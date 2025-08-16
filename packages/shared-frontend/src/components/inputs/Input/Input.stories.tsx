@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react";
-import { useLocalObservable } from "mobx-react-lite";
+import { useState } from "react";
 import { Input } from "./Input";
 
 const meta: Meta<typeof Input> = {
@@ -15,35 +15,36 @@ export default meta;
 
 type Story = StoryObj<typeof meta>;
 
-const Template: Story["render"] = (args) => {
-	const state = useLocalObservable(() => ({ value: args.state?.value || "" }));
-	return <Input {...args} state={state} path="value" />;
-};
-
 export const Default: Story = {
 	args: {
 		label: "Default Input",
 		placeholder: "Enter text...",
-		state: { value: "" },
 	},
-	render: Template,
+	render: (args) => {
+		const [value, setValue] = useState("");
+		return <Input {...args} value={value} onChange={setValue} />;
+	},
 };
 
 export const WithInitialValue: Story = {
 	args: {
 		label: "Input with Initial Value",
-		state: { value: "Hello, Storybook!" },
 	},
-	render: Template,
+	render: (args) => {
+		const [value, setValue] = useState("Hello, Storybook!");
+		return <Input {...args} value={value} onChange={setValue} />;
+	},
 };
 
 export const NumberType: Story = {
 	args: {
 		label: "Number Input",
 		type: "number",
-		state: { value: 123 },
 	},
-	render: Template,
+	render: (args) => {
+		const [value, setValue] = useState("123");
+		return <Input {...args} value={value} onChange={setValue} />;
+	},
 };
 
 export const WithError: Story = {
@@ -51,7 +52,9 @@ export const WithError: Story = {
 		label: "Input with Error",
 		isInvalid: true,
 		errorMessage: "This field is required.",
-		state: { value: "" },
 	},
-	render: Template,
+	render: (args) => {
+		const [value, setValue] = useState("");
+		return <Input {...args} value={value} onChange={setValue} />;
+	},
 };

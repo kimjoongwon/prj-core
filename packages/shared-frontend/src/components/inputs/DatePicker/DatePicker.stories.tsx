@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react";
-import { useLocalObservable } from "mobx-react-lite";
+import { useState } from "react";
 import { DatePicker } from "./DatePicker";
 
 const meta: Meta<typeof DatePicker> = {
@@ -10,19 +10,19 @@ const meta: Meta<typeof DatePicker> = {
 		docs: {
 			description: {
 				component:
-					"A date picker component built with HeroUI and MobX integration for state management.",
+					"A date picker component built with HeroUI and React state management.",
 			},
 		},
 	},
 	tags: ["autodocs"],
 	argTypes: {
-		state: {
-			description: "MobX observable state object",
+		value: {
+			description: "Selected date value",
 			control: false,
 		},
-		path: {
-			description: "Path to the date value in the state object",
-			control: "text",
+		onChange: {
+			description: "Callback function when date changes",
+			control: false,
 		},
 		label: {
 			description: "Label for the date picker",
@@ -77,16 +77,11 @@ const meta: Meta<typeof DatePicker> = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-// Mock state for stories
-const createMockState = (initialDate?: string) => ({
-	selectedDate: initialDate || new Date().toISOString(),
-});
-
-// Helper component to wrap DatePicker with MobX state
+// Helper component to wrap DatePicker with React state
 const DatePickerWrapper = (args: any) => {
-	const state = useLocalObservable(() => createMockState(args.initialDate));
+	const [value, setValue] = useState(args.initialDate || new Date().toISOString());
 
-	return <DatePicker {...args} state={state} path="selectedDate" />;
+	return <DatePicker {...args} value={value} onChange={setValue} />;
 };
 
 export const Default: Story = {

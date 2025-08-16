@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react";
-import { useLocalObservable } from "mobx-react-lite";
+import { useState } from "react";
 import { ListboxSelect } from "./ListboxSelect";
 
 const meta: Meta<typeof ListboxSelect> = {
@@ -21,20 +21,16 @@ const options = [
 	{ text: "Option 3", value: "3" },
 ];
 
-const Template: Story["render"] = (args) => {
-	// @ts-ignore
-	const state = useLocalObservable(() => ({ value: args.state?.value || [] }));
-	return <ListboxSelect {...args} state={state} path="value" />;
-};
-
 export const Default: Story = {
 	args: {
 		title: "Select an option",
 		options,
 		selectionMode: "single",
-		state: { value: "1" },
 	},
-	render: Template,
+	render: (args) => {
+		const [value, setValue] = useState("1");
+		return <ListboxSelect {...args} value={value} onChange={setValue} />;
+	},
 };
 
 export const MultiSelect: Story = {
@@ -42,7 +38,9 @@ export const MultiSelect: Story = {
 		title: "Select multiple options",
 		options,
 		selectionMode: "multiple",
-		state: { value: ["1", "3"] },
 	},
-	render: Template,
+	render: (args) => {
+		const [value, setValue] = useState(["1", "3"]);
+		return <ListboxSelect {...args} value={value} onChange={setValue} />;
+	},
 };

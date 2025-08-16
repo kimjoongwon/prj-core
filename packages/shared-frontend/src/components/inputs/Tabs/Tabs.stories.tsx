@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react";
-import { useLocalObservable } from "mobx-react-lite";
+import { useState } from "react";
 import { Option } from "../../../types";
 import { Tabs } from "./Tabs";
 
@@ -22,18 +22,12 @@ const options: Option[] = [
 	{ key: "3", label: "Tab 3", value: "3" },
 ];
 
-const Template: Story["render"] = (args) => {
-	const state = useLocalObservable(() => ({
-		// @ts-ignore
-		selectedTab: args.state?.selectedTab || "1",
-	}));
-	return <Tabs {...args} state={state} path="selectedTab" />;
-};
-
 export const Default: Story = {
 	args: {
 		options,
-		state: { selectedTab: "1" },
 	},
-	render: Template,
+	render: (args) => {
+		const [selectedTab, setSelectedTab] = useState("1");
+		return <Tabs {...args} selectedTab={selectedTab} onChange={setSelectedTab} />;
+	},
 };

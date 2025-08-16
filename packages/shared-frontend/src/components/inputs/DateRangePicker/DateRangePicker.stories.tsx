@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/react";
-import { useLocalObservable } from "mobx-react-lite";
+import { useState } from "react";
 import { DateRangePicker } from "./DateRangePicker";
+import { DateRangePickerProps } from "@heroui/react";
 
 const meta: Meta<typeof DateRangePicker> = {
 	title: "Inputs/DateRangePicker",
@@ -15,22 +16,17 @@ export default meta;
 
 type Story = StoryObj<typeof meta>;
 
-const Template: Story = {
-	render: (args) => {
-		const state = useLocalObservable(() => ({
-			startDate: new Date().toISOString(),
-			endDate: new Date().toISOString(),
-		}));
-
-		return <DateRangePicker {...args} state={state} path={args.path} />;
-	},
-};
-
 export const Default: Story = {
-	...Template,
 	args: {
-		// @ts-ignore
-		path: "startDate,endDate",
 		label: "Date Range",
+	},
+	render: (args) => {
+		const [value, setValue] = useState<DateRangePickerProps["value"]>();
+
+		const handleChange: DateRangePickerProps["onChange"] = (value) => {
+			setValue(value);
+		};
+
+		return <DateRangePicker {...args} onChange={handleChange} value={value} />;
 	},
 };

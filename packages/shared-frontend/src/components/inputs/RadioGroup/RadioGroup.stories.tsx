@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react";
-import { useLocalObservable } from "mobx-react-lite";
+import { useState } from "react";
 import { RadioGroup } from "./RadioGroup";
 
 const meta: Meta<typeof RadioGroup> = {
@@ -21,25 +21,24 @@ const options = [
 	{ text: "Option 3", value: "3" },
 ];
 
-const Template: Story["render"] = (args) => {
-	const state = useLocalObservable(() => ({ value: args.state?.value || "" }));
-	return <RadioGroup {...args} state={state} path="value" />;
-};
-
 export const Default: Story = {
 	args: {
 		label: "Select an option",
 		options,
-		state: { value: "" },
 	},
-	render: Template,
+	render: (args) => {
+		const [value, setValue] = useState("");
+		return <RadioGroup {...args} value={value} onChange={setValue} />;
+	},
 };
 
 export const WithInitialValue: Story = {
 	args: {
 		label: "Select an option",
 		options,
-		state: { value: "2" },
 	},
-	render: Template,
+	render: (args) => {
+		const [value, setValue] = useState("2");
+		return <RadioGroup {...args} value={value} onChange={setValue} />;
+	},
 };

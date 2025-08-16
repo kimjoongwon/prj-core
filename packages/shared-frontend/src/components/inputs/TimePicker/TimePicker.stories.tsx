@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react";
-import { useLocalObservable } from "mobx-react-lite";
+import { useState } from "react";
 import { TimePicker } from "./TimePicker";
 
 const meta: Meta<typeof TimePicker> = {
@@ -15,17 +15,9 @@ export default meta;
 
 type Story = StoryObj<typeof meta>;
 
-const Template: Story["render"] = (args) => {
-	const state = useLocalObservable(() => ({
-		// @ts-ignore
-		time: args.state?.time || "12:00",
-	}));
-	return <TimePicker {...args} state={state} path="time" />;
-};
-
 export const Default: Story = {
-	args: {
-		state: { time: "12:00" },
+	render: (args) => {
+		const [time, setTime] = useState("12:00");
+		return <TimePicker {...args} time={time} onChange={setTime} />;
 	},
-	render: Template,
 };

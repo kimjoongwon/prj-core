@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react";
-import { useLocalObservable } from "mobx-react-lite";
+import { useState } from "react";
 import { Switch } from "./Switch";
 
 const meta: Meta<typeof Switch> = {
@@ -15,23 +15,16 @@ export default meta;
 
 type Story = StoryObj<typeof meta>;
 
-const Template: Story["render"] = (args) => {
-	const state = useLocalObservable(() => ({
-		checked: args.state?.checked || false,
-	}));
-	return <Switch {...args} state={state} path="checked" />;
-};
-
 export const Default: Story = {
-	args: {
-		state: { checked: false },
+	render: (args) => {
+		const [checked, setChecked] = useState(false);
+		return <Switch {...args} checked={checked} onChange={setChecked} />;
 	},
-	render: Template,
 };
 
 export const Checked: Story = {
-	args: {
-		state: { checked: true },
+	render: (args) => {
+		const [checked, setChecked] = useState(true);
+		return <Switch {...args} checked={checked} onChange={setChecked} />;
 	},
-	render: Template,
 };
