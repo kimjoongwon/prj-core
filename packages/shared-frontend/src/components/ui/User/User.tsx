@@ -5,9 +5,9 @@ import {
 	DropdownMenu,
 	DropdownTrigger,
 } from "@heroui/react";
-import { observer } from "mobx-react-lite";
 
-export const User = observer(() => {
+
+export const User = (() => {
 	return (
 		<Dropdown>
 			<DropdownTrigger>

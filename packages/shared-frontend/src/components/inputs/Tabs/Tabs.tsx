@@ -1,31 +1,21 @@
 import { Tabs as HeroUITabs, Tab } from "@heroui/react";
-import { get } from "lodash-es";
-import { observer } from "mobx-react-lite";
 import { Key } from "react";
-import { useFormField } from "@shared/hooks";
-import type { MobxProps, Option } from "../../../types";
+import type { Option } from "../../../types";
 
-export interface TabsProps<T> extends MobxProps<T> {
+export interface TabsProps {
 	options: Option[];
+	selectedKey?: string;
+	onSelectionChange?: (key: Key) => void;
 }
 
-export const Tabs = observer(<T,>(props: TabsProps<T>) => {
-	const { state, path = "", options } = props;
-	const value = get(state, path);
-	const { localState } = useFormField({ initialValue: get(state, path), state, path });
-
-	const handleSelectionChange = (key: Key) => {
-		localState.value = key;
-	};
+export const Tabs = (props: TabsProps) => {
+	const { options, selectedKey, onSelectionChange } = props;
 
 	return (
-		<HeroUITabs
-			selectedKey={String(value)}
-			onSelectionChange={handleSelectionChange}
-		>
+		<HeroUITabs selectedKey={selectedKey} onSelectionChange={onSelectionChange}>
 			{options?.map((item) => (
 				<Tab key={item.value} title={item.label} />
 			))}
 		</HeroUITabs>
 	);
-});
+};

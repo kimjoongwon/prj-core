@@ -1,7 +1,6 @@
 import { ButtonProps, Button as NextUIButton } from "@heroui/react";
-import { observer } from "mobx-react-lite";
 
-export const Button = observer((props: ButtonProps) => {
+export const Button = (props: ButtonProps) => {
 	const { children, onPress, ...rest } = props;
 
 	return (
@@ -9,4 +8,4 @@ export const Button = observer((props: ButtonProps) => {
 			{children}
 		</NextUIButton>
 	);
-});
+};

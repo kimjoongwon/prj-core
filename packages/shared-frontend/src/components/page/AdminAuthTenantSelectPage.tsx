@@ -8,7 +8,7 @@ import {
 	ModalFooter,
 	ModalHeader,
 } from "@heroui/react";
-import { observer } from "mobx-react-lite";
+
 import { useState } from "react";
 
 interface Tenant {
@@ -21,7 +21,7 @@ interface AdminAuthTenantSelectPageProps {
 	onSelect: (tenantId: string) => void;
 }
 
-export const AdminAuthTenantSelectPage = observer(
+export const AdminAuthTenantSelectPage = (
 	({ tenants, onSelect }: AdminAuthTenantSelectPageProps) => {
 		const [selectedTenant, setSelectedTenant] = useState("");
 
@@ -67,5 +67,5 @@ export const AdminAuthTenantSelectPage = observer(
 				</ModalContent>
 			</Modal>
 		);
-	},
+	}
 );

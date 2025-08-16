@@ -2,47 +2,27 @@ import {
 	TimeInputProps as HeroUiTimeInputProps,
 	TimeInput as NextUiTimeInput,
 } from "@heroui/react";
-import { parseAbsoluteToLocal, ZonedDateTime } from "@internationalized/date";
-import { get, set } from "lodash-es";
-import { action, reaction } from "mobx";
-import { observer, useLocalObservable } from "mobx-react-lite";
-import { useEffect } from "react";
-import type { MobxProps } from "../../../types";
 
-export interface TimeInputProps<T> extends HeroUiTimeInputProps, MobxProps<T> {}
+export interface TimeInputProps<T>
+	extends Omit<HeroUiTimeInputProps, "onChange"> {
+	onChange?: (value: string) => void;
+}
 
-export const TimeInput = observer(
-	<T extends object>(props: TimeInputProps<T>) => {
-		const { state, path, ...rest } = props;
-		// @ts-ignore
-		const defaultValue = (get(state, path) ||
-			new Date().toISOString()) as string;
+export const TimeInput = <T extends object>(props: TimeInputProps<T>) => {
+	const { value, onChange, ...rest } = props;
 
-		const localState = useLocalObservable(() => ({
-			value: parseAbsoluteToLocal(defaultValue),
-		}));
+	const handleChange: HeroUiTimeInputProps["onChange"] = (dateValue) => {
+		if (onChange) {
+			onChange(dateValue?.toString() || "");
+		}
+	};
 
-		useEffect(() => {
-			const disposer = reaction(
-				() => localState.value,
-				(value) => {
-					set(state, path, value.toDate().toISOString());
-				},
-			);
-			return disposer;
-		}, [localState.value, path, state]);
-
-		return (
-			<NextUiTimeInput
-				{...rest}
-				hideTimeZone
-				value={localState.value}
-				// @ts-ignore
-				onChange={action((value) => {
-					// @ts-ignore
-					localState.value = value as unknown as ZonedDateTime;
-				})}
-			/>
-		);
-	},
-);
+	return (
+		<NextUiTimeInput
+			{...rest}
+			hideTimeZone
+			value={value}
+			onChange={handleChange}
+		/>
+	);
+};

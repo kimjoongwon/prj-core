@@ -1,5 +1,4 @@
 import type { Meta, StoryObj } from "@storybook/react";
-import { useLocalObservable } from "mobx-react-lite";
 import { MultiSelect } from "./MultiSelect";
 
 const meta: Meta<typeof MultiSelect> = {
@@ -22,10 +21,7 @@ const options = [
 ];
 
 const Template: Story["render"] = (args) => {
-	const state = useLocalObservable(() => ({
-		values: args.state?.values || [],
-	}));
-	return <MultiSelect {...args} state={state} path="values" />;
+	return <MultiSelect {...args} />;
 };
 
 export const Default: Story = {
@@ -33,7 +29,6 @@ export const Default: Story = {
 		label: "Select options",
 		placeholder: "Choose multiple options",
 		options,
-		state: { values: [] },
 	},
 	render: Template,
 };
@@ -42,7 +37,6 @@ export const WithInitialValues: Story = {
 	args: {
 		label: "Select options",
 		options,
-		state: { values: ["1", "3"] },
 	},
 	render: Template,
 };

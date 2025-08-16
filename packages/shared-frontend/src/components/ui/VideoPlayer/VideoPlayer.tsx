@@ -1,6 +1,6 @@
 import { Modal, ModalContent } from "@heroui/react";
 import { Maximize, Minimize, Pause, Play } from "lucide-react";
-import { observer } from "mobx-react-lite";
+
 import { useEffect, useRef, useState } from "react";
 
 export interface VideoPlayerProps {
@@ -9,7 +9,7 @@ export interface VideoPlayerProps {
 	onClose: () => void;
 }
 
-export const VideoPlayer = observer((props: VideoPlayerProps) => {
+export const VideoPlayer = ((props: VideoPlayerProps) => {
 	const { src, isOpen, onClose } = props;
 	const [isPlaying, setIsPlaying] = useState(false);
 	const [isFullscreen, setIsFullscreen] = useState(false);

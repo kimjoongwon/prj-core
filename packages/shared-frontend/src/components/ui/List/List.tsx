@@ -8,10 +8,9 @@ export interface ListProps<T> {
 	placeholder?: ReactNode;
 }
 
-import { observer } from "mobx-react-lite";
 import { v4 } from "uuid";
 
-export const List = observer(<T extends object>(props: ListProps<T>) => {
+export const List = <T extends object>(props: ListProps<T>) => {
 	const { data, renderItem, placeholder } = props;
 
 	const renderContainer = (children: ReactNode) => {
@@ -23,4 +22,4 @@ export const List = observer(<T extends object>(props: ListProps<T>) => {
 	}
 
 	return renderContainer(data.map(renderItem));
-});
+};

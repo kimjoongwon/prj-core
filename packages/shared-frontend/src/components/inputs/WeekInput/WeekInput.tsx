@@ -1,23 +1,18 @@
 import { Chip } from "@heroui/chip";
-import { get } from "lodash-es";
-import { observer } from "mobx-react-lite";
-import { useFormField } from "@shared/hooks";
 import type { RecurringDayOfTheWeek } from "../../../types";
 import { HStack, Text, VStack } from "../../ui";
 
 export interface WeekInputProps {
-	state: any;
-	path: string;
+	value?: RecurringDayOfTheWeek;
+	onChange?: (value: RecurringDayOfTheWeek) => void;
 	disabled?: boolean;
 }
 
-export const WeekInput = observer((props: WeekInputProps) => {
-	const { state, path, disabled, ...rest } = props;
-	const initialValue = get(state, path);
-	const { localState } = useFormField({ initialValue, state, path });
+export const WeekInput = (props: WeekInputProps) => {
+	const { value, onChange, disabled, ...rest } = props;
 
-	const handleChange = (value: RecurringDayOfTheWeek) => {
-		localState.value = value;
+	const handleChange = (dayValue: RecurringDayOfTheWeek) => {
+		onChange?.(dayValue);
 	};
 
 	const dayOptions: {
@@ -64,7 +59,7 @@ export const WeekInput = observer((props: WeekInputProps) => {
 							className="cursor-pointer"
 							onClick={() => handleChange(day.value)}
 							key={day.value}
-							color={localState.value === day.value ? "primary" : "default"}
+							color={value === day.value ? "primary" : "default"}
 							isDisabled={disabled}
 						>
 							{day.text}
@@ -74,4 +69,4 @@ export const WeekInput = observer((props: WeekInputProps) => {
 			</HStack>
 		</VStack>
 	);
-});
+};

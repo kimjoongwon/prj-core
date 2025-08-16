@@ -2,7 +2,7 @@ import { Button } from "@heroui/react";
 import { useTheme } from "@heroui/use-theme";
 import { cva, type VariantProps } from "class-variance-authority";
 import { Moon, Sun } from "lucide-react";
-import { observer } from "mobx-react-lite";
+
 
 const darkModeSwitchStyles = cva("p-2", {
 	variants: {
@@ -37,7 +37,7 @@ export interface DarkModeSwitchProps
  * DarkModeSwitch component that allows users to toggle between light and dark modes
  * It can be positioned in any of the four corners of the screen
  */
-export const DarkModeSwitch = observer((props: DarkModeSwitchProps) => {
+export const DarkModeSwitch = ((props: DarkModeSwitchProps) => {
 	const { position, size, className } = props;
 	const { setTheme, theme } = useTheme();
 

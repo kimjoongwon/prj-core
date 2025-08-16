@@ -1,7 +1,7 @@
-import { observer } from "mobx-react-lite";
+
 import { ReactNode } from "react";
 
-export const AuthLayout = observer(
+export const AuthLayout = (
 	(props: {
 		formComponent?: ReactNode;
 		adComponent?: ReactNode;
@@ -47,5 +47,5 @@ export const AuthLayout = observer(
 				</div>
 			</div>
 		);
-	},
+	}
 );

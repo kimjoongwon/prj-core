@@ -10,10 +10,10 @@ export interface DashboardLayoutProps {
 	children: ReactNode;
 }
 
-import { observer } from "mobx-react-lite";
+
 import { Text } from "../../ui/Text/Text";
 
-export const DashboardLayout = observer((props: DashboardLayoutProps) => {
+export const DashboardLayout = ((props: DashboardLayoutProps) => {
 	const { header, leftSidebar, rightSidebar, bottom, breadcrumb, children } =
 		props;
 

@@ -2,34 +2,27 @@ import {
 	Checkbox as NextUICheckbox,
 	CheckboxProps as NextUICheckboxProps,
 } from "@heroui/react";
-import { get } from "lodash-es";
-import { action } from "mobx";
-import { observer } from "mobx-react-lite";
-import { useFormField } from "@shared/hooks";
-import type { MobxProps } from "../../../types";
+import React from "react";
 import { Text } from "../../ui/Text/Text";
 
-export interface CheckboxProps<T> extends MobxProps<T>, NextUICheckboxProps {}
+export interface CheckboxProps extends Omit<NextUICheckboxProps, 'onChange'> {
+	onChange?: (checked: boolean) => void;
+}
 
-function BaseCheckbox<T extends object>(props: CheckboxProps<T>) {
-	const { path = "", state = {}, ...rest } = props;
+export const Checkbox = (props: CheckboxProps) => {
+	const { onChange, size = "lg", ...rest } = props;
 
-	const { localState } = useFormField({ initialValue: get(state, path), state: state, path: path });
-
-	const onChange = action((e: React.ChangeEvent<HTMLInputElement>) => {
-		localState.value = e.target.checked;
-	});
+	const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+		onChange?.(e.target.checked);
+	};
 
 	return (
 		<NextUICheckbox
 			{...rest}
-			onChange={onChange}
-			size="lg"
-			isSelected={localState.value}
+			onChange={handleChange}
+			size={size}
 		>
 			<Text className="font-bold">{props.children}</Text>
 		</NextUICheckbox>
 	);
-}
-
-export const Checkbox = observer(BaseCheckbox);
+};

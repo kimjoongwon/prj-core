@@ -6,7 +6,6 @@ import {
 	DropdownItemProps as HeroUIDropdownItemProps,
 	DropdownProps as HeroUIDropdownProps,
 } from "@heroui/react";
-import { observer } from "mobx-react-lite";
 import React from "react";
 
 export interface DropdownItemProps
@@ -49,4 +48,4 @@ const DropdownComponent = (props: DropdownProps) => {
 
 DropdownComponent.displayName = "Dropdown";
 
-export const Dropdown = observer(DropdownComponent);
+export const Dropdown = DropdownComponent;

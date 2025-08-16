@@ -1,5 +1,4 @@
 import { Link } from "@heroui/react";
-import { observer } from "mobx-react-lite";
 import { useCallback, useMemo } from "react";
 import { Button } from "../Button/Button";
 
@@ -10,7 +9,7 @@ export interface NavbarItemProps {
 	onChange: (href: string) => void;
 }
 
-export const NavbarItem = observer((props: NavbarItemProps) => {
+export const NavbarItem = (props: NavbarItemProps) => {
 	const { label = "미입력", value, onChange } = props;
 
 	// Check if current path matches the value
@@ -35,4 +34,4 @@ export const NavbarItem = observer((props: NavbarItemProps) => {
 			{label}
 		</Link>
 	);
-});
+};

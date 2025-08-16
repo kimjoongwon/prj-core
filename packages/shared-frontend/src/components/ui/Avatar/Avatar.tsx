@@ -1,6 +1,5 @@
 import { Button, Chip, Avatar as HeroUIAvatar, User } from "@heroui/react";
 import { EnvironmentUtil } from "@shared/utils";
-import { observer } from "mobx-react-lite";
 import { Dropdown, DropdownItemProps } from "../../inputs/Dropdown/Dropdown";
 
 interface AvatarProps {
@@ -8,7 +7,7 @@ interface AvatarProps {
 	onMenuAction?: (key: string) => void;
 }
 
-export const Avatar = observer((props: AvatarProps) => {
+export const Avatar = (props: AvatarProps) => {
 	const { showInfo = true, onMenuAction } = props;
 
 	const environment = EnvironmentUtil.getCurrentEnvironment();
@@ -125,7 +124,7 @@ export const Avatar = observer((props: AvatarProps) => {
 			}
 		/>
 	);
-});
+};
 
 // Start Content Components for Menu Items
 interface EnvironmentChipProps {

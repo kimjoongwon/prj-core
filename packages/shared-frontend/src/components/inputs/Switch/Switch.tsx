@@ -2,26 +2,17 @@ import {
 	Switch as NextUISwitch,
 	SwitchProps as NextUISwitchProps,
 } from "@heroui/react";
-import { get } from "lodash-es";
-import { action } from "mobx";
-import { observer } from "mobx-react-lite";
-import { useFormField } from "@shared/hooks";
-import type { MobxProps } from "../../../types";
 
-export interface SwitchProps<T> extends NextUISwitchProps, MobxProps<T> {}
+export interface SwitchProps
+	extends Omit<NextUISwitchProps, "onValueChange" | "value"> {
+	value?: boolean;
+	onValueChange?: (isSelected: boolean) => void;
+}
 
-export const Switch = observer(<T extends object>(props: SwitchProps<T>) => {
-	const { path = "", state = {}, ...rest } = props;
-
-	const initialValue = get(state, path);
-
-	const { localState } = useFormField({ initialValue, state, path });
-
-	const onChange = action((isSelected: boolean) => {
-		localState.value = isSelected;
-	});
+export const Switch = (props: SwitchProps) => {
+	const { onValueChange, value, ...rest } = props;
 
 	return (
-		<NextUISwitch {...rest} onValueChange={onChange} value={localState.value} />
+		<NextUISwitch {...rest} onValueChange={onValueChange} isSelected={value} />
 	);
-});
+};
