@@ -7,7 +7,7 @@ import React, {
 	useMemo,
 	useState,
 } from "react";
-import { Pressable, TextStyle, View, ViewStyle } from "react-native";
+import { Pressable, TextStyle, View, ViewStyle, PressableProps } from "react-native";
 import Animated, {
 	Easing,
 	interpolate,
@@ -17,7 +17,6 @@ import Animated, {
 } from "react-native-reanimated";
 import { useTheme } from "../../providers/theme-provider";
 import { Text } from "../Text";
-import { CheckboxProps, CheckboxRef } from "./types";
 import {
 	sizes,
 	radiusValues,
@@ -27,7 +26,46 @@ import {
 	styles,
 } from "./Checkbox.styles";
 
-export const Checkbox = forwardRef<CheckboxRef, CheckboxProps<any>>(
+export type CheckboxSize = "sm" | "md" | "lg";
+export type CheckboxColor =
+	| "default"
+	| "primary"
+	| "secondary"
+	| "success"
+	| "warning"
+	| "danger";
+export type CheckboxRadius = "none" | "sm" | "md" | "lg" | "full";
+
+export interface CheckboxProps
+	extends Omit<PressableProps, "style"> {
+	children?: React.ReactNode;
+	size?: CheckboxSize;
+	color?: CheckboxColor;
+	radius?: CheckboxRadius;
+	isSelected?: boolean;
+	defaultSelected?: boolean;
+	isDisabled?: boolean;
+	isIndeterminate?: boolean;
+	lineThrough?: boolean;
+	icon?: React.ReactNode;
+	isRequired?: boolean;
+	description?: string;
+	errorMessage?: string;
+	isInvalid?: boolean;
+	onValueChange?: (isSelected: boolean) => void;
+	style?: ViewStyle;
+	checkboxStyle?: ViewStyle;
+	labelStyle?: TextStyle;
+	className?: string;
+}
+
+export interface CheckboxRef {
+	toggle: () => void;
+	focus: () => void;
+	blur: () => void;
+}
+
+export const Checkbox = forwardRef<CheckboxRef, CheckboxProps>(
 	(
 		{
 			children,

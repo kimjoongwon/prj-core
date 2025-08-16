@@ -1,80 +1,46 @@
-import React, { forwardRef, useImperativeHandle, useCallback } from "react";
+import React, { useCallback } from "react";
 import { useFormField } from "@shared/hooks";
 import { get } from "lodash-es";
 import { action } from "mobx";
 import { observer } from "mobx-react-lite";
-import { Checkbox as BaseCheckbox } from "./Checkbox";
-import type { CheckboxProps, CheckboxRef } from "./types";
+import { MobxProps } from "@shared/types";
+import {
+	Checkbox as CheckboxComponent,
+	CheckboxProps as BaseCheckboxProps,
+	CheckboxRef,
+} from "./Checkbox";
+
+export interface CheckboxProps<T>
+	extends MobxProps<T>,
+		Omit<BaseCheckboxProps, "isSelected" | "onValueChange"> {}
 
 export const Checkbox = observer(
-	forwardRef<CheckboxRef, CheckboxProps>(
-		(
-			{
-				state,
-				path,
-				isSelected: controlledSelected,
-				defaultSelected = false,
-				onValueChange,
-				...props
-			},
-			ref,
-		) => {
-			// 무조건 MobX 사용 - controlledSelected는 무시됨
-			const initialValue = get(state, path || "", defaultSelected);
+	<T extends object>(
+		props: CheckboxProps<T> & { ref?: React.Ref<CheckboxRef> },
+	) => {
+		const { state, path, defaultSelected = false, ...rest } = props;
 
-			const { localState } = useFormField({
-				initialValue,
-				state,
-				path,
-			});
+		const initialValue = get(state, path || "", defaultSelected);
 
-			// 항상 localState.value 사용
-			const isSelected = localState.value;
+		const { localState } = useFormField({
+			initialValue,
+			state,
+			path,
+		});
 
-			const handleValueChange = useCallback(
-				action((newValue: boolean) => {
-					localState.value = newValue;
-					onValueChange?.(newValue);
-				}),
-				[localState, onValueChange],
-			);
+		const isSelected = localState.value;
 
-			const toggle = useCallback(() => {
-				const newValue = !localState.value;
-				handleValueChange(newValue);
-			}, [localState, handleValueChange]);
+		const handleValueChange = useCallback(
+			action((newValue: boolean) => {
+				localState.value = newValue;
+			}),
+			[localState],
+		);
 
-			useImperativeHandle(
-				ref,
-				() => ({
-					toggle,
-					focus: () => {},
-					blur: () => {},
-				}),
-				[toggle],
-			);
-
-			return (
-				<BaseCheckbox
-					{...props}
-					ref={ref}
-					isSelected={isSelected}
-					defaultSelected={undefined}
-					onValueChange={handleValueChange}
-				/>
-			);
-		},
-	),
+		return <CheckboxComponent {...rest} onValueChange={handleValueChange} />;
+	},
 );
 
 Checkbox.displayName = "MobxCheckbox";
 
-export { default } from "./Checkbox";
-export type {
-	CheckboxProps,
-	CheckboxRef,
-	CheckboxSize,
-	CheckboxColor,
-	CheckboxRadius,
-	MobxProps,
-} from "./types";
+export { Checkbox as default } from "./Checkbox";
