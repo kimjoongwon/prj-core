@@ -14,7 +14,7 @@ export interface FileUploaderProps<T>
 
 export const FileUploader = observer(
 	<T extends object>(props: FileUploaderProps<T>) => {
-		const { state = {}, path = "", ...rest } = props;
+		const { state, path, ...rest } = props;
 
 		const initialValue = Tool.get(state, path) || null;
 		const { localState } = useFormField({ initialValue, state, path });

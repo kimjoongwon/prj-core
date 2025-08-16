@@ -14,7 +14,7 @@ export interface RadioGroupProps<T>
 
 export const RadioGroup = observer(
 	<T extends object>(props: RadioGroupProps<T>) => {
-		const { state = {}, path = "", options, ...rest } = props;
+		const { state, path, options, ...rest } = props;
 
 		const initialValue =
 			options?.find((option) => option.value === Tool.get(state, path))?.value || "";

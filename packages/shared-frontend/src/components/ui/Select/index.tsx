@@ -8,7 +8,7 @@ import { Select as BaseSelect, type SelectProps as BaseSelectProps } from "./Sel
 export interface SelectProps<T> extends MobxProps<T>, Omit<BaseSelectProps, 'value' | 'onChange'> {}
 
 export const Select = observer(<T extends object>(props: SelectProps<T>) => {
-	const { state = {}, path = "", options = [], ...rest } = props;
+	const { state, path, options = [], ...rest } = props;
 
 	const _options = Tool.cloneDeep(options);
 

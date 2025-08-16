@@ -17,17 +17,12 @@ export interface ListboxSelectProps<T>
 
 export const ListboxSelect = observer(
 	<T extends object>(props: ListboxSelectProps<T>) => {
-		const {
-			state = {},
-			path = "",
-			selectionMode = "multiple",
-			...rest
-		} = props;
+		const { state, path, selectionMode = "multiple", ...rest } = props;
 
 		const initialValue = Tool.get(state, path);
 		const defaultSelectedKeys = new Set([initialValue]);
 
-		const { localState } = useFormField({
+		const { localState } = useFormField<any, any>({
 			initialValue: defaultSelectedKeys,
 			state,
 			path,

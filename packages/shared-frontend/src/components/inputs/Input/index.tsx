@@ -10,7 +10,7 @@ export interface InputProps<T>
 		Omit<BaseInputProps, "value" | "onChange" | "onBlur"> {}
 
 export const Input = observer(<T extends object>(props: InputProps<T>) => {
-	const { path = "", state = {}, ...rest } = props;
+	const { path, state, ...rest } = props;
 
 	const initialValue = Tool.get(state, path) || "";
 

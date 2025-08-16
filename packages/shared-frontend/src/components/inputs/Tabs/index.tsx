@@ -11,7 +11,7 @@ export interface TabsProps<T>
 		Omit<BaseTabsProps, "selectedKey" | "onSelectionChange"> {}
 
 export const Tabs = observer(<T,>(props: TabsProps<T>) => {
-	const { state, path = "", options } = props;
+	const { state, path, options } = props;
 
 	const { localState } = useFormField({
 		initialValue: Tool.get(state, path),

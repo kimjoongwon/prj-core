@@ -14,17 +14,22 @@ export interface AutoCompleteProps<T>
 
 export const AutoComplete = observer(
 	<T extends object>(props: AutoCompleteProps<T>) => {
-		const { defaultItems = [], state = {}, path = "", ...rest } = props;
+		const { defaultItems = [], state, path, ...rest } = props;
 
 		const initialValue = defaultItems
 			? [...defaultItems]?.find((item) => item.key === Tool.get(state, path))
 			: "";
 
-		const { localState } = useFormField({ initialValue, state, path });
-
-		const handleSelectionChange = action((key: string | number | null) => {
-			localState.value = key;
+		const { localState } = useFormField<any, any>({
+			initialValue,
+			state,
+			path,
 		});
+
+		const handleSelectionChange: BaseAutoCompleteProps["onSelectionChange"] =
+			action((value) => {
+				localState.value = value;
+			});
 
 		return (
 			<BaseAutoComplete
