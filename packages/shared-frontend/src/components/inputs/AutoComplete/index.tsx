@@ -1,7 +1,7 @@
-import { get } from "lodash-es";
 import { action } from "mobx";
 import { observer } from "mobx-react-lite";
 import { useFormField } from "@shared/hooks";
+import { Tool } from "@shared/utils";
 import { MobxProps } from "../../../types";
 import {
 	AutoComplete as BaseAutoComplete,
@@ -17,7 +17,7 @@ export const AutoComplete = observer(
 		const { defaultItems = [], state = {}, path = "", ...rest } = props;
 
 		const initialValue = defaultItems
-			? [...defaultItems]?.find((item) => item.key === get(state, path))
+			? [...defaultItems]?.find((item) => item.key === Tool.get(state, path))
 			: "";
 
 		const { localState } = useFormField({ initialValue, state, path });

@@ -1,7 +1,7 @@
-import { get } from "lodash-es";
 import { action } from "mobx";
 import { observer } from "mobx-react-lite";
 import { useFormField } from "@shared/hooks";
+import { Tool } from "@shared/utils";
 import type { RecurringDayOfTheWeek, MobxProps } from "../../../types";
 import { WeekInput as BaseWeekInput, type WeekInputProps as BaseWeekInputProps } from "./WeekInput";
 
@@ -12,7 +12,7 @@ export interface WeekInputProps<T = any>
 export const WeekInput = observer(<T extends object>(props: WeekInputProps<T>) => {
 	const { state, path, ...rest } = props;
 
-	const initialValue = get(state, path);
+	const initialValue = Tool.get(state, path);
 	const { localState } = useFormField({ initialValue, state, path });
 
 	const handleChange = action((value: RecurringDayOfTheWeek) => {

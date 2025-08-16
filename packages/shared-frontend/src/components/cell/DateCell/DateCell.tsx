@@ -1,4 +1,4 @@
-import dayjs from "dayjs";
+import { DateTimeUtil } from "@shared/utils";
 
 interface DateCellProps {
 	value: string | Date | null | undefined;
@@ -9,5 +9,5 @@ export const DateCell = ({ value }: DateCellProps) => {
 		return <p>-</p>;
 	}
 
-	return <p>{dayjs(value as string).format("YY.MM.DD HH:mm:ss")}</p>;
+	return <p>{DateTimeUtil.formatDateTimeWithSeconds(value as string)}</p>;
 };

@@ -1,5 +1,5 @@
 import { Card, CardBody } from "@heroui/react";
-import dayjs from "dayjs";
+import { DateTimeUtil } from "@shared/utils";
 import { Text } from "../../../ui/Text/Text";
 
 export interface DateProps {
@@ -18,7 +18,7 @@ export const Date = (props: DateProps) => {
 		className = "",
 		onDateClick,
 	} = props;
-	const date = dayjs(value).get("date");
+	const date = DateTimeUtil.getDate(value);
 
 	return (
 		<Card

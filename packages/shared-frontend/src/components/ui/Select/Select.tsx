@@ -3,8 +3,8 @@ import {
 	SelectProps as NextUISelectProps,
 	SelectItem,
 } from "@heroui/react";
-import { cloneDeep } from "lodash-es";
 import React from "react";
+import { Tool } from "@shared/utils";
 import type { Option } from "../../../types";
 
 export interface SelectProps
@@ -17,7 +17,7 @@ export interface SelectProps
 export const Select = (props: SelectProps) => {
 	const { options = [], value, onChange, ...rest } = props;
 
-	const _options = cloneDeep(options);
+	const _options = Tool.cloneDeep(options);
 
 	const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
 		onChange?.(e.target.value);

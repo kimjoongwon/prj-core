@@ -1,4 +1,4 @@
-import { get } from "lodash-es";
+import { Tool } from "@shared/utils";
 import { action } from "mobx";
 import { observer } from "mobx-react-lite";
 import { useFormField } from "@shared/hooks";
@@ -17,7 +17,7 @@ export const Checkbox = observer(
 		const { path = "", state = {}, ...rest } = props;
 
 		const { localState } = useFormField({
-			initialValue: get(state, path, false),
+			initialValue: Tool.get(state, path, false),
 			state,
 			path,
 		});

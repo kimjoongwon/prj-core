@@ -15,6 +15,5 @@ export { Switch } from "./Switch";
 export { Tabs } from "./Tabs";
 export { Textarea } from "./Textarea";
 export { TimeInput } from "./TimeInput";
-export { TimePicker } from "./TimePicker";
 export { VideoUploader } from "./VideoUploader/VideoUploader";
 export { WeekInput } from "./WeekInput";

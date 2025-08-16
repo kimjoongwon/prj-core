@@ -992,6 +992,9 @@ importers:
         specifier: 'catalog:'
         version: 19.0.0
     devDependencies:
+      '@shared/utils':
+        specifier: workspace:*
+        version: link:../shared-utils
       '@types/lodash-es':
         specifier: 'catalog:'
         version: 4.17.12

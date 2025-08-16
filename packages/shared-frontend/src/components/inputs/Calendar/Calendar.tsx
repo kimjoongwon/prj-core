@@ -1,5 +1,5 @@
 import dayjs from "dayjs";
-import { range } from "lodash-es";
+import { DateTimeUtil, Tool } from "@shared/utils";
 import { useState, useEffect } from "react";
 import { Date as DateComponent } from "./Date/Date";
 import { DaysOfWeek } from "./DaysOfWeek/DaysOfWeek";
@@ -32,9 +32,9 @@ const generateDates = (
 	const nextMonth = currentMonth.add(1, "month");
 	const prevMonthEnd = prevMonth.endOf("month").date();
 
-	const prevMonthRange = range(prevMonthEnd - startDay, prevMonthEnd);
-	const currentMonthRange = range(1, endDate + 1);
-	const nextMonthRange = range(
+	const prevMonthRange = Tool.range(prevMonthEnd - startDay, prevMonthEnd);
+	const currentMonthRange = Tool.range(1, endDate + 1);
+	const nextMonthRange = Tool.range(
 		1,
 		DAY_OF_WEEK * WEEK_OF_MONTH -
 			(prevMonthRange.length + currentMonthRange.length) +
@@ -46,7 +46,7 @@ const generateDates = (
 		type: "prev" | "current" | "next",
 	): DateData => ({
 		value: date.toISOString(),
-		selected: selectedValues.some((value) => dayjs(value).isSame(date, "date")),
+		selected: selectedValues.some((value) => DateTimeUtil.isSame(value, date, "date")),
 		isPressable: type === "current",
 		className: type === "current" ? "text-black" : "text-gray-400",
 	});
@@ -70,7 +70,7 @@ export const Calendar = (props: CalendarProps) => {
 	const { value, onChange } = props;
 
 	// Calendar state management
-	const [headerDate, setHeaderDate] = useState(dayjs().startOf("d").toDate());
+	const [headerDate, setHeaderDate] = useState(DateTimeUtil.startOf(new Date(), "day"));
 	const [dates, setDates] = useState<DateData[]>([]);
 
 	// Update dates when value or headerDate changes
@@ -80,19 +80,19 @@ export const Calendar = (props: CalendarProps) => {
 
 	// Handler functions
 	const handlePrevMonth = () => {
-		setHeaderDate(dayjs(headerDate).subtract(1, "M").toDate());
+		setHeaderDate(DateTimeUtil.subtract(headerDate, 1, "month"));
 	};
 
 	const handleNextMonth = () => {
-		setHeaderDate(dayjs(headerDate).add(1, "M").toDate());
+		setHeaderDate(DateTimeUtil.add(headerDate, 1, "month"));
 	};
 
 	const handleDateClick = (dateValue: string) => {
-		const isSelected = value.some((v) => dayjs(v).isSame(dateValue, "date"));
+		const isSelected = value.some((v) => DateTimeUtil.isSame(v, dateValue, "date"));
 		let newValue: string[];
 
 		if (isSelected) {
-			newValue = value.filter((v) => !dayjs(v).isSame(dateValue, "date"));
+			newValue = value.filter((v) => !DateTimeUtil.isSame(v, dateValue, "date"));
 		} else {
 			newValue = [...value, dateValue];
 		}

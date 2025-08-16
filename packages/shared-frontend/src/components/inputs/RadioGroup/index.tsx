@@ -1,7 +1,7 @@
-import { get } from "lodash-es";
 import { action } from "mobx";
 import { observer } from "mobx-react-lite";
 import { useFormField } from "@shared/hooks";
+import { Tool } from "@shared/utils";
 import { MobxProps } from "../../../types";
 import {
 	RadioGroup as BaseRadioGroup,
@@ -17,7 +17,7 @@ export const RadioGroup = observer(
 		const { state = {}, path = "", options, ...rest } = props;
 
 		const initialValue =
-			options?.find((option) => option.value === get(state, path))?.value || "";
+			options?.find((option) => option.value === Tool.get(state, path))?.value || "";
 
 		const { localState } = useFormField({ initialValue, state, path });
 

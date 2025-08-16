@@ -1,6 +1,6 @@
-import { get } from "lodash-es";
 import { observer } from "mobx-react-lite";
 import { useFormField } from "@shared/hooks";
+import { Tool } from "@shared/utils";
 import { MobxProps } from "../../../types";
 import {
 	ListboxSelect as BaseListboxSelect,
@@ -24,7 +24,7 @@ export const ListboxSelect = observer(
 			...rest
 		} = props;
 
-		const initialValue = get(state, path);
+		const initialValue = Tool.get(state, path);
 		const defaultSelectedKeys = new Set([initialValue]);
 
 		const { localState } = useFormField({

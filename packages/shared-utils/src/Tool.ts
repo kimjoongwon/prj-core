@@ -1,0 +1,22 @@
+import { get, set, cloneDeep, range } from "lodash-es";
+
+export class Tool {
+	// Object property utilities
+	static get(object: any, path: string | string[], defaultValue?: any): any {
+		return get(object, path, defaultValue);
+	}
+
+	static set(object: any, path: string | string[], value: any): any {
+		return set(object, path, value);
+	}
+
+	// Deep cloning utility
+	static cloneDeep<T>(value: T): T {
+		return cloneDeep(value);
+	}
+
+	// Array utilities
+	static range(start: number, end?: number, step?: number): number[] {
+		return range(start, end, step);
+	}
+}
