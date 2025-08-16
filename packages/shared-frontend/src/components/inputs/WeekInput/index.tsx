@@ -2,31 +2,37 @@ import { action } from "mobx";
 import { observer } from "mobx-react-lite";
 import { useFormField } from "@shared/hooks";
 import { Tool } from "@shared/utils";
-import type { RecurringDayOfTheWeek, MobxProps } from "@shared/types";
-import { WeekInput as BaseWeekInput, type WeekInputProps as BaseWeekInputProps } from "./WeekInput";
+import type { MobxProps } from "@shared/types";
+import {
+	WeekInput as BaseWeekInput,
+	RecurringDayOfTheWeek,
+	type WeekInputProps as BaseWeekInputProps,
+} from "./WeekInput";
 
 export interface WeekInputProps<T = any>
 	extends MobxProps<T>,
-		Omit<BaseWeekInputProps, 'value' | 'onChange'> {}
+		Omit<BaseWeekInputProps, "value" | "onChange"> {}
 
-export const WeekInput = observer(<T extends object>(props: WeekInputProps<T>) => {
-	const { state, path, ...rest } = props;
+export const WeekInput = observer(
+	<T extends object>(props: WeekInputProps<T>) => {
+		const { state, path, ...rest } = props;
 
-	const initialValue = Tool.get(state, path);
-	const { localState } = useFormField({ initialValue, state, path });
+		const initialValue = Tool.get(state, path);
+		const { localState } = useFormField({ initialValue, state, path });
 
-	const handleChange = action((value: RecurringDayOfTheWeek) => {
-		localState.value = value;
-	});
+		const handleChange = action((value: RecurringDayOfTheWeek) => {
+			localState.value = value;
+		});
 
-	return (
-		<BaseWeekInput
-			{...rest}
-			value={localState.value}
-			onChange={handleChange}
-		/>
-	);
-});
+		return (
+			<BaseWeekInput
+				{...rest}
+				value={localState.value}
+				onChange={handleChange}
+			/>
+		);
+	},
+);
 
 // Re-export types for backwards compatibility
 export type { BaseWeekInputProps as PureWeekInputProps };

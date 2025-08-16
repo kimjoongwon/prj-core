@@ -1,6 +1,7 @@
 import { Chip } from "@heroui/chip";
-import type { RecurringDayOfTheWeek } from "../../../types";
 import { HStack, Text, VStack } from "../../ui";
+
+export type RecurringDayOfTheWeek = "MONDAY" | "TUESDAY" | "WEDNESDAY" | "THURSDAY" | "FRIDAY" | "SATURDAY" | "SUNDAY";
 
 export interface WeekInputProps {
 	value?: RecurringDayOfTheWeek;
