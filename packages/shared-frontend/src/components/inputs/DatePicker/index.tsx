@@ -15,7 +15,7 @@ export interface DatePickerProps<T>
 
 export const DatePicker = observer(
 	<T extends object>(props: DatePickerProps<T>) => {
-		const { state = {}, path = "", ...rest } = props;
+		const { state, path, ...rest } = props;
 
 		const defaultValue = (Tool.get(state, path) ||
 			new Date().toISOString()) as string;

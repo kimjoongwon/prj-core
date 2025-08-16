@@ -16,7 +16,7 @@ export interface DateRangePickerProps<T>
 
 export const DateRangePicker = observer(
 	<T extends object>(props: DateRangePickerProps<T>) => {
-		const { state = {}, path = "", ...rest } = props;
+		const { state, path, ...rest } = props;
 
 		const [startPath, endPath] = useMemo(
 			() => (path as string)?.split(","),

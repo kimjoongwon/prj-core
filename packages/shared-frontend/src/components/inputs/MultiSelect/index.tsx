@@ -14,7 +14,7 @@ export interface MultiSelectProps<T>
 
 export const MultiSelect = observer(
 	<T extends object>(props: MultiSelectProps<T>) => {
-		const { state = {}, path = "", ...rest } = props;
+		const { state, path, ...rest } = props;
 
 		const initialValue = Tool.get(state, path) || [];
 		const { localState } = useFormField({ initialValue, state, path });

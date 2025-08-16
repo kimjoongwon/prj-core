@@ -14,7 +14,7 @@ export interface CheckboxProps<T>
 
 export const Checkbox = observer(
 	<T extends object>(props: CheckboxProps<T>) => {
-		const { path = "", state = {}, ...rest } = props;
+		const { path, state, ...rest } = props;
 
 		const { localState } = useFormField({
 			initialValue: Tool.get(state, path, false),

@@ -74,7 +74,7 @@ export interface ComponentProps<T>
 
 export const Component = observer(
   <T extends object>(props: ComponentProps<T>) => {
-    const { state = {}, path = "", ...rest } = props;
+    const { state, path, ...rest } = props;
 
     const initialValue = get(state, path) || defaultValue;
     const { localState } = useFormField({ initialValue, state, path });
@@ -234,7 +234,7 @@ export interface DateRangePickerProps<T>
     Omit<BaseDateRangePickerProps<T>, "value" | "onChange"> {}
 
 export const DateRangePicker = observer(<T extends object>(props: DateRangePickerProps<T>) => {
-  const { state = {}, path = "", ...rest } = props;
+  const { state, path, ...rest } = props;
   
   // 특수 로직: startPath, endPath 분리
   const [startPath, endPath] = useMemo(() => (path as string)?.split(","), [path]);

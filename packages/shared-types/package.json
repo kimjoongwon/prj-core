@@ -1,7 +1,7 @@
 {
-  "name": "@shared/hooks",
+  "name": "@shared/types",
   "version": "1.0.0",
-  "description": "Shared React hooks library",
+  "description": "shared types library",
   "packageManager": "pnpm@10.13.1",
   "publishConfig": {
     "access": "public"
@@ -24,29 +24,18 @@
   ],
   "scripts": {
     "build": "echo 'Build not needed - using source files directly'",
-    "start:dev": "echo 'Development mode - no build needed'",
     "lint": "echo 'Linting skipped for now'",
     "lint:fix": "echo 'Linting skipped for now'",
     "type-check": "echo 'Type checking skipped due to memory constraints'",
-    "test": "vitest",
-    "test:watch": "vitest --watch",
-    "clean": "rm -rf .turbo && rm -rf node_modules",
-    "clean:dist": "echo 'No dist folder to clean'"
+    "clean": "rm -rf .turbo && rm -rf node_modules"
   },
   "author": "kimjoongwon",
   "license": "ISC",
-  "peerDependencies": {
-    "react": "catalog:",
-    "mobx": "catalog:",
-    "mobx-react-lite": "catalog:",
-    "lodash-es": "catalog:"
-  },
   "devDependencies": {
-    "@types/lodash-es": "catalog:",
+    "@heroui/react": "catalog:",
+    "@tanstack/react-table": "^8.21.3",
     "@types/react": "catalog:",
-    "typescript": "catalog:",
-    "vitest": "catalog:",
-    "@shared/types": "workspace:*",
-    "@shared/utils": "workspace:*"
+    "react": "catalog:",
+    "typescript": "catalog:"
   }
 }

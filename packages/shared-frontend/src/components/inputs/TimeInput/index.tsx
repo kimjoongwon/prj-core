@@ -14,7 +14,7 @@ export interface TimeInputProps<T>
 
 export const TimeInput = observer(
 	<T extends object>(props: TimeInputProps<T>) => {
-		const { state = {}, path = "", ...rest } = props;
+		const { state, path, ...rest } = props;
 
 		const initialValue = Tool.get(state, path) || "";
 		const { localState } = useFormField({ initialValue, state, path });

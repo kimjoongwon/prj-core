@@ -48,6 +48,7 @@
     "@internationalized/date": "^3.8.2",
     "@shared/api-client": "workspace:*",
     "@shared/hooks": "workspace:*",
+    "@shared/types": "workspace:*",
     "@shared/utils": "workspace:*",
     "@storybook/react": "^9.0.18",
     "@storybook/react-vite": "catalog:",

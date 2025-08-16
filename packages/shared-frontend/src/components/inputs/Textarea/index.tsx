@@ -8,7 +8,7 @@ import { Textarea as BaseTextarea, type TextareaProps as BaseTextareaProps } fro
 export interface TextareaProps<T> extends MobxProps<T>, Omit<BaseTextareaProps, 'value' | 'onChange'> {}
 
 export const Textarea = observer(<T extends object>(props: TextareaProps<T>) => {
-	const { state = {}, path = "", ...rest } = props;
+	const { state, path, ...rest } = props;
 
 	const initialValue = Tool.get(state, path, "");
 

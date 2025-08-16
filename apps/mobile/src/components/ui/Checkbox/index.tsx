@@ -10,8 +10,8 @@ export const Checkbox = observer(
 	forwardRef<CheckboxRef, CheckboxProps>(
 		(
 			{
-				state = {},
-				path = "",
+				state,
+				path,
 				isSelected: controlledSelected,
 				defaultSelected = false,
 				onValueChange,

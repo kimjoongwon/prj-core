@@ -14,7 +14,7 @@ export interface CalendarProps<T>
 
 export const Calendar = observer(
 	<T extends object>(props: CalendarProps<T>) => {
-		const { state = {}, path = "", ...rest } = props;
+		const { state, path, ...rest } = props;
 
 		const initialValue = Tool.get(state, path) || [];
 		const { localState } = useFormField({ initialValue, state, path });

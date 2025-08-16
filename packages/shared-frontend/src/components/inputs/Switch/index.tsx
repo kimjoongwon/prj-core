@@ -13,7 +13,7 @@ export interface SwitchProps<T>
 		Omit<BaseSwitchProps, "value" | "onValueChange"> {}
 
 export const Switch = observer(<T extends object>(props: SwitchProps<T>) => {
-	const { path = "", state = {}, ...rest } = props;
+	const { path, state, ...rest } = props;
 
 	const initialValue = Tool.get(state, path, false);
 
