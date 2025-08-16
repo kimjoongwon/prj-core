@@ -1,4 +1,4 @@
-import { get } from "lodash-es";
+import { Tool } from "@shared/utils";
 import { action } from "mobx";
 import { observer } from "mobx-react-lite";
 import { useFormField } from "@shared/hooks";
@@ -12,7 +12,7 @@ export interface InputProps<T>
 export const Input = observer(<T extends object>(props: InputProps<T>) => {
 	const { path = "", state = {}, ...rest } = props;
 
-	const initialValue = get(state, path) || "";
+	const initialValue = Tool.get(state, path) || "";
 
 	const { localState } = useFormField({ initialValue, state, path });
 

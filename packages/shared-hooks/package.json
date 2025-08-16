@@ -45,6 +45,7 @@
     "@types/lodash-es": "catalog:",
     "@types/react": "catalog:",
     "typescript": "catalog:",
-    "vitest": "catalog:"
+    "vitest": "catalog:",
+    "@shared/utils": "workspace:*"
   }
 }

@@ -1,7 +1,7 @@
 import { parseAbsoluteToLocal } from "@internationalized/date";
-import { get } from "lodash-es";
 import { observer } from "mobx-react-lite";
 import { useFormField } from "@shared/hooks";
+import { Tool } from "@shared/utils";
 import { MobxProps } from "../../../types";
 import {
 	DatePicker as DatePickerComponent,
@@ -17,7 +17,7 @@ export const DatePicker = observer(
 	<T extends object>(props: DatePickerProps<T>) => {
 		const { state = {}, path = "", ...rest } = props;
 
-		const defaultValue = (get(state, path) ||
+		const defaultValue = (Tool.get(state, path) ||
 			new Date().toISOString()) as string;
 
 		const defaultParsedValue = parseAbsoluteToLocal(defaultValue);

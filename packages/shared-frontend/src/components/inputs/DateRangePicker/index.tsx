@@ -1,8 +1,8 @@
 import { parseAbsoluteToLocal } from "@internationalized/date";
-import { get, set } from "lodash-es";
 import { observer } from "mobx-react-lite";
 import { useMemo } from "react";
 import { useFormField } from "@shared/hooks";
+import { Tool } from "@shared/utils";
 import { MobxProps } from "../../../types";
 import {
 	DateRangePicker as DateRangePickerComponent,
@@ -23,8 +23,8 @@ export const DateRangePicker = observer(
 			[path],
 		);
 
-		const startDateTime = get(state, startPath) || new Date().toISOString();
-		const endDateTime = get(state, endPath) || new Date().toISOString();
+		const startDateTime = Tool.get(state, startPath) || new Date().toISOString();
+		const endDateTime = Tool.get(state, endPath) || new Date().toISOString();
 
 		const initialValue = {
 			start: parseAbsoluteToLocal(startDateTime),
@@ -39,8 +39,8 @@ export const DateRangePicker = observer(
 
 		const handleDateChange = action((value: any) => {
 			if (value && startPath && endPath) {
-				set(state, startPath, value.start.toString());
-				set(state, endPath, value.end.toString());
+				Tool.set(state, startPath, value.start.toString());
+				Tool.set(state, endPath, value.end.toString());
 			}
 			localState.value = value;
 		});
