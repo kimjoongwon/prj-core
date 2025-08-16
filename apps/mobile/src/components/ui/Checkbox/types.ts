@@ -1,3 +1,4 @@
+import { MobxProps } from "@shared/types";
 import { PressableProps, TextStyle, ViewStyle } from "react-native";
 
 export type CheckboxSize = "sm" | "md" | "lg";
@@ -10,12 +11,9 @@ export type CheckboxColor =
 	| "danger";
 export type CheckboxRadius = "none" | "sm" | "md" | "lg" | "full";
 
-export interface MobxProps<T> {
-	state?: T;
-	path?: string;
-}
-
-export interface CheckboxProps<T = any> extends Omit<PressableProps, "style">, MobxProps<T> {
+export interface CheckboxProps<T = any>
+	extends Omit<PressableProps, "style">,
+		MobxProps<T> {
 	children?: React.ReactNode;
 	size?: CheckboxSize;
 	color?: CheckboxColor;

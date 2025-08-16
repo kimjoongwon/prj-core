@@ -3,10 +3,9 @@ import {
 	type InputProps as HeroUiInputProps,
 } from "@heroui/react";
 import { ChangeEventHandler } from "react";
-import { Validation } from "../../../types";
 
-export interface InputProps extends Omit<HeroUiInputProps, 'onChange' | 'onBlur' | 'value'> {
-	validation?: Validation;
+export interface InputProps
+	extends Omit<HeroUiInputProps, "onChange" | "onBlur" | "value"> {
 	value?: string | number;
 	onChange?: (value: string | number) => void;
 	onBlur?: (value: string | number) => void;
@@ -19,7 +18,6 @@ export const Input = (props: InputProps) => {
 		errorMessage = " ",
 		type,
 		size = "sm",
-		validation,
 		value = "",
 		...rest
 	} = props;

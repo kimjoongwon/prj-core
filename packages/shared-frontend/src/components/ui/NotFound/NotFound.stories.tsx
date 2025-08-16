@@ -31,10 +31,6 @@ const meta = {
 			control: "text",
 			description: "Text for the back button",
 		},
-		homePath: {
-			control: "text",
-			description: "Path to navigate to when home button is clicked",
-		},
 		icon: {
 			description: "Custom icon to display instead of default 404",
 		},
@@ -182,7 +178,6 @@ export const Playground: Story = {
 		description: "요청하신 페이지가 존재하지 않거나 이동되었을 수 있습니다.",
 		homeButtonText: "홈으로 돌아가기",
 		backButtonText: "이전 페이지",
-		homePath: "/",
 	},
 	parameters: {
 		docs: {

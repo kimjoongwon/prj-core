@@ -2,35 +2,46 @@ import { parseAbsoluteToLocal } from "@internationalized/date";
 import { observer } from "mobx-react-lite";
 import { useFormField } from "@shared/hooks";
 import { Tool } from "@shared/utils";
-import { MobxProps } from "../../../types";
 import {
 	DatePicker as DatePickerComponent,
 	DatePickerProps as BaseDatePickerProps,
 } from "./DatePicker";
 import { action } from "mobx";
+import { MobxProps } from "@shared/types";
 
 export interface DatePickerProps<T>
 	extends MobxProps<T>,
-		Omit<BaseDatePickerProps<T>, "value" | "onChange"> {}
+		Omit<BaseDatePickerProps, "value" | "onChange"> {}
 
 export const DatePicker = observer(
 	<T extends object>(props: DatePickerProps<T>) => {
 		const { state, path, ...rest } = props;
 
-		const defaultValue = (Tool.get(state, path) ||
-			new Date().toISOString()) as string;
+		const defaultValue = Tool.get(state, path) || new Date().toISOString();
 
-		const defaultParsedValue = parseAbsoluteToLocal(defaultValue);
+		// Ensure defaultValue is a valid ISO string
+		const isoString =
+			typeof defaultValue === "string"
+				? defaultValue
+				: new Date().toISOString();
 
-		const { localState } = useFormField({
+		const defaultParsedValue = parseAbsoluteToLocal(isoString);
+
+		const { localState } = useFormField<T, any>({
 			initialValue: defaultParsedValue,
 			state,
 			path,
 		});
 
 		const handleDateChange = action((value: string) => {
-			const parsedValue = parseAbsoluteToLocal(value);
-			localState.value = parsedValue;
+			if (typeof value === "string") {
+				try {
+					const parsedValue = parseAbsoluteToLocal(value);
+					localState.value = parsedValue;
+				} catch (error) {
+					console.error("Error parsing date value:", error);
+				}
+			}
 		});
 
 		return (
