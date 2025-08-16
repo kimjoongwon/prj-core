@@ -9,7 +9,7 @@ import {
 	ModalHeaderProps,
 	ModalProps,
 } from "@heroui/react";
-import { observer } from "mobx-react-lite";
+
 
 interface ModalLayoutProps extends ModalProps {
 	modalHeader?: ModalHeaderProps;
@@ -17,7 +17,7 @@ interface ModalLayoutProps extends ModalProps {
 	modalFooter?: ModalFooterProps;
 }
 
-export const Modal = observer((props: ModalLayoutProps) => {
+export const Modal = ((props: ModalLayoutProps) => {
 	const { modalHeader, modalBody, modalFooter, ...modalProps } = props;
 
 	return (

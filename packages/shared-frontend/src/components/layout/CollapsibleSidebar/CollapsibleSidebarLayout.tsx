@@ -1,5 +1,5 @@
 import { Button } from "@heroui/react";
-import { observer } from "mobx-react-lite";
+
 import { renderLucideIcon } from "../../../utils/iconUtils";
 import { VStack } from "../../ui/VStack/VStack";
 
@@ -16,7 +16,7 @@ interface CollapsibleSidebarProps {
 	onToggle: () => void;
 }
 
-export const CollapsibleSidebar = observer((props: CollapsibleSidebarProps) => {
+export const CollapsibleSidebar = (props: CollapsibleSidebarProps) => {
 	const { children, parentMenuInfo, isCollapsed, onToggle } = props;
 
 	return (
@@ -79,6 +79,4 @@ export const CollapsibleSidebar = observer((props: CollapsibleSidebarProps) => {
 			</div>
 		</div>
 	);
-});
-
-CollapsibleSidebar.displayName = "CollapsibleSidebar";
+};

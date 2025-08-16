@@ -6,8 +6,6 @@ import {
 	getExpandedRowModel,
 	useReactTable,
 } from "@tanstack/react-table";
-import { action } from "mobx";
-import { observer, useLocalObservable } from "mobx-react-lite";
 import { useState } from "react";
 import { Table, TableProps } from "../Table/Table";
 
@@ -23,10 +21,13 @@ export type DataGridProps<T> = Omit<TableProps<T>, "tableInstance"> & {
 	data: (T & { id: Key })[];
 };
 
-export const DataGrid = observer(<T extends any>(props: DataGridProps<T>) => {
+export const DataGrid = <T extends any>(props: DataGridProps<T>) => {
 	const { data, columns, state, selectionMode, ...rest } = props;
 
 	const [expanded, setExpanded] = useState<ExpandedState>({});
+	const defaultSelection = state.selectedKeys
+		? new Set(state.selectedKeys)
+		: new Set<Key>();
 
 	const table = useReactTable({
 		data,
@@ -40,40 +41,17 @@ export const DataGrid = observer(<T extends any>(props: DataGridProps<T>) => {
 		},
 	});
 
-	const localState = useLocalObservable<{
-		selection: Selection;
-	}>(() => {
-		return {
-			selection: state.selectedKeys ? new Set(state.selectedKeys) : new Set(),
-		};
-	});
-
-	const onSelectionChange = action((selection: Selection) => {
-		localState.selection = selection;
-
-		const allKeys = data.map((item) => item.id);
-		let selectedKeys: Key[] = [];
-
-		if (selection === "all") {
-			selectedKeys = allKeys;
-		} else {
-			selectedKeys = Array.from(selection as Set<Key>);
-		}
-
-		if (selectionMode === "single") {
-			state.selectedKeys = selectedKeys;
-		} else {
-			state.selectedKeys = selectedKeys;
-		}
-	});
+	const onSelectionChange = (selection: Selection) => {
+		return selection;
+	};
 
 	return (
 		<Table
 			{...rest}
 			tableInstance={table}
 			onSelectionChange={onSelectionChange}
-			selectedKeys={localState.selection}
+			selectedKeys={defaultSelection}
 			selectionMode={selectionMode}
 		/>
 	);
-});
+};

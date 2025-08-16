@@ -1,29 +1,24 @@
 import type { TextAreaProps } from "@heroui/react";
 import { Textarea as BaseTextarea } from "@heroui/react";
-import type { MobxProps } from "../../../types";
+import React from "react";
 
-export interface BaseTextareaProps<T> extends TextAreaProps, MobxProps<T> {}
+export interface TextareaProps extends Omit<TextAreaProps, 'onChange' | 'value'> {
+	value?: string;
+	onChange?: (value: string) => void;
+}
 
-import { get } from "lodash-es";
-import { observer } from "mobx-react-lite";
-import { useFormField } from "@shared/hooks";
+export const Textarea = (props: TextareaProps) => {
+	const { onChange, value, ...rest } = props;
 
-export const Textarea = observer(
-	<T extends object>(props: BaseTextareaProps<T>) => {
-		const { value, state = {}, path = "", ...rest } = props;
-		const initialValue = get(state, path, value);
-		const { localState } = useFormField({ initialValue, state, path });
+	const handleOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+		onChange?.(e.target.value);
+	};
 
-		const handleOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-			localState.value = e.target.value;
-		};
-
-		return (
-			<BaseTextarea
-				{...rest}
-				value={localState.value}
-				onChange={handleOnChange}
-			/>
-		);
-	},
-);
+	return (
+		<BaseTextarea
+			{...rest}
+			value={value}
+			onChange={handleOnChange}
+		/>
+	);
+};

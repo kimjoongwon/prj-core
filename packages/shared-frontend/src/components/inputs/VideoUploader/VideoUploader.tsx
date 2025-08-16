@@ -3,10 +3,9 @@ export interface VideoUploaderProps {
 }
 
 import { Upload } from "lucide-react";
-import { observer } from "mobx-react-lite";
 import { useRef, useState } from "react";
 
-export const VideoUploader = observer((props: VideoUploaderProps) => {
+export const VideoUploader = (props: VideoUploaderProps) => {
 	const { label } = props;
 	const [file, setFile] = useState<File | null>(null);
 	const [uploading, setUploading] = useState(false);
@@ -133,4 +132,4 @@ export const VideoUploader = observer((props: VideoUploaderProps) => {
 			</div>
 		</div>
 	);
-});
+};

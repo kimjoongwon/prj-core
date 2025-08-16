@@ -1,89 +1,73 @@
-import { get } from "lodash-es";
-import { observer } from "mobx-react-lite";
-import { useMemo } from "react";
 import { v4 } from "uuid";
-import { useFormField } from "@shared/hooks";
-import type { MobxProps } from "../../../types";
 import { Chip } from "../../ui/Chip/Chip";
 
 type SelectionMode = "single" | "multiple" | "none";
 
-export interface ChipSelectProps<T> extends MobxProps<T> {
+export interface ChipSelectProps {
 	options: string[];
 	selectionMode?: SelectionMode;
+	value?: string | string[] | null;
+	onSelectionChange?: (value: string | string[] | null) => void;
 }
 
-export const ChipSelect = observer(
-	<T extends object>(props: ChipSelectProps<T>) => {
-		const { state, path, options = [], selectionMode = "multiple" } = props;
+export const ChipSelect = (props: ChipSelectProps) => {
+	const { options = [], selectionMode = "multiple", value, onSelectionChange } = props;
 
-		const initialValue = useMemo(() => {
-			const currentValue = get(state, path);
-			if (selectionMode === "single") {
-				return currentValue;
+	const handleChipPress = (option: string) => {
+		if (selectionMode === "none") return;
+
+		if (selectionMode === "single") {
+			const newValue = value === option ? null : option;
+			onSelectionChange?.(newValue);
+		} else if (selectionMode === "multiple") {
+			const currentValues = Array.isArray(value) ? value : [];
+			let newValue: string[];
+			if (currentValues.includes(option)) {
+				newValue = currentValues.filter((v) => v !== option);
+			} else {
+				newValue = [...currentValues, option];
 			}
-			return Array.isArray(currentValue) ? currentValue : [];
-		}, [state, path, selectionMode]);
+			onSelectionChange?.(newValue);
+		}
+	};
 
-		const { localState } = useFormField({ initialValue, state, path });
+	const isSelected = (option: string): boolean => {
+		if (selectionMode === "single") {
+			return value === option;
+		}
+		if (selectionMode === "multiple") {
+			return Array.isArray(value) && value.includes(option);
+		}
+		return false;
+	};
 
-		const handleChipPress = (value: string) => {
-			if (selectionMode === "none") return;
+	const getChipColor = (option: string) => {
+		if (selectionMode === "none") return "default";
+		return isSelected(option) ? "primary" : "default";
+	};
 
-			if (selectionMode === "single") {
-				localState.value = localState.value === value ? null : value;
-			} else if (selectionMode === "multiple") {
-				const currentValues = Array.isArray(localState.value)
-					? localState.value
-					: [];
-				if (currentValues.includes(value)) {
-					localState.value = currentValues.filter((v) => v !== value);
-				} else {
-					localState.value = [...currentValues, value];
-				}
-			}
-		};
+	const getChipVariant = (option: string) => {
+		if (selectionMode === "none") return "flat";
+		return isSelected(option) ? "solid" : "flat";
+	};
 
-		const isSelected = (value: string): boolean => {
-			if (selectionMode === "single") {
-				return localState.value === value;
-			}
-			if (selectionMode === "multiple") {
-				return (
-					Array.isArray(localState.value) && localState.value.includes(value)
-				);
-			}
-			return false;
-		};
-
-		const getChipColor = (value: string) => {
-			if (selectionMode === "none") return "default";
-			return isSelected(value) ? "primary" : "default";
-		};
-
-		const getChipVariant = (value: string) => {
-			if (selectionMode === "none") return "flat";
-			return isSelected(value) ? "solid" : "flat";
-		};
-
-		return (
-			<div className="flex flex-wrap gap-2">
-				{options.map((option) => (
-					<Chip
-						key={v4()}
-						variant={getChipVariant(option)}
-						color={getChipColor(option)}
-						className={selectionMode !== "none" ? "cursor-pointer" : ""}
-						onClick={
-							selectionMode !== "none"
-								? () => handleChipPress(option)
-								: undefined
-						}
-					>
-						{option}
-					</Chip>
-				))}
-			</div>
-		);
-	},
-);
+	return (
+		<div className="flex flex-wrap gap-2">
+			{options.map((option) => (
+				<Chip
+					key={v4()}
+					variant={getChipVariant(option)}
+					color={getChipColor(option)}
+					className={selectionMode !== "none" ? "cursor-pointer" : ""}
+					onClick={
+						selectionMode !== "none"
+							? () => handleChipPress(option)
+							: undefined
+					}
+				>
+					{option}
+				</Chip>
+			))}
+		</div>
+	);
+};

@@ -1,8 +1,6 @@
 import dayjs from "dayjs";
 import { range } from "lodash-es";
-import { action, makeObservable, observable } from "mobx";
-import { observer, useLocalObservable } from "mobx-react-lite";
-import { useEffect } from "react";
+import { useState, useEffect } from "react";
 import { Date as DateComponent } from "./Date/Date";
 import { DaysOfWeek } from "./DaysOfWeek/DaysOfWeek";
 import { Header } from "./Header/Header";
@@ -22,112 +20,71 @@ export interface CalendarProps {
 const DAY_OF_WEEK = 7;
 const WEEK_OF_MONTH = 6;
 
-export class CalendarState {
-	headerDate = dayjs().startOf("d").toDate();
-	dates: DateData[] = [];
+const generateDates = (
+	headerDate: Date,
+	selectedValues: string[] = [],
+): DateData[] => {
+	const currentMonth = dayjs(headerDate);
+	const startDay = currentMonth.startOf("month").day();
+	const endDate = currentMonth.endOf("month").date();
 
-	constructor() {
-		makeObservable(this, {
-			headerDate: observable,
-			dates: observable,
-			handlePrevMonth: action,
-			handleNextMonth: action,
-			generateDates: action,
-		});
-	}
+	const prevMonth = currentMonth.subtract(1, "month");
+	const nextMonth = currentMonth.add(1, "month");
+	const prevMonthEnd = prevMonth.endOf("month").date();
 
-	handlePrevMonth = () => {
-		this.headerDate = dayjs(this.headerDate).subtract(1, "M").toDate();
-		this.generateDates();
-	};
-
-	handleNextMonth = () => {
-		this.headerDate = dayjs(this.headerDate).add(1, "M").toDate();
-		this.generateDates();
-	};
-
-	generateDates = (selectedValues: string[] = []) => {
-		const currentMonth = dayjs(this.headerDate);
-		const startDay = currentMonth.startOf("month").day();
-		const endDate = currentMonth.endOf("month").date();
-
-		const prevMonth = currentMonth.subtract(1, "month");
-		const nextMonth = currentMonth.add(1, "month");
-		const prevMonthEnd = prevMonth.endOf("month").date();
-
-		const prevMonthRange = range(prevMonthEnd - startDay, prevMonthEnd);
-		const currentMonthRange = range(1, endDate + 1);
-		const nextMonthRange = range(
+	const prevMonthRange = range(prevMonthEnd - startDay, prevMonthEnd);
+	const currentMonthRange = range(1, endDate + 1);
+	const nextMonthRange = range(
+		1,
+		DAY_OF_WEEK * WEEK_OF_MONTH -
+			(prevMonthRange.length + currentMonthRange.length) +
 			1,
-			DAY_OF_WEEK * WEEK_OF_MONTH -
-				(prevMonthRange.length + currentMonthRange.length) +
-				1,
-		);
+	);
 
-		const createDateModel = (
-			date: Date,
-			type: "prev" | "current" | "next",
-		): DateData => ({
-			value: date.toISOString(),
-			selected: selectedValues.some((value) =>
-				dayjs(value).isSame(date, "date"),
-			),
-			isPressable: type === "current",
-			className: type === "current" ? "text-black" : "text-gray-400",
-		});
+	const createDateModel = (
+		date: Date,
+		type: "prev" | "current" | "next",
+	): DateData => ({
+		value: date.toISOString(),
+		selected: selectedValues.some((value) => dayjs(value).isSame(date, "date")),
+		isPressable: type === "current",
+		className: type === "current" ? "text-black" : "text-gray-400",
+	});
 
-		const prevMonthDates = prevMonthRange.map((day) =>
-			createDateModel(prevMonth.set("date", day).toDate(), "prev"),
-		);
+	const prevMonthDates = prevMonthRange.map((day) =>
+		createDateModel(prevMonth.set("date", day).toDate(), "prev"),
+	);
 
-		const currentMonthDates = currentMonthRange.map((day) =>
-			createDateModel(currentMonth.set("date", day).toDate(), "current"),
-		);
+	const currentMonthDates = currentMonthRange.map((day) =>
+		createDateModel(currentMonth.set("date", day).toDate(), "current"),
+	);
 
-		const nextMonthDates = nextMonthRange.map((day) =>
-			createDateModel(nextMonth.set("date", day).toDate(), "next"),
-		);
+	const nextMonthDates = nextMonthRange.map((day) =>
+		createDateModel(nextMonth.set("date", day).toDate(), "next"),
+	);
 
-		this.dates = [...prevMonthDates, ...currentMonthDates, ...nextMonthDates];
-	};
+	return [...prevMonthDates, ...currentMonthDates, ...nextMonthDates];
+};
 
-	get displayYear() {
-		return this.headerDate.getFullYear();
-	}
-
-	get displayMonth() {
-		return this.headerDate.getMonth() + 1;
-	}
-
-	get uiDates(): DateData[] {
-		return this.dates;
-	}
-}
-
-export const Calendar = observer((props: CalendarProps) => {
+export const Calendar = (props: CalendarProps) => {
 	const { value, onChange } = props;
 
 	// Calendar state management
-	const localState = useLocalObservable(() => {
-		const calendarState = new CalendarState();
-		calendarState.generateDates(value);
-		return calendarState;
-	});
+	const [headerDate, setHeaderDate] = useState(dayjs().startOf("d").toDate());
+	const [dates, setDates] = useState<DateData[]>([]);
 
-	// Update dates when value changes
+	// Update dates when value or headerDate changes
 	useEffect(() => {
-		localState.generateDates(value);
-	}, [value, localState]);
+		setDates(generateDates(headerDate, value));
+	}, [value, headerDate]);
 
 	// Handler functions
 	const handlePrevMonth = () => {
-		localState.handlePrevMonth();
-		localState.generateDates(value);
+		setHeaderDate(dayjs(headerDate).subtract(1, "M").toDate());
 	};
 
 	const handleNextMonth = () => {
-		localState.handleNextMonth();
-		localState.generateDates(value);
+		setHeaderDate(dayjs(headerDate).add(1, "M").toDate());
 	};
 
 	const handleDateClick = (dateValue: string) => {
@@ -143,17 +100,20 @@ export const Calendar = observer((props: CalendarProps) => {
 		onChange(newValue);
 	};
 
+	const displayYear = headerDate.getFullYear();
+	const displayMonth = headerDate.getMonth() + 1;
+
 	return (
 		<div className="w-full">
 			<Header
-				year={localState.displayYear}
-				month={localState.displayMonth}
+				year={displayYear}
+				month={displayMonth}
 				onPrevMonth={handlePrevMonth}
 				onNextMonth={handleNextMonth}
 			/>
 			<div className="grid grid-cols-7 grid-rows-7 gap-1">
 				<DaysOfWeek />
-				{localState.uiDates.map((date, idx) => (
+				{dates.map((date, idx) => (
 					<DateComponent
 						key={date.value ?? idx}
 						value={date.value}
@@ -166,4 +126,4 @@ export const Calendar = observer((props: CalendarProps) => {
 			</div>
 		</div>
 	);
-});
+};

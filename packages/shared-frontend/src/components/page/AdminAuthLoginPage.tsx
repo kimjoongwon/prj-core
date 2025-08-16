@@ -1,4 +1,4 @@
-import { observer } from "mobx-react-lite";
+
 import { useAdminAuthLoginRoute } from "../../../../../apps/admin/src/hooks/useAdminLoginRoute";
 import { LoginForm } from "../form/LoginForm/LoginForm";
 import { VStack } from "../ui";
@@ -6,7 +6,7 @@ import { Button } from "../ui/Button/Button";
 import { Logo } from "../ui/Logo/Logo";
 import { Text } from "../ui/Text/Text";
 
-export const AdminAuthLoginPage = observer(
+export const AdminAuthLoginPage = (
 	(props: ReturnType<typeof useAdminAuthLoginRoute>) => {
 		const { state, handlers } = props;
 
@@ -25,5 +25,5 @@ export const AdminAuthLoginPage = observer(
 				</Button>
 			</VStack>
 		);
-	},
+	}
 );

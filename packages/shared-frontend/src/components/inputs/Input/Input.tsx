@@ -2,49 +2,43 @@ import {
 	Input as HeroUiInput,
 	type InputProps as HeroUiInputProps,
 } from "@heroui/react";
-import { get } from "lodash-es";
-import { action } from "mobx";
-import { observer } from "mobx-react-lite";
 import { ChangeEventHandler } from "react";
-import { useFormField } from "@shared/hooks";
-import { MobxProps, Validation } from "../../../types";
+import { Validation } from "../../../types";
 
-export type InputProps<T> = MobxProps<T> &
-	HeroUiInputProps & {
-		validation?: Validation;
-	};
+export interface InputProps extends Omit<HeroUiInputProps, 'onChange' | 'onBlur' | 'value'> {
+	validation?: Validation;
+	value?: string | number;
+	onChange?: (value: string | number) => void;
+	onBlur?: (value: string | number) => void;
+}
 
-export const Input = observer(<T extends object>(props: InputProps<T>) => {
+export const Input = (props: InputProps) => {
 	const {
-		path = "",
-		state = {},
 		onChange,
 		onBlur,
 		errorMessage = " ",
 		type,
 		size = "sm",
 		validation,
+		value = "",
 		...rest
 	} = props;
 
-	const initialValue = get(state, path) || "";
+	const handleChange: ChangeEventHandler<HTMLInputElement> = (e) => {
+		if (type === "number" && typeof Number(e.target.value) === "number") {
+			onChange?.(Number(e.target.value));
+			return;
+		}
 
-	const { localState } = useFormField({ initialValue, state, path });
+		onChange?.(e.target.value);
+	};
 
-	const handleChange: ChangeEventHandler<HTMLInputElement> | undefined = action(
-		(e) => {
-			if (type === "number" && typeof Number(e.target.value) === "number") {
-				localState.value = Number(e.target.value);
-				return;
-			}
-
-			localState.value = e.target.value;
-			onChange?.(localState.value);
-		},
-	);
-
-	const handleOnBlur: InputProps<T>["onBlur"] = (e) => {
-		onBlur?.(e.target.value as any);
+	const handleOnBlur: ChangeEventHandler<HTMLInputElement> = (e) => {
+		if (type === "number" && typeof Number(e.target.value) === "number") {
+			onBlur?.(Number(e.target.value));
+		} else {
+			onBlur?.(e.target.value);
+		}
 	};
 
 	return (
@@ -55,7 +49,7 @@ export const Input = observer(<T extends object>(props: InputProps<T>) => {
 			onChange={handleChange}
 			onBlur={handleOnBlur}
 			errorMessage={errorMessage}
-			value={String(localState.value || "")}
+			value={String(value)}
 		/>
 	);
-});
+};

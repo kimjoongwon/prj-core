@@ -3,36 +3,32 @@ import {
 	SelectProps as NextUISelectProps,
 	SelectItem,
 } from "@heroui/react";
-import { cloneDeep, get } from "lodash-es";
-import { observer } from "mobx-react-lite";
-import { useFormField } from "@shared/hooks";
-import type { MobxProps, Option } from "../../../types";
+import { cloneDeep } from "lodash-es";
+import React from "react";
+import type { Option } from "../../../types";
 
-interface SelectProps<T>
-	extends Omit<NextUISelectProps, "children">,
-		MobxProps<T> {
+export interface SelectProps
+	extends Omit<NextUISelectProps, "children" | "onChange" | "selectedKeys"> {
 	options?: Option[];
+	value?: string;
+	onChange?: (value: string) => void;
 }
 
-export const Select = observer(<T extends object>(props: SelectProps<T>) => {
-	const { state = {}, path = "", options = [], value, ...rest } = props;
+export const Select = (props: SelectProps) => {
+	const { options = [], value, onChange, ...rest } = props;
 
 	const _options = cloneDeep(options);
 
-	const initialValue =
-		_options?.find((option) => option.value === get(state, path))?.value ||
-		value;
-
-	const { localState } = useFormField({ initialValue, state, path });
+	const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+		onChange?.(e.target.value);
+	};
 
 	return (
 		<NextSelect
 			variant="bordered"
 			{...rest}
-			onChange={(e) => {
-				localState.value = e.target.value;
-			}}
-			selectedKeys={localState.value ? [localState.value] : undefined}
+			onChange={handleChange}
+			selectedKeys={value ? [value] : undefined}
 		>
 			{_options.map((option) => {
 				return (
@@ -43,4 +39,4 @@ export const Select = observer(<T extends object>(props: SelectProps<T>) => {
 			})}
 		</NextSelect>
 	);
-});
+};
