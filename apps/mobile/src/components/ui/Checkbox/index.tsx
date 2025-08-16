@@ -1,8 +1,8 @@
+import React, { forwardRef, useImperativeHandle, useCallback } from "react";
 import { useFormField } from "@shared/hooks";
 import { get } from "lodash-es";
 import { action } from "mobx";
 import { observer } from "mobx-react-lite";
-import React, { forwardRef, useImperativeHandle, useCallback } from "react";
 import { Checkbox as BaseCheckbox } from "./Checkbox";
 import type { CheckboxProps, CheckboxRef } from "./types";
 
@@ -20,7 +20,7 @@ export const Checkbox = observer(
 			ref,
 		) => {
 			// 무조건 MobX 사용 - controlledSelected는 무시됨
-			const initialValue = get(state, path, defaultSelected);
+			const initialValue = get(state, path || "", defaultSelected);
 
 			const { localState } = useFormField({
 				initialValue,

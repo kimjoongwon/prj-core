@@ -1,6 +1,5 @@
 import { Card, CardBody } from "@heroui/react";
 import type { Meta, StoryObj } from "@storybook/react";
-import { PageProvider } from "../../../provider/PageProvider/PageProvider";
 import { Button } from "../../ui/Button/Button";
 import { HStack } from "../../ui/HStack/HStack";
 import { Text } from "../../ui/Text/Text";
@@ -21,11 +20,7 @@ const meta: Meta<typeof Modal> = {
 				state: {},
 			};
 
-			return (
-				<PageProvider pageBuilder={pageBuilder}>
-					<Story />
-				</PageProvider>
-			);
+			return <Story />;
 		},
 	],
 };

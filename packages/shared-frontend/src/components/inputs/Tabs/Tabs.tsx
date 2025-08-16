@@ -1,6 +1,6 @@
 import { Tabs as HeroUITabs, Tab } from "@heroui/react";
 import { Key } from "react";
-import type { Option } from "../../../types";
+import { Option } from "@shared/types";
 
 export interface TabsProps {
 	options: Option[];
@@ -14,7 +14,7 @@ export const Tabs = (props: TabsProps) => {
 	return (
 		<HeroUITabs selectedKey={selectedKey} onSelectionChange={onSelectionChange}>
 			{options?.map((item) => (
-				<Tab key={item.value} title={item.label} />
+				<Tab key={item.value} title={item.text} value={item.value} />
 			))}
 		</HeroUITabs>
 	);

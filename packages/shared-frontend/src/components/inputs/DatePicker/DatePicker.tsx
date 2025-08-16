@@ -8,13 +8,13 @@ import type {
 	ZonedDateTime,
 } from "@internationalized/date";
 
-export interface DatePickerProps<T = any>
+export interface DatePickerProps
 	extends Omit<HeroUiDatePickerProps, "value" | "onChange"> {
 	value?: CalendarDate | CalendarDateTime | ZonedDateTime;
 	onChange?: (value: string) => void;
 }
 
-export const DatePicker = <T extends object>(props: DatePickerProps<T>) => {
+export const DatePicker = (props: DatePickerProps) => {
 	const { value, onChange, ...rest } = props;
 
 	const handleDateChange = (

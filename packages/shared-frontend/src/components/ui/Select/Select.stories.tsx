@@ -63,11 +63,11 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 const countryOptions = [
-	{ key: "1", value: "kr", label: "Korea" },
-	{ key: "2", value: "us", label: "United States" },
-	{ key: "3", value: "jp", label: "Japan" },
-	{ key: "4", value: "cn", label: "China" },
-	{ key: "5", value: "uk", label: "United Kingdom" },
+	{ key: "1", value: "kr", text: "Korea" },
+	{ key: "2", value: "us", text: "United States" },
+	{ key: "3", value: "jp", text: "Japan" },
+	{ key: "4", value: "cn", text: "China" },
+	{ key: "5", value: "uk", text: "United Kingdom" },
 ];
 
 export const Default: Story = {

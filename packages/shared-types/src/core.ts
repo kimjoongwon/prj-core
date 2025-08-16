@@ -46,3 +46,18 @@ export type Leaves<T, D extends number = 10> = [D] extends [never]
 	: T extends object
 		? { [K in keyof T]-?: Join<K, Leaves<T[K], Prev[D]>> }[keyof T]
 		: "";
+
+export type Option = {
+	text: string;
+	value: any;
+};
+
+export interface MobxProps<T = any> {
+	path: Paths<T, 4>;
+	state: T;
+}
+
+export interface FormUnitProps<T> {
+	state: T;
+	path: Leaves<T, 4>;
+}
