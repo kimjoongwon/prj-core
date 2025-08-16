@@ -12,7 +12,7 @@ import { action } from "mobx";
 
 export interface DateRangePickerProps<T>
 	extends MobxProps<T>,
-		Omit<BaseDateRangePickerProps<T>, "value" | "onChange"> {}
+		Omit<BaseDateRangePickerProps, "value" | "onChange"> {}
 
 export const DateRangePicker = observer(
 	<T extends object>(props: DateRangePickerProps<T>) => {

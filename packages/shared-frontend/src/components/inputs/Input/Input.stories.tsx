@@ -21,40 +21,8 @@ export const Default: Story = {
 		placeholder: "Enter text...",
 	},
 	render: (args) => {
-		const [value, setValue] = useState("");
-		return <Input {...args} value={value} onChange={setValue} />;
-	},
-};
+		const [value, setValue] = useState<string>("");
 
-export const WithInitialValue: Story = {
-	args: {
-		label: "Input with Initial Value",
-	},
-	render: (args) => {
-		const [value, setValue] = useState("Hello, Storybook!");
-		return <Input {...args} value={value} onChange={setValue} />;
-	},
-};
-
-export const NumberType: Story = {
-	args: {
-		label: "Number Input",
-		type: "number",
-	},
-	render: (args) => {
-		const [value, setValue] = useState("123");
-		return <Input {...args} value={value} onChange={setValue} />;
-	},
-};
-
-export const WithError: Story = {
-	args: {
-		label: "Input with Error",
-		isInvalid: true,
-		errorMessage: "This field is required.",
-	},
-	render: (args) => {
-		const [value, setValue] = useState("");
-		return <Input {...args} value={value} onChange={setValue} />;
+		return <Input {...args} value={value} onValueChange={setValue} />;
 	},
 };
