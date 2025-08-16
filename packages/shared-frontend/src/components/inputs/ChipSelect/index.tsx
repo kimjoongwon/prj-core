@@ -3,7 +3,7 @@ import { observer } from "mobx-react-lite";
 import { useMemo } from "react";
 import { useFormField } from "@shared/hooks";
 import { Tool } from "@shared/utils";
-import { MobxProps } from "../../../types";
+import { MobxProps } from "@shared/types";
 import { ChipSelect as BaseChipSelect, type ChipSelectProps as BaseChipSelectProps } from "./ChipSelect";
 
 export interface ChipSelectProps<T> extends MobxProps<T>, Omit<BaseChipSelectProps, 'value' | 'onSelectionChange'> {}

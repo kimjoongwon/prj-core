@@ -3,7 +3,7 @@ import { observer } from "mobx-react-lite";
 import { Key } from "react";
 import { useFormField } from "@shared/hooks";
 import { Tool } from "@shared/utils";
-import { MobxProps } from "../../../types";
+import { MobxProps } from "@shared/types";
 import { Tabs as BaseTabs, type TabsProps as BaseTabsProps } from "./Tabs";
 
 export interface TabsProps<T>

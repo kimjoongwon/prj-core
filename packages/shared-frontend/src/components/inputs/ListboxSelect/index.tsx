@@ -1,7 +1,7 @@
 import { observer } from "mobx-react-lite";
 import { useFormField } from "@shared/hooks";
 import { Tool } from "@shared/utils";
-import { MobxProps } from "../../../types";
+import { MobxProps } from "@shared/types";
 import {
 	ListboxSelect as BaseListboxSelect,
 	ListboxSelectProps as BaseListboxSelectProps,
