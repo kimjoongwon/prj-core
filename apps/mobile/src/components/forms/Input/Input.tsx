@@ -16,7 +16,7 @@ import {
 	View,
 	ViewStyle,
 } from "react-native";
-import { Text } from "../Text";
+import { Text } from "../../ui/Text";
 import Animated, {
 	useSharedValue,
 	useAnimatedStyle,

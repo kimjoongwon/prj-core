@@ -4,7 +4,7 @@ import { View, Image } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { Text } from "../Text";
 import { Chip } from "./Chip";
-import type { ChipProps } from "./types";
+import type { ChipProps } from "./Chip";
 
 const meta: Meta<ChipProps> = {
 	title: "components/Chip",

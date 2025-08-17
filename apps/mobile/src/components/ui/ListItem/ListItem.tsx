@@ -1,5 +1,10 @@
 import React, { useEffect } from "react";
-import { TouchableOpacity, View, Image, ViewStyle } from "react-native";
+import {
+	TouchableOpacity,
+	View,
+	Image,
+	ViewStyle,
+} from "react-native";
 import { Text } from "../Text";
 import Animated, {
 	useSharedValue,
@@ -8,15 +13,34 @@ import Animated, {
 	interpolateColor,
 	interpolate,
 } from "react-native-reanimated";
-import { ListItemProps, BaseListItem } from "./types";
 import { styles, sizes } from "./ListItem.styles";
 import { useTheme } from "../../providers/theme-provider";
 
-export const ListItem = <T extends BaseListItem = BaseListItem>(
-	props: ListItemProps<T>,
-): React.ReactElement => {
+export type ListItemVariant = "default" | "card" | "simple";
+export type ListItemSize = "sm" | "md" | "lg";
+
+export interface ListItemProps {
+	title: string;
+	description?: string;
+	imageUrl?: string;
+	variant?: ListItemVariant;
+	size?: ListItemSize;
+	isSelected?: boolean;
+	onPress?: () => void;
+	disabled?: boolean;
+	showAnimation?: boolean;
+	showCheckbox?: boolean;
+	showImage?: boolean;
+	startContent?: React.ReactNode;
+	endContent?: React.ReactNode;
+	style?: ViewStyle;
+}
+
+export const ListItem: React.FC<ListItemProps> = (props) => {
 	const {
-		item,
+		title,
+		description,
+		imageUrl,
 		variant = "default",
 		size = "md",
 		isSelected = false,
@@ -109,20 +133,17 @@ export const ListItem = <T extends BaseListItem = BaseListItem>(
 	});
 
 	const renderImageOrPlaceholder = () => {
-		// showImage가 false이거나 item.image가 없으면 아무것도 렌더링하지 않음
-		if (!showImage || !item.image) return null;
+		// showImage가 false이거나 imageUrl이 없으면 아무것도 렌더링하지 않음
+		if (!showImage || !imageUrl) return null;
 
 		const imageStyle = {
 			width: sizeConfig.imageSize,
 			height: sizeConfig.imageSize,
 		};
 
-		const imageSource =
-			typeof item.image === "string" ? { uri: item.image } : item.image;
-
 		return (
 			<View style={[styles.imageContainer, imageStyle]}>
-				<Image source={imageSource} style={styles.image} />
+				<Image source={{ uri: imageUrl }} style={styles.image} />
 			</View>
 		);
 	};
@@ -188,14 +209,14 @@ export const ListItem = <T extends BaseListItem = BaseListItem>(
 							{
 								color: theme.colors.foreground,
 								fontSize: sizeConfig.titleFontSize,
-								marginBottom: item.description ? 2 : 0, // description이 있을 때만 마진
+								marginBottom: description ? 2 : 0, // description이 있을 때만 마진
 							},
 						]}
 						numberOfLines={1}
 					>
-						{item.title}
+						{title}
 					</Text>
-					{item.description && (
+					{description && (
 						<Text
 							style={[
 								styles.description,
@@ -206,7 +227,7 @@ export const ListItem = <T extends BaseListItem = BaseListItem>(
 							]}
 							numberOfLines={size === "sm" ? 1 : 2}
 						>
-							{item.description}
+							{description}
 						</Text>
 					)}
 				</View>
