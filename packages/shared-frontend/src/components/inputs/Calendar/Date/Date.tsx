@@ -1,5 +1,5 @@
 import { Card, CardBody } from "@heroui/react";
-import { DateTimeUtil } from "@shared/utils";
+import { getDate } from "@shared/utils";
 import { Text } from "../../../ui/Text/Text";
 
 export interface DateProps {
@@ -18,7 +18,7 @@ export const Date = (props: DateProps) => {
 		className = "",
 		onDateClick,
 	} = props;
-	const date = DateTimeUtil.getDate(value);
+	const date = getDate(value);
 
 	return (
 		<Card

@@ -1,5 +1,5 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import { BrowserUtil } from "../BrowserUtil";
+import { navigateTo, reload, getCurrentUrl, getUserAgent } from "../BrowserUtil";
 
 // Mock browser globals
 const mockDocument = {
@@ -70,13 +70,13 @@ describe("BrowserUtil", () => {
 				configurable: true,
 			});
 
-			BrowserUtil.navigateTo("/new-page");
+			navigateTo("/new-page");
 
 			expect(hrefValue).toBe("/new-page");
 		});
 
 		it("replace 옵션으로 이동해야 한다", () => {
-			BrowserUtil.navigateTo("/new-page", true);
+			navigateTo("/new-page", true);
 
 			expect(mockWindow.location.replace).toHaveBeenCalledWith("/new-page");
 		});
@@ -85,7 +85,7 @@ describe("BrowserUtil", () => {
 			delete (global as any).window;
 			const consoleSpy = vi.spyOn(console, "warn").mockImplementation(() => {});
 
-			BrowserUtil.navigateTo("/new-page");
+			navigateTo("/new-page");
 
 			expect(consoleSpy).toHaveBeenCalledWith(
 				"window가 정의되지 않았습니다. 브라우저 환경에서만 사용 가능합니다.",
@@ -97,7 +97,7 @@ describe("BrowserUtil", () => {
 
 	describe("reload", () => {
 		it("페이지를 새로고침해야 한다", () => {
-			BrowserUtil.reload();
+			reload();
 
 			expect(mockWindow.location.reload).toHaveBeenCalledOnce();
 		});
@@ -106,7 +106,7 @@ describe("BrowserUtil", () => {
 			delete (global as any).window;
 			const consoleSpy = vi.spyOn(console, "warn").mockImplementation(() => {});
 
-			BrowserUtil.reload();
+			reload();
 
 			expect(consoleSpy).toHaveBeenCalledWith(
 				"window가 정의되지 않았습니다. 브라우저 환경에서만 사용 가능합니다.",
@@ -118,7 +118,7 @@ describe("BrowserUtil", () => {
 
 	describe("getCurrentUrl", () => {
 		it("현재 URL 정보를 반환해야 한다", () => {
-			const result = BrowserUtil.getCurrentUrl();
+			const result = getCurrentUrl();
 
 			expect(result).toEqual({
 				href: "https://example.com/path",
@@ -135,7 +135,7 @@ describe("BrowserUtil", () => {
 			delete (global as any).window;
 			const consoleSpy = vi.spyOn(console, "warn").mockImplementation(() => {});
 
-			const result = BrowserUtil.getCurrentUrl();
+			const result = getCurrentUrl();
 
 			expect(result).toBeNull();
 			expect(consoleSpy).toHaveBeenCalledWith(
@@ -148,7 +148,7 @@ describe("BrowserUtil", () => {
 
 	describe("getUserAgent", () => {
 		it("사용자 에이전트 정보를 분석해야 한다", () => {
-			const result = BrowserUtil.getUserAgent();
+			const result = getUserAgent();
 
 			expect(result).toEqual({
 				userAgent: expect.stringContaining("Chrome"),
@@ -166,7 +166,7 @@ describe("BrowserUtil", () => {
 					"Mozilla/5.0 (iPhone; CPU iPhone OS 14_0 like Mac OS X) AppleWebKit/605.1.15",
 			} as any;
 
-			const result = BrowserUtil.getUserAgent();
+			const result = getUserAgent();
 
 			expect(result?.isMobile).toBe(true);
 			expect(result?.isDesktop).toBe(false);
@@ -176,7 +176,7 @@ describe("BrowserUtil", () => {
 			delete (global as any).navigator;
 			const consoleSpy = vi.spyOn(console, "warn").mockImplementation(() => {});
 
-			const result = BrowserUtil.getUserAgent();
+			const result = getUserAgent();
 
 			expect(result).toBeNull();
 			expect(consoleSpy).toHaveBeenCalledWith(
