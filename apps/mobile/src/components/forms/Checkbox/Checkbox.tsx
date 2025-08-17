@@ -7,7 +7,13 @@ import React, {
 	useMemo,
 	useState,
 } from "react";
-import { Pressable, TextStyle, View, ViewStyle, PressableProps } from "react-native";
+import {
+	Pressable,
+	TextStyle,
+	View,
+	ViewStyle,
+	PressableProps,
+} from "react-native";
 import Animated, {
 	Easing,
 	interpolate,
@@ -16,7 +22,7 @@ import Animated, {
 	withTiming,
 } from "react-native-reanimated";
 import { useTheme } from "../../providers/theme-provider";
-import { Text } from "../Text";
+import { Text } from "../../ui/Text";
 import {
 	sizes,
 	radiusValues,
@@ -36,8 +42,7 @@ export type CheckboxColor =
 	| "danger";
 export type CheckboxRadius = "none" | "sm" | "md" | "lg" | "full";
 
-export interface CheckboxProps
-	extends Omit<PressableProps, "style"> {
+export interface CheckboxProps extends Omit<PressableProps, "style"> {
 	children?: React.ReactNode;
 	size?: CheckboxSize;
 	color?: CheckboxColor;

@@ -1,59 +1,66 @@
 import { StyleSheet, TextStyle, ViewStyle } from "react-native";
-import { CheckboxSize } from "./types";
+import { RadioGroupSize } from "./RadioGroup";
 
 export const sizes: Record<
-	CheckboxSize,
+	RadioGroupSize,
 	{
-		checkboxSize: number;
+		radioSize: number;
 		fontSize: number;
 		iconSize: number;
 		spacing: number;
+		groupSpacing: number;
 	}
 > = {
 	sm: {
-		checkboxSize: 16,
+		radioSize: 16,
 		fontSize: 14,
-		iconSize: 10,
+		iconSize: 6,
 		spacing: 8,
+		groupSpacing: 12,
 	},
 	md: {
-		checkboxSize: 20,
+		radioSize: 20,
 		fontSize: 14,
-		iconSize: 12,
+		iconSize: 8,
 		spacing: 10,
+		groupSpacing: 16,
 	},
 	lg: {
-		checkboxSize: 24,
+		radioSize: 24,
 		fontSize: 16,
-		iconSize: 16,
+		iconSize: 10,
 		spacing: 12,
+		groupSpacing: 20,
 	},
 };
 
-export const radiusValues = {
-	none: 0,
-	sm: 2,
-	md: 4,
-	lg: 6,
-	full: 9999,
-};
-
-export const baseContainerStyles: Record<string, ViewStyle> = {
-	base: {
+export const baseGroupStyles: Record<string, ViewStyle> = {
+	container: {
+		flexDirection: "column",
+	},
+	group: {
+		flexDirection: "column",
+	},
+	horizontal: {
 		flexDirection: "row",
-		alignItems: "flex-start",
-		justifyContent: "flex-start",
+		flexWrap: "wrap",
 	},
 	disabled: {
 		opacity: 0.5,
 	},
 };
 
-export const baseCheckboxStyles: Record<string, ViewStyle> = {
-	base: {
+export const baseRadioStyles: Record<string, ViewStyle> = {
+	container: {
+		flexDirection: "row",
+		alignItems: "flex-start",
+		marginBottom: 8,
+	},
+	radio: {
 		alignItems: "center",
 		justifyContent: "center",
 		borderWidth: 2,
+		borderRadius: 50,
 		position: "relative",
 	},
 	selected: {
@@ -65,15 +72,21 @@ export const baseCheckboxStyles: Record<string, ViewStyle> = {
 };
 
 export const baseLabelStyles: Record<string, TextStyle> = {
-	base: {
+	groupLabel: {
+		fontWeight: "600",
+		marginBottom: 8,
+	},
+	radioLabel: {
 		fontWeight: "400",
 		lineHeight: 20,
 	},
+	description: {
+		fontSize: 12,
+		marginTop: 4,
+		opacity: 0.6,
+	},
 	disabled: {
 		opacity: 0.5,
-	},
-	lineThrough: {
-		textDecorationLine: "line-through",
 	},
 };
 
@@ -81,20 +94,40 @@ export const styles = StyleSheet.create({
 	container: {
 		flexDirection: "column",
 	},
-	checkboxContainer: {
+	group: {
+		flexDirection: "column",
+	},
+	horizontal: {
+		flexDirection: "row",
+		flexWrap: "wrap",
+	},
+	radioContainer: {
 		flexDirection: "row",
 		alignItems: "flex-start",
+		marginBottom: 8,
 	},
-	checkbox: {
+	horizontalRadioContainer: {
+		marginRight: 16,
+		marginBottom: 8,
+	},
+	radio: {
 		alignItems: "center",
 		justifyContent: "center",
 		borderWidth: 2,
+		borderRadius: 50,
+	},
+	radioInner: {
+		borderRadius: 50,
 	},
 	labelContainer: {
 		flexDirection: "column",
 		flex: 1,
 	},
-	label: {
+	groupLabel: {
+		fontWeight: "600",
+		marginBottom: 8,
+	},
+	radioLabel: {
 		fontWeight: "400",
 	},
 	description: {

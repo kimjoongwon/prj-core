@@ -1,11 +1,9 @@
 import React, {
-	forwardRef,
 	useCallback,
-	useImperativeHandle,
 	useMemo,
 	useState,
 } from "react";
-import { Pressable, View, ViewStyle } from "react-native";
+import { Pressable, View, ViewStyle, ViewProps, TextStyle } from "react-native";
 import Animated, {
 	Easing,
 	interpolate,
@@ -14,8 +12,8 @@ import Animated, {
 	withTiming,
 } from "react-native-reanimated";
 import { useTheme } from "../../providers/theme-provider";
-import { Text } from "../Text";
-import { RadioGroupProps, RadioGroupRef, RadioOption } from "./types";
+import { Text } from "../../ui/Text";
+import { MobxProps } from "@shared/types";
 import {
 	sizes,
 	baseGroupStyles,
@@ -24,32 +22,86 @@ import {
 	styles,
 } from "./RadioGroup.styles";
 
-export const RadioGroup = forwardRef<RadioGroupRef, RadioGroupProps>(
-	(
-		{
-			options,
-			label,
-			name,
-			value: controlledValue,
-			defaultValue,
-			size = "md",
-			color = "primary",
-			orientation = "vertical",
-			isDisabled = false,
-			isRequired = false,
-			isInvalid = false,
-			description,
-			errorMessage,
-			onValueChange,
-			style,
-			groupStyle,
-			labelStyle,
-			optionLabelStyle,
-			...props
-		},
-		ref,
-	) => {
-		const { theme } = useTheme();
+export type RadioGroupSize = "sm" | "md" | "lg";
+export type RadioGroupColor =
+	| "default"
+	| "primary"
+	| "secondary"
+	| "success"
+	| "warning"
+	| "danger";
+export type RadioGroupOrientation = "horizontal" | "vertical";
+
+export interface RadioOption<T = any> {
+	key: string;
+	text: string;
+	value: string;
+	description?: string;
+	isDisabled?: boolean;
+	data?: T;
+}
+
+export interface RadioGroupProps<T = any> extends Omit<ViewProps, "style"> {
+	options: RadioOption<T>[];
+	label?: string;
+	name?: string;
+	value?: string;
+	defaultValue?: string;
+	size?: RadioGroupSize;
+	color?: RadioGroupColor;
+	orientation?: RadioGroupOrientation;
+	isDisabled?: boolean;
+	isRequired?: boolean;
+	isInvalid?: boolean;
+	description?: string;
+	errorMessage?: string;
+	onValueChange?: (value: string, option?: RadioOption<T>) => void;
+	onDataChange?: (data: T | undefined, option?: RadioOption<T>) => void;
+	dataField?: keyof T | ((data: T) => any);
+	style?: ViewStyle;
+	groupStyle?: ViewStyle;
+	labelStyle?: TextStyle;
+	optionLabelStyle?: TextStyle;
+	className?: string;
+}
+
+// MobX RadioGroup Props
+export interface MobxRadioGroupProps<T, D = any>
+	extends MobxProps<T>,
+		Omit<RadioGroupProps<D>, "value" | "onValueChange" | "onDataChange"> {}
+
+export interface RadioGroupRef {
+	setValue: (value: string) => void;
+	getValue: () => string | undefined;
+	focus: () => void;
+	blur: () => void;
+}
+
+export const RadioGroup = <T = any,>({
+	options,
+	label,
+	name,
+	value: controlledValue,
+	defaultValue,
+	size = "md",
+	color = "primary",
+	orientation = "vertical",
+	isDisabled = false,
+	isRequired = false,
+	isInvalid = false,
+	description,
+	errorMessage,
+	onValueChange,
+	onDataChange,
+	dataField,
+	style,
+	groupStyle,
+	labelStyle,
+	optionLabelStyle,
+	...props
+}: RadioGroupProps<T> & React.RefAttributes<RadioGroupRef>): React.ReactElement => {
+	const { ref, ...restProps } = props;
+	const { theme } = useTheme();
 		const [internalValue, setInternalValue] = useState(defaultValue);
 
 		const selectedValue =
@@ -74,9 +126,25 @@ export const RadioGroup = forwardRef<RadioGroupRef, RadioGroupProps>(
 				if (controlledValue === undefined) {
 					setInternalValue(newValue);
 				}
-				onValueChange?.(newValue);
+				
+				const selectedOption = options.find(option => option.value === newValue);
+				onValueChange?.(newValue, selectedOption);
+				
+				if (onDataChange && selectedOption?.data) {
+					let dataValue: any = selectedOption.data;
+					
+					if (dataField) {
+						if (typeof dataField === 'function') {
+							dataValue = dataField(selectedOption.data);
+						} else {
+							dataValue = selectedOption.data[dataField];
+						}
+					}
+					
+					onDataChange(dataValue, selectedOption);
+				}
 			},
-			[controlledValue, onValueChange],
+			[controlledValue, onValueChange, onDataChange, dataField, options],
 		);
 
 		const setValue = useCallback(
@@ -90,16 +158,7 @@ export const RadioGroup = forwardRef<RadioGroupRef, RadioGroupProps>(
 			return selectedValue;
 		}, [selectedValue]);
 
-		useImperativeHandle(
-			ref,
-			() => ({
-				setValue,
-				getValue,
-				focus: () => {},
-				blur: () => {},
-			}),
-			[setValue, getValue],
-		);
+		// Note: ref handling can be added if needed via forwardRef
 
 		const containerStyle = useMemo((): ViewStyle => {
 			return {
@@ -286,7 +345,7 @@ export const RadioGroup = forwardRef<RadioGroupRef, RadioGroupProps>(
 		}, [options, selectedValue, handleValueChange]);
 
 		return (
-			<View style={[styles.container, containerStyle, style]} {...props}>
+			<View style={[styles.container, containerStyle, style]} {...restProps}>
 				{renderLabel()}
 
 				<View style={[groupContainerStyle, groupStyle]}>{renderOptions()}</View>
@@ -306,8 +365,7 @@ export const RadioGroup = forwardRef<RadioGroupRef, RadioGroupProps>(
 				)}
 			</View>
 		);
-	},
-);
+};
 
 RadioGroup.displayName = "RadioGroup";
 
