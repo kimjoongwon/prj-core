@@ -1,7 +1,2 @@
-export type {
-	CardVariant,
-	CardRadius,
-	CardShadow,
-	CardProps,
-} from "./Card";
+export type { CardProps } from "./Card";
 export { Card } from "./Card";

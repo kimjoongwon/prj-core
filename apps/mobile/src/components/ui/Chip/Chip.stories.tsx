@@ -13,7 +13,7 @@ const meta: Meta<ChipProps> = {
 		layout: "centered",
 		docs: {
 			description: {
-				component: "모던한 디자인의 Chip 컴포넌트입니다. 다양한 변형, 색상, 크기를 지원하며 클로저블 기능과 아바타를 제공합니다.",
+				component: "모던한 디자인의 정적 Chip 컴포넌트입니다. 다양한 변형, 색상, 크기를 지원하며 UI 표시 역할만 합니다.",
 			},
 		},
 	},
@@ -38,10 +38,6 @@ const meta: Meta<ChipProps> = {
 			options: ["none", "sm", "md", "lg", "full"],
 			description: "모서리 둥글기",
 		},
-		isClosable: {
-			control: { type: "boolean" },
-			description: "닫기 버튼 표시",
-		},
 		isDisabled: {
 			control: { type: "boolean" },
 			description: "비활성화 상태",
@@ -64,22 +60,20 @@ export default meta;
 type Story = StoryObj<ChipProps>;
 
 export const Default: Story = {
-	render: (args) => (
-		<Chip {...args} onPress={() => console.log("Chip pressed")}>
-			Default Chip
-		</Chip>
-	),
-	args: {},
+	args: {
+		children: "Default Chip",
+	},
 };
 
-export const Closable: Story = {
+export const WithEndContent: Story = {
 	render: (args) => (
 		<Chip 
 			{...args} 
-			isClosable={true}
-			onClose={() => console.log("Chip closed")}
+			variant="bordered"
+			color="danger"
+			endContent={<Ionicons name="close" size={14} color="#f31260" />}
 		>
-			Closable Chip
+			With End Content
 		</Chip>
 	),
 	args: {},
@@ -92,7 +86,6 @@ export const WithStartIcon: Story = {
 			variant="solid"
 			color="primary"
 			startContent={<Ionicons name="star" size={16} color="white" />}
-			onPress={() => console.log("Icon chip pressed")}
 		>
 			With Icon
 		</Chip>
@@ -107,7 +100,6 @@ export const WithEndIcon: Story = {
 			variant="bordered"
 			color="secondary"
 			endContent={<Ionicons name="arrow-forward" size={14} color="#7828c8" />}
-			onPress={() => console.log("End icon chip pressed")}
 		>
 			With End Icon
 		</Chip>
@@ -127,8 +119,6 @@ export const WithAvatar: Story = {
 					style={{ width: 20, height: 20, borderRadius: 10 }}
 				/>
 			}
-			isClosable={true}
-			onClose={() => console.log("Avatar chip closed")}
 		>
 			John Doe
 		</Chip>
@@ -200,33 +190,30 @@ export const AllRadius: Story = {
 	args: {},
 };
 
-export const InteractiveChips: Story = {
+export const WithContentExamples: Story = {
 	render: () => (
 		<View style={{ gap: 16 }}>
-			<Text style={{ fontSize: 18, fontWeight: "bold" }}>Interactive Chips</Text>
+			<Text style={{ fontSize: 18, fontWeight: "bold" }}>Content Examples</Text>
 			<View style={{ flexDirection: "row", flexWrap: "wrap", gap: 8 }}>
 				<Chip 
 					variant="solid" 
 					color="primary"
-					onPress={() => console.log("Pressable chip")}
 				>
-					Pressable
+					Solid Chip
 				</Chip>
 				<Chip 
 					variant="bordered" 
 					color="danger"
-					isClosable
-					onClose={() => console.log("Closed")}
+					endContent={<Ionicons name="close" size={14} color="#f31260" />}
 				>
-					Closable
+					With Close Icon
 				</Chip>
 				<Chip 
 					variant="light" 
 					color="success"
 					startContent={<Ionicons name="checkmark" size={14} color="#17c964" />}
-					onPress={() => console.log("Success action")}
 				>
-					Success Action
+					Success Status
 				</Chip>
 				<Chip 
 					variant="flat" 
@@ -243,8 +230,6 @@ export const InteractiveChips: Story = {
 							<Text style={{ color: "white", fontSize: 10, fontWeight: "bold" }}>!</Text>
 						</View>
 					}
-					isClosable
-					onClose={() => console.log("Warning closed")}
 				>
 					Warning
 				</Chip>
@@ -261,7 +246,7 @@ export const Disabled: Story = {
 			<View style={{ flexDirection: "row", flexWrap: "wrap", gap: 8 }}>
 				<Chip isDisabled>Disabled</Chip>
 				<Chip isDisabled color="primary">Disabled Primary</Chip>
-				<Chip isDisabled color="success" isClosable>Disabled Closable</Chip>
+				<Chip isDisabled color="success" endContent={<Ionicons name="close" size={14} color="#17c964" />}>Disabled with Icon</Chip>
 				<Chip 
 					isDisabled 
 					color="danger"
@@ -298,24 +283,21 @@ export const RealWorldExamples: Story = {
 					<Chip 
 						variant="solid" 
 						color="primary"
-						isClosable
-						onClose={() => console.log("Remove React")}
+						endContent={<Ionicons name="close" size={14} color="white" />}
 					>
 						React
 					</Chip>
 					<Chip 
 						variant="solid" 
 						color="primary"
-						isClosable
-						onClose={() => console.log("Remove Mobile")}
+						endContent={<Ionicons name="close" size={14} color="white" />}
 					>
 						Mobile
 					</Chip>
 					<Chip 
 						variant="solid" 
 						color="primary"
-						isClosable
-						onClose={() => console.log("Remove UI/UX")}
+						endContent={<Ionicons name="close" size={14} color="white" />}
 					>
 						UI/UX
 					</Chip>

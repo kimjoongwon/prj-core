@@ -3,7 +3,7 @@ import { observer } from "mobx-react-lite";
 import { useFormField } from "@shared/hooks";
 import { MobxProps } from "@shared/types";
 import { Input as InputComponent, InputProps as BaseInputProps } from "./Input";
-import { Tool } from "@shared/utils";
+import { get } from "lodash-es";
 
 export interface InputProps<T>
 	extends MobxProps<T>,
@@ -12,7 +12,7 @@ export interface InputProps<T>
 export const Input = observer(<T extends object>(props: InputProps<T>) => {
 	const { state, path, ...rest } = props;
 
-	const initialValue = Tool.get(state, path) || "";
+	const initialValue = get(state, path) || "";
 
 	const { localState } = useFormField({
 		initialValue,

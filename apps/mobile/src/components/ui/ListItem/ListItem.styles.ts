@@ -8,7 +8,6 @@ export const sizes = {
 		imageSize: 32,
 		titleFontSize: 14,
 		descriptionFontSize: 12,
-		checkboxSize: 20,
 	},
 	md: {
 		height: 72,
@@ -17,7 +16,6 @@ export const sizes = {
 		imageSize: 48,
 		titleFontSize: 16,
 		descriptionFontSize: 14,
-		checkboxSize: 24,
 	},
 	lg: {
 		height: 88,
@@ -26,7 +24,6 @@ export const sizes = {
 		imageSize: 64,
 		titleFontSize: 18,
 		descriptionFontSize: 15,
-		checkboxSize: 28,
 	},
 };
 
@@ -44,7 +41,7 @@ export const styles = StyleSheet.create({
 		alignItems: "center",
 		minHeight: 0, // flex가 제대로 작동하도록
 	},
-	
+
 	// Image Styles
 	imageContainer: {
 		borderRadius: 8,
@@ -57,7 +54,7 @@ export const styles = StyleSheet.create({
 		height: "100%",
 		borderRadius: 8,
 	},
-	
+
 	// Content Styles
 	textContainer: {
 		flex: 1,
@@ -75,20 +72,8 @@ export const styles = StyleSheet.create({
 		lineHeight: 18,
 		flexShrink: 1, // 긴 설명이 다른 요소를 밀지 않도록
 	},
-	
-	// Interactive Elements
-	checkboxContainer: {
-		justifyContent: "center",
-		alignItems: "center",
-		borderRadius: 6,
-		borderWidth: 2,
-		marginLeft: 12,
-		flexShrink: 0, // 체크박스 크기 고정
-	},
-	checkIcon: {
-		fontWeight: "800",
-	},
-	
+
+
 	// Variant Styles
 	cardVariant: {
 		backgroundColor: "transparent",
@@ -102,7 +87,6 @@ export const styles = StyleSheet.create({
 		borderRadius: 0,
 		paddingHorizontal: 0,
 	},
-	
 	// Start/End Content
 	startContent: {
 		marginRight: 12,

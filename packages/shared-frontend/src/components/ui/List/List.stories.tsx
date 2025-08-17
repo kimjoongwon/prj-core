@@ -9,7 +9,7 @@ const meta = {
 		docs: {
 			description: {
 				component:
-					"커스텀 렌더 함수로 배열의 아이템들을 렌더링하는 유연한 리스트 컴포넌트입니다. 비어있을 때 플레이스홀더를 보여줍니다.",
+					"수직 또는 수평으로 아이템을 렌더링할 수 있는 유연한 리스트 컴포넌트입니다. 커스텀 렌더 함수와 플레이스홀더를 지원합니다.",
 			},
 		},
 	},
@@ -19,14 +19,26 @@ const meta = {
 			description: "렌더링할 데이터 아이템 배열",
 		},
 		renderItem: {
-			description: "각 아이템을 렌더링할 함수",
+			description: "각 아이템을 렌더링할 함수 (item, index) => ReactNode",
+		},
+		horizontal: {
+			control: "boolean",
+			description: "수평 레이아웃 여부 (기본값: false)",
 		},
 		placeholder: {
 			description: "리스트가 비어있을 때 보여줄 콘텐츠",
 		},
 		className: {
 			control: "text",
-			description: "추가로 적용할 CSS 클래스",
+			description: "컨테이너에 적용할 CSS 클래스",
+		},
+		gap: {
+			control: "text",
+			description: "아이템 간의 간격 (CSS gap 속성값)",
+		},
+		itemClassName: {
+			control: "text",
+			description: "각 아이템 래퍼에 적용할 CSS 클래스",
 		},
 	},
 } satisfies Meta<typeof List>;
@@ -48,10 +60,11 @@ const 샘플사용자들 = [
 	{ id: 3, name: "이영희", email: "lee@example.com", role: "편집자" },
 ];
 
-export const 기본: Story = {
+export const 수직_리스트: Story = {
 	args: {
 		data: 샘플아이템들,
-		renderItem: (item: any) => <div key={item.id}>{item.name}</div>,
+		horizontal: false,
+		gap: "0.5rem",
 		placeholder: (
 			<div className="text-gray-500 italic">표시할 아이템이 없습니다</div>
 		),
@@ -59,10 +72,13 @@ export const 기본: Story = {
 	render: (args) => (
 		<List
 			{...args}
-			renderItem={(item) => (
-				<div key={item.id} className="p-2 border rounded mb-2">
-					<span className="font-medium">{item.name}</span> - {item.type} (
-					{item.color})
+			renderItem={(item, index) => (
+				<div className="p-3 border rounded-lg bg-white shadow-sm">
+					<span className="text-xs text-gray-400">#{index + 1}</span>
+					<div>
+						<span className="font-medium">{item.name}</span> - {item.type} (
+						{item.color})
+					</div>
 				</div>
 			)}
 		/>
@@ -70,7 +86,40 @@ export const 기본: Story = {
 	parameters: {
 		docs: {
 			description: {
-				story: "간단한 아이템 렌더링을 사용한 기본 리스트입니다.",
+				story: "수직으로 배열된 기본 리스트입니다. 인덱스도 함께 표시됩니다.",
+			},
+		},
+	},
+};
+
+export const 수평_리스트: Story = {
+	args: {
+		data: 샘플아이템들,
+		horizontal: true,
+		gap: "1rem",
+		placeholder: (
+			<div className="text-gray-500 italic">표시할 아이템이 없습니다</div>
+		),
+	},
+	render: (args) => (
+		<div style={{ width: "400px" }}>
+			<List
+				{...args}
+				renderItem={(item, index) => (
+					<div className="p-3 border rounded-lg bg-white shadow-sm min-w-[150px]">
+						<div className="text-xs text-gray-400 mb-1">#{index + 1}</div>
+						<div className="font-medium text-sm">{item.name}</div>
+						<div className="text-xs text-gray-600">{item.type}</div>
+						<div className="w-4 h-4 rounded-full mt-2" style={{ backgroundColor: item.color === "빨간색" ? "red" : item.color === "노란색" ? "yellow" : item.color === "주황색" ? "orange" : "green" }}></div>
+					</div>
+				)}
+			/>
+		</div>
+	),
+	parameters: {
+		docs: {
+			description: {
+				story: "수평으로 스크롤 가능한 리스트입니다. 아이템이 많을 때 자동으로 스크롤됩니다.",
 			},
 		},
 	},
@@ -79,7 +128,8 @@ export const 기본: Story = {
 export const 사용자_리스트: Story = {
 	args: {
 		data: 샘플사용자들,
-		renderItem: (user: any) => <div key={user.id}>{user.name}</div>,
+		horizontal: false,
+		gap: "0.75rem",
 		placeholder: (
 			<div className="text-center text-gray-500 py-8">
 				사용자를 찾을 수 없습니다
@@ -89,14 +139,16 @@ export const 사용자_리스트: Story = {
 	render: (args) => (
 		<List
 			{...args}
-			renderItem={(user) => (
-				<div
-					key={user.id}
-					className="flex items-center justify-between p-3 bg-gray-50 rounded-lg mb-2"
-				>
-					<div>
-						<div className="font-medium text-gray-900">{user.name}</div>
-						<div className="text-sm text-gray-500">{user.email}</div>
+			renderItem={(user, index) => (
+				<div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+					<div className="flex items-center gap-3">
+						<div className="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center text-white text-sm font-medium">
+							{index + 1}
+						</div>
+						<div>
+							<div className="font-medium text-gray-900">{user.name}</div>
+							<div className="text-sm text-gray-500">{user.email}</div>
+						</div>
 					</div>
 					<span className="px-2 py-1 text-xs bg-blue-100 text-blue-800 rounded-full">
 						{user.role}
@@ -108,7 +160,7 @@ export const 사용자_리스트: Story = {
 	parameters: {
 		docs: {
 			description: {
-				story: "스타일링된 카드로 사용자 정보를 표시하는 리스트입니다.",
+				story: "번호와 함께 사용자 정보를 표시하는 수직 리스트입니다.",
 			},
 		},
 	},
@@ -117,7 +169,7 @@ export const 사용자_리스트: Story = {
 export const 빈_리스트: Story = {
 	args: {
 		data: [],
-		renderItem: (item: any) => <div key={item.id}>{item.name}</div>,
+		horizontal: false,
 		placeholder: (
 			<div className="text-center py-12">
 				<div className="text-gray-400 text-6xl mb-4">📭</div>
@@ -133,8 +185,8 @@ export const 빈_리스트: Story = {
 	render: (args) => (
 		<List
 			{...args}
-			renderItem={(item: any) => (
-				<div key={item.id} className="p-2 border rounded">
+			renderItem={(item: any, index) => (
+				<div className="p-2 border rounded">
 					{item.name}
 				</div>
 			)}
@@ -144,6 +196,39 @@ export const 빈_리스트: Story = {
 		docs: {
 			description: {
 				story: "커스텀 플레이스홀더 콘텐츠를 보여주는 빈 리스트입니다.",
+			},
+		},
+	},
+};
+
+export const 간격_설정_예제: Story = {
+	args: {
+		data: [
+			{ id: 1, text: "간격 작음" },
+			{ id: 2, text: "간격 중간" },
+			{ id: 3, text: "간격 큼" },
+		],
+		horizontal: false,
+		gap: "2rem",
+	},
+	render: (args) => (
+		<div>
+			<h3 className="mb-4 font-medium">Gap: {args.gap}</h3>
+			<List
+				{...args}
+				renderItem={(item, index) => (
+					<div className="p-4 bg-blue-50 border-l-4 border-blue-500 rounded">
+						<div className="font-medium">아이템 {index + 1}</div>
+						<div className="text-sm text-gray-600">{item.text}</div>
+					</div>
+				)}
+			/>
+		</div>
+	),
+	parameters: {
+		docs: {
+			description: {
+				story: "gap 속성을 사용하여 아이템 간의 간격을 조절할 수 있습니다.",
 			},
 		},
 	},
@@ -254,7 +339,10 @@ export const 카드_리스트: Story = {
 export const 플레이그라운드: Story = {
 	args: {
 		data: 샘플아이템들,
-		renderItem: (item: any) => <div key={item.id}>{item.name}</div>,
+		horizontal: false,
+		gap: "0.5rem",
+		className: "w-full max-w-md",
+		itemClassName: "list-item",
 		placeholder: (
 			<div className="text-gray-500 text-center py-4">
 				보여줄 아이템이 없습니다
@@ -264,14 +352,16 @@ export const 플레이그라운드: Story = {
 	render: (args) => (
 		<List
 			{...args}
-			renderItem={(item: any) => (
-				<div
-					key={item.id}
-					className="p-3 border rounded-lg mb-2 bg-white shadow-sm"
-				>
-					<div className="font-medium">{item.name}</div>
-					<div className="text-sm text-gray-500">
-						{item.type} • {item.color}
+			renderItem={(item, index) => (
+				<div className="p-3 border rounded-lg bg-white shadow-sm hover:shadow-md transition-shadow">
+					<div className="flex items-center justify-between">
+						<div>
+							<div className="font-medium">{item.name}</div>
+							<div className="text-sm text-gray-500">
+								{item.type} • {item.color}
+							</div>
+						</div>
+						<div className="text-xs text-gray-400">#{index + 1}</div>
 					</div>
 				</div>
 			)}
@@ -280,7 +370,7 @@ export const 플레이그라운드: Story = {
 	parameters: {
 		docs: {
 			description: {
-				story: "다양한 리스트 설정을 테스트할 수 있는 플레이그라운드입니다.",
+				story: "다양한 리스트 설정을 테스트할 수 있는 플레이그라운드입니다. Controls 패널에서 속성을 변경해보세요.",
 			},
 		},
 	},

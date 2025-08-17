@@ -6,7 +6,6 @@ export const sizes = {
 		paddingHorizontal: 8,
 		fontSize: 12,
 		gap: 4,
-		closeButtonSize: 16,
 		avatarSize: 16,
 	},
 	md: {
@@ -14,7 +13,6 @@ export const sizes = {
 		paddingHorizontal: 12,
 		fontSize: 14,
 		gap: 6,
-		closeButtonSize: 20,
 		avatarSize: 20,
 	},
 	lg: {
@@ -22,7 +20,6 @@ export const sizes = {
 		paddingHorizontal: 16,
 		fontSize: 16,
 		gap: 8,
-		closeButtonSize: 24,
 		avatarSize: 24,
 	},
 };
@@ -60,16 +57,6 @@ export const styles = StyleSheet.create({
 		borderRadius: 999,
 		overflow: "hidden",
 		marginRight: 6,
-	},
-	closeButton: {
-		justifyContent: "center",
-		alignItems: "center",
-		borderRadius: 999,
-		marginLeft: 6,
-	},
-	closeIcon: {
-		fontWeight: "700",
-		textAlign: "center",
 	},
 	
 	// Shadow variant

@@ -39,7 +39,7 @@ export type { LogData, Logger } from "./src/LoggerUtil";
 export { getUrlWithParamsAndQueryString, convertFromPathParamsToQueryParams } from "./src/PathUtil";
 
 // Tool utilities
-export { getProperty, setProperty, deepClone, createRange } from "./src/Tool";
+export { getProperty, setProperty, deepClone, createRange, Tool } from "./src/Tool";
 
 // Validation utilities
 export { validateConfig, getVariableName } from "./src/ValidationUtil";

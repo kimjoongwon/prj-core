@@ -18,3 +18,11 @@ export function deepClone<T>(value: T): T {
 export function createRange(start: number, end?: number, step?: number): number[] {
 	return range(start, end, step);
 }
+
+// Tool object for useFormField compatibility
+export const Tool = {
+	get: getProperty,
+	set: setProperty,
+	clone: deepClone,
+	range: createRange,
+};

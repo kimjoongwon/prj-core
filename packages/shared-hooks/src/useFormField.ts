@@ -15,7 +15,7 @@ export const useFormField = <TState = any, TValue = any>({
 	path,
 }: UseFormFieldOptions<TState, TValue>) => {
 	const localState = useLocalObservable(() => ({
-		value: initialValue,
+		value: initialValue as TValue,
 	}));
 
 	useEffect(() => {
@@ -29,7 +29,7 @@ export const useFormField = <TState = any, TValue = any>({
 		const getterDisposer = reaction(
 			() => Tool.get(state, path),
 			(value) => {
-				localState.value = value;
+				localState.value = value as TValue;
 			},
 		);
 

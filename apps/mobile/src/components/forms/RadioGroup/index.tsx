@@ -1,4 +1,3 @@
-import { Tool } from "@shared/utils";
 import { action } from "mobx";
 import { observer } from "mobx-react-lite";
 import { useFormField } from "@shared/hooks";
@@ -13,6 +12,7 @@ import {
 	RadioGroupRef,
 	MobxRadioGroupProps,
 } from "./RadioGroup";
+import { get } from "lodash-es";
 
 export interface RadioGroupProps<T, D = any>
 	extends MobxProps<T>,
@@ -25,8 +25,8 @@ export const RadioGroup = observer(
 	<T extends object, D = any>(props: RadioGroupProps<T, D>) => {
 		const { state, path, dataPath, options, ...rest } = props;
 
-		const initialValue = Tool.get(state, path) || "";
-		const initialDataValue = dataPath ? Tool.get(state, dataPath) : undefined;
+		const initialValue = get(state, path) || "";
+		const initialDataValue = dataPath ? get(state, dataPath) : undefined;
 
 		const { localState } = useFormField({
 			initialValue,
@@ -37,7 +37,7 @@ export const RadioGroup = observer(
 		const { localState: dataLocalState } = useFormField({
 			initialValue: initialDataValue,
 			state,
-			path: dataPath as any || '',
+			path: (dataPath as any) || "",
 		});
 
 		const handleValueChange = action((value: string) => {
