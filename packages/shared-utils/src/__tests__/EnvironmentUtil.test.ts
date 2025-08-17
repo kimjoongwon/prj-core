@@ -1,5 +1,5 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import { EnvironmentUtil } from "../EnvironmentUtil";
+import * as EnvironmentUtil from "../EnvironmentUtil";
 
 // Helper function to mock window.location
 const mockWindowLocation = (hostname: string, port: string = "") => {

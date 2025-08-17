@@ -1,7 +1,7 @@
 /// <reference types="vitest/globals" />
 
 import { AXIOS_INSTANCE } from "@shared/api-client";
-import { BrowserUtil } from "@shared/utils";
+import { navigateTo } from "@shared/utils";
 import { isAxiosError } from "axios";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { AuthStore } from "../authStore";
@@ -10,17 +10,11 @@ import { TokenStore } from "../tokenStore";
 
 // 의존성 모킹
 vi.mock("@shared/utils", () => ({
-	BrowserUtil: {
-		clearLocalStorage: vi.fn(),
-		clearSessionStorage: vi.fn(),
-		navigateTo: vi.fn(),
-	},
-	LoggerUtil: {
-		create: vi.fn(() => ({
-			info: vi.fn(),
-			error: vi.fn(),
-		})),
-	},
+	navigateTo: vi.fn(),
+	createLogger: vi.fn(() => ({
+		info: vi.fn(),
+		error: vi.fn(),
+	})),
 }));
 vi.mock("axios");
 vi.mock("../plateStore");
@@ -202,7 +196,7 @@ describe("AuthStore", () => {
 			await authStore.logout(mockLogoutApi);
 
 			expect(mockLogoutApi).toHaveBeenCalled();
-			expect(BrowserUtil.navigateTo).toHaveBeenCalledWith(
+			expect(navigateTo).toHaveBeenCalledWith(
 				"/admin/auth/login",
 				true,
 			);
@@ -215,7 +209,7 @@ describe("AuthStore", () => {
 			await authStore.logout(mockLogoutApi);
 
 			expect(mockLogoutApi).toHaveBeenCalled();
-			expect(BrowserUtil.navigateTo).toHaveBeenCalledWith(
+			expect(navigateTo).toHaveBeenCalledWith(
 				"/admin/auth/login",
 				true,
 			);
@@ -225,7 +219,7 @@ describe("AuthStore", () => {
 		it("로그아웃 API가 제공되지 않은 경우에도 스토리지를 클리어하고 로그인 페이지로 이동해야 함", async () => {
 			await authStore.logout();
 
-			expect(BrowserUtil.navigateTo).toHaveBeenCalledWith(
+			expect(navigateTo).toHaveBeenCalledWith(
 				"/admin/auth/login",
 				true,
 			);

@@ -1,7 +1,5 @@
-import { FormValidationUtil } from "@shared/utils";
+import { validateSingleField, validateFields } from "@shared/utils";
 import { describe, expect, it } from "vitest";
-
-const { validateSingleField, validateFields } = FormValidationUtil;
 
 import type { Validation } from "../../types/index";
 

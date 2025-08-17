@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { PathUtil } from "../PathUtil";
+import * as PathUtil from "../PathUtil";
 
 describe("PathUtil", () => {
 	describe("getUrlWithParamsAndQueryString", () => {

@@ -1,22 +1,20 @@
 import { get, set, cloneDeep, range } from "lodash-es";
 
-export class Tool {
-	// Object property utilities
-	static get(object: any, path: string | string[], defaultValue?: any): any {
-		return get(object, path, defaultValue);
-	}
+// Object property utilities
+export function getProperty(object: any, path: string | string[], defaultValue?: any): any {
+	return get(object, path, defaultValue);
+}
 
-	static set(object: any, path: string | string[], value: any): any {
-		return set(object, path, value);
-	}
+export function setProperty(object: any, path: string | string[], value: any): any {
+	return set(object, path, value);
+}
 
-	// Deep cloning utility
-	static cloneDeep<T>(value: T): T {
-		return cloneDeep(value);
-	}
+// Deep cloning utility
+export function deepClone<T>(value: T): T {
+	return cloneDeep(value);
+}
 
-	// Array utilities
-	static range(start: number, end?: number, step?: number): number[] {
-		return range(start, end, step);
-	}
+// Array utilities
+export function createRange(start: number, end?: number, step?: number): number[] {
+	return range(start, end, step);
 }

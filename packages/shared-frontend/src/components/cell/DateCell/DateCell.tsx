@@ -1,4 +1,4 @@
-import { DateTimeUtil } from "@shared/utils";
+import { formatDateTimeWithSeconds } from "@shared/utils";
 
 interface DateCellProps {
 	value: string | Date | null | undefined;
@@ -9,5 +9,5 @@ export const DateCell = ({ value }: DateCellProps) => {
 		return <p>-</p>;
 	}
 
-	return <p>{DateTimeUtil.formatDateTimeWithSeconds(value as string)}</p>;
+	return <p>{formatDateTimeWithSeconds(value as string)}</p>;
 };
