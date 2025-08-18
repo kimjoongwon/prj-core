@@ -1,5 +1,5 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import * as DateTimeUtil from "../DateTimeUtil";
+import * as DateTimeUtil from "../DateTime";
 
 describe("DateTimeUtil", () => {
 	describe("getNow", () => {

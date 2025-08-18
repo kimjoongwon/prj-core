@@ -1,5 +1,5 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import { createLogger } from "../LoggerUtil";
+import { createLogger } from "../Logger";
 
 describe("LoggerUtil", () => {
 	// console 메서드들을 모킹

@@ -42,4 +42,26 @@ describe("Index exports", () => {
 		expect(utils.validateConfig).toBeDefined();
 		expect(utils.getVariableName).toBeDefined();
 	});
+
+	it("should export namespace objects", () => {
+		// Namespace objects
+		expect(utils.browser).toBeDefined();
+		expect(utils.dateTime).toBeDefined();
+		expect(utils.environment).toBeDefined();
+		expect(utils.form).toBeDefined();
+		expect(utils.logger).toBeDefined();
+		expect(utils.path).toBeDefined();
+		expect(utils.tool).toBeDefined();
+		expect(utils.validation).toBeDefined();
+
+		// Check that namespace objects contain expected functions
+		expect(utils.browser.navigateTo).toBeDefined();
+		expect(utils.dateTime.formatDate).toBeDefined();
+		expect(utils.environment.isDevelopment).toBeDefined();
+		expect(utils.form.validateSingleField).toBeDefined();
+		expect(utils.logger.create).toBeDefined();
+		expect(utils.path.getUrlWithParamsAndQueryString).toBeDefined();
+		expect(utils.tool.deepClone).toBeDefined();
+		expect(utils.validation.validateConfig).toBeDefined();
+	});
 });

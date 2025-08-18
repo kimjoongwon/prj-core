@@ -1,7 +1,7 @@
 import { IsNumber, IsOptional, IsString } from "class-validator";
 import { describe, expect, it } from "vitest";
 import "reflect-metadata";
-import * as ValidationUtil from "../ValidationUtil";
+import * as ValidationUtil from "../Validation";
 
 // Test classes for validation
 class TestConfig {
