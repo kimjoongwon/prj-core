@@ -21,7 +21,7 @@
 		13B07F961A680F5B00A75B9A /* mobile.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = mobile.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		13B07FB51A68108700A75B9A /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = mobile/Images.xcassets; sourceTree = "<group>"; };
 		13B07FB61A68108700A75B9A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = mobile/Info.plist; sourceTree = "<group>"; };
-		364C40AE84D0309B63C30336 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; includeInIndex = 1; name = PrivacyInfo.xcprivacy; path = mobile/PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
+		364C40AE84D0309B63C30336 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xml; name = PrivacyInfo.xcprivacy; path = mobile/PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		AA286B85B6C04FC6940260E9 /* SplashScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = SplashScreen.storyboard; path = mobile/SplashScreen.storyboard; sourceTree = "<group>"; };
 		BB2F792C24A3F905000567C9 /* Expo.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Expo.plist; sourceTree = "<group>"; };
 		CBE42F4F30731AF4AB164C1E /* ExpoModulesProvider.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ExpoModulesProvider.swift; path = "Pods/Target Support Files/Pods-mobile/ExpoModulesProvider.swift"; sourceTree = "<group>"; };
@@ -73,7 +73,6 @@
 				F5BB23412281182F4B7EC2D2 /* Pods-mobile.debug.xcconfig */,
 				EAC0FD1F3F1FB5BE767C3829 /* Pods-mobile.release.xcconfig */,
 			);
-			name = Pods;
 			path = Pods;
 			sourceTree = "<group>";
 		};
@@ -180,7 +179,7 @@
 			);
 			mainGroup = 83CBB9F61A601CBA00E9B192;
 			productRefGroup = 83CBBA001A601CBA00E9B192 /* Products */;
-			projectDirpath;
+			projectDirPath = "";
 			projectRoot = "";
 			targets = (
 				13B07F861A680F5B00A75B9A /* mobile */,
@@ -338,6 +337,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = mobile/mobile.entitlements;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = GWHNHFY5TM;
 				ENABLE_BITCODE = NO;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"$(inherited)",
@@ -356,7 +356,7 @@
 					"-lc++",
 				);
 				OTHER_SWIFT_FLAGS = "$(inherited) -D EXPO_CONFIGURATION_DEBUG";
-				PRODUCT_BUNDLE_IDENTIFIER = com.wallykim.mobile;
+				PRODUCT_BUNDLE_IDENTIFIER = com.wallykim.mobile.hiuhiu;
 				PRODUCT_NAME = mobile;
 				SWIFT_OBJC_BRIDGING_HEADER = "mobile/mobile-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
@@ -374,6 +374,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = mobile/mobile.entitlements;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = GWHNHFY5TM;
 				INFOPLIST_FILE = mobile/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 15.1;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -387,7 +388,7 @@
 					"-lc++",
 				);
 				OTHER_SWIFT_FLAGS = "$(inherited) -D EXPO_CONFIGURATION_RELEASE";
-				PRODUCT_BUNDLE_IDENTIFIER = com.wallykim.mobile;
+				PRODUCT_BUNDLE_IDENTIFIER = com.wallykim.mobile.hiuhiu;
 				PRODUCT_NAME = mobile;
 				SWIFT_OBJC_BRIDGING_HEADER = "mobile/mobile-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
