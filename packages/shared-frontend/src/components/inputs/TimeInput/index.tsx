@@ -1,7 +1,7 @@
 import { action } from "mobx";
 import { observer } from "mobx-react-lite";
 import { useFormField } from "@shared/hooks";
-import { Tool } from "@shared/utils";
+import { tools } from "@shared/utils";
 import { MobxProps } from "@shared/types";
 import {
 	TimeInput as TimeInputComponent,
@@ -16,7 +16,7 @@ export const TimeInput = observer(
 	<T extends object>(props: TimeInputProps<T>) => {
 		const { state, path, ...rest } = props;
 
-		const initialValue = Tool.get(state, path) || "";
+		const initialValue = tools.get(state, path) || "";
 		const { localState } = useFormField({ initialValue, state, path });
 
 		const handleChange = action((value: string) => {

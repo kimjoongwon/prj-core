@@ -1,5 +1,5 @@
 import { Button, Chip, Avatar as HeroUIAvatar, User } from "@heroui/react";
-import { EnvironmentUtil } from "@shared/utils";
+import { environment } from "@shared/utils";
 import { Dropdown, DropdownItemProps } from "../../inputs/Dropdown/Dropdown";
 
 interface AvatarProps {
@@ -10,14 +10,14 @@ interface AvatarProps {
 export const Avatar = (props: AvatarProps) => {
 	const { showInfo = true, onMenuAction } = props;
 
-	const environment = EnvironmentUtil.getCurrentEnvironment();
+	const currentEnvironment = environment.getCurrentEnvironment();
 
 	const userMenuItems: DropdownItemProps[] = [
 		{
 			key: "environment",
 			label: "환경 정보",
-			description: `현재 ${environment.name} 환경입니다`,
-			startContent: <EnvironmentChip environment={environment} />,
+			description: `현재 ${currentEnvironment.name} 환경입니다`,
+			startContent: <EnvironmentChip environment={currentEnvironment} />,
 			isDisabled: true,
 		},
 		{

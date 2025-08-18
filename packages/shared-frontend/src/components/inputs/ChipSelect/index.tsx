@@ -2,7 +2,7 @@ import { action } from "mobx";
 import { observer } from "mobx-react-lite";
 import { useMemo } from "react";
 import { useFormField } from "@shared/hooks";
-import { Tool } from "@shared/utils";
+import { tools } from "@shared/utils";
 import { MobxProps } from "@shared/types";
 import { ChipSelect as BaseChipSelect, type ChipSelectProps as BaseChipSelectProps } from "./ChipSelect";
 
@@ -12,7 +12,7 @@ export const ChipSelect = observer(<T extends object>(props: ChipSelectProps<T>)
 	const { state, path, options = [], selectionMode = "multiple" } = props;
 
 	const initialValue = useMemo(() => {
-		const currentValue = Tool.get(state, path);
+		const currentValue = tools.get(state, path);
 		if (selectionMode === "single") {
 			return currentValue;
 		}

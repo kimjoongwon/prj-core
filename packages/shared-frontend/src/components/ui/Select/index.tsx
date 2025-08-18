@@ -1,7 +1,7 @@
 import { action } from "mobx";
 import { observer } from "mobx-react-lite";
 import { useFormField } from "@shared/hooks";
-import { Tool } from "@shared/utils";
+import { tools } from "@shared/utils";
 import { MobxProps } from "@shared/types";
 import { Select as BaseSelect, type SelectProps as BaseSelectProps } from "./Select";
 
@@ -10,9 +10,9 @@ export interface SelectProps<T> extends MobxProps<T>, Omit<BaseSelectProps, 'val
 export const Select = observer(<T extends object>(props: SelectProps<T>) => {
 	const { state, path, options = [], ...rest } = props;
 
-	const _options = Tool.cloneDeep(options);
+	const _options = tools.cloneDeep(options);
 
-	const initialValue = _options?.find((option) => option.value === Tool.get(state, path))?.value;
+	const initialValue = _options?.find((option) => option.value === tools.get(state, path))?.value;
 
 	const { localState } = useFormField({ initialValue, state, path });
 

@@ -1,4 +1,4 @@
-import { Tool } from "@shared/utils";
+import { tools } from "@shared/utils";
 import type { MobxProps } from "@shared/types";
 import { reaction } from "mobx";
 import { useLocalObservable } from "mobx-react-lite";
@@ -22,12 +22,12 @@ export const useFormField = <TState = any, TValue = any>({
 		const setterDisposer = reaction(
 			() => localState.value,
 			(value) => {
-				Tool.set(state, path, value);
+				tools.set(state, path, value);
 			},
 		);
 
 		const getterDisposer = reaction(
-			() => Tool.get(state, path),
+			() => tools.get(state, path),
 			(value) => {
 				localState.value = value as TValue;
 			},

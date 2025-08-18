@@ -1,5 +1,5 @@
 import { registerAs } from "@nestjs/config";
-import { ValidationUtil } from "@shared/utils";
+import { validation } from "@shared/utils";
 import { IsString } from "class-validator";
 import { SMTPConfig } from "./config.type";
 
@@ -21,7 +21,7 @@ class EnvironmentVariablesValidator {
 }
 
 export default registerAs<SMTPConfig>("smtp", () => {
-	ValidationUtil.validateConfig(process.env, EnvironmentVariablesValidator);
+	validation.validateConfig(process.env, EnvironmentVariablesValidator);
 
 	return {
 		username: process.env.SMTP_USERNAME!,

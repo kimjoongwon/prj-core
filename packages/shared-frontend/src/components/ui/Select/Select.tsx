@@ -4,7 +4,7 @@ import {
 	SelectItem,
 } from "@heroui/react";
 import React from "react";
-import { Tool } from "@shared/utils";
+import { tools } from "@shared/utils";
 import type { Option } from "../../../types";
 
 export interface SelectProps
@@ -17,7 +17,7 @@ export interface SelectProps
 export const Select = (props: SelectProps) => {
 	const { options = [], value, onChange, ...rest } = props;
 
-	const _options = Tool.cloneDeep(options);
+	const _options = tools.cloneDeep(options);
 
 	const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
 		onChange?.(e.target.value);

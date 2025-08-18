@@ -1,5 +1,5 @@
 import { registerAs } from "@nestjs/config";
-import { ValidationUtil } from "@shared/utils";
+import { validation } from "@shared/utils";
 import { IsBoolean } from "class-validator";
 import { CorsConfig } from "./config.type";
 
@@ -9,7 +9,7 @@ class EnvironmentVariablesValidator {
 }
 
 export default registerAs<CorsConfig>("cors", () => {
-	ValidationUtil.validateConfig(process.env, EnvironmentVariablesValidator);
+	validation.validateConfig(process.env, EnvironmentVariablesValidator);
 
 	return {
 		enabled: process.env.CORS_ENABLED === "true",

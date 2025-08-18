@@ -1,11 +1,11 @@
 import { RouteDto } from "@shared/api-client";
-import { LoggerUtil } from "@shared/utils";
+import { logger } from "@shared/utils";
 import { makeAutoObservable } from "mobx";
 import { NavigatorStore } from "./navigatorStore";
 import { PlateStore } from "./plateStore";
 import { RouteStore } from "./routeStore";
 
-const _logger = LoggerUtil.create("[NavigationStore]");
+const _logger = logger.create("[NavigationStore]");
 
 export class NavigationStore {
 	readonly plateStore: PlateStore;

@@ -1,5 +1,5 @@
 import { registerAs } from "@nestjs/config";
-import { ValidationUtil } from "@shared/utils";
+import { validation } from "@shared/utils";
 import { IsEmail, IsEnum, IsNumber, IsString, IsUrl } from "class-validator";
 import { AppConfig } from "./config.type";
 
@@ -39,7 +39,7 @@ class EnvironmentVariablesValidator {
 }
 
 export default registerAs<AppConfig>("app", () => {
-	ValidationUtil.validateConfig(process.env, EnvironmentVariablesValidator);
+	validation.validateConfig(process.env, EnvironmentVariablesValidator);
 
 	return {
 		nodeEnv: process.env.NODE_ENV || "development",

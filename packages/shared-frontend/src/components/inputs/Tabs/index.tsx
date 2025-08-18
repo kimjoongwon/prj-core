@@ -2,7 +2,7 @@ import { action } from "mobx";
 import { observer } from "mobx-react-lite";
 import { Key } from "react";
 import { useFormField } from "@shared/hooks";
-import { Tool } from "@shared/utils";
+import { tools } from "@shared/utils";
 import { MobxProps } from "@shared/types";
 import { Tabs as BaseTabs, type TabsProps as BaseTabsProps } from "./Tabs";
 
@@ -14,7 +14,7 @@ export const Tabs = observer(<T,>(props: TabsProps<T>) => {
 	const { state, path, options } = props;
 
 	const { localState } = useFormField({
-		initialValue: Tool.get(state, path),
+		initialValue: tools.get(state, path),
 		state,
 		path,
 	});
