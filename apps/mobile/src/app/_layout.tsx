@@ -16,6 +16,8 @@ export {
 	ErrorBoundary,
 } from "expo-router";
 
+import "./global.css";
+
 export const unstable_settings = {
 	// Ensure that reloading on `/modal` keeps a back button present.
 	initialRouteName:

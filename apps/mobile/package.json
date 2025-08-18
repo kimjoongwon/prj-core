@@ -36,6 +36,7 @@
     "lodash-es": "catalog:",
     "mobx": "catalog:",
     "mobx-react-lite": "catalog:",
+    "nativewind": "^4.1.23",
     "react": "19.0.0",
     "react-dom": "19.0.0",
     "react-native": "0.79.5",
@@ -60,11 +61,13 @@
     "babel-loader": "^8.4.1",
     "jest": "^29.2.1",
     "jest-expo": "~53.0.9",
+    "prettier-plugin-tailwindcss": "^0.5.14",
     "react-native-gesture-handler": "^2.28.0",
     "react-native-svg": "^15.12.1",
     "react-test-renderer": "19.0.0",
     "storybook": "^9.1.1",
     "storybook-addon-theme-toggle": "^0.0.1",
+    "tailwindcss": "^3.4.17",
     "typescript": "~5.8.3"
   },
   "private": true

@@ -8,9 +8,12 @@ import { ListItem } from "../../ui/ListItem";
 import { Text } from "../../ui/Text";
 import { makeAutoObservable } from "mobx";
 
-const meta: Meta<ListSelectProps<any>> = {
+// 샘플 데이터 타입 정의
+type User = { id: number; name: string; email: string };
+
+const meta: Meta<ListSelectProps<User>> = {
 	title: "forms/ListSelect",
-	component: ListSelect,
+	component: ListSelect as any, // 오버로드된 컴포넌트를 위해 any로 캐스팅
 	parameters: {
 		layout: "centered",
 		docs: {
@@ -30,10 +33,10 @@ const meta: Meta<ListSelectProps<any>> = {
 };
 
 export default meta;
-type Story = StoryObj<ListSelectProps<any>>;
+type Story = StoryObj<ListSelectProps<User>>;
 
 // 샘플 데이터
-const 샘플사용자들 = [
+const 샘플사용자들: User[] = [
 	{ id: 1, name: "홍길동", email: "hong@example.com" },
 	{ id: 2, name: "김철수", email: "kim@example.com" },
 	{ id: 3, name: "이영희", email: "lee@example.com" },
@@ -42,14 +45,14 @@ const 샘플사용자들 = [
 
 export const 단일_선택: Story = {
 	render: () => {
-		const [selectedUser, setSelectedUser] = useState(null);
+		const [selectedUser, setSelectedUser] = useState<User | null>(null);
 
 		return (
 			<View style={{ gap: 16 }}>
 				<Text style={{ fontSize: 16, fontWeight: "600" }}>
 					선택된 사용자: {selectedUser?.name || "없음"}
 				</Text>
-				<ListSelect
+				<ListSelect<User>
 					data={샘플사용자들}
 					selectionMode="single"
 					onChangeSelection={setSelectedUser}
@@ -68,14 +71,14 @@ export const 단일_선택: Story = {
 
 export const 다중_선택: Story = {
 	render: () => {
-		const [selectedUsers, setSelectedUsers] = useState([]);
+		const [selectedUsers, setSelectedUsers] = useState<User[]>([]);
 
 		return (
 			<View style={{ gap: 16 }}>
 				<Text style={{ fontSize: 16, fontWeight: "600" }}>
 					선택된 사용자: {selectedUsers.length}명
 				</Text>
-				<ListSelect
+				<ListSelect<User>
 					data={샘플사용자들}
 					selectionMode="multiple"
 					onChangeSelection={setSelectedUsers}
@@ -94,18 +97,20 @@ export const 다중_선택: Story = {
 
 export const 기본_선택값: Story = {
 	render: () => {
-		const [selectedUser, setSelectedUser] = useState(샘플사용자들[0]);
+		const [selectedUser, setSelectedUser] = useState<User | null>(
+			샘플사용자들[0],
+		);
 
 		return (
 			<View style={{ gap: 16 }}>
 				<Text style={{ fontSize: 16, fontWeight: "600" }}>
 					선택된 사용자: {selectedUser?.name || "없음"}
 				</Text>
-				<ListSelect
+				<ListSelect<User>
 					data={샘플사용자들}
 					selectionMode="single"
 					selectedItems={selectedUser}
-					onChangeSelection={setSelectedUser}
+					onChangeSelection={(user) => setSelectedUser(user)}
 					renderItem={(user, isSelected) => (
 						<ListItem
 							title={user.name}
@@ -121,14 +126,14 @@ export const 기본_선택값: Story = {
 
 export const 커스텀_렌더링: Story = {
 	render: () => {
-		const [selectedUsers, setSelectedUsers] = useState([]);
+		const [selectedUsers, setSelectedUsers] = useState<User[]>([]);
 
 		return (
 			<View style={{ gap: 16 }}>
 				<Text style={{ fontSize: 16, fontWeight: "600" }}>
 					선택된 사용자: {selectedUsers.length}명
 				</Text>
-				<ListSelect
+				<ListSelect<User>
 					data={샘플사용자들}
 					selectionMode="multiple"
 					onChangeSelection={setSelectedUsers}
@@ -160,7 +165,7 @@ export const 비활성화_상태: Story = {
 			<Text style={{ fontSize: 16, fontWeight: "600", opacity: 0.5 }}>
 				비활성화된 리스트
 			</Text>
-			<ListSelect
+			<ListSelect<User>
 				data={샘플사용자들}
 				selectionMode="single"
 				isDisabled={true}
@@ -178,8 +183,8 @@ export const 비활성화_상태: Story = {
 
 // MobX 스토리들
 class TestFormState {
-	selectedUser: any = null;
-	selectedUsers: any[] = [];
+	selectedUser: User | null = null;
+	selectedUsers: User[] = [];
 
 	constructor() {
 		makeAutoObservable(this);
@@ -193,7 +198,7 @@ export const MobX_단일_선택: Story = {
 		return (
 			<View style={{ gap: 16 }}>
 				<Text style={{ fontSize: 16, fontWeight: "600" }}>MobX 단일 선택</Text>
-				<ObservedListSelect
+				<ObservedListSelect<TestFormState, User>
 					state={formState}
 					path="selectedUser"
 					data={샘플사용자들}
@@ -218,7 +223,7 @@ export const MobX_다중_선택: Story = {
 		return (
 			<View style={{ gap: 16 }}>
 				<Text style={{ fontSize: 16, fontWeight: "600" }}>MobX 다중 선택</Text>
-				<ObservedListSelect
+				<ObservedListSelect<TestFormState, User>
 					state={formState}
 					path="selectedUsers"
 					data={샘플사용자들}
