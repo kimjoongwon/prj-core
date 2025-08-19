@@ -1,7 +1,10 @@
 export { Button } from "./Button";
 export { Card } from "./Card";
 export { Chip } from "./Chip";
+export { Divider } from "./Divider";
 export { List } from "./List";
 export { ListItem } from "./ListItem";
+export { Logo } from "./Logo";
+export { SNSButtons } from "./SNSButtons";
 export { Text } from "./Text";
 export { View } from "./View";
