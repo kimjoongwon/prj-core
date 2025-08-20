@@ -43,7 +43,7 @@ export type CheckboxColor =
 export type CheckboxRadius = "none" | "sm" | "md" | "lg" | "full";
 
 export interface CheckboxProps extends Omit<PressableProps, "style"> {
-	children?: React.ReactNode;
+	label?: React.ReactNode;
 	size?: CheckboxSize;
 	color?: CheckboxColor;
 	radius?: CheckboxRadius;
@@ -73,7 +73,7 @@ export interface CheckboxRef {
 export const Checkbox = forwardRef<CheckboxRef, CheckboxProps>(
 	(
 		{
-			children,
+			label,
 			size = "md",
 			color = "primary",
 			radius = "sm",
@@ -250,14 +250,14 @@ export const Checkbox = forwardRef<CheckboxRef, CheckboxProps>(
 		}, [icon, isIndeterminate, sizeConfig.iconSize, colorScheme.icon]);
 
 		const renderLabel = useCallback(() => {
-			if (!children) return null;
+			if (!label) return null;
 
 			return (
 				<View style={styles.labelContainer}>
 					<Text
 						style={labelStyle ? [labelStyleMemo, labelStyle] : labelStyleMemo}
 					>
-						{children}
+						{label}
 						{isRequired && <Text style={styles.requiredStar}> *</Text>}
 					</Text>
 					{description && !errorMessage && (
@@ -275,7 +275,7 @@ export const Checkbox = forwardRef<CheckboxRef, CheckboxProps>(
 				</View>
 			);
 		}, [
-			children,
+			label,
 			labelStyleMemo,
 			labelStyle,
 			isRequired,

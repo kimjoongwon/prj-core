@@ -20,15 +20,13 @@ export const Checkbox = observer(
 	) => {
 		const { state, path, defaultSelected = false, ...rest } = props;
 
-		const initialValue = get(state, path || "", defaultSelected);
+		const initialValue = get(state, path || "", defaultSelected) as boolean;
 
-		const { localState } = useFormField({
+		const { localState } = useFormField<any, boolean>({
 			initialValue,
 			state,
 			path,
 		});
-
-		const isSelected = localState.value;
 
 		const handleValueChange = useCallback(
 			action((newValue: boolean) => {
@@ -37,7 +35,13 @@ export const Checkbox = observer(
 			[localState],
 		);
 
-		return <CheckboxComponent {...rest} onValueChange={handleValueChange} />;
+		return (
+			<CheckboxComponent
+				{...rest}
+				onValueChange={handleValueChange}
+				isSelected={!!localState.value}
+			/>
+		);
 	},
 );
 
