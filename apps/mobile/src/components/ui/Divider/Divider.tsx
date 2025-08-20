@@ -1,7 +1,6 @@
 import React from "react";
 import { View, StyleSheet, ViewStyle } from "react-native";
 import { Text } from "../Text";
-import { useTheme } from "../../providers/theme-provider";
 
 export type DividerOrientation = "horizontal" | "vertical";
 
@@ -22,8 +21,7 @@ export const Divider: React.FC<DividerProps> = ({
 	style,
 	margin = 16,
 }) => {
-	const { theme } = useTheme();
-	const dividerColor = color || theme.colors.default[300];
+	const dividerColor = color || "rgb(var(--color-border))";
 
 	if (children) {
 		return (

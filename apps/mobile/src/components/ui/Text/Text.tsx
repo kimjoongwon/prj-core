@@ -4,7 +4,7 @@ import {
   TextProps as RNTextProps,
   TextStyle,
 } from "react-native";
-import { useTheme } from "../../providers/theme-provider";
+import { useColorScheme } from "nativewind";
 
 export type TextVariant =
   | "h1"
@@ -35,60 +35,60 @@ export interface TextProps extends Omit<RNTextProps, "style"> {
 }
 
 // 타이포그래피 스타일 정의
-const getVariantStyles = (fonts: any): Record<TextVariant, TextStyle> => ({
+const variantStyles: Record<TextVariant, TextStyle> = {
   h1: {
     fontSize: 32,
-    fontFamily: fonts.bold,
+    fontFamily: "Pretendard-Bold",
     lineHeight: 40,
   },
   h2: {
     fontSize: 28,
-    fontFamily: fonts.bold,
+    fontFamily: "Pretendard-Bold",
     lineHeight: 36,
   },
   h3: {
     fontSize: 24,
-    fontFamily: fonts.semiBold,
+    fontFamily: "Pretendard-SemiBold",
     lineHeight: 32,
   },
   h4: {
     fontSize: 20,
-    fontFamily: fonts.semiBold,
+    fontFamily: "Pretendard-SemiBold",
     lineHeight: 28,
   },
   h5: {
     fontSize: 18,
-    fontFamily: fonts.semiBold,
+    fontFamily: "Pretendard-SemiBold",
     lineHeight: 24,
   },
   h6: {
     fontSize: 16,
-    fontFamily: fonts.semiBold,
+    fontFamily: "Pretendard-SemiBold",
     lineHeight: 22,
   },
   body1: {
     fontSize: 16,
-    fontFamily: fonts.regular,
+    fontFamily: "Pretendard-Regular",
     lineHeight: 24,
   },
   body2: {
     fontSize: 14,
-    fontFamily: fonts.regular,
+    fontFamily: "Pretendard-Regular",
     lineHeight: 20,
   },
   caption: {
     fontSize: 12,
-    fontFamily: fonts.regular,
+    fontFamily: "Pretendard-Regular",
     lineHeight: 16,
   },
   overline: {
     fontSize: 10,
-    fontFamily: fonts.medium,
+    fontFamily: "Pretendard-Medium",
     lineHeight: 14,
     textTransform: "uppercase",
     letterSpacing: 1.5,
   },
-});
+};
 
 export const Text: React.FC<TextProps> = ({
   children,
@@ -97,31 +97,32 @@ export const Text: React.FC<TextProps> = ({
   style,
   ...props
 }) => {
-  const { theme, isDark } = useTheme();
+  const { colorScheme } = useColorScheme();
 
-  // 테마별 색상 가져오기
+  // CSS 변수 기반 색상 가져오기
   const getTextColor = () => {
     switch (color) {
       case "foreground":
-        return theme.colors.foreground;
+        return "rgb(var(--color-foreground))";
       case "primary":
-        return theme.colors.primary.DEFAULT;
+        return "rgb(var(--color-primary-500))";
       case "secondary":
-        return theme.colors.secondary.DEFAULT;
+        return "rgb(var(--color-secondary-500))";
       case "success":
-        return theme.colors.success.DEFAULT;
+        return "rgb(var(--color-success-500))";
       case "warning":
-        return theme.colors.warning.DEFAULT;
+        return "rgb(var(--color-warning-500))";
       case "danger":
-        return theme.colors.danger.DEFAULT;
+        return "rgb(var(--color-danger-500))";
       case "default":
-        return isDark ? theme.colors.default[400] : theme.colors.default[600];
+        return colorScheme === "dark" 
+          ? "rgb(var(--color-default-400))" 
+          : "rgb(var(--color-default-600))";
       default:
-        return theme.colors.foreground;
+        return "rgb(var(--color-foreground))";
     }
   };
 
-  const variantStyles = getVariantStyles(theme.fonts);
   const textStyle: TextStyle = {
     ...variantStyles[variant],
     color: getTextColor(),
