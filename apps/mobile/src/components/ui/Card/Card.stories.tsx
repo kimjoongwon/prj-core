@@ -1,9 +1,9 @@
 import type { Meta, StoryObj } from "@storybook/react-native";
 import React from "react";
 import { View } from "react-native";
-import { Text } from "../Text";
-import { Card } from "./Card";
-import type { CardProps } from "./Card";
+import { Text } from "@/components/ui/Text";
+import { Card } from "@/components/ui/Card/Card";
+import type { CardProps } from "@/components/ui/Card/Card";
 
 const meta: Meta<CardProps> = {
 	title: "components/Card",

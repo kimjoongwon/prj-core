@@ -1,6 +1,6 @@
 import React from "react";
 import { View, ViewProps, ViewStyle } from "react-native";
-import { useTheme } from "../../providers/theme-provider";
+import { useTheme } from "@/components/providers/ThemeProvider";
 
 export interface CardProps extends Omit<ViewProps, "style"> {
 	children?: React.ReactNode;

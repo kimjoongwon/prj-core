@@ -1,5 +1,5 @@
 import { StyleSheet, TextStyle, ViewStyle } from "react-native";
-import { RadioGroupSize } from "./RadioGroup";
+import { RadioGroupSize } from "@/components/forms/RadioGroup/RadioGroup";
 
 export const sizes: Record<
 	RadioGroupSize,

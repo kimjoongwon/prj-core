@@ -1,8 +1,8 @@
 import type { Meta, StoryObj } from "@storybook/react-native";
 import React from "react";
 import { observable } from "mobx";
-import { LoginForm } from "./LoginForm";
-import type { LoginFormProps, LoginFormState } from "./LoginForm";
+import { LoginForm } from "@/components/forms/LoginForm/LoginForm";
+import type { LoginFormProps, LoginFormState } from "@/components/forms/LoginForm/LoginForm";
 
 const meta: Meta<LoginFormProps> = {
   title: "forms/LoginForm",

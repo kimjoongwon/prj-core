@@ -1,7 +1,7 @@
 import React from "react";
 import { StyleSheet } from "react-native";
-import { Input } from "../Input";
-import { Card } from "../../ui/Card/Card";
+import { Input } from "@/components/forms/Input";
+import { Card } from "@/components/ui/Card/Card";
 
 export interface LoginFormState {
 	email: string;

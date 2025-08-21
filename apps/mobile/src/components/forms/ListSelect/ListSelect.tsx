@@ -1,6 +1,6 @@
 import React, { useCallback, useState } from "react";
 import { Pressable, type ViewStyle } from "react-native";
-import { List } from "../../ui/List";
+import { List } from "@/components/ui/List";
 
 export type SelectionMode = "single" | "multiple";
 

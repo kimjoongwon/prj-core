@@ -1,12 +1,10 @@
 import FontAwesome from "@expo/vector-icons/FontAwesome";
-import { ThemeProvider as NavigationThemeProvider } from "@react-navigation/native";
 import { useFonts } from "expo-font";
 import { Stack } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
 import { useEffect } from "react";
 import "react-native-reanimated";
-import { Providers } from "../components/providers/Providers";
-import { useTheme } from "../components/providers/theme-provider";
+import { ThemeProvider } from "../components/providers/ThemeProvider";
 
 export {
 	// Catch any errors thrown by the Layout component.
@@ -58,53 +56,27 @@ export default function RootLayout() {
 }
 
 function NavigationWrapper() {
-	const { theme, isDark } = useTheme();
-
-	// React Navigation 테마 생성 (테마 기반)
-	const navigationTheme = {
-		dark: isDark,
-		colors: {
-			primary: theme.colors.primary.DEFAULT,
-			background: theme.colors.background,
-			card: theme.colors.content1.DEFAULT,
-			text: theme.colors.foreground,
-			border: theme.colors.default[300],
-			notification: theme.colors.danger.DEFAULT,
-		},
-		fonts: {
-			regular: {
-				fontFamily: theme.fonts.regular,
-				fontWeight: "normal" as const,
-			},
-			medium: { fontFamily: theme.fonts.medium, fontWeight: "500" as const },
-			bold: { fontFamily: theme.fonts.bold, fontWeight: "bold" as const },
-			heavy: { fontFamily: theme.fonts.black, fontWeight: "900" as const },
-		},
-	};
-
 	return (
-		<NavigationThemeProvider value={navigationTheme}>
-			<Stack>
-				<Stack.Protected guard={false}>
-					<Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-				</Stack.Protected>
+		<Stack>
+			<Stack.Protected guard={false}>
+				<Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+			</Stack.Protected>
 
-				<Stack.Protected guard={true}>
-					<Stack.Screen
-						name="login"
-						options={{ title: "로그인", headerShown: true }}
-					/>
-					<Stack.Screen name="storybook" options={{ headerShown: false }} />
-				</Stack.Protected>
-			</Stack>
-		</NavigationThemeProvider>
+			<Stack.Protected guard={true}>
+				<Stack.Screen
+					name="login"
+					options={{ title: "로그인", headerShown: true }}
+				/>
+				<Stack.Screen name="storybook" options={{ headerShown: false }} />
+			</Stack.Protected>
+		</Stack>
 	);
 }
 
 function RootLayoutNav() {
 	return (
-		<Providers>
+		<ThemeProvider>
 			<NavigationWrapper />
-		</Providers>
+		</ThemeProvider>
 	);
 }

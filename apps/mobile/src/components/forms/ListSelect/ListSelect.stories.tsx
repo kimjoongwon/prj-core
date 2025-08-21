@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 import type { Meta, StoryObj } from "@storybook/react-native";
 import { View } from "react-native";
-import { ListSelect } from "./ListSelect";
-import type { ListSelectProps } from "./ListSelect";
-import { ListItem } from "../../ui/ListItem";
-import { Text } from "../../ui/Text";
+import { ListSelect } from "@/components/forms/ListSelect/ListSelect";
+import type { ListSelectProps } from "@/components/forms/ListSelect/ListSelect";
+import { ListItem } from "@/components/ui/ListItem";
+import { Text } from "@/components/ui/Text";
 
 // 샘플 데이터 타입 정의
 type User = { id: number; name: string; email: string };

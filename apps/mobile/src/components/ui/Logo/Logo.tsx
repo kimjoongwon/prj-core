@@ -1,6 +1,6 @@
 import React from "react";
-import { Text } from "../Text";
-import type { TextProps } from "../Text/Text";
+import { Text } from "@/components/ui/Text";
+import type { TextProps } from "@/components/ui/Text/Text";
 
 export type LogoSize = "sm" | "md" | "lg";
 

@@ -16,21 +16,21 @@ import {
 	View,
 	ViewStyle,
 } from "react-native";
-import { Text } from "../../ui/Text";
+import { Text } from "@/components/ui/Text";
 import Animated, {
 	useSharedValue,
 	useAnimatedStyle,
 	withTiming,
 	interpolate,
 } from "react-native-reanimated";
-import { useTheme } from "../../providers/theme-provider";
+import { useTheme } from "@/components/providers/ThemeProvider";
 import {
 	sizes,
 	styles,
 	baseContainerStyles,
 	variantStyles,
 	labelStyles,
-} from "./Input.styles";
+} from "@/components/forms/Input/Input.styles";
 
 export type InputVariant = "flat" | "bordered" | "underlined" | "faded";
 export type InputColor =

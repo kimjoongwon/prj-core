@@ -1,5 +1,5 @@
 import { StyleSheet, TextStyle, ViewStyle } from "react-native";
-import { CheckboxSize } from "./Checkbox";
+import { CheckboxSize } from "@/components/forms/Checkbox/Checkbox";
 
 export const sizes: Record<
 	CheckboxSize,

@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/react-native";
 import React from "react";
-import { Logo } from "./index";
-import type { LogoProps } from "./Logo";
+import { Logo } from "@/components/ui/Logo";
+import type { LogoProps } from "@/components/ui/Logo/Logo";
 
 const meta: Meta<LogoProps> = {
 	title: "components/ui/Logo",

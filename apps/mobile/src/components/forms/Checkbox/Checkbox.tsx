@@ -21,8 +21,8 @@ import Animated, {
 	useSharedValue,
 	withTiming,
 } from "react-native-reanimated";
-import { useTheme } from "../../providers/theme-provider";
-import { Text } from "../../ui/Text";
+import { useTheme } from "@/components/providers/ThemeProvider";
+import { Text } from "@/components/ui/Text";
 import {
 	sizes,
 	radiusValues,
@@ -30,7 +30,7 @@ import {
 	baseCheckboxStyles,
 	baseLabelStyles,
 	styles,
-} from "./Checkbox.styles";
+} from "@/components/forms/Checkbox/Checkbox.styles";
 
 export type CheckboxSize = "sm" | "md" | "lg";
 export type CheckboxColor =

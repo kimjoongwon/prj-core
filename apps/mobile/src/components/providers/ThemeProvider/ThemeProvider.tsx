@@ -7,9 +7,15 @@ import React, {
 } from "react";
 import { useColorScheme } from "react-native";
 import { observer } from "mobx-react-lite";
-import { lightTheme, darkTheme } from "./ThemeProvider.styles";
-import { DarkModeSwitch } from "./DarkModeSwitch";
-import type { Theme, ThemeMode, ThemeContextValue } from "./types";
+import {
+	lightTheme,
+	darkTheme,
+} from "@/components/providers/ThemeProvider/ThemeProvider.styles";
+import { DarkModeSwitch } from "@/components/providers/ThemeProvider/DarkModeSwitch";
+import type {
+	ThemeMode,
+	ThemeContextValue,
+} from "@/components/providers/ThemeProvider/types";
 
 // Theme Context 생성
 const ThemeContext = createContext<ThemeContextValue | undefined>(undefined);
@@ -67,4 +73,10 @@ export const useTheme = (): ThemeContextValue => {
 };
 
 // 타입들을 export
-export type { Theme, ThemeColors, ColorScale, ContentColor, ThemeMode } from "./types";
+export type {
+	Theme,
+	ThemeColors,
+	ColorScale,
+	ContentColor,
+	ThemeMode,
+} from "@/components/providers/ThemeProvider/types";

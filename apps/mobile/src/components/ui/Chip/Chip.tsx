@@ -1,8 +1,8 @@
 import React from "react";
 import { View, type ViewStyle } from "react-native";
-import { styles, sizes, radiusValues } from "./Chip.styles";
-import { useTheme } from "../../providers/theme-provider";
-import { Text } from "../Text";
+import { styles, sizes, radiusValues } from "@/components/ui/Chip/Chip.styles";
+import { useTheme } from "@/components/providers/ThemeProvider";
+import { Text } from "@/components/ui/Text";
 
 export type ChipVariant =
 	| "solid"

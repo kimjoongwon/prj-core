@@ -1,6 +1,6 @@
 import React from "react";
 import { View, StyleSheet, ViewStyle } from "react-native";
-import { Text } from "../Text";
+import { Text } from "@/components/ui/Text";
 
 export type DividerOrientation = "horizontal" | "vertical";
 

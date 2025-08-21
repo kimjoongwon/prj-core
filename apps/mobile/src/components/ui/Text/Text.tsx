@@ -4,7 +4,7 @@ import {
 	TextProps as RNTextProps,
 	TextStyle,
 } from "react-native";
-import { useColorScheme } from "nativewind";
+import { useTheme } from "@/components/providers/ThemeProvider";
 
 export type TextVariant =
 	| "h1"
@@ -97,29 +97,27 @@ export const Text: React.FC<TextProps> = ({
 	style,
 	...props
 }) => {
-	const { colorScheme } = useColorScheme();
+	const { theme, isDark } = useTheme();
 
-	// CSS 변수 기반 색상 가져오기
+	// 테마 기반 색상 가져오기
 	const getTextColor = () => {
 		switch (color) {
 			case "foreground":
-				return "rgb(var(--color-foreground))";
+				return theme.colors.foreground;
 			case "primary":
-				return "rgb(var(--color-primary-500))";
+				return theme.colors.primary.DEFAULT;
 			case "secondary":
-				return "rgb(var(--color-secondary-500))";
+				return theme.colors.secondary.DEFAULT;
 			case "success":
-				return "rgb(var(--color-success-500))";
+				return theme.colors.success.DEFAULT;
 			case "warning":
-				return "rgb(var(--color-warning-500))";
+				return theme.colors.warning.DEFAULT;
 			case "danger":
-				return "rgb(var(--color-danger-500))";
+				return theme.colors.danger.DEFAULT;
 			case "default":
-				return colorScheme === "dark"
-					? "rgb(var(--color-default-400))"
-					: "rgb(var(--color-default-600))";
+				return isDark ? theme.colors.default[400] : theme.colors.default[600];
 			default:
-				return "rgb(var(--color-foreground))";
+				return theme.colors.foreground;
 		}
 	};
 

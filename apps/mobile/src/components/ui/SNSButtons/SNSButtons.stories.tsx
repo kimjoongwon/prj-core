@@ -1,8 +1,8 @@
 import type { Meta, StoryObj } from "@storybook/react-native";
 import React from "react";
 import { View } from "react-native";
-import { SNSButtons } from "./index";
-import type { SNSButtonsProps } from "./SNSButtons";
+import { SNSButtons } from "@/components/ui/SNSButtons";
+import type { SNSButtonsProps } from "@/components/ui/SNSButtons/SNSButtons";
 
 const meta: Meta<SNSButtonsProps> = {
 	title: "components/ui/SNSButtons",

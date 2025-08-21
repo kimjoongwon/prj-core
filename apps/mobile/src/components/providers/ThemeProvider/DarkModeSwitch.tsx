@@ -2,7 +2,7 @@ import React from "react";
 import { View, TouchableOpacity, StyleSheet, ViewStyle } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { observer } from "mobx-react-lite";
-import { useTheme } from "../theme-provider";
+import { useTheme } from "@/components/providers/ThemeProvider";
 
 export interface DarkModeSwitchProps {
 	style?: ViewStyle;

@@ -1,8 +1,8 @@
 import type { Meta, StoryObj } from "@storybook/react-native";
 import React from "react";
 import { View } from "react-native";
-import { Text } from "./Text";
-import type { TextProps } from "./Text";
+import { Text } from "@/components/ui/Text/Text";
+import type { TextProps } from "@/components/ui/Text/Text";
 
 const meta: Meta<TextProps> = {
   title: "components/Text",

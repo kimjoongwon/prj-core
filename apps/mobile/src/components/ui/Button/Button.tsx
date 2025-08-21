@@ -8,8 +8,8 @@ import {
 	View,
 	ViewStyle,
 } from "react-native";
-import { useTheme } from "../../providers/theme-provider";
-import { Text } from "../Text";
+import { useTheme } from "@/components/providers/ThemeProvider";
+import { Text } from "@/components/ui/Text";
 
 export type ButtonVariant =
 	| "solid"

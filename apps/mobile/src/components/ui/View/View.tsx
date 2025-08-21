@@ -8,5 +8,3 @@ export interface ViewProps extends RNViewProps {
 export const View: React.FC<ViewProps> = ({ children, ...props }) => {
 	return <RNView {...props}>{children}</RNView>;
 };
-
-export default View;

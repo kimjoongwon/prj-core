@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react";
 import React from "react";
-import { RadioGroup } from "./RadioGroup";
+import { RadioGroup } from "@/components/forms/RadioGroup/RadioGroup";
 
 const meta: Meta<typeof RadioGroup> = {
 	title: "Forms/RadioGroup",

@@ -1,8 +1,8 @@
 import type { Meta, StoryObj } from "@storybook/react-native";
 import React from "react";
 import { View } from "react-native";
-import { Divider } from "./index";
-import type { DividerProps } from "./Divider";
+import { Divider } from "@/components/ui/Divider";
+import type { DividerProps } from "@/components/ui/Divider/Divider";
 
 const meta: Meta<DividerProps> = {
 	title: "components/ui/Divider",

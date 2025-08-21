@@ -1,7 +1,7 @@
 import { Ionicons } from "@expo/vector-icons";
 import type { Meta, StoryObj } from "@storybook/react";
 import React from "react";
-import { Checkbox } from "./Checkbox";
+import { Checkbox } from "@/components/forms/Checkbox/Checkbox";
 
 const meta: Meta<typeof Checkbox> = {
 	title: "Forms/Checkbox",

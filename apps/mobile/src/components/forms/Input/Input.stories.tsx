@@ -1,10 +1,10 @@
 import type { Meta, StoryObj } from "@storybook/react-native";
 import { View, TouchableOpacity } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
-import { Text } from "../../ui/Text";
+import { Text } from "@/components/ui/Text";
 import { useRef } from "react";
-import { Input, InputRef, InputProps } from "./Input";
-import { useTheme } from "../../providers/theme-provider";
+import { Input, InputRef, InputProps } from "@/components/forms/Input/Input";
+import { useTheme } from "@/components/providers/ThemeProvider";
 
 // Extended args interface for Storybook
 interface InputStoryArgs extends InputProps {

@@ -2,9 +2,9 @@ import type { Meta, StoryObj } from "@storybook/react-native";
 import React from "react";
 import { View, Image } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
-import { Text } from "../Text";
-import { Chip } from "./Chip";
-import type { ChipProps } from "./Chip";
+import { Text } from "@/components/ui/Text";
+import { Chip } from "@/components/ui/Chip/Chip";
+import type { ChipProps } from "@/components/ui/Chip/Chip";
 
 const meta: Meta<ChipProps> = {
 	title: "components/Chip",

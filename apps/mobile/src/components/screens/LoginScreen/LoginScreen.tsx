@@ -8,14 +8,14 @@ import {
 } from "react-native";
 import { observable } from "mobx";
 import { observer } from "mobx-react-lite";
-import { View } from "../../ui/View";
-import { Text } from "../../ui/Text";
-import { Button } from "../../ui/Button";
-import { Logo } from "../../ui/Logo";
-import { Divider } from "../../ui/Divider";
-import { SNSButtons } from "../../ui/SNSButtons";
-import { LoginForm, LoginFormState } from "../../forms/LoginForm";
-import { Checkbox } from "../../forms/Checkbox";
+import { View } from "@/components/ui/View";
+import { Text } from "@/components/ui/Text";
+import { Button } from "@/components/ui/Button";
+import { Logo } from "@/components/ui/Logo";
+import { Divider } from "@/components/ui/Divider";
+import { SNSButtons } from "@/components/ui/SNSButtons";
+import { LoginForm, LoginFormState } from "@/components/forms/LoginForm";
+import { Checkbox } from "@/components/forms/Checkbox";
 
 export interface LoginScreenProps {
 	onLogin?: (email: string, password: string, keepLoggedIn: boolean) => void;

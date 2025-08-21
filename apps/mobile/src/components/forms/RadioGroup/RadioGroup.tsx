@@ -11,8 +11,8 @@ import Animated, {
 	useSharedValue,
 	withTiming,
 } from "react-native-reanimated";
-import { useTheme } from "../../providers/theme-provider";
-import { Text } from "../../ui/Text";
+import { useTheme } from "@/components/providers/ThemeProvider";
+import { Text } from "@/components/ui/Text";
 import { MobxProps } from "@shared/types";
 import {
 	sizes,
@@ -20,7 +20,7 @@ import {
 	baseLabelStyles,
 	baseRadioStyles,
 	styles,
-} from "./RadioGroup.styles";
+} from "@/components/forms/RadioGroup/RadioGroup.styles";
 
 export type RadioGroupSize = "sm" | "md" | "lg";
 export type RadioGroupColor =

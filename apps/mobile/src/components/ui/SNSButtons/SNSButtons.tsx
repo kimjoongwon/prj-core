@@ -1,6 +1,7 @@
 import React from "react";
-import { View, StyleSheet, ViewStyle } from "react-native";
-import { Button } from "../Button";
+import { StyleSheet, ViewStyle } from "react-native";
+import { Button } from "@/components/ui/Button";
+import { View } from "@/components/ui/View";
 
 export interface SNSButtonsProps {
 	onGooglePress?: () => void;
@@ -33,25 +34,25 @@ export const SNSButtons: React.FC<SNSButtonsProps> = ({
 					Google로 로그인
 				</Button>
 			)}
-			
+
 			{showApple && (
 				<Button
 					variant="solid"
 					color="default"
 					size="lg"
 					onPress={onApplePress}
-					style={[styles.button, styles.appleButton]}
+					style={styles.appleButton}
 				>
 					Apple로 로그인
 				</Button>
 			)}
-			
+
 			{showKakao && (
 				<Button
 					variant="solid"
 					size="lg"
 					onPress={onKakaoPress}
-					style={[styles.button, styles.kakaoButton]}
+					style={styles.kakaoButton}
 				>
 					카카오로 로그인
 				</Button>
@@ -69,9 +70,11 @@ const styles = StyleSheet.create({
 		width: "100%",
 	},
 	appleButton: {
+		width: "100%",
 		backgroundColor: "#000000",
 	},
 	kakaoButton: {
+		width: "100%",
 		backgroundColor: "#FEE500",
 	},
 });
