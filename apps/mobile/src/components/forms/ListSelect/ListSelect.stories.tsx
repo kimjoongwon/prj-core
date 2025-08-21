@@ -3,10 +3,8 @@ import type { Meta, StoryObj } from "@storybook/react-native";
 import { View } from "react-native";
 import { ListSelect } from "./ListSelect";
 import type { ListSelectProps } from "./ListSelect";
-import { ObservedListSelect } from "./index";
 import { ListItem } from "../../ui/ListItem";
 import { Text } from "../../ui/Text";
-import { makeAutoObservable } from "mobx";
 
 // 샘플 데이터 타입 정의
 type User = { id: number; name: string; email: string };
@@ -179,64 +177,4 @@ export const 비활성화_상태: Story = {
 			/>
 		</View>
 	),
-};
-
-// MobX 스토리들
-class TestFormState {
-	selectedUser: User | null = null;
-	selectedUsers: User[] = [];
-
-	constructor() {
-		makeAutoObservable(this);
-	}
-}
-
-export const MobX_단일_선택: Story = {
-	render: () => {
-		const formState = new TestFormState();
-
-		return (
-			<View style={{ gap: 16 }}>
-				<Text style={{ fontSize: 16, fontWeight: "600" }}>MobX 단일 선택</Text>
-				<ObservedListSelect<TestFormState, User>
-					state={formState}
-					path="selectedUser"
-					data={샘플사용자들}
-					selectionMode="single"
-					renderItem={(user, isSelected) => (
-						<ListItem
-							title={user.name}
-							description={user.email}
-							isSelected={isSelected}
-						/>
-					)}
-				/>
-			</View>
-		);
-	},
-};
-
-export const MobX_다중_선택: Story = {
-	render: () => {
-		const formState = new TestFormState();
-
-		return (
-			<View style={{ gap: 16 }}>
-				<Text style={{ fontSize: 16, fontWeight: "600" }}>MobX 다중 선택</Text>
-				<ObservedListSelect<TestFormState, User>
-					state={formState}
-					path="selectedUsers"
-					data={샘플사용자들}
-					selectionMode="multiple"
-					renderItem={(user, isSelected) => (
-						<ListItem
-							title={user.name}
-							description={user.email}
-							isSelected={isSelected}
-						/>
-					)}
-				/>
-			</View>
-		);
-	},
 };

@@ -76,7 +76,7 @@ const meta: Meta<typeof Checkbox> = {
 		},
 	},
 	args: {
-		children: "체크박스 라벨",
+		label: "체크박스 라벨",
 		size: "md",
 		color: "primary",
 		radius: "sm",
@@ -95,16 +95,16 @@ type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
 	args: {
-		children: "체크박스 옵션",
+		label: "체크박스 옵션",
 	},
 };
 
 export const Sizes: Story = {
 	render: () => (
 		<>
-			<Checkbox size="sm">Small</Checkbox>
-			<Checkbox size="md">Medium</Checkbox>
-			<Checkbox size="lg">Large</Checkbox>
+			<Checkbox size="sm" label="Small" />
+			<Checkbox size="md" label="Medium" />
+			<Checkbox size="lg" label="Large" />
 		</>
 	),
 	parameters: {
@@ -119,24 +119,12 @@ export const Sizes: Story = {
 export const Colors: Story = {
 	render: () => (
 		<>
-			<Checkbox color="default" defaultSelected>
-				Default
-			</Checkbox>
-			<Checkbox color="primary" defaultSelected>
-				Primary
-			</Checkbox>
-			<Checkbox color="secondary" defaultSelected>
-				Secondary
-			</Checkbox>
-			<Checkbox color="success" defaultSelected>
-				Success
-			</Checkbox>
-			<Checkbox color="warning" defaultSelected>
-				Warning
-			</Checkbox>
-			<Checkbox color="danger" defaultSelected>
-				Danger
-			</Checkbox>
+			<Checkbox color="default" defaultSelected label="Default" />
+			<Checkbox color="primary" defaultSelected label="Primary" />
+			<Checkbox color="secondary" defaultSelected label="Secondary" />
+			<Checkbox color="success" defaultSelected label="Success" />
+			<Checkbox color="warning" defaultSelected label="Warning" />
+			<Checkbox color="danger" defaultSelected label="Danger" />
 		</>
 	),
 	parameters: {
@@ -151,21 +139,11 @@ export const Colors: Story = {
 export const Radius: Story = {
 	render: () => (
 		<>
-			<Checkbox radius="none" defaultSelected>
-				None
-			</Checkbox>
-			<Checkbox radius="sm" defaultSelected>
-				Small
-			</Checkbox>
-			<Checkbox radius="md" defaultSelected>
-				Medium
-			</Checkbox>
-			<Checkbox radius="lg" defaultSelected>
-				Large
-			</Checkbox>
-			<Checkbox radius="full" defaultSelected>
-				Full
-			</Checkbox>
+			<Checkbox radius="none" defaultSelected label="None" />
+			<Checkbox radius="sm" defaultSelected label="Small" />
+			<Checkbox radius="md" defaultSelected label="Medium" />
+			<Checkbox radius="lg" defaultSelected label="Large" />
+			<Checkbox radius="full" defaultSelected label="Full" />
 		</>
 	),
 	parameters: {
@@ -180,13 +158,11 @@ export const Radius: Story = {
 export const States: Story = {
 	render: () => (
 		<>
-			<Checkbox>기본 상태</Checkbox>
-			<Checkbox defaultSelected>선택됨</Checkbox>
-			<Checkbox isIndeterminate>부분 선택</Checkbox>
-			<Checkbox isDisabled>비활성화</Checkbox>
-			<Checkbox isDisabled defaultSelected>
-				비활성화 + 선택됨
-			</Checkbox>
+			<Checkbox label="기본 상태" />
+			<Checkbox defaultSelected label="선택됨" />
+			<Checkbox isIndeterminate label="부분 선택" />
+			<Checkbox isDisabled label="비활성화" />
+			<Checkbox isDisabled defaultSelected label="비활성화 + 선택됨" />
 		</>
 	),
 	parameters: {
@@ -200,7 +176,7 @@ export const States: Story = {
 
 export const WithDescription: Story = {
 	args: {
-		children: "이용약관 동의",
+		label: "이용약관 동의",
 		description: "서비스 이용을 위해 약관에 동의해주세요.",
 	},
 	parameters: {
@@ -214,7 +190,7 @@ export const WithDescription: Story = {
 
 export const WithError: Story = {
 	args: {
-		children: "필수 약관 동의",
+		label: "필수 약관 동의",
 		isRequired: true,
 		isInvalid: true,
 		errorMessage: "필수 약관에 동의해주세요.",
@@ -231,10 +207,8 @@ export const WithError: Story = {
 export const LineThrough: Story = {
 	render: () => (
 		<>
-			<Checkbox lineThrough>기본 상태</Checkbox>
-			<Checkbox lineThrough defaultSelected>
-				완료된 할 일
-			</Checkbox>
+			<Checkbox lineThrough label="기본 상태" />
+			<Checkbox lineThrough defaultSelected label="완료된 할 일" />
 		</>
 	),
 	parameters: {
@@ -252,9 +226,8 @@ export const CustomIcon: Story = {
 			{...args}
 			defaultSelected
 			icon={<Ionicons name="heart" size={12} color="#ffffff" />}
-		>
-			커스텀 아이콘
-		</Checkbox>
+			label="커스텀 아이콘"
+		/>
 	),
 	args: {
 		color: "danger",
@@ -273,9 +246,8 @@ export const Interactive: Story = {
 		<Checkbox
 			{...args}
 			onValueChange={(isSelected) => console.log("선택 상태:", isSelected)}
-		>
-			클릭해보세요
-		</Checkbox>
+			label="클릭해보세요"
+		/>
 	),
 	parameters: {
 		docs: {
@@ -291,9 +263,11 @@ export const ControlledExample: Story = {
 		const [isSelected, setIsSelected] = React.useState(false);
 
 		return (
-			<Checkbox isSelected={isSelected} onValueChange={setIsSelected}>
-				제어된 체크박스 (현재: {isSelected ? "선택됨" : "선택 안됨"})
-			</Checkbox>
+			<Checkbox 
+				isSelected={isSelected} 
+				onValueChange={setIsSelected}
+				label={`제어된 체크박스 (현재: ${isSelected ? "선택됨" : "선택 안됨"})`}
+			/>
 		);
 	},
 	parameters: {
