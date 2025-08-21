@@ -1,13 +1,8 @@
 import React from "react";
-import {
-	View,
-	StatusBar,
-	ViewProps,
-	ViewStyle,
-} from "react-native";
+import { View, StatusBar, ViewProps, ViewStyle } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { observer } from "mobx-react-lite";
-import { useTheme } from "../../providers/theme-provider";
+import { useTheme } from "@/src/components/providers/theme-provider";
 
 export interface ScreenContainerProps extends Omit<ViewProps, "style"> {
 	children: React.ReactNode;

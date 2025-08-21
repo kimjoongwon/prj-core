@@ -1,8 +1,6 @@
 import type { Preview } from "@storybook/react-native";
-import { withThemeProvider } from "./decorators/ThemeDecorator";
 
 const preview: Preview = {
-	decorators: [withThemeProvider],
 	parameters: {
 		controls: {
 			matchers: {
@@ -11,7 +9,7 @@ const preview: Preview = {
 			},
 		},
 		// React Native 환경에서 최적화된 설정
-		layout: 'fullscreen',
+		layout: "fullscreen",
 	},
 };
 

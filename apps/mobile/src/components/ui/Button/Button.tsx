@@ -94,7 +94,6 @@ export const Button: React.FC<ButtonProps> = ({
 	// Theme-based color function with enhanced dark/light mode support
 	const getColorScheme = (color: ButtonColor, variant: ButtonVariant) => {
 		const colorTokens = theme.colors[color] || theme.colors.default;
-		const { isDark } = useTheme();
 
 		switch (variant) {
 			case "solid":

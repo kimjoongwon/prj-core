@@ -4,7 +4,7 @@ import { Ionicons } from "@expo/vector-icons";
 import { Text } from "../../ui/Text";
 import { useRef } from "react";
 import { Input, InputRef, InputProps } from "./Input";
-import { useTheme } from "@/src/components";
+import { useTheme } from "../../providers/theme-provider";
 
 // Extended args interface for Storybook
 interface InputStoryArgs extends InputProps {

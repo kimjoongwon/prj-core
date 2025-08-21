@@ -44,10 +44,6 @@ export const LoginScreen: React.FC<LoginScreenProps> = observer(
 			}),
 		);
 
-		const handleLogin = () => {
-			onLogin?.(loginState.email, loginState.password);
-		};
-
 		return (
 			<KeyboardAvoidingView
 				style={styles.container}
@@ -92,7 +88,6 @@ export const LoginScreen: React.FC<LoginScreenProps> = observer(
 							color="primary"
 							size="lg"
 							style={styles.loginButton}
-							onPress={handleLogin}
 						>
 							로그인
 						</Button>
