@@ -2,7 +2,7 @@ import React from "react";
 import { View, Image, ViewStyle } from "react-native";
 import { Text } from "@/components/ui/Text";
 import { styles, sizes } from "@/components/ui/ListItem/ListItem.styles";
-import { useTheme } from "@/components/providers/ThemeProvider";
+import { useTheme } from "@/components/contexts/ThemeContext";
 
 export type ListItemVariant = "default" | "card" | "simple";
 export type ListItemSize = "sm" | "md" | "lg";

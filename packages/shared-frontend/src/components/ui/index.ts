@@ -4,7 +4,6 @@ export * from "./ButtonGroup/ButtonGroup";
 export * from "./Chip/Chip";
 export * from "./Container/Container";
 export * from "./Copyright/Copyright";
-export * from "./DarkModeSwitch/DarkModeSwitch";
 export * from "./DataGrid/DataGrid";
 export * from "./HStack/HStack";
 export * from "./List/List";

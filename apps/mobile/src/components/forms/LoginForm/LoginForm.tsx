@@ -23,7 +23,6 @@ export const LoginForm: React.FC<LoginFormProps> = ({ state }) => {
 				keyboardType="email-address"
 				autoCapitalize="none"
 				autoComplete="email"
-				variant="bordered"
 				style={styles.input}
 			/>
 
@@ -34,7 +33,6 @@ export const LoginForm: React.FC<LoginFormProps> = ({ state }) => {
 				placeholder="비밀번호를 입력하세요"
 				secureTextEntry
 				autoComplete="password"
-				variant="bordered"
 				style={styles.input}
 			/>
 		</Card>

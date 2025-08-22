@@ -1,3 +1,5 @@
+import { createContext, useContext } from "react";
+
 // 색상 타입 정의
 export interface ColorScale {
 	50: string;
@@ -64,3 +66,17 @@ export interface ThemeContextValue {
 	toggleTheme: () => void;
 	setTheme: (mode: ThemeMode) => void;
 }
+
+// Theme Context 생성
+export const ThemeContext = createContext<ThemeContextValue | undefined>(
+	undefined,
+);
+
+// useTheme 훅
+export const useTheme = (): ThemeContextValue => {
+	const context = useContext(ThemeContext);
+	if (context === undefined) {
+		throw new Error("useTheme must be used within a ThemeProvider");
+	}
+	return context;
+};

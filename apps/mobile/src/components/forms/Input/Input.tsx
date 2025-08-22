@@ -23,7 +23,7 @@ import Animated, {
 	withTiming,
 	interpolate,
 } from "react-native-reanimated";
-import { useTheme } from "@/components/providers/ThemeProvider";
+import { useTheme } from "@/components/contexts/ThemeContext";
 import {
 	sizes,
 	styles,

@@ -11,7 +11,7 @@ import Animated, {
 	useSharedValue,
 	withTiming,
 } from "react-native-reanimated";
-import { useTheme } from "@/components/providers/ThemeProvider";
+import { useTheme } from "@/components/contexts/ThemeContext";
 import { Text } from "@/components/ui/Text";
 import { MobxProps } from "@shared/types";
 import {

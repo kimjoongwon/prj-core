@@ -1,4 +1,4 @@
-import type { Theme } from "@/components/providers/ThemeProvider/types";
+import type { Theme } from "@/components/contexts/ThemeContext";
 
 // 라이트 테마 정의
 export const lightTheme: Theme = {

@@ -21,6 +21,11 @@ const meta: Meta<DividerProps> = {
 			options: ["horizontal", "vertical"],
 			description: "구분선의 방향",
 		},
+		variant: {
+			control: { type: "select" },
+			options: ["default", "subtle", "strong"],
+			description: "구분선의 스타일 변형",
+		},
 		thickness: {
 			control: { type: "number", min: 1, max: 10 },
 			description: "구분선의 두께",
@@ -90,9 +95,45 @@ export const 색상변경: Story = {
 	),
 };
 
+export const Subtle변형: Story = {
+	args: {
+		variant: "subtle",
+	},
+	render: (args) => (
+		<View style={{ width: 300, height: 100, justifyContent: "center" }}>
+			<Divider {...args} />
+		</View>
+	),
+};
+
+export const Strong변형: Story = {
+	args: {
+		variant: "strong",
+	},
+	render: (args) => (
+		<View style={{ width: 300, height: 100, justifyContent: "center" }}>
+			<Divider {...args} />
+		</View>
+	),
+};
+
+export const 다크모드테스트: Story = {
+	args: {
+		children: "다크모드 대응",
+	},
+	render: (args) => (
+		<View style={{ width: 300, height: 200, justifyContent: "space-around", padding: 20 }}>
+			<Divider {...args} variant="subtle" />
+			<Divider {...args} variant="default" />
+			<Divider {...args} variant="strong" />
+		</View>
+	),
+};
+
 export const 플레이그라운드: Story = {
 	args: {
 		orientation: "horizontal",
+		variant: "default",
 		thickness: 1,
 		margin: 16,
 	},

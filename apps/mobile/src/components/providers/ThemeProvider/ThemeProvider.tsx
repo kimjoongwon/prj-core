@@ -1,24 +1,12 @@
-import React, {
-	createContext,
-	ReactNode,
-	useCallback,
-	useContext,
-	useState,
-} from "react";
+import React, { ReactNode, useCallback, useState } from "react";
 import { useColorScheme } from "react-native";
 import { observer } from "mobx-react-lite";
+import { lightTheme, darkTheme } from "./ThemeProvider.styles";
 import {
-	lightTheme,
-	darkTheme,
-} from "@/components/providers/ThemeProvider/ThemeProvider.styles";
-import { DarkModeSwitch } from "@/components/providers/ThemeProvider/DarkModeSwitch";
-import type {
-	ThemeMode,
-	ThemeContextValue,
-} from "@/components/providers/ThemeProvider/types";
-
-// Theme Context 생성
-const ThemeContext = createContext<ThemeContextValue | undefined>(undefined);
+	ThemeContext,
+	type ThemeMode,
+	type ThemeContextValue,
+} from "@/components/contexts/ThemeContext";
 
 interface ThemeProviderProps {
 	children: ReactNode;
@@ -53,30 +41,8 @@ export const ThemeProvider: React.FC<ThemeProviderProps> = observer(
 			setTheme,
 		};
 
-		const showDarkModeSwitch = process.env.EXPO_PUBLIC_STORYBOOK === "1";
-
 		return (
-			<ThemeContext.Provider value={value}>
-				{showDarkModeSwitch && <DarkModeSwitch />}
-				{children}
-			</ThemeContext.Provider>
+			<ThemeContext.Provider value={value}>{children}</ThemeContext.Provider>
 		);
 	},
 );
-
-export const useTheme = (): ThemeContextValue => {
-	const context = useContext(ThemeContext);
-	if (context === undefined) {
-		throw new Error("useTheme must be used within a ThemeProvider");
-	}
-	return context;
-};
-
-// 타입들을 export
-export type {
-	Theme,
-	ThemeColors,
-	ColorScale,
-	ContentColor,
-	ThemeMode,
-} from "@/components/providers/ThemeProvider/types";

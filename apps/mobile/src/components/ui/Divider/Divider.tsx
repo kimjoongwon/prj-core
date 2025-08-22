@@ -1,13 +1,16 @@
 import React from "react";
 import { View, StyleSheet, ViewStyle } from "react-native";
 import { Text } from "@/components/ui/Text";
+import { useTheme } from "@/components/contexts/ThemeContext";
 
 export type DividerOrientation = "horizontal" | "vertical";
+export type DividerVariant = "default" | "subtle" | "strong";
 
 export interface DividerProps {
 	orientation?: DividerOrientation;
 	thickness?: number;
 	color?: string;
+	variant?: DividerVariant;
 	children?: React.ReactNode;
 	style?: ViewStyle;
 	margin?: number;
@@ -17,11 +20,29 @@ export const Divider: React.FC<DividerProps> = ({
 	orientation = "horizontal",
 	thickness = 1,
 	color,
+	variant = "default",
 	children,
 	style,
 	margin = 16,
 }) => {
-	const dividerColor = color || "rgb(var(--color-border))";
+	const { theme, isDark } = useTheme();
+
+	// 테마 기반 색상 가져오기
+	const getDividerColor = () => {
+		if (color) return color;
+		
+		switch (variant) {
+			case "subtle":
+				return isDark ? theme.colors.default[200] : theme.colors.default[200];
+			case "strong":
+				return isDark ? theme.colors.default[600] : theme.colors.default[700];
+			case "default":
+			default:
+				return isDark ? theme.colors.default[300] : theme.colors.default[400];
+		}
+	};
+
+	const dividerColor = getDividerColor();
 
 	if (children) {
 		return (

@@ -63,7 +63,7 @@ function NavigationWrapper() {
 			<Stack.Protected guard={true}>
 				<Stack.Screen
 					name="login"
-					options={{ title: "로그인", headerShown: true }}
+					options={{ headerShown: false }}
 				/>
 				<Stack.Screen name="storybook" options={{ headerShown: false }} />
 			</Stack.Protected>
