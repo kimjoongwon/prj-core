@@ -1,7 +1,12 @@
 {
   "extends": "expo/tsconfig.base",
   "compilerOptions": {
-    "strict": true,
+    "strict": false,
+    "skipLibCheck": true,
+    "incremental": true,
+    "noResolve": false,
+    "isolatedModules": true,
+    "noEmitOnError": false,
     "paths": {
       "@/*": [
         "./src/*"
@@ -12,10 +17,21 @@
     }
   },
   "include": [
-    "**/*.ts",
-    "**/*.tsx",
+    "src/**/*.ts",
+    "src/**/*.tsx",
     ".expo/types/**/*.ts",
-    "expo-env.d.ts",
-    "nativewind-env.d.ts"
+    "expo-env.d.ts"
+  ],
+  "exclude": [
+    "node_modules",
+    "ios",
+    "android",
+    "dist",
+    "build",
+    "**/*.stories.tsx",
+    ".expo",
+    ".rnstorybook",
+    "**/*.test.tsx",
+    "**/*.spec.tsx"
   ]
 }

@@ -1,5 +1,6 @@
+import { MobxProps } from "@shared/types";
 import React, { useCallback, useMemo, useState } from "react";
-import { Pressable, View, ViewStyle, ViewProps, TextStyle } from "react-native";
+import { Pressable, TextStyle, View, ViewProps, ViewStyle } from "react-native";
 import Animated, {
 	Easing,
 	interpolate,
@@ -8,15 +9,14 @@ import Animated, {
 	withTiming,
 } from "react-native-reanimated";
 import { useTheme } from "@/components/contexts/ThemeContext";
-import { Text } from "@/components/ui/Text";
-import { MobxProps } from "@shared/types";
 import {
-	sizes,
 	baseGroupStyles,
 	baseLabelStyles,
 	baseRadioStyles,
+	sizes,
 	styles,
 } from "@/components/forms/RadioGroup/RadioGroup.styles";
+import { Text } from "@/components/ui/Text";
 
 export type RadioGroupSize = "sm" | "md" | "lg";
 export type RadioGroupColor =
@@ -28,21 +28,12 @@ export type RadioGroupColor =
 	| "danger";
 export type RadioGroupOrientation = "horizontal" | "vertical";
 
-export interface RadioOption<T = any> {
-	key: string;
-	text: string;
-	value: string;
-	description?: string;
-	isDisabled?: boolean;
-	data?: T;
-}
-
 export interface RadioGroupProps<T = any> extends Omit<ViewProps, "style"> {
-	options: RadioOption<T>[];
+	data: T[];
 	label?: string;
 	name?: string;
-	value?: string;
-	defaultValue?: string;
+	value?: any;
+	defaultValue?: any;
 	size?: RadioGroupSize;
 	color?: RadioGroupColor;
 	orientation?: RadioGroupOrientation;
@@ -51,9 +42,17 @@ export interface RadioGroupProps<T = any> extends Omit<ViewProps, "style"> {
 	isInvalid?: boolean;
 	description?: string;
 	errorMessage?: string;
-	onValueChange?: (value: string, option?: RadioOption<T>) => void;
-	onDataChange?: (data: T | undefined, option?: RadioOption<T>) => void;
-	dataField?: keyof T | ((data: T) => any);
+
+	// Extractor functions
+	keyExtractor: (item: T, index: number) => string;
+	labelExtractor: (item: T, index: number) => string;
+	valueExtractor: (item: T, index: number) => any;
+	descriptionExtractor?: (item: T, index: number) => string;
+	disabledExtractor?: (item: T, index: number) => boolean;
+
+	// Callback
+	onValueChange?: (value: any, item: T, index: number) => void;
+
 	style?: ViewStyle;
 	groupStyle?: ViewStyle;
 	labelStyle?: TextStyle;
@@ -64,7 +63,7 @@ export interface RadioGroupProps<T = any> extends Omit<ViewProps, "style"> {
 // MobX RadioGroup Props
 export interface MobxRadioGroupProps<T, D = any>
 	extends MobxProps<T>,
-		Omit<RadioGroupProps<D>, "value" | "onValueChange" | "onDataChange"> {}
+		Omit<RadioGroupProps<D>, "value" | "onValueChange"> {}
 
 export interface RadioGroupRef {
 	setValue: (value: string) => void;
@@ -74,7 +73,7 @@ export interface RadioGroupRef {
 }
 
 export const RadioGroup = <T = any>({
-	options,
+	data,
 	label,
 	name,
 	value: controlledValue,
@@ -87,9 +86,12 @@ export const RadioGroup = <T = any>({
 	isInvalid = false,
 	description,
 	errorMessage,
+	keyExtractor,
+	labelExtractor,
+	valueExtractor,
+	descriptionExtractor,
+	disabledExtractor,
 	onValueChange,
-	onDataChange,
-	dataField,
 	style,
 	groupStyle,
 	labelStyle,
@@ -119,45 +121,15 @@ export const RadioGroup = <T = any>({
 	}, [color, isInvalid, theme.colors]);
 
 	const handleValueChange = useCallback(
-		(newValue: string) => {
+		(newValue: any, selectedItem: T, selectedIndex: number) => {
 			if (controlledValue === undefined) {
 				setInternalValue(newValue);
 			}
 
-			const selectedOption = options.find(
-				(option) => option.value === newValue,
-			);
-			onValueChange?.(newValue, selectedOption);
-
-			if (onDataChange && selectedOption?.data) {
-				let dataValue: any = selectedOption.data;
-
-				if (dataField) {
-					if (typeof dataField === "function") {
-						dataValue = dataField(selectedOption.data);
-					} else {
-						dataValue = selectedOption.data[dataField];
-					}
-				}
-
-				onDataChange(dataValue, selectedOption);
-			}
+			onValueChange?.(newValue, selectedItem, selectedIndex);
 		},
-		[controlledValue, onValueChange, onDataChange, dataField, options],
+		[controlledValue, onValueChange],
 	);
-
-	const setValue = useCallback(
-		(newValue: string) => {
-			handleValueChange(newValue);
-		},
-		[handleValueChange],
-	);
-
-	const getValue = useCallback(() => {
-		return selectedValue;
-	}, [selectedValue]);
-
-	// Note: ref handling can be added if needed via forwardRef
 
 	const containerStyle = useMemo((): ViewStyle => {
 		return {
@@ -192,10 +164,11 @@ export const RadioGroup = <T = any>({
 
 	// Radio option component
 	const RadioOption: React.FC<{
-		option: RadioOption;
+		item: T;
+		index: number;
 		isSelected: boolean;
 		onPress: () => void;
-	}> = ({ option, isSelected, onPress }) => {
+	}> = ({ item, index, isSelected, onPress }) => {
 		const animatedScale = useSharedValue(1);
 		const animatedOpacity = useSharedValue(isSelected ? 1 : 0);
 
@@ -206,7 +179,8 @@ export const RadioGroup = <T = any>({
 			});
 		}, [isSelected, animatedOpacity]);
 
-		const isOptionDisabled = isDisabled || option.isDisabled;
+		const isOptionDisabled =
+			isDisabled || (disabledExtractor?.(item, index) ?? false);
 
 		const handlePress = useCallback(() => {
 			if (isOptionDisabled) return;
@@ -289,7 +263,7 @@ export const RadioGroup = <T = any>({
 					checked: isSelected,
 					disabled: isOptionDisabled,
 				}}
-				accessibilityLabel={option.text}
+				accessibilityLabel={labelExtractor(item, index)}
 			>
 				<Animated.View style={[radioContainerStyle, radioAnimatedStyle]}>
 					<Animated.View style={[innerRadioStyle, innerRadioAnimatedStyle]} />
@@ -303,13 +277,13 @@ export const RadioGroup = <T = any>({
 								: optionLabelStyleMemo
 						}
 					>
-						{option.text}
+						{labelExtractor(item, index)}
 					</Text>
-					{option.description && (
+					{descriptionExtractor?.(item, index) && (
 						<Text
 							style={[styles.description, { color: colorScheme.description }]}
 						>
-							{option.description}
+							{descriptionExtractor(item, index)}
 						</Text>
 					)}
 				</View>
@@ -329,15 +303,22 @@ export const RadioGroup = <T = any>({
 	}, [label, labelStyleMemo, labelStyle, isRequired]);
 
 	const renderOptions = useCallback(() => {
-		return options.map((option) => (
-			<RadioOption
-				key={option.key}
-				option={option}
-				isSelected={selectedValue === option.value}
-				onPress={() => handleValueChange(option.value)}
-			/>
-		));
-	}, [options, selectedValue, handleValueChange]);
+		return data.map((item, index) => {
+			const itemKey = keyExtractor(item, index);
+			const itemValue = valueExtractor(item, index);
+			const isSelected = selectedValue === itemValue;
+
+			return (
+				<RadioOption
+					key={itemKey}
+					item={item}
+					index={index}
+					isSelected={isSelected}
+					onPress={() => handleValueChange(itemValue, item, index)}
+				/>
+			);
+		});
+	}, [data, keyExtractor, valueExtractor, selectedValue, handleValueChange]);
 
 	return (
 		<View style={[styles.container, containerStyle, style]} {...restProps}>

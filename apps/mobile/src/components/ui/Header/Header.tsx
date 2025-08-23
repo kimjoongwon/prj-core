@@ -1,3 +1,4 @@
+import { NativeStackHeaderProps } from "@react-navigation/native-stack";
 import React from "react";
 import { Platform, StatusBar, StyleSheet, View, ViewStyle } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
@@ -14,7 +15,7 @@ export interface HeaderAction {
 	color?: "primary" | "secondary" | "default";
 }
 
-export interface HeaderProps {
+export interface HeaderProps extends NativeStackHeaderProps {
 	title?: string;
 	subtitle?: string;
 	variant?: HeaderVariant;

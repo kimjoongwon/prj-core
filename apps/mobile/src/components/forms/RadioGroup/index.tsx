@@ -1,32 +1,27 @@
-import { action } from "mobx";
-import { observer } from "mobx-react-lite";
 import { useFormField } from "@shared/hooks";
 import { MobxProps } from "@shared/types";
+import { get } from "lodash-es";
+import { action } from "mobx";
+import { observer } from "mobx-react-lite";
 import {
-	RadioGroup as RadioGroupComponent,
 	RadioGroupProps as BaseRadioGroupProps,
-	RadioOption,
-	RadioGroupSize,
+	MobxRadioGroupProps,
 	RadioGroupColor,
+	RadioGroup as RadioGroupComponent,
 	RadioGroupOrientation,
 	RadioGroupRef,
-	MobxRadioGroupProps,
+	RadioGroupSize,
 } from "./RadioGroup";
-import { get } from "lodash-es";
 
 export interface RadioGroupProps<T, D = any>
 	extends MobxProps<T>,
-		Omit<BaseRadioGroupProps<D>, "value" | "onValueChange" | "onDataChange"> {
-	options: RadioOption<D>[];
-	dataPath?: string;
-}
+		Omit<BaseRadioGroupProps<D>, "value" | "onValueChange"> {}
 
 export const RadioGroup = observer(
 	<T extends object, D = any>(props: RadioGroupProps<T, D>) => {
-		const { state, path, dataPath, options, ...rest } = props;
+		const { state, path, ...rest } = props;
 
-		const initialValue = get(state, path) || "";
-		const initialDataValue = dataPath ? get(state, dataPath) : undefined;
+		const initialValue = get(state, path);
 
 		const { localState } = useFormField({
 			initialValue,
@@ -34,29 +29,15 @@ export const RadioGroup = observer(
 			path,
 		});
 
-		const { localState: dataLocalState } = useFormField({
-			initialValue: initialDataValue,
-			state,
-			path: (dataPath as any) || "",
-		});
-
-		const handleValueChange = action((value: string) => {
+		const handleValueChange = action((value: any) => {
 			localState.value = value;
 		});
 
-		const handleDataChange = action((data: D | undefined) => {
-			if (dataPath && data !== undefined) {
-				dataLocalState.value = data;
-			}
-		});
-
 		return (
-			<RadioGroupComponent<D>
+			<RadioGroupComponent
 				{...rest}
-				options={options}
 				value={localState.value}
 				onValueChange={handleValueChange}
-				onDataChange={dataPath ? handleDataChange : undefined}
 			/>
 		);
 	},
@@ -67,7 +48,6 @@ RadioGroup.displayName = "MobxRadioGroup";
 export { RadioGroupComponent };
 export type {
 	BaseRadioGroupProps,
-	RadioOption,
 	RadioGroupSize,
 	RadioGroupColor,
 	RadioGroupOrientation,

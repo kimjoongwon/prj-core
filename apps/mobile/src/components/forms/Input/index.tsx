@@ -12,9 +12,9 @@ export interface InputProps<T>
 export const Input = observer(<T extends object>(props: InputProps<T>) => {
 	const { state, path, ...rest } = props;
 
-	const initialValue = get(state, path) || "";
+	const initialValue = get(state, path) as string;
 
-	const { localState } = useFormField({
+	const { localState } = useFormField<any, string>({
 		initialValue,
 		state,
 		path,

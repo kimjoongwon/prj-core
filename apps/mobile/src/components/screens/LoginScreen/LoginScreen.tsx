@@ -1,16 +1,15 @@
-import React from "react";
-import { StyleSheet, ViewStyle } from "react-native";
 import { observable } from "mobx";
 import { observer } from "mobx-react-lite";
-import { View } from "@/components/ui/View";
+import React from "react";
+import { StyleSheet, ViewStyle } from "react-native";
+import { type Theme, useTheme } from "@/components/contexts/ThemeContext";
+import { LoginForm, LoginFormState } from "@/components/forms/LoginForm";
+import { Button } from "@/components/ui/Button";
+import { Divider } from "@/components/ui/Divider";
+import { Logo } from "@/components/ui/Logo";
 import { ScrollView } from "@/components/ui/ScrollView";
 import { Text } from "@/components/ui/Text";
-import { Button } from "@/components/ui/Button";
-import { Logo } from "@/components/ui/Logo";
-import { Divider } from "@/components/ui/Divider";
-import { Header } from "@/components/ui/Header";
-import { LoginForm, LoginFormState } from "@/components/forms/LoginForm";
-import { useTheme, type Theme } from "@/components/contexts/ThemeContext";
+import { View } from "@/components/ui/View";
 
 export interface LoginScreenProps {
 	onLogin?: (email: string, password: string, keepLoggedIn: boolean) => void;
@@ -46,19 +45,6 @@ export const LoginScreen: React.FC<LoginScreenProps> = observer(
 
 		return (
 			<View style={dynamicStyles.container}>
-				<Header
-					title="로그인"
-					variant="default"
-					leftAction={
-						onBack
-							? {
-									title: "뒤로",
-									onPress: onBack,
-									variant: "ghost",
-								}
-							: undefined
-					}
-				/>
 				<ScrollView
 					variant="default"
 					style={[dynamicStyles.scrollView]}

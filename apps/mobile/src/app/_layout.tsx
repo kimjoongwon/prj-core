@@ -4,7 +4,8 @@ import { Stack } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
 import { useEffect } from "react";
 import "react-native-reanimated";
-import { ThemeProvider } from "../components/providers/ThemeProvider";
+import { Header } from "@/components";
+import { Providers } from "../components/providers";
 
 export {
 	// Catch any errors thrown by the Layout component.
@@ -55,7 +56,11 @@ export default function RootLayout() {
 
 function NavigationWrapper() {
 	return (
-		<Stack>
+		<Stack
+			screenOptions={{
+				header: (props) => <Header {...props} />,
+			}}
+		>
 			<Stack.Protected guard={false}>
 				<Stack.Screen name="(tabs)" options={{ headerShown: false }} />
 			</Stack.Protected>
@@ -70,8 +75,8 @@ function NavigationWrapper() {
 
 function RootLayoutNav() {
 	return (
-		<ThemeProvider>
+		<Providers>
 			<NavigationWrapper />
-		</ThemeProvider>
+		</Providers>
 	);
 }
