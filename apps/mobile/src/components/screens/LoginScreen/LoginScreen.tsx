@@ -49,11 +49,15 @@ export const LoginScreen: React.FC<LoginScreenProps> = observer(
 				<Header
 					title="로그인"
 					variant="default"
-					leftAction={onBack ? {
-						title: "뒤로",
-						onPress: onBack,
-						variant: "ghost",
-					} : undefined}
+					leftAction={
+						onBack
+							? {
+									title: "뒤로",
+									onPress: onBack,
+									variant: "ghost",
+								}
+							: undefined
+					}
 				/>
 				<ScrollView
 					variant="default"
@@ -71,7 +75,11 @@ export const LoginScreen: React.FC<LoginScreenProps> = observer(
 						<Text variant="h3" style={dynamicStyles.title}>
 							로그인
 						</Text>
-						<Text variant="body1" color="default" style={dynamicStyles.subtitle}>
+						<Text
+							variant="body1"
+							color="default"
+							style={dynamicStyles.subtitle}
+						>
 							계정에 로그인하세요
 						</Text>
 					</View>
@@ -86,7 +94,9 @@ export const LoginScreen: React.FC<LoginScreenProps> = observer(
 							color="primary"
 							size="lg"
 							style={dynamicStyles.loginButton}
-							onPress={() => onLogin?.(loginState.email, loginState.password, false)}
+							onPress={() =>
+								onLogin?.(loginState.email, loginState.password, false)
+							}
 						>
 							로그인
 						</Button>

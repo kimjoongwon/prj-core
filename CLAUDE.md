@@ -69,13 +69,14 @@ Storybook에서 interaction testing을 할 때는 `screen` 대신 `within(canvas
 
 ```typescript
 ❌ 잘못된 패턴:
-import { screen } from '@storybook/test';
+// import { screen, userEvent } from '@storybook/test';
 
-export const InteractiveStory: Story = {
-  play: async () => {
-    await screen.getByRole('button'); // 🚨 경고 발생!
-  },
-};
+// export const InteractiveStory: Story = {
+//   play: async () => {
+//     const button = await screen.getByRole('button'); // 🚨 경고 발생!
+//     await userEvent.click(button);
+//   },
+// };
 
 ✅ 올바른 패턴:
 import { within, userEvent } from '@storybook/test';

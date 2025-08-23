@@ -58,7 +58,7 @@ export const styles = StyleSheet.create({
 		overflow: "hidden",
 		marginRight: 6,
 	},
-	
+
 	// Shadow variant
 	shadowVariant: {
 		shadowOffset: { width: 0, height: 2 },
@@ -66,7 +66,7 @@ export const styles = StyleSheet.create({
 		shadowRadius: 4,
 		elevation: 2,
 	},
-	
+
 	// Disabled state
 	disabled: {
 		opacity: 0.5,

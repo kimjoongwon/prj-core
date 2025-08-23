@@ -1,9 +1,9 @@
 import type { Meta, StoryObj } from "@storybook/react";
 import React from "react";
-import { View, StyleSheet } from "react-native";
-import { Text } from "@/components/ui/Text";
-import { Button } from "@/components/ui/Button";
+import { StyleSheet, View } from "react-native";
 import { ScreenContainer } from "@/components/container/ScreenContainer/ScreenContainer";
+import { Button } from "@/components/ui/Button";
+import { Text } from "@/components/ui/Text";
 
 const meta: Meta<typeof ScreenContainer> = {
 	title: "Container/ScreenContainer",

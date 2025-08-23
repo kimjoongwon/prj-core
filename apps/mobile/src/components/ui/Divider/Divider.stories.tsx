@@ -1,5 +1,4 @@
 import type { Meta, StoryObj } from "@storybook/react-native";
-import React from "react";
 import { View } from "react-native";
 import { Divider } from "@/components/ui/Divider";
 import type { DividerProps } from "@/components/ui/Divider/Divider";
@@ -11,7 +10,8 @@ const meta: Meta<DividerProps> = {
 		layout: "centered",
 		docs: {
 			description: {
-				component: "구분선을 표시하는 컴포넌트입니다. 텍스트가 포함된 구분선도 지원합니다.",
+				component:
+					"구분선을 표시하는 컴포넌트입니다. 텍스트가 포함된 구분선도 지원합니다.",
 			},
 		},
 	},
@@ -65,7 +65,14 @@ export const 세로구분선: Story = {
 		orientation: "vertical",
 	},
 	render: (args) => (
-		<View style={{ width: 300, height: 100, flexDirection: "row", alignItems: "center" }}>
+		<View
+			style={{
+				width: 300,
+				height: 100,
+				flexDirection: "row",
+				alignItems: "center",
+			}}
+		>
 			<View style={{ flex: 1, height: 50, backgroundColor: "#f0f0f0" }} />
 			<Divider {...args} />
 			<View style={{ flex: 1, height: 50, backgroundColor: "#f0f0f0" }} />
@@ -122,7 +129,14 @@ export const 다크모드테스트: Story = {
 		children: "다크모드 대응",
 	},
 	render: (args) => (
-		<View style={{ width: 300, height: 200, justifyContent: "space-around", padding: 20 }}>
+		<View
+			style={{
+				width: 300,
+				height: 200,
+				justifyContent: "space-around",
+				padding: 20,
+			}}
+		>
 			<Divider {...args} variant="subtle" />
 			<Divider {...args} variant="default" />
 			<Divider {...args} variant="strong" />

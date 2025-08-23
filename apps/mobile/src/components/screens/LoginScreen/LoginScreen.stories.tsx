@@ -11,7 +11,8 @@ const meta: Meta<LoginScreenProps> = {
 		layout: "fullscreen",
 		docs: {
 			description: {
-				component: "완성된 로그인 스크린 컴포넌트입니다. 로그인 폼, 소셜 로그인, 링크 버튼들을 포함합니다.",
+				component:
+					"완성된 로그인 스크린 컴포넌트입니다. 로그인 폼, 소셜 로그인, 링크 버튼들을 포함합니다.",
 			},
 		},
 	},
@@ -59,7 +60,7 @@ export const 콜백함수포함: Story = {
 		<View style={{ flex: 1, backgroundColor: "#ffffff" }}>
 			<LoginScreen
 				{...args}
-				onLogin={(email, password, keepLoggedIn) => 
+				onLogin={(email, password, keepLoggedIn) =>
 					console.log("로그인:", { email, password, keepLoggedIn })
 				}
 				onSignUp={() => console.log("회원가입")}

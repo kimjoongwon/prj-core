@@ -1,9 +1,9 @@
-import { action } from "mobx";
-import { observer } from "mobx-react-lite";
 import { useFormField } from "@shared/hooks";
 import { MobxProps } from "@shared/types";
-import { Input as InputComponent, InputProps as BaseInputProps } from "./Input";
 import { get } from "lodash-es";
+import { action } from "mobx";
+import { observer } from "mobx-react-lite";
+import { InputProps as BaseInputProps, Input as InputComponent } from "./Input";
 
 export interface InputProps<T>
 	extends MobxProps<T>,
@@ -35,8 +35,6 @@ export const Input = observer(<T extends object>(props: InputProps<T>) => {
 
 Input.displayName = "MobxInput";
 
-// Re-export the pure component and types for direct use
-export { Input as default } from "./Input";
 export type {
 	InputColor,
 	InputProps as PureInputProps,
@@ -44,3 +42,5 @@ export type {
 	InputVariant,
 	LabelPlacement,
 } from "./Input";
+// Re-export the pure component and types for direct use
+export { Input as default } from "./Input";

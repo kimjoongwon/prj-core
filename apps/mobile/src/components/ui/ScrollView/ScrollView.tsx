@@ -6,7 +6,12 @@ import {
 } from "react-native";
 import { useTheme } from "@/components/contexts/ThemeContext";
 
-export type ScrollViewVariant = "default" | "content1" | "content2" | "content3" | "content4";
+export type ScrollViewVariant =
+	| "default"
+	| "content1"
+	| "content2"
+	| "content3"
+	| "content4";
 
 export interface ScrollViewProps extends RNScrollViewProps {
 	children?: React.ReactNode;

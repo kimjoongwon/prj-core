@@ -27,6 +27,8 @@
 			"dependsOn": []
 		},
 		"lint": {},
+		"lint:fix": {},
+		"format": {},
 		"start:dev": {
 			"cache": false,
 			"persistent": true

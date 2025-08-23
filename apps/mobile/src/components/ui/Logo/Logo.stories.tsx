@@ -1,5 +1,4 @@
 import type { Meta, StoryObj } from "@storybook/react-native";
-import React from "react";
 import { Logo } from "@/components/ui/Logo";
 import type { LogoProps } from "@/components/ui/Logo/Logo";
 

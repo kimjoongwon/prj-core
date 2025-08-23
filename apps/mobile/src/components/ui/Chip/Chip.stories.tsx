@@ -1,10 +1,9 @@
-import type { Meta, StoryObj } from "@storybook/react-native";
-import React from "react";
-import { View, Image } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
-import { Text } from "@/components/ui/Text";
-import { Chip } from "@/components/ui/Chip/Chip";
+import type { Meta, StoryObj } from "@storybook/react-native";
+import { Image, View } from "react-native";
 import type { ChipProps } from "@/components/ui/Chip/Chip";
+import { Chip } from "@/components/ui/Chip/Chip";
+import { Text } from "@/components/ui/Text";
 
 const meta: Meta<ChipProps> = {
 	title: "components/Chip",
@@ -13,7 +12,8 @@ const meta: Meta<ChipProps> = {
 		layout: "centered",
 		docs: {
 			description: {
-				component: "모던한 디자인의 정적 Chip 컴포넌트입니다. 다양한 변형, 색상, 크기를 지원하며 UI 표시 역할만 합니다.",
+				component:
+					"모던한 디자인의 정적 Chip 컴포넌트입니다. 다양한 변형, 색상, 크기를 지원하며 UI 표시 역할만 합니다.",
 			},
 		},
 	},
@@ -25,7 +25,14 @@ const meta: Meta<ChipProps> = {
 		},
 		color: {
 			control: { type: "select" },
-			options: ["default", "primary", "secondary", "success", "warning", "danger"],
+			options: [
+				"default",
+				"primary",
+				"secondary",
+				"success",
+				"warning",
+				"danger",
+			],
 			description: "칩 색상",
 		},
 		size: {
@@ -67,8 +74,8 @@ export const Default: Story = {
 
 export const WithEndContent: Story = {
 	render: (args) => (
-		<Chip 
-			{...args} 
+		<Chip
+			{...args}
 			variant="bordered"
 			color="danger"
 			endContent={<Ionicons name="close" size={14} color="#f31260" />}
@@ -131,12 +138,24 @@ export const AllVariants: Story = {
 		<View style={{ gap: 16 }}>
 			<Text style={{ fontSize: 18, fontWeight: "bold" }}>All Variants</Text>
 			<View style={{ flexDirection: "row", flexWrap: "wrap", gap: 8 }}>
-				<Chip variant="solid" color="primary">Solid</Chip>
-				<Chip variant="bordered" color="primary">Bordered</Chip>
-				<Chip variant="light" color="primary">Light</Chip>
-				<Chip variant="flat" color="primary">Flat</Chip>
-				<Chip variant="faded" color="primary">Faded</Chip>
-				<Chip variant="shadow" color="primary">Shadow</Chip>
+				<Chip variant="solid" color="primary">
+					Solid
+				</Chip>
+				<Chip variant="bordered" color="primary">
+					Bordered
+				</Chip>
+				<Chip variant="light" color="primary">
+					Light
+				</Chip>
+				<Chip variant="flat" color="primary">
+					Flat
+				</Chip>
+				<Chip variant="faded" color="primary">
+					Faded
+				</Chip>
+				<Chip variant="shadow" color="primary">
+					Shadow
+				</Chip>
 			</View>
 		</View>
 	),
@@ -165,9 +184,15 @@ export const AllSizes: Story = {
 		<View style={{ gap: 16 }}>
 			<Text style={{ fontSize: 18, fontWeight: "bold" }}>All Sizes</Text>
 			<View style={{ flexDirection: "row", alignItems: "center", gap: 8 }}>
-				<Chip size="sm" color="primary">Small</Chip>
-				<Chip size="md" color="primary">Medium</Chip>
-				<Chip size="lg" color="primary">Large</Chip>
+				<Chip size="sm" color="primary">
+					Small
+				</Chip>
+				<Chip size="md" color="primary">
+					Medium
+				</Chip>
+				<Chip size="lg" color="primary">
+					Large
+				</Chip>
 			</View>
 		</View>
 	),
@@ -179,11 +204,21 @@ export const AllRadius: Story = {
 		<View style={{ gap: 16 }}>
 			<Text style={{ fontSize: 18, fontWeight: "bold" }}>All Radius</Text>
 			<View style={{ flexDirection: "row", flexWrap: "wrap", gap: 8 }}>
-				<Chip radius="none" color="primary">None</Chip>
-				<Chip radius="sm" color="primary">Small</Chip>
-				<Chip radius="md" color="primary">Medium</Chip>
-				<Chip radius="lg" color="primary">Large</Chip>
-				<Chip radius="full" color="primary">Full</Chip>
+				<Chip radius="none" color="primary">
+					None
+				</Chip>
+				<Chip radius="sm" color="primary">
+					Small
+				</Chip>
+				<Chip radius="md" color="primary">
+					Medium
+				</Chip>
+				<Chip radius="lg" color="primary">
+					Large
+				</Chip>
+				<Chip radius="full" color="primary">
+					Full
+				</Chip>
 			</View>
 		</View>
 	),
@@ -195,39 +230,42 @@ export const WithContentExamples: Story = {
 		<View style={{ gap: 16 }}>
 			<Text style={{ fontSize: 18, fontWeight: "bold" }}>Content Examples</Text>
 			<View style={{ flexDirection: "row", flexWrap: "wrap", gap: 8 }}>
-				<Chip 
-					variant="solid" 
-					color="primary"
-				>
+				<Chip variant="solid" color="primary">
 					Solid Chip
 				</Chip>
-				<Chip 
-					variant="bordered" 
+				<Chip
+					variant="bordered"
 					color="danger"
 					endContent={<Ionicons name="close" size={14} color="#f31260" />}
 				>
 					With Close Icon
 				</Chip>
-				<Chip 
-					variant="light" 
+				<Chip
+					variant="light"
 					color="success"
 					startContent={<Ionicons name="checkmark" size={14} color="#17c964" />}
 				>
 					Success Status
 				</Chip>
-				<Chip 
-					variant="flat" 
+				<Chip
+					variant="flat"
 					color="warning"
 					avatar={
-						<View style={{
-							width: 16, 
-							height: 16, 
-							backgroundColor: "#f5a524", 
-							borderRadius: 8,
-							justifyContent: "center",
-							alignItems: "center"
-						}}>
-							<Text style={{ color: "white", fontSize: 10, fontWeight: "bold" }}>!</Text>
+						<View
+							style={{
+								width: 16,
+								height: 16,
+								backgroundColor: "#f5a524",
+								borderRadius: 8,
+								justifyContent: "center",
+								alignItems: "center",
+							}}
+						>
+							<Text
+								style={{ color: "white", fontSize: 10, fontWeight: "bold" }}
+							>
+								!
+							</Text>
 						</View>
 					}
 				>
@@ -245,10 +283,18 @@ export const Disabled: Story = {
 			<Text style={{ fontSize: 18, fontWeight: "bold" }}>Disabled States</Text>
 			<View style={{ flexDirection: "row", flexWrap: "wrap", gap: 8 }}>
 				<Chip isDisabled>Disabled</Chip>
-				<Chip isDisabled color="primary">Disabled Primary</Chip>
-				<Chip isDisabled color="success" endContent={<Ionicons name="close" size={14} color="#17c964" />}>Disabled with Icon</Chip>
-				<Chip 
-					isDisabled 
+				<Chip isDisabled color="primary">
+					Disabled Primary
+				</Chip>
+				<Chip
+					isDisabled
+					color="success"
+					endContent={<Ionicons name="close" size={14} color="#17c964" />}
+				>
+					Disabled with Icon
+				</Chip>
+				<Chip
+					isDisabled
 					color="danger"
 					startContent={<Ionicons name="close" size={14} color="#f31260" />}
 				>
@@ -268,10 +314,18 @@ export const RealWorldExamples: Story = {
 					기술 스택
 				</Text>
 				<View style={{ flexDirection: "row", flexWrap: "wrap", gap: 6 }}>
-					<Chip size="sm" variant="flat" color="primary">React Native</Chip>
-					<Chip size="sm" variant="flat" color="secondary">TypeScript</Chip>
-					<Chip size="sm" variant="flat" color="success">Node.js</Chip>
-					<Chip size="sm" variant="flat" color="warning">Expo</Chip>
+					<Chip size="sm" variant="flat" color="primary">
+						React Native
+					</Chip>
+					<Chip size="sm" variant="flat" color="secondary">
+						TypeScript
+					</Chip>
+					<Chip size="sm" variant="flat" color="success">
+						Node.js
+					</Chip>
+					<Chip size="sm" variant="flat" color="warning">
+						Expo
+					</Chip>
 				</View>
 			</View>
 
@@ -280,22 +334,22 @@ export const RealWorldExamples: Story = {
 					선택된 필터
 				</Text>
 				<View style={{ flexDirection: "row", flexWrap: "wrap", gap: 8 }}>
-					<Chip 
-						variant="solid" 
+					<Chip
+						variant="solid"
 						color="primary"
 						endContent={<Ionicons name="close" size={14} color="white" />}
 					>
 						React
 					</Chip>
-					<Chip 
-						variant="solid" 
+					<Chip
+						variant="solid"
 						color="primary"
 						endContent={<Ionicons name="close" size={14} color="white" />}
 					>
 						Mobile
 					</Chip>
-					<Chip 
-						variant="solid" 
+					<Chip
+						variant="solid"
 						color="primary"
 						endContent={<Ionicons name="close" size={14} color="white" />}
 					>

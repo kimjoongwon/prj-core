@@ -1,12 +1,12 @@
-import React, { useCallback } from "react";
 import { useFormField } from "@shared/hooks";
+import { MobxProps } from "@shared/types";
 import { get } from "lodash-es";
 import { action } from "mobx";
 import { observer } from "mobx-react-lite";
-import { MobxProps } from "@shared/types";
+import React, { useCallback } from "react";
 import {
-	Checkbox as CheckboxComponent,
 	CheckboxProps as BaseCheckboxProps,
+	Checkbox as CheckboxComponent,
 	CheckboxRef,
 } from "./Checkbox";
 

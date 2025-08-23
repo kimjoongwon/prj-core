@@ -1,5 +1,4 @@
 import type { Meta, StoryObj } from "@storybook/react-native";
-import React from "react";
 import { Button } from "@/components/ui/Button";
 import type { ButtonProps } from "@/components/ui/Button/Button";
 

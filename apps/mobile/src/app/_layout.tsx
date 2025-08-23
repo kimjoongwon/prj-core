@@ -61,10 +61,7 @@ function NavigationWrapper() {
 			</Stack.Protected>
 
 			<Stack.Protected guard={true}>
-				<Stack.Screen
-					name="login"
-					options={{ headerShown: false }}
-				/>
+				<Stack.Screen name="login" options={{ headerShown: false }} />
 				<Stack.Screen name="storybook" options={{ headerShown: false }} />
 			</Stack.Protected>
 		</Stack>

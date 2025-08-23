@@ -1,5 +1,4 @@
 import type { Preview } from "@storybook/react-native";
-import { ThemeProvider } from "../src/components/providers/ThemeProvider";
 import { ScreenContainer } from "../src/components/container/ScreenContainer";
 
 const preview: Preview = {

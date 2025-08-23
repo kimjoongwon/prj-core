@@ -1,7 +1,7 @@
 import React from "react";
 import { View, type ViewStyle } from "react-native";
-import { styles, sizes, radiusValues } from "@/components/ui/Chip/Chip.styles";
 import { useTheme } from "@/components/contexts/ThemeContext";
+import { radiusValues, sizes, styles } from "@/components/ui/Chip/Chip.styles";
 import { Text } from "@/components/ui/Text";
 
 export type ChipVariant =

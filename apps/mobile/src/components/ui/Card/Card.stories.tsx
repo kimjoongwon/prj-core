@@ -1,9 +1,8 @@
 import type { Meta, StoryObj } from "@storybook/react-native";
-import React from "react";
 import { View } from "react-native";
-import { Text } from "@/components/ui/Text";
-import { Card } from "@/components/ui/Card/Card";
 import type { CardProps } from "@/components/ui/Card/Card";
+import { Card } from "@/components/ui/Card/Card";
+import { Text } from "@/components/ui/Text";
 
 const meta: Meta<CardProps> = {
 	title: "components/Card",
@@ -12,7 +11,8 @@ const meta: Meta<CardProps> = {
 		layout: "centered",
 		docs: {
 			description: {
-				component: "content1 배경을 사용하는 간단한 카드 컨테이너 컴포넌트입니다.",
+				component:
+					"content1 배경을 사용하는 간단한 카드 컨테이너 컴포넌트입니다.",
 			},
 		},
 	},

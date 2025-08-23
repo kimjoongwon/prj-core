@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/react";
 import { View } from "react-native";
-import { Header } from "./Header";
 import { Text } from "@/components/ui/Text";
+import { Header } from "./Header";
 
 const meta: Meta<typeof Header> = {
 	title: "ui/Header",
@@ -126,8 +126,8 @@ export const WithBothActions: Story = {
 export const Transparent: Story = {
 	render: (args) => (
 		<View style={{ flex: 1 }}>
-			<View 
-				style={{ 
+			<View
+				style={{
 					position: "absolute",
 					top: 0,
 					left: 0,
@@ -218,7 +218,14 @@ export const DarkModeTest: Story = {
 	render: (args) => (
 		<View style={{ flex: 1 }}>
 			<Header {...args} />
-			<View style={{ flex: 1, justifyContent: "center", alignItems: "center", padding: 20 }}>
+			<View
+				style={{
+					flex: 1,
+					justifyContent: "center",
+					alignItems: "center",
+					padding: 20,
+				}}
+			>
 				<Text variant="body1" style={{ textAlign: "center", marginBottom: 16 }}>
 					다크모드 토글을 사용해서 테마 변경을 테스트해보세요.
 				</Text>
