@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/react";
-import { ScrollView } from "./ScrollView";
-import { View } from "@/components/ui/View";
 import { Text } from "@/components/ui/Text";
+import { View } from "@/components/ui/View";
+import { ScrollView } from "./ScrollView";
 
 const meta: Meta<typeof ScrollView> = {
 	title: "ui/ScrollView",

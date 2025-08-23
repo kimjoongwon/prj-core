@@ -1,9 +1,9 @@
 import React from "react";
-import { View, StyleSheet, ViewStyle, StatusBar, Platform } from "react-native";
+import { Platform, StatusBar, StyleSheet, View, ViewStyle } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { useTheme, type Theme } from "@/components/contexts/ThemeContext";
-import { Text } from "@/components/ui/Text";
+import { type Theme, useTheme } from "@/components/contexts/ThemeContext";
 import { Button } from "@/components/ui/Button";
+import { Text } from "@/components/ui/Text";
 
 export type HeaderVariant = "default" | "transparent" | "elevated";
 

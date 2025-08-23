@@ -1,12 +1,12 @@
 import { Ionicons } from "@expo/vector-icons";
 import React, {
-	useState,
-	useMemo,
-	useCallback,
 	forwardRef,
-	useRef,
-	useImperativeHandle,
+	useCallback,
 	useEffect,
+	useImperativeHandle,
+	useMemo,
+	useRef,
+	useState,
 } from "react";
 import {
 	TextInput,
@@ -16,21 +16,21 @@ import {
 	View,
 	ViewStyle,
 } from "react-native";
-import { Text } from "@/components/ui/Text";
 import Animated, {
-	useSharedValue,
-	useAnimatedStyle,
-	withTiming,
 	interpolate,
+	useAnimatedStyle,
+	useSharedValue,
+	withTiming,
 } from "react-native-reanimated";
 import { useTheme } from "@/components/contexts/ThemeContext";
 import {
+	baseContainerStyles,
+	labelStyles,
 	sizes,
 	styles,
-	baseContainerStyles,
 	variantStyles,
-	labelStyles,
 } from "@/components/forms/Input/Input.styles";
+import { Text } from "@/components/ui/Text";
 
 export type InputVariant = "flat" | "bordered" | "underlined" | "faded";
 export type InputColor =

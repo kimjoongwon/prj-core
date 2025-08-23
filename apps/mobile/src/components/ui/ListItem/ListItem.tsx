@@ -1,8 +1,8 @@
 import React from "react";
-import { View, Image, ViewStyle } from "react-native";
-import { Text } from "@/components/ui/Text";
-import { styles, sizes } from "@/components/ui/ListItem/ListItem.styles";
+import { Image, View, ViewStyle } from "react-native";
 import { useTheme } from "@/components/contexts/ThemeContext";
+import { sizes, styles } from "@/components/ui/ListItem/ListItem.styles";
+import { Text } from "@/components/ui/Text";
 
 export type ListItemVariant = "default" | "card" | "simple";
 export type ListItemSize = "sm" | "md" | "lg";
@@ -60,8 +60,8 @@ export const ListItem: React.FC<ListItemProps> = (props) => {
 		...(variant === "card" && styles.cardVariant),
 		...(variant === "simple" && styles.simpleVariant),
 		backgroundColor: theme.colors.content1.DEFAULT,
-		borderColor: isSelected 
-			? theme.colors.primary.DEFAULT 
+		borderColor: isSelected
+			? theme.colors.primary.DEFAULT
 			: theme.colors.content3.DEFAULT,
 		borderWidth: isSelected ? 2 : 1.5,
 		...(isSelected && {

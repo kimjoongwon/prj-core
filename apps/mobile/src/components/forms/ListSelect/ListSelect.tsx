@@ -85,8 +85,13 @@ export function ListSelect<T extends object>(
 			if (keyExtractor) {
 				const key = keyExtractor(item, index);
 				return selectedItems.some((selectedItem) => {
-					const selectedIndex = data.findIndex((dataItem) => dataItem === selectedItem);
-					return selectedIndex !== -1 && keyExtractor(selectedItem, selectedIndex) === key;
+					const selectedIndex = data.findIndex(
+						(dataItem) => dataItem === selectedItem,
+					);
+					return (
+						selectedIndex !== -1 &&
+						keyExtractor(selectedItem, selectedIndex) === key
+					);
 				});
 			} else {
 				// keyExtractor가 없으면 직접 객체 비교
@@ -123,12 +128,19 @@ export function ListSelect<T extends object>(
 					if (keyExtractor) {
 						const key = keyExtractor(item, index);
 						newSelectedItems = selectedItems.filter((selectedItem) => {
-							const selectedIndex = data.findIndex((dataItem) => dataItem === selectedItem);
-							return selectedIndex === -1 || keyExtractor(selectedItem, selectedIndex) !== key;
+							const selectedIndex = data.findIndex(
+								(dataItem) => dataItem === selectedItem,
+							);
+							return (
+								selectedIndex === -1 ||
+								keyExtractor(selectedItem, selectedIndex) !== key
+							);
 						});
 					} else {
 						// keyExtractor가 없으면 직접 객체 비교
-						newSelectedItems = selectedItems.filter((selectedItem) => selectedItem !== item);
+						newSelectedItems = selectedItems.filter(
+							(selectedItem) => selectedItem !== item,
+						);
 					}
 				} else {
 					// Add item

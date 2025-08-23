@@ -1,8 +1,7 @@
-import React from "react";
 import type { Meta, StoryObj } from "@storybook/react-native";
-import { View, ViewStyle } from "react-native";
-import { List } from "@/components/ui/List/List";
+import { View } from "react-native";
 import type { ListProps } from "@/components/ui/List/List";
+import { List } from "@/components/ui/List/List";
 import { Text } from "@/components/ui/Text";
 
 const meta: Meta<ListProps<any>> = {

@@ -263,8 +263,8 @@ export const ControlledExample: Story = {
 		const [isSelected, setIsSelected] = React.useState(false);
 
 		return (
-			<Checkbox 
-				isSelected={isSelected} 
+			<Checkbox
+				isSelected={isSelected}
 				onValueChange={setIsSelected}
 				label={`제어된 체크박스 (현재: ${isSelected ? "선택됨" : "선택 안됨"})`}
 			/>

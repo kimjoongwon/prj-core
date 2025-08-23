@@ -1,18 +1,18 @@
 import { Ionicons } from "@expo/vector-icons";
 import React, {
+	forwardRef,
 	useCallback,
 	useEffect,
-	forwardRef,
 	useImperativeHandle,
 	useMemo,
 	useState,
 } from "react";
 import {
 	Pressable,
+	PressableProps,
 	TextStyle,
 	View,
 	ViewStyle,
-	PressableProps,
 } from "react-native";
 import Animated, {
 	Easing,
@@ -22,15 +22,15 @@ import Animated, {
 	withTiming,
 } from "react-native-reanimated";
 import { useTheme } from "@/components/contexts/ThemeContext";
-import { Text } from "@/components/ui/Text";
 import {
-	sizes,
-	radiusValues,
-	baseContainerStyles,
 	baseCheckboxStyles,
+	baseContainerStyles,
 	baseLabelStyles,
+	radiusValues,
+	sizes,
 	styles,
 } from "@/components/forms/Checkbox/Checkbox.styles";
+import { Text } from "@/components/ui/Text";
 
 export type CheckboxSize = "sm" | "md" | "lg";
 export type CheckboxColor =

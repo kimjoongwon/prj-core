@@ -72,8 +72,6 @@ export const styles = StyleSheet.create({
 		lineHeight: 18,
 		flexShrink: 1, // 긴 설명이 다른 요소를 밀지 않도록
 	},
-
-
 	// Variant Styles
 	cardVariant: {
 		backgroundColor: "transparent",
