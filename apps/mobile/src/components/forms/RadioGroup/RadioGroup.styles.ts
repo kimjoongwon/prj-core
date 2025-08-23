@@ -53,7 +53,7 @@ export const baseGroupStyles: Record<string, ViewStyle> = {
 export const baseRadioStyles: Record<string, ViewStyle> = {
 	container: {
 		flexDirection: "row",
-		alignItems: "flex-start",
+		alignItems: "center",
 		marginBottom: 8,
 	},
 	radio: {
@@ -103,7 +103,7 @@ export const styles = StyleSheet.create({
 	},
 	radioContainer: {
 		flexDirection: "row",
-		alignItems: "flex-start",
+		alignItems: "center",
 		marginBottom: 8,
 	},
 	horizontalRadioContainer: {
@@ -122,6 +122,7 @@ export const styles = StyleSheet.create({
 	labelContainer: {
 		flexDirection: "column",
 		flex: 1,
+		justifyContent: "center",
 	},
 	groupLabel: {
 		fontWeight: "600",
@@ -138,9 +139,9 @@ export const styles = StyleSheet.create({
 	errorMessage: {
 		fontSize: 12,
 		marginTop: 4,
-		color: "#f31260",
+		// color는 컴포넌트에서 동적으로 설정
 	},
 	requiredStar: {
-		color: "#f31260",
+		// color는 컴포넌트에서 동적으로 설정
 	},
 });

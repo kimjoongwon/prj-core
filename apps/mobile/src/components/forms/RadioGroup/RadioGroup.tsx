@@ -115,8 +115,9 @@ export const RadioGroup = <T = any>({
 		return {
 			label: colorTokens.DEFAULT,
 			text: theme.colors.foreground,
-			description: theme.colors.default[500],
+			description: theme.colors.default[600], // 더 진한 색상으로 가독성 향상
 			error: theme.colors.danger.DEFAULT,
+			border: theme.colors.default[400], // 다크모드에서도 보이는 테두리 색상
 		};
 	}, [color, isInvalid, theme.colors]);
 
@@ -215,14 +216,14 @@ export const RadioGroup = <T = any>({
 				width: sizeConfig.radioSize,
 				height: sizeConfig.radioSize,
 				backgroundColor: "transparent",
-				borderColor: isSelected ? colorScheme.label : theme.colors.default[300],
+				borderColor: isSelected ? colorScheme.label : colorScheme.border,
 				...(isOptionDisabled ? baseRadioStyles.disabled : {}),
 			};
 		}, [
 			sizeConfig.radioSize,
 			isSelected,
 			colorScheme.label,
-			theme.colors.default,
+			colorScheme.border,
 			isOptionDisabled,
 		]);
 
@@ -297,10 +298,12 @@ export const RadioGroup = <T = any>({
 		return (
 			<Text style={labelStyle ? [labelStyleMemo, labelStyle] : labelStyleMemo}>
 				{label}
-				{isRequired && <Text style={styles.requiredStar}> *</Text>}
+				{isRequired && (
+					<Text style={[styles.requiredStar, { color: colorScheme.error }]}> *</Text>
+				)}
 			</Text>
 		);
-	}, [label, labelStyleMemo, labelStyle, isRequired]);
+	}, [label, labelStyleMemo, labelStyle, isRequired, colorScheme.error]);
 
 	const renderOptions = useCallback(() => {
 		return data.map((item, index) => {
