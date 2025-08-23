@@ -28,10 +28,7 @@
     "android",
     "dist",
     "build",
-    "**/*.stories.tsx",
     ".expo",
     ".rnstorybook",
-    "**/*.test.tsx",
-    "**/*.spec.tsx"
   ]
 }
