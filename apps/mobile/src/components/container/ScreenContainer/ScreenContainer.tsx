@@ -34,6 +34,7 @@ export const ScreenContainer: React.FC<ScreenContainerProps> = observer(
 
 		const containerStyle: ViewStyle = {
 			flex: 1,
+			paddingHorizontal: 20,
 			backgroundColor: containerBackgroundColor,
 			...style,
 		};

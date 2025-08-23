@@ -46,10 +46,7 @@ DarkModeSwitch.displayName = "DarkModeSwitch";
 
 const styles = StyleSheet.create({
 	container: {
-		position: "absolute",
-		top: 60,
-		right: 20,
-		zIndex: 9999,
+		// 위치 관련 스타일 제거 - 사용하는 곳에서 결정
 	},
 	button: {
 		width: 44,

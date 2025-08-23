@@ -122,27 +122,27 @@ export const Sizes: Story = {
 					size="sm"
 					defaultValue="option1"
 					data={sizeOptions}
-					keyExtractor={(item, index) => item.key}
-					labelExtractor={(item, index) => item.text}
-					valueExtractor={(item, index) => item.value}
+					keyExtractor={(item) => item.key}
+					labelExtractor={(item) => item.text}
+					valueExtractor={(item) => item.value}
 				/>
 				<RadioGroup
 					label="Medium Size"
 					size="md"
 					defaultValue="option1"
 					data={sizeOptions}
-					keyExtractor={(item, index) => item.key}
-					labelExtractor={(item, index) => item.text}
-					valueExtractor={(item, index) => item.value}
+					keyExtractor={(item) => item.key}
+					labelExtractor={(item) => item.text}
+					valueExtractor={(item) => item.value}
 				/>
 				<RadioGroup
 					label="Large Size"
 					size="lg"
 					defaultValue="option1"
 					data={sizeOptions}
-					keyExtractor={(item, index) => item.key}
-					labelExtractor={(item, index) => item.text}
-					valueExtractor={(item, index) => item.value}
+					keyExtractor={(item) => item.key}
+					labelExtractor={(item) => item.text}
+					valueExtractor={(item) => item.value}
 				/>
 			</>
 		);
@@ -170,54 +170,54 @@ export const Colors: Story = {
 					color="default"
 					defaultValue="option1"
 					data={colorOptions}
-					keyExtractor={(item, index) => item.key}
-					labelExtractor={(item, index) => item.text}
-					valueExtractor={(item, index) => item.value}
+					keyExtractor={(item) => item.key}
+					labelExtractor={(item) => item.text}
+					valueExtractor={(item) => item.value}
 				/>
 				<RadioGroup
 					label="Primary"
 					color="primary"
 					defaultValue="option1"
 					data={colorOptions}
-					keyExtractor={(item, index) => item.key}
-					labelExtractor={(item, index) => item.text}
-					valueExtractor={(item, index) => item.value}
+					keyExtractor={(item) => item.key}
+					labelExtractor={(item) => item.text}
+					valueExtractor={(item) => item.value}
 				/>
 				<RadioGroup
 					label="Secondary"
 					color="secondary"
 					defaultValue="option1"
 					data={colorOptions}
-					keyExtractor={(item, index) => item.key}
-					labelExtractor={(item, index) => item.text}
-					valueExtractor={(item, index) => item.value}
+					keyExtractor={(item) => item.key}
+					labelExtractor={(item) => item.text}
+					valueExtractor={(item) => item.value}
 				/>
 				<RadioGroup
 					label="Success"
 					color="success"
 					defaultValue="option1"
 					data={colorOptions}
-					keyExtractor={(item, index) => item.key}
-					labelExtractor={(item, index) => item.text}
-					valueExtractor={(item, index) => item.value}
+					keyExtractor={(item) => item.key}
+					labelExtractor={(item) => item.text}
+					valueExtractor={(item) => item.value}
 				/>
 				<RadioGroup
 					label="Warning"
 					color="warning"
 					defaultValue="option1"
 					data={colorOptions}
-					keyExtractor={(item, index) => item.key}
-					labelExtractor={(item, index) => item.text}
-					valueExtractor={(item, index) => item.value}
+					keyExtractor={(item) => item.key}
+					labelExtractor={(item) => item.text}
+					valueExtractor={(item) => item.value}
 				/>
 				<RadioGroup
 					label="Danger"
 					color="danger"
 					defaultValue="option1"
 					data={colorOptions}
-					keyExtractor={(item, index) => item.key}
-					labelExtractor={(item, index) => item.text}
-					valueExtractor={(item, index) => item.value}
+					keyExtractor={(item) => item.key}
+					labelExtractor={(item) => item.text}
+					valueExtractor={(item) => item.value}
 				/>
 			</>
 		);
@@ -246,18 +246,18 @@ export const Orientations: Story = {
 					orientation="vertical"
 					defaultValue="option1"
 					data={orientationOptions}
-					keyExtractor={(item, index) => item.key}
-					labelExtractor={(item, index) => item.text}
-					valueExtractor={(item, index) => item.value}
+					keyExtractor={(item) => item.key}
+					labelExtractor={(item) => item.text}
+					valueExtractor={(item) => item.value}
 				/>
 				<RadioGroup
 					label="가로 방향"
 					orientation="horizontal"
 					defaultValue="option1"
 					data={orientationOptions}
-					keyExtractor={(item, index) => item.key}
-					labelExtractor={(item, index) => item.text}
-					valueExtractor={(item, index) => item.value}
+					keyExtractor={(item) => item.key}
+					labelExtractor={(item) => item.text}
+					valueExtractor={(item) => item.value}
 				/>
 			</>
 		);
@@ -300,10 +300,10 @@ export const WithDescription: Story = {
 				description="원하는 배송 방법을 선택해주세요."
 				defaultValue="standard"
 				data={shippingOptions}
-				keyExtractor={(item, index) => item.key}
-				labelExtractor={(item, index) => item.text}
-				valueExtractor={(item, index) => item.value}
-				descriptionExtractor={(item, index) => item.description}
+				keyExtractor={(item) => item.key}
+				labelExtractor={(item) => item.text}
+				valueExtractor={(item) => item.value}
+				descriptionExtractor={(item) => item.description}
 			/>
 		);
 	},
@@ -344,27 +344,27 @@ export const States: Story = {
 					label="기본 상태"
 					defaultValue="option1"
 					data={basicOptions}
-					keyExtractor={(item, index) => item.key}
-					labelExtractor={(item, index) => item.text}
-					valueExtractor={(item, index) => item.value}
+					keyExtractor={(item) => item.key}
+					labelExtractor={(item) => item.text}
+					valueExtractor={(item) => item.value}
 				/>
 				<RadioGroup
 					label="비활성화된 그룹"
 					isDisabled
 					defaultValue="option1"
 					data={disabledOptions}
-					keyExtractor={(item, index) => item.key}
-					labelExtractor={(item, index) => item.text}
-					valueExtractor={(item, index) => item.value}
+					keyExtractor={(item) => item.key}
+					labelExtractor={(item) => item.text}
+					valueExtractor={(item) => item.value}
 				/>
 				<RadioGroup
 					label="개별 비활성화"
 					defaultValue="option1"
 					data={individualDisabledOptions}
-					keyExtractor={(item, index) => item.key}
-					labelExtractor={(item, index) => item.text}
-					valueExtractor={(item, index) => item.value}
-					disabledExtractor={(item, index) => item.isDisabled || false}
+					keyExtractor={(item) => item.key}
+					labelExtractor={(item) => item.text}
+					valueExtractor={(item) => item.value}
+					disabledExtractor={(item) => item.isDisabled || false}
 				/>
 			</>
 		);
@@ -393,9 +393,9 @@ export const WithError: Story = {
 				isInvalid
 				errorMessage="하나의 옵션을 선택해주세요."
 				data={errorOptions}
-				keyExtractor={(item, index) => item.key}
-				labelExtractor={(item, index) => item.text}
-				valueExtractor={(item, index) => item.value}
+				keyExtractor={(item) => item.key}
+				labelExtractor={(item) => item.text}
+				valueExtractor={(item) => item.value}
 			/>
 		);
 	},
@@ -424,9 +424,9 @@ export const Interactive: Story = {
 				onValueChange={(value) => setSelectedValue(value)}
 				description={`현재 선택된 값: ${selectedValue}`}
 				data={interactiveOptions}
-				keyExtractor={(item, index) => item.key}
-				labelExtractor={(item, index) => item.text}
-				valueExtractor={(item, index) => item.value}
+				keyExtractor={(item) => item.key}
+				labelExtractor={(item) => item.text}
+				valueExtractor={(item) => item.value}
 			/>
 		);
 	},
@@ -456,9 +456,9 @@ export const ControlledExample: Story = {
 				onValueChange={(newValue) => setValue(newValue)}
 				description={`선택된 값: ${value || "없음"}`}
 				data={frameworkOptions}
-				keyExtractor={(item, index) => item.key}
-				labelExtractor={(item, index) => item.text}
-				valueExtractor={(item, index) => item.value}
+				keyExtractor={(item) => item.key}
+				labelExtractor={(item) => item.text}
+				valueExtractor={(item) => item.value}
 			/>
 		);
 	},
