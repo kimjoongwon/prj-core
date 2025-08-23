@@ -11,7 +11,7 @@
     "lint": "biome lint .",
     "lint:fix": "biome lint --write .",
     "format": "biome format --write .",
-    "type-check": "NODE_OPTIONS=--max_old_space_size=4096 tsc --noEmit",
+    "type-check": "tsc --noEmit",
     "type-check:debug": "NODE_OPTIONS=\"--max_old_space_size=4096 --expose-gc\" tsc --noEmit --diagnostics --listFiles",
     "type-check:scope": "NODE_OPTIONS=--max_old_space_size=4096 tsc --noEmit src/components/**/*.tsx",
     "storybook-generate": "sb-rn-get-stories",
