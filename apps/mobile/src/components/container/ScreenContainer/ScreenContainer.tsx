@@ -1,26 +1,17 @@
 import { observer } from "mobx-react-lite";
 import React from "react";
 import { StatusBar, View, ViewProps, ViewStyle } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
 import { useTheme } from "@/components/contexts/ThemeContext";
 
 export interface ScreenContainerProps extends Omit<ViewProps, "style"> {
 	children: React.ReactNode;
-	safeArea?: boolean;
 	statusBarStyle?: "light-content" | "dark-content" | "auto";
 	backgroundColor?: string;
 	style?: ViewStyle;
 }
 
 export const ScreenContainer: React.FC<ScreenContainerProps> = observer(
-	({
-		children,
-		safeArea = true,
-		statusBarStyle = "auto",
-		backgroundColor,
-		style,
-		...props
-	}) => {
+	({ children, statusBarStyle = "auto", backgroundColor, style, ...props }) => {
 		const { theme, isDark } = useTheme();
 
 		const containerBackgroundColor = backgroundColor || theme.colors.background;
@@ -39,17 +30,15 @@ export const ScreenContainer: React.FC<ScreenContainerProps> = observer(
 			...style,
 		};
 
-		const Container = safeArea ? SafeAreaView : View;
-
 		return (
-			<Container style={containerStyle} {...props}>
+			<View style={containerStyle} {...props}>
 				<StatusBar
 					barStyle={statusBarStyleValue}
 					backgroundColor={containerBackgroundColor}
 					translucent={false}
 				/>
 				{children}
-			</Container>
+			</View>
 		);
 	},
 );

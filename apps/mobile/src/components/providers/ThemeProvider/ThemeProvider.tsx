@@ -1,12 +1,16 @@
+import {
+	DefaultTheme,
+	ThemeProvider as RNNavThemeProvider,
+} from "@react-navigation/native";
+import { observer } from "mobx-react-lite";
 import React, { ReactNode, useCallback, useState } from "react";
 import { useColorScheme } from "react-native";
-import { observer } from "mobx-react-lite";
-import { lightTheme, darkTheme } from "./ThemeProvider.styles";
 import {
 	ThemeContext,
-	type ThemeMode,
 	type ThemeContextValue,
+	type ThemeMode,
 } from "@/components/contexts/ThemeContext";
+import { darkTheme, lightTheme } from "./ThemeProvider.styles";
 
 interface ThemeProviderProps {
 	children: ReactNode;
@@ -42,7 +46,24 @@ export const ThemeProvider: React.FC<ThemeProviderProps> = observer(
 		};
 
 		return (
-			<ThemeContext.Provider value={value}>{children}</ThemeContext.Provider>
+			<ThemeContext.Provider value={value}>
+				<RNNavThemeProvider
+					value={{
+						fonts: DefaultTheme.fonts,
+						dark: isDark,
+						colors: {
+							primary: theme.colors.primary.DEFAULT,
+							background: theme.colors.background,
+							card: theme.colors.content1.DEFAULT,
+							text: theme.colors.foreground,
+							border: theme.colors.default[200],
+							notification: theme.colors.danger.DEFAULT,
+						},
+					}}
+				>
+					{children}
+				</RNNavThemeProvider>
+			</ThemeContext.Provider>
 		);
 	},
 );

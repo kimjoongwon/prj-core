@@ -1,10 +1,5 @@
-import { View } from "react-native";
-import { Text } from "@/components/ui/Text";
+import { LoginScreen } from "@/components/screens";
 
 export default function Login() {
-	return (
-		<View>
-			<Text>Login Screen</Text>
-		</View>
-	);
+	return <LoginScreen />;
 }

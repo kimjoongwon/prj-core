@@ -1,5 +1,4 @@
 import type { Meta, StoryObj } from "@storybook/react";
-import React from "react";
 import { StyleSheet, View } from "react-native";
 import { Button } from "@/components/ui/Button";
 import { Text } from "@/components/ui/Text";
@@ -18,10 +17,6 @@ const meta: Meta<typeof ScreenContainer> = {
 		},
 	},
 	argTypes: {
-		safeArea: {
-			control: { type: "boolean" },
-			description: "SafeAreaView 사용 여부",
-		},
 		statusBarStyle: {
 			control: { type: "select" },
 			options: ["light-content", "dark-content", "auto"],
@@ -33,7 +28,6 @@ const meta: Meta<typeof ScreenContainer> = {
 		},
 	},
 	args: {
-		safeArea: true,
 		statusBarStyle: "auto",
 	},
 };
@@ -64,9 +58,6 @@ export const Default: Story = {
 };
 
 export const WithoutSafeArea: Story = {
-	args: {
-		safeArea: false,
-	},
 	render: (args) => (
 		<ScreenContainer {...args}>
 			<DemoContent />

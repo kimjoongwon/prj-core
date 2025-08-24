@@ -2,7 +2,7 @@ export * from "./ThemeProvider";
 
 import { PropsWithChildren, ReactNode } from "react";
 import { StyleSheet, View } from "react-native";
-import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
+import { SafeAreaProvider } from "react-native-safe-area-context";
 import { DarkModeSwitch } from "@/components/ui/DarkModeSwitch";
 import { ThemeProvider } from "./ThemeProvider";
 
@@ -32,9 +32,7 @@ export function Providers({
 
 	return (
 		<SafeAreaProvider>
-			<SafeAreaView style={{ flex: 1 }}>
-				<ThemeProvider>{renderWithDarkModeSwitch(children)}</ThemeProvider>
-			</SafeAreaView>
+			<ThemeProvider>{renderWithDarkModeSwitch(children)}</ThemeProvider>
 		</SafeAreaProvider>
 	);
 }

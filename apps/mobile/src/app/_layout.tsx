@@ -4,7 +4,7 @@ import { Stack } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
 import { useEffect } from "react";
 import "react-native-reanimated";
-import { Header } from "@/components";
+import { useThemedScreenOptions } from "@/hooks/useThemedScreenOptions";
 import { Providers } from "../components/providers";
 
 export {
@@ -55,18 +55,21 @@ export default function RootLayout() {
 }
 
 function NavigationWrapper() {
+	const screenOptions = useThemedScreenOptions();
+
 	return (
-		<Stack
-			screenOptions={{
-				header: (props) => <Header {...props} />,
-			}}
-		>
+		<Stack screenOptions={screenOptions}>
 			<Stack.Protected guard={false}>
-				<Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+				<Stack.Screen options={{ headerShown: false }} name="(tabs)" />
 			</Stack.Protected>
 
 			<Stack.Protected guard={true}>
-				<Stack.Screen name="login" options={{ headerShown: false }} />
+				<Stack.Screen
+					name="login"
+					options={{
+						title: "로그인",
+					}}
+				/>
 				<Stack.Screen name="storybook" options={{ headerShown: false }} />
 			</Stack.Protected>
 		</Stack>

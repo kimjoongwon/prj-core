@@ -35,18 +35,10 @@ export const Header: React.FC<HeaderProps> = ({
 	rightAction,
 	centerContent,
 	style,
-	showStatusBar = true,
-	statusBarStyle = "auto",
 }) => {
-	const { theme, isDark } = useTheme();
+	const { theme } = useTheme();
 	const insets = useSafeAreaInsets();
 	const dynamicStyles = createStyles(theme, insets.top);
-
-	// StatusBar 스타일 결정
-	const getStatusBarStyle = () => {
-		if (statusBarStyle !== "auto") return statusBarStyle;
-		return isDark ? "light" : "dark";
-	};
 
 	const headerStyle = [
 		dynamicStyles.container,
@@ -56,78 +48,66 @@ export const Header: React.FC<HeaderProps> = ({
 	];
 
 	return (
-		<>
-			{showStatusBar && (
-				<StatusBar
-					// @ts-ignore
-					barStyle={`${getStatusBarStyle()}-content`}
-					backgroundColor={
-						variant === "transparent" ? "transparent" : theme.colors.background
-					}
-					translucent={variant === "transparent"}
-				/>
-			)}
-			<View style={headerStyle}>
-				<View style={dynamicStyles.content}>
-					{/* 왼쪽 액션 */}
-					<View style={dynamicStyles.leftSection}>
-						{leftAction && (
-							<Button
-								variant={leftAction.variant || "ghost"}
-								color={leftAction.color || "default"}
-								size="sm"
-								onPress={leftAction.onPress}
-							>
-								{leftAction.title}
-							</Button>
-						)}
-					</View>
+		<View style={headerStyle}>
+			<View style={dynamicStyles.content}>
+				{/* 왼쪽 액션 */}
+				<View style={dynamicStyles.leftSection}>
+					{leftAction && (
+						<Button
+							variant={leftAction.variant || "ghost"}
+							color={leftAction.color || "default"}
+							size="sm"
+							onPress={leftAction.onPress}
+						>
+							{leftAction.title}
+						</Button>
+					)}
+				</View>
 
-					{/* 중앙 컨텐츠 */}
-					<View style={dynamicStyles.centerSection}>
-						{centerContent ? (
-							centerContent
-						) : (
-							<View style={dynamicStyles.titleContainer}>
-								{title && (
-									<Text
-										variant="h6"
-										style={dynamicStyles.title}
-										numberOfLines={1}
-									>
-										{title}
-									</Text>
-								)}
-								{subtitle && (
-									<Text
-										variant="caption"
-										color="default"
-										style={dynamicStyles.subtitle}
-										numberOfLines={1}
-									>
-										{subtitle}
-									</Text>
-								)}
-							</View>
-						)}
-					</View>
+				{/* 중앙 컨텐츠 */}
+				<View style={dynamicStyles.centerSection}>
+					{centerContent ? (
+						centerContent
+					) : (
+						<View style={dynamicStyles.titleContainer}>
+							{title && (
+								<Text
+									variant="h6"
+									style={dynamicStyles.title}
+									numberOfLines={1}
+								>
+									{title}
+								</Text>
+							)}
+							{subtitle && (
+								<Text
+									variant="caption"
+									color="default"
+									style={dynamicStyles.subtitle}
+									numberOfLines={1}
+								>
+									{subtitle}
+								</Text>
+							)}
+						</View>
+					)}
+				</View>
 
-					{/* 오른쪽 액션 */}
-					<View style={dynamicStyles.rightSection}>
-						{rightAction && (
-							<Button
-								variant={rightAction.variant || "ghost"}
-								color={rightAction.color || "default"}
-								size="sm"
-								onPress={rightAction.onPress}
-							>
-								{rightAction.title}
-							</Button>
-						)}
-					</View>
+				{/* 오른쪽 액션 */}
+				<View style={dynamicStyles.rightSection}>
+					{rightAction && (
+						<Button
+							variant={rightAction.variant || "ghost"}
+							color={rightAction.color || "default"}
+							size="sm"
+							onPress={rightAction.onPress}
+						>
+							{rightAction.title}
+						</Button>
+					)}
 				</View>
 			</View>
-		</>
+		</View>
 	);
 };
 
