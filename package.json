@@ -6,12 +6,15 @@
   "scripts": {
     "build": "turbo build",
     "clean": "turbo clean",
-    "start:dev": "turbo start:dev --no-cache  --continue",
+    "start:dev": "turbo start:dev",
+    "mobile:dev": "turbo start:dev --filter=mobile",
+    "server:dev": "turbo start:dev --filter=server",
+    "admin:dev": "turbo start:dev --filter=admin",
     "lint": "turbo lint",
     "lint:fix": "turbo lint:fix",
     "format": "turbo format",
-  "test": "turbo test",
-  "storybook": "pnpm -C apps/mobile storybook"
+    "test": "turbo test",
+    "storybook": "pnpm -C apps/mobile storybook"
   },
   "devDependencies": {
     "@biomejs/biome": "catalog:",
