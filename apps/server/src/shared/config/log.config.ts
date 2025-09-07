@@ -12,6 +12,7 @@ export interface LogConfig {
 const getLogConfig = (): LogConfig => {
 	const isDevelopment = process.env.NODE_ENV !== "production";
 	const isTest = process.env.NODE_ENV === "test";
+	const isDocker = process.env.DOCKER_ENV === "true";
 
 	if (isTest) {
 		return {
@@ -23,7 +24,8 @@ const getLogConfig = (): LogConfig => {
 		};
 	}
 
-	if (isDevelopment) {
+	if (isDevelopment && !isDocker) {
+		// 로컬 개발 환경: pretty print 활성화
 		return {
 			level: ["debug", "log", "warn", "error"],
 			timestamp: true,
@@ -33,13 +35,13 @@ const getLogConfig = (): LogConfig => {
 		};
 	}
 
-	// Production
+	// Production 또는 Docker 환경: JSON 구조화 로그
 	return {
 		level: ["log", "warn", "error"],
 		timestamp: true,
 		colorize: false,
-		context: false,
-		prettyPrint: false,
+		context: true,
+		prettyPrint: false, // Docker에서는 pretty print 비활성화
 	};
 };
 

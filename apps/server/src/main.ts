@@ -71,8 +71,14 @@ async function bootstrap() {
 		credentials: true,
 	});
 
-	const port = 3005;
+	const port = process.env.PORT || 3005;
 	await app.listen(port);
+	
+	const logger = app.get(Logger);
+	logger.log(`🚀 서버가 ${port} 포트에서 시작되었습니다`);
+	logger.log(`📱 환경: ${process.env.NODE_ENV}`);
+	logger.log(`🐳 Docker: ${process.env.DOCKER_ENV === 'true' ? 'Yes' : 'No'}`);
+	logger.log(`📊 API 문서: http://localhost:${port}/api`);
 }
 
 bootstrap();
