@@ -1,4 +1,3 @@
-import { parseAbsoluteToLocal } from "@internationalized/date";
 import dayjs from "dayjs";
 
 export function getNow(): string {
@@ -75,9 +74,6 @@ export function getYear(): number {
 export function formatTime(format: string = "HH:mm"): string {
 	return dayjs().format(format);
 }
-
-// Internationalized date utilities
-export { parseAbsoluteToLocal };
 
 // ISO string utilities
 export function toISOString(date: string | Date): string {
