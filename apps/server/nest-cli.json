@@ -7,8 +7,7 @@
     "builder": {
       "type": "swc",
       "options": {
-        "swcrcPath": "infrastructure/.swcrc",
-        "watch": true
+        "swcrcPath": "infrastructure/.swcrc"
       }
     },
     "typeCheck": true
