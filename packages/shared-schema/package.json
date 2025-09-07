@@ -6,7 +6,7 @@
   "scripts": {
     "type-check": "tsc --noEmit",
     "generate": "prisma generate",
-    "build": "tsup",
+    "build": "prisma generate && tsup",
     "start:dev": "tsup --watch",
     "generate:safe": "prisma generate || echo 'Prisma generate failed, continuing...'",
     "db:push": "prisma db push",
