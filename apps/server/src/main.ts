@@ -78,6 +78,7 @@ async function bootstrap() {
 	logger.log(`📱 환경: ${process.env.NODE_ENV}`);
 	logger.log(`🐳 Docker: ${process.env.DOCKER_ENV === "true" ? "Yes" : "No"}`);
 	logger.log(`📊 API 문서: http://localhost:${port}/api`);
+	logger.log(`📊 API 문서: http://localhost:${port}/api`);
 }
 
 bootstrap();
