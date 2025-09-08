@@ -2,7 +2,7 @@ podTemplate(
     label: 'builder',
     volumes: [
         persistentVolumeClaim(
-            claimName: 'plate-container-cache-prod',
+            claimName: 'container-builder-pvc',
             mountPath: '/var/lib/docker'
         )
     ],

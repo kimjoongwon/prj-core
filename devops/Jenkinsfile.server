@@ -6,7 +6,7 @@ spec:
   volumes:
     - name: docker-lib
       persistentVolumeClaim:
-        claimName: plate-container-cache-prod
+        claimName: container-builder-pvc 
   containers:
     - name: docker
       image: docker:dind
