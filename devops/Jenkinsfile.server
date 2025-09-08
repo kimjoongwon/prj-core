@@ -1,23 +1,22 @@
-podTemplate(yaml:
-"""
-apiVersion: v1
-kind: Pod
-spec:
-  volumes:
-    - name: docker-lib
-      persistentVolumeClaim:
-        claimName: container-builder-pvc 
-  containers:
-    - name: docker
-      image: docker:dind
-      securityContext:
-        privileged: true
-      volumeMounts:
-        - name: docker-lib
-          mountPath: /var/lib/docker
-"""
+podTemplate(
+    label: 'server-builder',
+    volumes: [
+        persistentVolumeClaim(
+            claimName: 'container-builder-pvc',
+            mountPath: '/var/lib/docker'
+        )
+    ],
+    containers: [
+        containerTemplate(
+            name: 'docker', 
+            image: 'docker:dind', 
+            privileged: true, 
+            resourceRequestMemory: '1Gi', 
+            resourceLimitMemory: '1Gi'
+        )
+    ]
 ) {
-    node(POD_LABEL) {
+    node('server-builder') {
         stage('Checkout') {
             checkout scm
         }
