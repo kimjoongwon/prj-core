@@ -1,4 +1,10 @@
 podTemplate(
+    volumes: [
+        persistentVolumeClaim(
+            claimName: 'container-builder-pvc',
+            mountPath: '/var/lib/docker'
+        )
+    ],
     containers: [
         containerTemplate(
             name: 'docker', 
