@@ -1,5 +1,4 @@
 podTemplate(
-    label: 'server-builder',
     containers: [
         containerTemplate(
             name: 'docker', 
@@ -12,7 +11,7 @@ podTemplate(
         )
     ]
 ) {
-    node('server-builder') {
+    node(POD_LABEL) {
         stage('Checkout') {
             checkout scm
         }
