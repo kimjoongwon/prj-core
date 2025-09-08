@@ -1,15 +1,27 @@
-podTemplate(
-    containers: [
-        containerTemplate(name: 'docker', image: 'docker:dind', privileged: true)
-    ],
-    volumes: [
-        // Docker 데몬 레이어 캐시
-        persistentVolumeClaim(claimName: 'nfs-client', mountPath: '/var/lib/docker'),
-        // 선택: buildx 로컬 캐시 디렉터리 (pipeline에서 --cache-from/--cache-to local 사용 시)
-        persistentVolumeClaim(claimName: 'nfs-client', mountPath: '/workspace/.buildx-cache'),
-        // 예: pnpm store 캐시 원하면 아래 추가
-        persistentVolumeClaim(claimName: 'nfs-client', mountPath: '/root/.local/share/pnpm/store')
-    ]
+podTemplate(yaml:
+"""
+apiVersion: v1
+kind: Pod
+spec:
+  volumes:
+    - name: docker-lib
+      ephemeral:
+        volumeClaimTemplate:
+          spec:
+            accessModes: [ "ReadWriteOnce" ]
+            storageClassName: nfs-client
+            resources:
+              requests:
+                storage: 20Gi
+  containers:
+    - name: docker
+      image: docker:dind
+      securityContext:
+        privileged: true
+      volumeMounts:
+        - name: docker-lib
+          mountPath: /var/lib/docker
+"""
 ) {
     node(POD_LABEL) {
         stage('Checkout') {
