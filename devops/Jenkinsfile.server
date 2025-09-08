@@ -4,7 +4,7 @@ podTemplate(
         containerTemplate(name: 'docker', image: 'docker:dind', privileged: true)
     ]
 ) {
-    node(POD_LABEL) {
+    node('builder') {
         stage('Checkout') {
             checkout scm
         }
