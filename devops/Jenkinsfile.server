@@ -5,14 +5,8 @@ kind: Pod
 spec:
   volumes:
     - name: docker-lib
-      ephemeral:
-        volumeClaimTemplate:
-          spec:
-            accessModes: [ "ReadWriteOnce" ]
-            storageClassName: nfs-client
-            resources:
-              requests:
-                storage: 20Gi
+      persistentVolumeClaim:
+        claimName: plate-container-cache-prod
   containers:
     - name: docker
       image: docker:dind
