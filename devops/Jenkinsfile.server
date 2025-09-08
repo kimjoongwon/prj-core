@@ -1,6 +1,14 @@
 podTemplate(
     containers: [
         containerTemplate(name: 'docker', image: 'docker:dind', privileged: true)
+    ],
+    volumes: [
+        // Docker 데몬 레이어 캐시
+        persistentVolumeClaim(claimName: 'nfs-client', mountPath: '/var/lib/docker'),
+        // 선택: buildx 로컬 캐시 디렉터리 (pipeline에서 --cache-from/--cache-to local 사용 시)
+        persistentVolumeClaim(claimName: 'nfs-client', mountPath: '/workspace/.buildx-cache')
+        // 예: pnpm store 캐시 원하면 아래 추가
+        persistentVolumeClaim(claimName: 'nfs-client', mountPath: '/root/.local/share/pnpm/store')
     ]
 ) {
     node(POD_LABEL) {
@@ -27,8 +35,6 @@ podTemplate(
                 
                 // latest 태그로도 푸시
                 dockerImage.push("latest")
-
-
             }
         }
     }
