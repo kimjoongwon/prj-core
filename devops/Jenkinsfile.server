@@ -8,12 +8,12 @@ podTemplate(
     containers: [
         containerTemplate(
             name: 'podman', 
-            image: 'quay.io/podman/stable:latest', 
+            image: 'quay.io/podman/stable:v4.8.2', 
             privileged: true, 
-            // resourceRequestMemory: '2Gi', 
-            // resourceLimitMemory: '4Gi',
-            // resourceRequestCpu: '1000m',
-            // resourceLimitCpu: '2000m'
+            resourceRequestMemory: '2Gi', 
+            resourceLimitMemory: '4Gi',
+            resourceRequestCpu: '1000m',
+            resourceLimitCpu: '2000m'
         )
     ]
 ) {
@@ -23,17 +23,51 @@ podTemplate(
         }
         stage('Build and Push Image') {
             container('podman') {
+                // Podman 상태 확인 및 초기화
+                sh 'podman info || echo "Podman initializing..."'
+                
                 withCredentials([usernamePassword(credentialsId: 'harbarHubAccount', usernameVariable: 'HARBOR_USERNAME', passwordVariable: 'HARBOR_PASSWORD')]) {
-                    // Harbor Registry 로그인
-                    sh "echo $HARBOR_PASSWORD | podman login -u $HARBOR_USERNAME --password-stdin core.harbor.domain"
+                    // Harbor Registry 로그인 (TLS 검증 포함)
+                    sh """
+                        echo \$HARBOR_PASSWORD | podman login \
+                            -u \$HARBOR_USERNAME \
+                            --password-stdin \
+                            --tls-verify=true \
+                            core.harbor.domain
+                    """
                     
-                    // Podman 이미지 빌드
-                    sh "podman build -f ./devops/Dockerfile.server -t core.harbor.domain/server-stg/server:${env.BUILD_NUMBER} ."
-                    sh "podman tag core.harbor.domain/server-stg/server:${env.BUILD_NUMBER} core.harbor.domain/server-stg/server:latest"
+                    // Podman 이미지 빌드 (멀티스테이지 최적화)
+                    sh """
+                        podman build \
+                            --format=docker \
+                            --layers \
+                            -f ./devops/Dockerfile.server \
+                            -t core.harbor.domain/server-stg/server:${env.BUILD_NUMBER} \
+                            -t core.harbor.domain/server-stg/server:latest \
+                            .
+                    """
                     
-                    // 이미지 푸시
-                    sh "podman push core.harbor.domain/server-stg/server:${env.BUILD_NUMBER}"
-                    sh "podman push core.harbor.domain/server-stg/server:latest"
+                    // 이미지 푸시 (압축 최적화)
+                    sh """
+                        podman push \
+                            --compression-format=gzip \
+                            --compression-level=6 \
+                            core.harbor.domain/server-stg/server:${env.BUILD_NUMBER}
+                    """
+                    
+                    sh """
+                        podman push \
+                            --compression-format=gzip \
+                            --compression-level=6 \
+                            core.harbor.domain/server-stg/server:latest
+                    """
+                    
+                    // 로컬 이미지 정리 (디스크 공간 절약)
+                    sh """
+                        podman rmi \
+                            core.harbor.domain/server-stg/server:${env.BUILD_NUMBER} \
+                            core.harbor.domain/server-stg/server:latest || true
+                    """
                 }
             }
         }
