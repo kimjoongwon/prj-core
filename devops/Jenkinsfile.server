@@ -24,7 +24,7 @@ podTemplate(
                 // Podman 상태 확인 및 초기화
                 sh 'podman info || echo "Podman initializing..."'
                 
-                withCredentials([usernamePassword(credentialsId: 'harbar', usernameVariable: 'HARBOR_USERNAME', passwordVariable: 'HARBOR_PASSWORD')]) {
+                withCredentials([usernamePassword(credentialsId: 'harbor', usernameVariable: 'HARBOR_USERNAME', passwordVariable: 'HARBOR_PASSWORD')]) {
                     // Harbor Registry 로그인 (TLS 검증 포함)
                     sh """
                         echo \$HARBOR_PASSWORD | podman login \
