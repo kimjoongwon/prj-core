@@ -2,13 +2,13 @@ podTemplate(
     volumes: [
         persistentVolumeClaim(
             claimName: 'container-builder-pvc',
-            mountPath: '/var/lib/docker'
+            mountPath: '/var/lib/containers'
         )
     ],
     containers: [
         containerTemplate(
-            name: 'docker', 
-            image: 'docker:dind', 
+            name: 'podman', 
+            image: 'quay.io/podman/stable:latest', 
             privileged: true, 
             // resourceRequestMemory: '2Gi', 
             // resourceLimitMemory: '4Gi',
@@ -21,26 +21,20 @@ podTemplate(
         stage('Checkout') {
             checkout scm
         }
-        stage('Build and Run Docker') {
-            container('docker') {
-                // Docker 데몬 시작
-                sh 'dockerd &'
-                
-                // Docker 데몬이 시작될 때까지 대기
-                sh 'while ! docker info > /dev/null 2>&1; do sleep 1; done'
-
-                withCredentials([usernamePassword(credentialsId: 'dockerHubAccount', usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]) {
-                    sh "echo $DOCKER_PASSWORD | docker login -u $DOCKER_USERNAME --password-stdin"
+        stage('Build and Push Image') {
+            container('podman') {
+                withCredentials([usernamePassword(credentialsId: 'harbarHubAccount', usernameVariable: 'HARBOR_USERNAME', passwordVariable: 'HARBOR_PASSWORD')]) {
+                    // Harbor Registry 로그인
+                    sh "echo $HARBOR_PASSWORD | podman login -u $HARBOR_USERNAME --password-stdin core.harbor.domain"
+                    
+                    // Podman 이미지 빌드
+                    sh "podman build -f ./devops/Dockerfile.server -t core.harbor.domain/server-stg/server:${env.BUILD_NUMBER} ."
+                    sh "podman tag core.harbor.domain/server-stg/server:${env.BUILD_NUMBER} core.harbor.domain/server-stg/server:latest"
+                    
+                    // 이미지 푸시
+                    sh "podman push core.harbor.domain/server-stg/server:${env.BUILD_NUMBER}"
+                    sh "podman push core.harbor.domain/server-stg/server:latest"
                 }
-
-                // Docker 이미지 빌드
-                dockerImage = docker.build("kimjoongwon/server:${env.BUILD_NUMBER}", "-f ./devops/Dockerfile.server .")
-                
-                // Docker 이미지 푸시
-                dockerImage.push()
-                
-                // latest 태그로도 푸시
-                dockerImage.push("latest")
             }
         }
     }
