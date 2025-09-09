@@ -31,7 +31,7 @@ podTemplate(
                             -u \$HARBOR_USERNAME \
                             --password-stdin \
                             --tls-verify=true \
-                            harbor.cocdev.co.kr/service
+                            harbor.cocdev.co.kr
                     """
                     
                     // Podman 이미지 빌드 (멀티스테이지 최적화)
