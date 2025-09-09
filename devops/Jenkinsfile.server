@@ -9,7 +9,9 @@ podTemplate(
         containerTemplate(
             name: 'podman', 
             image: 'quay.io/podman/stable:v4.8.2', 
-            privileged: true, 
+            privileged: true,
+            ttyEnabled: true,
+            command: 'cat',
         )
     ]
 ) {
