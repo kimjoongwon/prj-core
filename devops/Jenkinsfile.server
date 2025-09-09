@@ -49,21 +49,21 @@ podTemplate(
                         podman push \
                             --compression-format=gzip \
                             --compression-level=6 \
-                            core.harbor.domain/server-stg/server:${env.BUILD_NUMBER}
+                            https://harbor.cocdev.co.kr/server-stg/server:${env.BUILD_NUMBER}
                     """
                     
                     sh """
                         podman push \
                             --compression-format=gzip \
                             --compression-level=6 \
-                            core.harbor.domain/server-stg/server:latest
+                            https://harbor.cocdev.co.kr/server-stg/server:latest
                     """
                     
                     // 로컬 이미지 정리 (디스크 공간 절약)
                     sh """
                         podman rmi \
-                            core.harbor.domain/server-stg/server:${env.BUILD_NUMBER} \
-                            core.harbor.domain/server-stg/server:latest || true
+                            https://harbor.cocdev.co.kr/server-stg/server:${env.BUILD_NUMBER} \
+                            https://harbor.cocdev.co.kr/server-stg/server:latest || true
                     """
                 }
             }
