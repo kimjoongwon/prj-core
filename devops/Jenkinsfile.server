@@ -31,8 +31,7 @@ podTemplate(
                             -u \$HARBOR_USERNAME \
                             --password-stdin \
                             --tls-verify=true \
-                            core.harbor.domain
-                    """
+                            https://harbor.cocdev.co.kr/                    """
                     
                     // Podman 이미지 빌드 (멀티스테이지 최적화)
                     sh """
@@ -40,8 +39,8 @@ podTemplate(
                             --format=docker \
                             --layers \
                             -f ./devops/Dockerfile.server \
-                            -t core.harbor.domain/server-stg/server:${env.BUILD_NUMBER} \
-                            -t core.harbor.domain/server-stg/server:latest \
+                            -t https://harbor.cocdev.co.kr/server-stg/server:${env.BUILD_NUMBER} \
+                            -t https://harbor.cocdev.co.kr/server-stg/server:latest \
                             .
                     """
                     
