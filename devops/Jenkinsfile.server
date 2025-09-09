@@ -10,10 +10,6 @@ podTemplate(
             name: 'podman', 
             image: 'quay.io/podman/stable:v4.8.2', 
             privileged: true, 
-            resourceRequestMemory: '2Gi', 
-            resourceLimitMemory: '4Gi',
-            resourceRequestCpu: '1000m',
-            resourceLimitCpu: '2000m'
         )
     ]
 ) {
