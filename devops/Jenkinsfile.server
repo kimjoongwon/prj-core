@@ -30,8 +30,9 @@ podTemplate(
                         echo \$HARBOR_PASSWORD | podman login \
                             -u \$HARBOR_USERNAME \
                             --password-stdin \
-                            --tls-verify=true \
-                            https://harbor.cocdev.co.kr/                    """
+                            --tls-verify=false \
+                            10.110.175.253:5000
+                    """
                     
                     // Podman 이미지 빌드 (멀티스테이지 최적화)
                     sh """
@@ -39,8 +40,8 @@ podTemplate(
                             --format=docker \
                             --layers \
                             -f ./devops/Dockerfile.server \
-                            -t https://harbor.cocdev.co.kr/server-stg/server:${env.BUILD_NUMBER} \
-                            -t https://harbor.cocdev.co.kr/server-stg/server:latest \
+                            -t 10.110.175.253:5000/server-stg/server:${env.BUILD_NUMBER} \
+                            -t 10.110.175.253:5000/server-stg/server:latest \
                             .
                     """
                     
@@ -49,21 +50,21 @@ podTemplate(
                         podman push \
                             --compression-format=gzip \
                             --compression-level=6 \
-                            https://harbor.cocdev.co.kr/server-stg/server:${env.BUILD_NUMBER}
+                            10.110.175.253:5000/server-stg/server:${env.BUILD_NUMBER}
                     """
                     
                     sh """
                         podman push \
                             --compression-format=gzip \
                             --compression-level=6 \
-                            https://harbor.cocdev.co.kr/server-stg/server:latest
+                            10.110.175.253:5000/server-stg/server:latest
                     """
                     
                     // 로컬 이미지 정리 (디스크 공간 절약)
                     sh """
                         podman rmi \
-                            https://harbor.cocdev.co.kr/server-stg/server:${env.BUILD_NUMBER} \
-                            https://harbor.cocdev.co.kr/server-stg/server:latest || true
+                            10.110.175.253:5000/server-stg/server:${env.BUILD_NUMBER} \
+                            10.110.175.253:5000/server-stg/server:latest || true
                     """
                 }
             }
