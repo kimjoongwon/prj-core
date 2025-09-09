@@ -49,14 +49,14 @@ podTemplate(
                     sh """
                         podman push \
                             --compression-format=gzip \
-                            --compression-level=9 \
+                            --compression-level=6 \
                             harbor.cocdev.co.kr/server-stg/server:${env.BUILD_NUMBER}
                     """
                     
                     sh """
                         podman push \
                             --compression-format=gzip \
-                            --compression-level=9 \
+                            --compression-level=6 \
                             harbor.cocdev.co.kr/server-stg/server:latest
                     """
                     
