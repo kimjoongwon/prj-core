@@ -18,11 +18,11 @@ import {
 	ApiTags,
 } from "@nestjs/swagger";
 import {
-	type CreateRoleClassificationDto,
+	CreateRoleClassificationDto,
 	QueryRoleClassificationDto,
 	ResponseEntity,
 	RoleClassificationDto,
-	type UpdateRoleClassificationDto,
+	UpdateRoleClassificationDto,
 } from "@shared/schema";
 import { plainToInstance } from "class-transformer";
 import { Auth } from "../../decorator";

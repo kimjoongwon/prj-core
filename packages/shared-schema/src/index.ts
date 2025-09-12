@@ -1,18 +1,33 @@
-// Re-export Prisma types and client
-// Re-export client
-// Re-export constants
+export { $Enums, Prisma, PrismaClient } from "../generated/client";
 
-// Re-export everything except direct Prisma Client (which we'll access directly)
 export * from "./constant";
-// Re-export DTOs
+
 export * from "./dto";
-// Re-export entities (custom entity classes, not Prisma models)
+
 export * from "./entity";
-// Re-export enums (custom enums, not Prisma enums)
+
 export * from "./enum";
-// Re-export lib utilities
+
 export { PaginationUtil } from "./lib/PaginationUtil";
-// Re-export Prisma types
-export * from "./prisma-types";
-// Re-export types
-export * from "./types";
+export interface DatabaseConfig {
+	url: string;
+	directUrl?: string;
+}
+
+// Common database operations
+export interface BaseEntity {
+	id: string;
+	seq: number;
+	createdAt: Date;
+	updatedAt?: Date | null;
+	removedAt?: Date | null;
+}
+
+// Type utilities for Prisma models
+export type WithoutId<T> = Omit<T, "id">;
+export type WithoutTimestamps<T> = Omit<
+	T,
+	"createdAt" | "updatedAt" | "removedAt"
+>;
+export type CreateInput<T> = WithoutId<WithoutTimestamps<T>>;
+export type UpdateInput<T> = Partial<WithoutTimestamps<T>>;
