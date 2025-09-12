@@ -1,0 +1,44 @@
+{
+	"$schema": "https://turbo.build/schema.json",
+	"globalDependencies": ["**/.env.*local"],
+	"globalEnv": ["NODE_ENV"],
+	"tasks": {
+		"build": {
+			"outputs": [
+				"dist/**",
+				".next/**",
+				"!.next/cache/**",
+				"storybook-static/**"
+			],
+			"dependsOn": ["^build"],
+			"env": ["NODE_ENV"],
+			"passThroughEnv": ["NODE_OPTIONS"]
+		},
+		"packages/shared-frontend#build": {
+			"env": ["NODE_ENV"],
+			"passThroughEnv": ["NODE_OPTIONS"]
+		},
+		"test": {
+			"outputs": ["coverage/**"],
+			"dependsOn": []
+		},
+		"test:e2e": {
+			"outputs": ["coverage/**"],
+			"dependsOn": []
+		},
+		"lint": {},
+		"lint:fix": {},
+		"format": {},
+		"start:dev": {
+			"cache": false,
+			"persistent": true,
+			"dependsOn": ["^build"]
+		},
+		"clean": {
+			"cache": false
+		},
+		"db:push": {
+			"cache": false
+		}
+	}
+}

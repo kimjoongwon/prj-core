@@ -1,22 +1,100 @@
 {
 	"$schema": "https://turbo.build/schema.json",
-	"globalDependencies": ["**/.env.*local"],
+	"globalDependencies": [
+		"**/.env.local",
+		"**/.env.development.local", 
+		"pnpm-workspace.yaml",
+		"pnpm-lock.yaml"
+	],
 	"globalEnv": ["NODE_ENV"],
 	"tasks": {
-		"build": {
-			"outputs": [
-				"dist/**",
-				".next/**",
-				"!.next/cache/**",
-				"storybook-static/**"
+		"@shared/api-client#build": {
+			"inputs": [
+				"src/**/*.ts",
+				"orval.*.config.js", 
+				"tsconfig.json",
+				"package.json",
+				"tsup.config.*"
 			],
-			"dependsOn": ["^build"],
+			"outputs": ["dist/**"],
+			"dependsOn": [],
 			"env": ["NODE_ENV"],
-			"passThroughEnv": ["NODE_OPTIONS"]
+			"cache": true
 		},
-		"packages/shared-frontend#build": {
+		"@shared/schema#build": {
+			"inputs": [
+				"src/**/*.ts",
+				"prisma/**/*.prisma",
+				"tsconfig.json",
+				"package.json", 
+				"tsup.config.*",
+				".env"
+			],
+			"outputs": ["dist/**", "node_modules/.prisma/**"],
+			"dependsOn": [],
+			"env": ["NODE_ENV", "DATABASE_URL"],
+			"cache": true
+		},
+		"@shared/utils#build": {
+			"inputs": [
+				"src/**/*.ts",
+				"tsconfig.json",
+				"package.json",
+				"tsup.config.*"
+			],
+			"outputs": ["dist/**"],
+			"dependsOn": [],
 			"env": ["NODE_ENV"],
-			"passThroughEnv": ["NODE_OPTIONS"]
+			"cache": true
+		},
+		"@shared/vars#build": {
+			"inputs": [
+				"src/**/*.ts",
+				"tsconfig.json",
+				"package.json",
+				"tsup.config.*"
+			],
+			"outputs": ["dist/**"],
+			"dependsOn": [],
+			"env": ["NODE_ENV"],
+			"cache": true
+		},
+		"build": {
+			"dependsOn": ["^build"]
+		},
+		"@shared/frontend#build": {
+			"inputs": [
+				"src/**/*.{ts,tsx,css}",
+				"index.ts",
+				"tsconfig.json",
+				"package.json"
+			],
+			"outputs": [],
+			"dependsOn": ["@shared/api-client#build", "@shared/hooks#build", "@shared/types#build", "@shared/utils#build"],
+			"env": ["NODE_ENV"],
+			"cache": false
+		},
+		"@shared/hooks#build": {
+			"inputs": [
+				"src/**/*.ts",
+				"index.ts",
+				"tsconfig.json",
+				"package.json"
+			],
+			"outputs": [],
+			"dependsOn": ["@shared/types#build", "@shared/utils#build"],
+			"cache": false
+		},
+		"@shared/types#build": {
+			"inputs": [
+				"src/**/*.ts",
+				"index.ts",
+				"tsconfig.json",
+				"package.json"
+			],
+			"outputs": [],
+			"dependsOn": [],
+			"cache": false
 		},
 		"test": {
 			"outputs": ["coverage/**"],
