@@ -1,6 +1,6 @@
 import { Injectable } from "@nestjs/common";
 import { Prisma, Timeline } from "@shared/schema";
-import { PrismaService } from "nestjs-prisma";
+import { PrismaService } from "../service/prisma.service";
 import { BaseRepository } from "../common/base.repository";
 import { UseEntity } from "../decorator/use-dto.decorator";
 

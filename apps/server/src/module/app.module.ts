@@ -36,10 +36,12 @@ import { TenantsModule } from "./tenants.module";
 import { TimelinesModule } from "./timelines.module";
 import { UserClassificationsModule } from "./user-classifications.module";
 import { UsersModule } from "./users.module";
+import { PrismaModule } from "./prisma.module";
 
 @Module({
 	imports: [
 		...modules,
+		PrismaModule,
 		CaslModule,
 		GroundsModule,
 		UserClassificationsModule,

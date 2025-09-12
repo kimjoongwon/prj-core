@@ -4,7 +4,6 @@ import { JwtModule } from "@nestjs/jwt";
 import { MailerModule } from "@nestjs-modules/mailer";
 import { ClsModule } from "nestjs-cls";
 import { LoggerModule } from "nestjs-pino";
-import { PrismaModule } from "nestjs-prisma";
 import {
 	AuthConfig,
 	appConfig,
@@ -77,9 +76,6 @@ export const modules: (DynamicModule | Promise<DynamicModule>)[] = [
 			};
 		},
 		inject: [ConfigService],
-	}),
-	PrismaModule.forRoot({
-		isGlobal: true,
 	}),
 	LoggerModule.forRootAsync({
 		inject: [ConfigService],

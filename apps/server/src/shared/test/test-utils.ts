@@ -4,7 +4,7 @@ import { Test, TestingModule } from "@nestjs/testing";
 import { User, UserDto } from "@shared/schema";
 import { Request, Response } from "express";
 import { DeepMockProxy, mockDeep, mockReset } from "jest-mock-extended";
-import { PrismaService } from "nestjs-prisma";
+import { PrismaService } from "../service/prisma.service";
 
 export type MockedPrismaService = DeepMockProxy<PrismaService>;
 
