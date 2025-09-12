@@ -1,7 +1,7 @@
 import { execSync } from "node:child_process";
 import { existsSync, unlinkSync } from "node:fs";
 import { join } from "node:path";
-import { PrismaClient } from "@prisma/client";
+import { PrismaClient } from "@shared/schema";
 
 export class TestDatabase {
 	private static instance: TestDatabase;

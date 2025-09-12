@@ -1,5 +1,5 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import { navigateTo, reload, getCurrentUrl, getUserAgent } from "../Browser";
+import { getCurrentUrl, getUserAgent, navigateTo, reload } from "../Browser";
 
 // Mock browser globals
 const mockDocument = {

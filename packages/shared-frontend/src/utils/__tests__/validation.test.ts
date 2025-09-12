@@ -1,4 +1,4 @@
-import { validateSingleField, validateFields } from "@shared/utils";
+import { validateFields, validateSingleField } from "@shared/utils";
 import { describe, expect, it } from "vitest";
 
 import type { Validation } from "../../types/index";

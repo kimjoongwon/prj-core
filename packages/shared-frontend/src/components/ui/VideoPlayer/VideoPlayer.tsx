@@ -9,7 +9,7 @@ export interface VideoPlayerProps {
 	onClose: () => void;
 }
 
-export const VideoPlayer = ((props: VideoPlayerProps) => {
+export const VideoPlayer = (props: VideoPlayerProps) => {
 	const { src, isOpen, onClose } = props;
 	const [isPlaying, setIsPlaying] = useState(false);
 	const [isFullscreen, setIsFullscreen] = useState(false);
@@ -92,4 +92,4 @@ export const VideoPlayer = ((props: VideoPlayerProps) => {
 			</ModalContent>
 		</Modal>
 	);
-});
+};

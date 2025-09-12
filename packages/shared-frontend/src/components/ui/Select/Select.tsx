@@ -3,8 +3,8 @@ import {
 	SelectProps as NextUISelectProps,
 	SelectItem,
 } from "@heroui/react";
-import React from "react";
 import { tools } from "@shared/utils";
+import React from "react";
 import type { Option } from "../../../types";
 
 export interface SelectProps

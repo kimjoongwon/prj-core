@@ -1,7 +1,7 @@
+import { DateRangePickerProps } from "@heroui/react";
 import type { Meta, StoryObj } from "@storybook/react";
 import { useState } from "react";
 import { DateRangePicker } from "./DateRangePicker";
-import { DateRangePickerProps } from "@heroui/react";
 
 const meta: Meta<typeof DateRangePicker> = {
 	title: "Inputs/DateRangePicker",

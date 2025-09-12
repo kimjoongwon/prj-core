@@ -88,7 +88,6 @@ describe("LoggerUtil", () => {
 		});
 	});
 
-
 	describe("데이터 처리", () => {
 		it("data가 없을 때 빈 문자열을 출력한다", () => {
 			const logger = createLogger("[Test]");

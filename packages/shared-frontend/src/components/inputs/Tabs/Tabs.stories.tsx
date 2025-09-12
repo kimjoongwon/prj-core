@@ -28,6 +28,8 @@ export const Default: Story = {
 	},
 	render: (args) => {
 		const [selectedTab, setSelectedTab] = useState("1");
-		return <Tabs {...args} selectedTab={selectedTab} onChange={setSelectedTab} />;
+		return (
+			<Tabs {...args} selectedTab={selectedTab} onChange={setSelectedTab} />
+		);
 	},
 };

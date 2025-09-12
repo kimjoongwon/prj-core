@@ -1,7 +1,7 @@
 import {
 	RadioGroup as NextUIRadioGroup,
-	Radio,
 	RadioGroupProps as NextUIRadioGroupProps,
+	Radio,
 } from "@heroui/react";
 
 export interface RadioOption {

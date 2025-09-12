@@ -6,8 +6,7 @@ import {
 	DropdownTrigger,
 } from "@heroui/react";
 
-
-export const User = (() => {
+export const User = () => {
 	return (
 		<Dropdown>
 			<DropdownTrigger>
@@ -37,4 +36,4 @@ export const User = (() => {
 			</DropdownMenu>
 		</Dropdown>
 	);
-});
+};

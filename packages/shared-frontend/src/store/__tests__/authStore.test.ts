@@ -196,10 +196,7 @@ describe("AuthStore", () => {
 			await authStore.logout(mockLogoutApi);
 
 			expect(mockLogoutApi).toHaveBeenCalled();
-			expect(navigateTo).toHaveBeenCalledWith(
-				"/admin/auth/login",
-				true,
-			);
+			expect(navigateTo).toHaveBeenCalledWith("/admin/auth/login", true);
 			expect(authStore.isLoggingOut).toBe(false);
 		});
 
@@ -209,20 +206,14 @@ describe("AuthStore", () => {
 			await authStore.logout(mockLogoutApi);
 
 			expect(mockLogoutApi).toHaveBeenCalled();
-			expect(navigateTo).toHaveBeenCalledWith(
-				"/admin/auth/login",
-				true,
-			);
+			expect(navigateTo).toHaveBeenCalledWith("/admin/auth/login", true);
 			expect(authStore.isLoggingOut).toBe(false);
 		});
 
 		it("로그아웃 API가 제공되지 않은 경우에도 스토리지를 클리어하고 로그인 페이지로 이동해야 함", async () => {
 			await authStore.logout();
 
-			expect(navigateTo).toHaveBeenCalledWith(
-				"/admin/auth/login",
-				true,
-			);
+			expect(navigateTo).toHaveBeenCalledWith("/admin/auth/login", true);
 			expect(authStore.isLoggingOut).toBe(false);
 		});
 

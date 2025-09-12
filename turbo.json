@@ -21,18 +21,27 @@
 			"env": ["NODE_ENV"],
 			"cache": true
 		},
+		"@shared/schema#generate": {
+			"inputs": [
+				"prisma/**/*.prisma",
+				".env"
+			],
+			"outputs": ["generated/**"],
+			"dependsOn": [],
+			"env": ["DATABASE_URL"],
+			"cache": true
+		},
 		"@shared/schema#build": {
 			"inputs": [
 				"src/**/*.ts",
-				"prisma/**/*.prisma",
+				"generated/**/*",
 				"tsconfig.json",
 				"package.json", 
-				"tsup.config.*",
-				".env"
+				"tsup.config.*"
 			],
-			"outputs": ["dist/**", "node_modules/.prisma/**"],
-			"dependsOn": [],
-			"env": ["NODE_ENV", "DATABASE_URL"],
+			"outputs": ["dist/**"],
+			"dependsOn": ["@shared/schema#generate"],
+			"env": ["NODE_ENV"],
 			"cache": true
 		},
 		"@shared/utils#build": {

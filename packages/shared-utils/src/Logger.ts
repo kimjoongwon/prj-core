@@ -72,6 +72,6 @@ export function createLogger(prefix: string): Logger {
 		 */
 		debug(message: string, data?: LogData | string | number | boolean): void {
 			console.debug(`🐛 ${prefix} ${message}`, data || "");
-		}
+		},
 	};
 }

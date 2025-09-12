@@ -25,11 +25,7 @@ export function getCurrentEnvironment(): EnvironmentInfo {
 	const port = window.location.port;
 
 	// 로컬 개발 환경
-	if (
-		hostname === "localhost" ||
-		hostname === "127.0.0.1" ||
-		port === "5173"
-	) {
+	if (hostname === "localhost" || hostname === "127.0.0.1" || port === "5173") {
 		return { name: "개발", color: "success" };
 	}
 

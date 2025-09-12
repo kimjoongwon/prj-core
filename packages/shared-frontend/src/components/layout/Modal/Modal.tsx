@@ -10,14 +10,13 @@ import {
 	ModalProps,
 } from "@heroui/react";
 
-
 interface ModalLayoutProps extends ModalProps {
 	modalHeader?: ModalHeaderProps;
 	modalBody?: ModalBodyProps;
 	modalFooter?: ModalFooterProps;
 }
 
-export const Modal = ((props: ModalLayoutProps) => {
+export const Modal = (props: ModalLayoutProps) => {
 	const { modalHeader, modalBody, modalFooter, ...modalProps } = props;
 
 	return (
@@ -35,4 +34,4 @@ export const Modal = ((props: ModalLayoutProps) => {
 			</ModalContent>
 		</BaseModal>
 	);
-});
+};
