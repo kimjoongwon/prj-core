@@ -1,6 +1,6 @@
 import { Injectable } from "@nestjs/common";
-import { PrismaService } from "../prisma.service";
 import { RouteBuilder, rawRoutes } from "../../vars/routes";
+import { PrismaService } from "../prisma.service";
 
 // 라우트 타입 상수
 const ROUTE_TYPES = {

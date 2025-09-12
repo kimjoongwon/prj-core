@@ -24,6 +24,7 @@ import { FileClassificationsModule } from "./file-classifications.module";
 import { FilesModule } from "./files.module";
 import { GroundsModule } from "./grounds.module";
 import { GroupsModule } from "./groups.module";
+import { PrismaModule } from "./prisma.module";
 import { ProgramsModule } from "./programs.module";
 import { RoleClassificationsModule } from "./role-classifications.module";
 import { RolesModule } from "./roles.module";
@@ -36,7 +37,6 @@ import { TenantsModule } from "./tenants.module";
 import { TimelinesModule } from "./timelines.module";
 import { UserClassificationsModule } from "./user-classifications.module";
 import { UsersModule } from "./users.module";
-import { PrismaModule } from "./prisma.module";
 
 @Module({
 	imports: [
