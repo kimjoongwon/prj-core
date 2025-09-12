@@ -12,7 +12,7 @@ import {
 	ResponseEntity,
 	SignUpPayloadDto,
 } from "@shared/schema";
-import { PrismaService } from "nestjs-prisma";
+import { PrismaService } from "../prisma.service";
 import { UsersService } from "../resources/users.service";
 import { PasswordService } from "./password.service";
 import { TokenService } from "./token.service";

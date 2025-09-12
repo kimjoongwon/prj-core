@@ -53,7 +53,6 @@
     "nest-casl": "^1.9.15",
     "nestjs-cls": "^6.0.1",
     "nestjs-pino": "^4.4.0",
-    "nestjs-prisma": "^0.25.0",
     "nodemailer": "^7.0.6",
     "passport": "^0.7.0",
     "passport-jwt": "^4.0.1",
