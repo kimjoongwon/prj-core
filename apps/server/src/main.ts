@@ -36,6 +36,7 @@ async function bootstrap() {
 	);
 
 	const config = new DocumentBuilder()
+		.setTitle(process.env.APP_NAME || "NestJS Application")
 		.setVersion("1.0.0")
 		.addBearerAuth()
 		.build();
