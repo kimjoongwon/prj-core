@@ -2,13 +2,13 @@ import { BadRequestException, UnauthorizedException } from "@nestjs/common";
 import { JwtService } from "@nestjs/jwt";
 import { Test, TestingModule } from "@nestjs/testing";
 import { LoginPayloadDto, SignUpPayloadDto } from "@shared/schema";
-import { PrismaService } from "../prisma.service";
 import {
 	createMockJwtService,
 	createMockPrismaService,
 	createTestUserEntity,
 	MockedPrismaService,
 } from "../../test/test-utils";
+import { PrismaService } from "../prisma.service";
 import { UsersService } from "../resources/users.service";
 import { AuthService } from "./auth.service";
 import { PasswordService } from "./password.service";
