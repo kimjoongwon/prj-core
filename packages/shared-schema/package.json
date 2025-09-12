@@ -6,7 +6,7 @@
   "scripts": {
     "type-check": "tsc --noEmit",
     "generate": "prisma generate",
-    "build": "prisma generate && tsup",
+    "build": "tsup",
     "start:dev": "tsup --watch",
     "generate:safe": "prisma generate || echo 'Prisma generate failed, continuing...'",
     "db:push": "prisma db push",
@@ -50,15 +50,20 @@
       "import": "./dist/index.js",
       "require": "./dist/index.js"
     },
-    "./client": {
-      "types": "./dist/client.d.ts",
-      "import": "./dist/client.js",
-      "require": "./dist/client.js"
-    },
     "./types": {
       "types": "./dist/types.d.ts",
       "import": "./dist/types.js",
       "require": "./dist/types.js"
+    },
+    "./client": {
+      "types": "./generated/client/index.d.ts",
+      "import": "./generated/client/index.js",
+      "require": "./generated/client/index.js"
+    },
+    "./generated/client": {
+      "types": "./generated/client/index.d.ts",
+      "import": "./generated/client/index.js",
+      "require": "./generated/client/index.js"
     }
   }
 }

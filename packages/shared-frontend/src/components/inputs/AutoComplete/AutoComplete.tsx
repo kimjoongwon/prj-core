@@ -8,7 +8,10 @@ type AutoCompleteItem = {
 };
 
 export interface AutoCompleteProps
-	extends Omit<AutocompleteProps<AutoCompleteItem>, "children" | "onSelectionChange"> {
+	extends Omit<
+		AutocompleteProps<AutoCompleteItem>,
+		"children" | "onSelectionChange"
+	> {
 	onSelectionChange?: (key: string | number | null) => void;
 }
 

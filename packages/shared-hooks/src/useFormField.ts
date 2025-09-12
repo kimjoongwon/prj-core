@@ -1,5 +1,5 @@
-import { tools } from "@shared/utils";
 import type { MobxProps } from "@shared/types";
+import { tools } from "@shared/utils";
 import { reaction } from "mobx";
 import { useLocalObservable } from "mobx-react-lite";
 import { useEffect } from "react";

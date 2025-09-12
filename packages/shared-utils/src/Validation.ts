@@ -20,7 +20,9 @@ export function validateConfig<T extends object>(
 	return validatedConfig;
 }
 
-export function getVariableName<TResult>(getVar: () => TResult): string | undefined {
+export function getVariableName<TResult>(
+	getVar: () => TResult,
+): string | undefined {
 	const m = /\(\)=>(.*)/.exec(
 		getVar.toString().replace(/(\r\n|\n|\r|\s)/gm, ""),
 	);

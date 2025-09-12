@@ -1,14 +1,14 @@
-import React, { useCallback } from "react";
+import { useFormField } from "@shared/hooks";
+import { MobxProps } from "@shared/types";
 import { get } from "lodash-es";
 import { action } from "mobx";
 import { observer } from "mobx-react-lite";
-import { useFormField } from "@shared/hooks";
-import { MobxProps } from "@shared/types";
+import React, { useCallback } from "react";
 import {
-	ListSelect as ListSelectComponent,
+	ListSelectMultipleProps as BaseListSelectMultipleProps,
 	ListSelectProps as BaseListSelectProps,
 	ListSelectSingleProps as BaseListSelectSingleProps,
-	ListSelectMultipleProps as BaseListSelectMultipleProps,
+	ListSelect as ListSelectComponent,
 	SelectionMode,
 } from "./ListSelect";
 

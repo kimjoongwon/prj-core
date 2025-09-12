@@ -1,8 +1,8 @@
-export { Chip } from "./Chip";
 export type {
-	ChipProps,
-	ChipVariant,
 	ChipColor,
-	ChipSize,
+	ChipProps,
 	ChipRadius,
+	ChipSize,
+	ChipVariant,
 } from "./Chip";
+export { Chip } from "./Chip";

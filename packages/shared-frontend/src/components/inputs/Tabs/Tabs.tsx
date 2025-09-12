@@ -1,6 +1,6 @@
 import { Tabs as HeroUITabs, Tab } from "@heroui/react";
-import { Key } from "react";
 import { Option } from "@shared/types";
+import { Key } from "react";
 
 export interface TabsProps {
 	options: Option[];

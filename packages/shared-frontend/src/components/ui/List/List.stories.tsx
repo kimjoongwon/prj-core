@@ -110,7 +110,19 @@ export const 수평_리스트: Story = {
 						<div className="text-xs text-gray-400 mb-1">#{index + 1}</div>
 						<div className="font-medium text-sm">{item.name}</div>
 						<div className="text-xs text-gray-600">{item.type}</div>
-						<div className="w-4 h-4 rounded-full mt-2" style={{ backgroundColor: item.color === "빨간색" ? "red" : item.color === "노란색" ? "yellow" : item.color === "주황색" ? "orange" : "green" }}></div>
+						<div
+							className="w-4 h-4 rounded-full mt-2"
+							style={{
+								backgroundColor:
+									item.color === "빨간색"
+										? "red"
+										: item.color === "노란색"
+											? "yellow"
+											: item.color === "주황색"
+												? "orange"
+												: "green",
+							}}
+						></div>
 					</div>
 				)}
 			/>
@@ -119,7 +131,8 @@ export const 수평_리스트: Story = {
 	parameters: {
 		docs: {
 			description: {
-				story: "수평으로 스크롤 가능한 리스트입니다. 아이템이 많을 때 자동으로 스크롤됩니다.",
+				story:
+					"수평으로 스크롤 가능한 리스트입니다. 아이템이 많을 때 자동으로 스크롤됩니다.",
 			},
 		},
 	},
@@ -186,9 +199,7 @@ export const 빈_리스트: Story = {
 		<List
 			{...args}
 			renderItem={(item: any, index) => (
-				<div className="p-2 border rounded">
-					{item.name}
-				</div>
+				<div className="p-2 border rounded">{item.name}</div>
 			)}
 		/>
 	),
@@ -370,7 +381,8 @@ export const 플레이그라운드: Story = {
 	parameters: {
 		docs: {
 			description: {
-				story: "다양한 리스트 설정을 테스트할 수 있는 플레이그라운드입니다. Controls 패널에서 속성을 변경해보세요.",
+				story:
+					"다양한 리스트 설정을 테스트할 수 있는 플레이그라운드입니다. Controls 패널에서 속성을 변경해보세요.",
 			},
 		},
 	},

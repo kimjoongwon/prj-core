@@ -10,11 +10,10 @@ export interface ButtonGroupProps {
 	rightButtons?: GroupButton[];
 }
 
-
 import { v4 } from "uuid";
 import { Button } from "../Button/Button";
 
-export const ButtonGroup = ((props: ButtonGroupProps) => {
+export const ButtonGroup = (props: ButtonGroupProps) => {
 	const { leftButtons, rightButtons } = props;
 	const renderButton = (props: GroupButton) => {
 		const { children, href } = props;
@@ -42,4 +41,4 @@ export const ButtonGroup = ((props: ButtonGroupProps) => {
 			<div>{rightButtons?.map(renderButton)}</div>
 		</div>
 	);
-});
+};

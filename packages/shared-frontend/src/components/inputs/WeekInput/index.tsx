@@ -1,12 +1,12 @@
+import { useFormField } from "@shared/hooks";
+import type { MobxProps } from "@shared/types";
+import { tools } from "@shared/utils";
 import { action } from "mobx";
 import { observer } from "mobx-react-lite";
-import { useFormField } from "@shared/hooks";
-import { tools } from "@shared/utils";
-import type { MobxProps } from "@shared/types";
 import {
 	WeekInput as BaseWeekInput,
-	RecurringDayOfTheWeek,
 	type WeekInputProps as BaseWeekInputProps,
+	RecurringDayOfTheWeek,
 } from "./WeekInput";
 
 export interface WeekInputProps<T = any>

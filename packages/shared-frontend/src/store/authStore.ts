@@ -1,5 +1,5 @@
 import { AXIOS_INSTANCE } from "@shared/api-client";
-import { navigateTo, createLogger } from "@shared/utils";
+import { createLogger, navigateTo } from "@shared/utils";
 import { isAxiosError } from "axios";
 import { makeAutoObservable } from "mobx";
 import { PlateStore } from "./plateStore";

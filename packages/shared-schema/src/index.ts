@@ -2,8 +2,7 @@
 // Re-export client
 // Re-export constants
 
-// Re-export Prisma types and client
-export { $Enums, Prisma, PrismaClient } from "@prisma/client";
+// Re-export everything except direct Prisma Client (which we'll access directly)
 export * from "./constant";
 // Re-export DTOs
 export * from "./dto";
@@ -13,5 +12,7 @@ export * from "./entity";
 export * from "./enum";
 // Re-export lib utilities
 export { PaginationUtil } from "./lib/PaginationUtil";
+// Re-export Prisma types
+export * from "./prisma-types";
 // Re-export types
 export * from "./types";

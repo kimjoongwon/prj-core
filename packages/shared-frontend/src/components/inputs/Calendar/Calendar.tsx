@@ -1,6 +1,6 @@
+import { add, createRange, isSame, startOf, subtract } from "@shared/utils";
 import dayjs from "dayjs";
-import { isSame, startOf, subtract, add, createRange } from "@shared/utils";
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Date as DateComponent } from "./Date/Date";
 import { DaysOfWeek } from "./DaysOfWeek/DaysOfWeek";
 import { Header } from "./Header/Header";

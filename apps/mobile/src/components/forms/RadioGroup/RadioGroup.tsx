@@ -299,7 +299,10 @@ export const RadioGroup = <T = any>({
 			<Text style={labelStyle ? [labelStyleMemo, labelStyle] : labelStyleMemo}>
 				{label}
 				{isRequired && (
-					<Text style={[styles.requiredStar, { color: colorScheme.error }]}> *</Text>
+					<Text style={[styles.requiredStar, { color: colorScheme.error }]}>
+						{" "}
+						*
+					</Text>
 				)}
 			</Text>
 		);

@@ -80,14 +80,9 @@ export function validateFields(
 		return path.split(".").reduce((current, key) => current?.[key], obj);
 	};
 
-	for (const [fieldPath, fieldValidation] of Object.entries(
-		validationFields,
-	)) {
+	for (const [fieldPath, fieldValidation] of Object.entries(validationFields)) {
 		const fieldValue = getValue(state, fieldPath);
-		const fieldResult = validateSingleField(
-			fieldValue,
-			fieldValidation,
-		);
+		const fieldResult = validateSingleField(fieldValue, fieldValidation);
 
 		if (!fieldResult.isValid) {
 			return {

@@ -11,7 +11,12 @@ export interface ChipSelectProps {
 }
 
 export const ChipSelect = (props: ChipSelectProps) => {
-	const { options = [], selectionMode = "multiple", value, onSelectionChange } = props;
+	const {
+		options = [],
+		selectionMode = "multiple",
+		value,
+		onSelectionChange,
+	} = props;
 
 	const handleChipPress = (option: string) => {
 		if (selectionMode === "none") return;
@@ -60,9 +65,7 @@ export const ChipSelect = (props: ChipSelectProps) => {
 					color={getChipColor(option)}
 					className={selectionMode !== "none" ? "cursor-pointer" : ""}
 					onClick={
-						selectionMode !== "none"
-							? () => handleChipPress(option)
-							: undefined
+						selectionMode !== "none" ? () => handleChipPress(option) : undefined
 					}
 				>
 					{option}
