@@ -3,7 +3,6 @@
   "version": "1.0.0",
   "type": "module",
   "main": "index.js",
-  "packageManager": "pnpm@10.13.1",
   "scripts": {
     "test": "vitest",
     "test:ui": "vitest --ui",

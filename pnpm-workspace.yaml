@@ -51,6 +51,9 @@ catalog:
   vite: ^6.0.8
   vitest: ^3.2.4
 
+ignoredBuiltDependencies:
+  - msw
+
 onlyBuiltDependencies:
   - '@nestjs/core'
   - nestjs-pino

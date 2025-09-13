@@ -2,7 +2,6 @@
   "name": "@shared/hooks",
   "version": "1.0.0",
   "description": "Shared React hooks library",
-  "packageManager": "pnpm@10.13.1",
   "publishConfig": {
     "access": "public"
   },
