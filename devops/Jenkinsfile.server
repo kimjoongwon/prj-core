@@ -48,11 +48,15 @@ podTemplate(
                     // 이미지 푸시 (압축 최적화)
                     sh """
                         podman push \
+                            --compression-format=gzip \
+                            --compression-level=9 \
                             harbor.cocdev.co.kr/server-stg/server:${env.BUILD_NUMBER}
                     """
                     
                     sh """
                         podman push \
+                            --compression-format=gzip \
+                            --compression-level=9 \
                             harbor.cocdev.co.kr/server-stg/server:latest
                     """
                     
