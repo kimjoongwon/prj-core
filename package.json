@@ -2,6 +2,7 @@
   "name": "core",
   "private": true,
   "version": "0.0.0",
+  "packageManager": "pnpm@10.16.0",
   "scripts": {
     "build": "turbo build",
     "clean": "turbo clean",
