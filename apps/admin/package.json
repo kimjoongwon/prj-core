@@ -61,7 +61,7 @@
     "@types/react-dom": "catalog:",
     "@vitejs/plugin-react-swc": "catalog:",
     "storybook": "catalog:",
-    "tailwindcss": "^4.1.11",
+    "tailwindcss": "catalog:",
     "typescript": "catalog:",
     "vite": "catalog:"
   }

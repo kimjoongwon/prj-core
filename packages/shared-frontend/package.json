@@ -93,7 +93,7 @@
     "react-test-renderer": "^19.0.0",
     "remeda": "catalog:",
     "storybook": "catalog:",
-    "tailwindcss": "^4.1.11",
+    "tailwindcss": "catalog:",
     "typescript": "catalog:",
     "uuid": "catalog:",
     "vitest": "catalog:"

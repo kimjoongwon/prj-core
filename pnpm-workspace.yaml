@@ -45,6 +45,7 @@ catalog:
   react-dropzone: ^14.3.8
   remeda: ^2.27.0
   storybook: ^9.0.18
+  tailwindcss: ^4.1.11
   tsup: ^8.5.0
   typescript: ^5.9.2
   uuid: ^11.1.0
