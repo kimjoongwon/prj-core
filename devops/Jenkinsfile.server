@@ -40,8 +40,8 @@ podTemplate(
                             --format=docker \
                             --layers \
                             -f ./devops/Dockerfile.server \
-                            -t harbor.cocdev.co.kr/server-stg/server:${env.BUILD_NUMBER} \
-                            -t harbor.cocdev.co.kr/server-stg/server:latest \
+                            -t harbor.cocdev.co.kr/stg-server/server:${env.BUILD_NUMBER} \
+                            -t harbor.cocdev.co.kr/stg-server/server:latest \
                             .
                     """
                     
@@ -50,21 +50,21 @@ podTemplate(
                         podman push \
                             --compression-format=gzip \
                             --compression-level=9 \
-                            harbor.cocdev.co.kr/server-stg/server:${env.BUILD_NUMBER}
+                            harbor.cocdev.co.kr/stg-server/server:${env.BUILD_NUMBER}
                     """
                     
                     sh """
                         podman push \
                             --compression-format=gzip \
                             --compression-level=9 \
-                            harbor.cocdev.co.kr/server-stg/server:latest
+                            harbor.cocdev.co.kr/stg-server/server:latest
                     """
                     
                     // 로컬 이미지 정리 (디스크 공간 절약)
                     sh """
                         podman rmi \
-                            harbor.cocdev.co.kr/server-stg/server:${env.BUILD_NUMBER} \
-                            harbor.cocdev.co.kr/server-stg/server:latest || true
+                            harbor.cocdev.co.kr/stg-server/server:${env.BUILD_NUMBER} \
+                            harbor.cocdev.co.kr/stg-server/server:latest || true
                     """
                 }
             }
