@@ -8,7 +8,9 @@
     "allowSyntheticDefaultImports": true,
     "sourceMap": true,
     "paths": {
-      "@prisma/client": ["./generated/client/index.js"]
+      "@prisma/client": ["./generated/client/index.js"],
+      "@shared/schema/client": ["./generated/client/index.js"],
+      "@shared/schema/client/runtime/library": ["./generated/client/runtime/library.js"]
     },
     "outDir": "./dist",
     "incremental": false,
