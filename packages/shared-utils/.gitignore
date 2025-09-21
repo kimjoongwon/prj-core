@@ -4,11 +4,10 @@ node_modules
 *.log
 .next
 dist-ssr
-*.local
-# .env
 .cache
 .turbo
 out
+/dist
 
 *storybook.log
 storybook-static
