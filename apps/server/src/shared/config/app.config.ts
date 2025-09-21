@@ -13,8 +13,8 @@ class EnvironmentVariablesValidator {
 	@IsEnum(Environment)
 	NODE_ENV!: Environment;
 
-	@IsString()
-	APP_NAME!: string;
+	// @IsString()
+	// APP_NAME!: string;
 
 	@IsEmail()
 	APP_ADMIN_EMAIL!: string;
