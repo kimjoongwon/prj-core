@@ -13,10 +13,6 @@ export default defineConfig((option) => ({
 	tsconfig: "./tsconfig.json",
 	external: [
 		"@prisma/client",
-		"@shared/schema/client",
-		"@shared/schema/client/runtime/library",
-		"./generated/client",
-		"../generated/client",
 		"class-transformer/storage",
 		"@nestjs/websockets/socket-module",
 		"@nestjs/microservices",

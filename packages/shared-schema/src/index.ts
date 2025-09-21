@@ -1,4 +1,4 @@
-export { $Enums, Prisma, PrismaClient } from "../generated/client";
+export { $Enums, Prisma, PrismaClient } from "@prisma/client";
 
 export * from "./constant";
 
