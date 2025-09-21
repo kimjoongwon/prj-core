@@ -17,9 +17,13 @@ WORKDIR /app
 COPY --from=setup /app/out/full/ ./ 
 RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install
 COPY turbo.json turbo.json
-# RUN pnpm install
-WORKDIR /app/apps/server
+# Generate Prisma client in the correct location
+WORKDIR /app/packages/shared-schema
+# Create the missing .prisma directory structure in node_modules
+RUN mkdir -p /app/node_modules/.prisma/client
+RUN cp -r generated/client/* /app/node_modules/.prisma/client/
 WORKDIR /app
+# Build all packages
 RUN turbo build
 
 

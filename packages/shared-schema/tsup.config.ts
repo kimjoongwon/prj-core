@@ -9,8 +9,12 @@ export default defineConfig((option) => ({
 	sourcemap: !!option.watch,
 	minify: !option.watch,
 	watch: option.watch,
+	// Enable path resolution for tsconfig paths
+	tsconfig: "./tsconfig.json",
 	external: [
 		"@prisma/client",
+		"@shared/schema/client",
+		"@shared/schema/client/runtime/library",
 		"./generated/client",
 		"../generated/client",
 		"class-transformer/storage",
