@@ -1,27 +1,22 @@
-# Logs
-logs
-*.log
+# Vite/React app specific
+/dist
+
+# Package manager specific logs (not covered by root *.log)
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
 
-node_modules
-dist
-dist-ssr
-*.local
+# Admin app specific logs
+logs
 
-# Editor directories and files
+# Editor directories and files (project specific)
 .vscode/*
 !.vscode/extensions.json
 .idea
-.DS_Store
 *.suo
 *.ntvs*
 *.njsproj
 *.sln
 *.sw?
-
-*storybook.log
-storybook-static

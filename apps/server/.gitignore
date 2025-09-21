@@ -1,24 +1,21 @@
-# compiled output
-dist
-node_modules
+# NestJS app specific
+/dist
 
-# Logs
-logs
-*.log
+# Tests
+/coverage
+/.nyc_output
+
+# Package manager specific logs (not covered by root *.log)
 npm-debug.log*
 pnpm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 lerna-debug.log*
 
-# OS
-.DS_Store
+# Server specific logs
+logs
 
-# Tests
-/coverage
-/.nyc_output
-
-# IDEs and editors
+# IDEs and editors (project specific)
 /.idea
 .project
 .classpath
@@ -27,7 +24,7 @@ lerna-debug.log*
 .settings/
 *.sublime-workspace
 
-# IDE - VSCode
+# IDE - VSCode (keep project specific settings)
 .vscode/*
 !.vscode/settings.json
 !.vscode/tasks.json

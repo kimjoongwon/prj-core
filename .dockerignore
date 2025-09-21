@@ -1,6 +1,11 @@
+# 로컬 의존성 제외 - Docker에서 clean install 수행
 node_modules
+# 모든 하위 디렉토리의 node_modules 제외 (monorepo 구조)
 **/node_modules
+# 빌드 결과물 제외 - Docker에서 재빌드
 dist
+# Git 히스토리 제외 - 보안 및 이미지 크기 최적화
 .git
 # .gitignore
+# 문서 파일 제외 - 런타임에 불필요
 *.md

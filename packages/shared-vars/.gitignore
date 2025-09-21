@@ -1,13 +1,2 @@
-.DS_Store
-node_modules
-.turbo
-*.log
-.next
-dist-ssr
-.cache
-.turbo
-out
+# Package specific build output
 /dist
-
-*storybook.log
-storybook-static
