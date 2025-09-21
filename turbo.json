@@ -58,6 +58,19 @@
 			"env": ["NODE_ENV"],
 			"cache": true
 		},
+		"server#build": {
+			"inputs": [
+				"src/**/*.ts",
+				"tsconfig.json",
+				"tsconfig.build.json",
+				"package.json",
+				"nest-cli.json"
+			],
+			"outputs": ["dist/**"],
+			"dependsOn": ["@shared/schema#build", "@shared/utils#build", "@shared/vars#build"],
+			"env": ["NODE_ENV"],
+			"cache": true
+		},
 		"build": {
 			"dependsOn": ["^build"]
 		},
