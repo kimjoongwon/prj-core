@@ -1,30 +1,92 @@
+# ============================================================================
+# 🏗️ BASE STAGE: 기본 환경 설정
+# ============================================================================
+# Node.js 22 Alpine Linux 기반 이미지 사용 (경량화된 리눅스 배포판)
 FROM node:22-alpine AS base
-ARG PNPM_VERSION=10.16.0
+
+# 📦 PNPM 버전을 인자로 받아서 설정 (기본값: 9.6.0)
+ARG PNPM_VERSION=9.6.0
+
+# 🔧 PNPM 홈 디렉토리를 전역 bin 경로로 설정
 ENV PNPM_HOME=/usr/local/bin
+
+# 📋 Node.js Corepack을 활성화하여 PNPM 패키지 매니저 설정
+# - corepack enable: Node.js 패키지 매니저 관리 도구 활성화
+# - corepack prepare: 특정 버전의 PNPM 준비 및 활성화
 RUN corepack enable && corepack prepare pnpm@${PNPM_VERSION} --activate
+
+# 🛠️ Alpine Linux 시스템 종속성 설치
+# - libc6-compat: GNU libc 호환성 라이브러리 (Node.js 네이티브 모듈 호환성)
+# - apk 캐시 정리로 이미지 크기 최적화
 RUN apk add --update --no-cache libc6-compat && rm -rf /var/cache/apk/*
+
+# 🎯 전역 도구 설치
+# - nest: NestJS CLI 도구
+# - turbo: Monorepo 빌드 시스템 최적화 도구
 RUN pnpm add -g nest
 RUN pnpm add -g turbo
+
+# 📂 작업 디렉토리 설정
 WORKDIR /app
 
+# ============================================================================
+# 🔍 SETUP STAGE: 종속성 분석 및 프로젝트 구조 최적화
+# ============================================================================
 FROM base AS setup
+
+# 📋 전체 프로젝트 파일 복사
 COPY . .
+
+# 🎯 Turbo를 사용해 서버 앱만을 위한 최소한의 종속성 트리 생성
+# - --scope=server: 서버 앱과 관련된 패키지만 추출
+# - --docker: Docker 최적화된 출력 구조 생성
 RUN turbo prune --scope=server --docker
 
+# ============================================================================
+# 🏭 BUILDER STAGE: 애플리케이션 빌드
+# ============================================================================
 FROM base AS builder
+
+# 📋 Git 무시 파일 복사 (빌드 과정에서 필요)
 COPY .gitignore .gitignore
+
+# 📂 작업 디렉토리 재설정
 WORKDIR /app
+
+# 📦 Setup 단계에서 최적화된 파일 구조 복사
+# - /app/out/full/: Turbo prune으로 생성된 최적화된 프로젝트 구조
 COPY --from=setup /app/out/full/ ./ 
+
+# 🚀 종속성 설치 (캐시 마운트로 성능 최적화)
+# - mount=type=cache: PNPM 스토어를 캐시로 마운트하여 재빌드 시 속도 향상
+# - id=pnpm: 캐시 식별자
+# - target=/pnpm/store: PNPM 캐시 저장소 경로
 RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install
+
+# 📋 Turbo 설정 파일 복사
 COPY turbo.json turbo.json
-# Prisma client will be generated automatically during build
-# Build all packages
+
+# 📂 루트 디렉토리로 다시 이동
+WORKDIR /app
+
+# 🏗️ Turbo를 사용한 프로젝트 빌드
+# - 모든 관련 패키지와 종속성을 최적화된 순서로 빌드
 RUN turbo build
 
-
+# ============================================================================
+# 🚀 PRODUCTION STAGE: 운영 환경 컨테이너
+# ============================================================================
 FROM node:22-alpine AS dev
+
+# 📂 작업 디렉토리 설정
 WORKDIR /app
+
+# 📦 빌드 단계에서 완성된 애플리케이션 복사
 COPY --from=builder /app/ .
+
+# 👤 루트 사용자로 실행 (보안상 권장되지 않지만 현재 설정)
 USER root
 
+# 🎯 애플리케이션 실행 명령어
+# - 빌드된 서버 애플리케이션의 메인 파일 실행
 CMD ["node", "/app/apps/server/dist/main"]
