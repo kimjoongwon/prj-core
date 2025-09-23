@@ -71,7 +71,7 @@ async function bootstrap() {
 		credentials: true,
 	});
 
-	const port = process.env.PORT || 3005;
+	const port = process.env.APP_PORT || 3006;
 	await app.listen(port);
 
 	const logger = app.get(Logger);
