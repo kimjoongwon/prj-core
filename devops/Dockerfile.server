@@ -121,8 +121,8 @@ RUN mkdir -p /etc/supervisor && \
 RUN mkdir -p /var/log/nginx /var/cache/nginx /var/run && \
     chown -R nginx:nginx /var/log/nginx /var/cache/nginx
 
-# 🌐 포트 80 (nginx), 3005 (node) 노출
-EXPOSE 80 3005
+# 🌐 포트 80 (nginx), 3006 (node) 노출
+EXPOSE 80 3006
 
 # 👤 루트 사용자로 실행
 USER root
