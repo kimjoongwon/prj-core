@@ -1,25 +1,76 @@
 {
   "compilerOptions": {
+    // TypeScript 빌드 정보 파일을 저장할 위치 (Node.js 도구용)
+    // 이유: 애플리케이션 빌드와 별도로 도구 스크립트의 증분 컴파일 지원
+    // 역할: Vite 설정 변경 시에만 재컴파일하여 개발 서버 시작 시간 단축
     "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.node.tsbuildinfo",
+    // 컴파일 대상 ECMAScript 버전 (최신 Node.js 환경 대응)
+    // 이유: Node.js 18+ 환경에서 지원하는 최신 JavaScript 기능 사용
+    // 역할: async/await, optional chaining 등 모던 문법을 네이티브로 사용
     "target": "ES2022",
+    // 사용 가능한 라이브러리 API 타입 정의
+    // 이유: ES2023의 최신 JavaScript API들에 대한 타입 정보 제공
+    // 역할: Array.findLast(), Object.hasOwn() 등 최신 메서드 타입 지원
     "lib": ["ES2023"],
+    // 모듈 시스템 방식 (최신 ECMAScript 모듈 사용)
+    // 이유: Node.js의 ESM 지원을 활용하여 import/export 문법 사용
+    // 역할: CommonJS 대신 표준 ES 모듈로 코드 작성 및 실행
     "module": "ESNext",
+    // 라이브러리 타입 검사 건너뛰기 (빌드 성능 향상)
+    // 이유: 빌드 도구 설정에서는 외부 라이브러리 타입 오류가 중요하지 않음
+    // 역할: Vite, 플러그인 등의 d.ts 파일 검사를 생략하여 컴파일 속도 향상
     "skipLibCheck": true,
 
-    /* Bundler mode */
+    /* 번들러 모드 설정 - Vite와 같은 최신 번들러 환경에 최적화 */
+    // 모듈 해석 방식을 번들러(Vite, Webpack 등) 기준으로 설정
+    // 이유: 번들러가 파일 확장자를 자동으로 해석하고 경로를 최적화
+    // 역할: import 문에서 .js, .ts 확장자 생략 가능, 절대 경로 지원
     "moduleResolution": "bundler",
+    // TypeScript 파일 확장자를 가진 import 허용
+    // 이유: 번들러 환경에서는 .ts 파일을 직접 import할 수 있음
+    // 역할: import './config.ts' 같은 명시적 확장자 사용 허용
     "allowImportingTsExtensions": true,
+    // import/export 구문을 그대로 유지 (트랜스파일 시 syntax 보존)
+    // 이유: 번들러가 모듈 변환을 담당하므로 TypeScript는 타입만 제거
+    // 역할: ES 모듈 문법을 그대로 유지하여 번들러 최적화 지원
     "verbatimModuleSyntax": true,
+    // 모든 파일을 모듈로 강제 인식
+    // 이유: script 태그 없이도 모든 파일을 ES 모듈로 처리
+    // 역할: 전역 스코프 오염 방지 및 모듈 스코프 강제 적용
     "moduleDetection": "force",
+    // JavaScript 파일 생성하지 않음 (타입 체크만 수행)
+    // 이유: Vite가 직접 TypeScript를 처리하므로 별도 컴파일 불필요
+    // 역할: 타입 검사만 수행하고 실제 빌드는 Vite에 위임
     "noEmit": true,
 
-    /* Linting */
+    /* 린팅 및 엄격한 타입 검사 - 코드 품질 향상 */
+    // 모든 엄격한 타입 검사 옵션 활성화
+    // 이유: 런타임 오류를 컴파일 타임에 미리 발견
+    // 역할: null/undefined 체크, 타입 호환성 검사 등 모든 엄격 모드 활성화
     "strict": true,
+    // 사용되지 않는 지역 변수에 대한 에러 발생
+    // 이유: 코드 정리 및 메모리 누수 방지
+    // 역할: 선언되었지만 사용되지 않는 변수를 컴파일 에러로 표시
     "noUnusedLocals": true,
+    // 사용되지 않는 매개변수에 대한 에러 발생
+    // 이유: 함수 인터페이스 정리 및 코드 가독성 향상
+    // 역할: 불필요한 매개변수를 제거하도록 강제하여 API 명확성 증대
     "noUnusedParameters": true,
-    "erasableSyntaxOnly": true,
+    // 타입만 사용하는 구문에서만 type-only import 허용
+    // 이유: 런타임과 타입 정보를 명확히 분리
+    // 역할: import type 구문 사용을 강제하여 번들 크기 최적화
+    "isolatedModules": true,
+    // switch문에서 fallthrough 케이스 방지
+    // 이유: break 문 누락으로 인한 의도치 않은 동작 방지
+    // 역할: 각 case 문에 break, return 등 명시적 종료 구문 강제
     "noFallthroughCasesInSwitch": true,
+    // 부작용이 있을 수 있는 미확인 import에 대한 에러 발생
+    // 이유: 예상치 못한 모듈 실행으로 인한 부작용 방지
+    // 역할: import 시점에 실행되는 코드가 있는 모듈에 대한 경고 제공
     "noUncheckedSideEffectImports": true
   },
+  // 컴파일에 포함할 파일 (Vite 설정 파일만 포함)
+  // 이유: 이 설정은 오직 개발 도구(Vite) 설정을 위한 것
+  // 역할: vite.config.ts 파일에 대해서만 타입 검사 및 IntelliSense 제공
   "include": ["vite.config.ts"]
 }

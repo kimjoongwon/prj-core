@@ -1,4 +1,20 @@
 {
+  // 이 설정 파일에서 직접 포함할 파일이 없음 (프로젝트 참조만 사용)
+  // 이유: 복합 프로젝트(composite project) 패턴을 사용하여 관심사 분리
+  // 역할: 루트 설정 파일이 직접 컴파일하지 않고 하위 프로젝트들을 조율
   "files": [],
-  "references": [{ "path": "./tsconfig.app.json" }, { "path": "./tsconfig.node.json" }]
+  // 다른 TypeScript 프로젝트 설정 파일들을 참조 (복합 프로젝트 구성)
+  // 이유: 애플리케이션 코드와 빌드 도구 코드를 분리하여 독립적 컴파일 가능
+  // 역할: 각 하위 프로젝트가 독립적인 타입 검사와 빌드 캐시를 가질 수 있음
+  // 장점: 1) 빌드 성능 향상 2) 설정 관리 용이 3) IDE 지원 개선
+  "references": [
+    // 애플리케이션 코드용 TypeScript 설정
+    // 이유: React 컴포넌트, 비즈니스 로직 등 실제 앱 코드에 특화된 설정 적용
+    // 역할: JSX 변환, React Hook 타입 등 프론트엔드 개발에 필요한 설정 제공
+    { "path": "./tsconfig.app.json" },
+    // Node.js 도구(Vite 등) 코드용 TypeScript 설정
+    // 이유: 빌드 도구는 Node.js 환경에서 실행되므로 다른 설정이 필요
+    // 역할: Vite 설정 파일 등 개발 도구에 최적화된 TypeScript 환경 제공
+    { "path": "./tsconfig.node.json" }
+  ]
 }
