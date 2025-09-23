@@ -17,7 +17,7 @@
   "dependencies": {
     "@heroui/react": "catalog:",
     "@shared/frontend": "workspace:*",
-    "@tanstack/react-query": "^5.83.0",
+    "@tanstack/react-query": "catalog:",
     "mobx": "catalog:",
     "mobx-react-lite": "catalog:",
     "nuqs": "catalog:",

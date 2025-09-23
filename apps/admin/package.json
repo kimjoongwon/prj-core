@@ -24,7 +24,7 @@
     "@shared/api-client": "workspace:*",
     "@shared/frontend": "workspace:*",
     "@shared/utils": "workspace:*",
-    "@tanstack/react-query": "5.83.0",
+    "@tanstack/react-query": "catalog:",
     "@tanstack/react-router": "^1.130.2",
     "@tanstack/react-table": "^8.21.3",
     "axios": "catalog:",

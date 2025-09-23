@@ -92,8 +92,9 @@ COPY --from=builder /app/ .
 # 🔧 nginx 설정 파일 복사
 COPY devops/nginx.conf /etc/nginx/nginx.conf
 
-# 📋 supervisor 설정 파일 생성
-RUN echo '[supervisord]' > /etc/supervisor/supervisord.conf && \
+# 📋 supervisor 디렉토리 생성 및 설정 파일 생성
+RUN mkdir -p /etc/supervisor && \
+    echo '[supervisord]' > /etc/supervisor/supervisord.conf && \
     echo 'nodaemon=true' >> /etc/supervisor/supervisord.conf && \
     echo 'user=root' >> /etc/supervisor/supervisord.conf && \
     echo '' >> /etc/supervisor/supervisord.conf && \
