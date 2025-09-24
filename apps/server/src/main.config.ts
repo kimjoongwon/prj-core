@@ -25,7 +25,6 @@ export const modules: (DynamicModule | Promise<DynamicModule>)[] = [
 			awsConfig,
 			logConfigFactory,
 		],
-		envFilePath: ".env",
 	}),
 	MailerModule.forRootAsync({
 		useFactory: async (config: ConfigService) => {
