@@ -12,7 +12,7 @@ export const Header = (props: HeaderProps) => {
 
 	return (
 		<Navbar
-			className="border-b border-divider bg-background/70 backdrop-blur-md"
+			className="border-divider border-b bg-background/70 backdrop-blur-md"
 			maxWidth="full"
 			height="4rem"
 			isBordered

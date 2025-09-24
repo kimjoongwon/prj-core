@@ -98,7 +98,7 @@ export const Headings: Story = {
 
 export const BodyText: Story = {
 	render: () => (
-		<div className="space-y-4 max-w-md">
+		<div className="max-w-md space-y-4">
 			<Text variant="title">Title Text</Text>
 			<Text variant="subtitle1">Subtitle 1 - Lorem ipsum dolor sit amet</Text>
 			<Text variant="subtitle2">Subtitle 2 - Consectetur adipiscing elit</Text>
@@ -191,7 +191,7 @@ export const CustomElements: Story = {
 
 export const AllVariants: Story = {
 	render: () => (
-		<div className="space-y-2 max-w-2xl">
+		<div className="max-w-2xl space-y-2">
 			<Text variant="h1">H1: The quick brown fox</Text>
 			<Text variant="h2">H2: The quick brown fox</Text>
 			<Text variant="h3">H3: The quick brown fox</Text>

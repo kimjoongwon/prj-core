@@ -16,51 +16,51 @@ const GroundDetailInfoRouteComponent = () => {
 
 	return (
 		<div className="space-y-6">
-			<h4 className="text-lg font-medium text-gray-900">그라운드 정보</h4>
+			<h4 className="font-medium text-gray-900 text-lg">그라운드 정보</h4>
 
-			<div className="bg-white shadow rounded-lg p-6">
+			<div className="rounded-lg bg-white p-6 shadow">
 				<dl className="grid grid-cols-1 gap-x-4 gap-y-6 sm:grid-cols-2">
 					<div>
-						<dt className="text-sm font-medium text-gray-500">이름</dt>
-						<dd className="mt-1 text-sm text-gray-900">{groundInfo.name}</dd>
+						<dt className="font-medium text-gray-500 text-sm">이름</dt>
+						<dd className="mt-1 text-gray-900 text-sm">{groundInfo.name}</dd>
 					</div>
 
 					<div>
-						<dt className="text-sm font-medium text-gray-500">위치</dt>
-						<dd className="mt-1 text-sm text-gray-900">
+						<dt className="font-medium text-gray-500 text-sm">위치</dt>
+						<dd className="mt-1 text-gray-900 text-sm">
 							{groundInfo.location}
 						</dd>
 					</div>
 
 					<div>
-						<dt className="text-sm font-medium text-gray-500">수용인원</dt>
-						<dd className="mt-1 text-sm text-gray-900">
+						<dt className="font-medium text-gray-500 text-sm">수용인원</dt>
+						<dd className="mt-1 text-gray-900 text-sm">
 							{groundInfo.capacity}
 						</dd>
 					</div>
 
 					<div>
-						<dt className="text-sm font-medium text-gray-500">운영시간</dt>
-						<dd className="mt-1 text-sm text-gray-900">
+						<dt className="font-medium text-gray-500 text-sm">운영시간</dt>
+						<dd className="mt-1 text-gray-900 text-sm">
 							{groundInfo.openingHours}
 						</dd>
 					</div>
 
 					<div>
-						<dt className="text-sm font-medium text-gray-500">연락처</dt>
-						<dd className="mt-1 text-sm text-gray-900">{groundInfo.phone}</dd>
+						<dt className="font-medium text-gray-500 text-sm">연락처</dt>
+						<dd className="mt-1 text-gray-900 text-sm">{groundInfo.phone}</dd>
 					</div>
 
 					<div>
-						<dt className="text-sm font-medium text-gray-500">편의시설</dt>
-						<dd className="mt-1 text-sm text-gray-900">
+						<dt className="font-medium text-gray-500 text-sm">편의시설</dt>
+						<dd className="mt-1 text-gray-900 text-sm">
 							{groundInfo.facilities.join(", ")}
 						</dd>
 					</div>
 
 					<div className="sm:col-span-2">
-						<dt className="text-sm font-medium text-gray-500">설명</dt>
-						<dd className="mt-1 text-sm text-gray-900">
+						<dt className="font-medium text-gray-500 text-sm">설명</dt>
+						<dd className="mt-1 text-gray-900 text-sm">
 							{groundInfo.description}
 						</dd>
 					</div>

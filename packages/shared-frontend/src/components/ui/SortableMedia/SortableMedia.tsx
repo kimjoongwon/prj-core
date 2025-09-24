@@ -53,16 +53,16 @@ export function SortableMedia({ media, onRemove }: SortableMediaProps) {
 					<img
 						src={url || "/placeholder.svg"}
 						alt="Uploaded content"
-						className="w-full h-full object-cover rounded-lg"
+						className="h-full w-full rounded-lg object-cover"
 					/>
 				) : (
-					<div className="relative w-full h-full cursor-pointer">
-						<video src={url} className="w-full h-full object-cover rounded-lg">
+					<div className="relative h-full w-full cursor-pointer">
+						<video src={url} className="h-full w-full rounded-lg object-cover">
 							<track kind="captions" />
 						</video>
 						<button
 							type="button"
-							className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50 rounded-lg"
+							className="absolute inset-0 flex items-center justify-center rounded-lg bg-black bg-opacity-50"
 							onClick={handleVideoClick}
 						>
 							<Play className="h-12 w-12 text-white" />
@@ -72,7 +72,7 @@ export function SortableMedia({ media, onRemove }: SortableMediaProps) {
 				<button
 					type="button"
 					onClick={handleRemoveClick}
-					className="absolute -top-2 -right-2 bg-gray-800 rounded-full p-1"
+					className="-top-2 -right-2 absolute rounded-full bg-gray-800 p-1"
 				>
 					<X className="h-4 w-4 text-white" />
 				</button>

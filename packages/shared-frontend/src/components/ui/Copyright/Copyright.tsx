@@ -8,7 +8,7 @@ export interface CopyrightProps {
 export const Copyright = (props: CopyrightProps) => {
 	const { companyName } = props;
 	return (
-		<p className="text-xs text-center text-gray-500">
+		<p className="text-center text-gray-500 text-xs">
 			© {getYear()} {companyName}. All rights reserved.
 		</p>
 	);

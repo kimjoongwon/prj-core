@@ -19,7 +19,7 @@ const UsersRouteComponent = () => {
 
 	return (
 		<div>
-			<h3 className="text-lg font-medium text-gray-900 mb-4">사용자 리스트</h3>
+			<h3 className="mb-4 font-medium text-gray-900 text-lg">사용자 리스트</h3>
 			<Table aria-label="사용자 테이블">
 				<TableHeader>
 					<TableColumn>이름</TableColumn>

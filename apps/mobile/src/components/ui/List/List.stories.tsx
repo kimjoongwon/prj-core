@@ -246,7 +246,7 @@ export const 빈_리스트: Story = {
 	render: (args) => (
 		<List
 			{...args}
-			renderItem={(item: any, index) => (
+			renderItem={(item: any, _index) => (
 				<View style={{ padding: 8, borderWidth: 1, borderRadius: 4 }}>
 					<Text>{item.name}</Text>
 				</View>

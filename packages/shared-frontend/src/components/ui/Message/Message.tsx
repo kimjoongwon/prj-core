@@ -9,7 +9,7 @@ export const Message = (props: MessageProps) => {
 	const { message, title } = props;
 	return (
 		<div
-			className="bg-blue-100 border-l-4 border-blue-500 text-blue-700 p-4"
+			className="border-blue-500 border-l-4 bg-blue-100 p-4 text-blue-700"
 			role="alert"
 		>
 			<Text className="font-bold">{title}</Text>

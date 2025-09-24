@@ -69,7 +69,7 @@ export const ListboxSelect = <T extends object>(
 };
 
 export const ListboxWrapper = ({ children }: { children: ReactNode }) => (
-	<div className="w-full border-small px-2 py-2 rounded-small border-default-200 dark:border-default-100">
+	<div className="w-full rounded-small border-default-200 border-small px-2 py-2 dark:border-default-100">
 		{children}
 	</div>
 );

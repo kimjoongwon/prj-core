@@ -20,23 +20,23 @@ type Story = StoryObj<typeof meta>;
 // Sample form component for stories
 const SampleForm = () => (
 	<VStack gap={4} className="w-full">
-		<Text variant="h2" className="text-center mb-4">
+		<Text variant="h2" className="mb-4 text-center">
 			로그인
 		</Text>
 		<div className="space-y-4">
 			<div>
-				<label className="block text-sm font-medium mb-1">이메일</label>
+				<label className="mb-1 block font-medium text-sm">이메일</label>
 				<input
 					type="email"
-					className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+					className="w-full rounded-md border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
 					placeholder="이메일을 입력하세요"
 				/>
 			</div>
 			<div>
-				<label className="block text-sm font-medium mb-1">비밀번호</label>
+				<label className="mb-1 block font-medium text-sm">비밀번호</label>
 				<input
 					type="password"
-					className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+					className="w-full rounded-md border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
 					placeholder="비밀번호를 입력하세요"
 				/>
 			</div>
@@ -49,18 +49,18 @@ const SampleForm = () => (
 
 // Sample ad component for stories
 const SampleAdComponent = () => (
-	<div className="w-full h-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center text-white rounded-lg">
+	<div className="flex h-full w-full items-center justify-center rounded-lg bg-gradient-to-br from-blue-500 to-purple-600 text-white">
 		<VStack gap={4} alignItems="center" className="text-center">
 			<Text variant="h3" className="text-white">
 				Welcome to Our Platform
 			</Text>
-			<Text variant="body1" className="text-white/90 max-w-sm">
+			<Text variant="body1" className="max-w-sm text-white/90">
 				Join thousands of users who trust our secure and reliable service
 			</Text>
 			<div className="flex space-x-2">
-				<div className="w-3 h-3 bg-white/50 rounded-full"></div>
-				<div className="w-3 h-3 bg-white rounded-full"></div>
-				<div className="w-3 h-3 bg-white/50 rounded-full"></div>
+				<div className="h-3 w-3 rounded-full bg-white/50"></div>
+				<div className="h-3 w-3 rounded-full bg-white"></div>
+				<div className="h-3 w-3 rounded-full bg-white/50"></div>
 			</div>
 		</VStack>
 	</div>
@@ -92,7 +92,7 @@ export const MinimalForm: Story = {
 	args: {
 		formComponent: (
 			<VStack gap={3} className="w-full">
-				<Text variant="h3" className="text-center mb-2">
+				<Text variant="h3" className="mb-2 text-center">
 					Sign In
 				</Text>
 				<Button className="w-full" color="primary">
@@ -104,7 +104,7 @@ export const MinimalForm: Story = {
 			</VStack>
 		),
 		adComponent: (
-			<div className="w-full h-full bg-gray-100 flex items-center justify-center rounded-lg">
+			<div className="flex h-full w-full items-center justify-center rounded-lg bg-gray-100">
 				<Text variant="subtitle1" className="text-gray-500">
 					Advertisement Space
 				</Text>

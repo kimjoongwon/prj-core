@@ -86,7 +86,7 @@ export const Avatar = (props: AvatarProps) => {
 				trigger={
 					<Button
 						variant="light"
-						className="h-auto p-0 bg-transparent data-[hover=true]:bg-transparent"
+						className="h-auto bg-transparent p-0 data-[hover=true]:bg-transparent"
 					>
 						<User
 							name="슈퍼매니저"
@@ -148,7 +148,7 @@ const EnvironmentChip = ({ environment }: EnvironmentChipProps) => (
 
 const ProfileIcon = () => (
 	<svg
-		className="w-4 h-4"
+		className="h-4 w-4"
 		fill="none"
 		stroke="currentColor"
 		viewBox="0 0 24 24"
@@ -164,7 +164,7 @@ const ProfileIcon = () => (
 
 const SettingsIcon = () => (
 	<svg
-		className="w-4 h-4"
+		className="h-4 w-4"
 		fill="none"
 		stroke="currentColor"
 		viewBox="0 0 24 24"
@@ -186,7 +186,7 @@ const SettingsIcon = () => (
 
 const HelpIcon = () => (
 	<svg
-		className="w-4 h-4"
+		className="h-4 w-4"
 		fill="none"
 		stroke="currentColor"
 		viewBox="0 0 24 24"
@@ -202,7 +202,7 @@ const HelpIcon = () => (
 
 const LogoutIcon = () => (
 	<svg
-		className="w-4 h-4"
+		className="h-4 w-4"
 		fill="none"
 		stroke="currentColor"
 		viewBox="0 0 24 24"

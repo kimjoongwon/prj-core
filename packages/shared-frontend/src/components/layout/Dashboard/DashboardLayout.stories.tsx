@@ -24,7 +24,7 @@ const SampleHeader = () => (
 	<div className="p-4">
 		<HStack justifyContent="between" alignItems="center">
 			<HStack gap={3} alignItems="center">
-				<div className="w-8 h-8 bg-primary rounded-lg"></div>
+				<div className="h-8 w-8 rounded-lg bg-primary"></div>
 				<Text variant="h5">Dashboard</Text>
 			</HStack>
 			<HStack gap={2}>
@@ -40,20 +40,20 @@ const SampleHeader = () => (
 );
 
 const SampleLeftSidebar = () => (
-	<VStack gap={2} className="p-4 w-60">
-		<Text variant="subtitle2" className="text-default-500 mb-2">
+	<VStack gap={2} className="w-60 p-4">
+		<Text variant="subtitle2" className="mb-2 text-default-500">
 			Navigation
 		</Text>
-		<Button variant="light" className="justify-start w-full">
+		<Button variant="light" className="w-full justify-start">
 			🏠 Dashboard
 		</Button>
-		<Button variant="light" className="justify-start w-full">
+		<Button variant="light" className="w-full justify-start">
 			📊 Analytics
 		</Button>
-		<Button variant="light" className="justify-start w-full">
+		<Button variant="light" className="w-full justify-start">
 			👥 Users
 		</Button>
-		<Button variant="light" className="justify-start w-full">
+		<Button variant="light" className="w-full justify-start">
 			⚙️ Settings
 		</Button>
 	</VStack>
@@ -148,7 +148,7 @@ const SampleMainContent = () => (
 				displayed.
 			</Text>
 		</div>
-		<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+		<div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
 			{[1, 2, 3, 4, 5, 6].map((i) => (
 				<Card key={i}>
 					<CardBody>
@@ -206,9 +206,9 @@ export const RightSidebarOnly: Story = {
 export const MinimalLayout: Story = {
 	args: {
 		children: (
-			<VStack gap={4} alignItems="center" className="text-center py-8">
+			<VStack gap={4} alignItems="center" className="py-8 text-center">
 				<Text variant="h3">Minimal Dashboard</Text>
-				<Text variant="body1" className="text-default-600 max-w-md">
+				<Text variant="body1" className="max-w-md text-default-600">
 					This shows the dashboard layout with only the main content area and
 					default header placeholder.
 				</Text>

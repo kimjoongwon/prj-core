@@ -61,23 +61,23 @@ export const VideoUploader = (props: VideoUploaderProps) => {
 	};
 	return (
 		<div className="container mx-auto px-4 py-8">
-			<h1 className="text-2xl font-bold mb-8 text-center text-foreground">
+			<h1 className="mb-8 text-center font-bold text-2xl text-foreground">
 				{label}
 			</h1>
-			<div className="max-w-3xl mx-auto bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6">
+			<div className="mx-auto max-w-3xl rounded-lg bg-white p-6 shadow-lg dark:bg-gray-800">
 				<div className="mb-8">
 					<div className="mb-4">
 						<label
 							htmlFor="video-upload"
-							className="flex flex-col items-center justify-center w-full h-32 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:hover:bg-bray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600"
+							className="flex h-32 w-full cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-gray-300 border-dashed bg-gray-50 hover:bg-gray-100 dark:border-gray-600 dark:bg-gray-700 dark:hover:border-gray-500 dark:hover:bg-bray-800 dark:hover:bg-gray-600"
 						>
 							<div className="flex flex-col items-center justify-center pt-5 pb-6">
-								<Upload className="w-8 h-8 mb-4 text-gray-500 dark:text-gray-400" />
-								<p className="mb-2 text-sm text-gray-500 dark:text-gray-400">
+								<Upload className="mb-4 h-8 w-8 text-gray-500 dark:text-gray-400" />
+								<p className="mb-2 text-gray-500 text-sm dark:text-gray-400">
 									<span className="font-semibold">클릭하여 업로드</span> 또는
 									드래그 앤 드롭
 								</p>
-								<p className="text-xs text-gray-500 dark:text-gray-400">
+								<p className="text-gray-500 text-xs dark:text-gray-400">
 									MP4, WebM, OGG (최대 100MB)
 								</p>
 							</div>
@@ -97,7 +97,7 @@ export const VideoUploader = (props: VideoUploaderProps) => {
 								<track kind="captions" srcLang="ko" label="Korean captions" />
 								Your browser does not support the video tag.
 							</video>
-							<p className="mt-2 text-sm text-gray-500 dark:text-gray-400">
+							<p className="mt-2 text-gray-500 text-sm dark:text-gray-400">
 								{file.name}
 							</p>
 						</div>
@@ -106,9 +106,9 @@ export const VideoUploader = (props: VideoUploaderProps) => {
 						type="button"
 						onClick={handleUpload}
 						disabled={!file || uploading}
-						className={`w-full px-4 py-2 text-white font-semibold rounded-lg ${
+						className={`w-full rounded-lg px-4 py-2 font-semibold text-white ${
 							!file || uploading
-								? "bg-gray-300 cursor-not-allowed"
+								? "cursor-not-allowed bg-gray-300"
 								: "bg-blue-500 hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50"
 						}`}
 					>
@@ -116,13 +116,13 @@ export const VideoUploader = (props: VideoUploaderProps) => {
 					</button>
 					{uploading && (
 						<div className="mt-4">
-							<div className="w-full bg-gray-200 rounded-full h-2.5 dark:bg-gray-700">
+							<div className="h-2.5 w-full rounded-full bg-gray-200 dark:bg-gray-700">
 								<div
-									className="bg-blue-600 h-2.5 rounded-full transition-all duration-300 ease-in-out"
+									className="h-2.5 rounded-full bg-blue-600 transition-all duration-300 ease-in-out"
 									style={{ width: `${uploadProgress}%` }}
 								></div>
 							</div>
-							<p className="mt-2 text-sm text-gray-500 dark:text-gray-400 text-center">
+							<p className="mt-2 text-center text-gray-500 text-sm dark:text-gray-400">
 								{uploadProgress}% 완료
 							</p>
 						</div>

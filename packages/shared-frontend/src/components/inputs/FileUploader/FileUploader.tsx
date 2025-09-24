@@ -61,10 +61,10 @@ export const FileUploader = (props: FileUploaderProps) => {
 		const isVideo = file.mimeType?.startsWith("video/");
 
 		return (
-			<div className="relative group w-full max-w-sm mx-auto">
-				<div className="w-full aspect-square max-w-48 mx-auto border-2 border-gray-200 rounded-lg overflow-hidden bg-gray-50 dark:bg-gray-800 dark:border-gray-600 relative">
+			<div className="group relative mx-auto w-full max-w-sm">
+				<div className="relative mx-auto aspect-square w-full max-w-48 overflow-hidden rounded-lg border-2 border-gray-200 bg-gray-50 dark:border-gray-600 dark:bg-gray-800">
 					{isImage && (
-						<div className="w-full h-full relative bg-white dark:bg-gray-700">
+						<div className="relative h-full w-full bg-white dark:bg-gray-700">
 							{/* 체크무늬 배경 패턴 (투명한 이미지를 위해) */}
 							<div
 								className="absolute inset-0 opacity-20"
@@ -82,23 +82,23 @@ export const FileUploader = (props: FileUploaderProps) => {
 							<img
 								src={file.url}
 								alt={file.name}
-								className="w-full h-full object-contain relative z-10"
+								className="relative z-10 h-full w-full object-contain"
 							/>
 						</div>
 					)}
 					{isVideo && (
 						<video
 							src={file.url}
-							className="w-full h-full object-contain bg-black"
+							className="h-full w-full bg-black object-contain"
 							controls={false}
 						>
 							<track kind="captions" />
 						</video>
 					)}
 					{!isImage && !isVideo && (
-						<div className="w-full h-full flex flex-col items-center justify-center text-gray-500 dark:text-gray-400">
-							<div className="text-4xl mb-3">📄</div>
-							<div className="text-sm text-center px-3 font-medium">
+						<div className="flex h-full w-full flex-col items-center justify-center text-gray-500 dark:text-gray-400">
+							<div className="mb-3 text-4xl">📄</div>
+							<div className="px-3 text-center font-medium text-sm">
 								{file.name && file.name.length > 20
 									? `${file.name.substring(0, 20)}...`
 									: file.name}
@@ -112,17 +112,17 @@ export const FileUploader = (props: FileUploaderProps) => {
 					size="sm"
 					variant="solid"
 					color="danger"
-					className="absolute -top-2 -right-2 opacity-0 group-hover:opacity-100 transition-opacity shadow-lg z-20"
+					className="-top-2 -right-2 absolute z-20 opacity-0 shadow-lg transition-opacity group-hover:opacity-100"
 					onPress={removeFile}
 				>
 					<X size={16} />
 				</Button>
-				<div className="mt-3 text-sm text-gray-700 dark:text-gray-300 text-center font-medium">
+				<div className="mt-3 text-center font-medium text-gray-700 text-sm dark:text-gray-300">
 					<div className="truncate px-2" title={file.name}>
 						{file.name}
 					</div>
 					{file.size && (
-						<div className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+						<div className="mt-1 text-gray-500 text-xs dark:text-gray-400">
 							{file.size < 1024
 								? `${file.size} bytes`
 								: file.size < 1024 * 1024
@@ -136,10 +136,10 @@ export const FileUploader = (props: FileUploaderProps) => {
 	};
 
 	return (
-		<Card className={`p-4 sm:p-6 w-full ${!fullWidth && "max-w-2xl mx-auto"}`}>
+		<Card className={`w-full p-4 sm:p-6 ${!fullWidth && "mx-auto max-w-2xl"}`}>
 			<div className="space-y-6">
 				{label && (
-					<h3 className="text-lg sm:text-xl font-semibold text-center text-gray-900 dark:text-gray-100">
+					<h3 className="text-center font-semibold text-gray-900 text-lg sm:text-xl dark:text-gray-100">
 						{label}
 					</h3>
 				)}
@@ -148,8 +148,8 @@ export const FileUploader = (props: FileUploaderProps) => {
 					{value ? (
 						renderFilePreview()
 					) : (
-						<div className="w-full max-w-sm mx-auto">
-							<label className="w-full aspect-square max-w-48 mx-auto border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg flex flex-col items-center justify-center cursor-pointer hover:border-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800 dark:hover:border-gray-500 transition-all duration-200">
+						<div className="mx-auto w-full max-w-sm">
+							<label className="mx-auto flex aspect-square w-full max-w-48 cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-gray-300 border-dashed transition-all duration-200 hover:border-gray-400 hover:bg-gray-50 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-800">
 								<input
 									type="file"
 									accept={
@@ -162,13 +162,13 @@ export const FileUploader = (props: FileUploaderProps) => {
 									className="hidden"
 									onChange={handleFileUpload}
 								/>
-								<div className="text-4xl text-gray-400 dark:text-gray-500 mb-3">
+								<div className="mb-3 text-4xl text-gray-400 dark:text-gray-500">
 									+
 								</div>
-								<span className="text-sm sm:text-base text-gray-600 dark:text-gray-400 text-center font-medium">
+								<span className="text-center font-medium text-gray-600 text-sm sm:text-base dark:text-gray-400">
 									파일 선택
 								</span>
-								<span className="text-xs text-gray-500 dark:text-gray-500 text-center mt-2">
+								<span className="mt-2 text-center text-gray-500 text-xs dark:text-gray-500">
 									클릭하여 파일을 선택하세요
 								</span>
 							</label>
@@ -177,12 +177,12 @@ export const FileUploader = (props: FileUploaderProps) => {
 
 					{!value && (
 						<div className="text-center">
-							<p className="text-sm sm:text-base text-gray-600 dark:text-gray-400 font-medium">
+							<p className="font-medium text-gray-600 text-sm sm:text-base dark:text-gray-400">
 								{type === "image" && "이미지 파일을 업로드하세요"}
 								{type === "video" && "비디오 파일을 업로드하세요"}
 								{type === "all" && "파일을 업로드하세요"}
 							</p>
-							<p className="text-xs text-gray-500 dark:text-gray-500 mt-1">
+							<p className="mt-1 text-gray-500 text-xs dark:text-gray-500">
 								{type === "image" && "JPG, PNG, GIF 등의 이미지 파일"}
 								{type === "video" && "MP4, AVI, MOV 등의 비디오 파일"}
 								{type === "all" && "모든 형태의 파일"}

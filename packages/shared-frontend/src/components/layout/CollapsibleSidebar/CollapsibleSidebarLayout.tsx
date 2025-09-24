@@ -21,18 +21,18 @@ export const CollapsibleSidebar = (props: CollapsibleSidebarProps) => {
 
 	return (
 		<div
-			className={`flex flex-col h-full transition-all duration-300 ${
+			className={`flex h-full flex-col transition-all duration-300 ${
 				isCollapsed ? "w-20" : "w-72"
 			}`}
 		>
 			{/* Header with Parent Menu Info and Toggle */}
 			<div
-				className={`flex items-center p-3 bg-content2/50 ${
+				className={`flex items-center bg-content2/50 p-3 ${
 					isCollapsed ? "justify-center" : "justify-between"
 				}`}
 			>
 				{!isCollapsed && parentMenuInfo && (
-					<div className="flex items-center gap-2 flex-1 min-w-0">
+					<div className="flex min-w-0 flex-1 items-center gap-2">
 						{parentMenuInfo.icon && (
 							<div className="flex-shrink-0">
 								{renderLucideIcon(
@@ -43,7 +43,7 @@ export const CollapsibleSidebar = (props: CollapsibleSidebarProps) => {
 							</div>
 						)}
 						<div className="min-w-0 flex-1">
-							<h3 className="text-sm font-semibold text-foreground truncate">
+							<h3 className="truncate font-semibold text-foreground text-sm">
 								{parentMenuInfo.name}
 							</h3>
 						</div>
@@ -55,7 +55,7 @@ export const CollapsibleSidebar = (props: CollapsibleSidebarProps) => {
 					variant="ghost"
 					size="sm"
 					onPress={onToggle}
-					className="text-default-500 hover:text-default-700 flex-shrink-0"
+					className="flex-shrink-0 text-default-500 hover:text-default-700"
 					aria-label={isCollapsed ? "Expand sidebar" : "Collapse sidebar"}
 				>
 					{renderLucideIcon(
@@ -69,7 +69,7 @@ export const CollapsibleSidebar = (props: CollapsibleSidebarProps) => {
 			{/* Divider */}
 			{!isCollapsed && parentMenuInfo && (
 				<div className="px-3 py-2">
-					<div className="w-full h-px"></div>
+					<div className="h-px w-full"></div>
 				</div>
 			)}
 

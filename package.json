@@ -6,6 +6,9 @@
   "scripts": {
     "build": "turbo build",
     "build:server": "turbo build --filter=server",
+    "build:admin": "turbo build --filter=admin",
+    "build:mobile": "turbo build --filter=mobile",
+    "build:storybook": "turbo build --filter=storybook",
     "clean": "turbo clean",
     "start:dev": "turbo start:dev",
     "mobile:dev": "turbo start:dev --filter=mobile",

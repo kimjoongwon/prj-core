@@ -12,7 +12,7 @@ export const Header = (props: HeaderProps) => {
 
 	return (
 		<div className="flex justify-between">
-			<HStack className="justify-between items-center">
+			<HStack className="items-center justify-between">
 				<Button
 					size="sm"
 					variant="light"
@@ -40,7 +40,7 @@ interface YearProps {
 
 export const Year = (props: YearProps) => {
 	const { year } = props;
-	return <div className="text-2xl lg:text-4xl font-bold">{year}년</div>;
+	return <div className="font-bold text-2xl lg:text-4xl">{year}년</div>;
 };
 
 interface MonthProps {
@@ -49,5 +49,5 @@ interface MonthProps {
 
 export const Month = (props: MonthProps) => {
 	const { month } = props;
-	return <div className="text-2xl lg:text-4xl font-bold">{month}월</div>;
+	return <div className="font-bold text-2xl lg:text-4xl">{month}월</div>;
 };

@@ -54,17 +54,17 @@ export function NotFound({
 	icon,
 }: NotFoundProps) {
 	const defaultIcon = (
-		<div className="text-9xl text-gray-300 font-bold">404</div>
+		<div className="font-bold text-9xl text-gray-300">404</div>
 	);
 
 	return (
-		<Container className="min-h-screen flex items-center justify-center">
-			<Card className="max-w-md w-full">
-				<CardBody className="text-center p-8">
-					<VStack className="gap-6 items-center">
+		<Container className="flex min-h-screen items-center justify-center">
+			<Card className="w-full max-w-md">
+				<CardBody className="p-8 text-center">
+					<VStack className="items-center gap-6">
 						{icon || defaultIcon}
 
-						<VStack className="gap-2 items-center">
+						<VStack className="items-center gap-2">
 							<Text variant="h2">{title}</Text>
 							<Text variant="body1" className="text-center">
 								{description}
@@ -74,7 +74,7 @@ export function NotFound({
 						<Spacer size={8} />
 
 						{actions || (
-							<VStack className="gap-3 w-full">
+							<VStack className="w-full gap-3">
 								<Button
 									color="primary"
 									variant="solid"

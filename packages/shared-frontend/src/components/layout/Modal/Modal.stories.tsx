@@ -32,34 +32,34 @@ type Story = StoryObj<typeof meta>;
 // Sample content components
 const SampleFormContent = () => (
 	<VStack gap={4} className="py-2">
-		<Text variant="body1" className="text-default-600 mb-4">
+		<Text variant="body1" className="mb-4 text-default-600">
 			Please fill out the form below to continue.
 		</Text>
 
 		<div className="space-y-4">
 			<div>
-				<label className="block text-sm font-medium mb-2">Full Name</label>
+				<label className="mb-2 block font-medium text-sm">Full Name</label>
 				<input
 					type="text"
-					className="w-full px-3 py-2 border border-default-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
+					className="w-full rounded-lg border border-default-200 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary"
 					placeholder="Enter your full name"
 				/>
 			</div>
 
 			<div>
-				<label className="block text-sm font-medium mb-2">Email Address</label>
+				<label className="mb-2 block font-medium text-sm">Email Address</label>
 				<input
 					type="email"
-					className="w-full px-3 py-2 border border-default-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
+					className="w-full rounded-lg border border-default-200 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary"
 					placeholder="Enter your email address"
 				/>
 			</div>
 
 			<div>
-				<label className="block text-sm font-medium mb-2">Message</label>
+				<label className="mb-2 block font-medium text-sm">Message</label>
 				<textarea
 					rows={4}
-					className="w-full px-3 py-2 border border-default-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary resize-none"
+					className="w-full resize-none rounded-lg border border-default-200 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary"
 					placeholder="Enter your message"
 				/>
 			</div>
@@ -68,7 +68,7 @@ const SampleFormContent = () => (
 		<HStack
 			gap={3}
 			justifyContent="end"
-			className="mt-6 pt-4 border-t border-default-200"
+			className="mt-6 border-default-200 border-t pt-4"
 		>
 			<Button variant="bordered">Cancel</Button>
 			<Button color="primary">Submit</Button>
@@ -78,7 +78,7 @@ const SampleFormContent = () => (
 
 const SampleConfirmationContent = () => (
 	<VStack gap={4} alignItems="center" className="py-6 text-center">
-		<div className="w-16 h-16 bg-warning-100 rounded-full flex items-center justify-center">
+		<div className="flex h-16 w-16 items-center justify-center rounded-full bg-warning-100">
 			<Text variant="h4" className="text-warning-600">
 				⚠️
 			</Text>
@@ -86,7 +86,7 @@ const SampleConfirmationContent = () => (
 
 		<VStack gap={2} alignItems="center">
 			<Text variant="h6">Confirm Action</Text>
-			<Text variant="body1" className="text-default-600 max-w-md">
+			<Text variant="body1" className="max-w-md text-default-600">
 				Are you sure you want to delete this item? This action cannot be undone.
 			</Text>
 		</VStack>
@@ -100,7 +100,7 @@ const SampleConfirmationContent = () => (
 
 const SampleDetailContent = () => (
 	<VStack gap={6} className="py-2">
-		<div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+		<div className="grid grid-cols-1 gap-4 md:grid-cols-2">
 			<Card>
 				<CardBody>
 					<Text variant="subtitle1" className="mb-3">
@@ -129,7 +129,7 @@ const SampleDetailContent = () => (
 							<Text variant="body2" className="text-default-500">
 								Status:
 							</Text>
-							<span className="px-2 py-1 bg-success-100 text-success-800 rounded-full text-xs">
+							<span className="rounded-full bg-success-100 px-2 py-1 text-success-800 text-xs">
 								Active
 							</span>
 						</HStack>
@@ -185,7 +185,7 @@ const SampleDetailContent = () => (
 						{ action: "Updated email preferences", time: "1 week ago" },
 					].map((activity, index) => (
 						<HStack key={index} gap={3} alignItems="center">
-							<div className="w-2 h-2 bg-primary rounded-full"></div>
+							<div className="h-2 w-2 rounded-full bg-primary"></div>
 							<VStack gap={0} className="flex-1">
 								<Text variant="body2">{activity.action}</Text>
 								<Text variant="caption" className="text-default-500">
@@ -201,7 +201,7 @@ const SampleDetailContent = () => (
 		<HStack
 			gap={3}
 			justifyContent="end"
-			className="pt-4 border-t border-default-200"
+			className="border-default-200 border-t pt-4"
 		>
 			<Button variant="bordered">Close</Button>
 			<Button color="primary">Edit</Button>
@@ -231,7 +231,7 @@ const SampleListContent = () => (
 						<HStack gap={3} alignItems="center">
 							<input
 								type="checkbox"
-								className="w-4 h-4 text-primary border-default-300 rounded focus:ring-primary"
+								className="h-4 w-4 rounded border-default-300 text-primary focus:ring-primary"
 							/>
 							<div className="flex-1">
 								<HStack justifyContent="between" alignItems="center">
@@ -257,7 +257,7 @@ const SampleListContent = () => (
 		<HStack
 			gap={3}
 			justifyContent="end"
-			className="mt-4 pt-4 border-t border-default-200"
+			className="mt-4 border-default-200 border-t pt-4"
 		>
 			<Button variant="bordered">Cancel</Button>
 			<Button color="primary">Select (0)</Button>

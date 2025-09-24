@@ -40,8 +40,8 @@ const CategoriesRouteComponent = () => {
 
 	return (
 		<div>
-			<div className="flex justify-between items-center mb-4">
-				<h3 className="text-lg font-medium text-gray-900">카테고리 리스트</h3>
+			<div className="mb-4 flex items-center justify-between">
+				<h3 className="font-medium text-gray-900 text-lg">카테고리 리스트</h3>
 				<Button color="primary" size="sm">
 					카테고리 추가
 				</Button>

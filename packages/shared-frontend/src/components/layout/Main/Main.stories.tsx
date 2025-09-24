@@ -31,7 +31,7 @@ const SampleDashboardContent = () => (
 			</Text>
 		</div>
 
-		<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+		<div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4">
 			{[
 				{ title: "Total Users", value: "2,543", icon: "👥" },
 				{ title: "Revenue", value: "$45,210", icon: "💰" },
@@ -40,7 +40,7 @@ const SampleDashboardContent = () => (
 			].map((stat, index) => (
 				<Card key={index}>
 					<CardBody className="text-center">
-						<div className="text-2xl mb-2">{stat.icon}</div>
+						<div className="mb-2 text-2xl">{stat.icon}</div>
 						<Text variant="h5" className="mb-1">
 							{stat.value}
 						</Text>
@@ -65,7 +65,7 @@ const SampleDashboardContent = () => (
 						"Database optimization finished",
 					].map((activity, index) => (
 						<HStack key={index} gap={3} alignItems="center">
-							<div className="w-2 h-2 bg-primary rounded-full"></div>
+							<div className="h-2 w-2 rounded-full bg-primary"></div>
 							<Text variant="body2" className="text-default-600">
 								{activity}
 							</Text>
@@ -85,28 +85,28 @@ const SampleFormContent = () => (
 
 		<div className="space-y-4">
 			<div>
-				<label className="block text-sm font-medium mb-2">Name</label>
+				<label className="mb-2 block font-medium text-sm">Name</label>
 				<input
 					type="text"
-					className="w-full px-3 py-2 border border-default-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
+					className="w-full rounded-lg border border-default-200 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary"
 					placeholder="Enter your name"
 					defaultValue="John Doe"
 				/>
 			</div>
 
 			<div>
-				<label className="block text-sm font-medium mb-2">Email</label>
+				<label className="mb-2 block font-medium text-sm">Email</label>
 				<input
 					type="email"
-					className="w-full px-3 py-2 border border-default-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
+					className="w-full rounded-lg border border-default-200 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary"
 					placeholder="Enter your email"
 					defaultValue="john@example.com"
 				/>
 			</div>
 
 			<div>
-				<label className="block text-sm font-medium mb-2">Role</label>
-				<select className="w-full px-3 py-2 border border-default-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary">
+				<label className="mb-2 block font-medium text-sm">Role</label>
+				<select className="w-full rounded-lg border border-default-200 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary">
 					<option>Administrator</option>
 					<option>Editor</option>
 					<option>Viewer</option>
@@ -136,19 +136,19 @@ const SampleTableContent = () => (
 					<table className="w-full">
 						<thead className="bg-default-50">
 							<tr>
-								<th className="px-4 py-3 text-left text-sm font-medium">
+								<th className="px-4 py-3 text-left font-medium text-sm">
 									Name
 								</th>
-								<th className="px-4 py-3 text-left text-sm font-medium">
+								<th className="px-4 py-3 text-left font-medium text-sm">
 									Email
 								</th>
-								<th className="px-4 py-3 text-left text-sm font-medium">
+								<th className="px-4 py-3 text-left font-medium text-sm">
 									Role
 								</th>
-								<th className="px-4 py-3 text-left text-sm font-medium">
+								<th className="px-4 py-3 text-left font-medium text-sm">
 									Status
 								</th>
-								<th className="px-4 py-3 text-left text-sm font-medium">
+								<th className="px-4 py-3 text-left font-medium text-sm">
 									Actions
 								</th>
 							</tr>
@@ -180,7 +180,7 @@ const SampleTableContent = () => (
 									<td className="px-4 py-3 text-sm">{user.role}</td>
 									<td className="px-4 py-3 text-sm">
 										<span
-											className={`px-2 py-1 rounded-full text-xs ${
+											className={`rounded-full px-2 py-1 text-xs ${
 												user.status === "Active"
 													? "bg-success-100 text-success-800"
 													: "bg-default-100 text-default-600"
@@ -231,13 +231,13 @@ export const EmptyLayout: Story = {
 	args: {
 		children: (
 			<VStack gap={4} alignItems="center" className="p-12 text-center">
-				<div className="w-16 h-16 bg-default-100 rounded-full flex items-center justify-center">
+				<div className="flex h-16 w-16 items-center justify-center rounded-full bg-default-100">
 					<Text variant="h4" className="text-default-400">
 						📄
 					</Text>
 				</div>
 				<Text variant="h5">No Content</Text>
-				<Text variant="body1" className="text-default-600 max-w-md">
+				<Text variant="body1" className="max-w-md text-default-600">
 					This is how the main layout looks when there's no content to display.
 				</Text>
 				<Button color="primary">Add Content</Button>

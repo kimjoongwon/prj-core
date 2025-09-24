@@ -36,7 +36,6 @@ export const Divider: React.FC<DividerProps> = ({
 				return isDark ? theme.colors.default[200] : theme.colors.default[200];
 			case "strong":
 				return isDark ? theme.colors.default[600] : theme.colors.default[700];
-			case "default":
 			default:
 				return isDark ? theme.colors.default[300] : theme.colors.default[400];
 		}

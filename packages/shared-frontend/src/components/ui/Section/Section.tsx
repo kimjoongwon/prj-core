@@ -7,7 +7,7 @@ export interface SectionProps {
 export const Section = (props: SectionProps) => {
 	const { children } = props;
 	return (
-		<div className="border-1 p-4 rounded-xl space-y-4 flex flex-1 flex-col w-full">
+		<div className="flex w-full flex-1 flex-col space-y-4 rounded-xl border-1 p-4">
 			{children}
 		</div>
 	);
