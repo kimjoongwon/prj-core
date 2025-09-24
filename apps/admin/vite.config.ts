@@ -15,8 +15,15 @@ export default defineConfig(() => {
 			tailwindcss(),
 		],
 		server: {
-			port: 3000,
+			port: 3001,
 			host: true,
+			proxy: {
+				'/api': {
+					target: 'http://localhost:3006',
+					changeOrigin: true,
+					secure: false,
+				},
+			},
 			hmr: {
 				overlay: true,
 			},

@@ -14,12 +14,11 @@
     "@shared/api-client#build": {
       "inputs": [
         "src/**/*.ts", // 소스 코드 변경 감지
-        "orval.*.config.js", // API 생성 설정 파일 변경 감지
+        "orval.config.js", // API 생성 설정 파일 변경 감지
         "tsconfig.json", // TypeScript 설정 변경 감지
-        "package.json", // 의존성 변경 감지
-        "tsup.config.*" // 번들러 설정 변경 감지
+        "package.json" // 의존성 변경 감지
       ],
-      "outputs": ["dist/**"], // 빌드 결과물 위치
+      "outputs": ["src/**/*.ts"], // 빌드 결과물 위치
       "dependsOn": [], // 다른 패키지에 의존하지 않음
       "env": ["NODE_ENV"], // 환경변수 의존성
       "cache": true // 빌드 결과 캐싱 활성화
