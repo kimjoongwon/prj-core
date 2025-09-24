@@ -1,7 +1,7 @@
 module.exports = {
   store: {
     mode: "tags-split",
-    input: "http://localhost:3005/api-json",
+    input: "http://localhost:3006/api-json",
     output: {
       target: "src/apis.ts",
       schemas: "src/model",

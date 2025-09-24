@@ -1,11 +1,11 @@
 module.exports = {
   store: {
     mode: "tags-split",
-    input: "https://wallyops.com/api-json",
+    input: "https://stg.cocdev.co.kr/api-json",
     output: {
       target: "src/apis.ts",
       schemas: "src/model",
-      baseUrl: "https://wallyops.com",
+      baseUrl: "https://stg.cocdev.co.kr",
       client: "react-query",
       override: {
         mutator: {
