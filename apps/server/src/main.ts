@@ -50,25 +50,10 @@ async function bootstrap() {
 	SwaggerModule.setup("api", app, document);
 
 	app.enableCors({
-		origin: [
-			"http://localhost:4173",
-			"http://localhost:6006",
-			"http://localhost:3004",
-			"http://localhost:5173",
-			"http://localhost:5174",
-			"http://localhost:3000",
-			"http://10.0.2.2:8082",
-			"http://localhost:8081",
-			"http://localhost:8082",
-			"http://192.168.233.197:3005",
-			"http://192.168.233.197:5173",
-			"http://192.168.233.197",
-			"http://localhost",
-			"https://wallyops.com",
-			"https://cocdev.co.kr",
-			"http://cocdev.co.kr",
-		],
+		origin: true, // 모든 도메인 허용
 		credentials: true,
+		methods: ['GET', 'HEAD', 'PUT', 'PATCH', 'POST', 'DELETE', 'OPTIONS'],
+		allowedHeaders: '*',
 	});
 
 	const port = process.env.APP_PORT || 3006;
