@@ -1,5 +1,4 @@
 import type { Meta, StoryObj } from "@storybook/react-native";
-import React from "react";
 import { View } from "react-native";
 import { LoginScreen } from "@/components/screens/LoginScreen";
 import type { LoginScreenProps } from "@/components/screens/LoginScreen/LoginScreen";

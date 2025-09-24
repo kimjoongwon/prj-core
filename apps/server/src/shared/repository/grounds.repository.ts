@@ -1,8 +1,8 @@
 import { Injectable } from "@nestjs/common";
 import { Ground, Prisma } from "@shared/schema";
-import { PrismaService } from "../service/prisma.service";
 import { BaseRepository } from "../common/base.repository";
 import { UseEntity } from "../decorator/use-dto.decorator";
+import { PrismaService } from "../service/prisma.service";
 
 @Injectable()
 @UseEntity(Ground)

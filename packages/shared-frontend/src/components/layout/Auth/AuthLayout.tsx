@@ -15,11 +15,11 @@ export const AuthLayout = (props: {
 
 	// If no adComponent is provided but adImageSrc is provided, create default image component
 	const defaultAdComponent = adImageSrc ? (
-		<div className="w-full h-full min-h-0 flex items-center justify-center">
+		<div className="flex h-full min-h-0 w-full items-center justify-center">
 			<img
 				src={adImageSrc}
 				alt={adImageAlt}
-				className="max-w-full max-h-full object-contain rounded-lg shadow-lg"
+				className="max-h-full max-w-full rounded-lg object-contain shadow-lg"
 			/>
 		</div>
 	) : null;
@@ -27,19 +27,19 @@ export const AuthLayout = (props: {
 	const finalAdComponent = adComponent || defaultAdComponent;
 
 	return (
-		<div className="flex flex-col min-h-screen">
-			<div className="flex flex-col md:flex-row flex-1 w-full min-h-0">
+		<div className="flex min-h-screen flex-col">
+			<div className="flex min-h-0 w-full flex-1 flex-col md:flex-row">
 				{/* Mobile */}
-				<div className="flex flex-col w-full md:hidden">
+				<div className="flex w-full flex-col md:hidden">
 					<div className="flex-1 p-6">{formComponent}</div>
 				</div>
 				{/* Desktop */}
-				<div className="hidden md:flex flex-1 flex-row w-full min-h-0">
-					<div className="flex-1 flex items-center justify-center p-10">
+				<div className="hidden min-h-0 w-full flex-1 flex-row md:flex">
+					<div className="flex flex-1 items-center justify-center p-10">
 						<div className="w-full max-w-md">{formComponent}</div>
 					</div>
-					<div className="flex-1 flex items-center justify-center p-4 min-h-0">
-						<div className="w-full h-full min-h-0">{finalAdComponent}</div>
+					<div className="flex min-h-0 flex-1 items-center justify-center p-4">
+						<div className="h-full min-h-0 w-full">{finalAdComponent}</div>
 					</div>
 				</div>
 			</div>

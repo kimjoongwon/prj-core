@@ -15,7 +15,7 @@ export const Logo = (props: LogoProps) => {
 		<HStack className="items-center">
 			<Button
 				variant="light"
-				className={cn(className, "font-bold text-2xl p-0")}
+				className={cn(className, "p-0 font-bold text-2xl")}
 				onPress={onClick}
 			>
 				플레이트

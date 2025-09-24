@@ -54,7 +54,7 @@ const GroundDetailMembersRouteComponent = () => {
 
 	return (
 		<div className="space-y-6">
-			<h4 className="text-lg font-medium text-gray-900">멤버 리스트</h4>
+			<h4 className="font-medium text-gray-900 text-lg">멤버 리스트</h4>
 
 			<Table aria-label="그라운드 멤버 테이블">
 				<TableHeader>

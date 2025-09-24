@@ -29,9 +29,9 @@ const GroundCreateRouteComponent = () => {
 
 	return (
 		<div className="space-y-6">
-			<h4 className="text-lg font-medium text-gray-900">새 그라운드 생성</h4>
+			<h4 className="font-medium text-gray-900 text-lg">새 그라운드 생성</h4>
 
-			<div className="bg-white shadow rounded-lg p-6">
+			<div className="rounded-lg bg-white p-6 shadow">
 				<div className="space-y-6">
 					<div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
 						<Input

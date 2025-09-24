@@ -41,10 +41,10 @@ export const Default: Story = {
 		size: 16,
 	},
 	render: (args) => (
-		<div className="border-2 border-dashed border-gray-300">
-			<div className="p-2 bg-blue-200">Content Above</div>
+		<div className="border-2 border-gray-300 border-dashed">
+			<div className="bg-blue-200 p-2">Content Above</div>
 			<Spacer {...args} />
-			<div className="p-2 bg-green-200">Content Below</div>
+			<div className="bg-green-200 p-2">Content Below</div>
 		</div>
 	),
 	parameters: {
@@ -94,10 +94,10 @@ export const HorizontalSpacer: Story = {
 		direction: "horizontal",
 	},
 	render: (args) => (
-		<div className="flex items-center border-2 border-dashed border-gray-300 p-4">
-			<div className="p-2 bg-blue-200">Left Content</div>
+		<div className="flex items-center border-2 border-gray-300 border-dashed p-4">
+			<div className="bg-blue-200 p-2">Left Content</div>
 			<Spacer {...args} />
-			<div className="p-2 bg-green-200">Right Content</div>
+			<div className="bg-green-200 p-2">Right Content</div>
 		</div>
 	),
 	parameters: {
@@ -143,15 +143,15 @@ export const HorizontalSizes: Story = {
 
 export const InFormLayout: Story = {
 	render: () => (
-		<div className="max-w-sm mx-auto p-6 bg-white border rounded-lg shadow">
-			<h3 className="text-lg font-semibold">Registration Form</h3>
+		<div className="mx-auto max-w-sm rounded-lg border bg-white p-6 shadow">
+			<h3 className="font-semibold text-lg">Registration Form</h3>
 
 			<Spacer size={16} />
 
 			<input
 				type="text"
 				placeholder="First Name"
-				className="w-full p-2 border rounded"
+				className="w-full rounded border p-2"
 			/>
 
 			<Spacer size={12} />
@@ -159,7 +159,7 @@ export const InFormLayout: Story = {
 			<input
 				type="text"
 				placeholder="Last Name"
-				className="w-full p-2 border rounded"
+				className="w-full rounded border p-2"
 			/>
 
 			<Spacer size={12} />
@@ -167,14 +167,14 @@ export const InFormLayout: Story = {
 			<input
 				type="email"
 				placeholder="Email"
-				className="w-full p-2 border rounded"
+				className="w-full rounded border p-2"
 			/>
 
 			<Spacer size={24} />
 
 			<button
 				type="button"
-				className="w-full py-2 px-4 bg-blue-500 text-white rounded hover:bg-blue-600"
+				className="w-full rounded bg-blue-500 px-4 py-2 text-white hover:bg-blue-600"
 			>
 				Sign Up
 			</button>
@@ -196,10 +196,10 @@ export const WithCustomClass: Story = {
 		className: "bg-red-100 border-2 border-red-300",
 	},
 	render: (args) => (
-		<div className="border-2 border-dashed border-gray-300">
-			<div className="p-2 bg-blue-200">Content Above</div>
+		<div className="border-2 border-gray-300 border-dashed">
+			<div className="bg-blue-200 p-2">Content Above</div>
 			<Spacer {...args} />
-			<div className="p-2 bg-green-200">Content Below</div>
+			<div className="bg-green-200 p-2">Content Below</div>
 		</div>
 	),
 	parameters: {
@@ -218,10 +218,10 @@ export const Playground: Story = {
 		direction: "vertical",
 	},
 	render: (args) => (
-		<div className="border-2 border-dashed border-gray-300 p-4">
-			<div className="p-2 bg-blue-200 text-center">First Element</div>
+		<div className="border-2 border-gray-300 border-dashed p-4">
+			<div className="bg-blue-200 p-2 text-center">First Element</div>
 			<Spacer {...args} />
-			<div className="p-2 bg-green-200 text-center">Second Element</div>
+			<div className="bg-green-200 p-2 text-center">Second Element</div>
 		</div>
 	),
 	parameters: {

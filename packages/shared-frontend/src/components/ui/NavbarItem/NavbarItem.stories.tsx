@@ -92,7 +92,7 @@ export const NavigationBar: Story = {
 		const handleNavigation = (value: string) =>
 			console.log("Navigating to:", value);
 		return (
-			<div className="flex gap-2 p-4 bg-gray-50 rounded-lg">
+			<div className="flex gap-2 rounded-lg bg-gray-50 p-4">
 				<NavbarItem
 					label="Home"
 					url="/"
@@ -142,7 +142,7 @@ export const VerticalNavigation: Story = {
 		const handleNavigation = (value: string) =>
 			console.log("Navigating to:", value);
 		return (
-			<div className="flex flex-col gap-1 p-4 bg-white border rounded-lg w-48">
+			<div className="flex w-48 flex-col gap-1 rounded-lg border bg-white p-4">
 				<NavbarItem
 					label="Dashboard"
 					url="/dashboard"

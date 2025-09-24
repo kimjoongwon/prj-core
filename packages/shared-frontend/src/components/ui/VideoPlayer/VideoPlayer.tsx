@@ -55,20 +55,20 @@ export const VideoPlayer = (props: VideoPlayerProps) => {
 	return (
 		<Modal isOpen={isOpen} onClose={handleClose}>
 			<ModalContent>
-				<div className="relative w-full h-full bg-black bg-opacity-10 rounded-lg overflow-hidden">
+				<div className="relative h-full w-full overflow-hidden rounded-lg bg-black bg-opacity-10">
 					<video
 						ref={videoRef}
 						src={src}
-						className="w-full h-full object-contain"
+						className="h-full w-full object-contain"
 						onClick={togglePlay}
 					>
 						<track kind="captions" />
 					</video>
-					<div className="absolute bottom-0 left-0 right-0 flex justify-between items-center p-4 bg-black bg-opacity-10 hover:bg-opacity-30 transition-all duration-300">
+					<div className="absolute right-0 bottom-0 left-0 flex items-center justify-between bg-black bg-opacity-10 p-4 transition-all duration-300 hover:bg-opacity-30">
 						<button
 							type="button"
 							onClick={togglePlay}
-							className="text-white hover:text-gray-300 transition-colors shadow-md"
+							className="text-white shadow-md transition-colors hover:text-gray-300"
 						>
 							{isPlaying ? (
 								<Pause className="h-6 w-6" />
@@ -79,7 +79,7 @@ export const VideoPlayer = (props: VideoPlayerProps) => {
 						<button
 							type="button"
 							onClick={toggleFullscreen}
-							className="text-white hover:text-gray-300 transition-colors shadow-md"
+							className="text-white shadow-md transition-colors hover:text-gray-300"
 						>
 							{isFullscreen ? (
 								<Minimize className="h-6 w-6" />

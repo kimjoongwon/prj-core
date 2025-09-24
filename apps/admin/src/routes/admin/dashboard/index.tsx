@@ -7,7 +7,7 @@ const DashboardIndexRouteComponent = () => {
 			<Spacer size={4} />
 			<Text
 				variant="h1"
-				className="text-center text-2xl font-bold text-gray-800"
+				className="text-center font-bold text-2xl text-gray-800"
 			>
 				대시보드에 오신 것을 환영합니다!
 			</Text>

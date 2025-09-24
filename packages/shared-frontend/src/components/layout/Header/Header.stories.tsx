@@ -21,8 +21,8 @@ type Story = StoryObj<typeof meta>;
 // Sample components for stories
 const SampleLogo = () => (
 	<HStack gap={2} alignItems="center">
-		<div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
-			<Text variant="body2" className="text-white font-bold">
+		<div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary">
+			<Text variant="body2" className="font-bold text-white">
 				L
 			</Text>
 		</div>
@@ -66,7 +66,7 @@ const SampleSearchBar = () => (
 		<input
 			type="search"
 			placeholder="Search..."
-			className="w-full px-4 py-2 rounded-lg border border-default-200 bg-background focus:outline-none focus:ring-2 focus:ring-primary"
+			className="w-full rounded-lg border border-default-200 bg-background px-4 py-2 focus:outline-none focus:ring-2 focus:ring-primary"
 		/>
 	</div>
 );
@@ -119,7 +119,7 @@ export const SimpleNavigation: Story = {
 	args: {
 		left: (
 			<HStack gap={2} alignItems="center">
-				<div className="w-6 h-6 bg-primary rounded"></div>
+				<div className="h-6 w-6 rounded bg-primary"></div>
 				<Text variant="subtitle1" className="font-semibold">
 					Brand
 				</Text>

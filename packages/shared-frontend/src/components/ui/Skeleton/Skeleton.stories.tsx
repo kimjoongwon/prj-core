@@ -67,11 +67,11 @@ export const Loaded: Story = {
 
 export const TextSkeletons: Story = {
 	render: () => (
-		<div className="space-y-3 max-w-sm">
-			<Skeleton isLoaded={false} className="w-3/4 h-4 rounded-lg" />
-			<Skeleton isLoaded={false} className="w-full h-4 rounded-lg" />
-			<Skeleton isLoaded={false} className="w-2/3 h-4 rounded-lg" />
-			<Skeleton isLoaded={false} className="w-1/2 h-4 rounded-lg" />
+		<div className="max-w-sm space-y-3">
+			<Skeleton isLoaded={false} className="h-4 w-3/4 rounded-lg" />
+			<Skeleton isLoaded={false} className="h-4 w-full rounded-lg" />
+			<Skeleton isLoaded={false} className="h-4 w-2/3 rounded-lg" />
+			<Skeleton isLoaded={false} className="h-4 w-1/2 rounded-lg" />
 		</div>
 	),
 	parameters: {
@@ -85,17 +85,17 @@ export const TextSkeletons: Story = {
 
 export const CardSkeleton: Story = {
 	render: () => (
-		<div className="max-w-sm bg-white border rounded-lg shadow p-6 space-y-4">
-			<Skeleton isLoaded={false} className="w-full h-32 rounded-lg" />
+		<div className="max-w-sm space-y-4 rounded-lg border bg-white p-6 shadow">
+			<Skeleton isLoaded={false} className="h-32 w-full rounded-lg" />
 			<div className="space-y-2">
-				<Skeleton isLoaded={false} className="w-3/4 h-6 rounded-lg" />
-				<Skeleton isLoaded={false} className="w-full h-4 rounded-lg" />
-				<Skeleton isLoaded={false} className="w-full h-4 rounded-lg" />
-				<Skeleton isLoaded={false} className="w-2/3 h-4 rounded-lg" />
+				<Skeleton isLoaded={false} className="h-6 w-3/4 rounded-lg" />
+				<Skeleton isLoaded={false} className="h-4 w-full rounded-lg" />
+				<Skeleton isLoaded={false} className="h-4 w-full rounded-lg" />
+				<Skeleton isLoaded={false} className="h-4 w-2/3 rounded-lg" />
 			</div>
 			<div className="flex space-x-2">
-				<Skeleton isLoaded={false} className="w-20 h-8 rounded-lg" />
-				<Skeleton isLoaded={false} className="w-24 h-8 rounded-lg" />
+				<Skeleton isLoaded={false} className="h-8 w-20 rounded-lg" />
+				<Skeleton isLoaded={false} className="h-8 w-24 rounded-lg" />
 			</div>
 		</div>
 	),
@@ -111,13 +111,13 @@ export const CardSkeleton: Story = {
 
 export const ProfileSkeleton: Story = {
 	render: () => (
-		<div className="flex items-center space-x-4 p-4 bg-white border rounded-lg shadow max-w-md">
-			<Skeleton isLoaded={false} className="w-12 h-12 rounded-full" />
+		<div className="flex max-w-md items-center space-x-4 rounded-lg border bg-white p-4 shadow">
+			<Skeleton isLoaded={false} className="h-12 w-12 rounded-full" />
 			<div className="flex-1 space-y-2">
-				<Skeleton isLoaded={false} className="w-24 h-4 rounded-lg" />
-				<Skeleton isLoaded={false} className="w-32 h-3 rounded-lg" />
+				<Skeleton isLoaded={false} className="h-4 w-24 rounded-lg" />
+				<Skeleton isLoaded={false} className="h-3 w-32 rounded-lg" />
 			</div>
-			<Skeleton isLoaded={false} className="w-16 h-6 rounded-lg" />
+			<Skeleton isLoaded={false} className="h-6 w-16 rounded-lg" />
 		</div>
 	),
 	parameters: {
@@ -132,7 +132,7 @@ export const ProfileSkeleton: Story = {
 
 export const ListSkeleton: Story = {
 	render: () => (
-		<div className="space-y-4 max-w-md">
+		<div className="max-w-md space-y-4">
 			{[...Array(5)].map((_, i) => {
 				const uniqueKey = `list-skeleton-item-${i}-${Math.random()
 					.toString(36)
@@ -140,14 +140,14 @@ export const ListSkeleton: Story = {
 				return (
 					<div
 						key={uniqueKey}
-						className="flex items-center space-x-3 p-3 bg-white border rounded-lg"
+						className="flex items-center space-x-3 rounded-lg border bg-white p-3"
 					>
-						<Skeleton isLoaded={false} className="w-8 h-8 rounded-full" />
+						<Skeleton isLoaded={false} className="h-8 w-8 rounded-full" />
 						<div className="flex-1 space-y-1">
-							<Skeleton isLoaded={false} className="w-3/4 h-4 rounded-lg" />
-							<Skeleton isLoaded={false} className="w-1/2 h-3 rounded-lg" />
+							<Skeleton isLoaded={false} className="h-4 w-3/4 rounded-lg" />
+							<Skeleton isLoaded={false} className="h-3 w-1/2 rounded-lg" />
 						</div>
-						<Skeleton isLoaded={false} className="w-12 h-6 rounded-lg" />
+						<Skeleton isLoaded={false} className="h-6 w-12 rounded-lg" />
 					</div>
 				);
 			})}
@@ -172,33 +172,33 @@ export const LoadingStates: Story = {
 		}, []);
 
 		return (
-			<div className="max-w-sm bg-white border rounded-lg shadow p-6">
-				<Skeleton isLoaded={isLoaded} className="w-full h-40 rounded-lg mb-4">
-					<div className="w-full h-40 bg-gradient-to-r from-blue-400 to-purple-500 rounded-lg" />
+			<div className="max-w-sm rounded-lg border bg-white p-6 shadow">
+				<Skeleton isLoaded={isLoaded} className="mb-4 h-40 w-full rounded-lg">
+					<div className="h-40 w-full rounded-lg bg-gradient-to-r from-blue-400 to-purple-500" />
 				</Skeleton>
 
 				<div className="space-y-2">
-					<Skeleton isLoaded={isLoaded} className="w-3/4 h-6 rounded-lg">
-						<h3 className="text-lg font-bold">Amazing Product Title</h3>
+					<Skeleton isLoaded={isLoaded} className="h-6 w-3/4 rounded-lg">
+						<h3 className="font-bold text-lg">Amazing Product Title</h3>
 					</Skeleton>
 
-					<Skeleton isLoaded={isLoaded} className="w-full h-4 rounded-lg">
+					<Skeleton isLoaded={isLoaded} className="h-4 w-full rounded-lg">
 						<p className="text-gray-600">
 							This is a detailed product description that explains all the
 							features.
 						</p>
 					</Skeleton>
 
-					<Skeleton isLoaded={isLoaded} className="w-1/3 h-6 rounded-lg">
-						<div className="text-xl font-bold text-blue-600">$99.99</div>
+					<Skeleton isLoaded={isLoaded} className="h-6 w-1/3 rounded-lg">
+						<div className="font-bold text-blue-600 text-xl">$99.99</div>
 					</Skeleton>
 				</div>
 
 				<div className="mt-4">
-					<Skeleton isLoaded={isLoaded} className="w-full h-10 rounded-lg">
+					<Skeleton isLoaded={isLoaded} className="h-10 w-full rounded-lg">
 						<button
 							type="button"
-							className="w-full py-2 px-4 bg-blue-500 text-white rounded-lg hover:bg-blue-600"
+							className="w-full rounded-lg bg-blue-500 px-4 py-2 text-white hover:bg-blue-600"
 						>
 							Add to Cart
 						</button>

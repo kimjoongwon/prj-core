@@ -78,8 +78,8 @@ const CalendarWrapper = () => {
 	return (
 		<div className="space-y-4">
 			<Calendar value={selectedDates} onChange={setSelectedDates} />
-			<div className="mt-4 p-4 bg-gray-100 rounded">
-				<h4 className="font-semibold mb-2">선택된 날짜들:</h4>
+			<div className="mt-4 rounded bg-gray-100 p-4">
+				<h4 className="mb-2 font-semibold">선택된 날짜들:</h4>
 				{selectedDates.length === 0 ? (
 					<p className="text-gray-500">선택된 날짜가 없습니다.</p>
 				) : (

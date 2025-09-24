@@ -53,7 +53,7 @@ const SampleItem = ({
 	children: React.ReactNode;
 	className?: string;
 }) => (
-	<div className={`p-2 bg-blue-200 rounded border ${className}`}>
+	<div className={`rounded border bg-blue-200 p-2 ${className}`}>
 		{children}
 	</div>
 );
@@ -80,12 +80,12 @@ export const Default: Story = {
 export const AlignItems: Story = {
 	args: {},
 	render: () => (
-		<div className="space-y-4 w-full max-w-md">
+		<div className="w-full max-w-md space-y-4">
 			<div>
-				<h4 className="text-sm font-semibold mb-2">Align Start</h4>
+				<h4 className="mb-2 font-semibold text-sm">Align Start</h4>
 				<VStack
 					alignItems="start"
-					className="border border-gray-300 p-2 w-full"
+					className="w-full border border-gray-300 p-2"
 				>
 					<SampleItem className="w-16">Short</SampleItem>
 					<SampleItem className="w-24">Medium</SampleItem>
@@ -94,10 +94,10 @@ export const AlignItems: Story = {
 			</div>
 
 			<div>
-				<h4 className="text-sm font-semibold mb-2">Align Center</h4>
+				<h4 className="mb-2 font-semibold text-sm">Align Center</h4>
 				<VStack
 					alignItems="center"
-					className="border border-gray-300 p-2 w-full"
+					className="w-full border border-gray-300 p-2"
 				>
 					<SampleItem className="w-16">Short</SampleItem>
 					<SampleItem className="w-24">Medium</SampleItem>
@@ -106,8 +106,8 @@ export const AlignItems: Story = {
 			</div>
 
 			<div>
-				<h4 className="text-sm font-semibold mb-2">Align End</h4>
-				<VStack alignItems="end" className="border border-gray-300 p-2 w-full">
+				<h4 className="mb-2 font-semibold text-sm">Align End</h4>
+				<VStack alignItems="end" className="w-full border border-gray-300 p-2">
 					<SampleItem className="w-16">Short</SampleItem>
 					<SampleItem className="w-24">Medium</SampleItem>
 					<SampleItem className="w-32">Long Content</SampleItem>
@@ -115,10 +115,10 @@ export const AlignItems: Story = {
 			</div>
 
 			<div>
-				<h4 className="text-sm font-semibold mb-2">Align Stretch</h4>
+				<h4 className="mb-2 font-semibold text-sm">Align Stretch</h4>
 				<VStack
 					alignItems="stretch"
-					className="border border-gray-300 p-2 w-full"
+					className="w-full border border-gray-300 p-2"
 				>
 					<SampleItem>Short</SampleItem>
 					<SampleItem>Medium</SampleItem>
@@ -141,10 +141,10 @@ export const JustifyContent: Story = {
 	render: () => (
 		<div className="space-y-4">
 			<div>
-				<h4 className="text-sm font-semibold mb-2">Justify Start</h4>
+				<h4 className="mb-2 font-semibold text-sm">Justify Start</h4>
 				<VStack
 					justifyContent="start"
-					className="border border-gray-300 p-2 h-40"
+					className="h-40 border border-gray-300 p-2"
 				>
 					<SampleItem>A</SampleItem>
 					<SampleItem>B</SampleItem>
@@ -153,10 +153,10 @@ export const JustifyContent: Story = {
 			</div>
 
 			<div>
-				<h4 className="text-sm font-semibold mb-2">Justify Center</h4>
+				<h4 className="mb-2 font-semibold text-sm">Justify Center</h4>
 				<VStack
 					justifyContent="center"
-					className="border border-gray-300 p-2 h-40"
+					className="h-40 border border-gray-300 p-2"
 				>
 					<SampleItem>A</SampleItem>
 					<SampleItem>B</SampleItem>
@@ -165,10 +165,10 @@ export const JustifyContent: Story = {
 			</div>
 
 			<div>
-				<h4 className="text-sm font-semibold mb-2">Justify End</h4>
+				<h4 className="mb-2 font-semibold text-sm">Justify End</h4>
 				<VStack
 					justifyContent="end"
-					className="border border-gray-300 p-2 h-40"
+					className="h-40 border border-gray-300 p-2"
 				>
 					<SampleItem>A</SampleItem>
 					<SampleItem>B</SampleItem>
@@ -177,10 +177,10 @@ export const JustifyContent: Story = {
 			</div>
 
 			<div>
-				<h4 className="text-sm font-semibold mb-2">Justify Between</h4>
+				<h4 className="mb-2 font-semibold text-sm">Justify Between</h4>
 				<VStack
 					justifyContent="between"
-					className="border border-gray-300 p-2 h-40"
+					className="h-40 border border-gray-300 p-2"
 				>
 					<SampleItem>A</SampleItem>
 					<SampleItem>B</SampleItem>
@@ -203,7 +203,7 @@ export const GapSizes: Story = {
 	render: () => (
 		<div className="space-y-4">
 			<div>
-				<h4 className="text-sm font-semibold mb-2">No Gap (0px)</h4>
+				<h4 className="mb-2 font-semibold text-sm">No Gap (0px)</h4>
 				<VStack gap={0} className="border border-gray-300 p-2">
 					<SampleItem>Item 1</SampleItem>
 					<SampleItem>Item 2</SampleItem>
@@ -212,7 +212,7 @@ export const GapSizes: Story = {
 			</div>
 
 			<div>
-				<h4 className="text-sm font-semibold mb-2">Small Gap (8px)</h4>
+				<h4 className="mb-2 font-semibold text-sm">Small Gap (8px)</h4>
 				<VStack gap={2} className="border border-gray-300 p-2">
 					<SampleItem>Item 1</SampleItem>
 					<SampleItem>Item 2</SampleItem>
@@ -221,7 +221,7 @@ export const GapSizes: Story = {
 			</div>
 
 			<div>
-				<h4 className="text-sm font-semibold mb-2">Medium Gap (16px)</h4>
+				<h4 className="mb-2 font-semibold text-sm">Medium Gap (16px)</h4>
 				<VStack gap={4} className="border border-gray-300 p-2">
 					<SampleItem>Item 1</SampleItem>
 					<SampleItem>Item 2</SampleItem>
@@ -230,7 +230,7 @@ export const GapSizes: Story = {
 			</div>
 
 			<div>
-				<h4 className="text-sm font-semibold mb-2">Large Gap (32px)</h4>
+				<h4 className="mb-2 font-semibold text-sm">Large Gap (32px)</h4>
 				<VStack gap={8} className="border border-gray-300 p-2">
 					<SampleItem>Item 1</SampleItem>
 					<SampleItem>Item 2</SampleItem>
@@ -255,14 +255,14 @@ export const FormLayoutExample: Story = {
 		<VStack
 			gap={4}
 			alignItems="stretch"
-			className="max-w-sm mx-auto p-6 bg-white border rounded-lg shadow"
+			className="mx-auto max-w-sm rounded-lg border bg-white p-6 shadow"
 		>
-			<h3 className="text-lg font-semibold text-center">Contact Form</h3>
+			<h3 className="text-center font-semibold text-lg">Contact Form</h3>
 
 			<VStack gap={2} alignItems="stretch">
 				<label
 					htmlFor="contact-name"
-					className="text-sm font-medium text-gray-700"
+					className="font-medium text-gray-700 text-sm"
 				>
 					Name
 				</label>
@@ -270,14 +270,14 @@ export const FormLayoutExample: Story = {
 					id="contact-name"
 					type="text"
 					placeholder="Enter your name"
-					className="w-full p-2 border border-gray-300 rounded focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+					className="w-full rounded border border-gray-300 p-2 focus:border-blue-500 focus:ring-2 focus:ring-blue-500"
 				/>
 			</VStack>
 
 			<VStack gap={2} alignItems="stretch">
 				<label
 					htmlFor="contact-email"
-					className="text-sm font-medium text-gray-700"
+					className="font-medium text-gray-700 text-sm"
 				>
 					Email
 				</label>
@@ -285,14 +285,14 @@ export const FormLayoutExample: Story = {
 					id="contact-email"
 					type="email"
 					placeholder="Enter your email"
-					className="w-full p-2 border border-gray-300 rounded focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+					className="w-full rounded border border-gray-300 p-2 focus:border-blue-500 focus:ring-2 focus:ring-blue-500"
 				/>
 			</VStack>
 
 			<VStack gap={2} alignItems="stretch">
 				<label
 					htmlFor="contact-message"
-					className="text-sm font-medium text-gray-700"
+					className="font-medium text-gray-700 text-sm"
 				>
 					Message
 				</label>
@@ -300,13 +300,13 @@ export const FormLayoutExample: Story = {
 					id="contact-message"
 					placeholder="Enter your message"
 					rows={4}
-					className="w-full p-2 border border-gray-300 rounded focus:ring-2 focus:ring-blue-500 focus:border-blue-500 resize-none"
+					className="w-full resize-none rounded border border-gray-300 p-2 focus:border-blue-500 focus:ring-2 focus:ring-blue-500"
 				/>
 			</VStack>
 
 			<button
 				type="button"
-				className="w-full py-2 px-4 bg-blue-500 text-white rounded hover:bg-blue-600 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+				className="w-full rounded bg-blue-500 px-4 py-2 text-white hover:bg-blue-600 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
 			>
 				Send Message
 			</button>
@@ -327,17 +327,17 @@ export const CardExample: Story = {
 	render: () => (
 		<VStack
 			gap={4}
-			className="max-w-sm bg-white border rounded-lg shadow overflow-hidden"
+			className="max-w-sm overflow-hidden rounded-lg border bg-white shadow"
 		>
-			<div className="w-full h-32 bg-gradient-to-r from-blue-400 to-purple-500"></div>
+			<div className="h-32 w-full bg-gradient-to-r from-blue-400 to-purple-500"></div>
 
 			<VStack gap={3} className="px-6 pb-6">
 				<VStack gap={1} alignItems="center">
-					<h3 className="text-xl font-bold text-gray-900">Product Title</h3>
-					<p className="text-2xl font-bold text-blue-600">$99.99</p>
+					<h3 className="font-bold text-gray-900 text-xl">Product Title</h3>
+					<p className="font-bold text-2xl text-blue-600">$99.99</p>
 				</VStack>
 
-				<p className="text-gray-600 text-center">
+				<p className="text-center text-gray-600">
 					This is a sample product description that demonstrates how VStack can
 					be used for card layouts.
 				</p>
@@ -345,13 +345,13 @@ export const CardExample: Story = {
 				<VStack gap={2} alignItems="stretch">
 					<button
 						type="button"
-						className="w-full py-2 px-4 bg-blue-500 text-white rounded hover:bg-blue-600"
+						className="w-full rounded bg-blue-500 px-4 py-2 text-white hover:bg-blue-600"
 					>
 						Add to Cart
 					</button>
 					<button
 						type="button"
-						className="w-full py-2 px-4 border border-gray-300 rounded hover:bg-gray-50"
+						className="w-full rounded border border-gray-300 px-4 py-2 hover:bg-gray-50"
 					>
 						Add to Wishlist
 					</button>
@@ -375,27 +375,27 @@ export const NavigationSidebarExample: Story = {
 		<VStack
 			gap={2}
 			alignItems="stretch"
-			className="w-48 p-4 bg-gray-50 border-r h-64"
+			className="h-64 w-48 border-r bg-gray-50 p-4"
 		>
-			<h4 className="font-semibold text-gray-900 mb-2">Navigation</h4>
+			<h4 className="mb-2 font-semibold text-gray-900">Navigation</h4>
 
-			<a href="#" className="px-3 py-2 text-gray-700 hover:bg-blue-100 rounded">
+			<a href="#" className="rounded px-3 py-2 text-gray-700 hover:bg-blue-100">
 				Dashboard
 			</a>
-			<a href="#" className="px-3 py-2 text-gray-700 hover:bg-blue-100 rounded">
+			<a href="#" className="rounded px-3 py-2 text-gray-700 hover:bg-blue-100">
 				Projects
 			</a>
-			<a href="#" className="px-3 py-2 text-gray-700 hover:bg-blue-100 rounded">
+			<a href="#" className="rounded px-3 py-2 text-gray-700 hover:bg-blue-100">
 				Team
 			</a>
-			<a href="#" className="px-3 py-2 text-gray-700 hover:bg-blue-100 rounded">
+			<a href="#" className="rounded px-3 py-2 text-gray-700 hover:bg-blue-100">
 				Settings
 			</a>
 
-			<div className="mt-auto pt-4 border-t">
+			<div className="mt-auto border-t pt-4">
 				<a
 					href="#"
-					className="px-3 py-2 text-gray-700 hover:bg-red-100 rounded"
+					className="rounded px-3 py-2 text-gray-700 hover:bg-red-100"
 				>
 					Logout
 				</a>

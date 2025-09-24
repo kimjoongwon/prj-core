@@ -40,25 +40,25 @@ const SampleUserTable = () => (
 					<table className="w-full">
 						<thead className="bg-default-50">
 							<tr>
-								<th className="px-4 py-3 text-left text-sm font-medium">
-									<input type="checkbox" className="w-4 h-4" />
+								<th className="px-4 py-3 text-left font-medium text-sm">
+									<input type="checkbox" className="h-4 w-4" />
 								</th>
-								<th className="px-4 py-3 text-left text-sm font-medium">
+								<th className="px-4 py-3 text-left font-medium text-sm">
 									Name
 								</th>
-								<th className="px-4 py-3 text-left text-sm font-medium">
+								<th className="px-4 py-3 text-left font-medium text-sm">
 									Email
 								</th>
-								<th className="px-4 py-3 text-left text-sm font-medium">
+								<th className="px-4 py-3 text-left font-medium text-sm">
 									Role
 								</th>
-								<th className="px-4 py-3 text-left text-sm font-medium">
+								<th className="px-4 py-3 text-left font-medium text-sm">
 									Status
 								</th>
-								<th className="px-4 py-3 text-left text-sm font-medium">
+								<th className="px-4 py-3 text-left font-medium text-sm">
 									Last Login
 								</th>
-								<th className="px-4 py-3 text-left text-sm font-medium">
+								<th className="px-4 py-3 text-left font-medium text-sm">
 									Actions
 								</th>
 							</tr>
@@ -96,16 +96,16 @@ const SampleUserTable = () => (
 							].map((user, index) => (
 								<tr key={index} className="hover:bg-default-50">
 									<td className="px-4 py-3">
-										<input type="checkbox" className="w-4 h-4" />
+										<input type="checkbox" className="h-4 w-4" />
 									</td>
-									<td className="px-4 py-3 text-sm font-medium">{user.name}</td>
-									<td className="px-4 py-3 text-sm text-default-600">
+									<td className="px-4 py-3 font-medium text-sm">{user.name}</td>
+									<td className="px-4 py-3 text-default-600 text-sm">
 										{user.email}
 									</td>
 									<td className="px-4 py-3 text-sm">{user.role}</td>
 									<td className="px-4 py-3 text-sm">
 										<span
-											className={`px-2 py-1 rounded-full text-xs ${
+											className={`rounded-full px-2 py-1 text-xs ${
 												user.status === "Active"
 													? "bg-success-100 text-success-800"
 													: "bg-default-100 text-default-600"
@@ -114,7 +114,7 @@ const SampleUserTable = () => (
 											{user.status}
 										</span>
 									</td>
-									<td className="px-4 py-3 text-sm text-default-600">
+									<td className="px-4 py-3 text-default-600 text-sm">
 										{user.lastLogin}
 									</td>
 									<td className="px-4 py-3 text-sm">
@@ -176,7 +176,7 @@ const SampleProductTable = () => (
 				<input
 					type="search"
 					placeholder="Search products..."
-					className="px-3 py-2 border border-default-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary"
+					className="rounded-lg border border-default-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary"
 				/>
 				<Button color="primary" size="sm">
 					Add Product
@@ -190,23 +190,23 @@ const SampleProductTable = () => (
 					<table className="w-full">
 						<thead className="bg-default-50">
 							<tr>
-								<th className="px-4 py-3 text-left text-sm font-medium">
+								<th className="px-4 py-3 text-left font-medium text-sm">
 									Product
 								</th>
-								<th className="px-4 py-3 text-left text-sm font-medium">SKU</th>
-								<th className="px-4 py-3 text-left text-sm font-medium">
+								<th className="px-4 py-3 text-left font-medium text-sm">SKU</th>
+								<th className="px-4 py-3 text-left font-medium text-sm">
 									Category
 								</th>
-								<th className="px-4 py-3 text-left text-sm font-medium">
+								<th className="px-4 py-3 text-left font-medium text-sm">
 									Stock
 								</th>
-								<th className="px-4 py-3 text-left text-sm font-medium">
+								<th className="px-4 py-3 text-left font-medium text-sm">
 									Price
 								</th>
-								<th className="px-4 py-3 text-left text-sm font-medium">
+								<th className="px-4 py-3 text-left font-medium text-sm">
 									Status
 								</th>
-								<th className="px-4 py-3 text-left text-sm font-medium">
+								<th className="px-4 py-3 text-left font-medium text-sm">
 									Actions
 								</th>
 							</tr>
@@ -249,7 +249,7 @@ const SampleProductTable = () => (
 								<tr key={index} className="hover:bg-default-50">
 									<td className="px-4 py-3">
 										<HStack gap={3} alignItems="center">
-											<div className="w-10 h-10 bg-default-100 rounded-lg flex items-center justify-center">
+											<div className="flex h-10 w-10 items-center justify-center rounded-lg bg-default-100">
 												📦
 											</div>
 											<VStack gap={0}>
@@ -262,7 +262,7 @@ const SampleProductTable = () => (
 											</VStack>
 										</HStack>
 									</td>
-									<td className="px-4 py-3 text-sm text-default-600">
+									<td className="px-4 py-3 text-default-600 text-sm">
 										{product.sku}
 									</td>
 									<td className="px-4 py-3 text-sm">{product.category}</td>
@@ -279,12 +279,12 @@ const SampleProductTable = () => (
 											{product.stock}
 										</span>
 									</td>
-									<td className="px-4 py-3 text-sm font-medium">
+									<td className="px-4 py-3 font-medium text-sm">
 										{product.price}
 									</td>
 									<td className="px-4 py-3 text-sm">
 										<span
-											className={`px-2 py-1 rounded-full text-xs ${
+											className={`rounded-full px-2 py-1 text-xs ${
 												product.status === "In Stock"
 													? "bg-success-100 text-success-800"
 													: product.status === "Low Stock"
@@ -336,7 +336,7 @@ const SampleSimpleList = () => (
 						"Fourth and final item",
 					].map((item, index) => (
 						<HStack key={index} gap={3} alignItems="center" className="py-2">
-							<div className="w-2 h-2 bg-primary rounded-full"></div>
+							<div className="h-2 w-2 rounded-full bg-primary"></div>
 							<Text variant="body2" className="flex-1">
 								{item}
 							</Text>
@@ -363,14 +363,14 @@ const SampleEmptyTable = () => (
 		<Card>
 			<CardBody className="py-12">
 				<VStack gap={4} alignItems="center" className="text-center">
-					<div className="w-16 h-16 bg-default-100 rounded-full flex items-center justify-center">
+					<div className="flex h-16 w-16 items-center justify-center rounded-full bg-default-100">
 						<Text variant="h4" className="text-default-400">
 							📋
 						</Text>
 					</div>
 					<VStack gap={2} alignItems="center">
 						<Text variant="h6">No Data Available</Text>
-						<Text variant="body2" className="text-default-600 max-w-md">
+						<Text variant="body2" className="max-w-md text-default-600">
 							There are no items to display yet. Add your first item to get
 							started.
 						</Text>

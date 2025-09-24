@@ -61,9 +61,9 @@ export const 여러요소: Story = {
 		className: "gap-4 p-4 bg-gray-50 rounded-lg",
 		children: (
 			<>
-				<div className="p-2 bg-blue-200 rounded">아이템 1</div>
-				<div className="p-2 bg-green-200 rounded">아이템 2</div>
-				<div className="p-2 bg-yellow-200 rounded">아이템 3</div>
+				<div className="rounded bg-blue-200 p-2">아이템 1</div>
+				<div className="rounded bg-green-200 p-2">아이템 2</div>
+				<div className="rounded bg-yellow-200 p-2">아이템 3</div>
 			</>
 		),
 	},
@@ -82,13 +82,13 @@ export const 반응형: Story = {
 		className: "w-full max-w-md mx-auto p-6 bg-white shadow-lg rounded-lg",
 		children: (
 			<>
-				<h2 className="text-xl font-bold mb-4">카드 제목</h2>
-				<p className="text-gray-600 mb-4">
+				<h2 className="mb-4 font-bold text-xl">카드 제목</h2>
+				<p className="mb-4 text-gray-600">
 					다양한 화면 크기에 잘 맞는 반응형 컴테이너의 예시입니다.
 				</p>
 				<button
 					type="button"
-					className="w-full py-2 px-4 bg-blue-500 text-white rounded hover:bg-blue-600"
+					className="w-full rounded bg-blue-500 px-4 py-2 text-white hover:bg-blue-600"
 				>
 					액션 버튼
 				</button>
@@ -110,25 +110,25 @@ export const 폼레이아웃: Story = {
 		className: "gap-4 p-6 max-w-sm bg-white border rounded-lg shadow",
 		children: (
 			<>
-				<h3 className="text-lg font-semibold">연락처 폼</h3>
+				<h3 className="font-semibold text-lg">연락처 폼</h3>
 				<input
 					type="text"
 					placeholder="이름"
-					className="w-full p-2 border rounded"
+					className="w-full rounded border p-2"
 				/>
 				<input
 					type="email"
 					placeholder="이메일"
-					className="w-full p-2 border rounded"
+					className="w-full rounded border p-2"
 				/>
 				<textarea
 					placeholder="메시지"
 					rows={3}
-					className="w-full p-2 border rounded resize-none"
+					className="w-full resize-none rounded border p-2"
 				/>
 				<button
 					type="button"
-					className="w-full py-2 px-4 bg-green-500 text-white rounded hover:bg-green-600"
+					className="w-full rounded bg-green-500 px-4 py-2 text-white hover:bg-green-600"
 				>
 					메시지 보내기
 				</button>

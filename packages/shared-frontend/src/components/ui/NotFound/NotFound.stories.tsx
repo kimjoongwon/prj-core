@@ -76,7 +76,7 @@ export const WithCustomIcon: Story = {
 	args: {
 		title: "Oops! Something went wrong",
 		description: "We couldn't find what you're looking for.",
-		icon: <div className="text-6xl text-blue-500 mb-4">🔍</div>,
+		icon: <div className="mb-4 text-6xl text-blue-500">🔍</div>,
 	},
 	parameters: {
 		docs: {
@@ -92,16 +92,16 @@ export const WithCustomActions: Story = {
 		title: "Access Denied",
 		description: "You don't have permission to access this resource.",
 		actions: (
-			<div className="flex flex-col gap-3 w-full">
+			<div className="flex w-full flex-col gap-3">
 				<button
 					type="button"
-					className="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600"
+					className="rounded-lg bg-red-500 px-4 py-2 text-white hover:bg-red-600"
 				>
 					Contact Support
 				</button>
 				<button
 					type="button"
-					className="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50"
+					className="rounded-lg border border-gray-300 px-4 py-2 hover:bg-gray-50"
 				>
 					View Documentation
 				</button>
@@ -141,7 +141,7 @@ export const ServerError: Story = {
 			"Something went wrong on our end. Please try again later or contact support if the problem persists.",
 		homeButtonText: "Return Home",
 		backButtonText: "Try Again",
-		icon: <div className="text-8xl text-red-400 font-bold">500</div>,
+		icon: <div className="font-bold text-8xl text-red-400">500</div>,
 	},
 	parameters: {
 		docs: {
@@ -160,7 +160,7 @@ export const MaintenanceMode: Story = {
 			"We're currently performing scheduled maintenance. Please check back in a few hours.",
 		homeButtonText: "Check Status Page",
 		backButtonText: "Notify Me",
-		icon: <div className="text-6xl text-yellow-500 mb-4">🔧</div>,
+		icon: <div className="mb-4 text-6xl text-yellow-500">🔧</div>,
 	},
 	parameters: {
 		docs: {

@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-native";
-import React, { useState } from "react";
+import { useState } from "react";
 import { View } from "react-native";
 import type { ListSelectProps } from "@/components/forms/ListSelect/ListSelect";
 import { ListSelect } from "@/components/forms/ListSelect/ListSelect";

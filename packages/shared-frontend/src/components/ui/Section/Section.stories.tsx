@@ -41,7 +41,7 @@ export const Default: Story = {
 export const WithText: Story = {
 	render: () => (
 		<Section>
-			<h2 className="text-xl font-bold">Section Title</h2>
+			<h2 className="font-bold text-xl">Section Title</h2>
 			<p className="text-gray-600">
 				This is a section with some text content. The section provides
 				consistent styling with border, padding, and spacing for organized
@@ -61,39 +61,39 @@ export const WithText: Story = {
 export const WithForm: Story = {
 	render: () => (
 		<Section>
-			<h3 className="text-lg font-semibold mb-4">Contact Information</h3>
+			<h3 className="mb-4 font-semibold text-lg">Contact Information</h3>
 			<div className="space-y-4">
 				<div>
 					<label
 						htmlFor="fullName"
-						className="block text-sm font-medium text-gray-700 mb-1"
+						className="mb-1 block font-medium text-gray-700 text-sm"
 					>
 						Full Name
 					</label>
 					<input
 						id="fullName"
 						type="text"
-						className="w-full p-2 border border-gray-300 rounded focus:ring-2 focus:ring-blue-500"
+						className="w-full rounded border border-gray-300 p-2 focus:ring-2 focus:ring-blue-500"
 						placeholder="Enter your name"
 					/>
 				</div>
 				<div>
 					<label
 						htmlFor="email"
-						className="block text-sm font-medium text-gray-700 mb-1"
+						className="mb-1 block font-medium text-gray-700 text-sm"
 					>
 						Email
 					</label>
 					<input
 						id="email"
 						type="email"
-						className="w-full p-2 border border-gray-300 rounded focus:ring-2 focus:ring-blue-500"
+						className="w-full rounded border border-gray-300 p-2 focus:ring-2 focus:ring-blue-500"
 						placeholder="Enter your email"
 					/>
 				</div>
 				<button
 					type="button"
-					className="w-full py-2 px-4 bg-blue-500 text-white rounded hover:bg-blue-600"
+					className="w-full rounded bg-blue-500 px-4 py-2 text-white hover:bg-blue-600"
 				>
 					Submit
 				</button>
@@ -112,23 +112,23 @@ export const WithForm: Story = {
 export const WithStats: Story = {
 	render: () => (
 		<Section>
-			<h3 className="text-lg font-semibold mb-4">Dashboard Statistics</h3>
+			<h3 className="mb-4 font-semibold text-lg">Dashboard Statistics</h3>
 			<div className="grid grid-cols-2 gap-4">
-				<div className="text-center p-4 bg-blue-50 rounded">
-					<div className="text-2xl font-bold text-blue-600">1,234</div>
-					<div className="text-sm text-gray-600">Total Users</div>
+				<div className="rounded bg-blue-50 p-4 text-center">
+					<div className="font-bold text-2xl text-blue-600">1,234</div>
+					<div className="text-gray-600 text-sm">Total Users</div>
 				</div>
-				<div className="text-center p-4 bg-green-50 rounded">
-					<div className="text-2xl font-bold text-green-600">567</div>
-					<div className="text-sm text-gray-600">Active Projects</div>
+				<div className="rounded bg-green-50 p-4 text-center">
+					<div className="font-bold text-2xl text-green-600">567</div>
+					<div className="text-gray-600 text-sm">Active Projects</div>
 				</div>
-				<div className="text-center p-4 bg-yellow-50 rounded">
-					<div className="text-2xl font-bold text-yellow-600">89</div>
-					<div className="text-sm text-gray-600">Pending Tasks</div>
+				<div className="rounded bg-yellow-50 p-4 text-center">
+					<div className="font-bold text-2xl text-yellow-600">89</div>
+					<div className="text-gray-600 text-sm">Pending Tasks</div>
 				</div>
-				<div className="text-center p-4 bg-purple-50 rounded">
-					<div className="text-2xl font-bold text-purple-600">12</div>
-					<div className="text-sm text-gray-600">Team Members</div>
+				<div className="rounded bg-purple-50 p-4 text-center">
+					<div className="font-bold text-2xl text-purple-600">12</div>
+					<div className="text-gray-600 text-sm">Team Members</div>
 				</div>
 			</div>
 		</Section>
@@ -145,7 +145,7 @@ export const WithStats: Story = {
 export const WithList: Story = {
 	render: () => (
 		<Section>
-			<h3 className="text-lg font-semibold mb-4">Recent Activities</h3>
+			<h3 className="mb-4 font-semibold text-lg">Recent Activities</h3>
 			<div className="space-y-3">
 				{[
 					{
@@ -171,11 +171,11 @@ export const WithList: Story = {
 				].map((item) => (
 					<div
 						key={item.action}
-						className="flex items-center justify-between p-3 bg-gray-50 rounded"
+						className="flex items-center justify-between rounded bg-gray-50 p-3"
 					>
 						<div className="flex items-center space-x-3">
 							<div
-								className={`w-2 h-2 rounded-full ${
+								className={`h-2 w-2 rounded-full ${
 									item.status === "success"
 										? "bg-green-500"
 										: item.status === "error"
@@ -185,7 +185,7 @@ export const WithList: Story = {
 							/>
 							<span className="text-sm">{item.action}</span>
 						</div>
-						<span className="text-xs text-gray-500">{item.time}</span>
+						<span className="text-gray-500 text-xs">{item.time}</span>
 					</div>
 				))}
 			</div>
@@ -202,24 +202,24 @@ export const WithList: Story = {
 
 export const NestedSections: Story = {
 	render: () => (
-		<div className="space-y-4 max-w-2xl">
+		<div className="max-w-2xl space-y-4">
 			<Section>
-				<h2 className="text-xl font-bold mb-4">Main Section</h2>
-				<p className="text-gray-600 mb-4">
+				<h2 className="mb-4 font-bold text-xl">Main Section</h2>
+				<p className="mb-4 text-gray-600">
 					This is the main section containing nested subsections.
 				</p>
 
-				<div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+				<div className="grid grid-cols-1 gap-4 md:grid-cols-2">
 					<Section>
-						<h4 className="font-semibold mb-2">Subsection A</h4>
-						<p className="text-sm text-gray-600">
+						<h4 className="mb-2 font-semibold">Subsection A</h4>
+						<p className="text-gray-600 text-sm">
 							Content for the first subsection with its own styling.
 						</p>
 					</Section>
 
 					<Section>
-						<h4 className="font-semibold mb-2">Subsection B</h4>
-						<p className="text-sm text-gray-600">
+						<h4 className="mb-2 font-semibold">Subsection B</h4>
+						<p className="text-gray-600 text-sm">
 							Content for the second subsection demonstrating layout
 							flexibility.
 						</p>

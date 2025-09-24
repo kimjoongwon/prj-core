@@ -19,10 +19,10 @@ export const DashboardLayout = (props: DashboardLayoutProps) => {
 	const renderPlaceholder = (componentName: string) => (
 		<Card className="h-full shadow-sm">
 			<CardBody className="flex items-center justify-center">
-				<div className="text-center space-y-2">
-					<div className="w-12 h-12 mx-auto rounded-lg bg-default-100 flex items-center justify-center">
+				<div className="space-y-2 text-center">
+					<div className="mx-auto flex h-12 w-12 items-center justify-center rounded-lg bg-default-100">
 						<svg
-							className="w-6 h-6 text-default-400"
+							className="h-6 w-6 text-default-400"
 							fill="none"
 							stroke="currentColor"
 							viewBox="0 0 24 24"
@@ -46,9 +46,9 @@ export const DashboardLayout = (props: DashboardLayoutProps) => {
 	const headerElement = header || renderPlaceholder("HeaderComponent");
 
 	return (
-		<div className="flex flex-col h-screen bg-background">
+		<div className="flex h-screen flex-col bg-background">
 			{/* Header */}
-			<div className="flex-none backdrop-blur-lg bg-background/95 border-b border-divider sticky top-0 z-40">
+			<div className="sticky top-0 z-40 flex-none border-divider border-b bg-background/95 backdrop-blur-lg">
 				{headerElement}
 			</div>
 
@@ -56,16 +56,16 @@ export const DashboardLayout = (props: DashboardLayoutProps) => {
 			<div className="flex flex-1 overflow-hidden">
 				{/* Left Sidebar - Only rendered when leftSidebar is provided */}
 				{leftSidebar && (
-					<aside className="flex flex-col bg-content1 border-r border-divider transition-all duration-300 min-w-16">
-						<div className="h-full overflow-y-auto scrollbar-thin">
+					<aside className="flex min-w-16 flex-col border-divider border-r bg-content1 transition-all duration-300">
+						<div className="scrollbar-thin h-full overflow-y-auto">
 							{leftSidebar}
 						</div>
 					</aside>
 				)}
 
 				{/* Main Content */}
-				<main className="flex-1 flex flex-col overflow-hidden bg-content2">
-					<div className="flex-1 overflow-y-auto scrollbar-thin">
+				<main className="flex flex-1 flex-col overflow-hidden bg-content2">
+					<div className="scrollbar-thin flex-1 overflow-y-auto">
 						<div className="p-6">
 							<Card className="min-h-full shadow-sm">
 								<CardBody>
@@ -82,8 +82,8 @@ export const DashboardLayout = (props: DashboardLayoutProps) => {
 
 				{/* Right Sidebar - Conditionally rendered when rightSidebar is provided */}
 				{rightSidebar && (
-					<aside className="hidden xl:flex w-72 flex-col bg-content1 border-l border-divider">
-						<div className="h-full overflow-y-auto scrollbar-thin">
+					<aside className="hidden w-72 flex-col border-divider border-l bg-content1 xl:flex">
+						<div className="scrollbar-thin h-full overflow-y-auto">
 							<div className="p-4">{rightSidebar}</div>
 						</div>
 					</aside>
@@ -92,7 +92,7 @@ export const DashboardLayout = (props: DashboardLayoutProps) => {
 
 			{/* Bottom Component - Only visible on mobile (below xl breakpoint) */}
 			{bottom && (
-				<div className="xl:hidden flex-none bg-content1 border-t border-divider">
+				<div className="flex-none border-divider border-t bg-content1 xl:hidden">
 					<div className="p-4">{bottom}</div>
 				</div>
 			)}

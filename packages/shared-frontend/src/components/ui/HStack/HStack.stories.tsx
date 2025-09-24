@@ -53,7 +53,7 @@ const 샘플아이템 = ({
 	children: React.ReactNode;
 	className?: string;
 }) => (
-	<div className={`p-2 bg-blue-200 rounded border ${className}`}>
+	<div className={`rounded border bg-blue-200 p-2 ${className}`}>
 		{children}
 	</div>
 );
@@ -149,8 +149,8 @@ export const 내비게이션_예시: Story = {
 		fullWidth: true,
 		children: (
 			<>
-				<div className="text-xl font-bold text-blue-600">로고</div>
-				<div className="text-sm text-gray-600">내비게이션 메뉴</div>
+				<div className="font-bold text-blue-600 text-xl">로고</div>
+				<div className="text-gray-600 text-sm">내비게이션 메뉴</div>
 			</>
 		),
 		className: "p-4 bg-white border-b",
@@ -171,8 +171,8 @@ export const 카드_액션_예시: Story = {
 		gap: 2,
 		children: (
 			<>
-				<div className="px-4 py-2 border border-gray-300 rounded">취소</div>
-				<div className="px-4 py-2 bg-blue-500 text-white rounded">
+				<div className="rounded border border-gray-300 px-4 py-2">취소</div>
+				<div className="rounded bg-blue-500 px-4 py-2 text-white">
 					장바구니 추가
 				</div>
 			</>

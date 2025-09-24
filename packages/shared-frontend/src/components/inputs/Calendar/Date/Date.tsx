@@ -27,10 +27,10 @@ export const Date = (props: DateProps) => {
 			radius="sm"
 			isHoverable
 			onClick={() => onDateClick?.(value)}
-			className={`${className} h-20 relative`}
+			className={`${className} relative h-20`}
 		>
 			{selected && (
-				<div className="absolute top-1 left-1 bg-green-500 rounded-full p-0.5">
+				<div className="absolute top-1 left-1 rounded-full bg-green-500 p-0.5">
 					<svg
 						width="12"
 						height="12"

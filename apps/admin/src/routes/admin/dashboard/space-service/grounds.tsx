@@ -33,7 +33,7 @@ const GroundsRouteComponent = () => {
 
 	return (
 		<div>
-			<h3 className="text-lg font-medium text-gray-900 mb-4">
+			<h3 className="mb-4 font-medium text-gray-900 text-lg">
 				그라운드 리스트
 			</h3>
 			<Table aria-label="그라운드 테이블">

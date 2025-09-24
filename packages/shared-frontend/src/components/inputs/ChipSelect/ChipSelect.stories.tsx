@@ -153,7 +153,7 @@ export const 다양한모드비교: Story = {
 	render: () => (
 		<div className="flex flex-col gap-6">
 			<div>
-				<h3 className="text-lg font-semibold mb-2">다중 선택</h3>
+				<h3 className="mb-2 font-semibold text-lg">다중 선택</h3>
 				<ChipSelect
 					options={["JavaScript", "TypeScript", "React"]}
 					selectionMode="multiple"
@@ -162,7 +162,7 @@ export const 다양한모드비교: Story = {
 				/>
 			</div>
 			<div>
-				<h3 className="text-lg font-semibold mb-2">단일 선택</h3>
+				<h3 className="mb-2 font-semibold text-lg">단일 선택</h3>
 				<ChipSelect
 					options={["초급", "중급", "고급"]}
 					selectionMode="single"
@@ -171,7 +171,7 @@ export const 다양한모드비교: Story = {
 				/>
 			</div>
 			<div>
-				<h3 className="text-lg font-semibold mb-2">선택 불가</h3>
+				<h3 className="mb-2 font-semibold text-lg">선택 불가</h3>
 				<ChipSelect
 					options={["읽기전용", "표시용", "정보용"]}
 					selectionMode="none"

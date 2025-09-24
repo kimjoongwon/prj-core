@@ -22,7 +22,8 @@
         "noExplicitAny": "off",
         "noImplicitAnyLet": "off",
         "noShadowRestrictedNames": "off",
-        "noArrayIndexKey": "off"
+        "noArrayIndexKey": "off",
+        "noRedeclare": "off"
       },
       "correctness": {
         "noUnusedVariables": "off",

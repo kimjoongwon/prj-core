@@ -3,7 +3,7 @@ import { createFileRoute, Outlet } from "@tanstack/react-router";
 const GroundDetailRouteComponent = () => {
 	return (
 		<div>
-			<nav className="flex space-x-4 mb-6">
+			<nav className="mb-6 flex space-x-4">
 				<a href="info" className="text-blue-600 hover:text-blue-800">
 					정보
 				</a>

@@ -40,7 +40,6 @@ export const ScrollView: React.FC<ScrollViewProps> = ({
 				return theme.colors.content3.DEFAULT;
 			case "content4":
 				return theme.colors.content4.DEFAULT;
-			case "default":
 			default:
 				return theme.colors.background;
 		}

@@ -65,11 +65,11 @@ export const ExpandableCell = ({
 				paddingLeft: expandable ? `${depth * 2}rem` : undefined,
 			}}
 		>
-			<div className="flex items-center relative">
+			<div className="relative flex items-center">
 				{/* 하위 항목이 있을 때만 세로 연결선 표시 */}
 				{expandable && depth > 0 && (
 					<div
-						className="absolute border-l border-gray-300"
+						className="absolute border-gray-300 border-l"
 						style={{
 							left: `-${(depth - 1) * 2 + 1.25}rem`, // 상위 폴더 아이콘의 중앙
 							top: "0rem", // 상위 폴더 아이콘의 하단에서 시작
@@ -82,7 +82,7 @@ export const ExpandableCell = ({
 				{/* 수평 연결선 */}
 				{expandable && depth > 0 && (
 					<div
-						className="absolute border-t border-gray-300"
+						className="absolute border-gray-300 border-t"
 						style={{
 							left: `-${(depth - 1) * 2 + 1.25}rem`, // 상위 폴더 중앙에서 시작
 							top: "0.875rem", // 아이콘 중앙 높이
@@ -96,21 +96,21 @@ export const ExpandableCell = ({
 							onClick: onToggleExpand,
 							style: { cursor: "pointer" },
 						}}
-						className="mr-3 flex items-center justify-center w-7 h-7 text-yellow-500 hover:text-yellow-600 hover:bg-yellow-50 rounded-md transition-all duration-200 border border-yellow-200 hover:border-yellow-300"
+						className="mr-3 flex h-7 w-7 items-center justify-center rounded-md border border-yellow-200 text-yellow-500 transition-all duration-200 hover:border-yellow-300 hover:bg-yellow-50 hover:text-yellow-600"
 					>
 						{isExpanded ? (
-							<FolderOpenIcon className="w-5 h-5" />
+							<FolderOpenIcon className="h-5 w-5" />
 						) : (
-							<FolderClosedIcon className="w-5 h-5" />
+							<FolderClosedIcon className="h-5 w-5" />
 						)}
 					</div>
 				) : expandable && !canExpand ? (
-					<div className="mr-3 flex items-center justify-center w-7 h-7 text-primary">
-						<DocumentIcon className="w-5 h-5" />
+					<div className="mr-3 flex h-7 w-7 items-center justify-center text-primary">
+						<DocumentIcon className="h-5 w-5" />
 					</div>
 				) : !expandable ? (
-					<div className="mr-3 flex items-center justify-center w-7 h-7 text-primary">
-						<DocumentIcon className="w-5 h-5" />
+					<div className="mr-3 flex h-7 w-7 items-center justify-center text-primary">
+						<DocumentIcon className="h-5 w-5" />
 					</div>
 				) : null}
 				<span>{String(value)}</span>

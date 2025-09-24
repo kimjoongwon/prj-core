@@ -73,8 +73,8 @@ export const 수직_리스트: Story = {
 		<List
 			{...args}
 			renderItem={(item, index) => (
-				<div className="p-3 border rounded-lg bg-white shadow-sm">
-					<span className="text-xs text-gray-400">#{index + 1}</span>
+				<div className="rounded-lg border bg-white p-3 shadow-sm">
+					<span className="text-gray-400 text-xs">#{index + 1}</span>
 					<div>
 						<span className="font-medium">{item.name}</span> - {item.type} (
 						{item.color})
@@ -106,12 +106,12 @@ export const 수평_리스트: Story = {
 			<List
 				{...args}
 				renderItem={(item, index) => (
-					<div className="p-3 border rounded-lg bg-white shadow-sm min-w-[150px]">
-						<div className="text-xs text-gray-400 mb-1">#{index + 1}</div>
+					<div className="min-w-[150px] rounded-lg border bg-white p-3 shadow-sm">
+						<div className="mb-1 text-gray-400 text-xs">#{index + 1}</div>
 						<div className="font-medium text-sm">{item.name}</div>
-						<div className="text-xs text-gray-600">{item.type}</div>
+						<div className="text-gray-600 text-xs">{item.type}</div>
 						<div
-							className="w-4 h-4 rounded-full mt-2"
+							className="mt-2 h-4 w-4 rounded-full"
 							style={{
 								backgroundColor:
 									item.color === "빨간색"
@@ -144,7 +144,7 @@ export const 사용자_리스트: Story = {
 		horizontal: false,
 		gap: "0.75rem",
 		placeholder: (
-			<div className="text-center text-gray-500 py-8">
+			<div className="py-8 text-center text-gray-500">
 				사용자를 찾을 수 없습니다
 			</div>
 		),
@@ -153,17 +153,17 @@ export const 사용자_리스트: Story = {
 		<List
 			{...args}
 			renderItem={(user, index) => (
-				<div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+				<div className="flex items-center justify-between rounded-lg bg-gray-50 p-3">
 					<div className="flex items-center gap-3">
-						<div className="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center text-white text-sm font-medium">
+						<div className="flex h-8 w-8 items-center justify-center rounded-full bg-blue-500 font-medium text-sm text-white">
 							{index + 1}
 						</div>
 						<div>
 							<div className="font-medium text-gray-900">{user.name}</div>
-							<div className="text-sm text-gray-500">{user.email}</div>
+							<div className="text-gray-500 text-sm">{user.email}</div>
 						</div>
 					</div>
-					<span className="px-2 py-1 text-xs bg-blue-100 text-blue-800 rounded-full">
+					<span className="rounded-full bg-blue-100 px-2 py-1 text-blue-800 text-xs">
 						{user.role}
 					</span>
 				</div>
@@ -184,12 +184,12 @@ export const 빈_리스트: Story = {
 		data: [],
 		horizontal: false,
 		placeholder: (
-			<div className="text-center py-12">
-				<div className="text-gray-400 text-6xl mb-4">📭</div>
-				<div className="text-lg font-medium text-gray-600">
+			<div className="py-12 text-center">
+				<div className="mb-4 text-6xl text-gray-400">📭</div>
+				<div className="font-medium text-gray-600 text-lg">
 					아직 아이템이 없습니다
 				</div>
-				<div className="text-sm text-gray-500 mt-1">
+				<div className="mt-1 text-gray-500 text-sm">
 					시작하려면 아이템을 추가하세요
 				</div>
 			</div>
@@ -198,8 +198,8 @@ export const 빈_리스트: Story = {
 	render: (args) => (
 		<List
 			{...args}
-			renderItem={(item: any, index) => (
-				<div className="p-2 border rounded">{item.name}</div>
+			renderItem={(item: any, _index) => (
+				<div className="rounded border p-2">{item.name}</div>
 			)}
 		/>
 	),
@@ -228,9 +228,9 @@ export const 간격_설정_예제: Story = {
 			<List
 				{...args}
 				renderItem={(item, index) => (
-					<div className="p-4 bg-blue-50 border-l-4 border-blue-500 rounded">
+					<div className="rounded border-blue-500 border-l-4 bg-blue-50 p-4">
 						<div className="font-medium">아이템 {index + 1}</div>
-						<div className="text-sm text-gray-600">{item.text}</div>
+						<div className="text-gray-600 text-sm">{item.text}</div>
 					</div>
 				)}
 			/>
@@ -255,7 +255,7 @@ export const 간단한_텍스트_리스트: Story = {
 		],
 		renderItem: (item: any) => <div key={item.id}>{item.text}</div>,
 		placeholder: (
-			<div className="text-gray-500 p-4">사용 가능한 아이템이 없습니다</div>
+			<div className="p-4 text-gray-500">사용 가능한 아이템이 없습니다</div>
 		),
 	},
 	render: (args) => (
@@ -264,7 +264,7 @@ export const 간단한_텍스트_리스트: Story = {
 			renderItem={(item: any) => (
 				<div
 					key={item.id}
-					className="px-3 py-2 hover:bg-gray-100 border-b border-gray-200 last:border-b-0"
+					className="border-gray-200 border-b px-3 py-2 last:border-b-0 hover:bg-gray-100"
 				>
 					{item.text}
 				</div>
@@ -304,8 +304,8 @@ export const 카드_리스트: Story = {
 		],
 		renderItem: (task: any) => <div key={task.id}>{task.title}</div>,
 		placeholder: (
-			<div className="bg-gray-50 border-2 border-dashed border-gray-300 rounded-lg p-8 text-center">
-				<div className="text-gray-400 text-2xl mb-2">📋</div>
+			<div className="rounded-lg border-2 border-gray-300 border-dashed bg-gray-50 p-8 text-center">
+				<div className="mb-2 text-2xl text-gray-400">📋</div>
 				<div className="text-gray-600">사용 가능한 할 일이 없습니다</div>
 			</div>
 		),
@@ -316,12 +316,12 @@ export const 카드_리스트: Story = {
 			renderItem={(task: any) => (
 				<div
 					key={task.id}
-					className="bg-white border border-gray-200 rounded-lg p-4 mb-3 shadow-sm"
+					className="mb-3 rounded-lg border border-gray-200 bg-white p-4 shadow-sm"
 				>
-					<div className="flex items-center justify-between mb-2">
+					<div className="mb-2 flex items-center justify-between">
 						<h3 className="font-medium text-gray-900">{task.title}</h3>
 						<span
-							className={`px-2 py-1 text-xs rounded-full ${
+							className={`rounded-full px-2 py-1 text-xs ${
 								task.status === "완료"
 									? "bg-green-100 text-green-800"
 									: task.status === "진행중"
@@ -332,7 +332,7 @@ export const 카드_리스트: Story = {
 							{task.status}
 						</span>
 					</div>
-					<p className="text-sm text-gray-600">{task.description}</p>
+					<p className="text-gray-600 text-sm">{task.description}</p>
 				</div>
 			)}
 		/>
@@ -355,7 +355,7 @@ export const 플레이그라운드: Story = {
 		className: "w-full max-w-md",
 		itemClassName: "list-item",
 		placeholder: (
-			<div className="text-gray-500 text-center py-4">
+			<div className="py-4 text-center text-gray-500">
 				보여줄 아이템이 없습니다
 			</div>
 		),
@@ -364,15 +364,15 @@ export const 플레이그라운드: Story = {
 		<List
 			{...args}
 			renderItem={(item, index) => (
-				<div className="p-3 border rounded-lg bg-white shadow-sm hover:shadow-md transition-shadow">
+				<div className="rounded-lg border bg-white p-3 shadow-sm transition-shadow hover:shadow-md">
 					<div className="flex items-center justify-between">
 						<div>
 							<div className="font-medium">{item.name}</div>
-							<div className="text-sm text-gray-500">
+							<div className="text-gray-500 text-sm">
 								{item.type} • {item.color}
 							</div>
 						</div>
-						<div className="text-xs text-gray-400">#{index + 1}</div>
+						<div className="text-gray-400 text-xs">#{index + 1}</div>
 					</div>
 				</div>
 			)}
