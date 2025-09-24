@@ -21,13 +21,14 @@
   ],
   "scripts": {
     "start:dev": "pnpm codegen:dev",
+    "build": "orval --config orval.config.js",
     "lint": "biome lint",
     "type-check": "tsc --noEmit",
     "clean": "rm -rf .turbo && rm -rf node_modules && rm -rf dist",
-    "codegen:dev": "orval --config orval.local.config.js",
-    "codegen:stg": "orval --config orval.stg.config.js",
-    "codegen:prod": "orval --config orval.prod.config.js",
-    "codegen": "npm run codegen:dev"
+    "codegen": "orval --config orval.config.js",
+    "codegen:local": "NODE_ENV=local orval --config orval.config.js",
+    "codegen:stg": "NODE_ENV=staging orval --config orval.config.js",
+    "codegen:prod": "NODE_ENV=production orval --config orval.config.js"
   },
   "dependencies": {
     "@tanstack/react-query": "catalog:",
