@@ -20,20 +20,14 @@
     "README.md"
   ],
   "scripts": {
-    "build": "tsup",
-    "build:prod": "NODE_ENV=production tsup",
-    "dev": "tsup --watch",
-    "start:dev": "tsup --watch",
-    "lint": "tsc --noEmit",
+    "start:dev": "pnpm codegen:dev",
+    "lint": "biome lint",
     "type-check": "tsc --noEmit",
     "clean": "rm -rf .turbo && rm -rf node_modules && rm -rf dist",
-    "clean:dist": "rm -rf dist",
-    "codegen:dev": "orval --config orval.dev.config.js",
+    "codegen:dev": "orval --config orval.local.config.js",
     "codegen:stg": "orval --config orval.stg.config.js",
     "codegen:prod": "orval --config orval.prod.config.js",
-    "codegen": "npm run codegen:dev",
-    "prebuild": "npm run clean:dist",
-    "prepack": "npm run build:prod"
+    "codegen": "npm run codegen:dev"
   },
   "dependencies": {
     "@tanstack/react-query": "catalog:",
