@@ -89,8 +89,8 @@ WORKDIR /app
 # 📦 빌드 단계에서 완성된 애플리케이션 복사
 COPY --from=builder /app/ .
 
-# 🔧 nginx 설정 파일 복사
-COPY devops/nginx.conf /etc/nginx/nginx.conf
+# 🔧 nginx 설정 파일 복사 (서버용 설정을 표준 nginx.conf로 복사)
+COPY devops/nginx.server.config /etc/nginx/nginx.conf
 
 # 📋 supervisor 디렉토리 생성 및 설정 파일 생성
 RUN mkdir -p /etc/supervisor && \

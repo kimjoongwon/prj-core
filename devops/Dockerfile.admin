@@ -79,9 +79,9 @@ COPY --from=builder /app/apps/admin/dist /usr/share/nginx/html
 # - default.conf: 기본 설정 파일 삭제하여 커스텀 설정 적용 준비
 RUN rm /etc/nginx/conf.d/default.conf
 
-# ⚙️ 관리자 앱 전용 Nginx 설정 파일 복사
+# ⚙️ 관리자 앱 전용 Nginx 설정 파일 복사 (admin용 설정을 표준 nginx.conf로 복사)
 # - 커스텀 라우팅, 프록시, 보안 설정 등이 포함된 설정 파일
-COPY --from=builder /app/apps/admin/nginx.conf /etc/nginx/nginx.conf
+COPY devops/nginx.admin.config /etc/nginx/nginx.conf
 
 # 🎯 Nginx 웹 서버 실행 명령어
 # - nginx: 웹 서버 실행
