@@ -1,76 +1,76 @@
-import { login } from "@shared/api-client/dist";
+import { login } from "@shared/api-client";
 import { useMutation } from "@tanstack/react-query";
 import { useNavigate } from "@tanstack/react-router";
 import { isAxiosError } from "axios";
 import { observable } from "mobx";
 
 export interface AdminAuthLoginRouteProps {
-	state: ReturnType<typeof useState>;
-	actions: ReturnType<typeof useActions>;
+  state: ReturnType<typeof useState>;
+  actions: ReturnType<typeof useActions>;
 }
 
 const useState = () => {
-	return observable({
-		loginForm: {
-			email: "plate@gmail.com",
-			password: "rkdmf12!@",
-		},
-	});
+  return observable({
+    loginForm: {
+      email: "plate@gmail.com",
+      password: "rkdmf12!@",
+    },
+  });
 };
 
 const useActions = () => {
-	const { mutateAsync: loginMutation } = useMutation({
-		mutationFn: login,
-	});
+  const { mutateAsync: loginMutation } = useMutation({
+    mutationFn: login,
+  });
 
-	const navigate = useNavigate();
+  const navigate = useNavigate();
 
-	const goToTenantSelect = () => {
-		navigate({
-			to: "/admin/auth/login/tenant-select",
-		});
-	};
+  const goToTenantSelect = () => {
+    navigate({
+      to: "/admin/auth/login/tenant-select",
+    });
+  };
 
-	return {
-		goToTenantSelect,
-		loginMutation,
-	};
+  return {
+    goToTenantSelect,
+    loginMutation,
+  };
 };
 
 const useHandlers = (props: AdminAuthLoginRouteProps) => {
-	const {
-		state,
-		actions: { loginMutation, goToTenantSelect },
-	} = props;
+  const {
+    state,
+    actions: { loginMutation, goToTenantSelect },
+  } = props;
 
-	const onClickLogin = async () => {
-		try {
-			await loginMutation(state.loginForm);
-		} catch (error: unknown) {
-			if (isAxiosError(error)) {
-				throw new Error(error.response?.data?.message);
-			}
-		}
+  const onClickLogin = async () => {
+    try {
+      await loginMutation(state.loginForm);
+    } catch (error: unknown) {
+      if (isAxiosError(error)) {
+        throw new Error(error.response?.data?.message);
+      }
+    }
 
-		goToTenantSelect();
-	};
+    goToTenantSelect();
+  };
 
-	return {
-		onClickLogin,
-	};
+  return {
+    onClickLogin,
+  };
 };
 
 export const useAdminAuthLoginRoute = () => {
-	const state = useState();
-	const actions = useActions();
-	const handlers = useHandlers({
-		state,
-		actions,
-	});
+  const state = useState();
+  const actions = useActions();
+  const handlers = useHandlers({
+    state,
+    actions,
+  });
 
-	return {
-		state,
-		actions,
-		handlers,
-	};
+  return {
+    state,
+    actions,
+    handlers,
+  };
 };

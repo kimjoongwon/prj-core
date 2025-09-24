@@ -12,3 +12,7 @@ out
 
 *storybook.log
 storybook-static
+
+# Build outputs
+apps/*/dist
+packages/*/dist

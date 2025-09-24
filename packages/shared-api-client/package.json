@@ -20,15 +20,12 @@
     "README.md"
   ],
   "scripts": {
-    "start:dev": "pnpm codegen:dev",
+    "start:dev": "pnpm codegen",
     "build": "orval --config orval.config.js",
     "lint": "biome lint",
     "type-check": "tsc --noEmit",
     "clean": "rm -rf .turbo && rm -rf node_modules && rm -rf dist",
-    "codegen": "orval --config orval.config.js",
-    "codegen:local": "NODE_ENV=local orval --config orval.config.js",
-    "codegen:stg": "NODE_ENV=staging orval --config orval.config.js",
-    "codegen:prod": "NODE_ENV=production orval --config orval.config.js"
+    "codegen": "orval --config orval.config.js"
   },
   "dependencies": {
     "@tanstack/react-query": "catalog:",
@@ -37,7 +34,6 @@
   "devDependencies": {
     "@types/node": "catalog:",
     "orval": "^7.8.0",
-    "tsup": "catalog:",
     "typescript": "catalog:"
   },
   "engines": {
