@@ -34,22 +34,6 @@ model Group {
   userAssociations  UserAssociation[]
 }
 
-model Exercise {
-  id          String    @id @default(uuid())
-  seq         Int       @unique @default(autoincrement())
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime? @updatedAt @db.Timestamptz(6)
-  removedAt   DateTime? @db.Timestamptz(6)
-  duration    Int
-  count       Int
-  taskId      String    @unique
-  description String?
-  imageFileId String?
-  videoFileId String?
-  name        String
-  task        Task      @relation(fields: [taskId], references: [id])
-}
-
 model Tenant {
   id          String       @id @default(uuid())
   seq         Int          @unique @default(autoincrement())
@@ -68,84 +52,6 @@ model Tenant {
   role        Role         @relation(fields: [roleId], references: [id])
   space       Space        @relation(fields: [spaceId], references: [id])
   user        User         @relation(fields: [userId], references: [id])
-  timelines   Timeline[]
-}
-
-model Timeline {
-  id        String    @id @default(uuid())
-  seq       Int       @unique @default(autoincrement())
-  createdAt DateTime  @default(now()) @db.Timestamptz(6)
-  updatedAt DateTime? @updatedAt @db.Timestamptz(6)
-  removedAt DateTime? @db.Timestamptz(6)
-  tenantId  String
-  sessions  Session[]
-  tenant    Tenant    @relation(fields: [tenantId], references: [id])
-}
-
-model Session {
-  id                 String              @id @default(uuid())
-  seq                Int                 @unique @default(autoincrement())
-  createdAt          DateTime            @default(now()) @db.Timestamptz(6)
-  updatedAt          DateTime?           @updatedAt @db.Timestamptz(6)
-  removedAt          DateTime?           @db.Timestamptz(6)
-  type               SessionTypes        @default(ONE_TIME)
-  repeatCycleType    RepeatCycleTypes?
-  startDateTime      DateTime?           @db.Timestamptz(6)
-  endDateTime        DateTime?           @db.Timestamptz(6)
-  recurringDayOfWeek RecurringDayOfWeek?
-  recurringMonth     Int?
-  timelineId         String
-  label              String
-  name               String
-  program            Program?
-  timeline           Timeline            @relation(fields: [timelineId], references: [id])
-}
-
-model Program {
-  id           String    @id @default(uuid())
-  seq          Int       @unique @default(autoincrement())
-  createdAt    DateTime  @default(now()) @db.Timestamptz(6)
-  updatedAt    DateTime? @updatedAt @db.Timestamptz(6)
-  removedAt    DateTime? @db.Timestamptz(6)
-  routineId    String    @unique
-  sessionId    String    @unique
-  instructorId String
-  capacity     Int
-  routine      Routine   @relation(fields: [routineId], references: [id])
-  session      Session   @relation(fields: [sessionId], references: [id])
-}
-
-model Activity {
-  id        String    @id @default(uuid())
-  seq       Int       @unique @default(autoincrement())
-  createdAt DateTime  @default(now()) @db.Timestamptz(6)
-  updatedAt DateTime? @updatedAt @db.Timestamptz(6)
-  removedAt DateTime? @db.Timestamptz(6)
-  routineId String
-  taskId    String
-
-  @@unique([routineId, taskId])
-}
-
-model Routine {
-  id        String    @id @default(uuid())
-  seq       Int       @unique @default(autoincrement())
-  createdAt DateTime  @default(now()) @db.Timestamptz(6)
-  updatedAt DateTime? @updatedAt @db.Timestamptz(6)
-  removedAt DateTime? @db.Timestamptz(6)
-  name      String
-  label     String
-  program   Program?
-}
-
-model Task {
-  id        String    @id @default(uuid())
-  seq       Int       @unique @default(autoincrement())
-  createdAt DateTime  @default(now()) @db.Timestamptz(6)
-  updatedAt DateTime? @updatedAt @db.Timestamptz(6)
-  removedAt DateTime? @db.Timestamptz(6)
-  tenantId  String
-  exercise  Exercise?
 }
 
 model Assignment {
