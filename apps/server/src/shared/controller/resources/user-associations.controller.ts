@@ -20,7 +20,6 @@ import {
 } from "@shared/schema";
 import { plainToInstance } from "class-transformer";
 import { ApiResponseEntity } from "../../decorator/api-response-entity.decorator";
-import { Auth } from "../../decorator/auth.decorator";
 import { UserAssociationsService } from "../../service/resources/user-associations.service";
 
 @ApiTags("USER-ASSOCIATIONS")
@@ -29,7 +28,6 @@ export class UserAssociationsController {
 	constructor(private readonly service: UserAssociationsService) {}
 
 	@Post()
-	@Auth()
 	@HttpCode(HttpStatus.OK)
 	@ApiResponseEntity(UserAssociationDto, HttpStatus.OK)
 	async createUserAssociation(
@@ -45,7 +43,6 @@ export class UserAssociationsController {
 	}
 
 	@Get(":userAssociationId")
-	@Auth()
 	@HttpCode(HttpStatus.OK)
 	@ApiResponseEntity(UserAssociationDto, HttpStatus.OK)
 	async getUserAssociation(
@@ -60,7 +57,6 @@ export class UserAssociationsController {
 	}
 
 	@Patch("removedAt")
-	@Auth()
 	@HttpCode(HttpStatus.OK)
 	@ApiResponseEntity(UserAssociationDto, HttpStatus.OK)
 	async removeUserAssociations(@Body() userAssociationIds: string[]) {
@@ -74,7 +70,6 @@ export class UserAssociationsController {
 	}
 
 	@Patch(":userAssociationId")
-	@Auth()
 	@HttpCode(HttpStatus.OK)
 	@ApiResponseEntity(UserAssociationDto, HttpStatus.OK)
 	async updateUserAssociation(
@@ -93,7 +88,6 @@ export class UserAssociationsController {
 	}
 
 	@Patch(":userAssociationId/removedAt")
-	@Auth()
 	@HttpCode(HttpStatus.OK)
 	@ApiResponseEntity(UserAssociationDto, HttpStatus.OK)
 	async removeUserAssociation(
@@ -108,7 +102,6 @@ export class UserAssociationsController {
 	}
 
 	@Delete(":userAssociationId")
-	@Auth()
 	@HttpCode(HttpStatus.OK)
 	@ApiResponseEntity(UserAssociationDto, HttpStatus.OK)
 	async deleteUserAssociation(
@@ -123,7 +116,6 @@ export class UserAssociationsController {
 	}
 
 	@Get()
-	@Auth()
 	@HttpCode(HttpStatus.OK)
 	@ApiResponseEntity(UserAssociationDto, HttpStatus.OK, { isArray: true })
 	async getUserAssociationsByQuery(@Query() query: QueryUserAssociationDto) {

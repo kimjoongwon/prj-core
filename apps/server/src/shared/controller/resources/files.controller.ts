@@ -10,7 +10,7 @@ import {
 	UploadedFiles,
 } from "@nestjs/common";
 import { CreateFileDto, FileDto, ResponseEntity } from "@shared/schema";
-import { ApiResponseEntity, Auth } from "../../decorator";
+import { ApiResponseEntity } from "../../decorator";
 import { ApiFile } from "../../decorator/swagger.schema";
 import { FilesService } from "../../service/resources/files.service";
 
@@ -19,7 +19,6 @@ export class FilesController {
 	constructor(private readonly service: FilesService) {}
 
 	@Get(":fileId")
-	@Auth()
 	@HttpCode(HttpStatus.OK)
 	@ApiResponseEntity(FileDto, HttpStatus.OK)
 	async getFileById(@Param("fileId") fileId: string) {
@@ -28,7 +27,6 @@ export class FilesController {
 	}
 
 	@Post()
-	@Auth()
 	@HttpCode(HttpStatus.CREATED)
 	@ApiResponseEntity(FileDto, HttpStatus.CREATED)
 	async createFile(@Body() createFileDto: CreateFileDto) {
@@ -41,7 +39,6 @@ export class FilesController {
 	}
 
 	@Patch(":fileId/removedAt")
-	@Auth()
 	@HttpCode(HttpStatus.OK)
 	@ApiResponseEntity(FileDto, HttpStatus.OK)
 	async removeFileById(@Param("fileId") fileId: string) {
@@ -54,7 +51,6 @@ export class FilesController {
 	}
 
 	@Patch(":fileId")
-	@Auth()
 	@HttpCode(HttpStatus.OK)
 	@ApiResponseEntity(FileDto, HttpStatus.OK)
 	@ApiFile(

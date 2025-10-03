@@ -18,7 +18,7 @@ import {
 	UpdateCategoryDto,
 } from "@shared/schema";
 import { plainToInstance } from "class-transformer";
-import { ApiResponseEntity, Auth } from "../../decorator";
+import { ApiResponseEntity } from "../../decorator";
 import { CategoriesService } from "../../service";
 
 @ApiTags("CATEGORIES")
@@ -26,7 +26,6 @@ import { CategoriesService } from "../../service";
 export class CategoriesController {
 	constructor(private readonly categoriesService: CategoriesService) {}
 
-	@Auth()
 	@ApiResponseEntity(CategoryDto, HttpStatus.OK, { isArray: true })
 	@Get()
 	async getCategoriesByQuery(@Query() query: QueryCategoryDto) {
@@ -40,7 +39,6 @@ export class CategoriesController {
 		);
 	}
 
-	@Auth()
 	@ApiResponseEntity(CategoryDto)
 	@Post()
 	async createCategory(@Body() createCategoryDto: CreateCategoryDto) {
@@ -54,7 +52,6 @@ export class CategoriesController {
 		);
 	}
 
-	@Auth()
 	@ApiResponseEntity(CategoryDto)
 	@Get(":categoryId")
 	async getCategoryById(@Param("categoryId") categoryId: string) {
@@ -67,7 +64,6 @@ export class CategoriesController {
 		);
 	}
 
-	@Auth()
 	@ApiResponseEntity(CategoryDto)
 	@Patch(":categoryId")
 	async updateCategoryById(
@@ -85,7 +81,6 @@ export class CategoriesController {
 		);
 	}
 
-	@Auth()
 	@ApiResponseEntity(CategoryDto)
 	@Delete(":categoryId")
 	async deleteCategoryById(@Param("categoryId") id: string) {

@@ -21,6 +21,7 @@ export class JwtAuthGuard extends AuthGuard("jwt") {
 			PUBLIC_ROUTE_KEY,
 			context.getHandler(),
 		);
+
 		const request = context.switchToHttp().getRequest();
 
 		this.logger.error(

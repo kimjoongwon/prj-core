@@ -22,7 +22,7 @@ import {
 } from "@shared/schema";
 import { plainToInstance } from "class-transformer";
 import { Request } from "express";
-import { ApiResponseEntity, Auth } from "../../decorator";
+import { ApiResponseEntity } from "../../decorator";
 import { UsersService } from "../../service/resources/users.service";
 
 @ApiTags("USERS")
@@ -33,7 +33,6 @@ export class UsersController {
 	constructor(private readonly service: UsersService) {}
 
 	@Post()
-	@Auth()
 	@HttpCode(HttpStatus.OK)
 	@ApiResponseEntity(UserDto, HttpStatus.OK)
 	async createUser(@Body() createUserDto: CreateUserDto) {
@@ -48,7 +47,6 @@ export class UsersController {
 	}
 
 	@Get(":userId")
-	@Auth()
 	@HttpCode(HttpStatus.OK)
 	@ApiResponseEntity(UserDto, HttpStatus.OK)
 	async getUser(@Param("userId") userId: string) {
@@ -61,7 +59,6 @@ export class UsersController {
 	}
 
 	@Patch("removedAt")
-	@Auth()
 	@HttpCode(HttpStatus.OK)
 	@ApiResponseEntity(UserDto, HttpStatus.OK)
 	async removeUsers(@Body() userIds: string[]) {
@@ -73,7 +70,6 @@ export class UsersController {
 	}
 
 	@Patch(":userId")
-	@Auth()
 	@HttpCode(HttpStatus.OK)
 	@ApiResponseEntity(UserDto, HttpStatus.OK)
 	async updateUser(
@@ -89,7 +85,6 @@ export class UsersController {
 	}
 
 	@Patch(":userId/removedAt")
-	@Auth()
 	@HttpCode(HttpStatus.OK)
 	@ApiResponseEntity(UserDto, HttpStatus.OK)
 	async removeUser(@Param("userId") userId: string) {
@@ -102,7 +97,6 @@ export class UsersController {
 	}
 
 	@Delete(":userId")
-	@Auth()
 	@HttpCode(HttpStatus.OK)
 	@ApiResponseEntity(UserDto, HttpStatus.OK)
 	async deleteUser(@Param("userId") userId: string) {
@@ -115,7 +109,6 @@ export class UsersController {
 	}
 
 	@Get()
-	@Auth()
 	@HttpCode(HttpStatus.OK)
 	@ApiResponseEntity(UserDto, HttpStatus.OK, { isArray: true })
 	async getUsersByQuery(@Query() query: QueryUserDto, @Req() req: Request) {

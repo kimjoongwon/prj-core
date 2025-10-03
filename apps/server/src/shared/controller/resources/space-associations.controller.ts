@@ -20,7 +20,6 @@ import {
 } from "@shared/schema";
 import { plainToInstance } from "class-transformer";
 import { ApiResponseEntity } from "../../decorator/api-response-entity.decorator";
-import { Auth } from "../../decorator/auth.decorator";
 import { SpaceAssociationsService } from "../../service/resources/space-associations.service";
 
 @ApiTags("SPACE-ASSOCIATIONS")
@@ -29,7 +28,6 @@ export class SpaceAssociationsController {
 	constructor(private readonly service: SpaceAssociationsService) {}
 
 	@Post()
-	@Auth()
 	@HttpCode(HttpStatus.OK)
 	@ApiResponseEntity(SpaceAssociationDto, HttpStatus.OK)
 	async createSpaceAssociation(
@@ -47,7 +45,6 @@ export class SpaceAssociationsController {
 	}
 
 	@Get(":spaceAssociationId")
-	@Auth()
 	@HttpCode(HttpStatus.OK)
 	@ApiResponseEntity(SpaceAssociationDto, HttpStatus.OK)
 	async getSpaceAssociation(
@@ -62,7 +59,6 @@ export class SpaceAssociationsController {
 	}
 
 	@Patch("removedAt")
-	@Auth()
 	@HttpCode(HttpStatus.OK)
 	@ApiResponseEntity(SpaceAssociationDto, HttpStatus.OK)
 	async removeSpaceAssociations(@Body() spaceAssociationIds: string[]) {
@@ -76,7 +72,6 @@ export class SpaceAssociationsController {
 	}
 
 	@Patch(":spaceAssociationId")
-	@Auth()
 	@HttpCode(HttpStatus.OK)
 	@ApiResponseEntity(SpaceAssociationDto, HttpStatus.OK)
 	async updateSpaceAssociation(
@@ -95,7 +90,6 @@ export class SpaceAssociationsController {
 	}
 
 	@Patch(":spaceAssociationId/removedAt")
-	@Auth()
 	@HttpCode(HttpStatus.OK)
 	@ApiResponseEntity(SpaceAssociationDto, HttpStatus.OK)
 	async removeSpaceAssociation(
@@ -110,7 +104,6 @@ export class SpaceAssociationsController {
 	}
 
 	@Delete(":spaceAssociationId")
-	@Auth()
 	@HttpCode(HttpStatus.OK)
 	@ApiResponseEntity(SpaceAssociationDto, HttpStatus.OK)
 	async deleteSpaceAssociation(
@@ -125,7 +118,6 @@ export class SpaceAssociationsController {
 	}
 
 	@Get()
-	@Auth()
 	@HttpCode(HttpStatus.OK)
 	@ApiResponseEntity(SpaceAssociationDto, HttpStatus.OK, { isArray: true })
 	async getSpaceAssociationsByQuery(@Query() query: QuerySpaceAssociationDto) {

@@ -81,14 +81,6 @@ export const modules: (DynamicModule | Promise<DynamicModule>)[] = [
 		useFactory: async (configService: ConfigService) => {
 			const logConfig = await configService.get("log");
 
-			// Map NestJS log levels to pino log levels
-			const logLevelMap = {
-				debug: "debug",
-				log: "info",
-				warn: "warn",
-				error: "error",
-			};
-
 			// Use the highest priority level from the array
 			// Priority: error > warn > log > debug
 			let logLevel = "info";

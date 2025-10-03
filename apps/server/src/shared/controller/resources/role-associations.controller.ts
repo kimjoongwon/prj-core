@@ -20,7 +20,6 @@ import {
 } from "@shared/schema";
 import { plainToInstance } from "class-transformer";
 import { ApiResponseEntity } from "../../decorator/api-response-entity.decorator";
-import { Auth } from "../../decorator/auth.decorator";
 import { RoleAssociationsService } from "../../service/resources/role-associations.service";
 
 @ApiTags("ROLE-ASSOCIATIONS")
@@ -29,7 +28,6 @@ export class RoleAssociationsController {
 	constructor(private readonly service: RoleAssociationsService) {}
 
 	@Post()
-	@Auth()
 	@HttpCode(HttpStatus.OK)
 	@ApiResponseEntity(RoleAssociationDto, HttpStatus.OK)
 	async createRoleAssociation(
@@ -45,7 +43,6 @@ export class RoleAssociationsController {
 	}
 
 	@Get(":roleAssociationId")
-	@Auth()
 	@HttpCode(HttpStatus.OK)
 	@ApiResponseEntity(RoleAssociationDto, HttpStatus.OK)
 	async getRoleAssociation(
@@ -60,7 +57,6 @@ export class RoleAssociationsController {
 	}
 
 	@Patch("removedAt")
-	@Auth()
 	@HttpCode(HttpStatus.OK)
 	@ApiResponseEntity(RoleAssociationDto, HttpStatus.OK)
 	async removeRoleAssociations(@Body() roleAssociationIds: string[]) {
@@ -74,7 +70,6 @@ export class RoleAssociationsController {
 	}
 
 	@Patch(":roleAssociationId")
-	@Auth()
 	@HttpCode(HttpStatus.OK)
 	@ApiResponseEntity(RoleAssociationDto, HttpStatus.OK)
 	async updateRoleAssociation(
@@ -93,7 +88,6 @@ export class RoleAssociationsController {
 	}
 
 	@Patch(":roleAssociationId/removedAt")
-	@Auth()
 	@HttpCode(HttpStatus.OK)
 	@ApiResponseEntity(RoleAssociationDto, HttpStatus.OK)
 	async removeRoleAssociation(
@@ -108,7 +102,6 @@ export class RoleAssociationsController {
 	}
 
 	@Delete(":roleAssociationId")
-	@Auth()
 	@HttpCode(HttpStatus.OK)
 	@ApiResponseEntity(RoleAssociationDto, HttpStatus.OK)
 	async deleteRoleAssociation(
@@ -123,7 +116,6 @@ export class RoleAssociationsController {
 	}
 
 	@Get()
-	@Auth()
 	@HttpCode(HttpStatus.OK)
 	@ApiResponseEntity(RoleAssociationDto, HttpStatus.OK, { isArray: true })
 	async getRoleAssociationsByQuery(@Query() query: QueryRoleAssociationDto) {

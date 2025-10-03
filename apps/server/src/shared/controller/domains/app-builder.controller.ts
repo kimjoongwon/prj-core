@@ -2,8 +2,7 @@ import { Controller, Get, Req } from "@nestjs/common";
 import { ApiTags } from "@nestjs/swagger";
 import { AppBuilderDto, ResponseEntity } from "@shared/schema";
 import { Request } from "express";
-import { ApiResponseEntity } from "../../decorator";
-import { Auth } from "../../decorator/auth.decorator";
+import { ApiResponseEntity, Public } from "../../decorator";
 import { AppBuilderService } from "../../service/domains/app-builder.service";
 
 // 응답 메시지 상수
@@ -26,7 +25,7 @@ export class AppBuilderController {
 	constructor(private readonly appBuilderService: AppBuilderService) {}
 
 	@Get()
-	@Auth({ public: true, injectTenant: false })
+	@Public()
 	@ApiResponseEntity(AppBuilderDto, 200)
 	async getAppBuilder(@Req() req: Request) {
 		const isAuthenticated = this.checkAuthenticationStatus(req);

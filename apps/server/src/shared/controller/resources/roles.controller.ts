@@ -19,7 +19,7 @@ import {
 	UpdateRoleDto,
 } from "@shared/schema";
 import { plainToInstance } from "class-transformer";
-import { ApiResponseEntity, Auth } from "../../decorator";
+import { ApiResponseEntity } from "../../decorator";
 import { RolesService } from "../../service";
 
 @ApiTags("SPACES")
@@ -28,7 +28,6 @@ export class RolesController {
 	constructor(private readonly service: RolesService) {}
 
 	@Post()
-	@Auth()
 	@HttpCode(HttpStatus.OK)
 	@ApiResponseEntity(RoleDto, HttpStatus.OK)
 	async createRole(@Body() createRoleDto: CreateRoleDto) {
@@ -41,7 +40,6 @@ export class RolesController {
 	}
 
 	@Get(":roleId")
-	@Auth()
 	@HttpCode(HttpStatus.OK)
 	@ApiResponseEntity(RoleDto, HttpStatus.OK)
 	async getRole(@Param("roleId") roleId: string) {
@@ -54,7 +52,6 @@ export class RolesController {
 	}
 
 	@Patch(":roleId")
-	@Auth()
 	@HttpCode(HttpStatus.OK)
 	@ApiResponseEntity(RoleDto, HttpStatus.OK)
 	async updateRole(
@@ -66,7 +63,6 @@ export class RolesController {
 	}
 
 	@Patch(":roleId/removedAt")
-	@Auth()
 	@HttpCode(HttpStatus.OK)
 	@ApiResponseEntity(RoleDto, HttpStatus.OK)
 	async removeRole(@Param("roleId") roleId: string) {
@@ -79,7 +75,6 @@ export class RolesController {
 	}
 
 	@Delete(":roleId")
-	@Auth()
 	@HttpCode(HttpStatus.OK)
 	@ApiResponseEntity(RoleDto, HttpStatus.OK)
 	async deleteRole(@Param("roleId") roleId: string) {
@@ -92,7 +87,6 @@ export class RolesController {
 	}
 
 	@Get()
-	@Auth()
 	@HttpCode(HttpStatus.OK)
 	@ApiResponseEntity(RoleDto, HttpStatus.OK, { isArray: true })
 	async getRolesByQuery(@Query() query: QueryRoleDto) {

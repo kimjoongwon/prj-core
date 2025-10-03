@@ -20,7 +20,7 @@ import {
 	UpdateTenantDto,
 } from "@shared/schema";
 import { plainToInstance } from "class-transformer";
-import { ApiResponseEntity, Auth } from "../../decorator";
+import { ApiResponseEntity } from "../../decorator";
 import { ContextProvider } from "../../provider/context.provider";
 import { TenantsService } from "../../service/resources/tenants.service";
 
@@ -30,7 +30,6 @@ export class TenantsController {
 	constructor(private readonly service: TenantsService) {}
 
 	@Get("my")
-	@Auth()
 	@HttpCode(HttpStatus.OK)
 	@ApiResponseEntity(TenantDto, HttpStatus.OK, { isArray: true })
 	async getMyTenants() {
@@ -45,7 +44,6 @@ export class TenantsController {
 	}
 
 	@Post()
-	@Auth()
 	@HttpCode(HttpStatus.OK)
 	@ApiResponseEntity(TenantDto, HttpStatus.OK)
 	async createTenant(@Body() createTenantDto: CreateTenantDto) {
@@ -59,7 +57,6 @@ export class TenantsController {
 	}
 
 	@Get(":tenantId")
-	@Auth()
 	@HttpCode(HttpStatus.OK)
 	@ApiResponseEntity(TenantDto, HttpStatus.OK)
 	async getTenantById(@Param("tenantId") tenantId: string) {
@@ -72,7 +69,6 @@ export class TenantsController {
 	}
 
 	@Patch(":tenantId")
-	@Auth()
 	@HttpCode(HttpStatus.OK)
 	@ApiResponseEntity(TenantDto, HttpStatus.OK)
 	async updateTenantById(
@@ -88,7 +84,6 @@ export class TenantsController {
 	}
 
 	@Patch(":tenantId/removedAt")
-	@Auth()
 	@HttpCode(HttpStatus.OK)
 	@ApiResponseEntity(TenantDto, HttpStatus.OK)
 	async removeTenantById(@Param("tenantId") tenantId: string) {
@@ -101,7 +96,6 @@ export class TenantsController {
 	}
 
 	@Delete(":tenantId")
-	@Auth()
 	@HttpCode(HttpStatus.OK)
 	@ApiResponseEntity(TenantDto, HttpStatus.OK)
 	async deleteTenant(@Param("tenantId") tenantId: string) {
@@ -114,7 +108,6 @@ export class TenantsController {
 	}
 
 	@Get()
-	@Auth()
 	@HttpCode(HttpStatus.OK)
 	@ApiResponseEntity(TenantDto, HttpStatus.OK, { isArray: true })
 	async getTenantsByQuery(@Query() query: QueryTenantDto) {

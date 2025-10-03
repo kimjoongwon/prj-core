@@ -19,7 +19,7 @@ import {
 	ResponseEntity,
 } from "@shared/schema";
 import { plainToInstance } from "class-transformer";
-import { ApiResponseEntity, Auth } from "../../decorator";
+import { ApiResponseEntity } from "../../decorator";
 import { AssignmentsService } from "../../service/resources/assignments.service";
 
 @ApiTags("ASSIGNMENTS")
@@ -28,7 +28,6 @@ export class AssignmentsController {
 	constructor(private readonly service: AssignmentsService) {}
 
 	@Post()
-	@Auth()
 	@HttpCode(HttpStatus.OK)
 	@ApiResponseEntity(AssignmentDto, HttpStatus.OK)
 	async createAssignment(@Body() createAssignmentDto: CreateAssignmentDto) {
@@ -42,7 +41,6 @@ export class AssignmentsController {
 	}
 
 	@Get(":assignmentId")
-	@Auth()
 	@HttpCode(HttpStatus.OK)
 	@ApiResponseEntity(AssignmentDto, HttpStatus.OK)
 	async getAssignment(@Param("assignmentId") assignmentId: string) {
@@ -56,7 +54,6 @@ export class AssignmentsController {
 	}
 
 	@Patch("removedAt")
-	@Auth()
 	@HttpCode(HttpStatus.OK)
 	@ApiResponseEntity(AssignmentDto, HttpStatus.OK)
 	async removeAssignments(@Body() assignmentIds: string[]) {
@@ -67,7 +64,6 @@ export class AssignmentsController {
 	}
 
 	@Patch(":assignmentId/removedAt")
-	@Auth()
 	@HttpCode(HttpStatus.OK)
 	@ApiResponseEntity(AssignmentDto, HttpStatus.OK)
 	async removeAssignmentById(@Param("assignmentId") assignmentId: string) {
@@ -80,7 +76,6 @@ export class AssignmentsController {
 	}
 
 	@Delete(":assignmentId")
-	@Auth()
 	@HttpCode(HttpStatus.OK)
 	@ApiResponseEntity(AssignmentDto, HttpStatus.OK)
 	async deleteAssignment(@Param("assignmentId") assignmentId: string) {
@@ -93,7 +88,6 @@ export class AssignmentsController {
 	}
 
 	@Get()
-	@Auth()
 	@HttpCode(HttpStatus.OK)
 	@ApiResponseEntity(AssignmentDto, HttpStatus.OK, { isArray: true })
 	async getAssignmentsByQuery(@Query() query: QueryAssignmentDto) {

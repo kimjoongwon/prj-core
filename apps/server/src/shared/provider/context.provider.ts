@@ -129,4 +129,30 @@ export class ContextProvider {
 			ContextProvider.set("spaceId", context.spaceId);
 		}
 	}
+
+	/**
+	 * 인증 컨텍스트를 배치로 가져오기
+	 */
+	static getAuthContext(): {
+		user?: UserDto;
+		tenant?: TenantDto;
+		tenantId?: string;
+		spaceId?: string;
+	} | null {
+		const user = ContextProvider.getAuthUser();
+		const tenant = ContextProvider.getTenant();
+		const tenantId = ContextProvider.getTenantId();
+		const spaceId = ContextProvider.getSpaceId();
+
+		if (!user && !tenant && !tenantId && !spaceId) {
+			return null;
+		}
+
+		return {
+			user,
+			tenant,
+			tenantId,
+			spaceId,
+		};
+	}
 }

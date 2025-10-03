@@ -20,7 +20,7 @@ import {
 	UpdateExerciseDto,
 } from "@shared/schema";
 import { plainToInstance } from "class-transformer";
-import { ApiResponseEntity, Auth } from "../../decorator";
+import { ApiResponseEntity } from "../../decorator";
 import { ExercisesService } from "../../service/resources/exercises.service";
 
 @ApiTags("EXERCISES")
@@ -29,7 +29,6 @@ export class ExercisesController {
 	constructor(private readonly service: ExercisesService) {}
 
 	@Get()
-	@Auth()
 	@HttpCode(HttpStatus.OK)
 	@ApiResponseEntity(ExerciseDto, HttpStatus.OK, { isArray: true })
 	async getExercisesByQuery(@Query() query: QueryExerciseDto) {
@@ -43,7 +42,6 @@ export class ExercisesController {
 	}
 
 	@Post()
-	@Auth()
 	@HttpCode(HttpStatus.OK)
 	@ApiResponseEntity(ExerciseDto, HttpStatus.OK)
 	async createExercise(@Body() createExerciseDto: CreateExerciseDto) {
@@ -56,7 +54,6 @@ export class ExercisesController {
 	}
 
 	@Get(":exerciseId")
-	@Auth()
 	@HttpCode(HttpStatus.OK)
 	@ApiResponseEntity(ExerciseDto, HttpStatus.OK)
 	async getExercise(@Param("exerciseId") exerciseId: string) {
@@ -69,7 +66,6 @@ export class ExercisesController {
 	}
 
 	@Patch(":exerciseId")
-	@Auth()
 	@HttpCode(HttpStatus.OK)
 	@ApiResponseEntity(ExerciseDto, HttpStatus.OK)
 	async updateExercise(
@@ -88,7 +84,6 @@ export class ExercisesController {
 	}
 
 	@Patch(":exerciseId/removedAt")
-	@Auth()
 	@HttpCode(HttpStatus.OK)
 	@ApiResponseEntity(ExerciseDto, HttpStatus.OK)
 	async removeExercise(@Param("exerciseId") exerciseId: string) {
@@ -101,7 +96,6 @@ export class ExercisesController {
 	}
 
 	@Delete(":exerciseId")
-	@Auth()
 	@HttpCode(HttpStatus.OK)
 	@ApiResponseEntity(ExerciseDto, HttpStatus.OK)
 	async deleteExercise(@Param("exerciseId") exerciseId: string) {

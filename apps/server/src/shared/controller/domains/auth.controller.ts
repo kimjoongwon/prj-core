@@ -19,7 +19,7 @@ import {
 } from "@shared/schema";
 import { plainToInstance } from "class-transformer";
 import { Request, Response } from "express";
-import { Auth, Public } from "../../decorator";
+import { Public } from "../../decorator";
 import { ApiResponseEntity } from "../../decorator/api-response-entity.decorator";
 import { ContextProvider } from "../../provider";
 import { AuthService } from "../../service/domains/auth.service";
@@ -33,6 +33,7 @@ export class AuthController {
 		private readonly tokenService: TokenService,
 	) {}
 
+	@Public()
 	@ApiResponseEntity(TokenDto, HttpStatus.OK)
 	@Post("login")
 	async login(
@@ -60,6 +61,7 @@ export class AuthController {
 		);
 	}
 
+	@Public()
 	@ApiResponseEntity(TokenDto, HttpStatus.OK)
 	@Post("token/refresh")
 	async refreshToken(
@@ -88,7 +90,6 @@ export class AuthController {
 		});
 	}
 
-	@Auth()
 	@ApiResponse({ status: HttpStatus.OK, type: TokenDto })
 	@Get("new-token")
 	async getNewToken(
@@ -127,7 +128,6 @@ export class AuthController {
 		);
 	}
 
-	@Auth()
 	@HttpCode(HttpStatus.OK)
 	@Get("verify-token")
 	@ApiResponseEntity(Boolean, HttpStatus.OK)
@@ -137,7 +137,6 @@ export class AuthController {
 		return new ResponseEntity(HttpStatus.OK, "토큰 유효성 검증 완료", isValid);
 	}
 
-	@Auth()
 	@HttpCode(HttpStatus.OK)
 	@Post("logout")
 	@ApiResponseEntity(Boolean, HttpStatus.OK)

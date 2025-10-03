@@ -20,7 +20,6 @@ import {
 } from "@shared/schema";
 import { plainToInstance } from "class-transformer";
 import { ApiResponseEntity } from "../../decorator/api-response-entity.decorator";
-import { Auth } from "../../decorator/auth.decorator";
 import { FileAssociationsService } from "../../service/resources/file-associations.service";
 
 @ApiTags("FILE-ASSOCIATIONS")
@@ -29,7 +28,6 @@ export class FileAssociationsController {
 	constructor(private readonly service: FileAssociationsService) {}
 
 	@Post()
-	@Auth()
 	@HttpCode(HttpStatus.OK)
 	@ApiResponseEntity(FileAssociationDto, HttpStatus.OK)
 	async createFileAssociation(
@@ -45,7 +43,6 @@ export class FileAssociationsController {
 	}
 
 	@Get(":fileAssociationId")
-	@Auth()
 	@HttpCode(HttpStatus.OK)
 	@ApiResponseEntity(FileAssociationDto, HttpStatus.OK)
 	async getFileAssociation(
@@ -60,7 +57,6 @@ export class FileAssociationsController {
 	}
 
 	@Patch("removedAt")
-	@Auth()
 	@HttpCode(HttpStatus.OK)
 	@ApiResponseEntity(FileAssociationDto, HttpStatus.OK)
 	async removeFileAssociations(@Body() fileAssociationIds: string[]) {
@@ -73,7 +69,6 @@ export class FileAssociationsController {
 	}
 
 	@Patch(":fileAssociationId")
-	@Auth()
 	@HttpCode(HttpStatus.OK)
 	@ApiResponseEntity(FileAssociationDto, HttpStatus.OK)
 	async updateFileAssociation(
@@ -92,7 +87,6 @@ export class FileAssociationsController {
 	}
 
 	@Patch(":fileAssociationId/removedAt")
-	@Auth()
 	@HttpCode(HttpStatus.OK)
 	@ApiResponseEntity(FileAssociationDto, HttpStatus.OK)
 	async removeFileAssociation(
@@ -107,7 +101,6 @@ export class FileAssociationsController {
 	}
 
 	@Delete(":fileAssociationId")
-	@Auth()
 	@HttpCode(HttpStatus.OK)
 	@ApiResponseEntity(FileAssociationDto, HttpStatus.OK)
 	async deleteFileAssociation(
@@ -122,7 +115,6 @@ export class FileAssociationsController {
 	}
 
 	@Get()
-	@Auth()
 	@HttpCode(HttpStatus.OK)
 	@ApiResponseEntity(FileAssociationDto, HttpStatus.OK, { isArray: true })
 	async getFileAssociationsByQuery(@Query() query: QueryFileAssociationDto) {

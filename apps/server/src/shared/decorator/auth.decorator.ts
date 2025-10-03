@@ -1,17 +1,10 @@
-import {
-	applyDecorators,
-	SetMetadata,
-	UseGuards,
-	UseInterceptors,
-} from "@nestjs/common";
+import { applyDecorators, SetMetadata, UseGuards } from "@nestjs/common";
 import { ApiCookieAuth, ApiUnauthorizedResponse } from "@nestjs/swagger";
 import { $Enums, RoleCategoryNames } from "@shared/schema";
-import { JwtAuthGuard } from "../guard";
 import { RoleCategoryGuard } from "../guard/role-category.guard";
 import { RoleGroupGuard } from "../guard/role-group.guard";
 import { RolesGuard } from "../guard/roles.guard";
-import { AuthUserInterceptor } from "../interceptor";
-import { PublicRoute } from "./public-route.decorator";
+import { Public } from "./public.decorator";
 import { RoleCategories } from "./role-categories.decorator";
 import { RoleGroups } from "./role-groups.decorator";
 import { Roles } from "./roles.decorator";
@@ -42,32 +35,27 @@ export function Auth(options: AuthOptions = {}): MethodDecorator {
 			public: isPublicRoute,
 			injectTenant,
 		}),
-		PublicRoute(isPublicRoute),
 		Roles(roles),
 	];
 
+	// Public 라우트 처리
+	if (isPublicRoute) {
+		decorators.push(Public());
+		return applyDecorators(...decorators);
+	}
+
+	// 역할 기반 권한 검증 추가 (JWT는 전역으로 처리됨)
+	decorators.push(UseGuards(RolesGuard));
+
 	if (groups.length > 0) {
 		decorators.push(RoleGroups(groups));
+		decorators.push(UseGuards(RoleGroupGuard));
 	}
 
 	if (categories.length > 0) {
 		decorators.push(RoleCategories(categories));
+		decorators.push(UseGuards(RoleCategoryGuard));
 	}
-
-	if (!isPublicRoute) {
-		decorators.push(UseGuards(JwtAuthGuard));
-		decorators.push(UseGuards(RolesGuard));
-
-		if (categories.length > 0) {
-			decorators.push(UseGuards(RoleCategoryGuard));
-		}
-
-		if (groups.length > 0) {
-			decorators.push(UseGuards(RoleGroupGuard));
-		}
-	}
-
-	decorators.push(UseInterceptors(AuthUserInterceptor));
 
 	return applyDecorators(...decorators);
 }

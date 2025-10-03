@@ -20,7 +20,7 @@ import {
 	type UpdateRoutineDto,
 } from "@shared/schema";
 import { plainToInstance } from "class-transformer";
-import { ApiResponseEntity, Auth } from "../../decorator";
+import { ApiResponseEntity } from "../../decorator";
 import { RoutinesService } from "../../service/resources/routines.service";
 
 @ApiTags("ROUTINE")
@@ -29,7 +29,6 @@ export class RoutinesController {
 	constructor(private readonly service: RoutinesService) {}
 
 	@Post()
-	@Auth()
 	@HttpCode(HttpStatus.OK)
 	@ApiResponseEntity(RoutineDto, HttpStatus.OK)
 	async createRoutine(@Body() createRoutineDto: CreateRoutineDto) {
@@ -42,7 +41,6 @@ export class RoutinesController {
 	}
 
 	@Get(":routineId")
-	@Auth()
 	@HttpCode(HttpStatus.OK)
 	@ApiResponseEntity(RoutineDto, HttpStatus.OK)
 	async getRoutine(@Param("routineId") routineId: string) {
@@ -55,7 +53,6 @@ export class RoutinesController {
 	}
 
 	@Patch(":routineId")
-	@Auth()
 	@HttpCode(HttpStatus.OK)
 	@ApiResponseEntity(RoutineDto, HttpStatus.OK)
 	async updateRoutine(
@@ -71,7 +68,6 @@ export class RoutinesController {
 	}
 
 	@Patch(":routineId/removedAt")
-	@Auth()
 	@HttpCode(HttpStatus.OK)
 	@ApiResponseEntity(RoutineDto, HttpStatus.OK)
 	async removeRoutine(@Param("routineId") routineId: string) {
@@ -84,7 +80,6 @@ export class RoutinesController {
 	}
 
 	@Delete(":routineId")
-	@Auth()
 	@HttpCode(HttpStatus.OK)
 	@ApiResponseEntity(RoutineDto, HttpStatus.OK)
 	async deleteRoutine(@Param("routineId") routineId: string) {
@@ -97,7 +92,6 @@ export class RoutinesController {
 	}
 
 	@Get()
-	@Auth()
 	@HttpCode(HttpStatus.OK)
 	@ApiResponseEntity(RoutineDto, HttpStatus.OK, { isArray: true })
 	async getRoutinesByQuery(@Query() query: QueryRoutineDto) {

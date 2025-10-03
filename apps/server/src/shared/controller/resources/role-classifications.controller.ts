@@ -25,7 +25,6 @@ import {
 	UpdateRoleClassificationDto,
 } from "@shared/schema";
 import { plainToInstance } from "class-transformer";
-import { Auth } from "../../decorator";
 import { RoleClassificationsService } from "../../service/resources/role-classifications.service";
 
 @ApiTags("ROLE_CLASSIFICATIONS")
@@ -34,7 +33,6 @@ export class RoleClassificationsController {
 	constructor(private readonly service: RoleClassificationsService) {}
 
 	@Post()
-	@Auth()
 	@HttpCode(HttpStatus.OK)
 	@ApiOperation({
 		operationId: "createRoleClassification",
@@ -54,7 +52,6 @@ export class RoleClassificationsController {
 	}
 
 	@Get(":id")
-	@Auth()
 	@HttpCode(HttpStatus.OK)
 	@ApiOperation({
 		operationId: "getRoleClassificationById",
@@ -74,7 +71,6 @@ export class RoleClassificationsController {
 	}
 
 	@Patch(":id")
-	@Auth()
 	@HttpCode(HttpStatus.OK)
 	@ApiOperation({
 		operationId: "updateRoleClassificationById",
@@ -96,7 +92,6 @@ export class RoleClassificationsController {
 	}
 
 	@Patch(":id/removedAt")
-	@Auth()
 	@HttpCode(HttpStatus.OK)
 	@ApiOperation({
 		operationId: "removeRoleClassificationById",
@@ -116,7 +111,6 @@ export class RoleClassificationsController {
 	}
 
 	@Delete(":id")
-	@Auth()
 	@HttpCode(HttpStatus.OK)
 	@ApiOperation({
 		operationId: "deleteRoleClassificationById",
@@ -136,7 +130,6 @@ export class RoleClassificationsController {
 	}
 
 	@Get()
-	@Auth()
 	@HttpCode(HttpStatus.OK)
 	@ApiOperation({
 		operationId: "getRoleClassificationsByQuery",

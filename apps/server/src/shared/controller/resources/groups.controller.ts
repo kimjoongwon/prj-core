@@ -18,7 +18,7 @@ import {
 	type UpdateGroupDto,
 } from "@shared/schema";
 import { plainToInstance } from "class-transformer";
-import { ApiResponseEntity, Auth, Public } from "../../decorator";
+import { ApiResponseEntity, Public } from "../../decorator";
 import { GroupsService } from "../../service";
 
 @ApiTags("GROUPS")
@@ -26,7 +26,6 @@ import { GroupsService } from "../../service";
 export class GroupsController {
 	constructor(private readonly groupService: GroupsService) {}
 
-	@Auth()
 	@ApiResponse({
 		status: 201,
 		description: "The record has been successfully created.",

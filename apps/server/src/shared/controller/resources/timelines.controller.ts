@@ -20,7 +20,7 @@ import {
 	type UpdateTimelineDto,
 } from "@shared/schema";
 import { plainToInstance } from "class-transformer";
-import { ApiResponseEntity, Auth } from "../../decorator";
+import { ApiResponseEntity } from "../../decorator";
 import { TimelinesService } from "../../service/resources/timelines.service";
 
 @ApiTags("TIMELINE")
@@ -29,7 +29,6 @@ export class TimelinesController {
 	constructor(private readonly service: TimelinesService) {}
 
 	@Post()
-	@Auth()
 	@HttpCode(HttpStatus.OK)
 	@ApiResponseEntity(TimelineDto, HttpStatus.OK)
 	async createTimeline(@Body() createTimelineDto: CreateTimelineDto) {
@@ -43,7 +42,6 @@ export class TimelinesController {
 	}
 
 	@Get(":timelineId")
-	@Auth()
 	@HttpCode(HttpStatus.OK)
 	@ApiResponseEntity(TimelineDto, HttpStatus.OK)
 	async getTimeline(@Param("timelineId") timelineId: string) {
@@ -56,7 +54,6 @@ export class TimelinesController {
 	}
 
 	@Patch("removedAt")
-	@Auth()
 	@HttpCode(HttpStatus.OK)
 	@ApiResponseEntity(TimelineDto, HttpStatus.OK)
 	async removeTimelines(@Body() timelineIds: string[]) {
@@ -68,7 +65,6 @@ export class TimelinesController {
 	}
 
 	@Patch(":timelineId")
-	@Auth()
 	@HttpCode(HttpStatus.OK)
 	@ApiResponseEntity(TimelineDto, HttpStatus.OK)
 	async updateTimeline(
@@ -87,7 +83,6 @@ export class TimelinesController {
 	}
 
 	@Patch(":timelineId/removedAt")
-	@Auth()
 	@HttpCode(HttpStatus.OK)
 	@ApiResponseEntity(TimelineDto, HttpStatus.OK)
 	async removeTimeline(@Param("timelineId") timelineId: string) {
@@ -100,7 +95,6 @@ export class TimelinesController {
 	}
 
 	@Delete(":timelineId")
-	@Auth()
 	@HttpCode(HttpStatus.OK)
 	@ApiResponseEntity(TimelineDto, HttpStatus.OK)
 	async deleteTimeline(@Param("timelineId") timelineId: string) {
@@ -113,7 +107,6 @@ export class TimelinesController {
 	}
 
 	@Get()
-	@Auth()
 	@HttpCode(HttpStatus.OK)
 	@ApiResponseEntity(TimelineDto, HttpStatus.OK, { isArray: true })
 	async getTimelinesByQuery(@Query() query: QueryTimelineDto) {
