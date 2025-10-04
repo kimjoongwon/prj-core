@@ -10,21 +10,14 @@ import {
 	authConfig,
 	awsConfig,
 	corsConfig,
-	logConfigFactory,
 	smtpConfig,
 } from "./shared";
 
-export const modules: (DynamicModule | Promise<DynamicModule>)[] = [
+export const globalModules: (DynamicModule | Promise<DynamicModule>)[] = [
 	ConfigModule.forRoot({
 		isGlobal: true,
-		load: [
-			authConfig,
-			appConfig,
-			corsConfig,
-			smtpConfig,
-			awsConfig,
-			logConfigFactory,
-		],
+		envFilePath: [".env.local"],
+		load: [authConfig, appConfig, corsConfig, smtpConfig, awsConfig],
 	}),
 	MailerModule.forRootAsync({
 		useFactory: async (config: ConfigService) => {
@@ -78,38 +71,45 @@ export const modules: (DynamicModule | Promise<DynamicModule>)[] = [
 	}),
 	LoggerModule.forRootAsync({
 		inject: [ConfigService],
-		useFactory: async (configService: ConfigService) => {
-			const logConfig = await configService.get("log");
+		useFactory: () => {
+			const isDevelopment = process.env.NODE_ENV !== "production";
+			const isTest = process.env.NODE_ENV === "test";
 
-			// Use the highest priority level from the array
-			// Priority: error > warn > log > debug
-			let logLevel = "info";
-			if (logConfig.level.includes("error")) {
-				logLevel = "error";
-			} else if (logConfig.level.includes("warn")) {
-				logLevel = "warn";
-			} else if (logConfig.level.includes("log")) {
-				logLevel = "info";
-			} else if (logConfig.level.includes("debug")) {
-				logLevel = "debug";
+			// Test 환경: 에러만 로깅
+			if (isTest) {
+				return {
+					pinoHttp: {
+						level: "error",
+						timestamp: false,
+					},
+				};
 			}
 
+			// Development 환경: 상세 로깅
+			if (isDevelopment) {
+				return {
+					pinoHttp: {
+						level: "debug",
+						transport: {
+							target: "pino-pretty",
+							options: {
+								colorize: true,
+								singleLine: true,
+								translateTime: "yyyy-mm-dd HH:MM:ss",
+								ignore: "pid,hostname",
+								messageFormat: "🕒 {time} {level} - {msg}",
+							},
+						},
+						timestamp: true,
+					},
+				};
+			}
+
+			// Production 환경: JSON 로그
 			return {
 				pinoHttp: {
-					level: logLevel,
-					transport: logConfig.prettyPrint
-						? {
-								target: "pino-pretty",
-								options: {
-									colorize: logConfig.colorize,
-									singleLine: true,
-									translateTime: "yyyy-mm-dd HH:MM:ss",
-									ignore: "pid,hostname",
-									messageFormat: "🕒 {time} {level} - {msg}",
-								},
-							}
-						: undefined,
-					timestamp: logConfig.timestamp,
+					level: "info",
+					timestamp: true,
 				},
 			};
 		},

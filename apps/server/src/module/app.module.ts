@@ -6,16 +6,13 @@ import {
 	OnModuleInit,
 } from "@nestjs/common";
 import { RouterModule } from "@nestjs/core";
-
+// Shared imports
+import { LoggerMiddleware } from "@shared";
 // Third-party imports
 import { CaslModule } from "nest-casl";
 
-// Shared imports
-
-import { LoggerMiddleware } from "@shared";
-// Feature modules
-// test commit
-import { modules } from "../main.config";
+// Global modules
+import { globalModules } from "../global.module";
 import { AppBuilderModule } from "./app-builder.module";
 import { AuthModule } from "./auth.module";
 import { CategoriesModule } from "./categories.module";
@@ -40,7 +37,7 @@ import { UsersModule } from "./users.module";
 
 @Module({
 	imports: [
-		...modules,
+		...globalModules,
 		PrismaModule,
 		CaslModule,
 		GroundsModule,
