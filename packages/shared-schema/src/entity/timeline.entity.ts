@@ -2,7 +2,7 @@ import { Timeline as TimelineEntity } from "@prisma/client";
 import { UseDto } from "../decorator/use-dto.decorator";
 import { TimelineDto } from "../dto/timeline.dto";
 import { AbstractEntity } from "./abstract.entity";
-import { Tenant } from "./tenant.entity";
+import { Session } from "./session.entity";
 
 @UseDto(TimelineDto)
 export class Timeline
@@ -10,5 +10,8 @@ export class Timeline
 	implements TimelineEntity
 {
 	tenantId: string;
-	tenant?: Tenant;
+	name: string;
+	description: string | null;
+
+	sessions?: Session[];
 }

@@ -3,34 +3,35 @@ import {
 	ClassField,
 	NumberField,
 	StringField,
+	StringFieldOptional,
 	UUIDField,
 	UUIDFieldOptional,
 } from "../decorator";
 import { AbstractDto } from "./abstract.dto";
-import { CreateTaskDto } from "./create";
+import { TaskDto } from "./task.dto";
 
 export class ExerciseDto extends AbstractDto implements ExcerciesEntity {
-	@StringField()
-	name: string;
-
-	@StringField()
-	description: string;
-
-	@UUIDFieldOptional()
-	imageFileId: string;
-
-	@UUIDFieldOptional()
-	videoFileId: string;
-
-	@UUIDField()
-	taskId: string;
-
 	@NumberField()
 	duration: number;
 
 	@NumberField()
 	count: number;
 
-	@ClassField(() => CreateTaskDto, { required: false })
-	task?: CreateTaskDto;
+	@UUIDField()
+	taskId: string;
+
+	@StringFieldOptional()
+	description: string | null;
+
+	@UUIDFieldOptional()
+	imageFileId: string | null;
+
+	@UUIDFieldOptional()
+	videoFileId: string | null;
+
+	@StringField()
+	name: string;
+
+	@ClassField(() => TaskDto)
+	task?: TaskDto;
 }

@@ -1,28 +1,16 @@
 import { Task as TaskEntity } from "@prisma/client";
-import { UUIDField } from "../decorator";
+import { ClassField, UUIDField } from "../decorator";
 import { AbstractDto } from "./abstract.dto";
-
-// export const createTaskValidationObject: Omit<ValidationRecord<CreateTaskDto>, 'content'> = {
-//   name: {
-//     required: {
-//       value: true,
-//       message: '이름은 필수입니다.',
-//     },
-//   },
-//   label: {
-//     required: {
-//       value: true,
-//       message: '라벨은 필수입니다.',
-//     },
-//   },
-// };
-
-// export const defaultCreateTaskDtoObject: Omit<CreateTaskDto, 'content'> = {
-//   name: '',
-//   label: '',
-// };
+import { ActivityDto } from "./activity.dto";
+import { ExerciseDto } from "./exercise.dto";
 
 export class TaskDto extends AbstractDto implements TaskEntity {
 	@UUIDField()
 	tenantId: string;
+
+	@ClassField(() => ExerciseDto)
+	exercise?: ExerciseDto;
+
+	@ClassField(() => ActivityDto, { isArray: true })
+	activities?: ActivityDto[];
 }

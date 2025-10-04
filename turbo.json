@@ -145,6 +145,12 @@
     "lint:fix": {},
     // 코드 포맷팅
     "format": {},
+    // shared-schema 개발 모드 (watch)
+    "@shared/schema#start:dev": {
+      "cache": false,
+      "persistent": true,
+      "dependsOn": ["@shared/schema#build"] // 초기 빌드 후 watch
+    },
     // 개발 서버 시작
     "start:dev": {
       "cache": false, // 개발 모드는 캐싱하지 않음

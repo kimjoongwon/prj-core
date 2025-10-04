@@ -2,22 +2,23 @@ import { $Enums, Session as SessionEntity } from "@prisma/client";
 import { UseDto } from "../decorator/use-dto.decorator";
 import { SessionDto } from "../dto/session.dto";
 import { AbstractEntity } from "./abstract.entity";
+import { Program } from "./program.entity";
+import { Timeline } from "./timeline.entity";
 
 @UseDto(SessionDto)
 export class Session
 	extends AbstractEntity<SessionDto>
 	implements SessionEntity
 {
-	recurringMonth: number;
-	name: string;
-	label: string;
 	type: $Enums.SessionTypes;
-	startTime: Date;
-	endTime: Date;
+	repeatCycleType: $Enums.RepeatCycleTypes | null;
+	startDateTime: Date | null;
+	endDateTime: Date | null;
+	recurringDayOfWeek: $Enums.RecurringDayOfWeek | null;
 	timelineId: string;
-	repeatCycleType: $Enums.RepeatCycleTypes;
-	baseDate: Date;
-	startDateTime: Date;
-	endDateTime: Date;
-	recurringDayOfWeek: $Enums.RecurringDayOfWeek;
+	name: string;
+	description: string | null;
+
+	programs?: Program[];
+	timeline?: Timeline;
 }

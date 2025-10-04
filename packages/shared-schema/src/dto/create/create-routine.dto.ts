@@ -4,4 +4,6 @@ import { RoutineDto } from "../routine.dto";
 
 export class CreateRoutineDto extends OmitType(RoutineDto, [
 	...COMMON_ENTITY_FIELDS,
+	"programs",
+	"activities",
 ]) {}

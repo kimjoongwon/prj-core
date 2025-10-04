@@ -1,4 +1,3 @@
-import { InputProps } from "@heroui/react";
 import { applyDecorators } from "@nestjs/common";
 import { ApiProperty, ApiPropertyOptions } from "@nestjs/swagger";
 import { Transform, Type } from "class-transformer";
@@ -38,14 +37,13 @@ import {
 	IsUndefinable,
 } from "./validator.decorators";
 
-interface IFieldOptions extends Omit<InputProps, "type"> {
+interface IFieldOptions {
 	required?: boolean;
 	each?: boolean;
 	swagger?: boolean;
 	nullable?: boolean;
 	groups?: string[];
 	formType?: string;
-	sectionName?: string;
 }
 interface INumberFieldOptions extends IFieldOptions {
 	min?: number;
