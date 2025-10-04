@@ -4,5 +4,5 @@ import { TimelineDto } from "../timeline.dto";
 
 export class CreateTimelineDto extends OmitType(TimelineDto, [
 	...COMMON_ENTITY_FIELDS,
-	"tenant",
+	"sessions",
 ]) {}

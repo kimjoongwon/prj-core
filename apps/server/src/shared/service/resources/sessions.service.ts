@@ -1,5 +1,10 @@
 import { Injectable } from "@nestjs/common";
-import { CreateSessionDto, Prisma, QuerySessionDto } from "@shared/schema";
+import {
+	CreateSessionDto,
+	Prisma,
+	QuerySessionDto,
+	UpdateSessionDto,
+} from "@shared/schema";
 import { SessionsRepository } from "../../repository/sessions.repository";
 
 @Injectable()
@@ -31,8 +36,11 @@ export class SessionsService {
 		};
 	}
 
-	updateById(id: string, data: Prisma.SessionUpdateInput) {
-		return this.repository.update({ where: { id }, data });
+	updateById(
+		id: string,
+		{ seq, timelineId, programs, timeline, ...data }: UpdateSessionDto,
+	) {
+		return this.repository.update({ where: { id }, data: data });
 	}
 
 	removeById(id: string) {

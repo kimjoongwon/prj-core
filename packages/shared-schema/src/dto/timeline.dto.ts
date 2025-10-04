@@ -1,12 +1,23 @@
 import { Timeline } from "@prisma/client";
-import { ClassField, UUIDField } from "../decorator/field.decorators";
+import {
+	ClassField,
+	StringField,
+	StringFieldOptional,
+	UUIDField,
+} from "../decorator/field.decorators";
 import { AbstractDto } from "./abstract.dto";
-import { TenantDto } from "./tenant.dto";
+import { SessionDto } from "./session.dto";
 
 export class TimelineDto extends AbstractDto implements Timeline {
 	@UUIDField()
 	tenantId: string;
 
-	@ClassField(() => TenantDto)
-	tenant?: TenantDto;
+	@StringField()
+	name: string;
+
+	@StringFieldOptional()
+	description: string | null;
+
+	@ClassField(() => SessionDto, { isArray: true })
+	sessions?: SessionDto[];
 }

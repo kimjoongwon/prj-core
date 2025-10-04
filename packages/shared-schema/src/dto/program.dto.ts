@@ -1,14 +1,16 @@
 import { Program as ProgramEntity } from "@prisma/client";
-import { NumberField, UUIDField } from "../decorator";
+import {
+	ClassField,
+	NumberField,
+	StringField,
+	StringFieldOptional,
+	UUIDField,
+} from "../decorator";
 import { AbstractDto } from "./abstract.dto";
+import { RoutineDto } from "./routine.dto";
+import { SessionDto } from "./session.dto";
 
 export class ProgramDto extends AbstractDto implements ProgramEntity {
-	@UUIDField()
-	instructorId: string;
-
-	@NumberField()
-	capacity: number;
-
 	@UUIDField()
 	routineId: string;
 
@@ -16,5 +18,20 @@ export class ProgramDto extends AbstractDto implements ProgramEntity {
 	sessionId: string;
 
 	@UUIDField()
-	tenancyId: string;
+	instructorId: string;
+
+	@NumberField()
+	capacity: number;
+
+	@StringField()
+	name: string;
+
+	@StringFieldOptional()
+	level: string | null;
+
+	@ClassField(() => RoutineDto)
+	routine?: RoutineDto;
+
+	@ClassField(() => SessionDto)
+	session?: SessionDto;
 }
