@@ -11,6 +11,7 @@ import {
 } from "@nestjs/common";
 import { ApiTags } from "@nestjs/swagger";
 import {
+	ApiResponseEntity,
 	CategoryDto,
 	CreateCategoryDto,
 	QueryCategoryDto,
@@ -18,7 +19,6 @@ import {
 	UpdateCategoryDto,
 } from "@shared/schema";
 import { plainToInstance } from "class-transformer";
-import { ApiResponseEntity } from "@shared/schema";
 import { CategoriesService } from "../../service";
 
 @ApiTags("CATEGORIES")

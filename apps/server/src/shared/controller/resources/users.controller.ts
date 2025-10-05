@@ -14,6 +14,7 @@ import {
 } from "@nestjs/common";
 import { ApiTags } from "@nestjs/swagger";
 import {
+	ApiResponseEntity,
 	CreateUserDto,
 	QueryUserDto,
 	ResponseEntity,
@@ -22,7 +23,6 @@ import {
 } from "@shared/schema";
 import { plainToInstance } from "class-transformer";
 import { Request } from "express";
-import { ApiResponseEntity } from "@shared/schema";
 import { UsersService } from "../../service/resources/users.service";
 
 @ApiTags("USERS")

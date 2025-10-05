@@ -1,7 +1,7 @@
 import { CanActivate, ExecutionContext, Injectable } from "@nestjs/common";
 import { Reflector } from "@nestjs/core";
-import _ from "lodash";
 import { PUBLIC_ROUTE_KEY } from "@shared/schema";
+import _ from "lodash";
 
 @Injectable()
 export class PublicGuard implements CanActivate {

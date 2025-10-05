@@ -6,12 +6,12 @@
  */
 
 export interface UserAssociationDto {
-  id: string;
-  seq: number;
-  createdAt: string;
-  updatedAt: string;
-  /** @nullable */
-  removedAt: string | null;
-  userId: string;
-  groupId: string;
+	id: string;
+	seq: number;
+	createdAt: string;
+	updatedAt: string;
+	/** @nullable */
+	removedAt: string | null;
+	userId: string;
+	groupId: string;
 }

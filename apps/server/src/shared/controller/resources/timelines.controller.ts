@@ -12,6 +12,7 @@ import {
 } from "@nestjs/common";
 import { ApiTags } from "@nestjs/swagger";
 import {
+	ApiResponseEntity,
 	type CreateTimelineDto,
 	PageMetaDto,
 	type QueryTimelineDto,
@@ -20,7 +21,6 @@ import {
 	type UpdateTimelineDto,
 } from "@shared/schema";
 import { plainToInstance } from "class-transformer";
-import { ApiResponseEntity } from "@shared/schema";
 import { TimelinesService } from "../../service/resources/timelines.service";
 
 @ApiTags("TIMELINE")

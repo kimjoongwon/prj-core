@@ -11,14 +11,15 @@ import {
 } from "@nestjs/common";
 import { ApiResponse, ApiTags } from "@nestjs/swagger";
 import {
+	ApiResponseEntity,
 	type CreateGroupDto,
 	GroupDto,
+	Public,
 	type QueryGroupDto,
 	ResponseEntity,
 	type UpdateGroupDto,
 } from "@shared/schema";
 import { plainToInstance } from "class-transformer";
-import { ApiResponseEntity, Public } from "@shared/schema";
 import { GroupsService } from "../../service";
 
 @ApiTags("GROUPS")

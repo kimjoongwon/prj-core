@@ -1,6 +1,6 @@
 import { Injectable, Logger } from "@nestjs/common";
-import { plainToInstance } from "class-transformer";
 import { Prisma, Routine, UseEntity } from "@shared/schema";
+import { plainToInstance } from "class-transformer";
 import { PrismaService } from "../service/prisma.service";
 
 @Injectable()
@@ -30,7 +30,9 @@ export class RoutinesRepository {
 		return plainToInstance(Routine, result);
 	}
 
-	async updateMany(args: Prisma.RoutineUpdateManyArgs): Promise<Prisma.BatchPayload> {
+	async updateMany(
+		args: Prisma.RoutineUpdateManyArgs,
+	): Promise<Prisma.BatchPayload> {
 		this.logger.debug(`Routine 다중 업데이트 중...`);
 		return await this.prisma.routine.updateMany(args);
 	}
@@ -64,13 +66,17 @@ export class RoutinesRepository {
 		return await this.prisma.routine.groupBy(args);
 	}
 
-	async createManyAndReturn(args: Prisma.RoutineCreateManyArgs): Promise<Routine[]> {
+	async createManyAndReturn(
+		args: Prisma.RoutineCreateManyArgs,
+	): Promise<Routine[]> {
 		this.logger.debug(`Routine 다중 생성 중...`);
 		const result = await this.prisma.routine.createManyAndReturn(args);
 		return result.map((item) => plainToInstance(Routine, item));
 	}
 
-	async deleteMany(args: Prisma.RoutineDeleteManyArgs): Promise<Prisma.BatchPayload> {
+	async deleteMany(
+		args: Prisma.RoutineDeleteManyArgs,
+	): Promise<Prisma.BatchPayload> {
 		this.logger.debug(`Routine 다중 삭제 중...`);
 		return await this.prisma.routine.deleteMany(args);
 	}

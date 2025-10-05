@@ -12,6 +12,7 @@ import {
 } from "@nestjs/common";
 import { ApiTags } from "@nestjs/swagger";
 import {
+	ApiResponseEntity,
 	CreateRoleAssociationDto,
 	QueryRoleAssociationDto,
 	ResponseEntity,
@@ -19,7 +20,6 @@ import {
 	UpdateRoleAssociationDto,
 } from "@shared/schema";
 import { plainToInstance } from "class-transformer";
-import { ApiResponseEntity } from "@shared/schema";
 import { RoleAssociationsService } from "../../service/resources/role-associations.service";
 
 @ApiTags("ROLE-ASSOCIATIONS")

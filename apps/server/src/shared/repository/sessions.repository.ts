@@ -1,6 +1,6 @@
 import { Injectable, Logger } from "@nestjs/common";
-import { plainToInstance } from "class-transformer";
 import { Prisma, Session, UseEntity } from "@shared/schema";
+import { plainToInstance } from "class-transformer";
 import { PrismaService } from "../service/prisma.service";
 
 @Injectable()
@@ -30,7 +30,9 @@ export class SessionsRepository {
 		return plainToInstance(Session, result);
 	}
 
-	async updateMany(args: Prisma.SessionUpdateManyArgs): Promise<Prisma.BatchPayload> {
+	async updateMany(
+		args: Prisma.SessionUpdateManyArgs,
+	): Promise<Prisma.BatchPayload> {
 		this.logger.debug(`Session 다중 업데이트 중...`);
 		return await this.prisma.session.updateMany(args);
 	}
@@ -64,13 +66,17 @@ export class SessionsRepository {
 		return await this.prisma.session.groupBy(args);
 	}
 
-	async createManyAndReturn(args: Prisma.SessionCreateManyArgs): Promise<Session[]> {
+	async createManyAndReturn(
+		args: Prisma.SessionCreateManyArgs,
+	): Promise<Session[]> {
 		this.logger.debug(`Session 다중 생성 중...`);
 		const result = await this.prisma.session.createManyAndReturn(args);
 		return result.map((item) => plainToInstance(Session, item));
 	}
 
-	async deleteMany(args: Prisma.SessionDeleteManyArgs): Promise<Prisma.BatchPayload> {
+	async deleteMany(
+		args: Prisma.SessionDeleteManyArgs,
+	): Promise<Prisma.BatchPayload> {
 		this.logger.debug(`Session 다중 삭제 중...`);
 		return await this.prisma.session.deleteMany(args);
 	}

@@ -4,14 +4,15 @@
  * Plate
  * OpenAPI spec version: 1.0.0
  */
-import type { SpaceDto } from './spaceDto';
-import type { GetSpacesByQuery200AllOfMeta } from './getSpacesByQuery200AllOfMeta';
+
+import type { GetSpacesByQuery200AllOfMeta } from "./getSpacesByQuery200AllOfMeta";
+import type { SpaceDto } from "./spaceDto";
 
 export type GetSpacesByQuery200AllOf = {
-  /** */
-  httpStatus?: number;
-  /** */
-  message?: string;
-  data?: SpaceDto[];
-  meta?: GetSpacesByQuery200AllOfMeta;
+	/** */
+	httpStatus?: number;
+	/** */
+	message?: string;
+	data?: SpaceDto[];
+	meta?: GetSpacesByQuery200AllOfMeta;
 };

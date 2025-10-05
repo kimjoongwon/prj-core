@@ -1,8 +1,12 @@
 import { Controller, Get, Req } from "@nestjs/common";
 import { ApiTags } from "@nestjs/swagger";
-import { AppBuilderDto, ResponseEntity } from "@shared/schema";
+import {
+	ApiResponseEntity,
+	AppBuilderDto,
+	Public,
+	ResponseEntity,
+} from "@shared/schema";
 import { Request } from "express";
-import { ApiResponseEntity, Public } from "@shared/schema";
 import { AppBuilderService } from "../../service/domains/app-builder.service";
 
 // 응답 메시지 상수

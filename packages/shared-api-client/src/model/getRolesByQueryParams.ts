@@ -4,18 +4,18 @@
  * Plate
  * OpenAPI spec version: 1.0.0
  */
-import type { SortOrder } from './sortOrder';
+import type { SortOrder } from "./sortOrder";
 
 export type GetRolesByQueryParams = {
-/**
- * @minimum 1
- */
-skip?: number;
-/**
- * @minimum 1
- * @maximum 50
- */
-take?: number;
-nameSortOrder?: SortOrder;
-createdAtSortOrder?: SortOrder;
+	/**
+	 * @minimum 1
+	 */
+	skip?: number;
+	/**
+	 * @minimum 1
+	 * @maximum 50
+	 */
+	take?: number;
+	nameSortOrder?: SortOrder;
+	createdAtSortOrder?: SortOrder;
 };

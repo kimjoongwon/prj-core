@@ -6,6 +6,6 @@
  */
 
 export interface CreateSpaceClassificationDto {
-  spaceId: string;
-  categoryId: string;
+	spaceId: string;
+	categoryId: string;
 }

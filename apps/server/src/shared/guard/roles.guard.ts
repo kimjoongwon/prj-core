@@ -5,9 +5,8 @@ import {
 	Injectable,
 } from "@nestjs/common";
 import { Reflector } from "@nestjs/core";
-import { $Enums, UserDto } from "@shared/schema";
+import { $Enums, Roles, UserDto } from "@shared/schema";
 import { isEmpty } from "lodash";
-import { Roles } from "@shared/schema";
 
 @Injectable()
 export class RolesGuard implements CanActivate {

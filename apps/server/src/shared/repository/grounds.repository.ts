@@ -1,6 +1,6 @@
 import { Injectable, Logger } from "@nestjs/common";
-import { plainToInstance } from "class-transformer";
 import { Ground, Prisma, UseEntity } from "@shared/schema";
+import { plainToInstance } from "class-transformer";
 import { PrismaService } from "../service/prisma.service";
 
 @Injectable()
@@ -30,7 +30,9 @@ export class GroundsRepository {
 		return plainToInstance(Ground, result);
 	}
 
-	async updateMany(args: Prisma.GroundUpdateManyArgs): Promise<Prisma.BatchPayload> {
+	async updateMany(
+		args: Prisma.GroundUpdateManyArgs,
+	): Promise<Prisma.BatchPayload> {
 		this.logger.debug(`Ground 다중 업데이트 중...`);
 		return await this.prisma.ground.updateMany(args);
 	}
@@ -64,13 +66,17 @@ export class GroundsRepository {
 		return await this.prisma.ground.groupBy(args);
 	}
 
-	async createManyAndReturn(args: Prisma.GroundCreateManyArgs): Promise<Ground[]> {
+	async createManyAndReturn(
+		args: Prisma.GroundCreateManyArgs,
+	): Promise<Ground[]> {
 		this.logger.debug(`Ground 다중 생성 중...`);
 		const result = await this.prisma.ground.createManyAndReturn(args);
 		return result.map((item) => plainToInstance(Ground, item));
 	}
 
-	async deleteMany(args: Prisma.GroundDeleteManyArgs): Promise<Prisma.BatchPayload> {
+	async deleteMany(
+		args: Prisma.GroundDeleteManyArgs,
+	): Promise<Prisma.BatchPayload> {
 		this.logger.debug(`Ground 다중 삭제 중...`);
 		return await this.prisma.ground.deleteMany(args);
 	}

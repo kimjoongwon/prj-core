@@ -1,6 +1,6 @@
 import { Injectable, Logger } from "@nestjs/common";
-import { plainToInstance } from "class-transformer";
 import { Exercise, Prisma, UseEntity } from "@shared/schema";
+import { plainToInstance } from "class-transformer";
 import { PrismaService } from "../service/prisma.service";
 
 @Injectable()
@@ -30,7 +30,9 @@ export class ExercisesRepository {
 		return plainToInstance(Exercise, result);
 	}
 
-	async updateMany(args: Prisma.ExerciseUpdateManyArgs): Promise<Prisma.BatchPayload> {
+	async updateMany(
+		args: Prisma.ExerciseUpdateManyArgs,
+	): Promise<Prisma.BatchPayload> {
 		this.logger.debug(`Exercise 다중 업데이트 중...`);
 		return await this.prisma.exercise.updateMany(args);
 	}
@@ -64,13 +66,17 @@ export class ExercisesRepository {
 		return await this.prisma.exercise.groupBy(args);
 	}
 
-	async createManyAndReturn(args: Prisma.ExerciseCreateManyArgs): Promise<Exercise[]> {
+	async createManyAndReturn(
+		args: Prisma.ExerciseCreateManyArgs,
+	): Promise<Exercise[]> {
 		this.logger.debug(`Exercise 다중 생성 중...`);
 		const result = await this.prisma.exercise.createManyAndReturn(args);
 		return result.map((item) => plainToInstance(Exercise, item));
 	}
 
-	async deleteMany(args: Prisma.ExerciseDeleteManyArgs): Promise<Prisma.BatchPayload> {
+	async deleteMany(
+		args: Prisma.ExerciseDeleteManyArgs,
+	): Promise<Prisma.BatchPayload> {
 		this.logger.debug(`Exercise 다중 삭제 중...`);
 		return await this.prisma.exercise.deleteMany(args);
 	}

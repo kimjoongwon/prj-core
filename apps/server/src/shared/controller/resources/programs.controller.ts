@@ -12,6 +12,7 @@ import {
 } from "@nestjs/common";
 import { ApiTags } from "@nestjs/swagger";
 import {
+	ApiResponseEntity,
 	type CreateProgramDto,
 	PageMetaDto,
 	ProgramDto,
@@ -20,7 +21,6 @@ import {
 	type UpdateProgramDto,
 } from "@shared/schema";
 import { plainToInstance } from "class-transformer";
-import { ApiResponseEntity } from "@shared/schema";
 import { ProgramsService } from "../../service/resources/programs.service";
 
 @ApiTags("PROGRAM")

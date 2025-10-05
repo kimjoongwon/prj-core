@@ -4,13 +4,13 @@
  * Plate
  * OpenAPI spec version: 1.0.0
  */
-import type { TokenDto } from './tokenDto';
+import type { TokenDto } from "./tokenDto";
 
 export type RefreshToken200AllOf = {
-  /** */
-  httpStatus?: number;
-  /** */
-  message?: string;
-  /** @nullable */
-  data?: TokenDto;
+	/** */
+	httpStatus?: number;
+	/** */
+	message?: string;
+	/** @nullable */
+	data?: TokenDto;
 };

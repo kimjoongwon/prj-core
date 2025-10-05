@@ -1,6 +1,6 @@
 import { Injectable, Logger } from "@nestjs/common";
-import { plainToInstance } from "class-transformer";
 import { Prisma, Subject, UseEntity } from "@shared/schema";
+import { plainToInstance } from "class-transformer";
 import { PrismaService } from "../service/prisma.service";
 
 @Injectable()
@@ -30,7 +30,9 @@ export class SubjectsRepository {
 		return plainToInstance(Subject, result);
 	}
 
-	async updateMany(args: Prisma.SubjectUpdateManyArgs): Promise<Prisma.BatchPayload> {
+	async updateMany(
+		args: Prisma.SubjectUpdateManyArgs,
+	): Promise<Prisma.BatchPayload> {
 		this.logger.debug(`Subject 다중 업데이트 중...`);
 		return await this.prisma.subject.updateMany(args);
 	}
@@ -64,13 +66,17 @@ export class SubjectsRepository {
 		return await this.prisma.subject.groupBy(args);
 	}
 
-	async createManyAndReturn(args: Prisma.SubjectCreateManyArgs): Promise<Subject[]> {
+	async createManyAndReturn(
+		args: Prisma.SubjectCreateManyArgs,
+	): Promise<Subject[]> {
 		this.logger.debug(`Subject 다중 생성 중...`);
 		const result = await this.prisma.subject.createManyAndReturn(args);
 		return result.map((item) => plainToInstance(Subject, item));
 	}
 
-	async deleteMany(args: Prisma.SubjectDeleteManyArgs): Promise<Prisma.BatchPayload> {
+	async deleteMany(
+		args: Prisma.SubjectDeleteManyArgs,
+	): Promise<Prisma.BatchPayload> {
 		this.logger.debug(`Subject 다중 삭제 중...`);
 		return await this.prisma.subject.deleteMany(args);
 	}

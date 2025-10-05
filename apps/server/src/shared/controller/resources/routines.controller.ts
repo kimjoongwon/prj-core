@@ -12,6 +12,7 @@ import {
 } from "@nestjs/common";
 import { ApiTags } from "@nestjs/swagger";
 import {
+	ApiResponseEntity,
 	type CreateRoutineDto,
 	PageMetaDto,
 	type QueryRoutineDto,
@@ -20,7 +21,6 @@ import {
 	type UpdateRoutineDto,
 } from "@shared/schema";
 import { plainToInstance } from "class-transformer";
-import { ApiResponseEntity } from "@shared/schema";
 import { RoutinesService } from "../../service/resources/routines.service";
 
 @ApiTags("ROUTINE")

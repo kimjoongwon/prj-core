@@ -18,6 +18,7 @@ import {
 	ApiTags,
 } from "@nestjs/swagger";
 import {
+	ApiResponseEntity,
 	CreateGroundDto,
 	GroundDto,
 	QueryGroundDto,
@@ -25,7 +26,6 @@ import {
 	UpdateGroundDto,
 } from "@shared/schema";
 import { plainToInstance } from "class-transformer";
-import { ApiResponseEntity } from "@shared/schema";
 import { GroundsService } from "../../service/resources/grounds.service";
 
 @ApiTags("GROUNDS")
