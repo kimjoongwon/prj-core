@@ -68,16 +68,17 @@ describe("UsersService", () => {
 	});
 
 	describe("getByEmail", () => {
-		it("should call repository.findFirst with correct args", async () => {
+		it("should call repository.findUnique with correct args", async () => {
 			const email = "test@example.com";
 			const expectedUser = createTestUserEntity();
 
-			repository.findFirst.mockResolvedValue(expectedUser);
+			repository.findUnique.mockResolvedValue(expectedUser);
 
 			const result = await service.getByEmail(email);
 
-			expect(repository.findFirst).toHaveBeenCalledWith({
+			expect(repository.findUnique).toHaveBeenCalledWith({
 				where: { email },
+				include: expect.any(Object),
 			});
 			expect(result).toEqual(expectedUser);
 		});
