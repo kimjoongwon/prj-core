@@ -1,28 +1,87 @@
-import { Injectable } from "@nestjs/common";
-import { Prisma, Program } from "@shared/schema";
-import { BaseRepository } from "../common/base.repository";
-import { UseEntity } from "@shared/schema";
+import { Injectable, Logger } from "@nestjs/common";
+import { plainToInstance } from "class-transformer";
+import { Prisma, Program, UseEntity } from "@shared/schema";
 import { PrismaService } from "../service/prisma.service";
 
 @Injectable()
 @UseEntity(Program)
-export class ProgramsRepository extends BaseRepository<
-	Prisma.ProgramCreateArgs,
-	Prisma.ProgramUpsertArgs,
-	Prisma.ProgramUpdateArgs,
-	Prisma.ProgramUpdateManyArgs,
-	Prisma.ProgramDeleteArgs,
-	Prisma.ProgramFindManyArgs,
-	Prisma.ProgramCountArgs,
-	Prisma.ProgramAggregateArgs,
-	Prisma.ProgramDeleteManyArgs,
-	Prisma.ProgramFindFirstArgs,
-	Prisma.ProgramFindUniqueArgs,
-	Prisma.ProgramGroupByArgs,
-	Prisma.ProgramCreateManyAndReturnArgs,
-	Program
-> {
-	constructor(prisma: PrismaService) {
-		super(prisma, "Program");
+export class ProgramsRepository {
+	private readonly logger: Logger;
+
+	constructor(private readonly prisma: PrismaService) {
+		this.logger = new Logger("Program");
+	}
+
+	async create(args: Prisma.ProgramCreateArgs): Promise<Program> {
+		this.logger.debug(`Program 생성 중...`);
+		const result = await this.prisma.program.create(args);
+		return plainToInstance(Program, result);
+	}
+
+	async upsert(args: Prisma.ProgramUpsertArgs): Promise<Program> {
+		this.logger.debug(`Program 업서트 중...`);
+		const result = await this.prisma.program.upsert(args);
+		return plainToInstance(Program, result);
+	}
+
+	async update(args: Prisma.ProgramUpdateArgs): Promise<Program> {
+		this.logger.debug(`Program 업데이트 중...`);
+		const result = await this.prisma.program.update(args);
+		return plainToInstance(Program, result);
+	}
+
+	async updateMany(args: Prisma.ProgramUpdateManyArgs): Promise<Prisma.BatchPayload> {
+		this.logger.debug(`Program 다중 업데이트 중...`);
+		return await this.prisma.program.updateMany(args);
+	}
+
+	async delete(args: Prisma.ProgramDeleteArgs): Promise<Program> {
+		this.logger.debug(`Program 삭제 중...`);
+		const result = await this.prisma.program.delete(args);
+		return plainToInstance(Program, result);
+	}
+
+	async findMany(args: Prisma.ProgramFindManyArgs): Promise<Program[]> {
+		this.logger.debug(`Program 다중 조회 중...`);
+		const result = await this.prisma.program.findMany(args);
+		return result.map((item) => plainToInstance(Program, item));
+	}
+
+	async findFirst(args: Prisma.ProgramFindFirstArgs): Promise<Program> {
+		this.logger.debug(`Program 최초 조회 중...`);
+		const result = await this.prisma.program.findFirst(args);
+		return plainToInstance(Program, result);
+	}
+
+	async findUnique(args: Prisma.ProgramFindUniqueArgs): Promise<Program> {
+		this.logger.debug(`Program 고유 조회 중...`);
+		const result = await this.prisma.program.findUnique(args);
+		return plainToInstance(Program, result);
+	}
+
+	async groupBy(args: any): Promise<any> {
+		this.logger.debug(`Program 그룹화 중...`);
+		return await this.prisma.program.groupBy(args);
+	}
+
+	async createManyAndReturn(args: Prisma.ProgramCreateManyArgs): Promise<Program[]> {
+		this.logger.debug(`Program 다중 생성 중...`);
+		const result = await this.prisma.program.createManyAndReturn(args);
+		return result.map((item) => plainToInstance(Program, item));
+	}
+
+	async deleteMany(args: Prisma.ProgramDeleteManyArgs): Promise<Prisma.BatchPayload> {
+		this.logger.debug(`Program 다중 삭제 중...`);
+		return await this.prisma.program.deleteMany(args);
+	}
+
+	async aggregate(args: Prisma.ProgramAggregateArgs): Promise<any> {
+		this.logger.debug(`Program 집계 중...`);
+		return await this.prisma.program.aggregate(args);
+	}
+
+	async count(args: Prisma.ProgramCountArgs): Promise<number> {
+		this.logger.debug(`Program 개수 세기 중...`);
+		return await this.prisma.program.count(args);
 	}
 }
