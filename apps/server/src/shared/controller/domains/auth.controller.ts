@@ -11,7 +11,9 @@ import {
 } from "@nestjs/common";
 import { ApiResponse, ApiTags } from "@nestjs/swagger";
 import {
+	ApiResponseEntity,
 	LoginPayloadDto,
+	Public,
 	ResponseEntity,
 	SignUpPayloadDto,
 	TokenDto,
@@ -19,8 +21,6 @@ import {
 } from "@shared/schema";
 import { plainToInstance } from "class-transformer";
 import { Request, Response } from "express";
-import { Public } from "../../decorator";
-import { ApiResponseEntity } from "../../decorator/api-response-entity.decorator";
 import { ContextProvider } from "../../provider";
 import { AuthService } from "../../service/domains/auth.service";
 import { TokenService } from "../../service/domains/token.service";
@@ -81,6 +81,10 @@ export class AuthController {
 		res.cookie("accessToken", newAccessToken, { httpOnly: true });
 
 		const user = await this.authService.getCurrentUser(newAccessToken);
+
+		if (!user) {
+			throw new UnauthorizedException("사용자를 찾을 수 없습니다");
+		}
 
 		return plainToInstance(TokenDto, {
 			accessToken: newAccessToken,

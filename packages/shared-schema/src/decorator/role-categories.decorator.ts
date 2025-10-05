@@ -1,5 +1,5 @@
 import { SetMetadata } from "@nestjs/common";
-import { RoleCategoryNames } from "@shared/schema";
+import { RoleCategoryNames } from "../enum/role-category-names.enum";
 
 export const ROLE_CATEGORIES_KEY = "roleCategories";
 

@@ -22,7 +22,7 @@ import {
 } from "@shared/schema";
 import { plainToInstance } from "class-transformer";
 import { Request } from "express";
-import { ApiResponseEntity } from "../../decorator";
+import { ApiResponseEntity } from "@shared/schema";
 import { UsersService } from "../../service/resources/users.service";
 
 @ApiTags("USERS")
@@ -129,7 +129,7 @@ export class UsersController {
 			return new ResponseEntity(
 				HttpStatus.OK,
 				"success",
-				users.map((user) => user?.toDto?.() ?? user),
+				users.map((user) => plainToInstance(UserDto, user)),
 				query.toPageMetaDto(count),
 			);
 		} catch (error) {

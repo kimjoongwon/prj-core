@@ -21,7 +21,7 @@ import {
 	UpdateSpaceDto,
 } from "@shared/schema";
 import { plainToInstance } from "class-transformer";
-import { ApiResponseEntity } from "../../decorator";
+import { ApiResponseEntity } from "@shared/schema";
 import { ContextProvider } from "../../provider";
 import { SpacesService } from "../../service";
 

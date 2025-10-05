@@ -56,8 +56,8 @@ export class UsersService {
 		});
 	}
 
-	getByIdWithTenants(id: string) {
-		return this.repository.findUnique({
+	async getByIdWithTenants(id: string) {
+		const user = await this.repository.findUnique({
 			where: { id },
 			include: {
 				tenants: {
@@ -89,6 +89,7 @@ export class UsersService {
 				profiles: true,
 			},
 		});
+		return user as any;
 	}
 
 	getByEmail(email: string) {

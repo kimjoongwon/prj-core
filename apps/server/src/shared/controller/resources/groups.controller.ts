@@ -18,7 +18,7 @@ import {
 	type UpdateGroupDto,
 } from "@shared/schema";
 import { plainToInstance } from "class-transformer";
-import { ApiResponseEntity, Public } from "../../decorator";
+import { ApiResponseEntity, Public } from "@shared/schema";
 import { GroupsService } from "../../service";
 
 @ApiTags("GROUPS")

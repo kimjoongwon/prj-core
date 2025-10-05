@@ -20,7 +20,7 @@ import {
 	UpdateExerciseDto,
 } from "@shared/schema";
 import { plainToInstance } from "class-transformer";
-import { ApiResponseEntity } from "../../decorator";
+import { ApiResponseEntity } from "@shared/schema";
 import { ExercisesService } from "../../service/resources/exercises.service";
 
 @ApiTags("EXERCISES")

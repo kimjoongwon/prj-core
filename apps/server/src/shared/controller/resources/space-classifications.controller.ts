@@ -19,7 +19,7 @@ import {
 	UpdateSpaceClassificationDto,
 } from "@shared/schema";
 import { plainToInstance } from "class-transformer";
-import { ApiResponseEntity } from "../../decorator";
+import { ApiResponseEntity } from "@shared/schema";
 import { SpaceClassificationsService } from "../../service/resources/space-classifications.service";
 
 @ApiTags("SPACE-CLASSIFICATIONS")

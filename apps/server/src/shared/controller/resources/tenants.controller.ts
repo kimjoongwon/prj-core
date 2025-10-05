@@ -20,7 +20,7 @@ import {
 	UpdateTenantDto,
 } from "@shared/schema";
 import { plainToInstance } from "class-transformer";
-import { ApiResponseEntity } from "../../decorator";
+import { ApiResponseEntity } from "@shared/schema";
 import { ContextProvider } from "../../provider/context.provider";
 import { TenantsService } from "../../service/resources/tenants.service";
 

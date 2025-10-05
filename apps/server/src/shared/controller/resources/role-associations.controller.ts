@@ -19,7 +19,7 @@ import {
 	UpdateRoleAssociationDto,
 } from "@shared/schema";
 import { plainToInstance } from "class-transformer";
-import { ApiResponseEntity } from "../../decorator/api-response-entity.decorator";
+import { ApiResponseEntity } from "@shared/schema";
 import { RoleAssociationsService } from "../../service/resources/role-associations.service";
 
 @ApiTags("ROLE-ASSOCIATIONS")

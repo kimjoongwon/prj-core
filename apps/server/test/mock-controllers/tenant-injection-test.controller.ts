@@ -2,7 +2,8 @@ import { Controller, Get, HttpStatus, Query } from "@nestjs/common";
 import { ApiProperty } from "@nestjs/swagger";
 import { ResponseEntity, RoleCategoryNames } from "@shared/schema";
 import { IsString } from "class-validator";
-import { Auth } from "../../src/shared/decorator";
+// Auth decorator is currently commented out
+// import { Auth } from "@shared/schema";
 
 class TestQueryDto {
 	@IsString()
@@ -20,7 +21,7 @@ class TestQueryDto {
  */
 @Controller("api/v1/test-tenant-injection")
 export class TenantInjectionTestController {
-	@Auth()
+	// @Auth()
 	@Get("debug-query")
 	async debugQuery(@Query() query: any) {
 		return new ResponseEntity(HttpStatus.OK, "Debug query parameters", {
@@ -30,7 +31,7 @@ export class TenantInjectionTestController {
 		});
 	}
 
-	@Auth({ injectTenant: false })
+	// @Auth({ injectTenant: false })
 	@Get("debug-query-no-injection")
 	async debugQueryNoInjection(@Query() query: any) {
 		return new ResponseEntity(
@@ -44,7 +45,7 @@ export class TenantInjectionTestController {
 		);
 	}
 
-	@Auth({ categories: [RoleCategoryNames.COMMON] })
+	// @Auth({ categories: [RoleCategoryNames.COMMON] })
 	@Get("test-role-category-common")
 	async testRoleCategoryCommon() {
 		return new ResponseEntity(
@@ -57,7 +58,7 @@ export class TenantInjectionTestController {
 		);
 	}
 
-	@Auth({ categories: [RoleCategoryNames.ADMIN] })
+	// @Auth({ categories: [RoleCategoryNames.ADMIN] })
 	@Get("test-role-category-admin")
 	async testRoleCategoryAdmin() {
 		return new ResponseEntity(
@@ -70,7 +71,7 @@ export class TenantInjectionTestController {
 		);
 	}
 
-	@Auth({ groups: ["일반"] })
+	// @Auth({ groups: ["일반"] })
 	@Get("test-role-group-normal")
 	async testRoleGroupNormal() {
 		return new ResponseEntity(
@@ -83,7 +84,7 @@ export class TenantInjectionTestController {
 		);
 	}
 
-	@Auth({ groups: ["VIP"] })
+	// @Auth({ groups: ["VIP"] })
 	@Get("test-role-group-vip")
 	async testRoleGroupVIP() {
 		return new ResponseEntity(

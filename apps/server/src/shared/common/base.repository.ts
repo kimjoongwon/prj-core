@@ -1,7 +1,7 @@
 import { Logger } from "@nestjs/common";
 import { Prisma } from "@shared/schema";
 import { plainToInstance } from "class-transformer";
-import { Constructor } from "../decorator/use-dto.decorator";
+import { Constructor } from "@shared/schema";
 import { PrismaService } from "../service/prisma.service";
 
 export class BaseRepository<

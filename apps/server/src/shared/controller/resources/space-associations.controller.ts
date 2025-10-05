@@ -19,7 +19,7 @@ import {
 	UpdateSpaceAssociationDto,
 } from "@shared/schema";
 import { plainToInstance } from "class-transformer";
-import { ApiResponseEntity } from "../../decorator/api-response-entity.decorator";
+import { ApiResponseEntity } from "@shared/schema";
 import { SpaceAssociationsService } from "../../service/resources/space-associations.service";
 
 @ApiTags("SPACE-ASSOCIATIONS")

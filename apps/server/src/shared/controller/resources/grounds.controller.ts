@@ -25,7 +25,7 @@ import {
 	UpdateGroundDto,
 } from "@shared/schema";
 import { plainToInstance } from "class-transformer";
-import { ApiResponseEntity } from "../../decorator";
+import { ApiResponseEntity } from "@shared/schema";
 import { GroundsService } from "../../service/resources/grounds.service";
 
 @ApiTags("GROUNDS")

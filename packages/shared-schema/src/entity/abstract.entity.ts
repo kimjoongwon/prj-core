@@ -13,7 +13,7 @@ export class AbstractEntity<DTO extends AbstractDto, O = never> {
 
 	toDto?(options?: O): DTO {
 		return plainToInstance(
-			// @ts-ignore
+			// @ts-expect-error
 			this.dtoClass,
 			this,
 			options as any,

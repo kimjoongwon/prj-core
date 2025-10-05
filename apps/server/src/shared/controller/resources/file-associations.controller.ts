@@ -12,6 +12,7 @@ import {
 } from "@nestjs/common";
 import { ApiTags } from "@nestjs/swagger";
 import {
+	ApiResponseEntity,
 	CreateFileAssociationDto,
 	FileAssociationDto,
 	QueryFileAssociationDto,
@@ -19,7 +20,6 @@ import {
 	UpdateFileAssociationDto,
 } from "@shared/schema";
 import { plainToInstance } from "class-transformer";
-import { ApiResponseEntity } from "../../decorator/api-response-entity.decorator";
 import { FileAssociationsService } from "../../service/resources/file-associations.service";
 
 @ApiTags("FILE-ASSOCIATIONS")
