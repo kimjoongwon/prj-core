@@ -1,2 +1,1 @@
-export * from "./logger.middleware";
-export * from "./prisma-logger.middleware";
+export { LoggerMiddleware } from "./logger.middleware";

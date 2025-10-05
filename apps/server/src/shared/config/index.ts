@@ -5,4 +5,18 @@ import corsConfig from "./cors.config";
 import smtpConfig from "./smtp.config";
 
 export { awsConfig, appConfig, authConfig, corsConfig, smtpConfig };
-export * from "./config.type";
+export type {
+	AllConfigType,
+	AppConfig,
+	AppleConfig,
+	AuthConfig,
+	AwsConfig,
+	CorsConfig,
+	DatabaseConfig,
+	FacebookConfig,
+	FileConfig,
+	GoogleConfig,
+	MailConfig,
+	SMTPConfig,
+	TwitterConfig,
+} from "./config.type";
