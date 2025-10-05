@@ -4,7 +4,7 @@
  * Plate
  * OpenAPI spec version: 1.0.0
  */
-import type { CreateTaskDto } from './createTaskDto';
+import type { TaskDto } from './taskDto';
 
 export interface ExerciseDto {
   id: string;
@@ -13,12 +13,12 @@ export interface ExerciseDto {
   updatedAt: string;
   /** @nullable */
   removedAt: string | null;
-  name: string;
-  description: string;
-  imageFileId?: string;
-  videoFileId?: string;
-  taskId: string;
   duration: number;
   count: number;
-  task?: CreateTaskDto;
+  taskId: string;
+  description?: string;
+  imageFileId?: string;
+  videoFileId?: string;
+  name: string;
+  task: TaskDto;
 }

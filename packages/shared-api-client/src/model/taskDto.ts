@@ -4,9 +4,10 @@
  * Plate
  * OpenAPI spec version: 1.0.0
  */
-import type { SessionDto } from './sessionDto';
+import type { ExerciseDto } from './exerciseDto';
+import type { ActivityDto } from './activityDto';
 
-export interface TimelineDto {
+export interface TaskDto {
   id: string;
   seq: number;
   createdAt: string;
@@ -14,7 +15,6 @@ export interface TimelineDto {
   /** @nullable */
   removedAt: string | null;
   tenantId: string;
-  name: string;
-  description?: string;
-  sessions: SessionDto[];
+  exercise: ExerciseDto;
+  activities: ActivityDto[];
 }

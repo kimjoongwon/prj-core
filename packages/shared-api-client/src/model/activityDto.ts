@@ -5,9 +5,9 @@
  * OpenAPI spec version: 1.0.0
  */
 import type { RoutineDto } from './routineDto';
-import type { SessionDto } from './sessionDto';
+import type { TaskDto } from './taskDto';
 
-export interface ProgramDto {
+export interface ActivityDto {
   id: string;
   seq: number;
   createdAt: string;
@@ -15,11 +15,11 @@ export interface ProgramDto {
   /** @nullable */
   removedAt: string | null;
   routineId: string;
-  sessionId: string;
-  instructorId: string;
-  capacity: number;
-  name: string;
-  level?: string;
+  taskId: string;
+  order: number;
+  repetitions: number;
+  restTime: number;
+  notes?: string;
   routine: RoutineDto;
-  session: SessionDto;
+  task: TaskDto;
 }

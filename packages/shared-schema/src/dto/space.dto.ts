@@ -22,6 +22,7 @@ export class SpaceDto extends AbstractDto implements Space {
 	@ClassField(() => SpaceAssociationDto, {
 		required: false,
 		each: true,
+		isArray: true,
 	})
 	spaceAssociations?: SpaceAssociationDto[];
 

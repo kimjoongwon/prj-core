@@ -1,0 +1,13 @@
+{
+  "watch": [
+    "src",
+    "../../packages/shared-schema/src",
+    "../../packages/shared-schema/dist"
+  ],
+  "ext": "ts,js",
+  "ignore": [
+    "src/**/*.spec.ts",
+    "src/**/*.test.ts"
+  ],
+  "exec": "nest start"
+}

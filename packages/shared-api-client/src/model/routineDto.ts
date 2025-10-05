@@ -4,6 +4,8 @@
  * Plate
  * OpenAPI spec version: 1.0.0
  */
+import type { ProgramDto } from './programDto';
+import type { ActivityDto } from './activityDto';
 
 export interface RoutineDto {
   id: string;
@@ -12,6 +14,8 @@ export interface RoutineDto {
   updatedAt: string;
   /** @nullable */
   removedAt: string | null;
-  label: string;
   name: string;
+  label: string;
+  programs: ProgramDto[];
+  activities: ActivityDto[];
 }

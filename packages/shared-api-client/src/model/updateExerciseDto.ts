@@ -6,11 +6,11 @@
  */
 
 export interface UpdateExerciseDto {
-  name?: string;
+  duration?: number;
+  count?: number;
   description?: string;
   imageFileId?: string;
   videoFileId?: string;
-  duration?: number;
-  count?: number;
+  name?: string;
   tenantId?: string;
 }

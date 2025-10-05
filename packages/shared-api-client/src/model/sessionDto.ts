@@ -7,6 +7,8 @@
 import type { SessionTypes } from './sessionTypes';
 import type { SessionDtoRepeatCycleType } from './sessionDtoRepeatCycleType';
 import type { SessionDtoRecurringDayOfWeek } from './sessionDtoRecurringDayOfWeek';
+import type { ProgramDto } from './programDto';
+import type { TimelineDto } from './timelineDto';
 
 export interface SessionDto {
   id: string;
@@ -15,16 +17,16 @@ export interface SessionDto {
   updatedAt: string;
   /** @nullable */
   removedAt: string | null;
-  name: string;
-  label: string;
   type: SessionTypes;
-  startDateTime?: string;
-  endDateTime?: string;
-  timelineId: string;
   /** @nullable */
   repeatCycleType?: SessionDtoRepeatCycleType;
+  startDateTime?: string;
+  endDateTime?: string;
   /** @nullable */
   recurringDayOfWeek?: SessionDtoRecurringDayOfWeek;
-  /** @nullable */
-  recurringMonth?: number | null;
+  timelineId: string;
+  name: string;
+  description?: string;
+  programs: ProgramDto[];
+  timeline: TimelineDto;
 }
