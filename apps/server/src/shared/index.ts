@@ -67,10 +67,7 @@ export {
 } from "./guard";
 
 // Interceptors
-export {
-	CustomClassSerializerInterceptor,
-	RequestContextInterceptor,
-} from "./interceptor";
+export { RequestContextInterceptor } from "./interceptor";
 
 // Lib
 export { DateTimeUtil, R } from "./lib";
