@@ -2,7 +2,7 @@
 # 🏗️ BASE STAGE: 기본 환경 설정
 # ============================================================================
 # Node.js 22 Alpine Linux 기반 이미지 사용 (경량화된 리눅스 배포판)
-FROM node:22-alpine AS base
+FROM node:24-alpine AS base
 
 # 📦 PNPM 버전을 인자로 받아서 설정 (기본값: 9.6.0)
 ARG PNPM_VERSION=10.16.0
