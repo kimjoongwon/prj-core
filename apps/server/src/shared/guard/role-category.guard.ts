@@ -1,12 +1,11 @@
-// biome-ignore assist/source/organizeImports: <explanation>
 import {
 	CanActivate,
 	ExecutionContext,
-	Injectable,
 	ForbiddenException,
+	Injectable,
 } from "@nestjs/common";
 import { Reflector } from "@nestjs/core";
-import { UserDto, Category, RoleCategoryNames } from "@shared/schema";
+import { Category, RoleCategoryNames, UserDto } from "@shared/schema";
 import { plainToInstance } from "class-transformer";
 import { isEmpty } from "lodash";
 
