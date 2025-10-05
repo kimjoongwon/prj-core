@@ -1,6 +1,6 @@
 export * from "./config";
 export * from "./controller";
-export * from "./decorator";
+export * from "@shared/schema";
 export * from "./filter";
 export * from "./guard";
 export * from "./interceptor";

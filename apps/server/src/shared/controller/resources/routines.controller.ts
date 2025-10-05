@@ -20,7 +20,7 @@ import {
 	type UpdateRoutineDto,
 } from "@shared/schema";
 import { plainToInstance } from "class-transformer";
-import { ApiResponseEntity } from "../../decorator";
+import { ApiResponseEntity } from "@shared/schema";
 import { RoutinesService } from "../../service/resources/routines.service";
 
 @ApiTags("ROUTINE")

@@ -19,7 +19,7 @@ import {
 	UserAssociationDto,
 } from "@shared/schema";
 import { plainToInstance } from "class-transformer";
-import { ApiResponseEntity } from "../../decorator/api-response-entity.decorator";
+import { ApiResponseEntity } from "@shared/schema";
 import { UserAssociationsService } from "../../service/resources/user-associations.service";
 
 @ApiTags("USER-ASSOCIATIONS")

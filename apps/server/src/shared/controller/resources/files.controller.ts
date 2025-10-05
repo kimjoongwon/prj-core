@@ -10,8 +10,8 @@ import {
 	UploadedFiles,
 } from "@nestjs/common";
 import { CreateFileDto, FileDto, ResponseEntity } from "@shared/schema";
-import { ApiResponseEntity } from "../../decorator";
-import { ApiFile } from "../../decorator/swagger.schema";
+import { ApiResponseEntity } from "@shared/schema";
+import { ApiFile } from "@shared/schema";
 import { FilesService } from "../../service/resources/files.service";
 
 @Controller()

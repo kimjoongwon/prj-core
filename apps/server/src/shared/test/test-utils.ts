@@ -1,7 +1,8 @@
 import { ConfigService } from "@nestjs/config";
 import { JwtService } from "@nestjs/jwt";
 import { Test, TestingModule } from "@nestjs/testing";
-import { User, UserDto } from "@shared/schema";
+import { User } from "@prisma/client";
+import { UserDto } from "@shared/schema";
 import { Request, Response } from "express";
 import { DeepMockProxy, mockDeep, mockReset } from "jest-mock-extended";
 import { PrismaService } from "../service/prisma.service";
@@ -97,7 +98,7 @@ export const createTestUserDto = (
 };
 
 export const createTestUserEntity = (overrides: Partial<User> = {}): User => {
-	const user = new User();
+	const user: User = {} as User;
 	Object.assign(user, {
 		id: "user-test-id",
 		spaceId: "space-test-id",

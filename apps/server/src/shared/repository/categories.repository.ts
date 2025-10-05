@@ -2,7 +2,7 @@ import { Injectable } from "@nestjs/common";
 import { Category, Prisma } from "@shared/schema";
 import { plainToInstance } from "class-transformer";
 import { BaseRepository } from "../common/base.repository";
-import { UseEntity } from "../decorator/use-dto.decorator";
+import { UseEntity } from "@shared/schema";
 import { PrismaService } from "../service/prisma.service";
 
 @Injectable()

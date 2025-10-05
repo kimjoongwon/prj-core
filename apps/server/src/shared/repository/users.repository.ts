@@ -1,7 +1,6 @@
 import { Injectable } from "@nestjs/common";
-import { Prisma, User } from "@shared/schema";
+import { Prisma, UseEntity, User } from "@shared/schema";
 import { BaseRepository } from "../common/base.repository";
-import { UseEntity } from "../decorator/use-dto.decorator";
 import { PrismaService } from "../service/prisma.service";
 
 @Injectable()
@@ -24,13 +23,5 @@ export class UsersRepository extends BaseRepository<
 > {
 	constructor(prisma: PrismaService) {
 		super(prisma, "User");
-	}
-
-	test() {
-		return this.findFirst({
-			where: {
-				removedAt: null,
-			},
-		});
 	}
 }

@@ -12,6 +12,7 @@ import {
 } from "@nestjs/common";
 import { ApiTags } from "@nestjs/swagger";
 import {
+	ApiResponseEntity,
 	CreateFileClassificationDto,
 	FileClassificationDto,
 	QueryFileClassificationDto,
@@ -19,7 +20,6 @@ import {
 	UpdateFileClassificationDto,
 } from "@shared/schema";
 import { plainToInstance } from "class-transformer";
-import { ApiResponseEntity } from "../../decorator";
 import { FileClassificationsService } from "../../service/resources/file-classifications.service";
 
 @ApiTags("FILE-CLASSIFICATIONS")

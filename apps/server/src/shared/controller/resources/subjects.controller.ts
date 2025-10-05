@@ -20,7 +20,7 @@ import {
 	type UpdateSubjectDto,
 } from "@shared/schema";
 import { plainToInstance } from "class-transformer";
-import { ApiResponseEntity } from "../../decorator";
+import { ApiResponseEntity } from "@shared/schema";
 import { SubjectsService } from "../../service/resources/subjects.service";
 
 @ApiTags("SUBJECTS")

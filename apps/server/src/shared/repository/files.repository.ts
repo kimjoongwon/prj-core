@@ -1,7 +1,7 @@
 import { Injectable } from "@nestjs/common";
 import { File, Prisma } from "@shared/schema";
 import { BaseRepository } from "../common/base.repository";
-import { UseEntity } from "../decorator/use-dto.decorator";
+import { UseEntity } from "@shared/schema";
 import { PrismaService } from "../service/prisma.service";
 
 @Injectable()

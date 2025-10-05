@@ -20,7 +20,7 @@ import {
 	type UpdateTimelineDto,
 } from "@shared/schema";
 import { plainToInstance } from "class-transformer";
-import { ApiResponseEntity } from "../../decorator";
+import { ApiResponseEntity } from "@shared/schema";
 import { TimelinesService } from "../../service/resources/timelines.service";
 
 @ApiTags("TIMELINE")
