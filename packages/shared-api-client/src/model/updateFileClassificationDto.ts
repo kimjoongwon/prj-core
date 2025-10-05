@@ -6,6 +6,6 @@
  */
 
 export interface UpdateFileClassificationDto {
-  fileId?: string;
-  categoryId?: string;
+	fileId?: string;
+	categoryId?: string;
 }

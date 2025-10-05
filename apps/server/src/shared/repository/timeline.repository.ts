@@ -1,6 +1,6 @@
 import { Injectable, Logger } from "@nestjs/common";
-import { plainToInstance } from "class-transformer";
 import { Prisma, Timeline, UseEntity } from "@shared/schema";
+import { plainToInstance } from "class-transformer";
 import { PrismaService } from "../service/prisma.service";
 
 @Injectable()
@@ -30,7 +30,9 @@ export class TimelinesRepository {
 		return plainToInstance(Timeline, result);
 	}
 
-	async updateMany(args: Prisma.TimelineUpdateManyArgs): Promise<Prisma.BatchPayload> {
+	async updateMany(
+		args: Prisma.TimelineUpdateManyArgs,
+	): Promise<Prisma.BatchPayload> {
 		this.logger.debug(`Timeline 다중 업데이트 중...`);
 		return await this.prisma.timeline.updateMany(args);
 	}
@@ -64,13 +66,17 @@ export class TimelinesRepository {
 		return await this.prisma.timeline.groupBy(args);
 	}
 
-	async createManyAndReturn(args: Prisma.TimelineCreateManyArgs): Promise<Timeline[]> {
+	async createManyAndReturn(
+		args: Prisma.TimelineCreateManyArgs,
+	): Promise<Timeline[]> {
 		this.logger.debug(`Timeline 다중 생성 중...`);
 		const result = await this.prisma.timeline.createManyAndReturn(args);
 		return result.map((item) => plainToInstance(Timeline, item));
 	}
 
-	async deleteMany(args: Prisma.TimelineDeleteManyArgs): Promise<Prisma.BatchPayload> {
+	async deleteMany(
+		args: Prisma.TimelineDeleteManyArgs,
+	): Promise<Prisma.BatchPayload> {
 		this.logger.debug(`Timeline 다중 삭제 중...`);
 		return await this.prisma.timeline.deleteMany(args);
 	}

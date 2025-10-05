@@ -4,14 +4,15 @@
  * Plate
  * OpenAPI spec version: 1.0.0
  */
-import type { RoutineDto } from './routineDto';
-import type { GetRoutinesByQuery200AllOfMeta } from './getRoutinesByQuery200AllOfMeta';
+
+import type { GetRoutinesByQuery200AllOfMeta } from "./getRoutinesByQuery200AllOfMeta";
+import type { RoutineDto } from "./routineDto";
 
 export type GetRoutinesByQuery200AllOf = {
-  /** */
-  httpStatus?: number;
-  /** */
-  message?: string;
-  data?: RoutineDto[];
-  meta?: GetRoutinesByQuery200AllOfMeta;
+	/** */
+	httpStatus?: number;
+	/** */
+	message?: string;
+	data?: RoutineDto[];
+	meta?: GetRoutinesByQuery200AllOfMeta;
 };

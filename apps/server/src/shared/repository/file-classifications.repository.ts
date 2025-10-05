@@ -1,6 +1,6 @@
 import { Injectable, Logger } from "@nestjs/common";
-import { plainToInstance } from "class-transformer";
 import { FileClassification, Prisma, UseEntity } from "@shared/schema";
+import { plainToInstance } from "class-transformer";
 import { PrismaService } from "../service/prisma.service";
 
 @Injectable()
@@ -12,48 +12,64 @@ export class FileClassificationsRepository {
 		this.logger = new Logger("FileClassification");
 	}
 
-	async create(args: Prisma.FileClassificationCreateArgs): Promise<FileClassification> {
+	async create(
+		args: Prisma.FileClassificationCreateArgs,
+	): Promise<FileClassification> {
 		this.logger.debug(`FileClassification 생성 중...`);
 		const result = await this.prisma.fileClassification.create(args);
 		return plainToInstance(FileClassification, result);
 	}
 
-	async upsert(args: Prisma.FileClassificationUpsertArgs): Promise<FileClassification> {
+	async upsert(
+		args: Prisma.FileClassificationUpsertArgs,
+	): Promise<FileClassification> {
 		this.logger.debug(`FileClassification 업서트 중...`);
 		const result = await this.prisma.fileClassification.upsert(args);
 		return plainToInstance(FileClassification, result);
 	}
 
-	async update(args: Prisma.FileClassificationUpdateArgs): Promise<FileClassification> {
+	async update(
+		args: Prisma.FileClassificationUpdateArgs,
+	): Promise<FileClassification> {
 		this.logger.debug(`FileClassification 업데이트 중...`);
 		const result = await this.prisma.fileClassification.update(args);
 		return plainToInstance(FileClassification, result);
 	}
 
-	async updateMany(args: Prisma.FileClassificationUpdateManyArgs): Promise<Prisma.BatchPayload> {
+	async updateMany(
+		args: Prisma.FileClassificationUpdateManyArgs,
+	): Promise<Prisma.BatchPayload> {
 		this.logger.debug(`FileClassification 다중 업데이트 중...`);
 		return await this.prisma.fileClassification.updateMany(args);
 	}
 
-	async delete(args: Prisma.FileClassificationDeleteArgs): Promise<FileClassification> {
+	async delete(
+		args: Prisma.FileClassificationDeleteArgs,
+	): Promise<FileClassification> {
 		this.logger.debug(`FileClassification 삭제 중...`);
 		const result = await this.prisma.fileClassification.delete(args);
 		return plainToInstance(FileClassification, result);
 	}
 
-	async findMany(args: Prisma.FileClassificationFindManyArgs): Promise<FileClassification[]> {
+	async findMany(
+		args: Prisma.FileClassificationFindManyArgs,
+	): Promise<FileClassification[]> {
 		this.logger.debug(`FileClassification 다중 조회 중...`);
 		const result = await this.prisma.fileClassification.findMany(args);
 		return result.map((item) => plainToInstance(FileClassification, item));
 	}
 
-	async findFirst(args: Prisma.FileClassificationFindFirstArgs): Promise<FileClassification> {
+	async findFirst(
+		args: Prisma.FileClassificationFindFirstArgs,
+	): Promise<FileClassification> {
 		this.logger.debug(`FileClassification 최초 조회 중...`);
 		const result = await this.prisma.fileClassification.findFirst(args);
 		return plainToInstance(FileClassification, result);
 	}
 
-	async findUnique(args: Prisma.FileClassificationFindUniqueArgs): Promise<FileClassification> {
+	async findUnique(
+		args: Prisma.FileClassificationFindUniqueArgs,
+	): Promise<FileClassification> {
 		this.logger.debug(`FileClassification 고유 조회 중...`);
 		const result = await this.prisma.fileClassification.findUnique(args);
 		return plainToInstance(FileClassification, result);
@@ -64,13 +80,18 @@ export class FileClassificationsRepository {
 		return await this.prisma.fileClassification.groupBy(args);
 	}
 
-	async createManyAndReturn(args: Prisma.FileClassificationCreateManyArgs): Promise<FileClassification[]> {
+	async createManyAndReturn(
+		args: Prisma.FileClassificationCreateManyArgs,
+	): Promise<FileClassification[]> {
 		this.logger.debug(`FileClassification 다중 생성 중...`);
-		const result = await this.prisma.fileClassification.createManyAndReturn(args);
+		const result =
+			await this.prisma.fileClassification.createManyAndReturn(args);
 		return result.map((item) => plainToInstance(FileClassification, item));
 	}
 
-	async deleteMany(args: Prisma.FileClassificationDeleteManyArgs): Promise<Prisma.BatchPayload> {
+	async deleteMany(
+		args: Prisma.FileClassificationDeleteManyArgs,
+	): Promise<Prisma.BatchPayload> {
 		this.logger.debug(`FileClassification 다중 삭제 중...`);
 		return await this.prisma.fileClassification.deleteMany(args);
 	}

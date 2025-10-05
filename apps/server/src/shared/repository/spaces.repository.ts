@@ -1,6 +1,6 @@
 import { Injectable, Logger } from "@nestjs/common";
-import { plainToInstance } from "class-transformer";
 import { Prisma, Space, UseEntity } from "@shared/schema";
+import { plainToInstance } from "class-transformer";
 import { PrismaService } from "../service/prisma.service";
 
 @Injectable()
@@ -30,7 +30,9 @@ export class SpacesRepository {
 		return plainToInstance(Space, result);
 	}
 
-	async updateMany(args: Prisma.SpaceUpdateManyArgs): Promise<Prisma.BatchPayload> {
+	async updateMany(
+		args: Prisma.SpaceUpdateManyArgs,
+	): Promise<Prisma.BatchPayload> {
 		this.logger.debug(`Space 다중 업데이트 중...`);
 		return await this.prisma.space.updateMany(args);
 	}
@@ -64,13 +66,17 @@ export class SpacesRepository {
 		return await this.prisma.space.groupBy(args);
 	}
 
-	async createManyAndReturn(args: Prisma.SpaceCreateManyArgs): Promise<Space[]> {
+	async createManyAndReturn(
+		args: Prisma.SpaceCreateManyArgs,
+	): Promise<Space[]> {
 		this.logger.debug(`Space 다중 생성 중...`);
 		const result = await this.prisma.space.createManyAndReturn(args);
 		return result.map((item) => plainToInstance(Space, item));
 	}
 
-	async deleteMany(args: Prisma.SpaceDeleteManyArgs): Promise<Prisma.BatchPayload> {
+	async deleteMany(
+		args: Prisma.SpaceDeleteManyArgs,
+	): Promise<Prisma.BatchPayload> {
 		this.logger.debug(`Space 다중 삭제 중...`);
 		return await this.prisma.space.deleteMany(args);
 	}

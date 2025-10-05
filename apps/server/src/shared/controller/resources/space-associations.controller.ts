@@ -12,6 +12,7 @@ import {
 } from "@nestjs/common";
 import { ApiTags } from "@nestjs/swagger";
 import {
+	ApiResponseEntity,
 	CreateSpaceAssociationDto,
 	QuerySpaceAssociationDto,
 	ResponseEntity,
@@ -19,7 +20,6 @@ import {
 	UpdateSpaceAssociationDto,
 } from "@shared/schema";
 import { plainToInstance } from "class-transformer";
-import { ApiResponseEntity } from "@shared/schema";
 import { SpaceAssociationsService } from "../../service/resources/space-associations.service";
 
 @ApiTags("SPACE-ASSOCIATIONS")

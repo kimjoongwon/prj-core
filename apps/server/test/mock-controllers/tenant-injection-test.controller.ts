@@ -2,6 +2,7 @@ import { Controller, Get, HttpStatus, Query } from "@nestjs/common";
 import { ApiProperty } from "@nestjs/swagger";
 import { ResponseEntity, RoleCategoryNames } from "@shared/schema";
 import { IsString } from "class-validator";
+
 // Auth decorator is currently commented out
 // import { Auth } from "@shared/schema";
 

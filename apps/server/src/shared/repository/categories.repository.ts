@@ -1,6 +1,6 @@
 import { Injectable, Logger } from "@nestjs/common";
-import { plainToInstance } from "class-transformer";
 import { Category, Prisma, UseEntity } from "@shared/schema";
+import { plainToInstance } from "class-transformer";
 import { PrismaService } from "../service/prisma.service";
 
 @Injectable()
@@ -30,7 +30,9 @@ export class CategoriesRepository {
 		return plainToInstance(Category, result);
 	}
 
-	async updateMany(args: Prisma.CategoryUpdateManyArgs): Promise<Prisma.BatchPayload> {
+	async updateMany(
+		args: Prisma.CategoryUpdateManyArgs,
+	): Promise<Prisma.BatchPayload> {
 		this.logger.debug(`Category 다중 업데이트 중...`);
 		return await this.prisma.category.updateMany(args);
 	}
@@ -64,13 +66,17 @@ export class CategoriesRepository {
 		return await this.prisma.category.groupBy(args);
 	}
 
-	async createManyAndReturn(args: Prisma.CategoryCreateManyArgs): Promise<Category[]> {
+	async createManyAndReturn(
+		args: Prisma.CategoryCreateManyArgs,
+	): Promise<Category[]> {
 		this.logger.debug(`Category 다중 생성 중...`);
 		const result = await this.prisma.category.createManyAndReturn(args);
 		return result.map((item) => plainToInstance(Category, item));
 	}
 
-	async deleteMany(args: Prisma.CategoryDeleteManyArgs): Promise<Prisma.BatchPayload> {
+	async deleteMany(
+		args: Prisma.CategoryDeleteManyArgs,
+	): Promise<Prisma.BatchPayload> {
 		this.logger.debug(`Category 다중 삭제 중...`);
 		return await this.prisma.category.deleteMany(args);
 	}

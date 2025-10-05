@@ -1,6 +1,6 @@
 import { Injectable, Logger } from "@nestjs/common";
-import { plainToInstance } from "class-transformer";
 import { Prisma, Task, UseEntity } from "@shared/schema";
+import { plainToInstance } from "class-transformer";
 import { PrismaService } from "../service/prisma.service";
 
 @Injectable()
@@ -30,7 +30,9 @@ export class TasksRepository {
 		return plainToInstance(Task, result);
 	}
 
-	async updateMany(args: Prisma.TaskUpdateManyArgs): Promise<Prisma.BatchPayload> {
+	async updateMany(
+		args: Prisma.TaskUpdateManyArgs,
+	): Promise<Prisma.BatchPayload> {
 		this.logger.debug(`Task 다중 업데이트 중...`);
 		return await this.prisma.task.updateMany(args);
 	}
@@ -70,7 +72,9 @@ export class TasksRepository {
 		return result.map((item) => plainToInstance(Task, item));
 	}
 
-	async deleteMany(args: Prisma.TaskDeleteManyArgs): Promise<Prisma.BatchPayload> {
+	async deleteMany(
+		args: Prisma.TaskDeleteManyArgs,
+	): Promise<Prisma.BatchPayload> {
 		this.logger.debug(`Task 다중 삭제 중...`);
 		return await this.prisma.task.deleteMany(args);
 	}

@@ -14,6 +14,7 @@ import {
 } from "@nestjs/common";
 import { ApiTags } from "@nestjs/swagger";
 import {
+	ApiResponseEntity,
 	CreateSpaceDto,
 	QuerySpaceDto,
 	ResponseEntity,
@@ -21,7 +22,6 @@ import {
 	UpdateSpaceDto,
 } from "@shared/schema";
 import { plainToInstance } from "class-transformer";
-import { ApiResponseEntity } from "@shared/schema";
 import { ContextProvider } from "../../provider";
 import { SpacesService } from "../../service";
 

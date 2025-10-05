@@ -1,6 +1,6 @@
 import { Injectable, Logger } from "@nestjs/common";
-import { plainToInstance } from "class-transformer";
 import { Prisma, Program, UseEntity } from "@shared/schema";
+import { plainToInstance } from "class-transformer";
 import { PrismaService } from "../service/prisma.service";
 
 @Injectable()
@@ -30,7 +30,9 @@ export class ProgramsRepository {
 		return plainToInstance(Program, result);
 	}
 
-	async updateMany(args: Prisma.ProgramUpdateManyArgs): Promise<Prisma.BatchPayload> {
+	async updateMany(
+		args: Prisma.ProgramUpdateManyArgs,
+	): Promise<Prisma.BatchPayload> {
 		this.logger.debug(`Program 다중 업데이트 중...`);
 		return await this.prisma.program.updateMany(args);
 	}
@@ -64,13 +66,17 @@ export class ProgramsRepository {
 		return await this.prisma.program.groupBy(args);
 	}
 
-	async createManyAndReturn(args: Prisma.ProgramCreateManyArgs): Promise<Program[]> {
+	async createManyAndReturn(
+		args: Prisma.ProgramCreateManyArgs,
+	): Promise<Program[]> {
 		this.logger.debug(`Program 다중 생성 중...`);
 		const result = await this.prisma.program.createManyAndReturn(args);
 		return result.map((item) => plainToInstance(Program, item));
 	}
 
-	async deleteMany(args: Prisma.ProgramDeleteManyArgs): Promise<Prisma.BatchPayload> {
+	async deleteMany(
+		args: Prisma.ProgramDeleteManyArgs,
+	): Promise<Prisma.BatchPayload> {
 		this.logger.debug(`Program 다중 삭제 중...`);
 		return await this.prisma.program.deleteMany(args);
 	}

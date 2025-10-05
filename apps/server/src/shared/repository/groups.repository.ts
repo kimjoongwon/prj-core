@@ -1,6 +1,6 @@
 import { Injectable, Logger } from "@nestjs/common";
-import { plainToInstance } from "class-transformer";
 import { Group, Prisma, UseEntity } from "@shared/schema";
+import { plainToInstance } from "class-transformer";
 import { PrismaService } from "../service/prisma.service";
 
 @Injectable()
@@ -30,7 +30,9 @@ export class GroupsRepository {
 		return plainToInstance(Group, result);
 	}
 
-	async updateMany(args: Prisma.GroupUpdateManyArgs): Promise<Prisma.BatchPayload> {
+	async updateMany(
+		args: Prisma.GroupUpdateManyArgs,
+	): Promise<Prisma.BatchPayload> {
 		this.logger.debug(`Group 다중 업데이트 중...`);
 		return await this.prisma.group.updateMany(args);
 	}
@@ -64,13 +66,17 @@ export class GroupsRepository {
 		return await this.prisma.group.groupBy(args);
 	}
 
-	async createManyAndReturn(args: Prisma.GroupCreateManyArgs): Promise<Group[]> {
+	async createManyAndReturn(
+		args: Prisma.GroupCreateManyArgs,
+	): Promise<Group[]> {
 		this.logger.debug(`Group 다중 생성 중...`);
 		const result = await this.prisma.group.createManyAndReturn(args);
 		return result.map((item) => plainToInstance(Group, item));
 	}
 
-	async deleteMany(args: Prisma.GroupDeleteManyArgs): Promise<Prisma.BatchPayload> {
+	async deleteMany(
+		args: Prisma.GroupDeleteManyArgs,
+	): Promise<Prisma.BatchPayload> {
 		this.logger.debug(`Group 다중 삭제 중...`);
 		return await this.prisma.group.deleteMany(args);
 	}

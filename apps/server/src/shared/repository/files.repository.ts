@@ -1,6 +1,6 @@
 import { Injectable, Logger } from "@nestjs/common";
-import { plainToInstance } from "class-transformer";
 import { File, Prisma, UseEntity } from "@shared/schema";
+import { plainToInstance } from "class-transformer";
 import { PrismaService } from "../service/prisma.service";
 
 @Injectable()
@@ -30,7 +30,9 @@ export class FilesRepository {
 		return plainToInstance(File, result);
 	}
 
-	async updateMany(args: Prisma.FileUpdateManyArgs): Promise<Prisma.BatchPayload> {
+	async updateMany(
+		args: Prisma.FileUpdateManyArgs,
+	): Promise<Prisma.BatchPayload> {
 		this.logger.debug(`File 다중 업데이트 중...`);
 		return await this.prisma.file.updateMany(args);
 	}
@@ -70,7 +72,9 @@ export class FilesRepository {
 		return result.map((item) => plainToInstance(File, item));
 	}
 
-	async deleteMany(args: Prisma.FileDeleteManyArgs): Promise<Prisma.BatchPayload> {
+	async deleteMany(
+		args: Prisma.FileDeleteManyArgs,
+	): Promise<Prisma.BatchPayload> {
 		this.logger.debug(`File 다중 삭제 중...`);
 		return await this.prisma.file.deleteMany(args);
 	}

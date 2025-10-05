@@ -9,9 +9,13 @@ import {
 	Post,
 	UploadedFiles,
 } from "@nestjs/common";
-import { CreateFileDto, FileDto, ResponseEntity } from "@shared/schema";
-import { ApiResponseEntity } from "@shared/schema";
-import { ApiFile } from "@shared/schema";
+import {
+	ApiFile,
+	ApiResponseEntity,
+	CreateFileDto,
+	FileDto,
+	ResponseEntity,
+} from "@shared/schema";
 import { FilesService } from "../../service/resources/files.service";
 
 @Controller()

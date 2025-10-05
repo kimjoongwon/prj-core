@@ -6,10 +6,10 @@
  */
 
 export interface SignUpPayloadDto {
-  nickname: string;
-  spaceId: string;
-  email: string;
-  name: string;
-  phone: string;
-  password: string;
+	nickname: string;
+	spaceId: string;
+	email: string;
+	name: string;
+	phone: string;
+	password: string;
 }

@@ -12,6 +12,7 @@ import {
 } from "@nestjs/common";
 import { ApiTags } from "@nestjs/swagger";
 import {
+	ApiResponseEntity,
 	CreateUserAssociationDto,
 	QueryUserAssociationDto,
 	ResponseEntity,
@@ -19,7 +20,6 @@ import {
 	UserAssociationDto,
 } from "@shared/schema";
 import { plainToInstance } from "class-transformer";
-import { ApiResponseEntity } from "@shared/schema";
 import { UserAssociationsService } from "../../service/resources/user-associations.service";
 
 @ApiTags("USER-ASSOCIATIONS")

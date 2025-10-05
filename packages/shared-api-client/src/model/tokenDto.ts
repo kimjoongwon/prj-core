@@ -4,15 +4,15 @@
  * Plate
  * OpenAPI spec version: 1.0.0
  */
-import type { UserDto } from './userDto';
+import type { UserDto } from "./userDto";
 
 export interface TokenDto {
-  /** JWT Access Token */
-  accessToken: string;
-  /** JWT Refresh Token */
-  refreshToken: string;
-  /** 인증된 사용자 정보 */
-  user: UserDto;
-  /** 메인 테넌트 ID */
-  mainTenantId: string;
+	/** JWT Access Token */
+	accessToken: string;
+	/** JWT Refresh Token */
+	refreshToken: string;
+	/** 인증된 사용자 정보 */
+	user: UserDto;
+	/** 메인 테넌트 ID */
+	mainTenantId: string;
 }

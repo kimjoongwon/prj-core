@@ -12,6 +12,7 @@ import {
 } from "@nestjs/common";
 import { ApiTags } from "@nestjs/swagger";
 import {
+	ApiResponseEntity,
 	type CreateSubjectDto,
 	PageMetaDto,
 	type QuerySubjectDto,
@@ -20,7 +21,6 @@ import {
 	type UpdateSubjectDto,
 } from "@shared/schema";
 import { plainToInstance } from "class-transformer";
-import { ApiResponseEntity } from "@shared/schema";
 import { SubjectsService } from "../../service/resources/subjects.service";
 
 @ApiTags("SUBJECTS")

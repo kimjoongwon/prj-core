@@ -4,14 +4,15 @@
  * Plate
  * OpenAPI spec version: 1.0.0
  */
-import type { TenantDto } from './tenantDto';
-import type { GetTenantsByQuery200AllOfMeta } from './getTenantsByQuery200AllOfMeta';
+
+import type { GetTenantsByQuery200AllOfMeta } from "./getTenantsByQuery200AllOfMeta";
+import type { TenantDto } from "./tenantDto";
 
 export type GetTenantsByQuery200AllOf = {
-  /** */
-  httpStatus?: number;
-  /** */
-  message?: string;
-  data?: TenantDto[];
-  meta?: GetTenantsByQuery200AllOfMeta;
+	/** */
+	httpStatus?: number;
+	/** */
+	message?: string;
+	data?: TenantDto[];
+	meta?: GetTenantsByQuery200AllOfMeta;
 };

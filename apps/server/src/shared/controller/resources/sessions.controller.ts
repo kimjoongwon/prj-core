@@ -12,6 +12,7 @@ import {
 } from "@nestjs/common";
 import { ApiTags } from "@nestjs/swagger";
 import {
+	ApiResponseEntity,
 	type CreateSessionDto,
 	PageMetaDto,
 	type QuerySessionDto,
@@ -20,7 +21,6 @@ import {
 	type UpdateSessionDto,
 } from "@shared/schema";
 import { plainToInstance } from "class-transformer";
-import { ApiResponseEntity } from "@shared/schema";
 import { SessionsService } from "../../service";
 
 @ApiTags("SESSION")

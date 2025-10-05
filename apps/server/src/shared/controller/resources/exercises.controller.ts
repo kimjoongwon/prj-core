@@ -12,6 +12,7 @@ import {
 } from "@nestjs/common";
 import { ApiTags } from "@nestjs/swagger";
 import {
+	ApiResponseEntity,
 	CreateExerciseDto,
 	ExerciseDto,
 	PageMetaDto,
@@ -20,7 +21,6 @@ import {
 	UpdateExerciseDto,
 } from "@shared/schema";
 import { plainToInstance } from "class-transformer";
-import { ApiResponseEntity } from "@shared/schema";
 import { ExercisesService } from "../../service/resources/exercises.service";
 
 @ApiTags("EXERCISES")
