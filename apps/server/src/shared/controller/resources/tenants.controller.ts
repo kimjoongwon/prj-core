@@ -21,19 +21,22 @@ import {
 	UpdateTenantDto,
 } from "@shared/schema";
 import { plainToInstance } from "class-transformer";
-import { ContextProvider } from "../../provider/context.provider";
+import { ContextService } from "../../service/context.service";
 import { TenantsService } from "../../service/resources/tenants.service";
 
 @ApiTags("TENANTS")
 @Controller()
 export class TenantsController {
-	constructor(private readonly service: TenantsService) {}
+	constructor(
+		private readonly service: TenantsService,
+		private readonly contextService: ContextService,
+	) {}
 
 	@Get("my")
 	@HttpCode(HttpStatus.OK)
 	@ApiResponseEntity(TenantDto, HttpStatus.OK, { isArray: true })
 	async getMyTenants() {
-		const userId = ContextProvider.getAuthUserId();
+		const userId = this.contextService.getAuthUserId();
 		// Note: getManyByUserId was replaced with getManyByQuery, may need adjustment
 		const tenants = await this.service.getManyByQuery({ userId } as any);
 		return new ResponseEntity(

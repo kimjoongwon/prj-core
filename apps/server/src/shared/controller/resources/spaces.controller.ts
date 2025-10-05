@@ -22,15 +22,18 @@ import {
 	UpdateSpaceDto,
 } from "@shared/schema";
 import { plainToInstance } from "class-transformer";
-import { ContextProvider } from "../../provider";
 import { SpacesService } from "../../service";
+import { ContextService } from "../../service/context.service";
 
 @ApiTags("SPACES")
 @Controller()
 export class SpacesController {
 	private readonly logger = new Logger(SpacesController.name);
 
-	constructor(private readonly service: SpacesService) {}
+	constructor(
+		private readonly service: SpacesService,
+		private readonly contextService: ContextService,
+	) {}
 
 	@Get("current")
 	@HttpCode(HttpStatus.OK)
@@ -40,10 +43,10 @@ export class SpacesController {
 		const startTime = Date.now();
 		this.logger.log("🚀 getCurrentSpace API 호출됨");
 
-		const tenant = ContextProvider.getTenant();
-		const tenantId = ContextProvider.getTenantId();
-		const spaceId = ContextProvider.getSpaceId();
-		const userId = ContextProvider.getAuthUserId();
+		const tenant = this.contextService.getTenant();
+		const tenantId = this.contextService.getTenantId();
+		const spaceId = this.contextService.getSpaceId();
+		const userId = this.contextService.getAuthUserId();
 
 		// 디버깅을 위한 상세한 로깅
 		this.logger.debug("getCurrentSpace - 컨텍스트 정보:", {

@@ -1,5 +1,6 @@
 import { Module } from "@nestjs/common";
 import {
+	ContextService,
 	ExercisesController,
 	ExercisesRepository,
 	ExercisesService,
@@ -7,6 +8,6 @@ import {
 
 @Module({
 	controllers: [ExercisesController],
-	providers: [ExercisesService, ExercisesRepository],
+	providers: [ExercisesService, ExercisesRepository, ContextService],
 })
 export class ExercisesModule {}

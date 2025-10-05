@@ -21,7 +21,7 @@ import {
 } from "@shared/schema";
 import { plainToInstance } from "class-transformer";
 import { Request, Response } from "express";
-import { ContextProvider } from "../../provider";
+import { ContextService } from "../../service/context.service";
 import { AuthService } from "../../service/domains/auth.service";
 import { TokenService } from "../../service/domains/token.service";
 
@@ -31,6 +31,7 @@ export class AuthController {
 	constructor(
 		private readonly authService: AuthService,
 		private readonly tokenService: TokenService,
+		private readonly contextService: ContextService,
 	) {}
 
 	@Public()
@@ -136,7 +137,11 @@ export class AuthController {
 	@Get("verify-token")
 	@ApiResponseEntity(Boolean, HttpStatus.OK)
 	async verifyToken() {
-		const token = ContextProvider.getToken();
+		const token = this.contextService.getToken();
+		if (!token) {
+			throw new UnauthorizedException("토큰이 존재하지 않습니다");
+		}
+
 		const isValid = this.tokenService.verifyToken(token);
 		return new ResponseEntity(HttpStatus.OK, "토큰 유효성 검증 완료", isValid);
 	}

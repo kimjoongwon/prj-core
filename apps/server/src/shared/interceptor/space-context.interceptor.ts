@@ -7,12 +7,14 @@ import {
 import { type TenantDto, type UserDto } from "@shared/schema";
 import { type Request } from "express";
 import { type Observable } from "rxjs";
-import { ContextProvider } from "../provider";
+import { ContextService } from "../service/context.service";
 import { AppLogger } from "../util/app-logger.util";
 
 @Injectable()
 export class SpaceContextInterceptor implements NestInterceptor {
 	private readonly logger = new AppLogger(SpaceContextInterceptor.name);
+
+	constructor(private readonly contextService: ContextService) {}
 
 	intercept(context: ExecutionContext, next: CallHandler): Observable<any> {
 		const request = context.switchToHttp().getRequest<Request>();
@@ -51,7 +53,7 @@ export class SpaceContextInterceptor implements NestInterceptor {
 					userId: user.id,
 				});
 
-				ContextProvider.setAuthContext({
+				this.contextService.setAuthContext({
 					user,
 					tenant: undefined,
 					tenantId: undefined,
@@ -61,7 +63,7 @@ export class SpaceContextInterceptor implements NestInterceptor {
 			}
 
 			// 성공적인 컨텍스트 설정
-			ContextProvider.setAuthContext({
+			this.contextService.setAuthContext({
 				user,
 				tenant: currentTenant,
 				tenantId: currentTenant.id,
@@ -85,7 +87,7 @@ export class SpaceContextInterceptor implements NestInterceptor {
 	}
 
 	private setDefaultContext(user?: UserDto): void {
-		ContextProvider.setAuthContext({
+		this.contextService.setAuthContext({
 			user: user || undefined,
 			tenant: undefined,
 			tenantId: undefined,

@@ -2,27 +2,34 @@ import { type CallHandler, type ExecutionContext } from "@nestjs/common";
 import { Test, type TestingModule } from "@nestjs/testing";
 import { UserDto } from "@shared/schema";
 import { of } from "rxjs";
-import { ContextProvider } from "../provider";
+import { ContextService } from "../service/context.service";
 import { SpaceContextInterceptor } from "./space-context.interceptor";
-
-// Mock ContextProvider
-jest.mock("../provider", () => ({
-	ContextProvider: {
-		setAuthContext: jest.fn(),
-	},
-}));
 
 describe("SpaceContextInterceptor", () => {
 	let interceptor: SpaceContextInterceptor;
+	let contextService: {
+		setAuthContext: jest.Mock;
+	};
 
 	beforeEach(async () => {
+		contextService = {
+			setAuthContext: jest.fn(),
+		};
+
 		const module: TestingModule = await Test.createTestingModule({
-			providers: [SpaceContextInterceptor],
+			providers: [
+				SpaceContextInterceptor,
+				{
+					provide: ContextService,
+					useValue: contextService,
+				},
+			],
 		}).compile();
 
 		interceptor = module.get<SpaceContextInterceptor>(SpaceContextInterceptor);
+	});
 
-		// Clear all mocks
+	afterEach(() => {
 		jest.clearAllMocks();
 	});
 
@@ -73,7 +80,7 @@ describe("SpaceContextInterceptor", () => {
 			const value = await result$.toPromise();
 
 			expect(value).toBe("test response");
-			expect(ContextProvider.setAuthContext).toHaveBeenCalledWith({
+			expect(contextService.setAuthContext).toHaveBeenCalledWith({
 				user: mockUser,
 				tenant: undefined,
 				tenantId: undefined,
@@ -95,7 +102,7 @@ describe("SpaceContextInterceptor", () => {
 			const value = await result$.toPromise();
 
 			expect(value).toBe("test response");
-			expect(ContextProvider.setAuthContext).toHaveBeenCalledWith({
+			expect(contextService.setAuthContext).toHaveBeenCalledWith({
 				user: undefined,
 				tenant: undefined,
 				tenantId: undefined,
@@ -119,7 +126,7 @@ describe("SpaceContextInterceptor", () => {
 			const value = await result$.toPromise();
 
 			expect(value).toBe("test response");
-			expect(ContextProvider.setAuthContext).toHaveBeenCalledWith({
+			expect(contextService.setAuthContext).toHaveBeenCalledWith({
 				user: mockUser,
 				tenant: undefined,
 				tenantId: undefined,
@@ -143,7 +150,7 @@ describe("SpaceContextInterceptor", () => {
 			const value = await result$.toPromise();
 
 			expect(value).toBe("test response");
-			expect(ContextProvider.setAuthContext).toHaveBeenCalledWith({
+			expect(contextService.setAuthContext).toHaveBeenCalledWith({
 				user: mockUser,
 				tenant: { id: "tenant-1", name: "Test Tenant 1", spaceId: "space-123" },
 				tenantId: "tenant-1",
@@ -167,7 +174,7 @@ describe("SpaceContextInterceptor", () => {
 			const value = await result$.toPromise();
 
 			expect(value).toBe("test response");
-			expect(ContextProvider.setAuthContext).toHaveBeenCalledWith({
+			expect(contextService.setAuthContext).toHaveBeenCalledWith({
 				user: mockUser,
 				tenant: undefined,
 				tenantId: undefined,
@@ -175,12 +182,10 @@ describe("SpaceContextInterceptor", () => {
 			});
 		});
 
-		it("ContextProvider.setAuthContext에서 오류가 발생하면 기본 컨텍스트로 설정한다", async () => {
-			(ContextProvider.setAuthContext as jest.Mock).mockImplementationOnce(
-				() => {
-					throw new Error("ContextProvider error");
-				},
-			);
+		it("ContextService.setAuthContext에서 오류가 발생하면 기본 컨텍스트로 설정한다", async () => {
+			contextService.setAuthContext.mockImplementationOnce(() => {
+				throw new Error("ContextService error");
+			});
 
 			const mockUser = createValidUser();
 			const mockRequest = createMockRequest({
@@ -198,7 +203,7 @@ describe("SpaceContextInterceptor", () => {
 
 			expect(value).toBe("test response");
 			// 에러 발생 후 기본 컨텍스트로 재설정
-			expect(ContextProvider.setAuthContext).toHaveBeenLastCalledWith({
+			expect(contextService.setAuthContext).toHaveBeenLastCalledWith({
 				user: mockUser,
 				tenant: undefined,
 				tenantId: undefined,
@@ -222,7 +227,7 @@ describe("SpaceContextInterceptor", () => {
 			const value = await result$.toPromise();
 
 			expect(value).toBe("test response");
-			expect(ContextProvider.setAuthContext).toHaveBeenCalledWith({
+			expect(contextService.setAuthContext).toHaveBeenCalledWith({
 				user: mockUser,
 				tenant: { id: "tenant-2", name: "Test Tenant 2", spaceId: "space-456" },
 				tenantId: "tenant-2",
@@ -246,7 +251,7 @@ describe("SpaceContextInterceptor", () => {
 			const value = await result$.toPromise();
 
 			expect(value).toBe("test response");
-			expect(ContextProvider.setAuthContext).toHaveBeenCalledWith({
+			expect(contextService.setAuthContext).toHaveBeenCalledWith({
 				user: mockUser,
 				tenant: undefined,
 				tenantId: undefined,

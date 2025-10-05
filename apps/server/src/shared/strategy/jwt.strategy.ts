@@ -8,7 +8,7 @@ import { ConfigService } from "@nestjs/config";
 import { PassportStrategy } from "@nestjs/passport";
 import { Request } from "express";
 import { ExtractJwt, Strategy } from "passport-jwt";
-import { AuthConfig, ContextProvider } from "..";
+import { AuthConfig, ContextService } from "..";
 import { UsersService } from "../service/resources/users.service";
 
 @Global()
@@ -19,6 +19,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
 	constructor(
 		readonly config: ConfigService,
 		readonly usersService: UsersService,
+		private readonly contextService: ContextService,
 	) {
 		const authConfig = config.get<AuthConfig>("auth");
 
@@ -43,7 +44,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
 						this.logger.log(
 							`[쿠키 추출기] 토큰 미리보기: ${token.substring(0, 30)}...`,
 						);
-						ContextProvider.setToken(token);
+						this.contextService.setToken(token);
 						return token;
 					}
 					this.logger.log(
@@ -67,7 +68,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
 						this.logger.log(
 							`[헤더 추출기] 토큰 미리보기: ${token.substring(0, 30)}...`,
 						);
-						ContextProvider.setToken(token);
+						this.contextService.setToken(token);
 						return token;
 					}
 					this.logger.log(

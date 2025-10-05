@@ -1,4 +1,6 @@
 // Export all domain services
+
+export { ContextService } from "./context.service";
 export {
 	AppBuilderService,
 	AuthService,

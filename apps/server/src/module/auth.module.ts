@@ -2,6 +2,7 @@ import { Module } from "@nestjs/common";
 import {
 	AuthController,
 	AuthService,
+	ContextService,
 	JwtStrategy,
 	LocalStrategy,
 	PasswordService,
@@ -19,6 +20,7 @@ import {
 		JwtStrategy,
 		UsersService,
 		UsersRepository,
+		ContextService,
 	],
 	controllers: [AuthController],
 	exports: [AuthService],

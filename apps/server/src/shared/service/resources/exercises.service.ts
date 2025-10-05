@@ -5,15 +5,21 @@ import {
 	QueryExerciseDto,
 	UpdateExerciseDto,
 } from "@shared/schema";
-import { ContextProvider } from "../../provider/context.provider";
 import { ExercisesRepository } from "../../repository/exercises.repository";
+import { ContextService } from "../context.service";
 
 @Injectable()
 export class ExercisesService {
-	constructor(private readonly repository: ExercisesRepository) {}
+	constructor(
+		private readonly repository: ExercisesRepository,
+		private readonly contextService: ContextService,
+	) {}
 
 	async create(createExerciseDto: CreateExerciseDto) {
-		const tenantId = ContextProvider.getTenantId();
+		const tenantId = this.contextService.getTenantId();
+		if (!tenantId) {
+			throw new Error("No tenantId in context");
+		}
 		const { name, count, duration } = createExerciseDto;
 
 		const exercise = await this.repository.create({

@@ -5,7 +5,6 @@ export class ContextProvider {
 	private static readonly nameSpace = "request";
 
 	private static readonly authUserKey = "user_key";
-
 	private static readonly languageKey = "language_key";
 
 	private static readonly tenantKey = "tenant_key";

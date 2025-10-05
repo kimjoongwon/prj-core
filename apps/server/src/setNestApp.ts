@@ -38,6 +38,6 @@ export function setNestApp<T extends INestApplication>(app: T): void {
 	// =================================================================
 	// Global Interceptors - 실행 순서: SpaceContextInterceptor → ClassSerializerInterceptor
 	// =================================================================
-	app.useGlobalInterceptors(new SpaceContextInterceptor());
+	app.useGlobalInterceptors(app.get(SpaceContextInterceptor));
 	app.useGlobalInterceptors(new ClassSerializerInterceptor(app.get(Reflector)));
 }

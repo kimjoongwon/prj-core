@@ -6,12 +6,15 @@ import {
 	Tenant,
 	UpdateTenantDto,
 } from "@shared/schema";
-import { ContextProvider } from "../../provider";
 import { TenantsRepository } from "../../repository/tenants.repository";
+import { ContextService } from "../context.service";
 
 @Injectable()
 export class TenantsService {
-	constructor(private readonly tenantsRepository: TenantsRepository) {}
+	constructor(
+		private readonly tenantsRepository: TenantsRepository,
+		private readonly contextService: ContextService,
+	) {}
 
 	async create(createTenantDto: CreateTenantDto): Promise<Tenant> {
 		return this.tenantsRepository.create({
@@ -90,7 +93,7 @@ export class TenantsService {
 	async getManyByQuery(
 		query: QueryTenantDto,
 	): Promise<{ tenants: Tenant[]; count: number }> {
-		const currentUser = ContextProvider.getAuthUser();
+		const currentUser = this.contextService.getAuthUser();
 		console.log("Current User:", currentUser);
 		const args = query?.toArgs({
 			where: {

@@ -1,16 +1,19 @@
 import { Injectable } from "@nestjs/common";
 import { Prisma, QueryCategoryDto, UpdateCategoryDto } from "@shared/schema";
-import { ContextProvider } from "../../provider";
 import { CategoriesRepository } from "../../repository/categories.repository";
 import { AppLogger } from "../../util/app-logger.util";
+import { ContextService } from "../context.service";
 
 @Injectable()
 export class CategoriesService {
 	private readonly logger = new AppLogger(CategoriesService.name);
-	constructor(private readonly repository: CategoriesRepository) {}
+	constructor(
+		private readonly repository: CategoriesRepository,
+		private readonly contextService: ContextService,
+	) {}
 
 	async create(args: Prisma.CategoryCreateArgs) {
-		const currentTenant = ContextProvider.getTenant();
+		const currentTenant = this.contextService.getTenant();
 		if (!currentTenant) {
 			throw new Error("No tenant found in context");
 		}
@@ -55,7 +58,7 @@ export class CategoriesService {
 	}
 
 	async getManyByQuery(query: QueryCategoryDto) {
-		const currentTenant = ContextProvider.getTenant();
+		const currentTenant = this.contextService.getTenant();
 		this.logger.debug("getManyByQuery - Current Tenant:", {
 			tenantId: currentTenant?.id?.slice(-8) || "null",
 			spaceId: currentTenant?.spaceId?.slice(-8) || "null",

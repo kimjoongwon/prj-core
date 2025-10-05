@@ -86,7 +86,7 @@ export {
 } from "./pipe";
 
 // Providers
-export { ContextProvider, GeneratorProvider } from "./provider";
+export { GeneratorProvider } from "./provider";
 
 // Repositories
 export {
@@ -123,6 +123,7 @@ export {
 	AuthService,
 	AwsService,
 	CategoriesService,
+	ContextService,
 	ExercisesService,
 	FileAssociationsService,
 	FileClassificationsService,
