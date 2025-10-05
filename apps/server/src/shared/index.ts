@@ -69,7 +69,7 @@ export {
 // Interceptors
 export {
 	CustomClassSerializerInterceptor,
-	SpaceContextInterceptor,
+	RequestContextInterceptor,
 } from "./interceptor";
 
 // Lib

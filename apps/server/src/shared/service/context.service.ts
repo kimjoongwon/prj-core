@@ -8,6 +8,8 @@ export class ContextService {
 	private static readonly authUserKey = "user_key";
 	private static readonly languageKey = "language_key";
 	private static readonly tenantKey = "tenant_key";
+	private static readonly tokenKey = "token_key";
+	private static readonly serviceNameKey = "service_name_key";
 
 	constructor(private readonly cls: ClsService) {}
 
@@ -27,26 +29,6 @@ export class ContextService {
 		this.setValue(ContextService.authUserKey, user);
 	}
 
-	setLanguage(language: string | undefined): void {
-		this.setValue(ContextService.languageKey, language);
-	}
-
-	setTenant(tenant: TenantDto | undefined): void {
-		this.setValue(ContextService.tenantKey, tenant);
-	}
-
-	setTenantId(tenantId: string | undefined): void {
-		this.setValue("tenantId", tenantId);
-	}
-
-	getTenantId(): string | undefined {
-		return this.getValue<string>("tenantId");
-	}
-
-	getLanguage(): LanguageCode | undefined {
-		return this.getValue<LanguageCode>(ContextService.languageKey);
-	}
-
 	getAuthUser(): UserDto | undefined {
 		return this.getValue<UserDto>(ContextService.authUserKey);
 	}
@@ -59,95 +41,43 @@ export class ContextService {
 		return this.getValue<string>("userId");
 	}
 
+	setLanguage(language: LanguageCode | undefined): void {
+		this.setValue(ContextService.languageKey, language);
+	}
+
+	getLanguage(): LanguageCode | undefined {
+		return this.getValue<LanguageCode>(ContextService.languageKey);
+	}
+
+	setTenant(tenant: TenantDto | undefined): void {
+		this.setValue(ContextService.tenantKey, tenant);
+	}
+
 	getTenant(): TenantDto | undefined {
 		return this.getValue<TenantDto>(ContextService.tenantKey);
 	}
 
-	setToken(token: string | undefined): void {
-		this.setValue("token", token);
-	}
-
-	getToken(): string | undefined {
-		return this.getValue<string>("token");
-	}
-
-	setServiceName(serviceName: string | undefined): void {
-		this.setValue("serviceName", serviceName);
-	}
-
-	getServiceName(): string | undefined {
-		return this.getValue<string>("serviceName");
-	}
-
-	setSpaceId(spaceId: string | undefined): void {
-		this.setValue("spaceId", spaceId);
+	getTenantId(): string | undefined {
+		return this.getTenant()?.id;
 	}
 
 	getSpaceId(): string | undefined {
-		return this.getValue<string>("spaceId");
+		return this.getTenant()?.spaceId;
 	}
 
-	setSpaceNumber(spaceNumber: string | undefined): void {
-		this.setValue("spaceNumber", spaceNumber);
+	setToken(token: string | undefined): void {
+		this.setValue(ContextService.tokenKey, token);
 	}
 
-	getSpaceNumber(): string | undefined {
-		return this.getValue<string>("spaceNumber");
+	getToken(): string | undefined {
+		return this.getValue<string>(ContextService.tokenKey);
 	}
 
-	setAuthContext(context: {
-		user?: UserDto;
-		tenant?: TenantDto;
-		tenantId?: string;
-		spaceId?: string;
-	}): void {
-		if (context.user) {
-			this.setAuthUser(context.user);
-			this.setAuthUserId(context.user.id);
-		} else {
-			this.setAuthUser(undefined);
-			this.setAuthUserId(undefined);
-		}
-
-		if (context.tenant) {
-			this.setTenant(context.tenant);
-		} else {
-			this.setTenant(undefined);
-		}
-
-		if (context.tenantId !== undefined) {
-			this.setTenantId(context.tenantId);
-		} else {
-			this.setTenantId(undefined);
-		}
-
-		if (context.spaceId !== undefined) {
-			this.setSpaceId(context.spaceId);
-		} else {
-			this.setSpaceId(undefined);
-		}
+	setServiceName(serviceName: string | undefined): void {
+		this.setValue(ContextService.serviceNameKey, serviceName);
 	}
 
-	getAuthContext(): {
-		user?: UserDto;
-		tenant?: TenantDto;
-		tenantId?: string;
-		spaceId?: string;
-	} | null {
-		const user = this.getAuthUser();
-		const tenant = this.getTenant();
-		const tenantId = this.getTenantId();
-		const spaceId = this.getSpaceId();
-
-		if (!user && !tenant && !tenantId && !spaceId) {
-			return null;
-		}
-
-		return {
-			user,
-			tenant,
-			tenantId,
-			spaceId,
-		};
+	getServiceName(): string | undefined {
+		return this.getValue<string>(ContextService.serviceNameKey);
 	}
 }

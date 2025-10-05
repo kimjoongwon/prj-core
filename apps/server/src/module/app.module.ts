@@ -10,7 +10,7 @@ import { RouterModule } from "@nestjs/core";
 import {
 	ContextService,
 	LoggerMiddleware,
-	SpaceContextInterceptor,
+	RequestContextInterceptor,
 } from "@shared";
 // Third-party imports
 import { CaslModule } from "nest-casl";
@@ -164,7 +164,7 @@ import { UsersModule } from "./users.module";
 			},
 		]),
 	],
-	providers: [SpaceContextInterceptor, ContextService],
+	providers: [RequestContextInterceptor, ContextService],
 })
 export class AppModule implements OnModuleInit {
 	logger = new Logger(AppModule.name);
