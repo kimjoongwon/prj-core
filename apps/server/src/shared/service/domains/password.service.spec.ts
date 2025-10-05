@@ -5,22 +5,19 @@ import { createMockConfigService } from "../../test/test-utils";
 import { PasswordService } from "./password.service";
 
 // Mock bcrypt module
-jest.mock("bcrypt", () => ({
-	compare: jest.fn(),
-	hash: jest.fn(),
-	hashSync: jest.fn(),
-}));
+jest.mock("bcrypt");
+
+const mockCompare = bcrypt.compare as jest.Mock;
+const mockHash = bcrypt.hash as jest.Mock;
+const mockHashSync = bcrypt.hashSync as jest.Mock;
 
 describe("PasswordService", () => {
 	let service: PasswordService;
 	let configService: jest.Mocked<ConfigService>;
-	let mockBcrypt: jest.Mocked<typeof bcrypt>;
 
 	beforeEach(async () => {
 		// Clear mocks before each test
 		jest.clearAllMocks();
-
-		mockBcrypt = bcrypt as jest.Mocked<typeof bcrypt>;
 
 		const module: TestingModule = await Test.createTestingModule({
 			providers: [
@@ -45,7 +42,7 @@ describe("PasswordService", () => {
 			const password = "password123";
 			const hashedPassword = "$2b$10$hashedPassword";
 
-			mockBcrypt.compare.mockResolvedValue(true);
+			mockCompare.mockResolvedValue(true);
 
 			const result = await service.validatePassword(password, hashedPassword);
 
@@ -57,7 +54,7 @@ describe("PasswordService", () => {
 			const password = "wrongPassword";
 			const hashedPassword = "$2b$10$hashedPassword";
 
-			mockBcrypt.compare.mockResolvedValue(false);
+			mockCompare.mockResolvedValue(false);
 
 			const result = await service.validatePassword(password, hashedPassword);
 
@@ -69,7 +66,7 @@ describe("PasswordService", () => {
 			const password = "password123";
 			const hashedPassword = "invalid-hash";
 
-			mockBcrypt.compare.mockRejectedValue(new Error("Invalid hash"));
+			mockCompare.mockRejectedValue(new Error("Invalid hash"));
 
 			await expect(
 				service.validatePassword(password, hashedPassword),
@@ -84,7 +81,7 @@ describe("PasswordService", () => {
 			const authConfig = { bcryptSaltOrRound: 12 };
 
 			configService.get = jest.fn().mockReturnValue(authConfig);
-			mockBcrypt.hash.mockResolvedValue(expectedHash);
+			mockHash.mockResolvedValue(expectedHash);
 
 			const result = await service.hashPassword(password);
 
@@ -98,7 +95,7 @@ describe("PasswordService", () => {
 			const expectedHash = "$2b$10$hashedPassword";
 
 			configService.get = jest.fn().mockReturnValue(null);
-			mockBcrypt.hash.mockResolvedValue(expectedHash);
+			mockHash.mockResolvedValue(expectedHash);
 
 			const result = await service.hashPassword(password);
 
@@ -113,7 +110,7 @@ describe("PasswordService", () => {
 			const authConfig = {}; // bcryptSaltOrRound is undefined
 
 			configService.get = jest.fn().mockReturnValue(authConfig);
-			mockBcrypt.hash.mockResolvedValue(expectedHash);
+			mockHash.mockResolvedValue(expectedHash);
 
 			const result = await service.hashPassword(password);
 
@@ -126,7 +123,7 @@ describe("PasswordService", () => {
 			const password = "password123";
 
 			configService.get = jest.fn().mockReturnValue({ bcryptSaltOrRound: 10 });
-			mockBcrypt.hash.mockRejectedValue(new Error("Hashing failed"));
+			mockHash.mockRejectedValue(new Error("Hashing failed"));
 
 			await expect(service.hashPassword(password)).rejects.toThrow(
 				"Hashing failed",
@@ -139,7 +136,7 @@ describe("PasswordService", () => {
 			const password = "password123";
 			const expectedHash = "$2b$10$hashedPassword";
 
-			mockBcrypt.hashSync.mockReturnValue(expectedHash);
+			mockHashSync.mockReturnValue(expectedHash);
 
 			const result = PasswordService.generateHash(password);
 
@@ -151,7 +148,7 @@ describe("PasswordService", () => {
 			const password = "";
 			const expectedHash = "$2b$10$emptyHash";
 
-			mockBcrypt.hashSync.mockReturnValue(expectedHash);
+			mockHashSync.mockReturnValue(expectedHash);
 
 			const result = PasswordService.generateHash(password);
 
@@ -165,7 +162,7 @@ describe("PasswordService", () => {
 			const password = "password123";
 			const hash = "$2b$10$hashedPassword";
 
-			mockBcrypt.compare.mockResolvedValue(true);
+			mockCompare.mockResolvedValue(true);
 
 			const result = await PasswordService.validateHash(password, hash);
 
@@ -177,7 +174,7 @@ describe("PasswordService", () => {
 			const password = "wrongPassword";
 			const hash = "$2b$10$hashedPassword";
 
-			mockBcrypt.compare.mockResolvedValue(false);
+			mockCompare.mockResolvedValue(false);
 
 			const result = await PasswordService.validateHash(password, hash);
 
@@ -239,7 +236,7 @@ describe("PasswordService", () => {
 			const password = "password123";
 			const hash = "invalid-hash";
 
-			mockBcrypt.compare.mockRejectedValue(new Error("Invalid hash format"));
+			mockCompare.mockRejectedValue(new Error("Invalid hash format"));
 
 			await expect(
 				PasswordService.validateHash(password, hash),

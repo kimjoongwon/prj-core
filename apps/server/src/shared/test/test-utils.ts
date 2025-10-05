@@ -1,8 +1,7 @@
 import { ConfigService } from "@nestjs/config";
 import { JwtService } from "@nestjs/jwt";
 import { Test, TestingModule } from "@nestjs/testing";
-import { User } from "@prisma/client";
-import { UserDto } from "@shared/schema";
+import { User, UserDto } from "@shared/schema";
 import { Request, Response } from "express";
 import { DeepMockProxy, mockDeep, mockReset } from "jest-mock-extended";
 import { PrismaService } from "../service/prisma.service";
@@ -98,9 +97,10 @@ export const createTestUserDto = (
 };
 
 export const createTestUserEntity = (overrides: Partial<User> = {}): User => {
-	const user: User = {} as User;
+	const user = new User();
 	Object.assign(user, {
 		id: "user-test-id",
+		seq: 1,
 		spaceId: "space-test-id",
 		email: "test@example.com",
 		name: "Test User",
@@ -108,6 +108,7 @@ export const createTestUserEntity = (overrides: Partial<User> = {}): User => {
 		password: "$2b$10$hashedPassword",
 		createdAt: new Date("2024-01-01"),
 		updatedAt: new Date("2024-01-01"),
+		removedAt: null,
 		tenants: [
 			{
 				id: "tenant-test-id",
