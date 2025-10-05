@@ -1,2 +1,2 @@
-export * from "./context.provider";
-export * from "./generator.provider";
+export { ContextProvider } from "./context.provider";
+export { GeneratorProvider } from "./generator.provider";

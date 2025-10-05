@@ -1,6 +1,6 @@
 // Domain Services
-export * from "./app-builder.service";
-export * from "./auth.service";
-export * from "./aws.service";
-export * from "./password.service";
-export * from "./token.service";
+export { AppBuilderService } from "./app-builder.service";
+export { AuthService } from "./auth.service";
+export { AwsService } from "./aws.service";
+export { PasswordService } from "./password.service";
+export { TokenService } from "./token.service";

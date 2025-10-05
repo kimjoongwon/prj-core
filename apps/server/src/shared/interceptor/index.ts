@@ -1,2 +1,2 @@
-export * from "./class-serializer.interceptor";
-export * from "./space-context.interceptor";
+export { CustomClassSerializerInterceptor } from "./class-serializer.interceptor";
+export { SpaceContextInterceptor } from "./space-context.interceptor";
