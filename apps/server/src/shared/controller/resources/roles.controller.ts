@@ -15,12 +15,12 @@ import {
 	ApiResponseEntity,
 	CreateRoleDto,
 	QueryRoleDto,
-	ResponseEntity,
 	RoleDto,
 	UpdateRoleDto,
 } from "@shared/schema";
 import { plainToInstance } from "class-transformer";
 import { RolesService } from "../../service";
+import { wrapResponse } from "../../util/response.util";
 
 @ApiTags("SPACES")
 @Controller()
@@ -32,11 +32,7 @@ export class RolesController {
 	@ApiResponseEntity(RoleDto, HttpStatus.OK)
 	async createRole(@Body() createRoleDto: CreateRoleDto) {
 		const role = await this.service.create(createRoleDto);
-		return new ResponseEntity(
-			HttpStatus.OK,
-			"성공",
-			plainToInstance(RoleDto, role),
-		);
+		return plainToInstance(RoleDto, role);
 	}
 
 	@Get(":roleId")
@@ -44,11 +40,7 @@ export class RolesController {
 	@ApiResponseEntity(RoleDto, HttpStatus.OK)
 	async getRole(@Param("roleId") roleId: string) {
 		const role = await this.service.getById(roleId);
-		return new ResponseEntity(
-			HttpStatus.OK,
-			"성공",
-			plainToInstance(RoleDto, role),
-		);
+		return plainToInstance(RoleDto, role);
 	}
 
 	@Patch(":roleId")
@@ -59,7 +51,7 @@ export class RolesController {
 		@Body() updateRoleDto: UpdateRoleDto,
 	) {
 		const role = await this.service.updateById(roleId, updateRoleDto);
-		return new ResponseEntity(HttpStatus.OK, "성공", role?.toDto?.() ?? role);
+		return role?.toDto?.() ?? role;
 	}
 
 	@Patch(":roleId/removedAt")
@@ -67,11 +59,7 @@ export class RolesController {
 	@ApiResponseEntity(RoleDto, HttpStatus.OK)
 	async removeRole(@Param("roleId") roleId: string) {
 		const role = await this.service.removeById(roleId);
-		return new ResponseEntity(
-			HttpStatus.OK,
-			"성공",
-			plainToInstance(RoleDto, role),
-		);
+		return plainToInstance(RoleDto, role);
 	}
 
 	@Delete(":roleId")
@@ -79,11 +67,7 @@ export class RolesController {
 	@ApiResponseEntity(RoleDto, HttpStatus.OK)
 	async deleteRole(@Param("roleId") roleId: string) {
 		const role = await this.service.deleteById(roleId);
-		return new ResponseEntity(
-			HttpStatus.OK,
-			"성공",
-			plainToInstance(RoleDto, role),
-		);
+		return plainToInstance(RoleDto, role);
 	}
 
 	@Get()
@@ -92,11 +76,12 @@ export class RolesController {
 	async getRolesByQuery(@Query() query: QueryRoleDto) {
 		const { count, roles } = await this.service.getManyByQuery(query);
 
-		return new ResponseEntity(
-			HttpStatus.OK,
-			"success",
+		return wrapResponse(
 			roles.map((role) => role?.toDto?.() ?? role),
-			query.toPageMetaDto(count),
+			{
+				message: "success",
+				meta: query.toPageMetaDto(count),
+			},
 		);
 	}
 }

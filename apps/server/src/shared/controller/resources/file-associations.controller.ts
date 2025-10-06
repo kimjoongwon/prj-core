@@ -16,11 +16,11 @@ import {
 	CreateFileAssociationDto,
 	FileAssociationDto,
 	QueryFileAssociationDto,
-	ResponseEntity,
 	UpdateFileAssociationDto,
 } from "@shared/schema";
 import { plainToInstance } from "class-transformer";
 import { FileAssociationsService } from "../../service/resources/file-associations.service";
+import { wrapResponse } from "../../util/response.util";
 
 @ApiTags("FILE-ASSOCIATIONS")
 @Controller()
@@ -35,11 +35,7 @@ export class FileAssociationsController {
 	) {
 		const fileAssociation = await this.service.create(createFileAssociationDto);
 
-		return new ResponseEntity(
-			HttpStatus.OK,
-			"성공",
-			plainToInstance(FileAssociationDto, fileAssociation),
-		);
+		return plainToInstance(FileAssociationDto, fileAssociation);
 	}
 
 	@Get(":fileAssociationId")
@@ -49,11 +45,7 @@ export class FileAssociationsController {
 		@Param("fileAssociationId") fileAssociationId: string,
 	) {
 		const fileAssociation = await this.service.getById(fileAssociationId);
-		return new ResponseEntity(
-			HttpStatus.OK,
-			"성공",
-			plainToInstance(FileAssociationDto, fileAssociation),
-		);
+		return plainToInstance(FileAssociationDto, fileAssociation);
 	}
 
 	@Patch("removedAt")
@@ -65,7 +57,7 @@ export class FileAssociationsController {
 			this.service.removeById(id),
 		);
 		const results = await Promise.all(promises);
-		return new ResponseEntity(HttpStatus.OK, "성공", results.length);
+		return results.length;
 	}
 
 	@Patch(":fileAssociationId")
@@ -79,11 +71,7 @@ export class FileAssociationsController {
 			fileAssociationId,
 			updateFileAssociationDto,
 		);
-		return new ResponseEntity(
-			HttpStatus.OK,
-			"성공",
-			plainToInstance(FileAssociationDto, fileAssociation),
-		);
+		return plainToInstance(FileAssociationDto, fileAssociation);
 	}
 
 	@Patch(":fileAssociationId/removedAt")
@@ -93,11 +81,7 @@ export class FileAssociationsController {
 		@Param("fileAssociationId") fileAssociationId: string,
 	) {
 		const fileAssociation = await this.service.removeById(fileAssociationId);
-		return new ResponseEntity(
-			HttpStatus.OK,
-			"성공",
-			plainToInstance(FileAssociationDto, fileAssociation),
-		);
+		return plainToInstance(FileAssociationDto, fileAssociation);
 	}
 
 	@Delete(":fileAssociationId")
@@ -107,11 +91,7 @@ export class FileAssociationsController {
 		@Param("fileAssociationId") fileAssociationId: string,
 	) {
 		const fileAssociation = await this.service.deleteById(fileAssociationId);
-		return new ResponseEntity(
-			HttpStatus.OK,
-			"성공",
-			plainToInstance(FileAssociationDto, fileAssociation),
-		);
+		return plainToInstance(FileAssociationDto, fileAssociation);
 	}
 
 	@Get()
@@ -120,11 +100,8 @@ export class FileAssociationsController {
 	async getFileAssociationsByQuery(@Query() query: QueryFileAssociationDto) {
 		const { fileAssociations, count } =
 			await this.service.getManyByQuery(query);
-		return new ResponseEntity(
-			HttpStatus.OK,
-			"성공",
-			plainToInstance(FileAssociationDto, fileAssociations),
-			query.toPageMetaDto(count),
-		);
+		return wrapResponse(plainToInstance(FileAssociationDto, fileAssociations), {
+			meta: query.toPageMetaDto(count),
+		});
 	}
 }

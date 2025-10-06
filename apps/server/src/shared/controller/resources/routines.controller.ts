@@ -16,12 +16,12 @@ import {
 	type CreateRoutineDto,
 	PageMetaDto,
 	type QueryRoutineDto,
-	ResponseEntity,
 	RoutineDto,
 	type UpdateRoutineDto,
 } from "@shared/schema";
 import { plainToInstance } from "class-transformer";
 import { RoutinesService } from "../../service/resources/routines.service";
+import { wrapResponse } from "../../util/response.util";
 
 @ApiTags("ROUTINE")
 @Controller()
@@ -33,11 +33,7 @@ export class RoutinesController {
 	@ApiResponseEntity(RoutineDto, HttpStatus.OK)
 	async createRoutine(@Body() createRoutineDto: CreateRoutineDto) {
 		const routine = await this.service.create(createRoutineDto);
-		return new ResponseEntity(
-			HttpStatus.OK,
-			"성공",
-			routine?.toDto?.() ?? routine,
-		);
+		return routine?.toDto?.() ?? routine;
 	}
 
 	@Get(":routineId")
@@ -45,11 +41,7 @@ export class RoutinesController {
 	@ApiResponseEntity(RoutineDto, HttpStatus.OK)
 	async getRoutine(@Param("routineId") routineId: string) {
 		const routine = await this.service.getById(routineId);
-		return new ResponseEntity(
-			HttpStatus.OK,
-			"성공",
-			routine?.toDto?.() ?? routine,
-		);
+		return routine?.toDto?.() ?? routine;
 	}
 
 	@Patch(":routineId")
@@ -60,11 +52,7 @@ export class RoutinesController {
 		@Body() updateRoutineDto: UpdateRoutineDto,
 	) {
 		const routine = await this.service.updateById(routineId, updateRoutineDto);
-		return new ResponseEntity(
-			HttpStatus.OK,
-			"성공",
-			plainToInstance(RoutineDto, routine),
-		);
+		return plainToInstance(RoutineDto, routine);
 	}
 
 	@Patch(":routineId/removedAt")
@@ -72,11 +60,7 @@ export class RoutinesController {
 	@ApiResponseEntity(RoutineDto, HttpStatus.OK)
 	async removeRoutine(@Param("routineId") routineId: string) {
 		const routine = await this.service.removeById(routineId);
-		return new ResponseEntity(
-			HttpStatus.OK,
-			"성공",
-			plainToInstance(RoutineDto, routine),
-		);
+		return plainToInstance(RoutineDto, routine);
 	}
 
 	@Delete(":routineId")
@@ -84,11 +68,7 @@ export class RoutinesController {
 	@ApiResponseEntity(RoutineDto, HttpStatus.OK)
 	async deleteRoutine(@Param("routineId") routineId: string) {
 		const routine = await this.service.deleteById(routineId);
-		return new ResponseEntity(
-			HttpStatus.OK,
-			"성공",
-			plainToInstance(RoutineDto, routine),
-		);
+		return plainToInstance(RoutineDto, routine);
 	}
 
 	@Get()
@@ -96,11 +76,12 @@ export class RoutinesController {
 	@ApiResponseEntity(RoutineDto, HttpStatus.OK, { isArray: true })
 	async getRoutinesByQuery(@Query() query: QueryRoutineDto) {
 		const { count, items } = await this.service.getManyByQuery(query);
-		return new ResponseEntity(
-			HttpStatus.OK,
-			"success",
+		return wrapResponse(
 			items.map((item) => item?.toDto?.() ?? item),
-			new PageMetaDto(query.skip, query.take, count),
+			{
+				message: "success",
+				meta: new PageMetaDto(query.skip, query.take, count),
+			},
 		);
 	}
 }

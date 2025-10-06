@@ -14,8 +14,8 @@ import {
 	ApiResponseEntity,
 	CreateFileDto,
 	FileDto,
-	ResponseEntity,
 } from "@shared/schema";
+import { ResponseMessage } from "../../decorator/response-message.decorator";
 import { FilesService } from "../../service/resources/files.service";
 
 @Controller()
@@ -27,31 +27,25 @@ export class FilesController {
 	@ApiResponseEntity(FileDto, HttpStatus.OK)
 	async getFileById(@Param("fileId") fileId: string) {
 		const file = await this.service.getById(fileId);
-		return new ResponseEntity(HttpStatus.OK, "성공", file?.toDto?.() ?? file);
+		return file?.toDto?.() ?? file;
 	}
 
 	@Post()
 	@HttpCode(HttpStatus.CREATED)
 	@ApiResponseEntity(FileDto, HttpStatus.CREATED)
+	@ResponseMessage("success")
 	async createFile(@Body() createFileDto: CreateFileDto) {
 		const file = await this.service.create(createFileDto);
-		return new ResponseEntity(
-			HttpStatus.CREATED,
-			"success",
-			file?.toDto?.() ?? file,
-		);
+		return file?.toDto?.() ?? file;
 	}
 
 	@Patch(":fileId/removedAt")
 	@HttpCode(HttpStatus.OK)
 	@ApiResponseEntity(FileDto, HttpStatus.OK)
+	@ResponseMessage("success")
 	async removeFileById(@Param("fileId") fileId: string) {
 		const fileEntity = await this.service.removeById(fileId);
-		return new ResponseEntity(
-			HttpStatus.OK,
-			"success",
-			fileEntity?.toDto?.() ?? fileEntity,
-		);
+		return fileEntity?.toDto?.() ?? fileEntity;
 	}
 
 	@Patch(":fileId")
@@ -65,15 +59,12 @@ export class FilesController {
 			isRequired: false,
 		},
 	)
+	@ResponseMessage("success")
 	async updateFileById(
 		@Param("fileId") fileId: string,
 		@UploadedFiles() { files }: { files: FileDto[] },
 	) {
 		const fileEntity = await this.service.updateById(fileId, files?.[0]);
-		return new ResponseEntity(
-			HttpStatus.OK,
-			"success",
-			fileEntity?.toDto?.() ?? fileEntity,
-		);
+		return fileEntity?.toDto?.() ?? fileEntity;
 	}
 }

@@ -17,11 +17,11 @@ import {
 	ExerciseDto,
 	PageMetaDto,
 	QueryExerciseDto,
-	ResponseEntity,
 	UpdateExerciseDto,
 } from "@shared/schema";
 import { plainToInstance } from "class-transformer";
 import { ExercisesService } from "../../service/resources/exercises.service";
+import { wrapResponse } from "../../util/response.util";
 
 @ApiTags("EXERCISES")
 @Controller()
@@ -33,11 +33,12 @@ export class ExercisesController {
 	@ApiResponseEntity(ExerciseDto, HttpStatus.OK, { isArray: true })
 	async getExercisesByQuery(@Query() query: QueryExerciseDto) {
 		const { count, exercises } = await this.service.getManyByQuery(query);
-		return new ResponseEntity(
-			HttpStatus.OK,
-			"success",
+		return wrapResponse(
 			exercises.map((exercise) => exercise?.toDto?.() ?? exercise),
-			new PageMetaDto(query.skip, query.take, count),
+			{
+				message: "success",
+				meta: new PageMetaDto(query.skip, query.take, count),
+			},
 		);
 	}
 
@@ -46,11 +47,7 @@ export class ExercisesController {
 	@ApiResponseEntity(ExerciseDto, HttpStatus.OK)
 	async createExercise(@Body() createExerciseDto: CreateExerciseDto) {
 		const exercise = await this.service.create(createExerciseDto);
-		return new ResponseEntity(
-			HttpStatus.OK,
-			"성공",
-			exercise?.toDto?.() ?? exercise,
-		);
+		return exercise?.toDto?.() ?? exercise;
 	}
 
 	@Get(":exerciseId")
@@ -58,11 +55,7 @@ export class ExercisesController {
 	@ApiResponseEntity(ExerciseDto, HttpStatus.OK)
 	async getExercise(@Param("exerciseId") exerciseId: string) {
 		const exercise = await this.service.getById(exerciseId);
-		return new ResponseEntity(
-			HttpStatus.OK,
-			"성공",
-			exercise?.toDto?.() ?? exercise,
-		);
+		return exercise?.toDto?.() ?? exercise;
 	}
 
 	@Patch(":exerciseId")
@@ -76,11 +69,7 @@ export class ExercisesController {
 			exerciseId,
 			updateExerciseDto,
 		);
-		return new ResponseEntity(
-			HttpStatus.OK,
-			"성공",
-			plainToInstance(ExerciseDto, exercise),
-		);
+		return plainToInstance(ExerciseDto, exercise);
 	}
 
 	@Patch(":exerciseId/removedAt")
@@ -88,11 +77,7 @@ export class ExercisesController {
 	@ApiResponseEntity(ExerciseDto, HttpStatus.OK)
 	async removeExercise(@Param("exerciseId") exerciseId: string) {
 		const exercise = await this.service.removeById(exerciseId);
-		return new ResponseEntity(
-			HttpStatus.OK,
-			"성공",
-			plainToInstance(ExerciseDto, exercise),
-		);
+		return plainToInstance(ExerciseDto, exercise);
 	}
 
 	@Delete(":exerciseId")
@@ -100,10 +85,6 @@ export class ExercisesController {
 	@ApiResponseEntity(ExerciseDto, HttpStatus.OK)
 	async deleteExercise(@Param("exerciseId") exerciseId: string) {
 		const exercise = await this.service.deleteById(exerciseId);
-		return new ResponseEntity(
-			HttpStatus.OK,
-			"성공",
-			plainToInstance(ExerciseDto, exercise),
-		);
+		return plainToInstance(ExerciseDto, exercise);
 	}
 }

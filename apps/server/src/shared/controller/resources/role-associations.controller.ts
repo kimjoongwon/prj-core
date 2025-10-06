@@ -15,12 +15,12 @@ import {
 	ApiResponseEntity,
 	CreateRoleAssociationDto,
 	QueryRoleAssociationDto,
-	ResponseEntity,
 	RoleAssociationDto,
 	UpdateRoleAssociationDto,
 } from "@shared/schema";
 import { plainToInstance } from "class-transformer";
 import { RoleAssociationsService } from "../../service/resources/role-associations.service";
+import { wrapResponse } from "../../util/response.util";
 
 @ApiTags("ROLE-ASSOCIATIONS")
 @Controller()
@@ -35,11 +35,7 @@ export class RoleAssociationsController {
 	) {
 		const roleAssociation = await this.service.create(createRoleAssociationDto);
 
-		return new ResponseEntity(
-			HttpStatus.OK,
-			"성공",
-			plainToInstance(RoleAssociationDto, roleAssociation),
-		);
+		return plainToInstance(RoleAssociationDto, roleAssociation);
 	}
 
 	@Get(":roleAssociationId")
@@ -49,11 +45,7 @@ export class RoleAssociationsController {
 		@Param("roleAssociationId") roleAssociationId: string,
 	) {
 		const roleAssociation = await this.service.getById(roleAssociationId);
-		return new ResponseEntity(
-			HttpStatus.OK,
-			"성공",
-			plainToInstance(RoleAssociationDto, roleAssociation),
-		);
+		return plainToInstance(RoleAssociationDto, roleAssociation);
 	}
 
 	@Patch("removedAt")
@@ -66,7 +58,7 @@ export class RoleAssociationsController {
 		);
 		const results = await Promise.all(promises);
 		const roleAssociations = { count: results.length };
-		return new ResponseEntity(HttpStatus.OK, "성공", roleAssociations.count);
+		return roleAssociations.count;
 	}
 
 	@Patch(":roleAssociationId")
@@ -80,11 +72,7 @@ export class RoleAssociationsController {
 			roleAssociationId,
 			updateRoleAssociationDto,
 		);
-		return new ResponseEntity(
-			HttpStatus.OK,
-			"성공",
-			plainToInstance(RoleAssociationDto, roleAssociation),
-		);
+		return plainToInstance(RoleAssociationDto, roleAssociation);
 	}
 
 	@Patch(":roleAssociationId/removedAt")
@@ -94,11 +82,7 @@ export class RoleAssociationsController {
 		@Param("roleAssociationId") roleAssociationId: string,
 	) {
 		const roleAssociation = await this.service.removeById(roleAssociationId);
-		return new ResponseEntity(
-			HttpStatus.OK,
-			"성공",
-			plainToInstance(RoleAssociationDto, roleAssociation),
-		);
+		return plainToInstance(RoleAssociationDto, roleAssociation);
 	}
 
 	@Delete(":roleAssociationId")
@@ -108,11 +92,7 @@ export class RoleAssociationsController {
 		@Param("roleAssociationId") roleAssociationId: string,
 	) {
 		const roleAssociation = await this.service.deleteById(roleAssociationId);
-		return new ResponseEntity(
-			HttpStatus.OK,
-			"성공",
-			plainToInstance(RoleAssociationDto, roleAssociation),
-		);
+		return plainToInstance(RoleAssociationDto, roleAssociation);
 	}
 
 	@Get()
@@ -121,11 +101,8 @@ export class RoleAssociationsController {
 	async getRoleAssociationsByQuery(@Query() query: QueryRoleAssociationDto) {
 		const { roleAssociations, count } =
 			await this.service.getManyByQuery(query);
-		return new ResponseEntity(
-			HttpStatus.OK,
-			"성공",
-			plainToInstance(RoleAssociationDto, roleAssociations),
-			query.toPageMetaDto(count),
-		);
+		return wrapResponse(plainToInstance(RoleAssociationDto, roleAssociations), {
+			meta: query.toPageMetaDto(count),
+		});
 	}
 }

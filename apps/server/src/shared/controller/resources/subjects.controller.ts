@@ -16,12 +16,12 @@ import {
 	type CreateSubjectDto,
 	PageMetaDto,
 	type QuerySubjectDto,
-	ResponseEntity,
 	SubjectDto,
 	type UpdateSubjectDto,
 } from "@shared/schema";
 import { plainToInstance } from "class-transformer";
 import { SubjectsService } from "../../service/resources/subjects.service";
+import { wrapResponse } from "../../util/response.util";
 
 @ApiTags("SUBJECTS")
 @Controller()
@@ -34,11 +34,7 @@ export class SubjectsController {
 	async createSubject(@Body() createSubjectDto: CreateSubjectDto) {
 		const subject = await this.service.create(createSubjectDto);
 
-		return new ResponseEntity(
-			HttpStatus.OK,
-			"성공",
-			plainToInstance(SubjectDto, subject),
-		);
+		return plainToInstance(SubjectDto, subject);
 	}
 
 	@Get(":subjectId")
@@ -46,11 +42,7 @@ export class SubjectsController {
 	@ApiResponseEntity(SubjectDto, HttpStatus.OK)
 	async getSubject(@Param("subjectId") subjectId: string) {
 		const subject = await this.service.getById(subjectId);
-		return new ResponseEntity(
-			HttpStatus.OK,
-			"성공",
-			plainToInstance(SubjectDto, subject),
-		);
+		return plainToInstance(SubjectDto, subject);
 	}
 
 	@Patch("removedAt")
@@ -61,7 +53,7 @@ export class SubjectsController {
 		const promises = subjectIds.map((id) => this.service.removeById(id));
 		const results = await Promise.all(promises);
 		const subjects = { count: results.length };
-		return new ResponseEntity(HttpStatus.OK, "성공", subjects.count);
+		return subjects.count;
 	}
 
 	@Patch(":subjectId")
@@ -72,11 +64,7 @@ export class SubjectsController {
 		@Body() updateSubjectDto: UpdateSubjectDto,
 	) {
 		const subject = await this.service.updateById(subjectId, updateSubjectDto);
-		return new ResponseEntity(
-			HttpStatus.OK,
-			"성공",
-			plainToInstance(SubjectDto, subject),
-		);
+		return plainToInstance(SubjectDto, subject);
 	}
 
 	@Patch(":subjectId/removedAt")
@@ -84,11 +72,7 @@ export class SubjectsController {
 	@ApiResponseEntity(SubjectDto, HttpStatus.OK)
 	async removeSubject(@Param("subjectId") subjectId: string) {
 		const subject = await this.service.removeById(subjectId);
-		return new ResponseEntity(
-			HttpStatus.OK,
-			"성공",
-			plainToInstance(SubjectDto, subject),
-		);
+		return plainToInstance(SubjectDto, subject);
 	}
 
 	@Delete(":subjectId")
@@ -96,11 +80,7 @@ export class SubjectsController {
 	@ApiResponseEntity(SubjectDto, HttpStatus.OK)
 	async deleteSubject(@Param("subjectId") subjectId: string) {
 		const subject = await this.service.deleteById(subjectId);
-		return new ResponseEntity(
-			HttpStatus.OK,
-			"성공",
-			plainToInstance(SubjectDto, subject),
-		);
+		return plainToInstance(SubjectDto, subject);
 	}
 
 	@Get()
@@ -109,11 +89,12 @@ export class SubjectsController {
 	async getSubjectsByQuery(@Query() query: QuerySubjectDto) {
 		const { count, subjects } = await this.service.getManyByQuery(query);
 
-		return new ResponseEntity(
-			HttpStatus.OK,
-			"success",
+		return wrapResponse(
 			subjects.map((subject) => subject?.toDto?.() ?? subject),
-			new PageMetaDto(query.skip, query.take, count),
+			{
+				message: "success",
+				meta: new PageMetaDto(query.skip, query.take, count),
+			},
 		);
 	}
 }

@@ -15,12 +15,12 @@ import {
 	ApiResponseEntity,
 	CreateSpaceAssociationDto,
 	QuerySpaceAssociationDto,
-	ResponseEntity,
 	SpaceAssociationDto,
 	UpdateSpaceAssociationDto,
 } from "@shared/schema";
 import { plainToInstance } from "class-transformer";
 import { SpaceAssociationsService } from "../../service/resources/space-associations.service";
+import { wrapResponse } from "../../util/response.util";
 
 @ApiTags("SPACE-ASSOCIATIONS")
 @Controller()
@@ -37,11 +37,7 @@ export class SpaceAssociationsController {
 			createSpaceAssociationDto,
 		);
 
-		return new ResponseEntity(
-			HttpStatus.OK,
-			"성공",
-			plainToInstance(SpaceAssociationDto, spaceAssociation),
-		);
+		return plainToInstance(SpaceAssociationDto, spaceAssociation);
 	}
 
 	@Get(":spaceAssociationId")
@@ -51,11 +47,7 @@ export class SpaceAssociationsController {
 		@Param("spaceAssociationId") spaceAssociationId: string,
 	) {
 		const spaceAssociation = await this.service.getById(spaceAssociationId);
-		return new ResponseEntity(
-			HttpStatus.OK,
-			"성공",
-			plainToInstance(SpaceAssociationDto, spaceAssociation),
-		);
+		return plainToInstance(SpaceAssociationDto, spaceAssociation);
 	}
 
 	@Patch("removedAt")
@@ -68,7 +60,7 @@ export class SpaceAssociationsController {
 		);
 		const results = await Promise.all(promises);
 		const spaceAssociations = { count: results.length };
-		return new ResponseEntity(HttpStatus.OK, "성공", spaceAssociations.count);
+		return spaceAssociations.count;
 	}
 
 	@Patch(":spaceAssociationId")
@@ -82,11 +74,7 @@ export class SpaceAssociationsController {
 			spaceAssociationId,
 			updateSpaceAssociationDto,
 		);
-		return new ResponseEntity(
-			HttpStatus.OK,
-			"성공",
-			plainToInstance(SpaceAssociationDto, spaceAssociation),
-		);
+		return plainToInstance(SpaceAssociationDto, spaceAssociation);
 	}
 
 	@Patch(":spaceAssociationId/removedAt")
@@ -96,11 +84,7 @@ export class SpaceAssociationsController {
 		@Param("spaceAssociationId") spaceAssociationId: string,
 	) {
 		const spaceAssociation = await this.service.removeById(spaceAssociationId);
-		return new ResponseEntity(
-			HttpStatus.OK,
-			"성공",
-			plainToInstance(SpaceAssociationDto, spaceAssociation),
-		);
+		return plainToInstance(SpaceAssociationDto, spaceAssociation);
 	}
 
 	@Delete(":spaceAssociationId")
@@ -110,11 +94,7 @@ export class SpaceAssociationsController {
 		@Param("spaceAssociationId") spaceAssociationId: string,
 	) {
 		const spaceAssociation = await this.service.deleteById(spaceAssociationId);
-		return new ResponseEntity(
-			HttpStatus.OK,
-			"성공",
-			plainToInstance(SpaceAssociationDto, spaceAssociation),
-		);
+		return plainToInstance(SpaceAssociationDto, spaceAssociation);
 	}
 
 	@Get()
@@ -123,11 +103,11 @@ export class SpaceAssociationsController {
 	async getSpaceAssociationsByQuery(@Query() query: QuerySpaceAssociationDto) {
 		const { spaceAssociations, count } =
 			await this.service.getManyByQuery(query);
-		return new ResponseEntity(
-			HttpStatus.OK,
-			"성공",
+		return wrapResponse(
 			plainToInstance(SpaceAssociationDto, spaceAssociations),
-			query.toPageMetaDto(count),
+			{
+				meta: query.toPageMetaDto(count),
+			},
 		);
 	}
 }

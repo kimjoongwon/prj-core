@@ -17,13 +17,13 @@ import {
 	ApiResponseEntity,
 	CreateUserDto,
 	QueryUserDto,
-	ResponseEntity,
 	UpdateUserDto,
 	UserDto,
 } from "@shared/schema";
 import { plainToInstance } from "class-transformer";
 import { Request } from "express";
 import { UsersService } from "../../service/resources/users.service";
+import { wrapResponse } from "../../util/response.util";
 
 @ApiTags("USERS")
 @Controller()
@@ -39,11 +39,7 @@ export class UsersController {
 		const user = await this.service.create({
 			data: createUserDto,
 		});
-		return new ResponseEntity(
-			HttpStatus.OK,
-			"성공",
-			plainToInstance(UserDto, user),
-		);
+		return plainToInstance(UserDto, user);
 	}
 
 	@Get(":userId")
@@ -51,11 +47,7 @@ export class UsersController {
 	@ApiResponseEntity(UserDto, HttpStatus.OK)
 	async getUser(@Param("userId") userId: string) {
 		const user = await this.service.getById(userId);
-		return new ResponseEntity(
-			HttpStatus.OK,
-			"성공",
-			plainToInstance(UserDto, user),
-		);
+		return plainToInstance(UserDto, user);
 	}
 
 	@Patch("removedAt")
@@ -66,7 +58,7 @@ export class UsersController {
 		const promises = userIds.map((id) => this.service.removeById(id));
 		const results = await Promise.all(promises);
 		const users = { count: results.length };
-		return new ResponseEntity(HttpStatus.OK, "성공", users.count);
+		return users.count;
 	}
 
 	@Patch(":userId")
@@ -77,11 +69,7 @@ export class UsersController {
 		@Body() updateUserDto: UpdateUserDto,
 	) {
 		const user = await this.service.updateById(userId, updateUserDto);
-		return new ResponseEntity(
-			HttpStatus.OK,
-			"성공",
-			plainToInstance(UserDto, user),
-		);
+		return plainToInstance(UserDto, user);
 	}
 
 	@Patch(":userId/removedAt")
@@ -89,11 +77,7 @@ export class UsersController {
 	@ApiResponseEntity(UserDto, HttpStatus.OK)
 	async removeUser(@Param("userId") userId: string) {
 		const user = await this.service.removeById(userId);
-		return new ResponseEntity(
-			HttpStatus.OK,
-			"성공",
-			plainToInstance(UserDto, user),
-		);
+		return plainToInstance(UserDto, user);
 	}
 
 	@Delete(":userId")
@@ -101,11 +85,7 @@ export class UsersController {
 	@ApiResponseEntity(UserDto, HttpStatus.OK)
 	async deleteUser(@Param("userId") userId: string) {
 		const user = await this.service.deleteById(userId);
-		return new ResponseEntity(
-			HttpStatus.OK,
-			"성공",
-			plainToInstance(UserDto, user),
-		);
+		return plainToInstance(UserDto, user);
 	}
 
 	@Get()
@@ -126,11 +106,12 @@ export class UsersController {
 				`Successfully retrieved ${users.length} users, total count: ${count}`,
 			);
 
-			return new ResponseEntity(
-				HttpStatus.OK,
-				"success",
+			return wrapResponse(
 				users.map((user) => plainToInstance(UserDto, user)),
-				query.toPageMetaDto(count),
+				{
+					message: "success",
+					meta: query.toPageMetaDto(count),
+				},
 			);
 		} catch (error) {
 			this.logger.error(

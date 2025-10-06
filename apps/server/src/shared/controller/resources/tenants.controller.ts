@@ -16,13 +16,13 @@ import {
 	CreateTenantDto,
 	PageMetaDto,
 	QueryTenantDto,
-	ResponseEntity,
 	TenantDto,
 	UpdateTenantDto,
 } from "@shared/schema";
 import { plainToInstance } from "class-transformer";
 import { ContextService } from "../../service/context.service";
 import { TenantsService } from "../../service/resources/tenants.service";
+import { wrapResponse } from "../../util/response.util";
 
 @ApiTags("TENANTS")
 @Controller()
@@ -39,11 +39,7 @@ export class TenantsController {
 		const userId = this.contextService.getAuthUserId();
 		// Note: getManyByUserId was replaced with getManyByQuery, may need adjustment
 		const tenants = await this.service.getManyByQuery({ userId } as any);
-		return new ResponseEntity(
-			HttpStatus.OK,
-			"성공",
-			plainToInstance(TenantDto, tenants),
-		);
+		return plainToInstance(TenantDto, tenants);
 	}
 
 	@Post()
@@ -52,11 +48,7 @@ export class TenantsController {
 	async createTenant(@Body() createTenantDto: CreateTenantDto) {
 		const tenant = await this.service.create(createTenantDto);
 
-		return new ResponseEntity(
-			HttpStatus.OK,
-			"성공",
-			plainToInstance(TenantDto, tenant),
-		);
+		return plainToInstance(TenantDto, tenant);
 	}
 
 	@Get(":tenantId")
@@ -64,11 +56,7 @@ export class TenantsController {
 	@ApiResponseEntity(TenantDto, HttpStatus.OK)
 	async getTenantById(@Param("tenantId") tenantId: string) {
 		const tenant = await this.service.getById(tenantId);
-		return new ResponseEntity(
-			HttpStatus.OK,
-			"성공",
-			tenant?.toDto?.() ?? tenant,
-		);
+		return tenant?.toDto?.() ?? tenant;
 	}
 
 	@Patch(":tenantId")
@@ -79,11 +67,7 @@ export class TenantsController {
 		@Body() updateTenantDto: UpdateTenantDto,
 	) {
 		const tenant = await this.service.updateById(tenantId, updateTenantDto);
-		return new ResponseEntity(
-			HttpStatus.OK,
-			"성공",
-			plainToInstance(TenantDto, tenant),
-		);
+		return plainToInstance(TenantDto, tenant);
 	}
 
 	@Patch(":tenantId/removedAt")
@@ -91,11 +75,7 @@ export class TenantsController {
 	@ApiResponseEntity(TenantDto, HttpStatus.OK)
 	async removeTenantById(@Param("tenantId") tenantId: string) {
 		const tenant = await this.service.removeById(tenantId);
-		return new ResponseEntity(
-			HttpStatus.OK,
-			"성공",
-			plainToInstance(TenantDto, tenant),
-		);
+		return plainToInstance(TenantDto, tenant);
 	}
 
 	@Delete(":tenantId")
@@ -103,11 +83,7 @@ export class TenantsController {
 	@ApiResponseEntity(TenantDto, HttpStatus.OK)
 	async deleteTenant(@Param("tenantId") tenantId: string) {
 		const tenant = await this.service.deleteById(tenantId);
-		return new ResponseEntity(
-			HttpStatus.OK,
-			"성공",
-			plainToInstance(TenantDto, tenant),
-		);
+		return plainToInstance(TenantDto, tenant);
 	}
 
 	@Get()
@@ -115,11 +91,12 @@ export class TenantsController {
 	@ApiResponseEntity(TenantDto, HttpStatus.OK, { isArray: true })
 	async getTenantsByQuery(@Query() query: QueryTenantDto) {
 		const { count, tenants } = await this.service.getManyByQuery(query);
-		return new ResponseEntity(
-			HttpStatus.OK,
-			"success",
+		return wrapResponse(
 			tenants.map((tenant) => tenant?.toDto?.() ?? tenant),
-			new PageMetaDto(query.skip, query.take, count),
+			{
+				message: "success",
+				meta: new PageMetaDto(query.skip, query.take, count),
+			},
 		);
 	}
 }

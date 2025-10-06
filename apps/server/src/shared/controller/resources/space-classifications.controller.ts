@@ -15,12 +15,12 @@ import {
 	ApiResponseEntity,
 	CreateSpaceClassificationDto,
 	QuerySpaceClassificationDto,
-	ResponseEntity,
 	SpaceClassificationDto,
 	UpdateSpaceClassificationDto,
 } from "@shared/schema";
 import { plainToInstance } from "class-transformer";
 import { SpaceClassificationsService } from "../../service/resources/space-classifications.service";
+import { wrapResponse } from "../../util/response.util";
 
 @ApiTags("SPACE-CLASSIFICATIONS")
 @Controller()
@@ -36,11 +36,7 @@ export class SpaceClassificationsController {
 		const spaceClassification = await this.service.create(
 			createSpaceClassificationDto,
 		);
-		return new ResponseEntity(
-			HttpStatus.OK,
-			"성공",
-			plainToInstance(SpaceClassificationDto, spaceClassification),
-		);
+		return plainToInstance(SpaceClassificationDto, spaceClassification);
 	}
 
 	@Get(":spaceClassificationId")
@@ -48,11 +44,7 @@ export class SpaceClassificationsController {
 	@ApiResponseEntity(SpaceClassificationDto, HttpStatus.OK)
 	async getSpaceClassification(@Param("spaceClassificationId") id: string) {
 		const spaceClassification = await this.service.getById(id);
-		return new ResponseEntity(
-			HttpStatus.OK,
-			"성공",
-			plainToInstance(SpaceClassificationDto, spaceClassification),
-		);
+		return plainToInstance(SpaceClassificationDto, spaceClassification);
 	}
 
 	@Patch(":spaceClassificationId")
@@ -66,11 +58,7 @@ export class SpaceClassificationsController {
 			id,
 			updateSpaceClassificationDto,
 		);
-		return new ResponseEntity(
-			HttpStatus.OK,
-			"성공",
-			plainToInstance(SpaceClassificationDto, spaceClassification),
-		);
+		return plainToInstance(SpaceClassificationDto, spaceClassification);
 	}
 
 	@Patch(":spaceClassificationId/removedAt")
@@ -78,11 +66,7 @@ export class SpaceClassificationsController {
 	@ApiResponseEntity(SpaceClassificationDto, HttpStatus.OK)
 	async removeSpaceClassification(@Param("spaceClassificationId") id: string) {
 		const spaceClassification = await this.service.removeById(id);
-		return new ResponseEntity(
-			HttpStatus.OK,
-			"성공",
-			plainToInstance(SpaceClassificationDto, spaceClassification),
-		);
+		return plainToInstance(SpaceClassificationDto, spaceClassification);
 	}
 
 	@Delete(":spaceClassificationId")
@@ -90,11 +74,7 @@ export class SpaceClassificationsController {
 	@ApiResponseEntity(SpaceClassificationDto, HttpStatus.OK)
 	async deleteSpaceClassification(@Param("spaceClassificationId") id: string) {
 		const spaceClassification = await this.service.deleteById(id);
-		return new ResponseEntity(
-			HttpStatus.OK,
-			"성공",
-			plainToInstance(SpaceClassificationDto, spaceClassification),
-		);
+		return plainToInstance(SpaceClassificationDto, spaceClassification);
 	}
 
 	@Get()
@@ -104,11 +84,8 @@ export class SpaceClassificationsController {
 		@Query() query: QuerySpaceClassificationDto,
 	) {
 		const { items, count } = await this.service.getManyByQuery(query);
-		return new ResponseEntity(
-			HttpStatus.OK,
-			"성공",
-			plainToInstance(SpaceClassificationDto, items),
-			query.toPageMetaDto(count),
-		);
+		return wrapResponse(plainToInstance(SpaceClassificationDto, items), {
+			meta: query.toPageMetaDto(count),
+		});
 	}
 }

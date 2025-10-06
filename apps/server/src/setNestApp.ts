@@ -7,6 +7,7 @@ import { HttpAdapterHost, Reflector } from "@nestjs/core";
 import { AllExceptionsFilter, PrismaClientExceptionFilter } from "@shared";
 import { JwtAuthGuard } from "./shared/guard";
 import { RequestContextInterceptor } from "./shared/interceptor/request-context.interceptor";
+import { ResponseEntityInterceptor } from "./shared/interceptor/response-entity.interceptor";
 
 export function setNestApp<T extends INestApplication>(app: T): void {
 	const httpAdapterHost = app.get(HttpAdapterHost);
@@ -38,6 +39,9 @@ export function setNestApp<T extends INestApplication>(app: T): void {
 	// =================================================================
 	// Global Interceptors - 실행 순서: RequestContextInterceptor → ClassSerializerInterceptor
 	// =================================================================
-	app.useGlobalInterceptors(app.get(RequestContextInterceptor));
-	app.useGlobalInterceptors(new ClassSerializerInterceptor(app.get(Reflector)));
+	app.useGlobalInterceptors(
+		app.get(RequestContextInterceptor),
+		app.get(ResponseEntityInterceptor),
+		new ClassSerializerInterceptor(app.get(Reflector)),
+	);
 }

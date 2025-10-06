@@ -16,6 +16,7 @@ import {
 import { CaslModule } from "nest-casl";
 // Global modules
 import { globalModules } from "../global.module";
+import { ResponseEntityInterceptor } from "../shared/interceptor/response-entity.interceptor";
 import { AppBuilderModule } from "./app-builder.module";
 import { AuthModule } from "./auth.module";
 import { CategoriesModule } from "./categories.module";
@@ -164,7 +165,11 @@ import { UsersModule } from "./users.module";
 			},
 		]),
 	],
-	providers: [RequestContextInterceptor, ContextService],
+	providers: [
+		RequestContextInterceptor,
+		ResponseEntityInterceptor,
+		ContextService,
+	],
 })
 export class AppModule implements OnModuleInit {
 	logger = new Logger(AppModule.name);
