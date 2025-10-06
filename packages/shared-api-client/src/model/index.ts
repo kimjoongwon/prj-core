@@ -252,3 +252,4 @@ export * from "./userAssociationDto";
 export * from "./userClassificationDto";
 export * from "./userDto";
 export * from "./verifyToken200AllOf";
+export * from './getNewToken200AllOf';

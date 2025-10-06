@@ -4,13 +4,13 @@
  * Plate
  * OpenAPI spec version: 1.0.0
  */
-import type { SpaceClassificationDto } from './spaceClassificationDto';
+import type { TokenDto } from './tokenDto';
 
-export type CreateSpaceClassification200AllOf = {
+export type GetNewToken200AllOf = {
   /** */
   httpStatus?: number;
   /** */
   message?: string;
   /** @nullable */
-  data?: SpaceClassificationDto;
+  data?: TokenDto;
 };

@@ -46,6 +46,8 @@ export class AuthController {
 			await this.authService.login(loginDto);
 		const mainTenantId = user.tenants?.find((tenant) => tenant.main)?.id ?? "";
 
+		console.log("=== AuthController.login 호출됨 ===");
+
 		res.cookie("refreshToken", refreshToken, {
 			httpOnly: true,
 		});
