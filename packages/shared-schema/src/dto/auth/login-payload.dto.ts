@@ -1,5 +1,5 @@
 import { Expose } from "class-transformer";
-import { StringField } from "../../decorator/field.decorators";
+import { StringField } from "../../decorator/field";
 
 export const loginPayloadValidations = {
 	email: {

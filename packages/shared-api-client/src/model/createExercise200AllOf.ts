@@ -4,13 +4,13 @@
  * Plate
  * OpenAPI spec version: 1.0.0
  */
-import type { ExerciseDto } from './exerciseDto';
+import type { ExerciseDto } from "./exerciseDto";
 
 export type CreateExercise200AllOf = {
-  /** */
-  httpStatus?: number;
-  /** */
-  message?: string;
-  /** @nullable */
-  data?: ExerciseDto;
+	/** */
+	httpStatus?: number;
+	/** */
+	message?: string;
+	/** @nullable */
+	data?: ExerciseDto;
 };

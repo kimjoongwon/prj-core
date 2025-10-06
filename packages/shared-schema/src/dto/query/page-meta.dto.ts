@@ -1,4 +1,4 @@
-import { BooleanField, NumberField } from "../../decorator/field.decorators";
+import { BooleanField, NumberField } from "../../decorator/field";
 import { PaginationUtil } from "../../lib/PaginationUtil";
 export class PageMetaDto {
 	@NumberField()

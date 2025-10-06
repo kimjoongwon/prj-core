@@ -3,7 +3,7 @@ export { $Enums, Prisma, PrismaClient } from "@prisma/client";
 export * from "./constant";
 export { ApiResponseEntity } from "./decorator/api-response-entity.decorator";
 // Decorator exports (avoiding conflicts)
-export * from "./decorator/field.decorators";
+export * from "./decorator/field";
 export { IS_PUBLIC_KEY, Public } from "./decorator/public.decorator";
 export {
 	PUBLIC_ROUTE_KEY,

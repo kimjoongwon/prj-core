@@ -4,14 +4,15 @@
  * Plate
  * OpenAPI spec version: 1.0.0
  */
-import type { GroupDto } from './groupDto';
-import type { GetGroupsByQuery200AllOfMeta } from './getGroupsByQuery200AllOfMeta';
+
+import type { GetGroupsByQuery200AllOfMeta } from "./getGroupsByQuery200AllOfMeta";
+import type { GroupDto } from "./groupDto";
 
 export type GetGroupsByQuery200AllOf = {
-  /** */
-  httpStatus?: number;
-  /** */
-  message?: string;
-  data?: GroupDto[];
-  meta?: GetGroupsByQuery200AllOfMeta;
+	/** */
+	httpStatus?: number;
+	/** */
+	message?: string;
+	data?: GroupDto[];
+	meta?: GetGroupsByQuery200AllOfMeta;
 };

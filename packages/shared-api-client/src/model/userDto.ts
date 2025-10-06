@@ -4,29 +4,29 @@
  * Plate
  * OpenAPI spec version: 1.0.0
  */
-import type { ProfileDto } from './profileDto';
-import type { TenantDto } from './tenantDto';
-import type { UserAssociationDto } from './userAssociationDto';
-import type { UserClassificationDto } from './userClassificationDto';
+import type { ProfileDto } from "./profileDto";
+import type { TenantDto } from "./tenantDto";
+import type { UserAssociationDto } from "./userAssociationDto";
+import type { UserClassificationDto } from "./userClassificationDto";
 
 export interface UserDto {
-  id: string;
-  seq: number;
-  createdAt: string;
-  updatedAt: string;
-  /** @nullable */
-  removedAt: string | null;
-  spaceId: string;
-  email: string;
-  name: string;
-  phone: string;
-  /**
-   * 응답 제외 필드
-   * @minLength 6
-   */
-  password: string;
-  profiles?: ProfileDto;
-  tenants?: TenantDto;
-  associations?: UserAssociationDto;
-  classification?: UserClassificationDto;
+	id: string;
+	seq: number;
+	createdAt: string;
+	updatedAt: string;
+	/** @nullable */
+	removedAt: string | null;
+	spaceId: string;
+	email: string;
+	name: string;
+	phone: string;
+	/**
+	 * 응답 제외 필드
+	 * @minLength 6
+	 */
+	password: string;
+	profiles?: ProfileDto;
+	tenants?: TenantDto;
+	associations?: UserAssociationDto;
+	classification?: UserClassificationDto;
 }

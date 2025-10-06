@@ -1,5 +1,5 @@
 import { UserAssociation } from "@prisma/client";
-import { ClassField, UUIDField } from "../decorator/field.decorators";
+import { ClassField, UUIDField } from "../decorator/field";
 import { AbstractDto, GroupDto, UserDto } from ".";
 
 export class UserAssociationDto extends AbstractDto implements UserAssociation {

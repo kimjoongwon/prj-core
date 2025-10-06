@@ -1,9 +1,5 @@
 import { Profile } from "@prisma/client";
-import {
-	ClassField,
-	StringField,
-	UUIDField,
-} from "../decorator/field.decorators";
+import { ClassField, StringField, UUIDField } from "../decorator/field";
 import { User } from "../entity/user.entity";
 import { AbstractDto } from "./abstract.dto";
 

@@ -6,12 +6,12 @@
  */
 
 export interface RoleAssociationDto {
-  id: string;
-  seq: number;
-  createdAt: string;
-  updatedAt: string;
-  /** @nullable */
-  removedAt: string | null;
-  roleId: string;
-  groupId: string;
+	id: string;
+	seq: number;
+	createdAt: string;
+	updatedAt: string;
+	/** @nullable */
+	removedAt: string | null;
+	roleId: string;
+	groupId: string;
 }

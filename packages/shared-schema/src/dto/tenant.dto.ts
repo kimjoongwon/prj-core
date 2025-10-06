@@ -4,7 +4,7 @@ import {
 	ClassField,
 	StringField,
 	UUIDField,
-} from "../decorator/field.decorators";
+} from "../decorator/field";
 import { RoleDto, SpaceDto, UserDto } from ".";
 import { AbstractDto } from "./abstract.dto";
 

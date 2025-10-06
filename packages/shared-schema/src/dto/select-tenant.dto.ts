@@ -1,5 +1,5 @@
 import { Expose } from "class-transformer";
-import { UUIDField } from "../decorator/field.decorators";
+import { UUIDField } from "../decorator/field";
 
 export class SelectTenantDto {
 	@UUIDField({

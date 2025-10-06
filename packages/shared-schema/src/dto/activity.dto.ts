@@ -4,7 +4,7 @@ import {
 	NumberField,
 	StringFieldOptional,
 	UUIDField,
-} from "../decorator/field.decorators";
+} from "../decorator/field";
 import { AbstractDto } from "./abstract.dto";
 import { RoutineDto } from "./routine.dto";
 import { TaskDto } from "./task.dto";

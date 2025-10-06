@@ -4,13 +4,13 @@
  * Plate
  * OpenAPI spec version: 1.0.0
  */
-import type { FileClassificationDto } from './fileClassificationDto';
+import type { FileClassificationDto } from "./fileClassificationDto";
 
 export type CreateFileClassification200AllOf = {
-  /** */
-  httpStatus?: number;
-  /** */
-  message?: string;
-  /** @nullable */
-  data?: FileClassificationDto;
+	/** */
+	httpStatus?: number;
+	/** */
+	message?: string;
+	/** @nullable */
+	data?: FileClassificationDto;
 };

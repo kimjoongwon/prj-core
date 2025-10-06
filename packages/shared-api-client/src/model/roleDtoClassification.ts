@@ -4,7 +4,7 @@
  * Plate
  * OpenAPI spec version: 1.0.0
  */
-import type { RoleClassificationDto } from './roleClassificationDto';
+import type { RoleClassificationDto } from "./roleClassificationDto";
 
 /**
  * @nullable
