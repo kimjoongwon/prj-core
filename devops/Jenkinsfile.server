@@ -20,51 +20,58 @@ podTemplate(
             stage('Checkout') {
                 checkout scm
             }
+
             stage('Build and Push Image') {
                 container('podman') {
                     // Podman 상태 확인 및 초기화
                     sh 'podman info || echo "Podman initializing..."'
 
-                    withCredentials([usernamePassword(credentialsId: 'harbor', usernameVariable: 'HARBOR_USERNAME', passwordVariable: 'HARBOR_PASSWORD')]) {
+                    withCredentials([
+                        usernamePassword(
+                            credentialsId: 'harbor',
+                            usernameVariable: 'HARBOR_USERNAME',
+                            passwordVariable: 'HARBOR_PASSWORD'
+                        )
+                    ]) {
                         // Harbor Registry 로그인 (TLS 검증 포함)
                         sh """
-                            echo \$HARBOR_PASSWORD | podman login \
-                                -u \$HARBOR_USERNAME \
-                                --password-stdin \
-                                --tls-verify=true \
+                            echo \$HARBOR_PASSWORD | podman login \\
+                                -u \$HARBOR_USERNAME \\
+                                --password-stdin \\
+                                --tls-verify=true \\
                                 harbor.cocdev.co.kr
                         """
 
                         // Podman 이미지 빌드 (멀티스테이지 최적화)
                         sh """
-                            podman build \
-                                --format=docker \
-                                --layers \
-                                -f ./devops/Dockerfile.server \
-                                -t harbor.cocdev.co.kr/stg-server/server:${env.BUILD_NUMBER} \
-                                -t harbor.cocdev.co.kr/stg-server/server:latest \
+                            podman build \\
+                                --format=docker \\
+                                --layers \\
+                                -f ./devops/Dockerfile.server \\
+                                -t harbor.cocdev.co.kr/stg-server/server:${env.BUILD_NUMBER} \\
+                                -t harbor.cocdev.co.kr/stg-server/server:latest \\
                                 .
                         """
 
                         // 이미지 푸시 (압축 최적화)
                         sh """
-                            podman push \
-                                --compression-format=gzip \
-                                --compression-level=9 \
+                            podman push \\
+                                --compression-format=gzip \\
+                                --compression-level=9 \\
                                 harbor.cocdev.co.kr/stg-server/server:${env.BUILD_NUMBER}
                         """
 
                         sh """
-                            podman push \
-                                --compression-format=gzip \
-                                --compression-level=9 \
+                            podman push \\
+                                --compression-format=gzip \\
+                                --compression-level=9 \\
                                 harbor.cocdev.co.kr/stg-server/server:latest
                         """
 
                         // 로컬 이미지 정리 (디스크 공간 절약)
                         sh """
-                            podman rmi \
-                                harbor.cocdev.co.kr/stg-server/server:${env.BUILD_NUMBER} \
+                            podman rmi \\
+                                harbor.cocdev.co.kr/stg-server/server:${env.BUILD_NUMBER} \\
                                 harbor.cocdev.co.kr/stg-server/server:latest || true
                         """
                     }
@@ -76,12 +83,12 @@ podTemplate(
                 channel: '#stg',
                 color: 'good',
                 message: """
-✅ Docker 이미지 푸시 성공
-• Job: ${env.JOB_NAME}
-• Build: #${env.BUILD_NUMBER}
-• Image: harbor.cocdev.co.kr/stg-server/server:${env.BUILD_NUMBER}
-• Latest: harbor.cocdev.co.kr/stg-server/server:latest
-• Duration: ${currentBuild.durationString.replace(' and counting', '')}
+                    ✅ Docker 이미지 푸시 성공
+                    • Job: ${env.JOB_NAME}
+                    • Build: #${env.BUILD_NUMBER}
+                    • Image: harbor.cocdev.co.kr/stg-server/server:${env.BUILD_NUMBER}
+                    • Latest: harbor.cocdev.co.kr/stg-server/server:latest
+                    • Duration: ${currentBuild.durationString.replace(' and counting', '')}
                 """.stripIndent().trim()
             )
 
@@ -91,11 +98,11 @@ podTemplate(
                 channel: '#stg',
                 color: 'danger',
                 message: """
-❌ Docker 이미지 푸시 실패
-• Job: ${env.JOB_NAME}
-• Build: #${env.BUILD_NUMBER}
-• Error: ${e.message}
-• Console: ${env.BUILD_URL}console
+                    ❌ Docker 이미지 푸시 실패
+                    • Job: ${env.JOB_NAME}
+                    • Build: #${env.BUILD_NUMBER}
+                    • Error: ${e.message}
+                    • Console: ${env.BUILD_URL}console
                 """.stripIndent().trim()
             )
             throw e
