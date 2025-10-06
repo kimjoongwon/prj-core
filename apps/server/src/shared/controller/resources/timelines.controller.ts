@@ -16,12 +16,12 @@ import {
 	type CreateTimelineDto,
 	PageMetaDto,
 	type QueryTimelineDto,
-	ResponseEntity,
 	TimelineDto,
 	type UpdateTimelineDto,
 } from "@shared/schema";
 import { plainToInstance } from "class-transformer";
 import { TimelinesService } from "../../service/resources/timelines.service";
+import { wrapResponse } from "../../util/response.util";
 
 @ApiTags("TIMELINE")
 @Controller()
@@ -34,11 +34,7 @@ export class TimelinesController {
 	async createTimeline(@Body() createTimelineDto: CreateTimelineDto) {
 		const timeline = await this.service.create(createTimelineDto);
 
-		return new ResponseEntity(
-			HttpStatus.OK,
-			"성공",
-			plainToInstance(TimelineDto, timeline),
-		);
+		return plainToInstance(TimelineDto, timeline);
 	}
 
 	@Get(":timelineId")
@@ -46,11 +42,7 @@ export class TimelinesController {
 	@ApiResponseEntity(TimelineDto, HttpStatus.OK)
 	async getTimeline(@Param("timelineId") timelineId: string) {
 		const timeline = await this.service.getById(timelineId);
-		return new ResponseEntity(
-			HttpStatus.OK,
-			"성공",
-			plainToInstance(TimelineDto, timeline),
-		);
+		return plainToInstance(TimelineDto, timeline);
 	}
 
 	@Patch("removedAt")
@@ -61,7 +53,7 @@ export class TimelinesController {
 		const promises = timelineIds.map((id) => this.service.removeById(id));
 		const results = await Promise.all(promises);
 		const timelines = { count: results.length };
-		return new ResponseEntity(HttpStatus.OK, "성공", timelines.count);
+		return timelines.count;
 	}
 
 	@Patch(":timelineId")
@@ -75,11 +67,7 @@ export class TimelinesController {
 			timelineId,
 			updateTimelineDto as any,
 		);
-		return new ResponseEntity(
-			HttpStatus.OK,
-			"성공",
-			plainToInstance(TimelineDto, timeline),
-		);
+		return plainToInstance(TimelineDto, timeline);
 	}
 
 	@Patch(":timelineId/removedAt")
@@ -87,11 +75,7 @@ export class TimelinesController {
 	@ApiResponseEntity(TimelineDto, HttpStatus.OK)
 	async removeTimeline(@Param("timelineId") timelineId: string) {
 		const timeline = await this.service.removeById(timelineId);
-		return new ResponseEntity(
-			HttpStatus.OK,
-			"성공",
-			plainToInstance(TimelineDto, timeline),
-		);
+		return plainToInstance(TimelineDto, timeline);
 	}
 
 	@Delete(":timelineId")
@@ -99,11 +83,7 @@ export class TimelinesController {
 	@ApiResponseEntity(TimelineDto, HttpStatus.OK)
 	async deleteTimeline(@Param("timelineId") timelineId: string) {
 		const timeline = await this.service.deleteById(timelineId);
-		return new ResponseEntity(
-			HttpStatus.OK,
-			"성공",
-			plainToInstance(TimelineDto, timeline),
-		);
+		return plainToInstance(TimelineDto, timeline);
 	}
 
 	@Get()
@@ -111,11 +91,12 @@ export class TimelinesController {
 	@ApiResponseEntity(TimelineDto, HttpStatus.OK, { isArray: true })
 	async getTimelinesByQuery(@Query() query: QueryTimelineDto) {
 		const { count, timelines } = await this.service.getManyByQuery(query);
-		return new ResponseEntity(
-			HttpStatus.OK,
-			"success",
+		return wrapResponse(
 			timelines.map((timeline) => timeline?.toDto?.() ?? timeline),
-			new PageMetaDto(query.skip, query.take, count),
+			{
+				message: "success",
+				meta: new PageMetaDto(query.skip, query.take, count),
+			},
 		);
 	}
 }

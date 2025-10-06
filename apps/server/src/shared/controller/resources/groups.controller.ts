@@ -16,11 +16,12 @@ import {
 	GroupDto,
 	Public,
 	type QueryGroupDto,
-	ResponseEntity,
 	type UpdateGroupDto,
 } from "@shared/schema";
 import { plainToInstance } from "class-transformer";
+import { ResponseMessage } from "../../decorator/response-message.decorator";
 import { GroupsService } from "../../service";
+import { wrapResponse } from "../../util/response.util";
 
 @ApiTags("GROUPS")
 @Controller()
@@ -40,66 +41,56 @@ export class GroupsController {
 	@Public()
 	@ApiResponseEntity(GroupDto, HttpStatus.OK, { isArray: true })
 	@Get()
+	@ResponseMessage("그룹 페이지 데이터 리턴 성공")
 	async getGroupsByQuery(@Query() query: QueryGroupDto) {
 		const { totalCount, groups } =
 			await this.groupService.getManyByQuery(query);
 
-		return new ResponseEntity(
-			HttpStatus.OK,
-			"그룹 페이지 데이터 리턴 성공",
+		return wrapResponse(
 			groups.map((group) => group?.toDto?.() ?? group),
-			query.toPageMetaDto(totalCount),
+			{
+				message: "그룹 페이지 데이터 리턴 성공",
+				meta: query.toPageMetaDto(totalCount),
+			},
 		);
 	}
 
 	@ApiResponseEntity(GroupDto, HttpStatus.OK)
 	@Get(":groupId")
+	@ResponseMessage("그룹 데이터 리턴 성공")
 	async getGroupById(@Param("groupId") groupId: string) {
 		const group = await this.groupService.getById(groupId);
 
-		return new ResponseEntity(
-			HttpStatus.OK,
-			"그룹 데이터 리턴 성공",
-			group ? plainToInstance(GroupDto, group) : null,
-		);
+		return group ? plainToInstance(GroupDto, group) : null;
 	}
 
 	@ApiResponseEntity(GroupDto, HttpStatus.OK)
 	@Patch(":groupId")
+	@ResponseMessage("그룹 데이터 업데이트 성공")
 	async updateGroupById(
 		@Param("groupId") groupId: string,
 		@Body() updateGroupDto: UpdateGroupDto,
 	) {
 		const group = await this.groupService.updateById(groupId, updateGroupDto);
-		return new ResponseEntity(
-			HttpStatus.OK,
-			"그룹 데이터 업데이트 성공",
-			plainToInstance(GroupDto, group),
-		);
+		return plainToInstance(GroupDto, group);
 	}
 
 	@ApiResponseEntity(Number, HttpStatus.OK)
 	@Patch(":groupIds")
+	@ResponseMessage("그룹 데이터 제거 성공")
 	async removeGroups(@Param("groupIds") ids: string[]) {
 		// Note: removeMany is discontinued, this endpoint may need to be updated to handle individual calls
 		const promises = ids.map((id) => this.groupService.removeById(id));
 		const results = await Promise.all(promises);
 		const groups = { count: results.length };
-		return new ResponseEntity(
-			HttpStatus.OK,
-			"그룹 데이터 제거 성공",
-			groups.count,
-		);
+		return groups.count;
 	}
 
 	@ApiResponseEntity(Number, HttpStatus.OK)
 	@Delete(":groupId")
+	@ResponseMessage("그룹 데이터 삭제 성공")
 	async deleteGroup(@Param("groupId") groupId: string) {
 		const group = await this.groupService.deleteById(groupId);
-		return new ResponseEntity(
-			HttpStatus.OK,
-			"그룹 데이터 삭제 성공",
-			plainToInstance(GroupDto, group),
-		);
+		return plainToInstance(GroupDto, group);
 	}
 }

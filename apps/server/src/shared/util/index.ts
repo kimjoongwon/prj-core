@@ -1,3 +1,11 @@
 // Export all utils
 export { AppLogger } from "./app-logger.util";
-// Add utilities as needed
+export type {
+	ResponseWrapOptions,
+	WrappedResponse,
+} from "./response.util";
+export {
+	isWrappedResponse,
+	RESPONSE_WRAPPER_FLAG,
+	wrapResponse,
+} from "./response.util";

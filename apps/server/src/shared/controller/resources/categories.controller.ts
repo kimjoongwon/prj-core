@@ -15,11 +15,12 @@ import {
 	CategoryDto,
 	CreateCategoryDto,
 	QueryCategoryDto,
-	ResponseEntity,
 	UpdateCategoryDto,
 } from "@shared/schema";
 import { plainToInstance } from "class-transformer";
+import { ResponseMessage } from "../../decorator/response-message.decorator";
 import { CategoriesService } from "../../service";
+import { wrapResponse } from "../../util/response.util";
 
 @ApiTags("CATEGORIES")
 @Controller()
@@ -28,44 +29,38 @@ export class CategoriesController {
 
 	@ApiResponseEntity(CategoryDto, HttpStatus.OK, { isArray: true })
 	@Get()
+	@ResponseMessage("Successfully fetched categories")
 	async getCategoriesByQuery(@Query() query: QueryCategoryDto) {
 		const { categories, count } =
 			await this.categoriesService.getManyByQuery(query);
-		return new ResponseEntity(
-			HttpStatus.OK,
-			"Successfully fetched categories",
-			categories.map((category) => plainToInstance(CategoryDto, category)),
-			query.toPageMetaDto(count),
-		);
+		return wrapResponse(plainToInstance(CategoryDto, categories), {
+			message: "Successfully fetched categories",
+			meta: query.toPageMetaDto(count),
+		});
 	}
 
 	@ApiResponseEntity(CategoryDto)
 	@Post()
+	@ResponseMessage("Category created")
 	async createCategory(@Body() createCategoryDto: CreateCategoryDto) {
 		const category = await this.categoriesService.create({
 			data: createCategoryDto,
 		});
-		return new ResponseEntity(
-			HttpStatus.OK,
-			"Category created",
-			plainToInstance(CategoryDto, category),
-		);
+		return plainToInstance(CategoryDto, category);
 	}
 
 	@ApiResponseEntity(CategoryDto)
 	@Get(":categoryId")
+	@ResponseMessage("Category found")
 	async getCategoryById(@Param("categoryId") categoryId: string) {
 		const category = await this.categoriesService.getById(categoryId);
 
-		return new ResponseEntity(
-			HttpStatus.OK,
-			"Category found",
-			plainToInstance(CategoryDto, category),
-		);
+		return plainToInstance(CategoryDto, category);
 	}
 
 	@ApiResponseEntity(CategoryDto)
 	@Patch(":categoryId")
+	@ResponseMessage("Category updated")
 	async updateCategoryById(
 		@Param("categoryId") id: string,
 		@Body() updateCategoryDto: UpdateCategoryDto,
@@ -74,17 +69,14 @@ export class CategoriesController {
 			id,
 			updateCategoryDto,
 		);
-		return new ResponseEntity(
-			HttpStatus.OK,
-			"Category updated",
-			plainToInstance(CategoryDto, category),
-		);
+		return plainToInstance(CategoryDto, category);
 	}
 
 	@ApiResponseEntity(CategoryDto)
 	@Delete(":categoryId")
+	@ResponseMessage("Category deleted")
 	async deleteCategoryById(@Param("categoryId") id: string) {
 		await this.categoriesService.deleteById(id);
-		return new ResponseEntity(HttpStatus.OK, "Category deleted");
+		return;
 	}
 }

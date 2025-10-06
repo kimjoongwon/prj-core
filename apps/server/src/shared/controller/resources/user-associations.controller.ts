@@ -15,12 +15,12 @@ import {
 	ApiResponseEntity,
 	CreateUserAssociationDto,
 	QueryUserAssociationDto,
-	ResponseEntity,
 	UpdateUserAssociationDto,
 	UserAssociationDto,
 } from "@shared/schema";
 import { plainToInstance } from "class-transformer";
 import { UserAssociationsService } from "../../service/resources/user-associations.service";
+import { wrapResponse } from "../../util/response.util";
 
 @ApiTags("USER-ASSOCIATIONS")
 @Controller()
@@ -35,11 +35,7 @@ export class UserAssociationsController {
 	) {
 		const userAssociation = await this.service.create(createUserAssociationDto);
 
-		return new ResponseEntity(
-			HttpStatus.OK,
-			"성공",
-			plainToInstance(UserAssociationDto, userAssociation),
-		);
+		return plainToInstance(UserAssociationDto, userAssociation);
 	}
 
 	@Get(":userAssociationId")
@@ -49,11 +45,7 @@ export class UserAssociationsController {
 		@Param("userAssociationId") userAssociationId: string,
 	) {
 		const userAssociation = await this.service.getById(userAssociationId);
-		return new ResponseEntity(
-			HttpStatus.OK,
-			"성공",
-			plainToInstance(UserAssociationDto, userAssociation),
-		);
+		return plainToInstance(UserAssociationDto, userAssociation);
 	}
 
 	@Patch("removedAt")
@@ -66,7 +58,7 @@ export class UserAssociationsController {
 		);
 		const results = await Promise.all(promises);
 		const userAssociations = { count: results.length };
-		return new ResponseEntity(HttpStatus.OK, "성공", userAssociations.count);
+		return userAssociations.count;
 	}
 
 	@Patch(":userAssociationId")
@@ -80,11 +72,7 @@ export class UserAssociationsController {
 			userAssociationId,
 			updateUserAssociationDto,
 		);
-		return new ResponseEntity(
-			HttpStatus.OK,
-			"성공",
-			plainToInstance(UserAssociationDto, userAssociation),
-		);
+		return plainToInstance(UserAssociationDto, userAssociation);
 	}
 
 	@Patch(":userAssociationId/removedAt")
@@ -94,11 +82,7 @@ export class UserAssociationsController {
 		@Param("userAssociationId") userAssociationId: string,
 	) {
 		const userAssociation = await this.service.removeById(userAssociationId);
-		return new ResponseEntity(
-			HttpStatus.OK,
-			"성공",
-			plainToInstance(UserAssociationDto, userAssociation),
-		);
+		return plainToInstance(UserAssociationDto, userAssociation);
 	}
 
 	@Delete(":userAssociationId")
@@ -108,11 +92,7 @@ export class UserAssociationsController {
 		@Param("userAssociationId") userAssociationId: string,
 	) {
 		const userAssociation = await this.service.deleteById(userAssociationId);
-		return new ResponseEntity(
-			HttpStatus.OK,
-			"성공",
-			plainToInstance(UserAssociationDto, userAssociation),
-		);
+		return plainToInstance(UserAssociationDto, userAssociation);
 	}
 
 	@Get()
@@ -121,11 +101,8 @@ export class UserAssociationsController {
 	async getUserAssociationsByQuery(@Query() query: QueryUserAssociationDto) {
 		const { userAssociations, count } =
 			await this.service.getManyByQuery(query);
-		return new ResponseEntity(
-			HttpStatus.OK,
-			"성공",
-			plainToInstance(UserAssociationDto, userAssociations),
-			query.toPageMetaDto(count),
-		);
+		return wrapResponse(plainToInstance(UserAssociationDto, userAssociations), {
+			meta: query.toPageMetaDto(count),
+		});
 	}
 }

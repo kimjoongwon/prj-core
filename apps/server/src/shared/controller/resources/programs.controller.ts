@@ -17,11 +17,11 @@ import {
 	PageMetaDto,
 	ProgramDto,
 	type QueryProgramDto,
-	ResponseEntity,
 	type UpdateProgramDto,
 } from "@shared/schema";
 import { plainToInstance } from "class-transformer";
 import { ProgramsService } from "../../service/resources/programs.service";
+import { wrapResponse } from "../../util/response.util";
 
 @ApiTags("PROGRAM")
 @Controller()
@@ -34,11 +34,7 @@ export class ProgramsController {
 	async createProgram(@Body() createProgramDto: CreateProgramDto) {
 		const program = await this.service.create(createProgramDto);
 
-		return new ResponseEntity(
-			HttpStatus.OK,
-			"성공",
-			plainToInstance(ProgramDto, program),
-		);
+		return plainToInstance(ProgramDto, program);
 	}
 
 	@Get(":programId")
@@ -46,11 +42,7 @@ export class ProgramsController {
 	@ApiResponseEntity(ProgramDto, HttpStatus.OK)
 	async getProgramById(@Param("programId") programId: string) {
 		const program = await this.service.getById(programId);
-		return new ResponseEntity(
-			HttpStatus.OK,
-			"성공",
-			program?.toDto?.() ?? program,
-		);
+		return program?.toDto?.() ?? program;
 	}
 
 	@Patch(":programId")
@@ -61,11 +53,7 @@ export class ProgramsController {
 		@Body() updateProgramDto: UpdateProgramDto,
 	) {
 		const program = await this.service.updateById(programId, updateProgramDto);
-		return new ResponseEntity(
-			HttpStatus.OK,
-			"성공",
-			plainToInstance(ProgramDto, program),
-		);
+		return plainToInstance(ProgramDto, program);
 	}
 
 	@Patch(":programId/removedAt")
@@ -73,11 +61,7 @@ export class ProgramsController {
 	@ApiResponseEntity(ProgramDto, HttpStatus.OK)
 	async removeProgramById(@Param("programId") programId: string) {
 		const program = await this.service.removeById(programId);
-		return new ResponseEntity(
-			HttpStatus.OK,
-			"성공",
-			plainToInstance(ProgramDto, program),
-		);
+		return plainToInstance(ProgramDto, program);
 	}
 
 	@Delete(":programId")
@@ -85,11 +69,7 @@ export class ProgramsController {
 	@ApiResponseEntity(ProgramDto, HttpStatus.OK)
 	async deleteProgramById(@Param("programId") programId: string) {
 		const program = await this.service.deleteById(programId);
-		return new ResponseEntity(
-			HttpStatus.OK,
-			"성공",
-			plainToInstance(ProgramDto, program),
-		);
+		return plainToInstance(ProgramDto, program);
 	}
 
 	@Get()
@@ -97,11 +77,12 @@ export class ProgramsController {
 	@ApiResponseEntity(ProgramDto, HttpStatus.OK, { isArray: true })
 	async getProgramsByQuery(@Query() query: QueryProgramDto) {
 		const { count, items } = await this.service.getManyByQuery(query);
-		return new ResponseEntity(
-			HttpStatus.OK,
-			"success",
+		return wrapResponse(
 			items.map((program) => program?.toDto?.() ?? program),
-			new PageMetaDto(query.skip, query.take, count),
+			{
+				message: "success",
+				meta: new PageMetaDto(query.skip, query.take, count),
+			},
 		);
 	}
 }

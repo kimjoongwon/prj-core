@@ -16,12 +16,12 @@ import {
 	type CreateSessionDto,
 	PageMetaDto,
 	type QuerySessionDto,
-	ResponseEntity,
 	SessionDto,
 	type UpdateSessionDto,
 } from "@shared/schema";
 import { plainToInstance } from "class-transformer";
 import { SessionsService } from "../../service";
+import { wrapResponse } from "../../util/response.util";
 
 @ApiTags("SESSION")
 @Controller()
@@ -34,11 +34,7 @@ export class SessionsController {
 	async createSession(@Body() createSessionDto: CreateSessionDto) {
 		const session = await this.service.create(createSessionDto);
 
-		return new ResponseEntity(
-			HttpStatus.OK,
-			"성공",
-			plainToInstance(SessionDto, session),
-		);
+		return plainToInstance(SessionDto, session);
 	}
 
 	@Get(":sessionId")
@@ -46,11 +42,7 @@ export class SessionsController {
 	@ApiResponseEntity(SessionDto, HttpStatus.OK)
 	async getSession(@Param("sessionId") sessionId: string) {
 		const session = await this.service.getById(sessionId);
-		return new ResponseEntity(
-			HttpStatus.OK,
-			"성공",
-			plainToInstance(SessionDto, session),
-		);
+		return plainToInstance(SessionDto, session);
 	}
 
 	@Patch("removedAt")
@@ -61,7 +53,7 @@ export class SessionsController {
 		const promises = sessionIds.map((id) => this.service.removeById(id));
 		const results = await Promise.all(promises);
 		const sessions = { count: results.length };
-		return new ResponseEntity(HttpStatus.OK, "성공", sessions.count);
+		return sessions.count;
 	}
 
 	@Patch(":sessionId")
@@ -72,11 +64,7 @@ export class SessionsController {
 		@Body() updateSessionDto: UpdateSessionDto,
 	) {
 		const session = await this.service.updateById(sessionId, updateSessionDto);
-		return new ResponseEntity(
-			HttpStatus.OK,
-			"성공",
-			plainToInstance(SessionDto, session),
-		);
+		return plainToInstance(SessionDto, session);
 	}
 
 	@Patch(":sessionId/removedAt")
@@ -84,11 +72,7 @@ export class SessionsController {
 	@ApiResponseEntity(SessionDto, HttpStatus.OK)
 	async removeSession(@Param("sessionId") sessionId: string) {
 		const session = await this.service.removeById(sessionId);
-		return new ResponseEntity(
-			HttpStatus.OK,
-			"성공",
-			plainToInstance(SessionDto, session),
-		);
+		return plainToInstance(SessionDto, session);
 	}
 
 	@Delete(":sessionId")
@@ -96,11 +80,7 @@ export class SessionsController {
 	@ApiResponseEntity(SessionDto, HttpStatus.OK)
 	async deleteSession(@Param("sessionId") sessionId: string) {
 		const session = await this.service.deleteById(sessionId);
-		return new ResponseEntity(
-			HttpStatus.OK,
-			"성공",
-			plainToInstance(SessionDto, session),
-		);
+		return plainToInstance(SessionDto, session);
 	}
 
 	@Get()
@@ -108,11 +88,12 @@ export class SessionsController {
 	@ApiResponseEntity(SessionDto, HttpStatus.OK, { isArray: true })
 	async getSessionsByQuery(@Query() query: QuerySessionDto) {
 		const { count, sessions } = await this.service.getManyByQuery(query);
-		return new ResponseEntity(
-			HttpStatus.OK,
-			"success",
+		return wrapResponse(
 			sessions.map((session) => session?.toDto?.() ?? session),
-			new PageMetaDto(query.skip, query.take, count),
+			{
+				message: "success",
+				meta: new PageMetaDto(query.skip, query.take, count),
+			},
 		);
 	}
 }

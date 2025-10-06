@@ -20,12 +20,12 @@ import {
 import {
 	CreateRoleClassificationDto,
 	QueryRoleClassificationDto,
-	ResponseEntity,
 	RoleClassificationDto,
 	UpdateRoleClassificationDto,
 } from "@shared/schema";
 import { plainToInstance } from "class-transformer";
 import { RoleClassificationsService } from "../../service/resources/role-classifications.service";
+import { wrapResponse } from "../../util/response.util";
 
 @ApiTags("ROLE_CLASSIFICATIONS")
 @Controller()
@@ -40,15 +40,9 @@ export class RoleClassificationsController {
 	})
 	@ApiResponse({ status: 200, description: "성공" })
 	@ApiBody({ description: "생성할 역할 분류 데이터" })
-	async create(
-		@Body() createDto: CreateRoleClassificationDto,
-	): Promise<ResponseEntity<RoleClassificationDto>> {
+	async create(@Body() createDto: CreateRoleClassificationDto) {
 		const entity = await this.service.create(createDto);
-		return new ResponseEntity(
-			HttpStatus.OK,
-			"성공",
-			plainToInstance(RoleClassificationDto, entity),
-		);
+		return plainToInstance(RoleClassificationDto, entity);
 	}
 
 	@Get(":id")
@@ -59,15 +53,9 @@ export class RoleClassificationsController {
 	})
 	@ApiResponse({ status: 200, description: "성공" })
 	@ApiParam({ name: "id", description: "역할 분류 ID", type: "string" })
-	async getById(
-		@Param("id") id: string,
-	): Promise<ResponseEntity<RoleClassificationDto>> {
+	async getById(@Param("id") id: string) {
 		const entity = await this.service.getById(id);
-		return new ResponseEntity(
-			HttpStatus.OK,
-			"성공",
-			plainToInstance(RoleClassificationDto, entity),
-		);
+		return plainToInstance(RoleClassificationDto, entity);
 	}
 
 	@Patch(":id")
@@ -82,13 +70,9 @@ export class RoleClassificationsController {
 	async updateById(
 		@Param("id") id: string,
 		@Body() updateDto: UpdateRoleClassificationDto,
-	): Promise<ResponseEntity<RoleClassificationDto>> {
+	) {
 		const entity = await this.service.updateById(id, updateDto);
-		return new ResponseEntity(
-			HttpStatus.OK,
-			"성공",
-			plainToInstance(RoleClassificationDto, entity),
-		);
+		return plainToInstance(RoleClassificationDto, entity);
 	}
 
 	@Patch(":id/removedAt")
@@ -99,15 +83,9 @@ export class RoleClassificationsController {
 	})
 	@ApiResponse({ status: 200, description: "성공" })
 	@ApiParam({ name: "id", description: "역할 분류 ID", type: "string" })
-	async removeById(
-		@Param("id") id: string,
-	): Promise<ResponseEntity<RoleClassificationDto>> {
+	async removeById(@Param("id") id: string) {
 		const entity = await this.service.removeById(id);
-		return new ResponseEntity(
-			HttpStatus.OK,
-			"성공",
-			plainToInstance(RoleClassificationDto, entity),
-		);
+		return plainToInstance(RoleClassificationDto, entity);
 	}
 
 	@Delete(":id")
@@ -118,15 +96,9 @@ export class RoleClassificationsController {
 	})
 	@ApiResponse({ status: 200, description: "성공" })
 	@ApiParam({ name: "id", description: "역할 분류 ID", type: "string" })
-	async deleteById(
-		@Param("id") id: string,
-	): Promise<ResponseEntity<RoleClassificationDto>> {
+	async deleteById(@Param("id") id: string) {
 		const entity = await this.service.deleteById(id);
-		return new ResponseEntity(
-			HttpStatus.OK,
-			"성공",
-			plainToInstance(RoleClassificationDto, entity),
-		);
+		return plainToInstance(RoleClassificationDto, entity);
 	}
 
 	@Get()
@@ -136,16 +108,11 @@ export class RoleClassificationsController {
 		summary: "쿼리 조건으로 역할 분류 목록 조회",
 	})
 	@ApiResponse({ status: 200, description: "성공" })
-	async getManyByQuery(
-		@Query() query: QueryRoleClassificationDto,
-	): Promise<ResponseEntity<RoleClassificationDto[]>> {
+	async getManyByQuery(@Query() query: QueryRoleClassificationDto) {
 		const queryInstance = plainToInstance(QueryRoleClassificationDto, query);
 		const { items, count } = await this.service.getManyByQuery(queryInstance);
-		return new ResponseEntity(
-			HttpStatus.OK,
-			"성공",
-			plainToInstance(RoleClassificationDto, items),
-			queryInstance.toPageMetaDto(count),
-		);
+		return wrapResponse(plainToInstance(RoleClassificationDto, items), {
+			meta: queryInstance.toPageMetaDto(count),
+		});
 	}
 }

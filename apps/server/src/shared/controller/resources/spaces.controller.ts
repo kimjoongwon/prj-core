@@ -17,13 +17,13 @@ import {
 	ApiResponseEntity,
 	CreateSpaceDto,
 	QuerySpaceDto,
-	ResponseEntity,
 	SpaceDto,
 	UpdateSpaceDto,
 } from "@shared/schema";
 import { plainToInstance } from "class-transformer";
 import { SpacesService } from "../../service";
 import { ContextService } from "../../service/context.service";
+import { wrapResponse } from "../../util/response.util";
 
 @ApiTags("SPACES")
 @Controller()
@@ -38,7 +38,7 @@ export class SpacesController {
 	@Get("current")
 	@HttpCode(HttpStatus.OK)
 	@ApiResponseEntity(SpaceDto, HttpStatus.OK)
-	async getCurrentSpace(): Promise<ResponseEntity<SpaceDto>> {
+	async getCurrentSpace() {
 		console.log("=== getCurrentSpace 호출됨 ===");
 		const startTime = Date.now();
 		this.logger.log("🚀 getCurrentSpace API 호출됨");
@@ -97,7 +97,7 @@ export class SpacesController {
 				duration: `${duration}ms`,
 			});
 
-			return new ResponseEntity(HttpStatus.OK, "성공", space?.toDto?.());
+			return space?.toDto?.();
 		} catch (error) {
 			const duration = Date.now() - startTime;
 			this.logger.error("getCurrentSpace - 오류:", {
@@ -113,11 +113,7 @@ export class SpacesController {
 	@ApiResponseEntity(SpaceDto, HttpStatus.OK)
 	async createSpace(@Body() createSpaceDto: CreateSpaceDto) {
 		const space = await this.service.create(createSpaceDto);
-		return new ResponseEntity(
-			HttpStatus.OK,
-			"성공",
-			plainToInstance(SpaceDto, space),
-		);
+		return plainToInstance(SpaceDto, space);
 	}
 
 	@Get(":spaceId")
@@ -125,11 +121,7 @@ export class SpacesController {
 	@ApiResponseEntity(SpaceDto, HttpStatus.OK)
 	async getSpace(@Param("spaceId") spaceId: string) {
 		const space = await this.service.getById(spaceId);
-		return new ResponseEntity(
-			HttpStatus.OK,
-			"성공",
-			plainToInstance(SpaceDto, space),
-		);
+		return plainToInstance(SpaceDto, space);
 	}
 
 	@Patch(":spaceId")
@@ -140,11 +132,7 @@ export class SpacesController {
 		@Body() updateSpaceDto: UpdateSpaceDto,
 	) {
 		const space = await this.service.updateById(spaceId, updateSpaceDto);
-		return new ResponseEntity(
-			HttpStatus.OK,
-			"성공",
-			plainToInstance(SpaceDto, space),
-		);
+		return plainToInstance(SpaceDto, space);
 	}
 
 	@Patch(":spaceId/removedAt")
@@ -152,11 +140,7 @@ export class SpacesController {
 	@ApiResponseEntity(SpaceDto, HttpStatus.OK)
 	async removeSpace(@Param("spaceId") spaceId: string) {
 		const space = await this.service.removeById(spaceId);
-		return new ResponseEntity(
-			HttpStatus.OK,
-			"성공",
-			plainToInstance(SpaceDto, space),
-		);
+		return plainToInstance(SpaceDto, space);
 	}
 
 	@Delete(":spaceId")
@@ -164,11 +148,7 @@ export class SpacesController {
 	@ApiResponseEntity(SpaceDto, HttpStatus.OK)
 	async deleteSpace(@Param("spaceId") spaceId: string) {
 		const space = await this.service.deleteById(spaceId);
-		return new ResponseEntity(
-			HttpStatus.OK,
-			"성공",
-			plainToInstance(SpaceDto, space),
-		);
+		return plainToInstance(SpaceDto, space);
 	}
 
 	@Get()
@@ -177,11 +157,12 @@ export class SpacesController {
 	async getSpacesByQuery(@Query() query: QuerySpaceDto) {
 		const { count, spaces } = await this.service.getManyByQuery(query);
 
-		return new ResponseEntity(
-			HttpStatus.OK,
-			"success",
+		return wrapResponse(
 			spaces.map((space) => space?.toDto?.() ?? space),
-			query.toPageMetaDto(count),
+			{
+				message: "success",
+				meta: query.toPageMetaDto(count),
+			},
 		);
 	}
 }

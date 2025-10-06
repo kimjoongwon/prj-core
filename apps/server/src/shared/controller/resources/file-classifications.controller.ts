@@ -16,11 +16,11 @@ import {
 	CreateFileClassificationDto,
 	FileClassificationDto,
 	QueryFileClassificationDto,
-	ResponseEntity,
 	UpdateFileClassificationDto,
 } from "@shared/schema";
 import { plainToInstance } from "class-transformer";
 import { FileClassificationsService } from "../../service/resources/file-classifications.service";
+import { wrapResponse } from "../../util/response.util";
 
 @ApiTags("FILE-CLASSIFICATIONS")
 @Controller()
@@ -35,22 +35,14 @@ export class FileClassificationsController {
 		const fileClassification = await this.service.create(
 			createFileClassificationDto,
 		);
-		return new ResponseEntity(
-			HttpStatus.OK,
-			"성공",
-			plainToInstance(FileClassificationDto, fileClassification),
-		);
+		return plainToInstance(FileClassificationDto, fileClassification);
 	}
 	@Get(":fileClassificationId")
 	@HttpCode(HttpStatus.OK)
 	@ApiResponseEntity(FileClassificationDto, HttpStatus.OK)
 	async getFileClassification(@Param("fileClassificationId") id: string) {
 		const fileClassification = await this.service.getById(id);
-		return new ResponseEntity(
-			HttpStatus.OK,
-			"성공",
-			plainToInstance(FileClassificationDto, fileClassification),
-		);
+		return plainToInstance(FileClassificationDto, fileClassification);
 	}
 	@Patch(":fileClassificationId")
 	@HttpCode(HttpStatus.OK)
@@ -63,33 +55,21 @@ export class FileClassificationsController {
 			id,
 			updateFileClassificationDto,
 		);
-		return new ResponseEntity(
-			HttpStatus.OK,
-			"성공",
-			plainToInstance(FileClassificationDto, fileClassification),
-		);
+		return plainToInstance(FileClassificationDto, fileClassification);
 	}
 	@Patch(":fileClassificationId/removedAt")
 	@HttpCode(HttpStatus.OK)
 	@ApiResponseEntity(FileClassificationDto, HttpStatus.OK)
 	async removeFileClassification(@Param("fileClassificationId") id: string) {
 		const fileClassification = await this.service.removeById(id);
-		return new ResponseEntity(
-			HttpStatus.OK,
-			"성공",
-			plainToInstance(FileClassificationDto, fileClassification),
-		);
+		return plainToInstance(FileClassificationDto, fileClassification);
 	}
 	@Delete(":fileClassificationId")
 	@HttpCode(HttpStatus.OK)
 	@ApiResponseEntity(FileClassificationDto, HttpStatus.OK)
 	async deleteFileClassification(@Param("fileClassificationId") id: string) {
 		const fileClassification = await this.service.deleteById(id);
-		return new ResponseEntity(
-			HttpStatus.OK,
-			"성공",
-			plainToInstance(FileClassificationDto, fileClassification),
-		);
+		return plainToInstance(FileClassificationDto, fileClassification);
 	}
 	@Get()
 	@HttpCode(HttpStatus.OK)
@@ -98,11 +78,8 @@ export class FileClassificationsController {
 		@Query() query: QueryFileClassificationDto,
 	) {
 		const { items, count } = await this.service.getManyByQuery(query);
-		return new ResponseEntity(
-			HttpStatus.OK,
-			"성공",
-			plainToInstance(FileClassificationDto, items),
-			query.toPageMetaDto(count),
-		);
+		return wrapResponse(plainToInstance(FileClassificationDto, items), {
+			meta: query.toPageMetaDto(count),
+		});
 	}
 }
