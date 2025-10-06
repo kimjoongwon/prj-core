@@ -70,4 +70,34 @@ podTemplate(
             }
         }
     }
+
+    post {
+        success {
+            slackSend(
+                channel: '#jenkins-notifications',
+                color: 'good',
+                message: """
+                    ✅ Docker 이미지 푸시 성공
+                    • Job: ${env.JOB_NAME}
+                    • Build: #${env.BUILD_NUMBER}
+                    • Image: harbor.cocdev.co.kr/stg-server/server:${env.BUILD_NUMBER}
+                    • Latest: harbor.cocdev.co.kr/stg-server/server:latest
+                    • Duration: ${currentBuild.durationString.replace(' and counting', '')}
+                """.stripIndent()
+            )
+        }
+        failure {
+            slackSend(
+                channel: '#jenkins-notifications',
+                color: 'danger',
+                message: """
+                    ❌ Docker 이미지 푸시 실패
+                    • Job: ${env.JOB_NAME}
+                    • Build: #${env.BUILD_NUMBER}
+                    • Error: ${currentBuild.result}
+                    • Console: ${env.BUILD_URL}console
+                """.stripIndent()
+            )
+        }
+    }
 }
