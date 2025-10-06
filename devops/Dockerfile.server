@@ -78,7 +78,7 @@ RUN turbo build
 # ============================================================================
 # 🚀 PRODUCTION STAGE: 운영 환경 컨테이너
 # ============================================================================
-FROM node:22-alpine AS dev
+FROM node:24-alpine AS dev
 
 # 🛠️ Alpine Linux에서 nginx와 supervisor 설치
 RUN apk add --update --no-cache nginx supervisor && rm -rf /var/cache/apk/*
