@@ -1,8 +1,8 @@
-import { Injectable, Scope } from "@nestjs/common";
+import { Injectable } from "@nestjs/common";
 import { LanguageCode, TenantDto, UserDto } from "@shared/schema";
 import { ClsService } from "nestjs-cls";
 
-@Injectable({ scope: Scope.REQUEST })
+@Injectable()
 export class ContextService {
 	private static readonly namespace = "request";
 	private static readonly authUserKey = "user_key";
