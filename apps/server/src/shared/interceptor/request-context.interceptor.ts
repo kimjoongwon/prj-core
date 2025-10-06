@@ -76,7 +76,7 @@ export class RequestContextInterceptor implements NestInterceptor {
 			});
 		} catch (error) {
 			this.logger.error(
-				`Request 컨텍스트 설정 실패: ${error instanceof Error ? error.message : String(error)}`,
+				`Request 컨텍스트 설정 실패: ${error instanceof Error ? error?.message : String(error)}`,
 			);
 
 			// 에러가 발생해도 기본값으로 설정하여 요청이 계속 진행되도록 함

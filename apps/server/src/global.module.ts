@@ -62,9 +62,8 @@ export const globalModules: (DynamicModule | Promise<DynamicModule>)[] = [
 			return {
 				global: true,
 				// secret: authConfig?.secret || 'default',
-				// privateKey: authConfig?.secret,
+				privateKey: authConfig?.secret,
 				signOptions: { expiresIn: authConfig?.expires },
-				secretOrPrivateKey: authConfig?.secret,
 			};
 		},
 		inject: [ConfigService],

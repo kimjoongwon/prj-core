@@ -42,6 +42,7 @@ export class AuthController {
 		@Body() loginDto: LoginPayloadDto,
 		@Res({ passthrough: true }) res: Response,
 	) {
+		console.log("=== 쿠키 설정 완료 ===");
 		const { accessToken, refreshToken, user } =
 			await this.authService.login(loginDto);
 		const mainTenantId = user.tenants?.find((tenant) => tenant.main)?.id ?? "";
@@ -54,7 +55,6 @@ export class AuthController {
 		res.cookie("accessToken", accessToken, {
 			httpOnly: true,
 		});
-
 		return plainToInstance(TokenDto, {
 			accessToken,
 			refreshToken,
