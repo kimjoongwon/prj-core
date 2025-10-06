@@ -73,7 +73,7 @@ podTemplate(
 
             // 성공 시 Slack 알림
             slackSend(
-                channel: '#jenkins-notifications',
+                channel: '#stg',
                 color: 'good',
                 message: """
 ✅ Docker 이미지 푸시 성공
@@ -88,7 +88,7 @@ podTemplate(
         } catch (Exception e) {
             // 실패 시 Slack 알림
             slackSend(
-                channel: '#jenkins-notifications',
+                channel: '#stg',
                 color: 'danger',
                 message: """
 ❌ Docker 이미지 푸시 실패
