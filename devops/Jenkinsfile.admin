@@ -8,41 +8,70 @@ podTemplate(
     ],
     containers: [
         containerTemplate(
-            name: 'docker', 
-            image: 'docker:dind', 
-            privileged: true, 
-            resourceRequestMemory: '1Gi', 
+            name: 'docker',
+            image: 'docker:dind',
+            privileged: true,
+            resourceRequestMemory: '1Gi',
             resourceLimitMemory: '1Gi'
         )
     ]
 ) {
     node('builder') {
-        stage('Checkout') {
-            checkout scm
-        }
-        stage('Build and Run Docker') {
-            container('docker') {
-                // Docker 데몬 시작
-                sh 'dockerd &'
-                
-                // Docker 데몬이 시작될 때까지 대기
-                sh 'while ! docker info > /dev/null 2>&1; do sleep 1; done'
-
-                withCredentials([usernamePassword(credentialsId: 'dockerHubAccount', usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]) {
-                    sh "echo $DOCKER_PASSWORD | docker login -u $DOCKER_USERNAME --password-stdin"
-                }
-
-                // Docker 이미지 빌드
-                dockerImage = docker.build("kimjoongwon/admin:${env.BUILD_NUMBER}", "--progress=plain -f ./devops/Dockerfile.admin .")
-                
-                // Docker 이미지 푸시
-                dockerImage.push()
-                
-                // latest 태그로도 푸시
-                dockerImage.push("latest")
-
-
+        try {
+            stage('Checkout') {
+                checkout scm
             }
+            stage('Build and Run Docker') {
+                container('docker') {
+                    // Docker 데몬 시작
+                    sh 'dockerd &'
+
+                    // Docker 데몬이 시작될 때까지 대기
+                    sh 'while ! docker info > /dev/null 2>&1; do sleep 1; done'
+
+                    withCredentials([usernamePassword(credentialsId: 'dockerHubAccount', usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]) {
+                        sh "echo $DOCKER_PASSWORD | docker login -u $DOCKER_USERNAME --password-stdin"
+                    }
+
+                    // Docker 이미지 빌드
+                    dockerImage = docker.build("kimjoongwon/admin:${env.BUILD_NUMBER}", "--progress=plain -f ./devops/Dockerfile.admin .")
+
+                    // Docker 이미지 푸시
+                    dockerImage.push()
+
+                    // latest 태그로도 푸시
+                    dockerImage.push("latest")
+                }
+            }
+
+            // 성공 시 Slack 알림
+            slackSend(
+                channel: '#stg',
+                color: 'good',
+                message: """
+✅ Docker 이미지 푸시 성공
+• Job: ${env.JOB_NAME}
+• Build: #${env.BUILD_NUMBER}
+• Image: kimjoongwon/admin:${env.BUILD_NUMBER}
+• Latest: kimjoongwon/admin:latest
+• Duration: ${currentBuild.durationString.replace(' and counting', '')}
+                """.stripIndent().trim()
+            )
+
+        } catch (Exception e) {
+            // 실패 시 Slack 알림
+            slackSend(
+                channel: '#stg',
+                color: 'danger',
+                message: """
+❌ Docker 이미지 푸시 실패
+• Job: ${env.JOB_NAME}
+• Build: #${env.BUILD_NUMBER}
+• Error: ${e.message}
+• Console: ${env.BUILD_URL}console
+                """.stripIndent().trim()
+            )
+            throw e
         }
     }
 }

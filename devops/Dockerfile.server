@@ -92,30 +92,8 @@ COPY --from=builder /app/ .
 # 🔧 nginx 설정 파일 복사 (서버용 설정을 표준 nginx.conf로 복사)
 COPY devops/nginx.server.config /etc/nginx/nginx.conf
 
-# 📋 supervisor 디렉토리 생성 및 설정 파일 생성
-RUN mkdir -p /etc/supervisor && \
-    echo '[supervisord]' > /etc/supervisor/supervisord.conf && \
-    echo 'nodaemon=true' >> /etc/supervisor/supervisord.conf && \
-    echo 'user=root' >> /etc/supervisor/supervisord.conf && \
-    echo '' >> /etc/supervisor/supervisord.conf && \
-    echo '[program:nginx]' >> /etc/supervisor/supervisord.conf && \
-    echo 'command=nginx -g "daemon off;"' >> /etc/supervisor/supervisord.conf && \
-    echo 'autostart=true' >> /etc/supervisor/supervisord.conf && \
-    echo 'autorestart=true' >> /etc/supervisor/supervisord.conf && \
-    echo 'stdout_logfile=/dev/stdout' >> /etc/supervisor/supervisord.conf && \
-    echo 'stdout_logfile_maxbytes=0' >> /etc/supervisor/supervisord.conf && \
-    echo 'stderr_logfile=/dev/stderr' >> /etc/supervisor/supervisord.conf && \
-    echo 'stderr_logfile_maxbytes=0' >> /etc/supervisor/supervisord.conf && \
-    echo '' >> /etc/supervisor/supervisord.conf && \
-    echo '[program:node-app]' >> /etc/supervisor/supervisord.conf && \
-    echo 'command=node /app/apps/server/dist/main' >> /etc/supervisor/supervisord.conf && \
-    echo 'directory=/app' >> /etc/supervisor/supervisord.conf && \
-    echo 'autostart=true' >> /etc/supervisor/supervisord.conf && \
-    echo 'autorestart=true' >> /etc/supervisor/supervisord.conf && \
-    echo 'stdout_logfile=/dev/stdout' >> /etc/supervisor/supervisord.conf && \
-    echo 'stdout_logfile_maxbytes=0' >> /etc/supervisor/supervisord.conf && \
-    echo 'stderr_logfile=/dev/stderr' >> /etc/supervisor/supervisord.conf && \
-    echo 'stderr_logfile_maxbytes=0' >> /etc/supervisor/supervisord.conf
+# 📋 supervisor 설정 파일 복사
+COPY devops/supervisord.conf /etc/supervisor/supervisord.conf
 
 # 🔒 nginx 디렉토리 권한 설정
 RUN mkdir -p /var/log/nginx /var/cache/nginx /var/run && \
