@@ -35,7 +35,7 @@ export class ValidationUtil {
 
 		const memberParts = fullMemberName.split(".");
 
-		return memberParts.at(-1);
+		return memberParts[memberParts.length - 1];
 	}
 }
 

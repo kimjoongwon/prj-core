@@ -1,5 +1,5 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { ClassField, StringField } from "../../decorator/field.decorators";
+import { ClassField, StringField } from "../../decorator/field";
 import { UserDto } from "../user.dto";
 
 export class TokenDto {

@@ -4,14 +4,14 @@
  * Plate
  * OpenAPI spec version: 1.0.0
  */
-import type { ExerciseDto } from './exerciseDto';
-import type { GetExercisesByQuery200AllOfMeta } from './getExercisesByQuery200AllOfMeta';
+import type { ExerciseDto } from "./exerciseDto";
+import type { GetExercisesByQuery200AllOfMeta } from "./getExercisesByQuery200AllOfMeta";
 
 export type GetExercisesByQuery200AllOf = {
-  /** */
-  httpStatus?: number;
-  /** */
-  message?: string;
-  data?: ExerciseDto[];
-  meta?: GetExercisesByQuery200AllOfMeta;
+	/** */
+	httpStatus?: number;
+	/** */
+	message?: string;
+	data?: ExerciseDto[];
+	meta?: GetExercisesByQuery200AllOfMeta;
 };

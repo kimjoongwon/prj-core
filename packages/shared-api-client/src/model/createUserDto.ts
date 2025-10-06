@@ -6,13 +6,13 @@
  */
 
 export interface CreateUserDto {
-  spaceId: string;
-  email: string;
-  name: string;
-  phone: string;
-  /**
-   * 응답 제외 필드
-   * @minLength 6
-   */
-  password: string;
+	spaceId: string;
+	email: string;
+	name: string;
+	phone: string;
+	/**
+	 * 응답 제외 필드
+	 * @minLength 6
+	 */
+	password: string;
 }

@@ -8,8 +8,9 @@ import { ResponseEntity } from "@shared/schema";
 import { lastValueFrom, of } from "rxjs";
 import { RESPONSE_MESSAGE_METADATA } from "../decorator/response-message.decorator";
 import { wrapResponse } from "../util/response.util";
-// Placeholder imports - will be implemented in corresponding modules
 import { ResponseEntityInterceptor } from "./response-entity.interceptor";
+
+// Placeholder imports - will be implemented in corresponding modules
 
 describe("ResponseEntityInterceptor", () => {
 	let reflector: Reflector;

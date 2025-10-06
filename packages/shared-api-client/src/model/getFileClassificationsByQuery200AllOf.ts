@@ -4,14 +4,14 @@
  * Plate
  * OpenAPI spec version: 1.0.0
  */
-import type { FileClassificationDto } from './fileClassificationDto';
-import type { GetFileClassificationsByQuery200AllOfMeta } from './getFileClassificationsByQuery200AllOfMeta';
+import type { FileClassificationDto } from "./fileClassificationDto";
+import type { GetFileClassificationsByQuery200AllOfMeta } from "./getFileClassificationsByQuery200AllOfMeta";
 
 export type GetFileClassificationsByQuery200AllOf = {
-  /** */
-  httpStatus?: number;
-  /** */
-  message?: string;
-  data?: FileClassificationDto[];
-  meta?: GetFileClassificationsByQuery200AllOfMeta;
+	/** */
+	httpStatus?: number;
+	/** */
+	message?: string;
+	data?: FileClassificationDto[];
+	meta?: GetFileClassificationsByQuery200AllOfMeta;
 };

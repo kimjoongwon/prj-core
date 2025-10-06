@@ -7,7 +7,7 @@ import {
 	PasswordField,
 	StringField,
 	UUIDField,
-} from "../decorator/field.decorators";
+} from "../decorator/field";
 import { ProfileDto, UserClassificationDto } from ".";
 import { AbstractDto } from "./abstract.dto";
 import { TenantDto } from "./tenant.dto";

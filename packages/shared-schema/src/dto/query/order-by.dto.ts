@@ -1,5 +1,5 @@
 import { Prisma } from "@prisma/client";
-import { EnumFieldOptional } from "../../decorator/field.decorators";
+import { EnumFieldOptional } from "../../decorator/field";
 
 export class OrderByDto {
 	@EnumFieldOptional(() => Prisma.SortOrder)

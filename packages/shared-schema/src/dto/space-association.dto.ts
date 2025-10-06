@@ -1,5 +1,5 @@
 import { SpaceAssociation } from "@prisma/client";
-import { ClassField, UUIDField } from "../decorator/field.decorators";
+import { ClassField, UUIDField } from "../decorator/field";
 import { AbstractDto, GroupDto } from ".";
 
 export class SpaceAssociationDto

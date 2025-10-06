@@ -4,7 +4,7 @@ import {
 	EnumField,
 	StringField,
 	UUIDField,
-} from "../decorator/field.decorators";
+} from "../decorator/field";
 import { AbstractDto } from "./abstract.dto";
 
 export class CategoryDto extends AbstractDto implements Category {

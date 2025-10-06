@@ -41,7 +41,11 @@ export class RequestContextInterceptor implements NestInterceptor {
 			const spaceIdFromHeader = request.headers["x-space-id"] as string;
 
 			// X-Space-ID 헤더가 없거나 사용자 정보가 없으면 tenant를 undefined로 설정
-			if (!spaceIdFromHeader || !user?.tenants || !Array.isArray(user.tenants)) {
+			if (
+				!spaceIdFromHeader ||
+				!user?.tenants ||
+				!Array.isArray(user.tenants)
+			) {
 				this.contextService.setTenant(undefined);
 				return;
 			}

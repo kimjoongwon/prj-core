@@ -4,14 +4,15 @@
  * Plate
  * OpenAPI spec version: 1.0.0
  */
-import type { SessionDto } from './sessionDto';
-import type { GetSessionsByQuery200AllOfMeta } from './getSessionsByQuery200AllOfMeta';
+
+import type { GetSessionsByQuery200AllOfMeta } from "./getSessionsByQuery200AllOfMeta";
+import type { SessionDto } from "./sessionDto";
 
 export type GetSessionsByQuery200AllOf = {
-  /** */
-  httpStatus?: number;
-  /** */
-  message?: string;
-  data?: SessionDto[];
-  meta?: GetSessionsByQuery200AllOfMeta;
+	/** */
+	httpStatus?: number;
+	/** */
+	message?: string;
+	data?: SessionDto[];
+	meta?: GetSessionsByQuery200AllOfMeta;
 };

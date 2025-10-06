@@ -1,5 +1,5 @@
 import { Space } from "@prisma/client";
-import { ClassField } from "../decorator/field.decorators";
+import { ClassField } from "../decorator/field";
 import { AbstractDto } from "./abstract.dto";
 import { GroundDto } from "./ground.dto";
 import { SpaceAssociationDto } from "./space-association.dto";

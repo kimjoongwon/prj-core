@@ -1,5 +1,5 @@
 import { $Enums, Role } from "@prisma/client";
-import { ClassField, EnumField } from "../decorator/field.decorators";
+import { ClassField, EnumField } from "../decorator/field";
 import { AbstractDto } from "./abstract.dto";
 import { RoleAssociationDto } from "./role-association.dto";
 import { RoleClassificationDto } from "./role-classification.dto";

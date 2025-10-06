@@ -1,5 +1,5 @@
 import { Routine } from "@prisma/client";
-import { ClassField, StringField } from "../decorator/field.decorators";
+import { ClassField, StringField } from "../decorator/field";
 import { AbstractDto } from "./abstract.dto";
 import { ActivityDto } from "./activity.dto";
 import { ProgramDto } from "./program.dto";

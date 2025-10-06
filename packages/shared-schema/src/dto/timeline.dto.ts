@@ -4,7 +4,7 @@ import {
 	StringField,
 	StringFieldOptional,
 	UUIDField,
-} from "../decorator/field.decorators";
+} from "../decorator/field";
 import { AbstractDto } from "./abstract.dto";
 import { SessionDto } from "./session.dto";
 

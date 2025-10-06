@@ -8,7 +8,7 @@ import {
 	StringField,
 	StringFieldOptional,
 	UUIDField,
-} from "../decorator/field.decorators";
+} from "../decorator/field";
 import { RepeatCycleTypes } from "../enum/repeat-cycle-types.enum";
 import { SessionTypes } from "../enum/session-types.enum";
 import { AbstractDto } from "./abstract.dto";
