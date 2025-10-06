@@ -4,15 +4,14 @@
  * Plate
  * OpenAPI spec version: 1.0.0
  */
-
-import type { ResponseEntityData } from "./responseEntityData";
-import type { ResponseEntityHttpStatus } from "./responseEntityHttpStatus";
-import type { ResponseEntityMeta } from "./responseEntityMeta";
+import type { ResponseEntityHttpStatus } from './responseEntityHttpStatus';
+import type { ResponseEntityData } from './responseEntityData';
+import type { ResponseEntityMeta } from './responseEntityMeta';
 
 export interface ResponseEntity {
-	httpStatus: ResponseEntityHttpStatus;
-	message: string;
-	data?: ResponseEntityData;
-	/** @nullable */
-	meta?: ResponseEntityMeta;
+  httpStatus: ResponseEntityHttpStatus;
+  message: string;
+  data?: ResponseEntityData;
+  /** @nullable */
+  meta?: ResponseEntityMeta;
 }

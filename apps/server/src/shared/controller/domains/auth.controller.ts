@@ -57,7 +57,7 @@ export class AuthController {
 			plainToInstance(TokenDto, {
 				accessToken,
 				refreshToken,
-				user,
+				user: plainToInstance(UserDto, user),
 			}),
 		);
 	}

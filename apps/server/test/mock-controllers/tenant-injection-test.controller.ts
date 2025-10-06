@@ -1,20 +1,5 @@
 import { Controller, Get, HttpStatus, Query } from "@nestjs/common";
-import { ApiProperty } from "@nestjs/swagger";
 import { ResponseEntity } from "@shared/schema";
-import { IsString } from "class-validator";
-
-// Auth decorator is currently commented out
-// import { Auth } from "@shared/schema";
-
-class TestQueryDto {
-	@IsString()
-	@ApiProperty({ required: false })
-	testParam?: string;
-
-	@IsString()
-	@ApiProperty({ required: false })
-	tenantId?: string;
-}
 
 /**
  * 테스트 전용 모킹 컨트롤러 - 테넌트 ID 주입 기능을 테스트하기 위한 용도
@@ -22,7 +7,7 @@ class TestQueryDto {
  */
 @Controller("api/v1/test-tenant-injection")
 export class TenantInjectionTestController {
-	// @Auth()
+	// 기본적으로 인증 필요 (전역 JWT Guard 적용)
 	@Get("debug-query")
 	async debugQuery(@Query() query: any) {
 		return new ResponseEntity(HttpStatus.OK, "Debug query parameters", {
@@ -32,7 +17,6 @@ export class TenantInjectionTestController {
 		});
 	}
 
-	// @Auth({ injectTenant: false })
 	@Get("debug-query-no-injection")
 	async debugQueryNoInjection(@Query() query: any) {
 		return new ResponseEntity(
@@ -46,7 +30,8 @@ export class TenantInjectionTestController {
 		);
 	}
 
-	// @Auth({ categories: [RoleCategoryNames.COMMON] })
+	// Role Category Guard 테스트용 엔드포인트
+	// Note: Role Guards are not implemented yet, so these will return 200
 	@Get("test-role-category-common")
 	async testRoleCategoryCommon() {
 		return new ResponseEntity(
@@ -59,7 +44,6 @@ export class TenantInjectionTestController {
 		);
 	}
 
-	// @Auth({ categories: [RoleCategoryNames.ADMIN] })
 	@Get("test-role-category-admin")
 	async testRoleCategoryAdmin() {
 		return new ResponseEntity(
@@ -72,7 +56,8 @@ export class TenantInjectionTestController {
 		);
 	}
 
-	// @Auth({ groups: ["일반"] })
+	// Role Group Guard 테스트용 엔드포인트
+	// Note: Role Guards are not implemented yet, so these will return 200
 	@Get("test-role-group-normal")
 	async testRoleGroupNormal() {
 		return new ResponseEntity(
@@ -85,7 +70,6 @@ export class TenantInjectionTestController {
 		);
 	}
 
-	// @Auth({ groups: ["VIP"] })
 	@Get("test-role-group-vip")
 	async testRoleGroupVIP() {
 		return new ResponseEntity(
