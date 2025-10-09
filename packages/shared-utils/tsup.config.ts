@@ -15,8 +15,8 @@ export default defineConfig((option) => ({
 		"class-transformer",
 		"class-validator",
 		"dayjs",
-		"path-parser",
 		"remeda",
 		"reflect-metadata",
 	],
+	noExternal: ["tslib", "path-parser"], // tslib과 path-parser를 번들에 포함
 }));

@@ -151,6 +151,16 @@
       "persistent": true,
       "dependsOn": ["@shared/schema#build"] // 초기 빌드 후 watch
     },
+    // mobile 앱 개발 모드 (Expo)
+    "mobile#start:dev": {
+      "cache": false,
+      "persistent": true,
+      "dependsOn": [
+        "@shared/api-client#build",
+        "@shared/hooks#build",
+        "@shared/utils#build"
+      ] // mobile이 의존하는 shared 패키지들만 먼저 빌드
+    },
     // 개발 서버 시작
     "start:dev": {
       "cache": false, // 개발 모드는 캐싱하지 않음

@@ -342,9 +342,6 @@ importers:
       '@shared/hooks':
         specifier: workspace:*
         version: link:../../packages/shared-hooks
-      '@shared/utils':
-        specifier: workspace:*
-        version: link:../../packages/shared-utils
       axios:
         specifier: 'catalog:'
         version: 1.12.2

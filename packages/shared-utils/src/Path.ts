@@ -30,7 +30,6 @@ export function convertFromPathParamsToQueryParams({
 	pathParams: object;
 }) {
 	return Object.fromEntries(
-		// @ts-ignore
 		pathParamKeys.map((key) => [key, pathParams?.[key]]),
 	);
 }
