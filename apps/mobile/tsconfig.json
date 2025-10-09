@@ -11,9 +11,6 @@
       "@/*": [
         "./src/*"
       ],
-      "tailwind.config": [
-        "./tailwind.config.js"
-      ]
     }
   },
   "include": [
