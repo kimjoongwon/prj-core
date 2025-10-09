@@ -3,7 +3,7 @@ module.exports = function (api) {
   return {
     presets: ['babel-preset-expo'],
     plugins: [
-      '@babel/plugin-transform-class-static-block'
+      '@babel/plugin-transform-class-static-block',
     ]
   };
 };

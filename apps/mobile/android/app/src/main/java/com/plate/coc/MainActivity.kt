@@ -1,4 +1,4 @@
-package com.anonymous.mobile
+package com.plate.coc
 import expo.modules.splashscreen.SplashScreenManager
 
 import android.os.Build
