@@ -1,12 +1,12 @@
 import { applyDecorators } from "@nestjs/common";
 import { ApiProperty } from "@nestjs/swagger";
-import { IsBoolean } from "class-validator";
+import { IsBoolean, NotEquals } from "class-validator";
 import { ToBoolean } from "../../transform.decorators";
+import { IsNullable } from "../../validator.decorators";
 import {
 	type BaseFieldOptions,
 	type FieldDecoratorOptions,
 } from "../base/field-options.types";
-import { applyNullableDecorators } from "../base/nullable.helper";
 import { createOptionalField } from "../base/optional-field.factory";
 
 /**
@@ -29,9 +29,11 @@ export function BooleanField(
 	const decorators: PropertyDecorator[] = [ToBoolean(), IsBoolean()];
 
 	// Nullable 처리
-	applyNullableDecorators(decorators, {
-		nullable: options.nullable,
-	});
+	if (options.nullable) {
+		decorators.push(IsNullable());
+	} else {
+		decorators.push(NotEquals(null));
+	}
 
 	// Swagger 문서화
 	if (options.swagger !== false) {

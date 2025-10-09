@@ -1,11 +1,10 @@
 import { applyDecorators } from "@nestjs/common";
 import { type ApiPropertyOptions } from "@nestjs/swagger";
-import { IsEnum } from "class-validator";
+import { IsEnum, NotEquals } from "class-validator";
 import { ApiEnumProperty } from "../../property.decorators";
 import { ToArray } from "../../transform.decorators";
-import { IsUndefinable } from "../../validator.decorators";
+import { IsNullable, IsUndefinable } from "../../validator.decorators";
 import { type BaseFieldOptions } from "../base/field-options.types";
-import { applyNullableDecorators } from "../base/nullable.helper";
 
 /**
  * Enum 필드 데코레이터
@@ -37,9 +36,11 @@ export function EnumField<TEnum extends object>(
 	];
 
 	// Nullable 처리
-	applyNullableDecorators(decorators, {
-		nullable: options.nullable,
-	});
+	if (options.nullable) {
+		decorators.push(IsNullable());
+	} else {
+		decorators.push(NotEquals(null));
+	}
 
 	// 배열 변환
 	if (options.each) {

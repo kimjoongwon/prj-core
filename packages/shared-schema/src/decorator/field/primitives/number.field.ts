@@ -1,13 +1,13 @@
 import { applyDecorators } from "@nestjs/common";
 import { ApiProperty } from "@nestjs/swagger";
 import { Type } from "class-transformer";
-import { IsInt, IsNumber, IsPositive, Max, Min } from "class-validator";
+import { IsInt, IsNumber, IsPositive, Max, Min, NotEquals } from "class-validator";
 import { ToArray } from "../../transform.decorators";
+import { IsNullable } from "../../validator.decorators";
 import {
 	type FieldDecoratorOptions,
 	type NumberFieldOptions,
 } from "../base/field-options.types";
-import { applyNullableDecorators } from "../base/nullable.helper";
 import { createOptionalField } from "../base/optional-field.factory";
 
 /**
@@ -30,10 +30,11 @@ export function NumberField(
 	const decorators: PropertyDecorator[] = [Type(() => Number)];
 
 	// Nullable 처리
-	applyNullableDecorators(decorators, {
-		nullable: options.nullable,
-		each: options.each,
-	});
+	if (options.nullable) {
+		decorators.push(IsNullable({ each: options.each }));
+	} else {
+		decorators.push(NotEquals(null, { each: options.each }));
+	}
 
 	// Swagger 문서화
 	if (options.swagger !== false) {

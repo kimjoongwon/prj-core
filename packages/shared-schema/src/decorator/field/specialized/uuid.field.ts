@@ -1,10 +1,11 @@
 import { applyDecorators } from "@nestjs/common";
 import { type ApiPropertyOptions } from "@nestjs/swagger";
 import { Type } from "class-transformer";
+import { NotEquals } from "class-validator";
 import { ApiUUIDProperty } from "../../property.decorators";
 import { ToArray } from "../../transform.decorators";
+import { IsNullable } from "../../validator.decorators";
 import { type BaseFieldOptions } from "../base/field-options.types";
-import { applyNullableDecorators } from "../base/nullable.helper";
 import { createOptionalField } from "../base/optional-field.factory";
 
 /**
@@ -29,11 +30,12 @@ export function UUIDField(
 ): PropertyDecorator {
 	const decorators: PropertyDecorator[] = [Type(() => String)];
 
-	// Nullable 처리 (문자열 "null" → null 변환 포함)
-	applyNullableDecorators(decorators, {
-		nullable: options.nullable,
-		transformStringNull: true,
-	});
+	// Nullable 처리
+	if (options.nullable) {
+		decorators.push(IsNullable());
+	} else {
+		decorators.push(NotEquals(null));
+	}
 
 	// Swagger 문서화 (UUID 포맷 포함)
 	decorators.push(ApiUUIDProperty(options));

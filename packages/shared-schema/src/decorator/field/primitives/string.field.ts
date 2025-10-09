@@ -1,14 +1,14 @@
 import { applyDecorators } from "@nestjs/common";
 import { ApiProperty } from "@nestjs/swagger";
 import { Type } from "class-transformer";
-import { IsString, Matches, MaxLength, MinLength } from "class-validator";
+import { IsString, MaxLength, MinLength, NotEquals } from "class-validator";
 import { VALIDATION_MESSAGES } from "../../constants/validation-messages";
 import { ToLowerCase, ToUpperCase } from "../../transform.decorators";
+import { IsNullable } from "../../validator.decorators";
 import {
 	type FieldDecoratorOptions,
 	type StringFieldOptions,
 } from "../base/field-options.types";
-import { applyNullableDecorators } from "../base/nullable.helper";
 import { createOptionalField } from "../base/optional-field.factory";
 
 /**
@@ -36,24 +36,12 @@ export function StringField(
 		}),
 	];
 
-	// 정규식 패턴 검증
-	if (options.pattern) {
-		decorators.push(
-			Matches(RegExp(options.pattern), {
-				message:
-					options.message ||
-					VALIDATION_MESSAGES.INVALID_FORMAT(options.pattern),
-				each: options.each,
-			}),
-		);
+	// Nullable 처리
+	if (options.nullable) {
+		decorators.push(IsNullable({ each: options.each }));
+	} else {
+		decorators.push(NotEquals(null, { each: options.each }));
 	}
-
-	// Nullable 처리 (문자열 "null" → null 변환 포함)
-	applyNullableDecorators(decorators, {
-		nullable: options.nullable,
-		each: options.each,
-		transformStringNull: true, // StringField는 "null" 문자열 변환 지원
-	});
 
 	// Swagger 문서화
 	if (options.swagger !== false) {
