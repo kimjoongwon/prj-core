@@ -3,6 +3,13 @@
   "version": "1.0.0",
   "description": "Shared Variables and Constants",
   "types": "dist/index.d.ts",
+  "publishConfig": {
+    "access": "public"
+  },
+  "files": [
+    "dist",
+    "README.md"
+  ],
   "exports": {
     ".": {
       "import": "./dist/index.mjs",

@@ -1,7 +1,15 @@
 {
-  "name": "@shared/utils",
+  "name": "@cocrepo/utils",
   "version": "1.0.0",
+  "private": false,
   "types": "dist/index.d.ts",
+  "publishConfig": {
+    "access": "public"
+  },
+  "files": [
+    "dist",
+    "README.md"
+  ],
   "exports": {
     ".": {
       "import": "./dist/index.mjs",

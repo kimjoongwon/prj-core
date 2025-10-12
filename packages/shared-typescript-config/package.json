@@ -4,6 +4,16 @@
   "description": "Shared TypeScript configuration",
   "main": "index.js",
   "type": "module",
+  "publishConfig": {
+    "access": "public"
+  },
+  "files": [
+    "index.js",
+    "base.json",
+    "react.json",
+    "node.json",
+    "README.md"
+  ],
   "exports": {
     ".": "./index.js",
     "./base": "./base.json",

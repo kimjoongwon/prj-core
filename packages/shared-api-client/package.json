@@ -1,5 +1,5 @@
 {
-  "name": "@shared/api-client",
+  "name": "@cocrepo/api-client",
   "version": "1.0.0",
   "description": "Generated API client and types from OpenAPI specs",
   "keywords": [

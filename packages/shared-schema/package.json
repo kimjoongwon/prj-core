@@ -1,8 +1,14 @@
 {
   "name": "@shared/schema",
   "version": "0.0.1",
-  "private": true,
+  "publishConfig": {
+    "access": "public"
+  },
   "description": "Shared schema, DTOs and entities for the core project",
+  "files": [
+    "dist",
+    "README.md"
+  ],
   "scripts": {
     "type-check": "tsc --noEmit",
     "generate": "prisma generate",
