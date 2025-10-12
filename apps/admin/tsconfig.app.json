@@ -2,7 +2,7 @@
   // 공유된 React 전용 TypeScript 설정을 확장
   // 이유: 코드 중복 방지 및 프로젝트 간 일관된 타입 검사 규칙 적용
   // 역할: JSX, React Hook 등 React 개발에 필요한 기본 설정을 자동으로 가져옴
-  "extends": "@shared/typescript-config/react",
+  "extends": "@cocrepo/typescript-config/react",
   "compilerOptions": {
     // TypeScript 빌드 정보 파일을 저장할 위치 (캐시를 통한 빌드 성능 최적화)
     // 이유: 증분 컴파일을 통해 변경된 파일만 재컴파일하여 빌드 시간 단축

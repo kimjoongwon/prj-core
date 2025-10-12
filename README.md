@@ -5,16 +5,18 @@ This repository hosts a full‑stack monorepo managed with [Turborepo](https://t
 ## Repository Structure
 
 ### Applications
+
 - **admin** – React + Vite based admin UI.
 - **server** – [NestJS](https://nestjs.com/) backend API.
 - **storybook** – Next.js application for UI component previews.
 
 ### Packages
-- **@shared/frontend** – shared React component library.
-- **@shared/api-client** – generated API client.
-- **@shared/utils** – utility functions.
-- **@shared/types** – shared TypeScript types.
-- **@shared/vars** – common variables/constants.
+
+- **@cocrepo/frontend** – shared React component library.
+- **@cocrepo/api-client** – generated API client.
+- **@cocrepo/utils** – utility functions.
+- **@cocrepo/types** – shared TypeScript types.
+- **@cocrepo/utils** – common variables/constants.
 - **@shared/specs** – OpenAPI specifications.
 
 Additional documentation can be found in the [`docs`](./docs) directory.

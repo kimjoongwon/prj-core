@@ -23,10 +23,10 @@
     ]
   },
   "moduleNameMapper": {
-    "^@shared/schema$": "<rootDir>/../../packages/shared-schema/src/index.ts",
-    "^@shared/types$": "<rootDir>/../../packages/shared-types/index.ts",
-    "^@shared/utils$": "<rootDir>/../../packages/shared-utils/index.ts",
-    "^@shared/vars$": "<rootDir>/../../packages/shared-vars/index.ts",
+    "^@cocrepo/schema$": "<rootDir>/../../packages/shared-schema/src/index.ts",
+    "^@cocrepo/types$": "<rootDir>/../../packages/shared-types/index.ts",
+    "^@cocrepo/utils$": "<rootDir>/../../packages/shared-utils/index.ts",
+    "^@cocrepo/utils$": "<rootDir>/../../packages/shared-vars/index.ts",
     "^@shared$": "<rootDir>/src/shared/index",
     "^@shared/(.*)$": "<rootDir>/src/shared/$1"
   },

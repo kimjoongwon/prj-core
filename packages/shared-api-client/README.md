@@ -1,4 +1,4 @@
-# @shared/api-client
+# @cocrepo/api-client
 
 OpenAPI 스펙으로부터 자동 생성되는 API 클라이언트 패키지입니다.
 
@@ -38,22 +38,22 @@ pnpm codegen:prod       # 프로덕션 환경
 
 ### 환경별 API 엔드포인트
 
-| 환경 변수 값 | 스크립트 | API URL |
-|------------|---------|---------|
-| `development` (기본값) | `pnpm codegen` | `http://localhost:3006/api-json` |
-| `local` | `pnpm codegen:local` | `http://localhost:3006/api-json` |
-| `staging` | `pnpm codegen:stg` | `https://stg.cocdev.co.kr/api-json` |
-| `production` | `pnpm codegen:prod` | `https://cocdev.co.kr/api-json` |
+| 환경 변수 값           | 스크립트             | API URL                             |
+| ---------------------- | -------------------- | ----------------------------------- |
+| `development` (기본값) | `pnpm codegen`       | `http://localhost:3006/api-json`    |
+| `local`                | `pnpm codegen:local` | `http://localhost:3006/api-json`    |
+| `staging`              | `pnpm codegen:stg`   | `https://stg.cocdev.co.kr/api-json` |
+| `production`           | `pnpm codegen:prod`  | `https://cocdev.co.kr/api-json`     |
 
 ### 생성된 API 사용 예시
 
 ```typescript
-import { useGetUsersQuery, useCreateUserMutation } from '@shared/api-client';
+import { useGetUsersQuery, useCreateUserMutation } from '@cocrepo/api-client';
 
 function UserList() {
   // GET 요청 - React Query의 useQuery 활용
   const { data: users, isLoading } = useGetUsersQuery();
-  
+
   // POST 요청 - React Query의 useMutation 활용
   const createUser = useCreateUserMutation();
 
@@ -80,7 +80,7 @@ function UserList() {
 ### Suspense 사용 예시
 
 ```typescript
-import { useGetUsersSuspenseQuery } from '@shared/api-client';
+import { useGetUsersSuspenseQuery } from '@cocrepo/api-client';
 
 function UserListWithSuspense() {
   // Suspense 경계 내에서 사용 - 로딩 상태 자동 관리
@@ -158,12 +158,15 @@ pnpm clean
 ## 🚨 트러블슈팅
 
 ### 환경 설정 오류
+
 ```bash
 ❌ 지원되지 않는 환경입니다: test
 ✅ 지원 가능한 환경: development, staging, production
 ```
+
 위와 같은 메시지가 나타나면 지원되는 환경 중 하나를 선택하여 다시 실행하세요.
 
 ### 네트워크 연결 오류
+
 - 로컬 개발 환경(`development`, `local`)의 경우 백엔드 서버가 `localhost:3006`에서 실행 중인지 확인하세요
 - 스테이징/프로덕션 환경의 경우 해당 서버가 정상 작동하는지 확인하세요

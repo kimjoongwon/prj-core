@@ -26,7 +26,7 @@ shared-frontend 패키지의 모든 컴포넌트는 **순수 React 컴포넌트*
 ```typescript
 import { SomeUILibrary } from "@heroui/react";
 
-export interface ComponentProps<T extends object> 
+export interface ComponentProps<T extends object>
   extends Omit<SomeUILibraryProps, "value" | "onChange"> {
   value?: SomeType;
   onChange?: (value: SomeType) => void;
@@ -50,6 +50,7 @@ export const Component = <T extends object>(props: ComponentProps<T>) => {
 ```
 
 **특징:**
+
 - ✅ **순수 함수**: 외부 의존성 없음
 - ✅ **표준 Props**: `value/onChange` 패턴
 - ✅ **재사용 가능**: 어떤 상태 관리 라이브러리와도 호환
@@ -61,7 +62,7 @@ export const Component = <T extends object>(props: ComponentProps<T>) => {
 import { get } from "lodash-es";
 import { action } from "mobx";
 import { observer } from "mobx-react-lite";
-import { useFormField } from "@shared/hooks";
+import { useFormField } from "@cocrepo/hooks";
 import { MobxProps } from "../../../types";
 import {
   Component as ComponentComponent,
@@ -95,6 +96,7 @@ export const Component = observer(
 ```
 
 **특징:**
+
 - ✅ **MobX 통합**: `observer`, `action`, `useFormField` 사용
 - ✅ **상태 관리**: `state/path` → `value/onChange` 변환
 - ✅ **타입 안전**: `MobxProps<T>` 확장
@@ -129,6 +131,7 @@ export const Default: Story = {
 ```
 
 **특징:**
+
 - ✅ **MobX 독립**: 순수 React 컴포넌트만 사용
 - ✅ **React State**: `useState` 훅으로 상태 관리
 - ✅ **상호작용**: 실제 동작하는 컴포넌트 시연
@@ -136,35 +139,40 @@ export const Default: Story = {
 ## 🎯 핵심 원칙
 
 ### 1. 관심사의 분리
+
 - **UI 로직**: 순수 React 컴포넌트
 - **상태 관리**: MobX 래퍼 컴포넌트
 - **문서화**: Storybook
 
 ### 2. 의존성 방향
+
 ```
 index.tsx (MobX) → Component.tsx (Pure React)
 Component.stories.tsx → Component.tsx (Pure React)
 ```
 
 ### 3. Import 규칙
+
 ```typescript
 // ✅ 올바른 Import
-import { Component } from "./Component";           // 순수 React (Storybook용)
-import { Component } from "./index";               // MobX 래퍼 (앱에서 사용)
-import { Component } from "../inputs/Component";   // 자동으로 index.tsx 참조
+import { Component } from "./Component"; // 순수 React (Storybook용)
+import { Component } from "./index"; // MobX 래퍼 (앱에서 사용)
+import { Component } from "../inputs/Component"; // 자동으로 index.tsx 참조
 
-// ❌ 잘못된 Import  
-import { Component } from "./index";               // Storybook에서 MobX 래퍼 사용 금지
+// ❌ 잘못된 Import
+import { Component } from "./index"; // Storybook에서 MobX 래퍼 사용 금지
 ```
 
 ## 📋 체크리스트
 
 ### 새 컴포넌트 작성 시
+
 - [ ] `Component.tsx`: 순수 React 컴포넌트 (`value/onChange` 패턴)
 - [ ] `index.tsx`: MobX 래퍼 (`MobxProps<T>` 확장, `useFormField` 사용)
 - [ ] `Component.stories.tsx`: 순수 React 컴포넌트 참조, `useState` 사용
 
 ### 기존 컴포넌트 리팩터링 시
+
 - [ ] MobX 의존성을 `index.tsx`로 분리
 - [ ] 순수 React 컴포넌트를 `Component.tsx`로 분리
 - [ ] Storybook이 순수 React 컴포넌트를 참조하는지 확인
@@ -173,6 +181,7 @@ import { Component } from "./index";               // Storybook에서 MobX 래�
 ## 🛠️ 도구 및 유틸리티
 
 ### useFormField Hook
+
 ```typescript
 const { localState } = useFormField({
   initialValue: defaultValue,
@@ -182,6 +191,7 @@ const { localState } = useFormField({
 ```
 
 ### MobxProps 타입
+
 ```typescript
 export interface MobxProps<T> {
   state?: T;
@@ -190,17 +200,19 @@ export interface MobxProps<T> {
 ```
 
 ### 표준 Import 패턴
+
 ```typescript
 import { get } from "lodash-es";
 import { action } from "mobx";
 import { observer } from "mobx-react-lite";
-import { useFormField } from "@shared/hooks";
+import { useFormField } from "@cocrepo/hooks";
 import { MobxProps } from "../../../types";
 ```
 
 ## 🔍 예제: DateRangePicker
 
 ### 순수 React 컴포넌트
+
 ```typescript
 // DateRangePicker.tsx
 export interface DateRangePickerProps<T extends object>
@@ -211,7 +223,7 @@ export interface DateRangePickerProps<T extends object>
 
 export const DateRangePicker = <T extends object>(props: DateRangePickerProps<T>) => {
   const { value, onChange, ...rest } = props;
-  
+
   const handleDateChange = (value: any) => {
     onChange?.(value);
   };
@@ -227,6 +239,7 @@ export const DateRangePicker = <T extends object>(props: DateRangePickerProps<T>
 ```
 
 ### MobX 래퍼 컴포넌트
+
 ```typescript
 // index.tsx
 export interface DateRangePickerProps<T>
@@ -235,10 +248,10 @@ export interface DateRangePickerProps<T>
 
 export const DateRangePicker = observer(<T extends object>(props: DateRangePickerProps<T>) => {
   const { state, path, ...rest } = props;
-  
+
   // 특수 로직: startPath, endPath 분리
   const [startPath, endPath] = useMemo(() => (path as string)?.split(","), [path]);
-  
+
   const initialValue = {
     start: parseAbsoluteToLocal(get(state, startPath) || new Date().toISOString()),
     end: parseAbsoluteToLocal(get(state, endPath) || new Date().toISOString()),

@@ -1,13 +1,13 @@
-import { formatDateTimeWithSeconds } from "@shared/utils";
+import { formatDateTimeWithSeconds } from "@cocrepo/utils";
 
 interface DateCellProps {
-	value: string | Date | null | undefined;
+  value: string | Date | null | undefined;
 }
 
 export const DateCell = ({ value }: DateCellProps) => {
-	if (!value) {
-		return <p>-</p>;
-	}
+  if (!value) {
+    return <p>-</p>;
+  }
 
-	return <p>{formatDateTimeWithSeconds(value as string)}</p>;
+  return <p>{formatDateTimeWithSeconds(value as string)}</p>;
 };

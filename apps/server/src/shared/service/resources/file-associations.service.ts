@@ -1,62 +1,62 @@
 import { Injectable } from "@nestjs/common";
 import {
-	CreateFileAssociationDto,
-	Prisma,
-	QueryFileAssociationDto,
-	UpdateFileAssociationDto,
-} from "@shared/schema";
+  CreateFileAssociationDto,
+  Prisma,
+  QueryFileAssociationDto,
+  UpdateFileAssociationDto,
+} from "@cocrepo/schema";
 import { FileAssociationsRepository } from "../../repository/file-associations.repository";
 
 @Injectable()
 export class FileAssociationsService {
-	constructor(private readonly repository: FileAssociationsRepository) {}
+  constructor(private readonly repository: FileAssociationsRepository) {}
 
-	async create(createFileAssociationDto: CreateFileAssociationDto) {
-		const fileAssociation = await this.repository.create({
-			data: createFileAssociationDto,
-		});
+  async create(createFileAssociationDto: CreateFileAssociationDto) {
+    const fileAssociation = await this.repository.create({
+      data: createFileAssociationDto,
+    });
 
-		return fileAssociation;
-	}
+    return fileAssociation;
+  }
 
-	async getManyByQuery(query: QueryFileAssociationDto) {
-		const args = query.toArgs<Prisma.FileAssociationFindManyArgs>();
-		const countArgs = query.toCountArgs<Prisma.FileAssociationCountArgs>();
+  async getManyByQuery(query: QueryFileAssociationDto) {
+    const args = query.toArgs<Prisma.FileAssociationFindManyArgs>();
+    const countArgs = query.toCountArgs<Prisma.FileAssociationCountArgs>();
 
-		// Include file information like original BaseService
-		const argsWithInclude = {
-			...args,
-			include: { file: true },
-		};
+    // Include file information like original BaseService
+    const argsWithInclude = {
+      ...args,
+      include: { file: true },
+    };
 
-		const fileAssociations = await this.repository.findMany(argsWithInclude);
-		const count = await this.repository.count(countArgs);
+    const fileAssociations = await this.repository.findMany(argsWithInclude);
+    const count = await this.repository.count(countArgs);
 
-		return {
-			fileAssociations,
-			count,
-		};
-	}
+    return {
+      fileAssociations,
+      count,
+    };
+  }
 
-	getById(id: string) {
-		return this.repository.findUnique({ where: { id } });
-	}
+  getById(id: string) {
+    return this.repository.findUnique({ where: { id } });
+  }
 
-	updateById(id: string, updateFileAssociationDto: UpdateFileAssociationDto) {
-		return this.repository.update({
-			where: { id },
-			data: updateFileAssociationDto,
-		});
-	}
+  updateById(id: string, updateFileAssociationDto: UpdateFileAssociationDto) {
+    return this.repository.update({
+      where: { id },
+      data: updateFileAssociationDto,
+    });
+  }
 
-	deleteById(id: string) {
-		return this.repository.delete({ where: { id } });
-	}
+  deleteById(id: string) {
+    return this.repository.delete({ where: { id } });
+  }
 
-	removeById(id: string) {
-		return this.repository.update({
-			where: { id },
-			data: { removedAt: new Date() },
-		});
-	}
+  removeById(id: string) {
+    return this.repository.update({
+      where: { id },
+      data: { removedAt: new Date() },
+    });
+  }
 }

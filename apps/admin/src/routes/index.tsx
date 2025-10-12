@@ -1,16 +1,16 @@
-import { useAuth } from "@shared/frontend";
+import { useAuth } from "@cocrepo/frontend";
 import { createFileRoute, Navigate } from "@tanstack/react-router";
 
 const IndexComponent = () => {
-	const { isAuthenticated } = useAuth();
+  const { isAuthenticated } = useAuth();
 
-	if (isAuthenticated) {
-		return <Navigate to="/admin/dashboard" />;
-	}
+  if (isAuthenticated) {
+    return <Navigate to="/admin/dashboard" />;
+  }
 
-	return <Navigate to="/admin/auth/login" />;
+  return <Navigate to="/admin/auth/login" />;
 };
 
 export const Route = createFileRoute("/")({
-	component: IndexComponent,
+  component: IndexComponent,
 });

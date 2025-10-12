@@ -7,7 +7,7 @@
  *
  * @example
  * ```typescript
- * import { LoggerUtil } from '@shared/utils';
+ * import { LoggerUtil } from '@cocrepo/utils';
  *
  * // 기본 사용법
  * const logger = LoggerUtil.create('[MyComponent]');
@@ -20,15 +20,15 @@
  */
 
 export interface LogData {
-	[key: string]: any;
+  [key: string]: any;
 }
 
 export interface Logger {
-	info(message: string, data?: LogData | string | number | boolean): void;
-	success(message: string, data?: LogData | string | number | boolean): void;
-	warning(message: string, data?: LogData | string | number | boolean): void;
-	error(message: string, data?: LogData | string | number | boolean): void;
-	debug(message: string, data?: LogData | string | number | boolean): void;
+  info(message: string, data?: LogData | string | number | boolean): void;
+  success(message: string, data?: LogData | string | number | boolean): void;
+  warning(message: string, data?: LogData | string | number | boolean): void;
+  error(message: string, data?: LogData | string | number | boolean): void;
+  debug(message: string, data?: LogData | string | number | boolean): void;
 }
 
 /**
@@ -38,40 +38,40 @@ export interface Logger {
  * @returns Logger 인스턴스
  */
 export function createLogger(prefix: string): Logger {
-	return {
-		/**
-		 * 정보성 로그를 출력합니다.
-		 */
-		info(message: string, data?: LogData | string | number | boolean): void {
-			console.log(`🔍 ${prefix} ${message}`, data || "");
-		},
+  return {
+    /**
+     * 정보성 로그를 출력합니다.
+     */
+    info(message: string, data?: LogData | string | number | boolean): void {
+      console.log(`🔍 ${prefix} ${message}`, data || "");
+    },
 
-		/**
-		 * 성공 로그를 출력합니다.
-		 */
-		success(message: string, data?: LogData | string | number | boolean): void {
-			console.log(`✅ ${prefix} ${message}`, data || "");
-		},
+    /**
+     * 성공 로그를 출력합니다.
+     */
+    success(message: string, data?: LogData | string | number | boolean): void {
+      console.log(`✅ ${prefix} ${message}`, data || "");
+    },
 
-		/**
-		 * 경고 로그를 출력합니다.
-		 */
-		warning(message: string, data?: LogData | string | number | boolean): void {
-			console.warn(`⚠️ ${prefix} ${message}`, data || "");
-		},
+    /**
+     * 경고 로그를 출력합니다.
+     */
+    warning(message: string, data?: LogData | string | number | boolean): void {
+      console.warn(`⚠️ ${prefix} ${message}`, data || "");
+    },
 
-		/**
-		 * 에러 로그를 출력합니다.
-		 */
-		error(message: string, data?: LogData | string | number | boolean): void {
-			console.error(`❌ ${prefix} ${message}`, data || "");
-		},
+    /**
+     * 에러 로그를 출력합니다.
+     */
+    error(message: string, data?: LogData | string | number | boolean): void {
+      console.error(`❌ ${prefix} ${message}`, data || "");
+    },
 
-		/**
-		 * 디버그 로그를 출력합니다.
-		 */
-		debug(message: string, data?: LogData | string | number | boolean): void {
-			console.debug(`🐛 ${prefix} ${message}`, data || "");
-		},
-	};
+    /**
+     * 디버그 로그를 출력합니다.
+     */
+    debug(message: string, data?: LogData | string | number | boolean): void {
+      console.debug(`🐛 ${prefix} ${message}`, data || "");
+    },
+  };
 }

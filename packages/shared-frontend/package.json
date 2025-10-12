@@ -1,5 +1,5 @@
 {
-  "name": "@shared/frontend",
+  "name": "@cocrepo/frontend",
   "version": "1.2.5",
   "description": "ui library",
   "sideEffects": [
@@ -45,10 +45,10 @@
     "@heroui/react": "catalog:",
     "@heroui/use-theme": "catalog:",
     "@internationalized/date": "^3.8.2",
-    "@shared/api-client": "workspace:*",
-    "@shared/hooks": "workspace:*",
-    "@shared/types": "workspace:*",
-    "@shared/utils": "workspace:*",
+    "@cocrepo/api-client": "workspace:*",
+    "@cocrepo/hooks": "workspace:*",
+    "@cocrepo/types": "workspace:*",
+    "@cocrepo/utils": "workspace:*",
     "@storybook/react": "^9.0.18",
     "@storybook/react-vite": "catalog:",
     "@tailwindcss/postcss": "catalog:",

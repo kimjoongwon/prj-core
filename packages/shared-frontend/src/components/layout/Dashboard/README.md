@@ -60,8 +60,8 @@ A dashboard layout component with responsive behavior for different screen sizes
 ### Full Dashboard Layout
 
 ```tsx
-import React from 'react';
-import { DashboardLayout } from '@shared/frontend';
+import React from "react";
+import { DashboardLayout } from "@cocrepo/frontend";
 
 const MyHeader = ({ children }) => (
   <div className="bg-blue-600 text-white p-4 flex items-center justify-between">
@@ -208,7 +208,7 @@ import {
   DashboardLayout,
   Breadcrumb,
   BreadcrumbBuilder,
-} from '@shared/frontend';
+} from "@cocrepo/frontend";
 
 function DashboardWithBreadcrumb() {
   // Using Breadcrumb component
@@ -224,7 +224,7 @@ function DashboardWithBreadcrumb() {
   // Or using BreadcrumbBuilder for automatic route-based breadcrumbs
   const MyBreadcrumbBuilder = () => (
     <BreadcrumbBuilder
-      routeNames={['대시보드', '사용자 관리', '사용자 목록']}
+      routeNames={["대시보드", "사용자 관리", "사용자 목록"]}
       className="text-sm sm:text-base"
     />
   );
@@ -331,7 +331,7 @@ This makes it easy to see the layout structure during development.
 The DashboardLayout is integrated with the LayoutBuilder component and can be used with the layout type `'Dashboard'`:
 
 ```tsx
-import { LayoutBuilder } from '@shared/frontend';
+import { LayoutBuilder } from "@cocrepo/frontend";
 
 function App() {
   return (

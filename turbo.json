@@ -11,7 +11,7 @@
   "globalEnv": ["NODE_ENV"],
   "tasks": {
     // API 클라이언트 코드 생성 패키지 (OpenAPI → TypeScript)
-    "@shared/api-client#build": {
+    "@cocrepo/api-client#build": {
       "inputs": [
         "src/**/*.ts", // 소스 코드 변경 감지
         "orval.config.js", // API 생성 설정 파일 변경 감지
@@ -24,7 +24,7 @@
       "cache": true // 빌드 결과 캐싱 활성화
     },
     // DB 스키마, DTO, Entity 정의 패키지 (Prisma 포함)
-    "@shared/schema#build": {
+    "@cocrepo/schema#build": {
       "inputs": [
         "src/**/*.ts", // 소스 코드 변경 감지
         "generated/**/*", // Prisma 생성 파일 변경 감지 (레거시)
@@ -38,7 +38,7 @@
       "cache": true // 빌드 결과 캐싱 활성화
     },
     // 공통 유틸리티 함수 패키지
-    "@shared/utils#build": {
+    "@cocrepo/utils#build": {
       "inputs": [
         "src/**/*.ts", // 소스 코드 변경 감지
         "tsconfig.json", // TypeScript 설정 변경 감지
@@ -51,7 +51,7 @@
       "cache": true // 빌드 결과 캐싱 활성화
     },
     // 환경변수 및 상수 정의 패키지
-    "@shared/vars#build": {
+    "@cocrepo/utils#build": {
       "inputs": [
         "src/**/*.ts", // 소스 코드 변경 감지
         "tsconfig.json", // TypeScript 설정 변경 감지
@@ -75,9 +75,9 @@
       "outputs": ["dist/**"], // 빌드 결과물 위치
       // 의존하는 shared 패키지들이 먼저 빌드되어야 함
       "dependsOn": [
-        "@shared/schema#build",
-        "@shared/utils#build",
-        "@shared/vars#build"
+        "@cocrepo/schema#build",
+        "@cocrepo/utils#build",
+        "@cocrepo/utils#build"
       ],
       "env": ["NODE_ENV"], // 환경변수 의존성
       "cache": true // 빌드 결과 캐싱 활성화
@@ -87,7 +87,7 @@
       "dependsOn": ["^build"] // 의존성 트리에 따라 순차적으로 빌드
     },
     // 공통 프론트엔드 컴포넌트 패키지
-    "@shared/frontend#build": {
+    "@cocrepo/frontend#build": {
       "inputs": [
         "src/**/*.{ts,tsx,css}", // React 컴포넌트 및 스타일 파일 변경 감지
         "index.ts", // 진입점 파일 변경 감지
@@ -97,16 +97,16 @@
       "outputs": [], // 타입 체크만 수행, 빌드 결과물 없음
       // 의존하는 다른 shared 패키지들이 먼저 빌드되어야 함
       "dependsOn": [
-        "@shared/api-client#build",
-        "@shared/hooks#build",
-        "@shared/types#build",
-        "@shared/utils#build"
+        "@cocrepo/api-client#build",
+        "@cocrepo/hooks#build",
+        "@cocrepo/types#build",
+        "@cocrepo/utils#build"
       ],
       "env": ["NODE_ENV"], // 환경변수 의존성
       "cache": false // 타입 체크는 캐싱하지 않음
     },
     // React 커스텀 훅 패키지
-    "@shared/hooks#build": {
+    "@cocrepo/hooks#build": {
       "inputs": [
         "src/**/*.ts", // 소스 코드 변경 감지
         "index.ts", // 진입점 파일 변경 감지
@@ -114,11 +114,11 @@
         "package.json" // 의존성 변경 감지
       ],
       "outputs": [], // 타입 체크만 수행, 빌드 결과물 없음
-      "dependsOn": ["@shared/types#build", "@shared/utils#build"], // 의존성 빌드 먼저 실행
+      "dependsOn": ["@cocrepo/types#build", "@cocrepo/utils#build"], // 의존성 빌드 먼저 실행
       "cache": false // 타입 체크는 캐싱하지 않음
     },
     // 공통 타입 정의 패키지
-    "@shared/types#build": {
+    "@cocrepo/types#build": {
       "inputs": [
         "src/**/*.ts", // 소스 코드 변경 감지
         "index.ts", // 진입점 파일 변경 감지
@@ -146,19 +146,19 @@
     // 코드 포맷팅
     "format": {},
     // shared-schema 개발 모드 (watch)
-    "@shared/schema#start:dev": {
+    "@cocrepo/schema#start:dev": {
       "cache": false,
       "persistent": true,
-      "dependsOn": ["@shared/schema#build"] // 초기 빌드 후 watch
+      "dependsOn": ["@cocrepo/schema#build"] // 초기 빌드 후 watch
     },
     // mobile 앱 개발 모드 (Expo)
     "mobile#start:dev": {
       "cache": false,
       "persistent": true,
       "dependsOn": [
-        "@shared/api-client#build",
-        "@shared/hooks#build",
-        "@shared/utils#build"
+        "@cocrepo/api-client#build",
+        "@cocrepo/hooks#build",
+        "@cocrepo/utils#build"
       ] // mobile이 의존하는 shared 패키지들만 먼저 빌드
     },
     // 개발 서버 시작

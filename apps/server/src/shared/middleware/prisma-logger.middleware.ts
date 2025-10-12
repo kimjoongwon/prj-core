@@ -1,17 +1,17 @@
-import { Prisma } from "@shared/schema";
+import { Prisma } from "@cocrepo/schema";
 
 export function loggingMiddleware(): Prisma.Middleware {
-	return async (params, next) => {
-		const before = Date.now();
+  return async (params, next) => {
+    const before = Date.now();
 
-		const result = await next(params);
+    const result = await next(params);
 
-		const after = Date.now();
+    const after = Date.now();
 
-		console.log(
-			`쿼리 ${params.model}.${params.action} 실행 시간: ${after - before}ms`,
-		);
+    console.log(
+      `쿼리 ${params.model}.${params.action} 실행 시간: ${after - before}ms`
+    );
 
-		return result;
-	};
+    return result;
+  };
 }

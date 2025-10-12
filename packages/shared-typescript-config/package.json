@@ -1,5 +1,5 @@
 {
-  "name": "@shared/typescript-config",
+  "name": "@cocrepo/typescript-config",
   "version": "1.0.0",
   "description": "Shared TypeScript configuration",
   "main": "index.js",

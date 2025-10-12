@@ -9,8 +9,10 @@
     "sourceMap": true,
     "paths": {
       "@prisma/client": ["./generated/client/index.js"],
-      "@shared/schema/client": ["./generated/client/index.js"],
-      "@shared/schema/client/runtime/library": ["./generated/client/runtime/library.js"]
+      "@cocrepo/schema/client": ["./generated/client/index.js"],
+      "@cocrepo/schema/client/runtime/library": [
+        "./generated/client/runtime/library.js"
+      ]
     },
     "outDir": "./dist",
     "incremental": false,
@@ -21,5 +23,5 @@
     "strictBindCallApply": false,
     "noFallthroughCasesInSwitch": false
   },
-  "exclude": ["generated", "node_modules", "dist"],
+  "exclude": ["generated", "node_modules", "dist"]
 }

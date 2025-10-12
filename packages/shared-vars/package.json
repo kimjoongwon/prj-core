@@ -1,5 +1,5 @@
 {
-  "name": "@shared/vars",
+  "name": "@cocrepo/vars",
   "version": "1.0.0",
   "description": "Shared Variables and Constants",
   "types": "dist/index.d.ts",

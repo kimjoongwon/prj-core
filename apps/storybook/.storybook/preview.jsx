@@ -1,5 +1,5 @@
 import "../tailwind.css";
-import { AppProviders, UIProviders } from "@shared/frontend";
+import { AppProviders, UIProviders } from "@cocrepo/frontend";
 
 /** @type { import('@storybook/react-vite').Preview } */
 const preview = {

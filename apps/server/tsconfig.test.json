@@ -10,9 +10,9 @@
     "paths": {
       "@shared/*": ["./src/shared/*"],
       "@shared": ["./src/shared/index"],
-      "@shared/schema": ["../packages/shared-schema/src"],
-      "@shared/utils": ["../packages/shared-utils/src"],
-      "@shared/vars": ["../packages/shared-vars/src"]
+      "@cocrepo/schema": ["../packages/shared-schema/src"],
+      "@cocrepo/utils": ["../packages/shared-utils/src"],
+      "@cocrepo/utils": ["../packages/shared-vars/src"]
     }
   },
   "include": ["src/**/*.ts", "src/**/*.test.ts"],

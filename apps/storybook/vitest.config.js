@@ -42,7 +42,7 @@ export default defineConfig({
         },
         resolve: {
           alias: {
-            "@shared/frontend": path.resolve(
+            "@cocrepo/frontend": path.resolve(
               dirname,
               "../../packages/shared-frontend"
             ),

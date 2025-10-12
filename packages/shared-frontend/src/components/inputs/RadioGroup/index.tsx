@@ -1,40 +1,40 @@
-import { useFormField } from "@shared/hooks";
-import { MobxProps } from "@shared/types";
-import { tools } from "@shared/utils";
+import { useFormField } from "@cocrepo/hooks";
+import { MobxProps } from "@cocrepo/types";
+import { tools } from "@cocrepo/utils";
 import { action } from "mobx";
 import { observer } from "mobx-react-lite";
 import {
-	RadioGroup as BaseRadioGroup,
-	type RadioGroupProps as BaseRadioGroupProps,
+  RadioGroup as BaseRadioGroup,
+  type RadioGroupProps as BaseRadioGroupProps,
 } from "./RadioGroup";
 
 export interface RadioGroupProps<T>
-	extends MobxProps<T>,
-		Omit<BaseRadioGroupProps, "value" | "onValueChange"> {}
+  extends MobxProps<T>,
+    Omit<BaseRadioGroupProps, "value" | "onValueChange"> {}
 
 export const RadioGroup = observer(
-	<T extends object>(props: RadioGroupProps<T>) => {
-		const { state, path, options, ...rest } = props;
+  <T extends object>(props: RadioGroupProps<T>) => {
+    const { state, path, options, ...rest } = props;
 
-		const initialValue =
-			options?.find((option) => option.value === tools.get(state, path))
-				?.value || "";
+    const initialValue =
+      options?.find((option) => option.value === tools.get(state, path))
+        ?.value || "";
 
-		const { localState } = useFormField({ initialValue, state, path });
+    const { localState } = useFormField({ initialValue, state, path });
 
-		const handleValueChange = action((value: string) => {
-			localState.value = value;
-		});
+    const handleValueChange = action((value: string) => {
+      localState.value = value;
+    });
 
-		return (
-			<BaseRadioGroup
-				{...rest}
-				options={options}
-				value={localState.value}
-				onValueChange={handleValueChange}
-			/>
-		);
-	},
+    return (
+      <BaseRadioGroup
+        {...rest}
+        options={options}
+        value={localState.value}
+        onValueChange={handleValueChange}
+      />
+    );
+  }
 );
 
 // Re-export types for backwards compatibility

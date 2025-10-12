@@ -1,55 +1,55 @@
 import { Injectable } from "@nestjs/common";
 import {
-	CreateFileDto,
-	Prisma,
-	QueryFileDto,
-	UpdateFileDto,
-} from "@shared/schema";
+  CreateFileDto,
+  Prisma,
+  QueryFileDto,
+  UpdateFileDto,
+} from "@cocrepo/schema";
 import { FilesRepository } from "../../repository/files.repository";
 
 @Injectable()
 export class FilesService {
-	constructor(private readonly repository: FilesRepository) {}
+  constructor(private readonly repository: FilesRepository) {}
 
-	async create(createFileDto: CreateFileDto) {
-		const file = await this.repository.create({
-			data: createFileDto,
-		});
+  async create(createFileDto: CreateFileDto) {
+    const file = await this.repository.create({
+      data: createFileDto,
+    });
 
-		return file;
-	}
+    return file;
+  }
 
-	async getManyByQuery(query: QueryFileDto) {
-		const args = query.toArgs<Prisma.FileFindManyArgs>();
-		const countArgs = query.toCountArgs<Prisma.FileCountArgs>();
-		const items = await this.repository.findMany(args);
-		const count = await this.repository.count(countArgs);
+  async getManyByQuery(query: QueryFileDto) {
+    const args = query.toArgs<Prisma.FileFindManyArgs>();
+    const countArgs = query.toCountArgs<Prisma.FileCountArgs>();
+    const items = await this.repository.findMany(args);
+    const count = await this.repository.count(countArgs);
 
-		return {
-			items,
-			count,
-		};
-	}
+    return {
+      items,
+      count,
+    };
+  }
 
-	getById(id: string) {
-		return this.repository.findUnique({ where: { id } });
-	}
+  getById(id: string) {
+    return this.repository.findUnique({ where: { id } });
+  }
 
-	updateById(id: string, updateFileDto: UpdateFileDto) {
-		return this.repository.update({
-			where: { id },
-			data: updateFileDto,
-		});
-	}
+  updateById(id: string, updateFileDto: UpdateFileDto) {
+    return this.repository.update({
+      where: { id },
+      data: updateFileDto,
+    });
+  }
 
-	deleteById(id: string) {
-		return this.repository.delete({ where: { id } });
-	}
+  deleteById(id: string) {
+    return this.repository.delete({ where: { id } });
+  }
 
-	removeById(id: string) {
-		return this.repository.update({
-			where: { id },
-			data: { removedAt: new Date() },
-		});
-	}
+  removeById(id: string) {
+    return this.repository.update({
+      where: { id },
+      data: { removedAt: new Date() },
+    });
+  }
 }

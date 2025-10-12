@@ -21,9 +21,9 @@
     "@heroui/react": "catalog:",
     "@heroui/use-theme": "catalog:",
     "@internationalized/date": "^3.8.2",
-    "@shared/api-client": "workspace:*",
-    "@shared/frontend": "workspace:*",
-    "@shared/utils": "workspace:*",
+    "@cocrepo/api-client": "workspace:*",
+    "@cocrepo/frontend": "workspace:*",
+    "@cocrepo/utils": "workspace:*",
     "@tanstack/react-query": "catalog:",
     "@tanstack/react-router": "^1.130.2",
     "@tanstack/react-table": "^8.21.3",
@@ -48,7 +48,7 @@
     "valtio": "^2.1.5"
   },
   "devDependencies": {
-    "@shared/typescript-config": "workspace:*",
+    "@cocrepo/typescript-config": "workspace:*",
     "@storybook/addon-docs": "catalog:",
     "@storybook/addon-onboarding": "^9.0.18",
     "@storybook/react-vite": "catalog:",
