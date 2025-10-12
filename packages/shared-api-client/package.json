@@ -28,13 +28,13 @@
     "codegen": "orval --config orval.config.js"
   },
   "dependencies": {
-    "@tanstack/react-query": "^5.83.0",
-    "axios": "^1.12.2"
+    "@tanstack/react-query": "catalog:",
+    "axios": "catalog:"
   },
   "devDependencies": {
-    "@types/node": "^24.5.2",
+    "@types/node": "catalog:",
     "orval": "^7.8.0",
-    "typescript": "^5.9.2"
+    "typescript": "catalog:"
   },
   "engines": {
     "node": ">=18.0.0",
