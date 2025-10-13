@@ -48,7 +48,7 @@
     "valtio": "^2.1.5"
   },
   "devDependencies": {
-    "@cocrepo/typescript-config": "workspace:*",
+    "@cocrepo/configs": "workspace:*",
     "@storybook/addon-docs": "catalog:",
     "@storybook/addon-onboarding": "^9.0.18",
     "@storybook/react-vite": "catalog:",

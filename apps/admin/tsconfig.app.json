@@ -2,7 +2,7 @@
   // 공유된 React 전용 TypeScript 설정을 확장
   // 이유: 코드 중복 방지 및 프로젝트 간 일관된 타입 검사 규칙 적용
   // 역할: JSX, React Hook 등 React 개발에 필요한 기본 설정을 자동으로 가져옴
-  "extends": "@cocrepo/typescript-config/react",
+  "extends": "@cocrepo/configs/react",
   "compilerOptions": {
     // TypeScript 빌드 정보 파일을 저장할 위치 (캐시를 통한 빌드 성능 최적화)
     // 이유: 증분 컴파일을 통해 변경된 파일만 재컴파일하여 빌드 시간 단축
@@ -28,7 +28,7 @@
     // 공유 프론트엔드 컴포넌트의 페이지 디렉토리
     // 이유: 모노레포 구조에서 다른 패키지의 컴포넌트를 직접 참조
     // 역할: 공통 페이지 컴포넌트들에 대한 타입 정보 제공
-    "../../packages/shared-frontend/src/components/page/pages"
+    "../../packages/frontend/src/components/page/pages"
   ],
   // ts-node 실행 시 설정 (개발 환경)
   // 이유: Node.js에서 TypeScript를 직접 실행할 때 필요한 설정
