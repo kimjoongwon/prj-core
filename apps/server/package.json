@@ -72,7 +72,7 @@
     "@nestjs/cli": "^11.0.10",
     "@nestjs/schematics": "^11.0.7",
     "@nestjs/testing": "^11.1.6",
-    "@cocrepo/typescript-config": "workspace:*",
+    "@cocrepo/configs": "workspace:*",
     "@suites/di.nestjs": "^3.0.1",
     "@suites/doubles.jest": "^3.0.1",
     "@suites/unit": "^3.0.1",

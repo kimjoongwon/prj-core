@@ -1,7 +1,7 @@
 {
-  "name": "@cocrepo/typescript-config",
+  "name": "@cocrepo/configs",
   "version": "1.0.0",
-  "description": "Shared TypeScript configuration",
+  "description": "Shared configuration files (TypeScript, etc.)",
   "main": "index.js",
   "type": "module",
   "publishConfig": {
