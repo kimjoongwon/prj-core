@@ -15,7 +15,7 @@
     "start:dev": "turbo start:dev",
     "start:mobile:ios": "turbo start:dev --filter=mobile",
     "start:mobile:aos": "turbo start:dev --filter=mobile",
-    "start:server": "turbo start:dev --filter=@cocrepo/schema --filter=server",
+    "start:server": "turbo start:dev --filter=server",
     "start:admin": "turbo start:dev --filter=admin",
     "start:storybook": "turbo start:dev --filter=storybook",
     "lint": "turbo lint",
