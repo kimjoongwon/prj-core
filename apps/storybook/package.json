@@ -16,7 +16,7 @@
   "description": "",
   "dependencies": {
     "@heroui/react": "catalog:",
-    "@cocrepo/frontend": "workspace:*",
+    "@cocrepo/frontend": "1.5.4",
     "@tanstack/react-query": "catalog:",
     "mobx": "catalog:",
     "mobx-react-lite": "catalog:",

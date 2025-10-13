@@ -41,15 +41,21 @@ apps.forEach((appName) => {
     if (!appPkg[depType]) return;
 
     Object.keys(appPkg[depType]).forEach((depName) => {
-      if (
-        appPkg[depType][depName] === "workspace:*" &&
-        packageVersions[depName]
-      ) {
-        appPkg[depType][depName] = packageVersions[depName];
-        console.log(
-          `  ✅ ${appName}: ${depName} workspace:* → ${packageVersions[depName]}`
-        );
-        updated = true;
+      if (packageVersions[depName]) {
+        const currentVersion = appPkg[depType][depName];
+        const newVersion = packageVersions[depName];
+
+        // workspace:* 또는 @cocrepo/ 패키지인 경우 업데이트
+        if (
+          currentVersion === "workspace:*" ||
+          (depName.startsWith("@cocrepo/") && currentVersion !== newVersion)
+        ) {
+          appPkg[depType][depName] = newVersion;
+          console.log(
+            `  ✅ ${appName}: ${depName} ${currentVersion} → ${newVersion}`
+          );
+          updated = true;
+        }
       }
     });
   });
