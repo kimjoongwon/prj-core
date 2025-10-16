@@ -1,4 +1,4 @@
-import { NotFound } from "@cocrepo/frontend";
+import { NotFound } from "@cocrepo/ui";
 import { createRootRoute, Outlet } from "@tanstack/react-router";
 
 const AppLayout = () => (

@@ -1,5 +1,5 @@
 import { login } from "@cocrepo/api-client";
-import { AdminAuthLoginPage } from "@cocrepo/frontend";
+import { AdminAuthLoginPage } from "@cocrepo/ui";
 import { useMutation } from "@tanstack/react-query";
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { isAxiosError } from "axios";

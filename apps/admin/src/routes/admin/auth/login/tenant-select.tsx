@@ -1,4 +1,4 @@
-import { AdminAuthTenantSelectPage } from "@cocrepo/frontend";
+import { AdminAuthTenantSelectPage } from "@cocrepo/ui";
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { observable } from "mobx";
 

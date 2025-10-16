@@ -1,4 +1,4 @@
-import { useAuth } from "@cocrepo/frontend";
+import { useAuth } from "@cocrepo/store";
 import { createFileRoute, Navigate } from "@tanstack/react-router";
 
 const IndexComponent = () => {
