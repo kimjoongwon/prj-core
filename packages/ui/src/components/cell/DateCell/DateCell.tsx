@@ -1,4 +1,4 @@
-import { formatDateTimeWithSeconds } from "@cocrepo/utils";
+import { formatDateTimeWithSeconds } from "@cocrepo/toolkit";
 
 interface DateCellProps {
   value: string | Date | null | undefined;

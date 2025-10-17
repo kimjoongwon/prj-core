@@ -46,6 +46,6 @@
     "typescript": "catalog:",
     "vitest": "catalog:",
     "@cocrepo/types": "workspace:*",
-    "@cocrepo/utils": "workspace:*"
+    "@cocrepo/toolkit": "workspace:*"
   }
 }

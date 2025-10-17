@@ -1,7 +1,7 @@
 /// <reference types="vitest/globals" />
 
 import { AXIOS_INSTANCE } from "@cocrepo/api-client";
-import { navigateTo } from "@cocrepo/utils";
+import { navigateTo } from "@cocrepo/toolkit";
 import { isAxiosError } from "axios";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { AuthStore } from "../authStore";
@@ -9,7 +9,7 @@ import { PlateStore } from "../plateStore";
 import { TokenStore } from "../tokenStore";
 
 // 의존성 모킹
-vi.mock("@cocrepo/utils", () => ({
+vi.mock("@cocrepo/toolkit", () => ({
   navigateTo: vi.fn(),
   createLogger: vi.fn(() => ({
     info: vi.fn(),

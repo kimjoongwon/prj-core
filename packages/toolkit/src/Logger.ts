@@ -7,7 +7,7 @@
  *
  * @example
  * ```typescript
- * import { LoggerUtil } from '@cocrepo/utils';
+ * import { LoggerUtil } from '@cocrepo/toolkit';
  *
  * // 기본 사용법
  * const logger = LoggerUtil.create('[MyComponent]');

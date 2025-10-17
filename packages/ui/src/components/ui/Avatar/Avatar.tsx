@@ -1,5 +1,5 @@
 import { Button, Chip, Avatar as HeroUIAvatar, User } from "@heroui/react";
-import { environment } from "@cocrepo/utils";
+import { environment } from "@cocrepo/toolkit";
 import { Dropdown, DropdownItemProps } from "../../inputs/Dropdown/Dropdown";
 
 interface AvatarProps {
