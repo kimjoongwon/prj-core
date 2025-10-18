@@ -188,12 +188,12 @@ importers:
       '@cocrepo/store':
         specifier: workspace:*
         version: link:../../packages/store
+      '@cocrepo/toolkit':
+        specifier: workspace:*
+        version: link:../../packages/toolkit
       '@cocrepo/ui':
         specifier: workspace:*
         version: link:../../packages/ui
-      '@cocrepo/utils':
-        specifier: workspace:*
-        version: link:../../packages/utils
       '@dnd-kit/core':
         specifier: ^6.3.1
         version: 6.3.1(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
@@ -283,8 +283,8 @@ importers:
         version: 2.1.7(@types/react@19.0.14)(react@19.1.0)
     devDependencies:
       '@cocrepo/configs':
-        specifier: 1.3.6
-        version: 1.3.6(typescript@5.9.2)
+        specifier: workspace:*
+        version: link:../../packages/configs
       '@storybook/addon-docs':
         specifier: 'catalog:'
         version: 9.1.10(@types/react@19.0.14)(storybook@9.1.10(@testing-library/dom@10.4.1)(msw@2.11.3(@types/node@24.5.2)(typescript@5.9.2))(prettier@3.6.2)(vite@6.3.6(@types/node@24.5.2)(jiti@2.6.0)(lightningcss@1.30.1)(terser@5.44.0)(tsx@4.20.5)(yaml@2.8.1)))
@@ -334,14 +334,14 @@ importers:
   apps/mobile:
     dependencies:
       '@cocrepo/api-client':
-        specifier: 1.3.4
-        version: 1.3.4(react@19.1.0)
+        specifier: workspace:*
+        version: link:../../packages/api-client
       '@cocrepo/hooks':
-        specifier: 1.3.4
-        version: 1.3.4(lodash-es@4.17.21)(mobx-react-lite@4.1.0(mobx@6.13.7)(react-dom@19.1.0(react@19.1.0))(react-native@0.81.4(@babel/core@7.28.4)(@types/react@19.1.17)(react@19.1.0))(react@19.1.0))(mobx@6.13.7)(react@19.1.0)
-      '@cocrepo/utils':
-        specifier: 1.3.4
-        version: 1.3.4(class-transformer@0.5.1)(class-validator@0.14.2)(dayjs@1.11.18)(path-parser@6.1.0)(reflect-metadata@0.2.2)(remeda@2.32.0)
+        specifier: workspace:*
+        version: link:../../packages/hooks
+      '@cocrepo/toolkit':
+        specifier: workspace:*
+        version: link:../../packages/toolkit
       '@expo/vector-icons':
         specifier: ^15.0.2
         version: 15.0.2(expo-font@14.0.9(expo@54.0.13)(react-native@0.81.4(@babel/core@7.28.4)(@types/react@19.1.17)(react@19.1.0))(react@19.1.0))(react-native@0.81.4(@babel/core@7.28.4)(@types/react@19.1.17)(react@19.1.0))(react@19.1.0)
@@ -428,8 +428,8 @@ importers:
         specifier: ^7.28.3
         version: 7.28.3(@babel/core@7.28.4)
       '@cocrepo/types':
-        specifier: 1.3.4
-        version: 1.3.4
+        specifier: workspace:*
+        version: link:../../packages/types
       '@react-native-async-storage/async-storage':
         specifier: 2.2.0
         version: 2.2.0(react-native@0.81.4(@babel/core@7.28.4)(@types/react@19.1.17)(react@19.1.0))
@@ -506,11 +506,11 @@ importers:
         specifier: ^1.5.2
         version: 1.5.2(@casl/ability@6.7.3)(@prisma/client@6.16.2(prisma@6.11.1(typescript@5.9.2))(typescript@5.9.2))
       '@cocrepo/schema':
-        specifier: 0.3.4
-        version: 0.3.4
-      '@cocrepo/utils':
-        specifier: 1.3.4
-        version: 1.3.4(class-transformer@0.5.1)(class-validator@0.14.2)(dayjs@1.11.18)(path-parser@6.1.0)(reflect-metadata@0.2.2)(remeda@2.32.0)
+        specifier: workspace:*
+        version: link:../../packages/schema
+      '@cocrepo/toolkit':
+        specifier: workspace:*
+        version: link:../../packages/toolkit
       '@nestjs-modules/mailer':
         specifier: ^2.0.2
         version: 2.0.2(@nestjs/common@11.1.6(class-transformer@0.5.1)(class-validator@0.14.2)(reflect-metadata@0.2.2)(rxjs@7.8.2))(@nestjs/core@11.1.6)(nodemailer@7.0.6)
@@ -633,8 +633,8 @@ importers:
         version: 11.1.0
     devDependencies:
       '@cocrepo/configs':
-        specifier: 1.3.6
-        version: 1.3.6(typescript@5.9.2)
+        specifier: workspace:*
+        version: link:../../packages/configs
       '@nestjs/cli':
         specifier: ^11.0.10
         version: 11.0.10(@swc/cli@0.7.8(@swc/core@1.13.5(@swc/helpers@0.5.17))(chokidar@4.0.3))(@swc/core@1.13.5(@swc/helpers@0.5.17))(@types/node@24.5.2)(esbuild@0.25.10)
@@ -869,12 +869,12 @@ importers:
         specifier: 'catalog:'
         version: 19.1.0
     devDependencies:
+      '@cocrepo/toolkit':
+        specifier: workspace:*
+        version: link:../toolkit
       '@cocrepo/types':
         specifier: workspace:*
         version: link:../types
-      '@cocrepo/utils':
-        specifier: workspace:*
-        version: link:../utils
       '@types/lodash-es':
         specifier: 'catalog:'
         version: 4.17.12
@@ -938,6 +938,22 @@ importers:
         version: 3.2.4(@types/node@24.5.2)(@vitest/browser@3.2.4)(@vitest/ui@3.2.4)(jiti@2.6.0)(jsdom@26.1.0)(lightningcss@1.30.1)(msw@2.11.3(@types/node@24.5.2)(typescript@5.9.2))(terser@5.44.0)(tsx@4.20.5)(yaml@2.8.1)
 
   packages/schema:
+    dependencies:
+      bcrypt:
+        specifier: ^6.0.0
+        version: 6.0.0
+      libphonenumber-js:
+        specifier: ^1.12.10
+        version: 1.12.21
+      lodash:
+        specifier: ^4.17.21
+        version: 4.17.21
+      remeda:
+        specifier: 'catalog:'
+        version: 2.32.0
+      ts-jenum:
+        specifier: ^2.2.2
+        version: 2.2.2(typescript@5.9.2)
     devDependencies:
       '@nestjs/common':
         specifier: ^11.1.3
@@ -960,9 +976,6 @@ importers:
       '@types/node':
         specifier: 'catalog:'
         version: 24.5.2
-      bcrypt:
-        specifier: ^6.0.0
-        version: 6.0.0
       class-transformer:
         specifier: ^0.5.1
         version: 0.5.1
@@ -972,21 +985,9 @@ importers:
       concurrently:
         specifier: ^9.2.0
         version: 9.2.1
-      libphonenumber-js:
-        specifier: ^1.12.10
-        version: 1.12.21
-      lodash:
-        specifier: ^4.17.21
-        version: 4.17.21
       prisma:
         specifier: 'catalog:'
         version: 6.11.1(typescript@5.9.2)
-      remeda:
-        specifier: 'catalog:'
-        version: 2.32.0
-      ts-jenum:
-        specifier: ^2.2.2
-        version: 2.2.2(typescript@5.9.2)
       ts-node:
         specifier: ^10.9.2
         version: 10.9.2(@swc/core@1.13.5(@swc/helpers@0.5.17))(@types/node@24.5.2)(typescript@5.9.2)
@@ -999,9 +1000,9 @@ importers:
 
   packages/store:
     devDependencies:
-      '@cocrepo/utils':
+      '@cocrepo/toolkit':
         specifier: workspace:*
-        version: link:../utils
+        version: link:../toolkit
       '@heroui/react':
         specifier: 'catalog:'
         version: 2.8.4(@types/react@19.0.14)(framer-motion@12.23.19(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(tailwindcss@4.1.13)
@@ -1057,6 +1058,49 @@ importers:
         specifier: 'catalog:'
         version: 3.2.4(@types/node@24.5.2)(@vitest/browser@3.2.4)(@vitest/ui@3.2.4)(jiti@2.6.0)(jsdom@26.1.0)(lightningcss@1.30.1)(msw@2.11.3(@types/node@24.5.2)(typescript@5.9.2))(terser@5.44.0)(tsx@4.20.5)(yaml@2.8.1)
 
+  packages/toolkit:
+    dependencies:
+      lodash-es:
+        specifier: 'catalog:'
+        version: 4.17.21
+    devDependencies:
+      '@types/node':
+        specifier: 'catalog:'
+        version: 24.5.2
+      '@vitest/coverage-v8':
+        specifier: 'catalog:'
+        version: 3.2.4(@vitest/browser@3.2.4)(vitest@3.2.4)
+      '@vitest/ui':
+        specifier: 'catalog:'
+        version: 3.2.4(vitest@3.2.4)
+      class-transformer:
+        specifier: ^0.5.1
+        version: 0.5.1
+      class-validator:
+        specifier: ^0.14.1
+        version: 0.14.2
+      dayjs:
+        specifier: 'catalog:'
+        version: 1.11.18
+      path-parser:
+        specifier: 6.1.0
+        version: 6.1.0
+      reflect-metadata:
+        specifier: ^0.1.13
+        version: 0.1.14
+      remeda:
+        specifier: 'catalog:'
+        version: 2.32.0
+      tsup:
+        specifier: 'catalog:'
+        version: 8.5.0(@swc/core@1.13.5(@swc/helpers@0.5.17))(jiti@2.6.0)(postcss@8.5.6)(tsx@4.20.5)(typescript@5.9.2)(yaml@2.8.1)
+      typescript:
+        specifier: 'catalog:'
+        version: 5.9.2
+      vitest:
+        specifier: 'catalog:'
+        version: 3.2.4(@types/node@24.5.2)(@vitest/browser@3.2.4)(@vitest/ui@3.2.4)(jiti@2.6.0)(jsdom@26.1.0)(lightningcss@1.30.1)(msw@2.11.3(@types/node@24.5.2)(typescript@5.9.2))(terser@5.44.0)(tsx@4.20.5)(yaml@2.8.1)
+
   packages/types:
     devDependencies:
       '@heroui/react':
@@ -1083,12 +1127,12 @@ importers:
       '@cocrepo/hooks':
         specifier: workspace:*
         version: link:../hooks
+      '@cocrepo/toolkit':
+        specifier: workspace:*
+        version: link:../toolkit
       '@cocrepo/types':
         specifier: workspace:*
         version: link:../types
-      '@cocrepo/utils':
-        specifier: workspace:*
-        version: link:../utils
       '@dnd-kit/core':
         specifier: ^6.3.1
         version: 6.3.1(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
@@ -1248,49 +1292,6 @@ importers:
       uuid:
         specifier: 'catalog:'
         version: 11.1.0
-      vitest:
-        specifier: 'catalog:'
-        version: 3.2.4(@types/node@24.5.2)(@vitest/browser@3.2.4)(@vitest/ui@3.2.4)(jiti@2.6.0)(jsdom@26.1.0)(lightningcss@1.30.1)(msw@2.11.3(@types/node@24.5.2)(typescript@5.9.2))(terser@5.44.0)(tsx@4.20.5)(yaml@2.8.1)
-
-  packages/utils:
-    dependencies:
-      lodash-es:
-        specifier: 'catalog:'
-        version: 4.17.21
-    devDependencies:
-      '@types/node':
-        specifier: 'catalog:'
-        version: 24.5.2
-      '@vitest/coverage-v8':
-        specifier: 'catalog:'
-        version: 3.2.4(@vitest/browser@3.2.4)(vitest@3.2.4)
-      '@vitest/ui':
-        specifier: 'catalog:'
-        version: 3.2.4(vitest@3.2.4)
-      class-transformer:
-        specifier: ^0.5.1
-        version: 0.5.1
-      class-validator:
-        specifier: ^0.14.1
-        version: 0.14.2
-      dayjs:
-        specifier: 'catalog:'
-        version: 1.11.18
-      path-parser:
-        specifier: 6.1.0
-        version: 6.1.0
-      reflect-metadata:
-        specifier: ^0.1.13
-        version: 0.1.14
-      remeda:
-        specifier: 'catalog:'
-        version: 2.32.0
-      tsup:
-        specifier: 'catalog:'
-        version: 8.5.0(@swc/core@1.13.5(@swc/helpers@0.5.17))(jiti@2.6.0)(postcss@8.5.6)(tsx@4.20.5)(typescript@5.9.2)(yaml@2.8.1)
-      typescript:
-        specifier: 'catalog:'
-        version: 5.9.2
       vitest:
         specifier: 'catalog:'
         version: 3.2.4(@types/node@24.5.2)(@vitest/browser@3.2.4)(@vitest/ui@3.2.4)(jiti@2.6.0)(jsdom@26.1.0)(lightningcss@1.30.1)(msw@2.11.3(@types/node@24.5.2)(typescript@5.9.2))(terser@5.44.0)(tsx@4.20.5)(yaml@2.8.1)
@@ -2116,39 +2117,6 @@ packages:
     engines: {node: '>=20.0.0', yarn: '>=1.22.18'}
     peerDependencies:
       storybook: ^0.0.0-0 || ^9.0.0 || ^9.1.0-0 || ^9.2.0-0 || ^10.0.0-0
-
-  '@cocrepo/api-client@1.3.4':
-    resolution: {integrity: sha512-JPndYhl4MtxVqCIirce/wJCALP7qRoCZH4Ciik5rd2WkTJwhYwAR7JN2kYr6JyyL/Ch/Pk5RkExOESLURcOeHQ==}
-    engines: {node: '>=18.0.0', pnpm: '>=8.0.0'}
-
-  '@cocrepo/configs@1.3.6':
-    resolution: {integrity: sha512-jHj9EjqG/TaBjIE6pQ5Dzkk9Mb8m+7rH5HWkw4cHNX7rfzwXpKafxZOcoikmDiCE6OHTI1c94QSXVjxWoNq+ag==}
-    peerDependencies:
-      typescript: ^5.9.2
-
-  '@cocrepo/hooks@1.3.4':
-    resolution: {integrity: sha512-FaPF7P/ztKiB+OrtDORi6ETeMeO5lwx6aUyNeJ0wieRq5QmoZv0+yaXf1L/t+HDE2Y00hvEa2xsCzROUiORySg==}
-    peerDependencies:
-      lodash-es: 4.17.21
-      mobx: 6.13.7
-      mobx-react-lite: 4.1.0
-      react: 19.1.0
-
-  '@cocrepo/schema@0.3.4':
-    resolution: {integrity: sha512-KZ/dUQP2V3T3pij0/yNa8f9skNgic5Y5lkewl18YlutLhl2dv2zKTF2hK56N94JT/Verm8M4c7WBaa6c839dBg==}
-
-  '@cocrepo/types@1.3.4':
-    resolution: {integrity: sha512-TX2j31SJIIlU4I9J3j3Xa7PttBHtrp95vYZHJJx9uB81imSfkwq+51XJMCq38q1UTe3S8See/BdkIf/6qQB2YA==}
-
-  '@cocrepo/utils@1.3.4':
-    resolution: {integrity: sha512-lVLjA9T1FHwaILdnARm2dkZSus3rDCS5oBm298xzPR5qNZHOsBG9PjXnZYPDwk0m9u7dX3F0VlVLh+3aKBwoFA==}
-    peerDependencies:
-      class-transformer: ^0.5.1
-      class-validator: ^0.14.1
-      dayjs: ^1.11.0
-      path-parser: ^6.1.0
-      reflect-metadata: ^0.1.13
-      remeda: ^2.20.0
 
   '@colors/colors@1.5.0':
     resolution: {integrity: sha512-ooWCrlZP11i8GImSjTHYHLkvFDP48nS4+204nGb1RiX/WXYHmJA2III9/e2DWVabCESdW7hBAEzHRqUn9OUVvQ==}
@@ -14094,39 +14062,6 @@ snapshots:
     transitivePeerDependencies:
       - '@chromatic-com/cypress'
       - '@chromatic-com/playwright'
-
-  '@cocrepo/api-client@1.3.4(react@19.1.0)':
-    dependencies:
-      '@tanstack/react-query': 5.83.0(react@19.1.0)
-      axios: 1.12.2
-    transitivePeerDependencies:
-      - debug
-      - react
-
-  '@cocrepo/configs@1.3.6(typescript@5.9.2)':
-    dependencies:
-      typescript: 5.9.2
-
-  '@cocrepo/hooks@1.3.4(lodash-es@4.17.21)(mobx-react-lite@4.1.0(mobx@6.13.7)(react-dom@19.1.0(react@19.1.0))(react-native@0.81.4(@babel/core@7.28.4)(@types/react@19.1.17)(react@19.1.0))(react@19.1.0))(mobx@6.13.7)(react@19.1.0)':
-    dependencies:
-      lodash-es: 4.17.21
-      mobx: 6.13.7
-      mobx-react-lite: 4.1.0(mobx@6.13.7)(react-dom@19.1.0(react@19.1.0))(react-native@0.81.4(@babel/core@7.28.4)(@types/react@19.1.17)(react@19.1.0))(react@19.1.0)
-      react: 19.1.0
-
-  '@cocrepo/schema@0.3.4': {}
-
-  '@cocrepo/types@1.3.4': {}
-
-  '@cocrepo/utils@1.3.4(class-transformer@0.5.1)(class-validator@0.14.2)(dayjs@1.11.18)(path-parser@6.1.0)(reflect-metadata@0.2.2)(remeda@2.32.0)':
-    dependencies:
-      class-transformer: 0.5.1
-      class-validator: 0.14.2
-      dayjs: 1.11.18
-      lodash-es: 4.17.21
-      path-parser: 6.1.0
-      reflect-metadata: 0.2.2
-      remeda: 2.32.0
 
   '@colors/colors@1.5.0':
     optional: true

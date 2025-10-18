@@ -1,5 +1,5 @@
 import { AXIOS_INSTANCE } from "@cocrepo/api-client";
-import { createLogger, navigateTo } from "@cocrepo/utils";
+import { createLogger, navigateTo } from "@cocrepo/toolkit";
 import { isAxiosError } from "axios";
 import { makeAutoObservable } from "mobx";
 import { PlateStore } from "./Store";

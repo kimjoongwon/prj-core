@@ -1,5 +1,5 @@
 import { Card, CardBody } from "@heroui/react";
-import { getDate } from "@cocrepo/utils";
+import { getDate } from "@cocrepo/toolkit";
 import { Text } from "../../../ui/Text/Text";
 
 export interface DateProps {

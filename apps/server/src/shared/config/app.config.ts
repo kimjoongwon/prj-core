@@ -1,5 +1,5 @@
 import { registerAs } from "@nestjs/config";
-import { validation } from "@cocrepo/utils";
+import { validation } from "@cocrepo/toolkit";
 import { IsEmail, IsEnum, IsNumber, IsString, IsUrl } from "class-validator";
 import { AppConfig } from "./config.type";
 

@@ -140,7 +140,7 @@ pnpm test:watch
 - `mobx` - Reactive state management
 - `mobx-react-lite` - React bindings for MobX
 - `@cocrepo/api-client` - API client utilities
-- `@cocrepo/utils` - Shared utility functions
+- `@cocrepo/toolkit` - Shared utility functions
 
 ## Best Practices
 
