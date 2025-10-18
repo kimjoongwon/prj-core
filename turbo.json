@@ -33,7 +33,7 @@
         "tsup.config.*" // 번들러 설정 변경 감지
       ],
       "outputs": ["dist/**"], // 빌드 결과물 위치
-      "dependsOn": [], // 다른 패키지에 의존하지 않음
+      "dependsOn": ["@cocrepo/toolkit#build"], // toolkit이 먼저 빌드되어야 함
       "env": ["NODE_ENV"], // 환경변수 의존성
       "cache": true // 빌드 결과 캐싱 활성화
     },
