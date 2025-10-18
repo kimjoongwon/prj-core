@@ -29,9 +29,23 @@
     "seed": "ts-node prisma/seed.ts",
     "schema": "./prisma"
   },
+  "dependencies": {
+    "lodash": "^4.17.21",
+    "remeda": "catalog:",
+    "ts-jenum": "^2.2.2",
+    "libphonenumber-js": "^1.12.10",
+    "bcrypt": "^6.0.0"
+  },
+  "peerDependencies": {
+    "@prisma/client": "catalog:",
+    "@nestjs/common": "^11.1.3",
+    "@nestjs/swagger": "^11.2.0",
+    "@nestjs/platform-express": "^11.1.3",
+    "class-transformer": "^0.5.1",
+    "class-validator": "^0.14.2"
+  },
   "devDependencies": {
     "@prisma/client": "catalog:",
-    "bcrypt": "^6.0.0",
     "@nestjs/common": "^11.1.3",
     "@nestjs/platform-express": "^11.1.3",
     "@nestjs/swagger": "^11.2.0",
@@ -41,6 +55,7 @@
     "lodash": "^4.17.21",
     "libphonenumber-js": "^1.12.10",
     "remeda": "catalog:",
+    "bcrypt": "^6.0.0",
     "@types/bcrypt": "^5.0.2",
     "@types/node": "catalog:",
     "@types/lodash": "^4.17.20",

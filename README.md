@@ -14,9 +14,9 @@ This repository hosts a full‑stack monorepo managed with [Turborepo](https://t
 
 - **@cocrepo/frontend** – shared React component library.
 - **@cocrepo/api-client** – generated API client.
-- **@cocrepo/utils** – utility functions.
+- **@cocrepo/toolkit** – utility functions.
 - **@cocrepo/types** – shared TypeScript types.
-- **@cocrepo/utils** – common variables/constants.
+- **@cocrepo/toolkit** – common variables/constants.
 - **@shared/specs** – OpenAPI specifications.
 
 Additional documentation can be found in the [`docs`](./docs) directory.

@@ -1,5 +1,5 @@
 import { RouteDto } from "@cocrepo/api-client";
-import { logger } from "@cocrepo/utils";
+import { logger } from "@cocrepo/toolkit";
 import { makeAutoObservable } from "mobx";
 import { NavigatorStore } from "./navigatorStore";
 import { RouteStore } from "./routeStore";

@@ -1,5 +1,5 @@
 import { registerAs } from "@nestjs/config";
-import { validation } from "@cocrepo/utils";
+import { validation } from "@cocrepo/toolkit";
 import { IsBoolean } from "class-validator";
 import { CorsConfig } from "./config.type";
 

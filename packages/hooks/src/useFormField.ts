@@ -1,5 +1,5 @@
 import type { MobxProps } from "@cocrepo/types";
-import { tools } from "@cocrepo/utils";
+import { tools } from "@cocrepo/toolkit";
 import { reaction } from "mobx";
 import { useLocalObservable } from "mobx-react-lite";
 import { useEffect } from "react";

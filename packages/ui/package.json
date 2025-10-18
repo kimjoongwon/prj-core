@@ -48,7 +48,7 @@
     "@cocrepo/api-client": "workspace:*",
     "@cocrepo/hooks": "workspace:*",
     "@cocrepo/types": "workspace:*",
-    "@cocrepo/utils": "workspace:*",
+    "@cocrepo/toolkit": "workspace:*",
     "@storybook/react": "^9.0.18",
     "@storybook/react-vite": "catalog:",
     "@tailwindcss/postcss": "catalog:",

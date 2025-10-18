@@ -1,4 +1,4 @@
-import { add, createRange, isSame, startOf, subtract } from "@cocrepo/utils";
+import { add, createRange, isSame, startOf, subtract } from "@cocrepo/toolkit";
 import dayjs from "dayjs";
 import { useEffect, useState } from "react";
 import { Date as DateComponent } from "./Date/Date";

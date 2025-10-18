@@ -1,5 +1,5 @@
 import { registerAs } from "@nestjs/config";
-import { validation } from "@cocrepo/utils";
+import { validation } from "@cocrepo/toolkit";
 import { IsString } from "class-validator";
 import { AwsConfig } from "./config.type";
 

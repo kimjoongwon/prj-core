@@ -1,10 +1,10 @@
-# @cocrepo/utils
+# @cocrepo/toolkit
 
-Shared utility functions and helpers for the Cocrepo monorepo.
+Comprehensive toolkit of utility functions and helpers for the Cocrepo monorepo.
 
 ## Overview
 
-`@cocrepo/utils` provides a comprehensive collection of utility functions for common tasks including data transformation, validation, date manipulation, logging, and type conversion.
+`@cocrepo/toolkit` provides a comprehensive collection of utility functions for common tasks including data transformation, validation, date manipulation, logging, and type conversion.
 
 ## Features
 
@@ -18,7 +18,7 @@ Shared utility functions and helpers for the Cocrepo monorepo.
 ## Installation
 
 ```bash
-pnpm add @cocrepo/utils
+pnpm add @cocrepo/toolkit
 ```
 
 ## Usage
@@ -26,7 +26,7 @@ pnpm add @cocrepo/utils
 ### Data Transformation
 
 ```tsx
-import { transformToDto, transformFromDto } from '@cocrepo/utils';
+import { transformToDto, transformFromDto } from '@cocrepo/toolkit';
 
 // Transform plain object to DTO instance
 const userDto = transformToDto(UserDto, plainObject);
@@ -38,7 +38,7 @@ const plainUser = transformFromDto(userDto);
 ### Validation
 
 ```tsx
-import { validateDto, isValid } from '@cocrepo/utils';
+import { validateDto, isValid } from '@cocrepo/toolkit';
 
 async function createUser(data: CreateUserDto) {
   const errors = await validateDto(data);
@@ -60,7 +60,7 @@ import {
   isAfter,
   isBefore,
   addDays
-} from '@cocrepo/utils';
+} from '@cocrepo/toolkit';
 
 // Format dates
 const formatted = formatDate(new Date(), 'YYYY-MM-DD');
@@ -80,7 +80,7 @@ const futureDate = addDays(new Date(), 7);
 ### Logging
 
 ```tsx
-import { createLogger, logger } from '@cocrepo/utils';
+import { createLogger, logger } from '@cocrepo/toolkit';
 
 // Create namespaced logger
 const log = createLogger('[MyComponent]');
@@ -96,7 +96,7 @@ logger.debug('Debug information');
 ### Navigation Utilities
 
 ```tsx
-import { navigateTo, parseRoute } from '@cocrepo/utils';
+import { navigateTo, parseRoute } from '@cocrepo/toolkit';
 
 // Programmatic navigation
 navigateTo('/users/123');
@@ -115,7 +115,7 @@ import {
   groupBy,
   sortBy,
   flattenDeep
-} from '@cocrepo/utils';
+} from '@cocrepo/toolkit';
 
 // Chunk array into smaller arrays
 const chunks = chunk([1, 2, 3, 4, 5], 2);
@@ -142,7 +142,7 @@ import {
   merge,
   cloneDeep,
   isEmpty
-} from '@cocrepo/utils';
+} from '@cocrepo/toolkit';
 
 // Pick specific properties
 const subset = pick(user, ['id', 'name', 'email']);
@@ -171,7 +171,7 @@ import {
   snakeCase,
   kebabCase,
   truncate
-} from '@cocrepo/utils';
+} from '@cocrepo/toolkit';
 
 // Capitalize first letter
 const title = capitalize('hello world'); // 'Hello world'
@@ -195,7 +195,7 @@ import {
   isObject,
   isFunction,
   isNil
-} from '@cocrepo/utils';
+} from '@cocrepo/toolkit';
 
 if (isString(value)) {
   // TypeScript knows value is string
@@ -271,7 +271,7 @@ pnpm start:dev
 Full TypeScript support with type definitions:
 
 ```tsx
-import type { Logger, ValidationError, RouteMatch } from '@cocrepo/utils';
+import type { Logger, ValidationError, RouteMatch } from '@cocrepo/toolkit';
 
 const logger: Logger = createLogger('[App]');
 
@@ -310,7 +310,7 @@ import {
   transformToDto,
   validateDto,
   createLogger
-} from '@cocrepo/utils';
+} from '@cocrepo/toolkit';
 
 const logger = createLogger('[UserService]');
 

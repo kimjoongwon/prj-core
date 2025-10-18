@@ -17,6 +17,7 @@ export default defineConfig((option) => ({
 		"dayjs",
 		"remeda",
 		"reflect-metadata",
+		"path-parser",
 	],
-	noExternal: ["tslib", "path-parser"], // tslib과 path-parser를 번들에 포함
+	noExternal: ["tslib"], // tslib을 번들에 포함
 }));

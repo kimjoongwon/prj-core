@@ -1,5 +1,5 @@
 {
-  "name": "@cocrepo/utils",
+  "name": "@cocrepo/toolkit",
   "version": "1.3.4",
   "private": false,
   "types": "dist/index.d.ts",
@@ -19,6 +19,7 @@
   "scripts": {
     "start:dev": "tsup --watch",
     "build": "tsup",
+    "type-check": "tsc --noEmit",
     "test": "vitest",
     "test:ui": "vitest --ui",
     "test:watch": "vitest --watch",

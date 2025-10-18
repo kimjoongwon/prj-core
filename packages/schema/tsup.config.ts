@@ -13,7 +13,12 @@ export default defineConfig((option) => ({
 	tsconfig: "./tsconfig.json",
 	external: [
 		"@prisma/client",
+		"@nestjs/common",
+		"@nestjs/swagger",
+		"@nestjs/platform-express",
+		"class-transformer",
 		"class-transformer/storage",
+		"class-validator",
 		"@nestjs/websockets/socket-module",
 		"@nestjs/microservices",
 		"@nestjs/microservices/microservices-module",

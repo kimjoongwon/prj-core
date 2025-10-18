@@ -1,4 +1,4 @@
-import { validateFields, validateSingleField } from "@cocrepo/utils";
+import { validateFields, validateSingleField } from "@cocrepo/toolkit";
 import { describe, expect, it } from "vitest";
 
 import type { Validation } from "../../types/index";

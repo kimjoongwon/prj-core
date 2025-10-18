@@ -1,4 +1,4 @@
-import { getYear } from "@cocrepo/utils";
+import { getYear } from "@cocrepo/toolkit";
 
 export interface CopyrightProps {
   companyName: string;
