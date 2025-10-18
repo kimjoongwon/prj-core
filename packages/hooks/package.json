@@ -37,11 +37,9 @@
   "peerDependencies": {
     "react": "catalog:",
     "mobx": "catalog:",
-    "mobx-react-lite": "catalog:",
-    "lodash-es": "catalog:"
+    "mobx-react-lite": "catalog:"
   },
   "devDependencies": {
-    "@types/lodash-es": "catalog:",
     "@types/react": "catalog:",
     "typescript": "catalog:",
     "vitest": "catalog:",

@@ -15,9 +15,11 @@ export default defineConfig((option) => ({
 		"class-transformer",
 		"class-validator",
 		"dayjs",
-		"remeda",
 		"reflect-metadata",
 		"path-parser",
 	],
-	noExternal: ["tslib"], // tslib을 번들에 포함
+	noExternal: [
+		"es-toolkit", // es-toolkit을 번들에 포함 (tree-shakable)
+		"tslib", // tslib을 번들에 포함
+	],
 }));

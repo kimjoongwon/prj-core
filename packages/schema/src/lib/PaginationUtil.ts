@@ -1,4 +1,4 @@
-import { isEmpty } from "remeda";
+import { isEmpty } from "@cocrepo/toolkit";
 
 export class PaginationUtil {
 	static getPage = ({

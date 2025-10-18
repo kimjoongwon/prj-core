@@ -238,7 +238,6 @@ const [isOpen, actions]: UseBooleanReturn = useBoolean(false);
 - `react` - React library
 - `mobx` - MobX state management
 - `mobx-react-lite` - React bindings for MobX
-- `lodash-es` - Utility functions
 
 ## Peer Dependencies
 

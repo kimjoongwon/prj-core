@@ -25,5 +25,9 @@ export default defineConfig((option) => ({
 		"@nestjs/websockets",
 		"@nestjs/platform-socket.io",
 		"@nestjs/platform-ws",
+		"@cocrepo/toolkit",
+		"ts-jenum",
+		"libphonenumber-js",
+		"bcrypt",
 	],
 }));

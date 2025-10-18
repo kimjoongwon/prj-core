@@ -1,6 +1,6 @@
 import { Transform } from "class-transformer";
 import { parsePhoneNumber } from "libphonenumber-js";
-import { castArray, isNil } from "lodash";
+import { castArray, isNil } from "@cocrepo/toolkit";
 
 export function ToBoolean(): PropertyDecorator {
 	return Transform(

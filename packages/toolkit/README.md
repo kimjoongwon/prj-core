@@ -285,7 +285,6 @@ function handleValidation(errors: ValidationError[]) {
 ## Dependencies
 
 ### Core Dependencies
-- `lodash-es` - Utility functions
 
 ### Peer Dependencies
 - `class-transformer` - Object transformation

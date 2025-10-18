@@ -119,3 +119,27 @@ export const validation = {
 	validateConfig: ValidationModule.validateConfig,
 	getVariableName: ValidationModule.getVariableName,
 } as const;
+
+// es-toolkit utilities re-export for convenient access
+export {
+	// Object utilities
+	get,
+	set,
+
+	// Type checking
+	isEmpty,
+	isString,
+	isNil,
+
+	// Array utilities
+	range,
+
+	// Object manipulation
+	cloneDeep,
+	merge,
+	defaultsDeep,
+
+	// Additional utilities
+	castArray,
+	mapValues,
+} from "es-toolkit/compat";

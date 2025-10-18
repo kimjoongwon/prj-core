@@ -75,7 +75,7 @@ export function validateFields(
 	state: any,
 	validationFields: Record<string, Validation>,
 ): { isValid: boolean; errorMessage?: string } {
-	// lodash-es의 get 대신 간단한 path 접근 구현
+	// 간단한 path 접근 구현
 	const getValue = (obj: any, path: string): any => {
 		return path.split(".").reduce((current, key) => current?.[key], obj);
 	};

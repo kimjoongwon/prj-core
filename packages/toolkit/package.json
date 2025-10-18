@@ -33,8 +33,7 @@
     "class-validator": "^0.14.1",
     "dayjs": "^1.11.0",
     "path-parser": "^6.1.0",
-    "reflect-metadata": "^0.1.13",
-    "remeda": "^2.20.0"
+    "reflect-metadata": "^0.1.13"
   },
   "devDependencies": {
     "@types/node": "catalog:",
@@ -45,12 +44,11 @@
     "dayjs": "catalog:",
     "path-parser": "6.1.0",
     "reflect-metadata": "^0.1.13",
-    "remeda": "catalog:",
     "tsup": "catalog:",
     "typescript": "catalog:",
     "vitest": "catalog:"
   },
   "dependencies": {
-    "lodash-es": "catalog:"
+    "es-toolkit": "^1.26.1"
   }
 }

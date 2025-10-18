@@ -1,4 +1,5 @@
-import { cloneDeep, get, range, set } from "lodash-es";
+import { cloneDeep, get, set } from "es-toolkit/compat";
+import { range } from "es-toolkit";
 
 // Object property utilities
 export function getProperty(

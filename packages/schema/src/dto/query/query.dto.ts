@@ -1,4 +1,4 @@
-import { defaultsDeep, merge } from "lodash";
+import { defaultsDeep, merge } from "@cocrepo/toolkit";
 import { NumberFieldOptional } from "../../decorator";
 import { PaginationUtil } from "../../lib/PaginationUtil";
 import { PageMetaDto } from "./page-meta.dto";

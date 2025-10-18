@@ -12,7 +12,10 @@ import {
 	ReferenceObject,
 	SchemaObject,
 } from "@nestjs/swagger/dist/interfaces/open-api-spec.interface";
-import { castArray, Many, mapValues } from "lodash";
+import { castArray, mapValues } from "@cocrepo/toolkit";
+
+// Many type from lodash - T | readonly T[]
+type Many<T> = T | readonly T[];
 
 export interface IApiFile {
 	name: string;

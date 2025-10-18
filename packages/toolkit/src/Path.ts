@@ -1,5 +1,5 @@
 import { Path } from "path-parser";
-import * as R from "remeda";
+import { isEmpty } from "es-toolkit/compat";
 
 export function getUrlWithParamsAndQueryString(
 	url: string,
@@ -9,7 +9,7 @@ export function getUrlWithParamsAndQueryString(
 	const path = new Path(url);
 
 	let pathWithParams = "";
-	if (R.isEmpty(params)) {
+	if (isEmpty(params)) {
 		pathWithParams = url;
 	} else {
 		pathWithParams = path.build(params);

@@ -4,7 +4,7 @@ import {
 	ValidateIf,
 	type ValidationOptions,
 } from "class-validator";
-import { isString } from "lodash";
+import { isString } from "@cocrepo/toolkit";
 
 export function IsPassword(
 	validationOptions?: ValidationOptions,

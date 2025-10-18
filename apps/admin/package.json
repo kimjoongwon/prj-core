@@ -34,7 +34,6 @@
     "dayjs": "catalog:",
     "framer-motion": "catalog:",
     "jwt-decode": "^4.0.0",
-    "lodash-es": "catalog:",
     "lucide-react": "catalog:",
     "mobx": "catalog:",
     "mobx-react-lite": "catalog:",
@@ -45,7 +44,6 @@
     "react-cookie": "catalog:",
     "react-dom": "catalog:",
     "react-dropzone": "catalog:",
-    "remeda": "catalog:",
     "uuid": "catalog:",
     "valtio": "^2.1.5"
   },

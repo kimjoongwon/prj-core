@@ -14,7 +14,6 @@ catalog:
   '@tanstack/react-query': 5.83.0
   '@testing-library/jest-dom': ^6.6.4
   '@testing-library/react': ^16.3.0
-  '@types/lodash-es': ^4.17.12
   '@types/node': ^24.3.1
   '@types/pluralize': ^0.0.33
   '@types/react': ~19.0.10
@@ -32,7 +31,6 @@ catalog:
   dayjs: 1.11.18
   framer-motion: ^12.23.11
   jsdom: ^26.1.0
-  lodash-es: 4.17.21
   lucide-react: ^0.533.0
   mobx: 6.13.7
   mobx-react-lite: 4.1.0
@@ -44,7 +42,6 @@ catalog:
   react-cookie: ^8.0.1
   react-dom: 19.1.0
   react-dropzone: ^14.3.8
-  remeda: ^2.30.0
   storybook: 9.1.10  
   tailwindcss: ^4.1.11
   tsup: ^8.5.0
