@@ -38,8 +38,11 @@ export class TokenService {
 
 	generateRefreshToken(payload: { userId: string }) {
 		const authConfig = this.configService.get<AuthConfig>("auth");
+		if (!authConfig?.refresh) {
+			throw new Error("JWT refresh expiration is not defined.");
+		}
 		return this.jwtService.sign(payload, {
-			expiresIn: authConfig?.refresh as string,
+			expiresIn: authConfig.refresh as any,
 		});
 	}
 
