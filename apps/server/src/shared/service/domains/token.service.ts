@@ -39,7 +39,7 @@ export class TokenService {
 	generateRefreshToken(payload: { userId: string }) {
 		const authConfig = this.configService.get<AuthConfig>("auth");
 		return this.jwtService.sign(payload, {
-			expiresIn: authConfig?.refresh,
+			expiresIn: authConfig?.refresh as string,
 		});
 	}
 
