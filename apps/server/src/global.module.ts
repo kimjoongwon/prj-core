@@ -16,6 +16,7 @@ import {
 export const globalModules: (DynamicModule | Promise<DynamicModule>)[] = [
 	ConfigModule.forRoot({
 		isGlobal: true,
+		envFilePath: `.env.local`,
 		load: [authConfig, appConfig, corsConfig, smtpConfig, awsConfig],
 	}),
 	MailerModule.forRootAsync({
