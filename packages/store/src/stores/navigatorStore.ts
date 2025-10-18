@@ -1,17 +1,17 @@
-import { RouteDto } from "@cocrepo/api-client";
-import { type PlateStore } from "./Store";
+import { RouteStore } from "./routeStore";
+import { type Store } from "./Store";
 
 export class NavigatorStore {
-	readonly plateStore: PlateStore;
+	readonly plateStore: Store;
 
-	constructor(plateStore: PlateStore) {
+	constructor(plateStore: Store) {
 		this.plateStore = plateStore;
 	}
 
 	getRouteByFullPath(
 		fullPath: string,
-		routes: RouteDto[],
-	): RouteDto | undefined {
+		routes: RouteStore[],
+	): RouteStore | undefined {
 		for (const route of routes) {
 			if (route.fullPath === fullPath) {
 				return route;

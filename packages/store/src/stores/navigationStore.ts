@@ -1,23 +1,22 @@
-import { RouteDto } from "@cocrepo/api-client";
 import { logger } from "@cocrepo/toolkit";
 import { makeAutoObservable } from "mobx";
 import { NavigatorStore } from "./navigatorStore";
 import { RouteStore } from "./routeStore";
-import { PlateStore } from "./Store";
+import { Store } from "./Store";
 
 const _logger = logger.create("[NavigationStore]");
 
 export class NavigationStore {
-	readonly plateStore: PlateStore;
+	readonly plateStore: Store;
 	readonly navigator: NavigatorStore;
 	routes: RouteStore[] = [];
-	private _currentRoute: RouteDto | undefined = undefined;
+	private _currentRoute: RouteStore | undefined = undefined;
 
-	get currentRoute(): RouteDto | undefined {
+	get currentRoute(): RouteStore | undefined {
 		return this._currentRoute;
 	}
 
-	set currentRoute(route: RouteDto | undefined) {
+	set currentRoute(route: RouteStore | undefined) {
 		const routeChanged = this._currentRoute !== route;
 		this._currentRoute = route;
 		if (routeChanged) {
@@ -26,9 +25,9 @@ export class NavigationStore {
 	}
 
 	constructor(
-		plateStore: PlateStore,
+		plateStore: Store,
 		navigator: NavigatorStore,
-		routeDtos: RouteDto[] = [],
+		routeDtos: RouteStore[] = [],
 	) {
 		this.plateStore = plateStore;
 		this.navigator = navigator;
@@ -50,16 +49,17 @@ export class NavigationStore {
 		}
 	}
 
-	private routeStoreToDto(routeStore: RouteStore): RouteDto {
+	private routeStoreToDto(routeStore: RouteStore): RouteStore {
 		return {
 			name: routeStore.name,
 			fullPath: routeStore.fullPath,
 			relativePath: routeStore.relativePath,
 			icon: routeStore.icon,
+			active: routeStore.active,
 			children:
 				routeStore.children.length > 0
 					? routeStore.children.map((child) => this.routeStoreToDto(child))
-					: null,
+					: [],
 		};
 	}
 

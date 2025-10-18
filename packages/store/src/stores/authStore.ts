@@ -1,37 +1,36 @@
-import { AXIOS_INSTANCE } from "@cocrepo/api-client";
 import { createLogger, navigateTo } from "@cocrepo/toolkit";
 import { isAxiosError } from "axios";
 import { makeAutoObservable } from "mobx";
-import { PlateStore } from "./Store";
+import { Store } from "./Store";
 
 const logger = createLogger("[AuthStore]");
 
 export class AuthStore {
-	plateStore: PlateStore;
+	plateStore: Store;
 	isLoggingOut = false;
 
-	constructor(plateStore: PlateStore) {
+	constructor(plateStore: Store) {
 		this.plateStore = plateStore;
 
-		AXIOS_INSTANCE.interceptors.response.use(
-			(response) => response,
-			(error) => {
-				this.handleAuthError(error);
-			},
-		);
+		// AXIOS_INSTANCE.interceptors.response.use(
+		// 	(response) => response,
+		// 	(error) => {
+		// 		this.handleAuthError(error);
+		// 	},
+		// );
 
-		AXIOS_INSTANCE.interceptors.request.use(
-			async (config) => {
-				const isATExpired = this.plateStore.tokenStore?.isAccessTokenExpired();
-				if (isATExpired) {
-					await this.plateStore.tokenStore?.refreshToken();
-				}
-				return config;
-			},
-			(error) => {
-				return Promise.reject(error);
-			},
-		);
+		// AXIOS_INSTANCE.interceptors.request.use(
+		// 	async (config) => {
+		// 		const isATExpired = this.plateStore.tokenStore?.isAccessTokenExpired();
+		// 		if (isATExpired) {
+		// 			await this.plateStore.tokenStore?.refreshToken();
+		// 		}
+		// 		return config;
+		// 	},
+		// 	(error) => {
+		// 		return Promise.reject(error);
+		// 	},
+		// );
 
 		makeAutoObservable(this);
 	}

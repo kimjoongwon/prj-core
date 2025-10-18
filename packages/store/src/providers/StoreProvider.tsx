@@ -1,5 +1,5 @@
-import { PlateStore, PlateStoreContext } from "../stores";
 import { useState } from "react";
+import { Store, StoreContext } from "../stores";
 
 interface StoreProviderProps {
 	children: React.ReactNode;
@@ -7,11 +7,9 @@ interface StoreProviderProps {
 
 export const StoreProvider = (props: StoreProviderProps) => {
 	const { children } = props;
-	const [store] = useState(() => new PlateStore());
+	const [store] = useState(() => new Store());
 
 	return (
-		<PlateStoreContext.Provider value={store}>
-			{children}
-		</PlateStoreContext.Provider>
+		<StoreContext.Provider value={store}>{children}</StoreContext.Provider>
 	);
 };

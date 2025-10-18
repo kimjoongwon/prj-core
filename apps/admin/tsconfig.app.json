@@ -1,42 +1,36 @@
 {
-  // 공유된 React 전용 TypeScript 설정을 확장
-  // 이유: 코드 중복 방지 및 프로젝트 간 일관된 타입 검사 규칙 적용
-  // 역할: JSX, React Hook 등 React 개발에 필요한 기본 설정을 자동으로 가져옴
-  "extends": "@cocrepo/configs/react",
   "compilerOptions": {
-    // TypeScript 빌드 정보 파일을 저장할 위치 (캐시를 통한 빌드 성능 최적화)
-    // 이유: 증분 컴파일을 통해 변경된 파일만 재컴파일하여 빌드 시간 단축
-    // 역할: 이전 컴파일 결과를 캐시하여 불필요한 재컴파일 방지
+    "target": "ES2020",
+    "lib": ["ES2020", "DOM", "DOM.Iterable"],
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "allowImportingTsExtensions": true,
+    "moduleDetection": "force",
+    "jsx": "react-jsx",
+    "allowJs": true,
+    "useDefineForClassFields": true,
     "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.app.tsbuildinfo",
-    // 라이브러리 타입 검사 건너뛰기 (빌드 성능 향상)
-    // 이유: node_modules의 d.ts 파일 검사는 시간이 오래 걸리고 대부분 불필요
-    // 역할: 외부 라이브러리 타입 파일의 문법 오류를 무시하여 컴파일 속도 향상
-    "skipLibCheck": true
+    "strict": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noFallthroughCasesInSwitch": true,
+    "noUncheckedSideEffectImports": true,
+    "skipLibCheck": true,
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "incremental": true,
+    "preserveWatchOutput": true,
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "verbatimModuleSyntax": false
   },
-  // 컴파일에 포함할 파일 및 디렉토리 패턴
-  // 이유: TypeScript가 어떤 파일들을 컴파일해야 하는지 명시적으로 지정
-  // 역할: 지정된 경로의 모든 TypeScript/JavaScript 파일을 컴파일 대상에 포함
   "include": [
-    // 애플리케이션 소스 코드 디렉토리
-    // 이유: 메인 애플리케이션 로직이 담긴 핵심 디렉토리
-    // 역할: src 폴더 내 모든 컴포넌트, 페이지, 유틸리티 등을 타입 검사 대상에 포함
     "src",
-    // TanStack Router에서 자동 생성된 라우트 트리 파일
-    // 이유: 동적으로 생성되는 라우팅 타입 정보를 포함하여 타입 안전성 확보
-    // 역할: 라우터의 자동 완성과 타입 검사를 가능하게 함
     "src/routeTree.gen.ts",
-    // 공유 프론트엔드 컴포넌트의 페이지 디렉토리
-    // 이유: 모노레포 구조에서 다른 패키지의 컴포넌트를 직접 참조
-    // 역할: 공통 페이지 컴포넌트들에 대한 타입 정보 제공
     "../../packages/frontend/src/components/page/pages"
   ],
-  // ts-node 실행 시 설정 (개발 환경)
-  // 이유: Node.js에서 TypeScript를 직접 실행할 때 필요한 설정
-  // 역할: 스크립트나 테스트 실행 시 TypeScript를 JavaScript로 변환하는 방식 지정
   "ts-node": {
-    // ECMAScript 모듈 지원 활성화
-    // 이유: 최신 JavaScript 모듈 시스템(import/export) 사용
-    // 역할: CommonJS 대신 ES6 모듈 형식으로 코드 실행 가능
     "esm": true
   }
 }

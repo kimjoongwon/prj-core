@@ -1,13 +1,12 @@
-import { refreshToken } from "@cocrepo/api-client";
 import { CookieStore } from "./cookieStore";
-import { PlateStore } from "./Store";
+import { Store } from "./Store";
 
 export class TokenStore {
 	private cookieStore: CookieStore;
-	readonly plateStore: PlateStore;
+	readonly store: Store;
 
-	constructor(plateStore: PlateStore) {
-		this.plateStore = plateStore;
+	constructor(Store: Store) {
+		this.store = Store;
 		this.cookieStore = new CookieStore();
 	}
 
@@ -63,13 +62,5 @@ export class TokenStore {
 		}
 	}
 
-	async refreshToken() {
-		try {
-			await refreshToken();
-		} catch (error) {
-			console.error("Token refresh failed:", error);
-			this.clearTokens();
-			throw error;
-		}
-	}
+	async refreshToken() {}
 }
