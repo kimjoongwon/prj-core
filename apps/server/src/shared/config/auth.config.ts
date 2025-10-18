@@ -20,6 +20,16 @@ class EnvironmentVariablesValidator {
 export default registerAs<AuthConfig>("auth", () => {
   validation.validateConfig(process.env, EnvironmentVariablesValidator);
 
+  if (!process.env.AUTH_JWT_SECRET) {
+    throw new Error("AUTH_JWT_SECRET is not defined");
+  }
+  if (!process.env.AUTH_JWT_TOKEN_REFRESH_IN) {
+    throw new Error("AUTH_JWT_TOKEN_REFRESH_IN is not defined");
+  }
+  if (!process.env.AUTH_JWT_TOKEN_EXPIRES_IN) {
+    throw new Error("AUTH_JWT_TOKEN_EXPIRES_IN is not defined");
+  }
+
   return {
     secret: process.env.AUTH_JWT_SECRET,
     refresh: process.env.AUTH_JWT_TOKEN_REFRESH_IN,

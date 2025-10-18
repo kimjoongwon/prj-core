@@ -12,7 +12,6 @@
       "@shared": ["./src/shared/index"],
       "@cocrepo/schema": ["../packages/shared-schema/src"],
       "@cocrepo/utils": ["../packages/shared-utils/src"],
-      "@cocrepo/utils": ["../packages/shared-vars/src"]
     }
   },
   "include": ["src/**/*.ts", "src/**/*.test.ts"],
