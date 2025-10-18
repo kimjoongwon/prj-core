@@ -185,9 +185,6 @@ importers:
       '@cocrepo/api-client':
         specifier: workspace:*
         version: link:../../packages/api-client
-      '@cocrepo/providers':
-        specifier: workspace:*
-        version: link:../../packages/providers
       '@cocrepo/store':
         specifier: workspace:*
         version: link:../../packages/store
@@ -218,6 +215,9 @@ importers:
       '@tanstack/react-query':
         specifier: 'catalog:'
         version: 5.83.0(react@19.1.0)
+      '@tanstack/react-query-devtools':
+        specifier: ^5.90.2
+        version: 5.90.2(@tanstack/react-query@5.83.0(react@19.1.0))(react@19.1.0)
       '@tanstack/react-router':
         specifier: ^1.130.2
         version: 1.132.2(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
