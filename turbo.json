@@ -38,20 +38,7 @@
       "cache": true // 빌드 결과 캐싱 활성화
     },
     // 공통 유틸리티 함수 패키지
-    "@cocrepo/utils#build": {
-      "inputs": [
-        "src/**/*.ts", // 소스 코드 변경 감지
-        "tsconfig.json", // TypeScript 설정 변경 감지
-        "package.json", // 의존성 변경 감지
-        "tsup.config.*" // 번들러 설정 변경 감지
-      ],
-      "outputs": ["dist/**"], // 빌드 결과물 위치
-      "dependsOn": [], // 다른 패키지에 의존하지 않음
-      "env": ["NODE_ENV"], // 환경변수 의존성
-      "cache": true // 빌드 결과 캐싱 활성화
-    },
-    // 환경변수 및 상수 정의 패키지
-    "@cocrepo/utils#build": {
+    "@cocrepo/toolkit#build": {
       "inputs": [
         "src/**/*.ts", // 소스 코드 변경 감지
         "tsconfig.json", // TypeScript 설정 변경 감지
@@ -74,11 +61,7 @@
       ],
       "outputs": ["dist/**"], // 빌드 결과물 위치
       // 의존하는 shared 패키지들이 먼저 빌드되어야 함
-      "dependsOn": [
-        "@cocrepo/schema#build",
-        "@cocrepo/utils#build",
-        "@cocrepo/utils#build"
-      ],
+      "dependsOn": ["@cocrepo/schema#build", "@cocrepo/toolkit#build"],
       "env": ["NODE_ENV"], // 환경변수 의존성
       "cache": true // 빌드 결과 캐싱 활성화
     },
@@ -87,7 +70,7 @@
       "dependsOn": ["^build"] // 의존성 트리에 따라 순차적으로 빌드
     },
     // 공통 프론트엔드 컴포넌트 패키지
-    "@cocrepo/frontend#build": {
+    "@cocrepo/ui#build": {
       "inputs": [
         "src/**/*.{ts,tsx,css}", // React 컴포넌트 및 스타일 파일 변경 감지
         "index.ts", // 진입점 파일 변경 감지
@@ -100,7 +83,7 @@
         "@cocrepo/api-client#build",
         "@cocrepo/hooks#build",
         "@cocrepo/types#build",
-        "@cocrepo/utils#build"
+        "@cocrepo/toolkit#build"
       ],
       "env": ["NODE_ENV"], // 환경변수 의존성
       "cache": false // 타입 체크는 캐싱하지 않음
@@ -114,7 +97,7 @@
         "package.json" // 의존성 변경 감지
       ],
       "outputs": [], // 타입 체크만 수행, 빌드 결과물 없음
-      "dependsOn": ["@cocrepo/types#build", "@cocrepo/utils#build"], // 의존성 빌드 먼저 실행
+      "dependsOn": ["@cocrepo/types#build", "@cocrepo/toolkit#build"], // 의존성 빌드 먼저 실행
       "cache": false // 타입 체크는 캐싱하지 않음
     },
     // 공통 타입 정의 패키지
@@ -158,7 +141,7 @@
       "dependsOn": [
         "@cocrepo/api-client#build",
         "@cocrepo/hooks#build",
-        "@cocrepo/utils#build"
+        "@cocrepo/toolkit#build"
       ] // mobile이 의존하는 shared 패키지들만 먼저 빌드
     },
     // 개발 서버 시작
