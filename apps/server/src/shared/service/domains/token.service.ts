@@ -7,6 +7,10 @@ import { ConfigService } from "@nestjs/config";
 import { JwtService, NotBeforeError, TokenExpiredError } from "@nestjs/jwt";
 import { Request, Response } from "express";
 import { AuthConfig } from "../../config";
+import {
+	getAccessTokenCookieOptions,
+	getRefreshTokenCookieOptions,
+} from "../../utils/cookie.util";
 
 export const Token = {
 	ACCESS: "accessToken",
@@ -29,7 +33,47 @@ export class TokenService {
 	}
 
 	setTokenToHTTPOnlyCookie(res: Response, key: TokenValues, value: string) {
-		return res.cookie(key, value, { httpOnly: true });
+		const authConfig = this.configService.get<AuthConfig>("auth");
+		if (!authConfig) {
+			throw new Error("Auth configuration is not defined.");
+		}
+
+		const options =
+			key === Token.ACCESS
+				? getAccessTokenCookieOptions(authConfig.expires)
+				: getRefreshTokenCookieOptions(authConfig.refresh);
+
+		return res.cookie(key, value, options);
+	}
+
+	/**
+	 * Access Token 쿠키 설정
+	 */
+	setAccessTokenCookie(res: Response, accessToken: string) {
+		return this.setTokenToHTTPOnlyCookie(res, Token.ACCESS, accessToken);
+	}
+
+	/**
+	 * Refresh Token 쿠키 설정
+	 */
+	setRefreshTokenCookie(res: Response, refreshToken: string) {
+		return this.setTokenToHTTPOnlyCookie(res, Token.REFRESH, refreshToken);
+	}
+
+	/**
+	 * 쿠키 삭제 (clearCookie와 동일한 옵션 사용)
+	 */
+	clearTokenCookies(res: Response) {
+		const authConfig = this.configService.get<AuthConfig>("auth");
+		if (!authConfig) {
+			throw new Error("Auth configuration is not defined.");
+		}
+
+		const accessOptions = getAccessTokenCookieOptions(authConfig.expires);
+		const refreshOptions = getRefreshTokenCookieOptions(authConfig.refresh);
+
+		res.clearCookie(Token.ACCESS, accessOptions);
+		res.clearCookie(Token.REFRESH, refreshOptions);
 	}
 
 	generateAccessToken(payload: { userId: string }) {
