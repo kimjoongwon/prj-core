@@ -1,7 +1,7 @@
 import { Exercise, Prisma, UseEntity } from "@cocrepo/schema";
 import { Injectable, Logger } from "@nestjs/common";
 import { plainToInstance } from "class-transformer";
-import { PrismaService } from "../service/prisma.service";
+import { PrismaService } from "../service/utils";
 
 @Injectable()
 @UseEntity(Exercise)

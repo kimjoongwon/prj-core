@@ -11,8 +11,7 @@ import {
 	Logger,
 	UnauthorizedException,
 } from "@nestjs/common";
-import { PasswordService, TokenService } from "../utils";
-import { PrismaService } from "../prisma.service";
+import { PasswordService, PrismaService, TokenService } from "../utils";
 import { UsersService } from "../resources/users.service";
 
 /**
