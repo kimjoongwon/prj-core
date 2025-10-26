@@ -6,11 +6,11 @@ import {
 import { ConfigService } from "@nestjs/config";
 import { JwtService, NotBeforeError, TokenExpiredError } from "@nestjs/jwt";
 import { Request, Response } from "express";
-import { AuthConfig } from "../../../config";
+import { AuthConfig } from "../../config";
 import {
 	getAccessTokenCookieOptions,
 	getRefreshTokenCookieOptions,
-} from "../../../utils/cookie.util";
+} from "../../utils/cookie.util";
 
 export const Token = {
 	ACCESS: "accessToken",

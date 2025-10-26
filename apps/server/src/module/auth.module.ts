@@ -1,6 +1,7 @@
 import { Module } from "@nestjs/common";
 import {
 	AuthController,
+	AuthDomain,
 	AuthService,
 	ContextService,
 	JwtStrategy,
@@ -10,7 +11,6 @@ import {
 	UsersRepository,
 	UsersService,
 } from "@shared";
-import { AuthDomain } from "@shared/service/domain/auth.domain";
 
 @Module({
 	providers: [
