@@ -1,37 +1,32 @@
 // Export all domain services
 
-export { ContextService } from "./context.service";
-export {
-  AuthService,
-  AwsService,
-  PasswordService,
-  TokenService,
-} from "./domains";
+export { ContextService, PasswordService, TokenService } from "./utils";
+export { AuthService, AwsService } from "./facade";
 // Export PrismaService
 export { PrismaService } from "./prisma.service";
 // Export all resource services
 export {
-  AssignmentsService,
-  CategoriesService,
-  ExercisesService,
-  FileAssociationsService,
-  FileClassificationsService,
-  FilesService,
-  GroundsService,
-  GroupsService,
-  ProgramsService,
-  RoleAssociationsService,
-  RoleClassificationsService,
-  RolesService,
-  RoutinesService,
-  SessionsService,
-  SpaceAssociationsService,
-  SpaceClassificationsService,
-  SpacesService,
-  SubjectsService,
-  TenantsService,
-  TimelinesService,
-  UserAssociationsService,
-  UserClassificationsService,
-  UsersService,
+	AssignmentsService,
+	CategoriesService,
+	ExercisesService,
+	FileAssociationsService,
+	FileClassificationsService,
+	FilesService,
+	GroundsService,
+	GroupsService,
+	ProgramsService,
+	RoleAssociationsService,
+	RoleClassificationsService,
+	RolesService,
+	RoutinesService,
+	SessionsService,
+	SpaceAssociationsService,
+	SpaceClassificationsService,
+	SpacesService,
+	SubjectsService,
+	TenantsService,
+	TimelinesService,
+	UserAssociationsService,
+	UserClassificationsService,
+	UsersService,
 } from "./resources";

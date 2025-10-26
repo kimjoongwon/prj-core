@@ -7,7 +7,7 @@ import {
   UpdateTenantDto,
 } from "@cocrepo/schema";
 import { TenantsRepository } from "../../repository/tenants.repository";
-import { ContextService } from "../context.service";
+import { ContextService } from "../utils";
 
 @Injectable()
 export class TenantsService {

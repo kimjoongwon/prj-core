@@ -2,7 +2,7 @@ import { Injectable } from "@nestjs/common";
 import { Prisma, QueryCategoryDto, UpdateCategoryDto } from "@cocrepo/schema";
 import { CategoriesRepository } from "../../repository/categories.repository";
 import { AppLogger } from "../../util/app-logger.util";
-import { ContextService } from "../context.service";
+import { ContextService } from "../utils";
 
 @Injectable()
 export class CategoriesService {

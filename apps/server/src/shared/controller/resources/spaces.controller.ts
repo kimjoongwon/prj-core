@@ -21,8 +21,7 @@ import {
   UpdateSpaceDto,
 } from "@cocrepo/schema";
 import { plainToInstance } from "class-transformer";
-import { SpacesService } from "../../service";
-import { ContextService } from "../../service/context.service";
+import { SpacesService, ContextService } from "../../service";
 import { wrapResponse } from "../../util/response.util";
 
 @ApiTags("SPACES")

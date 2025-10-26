@@ -20,7 +20,7 @@ import {
   UpdateTenantDto,
 } from "@cocrepo/schema";
 import { plainToInstance } from "class-transformer";
-import { ContextService } from "../../service/context.service";
+import { ContextService } from "../../service";
 import { TenantsService } from "../../service/resources/tenants.service";
 import { wrapResponse } from "../../util/response.util";
 

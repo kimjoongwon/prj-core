@@ -2,7 +2,7 @@ import { type CallHandler, type ExecutionContext } from "@nestjs/common";
 import { Test, type TestingModule } from "@nestjs/testing";
 import { UserDto } from "@cocrepo/schema";
 import { of } from "rxjs";
-import { ContextService } from "../service/context.service";
+import { ContextService } from "../service";
 import { RequestContextInterceptor } from "./request-context.interceptor";
 
 describe("RequestContextInterceptor", () => {

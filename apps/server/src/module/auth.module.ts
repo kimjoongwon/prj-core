@@ -10,9 +10,11 @@ import {
 	UsersRepository,
 	UsersService,
 } from "@shared";
+import { AuthDomain } from "@shared/service/domain/auth.domain";
 
 @Module({
 	providers: [
+		AuthDomain,
 		AuthService,
 		PasswordService,
 		TokenService,

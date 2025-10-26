@@ -6,7 +6,7 @@ import {
   UpdateExerciseDto,
 } from "@cocrepo/schema";
 import { ExercisesRepository } from "../../repository/exercises.repository";
-import { ContextService } from "../context.service";
+import { ContextService } from "../utils";
 
 @Injectable()
 export class ExercisesService {

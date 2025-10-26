@@ -7,7 +7,7 @@ import {
 } from "@nestjs/common";
 import { type Request } from "express";
 import { type Observable } from "rxjs";
-import { ContextService } from "../service/context.service";
+import { ContextService } from "../service";
 import { AppLogger } from "../util/app-logger.util";
 
 @Injectable()

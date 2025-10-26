@@ -2,29 +2,236 @@
   <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="200" alt="Nest Logo" /></a>
 </p>
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+# Server Application
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+NestJS 기반 백엔드 서버 애플리케이션입니다.
 
-## Description
+## 📂 폴더 구조
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+```
+src/
+├── shared/
+│   ├── service/              # 비즈니스 로직 및 서비스 계층
+│   │   ├── domain/           # 순수 비즈니스 로직 (도메인 계층)
+│   │   │   └── auth.domain.ts         # 인증 비즈니스 로직
+│   │   │       └── auth.domain.spec.ts
+│   │   │
+│   │   ├── facade/           # 서비스 조합 계층 (Facade 패턴)
+│   │   │   ├── auth.facade.ts         # 인증 서비스 (domain + utils 조합)
+│   │   │   ├── auth.facade.spec.ts
+│   │   │   └── aws.service.ts
+│   │   │
+│   │   ├── utils/            # 기술 유틸리티 서비스
+│   │   │   ├── password.service.ts    # 암호화 관련 유틸
+│   │   │   ├── token.service.ts       # JWT 토큰 관리
+│   │   │   └── context.service.ts     # 요청 컨텍스트 관리
+│   │   │
+│   │   ├── resources/        # 데이터 리소스 서비스 (DB 접근)
+│   │   │   ├── users.service.ts
+│   │   │   ├── tenants.service.ts
+│   │   │   └── ...
+│   │   │
+│   │   ├── prisma.service.ts # Prisma ORM 서비스
+│   │   └── index.ts          # 서비스 export 모음
+│   │
+│   ├── controller/           # HTTP 컨트롤러 (라우팅)
+│   │   ├── domains/          # 도메인별 컨트롤러
+│   │   │   └── auth.controller.ts
+│   │   └── resources/        # 리소스별 컨트롤러
+│   │
+│   ├── repository/           # 데이터 접근 계층
+│   ├── interceptor/          # HTTP 인터셉터
+│   ├── decorator/            # 커스텀 데코레이터
+│   ├── strategy/             # Passport 인증 전략
+│   └── util/                 # 유틸리티 함수
+│
+├── module/                   # NestJS 모듈
+│   ├── auth.module.ts        # 인증 모듈
+│   ├── app.module.ts
+│   └── ...
+│
+├── main.ts                   # 애플리케이션 진입점
+└── global.module.ts          # 글로벌 설정 모듈
+```
+
+## 🏗️ 아키텍처
+
+### 계층 구조
+
+| 계층 | 목적 | 위치 | 예시 |
+|------|------|------|------|
+| **Controller** | HTTP 요청 처리 | `controller/` | 라우팅, 요청 검증 |
+| **Facade** | 서비스 조합 | `service/facade/` | AuthService (domain + util) |
+| **Domain** | 순수 비즈니스 로직 | `service/domain/` | AuthDomain (비즈니스 규칙) |
+| **Utils** | 기술 구현 | `service/utils/` | 암호화, 토큰, 컨텍스트 |
+| **Resources** | 데이터 접근 | `service/resources/` | 사용자, 테넌트 CRUD |
+| **Repository** | DB 쿼리 | `repository/` | Prisma 쿼리 빌드 |
+
+### 데이터 흐름
+
+```
+HTTP Request
+    ↓
+Controller (auth.controller.ts)
+    ↓
+Facade (auth.facade.ts - AuthService)
+    ├── Domain 로직 위임 → auth.domain.ts
+    │   ├── validateUser()
+    │   ├── signUp()
+    │   └── login()
+    └── Util 조합
+        ├── PasswordService
+        ├── TokenService
+        └── UsersService
+    ↓
+Repository (Prisma)
+    ↓
+Database
+```
+
+## 📋 서비스 계층 상세
+
+### 1. Domain (비즈니스 로직)
+
+**파일**: `service/domain/auth.domain.ts`
+
+```typescript
+// 순수 비즈니스 로직만 포함
+- validateUser(email, password)    // 사용자 검증
+- signUp(payload)                   // 회원가입
+- login(email, password)            // 로그인
+```
+
+**특징**:
+- 순수한 비즈니스 규칙만 포함
+- 기술적 구현 없음 (HTTP, DB는 utils/resources 담당)
+- 테스트가 명확하고 용이함
+- 재사용성 높음
+
+### 2. Facade (서비스 조합)
+
+**파일**: `service/facade/auth.facade.ts`
+
+```typescript
+// Domain 로직 + Utils/Resources 조합
+- getCurrentUser(token)             // Token 파싱 + User 조회
+- getNewToken(refreshToken)         // Token 갱신
+- validateUser(email, password)     // domain.validateUser() 위임
+- signUp(payload)                   // domain.signUp() 위임
+- login(email, password)            // domain.login() 위임
+```
+
+**특징**:
+- Domain 로직을 조합해서 사용
+- 기술적 유틸리티 조합 (TokenService, PasswordService)
+- 컨트롤러가 직접 호출하는 인터페이스
+- Facade 패턴 적용
+
+### 3. Utils (기술 유틸리티)
+
+**파일**: `service/utils/`
+
+```typescript
+PasswordService
+- validatePassword(password, hash)
+- hashPassword(password)
+- static validateHash(password, hash)
+- static generateHash(password)
+
+TokenService
+- generateAccessToken(payload)
+- generateRefreshToken(payload)
+- generateTokens(payload)
+- setAccessTokenCookie(res, token)
+- setRefreshTokenCookie(res, token)
+- clearTokenCookies(res)
+
+ContextService
+- setAuthUser(), getAuthUser()
+- setAuthUserId(), getAuthUserId()
+- setTenant(), getTenant()
+- setToken(), getToken()
+```
+
+**특징**:
+- 기술 구현만 담당 (암호화, JWT, 컨텍스트)
+- 다른 서비스에서 재사용 가능
+- 프레임워크/라이브러리 의존성 최소화
+
+### 4. Resources (데이터 리소스)
+
+**파일**: `service/resources/`
+
+```typescript
+UsersService
+- getByEmail(email)
+- getByIdWithTenants(userId)
+- create(data)
+- getManyByQuery(query)
+
+TenantsService
+- create(), findMany(), update(), delete()
+
+... (다른 리소스 서비스들)
+```
+
+**특징**:
+- 데이터 접근 로직
+- Repository와 협력
+- CRUD 작업 담당
+
+## 🧪 테스트 구조
+
+### Domain 테스트
+
+**파일**: `service/domain/auth.domain.spec.ts`
+
+```typescript
+// 비즈니스 로직 테스트
+- validateUser() 테스트
+- signUp() 테스트
+- login() 테스트
+```
+
+### Facade 테스트
+
+**파일**: `service/facade/auth.facade.spec.ts`
+
+```typescript
+// 통합 테스트 (domain 위임 확인)
+- getCurrentUser() 테스트
+- getNewToken() 테스트
+- validateUser() → domain 위임 확인
+- signUp() → domain 위임 확인
+- login() → domain 위임 확인
+```
+
+## 🔄 주요 특징
+
+### 관심사 분리 (Separation of Concerns)
+
+- **Domain**: 비즈니스 규칙
+- **Facade**: 서비스 조합
+- **Utils**: 기술 구현
+- **Resources**: 데이터 접근
+
+### 재사용성
+
+- Utils는 모든 계층에서 사용 가능
+- Domain은 Domain에만 포함, 다른 곳에서 재사용 가능
+- Resources는 어디서든 필요한 곳에 주입 가능
+
+### 테스트 용이성
+
+- Domain 테스트: 순수 로직만 테스트
+- Facade 테스트: 서비스 조합 검증
+- 모킹이 간단하고 명확함
+
+### 확장성
+
+- 새로운 비즈니스 로직은 Domain에만 추가
+- 새로운 기술 유틸은 Utils에 추가
+- 기존 코드 수정 최소화
 
 ## Installation
 

@@ -21,9 +21,8 @@ import { ApiTags } from "@nestjs/swagger";
 import { plainToInstance } from "class-transformer";
 import { Request, Response } from "express";
 import { ResponseMessage } from "../../decorator";
-import { ContextService } from "../../service/context.service";
-import { AuthService } from "../../service/domains/auth.service";
-import { TokenService } from "../../service/domains/token.service";
+import { ContextService, TokenService } from "../../service/utils";
+import { AuthService } from "../../service/facade/auth.facade";
 
 @ApiTags("AUTH")
 @Controller()
