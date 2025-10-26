@@ -145,6 +145,8 @@ export {
 	UserClassificationsService,
 	UsersService,
 } from "./service";
+// Domain
+export { AuthDomain } from "./service/domain/auth.domain";
 // Strategies
 export { JwtStrategy, LocalStrategy } from "./strategy";
 export type { ResponseWrapOptions, WrappedResponse } from "./util";
