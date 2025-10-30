@@ -116,7 +116,7 @@ export {
 // Services
 export {
 	AssignmentsService,
-	AuthService,
+	AuthFacade,
 	AwsService,
 	CategoriesService,
 	ContextService,

@@ -7,11 +7,11 @@ import {
 } from "../../test/test-utils";
 import { TokenService } from "../utils";
 import { UsersService } from "../resources/users.service";
-import { AuthService } from "./auth.facade";
+import { AuthFacade } from "./auth.facade";
 import { AuthDomain } from "../domain/auth.domain";
 
-describe("AuthService (Facade)", () => {
-	let service: AuthService;
+describe("AuthFacade", () => {
+	let service: AuthFacade;
 	let authDomain: jest.Mocked<AuthDomain>;
 	let usersService: jest.Mocked<UsersService>;
 	let jwtService: jest.Mocked<JwtService>;
@@ -34,7 +34,7 @@ describe("AuthService (Facade)", () => {
 
 		const module: TestingModule = await Test.createTestingModule({
 			providers: [
-				AuthService,
+				AuthFacade,
 				{
 					provide: AuthDomain,
 					useValue: mockAuthDomain,
@@ -54,7 +54,7 @@ describe("AuthService (Facade)", () => {
 			],
 		}).compile();
 
-		service = module.get<AuthService>(AuthService);
+		service = module.get<AuthFacade>(AuthFacade);
 		authDomain = module.get(AuthDomain);
 		usersService = module.get(UsersService);
 		jwtService = module.get(JwtService);

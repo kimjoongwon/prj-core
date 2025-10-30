@@ -1,1 +1,1 @@
-export { AuthService } from "./auth.facade";
+export { AuthFacade } from "./auth.facade";

@@ -1,7 +1,7 @@
 // Export all domain services
 
 export { AwsService, ContextService, PasswordService, PrismaService, TokenService } from "./utils";
-export { AuthService } from "./facade";
+export { AuthFacade } from "./facade";
 // Export all resource services
 export {
 	AssignmentsService,

@@ -22,13 +22,13 @@ import { plainToInstance } from "class-transformer";
 import { Request, Response } from "express";
 import { ResponseMessage } from "../../decorator";
 import { ContextService, TokenService } from "../../service/utils";
-import { AuthService } from "../../service/facade/auth.facade";
+import { AuthFacade } from "../../service/facade/auth.facade";
 
 @ApiTags("AUTH")
 @Controller()
 export class AuthController {
 	constructor(
-		private readonly authService: AuthService,
+		private readonly authFacade: AuthFacade,
 		private readonly tokenService: TokenService,
 		private readonly contextService: ContextService,
 	) {}
@@ -42,7 +42,7 @@ export class AuthController {
 		@Res({ passthrough: true }) res: Response,
 	) {
 		const { accessToken, refreshToken, user } =
-			await this.authService.login(loginDto);
+			await this.authFacade.login(loginDto);
 		const mainTenantId = user.tenants?.find((tenant) => tenant.main)?.id ?? "";
 
 		this.tokenService.setAccessTokenCookie(res, accessToken);
@@ -71,12 +71,12 @@ export class AuthController {
 		}
 
 		const { newAccessToken, newRefreshToken } =
-			await this.authService.getNewToken(refreshToken);
+			await this.authFacade.getNewToken(refreshToken);
 
 		this.tokenService.setAccessTokenCookie(res, newAccessToken);
 		this.tokenService.setRefreshTokenCookie(res, newRefreshToken);
 
-		const user = await this.authService.getCurrentUser(newAccessToken);
+		const user = await this.authFacade.getCurrentUser(newAccessToken);
 
 		if (!user) {
 			throw new UnauthorizedException("사용자를 찾을 수 없습니다");
@@ -101,7 +101,7 @@ export class AuthController {
 	): Promise<TokenDto> {
 		const refreshToken = req.cookies.refreshToken;
 		const { newAccessToken, newRefreshToken } =
-			await this.authService.getNewToken(refreshToken);
+			await this.authFacade.getNewToken(refreshToken);
 
 		const user = req.user;
 
@@ -125,7 +125,7 @@ export class AuthController {
 	@ApiResponseEntity(TokenDto, HttpStatus.CREATED)
 	@ResponseMessage("회원가입 성공")
 	async signUpUser(@Body() signUpDto: SignUpPayloadDto) {
-		return this.authService.signUp(signUpDto);
+		return this.authFacade.signUp(signUpDto);
 	}
 
 	@HttpCode(HttpStatus.OK)

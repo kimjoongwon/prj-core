@@ -2,7 +2,7 @@ import { Module } from "@nestjs/common";
 import {
 	AuthController,
 	AuthDomain,
-	AuthService,
+	AuthFacade,
 	ContextService,
 	JwtStrategy,
 	LocalStrategy,
@@ -15,7 +15,7 @@ import {
 @Module({
 	providers: [
 		AuthDomain,
-		AuthService,
+		AuthFacade,
 		PasswordService,
 		TokenService,
 		LocalStrategy,
@@ -25,6 +25,6 @@ import {
 		ContextService,
 	],
 	controllers: [AuthController],
-	exports: [AuthService],
+	exports: [AuthFacade],
 })
 export class AuthModule {}

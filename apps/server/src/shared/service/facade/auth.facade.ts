@@ -1,23 +1,17 @@
-import {
-	LoginPayloadDto,
-	SignUpPayloadDto,
-} from "@cocrepo/schema";
-import {
-	Injectable,
-	Logger,
-} from "@nestjs/common";
+import { LoginPayloadDto, SignUpPayloadDto } from "@cocrepo/schema";
+import { Injectable, Logger } from "@nestjs/common";
 import { JwtService } from "@nestjs/jwt";
-import { TokenService } from "../utils";
-import { UsersService } from "../resources/users.service";
 import { AuthDomain } from "../domain/auth.domain";
+import { UsersService } from "../resources/users.service";
+import { TokenService } from "../utils";
 
 /**
- * 인증 서비스 (Facade 패턴)
+ * 인증 Facade (Facade 패턴)
  * 도메인 로직 + 유틸리티 서비스 조합
  */
 @Injectable()
-export class AuthService {
-	logger: Logger = new Logger(AuthService.name);
+export class AuthFacade {
+	logger: Logger = new Logger(AuthFacade.name);
 
 	constructor(
 		private authDomain: AuthDomain,
