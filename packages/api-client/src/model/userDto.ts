@@ -16,17 +16,25 @@ export interface UserDto {
   updatedAt: string;
   /** @nullable */
   removedAt: string | null;
+  /** 소속 공간 ID */
   spaceId: string;
+  /** 이메일 주소 */
   email: string;
+  /** 사용자 이름 */
   name: string;
+  /** 연락처 */
   phone: string;
   /**
    * 응답 제외 필드
    * @minLength 6
    */
   password: string;
-  profiles?: ProfileDto;
-  tenants?: TenantDto;
-  associations?: UserAssociationDto;
+  /** 프로필 목록 */
+  profiles?: ProfileDto[];
+  /** 테넌트 목록 */
+  tenants?: TenantDto[];
+  /** 사용자 연결 정보 */
+  associations?: UserAssociationDto[];
+  /** 사용자 분류 정보 */
   classification?: UserClassificationDto;
 }

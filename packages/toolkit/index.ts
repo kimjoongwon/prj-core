@@ -50,8 +50,6 @@ export {
 	setProperty,
 	tools,
 } from "./src/Tool";
-// Validation utilities
-export { getVariableName, validateConfig } from "./src/Validation";
 
 // Namespace objects for convenient grouped access
 import * as BrowserModule from "./src/Browser";
@@ -61,7 +59,6 @@ import * as FormModule from "./src/Form";
 import * as LoggerModule from "./src/Logger";
 import * as PathModule from "./src/Path";
 import * as ToolModule from "./src/Tool";
-import * as ValidationModule from "./src/Validation";
 
 export const browser = {
 	navigateTo: BrowserModule.navigateTo,
@@ -113,11 +110,6 @@ export const tool = {
 	setProperty: ToolModule.setProperty,
 	deepClone: ToolModule.deepClone,
 	createRange: ToolModule.createRange,
-} as const;
-
-export const validation = {
-	validateConfig: ValidationModule.validateConfig,
-	getVariableName: ValidationModule.getVariableName,
 } as const;
 
 // es-toolkit utilities re-export for convenient access

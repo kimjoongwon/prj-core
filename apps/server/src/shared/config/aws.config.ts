@@ -1,5 +1,5 @@
 import { registerAs } from "@nestjs/config";
-import { validation } from "@cocrepo/toolkit";
+import { ValidationUtil } from "@cocrepo/schema";
 import { IsString } from "class-validator";
 import { AwsConfig } from "./config.type";
 
@@ -18,7 +18,7 @@ class EnvironmentVariablesValidator {
 }
 
 export default registerAs<AwsConfig>("aws", () => {
-  validation.validateConfig(process.env, EnvironmentVariablesValidator);
+  ValidationUtil.validateConfig(process.env, EnvironmentVariablesValidator);
 
   return {
     accessKeyId: process.env.AWS_ACCESS_KEY_ID!,

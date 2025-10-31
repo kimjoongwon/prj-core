@@ -1,5 +1,5 @@
 import { registerAs } from "@nestjs/config";
-import { validation } from "@cocrepo/toolkit";
+import { ValidationUtil } from "@cocrepo/schema";
 import { IsEmail, IsEnum, IsNumber, IsString, IsUrl } from "class-validator";
 import { AppConfig } from "./config.type";
 
@@ -39,7 +39,7 @@ class EnvironmentVariablesValidator {
 }
 
 export default registerAs<AppConfig>("app", () => {
-  validation.validateConfig(process.env, EnvironmentVariablesValidator);
+  ValidationUtil.validateConfig(process.env, EnvironmentVariablesValidator);
 
   return {
     nodeEnv: process.env.NODE_ENV || "development",
