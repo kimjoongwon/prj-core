@@ -3,7 +3,7 @@ const fs = require("fs");
 const path = require("path");
 
 // 업데이트할 앱 목록
-const apps = ["admin", "mobile", "server", "storybook"];
+const apps = ["admin", "server", "storybook"];
 
 // 패키지 버전 읽기
 const packagesDir = path.join(__dirname, "../packages");
