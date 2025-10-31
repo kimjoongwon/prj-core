@@ -9,17 +9,13 @@ export default defineConfig((option) => ({
 	env: {
 		NODE_ENV: option.watch ? "development" : "production",
 	},
-	sourcemap: true,
+	sourcemap: option.watch,
 	dts: true,
-	external: [
-		"class-transformer",
-		"class-validator",
-		"dayjs",
-		"reflect-metadata",
-		"path-parser",
-	],
-	noExternal: [
-		"es-toolkit", // es-toolkit을 번들에 포함 (tree-shakable)
-		"tslib", // tslib을 번들에 포함
-	],
+	// Tree-shaking 최적화
+	treeshake: {
+		preset: "recommended", // 권장 설정 사용
+	},
+	// package.json 기반 전략: dependencies의 모든 패키지를 자동으로 external 처리
+	// → 사용자 프로젝트에서 tree-shaking 가능
+	// → 번들 크기 최소화 및 중복 방지
 }));

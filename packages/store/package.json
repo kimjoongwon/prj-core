@@ -1,6 +1,6 @@
 {
   "name": "@cocrepo/store",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Global state management library using MobX",
   "publishConfig": {
     "access": "public"

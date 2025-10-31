@@ -171,17 +171,17 @@ importers:
   apps/admin:
     dependencies:
       '@cocrepo/api-client':
-        specifier: workspace:*
-        version: link:../../packages/api-client
+        specifier: 1.3.5
+        version: 1.3.5(react@19.1.0)
       '@cocrepo/store':
-        specifier: workspace:*
-        version: link:../../packages/store
+        specifier: 1.0.1
+        version: 1.0.1
       '@cocrepo/toolkit':
-        specifier: workspace:*
-        version: link:../../packages/toolkit
+        specifier: 1.3.5
+        version: 1.3.5(class-transformer@0.5.1)(class-validator@0.14.2)(dayjs@1.11.18)(path-parser@6.1.0)(reflect-metadata@0.2.2)
       '@cocrepo/ui':
-        specifier: workspace:*
-        version: link:../../packages/ui
+        specifier: 1.5.5
+        version: 1.5.5
       '@dnd-kit/core':
         specifier: ^6.3.1
         version: 6.3.1(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
@@ -322,11 +322,11 @@ importers:
         specifier: ^1.5.2
         version: 1.5.2(@casl/ability@6.7.3)(@prisma/client@6.16.2(prisma@6.11.1(typescript@5.9.2))(typescript@5.9.2))
       '@cocrepo/schema':
-        specifier: workspace:*
-        version: link:../../packages/schema
+        specifier: 0.3.5
+        version: 0.3.5(@nestjs/common@11.1.6(class-transformer@0.5.1)(class-validator@0.14.2)(reflect-metadata@0.2.2)(rxjs@7.8.2))(@nestjs/platform-express@11.1.6)(@nestjs/swagger@11.2.0(@nestjs/common@11.1.6(class-transformer@0.5.1)(class-validator@0.14.2)(reflect-metadata@0.2.2)(rxjs@7.8.2))(@nestjs/core@11.1.6)(class-transformer@0.5.1)(class-validator@0.14.2)(reflect-metadata@0.2.2))(@prisma/client@6.16.2(prisma@6.11.1(typescript@5.9.2))(typescript@5.9.2))(class-transformer@0.5.1)(class-validator@0.14.2)(dayjs@1.11.18)(path-parser@6.1.0)(reflect-metadata@0.2.2)(typescript@5.9.2)
       '@cocrepo/toolkit':
-        specifier: workspace:*
-        version: link:../../packages/toolkit
+        specifier: 1.3.5
+        version: 1.3.5(class-transformer@0.5.1)(class-validator@0.14.2)(dayjs@1.11.18)(path-parser@6.1.0)(reflect-metadata@0.2.2)
       '@nestjs-modules/mailer':
         specifier: ^2.0.2
         version: 2.0.2(@nestjs/common@11.1.6(class-transformer@0.5.1)(class-validator@0.14.2)(reflect-metadata@0.2.2)(rxjs@7.8.2))(@nestjs/core@11.1.6)(nodemailer@7.0.6)
@@ -533,14 +533,14 @@ importers:
   apps/storybook:
     dependencies:
       '@cocrepo/providers':
-        specifier: workspace:*
-        version: link:../../packages/providers
+        specifier: 1.0.1
+        version: 1.0.1(@tanstack/react-router@1.132.2(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(@types/react@19.0.14)(framer-motion@12.23.19(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(react-dom@19.1.0(react@19.1.0))(react-router-dom@7.9.1(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(react-router@7.9.1(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(react@19.1.0)(tailwindcss@4.1.13)
       '@cocrepo/store':
-        specifier: workspace:*
-        version: link:../../packages/store
+        specifier: 1.0.1
+        version: 1.0.1
       '@cocrepo/ui':
-        specifier: workspace:*
-        version: link:../../packages/ui
+        specifier: 1.5.5
+        version: 1.5.5
       '@heroui/react':
         specifier: 'catalog:'
         version: 2.8.4(@types/react@19.0.14)(framer-motion@12.23.19(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(tailwindcss@4.1.13)
@@ -656,16 +656,6 @@ importers:
         version: 8.5.0(@swc/core@1.13.5(@swc/helpers@0.5.17))(jiti@2.6.0)(postcss@8.5.6)(tsx@4.20.5)(typescript@5.9.2)(yaml@2.8.1)
 
   packages/hooks:
-    dependencies:
-      mobx:
-        specifier: 'catalog:'
-        version: 6.13.7
-      mobx-react-lite:
-        specifier: 'catalog:'
-        version: 4.1.0(mobx@6.13.7)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
-      react:
-        specifier: 'catalog:'
-        version: 19.1.0
     devDependencies:
       '@cocrepo/toolkit':
         specifier: workspace:*
@@ -676,6 +666,15 @@ importers:
       '@types/react':
         specifier: 'catalog:'
         version: 19.0.14
+      mobx:
+        specifier: 'catalog:'
+        version: 6.13.7
+      mobx-react-lite:
+        specifier: 'catalog:'
+        version: 4.1.0(mobx@6.13.7)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
+      react:
+        specifier: 'catalog:'
+        version: 19.1.0
       typescript:
         specifier: 'catalog:'
         version: 5.9.2
@@ -852,6 +851,9 @@ importers:
       es-toolkit:
         specifier: ^1.26.1
         version: 1.39.10
+      path-parser:
+        specifier: 6.1.0
+        version: 6.1.0
     devDependencies:
       '@types/node':
         specifier: 'catalog:'
@@ -871,9 +873,6 @@ importers:
       dayjs:
         specifier: 'catalog:'
         version: 1.11.18
-      path-parser:
-        specifier: 6.1.0
-        version: 6.1.0
       reflect-metadata:
         specifier: ^0.1.13
         version: 0.1.14
@@ -1580,6 +1579,41 @@ packages:
     engines: {node: '>=20.0.0', yarn: '>=1.22.18'}
     peerDependencies:
       storybook: ^0.0.0-0 || ^9.0.0 || ^9.1.0-0 || ^9.2.0-0 || ^10.0.0-0
+
+  '@cocrepo/api-client@1.3.5':
+    resolution: {integrity: sha512-z4XVzwjW5p1aBYkfjpNNCcAq1vQ+ttmesGwkVD1/HsfuIjvQsXPaGCWa+RJjwHpSgDUtPc13eT8g9Oh2iLMurw==}
+    engines: {node: '>=18.0.0', pnpm: '>=8.0.0'}
+
+  '@cocrepo/providers@1.0.1':
+    resolution: {integrity: sha512-k9Uh3H86G2ts9L+i/LTo6DJxQOOjZQviYTeQAht3K8+PTMEeBR14pjf+4WQf1xjNo6QZYWzIvvn3f3JNYc+apw==}
+    peerDependencies:
+      react: 19.1.0
+      react-dom: 19.1.0
+
+  '@cocrepo/schema@0.3.5':
+    resolution: {integrity: sha512-F1ywkxZbVl+k/FrgPgRYzeuuopjv+3rWdwxjle9n1/f7PGCX3DQYZrlgkHDBCNaEcHJimLsrp8yMVc6KPSkacA==}
+    peerDependencies:
+      '@nestjs/common': ^11.1.3
+      '@nestjs/platform-express': ^11.1.3
+      '@nestjs/swagger': ^11.2.0
+      '@prisma/client': ^6.11.1
+      class-transformer: ^0.5.1
+      class-validator: ^0.14.2
+
+  '@cocrepo/store@1.0.1':
+    resolution: {integrity: sha512-02r4p1Mnk5q1Tgvw00pfTXNhot+zcHqBV4kP+XEwmInhxgKXrpqvsvOTsK5aFAy/eT5tb79eBA9vlL5E0ZWONQ==}
+
+  '@cocrepo/toolkit@1.3.5':
+    resolution: {integrity: sha512-/Q3eIuEyZIg2WYC9qavK+xcYQfXSWOcLPEKSZxerNPA9tU1eIikk8Nz3tQts3aMzuP7b/Qptf81yyme1B8i3eA==}
+    peerDependencies:
+      class-transformer: ^0.5.1
+      class-validator: ^0.14.1
+      dayjs: ^1.11.0
+      path-parser: ^6.1.0
+      reflect-metadata: ^0.1.13
+
+  '@cocrepo/ui@1.5.5':
+    resolution: {integrity: sha512-jPDe3QZKk16dmn/T4xNyl5TkUsrLZ6H8e8TJBELuF1TUDyDxKQSe0+5FNja1eoSvXHUnWtBzIWuhxgQADBmPFg==}
 
   '@colors/colors@1.5.0':
     resolution: {integrity: sha512-ooWCrlZP11i8GImSjTHYHLkvFDP48nS4+204nGb1RiX/WXYHmJA2III9/e2DWVabCESdW7hBAEzHRqUn9OUVvQ==}
@@ -10738,6 +10772,62 @@ snapshots:
     transitivePeerDependencies:
       - '@chromatic-com/cypress'
       - '@chromatic-com/playwright'
+
+  '@cocrepo/api-client@1.3.5(react@19.1.0)':
+    dependencies:
+      '@tanstack/react-query': 5.83.0(react@19.1.0)
+      axios: 1.12.2
+    transitivePeerDependencies:
+      - debug
+      - react
+
+  '@cocrepo/providers@1.0.1(@tanstack/react-router@1.132.2(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(@types/react@19.0.14)(framer-motion@12.23.19(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(react-dom@19.1.0(react@19.1.0))(react-router-dom@7.9.1(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(react-router@7.9.1(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(react@19.1.0)(tailwindcss@4.1.13)':
+    dependencies:
+      '@heroui/react': 2.8.4(@types/react@19.0.14)(framer-motion@12.23.19(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(tailwindcss@4.1.13)
+      '@tanstack/react-query': 5.83.0(react@19.1.0)
+      nuqs: 2.6.0(@tanstack/react-router@1.132.2(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(react-router-dom@7.9.1(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(react-router@7.9.1(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(react@19.1.0)
+      react: 19.1.0
+      react-dom: 19.1.0(react@19.1.0)
+    transitivePeerDependencies:
+      - '@remix-run/react'
+      - '@tanstack/react-router'
+      - '@types/react'
+      - framer-motion
+      - next
+      - react-router
+      - react-router-dom
+      - tailwindcss
+
+  '@cocrepo/schema@0.3.5(@nestjs/common@11.1.6(class-transformer@0.5.1)(class-validator@0.14.2)(reflect-metadata@0.2.2)(rxjs@7.8.2))(@nestjs/platform-express@11.1.6)(@nestjs/swagger@11.2.0(@nestjs/common@11.1.6(class-transformer@0.5.1)(class-validator@0.14.2)(reflect-metadata@0.2.2)(rxjs@7.8.2))(@nestjs/core@11.1.6)(class-transformer@0.5.1)(class-validator@0.14.2)(reflect-metadata@0.2.2))(@prisma/client@6.16.2(prisma@6.11.1(typescript@5.9.2))(typescript@5.9.2))(class-transformer@0.5.1)(class-validator@0.14.2)(dayjs@1.11.18)(path-parser@6.1.0)(reflect-metadata@0.2.2)(typescript@5.9.2)':
+    dependencies:
+      '@cocrepo/toolkit': 1.3.5(class-transformer@0.5.1)(class-validator@0.14.2)(dayjs@1.11.18)(path-parser@6.1.0)(reflect-metadata@0.2.2)
+      '@nestjs/common': 11.1.6(class-transformer@0.5.1)(class-validator@0.14.2)(reflect-metadata@0.2.2)(rxjs@7.8.2)
+      '@nestjs/platform-express': 11.1.6(@nestjs/common@11.1.6(class-transformer@0.5.1)(class-validator@0.14.2)(reflect-metadata@0.2.2)(rxjs@7.8.2))(@nestjs/core@11.1.6)
+      '@nestjs/swagger': 11.2.0(@nestjs/common@11.1.6(class-transformer@0.5.1)(class-validator@0.14.2)(reflect-metadata@0.2.2)(rxjs@7.8.2))(@nestjs/core@11.1.6)(class-transformer@0.5.1)(class-validator@0.14.2)(reflect-metadata@0.2.2)
+      '@prisma/client': 6.16.2(prisma@6.11.1(typescript@5.9.2))(typescript@5.9.2)
+      bcrypt: 6.0.0
+      class-transformer: 0.5.1
+      class-validator: 0.14.2
+      libphonenumber-js: 1.12.21
+      ts-jenum: 2.2.2(typescript@5.9.2)
+    transitivePeerDependencies:
+      - dayjs
+      - path-parser
+      - reflect-metadata
+      - typescript
+
+  '@cocrepo/store@1.0.1': {}
+
+  '@cocrepo/toolkit@1.3.5(class-transformer@0.5.1)(class-validator@0.14.2)(dayjs@1.11.18)(path-parser@6.1.0)(reflect-metadata@0.2.2)':
+    dependencies:
+      class-transformer: 0.5.1
+      class-validator: 0.14.2
+      dayjs: 1.11.18
+      es-toolkit: 1.39.10
+      path-parser: 6.1.0
+      reflect-metadata: 0.2.2
+
+  '@cocrepo/ui@1.5.5': {}
 
   '@colors/colors@1.5.0':
     optional: true

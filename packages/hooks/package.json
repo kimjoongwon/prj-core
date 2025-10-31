@@ -1,6 +1,6 @@
 {
   "name": "@cocrepo/hooks",
-  "version": "1.3.4",
+  "version": "1.3.5",
   "description": "Shared React hooks library",
   "publishConfig": {
     "access": "public"
@@ -34,12 +34,10 @@
   },
   "author": "kimjoongwon",
   "license": "ISC",
-  "peerDependencies": {
+  "devDependencies": {
     "react": "catalog:",
     "mobx": "catalog:",
-    "mobx-react-lite": "catalog:"
-  },
-  "devDependencies": {
+    "mobx-react-lite": "catalog:",
     "@types/react": "catalog:",
     "typescript": "catalog:",
     "vitest": "catalog:",

@@ -31,6 +31,13 @@ try {
   console.log("-".repeat(60));
   execSync(`pnpm build:pkg ${packageName}`, { stdio: "inherit" });
 
+  // 2.5 번들 사이즈 분석
+  console.log("\n📊 번들 사이즈 분석");
+  console.log("-".repeat(60));
+  execSync(`node scripts/analyze-bundle-size.js ${packageName}`, {
+    stdio: "inherit",
+  });
+
   // 3. 배포
   console.log("\n3️⃣  배포");
   console.log("-".repeat(60));

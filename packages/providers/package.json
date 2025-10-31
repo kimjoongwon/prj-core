@@ -1,6 +1,6 @@
 {
   "name": "@cocrepo/providers",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Provider components for React context and library integrations",
   "publishConfig": {
     "access": "public"

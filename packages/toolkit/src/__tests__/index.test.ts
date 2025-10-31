@@ -37,10 +37,6 @@ describe("Index exports", () => {
 		expect(utils.setProperty).toBeDefined();
 		expect(utils.deepClone).toBeDefined();
 		expect(utils.createRange).toBeDefined();
-
-		// Validation utilities
-		expect(utils.validateConfig).toBeDefined();
-		expect(utils.getVariableName).toBeDefined();
 	});
 
 	it("should export namespace objects", () => {
@@ -52,7 +48,6 @@ describe("Index exports", () => {
 		expect(utils.logger).toBeDefined();
 		expect(utils.path).toBeDefined();
 		expect(utils.tool).toBeDefined();
-		expect(utils.validation).toBeDefined();
 
 		// Check that namespace objects contain expected functions
 		expect(utils.browser.navigateTo).toBeDefined();
@@ -62,6 +57,5 @@ describe("Index exports", () => {
 		expect(utils.logger.create).toBeDefined();
 		expect(utils.path.getUrlWithParamsAndQueryString).toBeDefined();
 		expect(utils.tool.deepClone).toBeDefined();
-		expect(utils.validation.validateConfig).toBeDefined();
 	});
 });
