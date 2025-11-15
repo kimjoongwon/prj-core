@@ -11,6 +11,7 @@
     "build:packages": "turbo build --filter='./packages/**'",
     "build:pkg": "turbo build --filter",
     "clean": "turbo clean",
+    "type-check": "turbo type-check",
     "start:dev": "turbo start:dev",
     "start:server": "turbo start:dev --filter=server",
     "start:admin": "turbo start:dev --filter=admin",

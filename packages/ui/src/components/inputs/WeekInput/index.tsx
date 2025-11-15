@@ -1,7 +1,6 @@
 import { useFormField } from "@cocrepo/hooks";
 import type { MobxProps } from "@cocrepo/types";
 import { tools } from "@cocrepo/toolkit";
-import { action } from "mobx";
 import { observer } from "mobx-react-lite";
 import {
   WeekInput as BaseWeekInput,
@@ -17,17 +16,17 @@ export const WeekInput = observer(
   <T extends object>(props: WeekInputProps<T>) => {
     const { state, path, ...rest } = props;
 
-    const initialValue = tools.get(state, path);
-    const { localState } = useFormField({ initialValue, state, path });
+    const value = tools.get(state, path);
+    const formField = useFormField({ value, state, path });
 
-    const handleChange = action((value: RecurringDayOfTheWeek) => {
-      localState.value = value;
-    });
+    const handleChange = (value: RecurringDayOfTheWeek) => {
+      formField.setValue(value);
+    };
 
     return (
       <BaseWeekInput
         {...rest}
-        value={localState.value}
+        value={formField.state.value}
         onChange={handleChange}
       />
     );

@@ -1,7 +1,6 @@
 import { useFormField } from "@cocrepo/hooks";
 import { MobxProps } from "@cocrepo/types";
 import { tools } from "@cocrepo/toolkit";
-import { action } from "mobx";
 import { observer } from "mobx-react-lite";
 import { Key } from "react";
 import { Tabs as BaseTabs, type TabsProps as BaseTabsProps } from "./Tabs";
@@ -13,20 +12,20 @@ export interface TabsProps<T>
 export const Tabs = observer(<T,>(props: TabsProps<T>) => {
 	const { state, path, options } = props;
 
-	const { localState } = useFormField({
-		initialValue: tools.get(state, path),
+	const formField = useFormField({
+		value: tools.get(state, path),
 		state,
 		path,
 	});
 
-	const handleSelectionChange = action((key: Key) => {
-		localState.value = key;
-	});
+	const handleSelectionChange = (key: Key) => {
+		formField.setValue(key);
+	};
 
 	return (
 		<BaseTabs
 			options={options}
-			selectedKey={String(localState.value)}
+			selectedKey={String(formField.state.value)}
 			onSelectionChange={handleSelectionChange}
 		/>
 	);

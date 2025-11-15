@@ -1,7 +1,6 @@
 import { useFormField } from "@cocrepo/hooks";
 import { MobxProps } from "@cocrepo/types";
 import { tools } from "@cocrepo/toolkit";
-import { action } from "mobx";
 import { observer } from "mobx-react-lite";
 import {
   Select as BaseSelect,
@@ -17,21 +16,21 @@ export const Select = observer(<T extends object>(props: SelectProps<T>) => {
 
   const _options = tools.cloneDeep(options);
 
-  const initialValue = _options?.find(
+  const value = _options?.find(
     (option) => option.value === tools.get(state, path)
   )?.value;
 
-  const { localState } = useFormField({ initialValue, state, path });
+  const formField = useFormField({ value, state, path });
 
-  const handleChange = action((value: string) => {
-    localState.value = value;
-  });
+  const handleChange = (value: string) => {
+    formField.setValue(value);
+  };
 
   return (
     <BaseSelect
       {...rest}
       options={options}
-      value={localState.value}
+      value={formField.state.value}
       onChange={handleChange}
     />
   );

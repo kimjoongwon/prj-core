@@ -1,7 +1,6 @@
 import { useFormField } from "@cocrepo/hooks";
 import { MobxProps } from "@cocrepo/types";
 import { tools } from "@cocrepo/toolkit";
-import { action } from "mobx";
 import { observer } from "mobx-react-lite";
 import {
   Switch as BaseSwitch,
@@ -17,16 +16,16 @@ export const Switch = observer(<T extends object>(props: SwitchProps<T>) => {
 
   const initialValue = tools.get(state, path, false);
 
-  const { localState } = useFormField({ initialValue, state, path });
+  const formField = useFormField({ value: initialValue, state, path });
 
-  const handleValueChange = action((isSelected: boolean) => {
-    localState.value = isSelected;
-  });
+  const handleValueChange = (isSelected: boolean) => {
+    formField.setValue(isSelected);
+  };
 
   return (
     <BaseSwitch
       {...rest}
-      value={localState.value}
+      value={formField.state.value}
       onValueChange={handleValueChange}
     />
   );

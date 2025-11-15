@@ -1,7 +1,6 @@
 import { useFormField } from "@cocrepo/hooks";
 import { MobxProps } from "@cocrepo/types";
 import { tools } from "@cocrepo/toolkit";
-import { action } from "mobx";
 import { observer } from "mobx-react-lite";
 import { Input as BaseInput, type InputProps as BaseInputProps } from "./Input";
 
@@ -14,20 +13,20 @@ export const Input = observer(<T extends object>(props: InputProps<T>) => {
 
   const initialValue = tools.get(state, path) || "";
 
-  const { localState } = useFormField({ initialValue, state, path });
+  const formField = useFormField({ value: initialValue, state, path });
 
-  const handleChange = action((value: string | number) => {
-    localState.value = value;
-  });
+  const handleChange = (value: string | number) => {
+    formField.setValue(value);
+  };
 
-  const handleBlur = action((value: string | number) => {
-    localState.value = value;
-  });
+  const handleBlur = (value: string | number) => {
+    formField.setValue(value);
+  };
 
   return (
     <BaseInput
       {...rest}
-      value={localState.value}
+      value={formField.state.value}
       onChange={handleChange}
       onBlur={handleBlur}
     />

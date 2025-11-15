@@ -2,7 +2,6 @@ import { parseAbsoluteToLocal } from "@internationalized/date";
 import { useFormField } from "@cocrepo/hooks";
 import { MobxProps } from "@cocrepo/types";
 import { tools } from "@cocrepo/toolkit";
-import { action } from "mobx";
 import { observer } from "mobx-react-lite";
 import {
   DatePickerProps as BaseDatePickerProps,
@@ -27,27 +26,27 @@ export const DatePicker = observer(
 
     const defaultParsedValue = parseAbsoluteToLocal(isoString);
 
-    const { localState } = useFormField<T, any>({
-      initialValue: defaultParsedValue,
+    const formField = useFormField<T, any>({
+      value: defaultParsedValue,
       state,
       path,
     });
 
-    const handleDateChange = action((value: string) => {
+    const handleDateChange = (value: string) => {
       if (typeof value === "string") {
         try {
           const parsedValue = parseAbsoluteToLocal(value);
-          localState.value = parsedValue;
+          formField.setValue(parsedValue);
         } catch (error) {
           console.error("Error parsing date value:", error);
         }
       }
-    });
+    };
 
     return (
       <DatePickerComponent
         {...rest}
-        value={localState.value}
+        value={formField.state.value}
         onChange={handleDateChange}
       />
     );

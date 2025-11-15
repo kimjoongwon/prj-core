@@ -1,7 +1,6 @@
 import { useFormField } from "@cocrepo/hooks";
 import { MobxProps } from "@cocrepo/types";
 import { tools } from "@cocrepo/toolkit";
-import { action } from "mobx";
 import { observer } from "mobx-react-lite";
 import {
   FileUploaderProps as BaseFileUploaderProps,
@@ -16,19 +15,17 @@ export const FileUploader = observer(
   <T extends object>(props: FileUploaderProps<T>) => {
     const { state, path, ...rest } = props;
 
-    const initialValue = tools.get(state, path) || null;
-    const { localState } = useFormField({ initialValue, state, path });
+    const value = tools.get(state, path) || null;
+    const formField = useFormField({ value, state, path });
 
-    const handleChange: BaseFileUploaderProps["onChange"] = action(
-      (fileDto) => {
-        localState.value = fileDto;
-      }
-    );
+    const handleChange: BaseFileUploaderProps["onChange"] = (fileDto) => {
+      formField.setValue(fileDto);
+    };
 
     return (
       <FileUploaderComponent
         {...rest}
-        value={localState.value}
+        value={formField.state.value}
         onChange={handleChange}
       />
     );

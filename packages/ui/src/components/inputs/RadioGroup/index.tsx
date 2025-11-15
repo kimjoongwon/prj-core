@@ -1,7 +1,6 @@
 import { useFormField } from "@cocrepo/hooks";
 import { MobxProps } from "@cocrepo/types";
 import { tools } from "@cocrepo/toolkit";
-import { action } from "mobx";
 import { observer } from "mobx-react-lite";
 import {
   RadioGroup as BaseRadioGroup,
@@ -16,21 +15,21 @@ export const RadioGroup = observer(
   <T extends object>(props: RadioGroupProps<T>) => {
     const { state, path, options, ...rest } = props;
 
-    const initialValue =
+    const value =
       options?.find((option) => option.value === tools.get(state, path))
         ?.value || "";
 
-    const { localState } = useFormField({ initialValue, state, path });
+    const formField = useFormField({ value, state, path });
 
-    const handleValueChange = action((value: string) => {
-      localState.value = value;
-    });
+    const handleValueChange = (value: string) => {
+      formField.setValue(value);
+    };
 
     return (
       <BaseRadioGroup
         {...rest}
         options={options}
-        value={localState.value}
+        value={formField.state.value}
         onValueChange={handleValueChange}
       />
     );

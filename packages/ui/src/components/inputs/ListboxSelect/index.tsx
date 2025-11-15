@@ -19,11 +19,11 @@ export const ListboxSelect = observer(
   <T extends object>(props: ListboxSelectProps<T>) => {
     const { state, path, selectionMode = "multiple", ...rest } = props;
 
-    const initialValue = tools.get(state, path);
-    const defaultSelectedKeys = new Set([initialValue]);
+    const value = tools.get(state, path);
+    const defaultSelectedKeys = new Set([value]);
 
-    const { localState } = useFormField<any, any>({
-      initialValue: defaultSelectedKeys,
+    const formField = useFormField<any, any>({
+      value: defaultSelectedKeys,
       state,
       path,
     });
@@ -32,17 +32,17 @@ export const ListboxSelect = observer(
       (selection) => {
         const selectedKeys = Array.from(selection);
         if (selectionMode === "single") {
-          localState.value = selectedKeys[0];
+          formField.setValue(selectedKeys[0]);
           return;
         }
-        localState.value = selectedKeys;
+        formField.setValue(selectedKeys);
       };
 
     return (
       <BaseListboxSelect
         {...rest}
         selectionMode={selectionMode}
-        defaultSelectedKeys={localState.value}
+        defaultSelectedKeys={formField.state.value}
         onSelectionChange={handleSelectionChange}
       />
     );

@@ -1,7 +1,6 @@
 import { useFormField } from "@cocrepo/hooks";
 import { MobxProps } from "@cocrepo/types";
 import { tools } from "@cocrepo/toolkit";
-import { action } from "mobx";
 import { observer } from "mobx-react-lite";
 import {
   Textarea as BaseTextarea,
@@ -18,16 +17,16 @@ export const Textarea = observer(
 
     const initialValue = tools.get(state, path, "");
 
-    const { localState } = useFormField({ initialValue, state, path });
+    const formField = useFormField({ value: initialValue, state, path });
 
-    const handleChange = action((value: string) => {
-      localState.value = value;
-    });
+    const handleChange = (value: string) => {
+      formField.setValue(value);
+    };
 
     return (
       <BaseTextarea
         {...rest}
-        value={localState.value}
+        value={formField.state.value}
         onChange={handleChange}
       />
     );
