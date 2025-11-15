@@ -1,7 +1,6 @@
 import { useFormField } from "@cocrepo/hooks";
 import { MobxProps } from "@cocrepo/types";
 import { tools } from "@cocrepo/toolkit";
-import { action } from "mobx";
 import { observer } from "mobx-react-lite";
 import {
   Checkbox as BaseCheckbox,
@@ -16,20 +15,20 @@ export const Checkbox = observer(
   <T extends object>(props: CheckboxProps<T>) => {
     const { path, state, ...rest } = props;
 
-    const { localState } = useFormField({
-      initialValue: tools.get(state, path, false),
+    const formField = useFormField({
+      value: tools.get(state, path, false),
       state,
       path,
     });
 
-    const handleChange = action((checked: boolean) => {
-      localState.value = checked;
-    });
+    const handleChange = (checked: boolean) => {
+      formField.setValue(checked);
+    };
 
     return (
       <BaseCheckbox
         {...rest}
-        isSelected={localState.value}
+        isSelected={formField.state.value}
         onChange={handleChange}
       />
     );

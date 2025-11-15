@@ -1,7 +1,6 @@
 import { useFormField } from "@cocrepo/hooks";
 import { MobxProps } from "@cocrepo/types";
 import { tools } from "@cocrepo/toolkit";
-import { action } from "mobx";
 import { observer } from "mobx-react-lite";
 import {
   MultiSelectProps as BaseMultiSelectProps,
@@ -16,18 +15,18 @@ export const MultiSelect = observer(
   <T extends object>(props: MultiSelectProps<T>) => {
     const { state, path, ...rest } = props;
 
-    const initialValue = tools.get(state, path) || [];
-    const { localState } = useFormField({ initialValue, state, path });
+    const value = tools.get(state, path) || [];
+    const formField = useFormField({ value, state, path });
 
-    const handleChange = action((e: React.ChangeEvent<HTMLSelectElement>) => {
+    const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
       const newValue = e.target.value?.split(",") || [];
-      localState.value = newValue;
-    });
+      formField.setValue(newValue);
+    };
 
     return (
       <MultiSelectComponent
         {...rest}
-        selectedKeys={new Set(localState.value)}
+        selectedKeys={new Set(formField.state.value)}
         onChange={handleChange}
       />
     );

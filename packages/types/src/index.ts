@@ -61,3 +61,14 @@ export interface FormUnitProps<T> {
 	state: T;
 	path: Leaves<T, 4>;
 }
+
+// Multi-path support for useFormField
+export type PathTuple<T> = readonly [Paths<T, 4>, Paths<T, 4>, ...Paths<T, 4>[]];
+
+// PathMapper function type
+export type PathMapper<TValue, TPaths extends readonly string[]> =
+	(value: TValue, paths: TPaths) => Record<string, any>;
+
+// PathCombiner function type
+export type PathCombiner<TValue, TPaths extends readonly string[]> =
+	(values: Record<string, any>, paths: TPaths) => TValue;

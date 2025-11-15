@@ -1,7 +1,6 @@
 import { useFormField } from "@cocrepo/hooks";
 import { MobxProps } from "@cocrepo/types";
 import { tools } from "@cocrepo/toolkit";
-import { action } from "mobx";
 import { observer } from "mobx-react-lite";
 import {
   AutoComplete as BaseAutoComplete,
@@ -16,20 +15,20 @@ export const AutoComplete = observer(
   <T extends object>(props: AutoCompleteProps<T>) => {
     const { defaultItems = [], state, path, ...rest } = props;
 
-    const initialValue = defaultItems
+    const value = defaultItems
       ? [...defaultItems]?.find((item) => item.key === tools.get(state, path))
       : "";
 
-    const { localState } = useFormField<any, any>({
-      initialValue,
+    const formField = useFormField<any, any>({
+      value,
       state,
       path,
     });
 
     const handleSelectionChange: BaseAutoCompleteProps["onSelectionChange"] =
-      action((value) => {
-        localState.value = value;
-      });
+      (value) => {
+        formField.setValue(value);
+      };
 
     return (
       <BaseAutoComplete
