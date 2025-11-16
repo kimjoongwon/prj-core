@@ -1,57 +1,69 @@
-import { parseAbsoluteToLocal } from "@internationalized/date";
 import { useFormField } from "@cocrepo/hooks";
-import { MobxProps } from "@cocrepo/types";
 import { tools } from "@cocrepo/toolkit";
+import type { Paths, PathTuple } from "@cocrepo/types";
+import type { ZonedDateTime } from "@internationalized/date";
+import { parseAbsoluteToLocal } from "@internationalized/date";
 import { observer } from "mobx-react-lite";
 import { useMemo } from "react";
+
 import {
 	DateRangePickerProps as BaseDateRangePickerProps,
 	DateRangePicker as DateRangePickerComponent,
 } from "./DateRangePicker";
 
 export interface DateRangePickerProps<T>
-	extends MobxProps<T>,
-		Omit<BaseDateRangePickerProps, "value" | "onChange"> {}
+	extends Omit<BaseDateRangePickerProps, "value" | "onChange"> {
+	state: T;
+	paths: readonly [Paths<T, 4>, Paths<T, 4>];
+}
+
+interface DateRangeValue {
+	start: ZonedDateTime;
+	end: ZonedDateTime;
+}
 
 export const DateRangePicker = observer(
 	<T extends object>(props: DateRangePickerProps<T>) => {
-		const { state, path, ...rest } = props;
+		const { state, paths, ...rest } = props;
 
-		const paths = useMemo(() => {
-			const [start, end] = (path as string).split(",");
-			return [start, end] as const;
-		}, [path]);
+		const initialValue = useMemo(() => {
+			const startDateTime =
+				tools.get(state, paths[0]) || new Date().toISOString();
+			const endDateTime =
+				tools.get(state, paths[1]) || new Date().toISOString();
 
-		const startDateTime =
-			tools.get(state, paths[0]) || new Date().toISOString();
-		const endDateTime = tools.get(state, paths[1]) || new Date().toISOString();
-
-		const initialValue = {
-			start: parseAbsoluteToLocal(startDateTime),
-			end: parseAbsoluteToLocal(endDateTime),
-		};
+			return {
+				start: parseAbsoluteToLocal(startDateTime),
+				end: parseAbsoluteToLocal(endDateTime),
+			};
+		}, [state, paths]);
 
 		const formField = useFormField({
 			value: initialValue,
 			state,
-			paths: paths as any,
-			pathMapper: (
-				value: any,
-				[startPath, endPath]: readonly [string, string],
-			) => ({
-				[startPath]: value.start.toString(),
-				[endPath]: value.end.toString(),
-			}),
-			pathCombiner: (
+			paths: paths as unknown as PathTuple<T>,
+			// Split DateRangeValue into separate start/end date strings for state storage
+			valueSplitter: (value: DateRangeValue, paths: PathTuple<T>) => {
+				const [startPath, endPath] = paths as unknown as [string, string];
+				return {
+					[startPath]: value.start.toString(),
+					[endPath]: value.end.toString(),
+				};
+			},
+			// Aggregate start/end date strings from state into DateRangeValue
+			valueAggregator: (
 				values: Record<string, any>,
-				[startPath, endPath]: readonly [string, string],
-			) => ({
-				start: parseAbsoluteToLocal(values[startPath]),
-				end: parseAbsoluteToLocal(values[endPath]),
-			}),
+				paths: PathTuple<T>,
+			): DateRangeValue => {
+				const [startPath, endPath] = paths as unknown as [string, string];
+				return {
+					start: parseAbsoluteToLocal(values[startPath]),
+					end: parseAbsoluteToLocal(values[endPath]),
+				};
+			},
 		});
 
-		const handleDateChange = (value: any) => {
+		const handleDateChange = (value: DateRangeValue) => {
 			formField.setValue(value);
 		};
 

@@ -10,24 +10,24 @@
 
 import { Route as rootRouteImport } from "./routes/__root";
 import { Route as AdminRouteImport } from "./routes/admin";
-import { Route as IndexRouteImport } from "./routes/index";
-import { Route as AdminDashboardRouteImport } from "./routes/admin/dashboard";
 import { Route as AdminAuthRouteImport } from "./routes/admin/auth";
-import { Route as AdminDashboardIndexRouteImport } from "./routes/admin/dashboard/index";
-import { Route as AdminDashboardUserServiceRouteImport } from "./routes/admin/dashboard/user-service";
-import { Route as AdminDashboardSpaceServiceRouteImport } from "./routes/admin/dashboard/space-service";
 import { Route as AdminAuthLoginRouteImport } from "./routes/admin/auth/login";
-import { Route as AdminDashboardUserServiceUsersRouteImport } from "./routes/admin/dashboard/user-service/users";
-import { Route as AdminDashboardSpaceServiceGroundsRouteImport } from "./routes/admin/dashboard/space-service/grounds";
-import { Route as AdminDashboardSpaceServiceCategoriesRouteImport } from "./routes/admin/dashboard/space-service/categories";
 import { Route as AdminAuthLoginTenantSelectRouteImport } from "./routes/admin/auth/login/tenant-select";
-import { Route as AdminDashboardSpaceServiceGroundsGroundIdRouteImport } from "./routes/admin/dashboard/space-service/grounds/$groundId";
+import { Route as AdminDashboardRouteImport } from "./routes/admin/dashboard";
+import { Route as AdminDashboardIndexRouteImport } from "./routes/admin/dashboard/index";
+import { Route as AdminDashboardSpaceServiceRouteImport } from "./routes/admin/dashboard/space-service";
+import { Route as AdminDashboardSpaceServiceCategoriesRouteImport } from "./routes/admin/dashboard/space-service/categories";
 import { Route as AdminDashboardSpaceServiceCategoriesCategoryIdRouteImport } from "./routes/admin/dashboard/space-service/categories/$categoryId";
-import { Route as AdminDashboardSpaceServiceGroundsGroundIdModifyRouteImport } from "./routes/admin/dashboard/space-service/grounds/$groundId/modify";
-import { Route as AdminDashboardSpaceServiceGroundsGroundIdDetailRouteImport } from "./routes/admin/dashboard/space-service/grounds/$groundId/detail";
+import { Route as AdminDashboardSpaceServiceGroundsRouteImport } from "./routes/admin/dashboard/space-service/grounds";
+import { Route as AdminDashboardSpaceServiceGroundsGroundIdRouteImport } from "./routes/admin/dashboard/space-service/grounds/$groundId";
 import { Route as AdminDashboardSpaceServiceGroundsGroundIdCreateRouteImport } from "./routes/admin/dashboard/space-service/grounds/$groundId/create";
-import { Route as AdminDashboardSpaceServiceGroundsGroundIdDetailMembersRouteImport } from "./routes/admin/dashboard/space-service/grounds/$groundId/detail/members";
+import { Route as AdminDashboardSpaceServiceGroundsGroundIdDetailRouteImport } from "./routes/admin/dashboard/space-service/grounds/$groundId/detail";
 import { Route as AdminDashboardSpaceServiceGroundsGroundIdDetailInfoRouteImport } from "./routes/admin/dashboard/space-service/grounds/$groundId/detail/info";
+import { Route as AdminDashboardSpaceServiceGroundsGroundIdDetailMembersRouteImport } from "./routes/admin/dashboard/space-service/grounds/$groundId/detail/members";
+import { Route as AdminDashboardSpaceServiceGroundsGroundIdModifyRouteImport } from "./routes/admin/dashboard/space-service/grounds/$groundId/modify";
+import { Route as AdminDashboardUserServiceRouteImport } from "./routes/admin/dashboard/user-service";
+import { Route as AdminDashboardUserServiceUsersRouteImport } from "./routes/admin/dashboard/user-service/users";
+import { Route as IndexRouteImport } from "./routes/index";
 
 const AdminRoute = AdminRouteImport.update({
 	id: "/admin",

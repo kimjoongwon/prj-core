@@ -69,14 +69,16 @@ export type PathTuple<T> = readonly [
 	...Paths<T, 4>[],
 ];
 
-// PathMapper function type
-export type PathMapper<TValue, TPaths extends readonly string[]> = (
+// ValueSplitter function type - splits a single value into multiple path values
+// UI Component Value → Multiple State Path Values
+export type ValueSplitter<TValue, TPaths extends readonly string[]> = (
 	value: TValue,
 	paths: TPaths,
 ) => Record<string, any>;
 
-// PathCombiner function type
-export type PathCombiner<TValue, TPaths extends readonly string[]> = (
+// ValueAggregator function type - aggregates multiple path values into a single value
+// Multiple State Path Values → UI Component Value
+export type ValueAggregator<TValue, TPaths extends readonly string[]> = (
 	values: Record<string, any>,
 	paths: TPaths,
 ) => TValue;

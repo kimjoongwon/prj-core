@@ -1,10 +1,10 @@
+import { tools } from "@cocrepo/toolkit";
 import type {
-	PathCombiner,
-	PathMapper,
 	Paths,
 	PathTuple,
+	ValueAggregator,
+	ValueSplitter,
 } from "@cocrepo/types";
-import { tools } from "@cocrepo/toolkit";
 import { action, reaction } from "mobx";
 import { useLocalObservable } from "mobx-react-lite";
 import { useEffect, useMemo } from "react";
@@ -20,8 +20,8 @@ export interface UseFormFieldSingleOptions<TState = any, TValue = any>
 	extends UseFormFieldBaseOptions<TState, TValue> {
 	path: Paths<TState, 4>;
 	paths?: never;
-	pathMapper?: never;
-	pathCombiner?: never;
+	valueSplitter?: never;
+	valueAggregator?: never;
 }
 
 // Multi-path options (discriminated with never types)
@@ -32,8 +32,10 @@ export interface UseFormFieldMultiOptions<
 > extends UseFormFieldBaseOptions<TState, TValue> {
 	path?: never;
 	paths: TPaths;
-	pathMapper: PathMapper<TValue, TPaths>;
-	pathCombiner?: PathCombiner<TValue, TPaths>;
+	/** Splits a single UI value into multiple state path values (UI → State) */
+	valueSplitter: ValueSplitter<TValue, TPaths>;
+	/** Aggregates multiple state path values into a single UI value (State → UI) */
+	valueAggregator?: ValueAggregator<TValue, TPaths>;
 }
 
 // Return type
@@ -117,8 +119,8 @@ export function useFormField<TState = any, TValue = any>(
 			const setterDisposer = reaction(
 				() => localState.value,
 				(value) => {
-					// Use pathMapper to map value to each path
-					const mapped = multiOptions.pathMapper(value, multiOptions.paths);
+					// Use valueSplitter to split value to each path
+					const mapped = multiOptions.valueSplitter(value, multiOptions.paths);
 					multiOptions.paths.forEach((path: string) => {
 						tools.set(multiOptions.state, path, mapped[path]);
 					});
@@ -135,9 +137,9 @@ export function useFormField<TState = any, TValue = any>(
 					return values;
 				},
 				(values) => {
-					// Use pathCombiner to combine values if provided
-					if (multiOptions.pathCombiner) {
-						localState.value = multiOptions.pathCombiner(
+					// Use valueAggregator to aggregate values if provided
+					if (multiOptions.valueAggregator) {
+						localState.value = multiOptions.valueAggregator(
 							values,
 							multiOptions.paths,
 						);
@@ -155,8 +157,8 @@ export function useFormField<TState = any, TValue = any>(
 		isSinglePath,
 		options.state,
 		isSinglePath ? (options as any).path : (options as any).paths,
-		!isSinglePath ? (options as any).pathMapper : undefined,
-		!isSinglePath ? (options as any).pathCombiner : undefined,
+		!isSinglePath ? (options as any).valueSplitter : undefined,
+		!isSinglePath ? (options as any).valueAggregator : undefined,
 	]);
 
 	return {
