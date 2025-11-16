@@ -4,7 +4,7 @@
  * Plate
  * OpenAPI spec version: 1.0.0
  */
-import type { SpaceDto } from './spaceDto';
+import type { SpaceDto } from "./spaceDto";
 
 /**
  * @nullable

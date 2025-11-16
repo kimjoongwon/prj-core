@@ -6,16 +6,16 @@
  */
 
 export interface UpdateGroundDto {
-  name?: string;
-  /** @nullable */
-  label?: string | null;
-  address?: string;
-  phone?: string;
-  email?: string;
-  businessNo?: string;
-  /** @nullable */
-  logoImageFileId?: string | null;
-  /** @nullable */
-  imageFileId?: string | null;
-  spaceId?: string;
+	name?: string;
+	/** @nullable */
+	label?: string | null;
+	address?: string;
+	phone?: string;
+	email?: string;
+	businessNo?: string;
+	/** @nullable */
+	logoImageFileId?: string | null;
+	/** @nullable */
+	imageFileId?: string | null;
+	spaceId?: string;
 }

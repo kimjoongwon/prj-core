@@ -4,18 +4,18 @@
  * Plate
  * OpenAPI spec version: 1.0.0
  */
-import type { CategoryDto } from './categoryDto';
-import type { SpaceDto } from './spaceDto';
+import type { CategoryDto } from "./categoryDto";
+import type { SpaceDto } from "./spaceDto";
 
 export interface SpaceClassificationDto {
-  id: string;
-  seq: number;
-  createdAt: string;
-  updatedAt: string;
-  /** @nullable */
-  removedAt: string | null;
-  spaceId: string;
-  categoryId: string;
-  category?: CategoryDto;
-  space?: SpaceDto;
+	id: string;
+	seq: number;
+	createdAt: string;
+	updatedAt: string;
+	/** @nullable */
+	removedAt: string | null;
+	spaceId: string;
+	categoryId: string;
+	category?: CategoryDto;
+	space?: SpaceDto;
 }

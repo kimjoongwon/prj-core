@@ -26,6 +26,7 @@
     "start:dev": "echo 'Development mode - no build needed'",
     "lint": "echo 'Linting skipped for now'",
     "lint:fix": "echo 'Linting skipped for now'",
+    "format": "biome format --write .",
     "type-check": "echo 'Type checking skipped due to memory constraints'",
     "test": "vitest",
     "test:watch": "vitest --watch",

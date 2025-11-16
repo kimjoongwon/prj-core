@@ -19,6 +19,7 @@
   "scripts": {
     "start:dev": "tsup --watch",
     "build": "tsup",
+    "format": "biome format --write .",
     "type-check": "tsc --noEmit",
     "test": "vitest",
     "test:ui": "vitest --ui",

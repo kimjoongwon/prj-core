@@ -1,6 +1,6 @@
+import { ToastProvider } from "@heroui/react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
-import { ToastProvider } from "@heroui/react";
 import { NuqsAdapter } from "nuqs/adapters/react";
 
 interface ProvidersProps {

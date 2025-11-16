@@ -9,7 +9,7 @@ export default defineConfig((option) => ({
 	env: {
 		NODE_ENV: option.watch ? "development" : "production",
 	},
-	sourcemap: option.watch,
+	sourcemap: !!option.watch,
 	dts: true,
 	// Tree-shaking 최적화
 	treeshake: {

@@ -11,8 +11,8 @@ import {
 	Logger,
 	UnauthorizedException,
 } from "@nestjs/common";
-import { PasswordService, PrismaService, TokenService } from "../utils";
 import { UsersService } from "../resources/users.service";
+import { PasswordService, PrismaService, TokenService } from "../utils";
 
 /**
  * 인증 도메인 비즈니스 로직

@@ -6,12 +6,12 @@
  */
 
 export interface SubjectDto {
-  id: string;
-  seq: number;
-  createdAt: string;
-  updatedAt: string;
-  /** @nullable */
-  removedAt: string | null;
-  tenantId: string;
-  name: string;
+	id: string;
+	seq: number;
+	createdAt: string;
+	updatedAt: string;
+	/** @nullable */
+	removedAt: string | null;
+	tenantId: string;
+	name: string;
 }

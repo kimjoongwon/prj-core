@@ -1,24 +1,24 @@
 import {
-  Body,
-  Controller,
-  Delete,
-  Get,
-  HttpCode,
-  HttpStatus,
-  Param,
-  Patch,
-  Post,
-  Query,
+	ApiResponseEntity,
+	CreateTenantDto,
+	PageMetaDto,
+	QueryTenantDto,
+	TenantDto,
+	UpdateTenantDto,
+} from "@cocrepo/schema";
+import {
+	Body,
+	Controller,
+	Delete,
+	Get,
+	HttpCode,
+	HttpStatus,
+	Param,
+	Patch,
+	Post,
+	Query,
 } from "@nestjs/common";
 import { ApiTags } from "@nestjs/swagger";
-import {
-  ApiResponseEntity,
-  CreateTenantDto,
-  PageMetaDto,
-  QueryTenantDto,
-  TenantDto,
-  UpdateTenantDto,
-} from "@cocrepo/schema";
 import { plainToInstance } from "class-transformer";
 import { ContextService } from "../../service";
 import { TenantsService } from "../../service/resources/tenants.service";
@@ -27,76 +27,76 @@ import { wrapResponse } from "../../util/response.util";
 @ApiTags("TENANTS")
 @Controller()
 export class TenantsController {
-  constructor(
-    private readonly service: TenantsService,
-    private readonly contextService: ContextService
-  ) {}
+	constructor(
+		private readonly service: TenantsService,
+		private readonly contextService: ContextService,
+	) {}
 
-  @Get("my")
-  @HttpCode(HttpStatus.OK)
-  @ApiResponseEntity(TenantDto, HttpStatus.OK, { isArray: true })
-  async getMyTenants() {
-    const userId = this.contextService.getAuthUserId();
-    // Note: getManyByUserId was replaced with getManyByQuery, may need adjustment
-    const tenants = await this.service.getManyByQuery({ userId } as any);
-    return plainToInstance(TenantDto, tenants);
-  }
+	@Get("my")
+	@HttpCode(HttpStatus.OK)
+	@ApiResponseEntity(TenantDto, HttpStatus.OK, { isArray: true })
+	async getMyTenants() {
+		const userId = this.contextService.getAuthUserId();
+		// Note: getManyByUserId was replaced with getManyByQuery, may need adjustment
+		const tenants = await this.service.getManyByQuery({ userId } as any);
+		return plainToInstance(TenantDto, tenants);
+	}
 
-  @Post()
-  @HttpCode(HttpStatus.OK)
-  @ApiResponseEntity(TenantDto, HttpStatus.OK)
-  async createTenant(@Body() createTenantDto: CreateTenantDto) {
-    const tenant = await this.service.create(createTenantDto);
+	@Post()
+	@HttpCode(HttpStatus.OK)
+	@ApiResponseEntity(TenantDto, HttpStatus.OK)
+	async createTenant(@Body() createTenantDto: CreateTenantDto) {
+		const tenant = await this.service.create(createTenantDto);
 
-    return plainToInstance(TenantDto, tenant);
-  }
+		return plainToInstance(TenantDto, tenant);
+	}
 
-  @Get(":tenantId")
-  @HttpCode(HttpStatus.OK)
-  @ApiResponseEntity(TenantDto, HttpStatus.OK)
-  async getTenantById(@Param("tenantId") tenantId: string) {
-    const tenant = await this.service.getById(tenantId);
-    return tenant?.toDto?.() ?? tenant;
-  }
+	@Get(":tenantId")
+	@HttpCode(HttpStatus.OK)
+	@ApiResponseEntity(TenantDto, HttpStatus.OK)
+	async getTenantById(@Param("tenantId") tenantId: string) {
+		const tenant = await this.service.getById(tenantId);
+		return tenant?.toDto?.() ?? tenant;
+	}
 
-  @Patch(":tenantId")
-  @HttpCode(HttpStatus.OK)
-  @ApiResponseEntity(TenantDto, HttpStatus.OK)
-  async updateTenantById(
-    @Param("tenantId") tenantId: string,
-    @Body() updateTenantDto: UpdateTenantDto
-  ) {
-    const tenant = await this.service.updateById(tenantId, updateTenantDto);
-    return plainToInstance(TenantDto, tenant);
-  }
+	@Patch(":tenantId")
+	@HttpCode(HttpStatus.OK)
+	@ApiResponseEntity(TenantDto, HttpStatus.OK)
+	async updateTenantById(
+		@Param("tenantId") tenantId: string,
+		@Body() updateTenantDto: UpdateTenantDto,
+	) {
+		const tenant = await this.service.updateById(tenantId, updateTenantDto);
+		return plainToInstance(TenantDto, tenant);
+	}
 
-  @Patch(":tenantId/removedAt")
-  @HttpCode(HttpStatus.OK)
-  @ApiResponseEntity(TenantDto, HttpStatus.OK)
-  async removeTenantById(@Param("tenantId") tenantId: string) {
-    const tenant = await this.service.removeById(tenantId);
-    return plainToInstance(TenantDto, tenant);
-  }
+	@Patch(":tenantId/removedAt")
+	@HttpCode(HttpStatus.OK)
+	@ApiResponseEntity(TenantDto, HttpStatus.OK)
+	async removeTenantById(@Param("tenantId") tenantId: string) {
+		const tenant = await this.service.removeById(tenantId);
+		return plainToInstance(TenantDto, tenant);
+	}
 
-  @Delete(":tenantId")
-  @HttpCode(HttpStatus.OK)
-  @ApiResponseEntity(TenantDto, HttpStatus.OK)
-  async deleteTenant(@Param("tenantId") tenantId: string) {
-    const tenant = await this.service.deleteById(tenantId);
-    return plainToInstance(TenantDto, tenant);
-  }
+	@Delete(":tenantId")
+	@HttpCode(HttpStatus.OK)
+	@ApiResponseEntity(TenantDto, HttpStatus.OK)
+	async deleteTenant(@Param("tenantId") tenantId: string) {
+		const tenant = await this.service.deleteById(tenantId);
+		return plainToInstance(TenantDto, tenant);
+	}
 
-  @Get()
-  @HttpCode(HttpStatus.OK)
-  @ApiResponseEntity(TenantDto, HttpStatus.OK, { isArray: true })
-  async getTenantsByQuery(@Query() query: QueryTenantDto) {
-    const { count, tenants } = await this.service.getManyByQuery(query);
-    return wrapResponse(
-      tenants.map((tenant) => tenant?.toDto?.() ?? tenant),
-      {
-        message: "success",
-        meta: new PageMetaDto(query.skip, query.take, count),
-      }
-    );
-  }
+	@Get()
+	@HttpCode(HttpStatus.OK)
+	@ApiResponseEntity(TenantDto, HttpStatus.OK, { isArray: true })
+	async getTenantsByQuery(@Query() query: QueryTenantDto) {
+		const { count, tenants } = await this.service.getManyByQuery(query);
+		return wrapResponse(
+			tenants.map((tenant) => tenant?.toDto?.() ?? tenant),
+			{
+				message: "success",
+				meta: new PageMetaDto(query.skip, query.take, count),
+			},
+		);
+	}
 }

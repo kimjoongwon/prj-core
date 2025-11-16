@@ -6,11 +6,11 @@ import { Providers } from "./providers/Providers";
 const rootElement = document.getElementById("root")!;
 
 if (!rootElement.innerHTML) {
-  ReactDOM.createRoot(rootElement).render(
-    <StoreProvider>
-      <Providers>
-        <App />
-      </Providers>
-    </StoreProvider>
-  );
+	ReactDOM.createRoot(rootElement).render(
+		<StoreProvider>
+			<Providers>
+				<App />
+			</Providers>
+		</StoreProvider>,
+	);
 }

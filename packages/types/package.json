@@ -25,6 +25,7 @@
     "build": "echo 'Build not needed - using source files directly'",
     "lint": "echo 'Linting skipped for now'",
     "lint:fix": "echo 'Linting skipped for now'",
+    "format": "biome format --write .",
     "type-check": "echo 'Type checking skipped due to memory constraints'",
     "clean": "rm -rf .turbo && rm -rf node_modules"
   },

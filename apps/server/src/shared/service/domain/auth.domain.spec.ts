@@ -6,9 +6,9 @@ import {
 	createTestUserEntity,
 	MockedPrismaService,
 } from "../../test/test-utils";
-import { PasswordService, TokenService } from "../utils";
-import { PrismaService } from "../prisma.service";
 import { UsersService } from "../resources/users.service";
+import { PasswordService, TokenService } from "../utils";
+import { PrismaService } from "../utils/prisma.service";
 import { AuthDomain } from "./auth.domain";
 
 describe("AuthDomain", () => {

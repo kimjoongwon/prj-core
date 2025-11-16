@@ -1,7 +1,14 @@
 import { applyDecorators } from "@nestjs/common";
 import { ApiProperty } from "@nestjs/swagger";
 import { Type } from "class-transformer";
-import { IsInt, IsNumber, IsPositive, Max, Min, NotEquals } from "class-validator";
+import {
+	IsInt,
+	IsNumber,
+	IsPositive,
+	Max,
+	Min,
+	NotEquals,
+} from "class-validator";
 import { ToArray } from "../../transform.decorators";
 import { IsNullable } from "../../validator.decorators";
 import {

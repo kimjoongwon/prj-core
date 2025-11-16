@@ -1,24 +1,24 @@
 import {
-  Body,
-  Controller,
-  Delete,
-  Get,
-  HttpCode,
-  HttpStatus,
-  Param,
-  Patch,
-  Post,
-  Query,
+	ApiResponseEntity,
+	type CreateRoutineDto,
+	PageMetaDto,
+	type QueryRoutineDto,
+	RoutineDto,
+	type UpdateRoutineDto,
+} from "@cocrepo/schema";
+import {
+	Body,
+	Controller,
+	Delete,
+	Get,
+	HttpCode,
+	HttpStatus,
+	Param,
+	Patch,
+	Post,
+	Query,
 } from "@nestjs/common";
 import { ApiTags } from "@nestjs/swagger";
-import {
-  ApiResponseEntity,
-  type CreateRoutineDto,
-  PageMetaDto,
-  type QueryRoutineDto,
-  RoutineDto,
-  type UpdateRoutineDto,
-} from "@cocrepo/schema";
 import { plainToInstance } from "class-transformer";
 import { RoutinesService } from "../../service/resources/routines.service";
 import { wrapResponse } from "../../util/response.util";
@@ -26,62 +26,62 @@ import { wrapResponse } from "../../util/response.util";
 @ApiTags("ROUTINE")
 @Controller()
 export class RoutinesController {
-  constructor(private readonly service: RoutinesService) {}
+	constructor(private readonly service: RoutinesService) {}
 
-  @Post()
-  @HttpCode(HttpStatus.OK)
-  @ApiResponseEntity(RoutineDto, HttpStatus.OK)
-  async createRoutine(@Body() createRoutineDto: CreateRoutineDto) {
-    const routine = await this.service.create(createRoutineDto);
-    return routine?.toDto?.() ?? routine;
-  }
+	@Post()
+	@HttpCode(HttpStatus.OK)
+	@ApiResponseEntity(RoutineDto, HttpStatus.OK)
+	async createRoutine(@Body() createRoutineDto: CreateRoutineDto) {
+		const routine = await this.service.create(createRoutineDto);
+		return routine?.toDto?.() ?? routine;
+	}
 
-  @Get(":routineId")
-  @HttpCode(HttpStatus.OK)
-  @ApiResponseEntity(RoutineDto, HttpStatus.OK)
-  async getRoutine(@Param("routineId") routineId: string) {
-    const routine = await this.service.getById(routineId);
-    return routine?.toDto?.() ?? routine;
-  }
+	@Get(":routineId")
+	@HttpCode(HttpStatus.OK)
+	@ApiResponseEntity(RoutineDto, HttpStatus.OK)
+	async getRoutine(@Param("routineId") routineId: string) {
+		const routine = await this.service.getById(routineId);
+		return routine?.toDto?.() ?? routine;
+	}
 
-  @Patch(":routineId")
-  @HttpCode(HttpStatus.OK)
-  @ApiResponseEntity(RoutineDto, HttpStatus.OK)
-  async updateRoutine(
-    @Param("routineId") routineId: string,
-    @Body() updateRoutineDto: UpdateRoutineDto
-  ) {
-    const routine = await this.service.updateById(routineId, updateRoutineDto);
-    return plainToInstance(RoutineDto, routine);
-  }
+	@Patch(":routineId")
+	@HttpCode(HttpStatus.OK)
+	@ApiResponseEntity(RoutineDto, HttpStatus.OK)
+	async updateRoutine(
+		@Param("routineId") routineId: string,
+		@Body() updateRoutineDto: UpdateRoutineDto,
+	) {
+		const routine = await this.service.updateById(routineId, updateRoutineDto);
+		return plainToInstance(RoutineDto, routine);
+	}
 
-  @Patch(":routineId/removedAt")
-  @HttpCode(HttpStatus.OK)
-  @ApiResponseEntity(RoutineDto, HttpStatus.OK)
-  async removeRoutine(@Param("routineId") routineId: string) {
-    const routine = await this.service.removeById(routineId);
-    return plainToInstance(RoutineDto, routine);
-  }
+	@Patch(":routineId/removedAt")
+	@HttpCode(HttpStatus.OK)
+	@ApiResponseEntity(RoutineDto, HttpStatus.OK)
+	async removeRoutine(@Param("routineId") routineId: string) {
+		const routine = await this.service.removeById(routineId);
+		return plainToInstance(RoutineDto, routine);
+	}
 
-  @Delete(":routineId")
-  @HttpCode(HttpStatus.OK)
-  @ApiResponseEntity(RoutineDto, HttpStatus.OK)
-  async deleteRoutine(@Param("routineId") routineId: string) {
-    const routine = await this.service.deleteById(routineId);
-    return plainToInstance(RoutineDto, routine);
-  }
+	@Delete(":routineId")
+	@HttpCode(HttpStatus.OK)
+	@ApiResponseEntity(RoutineDto, HttpStatus.OK)
+	async deleteRoutine(@Param("routineId") routineId: string) {
+		const routine = await this.service.deleteById(routineId);
+		return plainToInstance(RoutineDto, routine);
+	}
 
-  @Get()
-  @HttpCode(HttpStatus.OK)
-  @ApiResponseEntity(RoutineDto, HttpStatus.OK, { isArray: true })
-  async getRoutinesByQuery(@Query() query: QueryRoutineDto) {
-    const { count, items } = await this.service.getManyByQuery(query);
-    return wrapResponse(
-      items.map((item) => item?.toDto?.() ?? item),
-      {
-        message: "success",
-        meta: new PageMetaDto(query.skip, query.take, count),
-      }
-    );
-  }
+	@Get()
+	@HttpCode(HttpStatus.OK)
+	@ApiResponseEntity(RoutineDto, HttpStatus.OK, { isArray: true })
+	async getRoutinesByQuery(@Query() query: QueryRoutineDto) {
+		const { count, items } = await this.service.getManyByQuery(query);
+		return wrapResponse(
+			items.map((item) => item?.toDto?.() ?? item),
+			{
+				message: "success",
+				meta: new PageMetaDto(query.skip, query.take, count),
+			},
+		);
+	}
 }

@@ -23,6 +23,7 @@
     "start:dev": "pnpm codegen",
     "build": "orval --config orval.config.js",
     "lint": "biome lint",
+    "format": "biome format --write .",
     "type-check": "tsc --noEmit",
     "clean": "rm -rf .turbo && rm -rf node_modules && rm -rf dist",
     "codegen": "orval --config orval.config.js"

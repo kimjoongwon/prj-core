@@ -1,47 +1,47 @@
-import { Injectable } from "@nestjs/common";
 import { CreateRoleDto, Prisma, UpdateRoleDto } from "@cocrepo/schema";
+import { Injectable } from "@nestjs/common";
 import { RolesRepository } from "../../repository/role.repository";
 
 @Injectable()
 export class RolesService {
-  constructor(private readonly repository: RolesRepository) {}
+	constructor(private readonly repository: RolesRepository) {}
 
-  getById(id: string) {
-    return this.repository.findUnique({ where: { id } });
-  }
+	getById(id: string) {
+		return this.repository.findUnique({ where: { id } });
+	}
 
-  deleteById(id: string) {
-    return this.repository.delete({ where: { id } });
-  }
+	deleteById(id: string) {
+		return this.repository.delete({ where: { id } });
+	}
 
-  create(createRoleDto: CreateRoleDto) {
-    return this.repository.create({
-      data: {
-        name: createRoleDto.name,
-      },
-    });
-  }
+	create(createRoleDto: CreateRoleDto) {
+		return this.repository.create({
+			data: {
+				name: createRoleDto.name,
+			},
+		});
+	}
 
-  async getManyByQuery(args: Prisma.RoleFindManyArgs) {
-    const roles = await this.repository.findMany(args);
-    const count = await this.repository.count(args as Prisma.RoleCountArgs);
-    return {
-      roles,
-      count,
-    };
-  }
+	async getManyByQuery(args: Prisma.RoleFindManyArgs) {
+		const roles = await this.repository.findMany(args);
+		const count = await this.repository.count(args as Prisma.RoleCountArgs);
+		return {
+			roles,
+			count,
+		};
+	}
 
-  updateById(id: string, updateRoleDto: UpdateRoleDto) {
-    return this.repository.update({
-      where: { id },
-      data: updateRoleDto,
-    });
-  }
+	updateById(id: string, updateRoleDto: UpdateRoleDto) {
+		return this.repository.update({
+			where: { id },
+			data: updateRoleDto,
+		});
+	}
 
-  removeById(id: string) {
-    return this.repository.update({
-      where: { id },
-      data: { removedAt: new Date() },
-    });
-  }
+	removeById(id: string) {
+		return this.repository.update({
+			where: { id },
+			data: { removedAt: new Date() },
+		});
+	}
 }

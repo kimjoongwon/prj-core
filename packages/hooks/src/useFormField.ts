@@ -1,24 +1,36 @@
-import type { PathCombiner, PathMapper, Paths, PathTuple } from "@cocrepo/types";
+import type {
+	PathCombiner,
+	PathMapper,
+	Paths,
+	PathTuple,
+} from "@cocrepo/types";
 import { tools } from "@cocrepo/toolkit";
 import { action, reaction } from "mobx";
 import { useLocalObservable } from "mobx-react-lite";
 import { useEffect, useMemo } from "react";
 
-// Single-path options
-export interface UseFormFieldSingleOptions<TState = any, TValue = any> {
+// Base options
+interface UseFormFieldBaseOptions<TState = any, TValue = any> {
 	value: TValue;
 	state: TState;
-	path: Paths<TState, 4>;
 }
 
-// Multi-path options
+// Single-path options (discriminated with never types)
+export interface UseFormFieldSingleOptions<TState = any, TValue = any>
+	extends UseFormFieldBaseOptions<TState, TValue> {
+	path: Paths<TState, 4>;
+	paths?: never;
+	pathMapper?: never;
+	pathCombiner?: never;
+}
+
+// Multi-path options (discriminated with never types)
 export interface UseFormFieldMultiOptions<
 	TState = any,
 	TValue = any,
-	TPaths extends PathTuple<TState> = PathTuple<TState>
-> {
-	value: TValue;
-	state: TState;
+	TPaths extends PathTuple<TState> = PathTuple<TState>,
+> extends UseFormFieldBaseOptions<TState, TValue> {
+	path?: never;
 	paths: TPaths;
 	pathMapper: PathMapper<TValue, TPaths>;
 	pathCombiner?: PathCombiner<TValue, TPaths>;
@@ -32,23 +44,23 @@ export interface UseFormFieldReturn<TValue> {
 
 // Single-path overload
 export function useFormField<TState = any, TValue = any>(
-	options: UseFormFieldSingleOptions<TState, TValue>
+	options: UseFormFieldSingleOptions<TState, TValue>,
 ): UseFormFieldReturn<TValue>;
 
 // Multi-path overload
 export function useFormField<
 	TState = any,
 	TValue = any,
-	TPaths extends PathTuple<TState> = PathTuple<TState>
+	TPaths extends PathTuple<TState> = PathTuple<TState>,
 >(
-	options: UseFormFieldMultiOptions<TState, TValue, TPaths>
+	options: UseFormFieldMultiOptions<TState, TValue, TPaths>,
 ): UseFormFieldReturn<TValue>;
 
 // Implementation
 export function useFormField<TState = any, TValue = any>(
 	options:
 		| UseFormFieldSingleOptions<TState, TValue>
-		| UseFormFieldMultiOptions<TState, TValue, any>
+		| UseFormFieldMultiOptions<TState, TValue, any>,
 ): UseFormFieldReturn<TValue> {
 	const isSinglePath = "path" in options;
 
@@ -63,28 +75,31 @@ export function useFormField<TState = any, TValue = any>(
 				(newValue: TValue) => {
 					localState.value = newValue;
 				},
-				`useFormField.setValue[${isSinglePath ? String(options.path) : (options as any).paths.join(",")}]`
+				`useFormField.setValue[${isSinglePath ? String(options.path) : (options as any).paths.join(",")}]`,
 			) as unknown as (value: TValue) => void,
-		[localState, isSinglePath]
+		[localState, isSinglePath],
 	);
 
 	useEffect(() => {
 		if (isSinglePath) {
 			// Single-path logic
-			const singleOptions = options as UseFormFieldSingleOptions<TState, TValue>;
+			const singleOptions = options as UseFormFieldSingleOptions<
+				TState,
+				TValue
+			>;
 
 			const setterDisposer = reaction(
 				() => localState.value,
 				(value) => {
 					tools.set(singleOptions.state, singleOptions.path, value);
-				}
+				},
 			);
 
 			const getterDisposer = reaction(
 				() => tools.get(singleOptions.state, singleOptions.path),
 				(value) => {
 					localState.value = value as TValue;
-				}
+				},
 			);
 
 			return () => {
@@ -93,7 +108,11 @@ export function useFormField<TState = any, TValue = any>(
 			};
 		} else {
 			// Multi-path logic
-			const multiOptions = options as UseFormFieldMultiOptions<TState, TValue, any>;
+			const multiOptions = options as UseFormFieldMultiOptions<
+				TState,
+				TValue,
+				any
+			>;
 
 			const setterDisposer = reaction(
 				() => localState.value,
@@ -103,7 +122,7 @@ export function useFormField<TState = any, TValue = any>(
 					multiOptions.paths.forEach((path: string) => {
 						tools.set(multiOptions.state, path, mapped[path]);
 					});
-				}
+				},
 			);
 
 			const getterDisposer = reaction(
@@ -118,9 +137,12 @@ export function useFormField<TState = any, TValue = any>(
 				(values) => {
 					// Use pathCombiner to combine values if provided
 					if (multiOptions.pathCombiner) {
-						localState.value = multiOptions.pathCombiner(values, multiOptions.paths);
+						localState.value = multiOptions.pathCombiner(
+							values,
+							multiOptions.paths,
+						);
 					}
-				}
+				},
 			);
 
 			return () => {

@@ -6,17 +6,17 @@
  */
 
 export interface UpdateUserDto {
-  /** 소속 공간 ID */
-  spaceId?: string;
-  /** 이메일 주소 */
-  email?: string;
-  /** 사용자 이름 */
-  name?: string;
-  /** 연락처 */
-  phone?: string;
-  /**
-   * 응답 제외 필드
-   * @minLength 6
-   */
-  password?: string;
+	/** 소속 공간 ID */
+	spaceId?: string;
+	/** 이메일 주소 */
+	email?: string;
+	/** 사용자 이름 */
+	name?: string;
+	/** 연락처 */
+	phone?: string;
+	/**
+	 * 응답 제외 필드
+	 * @minLength 6
+	 */
+	password?: string;
 }

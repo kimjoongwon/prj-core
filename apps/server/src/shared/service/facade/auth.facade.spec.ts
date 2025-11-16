@@ -5,10 +5,10 @@ import {
 	createMockJwtService,
 	createTestUserEntity,
 } from "../../test/test-utils";
-import { TokenService } from "../utils";
-import { UsersService } from "../resources/users.service";
-import { AuthFacade } from "./auth.facade";
 import { AuthDomain } from "../domain/auth.domain";
+import { UsersService } from "../resources/users.service";
+import { TokenService } from "../utils";
+import { AuthFacade } from "./auth.facade";
 
 describe("AuthFacade", () => {
 	let service: AuthFacade;
