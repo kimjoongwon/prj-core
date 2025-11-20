@@ -16,3 +16,4 @@ storybook-static
 # Build outputs
 apps/*/dist
 packages/*/dist
+.env
