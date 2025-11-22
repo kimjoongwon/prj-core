@@ -122,8 +122,8 @@ model Task {
   updatedAt  DateTime?  @updatedAt @db.Timestamptz(6) /// 수정 일시
   removedAt  DateTime?  @db.Timestamptz(6) /// 삭제 일시
   tenantId   String /// 테넌트 ID
-  exercise   Exercise? /// 운동
   activities Activity[] /// 활동 목록
+  exercise   Exercise?
 
   @@index([tenantId])
 }
