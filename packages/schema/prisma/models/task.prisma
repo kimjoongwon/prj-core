@@ -6,10 +6,10 @@
 model Timeline {
   id          String    @id @default(uuid()) /// 고유 식별자
   seq         Int       @unique @default(autoincrement()) /// 순번
-  createdAt   DateTime  @default(now()) @db.Timestamptz(6) /// 생성 일시
-  updatedAt   DateTime? @updatedAt @db.Timestamptz(6) /// 수정 일시
-  removedAt   DateTime? @db.Timestamptz(6) /// 삭제 일시
-  tenantId    String /// 테넌트 ID
+  createdAt   DateTime  @default(now()) @map("created_at") @db.Timestamptz(6) /// 생성 일시
+  updatedAt   DateTime? @updatedAt @map("updated_at") @db.Timestamptz(6) /// 수정 일시
+  removedAt   DateTime? @map("removed_at") @db.Timestamptz(6) /// 삭제 일시
+  tenantId    String    @map("tenant_id") /// 테넌트 ID
   name        String /// 타임라인 이름 (예: "2025년 10월 첫째 주", "가을 시즌")
   description String? /// 타임라인 설명
   sessions    Session[] /// 세션 목록
@@ -17,6 +17,7 @@ model Timeline {
   @@index([tenantId])
   @@index([tenantId, createdAt])
   @@index([name])
+  @@map("timelines")
 }
 
 /**
@@ -26,15 +27,15 @@ model Timeline {
 model Session {
   id                 String              @id @default(uuid()) /// 고유 식별자
   seq                Int                 @unique @default(autoincrement()) /// 순번
-  createdAt          DateTime            @default(now()) @db.Timestamptz(6) /// 생성 일시
-  updatedAt          DateTime?           @updatedAt @db.Timestamptz(6) /// 수정 일시
-  removedAt          DateTime?           @db.Timestamptz(6) /// 삭제 일시
+  createdAt          DateTime            @default(now()) @map("created_at") @db.Timestamptz(6) /// 생성 일시
+  updatedAt          DateTime?           @updatedAt @map("updated_at") @db.Timestamptz(6) /// 수정 일시
+  removedAt          DateTime?           @map("removed_at") @db.Timestamptz(6) /// 삭제 일시
   type               SessionTypes        @default(ONE_TIME) /// 세션 유형 (일회성/기간형/반복형)
-  repeatCycleType    RepeatCycleTypes? /// 반복 주기 유형 (주간/월간)
-  startDateTime      DateTime?           @db.Timestamptz(6) /// 시작 일시
-  endDateTime        DateTime?           @db.Timestamptz(6) /// 종료 일시
-  recurringDayOfWeek RecurringDayOfWeek? /// 반복 요일
-  timelineId         String /// 타임라인 ID
+  repeatCycleType    RepeatCycleTypes?   @map("repeat_cycle_type") /// 반복 주기 유형 (주간/월간)
+  startDateTime      DateTime?           @map("start_date_time") @db.Timestamptz(6) /// 시작 일시
+  endDateTime        DateTime?           @map("end_date_time") @db.Timestamptz(6) /// 종료 일시
+  recurringDayOfWeek RecurringDayOfWeek? @map("recurring_day_of_week") /// 반복 요일
+  timelineId         String              @map("timeline_id") /// 타임라인 ID
   name               String /// 세션 이름
   description        String? /// 세션 설명
   programs           Program[] /// 프로그램 목록
@@ -43,6 +44,7 @@ model Session {
   @@index([timelineId, startDateTime])
   @@index([startDateTime, endDateTime])
   @@index([type, startDateTime])
+  @@map("sessions")
 }
 
 /**
@@ -52,100 +54,109 @@ model Session {
 model Program {
   id           String    @id @default(uuid()) /// 고유 식별자
   seq          Int       @unique @default(autoincrement()) /// 순번
-  createdAt    DateTime  @default(now()) @db.Timestamptz(6) /// 생성 일시
-  updatedAt    DateTime? @updatedAt @db.Timestamptz(6) /// 수정 일시
-  removedAt    DateTime? @db.Timestamptz(6) /// 삭제 일시
-  routineId    String /// 루틴 ID
-  sessionId    String /// 세션 ID
-  instructorId String /// 강사 ID
+  createdAt    DateTime  @default(now()) @map("created_at") @db.Timestamptz(6) /// 생성 일시
+  updatedAt    DateTime? @updatedAt @map("updated_at") @db.Timestamptz(6) /// 수정 일시
+  removedAt    DateTime? @map("removed_at") @db.Timestamptz(6) /// 삭제 일시
+  routineId    String    @map("routine_id") /// 루틴 ID
+  sessionId    String    @map("session_id") /// 세션 ID
+  instructorId String    @map("instructor_id") /// 강사 ID
   capacity     Int /// 정원 (최대 참여 인원)
   name         String /// 프로그램 이름
   level        String? /// 난이도 (초급/중급/고급)
   routine      Routine   @relation(fields: [routineId], references: [id]) /// 루틴 관계
   session      Session   @relation(fields: [sessionId], references: [id]) /// 세션 관계
 
-  @@unique([sessionId, routineId]) /// 같은 세션에서 같은 루틴 중복 방지
+  @@unique([sessionId, routineId])
   @@index([sessionId])
   @@index([routineId])
   @@index([instructorId])
+  @@map("programs")
 }
 
 /**
- * @description 루틴은 반복적으로 수행되는 일련의 활동들의 조합입니다. 여러 태스크(Task)들로 구성된 활동 묶음을 의미합니다.
- * @type 자원
+ * @description 루틴은 반복적으로 수행되는 일련의 활동들의 조합입니다. 여러 Activity를 순서대로 묶어서 하나의 프로그램으로 만듭니다.
+ * @type 자원 (도메인 독립적)
  */
 model Routine {
   id         String     @id @default(uuid()) /// 고유 식별자
   seq        Int        @unique @default(autoincrement()) /// 순번
-  createdAt  DateTime   @default(now()) @db.Timestamptz(6) /// 생성 일시
-  updatedAt  DateTime?  @updatedAt @db.Timestamptz(6) /// 수정 일시
-  removedAt  DateTime?  @db.Timestamptz(6) /// 삭제 일시
+  createdAt  DateTime   @default(now()) @map("created_at") @db.Timestamptz(6) /// 생성 일시
+  updatedAt  DateTime?  @updatedAt @map("updated_at") @db.Timestamptz(6) /// 수정 일시
+  removedAt  DateTime?  @map("removed_at") @db.Timestamptz(6) /// 삭제 일시
   name       String /// 이름
   label      String /// 라벨
-  programs   Program[] /// 프로그램 목록
   activities Activity[] /// 활동 목록
+  programs   Program[]
 
   @@index([name])
+  @@map("routines")
 }
 
 /**
- * @description 활동은 루틴 내 태스크의 실행 순서와 방법을 정의합니다. 루틴과 태스크를 연결하며 수행 방식에 대한 메타 정보를 포함합니다.
- * @type 관계
+ * @description 활동은 루틴 내에서 특정 Task를 어떻게 수행할지 정의합니다. 실행 순서, 반복 횟수, 휴식 시간 등의 메타 정보를 포함합니다.
+ * Activity는 도메인 독립적이며, Task를 통해 여러 도메인(운동, 헤어샵 등)의 작업을 참조할 수 있습니다.
+ * @type 자원 (도메인 독립적 - 연결 역할)
  */
 model Activity {
   id          String    @id @default(uuid()) /// 고유 식별자
   seq         Int       @unique @default(autoincrement()) /// 순번
-  createdAt   DateTime  @default(now()) @db.Timestamptz(6) /// 생성 일시
-  updatedAt   DateTime? @updatedAt @db.Timestamptz(6) /// 수정 일시
-  removedAt   DateTime? @db.Timestamptz(6) /// 삭제 일시
-  routineId   String /// 루틴 ID
-  taskId      String /// 태스크 ID
+  createdAt   DateTime  @default(now()) @map("created_at") @db.Timestamptz(6) /// 생성 일시
+  updatedAt   DateTime? @updatedAt @map("updated_at") @db.Timestamptz(6) /// 수정 일시
+  removedAt   DateTime? @map("removed_at") @db.Timestamptz(6) /// 삭제 일시
+  routineId   String    @map("routine_id") /// 루틴 ID
+  taskId      String    @map("task_id") /// Task ID (도메인 독립적 참조)
   order       Int /// 루틴 내 실행 순서
   repetitions Int       @default(1) /// 반복 횟수 (세트 수)
-  restTime    Int       @default(0) /// 다음 운동까지 휴식 시간 (초)
+  restTime    Int       @default(0) @map("rest_time") /// 다음 작업까지 휴식 시간 (초)
   notes       String? /// 특별 지시사항
   routine     Routine   @relation(fields: [routineId], references: [id]) /// 루틴 관계
-  task        Task      @relation(fields: [taskId], references: [id]) /// 태스크 관계
+  task        Task      @relation(fields: [taskId], references: [id]) /// Task 관계 (Task를 통해 Exercise 등 도메인 모델 접근)
 
   @@unique([routineId, taskId])
   @@index([routineId, order])
+  @@map("activities")
 }
 
 /**
- * @description 태스크는 수행해야 할 개별 작업 단위입니다. 운동(Exercise)과 같은 구체적인 활동 내용을 포함합니다.
- * @type 자원
+ * @description 태스크는 도메인 독립적인 작업의 추상 계층입니다. 분류 및 그룹핑 역할만 수행하며, 구체적인 도메인 정보는 포함하지 않습니다.
+ * Task는 Exercise(운동), Treatment(헤어샵) 등 다양한 도메인 모델에 의해 확장됩니다.
+ * 하나의 Task는 여러 Activity에서 재사용될 수 있습니다 (예: "플랭크" 운동이 여러 루틴에서 사용됨).
+ * @type 추상 (도메인 브릿지 계층)
  */
 model Task {
   id         String     @id @default(uuid()) /// 고유 식별자
   seq        Int        @unique @default(autoincrement()) /// 순번
-  createdAt  DateTime   @default(now()) @db.Timestamptz(6) /// 생성 일시
-  updatedAt  DateTime?  @updatedAt @db.Timestamptz(6) /// 수정 일시
-  removedAt  DateTime?  @db.Timestamptz(6) /// 삭제 일시
-  tenantId   String /// 테넌트 ID
-  activities Activity[] /// 활동 목록
-  exercise   Exercise?
+  createdAt  DateTime   @default(now()) @map("created_at") @db.Timestamptz(6) /// 생성 일시
+  updatedAt  DateTime?  @updatedAt @map("updated_at") @db.Timestamptz(6) /// 수정 일시
+  removedAt  DateTime?  @map("removed_at") @db.Timestamptz(6) /// 삭제 일시
+  tenantId   String     @map("tenant_id") /// 테넌트 ID
+  activities Activity[] /// 이 Task를 사용하는 Activity 목록 (여러 루틴에서 재사용 가능)
+  exercise   Exercise? /// 운동 도메인 확장 (1:1, optional - 미래에 treatment, service 등 추가 가능)
 
   @@index([tenantId])
+  @@map("tasks")
 }
 
 /**
- * @description 운동은 태스크의 구체적인 실행 내용을 정의합니다. 수행 시간, 횟수, 설명 및 관련 미디어 자료를 포함합니다.
- * @type 자원
+ * @description 운동은 Task를 확장하여 운동 도메인의 모든 정보를 담당합니다. 운동 이름, 설명, 수행 시간, 횟수, 이미지, 영상 등 운동 관련 모든 데이터를 포함합니다.
+ * Exercise는 Task와 1:1 관계이며, Task를 통해 Activity에서 참조됩니다.
+ * @type 도메인 (운동 전용)
  */
 model Exercise {
   id          String    @id @default(uuid()) /// 고유 식별자
   seq         Int       @unique @default(autoincrement()) /// 순번
-  createdAt   DateTime  @default(now()) @db.Timestamptz(6) /// 생성 일시
-  updatedAt   DateTime? @updatedAt @db.Timestamptz(6) /// 수정 일시
-  removedAt   DateTime? @db.Timestamptz(6) /// 삭제 일시
+  createdAt   DateTime  @default(now()) @map("created_at") @db.Timestamptz(6) /// 생성 일시
+  updatedAt   DateTime? @updatedAt @map("updated_at") @db.Timestamptz(6) /// 수정 일시
+  removedAt   DateTime? @map("removed_at") @db.Timestamptz(6) /// 삭제 일시
   duration    Int /// 지속 시간 (초 단위)
   count       Int /// 반복 횟수
-  taskId      String    @unique /// 태스크 ID
+  taskId      String    @unique @map("task_id") /// Task ID (1:1 관계)
   description String? /// 운동 설명
-  imageFileId String? /// 이미지 파일 ID (운동 동작 이미지)
-  videoFileId String? /// 비디오 파일 ID (운동 시연 영상)
+  imageFileId String?   @map("image_file_id") /// 이미지 파일 ID (운동 동작 이미지)
+  videoFileId String?   @map("video_file_id") /// 비디오 파일 ID (운동 시연 영상)
   name        String /// 운동 이름
-  task        Task      @relation(fields: [taskId], references: [id]) /// 태스크 관계
+  task        Task      @relation(fields: [taskId], references: [id]) /// Task 관계 (Exercise가 Task를 확장)
 
   @@index([name])
+  @@map("exercises")
 }

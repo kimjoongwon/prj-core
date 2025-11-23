@@ -1,13 +1,13 @@
 model Category {
   id                   String                @id @default(uuid())
   seq                  Int                   @unique @default(autoincrement())
-  createdAt            DateTime              @default(now()) @db.Timestamptz(6)
-  updatedAt            DateTime?             @updatedAt @db.Timestamptz(6)
-  removedAt            DateTime?             @db.Timestamptz(6)
+  createdAt            DateTime              @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt            DateTime?             @updatedAt @map("updated_at") @db.Timestamptz(6)
+  removedAt            DateTime?             @map("removed_at") @db.Timestamptz(6)
   name                 String                @unique
   type                 CategoryTypes         @default(User)
-  parentId             String?
-  tenantId             String
+  parentId             String?               @map("parent_id")
+  tenantId             String                @map("tenant_id")
   parent               Category?             @relation("CategoryToCategory", fields: [parentId], references: [id])
   children             Category[]            @relation("CategoryToCategory")
   tenant               Tenant                @relation(fields: [tenantId], references: [id])
@@ -15,34 +15,38 @@ model Category {
   roleClassifications  RoleClassification[]
   spaceClassifications SpaceClassification[]
   userClassifications  UserClassification[]
+
+  @@map("categories")
 }
 
 model Group {
   id                String             @id @default(uuid())
   seq               Int                @unique @default(autoincrement())
-  createdAt         DateTime           @default(now()) @db.Timestamptz(6)
-  updatedAt         DateTime?          @updatedAt @db.Timestamptz(6)
-  removedAt         DateTime?          @db.Timestamptz(6)
+  createdAt         DateTime           @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt         DateTime?          @updatedAt @map("updated_at") @db.Timestamptz(6)
+  removedAt         DateTime?          @map("removed_at") @db.Timestamptz(6)
   name              String
   type              GroupTypes         @default(User)
   label             String?
-  tenantId          String
+  tenantId          String             @map("tenant_id")
   tenant            Tenant             @relation(fields: [tenantId], references: [id])
   fileAssociations  FileAssociation[]
   roleAssociations  RoleAssociation[]
   spaceAssociations SpaceAssociation[]
   userAssociations  UserAssociation[]
+
+  @@map("groups")
 }
 
 model Tenant {
   id          String       @id @default(uuid())
   seq         Int          @unique @default(autoincrement())
-  createdAt   DateTime     @default(now())
-  updatedAt   DateTime?    @updatedAt @db.Timestamptz(6)
-  removedAt   DateTime?    @db.Timestamptz(6)
-  userId      String
-  spaceId     String
-  roleId      String
+  createdAt   DateTime     @default(now()) @map("created_at")
+  updatedAt   DateTime?    @updatedAt @map("updated_at") @db.Timestamptz(6)
+  removedAt   DateTime?    @map("removed_at") @db.Timestamptz(6)
+  userId      String       @map("user_id")
+  spaceId     String       @map("space_id")
+  roleId      String       @map("role_id")
   main        Boolean      @default(false)
   assignments Assignment[]
   categories  Category[]
@@ -52,80 +56,94 @@ model Tenant {
   role        Role         @relation(fields: [roleId], references: [id])
   space       Space        @relation(fields: [spaceId], references: [id])
   user        User         @relation(fields: [userId], references: [id])
+
+  @@map("tenants")
 }
 
 model Assignment {
   id        String    @id @default(uuid())
   seq       Int       @unique @default(autoincrement())
-  createdAt DateTime  @default(now())
-  updatedAt DateTime? @updatedAt @db.Timestamptz(6)
-  removedAt DateTime? @db.Timestamptz(6)
-  roleId    String
-  tenantId  String
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime? @updatedAt @map("updated_at") @db.Timestamptz(6)
+  removedAt DateTime? @map("removed_at") @db.Timestamptz(6)
+  roleId    String    @map("role_id")
+  tenantId  String    @map("tenant_id")
   role      Role      @relation(fields: [roleId], references: [id])
   tenant    Tenant    @relation(fields: [tenantId], references: [id])
+
+  @@map("assignments")
 }
 
 model Action {
   id         String         @id @default(uuid())
   seq        Int            @unique @default(autoincrement())
-  createdAt  DateTime       @default(now())
-  updatedAt  DateTime?      @updatedAt @db.Timestamptz(6)
-  removedAt  DateTime?      @db.Timestamptz(6)
+  createdAt  DateTime       @default(now()) @map("created_at")
+  updatedAt  DateTime?      @updatedAt @map("updated_at") @db.Timestamptz(6)
+  removedAt  DateTime?      @map("removed_at") @db.Timestamptz(6)
   name       AbilityActions @default(CREATE)
   conditions Json?
-  tenantId   String
+  tenantId   String         @map("tenant_id")
+
+  @@map("actions")
 }
 
 model Subject {
   id        String    @id @default(uuid())
   seq       Int       @unique @default(autoincrement())
-  createdAt DateTime  @default(now())
-  updatedAt DateTime? @updatedAt @db.Timestamptz(6)
-  removedAt DateTime? @db.Timestamptz(6)
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime? @updatedAt @map("updated_at") @db.Timestamptz(6)
+  removedAt DateTime? @map("removed_at") @db.Timestamptz(6)
   name      String    @unique
-  tenantId  String
+  tenantId  String    @map("tenant_id")
+
+  @@map("subjects")
 }
 
 model Ability {
   id          String       @id @default(uuid())
   seq         Int          @unique @default(autoincrement())
-  createdAt   DateTime     @default(now()) @db.Timestamptz(6)
-  updatedAt   DateTime?    @updatedAt @db.Timestamptz(6)
-  removedAt   DateTime?    @db.Timestamptz(6)
+  createdAt   DateTime     @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt   DateTime?    @updatedAt @map("updated_at") @db.Timestamptz(6)
+  removedAt   DateTime?    @map("removed_at") @db.Timestamptz(6)
   type        AbilityTypes
-  roleId      String
+  roleId      String       @map("role_id")
   description String?
   conditions  Json?
-  subjectId   String
-  tenantId    String
+  subjectId   String       @map("subject_id")
+  tenantId    String       @map("tenant_id")
   role        Role         @relation(fields: [roleId], references: [id])
+
+  @@map("abilities")
 }
 
 model Post {
   id        String    @id @default(uuid())
   seq       Int       @unique @default(autoincrement())
-  createdAt DateTime  @default(now()) @db.Timestamptz(6)
-  updatedAt DateTime? @updatedAt @db.Timestamptz(6)
-  removedAt DateTime? @db.Timestamptz(6)
-  contentId String
+  createdAt DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt DateTime? @updatedAt @map("updated_at") @db.Timestamptz(6)
+  removedAt DateTime? @map("removed_at") @db.Timestamptz(6)
+  contentId String    @map("content_id")
   content   Content   @relation(fields: [contentId], references: [id])
+
+  @@map("posts")
 }
 
 model Content {
   id          String    @id @default(uuid())
   seq         Int       @unique @default(autoincrement())
-  createdAt   DateTime  @default(now()) @db.Timestamptz(6)
-  updatedAt   DateTime? @updatedAt @db.Timestamptz(6)
-  removedAt   DateTime? @db.Timestamptz(6)
+  createdAt   DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt   DateTime? @updatedAt @map("updated_at") @db.Timestamptz(6)
+  removedAt   DateTime? @map("removed_at") @db.Timestamptz(6)
   title       String?
   description String?
   type        TextTypes @default(Editor)
   text        String?   @db.VarChar(1000)
-  fileId      String?
-  tenantId    String
+  fileId      String?   @map("file_id")
+  tenantId    String    @map("tenant_id")
   tenant      Tenant    @relation(fields: [tenantId], references: [id])
   posts       Post[]
+
+  @@map("contents")
 }
 
 enum SMSStatus {

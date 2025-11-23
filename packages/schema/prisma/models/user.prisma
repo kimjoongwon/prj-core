@@ -1,9 +1,9 @@
 model User {
   id             String              @id @default(uuid())
   seq            Int                 @unique @default(autoincrement())
-  updatedAt      DateTime?           @updatedAt @db.Timestamptz(6)
-  createdAt      DateTime            @default(now()) @db.Timestamptz(6)
-  removedAt      DateTime?           @db.Timestamptz(6)
+  updatedAt      DateTime?           @updatedAt @map("updated_at") @db.Timestamptz(6)
+  createdAt      DateTime            @default(now()) @map("created_at") @db.Timestamptz(6)
+  removedAt      DateTime?           @map("removed_at") @db.Timestamptz(6)
   phone          String              @unique
   name           String              @unique
   email          String              @unique
@@ -12,43 +12,50 @@ model User {
   tenants        Tenant[]
   classification UserClassification?
   associations   UserAssociation[]
+
+  @@map("users")
 }
 
 model UserClassification {
   id         String    @id @default(uuid())
   seq        Int       @unique @default(autoincrement())
-  categoryId String
-  userId     String    @unique
-  createdAt  DateTime  @default(now())
-  updatedAt  DateTime? @updatedAt @db.Timestamptz(6)
-  removedAt  DateTime? @db.Timestamptz(6)
+  categoryId String    @map("category_id")
+  userId     String    @unique @map("user_id")
+  createdAt  DateTime  @default(now()) @map("created_at")
+  updatedAt  DateTime? @updatedAt @map("updated_at") @db.Timestamptz(6)
+  removedAt  DateTime? @map("removed_at") @db.Timestamptz(6)
   category   Category  @relation(fields: [categoryId], references: [id])
   user       User      @relation(fields: [userId], references: [id])
 
   @@unique([categoryId, userId])
+  @@map("user_classifications")
 }
 
 model UserAssociation {
   id        String    @id @default(uuid())
   seq       Int       @unique @default(autoincrement())
-  createdAt DateTime  @default(now())
-  updatedAt DateTime? @updatedAt @db.Timestamptz(6)
-  removedAt DateTime? @db.Timestamptz(6)
-  userId    String
-  groupId   String
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime? @updatedAt @map("updated_at") @db.Timestamptz(6)
+  removedAt DateTime? @map("removed_at") @db.Timestamptz(6)
+  userId    String    @map("user_id")
+  groupId   String    @map("group_id")
   group     Group     @relation(fields: [groupId], references: [id])
   user      User      @relation(fields: [userId], references: [id])
+
+  @@map("user_associations")
 }
 
 model Profile {
   id           String    @id @default(uuid())
   seq          Int       @unique @default(autoincrement())
-  createdAt    DateTime  @default(now())
-  updatedAt    DateTime? @updatedAt @db.Timestamptz(6)
-  removedAt    DateTime? @db.Timestamptz(6)
+  createdAt    DateTime  @default(now()) @map("created_at")
+  updatedAt    DateTime? @updatedAt @map("updated_at") @db.Timestamptz(6)
+  removedAt    DateTime? @map("removed_at") @db.Timestamptz(6)
   name         String
   nickname     String    @unique
-  userId       String
-  avatarFileId String?
+  userId       String    @map("user_id")
+  avatarFileId String?   @map("avatar_file_id")
   user         User      @relation(fields: [userId], references: [id])
+
+  @@map("profiles")
 }
