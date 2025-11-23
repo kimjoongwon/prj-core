@@ -3,44 +3,48 @@ model File {
   seq            Int                 @unique @default(autoincrement())
   name           String
   size           Int
-  parentId       String?
-  mimeType       String
+  parentId       String?             @map("parent_id")
+  mimeType       String              @map("mime_type")
   url            String
-  tenantId       String
-  createdAt      DateTime            @default(now())
-  updatedAt      DateTime?           @updatedAt @db.Timestamptz(6)
-  removedAt      DateTime?           @db.Timestamptz(6)
+  tenantId       String              @map("tenant_id")
+  createdAt      DateTime            @default(now()) @map("created_at")
+  updatedAt      DateTime?           @updatedAt @map("updated_at") @db.Timestamptz(6)
+  removedAt      DateTime?           @map("removed_at") @db.Timestamptz(6)
   parent         File?               @relation("FileParent", fields: [parentId], references: [id])
   children       File[]              @relation("FileParent")
   tenant         Tenant              @relation(fields: [tenantId], references: [id])
   associations   FileAssociation[]
   classification FileClassification?
+
+  @@map("files")
 }
 
 model FileClassification {
   id         String    @id @default(uuid())
   seq        Int       @unique @default(autoincrement())
-  categoryId String
-  fileId     String    @unique
-  createdAt  DateTime  @default(now())
-  updatedAt  DateTime? @updatedAt @db.Timestamptz(6)
-  removedAt  DateTime? @db.Timestamptz(6)
+  categoryId String    @map("category_id")
+  fileId     String    @unique @map("file_id")
+  createdAt  DateTime  @default(now()) @map("created_at")
+  updatedAt  DateTime? @updatedAt @map("updated_at") @db.Timestamptz(6)
+  removedAt  DateTime? @map("removed_at") @db.Timestamptz(6)
   category   Category  @relation(fields: [categoryId], references: [id])
   file       File      @relation(fields: [fileId], references: [id])
 
   @@unique([categoryId, fileId])
+  @@map("file_classifications")
 }
 
 model FileAssociation {
   id        String    @id @default(uuid())
   seq       Int       @unique @default(autoincrement())
-  createdAt DateTime  @default(now())
-  updatedAt DateTime? @updatedAt @db.Timestamptz(6)
-  removedAt DateTime? @db.Timestamptz(6)
-  fileId    String
-  groupId   String
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime? @updatedAt @map("updated_at") @db.Timestamptz(6)
+  removedAt DateTime? @map("removed_at") @db.Timestamptz(6)
+  fileId    String    @map("file_id")
+  groupId   String    @map("group_id")
   file      File      @relation(fields: [fileId], references: [id])
   group     Group     @relation(fields: [groupId], references: [id])
 
   @@unique([groupId, fileId])
+  @@map("file_associations")
 }

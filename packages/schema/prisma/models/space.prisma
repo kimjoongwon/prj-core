@@ -1,57 +1,63 @@
 model Space {
   id             String               @id @default(uuid())
   seq            Int                  @unique @default(autoincrement())
-  createdAt      DateTime             @default(now()) @db.Timestamptz(6)
-  updatedAt      DateTime?            @updatedAt @db.Timestamptz(6)
-  removedAt      DateTime?            @db.Timestamptz(6)
+  createdAt      DateTime             @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt      DateTime?            @updatedAt @map("updated_at") @db.Timestamptz(6)
+  removedAt      DateTime?            @map("removed_at") @db.Timestamptz(6)
   ground         Ground?
   associations   SpaceAssociation[]
   classification SpaceClassification?
   tenants        Tenant[]
+
+  @@map("spaces")
 }
 
 model SpaceClassification {
   id         String    @id @default(uuid())
   seq        Int       @unique @default(autoincrement())
-  categoryId String
-  spaceId    String    @unique
-  createdAt  DateTime  @default(now())
-  updatedAt  DateTime? @updatedAt @db.Timestamptz(6)
-  removedAt  DateTime? @db.Timestamptz(6)
+  categoryId String    @map("category_id")
+  spaceId    String    @unique @map("space_id")
+  createdAt  DateTime  @default(now()) @map("created_at")
+  updatedAt  DateTime? @updatedAt @map("updated_at") @db.Timestamptz(6)
+  removedAt  DateTime? @map("removed_at") @db.Timestamptz(6)
   category   Category  @relation(fields: [categoryId], references: [id])
   space      Space     @relation(fields: [spaceId], references: [id])
 
   @@unique([categoryId, spaceId])
+  @@map("space_classifications")
 }
 
 model SpaceAssociation {
   id        String    @id @default(uuid())
   seq       Int       @unique @default(autoincrement())
-  createdAt DateTime  @default(now())
-  updatedAt DateTime? @updatedAt @db.Timestamptz(6)
-  removedAt DateTime? @db.Timestamptz(6)
-  spaceId   String
-  groupId   String
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime? @updatedAt @map("updated_at") @db.Timestamptz(6)
+  removedAt DateTime? @map("removed_at") @db.Timestamptz(6)
+  spaceId   String    @map("space_id")
+  groupId   String    @map("group_id")
   group     Group     @relation(fields: [groupId], references: [id])
   space     Space     @relation(fields: [spaceId], references: [id])
 
   @@unique([spaceId, groupId])
+  @@map("space_associations")
 }
 
 model Ground {
   id              String    @id @default(uuid())
   seq             Int       @unique @default(autoincrement())
-  createdAt       DateTime  @default(now())
-  updatedAt       DateTime? @updatedAt @db.Timestamptz(6)
-  removedAt       DateTime? @db.Timestamptz(6)
+  createdAt       DateTime  @default(now()) @map("created_at")
+  updatedAt       DateTime? @updatedAt @map("updated_at") @db.Timestamptz(6)
+  removedAt       DateTime? @map("removed_at") @db.Timestamptz(6)
   name            String
   label           String?
   address         String
   phone           String
   email           String
-  businessNo      String    @unique
-  spaceId         String    @unique
-  logoImageFileId String?
-  imageFileId     String?
+  businessNo      String    @unique @map("business_no")
+  spaceId         String    @unique @map("space_id")
+  logoImageFileId String?   @map("logo_image_file_id")
+  imageFileId     String?   @map("image_file_id")
   space           Space     @relation(fields: [spaceId], references: [id])
+
+  @@map("grounds")
 }
