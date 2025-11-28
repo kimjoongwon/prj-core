@@ -8,8 +8,7 @@
 .env.local
 .env.production.local
 .env.development.local
+.env
 
 # Turbo
 .turbo/
-
-.env
