@@ -50,6 +50,9 @@ try {
   if (!dryRun) {
     console.log("\n4️⃣  Apps 의존성 업데이트");
     console.log("-".repeat(60));
+    console.log(
+      "💡 대화형 모드로 업데이트할 앱을 선택할 수 있습니다.\n"
+    );
     execSync("node scripts/update-app-deps.js", { stdio: "inherit" });
   } else {
     console.log("\n⏭️  Apps 의존성 업데이트 건너뛰기 (DRY RUN)");
