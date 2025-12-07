@@ -1,4 +1,4 @@
-import { $Enums, Category as CategoryEntity } from "@prisma/client";
+import { Category as CategoryEntity, CategoryTypes } from "@prisma/client";
 import { UseDto } from "../decorator/use-dto.decorator";
 import { CategoryDto } from "../dto";
 import { AbstractEntity } from "./abstract.entity";
@@ -10,7 +10,7 @@ export class Category
 	implements CategoryEntity
 {
 	name: string;
-	type: $Enums.CategoryTypes;
+	type: CategoryTypes;
 	parentId: string | null;
 	tenantId: string;
 

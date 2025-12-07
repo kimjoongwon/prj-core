@@ -76,10 +76,30 @@ export function ApiEnumProperty<TEnum>(
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	const enumValue = getEnum() as any;
 
+	// Prisma 7: enums are plain objects, extract values for Swagger
+	// ts-jenum: class-based enums need special handling
+	// Prisma 6 & native TS enums: already in correct format
+	let enumForSwagger = enumValue;
+
+	// Check if it's a class constructor (ts-jenum)
+	if (typeof enumValue === 'function' && enumValue.prototype) {
+		// ts-jenum class: call static values() method if available
+		if (typeof enumValue.values === 'function') {
+			enumForSwagger = enumValue.values();
+		}
+	} else if (enumValue && typeof enumValue === 'object' && !Array.isArray(enumValue)) {
+		// Check if it's a Prisma 7 plain object enum (has string values)
+		const values = Object.values(enumValue);
+		if (values.length > 0 && values.every(v => typeof v === 'string')) {
+			// It's a Prisma 7 enum - use the values array
+			enumForSwagger = values;
+		}
+	}
+
 	return ApiProperty({
 		// throw error during the compilation of swagger
 		// isArray: options.each,
-		enum: enumValue,
+		enum: enumForSwagger,
 		enumName: ValidationUtil.getVariableName(getEnum),
 		...options,
 	});

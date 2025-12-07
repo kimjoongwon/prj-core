@@ -1,24 +1,20 @@
+import "dotenv/config";
 import { PrismaClient } from "@prisma/client";
+import { PrismaPg } from "@prisma/adapter-pg";
 import { describe, expect, it } from "vitest";
+import pg from "pg";
 
 describe("PrismaClient", () => {
-	it("should create PrismaClient instance", () => {
-		const client = new PrismaClient();
+	it("should create PrismaClient instance with adapter", () => {
+		const pool = new pg.Pool({
+			connectionString: process.env.DATABASE_URL,
+		});
+		const adapter = new PrismaPg(pool);
+		const client = new PrismaClient({ adapter });
+
 		expect(client).toBeDefined();
 		expect(client.constructor.name).toBe("PrismaClient");
 	});
-
-	// Note: onModuleInit and onModuleDestroy are NestJS-specific methods
-	// that are added in the custom PrismaClient implementation in apps/server
-	// it("should have onModuleInit method", () => {
-	// 	const client = new PrismaClient();
-	// 	expect(typeof client.onModuleInit).toBe("function");
-	// });
-
-	// it("should have onModuleDestroy method", () => {
-	// 	const client = new PrismaClient();
-	// 	expect(typeof client.onModuleDestroy).toBe("function");
-	// });
 });
 
 describe("Types", () => {

@@ -10,13 +10,11 @@ export class TestDatabase {
 
 	private constructor() {
 		this.dbPath = join(process.cwd(), "test.db");
-		this.prisma = new PrismaClient({
-			datasources: {
-				db: {
-					url: "file:./test.db",
-				},
-			},
-		});
+		
+		// Prisma 7: Set DATABASE_URL environment variable before creating client
+		process.env.DATABASE_URL = "file:./test.db";
+		
+		this.prisma = new PrismaClient();
 	}
 
 	public static getInstance(): TestDatabase {

@@ -1,4 +1,4 @@
 import { Reflector } from "@nestjs/core";
-import { $Enums } from "@prisma/client";
+import { Roles as RolesEnum } from "@prisma/client";
 
-export const Roles = Reflector.createDecorator<$Enums.Roles[]>();
+export const Roles = Reflector.createDecorator<RolesEnum[]>();

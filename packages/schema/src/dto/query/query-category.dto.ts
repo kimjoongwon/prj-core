@@ -1,4 +1,4 @@
-import { $Enums, Prisma } from "@prisma/client";
+import { Prisma, CategoryTypes } from "@prisma/client";
 import { EnumFieldOptional, StringFieldOptional } from "../../decorator/field";
 import { QueryDto } from "./query.dto";
 
@@ -6,8 +6,8 @@ export class QueryCategoryDto extends QueryDto {
 	@StringFieldOptional()
 	name?: string;
 
-	@EnumFieldOptional(() => $Enums.CategoryTypes)
-	type?: $Enums.CategoryTypes;
+	@EnumFieldOptional(() => CategoryTypes)
+	type?: CategoryTypes;
 
 	@StringFieldOptional()
 	parentId?: string;

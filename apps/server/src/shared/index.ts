@@ -144,6 +144,7 @@ export {
 	UserAssociationsService,
 	UserClassificationsService,
 	UsersService,
+	createPrismaClient,
 } from "./service";
 // Domain
 export { AuthDomain } from "./service/domain/auth.domain";

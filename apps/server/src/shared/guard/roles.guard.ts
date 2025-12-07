@@ -1,4 +1,5 @@
-import { $Enums, Roles, UserDto } from "@cocrepo/schema";
+import { Roles as RolesDecorator, UserDto } from "@cocrepo/schema";
+import { Roles } from "@prisma/client";
 import {
 	CanActivate,
 	ExecutionContext,
@@ -13,8 +14,8 @@ export class RolesGuard implements CanActivate {
 	constructor(private readonly reflector: Reflector) {}
 
 	canActivate(context: ExecutionContext): boolean {
-		const roles = this.reflector.get<$Enums.Roles[]>(
-			Roles,
+		const roles = this.reflector.get<Roles[]>(
+			RolesDecorator,
 			context.getHandler(),
 		);
 
@@ -44,7 +45,7 @@ export class RolesGuard implements CanActivate {
 			throw new ForbiddenException("테넌트에 역할이 할당되지 않았습니다.");
 		}
 
-		const hasRequiredRole = roles.includes(tenant.role.name as $Enums.Roles);
+		const hasRequiredRole = roles.includes(tenant.role.name as Roles);
 		if (!hasRequiredRole) {
 			throw new ForbiddenException(
 				`이 작업을 수행하려면 다음 역할 중 하나가 필요합니다: ${roles.join(", ")}. 현재 역할: ${tenant.role.name}`,

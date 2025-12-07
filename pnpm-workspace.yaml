@@ -6,7 +6,7 @@ catalog:
   '@biomejs/biome': ^2.1.4
   '@heroui/react': ^2.8.2
   '@heroui/use-theme': ^2.1.10
-  '@prisma/client': ^6.11.1
+  '@prisma/client': ^7.0.0
   '@storybook/addon-docs': ^9.1.10  
   '@storybook/react-vite': ^9.1.10
   '@tailwindcss/postcss': ^4.1.11
@@ -37,7 +37,7 @@ catalog:
   nuqs: ^2.4.3
   pluralize: ^8.0.0
   postcss: ^8.5.6
-  prisma: 6.11.1
+  prisma: 7.0.0
   react: 19.1.0
   react-cookie: ^8.0.1
   react-dom: 19.1.0
