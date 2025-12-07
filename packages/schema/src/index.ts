@@ -1,4 +1,4 @@
-export { $Enums, Prisma, PrismaClient } from "@prisma/client";
+export { Prisma, PrismaClient } from "@prisma/client";
 
 export * from "./constant";
 export { ApiResponseEntity } from "./decorator/api-response-entity.decorator";

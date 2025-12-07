@@ -1,12 +1,12 @@
-import { $Enums, Role } from "@prisma/client";
+import { Role, Roles } from "@prisma/client";
 import { ClassField, EnumField } from "../decorator/field";
 import { AbstractDto } from "./abstract.dto";
 import { RoleAssociationDto } from "./role-association.dto";
 import { RoleClassificationDto } from "./role-classification.dto";
 
 export class RoleDto extends AbstractDto implements Role {
-	@EnumField(() => $Enums.Roles)
-	name: $Enums.Roles;
+	@EnumField(() => Roles)
+	name: Roles;
 
 	@ClassField(() => RoleClassificationDto, { nullable: true })
 	classification?: RoleClassificationDto;

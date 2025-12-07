@@ -42,24 +42,65 @@ type UpdateUserInput = UpdateInput<User>;
 
 ## Scripts
 
-- `pnpm run build` - Build the package
-- `pnpm run dev` - Build in watch mode
-- `pnpm run generate` - Generate Prisma client
-- `pnpm run db:push` - Push schema to database
-- `pnpm run db:studio` - Open Prisma Studio
-- `pnpm run db:migrate` - Create and apply migrations
-- `pnpm run db:seed` - Seed the database
+### Development
+- `pnpm generate` - Generate Prisma client from multi-file schema
+- `pnpm build` - Build the package
+- `pnpm start:dev` - Build in watch mode
 
-## Schema Organization
+### Database Operations
+- `pnpm db:push` - Push schema to database
+- `pnpm db:pull` - Pull schema from database
+- `pnpm db:studio` - Open Prisma Studio
+- `pnpm db:migrate` - Create and apply migrations
+- `pnpm db:migrate:deploy` - Deploy migrations to production
+- `pnpm db:reset` - Reset database and re-run migrations
+- `pnpm db:seed` - Seed the database
 
-The Prisma schema is organized into multiple files:
+## Multi-File Schema Architecture (Prisma Official)
 
-- `schema/schema.prisma` - Main configuration
-- `schema/user.prisma` - User-related models
-- `schema/role.prisma` - Role and permission models
-- `schema/space.prisma` - Space-related models
-- `schema/file.prisma` - File management models
-- `schema/core.prisma` - Core business models
+This project uses **Prisma's official multi-file schema support** (GA since Prisma 6.7.0) to organize models into separate domain files:
+
+```
+prisma/
+├── schema/              # Multi-file schema directory
+│   ├── _base.prisma     # Generator and datasource configuration
+│   ├── core.prisma      # Core business models (Tenant, Category, etc.)
+│   ├── user.prisma      # User and authentication models
+│   ├── role.prisma      # Role-based access control models
+│   ├── space.prisma     # Space management models
+│   ├── file.prisma      # File management models
+│   └── task.prisma      # Task and timeline models
+├── migrations/          # Database migrations
+└── seed.ts             # Database seeding script
+```
+
+### How It Works
+
+Prisma automatically combines all `.prisma` files in the `prisma/schema/` directory:
+
+1. **Edit any schema file**: Make changes to files in `prisma/schema/`
+2. **Generate client**: Run `pnpm generate`
+3. **Create migrations**: Run `pnpm db:migrate`
+
+✅ **No merge script needed** - Prisma handles it natively!
+
+### Configuration
+
+The multi-file schema is configured in `prisma.config.ts`:
+
+```typescript
+export default defineConfig({
+  schema: "./prisma/schema",  // Points to directory, not file
+  // ...
+})
+```
+
+### Schema Statistics
+
+Current schema contains:
+- **30 models** across 6 domain files
+- **14 enums** for type safety
+- Automatic cross-file model referencing (no imports needed)
 
 ## Environment Variables
 

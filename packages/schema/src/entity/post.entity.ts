@@ -1,8 +1,8 @@
 // import { AbstractEntity } from './abstract.entity';
-// import { $Enums, Post as PostEntity } from '@prisma/client';
+// import { Post as PostEntity, PostTypes } from "@prisma/client";
 
 // export class Post extends AbstractEntity implements PostEntity {
-//   type: $Enums.PostTypes;
+//   type: PostTypes;
 //   title: string;
 //   description: string;
 //   content: string;

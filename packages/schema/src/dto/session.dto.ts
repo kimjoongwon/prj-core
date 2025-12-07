@@ -1,4 +1,9 @@
-import { $Enums, Session } from "@prisma/client";
+import {
+	Session,
+	RecurringDayOfWeek,
+	RepeatCycleTypes as PrismaRepeatCycleTypes,
+	SessionTypes as PrismaSessionTypes
+} from "@prisma/client";
 import { Transform } from "class-transformer";
 import {
 	ClassField,
@@ -16,13 +21,13 @@ import { ProgramDto } from "./program.dto";
 import { TimelineDto } from "./timeline.dto";
 
 export class SessionDto extends AbstractDto implements Session {
-	@EnumField(() => $Enums.SessionTypes)
+	@EnumField(() => SessionTypes)
 	@Transform(({ value }) => SessionTypes.findName(value))
-	type: $Enums.SessionTypes;
+	type: PrismaSessionTypes;
 
-	@EnumFieldOptional(() => $Enums.RepeatCycleTypes, { nullable: true })
+	@EnumFieldOptional(() => RepeatCycleTypes, { nullable: true })
 	@Transform(({ value }) => RepeatCycleTypes.findName(value))
-	repeatCycleType: $Enums.RepeatCycleTypes | null;
+	repeatCycleType: PrismaRepeatCycleTypes | null;
 
 	@DateFieldOptional()
 	startDateTime: Date | null;
@@ -30,8 +35,8 @@ export class SessionDto extends AbstractDto implements Session {
 	@DateFieldOptional()
 	endDateTime: Date | null;
 
-	@EnumFieldOptional(() => $Enums.RecurringDayOfWeek, { nullable: true })
-	recurringDayOfWeek: $Enums.RecurringDayOfWeek | null;
+	@EnumFieldOptional(() => RecurringDayOfWeek, { nullable: true })
+	recurringDayOfWeek: RecurringDayOfWeek | null;
 
 	@UUIDField()
 	timelineId: string;

@@ -12,7 +12,7 @@
   "scripts": {
     "type-check": "tsc --noEmit",
     "generate": "prisma generate",
-    "build": "prisma generate && tsup",
+    "build": "pnpm generate && tsup",
     "start:dev": "tsup --watch",
     "format": "biome format --write .",
     "db:push": "prisma db push",
@@ -27,11 +27,12 @@
     "test:ui": "vitest --ui"
   },
   "prisma": {
-    "seed": "ts-node prisma/seed.ts",
-    "schema": "./prisma"
+    "seed": "ts-node prisma/seed.ts"
   },
   "dependencies": {
     "@cocrepo/toolkit": "workspace:*",
+    "@prisma/adapter-pg": "^7.0.0",
+    "pg": "^8.13.1",
     "ts-jenum": "^2.2.2",
     "libphonenumber-js": "^1.12.10",
     "bcrypt": "^6.0.0"
@@ -55,6 +56,8 @@
     "libphonenumber-js": "^1.12.10",
     "bcrypt": "^6.0.0",
     "@types/bcrypt": "^5.0.2",
+    "@types/pg": "^8.11.10",
+    "dotenv": "^16.4.7",
     "@types/node": "catalog:",
     "concurrently": "^9.2.0",
     "prisma": "catalog:",

@@ -1,4 +1,4 @@
-import { $Enums, Group as GroupEntity } from "@prisma/client";
+import { Group as GroupEntity, GroupTypes } from "@prisma/client";
 import { UseDto } from "../decorator/use-dto.decorator";
 import { GroupDto } from "../dto";
 import { AbstractEntity } from "./abstract.entity";
@@ -8,7 +8,7 @@ import { Tenant } from "./tenant.entity";
 export class Group extends AbstractEntity<GroupDto> implements GroupEntity {
 	name: string;
 	label: string;
-	type: $Enums.GroupTypes;
+	type: GroupTypes;
 	tenantId: string;
 	tenant: Tenant;
 }

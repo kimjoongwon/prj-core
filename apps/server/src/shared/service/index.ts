@@ -33,4 +33,5 @@ export {
 	PasswordService,
 	PrismaService,
 	TokenService,
+	createPrismaClient,
 } from "./utils";
