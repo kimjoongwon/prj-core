@@ -30,8 +30,10 @@ export {
 export {
 	AwsService,
 	ContextService,
+	createPrismaClient,
 	PasswordService,
 	PrismaService,
+	RedisService,
 	TokenService,
-	createPrismaClient,
+	TokenStorageService,
 } from "./utils";

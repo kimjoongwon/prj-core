@@ -12,6 +12,7 @@ export type {
 	FileConfig,
 	GoogleConfig,
 	MailConfig,
+	RedisConfig,
 	SMTPConfig,
 	TwitterConfig,
 } from "./config";
@@ -20,6 +21,7 @@ export {
 	authConfig,
 	awsConfig,
 	corsConfig,
+	redisConfig,
 	smtpConfig,
 } from "./config";
 
@@ -120,6 +122,7 @@ export {
 	AwsService,
 	CategoriesService,
 	ContextService,
+	createPrismaClient,
 	ExercisesService,
 	FileAssociationsService,
 	FileClassificationsService,
@@ -129,6 +132,7 @@ export {
 	PasswordService,
 	PrismaService,
 	ProgramsService,
+	RedisService,
 	RoleAssociationsService,
 	RoleClassificationsService,
 	RolesService,
@@ -141,10 +145,10 @@ export {
 	TenantsService,
 	TimelinesService,
 	TokenService,
+	TokenStorageService,
 	UserAssociationsService,
 	UserClassificationsService,
 	UsersService,
-	createPrismaClient,
 } from "./service";
 // Domain
 export { AuthDomain } from "./service/domain/auth.domain";

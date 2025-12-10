@@ -7,7 +7,9 @@ import {
 	JwtStrategy,
 	LocalStrategy,
 	PasswordService,
+	RedisService,
 	TokenService,
+	TokenStorageService,
 	UsersRepository,
 	UsersService,
 } from "@shared";
@@ -18,6 +20,8 @@ import {
 		AuthFacade,
 		PasswordService,
 		TokenService,
+		TokenStorageService,
+		RedisService,
 		LocalStrategy,
 		JwtStrategy,
 		UsersService,
@@ -25,6 +29,6 @@ import {
 		ContextService,
 	],
 	controllers: [AuthController],
-	exports: [AuthFacade],
+	exports: [AuthFacade, TokenStorageService, RedisService],
 })
 export class AuthModule {}

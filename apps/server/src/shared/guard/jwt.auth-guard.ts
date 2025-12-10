@@ -7,12 +7,16 @@ import {
 } from "@nestjs/common";
 import { Reflector } from "@nestjs/core";
 import { AuthGuard } from "@nestjs/passport";
+import { TokenStorageService } from "../service/utils/token-storage.service";
 
 @Injectable()
 export class JwtAuthGuard extends AuthGuard("jwt") {
 	private readonly logger = new Logger(JwtAuthGuard.name);
 
-	constructor(private reflector: Reflector) {
+	constructor(
+		private reflector: Reflector,
+		private tokenStorageService: TokenStorageService,
+	) {
 		super();
 	}
 
@@ -34,8 +38,30 @@ export class JwtAuthGuard extends AuthGuard("jwt") {
 			return true;
 		}
 
+		// Access Token 블랙리스트 확인
+		const accessToken = request.cookies?.accessToken;
+		if (accessToken) {
+			return this.checkBlacklistAndActivate(accessToken, context);
+		}
+
 		this.logger.log("보호된 라우트입니다, JWT를 확인합니다");
 		return super.canActivate(context);
+	}
+
+	private async checkBlacklistAndActivate(
+		accessToken: string,
+		context: ExecutionContext,
+	): Promise<boolean> {
+		const isBlacklisted =
+			await this.tokenStorageService.isBlacklisted(accessToken);
+
+		if (isBlacklisted) {
+			this.logger.warn("블랙리스트에 등록된 토큰입니다");
+			throw new UnauthorizedException("토큰이 무효화되었습니다");
+		}
+
+		this.logger.log("보호된 라우트입니다, JWT를 확인합니다");
+		return super.canActivate(context) as boolean | Promise<boolean>;
 	}
 
 	handleRequest(err: any, user: any, info: any) {

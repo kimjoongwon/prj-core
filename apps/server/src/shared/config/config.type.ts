@@ -95,6 +95,12 @@ export type TwitterConfig = {
 	consumerSecret?: string;
 };
 
+export type RedisConfig = {
+	host: string;
+	port: number;
+	password?: string;
+};
+
 export type AllConfigType = {
 	app: AppConfig;
 	apple: AppleConfig;
@@ -105,4 +111,5 @@ export type AllConfigType = {
 	google: GoogleConfig;
 	mail: MailConfig;
 	twitter: TwitterConfig;
+	redis: RedisConfig;
 };
