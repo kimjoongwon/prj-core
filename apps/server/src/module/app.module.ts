@@ -30,6 +30,7 @@ import { ProgramsModule } from "./programs.module";
 import { RoleClassificationsModule } from "./role-classifications.module";
 import { RolesModule } from "./roles.module";
 import { RoutinesModule } from "./routines.module";
+import { SafeModule } from "./safe.module";
 import { SessionsModule } from "./sessions.module";
 import { SpaceClassificationsModule } from "./space-classifications.module";
 import { SpacesModule } from "./spaces.module";
@@ -60,6 +61,7 @@ import { UsersModule } from "./users.module";
     SessionsModule,
     ProgramsModule,
     RoutinesModule,
+    SafeModule,
     ExercisesModule,
     FilesModule,
     TenantsModule,
@@ -153,6 +155,10 @@ import { UsersModule } from "./users.module";
               {
                 path: "grounds",
                 module: GroundsModule,
+              },
+              {
+                path: "safe",
+                module: SafeModule,
               },
             ],
           },

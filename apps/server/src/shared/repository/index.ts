@@ -11,6 +11,11 @@ export { RolesRepository } from "./role.repository";
 export { RoleAssociationsRepository } from "./role-associations.repository";
 export { RoleClassificationsRepository } from "./role-classifications.repository";
 export { RoutinesRepository } from "./routines.repository";
+export {
+  SafeConfirmationRepository,
+  SafeTransactionRepository,
+  SafeWalletRepository,
+} from "./safe.repository";
 export { SessionsRepository } from "./sessions.repository";
 export { SpaceAssociationsRepository } from "./space-associations.repository";
 export { SpaceClassificationsRepository } from "./space-classifications.repository";

@@ -12,6 +12,7 @@ export { RoleAssociationsService } from "./role-associations.service";
 export { RoleClassificationsService } from "./role-classifications.service";
 export { RolesService } from "./roles.service";
 export { RoutinesService } from "./routines.service";
+export { SafeService } from "./safe.service";
 export { SessionsService } from "./sessions.service";
 export { SpaceAssociationsService } from "./space-associations.service";
 export { SpaceClassificationsService } from "./space-classifications.service";

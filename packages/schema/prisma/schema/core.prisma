@@ -53,6 +53,7 @@ model Tenant {
   contents    Content[]
   files       File[]
   groups      Group[]
+  safeWallets SafeWallet[]
   role        Role         @relation(fields: [roleId], references: [id])
   space       Space        @relation(fields: [spaceId], references: [id])
   user        User         @relation(fields: [userId], references: [id])

@@ -1,0 +1,59 @@
+// Safe Wallet Model
+model SafeWallet {
+  id           String            @id @default(uuid())
+  seq          Int               @unique @default(autoincrement())
+  createdAt    DateTime          @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt    DateTime?         @updatedAt @map("updated_at") @db.Timestamptz(6)
+  removedAt    DateTime?         @map("removed_at") @db.Timestamptz(6)
+  address      String            @unique
+  chainId      Int               @map("chain_id")
+  threshold    Int               @default(3)
+  nonce        Int               @default(0)
+  owners       String[] // 소유자 주소 배열
+  tenantId     String            @map("tenant_id")
+  tenant       Tenant            @relation(fields: [tenantId], references: [id])
+  transactions SafeTransaction[]
+
+  @@map("safe_wallets")
+}
+
+// Safe Transaction Model
+model SafeTransaction {
+  id                    String             @id @default(uuid())
+  seq                   Int                @unique @default(autoincrement())
+  createdAt             DateTime           @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt             DateTime?          @updatedAt @map("updated_at") @db.Timestamptz(6)
+  removedAt             DateTime?          @map("removed_at") @db.Timestamptz(6)
+  safeTxHash            String             @unique @map("safe_tx_hash")
+  safeWalletId          String             @map("safe_wallet_id")
+  safeWallet            SafeWallet         @relation(fields: [safeWalletId], references: [id])
+  to                    String // 수신자 주소
+  value                 String             @default("0") // ETH 값 (wei)
+  data                  String             @default("0x") // 트랜잭션 데이터
+  nonce                 Int // Safe nonce
+  operation             Int                @default(0) // 0: Call, 1: DelegateCall
+  tokenAddress          String?            @map("token_address") // ERC-20 토큰 주소
+  tokenSymbol           String?            @map("token_symbol")
+  tokenDecimals         Int?               @map("token_decimals")
+  confirmationsRequired Int                @map("confirmations_required")
+  isExecuted            Boolean            @default(false) @map("is_executed")
+  executionTxHash       String?            @map("execution_tx_hash")
+  executedAt            DateTime?          @map("executed_at") @db.Timestamptz(6)
+  confirmations         SafeConfirmation[]
+
+  @@map("safe_transactions")
+}
+
+// Safe Confirmation Model (서명)
+model SafeConfirmation {
+  id                String          @id @default(uuid())
+  seq               Int             @unique @default(autoincrement())
+  createdAt         DateTime        @default(now()) @map("created_at") @db.Timestamptz(6)
+  safeTransactionId String          @map("safe_transaction_id")
+  safeTransaction   SafeTransaction @relation(fields: [safeTransactionId], references: [id])
+  owner             String // 서명자 주소
+  signature         String // 서명 데이터
+
+  @@unique([safeTransactionId, owner])
+  @@map("safe_confirmations")
+}

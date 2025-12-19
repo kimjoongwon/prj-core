@@ -11,6 +11,7 @@ export { RoleAssociationsController } from "./role-associations.controller";
 export { RoleClassificationsController } from "./role-classifications.controller";
 export { RolesController } from "./roles.controller";
 export { RoutinesController } from "./routines.controller";
+export { SafeController } from "./safe.controller";
 export { SessionsController } from "./sessions.controller";
 export { SpaceAssociationsController } from "./space-associations.controller";
 export { SpaceClassificationsController } from "./space-classifications.controller";
