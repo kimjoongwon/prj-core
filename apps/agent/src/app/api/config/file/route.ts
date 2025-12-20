@@ -1,7 +1,7 @@
-import { NextRequest, NextResponse } from "next/server";
 import { promises as fs } from "fs";
-import path from "path";
+import { NextRequest, NextResponse } from "next/server";
 import os from "os";
+import path from "path";
 
 // Claude 경로
 const PERSONAL_CLAUDE_DIR = path.join(os.homedir(), ".claude");
@@ -72,7 +72,7 @@ export async function GET(request: NextRequest) {
       content = await readFileContent(filePath);
       break;
 
-    case "hooks":
+    case "hooks": {
       filePath = path.join(PROJECT_CLAUDE_DIR, "settings.json");
       const settingsContent = await readFileContent(filePath);
       if (settingsContent) {
@@ -84,6 +84,7 @@ export async function GET(request: NextRequest) {
         }
       }
       break;
+    }
 
     case "subagent":
       filePath = path.join(PROJECT_CLAUDE_DIR, "subagents", name);
@@ -95,7 +96,7 @@ export async function GET(request: NextRequest) {
       content = await readFileContent(filePath);
       break;
 
-    case "mcp":
+    case "mcp": {
       filePath = path.join(PROJECT_CLAUDE_DIR, "mcp.json");
       const mcpContent = await readFileContent(filePath);
       if (mcpContent) {
@@ -106,9 +107,10 @@ export async function GET(request: NextRequest) {
         }
       }
       break;
+    }
 
     // === Qoder 파일들 ===
-    case "qoder-wiki":
+    case "qoder-wiki": {
       // Wiki 파일 검색 (재귀적으로)
       const wikiFile = await findFileRecursively(
         path.join(PROJECT_QODER_DIR, "repowiki/en/content"),
@@ -118,6 +120,7 @@ export async function GET(request: NextRequest) {
         content = await readFileContent(wikiFile);
       }
       break;
+    }
 
     case "qoder-quest":
       filePath = path.join(PROJECT_QODER_DIR, "quests", name);

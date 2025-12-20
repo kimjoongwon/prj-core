@@ -1,0 +1,1365 @@
+{
+  "components": [
+    {
+      "name": "AdminAuthLoginPage",
+      "path": "packages/ui/src/components/page/AdminAuthLoginPage.tsx",
+      "category": "page",
+      "props": [],
+      "hasStories": false
+    },
+    {
+      "name": "AdminAuthTenantSelectPage",
+      "path": "packages/ui/src/components/page/AdminAuthTenantSelectPage.tsx",
+      "category": "page",
+      "props": [
+        {
+          "name": "tenants",
+          "type": "Tenant[]",
+          "required": true
+        },
+        {
+          "name": "onSelect",
+          "type": "(tenantId: string) => void",
+          "required": true
+        }
+      ],
+      "hasStories": false
+    },
+    {
+      "name": "AuthLayout",
+      "path": "packages/ui/src/components/layout/Auth/AuthLayout.tsx",
+      "category": "layout",
+      "props": [],
+      "hasStories": true
+    },
+    {
+      "name": "AutoComplete",
+      "path": "packages/ui/src/components/inputs/AutoComplete/AutoComplete.tsx",
+      "category": "inputs",
+      "props": [
+        {
+          "name": "onSelectionChange",
+          "type": "(key: string | number | null) => void",
+          "required": false
+        }
+      ],
+      "hasStories": true
+    },
+    {
+      "name": "Avatar",
+      "path": "packages/ui/src/components/ui/Avatar/Avatar.tsx",
+      "category": "ui",
+      "props": [
+        {
+          "name": "environment",
+          "type": "{\n\t\tname: string;\n\t\tcolor:\n\t\t\t| \"default\"\n\t\t\t| \"primary\"\n\t\t\t| \"secondary\"\n\t\t\t| \"success\"\n\t\t\t| \"warning\"\n\t\t\t| \"danger\";\n\t}",
+          "required": true
+        }
+      ],
+      "hasStories": true
+    },
+    {
+      "name": "BooleanCell",
+      "path": "packages/ui/src/components/cell/BooleanCell/BooleanCell.tsx",
+      "category": "cell",
+      "props": [
+        {
+          "name": "value",
+          "type": "boolean | null | undefined",
+          "required": true
+        }
+      ],
+      "hasStories": true
+    },
+    {
+      "name": "Button",
+      "path": "packages/ui/src/components/ui/Button/Button.tsx",
+      "category": "ui",
+      "props": [],
+      "hasStories": true
+    },
+    {
+      "name": "ButtonGroup",
+      "path": "packages/ui/src/components/ui/ButtonGroup/ButtonGroup.tsx",
+      "category": "ui",
+      "props": [
+        {
+          "name": "leftButtons",
+          "type": "GroupButton[]",
+          "required": false
+        },
+        {
+          "name": "rightButtons",
+          "type": "GroupButton[]",
+          "required": false
+        }
+      ],
+      "hasStories": true
+    },
+    {
+      "name": "Calendar",
+      "path": "packages/ui/src/components/inputs/Calendar/Calendar.tsx",
+      "category": "inputs",
+      "props": [
+        {
+          "name": "value",
+          "type": "string[]",
+          "required": true
+        },
+        {
+          "name": "onChange",
+          "type": "(value: string[]) => void",
+          "required": true
+        }
+      ],
+      "hasStories": true
+    },
+    {
+      "name": "Checkbox",
+      "path": "packages/ui/src/components/inputs/Checkbox/Checkbox.tsx",
+      "category": "inputs",
+      "props": [
+        {
+          "name": "onChange",
+          "type": "(checked: boolean) => void",
+          "required": false
+        }
+      ],
+      "hasStories": true
+    },
+    {
+      "name": "Chip",
+      "path": "packages/ui/src/components/ui/Chip/Chip.tsx",
+      "category": "ui",
+      "props": [],
+      "hasStories": true
+    },
+    {
+      "name": "ChipSelect",
+      "path": "packages/ui/src/components/inputs/ChipSelect/ChipSelect.tsx",
+      "category": "inputs",
+      "props": [
+        {
+          "name": "options",
+          "type": "string[]",
+          "required": true
+        },
+        {
+          "name": "selectionMode",
+          "type": "SelectionMode",
+          "required": false
+        },
+        {
+          "name": "value",
+          "type": "string | string[] | null",
+          "required": false
+        },
+        {
+          "name": "onSelectionChange",
+          "type": "(value: string | string[] | null) => void",
+          "required": false
+        }
+      ],
+      "hasStories": true
+    },
+    {
+      "name": "CollapsibleSidebarLayout",
+      "path": "packages/ui/src/components/layout/CollapsibleSidebar/CollapsibleSidebarLayout.tsx",
+      "category": "layout",
+      "props": [
+        {
+          "name": "children",
+          "type": "React.ReactNode",
+          "required": true
+        },
+        {
+          "name": "parentMenuInfo",
+          "type": "ParentMenuInfo | null",
+          "required": false
+        },
+        {
+          "name": "isCollapsed",
+          "type": "boolean",
+          "required": true
+        },
+        {
+          "name": "onToggle",
+          "type": "() => void",
+          "required": true
+        }
+      ],
+      "hasStories": true
+    },
+    {
+      "name": "Container",
+      "path": "packages/ui/src/components/ui/Container/Container.tsx",
+      "category": "ui",
+      "props": [
+        {
+          "name": "children",
+          "type": "React.ReactNode",
+          "required": true
+        },
+        {
+          "name": "className",
+          "type": "string",
+          "required": false
+        }
+      ],
+      "hasStories": true
+    },
+    {
+      "name": "Copyright",
+      "path": "packages/ui/src/components/ui/Copyright/Copyright.tsx",
+      "category": "ui",
+      "props": [
+        {
+          "name": "companyName",
+          "type": "string",
+          "required": true
+        },
+        {
+          "name": "className",
+          "type": "string",
+          "required": false
+        }
+      ],
+      "hasStories": true
+    },
+    {
+      "name": "DashboardLayout",
+      "path": "packages/ui/src/components/layout/Dashboard/DashboardLayout.tsx",
+      "category": "layout",
+      "props": [
+        {
+          "name": "header",
+          "type": "ReactNode",
+          "required": false
+        },
+        {
+          "name": "leftSidebar",
+          "type": "ReactNode",
+          "required": false
+        },
+        {
+          "name": "rightSidebar",
+          "type": "ReactNode",
+          "required": false
+        },
+        {
+          "name": "bottom",
+          "type": "ReactNode",
+          "required": false
+        },
+        {
+          "name": "breadcrumb",
+          "type": "ReactNode",
+          "required": false
+        },
+        {
+          "name": "children",
+          "type": "ReactNode",
+          "required": true
+        }
+      ],
+      "hasStories": true
+    },
+    {
+      "name": "DataGrid",
+      "path": "packages/ui/src/components/ui/DataGrid/DataGrid.tsx",
+      "category": "ui",
+      "props": [],
+      "hasStories": true
+    },
+    {
+      "name": "Date",
+      "path": "packages/ui/src/components/inputs/Calendar/Date/Date.tsx",
+      "category": "inputs",
+      "props": [
+        {
+          "name": "value",
+          "type": "string",
+          "required": true
+        },
+        {
+          "name": "selected",
+          "type": "boolean",
+          "required": false
+        },
+        {
+          "name": "isPressable",
+          "type": "boolean",
+          "required": false
+        },
+        {
+          "name": "className",
+          "type": "string",
+          "required": false
+        },
+        {
+          "name": "onDateClick",
+          "type": "(value: string) => void",
+          "required": false
+        }
+      ],
+      "hasStories": true
+    },
+    {
+      "name": "DateCell",
+      "path": "packages/ui/src/components/cell/DateCell/DateCell.tsx",
+      "category": "cell",
+      "props": [
+        {
+          "name": "value",
+          "type": "string | Date | null | undefined",
+          "required": true
+        }
+      ],
+      "hasStories": true
+    },
+    {
+      "name": "DatePicker",
+      "path": "packages/ui/src/components/inputs/DatePicker/DatePicker.tsx",
+      "category": "inputs",
+      "props": [
+        {
+          "name": "value",
+          "type": "CalendarDate | CalendarDateTime | ZonedDateTime",
+          "required": false
+        },
+        {
+          "name": "onChange",
+          "type": "(value: string) => void",
+          "required": false
+        }
+      ],
+      "hasStories": true
+    },
+    {
+      "name": "DateRangePicker",
+      "path": "packages/ui/src/components/inputs/DateRangePicker/DateRangePicker.tsx",
+      "category": "inputs",
+      "props": [
+        {
+          "name": "value",
+          "type": "any",
+          "required": false
+        },
+        {
+          "name": "onChange",
+          "type": "(value: any) => void",
+          "required": false
+        }
+      ],
+      "hasStories": true
+    },
+    {
+      "name": "DateTimeCell",
+      "path": "packages/ui/src/components/cell/DateTimeCell/DateTimeCell.tsx",
+      "category": "cell",
+      "props": [
+        {
+          "name": "value",
+          "type": "string | Date | null | undefined",
+          "required": true
+        }
+      ],
+      "hasStories": true
+    },
+    {
+      "name": "DaysOfWeek",
+      "path": "packages/ui/src/components/inputs/Calendar/DaysOfWeek/DaysOfWeek.tsx",
+      "category": "inputs",
+      "props": [],
+      "hasStories": true
+    },
+    {
+      "name": "DefaultCell",
+      "path": "packages/ui/src/components/cell/DefaultCell/DefaultCell.tsx",
+      "category": "cell",
+      "props": [
+        {
+          "name": "value",
+          "type": "string | number",
+          "required": true
+        }
+      ],
+      "hasStories": true
+    },
+    {
+      "name": "Dropdown",
+      "path": "packages/ui/src/components/inputs/Dropdown/Dropdown.tsx",
+      "category": "inputs",
+      "props": [
+        {
+          "name": "trigger",
+          "type": "React.ReactNode",
+          "required": true
+        },
+        {
+          "name": "dropdownItems",
+          "type": "DropdownItemProps[]",
+          "required": true
+        },
+        {
+          "name": "onAction",
+          "type": "(key: string) => void",
+          "required": false
+        }
+      ],
+      "hasStories": true
+    },
+    {
+      "name": "ExpandableCell",
+      "path": "packages/ui/src/components/cell/ExpandableCell/ExpandableCell.tsx",
+      "category": "cell",
+      "props": [
+        {
+          "name": "value",
+          "type": "string | number",
+          "required": true
+        },
+        {
+          "name": "expandable",
+          "type": "boolean",
+          "required": false
+        },
+        {
+          "name": "depth",
+          "type": "number",
+          "required": false
+        },
+        {
+          "name": "canExpand",
+          "type": "boolean",
+          "required": false
+        },
+        {
+          "name": "isExpanded",
+          "type": "boolean",
+          "required": false
+        },
+        {
+          "name": "onToggleExpand",
+          "type": "() => void",
+          "required": false
+        }
+      ],
+      "hasStories": true
+    },
+    {
+      "name": "FileUploader",
+      "path": "packages/ui/src/components/inputs/FileUploader/FileUploader.tsx",
+      "category": "inputs",
+      "props": [
+        {
+          "name": "label",
+          "type": "string",
+          "required": false
+        },
+        {
+          "name": "type",
+          "type": "\"image\" | \"video\" | \"all\"",
+          "required": true
+        },
+        {
+          "name": "value",
+          "type": "Partial<FileDto> | null",
+          "required": false
+        },
+        {
+          "name": "onChange",
+          "type": "(fileDto: Partial<FileDto> | null) => void",
+          "required": false
+        },
+        {
+          "name": "onFilesChange",
+          "type": "(\n\t\ttype: \"image\" | \"video\" | \"all\",\n\t\tfileDtos: Partial<FileDto>[],\n\t) => void",
+          "required": false
+        },
+        {
+          "name": "onFileRemove",
+          "type": "(fileDto: Partial<FileDto>) => void",
+          "required": false
+        },
+        {
+          "name": "fullWidth",
+          "type": "boolean",
+          "required": false
+        }
+      ],
+      "hasStories": true
+    },
+    {
+      "name": "Header",
+      "path": "packages/ui/src/components/inputs/Calendar/Header/Header.tsx",
+      "category": "inputs",
+      "props": [
+        {
+          "name": "month",
+          "type": "number",
+          "required": true
+        }
+      ],
+      "hasStories": true
+    },
+    {
+      "name": "Header",
+      "path": "packages/ui/src/components/layout/Header/Header.tsx",
+      "category": "layout",
+      "props": [
+        {
+          "name": "left",
+          "type": "ReactNode",
+          "required": false
+        },
+        {
+          "name": "center",
+          "type": "ReactNode",
+          "required": false
+        },
+        {
+          "name": "right",
+          "type": "ReactNode",
+          "required": false
+        }
+      ],
+      "hasStories": true
+    },
+    {
+      "name": "HStack",
+      "path": "packages/ui/src/components/ui/HStack/HStack.tsx",
+      "category": "ui",
+      "props": [
+        {
+          "name": "children",
+          "type": "ReactNode",
+          "required": false
+        },
+        {
+          "name": "className",
+          "type": "string",
+          "required": false
+        },
+        {
+          "name": "alignItems",
+          "type": "\"start\" | \"center\" | \"end\" | \"stretch\" | \"baseline\"",
+          "required": false
+        },
+        {
+          "name": "justifyContent",
+          "type": "\"start\" | \"center\" | \"end\" | \"between\" | \"around\" | \"evenly\"",
+          "required": false
+        },
+        {
+          "name": "fullWidth",
+          "type": "boolean",
+          "required": false
+        },
+        {
+          "name": "gap",
+          "type": "0 | 1 | 2 | 3 | 4 | 5 | 6 | 8 | 10 | 12 | 16 | 20 | 24",
+          "required": false
+        }
+      ],
+      "hasStories": true
+    },
+    {
+      "name": "index",
+      "path": "packages/ui/src/components/inputs/AutoComplete/index.tsx",
+      "category": "inputs",
+      "props": [],
+      "hasStories": false
+    },
+    {
+      "name": "index",
+      "path": "packages/ui/src/components/inputs/Calendar/index.tsx",
+      "category": "inputs",
+      "props": [],
+      "hasStories": false
+    },
+    {
+      "name": "index",
+      "path": "packages/ui/src/components/inputs/Checkbox/index.tsx",
+      "category": "inputs",
+      "props": [],
+      "hasStories": false
+    },
+    {
+      "name": "index",
+      "path": "packages/ui/src/components/inputs/ChipSelect/index.tsx",
+      "category": "inputs",
+      "props": [],
+      "hasStories": false
+    },
+    {
+      "name": "index",
+      "path": "packages/ui/src/components/inputs/DatePicker/index.tsx",
+      "category": "inputs",
+      "props": [],
+      "hasStories": false
+    },
+    {
+      "name": "index",
+      "path": "packages/ui/src/components/inputs/DateRangePicker/index.tsx",
+      "category": "inputs",
+      "props": [
+        {
+          "name": "state",
+          "type": "T",
+          "required": true
+        },
+        {
+          "name": "paths",
+          "type": "readonly [Paths<T, 4>, Paths<T, 4>]",
+          "required": true
+        }
+      ],
+      "hasStories": false
+    },
+    {
+      "name": "index",
+      "path": "packages/ui/src/components/inputs/FileUploader/index.tsx",
+      "category": "inputs",
+      "props": [],
+      "hasStories": false
+    },
+    {
+      "name": "index",
+      "path": "packages/ui/src/components/inputs/Input/index.tsx",
+      "category": "inputs",
+      "props": [],
+      "hasStories": false
+    },
+    {
+      "name": "index",
+      "path": "packages/ui/src/components/inputs/ListboxSelect/index.tsx",
+      "category": "inputs",
+      "props": [],
+      "hasStories": false
+    },
+    {
+      "name": "index",
+      "path": "packages/ui/src/components/inputs/MultiSelect/index.tsx",
+      "category": "inputs",
+      "props": [],
+      "hasStories": false
+    },
+    {
+      "name": "index",
+      "path": "packages/ui/src/components/inputs/RadioGroup/index.tsx",
+      "category": "inputs",
+      "props": [],
+      "hasStories": false
+    },
+    {
+      "name": "index",
+      "path": "packages/ui/src/components/inputs/Switch/index.tsx",
+      "category": "inputs",
+      "props": [],
+      "hasStories": false
+    },
+    {
+      "name": "index",
+      "path": "packages/ui/src/components/inputs/Tabs/index.tsx",
+      "category": "inputs",
+      "props": [],
+      "hasStories": false
+    },
+    {
+      "name": "index",
+      "path": "packages/ui/src/components/inputs/Textarea/index.tsx",
+      "category": "inputs",
+      "props": [],
+      "hasStories": false
+    },
+    {
+      "name": "index",
+      "path": "packages/ui/src/components/inputs/TimeInput/index.tsx",
+      "category": "inputs",
+      "props": [],
+      "hasStories": false
+    },
+    {
+      "name": "index",
+      "path": "packages/ui/src/components/inputs/WeekInput/index.tsx",
+      "category": "inputs",
+      "props": [],
+      "hasStories": false
+    },
+    {
+      "name": "index",
+      "path": "packages/ui/src/components/ui/DataGrid/index.tsx",
+      "category": "ui",
+      "props": [],
+      "hasStories": false
+    },
+    {
+      "name": "index",
+      "path": "packages/ui/src/components/ui/Select/index.tsx",
+      "category": "ui",
+      "props": [],
+      "hasStories": false
+    },
+    {
+      "name": "Input",
+      "path": "packages/ui/src/components/inputs/Input/Input.tsx",
+      "category": "inputs",
+      "props": [
+        {
+          "name": "value",
+          "type": "string | number",
+          "required": false
+        },
+        {
+          "name": "onChange",
+          "type": "(value: string | number) => void",
+          "required": false
+        },
+        {
+          "name": "onBlur",
+          "type": "(value: string | number) => void",
+          "required": false
+        }
+      ],
+      "hasStories": true
+    },
+    {
+      "name": "LinkCell",
+      "path": "packages/ui/src/components/cell/LinkCell/LinkCell.tsx",
+      "category": "cell",
+      "props": [
+        {
+          "name": "value",
+          "type": "string",
+          "required": true
+        }
+      ],
+      "hasStories": true
+    },
+    {
+      "name": "List",
+      "path": "packages/ui/src/components/ui/List/List.tsx",
+      "category": "ui",
+      "props": [
+        {
+          "name": "data",
+          "type": "T[]",
+          "required": true
+        },
+        {
+          "name": "renderItem",
+          "type": "(item: T, index: number) => ReactNode",
+          "required": true
+        },
+        {
+          "name": "horizontal",
+          "type": "boolean",
+          "required": false
+        },
+        {
+          "name": "className",
+          "type": "string",
+          "required": false
+        },
+        {
+          "name": "placeholder",
+          "type": "ReactNode",
+          "required": false
+        },
+        {
+          "name": "gap",
+          "type": "number | string",
+          "required": false
+        },
+        {
+          "name": "itemClassName",
+          "type": "string",
+          "required": false
+        }
+      ],
+      "hasStories": true
+    },
+    {
+      "name": "ListboxSelect",
+      "path": "packages/ui/src/components/inputs/ListboxSelect/ListboxSelect.tsx",
+      "category": "inputs",
+      "props": [],
+      "hasStories": true
+    },
+    {
+      "name": "LoginForm",
+      "path": "packages/ui/src/components/form/LoginForm/LoginForm.tsx",
+      "category": "form",
+      "props": [
+        {
+          "name": "state",
+          "type": "{\n\t\temail: string;\n\t\tpassword: string;\n\t}",
+          "required": true
+        }
+      ],
+      "hasStories": true
+    },
+    {
+      "name": "Logo",
+      "path": "packages/ui/src/components/ui/Logo/Logo.tsx",
+      "category": "ui",
+      "props": [
+        {
+          "name": "onClick",
+          "type": "() => void",
+          "required": false
+        },
+        {
+          "name": "className",
+          "type": "string",
+          "required": false
+        },
+        {
+          "name": "children",
+          "type": "React.ReactNode",
+          "required": false
+        }
+      ],
+      "hasStories": true
+    },
+    {
+      "name": "Main",
+      "path": "packages/ui/src/components/layout/Main/Main.tsx",
+      "category": "layout",
+      "props": [
+        {
+          "name": "children",
+          "type": "ReactNode",
+          "required": true
+        }
+      ],
+      "hasStories": true
+    },
+    {
+      "name": "Message",
+      "path": "packages/ui/src/components/ui/Message/Message.tsx",
+      "category": "ui",
+      "props": [
+        {
+          "name": "title",
+          "type": "string",
+          "required": true
+        },
+        {
+          "name": "message",
+          "type": "string",
+          "required": true
+        }
+      ],
+      "hasStories": true
+    },
+    {
+      "name": "Modal",
+      "path": "packages/ui/src/components/layout/Modal/Modal.tsx",
+      "category": "layout",
+      "props": [
+        {
+          "name": "modalHeader",
+          "type": "ModalHeaderProps",
+          "required": false
+        },
+        {
+          "name": "modalBody",
+          "type": "ModalBodyProps",
+          "required": false
+        },
+        {
+          "name": "modalFooter",
+          "type": "ModalFooterProps",
+          "required": false
+        }
+      ],
+      "hasStories": true
+    },
+    {
+      "name": "MultiSelect",
+      "path": "packages/ui/src/components/inputs/MultiSelect/MultiSelect.tsx",
+      "category": "inputs",
+      "props": [
+        {
+          "name": "options",
+          "type": "any[]",
+          "required": false
+        },
+        {
+          "name": "selectedKeys",
+          "type": "Selection",
+          "required": false
+        },
+        {
+          "name": "onChange",
+          "type": "(e: React.ChangeEvent<HTMLSelectElement>) => void",
+          "required": false
+        }
+      ],
+      "hasStories": true
+    },
+    {
+      "name": "Navbar",
+      "path": "packages/ui/src/components/ui/Navbar/Navbar.tsx",
+      "category": "ui",
+      "props": [],
+      "hasStories": false
+    },
+    {
+      "name": "NavbarItem",
+      "path": "packages/ui/src/components/ui/NavbarItem/NavbarItem.tsx",
+      "category": "ui",
+      "props": [
+        {
+          "name": "url",
+          "type": "string",
+          "required": true
+        },
+        {
+          "name": "label",
+          "type": "string",
+          "required": true
+        },
+        {
+          "name": "value",
+          "type": "string",
+          "required": true
+        },
+        {
+          "name": "onChange",
+          "type": "(href: string) => void",
+          "required": true
+        }
+      ],
+      "hasStories": true
+    },
+    {
+      "name": "NotFound",
+      "path": "packages/ui/src/components/ui/NotFound/NotFound.tsx",
+      "category": "ui",
+      "props": [
+        {
+          "name": "title",
+          "type": "string",
+          "required": false,
+          "description": "페이지 제목"
+        },
+        {
+          "name": "description",
+          "type": "string",
+          "required": false,
+          "description": "페이지 설명"
+        },
+        {
+          "name": "homeButtonText",
+          "type": "string",
+          "required": false,
+          "description": "홈으로 돌아가기 버튼 텍스트"
+        },
+        {
+          "name": "backButtonText",
+          "type": "string",
+          "required": false,
+          "description": "이전 페이지로 돌아가기 버튼 텍스트"
+        },
+        {
+          "name": "onHomeClick",
+          "type": "() => void",
+          "required": false,
+          "description": "홈으로 돌아가기 클릭 핸들러"
+        },
+        {
+          "name": "onBackClick",
+          "type": "() => void",
+          "required": false,
+          "description": "이전 페이지로 돌아가기 클릭 핸들러"
+        },
+        {
+          "name": "actions",
+          "type": "React.ReactNode",
+          "required": false,
+          "description": "추가 액션 버튼들"
+        },
+        {
+          "name": "icon",
+          "type": "React.ReactNode",
+          "required": false,
+          "description": "커스텀 아이콘"
+        }
+      ],
+      "description": "404 Not Found 페이지 컴포넌트 (Pure Function)",
+      "hasStories": true
+    },
+    {
+      "name": "NumberCell",
+      "path": "packages/ui/src/components/cell/NumberCell/NumberCell.tsx",
+      "category": "cell",
+      "props": [
+        {
+          "name": "value",
+          "type": "number | string | null | undefined",
+          "required": true
+        }
+      ],
+      "hasStories": true
+    },
+    {
+      "name": "Pagination",
+      "path": "packages/ui/src/components/inputs/Pagination/Pagination.tsx",
+      "category": "inputs",
+      "props": [
+        {
+          "name": "totalCount",
+          "type": "number",
+          "required": true
+        }
+      ],
+      "hasStories": true
+    },
+    {
+      "name": "Placeholder",
+      "path": "packages/ui/src/components/ui/Placeholder/Placeholder.tsx",
+      "category": "ui",
+      "props": [],
+      "hasStories": true
+    },
+    {
+      "name": "RadioGroup",
+      "path": "packages/ui/src/components/inputs/RadioGroup/RadioGroup.tsx",
+      "category": "inputs",
+      "props": [
+        {
+          "name": "options",
+          "type": "RadioOption[]",
+          "required": false
+        },
+        {
+          "name": "value",
+          "type": "string",
+          "required": false
+        },
+        {
+          "name": "onValueChange",
+          "type": "(value: string) => void",
+          "required": false
+        }
+      ],
+      "hasStories": true
+    },
+    {
+      "name": "Section",
+      "path": "packages/ui/src/components/ui/Section/Section.tsx",
+      "category": "ui",
+      "props": [
+        {
+          "name": "children",
+          "type": "ReactNode",
+          "required": true
+        }
+      ],
+      "hasStories": true
+    },
+    {
+      "name": "Select",
+      "path": "packages/ui/src/components/ui/Select/Select.tsx",
+      "category": "ui",
+      "props": [
+        {
+          "name": "options",
+          "type": "Option[]",
+          "required": false
+        },
+        {
+          "name": "value",
+          "type": "string",
+          "required": false
+        },
+        {
+          "name": "onChange",
+          "type": "(value: string) => void",
+          "required": false
+        }
+      ],
+      "hasStories": true
+    },
+    {
+      "name": "Skeleton",
+      "path": "packages/ui/src/components/ui/Skeleton/Skeleton.tsx",
+      "category": "ui",
+      "props": [],
+      "hasStories": true
+    },
+    {
+      "name": "SortableMedia",
+      "path": "packages/ui/src/components/ui/SortableMedia/SortableMedia.tsx",
+      "category": "ui",
+      "props": [
+        {
+          "name": "media",
+          "type": "Partial<any>",
+          "required": true
+        },
+        {
+          "name": "onRemove",
+          "type": "(id: string) => void",
+          "required": true
+        }
+      ],
+      "hasStories": true
+    },
+    {
+      "name": "Spacer",
+      "path": "packages/ui/src/components/ui/Spacer/Spacer.tsx",
+      "category": "ui",
+      "props": [
+        {
+          "name": "size",
+          "type": "number",
+          "required": false
+        },
+        {
+          "name": "direction",
+          "type": "\"horizontal\" | \"vertical\"",
+          "required": false
+        },
+        {
+          "name": "className",
+          "type": "string",
+          "required": false
+        }
+      ],
+      "description": "Spacer component that creates empty space with configurable size using Tailwind's spacing units",
+      "hasStories": true
+    },
+    {
+      "name": "SplashScreen",
+      "path": "packages/ui/src/components/ui/SplashScreen/SplashScreen.tsx",
+      "category": "ui",
+      "props": [
+        {
+          "name": "title",
+          "type": "string",
+          "required": false
+        },
+        {
+          "name": "subtitle",
+          "type": "string",
+          "required": false
+        },
+        {
+          "name": "progress",
+          "type": "number",
+          "required": false
+        },
+        {
+          "name": "showProgress",
+          "type": "boolean",
+          "required": false
+        }
+      ],
+      "hasStories": true
+    },
+    {
+      "name": "Switch",
+      "path": "packages/ui/src/components/inputs/Switch/Switch.tsx",
+      "category": "inputs",
+      "props": [
+        {
+          "name": "value",
+          "type": "boolean",
+          "required": false
+        },
+        {
+          "name": "onValueChange",
+          "type": "(isSelected: boolean) => void",
+          "required": false
+        }
+      ],
+      "hasStories": true
+    },
+    {
+      "name": "Table",
+      "path": "packages/ui/src/components/layout/Table/Table.tsx",
+      "category": "layout",
+      "props": [
+        {
+          "name": "children",
+          "type": "ReactNode",
+          "required": true
+        }
+      ],
+      "hasStories": true
+    },
+    {
+      "name": "Table",
+      "path": "packages/ui/src/components/ui/Table/Table.tsx",
+      "category": "ui",
+      "props": [],
+      "hasStories": true
+    },
+    {
+      "name": "Tabs",
+      "path": "packages/ui/src/components/inputs/Tabs/Tabs.tsx",
+      "category": "inputs",
+      "props": [
+        {
+          "name": "options",
+          "type": "Option[]",
+          "required": true
+        },
+        {
+          "name": "selectedKey",
+          "type": "string",
+          "required": false
+        },
+        {
+          "name": "onSelectionChange",
+          "type": "(key: Key) => void",
+          "required": false
+        }
+      ],
+      "hasStories": true
+    },
+    {
+      "name": "Text",
+      "path": "packages/ui/src/components/ui/Text/Text.tsx",
+      "category": "ui",
+      "props": [
+        {
+          "name": "variant",
+          "type": "| \"h1\"\n\t\t| \"h2\"\n\t\t| \"h3\"\n\t\t| \"h4\"\n\t\t| \"h5\"\n\t\t| \"h6\"\n\t\t| \"caption\"\n\t\t| \"subtitle1\"\n\t\t| \"subtitle2\"\n\t\t| \"body1\"\n\t\t| \"body2\"\n\t\t| \"title\"\n\t\t| \"label\"\n\t\t| \"text\"\n\t\t| \"error\"",
+          "required": false
+        },
+        {
+          "name": "as",
+          "type": "ElementType",
+          "required": false
+        },
+        {
+          "name": "children",
+          "type": "ReactNode",
+          "required": false
+        },
+        {
+          "name": "truncate",
+          "type": "boolean",
+          "required": false
+        },
+        {
+          "name": "lineClamp",
+          "type": "1 | 2 | 3 | 4 | 5 | 6 | \"none\"",
+          "required": false
+        }
+      ],
+      "hasStories": true
+    },
+    {
+      "name": "Textarea",
+      "path": "packages/ui/src/components/inputs/Textarea/Textarea.tsx",
+      "category": "inputs",
+      "props": [
+        {
+          "name": "value",
+          "type": "string",
+          "required": false
+        },
+        {
+          "name": "onChange",
+          "type": "(value: string) => void",
+          "required": false
+        }
+      ],
+      "hasStories": true
+    },
+    {
+      "name": "TimeInput",
+      "path": "packages/ui/src/components/inputs/TimeInput/TimeInput.tsx",
+      "category": "inputs",
+      "props": [
+        {
+          "name": "onChange",
+          "type": "(value: string) => void",
+          "required": false
+        }
+      ],
+      "hasStories": true
+    },
+    {
+      "name": "User",
+      "path": "packages/ui/src/components/ui/User/User.tsx",
+      "category": "ui",
+      "props": [],
+      "hasStories": true
+    },
+    {
+      "name": "VideoPlayer",
+      "path": "packages/ui/src/components/ui/VideoPlayer/VideoPlayer.tsx",
+      "category": "ui",
+      "props": [
+        {
+          "name": "src",
+          "type": "string",
+          "required": true
+        },
+        {
+          "name": "isOpen",
+          "type": "boolean",
+          "required": true
+        },
+        {
+          "name": "onClose",
+          "type": "() => void",
+          "required": true
+        }
+      ],
+      "hasStories": true
+    },
+    {
+      "name": "VideoUploader",
+      "path": "packages/ui/src/components/inputs/VideoUploader/VideoUploader.tsx",
+      "category": "inputs",
+      "props": [
+        {
+          "name": "label",
+          "type": "string",
+          "required": false
+        }
+      ],
+      "hasStories": true
+    },
+    {
+      "name": "VStack",
+      "path": "packages/ui/src/components/ui/VStack/VStack.tsx",
+      "category": "ui",
+      "props": [],
+      "hasStories": true
+    },
+    {
+      "name": "WeekInput",
+      "path": "packages/ui/src/components/inputs/WeekInput/WeekInput.tsx",
+      "category": "inputs",
+      "props": [
+        {
+          "name": "value",
+          "type": "RecurringDayOfTheWeek",
+          "required": false
+        },
+        {
+          "name": "onChange",
+          "type": "(value: RecurringDayOfTheWeek) => void",
+          "required": false
+        },
+        {
+          "name": "disabled",
+          "type": "boolean",
+          "required": false
+        }
+      ],
+      "hasStories": true
+    }
+  ],
+  "generatedAt": "2025-12-20T08:55:28.000Z",
+  "totalComponents": 83
+}

@@ -68,7 +68,9 @@ export function MarkdownViewer({
             </pre>
           ) : (
             <article className="prose prose-gray dark:prose-invert max-w-none">
-              <ReactMarkdown remarkPlugins={[remarkGfm]}>{content}</ReactMarkdown>
+              <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                {content}
+              </ReactMarkdown>
             </article>
           )}
         </div>

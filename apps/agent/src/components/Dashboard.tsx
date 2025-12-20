@@ -117,8 +117,7 @@ export function Dashboard() {
             icon="📁"
             status={config.claudeMd.project ? "active" : "inactive"}
             onClick={() =>
-              config.claudeMd.project &&
-              handleFileClick("claude-md", "project")
+              config.claudeMd.project && handleFileClick("claude-md", "project")
             }
           />
         </div>
@@ -249,7 +248,9 @@ export function Dashboard() {
             <div className="flex items-start gap-4">
               <div className="text-4xl">💾</div>
               <div>
-                <h4 className="font-semibold text-lg mb-2">Qoder Memory System</h4>
+                <h4 className="font-semibold text-lg mb-2">
+                  Qoder Memory System
+                </h4>
                 <p className="text-gray-600 dark:text-gray-400 mb-4">
                   {config.qoder.memoryNote}
                 </p>
@@ -275,7 +276,10 @@ export function Dashboard() {
           </h3>
           {config.qoder.wiki.length > 0 ? (
             <div className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-xl p-4">
-              <WikiTree items={config.qoder.wiki} onFileClick={handleFileClick} />
+              <WikiTree
+                items={config.qoder.wiki}
+                onFileClick={handleFileClick}
+              />
             </div>
           ) : (
             <EmptyState message="Wiki 콘텐츠가 없습니다" />
@@ -349,7 +353,13 @@ function WikiTree({
   depth?: number;
 }) {
   return (
-    <ul className={depth > 0 ? "ml-4 border-l border-gray-200 dark:border-gray-700 pl-4" : ""}>
+    <ul
+      className={
+        depth > 0
+          ? "ml-4 border-l border-gray-200 dark:border-gray-700 pl-4"
+          : ""
+      }
+    >
       {items.map((item) => (
         <li key={item.name} className="py-1">
           {item.type === "folder" ? (
@@ -359,7 +369,11 @@ function WikiTree({
                 {item.name}
               </div>
               {item.children && (
-                <WikiTree items={item.children} onFileClick={onFileClick} depth={depth + 1} />
+                <WikiTree
+                  items={item.children}
+                  onFileClick={onFileClick}
+                  depth={depth + 1}
+                />
               )}
             </div>
           ) : (
