@@ -100,9 +100,9 @@ export async function GET() {
       }
     }
 
-    // Subagents
-    const subagentsDir = path.join(PROJECT_CLAUDE_DIR, "subagents");
-    const subagents = await listDirectory(subagentsDir);
+    // Agents (Subagents)
+    const agentsDir = path.join(PROJECT_CLAUDE_DIR, "agents");
+    const agents = await listDirectory(agentsDir);
 
     // Skills
     const skillsDir = path.join(PROJECT_CLAUDE_DIR, "skills");
@@ -147,7 +147,7 @@ export async function GET() {
       },
       commands,
       hooks,
-      subagents,
+      agents,
       skills,
       mcp,
       // Qoder

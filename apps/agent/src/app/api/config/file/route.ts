@@ -86,8 +86,8 @@ export async function GET(request: NextRequest) {
       break;
     }
 
-    case "subagent":
-      filePath = path.join(PROJECT_CLAUDE_DIR, "subagents", name);
+    case "agent":
+      filePath = path.join(PROJECT_CLAUDE_DIR, "agents", name);
       content = await readFileContent(filePath);
       break;
 

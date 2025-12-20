@@ -17,7 +17,7 @@ interface AgentConfig {
   };
   commands: string[];
   hooks: Record<string, unknown> | null;
-  subagents: string[];
+  agents: string[];
   skills: string[];
   mcp: Record<string, unknown> | null;
   qoder: {
@@ -163,29 +163,29 @@ export function Dashboard() {
         />
       </section>
 
-      {/* Subagents 섹션 */}
+      {/* Agents 섹션 */}
       <section>
         <h2 className="text-2xl font-bold mb-4 flex items-center gap-2">
-          <span className="text-3xl">🤖</span> Subagents
+          <span className="text-3xl">🤖</span> Agents
           <span className="text-sm font-normal text-gray-500">
-            ({config.subagents.length}개)
+            ({config.agents.length}개)
           </span>
         </h2>
-        {config.subagents.length > 0 ? (
+        {config.agents.length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {config.subagents.map((agent) => (
+            {config.agents.map((agent) => (
               <ConfigCard
                 key={agent}
                 title={agent.replace(".md", "")}
-                subtitle=".claude/subagents/"
+                subtitle=".claude/agents/"
                 icon="🧠"
                 status="active"
-                onClick={() => handleFileClick("subagent", agent)}
+                onClick={() => handleFileClick("agent", agent)}
               />
             ))}
           </div>
         ) : (
-          <EmptyState message="정의된 서브에이전트가 없습니다" />
+          <EmptyState message="정의된 에이전트가 없습니다" />
         )}
       </section>
 
