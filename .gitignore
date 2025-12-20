@@ -17,3 +17,6 @@ storybook-static
 apps/*/dist
 packages/*/dist
 .env
+
+# Claude Code settings
+.claude/*.local.json
