@@ -1,4 +1,4 @@
-import { FileAssociation, Prisma, UseEntity } from "@cocrepo/schema";
+import { FileAssociation, UseEntity } from "@cocrepo/schema";
 import { Injectable, Logger } from "@nestjs/common";
 import { plainToInstance } from "class-transformer";
 import { PrismaService } from "../service/utils";
@@ -13,7 +13,7 @@ export class FileAssociationsRepository {
 	}
 
 	async create(
-		args: Prisma.FileAssociationCreateArgs,
+		args: any,
 	): Promise<FileAssociation> {
 		this.logger.debug(`FileAssociation 생성 중...`);
 		const result = await this.prisma.fileAssociation.create(args);
@@ -21,7 +21,7 @@ export class FileAssociationsRepository {
 	}
 
 	async upsert(
-		args: Prisma.FileAssociationUpsertArgs,
+		args: any,
 	): Promise<FileAssociation> {
 		this.logger.debug(`FileAssociation 업서트 중...`);
 		const result = await this.prisma.fileAssociation.upsert(args);
@@ -29,7 +29,7 @@ export class FileAssociationsRepository {
 	}
 
 	async update(
-		args: Prisma.FileAssociationUpdateArgs,
+		args: any,
 	): Promise<FileAssociation> {
 		this.logger.debug(`FileAssociation 업데이트 중...`);
 		const result = await this.prisma.fileAssociation.update(args);
@@ -37,14 +37,14 @@ export class FileAssociationsRepository {
 	}
 
 	async updateMany(
-		args: Prisma.FileAssociationUpdateManyArgs,
-	): Promise<Prisma.BatchPayload> {
+		args: any,
+	): Promise<any> {
 		this.logger.debug(`FileAssociation 다중 업데이트 중...`);
 		return await this.prisma.fileAssociation.updateMany(args);
 	}
 
 	async delete(
-		args: Prisma.FileAssociationDeleteArgs,
+		args: any,
 	): Promise<FileAssociation> {
 		this.logger.debug(`FileAssociation 삭제 중...`);
 		const result = await this.prisma.fileAssociation.delete(args);
@@ -52,7 +52,7 @@ export class FileAssociationsRepository {
 	}
 
 	async findMany(
-		args: Prisma.FileAssociationFindManyArgs,
+		args: any,
 	): Promise<FileAssociation[]> {
 		this.logger.debug(`FileAssociation 다중 조회 중...`);
 		const result = await this.prisma.fileAssociation.findMany(args);
@@ -60,7 +60,7 @@ export class FileAssociationsRepository {
 	}
 
 	async findFirst(
-		args: Prisma.FileAssociationFindFirstArgs,
+		args: any,
 	): Promise<FileAssociation> {
 		this.logger.debug(`FileAssociation 최초 조회 중...`);
 		const result = await this.prisma.fileAssociation.findFirst(args);
@@ -68,20 +68,16 @@ export class FileAssociationsRepository {
 	}
 
 	async findUnique(
-		args: Prisma.FileAssociationFindUniqueArgs,
+		args: any,
 	): Promise<FileAssociation> {
 		this.logger.debug(`FileAssociation 고유 조회 중...`);
 		const result = await this.prisma.fileAssociation.findUnique(args);
 		return plainToInstance(FileAssociation, result);
 	}
 
-	async groupBy(args: any): Promise<any> {
-		this.logger.debug(`FileAssociation 그룹화 중...`);
-		return await this.prisma.fileAssociation.groupBy(args);
-	}
 
 	async createManyAndReturn(
-		args: Prisma.FileAssociationCreateManyArgs,
+		args: any,
 	): Promise<FileAssociation[]> {
 		this.logger.debug(`FileAssociation 다중 생성 중...`);
 		const result = await this.prisma.fileAssociation.createManyAndReturn(args);
@@ -89,18 +85,18 @@ export class FileAssociationsRepository {
 	}
 
 	async deleteMany(
-		args: Prisma.FileAssociationDeleteManyArgs,
-	): Promise<Prisma.BatchPayload> {
+		args: any,
+	): Promise<any> {
 		this.logger.debug(`FileAssociation 다중 삭제 중...`);
 		return await this.prisma.fileAssociation.deleteMany(args);
 	}
 
-	async aggregate(args: Prisma.FileAssociationAggregateArgs): Promise<any> {
+	async aggregate(args: any): Promise<any> {
 		this.logger.debug(`FileAssociation 집계 중...`);
 		return await this.prisma.fileAssociation.aggregate(args);
 	}
 
-	async count(args: Prisma.FileAssociationCountArgs): Promise<number> {
+	async count(args: any): Promise<number> {
 		this.logger.debug(`FileAssociation 개수 세기 중...`);
 		return await this.prisma.fileAssociation.count(args);
 	}

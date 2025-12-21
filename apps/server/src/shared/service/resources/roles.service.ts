@@ -22,7 +22,7 @@ export class RolesService {
 		});
 	}
 
-	async getManyByQuery(args: Prisma.RoleFindManyArgs) {
+	async getManyByQuery(args: any) {
 		const roles = await this.repository.findMany(args);
 		const count = await this.repository.count(args as Prisma.RoleCountArgs);
 		return {

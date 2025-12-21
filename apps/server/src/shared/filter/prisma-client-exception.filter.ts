@@ -1,4 +1,5 @@
-import { Prisma, ResponseEntity } from "@cocrepo/schema";
+import { Prisma } from "@prisma/client";
+import { ResponseEntity } from "@cocrepo/schema";
 import {
 	type ArgumentsHost,
 	Catch,

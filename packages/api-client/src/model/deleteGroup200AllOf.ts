@@ -7,9 +7,9 @@
  */
 
 export type DeleteGroup200AllOf = {
-  /** */
-  httpStatus?: number;
-  /** */
-  message?: string;
-  data?: number;
+	/** */
+	httpStatus?: number;
+	/** */
+	message?: string;
+	data?: number;
 };

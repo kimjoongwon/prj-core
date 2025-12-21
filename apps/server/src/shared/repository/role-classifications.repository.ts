@@ -1,4 +1,4 @@
-import { Prisma, RoleClassification, UseEntity } from "@cocrepo/schema";
+import { RoleClassification, UseEntity } from "@cocrepo/schema";
 import { Injectable, Logger } from "@nestjs/common";
 import { plainToInstance } from "class-transformer";
 import { PrismaService } from "../service/utils";
@@ -13,7 +13,7 @@ export class RoleClassificationsRepository {
 	}
 
 	async create(
-		args: Prisma.RoleClassificationCreateArgs,
+		args: any,
 	): Promise<RoleClassification> {
 		this.logger.debug(`RoleClassification 생성 중...`);
 		const result = await this.prisma.roleClassification.create(args);
@@ -21,7 +21,7 @@ export class RoleClassificationsRepository {
 	}
 
 	async upsert(
-		args: Prisma.RoleClassificationUpsertArgs,
+		args: any,
 	): Promise<RoleClassification> {
 		this.logger.debug(`RoleClassification 업서트 중...`);
 		const result = await this.prisma.roleClassification.upsert(args);
@@ -29,7 +29,7 @@ export class RoleClassificationsRepository {
 	}
 
 	async update(
-		args: Prisma.RoleClassificationUpdateArgs,
+		args: any,
 	): Promise<RoleClassification> {
 		this.logger.debug(`RoleClassification 업데이트 중...`);
 		const result = await this.prisma.roleClassification.update(args);
@@ -37,14 +37,14 @@ export class RoleClassificationsRepository {
 	}
 
 	async updateMany(
-		args: Prisma.RoleClassificationUpdateManyArgs,
-	): Promise<Prisma.BatchPayload> {
+		args: any,
+	): Promise<any> {
 		this.logger.debug(`RoleClassification 다중 업데이트 중...`);
 		return await this.prisma.roleClassification.updateMany(args);
 	}
 
 	async delete(
-		args: Prisma.RoleClassificationDeleteArgs,
+		args: any,
 	): Promise<RoleClassification> {
 		this.logger.debug(`RoleClassification 삭제 중...`);
 		const result = await this.prisma.roleClassification.delete(args);
@@ -52,7 +52,7 @@ export class RoleClassificationsRepository {
 	}
 
 	async findMany(
-		args: Prisma.RoleClassificationFindManyArgs,
+		args: any,
 	): Promise<RoleClassification[]> {
 		this.logger.debug(`RoleClassification 다중 조회 중...`);
 		const result = await this.prisma.roleClassification.findMany(args);
@@ -60,7 +60,7 @@ export class RoleClassificationsRepository {
 	}
 
 	async findFirst(
-		args: Prisma.RoleClassificationFindFirstArgs,
+		args: any,
 	): Promise<RoleClassification> {
 		this.logger.debug(`RoleClassification 최초 조회 중...`);
 		const result = await this.prisma.roleClassification.findFirst(args);
@@ -68,20 +68,16 @@ export class RoleClassificationsRepository {
 	}
 
 	async findUnique(
-		args: Prisma.RoleClassificationFindUniqueArgs,
+		args: any,
 	): Promise<RoleClassification> {
 		this.logger.debug(`RoleClassification 고유 조회 중...`);
 		const result = await this.prisma.roleClassification.findUnique(args);
 		return plainToInstance(RoleClassification, result);
 	}
 
-	async groupBy(args: any): Promise<any> {
-		this.logger.debug(`RoleClassification 그룹화 중...`);
-		return await this.prisma.roleClassification.groupBy(args);
-	}
 
 	async createManyAndReturn(
-		args: Prisma.RoleClassificationCreateManyArgs,
+		args: any,
 	): Promise<RoleClassification[]> {
 		this.logger.debug(`RoleClassification 다중 생성 중...`);
 		const result =
@@ -90,18 +86,18 @@ export class RoleClassificationsRepository {
 	}
 
 	async deleteMany(
-		args: Prisma.RoleClassificationDeleteManyArgs,
-	): Promise<Prisma.BatchPayload> {
+		args: any,
+	): Promise<any> {
 		this.logger.debug(`RoleClassification 다중 삭제 중...`);
 		return await this.prisma.roleClassification.deleteMany(args);
 	}
 
-	async aggregate(args: Prisma.RoleClassificationAggregateArgs): Promise<any> {
+	async aggregate(args: any): Promise<any> {
 		this.logger.debug(`RoleClassification 집계 중...`);
 		return await this.prisma.roleClassification.aggregate(args);
 	}
 
-	async count(args: Prisma.RoleClassificationCountArgs): Promise<number> {
+	async count(args: any): Promise<number> {
 		this.logger.debug(`RoleClassification 개수 세기 중...`);
 		return await this.prisma.roleClassification.count(args);
 	}

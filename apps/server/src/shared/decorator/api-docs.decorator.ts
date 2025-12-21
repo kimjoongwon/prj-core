@@ -1,11 +1,11 @@
 import { Token } from "@cocrepo/schema";
 import { applyDecorators, HttpStatus } from "@nestjs/common";
 import {
-  ApiCookieAuth,
-  ApiOperation,
-  ApiParam,
-  ApiQuery,
-  ApiResponse,
+	ApiCookieAuth,
+	ApiOperation,
+	ApiParam,
+	ApiQuery,
+	ApiResponse,
 } from "@nestjs/swagger";
 
 // ============================================================================
@@ -17,13 +17,13 @@ import {
  * @description 상태 코드별 기본 설명 메시지
  */
 const DefaultErrorMessages: Record<number, string> = {
-  [HttpStatus.BAD_REQUEST]: "잘못된 요청입니다",
-  [HttpStatus.UNAUTHORIZED]: "인증이 필요합니다",
-  [HttpStatus.FORBIDDEN]: "접근 권한이 없습니다",
-  [HttpStatus.NOT_FOUND]: "리소스를 찾을 수 없습니다",
-  [HttpStatus.CONFLICT]: "리소스 충돌이 발생했습니다",
-  [HttpStatus.UNPROCESSABLE_ENTITY]: "처리할 수 없는 요청입니다",
-  [HttpStatus.INTERNAL_SERVER_ERROR]: "서버 오류가 발생했습니다",
+	[HttpStatus.BAD_REQUEST]: "잘못된 요청입니다",
+	[HttpStatus.UNAUTHORIZED]: "인증이 필요합니다",
+	[HttpStatus.FORBIDDEN]: "접근 권한이 없습니다",
+	[HttpStatus.NOT_FOUND]: "리소스를 찾을 수 없습니다",
+	[HttpStatus.CONFLICT]: "리소스 충돌이 발생했습니다",
+	[HttpStatus.UNPROCESSABLE_ENTITY]: "처리할 수 없는 요청입니다",
+	[HttpStatus.INTERNAL_SERVER_ERROR]: "서버 오류가 발생했습니다",
 };
 
 /**
@@ -60,17 +60,17 @@ type ErrorSpec = number | { status: number; message: string };
  * )
  */
 export const ApiErrors = (...errors: ErrorSpec[]) => {
-  const responses = errors.map((error) => {
-    const status = typeof error === "number" ? error : error.status;
-    const description =
-      typeof error === "number"
-        ? DefaultErrorMessages[status] || "오류가 발생했습니다"
-        : error.message;
+	const responses = errors.map((error) => {
+		const status = typeof error === "number" ? error : error.status;
+		const description =
+			typeof error === "number"
+				? DefaultErrorMessages[status] || "오류가 발생했습니다"
+				: error.message;
 
-    return ApiResponse({ status, description });
-  });
+		return ApiResponse({ status, description });
+	});
 
-  return applyDecorators(...responses);
+	return applyDecorators(...responses);
 };
 
 /**
@@ -113,13 +113,13 @@ export const ApiAuthWriteErrors = () => ApiErrors(400, 401, 403, 404, 500);
  * 표준 HTTP 에러 응답 문서화 (모든 에러 포함)
  */
 export const ApiStandardErrors = () =>
-  applyDecorators(
-    ApiResponse({ status: 400, description: "잘못된 요청" }),
-    ApiResponse({ status: 401, description: "인증 필요" }),
-    ApiResponse({ status: 403, description: "권한 없음" }),
-    ApiResponse({ status: 404, description: "리소스를 찾을 수 없음" }),
-    ApiResponse({ status: 500, description: "서버 오류" })
-  );
+	applyDecorators(
+		ApiResponse({ status: 400, description: "잘못된 요청" }),
+		ApiResponse({ status: 401, description: "인증 필요" }),
+		ApiResponse({ status: 403, description: "권한 없음" }),
+		ApiResponse({ status: 404, description: "리소스를 찾을 수 없음" }),
+		ApiResponse({ status: 500, description: "서버 오류" }),
+	);
 
 // ============================================================================
 // 인증 문서화
@@ -143,104 +143,104 @@ export const ApiAuth = () => ApiCookieAuth(Token.ACCESS);
  * @param description - 파라미터 설명
  */
 export const ApiUUIDParam = (name: string, description: string) =>
-  ApiParam({
-    name,
-    type: "string",
-    format: "uuid",
-    description,
-    example: "123e4567-e89b-12d3-a456-426614174000",
-  });
+	ApiParam({
+		name,
+		type: "string",
+		format: "uuid",
+		description,
+		example: "123e4567-e89b-12d3-a456-426614174000",
+	});
 
 /**
  * 페이지네이션 쿼리 파라미터 문서화
  * skip, take 파라미터를 자동으로 문서화
  */
 export const ApiPaginationQuery = () =>
-  applyDecorators(
-    ApiQuery({
-      name: "skip",
-      required: false,
-      type: Number,
-      description: "건너뛸 항목 수",
-      example: 0,
-    }),
-    ApiQuery({
-      name: "take",
-      required: false,
-      type: Number,
-      description: "가져올 항목 수 (최대 50)",
-      example: 20,
-    })
-  );
+	applyDecorators(
+		ApiQuery({
+			name: "skip",
+			required: false,
+			type: Number,
+			description: "건너뛸 항목 수",
+			example: 0,
+		}),
+		ApiQuery({
+			name: "take",
+			required: false,
+			type: Number,
+			description: "가져올 항목 수 (최대 50)",
+			example: 20,
+		}),
+	);
 
 /**
  * CRUD 작업에 대한 표준 @ApiOperation 데코레이터 집합
  * 일관된 operationId, summary, description 제공
  */
 export const ApiCrudOperation = {
-  /**
-   * CREATE 작업 문서화
-   * @param resource - 리소스 이름 (예: "User", "Space")
-   */
-  create: (resource: string) =>
-    ApiOperation({
-      summary: `${resource} 생성`,
-      description: `새로운 ${resource}를 생성합니다.`,
-      operationId: `create${resource}`,
-    }),
+	/**
+	 * CREATE 작업 문서화
+	 * @param resource - 리소스 이름 (예: "User", "Space")
+	 */
+	create: (resource: string) =>
+		ApiOperation({
+			summary: `${resource} 생성`,
+			description: `새로운 ${resource}를 생성합니다.`,
+			operationId: `create${resource}`,
+		}),
 
-  /**
-   * READ (단일 조회) 작업 문서화
-   * @param resource - 리소스 이름
-   */
-  getById: (resource: string) =>
-    ApiOperation({
-      summary: `${resource} 조회`,
-      description: `ID로 특정 ${resource}를 조회합니다.`,
-      operationId: `get${resource}ById`,
-    }),
+	/**
+	 * READ (단일 조회) 작업 문서화
+	 * @param resource - 리소스 이름
+	 */
+	getById: (resource: string) =>
+		ApiOperation({
+			summary: `${resource} 조회`,
+			description: `ID로 특정 ${resource}를 조회합니다.`,
+			operationId: `get${resource}ById`,
+		}),
 
-  /**
-   * UPDATE 작업 문서화
-   * @param resource - 리소스 이름
-   */
-  updateById: (resource: string) =>
-    ApiOperation({
-      summary: `${resource} 수정`,
-      description: `ID로 특정 ${resource}를 수정합니다.`,
-      operationId: `update${resource}ById`,
-    }),
+	/**
+	 * UPDATE 작업 문서화
+	 * @param resource - 리소스 이름
+	 */
+	updateById: (resource: string) =>
+		ApiOperation({
+			summary: `${resource} 수정`,
+			description: `ID로 특정 ${resource}를 수정합니다.`,
+			operationId: `update${resource}ById`,
+		}),
 
-  /**
-   * SOFT DELETE 작업 문서화
-   * @param resource - 리소스 이름
-   */
-  removeById: (resource: string) =>
-    ApiOperation({
-      summary: `${resource} 삭제 (소프트)`,
-      description: `ID로 특정 ${resource}를 논리 삭제합니다 (복구 가능).`,
-      operationId: `remove${resource}ById`,
-    }),
+	/**
+	 * SOFT DELETE 작업 문서화
+	 * @param resource - 리소스 이름
+	 */
+	removeById: (resource: string) =>
+		ApiOperation({
+			summary: `${resource} 삭제 (소프트)`,
+			description: `ID로 특정 ${resource}를 논리 삭제합니다 (복구 가능).`,
+			operationId: `remove${resource}ById`,
+		}),
 
-  /**
-   * HARD DELETE 작업 문서화
-   * @param resource - 리소스 이름
-   */
-  deleteById: (resource: string) =>
-    ApiOperation({
-      summary: `${resource} 삭제 (하드)`,
-      description: `ID로 특정 ${resource}를 물리 삭제합니다 (복구 불가).`,
-      operationId: `delete${resource}ById`,
-    }),
+	/**
+	 * HARD DELETE 작업 문서화
+	 * @param resource - 리소스 이름
+	 */
+	deleteById: (resource: string) =>
+		ApiOperation({
+			summary: `${resource} 삭제 (하드)`,
+			description: `ID로 특정 ${resource}를 물리 삭제합니다 (복구 불가).`,
+			operationId: `delete${resource}ById`,
+		}),
 
-  /**
-   * LIST (목록 조회) 작업 문서화
-   * @param resource - 리소스 이름
-   */
-  list: (resource: string) =>
-    ApiOperation({
-      summary: `${resource} 목록 조회`,
-      description: `쿼리 조건에 따라 ${resource} 목록을 조회합니다.`,
-      operationId: `get${resource}sByQuery`,
-    }),
+	/**
+	 * LIST (목록 조회) 작업 문서화
+	 * @param resource - 리소스 이름
+	 */
+	list: (resource: string) =>
+		ApiOperation({
+			summary: `${resource} 목록 조회`,
+			description: `쿼리 조건에 따라 ${resource} 목록을 조회합니다.`,
+			operationId: `get${resource}sByQuery`,
+		}),
 };

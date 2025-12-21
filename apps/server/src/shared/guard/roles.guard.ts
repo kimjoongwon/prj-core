@@ -1,5 +1,4 @@
 import { Roles as RolesDecorator, UserDto } from "@cocrepo/schema";
-import { Roles } from "@prisma/client";
 import {
 	CanActivate,
 	ExecutionContext,
@@ -7,6 +6,7 @@ import {
 	Injectable,
 } from "@nestjs/common";
 import { Reflector } from "@nestjs/core";
+import { Roles } from "@prisma/client";
 import { isEmpty } from "lodash";
 
 @Injectable()

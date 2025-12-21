@@ -10,7 +10,7 @@ describe("PrismaClient", () => {
 			connectionString: process.env.DATABASE_URL,
 		});
 		const adapter = new PrismaPg(pool);
-		const client = new PrismaClient({ adapter });
+		const client = new PrismaClient({ adapter } as any);
 
 		expect(client).toBeDefined();
 		expect(client.constructor.name).toBe("PrismaClient");

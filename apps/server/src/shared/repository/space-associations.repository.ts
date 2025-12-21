@@ -1,4 +1,4 @@
-import { Prisma, SpaceAssociation, UseEntity } from "@cocrepo/schema";
+import { SpaceAssociation, UseEntity } from "@cocrepo/schema";
 import { Injectable, Logger } from "@nestjs/common";
 import { plainToInstance } from "class-transformer";
 import { PrismaService } from "../service/utils";
@@ -13,7 +13,7 @@ export class SpaceAssociationsRepository {
 	}
 
 	async create(
-		args: Prisma.SpaceAssociationCreateArgs,
+		args: any,
 	): Promise<SpaceAssociation> {
 		this.logger.debug(`SpaceAssociation 생성 중...`);
 		const result = await this.prisma.spaceAssociation.create(args);
@@ -21,7 +21,7 @@ export class SpaceAssociationsRepository {
 	}
 
 	async upsert(
-		args: Prisma.SpaceAssociationUpsertArgs,
+		args: any,
 	): Promise<SpaceAssociation> {
 		this.logger.debug(`SpaceAssociation 업서트 중...`);
 		const result = await this.prisma.spaceAssociation.upsert(args);
@@ -29,7 +29,7 @@ export class SpaceAssociationsRepository {
 	}
 
 	async update(
-		args: Prisma.SpaceAssociationUpdateArgs,
+		args: any,
 	): Promise<SpaceAssociation> {
 		this.logger.debug(`SpaceAssociation 업데이트 중...`);
 		const result = await this.prisma.spaceAssociation.update(args);
@@ -37,14 +37,14 @@ export class SpaceAssociationsRepository {
 	}
 
 	async updateMany(
-		args: Prisma.SpaceAssociationUpdateManyArgs,
-	): Promise<Prisma.BatchPayload> {
+		args: any,
+	): Promise<any> {
 		this.logger.debug(`SpaceAssociation 다중 업데이트 중...`);
 		return await this.prisma.spaceAssociation.updateMany(args);
 	}
 
 	async delete(
-		args: Prisma.SpaceAssociationDeleteArgs,
+		args: any,
 	): Promise<SpaceAssociation> {
 		this.logger.debug(`SpaceAssociation 삭제 중...`);
 		const result = await this.prisma.spaceAssociation.delete(args);
@@ -52,7 +52,7 @@ export class SpaceAssociationsRepository {
 	}
 
 	async findMany(
-		args: Prisma.SpaceAssociationFindManyArgs,
+		args: any,
 	): Promise<SpaceAssociation[]> {
 		this.logger.debug(`SpaceAssociation 다중 조회 중...`);
 		const result = await this.prisma.spaceAssociation.findMany(args);
@@ -60,7 +60,7 @@ export class SpaceAssociationsRepository {
 	}
 
 	async findFirst(
-		args: Prisma.SpaceAssociationFindFirstArgs,
+		args: any,
 	): Promise<SpaceAssociation> {
 		this.logger.debug(`SpaceAssociation 최초 조회 중...`);
 		const result = await this.prisma.spaceAssociation.findFirst(args);
@@ -68,20 +68,16 @@ export class SpaceAssociationsRepository {
 	}
 
 	async findUnique(
-		args: Prisma.SpaceAssociationFindUniqueArgs,
+		args: any,
 	): Promise<SpaceAssociation> {
 		this.logger.debug(`SpaceAssociation 고유 조회 중...`);
 		const result = await this.prisma.spaceAssociation.findUnique(args);
 		return plainToInstance(SpaceAssociation, result);
 	}
 
-	async groupBy(args: any): Promise<any> {
-		this.logger.debug(`SpaceAssociation 그룹화 중...`);
-		return await this.prisma.spaceAssociation.groupBy(args);
-	}
 
 	async createManyAndReturn(
-		args: Prisma.SpaceAssociationCreateManyArgs,
+		args: any,
 	): Promise<SpaceAssociation[]> {
 		this.logger.debug(`SpaceAssociation 다중 생성 중...`);
 		const result = await this.prisma.spaceAssociation.createManyAndReturn(args);
@@ -89,18 +85,18 @@ export class SpaceAssociationsRepository {
 	}
 
 	async deleteMany(
-		args: Prisma.SpaceAssociationDeleteManyArgs,
-	): Promise<Prisma.BatchPayload> {
+		args: any,
+	): Promise<any> {
 		this.logger.debug(`SpaceAssociation 다중 삭제 중...`);
 		return await this.prisma.spaceAssociation.deleteMany(args);
 	}
 
-	async aggregate(args: Prisma.SpaceAssociationAggregateArgs): Promise<any> {
+	async aggregate(args: any): Promise<any> {
 		this.logger.debug(`SpaceAssociation 집계 중...`);
 		return await this.prisma.spaceAssociation.aggregate(args);
 	}
 
-	async count(args: Prisma.SpaceAssociationCountArgs): Promise<number> {
+	async count(args: any): Promise<number> {
 		this.logger.debug(`SpaceAssociation 개수 세기 중...`);
 		return await this.prisma.spaceAssociation.count(args);
 	}

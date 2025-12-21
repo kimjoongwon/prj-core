@@ -1,19 +1,19 @@
-import { Prisma } from "@cocrepo/schema";
+import { Prisma } from "@prisma/client";
 
 // Prisma 7: Middleware is deprecated, use client extensions instead
 export function loggingExtension() {
 	return Prisma.defineExtension({
-		name: 'logging',
+		name: "logging",
 		query: {
 			async $allOperations({ operation, model, args, query }) {
 				const before = Date.now();
 				const result = await query(args);
 				const after = Date.now();
-				
+
 				console.log(
 					`쿼리 ${model}.${operation} 실행 시간: ${after - before}ms`,
 				);
-				
+
 				return result;
 			},
 		},

@@ -5,17 +5,17 @@
  * API 문서입니다. 대부분의 엔드포인트는 쿠키 기반 JWT 인증이 필요합니다. (@Public 데코레이터가 있는 엔드포인트는 예외)
  * OpenAPI spec version: 1.0.0
  */
-import type { ExerciseDto } from './exerciseDto';
-import type { ActivityDto } from './activityDto';
+import type { ExerciseDto } from "./exerciseDto";
+import type { ActivityDto } from "./activityDto";
 
 export interface TaskDto {
-  id: string;
-  seq: number;
-  createdAt: string;
-  updatedAt: string;
-  /** @nullable */
-  removedAt: string | null;
-  tenantId: string;
-  exercise: ExerciseDto;
-  activities: ActivityDto[];
+	id: string;
+	seq: number;
+	createdAt: string;
+	updatedAt: string;
+	/** @nullable */
+	removedAt: string | null;
+	tenantId: string;
+	exercise: ExerciseDto;
+	activities: ActivityDto[];
 }

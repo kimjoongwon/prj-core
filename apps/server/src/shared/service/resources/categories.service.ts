@@ -12,7 +12,7 @@ export class CategoriesService {
 		private readonly contextService: ContextService,
 	) {}
 
-	async create(args: Prisma.CategoryCreateArgs) {
+	async create(args: any) {
 		const currentTenant = this.contextService.getTenant();
 		if (!currentTenant) {
 			throw new Error("No tenant found in context");

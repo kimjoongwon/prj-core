@@ -5,14 +5,14 @@
  * API 문서입니다. 대부분의 엔드포인트는 쿠키 기반 JWT 인증이 필요합니다. (@Public 데코레이터가 있는 엔드포인트는 예외)
  * OpenAPI spec version: 1.0.0
  */
-import type { RoutineDto } from './routineDto';
-import type { GetRoutinesByQuery200AllOfMeta } from './getRoutinesByQuery200AllOfMeta';
+import type { RoutineDto } from "./routineDto";
+import type { GetRoutinesByQuery200AllOfMeta } from "./getRoutinesByQuery200AllOfMeta";
 
 export type GetRoutinesByQuery200AllOf = {
-  /** */
-  httpStatus?: number;
-  /** */
-  message?: string;
-  data?: RoutineDto[];
-  meta?: GetRoutinesByQuery200AllOfMeta;
+	/** */
+	httpStatus?: number;
+	/** */
+	message?: string;
+	data?: RoutineDto[];
+	meta?: GetRoutinesByQuery200AllOfMeta;
 };

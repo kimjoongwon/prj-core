@@ -1,4 +1,9 @@
-import { Session as SessionEntity, RecurringDayOfWeek, RepeatCycleTypes, SessionTypes } from "@prisma/client";
+import {
+	Session as SessionEntity,
+	RecurringDayOfWeek,
+	RepeatCycleTypes,
+	SessionTypes,
+} from "@prisma/client";
 import { UseDto } from "../decorator/use-dto.decorator";
 import { SessionDto } from "../dto/session.dto";
 import { AbstractEntity } from "./abstract.entity";

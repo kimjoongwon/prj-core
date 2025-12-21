@@ -24,7 +24,8 @@ export function CharacterCounter({
 	};
 
 	const colorClass = getColorClass();
-	const combinedClassName = `text-right ${colorClass} ${className || ""}`.trim();
+	const combinedClassName =
+		`text-right ${colorClass} ${className || ""}`.trim();
 
 	return (
 		<Text variant="caption" className={combinedClassName}>

@@ -1,4 +1,4 @@
-import { Prisma, UseEntity, UserClassification } from "@cocrepo/schema";
+import { UseEntity, UserClassification } from "@cocrepo/schema";
 import { Injectable, Logger } from "@nestjs/common";
 import { plainToInstance } from "class-transformer";
 import { PrismaService } from "../service/utils";
@@ -13,7 +13,7 @@ export class UserClassificationsRepository {
 	}
 
 	async create(
-		args: Prisma.UserClassificationCreateArgs,
+		args: any,
 	): Promise<UserClassification> {
 		this.logger.debug(`UserClassification 생성 중...`);
 		const result = await this.prisma.userClassification.create(args);
@@ -21,7 +21,7 @@ export class UserClassificationsRepository {
 	}
 
 	async upsert(
-		args: Prisma.UserClassificationUpsertArgs,
+		args: any,
 	): Promise<UserClassification> {
 		this.logger.debug(`UserClassification 업서트 중...`);
 		const result = await this.prisma.userClassification.upsert(args);
@@ -29,7 +29,7 @@ export class UserClassificationsRepository {
 	}
 
 	async update(
-		args: Prisma.UserClassificationUpdateArgs,
+		args: any,
 	): Promise<UserClassification> {
 		this.logger.debug(`UserClassification 업데이트 중...`);
 		const result = await this.prisma.userClassification.update(args);
@@ -37,14 +37,14 @@ export class UserClassificationsRepository {
 	}
 
 	async updateMany(
-		args: Prisma.UserClassificationUpdateManyArgs,
-	): Promise<Prisma.BatchPayload> {
+		args: any,
+	): Promise<any> {
 		this.logger.debug(`UserClassification 다중 업데이트 중...`);
 		return await this.prisma.userClassification.updateMany(args);
 	}
 
 	async delete(
-		args: Prisma.UserClassificationDeleteArgs,
+		args: any,
 	): Promise<UserClassification> {
 		this.logger.debug(`UserClassification 삭제 중...`);
 		const result = await this.prisma.userClassification.delete(args);
@@ -52,7 +52,7 @@ export class UserClassificationsRepository {
 	}
 
 	async findMany(
-		args: Prisma.UserClassificationFindManyArgs,
+		args: any,
 	): Promise<UserClassification[]> {
 		this.logger.debug(`UserClassification 다중 조회 중...`);
 		const result = await this.prisma.userClassification.findMany(args);
@@ -60,7 +60,7 @@ export class UserClassificationsRepository {
 	}
 
 	async findFirst(
-		args: Prisma.UserClassificationFindFirstArgs,
+		args: any,
 	): Promise<UserClassification> {
 		this.logger.debug(`UserClassification 최초 조회 중...`);
 		const result = await this.prisma.userClassification.findFirst(args);
@@ -68,20 +68,16 @@ export class UserClassificationsRepository {
 	}
 
 	async findUnique(
-		args: Prisma.UserClassificationFindUniqueArgs,
+		args: any,
 	): Promise<UserClassification> {
 		this.logger.debug(`UserClassification 고유 조회 중...`);
 		const result = await this.prisma.userClassification.findUnique(args);
 		return plainToInstance(UserClassification, result);
 	}
 
-	async groupBy(args: any): Promise<any> {
-		this.logger.debug(`UserClassification 그룹화 중...`);
-		return await this.prisma.userClassification.groupBy(args);
-	}
 
 	async createManyAndReturn(
-		args: Prisma.UserClassificationCreateManyArgs,
+		args: any,
 	): Promise<UserClassification[]> {
 		this.logger.debug(`UserClassification 다중 생성 중...`);
 		const result =
@@ -90,18 +86,18 @@ export class UserClassificationsRepository {
 	}
 
 	async deleteMany(
-		args: Prisma.UserClassificationDeleteManyArgs,
-	): Promise<Prisma.BatchPayload> {
+		args: any,
+	): Promise<any> {
 		this.logger.debug(`UserClassification 다중 삭제 중...`);
 		return await this.prisma.userClassification.deleteMany(args);
 	}
 
-	async aggregate(args: Prisma.UserClassificationAggregateArgs): Promise<any> {
+	async aggregate(args: any): Promise<any> {
 		this.logger.debug(`UserClassification 집계 중...`);
 		return await this.prisma.userClassification.aggregate(args);
 	}
 
-	async count(args: Prisma.UserClassificationCountArgs): Promise<number> {
+	async count(args: any): Promise<number> {
 		this.logger.debug(`UserClassification 개수 세기 중...`);
 		return await this.prisma.userClassification.count(args);
 	}

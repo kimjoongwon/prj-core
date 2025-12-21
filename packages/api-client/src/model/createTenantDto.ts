@@ -7,8 +7,8 @@
  */
 
 export interface CreateTenantDto {
-  main: boolean;
-  roleId: string;
-  userId: string;
-  spaceId: string;
+	main: boolean;
+	roleId: string;
+	userId: string;
+	spaceId: string;
 }

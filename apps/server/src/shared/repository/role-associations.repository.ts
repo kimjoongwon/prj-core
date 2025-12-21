@@ -1,4 +1,4 @@
-import { Prisma, RoleAssociation, UseEntity } from "@cocrepo/schema";
+import { RoleAssociation, UseEntity } from "@cocrepo/schema";
 import { Injectable, Logger } from "@nestjs/common";
 import { plainToInstance } from "class-transformer";
 import { PrismaService } from "../service/utils";
@@ -13,7 +13,7 @@ export class RoleAssociationsRepository {
 	}
 
 	async create(
-		args: Prisma.RoleAssociationCreateArgs,
+		args: any,
 	): Promise<RoleAssociation> {
 		this.logger.debug(`RoleAssociation 생성 중...`);
 		const result = await this.prisma.roleAssociation.create(args);
@@ -21,7 +21,7 @@ export class RoleAssociationsRepository {
 	}
 
 	async upsert(
-		args: Prisma.RoleAssociationUpsertArgs,
+		args: any,
 	): Promise<RoleAssociation> {
 		this.logger.debug(`RoleAssociation 업서트 중...`);
 		const result = await this.prisma.roleAssociation.upsert(args);
@@ -29,7 +29,7 @@ export class RoleAssociationsRepository {
 	}
 
 	async update(
-		args: Prisma.RoleAssociationUpdateArgs,
+		args: any,
 	): Promise<RoleAssociation> {
 		this.logger.debug(`RoleAssociation 업데이트 중...`);
 		const result = await this.prisma.roleAssociation.update(args);
@@ -37,14 +37,14 @@ export class RoleAssociationsRepository {
 	}
 
 	async updateMany(
-		args: Prisma.RoleAssociationUpdateManyArgs,
-	): Promise<Prisma.BatchPayload> {
+		args: any,
+	): Promise<any> {
 		this.logger.debug(`RoleAssociation 다중 업데이트 중...`);
 		return await this.prisma.roleAssociation.updateMany(args);
 	}
 
 	async delete(
-		args: Prisma.RoleAssociationDeleteArgs,
+		args: any,
 	): Promise<RoleAssociation> {
 		this.logger.debug(`RoleAssociation 삭제 중...`);
 		const result = await this.prisma.roleAssociation.delete(args);
@@ -52,7 +52,7 @@ export class RoleAssociationsRepository {
 	}
 
 	async findMany(
-		args: Prisma.RoleAssociationFindManyArgs,
+		args: any,
 	): Promise<RoleAssociation[]> {
 		this.logger.debug(`RoleAssociation 다중 조회 중...`);
 		const result = await this.prisma.roleAssociation.findMany(args);
@@ -60,7 +60,7 @@ export class RoleAssociationsRepository {
 	}
 
 	async findFirst(
-		args: Prisma.RoleAssociationFindFirstArgs,
+		args: any,
 	): Promise<RoleAssociation> {
 		this.logger.debug(`RoleAssociation 최초 조회 중...`);
 		const result = await this.prisma.roleAssociation.findFirst(args);
@@ -68,20 +68,16 @@ export class RoleAssociationsRepository {
 	}
 
 	async findUnique(
-		args: Prisma.RoleAssociationFindUniqueArgs,
+		args: any,
 	): Promise<RoleAssociation> {
 		this.logger.debug(`RoleAssociation 고유 조회 중...`);
 		const result = await this.prisma.roleAssociation.findUnique(args);
 		return plainToInstance(RoleAssociation, result);
 	}
 
-	async groupBy(args: any): Promise<any> {
-		this.logger.debug(`RoleAssociation 그룹화 중...`);
-		return await this.prisma.roleAssociation.groupBy(args);
-	}
 
 	async createManyAndReturn(
-		args: Prisma.RoleAssociationCreateManyArgs,
+		args: any,
 	): Promise<RoleAssociation[]> {
 		this.logger.debug(`RoleAssociation 다중 생성 중...`);
 		const result = await this.prisma.roleAssociation.createManyAndReturn(args);
@@ -89,18 +85,18 @@ export class RoleAssociationsRepository {
 	}
 
 	async deleteMany(
-		args: Prisma.RoleAssociationDeleteManyArgs,
-	): Promise<Prisma.BatchPayload> {
+		args: any,
+	): Promise<any> {
 		this.logger.debug(`RoleAssociation 다중 삭제 중...`);
 		return await this.prisma.roleAssociation.deleteMany(args);
 	}
 
-	async aggregate(args: Prisma.RoleAssociationAggregateArgs): Promise<any> {
+	async aggregate(args: any): Promise<any> {
 		this.logger.debug(`RoleAssociation 집계 중...`);
 		return await this.prisma.roleAssociation.aggregate(args);
 	}
 
-	async count(args: Prisma.RoleAssociationCountArgs): Promise<number> {
+	async count(args: any): Promise<number> {
 		this.logger.debug(`RoleAssociation 개수 세기 중...`);
 		return await this.prisma.roleAssociation.count(args);
 	}

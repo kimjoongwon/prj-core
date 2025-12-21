@@ -5,14 +5,14 @@
  * API 문서입니다. 대부분의 엔드포인트는 쿠키 기반 JWT 인증이 필요합니다. (@Public 데코레이터가 있는 엔드포인트는 예외)
  * OpenAPI spec version: 1.0.0
  */
-import type { CategoryDto } from './categoryDto';
-import type { GetCategoriesByQuery200AllOfMeta } from './getCategoriesByQuery200AllOfMeta';
+import type { CategoryDto } from "./categoryDto";
+import type { GetCategoriesByQuery200AllOfMeta } from "./getCategoriesByQuery200AllOfMeta";
 
 export type GetCategoriesByQuery200AllOf = {
-  /** */
-  httpStatus?: number;
-  /** */
-  message?: string;
-  data?: CategoryDto[];
-  meta?: GetCategoriesByQuery200AllOfMeta;
+	/** */
+	httpStatus?: number;
+	/** */
+	message?: string;
+	data?: CategoryDto[];
+	meta?: GetCategoriesByQuery200AllOfMeta;
 };

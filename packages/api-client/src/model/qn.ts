@@ -6,10 +6,9 @@
  * OpenAPI spec version: 1.0.0
  */
 
-export type Qn = typeof Qn[keyof typeof Qn];
-
+export type Qn = (typeof Qn)[keyof typeof Qn];
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export const Qn = {
-  '[object_Object]': [object Object],
+	// '[object_Object]': [object Object],
 } as const;

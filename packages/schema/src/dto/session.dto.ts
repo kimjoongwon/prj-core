@@ -1,8 +1,8 @@
 import {
-	Session,
-	RecurringDayOfWeek,
 	RepeatCycleTypes as PrismaRepeatCycleTypes,
-	SessionTypes as PrismaSessionTypes
+	SessionTypes as PrismaSessionTypes,
+	RecurringDayOfWeek,
+	Session,
 } from "@prisma/client";
 import { Transform } from "class-transformer";
 import {

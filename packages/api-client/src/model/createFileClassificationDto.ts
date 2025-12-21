@@ -7,6 +7,6 @@
  */
 
 export interface CreateFileClassificationDto {
-  fileId: string;
-  categoryId: string;
+	fileId: string;
+	categoryId: string;
 }

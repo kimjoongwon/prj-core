@@ -82,15 +82,19 @@ export function ApiEnumProperty<TEnum>(
 	let enumForSwagger = enumValue;
 
 	// Check if it's a class constructor (ts-jenum)
-	if (typeof enumValue === 'function' && enumValue.prototype) {
+	if (typeof enumValue === "function" && enumValue.prototype) {
 		// ts-jenum class: call static values() method if available
-		if (typeof enumValue.values === 'function') {
+		if (typeof enumValue.values === "function") {
 			enumForSwagger = enumValue.values();
 		}
-	} else if (enumValue && typeof enumValue === 'object' && !Array.isArray(enumValue)) {
+	} else if (
+		enumValue &&
+		typeof enumValue === "object" &&
+		!Array.isArray(enumValue)
+	) {
 		// Check if it's a Prisma 7 plain object enum (has string values)
 		const values = Object.values(enumValue);
-		if (values.length > 0 && values.every(v => typeof v === 'string')) {
+		if (values.length > 0 && values.every((v) => typeof v === "string")) {
 			// It's a Prisma 7 enum - use the values array
 			enumForSwagger = values;
 		}

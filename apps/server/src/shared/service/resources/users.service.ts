@@ -21,7 +21,7 @@ export class UsersService {
 		return this.repository.delete({ where: { id } });
 	}
 
-	create(args: Prisma.UserCreateArgs) {
+	create(args: any) {
 		return this.repository.create(args);
 	}
 

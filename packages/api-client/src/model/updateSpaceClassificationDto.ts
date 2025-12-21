@@ -7,6 +7,6 @@
  */
 
 export interface UpdateSpaceClassificationDto {
-  spaceId?: string;
-  categoryId?: string;
+	spaceId?: string;
+	categoryId?: string;
 }

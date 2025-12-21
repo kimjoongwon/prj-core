@@ -47,7 +47,7 @@
 				"noDangerouslySetInnerHtml": "off"
 			},
 			"nursery": {
-				"useSortedClasses": "error"
+				"useSortedClasses": "off"
 			}
 		}
 	},

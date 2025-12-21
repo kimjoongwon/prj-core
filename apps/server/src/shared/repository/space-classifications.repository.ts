@@ -1,4 +1,4 @@
-import { Prisma, SpaceClassification, UseEntity } from "@cocrepo/schema";
+import { SpaceClassification, UseEntity } from "@cocrepo/schema";
 import { Injectable, Logger } from "@nestjs/common";
 import { plainToInstance } from "class-transformer";
 import { PrismaService } from "../service/utils";
@@ -13,7 +13,7 @@ export class SpaceClassificationsRepository {
 	}
 
 	async create(
-		args: Prisma.SpaceClassificationCreateArgs,
+		args: any,
 	): Promise<SpaceClassification> {
 		this.logger.debug(`SpaceClassification 생성 중...`);
 		const result = await this.prisma.spaceClassification.create(args);
@@ -21,7 +21,7 @@ export class SpaceClassificationsRepository {
 	}
 
 	async upsert(
-		args: Prisma.SpaceClassificationUpsertArgs,
+		args: any,
 	): Promise<SpaceClassification> {
 		this.logger.debug(`SpaceClassification 업서트 중...`);
 		const result = await this.prisma.spaceClassification.upsert(args);
@@ -29,7 +29,7 @@ export class SpaceClassificationsRepository {
 	}
 
 	async update(
-		args: Prisma.SpaceClassificationUpdateArgs,
+		args: any,
 	): Promise<SpaceClassification> {
 		this.logger.debug(`SpaceClassification 업데이트 중...`);
 		const result = await this.prisma.spaceClassification.update(args);
@@ -37,14 +37,14 @@ export class SpaceClassificationsRepository {
 	}
 
 	async updateMany(
-		args: Prisma.SpaceClassificationUpdateManyArgs,
-	): Promise<Prisma.BatchPayload> {
+		args: any,
+	): Promise<any> {
 		this.logger.debug(`SpaceClassification 다중 업데이트 중...`);
 		return await this.prisma.spaceClassification.updateMany(args);
 	}
 
 	async delete(
-		args: Prisma.SpaceClassificationDeleteArgs,
+		args: any,
 	): Promise<SpaceClassification> {
 		this.logger.debug(`SpaceClassification 삭제 중...`);
 		const result = await this.prisma.spaceClassification.delete(args);
@@ -52,7 +52,7 @@ export class SpaceClassificationsRepository {
 	}
 
 	async findMany(
-		args: Prisma.SpaceClassificationFindManyArgs,
+		args: any,
 	): Promise<SpaceClassification[]> {
 		this.logger.debug(`SpaceClassification 다중 조회 중...`);
 		const result = await this.prisma.spaceClassification.findMany(args);
@@ -60,7 +60,7 @@ export class SpaceClassificationsRepository {
 	}
 
 	async findFirst(
-		args: Prisma.SpaceClassificationFindFirstArgs,
+		args: any,
 	): Promise<SpaceClassification> {
 		this.logger.debug(`SpaceClassification 최초 조회 중...`);
 		const result = await this.prisma.spaceClassification.findFirst(args);
@@ -68,20 +68,16 @@ export class SpaceClassificationsRepository {
 	}
 
 	async findUnique(
-		args: Prisma.SpaceClassificationFindUniqueArgs,
+		args: any,
 	): Promise<SpaceClassification> {
 		this.logger.debug(`SpaceClassification 고유 조회 중...`);
 		const result = await this.prisma.spaceClassification.findUnique(args);
 		return plainToInstance(SpaceClassification, result);
 	}
 
-	async groupBy(args: any): Promise<any> {
-		this.logger.debug(`SpaceClassification 그룹화 중...`);
-		return await this.prisma.spaceClassification.groupBy(args);
-	}
 
 	async createManyAndReturn(
-		args: Prisma.SpaceClassificationCreateManyArgs,
+		args: any,
 	): Promise<SpaceClassification[]> {
 		this.logger.debug(`SpaceClassification 다중 생성 중...`);
 		const result =
@@ -90,18 +86,18 @@ export class SpaceClassificationsRepository {
 	}
 
 	async deleteMany(
-		args: Prisma.SpaceClassificationDeleteManyArgs,
-	): Promise<Prisma.BatchPayload> {
+		args: any,
+	): Promise<any> {
 		this.logger.debug(`SpaceClassification 다중 삭제 중...`);
 		return await this.prisma.spaceClassification.deleteMany(args);
 	}
 
-	async aggregate(args: Prisma.SpaceClassificationAggregateArgs): Promise<any> {
+	async aggregate(args: any): Promise<any> {
 		this.logger.debug(`SpaceClassification 집계 중...`);
 		return await this.prisma.spaceClassification.aggregate(args);
 	}
 
-	async count(args: Prisma.SpaceClassificationCountArgs): Promise<number> {
+	async count(args: any): Promise<number> {
 		this.logger.debug(`SpaceClassification 개수 세기 중...`);
 		return await this.prisma.spaceClassification.count(args);
 	}

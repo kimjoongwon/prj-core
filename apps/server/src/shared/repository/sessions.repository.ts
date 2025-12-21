@@ -1,4 +1,4 @@
-import { Prisma, Session, UseEntity } from "@cocrepo/schema";
+import { Session, UseEntity } from "@cocrepo/schema";
 import { Injectable, Logger } from "@nestjs/common";
 import { plainToInstance } from "class-transformer";
 import { PrismaService } from "../service/utils";
@@ -12,62 +12,58 @@ export class SessionsRepository {
 		this.logger = new Logger("Session");
 	}
 
-	async create(args: Prisma.SessionCreateArgs): Promise<Session> {
+	async create(args: any): Promise<Session> {
 		this.logger.debug(`Session 생성 중...`);
 		const result = await this.prisma.session.create(args);
 		return plainToInstance(Session, result);
 	}
 
-	async upsert(args: Prisma.SessionUpsertArgs): Promise<Session> {
+	async upsert(args: any): Promise<Session> {
 		this.logger.debug(`Session 업서트 중...`);
 		const result = await this.prisma.session.upsert(args);
 		return plainToInstance(Session, result);
 	}
 
-	async update(args: Prisma.SessionUpdateArgs): Promise<Session> {
+	async update(args: any): Promise<Session> {
 		this.logger.debug(`Session 업데이트 중...`);
 		const result = await this.prisma.session.update(args);
 		return plainToInstance(Session, result);
 	}
 
 	async updateMany(
-		args: Prisma.SessionUpdateManyArgs,
-	): Promise<Prisma.BatchPayload> {
+		args: any,
+	): Promise<any> {
 		this.logger.debug(`Session 다중 업데이트 중...`);
 		return await this.prisma.session.updateMany(args);
 	}
 
-	async delete(args: Prisma.SessionDeleteArgs): Promise<Session> {
+	async delete(args: any): Promise<Session> {
 		this.logger.debug(`Session 삭제 중...`);
 		const result = await this.prisma.session.delete(args);
 		return plainToInstance(Session, result);
 	}
 
-	async findMany(args: Prisma.SessionFindManyArgs): Promise<Session[]> {
+	async findMany(args: any): Promise<Session[]> {
 		this.logger.debug(`Session 다중 조회 중...`);
 		const result = await this.prisma.session.findMany(args);
 		return result.map((item) => plainToInstance(Session, item));
 	}
 
-	async findFirst(args: Prisma.SessionFindFirstArgs): Promise<Session> {
+	async findFirst(args: any): Promise<Session> {
 		this.logger.debug(`Session 최초 조회 중...`);
 		const result = await this.prisma.session.findFirst(args);
 		return plainToInstance(Session, result);
 	}
 
-	async findUnique(args: Prisma.SessionFindUniqueArgs): Promise<Session> {
+	async findUnique(args: any): Promise<Session> {
 		this.logger.debug(`Session 고유 조회 중...`);
 		const result = await this.prisma.session.findUnique(args);
 		return plainToInstance(Session, result);
 	}
 
-	async groupBy(args: any): Promise<any> {
-		this.logger.debug(`Session 그룹화 중...`);
-		return await this.prisma.session.groupBy(args);
-	}
 
 	async createManyAndReturn(
-		args: Prisma.SessionCreateManyArgs,
+		args: any,
 	): Promise<Session[]> {
 		this.logger.debug(`Session 다중 생성 중...`);
 		const result = await this.prisma.session.createManyAndReturn(args);
@@ -75,18 +71,18 @@ export class SessionsRepository {
 	}
 
 	async deleteMany(
-		args: Prisma.SessionDeleteManyArgs,
-	): Promise<Prisma.BatchPayload> {
+		args: any,
+	): Promise<any> {
 		this.logger.debug(`Session 다중 삭제 중...`);
 		return await this.prisma.session.deleteMany(args);
 	}
 
-	async aggregate(args: Prisma.SessionAggregateArgs): Promise<any> {
+	async aggregate(args: any): Promise<any> {
 		this.logger.debug(`Session 집계 중...`);
 		return await this.prisma.session.aggregate(args);
 	}
 
-	async count(args: Prisma.SessionCountArgs): Promise<number> {
+	async count(args: any): Promise<number> {
 		this.logger.debug(`Session 개수 세기 중...`);
 		return await this.prisma.session.count(args);
 	}

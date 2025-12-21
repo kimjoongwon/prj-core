@@ -235,10 +235,63 @@ export default function Page() {
 - **layout 카테고리**: `packages/ui/src/components/layout/Header/Header.tsx`
 - **cell 카테고리**: `packages/ui/src/components/cell/DateCell/DateCell.tsx`
 
+## 스타일링 규칙
+
+### CVA (Class Variance Authority) 사용
+
+모든 스타일링은 **CVA**를 이용하여 타입 안전하게 관리합니다.
+
+```tsx
+import { cva, type VariantProps } from "class-variance-authority";
+
+const componentStyles = cva(
+  // 기본 스타일
+  "base-classes",
+  {
+    variants: {
+      variant: {
+        default: "variant-default-classes",
+        primary: "variant-primary-classes",
+      },
+      size: {
+        sm: "size-sm-classes",
+        md: "size-md-classes",
+        lg: "size-lg-classes",
+      },
+    },
+    defaultVariants: {
+      variant: "default",
+      size: "md",
+    },
+  }
+);
+
+export interface ComponentProps extends VariantProps<typeof componentStyles> {
+  className?: string;
+}
+
+export const Component = ({ variant, size, className }: ComponentProps) => {
+  return (
+    <div className={componentStyles({ variant, size, className })}>
+      {/* 내용 */}
+    </div>
+  );
+};
+```
+
+**CVA 사용 원칙:**
+
+- ✅ 모든 variant는 CVA로 정의
+- ✅ Props 타입은 `VariantProps<typeof styles>` 확장
+- ✅ className은 항상 마지막 인자로 전달 (사용자 커스터마이징 허용)
+- ❌ Tailwind 클래스를 직접 조건부로 작성하지 않음
+- ❌ inline style 절대 금지
+
 ## 주의사항
 
 - **Pure Component 원칙 엄수** - 상태 절대 금지
 - **이벤트는 Props로만** - onClick, onChange 등
+- **CVA로 스타일링** - 타입 안전한 variant 관리
 - **Tailwind CSS만 사용** - inline style 금지
 - **TypeScript 필수** - Props 인터페이스 export
 - **Storybook 필수** - 최소 2개 이상 variant 제공

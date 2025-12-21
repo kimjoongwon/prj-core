@@ -5,14 +5,14 @@
  * API 문서입니다. 대부분의 엔드포인트는 쿠키 기반 JWT 인증이 필요합니다. (@Public 데코레이터가 있는 엔드포인트는 예외)
  * OpenAPI spec version: 1.0.0
  */
-import type { SpaceDto } from './spaceDto';
-import type { GetSpacesByQuery200AllOfMeta } from './getSpacesByQuery200AllOfMeta';
+import type { SpaceDto } from "./spaceDto";
+import type { GetSpacesByQuery200AllOfMeta } from "./getSpacesByQuery200AllOfMeta";
 
 export type GetSpacesByQuery200AllOf = {
-  /** */
-  httpStatus?: number;
-  /** */
-  message?: string;
-  data?: SpaceDto[];
-  meta?: GetSpacesByQuery200AllOfMeta;
+	/** */
+	httpStatus?: number;
+	/** */
+	message?: string;
+	data?: SpaceDto[];
+	meta?: GetSpacesByQuery200AllOfMeta;
 };

@@ -6,10 +6,9 @@
  * OpenAPI spec version: 1.0.0
  */
 
-export type Zn = typeof Zn[keyof typeof Zn];
-
+export type Zn = (typeof Zn)[keyof typeof Zn];
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export const Zn = {
-  '[object_Object]': [object Object],
+	// TODO: orval 재생성 필요 - 백엔드에서 올바른 enum 값을 가져와야 함
 } as const;
