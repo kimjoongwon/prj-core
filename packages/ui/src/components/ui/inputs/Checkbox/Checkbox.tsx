@@ -3,7 +3,7 @@ import {
 	CheckboxProps as NextUICheckboxProps,
 } from "@heroui/react";
 import React from "react";
-import { Text } from "../../ui/Text/Text";
+import { Text } from "../../data-display/Text/Text";
 
 export interface CheckboxProps extends Omit<NextUICheckboxProps, "onChange"> {
 	onChange?: (checked: boolean) => void;

@@ -1,7 +1,8 @@
 import { Button } from "@heroui/react";
 import { memo, useCallback, useMemo } from "react";
-import { renderLucideIcon } from "../../../utils";
-import { HStack, VStack } from "..";
+import { renderLucideIcon } from "../../../../utils";
+import { HStack } from "../../surfaces/HStack/HStack";
+import { VStack } from "../../surfaces/VStack/VStack";
 import { NavbarProps, Route } from "./types";
 import { getRouteDisplayText, getRouteKey, isRouteClickable } from "./utils";
 

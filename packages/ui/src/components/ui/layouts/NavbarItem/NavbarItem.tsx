@@ -1,6 +1,6 @@
 import { Link } from "@heroui/react";
 import { useCallback, useMemo } from "react";
-import { Button } from "../Button/Button";
+import { Button } from "../../inputs/Button/Button";
 
 export interface NavbarItemProps {
 	url: string;

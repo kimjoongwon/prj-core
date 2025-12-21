@@ -1,8 +1,8 @@
 import type { Meta, StoryObj } from "@storybook/react";
-import { Avatar } from "../../ui/Avatar/Avatar";
-import { Button } from "../../ui/Button/Button";
-import { HStack } from "../../ui/HStack/HStack";
-import { Text } from "../../ui/Text/Text";
+import { Avatar } from "../../data-display/Avatar/Avatar";
+import { Button } from "../../inputs/Button/Button";
+import { HStack } from "../../surfaces/HStack/HStack";
+import { Text } from "../../data-display/Text/Text";
 import { Header } from "./Header";
 
 const meta: Meta<typeof Header> = {

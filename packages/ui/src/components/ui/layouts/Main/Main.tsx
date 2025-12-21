@@ -4,7 +4,7 @@ export interface MainLayoutProps {
 	children: ReactNode;
 }
 
-import { VStack } from "../../ui/VStack/VStack";
+import { VStack } from "../../surfaces/VStack/VStack";
 
 export const MainLayout = (props: MainLayoutProps) => {
 	const { children } = props;

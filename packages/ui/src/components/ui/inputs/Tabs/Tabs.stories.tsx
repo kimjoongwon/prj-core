@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react";
 import { useState } from "react";
-import { Option } from "../../../types";
+import { Option } from "@cocrepo/type";
 import { Tabs } from "./Tabs";
 
 const meta: Meta<typeof Tabs> = {

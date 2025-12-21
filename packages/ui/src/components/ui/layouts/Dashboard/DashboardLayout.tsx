@@ -10,7 +10,7 @@ export interface DashboardLayoutProps {
 	children: ReactNode;
 }
 
-import { Text } from "../../ui/Text/Text";
+import { Text } from "../../data-display/Text/Text";
 
 export const DashboardLayout = (props: DashboardLayoutProps) => {
 	const { header, leftSidebar, rightSidebar, bottom, breadcrumb, children } =

@@ -5,7 +5,7 @@ import {
 } from "@heroui/react";
 import { tools } from "@cocrepo/toolkit";
 import React from "react";
-import type { Option } from "../../../types";
+import type { Option } from "@cocrepo/type";
 
 export interface SelectProps
 	extends Omit<NextUISelectProps, "children" | "onChange" | "selectedKeys"> {

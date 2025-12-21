@@ -1,5 +1,5 @@
 import { v4 } from "uuid";
-import { Chip } from "../../ui/Chip/Chip";
+import { Chip } from "../../data-display/Chip/Chip";
 
 type SelectionMode = "single" | "multiple" | "none";
 

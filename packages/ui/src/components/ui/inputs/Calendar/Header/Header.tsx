@@ -1,4 +1,5 @@
-import { Button, HStack } from "../../../../..";
+import { Button } from "../../Button/Button";
+import { HStack } from "../../../surfaces/HStack/HStack";
 
 interface HeaderProps {
 	year: number;

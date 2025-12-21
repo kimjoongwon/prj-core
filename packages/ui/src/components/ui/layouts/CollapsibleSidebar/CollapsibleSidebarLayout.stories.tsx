@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react";
 import { useState } from "react";
-import { Button } from "../../ui/Button/Button";
+import { Button } from "../../inputs/Button/Button";
 import { CollapsibleSidebar } from "./CollapsibleSidebarLayout";
 
 const meta: Meta<typeof CollapsibleSidebar> = {
