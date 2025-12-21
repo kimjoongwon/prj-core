@@ -183,25 +183,13 @@ tools: Read, Grep
 
 ### 3단계: 부족한 컴포넌트 식별
 
-**중요: HeroUI 기존 컴포넌트 확인 필수**
-
-신규 컴포넌트 제안 전에 반드시 다음을 확인:
-
-1. **HeroUI(@heroui/react)에 이미 존재하는 컴포넌트는 제안하지 않음**
-   - Card, Badge, Avatar, Skeleton, Progress, Spinner 등은 HeroUI에 이미 존재
-   - 제안하기 전에 HeroUI 문서 확인 필요
-   - 예: `import { Card, Badge } from "@heroui/react";`
-
-2. **프로젝트 고유 컴포넌트만 제안**
-   - HeroUI에 없는 도메인 특화 컴포넌트
-   - 기존 컴포넌트의 조합으로 만들어지는 복합 컴포넌트
-   - 프로젝트 특수 요구사항을 만족하는 컴포넌트
-
 기존 컴포넌트로 구현 불가능한 경우:
 
-- 왜 기존 컴포넌트(프로젝트 + HeroUI)로 안 되는지 설명
+- 왜 기존 컴포넌트로 안 되는지 설명
 - 어떤 Props가 필요한지 정의
 - Component Builder Agent 위임 내용 작성
+
+**참고:** Component Builder가 구현 시 HeroUI에 이미 존재하는 컴포넌트인지 확인합니다.
 
 ## 출력 형식
 
@@ -365,9 +353,6 @@ Badge 컴포넌트를 만들어주세요.
 - **절대로 스타일 코드를 작성하지 마세요** (색상, 간격, 타이포그래피 등)
 - **절대로 컴포넌트 구현 코드를 작성하지 마세요**
 - 오직 **어떤 컴포넌트를 조합**할지, **어떤 컴포넌트가 필요**한지만 분석합니다
-- **HeroUI(@heroui/react)에 이미 존재하는 컴포넌트는 절대 제안하지 마세요**
-  - Card, Badge, Avatar, Skeleton, Progress, Spinner, Chip, Tooltip, Popover, Modal, Drawer, Tabs, Accordion, Dropdown 등
-  - 신규 제안 전에 반드시 HeroUI 문서에서 존재 여부 확인
 - 신규 컴포넌트가 필요하면 **Component Builder Agent에게 위임할 명세**만 작성합니다
 - 개발자가 복사-붙여넣기 할 수 있도록 **명확한 구분선(`---`)과 마크다운 블록**으로 제공합니다
 
