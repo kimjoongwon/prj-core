@@ -1,5 +1,5 @@
-import { Text } from "../Text/Text";
-import { VStack } from "../VStack/VStack";
+import { Text } from "../../data-display/Text/Text";
+import { VStack } from "../../surfaces/VStack/VStack";
 
 export const Placeholder = () => {
 	return (

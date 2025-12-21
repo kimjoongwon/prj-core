@@ -3,7 +3,7 @@ export interface MessageProps {
 	message: string;
 }
 
-import { Text } from "../Text/Text";
+import { Text } from "../../data-display/Text/Text";
 
 export const Message = (props: MessageProps) => {
 	const { message, title } = props;

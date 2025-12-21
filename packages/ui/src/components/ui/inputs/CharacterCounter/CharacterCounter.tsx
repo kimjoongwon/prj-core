@@ -1,4 +1,4 @@
-import { Text } from "../Text/Text";
+import { Text } from "../../data-display/Text/Text";
 
 export interface CharacterCounterProps {
 	current: number;
