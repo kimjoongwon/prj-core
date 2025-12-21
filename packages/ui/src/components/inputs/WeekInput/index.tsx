@@ -1,5 +1,5 @@
 import { useFormField } from "@cocrepo/hook";
-import type { MobxProps } from "@cocrepo/types";
+import type { MobxProps } from "@cocrepo/type";
 import { tools } from "@cocrepo/toolkit";
 import { observer } from "mobx-react-lite";
 import {

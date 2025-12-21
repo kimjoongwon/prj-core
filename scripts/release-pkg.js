@@ -6,7 +6,7 @@ const [, , packageName, versionType = "patch", ...flags] = process.argv;
 if (!packageName) {
   console.error("❌ 패키지명을 입력해주세요.");
   console.log(
-    "사용법: pnpm release:pkg @cocrepo/api-client [patch|minor|major] [--dry-run]"
+    "사용법: pnpm release:pkg @cocrepo/api [patch|minor|major] [--dry-run]"
   );
   process.exit(1);
 }

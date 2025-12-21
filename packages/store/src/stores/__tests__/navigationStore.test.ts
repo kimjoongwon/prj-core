@@ -1,6 +1,6 @@
 /// <reference types="vitest/globals" />
 
-import type { RouteDto } from "@cocrepo/api-client";
+import type { RouteDto } from "@cocrepo/api";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { NavigationStore } from "../navigationStore";
 import { NavigatorStore } from "../navigatorStore";

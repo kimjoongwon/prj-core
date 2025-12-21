@@ -1,4 +1,4 @@
-import { Option } from "@cocrepo/types";
+import { Option } from "@cocrepo/type";
 import { Tabs as HeroUITabs, Tab } from "@heroui/react";
 import { Key } from "react";
 

@@ -17,7 +17,7 @@ Admin 앱은 피트니스/예약 플랫폼의 관리자 인터페이스를 제�
 | **Data Fetching** | TanStack Query | 5.x |
 | **UI Components** | HeroUI | 2.8 |
 | **Styling** | Tailwind CSS | 4.x |
-| **API Client** | @cocrepo/api-client | - |
+| **API Client** | @cocrepo/api | - |
 
 ## 폴더 구조
 
@@ -114,10 +114,10 @@ function MyComponent() {
 
 ## API 통신
 
-`@cocrepo/api-client` 패키지를 통한 API 통신:
+`@cocrepo/api` 패키지를 통한 API 통신:
 
 ```typescript
-import { useGetUsers, useCreateUser } from '@cocrepo/api-client';
+import { useGetUsers, useCreateUser } from '@cocrepo/api';
 
 function UsersPage() {
   const { data: users, isLoading } = useGetUsers();
@@ -176,7 +176,7 @@ return <Button onClick={() => doSomething()}>클릭</Button>;
 
 ## 관련 패키지
 
-- `@cocrepo/api-client` - API 클라이언트
+- `@cocrepo/api` - API 클라이언트
 - `@cocrepo/ui` - 공유 UI 컴포넌트
 - `@cocrepo/design-system` - 디자인 시스템
 - `@cocrepo/store` - 공유 상태 관리
