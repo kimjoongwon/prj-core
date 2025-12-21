@@ -1,4 +1,7 @@
-import { Prisma, QueryUserDto } from "@cocrepo/schema";
+import { Prisma } from "@prisma/client";
+import {
+	QueryUserDto,
+} from "@cocrepo/dto";
 import { Injectable } from "@nestjs/common";
 import { UsersRepository } from "../../repository/users.repository";
 

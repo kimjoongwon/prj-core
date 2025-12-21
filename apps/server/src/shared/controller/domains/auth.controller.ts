@@ -1,11 +1,11 @@
+import { Public } from "@cocrepo/decorator";
+import { ApiResponseEntity } from "@cocrepo/decorator";
 import {
-	ApiResponseEntity,
 	LoginPayloadDto,
-	Public,
 	SignUpPayloadDto,
 	TokenDto,
 	UserDto,
-} from "@cocrepo/schema";
+} from "@cocrepo/dto";
 import {
 	Body,
 	Controller,

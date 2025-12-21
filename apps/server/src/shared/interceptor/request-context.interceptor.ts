@@ -1,4 +1,7 @@
-import { type TenantDto, type UserDto } from "@cocrepo/schema";
+import {
+	type TenantDto,
+	type UserDto,
+} from "@cocrepo/dto";
 import {
 	type CallHandler,
 	type ExecutionContext,

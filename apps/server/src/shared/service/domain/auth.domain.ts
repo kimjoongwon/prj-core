@@ -1,9 +1,11 @@
 import {
+	ResponseEntity,
+} from "@cocrepo/entity";
+import {
 	LoginPayloadDto,
 	QueryUserDto,
-	ResponseEntity,
 	SignUpPayloadDto,
-} from "@cocrepo/schema";
+} from "@cocrepo/dto";
 import {
 	BadRequestException,
 	HttpStatus,

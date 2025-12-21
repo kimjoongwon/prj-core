@@ -17,6 +17,8 @@
   },
   "dependencies": {
     "@cocrepo/api-client": "1.3.6",
+    "@cocrepo/design-system": "workspace:*",
+    "@cocrepo/providers": "workspace:*",
     "@cocrepo/store": "1.0.2",
     "@cocrepo/toolkit": "1.3.5",
     "@cocrepo/ui": "1.5.6",

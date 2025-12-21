@@ -3,7 +3,7 @@ import {
 	QueryRoleClassificationDto,
 	RoleClassificationDto,
 	UpdateRoleClassificationDto,
-} from "@cocrepo/schema";
+} from "@cocrepo/dto";
 import {
 	Body,
 	Controller,

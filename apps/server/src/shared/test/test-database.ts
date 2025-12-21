@@ -1,7 +1,7 @@
 import { execSync } from "node:child_process";
 import { existsSync, unlinkSync } from "node:fs";
 import { join } from "node:path";
-import { PrismaClient } from "@cocrepo/schema";
+import { PrismaClient } from "@prisma/client";
 
 export class TestDatabase {
 	private static instance: TestDatabase;

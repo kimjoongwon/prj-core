@@ -1,4 +1,4 @@
-import { ResponseEntity } from "@cocrepo/schema";
+import { ResponseEntity } from "@cocrepo/entity";
 import {
 	type CallHandler,
 	type ExecutionContext,

@@ -1,10 +1,59 @@
 # @cocrepo/constants
 
-Shared constants and configuration values for the Cocrepo monorepo.
+프로젝트 전반에서 사용하는 공통 상수 및 설정 값을 제공하는 패키지입니다.
 
-## Overview
+## 개요
 
-`@cocrepo/constants` provides centralized constant values, configuration options, and shared constants used across all applications and packages. This ensures consistency and makes it easy to update values in one place.
+`@cocrepo/constants`는 모든 애플리케이션과 패키지에서 사용하는 상수 값, 설정 옵션, 공유 상수를 제공합니다. 이를 통해 일관성을 유지하고 한 곳에서 값을 쉽게 업데이트할 수 있습니다.
+
+## 디렉토리 구조
+
+```
+src/
+├── routing/              # 프론트엔드 라우팅 상수
+│   ├── endpoints.ts      # API 엔드포인트 경로
+│   ├── route-names.ts    # 라우트 이름 상수
+│   └── index.ts
+├── schema/               # 백엔드 스키마 상수
+│   ├── api-description.constant.ts   # API 문서 설명
+│   ├── default-object.constant.ts    # 기본값 객체
+│   ├── entity-common-fields.ts       # 엔티티 공통 필드
+│   ├── language-code.constant.ts     # 언어 코드
+│   ├── order.constant.ts             # 정렬 순서
+│   ├── role-type.constant.ts         # 역할 타입
+│   ├── token.constant.ts             # 토큰 상수
+│   ├── token-types.constant.ts       # 토큰 타입
+│   ├── types.ts                      # 유틸리티 타입
+│   └── index.ts
+└── index.ts
+```
+
+## 라우팅 상수 사용
+
+```typescript
+// 프론트엔드 라우팅
+import { ROUTE_ENDPOINTS, ROUTE_NAMES } from '@cocrepo/constants/routing';
+
+// 관리자 대시보드 경로
+const dashboardPath = ROUTE_ENDPOINTS.ADMIN.DASHBOARD;
+const dashboardName = ROUTE_NAMES.ADMIN.DASHBOARD;
+```
+
+## 스키마 상수 사용
+
+```typescript
+// 백엔드 스키마 상수
+import { API_DESCRIPTIONS, DEFAULT_OBJECTS, LANGUAGE_CODES } from '@cocrepo/constants/schema';
+
+// API 설명문
+const userDescription = API_DESCRIPTIONS.USER.CREATE;
+
+// 기본값 객체
+const defaultPagination = DEFAULT_OBJECTS.PAGINATION;
+```
+
+> **참고**: 이 패키지는 기존 `@cocrepo/schema`에서 분리되었습니다.
+> 마이그레이션 가이드: [docs/SCHEMA-REFACTORING.md](../../docs/SCHEMA-REFACTORING.md)
 
 ## Features
 

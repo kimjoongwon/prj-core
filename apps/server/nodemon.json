@@ -1,8 +1,18 @@
 {
   "watch": [
     "src",
-    "../../packages/shared-schema/src",
-    "../../packages/shared-schema/dist"
+    "../../packages/decorator/dist",
+    "../../packages/decorator/src",
+    "../../packages/dto/dist",
+    "../../packages/dto/src",
+    "../../packages/entity/dist",
+    "../../packages/entity/src",
+    "../../packages/enums/dist",
+    "../../packages/enums/src",
+    "../../packages/schema/dist",
+    "../../packages/types/src",
+    "../../packages/toolkit/dist"
+    "../../packages/toolkit/src"
   ],
   "ext": "ts,js",
   "ignore": [

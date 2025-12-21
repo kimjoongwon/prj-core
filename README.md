@@ -135,20 +135,39 @@ prj-core/
 │       └── package.json
 ├── packages/                      # 공유 패키지
 │   ├── api-client/               # 자동 생성 API 클라이언트 (Orval)
-│   ├── constants/                # 공통 상수 (엔드포인트, 라우트명)
+│   ├── constants/                # 공통 상수
+│   │   └── src/
+│   │       ├── routing/         # 프론트엔드 라우팅 상수
+│   │       └── schema/          # 백엔드 스키마 상수
+│   ├── decorator/                # NestJS 데코레이터 모음
+│   │   └── src/
+│   │       ├── field/           # 필드 데코레이터 (primitives, complex, specialized)
+│   │       └── *.decorator.ts   # 인증, 권한, API 데코레이터
+│   ├── design-system/            # HeroUI 기반 디자인 시스템
+│   │   └── src/
+│   │       ├── provider/        # DesignSystemProvider
+│   │       ├── theme/           # 테마 설정 및 토큰
+│   │       └── styles/          # 기본 스타일
+│   ├── dto/                      # Data Transfer Objects
+│   │   └── src/
+│   │       ├── auth/            # 인증 관련 DTO
+│   │       ├── create/          # 생성 DTO
+│   │       ├── update/          # 수정 DTO
+│   │       └── query/           # 조회 DTO
+│   ├── entity/                   # 데이터베이스 엔티티 타입
+│   │   └── src/
+│   │       ├── *.entity.ts      # 엔티티 정의
+│   │       └── types/           # JSON, 페이지네이션 타입
+│   ├── enums/                    # 공유 열거형
+│   │   └── src/
+│   │       └── *.enum.ts        # 카테고리, 그룹, 세션 타입 등
 │   ├── hooks/                    # 공유 React Hooks
 │   ├── providers/                # 공유 Providers
-│   ├── schema/                   # Prisma 스키마 & DTO
-│   │   ├── prisma/
-│   │   │   ├── models/          # Prisma 모델 정의
-│   │   │   ├── migrations/      # DB 마이그레이션
-│   │   │   ├── seed.ts          # 시드 데이터
-│   │   │   └── seed-data.ts
-│   │   └── src/
-│   │       ├── dto/             # Data Transfer Objects
-│   │       ├── entity/          # Prisma 엔티티
-│   │       ├── enum/            # Enum 타입
-│   │       └── decorator/       # 커스텀 데코레이터
+│   ├── schema/                   # Prisma 스키마 (DB 전용)
+│   │   └── prisma/
+│   │       ├── models/          # Prisma 모델 정의
+│   │       ├── migrations/      # DB 마이그레이션
+│   │       └── seed.ts          # 시드 데이터
 │   ├── store/                    # 공유 상태 관리 (MobX)
 │   ├── toolkit/                  # 유틸리티 함수
 │   ├── types/                    # 공유 TypeScript 타입
@@ -171,36 +190,64 @@ graph TD
         Storybook[Storybook]
     end
 
-    subgraph Packages
-        ApiClient[api-client]
-        Schema[schema]
-        UI[ui]
-        Store[store]
-        Toolkit[toolkit]
-        Hooks[hooks]
+    subgraph "Core Packages"
         Constants[constants]
+        Enums[enums]
         Types[types]
+        Toolkit[toolkit]
     end
 
+    subgraph "Backend Packages"
+        Schema[schema - Prisma]
+        Decorator[decorator]
+        Entity[entity]
+        DTO[dto]
+    end
+
+    subgraph "Frontend Packages"
+        DesignSystem[design-system]
+        UI[ui]
+        Store[store]
+        Hooks[hooks]
+        ApiClient[api-client]
+        Providers[providers]
+    end
+
+    %% Application Dependencies
     Admin --> ApiClient
     Admin --> UI
     Admin --> Store
-    Admin --> Toolkit
+    Admin --> DesignSystem
     Admin --> Hooks
     Admin --> Constants
 
     Server --> Schema
-    Server --> Toolkit
+    Server --> DTO
+    Server --> Entity
+    Server --> Decorator
+    Server --> Enums
     Server --> Constants
 
     Storybook --> UI
-    Storybook --> Hooks
+    Storybook --> DesignSystem
+
+    %% Package Dependencies
+    Decorator --> Constants
+    Entity --> Decorator
+    Entity --> Types
+    DTO --> Entity
+    DTO --> Decorator
+    DTO --> Enums
 
     UI --> Toolkit
     UI --> Types
     Store --> Types
     ApiClient --> Types
+    DesignSystem --> UI
 ```
+
+> **📝 참고**: 기존 `packages/schema`에서 DTO, Entity, Enum, Decorator가 별도 패키지로 분리되었습니다.
+> 마이그레이션 가이드: [docs/SCHEMA-REFACTORING.md](./docs/SCHEMA-REFACTORING.md)
 
 ## 🚀 시작하기
 

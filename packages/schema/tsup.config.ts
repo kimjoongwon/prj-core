@@ -12,6 +12,10 @@ export default defineConfig((option) => ({
 	// Enable path resolution for tsconfig paths
 	tsconfig: "./tsconfig.json",
 	external: [
+		"@cocrepo/enums",
+		"@cocrepo/constants",
+		"@cocrepo/decorator",
+		"@cocrepo/entity",
 		"@prisma/client",
 		"@nestjs/common",
 		"@nestjs/swagger",

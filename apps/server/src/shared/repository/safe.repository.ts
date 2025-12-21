@@ -1,4 +1,4 @@
-import { Prisma } from "@cocrepo/schema";
+import { Prisma } from "@prisma/client";
 import { Injectable, Logger } from "@nestjs/common";
 import { PrismaService } from "../service/utils";
 

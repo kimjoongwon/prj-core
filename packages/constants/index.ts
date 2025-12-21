@@ -1,2 +1,2 @@
-export * from "./src/endpoints";
-export * from "./src/route-names";
+export * from "./src/routing";
+export * from "./src/schema";

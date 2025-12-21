@@ -1,9 +1,9 @@
+import { Prisma } from "@prisma/client";
 import {
 	CreateProgramDto,
-	Prisma,
 	QueryProgramDto,
 	UpdateProgramDto,
-} from "@cocrepo/schema";
+} from "@cocrepo/dto";
 import { Injectable } from "@nestjs/common";
 import { ProgramsRepository } from "../../repository/programs.repository";
 

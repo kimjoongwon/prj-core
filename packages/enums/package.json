@@ -1,0 +1,32 @@
+{
+  "name": "@cocrepo/enums",
+  "version": "0.1.0",
+  "description": "Shared Enums",
+  "types": "dist/index.d.ts",
+  "publishConfig": {
+    "access": "public"
+  },
+  "files": [
+    "dist"
+  ],
+  "exports": {
+    ".": {
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.js"
+    }
+  },
+  "scripts": {
+    "start:dev": "tsup --watch --sourcemap",
+    "build": "tsup",
+    "format": "biome format --write ."
+  },
+  "keywords": [],
+  "author": "kimjoongwon",
+  "license": "ISC",
+  "dependencies": {
+    "ts-jenum": "^2.2.2"
+  },
+  "devDependencies": {
+    "tsup": "catalog:"
+  }
+}

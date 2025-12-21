@@ -1,4 +1,8 @@
-import { CreateSpaceDto, QuerySpaceDto, UpdateSpaceDto } from "@cocrepo/schema";
+import {
+	CreateSpaceDto,
+	QuerySpaceDto,
+	UpdateSpaceDto,
+} from "@cocrepo/dto";
 import { Injectable } from "@nestjs/common";
 import { SpacesRepository } from "../../repository/spaces.repository";
 

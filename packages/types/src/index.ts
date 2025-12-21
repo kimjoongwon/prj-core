@@ -1,4 +1,30 @@
+// ============================================
+// Entity 관련 타입
+// ============================================
+
+/**
+ * 인스턴스화 가능한 클래스를 나타내는 제네릭 생성자 타입
+ * @template T - 생성자가 생성하는 인스턴스의 타입
+ * @template Arguments - 생성자 인자 타입 배열 (기본값: any[])
+ */
+export type Constructor<T = any, Arguments extends unknown[] = any[]> = new (
+	...arguments_: Arguments
+) => T;
+
+/**
+ * 모든 엔티티가 가지는 공통 필드 인터페이스
+ */
+export interface BaseEntityFields {
+	id: string;
+	seq: number;
+	createdAt: Date;
+	updatedAt: Date | null;
+	removedAt: Date | null;
+}
+
+// ============================================
 // Core type utilities
+// ============================================
 export type Join<K, P> = K extends string | number
 	? P extends string | number
 		? `${K}${"" extends P ? "" : "."}${P}`

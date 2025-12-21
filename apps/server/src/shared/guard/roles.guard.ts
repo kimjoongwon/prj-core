@@ -1,4 +1,5 @@
-import { Roles as RolesDecorator, UserDto } from "@cocrepo/schema";
+import { Roles as RolesDecorator } from "@cocrepo/decorator";
+import { UserDto } from "@cocrepo/dto";
 import {
 	CanActivate,
 	ExecutionContext,

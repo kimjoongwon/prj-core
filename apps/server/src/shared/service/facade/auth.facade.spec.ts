@@ -1,4 +1,7 @@
-import { LoginPayloadDto, SignUpPayloadDto } from "@cocrepo/schema";
+import {
+	LoginPayloadDto,
+	SignUpPayloadDto,
+} from "@cocrepo/dto";
 import { JwtService } from "@nestjs/jwt";
 import { Test, TestingModule } from "@nestjs/testing";
 import {

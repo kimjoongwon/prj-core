@@ -1,4 +1,4 @@
-import { UserDto } from "@cocrepo/schema";
+import { UserDto } from "@cocrepo/dto";
 import { type CallHandler, type ExecutionContext } from "@nestjs/common";
 import { Test, type TestingModule } from "@nestjs/testing";
 import { of } from "rxjs";

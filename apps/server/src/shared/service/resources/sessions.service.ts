@@ -1,9 +1,9 @@
+import { Prisma } from "@prisma/client";
 import {
 	CreateSessionDto,
-	Prisma,
 	QuerySessionDto,
 	UpdateSessionDto,
-} from "@cocrepo/schema";
+} from "@cocrepo/dto";
 import { Injectable } from "@nestjs/common";
 import { SessionsRepository } from "../../repository/sessions.repository";
 

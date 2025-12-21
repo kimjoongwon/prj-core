@@ -1,0 +1,47 @@
+{
+  "name": "@cocrepo/entity",
+  "version": "0.1.0",
+  "publishConfig": {
+    "access": "public"
+  },
+  "description": "Entity 클래스 패키지",
+  "files": [
+    "dist",
+    "README.md"
+  ],
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
+  "scripts": {
+    "type-check": "tsc --noEmit",
+    "build": "tsup",
+    "start:dev": "tsup --watch",
+    "format": "biome format --write .",
+    "clean": "rm -rf dist && rm -rf node_modules"
+  },
+  "dependencies": {
+    "@cocrepo/decorator": "workspace:*",
+    "@cocrepo/types": "workspace:*",
+    "class-transformer": "^0.5.1"
+  },
+  "peerDependencies": {
+    "@prisma/client": "catalog:",
+    "@nestjs/common": "^11.1.3",
+    "@nestjs/swagger": "^11.2.0"
+  },
+  "devDependencies": {
+    "@prisma/client": "catalog:",
+    "@nestjs/common": "^11.1.3",
+    "@nestjs/swagger": "^11.2.0",
+    "@types/node": "catalog:",
+    "tsup": "catalog:",
+    "typescript": "catalog:"
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.js"
+    }
+  }
+}

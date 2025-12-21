@@ -1,0 +1,48 @@
+{
+  "name": "@cocrepo/decorator",
+  "version": "0.1.0",
+  "private": false,
+  "types": "dist/index.d.ts",
+  "publishConfig": {
+    "access": "public"
+  },
+  "description": "NestJS decorators for DTOs, entities, and API documentation",
+  "files": [
+    "dist",
+    "README.md"
+  ],
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.js"
+    }
+  },
+  "scripts": {
+    "start:dev": "tsup --watch",
+    "build": "tsup",
+    "format": "biome format --write .",
+    "type-check": "tsc --noEmit",
+    "clean": "rm -rf dist && rm -rf node_modules"
+  },
+  "dependencies": {
+    "@cocrepo/constants": "workspace:*",
+    "@cocrepo/toolkit": "workspace:*",
+    "libphonenumber-js": "^1.12.10"
+  },
+  "peerDependencies": {
+    "@nestjs/common": "^11.1.3",
+    "@nestjs/swagger": "^11.2.0",
+    "class-transformer": "^0.5.1",
+    "class-validator": "^0.14.2"
+  },
+  "devDependencies": {
+    "@nestjs/common": "^11.1.3",
+    "@nestjs/swagger": "^11.2.0",
+    "@types/node": "catalog:",
+    "class-transformer": "^0.5.1",
+    "class-validator": "^0.14.2",
+    "tsup": "catalog:",
+    "typescript": "catalog:"
+  }
+}

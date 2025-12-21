@@ -1,11 +1,11 @@
+import { ApiResponseEntity } from "@cocrepo/decorator";
 import {
-	ApiResponseEntity,
 	type CreateSubjectDto,
 	PageMetaDto,
 	type QuerySubjectDto,
 	SubjectDto,
 	type UpdateSubjectDto,
-} from "@cocrepo/schema";
+} from "@cocrepo/dto";
 import {
 	Body,
 	Controller,

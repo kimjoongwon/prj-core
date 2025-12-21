@@ -1,4 +1,4 @@
-import { PUBLIC_ROUTE_KEY } from "@cocrepo/schema";
+import { PUBLIC_ROUTE_KEY } from "@cocrepo/decorator";
 import {
 	ExecutionContext,
 	Injectable,

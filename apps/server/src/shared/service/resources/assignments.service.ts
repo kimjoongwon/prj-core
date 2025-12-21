@@ -1,9 +1,9 @@
+import { Prisma } from "@prisma/client";
 import {
 	CreateAssignmentDto,
-	Prisma,
 	QueryAssignmentDto,
 	UpdateAssignmentDto,
-} from "@cocrepo/schema";
+} from "@cocrepo/dto";
 import { Injectable } from "@nestjs/common";
 import { AssignmentsRepository } from "../../repository/assignments.repository";
 
