@@ -1,4 +1,3 @@
-import { Prisma } from "@prisma/client";
 import { ResponseEntity } from "@cocrepo/entity";
 import {
 	type ArgumentsHost,
@@ -8,6 +7,7 @@ import {
 	HttpStatus,
 } from "@nestjs/common";
 import { APP_FILTER, BaseExceptionFilter, HttpAdapterHost } from "@nestjs/core";
+import { Prisma } from "@prisma/client";
 
 export declare type GqlContextType = "graphql";
 

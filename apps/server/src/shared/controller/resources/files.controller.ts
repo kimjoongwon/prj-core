@@ -1,9 +1,5 @@
-import { ApiFile } from "@cocrepo/decorator";
-import { ApiResponseEntity } from "@cocrepo/decorator";
-import {
-	CreateFileDto,
-	FileDto,
-} from "@cocrepo/dto";
+import { ApiFile, ApiResponseEntity } from "@cocrepo/decorator";
+import { CreateFileDto, FileDto } from "@cocrepo/dto";
 import {
 	Body,
 	Controller,

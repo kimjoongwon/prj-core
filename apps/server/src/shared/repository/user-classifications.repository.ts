@@ -13,82 +13,61 @@ export class UserClassificationsRepository {
 		this.logger = new Logger("UserClassification");
 	}
 
-	async create(
-		args: any,
-	): Promise<UserClassification> {
+	async create(args: any): Promise<UserClassification> {
 		this.logger.debug(`UserClassification 생성 중...`);
 		const result = await this.prisma.userClassification.create(args);
 		return plainToInstance(UserClassification, result);
 	}
 
-	async upsert(
-		args: any,
-	): Promise<UserClassification> {
+	async upsert(args: any): Promise<UserClassification> {
 		this.logger.debug(`UserClassification 업서트 중...`);
 		const result = await this.prisma.userClassification.upsert(args);
 		return plainToInstance(UserClassification, result);
 	}
 
-	async update(
-		args: any,
-	): Promise<UserClassification> {
+	async update(args: any): Promise<UserClassification> {
 		this.logger.debug(`UserClassification 업데이트 중...`);
 		const result = await this.prisma.userClassification.update(args);
 		return plainToInstance(UserClassification, result);
 	}
 
-	async updateMany(
-		args: any,
-	): Promise<any> {
+	async updateMany(args: any): Promise<any> {
 		this.logger.debug(`UserClassification 다중 업데이트 중...`);
 		return await this.prisma.userClassification.updateMany(args);
 	}
 
-	async delete(
-		args: any,
-	): Promise<UserClassification> {
+	async delete(args: any): Promise<UserClassification> {
 		this.logger.debug(`UserClassification 삭제 중...`);
 		const result = await this.prisma.userClassification.delete(args);
 		return plainToInstance(UserClassification, result);
 	}
 
-	async findMany(
-		args: any,
-	): Promise<UserClassification[]> {
+	async findMany(args: any): Promise<UserClassification[]> {
 		this.logger.debug(`UserClassification 다중 조회 중...`);
 		const result = await this.prisma.userClassification.findMany(args);
 		return result.map((item) => plainToInstance(UserClassification, item));
 	}
 
-	async findFirst(
-		args: any,
-	): Promise<UserClassification> {
+	async findFirst(args: any): Promise<UserClassification> {
 		this.logger.debug(`UserClassification 최초 조회 중...`);
 		const result = await this.prisma.userClassification.findFirst(args);
 		return plainToInstance(UserClassification, result);
 	}
 
-	async findUnique(
-		args: any,
-	): Promise<UserClassification> {
+	async findUnique(args: any): Promise<UserClassification> {
 		this.logger.debug(`UserClassification 고유 조회 중...`);
 		const result = await this.prisma.userClassification.findUnique(args);
 		return plainToInstance(UserClassification, result);
 	}
 
-
-	async createManyAndReturn(
-		args: any,
-	): Promise<UserClassification[]> {
+	async createManyAndReturn(args: any): Promise<UserClassification[]> {
 		this.logger.debug(`UserClassification 다중 생성 중...`);
 		const result =
 			await this.prisma.userClassification.createManyAndReturn(args);
 		return result.map((item) => plainToInstance(UserClassification, item));
 	}
 
-	async deleteMany(
-		args: any,
-	): Promise<any> {
+	async deleteMany(args: any): Promise<any> {
 		this.logger.debug(`UserClassification 다중 삭제 중...`);
 		return await this.prisma.userClassification.deleteMany(args);
 	}

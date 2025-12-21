@@ -13,81 +13,60 @@ export class RoleAssociationsRepository {
 		this.logger = new Logger("RoleAssociation");
 	}
 
-	async create(
-		args: any,
-	): Promise<RoleAssociation> {
+	async create(args: any): Promise<RoleAssociation> {
 		this.logger.debug(`RoleAssociation 생성 중...`);
 		const result = await this.prisma.roleAssociation.create(args);
 		return plainToInstance(RoleAssociation, result);
 	}
 
-	async upsert(
-		args: any,
-	): Promise<RoleAssociation> {
+	async upsert(args: any): Promise<RoleAssociation> {
 		this.logger.debug(`RoleAssociation 업서트 중...`);
 		const result = await this.prisma.roleAssociation.upsert(args);
 		return plainToInstance(RoleAssociation, result);
 	}
 
-	async update(
-		args: any,
-	): Promise<RoleAssociation> {
+	async update(args: any): Promise<RoleAssociation> {
 		this.logger.debug(`RoleAssociation 업데이트 중...`);
 		const result = await this.prisma.roleAssociation.update(args);
 		return plainToInstance(RoleAssociation, result);
 	}
 
-	async updateMany(
-		args: any,
-	): Promise<any> {
+	async updateMany(args: any): Promise<any> {
 		this.logger.debug(`RoleAssociation 다중 업데이트 중...`);
 		return await this.prisma.roleAssociation.updateMany(args);
 	}
 
-	async delete(
-		args: any,
-	): Promise<RoleAssociation> {
+	async delete(args: any): Promise<RoleAssociation> {
 		this.logger.debug(`RoleAssociation 삭제 중...`);
 		const result = await this.prisma.roleAssociation.delete(args);
 		return plainToInstance(RoleAssociation, result);
 	}
 
-	async findMany(
-		args: any,
-	): Promise<RoleAssociation[]> {
+	async findMany(args: any): Promise<RoleAssociation[]> {
 		this.logger.debug(`RoleAssociation 다중 조회 중...`);
 		const result = await this.prisma.roleAssociation.findMany(args);
 		return result.map((item) => plainToInstance(RoleAssociation, item));
 	}
 
-	async findFirst(
-		args: any,
-	): Promise<RoleAssociation> {
+	async findFirst(args: any): Promise<RoleAssociation> {
 		this.logger.debug(`RoleAssociation 최초 조회 중...`);
 		const result = await this.prisma.roleAssociation.findFirst(args);
 		return plainToInstance(RoleAssociation, result);
 	}
 
-	async findUnique(
-		args: any,
-	): Promise<RoleAssociation> {
+	async findUnique(args: any): Promise<RoleAssociation> {
 		this.logger.debug(`RoleAssociation 고유 조회 중...`);
 		const result = await this.prisma.roleAssociation.findUnique(args);
 		return plainToInstance(RoleAssociation, result);
 	}
 
-
-	async createManyAndReturn(
-		args: any,
-	): Promise<RoleAssociation[]> {
+	async createManyAndReturn(args: any): Promise<RoleAssociation[]> {
 		this.logger.debug(`RoleAssociation 다중 생성 중...`);
 		const result = await this.prisma.roleAssociation.createManyAndReturn(args);
 		return result.map((item) => plainToInstance(RoleAssociation, item));
 	}
 
-	async deleteMany(
-		args: any,
-	): Promise<any> {
+	async deleteMany(args: any): Promise<any> {
 		this.logger.debug(`RoleAssociation 다중 삭제 중...`);
 		return await this.prisma.roleAssociation.deleteMany(args);
 	}

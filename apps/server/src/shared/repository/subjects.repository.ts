@@ -31,9 +31,7 @@ export class SubjectsRepository {
 		return plainToInstance(Subject, result);
 	}
 
-	async updateMany(
-		args: any,
-	): Promise<any> {
+	async updateMany(args: any): Promise<any> {
 		this.logger.debug(`Subject 다중 업데이트 중...`);
 		return await this.prisma.subject.updateMany(args);
 	}
@@ -62,18 +60,13 @@ export class SubjectsRepository {
 		return plainToInstance(Subject, result);
 	}
 
-
-	async createManyAndReturn(
-		args: any,
-	): Promise<Subject[]> {
+	async createManyAndReturn(args: any): Promise<Subject[]> {
 		this.logger.debug(`Subject 다중 생성 중...`);
 		const result = await this.prisma.subject.createManyAndReturn(args);
 		return result.map((item) => plainToInstance(Subject, item));
 	}
 
-	async deleteMany(
-		args: any,
-	): Promise<any> {
+	async deleteMany(args: any): Promise<any> {
 		this.logger.debug(`Subject 다중 삭제 중...`);
 		return await this.prisma.subject.deleteMany(args);
 	}

@@ -1,7 +1,4 @@
-import {
-	TenantDto,
-	UserDto,
-} from "@cocrepo/dto";
+import { TenantDto, UserDto } from "@cocrepo/dto";
 import { type ClsService } from "nestjs-cls";
 import { ContextService } from "./context.service";
 

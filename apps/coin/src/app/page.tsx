@@ -1,6 +1,7 @@
 "use client";
 
 import { observer } from "mobx-react-lite";
+import Link from "next/link";
 import { ConnectWalletButton } from "@/components";
 import { useStores } from "@/providers";
 
@@ -44,7 +45,7 @@ const Home = observer(() => {
 
             {/* Safe 액션 버튼 */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <a
+              <Link
                 href="/safe/create"
                 className="block p-6 bg-white dark:bg-zinc-950 rounded-lg border border-zinc-200 dark:border-zinc-800 hover:border-blue-500 transition-colors"
               >
@@ -54,8 +55,8 @@ const Home = observer(() => {
                 <p className="text-sm text-zinc-600 dark:text-zinc-400">
                   3명의 서명자로 새로운 멀티시그 지갑을 생성합니다.
                 </p>
-              </a>
-              <a
+              </Link>
+              <Link
                 href="/safe/manage"
                 className="block p-6 bg-white dark:bg-zinc-950 rounded-lg border border-zinc-200 dark:border-zinc-800 hover:border-blue-500 transition-colors"
               >
@@ -65,7 +66,7 @@ const Home = observer(() => {
                 <p className="text-sm text-zinc-600 dark:text-zinc-400">
                   기존 Safe 지갑을 조회하고 트랜잭션을 관리합니다.
                 </p>
-              </a>
+              </Link>
             </div>
           </div>
         ) : (

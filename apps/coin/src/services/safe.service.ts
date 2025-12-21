@@ -79,7 +79,7 @@ export class SafeService {
       throw new Error("Signer not found");
     }
 
-    const txHash = await client.sendTransaction({
+    await client.sendTransaction({
       to: deploymentTransaction.to as `0x${string}`,
       value: BigInt(deploymentTransaction.value),
       data: deploymentTransaction.data as `0x${string}`,

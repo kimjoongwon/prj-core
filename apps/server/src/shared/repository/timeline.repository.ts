@@ -31,9 +31,7 @@ export class TimelinesRepository {
 		return plainToInstance(Timeline, result);
 	}
 
-	async updateMany(
-		args: any,
-	): Promise<any> {
+	async updateMany(args: any): Promise<any> {
 		this.logger.debug(`Timeline 다중 업데이트 중...`);
 		return await this.prisma.timeline.updateMany(args);
 	}
@@ -62,18 +60,13 @@ export class TimelinesRepository {
 		return plainToInstance(Timeline, result);
 	}
 
-
-	async createManyAndReturn(
-		args: any,
-	): Promise<Timeline[]> {
+	async createManyAndReturn(args: any): Promise<Timeline[]> {
 		this.logger.debug(`Timeline 다중 생성 중...`);
 		const result = await this.prisma.timeline.createManyAndReturn(args);
 		return result.map((item) => plainToInstance(Timeline, item));
 	}
 
-	async deleteMany(
-		args: any,
-	): Promise<any> {
+	async deleteMany(args: any): Promise<any> {
 		this.logger.debug(`Timeline 다중 삭제 중...`);
 		return await this.prisma.timeline.deleteMany(args);
 	}

@@ -7,7 +7,7 @@
 import { HeroUIProvider } from "@heroui/react";
 import { useTheme } from "@heroui/use-theme";
 import type { ReactNode } from "react";
-import { defaultThemeConfig, type ThemeConfig } from "../theme/heroui.config";
+import { type ThemeConfig } from "../theme/heroui.config";
 
 export interface DesignSystemProviderProps {
   children: ReactNode;
@@ -40,19 +40,9 @@ export interface DesignSystemProviderProps {
  */
 export function DesignSystemProvider({
   children,
-  themeConfig,
   navigate,
 }: DesignSystemProviderProps) {
-  const config = { ...defaultThemeConfig, ...themeConfig };
-
-  return (
-    <HeroUIProvider
-      navigate={navigate}
-      disableBaseline={config.disableBaseline}
-    >
-      {children}
-    </HeroUIProvider>
-  );
+  return <HeroUIProvider navigate={navigate}>{children}</HeroUIProvider>;
 }
 
 /**

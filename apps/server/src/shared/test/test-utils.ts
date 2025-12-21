@@ -1,9 +1,5 @@
-import {
-	User,
-} from "@cocrepo/entity";
-import {
-	UserDto,
-} from "@cocrepo/dto";
+import { UserDto } from "@cocrepo/dto";
+import { User } from "@cocrepo/entity";
 import { ConfigService } from "@nestjs/config";
 import { JwtService } from "@nestjs/jwt";
 import { Test, TestingModule } from "@nestjs/testing";

@@ -1,8 +1,6 @@
-import { Prisma } from "@prisma/client";
-import {
-	QueryUserDto,
-} from "@cocrepo/dto";
+import { QueryUserDto } from "@cocrepo/dto";
 import { Injectable } from "@nestjs/common";
+import { Prisma } from "@prisma/client";
 import { UsersRepository } from "../../repository/users.repository";
 
 @Injectable()

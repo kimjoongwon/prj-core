@@ -1,10 +1,10 @@
-import { Prisma } from "@prisma/client";
 import {
 	CreateAssignmentDto,
 	QueryAssignmentDto,
 	UpdateAssignmentDto,
 } from "@cocrepo/dto";
 import { Injectable } from "@nestjs/common";
+import { Prisma } from "@prisma/client";
 import { AssignmentsRepository } from "../../repository/assignments.repository";
 
 @Injectable()

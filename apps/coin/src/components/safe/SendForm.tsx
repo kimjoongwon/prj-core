@@ -107,11 +107,9 @@ export const SendForm = observer(function SendForm({
         request: walletClient.request.bind(walletClient),
       };
 
-      let safeTxHash: string;
-
       if (selectedToken.isNative && !useCustomToken) {
         // ETH 송금
-        safeTxHash = await transactionService.createEthTransaction(
+        await transactionService.createEthTransaction(
           safeAddress,
           recipient,
           amount,
@@ -126,7 +124,7 @@ export const SendForm = observer(function SendForm({
           : selectedToken.address;
         const decimals = useCustomToken ? 18 : selectedToken.decimals;
 
-        safeTxHash = await transactionService.createTokenTransaction(
+        await transactionService.createTokenTransaction(
           safeAddress,
           tokenAddress,
           recipient,

@@ -1,7 +1,4 @@
-import {
-	LoginPayloadDto,
-	SignUpPayloadDto,
-} from "@cocrepo/dto";
+import { LoginPayloadDto, SignUpPayloadDto } from "@cocrepo/dto";
 import { Injectable, Logger, UnauthorizedException } from "@nestjs/common";
 import { JwtService } from "@nestjs/jwt";
 import { AuthDomain } from "../domain/auth.domain";

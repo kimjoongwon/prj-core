@@ -31,9 +31,7 @@ export class SpacesRepository {
 		return plainToInstance(Space, result);
 	}
 
-	async updateMany(
-		args: any,
-	): Promise<any> {
+	async updateMany(args: any): Promise<any> {
 		this.logger.debug(`Space 다중 업데이트 중...`);
 		return await this.prisma.space.updateMany(args);
 	}
@@ -62,18 +60,13 @@ export class SpacesRepository {
 		return plainToInstance(Space, result);
 	}
 
-
-	async createManyAndReturn(
-		args: any,
-	): Promise<Space[]> {
+	async createManyAndReturn(args: any): Promise<Space[]> {
 		this.logger.debug(`Space 다중 생성 중...`);
 		const result = await this.prisma.space.createManyAndReturn(args);
 		return result.map((item) => plainToInstance(Space, item));
 	}
 
-	async deleteMany(
-		args: any,
-	): Promise<any> {
+	async deleteMany(args: any): Promise<any> {
 		this.logger.debug(`Space 다중 삭제 중...`);
 		return await this.prisma.space.deleteMany(args);
 	}

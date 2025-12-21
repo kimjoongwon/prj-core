@@ -1,10 +1,10 @@
-import { Prisma } from "@prisma/client";
 import {
 	CreateRoutineDto,
 	QueryRoutineDto,
 	UpdateRoutineDto,
 } from "@cocrepo/dto";
 import { Injectable } from "@nestjs/common";
+import { Prisma } from "@prisma/client";
 import { RoutinesRepository } from "../../repository/routines.repository";
 
 @Injectable()

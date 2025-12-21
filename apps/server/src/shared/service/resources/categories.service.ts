@@ -1,9 +1,6 @@
-import { Prisma } from "@prisma/client";
-import {
-	QueryCategoryDto,
-	UpdateCategoryDto,
-} from "@cocrepo/dto";
+import { QueryCategoryDto, UpdateCategoryDto } from "@cocrepo/dto";
 import { Injectable } from "@nestjs/common";
+import { Prisma } from "@prisma/client";
 import { CategoriesRepository } from "../../repository/categories.repository";
 import { AppLogger } from "../../util/app-logger.util";
 import { ContextService } from "../utils";
