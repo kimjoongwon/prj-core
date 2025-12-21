@@ -5,7 +5,7 @@ import { PrismaClient } from "@cocrepo/prisma";
 
 export class TestDatabase {
   private static instance: TestDatabase;
-  private prisma: PrismaClient;
+  private prisma: InstanceType<typeof PrismaClient>;
   private dbPath: string;
 
   private constructor() {
@@ -14,7 +14,8 @@ export class TestDatabase {
     // Prisma 7: Set DATABASE_URL environment variable before creating client
     process.env.DATABASE_URL = "file:./test.db";
 
-    this.prisma = new PrismaClient();
+    // Prisma 7 requires options object
+    this.prisma = new PrismaClient({} as any);
   }
 
   public static getInstance(): TestDatabase {

@@ -1,4 +1,4 @@
-import { login } from "@cocrepo/api-client";
+import { login } from "@cocrepo/api";
 import { AdminAuthLoginPage } from "@cocrepo/ui";
 import { useMutation } from "@tanstack/react-query";
 import { createFileRoute, useNavigate } from "@tanstack/react-router";

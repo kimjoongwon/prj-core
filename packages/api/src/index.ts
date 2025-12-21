@@ -1,5 +1,5 @@
 /**
- * @cocrepo/api-client
+ * @cocrepo/api
  * Generated API client and types from OpenAPI specs using orval
  */
 

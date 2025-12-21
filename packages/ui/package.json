@@ -46,7 +46,7 @@
     "@heroui/react": "catalog:",
     "@heroui/use-theme": "catalog:",
     "@internationalized/date": "^3.8.2",
-    "@cocrepo/api-client": "workspace:*",
+    "@cocrepo/api": "workspace:*",
     "@cocrepo/hook": "workspace:*",
     "@cocrepo/type": "workspace:*",
     "@cocrepo/toolkit": "workspace:*",

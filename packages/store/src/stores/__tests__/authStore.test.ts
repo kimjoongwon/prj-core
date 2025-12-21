@@ -1,6 +1,6 @@
 /// <reference types="vitest/globals" />
 
-import { AXIOS_INSTANCE } from "@cocrepo/api-client";
+import { AXIOS_INSTANCE } from "@cocrepo/api";
 import { navigateTo } from "@cocrepo/toolkit";
 import { isAxiosError } from "axios";
 import { beforeEach, describe, expect, it, vi } from "vitest";
@@ -21,7 +21,7 @@ vi.mock("../plateStore");
 vi.mock("../tokenStore");
 
 // AXIOS_INSTANCE 모킹
-vi.mock("@cocrepo/api-client", () => ({
+vi.mock("@cocrepo/api", () => ({
 	AXIOS_INSTANCE: {
 		interceptors: {
 			response: {

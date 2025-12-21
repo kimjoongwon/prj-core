@@ -11,13 +11,14 @@ export default defineConfig((option) => ({
   watch: option.watch,
   // Enable path resolution for tsconfig paths
   tsconfig: "./tsconfig.json",
+  // Prisma 7.0 generated client (.ts files)를 번들에 포함
+  noExternal: [/generated\/client/],
   external: [
     "@cocrepo/enum",
     "@cocrepo/constant",
     "@cocrepo/decorator",
     "@cocrepo/entity",
-    // Prisma 7.0 로컬 client는 번들에 포함하지 않음
-    "../generated/client",
+    "@prisma/client",
     "@nestjs/common",
     "@nestjs/swagger",
     "@nestjs/platform-express",

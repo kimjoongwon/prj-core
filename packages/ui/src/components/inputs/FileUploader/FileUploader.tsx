@@ -1,5 +1,5 @@
 import { Button, Card } from "@heroui/react";
-import { FileDto } from "@cocrepo/api-client";
+import { FileDto } from "@cocrepo/api";
 import { X } from "lucide-react";
 import { v4 } from "uuid";
 

@@ -1,4 +1,4 @@
-import { login } from "@cocrepo/api-client";
+import { login } from "@cocrepo/api";
 import { useMutation } from "@tanstack/react-query";
 import { useNavigate } from "@tanstack/react-router";
 import { isAxiosError } from "axios";

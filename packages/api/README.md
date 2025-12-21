@@ -1,4 +1,4 @@
-# @cocrepo/api-client
+# @cocrepo/api
 
 OpenAPI 스펙으로부터 자동 생성되는 API 클라이언트 패키지입니다.
 
@@ -48,7 +48,7 @@ pnpm codegen:prod       # 프로덕션 환경
 ### 생성된 API 사용 예시
 
 ```typescript
-import { useGetUsersQuery, useCreateUserMutation } from '@cocrepo/api-client';
+import { useGetUsersQuery, useCreateUserMutation } from '@cocrepo/api';
 
 function UserList() {
   // GET 요청 - React Query의 useQuery 활용
@@ -80,7 +80,7 @@ function UserList() {
 ### Suspense 사용 예시
 
 ```typescript
-import { useGetUsersSuspenseQuery } from '@cocrepo/api-client';
+import { useGetUsersSuspenseQuery } from '@cocrepo/api';
 
 function UserListWithSuspense() {
   // Suspense 경계 내에서 사용 - 로딩 상태 자동 관리

@@ -1,6 +1,6 @@
 import { useFormField } from "@cocrepo/hook";
 import { tools } from "@cocrepo/toolkit";
-import type { Paths, PathTuple } from "@cocrepo/types";
+import type { Paths, PathTuple } from "@cocrepo/type";
 import type { ZonedDateTime } from "@internationalized/date";
 import { parseAbsoluteToLocal } from "@internationalized/date";
 import { observer } from "mobx-react-lite";
