@@ -4,11 +4,11 @@ import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { NuqsAdapter } from "nuqs/adapters/react";
 
 interface ProvidersProps {
-	children: React.ReactNode;
+  children: React.ReactNode;
 }
 
 function makeQueryClient() {
-	return new QueryClient();
+  return new QueryClient();
 }
 
 /**
@@ -20,18 +20,16 @@ function makeQueryClient() {
  * - ToastProvider: HeroUI toast notifications
  */
 export const Providers = (props: ProvidersProps) => {
-	const { children } = props;
-	const queryClient = makeQueryClient();
+  const { children } = props;
+  const queryClient = makeQueryClient();
 
-	return (
-		<QueryClientProvider client={queryClient}>
-			{/* @ts-expect-error - NuqsAdapter React 19 type compatibility issue */}
-			<NuqsAdapter>
-				<ToastProvider placement="bottom-center" />
-				{children}
-				{/* @ts-expect-error - ReactQueryDevtools React 19 type compatibility issue */}
-				<ReactQueryDevtools position="top" />
-			</NuqsAdapter>
-		</QueryClientProvider>
-	);
+  return (
+    <QueryClientProvider client={queryClient}>
+      <NuqsAdapter>
+        <ToastProvider placement="bottom-center" />
+        {children}
+        <ReactQueryDevtools position="top" />
+      </NuqsAdapter>
+    </QueryClientProvider>
+  );
 };
