@@ -1,5 +1,5 @@
+import { ResponseEntity } from "@cocrepo/db";
 import { Controller, Get, HttpStatus, Query } from "@nestjs/common";
-import { ResponseEntity } from "@cocrepo/schema";
 
 /**
  * 테스트 전용 모킹 컨트롤러 - 테넌트 ID 주입 기능을 테스트하기 위한 용도

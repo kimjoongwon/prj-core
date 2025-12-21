@@ -16,7 +16,8 @@ export default defineConfig((option) => ({
 		"@cocrepo/constants",
 		"@cocrepo/decorator",
 		"@cocrepo/entity",
-		"@prisma/client",
+		// Prisma 7.0 로컬 client는 번들에 포함하지 않음
+		"../generated/client",
 		"@nestjs/common",
 		"@nestjs/swagger",
 		"@nestjs/platform-express",

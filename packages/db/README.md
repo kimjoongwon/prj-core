@@ -1,4 +1,4 @@
-# @cocrepo/schema
+# @cocrepo/db
 
 Prisma 스키마 및 데이터베이스 클라이언트를 제공하는 패키지입니다.
 
@@ -9,13 +9,13 @@ Prisma 스키마 및 데이터베이스 클라이언트를 제공하는 패키�
 
 ## 분리된 패키지
 
-| 기능 | 새 패키지 |
-|------|----------|
-| Data Transfer Objects | `@cocrepo/dto` |
-| 엔티티 정의 | `@cocrepo/entity` |
-| 열거형 | `@cocrepo/enums` |
-| 데코레이터 | `@cocrepo/decorator` |
-| 스키마 상수 | `@cocrepo/constants` |
+| 기능                  | 새 패키지            |
+| --------------------- | -------------------- |
+| Data Transfer Objects | `@cocrepo/dto`       |
+| 엔티티 정의           | `@cocrepo/entity`    |
+| 열거형                | `@cocrepo/enums`     |
+| 데코레이터            | `@cocrepo/decorator` |
+| 스키마 상수           | `@cocrepo/constants` |
 
 ## 현재 패키지 역할
 
@@ -65,11 +65,13 @@ type UpdateUserInput = UpdateInput<User>;
 ## Scripts
 
 ### Development
+
 - `pnpm generate` - Generate Prisma client from multi-file schema
 - `pnpm build` - Build the package
 - `pnpm start:dev` - Build in watch mode
 
 ### Database Operations
+
 - `pnpm db:push` - Push schema to database
 - `pnpm db:pull` - Pull schema from database
 - `pnpm db:studio` - Open Prisma Studio
@@ -112,14 +114,15 @@ The multi-file schema is configured in `prisma.config.ts`:
 
 ```typescript
 export default defineConfig({
-  schema: "./prisma/schema",  // Points to directory, not file
+  schema: "./prisma/schema", // Points to directory, not file
   // ...
-})
+});
 ```
 
 ### Schema Statistics
 
 Current schema contains:
+
 - **30 models** across 6 domain files
 - **14 enums** for type safety
 - Automatic cross-file model referencing (no imports needed)

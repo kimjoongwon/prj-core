@@ -2,7 +2,7 @@
  * Field Decorators - 통합 Export
  *
  * 모든 필드 데코레이터를 여기서 re-export
- * 기존 import 경로 호환성 유지: `import { StringField } from '@cocrepo/schema'`
+ * 기존 import 경로 호환성 유지: `import { StringField } from '@cocrepo/db'`
  */
 
 // ============================================================================
@@ -53,7 +53,7 @@ export const DefaultKey = "default";
  * ```
  */
 export function Default(value: any) {
-	return (target: any, propertyKey: string) => {
-		Reflect.defineMetadata(DefaultKey, value, target, propertyKey);
-	};
+  return (target: any, propertyKey: string) => {
+    Reflect.defineMetadata(DefaultKey, value, target, propertyKey);
+  };
 }

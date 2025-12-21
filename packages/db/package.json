@@ -1,5 +1,5 @@
 {
-  "name": "@cocrepo/schema",
+  "name": "@cocrepo/db",
   "version": "0.3.6",
   "publishConfig": {
     "access": "public"
@@ -7,6 +7,7 @@
   "description": "Prisma schema and client for the core project",
   "files": [
     "dist",
+    "generated",
     "README.md"
   ],
   "scripts": {
@@ -67,6 +68,11 @@
       "types": "./dist/index.d.ts",
       "import": "./dist/index.js",
       "require": "./dist/index.js"
+    },
+    "./client": {
+      "types": "./generated/client/index.d.ts",
+      "import": "./generated/client/index.js",
+      "require": "./generated/client/index.js"
     },
     "./types": {
       "types": "./dist/types.d.ts",

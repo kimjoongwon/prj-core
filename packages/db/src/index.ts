@@ -1,4 +1,5 @@
-export { Prisma, PrismaClient } from "@prisma/client";
+// Prisma 7.0 - 로컬 생성된 client 사용
+export { Prisma, PrismaClient } from "../generated/client";
 
 // Common database operations
 export interface BaseEntity {

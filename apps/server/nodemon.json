@@ -11,7 +11,7 @@
     "../../packages/enums/src",
     "../../packages/schema/dist",
     "../../packages/types/src",
-    "../../packages/toolkit/dist"
+    "../../packages/toolkit/dist",
     "../../packages/toolkit/src"
   ],
   "ext": "ts,js",

@@ -9,20 +9,22 @@
 단일 패키지의 버전 업데이트, 빌드, 배포를 한 번에 수행합니다.
 
 **사용법:**
+
 ```bash
 # 기본 사용 (patch 버전 업데이트)
-pnpm release:pkg @cocrepo/schema
+pnpm release:pkg @cocrepo/db
 
 # 버전 타입 지정
-pnpm release:pkg @cocrepo/schema patch
-pnpm release:pkg @cocrepo/schema minor
-pnpm release:pkg @cocrepo/schema major
+pnpm release:pkg @cocrepo/db patch
+pnpm release:pkg @cocrepo/db minor
+pnpm release:pkg @cocrepo/db major
 
 # 드라이런 모드 (실제 배포 없이 테스트)
-pnpm release:pkg @cocrepo/schema patch --dry-run
+pnpm release:pkg @cocrepo/db patch --dry-run
 ```
 
 **실행 단계:**
+
 1. 버전 업데이트 (`version-pkg.js` 호출)
 2. 패키지 빌드 (`turbo build`)
 3. 번들 사이즈 분석 (`analyze-bundle-size.js` 호출)
@@ -34,6 +36,7 @@ pnpm release:pkg @cocrepo/schema patch --dry-run
 패키지 배포 후 앱들의 의존성을 `workspace:^` 프로토콜로 업데이트합니다.
 
 **사용법:**
+
 ```bash
 # 대화형 모드 (앱 선택)
 pnpm update:app-deps
@@ -45,6 +48,7 @@ node scripts/update-app-deps.js server admin
 ```
 
 **대화형 모드 예시:**
+
 ```
 📱 업데이트할 앱을 선택해주세요:
 ============================================================
@@ -57,16 +61,17 @@ node scripts/update-app-deps.js server admin
 ============================================================
 
 📦 패키지 버전 수집 중...
-  ✓ @cocrepo/schema@0.3.7
+  ✓ @cocrepo/db@0.3.7
   ✓ @cocrepo/toolkit@1.3.5
 
 📱 앱 의존성 업데이트 중...
-  ✅ admin: @cocrepo/schema workspace:^0.3.0 → workspace:^0.3.0
-  ℹ️  admin: @cocrepo/schema 이미 최신 버전 (workspace:^0.3.0)
+  ✅ admin: @cocrepo/db workspace:^0.3.0 → workspace:^0.3.0
+  ℹ️  admin: @cocrepo/db 이미 최신 버전 (workspace:^0.3.0)
   💾 admin package.json 업데이트 완료
 ```
 
 **동작 방식:**
+
 - 패키지 버전 `0.3.7` → 앱 의존성 `workspace:^0.3.0`
 - 패키지 버전 `1.4.2` → 앱 의존성 `workspace:^1.4.0`
 - 마이너 버전 변경 시에만 업데이트 필요
@@ -77,8 +82,9 @@ node scripts/update-app-deps.js server admin
 특정 패키지의 버전을 업데이트합니다.
 
 **사용법:**
+
 ```bash
-node scripts/version-pkg.js @cocrepo/schema patch
+node scripts/version-pkg.js @cocrepo/db patch
 node scripts/version-pkg.js @cocrepo/toolkit minor
 ```
 
@@ -87,8 +93,9 @@ node scripts/version-pkg.js @cocrepo/toolkit minor
 패키지의 빌드 결과물 크기를 분석합니다.
 
 **사용법:**
+
 ```bash
-node scripts/analyze-bundle-size.js @cocrepo/schema
+node scripts/analyze-bundle-size.js @cocrepo/db
 ```
 
 ## 🔄 워크플로우
@@ -113,7 +120,7 @@ pnpm update:app-deps
 
 ```bash
 # 한 줄로 모든 과정 수행 (대화형 모드 포함)
-pnpm release:pkg @cocrepo/schema patch
+pnpm release:pkg @cocrepo/db patch
 ```
 
 ## 📋 Workspace 프로토콜 이해
@@ -135,42 +142,51 @@ pnpm release:pkg @cocrepo/schema patch
 ### 버전 업데이트 예시
 
 **시나리오 1: 패치 버전 업데이트 (0.3.6 → 0.3.7)**
+
 ```bash
-pnpm release:pkg @cocrepo/schema patch
+pnpm release:pkg @cocrepo/db patch
 ```
+
 - Apps: `workspace:^0.3.0` 유지 (업데이트 불필요)
 - 자동으로 0.3.7 사용
 
 **시나리오 2: 마이너 버전 업데이트 (0.3.7 → 0.4.0)**
+
 ```bash
-pnpm release:pkg @cocrepo/schema minor
+pnpm release:pkg @cocrepo/db minor
 ```
+
 - Apps 대화형 선택:
   - `admin`: 업데이트 (y) → `workspace:^0.4.0`
   - `server`: 건너뜀 (n) → `workspace:^0.3.0` 유지
   - `storybook`: 업데이트 (y) → `workspace:^0.4.0`
 
 **시나리오 3: 메이저 버전 업데이트 (0.4.2 → 1.0.0)**
+
 ```bash
-pnpm release:pkg @cocrepo/schema major
+pnpm release:pkg @cocrepo/db major
 ```
+
 - Apps 대화형 선택 (각각 개별 판단)
 - Breaking changes 있으므로 신중한 업데이트
 
 ## 🚀 배포 체크리스트
 
 ### 배포 전
+
 - [ ] 모든 테스트 통과 (`pnpm test`)
 - [ ] 린트 통과 (`pnpm lint`)
 - [ ] 타입 체크 통과 (`pnpm type-check`)
 - [ ] 변경사항 문서화 (CHANGELOG.md)
 
 ### 배포 중
+
 - [ ] 올바른 버전 타입 선택 (patch/minor/major)
 - [ ] 번들 사이즈 확인
 - [ ] 배포 성공 확인
 
 ### 배포 후
+
 - [ ] Apps 의존성 업데이트 (대화형 선택)
 - [ ] 업데이트된 앱 테스트
 - [ ] Git 커밋 및 푸시
@@ -179,17 +195,20 @@ pnpm release:pkg @cocrepo/schema major
 ## 💡 팁
 
 ### 드라이런으로 먼저 테스트
+
 ```bash
-pnpm release:pkg @cocrepo/schema patch --dry-run
+pnpm release:pkg @cocrepo/db patch --dry-run
 ```
 
 ### 특정 앱만 업데이트
+
 ```bash
 # release-pkg.js에서 자동 실행되지 않고 수동 실행
 node scripts/update-app-deps.js server
 ```
 
 ### 버전 확인
+
 ```bash
 pnpm bundle:sizes
 ```
@@ -215,14 +234,17 @@ pnpm bundle:sizes
 ## 🔧 문제 해결
 
 ### "Could not find package" 에러
+
 - `workspace:^` 프로토콜 확인
 - `pnpm install` 재실행
 
 ### 번들 사이즈 급증
+
 - 불필요한 의존성 확인
 - Tree-shaking 설정 확인
 
 ### 배포 실패
+
 - npm 로그인 상태 확인
 - 패키지 권한 확인
 - 네트워크 연결 확인

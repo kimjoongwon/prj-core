@@ -32,7 +32,7 @@ src/
 
 ```typescript
 // 프론트엔드 라우팅
-import { ROUTE_ENDPOINTS, ROUTE_NAMES } from '@cocrepo/constants/routing';
+import { ROUTE_ENDPOINTS, ROUTE_NAMES } from "@cocrepo/constants/routing";
 
 // 관리자 대시보드 경로
 const dashboardPath = ROUTE_ENDPOINTS.ADMIN.DASHBOARD;
@@ -43,7 +43,11 @@ const dashboardName = ROUTE_NAMES.ADMIN.DASHBOARD;
 
 ```typescript
 // 백엔드 스키마 상수
-import { API_DESCRIPTIONS, DEFAULT_OBJECTS, LANGUAGE_CODES } from '@cocrepo/constants/schema';
+import {
+  API_DESCRIPTIONS,
+  DEFAULT_OBJECTS,
+  LANGUAGE_CODES,
+} from "@cocrepo/constants/schema";
 
 // API 설명문
 const userDescription = API_DESCRIPTIONS.USER.CREATE;
@@ -52,7 +56,7 @@ const userDescription = API_DESCRIPTIONS.USER.CREATE;
 const defaultPagination = DEFAULT_OBJECTS.PAGINATION;
 ```
 
-> **참고**: 이 패키지는 기존 `@cocrepo/schema`에서 분리되었습니다.
+> **참고**: 이 패키지는 기존 `@cocrepo/db`에서 분리되었습니다.
 > 마이그레이션 가이드: [docs/SCHEMA-REFACTORING.md](../../docs/SCHEMA-REFACTORING.md)
 
 ## Features
@@ -74,11 +78,11 @@ pnpm add @cocrepo/constants
 ### API Configuration
 
 ```tsx
-import { API_BASE_URL, API_TIMEOUT, API_ENDPOINTS } from '@cocrepo/constants';
+import { API_BASE_URL, API_TIMEOUT, API_ENDPOINTS } from "@cocrepo/constants";
 
 const fetchUsers = async () => {
   const response = await fetch(`${API_BASE_URL}${API_ENDPOINTS.USERS}`, {
-    timeout: API_TIMEOUT
+    timeout: API_TIMEOUT,
   });
   return response.json();
 };
@@ -91,8 +95,8 @@ import {
   APP_NAME,
   APP_VERSION,
   DEFAULT_LOCALE,
-  SUPPORTED_LOCALES
-} from '@cocrepo/constants';
+  SUPPORTED_LOCALES,
+} from "@cocrepo/constants";
 
 function AppHeader() {
   return (
@@ -112,14 +116,14 @@ import {
   SPACING,
   BREAKPOINTS,
   FONT_SIZES,
-  Z_INDEX
-} from '@cocrepo/constants';
+  Z_INDEX,
+} from "@cocrepo/constants";
 
 const styles = {
   padding: SPACING.md,
   color: COLORS.primary[500],
   fontSize: FONT_SIZES.lg,
-  zIndex: Z_INDEX.modal
+  zIndex: Z_INDEX.modal,
 };
 ```
 
@@ -130,8 +134,8 @@ import {
   PASSWORD_MIN_LENGTH,
   USERNAME_PATTERN,
   EMAIL_PATTERN,
-  MAX_FILE_SIZE
-} from '@cocrepo/constants';
+  MAX_FILE_SIZE,
+} from "@cocrepo/constants";
 
 const validatePassword = (password: string) => {
   if (password.length < PASSWORD_MIN_LENGTH) {
@@ -144,7 +148,7 @@ const validatePassword = (password: string) => {
 ### Route Constants
 
 ```tsx
-import { ROUTES, ADMIN_ROUTES, API_ROUTES } from '@cocrepo/constants';
+import { ROUTES, ADMIN_ROUTES, API_ROUTES } from "@cocrepo/constants";
 
 function Navigation() {
   return (
@@ -160,6 +164,7 @@ function Navigation() {
 ## Available Constants
 
 ### Application
+
 - `APP_NAME` - Application name
 - `APP_VERSION` - Current version
 - `APP_DESCRIPTION` - Application description
@@ -167,12 +172,14 @@ function Navigation() {
 - `SUPPORTED_LOCALES` - Supported languages
 
 ### API Configuration
+
 - `API_BASE_URL` - Base API URL
 - `API_TIMEOUT` - Request timeout (ms)
 - `API_RETRY_COUNT` - Retry attempts
 - `API_ENDPOINTS` - Endpoint paths
 
 ### Theme & Design
+
 - `COLORS` - Color palette
 - `SPACING` - Spacing scale (xs, sm, md, lg, xl)
 - `BREAKPOINTS` - Responsive breakpoints
@@ -183,6 +190,7 @@ function Navigation() {
 - `Z_INDEX` - Z-index layers
 
 ### Validation
+
 - `PASSWORD_MIN_LENGTH` - Minimum password length
 - `PASSWORD_MAX_LENGTH` - Maximum password length
 - `USERNAME_MIN_LENGTH` - Minimum username length
@@ -193,21 +201,25 @@ function Navigation() {
 - `ALLOWED_FILE_TYPES` - Permitted file types
 
 ### Routes
+
 - `ROUTES` - Public route paths
 - `ADMIN_ROUTES` - Admin route paths
 - `AUTH_ROUTES` - Authentication route paths
 - `API_ROUTES` - API endpoint paths
 
 ### Feature Flags
+
 - `FEATURES` - Enabled/disabled features
 - `FEATURE_FLAGS` - Environment-specific flags
 
 ### Pagination
+
 - `DEFAULT_PAGE_SIZE` - Default items per page
 - `MAX_PAGE_SIZE` - Maximum items per page
 - `PAGE_SIZE_OPTIONS` - Available page sizes
 
 ### Date & Time
+
 - `DATE_FORMAT` - Default date format
 - `TIME_FORMAT` - Default time format
 - `DATETIME_FORMAT` - Default datetime format
@@ -218,7 +230,7 @@ function Navigation() {
 Values can change based on environment:
 
 ```tsx
-import { API_BASE_URL } from '@cocrepo/constants';
+import { API_BASE_URL } from "@cocrepo/constants";
 
 // Development: http://localhost:3006
 // Staging: https://stg.cocdev.co.kr
@@ -237,7 +249,7 @@ console.log(API_BASE_URL);
 ### Example: Feature Flag Pattern
 
 ```tsx
-import { FEATURES } from '@cocrepo/constants';
+import { FEATURES } from "@cocrepo/constants";
 
 function FeatureComponent() {
   if (!FEATURES.NEW_DASHBOARD) {
@@ -251,12 +263,12 @@ function FeatureComponent() {
 ### Example: Responsive Design
 
 ```tsx
-import { BREAKPOINTS } from '@cocrepo/constants';
+import { BREAKPOINTS } from "@cocrepo/constants";
 
 const mediaQueries = {
   mobile: `@media (max-width: ${BREAKPOINTS.sm})`,
   tablet: `@media (max-width: ${BREAKPOINTS.md})`,
-  desktop: `@media (min-width: ${BREAKPOINTS.lg})`
+  desktop: `@media (min-width: ${BREAKPOINTS.lg})`,
 };
 ```
 
@@ -275,11 +287,11 @@ pnpm start:dev
 All constants are fully typed:
 
 ```tsx
-import type { ColorPalette, Spacing, Breakpoint } from '@cocrepo/constants';
+import type { ColorPalette, Spacing, Breakpoint } from "@cocrepo/constants";
 
 const customColors: ColorPalette = {
-  primary: { 500: '#3b82f6' },
-  secondary: { 500: '#8b5cf6' }
+  primary: { 500: "#3b82f6" },
+  secondary: { 500: "#8b5cf6" },
 };
 ```
 
@@ -312,6 +324,7 @@ export const SEARCH_DEBOUNCE_DELAY = 300;
 ## Testing
 
 When changing constants, verify:
+
 - [ ] No breaking changes in consuming apps
 - [ ] Environment-specific values are correct
 - [ ] TypeScript types are accurate
@@ -323,10 +336,10 @@ If a constant is renamed:
 
 ```tsx
 // Before
-import { OLD_CONSTANT } from '@cocrepo/constants';
+import { OLD_CONSTANT } from "@cocrepo/constants";
 
 // After
-import { NEW_CONSTANT } from '@cocrepo/constants';
+import { NEW_CONSTANT } from "@cocrepo/constants";
 
 // Deprecated (add temporary alias)
 export const OLD_CONSTANT = NEW_CONSTANT;
@@ -342,6 +355,7 @@ export const OLD_CONSTANT = NEW_CONSTANT;
 ## Contributing
 
 Follow these guidelines:
+
 1. Constants should be truly shared (used in 2+ packages)
 2. Avoid package-specific values
 3. Use uppercase with underscores

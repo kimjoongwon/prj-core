@@ -2,7 +2,7 @@
   "extends": "./tsconfig.json",
   "compilerOptions": {
     "types": ["jest", "node"],
-    "moduleResolution": "node",
+    "moduleResolution": "Node16",
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
     "strict": false,
@@ -10,7 +10,7 @@
     "paths": {
       "@shared/*": ["./src/shared/*"],
       "@shared": ["./src/shared/index"],
-      "@cocrepo/schema": ["../packages/shared-schema/src"],
+      "@cocrepo/db": ["../../packages/db/src"],
       "@cocrepo/utils": ["../packages/shared-utils/src"],
     }
   },
