@@ -16,6 +16,7 @@ export {
 	RoleClassificationsService,
 	RolesService,
 	RoutinesService,
+	SafeService,
 	SessionsService,
 	SpaceAssociationsService,
 	SpaceClassificationsService,
