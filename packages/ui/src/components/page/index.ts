@@ -1,3 +1,2 @@
-export { AdminAuthLoginPage } from "./AdminAuthLoginPage";
-export { AdminAuthTenantSelectPage } from "./AdminAuthTenantSelectPage";
-export { DogWalkRequestPage } from "./DogWalkRequestPage";
+export { LoginPage } from "./LoginPage";
+export { TenantSelectPage } from "./TenantSelectPage";
