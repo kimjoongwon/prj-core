@@ -2,7 +2,7 @@
 
 - 상태도구를 mobx를 사용합니다.
 - log를 달때 @cocrepo/toolkit logger를 이용합니다.
-- folder 경로 apps/admin packages/shared-frontend
+- folder 경로 apps/admin packages/ui
 - 테스트 코드를 먼저 작성후 작업해주세요.
 - Text 컴포넌트를 사용합니다.
 - 컴포넌트를 만들때 @cocrepo/frontend 컴포넌트를 활용하고 없으면 @heroui/react 컴포넌트를 사용해주세요.

@@ -1,5 +1,5 @@
 ---
-name: frontend-architect
+name: 프론트엔드-아키텍트
 description: React/Next.js 컴포넌트 설계 및 상태 관리 전문가
 tools: Read, Write, Grep
 ---

@@ -1,5 +1,5 @@
 ---
-name: backend-architect
+name: 백엔드-아키텍트
 description: NestJS API 설계 및 아키텍처 전문가
 tools: Read, Write, Grep, Bash
 ---

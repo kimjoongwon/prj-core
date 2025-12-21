@@ -13,9 +13,7 @@
     "start:dev": "storybook dev -p 6006",
     "build-storybook": "storybook build"
   },
-  "author": "",
   "license": "ISC",
-  "description": "",
   "dependencies": {
     "@heroui/react": "catalog:",
     "@cocrepo/providers": "1.0.2",

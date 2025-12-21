@@ -1,5 +1,5 @@
 ---
-name: expo-migration-expert
+name: Expo-마이그레이션-전문가
 description: React Native CLI 모듈을 Expo Module로 마이그레이션하는 전문가
 tools: Read, Write, Bash, Grep
 ---

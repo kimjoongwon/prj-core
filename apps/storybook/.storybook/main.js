@@ -13,7 +13,7 @@ const config = {
   stories: [
     "../stories/**/*.mdx",
     "../stories/**/*.stories.@(js|jsx|mjs|ts|tsx)",
-    "../../../packages/shared-frontend/src/**/*.stories.@(js|jsx|mjs|ts|tsx)",
+    "../../../packages/ui/src/**/*.stories.@(js|jsx|mjs|ts|tsx)",
   ],
   addons: [
     getAbsolutePath("@chromatic-com/storybook"),
@@ -27,14 +27,15 @@ const config = {
   },
   async viteFinal(config) {
     const { default: tailwindcss } = await import("@tailwindcss/vite");
+    const { default: react } = await import("@vitejs/plugin-react-swc");
 
     config.plugins = config.plugins || [];
     config.plugins.push(tailwindcss());
-
-    // JSX 자동 변환 설정
-    config.esbuild = {
-      jsx: "automatic",
-    };
+    config.plugins.push(
+      react({
+        jsxImportSource: "react",
+      })
+    );
 
     return config;
   },

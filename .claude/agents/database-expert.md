@@ -1,5 +1,5 @@
 ---
-name: database-expert
+name: 데이터베이스-전문가
 description: PostgreSQL/Prisma 데이터베이스 설계 및 최적화 전문가
 tools: Read, Write, Grep, Bash
 ---

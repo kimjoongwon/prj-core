@@ -1,5 +1,5 @@
 ---
-name: react-native-architect
+name: React-Native-아키텍트
 description: React Native 컴포넌트 설계 및 네이티브 통합 전문가
 tools: Read, Write, Grep, Bash
 ---

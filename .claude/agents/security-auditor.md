@@ -1,5 +1,5 @@
 ---
-name: security-auditor
+name: 보안-감사자
 description: 보안 취약점 분석 및 보안 강화 전문가
 tools: Read, Grep
 ---

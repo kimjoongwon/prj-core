@@ -1,5 +1,5 @@
 ---
-name: component-builder
+name: 컴포넌트-빌더
 description: Pure UI 컴포넌트를 생성하고 apps/design에 전시하는 전문가
 tools: Read, Write, Grep, Bash
 ---

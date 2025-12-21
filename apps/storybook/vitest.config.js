@@ -32,20 +32,21 @@ export default defineConfig({
         },
       },
       {
-        plugins: [react()],
+        plugins: [
+          react({
+            jsxImportSource: "react",
+          }),
+        ],
         test: {
-          name: "shared-frontend",
+          name: "ui",
           environment: "jsdom",
           globals: true,
           setupFiles: [path.resolve(dirname, "./test-setup.js")],
-          include: ["../../packages/shared-frontend/src/**/*.test.{ts,tsx}"],
+          include: ["../../packages/ui/src/**/*.test.{ts,tsx}"],
         },
         resolve: {
           alias: {
-            "@cocrepo/frontend": path.resolve(
-              dirname,
-              "../../packages/shared-frontend"
-            ),
+            "@cocrepo/frontend": path.resolve(dirname, "../../packages/ui"),
           },
         },
       },

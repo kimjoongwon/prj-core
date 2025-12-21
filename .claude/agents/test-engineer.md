@@ -1,5 +1,5 @@
 ---
-name: test-engineer
+name: 테스트-엔지니어
 description: 테스트 전략 수립 및 테스트 코드 작성 전문가
 tools: Read, Write, Grep, Bash
 ---

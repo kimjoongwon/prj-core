@@ -1,5 +1,5 @@
 ---
-name: refactoring-expert
+name: 리팩토링-전문가
 description: 코드 리팩토링 및 기술 부채 해소 전문가
 tools: Read, Write, Grep
 ---

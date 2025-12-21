@@ -1,5 +1,5 @@
 ---
-name: performance-optimizer
+name: 성능-최적화-전문가
 description: 프론트엔드/백엔드 성능 분석 및 최적화 전문가
 tools: Read, Grep, Bash
 ---

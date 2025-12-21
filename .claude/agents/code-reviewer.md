@@ -1,5 +1,5 @@
 ---
-name: code-reviewer
+name: 코드-리뷰어
 description: 코드 품질 검토 및 베스트 프랙티스 적용 전문가
 tools: Read, Grep
 ---

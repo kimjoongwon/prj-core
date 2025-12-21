@@ -1,5 +1,5 @@
 ---
-name: documentation-writer
+name: 문서화-전문가
 description: 기술 문서 및 API 문서 작성 전문가
 tools: Read, Write, Grep
 ---

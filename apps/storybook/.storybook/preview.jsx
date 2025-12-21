@@ -1,14 +1,17 @@
 import "../tailwind.css";
-import { Providers } from "@cocrepo/providers";
+import { ToastProvider } from "@heroui/react";
+import { NuqsAdapter } from "nuqs/adapters/react";
 
 /** @type { import('@storybook/react-vite').Preview } */
 const preview = {
   decorators: [
     (Story) => {
       return (
-        <Providers>
+        // @ts-expect-error - NuqsAdapter React 19 type compatibility issue
+        <NuqsAdapter>
+          <ToastProvider placement="bottom-center" />
           <Story />
-        </Providers>
+        </NuqsAdapter>
       );
     },
   ],

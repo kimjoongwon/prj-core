@@ -1,5 +1,5 @@
 ---
-name: devops-engineer
+name: 데브옵스-엔지니어
 description: Docker/K8s/CI/CD 인프라 및 배포 자동화 전문가
 tools: Read, Write, Bash, Grep
 ---

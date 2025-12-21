@@ -115,6 +115,34 @@
       "hasStories": true
     },
     {
+      "name": "CharacterCounter",
+      "path": "packages/ui/src/components/ui/CharacterCounter/CharacterCounter.tsx",
+      "category": "ui",
+      "props": [
+        {
+          "name": "current",
+          "type": "number",
+          "required": true
+        },
+        {
+          "name": "max",
+          "type": "number",
+          "required": true
+        },
+        {
+          "name": "showWarning",
+          "type": "boolean",
+          "required": false
+        },
+        {
+          "name": "className",
+          "type": "string",
+          "required": false
+        }
+      ],
+      "hasStories": true
+    },
+    {
       "name": "Checkbox",
       "path": "packages/ui/src/components/inputs/Checkbox/Checkbox.tsx",
       "category": "inputs",
@@ -157,6 +185,34 @@
         {
           "name": "onSelectionChange",
           "type": "(value: string | string[] | null) => void",
+          "required": false
+        }
+      ],
+      "hasStories": true
+    },
+    {
+      "name": "CircularImage",
+      "path": "packages/ui/src/components/ui/CircularImage/CircularImage.tsx",
+      "category": "ui",
+      "props": [
+        {
+          "name": "src",
+          "type": "string",
+          "required": true
+        },
+        {
+          "name": "alt",
+          "type": "string",
+          "required": true
+        },
+        {
+          "name": "size",
+          "type": "\"sm\" | \"md\" | \"lg\"",
+          "required": false
+        },
+        {
+          "name": "className",
+          "type": "string",
           "required": false
         }
       ],
@@ -387,6 +443,42 @@
       "hasStories": true
     },
     {
+      "name": "DogPawIcon",
+      "path": "packages/ui/src/components/ui/Icon/DogPawIcon.tsx",
+      "category": "ui",
+      "props": [
+        {
+          "name": "size",
+          "type": "number",
+          "required": false
+        },
+        {
+          "name": "color",
+          "type": "string",
+          "required": false
+        },
+        {
+          "name": "className",
+          "type": "string",
+          "required": false
+        }
+      ],
+      "hasStories": false
+    },
+    {
+      "name": "DogWalkRequestPage",
+      "path": "packages/ui/src/components/page/DogWalkRequestPage.tsx",
+      "category": "page",
+      "props": [
+        {
+          "name": "className",
+          "type": "string",
+          "required": false
+        }
+      ],
+      "hasStories": true
+    },
+    {
       "name": "Dropdown",
       "path": "packages/ui/src/components/inputs/Dropdown/Dropdown.tsx",
       "category": "inputs",
@@ -442,6 +534,29 @@
         {
           "name": "onToggleExpand",
           "type": "() => void",
+          "required": false
+        }
+      ],
+      "hasStories": true
+    },
+    {
+      "name": "FeeTable",
+      "path": "packages/ui/src/components/ui/FeeTable/FeeTable.tsx",
+      "category": "ui",
+      "props": [
+        {
+          "name": "items",
+          "type": "FeeItem[]",
+          "required": true
+        },
+        {
+          "name": "total",
+          "type": "number",
+          "required": false
+        },
+        {
+          "name": "className",
+          "type": "string",
           "required": false
         }
       ],
@@ -689,7 +804,49 @@
     },
     {
       "name": "index",
+      "path": "packages/ui/src/components/ui/CharacterCounter/index.tsx",
+      "category": "ui",
+      "props": [],
+      "hasStories": false
+    },
+    {
+      "name": "index",
+      "path": "packages/ui/src/components/ui/CircularImage/index.tsx",
+      "category": "ui",
+      "props": [],
+      "hasStories": false
+    },
+    {
+      "name": "index",
       "path": "packages/ui/src/components/ui/DataGrid/index.tsx",
+      "category": "ui",
+      "props": [],
+      "hasStories": false
+    },
+    {
+      "name": "index",
+      "path": "packages/ui/src/components/ui/FeeTable/index.tsx",
+      "category": "ui",
+      "props": [],
+      "hasStories": false
+    },
+    {
+      "name": "index",
+      "path": "packages/ui/src/components/ui/Icon/index.tsx",
+      "category": "ui",
+      "props": [],
+      "hasStories": false
+    },
+    {
+      "name": "index",
+      "path": "packages/ui/src/components/ui/InfoMessage/index.tsx",
+      "category": "ui",
+      "props": [],
+      "hasStories": false
+    },
+    {
+      "name": "index",
+      "path": "packages/ui/src/components/ui/SectionHeader/index.tsx",
       "category": "ui",
       "props": [],
       "hasStories": false
@@ -700,6 +857,57 @@
       "category": "ui",
       "props": [],
       "hasStories": false
+    },
+    {
+      "name": "InfoIcon",
+      "path": "packages/ui/src/components/ui/Icon/InfoIcon.tsx",
+      "category": "ui",
+      "props": [
+        {
+          "name": "size",
+          "type": "number",
+          "required": false
+        },
+        {
+          "name": "color",
+          "type": "string",
+          "required": false
+        },
+        {
+          "name": "className",
+          "type": "string",
+          "required": false
+        }
+      ],
+      "hasStories": false
+    },
+    {
+      "name": "InfoMessage",
+      "path": "packages/ui/src/components/ui/InfoMessage/InfoMessage.tsx",
+      "category": "ui",
+      "props": [
+        {
+          "name": "message",
+          "type": "string",
+          "required": true
+        },
+        {
+          "name": "variant",
+          "type": "\"info\" | \"warning\" | \"error\" | \"success\"",
+          "required": false
+        },
+        {
+          "name": "icon",
+          "type": "ReactNode",
+          "required": false
+        },
+        {
+          "name": "className",
+          "type": "string",
+          "required": false
+        }
+      ],
+      "hasStories": true
     },
     {
       "name": "Input",
@@ -1062,6 +1270,24 @@
       "hasStories": true
     },
     {
+      "name": "SectionHeader",
+      "path": "packages/ui/src/components/ui/SectionHeader/SectionHeader.tsx",
+      "category": "ui",
+      "props": [
+        {
+          "name": "children",
+          "type": "ReactNode",
+          "required": true
+        },
+        {
+          "name": "className",
+          "type": "string",
+          "required": false
+        }
+      ],
+      "hasStories": true
+    },
+    {
       "name": "Select",
       "path": "packages/ui/src/components/ui/Select/Select.tsx",
       "category": "ui",
@@ -1160,6 +1386,34 @@
         }
       ],
       "hasStories": true
+    },
+    {
+      "name": "StarIcon",
+      "path": "packages/ui/src/components/ui/Icon/StarIcon.tsx",
+      "category": "ui",
+      "props": [
+        {
+          "name": "size",
+          "type": "number",
+          "required": false
+        },
+        {
+          "name": "color",
+          "type": "string",
+          "required": false
+        },
+        {
+          "name": "className",
+          "type": "string",
+          "required": false
+        },
+        {
+          "name": "filled",
+          "type": "boolean",
+          "required": false
+        }
+      ],
+      "hasStories": false
     },
     {
       "name": "Switch",
@@ -1337,6 +1591,29 @@
       "hasStories": true
     },
     {
+      "name": "WarningIcon",
+      "path": "packages/ui/src/components/ui/Icon/WarningIcon.tsx",
+      "category": "ui",
+      "props": [
+        {
+          "name": "size",
+          "type": "number",
+          "required": false
+        },
+        {
+          "name": "color",
+          "type": "string",
+          "required": false
+        },
+        {
+          "name": "className",
+          "type": "string",
+          "required": false
+        }
+      ],
+      "hasStories": false
+    },
+    {
       "name": "WeekInput",
       "path": "packages/ui/src/components/inputs/WeekInput/WeekInput.tsx",
       "category": "inputs",
@@ -1360,6 +1637,6 @@
       "hasStories": true
     }
   ],
-  "generatedAt": "2025-12-20T08:55:28.000Z",
-  "totalComponents": 83
+  "generatedAt": "2025-12-21T04:14:15.478Z",
+  "totalComponents": 99
 }
