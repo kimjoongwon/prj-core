@@ -1,4 +1,4 @@
-import { Prisma, QueryUserDto } from "@cocrepo/schema";
+import { Prisma, QueryUserDto } from "@cocrepo/entity";
 import { Test, TestingModule } from "@nestjs/testing";
 import { UsersRepository } from "../../repository/users.repository";
 import { createTestUserEntity } from "../../test/test-utils";

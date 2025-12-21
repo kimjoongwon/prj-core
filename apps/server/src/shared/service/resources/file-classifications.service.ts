@@ -1,9 +1,9 @@
+import { Prisma } from "@prisma/client";
 import {
 	CreateFileClassificationDto,
-	Prisma,
 	QueryFileClassificationDto,
 	UpdateFileClassificationDto,
-} from "@cocrepo/schema";
+} from "@cocrepo/dto";
 import { Injectable } from "@nestjs/common";
 import { FileClassificationsRepository } from "../../repository/file-classifications.repository";
 

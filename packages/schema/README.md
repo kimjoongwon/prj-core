@@ -1,13 +1,35 @@
-# @shared/prisma
+# @cocrepo/schema
 
-Shared Prisma schema and types for the core project.
+Prisma 스키마 및 데이터베이스 클라이언트를 제공하는 패키지입니다.
 
-## Features
+> **중요**: 이 패키지는 리팩토링되어 **Prisma 전용** 패키지가 되었습니다.
+> DTO, Entity, Enum, Decorator는 별도 패키지로 분리되었습니다.
+>
+> **마이그레이션 가이드**: [docs/SCHEMA-REFACTORING.md](../../docs/SCHEMA-REFACTORING.md)
 
-- Centralized Prisma schema management
-- Type-safe database client
-- Common database utilities
-- Shared database types across backend services
+## 분리된 패키지
+
+| 기능 | 새 패키지 |
+|------|----------|
+| Data Transfer Objects | `@cocrepo/dto` |
+| 엔티티 정의 | `@cocrepo/entity` |
+| 열거형 | `@cocrepo/enums` |
+| 데코레이터 | `@cocrepo/decorator` |
+| 스키마 상수 | `@cocrepo/constants` |
+
+## 현재 패키지 역할
+
+- Prisma 스키마 관리
+- 타입 안전 데이터베이스 클라이언트
+- 마이그레이션 관리
+- 시드 데이터
+
+## 주요 기능
+
+- Prisma 멀티 파일 스키마 지원
+- 타입 안전 데이터베이스 클라이언트
+- 공통 데이터베이스 유틸리티
+- 백엔드 서비스 간 공유 타입
 
 ## Installation
 

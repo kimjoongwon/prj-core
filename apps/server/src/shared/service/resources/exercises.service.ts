@@ -1,9 +1,9 @@
+import { Prisma } from "@prisma/client";
 import {
 	CreateExerciseDto,
-	Prisma,
 	QueryExerciseDto,
 	UpdateExerciseDto,
-} from "@cocrepo/schema";
+} from "@cocrepo/dto";
 import { Injectable } from "@nestjs/common";
 import { ExercisesRepository } from "../../repository/exercises.repository";
 import { ContextService } from "../utils";

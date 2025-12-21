@@ -1,10 +1,10 @@
+import { ApiResponseEntity } from "@cocrepo/decorator";
 import {
-	ApiResponseEntity,
 	CreateSpaceDto,
 	QuerySpaceDto,
 	SpaceDto,
 	UpdateSpaceDto,
-} from "@cocrepo/schema";
+} from "@cocrepo/dto";
 import {
 	Body,
 	Controller,

@@ -1,11 +1,11 @@
+import { Public } from "@cocrepo/decorator";
+import { ApiResponseEntity } from "@cocrepo/decorator";
 import {
-	ApiResponseEntity,
 	type CreateGroupDto,
 	GroupDto,
-	Public,
 	type QueryGroupDto,
 	type UpdateGroupDto,
-} from "@cocrepo/schema";
+} from "@cocrepo/dto";
 import {
 	Body,
 	Controller,

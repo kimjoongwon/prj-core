@@ -1,9 +1,9 @@
+import { Prisma } from "@prisma/client";
 import {
 	CreateSpaceClassificationDto,
-	Prisma,
 	QuerySpaceClassificationDto,
 	UpdateSpaceClassificationDto,
-} from "@cocrepo/schema";
+} from "@cocrepo/dto";
 import { Injectable } from "@nestjs/common";
 import { SpaceClassificationsRepository } from "../../repository/space-classifications.repository";
 

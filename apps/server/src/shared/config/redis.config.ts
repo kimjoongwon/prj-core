@@ -1,4 +1,4 @@
-import { ValidationUtil } from "@cocrepo/schema";
+import { ValidationUtil } from "@cocrepo/decorator";
 import { registerAs } from "@nestjs/config";
 import { IsNumber, IsOptional, IsString } from "class-validator";
 import { RedisConfig } from "./config.type";

@@ -1,166 +1,64 @@
 {
   "$schema": "https://turbo.build/schema.json",
-  // 모든 태스크에 영향을 주는 전역 의존성 파일들
   "globalDependencies": [
-    "**/.env.local", // 로컬 환경변수 변경 시 재빌드
-    "**/.env.development.local", // 개발 환경변수 변경 시 재빌드
-    "pnpm-workspace.yaml", // monorepo 워크스페이스 설정 변경 시 재빌드
-    "pnpm-lock.yaml" // 의존성 락파일 변경 시 재빌드
+    "**/.env.local",
+    "**/.env.development.local",
+    "pnpm-workspace.yaml",
+    "pnpm-lock.yaml"
   ],
-  // 모든 태스크에서 사용할 수 있는 환경변수
   "globalEnv": ["NODE_ENV"],
   "tasks": {
-    // API 클라이언트 코드 생성 패키지 (OpenAPI → TypeScript)
-    "@cocrepo/api-client#build": {
-      "inputs": [
-        "src/**/*.ts", // 소스 코드 변경 감지
-        "orval.config.js", // API 생성 설정 파일 변경 감지
-        "tsconfig.json", // TypeScript 설정 변경 감지
-        "package.json" // 의존성 변경 감지
-      ],
-      "outputs": ["src/**/*.ts"], // 빌드 결과물 위치
-      "dependsOn": [], // 다른 패키지에 의존하지 않음
-      "env": ["NODE_ENV"], // 환경변수 의존성
-      "cache": true // 빌드 결과 캐싱 활성화
-    },
-    // DB 스키마, DTO, Entity 정의 패키지 (Prisma 포함)
-    "@cocrepo/schema#build": {
-      "inputs": [
-        "src/**/*.ts", // 소스 코드 변경 감지
-        "generated/**/*", // Prisma 생성 파일 변경 감지 (레거시)
-        "tsconfig.json", // TypeScript 설정 변경 감지
-        "package.json", // 의존성 변경 감지
-        "tsup.config.*" // 번들러 설정 변경 감지
-      ],
-      "outputs": ["dist/**"], // 빌드 결과물 위치
-      "dependsOn": ["@cocrepo/toolkit#build"], // toolkit이 먼저 빌드되어야 함
-      "env": ["NODE_ENV"], // 환경변수 의존성
-      "cache": true // 빌드 결과 캐싱 활성화
-    },
-    // 공통 유틸리티 함수 패키지
-    "@cocrepo/toolkit#build": {
-      "inputs": [
-        "src/**/*.ts", // 소스 코드 변경 감지
-        "tsconfig.json", // TypeScript 설정 변경 감지
-        "package.json", // 의존성 변경 감지
-        "tsup.config.*" // 번들러 설정 변경 감지
-      ],
-      "outputs": ["dist/**"], // 빌드 결과물 위치
-      "dependsOn": [], // 다른 패키지에 의존하지 않음
-      "env": ["NODE_ENV"], // 환경변수 의존성
-      "cache": true // 빌드 결과 캐싱 활성화
-    },
-    // NestJS 백엔드 서버 애플리케이션
-    "server#build": {
-      "inputs": [
-        "src/**/*.ts", // 소스 코드 변경 감지
-        "tsconfig.json", // TypeScript 설정 변경 감지
-        "tsconfig.build.json", // NestJS 빌드 설정 변경 감지
-        "package.json", // 의존성 변경 감지
-        "nest-cli.json" // NestJS CLI 설정 변경 감지
-      ],
-      "outputs": ["dist/**"], // 빌드 결과물 위치
-      // 의존하는 shared 패키지들이 먼저 빌드되어야 함
-      "dependsOn": ["@cocrepo/schema#build", "@cocrepo/toolkit#build"],
-      "env": ["NODE_ENV"], // 환경변수 의존성
-      "cache": true // 빌드 결과 캐싱 활성화
-    },
-    // 모든 패키지의 빌드를 실행하는 루트 태스크
+    // === 기본 태스크 ===
     "build": {
-      "dependsOn": ["^build"] // 의존성 트리에 따라 순차적으로 빌드
+      "dependsOn": ["^build"],
+      "inputs": ["src/**", "index.ts", "tsconfig.json", "package.json"],
+      "outputs": ["dist/**"],
+      "cache": true
     },
-    // 공통 프론트엔드 컴포넌트 패키지
-    "@cocrepo/ui#build": {
-      "inputs": [
-        "src/**/*.{ts,tsx,css}", // React 컴포넌트 및 스타일 파일 변경 감지
-        "index.ts", // 진입점 파일 변경 감지
-        "tsconfig.json", // TypeScript 설정 변경 감지
-        "package.json" // 의존성 변경 감지
-      ],
-      "outputs": [], // 타입 체크만 수행, 빌드 결과물 없음
-      // 의존하는 다른 shared 패키지들이 먼저 빌드되어야 함
-      "dependsOn": [
-        "@cocrepo/api-client#build",
-        "@cocrepo/hooks#build",
-        "@cocrepo/types#build",
-        "@cocrepo/toolkit#build"
-      ],
-      "env": ["NODE_ENV"], // 환경변수 의존성
-      "cache": false // 타입 체크는 캐싱하지 않음
-    },
-    // React 커스텀 훅 패키지
-    "@cocrepo/hooks#build": {
-      "inputs": [
-        "src/**/*.ts", // 소스 코드 변경 감지
-        "index.ts", // 진입점 파일 변경 감지
-        "tsconfig.json", // TypeScript 설정 변경 감지
-        "package.json" // 의존성 변경 감지
-      ],
-      "outputs": [], // 타입 체크만 수행, 빌드 결과물 없음
-      "dependsOn": ["@cocrepo/types#build", "@cocrepo/toolkit#build"], // 의존성 빌드 먼저 실행
-      "cache": false // 타입 체크는 캐싱하지 않음
-    },
-    // 공통 타입 정의 패키지
-    "@cocrepo/types#build": {
-      "inputs": [
-        "src/**/*.ts", // 소스 코드 변경 감지
-        "index.ts", // 진입점 파일 변경 감지
-        "tsconfig.json", // TypeScript 설정 변경 감지
-        "package.json" // 의존성 변경 감지
-      ],
-      "outputs": [], // 타입 체크만 수행, 빌드 결과물 없음
-      "dependsOn": [], // 다른 패키지에 의존하지 않음
-      "cache": false // 타입 체크는 캐싱하지 않음
-    },
-    // 단위 테스트 실행
-    "test": {
-      "outputs": ["coverage/**"], // 커버리지 보고서 생성
-      "dependsOn": [] // 빌드와 독립적으로 실행
-    },
-    // E2E 테스트 실행
-    "test:e2e": {
-      "outputs": ["coverage/**"], // 커버리지 보고서 생성
-      "dependsOn": [] // 빌드와 독립적으로 실행
-    },
-    // 코드 린팅 (읽기 전용)
-    "lint": {},
-    // 코드 린팅 및 자동 수정
-    "lint:fix": {},
-    // 코드 포맷팅
-    "format": {},
-    // TypeScript 타입 체크
-    "type-check": {
-      "cache": false // 타입 체크는 항상 최신 상태로 실행
-    },
-    // shared-schema 개발 모드 (watch)
-    "@cocrepo/schema#start:dev": {
-      "cache": false,
-      "persistent": true,
-      "dependsOn": ["@cocrepo/schema#build"] // 초기 빌드 후 watch
-    },
-    // mobile 앱 개발 모드 (Expo)
-    "mobile#start:dev": {
-      "cache": false,
-      "persistent": true,
-      "dependsOn": [
-        "@cocrepo/api-client#build",
-        "@cocrepo/hooks#build",
-        "@cocrepo/toolkit#build"
-      ] // mobile이 의존하는 shared 패키지들만 먼저 빌드
-    },
-    // 개발 서버 시작
     "start:dev": {
-      "cache": false, // 개발 모드는 캐싱하지 않음
-      "persistent": true, // 지속적으로 실행되는 태스크
-      "dependsOn": ["^build"] // 모든 의존성 패키지 먼저 빌드
+      "dependsOn": ["^build"],
+      "cache": false,
+      "persistent": true
     },
-    // 빌드 결과물 정리
+    "type-check": {
+      "dependsOn": ["^build"],
+      "cache": false
+    },
+    "lint": {},
+    "lint:fix": {},
+    "format": {},
+    "test": {
+      "outputs": ["coverage/**"]
+    },
+    "test:e2e": {
+      "outputs": ["coverage/**"]
+    },
     "clean": {
-      "cache": false // 정리 작업은 캐싱하지 않음
+      "cache": false
     },
-    // 데이터베이스 스키마 동기화
+
+    // === 특수 빌드 패키지 ===
+    "@cocrepo/schema#build": {
+      "dependsOn": ["^build"],
+      "inputs": ["src/**", "prisma/**", "tsconfig.json", "package.json", "tsup.config.*"],
+      "outputs": ["dist/**"],
+      "cache": true
+    },
+
+    // === 앱 태스크 ===
+    "server#build": {
+      "dependsOn": ["^build"],
+      "inputs": ["src/**", "tsconfig.json", "tsconfig.build.json", "package.json", "nest-cli.json"],
+      "outputs": ["dist/**"],
+      "cache": true
+    },
+
+    // === DB 태스크 ===
     "db:push": {
-      "cache": false // DB 작업은 캐싱하지 않음
+      "cache": false
+    },
+    "db:migrate": {
+      "cache": false
     }
   }
 }

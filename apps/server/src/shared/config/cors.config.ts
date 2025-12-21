@@ -1,4 +1,4 @@
-import { ValidationUtil } from "@cocrepo/schema";
+import { ValidationUtil } from "@cocrepo/decorator";
 import { registerAs } from "@nestjs/config";
 import { IsBoolean } from "class-validator";
 import { CorsConfig } from "./config.type";

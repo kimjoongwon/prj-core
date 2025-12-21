@@ -1,9 +1,9 @@
+import { Prisma } from "@prisma/client";
 import {
 	CreateSpaceAssociationDto,
-	Prisma,
 	QuerySpaceAssociationDto,
 	UpdateSpaceAssociationDto,
-} from "@cocrepo/schema";
+} from "@cocrepo/dto";
 import { Injectable } from "@nestjs/common";
 import { SpaceAssociationsRepository } from "../../repository/space-associations.repository";
 

@@ -1,4 +1,4 @@
-import { UserDto } from "@cocrepo/schema";
+import { UserDto } from "@cocrepo/dto";
 import {
 	CanActivate,
 	ExecutionContext,

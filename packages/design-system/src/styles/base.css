@@ -1,0 +1,46 @@
+/**
+ * 공통 Tailwind CSS 기본 스타일
+ * 앱에서 @import '@cocrepo/design-system/styles' 로 사용합니다.
+ */
+
+/* 기본 폰트 및 스무스 렌더링 */
+@layer base {
+  html {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+  }
+
+  /* 스크롤바 스타일링 (optional) */
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+
+  ::-webkit-scrollbar-track {
+    @apply bg-default-100;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    @apply bg-default-300 rounded-full;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    @apply bg-default-400;
+  }
+}
+
+/* 포커스 링 스타일 */
+@layer utilities {
+  .focus-ring {
+    @apply outline-none ring-2 ring-primary ring-offset-2 ring-offset-background;
+  }
+
+  .focus-ring-inset {
+    @apply outline-none ring-2 ring-primary ring-inset;
+  }
+}

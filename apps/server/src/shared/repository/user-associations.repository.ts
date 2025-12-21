@@ -1,4 +1,5 @@
-import { UseEntity, UserAssociation } from "@cocrepo/schema";
+import { UseEntity } from "@cocrepo/decorator";
+import { UserAssociation } from "@cocrepo/entity";
 import { Injectable, Logger } from "@nestjs/common";
 import { plainToInstance } from "class-transformer";
 import { PrismaService } from "../service/utils";

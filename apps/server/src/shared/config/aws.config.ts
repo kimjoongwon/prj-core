@@ -1,4 +1,4 @@
-import { ValidationUtil } from "@cocrepo/schema";
+import { ValidationUtil } from "@cocrepo/decorator";
 import { registerAs } from "@nestjs/config";
 import { IsString } from "class-validator";
 import { AwsConfig } from "./config.type";

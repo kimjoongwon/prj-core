@@ -35,7 +35,9 @@
   "author": "kimjoongwon",
   "license": "ISC",
   "dependencies": {
+    "@cocrepo/design-system": "workspace:*",
     "@tanstack/react-query": "catalog:",
+    "@tanstack/react-query-devtools": "^5.83.0",
     "@heroui/react": "catalog:",
     "nuqs": "catalog:"
   },

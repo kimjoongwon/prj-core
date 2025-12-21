@@ -70,7 +70,8 @@ cleanup() {
 
 trap cleanup EXIT INT TERM
 
-# 서버 실행
+# 서버 실행 (패키지 watch + 서버)
 echo "🚀 NestJS 서버 시작 중..."
-cd "$(dirname "$0")/../apps/server"
-pnpm start:dev
+cd "$(dirname "$0")/.."
+# turbo start:dev --filter='./packages/*' --filter=server --concurrency=20
+turbo start:dev --filter=server

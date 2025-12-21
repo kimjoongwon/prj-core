@@ -1,4 +1,8 @@
-import { CreateRoleDto, Prisma, UpdateRoleDto } from "@cocrepo/schema";
+import { Prisma } from "@prisma/client";
+import {
+	CreateRoleDto,
+	UpdateRoleDto,
+} from "@cocrepo/dto";
 import { Injectable } from "@nestjs/common";
 import { RolesRepository } from "../../repository/role.repository";
 

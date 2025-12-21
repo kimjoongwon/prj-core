@@ -4,7 +4,7 @@
   "publishConfig": {
     "access": "public"
   },
-  "description": "Shared schema, DTOs and entities for the core project",
+  "description": "Prisma schema and client for the core project",
   "files": [
     "dist",
     "README.md"
@@ -30,11 +30,8 @@
     "seed": "ts-node prisma/seed.ts"
   },
   "dependencies": {
-    "@cocrepo/toolkit": "workspace:*",
     "@prisma/adapter-pg": "^7.0.0",
     "pg": "^8.13.1",
-    "ts-jenum": "^2.2.2",
-    "libphonenumber-js": "^1.12.10",
     "bcrypt": "^6.0.0"
   },
   "peerDependencies": {

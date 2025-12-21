@@ -1,9 +1,9 @@
+import { Prisma } from "@prisma/client";
 import {
 	CreateFileAssociationDto,
-	Prisma,
 	QueryFileAssociationDto,
 	UpdateFileAssociationDto,
-} from "@cocrepo/schema";
+} from "@cocrepo/dto";
 import { Injectable } from "@nestjs/common";
 import { FileAssociationsRepository } from "../../repository/file-associations.repository";
 
