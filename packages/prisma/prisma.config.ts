@@ -11,19 +11,19 @@ dotenv.config({ path: path.resolve(__dirname, ".env.local") });
 dotenv.config({ path: path.resolve(__dirname, ".env") });
 
 export default defineConfig({
-	// Multi-file schema configuration
-	// Points to schema directory containing modular .prisma files
-	schema: "./prisma/schema",
+  // Multi-file schema configuration
+  // Points to schema directory containing modular .prisma files
+  schema: "./schema",
 
-	// 마이그레이션 설정
-	migrations: {
-		path: "./prisma/migrations",
-		seed: "tsx ./prisma/seed.ts",
-	},
+  // 마이그레이션 설정
+  migrations: {
+    path: "./migrations",
+    seed: "tsx ./seed.ts",
+  },
 
-	// 데이터소스 설정
-	datasource: {
-		url: env("DATABASE_URL"),
-		// directUrl: env("DIRECT_URL"),
-	},
+  // 데이터소스 설정
+  datasource: {
+    url: env("DATABASE_URL"),
+    // directUrl: env("DIRECT_URL"),
+  },
 });
