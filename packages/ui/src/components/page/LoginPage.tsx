@@ -1,11 +1,10 @@
-import { useAdminAuthLoginRoute } from "../../../../../apps/admin/src/hooks/useAdminLoginRoute";
 import { LoginForm } from "../form/LoginForm/LoginForm";
-import { VStack } from "../ui";
-import { Button } from "../ui/Button/Button";
-import { Logo } from "../ui/Logo/Logo";
-import { Text } from "../ui/Text/Text";
+import { Logo } from "../ui/data-display/Logo/Logo";
+import { Text } from "../ui/data-display/Text/Text";
+import { Button } from "../ui/inputs/Button/Button";
+import { VStack } from "../ui/surfaces/VStack/VStack";
 
-export const LoginPage = (props: ReturnType<typeof useAdminAuthLoginRoute>) => {
+export const LoginPage = (props: any) => {
   const { state, handlers } = props;
 
   return (

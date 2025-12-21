@@ -1,5 +1,8 @@
 export { AutoComplete } from "./AutoComplete";
+export * from "./Button/Button";
+export * from "./ButtonGroup/ButtonGroup";
 export { Calendar } from "./Calendar";
+export * from "./CharacterCounter/CharacterCounter";
 export { Checkbox } from "./Checkbox";
 export { ChipSelect } from "./ChipSelect";
 export { DatePicker } from "./DatePicker";
@@ -11,6 +14,7 @@ export { ListboxSelect } from "./ListboxSelect";
 export { MultiSelect } from "./MultiSelect";
 export { Pagination } from "./Pagination/Pagination";
 export { RadioGroup } from "./RadioGroup";
+export * from "./Select/Select";
 export { Switch } from "./Switch";
 export { Tabs } from "./Tabs";
 export { Textarea } from "./Textarea";

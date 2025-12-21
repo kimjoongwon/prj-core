@@ -1,6 +1,6 @@
 import { cn } from "@heroui/react";
-import { Button } from "../Button/Button";
-import { HStack } from "../HStack/HStack";
+import { Button } from "../../inputs/Button/Button";
+import { HStack } from "../../surfaces/HStack/HStack";
 
 export interface LogoProps {
 	onClick?: () => void;
