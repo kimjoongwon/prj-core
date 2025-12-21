@@ -1,5 +1,5 @@
 import { EnumFieldOptional, UUIDFieldOptional } from "@cocrepo/decorator";
-import { Prisma } from "@cocrepo/prisma";
+import { SortOrder } from "@cocrepo/enum";
 import { QueryDto } from "./query.dto";
 
 export class QueryFileAssociationDto extends QueryDto {
@@ -9,6 +9,6 @@ export class QueryFileAssociationDto extends QueryDto {
   @UUIDFieldOptional()
   fileId: string;
 
-  @EnumFieldOptional(() => Prisma.SortOrder)
-  createdAtSortOrder: Prisma.SortOrder;
+  @EnumFieldOptional(() => SortOrder)
+  createdAtSortOrder: SortOrder;
 }

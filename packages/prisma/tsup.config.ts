@@ -9,31 +9,15 @@ export default defineConfig((option) => ({
   sourcemap: !!option.watch,
   minify: !option.watch,
   watch: option.watch,
-  // Enable path resolution for tsconfig paths
   tsconfig: "./tsconfig.json",
-  // Prisma 7.0 generated client (.ts files)를 번들에 포함
-  noExternal: [/generated\/client/],
-  external: [
-    "@cocrepo/enum",
-    "@cocrepo/constant",
-    "@cocrepo/decorator",
-    "@cocrepo/entity",
-    "@prisma/client",
-    "@nestjs/common",
-    "@nestjs/swagger",
-    "@nestjs/platform-express",
-    "class-transformer",
-    "class-transformer/storage",
-    "class-validator",
-    "@nestjs/websockets/socket-module",
-    "@nestjs/microservices",
-    "@nestjs/microservices/microservices-module",
-    "@nestjs/websockets",
-    "@nestjs/platform-socket.io",
-    "@nestjs/platform-ws",
-    "@cocrepo/toolkit",
-    "ts-jenum",
-    "libphonenumber-js",
-    "bcrypt",
-  ],
+  // CJS에서 import.meta 사용을 위한 shim 추가 (Prisma 7.0+ 호환)
+  shims: true,
+  // CJS 출력을 .cjs 확장자로 명시 (Node.js 24+ 호환)
+  outExtension({ format }) {
+    return {
+      js: format === "cjs" ? ".cjs" : ".mjs",
+    };
+  },
+  // @prisma/client를 external로 처리 (re-export만 함)
+  external: ["@prisma/client"],
 }));
