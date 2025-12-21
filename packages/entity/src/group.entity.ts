@@ -1,4 +1,4 @@
-import { Group as GroupEntity, GroupTypes } from "@prisma/client";
+import { Group as GroupEntity, GroupTypes } from "@cocrepo/prisma";
 import { AbstractEntity } from "./abstract.entity";
 import { Tenant } from "./tenant.entity";
 

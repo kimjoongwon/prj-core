@@ -1,4 +1,4 @@
-import { LanguageCode } from "@cocrepo/constants";
+import { LanguageCode } from "@cocrepo/constant";
 import { TenantDto, UserDto } from "@cocrepo/dto";
 import { Injectable } from "@nestjs/common";
 import { ClsService } from "nestjs-cls";

@@ -1,10 +1,10 @@
-# @cocrepo/hooks
+# @cocrepo/hook
 
 Shared React hooks library for the Cocrepo monorepo.
 
 ## Overview
 
-`@cocrepo/hooks` provides a collection of reusable React hooks for common patterns like data fetching, state management, form handling, and MobX integration.
+`@cocrepo/hook` provides a collection of reusable React hooks for common patterns like data fetching, state management, form handling, and MobX integration.
 
 ## Features
 
@@ -17,7 +17,7 @@ Shared React hooks library for the Cocrepo monorepo.
 ## Installation
 
 ```bash
-pnpm add @cocrepo/hooks
+pnpm add @cocrepo/hook
 ```
 
 ## Usage
@@ -25,7 +25,7 @@ pnpm add @cocrepo/hooks
 ### Basic Hook Example
 
 ```tsx
-import { useBoolean, useDebounce } from '@cocrepo/hooks';
+import { useBoolean, useDebounce } from '@cocrepo/hook';
 
 function SearchComponent() {
   const [isOpen, { toggle, setTrue, setFalse }] = useBoolean(false);
@@ -56,7 +56,7 @@ function SearchComponent() {
 ### MobX Store Hooks
 
 ```tsx
-import { useStore, useObserver } from '@cocrepo/hooks';
+import { useStore, useObserver } from '@cocrepo/hook';
 import { observer } from 'mobx-react-lite';
 
 const MyComponent = observer(() => {
@@ -75,7 +75,7 @@ const MyComponent = observer(() => {
 ### Form Hooks
 
 ```tsx
-import { useForm, useFormField } from '@cocrepo/hooks';
+import { useForm, useFormField } from '@cocrepo/hook';
 
 function LoginForm() {
   const form = useForm({
@@ -110,7 +110,7 @@ function LoginForm() {
 ### Data Fetching Hooks
 
 ```tsx
-import { useAsync, useAsyncFn } from '@cocrepo/hooks';
+import { useAsync, useAsyncFn } from '@cocrepo/hook';
 
 function UserProfile({ userId }) {
   const { data: user, loading, error } = useAsync(
@@ -182,7 +182,7 @@ import {
   useDebounce,
   useAsync,
   useLocalStorage
-} from '@cocrepo/hooks';
+} from '@cocrepo/hook';
 
 function useSearchWithHistory(searchFn) {
   const [query, setQuery] = useLocalStorage('search-query', '');
@@ -224,7 +224,7 @@ pnpm test:watch
 All hooks are fully typed:
 
 ```tsx
-import type { UseFormReturn, UseBooleanReturn } from '@cocrepo/hooks';
+import type { UseFormReturn, UseBooleanReturn } from '@cocrepo/hook';
 
 const form: UseFormReturn<LoginFormValues> = useForm({
   initialValues: { email: '', password: '' }

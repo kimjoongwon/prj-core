@@ -1,4 +1,4 @@
-import { Category, CategoryTypes } from "@prisma/client";
+import { Category, CategoryTypes } from "@cocrepo/prisma";
 import {
 	ClassField,
 	EnumField,

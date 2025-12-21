@@ -10,7 +10,7 @@
     "paths": {
       "@shared/*": ["./src/shared/*"],
       "@shared": ["./src/shared/index"],
-      "@cocrepo/db": ["../../packages/db/src"],
+      "@cocrepo/prisma": ["../../packages/db/src"],
       "@cocrepo/utils": ["../packages/shared-utils/src"],
     }
   },

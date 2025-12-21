@@ -2,7 +2,7 @@ import {
 	File,
 	FileAssociation as FileAssociationEntity,
 	Group,
-} from "@prisma/client";
+} from "@cocrepo/prisma";
 import { AbstractEntity } from "./abstract.entity";
 
 export class FileAssociation extends AbstractEntity implements FileAssociationEntity {

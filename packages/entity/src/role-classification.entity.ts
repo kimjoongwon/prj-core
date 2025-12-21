@@ -1,4 +1,4 @@
-import { RoleClassification as RoleClassificationEntity } from "@prisma/client";
+import { RoleClassification as RoleClassificationEntity } from "@cocrepo/prisma";
 import { AbstractEntity } from "./abstract.entity";
 import { Category } from "./category.entity";
 import { Role } from "./role.entity";

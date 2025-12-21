@@ -1,11 +1,11 @@
-# @cocrepo/enums
+# @cocrepo/enum
 
 프론트엔드와 백엔드에서 공유하는 열거형(Enum) 패키지입니다.
 
 ## 설치
 
 ```bash
-pnpm add @cocrepo/enums
+pnpm add @cocrepo/enum
 ```
 
 ## 제공 열거형
@@ -15,7 +15,7 @@ pnpm add @cocrepo/enums
 카테고리 타입을 정의합니다:
 
 ```typescript
-import { CategoryTypes } from '@cocrepo/enums';
+import { CategoryTypes } from '@cocrepo/enum';
 
 const category = CategoryTypes.SERVICE;
 ```
@@ -25,7 +25,7 @@ const category = CategoryTypes.SERVICE;
 카테고리 이름을 정의합니다:
 
 ```typescript
-import { CategoryNames } from '@cocrepo/enums';
+import { CategoryNames } from '@cocrepo/enum';
 
 const name = CategoryNames.PILATES;
 ```
@@ -35,7 +35,7 @@ const name = CategoryNames.PILATES;
 그룹 타입을 정의합니다:
 
 ```typescript
-import { GroupTypes } from '@cocrepo/enums';
+import { GroupTypes } from '@cocrepo/enum';
 
 const groupType = GroupTypes.TEAM;
 ```
@@ -45,7 +45,7 @@ const groupType = GroupTypes.TEAM;
 그룹 이름을 정의합니다:
 
 ```typescript
-import { GroupNames } from '@cocrepo/enums';
+import { GroupNames } from '@cocrepo/enum';
 
 const groupName = GroupNames.DEFAULT;
 ```
@@ -55,7 +55,7 @@ const groupName = GroupNames.DEFAULT;
 세션 타입을 정의합니다:
 
 ```typescript
-import { SessionTypes } from '@cocrepo/enums';
+import { SessionTypes } from '@cocrepo/enum';
 
 const sessionType = SessionTypes.PRIVATE;
 // SessionTypes.GROUP, SessionTypes.OPEN 등
@@ -66,7 +66,7 @@ const sessionType = SessionTypes.PRIVATE;
 반복 일정의 요일을 정의합니다:
 
 ```typescript
-import { RecurringDayOfWeek } from '@cocrepo/enums';
+import { RecurringDayOfWeek } from '@cocrepo/enum';
 
 const days = [
   RecurringDayOfWeek.MONDAY,
@@ -80,7 +80,7 @@ const days = [
 반복 주기 타입을 정의합니다:
 
 ```typescript
-import { RepeatCycleTypes } from '@cocrepo/enums';
+import { RepeatCycleTypes } from '@cocrepo/enum';
 
 const cycle = RepeatCycleTypes.WEEKLY;
 // RepeatCycleTypes.DAILY, RepeatCycleTypes.MONTHLY 등
@@ -91,7 +91,7 @@ const cycle = RepeatCycleTypes.WEEKLY;
 역할 카테고리 이름을 정의합니다:
 
 ```typescript
-import { RoleCategoryNames } from '@cocrepo/enums';
+import { RoleCategoryNames } from '@cocrepo/enum';
 
 const roleCategory = RoleCategoryNames.SYSTEM;
 ```
@@ -101,7 +101,7 @@ const roleCategory = RoleCategoryNames.SYSTEM;
 역할 그룹 이름을 정의합니다:
 
 ```typescript
-import { RoleGroupNames } from '@cocrepo/enums';
+import { RoleGroupNames } from '@cocrepo/enum';
 
 const roleGroup = RoleGroupNames.ADMIN;
 ```

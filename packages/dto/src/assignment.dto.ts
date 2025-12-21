@@ -1,4 +1,4 @@
-import { Assignment as AssignmentEntity } from "@prisma/client";
+import { Assignment as AssignmentEntity } from "@cocrepo/prisma";
 import { ClassField, UUIDField } from "@cocrepo/decorator";
 import { AbstractDto } from "./abstract.dto";
 import { RoleDto } from "./role.dto";

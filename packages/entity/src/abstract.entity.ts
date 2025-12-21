@@ -1,5 +1,5 @@
 import { plainToInstance } from "class-transformer";
-import type { Constructor, BaseEntityFields } from "@cocrepo/types";
+import type { Constructor, BaseEntityFields } from "@cocrepo/type";
 
 /**
  * 모든 엔티티의 기본 클래스

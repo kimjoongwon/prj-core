@@ -1,4 +1,4 @@
-import { Prisma } from "@prisma/client";
+import { Prisma } from "@cocrepo/prisma";
 
 // Prisma 7: Middleware is deprecated, use client extensions instead
 export function loggingExtension() {

@@ -1,4 +1,4 @@
-import { FileClassification as FileClassificationEntity } from "@prisma/client";
+import { FileClassification as FileClassificationEntity } from "@cocrepo/prisma";
 import { AbstractEntity } from "./abstract.entity";
 import { Category } from "./category.entity";
 import { File } from "./file.entity";

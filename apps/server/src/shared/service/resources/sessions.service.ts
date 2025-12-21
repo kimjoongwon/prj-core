@@ -4,7 +4,7 @@ import {
 	UpdateSessionDto,
 } from "@cocrepo/dto";
 import { Injectable } from "@nestjs/common";
-import { Prisma } from "@prisma/client";
+import { Prisma } from "@cocrepo/prisma";
 import { SessionsRepository } from "../../repository/sessions.repository";
 
 @Injectable()

@@ -1,4 +1,4 @@
-import { Role, Roles } from "@prisma/client";
+import { Role, Roles } from "@cocrepo/prisma";
 import { ClassField, EnumField } from "@cocrepo/decorator";
 import { AbstractDto } from "./abstract.dto";
 import { RoleAssociationDto } from "./role-association.dto";

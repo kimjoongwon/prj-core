@@ -4,7 +4,7 @@ import {
 	UpdateRoleAssociationDto,
 } from "@cocrepo/dto";
 import { Injectable } from "@nestjs/common";
-import { Prisma } from "@prisma/client";
+import { Prisma } from "@cocrepo/prisma";
 import { RoleAssociationsRepository } from "../../repository";
 
 @Injectable()

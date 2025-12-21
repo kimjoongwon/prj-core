@@ -135,7 +135,7 @@ prj-core/
 │       └── package.json
 ├── packages/                      # 공유 패키지
 │   ├── api-client/               # 자동 생성 API 클라이언트 (Orval)
-│   ├── constants/                # 공통 상수
+│   ├── constant/                 # 공통 상수
 │   │   └── src/
 │   │       ├── routing/         # 프론트엔드 라우팅 상수
 │   │       └── schema/          # 백엔드 스키마 상수
@@ -158,11 +158,11 @@ prj-core/
 │   │   └── src/
 │   │       ├── *.entity.ts      # 엔티티 정의
 │   │       └── types/           # JSON, 페이지네이션 타입
-│   ├── enums/                    # 공유 열거형
+│   ├── enum/                     # 공유 열거형
 │   │   └── src/
 │   │       └── *.enum.ts        # 카테고리, 그룹, 세션 타입 등
-│   ├── hooks/                    # 공유 React Hooks
-│   ├── providers/                # 공유 Providers
+│   ├── hook/                     # 공유 React Hook
+│   ├── provider/                 # 공유 Provider
 │   ├── schema/                   # Prisma 스키마 (DB 전용)
 │   │   └── prisma/
 │   │       ├── models/          # Prisma 모델 정의
@@ -170,7 +170,7 @@ prj-core/
 │   │       └── seed.ts          # 시드 데이터
 │   ├── store/                    # 공유 상태 관리 (MobX)
 │   ├── toolkit/                  # 유틸리티 함수
-│   ├── types/                    # 공유 TypeScript 타입
+│   ├── type/                     # 공유 TypeScript 타입
 │   └── ui/                       # 공유 UI 컴포넌트
 ├── scripts/                       # 빌드/배포 스크립트
 ├── devops/                        # 인프라 설정
@@ -191,9 +191,9 @@ graph TD
     end
 
     subgraph "Core Packages"
-        Constants[constants]
-        Enums[enums]
-        Types[types]
+        Constant[constant]
+        Enum[enum]
+        Type[type]
         Toolkit[toolkit]
     end
 
@@ -208,9 +208,9 @@ graph TD
         DesignSystem[design-system]
         UI[ui]
         Store[store]
-        Hooks[hooks]
+        Hook[hook]
         ApiClient[api-client]
-        Providers[providers]
+        Provider[provider]
     end
 
     %% Application Dependencies
@@ -218,31 +218,31 @@ graph TD
     Admin --> UI
     Admin --> Store
     Admin --> DesignSystem
-    Admin --> Hooks
-    Admin --> Constants
+    Admin --> Hook
+    Admin --> Constant
 
     Server --> Schema
     Server --> DTO
     Server --> Entity
     Server --> Decorator
-    Server --> Enums
-    Server --> Constants
+    Server --> Enum
+    Server --> Constant
 
     Storybook --> UI
     Storybook --> DesignSystem
 
     %% Package Dependencies
-    Decorator --> Constants
+    Decorator --> Constant
     Entity --> Decorator
-    Entity --> Types
+    Entity --> Type
     DTO --> Entity
     DTO --> Decorator
-    DTO --> Enums
+    DTO --> Enum
 
     UI --> Toolkit
-    UI --> Types
-    Store --> Types
-    ApiClient --> Types
+    UI --> Type
+    Store --> Type
+    ApiClient --> Type
     DesignSystem --> UI
 ```
 

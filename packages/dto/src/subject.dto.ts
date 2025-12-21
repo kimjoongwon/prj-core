@@ -1,4 +1,4 @@
-import { Subject } from "@prisma/client";
+import { Subject } from "@cocrepo/prisma";
 import { StringField, UUIDField } from "@cocrepo/decorator";
 import { AbstractDto } from "./abstract.dto";
 

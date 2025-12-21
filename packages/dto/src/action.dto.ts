@@ -5,7 +5,7 @@ import {
   UUIDField,
 } from "@cocrepo/decorator";
 import { JsonValue } from "@cocrepo/entity";
-import { AbilityActions, Action } from "@prisma/client";
+import { AbilityActions, Action } from "@cocrepo/prisma";
 import { AbstractDto } from "./abstract.dto";
 import { TenantDto } from "./tenant.dto";
 

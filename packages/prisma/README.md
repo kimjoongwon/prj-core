@@ -13,9 +13,9 @@ Prisma 스키마 및 데이터베이스 클라이언트를 제공하는 패키�
 | --------------------- | -------------------- |
 | Data Transfer Objects | `@cocrepo/dto`       |
 | 엔티티 정의           | `@cocrepo/entity`    |
-| 열거형                | `@cocrepo/enums`     |
+| 열거형                | `@cocrepo/enum`     |
 | 데코레이터            | `@cocrepo/decorator` |
-| 스키마 상수           | `@cocrepo/constants` |
+| 스키마 상수           | `@cocrepo/constant` |
 
 ## 현재 패키지 역할
 

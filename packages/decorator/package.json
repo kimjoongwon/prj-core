@@ -26,7 +26,8 @@
     "clean": "rm -rf dist && rm -rf node_modules"
   },
   "dependencies": {
-    "@cocrepo/constants": "workspace:*",
+    "@cocrepo/constant": "workspace:*",
+    "@cocrepo/prisma": "workspace:*",
     "@cocrepo/toolkit": "workspace:*",
     "libphonenumber-js": "^1.12.10"
   },

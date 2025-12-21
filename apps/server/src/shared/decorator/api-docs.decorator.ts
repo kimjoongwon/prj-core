@@ -1,4 +1,4 @@
-import { Token } from "@cocrepo/constants";
+import { Token } from "@cocrepo/constant";
 import { applyDecorators, HttpStatus } from "@nestjs/common";
 import {
 	ApiCookieAuth,

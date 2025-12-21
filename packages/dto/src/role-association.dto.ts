@@ -1,4 +1,4 @@
-import { RoleAssociation } from "@prisma/client";
+import { RoleAssociation } from "@cocrepo/prisma";
 import { ClassField, UUIDField } from "@cocrepo/decorator";
 import { AbstractDto, GroupDto } from ".";
 

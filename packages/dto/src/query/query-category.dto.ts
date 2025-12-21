@@ -1,4 +1,4 @@
-import { Prisma, CategoryTypes } from "@prisma/client";
+import { Prisma, CategoryTypes } from "@cocrepo/prisma";
 import { EnumFieldOptional, StringFieldOptional } from "@cocrepo/decorator";
 import { QueryDto } from "./query.dto";
 

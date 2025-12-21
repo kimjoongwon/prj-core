@@ -1,4 +1,4 @@
-import { Token, type TokenValues } from "@cocrepo/constants";
+import { Token, type TokenValues } from "@cocrepo/constant";
 import {
 	BadRequestException,
 	Injectable,

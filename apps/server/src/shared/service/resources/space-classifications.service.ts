@@ -4,7 +4,7 @@ import {
 	UpdateSpaceClassificationDto,
 } from "@cocrepo/dto";
 import { Injectable } from "@nestjs/common";
-import { Prisma } from "@prisma/client";
+import { Prisma } from "@cocrepo/prisma";
 import { SpaceClassificationsRepository } from "../../repository/space-classifications.repository";
 
 @Injectable()

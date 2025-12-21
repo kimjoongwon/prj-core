@@ -1,4 +1,4 @@
-import { SpaceClassification as SpaceClassificationEntity } from "@prisma/client";
+import { SpaceClassification as SpaceClassificationEntity } from "@cocrepo/prisma";
 import { AbstractEntity } from "./abstract.entity";
 import { Category } from "./category.entity";
 import { Space } from "./space.entity";

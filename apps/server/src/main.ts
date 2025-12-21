@@ -1,4 +1,4 @@
-import { Token } from "@cocrepo/constants";
+import { Token } from "@cocrepo/constant";
 import { NestFactory } from "@nestjs/core";
 import { NestExpressApplication } from "@nestjs/platform-express";
 import {

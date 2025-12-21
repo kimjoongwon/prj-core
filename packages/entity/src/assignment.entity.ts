@@ -1,4 +1,4 @@
-import { Assignment as AssignmentEntity, Role, Tenant } from "@prisma/client";
+import { Assignment as AssignmentEntity, Role, Tenant } from "@cocrepo/prisma";
 import { AbstractEntity } from "./abstract.entity";
 
 export class Assignment extends AbstractEntity implements AssignmentEntity {

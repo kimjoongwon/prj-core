@@ -1,4 +1,4 @@
-import { Program as ProgramEntity } from "@prisma/client";
+import { Program as ProgramEntity } from "@cocrepo/prisma";
 import { AbstractEntity } from "./abstract.entity";
 import { Routine } from "./routine.entity";
 import { Session } from "./session.entity";

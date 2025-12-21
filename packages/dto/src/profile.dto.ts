@@ -1,4 +1,4 @@
-import { Profile } from "@prisma/client";
+import { Profile } from "@cocrepo/prisma";
 import { ClassField, StringField, UUIDField } from "@cocrepo/decorator";
 import { User } from "@cocrepo/entity";
 import { AbstractDto } from "./abstract.dto";

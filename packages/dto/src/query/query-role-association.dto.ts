@@ -1,4 +1,4 @@
-import { Prisma } from "@prisma/client";
+import { Prisma } from "@cocrepo/prisma";
 import { EnumFieldOptional, UUIDFieldOptional } from "@cocrepo/decorator";
 import { QueryDto } from "./query.dto";
 

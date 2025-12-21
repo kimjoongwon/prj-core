@@ -7,7 +7,7 @@ import {
 	Injectable,
 } from "@nestjs/common";
 import { Reflector } from "@nestjs/core";
-import { Roles } from "@prisma/client";
+import { Roles } from "@cocrepo/prisma";
 import { isEmpty } from "lodash";
 
 @Injectable()

@@ -7,13 +7,13 @@ import {
   StringFieldOptional,
   UUIDField,
 } from "@cocrepo/decorator";
-import { RepeatCycleTypes, SessionTypes } from "@cocrepo/enums";
+import { RepeatCycleTypes, SessionTypes } from "@cocrepo/enum";
 import {
   RepeatCycleTypes as PrismaRepeatCycleTypes,
   SessionTypes as PrismaSessionTypes,
   RecurringDayOfWeek,
   Session,
-} from "@prisma/client";
+} from "@cocrepo/prisma";
 import { Transform } from "class-transformer";
 import { AbstractDto } from "./abstract.dto";
 import { ProgramDto } from "./program.dto";

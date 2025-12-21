@@ -1,4 +1,4 @@
-import { ResponseEntity } from "@cocrepo/db";
+import { ResponseEntity } from "@cocrepo/prisma";
 import { Controller, Get, HttpStatus, Query } from "@nestjs/common";
 
 /**

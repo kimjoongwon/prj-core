@@ -1,4 +1,4 @@
-import { Timeline } from "@prisma/client";
+import { Timeline } from "@cocrepo/prisma";
 import {
 	ClassField,
 	StringField,

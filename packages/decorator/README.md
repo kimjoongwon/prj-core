@@ -67,7 +67,7 @@ class SignUpDto {
 
 ```typescript
 import { EnumField, ClassField } from '@cocrepo/decorator';
-import { CategoryTypes } from '@cocrepo/enums';
+import { CategoryTypes } from '@cocrepo/enum';
 
 class CreateCategoryDto {
   @EnumField(() => CategoryTypes, { description: '카테고리 타입' })
@@ -252,7 +252,7 @@ src/
 
 ## 의존성
 
-- `@cocrepo/constants` - 상수 값
+- `@cocrepo/constant` - 상수 값
 - `@cocrepo/toolkit` - 유틸리티 함수
 - `@nestjs/common` (peer)
 - `@nestjs/swagger` (peer)

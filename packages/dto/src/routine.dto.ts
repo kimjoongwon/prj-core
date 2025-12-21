@@ -1,4 +1,4 @@
-import { Routine } from "@prisma/client";
+import { Routine } from "@cocrepo/prisma";
 import { ClassField, StringField } from "@cocrepo/decorator";
 import { AbstractDto } from "./abstract.dto";
 import { ActivityDto } from "./activity.dto";

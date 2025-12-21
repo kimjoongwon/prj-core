@@ -1,4 +1,5 @@
+import type { Roles as RolesEnum } from "@cocrepo/prisma";
 import { Reflector } from "@nestjs/core";
-import { Roles as RolesEnum } from "@prisma/client";
 
-export const Roles = Reflector.createDecorator<RolesEnum[]>();
+export const Roles: ReturnType<typeof Reflector.createDecorator<RolesEnum[]>> =
+  Reflector.createDecorator<RolesEnum[]>();

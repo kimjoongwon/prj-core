@@ -1,4 +1,4 @@
-import { Role as RoleEntity, Roles } from "@prisma/client";
+import { Role as RoleEntity, Roles } from "@cocrepo/prisma";
 import { AbstractEntity } from "./abstract.entity";
 
 export class Role extends AbstractEntity implements RoleEntity {

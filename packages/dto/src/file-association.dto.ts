@@ -1,4 +1,4 @@
-import { FileAssociation } from "@prisma/client";
+import { FileAssociation } from "@cocrepo/prisma";
 import { ClassField, UUIDField } from "@cocrepo/decorator";
 import { AbstractDto, FileDto } from ".";
 

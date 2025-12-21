@@ -23,7 +23,7 @@
     ]
   },
   "moduleNameMapper": {
-    "^@cocrepo/db$": "<rootDir>/../../packages/db/src/index.ts",
+    "^@cocrepo/prisma$": "<rootDir>/../../packages/db/src/index.ts",
     "^@cocrepo/types$": "<rootDir>/../../packages/shared-types/index.ts",
     "^@cocrepo/utils$": "<rootDir>/../../packages/shared-utils/index.ts",
     "^@cocrepo/utils$": "<rootDir>/../../packages/shared-vars/index.ts",

@@ -1,6 +1,6 @@
 import { applyDecorators, HttpCode, HttpStatus, Type } from "@nestjs/common";
 import { ApiExtraModels, ApiResponse, getSchemaPath } from "@nestjs/swagger";
-import { Token } from "@cocrepo/constants";
+import { Token } from "@cocrepo/constant";
 
 /**
  * Primitive 타입을 OpenAPI 스키마로 변환

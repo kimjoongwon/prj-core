@@ -1,4 +1,4 @@
-import { Space as SpaceEntity } from "@prisma/client";
+import { Space as SpaceEntity } from "@cocrepo/prisma";
 import { AbstractEntity } from "./abstract.entity";
 import { Ground } from "./ground.entity";
 import { SpaceAssociation } from "./space-association.entity";

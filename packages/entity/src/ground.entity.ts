@@ -1,4 +1,4 @@
-import { Ground as GroundEntity } from "@prisma/client";
+import { Ground as GroundEntity } from "@cocrepo/prisma";
 import { AbstractEntity } from "./abstract.entity";
 import { Space } from "./space.entity";
 

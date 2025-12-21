@@ -13,8 +13,8 @@
     "esModuleInterop": true,
     "sourceMap": true,
     "paths": {
-      "@cocrepo/db/client": ["./generated/client/index.js"],
-      "@cocrepo/db/client/*": ["./generated/client/*"]
+      "@cocrepo/prisma": ["./generated/client/index.js"],
+      "@cocrepo/prisma/*": ["./generated/client/*"]
     },
     "outDir": "./dist",
     "rootDir": "./src",

@@ -1,4 +1,4 @@
-import { Routine as RoutineEntity } from "@prisma/client";
+import { Routine as RoutineEntity } from "@cocrepo/prisma";
 import { AbstractEntity } from "./abstract.entity";
 import { Activity } from "./activity.entity";
 import { Program } from "./program.entity";

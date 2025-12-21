@@ -1,4 +1,4 @@
-import { Tenant as TenantEntity } from "@prisma/client";
+import { Tenant as TenantEntity } from "@cocrepo/prisma";
 import { AbstractEntity } from "./abstract.entity";
 import { Role } from "./role.entity";
 import { Space } from "./space.entity";

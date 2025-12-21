@@ -4,7 +4,7 @@ import {
 	UpdateExerciseDto,
 } from "@cocrepo/dto";
 import { Injectable } from "@nestjs/common";
-import { Prisma } from "@prisma/client";
+import { Prisma } from "@cocrepo/prisma";
 import { ExercisesRepository } from "../../repository/exercises.repository";
 import { ContextService } from "../utils";
 

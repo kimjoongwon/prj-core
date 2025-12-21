@@ -1,4 +1,4 @@
-import { Timeline as TimelineEntity } from "@prisma/client";
+import { Timeline as TimelineEntity } from "@cocrepo/prisma";
 import { AbstractEntity } from "./abstract.entity";
 import { Session } from "./session.entity";
 

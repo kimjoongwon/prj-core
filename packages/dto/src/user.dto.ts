@@ -1,4 +1,4 @@
-import { ResponseExcludedField } from "@cocrepo/constants";
+import { ResponseExcludedField } from "@cocrepo/constant";
 import {
   ClassField,
   EmailField,
@@ -6,7 +6,7 @@ import {
   StringField,
   UUIDField,
 } from "@cocrepo/decorator";
-import { User } from "@prisma/client";
+import { User } from "@cocrepo/prisma";
 import { Exclude } from "class-transformer";
 import { ProfileDto, UserClassificationDto } from ".";
 import { AbstractDto } from "./abstract.dto";

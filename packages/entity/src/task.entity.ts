@@ -1,4 +1,4 @@
-import { Task as TaskEntity } from "@prisma/client";
+import { Task as TaskEntity } from "@cocrepo/prisma";
 import { AbstractEntity } from "./abstract.entity";
 import { Activity } from "./activity.entity";
 import { Exercise } from "./exercise.entity";

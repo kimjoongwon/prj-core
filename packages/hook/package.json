@@ -1,7 +1,7 @@
 {
-  "name": "@cocrepo/providers",
-  "version": "1.0.2",
-  "description": "Provider components for React context and library integrations",
+  "name": "@cocrepo/hook",
+  "version": "1.3.7",
+  "description": "Shared React hook library",
   "publishConfig": {
     "access": "public"
   },
@@ -30,33 +30,19 @@
     "type-check": "echo 'Type checking skipped due to memory constraints'",
     "test": "vitest",
     "test:watch": "vitest --watch",
-    "clean": "rm -rf .turbo && rm -rf node_modules"
+    "clean": "rm -rf .turbo && rm -rf node_modules",
+    "clean:dist": "echo 'No dist folder to clean'"
   },
   "author": "kimjoongwon",
   "license": "ISC",
-  "dependencies": {
-    "@cocrepo/design-system": "workspace:*",
-    "@tanstack/react-query": "catalog:",
-    "@tanstack/react-query-devtools": "^5.83.0",
-    "@heroui/react": "catalog:",
-    "nuqs": "catalog:"
-  },
   "devDependencies": {
-    "@testing-library/jest-dom": "catalog:",
-    "@testing-library/react": "catalog:",
-    "@types/node": "catalog:",
+    "react": "catalog:",
+    "mobx": "catalog:",
+    "mobx-react-lite": "catalog:",
     "@types/react": "catalog:",
-    "@types/react-dom": "catalog:",
-    "@vitejs/plugin-react-swc": "catalog:",
-    "@vitest/ui": "catalog:",
-    "jsdom": "catalog:",
-    "react": "catalog:",
-    "react-dom": "catalog:",
     "typescript": "catalog:",
-    "vitest": "catalog:"
-  },
-  "peerDependencies": {
-    "react": "catalog:",
-    "react-dom": "catalog:"
+    "vitest": "catalog:",
+    "@cocrepo/type": "workspace:*",
+    "@cocrepo/toolkit": "workspace:*"
   }
 }

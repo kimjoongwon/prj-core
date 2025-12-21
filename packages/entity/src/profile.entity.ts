@@ -1,4 +1,4 @@
-import { Profile as ProfileEntity } from "@prisma/client";
+import { Profile as ProfileEntity } from "@cocrepo/prisma";
 import { AbstractEntity } from "./abstract.entity";
 import { User } from "./user.entity";
 

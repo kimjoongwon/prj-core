@@ -11,10 +11,9 @@ export default defineConfig((option) => ({
   watch: option.watch,
   tsconfig: "./tsconfig.json",
   external: [
-    "@prisma/client",
     "class-transformer",
     "class-validator",
     "@cocrepo/decorator",
-    "@cocrepo/db",
+    "@cocrepo/prisma",
   ],
 }));

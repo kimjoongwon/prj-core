@@ -1,7 +1,7 @@
 {
-  "name": "@cocrepo/constants",
+  "name": "@cocrepo/constant",
   "version": "1.3.6",
-  "description": "Shared Constants and Configuration Values",
+  "description": "Shared Constant and Configuration Values",
   "types": "dist/index.d.ts",
   "publishConfig": {
     "access": "public"

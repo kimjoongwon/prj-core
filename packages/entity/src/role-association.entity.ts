@@ -1,4 +1,4 @@
-import { RoleAssociation as RoleAssociationEntity } from "@prisma/client";
+import { RoleAssociation as RoleAssociationEntity } from "@cocrepo/prisma";
 import { AbstractEntity } from "./abstract.entity";
 import { Group } from "./group.entity";
 

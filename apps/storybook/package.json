@@ -17,7 +17,7 @@
   "dependencies": {
     "@cocrepo/design-system": "workspace:*",
     "@heroui/react": "catalog:",
-    "@cocrepo/providers": "1.0.2",
+    "@cocrepo/provider": "workspace:*",
     "@cocrepo/store": "1.0.2",
     "@cocrepo/ui": "1.5.6",
     "@tanstack/react-query": "catalog:",

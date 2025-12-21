@@ -1,6 +1,6 @@
 import { UserDto } from "@cocrepo/dto";
 import { Category } from "@cocrepo/entity";
-import { RoleCategoryNames } from "@cocrepo/enums";
+import { RoleCategoryNames } from "@cocrepo/enum";
 import {
 	CanActivate,
 	ExecutionContext,

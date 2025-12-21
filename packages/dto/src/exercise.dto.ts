@@ -1,4 +1,4 @@
-import { Exercise as ExcerciesEntity } from "@prisma/client";
+import { Exercise as ExcerciesEntity } from "@cocrepo/prisma";
 import {
 	ClassField,
 	NumberField,

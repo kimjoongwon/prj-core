@@ -4,7 +4,7 @@ import {
 	UpdateRoutineDto,
 } from "@cocrepo/dto";
 import { Injectable } from "@nestjs/common";
-import { Prisma } from "@prisma/client";
+import { Prisma } from "@cocrepo/prisma";
 import { RoutinesRepository } from "../../repository/routines.repository";
 
 @Injectable()

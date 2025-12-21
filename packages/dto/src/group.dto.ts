@@ -1,5 +1,5 @@
-import type { Group } from "@prisma/client";
-import { GroupTypes } from "@prisma/client";
+import type { Group } from "@cocrepo/prisma";
+import { GroupTypes } from "@cocrepo/prisma";
 import {
 	ClassField,
 	EnumField,

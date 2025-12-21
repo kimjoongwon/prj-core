@@ -1,4 +1,4 @@
-import { Activity as ActivityEntity } from "@prisma/client";
+import { Activity as ActivityEntity } from "@cocrepo/prisma";
 import {
 	ClassField,
 	NumberField,

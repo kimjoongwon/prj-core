@@ -4,7 +4,7 @@
  * HeroUI Provider를 래핑하여 테마 설정을 중앙에서 관리합니다.
  * 앱에서는 이 Provider를 최상위에 배치하면 됩니다.
  */
-import { HeroUIProvider } from "@heroui/react";
+import { HeroUIProvider, ToastProvider } from "@heroui/react";
 import { useTheme } from "@heroui/use-theme";
 import type { ReactNode } from "react";
 import { type ThemeConfig } from "../theme/heroui.config";
@@ -42,7 +42,12 @@ export function DesignSystemProvider({
   children,
   navigate,
 }: DesignSystemProviderProps) {
-  return <HeroUIProvider navigate={navigate}>{children}</HeroUIProvider>;
+  return (
+    <HeroUIProvider navigate={navigate}>
+      {children}
+      <ToastProvider />
+    </HeroUIProvider>
+  );
 }
 
 /**

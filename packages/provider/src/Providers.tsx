@@ -2,7 +2,6 @@ import {
   DesignSystemProvider,
   type DesignSystemProviderProps,
 } from "@cocrepo/design-system";
-import { ToastProvider } from "@heroui/react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { NuqsAdapter } from "nuqs/adapters/react";
@@ -40,7 +39,6 @@ export const Providers = (props: ProvidersProps) => {
     <DesignSystemProvider navigate={navigate} themeConfig={themeConfig}>
       <QueryClientProvider client={queryClient}>
         <NuqsAdapter>
-          <ToastProvider placement="bottom-center" />
           {children}
           <ReactQueryDevtools position="top" />
         </NuqsAdapter>

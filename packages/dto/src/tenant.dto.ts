@@ -1,4 +1,4 @@
-import { Tenant } from "@prisma/client";
+import { Tenant } from "@cocrepo/prisma";
 import {
 	BooleanField,
 	ClassField,

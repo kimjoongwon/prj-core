@@ -1,4 +1,4 @@
-import { Ground as GroundEntity } from "@prisma/client";
+import { Ground as GroundEntity } from "@cocrepo/prisma";
 import { Expose } from "class-transformer";
 import {
 	ClassField,

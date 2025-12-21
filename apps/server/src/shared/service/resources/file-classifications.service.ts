@@ -4,7 +4,7 @@ import {
 	UpdateFileClassificationDto,
 } from "@cocrepo/dto";
 import { Injectable } from "@nestjs/common";
-import { Prisma } from "@prisma/client";
+import { Prisma } from "@cocrepo/prisma";
 import { FileClassificationsRepository } from "../../repository/file-classifications.repository";
 
 @Injectable()

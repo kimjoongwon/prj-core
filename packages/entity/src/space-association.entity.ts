@@ -1,4 +1,4 @@
-import { SpaceAssociation as SpaceAssociationEntity } from "@prisma/client";
+import { SpaceAssociation as SpaceAssociationEntity } from "@cocrepo/prisma";
 import { AbstractEntity } from "./abstract.entity";
 import { Group } from "./group.entity";
 

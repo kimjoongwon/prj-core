@@ -1,10 +1,10 @@
-# @cocrepo/types
+# @cocrepo/type
 
 Shared TypeScript types and interfaces for the Cocrepo monorepo.
 
 ## Overview
 
-`@cocrepo/types` provides common TypeScript type definitions, interfaces, and type utilities used across all applications and packages in the monorepo.
+`@cocrepo/type` provides common TypeScript type definitions, interfaces, and type utilities used across all applications and packages in the monorepo.
 
 ## Features
 
@@ -17,7 +17,7 @@ Shared TypeScript types and interfaces for the Cocrepo monorepo.
 ## Installation
 
 ```bash
-pnpm add @cocrepo/types
+pnpm add @cocrepo/type
 ```
 
 ## Usage
@@ -30,7 +30,7 @@ import type {
   Route,
   ApiResponse,
   PaginatedResult
-} from '@cocrepo/types';
+} from '@cocrepo/type';
 
 const user: User = {
   id: 1,
@@ -49,7 +49,7 @@ const response: ApiResponse<User> = {
 ### Generic Types
 
 ```tsx
-import type { Nullable, Optional, Awaited } from '@cocrepo/types';
+import type { Nullable, Optional, Awaited } from '@cocrepo/type';
 
 // Nullable type
 const userName: Nullable<string> = null;
@@ -67,7 +67,7 @@ type UserData = Awaited<ReturnType<typeof fetchUser>>;
 ### Component Props Types
 
 ```tsx
-import type { ButtonProps, InputProps, ModalProps } from '@cocrepo/types';
+import type { ButtonProps, InputProps, ModalProps } from '@cocrepo/type';
 
 const MyButton: React.FC<ButtonProps> = ({ variant, size, children }) => {
   return <button className={`btn-${variant}-${size}`}>{children}</button>;
@@ -77,7 +77,7 @@ const MyButton: React.FC<ButtonProps> = ({ variant, size, children }) => {
 ### Table & Data Grid Types
 
 ```tsx
-import type { ColumnDef, TableOptions, SortingState } from '@cocrepo/types';
+import type { ColumnDef, TableOptions, SortingState } from '@cocrepo/type';
 
 const columns: ColumnDef<User>[] = [
   {
@@ -95,7 +95,7 @@ const columns: ColumnDef<User>[] = [
 ### Form Types
 
 ```tsx
-import type { FormField, ValidationRule, FormErrors } from '@cocrepo/types';
+import type { FormField, ValidationRule, FormErrors } from '@cocrepo/type';
 
 interface LoginForm {
   email: FormField<string>;
@@ -145,7 +145,7 @@ const validationRules: ValidationRule[] = [
 ## Type Guards
 
 ```tsx
-import { isUser, isApiError, isPaginatedResult } from '@cocrepo/types';
+import { isUser, isApiError, isPaginatedResult } from '@cocrepo/type';
 
 if (isUser(data)) {
   // TypeScript knows data is User
@@ -163,7 +163,7 @@ if (isApiError(error)) {
 ### Pick and Omit
 
 ```tsx
-import type { User } from '@cocrepo/types';
+import type { User } from '@cocrepo/type';
 
 // Pick specific fields
 type UserBasic = Pick<User, 'id' | 'name' | 'email'>;
@@ -193,7 +193,7 @@ type RequiredConfig = Required<OptionalConfig>;
 ### Example: Extending Types
 
 ```tsx
-import type { User } from '@cocrepo/types';
+import type { User } from '@cocrepo/type';
 
 // Extend base User type
 interface AdminUser extends User {
@@ -258,10 +258,10 @@ If a type is renamed or moved:
 
 ```tsx
 // Before
-import { OldType } from '@cocrepo/types';
+import { OldType } from '@cocrepo/type';
 
 // After
-import { NewType } from '@cocrepo/types';
+import { NewType } from '@cocrepo/type';
 
 // Add type alias for backward compatibility (temporary)
 type OldType = NewType;

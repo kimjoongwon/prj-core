@@ -1,10 +1,13 @@
 {
-  "name": "@cocrepo/db",
-  "version": "0.3.6",
+  "name": "@cocrepo/prisma",
+  "version": "1.0.0",
   "publishConfig": {
     "access": "public"
   },
   "description": "Prisma schema and client for the core project",
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
   "files": [
     "dist",
     "generated",
@@ -66,18 +69,8 @@
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
-      "import": "./dist/index.js",
+      "import": "./dist/index.mjs",
       "require": "./dist/index.js"
-    },
-    "./client": {
-      "types": "./generated/client/index.d.ts",
-      "import": "./generated/client/index.js",
-      "require": "./generated/client/index.js"
-    },
-    "./types": {
-      "types": "./dist/types.d.ts",
-      "import": "./dist/types.js",
-      "require": "./dist/types.js"
     }
   }
 }

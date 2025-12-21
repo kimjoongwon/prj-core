@@ -1,4 +1,4 @@
-import { Category as CategoryEntity, CategoryTypes } from "@prisma/client";
+import { Category as CategoryEntity, CategoryTypes } from "@cocrepo/prisma";
 import { AbstractEntity } from "./abstract.entity";
 import { Tenant } from "./tenant.entity";
 

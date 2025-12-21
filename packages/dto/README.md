@@ -184,10 +184,10 @@ const query: QueryUserDto = {
 
 ## 의존성
 
-- `@cocrepo/constants` - 상수
+- `@cocrepo/constant` - 상수
 - `@cocrepo/decorator` - 필드 데코레이터
 - `@cocrepo/entity` - 엔티티 타입
-- `@cocrepo/enums` - 열거형
+- `@cocrepo/enum` - 열거형
 - `@cocrepo/toolkit` - 유틸리티
 - `@nestjs/common` (peer)
 - `@nestjs/swagger` (peer)

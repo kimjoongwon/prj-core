@@ -1,4 +1,4 @@
-import { UserAssociation as UserAssociationEntity } from "@prisma/client";
+import { UserAssociation as UserAssociationEntity } from "@cocrepo/prisma";
 import { AbstractEntity } from "./abstract.entity";
 import { Group } from "./group.entity";
 import { User } from "./user.entity";

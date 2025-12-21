@@ -1,4 +1,4 @@
-import { Action as ActionEntity, AbilityActions } from "@prisma/client";
+import { Action as ActionEntity, AbilityActions } from "@cocrepo/prisma";
 import type { JsonValue } from "./types/json";
 import { AbstractEntity } from "./abstract.entity";
 

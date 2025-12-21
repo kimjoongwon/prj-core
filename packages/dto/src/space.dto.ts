@@ -1,4 +1,4 @@
-import { Space } from "@prisma/client";
+import { Space } from "@cocrepo/prisma";
 import { ClassField } from "@cocrepo/decorator";
 import { AbstractDto } from "./abstract.dto";
 import { GroundDto } from "./ground.dto";

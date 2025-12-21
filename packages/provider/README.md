@@ -1,10 +1,10 @@
-# @cocrepo/providers
+# @cocrepo/provider
 
 React Provider components for context management and library integrations.
 
 ## Overview
 
-`@cocrepo/providers` provides a centralized collection of Provider components that wrap your application with necessary context and library configurations. This ensures consistent setup across all apps in the monorepo.
+`@cocrepo/provider` provides a centralized collection of Provider components that wrap your application with necessary context and library configurations. This ensures consistent setup across all apps in the monorepo.
 
 ## Features
 
@@ -16,7 +16,7 @@ React Provider components for context management and library integrations.
 ## Installation
 
 ```bash
-pnpm add @cocrepo/providers
+pnpm add @cocrepo/provider
 ```
 
 ## Providers
@@ -26,7 +26,7 @@ pnpm add @cocrepo/providers
 Configures React Query for data fetching and caching.
 
 ```tsx
-import { QueryProvider } from '@cocrepo/providers';
+import { QueryProvider } from '@cocrepo/provider';
 
 function App() {
   return (
@@ -48,7 +48,7 @@ function App() {
 Integrates external UI and state libraries.
 
 ```tsx
-import { LibProvider } from '@cocrepo/providers';
+import { LibProvider } from '@cocrepo/provider';
 
 function App() {
   return (
@@ -68,7 +68,7 @@ function App() {
 ### Basic Setup
 
 ```tsx
-import { QueryProvider, LibProvider } from '@cocrepo/providers';
+import { QueryProvider, LibProvider } from '@cocrepo/provider';
 
 function App() {
   return (
@@ -85,7 +85,7 @@ function App() {
 
 ```tsx
 // .storybook/preview.jsx
-import { QueryProvider, LibProvider } from '@cocrepo/providers';
+import { QueryProvider, LibProvider } from '@cocrepo/provider';
 
 export const decorators = [
   (Story) => (
@@ -101,7 +101,7 @@ export const decorators = [
 ### Testing
 
 ```tsx
-import { QueryProvider, LibProvider } from '@cocrepo/providers';
+import { QueryProvider, LibProvider } from '@cocrepo/provider';
 import { render } from '@testing-library/react';
 
 function renderWithProviders(ui: React.ReactElement) {
@@ -214,7 +214,7 @@ Only use what you need:
 import { QueryProvider, UIProviders } from '@cocrepo/ui';
 
 // After
-import { QueryProvider, LibProvider } from '@cocrepo/providers';
+import { QueryProvider, LibProvider } from '@cocrepo/provider';
 ```
 
 ### From @cocrepo/store
@@ -228,7 +228,7 @@ import { AppProviders } from '@cocrepo/store';
 </AppProviders>
 
 // After
-import { QueryProvider, LibProvider } from '@cocrepo/providers';
+import { QueryProvider, LibProvider } from '@cocrepo/provider';
 
 <QueryProvider>
   <LibProvider>
@@ -254,7 +254,7 @@ Full TypeScript support with type definitions:
 
 ```tsx
 import type { QueryClient } from '@tanstack/react-query';
-import { QueryProvider } from '@cocrepo/providers';
+import { QueryProvider } from '@cocrepo/provider';
 ```
 
 ## Testing

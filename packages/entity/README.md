@@ -190,7 +190,7 @@ export class AbstractEntity {
 ## 의존성
 
 - `@cocrepo/decorator` - 데코레이터
-- `@cocrepo/types` - 타입 정의
+- `@cocrepo/type` - 타입 정의
 - `class-transformer` - 직렬화
 - `@prisma/client` (peer)
 - `@nestjs/common` (peer)

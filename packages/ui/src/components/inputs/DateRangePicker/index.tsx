@@ -1,4 +1,4 @@
-import { useFormField } from "@cocrepo/hooks";
+import { useFormField } from "@cocrepo/hook";
 import { tools } from "@cocrepo/toolkit";
 import type { Paths, PathTuple } from "@cocrepo/types";
 import type { ZonedDateTime } from "@internationalized/date";

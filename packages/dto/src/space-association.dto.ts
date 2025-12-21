@@ -1,4 +1,4 @@
-import { SpaceAssociation } from "@prisma/client";
+import { SpaceAssociation } from "@cocrepo/prisma";
 import { ClassField, UUIDField } from "@cocrepo/decorator";
 import { AbstractDto, GroupDto } from ".";
 

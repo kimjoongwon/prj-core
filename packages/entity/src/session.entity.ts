@@ -3,7 +3,7 @@ import {
 	RecurringDayOfWeek,
 	RepeatCycleTypes,
 	SessionTypes,
-} from "@prisma/client";
+} from "@cocrepo/prisma";
 import { AbstractEntity } from "./abstract.entity";
 import { Program } from "./program.entity";
 import { Timeline } from "./timeline.entity";

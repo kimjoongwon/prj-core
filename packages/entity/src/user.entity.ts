@@ -3,7 +3,7 @@ import {
 	Tenant,
 	UserAssociation,
 	User as UserEntity,
-} from "@prisma/client";
+} from "@cocrepo/prisma";
 import { AbstractEntity } from "./abstract.entity";
 
 export class User extends AbstractEntity implements UserEntity {

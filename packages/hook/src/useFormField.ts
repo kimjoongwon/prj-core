@@ -4,7 +4,7 @@ import type {
 	PathTuple,
 	ValueAggregator,
 	ValueSplitter,
-} from "@cocrepo/types";
+} from "@cocrepo/type";
 import { action, reaction } from "mobx";
 import { useLocalObservable } from "mobx-react-lite";
 import { useEffect, useMemo } from "react";

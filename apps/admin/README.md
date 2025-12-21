@@ -180,5 +180,5 @@ return <Button onClick={() => doSomething()}>클릭</Button>;
 - `@cocrepo/ui` - 공유 UI 컴포넌트
 - `@cocrepo/design-system` - 디자인 시스템
 - `@cocrepo/store` - 공유 상태 관리
-- `@cocrepo/hooks` - 공유 훅
-- `@cocrepo/constants` - 공유 상수
+- `@cocrepo/hook` - 공유 훅
+- `@cocrepo/constant` - 공유 상수

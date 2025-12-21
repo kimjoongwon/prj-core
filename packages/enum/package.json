@@ -1,7 +1,7 @@
 {
-  "name": "@cocrepo/enums",
+  "name": "@cocrepo/enum",
   "version": "0.1.0",
-  "description": "Shared Enums",
+  "description": "Shared Enum",
   "types": "dist/index.d.ts",
   "publishConfig": {
     "access": "public"

@@ -7,7 +7,7 @@ import {
 	HttpStatus,
 } from "@nestjs/common";
 import { APP_FILTER, BaseExceptionFilter, HttpAdapterHost } from "@nestjs/core";
-import { Prisma } from "@prisma/client";
+import { Prisma } from "@cocrepo/prisma";
 
 export declare type GqlContextType = "graphql";
 

@@ -1,10 +1,10 @@
-# @cocrepo/constants
+# @cocrepo/constant
 
 프로젝트 전반에서 사용하는 공통 상수 및 설정 값을 제공하는 패키지입니다.
 
 ## 개요
 
-`@cocrepo/constants`는 모든 애플리케이션과 패키지에서 사용하는 상수 값, 설정 옵션, 공유 상수를 제공합니다. 이를 통해 일관성을 유지하고 한 곳에서 값을 쉽게 업데이트할 수 있습니다.
+`@cocrepo/constant`는 모든 애플리케이션과 패키지에서 사용하는 상수 값, 설정 옵션, 공유 상수를 제공합니다. 이를 통해 일관성을 유지하고 한 곳에서 값을 쉽게 업데이트할 수 있습니다.
 
 ## 디렉토리 구조
 
@@ -32,7 +32,7 @@ src/
 
 ```typescript
 // 프론트엔드 라우팅
-import { ROUTE_ENDPOINTS, ROUTE_NAMES } from "@cocrepo/constants/routing";
+import { ROUTE_ENDPOINTS, ROUTE_NAMES } from "@cocrepo/constant/routing";
 
 // 관리자 대시보드 경로
 const dashboardPath = ROUTE_ENDPOINTS.ADMIN.DASHBOARD;
@@ -47,7 +47,7 @@ import {
   API_DESCRIPTIONS,
   DEFAULT_OBJECTS,
   LANGUAGE_CODES,
-} from "@cocrepo/constants/schema";
+} from "@cocrepo/constant/schema";
 
 // API 설명문
 const userDescription = API_DESCRIPTIONS.USER.CREATE;
@@ -70,7 +70,7 @@ const defaultPagination = DEFAULT_OBJECTS.PAGINATION;
 ## Installation
 
 ```bash
-pnpm add @cocrepo/constants
+pnpm add @cocrepo/constant
 ```
 
 ## Usage
@@ -78,7 +78,7 @@ pnpm add @cocrepo/constants
 ### API Configuration
 
 ```tsx
-import { API_BASE_URL, API_TIMEOUT, API_ENDPOINTS } from "@cocrepo/constants";
+import { API_BASE_URL, API_TIMEOUT, API_ENDPOINTS } from "@cocrepo/constant";
 
 const fetchUsers = async () => {
   const response = await fetch(`${API_BASE_URL}${API_ENDPOINTS.USERS}`, {
@@ -96,7 +96,7 @@ import {
   APP_VERSION,
   DEFAULT_LOCALE,
   SUPPORTED_LOCALES,
-} from "@cocrepo/constants";
+} from "@cocrepo/constant";
 
 function AppHeader() {
   return (
@@ -117,7 +117,7 @@ import {
   BREAKPOINTS,
   FONT_SIZES,
   Z_INDEX,
-} from "@cocrepo/constants";
+} from "@cocrepo/constant";
 
 const styles = {
   padding: SPACING.md,
@@ -135,7 +135,7 @@ import {
   USERNAME_PATTERN,
   EMAIL_PATTERN,
   MAX_FILE_SIZE,
-} from "@cocrepo/constants";
+} from "@cocrepo/constant";
 
 const validatePassword = (password: string) => {
   if (password.length < PASSWORD_MIN_LENGTH) {
@@ -148,7 +148,7 @@ const validatePassword = (password: string) => {
 ### Route Constants
 
 ```tsx
-import { ROUTES, ADMIN_ROUTES, API_ROUTES } from "@cocrepo/constants";
+import { ROUTES, ADMIN_ROUTES, API_ROUTES } from "@cocrepo/constant";
 
 function Navigation() {
   return (
@@ -230,7 +230,7 @@ function Navigation() {
 Values can change based on environment:
 
 ```tsx
-import { API_BASE_URL } from "@cocrepo/constants";
+import { API_BASE_URL } from "@cocrepo/constant";
 
 // Development: http://localhost:3006
 // Staging: https://stg.cocdev.co.kr
@@ -249,7 +249,7 @@ console.log(API_BASE_URL);
 ### Example: Feature Flag Pattern
 
 ```tsx
-import { FEATURES } from "@cocrepo/constants";
+import { FEATURES } from "@cocrepo/constant";
 
 function FeatureComponent() {
   if (!FEATURES.NEW_DASHBOARD) {
@@ -263,7 +263,7 @@ function FeatureComponent() {
 ### Example: Responsive Design
 
 ```tsx
-import { BREAKPOINTS } from "@cocrepo/constants";
+import { BREAKPOINTS } from "@cocrepo/constant";
 
 const mediaQueries = {
   mobile: `@media (max-width: ${BREAKPOINTS.sm})`,
@@ -287,7 +287,7 @@ pnpm start:dev
 All constants are fully typed:
 
 ```tsx
-import type { ColorPalette, Spacing, Breakpoint } from "@cocrepo/constants";
+import type { ColorPalette, Spacing, Breakpoint } from "@cocrepo/constant";
 
 const customColors: ColorPalette = {
   primary: { 500: "#3b82f6" },
@@ -336,10 +336,10 @@ If a constant is renamed:
 
 ```tsx
 // Before
-import { OLD_CONSTANT } from "@cocrepo/constants";
+import { OLD_CONSTANT } from "@cocrepo/constant";
 
 // After
-import { NEW_CONSTANT } from "@cocrepo/constants";
+import { NEW_CONSTANT } from "@cocrepo/constant";
 
 // Deprecated (add temporary alias)
 export const OLD_CONSTANT = NEW_CONSTANT;

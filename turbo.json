@@ -38,7 +38,7 @@
     },
 
     // === 특수 빌드 패키지 ===
-    "@cocrepo/db#build": {
+    "@cocrepo/prisma#build": {
       "dependsOn": ["^build"],
       "inputs": ["src/**", "prisma/**", "tsconfig.json", "package.json", "tsup.config.*"],
       "outputs": ["dist/**"],

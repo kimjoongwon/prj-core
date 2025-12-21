@@ -1,4 +1,4 @@
-import { File as FileEntity } from "@prisma/client";
+import { File as FileEntity } from "@cocrepo/prisma";
 import { AbstractEntity } from "./abstract.entity";
 
 export class File extends AbstractEntity implements FileEntity {

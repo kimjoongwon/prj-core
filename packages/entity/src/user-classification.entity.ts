@@ -1,4 +1,4 @@
-import { UserClassification as UserClassificationEntity } from "@prisma/client";
+import { UserClassification as UserClassificationEntity } from "@cocrepo/prisma";
 import { AbstractEntity } from "./abstract.entity";
 
 export class UserClassification extends AbstractEntity implements UserClassificationEntity {
