@@ -20,35 +20,6 @@
  */
 
 // ============================================================================
-// Re-export everything from generated Prisma client
+// Re-export from @prisma/client
 // ============================================================================
-
 export * from "../generated/client/client";
-
-// ============================================================================
-// Type Utilities
-// ============================================================================
-
-/** 기본 엔티티 인터페이스 */
-export interface BaseEntity {
-  id: string;
-  seq: number;
-  createdAt: Date;
-  updatedAt?: Date | null;
-  removedAt?: Date | null;
-}
-
-/** ID 필드 제외 */
-export type WithoutId<T> = Omit<T, "id">;
-
-/** 타임스탬프 필드 제외 */
-export type WithoutTimestamps<T> = Omit<
-  T,
-  "createdAt" | "updatedAt" | "removedAt"
->;
-
-/** 생성 입력 타입 */
-export type CreateInput<T> = WithoutId<WithoutTimestamps<T>>;
-
-/** 수정 입력 타입 */
-export type UpdateInput<T> = Partial<WithoutTimestamps<T>>;

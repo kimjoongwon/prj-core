@@ -1,5 +1,6 @@
 import { EnumFieldOptional, StringFieldOptional } from "@cocrepo/decorator";
-import { CategoryTypes, Prisma } from "@cocrepo/prisma";
+import { SortOrder } from "@cocrepo/enum";
+import { CategoryTypes } from "@cocrepo/prisma";
 import { QueryDto } from "./query.dto";
 
 export class QueryCategoryDto extends QueryDto {
@@ -18,6 +19,6 @@ export class QueryCategoryDto extends QueryDto {
   @StringFieldOptional()
   serviceId?: string;
 
-  @EnumFieldOptional(() => Prisma.SortOrder, { default: Prisma.SortOrder })
-  nameSortOrder?: Prisma.SortOrder;
+  @EnumFieldOptional(() => SortOrder)
+  nameSortOrder?: SortOrder;
 }

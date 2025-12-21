@@ -1,16 +1,16 @@
-import { Prisma } from "@cocrepo/prisma";
 import { EnumFieldOptional } from "@cocrepo/decorator";
+import { SortOrder } from "@cocrepo/enum";
 
 export class OrderByDto {
-	@EnumFieldOptional(() => Prisma.SortOrder)
-	idSortOrder?: Prisma.SortOrder;
+	@EnumFieldOptional(() => SortOrder)
+	idSortOrder?: SortOrder;
 
-	@EnumFieldOptional(() => Prisma.SortOrder)
-	createdAtSortOrder?: Prisma.SortOrder;
+	@EnumFieldOptional(() => SortOrder)
+	createdAtSortOrder?: SortOrder;
 
-	@EnumFieldOptional(() => Prisma.SortOrder)
-	updatedAtSortOrder?: Prisma.SortOrder;
+	@EnumFieldOptional(() => SortOrder)
+	updatedAtSortOrder?: SortOrder;
 
-	@EnumFieldOptional(() => Prisma.SortOrder)
-	removedAtSortOrder?: Prisma.SortOrder;
+	@EnumFieldOptional(() => SortOrder)
+	removedAtSortOrder?: SortOrder;
 }

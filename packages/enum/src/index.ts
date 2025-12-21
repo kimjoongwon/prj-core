@@ -7,3 +7,4 @@ export * from "./repeat-cycle-types.enum";
 export * from "./role-category-names.enum";
 export * from "./role-group-names.enum";
 export * from "./session-types.enum";
+export * from "./sort-order.enum";
