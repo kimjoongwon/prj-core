@@ -31,9 +31,7 @@ export class RoutinesRepository {
 		return plainToInstance(Routine, result);
 	}
 
-	async updateMany(
-		args: any,
-	): Promise<any> {
+	async updateMany(args: any): Promise<any> {
 		this.logger.debug(`Routine 다중 업데이트 중...`);
 		return await this.prisma.routine.updateMany(args);
 	}
@@ -62,18 +60,13 @@ export class RoutinesRepository {
 		return plainToInstance(Routine, result);
 	}
 
-
-	async createManyAndReturn(
-		args: any,
-	): Promise<Routine[]> {
+	async createManyAndReturn(args: any): Promise<Routine[]> {
 		this.logger.debug(`Routine 다중 생성 중...`);
 		const result = await this.prisma.routine.createManyAndReturn(args);
 		return result.map((item) => plainToInstance(Routine, item));
 	}
 
-	async deleteMany(
-		args: any,
-	): Promise<any> {
+	async deleteMany(args: any): Promise<any> {
 		this.logger.debug(`Routine 다중 삭제 중...`);
 		return await this.prisma.routine.deleteMany(args);
 	}

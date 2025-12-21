@@ -1,10 +1,6 @@
-import { Prisma } from "@prisma/client";
-import {
-	CreateGroupDto,
-	QueryGroupDto,
-	UpdateGroupDto,
-} from "@cocrepo/dto";
+import { CreateGroupDto, QueryGroupDto, UpdateGroupDto } from "@cocrepo/dto";
 import { Injectable } from "@nestjs/common";
+import { Prisma } from "@prisma/client";
 import { GroupsRepository } from "../../repository/groups.repository";
 
 @Injectable()

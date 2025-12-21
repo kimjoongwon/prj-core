@@ -17,8 +17,8 @@ interface TransactionListProps {
 export const TransactionList = observer(function TransactionList({
   safeAddress,
 }: TransactionListProps) {
-  const { transaction: txStore, safe: safeStore } = useStores();
-  const { isConnected, address } = useAccount();
+  const { transaction: txStore } = useStores();
+  const { isConnected } = useAccount();
 
   useEffect(() => {
     const loadPendingTransactions = async () => {

@@ -1,8 +1,7 @@
 import SafeApiKit from "@safe-global/api-kit";
 import Safe from "@safe-global/protocol-kit";
 import { MetaTransactionData, OperationType } from "@safe-global/types-kit";
-import { encodeFunctionData, formatUnits, parseUnits } from "viem";
-import { SAFE_TX_SERVICE_URL } from "@/config/web3.config";
+import { encodeFunctionData, parseUnits } from "viem";
 import type { PendingTransaction, SafeTransaction } from "@/stores";
 
 // Safe SDK Provider 타입
@@ -183,9 +182,6 @@ export class TransactionService {
 
     const apiKit = this.getApiKit();
 
-    // 대기 중인 트랜잭션 가져오기
-    const pendingTx = await apiKit.getTransaction(safeTxHash);
-
     // 트랜잭션 서명
     const signature = await protocolKit.signHash(safeTxHash);
 
@@ -284,24 +280,12 @@ export class TransactionService {
   /**
    * ERC-20 토큰 잔액 조회
    */
-  async getTokenBalance(
-    safeAddress: string,
-    tokenAddress: string,
-    provider: SafeProvider
-  ): Promise<{
+  async getTokenBalance(): Promise<{
     balance: string;
     decimals: number;
     symbol: string;
     name: string;
   }> {
-    const protocolKit = await Safe.init({
-      provider,
-      safeAddress,
-    });
-
-    // viem 클라이언트 가져오기
-    const ethAdapter = protocolKit.getSafeProvider();
-
     // TODO: 실제 구현에서는 viem publicClient를 통해 토큰 정보 조회
     // 현재는 간단한 구현
     return {

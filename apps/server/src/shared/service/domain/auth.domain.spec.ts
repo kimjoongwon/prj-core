@@ -1,7 +1,4 @@
-import {
-	LoginPayloadDto,
-	SignUpPayloadDto,
-} from "@cocrepo/dto";
+import { LoginPayloadDto, SignUpPayloadDto } from "@cocrepo/dto";
 import { BadRequestException, UnauthorizedException } from "@nestjs/common";
 import { Test, TestingModule } from "@nestjs/testing";
 import {

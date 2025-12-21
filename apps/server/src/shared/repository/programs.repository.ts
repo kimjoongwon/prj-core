@@ -31,9 +31,7 @@ export class ProgramsRepository {
 		return plainToInstance(Program, result);
 	}
 
-	async updateMany(
-		args: any,
-	): Promise<any> {
+	async updateMany(args: any): Promise<any> {
 		this.logger.debug(`Program 다중 업데이트 중...`);
 		return await this.prisma.program.updateMany(args);
 	}
@@ -62,18 +60,13 @@ export class ProgramsRepository {
 		return plainToInstance(Program, result);
 	}
 
-
-	async createManyAndReturn(
-		args: any,
-	): Promise<Program[]> {
+	async createManyAndReturn(args: any): Promise<Program[]> {
 		this.logger.debug(`Program 다중 생성 중...`);
 		const result = await this.prisma.program.createManyAndReturn(args);
 		return result.map((item) => plainToInstance(Program, item));
 	}
 
-	async deleteMany(
-		args: any,
-	): Promise<any> {
+	async deleteMany(args: any): Promise<any> {
 		this.logger.debug(`Program 다중 삭제 중...`);
 		return await this.prisma.program.deleteMany(args);
 	}

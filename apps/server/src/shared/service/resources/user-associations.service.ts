@@ -1,10 +1,10 @@
-import { Prisma } from "@prisma/client";
 import {
 	CreateUserAssociationDto,
 	QueryUserAssociationDto,
 	UpdateUserAssociationDto,
 } from "@cocrepo/dto";
 import { Injectable } from "@nestjs/common";
+import { Prisma } from "@prisma/client";
 import { UserAssociationsRepository } from "../../repository/user-associations.repository";
 
 @Injectable()

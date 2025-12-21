@@ -1,10 +1,10 @@
-import { Prisma } from "@prisma/client";
 import {
 	CreateSessionDto,
 	QuerySessionDto,
 	UpdateSessionDto,
 } from "@cocrepo/dto";
 import { Injectable } from "@nestjs/common";
+import { Prisma } from "@prisma/client";
 import { SessionsRepository } from "../../repository/sessions.repository";
 
 @Injectable()

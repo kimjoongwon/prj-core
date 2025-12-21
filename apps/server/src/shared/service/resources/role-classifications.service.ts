@@ -1,10 +1,10 @@
-import { Prisma } from "@prisma/client";
 import {
 	CreateRoleClassificationDto,
 	QueryRoleClassificationDto,
 	UpdateRoleClassificationDto,
 } from "@cocrepo/dto";
 import { Injectable } from "@nestjs/common";
+import { Prisma } from "@prisma/client";
 import { RoleClassificationsRepository } from "../../repository/role-classifications.repository";
 
 @Injectable()
