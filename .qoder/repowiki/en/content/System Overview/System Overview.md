@@ -5,7 +5,7 @@
 - [README.md](file://README.md)
 - [main.ts](file://apps/server/src/main.ts)
 - [main.tsx](file://apps/admin/src/main.tsx)
-- [AppProviders.tsx](file://packages/ui/src/provider/AppProviders/AppProviders.tsx)
+- [AppProviders.tsx](file://packages/shared-frontend/src/provider/AppProviders/AppProviders.tsx)
 - [apis.ts](file://packages/shared-api-client/src/apis.ts)
 - [user.entity.ts](file://packages/shared-schema/src/entity/user.entity.ts)
 - [user.dto.ts](file://packages/shared-schema/src/dto/user.dto.ts)
@@ -14,18 +14,17 @@
 - [app.module.ts](file://apps/server/src/module/app.module.ts)
 - [main.config.ts](file://apps/server/src/main.config.ts)
 - [useAdminLoginRoute.ts](file://apps/admin/src/hooks/useAdminLoginRoute.ts)
-- [authStore.ts](file://packages/ui/src/store/authStore.ts)
+- [authStore.ts](file://packages/shared-frontend/src/store/authStore.ts)
 - [route-names.ts](file://packages/shared-vars/src/route-names.ts)
 - [login.tsx](file://apps/mobile/src/app/login.tsx)
 - [package.json](file://apps/admin/package.json)
 - [package.json](file://apps/mobile/package.json)
 - [package.json](file://apps/server/package.json)
 - [package.json](file://packages/shared-api-client/package.json)
-- [package.json](file://packages/ui/package.json)
+- [package.json](file://packages/shared-frontend/package.json)
 </cite>
 
 ## Table of Contents
-
 1. [Introduction](#introduction)
 2. [Project Structure](#project-structure)
 3. [Core Components](#core-components)
@@ -55,7 +54,7 @@ D[Storybook]
 end
 subgraph "Shared Packages"
 E[shared-api-client]
-F[ui]
+F[shared-frontend]
 G[shared-utils]
 H[shared-schema]
 I[shared-vars]
@@ -79,7 +78,6 @@ D --> G
 ```
 
 **Diagram sources**
-
 - [README.md](file://README.md)
 
 ### Applications
@@ -92,7 +90,7 @@ D --> G
 ### Packages
 
 - **shared-api-client**: Automatically generated API client using Orval, based on OpenAPI specifications.
-- **ui**: Shared React components, providers, and UI elements used by both admin and mobile apps.
+- **shared-frontend**: Shared React components, providers, and UI elements used by both admin and mobile apps.
 - **shared-utils**: Utility functions for common operations like logging, environment checks, and form handling.
 - **shared-schema**: Prisma schema, DTOs (Data Transfer Objects), and entity definitions shared between frontend and backend.
 - **shared-vars**: Constants such as route names and API endpoints.
@@ -101,7 +99,6 @@ D --> G
 - **shared-typescript-config**: Shared TypeScript configuration.
 
 **Section sources**
-
 - [README.md](file://README.md)
 
 ## Core Components
@@ -121,21 +118,20 @@ import { App } from "./App";
 const rootElement = document.getElementById("root")!;
 
 if (!rootElement.innerHTML) {
-  ReactDOM.createRoot(rootElement).render(
-    <AppProviders>
-      <App />
-    </AppProviders>
-  );
+	ReactDOM.createRoot(rootElement).render(
+		<AppProviders>
+			<App />
+		</AppProviders>,
+	);
 }
 ```
 
 **Section sources**
-
 - [main.tsx](file://apps/admin/src/main.tsx)
 
 ### Mobile Application
 
-The mobile application is a React Native app using Expo, located in `apps/mobile`. It shares UI components and state management with the admin app through the `ui` package.
+The mobile application is a React Native app using Expo, located in `apps/mobile`. It shares UI components and state management with the admin app through the `shared-frontend` package.
 
 ```tsx
 // apps/mobile/src/app/login.tsx
@@ -143,16 +139,15 @@ import { View } from "react-native";
 import { Text } from "@/components/ui/Text";
 
 export default function Login() {
-  return (
-    <View>
-      <Text>Login Screen</Text>
-    </View>
-  );
+	return (
+		<View>
+			<Text>Login Screen</Text>
+		</View>
+	);
 }
 ```
 
 **Section sources**
-
 - [login.tsx](file://apps/mobile/src/app/login.tsx)
 
 ### Server Application
@@ -191,7 +186,6 @@ async function bootstrap() {
 ```
 
 **Section sources**
-
 - [main.ts](file://apps/server/src/main.ts)
 
 ## Architecture Overview
@@ -206,7 +200,7 @@ B[Mobile App]
 C[Storybook]
 end
 subgraph "Shared"
-D[ui]
+D[shared-frontend]
 E[shared-api-client]
 F[shared-utils]
 G[shared-schema]
@@ -236,7 +230,6 @@ D --> F
 ```
 
 **Diagram sources**
-
 - [README.md](file://README.md)
 - [main.ts](file://apps/server/src/main.ts)
 - [main.tsx](file://apps/admin/src/main.tsx)
@@ -249,31 +242,29 @@ Shared packages play a crucial role in maintaining consistency and reducing dupl
 
 ### AppProviders
 
-The `AppProviders` component from `ui` wraps both admin and mobile applications, providing essential global providers:
+The `AppProviders` component from `shared-frontend` wraps both admin and mobile applications, providing essential global providers:
 
 ```tsx
-// packages/ui/src/provider/AppProviders/AppProviders.tsx
+// packages/shared-frontend/src/provider/AppProviders/AppProviders.tsx
 export const AppProviders = (props: AppProvidersProps) => {
-  return (
-    <QueryProvider>
-      <NuqsAdapter>
-        <AuthProvider>{children}</AuthProvider>
-        <ToastProvider placement="bottom-center" />
-      </NuqsAdapter>
-    </QueryProvider>
-  );
+	return (
+		<QueryProvider>
+			<NuqsAdapter>
+				<AuthProvider>{children}</AuthProvider>
+				<ToastProvider placement="bottom-center" />
+			</NuqsAdapter>
+		</QueryProvider>
+	);
 };
 ```
 
 This setup ensures that both applications have access to:
-
 - **QueryProvider**: React Query for data fetching and caching
 - **AuthProvider**: Authentication state management
 - **ToastProvider**: Global notification system
 
 **Section sources**
-
-- [AppProviders.tsx](file://packages/ui/src/provider/AppProviders/AppProviders.tsx)
+- [AppProviders.tsx](file://packages/shared-frontend/src/provider/AppProviders/AppProviders.tsx)
 
 ### API Client Generation
 
@@ -282,14 +273,14 @@ The `shared-api-client` package is automatically generated using Orval from Open
 ```ts
 // packages/shared-api-client/src/apis.ts
 export const getGroundsByQuery = (
-  params?: GetGroundsByQueryParams,
-  options?: SecondParameter<typeof customInstance>,
-  signal?: AbortSignal
+	params?: GetGroundsByQueryParams,
+	options?: SecondParameter<typeof customInstance>,
+	signal?: AbortSignal,
 ) => {
-  return customInstance<GetGroundsByQuery200AllOf>(
-    { url: `/api/v1/grounds`, method: "GET", params, signal },
-    options
-  );
+	return customInstance<GetGroundsByQuery200AllOf>(
+		{ url: `/api/v1/grounds`, method: "GET", params, signal },
+		options,
+	);
 };
 ```
 
@@ -311,7 +302,6 @@ export function useGetGroundsByQuery<
 ```
 
 **Section sources**
-
 - [apis.ts](file://packages/shared-api-client/src/apis.ts)
 
 ### Data Modeling with Shared Schema
@@ -322,52 +312,51 @@ The `shared-schema` package contains entity definitions and DTOs used by both fr
 // packages/shared-schema/src/entity/user.entity.ts
 @UseDto(UserDto)
 export class User extends AbstractEntity<UserDto> implements UserEntity {
-  name: string;
-  email: string;
-  phone: string;
-  password: string;
+	name: string;
+	email: string;
+	phone: string;
+	password: string;
 
-  profiles?: Profile[];
-  tenants?: Tenant[];
-  associations?: UserAssociation[];
+	profiles?: Profile[];
+	tenants?: Tenant[];
+	associations?: UserAssociation[];
 
-  getMainTenant(): Tenant | undefined {
-    return this.tenants?.find((tenant) => tenant.main === true);
-  }
+	getMainTenant(): Tenant | undefined {
+		return this.tenants?.find((tenant) => tenant.main === true);
+	}
 }
 ```
 
 ```ts
 // packages/shared-schema/src/dto/user.dto.ts
 export class UserDto extends AbstractDto implements User {
-  @UUIDField()
-  spaceId!: string;
+	@UUIDField()
+	spaceId!: string;
 
-  @EmailField()
-  email!: string;
+	@EmailField()
+	email!: string;
 
-  @StringField()
-  name!: string;
+	@StringField()
+	name!: string;
 
-  @StringField()
-  phone!: string;
+	@StringField()
+	phone!: string;
 
-  @Exclude()
-  @PasswordField({ description: ResponseExcludedField })
-  password!: string;
+	@Exclude()
+	@PasswordField({ description: ResponseExcludedField })
+	password!: string;
 }
 ```
 
 This shared modeling ensures type consistency across the stack and reduces the risk of data shape mismatches.
 
 **Section sources**
-
 - [user.entity.ts](file://packages/shared-schema/src/entity/user.entity.ts)
 - [user.dto.ts](file://packages/shared-schema/src/dto/user.dto.ts)
 
 ## Authentication Flow
 
-The authentication system is implemented across multiple layers, with shared logic in `ui` and `shared-api-client`.
+The authentication system is implemented across multiple layers, with shared logic in `shared-frontend` and `shared-api-client`.
 
 ### Backend Authentication
 
@@ -376,38 +365,38 @@ The server uses NestJS's Passport module with JWT and local strategies:
 ```ts
 // apps/server/src/module/auth.module.ts
 @Module({
-  providers: [
-    AuthService,
-    PasswordService,
-    TokenService,
-    LocalStrategy,
-    JwtStrategy,
-    UsersService,
-    UsersRepository,
-  ],
-  controllers: [AuthController],
-  exports: [AuthService],
+	providers: [
+		AuthService,
+		PasswordService,
+		TokenService,
+		LocalStrategy,
+		JwtStrategy,
+		UsersService,
+		UsersRepository,
+	],
+	controllers: [AuthController],
+	exports: [AuthService],
 })
 export class AuthModule {}
 ```
 
 ### Frontend Authentication State
 
-The `AuthStore` in `ui` manages authentication state and intercepts API requests:
+The `AuthStore` in `shared-frontend` manages authentication state and intercepts API requests:
 
 ```ts
-// packages/ui/src/store/authStore.ts
+// packages/shared-frontend/src/store/authStore.ts
 AXIOS_INSTANCE.interceptors.request.use(
-  async (config) => {
-    const isATExpired = this.plateStore.tokenStore?.isAccessTokenExpired();
-    if (isATExpired) {
-      await this.plateStore.tokenStore?.refreshToken();
-    }
-    return config;
-  },
-  (error) => {
-    return Promise.reject(error);
-  }
+	async (config) => {
+		const isATExpired = this.plateStore.tokenStore?.isAccessTokenExpired();
+		if (isATExpired) {
+			await this.plateStore.tokenStore?.refreshToken();
+		}
+		return config;
+	},
+	(error) => {
+		return Promise.reject(error);
+	},
 );
 ```
 
@@ -420,29 +409,28 @@ The admin login route uses a custom hook that leverages the generated API client
 ```ts
 // apps/admin/src/hooks/useAdminLoginRoute.ts
 const useActions = () => {
-  const { mutateAsync: loginMutation } = useMutation({
-    mutationFn: login,
-  });
+	const { mutateAsync: loginMutation } = useMutation({
+		mutationFn: login,
+	});
 
-  const navigate = useNavigate();
+	const navigate = useNavigate();
 
-  const goToTenantSelect = () => {
-    navigate({
-      to: "/admin/auth/login/tenant-select",
-    });
-  };
+	const goToTenantSelect = () => {
+		navigate({
+			to: "/admin/auth/login/tenant-select",
+		});
+	};
 
-  return {
-    goToTenantSelect,
-    loginMutation,
-  };
+	return {
+		goToTenantSelect,
+		loginMutation,
+	};
 };
 ```
 
 **Section sources**
-
 - [auth.module.ts](file://apps/server/src/module/auth.module.ts)
-- [authStore.ts](file://packages/ui/src/store/authStore.ts)
+- [authStore.ts](file://packages/shared-frontend/src/store/authStore.ts)
 - [useAdminLoginRoute.ts](file://apps/admin/src/hooks/useAdminLoginRoute.ts)
 
 ## Development and Deployment Workflow
@@ -493,7 +481,6 @@ ConfigModule.forRoot({
 Dockerfiles and Jenkins pipelines in the `devops` directory enable containerized deployment and automated CI/CD workflows.
 
 **Section sources**
-
 - [README.md](file://README.md)
 - [main.config.ts](file://apps/server/src/main.config.ts)
 

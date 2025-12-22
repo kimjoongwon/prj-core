@@ -19,7 +19,6 @@
 </cite>
 
 ## Table of Contents
-
 1. [Introduction](#introduction)
 2. [Project Structure](#project-structure)
 3. [Core Components](#core-components)
@@ -31,11 +30,9 @@
 9. [Conclusion](#conclusion)
 
 ## Introduction
-
 This document provides a comprehensive architectural overview of the backend system for prj-core, a NestJS-based application. The backend follows a modular, layered architecture with clear separation of concerns between controllers, services, and repositories. It leverages Prisma ORM for database interactions and implements a robust security model using JWT-based authentication. The system is designed to support multiple frontend applications including admin and mobile interfaces, with a focus on scalability, maintainability, and developer experience.
 
 ## Project Structure
-
 The project follows a monorepo structure using pnpm workspaces, with distinct applications and shared packages. The backend resides in the `apps/server` directory, while shared components are organized in the `packages` directory for reuse across different applications.
 
 ```mermaid
@@ -53,7 +50,7 @@ end
 subgraph "Shared Packages"
 G[packages]
 G --> H[shared-api-client]
-G --> I[ui]
+G --> I[shared-frontend]
 G --> J[shared-hooks]
 G --> K[shared-schema]
 G --> L[shared-types]
@@ -65,15 +62,12 @@ A --> G
 ```
 
 **Diagram sources**
-
 - [pnpm-workspace.yaml](file://pnpm-workspace.yaml#L1-L3)
 
 **Section sources**
-
 - [pnpm-workspace.yaml](file://pnpm-workspace.yaml#L1-L55)
 
 ## Core Components
-
 The backend architecture is built on NestJS framework and follows a MVC-like pattern with Controllers, Services, and Repositories. The core components include:
 
 - **Controllers**: Handle HTTP requests and responses
@@ -86,12 +80,10 @@ The backend architecture is built on NestJS framework and follows a MVC-like pat
 The architecture emphasizes separation of concerns, with each layer having distinct responsibilities and clear interfaces between them.
 
 **Section sources**
-
 - [main.ts](file://apps/server/src/main.ts#L1-L76)
 - [app.module.ts](file://apps/server/src/module/app.module.ts#L1-L177)
 
 ## Architecture Overview
-
 The backend system follows a layered architecture with well-defined boundaries between components. The application is organized into feature modules, each containing controllers, services, and repositories for specific domain entities.
 
 ```mermaid
@@ -126,14 +118,12 @@ style F fill:#fbb,stroke:#333
 ```
 
 **Diagram sources**
-
 - [main.ts](file://apps/server/src/main.ts#L1-L76)
 - [app.module.ts](file://apps/server/src/module/app.module.ts#L1-L177)
 
 ## Detailed Component Analysis
 
 ### Component Interaction Flow
-
 The typical request flow in the system follows a consistent pattern from controller to repository, with proper error handling and response formatting.
 
 ```mermaid
@@ -159,13 +149,11 @@ Note over Client,DB : Complete user retrieval with pagination
 ```
 
 **Diagram sources**
-
 - [users.controller.ts](file://apps/server/src/shared/controller/resources/users.controller.ts#L1-L151)
 - [users.service.ts](file://apps/server/src/shared/service/resources/users.service.ts#L1-L149)
 - [users.repository.ts](file://apps/server/src/shared/repository/users.repository.ts#L1-L37)
 
 ### Controller Layer Analysis
-
 Controllers in the application handle HTTP requests, validate input, and return standardized responses. They use decorators for route definition, authentication, and response formatting.
 
 ```mermaid
@@ -194,13 +182,11 @@ UsersController --> UsersService : "depends on"
 ```
 
 **Diagram sources**
-
 - [users.controller.ts](file://apps/server/src/shared/controller/resources/users.controller.ts#L1-L151)
 - [api-response-entity.decorator.ts](file://apps/server/src/shared/decorator/api-response-entity.decorator.ts#L1-L61)
 - [auth.guard.ts](file://apps/server/src/shared/guard/auth.guard.ts#L1-L14)
 
 ### Service Layer Analysis
-
 Services contain the business logic and coordinate operations between repositories. They handle complex operations, data transformations, and business rules.
 
 ```mermaid
@@ -222,12 +208,10 @@ UsersService --> UsersRepository : "uses"
 ```
 
 **Diagram sources**
-
 - [users.service.ts](file://apps/server/src/shared/service/resources/users.service.ts#L1-L149)
 - [users.repository.ts](file://apps/server/src/shared/repository/users.repository.ts#L1-L37)
 
 ### Repository Layer Analysis
-
 Repositories provide an abstraction over Prisma ORM, implementing CRUD operations with consistent logging and error handling. The base repository class provides common functionality for all entity-specific repositories.
 
 ```mermaid
@@ -258,13 +242,11 @@ BaseRepository --> PrismaService : "uses"
 ```
 
 **Diagram sources**
-
 - [base.repository.ts](file://apps/server/src/shared/common/base.repository.ts#L1-L156)
 - [users.repository.ts](file://apps/server/src/shared/repository/users.repository.ts#L1-L37)
 - [prisma.service.ts](file://node_modules/nestjs-prisma/src/prisma.service.ts)
 
 ## Dependency Analysis
-
 The backend system has a well-defined dependency structure with clear boundaries between layers. The dependency inversion principle is applied through NestJS dependency injection.
 
 ```mermaid
@@ -292,12 +274,10 @@ style C fill:#fbb,stroke:#333
 ```
 
 **Diagram sources**
-
 - [app.module.ts](file://apps/server/src/module/app.module.ts#L1-L177)
 - [main.ts](file://apps/server/src/main.ts#L1-L76)
 
 ## Performance Considerations
-
 The architecture includes several performance optimizations:
 
 1. **Request Logging**: Middleware logs all HTTP requests for monitoring and debugging
@@ -310,12 +290,10 @@ The architecture includes several performance optimizations:
 The system uses connection pooling with configurable maxConnections (default 100) and supports SSL for database connections in production environments.
 
 **Section sources**
-
 - [main.ts](file://apps/server/src/main.ts#L1-L76)
 - [database.config.ts](file://apps/server/src/shared/config/database.config.ts#L1-L42)
 
 ## Troubleshooting Guide
-
 Common issues and their solutions:
 
 1. **Authentication Failures**: Check JWT token validity and ensure proper Authorization header format
@@ -327,13 +305,11 @@ Common issues and their solutions:
 The system includes comprehensive logging through nestjs-pino, with middleware logging all HTTP requests and guards logging authentication attempts.
 
 **Section sources**
-
 - [logger.middleware.ts](file://apps/server/src/shared/middleware/logger.middleware.ts#L1-L15)
 - [jwt.auth-guard.ts](file://apps/server/src/shared/guard/jwt.auth-guard.ts#L1-L63)
 - [all-exception.filter.ts](file://apps/server/src/shared/filter/all-exception.filter.ts)
 
 ## Conclusion
-
 The prj-core backend architecture demonstrates a well-structured, maintainable design using NestJS framework. The layered architecture with clear separation of concerns enables scalability and ease of development. Key strengths include:
 
 - Modular organization with feature-based modules

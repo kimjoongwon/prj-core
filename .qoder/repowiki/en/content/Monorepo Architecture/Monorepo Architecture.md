@@ -9,18 +9,17 @@
 - [apps/admin/package.json](file://apps/admin/package.json)
 - [apps/mobile/package.json](file://apps/mobile/package.json)
 - [packages/shared-api-client/package.json](file://packages/shared-api-client/package.json)
-- [packages/ui/package.json](file://packages/ui/package.json)
+- [packages/shared-frontend/package.json](file://packages/shared-frontend/package.json)
 - [packages/shared-schema/package.json](file://packages/shared-schema/package.json)
 - [apps/server/src/main.ts](file://apps/server/src/main.ts)
 - [apps/admin/src/main.tsx](file://apps/admin/src/main.tsx)
 - [apps/mobile/src/app/_layout.tsx](file://apps/mobile/src/app/_layout.tsx)
-- [packages/ui/src/provider/AppProviders/AppProviders.tsx](file://packages/ui/src/provider/AppProviders/AppProviders.tsx)
-- [packages/ui/src/provider/QueryProvider/QueryProvider.tsx](file://packages/ui/src/provider/QueryProvider/QueryProvider.tsx)
-- [packages/ui/src/provider/AuthProvider/AuthProvider.tsx](file://packages/ui/src/provider/AuthProvider/AuthProvider.tsx)
+- [packages/shared-frontend/src/provider/AppProviders/AppProviders.tsx](file://packages/shared-frontend/src/provider/AppProviders/AppProviders.tsx)
+- [packages/shared-frontend/src/provider/QueryProvider/QueryProvider.tsx](file://packages/shared-frontend/src/provider/QueryProvider/QueryProvider.tsx)
+- [packages/shared-frontend/src/provider/AuthProvider/AuthProvider.tsx](file://packages/shared-frontend/src/provider/AuthProvider/AuthProvider.tsx)
 </cite>
 
 ## Table of Contents
-
 1. [Introduction](#introduction)
 2. [Project Structure](#project-structure)
 3. [Monorepo Configuration](#monorepo-configuration)
@@ -50,7 +49,7 @@ SB[Storybook]
 end
 subgraph "Shared Packages"
 SAC[shared-api-client]
-SF[ui]
+SF[shared-frontend]
 SH[shared-hooks]
 SS[shared-schema]
 ST[shared-types]
@@ -80,11 +79,9 @@ SF --> ST
 ```
 
 **Diagram sources**
-
 - [project_structure](file://)
 
 **Section sources**
-
 - [project_structure](file://)
 
 ## Monorepo Configuration
@@ -98,14 +95,13 @@ packages:
   - apps/*
   - packages/*
 catalog:
-  "@biomejs/biome": ^2.1.4
-  "@heroui/react": ^2.8.2
-  "@prisma/client": ^6.11.1
+  '@biomejs/biome': ^2.1.4
+  '@heroui/react': ^2.8.2
+  '@prisma/client': ^6.11.1
   # ... additional catalog entries
 ```
 
 **Section sources**
-
 - [pnpm-workspace.yaml](file://pnpm-workspace.yaml)
 
 ### Turborepo Task Orchestration
@@ -114,33 +110,27 @@ Turborepo is used for task orchestration across the monorepo, as configured in t
 
 ```json
 {
-  "globalDependencies": ["**/.env.*local"],
-  "globalEnv": ["NODE_ENV"],
-  "tasks": {
-    "build": {
-      "outputs": [
-        "dist/**",
-        ".next/**",
-        "!.next/cache/**",
-        "storybook-static/**"
-      ],
-      "dependsOn": ["^build"],
-      "env": ["NODE_ENV"]
-    },
-    "test": {
-      "outputs": ["coverage/**"],
-      "dependsOn": []
-    },
-    "start:dev": {
-      "cache": false,
-      "persistent": true
-    }
-  }
+	"globalDependencies": ["**/.env.*local"],
+	"globalEnv": ["NODE_ENV"],
+	"tasks": {
+		"build": {
+			"outputs": ["dist/**", ".next/**", "!.next/cache/**", "storybook-static/**"],
+			"dependsOn": ["^build"],
+			"env": ["NODE_ENV"]
+		},
+		"test": {
+			"outputs": ["coverage/**"],
+			"dependsOn": []
+		},
+		"start:dev": {
+			"cache": false,
+			"persistent": true
+		}
+	}
 }
 ```
 
 **Section sources**
-
 - [turbo.json](file://turbo.json)
 
 ### Root Package Configuration
@@ -167,7 +157,6 @@ The root `package.json` file defines the monorepo's top-level scripts and devDep
 ```
 
 **Section sources**
-
 - [package.json](file://package.json)
 
 ## Application Architecture
@@ -193,13 +182,12 @@ S --> AM --> Cors
 ```
 
 **Section sources**
-
 - [apps/server/package.json](file://apps/server/package.json)
 - [apps/server/src/main.ts](file://apps/server/src/main.ts)
 
 ### Admin Web Application (React)
 
-The admin application is a React web interface built with Vite and TypeScript. It uses React Router for routing, TanStack Query for data fetching, and MobX for state management. The application leverages shared components from the ui package and uses the shared API client for backend communication. It is configured with Storybook for component documentation and testing. The UI is built with Tailwind CSS and includes drag-and-drop functionality via @dnd-kit.
+The admin application is a React web interface built with Vite and TypeScript. It uses React Router for routing, TanStack Query for data fetching, and MobX for state management. The application leverages shared components from the shared-frontend package and uses the shared API client for backend communication. It is configured with Storybook for component documentation and testing. The UI is built with Tailwind CSS and includes drag-and-drop functionality via @dnd-kit.
 
 ```mermaid
 graph TD
@@ -207,7 +195,7 @@ A[Admin Application]
 A --> Router[TanStack Router]
 A --> Query[TanStack Query]
 A --> State[MobX]
-A --> UI[ui]
+A --> UI[shared-frontend]
 A --> API[shared-api-client]
 A --> Auth[AuthProvider]
 A --> Theme[ThemeProvider]
@@ -216,7 +204,6 @@ A --> DevTools[React Query Devtools]
 ```
 
 **Section sources**
-
 - [apps/admin/package.json](file://apps/admin/package.json)
 - [apps/admin/src/main.tsx](file://apps/admin/src/main.tsx)
 
@@ -238,9 +225,8 @@ M --> Storybook[Storybook Mode]
 ```
 
 **Section sources**
-
 - [apps/mobile/package.json](file://apps/mobile/package.json)
-- [apps/mobile/src/app/\_layout.tsx](file://apps/mobile/src/app/_layout.tsx)
+- [apps/mobile/src/app/_layout.tsx](file://apps/mobile/src/app/_layout.tsx)
 
 ## Shared Packages
 
@@ -265,12 +251,11 @@ The shared-api-client package is an automatically generated API client and types
 ```
 
 **Section sources**
-
 - [packages/shared-api-client/package.json](file://packages/shared-api-client/package.json)
 
-### ui
+### shared-frontend
 
-The ui package is a UI component library that provides reusable components, providers, and utilities for React applications. It includes providers for authentication, state management, and UI services such as toasts. The package exports a composite AppProviders component that wraps applications with all necessary context providers. It depends on various UI libraries and is designed to be consumed directly in source form by applications.
+The shared-frontend package is a UI component library that provides reusable components, providers, and utilities for React applications. It includes providers for authentication, state management, and UI services such as toasts. The package exports a composite AppProviders component that wraps applications with all necessary context providers. It depends on various UI libraries and is designed to be consumed directly in source form by applications.
 
 ```typescript
 export const AppProviders = (props: AppProvidersProps) => {
@@ -286,9 +271,8 @@ export const AppProviders = (props: AppProvidersProps) => {
 ```
 
 **Section sources**
-
-- [packages/ui/package.json](file://packages/ui/package.json)
-- [packages/ui/src/provider/AppProviders/AppProviders.tsx](file://packages/ui/src/provider/AppProviders/AppProviders.tsx)
+- [packages/shared-frontend/package.json](file://packages/shared-frontend/package.json)
+- [packages/shared-frontend/src/provider/AppProviders/AppProviders.tsx](file://packages/shared-frontend/src/provider/AppProviders/AppProviders.tsx)
 
 ### shared-schema
 
@@ -312,14 +296,13 @@ The shared-schema package contains shared data models, DTOs, and Prisma schema d
 ```
 
 **Section sources**
-
 - [packages/shared-schema/package.json](file://packages/shared-schema/package.json)
 
 ## Component Interactions and Data Flow
 
 ### Provider Hierarchy and State Management
 
-The applications use a consistent provider hierarchy for state management and service access. The ui package provides a unified provider stack that includes QueryProvider for data fetching, NuqsAdapter for URL-based state management, AuthProvider for authentication state, and ToastProvider for notifications. This consistent pattern ensures that all applications have the same foundational services available through context.
+The applications use a consistent provider hierarchy for state management and service access. The shared-frontend package provides a unified provider stack that includes QueryProvider for data fetching, NuqsAdapter for URL-based state management, AuthProvider for authentication state, and ToastProvider for notifications. This consistent pattern ensures that all applications have the same foundational services available through context.
 
 ```mermaid
 graph TD
@@ -336,10 +319,9 @@ SB[Storybook] --> QP
 ```
 
 **Diagram sources**
-
-- [packages/ui/src/provider/AppProviders/AppProviders.tsx](file://packages/ui/src/provider/AppProviders/AppProviders.tsx)
-- [packages/ui/src/provider/QueryProvider/QueryProvider.tsx](file://packages/ui/src/provider/QueryProvider/QueryProvider.tsx)
-- [packages/ui/src/provider/AuthProvider/AuthProvider.tsx](file://packages/ui/src/provider/AuthProvider/AuthProvider.tsx)
+- [packages/shared-frontend/src/provider/AppProviders/AppProviders.tsx](file://packages/shared-frontend/src/provider/AppProviders/AppProviders.tsx)
+- [packages/shared-frontend/src/provider/QueryProvider/QueryProvider.tsx](file://packages/shared-frontend/src/provider/QueryProvider/QueryProvider.tsx)
+- [packages/shared-frontend/src/provider/AuthProvider/AuthProvider.tsx](file://packages/shared-frontend/src/provider/AuthProvider/AuthProvider.tsx)
 
 ### Authentication Flow
 
@@ -364,13 +346,12 @@ AuthProvider->>App : Update isAuthenticated state
 ```
 
 **Diagram sources**
-
-- [packages/ui/src/provider/AuthProvider/AuthProvider.tsx](file://packages/ui/src/provider/AuthProvider/AuthProvider.tsx)
+- [packages/shared-frontend/src/provider/AuthProvider/AuthProvider.tsx](file://packages/shared-frontend/src/provider/AuthProvider/AuthProvider.tsx)
 - [apps/server/src/main.ts](file://apps/server/src/main.ts)
 
 ### Data Fetching Pattern
 
-Applications use a consistent data fetching pattern through the shared-api-client package, which provides React Query hooks for all API endpoints. This pattern ensures type safety, automatic caching, and consistent error handling across applications. The QueryProvider from ui configures the QueryClient with default settings and includes React Query Devtools for debugging.
+Applications use a consistent data fetching pattern through the shared-api-client package, which provides React Query hooks for all API endpoints. This pattern ensures type safety, automatic caching, and consistent error handling across applications. The QueryProvider from shared-frontend configures the QueryClient with default settings and includes React Query Devtools for debugging.
 
 ```mermaid
 graph TD
@@ -393,8 +374,7 @@ style L fill:#9cf,stroke:#333
 ```
 
 **Diagram sources**
-
-- [packages/ui/src/provider/QueryProvider/QueryProvider.tsx](file://packages/ui/src/provider/QueryProvider/QueryProvider.tsx)
+- [packages/shared-frontend/src/provider/QueryProvider/QueryProvider.tsx](file://packages/shared-frontend/src/provider/QueryProvider/QueryProvider.tsx)
 - [packages/shared-api-client/package.json](file://packages/shared-api-client/package.json)
 
 ## System Context and Integration Patterns
@@ -431,7 +411,6 @@ class S3,Email external
 ```
 
 **Diagram sources**
-
 - [project_structure](file://)
 
 ### API Integration Pattern
@@ -458,7 +437,6 @@ style S fill:#f96,stroke:#333
 ```
 
 **Section sources**
-
 - [packages/shared-api-client/package.json](file://packages/shared-api-client/package.json)
 
 ## Technical Decisions and Trade-offs
@@ -468,26 +446,23 @@ style S fill:#f96,stroke:#333
 The monorepo approach provides several benefits including simplified dependency management, consistent tooling across projects, and easier code sharing. By using pnpm workspaces and a dependency catalog, the team ensures version consistency across all packages and applications. Turborepo enables efficient task orchestration with intelligent caching, reducing build and test times. However, this approach also introduces complexity in repository management and requires careful consideration of package boundaries to avoid tight coupling.
 
 **Section sources**
-
 - [pnpm-workspace.yaml](file://pnpm-workspace.yaml)
 - [turbo.json](file://turbo.json)
 
 ### State Management Strategy
 
-The architecture uses MobX for state management in React applications, chosen for its simplicity and reactivity model. Unlike Redux, MobX allows for more direct state manipulation while still providing reactivity through observables. The ui package provides a consistent provider setup that includes MobX with mobx-react-lite for React integration. This approach reduces boilerplate code compared to Redux while maintaining predictable state updates through the use of actions and reactions.
+The architecture uses MobX for state management in React applications, chosen for its simplicity and reactivity model. Unlike Redux, MobX allows for more direct state manipulation while still providing reactivity through observables. The shared-frontend package provides a consistent provider setup that includes MobX with mobx-react-lite for React integration. This approach reduces boilerplate code compared to Redux while maintaining predictable state updates through the use of actions and reactions.
 
 **Section sources**
-
 - [apps/admin/package.json](file://apps/admin/package.json)
 - [apps/mobile/package.json](file://apps/mobile/package.json)
-- [packages/ui/package.json](file://packages/ui/package.json)
+- [packages/shared-frontend/package.json](file://packages/shared-frontend/package.json)
 
 ### API Client Generation
 
 The decision to use Orval for API client generation from OpenAPI specifications ensures type safety and consistency between frontend and backend. When API endpoints change, the client code is automatically regenerated, reducing the risk of runtime errors due to API contract mismatches. This approach also eliminates the need for manual API client maintenance. The trade-off is a build-time dependency on the OpenAPI specification and a learning curve for developers unfamiliar with code generation tools.
 
 **Section sources**
-
 - [packages/shared-api-client/package.json](file://packages/shared-api-client/package.json)
 
 ## Infrastructure and Deployment
@@ -497,7 +472,6 @@ The decision to use Orval for API client generation from OpenAPI specifications 
 The development environment is configured to support multiple applications simultaneously. The server runs on port 3005 with CORS configured for various development origins used by the admin and mobile applications. Each application has its own development server with hot module replacement. The monorepo structure allows developers to work on shared packages and applications simultaneously, with changes to shared packages immediately available to applications through pnpm's workspace linking.
 
 **Section sources**
-
 - [apps/server/src/main.ts](file://apps/server/src/main.ts)
 
 ### Build and Deployment Pipeline
@@ -505,33 +479,29 @@ The development environment is configured to support multiple applications simul
 The build pipeline is orchestrated by Turborepo, which coordinates tasks across the monorepo with intelligent caching. The build task depends on upstream builds, ensuring that shared packages are built before applications that depend on them. Applications are built to their respective dist directories, with outputs configured in turbo.json. The deployment topology likely involves separate deployment of the server application to a Node.js environment and the frontend applications to static hosting or app stores.
 
 **Section sources**
-
 - [turbo.json](file://turbo.json)
 
 ## Cross-Cutting Concerns
 
 ### Code Sharing Strategy
 
-The monorepo implements a comprehensive code sharing strategy through the packages directory. Shared functionality is organized into focused packages based on responsibility: shared-api-client for API integration, ui for UI components, shared-hooks for React hooks, shared-schema for data models, and so on. This modular approach allows applications to import only the functionality they need, reducing bundle sizes. The workspace protocol in package.json files enables seamless linking between packages during development.
+The monorepo implements a comprehensive code sharing strategy through the packages directory. Shared functionality is organized into focused packages based on responsibility: shared-api-client for API integration, shared-frontend for UI components, shared-hooks for React hooks, shared-schema for data models, and so on. This modular approach allows applications to import only the functionality they need, reducing bundle sizes. The workspace protocol in package.json files enables seamless linking between packages during development.
 
 **Section sources**
-
 - [project_structure](file://)
 
 ### Versioning and Dependency Management
 
-The monorepo uses a combination of pnpm workspaces and a dependency catalog to manage versions consistently. The catalog in pnpm-workspace.yaml defines specific versions for commonly used dependencies, ensuring that all packages and applications use the same versions. Shared packages use workspace:\* dependencies to reference other shared packages, enabling immediate access to changes without publishing. This approach simplifies dependency management but requires careful coordination when updating shared packages that are used by multiple applications.
+The monorepo uses a combination of pnpm workspaces and a dependency catalog to manage versions consistently. The catalog in pnpm-workspace.yaml defines specific versions for commonly used dependencies, ensuring that all packages and applications use the same versions. Shared packages use workspace:* dependencies to reference other shared packages, enabling immediate access to changes without publishing. This approach simplifies dependency management but requires careful coordination when updating shared packages that are used by multiple applications.
 
 **Section sources**
-
 - [pnpm-workspace.yaml](file://pnpm-workspace.yaml)
 
 ### Testing Strategy
 
-The testing strategy varies by package type. Applications use Vitest for unit and integration testing, with the server application also using Jest for end-to-end tests. The ui package includes Vitest configuration for component testing, while the shared-schema package includes database integration tests. The monorepo structure allows for consistent testing tools across packages, with Turborepo orchestrating test execution across the entire codebase.
+The testing strategy varies by package type. Applications use Vitest for unit and integration testing, with the server application also using Jest for end-to-end tests. The shared-frontend package includes Vitest configuration for component testing, while the shared-schema package includes database integration tests. The monorepo structure allows for consistent testing tools across packages, with Turborepo orchestrating test execution across the entire codebase.
 
 **Section sources**
-
-- [packages/ui/package.json](file://packages/ui/package.json)
+- [packages/shared-frontend/package.json](file://packages/shared-frontend/package.json)
 - [packages/shared-schema/package.json](file://packages/shared-schema/package.json)
 - [apps/server/package.json](file://apps/server/package.json)

@@ -169,8 +169,6 @@ export { [ComponentName] } from "./[ComponentName]";
 export type { [ComponentName]Props } from "./[ComponentName]";
 ```
 
-
-
 ## 출력 형식
 
 ### 구현 완료 리포트
