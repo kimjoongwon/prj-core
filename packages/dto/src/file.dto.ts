@@ -1,5 +1,10 @@
 import { File } from "@cocrepo/prisma";
-import { ClassField, NumberField, StringField, UUIDField } from "@cocrepo/decorator";
+import {
+	ClassField,
+	NumberField,
+	StringField,
+	UUIDField,
+} from "@cocrepo/decorator";
 import { FileAssociation } from "@cocrepo/entity";
 import { AbstractDto } from "./abstract.dto";
 import { FileClassificationDto } from "./file-classification.dto";

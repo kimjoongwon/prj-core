@@ -4,21 +4,21 @@ import { CategoryTypes } from "@cocrepo/prisma";
 import { QueryDto } from "./query.dto";
 
 export class QueryCategoryDto extends QueryDto {
-  @StringFieldOptional()
-  name?: string;
+	@StringFieldOptional()
+	name?: string;
 
-  @EnumFieldOptional(() => CategoryTypes)
-  type?: CategoryTypes;
+	@EnumFieldOptional(() => CategoryTypes)
+	type?: CategoryTypes;
 
-  @StringFieldOptional()
-  parentId?: string;
+	@StringFieldOptional()
+	parentId?: string;
 
-  @StringFieldOptional()
-  tenantId?: string;
+	@StringFieldOptional()
+	tenantId?: string;
 
-  @StringFieldOptional()
-  serviceId?: string;
+	@StringFieldOptional()
+	serviceId?: string;
 
-  @EnumFieldOptional(() => SortOrder)
-  nameSortOrder?: SortOrder;
+	@EnumFieldOptional(() => SortOrder)
+	nameSortOrder?: SortOrder;
 }

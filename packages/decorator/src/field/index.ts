@@ -53,7 +53,7 @@ export const DefaultKey = "default";
  * ```
  */
 export function Default(value: any) {
-  return (target: any, propertyKey: string) => {
-    Reflect.defineMetadata(DefaultKey, value, target, propertyKey);
-  };
+	return (target: any, propertyKey: string) => {
+		Reflect.defineMetadata(DefaultKey, value, target, propertyKey);
+	};
 }

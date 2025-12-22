@@ -9,24 +9,24 @@ import { createElement } from "react";
  * @returns React 아이콘 엘리먼트 또는 null
  */
 export const renderLucideIcon = (
-  iconName?: string,
-  className?: string,
-  size: number = 16
+	iconName?: string,
+	className?: string,
+	size: number = 16,
 ) => {
-  if (!iconName) return null;
+	if (!iconName) return null;
 
-  // LucideIcons에서 해당 아이콘을 찾습니다
-  const IconComponent = (LucideIcons as any)[iconName];
+	// LucideIcons에서 해당 아이콘을 찾습니다
+	const IconComponent = (LucideIcons as any)[iconName];
 
-  if (!IconComponent) {
-    console.warn(`Icon "${iconName}" not found in lucide-react`);
-    return null;
-  }
+	if (!IconComponent) {
+		console.warn(`Icon "${iconName}" not found in lucide-react`);
+		return null;
+	}
 
-  return createElement(IconComponent, {
-    className,
-    size,
-  });
+	return createElement(IconComponent, {
+		className,
+		size,
+	});
 };
 
 /**
@@ -34,9 +34,9 @@ export const renderLucideIcon = (
  * @returns Lucide 아이콘 이름 배열
  */
 export const getAvailableLucideIcons = (): string[] => {
-  return Object.keys(LucideIcons).filter(
-    (key) => key !== "createLucideIcon" && key !== "Icon"
-  );
+	return Object.keys(LucideIcons).filter(
+		(key) => key !== "createLucideIcon" && key !== "Icon",
+	);
 };
 
 /**
@@ -45,5 +45,5 @@ export const getAvailableLucideIcons = (): string[] => {
  * @returns 유효한 아이콘 이름인지 여부
  */
 export const isValidLucideIcon = (iconName: string): boolean => {
-  return iconName in LucideIcons;
+	return iconName in LucideIcons;
 };

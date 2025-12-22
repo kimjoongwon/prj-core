@@ -10,16 +10,16 @@ import type { ReactNode } from "react";
 import { type ThemeConfig } from "../theme/heroui.config";
 
 export interface DesignSystemProviderProps {
-  children: ReactNode;
-  /**
-   * 테마 설정 (기본값: light 테마)
-   */
-  themeConfig?: Partial<ThemeConfig>;
-  /**
-   * 라우터 네비게이션 함수 (선택사항)
-   * TanStack Router, React Router 등과 통합할 때 사용
-   */
-  navigate?: (path: string) => void;
+	children: ReactNode;
+	/**
+	 * 테마 설정 (기본값: light 테마)
+	 */
+	themeConfig?: Partial<ThemeConfig>;
+	/**
+	 * 라우터 네비게이션 함수 (선택사항)
+	 * TanStack Router, React Router 등과 통합할 때 사용
+	 */
+	navigate?: (path: string) => void;
 }
 
 /**
@@ -39,15 +39,15 @@ export interface DesignSystemProviderProps {
  * ```
  */
 export function DesignSystemProvider({
-  children,
-  navigate,
+	children,
+	navigate,
 }: DesignSystemProviderProps) {
-  return (
-    <HeroUIProvider navigate={navigate}>
-      {children}
-      <ToastProvider />
-    </HeroUIProvider>
-  );
+	return (
+		<HeroUIProvider navigate={navigate}>
+			{children}
+			<ToastProvider />
+		</HeroUIProvider>
+	);
 }
 
 /**
@@ -59,13 +59,13 @@ export function DesignSystemProvider({
  * ```
  */
 export function useDesignSystemTheme() {
-  const { theme, setTheme } = useTheme();
+	const { theme, setTheme } = useTheme();
 
-  return {
-    theme: theme as "light" | "dark" | undefined,
-    setTheme,
-    toggleTheme: () => setTheme(theme === "light" ? "dark" : "light"),
-    isDark: theme === "dark",
-    isLight: theme === "light",
-  };
+	return {
+		theme: theme as "light" | "dark" | undefined,
+		setTheme,
+		toggleTheme: () => setTheme(theme === "light" ? "dark" : "light"),
+		isDark: theme === "dark",
+		isLight: theme === "light",
+	};
 }

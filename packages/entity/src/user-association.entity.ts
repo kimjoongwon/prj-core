@@ -3,7 +3,10 @@ import { AbstractEntity } from "./abstract.entity";
 import { Group } from "./group.entity";
 import { User } from "./user.entity";
 
-export class UserAssociation extends AbstractEntity implements UserAssociationEntity {
+export class UserAssociation
+	extends AbstractEntity
+	implements UserAssociationEntity
+{
 	userId!: string;
 	groupId!: string;
 

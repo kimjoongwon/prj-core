@@ -1,5 +1,5 @@
 export {
-  DesignSystemProvider,
-  type DesignSystemProviderProps,
-  useDesignSystemTheme,
+	DesignSystemProvider,
+	type DesignSystemProviderProps,
+	useDesignSystemTheme,
 } from "./DesignSystemProvider";

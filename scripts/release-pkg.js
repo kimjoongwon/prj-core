@@ -20,6 +20,29 @@ if (!validVersionTypes.includes(versionType)) {
 }
 
 /**
+ * npm 로그인 상태 확인
+ */
+function checkNpmAuth() {
+  console.log("\n🔐 npm 인증 상태 확인 중...");
+
+  try {
+    const username = execSync("npm whoami", { encoding: "utf8" }).trim();
+    console.log(`✅ npm 로그인 확인: ${username}\n`);
+    return true;
+  } catch (error) {
+    console.log("\n" + "=".repeat(60));
+    console.error("❌ npm 토큰이 만료되었거나 로그인되지 않았습니다.");
+    console.log("=".repeat(60));
+    console.log("\n💡 다음 명령어로 로그인하세요:\n");
+    console.log("   npm login\n");
+    console.log("또는 토큰을 직접 설정:\n");
+    console.log("   npm config set //registry.npmjs.org/:_authToken=YOUR_TOKEN\n");
+    console.log("=".repeat(60) + "\n");
+    return false;
+  }
+}
+
+/**
  * 전체 패키지 릴리즈
  */
 function releaseAll() {
@@ -137,6 +160,10 @@ function releaseSingle(pkgName) {
 }
 
 // 메인 실행
+if (!dryRun && !checkNpmAuth()) {
+  process.exit(1);
+}
+
 if (packageName) {
   releaseSingle(packageName);
 } else {
