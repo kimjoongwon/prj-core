@@ -3,7 +3,10 @@ import { AbstractEntity } from "./abstract.entity";
 import { Category } from "./category.entity";
 import { File } from "./file.entity";
 
-export class FileClassification extends AbstractEntity implements FileClassificationEntity {
+export class FileClassification
+	extends AbstractEntity
+	implements FileClassificationEntity
+{
 	categoryId!: string;
 	fileId!: string;
 

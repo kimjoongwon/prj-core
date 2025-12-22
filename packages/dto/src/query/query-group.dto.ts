@@ -3,12 +3,12 @@ import { Order } from "../constant";
 import { QueryDto } from "./query.dto";
 
 export class QueryGroupDto extends QueryDto {
-  @StringFieldOptional()
-  name: string;
+	@StringFieldOptional()
+	name: string;
 
-  @StringFieldOptional()
-  serviceId: string;
+	@StringFieldOptional()
+	serviceId: string;
 
-  @EnumFieldOptional(() => Order, { default: Order.ASC })
-  orderByCreatedAt: Order;
+	@EnumFieldOptional(() => Order, { default: Order.ASC })
+	orderByCreatedAt: Order;
 }

@@ -1,6 +1,6 @@
 {
   "name": "@cocrepo/ui",
-  "version": "1.5.7",
+  "version": "1.5.17",
   "description": "ui library",
   "sideEffects": [
     "**/*.css"

@@ -5,7 +5,10 @@ import {
 } from "@cocrepo/prisma";
 import { AbstractEntity } from "./abstract.entity";
 
-export class FileAssociation extends AbstractEntity implements FileAssociationEntity {
+export class FileAssociation
+	extends AbstractEntity
+	implements FileAssociationEntity
+{
 	groupId!: string;
 	fileId!: string;
 	file?: File;

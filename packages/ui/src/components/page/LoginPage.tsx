@@ -5,21 +5,21 @@ import { Button } from "../ui/inputs/Button/Button";
 import { VStack } from "../ui/surfaces/VStack/VStack";
 
 export const LoginPage = (props: any) => {
-  const { state, handlers } = props;
+	const { state, handlers } = props;
 
-  return (
-    <VStack fullWidth>
-      <Logo />
-      <Text variant="h5">관리자 로그인</Text>
-      <LoginForm state={state.loginForm} />
-      <Button
-        fullWidth
-        type="submit"
-        onPress={handlers.onClickLogin}
-        color="primary"
-      >
-        로그인
-      </Button>
-    </VStack>
-  );
+	return (
+		<VStack fullWidth>
+			<Logo />
+			<Text variant="h5">관리자 로그인</Text>
+			<LoginForm state={state.loginForm} />
+			<Button
+				fullWidth
+				type="submit"
+				onPress={handlers.onClickLogin}
+				color="primary"
+			>
+				로그인
+			</Button>
+		</VStack>
+	);
 };

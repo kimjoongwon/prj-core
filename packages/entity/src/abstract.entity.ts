@@ -8,7 +8,9 @@ import type { Constructor, BaseEntityFields } from "@cocrepo/type";
  * @template DTO - 변환할 DTO 타입
  * @template O - toDto 옵션 타입
  */
-export class AbstractEntity<DTO = unknown, O = never> implements BaseEntityFields {
+export class AbstractEntity<DTO = unknown, O = never>
+	implements BaseEntityFields
+{
 	id!: string;
 	seq!: number;
 	createdAt!: Date;
@@ -22,12 +24,14 @@ export class AbstractEntity<DTO = unknown, O = never> implements BaseEntityField
 	 */
 	toDto?(options?: O): DTO {
 		if (!this.dtoClass) {
-			throw new Error("dtoClass가 설정되지 않았습니다. @UseDto 데코레이터를 사용하세요.");
+			throw new Error(
+				"dtoClass가 설정되지 않았습니다. @UseDto 데코레이터를 사용하세요.",
+			);
 		}
 		return plainToInstance(
 			this.dtoClass,
 			this,
-			options as any
+			options as any,
 		) as unknown as DTO;
 	}
 }
