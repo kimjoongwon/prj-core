@@ -28,15 +28,13 @@
     "version:pkg": "node scripts/version-pkg.js",
     "publish:packages": "pnpm -r --filter './packages/**' publish --access public --no-git-checks",
     "publish:dry": "pnpm -r --filter './packages/**' publish --access public --no-git-checks --dry-run",
-    "publish:pkg": "pnpm --filter",
-    "publish:pkg:dry": "pnpm --filter",
     "update:app-deps": "node scripts/update-app-deps.js",
+    "bundle:size": "node scripts/analyze-bundle-size.js",
     "bundle:sizes": "node scripts/show-bundle-sizes.js",
     "release:patch": "pnpm version:patch && pnpm build:packages && pnpm publish:packages && pnpm update:app-deps",
     "release:minor": "pnpm version:minor && pnpm build:packages && pnpm publish:packages && pnpm update:app-deps",
     "release:major": "pnpm version:major && pnpm build:packages && pnpm publish:packages && pnpm update:app-deps",
-    "release:pkg": "node scripts/release-pkg.js",
-    "release:pkg:dry": "node scripts/release-pkg.js"
+    "release:pkg": "node scripts/release-pkg.js"
   },
   "devDependencies": {
     "@biomejs/biome": "catalog:",
