@@ -176,16 +176,13 @@ importers:
   apps/admin:
     dependencies:
       '@cocrepo/api':
-        specifier: workspace:^1.3.0
+        specifier: workspace:^
         version: link:../../packages/api
       '@cocrepo/design-system':
-        specifier: workspace:^1.0.0
+        specifier: workspace:^
         version: link:../../packages/design-system
-      '@cocrepo/provider':
-        specifier: workspace:^1.0.0
-        version: link:../../packages/provider
       '@cocrepo/store':
-        specifier: workspace:^1.0.0
+        specifier: workspace:^
         version: link:../../packages/store
       '@cocrepo/toolkit':
         specifier: workspace:^1.3.0
@@ -690,16 +687,13 @@ importers:
   apps/storybook:
     dependencies:
       '@cocrepo/design-system':
-        specifier: workspace:^1.0.0
+        specifier: workspace:^
         version: link:../../packages/design-system
-      '@cocrepo/provider':
-        specifier: workspace:^1.0.0
-        version: link:../../packages/provider
       '@cocrepo/store':
-        specifier: workspace:^1.0.0
+        specifier: workspace:^
         version: link:../../packages/store
       '@cocrepo/ui':
-        specifier: workspace:^1.5.0
+        specifier: workspace:^
         version: link:../../packages/ui
       '@heroui/react':
         specifier: 'catalog:'
@@ -715,7 +709,7 @@ importers:
         version: 4.1.0(mobx@6.13.7)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
       nuqs:
         specifier: 'catalog:'
-        version: 2.6.0(@tanstack/react-router@1.132.2(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(next@16.1.0(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(react-router-dom@7.9.1(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(react-router@7.9.1(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(react@19.1.0)
+        version: 2.6.0(@tanstack/react-router@1.132.2(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(next@16.1.0(@babel/core@7.28.4)(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(react-router-dom@7.9.1(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(react-router@7.9.1(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(react@19.1.0)
       react:
         specifier: 'catalog:'
         version: 19.1.0
@@ -1061,61 +1055,6 @@ importers:
         specifier: 'catalog:'
         version: 3.2.4(@types/debug@4.1.12)(@types/node@24.5.2)(@vitest/browser@3.2.4)(@vitest/ui@3.2.4)(jiti@2.6.0)(jsdom@26.1.0(bufferutil@4.0.9)(utf-8-validate@5.0.10))(lightningcss@1.30.1)(msw@2.11.3(@types/node@24.5.2)(typescript@5.9.3))(terser@5.44.0)(tsx@4.20.5)(yaml@2.8.1)
 
-  packages/provider:
-    dependencies:
-      '@cocrepo/design-system':
-        specifier: workspace:*
-        version: link:../design-system
-      '@heroui/react':
-        specifier: 'catalog:'
-        version: 2.8.4(@types/react@19.0.14)(framer-motion@12.23.19(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(tailwindcss@4.1.13)
-      '@tanstack/react-query':
-        specifier: 'catalog:'
-        version: 5.83.0(react@19.1.0)
-      '@tanstack/react-query-devtools':
-        specifier: ^5.83.0
-        version: 5.90.2(@tanstack/react-query@5.83.0(react@19.1.0))(react@19.1.0)
-      nuqs:
-        specifier: 'catalog:'
-        version: 2.6.0(@tanstack/react-router@1.132.2(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(next@16.1.0(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(react-router-dom@7.9.1(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(react-router@7.9.1(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(react@19.1.0)
-    devDependencies:
-      '@testing-library/jest-dom':
-        specifier: 'catalog:'
-        version: 6.8.0
-      '@testing-library/react':
-        specifier: 'catalog:'
-        version: 16.3.0(@testing-library/dom@10.4.1)(@types/react-dom@19.0.6(@types/react@19.0.14))(@types/react@19.0.14)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
-      '@types/node':
-        specifier: 'catalog:'
-        version: 24.5.2
-      '@types/react':
-        specifier: 'catalog:'
-        version: 19.0.14
-      '@types/react-dom':
-        specifier: 'catalog:'
-        version: 19.0.6(@types/react@19.0.14)
-      '@vitejs/plugin-react-swc':
-        specifier: 'catalog:'
-        version: 3.11.0(@swc/helpers@0.5.17)(vite@7.1.9(@types/node@24.5.2)(jiti@2.6.0)(lightningcss@1.30.1)(terser@5.44.0)(tsx@4.20.5)(yaml@2.8.1))
-      '@vitest/ui':
-        specifier: 'catalog:'
-        version: 3.2.4(vitest@3.2.4)
-      jsdom:
-        specifier: 'catalog:'
-        version: 26.1.0(bufferutil@4.0.9)(utf-8-validate@5.0.10)
-      react:
-        specifier: 'catalog:'
-        version: 19.1.0
-      react-dom:
-        specifier: 'catalog:'
-        version: 19.1.0(react@19.1.0)
-      typescript:
-        specifier: 'catalog:'
-        version: 5.9.3
-      vitest:
-        specifier: 'catalog:'
-        version: 3.2.4(@types/debug@4.1.12)(@types/node@24.5.2)(@vitest/browser@3.2.4)(@vitest/ui@3.2.4)(jiti@2.6.0)(jsdom@26.1.0(bufferutil@4.0.9)(utf-8-validate@5.0.10))(lightningcss@1.30.1)(msw@2.11.3(@types/node@24.5.2)(typescript@5.9.3))(terser@5.44.0)(tsx@4.20.5)(yaml@2.8.1)
-
   packages/store:
     devDependencies:
       '@cocrepo/toolkit':
@@ -1361,7 +1300,7 @@ importers:
         version: 2.11.3(@types/node@24.5.2)(typescript@5.9.3)
       nuqs:
         specifier: 'catalog:'
-        version: 2.6.0(@tanstack/react-router@1.132.2(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(next@16.1.0(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(react-router-dom@7.9.1(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(react-router@7.9.1(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(react@19.1.0)
+        version: 2.6.0(@tanstack/react-router@1.132.2(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(next@16.1.0(@babel/core@7.28.4)(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(react-router-dom@7.9.1(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(react-router@7.9.1(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(react@19.1.0)
       path-parser:
         specifier: 6.1.0
         version: 6.1.0

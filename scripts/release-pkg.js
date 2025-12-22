@@ -36,7 +36,9 @@ function checkNpmAuth() {
     console.log("\n💡 다음 명령어로 로그인하세요:\n");
     console.log("   npm login\n");
     console.log("또는 토큰을 직접 설정:\n");
-    console.log("   npm config set //registry.npmjs.org/:_authToken=YOUR_TOKEN\n");
+    console.log(
+      "   npm config set //registry.npmjs.org/:_authToken=YOUR_TOKEN\n"
+    );
     console.log("=".repeat(60) + "\n");
     return false;
   }

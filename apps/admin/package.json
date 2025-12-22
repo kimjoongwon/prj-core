@@ -16,10 +16,9 @@
     "clean": "rm -rf node_modules && rm -rf dist && rm -rf package-lock.json"
   },
   "dependencies": {
-    "@cocrepo/api": "workspace:^1.3.0",
-    "@cocrepo/design-system": "workspace:^1.0.0",
-    "@cocrepo/provider": "workspace:^1.0.0",
-    "@cocrepo/store": "workspace:^1.0.0",
+    "@cocrepo/api": "workspace:^",
+    "@cocrepo/design-system": "workspace:^",
+    "@cocrepo/store": "workspace:^",
     "@cocrepo/toolkit": "workspace:^1.3.0",
     "@cocrepo/ui": "workspace:^1.5.0",
     "@dnd-kit/core": "^6.3.1",
