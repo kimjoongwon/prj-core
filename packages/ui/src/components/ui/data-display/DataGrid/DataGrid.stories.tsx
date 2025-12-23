@@ -144,7 +144,7 @@ const DataGridWrapper = observer<{
 export const 기본: Story = {
 	args: {
 		data: sampleData,
-		// @ts-ignore
+		// @ts-expect-error
 		columns: columns,
 		emptyContent: "데이터가 없습니다.",
 		selectionMode: "none",
@@ -162,7 +162,7 @@ export const 기본: Story = {
 export const 단일선택: Story = {
 	args: {
 		data: sampleData,
-		// @ts-ignore
+		// @ts-expect-error
 		columns: columns,
 		selectionMode: "single",
 	},
@@ -179,7 +179,7 @@ export const 단일선택: Story = {
 export const 다중선택: Story = {
 	args: {
 		data: sampleData,
-		// @ts-ignore
+		// @ts-expect-error
 		columns: columns,
 		selectionMode: "multiple",
 	},
@@ -196,7 +196,7 @@ export const 다중선택: Story = {
 export const 빈데이터: Story = {
 	args: {
 		data: [],
-		// @ts-ignore
+		// @ts-expect-error
 		columns: columns,
 		emptyContent: "표시할 데이터가 없습니다.",
 	},
@@ -213,7 +213,7 @@ export const 빈데이터: Story = {
 export const 커스텀빈내용: Story = {
 	args: {
 		data: [],
-		// @ts-ignore
+		// @ts-expect-error
 		columns: columns,
 		emptyContent: "🔍 검색 결과가 없습니다.",
 	},
@@ -230,7 +230,7 @@ export const 커스텀빈내용: Story = {
 export const 플레이그라운드: Story = {
 	args: {
 		data: sampleData,
-		// @ts-ignore
+		// @ts-expect-error
 		columns: columns,
 		selectionMode: "multiple",
 		emptyContent: "데이터가 없습니다.",

@@ -1,5 +1,5 @@
-import { Routine } from "@cocrepo/prisma";
 import { ClassField, StringField } from "@cocrepo/decorator";
+import { Routine } from "@cocrepo/prisma";
 import { AbstractDto } from "./abstract.dto";
 import { ActivityDto } from "./activity.dto";
 import { ProgramDto } from "./program.dto";

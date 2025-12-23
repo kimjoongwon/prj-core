@@ -1,7 +1,6 @@
 import {
 	CreateRoleClassificationDto,
 	QueryRoleClassificationDto,
-	RoleClassificationDto,
 	UpdateRoleClassificationDto,
 } from "@cocrepo/dto";
 import {
@@ -23,7 +22,6 @@ import {
 	ApiResponse,
 	ApiTags,
 } from "@nestjs/swagger";
-import { plainToInstance } from "class-transformer";
 import { RoleClassificationsService } from "../../service/resources/role-classifications.service";
 import { wrapResponse } from "../../util/response.util";
 
@@ -42,7 +40,7 @@ export class RoleClassificationsController {
 	@ApiBody({ description: "생성할 역할 분류 데이터" })
 	async create(@Body() createDto: CreateRoleClassificationDto) {
 		const entity = await this.service.create(createDto);
-		return plainToInstance(RoleClassificationDto, entity);
+		return entity;
 	}
 
 	@Get(":id")
@@ -55,7 +53,7 @@ export class RoleClassificationsController {
 	@ApiParam({ name: "id", description: "역할 분류 ID", type: "string" })
 	async getById(@Param("id") id: string) {
 		const entity = await this.service.getById(id);
-		return plainToInstance(RoleClassificationDto, entity);
+		return entity;
 	}
 
 	@Patch(":id")
@@ -72,7 +70,7 @@ export class RoleClassificationsController {
 		@Body() updateDto: UpdateRoleClassificationDto,
 	) {
 		const entity = await this.service.updateById(id, updateDto);
-		return plainToInstance(RoleClassificationDto, entity);
+		return entity;
 	}
 
 	@Patch(":id/removedAt")
@@ -85,7 +83,7 @@ export class RoleClassificationsController {
 	@ApiParam({ name: "id", description: "역할 분류 ID", type: "string" })
 	async removeById(@Param("id") id: string) {
 		const entity = await this.service.removeById(id);
-		return plainToInstance(RoleClassificationDto, entity);
+		return entity;
 	}
 
 	@Delete(":id")
@@ -98,7 +96,7 @@ export class RoleClassificationsController {
 	@ApiParam({ name: "id", description: "역할 분류 ID", type: "string" })
 	async deleteById(@Param("id") id: string) {
 		const entity = await this.service.deleteById(id);
-		return plainToInstance(RoleClassificationDto, entity);
+		return entity;
 	}
 
 	@Get()
@@ -109,9 +107,9 @@ export class RoleClassificationsController {
 	})
 	@ApiResponse({ status: 200, description: "성공" })
 	async getManyByQuery(@Query() query: QueryRoleClassificationDto) {
-		const queryInstance = plainToInstance(QueryRoleClassificationDto, query);
+		const queryInstance = query;
 		const { items, count } = await this.service.getManyByQuery(queryInstance);
-		return wrapResponse(plainToInstance(RoleClassificationDto, items), {
+		return wrapResponse(items, {
 			meta: queryInstance.toPageMetaDto(count),
 		});
 	}

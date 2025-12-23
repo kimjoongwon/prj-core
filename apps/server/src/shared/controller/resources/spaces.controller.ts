@@ -20,7 +20,6 @@ import {
 	Query,
 } from "@nestjs/common";
 import { ApiTags } from "@nestjs/swagger";
-import { plainToInstance } from "class-transformer";
 import { ContextService, SpacesService } from "../../service";
 import { wrapResponse } from "../../util/response.util";
 
@@ -112,7 +111,7 @@ export class SpacesController {
 	@ApiResponseEntity(SpaceDto, HttpStatus.OK)
 	async createSpace(@Body() createSpaceDto: CreateSpaceDto) {
 		const space = await this.service.create(createSpaceDto);
-		return plainToInstance(SpaceDto, space);
+		return space;
 	}
 
 	@Get(":spaceId")
@@ -120,7 +119,7 @@ export class SpacesController {
 	@ApiResponseEntity(SpaceDto, HttpStatus.OK)
 	async getSpace(@Param("spaceId") spaceId: string) {
 		const space = await this.service.getById(spaceId);
-		return plainToInstance(SpaceDto, space);
+		return space;
 	}
 
 	@Patch(":spaceId")
@@ -131,7 +130,7 @@ export class SpacesController {
 		@Body() updateSpaceDto: UpdateSpaceDto,
 	) {
 		const space = await this.service.updateById(spaceId, updateSpaceDto);
-		return plainToInstance(SpaceDto, space);
+		return space;
 	}
 
 	@Patch(":spaceId/removedAt")
@@ -139,7 +138,7 @@ export class SpacesController {
 	@ApiResponseEntity(SpaceDto, HttpStatus.OK)
 	async removeSpace(@Param("spaceId") spaceId: string) {
 		const space = await this.service.removeById(spaceId);
-		return plainToInstance(SpaceDto, space);
+		return space;
 	}
 
 	@Delete(":spaceId")
@@ -147,7 +146,7 @@ export class SpacesController {
 	@ApiResponseEntity(SpaceDto, HttpStatus.OK)
 	async deleteSpace(@Param("spaceId") spaceId: string) {
 		const space = await this.service.deleteById(spaceId);
-		return plainToInstance(SpaceDto, space);
+		return space;
 	}
 
 	@Get()

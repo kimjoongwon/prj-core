@@ -4,14 +4,14 @@
  * Plate
  * OpenAPI spec version: 1.0.0
  */
-import type { CategoryDto } from './categoryDto';
-import type { GetCategoriesByQuery200AllOfMeta } from './getCategoriesByQuery200AllOfMeta';
+import type { CategoryDto } from "./categoryDto";
+import type { GetCategoriesByQuery200AllOfMeta } from "./getCategoriesByQuery200AllOfMeta";
 
 export type GetCategoriesByQuery200AllOf = {
-  /** */
-  httpStatus?: number;
-  /** */
-  message?: string;
-  data?: CategoryDto[];
-  meta?: GetCategoriesByQuery200AllOfMeta;
+	/** */
+	httpStatus?: number;
+	/** */
+	message?: string;
+	data?: CategoryDto[];
+	meta?: GetCategoriesByQuery200AllOfMeta;
 };

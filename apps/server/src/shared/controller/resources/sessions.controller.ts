@@ -19,7 +19,6 @@ import {
 	Query,
 } from "@nestjs/common";
 import { ApiTags } from "@nestjs/swagger";
-import { plainToInstance } from "class-transformer";
 import { SessionsService } from "../../service";
 import { wrapResponse } from "../../util/response.util";
 
@@ -34,7 +33,7 @@ export class SessionsController {
 	async createSession(@Body() createSessionDto: CreateSessionDto) {
 		const session = await this.service.create(createSessionDto);
 
-		return plainToInstance(SessionDto, session);
+		return session;
 	}
 
 	@Get(":sessionId")
@@ -42,7 +41,7 @@ export class SessionsController {
 	@ApiResponseEntity(SessionDto, HttpStatus.OK)
 	async getSession(@Param("sessionId") sessionId: string) {
 		const session = await this.service.getById(sessionId);
-		return plainToInstance(SessionDto, session);
+		return session;
 	}
 
 	@Patch("removedAt")
@@ -64,7 +63,7 @@ export class SessionsController {
 		@Body() updateSessionDto: UpdateSessionDto,
 	) {
 		const session = await this.service.updateById(sessionId, updateSessionDto);
-		return plainToInstance(SessionDto, session);
+		return session;
 	}
 
 	@Patch(":sessionId/removedAt")
@@ -72,7 +71,7 @@ export class SessionsController {
 	@ApiResponseEntity(SessionDto, HttpStatus.OK)
 	async removeSession(@Param("sessionId") sessionId: string) {
 		const session = await this.service.removeById(sessionId);
-		return plainToInstance(SessionDto, session);
+		return session;
 	}
 
 	@Delete(":sessionId")
@@ -80,7 +79,7 @@ export class SessionsController {
 	@ApiResponseEntity(SessionDto, HttpStatus.OK)
 	async deleteSession(@Param("sessionId") sessionId: string) {
 		const session = await this.service.deleteById(sessionId);
-		return plainToInstance(SessionDto, session);
+		return session;
 	}
 
 	@Get()
@@ -88,12 +87,9 @@ export class SessionsController {
 	@ApiResponseEntity(SessionDto, HttpStatus.OK, { isArray: true })
 	async getSessionsByQuery(@Query() query: QuerySessionDto) {
 		const { count, sessions } = await this.service.getManyByQuery(query);
-		return wrapResponse(
-			sessions.map((session) => session?.toDto?.() ?? session),
-			{
-				message: "success",
-				meta: new PageMetaDto(query.skip, query.take, count),
-			},
-		);
+		return wrapResponse(sessions, {
+			message: "success",
+			meta: new PageMetaDto(query.skip, query.take, count),
+		});
 	}
 }

@@ -6,23 +6,23 @@ import { rootStore } from "@/stores";
 const StoreContext = createContext(rootStore);
 
 interface StoreProviderProps {
-  children: ReactNode;
+	children: ReactNode;
 }
 
 export function StoreProvider({ children }: StoreProviderProps) {
-  return (
-    <StoreContext.Provider value={rootStore}>{children}</StoreContext.Provider>
-  );
+	return (
+		<StoreContext.Provider value={rootStore}>{children}</StoreContext.Provider>
+	);
 }
 
 export function useStores() {
-  return useContext(StoreContext);
+	return useContext(StoreContext);
 }
 
 export function useWalletStore() {
-  return useContext(StoreContext).wallet;
+	return useContext(StoreContext).wallet;
 }
 
 export function useSafeStore() {
-  return useContext(StoreContext).safe;
+	return useContext(StoreContext).safe;
 }

@@ -4,29 +4,30 @@
  * Plate
  * OpenAPI spec version: 1.0.0
  */
-import type { SessionTypes } from './sessionTypes';
-import type { SessionDtoRepeatCycleType } from './sessionDtoRepeatCycleType';
-import type { SessionDtoRecurringDayOfWeek } from './sessionDtoRecurringDayOfWeek';
-import type { ProgramDto } from './programDto';
-import type { TimelineDto } from './timelineDto';
+
+import type { ProgramDto } from "./programDto";
+import type { SessionDtoRecurringDayOfWeek } from "./sessionDtoRecurringDayOfWeek";
+import type { SessionDtoRepeatCycleType } from "./sessionDtoRepeatCycleType";
+import type { SessionTypes } from "./sessionTypes";
+import type { TimelineDto } from "./timelineDto";
 
 export interface SessionDto {
-  id: string;
-  seq: number;
-  createdAt: string;
-  updatedAt: string;
-  /** @nullable */
-  removedAt: string | null;
-  type: SessionTypes;
-  /** @nullable */
-  repeatCycleType?: SessionDtoRepeatCycleType;
-  startDateTime?: string;
-  endDateTime?: string;
-  /** @nullable */
-  recurringDayOfWeek?: SessionDtoRecurringDayOfWeek;
-  timelineId: string;
-  name: string;
-  description?: string;
-  programs: ProgramDto[];
-  timeline: TimelineDto;
+	id: string;
+	seq: number;
+	createdAt: string;
+	updatedAt: string;
+	/** @nullable */
+	removedAt: string | null;
+	type: SessionTypes;
+	/** @nullable */
+	repeatCycleType?: SessionDtoRepeatCycleType;
+	startDateTime?: string;
+	endDateTime?: string;
+	/** @nullable */
+	recurringDayOfWeek?: SessionDtoRecurringDayOfWeek;
+	timelineId: string;
+	name: string;
+	description?: string;
+	programs: ProgramDto[];
+	timeline: TimelineDto;
 }

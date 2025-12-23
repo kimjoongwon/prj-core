@@ -1,5 +1,5 @@
-import { UserAssociation } from "@cocrepo/prisma";
 import { ClassField, UUIDField } from "@cocrepo/decorator";
+import { UserAssociation } from "@cocrepo/prisma";
 import { AbstractDto, GroupDto, UserDto } from ".";
 
 export class UserAssociationDto extends AbstractDto implements UserAssociation {

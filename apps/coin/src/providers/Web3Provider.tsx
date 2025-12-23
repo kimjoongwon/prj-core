@@ -6,25 +6,25 @@ import { WagmiProvider } from "wagmi";
 import { wagmiConfig } from "@/config/web3.config";
 
 interface Web3ProviderProps {
-  children: ReactNode;
+	children: ReactNode;
 }
 
 export function Web3Provider({ children }: Web3ProviderProps) {
-  const [queryClient] = useState(
-    () =>
-      new QueryClient({
-        defaultOptions: {
-          queries: {
-            staleTime: 1000 * 60 * 5, // 5분
-            gcTime: 1000 * 60 * 30, // 30분
-          },
-        },
-      })
-  );
+	const [queryClient] = useState(
+		() =>
+			new QueryClient({
+				defaultOptions: {
+					queries: {
+						staleTime: 1000 * 60 * 5, // 5분
+						gcTime: 1000 * 60 * 30, // 30분
+					},
+				},
+			}),
+	);
 
-  return (
-    <WagmiProvider config={wagmiConfig}>
-      <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
-    </WagmiProvider>
-  );
+	return (
+		<WagmiProvider config={wagmiConfig}>
+			<QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
+		</WagmiProvider>
+	);
 }

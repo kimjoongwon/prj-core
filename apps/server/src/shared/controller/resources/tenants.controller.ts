@@ -19,7 +19,6 @@ import {
 	Query,
 } from "@nestjs/common";
 import { ApiTags } from "@nestjs/swagger";
-import { plainToInstance } from "class-transformer";
 import { ContextService } from "../../service";
 import { TenantsService } from "../../service/resources/tenants.service";
 import { wrapResponse } from "../../util/response.util";
@@ -39,7 +38,7 @@ export class TenantsController {
 		const userId = this.contextService.getAuthUserId();
 		// Note: getManyByUserId was replaced with getManyByQuery, may need adjustment
 		const tenants = await this.service.getManyByQuery({ userId } as any);
-		return plainToInstance(TenantDto, tenants);
+		return tenants;
 	}
 
 	@Post()
@@ -48,7 +47,7 @@ export class TenantsController {
 	async createTenant(@Body() createTenantDto: CreateTenantDto) {
 		const tenant = await this.service.create(createTenantDto);
 
-		return plainToInstance(TenantDto, tenant);
+		return tenant;
 	}
 
 	@Get(":tenantId")
@@ -56,7 +55,7 @@ export class TenantsController {
 	@ApiResponseEntity(TenantDto, HttpStatus.OK)
 	async getTenantById(@Param("tenantId") tenantId: string) {
 		const tenant = await this.service.getById(tenantId);
-		return tenant?.toDto?.() ?? tenant;
+		return tenant;
 	}
 
 	@Patch(":tenantId")
@@ -67,7 +66,7 @@ export class TenantsController {
 		@Body() updateTenantDto: UpdateTenantDto,
 	) {
 		const tenant = await this.service.updateById(tenantId, updateTenantDto);
-		return plainToInstance(TenantDto, tenant);
+		return tenant;
 	}
 
 	@Patch(":tenantId/removedAt")
@@ -75,7 +74,7 @@ export class TenantsController {
 	@ApiResponseEntity(TenantDto, HttpStatus.OK)
 	async removeTenantById(@Param("tenantId") tenantId: string) {
 		const tenant = await this.service.removeById(tenantId);
-		return plainToInstance(TenantDto, tenant);
+		return tenant;
 	}
 
 	@Delete(":tenantId")
@@ -83,7 +82,7 @@ export class TenantsController {
 	@ApiResponseEntity(TenantDto, HttpStatus.OK)
 	async deleteTenant(@Param("tenantId") tenantId: string) {
 		const tenant = await this.service.deleteById(tenantId);
-		return plainToInstance(TenantDto, tenant);
+		return tenant;
 	}
 
 	@Get()
@@ -91,12 +90,9 @@ export class TenantsController {
 	@ApiResponseEntity(TenantDto, HttpStatus.OK, { isArray: true })
 	async getTenantsByQuery(@Query() query: QueryTenantDto) {
 		const { count, tenants } = await this.service.getManyByQuery(query);
-		return wrapResponse(
-			tenants.map((tenant) => tenant?.toDto?.() ?? tenant),
-			{
-				message: "success",
-				meta: new PageMetaDto(query.skip, query.take, count),
-			},
-		);
+		return wrapResponse(tenants, {
+			message: "success",
+			meta: new PageMetaDto(query.skip, query.take, count),
+		});
 	}
 }

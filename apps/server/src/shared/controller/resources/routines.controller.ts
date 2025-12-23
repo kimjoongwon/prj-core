@@ -19,7 +19,6 @@ import {
 	Query,
 } from "@nestjs/common";
 import { ApiTags } from "@nestjs/swagger";
-import { plainToInstance } from "class-transformer";
 import { RoutinesService } from "../../service/resources/routines.service";
 import { wrapResponse } from "../../util/response.util";
 
@@ -33,7 +32,7 @@ export class RoutinesController {
 	@ApiResponseEntity(RoutineDto, HttpStatus.OK)
 	async createRoutine(@Body() createRoutineDto: CreateRoutineDto) {
 		const routine = await this.service.create(createRoutineDto);
-		return routine?.toDto?.() ?? routine;
+		return routine;
 	}
 
 	@Get(":routineId")
@@ -41,7 +40,7 @@ export class RoutinesController {
 	@ApiResponseEntity(RoutineDto, HttpStatus.OK)
 	async getRoutine(@Param("routineId") routineId: string) {
 		const routine = await this.service.getById(routineId);
-		return routine?.toDto?.() ?? routine;
+		return routine;
 	}
 
 	@Patch(":routineId")
@@ -52,7 +51,7 @@ export class RoutinesController {
 		@Body() updateRoutineDto: UpdateRoutineDto,
 	) {
 		const routine = await this.service.updateById(routineId, updateRoutineDto);
-		return plainToInstance(RoutineDto, routine);
+		return routine;
 	}
 
 	@Patch(":routineId/removedAt")
@@ -60,7 +59,7 @@ export class RoutinesController {
 	@ApiResponseEntity(RoutineDto, HttpStatus.OK)
 	async removeRoutine(@Param("routineId") routineId: string) {
 		const routine = await this.service.removeById(routineId);
-		return plainToInstance(RoutineDto, routine);
+		return routine;
 	}
 
 	@Delete(":routineId")
@@ -68,7 +67,7 @@ export class RoutinesController {
 	@ApiResponseEntity(RoutineDto, HttpStatus.OK)
 	async deleteRoutine(@Param("routineId") routineId: string) {
 		const routine = await this.service.deleteById(routineId);
-		return plainToInstance(RoutineDto, routine);
+		return routine;
 	}
 
 	@Get()
@@ -76,12 +75,9 @@ export class RoutinesController {
 	@ApiResponseEntity(RoutineDto, HttpStatus.OK, { isArray: true })
 	async getRoutinesByQuery(@Query() query: QueryRoutineDto) {
 		const { count, items } = await this.service.getManyByQuery(query);
-		return wrapResponse(
-			items.map((item) => item?.toDto?.() ?? item),
-			{
-				message: "success",
-				meta: new PageMetaDto(query.skip, query.take, count),
-			},
-		);
+		return wrapResponse(items, {
+			message: "success",
+			meta: new PageMetaDto(query.skip, query.take, count),
+		});
 	}
 }

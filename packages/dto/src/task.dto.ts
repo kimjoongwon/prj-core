@@ -1,5 +1,5 @@
-import { Task as TaskEntity } from "@cocrepo/prisma";
 import { ClassField, UUIDField } from "@cocrepo/decorator";
+import { Task as TaskEntity } from "@cocrepo/prisma";
 import { AbstractDto } from "./abstract.dto";
 import { ActivityDto } from "./activity.dto";
 import { ExerciseDto } from "./exercise.dto";

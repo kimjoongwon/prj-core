@@ -18,7 +18,6 @@ import {
 	Query,
 } from "@nestjs/common";
 import { ApiTags } from "@nestjs/swagger";
-import { plainToInstance } from "class-transformer";
 import { UserAssociationsService } from "../../service/resources/user-associations.service";
 import { wrapResponse } from "../../util/response.util";
 
@@ -35,7 +34,7 @@ export class UserAssociationsController {
 	) {
 		const userAssociation = await this.service.create(createUserAssociationDto);
 
-		return plainToInstance(UserAssociationDto, userAssociation);
+		return userAssociation;
 	}
 
 	@Get(":userAssociationId")
@@ -45,7 +44,7 @@ export class UserAssociationsController {
 		@Param("userAssociationId") userAssociationId: string,
 	) {
 		const userAssociation = await this.service.getById(userAssociationId);
-		return plainToInstance(UserAssociationDto, userAssociation);
+		return userAssociation;
 	}
 
 	@Patch("removedAt")
@@ -72,7 +71,7 @@ export class UserAssociationsController {
 			userAssociationId,
 			updateUserAssociationDto,
 		);
-		return plainToInstance(UserAssociationDto, userAssociation);
+		return userAssociation;
 	}
 
 	@Patch(":userAssociationId/removedAt")
@@ -82,7 +81,7 @@ export class UserAssociationsController {
 		@Param("userAssociationId") userAssociationId: string,
 	) {
 		const userAssociation = await this.service.removeById(userAssociationId);
-		return plainToInstance(UserAssociationDto, userAssociation);
+		return userAssociation;
 	}
 
 	@Delete(":userAssociationId")
@@ -92,7 +91,7 @@ export class UserAssociationsController {
 		@Param("userAssociationId") userAssociationId: string,
 	) {
 		const userAssociation = await this.service.deleteById(userAssociationId);
-		return plainToInstance(UserAssociationDto, userAssociation);
+		return userAssociation;
 	}
 
 	@Get()
@@ -101,7 +100,7 @@ export class UserAssociationsController {
 	async getUserAssociationsByQuery(@Query() query: QueryUserAssociationDto) {
 		const { userAssociations, count } =
 			await this.service.getManyByQuery(query);
-		return wrapResponse(plainToInstance(UserAssociationDto, userAssociations), {
+		return wrapResponse(userAssociations, {
 			meta: query.toPageMetaDto(count),
 		});
 	}

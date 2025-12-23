@@ -1,5 +1,7 @@
 // eslint-disable-next-line max-len
 /* eslint-disable @typescript-eslint/no-unsafe-assignment,@typescript-eslint/no-explicit-any,@typescript-eslint/no-unsafe-member-access,@typescript-eslint/no-unsafe-return,@typescript-eslint/no-unsafe-argument */
+
+import { castArray, mapValues } from "@cocrepo/toolkit";
 import { applyDecorators, Type, UseInterceptors } from "@nestjs/common";
 import { FileFieldsInterceptor } from "@nestjs/platform-express";
 import {
@@ -12,7 +14,6 @@ import {
 	ReferenceObject,
 	SchemaObject,
 } from "@nestjs/swagger/dist/interfaces/open-api-spec.interface";
-import { castArray, mapValues } from "@cocrepo/toolkit";
 
 // Many type from lodash - T | readonly T[]
 type Many<T> = T | readonly T[];

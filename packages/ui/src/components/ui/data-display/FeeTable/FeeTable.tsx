@@ -1,6 +1,6 @@
 import { HStack } from "../../surfaces/HStack/HStack";
-import { Text } from "../Text/Text";
 import { VStack } from "../../surfaces/VStack/VStack";
+import { Text } from "../Text/Text";
 
 export interface FeeItem {
 	day: string;

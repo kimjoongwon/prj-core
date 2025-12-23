@@ -1,2 +1,2 @@
+export type { FeeItem, FeeTableProps } from "./FeeTable";
 export { FeeTable } from "./FeeTable";
-export type { FeeTableProps, FeeItem } from "./FeeTable";

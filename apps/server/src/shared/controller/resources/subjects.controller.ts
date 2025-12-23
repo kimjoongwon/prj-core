@@ -19,7 +19,6 @@ import {
 	Query,
 } from "@nestjs/common";
 import { ApiTags } from "@nestjs/swagger";
-import { plainToInstance } from "class-transformer";
 import { SubjectsService } from "../../service/resources/subjects.service";
 import { wrapResponse } from "../../util/response.util";
 
@@ -34,7 +33,7 @@ export class SubjectsController {
 	async createSubject(@Body() createSubjectDto: CreateSubjectDto) {
 		const subject = await this.service.create(createSubjectDto);
 
-		return plainToInstance(SubjectDto, subject);
+		return subject;
 	}
 
 	@Get(":subjectId")
@@ -42,7 +41,7 @@ export class SubjectsController {
 	@ApiResponseEntity(SubjectDto, HttpStatus.OK)
 	async getSubject(@Param("subjectId") subjectId: string) {
 		const subject = await this.service.getById(subjectId);
-		return plainToInstance(SubjectDto, subject);
+		return subject;
 	}
 
 	@Patch("removedAt")
@@ -64,7 +63,7 @@ export class SubjectsController {
 		@Body() updateSubjectDto: UpdateSubjectDto,
 	) {
 		const subject = await this.service.updateById(subjectId, updateSubjectDto);
-		return plainToInstance(SubjectDto, subject);
+		return subject;
 	}
 
 	@Patch(":subjectId/removedAt")
@@ -72,7 +71,7 @@ export class SubjectsController {
 	@ApiResponseEntity(SubjectDto, HttpStatus.OK)
 	async removeSubject(@Param("subjectId") subjectId: string) {
 		const subject = await this.service.removeById(subjectId);
-		return plainToInstance(SubjectDto, subject);
+		return subject;
 	}
 
 	@Delete(":subjectId")
@@ -80,7 +79,7 @@ export class SubjectsController {
 	@ApiResponseEntity(SubjectDto, HttpStatus.OK)
 	async deleteSubject(@Param("subjectId") subjectId: string) {
 		const subject = await this.service.deleteById(subjectId);
-		return plainToInstance(SubjectDto, subject);
+		return subject;
 	}
 
 	@Get()
@@ -89,12 +88,9 @@ export class SubjectsController {
 	async getSubjectsByQuery(@Query() query: QuerySubjectDto) {
 		const { count, subjects } = await this.service.getManyByQuery(query);
 
-		return wrapResponse(
-			subjects.map((subject) => subject?.toDto?.() ?? subject),
-			{
-				message: "success",
-				meta: new PageMetaDto(query.skip, query.take, count),
-			},
-		);
+		return wrapResponse(subjects, {
+			message: "success",
+			meta: new PageMetaDto(query.skip, query.take, count),
+		});
 	}
 }

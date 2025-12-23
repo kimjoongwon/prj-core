@@ -1,10 +1,10 @@
+import { isString } from "@cocrepo/toolkit";
 import {
 	IsPhoneNumber as isPhoneNumber,
 	registerDecorator,
 	ValidateIf,
 	type ValidationOptions,
 } from "class-validator";
-import { isString } from "@cocrepo/toolkit";
 
 export function IsPassword(
 	validationOptions?: ValidationOptions,

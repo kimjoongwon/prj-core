@@ -4,23 +4,23 @@
  * Plate
  * OpenAPI spec version: 1.0.0
  */
-import type { CategoryTypes } from './categoryTypes';
-import type { SortOrder } from './sortOrder';
+import type { CategoryTypes } from "./categoryTypes";
+import type { SortOrder } from "./sortOrder";
 
 export type GetCategoriesByQueryParams = {
-/**
- * @minimum 1
- */
-skip?: number;
-/**
- * @minimum 1
- * @maximum 50
- */
-take?: number;
-name?: string;
-type?: CategoryTypes;
-parentId?: string;
-tenantId?: string;
-serviceId?: string;
-nameSortOrder?: SortOrder;
+	/**
+	 * @minimum 1
+	 */
+	skip?: number;
+	/**
+	 * @minimum 1
+	 * @maximum 50
+	 */
+	take?: number;
+	name?: string;
+	type?: CategoryTypes;
+	parentId?: string;
+	tenantId?: string;
+	serviceId?: string;
+	nameSortOrder?: SortOrder;
 };

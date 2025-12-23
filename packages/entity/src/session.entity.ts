@@ -1,7 +1,7 @@
 import {
-	Session as SessionEntity,
 	RecurringDayOfWeek,
 	RepeatCycleTypes,
+	Session as SessionEntity,
 	SessionTypes,
 } from "@cocrepo/prisma";
 import { AbstractEntity } from "./abstract.entity";
