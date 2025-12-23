@@ -1,5 +1,5 @@
+import * as path from "node:path";
 import * as dotenv from "dotenv";
-import * as path from "path";
 import { defineConfig, env } from "prisma/config";
 
 // .env.local 파일 로드 (server 앱의 환경변수 사용)

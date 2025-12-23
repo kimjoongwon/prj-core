@@ -17,7 +17,6 @@ import {
 	Query,
 } from "@nestjs/common";
 import { ApiTags } from "@nestjs/swagger";
-import { plainToInstance } from "class-transformer";
 import { ResponseMessage } from "../../decorator/response-message.decorator";
 import { CategoriesService } from "../../service";
 import { wrapResponse } from "../../util/response.util";
@@ -33,7 +32,7 @@ export class CategoriesController {
 	async getCategoriesByQuery(@Query() query: QueryCategoryDto) {
 		const { categories, count } =
 			await this.categoriesService.getManyByQuery(query);
-		return wrapResponse(plainToInstance(CategoryDto, categories), {
+		return wrapResponse(categories, {
 			message: "Successfully fetched categories",
 			meta: query.toPageMetaDto(count),
 		});
@@ -46,7 +45,7 @@ export class CategoriesController {
 		const category = await this.categoriesService.create({
 			data: createCategoryDto,
 		});
-		return plainToInstance(CategoryDto, category);
+		return category;
 	}
 
 	@ApiResponseEntity(CategoryDto)
@@ -55,7 +54,7 @@ export class CategoriesController {
 	async getCategoryById(@Param("categoryId") categoryId: string) {
 		const category = await this.categoriesService.getById(categoryId);
 
-		return plainToInstance(CategoryDto, category);
+		return category;
 	}
 
 	@ApiResponseEntity(CategoryDto)
@@ -69,7 +68,7 @@ export class CategoriesController {
 			id,
 			updateCategoryDto,
 		);
-		return plainToInstance(CategoryDto, category);
+		return category;
 	}
 
 	@ApiResponseEntity(CategoryDto)

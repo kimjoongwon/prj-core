@@ -6,6 +6,7 @@ import {
 import { HttpAdapterHost, Reflector } from "@nestjs/core";
 import { AllExceptionsFilter, TokenStorageService } from "@shared";
 import { JwtAuthGuard } from "./shared/guard";
+import { DtoTransformInterceptor } from "./shared/interceptor/dto-transform.interceptor";
 import { RequestContextInterceptor } from "./shared/interceptor/request-context.interceptor";
 import { ResponseEntityInterceptor } from "./shared/interceptor/response-entity.interceptor";
 
@@ -39,10 +40,12 @@ export function setNestApp<T extends INestApplication>(app: T): void {
 	);
 
 	// =================================================================
-	// Global Interceptors - 실행 순서: RequestContextInterceptor → ClassSerializerInterceptor
+	// Global Interceptors - 실행 순서:
+	// RequestContextInterceptor → DtoTransformInterceptor → ResponseEntityInterceptor → ClassSerializerInterceptor
 	// =================================================================
 	app.useGlobalInterceptors(
 		app.get(RequestContextInterceptor),
+		new DtoTransformInterceptor(app.get(Reflector)),
 		app.get(ResponseEntityInterceptor),
 		new ClassSerializerInterceptor(app.get(Reflector)),
 	);

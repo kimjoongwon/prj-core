@@ -1,5 +1,5 @@
-import { cloneDeep, get, set } from "es-toolkit/compat";
 import { range } from "es-toolkit";
+import { cloneDeep, get, set } from "es-toolkit/compat";
 
 // Object property utilities
 export function getProperty(

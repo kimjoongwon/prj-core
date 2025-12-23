@@ -1,5 +1,5 @@
-import { Expose } from "class-transformer";
 import { UUIDField } from "@cocrepo/decorator";
+import { Expose } from "class-transformer";
 
 export class SelectTenantDto {
 	@UUIDField({

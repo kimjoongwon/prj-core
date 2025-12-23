@@ -18,7 +18,6 @@ import {
 	Query,
 } from "@nestjs/common";
 import { ApiTags } from "@nestjs/swagger";
-import { plainToInstance } from "class-transformer";
 import { AssignmentsService } from "../../service/resources/assignments.service";
 import { wrapResponse } from "../../util/response.util";
 
@@ -33,7 +32,7 @@ export class AssignmentsController {
 	async createAssignment(@Body() createAssignmentDto: CreateAssignmentDto) {
 		const assignment = await this.service.create(createAssignmentDto);
 
-		return plainToInstance(AssignmentDto, assignment);
+		return assignment;
 	}
 
 	@Get(":assignmentId")
@@ -42,7 +41,7 @@ export class AssignmentsController {
 	async getAssignment(@Param("assignmentId") assignmentId: string) {
 		const assignment = await this.service.getById(assignmentId);
 
-		return assignment?.toDto?.() ?? assignment;
+		return assignment;
 	}
 
 	@Patch("removedAt")
@@ -60,7 +59,7 @@ export class AssignmentsController {
 	@ApiResponseEntity(AssignmentDto, HttpStatus.OK)
 	async removeAssignmentById(@Param("assignmentId") assignmentId: string) {
 		const assignment = await this.service.removeById(assignmentId);
-		return plainToInstance(AssignmentDto, assignment);
+		return assignment;
 	}
 
 	@Delete(":assignmentId")
@@ -68,7 +67,7 @@ export class AssignmentsController {
 	@ApiResponseEntity(AssignmentDto, HttpStatus.OK)
 	async deleteAssignment(@Param("assignmentId") assignmentId: string) {
 		const assignment = await this.service.deleteById(assignmentId);
-		return plainToInstance(AssignmentDto, assignment);
+		return assignment;
 	}
 
 	@Get()
@@ -76,12 +75,9 @@ export class AssignmentsController {
 	@ApiResponseEntity(AssignmentDto, HttpStatus.OK, { isArray: true })
 	async getAssignmentsByQuery(@Query() query: QueryAssignmentDto) {
 		const { count, assignments } = await this.service.getManyByQuery(query);
-		return wrapResponse(
-			assignments.map((assignment) => assignment?.toDto?.() ?? assignment),
-			{
-				message: "success",
-				meta: new PageMetaDto(query.skip, query.take, count),
-			},
-		);
+		return wrapResponse(assignments, {
+			message: "success",
+			meta: new PageMetaDto(query.skip, query.take, count),
+		});
 	}
 }

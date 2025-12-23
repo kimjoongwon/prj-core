@@ -1,8 +1,8 @@
 import { Card, CardBody } from "@heroui/react";
 import type { Meta, StoryObj } from "@storybook/react";
+import { Text } from "../../data-display/Text/Text";
 import { Button } from "../../inputs/Button/Button";
 import { HStack } from "../../surfaces/HStack/HStack";
-import { Text } from "../../data-display/Text/Text";
 import { VStack } from "../../surfaces/VStack/VStack";
 import { TableLayout } from "./Table";
 

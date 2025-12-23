@@ -20,7 +20,6 @@ import {
 	Req,
 } from "@nestjs/common";
 import { ApiTags } from "@nestjs/swagger";
-import { plainToInstance } from "class-transformer";
 import { Request } from "express";
 import { UsersService } from "../../service/resources/users.service";
 import { wrapResponse } from "../../util/response.util";
@@ -39,7 +38,7 @@ export class UsersController {
 		const user = await this.service.create({
 			data: createUserDto,
 		});
-		return plainToInstance(UserDto, user);
+		return user;
 	}
 
 	@Get(":userId")
@@ -47,7 +46,7 @@ export class UsersController {
 	@ApiResponseEntity(UserDto, HttpStatus.OK)
 	async getUser(@Param("userId") userId: string) {
 		const user = await this.service.getById(userId);
-		return plainToInstance(UserDto, user);
+		return user;
 	}
 
 	@Patch("removedAt")
@@ -69,7 +68,7 @@ export class UsersController {
 		@Body() updateUserDto: UpdateUserDto,
 	) {
 		const user = await this.service.updateById(userId, updateUserDto);
-		return plainToInstance(UserDto, user);
+		return user;
 	}
 
 	@Patch(":userId/removedAt")
@@ -77,7 +76,7 @@ export class UsersController {
 	@ApiResponseEntity(UserDto, HttpStatus.OK)
 	async removeUser(@Param("userId") userId: string) {
 		const user = await this.service.removeById(userId);
-		return plainToInstance(UserDto, user);
+		return user;
 	}
 
 	@Delete(":userId")
@@ -85,7 +84,7 @@ export class UsersController {
 	@ApiResponseEntity(UserDto, HttpStatus.OK)
 	async deleteUser(@Param("userId") userId: string) {
 		const user = await this.service.deleteById(userId);
-		return plainToInstance(UserDto, user);
+		return user;
 	}
 
 	@Get()
@@ -106,13 +105,10 @@ export class UsersController {
 				`Successfully retrieved ${users.length} users, total count: ${count}`,
 			);
 
-			return wrapResponse(
-				users.map((user) => plainToInstance(UserDto, user)),
-				{
-					message: "success",
-					meta: query.toPageMetaDto(count),
-				},
-			);
+			return wrapResponse(users, {
+				message: "success",
+				meta: query.toPageMetaDto(count),
+			});
 		} catch (error) {
 			this.logger.error(
 				`Error in getUsersByQuery: ${error instanceof Error ? error.message : String(error)}`,

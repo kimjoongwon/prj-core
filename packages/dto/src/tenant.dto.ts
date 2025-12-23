@@ -1,10 +1,10 @@
-import { Tenant } from "@cocrepo/prisma";
 import {
 	BooleanField,
 	ClassField,
 	StringField,
 	UUIDField,
 } from "@cocrepo/decorator";
+import { Tenant } from "@cocrepo/prisma";
 import { RoleDto, SpaceDto, UserDto } from ".";
 import { AbstractDto } from "./abstract.dto";
 

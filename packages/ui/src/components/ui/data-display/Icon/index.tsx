@@ -1,11 +1,8 @@
-export { DogPawIcon } from "./DogPawIcon";
 export type { DogPawIconProps } from "./DogPawIcon";
-
-export { WarningIcon } from "./WarningIcon";
-export type { WarningIconProps } from "./WarningIcon";
-
-export { InfoIcon } from "./InfoIcon";
+export { DogPawIcon } from "./DogPawIcon";
 export type { InfoIconProps } from "./InfoIcon";
-
-export { StarIcon } from "./StarIcon";
+export { InfoIcon } from "./InfoIcon";
 export type { StarIconProps } from "./StarIcon";
+export { StarIcon } from "./StarIcon";
+export type { WarningIconProps } from "./WarningIcon";
+export { WarningIcon } from "./WarningIcon";

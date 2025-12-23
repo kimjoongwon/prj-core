@@ -18,7 +18,6 @@ import {
 	Query,
 } from "@nestjs/common";
 import { ApiTags } from "@nestjs/swagger";
-import { plainToInstance } from "class-transformer";
 import { FileAssociationsService } from "../../service/resources/file-associations.service";
 import { wrapResponse } from "../../util/response.util";
 
@@ -35,7 +34,7 @@ export class FileAssociationsController {
 	) {
 		const fileAssociation = await this.service.create(createFileAssociationDto);
 
-		return plainToInstance(FileAssociationDto, fileAssociation);
+		return fileAssociation;
 	}
 
 	@Get(":fileAssociationId")
@@ -45,7 +44,7 @@ export class FileAssociationsController {
 		@Param("fileAssociationId") fileAssociationId: string,
 	) {
 		const fileAssociation = await this.service.getById(fileAssociationId);
-		return plainToInstance(FileAssociationDto, fileAssociation);
+		return fileAssociation;
 	}
 
 	@Patch("removedAt")
@@ -71,7 +70,7 @@ export class FileAssociationsController {
 			fileAssociationId,
 			updateFileAssociationDto,
 		);
-		return plainToInstance(FileAssociationDto, fileAssociation);
+		return fileAssociation;
 	}
 
 	@Patch(":fileAssociationId/removedAt")
@@ -81,7 +80,7 @@ export class FileAssociationsController {
 		@Param("fileAssociationId") fileAssociationId: string,
 	) {
 		const fileAssociation = await this.service.removeById(fileAssociationId);
-		return plainToInstance(FileAssociationDto, fileAssociation);
+		return fileAssociation;
 	}
 
 	@Delete(":fileAssociationId")
@@ -91,7 +90,7 @@ export class FileAssociationsController {
 		@Param("fileAssociationId") fileAssociationId: string,
 	) {
 		const fileAssociation = await this.service.deleteById(fileAssociationId);
-		return plainToInstance(FileAssociationDto, fileAssociation);
+		return fileAssociation;
 	}
 
 	@Get()
@@ -100,7 +99,7 @@ export class FileAssociationsController {
 	async getFileAssociationsByQuery(@Query() query: QueryFileAssociationDto) {
 		const { fileAssociations, count } =
 			await this.service.getManyByQuery(query);
-		return wrapResponse(plainToInstance(FileAssociationDto, fileAssociations), {
+		return wrapResponse(fileAssociations, {
 			meta: query.toPageMetaDto(count),
 		});
 	}

@@ -18,7 +18,6 @@ import {
 	Query,
 } from "@nestjs/common";
 import { ApiTags } from "@nestjs/swagger";
-import { plainToInstance } from "class-transformer";
 import { SpaceAssociationsService } from "../../service/resources/space-associations.service";
 import { wrapResponse } from "../../util/response.util";
 
@@ -37,7 +36,7 @@ export class SpaceAssociationsController {
 			createSpaceAssociationDto,
 		);
 
-		return plainToInstance(SpaceAssociationDto, spaceAssociation);
+		return spaceAssociation;
 	}
 
 	@Get(":spaceAssociationId")
@@ -47,7 +46,7 @@ export class SpaceAssociationsController {
 		@Param("spaceAssociationId") spaceAssociationId: string,
 	) {
 		const spaceAssociation = await this.service.getById(spaceAssociationId);
-		return plainToInstance(SpaceAssociationDto, spaceAssociation);
+		return spaceAssociation;
 	}
 
 	@Patch("removedAt")
@@ -74,7 +73,7 @@ export class SpaceAssociationsController {
 			spaceAssociationId,
 			updateSpaceAssociationDto,
 		);
-		return plainToInstance(SpaceAssociationDto, spaceAssociation);
+		return spaceAssociation;
 	}
 
 	@Patch(":spaceAssociationId/removedAt")
@@ -84,7 +83,7 @@ export class SpaceAssociationsController {
 		@Param("spaceAssociationId") spaceAssociationId: string,
 	) {
 		const spaceAssociation = await this.service.removeById(spaceAssociationId);
-		return plainToInstance(SpaceAssociationDto, spaceAssociation);
+		return spaceAssociation;
 	}
 
 	@Delete(":spaceAssociationId")
@@ -94,7 +93,7 @@ export class SpaceAssociationsController {
 		@Param("spaceAssociationId") spaceAssociationId: string,
 	) {
 		const spaceAssociation = await this.service.deleteById(spaceAssociationId);
-		return plainToInstance(SpaceAssociationDto, spaceAssociation);
+		return spaceAssociation;
 	}
 
 	@Get()
@@ -103,11 +102,8 @@ export class SpaceAssociationsController {
 	async getSpaceAssociationsByQuery(@Query() query: QuerySpaceAssociationDto) {
 		const { spaceAssociations, count } =
 			await this.service.getManyByQuery(query);
-		return wrapResponse(
-			plainToInstance(SpaceAssociationDto, spaceAssociations),
-			{
-				meta: query.toPageMetaDto(count),
-			},
-		);
+		return wrapResponse(spaceAssociations, {
+			meta: query.toPageMetaDto(count),
+		});
 	}
 }

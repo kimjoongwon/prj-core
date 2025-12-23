@@ -1,10 +1,10 @@
-import { Category, CategoryTypes } from "@cocrepo/prisma";
 import {
 	ClassField,
 	EnumField,
 	StringField,
 	UUIDField,
 } from "@cocrepo/decorator";
+import { Category, CategoryTypes } from "@cocrepo/prisma";
 import { AbstractDto } from "./abstract.dto";
 
 export class CategoryDto extends AbstractDto implements Category {

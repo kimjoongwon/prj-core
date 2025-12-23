@@ -6,16 +6,16 @@
  */
 
 export type GetSubjectsByQuery200AllOfMeta = {
-  /** */
-  skip?: number;
-  /** */
-  take?: number;
-  /** */
-  itemCount?: number;
-  /** */
-  pageCount?: number;
-  /** */
-  hasNextPage?: boolean;
-  /** */
-  hasPreviousPage?: boolean;
+	/** */
+	skip?: number;
+	/** */
+	take?: number;
+	/** */
+	itemCount?: number;
+	/** */
+	pageCount?: number;
+	/** */
+	hasNextPage?: boolean;
+	/** */
+	hasPreviousPage?: boolean;
 };

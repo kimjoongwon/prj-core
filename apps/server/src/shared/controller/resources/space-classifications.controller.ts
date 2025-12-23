@@ -18,7 +18,6 @@ import {
 	Query,
 } from "@nestjs/common";
 import { ApiTags } from "@nestjs/swagger";
-import { plainToInstance } from "class-transformer";
 import { SpaceClassificationsService } from "../../service/resources/space-classifications.service";
 import { wrapResponse } from "../../util/response.util";
 
@@ -36,7 +35,7 @@ export class SpaceClassificationsController {
 		const spaceClassification = await this.service.create(
 			createSpaceClassificationDto,
 		);
-		return plainToInstance(SpaceClassificationDto, spaceClassification);
+		return spaceClassification;
 	}
 
 	@Get(":spaceClassificationId")
@@ -44,7 +43,7 @@ export class SpaceClassificationsController {
 	@ApiResponseEntity(SpaceClassificationDto, HttpStatus.OK)
 	async getSpaceClassification(@Param("spaceClassificationId") id: string) {
 		const spaceClassification = await this.service.getById(id);
-		return plainToInstance(SpaceClassificationDto, spaceClassification);
+		return spaceClassification;
 	}
 
 	@Patch(":spaceClassificationId")
@@ -58,7 +57,7 @@ export class SpaceClassificationsController {
 			id,
 			updateSpaceClassificationDto,
 		);
-		return plainToInstance(SpaceClassificationDto, spaceClassification);
+		return spaceClassification;
 	}
 
 	@Patch(":spaceClassificationId/removedAt")
@@ -66,7 +65,7 @@ export class SpaceClassificationsController {
 	@ApiResponseEntity(SpaceClassificationDto, HttpStatus.OK)
 	async removeSpaceClassification(@Param("spaceClassificationId") id: string) {
 		const spaceClassification = await this.service.removeById(id);
-		return plainToInstance(SpaceClassificationDto, spaceClassification);
+		return spaceClassification;
 	}
 
 	@Delete(":spaceClassificationId")
@@ -74,7 +73,7 @@ export class SpaceClassificationsController {
 	@ApiResponseEntity(SpaceClassificationDto, HttpStatus.OK)
 	async deleteSpaceClassification(@Param("spaceClassificationId") id: string) {
 		const spaceClassification = await this.service.deleteById(id);
-		return plainToInstance(SpaceClassificationDto, spaceClassification);
+		return spaceClassification;
 	}
 
 	@Get()
@@ -84,7 +83,7 @@ export class SpaceClassificationsController {
 		@Query() query: QuerySpaceClassificationDto,
 	) {
 		const { items, count } = await this.service.getManyByQuery(query);
-		return wrapResponse(plainToInstance(SpaceClassificationDto, items), {
+		return wrapResponse(items, {
 			meta: query.toPageMetaDto(count),
 		});
 	}

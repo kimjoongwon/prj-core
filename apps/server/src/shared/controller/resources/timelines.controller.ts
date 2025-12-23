@@ -19,7 +19,6 @@ import {
 	Query,
 } from "@nestjs/common";
 import { ApiTags } from "@nestjs/swagger";
-import { plainToInstance } from "class-transformer";
 import { TimelinesService } from "../../service/resources/timelines.service";
 import { wrapResponse } from "../../util/response.util";
 
@@ -34,7 +33,7 @@ export class TimelinesController {
 	async createTimeline(@Body() createTimelineDto: CreateTimelineDto) {
 		const timeline = await this.service.create(createTimelineDto);
 
-		return plainToInstance(TimelineDto, timeline);
+		return timeline;
 	}
 
 	@Get(":timelineId")
@@ -42,7 +41,7 @@ export class TimelinesController {
 	@ApiResponseEntity(TimelineDto, HttpStatus.OK)
 	async getTimeline(@Param("timelineId") timelineId: string) {
 		const timeline = await this.service.getById(timelineId);
-		return plainToInstance(TimelineDto, timeline);
+		return timeline;
 	}
 
 	@Patch("removedAt")
@@ -67,7 +66,7 @@ export class TimelinesController {
 			timelineId,
 			updateTimelineDto as any,
 		);
-		return plainToInstance(TimelineDto, timeline);
+		return timeline;
 	}
 
 	@Patch(":timelineId/removedAt")
@@ -75,7 +74,7 @@ export class TimelinesController {
 	@ApiResponseEntity(TimelineDto, HttpStatus.OK)
 	async removeTimeline(@Param("timelineId") timelineId: string) {
 		const timeline = await this.service.removeById(timelineId);
-		return plainToInstance(TimelineDto, timeline);
+		return timeline;
 	}
 
 	@Delete(":timelineId")
@@ -83,7 +82,7 @@ export class TimelinesController {
 	@ApiResponseEntity(TimelineDto, HttpStatus.OK)
 	async deleteTimeline(@Param("timelineId") timelineId: string) {
 		const timeline = await this.service.deleteById(timelineId);
-		return plainToInstance(TimelineDto, timeline);
+		return timeline;
 	}
 
 	@Get()
@@ -91,12 +90,9 @@ export class TimelinesController {
 	@ApiResponseEntity(TimelineDto, HttpStatus.OK, { isArray: true })
 	async getTimelinesByQuery(@Query() query: QueryTimelineDto) {
 		const { count, timelines } = await this.service.getManyByQuery(query);
-		return wrapResponse(
-			timelines.map((timeline) => timeline?.toDto?.() ?? timeline),
-			{
-				message: "success",
-				meta: new PageMetaDto(query.skip, query.take, count),
-			},
-		);
+		return wrapResponse(timelines, {
+			message: "success",
+			meta: new PageMetaDto(query.skip, query.take, count),
+		});
 	}
 }

@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react";
-import { DogPawIcon, WarningIcon, InfoIcon, StarIcon } from "./index";
+import { DogPawIcon, InfoIcon, StarIcon, WarningIcon } from "./index";
 
 const meta = {
 	title: "UI/Icon",

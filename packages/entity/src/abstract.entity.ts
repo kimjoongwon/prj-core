@@ -1,5 +1,5 @@
+import type { BaseEntityFields, Constructor } from "@cocrepo/type";
 import { plainToInstance } from "class-transformer";
-import type { Constructor, BaseEntityFields } from "@cocrepo/type";
 
 /**
  * 모든 엔티티의 기본 클래스
@@ -20,9 +20,16 @@ export class AbstractEntity<DTO = unknown, O = never>
 	private dtoClass?: Constructor<DTO>;
 
 	/**
-	 * 엔티티를 DTO로 변환합니다
+	 * @deprecated DtoTransformInterceptor가 자동으로 Entity → DTO 변환을 처리합니다.
+	 * Controller에서 직접 호출하지 마세요. 이 메서드는 하위 호환성을 위해 유지되며, 향후 제거될 예정입니다.
+	 *
+	 * @see DtoTransformInterceptor - 자동 DTO 변환을 담당하는 Interceptor
 	 */
 	toDto?(options?: O): DTO {
+		console.warn(
+			"[DEPRECATED] toDto()는 deprecated되었습니다. DtoTransformInterceptor가 자동으로 변환을 처리합니다.",
+		);
+
 		if (!this.dtoClass) {
 			throw new Error(
 				"dtoClass가 설정되지 않았습니다. @UseDto 데코레이터를 사용하세요.",

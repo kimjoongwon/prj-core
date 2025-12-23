@@ -1,5 +1,5 @@
-import { Space } from "@cocrepo/prisma";
 import { ClassField } from "@cocrepo/decorator";
+import { Space } from "@cocrepo/prisma";
 import { AbstractDto } from "./abstract.dto";
 import { GroundDto } from "./ground.dto";
 import { SpaceAssociationDto } from "./space-association.dto";

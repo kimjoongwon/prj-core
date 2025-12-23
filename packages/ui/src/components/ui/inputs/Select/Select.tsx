@@ -1,11 +1,11 @@
+import { tools } from "@cocrepo/toolkit";
+import type { Option } from "@cocrepo/type";
 import {
 	Select as NextSelect,
 	SelectProps as NextUISelectProps,
 	SelectItem,
 } from "@heroui/react";
-import { tools } from "@cocrepo/toolkit";
 import React from "react";
-import type { Option } from "@cocrepo/type";
 
 export interface SelectProps
 	extends Omit<NextUISelectProps, "children" | "onChange" | "selectedKeys"> {

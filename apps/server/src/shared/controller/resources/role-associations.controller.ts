@@ -18,7 +18,6 @@ import {
 	Query,
 } from "@nestjs/common";
 import { ApiTags } from "@nestjs/swagger";
-import { plainToInstance } from "class-transformer";
 import { RoleAssociationsService } from "../../service/resources/role-associations.service";
 import { wrapResponse } from "../../util/response.util";
 
@@ -35,7 +34,7 @@ export class RoleAssociationsController {
 	) {
 		const roleAssociation = await this.service.create(createRoleAssociationDto);
 
-		return plainToInstance(RoleAssociationDto, roleAssociation);
+		return roleAssociation;
 	}
 
 	@Get(":roleAssociationId")
@@ -45,7 +44,7 @@ export class RoleAssociationsController {
 		@Param("roleAssociationId") roleAssociationId: string,
 	) {
 		const roleAssociation = await this.service.getById(roleAssociationId);
-		return plainToInstance(RoleAssociationDto, roleAssociation);
+		return roleAssociation;
 	}
 
 	@Patch("removedAt")
@@ -72,7 +71,7 @@ export class RoleAssociationsController {
 			roleAssociationId,
 			updateRoleAssociationDto,
 		);
-		return plainToInstance(RoleAssociationDto, roleAssociation);
+		return roleAssociation;
 	}
 
 	@Patch(":roleAssociationId/removedAt")
@@ -82,7 +81,7 @@ export class RoleAssociationsController {
 		@Param("roleAssociationId") roleAssociationId: string,
 	) {
 		const roleAssociation = await this.service.removeById(roleAssociationId);
-		return plainToInstance(RoleAssociationDto, roleAssociation);
+		return roleAssociation;
 	}
 
 	@Delete(":roleAssociationId")
@@ -92,7 +91,7 @@ export class RoleAssociationsController {
 		@Param("roleAssociationId") roleAssociationId: string,
 	) {
 		const roleAssociation = await this.service.deleteById(roleAssociationId);
-		return plainToInstance(RoleAssociationDto, roleAssociation);
+		return roleAssociation;
 	}
 
 	@Get()
@@ -101,7 +100,7 @@ export class RoleAssociationsController {
 	async getRoleAssociationsByQuery(@Query() query: QueryRoleAssociationDto) {
 		const { roleAssociations, count } =
 			await this.service.getManyByQuery(query);
-		return wrapResponse(plainToInstance(RoleAssociationDto, roleAssociations), {
+		return wrapResponse(roleAssociations, {
 			meta: query.toPageMetaDto(count),
 		});
 	}

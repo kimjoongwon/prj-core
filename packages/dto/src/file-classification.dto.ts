@@ -1,5 +1,5 @@
-import { FileClassification } from "@cocrepo/prisma";
 import { ClassField, UUIDField } from "@cocrepo/decorator";
+import { FileClassification } from "@cocrepo/prisma";
 import { AbstractDto, CategoryDto, FileDto } from ".";
 
 export class FileClassificationDto

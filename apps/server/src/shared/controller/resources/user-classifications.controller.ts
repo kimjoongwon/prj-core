@@ -14,7 +14,7 @@ export class UserClassificationsController {
 	//   return new ResponseEntity(
 	//     HttpStatus.OK,
 	//     '성공',
-	//     plainToInstance(UserClassificationDto, userClassification),
+	//     userClassification,
 	//   );
 	// }
 	// @Get(':userClassificationId')
@@ -26,7 +26,7 @@ export class UserClassificationsController {
 	//   return new ResponseEntity(
 	//     HttpStatus.OK,
 	//     '성공',
-	//     plainToInstance(UserClassificationDto, userClassification),
+	//     userClassification,
 	//   );
 	// }
 	// @Patch(':userClassificationId')
@@ -41,7 +41,7 @@ export class UserClassificationsController {
 	//   return new ResponseEntity(
 	//     HttpStatus.OK,
 	//     '성공',
-	//     plainToInstance(UserClassificationDto, userClassification),
+	//     userClassification,
 	//   );
 	// }
 	// @Patch(':userClassificationId/removedAt')
@@ -53,7 +53,7 @@ export class UserClassificationsController {
 	//   return new ResponseEntity(
 	//     HttpStatus.OK,
 	//     '성공',
-	//     plainToInstance(UserClassificationDto, userClassification),
+	//     userClassification,
 	//   );
 	// }
 	// @Delete(':userClassificationId')
@@ -65,7 +65,7 @@ export class UserClassificationsController {
 	//   return new ResponseEntity(
 	//     HttpStatus.OK,
 	//     '성공',
-	//     plainToInstance(UserClassificationDto, userClassification),
+	//     userClassification,
 	//   );
 	// }
 	// @Get()
@@ -77,7 +77,7 @@ export class UserClassificationsController {
 	//   return new ResponseEntity(
 	//     HttpStatus.OK,
 	//     '성공',
-	//     plainToInstance(UserClassificationDto, items),
+	//     items,
 	//     query.toPageMetaDto(count),
 	//   );
 	// }

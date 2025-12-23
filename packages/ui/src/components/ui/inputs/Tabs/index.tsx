@@ -1,6 +1,6 @@
 import { useFormField } from "@cocrepo/hook";
-import { MobxProps } from "@cocrepo/type";
 import { tools } from "@cocrepo/toolkit";
+import { MobxProps } from "@cocrepo/type";
 import { observer } from "mobx-react-lite";
 import { Key } from "react";
 import { Tabs as BaseTabs, type TabsProps as BaseTabsProps } from "./Tabs";

@@ -1,6 +1,16 @@
-import { applyDecorators, HttpCode, HttpStatus, Type } from "@nestjs/common";
-import { ApiExtraModels, ApiResponse, getSchemaPath } from "@nestjs/swagger";
 import { Token } from "@cocrepo/constant";
+import {
+	applyDecorators,
+	HttpCode,
+	HttpStatus,
+	SetMetadata,
+	Type,
+} from "@nestjs/common";
+import { ApiExtraModels, ApiResponse, getSchemaPath } from "@nestjs/swagger";
+import {
+	DTO_CLASS_METADATA,
+	DTO_IS_ARRAY_METADATA,
+} from "./constants/metadata.constants";
 
 /**
  * Primitive 타입을 OpenAPI 스키마로 변환
@@ -107,6 +117,8 @@ export const ApiResponseEntity = <DataDto extends Type<unknown>>(
 					headers,
 				}),
 				HttpCode(httpStatus),
+				SetMetadata(DTO_CLASS_METADATA, dataDto),
+				SetMetadata(DTO_IS_ARRAY_METADATA, options?.isArray ?? false),
 			]
 		: [
 				ApiExtraModels(dataDto),
@@ -116,6 +128,8 @@ export const ApiResponseEntity = <DataDto extends Type<unknown>>(
 					headers,
 				}),
 				HttpCode(httpStatus),
+				SetMetadata(DTO_CLASS_METADATA, dataDto),
+				SetMetadata(DTO_IS_ARRAY_METADATA, options?.isArray ?? false),
 			];
 
 	return applyDecorators(...decorators);

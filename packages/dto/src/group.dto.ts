@@ -1,5 +1,3 @@
-import type { Group } from "@cocrepo/prisma";
-import { GroupTypes } from "@cocrepo/prisma";
 import {
 	ClassField,
 	EnumField,
@@ -7,6 +5,8 @@ import {
 	StringFieldOptional,
 	UUIDField,
 } from "@cocrepo/decorator";
+import type { Group } from "@cocrepo/prisma";
+import { GroupTypes } from "@cocrepo/prisma";
 import { AbstractDto } from "./abstract.dto";
 import { TenantDto } from "./tenant.dto";
 

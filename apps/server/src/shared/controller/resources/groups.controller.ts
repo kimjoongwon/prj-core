@@ -17,7 +17,6 @@ import {
 	Query,
 } from "@nestjs/common";
 import { ApiResponse, ApiTags } from "@nestjs/swagger";
-import { plainToInstance } from "class-transformer";
 import { ResponseMessage } from "../../decorator/response-message.decorator";
 import { GroupsService } from "../../service";
 import { wrapResponse } from "../../util/response.util";
@@ -45,13 +44,10 @@ export class GroupsController {
 		const { totalCount, groups } =
 			await this.groupService.getManyByQuery(query);
 
-		return wrapResponse(
-			groups.map((group) => group?.toDto?.() ?? group),
-			{
-				message: "그룹 페이지 데이터 리턴 성공",
-				meta: query.toPageMetaDto(totalCount),
-			},
-		);
+		return wrapResponse(groups, {
+			message: "그룹 페이지 데이터 리턴 성공",
+			meta: query.toPageMetaDto(totalCount),
+		});
 	}
 
 	@ApiResponseEntity(GroupDto, HttpStatus.OK)
@@ -60,7 +56,7 @@ export class GroupsController {
 	async getGroupById(@Param("groupId") groupId: string) {
 		const group = await this.groupService.getById(groupId);
 
-		return group ? plainToInstance(GroupDto, group) : null;
+		return group ? group : null;
 	}
 
 	@ApiResponseEntity(GroupDto, HttpStatus.OK)
@@ -71,7 +67,7 @@ export class GroupsController {
 		@Body() updateGroupDto: UpdateGroupDto,
 	) {
 		const group = await this.groupService.updateById(groupId, updateGroupDto);
-		return plainToInstance(GroupDto, group);
+		return group;
 	}
 
 	@ApiResponseEntity(Number, HttpStatus.OK)
@@ -90,6 +86,6 @@ export class GroupsController {
 	@ResponseMessage("그룹 데이터 삭제 성공")
 	async deleteGroup(@Param("groupId") groupId: string) {
 		const group = await this.groupService.deleteById(groupId);
-		return plainToInstance(GroupDto, group);
+		return group;
 	}
 }

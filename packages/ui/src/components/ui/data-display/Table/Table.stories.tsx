@@ -95,7 +95,7 @@ export const Default: Story = {
 			getCoreRowModel: getCoreRowModel(),
 		});
 
-		// @ts-ignore
+		// @ts-expect-error
 		return <Table {...args} tableInstance={tableInstance} />;
 	},
 	parameters: {

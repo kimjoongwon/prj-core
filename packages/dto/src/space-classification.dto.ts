@@ -1,5 +1,5 @@
-import { SpaceClassification } from "@cocrepo/prisma";
 import { ClassField, UUIDField } from "@cocrepo/decorator";
+import { SpaceClassification } from "@cocrepo/prisma";
 import { AbstractDto, CategoryDto, SpaceDto } from ".";
 
 export class SpaceClassificationDto

@@ -1,6 +1,6 @@
+import { UUIDField } from "@cocrepo/decorator";
 import { OmitType } from "@nestjs/swagger";
 import { COMMON_ENTITY_FIELDS } from "../constant";
-import { UUIDField } from "@cocrepo/decorator";
 import { ExerciseDto } from "../exercise.dto";
 
 export class CreateExerciseDto extends OmitType(ExerciseDto, [

@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react";
-import { Button } from "../../inputs/Button/Button";
 import { Text } from "../../data-display/Text/Text";
+import { Button } from "../../inputs/Button/Button";
 import { VStack } from "../../surfaces/VStack/VStack";
 import { AuthLayout } from "./AuthLayout";
 

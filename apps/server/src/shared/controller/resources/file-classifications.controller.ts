@@ -18,7 +18,6 @@ import {
 	Query,
 } from "@nestjs/common";
 import { ApiTags } from "@nestjs/swagger";
-import { plainToInstance } from "class-transformer";
 import { FileClassificationsService } from "../../service/resources/file-classifications.service";
 import { wrapResponse } from "../../util/response.util";
 
@@ -35,14 +34,14 @@ export class FileClassificationsController {
 		const fileClassification = await this.service.create(
 			createFileClassificationDto,
 		);
-		return plainToInstance(FileClassificationDto, fileClassification);
+		return fileClassification;
 	}
 	@Get(":fileClassificationId")
 	@HttpCode(HttpStatus.OK)
 	@ApiResponseEntity(FileClassificationDto, HttpStatus.OK)
 	async getFileClassification(@Param("fileClassificationId") id: string) {
 		const fileClassification = await this.service.getById(id);
-		return plainToInstance(FileClassificationDto, fileClassification);
+		return fileClassification;
 	}
 	@Patch(":fileClassificationId")
 	@HttpCode(HttpStatus.OK)
@@ -55,21 +54,21 @@ export class FileClassificationsController {
 			id,
 			updateFileClassificationDto,
 		);
-		return plainToInstance(FileClassificationDto, fileClassification);
+		return fileClassification;
 	}
 	@Patch(":fileClassificationId/removedAt")
 	@HttpCode(HttpStatus.OK)
 	@ApiResponseEntity(FileClassificationDto, HttpStatus.OK)
 	async removeFileClassification(@Param("fileClassificationId") id: string) {
 		const fileClassification = await this.service.removeById(id);
-		return plainToInstance(FileClassificationDto, fileClassification);
+		return fileClassification;
 	}
 	@Delete(":fileClassificationId")
 	@HttpCode(HttpStatus.OK)
 	@ApiResponseEntity(FileClassificationDto, HttpStatus.OK)
 	async deleteFileClassification(@Param("fileClassificationId") id: string) {
 		const fileClassification = await this.service.deleteById(id);
-		return plainToInstance(FileClassificationDto, fileClassification);
+		return fileClassification;
 	}
 	@Get()
 	@HttpCode(HttpStatus.OK)
@@ -78,7 +77,7 @@ export class FileClassificationsController {
 		@Query() query: QueryFileClassificationDto,
 	) {
 		const { items, count } = await this.service.getManyByQuery(query);
-		return wrapResponse(plainToInstance(FileClassificationDto, items), {
+		return wrapResponse(items, {
 			meta: query.toPageMetaDto(count),
 		});
 	}
