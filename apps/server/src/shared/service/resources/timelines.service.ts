@@ -1,6 +1,6 @@
 import { CreateTimelineDto, QueryTimelineDto } from "@cocrepo/dto";
-import { Injectable } from "@nestjs/common";
 import { Prisma } from "@cocrepo/prisma";
+import { Injectable } from "@nestjs/common";
 import { TimelinesRepository } from "../../repository/timeline.repository";
 
 @Injectable()

@@ -3,8 +3,8 @@ import {
 	QueryUserAssociationDto,
 	UpdateUserAssociationDto,
 } from "@cocrepo/dto";
-import { Injectable } from "@nestjs/common";
 import { Prisma } from "@cocrepo/prisma";
+import { Injectable } from "@nestjs/common";
 import { UserAssociationsRepository } from "../../repository/user-associations.repository";
 
 @Injectable()

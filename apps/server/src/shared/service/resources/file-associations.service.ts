@@ -3,8 +3,8 @@ import {
 	QueryFileAssociationDto,
 	UpdateFileAssociationDto,
 } from "@cocrepo/dto";
-import { Injectable } from "@nestjs/common";
 import { Prisma } from "@cocrepo/prisma";
+import { Injectable } from "@nestjs/common";
 import { FileAssociationsRepository } from "../../repository/file-associations.repository";
 
 @Injectable()

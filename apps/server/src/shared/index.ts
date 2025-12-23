@@ -58,7 +58,7 @@ export {
 export { ResponseMessage } from "./decorator";
 
 // Filters
-export { AllExceptionsFilter, PrismaClientExceptionFilter } from "./filter";
+export { AllExceptionsFilter } from "./filter";
 
 // Guards
 export {

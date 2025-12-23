@@ -3,8 +3,8 @@ import {
 	QuerySessionDto,
 	UpdateSessionDto,
 } from "@cocrepo/dto";
-import { Injectable } from "@nestjs/common";
 import { Prisma } from "@cocrepo/prisma";
+import { Injectable } from "@nestjs/common";
 import { SessionsRepository } from "../../repository/sessions.repository";
 
 @Injectable()
