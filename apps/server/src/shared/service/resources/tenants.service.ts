@@ -1,7 +1,7 @@
 import { CreateTenantDto, QueryTenantDto, UpdateTenantDto } from "@cocrepo/dto";
 import { Tenant } from "@cocrepo/entity";
-import { Injectable } from "@nestjs/common";
 import { Prisma } from "@cocrepo/prisma";
+import { Injectable } from "@nestjs/common";
 import { TenantsRepository } from "../../repository/tenants.repository";
 import { ContextService } from "../utils";
 

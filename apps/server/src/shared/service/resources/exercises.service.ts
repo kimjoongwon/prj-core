@@ -3,8 +3,8 @@ import {
 	QueryExerciseDto,
 	UpdateExerciseDto,
 } from "@cocrepo/dto";
-import { Injectable } from "@nestjs/common";
 import { Prisma } from "@cocrepo/prisma";
+import { Injectable } from "@nestjs/common";
 import { ExercisesRepository } from "../../repository/exercises.repository";
 import { ContextService } from "../utils";
 

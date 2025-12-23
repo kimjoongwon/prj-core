@@ -1,8 +1,8 @@
 import "dotenv/config";
+import { PrismaClient } from "@cocrepo/prisma";
 import { PrismaPg } from "@prisma/adapter-pg";
 import pg from "pg";
 import { describe, expect, it } from "vitest";
-import { PrismaClient } from "../../generated/client";
 
 describe("PrismaClient", () => {
 	it("should create PrismaClient instance with adapter", () => {

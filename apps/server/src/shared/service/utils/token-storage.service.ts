@@ -1,6 +1,6 @@
+import * as crypto from "node:crypto";
 import { Injectable, Logger } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
-import * as crypto from "crypto";
 import { AuthConfig } from "../../config";
 import { RedisService } from "./redis.service";
 

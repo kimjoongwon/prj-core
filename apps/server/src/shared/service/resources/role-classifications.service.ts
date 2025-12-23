@@ -3,8 +3,8 @@ import {
 	QueryRoleClassificationDto,
 	UpdateRoleClassificationDto,
 } from "@cocrepo/dto";
-import { Injectable } from "@nestjs/common";
 import { Prisma } from "@cocrepo/prisma";
+import { Injectable } from "@nestjs/common";
 import { RoleClassificationsRepository } from "../../repository/role-classifications.repository";
 
 @Injectable()

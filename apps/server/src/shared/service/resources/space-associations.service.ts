@@ -3,8 +3,8 @@ import {
 	QuerySpaceAssociationDto,
 	UpdateSpaceAssociationDto,
 } from "@cocrepo/dto";
-import { Injectable } from "@nestjs/common";
 import { Prisma } from "@cocrepo/prisma";
+import { Injectable } from "@nestjs/common";
 import { SpaceAssociationsRepository } from "../../repository/space-associations.repository";
 
 @Injectable()

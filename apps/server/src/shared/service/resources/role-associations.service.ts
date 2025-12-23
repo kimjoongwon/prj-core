@@ -3,8 +3,8 @@ import {
 	QueryRoleAssociationDto,
 	UpdateRoleAssociationDto,
 } from "@cocrepo/dto";
-import { Injectable } from "@nestjs/common";
 import { Prisma } from "@cocrepo/prisma";
+import { Injectable } from "@nestjs/common";
 import { RoleAssociationsRepository } from "../../repository";
 
 @Injectable()

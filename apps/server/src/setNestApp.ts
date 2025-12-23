@@ -4,11 +4,7 @@ import {
 	ValidationPipe,
 } from "@nestjs/common";
 import { HttpAdapterHost, Reflector } from "@nestjs/core";
-import {
-	AllExceptionsFilter,
-	PrismaClientExceptionFilter,
-	TokenStorageService,
-} from "@shared";
+import { AllExceptionsFilter, TokenStorageService } from "@shared";
 import { JwtAuthGuard } from "./shared/guard";
 import { RequestContextInterceptor } from "./shared/interceptor/request-context.interceptor";
 import { ResponseEntityInterceptor } from "./shared/interceptor/response-entity.interceptor";
@@ -21,7 +17,6 @@ export function setNestApp<T extends INestApplication>(app: T): void {
 	// =================================================================
 	app.useGlobalFilters(
 		new AllExceptionsFilter(httpAdapterHost.httpAdapter), // 전역 예외 처리
-		new PrismaClientExceptionFilter(httpAdapterHost.httpAdapter), // Prisma 전용 예외 처리
 	);
 
 	// =================================================================

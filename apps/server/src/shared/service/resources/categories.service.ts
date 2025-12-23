@@ -1,6 +1,6 @@
 import { QueryCategoryDto, UpdateCategoryDto } from "@cocrepo/dto";
-import { Injectable } from "@nestjs/common";
 import { Prisma } from "@cocrepo/prisma";
+import { Injectable } from "@nestjs/common";
 import { CategoriesRepository } from "../../repository/categories.repository";
 import { AppLogger } from "../../util/app-logger.util";
 import { ContextService } from "../utils";

@@ -1,6 +1,6 @@
 import { QueryUserDto } from "@cocrepo/dto";
-import { Injectable } from "@nestjs/common";
 import { Prisma } from "@cocrepo/prisma";
+import { Injectable } from "@nestjs/common";
 import { UsersRepository } from "../../repository/users.repository";
 
 @Injectable()
