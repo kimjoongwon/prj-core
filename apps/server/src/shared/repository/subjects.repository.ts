@@ -1,11 +1,9 @@
-import { UseEntity } from "@cocrepo/decorator";
 import { Subject } from "@cocrepo/entity";
 import { Injectable, Logger } from "@nestjs/common";
 import { plainToInstance } from "class-transformer";
 import { PrismaService } from "../service/utils";
 
 @Injectable()
-@UseEntity(Subject)
 export class SubjectsRepository {
 	private readonly logger: Logger;
 
