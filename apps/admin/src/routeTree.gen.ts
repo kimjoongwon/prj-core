@@ -8,564 +8,564 @@
 // You should NOT make any changes in this file as it will be overwritten.
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
-import { Route as rootRouteImport } from "./routes/__root";
-import { Route as AdminRouteImport } from "./routes/admin";
-import { Route as IndexRouteImport } from "./routes/index";
-import { Route as AdminDashboardRouteImport } from "./routes/admin/dashboard";
-import { Route as AdminAuthRouteImport } from "./routes/admin/auth";
-import { Route as AdminDashboardIndexRouteImport } from "./routes/admin/dashboard/index";
-import { Route as AdminDashboardUserServiceRouteImport } from "./routes/admin/dashboard/user-service";
-import { Route as AdminDashboardSpaceServiceRouteImport } from "./routes/admin/dashboard/space-service";
-import { Route as AdminAuthLoginRouteImport } from "./routes/admin/auth/login";
-import { Route as AdminDashboardUserServiceUsersRouteImport } from "./routes/admin/dashboard/user-service/users";
-import { Route as AdminDashboardSpaceServiceGroundsRouteImport } from "./routes/admin/dashboard/space-service/grounds";
-import { Route as AdminDashboardSpaceServiceCategoriesRouteImport } from "./routes/admin/dashboard/space-service/categories";
-import { Route as AdminAuthLoginTenantSelectRouteImport } from "./routes/admin/auth/login/tenant-select";
-import { Route as AdminDashboardSpaceServiceGroundsGroundIdRouteImport } from "./routes/admin/dashboard/space-service/grounds/$groundId";
-import { Route as AdminDashboardSpaceServiceCategoriesCategoryIdRouteImport } from "./routes/admin/dashboard/space-service/categories/$categoryId";
-import { Route as AdminDashboardSpaceServiceGroundsGroundIdModifyRouteImport } from "./routes/admin/dashboard/space-service/grounds/$groundId/modify";
-import { Route as AdminDashboardSpaceServiceGroundsGroundIdDetailRouteImport } from "./routes/admin/dashboard/space-service/grounds/$groundId/detail";
-import { Route as AdminDashboardSpaceServiceGroundsGroundIdCreateRouteImport } from "./routes/admin/dashboard/space-service/grounds/$groundId/create";
-import { Route as AdminDashboardSpaceServiceGroundsGroundIdDetailMembersRouteImport } from "./routes/admin/dashboard/space-service/grounds/$groundId/detail/members";
-import { Route as AdminDashboardSpaceServiceGroundsGroundIdDetailInfoRouteImport } from "./routes/admin/dashboard/space-service/grounds/$groundId/detail/info";
+import { Route as rootRouteImport } from './routes/__root'
+import { Route as AdminRouteImport } from './routes/admin'
+import { Route as IndexRouteImport } from './routes/index'
+import { Route as AdminDashboardRouteImport } from './routes/admin/dashboard'
+import { Route as AdminAuthRouteImport } from './routes/admin/auth'
+import { Route as AdminDashboardIndexRouteImport } from './routes/admin/dashboard/index'
+import { Route as AdminDashboardUserServiceRouteImport } from './routes/admin/dashboard/user-service'
+import { Route as AdminDashboardSpaceServiceRouteImport } from './routes/admin/dashboard/space-service'
+import { Route as AdminAuthLoginRouteImport } from './routes/admin/auth/login'
+import { Route as AdminDashboardUserServiceUsersRouteImport } from './routes/admin/dashboard/user-service/users'
+import { Route as AdminDashboardSpaceServiceGroundsRouteImport } from './routes/admin/dashboard/space-service/grounds'
+import { Route as AdminDashboardSpaceServiceCategoriesRouteImport } from './routes/admin/dashboard/space-service/categories'
+import { Route as AdminAuthLoginTenantSelectRouteImport } from './routes/admin/auth/login/tenant-select'
+import { Route as AdminDashboardSpaceServiceGroundsGroundIdRouteImport } from './routes/admin/dashboard/space-service/grounds/$groundId'
+import { Route as AdminDashboardSpaceServiceCategoriesCategoryIdRouteImport } from './routes/admin/dashboard/space-service/categories/$categoryId'
+import { Route as AdminDashboardSpaceServiceGroundsGroundIdModifyRouteImport } from './routes/admin/dashboard/space-service/grounds/$groundId/modify'
+import { Route as AdminDashboardSpaceServiceGroundsGroundIdDetailRouteImport } from './routes/admin/dashboard/space-service/grounds/$groundId/detail'
+import { Route as AdminDashboardSpaceServiceGroundsGroundIdCreateRouteImport } from './routes/admin/dashboard/space-service/grounds/$groundId/create'
+import { Route as AdminDashboardSpaceServiceGroundsGroundIdDetailMembersRouteImport } from './routes/admin/dashboard/space-service/grounds/$groundId/detail/members'
+import { Route as AdminDashboardSpaceServiceGroundsGroundIdDetailInfoRouteImport } from './routes/admin/dashboard/space-service/grounds/$groundId/detail/info'
 
 const AdminRoute = AdminRouteImport.update({
-	id: "/admin",
-	path: "/admin",
-	getParentRoute: () => rootRouteImport,
-} as any);
+  id: '/admin',
+  path: '/admin',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
-	id: "/",
-	path: "/",
-	getParentRoute: () => rootRouteImport,
-} as any);
+  id: '/',
+  path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AdminDashboardRoute = AdminDashboardRouteImport.update({
-	id: "/dashboard",
-	path: "/dashboard",
-	getParentRoute: () => AdminRoute,
-} as any);
+  id: '/dashboard',
+  path: '/dashboard',
+  getParentRoute: () => AdminRoute,
+} as any)
 const AdminAuthRoute = AdminAuthRouteImport.update({
-	id: "/auth",
-	path: "/auth",
-	getParentRoute: () => AdminRoute,
-} as any);
+  id: '/auth',
+  path: '/auth',
+  getParentRoute: () => AdminRoute,
+} as any)
 const AdminDashboardIndexRoute = AdminDashboardIndexRouteImport.update({
-	id: "/",
-	path: "/",
-	getParentRoute: () => AdminDashboardRoute,
-} as any);
+  id: '/',
+  path: '/',
+  getParentRoute: () => AdminDashboardRoute,
+} as any)
 const AdminDashboardUserServiceRoute =
-	AdminDashboardUserServiceRouteImport.update({
-		id: "/user-service",
-		path: "/user-service",
-		getParentRoute: () => AdminDashboardRoute,
-	} as any);
+  AdminDashboardUserServiceRouteImport.update({
+    id: '/user-service',
+    path: '/user-service',
+    getParentRoute: () => AdminDashboardRoute,
+  } as any)
 const AdminDashboardSpaceServiceRoute =
-	AdminDashboardSpaceServiceRouteImport.update({
-		id: "/space-service",
-		path: "/space-service",
-		getParentRoute: () => AdminDashboardRoute,
-	} as any);
+  AdminDashboardSpaceServiceRouteImport.update({
+    id: '/space-service',
+    path: '/space-service',
+    getParentRoute: () => AdminDashboardRoute,
+  } as any)
 const AdminAuthLoginRoute = AdminAuthLoginRouteImport.update({
-	id: "/login",
-	path: "/login",
-	getParentRoute: () => AdminAuthRoute,
-} as any);
+  id: '/login',
+  path: '/login',
+  getParentRoute: () => AdminAuthRoute,
+} as any)
 const AdminDashboardUserServiceUsersRoute =
-	AdminDashboardUserServiceUsersRouteImport.update({
-		id: "/users",
-		path: "/users",
-		getParentRoute: () => AdminDashboardUserServiceRoute,
-	} as any);
+  AdminDashboardUserServiceUsersRouteImport.update({
+    id: '/users',
+    path: '/users',
+    getParentRoute: () => AdminDashboardUserServiceRoute,
+  } as any)
 const AdminDashboardSpaceServiceGroundsRoute =
-	AdminDashboardSpaceServiceGroundsRouteImport.update({
-		id: "/grounds",
-		path: "/grounds",
-		getParentRoute: () => AdminDashboardSpaceServiceRoute,
-	} as any);
+  AdminDashboardSpaceServiceGroundsRouteImport.update({
+    id: '/grounds',
+    path: '/grounds',
+    getParentRoute: () => AdminDashboardSpaceServiceRoute,
+  } as any)
 const AdminDashboardSpaceServiceCategoriesRoute =
-	AdminDashboardSpaceServiceCategoriesRouteImport.update({
-		id: "/categories",
-		path: "/categories",
-		getParentRoute: () => AdminDashboardSpaceServiceRoute,
-	} as any);
+  AdminDashboardSpaceServiceCategoriesRouteImport.update({
+    id: '/categories',
+    path: '/categories',
+    getParentRoute: () => AdminDashboardSpaceServiceRoute,
+  } as any)
 const AdminAuthLoginTenantSelectRoute =
-	AdminAuthLoginTenantSelectRouteImport.update({
-		id: "/tenant-select",
-		path: "/tenant-select",
-		getParentRoute: () => AdminAuthLoginRoute,
-	} as any);
+  AdminAuthLoginTenantSelectRouteImport.update({
+    id: '/tenant-select',
+    path: '/tenant-select',
+    getParentRoute: () => AdminAuthLoginRoute,
+  } as any)
 const AdminDashboardSpaceServiceGroundsGroundIdRoute =
-	AdminDashboardSpaceServiceGroundsGroundIdRouteImport.update({
-		id: "/$groundId",
-		path: "/$groundId",
-		getParentRoute: () => AdminDashboardSpaceServiceGroundsRoute,
-	} as any);
+  AdminDashboardSpaceServiceGroundsGroundIdRouteImport.update({
+    id: '/$groundId',
+    path: '/$groundId',
+    getParentRoute: () => AdminDashboardSpaceServiceGroundsRoute,
+  } as any)
 const AdminDashboardSpaceServiceCategoriesCategoryIdRoute =
-	AdminDashboardSpaceServiceCategoriesCategoryIdRouteImport.update({
-		id: "/$categoryId",
-		path: "/$categoryId",
-		getParentRoute: () => AdminDashboardSpaceServiceCategoriesRoute,
-	} as any);
+  AdminDashboardSpaceServiceCategoriesCategoryIdRouteImport.update({
+    id: '/$categoryId',
+    path: '/$categoryId',
+    getParentRoute: () => AdminDashboardSpaceServiceCategoriesRoute,
+  } as any)
 const AdminDashboardSpaceServiceGroundsGroundIdModifyRoute =
-	AdminDashboardSpaceServiceGroundsGroundIdModifyRouteImport.update({
-		id: "/modify",
-		path: "/modify",
-		getParentRoute: () => AdminDashboardSpaceServiceGroundsGroundIdRoute,
-	} as any);
+  AdminDashboardSpaceServiceGroundsGroundIdModifyRouteImport.update({
+    id: '/modify',
+    path: '/modify',
+    getParentRoute: () => AdminDashboardSpaceServiceGroundsGroundIdRoute,
+  } as any)
 const AdminDashboardSpaceServiceGroundsGroundIdDetailRoute =
-	AdminDashboardSpaceServiceGroundsGroundIdDetailRouteImport.update({
-		id: "/detail",
-		path: "/detail",
-		getParentRoute: () => AdminDashboardSpaceServiceGroundsGroundIdRoute,
-	} as any);
+  AdminDashboardSpaceServiceGroundsGroundIdDetailRouteImport.update({
+    id: '/detail',
+    path: '/detail',
+    getParentRoute: () => AdminDashboardSpaceServiceGroundsGroundIdRoute,
+  } as any)
 const AdminDashboardSpaceServiceGroundsGroundIdCreateRoute =
-	AdminDashboardSpaceServiceGroundsGroundIdCreateRouteImport.update({
-		id: "/create",
-		path: "/create",
-		getParentRoute: () => AdminDashboardSpaceServiceGroundsGroundIdRoute,
-	} as any);
+  AdminDashboardSpaceServiceGroundsGroundIdCreateRouteImport.update({
+    id: '/create',
+    path: '/create',
+    getParentRoute: () => AdminDashboardSpaceServiceGroundsGroundIdRoute,
+  } as any)
 const AdminDashboardSpaceServiceGroundsGroundIdDetailMembersRoute =
-	AdminDashboardSpaceServiceGroundsGroundIdDetailMembersRouteImport.update({
-		id: "/members",
-		path: "/members",
-		getParentRoute: () => AdminDashboardSpaceServiceGroundsGroundIdDetailRoute,
-	} as any);
+  AdminDashboardSpaceServiceGroundsGroundIdDetailMembersRouteImport.update({
+    id: '/members',
+    path: '/members',
+    getParentRoute: () => AdminDashboardSpaceServiceGroundsGroundIdDetailRoute,
+  } as any)
 const AdminDashboardSpaceServiceGroundsGroundIdDetailInfoRoute =
-	AdminDashboardSpaceServiceGroundsGroundIdDetailInfoRouteImport.update({
-		id: "/info",
-		path: "/info",
-		getParentRoute: () => AdminDashboardSpaceServiceGroundsGroundIdDetailRoute,
-	} as any);
+  AdminDashboardSpaceServiceGroundsGroundIdDetailInfoRouteImport.update({
+    id: '/info',
+    path: '/info',
+    getParentRoute: () => AdminDashboardSpaceServiceGroundsGroundIdDetailRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
-	"/": typeof IndexRoute;
-	"/admin": typeof AdminRouteWithChildren;
-	"/admin/auth": typeof AdminAuthRouteWithChildren;
-	"/admin/dashboard": typeof AdminDashboardRouteWithChildren;
-	"/admin/auth/login": typeof AdminAuthLoginRouteWithChildren;
-	"/admin/dashboard/space-service": typeof AdminDashboardSpaceServiceRouteWithChildren;
-	"/admin/dashboard/user-service": typeof AdminDashboardUserServiceRouteWithChildren;
-	"/admin/dashboard/": typeof AdminDashboardIndexRoute;
-	"/admin/auth/login/tenant-select": typeof AdminAuthLoginTenantSelectRoute;
-	"/admin/dashboard/space-service/categories": typeof AdminDashboardSpaceServiceCategoriesRouteWithChildren;
-	"/admin/dashboard/space-service/grounds": typeof AdminDashboardSpaceServiceGroundsRouteWithChildren;
-	"/admin/dashboard/user-service/users": typeof AdminDashboardUserServiceUsersRoute;
-	"/admin/dashboard/space-service/categories/$categoryId": typeof AdminDashboardSpaceServiceCategoriesCategoryIdRoute;
-	"/admin/dashboard/space-service/grounds/$groundId": typeof AdminDashboardSpaceServiceGroundsGroundIdRouteWithChildren;
-	"/admin/dashboard/space-service/grounds/$groundId/create": typeof AdminDashboardSpaceServiceGroundsGroundIdCreateRoute;
-	"/admin/dashboard/space-service/grounds/$groundId/detail": typeof AdminDashboardSpaceServiceGroundsGroundIdDetailRouteWithChildren;
-	"/admin/dashboard/space-service/grounds/$groundId/modify": typeof AdminDashboardSpaceServiceGroundsGroundIdModifyRoute;
-	"/admin/dashboard/space-service/grounds/$groundId/detail/info": typeof AdminDashboardSpaceServiceGroundsGroundIdDetailInfoRoute;
-	"/admin/dashboard/space-service/grounds/$groundId/detail/members": typeof AdminDashboardSpaceServiceGroundsGroundIdDetailMembersRoute;
+  '/': typeof IndexRoute
+  '/admin': typeof AdminRouteWithChildren
+  '/admin/auth': typeof AdminAuthRouteWithChildren
+  '/admin/dashboard': typeof AdminDashboardRouteWithChildren
+  '/admin/auth/login': typeof AdminAuthLoginRouteWithChildren
+  '/admin/dashboard/space-service': typeof AdminDashboardSpaceServiceRouteWithChildren
+  '/admin/dashboard/user-service': typeof AdminDashboardUserServiceRouteWithChildren
+  '/admin/dashboard/': typeof AdminDashboardIndexRoute
+  '/admin/auth/login/tenant-select': typeof AdminAuthLoginTenantSelectRoute
+  '/admin/dashboard/space-service/categories': typeof AdminDashboardSpaceServiceCategoriesRouteWithChildren
+  '/admin/dashboard/space-service/grounds': typeof AdminDashboardSpaceServiceGroundsRouteWithChildren
+  '/admin/dashboard/user-service/users': typeof AdminDashboardUserServiceUsersRoute
+  '/admin/dashboard/space-service/categories/$categoryId': typeof AdminDashboardSpaceServiceCategoriesCategoryIdRoute
+  '/admin/dashboard/space-service/grounds/$groundId': typeof AdminDashboardSpaceServiceGroundsGroundIdRouteWithChildren
+  '/admin/dashboard/space-service/grounds/$groundId/create': typeof AdminDashboardSpaceServiceGroundsGroundIdCreateRoute
+  '/admin/dashboard/space-service/grounds/$groundId/detail': typeof AdminDashboardSpaceServiceGroundsGroundIdDetailRouteWithChildren
+  '/admin/dashboard/space-service/grounds/$groundId/modify': typeof AdminDashboardSpaceServiceGroundsGroundIdModifyRoute
+  '/admin/dashboard/space-service/grounds/$groundId/detail/info': typeof AdminDashboardSpaceServiceGroundsGroundIdDetailInfoRoute
+  '/admin/dashboard/space-service/grounds/$groundId/detail/members': typeof AdminDashboardSpaceServiceGroundsGroundIdDetailMembersRoute
 }
 export interface FileRoutesByTo {
-	"/": typeof IndexRoute;
-	"/admin": typeof AdminRouteWithChildren;
-	"/admin/auth": typeof AdminAuthRouteWithChildren;
-	"/admin/auth/login": typeof AdminAuthLoginRouteWithChildren;
-	"/admin/dashboard/space-service": typeof AdminDashboardSpaceServiceRouteWithChildren;
-	"/admin/dashboard/user-service": typeof AdminDashboardUserServiceRouteWithChildren;
-	"/admin/dashboard": typeof AdminDashboardIndexRoute;
-	"/admin/auth/login/tenant-select": typeof AdminAuthLoginTenantSelectRoute;
-	"/admin/dashboard/space-service/categories": typeof AdminDashboardSpaceServiceCategoriesRouteWithChildren;
-	"/admin/dashboard/space-service/grounds": typeof AdminDashboardSpaceServiceGroundsRouteWithChildren;
-	"/admin/dashboard/user-service/users": typeof AdminDashboardUserServiceUsersRoute;
-	"/admin/dashboard/space-service/categories/$categoryId": typeof AdminDashboardSpaceServiceCategoriesCategoryIdRoute;
-	"/admin/dashboard/space-service/grounds/$groundId": typeof AdminDashboardSpaceServiceGroundsGroundIdRouteWithChildren;
-	"/admin/dashboard/space-service/grounds/$groundId/create": typeof AdminDashboardSpaceServiceGroundsGroundIdCreateRoute;
-	"/admin/dashboard/space-service/grounds/$groundId/detail": typeof AdminDashboardSpaceServiceGroundsGroundIdDetailRouteWithChildren;
-	"/admin/dashboard/space-service/grounds/$groundId/modify": typeof AdminDashboardSpaceServiceGroundsGroundIdModifyRoute;
-	"/admin/dashboard/space-service/grounds/$groundId/detail/info": typeof AdminDashboardSpaceServiceGroundsGroundIdDetailInfoRoute;
-	"/admin/dashboard/space-service/grounds/$groundId/detail/members": typeof AdminDashboardSpaceServiceGroundsGroundIdDetailMembersRoute;
+  '/': typeof IndexRoute
+  '/admin': typeof AdminRouteWithChildren
+  '/admin/auth': typeof AdminAuthRouteWithChildren
+  '/admin/auth/login': typeof AdminAuthLoginRouteWithChildren
+  '/admin/dashboard/space-service': typeof AdminDashboardSpaceServiceRouteWithChildren
+  '/admin/dashboard/user-service': typeof AdminDashboardUserServiceRouteWithChildren
+  '/admin/dashboard': typeof AdminDashboardIndexRoute
+  '/admin/auth/login/tenant-select': typeof AdminAuthLoginTenantSelectRoute
+  '/admin/dashboard/space-service/categories': typeof AdminDashboardSpaceServiceCategoriesRouteWithChildren
+  '/admin/dashboard/space-service/grounds': typeof AdminDashboardSpaceServiceGroundsRouteWithChildren
+  '/admin/dashboard/user-service/users': typeof AdminDashboardUserServiceUsersRoute
+  '/admin/dashboard/space-service/categories/$categoryId': typeof AdminDashboardSpaceServiceCategoriesCategoryIdRoute
+  '/admin/dashboard/space-service/grounds/$groundId': typeof AdminDashboardSpaceServiceGroundsGroundIdRouteWithChildren
+  '/admin/dashboard/space-service/grounds/$groundId/create': typeof AdminDashboardSpaceServiceGroundsGroundIdCreateRoute
+  '/admin/dashboard/space-service/grounds/$groundId/detail': typeof AdminDashboardSpaceServiceGroundsGroundIdDetailRouteWithChildren
+  '/admin/dashboard/space-service/grounds/$groundId/modify': typeof AdminDashboardSpaceServiceGroundsGroundIdModifyRoute
+  '/admin/dashboard/space-service/grounds/$groundId/detail/info': typeof AdminDashboardSpaceServiceGroundsGroundIdDetailInfoRoute
+  '/admin/dashboard/space-service/grounds/$groundId/detail/members': typeof AdminDashboardSpaceServiceGroundsGroundIdDetailMembersRoute
 }
 export interface FileRoutesById {
-	__root__: typeof rootRouteImport;
-	"/": typeof IndexRoute;
-	"/admin": typeof AdminRouteWithChildren;
-	"/admin/auth": typeof AdminAuthRouteWithChildren;
-	"/admin/dashboard": typeof AdminDashboardRouteWithChildren;
-	"/admin/auth/login": typeof AdminAuthLoginRouteWithChildren;
-	"/admin/dashboard/space-service": typeof AdminDashboardSpaceServiceRouteWithChildren;
-	"/admin/dashboard/user-service": typeof AdminDashboardUserServiceRouteWithChildren;
-	"/admin/dashboard/": typeof AdminDashboardIndexRoute;
-	"/admin/auth/login/tenant-select": typeof AdminAuthLoginTenantSelectRoute;
-	"/admin/dashboard/space-service/categories": typeof AdminDashboardSpaceServiceCategoriesRouteWithChildren;
-	"/admin/dashboard/space-service/grounds": typeof AdminDashboardSpaceServiceGroundsRouteWithChildren;
-	"/admin/dashboard/user-service/users": typeof AdminDashboardUserServiceUsersRoute;
-	"/admin/dashboard/space-service/categories/$categoryId": typeof AdminDashboardSpaceServiceCategoriesCategoryIdRoute;
-	"/admin/dashboard/space-service/grounds/$groundId": typeof AdminDashboardSpaceServiceGroundsGroundIdRouteWithChildren;
-	"/admin/dashboard/space-service/grounds/$groundId/create": typeof AdminDashboardSpaceServiceGroundsGroundIdCreateRoute;
-	"/admin/dashboard/space-service/grounds/$groundId/detail": typeof AdminDashboardSpaceServiceGroundsGroundIdDetailRouteWithChildren;
-	"/admin/dashboard/space-service/grounds/$groundId/modify": typeof AdminDashboardSpaceServiceGroundsGroundIdModifyRoute;
-	"/admin/dashboard/space-service/grounds/$groundId/detail/info": typeof AdminDashboardSpaceServiceGroundsGroundIdDetailInfoRoute;
-	"/admin/dashboard/space-service/grounds/$groundId/detail/members": typeof AdminDashboardSpaceServiceGroundsGroundIdDetailMembersRoute;
+  __root__: typeof rootRouteImport
+  '/': typeof IndexRoute
+  '/admin': typeof AdminRouteWithChildren
+  '/admin/auth': typeof AdminAuthRouteWithChildren
+  '/admin/dashboard': typeof AdminDashboardRouteWithChildren
+  '/admin/auth/login': typeof AdminAuthLoginRouteWithChildren
+  '/admin/dashboard/space-service': typeof AdminDashboardSpaceServiceRouteWithChildren
+  '/admin/dashboard/user-service': typeof AdminDashboardUserServiceRouteWithChildren
+  '/admin/dashboard/': typeof AdminDashboardIndexRoute
+  '/admin/auth/login/tenant-select': typeof AdminAuthLoginTenantSelectRoute
+  '/admin/dashboard/space-service/categories': typeof AdminDashboardSpaceServiceCategoriesRouteWithChildren
+  '/admin/dashboard/space-service/grounds': typeof AdminDashboardSpaceServiceGroundsRouteWithChildren
+  '/admin/dashboard/user-service/users': typeof AdminDashboardUserServiceUsersRoute
+  '/admin/dashboard/space-service/categories/$categoryId': typeof AdminDashboardSpaceServiceCategoriesCategoryIdRoute
+  '/admin/dashboard/space-service/grounds/$groundId': typeof AdminDashboardSpaceServiceGroundsGroundIdRouteWithChildren
+  '/admin/dashboard/space-service/grounds/$groundId/create': typeof AdminDashboardSpaceServiceGroundsGroundIdCreateRoute
+  '/admin/dashboard/space-service/grounds/$groundId/detail': typeof AdminDashboardSpaceServiceGroundsGroundIdDetailRouteWithChildren
+  '/admin/dashboard/space-service/grounds/$groundId/modify': typeof AdminDashboardSpaceServiceGroundsGroundIdModifyRoute
+  '/admin/dashboard/space-service/grounds/$groundId/detail/info': typeof AdminDashboardSpaceServiceGroundsGroundIdDetailInfoRoute
+  '/admin/dashboard/space-service/grounds/$groundId/detail/members': typeof AdminDashboardSpaceServiceGroundsGroundIdDetailMembersRoute
 }
 export interface FileRouteTypes {
-	fileRoutesByFullPath: FileRoutesByFullPath;
-	fullPaths:
-		| "/"
-		| "/admin"
-		| "/admin/auth"
-		| "/admin/dashboard"
-		| "/admin/auth/login"
-		| "/admin/dashboard/space-service"
-		| "/admin/dashboard/user-service"
-		| "/admin/dashboard/"
-		| "/admin/auth/login/tenant-select"
-		| "/admin/dashboard/space-service/categories"
-		| "/admin/dashboard/space-service/grounds"
-		| "/admin/dashboard/user-service/users"
-		| "/admin/dashboard/space-service/categories/$categoryId"
-		| "/admin/dashboard/space-service/grounds/$groundId"
-		| "/admin/dashboard/space-service/grounds/$groundId/create"
-		| "/admin/dashboard/space-service/grounds/$groundId/detail"
-		| "/admin/dashboard/space-service/grounds/$groundId/modify"
-		| "/admin/dashboard/space-service/grounds/$groundId/detail/info"
-		| "/admin/dashboard/space-service/grounds/$groundId/detail/members";
-	fileRoutesByTo: FileRoutesByTo;
-	to:
-		| "/"
-		| "/admin"
-		| "/admin/auth"
-		| "/admin/auth/login"
-		| "/admin/dashboard/space-service"
-		| "/admin/dashboard/user-service"
-		| "/admin/dashboard"
-		| "/admin/auth/login/tenant-select"
-		| "/admin/dashboard/space-service/categories"
-		| "/admin/dashboard/space-service/grounds"
-		| "/admin/dashboard/user-service/users"
-		| "/admin/dashboard/space-service/categories/$categoryId"
-		| "/admin/dashboard/space-service/grounds/$groundId"
-		| "/admin/dashboard/space-service/grounds/$groundId/create"
-		| "/admin/dashboard/space-service/grounds/$groundId/detail"
-		| "/admin/dashboard/space-service/grounds/$groundId/modify"
-		| "/admin/dashboard/space-service/grounds/$groundId/detail/info"
-		| "/admin/dashboard/space-service/grounds/$groundId/detail/members";
-	id:
-		| "__root__"
-		| "/"
-		| "/admin"
-		| "/admin/auth"
-		| "/admin/dashboard"
-		| "/admin/auth/login"
-		| "/admin/dashboard/space-service"
-		| "/admin/dashboard/user-service"
-		| "/admin/dashboard/"
-		| "/admin/auth/login/tenant-select"
-		| "/admin/dashboard/space-service/categories"
-		| "/admin/dashboard/space-service/grounds"
-		| "/admin/dashboard/user-service/users"
-		| "/admin/dashboard/space-service/categories/$categoryId"
-		| "/admin/dashboard/space-service/grounds/$groundId"
-		| "/admin/dashboard/space-service/grounds/$groundId/create"
-		| "/admin/dashboard/space-service/grounds/$groundId/detail"
-		| "/admin/dashboard/space-service/grounds/$groundId/modify"
-		| "/admin/dashboard/space-service/grounds/$groundId/detail/info"
-		| "/admin/dashboard/space-service/grounds/$groundId/detail/members";
-	fileRoutesById: FileRoutesById;
+  fileRoutesByFullPath: FileRoutesByFullPath
+  fullPaths:
+    | '/'
+    | '/admin'
+    | '/admin/auth'
+    | '/admin/dashboard'
+    | '/admin/auth/login'
+    | '/admin/dashboard/space-service'
+    | '/admin/dashboard/user-service'
+    | '/admin/dashboard/'
+    | '/admin/auth/login/tenant-select'
+    | '/admin/dashboard/space-service/categories'
+    | '/admin/dashboard/space-service/grounds'
+    | '/admin/dashboard/user-service/users'
+    | '/admin/dashboard/space-service/categories/$categoryId'
+    | '/admin/dashboard/space-service/grounds/$groundId'
+    | '/admin/dashboard/space-service/grounds/$groundId/create'
+    | '/admin/dashboard/space-service/grounds/$groundId/detail'
+    | '/admin/dashboard/space-service/grounds/$groundId/modify'
+    | '/admin/dashboard/space-service/grounds/$groundId/detail/info'
+    | '/admin/dashboard/space-service/grounds/$groundId/detail/members'
+  fileRoutesByTo: FileRoutesByTo
+  to:
+    | '/'
+    | '/admin'
+    | '/admin/auth'
+    | '/admin/auth/login'
+    | '/admin/dashboard/space-service'
+    | '/admin/dashboard/user-service'
+    | '/admin/dashboard'
+    | '/admin/auth/login/tenant-select'
+    | '/admin/dashboard/space-service/categories'
+    | '/admin/dashboard/space-service/grounds'
+    | '/admin/dashboard/user-service/users'
+    | '/admin/dashboard/space-service/categories/$categoryId'
+    | '/admin/dashboard/space-service/grounds/$groundId'
+    | '/admin/dashboard/space-service/grounds/$groundId/create'
+    | '/admin/dashboard/space-service/grounds/$groundId/detail'
+    | '/admin/dashboard/space-service/grounds/$groundId/modify'
+    | '/admin/dashboard/space-service/grounds/$groundId/detail/info'
+    | '/admin/dashboard/space-service/grounds/$groundId/detail/members'
+  id:
+    | '__root__'
+    | '/'
+    | '/admin'
+    | '/admin/auth'
+    | '/admin/dashboard'
+    | '/admin/auth/login'
+    | '/admin/dashboard/space-service'
+    | '/admin/dashboard/user-service'
+    | '/admin/dashboard/'
+    | '/admin/auth/login/tenant-select'
+    | '/admin/dashboard/space-service/categories'
+    | '/admin/dashboard/space-service/grounds'
+    | '/admin/dashboard/user-service/users'
+    | '/admin/dashboard/space-service/categories/$categoryId'
+    | '/admin/dashboard/space-service/grounds/$groundId'
+    | '/admin/dashboard/space-service/grounds/$groundId/create'
+    | '/admin/dashboard/space-service/grounds/$groundId/detail'
+    | '/admin/dashboard/space-service/grounds/$groundId/modify'
+    | '/admin/dashboard/space-service/grounds/$groundId/detail/info'
+    | '/admin/dashboard/space-service/grounds/$groundId/detail/members'
+  fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
-	IndexRoute: typeof IndexRoute;
-	AdminRoute: typeof AdminRouteWithChildren;
+  IndexRoute: typeof IndexRoute
+  AdminRoute: typeof AdminRouteWithChildren
 }
 
-declare module "@tanstack/react-router" {
-	interface FileRoutesByPath {
-		"/admin": {
-			id: "/admin";
-			path: "/admin";
-			fullPath: "/admin";
-			preLoaderRoute: typeof AdminRouteImport;
-			parentRoute: typeof rootRouteImport;
-		};
-		"/": {
-			id: "/";
-			path: "/";
-			fullPath: "/";
-			preLoaderRoute: typeof IndexRouteImport;
-			parentRoute: typeof rootRouteImport;
-		};
-		"/admin/dashboard": {
-			id: "/admin/dashboard";
-			path: "/dashboard";
-			fullPath: "/admin/dashboard";
-			preLoaderRoute: typeof AdminDashboardRouteImport;
-			parentRoute: typeof AdminRoute;
-		};
-		"/admin/auth": {
-			id: "/admin/auth";
-			path: "/auth";
-			fullPath: "/admin/auth";
-			preLoaderRoute: typeof AdminAuthRouteImport;
-			parentRoute: typeof AdminRoute;
-		};
-		"/admin/dashboard/": {
-			id: "/admin/dashboard/";
-			path: "/";
-			fullPath: "/admin/dashboard/";
-			preLoaderRoute: typeof AdminDashboardIndexRouteImport;
-			parentRoute: typeof AdminDashboardRoute;
-		};
-		"/admin/dashboard/user-service": {
-			id: "/admin/dashboard/user-service";
-			path: "/user-service";
-			fullPath: "/admin/dashboard/user-service";
-			preLoaderRoute: typeof AdminDashboardUserServiceRouteImport;
-			parentRoute: typeof AdminDashboardRoute;
-		};
-		"/admin/dashboard/space-service": {
-			id: "/admin/dashboard/space-service";
-			path: "/space-service";
-			fullPath: "/admin/dashboard/space-service";
-			preLoaderRoute: typeof AdminDashboardSpaceServiceRouteImport;
-			parentRoute: typeof AdminDashboardRoute;
-		};
-		"/admin/auth/login": {
-			id: "/admin/auth/login";
-			path: "/login";
-			fullPath: "/admin/auth/login";
-			preLoaderRoute: typeof AdminAuthLoginRouteImport;
-			parentRoute: typeof AdminAuthRoute;
-		};
-		"/admin/dashboard/user-service/users": {
-			id: "/admin/dashboard/user-service/users";
-			path: "/users";
-			fullPath: "/admin/dashboard/user-service/users";
-			preLoaderRoute: typeof AdminDashboardUserServiceUsersRouteImport;
-			parentRoute: typeof AdminDashboardUserServiceRoute;
-		};
-		"/admin/dashboard/space-service/grounds": {
-			id: "/admin/dashboard/space-service/grounds";
-			path: "/grounds";
-			fullPath: "/admin/dashboard/space-service/grounds";
-			preLoaderRoute: typeof AdminDashboardSpaceServiceGroundsRouteImport;
-			parentRoute: typeof AdminDashboardSpaceServiceRoute;
-		};
-		"/admin/dashboard/space-service/categories": {
-			id: "/admin/dashboard/space-service/categories";
-			path: "/categories";
-			fullPath: "/admin/dashboard/space-service/categories";
-			preLoaderRoute: typeof AdminDashboardSpaceServiceCategoriesRouteImport;
-			parentRoute: typeof AdminDashboardSpaceServiceRoute;
-		};
-		"/admin/auth/login/tenant-select": {
-			id: "/admin/auth/login/tenant-select";
-			path: "/tenant-select";
-			fullPath: "/admin/auth/login/tenant-select";
-			preLoaderRoute: typeof AdminAuthLoginTenantSelectRouteImport;
-			parentRoute: typeof AdminAuthLoginRoute;
-		};
-		"/admin/dashboard/space-service/grounds/$groundId": {
-			id: "/admin/dashboard/space-service/grounds/$groundId";
-			path: "/$groundId";
-			fullPath: "/admin/dashboard/space-service/grounds/$groundId";
-			preLoaderRoute: typeof AdminDashboardSpaceServiceGroundsGroundIdRouteImport;
-			parentRoute: typeof AdminDashboardSpaceServiceGroundsRoute;
-		};
-		"/admin/dashboard/space-service/categories/$categoryId": {
-			id: "/admin/dashboard/space-service/categories/$categoryId";
-			path: "/$categoryId";
-			fullPath: "/admin/dashboard/space-service/categories/$categoryId";
-			preLoaderRoute: typeof AdminDashboardSpaceServiceCategoriesCategoryIdRouteImport;
-			parentRoute: typeof AdminDashboardSpaceServiceCategoriesRoute;
-		};
-		"/admin/dashboard/space-service/grounds/$groundId/modify": {
-			id: "/admin/dashboard/space-service/grounds/$groundId/modify";
-			path: "/modify";
-			fullPath: "/admin/dashboard/space-service/grounds/$groundId/modify";
-			preLoaderRoute: typeof AdminDashboardSpaceServiceGroundsGroundIdModifyRouteImport;
-			parentRoute: typeof AdminDashboardSpaceServiceGroundsGroundIdRoute;
-		};
-		"/admin/dashboard/space-service/grounds/$groundId/detail": {
-			id: "/admin/dashboard/space-service/grounds/$groundId/detail";
-			path: "/detail";
-			fullPath: "/admin/dashboard/space-service/grounds/$groundId/detail";
-			preLoaderRoute: typeof AdminDashboardSpaceServiceGroundsGroundIdDetailRouteImport;
-			parentRoute: typeof AdminDashboardSpaceServiceGroundsGroundIdRoute;
-		};
-		"/admin/dashboard/space-service/grounds/$groundId/create": {
-			id: "/admin/dashboard/space-service/grounds/$groundId/create";
-			path: "/create";
-			fullPath: "/admin/dashboard/space-service/grounds/$groundId/create";
-			preLoaderRoute: typeof AdminDashboardSpaceServiceGroundsGroundIdCreateRouteImport;
-			parentRoute: typeof AdminDashboardSpaceServiceGroundsGroundIdRoute;
-		};
-		"/admin/dashboard/space-service/grounds/$groundId/detail/members": {
-			id: "/admin/dashboard/space-service/grounds/$groundId/detail/members";
-			path: "/members";
-			fullPath: "/admin/dashboard/space-service/grounds/$groundId/detail/members";
-			preLoaderRoute: typeof AdminDashboardSpaceServiceGroundsGroundIdDetailMembersRouteImport;
-			parentRoute: typeof AdminDashboardSpaceServiceGroundsGroundIdDetailRoute;
-		};
-		"/admin/dashboard/space-service/grounds/$groundId/detail/info": {
-			id: "/admin/dashboard/space-service/grounds/$groundId/detail/info";
-			path: "/info";
-			fullPath: "/admin/dashboard/space-service/grounds/$groundId/detail/info";
-			preLoaderRoute: typeof AdminDashboardSpaceServiceGroundsGroundIdDetailInfoRouteImport;
-			parentRoute: typeof AdminDashboardSpaceServiceGroundsGroundIdDetailRoute;
-		};
-	}
+declare module '@tanstack/react-router' {
+  interface FileRoutesByPath {
+    '/admin': {
+      id: '/admin'
+      path: '/admin'
+      fullPath: '/admin'
+      preLoaderRoute: typeof AdminRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/': {
+      id: '/'
+      path: '/'
+      fullPath: '/'
+      preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin/dashboard': {
+      id: '/admin/dashboard'
+      path: '/dashboard'
+      fullPath: '/admin/dashboard'
+      preLoaderRoute: typeof AdminDashboardRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/auth': {
+      id: '/admin/auth'
+      path: '/auth'
+      fullPath: '/admin/auth'
+      preLoaderRoute: typeof AdminAuthRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/dashboard/': {
+      id: '/admin/dashboard/'
+      path: '/'
+      fullPath: '/admin/dashboard/'
+      preLoaderRoute: typeof AdminDashboardIndexRouteImport
+      parentRoute: typeof AdminDashboardRoute
+    }
+    '/admin/dashboard/user-service': {
+      id: '/admin/dashboard/user-service'
+      path: '/user-service'
+      fullPath: '/admin/dashboard/user-service'
+      preLoaderRoute: typeof AdminDashboardUserServiceRouteImport
+      parentRoute: typeof AdminDashboardRoute
+    }
+    '/admin/dashboard/space-service': {
+      id: '/admin/dashboard/space-service'
+      path: '/space-service'
+      fullPath: '/admin/dashboard/space-service'
+      preLoaderRoute: typeof AdminDashboardSpaceServiceRouteImport
+      parentRoute: typeof AdminDashboardRoute
+    }
+    '/admin/auth/login': {
+      id: '/admin/auth/login'
+      path: '/login'
+      fullPath: '/admin/auth/login'
+      preLoaderRoute: typeof AdminAuthLoginRouteImport
+      parentRoute: typeof AdminAuthRoute
+    }
+    '/admin/dashboard/user-service/users': {
+      id: '/admin/dashboard/user-service/users'
+      path: '/users'
+      fullPath: '/admin/dashboard/user-service/users'
+      preLoaderRoute: typeof AdminDashboardUserServiceUsersRouteImport
+      parentRoute: typeof AdminDashboardUserServiceRoute
+    }
+    '/admin/dashboard/space-service/grounds': {
+      id: '/admin/dashboard/space-service/grounds'
+      path: '/grounds'
+      fullPath: '/admin/dashboard/space-service/grounds'
+      preLoaderRoute: typeof AdminDashboardSpaceServiceGroundsRouteImport
+      parentRoute: typeof AdminDashboardSpaceServiceRoute
+    }
+    '/admin/dashboard/space-service/categories': {
+      id: '/admin/dashboard/space-service/categories'
+      path: '/categories'
+      fullPath: '/admin/dashboard/space-service/categories'
+      preLoaderRoute: typeof AdminDashboardSpaceServiceCategoriesRouteImport
+      parentRoute: typeof AdminDashboardSpaceServiceRoute
+    }
+    '/admin/auth/login/tenant-select': {
+      id: '/admin/auth/login/tenant-select'
+      path: '/tenant-select'
+      fullPath: '/admin/auth/login/tenant-select'
+      preLoaderRoute: typeof AdminAuthLoginTenantSelectRouteImport
+      parentRoute: typeof AdminAuthLoginRoute
+    }
+    '/admin/dashboard/space-service/grounds/$groundId': {
+      id: '/admin/dashboard/space-service/grounds/$groundId'
+      path: '/$groundId'
+      fullPath: '/admin/dashboard/space-service/grounds/$groundId'
+      preLoaderRoute: typeof AdminDashboardSpaceServiceGroundsGroundIdRouteImport
+      parentRoute: typeof AdminDashboardSpaceServiceGroundsRoute
+    }
+    '/admin/dashboard/space-service/categories/$categoryId': {
+      id: '/admin/dashboard/space-service/categories/$categoryId'
+      path: '/$categoryId'
+      fullPath: '/admin/dashboard/space-service/categories/$categoryId'
+      preLoaderRoute: typeof AdminDashboardSpaceServiceCategoriesCategoryIdRouteImport
+      parentRoute: typeof AdminDashboardSpaceServiceCategoriesRoute
+    }
+    '/admin/dashboard/space-service/grounds/$groundId/modify': {
+      id: '/admin/dashboard/space-service/grounds/$groundId/modify'
+      path: '/modify'
+      fullPath: '/admin/dashboard/space-service/grounds/$groundId/modify'
+      preLoaderRoute: typeof AdminDashboardSpaceServiceGroundsGroundIdModifyRouteImport
+      parentRoute: typeof AdminDashboardSpaceServiceGroundsGroundIdRoute
+    }
+    '/admin/dashboard/space-service/grounds/$groundId/detail': {
+      id: '/admin/dashboard/space-service/grounds/$groundId/detail'
+      path: '/detail'
+      fullPath: '/admin/dashboard/space-service/grounds/$groundId/detail'
+      preLoaderRoute: typeof AdminDashboardSpaceServiceGroundsGroundIdDetailRouteImport
+      parentRoute: typeof AdminDashboardSpaceServiceGroundsGroundIdRoute
+    }
+    '/admin/dashboard/space-service/grounds/$groundId/create': {
+      id: '/admin/dashboard/space-service/grounds/$groundId/create'
+      path: '/create'
+      fullPath: '/admin/dashboard/space-service/grounds/$groundId/create'
+      preLoaderRoute: typeof AdminDashboardSpaceServiceGroundsGroundIdCreateRouteImport
+      parentRoute: typeof AdminDashboardSpaceServiceGroundsGroundIdRoute
+    }
+    '/admin/dashboard/space-service/grounds/$groundId/detail/members': {
+      id: '/admin/dashboard/space-service/grounds/$groundId/detail/members'
+      path: '/members'
+      fullPath: '/admin/dashboard/space-service/grounds/$groundId/detail/members'
+      preLoaderRoute: typeof AdminDashboardSpaceServiceGroundsGroundIdDetailMembersRouteImport
+      parentRoute: typeof AdminDashboardSpaceServiceGroundsGroundIdDetailRoute
+    }
+    '/admin/dashboard/space-service/grounds/$groundId/detail/info': {
+      id: '/admin/dashboard/space-service/grounds/$groundId/detail/info'
+      path: '/info'
+      fullPath: '/admin/dashboard/space-service/grounds/$groundId/detail/info'
+      preLoaderRoute: typeof AdminDashboardSpaceServiceGroundsGroundIdDetailInfoRouteImport
+      parentRoute: typeof AdminDashboardSpaceServiceGroundsGroundIdDetailRoute
+    }
+  }
 }
 
 interface AdminAuthLoginRouteChildren {
-	AdminAuthLoginTenantSelectRoute: typeof AdminAuthLoginTenantSelectRoute;
+  AdminAuthLoginTenantSelectRoute: typeof AdminAuthLoginTenantSelectRoute
 }
 
 const AdminAuthLoginRouteChildren: AdminAuthLoginRouteChildren = {
-	AdminAuthLoginTenantSelectRoute: AdminAuthLoginTenantSelectRoute,
-};
+  AdminAuthLoginTenantSelectRoute: AdminAuthLoginTenantSelectRoute,
+}
 
 const AdminAuthLoginRouteWithChildren = AdminAuthLoginRoute._addFileChildren(
-	AdminAuthLoginRouteChildren,
-);
+  AdminAuthLoginRouteChildren,
+)
 
 interface AdminAuthRouteChildren {
-	AdminAuthLoginRoute: typeof AdminAuthLoginRouteWithChildren;
+  AdminAuthLoginRoute: typeof AdminAuthLoginRouteWithChildren
 }
 
 const AdminAuthRouteChildren: AdminAuthRouteChildren = {
-	AdminAuthLoginRoute: AdminAuthLoginRouteWithChildren,
-};
+  AdminAuthLoginRoute: AdminAuthLoginRouteWithChildren,
+}
 
 const AdminAuthRouteWithChildren = AdminAuthRoute._addFileChildren(
-	AdminAuthRouteChildren,
-);
+  AdminAuthRouteChildren,
+)
 
 interface AdminDashboardSpaceServiceCategoriesRouteChildren {
-	AdminDashboardSpaceServiceCategoriesCategoryIdRoute: typeof AdminDashboardSpaceServiceCategoriesCategoryIdRoute;
+  AdminDashboardSpaceServiceCategoriesCategoryIdRoute: typeof AdminDashboardSpaceServiceCategoriesCategoryIdRoute
 }
 
 const AdminDashboardSpaceServiceCategoriesRouteChildren: AdminDashboardSpaceServiceCategoriesRouteChildren =
-	{
-		AdminDashboardSpaceServiceCategoriesCategoryIdRoute:
-			AdminDashboardSpaceServiceCategoriesCategoryIdRoute,
-	};
+  {
+    AdminDashboardSpaceServiceCategoriesCategoryIdRoute:
+      AdminDashboardSpaceServiceCategoriesCategoryIdRoute,
+  }
 
 const AdminDashboardSpaceServiceCategoriesRouteWithChildren =
-	AdminDashboardSpaceServiceCategoriesRoute._addFileChildren(
-		AdminDashboardSpaceServiceCategoriesRouteChildren,
-	);
+  AdminDashboardSpaceServiceCategoriesRoute._addFileChildren(
+    AdminDashboardSpaceServiceCategoriesRouteChildren,
+  )
 
 interface AdminDashboardSpaceServiceGroundsGroundIdDetailRouteChildren {
-	AdminDashboardSpaceServiceGroundsGroundIdDetailInfoRoute: typeof AdminDashboardSpaceServiceGroundsGroundIdDetailInfoRoute;
-	AdminDashboardSpaceServiceGroundsGroundIdDetailMembersRoute: typeof AdminDashboardSpaceServiceGroundsGroundIdDetailMembersRoute;
+  AdminDashboardSpaceServiceGroundsGroundIdDetailInfoRoute: typeof AdminDashboardSpaceServiceGroundsGroundIdDetailInfoRoute
+  AdminDashboardSpaceServiceGroundsGroundIdDetailMembersRoute: typeof AdminDashboardSpaceServiceGroundsGroundIdDetailMembersRoute
 }
 
 const AdminDashboardSpaceServiceGroundsGroundIdDetailRouteChildren: AdminDashboardSpaceServiceGroundsGroundIdDetailRouteChildren =
-	{
-		AdminDashboardSpaceServiceGroundsGroundIdDetailInfoRoute:
-			AdminDashboardSpaceServiceGroundsGroundIdDetailInfoRoute,
-		AdminDashboardSpaceServiceGroundsGroundIdDetailMembersRoute:
-			AdminDashboardSpaceServiceGroundsGroundIdDetailMembersRoute,
-	};
+  {
+    AdminDashboardSpaceServiceGroundsGroundIdDetailInfoRoute:
+      AdminDashboardSpaceServiceGroundsGroundIdDetailInfoRoute,
+    AdminDashboardSpaceServiceGroundsGroundIdDetailMembersRoute:
+      AdminDashboardSpaceServiceGroundsGroundIdDetailMembersRoute,
+  }
 
 const AdminDashboardSpaceServiceGroundsGroundIdDetailRouteWithChildren =
-	AdminDashboardSpaceServiceGroundsGroundIdDetailRoute._addFileChildren(
-		AdminDashboardSpaceServiceGroundsGroundIdDetailRouteChildren,
-	);
+  AdminDashboardSpaceServiceGroundsGroundIdDetailRoute._addFileChildren(
+    AdminDashboardSpaceServiceGroundsGroundIdDetailRouteChildren,
+  )
 
 interface AdminDashboardSpaceServiceGroundsGroundIdRouteChildren {
-	AdminDashboardSpaceServiceGroundsGroundIdCreateRoute: typeof AdminDashboardSpaceServiceGroundsGroundIdCreateRoute;
-	AdminDashboardSpaceServiceGroundsGroundIdDetailRoute: typeof AdminDashboardSpaceServiceGroundsGroundIdDetailRouteWithChildren;
-	AdminDashboardSpaceServiceGroundsGroundIdModifyRoute: typeof AdminDashboardSpaceServiceGroundsGroundIdModifyRoute;
+  AdminDashboardSpaceServiceGroundsGroundIdCreateRoute: typeof AdminDashboardSpaceServiceGroundsGroundIdCreateRoute
+  AdminDashboardSpaceServiceGroundsGroundIdDetailRoute: typeof AdminDashboardSpaceServiceGroundsGroundIdDetailRouteWithChildren
+  AdminDashboardSpaceServiceGroundsGroundIdModifyRoute: typeof AdminDashboardSpaceServiceGroundsGroundIdModifyRoute
 }
 
 const AdminDashboardSpaceServiceGroundsGroundIdRouteChildren: AdminDashboardSpaceServiceGroundsGroundIdRouteChildren =
-	{
-		AdminDashboardSpaceServiceGroundsGroundIdCreateRoute:
-			AdminDashboardSpaceServiceGroundsGroundIdCreateRoute,
-		AdminDashboardSpaceServiceGroundsGroundIdDetailRoute:
-			AdminDashboardSpaceServiceGroundsGroundIdDetailRouteWithChildren,
-		AdminDashboardSpaceServiceGroundsGroundIdModifyRoute:
-			AdminDashboardSpaceServiceGroundsGroundIdModifyRoute,
-	};
+  {
+    AdminDashboardSpaceServiceGroundsGroundIdCreateRoute:
+      AdminDashboardSpaceServiceGroundsGroundIdCreateRoute,
+    AdminDashboardSpaceServiceGroundsGroundIdDetailRoute:
+      AdminDashboardSpaceServiceGroundsGroundIdDetailRouteWithChildren,
+    AdminDashboardSpaceServiceGroundsGroundIdModifyRoute:
+      AdminDashboardSpaceServiceGroundsGroundIdModifyRoute,
+  }
 
 const AdminDashboardSpaceServiceGroundsGroundIdRouteWithChildren =
-	AdminDashboardSpaceServiceGroundsGroundIdRoute._addFileChildren(
-		AdminDashboardSpaceServiceGroundsGroundIdRouteChildren,
-	);
+  AdminDashboardSpaceServiceGroundsGroundIdRoute._addFileChildren(
+    AdminDashboardSpaceServiceGroundsGroundIdRouteChildren,
+  )
 
 interface AdminDashboardSpaceServiceGroundsRouteChildren {
-	AdminDashboardSpaceServiceGroundsGroundIdRoute: typeof AdminDashboardSpaceServiceGroundsGroundIdRouteWithChildren;
+  AdminDashboardSpaceServiceGroundsGroundIdRoute: typeof AdminDashboardSpaceServiceGroundsGroundIdRouteWithChildren
 }
 
 const AdminDashboardSpaceServiceGroundsRouteChildren: AdminDashboardSpaceServiceGroundsRouteChildren =
-	{
-		AdminDashboardSpaceServiceGroundsGroundIdRoute:
-			AdminDashboardSpaceServiceGroundsGroundIdRouteWithChildren,
-	};
+  {
+    AdminDashboardSpaceServiceGroundsGroundIdRoute:
+      AdminDashboardSpaceServiceGroundsGroundIdRouteWithChildren,
+  }
 
 const AdminDashboardSpaceServiceGroundsRouteWithChildren =
-	AdminDashboardSpaceServiceGroundsRoute._addFileChildren(
-		AdminDashboardSpaceServiceGroundsRouteChildren,
-	);
+  AdminDashboardSpaceServiceGroundsRoute._addFileChildren(
+    AdminDashboardSpaceServiceGroundsRouteChildren,
+  )
 
 interface AdminDashboardSpaceServiceRouteChildren {
-	AdminDashboardSpaceServiceCategoriesRoute: typeof AdminDashboardSpaceServiceCategoriesRouteWithChildren;
-	AdminDashboardSpaceServiceGroundsRoute: typeof AdminDashboardSpaceServiceGroundsRouteWithChildren;
+  AdminDashboardSpaceServiceCategoriesRoute: typeof AdminDashboardSpaceServiceCategoriesRouteWithChildren
+  AdminDashboardSpaceServiceGroundsRoute: typeof AdminDashboardSpaceServiceGroundsRouteWithChildren
 }
 
 const AdminDashboardSpaceServiceRouteChildren: AdminDashboardSpaceServiceRouteChildren =
-	{
-		AdminDashboardSpaceServiceCategoriesRoute:
-			AdminDashboardSpaceServiceCategoriesRouteWithChildren,
-		AdminDashboardSpaceServiceGroundsRoute:
-			AdminDashboardSpaceServiceGroundsRouteWithChildren,
-	};
+  {
+    AdminDashboardSpaceServiceCategoriesRoute:
+      AdminDashboardSpaceServiceCategoriesRouteWithChildren,
+    AdminDashboardSpaceServiceGroundsRoute:
+      AdminDashboardSpaceServiceGroundsRouteWithChildren,
+  }
 
 const AdminDashboardSpaceServiceRouteWithChildren =
-	AdminDashboardSpaceServiceRoute._addFileChildren(
-		AdminDashboardSpaceServiceRouteChildren,
-	);
+  AdminDashboardSpaceServiceRoute._addFileChildren(
+    AdminDashboardSpaceServiceRouteChildren,
+  )
 
 interface AdminDashboardUserServiceRouteChildren {
-	AdminDashboardUserServiceUsersRoute: typeof AdminDashboardUserServiceUsersRoute;
+  AdminDashboardUserServiceUsersRoute: typeof AdminDashboardUserServiceUsersRoute
 }
 
 const AdminDashboardUserServiceRouteChildren: AdminDashboardUserServiceRouteChildren =
-	{
-		AdminDashboardUserServiceUsersRoute: AdminDashboardUserServiceUsersRoute,
-	};
+  {
+    AdminDashboardUserServiceUsersRoute: AdminDashboardUserServiceUsersRoute,
+  }
 
 const AdminDashboardUserServiceRouteWithChildren =
-	AdminDashboardUserServiceRoute._addFileChildren(
-		AdminDashboardUserServiceRouteChildren,
-	);
+  AdminDashboardUserServiceRoute._addFileChildren(
+    AdminDashboardUserServiceRouteChildren,
+  )
 
 interface AdminDashboardRouteChildren {
-	AdminDashboardSpaceServiceRoute: typeof AdminDashboardSpaceServiceRouteWithChildren;
-	AdminDashboardUserServiceRoute: typeof AdminDashboardUserServiceRouteWithChildren;
-	AdminDashboardIndexRoute: typeof AdminDashboardIndexRoute;
+  AdminDashboardSpaceServiceRoute: typeof AdminDashboardSpaceServiceRouteWithChildren
+  AdminDashboardUserServiceRoute: typeof AdminDashboardUserServiceRouteWithChildren
+  AdminDashboardIndexRoute: typeof AdminDashboardIndexRoute
 }
 
 const AdminDashboardRouteChildren: AdminDashboardRouteChildren = {
-	AdminDashboardSpaceServiceRoute: AdminDashboardSpaceServiceRouteWithChildren,
-	AdminDashboardUserServiceRoute: AdminDashboardUserServiceRouteWithChildren,
-	AdminDashboardIndexRoute: AdminDashboardIndexRoute,
-};
+  AdminDashboardSpaceServiceRoute: AdminDashboardSpaceServiceRouteWithChildren,
+  AdminDashboardUserServiceRoute: AdminDashboardUserServiceRouteWithChildren,
+  AdminDashboardIndexRoute: AdminDashboardIndexRoute,
+}
 
 const AdminDashboardRouteWithChildren = AdminDashboardRoute._addFileChildren(
-	AdminDashboardRouteChildren,
-);
+  AdminDashboardRouteChildren,
+)
 
 interface AdminRouteChildren {
-	AdminAuthRoute: typeof AdminAuthRouteWithChildren;
-	AdminDashboardRoute: typeof AdminDashboardRouteWithChildren;
+  AdminAuthRoute: typeof AdminAuthRouteWithChildren
+  AdminDashboardRoute: typeof AdminDashboardRouteWithChildren
 }
 
 const AdminRouteChildren: AdminRouteChildren = {
-	AdminAuthRoute: AdminAuthRouteWithChildren,
-	AdminDashboardRoute: AdminDashboardRouteWithChildren,
-};
+  AdminAuthRoute: AdminAuthRouteWithChildren,
+  AdminDashboardRoute: AdminDashboardRouteWithChildren,
+}
 
-const AdminRouteWithChildren = AdminRoute._addFileChildren(AdminRouteChildren);
+const AdminRouteWithChildren = AdminRoute._addFileChildren(AdminRouteChildren)
 
 const rootRouteChildren: RootRouteChildren = {
-	IndexRoute: IndexRoute,
-	AdminRoute: AdminRouteWithChildren,
-};
+  IndexRoute: IndexRoute,
+  AdminRoute: AdminRouteWithChildren,
+}
 export const routeTree = rootRouteImport
-	._addFileChildren(rootRouteChildren)
-	._addFileTypes<FileRouteTypes>();
+  ._addFileChildren(rootRouteChildren)
+  ._addFileTypes<FileRouteTypes>()
