@@ -52,6 +52,11 @@
       "outputs": ["dist/**"],
       "cache": true
     },
+    "server#start:dev": {
+      "dependsOn": ["^build"],
+      "cache": false,
+      "persistent": true
+    },
 
     // === DB 태스크 ===
     "db:push": {

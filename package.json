@@ -13,7 +13,7 @@
     "clean": "turbo clean",
     "type-check": "turbo type-check",
     "start:dev": "turbo start:dev",
-    "start:server": "turbo start:dev --filter=server",
+    "start:server": "turbo start:dev --filter=server...",
     "start:server:dev": "bash scripts/redis-port-forward.sh",
     "start:admin": "turbo start:dev --filter=admin",
     "start:storybook": "turbo start:dev --filter=storybook",

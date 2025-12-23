@@ -2,17 +2,11 @@
   "watch": [
     "src",
     "../../packages/decorator/dist",
-    "../../packages/decorator/src",
     "../../packages/dto/dist",
-    "../../packages/dto/src",
     "../../packages/entity/dist",
-    "../../packages/entity/src",
     "../../packages/enums/dist",
-    "../../packages/enums/src",
     "../../packages/schema/dist",
-    "../../packages/types/src",
-    "../../packages/toolkit/dist",
-    "../../packages/toolkit/src"
+    "../../packages/toolkit/dist"
   ],
   "ext": "ts,js",
   "ignore": [
