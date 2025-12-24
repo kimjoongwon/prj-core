@@ -108,3 +108,23 @@ export type ValueAggregator<TValue, TPaths extends readonly string[]> = (
 	values: Record<string, any>,
 	paths: TPaths,
 ) => TValue;
+
+// ============================================
+// Config 관련 타입
+// ============================================
+export type {
+	AllConfigType,
+	AppConfig,
+	AppleConfig,
+	AuthConfig,
+	AwsConfig,
+	CorsConfig,
+	DatabaseConfig,
+	FacebookConfig,
+	FileConfig,
+	GoogleConfig,
+	MailConfig,
+	RedisConfig,
+	SMTPConfig,
+	TwitterConfig,
+} from "./config.types";

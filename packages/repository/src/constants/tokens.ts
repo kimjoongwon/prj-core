@@ -1,0 +1,1 @@
+export const PRISMA_SERVICE_TOKEN = Symbol("PRISMA_SERVICE");
