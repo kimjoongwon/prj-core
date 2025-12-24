@@ -89,7 +89,7 @@ export {
 } from "./pipe";
 // Providers
 export { GeneratorProvider } from "./provider";
-// Repositories
+// Repositories - @cocrepo/repository 패키지에서 re-export
 export {
 	AssignmentsRepository,
 	CategoriesRepository,
@@ -99,11 +99,15 @@ export {
 	FilesRepository,
 	GroundsRepository,
 	GroupsRepository,
+	PRISMA_SERVICE_TOKEN,
 	ProgramsRepository,
 	RoleAssociationsRepository,
 	RoleClassificationsRepository,
 	RolesRepository,
 	RoutinesRepository,
+	SafeConfirmationRepository,
+	SafeTransactionRepository,
+	SafeWalletRepository,
 	SessionsRepository,
 	SpaceAssociationsRepository,
 	SpaceClassificationsRepository,
@@ -115,10 +119,11 @@ export {
 	UserAssociationsRepository,
 	UserClassificationsRepository,
 	UsersRepository,
-} from "./repository";
+} from "@cocrepo/repository";
 // Services
 export {
 	AssignmentsService,
+	AuthDomain,
 	AuthFacade,
 	AwsService,
 	CategoriesService,
@@ -150,9 +155,7 @@ export {
 	UserAssociationsService,
 	UserClassificationsService,
 	UsersService,
-} from "./service";
-// Domain
-export { AuthDomain } from "./service/domain/auth.domain";
+} from "@cocrepo/service";
 // Strategies
 export { JwtStrategy, LocalStrategy } from "./strategy";
 export type { ResponseWrapOptions, WrappedResponse } from "./util";

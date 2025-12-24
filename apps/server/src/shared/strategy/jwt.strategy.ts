@@ -104,7 +104,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
 				`JWT 전략 - 사용자 테넌트: ${JSON.stringify(user.tenants?.map((t) => ({ id: t.id, main: t.main })))}`,
 			);
 
-			// user 객체를 직접 반환 ({ user } 래핑하지 않음)
+			// User 엔티티를 직접 반환 (도메인 로직 포함)
 			return user;
 		} catch (error) {
 			const errorMessage =

@@ -1,0 +1,64 @@
+{
+  "name": "@cocrepo/service",
+  "version": "0.1.0",
+  "publishConfig": {
+    "access": "public"
+  },
+  "description": "Business logic and service layer for cocrepo",
+  "files": [
+    "dist",
+    "README.md"
+  ],
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
+  "scripts": {
+    "type-check": "tsc --noEmit",
+    "build": "tsup",
+    "start:dev": "tsup --watch",
+    "format": "biome format --write .",
+    "clean": "rm -rf dist && rm -rf node_modules"
+  },
+  "dependencies": {
+    "@cocrepo/constant": "workspace:*",
+    "@cocrepo/dto": "workspace:*",
+    "@cocrepo/entity": "workspace:*",
+    "@cocrepo/prisma": "workspace:*",
+    "@cocrepo/decorator": "workspace:*",
+    "@cocrepo/repository": "workspace:*",
+    "@cocrepo/toolkit": "workspace:*",
+    "@cocrepo/type": "workspace:*"
+  },
+  "peerDependencies": {
+    "@aws-sdk/client-s3": "^3.883.0",
+    "@nestjs/common": "^11.1.3",
+    "@nestjs/config": "^4.0.2",
+    "@nestjs/jwt": "^11.0.0",
+    "@nestjs/swagger": "^11.2.0",
+    "bcrypt": "^6.0.0",
+    "class-transformer": "^0.5.1",
+    "ioredis": "^5.8.2"
+  },
+  "devDependencies": {
+    "@aws-sdk/client-s3": "^3.883.0",
+    "@nestjs/common": "^11.1.3",
+    "@nestjs/config": "^4.0.2",
+    "@nestjs/jwt": "^11.0.0",
+    "@nestjs/swagger": "^11.2.0",
+    "@nestjs/testing": "^11.1.6",
+    "@types/bcrypt": "^5.0.2",
+    "@types/node": "catalog:",
+    "bcrypt": "^6.0.0",
+    "class-transformer": "^0.5.1",
+    "ioredis": "^5.8.2",
+    "tsup": "catalog:",
+    "typescript": "catalog:"
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.cjs"
+    }
+  }
+}

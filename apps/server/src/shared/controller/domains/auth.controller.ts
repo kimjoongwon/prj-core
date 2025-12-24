@@ -5,6 +5,7 @@ import {
 	TokenDto,
 	UserDto,
 } from "@cocrepo/dto";
+import { User } from "@cocrepo/entity";
 import {
 	Body,
 	Controller,
@@ -153,7 +154,7 @@ export class AuthController {
 	@ApiResponseEntity(TokenDto, HttpStatus.OK, { withSetCookie: true })
 	@ResponseMessage("토큰 갱신 성공")
 	async getNewToken(
-		@Req() req: Request & { user: UserDto },
+		@Req() req: Request & { user: User },
 		@Res({ passthrough: true }) res: Response,
 	): Promise<TokenDto> {
 		const refreshToken = req.cookies.refreshToken;
@@ -244,7 +245,7 @@ export class AuthController {
 	@ApiResponseEntity(Boolean, HttpStatus.OK)
 	@ResponseMessage("로그아웃 성공")
 	async logout(
-		@Req() req: Request & { user?: UserDto },
+		@Req() req: Request & { user?: User },
 		@Res({ passthrough: true }) res: Response,
 	) {
 		// Redis에서 토큰 무효화

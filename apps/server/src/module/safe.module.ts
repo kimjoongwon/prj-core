@@ -1,10 +1,10 @@
 import { Module } from "@nestjs/common";
-import { SafeController } from "@shared";
 import {
 	SafeConfirmationRepository,
+	SafeController,
 	SafeTransactionRepository,
 	SafeWalletRepository,
-} from "../shared/repository/safe.repository";
+} from "@shared";
 import { SafeService } from "../shared/service/resources/safe.service";
 
 @Module({
