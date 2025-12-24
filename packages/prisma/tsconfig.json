@@ -1,8 +1,6 @@
 {
   "compilerOptions": {
-    "target": "ES2022",
-    "module": "ESNext",
-    "moduleResolution": "bundler",
+    "module": "commonjs",
     "declaration": true,
     "declarationMap": true,
     "composite": false,
@@ -12,10 +10,7 @@
     "allowSyntheticDefaultImports": true,
     "esModuleInterop": true,
     "sourceMap": true,
-    "paths": {
-      "@cocrepo/prisma": ["./generated/client/client.ts"],
-      "@cocrepo/prisma/*": ["./generated/client/*"]
-    },
+    "rootDir": ".",
     "outDir": "./dist",
     "incremental": true,
     "tsBuildInfoFile": "./dist/.tsbuildinfo",
@@ -25,6 +20,6 @@
     "strictBindCallApply": false,
     "noFallthroughCasesInSwitch": false
   },
-  "include": ["src/**/*.ts", "generated/**/*.ts"],
-  "exclude": ["node_modules", "dist"]
+  "include": ["src/**/*.ts"],
+  "exclude": ["node_modules", "dist", "generated"]
 }

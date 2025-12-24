@@ -9,20 +9,19 @@
     "dist",
     "README.md"
   ],
-  "main": "./dist/index.cjs",
-  "module": "./dist/index.mjs",
+  "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
-      "import": "./dist/index.mjs",
-      "require": "./dist/index.cjs"
+      "require": "./dist/index.js",
+      "default": "./dist/index.js"
     }
   },
   "scripts": {
     "type-check": "tsc --noEmit",
-    "build": "tsup",
-    "start:dev": "tsup --watch",
+    "build": "tsc",
+    "start:dev": "tsc --watch",
     "format": "biome format --write .",
     "clean": "rm -rf dist && rm -rf node_modules"
   },

@@ -10,18 +10,18 @@
     "dist",
     "README.md"
   ],
-  "main": "./dist/index.cjs",
-  "module": "./dist/index.mjs",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
-      "import": "./dist/index.mjs",
-      "require": "./dist/index.cjs"
+      "require": "./dist/index.js",
+      "default": "./dist/index.js"
     }
   },
   "scripts": {
-    "start:dev": "tsup --watch",
-    "build": "tsup",
+    "start:dev": "tsc --watch",
+    "build": "tsc",
     "format": "biome format --write .",
     "type-check": "tsc --noEmit",
     "test": "vitest",

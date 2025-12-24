@@ -22,4 +22,4 @@
 // ============================================================================
 // Re-export from @prisma/client
 // ============================================================================
-export * from "../generated/client/client";
+export * from "./generated/client/client";

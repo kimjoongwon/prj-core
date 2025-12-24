@@ -5,9 +5,8 @@
     "access": "public"
   },
   "description": "Prisma schema and client for the core project",
-  "main": "./dist/index.cjs",
-  "module": "./dist/index.mjs",
-  "types": "./dist/index.d.ts",
+  "main": "./dist/src/index.js",
+  "types": "./dist/src/index.d.ts",
   "files": [
     "dist",
     "generated",
@@ -16,8 +15,8 @@
   "scripts": {
     "type-check": "tsc --noEmit",
     "generate": "prisma generate",
-    "build": "pnpm generate && tsup",
-    "start:dev": "tsup --watch",
+    "build": "pnpm generate && tsc",
+    "start:dev": "tsc --watch",
     "format": "biome format --write .",
     "db:push": "prisma db push",
     "db:pull": "prisma db pull",
@@ -68,9 +67,9 @@
   },
   "exports": {
     ".": {
-      "types": "./dist/index.d.ts",
-      "import": "./dist/index.mjs",
-      "require": "./dist/index.cjs"
+      "types": "./dist/src/index.d.ts",
+      "require": "./dist/src/index.js",
+      "default": "./dist/src/index.js"
     }
   }
 }
