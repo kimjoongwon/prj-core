@@ -26,8 +26,8 @@ function analyzeBundleSize(packageName) {
   const packageJson = JSON.parse(fs.readFileSync(packageJsonPath, "utf8"));
   const buildScript = packageJson.scripts?.build || "";
 
-  // 소스 직접 배포하는 패키지는 번들 사이즈 분석 스킵
-  if (buildScript.includes("echo") || !buildScript.includes("tsup")) {
+  // 소스 직접 배포하는 패키지는 번들 사이즈 분석 스킵 (echo만 있는 경우)
+  if (buildScript.includes("echo") && !buildScript.includes("tsc") && !buildScript.includes("tsup")) {
     console.log("\n" + "=".repeat(60));
     console.log("ℹ️  번들 사이즈 분석");
     console.log("=".repeat(60));
