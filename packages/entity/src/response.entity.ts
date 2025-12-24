@@ -1,7 +1,7 @@
 import { ClassField } from "@cocrepo/decorator";
+import type { IPageMeta } from "@cocrepo/type";
 import { HttpStatus } from "@nestjs/common";
 import { ApiProperty } from "@nestjs/swagger";
-import type { IPageMeta } from "./types/page-meta";
 
 /**
  * API 응답 엔티티

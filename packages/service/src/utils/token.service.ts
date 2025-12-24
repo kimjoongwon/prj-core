@@ -9,24 +9,12 @@ import { ConfigService } from "@nestjs/config";
 import { JwtService, NotBeforeError, TokenExpiredError } from "@nestjs/jwt";
 import { Request, Response } from "express";
 import { AuthConfig } from "@cocrepo/type";
+import {
+	AccessTokenCookieOptions,
+	RefreshTokenCookieOptions,
+	TokenPair,
+} from "@cocrepo/vo";
 import { TokenStorageService } from "./token-storage.service";
-
-// TODO: cookie.util을 별도 패키지로 분리 - 임시 inline 구현
-const getAccessTokenCookieOptions = (maxAge: string) => ({
-	httpOnly: true,
-	secure: process.env.NODE_ENV === "production",
-	sameSite: "lax" as const,
-	maxAge: Number.parseInt(maxAge) * 1000,
-	path: "/",
-});
-
-const getRefreshTokenCookieOptions = (maxAge: string) => ({
-	httpOnly: true,
-	secure: process.env.NODE_ENV === "production",
-	sameSite: "lax" as const,
-	maxAge: Number.parseInt(maxAge) * 1000,
-	path: "/",
-});
 
 @Injectable()
 export class TokenService {
@@ -50,12 +38,12 @@ export class TokenService {
 			throw new Error("Auth configuration is not defined.");
 		}
 
-		const options =
+		const cookieOptions =
 			key === Token.ACCESS
-				? getAccessTokenCookieOptions(authConfig.expires)
-				: getRefreshTokenCookieOptions(authConfig.refresh);
+				? AccessTokenCookieOptions.forAccessToken(authConfig.expires)
+				: RefreshTokenCookieOptions.forRefreshToken(authConfig.refresh);
 
-		return res.cookie(key, value, options);
+		return res.cookie(key, value, cookieOptions.toExpressCookieOptions());
 	}
 
 	/**
@@ -81,11 +69,15 @@ export class TokenService {
 			throw new Error("Auth configuration is not defined.");
 		}
 
-		const accessOptions = getAccessTokenCookieOptions(authConfig.expires);
-		const refreshOptions = getRefreshTokenCookieOptions(authConfig.refresh);
+		const accessOptions = AccessTokenCookieOptions.forAccessToken(
+			authConfig.expires,
+		);
+		const refreshOptions = RefreshTokenCookieOptions.forRefreshToken(
+			authConfig.refresh,
+		);
 
-		res.clearCookie(Token.ACCESS, accessOptions);
-		res.clearCookie(Token.REFRESH, refreshOptions);
+		res.clearCookie(Token.ACCESS, accessOptions.toExpressCookieOptions());
+		res.clearCookie(Token.REFRESH, refreshOptions.toExpressCookieOptions());
 	}
 
 	generateAccessToken(payload: { userId: string }) {
@@ -102,24 +94,26 @@ export class TokenService {
 		});
 	}
 
-	generateTokens(payload: { userId: string }) {
-		return {
-			accessToken: this.generateAccessToken(payload),
-			refreshToken: this.generateRefreshToken(payload),
-		};
+	generateTokens(payload: { userId: string }): TokenPair {
+		const accessToken = this.generateAccessToken(payload);
+		const refreshToken = this.generateRefreshToken(payload);
+
+		return TokenPair.fromStrings(accessToken, refreshToken);
 	}
 
 	/**
 	 * 토큰 생성 및 Redis에 Refresh Token 저장
 	 */
-	async generateTokensWithStorage(payload: { userId: string }) {
-		const tokens = this.generateTokens(payload);
+	async generateTokensWithStorage(payload: {
+		userId: string;
+	}): Promise<TokenPair> {
+		const tokenPair = this.generateTokens(payload);
 		await this.tokenStorageService.saveRefreshToken(
 			payload.userId,
-			tokens.refreshToken,
+			tokenPair.refreshToken.value,
 		);
 		this.logger.debug(`토큰 생성 및 Redis 저장 완료: userId=${payload.userId}`);
-		return tokens;
+		return tokenPair;
 	}
 
 	/**

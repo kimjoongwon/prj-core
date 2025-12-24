@@ -5,6 +5,7 @@ import {
 	UpdateUserAssociationDto,
 	UserAssociationDto,
 } from "@cocrepo/dto";
+import { UserAssociationsService } from "@cocrepo/service";
 import {
 	Body,
 	Controller,
@@ -18,7 +19,6 @@ import {
 	Query,
 } from "@nestjs/common";
 import { ApiTags } from "@nestjs/swagger";
-import { UserAssociationsService } from "../../service/resources/user-associations.service";
 import { wrapResponse } from "../../util/response.util";
 
 @ApiTags("USER-ASSOCIATIONS")

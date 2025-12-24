@@ -1,10 +1,7 @@
-// Domain
-export { AuthDomain } from "./domain";
-
 // Facade
 export { AuthFacade } from "./facade";
 
-// Resources (24개 서비스)
+// Resources (25개 서비스)
 export {
 	AssignmentsService,
 	CategoriesService,
@@ -19,6 +16,7 @@ export {
 	RoleClassificationsService,
 	RolesService,
 	RoutinesService,
+	SafeService,
 	SessionsService,
 	SpaceAssociationsService,
 	SpaceClassificationsService,
@@ -31,12 +29,18 @@ export {
 	UsersService,
 } from "./resources";
 
+// Safe Service DTOs
+export type {
+	AddConfirmationDto,
+	CreateSafeTransactionDto,
+	CreateSafeWalletDto,
+	ExecuteTransactionDto,
+} from "./resources/safe.service";
+
 // Utils
 export {
 	AwsService,
-	ContextService,
 	createPrismaClient,
-	PasswordService,
 	PrismaService,
 	RedisService,
 	TokenService,

@@ -1,24 +1,17 @@
-import { Module } from "@nestjs/common";
+import { UsersRepository } from "@cocrepo/repository";
 import {
-	AuthController,
-	AuthDomain,
 	AuthFacade,
-	ContextService,
-	JwtStrategy,
-	LocalStrategy,
-	PasswordService,
 	RedisService,
 	TokenService,
 	TokenStorageService,
-	UsersRepository,
 	UsersService,
-} from "@shared";
+} from "@cocrepo/service";
+import { Module } from "@nestjs/common";
+import { AuthController, JwtStrategy, LocalStrategy } from "@shared";
 
 @Module({
 	providers: [
-		AuthDomain,
 		AuthFacade,
-		PasswordService,
 		TokenService,
 		TokenStorageService,
 		RedisService,
@@ -26,7 +19,6 @@ import {
 		JwtStrategy,
 		UsersService,
 		UsersRepository,
-		ContextService,
 	],
 	controllers: [AuthController],
 	exports: [AuthFacade, TokenStorageService, RedisService],

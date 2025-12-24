@@ -6,6 +6,7 @@ import {
 	QueryExerciseDto,
 	UpdateExerciseDto,
 } from "@cocrepo/dto";
+import { ExercisesService } from "@cocrepo/service";
 import {
 	Body,
 	Controller,
@@ -19,7 +20,6 @@ import {
 	Query,
 } from "@nestjs/common";
 import { ApiTags } from "@nestjs/swagger";
-import { ExercisesService } from "../../service/resources/exercises.service";
 import { wrapResponse } from "../../util/response.util";
 
 @ApiTags("EXERCISES")

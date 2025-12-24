@@ -1,9 +1,7 @@
+import { RoleAssociationsRepository } from "@cocrepo/repository";
+import { RoleAssociationsService } from "@cocrepo/service";
 import { Module } from "@nestjs/common";
-import {
-	RoleAssociationsController,
-	RoleAssociationsRepository,
-	RoleAssociationsService,
-} from "@shared";
+import { RoleAssociationsController } from "@shared";
 
 @Module({
 	providers: [RoleAssociationsService, RoleAssociationsRepository],

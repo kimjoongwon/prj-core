@@ -1,9 +1,7 @@
+import { FileClassificationsRepository } from "@cocrepo/repository";
+import { FileClassificationsService } from "@cocrepo/service";
 import { Module } from "@nestjs/common";
-import {
-	FileClassificationsController,
-	FileClassificationsRepository,
-	FileClassificationsService,
-} from "@shared";
+import { FileClassificationsController } from "@shared";
 
 @Module({
 	controllers: [FileClassificationsController],

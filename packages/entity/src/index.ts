@@ -28,9 +28,6 @@ export * from "./subject.entity";
 export * from "./task.entity";
 export * from "./tenant.entity";
 export * from "./timeline.entity";
-// Types
-export * from "./types/json";
-export * from "./types/page-meta";
 export * from "./user.entity";
 export * from "./user-association.entity";
 export * from "./user-classification.entity";

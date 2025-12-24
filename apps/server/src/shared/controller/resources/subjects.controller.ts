@@ -6,6 +6,7 @@ import {
 	SubjectDto,
 	type UpdateSubjectDto,
 } from "@cocrepo/dto";
+import { SubjectsService } from "@cocrepo/service";
 import {
 	Body,
 	Controller,
@@ -19,7 +20,6 @@ import {
 	Query,
 } from "@nestjs/common";
 import { ApiTags } from "@nestjs/swagger";
-import { SubjectsService } from "../../service/resources/subjects.service";
 import { wrapResponse } from "../../util/response.util";
 
 @ApiTags("SUBJECTS")

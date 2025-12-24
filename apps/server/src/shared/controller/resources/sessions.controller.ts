@@ -6,6 +6,7 @@ import {
 	SessionDto,
 	type UpdateSessionDto,
 } from "@cocrepo/dto";
+import { SessionsService } from "@cocrepo/service";
 import {
 	Body,
 	Controller,
@@ -19,7 +20,6 @@ import {
 	Query,
 } from "@nestjs/common";
 import { ApiTags } from "@nestjs/swagger";
-import { SessionsService } from "../../service";
 import { wrapResponse } from "../../util/response.util";
 
 @ApiTags("SESSION")

@@ -5,6 +5,7 @@ import {
 	SpaceAssociationDto,
 	UpdateSpaceAssociationDto,
 } from "@cocrepo/dto";
+import { SpaceAssociationsService } from "@cocrepo/service";
 import {
 	Body,
 	Controller,
@@ -18,7 +19,6 @@ import {
 	Query,
 } from "@nestjs/common";
 import { ApiTags } from "@nestjs/swagger";
-import { SpaceAssociationsService } from "../../service/resources/space-associations.service";
 import { wrapResponse } from "../../util/response.util";
 
 @ApiTags("SPACE-ASSOCIATIONS")

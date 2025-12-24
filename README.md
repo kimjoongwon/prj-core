@@ -125,6 +125,10 @@ prj-core/
 │   │   │   ├── hooks/            # React Hooks
 │   │   │   └── providers/        # Context Providers
 │   │   └── package.json
+│   ├── agent/                     # AI Agent 애플리케이션
+│   │   └── package.json
+│   ├── coin/                      # 코인/결제 애플리케이션
+│   │   └── package.json
 │   ├── server/                    # Backend API (NestJS)
 │   │   ├── src/
 │   │   │   ├── module/           # 기능별 모듈
@@ -134,7 +138,7 @@ prj-core/
 │   └── storybook/                 # UI 컴포넌트 문서화
 │       └── package.json
 ├── packages/                      # 공유 패키지
-│   ├── api-client/               # 자동 생성 API 클라이언트 (Orval)
+│   ├── api/                      # 자동 생성 API 클라이언트 (Orval)
 │   ├── constant/                 # 공통 상수
 │   │   └── src/
 │   │       ├── routing/         # 프론트엔드 라우팅 상수
@@ -156,22 +160,36 @@ prj-core/
 │   │       └── query/           # 조회 DTO
 │   ├── entity/                   # 데이터베이스 엔티티 타입
 │   │   └── src/
-│   │       ├── *.entity.ts      # 엔티티 정의
-│   │       └── types/           # JSON, 페이지네이션 타입
+│   │       └── *.entity.ts      # 엔티티 정의
 │   ├── enum/                     # 공유 열거형
 │   │   └── src/
 │   │       └── *.enum.ts        # 카테고리, 그룹, 세션 타입 등
 │   ├── hook/                     # 공유 React Hook
-│   ├── provider/                 # 공유 Provider
-│   ├── schema/                   # Prisma 스키마 (DB 전용)
+│   ├── prisma/                   # Prisma 스키마 & Client
 │   │   └── prisma/
 │   │       ├── models/          # Prisma 모델 정의
 │   │       ├── migrations/      # DB 마이그레이션
 │   │       └── seed.ts          # 시드 데이터
+│   ├── repository/               # Repository 패턴 구현
+│   │   └── src/
+│   │       └── repositories/    # 각 엔티티별 Repository
+│   ├── service/                  # 비즈니스 로직 & 서비스 레이어
+│   │   └── src/
+│   │       ├── facade/          # Facade 패턴 서비스
+│   │       ├── resources/       # 리소스별 서비스
+│   │       └── utils/           # 서비스 유틸리티
 │   ├── store/                    # 공유 상태 관리 (MobX)
 │   ├── toolkit/                  # 유틸리티 함수
 │   ├── type/                     # 공유 TypeScript 타입
-│   └── ui/                       # 공유 UI 컴포넌트
+│   │   └── src/
+│   │       ├── config.types.ts  # 설정 관련 타입
+│   │       ├── json.ts          # JSON 타입 (Prisma 7 호환)
+│   │       ├── page-meta.ts     # 페이지네이션 타입
+│   │       └── index.ts         # 타입 유틸리티 (Paths, Leaves 등)
+│   ├── ui/                       # 공유 UI 컴포넌트
+│   └── vo/                       # Value Object (도메인 불변 값)
+│       └── src/
+│           └── *.vo.ts          # Value Object 정의
 ├── scripts/                       # 빌드/배포 스크립트
 ├── devops/                        # 인프라 설정
 ├── biome.json                     # Biome 설정
@@ -188,66 +206,104 @@ graph TD
         Admin[Admin App]
         Server[Server API]
         Storybook[Storybook]
+        Agent[Agent App]
+        Coin[Coin App]
     end
 
-    subgraph "Core Packages"
-        Constant[constant]
-        Enum[enum]
+    subgraph "Foundation Packages"
         Type[type]
+        Enum[enum]
+        Constant[constant]
         Toolkit[toolkit]
     end
 
-    subgraph "Backend Packages"
-        Schema[schema - Prisma]
-        Decorator[decorator]
+    subgraph "Data Layer"
+        Prisma[prisma]
+        VO[vo - Value Object]
         Entity[entity]
-        DTO[dto]
     end
 
-    subgraph "Frontend Packages"
+    subgraph "Backend Core"
+        Decorator[decorator]
+        DTO[dto]
+        Repository[repository]
+        Service[service]
+    end
+
+    subgraph "Frontend Core"
         DesignSystem[design-system]
         UI[ui]
-        Store[store]
         Hook[hook]
-        ApiClient[api-client]
-        Provider[provider]
+        Store[store]
+        ApiClient[api]
     end
 
     %% Application Dependencies
+    Server --> Service
+    Server --> Repository
+    Server --> DTO
+    Server --> Decorator
+    Server --> Prisma
+    Server --> Constant
+    Server --> Toolkit
+
     Admin --> ApiClient
     Admin --> UI
     Admin --> Store
     Admin --> DesignSystem
-    Admin --> Hook
-    Admin --> Constant
-
-    Server --> Schema
-    Server --> DTO
-    Server --> Entity
-    Server --> Decorator
-    Server --> Enum
-    Server --> Constant
+    Admin --> Toolkit
 
     Storybook --> UI
     Storybook --> DesignSystem
 
-    %% Package Dependencies
-    Decorator --> Constant
-    Entity --> Decorator
-    Entity --> Type
+    %% Backend Package Dependencies
+    Service --> Repository
+    Service --> DTO
+    Service --> Entity
+    Service --> VO
+    Service --> Decorator
+    Service --> Prisma
+    Service --> Type
+    Service --> Constant
+    Service --> Toolkit
+
+    Repository --> Prisma
+    Repository --> Entity
+
     DTO --> Entity
     DTO --> Decorator
     DTO --> Enum
+    DTO --> Constant
+    DTO --> Toolkit
 
-    UI --> Toolkit
+    Entity --> Prisma
+    Entity --> Decorator
+    Entity --> Type
+
+    Decorator --> Prisma
+    Decorator --> Constant
+    Decorator --> Toolkit
+
+    %% Frontend Package Dependencies
+    UI --> Hook
     UI --> Type
-    Store --> Type
+    UI --> Toolkit
+    UI --> ApiClient
+
+    Hook --> Type
+    Hook --> Toolkit
+
+    Store --> Toolkit
+
     ApiClient --> Type
+
     DesignSystem --> UI
 ```
 
-> **📝 참고**: 기존 `packages/schema`에서 DTO, Entity, Enum, Decorator가 별도 패키지로 분리되었습니다.
-> 마이그레이션 가이드: [docs/SCHEMA-REFACTORING.md](./docs/SCHEMA-REFACTORING.md)
+> **📝 참고**: 모노레포 아키텍처 개선으로 패키지가 재구성되었습니다.
+> - `packages/schema` → `packages/prisma`로 변경
+> - `packages/type`, `packages/vo`, `packages/repository`, `packages/service` 신규 추가
+> - DTO, Entity, Enum, Decorator가 독립 패키지로 분리
 
 ## 🚀 시작하기
 
@@ -285,7 +341,7 @@ cp .env.example .env
 4. **데이터베이스 마이그레이션**
 
 ```bash
-cd packages/schema
+cd packages/prisma
 pnpm prisma migrate dev
 pnpm prisma db seed
 ```
@@ -386,7 +442,7 @@ pnpm release:major
 ### 데이터베이스 관리
 
 ```bash
-cd packages/schema
+cd packages/prisma
 
 # Prisma 명령어
 pnpm prisma migrate dev      # 마이그레이션 생성 및 적용
@@ -399,7 +455,7 @@ pnpm prisma generate         # Prisma Client 재생성
 ### API 클라이언트 재생성
 
 ```bash
-cd packages/api-client
+cd packages/api
 
 # OpenAPI 스펙에서 클라이언트 생성
 pnpm generate
@@ -481,7 +537,7 @@ Kubernetes 환경에서는 OpenBao를 통해 환경 변수가 자동으로 주�
 
 ## 📚 추가 문서
 
-- [Prisma Schema 설계 가이드](./packages/schema/prisma/models/task.example.md)
+- [Prisma Schema 설계 가이드](./packages/prisma/prisma/models/task.example.md)
 - [API 문서](http://localhost:3000/api/docs) (서버 실행 후 접속)
 - [Storybook](http://localhost:6006) (Storybook 실행 후 접속)
 

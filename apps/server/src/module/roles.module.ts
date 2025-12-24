@@ -1,5 +1,7 @@
+import { RolesRepository } from "@cocrepo/repository";
+import { RolesService } from "@cocrepo/service";
 import { Module } from "@nestjs/common";
-import { RolesController, RolesRepository, RolesService } from "@shared";
+import { RolesController } from "@shared";
 
 @Module({
 	controllers: [RolesController],

@@ -469,6 +469,12 @@ importers:
       '@cocrepo/prisma':
         specifier: workspace:^1.0.0
         version: link:../../packages/prisma
+      '@cocrepo/repository':
+        specifier: workspace:*
+        version: link:../../packages/repository
+      '@cocrepo/service':
+        specifier: workspace:*
+        version: link:../../packages/service
       '@cocrepo/toolkit':
         specifier: workspace:^1.3.0
         version: link:../../packages/toolkit
@@ -709,7 +715,7 @@ importers:
         version: 4.1.0(mobx@6.13.7)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
       nuqs:
         specifier: 'catalog:'
-        version: 2.6.0(@tanstack/react-router@1.132.2(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(next@16.1.0(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(react-router-dom@7.9.1(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(react-router@7.9.1(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(react@19.1.0)
+        version: 2.6.0(@tanstack/react-router@1.132.2(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(next@16.1.0(@babel/core@7.28.4)(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(react-router-dom@7.9.1(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(react-router@7.9.1(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(react@19.1.0)
       react:
         specifier: 'catalog:'
         version: 19.1.0
@@ -1055,6 +1061,104 @@ importers:
         specifier: 'catalog:'
         version: 3.2.4(@types/debug@4.1.12)(@types/node@24.5.2)(@vitest/browser@3.2.4)(@vitest/ui@3.2.4)(jiti@2.6.0)(jsdom@26.1.0(bufferutil@4.0.9)(utf-8-validate@5.0.10))(lightningcss@1.30.1)(msw@2.11.3(@types/node@24.5.2)(typescript@5.9.3))(terser@5.44.0)(tsx@4.20.5)(yaml@2.8.1)
 
+  packages/repository:
+    dependencies:
+      '@cocrepo/entity':
+        specifier: workspace:*
+        version: link:../entity
+      '@cocrepo/prisma':
+        specifier: workspace:*
+        version: link:../prisma
+      class-transformer:
+        specifier: ^0.5.1
+        version: 0.5.1
+    devDependencies:
+      '@nestjs/common':
+        specifier: ^11.1.3
+        version: 11.1.6(class-transformer@0.5.1)(class-validator@0.14.2)(reflect-metadata@0.2.2)(rxjs@7.8.2)
+      '@types/node':
+        specifier: 'catalog:'
+        version: 24.5.2
+      tsup:
+        specifier: 'catalog:'
+        version: 8.5.0(@swc/core@1.13.5(@swc/helpers@0.5.17))(jiti@2.6.0)(postcss@8.5.6)(tsx@4.20.5)(typescript@5.9.3)(yaml@2.8.1)
+      typescript:
+        specifier: 'catalog:'
+        version: 5.9.3
+
+  packages/service:
+    dependencies:
+      '@cocrepo/constant':
+        specifier: workspace:*
+        version: link:../constant
+      '@cocrepo/decorator':
+        specifier: workspace:*
+        version: link:../decorator
+      '@cocrepo/dto':
+        specifier: workspace:*
+        version: link:../dto
+      '@cocrepo/entity':
+        specifier: workspace:*
+        version: link:../entity
+      '@cocrepo/prisma':
+        specifier: workspace:*
+        version: link:../prisma
+      '@cocrepo/repository':
+        specifier: workspace:*
+        version: link:../repository
+      '@cocrepo/toolkit':
+        specifier: workspace:*
+        version: link:../toolkit
+      '@cocrepo/type':
+        specifier: workspace:*
+        version: link:../type
+      '@cocrepo/vo':
+        specifier: workspace:*
+        version: link:../vo
+      libphonenumber-js:
+        specifier: ^1.11.17
+        version: 1.12.21
+    devDependencies:
+      '@aws-sdk/client-s3':
+        specifier: ^3.883.0
+        version: 3.895.0
+      '@nestjs/common':
+        specifier: ^11.1.3
+        version: 11.1.6(class-transformer@0.5.1)(class-validator@0.14.2)(reflect-metadata@0.2.2)(rxjs@7.8.2)
+      '@nestjs/config':
+        specifier: ^4.0.2
+        version: 4.0.2(@nestjs/common@11.1.6(class-transformer@0.5.1)(class-validator@0.14.2)(reflect-metadata@0.2.2)(rxjs@7.8.2))(rxjs@7.8.2)
+      '@nestjs/jwt':
+        specifier: ^11.0.0
+        version: 11.0.0(@nestjs/common@11.1.6(class-transformer@0.5.1)(class-validator@0.14.2)(reflect-metadata@0.2.2)(rxjs@7.8.2))
+      '@nestjs/swagger':
+        specifier: ^11.2.0
+        version: 11.2.0(@nestjs/common@11.1.6(class-transformer@0.5.1)(class-validator@0.14.2)(reflect-metadata@0.2.2)(rxjs@7.8.2))(@nestjs/core@11.1.6)(class-transformer@0.5.1)(class-validator@0.14.2)(reflect-metadata@0.2.2)
+      '@nestjs/testing':
+        specifier: ^11.1.6
+        version: 11.1.6(@nestjs/common@11.1.6(class-transformer@0.5.1)(class-validator@0.14.2)(reflect-metadata@0.2.2)(rxjs@7.8.2))(@nestjs/core@11.1.6)(@nestjs/platform-express@11.1.6)
+      '@types/bcrypt':
+        specifier: ^5.0.2
+        version: 5.0.2
+      '@types/node':
+        specifier: 'catalog:'
+        version: 24.5.2
+      bcrypt:
+        specifier: ^6.0.0
+        version: 6.0.0
+      class-transformer:
+        specifier: ^0.5.1
+        version: 0.5.1
+      ioredis:
+        specifier: ^5.8.2
+        version: 5.8.2
+      tsup:
+        specifier: 'catalog:'
+        version: 8.5.0(@swc/core@1.13.5(@swc/helpers@0.5.17))(jiti@2.6.0)(postcss@8.5.6)(tsx@4.20.5)(typescript@5.9.3)(yaml@2.8.1)
+      typescript:
+        specifier: 'catalog:'
+        version: 5.9.3
+
   packages/store:
     devDependencies:
       '@cocrepo/toolkit':
@@ -1300,7 +1404,7 @@ importers:
         version: 2.11.3(@types/node@24.5.2)(typescript@5.9.3)
       nuqs:
         specifier: 'catalog:'
-        version: 2.6.0(@tanstack/react-router@1.132.2(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(next@16.1.0(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(react-router-dom@7.9.1(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(react-router@7.9.1(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(react@19.1.0)
+        version: 2.6.0(@tanstack/react-router@1.132.2(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(next@16.1.0(@babel/core@7.28.4)(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(react-router-dom@7.9.1(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(react-router@7.9.1(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(react@19.1.0)
       path-parser:
         specifier: 6.1.0
         version: 6.1.0
@@ -1340,6 +1444,27 @@ importers:
       vitest:
         specifier: 'catalog:'
         version: 3.2.4(@types/debug@4.1.12)(@types/node@24.5.2)(@vitest/browser@3.2.4)(@vitest/ui@3.2.4)(jiti@2.6.0)(jsdom@26.1.0(bufferutil@4.0.9)(utf-8-validate@5.0.10))(lightningcss@1.30.1)(msw@2.11.3(@types/node@24.5.2)(typescript@5.9.3))(terser@5.44.0)(tsx@4.20.5)(yaml@2.8.1)
+
+  packages/vo:
+    devDependencies:
+      '@types/bcrypt':
+        specifier: ^5.0.2
+        version: 5.0.2
+      '@types/node':
+        specifier: 'catalog:'
+        version: 24.5.2
+      bcrypt:
+        specifier: ^6.0.0
+        version: 6.0.0
+      libphonenumber-js:
+        specifier: ^1.11.17
+        version: 1.12.21
+      tsup:
+        specifier: 'catalog:'
+        version: 8.5.0(@swc/core@1.13.5(@swc/helpers@0.5.17))(jiti@2.6.0)(postcss@8.5.6)(tsx@4.20.5)(typescript@5.9.3)(yaml@2.8.1)
+      typescript:
+        specifier: 'catalog:'
+        version: 5.9.3
 
 packages:
 
@@ -17431,7 +17556,7 @@ snapshots:
       debug: 4.4.3(supports-color@5.5.0)
       lodash: 4.17.21
       pony-cause: 2.1.11
-      semver: 7.7.2
+      semver: 7.7.3
       uuid: 9.0.1
     transitivePeerDependencies:
       - supports-color
@@ -25079,7 +25204,7 @@ snapshots:
       '@one-ini/wasm': 0.1.1
       commander: 10.0.1
       minimatch: 9.0.1
-      semver: 7.7.2
+      semver: 7.7.3
     optional: true
 
   ee-first@1.1.1: {}

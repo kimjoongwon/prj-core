@@ -5,6 +5,7 @@ import {
 	QueryFileAssociationDto,
 	UpdateFileAssociationDto,
 } from "@cocrepo/dto";
+import { FileAssociationsService } from "@cocrepo/service";
 import {
 	Body,
 	Controller,
@@ -18,7 +19,6 @@ import {
 	Query,
 } from "@nestjs/common";
 import { ApiTags } from "@nestjs/swagger";
-import { FileAssociationsService } from "../../service/resources/file-associations.service";
 import { wrapResponse } from "../../util/response.util";
 
 @ApiTags("FILE-ASSOCIATIONS")

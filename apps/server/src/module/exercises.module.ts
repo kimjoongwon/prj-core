@@ -1,13 +1,10 @@
+import { ExercisesRepository } from "@cocrepo/repository";
+import { ExercisesService } from "@cocrepo/service";
 import { Module } from "@nestjs/common";
-import {
-	ContextService,
-	ExercisesController,
-	ExercisesRepository,
-	ExercisesService,
-} from "@shared";
+import { ExercisesController } from "@shared";
 
 @Module({
 	controllers: [ExercisesController],
-	providers: [ExercisesService, ExercisesRepository, ContextService],
+	providers: [ExercisesService, ExercisesRepository],
 })
 export class ExercisesModule {}

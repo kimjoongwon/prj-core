@@ -1,3 +1,4 @@
+import { RedisConfig } from "@cocrepo/type";
 import {
 	Injectable,
 	Logger,
@@ -6,7 +7,6 @@ import {
 } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
 import Redis from "ioredis";
-import { RedisConfig } from "@cocrepo/type";
 
 @Injectable()
 export class RedisService implements OnModuleInit, OnModuleDestroy {

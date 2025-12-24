@@ -1,5 +1,6 @@
 import { ApiFile, ApiResponseEntity } from "@cocrepo/decorator";
 import { CreateFileDto, FileDto } from "@cocrepo/dto";
+import { FilesService } from "@cocrepo/service";
 import {
 	Body,
 	Controller,
@@ -12,7 +13,6 @@ import {
 	UploadedFiles,
 } from "@nestjs/common";
 import { ResponseMessage } from "../../decorator/response-message.decorator";
-import { FilesService } from "../../service/resources/files.service";
 
 @Controller()
 export class FilesController {

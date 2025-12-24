@@ -1,4 +1,5 @@
 import { QueryUserDto } from "@cocrepo/dto";
+import { User } from "@cocrepo/entity";
 import { Prisma } from "@cocrepo/prisma";
 import { Injectable } from "@nestjs/common";
 import { UsersRepository } from "@cocrepo/repository";
@@ -22,8 +23,12 @@ export class UsersService {
 		return this.repository.delete({ where: { id } });
 	}
 
-	create(args: any) {
-		return this.repository.create(args);
+	/**
+	 * Entity를 받아서 사용자 생성
+	 */
+	async create(user: User): Promise<User> {
+		// 비즈니스 로직 추가 가능 (예: 이메일 중복 검증, 비밀번호 암호화 등)
+		return this.repository.create(user);
 	}
 
 	async getManyByQuery(query: QueryUserDto) {
@@ -46,12 +51,16 @@ export class UsersService {
 		return { users, count };
 	}
 
-	updateById(id: string, data: Prisma.UserUpdateInput) {
-		return this.repository.update({ where: { id }, data });
+	/**
+	 * Partial<Entity>를 받아서 사용자 업데이트
+	 */
+	updateById(id: string, userUpdate: Partial<User>): Promise<User> {
+		// 비즈니스 로직 추가 가능 (예: 권한 검증 등)
+		return this.repository.update(id, userUpdate);
 	}
 
 	removeById(id: string) {
-		return this.repository.update({
+		return this.repository.updateWithArgs({
 			where: { id },
 			data: { removedAt: new Date() },
 		});

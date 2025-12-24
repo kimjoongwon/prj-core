@@ -2,7 +2,7 @@ import { Exercise } from "@cocrepo/entity";
 import { Prisma } from "@cocrepo/prisma";
 import { Inject, Injectable, Logger } from "@nestjs/common";
 import { plainToInstance } from "class-transformer";
-import { PRISMA_SERVICE_TOKEN } from "../constants/tokens";
+import { PRISMA_SERVICE_TOKEN } from "@cocrepo/constant";
 import type { IPrismaClient } from "../types/prisma-client.interface";
 
 @Injectable()
@@ -11,7 +11,7 @@ export class ExercisesRepository {
 
 	constructor(
 		@Inject(PRISMA_SERVICE_TOKEN)
-		private readonly prisma: IPrismaClient
+		private readonly prisma: IPrismaClient,
 	) {
 		this.logger = new Logger("Exercise");
 	}

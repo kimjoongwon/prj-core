@@ -4,8 +4,9 @@
     "../../packages/decorator/dist",
     "../../packages/dto/dist",
     "../../packages/entity/dist",
-    "../../packages/enums/dist",
-    "../../packages/schema/dist",
+    "../../packages/enum/dist",
+    "../../packages/repository/dist",
+    "../../packages/service/dist",
     "../../packages/toolkit/dist"
   ],
   "ext": "ts,js",

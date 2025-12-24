@@ -1,6 +1,6 @@
 import { Prisma } from "@cocrepo/prisma";
 import { Inject, Injectable, Logger } from "@nestjs/common";
-import { PRISMA_SERVICE_TOKEN } from "../constants/tokens";
+import { PRISMA_SERVICE_TOKEN } from "@cocrepo/constant";
 import type { IPrismaClient } from "../types/prisma-client.interface";
 
 @Injectable()
@@ -9,7 +9,7 @@ export class SafeWalletRepository {
 
 	constructor(
 		@Inject(PRISMA_SERVICE_TOKEN)
-		private readonly prisma: IPrismaClient
+		private readonly prisma: IPrismaClient,
 	) {
 		this.logger = new Logger("SafeWallet");
 	}
@@ -51,7 +51,7 @@ export class SafeTransactionRepository {
 
 	constructor(
 		@Inject(PRISMA_SERVICE_TOKEN)
-		private readonly prisma: IPrismaClient
+		private readonly prisma: IPrismaClient,
 	) {
 		this.logger = new Logger("SafeTransaction");
 	}
@@ -93,7 +93,7 @@ export class SafeConfirmationRepository {
 
 	constructor(
 		@Inject(PRISMA_SERVICE_TOKEN)
-		private readonly prisma: IPrismaClient
+		private readonly prisma: IPrismaClient,
 	) {
 		this.logger = new Logger("SafeConfirmation");
 	}

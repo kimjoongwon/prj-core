@@ -5,6 +5,7 @@ import {
 	QueryGroundDto,
 	UpdateGroundDto,
 } from "@cocrepo/dto";
+import { GroundsService } from "@cocrepo/service";
 import {
 	Body,
 	Controller,
@@ -24,7 +25,6 @@ import {
 	ApiResponse,
 	ApiTags,
 } from "@nestjs/swagger";
-import { GroundsService } from "../../service/resources/grounds.service";
 import { wrapResponse } from "../../util/response.util";
 
 @ApiTags("GROUNDS")

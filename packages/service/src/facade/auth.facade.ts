@@ -1,23 +1,33 @@
-import { LoginPayloadDto, SignUpPayloadDto } from "@cocrepo/dto";
-import { Injectable, Logger, UnauthorizedException } from "@nestjs/common";
+import { PRISMA_SERVICE_TOKEN } from "@cocrepo/constant";
+import { LoginPayloadDto, QueryUserDto, SignUpPayloadDto } from "@cocrepo/dto";
+import { ResponseEntity } from "@cocrepo/entity";
+import { HashedPassword, PlainPassword } from "@cocrepo/vo";
+import {
+	BadRequestException,
+	HttpStatus,
+	Inject,
+	Injectable,
+	Logger,
+	UnauthorizedException,
+} from "@nestjs/common";
 import { JwtService } from "@nestjs/jwt";
-import { AuthDomain } from "../domain/auth.domain";
 import { UsersService } from "../resources/users.service";
-import { TokenService } from "../utils";
+import { PrismaService, TokenService } from "../utils";
 
 /**
- * 인증 Facade (Facade 패턴)
- * 도메인 로직 + 유틸리티 서비스 조합
+ * 인증 Facade
+ * 인증 관련 모든 비즈니스 로직 처리
  */
 @Injectable()
 export class AuthFacade {
 	logger: Logger = new Logger(AuthFacade.name);
 
 	constructor(
-		private authDomain: AuthDomain,
 		private usersService: UsersService,
 		private jwtService: JwtService,
 		private tokenService: TokenService,
+		@Inject(PRISMA_SERVICE_TOKEN)
+		private prisma: PrismaService,
 	) {}
 
 	/**
@@ -46,41 +56,128 @@ export class AuthFacade {
 		}
 
 		// 새로운 토큰 생성 및 Redis에 저장
-		const { accessToken: newAccessToken, refreshToken: newRefreshToken } =
-			await this.tokenService.generateTokensWithStorage({ userId });
+		const tokenPair = await this.tokenService.generateTokensWithStorage({
+			userId,
+		});
 
 		return {
-			newAccessToken,
-			newRefreshToken,
+			newAccessToken: tokenPair.accessToken.value,
+			newRefreshToken: tokenPair.refreshToken.value,
 		};
 	}
 
 	/**
-	 * 사용자 검증 (도메인 로직 위임)
+	 * 사용자 검증 (이메일/비밀번호)
 	 */
 	async validateUser(email: string, password: string) {
-		return this.authDomain.validateUser(email, password);
+		const user = await this.usersService.getByEmail(email);
+
+		const plainPassword = PlainPassword.create(password);
+		const storedHash = HashedPassword.fromHash(user?.password || "");
+		const isPasswordValid = await storedHash.compare(plainPassword);
+
+		if (!isPasswordValid) {
+			this.logger.warn(
+				`Invalid password attempt for user: ${email}. User: ${JSON.stringify(user)}`,
+			);
+			throw new UnauthorizedException(
+				ResponseEntity.WITH_ERROR(
+					HttpStatus.UNAUTHORIZED,
+					"패스워드가 일치하지 않습니다.",
+				),
+			);
+		}
+
+		return user;
 	}
 
 	/**
-	 * 회원가입 (도메인 로직 위임)
+	 * 회원가입 처리
 	 */
 	async signUp(signUpPayloadDto: SignUpPayloadDto) {
-		return this.authDomain.signUp(signUpPayloadDto);
+		const { name, nickname, password, phone, spaceId, email } =
+			signUpPayloadDto;
+
+		// 유저 역할 확인
+		const userRole = await this.prisma.role.findFirst({
+			where: { name: "USER" },
+		});
+
+		if (!userRole) {
+			this.logger.error("User role not found");
+			throw new BadRequestException("유저 역할이 존재하지 않습니다.");
+		}
+
+		// Space 생성
+		const space = await this.prisma.space.create({
+			data: {},
+		});
+
+		// 비밀번호 해싱
+		const plainPassword = PlainPassword.create(password);
+		const hashedPassword = await HashedPassword.fromPlain(plainPassword);
+
+		// 사용자 생성
+		const { id: userId } = await this.prisma.user.create({
+			data: {
+				name,
+				email,
+				phone,
+				password: hashedPassword.value,
+				tenants: {
+					create: {
+						main: true,
+						spaceId: space.id,
+						roleId: userRole.id,
+					},
+				},
+				profiles: {
+					create: {
+						name,
+						nickname: nickname || name,
+					},
+				},
+			},
+		});
+
+		// 토큰 생성
+		const tokenPair = this.tokenService.generateTokens({ userId });
+		return tokenPair.toObject();
 	}
 
 	/**
-	 * 로그인 (도메인 로직 위임)
+	 * 로그인 처리
 	 */
-	async login(loginPayloadDto: LoginPayloadDto) {
-		const result = await this.authDomain.login(loginPayloadDto);
+	async login({ email, password }: LoginPayloadDto) {
+		const { users } = await this.usersService.getManyByQuery(
+			new QueryUserDto(),
+		);
+		const user = users?.find((u: any) => u.email === email);
 
-		// Refresh Token을 Redis에 저장
-		await this.tokenService.generateTokensWithStorage({
-			userId: result.user.id,
+		this.logger.log(`User: ${JSON.stringify(user)}`);
+
+		if (!user) {
+			throw new UnauthorizedException("유저가 존재하지 않습니다.");
+		}
+
+		// 비밀번호 검증
+		const plainPassword = PlainPassword.create(password);
+		const storedHash = HashedPassword.fromHash(user.password);
+		const passwordValid = await storedHash.compare(plainPassword);
+
+		if (!passwordValid) {
+			throw new BadRequestException("비밀번호가 일치하지 않습니다.");
+		}
+
+		// 토큰 생성 및 Redis 저장
+		const tokenPair = await this.tokenService.generateTokensWithStorage({
+			userId: user.id,
 		});
 
-		return result;
+		return {
+			...tokenPair.toObject(),
+			user,
+		};
 	}
 
 	/**

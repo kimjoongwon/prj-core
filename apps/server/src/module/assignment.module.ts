@@ -1,9 +1,7 @@
+import { AssignmentsRepository } from "@cocrepo/repository";
+import { AssignmentsService } from "@cocrepo/service";
 import { Module } from "@nestjs/common";
-import {
-	AssignmentsController,
-	AssignmentsRepository,
-	AssignmentsService,
-} from "@shared";
+import { AssignmentsController } from "@shared";
 
 @Module({
 	controllers: [AssignmentsController],

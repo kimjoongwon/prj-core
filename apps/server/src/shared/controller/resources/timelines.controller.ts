@@ -6,6 +6,7 @@ import {
 	TimelineDto,
 	type UpdateTimelineDto,
 } from "@cocrepo/dto";
+import { TimelinesService } from "@cocrepo/service";
 import {
 	Body,
 	Controller,
@@ -19,7 +20,6 @@ import {
 	Query,
 } from "@nestjs/common";
 import { ApiTags } from "@nestjs/swagger";
-import { TimelinesService } from "../../service/resources/timelines.service";
 import { wrapResponse } from "../../util/response.util";
 
 @ApiTags("TIMELINE")

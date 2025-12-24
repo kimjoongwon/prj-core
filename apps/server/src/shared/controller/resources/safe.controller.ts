@@ -1,11 +1,11 @@
-import { Body, Controller, Get, Param, Post, Put, Query } from "@nestjs/common";
 import {
 	AddConfirmationDto,
 	CreateSafeTransactionDto,
 	CreateSafeWalletDto,
 	ExecuteTransactionDto,
 	SafeService,
-} from "../../service/resources/safe.service";
+} from "@cocrepo/service";
+import { Body, Controller, Get, Param, Post, Put, Query } from "@nestjs/common";
 
 @Controller()
 export class SafeController {

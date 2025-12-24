@@ -1,3 +1,5 @@
+import { CONTEXT_KEYS } from "@cocrepo/constant";
+import { UsersService } from "@cocrepo/service";
 import {
 	Global,
 	Injectable,
@@ -7,9 +9,9 @@ import {
 import { ConfigService } from "@nestjs/config";
 import { PassportStrategy } from "@nestjs/passport";
 import { Request } from "express";
+import { ClsService } from "nestjs-cls";
 import { ExtractJwt, Strategy } from "passport-jwt";
-import { AuthConfig, ContextService } from "..";
-import { UsersService } from "../service/resources/users.service";
+import { AuthConfig } from "..";
 
 @Global()
 @Injectable()
@@ -19,7 +21,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
 	constructor(
 		readonly config: ConfigService,
 		readonly usersService: UsersService,
-		private readonly contextService: ContextService,
+		private readonly cls: ClsService,
 	) {
 		const authConfig = config.get<AuthConfig>("auth");
 
@@ -44,7 +46,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
 						this.logger.log(
 							`[쿠키 추출기] 토큰 미리보기: ${token.substring(0, 30)}...`,
 						);
-						this.contextService.setToken(token);
+						this.cls.set(CONTEXT_KEYS.TOKEN, token);
 						return token;
 					}
 					this.logger.log(
@@ -68,7 +70,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
 						this.logger.log(
 							`[헤더 추출기] 토큰 미리보기: ${token.substring(0, 30)}...`,
 						);
-						this.contextService.setToken(token);
+						this.cls.set(CONTEXT_KEYS.TOKEN, token);
 						return token;
 					}
 					this.logger.log(

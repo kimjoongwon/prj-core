@@ -3,6 +3,7 @@ import {
 	QueryRoleClassificationDto,
 	UpdateRoleClassificationDto,
 } from "@cocrepo/dto";
+import { RoleClassificationsService } from "@cocrepo/service";
 import {
 	Body,
 	Controller,
@@ -22,7 +23,6 @@ import {
 	ApiResponse,
 	ApiTags,
 } from "@nestjs/swagger";
-import { RoleClassificationsService } from "../../service/resources/role-classifications.service";
 import { wrapResponse } from "../../util/response.util";
 
 @ApiTags("ROLE_CLASSIFICATIONS")

@@ -5,6 +5,7 @@ import {
 	UpdateUserDto,
 	UserDto,
 } from "@cocrepo/dto";
+import { UsersService } from "@cocrepo/service";
 import {
 	Body,
 	Controller,
@@ -21,7 +22,6 @@ import {
 } from "@nestjs/common";
 import { ApiTags } from "@nestjs/swagger";
 import { Request } from "express";
-import { UsersService } from "../../service/resources/users.service";
 import { wrapResponse } from "../../util/response.util";
 
 @ApiTags("USERS")
@@ -35,10 +35,10 @@ export class UsersController {
 	@HttpCode(HttpStatus.OK)
 	@ApiResponseEntity(UserDto, HttpStatus.OK)
 	async createUser(@Body() createUserDto: CreateUserDto) {
-		const user = await this.service.create({
-			data: createUserDto,
-		});
-		return user;
+		// DTO → Entity 변환
+		const user = createUserDto.toEntity();
+		const savedUser = await this.service.create(user);
+		return savedUser;
 	}
 
 	@Get(":userId")
@@ -67,7 +67,9 @@ export class UsersController {
 		@Param("userId") userId: string,
 		@Body() updateUserDto: UpdateUserDto,
 	) {
-		const user = await this.service.updateById(userId, updateUserDto);
+		// DTO → Partial<Entity> 변환
+		const userUpdate = updateUserDto.toEntity();
+		const user = await this.service.updateById(userId, userUpdate);
 		return user;
 	}
 

@@ -1,5 +1,7 @@
+import { GroupsRepository } from "@cocrepo/repository";
+import { GroupsService } from "@cocrepo/service";
 import { Module } from "@nestjs/common";
-import { GroupsController, GroupsRepository, GroupsService } from "@shared";
+import { GroupsController } from "@shared";
 
 @Module({
 	controllers: [GroupsController],

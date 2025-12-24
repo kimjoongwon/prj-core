@@ -1,4 +1,5 @@
 import { PUBLIC_ROUTE_KEY } from "@cocrepo/decorator";
+import { TokenStorageService } from "@cocrepo/service";
 import {
 	ExecutionContext,
 	Injectable,
@@ -7,7 +8,6 @@ import {
 } from "@nestjs/common";
 import { Reflector } from "@nestjs/core";
 import { AuthGuard } from "@nestjs/passport";
-import { TokenStorageService } from "../service/utils/token-storage.service";
 
 @Injectable()
 export class JwtAuthGuard extends AuthGuard("jwt") {

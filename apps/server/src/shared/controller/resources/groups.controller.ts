@@ -5,6 +5,7 @@ import {
 	type QueryGroupDto,
 	type UpdateGroupDto,
 } from "@cocrepo/dto";
+import { GroupsService } from "@cocrepo/service";
 import {
 	Body,
 	Controller,
@@ -18,7 +19,6 @@ import {
 } from "@nestjs/common";
 import { ApiResponse, ApiTags } from "@nestjs/swagger";
 import { ResponseMessage } from "../../decorator/response-message.decorator";
-import { GroupsService } from "../../service";
 import { wrapResponse } from "../../util/response.util";
 
 @ApiTags("GROUPS")

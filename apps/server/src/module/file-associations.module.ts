@@ -1,9 +1,7 @@
+import { FileAssociationsRepository } from "@cocrepo/repository";
+import { FileAssociationsService } from "@cocrepo/service";
 import { Module } from "@nestjs/common";
-import {
-	FileAssociationsController,
-	FileAssociationsRepository,
-	FileAssociationsService,
-} from "@shared";
+import { FileAssociationsController } from "@shared";
 
 @Module({
 	providers: [FileAssociationsService, FileAssociationsRepository],

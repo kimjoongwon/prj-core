@@ -6,6 +6,7 @@ import {
 	type QueryProgramDto,
 	type UpdateProgramDto,
 } from "@cocrepo/dto";
+import { ProgramsService } from "@cocrepo/service";
 import {
 	Body,
 	Controller,
@@ -19,7 +20,6 @@ import {
 	Query,
 } from "@nestjs/common";
 import { ApiTags } from "@nestjs/swagger";
-import { ProgramsService } from "../../service/resources/programs.service";
 import { wrapResponse } from "../../util/response.util";
 
 @ApiTags("PROGRAM")

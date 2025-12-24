@@ -1,10 +1,11 @@
+import { TokenStorageService } from "@cocrepo/service";
 import {
 	ClassSerializerInterceptor,
 	INestApplication,
 	ValidationPipe,
 } from "@nestjs/common";
 import { HttpAdapterHost, Reflector } from "@nestjs/core";
-import { AllExceptionsFilter, TokenStorageService } from "@shared";
+import { AllExceptionsFilter } from "@shared";
 import { JwtAuthGuard } from "./shared/guard";
 import { DtoTransformInterceptor } from "./shared/interceptor/dto-transform.interceptor";
 import { RequestContextInterceptor } from "./shared/interceptor/request-context.interceptor";

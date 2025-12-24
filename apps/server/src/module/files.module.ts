@@ -1,5 +1,7 @@
+import { FilesRepository } from "@cocrepo/repository";
+import { FilesService } from "@cocrepo/service";
 import { Module } from "@nestjs/common";
-import { FilesController, FilesRepository, FilesService } from "@shared";
+import { FilesController } from "@shared";
 
 @Module({
 	controllers: [FilesController],

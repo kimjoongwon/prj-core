@@ -7,7 +7,7 @@ export default defineConfig((option) => ({
 	clean: !option.watch,
 	splitting: !option.watch,
 	sourcemap: !!option.watch,
-	minify: !option.watch,
+	minify: false,
 	watch: option.watch,
 	tsconfig: "./tsconfig.json",
 	shims: true,

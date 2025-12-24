@@ -9,13 +9,12 @@
     "dist",
     "README.md"
   ],
-  "main": "./dist/index.cjs",
-  "module": "./dist/index.mjs",
+  "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "scripts": {
     "type-check": "tsc --noEmit",
-    "build": "tsup",
-    "start:dev": "tsup --watch",
+    "build": "tsc",
+    "start:dev": "tsc --watch",
     "format": "biome format --write .",
     "clean": "rm -rf dist && rm -rf node_modules"
   },
@@ -27,7 +26,9 @@
     "@cocrepo/decorator": "workspace:*",
     "@cocrepo/repository": "workspace:*",
     "@cocrepo/toolkit": "workspace:*",
-    "@cocrepo/type": "workspace:*"
+    "@cocrepo/type": "workspace:*",
+    "@cocrepo/vo": "workspace:*",
+    "libphonenumber-js": "^1.11.17"
   },
   "peerDependencies": {
     "@aws-sdk/client-s3": "^3.883.0",
@@ -37,7 +38,8 @@
     "@nestjs/swagger": "^11.2.0",
     "bcrypt": "^6.0.0",
     "class-transformer": "^0.5.1",
-    "ioredis": "^5.8.2"
+    "ioredis": "^5.8.2",
+    "libphonenumber-js": "^1.11.17"
   },
   "devDependencies": {
     "@aws-sdk/client-s3": "^3.883.0",
@@ -51,14 +53,15 @@
     "bcrypt": "^6.0.0",
     "class-transformer": "^0.5.1",
     "ioredis": "^5.8.2",
+    "libphonenumber-js": "^1.11.17",
     "tsup": "catalog:",
     "typescript": "catalog:"
   },
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
-      "import": "./dist/index.mjs",
-      "require": "./dist/index.cjs"
+      "require": "./dist/index.js",
+      "default": "./dist/index.js"
     }
   }
 }

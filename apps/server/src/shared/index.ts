@@ -1,5 +1,4 @@
 // Config
-
 export type {
 	AllConfigType,
 	AppConfig,
@@ -24,7 +23,6 @@ export {
 	redisConfig,
 	smtpConfig,
 } from "./config";
-
 // Controllers
 export {
 	AssignmentsController,
@@ -53,13 +51,10 @@ export {
 	UserClassificationsController,
 	UsersController,
 } from "./controller";
-
 // Decorators
 export { ResponseMessage } from "./decorator";
-
 // Filters
 export { AllExceptionsFilter } from "./filter";
-
 // Guards
 export {
 	JwtAuthGuard,
@@ -70,13 +65,11 @@ export {
 	RoleGroupGuard,
 	RolesGuard,
 } from "./guard";
-
 // Interceptors
 export {
 	RequestContextInterceptor,
 	ResponseEntityInterceptor,
 } from "./interceptor";
-
 // Lib
 export { DateTimeUtil } from "./lib";
 // Middleware
@@ -89,73 +82,6 @@ export {
 } from "./pipe";
 // Providers
 export { GeneratorProvider } from "./provider";
-// Repositories - @cocrepo/repository 패키지에서 re-export
-export {
-	AssignmentsRepository,
-	CategoriesRepository,
-	ExercisesRepository,
-	FileAssociationsRepository,
-	FileClassificationsRepository,
-	FilesRepository,
-	GroundsRepository,
-	GroupsRepository,
-	PRISMA_SERVICE_TOKEN,
-	ProgramsRepository,
-	RoleAssociationsRepository,
-	RoleClassificationsRepository,
-	RolesRepository,
-	RoutinesRepository,
-	SafeConfirmationRepository,
-	SafeTransactionRepository,
-	SafeWalletRepository,
-	SessionsRepository,
-	SpaceAssociationsRepository,
-	SpaceClassificationsRepository,
-	SpacesRepository,
-	SubjectsRepository,
-	TasksRepository,
-	TenantsRepository,
-	TimelinesRepository,
-	UserAssociationsRepository,
-	UserClassificationsRepository,
-	UsersRepository,
-} from "@cocrepo/repository";
-// Services
-export {
-	AssignmentsService,
-	AuthDomain,
-	AuthFacade,
-	AwsService,
-	CategoriesService,
-	ContextService,
-	createPrismaClient,
-	ExercisesService,
-	FileAssociationsService,
-	FileClassificationsService,
-	FilesService,
-	GroundsService,
-	GroupsService,
-	PasswordService,
-	PrismaService,
-	ProgramsService,
-	RedisService,
-	RoleAssociationsService,
-	RoleClassificationsService,
-	RolesService,
-	RoutinesService,
-	SessionsService,
-	SpaceAssociationsService,
-	SpaceClassificationsService,
-	SpacesService,
-	SubjectsService,
-	TenantsService,
-	TimelinesService,
-	TokenService,
-	TokenStorageService,
-	UserAssociationsService,
-	UserClassificationsService,
-	UsersService,
-} from "@cocrepo/service";
 // Strategies
 export { JwtStrategy, LocalStrategy } from "./strategy";
 export type { ResponseWrapOptions, WrappedResponse } from "./util";

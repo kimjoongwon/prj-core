@@ -7,7 +7,7 @@ export default defineConfig((option) => ({
 	clean: !option.watch,
 	splitting: !option.watch,
 	sourcemap: !!option.watch,
-	minify: !option.watch,
+	minify: false,
 	watch: option.watch,
 	shims: true,
 	outExtension({ format }) {
@@ -15,8 +15,11 @@ export default defineConfig((option) => ({
 			js: format === "cjs" ? ".cjs" : ".mjs",
 		};
 	},
+	noExternal: [],
 	external: [
+		// AWS
 		"@aws-sdk/client-s3",
+		// NestJS
 		"@nestjs/common",
 		"@nestjs/config",
 		"@nestjs/jwt",
@@ -24,10 +27,19 @@ export default defineConfig((option) => ({
 		"@nestjs/core",
 		"@nestjs/websockets",
 		"@nestjs/microservices",
+		// Database
+		"@prisma/client",
+		"pg",
+		"pg-native",
+		"pg-pool",
+		"pg-cursor",
+		// Utilities
 		"bcrypt",
 		"class-transformer",
 		"ioredis",
+		"libphonenumber-js",
 		"express",
+		// Internal packages
 		"@cocrepo/constant",
 		"@cocrepo/dto",
 		"@cocrepo/entity",
@@ -36,5 +48,6 @@ export default defineConfig((option) => ({
 		"@cocrepo/toolkit",
 		"@cocrepo/repository",
 		"@cocrepo/type",
+		"@cocrepo/vo",
 	],
 }));

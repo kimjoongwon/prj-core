@@ -1,9 +1,7 @@
+import { SubjectsRepository } from "@cocrepo/repository";
+import { SubjectsService } from "@cocrepo/service";
 import { Module } from "@nestjs/common";
-import {
-	SubjectsController,
-	SubjectsRepository,
-	SubjectsService,
-} from "@shared";
+import { SubjectsController } from "@shared";
 
 @Module({
 	controllers: [SubjectsController],

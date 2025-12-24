@@ -4,8 +4,8 @@ import {
 	UpdateSpaceAssociationDto,
 } from "@cocrepo/dto";
 import { Prisma } from "@cocrepo/prisma";
-import { Injectable } from "@nestjs/common";
 import { SpaceAssociationsRepository } from "@cocrepo/repository";
+import { Injectable } from "@nestjs/common";
 
 @Injectable()
 export class SpaceAssociationsService {

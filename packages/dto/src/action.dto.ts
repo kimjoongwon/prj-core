@@ -4,8 +4,8 @@ import {
 	StringFieldOptional,
 	UUIDField,
 } from "@cocrepo/decorator";
-import { JsonValue } from "@cocrepo/entity";
 import { AbilityActions, Action } from "@cocrepo/prisma";
+import { JsonValue } from "@cocrepo/type";
 import { AbstractDto } from "./abstract.dto";
 import { TenantDto } from "./tenant.dto";
 

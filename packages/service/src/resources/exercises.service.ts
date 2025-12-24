@@ -1,22 +1,25 @@
+import { CONTEXT_KEYS } from "@cocrepo/constant";
 import {
 	CreateExerciseDto,
 	QueryExerciseDto,
+	TenantDto,
 	UpdateExerciseDto,
 } from "@cocrepo/dto";
 import { Prisma } from "@cocrepo/prisma";
-import { Injectable } from "@nestjs/common";
 import { ExercisesRepository } from "@cocrepo/repository";
-import { ContextService } from "../utils";
+import { Injectable } from "@nestjs/common";
+import { ClsService } from "nestjs-cls";
 
 @Injectable()
 export class ExercisesService {
 	constructor(
 		private readonly repository: ExercisesRepository,
-		private readonly contextService: ContextService,
+		private readonly cls: ClsService,
 	) {}
 
 	async create(createExerciseDto: CreateExerciseDto) {
-		const tenantId = this.contextService.getTenantId();
+		const tenant = this.cls.get<TenantDto>(CONTEXT_KEYS.TENANT);
+		const tenantId = tenant?.id;
 		if (!tenantId) {
 			throw new Error("No tenantId in context");
 		}

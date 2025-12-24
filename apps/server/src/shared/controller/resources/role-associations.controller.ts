@@ -5,6 +5,7 @@ import {
 	RoleAssociationDto,
 	UpdateRoleAssociationDto,
 } from "@cocrepo/dto";
+import { RoleAssociationsService } from "@cocrepo/service";
 import {
 	Body,
 	Controller,
@@ -18,7 +19,6 @@ import {
 	Query,
 } from "@nestjs/common";
 import { ApiTags } from "@nestjs/swagger";
-import { RoleAssociationsService } from "../../service/resources/role-associations.service";
 import { wrapResponse } from "../../util/response.util";
 
 @ApiTags("ROLE-ASSOCIATIONS")

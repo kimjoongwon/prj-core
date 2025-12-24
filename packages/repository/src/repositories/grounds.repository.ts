@@ -1,8 +1,8 @@
+import { PRISMA_SERVICE_TOKEN } from "@cocrepo/constant";
 import { Ground } from "@cocrepo/entity";
 import { Prisma } from "@cocrepo/prisma";
 import { Inject, Injectable, Logger } from "@nestjs/common";
 import { plainToInstance } from "class-transformer";
-import { PRISMA_SERVICE_TOKEN } from "../constants/tokens";
 import type { IPrismaClient } from "../types/prisma-client.interface";
 
 @Injectable()
@@ -11,7 +11,7 @@ export class GroundsRepository {
 
 	constructor(
 		@Inject(PRISMA_SERVICE_TOKEN)
-		private readonly prisma: IPrismaClient
+		private readonly prisma: IPrismaClient,
 	) {
 		this.logger = new Logger("Ground");
 	}

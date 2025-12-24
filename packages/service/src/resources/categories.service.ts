@@ -1,19 +1,20 @@
-import { QueryCategoryDto, UpdateCategoryDto } from "@cocrepo/dto";
+import { CONTEXT_KEYS } from "@cocrepo/constant";
+import { QueryCategoryDto, TenantDto, UpdateCategoryDto } from "@cocrepo/dto";
 import { Prisma } from "@cocrepo/prisma";
-import { Injectable, Logger } from "@nestjs/common";
 import { CategoriesRepository } from "@cocrepo/repository";
-import { ContextService } from "../utils";
+import { Injectable, Logger } from "@nestjs/common";
+import { ClsService } from "nestjs-cls";
 
 @Injectable()
 export class CategoriesService {
 	private readonly logger = new Logger(CategoriesService.name);
 	constructor(
 		private readonly repository: CategoriesRepository,
-		private readonly contextService: ContextService,
+		private readonly cls: ClsService,
 	) {}
 
 	async create(args: any) {
-		const currentTenant = this.contextService.getTenant();
+		const currentTenant = this.cls.get<TenantDto>(CONTEXT_KEYS.TENANT);
 		if (!currentTenant) {
 			throw new Error("No tenant found in context");
 		}
@@ -58,7 +59,7 @@ export class CategoriesService {
 	}
 
 	async getManyByQuery(query: QueryCategoryDto) {
-		const currentTenant = this.contextService.getTenant();
+		const currentTenant = this.cls.get<TenantDto>(CONTEXT_KEYS.TENANT);
 		this.logger.debug("getManyByQuery - Current Tenant:", {
 			tenantId: currentTenant?.id?.slice(-8) || "null",
 			spaceId: currentTenant?.spaceId?.slice(-8) || "null",

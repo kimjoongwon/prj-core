@@ -6,6 +6,7 @@ import {
 	RoutineDto,
 	type UpdateRoutineDto,
 } from "@cocrepo/dto";
+import { RoutinesService } from "@cocrepo/service";
 import {
 	Body,
 	Controller,
@@ -19,7 +20,6 @@ import {
 	Query,
 } from "@nestjs/common";
 import { ApiTags } from "@nestjs/swagger";
-import { RoutinesService } from "../../service/resources/routines.service";
 import { wrapResponse } from "../../util/response.util";
 
 @ApiTags("ROUTINE")

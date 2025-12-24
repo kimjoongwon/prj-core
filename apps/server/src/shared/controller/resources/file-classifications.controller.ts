@@ -5,6 +5,7 @@ import {
 	QueryFileClassificationDto,
 	UpdateFileClassificationDto,
 } from "@cocrepo/dto";
+import { FileClassificationsService } from "@cocrepo/service";
 import {
 	Body,
 	Controller,
@@ -18,7 +19,6 @@ import {
 	Query,
 } from "@nestjs/common";
 import { ApiTags } from "@nestjs/swagger";
-import { FileClassificationsService } from "../../service/resources/file-classifications.service";
 import { wrapResponse } from "../../util/response.util";
 
 @ApiTags("FILE-CLASSIFICATIONS")

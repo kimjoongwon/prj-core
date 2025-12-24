@@ -1,10 +1,14 @@
+import { CONTEXT_KEYS } from "@cocrepo/constant";
 import { ApiResponseEntity } from "@cocrepo/decorator";
 import {
 	CreateSpaceDto,
 	QuerySpaceDto,
 	SpaceDto,
+	TenantDto,
 	UpdateSpaceDto,
+	UserDto,
 } from "@cocrepo/dto";
+import { SpacesService } from "@cocrepo/service";
 import {
 	Body,
 	Controller,
@@ -20,7 +24,7 @@ import {
 	Query,
 } from "@nestjs/common";
 import { ApiTags } from "@nestjs/swagger";
-import { ContextService, SpacesService } from "../../service";
+import { ClsService } from "nestjs-cls";
 import { wrapResponse } from "../../util/response.util";
 
 @ApiTags("SPACES")
@@ -30,7 +34,7 @@ export class SpacesController {
 
 	constructor(
 		private readonly service: SpacesService,
-		private readonly contextService: ContextService,
+		private readonly cls: ClsService,
 	) {}
 
 	@Get("current")
@@ -41,10 +45,10 @@ export class SpacesController {
 		const startTime = Date.now();
 		this.logger.log("🚀 getCurrentSpace API 호출됨");
 
-		const tenant = this.contextService.getTenant();
-		const tenantId = this.contextService.getTenantId();
-		const spaceId = this.contextService.getSpaceId();
-		const userId = this.contextService.getAuthUserId();
+		const tenant = this.cls.get<TenantDto>(CONTEXT_KEYS.TENANT);
+		const tenantId = tenant?.id;
+		const spaceId = tenant?.spaceId;
+		const userId = this.cls.get<UserDto>(CONTEXT_KEYS.AUTH_USER)?.id;
 
 		// 디버깅을 위한 상세한 로깅
 		this.logger.debug("getCurrentSpace - 컨텍스트 정보:", {

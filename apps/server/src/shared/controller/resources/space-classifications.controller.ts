@@ -5,6 +5,7 @@ import {
 	SpaceClassificationDto,
 	UpdateSpaceClassificationDto,
 } from "@cocrepo/dto";
+import { SpaceClassificationsService } from "@cocrepo/service";
 import {
 	Body,
 	Controller,
@@ -18,7 +19,6 @@ import {
 	Query,
 } from "@nestjs/common";
 import { ApiTags } from "@nestjs/swagger";
-import { SpaceClassificationsService } from "../../service/resources/space-classifications.service";
 import { wrapResponse } from "../../util/response.util";
 
 @ApiTags("SPACE-CLASSIFICATIONS")

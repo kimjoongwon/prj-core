@@ -5,6 +5,7 @@ import {
 	QueryCategoryDto,
 	UpdateCategoryDto,
 } from "@cocrepo/dto";
+import { CategoriesService } from "@cocrepo/service";
 import {
 	Body,
 	Controller,
@@ -18,7 +19,6 @@ import {
 } from "@nestjs/common";
 import { ApiTags } from "@nestjs/swagger";
 import { ResponseMessage } from "../../decorator/response-message.decorator";
-import { CategoriesService } from "../../service";
 import { wrapResponse } from "../../util/response.util";
 
 @ApiTags("CATEGORIES")

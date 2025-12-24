@@ -1,24 +1,23 @@
-import { Global, Module } from "@nestjs/common";
-import { ConfigModule, ConfigService } from "@nestjs/config";
-import { PRISMA_SERVICE_TOKEN } from "@cocrepo/repository";
-import { createPrismaClient, PrismaService } from "@shared";
+import { PRISMA_SERVICE_TOKEN } from "@cocrepo/constant";
+import { createPrismaClient } from "@cocrepo/service";
+import { Global, Logger, Module, OnModuleInit } from "@nestjs/common";
+import { ConfigService } from "@nestjs/config";
 
 @Global()
 @Module({
-	imports: [ConfigModule],
 	providers: [
-		// Factory 패턴으로 PrismaService 직접 제공 (adapter 포함)
 		{
-			provide: PrismaService,
+			provide: PRISMA_SERVICE_TOKEN,
 			useFactory: createPrismaClient,
 			inject: [ConfigService],
 		},
-		// Repository 패키지를 위한 Token Provider
-		{
-			provide: PRISMA_SERVICE_TOKEN,
-			useExisting: PrismaService,
-		},
 	],
-	exports: [PrismaService, PRISMA_SERVICE_TOKEN],
+	exports: [PRISMA_SERVICE_TOKEN],
 })
-export class PrismaModule {}
+export class PrismaModule implements OnModuleInit {
+	private readonly logger = new Logger(PrismaModule.name);
+
+	onModuleInit() {
+		this.logger.log("PrismaModule initialized successfully");
+	}
+}

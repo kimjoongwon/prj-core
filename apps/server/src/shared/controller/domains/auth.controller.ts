@@ -1,3 +1,4 @@
+import { CONTEXT_KEYS } from "@cocrepo/constant";
 import { ApiResponseEntity, Public } from "@cocrepo/decorator";
 import {
 	LoginPayloadDto,
@@ -6,6 +7,7 @@ import {
 	UserDto,
 } from "@cocrepo/dto";
 import { User } from "@cocrepo/entity";
+import { AuthFacade, TokenService } from "@cocrepo/service";
 import {
 	Body,
 	Controller,
@@ -20,9 +22,8 @@ import {
 import { ApiBody, ApiOperation, ApiResponse, ApiTags } from "@nestjs/swagger";
 import { plainToInstance } from "class-transformer";
 import { Request, Response } from "express";
+import { ClsService } from "nestjs-cls";
 import { ApiAuth, ApiErrors, ResponseMessage } from "../../decorator";
-import { AuthFacade } from "../../service/facade/auth.facade";
-import { ContextService, TokenService } from "../../service/utils";
 
 /**
  * 인증 관련 에러 메시지 상수
@@ -54,7 +55,7 @@ export class AuthController {
 	constructor(
 		private readonly authFacade: AuthFacade,
 		private readonly tokenService: TokenService,
-		private readonly contextService: ContextService,
+		private readonly cls: ClsService,
 	) {}
 
 	@Public()
@@ -210,7 +211,7 @@ export class AuthController {
 	@ApiResponseEntity(Boolean, HttpStatus.OK)
 	@ResponseMessage("토큰 유효성 검증 완료")
 	async verifyToken() {
-		const token = this.contextService.getToken();
+		const token = this.cls.get<string>(CONTEXT_KEYS.TOKEN);
 		if (!token) {
 			throw new UnauthorizedException(AuthErrorMessages.TOKEN_NOT_FOUND);
 		}

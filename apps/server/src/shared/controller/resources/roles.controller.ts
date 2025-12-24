@@ -5,6 +5,7 @@ import {
 	RoleDto,
 	UpdateRoleDto,
 } from "@cocrepo/dto";
+import { RolesService } from "@cocrepo/service";
 import {
 	Body,
 	Controller,
@@ -18,7 +19,6 @@ import {
 	Query,
 } from "@nestjs/common";
 import { ApiTags } from "@nestjs/swagger";
-import { RolesService } from "../../service";
 import { wrapResponse } from "../../util/response.util";
 
 @ApiTags("SPACES")

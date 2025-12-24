@@ -1,9 +1,5 @@
 // Constants
-export { PRISMA_SERVICE_TOKEN } from "./constants/tokens";
-
-// Types
-export type { IPrismaClient } from "./types/prisma-client.interface";
-
+export { PRISMA_SERVICE_TOKEN } from "@cocrepo/constant";
 // Repositories
 export { AssignmentsRepository } from "./repositories/assignments.repository";
 export { CategoriesRepository } from "./repositories/categories.repository";
@@ -34,3 +30,5 @@ export { TimelinesRepository } from "./repositories/timeline.repository";
 export { UserAssociationsRepository } from "./repositories/user-associations.repository";
 export { UserClassificationsRepository } from "./repositories/user-classifications.repository";
 export { UsersRepository } from "./repositories/users.repository";
+// Types
+export type { IPrismaClient } from "./types/prisma-client.interface";

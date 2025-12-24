@@ -1,5 +1,5 @@
+import { RedisService } from "@cocrepo/service";
 import { Global, Module } from "@nestjs/common";
-import { RedisService } from "@shared";
 
 @Global()
 @Module({

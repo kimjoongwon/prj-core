@@ -1,9 +1,7 @@
+import { RoleClassificationsRepository } from "@cocrepo/repository";
+import { RoleClassificationsService } from "@cocrepo/service";
 import { Module } from "@nestjs/common";
-import {
-	RoleClassificationsController,
-	RoleClassificationsRepository,
-	RoleClassificationsService,
-} from "@shared";
+import { RoleClassificationsController } from "@shared";
 
 @Module({
 	controllers: [RoleClassificationsController],

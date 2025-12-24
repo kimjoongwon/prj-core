@@ -8,11 +8,7 @@ import {
 import { APP_GUARD, RouterModule } from "@nestjs/core";
 import { ThrottlerGuard } from "@nestjs/throttler";
 // Shared imports
-import {
-	ContextService,
-	LoggerMiddleware,
-	RequestContextInterceptor,
-} from "@shared";
+import { LoggerMiddleware, RequestContextInterceptor } from "@shared";
 // Global modules
 import { globalModules } from "../global.module";
 import { ResponseEntityInterceptor } from "../shared/interceptor/response-entity.interceptor";
@@ -166,7 +162,6 @@ import { UsersModule } from "./users.module";
 	providers: [
 		RequestContextInterceptor,
 		ResponseEntityInterceptor,
-		ContextService,
 		// Rate Limiting
 		{
 			provide: APP_GUARD,

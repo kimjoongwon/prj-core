@@ -1,3 +1,4 @@
+import { CONTEXT_KEYS } from "@cocrepo/constant";
 import { ApiResponseEntity } from "@cocrepo/decorator";
 import {
 	CreateTenantDto,
@@ -5,7 +6,9 @@ import {
 	QueryTenantDto,
 	TenantDto,
 	UpdateTenantDto,
+	UserDto,
 } from "@cocrepo/dto";
+import { TenantsService } from "@cocrepo/service";
 import {
 	Body,
 	Controller,
@@ -19,8 +22,7 @@ import {
 	Query,
 } from "@nestjs/common";
 import { ApiTags } from "@nestjs/swagger";
-import { ContextService } from "../../service";
-import { TenantsService } from "../../service/resources/tenants.service";
+import { ClsService } from "nestjs-cls";
 import { wrapResponse } from "../../util/response.util";
 
 @ApiTags("TENANTS")
@@ -28,14 +30,14 @@ import { wrapResponse } from "../../util/response.util";
 export class TenantsController {
 	constructor(
 		private readonly service: TenantsService,
-		private readonly contextService: ContextService,
+		private readonly cls: ClsService,
 	) {}
 
 	@Get("my")
 	@HttpCode(HttpStatus.OK)
 	@ApiResponseEntity(TenantDto, HttpStatus.OK, { isArray: true })
 	async getMyTenants() {
-		const userId = this.contextService.getAuthUserId();
+		const userId = this.cls.get<UserDto>(CONTEXT_KEYS.AUTH_USER)?.id;
 		// Note: getManyByUserId was replaced with getManyByQuery, may need adjustment
 		const tenants = await this.service.getManyByQuery({ userId } as any);
 		return tenants;

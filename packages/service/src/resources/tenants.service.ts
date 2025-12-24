@@ -1,15 +1,21 @@
-import { CreateTenantDto, QueryTenantDto, UpdateTenantDto } from "@cocrepo/dto";
+import { CONTEXT_KEYS } from "@cocrepo/constant";
+import {
+	CreateTenantDto,
+	QueryTenantDto,
+	UpdateTenantDto,
+	UserDto,
+} from "@cocrepo/dto";
 import { Tenant } from "@cocrepo/entity";
 import { Prisma } from "@cocrepo/prisma";
-import { Injectable } from "@nestjs/common";
 import { TenantsRepository } from "@cocrepo/repository";
-import { ContextService } from "../utils";
+import { Injectable } from "@nestjs/common";
+import { ClsService } from "nestjs-cls";
 
 @Injectable()
 export class TenantsService {
 	constructor(
 		private readonly tenantsRepository: TenantsRepository,
-		private readonly contextService: ContextService,
+		private readonly cls: ClsService,
 	) {}
 
 	async create(createTenantDto: CreateTenantDto): Promise<Tenant> {
@@ -89,7 +95,7 @@ export class TenantsService {
 	async getManyByQuery(
 		query: QueryTenantDto,
 	): Promise<{ tenants: Tenant[]; count: number }> {
-		const currentUser = this.contextService.getAuthUser();
+		const currentUser = this.cls.get<UserDto>(CONTEXT_KEYS.AUTH_USER);
 		console.log("Current User:", currentUser);
 		const args = query?.toArgs({
 			where: {

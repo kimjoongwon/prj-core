@@ -1,9 +1,7 @@
+import { SpaceClassificationsRepository } from "@cocrepo/repository";
+import { SpaceClassificationsService } from "@cocrepo/service";
 import { Module } from "@nestjs/common";
-import {
-	SpaceClassificationsController,
-	SpaceClassificationsRepository,
-	SpaceClassificationsService,
-} from "@shared";
+import { SpaceClassificationsController } from "@shared";
 
 @Module({
 	controllers: [SpaceClassificationsController],
