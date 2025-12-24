@@ -1,8 +1,8 @@
 import { PutObjectCommand, S3Client } from "@aws-sdk/client-s3";
+import { AwsConfig } from "@cocrepo/type";
 // aws.service.ts
 import { Global, Injectable } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
-import { AwsConfig } from "@cocrepo/type";
 
 @Global()
 @Injectable()
