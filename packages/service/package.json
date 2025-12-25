@@ -20,10 +20,10 @@
   },
   "dependencies": {
     "@cocrepo/constant": "workspace:*",
+    "@cocrepo/decorator": "workspace:*",
     "@cocrepo/dto": "workspace:*",
     "@cocrepo/entity": "workspace:*",
     "@cocrepo/prisma": "workspace:*",
-    "@cocrepo/decorator": "workspace:*",
     "@cocrepo/repository": "workspace:*",
     "@cocrepo/toolkit": "workspace:*",
     "@cocrepo/type": "workspace:*",
@@ -40,7 +40,7 @@
     "class-transformer": "^0.5.1",
     "ioredis": "^5.8.2",
     "libphonenumber-js": "^1.11.17",
-    "nestjs-cls": "^6.0.1"
+    "nestjs-cls": "^6.1.0"
   },
   "devDependencies": {
     "@aws-sdk/client-s3": "^3.883.0",
@@ -55,7 +55,7 @@
     "class-transformer": "^0.5.1",
     "ioredis": "^5.8.2",
     "libphonenumber-js": "^1.11.17",
-    "nestjs-cls": "^6.0.1",
+    "nestjs-cls": "^6.1.0",
     "typescript": "catalog:"
   },
   "exports": {

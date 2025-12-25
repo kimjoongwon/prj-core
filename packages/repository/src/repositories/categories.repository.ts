@@ -1,19 +1,24 @@
-import { PRISMA_SERVICE_TOKEN } from "@cocrepo/constant";
 import { Category } from "@cocrepo/entity";
-import { Prisma } from "@cocrepo/prisma";
-import { Inject, Injectable, Logger } from "@nestjs/common";
+import { Prisma, PrismaClient } from "@cocrepo/prisma";
+import { Injectable, Logger } from "@nestjs/common";
+import { TransactionHost } from "@nestjs-cls/transactional";
+import { TransactionalAdapterPrisma } from "@nestjs-cls/transactional-adapter-prisma";
 import { plainToInstance } from "class-transformer";
-import type { IPrismaClient } from "../types/prisma-client.interface";
 
 @Injectable()
 export class CategoriesRepository {
   private readonly logger: Logger;
 
   constructor(
-    @Inject(PRISMA_SERVICE_TOKEN)
-    private readonly prisma: IPrismaClient
+    private readonly txHost: TransactionHost<
+      TransactionalAdapterPrisma<PrismaClient>
+    >
   ) {
     this.logger = new Logger("Category");
+  }
+
+  private get prisma() {
+    return this.txHost.tx;
   }
 
   async create(args: Prisma.CategoryCreateArgs): Promise<Category> {
