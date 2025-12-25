@@ -45,7 +45,6 @@
     "@types/node": "catalog:",
     "class-transformer": "^0.5.1",
     "class-validator": "^0.14.2",
-    "tsup": "catalog:",
     "typescript": "catalog:"
   }
 }

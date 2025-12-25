@@ -35,7 +35,6 @@
     "@types/node": "catalog:",
     "bcrypt": "^6.0.0",
     "libphonenumber-js": "^1.11.17",
-    "tsup": "catalog:",
     "typescript": "catalog:"
   }
 }

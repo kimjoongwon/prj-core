@@ -29,7 +29,5 @@
   "dependencies": {
     "ts-jenum": "^2.2.2"
   },
-  "devDependencies": {
-    "tsup": "catalog:"
-  }
+  "devDependencies": {}
 }

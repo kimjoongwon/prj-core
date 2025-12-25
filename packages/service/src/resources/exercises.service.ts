@@ -1,80 +1,81 @@
 import { CONTEXT_KEYS } from "@cocrepo/constant";
 import {
-	CreateExerciseDto,
-	QueryExerciseDto,
-	TenantDto,
-	UpdateExerciseDto,
+  CreateExerciseDto,
+  QueryExerciseDto,
+  TenantDto,
+  UpdateExerciseDto,
 } from "@cocrepo/dto";
 import { Prisma } from "@cocrepo/prisma";
 import { ExercisesRepository } from "@cocrepo/repository";
 import { Injectable } from "@nestjs/common";
-import { ClsService } from "nestjs-cls";
+import { ClsServiceManager } from "nestjs-cls";
 
 @Injectable()
 export class ExercisesService {
-	constructor(
-		private readonly repository: ExercisesRepository,
-		private readonly cls: ClsService,
-	) {}
+  private get cls() {
+    return ClsServiceManager.getClsService();
+  }
 
-	async create(createExerciseDto: CreateExerciseDto) {
-		const tenant = this.cls.get<TenantDto>(CONTEXT_KEYS.TENANT);
-		const tenantId = tenant?.id;
-		if (!tenantId) {
-			throw new Error("No tenantId in context");
-		}
-		const { name, count, duration } = createExerciseDto;
+  constructor(private readonly repository: ExercisesRepository) {}
 
-		const exercise = await this.repository.create({
-			data: {
-				name,
-				count,
-				duration,
-				task: {
-					create: {
-						tenantId,
-					},
-				},
-			},
-		});
+  async create(createExerciseDto: CreateExerciseDto) {
+    const tenant = this.cls.get<TenantDto>(CONTEXT_KEYS.TENANT);
+    const tenantId = tenant?.id;
+    if (!tenantId) {
+      throw new Error("No tenantId in context");
+    }
+    const { name, count, duration } = createExerciseDto;
 
-		return exercise;
-	}
-	async getManyByQuery(query: QueryExerciseDto) {
-		const args = query.toArgs<Prisma.ExerciseFindManyArgs>();
-		const countArgs = query.toCountArgs<Prisma.ExerciseCountArgs>();
-		const exercises = await this.repository.findMany(args);
-		const count = await this.repository.count(countArgs);
+    const exercise = await this.repository.create({
+      data: {
+        name,
+        count,
+        duration,
+        task: {
+          create: {
+            tenantId,
+          },
+        },
+      },
+    });
 
-		return {
-			exercises,
-			count,
-		};
-	}
+    return exercise;
+  }
+  async getManyByQuery(query: QueryExerciseDto) {
+    const args = query.toArgs<Prisma.ExerciseFindManyArgs>();
+    const countArgs = query.toCountArgs<Prisma.ExerciseCountArgs>();
+    const exercises = await this.repository.findMany(args);
+    const count = await this.repository.count(countArgs);
 
-	getById(id: string) {
-		return this.repository.findUnique({ where: { id } });
-	}
+    return {
+      exercises,
+      count,
+    };
+  }
 
-	updateById(id: string, updateExerciseDto: UpdateExerciseDto) {
-		const { count, duration } = updateExerciseDto;
-		return this.repository.update({
-			where: { id },
-			data: {
-				count,
-				duration,
-			},
-		});
-	}
+  getById(id: string) {
+    return this.repository.findUnique({ where: { id } });
+  }
 
-	deleteById(id: string) {
-		return this.repository.delete({ where: { id } });
-	}
+  updateById(id: string, updateExerciseDto: UpdateExerciseDto) {
+    const { count, duration } = updateExerciseDto;
+    return this.repository.update({
+      where: { id },
+      data: {
+        count,
+        duration,
+      },
+    });
+  }
 
-	removeById(id: string) {
-		return this.repository.update({
-			where: { id },
-			data: { removedAt: new Date() },
-		});
-	}
+  deleteById(id: string) {
+    return this.repository.delete({ where: { id } });
+  }
+
+  removeById(id: string) {
+    return this.repository.update({
+      where: { id },
+      data: { removedAt: new Date() },
+    });
+  }
 }

@@ -11,7 +11,7 @@
     "build:packages": "turbo build --filter='./packages/**'",
     "build:pkg": "turbo build --filter",
     "clean": "rm -rf node_modules/.cache .turbo && find packages apps -name 'dist' -type d -exec rm -rf {} + 2>/dev/null; find packages apps -name '.turbo' -type d -exec rm -rf {} + 2>/dev/null; echo 'Cleaned dist and turbo cache'",
-    "clean:all": "pnpm clean && rm -rf node_modules && find packages apps -name 'node_modules' -type d -exec rm -rf {} + 2>/dev/null; echo 'Cleaned all node_modules'",
+    "clean:all": "node scripts/clean-all.js",
     "type-check": "turbo type-check",
     "start:dev": "turbo start:dev",
     "start:server": "turbo start:dev --filter=server... --concurrency=20",

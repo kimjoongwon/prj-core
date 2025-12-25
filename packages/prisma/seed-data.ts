@@ -1,6 +1,5 @@
 // Enum imports
-import { RoleCategoryNames } from "../src/enum/role-category-names.enum";
-import { RoleGroupNames } from "../src/enum/role-group-names.enum";
+import { RoleCategoryNames, RoleGroupNames } from "@cocrepo/enum";
 
 // 시드 데이터를 위한 메타데이터
 export interface UserSeedData {
