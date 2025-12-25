@@ -23,10 +23,16 @@
     ]
   },
   "moduleNameMapper": {
-    "^@cocrepo/prisma$": "<rootDir>/../../packages/db/src/index.ts",
-    "^@cocrepo/types$": "<rootDir>/../../packages/shared-types/index.ts",
-    "^@cocrepo/utils$": "<rootDir>/../../packages/shared-utils/index.ts",
-    "^@cocrepo/utils$": "<rootDir>/../../packages/shared-vars/index.ts",
+    "^@cocrepo/prisma$": "<rootDir>/../../packages/prisma/dist/src",
+    "^@cocrepo/repository$": "<rootDir>/../../packages/repository/dist",
+    "^@cocrepo/service$": "<rootDir>/../../packages/service/dist",
+    "^@cocrepo/entity$": "<rootDir>/../../packages/entity/dist",
+    "^@cocrepo/vo$": "<rootDir>/../../packages/vo/dist",
+    "^@cocrepo/dto$": "<rootDir>/../../packages/dto/dist",
+    "^@cocrepo/toolkit$": "<rootDir>/../../packages/toolkit/dist",
+    "^@cocrepo/constant$": "<rootDir>/../../packages/constant/dist",
+    "^@cocrepo/type$": "<rootDir>/../../packages/type/dist",
+    "^@cocrepo/decorator$": "<rootDir>/../../packages/decorator/dist",
     "^@shared$": "<rootDir>/src/shared/index",
     "^@shared/(.*)$": "<rootDir>/src/shared/$1"
   },

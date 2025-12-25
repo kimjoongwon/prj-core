@@ -4,18 +4,18 @@
  * Plate
  * OpenAPI spec version: 1.0.0
  */
-import type { UserDto } from './userDto';
-import type { CategoryDto } from './categoryDto';
+import type { UserDto } from "./userDto";
+import type { CategoryDto } from "./categoryDto";
 
 export interface UserClassificationDto {
-  id: string;
-  seq: number;
-  createdAt: string;
-  updatedAt: string;
-  /** @nullable */
-  removedAt: string | null;
-  categoryId?: string;
-  userId?: string;
-  user?: UserDto;
-  category?: CategoryDto;
+	id: string;
+	seq: number;
+	createdAt: string;
+	updatedAt: string;
+	/** @nullable */
+	removedAt: string | null;
+	categoryId?: string;
+	userId?: string;
+	user?: UserDto;
+	category?: CategoryDto;
 }

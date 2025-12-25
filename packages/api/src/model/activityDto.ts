@@ -4,22 +4,22 @@
  * Plate
  * OpenAPI spec version: 1.0.0
  */
-import type { RoutineDto } from './routineDto';
-import type { TaskDto } from './taskDto';
+import type { RoutineDto } from "./routineDto";
+import type { TaskDto } from "./taskDto";
 
 export interface ActivityDto {
-  id: string;
-  seq: number;
-  createdAt: string;
-  updatedAt: string;
-  /** @nullable */
-  removedAt: string | null;
-  routineId: string;
-  taskId: string;
-  order: number;
-  repetitions: number;
-  restTime: number;
-  notes?: string;
-  routine: RoutineDto;
-  task: TaskDto;
+	id: string;
+	seq: number;
+	createdAt: string;
+	updatedAt: string;
+	/** @nullable */
+	removedAt: string | null;
+	routineId: string;
+	taskId: string;
+	order: number;
+	repetitions: number;
+	restTime: number;
+	notes?: string;
+	routine: RoutineDto;
+	task: TaskDto;
 }

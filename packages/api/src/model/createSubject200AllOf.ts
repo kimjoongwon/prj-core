@@ -4,13 +4,13 @@
  * Plate
  * OpenAPI spec version: 1.0.0
  */
-import type { SubjectDto } from './subjectDto';
+import type { SubjectDto } from "./subjectDto";
 
 export type CreateSubject200AllOf = {
-  /** */
-  httpStatus?: number;
-  /** */
-  message?: string;
-  /** @nullable */
-  data?: SubjectDto;
+	/** */
+	httpStatus?: number;
+	/** */
+	message?: string;
+	/** @nullable */
+	data?: SubjectDto;
 };

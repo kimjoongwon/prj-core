@@ -4,14 +4,14 @@
  * Plate
  * OpenAPI spec version: 1.0.0
  */
-import type { RoleDto } from './roleDto';
-import type { GetRolesByQuery200AllOfMeta } from './getRolesByQuery200AllOfMeta';
+import type { RoleDto } from "./roleDto";
+import type { GetRolesByQuery200AllOfMeta } from "./getRolesByQuery200AllOfMeta";
 
 export type GetRolesByQuery200AllOf = {
-  /** */
-  httpStatus?: number;
-  /** */
-  message?: string;
-  data?: RoleDto[];
-  meta?: GetRolesByQuery200AllOfMeta;
+	/** */
+	httpStatus?: number;
+	/** */
+	message?: string;
+	data?: RoleDto[];
+	meta?: GetRolesByQuery200AllOfMeta;
 };

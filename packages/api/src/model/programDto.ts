@@ -4,22 +4,22 @@
  * Plate
  * OpenAPI spec version: 1.0.0
  */
-import type { RoutineDto } from './routineDto';
-import type { SessionDto } from './sessionDto';
+import type { RoutineDto } from "./routineDto";
+import type { SessionDto } from "./sessionDto";
 
 export interface ProgramDto {
-  id: string;
-  seq: number;
-  createdAt: string;
-  updatedAt: string;
-  /** @nullable */
-  removedAt: string | null;
-  routineId: string;
-  sessionId: string;
-  instructorId: string;
-  capacity: number;
-  name: string;
-  level?: string;
-  routine: RoutineDto;
-  session: SessionDto;
+	id: string;
+	seq: number;
+	createdAt: string;
+	updatedAt: string;
+	/** @nullable */
+	removedAt: string | null;
+	routineId: string;
+	sessionId: string;
+	instructorId: string;
+	capacity: number;
+	name: string;
+	level?: string;
+	routine: RoutineDto;
+	session: SessionDto;
 }

@@ -4,10 +4,10 @@
  * Plate
  * OpenAPI spec version: 1.0.0
  */
-import type { Roles } from './roles';
+import type { Roles } from "./roles";
 
 export interface UpdateRoleDto {
-  name?: Roles;
-  serviceId?: string;
-  categoryId?: string;
+	name?: Roles;
+	serviceId?: string;
+	categoryId?: string;
 }

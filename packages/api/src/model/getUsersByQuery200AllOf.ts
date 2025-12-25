@@ -4,14 +4,14 @@
  * Plate
  * OpenAPI spec version: 1.0.0
  */
-import type { UserDto } from './userDto';
-import type { GetUsersByQuery200AllOfMeta } from './getUsersByQuery200AllOfMeta';
+import type { UserDto } from "./userDto";
+import type { GetUsersByQuery200AllOfMeta } from "./getUsersByQuery200AllOfMeta";
 
 export type GetUsersByQuery200AllOf = {
-  /** */
-  httpStatus?: number;
-  /** */
-  message?: string;
-  data?: UserDto[];
-  meta?: GetUsersByQuery200AllOfMeta;
+	/** */
+	httpStatus?: number;
+	/** */
+	message?: string;
+	data?: UserDto[];
+	meta?: GetUsersByQuery200AllOfMeta;
 };

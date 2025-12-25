@@ -31,16 +31,15 @@ export class UsersModule {}
 
 ## 구조
 
-- **domain/**: 핵심 비즈니스 로직 (AuthDomain)
-- **facade/**: Facade 패턴으로 구현된 서비스 (AuthFacade)
-- **resources/**: 리소스별 CRUD 서비스 (24개)
-  - Users, Roles, Categories, Files, Grounds, Spaces 등
+- **facade/**: Facade 패턴으로 구현된 서비스
+  - AuthFacade: 인증 관련 비즈니스 로직 통합
+- **service/**: 리소스별 CRUD 서비스
+  - UsersService: 사용자 관리
 - **utils/**: 기반 시설 서비스
   - PrismaService: Prisma 클라이언트 래퍼
-  - PasswordService: 비밀번호 해싱
-  - TokenService: JWT 토큰 관리
+  - TokenService: JWT 토큰 생성/검증
+  - TokenStorageService: Redis 기반 토큰 저장소
   - RedisService: Redis 연결 관리
-  - ContextService: 테넌트/유저 컨텍스트 관리
   - AwsService: AWS S3 연동
 
 ## 의존성
