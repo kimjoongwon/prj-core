@@ -6,10 +6,10 @@
  */
 
 export interface CreateFileDto {
-  parentId: string;
-  tenantId: string;
-  name: string;
-  size: number;
-  mimeType: string;
-  url: string;
+	parentId: string;
+	tenantId: string;
+	name: string;
+	size: number;
+	mimeType: string;
+	url: string;
 }

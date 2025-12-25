@@ -4,18 +4,18 @@
  * Plate
  * OpenAPI spec version: 1.0.0
  */
-import type { SpaceClassificationDto } from './spaceClassificationDto';
-import type { SpaceAssociationDto } from './spaceAssociationDto';
-import type { GroundDto } from './groundDto';
+import type { SpaceClassificationDto } from "./spaceClassificationDto";
+import type { SpaceAssociationDto } from "./spaceAssociationDto";
+import type { GroundDto } from "./groundDto";
 
 export interface SpaceDto {
-  id: string;
-  seq: number;
-  createdAt: string;
-  updatedAt: string;
-  /** @nullable */
-  removedAt: string | null;
-  spaceClassification?: SpaceClassificationDto;
-  spaceAssociations?: SpaceAssociationDto[];
-  ground?: GroundDto;
+	id: string;
+	seq: number;
+	createdAt: string;
+	updatedAt: string;
+	/** @nullable */
+	removedAt: string | null;
+	spaceClassification?: SpaceClassificationDto;
+	spaceAssociations?: SpaceAssociationDto[];
+	ground?: GroundDto;
 }

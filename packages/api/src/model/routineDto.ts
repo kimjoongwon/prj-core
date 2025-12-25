@@ -4,18 +4,18 @@
  * Plate
  * OpenAPI spec version: 1.0.0
  */
-import type { ProgramDto } from './programDto';
-import type { ActivityDto } from './activityDto';
+import type { ProgramDto } from "./programDto";
+import type { ActivityDto } from "./activityDto";
 
 export interface RoutineDto {
-  id: string;
-  seq: number;
-  createdAt: string;
-  updatedAt: string;
-  /** @nullable */
-  removedAt: string | null;
-  name: string;
-  label: string;
-  programs: ProgramDto[];
-  activities: ActivityDto[];
+	id: string;
+	seq: number;
+	createdAt: string;
+	updatedAt: string;
+	/** @nullable */
+	removedAt: string | null;
+	name: string;
+	label: string;
+	programs: ProgramDto[];
+	activities: ActivityDto[];
 }

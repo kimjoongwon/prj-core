@@ -1,194 +1,202 @@
-import { LoginPayloadDto, SignUpPayloadDto } from "@cocrepo/dto";
+import { PRISMA_SERVICE_TOKEN } from "@cocrepo/constant";
 import { JwtService } from "@nestjs/jwt";
 import { Test, TestingModule } from "@nestjs/testing";
-import {
-	createMockJwtService,
-	createTestUserEntity,
-} from "../../test/test-utils";
-import { AuthDomain } from "../domain/auth.domain";
-import { UsersService } from "../resources/users.service";
-import { TokenService } from "../utils";
-import { AuthFacade } from "./auth.facade";
+import { AuthFacade } from "../src/facade/auth.facade";
+import { UsersService } from "../src/service/users.service";
+import { TokenService } from "../src/utils";
 
 describe("AuthFacade", () => {
-	let service: AuthFacade;
-	let authDomain: jest.Mocked<AuthDomain>;
-	let usersService: jest.Mocked<UsersService>;
-	let jwtService: jest.Mocked<JwtService>;
-	let tokenService: jest.Mocked<TokenService>;
+	let facade: AuthFacade;
+	let mockUsersService: jest.Mocked<UsersService>;
+	let mockJwtService: jest.Mocked<JwtService>;
+	let mockTokenService: jest.Mocked<TokenService>;
+	let mockPrismaService: any;
+
+	const mockUser = {
+		id: "user-test-id",
+		email: "test@example.com",
+		name: "Test User",
+		phone: "010-1234-5678",
+		password: "$2b$10$hashedPassword",
+		tenants: [],
+		profiles: [],
+	};
 
 	beforeEach(async () => {
-		const mockAuthDomain = {
-			validateUser: jest.fn(),
-			signUp: jest.fn(),
-			login: jest.fn(),
-		};
-
-		const mockUsersService = {
+		mockUsersService = {
 			getByIdWithTenants: jest.fn(),
-		};
+			findUserForAuth: jest.fn(),
+		} as any;
 
-		const mockTokenService = {
+		mockJwtService = {
+			verify: jest.fn(),
+			sign: jest.fn(),
+		} as any;
+
+		mockTokenService = {
 			generateTokens: jest.fn(),
+			generateTokensWithStorage: jest.fn(),
+			validateRefreshTokenFromStorage: jest.fn(),
+			invalidateTokens: jest.fn(),
+			isTokenBlacklisted: jest.fn(),
+		} as any;
+
+		mockPrismaService = {
+			role: { findFirst: jest.fn() },
+			space: { create: jest.fn() },
+			user: { create: jest.fn() },
 		};
 
 		const module: TestingModule = await Test.createTestingModule({
 			providers: [
 				AuthFacade,
-				{
-					provide: AuthDomain,
-					useValue: mockAuthDomain,
-				},
-				{
-					provide: UsersService,
-					useValue: mockUsersService,
-				},
-				{
-					provide: JwtService,
-					useValue: createMockJwtService(),
-				},
-				{
-					provide: TokenService,
-					useValue: mockTokenService,
-				},
+				{ provide: UsersService, useValue: mockUsersService },
+				{ provide: JwtService, useValue: mockJwtService },
+				{ provide: TokenService, useValue: mockTokenService },
+				{ provide: PRISMA_SERVICE_TOKEN, useValue: mockPrismaService },
 			],
 		}).compile();
 
-		service = module.get<AuthFacade>(AuthFacade);
-		authDomain = module.get(AuthDomain);
-		usersService = module.get(UsersService);
-		jwtService = module.get(JwtService);
-		tokenService = module.get(TokenService);
+		facade = module.get<AuthFacade>(AuthFacade);
 	});
 
-	it("should be defined", () => {
-		expect(service).toBeDefined();
+	it("서비스가 정의되어야 한다", () => {
+		expect(facade).toBeDefined();
 	});
 
 	describe("getCurrentUser", () => {
-		it("should return current user for valid access token", async () => {
-			const userId = "user-test-id";
+		it("액세스 토큰으로 현재 사용자를 조회해야 한다", async () => {
+			// Given
 			const accessToken = "valid-access-token";
-			const testUser = createTestUserEntity();
+			mockJwtService.verify.mockReturnValue({ userId: "user-test-id" });
+			mockUsersService.getByIdWithTenants.mockResolvedValue(mockUser as any);
 
-			jwtService.verify = jest.fn().mockReturnValue({ userId });
-			usersService.getByIdWithTenants.mockResolvedValue(testUser);
+			// When
+			const result = await facade.getCurrentUser(accessToken);
 
-			const result = await service.getCurrentUser(accessToken);
-
-			expect(jwtService.verify).toHaveBeenCalledWith(accessToken);
-			expect(usersService.getByIdWithTenants).toHaveBeenCalledWith(userId);
-			expect(result).toEqual(testUser);
+			// Then
+			expect(mockJwtService.verify).toHaveBeenCalledWith(accessToken);
+			expect(mockUsersService.getByIdWithTenants).toHaveBeenCalledWith(
+				"user-test-id",
+			);
+			expect(result).toEqual(mockUser);
 		});
 
-		it("should throw error for invalid access token", async () => {
-			const accessToken = "invalid-access-token";
-
-			jwtService.verify = jest.fn().mockImplementation(() => {
+		it("유효하지 않은 토큰이면 에러를 던져야 한다", async () => {
+			// Given
+			const accessToken = "invalid-token";
+			mockJwtService.verify.mockImplementation(() => {
 				throw new Error("Invalid token");
 			});
 
-			await expect(service.getCurrentUser(accessToken)).rejects.toThrow(
+			// When & Then
+			await expect(facade.getCurrentUser(accessToken)).rejects.toThrow(
 				"Invalid token",
 			);
 		});
 	});
 
 	describe("getNewToken", () => {
-		it("should generate new tokens for valid refresh token", async () => {
-			const userId = "user-test-id";
+		it("리프레시 토큰으로 새로운 토큰을 생성해야 한다", async () => {
+			// Given
 			const refreshToken = "valid-refresh-token";
-			const newTokens = {
-				accessToken: "new-access-token",
-				refreshToken: "new-refresh-token",
+			const mockTokenPair = {
+				accessToken: { value: "new-access-token" },
+				refreshToken: { value: "new-refresh-token" },
 			};
 
-			jwtService.verify = jest.fn().mockReturnValue({ userId });
-			tokenService.generateTokens.mockReturnValue(newTokens);
+			mockJwtService.verify.mockReturnValue({ userId: "user-test-id" });
+			mockTokenService.validateRefreshTokenFromStorage.mockResolvedValue(true);
+			mockTokenService.generateTokensWithStorage.mockResolvedValue(
+				mockTokenPair as any,
+			);
 
-			const result = await service.getNewToken(refreshToken);
+			// When
+			const result = await facade.getNewToken(refreshToken);
 
-			expect(jwtService.verify).toHaveBeenCalledWith(refreshToken);
-			expect(tokenService.generateTokens).toHaveBeenCalledWith({ userId });
+			// Then
+			expect(mockJwtService.verify).toHaveBeenCalledWith(refreshToken);
+			expect(
+				mockTokenService.validateRefreshTokenFromStorage,
+			).toHaveBeenCalledWith("user-test-id", refreshToken);
 			expect(result).toEqual({
-				newAccessToken: newTokens.accessToken,
-				newRefreshToken: newTokens.refreshToken,
+				newAccessToken: "new-access-token",
+				newRefreshToken: "new-refresh-token",
 			});
 		});
 
-		it("should throw error for invalid refresh token", async () => {
+		it("유효하지 않은 리프레시 토큰이면 UnauthorizedException을 던져야 한다", async () => {
+			// Given
 			const refreshToken = "invalid-refresh-token";
+			mockJwtService.verify.mockReturnValue({ userId: "user-test-id" });
+			mockTokenService.validateRefreshTokenFromStorage.mockResolvedValue(false);
 
-			jwtService.verify = jest.fn().mockImplementation(() => {
-				throw new Error("Invalid token");
-			});
-
-			await expect(service.getNewToken(refreshToken)).rejects.toThrow(
-				"Invalid token",
+			// When & Then
+			await expect(facade.getNewToken(refreshToken)).rejects.toThrow(
+				"유효하지 않은 리프레시 토큰입니다.",
 			);
 		});
 	});
 
-	describe("validateUser", () => {
-		it("should delegate to authDomain.validateUser", async () => {
-			const email = "test@example.com";
-			const password = "password123";
-			const testUser = createTestUserEntity();
+	describe("logout", () => {
+		it("토큰을 무효화해야 한다", async () => {
+			// Given
+			const userId = "user-test-id";
+			const accessToken = "access-token";
+			mockTokenService.invalidateTokens.mockResolvedValue(undefined);
 
-			authDomain.validateUser.mockResolvedValue(testUser);
+			// When
+			await facade.logout(userId, accessToken);
 
-			const result = await service.validateUser(email, password);
+			// Then
+			expect(mockTokenService.invalidateTokens).toHaveBeenCalledWith(
+				userId,
+				accessToken,
+			);
+		});
 
-			expect(authDomain.validateUser).toHaveBeenCalledWith(email, password);
-			expect(result).toEqual(testUser);
+		it("액세스 토큰 없이 로그아웃해야 한다", async () => {
+			// Given
+			const userId = "user-test-id";
+			mockTokenService.invalidateTokens.mockResolvedValue(undefined);
+
+			// When
+			await facade.logout(userId);
+
+			// Then
+			expect(mockTokenService.invalidateTokens).toHaveBeenCalledWith(
+				userId,
+				undefined,
+			);
 		});
 	});
 
-	describe("signUp", () => {
-		it("should delegate to authDomain.signUp", async () => {
-			const signUpData: SignUpPayloadDto = {
-				name: "Test User",
-				nickname: "testuser",
-				email: "test@example.com",
-				password: "password123",
-				phone: "010-1234-5678",
-				spaceId: "space-test-id",
-			};
+	describe("isTokenBlacklisted", () => {
+		it("블랙리스트된 토큰은 true를 반환해야 한다", async () => {
+			// Given
+			const accessToken = "blacklisted-token";
+			mockTokenService.isTokenBlacklisted.mockResolvedValue(true);
 
-			const tokens = {
-				accessToken: "access-token",
-				refreshToken: "refresh-token",
-			};
+			// When
+			const result = await facade.isTokenBlacklisted(accessToken);
 
-			authDomain.signUp.mockResolvedValue(tokens);
-
-			const result = await service.signUp(signUpData);
-
-			expect(authDomain.signUp).toHaveBeenCalledWith(signUpData);
-			expect(result).toEqual(tokens);
+			// Then
+			expect(mockTokenService.isTokenBlacklisted).toHaveBeenCalledWith(
+				accessToken,
+			);
+			expect(result).toBe(true);
 		});
-	});
 
-	describe("login", () => {
-		it("should delegate to authDomain.login", async () => {
-			const loginData: LoginPayloadDto = {
-				email: "test@example.com",
-				password: "password123",
-			};
+		it("블랙리스트에 없는 토큰은 false를 반환해야 한다", async () => {
+			// Given
+			const accessToken = "valid-token";
+			mockTokenService.isTokenBlacklisted.mockResolvedValue(false);
 
-			const testUser = createTestUserEntity({ email: loginData.email });
-			const tokens = {
-				accessToken: "access-token",
-				refreshToken: "refresh-token",
-				user: testUser,
-			};
+			// When
+			const result = await facade.isTokenBlacklisted(accessToken);
 
-			authDomain.login.mockResolvedValue(tokens);
-
-			const result = await service.login(loginData);
-
-			expect(authDomain.login).toHaveBeenCalledWith(loginData);
-			expect(result).toEqual(tokens);
+			// Then
+			expect(result).toBe(false);
 		});
 	});
 });
