@@ -26,7 +26,5 @@
   "keywords": [],
   "author": "kimjoongwon",
   "license": "ISC",
-  "devDependencies": {
-    "tsup": "catalog:"
-  }
+  "devDependencies": {}
 }

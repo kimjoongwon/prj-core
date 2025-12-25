@@ -3,134 +3,135 @@ import { QueryCategoryDto, TenantDto, UpdateCategoryDto } from "@cocrepo/dto";
 import { Prisma } from "@cocrepo/prisma";
 import { CategoriesRepository } from "@cocrepo/repository";
 import { Injectable, Logger } from "@nestjs/common";
-import { ClsService } from "nestjs-cls";
+import { ClsServiceManager } from "nestjs-cls";
 
 @Injectable()
 export class CategoriesService {
-	private readonly logger = new Logger(CategoriesService.name);
-	constructor(
-		private readonly repository: CategoriesRepository,
-		private readonly cls: ClsService,
-	) {}
+  private readonly logger = new Logger(CategoriesService.name);
+  private get cls() {
+    return ClsServiceManager.getClsService();
+  }
 
-	async create(args: any) {
-		const currentTenant = this.cls.get<TenantDto>(CONTEXT_KEYS.TENANT);
-		if (!currentTenant) {
-			throw new Error("No tenant found in context");
-		}
+  constructor(private readonly repository: CategoriesRepository) {}
 
-		// tenant 관계를 자동으로 설정
-		const createArgs = {
-			...args,
-			data: {
-				...args.data,
-				tenant: {
-					connect: {
-						id: currentTenant.id,
-					},
-				},
-			},
-		} as Prisma.CategoryCreateArgs;
+  async create(args: any) {
+    const currentTenant = this.cls.get<TenantDto>(CONTEXT_KEYS.TENANT);
+    if (!currentTenant) {
+      throw new Error("No tenant found in context");
+    }
 
-		const services = await this.repository.create(createArgs);
-		return services;
-	}
+    // tenant 관계를 자동으로 설정
+    const createArgs = {
+      ...args,
+      data: {
+        ...args.data,
+        tenant: {
+          connect: {
+            id: currentTenant.id,
+          },
+        },
+      },
+    } as Prisma.CategoryCreateArgs;
 
-	getById(id: string) {
-		return this.repository.findUnique({ where: { id } });
-	}
+    const services = await this.repository.create(createArgs);
+    return services;
+  }
 
-	updateById(id: string, updateCategoryDto: UpdateCategoryDto) {
-		return this.repository.update({
-			where: { id },
-			data: updateCategoryDto,
-		});
-	}
+  getById(id: string) {
+    return this.repository.findUnique({ where: { id } });
+  }
 
-	deleteById(id: string) {
-		return this.repository.delete({ where: { id } });
-	}
+  updateById(id: string, updateCategoryDto: UpdateCategoryDto) {
+    return this.repository.update({
+      where: { id },
+      data: updateCategoryDto,
+    });
+  }
 
-	removeById(id: string) {
-		return this.repository.update({
-			where: { id },
-			data: { removedAt: new Date() },
-		});
-	}
+  deleteById(id: string) {
+    return this.repository.delete({ where: { id } });
+  }
 
-	async getManyByQuery(query: QueryCategoryDto) {
-		const currentTenant = this.cls.get<TenantDto>(CONTEXT_KEYS.TENANT);
-		this.logger.debug("getManyByQuery - Current Tenant:", {
-			tenantId: currentTenant?.id?.slice(-8) || "null",
-			spaceId: currentTenant?.spaceId?.slice(-8) || "null",
-			timestamp: new Date().toISOString(),
-		});
+  removeById(id: string) {
+    return this.repository.update({
+      where: { id },
+      data: { removedAt: new Date() },
+    });
+  }
 
-		this.logger.debug("getManyByQuery - Query Args:", query);
-		if (!currentTenant) {
-			this.logger.warn("getManyByQuery - No tenant found in context");
-			throw new Error(
-				"Tenant information not found in context. Please log in again.",
-			);
-		}
-		if (!currentTenant.spaceId) {
-			this.logger.warn("getManyByQuery - No spaceId in tenant:", {
-				tenantId: currentTenant.id?.slice(-8),
-				hasSpaceId: !!currentTenant.spaceId,
-			});
-			throw new Error(
-				"Space ID is missing from tenant information. Please select a space.",
-			);
-		}
-		this.logger.debug("getManyByQuery - Query Args:", {
-			args: query.toArgs<Prisma.CategoryFindManyArgs>({
-				where: {
-					parent: null,
-					tenant: {
-						spaceId: currentTenant.spaceId,
-					},
-				},
-				include: {
-					children: {
-						include: {
-							children: {
-								include: {
-									children: true,
-								},
-							},
-						},
-					},
-				},
-			}),
-			countArgs: query.toCountArgs<Prisma.CategoryCountArgs>(),
-		});
-		const args = query.toArgs<Prisma.CategoryFindManyArgs>({
-			where: {
-				parent: null,
-				tenant: {
-					spaceId: currentTenant?.spaceId,
-				},
-			},
-			include: {
-				children: {
-					include: {
-						children: {
-							include: {
-								children: true,
-							},
-						},
-					},
-				},
-			},
-		});
+  async getManyByQuery(query: QueryCategoryDto) {
+    const currentTenant = this.cls.get<TenantDto>(CONTEXT_KEYS.TENANT);
+    this.logger.debug("getManyByQuery - Current Tenant:", {
+      tenantId: currentTenant?.id?.slice(-8) || "null",
+      spaceId: currentTenant?.spaceId?.slice(-8) || "null",
+      timestamp: new Date().toISOString(),
+    });
 
-		const countArgs = query.toCountArgs<Prisma.CategoryCountArgs>();
-		const categories = await this.repository.findMany(args);
-		const count = await this.repository.count(countArgs);
+    this.logger.debug("getManyByQuery - Query Args:", query);
+    if (!currentTenant) {
+      this.logger.warn("getManyByQuery - No tenant found in context");
+      throw new Error(
+        "Tenant information not found in context. Please log in again."
+      );
+    }
+    if (!currentTenant.spaceId) {
+      this.logger.warn("getManyByQuery - No spaceId in tenant:", {
+        tenantId: currentTenant.id?.slice(-8),
+        hasSpaceId: !!currentTenant.spaceId,
+      });
+      throw new Error(
+        "Space ID is missing from tenant information. Please select a space."
+      );
+    }
+    this.logger.debug("getManyByQuery - Query Args:", {
+      args: query.toArgs<Prisma.CategoryFindManyArgs>({
+        where: {
+          parent: null,
+          tenant: {
+            spaceId: currentTenant.spaceId,
+          },
+        },
+        include: {
+          children: {
+            include: {
+              children: {
+                include: {
+                  children: true,
+                },
+              },
+            },
+          },
+        },
+      }),
+      countArgs: query.toCountArgs<Prisma.CategoryCountArgs>(),
+    });
+    const args = query.toArgs<Prisma.CategoryFindManyArgs>({
+      where: {
+        parent: null,
+        tenant: {
+          spaceId: currentTenant?.spaceId,
+        },
+      },
+      include: {
+        children: {
+          include: {
+            children: {
+              include: {
+                children: true,
+              },
+            },
+          },
+        },
+      },
+    });
 
-		return {
-			categories,
-			count,
-		};
-	}
+    const countArgs = query.toCountArgs<Prisma.CategoryCountArgs>();
+    const categories = await this.repository.findMany(args);
+    const count = await this.repository.count(countArgs);
+
+    return {
+      categories,
+      count,
+    };
+  }
 }

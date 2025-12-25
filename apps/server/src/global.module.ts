@@ -6,136 +6,136 @@ import { MailerModule } from "@nestjs-modules/mailer";
 import { ClsModule } from "nestjs-cls";
 import { LoggerModule } from "nestjs-pino";
 import {
-	AuthConfig,
-	appConfig,
-	authConfig,
-	awsConfig,
-	corsConfig,
-	redisConfig,
-	smtpConfig,
+  AuthConfig,
+  appConfig,
+  authConfig,
+  awsConfig,
+  corsConfig,
+  redisConfig,
+  smtpConfig,
 } from "./shared";
 
 export const globalModules: (DynamicModule | Promise<DynamicModule>)[] = [
-	ConfigModule.forRoot({
-		isGlobal: true,
-		envFilePath: `.env.local`,
-		load: [
-			authConfig,
-			appConfig,
-			corsConfig,
-			smtpConfig,
-			awsConfig,
-			redisConfig,
-		],
-	}),
-	ThrottlerModule.forRoot([
-		{
-			name: "short",
-			ttl: 1000, // 1초
-			limit: 10, // 1초당 10개 요청
-		},
-		{
-			name: "medium",
-			ttl: 60000, // 1분
-			limit: 100, // 1분당 100개 요청
-		},
-		{
-			name: "long",
-			ttl: 900000, // 15분
-			limit: 1000, // 15분당 1000개 요청
-		},
-	]),
-	MailerModule.forRootAsync({
-		useFactory: async (config: ConfigService) => {
-			const smtpConfig = await config.get("smtp");
-			return {
-				transport: {
-					host: smtpConfig.host,
-					port: smtpConfig.port,
-					secure: true,
-					auth: {
-						user: smtpConfig.username,
-						pass: smtpConfig.password,
-					},
-				},
-				defaults: {
-					from: smtpConfig.sender,
-				},
-			};
-		},
-		inject: [ConfigService],
-	}),
-	ClsModule.forRoot({
-		global: true,
-		middleware: {
-			mount: true,
-		},
-	}),
-	JwtModule.registerAsync({
-		global: true,
-		useFactory: async (config: ConfigService) => {
-			const authConfig = await config.get<AuthConfig>("auth");
-			if (!authConfig?.secret) {
-				throw new Error("JWT secret is not defined in the configuration.");
-			}
+  ConfigModule.forRoot({
+    isGlobal: true,
+    envFilePath: `.env.local`,
+    load: [
+      authConfig,
+      appConfig,
+      corsConfig,
+      smtpConfig,
+      awsConfig,
+      redisConfig,
+    ],
+  }),
+  ThrottlerModule.forRoot([
+    {
+      name: "short",
+      ttl: 1000, // 1초
+      limit: 10, // 1초당 10개 요청
+    },
+    {
+      name: "medium",
+      ttl: 60000, // 1분
+      limit: 100, // 1분당 100개 요청
+    },
+    {
+      name: "long",
+      ttl: 900000, // 15분
+      limit: 1000, // 15분당 1000개 요청
+    },
+  ]),
+  MailerModule.forRootAsync({
+    useFactory: async (config: ConfigService) => {
+      const smtpConfig = await config.get("smtp");
+      return {
+        transport: {
+          host: smtpConfig.host,
+          port: smtpConfig.port,
+          secure: true,
+          auth: {
+            user: smtpConfig.username,
+            pass: smtpConfig.password,
+          },
+        },
+        defaults: {
+          from: smtpConfig.sender,
+        },
+      };
+    },
+    inject: [ConfigService],
+  }),
+  ClsModule.forRoot({
+    global: true,
+    middleware: {
+      mount: true,
+    },
+  }),
+  JwtModule.registerAsync({
+    global: true,
+    useFactory: async (config: ConfigService) => {
+      const authConfig = await config.get<AuthConfig>("auth");
+      if (!authConfig?.secret) {
+        throw new Error("JWT secret is not defined in the configuration.");
+      }
 
-			if (!authConfig?.expires) {
-				throw new Error(
-					"JWT expiration time is not defined in the configuration.",
-				);
-			}
+      if (!authConfig?.expires) {
+        throw new Error(
+          "JWT expiration time is not defined in the configuration."
+        );
+      }
 
-			return {
-				global: true,
-				secret: authConfig.secret,
-				signOptions: { expiresIn: authConfig.expires as any },
-			} as const;
-		},
-		inject: [ConfigService],
-	}),
-	LoggerModule.forRootAsync({
-		inject: [ConfigService],
-		useFactory: () => {
-			const isDevelopment = process.env.NODE_ENV !== "production";
-			const isTest = process.env.NODE_ENV === "test";
+      return {
+        global: true,
+        secret: authConfig.secret,
+        signOptions: { expiresIn: authConfig.expires as any },
+      } as const;
+    },
+    inject: [ConfigService],
+  }),
+  LoggerModule.forRootAsync({
+    inject: [ConfigService],
+    useFactory: () => {
+      const isDevelopment = process.env.NODE_ENV !== "production";
+      const isTest = process.env.NODE_ENV === "test";
 
-			// Test 환경: 에러만 로깅
-			if (isTest) {
-				return {
-					pinoHttp: {
-						level: "error",
-						timestamp: false,
-					},
-				};
-			}
+      // Test 환경: 에러만 로깅
+      if (isTest) {
+        return {
+          pinoHttp: {
+            level: "error",
+            timestamp: false,
+          },
+        };
+      }
 
-			// Development 환경: 상세 로깅
-			if (isDevelopment) {
-				return {
-					pinoHttp: {
-						level: "debug",
-						transport: {
-							target: "pino-pretty",
-							options: {
-								colorize: true,
-								singleLine: true,
-								translateTime: "yyyy-mm-dd HH:MM:ss",
-								ignore: "pid,hostname",
-								messageFormat: "🕒 {time} {level} - {msg}",
-							},
-						},
-						timestamp: true,
-					},
-				};
-			}
+      // Development 환경: 상세 로깅
+      if (isDevelopment) {
+        return {
+          pinoHttp: {
+            level: "debug",
+            transport: {
+              target: "pino-pretty",
+              options: {
+                colorize: true,
+                singleLine: true,
+                translateTime: "yyyy-mm-dd HH:MM:ss",
+                ignore: "pid,hostname",
+                messageFormat: "🕒 {time} {level} - {msg}",
+              },
+            },
+            timestamp: true,
+          },
+        };
+      }
 
-			// Production 환경: JSON 로그
-			return {
-				pinoHttp: {
-					level: "info",
-					timestamp: true,
-				},
-			};
-		},
-	}),
+      // Production 환경: JSON 로그
+      return {
+        pinoHttp: {
+          level: "info",
+          timestamp: true,
+        },
+      };
+    },
+  }),
 ];

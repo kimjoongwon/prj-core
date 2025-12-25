@@ -54,7 +54,6 @@
     "class-transformer": "^0.5.1",
     "ioredis": "^5.8.2",
     "libphonenumber-js": "^1.11.17",
-    "tsup": "catalog:",
     "typescript": "catalog:"
   },
   "exports": {
