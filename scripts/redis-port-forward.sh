@@ -55,6 +55,12 @@ echo ""
 # 환경변수 설정
 export REDIS_HOST=127.0.0.1
 export REDIS_PORT=6379
+# REDIS_PASSWORD는 이미 라인 11에서 export됨 - 재확인
+if [ -z "$REDIS_PASSWORD" ]; then
+    echo "❌ REDIS_PASSWORD 환경변수가 설정되지 않았습니다."
+    exit 1
+fi
+echo "✅ REDIS_PASSWORD 환경변수 확인 완료"
 
 # 종료 시 포트포워딩 정리
 cleanup() {
@@ -74,4 +80,4 @@ trap cleanup EXIT INT TERM
 echo "🚀 NestJS 서버 시작 중..."
 cd "$(dirname "$0")/.."
 # turbo start:dev --filter='./packages/*' --filter=server --concurrency=20
-turbo start:dev --filter=server
+pnpm start:server

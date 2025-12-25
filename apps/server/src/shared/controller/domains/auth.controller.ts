@@ -76,7 +76,7 @@ export class AuthController {
     { status: 401, message: AuthErrorMessages.INVALID_CREDENTIALS },
     500
   )
-  @ApiResponseEntity(TokenDto, HttpStatus.OK, { withSetCookie: true })
+  @ApiResponseEntity(TokenDto, HttpStatus.OK)
   @ResponseMessage("로그인 성공")
   async login(
     @Body() loginDto: LoginPayloadDto,
@@ -215,6 +215,8 @@ export class AuthController {
     if (!token) {
       throw new UnauthorizedException(AuthErrorMessages.TOKEN_NOT_FOUND);
     }
+
+    console.log("token", token);
 
     const isValid = this.tokenService.verifyToken(token);
     return isValid;

@@ -6,7 +6,7 @@
     "pnpm-workspace.yaml",
     "pnpm-lock.yaml"
   ],
-  "globalEnv": ["NODE_ENV"],
+  "globalEnv": ["NODE_ENV", "REDIS_HOST", "REDIS_PORT", "REDIS_PASSWORD"],
   "tasks": {
     // === 기본 태스크 ===
     "build": {

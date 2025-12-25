@@ -3,16 +3,16 @@ import { QueryCategoryDto, TenantDto, UpdateCategoryDto } from "@cocrepo/dto";
 import { Prisma } from "@cocrepo/prisma";
 import { CategoriesRepository } from "@cocrepo/repository";
 import { Injectable, Logger } from "@nestjs/common";
-import { ClsServiceManager } from "nestjs-cls";
+import { ClsService } from "nestjs-cls";
 
 @Injectable()
 export class CategoriesService {
   private readonly logger = new Logger(CategoriesService.name);
-  private get cls() {
-    return ClsServiceManager.getClsService();
-  }
 
-  constructor(private readonly repository: CategoriesRepository) {}
+  constructor(
+    private readonly repository: CategoriesRepository,
+    private readonly cls: ClsService
+  ) {}
 
   async create(args: any) {
     const currentTenant = this.cls.get<TenantDto>(CONTEXT_KEYS.TENANT);

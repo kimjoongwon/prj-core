@@ -9,15 +9,14 @@ import { Tenant } from "@cocrepo/entity";
 import { Prisma } from "@cocrepo/prisma";
 import { TenantsRepository } from "@cocrepo/repository";
 import { Injectable } from "@nestjs/common";
-import { ClsServiceManager } from "nestjs-cls";
+import { ClsService } from "nestjs-cls";
 
 @Injectable()
 export class TenantsService {
-  private get cls() {
-    return ClsServiceManager.getClsService();
-  }
-
-  constructor(private readonly tenantsRepository: TenantsRepository) {}
+  constructor(
+    private readonly tenantsRepository: TenantsRepository,
+    private readonly cls: ClsService
+  ) {}
 
   async create(createTenantDto: CreateTenantDto): Promise<Tenant> {
     return this.tenantsRepository.create({

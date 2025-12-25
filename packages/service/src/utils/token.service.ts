@@ -1,4 +1,4 @@
-import { Token, type TokenValues } from "@cocrepo/constant";
+import { CONTEXT_KEYS, Token, type TokenValues } from "@cocrepo/constant";
 import { AuthConfig } from "@cocrepo/type";
 import {
   AccessTokenCookieOptions,
@@ -14,20 +14,18 @@ import {
 import { ConfigService } from "@nestjs/config";
 import { JwtService, NotBeforeError, TokenExpiredError } from "@nestjs/jwt";
 import { Request, Response } from "express";
-import { ClsServiceManager } from "nestjs-cls";
+import { ClsService } from "nestjs-cls";
 import { TokenStorageService } from "./token-storage.service";
 
 @Injectable()
 export class TokenService {
   private readonly logger = new Logger(TokenService.name);
-  private get cls() {
-    return ClsServiceManager.getClsService();
-  }
 
   constructor(
     private jwtService: JwtService,
     private configService: ConfigService,
-    private tokenStorageService: TokenStorageService
+    private tokenStorageService: TokenStorageService,
+    private cls: ClsService
   ) {}
 
   getTokenFromRequest(req: Request, key?: TokenValues): string {
@@ -155,6 +153,11 @@ export class TokenService {
   }
 
   validateToken(token: string) {
+    const test = this.cls.get<string>(CONTEXT_KEYS.TOKEN);
+    console.log(
+      "---------------------------------------------------------------",
+      test
+    );
     try {
       return this.jwtService.verify(token);
     } catch (error) {

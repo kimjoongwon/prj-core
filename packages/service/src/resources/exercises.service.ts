@@ -8,15 +8,14 @@ import {
 import { Prisma } from "@cocrepo/prisma";
 import { ExercisesRepository } from "@cocrepo/repository";
 import { Injectable } from "@nestjs/common";
-import { ClsServiceManager } from "nestjs-cls";
+import { ClsService } from "nestjs-cls";
 
 @Injectable()
 export class ExercisesService {
-  private get cls() {
-    return ClsServiceManager.getClsService();
-  }
-
-  constructor(private readonly repository: ExercisesRepository) {}
+  constructor(
+    private readonly repository: ExercisesRepository,
+    private readonly cls: ClsService
+  ) {}
 
   async create(createExerciseDto: CreateExerciseDto) {
     const tenant = this.cls.get<TenantDto>(CONTEXT_KEYS.TENANT);

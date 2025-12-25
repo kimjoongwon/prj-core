@@ -39,7 +39,8 @@
     "bcrypt": "^6.0.0",
     "class-transformer": "^0.5.1",
     "ioredis": "^5.8.2",
-    "libphonenumber-js": "^1.11.17"
+    "libphonenumber-js": "^1.11.17",
+    "nestjs-cls": "^6.0.1"
   },
   "devDependencies": {
     "@aws-sdk/client-s3": "^3.883.0",
@@ -54,6 +55,7 @@
     "class-transformer": "^0.5.1",
     "ioredis": "^5.8.2",
     "libphonenumber-js": "^1.11.17",
+    "nestjs-cls": "^6.0.1",
     "typescript": "catalog:"
   },
   "exports": {
