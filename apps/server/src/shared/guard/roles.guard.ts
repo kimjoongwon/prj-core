@@ -1,4 +1,4 @@
-import { Roles as RolesDecorator } from "@cocrepo/decorator";
+import { ROLES_KEY } from "@cocrepo/decorator";
 import { UserDto } from "@cocrepo/dto";
 import { Roles } from "@cocrepo/prisma";
 import {
@@ -6,6 +6,7 @@ import {
 	ExecutionContext,
 	ForbiddenException,
 	Injectable,
+	UnauthorizedException,
 } from "@nestjs/common";
 import { Reflector } from "@nestjs/core";
 import { isEmpty } from "lodash";
@@ -16,7 +17,7 @@ export class RolesGuard implements CanActivate {
 
 	canActivate(context: ExecutionContext): boolean {
 		const roles = this.reflector.get<Roles[]>(
-			RolesDecorator,
+			ROLES_KEY,
 			context.getHandler(),
 		);
 
@@ -28,7 +29,7 @@ export class RolesGuard implements CanActivate {
 		const user = <UserDto>request.user;
 
 		if (!user) {
-			throw new ForbiddenException("인증된 사용자가 필요합니다.");
+			throw new UnauthorizedException("인증된 사용자가 필요합니다.");
 		}
 
 		if (!user.tenants || user.tenants.length === 0) {

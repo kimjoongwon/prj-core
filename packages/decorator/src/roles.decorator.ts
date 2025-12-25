@@ -1,5 +1,6 @@
 import type { Roles as RolesEnum } from "@cocrepo/prisma";
-import { Reflector } from "@nestjs/core";
+import { SetMetadata } from "@nestjs/common";
 
-export const Roles: ReturnType<typeof Reflector.createDecorator<RolesEnum[]>> =
-	Reflector.createDecorator<RolesEnum[]>();
+export const ROLES_KEY = "roles";
+
+export const Roles = (roles: RolesEnum[]) => SetMetadata(ROLES_KEY, roles);
