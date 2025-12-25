@@ -4,22 +4,22 @@
  * Plate
  * OpenAPI spec version: 1.0.0
  */
-import type { UserDto } from './userDto';
-import type { SpaceDto } from './spaceDto';
-import type { RoleDto } from './roleDto';
+import type { UserDto } from "./userDto";
+import type { SpaceDto } from "./spaceDto";
+import type { RoleDto } from "./roleDto";
 
 export interface TenantDto {
-  id: string;
-  seq: number;
-  createdAt: string;
-  updatedAt: string;
-  /** @nullable */
-  removedAt: string | null;
-  main: boolean;
-  roleId: string;
-  userId: string;
-  spaceId: string;
-  user?: UserDto;
-  space?: SpaceDto;
-  role?: RoleDto;
+	id: string;
+	seq: number;
+	createdAt: string;
+	updatedAt: string;
+	/** @nullable */
+	removedAt: string | null;
+	main: boolean;
+	roleId: string;
+	userId: string;
+	spaceId: string;
+	user?: UserDto;
+	space?: SpaceDto;
+	role?: RoleDto;
 }

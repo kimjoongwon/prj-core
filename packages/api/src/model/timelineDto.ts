@@ -4,17 +4,17 @@
  * Plate
  * OpenAPI spec version: 1.0.0
  */
-import type { SessionDto } from './sessionDto';
+import type { SessionDto } from "./sessionDto";
 
 export interface TimelineDto {
-  id: string;
-  seq: number;
-  createdAt: string;
-  updatedAt: string;
-  /** @nullable */
-  removedAt: string | null;
-  tenantId: string;
-  name: string;
-  description?: string;
-  sessions: SessionDto[];
+	id: string;
+	seq: number;
+	createdAt: string;
+	updatedAt: string;
+	/** @nullable */
+	removedAt: string | null;
+	tenantId: string;
+	name: string;
+	description?: string;
+	sessions: SessionDto[];
 }
