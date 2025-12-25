@@ -29,9 +29,9 @@ tools: Read, Write, Grep, Bash
    ```
 
 2. **계층 분리 준수**
-   - **Controller**: HTTP 요청/응답 처리, 입력 검증
-   - **Facade**: 복잡한 비즈니스 로직 조합, 트랜잭션 관리
-   - **Service**: 단일 도메인 비즈니스 로직
+   - **Controller**: HTTP 요청/응답 처리, 입력 검증, DTO → 도메인 모델 변환
+   - **Facade**: 복잡한 비즈니스 로직 조합, 트랜잭션 관리 (도메인 모델만 사용)
+   - **Service**: 단일 도메인 비즈니스 로직 (도메인 모델만 사용)
    - **Repository**: 데이터 접근 (Prisma)
 
 3. **의존성 주입 활용**
@@ -59,6 +59,37 @@ tools: Read, Write, Grep, Bash
    ```typescript
    if (!user) {
      throw new UnauthorizedException("유저가 존재하지 않습니다.");
+   }
+   ```
+
+5. **Controller를 넘어서면 도메인 모델만 사용**
+   - DTO는 Controller 레이어에서만 사용
+   - Controller에서 DTO → 도메인 모델 변환 후 Facade/Service 호출
+   - Facade, Service 레이어는 순수한 도메인 모델만 받아 처리
+
+   ```typescript
+   // ❌ 금지 - Facade/Service에서 DTO를 받음
+   // Facade
+   async signup(dto: SignUpDto) { ... }
+   // Service
+   async createUser(dto: CreateUserDto) { ... }
+
+   // ✅ 권장 - Controller에서 변환, 그 이후는 도메인 모델만
+   // Controller
+   @Post()
+   async signup(@Body() dto: SignUpDto) {
+     const user = User.create(dto.email, dto.password);
+     return this.authFacade.signup(user);
+   }
+
+   // Facade - 도메인 모델을 받음
+   async signup(user: User) {
+     return this.usersService.createUser(user);
+   }
+
+   // Service - 도메인 모델을 받음
+   async createUser(user: User) {
+     return this.repository.save(user);
    }
    ```
 
@@ -137,10 +168,11 @@ export class SomeFacade {
 
   /**
    * 복합 비즈니스 로직 처리
+   * @param entity - 도메인 모델 (DTO가 아님)
    */
-  async processComplexOperation(dto: SomeDto) {
-    // 여러 서비스 조합
-    const resultA = await this.serviceA.doSomething();
+  async processComplexOperation(entity: SomeEntity) {
+    // 여러 서비스 조합 - 모두 도메인 모델로 처리
+    const resultA = await this.serviceA.doSomething(entity);
     const resultB = await this.serviceB.doAnother(resultA);
     return resultB;
   }
@@ -161,6 +193,7 @@ export class SomeFacade {
 ## 체크리스트
 
 - [ ] 함수명이 비즈니스 목적을 명확히 표현하는가?
+- [ ] Facade/Service가 DTO 대신 도메인 모델을 받는가?
 - [ ] 불필요한 전체 조회 없이 DB 레벨에서 필터링하는가?
 - [ ] 하드코딩 없이 상수를 사용하는가?
 - [ ] JSDoc으로 함수 목적을 문서화했는가?

@@ -8,7 +8,19 @@
 - [README.md](file://README.md)
 - [apps/admin/package.json](file://apps/admin/package.json)
 - [apps/server/package.json](file://apps/server/package.json)
+- [packages/prisma/README.md](file://packages/prisma/README.md)
+- [docs/SCHEMA-REFACTORING.md](file://docs/SCHEMA-REFACTORING.md)
+- [packages/repository/README.md](file://packages/repository/README.md)
+- [packages/service/README.md](file://packages/service/README.md)
 </cite>
+
+## Update Summary
+**Changes Made**   
+- Updated package structure to reflect the renaming of `packages/schema` to `packages/prisma`
+- Added documentation for new independent packages: type, vo, repository, and service
+- Updated architectural diagrams to reflect the new package dependencies and structure
+- Revised dependency analysis to include the new package relationships
+- Updated section sources to reference the new package README files and migration guide
 
 ## Table of Contents
 1. [Introduction](#introduction)
@@ -36,13 +48,16 @@ Server[apps/server]
 Storybook[apps/storybook]
 end
 subgraph "Shared Packages"
-ApiClient[packages/shared-api-client]
-Frontend[packages/shared-frontend]
-Hooks[packages/shared-hooks]
-Schema[packages/shared-schema]
-Types[packages/shared-types]
-Utils[packages/shared-utils]
-Vars[packages/shared-vars]
+ApiClient[packages/api]
+Frontend[packages/design-system]
+Hooks[packages/hook]
+Schema[packages/prisma]
+Types[packages/type]
+Utils[packages/toolkit]
+Vars[packages/constant]
+VO[packages/vo]
+Repository[packages/repository]
+Service[packages/service]
 end
 Admin --> Frontend
 Admin --> Hooks
@@ -58,6 +73,9 @@ Mobile --> ApiClient
 Server --> Schema
 Server --> Utils
 Server --> Vars
+Server --> Repository
+Server --> Service
+Server --> VO
 Storybook --> Frontend
 Storybook --> Hooks
 ```
@@ -91,13 +109,16 @@ Server[Backend API]
 Storybook[UI Documentation]
 end
 subgraph "Shared Packages"
-Schema[shared-schema<br>Prisma Models & DTOs]
-ApiClient[shared-api-client<br>API Client]
-Frontend[shared-frontend<br>UI Components]
-Utils[shared-utils<br>Utility Functions]
-Hooks[shared-hooks<br>React Hooks]
-Types[shared-types<br>Type Definitions]
-Vars[shared-vars<br>Constants]
+Schema[prisma<br>Prisma Models & Client]
+ApiClient[api<br>API Client]
+Frontend[design-system<br>UI Components]
+Utils[toolkit<br>Utility Functions]
+Hooks[hook<br>React Hooks]
+Types[type<br>Type Definitions]
+Vars[constant<br>Constants]
+VO[vo<br>Value Objects]
+Repository[repository<br>Repository Pattern]
+Service[service<br>Business Logic]
 end
 Turborepo --> Admin
 Turborepo --> Mobile
@@ -124,6 +145,9 @@ Mobile --> Vars
 Server --> Schema
 Server --> Utils
 Server --> Vars
+Server --> Repository
+Server --> Service
+Server --> VO
 Storybook --> Frontend
 Storybook --> Hooks
 ```
@@ -142,12 +166,12 @@ The Turborepo configuration in turbo.json defines the task orchestration pipelin
 graph TD
 Build[build] --> DependsOn["^build<br>(All package builds)"]
 subgraph "Package Build Tasks"
-SchemaBuild["@cocrepo/schema#build"]
+SchemaBuild["@cocrepo/prisma#build"]
 ToolkitBuild["@cocrepo/toolkit#build"]
-ApiClientBuild["@cocrepo/api-client#build"]
-UIBuild["@cocrepo/ui#build"]
-HooksBuild["@cocrepo/hooks#build"]
-TypesBuild["@cocrepo/types#build"]
+ApiClientBuild["@cocrepo/api#build"]
+UIBuild["@cocrepo/design-system#build"]
+HooksBuild["@cocrepo/hook#build"]
+TypesBuild["@cocrepo/type#build"]
 ServerBuild["server#build"]
 end
 SchemaBuild --> ToolkitBuild
@@ -160,6 +184,19 @@ HooksBuild --> TypesBuild
 HooksBuild --> ToolkitBuild
 ServerBuild --> SchemaBuild
 ServerBuild --> ToolkitBuild
+ServerBuild --> RepositoryBuild
+ServerBuild --> ServiceBuild
+RepositoryBuild --> SchemaBuild
+RepositoryBuild --> EntityBuild
+ServiceBuild --> RepositoryBuild
+ServiceBuild --> DTOBuild
+ServiceBuild --> EntityBuild
+ServiceBuild --> VOBuild
+ServiceBuild --> DecoratorBuild
+ServiceBuild --> SchemaBuild
+ServiceBuild --> TypesBuild
+ServiceBuild --> ConstantBuild
+ServiceBuild --> ToolkitBuild
 Build --> SchemaBuild
 Build --> ToolkitBuild
 Build --> ApiClientBuild
@@ -167,6 +204,8 @@ Build --> UIBuild
 Build --> HooksBuild
 Build --> TypesBuild
 Build --> ServerBuild
+Build --> RepositoryBuild
+Build --> ServiceBuild
 ```
 
 **Diagram sources**
@@ -260,13 +299,19 @@ Server[Server API]
 Storybook[Storybook]
 end
 subgraph "Shared Packages"
-Schema[shared-schema]
-ApiClient[shared-api-client]
-Frontend[shared-frontend]
-Utils[shared-utils]
-Hooks[shared-hooks]
-Types[shared-types]
-Vars[shared-vars]
+Schema[prisma]
+ApiClient[api]
+Frontend[design-system]
+Utils[toolkit]
+Hooks[hook]
+Types[type]
+Vars[constant]
+VO[vo]
+Repository[repository]
+Service[service]
+Entity[entity]
+DTO[dto]
+Decorator[decorator]
 end
 Admin --> Schema
 Admin --> ApiClient
@@ -285,6 +330,9 @@ Mobile --> Vars
 Server --> Schema
 Server --> Utils
 Server --> Vars
+Server --> Repository
+Server --> Service
+Server --> VO
 Storybook --> Frontend
 Storybook --> Hooks
 Frontend --> Utils
@@ -295,14 +343,32 @@ ApiClient --> Types
 ApiClient --> Utils
 Schema --> Utils
 Schema --> Types
-Hooks --> Types
-Hooks --> Utils
+Repository --> Schema
+Repository --> Entity
+Service --> Repository
+Service --> DTO
+Service --> Entity
+Service --> VO
+Service --> Decorator
+Service --> Schema
+Service --> Types
+Service --> Vars
+Service --> Utils
+DTO --> Entity
+DTO --> Decorator
+DTO --> Types
+DTO --> Vars
+Decorator --> Vars
+Decorator --> Utils
+VO --> Utils
 ```
 
 **Diagram sources**
 - [apps/admin/package.json](file://apps/admin/package.json)
 - [apps/server/package.json](file://apps/server/package.json)
 - [README.md](file://README.md#L164-L203)
+- [packages/repository/README.md](file://packages/repository/README.md)
+- [packages/service/README.md](file://packages/service/README.md)
 
 **Section sources**
 - [apps/admin/package.json](file://apps/admin/package.json)

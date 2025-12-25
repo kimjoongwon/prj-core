@@ -1,30 +1,5 @@
 // Domain Controllers
-export { AuthController } from "./domains";
+export { AuthController } from "./auth.controller";
 
 // Resource Controllers
-export {
-	AssignmentsController,
-	CategoriesController,
-	ExercisesController,
-	FileAssociationsController,
-	FileClassificationsController,
-	FilesController,
-	GroundsController,
-	GroupsController,
-	ProgramsController,
-	RoleAssociationsController,
-	RoleClassificationsController,
-	RolesController,
-	RoutinesController,
-	SafeController,
-	SessionsController,
-	SpaceAssociationsController,
-	SpaceClassificationsController,
-	SpacesController,
-	SubjectsController,
-	TenantsController,
-	TimelinesController,
-	UserAssociationsController,
-	UserClassificationsController,
-	UsersController,
-} from "./resources";
+// 필요할 때 생성합니다. 가이드: .claude/agents/controller-builder.md

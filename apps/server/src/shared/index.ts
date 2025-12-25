@@ -24,33 +24,7 @@ export {
 	smtpConfig,
 } from "./config";
 // Controllers
-export {
-	AssignmentsController,
-	AuthController,
-	CategoriesController,
-	ExercisesController,
-	FileAssociationsController,
-	FileClassificationsController,
-	FilesController,
-	GroundsController,
-	GroupsController,
-	ProgramsController,
-	RoleAssociationsController,
-	RoleClassificationsController,
-	RolesController,
-	RoutinesController,
-	SafeController,
-	SessionsController,
-	SpaceAssociationsController,
-	SpaceClassificationsController,
-	SpacesController,
-	SubjectsController,
-	TenantsController,
-	TimelinesController,
-	UserAssociationsController,
-	UserClassificationsController,
-	UsersController,
-} from "./controller";
+export { AuthController } from "./controller";
 // Decorators
 export { ResponseMessage } from "./decorator";
 // Filters
