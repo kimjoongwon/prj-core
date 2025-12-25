@@ -1,7 +1,8 @@
+import { RoleCategoryNames } from "@cocrepo/enum";
 import { SetMetadata } from "@nestjs/common";
 
 export const ROLE_CATEGORIES_KEY = "roleCategories";
 
-// RoleCategoryNames 타입은 사용처에서 정의
-export const RoleCategories = <T extends string>(categories: T[]) =>
+// RoleCategoryNames 타입을 직접 사용
+export const RoleCategories = (categories: RoleCategoryNames[]) =>
 	SetMetadata(ROLE_CATEGORIES_KEY, categories);
