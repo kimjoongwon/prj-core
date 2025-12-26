@@ -1,0 +1,50 @@
+{
+  "name": "@cocrepo/facade",
+  "version": "0.1.0",
+  "publishConfig": {
+    "access": "public"
+  },
+  "description": "Facade layer for cocrepo",
+  "files": [
+    "dist",
+    "README.md"
+  ],
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "scripts": {
+    "type-check": "tsc --noEmit",
+    "build": "tsc",
+    "start:dev": "tsc --watch",
+    "format": "biome format --write .",
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "clean": "rm -rf dist && rm -rf node_modules"
+  },
+  "dependencies": {
+    "@cocrepo/constant": "workspace:*",
+    "@cocrepo/entity": "workspace:*",
+    "@cocrepo/service": "workspace:*",
+    "@cocrepo/vo": "workspace:*"
+  },
+  "peerDependencies": {
+    "@nestjs/common": "^11.1.3",
+    "@nestjs/jwt": "^11.0.0"
+  },
+  "devDependencies": {
+    "@nestjs/common": "^11.1.3",
+    "@nestjs/jwt": "^11.0.0",
+    "@nestjs/testing": "^11.1.6",
+    "@types/jest": "^30.0.0",
+    "@types/node": "catalog:",
+    "jest": "^30.1.3",
+    "ts-jest": "^29.4.1",
+    "typescript": "catalog:"
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "require": "./dist/index.js",
+      "default": "./dist/index.js"
+    }
+  }
+}

@@ -7,7 +7,8 @@ import {
 	UserDto,
 } from "@cocrepo/dto";
 import { User } from "@cocrepo/entity";
-import { AuthFacade, TokenService } from "@cocrepo/service";
+import { AuthFacade } from "@cocrepo/facade";
+import { TokenService } from "@cocrepo/service";
 import {
 	Body,
 	Controller,

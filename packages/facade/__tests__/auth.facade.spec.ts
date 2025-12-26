@@ -1,16 +1,15 @@
 import { PRISMA_SERVICE_TOKEN } from "@cocrepo/constant";
+import { PrismaService, TokenService, UsersService } from "@cocrepo/service";
 import { JwtService } from "@nestjs/jwt";
 import { Test, TestingModule } from "@nestjs/testing";
-import { AuthFacade } from "../src/facade/auth.facade";
-import { UsersService } from "../src/service/users.service";
-import { TokenService } from "../src/utils";
+import { AuthFacade } from "../src/auth.facade";
 
 describe("AuthFacade", () => {
 	let facade: AuthFacade;
 	let mockUsersService: jest.Mocked<UsersService>;
 	let mockJwtService: jest.Mocked<JwtService>;
 	let mockTokenService: jest.Mocked<TokenService>;
-	let mockPrismaService: any;
+	let mockPrismaService: jest.Mocked<PrismaService>;
 
 	const mockUser = {
 		id: "user-test-id",
@@ -45,7 +44,7 @@ describe("AuthFacade", () => {
 			role: { findFirst: jest.fn() },
 			space: { create: jest.fn() },
 			user: { create: jest.fn() },
-		};
+		} as any;
 
 		const module: TestingModule = await Test.createTestingModule({
 			providers: [

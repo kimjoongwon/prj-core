@@ -1,7 +1,18 @@
-import type { CookieOptions } from "express";
 import { ValueObject } from "../../common/value-object.base";
 import { VoValidationError } from "../../errors/vo.error";
 import { JwtExpiration } from "./jwt-expiration.vo";
+
+/**
+ * Express CookieOptions 호환 인터페이스
+ */
+export interface CookieOptions {
+	maxAge?: number;
+	httpOnly?: boolean;
+	secure?: boolean;
+	sameSite?: "strict" | "lax" | "none";
+	path?: string;
+	domain?: string;
+}
 
 interface CookieOptionsProps {
 	maxAge: number;

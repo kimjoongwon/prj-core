@@ -6,6 +6,6 @@
 @custom-variant dark (&:is(.dark *));
 
 body {
-	font-family: "Pretendard", sans-serif;
-	height: 100vh;
+  font-family: "Pretendard", sans-serif;
+  height: 100vh;
 }
