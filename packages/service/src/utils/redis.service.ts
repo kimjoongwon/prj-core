@@ -16,34 +16,71 @@ export class RedisService implements OnModuleInit, OnModuleDestroy {
 	constructor(private configService: ConfigService) {
 		const redisConfig = this.configService.get<RedisConfig>("redis");
 
+		// 연결 시도 전 설정 로깅
+		this.logger.log(
+			`Redis 연결 시도: ${redisConfig?.host}:${redisConfig?.port}`,
+		);
+
 		this.client = new Redis({
 			host: redisConfig?.host || "localhost",
 			port: redisConfig?.port || 6379,
 			password: redisConfig?.password || undefined,
 			retryStrategy: (times) => {
+				this.logger.warn(
+					`Redis 재연결 시도 ${times}회차 - host: ${redisConfig?.host}`,
+				);
 				if (times > 3) {
-					this.logger.error("Redis 연결 재시도 횟수 초과");
+					this.logger.error(
+						`Redis 연결 재시도 횟수 초과 (3회) - host: ${redisConfig?.host}`,
+					);
 					return null;
 				}
-				return Math.min(times * 200, 2000);
+				const delay = Math.min(times * 200, 2000);
+				this.logger.warn(`${delay}ms 후 재시도...`);
+				return delay;
 			},
 		});
 
+		// 에러 이벤트 상세 로깅
 		this.client.on("error", (err) => {
-			this.logger.error(`Redis 연결 오류: ${err.message}`);
+			this.logger.error(`Redis 연결 오류: ${JSON.stringify({
+				message: err.message,
+				code: (err as NodeJS.ErrnoException).code,
+				host: redisConfig?.host,
+				port: redisConfig?.port,
+			})}`);
 		});
 
+		// 연결 상태 이벤트 로깅
 		this.client.on("connect", () => {
-			this.logger.log("Redis 연결 성공");
+			this.logger.log(
+				`Redis 연결 성공: ${redisConfig?.host}:${redisConfig?.port}`,
+			);
+		});
+
+		this.client.on("ready", () => {
+			this.logger.log("Redis 클라이언트 준비 완료");
+		});
+
+		this.client.on("close", () => {
+			this.logger.warn("Redis 연결 종료됨");
+		});
+
+		this.client.on("reconnecting", () => {
+			this.logger.warn("Redis 재연결 중...");
 		});
 	}
 
 	async onModuleInit() {
 		try {
-			await this.client.ping();
-			this.logger.log("Redis 연결 확인 완료");
+			const result = await this.client.ping();
+			this.logger.log(`Redis PING 응답: ${result}`);
 		} catch (error) {
-			this.logger.warn(`Redis 연결 실패: ${error}`);
+			const err = error as NodeJS.ErrnoException;
+			this.logger.error(`Redis 연결 실패: ${JSON.stringify({
+				message: err.message,
+				code: err.code,
+			})}`);
 		}
 	}
 
