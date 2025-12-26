@@ -4,12 +4,7 @@
  * Plate
  * OpenAPI spec version: 1.0.0
  */
-import {
-	useMutation,
-	useQuery,
-	useSuspenseInfiniteQuery,
-	useSuspenseQuery,
-} from "@tanstack/react-query";
+
 import type {
 	DataTag,
 	DefinedInitialDataOptions,
@@ -29,7 +24,15 @@ import type {
 	UseSuspenseQueryOptions,
 	UseSuspenseQueryResult,
 } from "@tanstack/react-query";
+import {
+	useMutation,
+	useQuery,
+	useSuspenseInfiniteQuery,
+	useSuspenseQuery,
+} from "@tanstack/react-query";
+import type { BodyType, ErrorType } from "./libs/customAxios";
 
+import { customInstance } from "./libs/customAxios";
 import type {
 	CreateCategory200AllOf,
 	CreateCategoryDto,
@@ -165,8 +168,6 @@ import type {
 	VerifyToken200AllOf,
 } from "./model";
 
-import { customInstance } from "./libs/customAxios";
-import type { ErrorType, BodyType } from "./libs/customAxios";
 type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
 
 /**

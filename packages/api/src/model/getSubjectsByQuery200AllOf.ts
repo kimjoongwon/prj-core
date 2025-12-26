@@ -4,8 +4,9 @@
  * Plate
  * OpenAPI spec version: 1.0.0
  */
-import type { SubjectDto } from "./subjectDto";
+
 import type { GetSubjectsByQuery200AllOfMeta } from "./getSubjectsByQuery200AllOfMeta";
+import type { SubjectDto } from "./subjectDto";
 
 export type GetSubjectsByQuery200AllOf = {
 	/** */

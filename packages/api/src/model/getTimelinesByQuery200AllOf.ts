@@ -4,8 +4,9 @@
  * Plate
  * OpenAPI spec version: 1.0.0
  */
-import type { TimelineDto } from "./timelineDto";
+
 import type { GetTimelinesByQuery200AllOfMeta } from "./getTimelinesByQuery200AllOfMeta";
+import type { TimelineDto } from "./timelineDto";
 
 export type GetTimelinesByQuery200AllOf = {
 	/** */

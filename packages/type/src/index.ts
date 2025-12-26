@@ -110,16 +110,6 @@ export type ValueAggregator<TValue, TPaths extends readonly string[]> = (
 ) => TValue;
 
 // ============================================
-// JSON 관련 타입
-// ============================================
-export type { JsonArray, JsonObject, JsonValue } from "./json";
-
-// ============================================
-// 페이지 메타 관련 타입
-// ============================================
-export type { IPageMeta } from "./page-meta";
-
-// ============================================
 // Config 관련 타입
 // ============================================
 export type {
@@ -138,3 +128,11 @@ export type {
 	SMTPConfig,
 	TwitterConfig,
 } from "./config.types";
+// ============================================
+// JSON 관련 타입
+// ============================================
+export type { JsonArray, JsonObject, JsonValue } from "./json";
+// ============================================
+// 페이지 메타 관련 타입
+// ============================================
+export type { IPageMeta } from "./page-meta";

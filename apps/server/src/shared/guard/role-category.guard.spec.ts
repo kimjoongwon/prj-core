@@ -8,9 +8,7 @@ describe("RoleCategoryGuard", () => {
 	let guard: RoleCategoryGuard;
 	let mockReflector: jest.Mocked<Reflector>;
 
-	const createMockExecutionContext = (
-		user: any = null,
-	): ExecutionContext => {
+	const createMockExecutionContext = (user: any = null): ExecutionContext => {
 		const request = { user };
 		const handler = jest.fn();
 

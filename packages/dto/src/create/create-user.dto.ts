@@ -1,5 +1,5 @@
-import { OmitType } from "@nestjs/swagger";
 import { User } from "@cocrepo/entity";
+import { OmitType } from "@nestjs/swagger";
 import { COMMON_ENTITY_FIELDS } from "../constant";
 import { UserDto } from "../user.dto";
 

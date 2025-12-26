@@ -1,6 +1,8 @@
 {
   "editor.formatOnSave": true,
   "editor.defaultFormatter": "biomejs.biome",
+  "editor.insertSpaces": false,
+  "editor.tabSize": 2,
   "editor.codeActionsOnSave": {
     "source.organizeImports.biome": "always",
     "source.fixAll.biome": "explicit"
@@ -15,9 +17,19 @@
     "editor.defaultFormatter": "Prisma.prisma"
   },
   "[markdown]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
+    "editor.defaultFormatter": "biomejs.biome"
   },
   "[jsonc]": {
     "editor.defaultFormatter": "biomejs.biome"
+  },
+  "[typescript]": {
+    "editor.defaultFormatter": "biomejs.biome",
+    "editor.insertSpaces": false,
+    "editor.tabSize": 2
+  },
+  "[typescriptreact]": {
+    "editor.defaultFormatter": "biomejs.biome",
+    "editor.insertSpaces": false,
+    "editor.tabSize": 2
   }
 }

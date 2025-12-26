@@ -4,8 +4,9 @@
  * Plate
  * OpenAPI spec version: 1.0.0
  */
-import type { SpaceClassificationDto } from "./spaceClassificationDto";
+
 import type { GetSpaceClassificationsByQuery200AllOfMeta } from "./getSpaceClassificationsByQuery200AllOfMeta";
+import type { SpaceClassificationDto } from "./spaceClassificationDto";
 
 export type GetSpaceClassificationsByQuery200AllOf = {
 	/** */

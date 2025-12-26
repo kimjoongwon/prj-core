@@ -1,7 +1,7 @@
 import * as crypto from "node:crypto";
+import { AuthConfig } from "@cocrepo/type";
 import { Injectable, Logger } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
-import { AuthConfig } from "@cocrepo/type";
 import { RedisService } from "./redis.service";
 
 /**

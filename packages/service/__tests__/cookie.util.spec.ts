@@ -1,9 +1,9 @@
 import {
-	parseJwtExpiresInToMs,
 	createCookieOptions,
 	getAccessTokenCookieOptions,
-	getRefreshTokenCookieOptions,
 	getDefaultCookieOptions,
+	getRefreshTokenCookieOptions,
+	parseJwtExpiresInToMs,
 } from "../src/utils/cookie.util";
 
 describe("CookieUtil", () => {

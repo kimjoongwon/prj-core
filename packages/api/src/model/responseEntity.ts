@@ -4,8 +4,9 @@
  * Plate
  * OpenAPI spec version: 1.0.0
  */
-import type { ResponseEntityHttpStatus } from "./responseEntityHttpStatus";
+
 import type { ResponseEntityData } from "./responseEntityData";
+import type { ResponseEntityHttpStatus } from "./responseEntityHttpStatus";
 import type { ResponseEntityMeta } from "./responseEntityMeta";
 
 export interface ResponseEntity {

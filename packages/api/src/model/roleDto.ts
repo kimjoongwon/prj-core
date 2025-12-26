@@ -4,9 +4,10 @@
  * Plate
  * OpenAPI spec version: 1.0.0
  */
-import type { Roles } from "./roles";
-import type { RoleDtoClassification } from "./roleDtoClassification";
+
 import type { RoleAssociationDto } from "./roleAssociationDto";
+import type { RoleDtoClassification } from "./roleDtoClassification";
+import type { Roles } from "./roles";
 
 export interface RoleDto {
 	id: string;

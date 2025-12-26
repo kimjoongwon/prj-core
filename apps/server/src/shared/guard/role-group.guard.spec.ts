@@ -278,10 +278,7 @@ describe("RoleGroupGuard", () => {
 							main: true,
 							role: {
 								name: "USER",
-								associations: [
-									{ group: null },
-									{ group: { name: "일반" } },
-								],
+								associations: [{ group: null }, { group: { name: "일반" } }],
 							},
 						},
 					],

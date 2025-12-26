@@ -4,8 +4,9 @@
  * Plate
  * OpenAPI spec version: 1.0.0
  */
-import type { ExerciseDto } from "./exerciseDto";
+
 import type { ActivityDto } from "./activityDto";
+import type { ExerciseDto } from "./exerciseDto";
 
 export interface TaskDto {
 	id: string;
