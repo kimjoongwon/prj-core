@@ -1,6 +1,3 @@
-// Facade
-export { AuthFacade } from "./facade";
-
 // Resources
 // 필요할 때 생성합니다. 가이드: .claude/agents/service-builder.md
 export { UsersService } from "./service";
@@ -13,4 +10,4 @@ export {
 	RedisService,
 	TokenService,
 	TokenStorageService,
-} from "./utils";
+} from "./infra";

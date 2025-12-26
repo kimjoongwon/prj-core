@@ -1,5 +1,6 @@
 import { PRISMA_SERVICE_TOKEN } from "@cocrepo/constant";
 import { ResponseEntity } from "@cocrepo/entity";
+import { PrismaService, TokenService, UsersService } from "@cocrepo/service";
 import { HashedPassword, PlainPassword } from "@cocrepo/vo";
 import {
 	BadRequestException,
@@ -10,8 +11,6 @@ import {
 	UnauthorizedException,
 } from "@nestjs/common";
 import { JwtService } from "@nestjs/jwt";
-import { UsersService } from "../service/users.service";
-import { PrismaService, TokenService } from "../utils";
 
 /**
  * 인증 Facade

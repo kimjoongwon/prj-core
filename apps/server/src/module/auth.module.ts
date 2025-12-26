@@ -1,6 +1,6 @@
+import { AuthFacade } from "@cocrepo/facade";
 import { UsersRepository } from "@cocrepo/repository";
 import {
-	AuthFacade,
 	RedisService,
 	TokenService,
 	TokenStorageService,
