@@ -27,6 +27,9 @@ tools: Read, Write, Grep, Bash
 2. **이벤트 핸들러는 hooks로 분리**
    - 모든 이벤트 핸들러는 `useHandlers` hook에 정의
    - 페이지에서 useHandlers를 호출하여 사용
+   - **네이밍 규칙**: `on[Event][UI]` 형태로 직관적으로 작성
+     - 예: `onClickLoginButton`, `onKeyDownInput`, `onChangeEmail`
+     - `handle` 접두어는 사용하지 않음 (페이지는 직관적이어야 함)
 
 3. **폴더 구조**
    ```
@@ -41,8 +44,12 @@ tools: Read, Write, Grep, Bash
 ### ❌ 피해야 할 것
 
 1. **중첩된 컴포넌트 구조**
+   - 페이지의 컴포넌트 구조는 한 눈에 파악 가능해야 함
+   - **children 또는 renderProps를 활용**하여 flat하게 유지
+   - 복잡한 레이아웃은 Layout 컴포넌트에 위임
+
    ```tsx
-   // ❌ 금지 - 깊은 중첩
+   // ❌ 금지 - 깊은 중첩 (구조 파악 어려움)
    <VStack>
      <VStack>
        <VStack>
@@ -53,12 +60,38 @@ tools: Read, Write, Grep, Bash
      </VStack>
    </VStack>
 
-   // ✅ 허용 - flat 구조
+   // ❌ 금지 - 레이아웃 로직이 페이지에 노출됨
+   <div className="flex flex-col">
+     <div className="flex justify-between">
+       <Header />
+       <Sidebar>
+         <Content />
+       </Sidebar>
+     </div>
+   </div>
+
+   // ✅ 권장 - children을 활용한 flat 구조
    <VStack gap={4}>
      <Header />
      <Content />
      <Footer />
    </VStack>
+
+   // ✅ 권장 - Layout 컴포넌트 + children으로 구조 한눈에 파악
+   <DashboardLayout
+     header={<Header />}
+     sidebar={<Sidebar />}
+   >
+     <Content />
+   </DashboardLayout>
+
+   // ✅ 권장 - renderProps로 복잡한 구조 위임
+   <FormLayout
+     renderHeader={() => <FormHeader />}
+     renderActions={() => <FormActions />}
+   >
+     <FormFields />
+   </FormLayout>
    ```
 
 2. **이벤트 핸들러를 페이지에 직접 정의**
@@ -71,12 +104,25 @@ tools: Read, Write, Grep, Bash
      return <Button onPress={handleSubmit}>로그인</Button>;
    };
 
-   // ✅ 권장 - useHandlers 사용
+   // ✅ 권장 - useHandlers 사용 + 직관적 네이밍
    const LoginPage = () => {
      const state = useLocalObservable(() => ({ ... }));
      const handlers = useHandlers({ state });
-     return <Button onPress={handlers.handleSubmit}>로그인</Button>;
+     return <Button onPress={handlers.onClickLoginButton}>로그인</Button>;
    };
+   ```
+
+3. **handle 접두어 사용**
+   ```tsx
+   // ❌ 피하기 - handle 접두어
+   handlers.handleLogin
+   handlers.handleKeyDown
+   handlers.handleSubmit
+
+   // ✅ 권장 - on[Event][UI] 형태로 직관적 표현
+   handlers.onClickLoginButton   // 로그인 버튼 클릭
+   handlers.onKeyDownInput       // 입력 필드에서 키 입력
+   handlers.onChangeEmail        // 이메일 변경
    ```
 
 ## 페이지 생성 프로세스
@@ -146,7 +192,7 @@ export const [PageName]Page = observer(() => {
         path="email"
         state={state.form}
         label="이메일"
-        onKeyDown={handlers.handleKeyDown}
+        onKeyDown={handlers.onKeyDownInput}
       />
 
       {state.errorMessage && (
@@ -155,7 +201,7 @@ export const [PageName]Page = observer(() => {
 
       <Button
         color="primary"
-        onPress={handlers.handleSubmit}
+        onPress={handlers.onClickSubmitButton}
         isLoading={state.isLoading}
       >
         제출
@@ -185,7 +231,7 @@ interface UseHandlersParams {
 }
 
 export const useHandlers = ({ state }: UseHandlersParams) => {
-  const handleSubmit = useCallback(async () => {
+  const onClickSubmitButton = useCallback(async () => {
     // 유효성 검사
     if (!state.form.email || !state.form.password) {
       state.errorMessage = "모든 필드를 입력해주세요.";
@@ -204,15 +250,15 @@ export const useHandlers = ({ state }: UseHandlersParams) => {
     }
   }, [state]);
 
-  const handleKeyDown = useCallback((e: React.KeyboardEvent) => {
+  const onKeyDownInput = useCallback((e: React.KeyboardEvent) => {
     if (e.key === "Enter") {
-      handleSubmit();
+      onClickSubmitButton();
     }
-  }, [handleSubmit]);
+  }, [onClickSubmitButton]);
 
   return {
-    handleSubmit,
-    handleKeyDown,
+    onClickSubmitButton,
+    onKeyDownInput,
   };
 };
 ```
@@ -256,8 +302,8 @@ export * from "./hooks";
 **Handlers (useHandlers):**
 | 이름 | 파라미터 | 설명 |
 |------|----------|------|
-| handleSubmit | - | 폼 제출 |
-| handleKeyDown | KeyboardEvent | 키 입력 처리 |
+| onClickSubmitButton | - | 제출 버튼 클릭 |
+| onKeyDownInput | KeyboardEvent | 입력 필드 키 입력 |
 
 **체크리스트:**
 - ✅ Flat 구조 유지

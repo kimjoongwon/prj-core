@@ -174,7 +174,7 @@ export const createMockJwtService = (): Partial<JwtService> => {
 export const createMockConfigService = (): Partial<ConfigService> => {
 	return {
 		get: jest.fn().mockImplementation((key: string) => {
-			const config = {
+			const config: Record<string, string | number> = {
 				"auth.jwtSecret": "test-jwt-secret",
 				"auth.jwtRefreshSecret": "test-jwt-refresh-secret",
 				"auth.jwtAccessTokenExpirationTime": "15m",

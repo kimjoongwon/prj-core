@@ -1,4 +1,4 @@
-import { tools } from "@cocrepo/toolkit";
+import { cloneDeep } from "@cocrepo/toolkit";
 import type { Option } from "@cocrepo/type";
 import {
 	Select as NextSelect,
@@ -17,7 +17,7 @@ export interface SelectProps
 export const Select = (props: SelectProps) => {
 	const { options = [], value, onChange, ...rest } = props;
 
-	const _options = tools.cloneDeep(options);
+	const _options = cloneDeep(options);
 
 	const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
 		onChange?.(e.target.value);
@@ -32,8 +32,8 @@ export const Select = (props: SelectProps) => {
 		>
 			{_options.map((option) => {
 				return (
-					<SelectItem key={option.key} textValue={option.value}>
-						{option.label}
+					<SelectItem key={option.value} textValue={option.value}>
+						{option.text}
 					</SelectItem>
 				);
 			})}

@@ -1,0 +1,66 @@
+{
+  "name": "@cocrepo/be-common",
+  "version": "0.1.0",
+  "private": true,
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "require": "./dist/index.js",
+      "default": "./dist/index.js"
+    }
+  },
+  "scripts": {
+    "build": "tsc",
+    "start:dev": "tsc --watch",
+    "type-check": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@cocrepo/constant": "workspace:*",
+    "@cocrepo/decorator": "workspace:*",
+    "@cocrepo/dto": "workspace:*",
+    "@cocrepo/entity": "workspace:*",
+    "@cocrepo/enum": "workspace:*",
+    "@cocrepo/facade": "workspace:*",
+    "@cocrepo/prisma": "workspace:*",
+    "@cocrepo/service": "workspace:*",
+    "@cocrepo/type": "workspace:*",
+    "lodash": "^4.17.21"
+  },
+  "peerDependencies": {
+    "@nestjs/common": "^11.1.3",
+    "@nestjs/config": "^4.0.2",
+    "@nestjs/core": "^11.1.6",
+    "@nestjs/jwt": "^11.0.0",
+    "@nestjs/passport": "^11.0.5",
+    "@nestjs/swagger": "^11.2.0",
+    "@nestjs/throttler": "^6.4.0",
+    "class-transformer": "^0.5.1",
+    "class-validator": "^0.14.2",
+    "ioredis": "^5.8.2",
+    "nestjs-cls": "^6.1.0",
+    "passport-jwt": "^4.0.1",
+    "passport-local": "^1.0.0"
+  },
+  "devDependencies": {
+    "@nestjs/common": "^11.1.3",
+    "@nestjs/config": "^4.0.2",
+    "@nestjs/core": "^11.1.6",
+    "@nestjs/jwt": "^11.0.0",
+    "@nestjs/passport": "^11.0.5",
+    "@nestjs/swagger": "^11.2.0",
+    "@nestjs/throttler": "^6.4.0",
+    "@types/lodash": "^4.17.16",
+    "@types/node": "catalog:",
+    "@types/passport-jwt": "^4.0.1",
+    "@types/passport-local": "^1.0.38",
+    "class-transformer": "^0.5.1",
+    "class-validator": "^0.14.2",
+    "ioredis": "^5.8.2",
+    "nestjs-cls": "^6.1.0",
+    "passport-jwt": "^4.0.1",
+    "passport-local": "^1.0.0",
+    "typescript": "catalog:"
+  }
+}

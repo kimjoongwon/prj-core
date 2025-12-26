@@ -14,7 +14,7 @@ pnpm install
 
 ### Service Import
 ```typescript
-import { UsersService, AuthFacade } from '@cocrepo/service';
+import { UsersService, TokenService, PrismaService } from '@cocrepo/service';
 ```
 
 ### NestJS 모듈에서 사용
@@ -31,16 +31,17 @@ export class UsersModule {}
 
 ## 구조
 
-- **facade/**: Facade 패턴으로 구현된 서비스
-  - AuthFacade: 인증 관련 비즈니스 로직 통합
-- **service/**: 리소스별 CRUD 서비스
+- **service/**: 리소스별 비즈니스 서비스
   - UsersService: 사용자 관리
-- **utils/**: 기반 시설 서비스
+- **infra/**: 인프라 서비스
   - PrismaService: Prisma 클라이언트 래퍼
+  - createPrismaClient: Prisma 클라이언트 팩토리
   - TokenService: JWT 토큰 생성/검증
   - TokenStorageService: Redis 기반 토큰 저장소
   - RedisService: Redis 연결 관리
   - AwsService: AWS S3 연동
+
+> **참고**: AuthFacade는 `@cocrepo/facade` 패키지로 분리되었습니다.
 
 ## 의존성
 
@@ -69,6 +70,9 @@ pnpm build
 
 # Watch 모드
 pnpm start:dev
+
+# 테스트
+pnpm test
 
 # 포맷팅
 pnpm format

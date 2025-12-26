@@ -8,6 +8,10 @@ const nextConfig: NextConfig = {
 		"@cocrepo/store",
 		"@cocrepo/toolkit",
 	],
+	typedRoutes: true,
+	experimental: {
+		cacheComponents: true,
+	},
 };
 
 export default nextConfig;

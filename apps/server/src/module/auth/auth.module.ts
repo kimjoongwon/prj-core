@@ -1,3 +1,4 @@
+import { JwtStrategy, LocalStrategy } from "@cocrepo/be-common";
 import { AuthFacade } from "@cocrepo/facade";
 import { UsersRepository } from "@cocrepo/repository";
 import {
@@ -7,7 +8,7 @@ import {
 	UsersService,
 } from "@cocrepo/service";
 import { Module } from "@nestjs/common";
-import { AuthController, JwtStrategy, LocalStrategy } from "@shared";
+import { AuthController } from "./auth.controller";
 
 @Module({
 	providers: [
