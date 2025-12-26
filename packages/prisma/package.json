@@ -15,7 +15,7 @@
   "scripts": {
     "type-check": "tsc --noEmit",
     "generate": "prisma generate",
-    "build": "pnpm generate && tsc",
+    "build": "tsc",
     "start:dev": "tsc --watch",
     "format": "biome format --write .",
     "db:push": "prisma db push",
