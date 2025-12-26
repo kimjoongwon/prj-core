@@ -7,7 +7,7 @@ import {
 	RoleCategoryGuard,
 	RoleGroupGuard,
 	RolesGuard,
-} from "../../src/shared/guard";
+} from "@cocrepo/be-common";
 
 /**
  * 테스트 전용 모킹 컨트롤러 - 테넌트 ID 주입 테스트용

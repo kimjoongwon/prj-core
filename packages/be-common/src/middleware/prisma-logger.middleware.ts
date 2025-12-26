@@ -1,7 +1,8 @@
 import { Prisma } from "@cocrepo/prisma";
 
 // Prisma 7: Middleware is deprecated, use client extensions instead
-export function loggingExtension() {
+// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+export function loggingExtension(): ReturnType<typeof Prisma.defineExtension> {
 	return Prisma.defineExtension({
 		name: "logging",
 		query: {

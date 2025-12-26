@@ -1,7 +1,8 @@
 import { CONTEXT_KEYS } from "@cocrepo/constant";
 import { LoginPayloadDto, SignUpPayloadDto, UserDto } from "@cocrepo/dto";
 import { User } from "@cocrepo/entity";
-import { AuthFacade, TokenService } from "@cocrepo/service";
+import { AuthFacade } from "@cocrepo/facade";
+import { TokenService } from "@cocrepo/service";
 import { UnauthorizedException } from "@nestjs/common";
 import { Test, TestingModule } from "@nestjs/testing";
 import { ClsService } from "nestjs-cls";

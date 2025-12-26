@@ -28,7 +28,7 @@ export const SplashScreen: React.FC<SplashScreenProps> = ({
 					<VStack className="items-center space-y-6">
 						{/* 로고 */}
 						<div className="animate-pulse">
-							<Logo variants="text" className="text-3xl" />
+							<Logo className="text-3xl" />
 						</div>
 
 						{/* 타이틀과 서브타이틀 */}

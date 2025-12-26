@@ -1,3 +1,4 @@
+import { ApiAuth, ApiErrors, ResponseMessage } from "@cocrepo/be-common";
 import { CONTEXT_KEYS } from "@cocrepo/constant";
 import { ApiResponseEntity, Public } from "@cocrepo/decorator";
 import {
@@ -24,7 +25,6 @@ import { ApiBody, ApiOperation, ApiResponse, ApiTags } from "@nestjs/swagger";
 import { plainToInstance } from "class-transformer";
 import { Request, Response } from "express";
 import { ClsService } from "nestjs-cls";
-import { ApiAuth, ApiErrors, ResponseMessage } from "../decorator";
 
 /**
  * 인증 관련 에러 메시지 상수

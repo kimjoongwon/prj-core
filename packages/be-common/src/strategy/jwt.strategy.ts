@@ -11,7 +11,7 @@ import { PassportStrategy } from "@nestjs/passport";
 import { Request } from "express";
 import { ClsService } from "nestjs-cls";
 import { ExtractJwt, Strategy } from "passport-jwt";
-import { AuthConfig } from "..";
+import { AuthConfig } from "@cocrepo/type";
 
 @Global()
 @Injectable()

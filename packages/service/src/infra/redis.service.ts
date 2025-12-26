@@ -43,12 +43,14 @@ export class RedisService implements OnModuleInit, OnModuleDestroy {
 
 		// 에러 이벤트 상세 로깅
 		this.client.on("error", (err) => {
-			this.logger.error(`Redis 연결 오류: ${JSON.stringify({
-				message: err.message,
-				code: (err as NodeJS.ErrnoException).code,
-				host: redisConfig?.host,
-				port: redisConfig?.port,
-			})}`);
+			this.logger.error(
+				`Redis 연결 오류: ${JSON.stringify({
+					message: err.message,
+					code: (err as NodeJS.ErrnoException).code,
+					host: redisConfig?.host,
+					port: redisConfig?.port,
+				})}`,
+			);
 		});
 
 		// 연결 상태 이벤트 로깅
@@ -77,10 +79,12 @@ export class RedisService implements OnModuleInit, OnModuleDestroy {
 			this.logger.log(`Redis PING 응답: ${result}`);
 		} catch (error) {
 			const err = error as NodeJS.ErrnoException;
-			this.logger.error(`Redis 연결 실패: ${JSON.stringify({
-				message: err.message,
-				code: err.code,
-			})}`);
+			this.logger.error(
+				`Redis 연결 실패: ${JSON.stringify({
+					message: err.message,
+					code: err.code,
+				})}`,
+			);
 		}
 	}
 

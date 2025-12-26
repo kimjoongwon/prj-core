@@ -16,12 +16,12 @@ import {
 	corsConfig,
 	redisConfig,
 	smtpConfig,
-} from "../shared";
+} from "../config";
 
 export const globalModules: (DynamicModule | Promise<DynamicModule>)[] = [
 	ConfigModule.forRoot({
 		isGlobal: true,
-		envFilePath: `.env.local`,
+		envFilePath: ".env",
 		load: [
 			authConfig,
 			appConfig,

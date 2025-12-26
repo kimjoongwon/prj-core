@@ -1,4 +1,11 @@
 // NestJS core imports
+
+// be-common imports
+import {
+	LoggerMiddleware,
+	RequestContextInterceptor,
+	ResponseEntityInterceptor,
+} from "@cocrepo/be-common";
 import {
 	Logger,
 	MiddlewareConsumer,
@@ -7,12 +14,10 @@ import {
 } from "@nestjs/common";
 import { APP_GUARD, RouterModule } from "@nestjs/core";
 import { ThrottlerGuard } from "@nestjs/throttler";
-// Shared imports
-import { LoggerMiddleware, RequestContextInterceptor } from "@shared";
-import { ResponseEntityInterceptor } from "../shared/interceptor/response-entity.interceptor";
-import { AuthModule } from "./auth.module";
+import { AuthModule } from "./auth";
 // Global modules
 import { globalModules } from "./global.module";
+import { GroundsModule } from "./ground";
 import { PrismaModule } from "./prisma.module";
 
 @Module({
@@ -20,6 +25,7 @@ import { PrismaModule } from "./prisma.module";
 		...globalModules,
 		PrismaModule,
 		AuthModule,
+		GroundsModule,
 		// Resource Modules는 필요할 때 추가합니다.
 		// 가이드: .claude/agents/controller-builder.md
 		RouterModule.register([
@@ -32,6 +38,10 @@ import { PrismaModule } from "./prisma.module";
 							{
 								path: "auth",
 								module: AuthModule,
+							},
+							{
+								path: "grounds",
+								module: GroundsModule,
 							},
 							// 새로운 Resource 라우트는 여기에 추가
 						],

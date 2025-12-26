@@ -5,7 +5,10 @@
 ### 컴포넌트 작성
 
 - ui 컴포넌트를 만들 때는 mobx를 사용합니다
-- 이벤트 핸들러 함수명에는 `handle` 접두어를 붙입니다 (예: `handleClick`, `handleChange`)
+- **이벤트 핸들러 네이밍 규칙**:
+  - **일반 컴포넌트**: `handle` 접두어 사용 (예: `handleClick`, `handleChange`)
+  - **Page 컴포넌트**: `on[Event][UI]` 형태로 직관적 표현 (예: `onClickLoginButton`, `onChangeEmail`)
+    - Page는 직관적이어야 하므로 어떤 UI를 눌렀는지 명확히 드러나야 함
 - 컴포넌트 내에서 함수를 인라인으로 선언하지 않습니다
 
 ### 텍스트 처리

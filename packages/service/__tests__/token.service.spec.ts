@@ -7,8 +7,8 @@ import { ConfigService } from "@nestjs/config";
 import { JwtService, NotBeforeError, TokenExpiredError } from "@nestjs/jwt";
 import { Test, TestingModule } from "@nestjs/testing";
 import { ClsService } from "nestjs-cls";
-import { TokenService } from "../src/utils/token.service";
-import { TokenStorageService } from "../src/utils/token-storage.service";
+import { TokenService } from "../src/infra/token.service";
+import { TokenStorageService } from "../src/infra/token-storage.service";
 
 describe("TokenService", () => {
 	let service: TokenService;

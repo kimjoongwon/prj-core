@@ -1,7 +1,7 @@
 import { ConfigService } from "@nestjs/config";
 import { Test, TestingModule } from "@nestjs/testing";
-import { RedisService } from "../src/utils/redis.service";
-import { TokenStorageService } from "../src/utils/token-storage.service";
+import { RedisService } from "../src/infra/redis.service";
+import { TokenStorageService } from "../src/infra/token-storage.service";
 
 describe("TokenStorageService", () => {
 	let service: TokenStorageService;
