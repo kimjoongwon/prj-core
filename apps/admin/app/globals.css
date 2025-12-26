@@ -6,20 +6,6 @@
 @custom-variant dark (&:is(.dark *));
 
 body {
-  font-family: "Pretendard", sans-serif;
-  height: 100vh;
-}
-
-body > [data-overlay-container] {
-  height: 100vh;
-}
-
-#root {
-  height: 100vh;
-}
-
-#root > [data-overlay-container] {
-  height: 100vh;
-  display: flex;
-  flex-direction: column;
+	font-family: "Pretendard", sans-serif;
+	height: 100vh;
 }
