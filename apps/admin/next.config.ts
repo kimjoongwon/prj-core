@@ -9,9 +9,6 @@ const nextConfig: NextConfig = {
 		"@cocrepo/toolkit",
 	],
 	typedRoutes: true,
-	experimental: {
-		cacheComponents: true,
-	},
 };
 
 export default nextConfig;

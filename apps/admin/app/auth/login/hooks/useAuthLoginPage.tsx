@@ -1,34 +1,21 @@
+import { useLogin } from "@cocrepo/api";
+import type { LoginPageState } from "@cocrepo/ui";
+import { useLocalObservable } from "mobx-react-lite";
+import { useRouter } from "next/navigation";
 import type React from "react";
 import { useCallback } from "react";
 
-interface LoginState {
-	email: string;
-	password: string;
-	errorMessage: string;
-}
+// 로그인 페이지에 필요한 모든 속성을 생성하는 훅
+export const useAuthLoginPage = () => {
+	const router = useRouter();
+	const loginMutation = useLogin();
 
-interface LoginMutation {
-	mutateAsync: (params: {
-		data: { email: string; password: string };
-	}) => Promise<unknown>;
-	isPending: boolean;
-}
+	const state = useLocalObservable<LoginPageState>(() => ({
+		email: "",
+		password: "",
+		errorMessage: "",
+	}));
 
-interface Router {
-	push: (path: string) => void;
-}
-
-interface UseHandlersParams {
-	state: LoginState;
-	loginMutation: LoginMutation;
-	router: Router;
-}
-
-export const useHandlers = ({
-	state,
-	loginMutation,
-	router,
-}: UseHandlersParams) => {
 	const onClickLoginButton = useCallback(async () => {
 		state.errorMessage = "";
 
@@ -63,7 +50,9 @@ export const useHandlers = ({
 	);
 
 	return {
+		state,
 		onClickLoginButton,
 		onKeyDownInput,
+		isLoading: loginMutation.isPending,
 	};
 };

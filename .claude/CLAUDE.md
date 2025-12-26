@@ -62,18 +62,35 @@ feat(coin): 멀티시그 지갑 서비스 초기 구현
 
 ## Agent 활용 가이드
 
-### 사용 가능한 Agent
+### 오케스트레이터 (메타 에이전트)
 
-- **design-analyzer**: Figma 디자인 분석 및 컴포넌트 매핑
-- **component-builder**: 재사용 가능한 UI 컴포넌트 생성
-- **backend-architect**: NestJS API 설계
-- **frontend-architect**: React 컴포넌트 아키텍처 설계
-- **database-expert**: Prisma 스키마 설계 및 최적화
-- **code-reviewer**: 코드 리뷰 및 개선 제안
-- **refactoring-expert**: 코드 리팩토링
-- **test-engineer**: 테스트 코드 작성
-- **performance-optimizer**: 성능 최적화
-- **security-auditor**: 보안 취약점 분석
-- **devops-engineer**: 배포 및 인프라 설정
+- **page-orchestrator**: 페이지 생성 시 모든 하위 에이전트를 자동 조율
+  - Phase 1: 기획자 (Figma 없을 때) / 디자인-분석가 (Figma 있을 때)
+  - Phase 2: 컴포넌트-빌더 (신규 컴포넌트)
+  - Phase 3: 리포지토리-빌더 → 서비스-빌더 → 컨트롤러-빌더 (백엔드)
+  - Phase 4: 페이지-빌더 (프론트엔드)
+  - Phase 5: 코드-리뷰어, 테스트-엔지니어 (품질 검증)
+
+### 개별 Agent
+
+| 카테고리 | Agent | 역할 |
+|---------|-------|------|
+| **기획/분석** | planner | 요구사항 → 화면 기획서 작성 (Figma 없을 때) |
+| | design-analyzer | Figma 디자인 분석 및 컴포넌트 매핑 (Figma 있을 때) |
+| **프론트엔드** | component-builder | Pure UI 컴포넌트 생성 |
+| | page-builder | 페이지 컴포넌트 생성 (useHandlers 분리) |
+| | frontend-architect | React 컴포넌트 아키텍처 설계 |
+| **백엔드** | repository-builder | Prisma Repository 레이어 생성 |
+| | service-builder | NestJS Service 레이어 생성 |
+| | controller-builder | NestJS Controller 레이어 생성 |
+| | backend-architect | NestJS API 설계 |
+| | backend-service-builder | 복합 백엔드 서비스 구현 |
+| **데이터** | database-expert | Prisma 스키마 설계 및 최적화 |
+| **품질** | code-reviewer | 코드 리뷰 및 개선 제안 |
+| | test-engineer | 테스트 코드 작성 |
+| | refactoring-expert | 코드 리팩토링 |
+| | performance-optimizer | 성능 최적화 |
+| | security-auditor | 보안 취약점 분석 |
+| **인프라** | devops-engineer | 배포 및 인프라 설정 |
 
 각 Agent의 상세 역할은 `.claude/agents/` 디렉토리를 참고하세요.

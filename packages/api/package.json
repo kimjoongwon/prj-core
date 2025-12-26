@@ -29,8 +29,10 @@
     "codegen": "orval --config orval.config.js"
   },
   "dependencies": {
-    "@tanstack/react-query": "catalog:",
     "axios": "catalog:"
+  },
+  "peerDependencies": {
+    "@tanstack/react-query": "catalog:"
   },
   "devDependencies": {
     "@types/node": "catalog:",

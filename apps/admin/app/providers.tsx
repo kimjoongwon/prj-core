@@ -2,40 +2,52 @@
 
 import { DesignSystemProvider } from "@cocrepo/design-system";
 import { StoreProvider } from "@cocrepo/store";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import {
+	isServer,
+	QueryClient,
+	QueryClientProvider,
+} from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
-import { type ReactNode, useEffect, useState } from "react";
+import { type ReactNode } from "react";
 
 interface ProvidersProps {
 	children: ReactNode;
 }
+function makeQueryClient() {
+	return new QueryClient({
+		defaultOptions: {
+			queries: {
+				// With SSR, we usually want to set some default staleTime
+				// above 0 to avoid refetching immediately on the client
+				staleTime: 60 * 1000,
+			},
+		},
+	});
+}
+
+let browserQueryClient: QueryClient | undefined;
+
+function getQueryClient() {
+	if (isServer) {
+		// Server: always make a new query client
+		return makeQueryClient();
+	} else {
+		// Browser: make a new query client if we don't already have one
+		// This is very important, so we don't re-make a new client if React
+		// suspends during the initial render. This may not be needed if we
+		// have a suspense boundary BELOW the creation of the query client
+		if (!browserQueryClient) browserQueryClient = makeQueryClient();
+		return browserQueryClient;
+	}
+}
 
 export function Providers({ children }: ProvidersProps) {
 	const router = useRouter();
-	const [mounted, setMounted] = useState(false);
-	const [queryClient] = useState(
-		() =>
-			new QueryClient({
-				defaultOptions: {
-					queries: {
-						staleTime: 60 * 1000,
-					},
-				},
-			}),
-	);
-
-	useEffect(() => {
-		setMounted(true);
-	}, []);
+	const queryClient = getQueryClient();
 
 	const handleNavigate = (path: string) => {
-		router.push(path);
+		router.push(path as any);
 	};
-
-	// StoreProvider는 window 객체를 사용하므로 클라이언트 사이드에서만 렌더링
-	if (!mounted) {
-		return null;
-	}
 
 	return (
 		<QueryClientProvider client={queryClient}>

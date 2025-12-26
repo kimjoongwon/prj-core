@@ -1,41 +1,34 @@
 "use client";
 
-import { observer, useLocalObservable } from "mobx-react-lite";
+import { observer } from "mobx-react-lite";
+import type React from "react";
+
 import { Text } from "../../ui/data-display/Text/Text";
 import { Button } from "../../ui/inputs/Button/Button";
 import { Input } from "../../ui/inputs/Input";
 import { AuthLayout } from "../../ui/layouts/Auth/AuthLayout";
 import { VStack } from "../../ui/surfaces/VStack/VStack";
-import { useHandlers } from "./hooks";
 
-interface LoginMutation {
-	mutateAsync: (params: {
-		data: { email: string; password: string };
-	}) => Promise<unknown>;
-	isPending: boolean;
+export interface State {
+	email: string;
+	password: string;
+	errorMessage: string;
 }
 
-interface Router {
-	push: (path: string) => void;
-}
-
-interface LoginPageProps {
-	loginMutation: LoginMutation;
-	router: Router;
+export interface LoginPageProps {
+	state: State;
+	onClickLoginButton: () => void;
+	onKeyDownInput: (e: React.KeyboardEvent) => void;
+	isLoading?: boolean;
 }
 
 export const LoginPage = observer(
-	({ loginMutation, router }: LoginPageProps) => {
-		// 페이지 상태
-		const state = useLocalObservable(() => ({
-			email: "",
-			password: "",
-			errorMessage: "",
-		}));
-
-		// 핸들러는 hooks에서 가져옴
-		const handlers = useHandlers({ state, loginMutation, router });
-
+	({
+		state,
+		onClickLoginButton,
+		onKeyDownInput,
+		isLoading = false,
+	}: LoginPageProps) => {
 		const formComponent = (
 			<VStack fullWidth gap={8} className="p-4">
 				<VStack fullWidth gap={2}>
@@ -53,7 +46,7 @@ export const LoginPage = observer(
 						type="email"
 						placeholder="이메일을 입력하세요"
 						label="이메일"
-						onKeyDown={handlers.onKeyDownInput}
+						onKeyDown={onKeyDownInput}
 					/>
 					<Input
 						path="password"
@@ -62,7 +55,7 @@ export const LoginPage = observer(
 						type="password"
 						placeholder="비밀번호를 입력하세요"
 						label="비밀번호"
-						onKeyDown={handlers.onKeyDownInput}
+						onKeyDown={onKeyDownInput}
 					/>
 				</VStack>
 
@@ -74,8 +67,8 @@ export const LoginPage = observer(
 					color="primary"
 					size="lg"
 					fullWidth
-					onPress={handlers.onClickLoginButton}
-					isLoading={loginMutation.isPending}
+					onPress={onClickLoginButton}
+					isLoading={isLoading}
 				>
 					<Text variant="body1" className="text-white">
 						로그인

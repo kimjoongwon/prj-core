@@ -1,0 +1,1 @@
+export { useAuthLoginPage } from "./useAuthLoginPage";

@@ -1,10 +1,7 @@
-import { logger } from "@cocrepo/toolkit";
 import { makeAutoObservable } from "mobx";
 import { NavigatorStore } from "./navigatorStore";
 import { RouteStore } from "./routeStore";
 import { Store } from "./Store";
-
-const _logger = logger.create("[NavigationStore]");
 
 export class NavigationStore {
 	readonly plateStore: Store;

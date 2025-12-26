@@ -1,14 +1,21 @@
 "use client";
 
-import { useLogin } from "@cocrepo/api";
 import { LoginPage } from "@cocrepo/ui";
-import { useRouter } from "next/navigation";
+
+import { useAuthLoginPage } from "./hooks";
 
 const LoginPageWrapper = () => {
-	const router = useRouter();
-	const loginMutation = useLogin();
+	const { state, onClickLoginButton, onKeyDownInput, isLoading } =
+		useAuthLoginPage();
 
-	return <LoginPage loginMutation={loginMutation} router={router} />;
+	return (
+		<LoginPage
+			state={state}
+			onClickLoginButton={onClickLoginButton}
+			onKeyDownInput={onKeyDownInput}
+			isLoading={isLoading}
+		/>
+	);
 };
 
 export default LoginPageWrapper;
