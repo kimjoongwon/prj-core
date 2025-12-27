@@ -16,6 +16,11 @@ podTemplate(
     ]
 ) {
     node(POD_LABEL) {
+        // 브랜치에 따른 환경 설정
+        def ENV_NAME = env.BRANCH_NAME == 'main' ? 'prod' : 'stg'
+        def SLACK_CHANNEL = env.BRANCH_NAME == 'main' ? '#stg' : '#stg'
+        def IMAGE_PATH = "harbor.cocdev.co.kr/${ENV_NAME}/plate-admin"
+
         try {
             stage('Checkout') {
                 checkout scm
@@ -48,8 +53,8 @@ podTemplate(
                                 --format=docker \\
                                 --layers \\
                                 -f ./devops/Dockerfile.admin \\
-                                -t harbor.cocdev.co.kr/stg-admin/admin:${env.BUILD_NUMBER} \\
-                                -t harbor.cocdev.co.kr/stg-admin/admin:latest \\
+                                -t ${IMAGE_PATH}:${env.BUILD_NUMBER} \\
+                                -t ${IMAGE_PATH}:latest \\
                                 .
                         """
 
@@ -58,21 +63,21 @@ podTemplate(
                             podman push \\
                                 --compression-format=gzip \\
                                 --compression-level=9 \\
-                                harbor.cocdev.co.kr/stg-admin/admin:${env.BUILD_NUMBER}
+                                ${IMAGE_PATH}:${env.BUILD_NUMBER}
                         """
 
                         sh """
                             podman push \\
                                 --compression-format=gzip \\
                                 --compression-level=9 \\
-                                harbor.cocdev.co.kr/stg-admin/admin:latest
+                                ${IMAGE_PATH}:latest
                         """
 
                         // 로컬 이미지 정리 (디스크 공간 절약)
                         sh """
                             podman rmi \\
-                                harbor.cocdev.co.kr/stg-admin/admin:${env.BUILD_NUMBER} \\
-                                harbor.cocdev.co.kr/stg-admin/admin:latest || true
+                                ${IMAGE_PATH}:${env.BUILD_NUMBER} \\
+                                ${IMAGE_PATH}:latest || true
                         """
                     }
                 }
@@ -80,14 +85,15 @@ podTemplate(
 
             // 성공 시 Slack 알림
             slackSend(
-                channel: '#stg',
+                channel: SLACK_CHANNEL,
                 color: 'good',
                 message: """
-                    ✅ Docker 이미지 푸시 성공
+                    ✅ Docker 이미지 푸시 성공 [${ENV_NAME.toUpperCase()}]
                     • Job: ${env.JOB_NAME}
                     • Build: #${env.BUILD_NUMBER}
-                    • Image: harbor.cocdev.co.kr/stg-admin/admin:${env.BUILD_NUMBER}
-                    • Latest: harbor.cocdev.co.kr/stg-admin/admin:latest
+                    • Branch: ${env.BRANCH_NAME}
+                    • Image: ${IMAGE_PATH}:${env.BUILD_NUMBER}
+                    • Latest: ${IMAGE_PATH}:latest
                     • Duration: ${currentBuild.durationString.replace(' and counting', '')}
                 """.stripIndent().trim()
             )
@@ -95,12 +101,13 @@ podTemplate(
         } catch (Exception e) {
             // 실패 시 Slack 알림
             slackSend(
-                channel: '#stg',
+                channel: SLACK_CHANNEL,
                 color: 'danger',
                 message: """
-                    ❌ Docker 이미지 푸시 실패
+                    ❌ Docker 이미지 푸시 실패 [${ENV_NAME.toUpperCase()}]
                     • Job: ${env.JOB_NAME}
                     • Build: #${env.BUILD_NUMBER}
+                    • Branch: ${env.BRANCH_NAME}
                     • Error: ${e.message}
                     • Console: ${env.BUILD_URL}console
                 """.stripIndent().trim()

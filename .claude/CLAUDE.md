@@ -92,5 +92,6 @@ feat(coin): 멀티시그 지갑 서비스 초기 구현
 | | performance-optimizer | 성능 최적화 |
 | | security-auditor | 보안 취약점 분석 |
 | **인프라** | devops-engineer | 배포 및 인프라 설정 |
+| | jenkinsfile-builder | Jenkins 파이프라인 파일 생성 |
 
 각 Agent의 상세 역할은 `.claude/agents/` 디렉토리를 참고하세요.
