@@ -1,10 +1,10 @@
 # ============================================================================
 # 🏗️ BASE STAGE: 기본 환경 설정
 # ============================================================================
-# Node.js 22 Alpine Linux 기반 이미지 사용 (경량화된 리눅스 배포판)
+# Node.js 24 Alpine Linux 기반 이미지 사용 (경량화된 리눅스 배포판)
 FROM node:24-alpine AS base
 
-# 📦 PNPM 버전을 인자로 받아서 설정 (기본값: 9.6.0)
+# 📦 PNPM 버전을 인자로 받아서 설정
 ARG PNPM_VERSION=10.16.0
 
 # 🔧 PNPM 홈 디렉토리를 전역 bin 경로로 설정
@@ -41,7 +41,7 @@ COPY . .
 RUN turbo prune --scope=admin --docker
 
 # ============================================================================
-# 🏭 BUILDER STAGE: 프론트엔드 애플리케이션 빌드
+# 🏭 BUILDER STAGE: Next.js 애플리케이션 빌드
 # ============================================================================
 FROM base AS builder
 
@@ -61,29 +61,42 @@ RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install
 # 📋 Turbo 설정 파일 복사
 COPY turbo.json turbo.json
 
-# 🏗️ 관리자 앱 전용 빌드 실행
-# - 정적 파일 생성 (HTML, CSS, JS)
+# 🏗️ 관리자 앱 빌드 실행 (Next.js standalone 모드)
 RUN turbo build
 
 # ============================================================================
-# 🌐 PRODUCTION STAGE: Nginx 웹 서버로 정적 파일 서빙
+# 🚀 PRODUCTION STAGE: Next.js 서버 실행
 # ============================================================================
-FROM nginx:alpine AS runner
+FROM node:24-alpine AS runner
 
-# 📦 빌드된 정적 파일을 Nginx 웹 루트로 복사
-# - /app/apps/admin/dist: 빌드된 관리자 앱 정적 파일
-# - /usr/share/nginx/html: Nginx 기본 웹 루트 디렉토리
-COPY --from=builder /app/apps/admin/dist /usr/share/nginx/html
+# 📂 작업 디렉토리 설정
+WORKDIR /app
 
-# 🗑️ Nginx 기본 설정 파일 제거
-# - default.conf: 기본 설정 파일 삭제하여 커스텀 설정 적용 준비
-RUN rm /etc/nginx/conf.d/default.conf
+# 🔒 보안을 위한 non-root 사용자 설정
+RUN addgroup --system --gid 1001 nodejs && \
+    adduser --system --uid 1001 nextjs
 
-# ⚙️ 관리자 앱 전용 Nginx 설정 파일 복사 (admin용 설정을 표준 nginx.conf로 복사)
-# - 커스텀 라우팅, 프록시, 보안 설정 등이 포함된 설정 파일
-COPY devops/nginx.admin.config /etc/nginx/nginx.conf
+# 📦 Next.js standalone 빌드 결과물 복사
+# - standalone: 최소화된 Node.js 서버
+COPY --from=builder --chown=nextjs:nodejs /app/apps/admin/.next/standalone ./
 
-# 🎯 Nginx 웹 서버 실행 명령어
-# - nginx: 웹 서버 실행
-# - -g "daemon off;": 포그라운드 모드로 실행 (Docker 컨테이너용)
-CMD ["nginx", "-g", "daemon off;"]
+# 📦 정적 파일 복사
+# - static: CSS, JS, 이미지 등 정적 자산
+COPY --from=builder --chown=nextjs:nodejs /app/apps/admin/.next/static ./apps/admin/.next/static
+
+# 📦 public 폴더 복사 (존재하는 경우)
+COPY --from=builder --chown=nextjs:nodejs /app/apps/admin/public ./apps/admin/public
+
+# 🔧 환경 변수 설정
+ENV NODE_ENV=production
+ENV PORT=3000
+ENV HOSTNAME="0.0.0.0"
+
+# 👤 non-root 사용자로 전환
+USER nextjs
+
+# 🌐 포트 3000 노출
+EXPOSE 3000
+
+# 🎯 Next.js 서버 실행
+CMD ["node", "apps/admin/server.js"]
