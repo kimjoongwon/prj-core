@@ -33,7 +33,9 @@ export function UUID(options: UUIDDecoratorOptions = {}): PropertyDecorator {
 	];
 
 	if (required) {
-		decorators.push(IsNotEmpty({ each, message: VALIDATION_MESSAGES.REQUIRED }));
+		decorators.push(
+			IsNotEmpty({ each, message: VALIDATION_MESSAGES.REQUIRED }),
+		);
 	} else {
 		decorators.push(IsOptional());
 	}

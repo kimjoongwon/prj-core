@@ -1,5 +1,11 @@
 import { Type } from "class-transformer";
-import { IsDate, IsNotEmpty, IsOptional, MaxDate, MinDate } from "class-validator";
+import {
+	IsDate,
+	IsNotEmpty,
+	IsOptional,
+	MaxDate,
+	MinDate,
+} from "class-validator";
 import { VALIDATION_MESSAGES } from "../constants/validation-messages";
 import { applyDecorators } from "./apply";
 

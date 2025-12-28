@@ -37,12 +37,12 @@ export interface NumberDecoratorOptions {
  * }
  * ```
  */
-export function Number(options: NumberDecoratorOptions = {}): PropertyDecorator {
+export function Number(
+	options: NumberDecoratorOptions = {},
+): PropertyDecorator {
 	const { required = true, int = false, min, max, each = false } = options;
 
-	const decorators: PropertyDecorator[] = [
-		Type(() => globalThis.Number),
-	];
+	const decorators: PropertyDecorator[] = [Type(() => globalThis.Number)];
 
 	if (int) {
 		decorators.push(IsInt({ each, message: VALIDATION_MESSAGES.NUMBER_TYPE }));
@@ -53,7 +53,9 @@ export function Number(options: NumberDecoratorOptions = {}): PropertyDecorator 
 	}
 
 	if (required) {
-		decorators.push(IsNotEmpty({ each, message: VALIDATION_MESSAGES.REQUIRED }));
+		decorators.push(
+			IsNotEmpty({ each, message: VALIDATION_MESSAGES.REQUIRED }),
+		);
 	} else {
 		decorators.push(IsOptional());
 	}

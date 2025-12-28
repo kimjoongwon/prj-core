@@ -5,15 +5,15 @@
  * API 문서입니다. 대부분의 엔드포인트는 쿠키 기반 JWT 인증이 필요합니다. (@Public 데코레이터가 있는 엔드포인트는 예외)
  * OpenAPI spec version: 1.0.0
  */
-import type { UserDto } from './userDto';
+import type { UserDto } from "./userDto";
 
 export interface TokenDto {
-  /** JWT Access Token */
-  accessToken: string;
-  /** JWT Refresh Token */
-  refreshToken: string;
-  /** 인증된 사용자 정보 */
-  user: UserDto;
-  /** 메인 테넌트 ID */
-  mainTenantId: string;
+	/** JWT Access Token */
+	accessToken: string;
+	/** JWT Refresh Token */
+	refreshToken: string;
+	/** 인증된 사용자 정보 */
+	user: UserDto;
+	/** 메인 테넌트 ID */
+	mainTenantId: string;
 }

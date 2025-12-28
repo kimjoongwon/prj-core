@@ -258,5 +258,5 @@ export * from "./userClassificationDto";
 export * from "./userDto";
 export * from "./verifyToken200AllOf";
 export * from "./zn";
-export * from './getAll200AllOf';
-export * from './getAll200AllOfMeta';
+export * from "./getAll200AllOf";
+export * from "./getAll200AllOfMeta";
