@@ -15,12 +15,15 @@
   "dependencies": {
     "@cocrepo/api": "workspace:^",
     "@cocrepo/design-system": "workspace:^",
+    "@cocrepo/hook": "workspace:^",
     "@cocrepo/store": "workspace:^",
     "@cocrepo/toolkit": "workspace:^1.3.0",
+    "@cocrepo/type": "workspace:^",
     "@cocrepo/ui": "workspace:^1.5.0",
     "@heroui/react": "catalog:",
     "@heroui/use-theme": "catalog:",
     "@tanstack/react-query": "catalog:",
+    "@tanstack/react-table": "^8.21.3",
     "axios": "catalog:",
     "class-variance-authority": "catalog:",
     "dayjs": "catalog:",
@@ -28,8 +31,9 @@
     "lucide-react": "catalog:",
     "mobx": "catalog:",
     "mobx-react-lite": "catalog:",
-    "next": "^15.3.0",
+    "next": "^16.1.0",
     "react": "catalog:",
+    "react-cookie": "catalog:",
     "react-dom": "catalog:"
   },
   "devDependencies": {
