@@ -1,0 +1,75 @@
+"use client";
+
+import type React from "react";
+
+import { Text } from "../ui/data-display/Text/Text";
+import { Button } from "../ui/inputs/Button/Button";
+import { Input } from "../ui/inputs/Input";
+import { AuthLayout } from "../ui/layouts/Auth/AuthLayout";
+import { VStack } from "../ui/surfaces/VStack/VStack";
+
+export interface PasswordInputPageState {
+	password: string;
+	passwordConfirm: string;
+	errorMessage: string;
+}
+
+export interface PasswordInputPageProps {
+	state: PasswordInputPageState;
+	onSubmit: () => void;
+	isLoading?: boolean;
+}
+
+export const PasswordInputPage = ({
+	state,
+	onSubmit,
+	isLoading = false,
+}: PasswordInputPageProps) => {
+	const formComponent = (
+		<VStack fullWidth gap={8} className="p-4">
+			<VStack fullWidth gap={2}>
+				<Text variant="h3">비밀번호 설정</Text>
+				<Text variant="caption">
+					사용하실 비밀번호를 입력해주세요.
+				</Text>
+			</VStack>
+
+			<VStack fullWidth gap={4}>
+				<Input
+					path="password"
+					state={state}
+					variant="flat"
+					type="password"
+					placeholder="비밀번호를 입력하세요"
+					label="비밀번호"
+				/>
+				<Input
+					path="passwordConfirm"
+					state={state}
+					variant="flat"
+					type="password"
+					placeholder="비밀번호를 다시 입력하세요"
+					label="비밀번호 확인"
+				/>
+			</VStack>
+
+			{state.errorMessage && (
+				<Text variant="error">{state.errorMessage}</Text>
+			)}
+
+			<Button
+				color="primary"
+				size="lg"
+				fullWidth
+				onPress={onSubmit}
+				isLoading={isLoading}
+			>
+				<Text variant="body1" className="text-white">
+					다음
+				</Text>
+			</Button>
+		</VStack>
+	);
+
+	return <AuthLayout formComponent={formComponent} />;
+};
