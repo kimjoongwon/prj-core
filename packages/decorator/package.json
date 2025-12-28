@@ -30,6 +30,7 @@
   "dependencies": {
     "@cocrepo/constant": "workspace:*",
     "@cocrepo/prisma": "workspace:*",
+    "@cocrepo/schema": "workspace:*",
     "@cocrepo/toolkit": "workspace:*",
     "libphonenumber-js": "^1.12.10"
   },

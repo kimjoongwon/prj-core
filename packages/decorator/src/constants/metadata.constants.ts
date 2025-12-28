@@ -20,3 +20,9 @@ export const DTO_IS_ARRAY_METADATA = "api:response:is_array";
  * @example @SetMetadata(SKIP_DTO_TRANSFORM, true)
  */
 export const SKIP_DTO_TRANSFORM = "dto:skip_transform";
+
+/**
+ * 응답 메시지 커스터마이징용 메타데이터 키
+ * @example @ResponseMessage("사용자 생성 완료")
+ */
+export const RESPONSE_MESSAGE_METADATA = "shared:response-message";

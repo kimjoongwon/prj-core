@@ -23,6 +23,7 @@
     "noFallthroughCasesInSwitch": false,
     "strict": true,
     "strictPropertyInitialization": false,
+    "useDefineForClassFields": false,
   },
   "include": ["src/**/*"],
   "exclude": ["node_modules", "dist"]

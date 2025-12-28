@@ -10,6 +10,7 @@ import { ApiExtraModels, ApiResponse, getSchemaPath } from "@nestjs/swagger";
 import {
 	DTO_CLASS_METADATA,
 	DTO_IS_ARRAY_METADATA,
+	RESPONSE_MESSAGE_METADATA,
 } from "./constants/metadata.constants";
 
 /**
@@ -134,3 +135,13 @@ export const ApiResponseEntity = <DataDto extends Type<unknown>>(
 
 	return applyDecorators(...decorators);
 };
+
+/**
+ * 응답 메시지를 커스터마이징하는 데코레이터
+ * ResponseEntityInterceptor가 이 메타데이터를 읽어 응답 메시지를 설정합니다.
+ *
+ * @param message - 응답에 포함될 메시지
+ * @example @ResponseMessage("사용자 생성 완료")
+ */
+export const ResponseMessage = (message: string) =>
+	SetMetadata(RESPONSE_MESSAGE_METADATA, message);

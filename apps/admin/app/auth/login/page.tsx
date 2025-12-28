@@ -4,7 +4,7 @@ import { LoginPage } from "@cocrepo/ui";
 
 import { useAuthLoginPage } from "./hooks";
 
-const LoginPageWrapper = () => {
+const Page = () => {
 	const { state, onClickLoginButton, onKeyDownInput, isLoading } =
 		useAuthLoginPage();
 
@@ -18,4 +18,4 @@ const LoginPageWrapper = () => {
 	);
 };
 
-export default LoginPageWrapper;
+export default Page;

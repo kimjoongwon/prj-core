@@ -1,0 +1,45 @@
+{
+  "name": "@cocrepo/schema",
+  "version": "0.1.0",
+  "description": "공유 검증 스키마 (프론트엔드/백엔드)",
+  "publishConfig": {
+    "access": "public"
+  },
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "require": "./dist/index.js",
+      "default": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist",
+    "README.md"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "start:dev": "tsc --watch",
+    "type-check": "tsc --noEmit",
+    "format": "biome format --write .",
+    "clean": "rm -rf dist && rm -rf node_modules"
+  },
+  "dependencies": {
+    "class-validator": "^0.14.2",
+    "class-transformer": "^0.5.1",
+    "reflect-metadata": "^0.2.2"
+  },
+  "devDependencies": {
+    "@types/node": "catalog:",
+    "typescript": "catalog:"
+  },
+  "keywords": [
+    "validation",
+    "schema",
+    "class-validator",
+    "dto"
+  ],
+  "author": "cocrepo",
+  "license": "ISC"
+}

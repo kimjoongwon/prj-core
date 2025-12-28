@@ -1,5 +1,5 @@
-import type { NextConfig } from "next";
 import path from "node:path";
+import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
 	// Docker 배포를 위한 standalone 출력 모드
@@ -21,6 +21,7 @@ const nextConfig: NextConfig = {
 		"@cocrepo/type",
 	],
 	typedRoutes: true,
+	cacheComponents: true,
 };
 
 export default nextConfig;

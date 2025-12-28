@@ -24,6 +24,7 @@
     "@cocrepo/decorator": "workspace:*",
     "@cocrepo/entity": "workspace:*",
     "@cocrepo/enum": "workspace:*",
+    "@cocrepo/schema": "workspace:*",
     "@cocrepo/toolkit": "workspace:*"
   },
   "peerDependencies": {

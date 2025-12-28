@@ -240,11 +240,10 @@ export type { [PageName]PageProps, State as [PageName]PageState } from "./[PageN
 ```tsx
 // hooks/use[Route][PageName]Page.tsx
 import { useLogin } from "@cocrepo/api";
+import { LoginSchema, validateSchema } from "@cocrepo/schema";
 import type { [PageName]PageState } from "@cocrepo/ui";
 import { useLocalObservable } from "mobx-react-lite";
 import { useRouter } from "next/navigation";
-import type React from "react";
-import { useCallback } from "react";
 
 // 페이지에 필요한 모든 속성을 생성하는 훅
 export const use[Route][PageName]Page = () => {
@@ -257,35 +256,39 @@ export const use[Route][PageName]Page = () => {
     errorMessage: "",
   }));
 
-  const onClickSubmitButton = useCallback(async () => {
+  // React 19 - useCallback 불필요 (React Compiler 자동 메모이제이션)
+  const onClickSubmitButton = async () => {
     state.errorMessage = "";
 
-    if (!state.email || !state.password) {
-      state.errorMessage = "모든 필드를 입력해주세요.";
+    // @cocrepo/schema를 이용한 검증
+    const result = await validateSchema(LoginSchema, {
+      email: state.email,
+      password: state.password,
+    });
+
+    if (!result.isValid) {
+      state.errorMessage = result.errors[0].messages[0];
       return;
     }
 
     try {
       await loginMutation.mutateAsync({
         data: {
-          email: state.email,
-          password: state.password,
+          email: result.data.email,
+          password: result.data.password,
         },
       });
       router.push("/");
     } catch (_error) {
       state.errorMessage = "처리 중 오류가 발생했습니다.";
     }
-  }, [loginMutation, router, state]);
+  };
 
-  const onKeyDownInput = useCallback(
-    (e: React.KeyboardEvent) => {
-      if (e.key === "Enter") {
-        onClickSubmitButton();
-      }
-    },
-    [onClickSubmitButton],
-  );
+  const onKeyDownInput = (e: React.KeyboardEvent) => {
+    if (e.key === "Enter") {
+      onClickSubmitButton();
+    }
+  };
 
   return {
     state,
@@ -374,11 +377,10 @@ export const LoginPage = observer(
 
 ```tsx
 import { useLogin } from "@cocrepo/api";
+import { LoginSchema, validateSchema } from "@cocrepo/schema";
 import type { LoginPageState } from "@cocrepo/ui";
 import { useLocalObservable } from "mobx-react-lite";
 import { useRouter } from "next/navigation";
-import type React from "react";
-import { useCallback } from "react";
 
 export const useAuthLoginPage = () => {
   const router = useRouter();
@@ -390,18 +392,35 @@ export const useAuthLoginPage = () => {
     errorMessage: "",
   }));
 
-  const onClickLoginButton = useCallback(async () => {
-    // ... 로그인 로직
-  }, [loginMutation, router, state]);
+  // React 19 - useCallback 불필요
+  const onClickLoginButton = async () => {
+    state.errorMessage = "";
 
-  const onKeyDownInput = useCallback(
-    (e: React.KeyboardEvent) => {
-      if (e.key === "Enter") {
-        onClickLoginButton();
-      }
-    },
-    [onClickLoginButton],
-  );
+    const result = await validateSchema(LoginSchema, {
+      email: state.email,
+      password: state.password,
+    });
+
+    if (!result.isValid) {
+      state.errorMessage = result.errors[0].messages[0];
+      return;
+    }
+
+    try {
+      await loginMutation.mutateAsync({
+        data: { email: result.data.email, password: result.data.password },
+      });
+      router.push("/");
+    } catch (_error) {
+      state.errorMessage = "로그인에 실패했습니다.";
+    }
+  };
+
+  const onKeyDownInput = (e: React.KeyboardEvent) => {
+    if (e.key === "Enter") {
+      onClickLoginButton();
+    }
+  };
 
   return {
     state,
@@ -493,3 +512,26 @@ apps/admin (비즈니스 로직):
 - **통합 훅 네이밍**: `use[Route][PageName]Page` (예: `useAuthLoginPage`)
 - **MobX observer 사용** - 상태 변화 감지
 - **TypeScript 필수** - 타입 정의
+
+---
+
+## React Compiler (React 19 + Next.js 16)
+
+React Compiler가 자동 메모이제이션을 제공하므로 `useCallback`, `useMemo` 불필요합니다.
+
+```typescript
+// ❌ 기존 - useCallback 사용
+const onClickLoginButton = useCallback(async () => {
+  // 로직
+}, [dep1, dep2]);
+
+// ✅ React 19 - 일반 함수 사용
+const onClickLoginButton = async () => {
+  // 로직
+};
+```
+
+**장점:**
+- 의존성 배열 관리 불필요
+- 코드 간결화
+- 자동 최적화

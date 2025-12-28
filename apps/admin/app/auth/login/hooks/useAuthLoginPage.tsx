@@ -1,9 +1,8 @@
 import { useLogin } from "@cocrepo/api";
+import { LoginSchema, validateSchema } from "@cocrepo/schema";
 import type { LoginPageState } from "@cocrepo/ui";
 import { useLocalObservable } from "mobx-react-lite";
 import { useRouter } from "next/navigation";
-import type React from "react";
-import { useCallback } from "react";
 
 // 로그인 페이지에 필요한 모든 속성을 생성하는 훅
 export const useAuthLoginPage = () => {
@@ -16,19 +15,25 @@ export const useAuthLoginPage = () => {
 		errorMessage: "",
 	}));
 
-	const onClickLoginButton = useCallback(async () => {
+	const onClickLoginButton = async () => {
 		state.errorMessage = "";
 
-		if (!state.email || !state.password) {
-			state.errorMessage = "이메일과 비밀번호를 입력해주세요.";
+		// @cocrepo/schema를 이용한 검증
+		const result = await validateSchema(LoginSchema, {
+			email: state.email,
+			password: state.password,
+		});
+
+		if (!result.isValid) {
+			state.errorMessage = result.errors[0].messages[0];
 			return;
 		}
 
 		try {
 			await loginMutation.mutateAsync({
 				data: {
-					email: state.email,
-					password: state.password,
+					email: result.data.email,
+					password: result.data.password,
 				},
 			});
 
@@ -38,16 +43,13 @@ export const useAuthLoginPage = () => {
 			state.errorMessage =
 				"로그인에 실패했습니다. 이메일과 비밀번호를 확인해주세요.";
 		}
-	}, [loginMutation, router, state]);
+	};
 
-	const onKeyDownInput = useCallback(
-		(e: React.KeyboardEvent) => {
-			if (e.key === "Enter") {
-				onClickLoginButton();
-			}
-		},
-		[onClickLoginButton],
-	);
+	const onKeyDownInput = (e: React.KeyboardEvent) => {
+		if (e.key === "Enter") {
+			onClickLoginButton();
+		}
+	};
 
 	return {
 		state,

@@ -6,7 +6,7 @@ import {
 } from "@nestjs/common";
 import { Reflector } from "@nestjs/core";
 import { lastValueFrom, of } from "rxjs";
-import { RESPONSE_MESSAGE_METADATA } from "../decorator/response-message.decorator";
+import { RESPONSE_MESSAGE_METADATA } from "@cocrepo/decorator";
 import { wrapResponse } from "../util/response.util";
 import { ResponseEntityInterceptor } from "./response-entity.interceptor";
 

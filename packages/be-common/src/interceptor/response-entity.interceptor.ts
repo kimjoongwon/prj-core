@@ -1,3 +1,4 @@
+import { RESPONSE_MESSAGE_METADATA } from "@cocrepo/decorator";
 import { ResponseEntity } from "@cocrepo/entity";
 import {
 	CallHandler,
@@ -10,7 +11,6 @@ import { HTTP_CODE_METADATA } from "@nestjs/common/constants";
 import { Reflector } from "@nestjs/core";
 import { Observable } from "rxjs";
 import { map } from "rxjs/operators";
-import { RESPONSE_MESSAGE_METADATA } from "../decorator/response-message.decorator";
 import { isWrappedResponse } from "../util/response.util";
 
 @Injectable()

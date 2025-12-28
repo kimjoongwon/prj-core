@@ -17,11 +17,48 @@ tools: Read, Write, Grep
 
 ## 기술 스택
 
-- React 19 / Next.js (App Router)
+- React 19 / Next.js 16 (App Router)
 - TypeScript
 - Tailwind CSS
 - Zustand / TanStack Query
 - Radix UI / shadcn/ui
+
+---
+
+## React Compiler (React 19)
+
+React 19 + Next.js 16에는 **React Compiler**가 내장되어 자동 메모이제이션을 제공합니다.
+
+### useCallback/useMemo 불필요
+
+```typescript
+// ❌ 기존 - 수동 메모이제이션
+const handleClick = useCallback(() => {
+  doSomething();
+}, [dep1, dep2]);
+
+const computedValue = useMemo(() => {
+  return expensiveCalculation(data);
+}, [data]);
+
+// ✅ React 19 - 자동 메모이제이션
+const handleClick = () => {
+  doSomething();
+};
+
+const computedValue = expensiveCalculation(data);
+```
+
+### 장점
+
+- **의존성 배열 관리 불필요** - 버그 원인 제거
+- **코드 간결화** - 보일러플레이트 감소
+- **자동 최적화** - 컴파일러가 최적의 메모이제이션 적용
+
+### 주의사항
+
+- `React.memo()`는 여전히 유효 (컴포넌트 레벨 최적화)
+- 외부 라이브러리의 콜백은 여전히 `useCallback` 필요할 수 있음
 
 ## 출력 형식
 

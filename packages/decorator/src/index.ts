@@ -1,6 +1,7 @@
 // Field decorators for DTOs
 
 // NestJS decorators
+export * from "./api-errors.decorator";
 export * from "./api-response-entity.decorator";
 export * from "./auth.decorator";
 export * from "./constants/metadata.constants";
