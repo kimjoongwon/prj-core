@@ -18,4 +18,11 @@ export class GroundsService {
 	getById(id: string) {
 		return this.repository.findById(id);
 	}
+
+	/**
+	 * 내 Space의 Ground 목록 조회
+	 */
+	getMyGrounds(spaceId: string) {
+		return this.repository.findBySpaceId(spaceId);
+	}
 }

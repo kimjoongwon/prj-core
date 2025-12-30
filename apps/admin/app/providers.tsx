@@ -1,7 +1,7 @@
 "use client";
 
 import { DesignSystemProvider } from "@cocrepo/design-system";
-import { StoreProvider } from "@cocrepo/store";
+import { AbilityProvider } from "@cocrepo/hook";
 import {
 	isServer,
 	QueryClient,
@@ -9,16 +9,17 @@ import {
 } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 import { type ReactNode } from "react";
+import { AdminStoreProvider } from "../src/stores";
 
 interface ProvidersProps {
 	children: ReactNode;
 }
+
 function makeQueryClient() {
 	return new QueryClient({
 		defaultOptions: {
 			queries: {
-				// With SSR, we usually want to set some default staleTime
-				// above 0 to avoid refetching immediately on the client
+				// SSR 환경에서 클라이언트 즉시 refetch 방지를 위한 staleTime 설정
 				staleTime: 60 * 1000,
 			},
 		},
@@ -29,33 +30,42 @@ let browserQueryClient: QueryClient | undefined;
 
 function getQueryClient() {
 	if (isServer) {
-		// Server: always make a new query client
+		// 서버: 항상 새로운 QueryClient 생성
 		return makeQueryClient();
-	} else {
-		// Browser: make a new query client if we don't already have one
-		// This is very important, so we don't re-make a new client if React
-		// suspends during the initial render. This may not be needed if we
-		// have a suspense boundary BELOW the creation of the query client
-		if (!browserQueryClient) browserQueryClient = makeQueryClient();
-		return browserQueryClient;
 	}
+	// 브라우저: 기존 클라이언트 재사용 (React Suspense 대응)
+	if (!browserQueryClient) {
+		browserQueryClient = makeQueryClient();
+	}
+	return browserQueryClient;
 }
 
+/**
+ * Admin 앱 최상위 Provider
+ *
+ * Provider 계층 구조:
+ * QueryClientProvider
+ * └── AbilityProvider (권한 관리)
+ *     └── AdminStoreProvider (RootStore + 주입된 Store들 통합 관리)
+ *         └── DesignSystemProvider (UI 시스템)
+ */
 export function Providers({ children }: ProvidersProps) {
 	const router = useRouter();
 	const queryClient = getQueryClient();
 
 	const handleNavigate = (path: string) => {
-		router.push(path as any);
+		router.push(path as never);
 	};
 
 	return (
 		<QueryClientProvider client={queryClient}>
-			<StoreProvider>
-				<DesignSystemProvider navigate={handleNavigate}>
-					{children}
-				</DesignSystemProvider>
-			</StoreProvider>
+			<AbilityProvider>
+				<AdminStoreProvider>
+					<DesignSystemProvider navigate={handleNavigate}>
+						{children}
+					</DesignSystemProvider>
+				</AdminStoreProvider>
+			</AbilityProvider>
 		</QueryClientProvider>
 	);
 }

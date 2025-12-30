@@ -1,11 +1,11 @@
 import { RouteStore } from "./routeStore";
-import { type Store } from "./Store";
+import { type RootStore } from "./Store";
 
 export class NavigatorStore {
-	readonly plateStore: Store;
+	readonly rootStore: RootStore;
 
-	constructor(plateStore: Store) {
-		this.plateStore = plateStore;
+	constructor(rootStore: RootStore) {
+		this.rootStore = rootStore;
 	}
 
 	getRouteByFullPath(

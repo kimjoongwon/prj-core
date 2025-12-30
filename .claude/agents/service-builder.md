@@ -32,11 +32,12 @@ NestJS Service 레이어를 생성하는 전문가입니다.
    ```
 
 2. **Service 메서드명은 도메인 목적을 표현**
-   - Repository는 "어떤 데이터를 가져오는지" 표현 (주요 관계 나열)
-   - Service는 "왜/무슨 목적으로 가져오는지" 표현
+   - Repository는 "어떤 데이터를 가져오는지" 표현 (데이터 중심)
+   - Service는 "왜/무슨 목적으로 가져오는지" 표현 (사용자/비즈니스 관점)
+   - **함수명만 보고도 무슨 일을 하는지 즉시 이해할 수 있어야 함**
 
    ```typescript
-   // Repository: 데이터 중심 메서드명 (주요 관계 나열)
+   // Repository: 데이터 중심 메서드명
    findByEmailWithTenantsAndProfiles(email: string)
 
    // Service: 도메인 목적 메서드명
@@ -44,6 +45,71 @@ NestJS Service 레이어를 생성하는 전문가입니다.
      return this.repository.findByEmailWithTenantsAndProfiles(email);
    }
    ```
+
+   ### 네이밍 규칙 상세
+
+   #### 왜 목적 중심 네이밍인가?
+
+   ```typescript
+   // ❌ 이 함수는 뭘 하는 건가요?
+   getGroundsForSpace(spaceId: string)
+   // → "Space에 대한 Grounds를 가져온다"... 그래서 왜? 누구 거?
+
+   // ✅ 이 함수는 명확합니다
+   getMyGrounds(spaceId: string)
+   // → "내 Grounds를 가져온다" - 바로 이해됨!
+   ```
+
+   **핵심 질문: "함수명만 보고 5초 안에 이해되는가?"**
+
+   #### 패턴별 비교표
+
+   | 상황 | ❌ 데이터 중심 (모호함) | ✅ 목적 중심 (명확함) |
+   |------|------------------------|---------------------|
+   | 내 데이터 조회 | `getBySpaceId()`, `getGroundsForSpace()` | `getMyGrounds()` |
+   | 인증용 조회 | `findByEmail()`, `getUserByEmail()` | `findUserForAuth()` |
+   | 검색 | `findManyByQuery()`, `getByFilters()` | `searchProducts()`, `searchUsers()` |
+   | 상세 조회 | `findByIdWithRelations()`, `getById()` | `getUserProfile()`, `getOrderDetails()` |
+   | 권한 확인용 | `findByUserIdAndRole()` | `checkUserPermission()` |
+   | 통계 조회 | `getByDateRange()` | `getDailySalesReport()` |
+
+   #### 자주 틀리는 패턴
+
+   ```typescript
+   // ❌ "ForXxx" 패턴 - 여전히 데이터 중심
+   getGroundsForSpace(spaceId)      // Space를 위한 Grounds? 무슨 의미?
+   getOrdersForUser(userId)         // User를 위한 Orders?
+   getCategoriesForTenant(tenantId) // Tenant를 위한 Categories?
+
+   // ✅ "My" 패턴 - 사용자 관점에서 명확
+   getMyGrounds(spaceId)            // 내 Grounds 목록
+   getMyOrders(userId)              // 내 주문 목록
+   getMyCategories(tenantId)        // 내 카테고리 목록
+   ```
+
+   ```typescript
+   // ❌ "ByXxx" 패턴 - 쿼리 조건만 설명
+   getBySpaceId(spaceId)
+   findByUserId(userId)
+   getByTenantId(tenantId)
+
+   // ✅ 목적 패턴 - 왜 조회하는지 설명
+   getMyDashboardData(spaceId)      // 대시보드용
+   findUserForAuth(email)           // 인증용
+   getActiveTenants()               // 활성 테넌트 목록
+   ```
+
+   #### 권장 접두어/접미어
+
+   | 접두어/접미어 | 의미 | 예시 |
+   |--------------|------|------|
+   | `getMy...` | 현재 사용자/컨텍스트의 데이터 | `getMyOrders()`, `getMyProfile()` |
+   | `...ForAuth` | 인증/인가 목적 | `findUserForAuth()`, `validateTokenForAuth()` |
+   | `search...` | 검색 기능 | `searchProducts()`, `searchUsers()` |
+   | `get...Details` | 상세 정보 조회 | `getOrderDetails()`, `getUserDetails()` |
+   | `get...List` | 목록 조회 (필요시) | `getActiveUserList()` |
+   | `check...` | 확인/검증 | `checkPermission()`, `checkAvailability()` |
+   | `...Report` | 리포트/통계 | `getSalesReport()`, `getDailyReport()` |
 
 3. **비즈니스 로직만 담당**
    - 데이터 검증

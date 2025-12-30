@@ -43,4 +43,18 @@ export class GroundsRepository {
 
 		return result ? plainToInstance(Ground, result) : null;
 	}
+
+	/**
+	 * SpaceId로 Ground 목록 조회
+	 */
+	async findBySpaceId(spaceId: string): Promise<Ground[]> {
+		this.logger.debug(`SpaceId로 Ground 목록 조회: ${spaceId.slice(-8)}`);
+
+		const results = await this.txHost.tx.ground.findMany({
+			where: { spaceId, removedAt: null },
+			orderBy: { createdAt: "desc" },
+		});
+
+		return results.map((result) => plainToInstance(Ground, result));
+	}
 }

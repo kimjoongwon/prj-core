@@ -17,7 +17,7 @@ import { ThrottlerGuard } from "@nestjs/throttler";
 import { AuthModule } from "./auth";
 // Global modules
 import { globalModules } from "./global.module";
-import { GroundsModule } from "./ground";
+import { GroundsModule } from "./grounds";
 import { PrismaModule } from "./prisma.module";
 
 @Module({

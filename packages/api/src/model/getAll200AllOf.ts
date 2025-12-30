@@ -5,14 +5,14 @@
  * API 문서입니다. 대부분의 엔드포인트는 쿠키 기반 JWT 인증이 필요합니다. (@Public 데코레이터가 있는 엔드포인트는 예외)
  * OpenAPI spec version: 1.0.0
  */
-import type { GroundDto } from "./groundDto";
-import type { GetAll200AllOfMeta } from "./getAll200AllOfMeta";
+import type { GroundDto } from './groundDto';
+import type { GetAll200AllOfMeta } from './getAll200AllOfMeta';
 
 export type GetAll200AllOf = {
-	/** */
-	httpStatus?: number;
-	/** */
-	message?: string;
-	data?: GroundDto[];
-	meta?: GetAll200AllOfMeta;
+  /** */
+  httpStatus?: number;
+  /** */
+  message?: string;
+  data?: GroundDto[];
+  meta?: GetAll200AllOfMeta;
 };

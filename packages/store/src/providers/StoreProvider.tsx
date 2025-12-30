@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { Store, StoreContext } from "../stores";
+import { useRef } from "react";
+import { RootStore, RootStoreContext } from "../stores";
 
 interface StoreProviderProps {
 	children: React.ReactNode;
@@ -7,9 +7,15 @@ interface StoreProviderProps {
 
 export const StoreProvider = (props: StoreProviderProps) => {
 	const { children } = props;
-	const [store] = useState(() => new Store());
+	// useRef로 Store 인스턴스 안정적 참조 유지 (useMemo/useState 대신)
+	const storeRef = useRef<RootStore | null>(null);
+	if (!storeRef.current) {
+		storeRef.current = new RootStore();
+	}
 
 	return (
-		<StoreContext.Provider value={store}>{children}</StoreContext.Provider>
+		<RootStoreContext.Provider value={storeRef.current}>
+			{children}
+		</RootStoreContext.Provider>
 	);
 };

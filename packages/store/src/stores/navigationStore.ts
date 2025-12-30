@@ -1,10 +1,10 @@
 import { makeAutoObservable } from "mobx";
 import { NavigatorStore } from "./navigatorStore";
 import { RouteStore } from "./routeStore";
-import { Store } from "./Store";
+import { RootStore } from "./Store";
 
 export class NavigationStore {
-	readonly plateStore: Store;
+	readonly rootStore: RootStore;
 	readonly navigator: NavigatorStore;
 	routes: RouteStore[] = [];
 	private _currentRoute: RouteStore | undefined = undefined;
@@ -22,11 +22,11 @@ export class NavigationStore {
 	}
 
 	constructor(
-		plateStore: Store,
+		rootStore: RootStore,
 		navigator: NavigatorStore,
 		routeDtos: RouteStore[] = [],
 	) {
-		this.plateStore = plateStore;
+		this.rootStore = rootStore;
 		this.navigator = navigator;
 		this.routes = routeDtos.map((routeDto) => new RouteStore(routeDto));
 		this.initializeCurrentPath();

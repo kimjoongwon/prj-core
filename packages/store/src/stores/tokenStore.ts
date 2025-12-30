@@ -1,12 +1,12 @@
 import { CookieStore } from "./cookieStore";
-import { Store } from "./Store";
+import { RootStore } from "./Store";
 
 export class TokenStore {
 	private cookieStore: CookieStore;
-	readonly store: Store;
+	readonly rootStore: RootStore;
 
-	constructor(Store: Store) {
-		this.store = Store;
+	constructor(rootStore: RootStore) {
+		this.rootStore = rootStore;
 		this.cookieStore = new CookieStore();
 	}
 

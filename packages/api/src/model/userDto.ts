@@ -5,37 +5,37 @@
  * API 문서입니다. 대부분의 엔드포인트는 쿠키 기반 JWT 인증이 필요합니다. (@Public 데코레이터가 있는 엔드포인트는 예외)
  * OpenAPI spec version: 1.0.0
  */
-import type { ProfileDto } from "./profileDto";
-import type { TenantDto } from "./tenantDto";
-import type { UserAssociationDto } from "./userAssociationDto";
-import type { UserClassificationDto } from "./userClassificationDto";
+import type { ProfileDto } from './profileDto';
+import type { TenantDto } from './tenantDto';
+import type { UserAssociationDto } from './userAssociationDto';
+import type { UserClassificationDto } from './userClassificationDto';
 
 export interface UserDto {
-	id: string;
-	seq: number;
-	createdAt: string;
-	updatedAt: string;
-	/** @nullable */
-	removedAt: string | null;
-	/** 소속 공간 ID */
-	spaceId: string;
-	/** 이메일 주소 */
-	email: string;
-	/** 사용자 이름 */
-	name: string;
-	/** 연락처 */
-	phone: string;
-	/**
-	 * 응답 제외 필드
-	 * @minLength 6
-	 */
-	password: string;
-	/** 프로필 목록 */
-	profiles?: ProfileDto[];
-	/** 테넌트 목록 */
-	tenants?: TenantDto[];
-	/** 사용자 연결 정보 */
-	associations?: UserAssociationDto[];
-	/** 사용자 분류 정보 */
-	classification?: UserClassificationDto;
+  id: string;
+  seq: number;
+  createdAt: string;
+  updatedAt: string;
+  /** @nullable */
+  removedAt: string | null;
+  /** 소속 공간 ID */
+  spaceId: string;
+  /** 이메일 주소 */
+  email: string;
+  /** 사용자 이름 */
+  name: string;
+  /** 연락처 */
+  phone: string;
+  /**
+   * 응답 제외 필드
+   * @minLength 6
+   */
+  password: string;
+  /** 프로필 목록 */
+  profiles?: ProfileDto[];
+  /** 테넌트 목록 */
+  tenants?: TenantDto[];
+  /** 사용자 연결 정보 */
+  associations?: UserAssociationDto[];
+  /** 사용자 분류 정보 */
+  classification?: UserClassificationDto;
 }

@@ -1,5 +1,5 @@
 import { plainToInstance } from "class-transformer";
-import { validate, type ValidationError } from "class-validator";
+import { type ValidationError, validate } from "class-validator";
 
 /**
  * 검증 에러 정보
