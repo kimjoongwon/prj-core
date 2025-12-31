@@ -4,9 +4,9 @@ import { useMemo } from "react";
 import { useAbility } from "./AbilityContext";
 
 /**
- * 메뉴 아이템 인터페이스 (adminMenuConfig와 동일)
+ * 메뉴 인터페이스 (adminMenuConfig와 동일)
  */
-interface SubMenuItem {
+interface SubMenu {
 	id: string;
 	label: string;
 	path: string;
@@ -14,12 +14,12 @@ interface SubMenuItem {
 	subject: string;
 }
 
-interface MenuItem {
+interface Menu {
 	id: string;
 	label: string;
 	path?: string;
 	icon?: string;
-	children?: SubMenuItem[];
+	children?: SubMenu[];
 	subject: string;
 }
 
@@ -40,7 +40,7 @@ export function useMenuAccess(menuSubject: string): boolean {
  * @param menuItems 전체 메뉴 설정
  * @returns 필터링된 메뉴 목록
  */
-export function useFilteredMenuItems<T extends MenuItem>(menuItems: T[]): T[] {
+export function useFilteredMenus<T extends Menu>(menuItems: T[]): T[] {
 	const ability = useAbility();
 
 	return useMemo(() => {
@@ -60,7 +60,7 @@ export function useFilteredMenuItems<T extends MenuItem>(menuItems: T[]): T[] {
  * 메뉴 필터링 유틸 함수 (비훅 버전)
  * Provider 외부에서 사용할 때 사용합니다.
  */
-export function filterMenuByAbility<T extends MenuItem>(
+export function filterMenuByAbility<T extends Menu>(
 	menuItems: T[],
 	can: (action: string, subject: string) => boolean,
 ): T[] {

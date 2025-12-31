@@ -1,11 +1,10 @@
 "use client";
 
-import { ADMIN_MENU_CONFIG } from "@cocrepo/constant";
+import { ADMIN_MENUS } from "@cocrepo/constant";
 import { type AbilityActions, useAbility } from "@cocrepo/hook";
 import {
   AuthStore,
   CookieStore,
-  MenuItem,
   MenuStore,
   RootStore,
   TokenStore,
@@ -27,7 +26,7 @@ function createAdminRootStore(): RootStore {
   rootStore.tokenStore = new TokenStore(rootStore);
   rootStore.cookieStore = new CookieStore();
   rootStore.authStore = new AuthStore(rootStore);
-  rootStore.menuStore = new MenuStore(ADMIN_MENU_CONFIG as MenuItem[]);
+  rootStore.menuStore = new MenuStore(ADMIN_MENUS);
 
   return rootStore;
 }

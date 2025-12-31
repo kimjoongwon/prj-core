@@ -1,12 +1,8 @@
 "use client";
 
 import { ADMIN_PATHS } from "@cocrepo/constant";
-import type { MenuItem } from "@cocrepo/store";
-import type {
-	TopNavContext,
-	TopNavMenuItem,
-	TopNavUser,
-} from "@cocrepo/ui";
+import type { Menu } from "@cocrepo/store";
+import type { TopNavContext, TopNavMenuItem, TopNavUser } from "@cocrepo/ui";
 import { useRouter } from "next/navigation";
 import { useEffect, useState, useSyncExternalStore } from "react";
 import { useAdminMenuStore } from "../stores";
@@ -56,9 +52,9 @@ export interface UseAdminLayoutReturn {
 }
 
 /**
- * MenuItem을 TopNavMenuItem으로 변환
+ * Menu를 TopNavMenuItem으로 변환
  */
-function toTopNavMenuItem(item: MenuItem): TopNavMenuItem {
+function toTopNavMenuItem(item: Menu): TopNavMenuItem {
 	return {
 		id: item.id,
 		label: item.label,

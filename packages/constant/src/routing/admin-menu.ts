@@ -1,20 +1,13 @@
 /**
- * 어드민 메뉴 경로 정의 (Source of Truth)
- * 모든 어드민 메뉴 경로는 이 파일에서 관리됩니다.
+ * 메뉴 인터페이스
  */
-
-/**
- * 메뉴 아이템 설정 타입
- * 주의: 프론트엔드 모델이므로 Dto 접미사를 사용하지 않음
- * Dto는 오직 Orval로 생성된 API 전송 객체에만 사용
- */
-export interface MenuItemConfig {
+export interface Menu {
 	id: string;
 	label: string;
 	path?: string;
 	icon?: string;
-	subject: string; // CASL Subject
-	children?: MenuItemConfig[];
+	subject: string;
+	children?: Menu[];
 }
 
 /**
@@ -122,11 +115,7 @@ export const ADMIN_SUBJECTS = {
 	MENU_SETTINGS_SYSTEM: "menu:settings:system",
 } as const;
 
-/**
- * 어드민 메뉴 구조 정의
- * 이 데이터를 기반으로 MenuStore가 인스턴스화됩니다.
- */
-export const ADMIN_MENU_CONFIG: MenuItemConfig[] = [
+export const ADMIN_MENUS: Menu[] = [
 	{
 		id: "members",
 		label: "회원",
