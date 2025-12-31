@@ -14,6 +14,14 @@ Figma 디자인 없이 사용자의 요구사항만으로 화면 기획서를 �
 2. **화면 구조 설계**: 레이아웃과 컴포넌트 구성 정의
 3. **데이터 흐름 정의**: 필요한 API, 상태 관리 정의
 4. **인터랙션 설계**: 사용자 행동과 시스템 반응 정의
+5. **플랫폼 고려**: Web과 Mobile 환경에 맞는 기획
+
+## 프로젝트 경로
+
+| 플랫폼 | 경로 | 설명 |
+|--------|------|------|
+| Core (Web/Server) | `/Users/wallykim/dev/prj-core` | 웹 프론트엔드 및 백엔드 서버 |
+| Mobile | `/Users/wallykim/dev/prj-mobile` | React Native 모바일 앱 |
 
 ## 입력 형식
 
@@ -32,6 +40,8 @@ Ground를 선택하는 페이지가 필요해요.
 
 ```markdown
 # 📋 [PageName] 화면 기획서
+
+**플랫폼:** [Web / Mobile / Web + Mobile / Admin Web]
 
 ## 1. 화면 개요
 
@@ -52,6 +62,7 @@ Ground를 선택하는 페이지가 필요해요.
 
 ### 레이아웃
 [텍스트/ASCII로 레이아웃 표현]
+[사용자용 화면인 경우 Web과 Mobile 레이아웃 모두 제시]
 
 ┌─────────────────────────────────────┐
 │            Header                   │
@@ -91,7 +102,8 @@ Ground를 선택하는 페이지가 필요해요.
   "data": [
     {
       "id": "uuid",
-      "name": "Ground A",
+      "name": "서울 강남점",
+      "spaceId": "space-uuid",
       "address": "서울시 강남구...",
       "logoImageFileId": "uuid"
     }
@@ -110,7 +122,8 @@ Ground를 선택하는 페이지가 필요해요.
 ### 저장소 (Storage)
 | 키 | 저장소 | 설명 |
 |----|--------|------|
-| selectedGround | localStorage | 선택된 Ground 정보 |
+| currentSpaceId | localStorage | 현재 선택된 Space ID (개념적 컨텍스트) |
+| currentGroundId | localStorage | 현재 선택된 Ground ID |
 
 ---
 
@@ -145,7 +158,8 @@ selectedGroundId = clickedId
     ↓
 선택 완료 버튼 클릭
     ↓
-localStorage.setItem("selectedGround", JSON.stringify(ground))
+localStorage.setItem("currentSpaceId", ground.spaceId)
+localStorage.setItem("currentGroundId", ground.id)
     ↓
 router.push("/dashboard")
 ```
@@ -178,7 +192,10 @@ router.push("/dashboard")
 ### 사용 가능한 기존 컴포넌트
 | 컴포넌트 | 용도 | 경로 |
 |----------|------|------|
-| AuthLayout | 페이지 레이아웃 | components/ui/layouts/Auth |
+| AppLayout | 앱 레이아웃 (TopNav + SubNav + Content) | components/ui/layouts/AppLayout |
+| TopNav | 상단 네비게이션 | components/ui/layouts/TopNav |
+| SubNav | 하위 메뉴 네비게이션 | components/ui/layouts/SubNav |
+| AuthLayout | 인증 페이지 레이아웃 | components/ui/layouts/Auth |
 | VStack | 수직 정렬 | components/ui/surfaces/VStack |
 | HStack | 수평 정렬 | components/ui/surfaces/HStack |
 | Text | 텍스트 표시 | components/ui/data-display/Text |
@@ -275,6 +292,8 @@ GroundSelectPage를 만들어주세요.
 - [ ] 핸들러 네이밍이 규칙을 따르는가? (on[Event][UI])
 - [ ] 기존 컴포넌트 활용을 최대화했는가?
 - [ ] 다음 에이전트 전달 내용이 완성되었는가?
+- [ ] 플랫폼(Web/Mobile)이 명시되었는가?
+- [ ] 사용자용 화면인 경우 Web과 Mobile 모두 기획되었는가?
 
 ## 주의사항
 
@@ -282,3 +301,35 @@ GroundSelectPage를 만들어주세요.
 2. **기존 컴포넌트 우선**: 새 컴포넌트는 정말 필요할 때만
 3. **핸들러 네이밍 규칙 준수**: `on[Event][UI]` 형태
 4. **HeroUI 컴포넌트 확인**: Card, Badge 등은 이미 있음
+5. **플랫폼 필수 고려**:
+   - 사용자용 화면은 Web과 Mobile 모두 기획
+   - 관리자용 화면은 Web만 기획
+   - 플랫폼별 차이점 명시 (레이아웃, 인터랙션, 컴포넌트)
+
+---
+
+## 8. 기획서 저장
+
+### 저장 위치
+기획이 완료되면 `.claude/plans/` 폴더에 날짜별로 저장합니다.
+
+### 파일명 규칙
+```
+YYYY-MM-DD-[PageName].md
+```
+
+**예시:**
+- `2025-12-30-GroundSelectPage.md`
+- `2025-12-30-UserProfilePage.md`
+
+### 저장 프로세스
+1. 사용자와 기획 논의 완료
+2. 화면 기획서 작성 완료
+3. `.claude/plans/YYYY-MM-DD-[PageName].md` 파일로 저장
+4. 저장 완료 메시지 출력
+
+**저장 완료 메시지 예시:**
+```
+✅ GroundSelectPage 기획서가 저장되었습니다.
+📁 경로: .claude/plans/2025-12-30-GroundSelectPage.md
+```

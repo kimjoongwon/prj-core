@@ -1,16 +1,16 @@
 import { createLogger, navigateTo } from "@cocrepo/toolkit";
 import { isAxiosError } from "axios";
 import { makeAutoObservable } from "mobx";
-import { Store } from "./Store";
+import { RootStore } from "./Store";
 
 const logger = createLogger("[AuthStore]");
 
 export class AuthStore {
-	plateStore: Store;
+	rootStore: RootStore;
 	isLoggingOut = false;
 
-	constructor(plateStore: Store) {
-		this.plateStore = plateStore;
+	constructor(rootStore: RootStore) {
+		this.rootStore = rootStore;
 
 		// AXIOS_INSTANCE.interceptors.response.use(
 		// 	(response) => response,
@@ -36,7 +36,7 @@ export class AuthStore {
 	}
 
 	get isAuthenticated(): boolean {
-		return !this.plateStore.tokenStore?.isAccessTokenExpired();
+		return !this.rootStore.tokenStore?.isAccessTokenExpired();
 	}
 
 	async handleAuthError(error: unknown) {

@@ -40,7 +40,9 @@ export interface StringDecoratorOptions {
  * }
  * ```
  */
-export function String(options: StringDecoratorOptions = {}): PropertyDecorator {
+export function String(
+	options: StringDecoratorOptions = {},
+): PropertyDecorator {
 	const {
 		required = true,
 		minLength = 1,
@@ -57,7 +59,9 @@ export function String(options: StringDecoratorOptions = {}): PropertyDecorator 
 
 	// 필수 여부
 	if (required) {
-		decorators.push(IsNotEmpty({ each, message: VALIDATION_MESSAGES.REQUIRED }));
+		decorators.push(
+			IsNotEmpty({ each, message: VALIDATION_MESSAGES.REQUIRED }),
+		);
 	} else {
 		decorators.push(IsOptional());
 	}

@@ -500,10 +500,130 @@ apps/admin (비즈니스 로직):
 
 ## 기존 컴포넌트 참고
 
-- **Layout**: `AuthLayout`, `DashboardLayout`, `MainLayout`
+- **Layout**: `AuthLayout`, `DashboardLayout`, `MainLayout`, `AppLayout`, `TopNav`, `SubNav`
 - **Surface**: `VStack`, `HStack`, `Container`
 - **Input**: `Input`, `Button`, `Select`, `Checkbox`
 - **Display**: `Text`, `Avatar`, `Table`
+
+---
+
+## 레이아웃 시스템 (AppLayout + MenuStore)
+
+### 아키텍처 개요
+
+```
+packages/constant (Source of Truth)
+    └── ADMIN_MENU_CONFIG, ADMIN_PATHS, ADMIN_SUBJECTS
+
+packages/store (MobX Stores)
+    ├── MenuItem (개별 메뉴 아이템 Entity, observable)
+    └── MenuStore (메뉴 시스템 관리)
+
+packages/ui (범용 UI 컴포넌트)
+    ├── TopNav (상단 네비게이션)
+    ├── SubNav (하위 메뉴 네비게이션)
+    └── AppLayout (TopNav + SubNav + Content 조합)
+
+apps/admin (앱별 인스턴스화)
+    ├── AdminMenuStoreContext (MenuStore 컨텍스트)
+    ├── useAdminLayout (레이아웃 훅)
+    └── AdminLayoutWrapper (레이아웃 조합)
+```
+
+### 메뉴 상태 관리 (MobX)
+
+MenuStore와 MenuItem을 사용하여 객체 지향적으로 메뉴 상태를 관리합니다.
+
+> **네이밍 규칙**: Entity(Store에 복수개 존재하는 row)에는 `Store` 접미사를 붙이지 않습니다.
+> `MenuItem`은 `MenuStore`가 관리하는 Entity이므로 Store 접미사 없이 사용합니다.
+
+```typescript
+// MenuItem - 개별 메뉴 아이템 Entity (Store가 아님!)
+class MenuItem {
+  readonly id: string;
+  readonly label: string;
+  readonly path: string | undefined;
+  readonly icon: string | undefined;
+  private _active: boolean = false;
+
+  get active(): boolean { return this._active; }
+  setActive(value: boolean): void { this._active = value; }
+}
+
+// MenuStore - 메뉴 시스템 관리 (여러 MenuItem을 관리)
+class MenuStore {
+  items: MenuItem[];
+  selectedMenu: MenuItem | null;
+  selectedSubMenu: MenuItem | null;
+
+  setCurrentPath(path: string): void;
+  selectMenu(menuId: string): void;
+  selectSubMenu(subMenuId: string): void;
+}
+```
+
+### 경로 상수 (Source of Truth)
+
+모든 경로는 `packages/constant`에 정의됩니다:
+
+```typescript
+// packages/constant/src/routing/admin-menu.ts
+export const ADMIN_PATHS = {
+  MEMBERS: "/members",
+  MEMBERS_GRADES: "/members/grades",
+  // ...
+} as const;
+
+export const ADMIN_SUBJECTS = {
+  MENU_MEMBERS: "menu:members",
+  // ...
+} as const;
+
+export const ADMIN_MENU_CONFIG: MenuItemDto[] = [
+  {
+    id: "members",
+    label: "회원",
+    icon: "Users",
+    subject: ADMIN_SUBJECTS.MENU_MEMBERS,
+    children: [...]
+  }
+];
+```
+
+### AppLayout 사용법
+
+```tsx
+import { AppLayout } from "@cocrepo/ui";
+
+<AppLayout
+  menuItems={menuItems}           // TopNavMenuItem[]
+  subMenuItems={subMenuItems}     // SubNavMenuItem[]
+  currentUser={currentUser}       // TopNavUser | null
+  currentContext={currentContext} // TopNavContext | null
+  onClickMenu={onClickMenu}       // (menuId: string) => void
+  onClickSubMenu={onClickSubMenu} // (menuId: string) => void
+  onLogout={onLogout}
+  onClickLogo={onClickLogo}
+  logoIcon="LayoutGrid"
+  logoText="Admin"
+>
+  {children}
+</AppLayout>
+```
+
+### 권한 기반 메뉴 필터링
+
+CASL을 사용하여 권한 기반 메뉴 필터링:
+
+```typescript
+const menuStore = new MenuStore(ADMIN_MENU_CONFIG, {
+  abilityChecker: (action, subject) => ability.can(action, subject),
+  onNavigate: (path) => router.push(path),
+});
+
+// 자동으로 권한이 없는 메뉴 필터링됨
+const visibleMenus = menuStore.items; // 권한 있는 메뉴만 반환
+```
 
 ## 주의사항
 
@@ -515,23 +635,145 @@ apps/admin (비즈니스 로직):
 
 ---
 
-## React Compiler (React 19 + Next.js 16)
+## ⚠️ API 사용 규칙 (Orval 기반)
 
-React Compiler가 자동 메모이제이션을 제공하므로 `useCallback`, `useMemo` 불필요합니다.
+### 필수 원칙
+
+**API 클라이언트는 직접 작성하지 않습니다!**
+
+이 프로젝트는 **Orval**을 사용하여 백엔드 Swagger에서 API 클라이언트를 자동 생성합니다.
+
+### API 사용 프로세스
+
+```
+1. 백엔드 API 완성 (Swagger 노출)
+       ↓
+2. pnpm --filter=@cocrepo/api generate (Orval 실행)
+       ↓
+3. packages/api/src/apis.ts 에 API 함수 자동 생성
+       ↓
+4. 페이지에서 import하여 사용
+```
+
+### API 함수 사용 예시
 
 ```typescript
-// ❌ 기존 - useCallback 사용
-const onClickLoginButton = useCallback(async () => {
-  // 로직
-}, [dep1, dep2]);
+// ✅ 올바른 사용 - Orval이 생성한 함수 import
+import { useGetGrounds, useLogin, useGetUserById } from "@cocrepo/api";
 
-// ✅ React 19 - 일반 함수 사용
-const onClickLoginButton = async () => {
-  // 로직
+export const useGroundSelectPage = () => {
+  // React Query 훅 형태로 자동 생성됨
+  const { data: groundsData, isLoading } = useGetGrounds();
+  const loginMutation = useLogin();
+
+  // ...
 };
+```
+
+```typescript
+// ❌ 금지 - 직접 axios/fetch 호출
+const response = await axios.get("/api/v1/grounds");
+const data = await fetch("/api/v1/login").then(res => res.json());
+```
+
+### API가 없을 때
+
+1. **먼저 백엔드 API가 구현되어 있는지 확인**
+   - Swagger UI 확인: `http://localhost:3000/api/docs`
+   - `packages/api/src/apis.ts`에서 필요한 API 함수 검색
+
+2. **API가 없으면 백엔드 빌더에게 먼저 요청**
+   ```
+   컨트롤러-빌더 → Swagger 자동 노출 → Orval 실행 → API 함수 생성
+   ```
+
+3. **Orval 재생성 필요 시**
+   ```bash
+   pnpm --filter=@cocrepo/api generate
+   ```
+
+### Orval 설정 위치
+
+- 설정 파일: `packages/api/orval.config.js`
+- 생성 위치: `packages/api/src/apis.ts`, `packages/api/src/model/`
+
+### 체크리스트
+
+- [ ] 직접 axios/fetch 호출하지 않았는가?
+- [ ] `@cocrepo/api`에서 필요한 API 함수를 import했는가?
+- [ ] API가 없으면 백엔드 구현 먼저 요청했는가?
+
+---
+
+## 메모이제이션 규칙 (useCallback/useMemo 사용 금지)
+
+### 핵심 원칙
+
+**이 프로젝트에서는 `useCallback`, `useMemo`를 사용하지 않습니다.**
+
+두 가지 이유:
+1. **React 19 Compiler** - 자동 메모이제이션 제공
+2. **MobX 자동 메모이제이션** - Store 내부 상태와 메서드가 자동으로 메모이제이션됨
+
+### MobX Store 메모이제이션
+
+MobX Store의 상태와 액션은 자동으로 메모이제이션됩니다:
+
+```typescript
+// MobX Store 클래스
+class MenuStore {
+  private _items: MenuItemStore[] = [];
+
+  constructor() {
+    makeAutoObservable(this);  // 모든 상태와 메서드 자동 메모이제이션
+  }
+
+  // getter - 자동 캐싱 (computed)
+  get items() { return this._items; }
+
+  // action - 자동 메모이제이션
+  selectMenu(id: string) { ... }
+}
+```
+
+### 컴포넌트에서의 사용
+
+```typescript
+// ❌ 금지 - useCallback/useMemo 사용
+const onClickMenu = useCallback((id: string) => {
+  menuStore.selectMenu(id);
+}, [menuStore]);
+
+const menuItems = useMemo(() => {
+  return menuStore.items.map(toMenuItem);
+}, [menuStore.items]);
+
+// ✅ 권장 - 일반 함수/변수 사용
+const onClickMenu = (id: string) => {
+  menuStore.selectMenu(id);
+};
+
+const menuItems = menuStore.items.map(toMenuItem);
+```
+
+### Store 인스턴스 생성
+
+Store 인스턴스는 `useRef`로 안정적인 참조를 유지합니다:
+
+```typescript
+// ❌ 금지 - useMemo로 Store 생성
+const store = useMemo(() => new MenuStore(), []);
+
+// ✅ 권장 - useRef로 Store 생성
+const storeRef = useRef<MenuStore | null>(null);
+if (!storeRef.current) {
+  storeRef.current = new MenuStore();
+}
+const store = storeRef.current;
 ```
 
 **장점:**
 - 의존성 배열 관리 불필요
 - 코드 간결화
 - 자동 최적화
+- MobX와 React Compiler의 이중 최적화

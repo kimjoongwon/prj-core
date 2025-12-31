@@ -208,17 +208,18 @@ export type XOR<T, U> = T extends object
 /**
  * Is T a Record?
  */
-type IsObject<T extends any> = T extends Array<any>
-	? False
-	: T extends Date
+type IsObject<T extends any> =
+	T extends Array<any>
 		? False
-		: T extends Uint8Array
+		: T extends Date
 			? False
-			: T extends BigInt
+			: T extends Uint8Array
 				? False
-				: T extends object
-					? True
-					: False;
+				: T extends BigInt
+					? False
+					: T extends object
+						? True
+						: False;
 
 /**
  * If it's T[], return T
@@ -3957,11 +3958,8 @@ export type GetLogType<T> = CheckIsLogLevel<
 	T extends LogDefinition ? T["level"] : T
 >;
 
-export type GetEvents<T extends any[]> = T extends Array<
-	LogLevel | LogDefinition
->
-	? GetLogType<T[number]>
-	: never;
+export type GetEvents<T extends any[]> =
+	T extends Array<LogLevel | LogDefinition> ? GetLogType<T[number]> : never;
 
 export type QueryEvent = {
 	timestamp: Date;

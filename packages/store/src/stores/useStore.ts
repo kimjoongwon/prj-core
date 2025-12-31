@@ -1,12 +1,12 @@
 import { createContext, useContext } from "react";
-import { Store } from "./Store";
+import { RootStore } from "./Store";
 
-export const StoreContext = createContext<Store | null>(null);
+export const RootStoreContext = createContext<RootStore | null>(null);
 
 export const useStore = () => {
-	const store = useContext(StoreContext);
+	const store = useContext(RootStoreContext);
 	if (!store) {
-		throw new Error("usePlateStore must be used within a PlateStoreProvider");
+		throw new Error("useStore must be used within a RootStoreProvider");
 	}
 	return store;
 };

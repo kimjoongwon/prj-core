@@ -15,6 +15,25 @@
 
 - 모든 컴포넌트의 텍스트는 components 폴더의 Text 컴포넌트로 감싸서 사용합니다
 
+### API 클라이언트 (Orval 기반)
+
+- **API 클라이언트는 직접 작성하지 않습니다!**
+- 백엔드 Swagger에서 **Orval**로 자동 생성합니다
+- 생성된 함수는 `@cocrepo/api`에서 import하여 사용
+
+```typescript
+// ✅ 올바른 사용
+import { useGetGrounds, useLogin } from "@cocrepo/api";
+
+// ❌ 금지 - 직접 axios/fetch 호출
+const response = await axios.get("/api/v1/grounds");
+```
+
+**API 생성 명령어:**
+```bash
+pnpm --filter=@cocrepo/api generate
+```
+
 ## 테스트 작성 규칙
 
 - 테스트 코드의 설명(describe, it)은 한글로 작성합니다
@@ -69,6 +88,7 @@ feat(coin): 멀티시그 지갑 서비스 초기 구현
   - Phase 2: 컴포넌트-빌더 (신규 컴포넌트)
   - Phase 3: 리포지토리-빌더 → 서비스-빌더 → 컨트롤러-빌더 (백엔드)
   - Phase 4: 페이지-빌더 (프론트엔드)
+  - Phase 4.5: 페이지-리뷰어 (규칙 검증, 필수)
   - Phase 5: 코드-리뷰어, 테스트-엔지니어 (품질 검증)
 
 ### 개별 Agent
@@ -77,6 +97,7 @@ feat(coin): 멀티시그 지갑 서비스 초기 구현
 |---------|-------|------|
 | **기획/분석** | planner | 요구사항 → 화면 기획서 작성 (Figma 없을 때) |
 | | design-analyzer | Figma 디자인 분석 및 컴포넌트 매핑 (Figma 있을 때) |
+| | technical-designer | 기획 문서 개발적 강화 및 Entity/API 상세 설계 |
 | **프론트엔드** | component-builder | Pure UI 컴포넌트 생성 |
 | | page-builder | 페이지 컴포넌트 생성 (useHandlers 분리) |
 | | frontend-architect | React 컴포넌트 아키텍처 설계 |
@@ -86,7 +107,9 @@ feat(coin): 멀티시그 지갑 서비스 초기 구현
 | | backend-architect | NestJS API 설계 |
 | | backend-service-builder | 복합 백엔드 서비스 구현 |
 | **데이터** | database-expert | Prisma 스키마 설계 및 최적화 |
-| **품질** | code-reviewer | 코드 리뷰 및 개선 제안 |
+| | seed-maker | 현실 세계와 연결된 시드 데이터 생성 |
+| **품질** | page-reviewer | 페이지 생성 결과 규칙 검증 (필수) |
+| | code-reviewer | 코드 리뷰 및 개선 제안 |
 | | test-engineer | 테스트 코드 작성 |
 | | refactoring-expert | 코드 리팩토링 |
 | | performance-optimizer | 성능 최적화 |
