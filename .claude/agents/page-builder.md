@@ -66,6 +66,10 @@ tools: Read, Write, Grep, Bash
 "use client";
 
 import { observer } from "mobx-react-lite";
+import { VStack } from "../../ui/surfaces/VStack/VStack";
+import { Input } from "../../ui/inputs/Input/Input";
+import { Button } from "../../ui/inputs/Button/Button";
+import { Text } from "../../ui/data-display/Text/Text";
 
 /** Page 내부에서만 사용하는 State 타입 */
 export interface State {
@@ -85,14 +89,14 @@ export interface LoginPageProps {
 export const LoginPage = observer(
   ({ state, onClickLoginButton, onChangeEmail, onChangePassword, isLoading }: LoginPageProps) => {
     return (
-      <AuthLayout>
+      <VStack className="gap-4 w-full max-w-md">
         <Input value={state.email} onChange={onChangeEmail} placeholder="이메일" />
         <Input value={state.password} onChange={onChangePassword} type="password" />
         <Button onPress={onClickLoginButton} isLoading={isLoading}>
           로그인
         </Button>
         {state.errorMessage && <Text color="error">{state.errorMessage}</Text>}
-      </AuthLayout>
+      </VStack>
     );
   },
 );
@@ -197,7 +201,50 @@ export default function LoginPageRoute() {
 | 핸들러 | `on[Event][UI]` | `onClickLoginButton`, `onChangeEmail` |
 | State 타입 | 파일 내 `State` | `State` (접두어 불필요) |
 
-### 4.3 금지 패턴
+### 4.3 Layout 컴포넌트 금지 (중요!)
+
+**Page 컴포넌트 내부에서 Layout 컴포넌트를 사용하면 안 됩니다.**
+
+Layout은 반드시 **Next.js의 layout.tsx**에서만 사용해야 합니다.
+
+```tsx
+// ❌ 금지 - Page 내부에 Layout 사용
+export const LoginPage = observer(({ state, ...handlers }: LoginPageProps) => {
+  return (
+    <AuthLayout>           {/* ← Layout이 Page 안에 있으면 안 됨! */}
+      <Input ... />
+      <Button ... />
+    </AuthLayout>
+  );
+});
+
+// ✅ 올바른 패턴 - Page는 순수 UI만 반환
+export const LoginPage = observer(({ state, ...handlers }: LoginPageProps) => {
+  return (
+    <VStack>               {/* ← 순수 UI 컴포넌트만 사용 */}
+      <Input ... />
+      <Button ... />
+    </VStack>
+  );
+});
+
+// ✅ Layout은 Next.js layout.tsx에서 사용
+// apps/admin/app/auth/layout.tsx
+export default function AuthLayout({ children }: { children: React.ReactNode }) {
+  return (
+    <AuthLayoutComponent>   {/* ← Layout은 여기서만 사용 */}
+      {children}
+    </AuthLayoutComponent>
+  );
+}
+```
+
+**이유:**
+- Layout은 라우트 레벨에서 결정되어야 함
+- 같은 Page를 다른 Layout으로 재사용할 수 있어야 함
+- 관심사 분리: Page는 콘텐츠, Layout은 구조
+
+### 4.4 기타 금지 패턴
 
 ```tsx
 // ❌ handlers 객체로 묶기

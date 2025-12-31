@@ -1,11 +1,9 @@
 "use client";
 
 import type React from "react";
-
 import { Text } from "../ui/data-display/Text/Text";
 import { Button } from "../ui/inputs/Button/Button";
 import { Input } from "../ui/inputs/Input";
-import { AuthLayout } from "../ui/layouts/Auth/AuthLayout";
 import { VStack } from "../ui/surfaces/VStack/VStack";
 
 export interface PhoneVerifyPageState {
@@ -22,6 +20,11 @@ export interface PhoneVerifyPageProps {
 	isLoading?: boolean;
 }
 
+/**
+ * PhoneVerifyPage 컴포넌트
+ * 순수 UI 컴포넌트로, Layout은 포함하지 않습니다.
+ * Layout은 반드시 Next.js layout.tsx에서 적용해야 합니다.
+ */
 export const PhoneVerifyPage = ({
 	state,
 	onSendVerificationCode,
@@ -29,13 +32,11 @@ export const PhoneVerifyPage = ({
 	isCodeSent = false,
 	isLoading = false,
 }: PhoneVerifyPageProps) => {
-	const formComponent = (
+	return (
 		<VStack fullWidth gap={8} className="p-4">
 			<VStack fullWidth gap={2}>
 				<Text variant="h3">전화번호 인증</Text>
-				<Text variant="caption">
-					회원가입을 위해 전화번호를 인증해주세요.
-				</Text>
+				<Text variant="caption">회원가입을 위해 전화번호를 인증해주세요.</Text>
 			</VStack>
 
 			<VStack fullWidth gap={4}>
@@ -88,11 +89,7 @@ export const PhoneVerifyPage = ({
 				)}
 			</VStack>
 
-			{state.errorMessage && (
-				<Text variant="error">{state.errorMessage}</Text>
-			)}
+			{state.errorMessage && <Text variant="error">{state.errorMessage}</Text>}
 		</VStack>
 	);
-
-	return <AuthLayout formComponent={formComponent} />;
 };

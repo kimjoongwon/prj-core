@@ -5,7 +5,16 @@
 ## 1. 화면 개요
 
 ### 목적
-엔터프라이즈급 멀티테넌트 어드민 시스템의 전체 레이아웃과 메뉴 시스템을 제공합니다. 상단 탑바(브랜딩/검색/사용자)와 좌측 사이드바(메뉴)로 구성된 대시보드 스타일 레이아웃을 구현합니다. 사이드바 메뉴 클릭 시 하위 메뉴가 아코디언 형태로 펼쳐집니다.
+엔터프라이즈급 멀티테넌트 어드민 시스템의 전체 레이아웃과 메뉴 시스템을 제공합니다. 상단 헤더(로고/사용자 아바타)와 좌측 사이드바(네비게이션)로 구성된 대시보드 스타일 레이아웃을 구현합니다.
+
+**핵심 특징:**
+- **Header**: 네비게이션 기능 없음
+  - 왼쪽: 로고
+  - 오른쪽: 유저 아바타 (클릭 시 로그아웃 메뉴)
+- **Left Aside (Sidebar)**: 2depth 아코디언/트리 형태의 네비게이션
+  - 예: 회원관리 → 강사 관리, 회원관리 → 회원 목록
+  - 하위 메뉴가 있는 항목: 클릭 시 펼침/접힘
+  - 하위 메뉴가 없는 항목: 클릭 시 해당 페이지로 바로 이동
 
 ### 진입 조건
 - Ground 선택 완료 (Space 컨텍스트 설정됨)
@@ -24,31 +33,41 @@
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────┐
-│ [Logo]                    [🔍 검색...]       [Ground A ▼] [🔔] [Admin▼] │  ← 탑바 (브랜딩/검색/아바타)
+│ [Logo]                                                       [👤 Avatar]│  ← Header (로고 + 아바타)
 ├────────────┬────────────────────────────────────────────────────────────┤
-│  👥 회원   │                                                            │
-│    ├ 목록  │                                                            │
-│    ├ 등급  │                                                            │
-│    └ 탈퇴  │                                                            │
+│            │                                                            │
+│  👥 회원관리│                                                            │
+│    ├ 강사 관리                                                          │
+│    ├ 회원 목록                                                          │
+│    ├ 회원 등급                                                          │
+│    └ 탈퇴 회원                                                          │
 │            │                                                            │
 │  📅 예약   │               페이지 콘텐츠 영역                             │
 │  🔔 알림   │                                                            │
 │  💬 문의   │                                                            │
 │  📄 콘텐츠  │                                                            │
-│  ⚙️ 설정   │                                                            │
+│  ⚙️ 설정   │  (하위 메뉴 없으면 클릭 시 바로 이동)                        │
 │            │                                                            │
 ├────────────┴────────────────────────────────────────────────────────────┤
 │  [접기/펼치기]                                                           │  ← 사이드바 토글 (선택)
 └─────────────────────────────────────────────────────────────────────────┘
+
+아바타 클릭 시:
+┌──────────────┐
+│ 관리자 이름   │
+│ 권한: ADMIN  │
+├──────────────┤
+│ 🚪 로그아웃   │
+└──────────────┘
 ```
 
 ### 컴포넌트 구성
 
-| 영역 | 컴포넌트 | 설명 |
-|------|----------|------|
-| Top Header | AppTopBar | 로고 + 검색 + Ground 선택 + 알림 + 사용자 메뉴 |
-| Sidebar | AppSidebar | 주요 메뉴 + 하위 메뉴 (아코디언/트리 구조) |
-| Main Content | Outlet (React Router) | 실제 페이지 콘텐츠 |
+| 영역 | 컴포넌트 | 유형 | 설명 |
+|------|----------|------|------|
+| Header | AdminHeader | layouts | 왼쪽 로고 + 오른쪽 유저 아바타 (로그아웃 메뉴) |
+| Left Aside | AdminSidebar | feature | 2depth 네비게이션 (아코디언/트리 구조) |
+| Main Content | Outlet (Next.js) | - | 실제 페이지 콘텐츠 |
 
 ---
 
@@ -88,23 +107,33 @@ interface SubMenuItem {
 
 ```typescript
 const adminMenuConfig: MenuItem[] = [
+  // 하위 메뉴가 없는 예시 (클릭 시 바로 이동)
+  {
+    id: 'dashboard',
+    label: '대시보드',
+    icon: DashboardIcon,
+    path: '/admin/dashboard',  // 하위 없으면 path 직접 지정
+    subject: 'menu:dashboard',
+    // children 없음 → 클릭 시 바로 /admin/dashboard로 이동
+  },
+  // 하위 메뉴가 있는 예시 (회원관리 → 강사 관리, 회원 목록 등)
   {
     id: 'members',
-    label: '회원',
+    label: '회원관리',
     icon: UsersIcon,
     subject: 'menu:members',
     children: [
+      {
+        id: 'members-instructors',
+        label: '강사 관리',
+        path: '/admin/members/instructors',
+        subject: 'menu:members:instructors',
+      },
       {
         id: 'members-list',
         label: '회원 목록',
         path: '/admin/members',
         subject: 'menu:members:list',
-      },
-      {
-        id: 'members-detail',
-        label: '회원 상세',
-        path: '/admin/members/:id',
-        subject: 'menu:members:detail',
       },
       {
         id: 'members-grade',
@@ -319,12 +348,12 @@ const adminMenuConfig: MenuItem[] = [
 
 | 상태 | 타입 | 설명 | 초기값 |
 |------|------|------|--------|
-| selectedMainMenu | string \| null | 선택된 주요 메뉴 ID | null |
-| selectedSubMenu | string \| null | 선택된 하위 메뉴 ID | null |
+| expandedMenuIds | string[] | 펼쳐진 메뉴 ID 목록 (아코디언) | [] |
+| selectedMenuId | string \| null | 현재 활성화된 메뉴 ID | null |
 | currentGround | AdminGround \| null | 현재 선택된 Ground | null |
 | currentUser | AdminUser \| null | 현재 로그인한 관리자 정보 | null |
-| isGroundSelectorOpen | boolean | Ground 선택 드롭다운 열림 상태 | false |
-| isUserMenuOpen | boolean | 사용자 메뉴 드롭다운 열림 상태 | false |
+| isUserMenuOpen | boolean | 사용자 아바타 메뉴 열림 상태 | false |
+| isSidebarCollapsed | boolean | 사이드바 접힘 상태 (선택적) | false |
 
 ### 저장소에서 가져올 데이터
 
@@ -345,49 +374,57 @@ const adminRole = sessionStorage.getItem('adminRole');
 
 | 액션 | 트리거 | 결과 |
 |------|--------|------|
-| 주요 메뉴 클릭 | 사이드바 메뉴 항목 클릭 | 아코디언 펼침/접힘, 하위 메뉴 표시 |
+| **Header** | | |
+| 아바타 클릭 | 우측 상단 아바타 클릭 | 로그아웃 메뉴 표시 |
+| 로그아웃 | 로그아웃 메뉴 클릭 | 인증 정보 제거, 로그인 페이지로 이동 |
+| **Sidebar** | | |
+| 주요 메뉴 클릭 (하위 있음) | 사이드바 메뉴 항목 클릭 | 아코디언 펼침/접힘, 하위 메뉴 표시 |
+| 주요 메뉴 클릭 (하위 없음) | 사이드바 메뉴 항목 클릭 | 해당 페이지로 바로 이동 |
 | 하위 메뉴 클릭 | 하위 메뉴 항목 클릭 | 해당 페이지로 이동, 해당 메뉴 활성화 |
-| 검색 | 탑바 검색창 입력 | 검색 결과 표시 (선택적 기능) |
-| Ground 선택 버튼 클릭 | Ground 드롭다운 클릭 | Ground 목록 드롭다운 표시 |
-| Ground 변경 | 드롭다운에서 다른 Ground 선택 | Space 선택 페이지로 이동 또는 즉시 변경 |
-| 알림 아이콘 클릭 | 알림 아이콘 클릭 | 알림 패널 표시 (선택적 기능) |
-| 사용자 메뉴 클릭 | 우측 상단 아바타 클릭 | 프로필, 로그아웃 메뉴 표시 |
-| 로그아웃 | 로그아웃 메뉴 클릭 | 로그인 페이지로 이동 |
 | 사이드바 토글 | 토글 버튼 클릭 | 사이드바 접기/펼치기 (선택적 기능) |
 
 ### 핸들러 정의
 
 | 핸들러 | 파라미터 | 동작 |
 |--------|----------|------|
-| onToggleMenu | menuId: string | 사이드바 메뉴 아코디언 펼침/접힘 |
-| onClickSubMenu | menuId: string, path: string | selectedSubMenu 업데이트, path로 navigate |
-| onChangeGround | - | /admin/select-space로 navigate |
-| onClickUserMenu | - | isUserMenuOpen 토글 |
+| **Header** | | |
+| onClickAvatar | - | isUserMenuOpen 토글 |
 | onClickLogout | - | 인증 정보 제거, 로그인 페이지로 navigate |
-| onToggleSidebar | - | 사이드바 접힘/펼침 상태 토글 |
+| **Sidebar** | | |
+| onClickMenu | menuId: string | 하위 있으면 아코디언 토글, 없으면 path로 navigate |
+| onClickSubMenu | menuId: string, path: string | selectedMenuId 업데이트, path로 navigate |
+| onToggleSidebar | - | 사이드바 접힘/펼침 상태 토글 (선택적) |
 
 ### 상태 변화 흐름
 
 ```
-페이지 진입 (예: /admin/members)
+페이지 진입 (예: /admin/members/instructors)
     ↓
-URL 기반으로 expandedMenu, selectedSubMenu 자동 설정
-해당 메뉴 아코디언 자동 펼침
+URL 기반으로 expandedMenuIds, selectedMenuId 자동 설정
+해당 상위 메뉴 아코디언 자동 펼침
     ↓
 localStorage/PersistStore에서 currentGroundId, currentSpaceId 로드
 AbilityProvider에서 사용자 권한 로드
     ↓
 메뉴 권한 필터링 (CASL ability 기반)
     ↓
-사용자가 주요 메뉴 클릭 (예: "예약")
+[케이스 1: 하위 메뉴가 있는 주요 메뉴 클릭]
+사용자가 "회원관리" 클릭
     ↓
-예약 메뉴 아코디언 펼침
-하위 메뉴 목록 표시
+expandedMenuIds에 "members" 추가/제거 (토글)
+하위 메뉴 목록 표시/숨김
     ↓
-사용자가 하위 메뉴 클릭 (예: "예약 캘린더")
+사용자가 하위 메뉴 클릭 (예: "강사 관리")
     ↓
-selectedSubMenu = "reservations-calendar"
-navigate to /admin/reservations/calendar
+selectedMenuId = "members-instructors"
+navigate to /admin/members/instructors
+해당 메뉴 활성화 표시
+
+[케이스 2: 하위 메뉴가 없는 주요 메뉴 클릭]
+사용자가 "대시보드" 클릭 (하위 없음)
+    ↓
+selectedMenuId = "dashboard"
+navigate to /admin/dashboard
 해당 메뉴 활성화 표시
 ```
 
@@ -395,61 +432,110 @@ navigate to /admin/reservations/calendar
 
 ## 5. UI 상세
 
-### Top Header (AdminTopNav)
+### Header (AdminHeader)
 
 **구성 요소:**
-- 좌측: 로고 + 주요 메뉴 (가로 배치)
-- 우측: Ground 선택 드롭다운 + 사용자 메뉴
+- 좌측: 로고
+- 우측: 유저 아바타
 
 **스타일:**
 - 높이: 64px
 - 배경: White
 - Border Bottom: 1px solid gray-200
-- 메뉴 항목 간격: 24px
-- 선택된 메뉴: Primary color underline (2px)
+- 로고와 아바타 사이: flex justify-between
 
-### Sub Header (AdminSubNav)
-
-**구성 요소:**
-- 선택된 주요 메뉴의 하위 메뉴 항목 (가로 배치)
-
-**스타일:**
-- 높이: 48px
-- 배경: gray-50
-- Border Bottom: 1px solid gray-200
-- 메뉴 항목 간격: 16px
-- 선택된 메뉴: Primary color background + white text
-
-### Ground 선택 드롭다운
-
-**표시 정보:**
-- 현재 Ground 이름 + 아이콘
-- 클릭 시 "Ground 변경하기" 옵션 표시
-
-**동작:**
-- "Ground 변경하기" 클릭 시 /admin/select-space로 이동
-
-### 사용자 메뉴 드롭다운
+### 아바타 드롭다운 메뉴
 
 **표시 정보:**
 - 관리자 이름
-- 권한 (예: "최고 관리자")
+- 권한 (예: "ADMIN", "SUPER_ADMIN")
 - 로그아웃 버튼
+
+**동작:**
+- 아바타 클릭 시 드롭다운 열림
+- 로그아웃 클릭 시 인증 정보 제거 후 로그인 페이지로 이동
+
+### Left Sidebar (AdminSidebar)
+
+**구성 요소:**
+- 2depth 아코디언/트리 형태의 네비게이션 메뉴
+- 사이드바 접기/펼치기 토글 버튼 (선택적)
+
+**스타일:**
+- 너비: 240px (펼침), 64px (접힘)
+- 배경: gray-50 또는 White
+- Border Right: 1px solid gray-200
+- 메뉴 항목 높이: 40-48px
+- 선택된 메뉴: Primary color background + white text
+- 펼쳐진 메뉴: 하위 메뉴 들여쓰기 (padding-left)
+
+**메뉴 동작:**
+- 하위 메뉴가 있는 항목: 클릭 시 아코디언 펼침/접힘 (chevron 아이콘 회전)
+- 하위 메뉴가 없는 항목: 클릭 시 해당 페이지로 바로 이동
+- 현재 페이지에 해당하는 메뉴 자동 활성화 및 상위 메뉴 자동 펼침
 
 ---
 
 ## 6. 기존 컴포넌트 활용 제안
 
+### 컴포넌트 계층 구조 (필수 이해)
+
+```
+UI (Pure)  →  Inputs  →  Widget  →  Feature  →  Layouts  →  Page
+작은 단위     폼 입력     UI 조합    비즈니스    영역 정의    화면
+```
+
+| 유형 | 위치 | 상태 | API | 예시 |
+|------|------|:----:|:---:|------|
+| **ui** | `components/ui/` | ❌ | ❌ | Text, VStack, HStack, Avatar |
+| **inputs** | `components/inputs/` | △ MobX | ❌ | Input, Button, Checkbox, Select |
+| **widget** | `components/widget/` | ❌ | ❌ | LoginForm, RoleSelector |
+| **feature** | `components/feature/` | ✅ | ✅ | UserMenu, Nav, AdminSidebar |
+| **layouts** | `components/layouts/` | ❌ | ❌ | AppLayout, Header, Main, AdminLayout |
+
 ### 사용 가능한 기존 컴포넌트
 
+#### UI 컴포넌트 (Pure)
 | 컴포넌트 | 용도 | 경로 |
 |----------|------|------|
-| HStack | 수평 정렬 | components/ui/surfaces/HStack |
 | VStack | 수직 정렬 | components/ui/surfaces/VStack |
+| HStack | 수평 정렬 | components/ui/surfaces/HStack |
 | Text | 텍스트 표시 | components/ui/data-display/Text |
-| Button | 버튼 | components/ui/inputs/Button |
-| Dropdown (HeroUI) | 드롭다운 | @heroui/react |
-| Avatar (HeroUI) | 사용자 아바타 | @heroui/react |
+| Container | 컨테이너 | components/ui/surfaces/Container |
+| Section | 섹션 | components/ui/surfaces/Section |
+
+#### Input 컴포넌트 (폼 입력)
+| 컴포넌트 | 용도 | 경로 |
+|----------|------|------|
+| Button | 버튼 | components/inputs/Button |
+| Select | 선택 | components/inputs/Select |
+| Checkbox | 체크박스 | components/inputs/Checkbox |
+| Tabs | 탭 | components/inputs/Tabs |
+
+#### Feature 컴포넌트 (기존)
+| 컴포넌트 | 용도 | 경로 |
+|----------|------|------|
+| UserMenu | 사용자 메뉴 | components/feature/UserMenu |
+| Nav | 네비게이션 | components/feature/Nav |
+| SubNav | 서브 네비게이션 | components/feature/SubNav |
+| CollapsibleSidebar | 접을 수 있는 사이드바 | components/feature/CollapsibleSidebar |
+| Logo | 로고 | components/feature/Logo |
+
+#### Layout 컴포넌트
+| 컴포넌트 | 용도 | 경로 |
+|----------|------|------|
+| AppLayout | 앱 레이아웃 | components/layouts/AppLayout |
+| Header | 헤더 | components/layouts/Header |
+| Main | 메인 콘텐츠 | components/layouts/Main |
+| Modal | 모달 | components/layouts/Modal |
+
+#### HeroUI 컴포넌트
+| 컴포넌트 | 용도 |
+|----------|------|
+| Dropdown | 드롭다운 메뉴 |
+| Avatar | 사용자 아바타 |
+| Accordion | 아코디언 |
+| Listbox | 리스트박스 |
 
 ### 신규 컴포넌트 필요 여부
 - [x] 필요함 → 아래 명세 참고
@@ -457,65 +543,86 @@ navigate to /admin/reservations/calendar
 ### 신규 컴포넌트 명세
 
 ---
-**AdminTopNav 컴포넌트를 만들어주세요.**
+**AdminHeader 컴포넌트를 만들어주세요.**
+
+**유형:** layouts
+**조합:** Header (layouts) + Logo (feature) + UserMenu (feature)
 
 **Props:**
-- menuItems: MenuItem[] (주요 메뉴 데이터)
-- selectedMenuId: string | null (선택된 메뉴 ID)
-- currentGround: AdminGround (현재 Ground)
 - currentUser: AdminUser (현재 사용자)
-- onClickMenu: (menuId: string) => void
-- onChangeGround: () => void
-- onLogout: () => void
+- isUserMenuOpen: boolean
+- onClickAvatar: () => void
+- onClickLogout: () => void
 
 **표시 내용:**
-- 로고
-- 주요 메뉴 (CASL ability 기반 권한 필터링 적용)
-- Ground 선택 드롭다운
-- 사용자 메뉴 드롭다운
+- 좌측: 로고
+- 우측: 유저 아바타
+- 아바타 클릭 시 드롭다운 메뉴 (관리자 이름, 권한, 로그아웃)
+
+**Storybook:** 필요
+**경로:** packages/ui/src/components/layouts/AdminHeader/AdminHeader.tsx
+
+---
+
+---
+**AdminSidebar 컴포넌트를 만들어주세요.**
+
+**유형:** feature
+**조합:**
+- ui: VStack, Text
+- inputs: Button
+- HeroUI: Accordion, Listbox
+
+**Props:**
+- menuItems: MenuItem[] (메뉴 데이터)
+- expandedMenuIds: string[] (펼쳐진 메뉴 ID 목록)
+- selectedMenuId: string | null (선택된 메뉴 ID)
+- onClickMenu: (menuId: string) => void
+- onClickSubMenu: (menuId: string, path: string) => void
+- isCollapsed?: boolean (사이드바 접힘 상태)
+- onToggleSidebar?: () => void
+
+**표시 내용:**
+- 2depth 아코디언/트리 형태의 네비게이션
+- 하위 메뉴가 있는 항목: chevron 아이콘으로 펼침/접힘 표시
+- 하위 메뉴가 없는 항목: 바로 클릭 가능
+- 선택된 메뉴 강조 표시
 
 **권한 처리:**
 - `useFilteredMenuItems` 훅으로 접근 가능한 메뉴만 필터링
 - 또는 `Can` 컴포넌트로 개별 메뉴 표시/숨김 처리
 
-**카테고리:** admin
 **Storybook:** 필요
-**경로:** packages/ui/src/components/admin/AdminTopNav/AdminTopNav.tsx
-
----
-
----
-**AdminSubNav 컴포넌트를 만들어주세요.**
-
-**Props:**
-- subMenuItems: SubMenuItem[] (하위 메뉴 데이터)
-- selectedSubMenuId: string | null (선택된 하위 메뉴 ID)
-- onClickSubMenu: (menuId: string, path: string) => void
-
-**표시 내용:**
-- 하위 메뉴 항목 (가로 배치)
-- 선택된 메뉴 강조
-
-**카테고리:** admin
-**Storybook:** 필요
-**경로:** packages/ui/src/components/admin/AdminSubNav/AdminSubNav.tsx
+**경로:** packages/ui/src/components/feature/AdminSidebar/AdminSidebar.tsx
 
 ---
 
 ---
 **AdminLayout 컴포넌트를 만들어주세요.**
 
+**유형:** layouts
+**조합:**
+- layouts: AdminHeader
+- feature: AdminSidebar
+- layouts: Main
+
 **Props:**
 - children: React.ReactNode
 
 **구조:**
-- AdminTopNav
-- AdminSubNav
-- Main Content (children)
+```
+┌──────────────────────────────────────┐
+│            AdminHeader               │
+├────────────┬─────────────────────────┤
+│            │                         │
+│  AdminSide │    Main Content         │
+│    bar     │    (children)           │
+│            │                         │
+└────────────┴─────────────────────────┘
+```
 
-**카테고리:** admin
 **Storybook:** 불필요 (레이아웃)
-**경로:** packages/ui/src/components/admin/AdminLayout/AdminLayout.tsx
+**경로:** packages/ui/src/components/layouts/AdminLayout/AdminLayout.tsx
 
 ---
 
@@ -532,36 +639,38 @@ navigate to /admin/reservations/calendar
 - /admin/* 경로의 모든 페이지 (단, /admin/select-space 제외)
 
 **필요한 로직:**
-- URL 기반 자동 메뉴 선택
+- URL 기반 자동 메뉴 선택 (expandedMenuIds, selectedMenuId 설정)
 - localStorage에서 currentGroundId, currentSpaceId 로드
 - AbilityProvider에서 사용자 권한 로드
 - CASL ability 기반 메뉴 필터링 (`useFilteredMenuItems` 훅 사용)
-- 메뉴 클릭 시 라우팅
+- 사이드바 메뉴 클릭 시 라우팅 (하위 없으면 바로 이동, 있으면 아코디언 토글)
+- 아바타 클릭 시 로그아웃 메뉴 표시
 - 권한 없는 페이지 접근 시 403 처리
 
-**라우터 구조 예시:**
+**라우터 구조 예시 (Next.js App Router):**
 ```tsx
+// apps/admin/app/(admin)/layout.tsx
 import { AbilityProvider } from '@packages/hook/casl';
+import { AdminLayout } from '@cocrepo/ui';
 
-// App.tsx
-<AbilityProvider>
-  <Routes>
-    <Route path="/admin/select-space" element={<AdminSpaceSelectPage />} />
-    <Route path="/admin" element={<AdminLayout />}>
-      <Route path="dashboard" element={<DashboardPage />} />
-      <Route path="members" element={<MembersListPage />} />
-      <Route path="members/:id" element={<MemberDetailPage />} />
-      {/* ... 기타 페이지 */}
-    </Route>
-  </Routes>
-</AbilityProvider>
+export default function AdminLayoutWrapper({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  return (
+    <AbilityProvider>
+      <AdminLayout>{children}</AdminLayout>
+    </AbilityProvider>
+  );
+}
 ```
 
 **권한 체크 래퍼 컴포넌트:**
 ```tsx
 // ProtectedRoute.tsx
 import { useAbility } from '@packages/hook/casl';
-import { Navigate } from 'react-router-dom';
+import { redirect } from 'next/navigation';
 
 interface ProtectedRouteProps {
   subject: string;
@@ -572,21 +681,20 @@ export function ProtectedRoute({ subject, children }: ProtectedRouteProps) {
   const ability = useAbility();
 
   if (!ability.can('ACCESS', subject)) {
-    return <Navigate to="/admin/403" replace />;
+    redirect('/admin/403');
   }
 
   return <>{children}</>;
 }
 
-// 사용 예시
-<Route
-  path="settings/permissions"
-  element={
+// 사용 예시 (page.tsx)
+export default function PermissionsPage() {
+  return (
     <ProtectedRoute subject="menu:settings:permissions">
-      <PermissionsPage />
+      <PermissionsContent />
     </ProtectedRoute>
-  }
-/>
+  );
+}
 ```
 
 ---
@@ -600,7 +708,7 @@ export function ProtectedRoute({ subject, children }: ProtectedRouteProps) {
 ---
 **메뉴 설정 파일을 만들어주세요.**
 
-**파일 경로:** `apps/web/src/config/adminMenuConfig.ts`
+**파일 경로:** `apps/admin/src/config/adminMenuConfig.ts`
 
 **내용:**
 - MenuItem, SubMenuItem 타입 정의
@@ -684,31 +792,38 @@ export function useFilteredMenuItems(menuItems: MenuItem[]): MenuItem[] {
 #### Can 컴포넌트 활용
 
 ```tsx
-// AdminTopNav에서 메뉴 렌더링
+// AdminSidebar에서 메뉴 렌더링
 import { Can } from '@packages/hook/casl';
 
-function AdminTopNav({ menuItems }: Props) {
+function AdminSidebar({ menuItems, expandedMenuIds, selectedMenuId, onClickMenu, onClickSubMenu }: Props) {
   return (
-    <nav>
+    <aside>
       {menuItems.map((menu) => (
         <Can key={menu.id} I="ACCESS" a={menu.subject}>
-          <MenuItem menu={menu} />
+          {/* 하위 메뉴가 없는 경우: 바로 페이지 이동 */}
+          {!menu.children ? (
+            <MenuItemLink menu={menu} isSelected={selectedMenuId === menu.id} />
+          ) : (
+            /* 하위 메뉴가 있는 경우: 아코디언 */
+            <MenuItemAccordion
+              menu={menu}
+              isExpanded={expandedMenuIds.includes(menu.id)}
+              onToggle={() => onClickMenu(menu.id)}
+            >
+              {menu.children.map((subMenu) => (
+                <Can key={subMenu.id} I="ACCESS" a={subMenu.subject}>
+                  <SubMenuItem
+                    menu={subMenu}
+                    isSelected={selectedMenuId === subMenu.id}
+                    onClick={() => onClickSubMenu(subMenu.id, subMenu.path)}
+                  />
+                </Can>
+              ))}
+            </MenuItemAccordion>
+          )}
         </Can>
       ))}
-    </nav>
-  );
-}
-
-// AdminSubNav에서 하위 메뉴 렌더링
-function AdminSubNav({ subMenuItems }: Props) {
-  return (
-    <nav>
-      {subMenuItems.map((subMenu) => (
-        <Can key={subMenu.id} I="ACCESS" a={subMenu.subject}>
-          <SubMenuItem menu={subMenu} />
-        </Can>
-      ))}
-    </nav>
+    </aside>
   );
 }
 ```
@@ -929,6 +1044,12 @@ interface AbilityChange {
 ---
 **PermissionMatrix 컴포넌트를 만들어주세요.**
 
+**유형:** feature
+**조합:**
+- ui: VStack, Text, Table
+- inputs: Checkbox, Tabs
+- HeroUI: Accordion
+
 **Props:**
 - subjects: Subject[] (Subject 트리)
 - abilities: Ability[] (현재 권한)
@@ -940,13 +1061,18 @@ interface AbilityChange {
 - 엔티티: 테이블 + CRUD 체크박스
 - 기능: 리스트 + ACCESS 체크박스
 
-**카테고리:** admin
-**경로:** packages/ui/src/components/admin/PermissionMatrix/PermissionMatrix.tsx
+**Storybook:** 필요
+**경로:** packages/ui/src/components/feature/PermissionMatrix/PermissionMatrix.tsx
 
 ---
 
 ---
 **RoleSelector 컴포넌트를 만들어주세요.**
+
+**유형:** widget
+**조합:**
+- ui: Text
+- inputs: Select
 
 **Props:**
 - roles: Role[]
@@ -957,8 +1083,8 @@ interface AbilityChange {
 **표시 내용:**
 - 역할 드롭다운 (ADMIN, MANAGER 등)
 
-**카테고리:** admin
-**경로:** packages/ui/src/components/admin/RoleSelector/RoleSelector.tsx
+**Storybook:** 필요
+**경로:** packages/ui/src/components/widget/RoleSelector/RoleSelector.tsx
 
 ---
 
@@ -1016,3 +1142,15 @@ PUT /api/v1/abilities/roles/:roleId 호출
 | [CASL 권한 시스템 기획서](./2025-12-30-CASL-Permission-System.md) | CASL 기반 권한 체계 상세 설계 |
 | [CASL 공식 문서](https://casl.js.org/v6/en/) | CASL 라이브러리 공식 가이드 |
 | [CASL React](https://casl.js.org/v6/en/package/casl-react) | React용 CASL 패키지 |
+
+---
+
+## 13. 컴포넌트 경로 요약
+
+| 컴포넌트 | 유형 | 경로 |
+|----------|------|------|
+| AdminLayout | layouts | `packages/ui/src/components/layouts/AdminLayout/AdminLayout.tsx` |
+| AdminHeader | layouts | `packages/ui/src/components/layouts/AdminHeader/AdminHeader.tsx` |
+| AdminSidebar | feature | `packages/ui/src/components/feature/AdminSidebar/AdminSidebar.tsx` |
+| PermissionMatrix | feature | `packages/ui/src/components/feature/PermissionMatrix/PermissionMatrix.tsx` |
+| RoleSelector | widget | `packages/ui/src/components/widget/RoleSelector/RoleSelector.tsx` |

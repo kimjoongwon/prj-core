@@ -1,5 +1,10 @@
 # 프로젝트 개발 가이드
 
+## Claude Code 버그 회피
+
+- **TodoWrite 도구의 content, activeForm은 영어로 작성** (한글 UTF-8 멀티바이트 문자열 처리 버그 회피)
+- Task 도구의 description도 영어로 작성
+
 ## 프론트엔드 개발 규칙
 
 ### 컴포넌트 작성
@@ -136,7 +141,8 @@ feat(coin): 멀티시그 지갑 서비스 초기 구현
 | **기획/분석** | planner | 요구사항 → 화면 기획서 작성 (Figma 없을 때) |
 | | design-analyzer | Figma 디자인 분석 및 컴포넌트 매핑 (Figma 있을 때) |
 | | technical-designer | 기획 문서 개발적 강화 및 Entity/API 상세 설계 |
-| **프론트엔드** | component-builder | Pure UI 컴포넌트 생성 |
+| **프론트엔드** | ui-component-builder | Pure UI 컴포넌트 생성 (components/ui) |
+| | input-component-builder | Input 컴포넌트 생성 (components/inputs) |
 | | page-builder | 페이지 컴포넌트 생성 (useHandlers 분리) |
 | | frontend-architect | React 컴포넌트 아키텍처 설계 |
 | **백엔드** | repository-builder | Prisma Repository 레이어 생성 |

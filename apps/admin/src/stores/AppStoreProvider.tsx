@@ -10,6 +10,7 @@ import {
 	MenuStore,
 	PersistStore,
 	RootStore,
+	RootStoreContext,
 	TokenStore,
 } from "@cocrepo/store";
 import { usePathname, useRouter } from "next/navigation";
@@ -77,6 +78,9 @@ interface AppStoreProviderProps {
  * RootStore를 최상단에서 초기화하고 하위 컴포넌트에 제공합니다.
  * Router, Pathname, Ability 변경 시 MenuStore의 핸들러를 자동 업데이트합니다.
  *
+ * RootStoreContext도 함께 제공하여 @cocrepo/ui의 Feature 컴포넌트가
+ * @cocrepo/store의 hooks를 사용할 수 있도록 합니다.
+ *
  * @example
  * ```tsx
  * // providers.tsx에서 사용
@@ -93,8 +97,24 @@ interface AppStoreProviderProps {
 function AppStoreProvider({ children }: AppStoreProviderProps) {
 	return (
 		<StoreProviderBase createStore={createRootStore}>
-			<StoreInitializer>{children}</StoreInitializer>
+			<RootStoreContextBridge>{children}</RootStoreContextBridge>
 		</StoreProviderBase>
+	);
+}
+
+/**
+ * RootStoreContext Bridge
+ * AppStoreContext의 store를 RootStoreContext에도 제공하여
+ * @cocrepo/store의 hooks (useMenuStore, usePersistStore 등)가
+ * Feature 컴포넌트에서 사용 가능하도록 합니다.
+ */
+function RootStoreContextBridge({ children }: { children: ReactNode }) {
+	const store = useAppStore();
+
+	return (
+		<RootStoreContext.Provider value={store}>
+			<StoreInitializer>{children}</StoreInitializer>
+		</RootStoreContext.Provider>
 	);
 }
 

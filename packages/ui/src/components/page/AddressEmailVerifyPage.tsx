@@ -1,11 +1,9 @@
 "use client";
 
 import type React from "react";
-
 import { Text } from "../ui/data-display/Text/Text";
 import { Button } from "../ui/inputs/Button/Button";
 import { Input } from "../ui/inputs/Input";
-import { AuthLayout } from "../ui/layouts/Auth/AuthLayout";
 import { VStack } from "../ui/surfaces/VStack/VStack";
 
 export interface AddressEmailVerifyPageState {
@@ -23,6 +21,11 @@ export interface AddressEmailVerifyPageProps {
 	isLoading?: boolean;
 }
 
+/**
+ * AddressEmailVerifyPage 컴포넌트
+ * 순수 UI 컴포넌트로, Layout은 포함하지 않습니다.
+ * Layout은 반드시 Next.js layout.tsx에서 적용해야 합니다.
+ */
 export const AddressEmailVerifyPage = ({
 	state,
 	onSendEmailVerification,
@@ -30,7 +33,7 @@ export const AddressEmailVerifyPage = ({
 	isEmailCodeSent = false,
 	isLoading = false,
 }: AddressEmailVerifyPageProps) => {
-	const formComponent = (
+	return (
 		<VStack fullWidth gap={8} className="p-4">
 			<VStack fullWidth gap={2}>
 				<Text variant="h3">추가 정보 입력</Text>
@@ -87,9 +90,7 @@ export const AddressEmailVerifyPage = ({
 				)}
 			</VStack>
 
-			{state.errorMessage && (
-				<Text variant="error">{state.errorMessage}</Text>
-			)}
+			{state.errorMessage && <Text variant="error">{state.errorMessage}</Text>}
 
 			{isEmailCodeSent && (
 				<Button
@@ -106,6 +107,4 @@ export const AddressEmailVerifyPage = ({
 			)}
 		</VStack>
 	);
-
-	return <AuthLayout formComponent={formComponent} />;
 };

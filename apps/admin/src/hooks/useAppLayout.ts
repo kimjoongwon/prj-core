@@ -4,12 +4,21 @@ import { ADMIN_PATHS } from "@cocrepo/constant";
 import type { Menu } from "@cocrepo/store";
 import type {
 	ContextSelectorContext,
-	NavMenuItem,
 	UserMenuUser,
 } from "@cocrepo/ui";
 import { useRouter } from "next/navigation";
 import { useState, useSyncExternalStore } from "react";
 import { useMenuStore, usePersistStore } from "../stores";
+
+/**
+ * Nav에서 사용하는 메뉴 아이템 타입
+ */
+export interface NavMenuItem {
+	id: string;
+	label: string;
+	icon?: string;
+	active?: boolean;
+}
 
 /**
  * 클라이언트 마운트 상태를 추적하는 훅
@@ -64,6 +73,10 @@ function toNavMenuItem(item: Menu): NavMenuItem {
  * MobX MenuStore와 PersistStore를 사용하여 상태를 관리합니다.
  *
  * 주의: useCallback/useMemo 사용하지 않음 (MobX 자동 메모이제이션)
+ *
+ * @deprecated 이 훅은 더 이상 필요하지 않습니다.
+ * Feature 컴포넌트(Nav, SubNav, AppLogo, ContextSelector, UserMenu)가
+ * 자체적으로 store를 사용하여 비즈니스 로직을 처리합니다.
  */
 export function useAppLayout(): UseAppLayoutReturn {
 	const router = useRouter();
@@ -72,17 +85,17 @@ export function useAppLayout(): UseAppLayoutReturn {
 	const isMounted = useIsMounted();
 
 	// 사용자 정보 (임시 mock 데이터)
-	const [currentUser] = useState<TopNavUser | null>({
+	const [currentUser] = useState<UserMenuUser | null>({
 		id: "1",
 		name: "관리자",
 		role: "최고 관리자",
 	});
 
 	// 메뉴 아이템 변환 (observable 상태 반영)
-	const menuItems = menuStore.items.map(toTopNavMenuItem);
+	const menuItems = menuStore.items.map(toNavMenuItem);
 	// 하위 메뉴는 클라이언트 마운트 후에만 렌더링 (Hydration 오류 방지)
 	const subMenuItems = isMounted
-		? menuStore.subMenuItems.map(toTopNavMenuItem)
+		? menuStore.subMenuItems.map(toNavMenuItem)
 		: [];
 
 	// 주요 메뉴 클릭 핸들러 (MobX action이 자동 메모이제이션됨)
@@ -120,7 +133,7 @@ export function useAppLayout(): UseAppLayoutReturn {
 	};
 
 	// 현재 컨텍스트 (PersistStore에서 가져옴)
-	const currentContext: TopNavContext | null =
+	const currentContext: ContextSelectorContext | null =
 		persistStore.spaceId && persistStore.spaceName
 			? { id: persistStore.spaceId, name: persistStore.spaceName }
 			: null;
