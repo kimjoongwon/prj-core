@@ -1,47 +1,47 @@
 import { makeAutoObservable } from "mobx";
 
 /**
- * MenuItem - 개별 메뉴 아이템을 나타내는 MobX 도메인 객체
+ * Menu - 개별 메뉴를 나타내는 MobX 도메인 객체
  *
  * 주의: Store 접미사를 사용하지 않습니다.
- * MenuItem은 MenuStore에 복수개 존재하는 엔티티이며,
+ * Menu는 MenuStore에 복수개 존재하는 엔티티이며,
  * 항상 MenuStore를 통해 접근합니다.
  *
  * @example
  * ```ts
  * // MenuStore를 통해 접근
  * const menuStore = new MenuStore(ADMIN_MENU_CONFIG);
- * const menuItem = menuStore.items[0];
+ * const menu = menuStore.items[0];
  *
  * // 활성화 상태 확인
- * console.log(menuItem.active); // false
+ * console.log(menu.active); // false
  *
  * // 활성화
- * menuItem.setActive(true);
- * console.log(menuItem.active); // true
+ * menu.setActive(true);
+ * console.log(menu.active); // true
  * ```
  */
-export class MenuItem {
+export class Menu {
   readonly id: string;
   readonly label: string;
   readonly path: string | undefined;
   readonly icon: string | undefined;
   readonly subject: string;
-  readonly children: MenuItem[];
+  readonly children: Menu[];
   private _active: boolean = false;
 
   /**
-   * 메뉴 아이템 생성
-   * @param config 메뉴 아이템 설정
+   * 메뉴 생성
+   * @param config 메뉴 설정
    */
-  constructor(config: MenuItem) {
+  constructor(config: Menu) {
     this.id = config.id;
     this.label = config.label;
     this.path = config.path;
     this.icon = config.icon;
     this.subject = config.subject;
     this.children = config.children
-      ? config.children.map((child) => new MenuItem(child))
+      ? config.children.map((child) => new Menu(child))
       : [];
 
     makeAutoObservable(this);
@@ -81,7 +81,7 @@ export class MenuItem {
   /**
    * 활성화된 하위 메뉴 반환
    */
-  get activeChild(): MenuItem | undefined {
+  get activeChild(): Menu | undefined {
     return this.children.find((child) => child.active);
   }
 
@@ -97,14 +97,14 @@ export class MenuItem {
   /**
    * ID로 하위 메뉴 찾기
    */
-  findChildById(id: string): MenuItem | undefined {
+  findChildById(id: string): Menu | undefined {
     return this.children.find((child) => child.id === id);
   }
 
   /**
    * 경로로 하위 메뉴 찾기
    */
-  findChildByPath(path: string): MenuItem | undefined {
+  findChildByPath(path: string): Menu | undefined {
     return this.children.find(
       (child) => child.path && path.startsWith(child.path)
     );
