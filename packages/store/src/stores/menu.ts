@@ -1,5 +1,17 @@
 import { makeAutoObservable } from "mobx";
 
+/**
+ * 메뉴 설정 인터페이스 (생성자 파라미터용)
+ */
+export interface MenuConfig {
+	id: string;
+	label: string;
+	path?: string;
+	icon?: string;
+	subject: string;
+	children?: MenuConfig[];
+}
+
 export class Menu {
 	readonly id: string;
 	readonly label: string;
@@ -11,16 +23,16 @@ export class Menu {
 
 	/**
 	 * 메뉴 생성
-	 * @param menu 메뉴 데이터
+	 * @param config 메뉴 설정 데이터
 	 */
-	constructor(menu: Menu) {
-		this.id = menu.id;
-		this.label = menu.label;
-		this.path = menu.path;
-		this.icon = menu.icon;
-		this.subject = menu.subject;
-		this.children = menu.children
-			? menu.children.map((child) => new Menu(child))
+	constructor(config: MenuConfig) {
+		this.id = config.id;
+		this.label = config.label;
+		this.path = config.path;
+		this.icon = config.icon;
+		this.subject = config.subject;
+		this.children = config.children
+			? config.children.map((child) => new Menu(child))
 			: [];
 
 		makeAutoObservable(this);

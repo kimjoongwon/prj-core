@@ -3,6 +3,7 @@ import type { AuthStore } from "./authStore";
 import type { CookieStore } from "./cookieStore";
 import type { MenuStore } from "./menuStore";
 import type { NavigationStore } from "./navigationStore";
+import type { PersistStore } from "./persistStore";
 import type { TokenStore } from "./tokenStore";
 
 /**
@@ -27,6 +28,7 @@ import type { TokenStore } from "./tokenStore";
  * ├── cookieStore (CookieStore) - 쿠키 관리
  * ├── authStore (AuthStore) - 인증 상태 관리
  * ├── menuStore (MenuStore) - 메뉴 관리 (앱별)
+ * ├── persistStore (PersistStore) - 영속 저장 관리
  * └── navigation (NavigationStore) - 네비게이션 관리
  */
 export class RootStore {
@@ -38,6 +40,7 @@ export class RootStore {
 	authStore?: AuthStore;
 	cookieStore?: CookieStore;
 	menuStore?: MenuStore;
+	persistStore?: PersistStore;
 
 	constructor() {
 		makeAutoObservable(this);

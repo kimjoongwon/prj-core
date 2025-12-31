@@ -2,10 +2,14 @@
 
 import { ADMIN_PATHS } from "@cocrepo/constant";
 import type { Menu } from "@cocrepo/store";
-import type { TopNavContext, TopNavMenuItem, TopNavUser } from "@cocrepo/ui";
+import type {
+	ContextSelectorContext,
+	NavMenuItem,
+	UserMenuUser,
+} from "@cocrepo/ui";
 import { useRouter } from "next/navigation";
-import { useEffect, useState, useSyncExternalStore } from "react";
-import { useAdminMenuStore } from "../stores";
+import { useState, useSyncExternalStore } from "react";
+import { useMenuStore, usePersistStore } from "../stores";
 
 /**
  * 클라이언트 마운트 상태를 추적하는 훅
@@ -20,30 +24,22 @@ function useIsMounted(): boolean {
 }
 
 /**
- * Ground 정보 인터페이스
+ * useAppLayout 훅 반환 타입
  */
-interface AdminGround {
-	id: string;
-	name: string;
-}
-
-/**
- * useAdminLayout 훅 반환 타입
- */
-export interface UseAdminLayoutReturn {
-	/** 주요 메뉴 아이템 (TopNav용) */
-	menuItems: TopNavMenuItem[];
-	/** 하위 메뉴 아이템 (SubNav용) */
-	subMenuItems: TopNavMenuItem[];
-	/** 현재 Ground 컨텍스트 */
-	currentContext: TopNavContext | null;
+export interface UseAppLayoutReturn {
+	/** Main menu items (for Nav) */
+	menuItems: NavMenuItem[];
+	/** Sub menu items (for SubNav) */
+	subMenuItems: NavMenuItem[];
+	/** 현재 Space 컨텍스트 */
+	currentContext: ContextSelectorContext | null;
 	/** 현재 사용자 */
-	currentUser: TopNavUser | null;
+	currentUser: UserMenuUser | null;
 	/** 주요 메뉴 클릭 핸들러 */
 	onClickMenu: (menuId: string) => void;
 	/** 하위 메뉴 클릭 핸들러 */
 	onClickSubMenu: (menuId: string) => void;
-	/** Ground 변경 핸들러 */
+	/** Space 변경 핸들러 */
 	onChangeContext: () => void;
 	/** 로그아웃 핸들러 */
 	onLogout: () => void;
@@ -52,9 +48,9 @@ export interface UseAdminLayoutReturn {
 }
 
 /**
- * Menu를 TopNavMenuItem으로 변환
+ * Menu를 NavMenuItem으로 변환
  */
-function toTopNavMenuItem(item: Menu): TopNavMenuItem {
+function toNavMenuItem(item: Menu): NavMenuItem {
 	return {
 		id: item.id,
 		label: item.label,
@@ -64,18 +60,16 @@ function toTopNavMenuItem(item: Menu): TopNavMenuItem {
 }
 
 /**
- * AdminLayout 상태 관리 및 핸들러 훅
- * MobX MenuStore를 사용하여 메뉴 상태를 관리합니다.
+ * AppLayout 상태 관리 및 핸들러 훅
+ * MobX MenuStore와 PersistStore를 사용하여 상태를 관리합니다.
  *
  * 주의: useCallback/useMemo 사용하지 않음 (MobX 자동 메모이제이션)
  */
-export function useAdminLayout(): UseAdminLayoutReturn {
+export function useAppLayout(): UseAppLayoutReturn {
 	const router = useRouter();
-	const menuStore = useAdminMenuStore();
+	const menuStore = useMenuStore();
+	const persistStore = usePersistStore();
 	const isMounted = useIsMounted();
-
-	// Ground 정보 (localStorage에서 로드)
-	const [currentGround, setCurrentGround] = useState<AdminGround | null>(null);
 
 	// 사용자 정보 (임시 mock 데이터)
 	const [currentUser] = useState<TopNavUser | null>({
@@ -83,15 +77,6 @@ export function useAdminLayout(): UseAdminLayoutReturn {
 		name: "관리자",
 		role: "최고 관리자",
 	});
-
-	// localStorage에서 Ground 정보 로드
-	useEffect(() => {
-		const groundId = localStorage.getItem("currentGroundId");
-		const groundName = localStorage.getItem("currentGroundName");
-		if (groundId && groundName) {
-			setCurrentGround({ id: groundId, name: groundName });
-		}
-	}, []);
 
 	// 메뉴 아이템 변환 (observable 상태 반영)
 	const menuItems = menuStore.items.map(toTopNavMenuItem);
@@ -117,10 +102,9 @@ export function useAdminLayout(): UseAdminLayoutReturn {
 
 	// 로그아웃 핸들러
 	const onLogout = () => {
-		// 인증 정보 제거
-		localStorage.removeItem("currentGroundId");
-		localStorage.removeItem("currentGroundName");
-		localStorage.removeItem("currentSpaceId");
+		// PersistStore를 통해 영속 데이터 초기화
+		persistStore.clearSpace();
+		// 세션 스토리지 정리
 		sessionStorage.removeItem("adminRole");
 		// 로그인 페이지로 이동
 		router.push(ADMIN_PATHS.AUTH_LOGIN as never);
@@ -135,10 +119,11 @@ export function useAdminLayout(): UseAdminLayoutReturn {
 		}
 	};
 
-	// 현재 컨텍스트 변환
-	const currentContext: TopNavContext | null = currentGround
-		? { id: currentGround.id, name: currentGround.name }
-		: null;
+	// 현재 컨텍스트 (PersistStore에서 가져옴)
+	const currentContext: TopNavContext | null =
+		persistStore.spaceId && persistStore.spaceName
+			? { id: persistStore.spaceId, name: persistStore.spaceName }
+			: null;
 
 	return {
 		menuItems,

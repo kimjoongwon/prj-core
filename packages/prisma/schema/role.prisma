@@ -1,3 +1,23 @@
+// ============================================================================
+// Role Domain - 역할 도메인
+// ============================================================================
+//
+// Role은 시스템의 권한 체계를 정의합니다.
+// Ability를 통해 권한이 부여되고, Tenant를 통해 User와 Space에 연결됩니다.
+//
+// 관계 구조:
+//   Role (구체 엔티티)
+//     │
+//     ├─── Ability (권한 정의)
+//     ├─── Assignment ─── Tenant (추가 역할 할당)
+//     ├─── RoleClassification ─── Category (분류)
+//     ├─── RoleAssociation ─── Group (그룹핑)
+//     └─── Tenant (Bridge: User + Space + Role)
+//
+// ============================================================================
+
+// @schema-type: CONCRETE ENTITY
+// @description: 권한 체계를 정의하는 핵심 역할 도메인 객체
 model Role {
   id             String              @id @default(uuid())
   seq            Int                 @unique @default(autoincrement())
@@ -14,6 +34,9 @@ model Role {
   @@map("roles")
 }
 
+// @schema-type: ASSOCIATION
+// @description: Role과 Group을 연결하여 그룹핑
+// @connects: Role ─── Group
 model RoleAssociation {
   id        String    @id @default(uuid())
   seq       Int       @unique @default(autoincrement())
@@ -29,6 +52,9 @@ model RoleAssociation {
   @@map("role_associations")
 }
 
+// @schema-type: CLASSIFICATION
+// @description: Role에 Category를 연결하여 분류 체계 부여
+// @connects: Role ─── Category
 model RoleClassification {
   id         String    @id @default(uuid())
   seq        Int       @unique @default(autoincrement())

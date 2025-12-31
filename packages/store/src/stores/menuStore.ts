@@ -1,5 +1,5 @@
 import { makeAutoObservable } from "mobx";
-import { Menu } from "./menu";
+import { Menu, type MenuConfig } from "./menu";
 
 /**
  * 권한 체크 함수 타입
@@ -41,17 +41,17 @@ export class MenuStore {
 
 	/**
 	 * MenuStore 생성
-	 * @param menus 메뉴 배열
+	 * @param menus 메뉴 설정 배열
 	 * @param options 옵션
 	 */
 	constructor(
-		menus: Menu[],
+		menus: MenuConfig[],
 		options?: {
 			abilityChecker?: AbilityChecker;
 			onNavigate?: (path: string) => void;
 		},
 	) {
-		this._items = menus.map((menu) => new Menu(menu));
+		this._items = menus.map((config) => new Menu(config));
 		this._abilityChecker = options?.abilityChecker ?? null;
 		this._onNavigate = options?.onNavigate ?? null;
 

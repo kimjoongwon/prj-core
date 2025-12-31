@@ -272,3 +272,32 @@ export const Component = ({ variant, size, className }: ComponentProps) => {
 - **Tailwind CSS만 사용** - inline style 금지
 - **TypeScript 필수** - Props 인터페이스 export
 - **Storybook 필수** - 최소 2개 이상 variant 제공
+
+---
+
+## 공용 패키지 네이밍 규칙 (Critical)
+
+`packages/*` 디렉토리의 공용 패키지는 **특정 앱에 종속된 이름을 사용하지 않습니다**.
+
+```typescript
+// ✅ 올바른 예시 (범용적인 이름)
+export class PersistStore { }
+export function useAppStore() { }
+export function useMenuStore() { }
+export function useAppLayout() { }
+
+// ❌ 금지 (앱 이름이 포함된 이름)
+export class AdminPersistStore { }
+export function useAdminStore() { }
+export function useAdminMenuStore() { }
+export function useAdminLayout() { }
+```
+
+**이유:**
+- 공용 패키지는 여러 앱(admin, coin 등)에서 재사용됩니다
+- 앱별 설정은 각 앱의 `stores/` 디렉토리에서 주입합니다
+
+**검증 체크리스트:**
+- [ ] 컴포넌트명에 `Admin`, `Coin` 등 앱 이름이 포함되어 있지 않은가?
+- [ ] 훅, Store, Provider 등에 앱 종속 접두어가 없는가?
+- [ ] 범용적인 이름(`App`, `Menu`, `Layout` 등)을 사용했는가?

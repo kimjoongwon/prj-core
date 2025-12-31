@@ -1,3 +1,19 @@
+// ============================================================================
+// Core Domain - 핵심 공통 도메인
+// ============================================================================
+//
+// 시스템 전반에서 사용되는 핵심 공통 모델들입니다.
+// Category, Group: 분류/그룹핑 체계
+// Tenant: User + Space + Role을 연결하는 핵심 Bridge
+// Action, Subject, Ability: 권한 체계
+// Content, Post: 콘텐츠 관리
+//
+// ============================================================================
+
+// @schema-type: CONCRETE ENTITY
+// @description: 분류 체계를 정의하는 카테고리 (트리 구조)
+// @self-reference: parent/children
+// @connected-by: XxxClassification 모델들
 model Category {
   id                   String                @id @default(uuid())
   seq                  Int                   @unique @default(autoincrement())
@@ -19,6 +35,9 @@ model Category {
   @@map("categories")
 }
 
+// @schema-type: CONCRETE ENTITY
+// @description: 그룹핑 체계를 정의하는 그룹
+// @connected-by: XxxAssociation 모델들
 model Group {
   id                String             @id @default(uuid())
   seq               Int                @unique @default(autoincrement())
@@ -38,6 +57,10 @@ model Group {
   @@map("groups")
 }
 
+// @schema-type: BRIDGE
+// @description: User + Space + Role을 연결하는 핵심 다대다 관계 테이블
+// @connects: User ─── Space ─── Role
+// @note: 사용자가 특정 공간에서 어떤 역할을 가지는지를 정의
 model Tenant {
   id          String       @id @default(uuid())
   seq         Int          @unique @default(autoincrement())
@@ -61,6 +84,9 @@ model Tenant {
   @@map("tenants")
 }
 
+// @schema-type: BRIDGE
+// @description: Tenant에 추가 Role을 할당하는 다대다 관계 테이블
+// @connects: Tenant ─── Role
 model Assignment {
   id        String    @id @default(uuid())
   seq       Int       @unique @default(autoincrement())
@@ -75,6 +101,8 @@ model Assignment {
   @@map("assignments")
 }
 
+// @schema-type: REFERENCE
+// @description: 권한 체계에서 사용되는 액션 정의 (CREATE, READ, UPDATE, DELETE 등)
 model Action {
   id         String         @id @default(uuid())
   seq        Int            @unique @default(autoincrement())
@@ -88,6 +116,8 @@ model Action {
   @@map("actions")
 }
 
+// @schema-type: REFERENCE
+// @description: 권한 체계에서 사용되는 대상 정의 (권한이 적용되는 리소스)
 model Subject {
   id        String    @id @default(uuid())
   seq       Int       @unique @default(autoincrement())
@@ -100,6 +130,9 @@ model Subject {
   @@map("subjects")
 }
 
+// @schema-type: REFERENCE
+// @description: Role에 부여되는 구체적인 권한 정의 (CASL 기반)
+// @connects: Role ─── Subject (특정 대상에 대한 권한)
 model Ability {
   id          String       @id @default(uuid())
   seq         Int          @unique @default(autoincrement())
@@ -117,6 +150,9 @@ model Ability {
   @@map("abilities")
 }
 
+// @schema-type: CONTENT
+// @description: 게시물 - Content를 감싸는 발행 단위
+// @wraps: Content
 model Post {
   id        String    @id @default(uuid())
   seq       Int       @unique @default(autoincrement())
@@ -129,6 +165,8 @@ model Post {
   @@map("posts")
 }
 
+// @schema-type: CONTENT
+// @description: 사용자 생성 콘텐츠 (텍스트, 에디터 내용 등)
 model Content {
   id          String    @id @default(uuid())
   seq         Int       @unique @default(autoincrement())

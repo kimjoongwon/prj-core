@@ -1,3 +1,22 @@
+// ============================================================================
+// File Domain - 파일 도메인
+// ============================================================================
+//
+// File은 시스템의 파일/디렉토리 구조를 관리합니다.
+// 자기 참조(self-reference)를 통해 계층 구조를 형성합니다.
+//
+// 관계 구조:
+//   File (구체 엔티티, 트리 구조)
+//     │
+//     ├─── File (자기 참조: parent/children)
+//     ├─── FileClassification ─── Category (분류)
+//     └─── FileAssociation ─── Group (그룹핑)
+//
+// ============================================================================
+
+// @schema-type: CONCRETE ENTITY
+// @description: 파일/디렉토리를 관리하는 핵심 도메인 객체 (트리 구조)
+// @self-reference: parent/children
 model File {
   id             String              @id @default(uuid())
   seq            Int                 @unique @default(autoincrement())
@@ -19,6 +38,9 @@ model File {
   @@map("files")
 }
 
+// @schema-type: CLASSIFICATION
+// @description: File에 Category를 연결하여 분류 체계 부여
+// @connects: File ─── Category
 model FileClassification {
   id         String    @id @default(uuid())
   seq        Int       @unique @default(autoincrement())
@@ -34,6 +56,9 @@ model FileClassification {
   @@map("file_classifications")
 }
 
+// @schema-type: ASSOCIATION
+// @description: File과 Group을 연결하여 그룹핑
+// @connects: File ─── Group
 model FileAssociation {
   id        String    @id @default(uuid())
   seq       Int       @unique @default(autoincrement())

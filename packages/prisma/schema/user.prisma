@@ -1,3 +1,23 @@
+// ============================================================================
+// User Domain - 사용자 도메인
+// ============================================================================
+//
+// User는 시스템의 핵심 사용자 엔티티입니다.
+// Profile을 통해 추가 정보가 확장되고, Tenant를 통해 Space와 Role에 연결됩니다.
+//
+// 관계 구조:
+//   User (구체 엔티티)
+//     │
+//     ├─── Profile (확장: nickname, avatar 등)
+//     ├─── UserClassification ─── Category (분류)
+//     ├─── UserAssociation ─── Group (그룹핑)
+//     └─── Tenant (Bridge: User + Space + Role)
+//
+// ============================================================================
+
+// @schema-type: CONCRETE ENTITY
+// @description: 독립적으로 존재하는 핵심 사용자 도메인 객체
+// @extended-by: Profile
 model User {
   id             String              @id @default(uuid())
   seq            Int                 @unique @default(autoincrement())
@@ -16,6 +36,9 @@ model User {
   @@map("users")
 }
 
+// @schema-type: CLASSIFICATION
+// @description: User에 Category를 연결하여 분류 체계 부여
+// @connects: User ─── Category
 model UserClassification {
   id         String    @id @default(uuid())
   seq        Int       @unique @default(autoincrement())
@@ -31,6 +54,9 @@ model UserClassification {
   @@map("user_classifications")
 }
 
+// @schema-type: ASSOCIATION
+// @description: User와 Group을 연결하여 그룹핑
+// @connects: User ─── Group
 model UserAssociation {
   id        String    @id @default(uuid())
   seq       Int       @unique @default(autoincrement())
@@ -45,6 +71,10 @@ model UserAssociation {
   @@map("user_associations")
 }
 
+// @schema-type: EXTENSION
+// @description: User에 추가 정보(nickname, avatar)를 부여하는 확장 모델 (1:N)
+// @extends: User
+// @extension-fields: name, nickname, avatarFileId
 model Profile {
   id           String    @id @default(uuid())
   seq          Int       @unique @default(autoincrement())

@@ -1,1 +1,1 @@
-export * from "./AdminStoreProvider";
+export * from "./AppStoreProvider";

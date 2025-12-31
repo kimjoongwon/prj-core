@@ -1,1 +1,1 @@
-export * from "./useAdminLayout";
+export * from "./useAppLayout";

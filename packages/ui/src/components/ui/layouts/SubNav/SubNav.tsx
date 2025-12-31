@@ -1,21 +1,11 @@
 import { Button } from "@heroui/react";
 import { observer } from "mobx-react-lite";
 import { renderLucideIcon } from "../../../../utils";
-
-/**
- * 하위 메뉴 아이템 인터페이스 (MenuItemStore와 호환)
- */
-export interface SubNavMenuItem {
-	id: string;
-	label: string;
-	path?: string;
-	icon?: string;
-	active: boolean;
-}
+import type { TopNavMenuItem } from "../TopNav/TopNav";
 
 export interface SubNavProps {
-	/** 하위 메뉴 아이템 */
-	menuItems: SubNavMenuItem[];
+	/** 하위 메뉴 아이템 (TopNavMenuItem과 동일한 구조) */
+	menuItems: TopNavMenuItem[];
 	/** 하위 메뉴 클릭 핸들러 */
 	onClickMenu: (menuId: string) => void;
 }

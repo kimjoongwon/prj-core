@@ -9,7 +9,7 @@ import {
 } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 import { type ReactNode } from "react";
-import { AdminStoreProvider } from "../src/stores";
+import { AppStoreProvider } from "../src/stores";
 
 interface ProvidersProps {
 	children: ReactNode;
@@ -46,7 +46,7 @@ function getQueryClient() {
  * Provider 계층 구조:
  * QueryClientProvider
  * └── AbilityProvider (권한 관리)
- *     └── AdminStoreProvider (RootStore + 주입된 Store들 통합 관리)
+ *     └── AppStoreProvider (RootStore + 주입된 Store들 통합 관리)
  *         └── DesignSystemProvider (UI 시스템)
  */
 export function Providers({ children }: ProvidersProps) {
@@ -60,11 +60,11 @@ export function Providers({ children }: ProvidersProps) {
 	return (
 		<QueryClientProvider client={queryClient}>
 			<AbilityProvider>
-				<AdminStoreProvider>
+				<AppStoreProvider>
 					<DesignSystemProvider navigate={handleNavigate}>
 						{children}
 					</DesignSystemProvider>
-				</AdminStoreProvider>
+				</AppStoreProvider>
 			</AbilityProvider>
 		</QueryClientProvider>
 	);

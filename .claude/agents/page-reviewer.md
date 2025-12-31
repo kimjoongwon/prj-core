@@ -168,6 +168,33 @@ const store = storeRef.current;
 | `GroundSelectPageProps` | ✅ 올바름 | - |
 | `State` (파일 내부) | ✅ 올바름 | - |
 
+### 9. 공용 패키지 네이밍 규칙 (Critical)
+
+**packages/* 내 앱 종속 이름 사용 금지**
+
+```bash
+# 검증 명령
+grep -rE "(Admin|Coin)[A-Z][a-zA-Z]*Store|use(Admin|Coin)[A-Z]" packages/
+grep -rE "(Admin|Coin)(Store|Layout|Provider)" packages/
+```
+
+| 패턴 | 판정 | 올바른 형태 |
+|------|------|------------|
+| `AdminPersistStore` | ❌ 위반 | `PersistStore` |
+| `useAdminStore()` | ❌ 위반 | `useAppStore()` |
+| `useAdminLayout()` | ❌ 위반 | `useAppLayout()` |
+| `AdminStoreProvider` | ❌ 위반 | `AppStoreProvider` |
+| `useMenuStore()` | ✅ 올바름 | - |
+| `useAppLayout()` | ✅ 올바름 | - |
+
+**위반 발견 시 조치:**
+```typescript
+파일: packages/store/src/stores/index.ts:15
+현재: export function useAdminMenuStore() { }
+수정: export function useMenuStore() { }
+이유: 공용 패키지는 여러 앱에서 재사용되므로 앱 종속 이름 금지
+```
+
 ---
 
 ## 검증 프로세스

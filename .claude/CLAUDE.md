@@ -34,6 +34,44 @@ const response = await axios.get("/api/v1/grounds");
 pnpm --filter=@cocrepo/api generate
 ```
 
+### 공용 패키지 작성 규칙
+
+`packages/*` 디렉토리의 공용 패키지는 **특정 앱에 종속된 이름을 사용하지 않습니다**.
+
+```typescript
+// ✅ 올바른 예시 (범용적인 이름)
+export class PersistStore { }
+export function useAppStore() { }
+export function useMenuStore() { }
+
+// ❌ 금지 (앱 이름이 포함된 이름)
+export class AdminPersistStore { }
+export function useAdminStore() { }
+export function useAdminMenuStore() { }
+```
+
+**이유:**
+- 공용 패키지는 여러 앱(admin, coin 등)에서 재사용됩니다
+- 앱별 설정은 각 앱의 `stores/` 디렉토리에서 주입합니다
+
+**올바른 패턴:**
+```typescript
+// packages/store - 범용 Store 정의
+export class PersistStore {
+  constructor(config: { storageKey: string }) { }
+}
+
+// apps/admin/src/stores - 앱별 설정 주입
+rootStore.persistStore = new PersistStore({
+  storageKey: "admin-persist",
+});
+
+// apps/coin/src/stores - 다른 앱에서 재사용
+rootStore.persistStore = new PersistStore({
+  storageKey: "coin-persist",
+});
+```
+
 ## 테스트 작성 규칙
 
 - 테스트 코드의 설명(describe, it)은 한글로 작성합니다
@@ -106,7 +144,8 @@ feat(coin): 멀티시그 지갑 서비스 초기 구현
 | | controller-builder | NestJS Controller 레이어 생성 |
 | | backend-architect | NestJS API 설계 |
 | | backend-service-builder | 복합 백엔드 서비스 구현 |
-| **데이터** | database-expert | Prisma 스키마 설계 및 최적화 |
+| **데이터** | schema-builder | Prisma 스키마 생성 및 유형 분류 |
+| | database-expert | Prisma 스키마 설계 및 최적화 |
 | | seed-maker | 현실 세계와 연결된 시드 데이터 생성 |
 | **품질** | page-reviewer | 페이지 생성 결과 규칙 검증 (필수) |
 | | code-reviewer | 코드 리뷰 및 개선 제안 |

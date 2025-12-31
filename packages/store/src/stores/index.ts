@@ -5,6 +5,7 @@ export * from "./menu";
 export * from "./menuStore";
 export * from "./navigationStore";
 export * from "./navigatorStore";
+export * from "./persistStore";
 export * from "./routeStore";
 export * from "./Store";
 export * from "./storageStore";

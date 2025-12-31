@@ -265,3 +265,51 @@ const store = storeRef.current;
 - Props drilling 최소화
 - 불필요한 리렌더링 방지
 - 접근성(a11y) 고려
+
+---
+
+## 공용 패키지 네이밍 규칙 (Critical)
+
+`packages/*` 디렉토리의 공용 패키지는 **특정 앱에 종속된 이름을 사용하지 않습니다**.
+
+```typescript
+// ✅ 올바른 예시 (범용적인 이름)
+export class PersistStore { }
+export function useAppStore() { }
+export function useMenuStore() { }
+export function useAppLayout() { }
+export const AppStoreProvider = () => { }
+
+// ❌ 금지 (앱 이름이 포함된 이름)
+export class AdminPersistStore { }
+export function useAdminStore() { }
+export function useAdminMenuStore() { }
+export function useAdminLayout() { }
+export const AdminStoreProvider = () => { }
+```
+
+**이유:**
+- 공용 패키지는 여러 앱(admin, coin 등)에서 재사용됩니다
+- 앱별 설정은 각 앱의 `stores/` 디렉토리에서 주입합니다
+
+**올바른 패턴:**
+```typescript
+// packages/store - 범용 Store 정의
+export class PersistStore {
+  constructor(config: { storageKey: string }) { }
+}
+
+// apps/admin/src/stores - 앱별 설정 주입
+rootStore.persistStore = new PersistStore({
+  storageKey: "admin-persist",
+});
+
+// apps/coin/src/stores - 다른 앱에서 재사용
+rootStore.persistStore = new PersistStore({
+  storageKey: "coin-persist",
+});
+```
+
+**아키텍처 리뷰 시 필수 확인:**
+- [ ] packages/* 내 모든 export가 범용적인 이름을 사용하는가?
+- [ ] 앱 종속 설정이 apps/* 디렉토리에서 주입되는가?

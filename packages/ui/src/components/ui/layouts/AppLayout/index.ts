@@ -1,1 +1,2 @@
-export * from "./AppLayout";
+export { AppLayout } from "./AppLayout";
+export type { AppLayoutProps } from "./AppLayout";

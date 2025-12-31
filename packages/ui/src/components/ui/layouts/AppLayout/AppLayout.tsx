@@ -1,97 +1,71 @@
-import { observer } from "mobx-react-lite";
 import type { ReactNode } from "react";
-import { SubNav, type SubNavMenuItem } from "../SubNav";
-import {
-	TopNav,
-	type TopNavContext,
-	type TopNavMenuItem,
-	type TopNavUser,
-} from "../TopNav";
 
 export interface AppLayoutProps {
-	/** 주요 메뉴 아이템 */
-	menuItems: TopNavMenuItem[];
-	/** 하위 메뉴 아이템 (선택된 메뉴의 children) */
-	subMenuItems?: SubNavMenuItem[];
-	/** 현재 사용자 */
-	currentUser: TopNavUser | null;
-	/** 현재 컨텍스트 (선택적) */
-	currentContext?: TopNavContext | null;
-	/** 주요 메뉴 클릭 핸들러 */
-	onClickMenu: (menuId: string) => void;
-	/** 하위 메뉴 클릭 핸들러 */
-	onClickSubMenu?: (menuId: string) => void;
-	/** 컨텍스트 변경 핸들러 */
-	onChangeContext?: () => void;
-	/** 로그아웃 핸들러 */
-	onLogout: () => void;
-	/** 로고 클릭 핸들러 */
-	onClickLogo?: () => void;
-	/** 로고 아이콘 이름 */
-	logoIcon?: string;
-	/** 로고 텍스트 */
-	logoText?: string;
-	/** 컨텍스트 변경 텍스트 */
-	changeContextText?: string;
-	/** 추가 네비게이션 컨텐츠 */
-	extraContent?: ReactNode;
+	/** 상단 헤더 영역 (Header 컴포넌트) */
+	header?: ReactNode;
+	/** 하위 네비게이션 영역 (SubNav 컴포넌트) */
+	subNav?: ReactNode;
+	/** 사이드바 영역 */
+	sidebar?: ReactNode;
 	/** 페이지 콘텐츠 */
 	children: ReactNode;
 }
 
 /**
  * AppLayout 컴포넌트
- * TopNav + SubNav + Content 영역을 조합한 범용 레이아웃
+ * 영역만 정의하는 순수 레이아웃 컴포넌트
  *
- * 구성:
- * - TopNav: 상단 네비게이션 (로고 + 메뉴 + 사용자)
- * - SubNav: 하위 메뉴 (선택적)
- * - Content: 메인 콘텐츠 영역
+ * 구조:
+ * - header: 상단 헤더 영역 (Header 컴포넌트)
+ * - subNav: 하위 네비게이션 영역
+ * - sidebar: 사이드바 영역
+ * - children: 메인 콘텐츠 영역
+ *
+ * @example
+ * ```tsx
+ * <AppLayout
+ *   header={
+ *     <Header
+ *       logo={<Logo icon="LayoutGrid" text="Admin" onClick={onClickLogo} />}
+ *       rightContent={<UserMenu user={currentUser} onLogout={onLogout} />}
+ *     >
+ *       <Nav items={menuItems} onClickMenu={onClickMenu} />
+ *     </Header>
+ *   }
+ *   subNav={<SubNav items={subMenuItems} onClickMenu={onClickSubMenu} />}
+ * >
+ *   <PageContent />
+ * </AppLayout>
+ * ```
  */
-export const AppLayout = observer<AppLayoutProps>(
-	({
-		menuItems,
-		subMenuItems,
-		currentUser,
-		currentContext,
-		onClickMenu,
-		onClickSubMenu,
-		onChangeContext,
-		onLogout,
-		onClickLogo,
-		logoIcon,
-		logoText,
-		changeContextText,
-		extraContent,
-		children,
-	}) => {
-		return (
-			<div className="flex min-h-screen flex-col bg-background">
-				{/* 상단 네비게이션 */}
-				<TopNav
-					menuItems={menuItems}
-					currentUser={currentUser}
-					currentContext={currentContext}
-					onClickMenu={onClickMenu}
-					onChangeContext={onChangeContext}
-					onLogout={onLogout}
-					onClickLogo={onClickLogo}
-					logoIcon={logoIcon}
-					logoText={logoText}
-					changeContextText={changeContextText}
-					extraContent={extraContent}
-				/>
+export const AppLayout = ({
+	header,
+	subNav,
+	sidebar,
+	children,
+}: AppLayoutProps) => {
+	return (
+		<div className="flex h-screen flex-col bg-background">
+			{/* Header 영역 */}
+			{header && <div className="sticky top-0 z-40 flex-none">{header}</div>}
 
-				{/* 하위 메뉴 네비게이션 */}
-				{subMenuItems && subMenuItems.length > 0 && onClickSubMenu && (
-					<SubNav menuItems={subMenuItems} onClickMenu={onClickSubMenu} />
-				)}
+			{/* Sub Navigation 영역 */}
+			{subNav}
 
-				{/* 메인 콘텐츠 영역 */}
-				<main className="flex-1 overflow-auto p-6">{children}</main>
+			{/* Main Content 영역 */}
+			<div className="flex flex-1 overflow-hidden">
+				{/* Sidebar 영역 */}
+				{sidebar && <aside className="flex-shrink-0">{sidebar}</aside>}
+
+				{/* Content 영역 */}
+				<main className="flex flex-1 flex-col overflow-hidden bg-content2">
+					<div className="scrollbar-thin flex-1 overflow-y-auto">
+						<div className="p-6">{children}</div>
+					</div>
+				</main>
 			</div>
-		);
-	},
-);
+		</div>
+	);
+};
 
 AppLayout.displayName = "AppLayout";
