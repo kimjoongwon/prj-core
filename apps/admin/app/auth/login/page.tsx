@@ -14,6 +14,8 @@ const Page = () => {
 			onClickLoginButton={onClickLoginButton}
 			onKeyDownInput={onKeyDownInput}
 			isLoading={isLoading}
+			title="관리자 로그인"
+			caption="관리자 계정으로 로그인하세요"
 		/>
 	);
 };

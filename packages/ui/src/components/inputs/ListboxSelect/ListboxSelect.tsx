@@ -15,7 +15,7 @@ export type ListboxSelectProps<T> = Omit<
 };
 
 import { ReactNode } from "react";
-import { Text } from "../../data-display/Text/Text";
+import { Text } from "../../ui/data-display/Text/Text";
 
 export const ListboxSelect = <T extends object>(
 	props: ListboxSelectProps<T>,

@@ -1,7 +1,7 @@
 import { Chip } from "@heroui/chip";
-import { Text } from "../../data-display/Text/Text";
-import { HStack } from "../../surfaces/HStack/HStack";
-import { VStack } from "../../surfaces/VStack/VStack";
+import { Text } from "../../ui/data-display/Text/Text";
+import { HStack } from "../../ui/surfaces/HStack/HStack";
+import { VStack } from "../../ui/surfaces/VStack/VStack";
 
 export type RecurringDayOfTheWeek =
 	| "MONDAY"

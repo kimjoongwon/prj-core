@@ -1,4 +1,4 @@
-import { Input } from "../../../ui/inputs/Input";
+import { Input } from "../../../inputs/Input";
 import { VStack } from "../../../ui/surfaces/VStack/VStack";
 
 interface LoginFormProps {

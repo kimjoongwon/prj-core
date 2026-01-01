@@ -1,5 +1,5 @@
 import { cn } from "@heroui/react";
-import { Button } from "../../inputs/Button/Button";
+import { Button } from "../../../inputs/Button/Button";
 import { HStack } from "../../surfaces/HStack/HStack";
 
 export interface LogoProps {

@@ -1,4 +1,4 @@
-import { Text } from "../../data-display/Text/Text";
+import { Text } from "../../ui/data-display/Text/Text";
 
 export interface CharacterCounterProps {
 	current: number;

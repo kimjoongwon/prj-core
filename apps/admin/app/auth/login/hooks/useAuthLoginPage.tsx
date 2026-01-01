@@ -18,7 +18,6 @@ export const useAuthLoginPage = () => {
 	const onClickLoginButton = async () => {
 		state.errorMessage = "";
 
-		// @cocrepo/schema를 이용한 검증
 		const result = await validateSchema(LoginSchema, {
 			email: state.email,
 			password: state.password,

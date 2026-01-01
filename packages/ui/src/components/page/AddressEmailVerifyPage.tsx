@@ -1,9 +1,9 @@
 "use client";
 
 import type React from "react";
+import { Button } from "../inputs/Button/Button";
+import { Input } from "../inputs/Input";
 import { Text } from "../ui/data-display/Text/Text";
-import { Button } from "../ui/inputs/Button/Button";
-import { Input } from "../ui/inputs/Input";
 import { VStack } from "../ui/surfaces/VStack/VStack";
 
 export interface AddressEmailVerifyPageState {

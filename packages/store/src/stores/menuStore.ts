@@ -38,6 +38,7 @@ export class MenuStore {
 	private _selectedSubMenu: Menu | null = null;
 	private _abilityChecker: AbilityChecker | null = null;
 	private _onNavigate: ((path: string) => void) | null = null;
+	private _expandedMenuIds: Set<string> = new Set();
 
 	/**
 	 * MenuStore 생성
@@ -139,6 +140,41 @@ export class MenuStore {
 	}
 
 	/**
+	 * 펼쳐진 메뉴 ID 목록 (읽기 전용)
+	 */
+	get expandedMenuIds(): Set<string> {
+		return this._expandedMenuIds;
+	}
+
+	/**
+	 * 메뉴 펼침/접힘 토글
+	 * @param menuId 토글할 메뉴 ID
+	 */
+	toggleMenu(menuId: string): void {
+		if (this._expandedMenuIds.has(menuId)) {
+			this._expandedMenuIds.delete(menuId);
+		} else {
+			this._expandedMenuIds.add(menuId);
+		}
+	}
+
+	/**
+	 * 메뉴가 펼쳐진 상태인지 확인
+	 * @param menuId 확인할 메뉴 ID
+	 */
+	isMenuExpanded(menuId: string): boolean {
+		return this._expandedMenuIds.has(menuId);
+	}
+
+	/**
+	 * 특정 메뉴 펼치기
+	 * @param menuId 펼칠 메뉴 ID
+	 */
+	expandMenu(menuId: string): void {
+		this._expandedMenuIds.add(menuId);
+	}
+
+	/**
 	 * 현재 경로를 기반으로 메뉴 활성화 상태 설정
 	 */
 	setCurrentPath(path: string): void {
@@ -152,6 +188,8 @@ export class MenuStore {
 				matchedChild.setActive(true);
 				this._selectedMenu = menu;
 				this._selectedSubMenu = matchedChild;
+				// 선택된 메뉴 자동 펼침
+				this._expandedMenuIds.add(menu.id);
 				return;
 			}
 

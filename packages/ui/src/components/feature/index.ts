@@ -3,5 +3,6 @@ export { CollapsibleSidebar } from "./CollapsibleSidebar/CollapsibleSidebarLayou
 export * from "./ContextSelector";
 export * from "./Logo";
 export * from "./Nav";
+export * from "./SideNav";
 export * from "./SubNav";
 export * from "./UserMenu";

@@ -2,7 +2,7 @@
 
 **플랫폼:** Admin Web
 **최종 수정일:** 2026-01-01
-**버전:** 2.0
+**버전:** 3.0
 
 ---
 
@@ -12,14 +12,14 @@
 |------|------|----------|
 | 1.0 | 2025-12-30 | 초안 작성 |
 | 2.0 | 2026-01-01 | 코드베이스 분석 후 전면 개정 - 네이밍 규칙 수정, 기존 컴포넌트 활용 현황 추가, 현재 구현 구조 반영 |
+| 3.0 | 2026-01-01 | 좌측 사이드바 + 2depth 트리 메뉴 구조로 전면 변경 |
 
-### 주요 변경 사항 (v2.0)
+### 주요 변경 사항 (v3.0)
 
-1. **네이밍 규칙 준수**: `AdminHeader`, `AdminSidebar`, `AdminLayout` -> 범용 이름 사용 (기존 컴포넌트 활용)
-2. **기존 컴포넌트 활용 현황 추가**: 이미 구현된 컴포넌트 목록 정리
-3. **현재 레이아웃 구조 반영**: 좌측 사이드바 -> 상단 Nav + SubNav 구조
-4. **에이전트 문서 참조 추가**: 신규 컴포넌트에 해당 에이전트 문서 참조 명시
-5. **구현 완료 확인 체크리스트 추가**
+1. **레이아웃 구조 변경**: 상단 Nav + SubNav 구조 → 좌측 사이드바 + 2depth 트리 메뉴 구조
+2. **SideNav 컴포넌트 필수화**: 좌측 사이드바에 아코디언/트리 형태 메뉴 배치
+3. **Header 단순화**: 메뉴 네비게이션 제거, 로고 + 컨텍스트 + 유저메뉴만 유지
+4. **메뉴 인터랙션 변경**: 1depth 클릭 시 펼침/접힘, 2depth 클릭 시 페이지 이동
 
 ---
 
@@ -29,12 +29,14 @@
 
 엔터프라이즈급 멀티테넌트 어드민 시스템의 전체 레이아웃과 메뉴 시스템을 제공합니다.
 
-**현재 구현된 구조 (상단 Nav + SubNav):**
+**레이아웃 구조 (좌측 사이드바 + 2depth 트리 메뉴):**
 - **Header**: 상단 헤더
-  - 왼쪽: 로고 (AppLogo) - 클릭 시 첫 번째 메뉴로 이동
-  - 중앙: 메인 네비게이션 (Nav) - 주요 메뉴 (회원, 예약, 알림 등)
+  - 왼쪽: 로고 (AppLogo) - 클릭 시 대시보드로 이동
   - 오른쪽: 컨텍스트 셀렉터 (ContextSelector) + 유저 아바타 (UserMenu)
-  - 하단: 서브 네비게이션 (SubNav) - 선택된 메뉴의 하위 메뉴
+- **Sidebar (좌측)**: 사이드 네비게이션 (SideNav)
+  - 2depth 트리 메뉴 구조
+  - 1depth: 메인 카테고리 (회원, 예약, 알림 등) - 클릭 시 펼침/접힘
+  - 2depth: 하위 메뉴 - 클릭 시 페이지 이동
 - **Main**: 페이지 콘텐츠 영역
 
 ### 진입 조건
@@ -52,21 +54,35 @@
 
 ## 2. 화면 구조
 
-### 레이아웃 (Admin Web) - 현재 구현 구조
+### 레이아웃 (Admin Web) - 좌측 사이드바 + 2depth 트리 메뉴
 
 ```
-+-------------------------------------------------------------------------+
-|  [Logo]      [회원] [예약] [알림] [문의] [콘텐츠] [템플릿] [설정]  [Space] [Avatar] |  <- Header
-+-------------------------------------------------------------------------+
-|  [회원 목록] [회원 등급 관리] [탈퇴 회원]                                     |  <- SubNav
-+-------------------------------------------------------------------------+
-|                                                                         |
-|                                                                         |
-|                         페이지 콘텐츠 영역                                 |
-|                                                                         |
-|                                                                         |
-+-------------------------------------------------------------------------+
++------------------+----------------------------------------------------------+
+|      [Logo]      |                                   [Space▼] [Avatar▼]    |  <- Header
++------------------+----------------------------------------------------------+
+|                  |                                                          |
+|  📊 대시보드      |                                                          |
+|                  |                                                          |
+|  ▼ 👥 회원        |                                                          |
+|     회원 목록     |                                                          |
+|     회원 등급 관리 |                    페이지 콘텐츠 영역                      |
+|     탈퇴 회원     |                                                          |
+|                  |                                                          |
+|  ▶ 📅 예약        |                                                          |
+|  ▶ 🔔 알림        |                                                          |
+|  ▶ 💬 문의        |                                                          |
+|  ▶ 📝 콘텐츠      |                                                          |
+|  ▶ 📋 템플릿      |                                                          |
+|  ▶ ⚙️ 설정        |                                                          |
+|                  |                                                          |
++------------------+----------------------------------------------------------+
+     Sidebar                                Main
 ```
+
+**메뉴 상태:**
+- `▶`: 접힌 상태 (하위 메뉴 숨김)
+- `▼`: 펼친 상태 (하위 메뉴 표시)
+- 대시보드: 하위 메뉴 없이 바로 이동
 
 **아바타 클릭 시:**
 ```
@@ -78,7 +94,7 @@
 +--------------+
 ```
 
-### 컴포넌트 구성 (기존 컴포넌트 활용)
+### 컴포넌트 구성
 
 | 영역 | 컴포넌트 | 유형 | 위치 | 구현 상태 |
 |------|----------|------|------|----------|
@@ -86,10 +102,9 @@
 | Layout 전체 | PageLayout | layouts | `packages/ui/.../layouts/PageLayout` | 완료 |
 | Header 전체 | Header | layouts | `packages/ui/.../layouts/Header` | 완료 |
 | Header > left | AppLogo | feature | `packages/ui/.../feature/Logo` | 완료 |
-| Header > center | Nav | feature | `packages/ui/.../feature/Nav` | 완료 |
 | Header > right | ContextSelector | feature | `packages/ui/.../feature/ContextSelector` | 완료 |
 | Header > right | UserMenu | feature | `packages/ui/.../feature/UserMenu` | 완료 |
-| Header > bottom | SubNav | feature | `packages/ui/.../feature/SubNav` | 완료 |
+| Sidebar (leftAside) | SideNav | feature | `packages/ui/.../feature/SideNav` | **신규 필요** |
 
 ---
 
@@ -107,14 +122,16 @@
 
 ### 이미 구현된 Feature 컴포넌트
 
-| 컴포넌트 | 용도 | 경로 | 구현 상태 |
-|----------|------|------|----------|
-| AppLogo | 로고 + 클릭 시 첫 메뉴 이동 | `packages/ui/src/components/feature/Logo/Logo.tsx` | 완료 |
-| Nav | 메인 네비게이션 (MenuStore 사용) | `packages/ui/src/components/feature/Nav/Nav.tsx` | 완료 |
-| SubNav | 하위 네비게이션 (MenuStore 사용) | `packages/ui/src/components/feature/SubNav/SubNav.tsx` | 완료 |
-| ContextSelector | Space 변경 (PersistStore 사용) | `packages/ui/src/components/feature/ContextSelector/ContextSelector.tsx` | 완료 |
-| UserMenu | 사용자 메뉴 + 로그아웃 (AuthStore, PersistStore 사용) | `packages/ui/src/components/feature/UserMenu/UserMenu.tsx` | 완료 |
-| CollapsibleSidebar | 접을 수 있는 사이드바 | `packages/ui/src/components/feature/CollapsibleSidebar/CollapsibleSidebarLayout.tsx` | 완료 |
+| 컴포넌트 | 용도 | 경로 | 구현 상태 | 사용 여부 |
+|----------|------|------|----------|----------|
+| AppLogo | 로고 + 클릭 시 대시보드 이동 | `packages/ui/src/components/feature/Logo/Logo.tsx` | 완료 | ✅ 사용 |
+| Nav | 상단 메인 네비게이션 | `packages/ui/src/components/feature/Nav/Nav.tsx` | 완료 | ❌ 미사용 |
+| SubNav | 상단 하위 네비게이션 | `packages/ui/src/components/feature/SubNav/SubNav.tsx` | 완료 | ❌ 미사용 |
+| ContextSelector | Space 변경 (PersistStore 사용) | `packages/ui/src/components/feature/ContextSelector/ContextSelector.tsx` | 완료 | ✅ 사용 |
+| UserMenu | 사용자 메뉴 + 로그아웃 | `packages/ui/src/components/feature/UserMenu/UserMenu.tsx` | 완료 | ✅ 사용 |
+| CollapsibleSidebar | 접을 수 있는 사이드바 | `packages/ui/src/components/feature/CollapsibleSidebar/CollapsibleSidebarLayout.tsx` | 완료 | 참조용 |
+
+> **참고:** Nav, SubNav는 이번 레이아웃에서 사용하지 않습니다. 좌측 사이드바의 SideNav로 대체됩니다.
 
 ### 이미 구현된 Store
 
@@ -243,12 +260,14 @@ sessionStorage.getItem('adminRole')  // 관리자 역할
 | 액션 | 트리거 | 결과 | 담당 컴포넌트 |
 |------|--------|------|--------------|
 | **Header** | | | |
-| 로고 클릭 | 로고 클릭 | 첫 번째 메뉴로 이동 | AppLogo |
-| 메뉴 클릭 | Nav 메뉴 클릭 | 해당 메뉴의 첫 번째 하위 메뉴로 이동, SubNav 업데이트 | Nav |
-| 하위 메뉴 클릭 | SubNav 메뉴 클릭 | 해당 페이지로 이동 | SubNav |
+| 로고 클릭 | 로고 클릭 | 대시보드 (`/`)로 이동 | AppLogo |
 | Space 변경 | 컨텍스트 셀렉터 클릭 | Space 선택 페이지로 이동 | ContextSelector |
 | 아바타 클릭 | 우측 상단 아바타 클릭 | 로그아웃 메뉴 표시 | UserMenu |
 | 로그아웃 | 로그아웃 메뉴 클릭 | 인증 정보 제거, 로그인 페이지로 이동 | UserMenu |
+| **Sidebar** | | | |
+| 대시보드 클릭 | 대시보드 메뉴 클릭 | 대시보드 (`/`)로 이동 | SideNav |
+| 1depth 메뉴 클릭 | 하위 메뉴가 있는 1depth 클릭 | 해당 메뉴 펼침/접힘 토글 | SideNav |
+| 2depth 메뉴 클릭 | 하위 메뉴 클릭 | 해당 페이지로 이동 | SideNav |
 
 ### 상태 변화 흐름
 
@@ -265,29 +284,30 @@ useEffect에서 menuStore.setCurrentPath(pathname) 호출
 MenuStore가 URL 기반으로 selectedMenu, selectedSubMenu 자동 설정
     |
     v
-Nav에서 selectedMenu.active 기반 스타일 적용
-SubNav에서 subMenuItems 렌더링
+SideNav에서:
+  - selectedMenu에 해당하는 1depth 메뉴 자동 펼침 (expanded)
+  - selectedSubMenu에 해당하는 2depth 메뉴 활성화 (active) 스타일 적용
     |
     v
-사용자가 Nav의 "예약" 클릭
+사용자가 SideNav의 "예약" (1depth) 클릭
     |
     v
-Nav.handleClickMenu("reservations") 호출
+SideNav.handleToggleMenu("reservations") 호출
     |
     v
-menuStore.selectMenu("reservations")
-  -> selectedMenu = reservations
-  -> 첫 번째 하위 메뉴 (/reservations) 로 이동
-  -> SubNav 업데이트
+menuStore.toggleMenu("reservations")
+  -> "예약" 메뉴의 펼침/접힘 상태 토글
+  -> 펼쳐지면 하위 메뉴 표시
     |
     v
-사용자가 SubNav의 "예약 캘린더" 클릭
+사용자가 "예약 캘린더" (2depth) 클릭
     |
     v
-SubNav.handleClickSubMenu("reservations-calendar") 호출
+SideNav.handleClickSubMenu("reservations-calendar") 호출
     |
     v
 menuStore.selectSubMenu("reservations-calendar")
+  -> selectedMenu = reservations (자동 설정)
   -> selectedSubMenu = reservations-calendar
   -> /reservations/calendar 로 이동
 ```
@@ -302,34 +322,51 @@ menuStore.selectSubMenu("reservations-calendar")
 
 **구성 요소:**
 - `left`: AppLogo (로고 + 앱 이름)
-- `center`: Nav (메인 네비게이션)
 - `right`: ContextSelector + UserMenu
-- `bottom`: SubNav (하위 네비게이션)
 
-**스타일 (현재 구현):**
+**스타일:**
 - 높이: 4rem (64px)
 - 배경: `bg-background/70 backdrop-blur-md`
 - 테두리: `border-b border-divider`
 - HeroUI Navbar 컴포넌트 사용
 
-### Nav
+### SideNav (신규)
 
-**구현 컴포넌트:** `packages/ui/src/components/feature/Nav/Nav.tsx`
+**생성 위치:** `packages/ui/src/components/feature/SideNav/SideNav.tsx`
+
+**구조:**
+```
++------------------+
+|  📊 대시보드      |  <- 하위 메뉴 없음, 클릭 시 바로 이동
++------------------+
+|  ▼ 👥 회원        |  <- 1depth (펼침 상태)
+|     회원 목록     |  <- 2depth
+|     회원 등급 관리 |  <- 2depth (활성화)
+|     탈퇴 회원     |  <- 2depth
++------------------+
+|  ▶ 📅 예약        |  <- 1depth (접힘 상태)
++------------------+
+```
 
 **스타일:**
-- 선택된 메뉴: `bg-primary text-primary-foreground`
-- 미선택 메뉴: `text-foreground/70 hover:bg-default-100`
-- 아이콘 + 라벨 표시
+- 너비: 240px (고정)
+- 배경: `bg-content1`
+- 테두리: `border-r border-divider`
 
-### SubNav
+**1depth 메뉴 스타일:**
+- 기본: `text-foreground/70 hover:bg-default-100`
+- 활성화 (하위 메뉴 선택됨): `text-primary font-medium`
+- 아이콘 + 라벨 + 펼침/접힘 화살표
 
-**구현 컴포넌트:** `packages/ui/src/components/feature/SubNav/SubNav.tsx`
+**2depth 메뉴 스타일:**
+- 기본: `text-foreground/60 hover:bg-default-100 pl-10`
+- 활성화: `bg-primary/10 text-primary font-medium`
+- 들여쓰기로 계층 구분
 
-**스타일:**
-- 배경: `bg-background/50`
-- 테두리: `border-t border-divider`
-- 선택된 메뉴: `bg-default-200 text-foreground`
-- 미선택 메뉴: `text-foreground/60 hover:bg-default-100`
+**인터랙션:**
+- 1depth 클릭: 펼침/접힘 토글 (하위 메뉴가 있는 경우)
+- 1depth 클릭: 바로 이동 (하위 메뉴가 없는 경우, 예: 대시보드)
+- 2depth 클릭: 해당 페이지로 이동
 
 ### UserMenu 드롭다운
 
@@ -349,15 +386,17 @@ menuStore.selectSubMenu("reservations-calendar")
 
 ## 7. 신규 컴포넌트 필요 여부
 
-### 결론: 레이아웃/메뉴 시스템은 신규 컴포넌트 불필요
+### 결론: SideNav 컴포넌트 신규 생성 필요
 
-현재 상단 Nav + SubNav 구조는 기존 컴포넌트로 완전히 구현되어 있습니다.
+좌측 사이드바 + 2depth 트리 메뉴 구조를 위해 **SideNav** 컴포넌트가 필요합니다.
 
-### 개선이 필요한 부분
+### 필요 작업
 
-| 항목 | 현재 상태 | 개선 내용 | 우선순위 |
+| 항목 | 현재 상태 | 작업 내용 | 우선순위 |
 |------|----------|----------|----------|
+| **SideNav 컴포넌트** | 미구현 | 좌측 사이드바 2depth 트리 메뉴 컴포넌트 생성 | **최우선** |
 | 대시보드 메뉴 | ADMIN_MENUS에 없음 | 대시보드 메뉴 추가 (path: "/", 하위 없음) | 높음 |
+| MenuStore 확장 | toggleMenu 메서드 없음 | 메뉴 펼침/접힘 상태 관리 메서드 추가 | 높음 |
 | UserMenu 사용자 정보 | 하드코딩된 임시 데이터 | AuthStore에서 실제 사용자 정보 연동 | 중간 |
 | 권한 연동 | MenuStore에 직접 ability 체커 설정 | AbilityProvider와 연동 자동화 | 중간 |
 
@@ -365,7 +404,73 @@ menuStore.selectSubMenu("reservations-calendar")
 
 ## 8. 개선 작업 요청
 
-### 8.1 대시보드 메뉴 추가 요청
+### 8.1 SideNav 컴포넌트 생성 요청 (최우선)
+
+**SideNav Feature 컴포넌트를 만들어주세요.**
+
+> **참조:** `.claude/agents/기능-컴포넌트-빌더.md`
+
+**유형:** feature
+**경로:** `packages/ui/src/components/feature/SideNav/SideNav.tsx`
+
+**역할:**
+- 2depth 트리 형태의 좌측 사이드바 네비게이션
+- 하위 메뉴가 있는 항목: 클릭 시 펼침/접힘
+- 하위 메뉴가 없는 항목: 클릭 시 바로 이동
+
+**조합:**
+- ui: VStack, Text, HStack
+- inputs: Button
+- icons: lucide-react (ChevronRight, ChevronDown 등)
+
+**사용 Store:**
+- MenuStore (items, selectedMenu, selectedSubMenu, expandedMenuIds)
+
+**핸들러:**
+- handleToggleMenu(menuId: string) -> menuStore.toggleMenu(menuId)
+- handleClickMenu(menuId: string) -> menuStore.selectMenu(menuId) (하위 메뉴 없는 경우)
+- handleClickSubMenu(subMenuId: string) -> menuStore.selectSubMenu(subMenuId)
+
+**Storybook:** 필요
+
+### 8.2 MenuStore 확장 요청
+
+**파일:** `packages/store/src/stores/menuStore.ts`
+
+**추가할 기능:**
+```typescript
+class MenuStore {
+  // 기존 기능들...
+
+  // 추가: 펼침/접힘 상태 관리
+  expandedMenuIds: Set<string> = new Set();
+
+  // 메뉴 펼침/접힘 토글
+  toggleMenu(menuId: string): void {
+    if (this.expandedMenuIds.has(menuId)) {
+      this.expandedMenuIds.delete(menuId);
+    } else {
+      this.expandedMenuIds.add(menuId);
+    }
+  }
+
+  // 메뉴가 펼쳐진 상태인지 확인
+  isMenuExpanded(menuId: string): boolean {
+    return this.expandedMenuIds.has(menuId);
+  }
+
+  // setCurrentPath에서 selectedMenu의 부모 메뉴 자동 펼침
+  setCurrentPath(path: string): void {
+    // 기존 로직...
+    // 추가: selectedMenu가 있으면 해당 메뉴 자동 펼침
+    if (this.selectedMenu) {
+      this.expandedMenuIds.add(this.selectedMenu.id);
+    }
+  }
+}
+```
+
+### 8.3 대시보드 메뉴 추가 요청
 
 **파일:** `packages/constant/src/routing/admin-menu.ts`
 
@@ -388,7 +493,7 @@ MENU_DASHBOARD: "menu:dashboard",
 },
 ```
 
-### 8.2 UserMenu 실제 사용자 정보 연동 요청
+### 8.4 UserMenu 실제 사용자 정보 연동 요청
 
 **파일:** `packages/ui/src/components/feature/UserMenu/UserMenu.tsx`
 
@@ -410,70 +515,54 @@ const user = {
 
 ---
 
-## 9. 좌측 사이드바 레이아웃 변형 (선택적)
+## 9. Layout 구현 가이드
 
-현재는 상단 Nav + SubNav 구조이지만, 향후 좌측 사이드바 레이아웃이 필요한 경우:
+### 구현 파일
 
-### 변경 방법
+**파일:** `apps/admin/app/(admin)/layout.tsx`
 
-**수정 파일:** `apps/admin/app/(admin)/layout.tsx`
+### 구현 코드
 
-**변경 내용:**
 ```tsx
-// 현재 구조 (상단 Nav + SubNav)
-<PageLayout
-  header={
-    <Header
-      left={<AppLogo icon="LayoutGrid" text="Admin" />}
-      center={<Nav />}
-      right={<><ContextSelector /><UserMenu /></>}
-      bottom={<SubNav />}
-    />
-  }
->
-  {children}
-</PageLayout>
+import { PageLayout, Header } from "@cocrepo/ui/layouts";
+import { AppLogo, ContextSelector, UserMenu, SideNav } from "@cocrepo/ui/feature";
 
-// 변경 구조 (좌측 사이드바)
-<PageLayout
-  header={
-    <Header
-      left={<AppLogo icon="LayoutGrid" text="Admin" />}
-      right={<><ContextSelector /><UserMenu /></>}
-    />
-  }
-  leftAside={<SideNav />}  // 새 Feature 컴포넌트 필요
->
-  {children}
-</PageLayout>
+export default function AdminLayout({ children }: { children: React.ReactNode }) {
+  return (
+    <PageLayout
+      header={
+        <Header
+          left={<AppLogo icon="LayoutGrid" text="Admin" />}
+          right={
+            <>
+              <ContextSelector />
+              <UserMenu />
+            </>
+          }
+        />
+      }
+      leftAside={<SideNav />}
+    >
+      {children}
+    </PageLayout>
+  );
+}
 ```
 
-### 필요 컴포넌트 (좌측 사이드바용)
+### 레이아웃 구조
 
-**SideNav Feature 컴포넌트**
-
-> **참조:** `.claude/agents/feature-builder.md`
-
-**유형:** feature
-**경로:** `packages/ui/src/components/feature/SideNav/SideNav.tsx`
-
-**역할:**
-- 2depth 아코디언/트리 형태의 네비게이션
-- 하위 메뉴가 있는 항목: 클릭 시 펼침/접힘
-- 하위 메뉴가 없는 항목: 클릭 시 바로 이동
-
-**조합:**
-- ui: VStack, Text
-- inputs: Button
-- HeroUI: Accordion
-- 기존 CollapsibleSidebar 컴포넌트 활용 가능
-
-**사용 Store:**
-- MenuStore (items, selectedMenu, selectedSubMenu)
-
-**핸들러:**
-- handleClickMenu(menuId: string) -> menuStore.selectMenu(menuId)
-- handleClickSubMenu(subMenuId: string) -> menuStore.selectSubMenu(subMenuId)
+```
++------------------+----------------------------------------------------------+
+|      Header      |                                                          |
+|  [Logo]          |                                   [Space▼] [Avatar▼]    |
++------------------+----------------------------------------------------------+
+|                  |                                                          |
+|    leftAside     |                                                          |
+|    (SideNav)     |                     children                             |
+|                  |                     (Main)                               |
+|                  |                                                          |
++------------------+----------------------------------------------------------+
+```
 
 ---
 
@@ -690,25 +779,25 @@ const filteredMenus = useFilteredMenus(ADMIN_MENUS);
 
 ### 기존 컴포넌트 (구현 완료)
 
-| 컴포넌트 | 유형 | 경로 |
-|----------|------|------|
-| AppLayout | layouts | `packages/ui/src/components/layouts/AppLayout/AppLayout.tsx` |
-| PageLayout | layouts | `packages/ui/src/components/layouts/PageLayout/PageLayout.tsx` |
-| SectionLayout | layouts | `packages/ui/src/components/layouts/SectionLayout/SectionLayout.tsx` |
-| Header | layouts | `packages/ui/src/components/layouts/Header/Header.tsx` |
-| Main | layouts | `packages/ui/src/components/layouts/Main/Main.tsx` |
-| AppLogo | feature | `packages/ui/src/components/feature/Logo/Logo.tsx` |
-| Nav | feature | `packages/ui/src/components/feature/Nav/Nav.tsx` |
-| SubNav | feature | `packages/ui/src/components/feature/SubNav/SubNav.tsx` |
-| ContextSelector | feature | `packages/ui/src/components/feature/ContextSelector/ContextSelector.tsx` |
-| UserMenu | feature | `packages/ui/src/components/feature/UserMenu/UserMenu.tsx` |
-| CollapsibleSidebar | feature | `packages/ui/src/components/feature/CollapsibleSidebar/CollapsibleSidebarLayout.tsx` |
-
-### 신규 컴포넌트 (필요 시)
-
-| 컴포넌트 | 유형 | 경로 | 필요 상황 |
+| 컴포넌트 | 유형 | 경로 | 사용 여부 |
 |----------|------|------|----------|
-| SideNav | feature | `packages/ui/src/components/feature/SideNav/SideNav.tsx` | 좌측 사이드바 레이아웃 변형 시 |
+| AppLayout | layouts | `packages/ui/src/components/layouts/AppLayout/AppLayout.tsx` | ✅ 사용 |
+| PageLayout | layouts | `packages/ui/src/components/layouts/PageLayout/PageLayout.tsx` | ✅ 사용 |
+| SectionLayout | layouts | `packages/ui/src/components/layouts/SectionLayout/SectionLayout.tsx` | ✅ 사용 |
+| Header | layouts | `packages/ui/src/components/layouts/Header/Header.tsx` | ✅ 사용 |
+| Main | layouts | `packages/ui/src/components/layouts/Main/Main.tsx` | ✅ 사용 |
+| AppLogo | feature | `packages/ui/src/components/feature/Logo/Logo.tsx` | ✅ 사용 |
+| Nav | feature | `packages/ui/src/components/feature/Nav/Nav.tsx` | ❌ 미사용 |
+| SubNav | feature | `packages/ui/src/components/feature/SubNav/SubNav.tsx` | ❌ 미사용 |
+| ContextSelector | feature | `packages/ui/src/components/feature/ContextSelector/ContextSelector.tsx` | ✅ 사용 |
+| UserMenu | feature | `packages/ui/src/components/feature/UserMenu/UserMenu.tsx` | ✅ 사용 |
+| CollapsibleSidebar | feature | `packages/ui/src/components/feature/CollapsibleSidebar/CollapsibleSidebarLayout.tsx` | 참조용 |
+
+### 신규 컴포넌트 (필수)
+
+| 컴포넌트 | 유형 | 경로 | 우선순위 |
+|----------|------|------|----------|
+| **SideNav** | feature | `packages/ui/src/components/feature/SideNav/SideNav.tsx` | **최우선** |
 | PermissionMatrix | feature | `packages/ui/src/components/feature/PermissionMatrix/PermissionMatrix.tsx` | 권한 관리 페이지 구현 시 |
 | RoleSelector | widget | `packages/ui/src/components/widget/RoleSelector/RoleSelector.tsx` | 권한 관리 페이지 구현 시 |
 
@@ -747,9 +836,9 @@ const filteredMenus = useFilteredMenus(ADMIN_MENUS);
 
 | 항목 | 상태 | 비고 |
 |------|:----:|------|
-| 레이아웃 구조 (PageLayout + Header) | O | `app/(admin)/layout.tsx` |
-| 메인 네비게이션 (Nav) | O | 권한 필터링 적용 |
-| 서브 네비게이션 (SubNav) | O | 선택된 메뉴 하위 메뉴 표시 |
+| 레이아웃 구조 (PageLayout + Header + leftAside) | O | `app/(admin)/layout.tsx` 수정 필요 |
+| **SideNav 컴포넌트** | **X** | **신규 생성 필요 (최우선)** |
+| **MenuStore 확장 (toggleMenu)** | **X** | **펼침/접힘 상태 관리 추가 필요** |
 | 사용자 메뉴 (UserMenu) | O | 로그아웃 기능 |
 | 컨텍스트 선택 (ContextSelector) | O | Space 변경 기능 |
 | MenuStore | O | 메뉴 상태 관리, 권한 필터링 |
@@ -758,6 +847,14 @@ const filteredMenus = useFilteredMenus(ADMIN_MENUS);
 | 대시보드 메뉴 추가 | X | 작업 필요 |
 | UserMenu 실제 사용자 정보 연동 | X | 작업 필요 |
 | 권한 관리 페이지 | X | 별도 기획서로 분리 권장 |
+
+### 구현 우선순위
+
+1. **SideNav 컴포넌트 생성** - 좌측 사이드바 2depth 트리 메뉴
+2. **MenuStore 확장** - toggleMenu, expandedMenuIds 추가
+3. **대시보드 메뉴 추가** - ADMIN_MENUS에 추가
+4. **Layout 수정** - `app/(admin)/layout.tsx`에서 SideNav 적용
+5. UserMenu 실제 사용자 정보 연동
 
 ---
 

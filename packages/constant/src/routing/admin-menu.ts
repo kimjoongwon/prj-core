@@ -14,6 +14,9 @@ export interface Menu {
  * 어드민 메뉴 경로 상수
  */
 export const ADMIN_PATHS = {
+	// 대시보드
+	DASHBOARD: "/",
+
 	// 회원
 	MEMBERS: "/members",
 	MEMBERS_GRADES: "/members/grades",
@@ -64,6 +67,9 @@ export const ADMIN_PATHS = {
  * 어드민 메뉴 Subject 상수
  */
 export const ADMIN_SUBJECTS = {
+	// 대시보드
+	MENU_DASHBOARD: "menu:dashboard",
+
 	// 주요 메뉴
 	MENU_MEMBERS: "menu:members",
 	MENU_RESERVATIONS: "menu:reservations",
@@ -116,6 +122,14 @@ export const ADMIN_SUBJECTS = {
 } as const;
 
 export const ADMIN_MENUS: Menu[] = [
+	{
+		id: "dashboard",
+		label: "대시보드",
+		icon: "LayoutDashboard",
+		path: ADMIN_PATHS.DASHBOARD,
+		subject: ADMIN_SUBJECTS.MENU_DASHBOARD,
+		// children 없음 - 클릭 시 바로 이동
+	},
 	{
 		id: "members",
 		label: "회원",
