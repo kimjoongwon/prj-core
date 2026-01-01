@@ -7,11 +7,11 @@ import {
 import { AbilityActions, Action } from "@cocrepo/prisma";
 import { JsonValue } from "@cocrepo/type";
 import { AbstractDto } from "./abstract.dto";
-import { TenantDto } from "./tenant.dto";
+import { SpaceDto } from "./space.dto";
 
 export class ActionDto extends AbstractDto implements Action {
 	@UUIDField()
-	tenantId: string;
+	spaceId: string;
 
 	@EnumField(() => AbilityActions)
 	name: AbilityActions;
@@ -19,6 +19,6 @@ export class ActionDto extends AbstractDto implements Action {
 	@StringFieldOptional()
 	conditions: JsonValue | null;
 
-	@ClassField(() => TenantDto, { required: false })
-	tenant?: TenantDto;
+	@ClassField(() => SpaceDto, { required: false })
+	space?: SpaceDto;
 }

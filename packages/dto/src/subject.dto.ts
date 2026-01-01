@@ -4,7 +4,8 @@ import { AbstractDto } from "./abstract.dto";
 
 export class SubjectDto extends AbstractDto implements Subject {
 	@UUIDField()
-	tenantId: string;
+	spaceId: string;
+
 	@StringField()
 	name: string;
 }

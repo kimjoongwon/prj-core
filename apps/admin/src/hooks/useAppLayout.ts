@@ -3,7 +3,7 @@
 import { ADMIN_PATHS } from "@cocrepo/constant";
 import type { Menu } from "@cocrepo/store";
 import type {
-	ContextSelectorContext,
+	SpaceSelectorSpace,
 	UserMenuUser,
 } from "@cocrepo/ui";
 import { useRouter } from "next/navigation";
@@ -41,7 +41,7 @@ export interface UseAppLayoutReturn {
 	/** Sub menu items (for SubNav) */
 	subMenuItems: NavMenuItem[];
 	/** 현재 Space 컨텍스트 */
-	currentContext: ContextSelectorContext | null;
+	currentSpace: SpaceSelectorSpace | null;
 	/** 현재 사용자 */
 	currentUser: UserMenuUser | null;
 	/** 주요 메뉴 클릭 핸들러 */
@@ -75,7 +75,7 @@ function toNavMenuItem(item: Menu): NavMenuItem {
  * 주의: useCallback/useMemo 사용하지 않음 (MobX 자동 메모이제이션)
  *
  * @deprecated 이 훅은 더 이상 필요하지 않습니다.
- * Feature 컴포넌트(Nav, SubNav, AppLogo, ContextSelector, UserMenu)가
+ * Feature 컴포넌트(Nav, SubNav, AppLogo, SpaceSelector, UserMenu)가
  * 자체적으로 store를 사용하여 비즈니스 로직을 처리합니다.
  */
 export function useAppLayout(): UseAppLayoutReturn {
@@ -132,8 +132,8 @@ export function useAppLayout(): UseAppLayoutReturn {
 		}
 	};
 
-	// 현재 컨텍스트 (PersistStore에서 가져옴)
-	const currentContext: ContextSelectorContext | null =
+	// 현재 Space (PersistStore에서 가져옴)
+	const currentSpace: SpaceSelectorSpace | null =
 		persistStore.spaceId && persistStore.groundName
 			? { id: persistStore.spaceId, name: persistStore.groundName }
 			: null;
@@ -141,7 +141,7 @@ export function useAppLayout(): UseAppLayoutReturn {
 	return {
 		menuItems,
 		subMenuItems,
-		currentContext,
+		currentSpace,
 		currentUser,
 		onClickMenu,
 		onClickSubMenu,

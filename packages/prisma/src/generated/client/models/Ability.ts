@@ -44,7 +44,7 @@ export type AbilityMinAggregateOutputType = {
   roleId: string | null
   description: string | null
   subjectId: string | null
-  tenantId: string | null
+  spaceId: string | null
 }
 
 export type AbilityMaxAggregateOutputType = {
@@ -57,7 +57,7 @@ export type AbilityMaxAggregateOutputType = {
   roleId: string | null
   description: string | null
   subjectId: string | null
-  tenantId: string | null
+  spaceId: string | null
 }
 
 export type AbilityCountAggregateOutputType = {
@@ -71,7 +71,7 @@ export type AbilityCountAggregateOutputType = {
   description: number
   conditions: number
   subjectId: number
-  tenantId: number
+  spaceId: number
   _all: number
 }
 
@@ -94,7 +94,7 @@ export type AbilityMinAggregateInputType = {
   roleId?: true
   description?: true
   subjectId?: true
-  tenantId?: true
+  spaceId?: true
 }
 
 export type AbilityMaxAggregateInputType = {
@@ -107,7 +107,7 @@ export type AbilityMaxAggregateInputType = {
   roleId?: true
   description?: true
   subjectId?: true
-  tenantId?: true
+  spaceId?: true
 }
 
 export type AbilityCountAggregateInputType = {
@@ -121,7 +121,7 @@ export type AbilityCountAggregateInputType = {
   description?: true
   conditions?: true
   subjectId?: true
-  tenantId?: true
+  spaceId?: true
   _all?: true
 }
 
@@ -222,7 +222,7 @@ export type AbilityGroupByOutputType = {
   description: string | null
   conditions: runtime.JsonValue | null
   subjectId: string
-  tenantId: string
+  spaceId: string
   _count: AbilityCountAggregateOutputType | null
   _avg: AbilityAvgAggregateOutputType | null
   _sum: AbilitySumAggregateOutputType | null
@@ -259,8 +259,9 @@ export type AbilityWhereInput = {
   description?: Prisma.StringNullableFilter<"Ability"> | string | null
   conditions?: Prisma.JsonNullableFilter<"Ability">
   subjectId?: Prisma.StringFilter<"Ability"> | string
-  tenantId?: Prisma.StringFilter<"Ability"> | string
+  spaceId?: Prisma.StringFilter<"Ability"> | string
   role?: Prisma.XOR<Prisma.RoleScalarRelationFilter, Prisma.RoleWhereInput>
+  space?: Prisma.XOR<Prisma.SpaceScalarRelationFilter, Prisma.SpaceWhereInput>
 }
 
 export type AbilityOrderByWithRelationInput = {
@@ -274,8 +275,9 @@ export type AbilityOrderByWithRelationInput = {
   description?: Prisma.SortOrderInput | Prisma.SortOrder
   conditions?: Prisma.SortOrderInput | Prisma.SortOrder
   subjectId?: Prisma.SortOrder
-  tenantId?: Prisma.SortOrder
+  spaceId?: Prisma.SortOrder
   role?: Prisma.RoleOrderByWithRelationInput
+  space?: Prisma.SpaceOrderByWithRelationInput
 }
 
 export type AbilityWhereUniqueInput = Prisma.AtLeast<{
@@ -292,8 +294,9 @@ export type AbilityWhereUniqueInput = Prisma.AtLeast<{
   description?: Prisma.StringNullableFilter<"Ability"> | string | null
   conditions?: Prisma.JsonNullableFilter<"Ability">
   subjectId?: Prisma.StringFilter<"Ability"> | string
-  tenantId?: Prisma.StringFilter<"Ability"> | string
+  spaceId?: Prisma.StringFilter<"Ability"> | string
   role?: Prisma.XOR<Prisma.RoleScalarRelationFilter, Prisma.RoleWhereInput>
+  space?: Prisma.XOR<Prisma.SpaceScalarRelationFilter, Prisma.SpaceWhereInput>
 }, "id" | "seq">
 
 export type AbilityOrderByWithAggregationInput = {
@@ -307,7 +310,7 @@ export type AbilityOrderByWithAggregationInput = {
   description?: Prisma.SortOrderInput | Prisma.SortOrder
   conditions?: Prisma.SortOrderInput | Prisma.SortOrder
   subjectId?: Prisma.SortOrder
-  tenantId?: Prisma.SortOrder
+  spaceId?: Prisma.SortOrder
   _count?: Prisma.AbilityCountOrderByAggregateInput
   _avg?: Prisma.AbilityAvgOrderByAggregateInput
   _max?: Prisma.AbilityMaxOrderByAggregateInput
@@ -329,7 +332,7 @@ export type AbilityScalarWhereWithAggregatesInput = {
   description?: Prisma.StringNullableWithAggregatesFilter<"Ability"> | string | null
   conditions?: Prisma.JsonNullableWithAggregatesFilter<"Ability">
   subjectId?: Prisma.StringWithAggregatesFilter<"Ability"> | string
-  tenantId?: Prisma.StringWithAggregatesFilter<"Ability"> | string
+  spaceId?: Prisma.StringWithAggregatesFilter<"Ability"> | string
 }
 
 export type AbilityCreateInput = {
@@ -342,8 +345,8 @@ export type AbilityCreateInput = {
   description?: string | null
   conditions?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   subjectId: string
-  tenantId: string
   role: Prisma.RoleCreateNestedOneWithoutAbilitiesInput
+  space: Prisma.SpaceCreateNestedOneWithoutAbilitiesInput
 }
 
 export type AbilityUncheckedCreateInput = {
@@ -357,7 +360,7 @@ export type AbilityUncheckedCreateInput = {
   description?: string | null
   conditions?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   subjectId: string
-  tenantId: string
+  spaceId: string
 }
 
 export type AbilityUpdateInput = {
@@ -369,8 +372,8 @@ export type AbilityUpdateInput = {
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   conditions?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   subjectId?: Prisma.StringFieldUpdateOperationsInput | string
-  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.RoleUpdateOneRequiredWithoutAbilitiesNestedInput
+  space?: Prisma.SpaceUpdateOneRequiredWithoutAbilitiesNestedInput
 }
 
 export type AbilityUncheckedUpdateInput = {
@@ -384,7 +387,7 @@ export type AbilityUncheckedUpdateInput = {
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   conditions?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   subjectId?: Prisma.StringFieldUpdateOperationsInput | string
-  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
+  spaceId?: Prisma.StringFieldUpdateOperationsInput | string
 }
 
 export type AbilityCreateManyInput = {
@@ -398,7 +401,7 @@ export type AbilityCreateManyInput = {
   description?: string | null
   conditions?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   subjectId: string
-  tenantId: string
+  spaceId: string
 }
 
 export type AbilityUpdateManyMutationInput = {
@@ -410,7 +413,6 @@ export type AbilityUpdateManyMutationInput = {
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   conditions?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   subjectId?: Prisma.StringFieldUpdateOperationsInput | string
-  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
 }
 
 export type AbilityUncheckedUpdateManyInput = {
@@ -424,7 +426,7 @@ export type AbilityUncheckedUpdateManyInput = {
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   conditions?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   subjectId?: Prisma.StringFieldUpdateOperationsInput | string
-  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
+  spaceId?: Prisma.StringFieldUpdateOperationsInput | string
 }
 
 export type AbilityCountOrderByAggregateInput = {
@@ -438,7 +440,7 @@ export type AbilityCountOrderByAggregateInput = {
   description?: Prisma.SortOrder
   conditions?: Prisma.SortOrder
   subjectId?: Prisma.SortOrder
-  tenantId?: Prisma.SortOrder
+  spaceId?: Prisma.SortOrder
 }
 
 export type AbilityAvgOrderByAggregateInput = {
@@ -455,7 +457,7 @@ export type AbilityMaxOrderByAggregateInput = {
   roleId?: Prisma.SortOrder
   description?: Prisma.SortOrder
   subjectId?: Prisma.SortOrder
-  tenantId?: Prisma.SortOrder
+  spaceId?: Prisma.SortOrder
 }
 
 export type AbilityMinOrderByAggregateInput = {
@@ -468,7 +470,7 @@ export type AbilityMinOrderByAggregateInput = {
   roleId?: Prisma.SortOrder
   description?: Prisma.SortOrder
   subjectId?: Prisma.SortOrder
-  tenantId?: Prisma.SortOrder
+  spaceId?: Prisma.SortOrder
 }
 
 export type AbilitySumOrderByAggregateInput = {
@@ -531,6 +533,48 @@ export type AbilityUncheckedUpdateManyWithoutRoleNestedInput = {
   deleteMany?: Prisma.AbilityScalarWhereInput | Prisma.AbilityScalarWhereInput[]
 }
 
+export type AbilityCreateNestedManyWithoutSpaceInput = {
+  create?: Prisma.XOR<Prisma.AbilityCreateWithoutSpaceInput, Prisma.AbilityUncheckedCreateWithoutSpaceInput> | Prisma.AbilityCreateWithoutSpaceInput[] | Prisma.AbilityUncheckedCreateWithoutSpaceInput[]
+  connectOrCreate?: Prisma.AbilityCreateOrConnectWithoutSpaceInput | Prisma.AbilityCreateOrConnectWithoutSpaceInput[]
+  createMany?: Prisma.AbilityCreateManySpaceInputEnvelope
+  connect?: Prisma.AbilityWhereUniqueInput | Prisma.AbilityWhereUniqueInput[]
+}
+
+export type AbilityUncheckedCreateNestedManyWithoutSpaceInput = {
+  create?: Prisma.XOR<Prisma.AbilityCreateWithoutSpaceInput, Prisma.AbilityUncheckedCreateWithoutSpaceInput> | Prisma.AbilityCreateWithoutSpaceInput[] | Prisma.AbilityUncheckedCreateWithoutSpaceInput[]
+  connectOrCreate?: Prisma.AbilityCreateOrConnectWithoutSpaceInput | Prisma.AbilityCreateOrConnectWithoutSpaceInput[]
+  createMany?: Prisma.AbilityCreateManySpaceInputEnvelope
+  connect?: Prisma.AbilityWhereUniqueInput | Prisma.AbilityWhereUniqueInput[]
+}
+
+export type AbilityUpdateManyWithoutSpaceNestedInput = {
+  create?: Prisma.XOR<Prisma.AbilityCreateWithoutSpaceInput, Prisma.AbilityUncheckedCreateWithoutSpaceInput> | Prisma.AbilityCreateWithoutSpaceInput[] | Prisma.AbilityUncheckedCreateWithoutSpaceInput[]
+  connectOrCreate?: Prisma.AbilityCreateOrConnectWithoutSpaceInput | Prisma.AbilityCreateOrConnectWithoutSpaceInput[]
+  upsert?: Prisma.AbilityUpsertWithWhereUniqueWithoutSpaceInput | Prisma.AbilityUpsertWithWhereUniqueWithoutSpaceInput[]
+  createMany?: Prisma.AbilityCreateManySpaceInputEnvelope
+  set?: Prisma.AbilityWhereUniqueInput | Prisma.AbilityWhereUniqueInput[]
+  disconnect?: Prisma.AbilityWhereUniqueInput | Prisma.AbilityWhereUniqueInput[]
+  delete?: Prisma.AbilityWhereUniqueInput | Prisma.AbilityWhereUniqueInput[]
+  connect?: Prisma.AbilityWhereUniqueInput | Prisma.AbilityWhereUniqueInput[]
+  update?: Prisma.AbilityUpdateWithWhereUniqueWithoutSpaceInput | Prisma.AbilityUpdateWithWhereUniqueWithoutSpaceInput[]
+  updateMany?: Prisma.AbilityUpdateManyWithWhereWithoutSpaceInput | Prisma.AbilityUpdateManyWithWhereWithoutSpaceInput[]
+  deleteMany?: Prisma.AbilityScalarWhereInput | Prisma.AbilityScalarWhereInput[]
+}
+
+export type AbilityUncheckedUpdateManyWithoutSpaceNestedInput = {
+  create?: Prisma.XOR<Prisma.AbilityCreateWithoutSpaceInput, Prisma.AbilityUncheckedCreateWithoutSpaceInput> | Prisma.AbilityCreateWithoutSpaceInput[] | Prisma.AbilityUncheckedCreateWithoutSpaceInput[]
+  connectOrCreate?: Prisma.AbilityCreateOrConnectWithoutSpaceInput | Prisma.AbilityCreateOrConnectWithoutSpaceInput[]
+  upsert?: Prisma.AbilityUpsertWithWhereUniqueWithoutSpaceInput | Prisma.AbilityUpsertWithWhereUniqueWithoutSpaceInput[]
+  createMany?: Prisma.AbilityCreateManySpaceInputEnvelope
+  set?: Prisma.AbilityWhereUniqueInput | Prisma.AbilityWhereUniqueInput[]
+  disconnect?: Prisma.AbilityWhereUniqueInput | Prisma.AbilityWhereUniqueInput[]
+  delete?: Prisma.AbilityWhereUniqueInput | Prisma.AbilityWhereUniqueInput[]
+  connect?: Prisma.AbilityWhereUniqueInput | Prisma.AbilityWhereUniqueInput[]
+  update?: Prisma.AbilityUpdateWithWhereUniqueWithoutSpaceInput | Prisma.AbilityUpdateWithWhereUniqueWithoutSpaceInput[]
+  updateMany?: Prisma.AbilityUpdateManyWithWhereWithoutSpaceInput | Prisma.AbilityUpdateManyWithWhereWithoutSpaceInput[]
+  deleteMany?: Prisma.AbilityScalarWhereInput | Prisma.AbilityScalarWhereInput[]
+}
+
 export type AbilityCreateWithoutRoleInput = {
   id?: string
   seq?: number
@@ -541,7 +585,7 @@ export type AbilityCreateWithoutRoleInput = {
   description?: string | null
   conditions?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   subjectId: string
-  tenantId: string
+  space: Prisma.SpaceCreateNestedOneWithoutAbilitiesInput
 }
 
 export type AbilityUncheckedCreateWithoutRoleInput = {
@@ -554,7 +598,7 @@ export type AbilityUncheckedCreateWithoutRoleInput = {
   description?: string | null
   conditions?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   subjectId: string
-  tenantId: string
+  spaceId: string
 }
 
 export type AbilityCreateOrConnectWithoutRoleInput = {
@@ -597,7 +641,59 @@ export type AbilityScalarWhereInput = {
   description?: Prisma.StringNullableFilter<"Ability"> | string | null
   conditions?: Prisma.JsonNullableFilter<"Ability">
   subjectId?: Prisma.StringFilter<"Ability"> | string
-  tenantId?: Prisma.StringFilter<"Ability"> | string
+  spaceId?: Prisma.StringFilter<"Ability"> | string
+}
+
+export type AbilityCreateWithoutSpaceInput = {
+  id?: string
+  seq?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string | null
+  removedAt?: Date | string | null
+  type: $Enums.AbilityTypes
+  description?: string | null
+  conditions?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  subjectId: string
+  role: Prisma.RoleCreateNestedOneWithoutAbilitiesInput
+}
+
+export type AbilityUncheckedCreateWithoutSpaceInput = {
+  id?: string
+  seq?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string | null
+  removedAt?: Date | string | null
+  type: $Enums.AbilityTypes
+  roleId: string
+  description?: string | null
+  conditions?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  subjectId: string
+}
+
+export type AbilityCreateOrConnectWithoutSpaceInput = {
+  where: Prisma.AbilityWhereUniqueInput
+  create: Prisma.XOR<Prisma.AbilityCreateWithoutSpaceInput, Prisma.AbilityUncheckedCreateWithoutSpaceInput>
+}
+
+export type AbilityCreateManySpaceInputEnvelope = {
+  data: Prisma.AbilityCreateManySpaceInput | Prisma.AbilityCreateManySpaceInput[]
+  skipDuplicates?: boolean
+}
+
+export type AbilityUpsertWithWhereUniqueWithoutSpaceInput = {
+  where: Prisma.AbilityWhereUniqueInput
+  update: Prisma.XOR<Prisma.AbilityUpdateWithoutSpaceInput, Prisma.AbilityUncheckedUpdateWithoutSpaceInput>
+  create: Prisma.XOR<Prisma.AbilityCreateWithoutSpaceInput, Prisma.AbilityUncheckedCreateWithoutSpaceInput>
+}
+
+export type AbilityUpdateWithWhereUniqueWithoutSpaceInput = {
+  where: Prisma.AbilityWhereUniqueInput
+  data: Prisma.XOR<Prisma.AbilityUpdateWithoutSpaceInput, Prisma.AbilityUncheckedUpdateWithoutSpaceInput>
+}
+
+export type AbilityUpdateManyWithWhereWithoutSpaceInput = {
+  where: Prisma.AbilityScalarWhereInput
+  data: Prisma.XOR<Prisma.AbilityUpdateManyMutationInput, Prisma.AbilityUncheckedUpdateManyWithoutSpaceInput>
 }
 
 export type AbilityCreateManyRoleInput = {
@@ -610,7 +706,7 @@ export type AbilityCreateManyRoleInput = {
   description?: string | null
   conditions?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   subjectId: string
-  tenantId: string
+  spaceId: string
 }
 
 export type AbilityUpdateWithoutRoleInput = {
@@ -622,7 +718,7 @@ export type AbilityUpdateWithoutRoleInput = {
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   conditions?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   subjectId?: Prisma.StringFieldUpdateOperationsInput | string
-  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
+  space?: Prisma.SpaceUpdateOneRequiredWithoutAbilitiesNestedInput
 }
 
 export type AbilityUncheckedUpdateWithoutRoleInput = {
@@ -635,7 +731,7 @@ export type AbilityUncheckedUpdateWithoutRoleInput = {
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   conditions?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   subjectId?: Prisma.StringFieldUpdateOperationsInput | string
-  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
+  spaceId?: Prisma.StringFieldUpdateOperationsInput | string
 }
 
 export type AbilityUncheckedUpdateManyWithoutRoleInput = {
@@ -648,7 +744,58 @@ export type AbilityUncheckedUpdateManyWithoutRoleInput = {
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   conditions?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   subjectId?: Prisma.StringFieldUpdateOperationsInput | string
-  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
+  spaceId?: Prisma.StringFieldUpdateOperationsInput | string
+}
+
+export type AbilityCreateManySpaceInput = {
+  id?: string
+  seq?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string | null
+  removedAt?: Date | string | null
+  type: $Enums.AbilityTypes
+  roleId: string
+  description?: string | null
+  conditions?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  subjectId: string
+}
+
+export type AbilityUpdateWithoutSpaceInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  type?: Prisma.EnumAbilityTypesFieldUpdateOperationsInput | $Enums.AbilityTypes
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  conditions?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  subjectId?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.RoleUpdateOneRequiredWithoutAbilitiesNestedInput
+}
+
+export type AbilityUncheckedUpdateWithoutSpaceInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  seq?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  type?: Prisma.EnumAbilityTypesFieldUpdateOperationsInput | $Enums.AbilityTypes
+  roleId?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  conditions?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  subjectId?: Prisma.StringFieldUpdateOperationsInput | string
+}
+
+export type AbilityUncheckedUpdateManyWithoutSpaceInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  seq?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  type?: Prisma.EnumAbilityTypesFieldUpdateOperationsInput | $Enums.AbilityTypes
+  roleId?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  conditions?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  subjectId?: Prisma.StringFieldUpdateOperationsInput | string
 }
 
 
@@ -664,8 +811,9 @@ export type AbilitySelect<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   description?: boolean
   conditions?: boolean
   subjectId?: boolean
-  tenantId?: boolean
+  spaceId?: boolean
   role?: boolean | Prisma.RoleDefaultArgs<ExtArgs>
+  space?: boolean | Prisma.SpaceDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["ability"]>
 
 export type AbilitySelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -679,8 +827,9 @@ export type AbilitySelectCreateManyAndReturn<ExtArgs extends runtime.Types.Exten
   description?: boolean
   conditions?: boolean
   subjectId?: boolean
-  tenantId?: boolean
+  spaceId?: boolean
   role?: boolean | Prisma.RoleDefaultArgs<ExtArgs>
+  space?: boolean | Prisma.SpaceDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["ability"]>
 
 export type AbilitySelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -694,8 +843,9 @@ export type AbilitySelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Exten
   description?: boolean
   conditions?: boolean
   subjectId?: boolean
-  tenantId?: boolean
+  spaceId?: boolean
   role?: boolean | Prisma.RoleDefaultArgs<ExtArgs>
+  space?: boolean | Prisma.SpaceDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["ability"]>
 
 export type AbilitySelectScalar = {
@@ -709,24 +859,28 @@ export type AbilitySelectScalar = {
   description?: boolean
   conditions?: boolean
   subjectId?: boolean
-  tenantId?: boolean
+  spaceId?: boolean
 }
 
-export type AbilityOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "seq" | "createdAt" | "updatedAt" | "removedAt" | "type" | "roleId" | "description" | "conditions" | "subjectId" | "tenantId", ExtArgs["result"]["ability"]>
+export type AbilityOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "seq" | "createdAt" | "updatedAt" | "removedAt" | "type" | "roleId" | "description" | "conditions" | "subjectId" | "spaceId", ExtArgs["result"]["ability"]>
 export type AbilityInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   role?: boolean | Prisma.RoleDefaultArgs<ExtArgs>
+  space?: boolean | Prisma.SpaceDefaultArgs<ExtArgs>
 }
 export type AbilityIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   role?: boolean | Prisma.RoleDefaultArgs<ExtArgs>
+  space?: boolean | Prisma.SpaceDefaultArgs<ExtArgs>
 }
 export type AbilityIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   role?: boolean | Prisma.RoleDefaultArgs<ExtArgs>
+  space?: boolean | Prisma.SpaceDefaultArgs<ExtArgs>
 }
 
 export type $AbilityPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "Ability"
   objects: {
     role: Prisma.$RolePayload<ExtArgs>
+    space: Prisma.$SpacePayload<ExtArgs>
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -739,7 +893,7 @@ export type $AbilityPayload<ExtArgs extends runtime.Types.Extensions.InternalArg
     description: string | null
     conditions: runtime.JsonValue | null
     subjectId: string
-    tenantId: string
+    spaceId: string
   }, ExtArgs["result"]["ability"]>
   composites: {}
 }
@@ -1135,6 +1289,7 @@ readonly fields: AbilityFieldRefs;
 export interface Prisma__AbilityClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
   role<T extends Prisma.RoleDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.RoleDefaultArgs<ExtArgs>>): Prisma.Prisma__RoleClient<runtime.Types.Result.GetResult<Prisma.$RolePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  space<T extends Prisma.SpaceDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.SpaceDefaultArgs<ExtArgs>>): Prisma.Prisma__SpaceClient<runtime.Types.Result.GetResult<Prisma.$SpacePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1174,7 +1329,7 @@ export interface AbilityFieldRefs {
   readonly description: Prisma.FieldRef<"Ability", 'String'>
   readonly conditions: Prisma.FieldRef<"Ability", 'Json'>
   readonly subjectId: Prisma.FieldRef<"Ability", 'String'>
-  readonly tenantId: Prisma.FieldRef<"Ability", 'String'>
+  readonly spaceId: Prisma.FieldRef<"Ability", 'String'>
 }
     
 

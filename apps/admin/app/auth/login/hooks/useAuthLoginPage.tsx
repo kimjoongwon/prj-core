@@ -15,7 +15,7 @@ export const useAuthLoginPage = () => {
 
 	const state = useLocalObservable<LoginPageState>(() => ({
 		email: isDev ? "ceo@f45training.co.kr" : "",
-		password: isDev ? "SuperAdmin123" : "",
+		password: isDev ? "SuperAdmin123!@#" : "",
 		errorMessage: "",
 	}));
 
@@ -50,8 +50,19 @@ export const useAuthLoginPage = () => {
 				);
 			}
 
-			// 2. Space 선택 (selectedSpaceId 우선, 없으면 첫 번째 tenant)
+			// 2. Space 목록 저장 (헤더 SpaceSelector에서 사용)
 			const tenants = data?.user?.tenants;
+			if (tenants && tenants.length > 0) {
+				const spaces = tenants
+					.filter((t) => t.spaceId && t.space?.ground?.name)
+					.map((t) => ({
+						spaceId: t.spaceId,
+						groundName: t.space!.ground!.name,
+					}));
+				persistStore.setSpaces(spaces);
+			}
+
+			// 3. 현재 Space 선택 (selectedSpaceId 우선, 없으면 첫 번째 tenant)
 			let targetTenant = data?.selectedSpaceId
 				? tenants?.find((t) => t.spaceId === data.selectedSpaceId)
 				: undefined;
@@ -63,7 +74,7 @@ export const useAuthLoginPage = () => {
 			if (targetTenant?.spaceId && targetTenant?.space?.ground?.name) {
 				const groundName = targetTenant.space.ground.name;
 				persistStore.setSpace(targetTenant.spaceId, groundName);
-				// 3. 대시보드로 이동
+				// 4. 대시보드로 이동
 				router.push("/");
 			} else {
 				// Space/Ground가 없는 경우

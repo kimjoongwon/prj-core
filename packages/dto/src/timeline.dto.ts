@@ -3,6 +3,7 @@ import {
 	StringField,
 	StringFieldOptional,
 	UUIDField,
+	UUIDFieldOptional,
 } from "@cocrepo/decorator";
 import { Timeline } from "@cocrepo/prisma";
 import { AbstractDto } from "./abstract.dto";
@@ -10,7 +11,10 @@ import { SessionDto } from "./session.dto";
 
 export class TimelineDto extends AbstractDto implements Timeline {
 	@UUIDField()
-	tenantId: string;
+	spaceId: string;
+
+	@UUIDFieldOptional()
+	creatorId: string | null;
 
 	@StringField()
 	name: string;

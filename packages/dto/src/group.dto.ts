@@ -4,11 +4,12 @@ import {
 	StringField,
 	StringFieldOptional,
 	UUIDField,
+	UUIDFieldOptional,
 } from "@cocrepo/decorator";
 import type { Group } from "@cocrepo/prisma";
 import { GroupTypes } from "@cocrepo/prisma";
 import { AbstractDto } from "./abstract.dto";
-import { TenantDto } from "./tenant.dto";
+import { SpaceDto } from "./space.dto";
 
 export class GroupDto extends AbstractDto implements Group {
 	@StringField()
@@ -21,8 +22,11 @@ export class GroupDto extends AbstractDto implements Group {
 	type!: GroupTypes;
 
 	@UUIDField()
-	tenantId!: string;
+	spaceId!: string;
 
-	@ClassField(() => TenantDto, { required: false })
-	tenant?: TenantDto;
+	@UUIDFieldOptional()
+	creatorId!: string | null;
+
+	@ClassField(() => SpaceDto, { required: false })
+	space?: SpaceDto;
 }

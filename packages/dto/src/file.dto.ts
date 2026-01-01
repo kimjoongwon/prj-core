@@ -3,19 +3,23 @@ import {
 	NumberField,
 	StringField,
 	UUIDField,
+	UUIDFieldOptional,
 } from "@cocrepo/decorator";
 import { FileAssociation } from "@cocrepo/entity";
 import { File } from "@cocrepo/prisma";
 import { AbstractDto } from "./abstract.dto";
 import { FileClassificationDto } from "./file-classification.dto";
-import { TenantDto } from "./tenant.dto";
+import { SpaceDto } from "./space.dto";
 
 export class FileDto extends AbstractDto implements File {
-	@UUIDField()
-	parentId: string;
+	@UUIDFieldOptional()
+	parentId: string | null;
 
 	@UUIDField()
-	tenantId: string;
+	spaceId: string;
+
+	@UUIDFieldOptional()
+	creatorId: string | null;
 
 	@StringField()
 	name: string;
@@ -29,8 +33,8 @@ export class FileDto extends AbstractDto implements File {
 	@StringField()
 	url: string;
 
-	@ClassField(() => TenantDto, { required: false })
-	tenant?: TenantDto;
+	@ClassField(() => SpaceDto, { required: false })
+	space?: SpaceDto;
 
 	@ClassField(() => FileClassificationDto, { required: false })
 	classification?: FileClassificationDto;

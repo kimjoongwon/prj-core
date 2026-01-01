@@ -2,7 +2,6 @@ import "dotenv/config";
 import { PrismaPg } from "@prisma/adapter-pg";
 import { hash } from "bcrypt";
 import pg from "pg";
-import { PrismaClient } from "./src/generated/client/client";
 import {
 	groundSeedData,
 	roleAssociationSeedData,
@@ -13,6 +12,7 @@ import {
 	userGroundMapping,
 	userSeedData,
 } from "./seed-data";
+import { PrismaClient } from "./src/generated/client/client";
 
 // Prisma 7: Adapter 패턴으로 PrismaClient 생성
 const pool = new pg.Pool({
@@ -122,14 +122,14 @@ async function main() {
 			const existingGroup = await prisma.group.findFirst({
 				where: {
 					name: group.name,
-					tenantId: firstTenant.id,
+					spaceId: firstTenant.spaceId,
 				},
 			});
 
 			if (!existingGroup) {
 				await prisma.group.create({
 					data: {
-						tenantId: firstTenant.id,
+						spaceId: firstTenant.spaceId,
 						name: group.name,
 						type: "Space",
 					},
@@ -344,7 +344,6 @@ async function createRegularUsersAndGrounds(adminRole: any, _userRole: any) {
 						if (!existingUserTenant) {
 							await prisma.tenant.create({
 								data: {
-									main: isMain,
 									userId: user.id,
 									spaceId: groundInfo.spaceId,
 									roleId: assignedRole.id,
@@ -391,7 +390,7 @@ async function createRoleCategories() {
 			create: {
 				name: roleCategoryEnum.name, // enum의 name 속성 사용
 				type: categoryData.type as any,
-				tenantId: tenant.id,
+				spaceId: tenant.spaceId,
 				// parentId는 나중에 별도로 설정 (현재는 평면 구조)
 			},
 		});
@@ -482,7 +481,7 @@ async function createRoleGroupsAndAssociations(roles: Record<string, any>) {
 			where: {
 				name: roleGroupEnum.name, // enum의 name 속성 사용
 				type: "Role",
-				tenantId: tenant.id,
+				spaceId: tenant.spaceId,
 			},
 		});
 
@@ -491,7 +490,7 @@ async function createRoleGroupsAndAssociations(roles: Record<string, any>) {
 				data: {
 					name: roleGroupEnum.name, // enum의 name 속성 사용
 					type: "Role", // GroupTypes.Role
-					tenantId: tenant.id,
+					spaceId: tenant.spaceId,
 				},
 			});
 			console.log(
@@ -561,26 +560,26 @@ main()
 		process.exit(1);
 	});
 
-const spaceGroupSeed: Array<{ name: string; label: string; tenantId: string }> =
+const spaceGroupSeed: Array<{ name: string; label: string; spaceId: string }> =
 	[
 		{
 			name: "TEAM_TRAINING",
 			label: "",
-			tenantId: "",
+			spaceId: "",
 		},
 		{
 			name: "PERSONAL_TRAINNING",
 			label: "",
-			tenantId: "",
+			spaceId: "",
 		},
 		{
 			name: "GROUND",
 			label: "",
-			tenantId: "",
+			spaceId: "",
 		},
 		{
 			name: "PILATES",
 			label: "",
-			tenantId: "",
+			spaceId: "",
 		},
 	];

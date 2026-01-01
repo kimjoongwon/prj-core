@@ -254,7 +254,12 @@ class PersistStore {
   }
 
   // === Space/Ground 관련 ===
-  setSpace(spaceId: string, groundName: string): void {
+  /**
+   * Space 설정
+   * @param spaceId - Space ID (null = "전체" 선택, 슈퍼매니저만 가능)
+   * @param groundName - 표시용 Ground 이름 ("전체" 또는 실제 이름)
+   */
+  setSpace(spaceId: string | null, groundName: string): void {
     this.spaceId = spaceId;
     this.groundName = groundName;
     this.persist();
@@ -316,6 +321,98 @@ class PersistStore {
 ---
 
 ## 4. 인터랙션 정의
+
+### 4.0 슈퍼매니저 권한 및 "전체" Space 선택
+
+#### 슈퍼매니저 (SuperManager) 개념
+
+```
+┌─────────────────────────────────────────────────────────────────┐
+│  권한 레벨 구조                                                    │
+├─────────────────────────────────────────────────────────────────┤
+│                                                                  │
+│  [슈퍼매니저]                                                      │
+│      │                                                           │
+│      ├── 모든 Space의 리소스 조회 가능                              │
+│      ├── Space 선택 시 "전체" 옵션 사용 가능                        │
+│      └── X-Space-ID: undefined → 모든 리소스 조회                  │
+│                                                                  │
+│  [일반 매니저]                                                     │
+│      │                                                           │
+│      ├── 소속된 Space의 리소스만 조회 가능                          │
+│      ├── Space 선택 시 "전체" 옵션 없음                            │
+│      └── X-Space-ID: 반드시 spaceId 필수                          │
+│                                                                  │
+└─────────────────────────────────────────────────────────────────┘
+```
+
+#### SpaceSelector 컴포넌트
+
+```
+┌────────────────────────────────────────┐
+│  [SpaceSelector 드롭다운]                │
+├────────────────────────────────────────┤
+│                                         │
+│  슈퍼매니저인 경우:                       │
+│  ┌──────────────────────────────────┐   │
+│  │  ▼  전체                          │   │  ← X-Space-ID: undefined
+│  │     ──────────────────────────   │   │
+│  │     Ground A                     │   │  ← X-Space-ID: space-a-id
+│  │     Ground B                     │   │  ← X-Space-ID: space-b-id
+│  │     Ground C                     │   │  ← X-Space-ID: space-c-id
+│  └──────────────────────────────────┘   │
+│                                         │
+│  일반 매니저인 경우:                       │
+│  ┌──────────────────────────────────┐   │
+│  │  ▼  Ground A                     │   │  ← X-Space-ID: space-a-id
+│  │     ──────────────────────────   │   │
+│  │     Ground B                     │   │  ← X-Space-ID: space-b-id
+│  └──────────────────────────────────┘   │
+│                                         │
+└────────────────────────────────────────┘
+```
+
+#### 백엔드 처리 로직
+
+```typescript
+// 백엔드 Request Context Interceptor 로직
+function handleSpaceId(request: Request, user: User) {
+  const spaceId = request.headers['x-space-id'];
+
+  if (spaceId === undefined || spaceId === '') {
+    // X-Space-ID가 undefined인 경우
+    if (user.isSuperManager) {
+      // 슈퍼매니저: 모든 리소스 조회 허용
+      return { spaceId: null, queryAllSpaces: true };
+    } else {
+      // 일반 매니저: 에러 반환 (Space 선택 필수)
+      throw new ForbiddenException('Space 선택이 필요합니다.');
+    }
+  } else {
+    // X-Space-ID가 있는 경우: 해당 Space 리소스만 조회
+    return { spaceId, queryAllSpaces: false };
+  }
+}
+```
+
+#### Repository 레이어 처리 예시
+
+```typescript
+// 슈퍼매니저의 "전체" 선택 시 Repository 쿼리 예시
+async findMembers(context: RequestContext) {
+  const where: Prisma.UserWhereInput = {};
+
+  if (context.queryAllSpaces) {
+    // 슈퍼매니저 + 전체 선택: Space 필터 없이 조회
+    // where.spaceId 조건 생략
+  } else {
+    // 특정 Space 선택: 해당 Space만 조회
+    where.tenants = { some: { spaceId: context.spaceId } };
+  }
+
+  return this.prisma.user.findMany({ where });
+}
+```
 
 ### 4.1 로그인 흐름
 
@@ -403,14 +500,22 @@ Login API 응답
 // packages/api/src/libs/customAxios.ts
 AXIOS_INSTANCE.interceptors.request.use((config) => {
   // spaceId 헤더 추가
+  // - spaceId가 있으면: 해당 Space의 리소스만 조회
+  // - spaceId가 null/undefined이면: 헤더를 보내지 않음 (슈퍼매니저의 "전체" 선택)
   const spaceId = persistStore.spaceId;
   if (spaceId) {
     config.headers['x-space-id'] = spaceId;
   }
+  // spaceId가 null/undefined인 경우 헤더를 설정하지 않음
+  // → 백엔드에서 슈퍼매니저인 경우 모든 리소스 조회 허용
 
   return config;
 });
 ```
+
+> **"전체" 선택 시 헤더 동작:**
+> - `spaceId = null` → `X-Space-ID` 헤더 미포함 → 백엔드에서 슈퍼매니저 확인 후 전체 조회
+> - `spaceId = 'space-123'` → `X-Space-ID: space-123` → 해당 Space만 조회
 
 ### 4.4 Space 미선택 처리
 
@@ -487,7 +592,8 @@ interface UpdateSelectedSpaceResponse {
 |:--------:|------|------|
 | 1 | `apps/admin/src/hooks/useSpaceGuard.ts` | Space 선택 여부 확인 훅 |
 | 2 | `apps/admin/src/hooks/useChangeSpace.ts` | Space 변경 훅 (API 호출 + Store 업데이트) |
-| 3 | `packages/ui/src/components/widget/SpaceAlert/SpaceAlert.tsx` | Space 선택 Alert 컴포넌트 |
+| 3 | `packages/ui/src/components/feature/SpaceSelector/SpaceSelector.tsx` | Space 선택 드롭다운 (슈퍼매니저용 "전체" 포함) |
+| 4 | `packages/ui/src/components/widget/SpaceAlert/SpaceAlert.tsx` | Space 선택 Alert 컴포넌트 |
 
 ### 5.3 수정이 필요한 파일
 
@@ -678,38 +784,202 @@ export function useChangeSpace(options?: UseChangeSpaceOptions) {
 }
 ```
 
-**사용 예시 (헤더 Space 드롭다운):**
+### 6.5 SpaceSelector 컴포넌트 (슈퍼매니저용 "전체" 포함)
+
+**파일:** `packages/ui/src/components/feature/SpaceSelector/SpaceSelector.tsx`
 
 ```typescript
-function SpaceSelector() {
-  const { changeSpace, isLoading } = useChangeSpace({
-    onSuccess: () => {
-      // 필요시 페이지 새로고침 또는 데이터 refetch
-      window.location.reload();
-    },
-  });
+"use client";
 
-  const handleSelectSpace = (tenant: Tenant) => {
-    changeSpace(tenant.spaceId, tenant.space.ground.name);
+import { observer } from "mobx-react-lite";
+
+/**
+ * SpaceItem - 선택 가능한 Space 정보
+ */
+interface SpaceItem {
+  spaceId: string | null;  // null = "전체" 선택
+  groundName: string;
+}
+
+interface SpaceSelectorProps {
+  /** 선택 가능한 Space 목록 (tenants에서 추출) */
+  spaces: SpaceItem[];
+  /** 현재 선택된 spaceId (null = "전체") */
+  selectedSpaceId: string | null;
+  /** 슈퍼매니저 여부 (true면 "전체" 옵션 표시) */
+  isSuperManager: boolean;
+  /** Space 선택 시 콜백 */
+  onSelectSpace: (spaceId: string | null, groundName: string) => void;
+  /** 로딩 상태 */
+  isLoading?: boolean;
+}
+
+/**
+ * SpaceSelector - Space 선택 드롭다운
+ *
+ * - 슈퍼매니저: "전체" 옵션 + Space 목록
+ * - 일반 매니저: Space 목록만 표시
+ */
+export const SpaceSelector = observer(function SpaceSelector({
+  spaces,
+  selectedSpaceId,
+  isSuperManager,
+  onSelectSpace,
+  isLoading = false,
+}: SpaceSelectorProps) {
+  // 현재 선택된 항목의 표시 텍스트
+  const selectedLabel =
+    selectedSpaceId === null
+      ? "전체"
+      : spaces.find((s) => s.spaceId === selectedSpaceId)?.groundName ?? "선택";
+
+  const handleSelect = (spaceId: string | null, groundName: string) => {
+    onSelectSpace(spaceId, groundName);
   };
 
   return (
     <Dropdown>
-      {tenants.map(tenant => (
-        <DropdownItem
-          key={tenant.id}
-          onClick={() => handleSelectSpace(tenant)}
-          disabled={isLoading}
-        >
-          {tenant.space.ground.name}
-        </DropdownItem>
-      ))}
+      <DropdownTrigger disabled={isLoading}>
+        <Text>{selectedLabel}</Text>
+        <ChevronDownIcon />
+      </DropdownTrigger>
+      <DropdownContent>
+        {/* 슈퍼매니저인 경우 "전체" 옵션 표시 */}
+        {isSuperManager && (
+          <>
+            <DropdownItem
+              key="all"
+              onClick={() => handleSelect(null, "전체")}
+              selected={selectedSpaceId === null}
+            >
+              <Text>전체</Text>
+            </DropdownItem>
+            <DropdownSeparator />
+          </>
+        )}
+
+        {/* Space 목록 */}
+        {spaces.map((space) => (
+          <DropdownItem
+            key={space.spaceId}
+            onClick={() => handleSelect(space.spaceId, space.groundName)}
+            selected={selectedSpaceId === space.spaceId}
+          >
+            <Text>{space.groundName}</Text>
+          </DropdownItem>
+        ))}
+      </DropdownContent>
     </Dropdown>
   );
+});
+```
+
+### 6.6 SpaceSelector 사용 예시 (헤더)
+
+**파일:** `apps/admin/src/components/Header/HeaderSpaceSelector.tsx`
+
+```typescript
+"use client";
+
+import { observer } from "mobx-react-lite";
+import { SpaceSelector } from "@cocrepo/ui";
+import { useChangeSpace } from "@/hooks/useChangeSpace";
+import { usePersistStore, useUserStore } from "@/stores/AppStoreProvider";
+
+/**
+ * HeaderSpaceSelector - 헤더에 표시되는 Space 선택 컴포넌트
+ */
+export const HeaderSpaceSelector = observer(function HeaderSpaceSelector() {
+  const persistStore = usePersistStore();
+  const userStore = useUserStore();
+
+  const { changeSpace, isLoading } = useChangeSpace({
+    onSuccess: () => {
+      // Space 변경 후 현재 페이지 데이터 새로고침
+      window.location.reload();
+    },
+  });
+
+  // tenants에서 SpaceItem 배열 생성
+  const spaces = userStore?.user?.tenants?.map((tenant) => ({
+    spaceId: tenant.spaceId,
+    groundName: tenant.space?.ground?.name ?? "Unknown",
+  })) ?? [];
+
+  const handleSelectSpace = (spaceId: string | null, groundName: string) => {
+    // spaceId가 null이면 "전체" 선택 (슈퍼매니저만 가능)
+    changeSpace(spaceId, groundName);
+  };
+
+  return (
+    <SpaceSelector
+      spaces={spaces}
+      selectedSpaceId={persistStore?.spaceId ?? null}
+      isSuperManager={userStore?.isSuperManager ?? false}
+      onSelectSpace={handleSelectSpace}
+      isLoading={isLoading}
+    />
+  );
+});
+```
+
+### 6.7 useChangeSpace 훅 수정 ("전체" 지원)
+
+**파일:** `apps/admin/src/hooks/useChangeSpace.ts`
+
+```typescript
+"use client";
+
+import { useCallback } from "react";
+import { usePersistStore } from "@/stores/AppStoreProvider";
+import { useUpdateSelectedSpace } from "@cocrepo/api";
+
+interface UseChangeSpaceOptions {
+  onSuccess?: () => void;
+  onError?: (error: Error) => void;
+}
+
+/**
+ * Space 변경 훅 (슈퍼매니저의 "전체" 선택 지원)
+ *
+ * - spaceId가 string: 해당 Space 선택 → X-Space-ID: spaceId
+ * - spaceId가 null: "전체" 선택 → X-Space-ID: 헤더 미포함 (슈퍼매니저만)
+ */
+export function useChangeSpace(options?: UseChangeSpaceOptions) {
+  const persistStore = usePersistStore();
+
+  const mutation = useUpdateSelectedSpace({
+    mutation: {
+      onSuccess: () => {
+        options?.onSuccess?.();
+      },
+      onError: (error) => {
+        options?.onError?.(error);
+      },
+    },
+  });
+
+  const changeSpace = useCallback(
+    async (spaceId: string | null, groundName: string) => {
+      // 1. API 호출 (DB 저장) - "전체"면 null 전송
+      await mutation.mutateAsync({ data: { spaceId } });
+
+      // 2. PersistStore 업데이트
+      // - spaceId가 null: "전체" 선택 → API 인터셉터에서 X-Space-ID 헤더 미포함
+      // - spaceId가 string: 특정 Space 선택 → X-Space-ID: spaceId
+      persistStore?.setSpace(spaceId, groundName);
+    },
+    [mutation, persistStore]
+  );
+
+  return {
+    changeSpace,
+    isLoading: mutation.isPending,
+  };
 }
 ```
 
-### 6.5 Admin Layout에 Space Guard 적용
+### 6.8 Admin Layout에 Space Guard 적용
 
 **파일:** `apps/admin/app/(admin)/layout.tsx`
 
@@ -1135,6 +1405,9 @@ describe('관리자 로그인 E2E', () => {
 | 파일 | 설명 |
 |------|------|
 | `apps/admin/src/hooks/useSpaceGuard.ts` | Space 선택 확인 훅 |
+| `apps/admin/src/hooks/useChangeSpace.ts` | Space 변경 훅 (null 지원) |
+| `packages/ui/src/components/feature/SpaceSelector/SpaceSelector.tsx` | Space 선택 드롭다운 ("전체" 포함) |
+| `apps/admin/src/components/Header/HeaderSpaceSelector.tsx` | 헤더용 SpaceSelector 래퍼 |
 | `packages/ui/src/components/widget/SpaceAlert/SpaceAlert.tsx` | Space 선택 Alert |
 
 ---
@@ -1153,14 +1426,16 @@ describe('관리자 로그인 E2E', () => {
 
 | 순서 | 작업 | 설명 |
 |:----:|------|------|
-| 1 | PersistStore 수정 | 토큰 만료 시간 필드 및 메서드 추가 |
+| 1 | PersistStore 수정 | 토큰 만료 시간 + spaceId null 지원 |
 | 2 | useAuthLoginPage 수정 | `selectedSpaceId` 우선 선택 로직 구현 |
-| 3 | x-space-id 인터셉터 추가 | 모든 API 요청에 헤더 설정 |
-| 4 | useSpaceGuard 훅 생성 | Space 미선택 감지 |
-| 5 | SpaceAlert 컴포넌트 생성 | Alert UI |
-| 6 | Admin Layout 수정 | Space Guard 적용 |
-| 7 | Space 변경 훅 추가 | `useChangeSpace` - API 호출 + Store 업데이트 |
-| 8 | 테스트 코드 작성 | 단위/통합/E2E 테스트 |
+| 3 | x-space-id 인터셉터 추가 | 모든 API 요청에 헤더 설정 (null 시 미포함) |
+| 4 | SpaceSelector 컴포넌트 생성 | "전체" 옵션 포함 드롭다운 |
+| 5 | HeaderSpaceSelector 생성 | 헤더용 SpaceSelector 래퍼 |
+| 6 | useChangeSpace 훅 생성 | Space 변경 (null = "전체" 지원) |
+| 7 | useSpaceGuard 훅 생성 | Space 미선택 감지 |
+| 8 | SpaceAlert 컴포넌트 생성 | Alert UI |
+| 9 | Admin Layout 수정 | Space Guard + SpaceSelector 적용 |
+| 10 | 테스트 코드 작성 | 단위/통합/E2E 테스트 |
 
 ---
 

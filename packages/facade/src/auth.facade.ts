@@ -176,7 +176,10 @@ export class AuthFacade {
 	 * 로그인 처리
 	 * 토큰, 만료 시간, 사용자 정보를 함께 반환
 	 */
-	async login(params: { email: string; password: string }): Promise<LoginResult> {
+	async login(params: {
+		email: string;
+		password: string;
+	}): Promise<LoginResult> {
 		const { email, password } = params;
 		const user = await this.usersService.findUserForAuth(email);
 

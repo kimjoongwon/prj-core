@@ -9,5 +9,5 @@ export class CreateExerciseDto extends OmitType(ExerciseDto, [
 	"task",
 ]) {
 	@UUIDField()
-	tenantId: string;
+	spaceId: string;
 }

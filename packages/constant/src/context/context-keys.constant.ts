@@ -9,4 +9,6 @@ export const CONTEXT_KEYS = {
 	TENANT: "request.tenant_key",
 	TOKEN: "request.token_key",
 	SERVICE_NAME: "request.service_name_key",
+	/** 요청된 Space ID (X-Space-ID 헤더) - undefined이면 모든 데이터 조회 */
+	SPACE_ID: "request.space_id",
 } as const;

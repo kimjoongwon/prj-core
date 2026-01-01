@@ -17,6 +17,7 @@
     "start:server": "turbo start:dev --filter=server... --concurrency=20",
     "start:server:dev": "bash scripts/redis-port-forward.sh",
     "start:admin": "turbo start:dev --filter=admin",
+    "start:admin:full": "turbo start:dev --filter=admin --filter=server... --concurrency=20",
     "start:storybook": "turbo start:dev --filter=storybook",
     "lint": "turbo lint",
     "lint:fix": "turbo lint:fix",

@@ -28,10 +28,13 @@ export class User extends AbstractEntity implements UserEntity {
 	associations?: UserAssociation[];
 
 	/**
-	 * 사용자의 메인 테넌트를 반환합니다
+	 * 사용자의 현재 선택된 Space에 해당하는 테넌트를 반환합니다
 	 */
-	getMainTenant(): Tenant | undefined {
-		return this.tenants?.find((tenant) => tenant.main === true);
+	getCurrentTenant(): Tenant | undefined {
+		if (!this.selectedSpaceId || !this.tenants) return undefined;
+		return this.tenants.find(
+			(tenant) => tenant.spaceId === this.selectedSpaceId,
+		);
 	}
 
 	/**

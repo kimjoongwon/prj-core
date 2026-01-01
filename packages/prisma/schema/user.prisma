@@ -24,21 +24,29 @@
 // @description: 독립적으로 존재하는 핵심 사용자 도메인 객체
 // @extended-by: Profile
 model User {
-  id              String              @id @default(uuid())
-  seq             Int                 @unique @default(autoincrement())
-  updatedAt       DateTime?           @updatedAt @map("updated_at") @db.Timestamptz(6)
-  createdAt       DateTime            @default(now()) @map("created_at") @db.Timestamptz(6)
-  removedAt       DateTime?           @map("removed_at") @db.Timestamptz(6)
-  phone           String              @unique
-  name            String              @unique
-  email           String              @unique
-  password        String
-  selectedSpaceId String?             @map("selected_space_id")
-  selectedSpace   Space?              @relation("UserSelectedSpace", fields: [selectedSpaceId], references: [id])
-  profiles        Profile[]
-  tenants         Tenant[]
-  classification  UserClassification?
-  associations    UserAssociation[]
+  id                 String              @id @default(uuid())
+  seq                Int                 @unique @default(autoincrement())
+  updatedAt          DateTime?           @updatedAt @map("updated_at") @db.Timestamptz(6)
+  createdAt          DateTime            @default(now()) @map("created_at") @db.Timestamptz(6)
+  removedAt          DateTime?           @map("removed_at") @db.Timestamptz(6)
+  phone              String              @unique
+  name               String              @unique
+  email              String              @unique
+  password           String
+  selectedSpaceId    String?             @map("selected_space_id")
+  selectedSpace      Space?              @relation("UserSelectedSpace", fields: [selectedSpaceId], references: [id])
+  profiles           Profile[]
+  tenants            Tenant[]
+  classification     UserClassification?
+  associations       UserAssociation[]
+  // Creator 관계
+  createdCategories  Category[]          @relation("CategoryCreator")
+  createdGroups      Group[]             @relation("GroupCreator")
+  createdContents    Content[]           @relation("ContentCreator")
+  createdFiles       File[]              @relation("FileCreator")
+  createdTimelines   Timeline[]          @relation("TimelineCreator")
+  createdTasks       Task[]              @relation("TaskCreator")
+  createdSafeWallets SafeWallet[]        @relation("SafeWalletCreator")
 
   @@map("users")
 }

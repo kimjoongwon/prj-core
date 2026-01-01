@@ -30,6 +30,17 @@ model Space {
   classification    SpaceClassification?
   tenants           Tenant[]
   usersWithSelected User[]               @relation("UserSelectedSpace")
+  // Space소속 리소스
+  categories        Category[]
+  groups            Group[]
+  contents          Content[]
+  files             File[]
+  timelines         Timeline[]
+  tasks             Task[]
+  safeWallets       SafeWallet[]
+  actions           Action[]
+  subjects          Subject[]
+  abilities         Ability[]
 
   @@map("spaces")
 }

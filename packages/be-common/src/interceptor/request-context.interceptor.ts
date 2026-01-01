@@ -38,10 +38,17 @@ export class RequestContextInterceptor implements NestInterceptor {
 				this.cls.set(CONTEXT_KEYS.USER_ID, undefined);
 			}
 
-			// Tenant 설정
-			const spaceIdFromHeader = request.headers["x-space-id"] as string;
+			// Space ID 설정 (X-Space-ID 헤더)
+			// - 헤더 있음: 해당 Space 데이터만 조회
+			// - 헤더 없음: 모든 데이터 조회 (프론트엔드에서 SUPER_ADMIN인 경우 헤더 안 보냄)
+			const spaceIdFromHeader = request.headers["x-space-id"] as
+				| string
+				| undefined;
 
-			// X-Space-ID 헤더가 없거나 사용자 정보가 없으면 tenant를 undefined로 설정
+			// SPACE_ID 컨텍스트 설정
+			this.cls.set(CONTEXT_KEYS.SPACE_ID, spaceIdFromHeader || undefined);
+
+			// Tenant 설정 (spaceId가 있는 경우에만)
 			if (
 				!spaceIdFromHeader ||
 				!user?.tenants ||
@@ -57,12 +64,10 @@ export class RequestContextInterceptor implements NestInterceptor {
 			);
 
 			if (!tenant) {
-				// 권한이 없어도 에러를 발생시키지 않고 undefined로 설정
 				this.logger.warn("Space 접근 권한 없음", {
 					spaceId: spaceIdFromHeader.slice(-8),
 					userId: user.id,
 				});
-
 				this.cls.set(CONTEXT_KEYS.TENANT, undefined);
 				return;
 			}

@@ -116,10 +116,7 @@ export class UsersRepository {
 	 * @param spaceId - 업데이트할 Space ID
 	 * @returns 업데이트된 spaceId
 	 */
-	async updateSpaceId(
-		userId: string,
-		spaceId: string,
-	): Promise<string> {
+	async updateSpaceId(userId: string, spaceId: string): Promise<string> {
 		this.logger.debug(
 			`spaceId 업데이트: userId=${userId.slice(-8)}, spaceId=${spaceId.slice(-8)}`,
 		);
@@ -140,7 +137,10 @@ export class UsersRepository {
 	 * @param spaceId - 확인할 Space ID
 	 * @returns Tenant 관계 존재 여부
 	 */
-	async existsTenantByUserAndSpace(userId: string, spaceId: string): Promise<boolean> {
+	async existsTenantByUserAndSpace(
+		userId: string,
+		spaceId: string,
+	): Promise<boolean> {
 		this.logger.debug(
 			`Tenant 관계 확인: userId=${userId.slice(-8)}, spaceId=${spaceId.slice(-8)}`,
 		);

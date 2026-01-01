@@ -41,6 +41,11 @@ async function findFileRecursively(
 }
 
 export async function GET(request: NextRequest) {
+	// request가 undefined인 경우 방어
+	if (!request?.nextUrl) {
+		return NextResponse.json({ error: "Invalid request" }, { status: 400 });
+	}
+
 	const searchParams = request.nextUrl.searchParams;
 	const type = searchParams.get("type");
 	const name = searchParams.get("name");

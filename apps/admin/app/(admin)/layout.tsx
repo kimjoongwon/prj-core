@@ -2,7 +2,7 @@
 
 import {
 	AppLogo,
-	ContextSelector,
+	SpaceSelector,
 	Header,
 	PageLayout,
 	SideNav,
@@ -34,7 +34,7 @@ import { useSpaceGuard } from "@/hooks";
  * Feature 컴포넌트가 자체적으로 비즈니스 로직을 처리합니다:
  * - AppLogo: 클릭 시 첫 번째 메뉴로 이동 (MenuStore 사용)
  * - SideNav: 2depth 트리 메뉴 표시 및 선택 (MenuStore 사용)
- * - ContextSelector: Space 변경 기능 (PersistStore 사용)
+ * - SpaceSelector: Space 변경 기능 (PersistStore 사용)
  * - UserMenu: 사용자 정보 표시, 로그아웃 (AuthStore, PersistStore 사용)
  */
 export default function AdminLayout({
@@ -51,7 +51,7 @@ export default function AdminLayout({
 					left={<AppLogo icon="LayoutGrid" text="Admin" />}
 					right={
 						<>
-							<ContextSelector changeText="Space 변경" />
+							<SpaceSelector />
 							<UserMenu />
 						</>
 					}

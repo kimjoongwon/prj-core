@@ -27,9 +27,14 @@ const nextConfig: NextConfig = {
 		return {
 			// basePath를 무시하고 /api 경로를 프록시
 			beforeFiles: [
+				// {
+				// 	source: "/api/:path*",
+				// 	destination: "https://stg.cocdev.co.kr/api/:path*",
+				// 	basePath: false,
+				// },
 				{
 					source: "/api/:path*",
-					destination: "https://stg.cocdev.co.kr/api/:path*",
+					destination: "http://localhost:3006/api/:path*",
 					basePath: false,
 				},
 			],

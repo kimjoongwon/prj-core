@@ -1,16 +1,19 @@
 import { Category as CategoryEntity, CategoryTypes } from "@cocrepo/prisma";
 import { AbstractEntity } from "./abstract.entity";
-import { Tenant } from "./tenant.entity";
+import { Space } from "./space.entity";
+import { User } from "./user.entity";
 
 export class Category extends AbstractEntity implements CategoryEntity {
 	name!: string;
 	type!: CategoryTypes;
 	parentId!: string | null;
-	tenantId!: string;
+	spaceId!: string;
+	creatorId!: string | null;
 
 	parent?: Category;
 	children?: Category[];
-	tenant?: Tenant;
+	space?: Space;
+	creator?: User;
 
 	/**
 	 * 현재 카테고리부터 루트까지 모든 상위 카테고리 이름을 추출합니다

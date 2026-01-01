@@ -6,14 +6,9 @@ import {
 	Public,
 	ResponseMessage,
 } from "@cocrepo/decorator";
-import { GroundDto, TenantDto } from "@cocrepo/dto";
+import { GroundDto } from "@cocrepo/dto";
 import { GroundsService } from "@cocrepo/service";
-import {
-	Controller,
-	ForbiddenException,
-	Get,
-	HttpStatus,
-} from "@nestjs/common";
+import { Controller, Get, HttpStatus } from "@nestjs/common";
 import { ApiOperation, ApiTags } from "@nestjs/swagger";
 import { ClsService } from "nestjs-cls";
 
@@ -42,19 +37,14 @@ export class GroundsController {
 	@ApiOperation({
 		summary: "내 Space의 Ground 목록 조회",
 		description:
-			"로그인한 사용자의 현재 Space에 해당하는 Ground 목록을 조회합니다. X-Space-ID 헤더가 필요합니다.",
+			"X-Space-ID 헤더가 있으면 해당 Space의 Ground만, 없으면 모든 Ground를 조회합니다.",
 	})
 	@ApiAuth()
-	@ApiErrors({ status: 403, message: "Space 접근 권한이 없습니다" }, 500)
+	@ApiErrors(500)
 	@ApiResponseEntity(GroundDto, HttpStatus.OK, { isArray: true })
 	@ResponseMessage("내 Space의 Ground 목록 조회 성공")
 	async getMyGrounds() {
-		const tenant = this.cls.get<TenantDto>(CONTEXT_KEYS.TENANT);
-
-		if (!tenant?.spaceId) {
-			throw new ForbiddenException("Space 접근 권한이 없습니다");
-		}
-
-		return this.groundsService.getMyGrounds(tenant.spaceId);
+		const spaceId = this.cls.get<string | undefined>(CONTEXT_KEYS.SPACE_ID);
+		return this.groundsService.getMyGrounds(spaceId);
 	}
 }

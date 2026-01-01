@@ -111,7 +111,8 @@ export const CategoryScalarFieldEnum = {
   name: 'name',
   type: 'type',
   parentId: 'parentId',
-  tenantId: 'tenantId'
+  spaceId: 'spaceId',
+  creatorId: 'creatorId'
 } as const
 
 export type CategoryScalarFieldEnum = (typeof CategoryScalarFieldEnum)[keyof typeof CategoryScalarFieldEnum]
@@ -126,7 +127,8 @@ export const GroupScalarFieldEnum = {
   name: 'name',
   type: 'type',
   label: 'label',
-  tenantId: 'tenantId'
+  spaceId: 'spaceId',
+  creatorId: 'creatorId'
 } as const
 
 export type GroupScalarFieldEnum = (typeof GroupScalarFieldEnum)[keyof typeof GroupScalarFieldEnum]
@@ -140,8 +142,7 @@ export const TenantScalarFieldEnum = {
   removedAt: 'removedAt',
   userId: 'userId',
   spaceId: 'spaceId',
-  roleId: 'roleId',
-  main: 'main'
+  roleId: 'roleId'
 } as const
 
 export type TenantScalarFieldEnum = (typeof TenantScalarFieldEnum)[keyof typeof TenantScalarFieldEnum]
@@ -168,7 +169,7 @@ export const ActionScalarFieldEnum = {
   removedAt: 'removedAt',
   name: 'name',
   conditions: 'conditions',
-  tenantId: 'tenantId'
+  spaceId: 'spaceId'
 } as const
 
 export type ActionScalarFieldEnum = (typeof ActionScalarFieldEnum)[keyof typeof ActionScalarFieldEnum]
@@ -181,7 +182,7 @@ export const SubjectScalarFieldEnum = {
   updatedAt: 'updatedAt',
   removedAt: 'removedAt',
   name: 'name',
-  tenantId: 'tenantId'
+  spaceId: 'spaceId'
 } as const
 
 export type SubjectScalarFieldEnum = (typeof SubjectScalarFieldEnum)[keyof typeof SubjectScalarFieldEnum]
@@ -198,7 +199,7 @@ export const AbilityScalarFieldEnum = {
   description: 'description',
   conditions: 'conditions',
   subjectId: 'subjectId',
-  tenantId: 'tenantId'
+  spaceId: 'spaceId'
 } as const
 
 export type AbilityScalarFieldEnum = (typeof AbilityScalarFieldEnum)[keyof typeof AbilityScalarFieldEnum]
@@ -227,7 +228,8 @@ export const ContentScalarFieldEnum = {
   type: 'type',
   text: 'text',
   fileId: 'fileId',
-  tenantId: 'tenantId'
+  spaceId: 'spaceId',
+  creatorId: 'creatorId'
 } as const
 
 export type ContentScalarFieldEnum = (typeof ContentScalarFieldEnum)[keyof typeof ContentScalarFieldEnum]
@@ -241,7 +243,8 @@ export const FileScalarFieldEnum = {
   parentId: 'parentId',
   mimeType: 'mimeType',
   url: 'url',
-  tenantId: 'tenantId',
+  spaceId: 'spaceId',
+  creatorId: 'creatorId',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   removedAt: 'removedAt'
@@ -325,7 +328,8 @@ export const SafeWalletScalarFieldEnum = {
   threshold: 'threshold',
   nonce: 'nonce',
   owners: 'owners',
-  tenantId: 'tenantId'
+  spaceId: 'spaceId',
+  creatorId: 'creatorId'
 } as const
 
 export type SafeWalletScalarFieldEnum = (typeof SafeWalletScalarFieldEnum)[keyof typeof SafeWalletScalarFieldEnum]
@@ -431,7 +435,8 @@ export const TimelineScalarFieldEnum = {
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   removedAt: 'removedAt',
-  tenantId: 'tenantId',
+  spaceId: 'spaceId',
+  creatorId: 'creatorId',
   name: 'name',
   description: 'description'
 } as const
@@ -511,7 +516,8 @@ export const TaskScalarFieldEnum = {
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   removedAt: 'removedAt',
-  tenantId: 'tenantId'
+  spaceId: 'spaceId',
+  creatorId: 'creatorId'
 } as const
 
 export type TaskScalarFieldEnum = (typeof TaskScalarFieldEnum)[keyof typeof TaskScalarFieldEnum]

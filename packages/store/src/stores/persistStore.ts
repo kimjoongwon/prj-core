@@ -13,11 +13,20 @@ export interface PersistStoreConfig {
 }
 
 /**
+ * Space 정보 인터페이스 (선택 가능한 Space 목록용)
+ */
+export interface SpaceInfo {
+	spaceId: string;
+	groundName: string;
+}
+
+/**
  * 영속 저장 데이터 인터페이스
  */
 interface PersistedData {
 	spaceId: string | null;
 	groundName: string | null;
+	spaces: SpaceInfo[];
 	accessTokenExpiresAt: number | null;
 	refreshTokenExpiresAt: number | null;
 }
@@ -48,6 +57,9 @@ export class PersistStore {
 	spaceId: string | null = null;
 	groundName: string | null = null;
 
+	// 선택 가능한 Space 목록 (로그인 시 저장)
+	spaces: SpaceInfo[] = [];
+
 	// 토큰 만료 시간 (Unix timestamp, 실제 토큰은 httpOnly 쿠키에 저장)
 	accessTokenExpiresAt: number | null = null;
 	refreshTokenExpiresAt: number | null = null;
@@ -73,6 +85,7 @@ export class PersistStore {
 				const data: PersistedData = JSON.parse(stored);
 				this.spaceId = data.spaceId;
 				this.groundName = data.groundName;
+				this.spaces = data.spaces || [];
 				this.accessTokenExpiresAt = data.accessTokenExpiresAt;
 				this.refreshTokenExpiresAt = data.refreshTokenExpiresAt;
 			} catch {
@@ -91,6 +104,7 @@ export class PersistStore {
 			() => ({
 				spaceId: this.spaceId,
 				groundName: this.groundName,
+				spaces: this.spaces,
 				accessTokenExpiresAt: this.accessTokenExpiresAt,
 				refreshTokenExpiresAt: this.refreshTokenExpiresAt,
 			}),
@@ -116,6 +130,13 @@ export class PersistStore {
 	clearSpace(): void {
 		this.spaceId = null;
 		this.groundName = null;
+	}
+
+	/**
+	 * 선택 가능한 Space 목록 설정 (로그인 시 호출)
+	 */
+	setSpaces(spaces: SpaceInfo[]): void {
+		this.spaces = spaces;
 	}
 
 	// === 토큰 만료 시간 관련 ===
@@ -168,6 +189,7 @@ export class PersistStore {
 	clear(): void {
 		this.spaceId = null;
 		this.groundName = null;
+		this.spaces = [];
 		this.accessTokenExpiresAt = null;
 		this.refreshTokenExpiresAt = null;
 		if (typeof window !== "undefined") {

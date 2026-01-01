@@ -41,7 +41,7 @@ export type SubjectMinAggregateOutputType = {
   updatedAt: Date | null
   removedAt: Date | null
   name: string | null
-  tenantId: string | null
+  spaceId: string | null
 }
 
 export type SubjectMaxAggregateOutputType = {
@@ -51,7 +51,7 @@ export type SubjectMaxAggregateOutputType = {
   updatedAt: Date | null
   removedAt: Date | null
   name: string | null
-  tenantId: string | null
+  spaceId: string | null
 }
 
 export type SubjectCountAggregateOutputType = {
@@ -61,7 +61,7 @@ export type SubjectCountAggregateOutputType = {
   updatedAt: number
   removedAt: number
   name: number
-  tenantId: number
+  spaceId: number
   _all: number
 }
 
@@ -81,7 +81,7 @@ export type SubjectMinAggregateInputType = {
   updatedAt?: true
   removedAt?: true
   name?: true
-  tenantId?: true
+  spaceId?: true
 }
 
 export type SubjectMaxAggregateInputType = {
@@ -91,7 +91,7 @@ export type SubjectMaxAggregateInputType = {
   updatedAt?: true
   removedAt?: true
   name?: true
-  tenantId?: true
+  spaceId?: true
 }
 
 export type SubjectCountAggregateInputType = {
@@ -101,7 +101,7 @@ export type SubjectCountAggregateInputType = {
   updatedAt?: true
   removedAt?: true
   name?: true
-  tenantId?: true
+  spaceId?: true
   _all?: true
 }
 
@@ -198,7 +198,7 @@ export type SubjectGroupByOutputType = {
   updatedAt: Date | null
   removedAt: Date | null
   name: string
-  tenantId: string
+  spaceId: string
   _count: SubjectCountAggregateOutputType | null
   _avg: SubjectAvgAggregateOutputType | null
   _sum: SubjectSumAggregateOutputType | null
@@ -231,7 +231,8 @@ export type SubjectWhereInput = {
   updatedAt?: Prisma.DateTimeNullableFilter<"Subject"> | Date | string | null
   removedAt?: Prisma.DateTimeNullableFilter<"Subject"> | Date | string | null
   name?: Prisma.StringFilter<"Subject"> | string
-  tenantId?: Prisma.StringFilter<"Subject"> | string
+  spaceId?: Prisma.StringFilter<"Subject"> | string
+  space?: Prisma.XOR<Prisma.SpaceScalarRelationFilter, Prisma.SpaceWhereInput>
 }
 
 export type SubjectOrderByWithRelationInput = {
@@ -241,7 +242,8 @@ export type SubjectOrderByWithRelationInput = {
   updatedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   removedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   name?: Prisma.SortOrder
-  tenantId?: Prisma.SortOrder
+  spaceId?: Prisma.SortOrder
+  space?: Prisma.SpaceOrderByWithRelationInput
 }
 
 export type SubjectWhereUniqueInput = Prisma.AtLeast<{
@@ -254,7 +256,8 @@ export type SubjectWhereUniqueInput = Prisma.AtLeast<{
   createdAt?: Prisma.DateTimeFilter<"Subject"> | Date | string
   updatedAt?: Prisma.DateTimeNullableFilter<"Subject"> | Date | string | null
   removedAt?: Prisma.DateTimeNullableFilter<"Subject"> | Date | string | null
-  tenantId?: Prisma.StringFilter<"Subject"> | string
+  spaceId?: Prisma.StringFilter<"Subject"> | string
+  space?: Prisma.XOR<Prisma.SpaceScalarRelationFilter, Prisma.SpaceWhereInput>
 }, "id" | "seq" | "name">
 
 export type SubjectOrderByWithAggregationInput = {
@@ -264,7 +267,7 @@ export type SubjectOrderByWithAggregationInput = {
   updatedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   removedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   name?: Prisma.SortOrder
-  tenantId?: Prisma.SortOrder
+  spaceId?: Prisma.SortOrder
   _count?: Prisma.SubjectCountOrderByAggregateInput
   _avg?: Prisma.SubjectAvgOrderByAggregateInput
   _max?: Prisma.SubjectMaxOrderByAggregateInput
@@ -282,7 +285,7 @@ export type SubjectScalarWhereWithAggregatesInput = {
   updatedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Subject"> | Date | string | null
   removedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Subject"> | Date | string | null
   name?: Prisma.StringWithAggregatesFilter<"Subject"> | string
-  tenantId?: Prisma.StringWithAggregatesFilter<"Subject"> | string
+  spaceId?: Prisma.StringWithAggregatesFilter<"Subject"> | string
 }
 
 export type SubjectCreateInput = {
@@ -292,7 +295,7 @@ export type SubjectCreateInput = {
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
   name: string
-  tenantId: string
+  space: Prisma.SpaceCreateNestedOneWithoutSubjectsInput
 }
 
 export type SubjectUncheckedCreateInput = {
@@ -302,7 +305,7 @@ export type SubjectUncheckedCreateInput = {
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
   name: string
-  tenantId: string
+  spaceId: string
 }
 
 export type SubjectUpdateInput = {
@@ -311,7 +314,7 @@ export type SubjectUpdateInput = {
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   name?: Prisma.StringFieldUpdateOperationsInput | string
-  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
+  space?: Prisma.SpaceUpdateOneRequiredWithoutSubjectsNestedInput
 }
 
 export type SubjectUncheckedUpdateInput = {
@@ -321,7 +324,7 @@ export type SubjectUncheckedUpdateInput = {
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   name?: Prisma.StringFieldUpdateOperationsInput | string
-  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
+  spaceId?: Prisma.StringFieldUpdateOperationsInput | string
 }
 
 export type SubjectCreateManyInput = {
@@ -331,7 +334,7 @@ export type SubjectCreateManyInput = {
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
   name: string
-  tenantId: string
+  spaceId: string
 }
 
 export type SubjectUpdateManyMutationInput = {
@@ -340,7 +343,6 @@ export type SubjectUpdateManyMutationInput = {
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   name?: Prisma.StringFieldUpdateOperationsInput | string
-  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
 }
 
 export type SubjectUncheckedUpdateManyInput = {
@@ -350,7 +352,7 @@ export type SubjectUncheckedUpdateManyInput = {
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   name?: Prisma.StringFieldUpdateOperationsInput | string
-  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
+  spaceId?: Prisma.StringFieldUpdateOperationsInput | string
 }
 
 export type SubjectCountOrderByAggregateInput = {
@@ -360,7 +362,7 @@ export type SubjectCountOrderByAggregateInput = {
   updatedAt?: Prisma.SortOrder
   removedAt?: Prisma.SortOrder
   name?: Prisma.SortOrder
-  tenantId?: Prisma.SortOrder
+  spaceId?: Prisma.SortOrder
 }
 
 export type SubjectAvgOrderByAggregateInput = {
@@ -374,7 +376,7 @@ export type SubjectMaxOrderByAggregateInput = {
   updatedAt?: Prisma.SortOrder
   removedAt?: Prisma.SortOrder
   name?: Prisma.SortOrder
-  tenantId?: Prisma.SortOrder
+  spaceId?: Prisma.SortOrder
 }
 
 export type SubjectMinOrderByAggregateInput = {
@@ -384,11 +386,155 @@ export type SubjectMinOrderByAggregateInput = {
   updatedAt?: Prisma.SortOrder
   removedAt?: Prisma.SortOrder
   name?: Prisma.SortOrder
-  tenantId?: Prisma.SortOrder
+  spaceId?: Prisma.SortOrder
 }
 
 export type SubjectSumOrderByAggregateInput = {
   seq?: Prisma.SortOrder
+}
+
+export type SubjectListRelationFilter = {
+  every?: Prisma.SubjectWhereInput
+  some?: Prisma.SubjectWhereInput
+  none?: Prisma.SubjectWhereInput
+}
+
+export type SubjectOrderByRelationAggregateInput = {
+  _count?: Prisma.SortOrder
+}
+
+export type SubjectCreateNestedManyWithoutSpaceInput = {
+  create?: Prisma.XOR<Prisma.SubjectCreateWithoutSpaceInput, Prisma.SubjectUncheckedCreateWithoutSpaceInput> | Prisma.SubjectCreateWithoutSpaceInput[] | Prisma.SubjectUncheckedCreateWithoutSpaceInput[]
+  connectOrCreate?: Prisma.SubjectCreateOrConnectWithoutSpaceInput | Prisma.SubjectCreateOrConnectWithoutSpaceInput[]
+  createMany?: Prisma.SubjectCreateManySpaceInputEnvelope
+  connect?: Prisma.SubjectWhereUniqueInput | Prisma.SubjectWhereUniqueInput[]
+}
+
+export type SubjectUncheckedCreateNestedManyWithoutSpaceInput = {
+  create?: Prisma.XOR<Prisma.SubjectCreateWithoutSpaceInput, Prisma.SubjectUncheckedCreateWithoutSpaceInput> | Prisma.SubjectCreateWithoutSpaceInput[] | Prisma.SubjectUncheckedCreateWithoutSpaceInput[]
+  connectOrCreate?: Prisma.SubjectCreateOrConnectWithoutSpaceInput | Prisma.SubjectCreateOrConnectWithoutSpaceInput[]
+  createMany?: Prisma.SubjectCreateManySpaceInputEnvelope
+  connect?: Prisma.SubjectWhereUniqueInput | Prisma.SubjectWhereUniqueInput[]
+}
+
+export type SubjectUpdateManyWithoutSpaceNestedInput = {
+  create?: Prisma.XOR<Prisma.SubjectCreateWithoutSpaceInput, Prisma.SubjectUncheckedCreateWithoutSpaceInput> | Prisma.SubjectCreateWithoutSpaceInput[] | Prisma.SubjectUncheckedCreateWithoutSpaceInput[]
+  connectOrCreate?: Prisma.SubjectCreateOrConnectWithoutSpaceInput | Prisma.SubjectCreateOrConnectWithoutSpaceInput[]
+  upsert?: Prisma.SubjectUpsertWithWhereUniqueWithoutSpaceInput | Prisma.SubjectUpsertWithWhereUniqueWithoutSpaceInput[]
+  createMany?: Prisma.SubjectCreateManySpaceInputEnvelope
+  set?: Prisma.SubjectWhereUniqueInput | Prisma.SubjectWhereUniqueInput[]
+  disconnect?: Prisma.SubjectWhereUniqueInput | Prisma.SubjectWhereUniqueInput[]
+  delete?: Prisma.SubjectWhereUniqueInput | Prisma.SubjectWhereUniqueInput[]
+  connect?: Prisma.SubjectWhereUniqueInput | Prisma.SubjectWhereUniqueInput[]
+  update?: Prisma.SubjectUpdateWithWhereUniqueWithoutSpaceInput | Prisma.SubjectUpdateWithWhereUniqueWithoutSpaceInput[]
+  updateMany?: Prisma.SubjectUpdateManyWithWhereWithoutSpaceInput | Prisma.SubjectUpdateManyWithWhereWithoutSpaceInput[]
+  deleteMany?: Prisma.SubjectScalarWhereInput | Prisma.SubjectScalarWhereInput[]
+}
+
+export type SubjectUncheckedUpdateManyWithoutSpaceNestedInput = {
+  create?: Prisma.XOR<Prisma.SubjectCreateWithoutSpaceInput, Prisma.SubjectUncheckedCreateWithoutSpaceInput> | Prisma.SubjectCreateWithoutSpaceInput[] | Prisma.SubjectUncheckedCreateWithoutSpaceInput[]
+  connectOrCreate?: Prisma.SubjectCreateOrConnectWithoutSpaceInput | Prisma.SubjectCreateOrConnectWithoutSpaceInput[]
+  upsert?: Prisma.SubjectUpsertWithWhereUniqueWithoutSpaceInput | Prisma.SubjectUpsertWithWhereUniqueWithoutSpaceInput[]
+  createMany?: Prisma.SubjectCreateManySpaceInputEnvelope
+  set?: Prisma.SubjectWhereUniqueInput | Prisma.SubjectWhereUniqueInput[]
+  disconnect?: Prisma.SubjectWhereUniqueInput | Prisma.SubjectWhereUniqueInput[]
+  delete?: Prisma.SubjectWhereUniqueInput | Prisma.SubjectWhereUniqueInput[]
+  connect?: Prisma.SubjectWhereUniqueInput | Prisma.SubjectWhereUniqueInput[]
+  update?: Prisma.SubjectUpdateWithWhereUniqueWithoutSpaceInput | Prisma.SubjectUpdateWithWhereUniqueWithoutSpaceInput[]
+  updateMany?: Prisma.SubjectUpdateManyWithWhereWithoutSpaceInput | Prisma.SubjectUpdateManyWithWhereWithoutSpaceInput[]
+  deleteMany?: Prisma.SubjectScalarWhereInput | Prisma.SubjectScalarWhereInput[]
+}
+
+export type SubjectCreateWithoutSpaceInput = {
+  id?: string
+  seq?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string | null
+  removedAt?: Date | string | null
+  name: string
+}
+
+export type SubjectUncheckedCreateWithoutSpaceInput = {
+  id?: string
+  seq?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string | null
+  removedAt?: Date | string | null
+  name: string
+}
+
+export type SubjectCreateOrConnectWithoutSpaceInput = {
+  where: Prisma.SubjectWhereUniqueInput
+  create: Prisma.XOR<Prisma.SubjectCreateWithoutSpaceInput, Prisma.SubjectUncheckedCreateWithoutSpaceInput>
+}
+
+export type SubjectCreateManySpaceInputEnvelope = {
+  data: Prisma.SubjectCreateManySpaceInput | Prisma.SubjectCreateManySpaceInput[]
+  skipDuplicates?: boolean
+}
+
+export type SubjectUpsertWithWhereUniqueWithoutSpaceInput = {
+  where: Prisma.SubjectWhereUniqueInput
+  update: Prisma.XOR<Prisma.SubjectUpdateWithoutSpaceInput, Prisma.SubjectUncheckedUpdateWithoutSpaceInput>
+  create: Prisma.XOR<Prisma.SubjectCreateWithoutSpaceInput, Prisma.SubjectUncheckedCreateWithoutSpaceInput>
+}
+
+export type SubjectUpdateWithWhereUniqueWithoutSpaceInput = {
+  where: Prisma.SubjectWhereUniqueInput
+  data: Prisma.XOR<Prisma.SubjectUpdateWithoutSpaceInput, Prisma.SubjectUncheckedUpdateWithoutSpaceInput>
+}
+
+export type SubjectUpdateManyWithWhereWithoutSpaceInput = {
+  where: Prisma.SubjectScalarWhereInput
+  data: Prisma.XOR<Prisma.SubjectUpdateManyMutationInput, Prisma.SubjectUncheckedUpdateManyWithoutSpaceInput>
+}
+
+export type SubjectScalarWhereInput = {
+  AND?: Prisma.SubjectScalarWhereInput | Prisma.SubjectScalarWhereInput[]
+  OR?: Prisma.SubjectScalarWhereInput[]
+  NOT?: Prisma.SubjectScalarWhereInput | Prisma.SubjectScalarWhereInput[]
+  id?: Prisma.StringFilter<"Subject"> | string
+  seq?: Prisma.IntFilter<"Subject"> | number
+  createdAt?: Prisma.DateTimeFilter<"Subject"> | Date | string
+  updatedAt?: Prisma.DateTimeNullableFilter<"Subject"> | Date | string | null
+  removedAt?: Prisma.DateTimeNullableFilter<"Subject"> | Date | string | null
+  name?: Prisma.StringFilter<"Subject"> | string
+  spaceId?: Prisma.StringFilter<"Subject"> | string
+}
+
+export type SubjectCreateManySpaceInput = {
+  id?: string
+  seq?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string | null
+  removedAt?: Date | string | null
+  name: string
+}
+
+export type SubjectUpdateWithoutSpaceInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+}
+
+export type SubjectUncheckedUpdateWithoutSpaceInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  seq?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+}
+
+export type SubjectUncheckedUpdateManyWithoutSpaceInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  seq?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  name?: Prisma.StringFieldUpdateOperationsInput | string
 }
 
 
@@ -400,7 +546,8 @@ export type SubjectSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   updatedAt?: boolean
   removedAt?: boolean
   name?: boolean
-  tenantId?: boolean
+  spaceId?: boolean
+  space?: boolean | Prisma.SpaceDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["subject"]>
 
 export type SubjectSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -410,7 +557,8 @@ export type SubjectSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Exten
   updatedAt?: boolean
   removedAt?: boolean
   name?: boolean
-  tenantId?: boolean
+  spaceId?: boolean
+  space?: boolean | Prisma.SpaceDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["subject"]>
 
 export type SubjectSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -420,7 +568,8 @@ export type SubjectSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Exten
   updatedAt?: boolean
   removedAt?: boolean
   name?: boolean
-  tenantId?: boolean
+  spaceId?: boolean
+  space?: boolean | Prisma.SpaceDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["subject"]>
 
 export type SubjectSelectScalar = {
@@ -430,14 +579,25 @@ export type SubjectSelectScalar = {
   updatedAt?: boolean
   removedAt?: boolean
   name?: boolean
-  tenantId?: boolean
+  spaceId?: boolean
 }
 
-export type SubjectOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "seq" | "createdAt" | "updatedAt" | "removedAt" | "name" | "tenantId", ExtArgs["result"]["subject"]>
+export type SubjectOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "seq" | "createdAt" | "updatedAt" | "removedAt" | "name" | "spaceId", ExtArgs["result"]["subject"]>
+export type SubjectInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  space?: boolean | Prisma.SpaceDefaultArgs<ExtArgs>
+}
+export type SubjectIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  space?: boolean | Prisma.SpaceDefaultArgs<ExtArgs>
+}
+export type SubjectIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  space?: boolean | Prisma.SpaceDefaultArgs<ExtArgs>
+}
 
 export type $SubjectPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "Subject"
-  objects: {}
+  objects: {
+    space: Prisma.$SpacePayload<ExtArgs>
+  }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
     seq: number
@@ -445,7 +605,7 @@ export type $SubjectPayload<ExtArgs extends runtime.Types.Extensions.InternalArg
     updatedAt: Date | null
     removedAt: Date | null
     name: string
-    tenantId: string
+    spaceId: string
   }, ExtArgs["result"]["subject"]>
   composites: {}
 }
@@ -840,6 +1000,7 @@ readonly fields: SubjectFieldRefs;
  */
 export interface Prisma__SubjectClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
+  space<T extends Prisma.SpaceDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.SpaceDefaultArgs<ExtArgs>>): Prisma.Prisma__SpaceClient<runtime.Types.Result.GetResult<Prisma.$SpacePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -875,7 +1036,7 @@ export interface SubjectFieldRefs {
   readonly updatedAt: Prisma.FieldRef<"Subject", 'DateTime'>
   readonly removedAt: Prisma.FieldRef<"Subject", 'DateTime'>
   readonly name: Prisma.FieldRef<"Subject", 'String'>
-  readonly tenantId: Prisma.FieldRef<"Subject", 'String'>
+  readonly spaceId: Prisma.FieldRef<"Subject", 'String'>
 }
     
 
@@ -892,6 +1053,10 @@ export type SubjectFindUniqueArgs<ExtArgs extends runtime.Types.Extensions.Inter
    * Omit specific fields from the Subject
    */
   omit?: Prisma.SubjectOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.SubjectInclude<ExtArgs> | null
   /**
    * Filter, which Subject to fetch.
    */
@@ -911,6 +1076,10 @@ export type SubjectFindUniqueOrThrowArgs<ExtArgs extends runtime.Types.Extension
    */
   omit?: Prisma.SubjectOmit<ExtArgs> | null
   /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.SubjectInclude<ExtArgs> | null
+  /**
    * Filter, which Subject to fetch.
    */
   where: Prisma.SubjectWhereUniqueInput
@@ -928,6 +1097,10 @@ export type SubjectFindFirstArgs<ExtArgs extends runtime.Types.Extensions.Intern
    * Omit specific fields from the Subject
    */
   omit?: Prisma.SubjectOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.SubjectInclude<ExtArgs> | null
   /**
    * Filter, which Subject to fetch.
    */
@@ -977,6 +1150,10 @@ export type SubjectFindFirstOrThrowArgs<ExtArgs extends runtime.Types.Extensions
    */
   omit?: Prisma.SubjectOmit<ExtArgs> | null
   /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.SubjectInclude<ExtArgs> | null
+  /**
    * Filter, which Subject to fetch.
    */
   where?: Prisma.SubjectWhereInput
@@ -1025,6 +1202,10 @@ export type SubjectFindManyArgs<ExtArgs extends runtime.Types.Extensions.Interna
    */
   omit?: Prisma.SubjectOmit<ExtArgs> | null
   /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.SubjectInclude<ExtArgs> | null
+  /**
    * Filter, which Subjects to fetch.
    */
   where?: Prisma.SubjectWhereInput
@@ -1068,6 +1249,10 @@ export type SubjectCreateArgs<ExtArgs extends runtime.Types.Extensions.InternalA
    */
   omit?: Prisma.SubjectOmit<ExtArgs> | null
   /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.SubjectInclude<ExtArgs> | null
+  /**
    * The data needed to create a Subject.
    */
   data: Prisma.XOR<Prisma.SubjectCreateInput, Prisma.SubjectUncheckedCreateInput>
@@ -1101,6 +1286,10 @@ export type SubjectCreateManyAndReturnArgs<ExtArgs extends runtime.Types.Extensi
    */
   data: Prisma.SubjectCreateManyInput | Prisma.SubjectCreateManyInput[]
   skipDuplicates?: boolean
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.SubjectIncludeCreateManyAndReturn<ExtArgs> | null
 }
 
 /**
@@ -1115,6 +1304,10 @@ export type SubjectUpdateArgs<ExtArgs extends runtime.Types.Extensions.InternalA
    * Omit specific fields from the Subject
    */
   omit?: Prisma.SubjectOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.SubjectInclude<ExtArgs> | null
   /**
    * The data needed to update a Subject.
    */
@@ -1167,6 +1360,10 @@ export type SubjectUpdateManyAndReturnArgs<ExtArgs extends runtime.Types.Extensi
    * Limit how many Subjects to update.
    */
   limit?: number
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.SubjectIncludeUpdateManyAndReturn<ExtArgs> | null
 }
 
 /**
@@ -1181,6 +1378,10 @@ export type SubjectUpsertArgs<ExtArgs extends runtime.Types.Extensions.InternalA
    * Omit specific fields from the Subject
    */
   omit?: Prisma.SubjectOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.SubjectInclude<ExtArgs> | null
   /**
    * The filter to search for the Subject to update in case it exists.
    */
@@ -1207,6 +1408,10 @@ export type SubjectDeleteArgs<ExtArgs extends runtime.Types.Extensions.InternalA
    * Omit specific fields from the Subject
    */
   omit?: Prisma.SubjectOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.SubjectInclude<ExtArgs> | null
   /**
    * Filter which Subject to delete.
    */
@@ -1239,4 +1444,8 @@ export type SubjectDefaultArgs<ExtArgs extends runtime.Types.Extensions.Internal
    * Omit specific fields from the Subject
    */
   omit?: Prisma.SubjectOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.SubjectInclude<ExtArgs> | null
 }

@@ -41,7 +41,7 @@ export type ActionMinAggregateOutputType = {
   updatedAt: Date | null
   removedAt: Date | null
   name: $Enums.AbilityActions | null
-  tenantId: string | null
+  spaceId: string | null
 }
 
 export type ActionMaxAggregateOutputType = {
@@ -51,7 +51,7 @@ export type ActionMaxAggregateOutputType = {
   updatedAt: Date | null
   removedAt: Date | null
   name: $Enums.AbilityActions | null
-  tenantId: string | null
+  spaceId: string | null
 }
 
 export type ActionCountAggregateOutputType = {
@@ -62,7 +62,7 @@ export type ActionCountAggregateOutputType = {
   removedAt: number
   name: number
   conditions: number
-  tenantId: number
+  spaceId: number
   _all: number
 }
 
@@ -82,7 +82,7 @@ export type ActionMinAggregateInputType = {
   updatedAt?: true
   removedAt?: true
   name?: true
-  tenantId?: true
+  spaceId?: true
 }
 
 export type ActionMaxAggregateInputType = {
@@ -92,7 +92,7 @@ export type ActionMaxAggregateInputType = {
   updatedAt?: true
   removedAt?: true
   name?: true
-  tenantId?: true
+  spaceId?: true
 }
 
 export type ActionCountAggregateInputType = {
@@ -103,7 +103,7 @@ export type ActionCountAggregateInputType = {
   removedAt?: true
   name?: true
   conditions?: true
-  tenantId?: true
+  spaceId?: true
   _all?: true
 }
 
@@ -201,7 +201,7 @@ export type ActionGroupByOutputType = {
   removedAt: Date | null
   name: $Enums.AbilityActions
   conditions: runtime.JsonValue | null
-  tenantId: string
+  spaceId: string
   _count: ActionCountAggregateOutputType | null
   _avg: ActionAvgAggregateOutputType | null
   _sum: ActionSumAggregateOutputType | null
@@ -235,7 +235,8 @@ export type ActionWhereInput = {
   removedAt?: Prisma.DateTimeNullableFilter<"Action"> | Date | string | null
   name?: Prisma.EnumAbilityActionsFilter<"Action"> | $Enums.AbilityActions
   conditions?: Prisma.JsonNullableFilter<"Action">
-  tenantId?: Prisma.StringFilter<"Action"> | string
+  spaceId?: Prisma.StringFilter<"Action"> | string
+  space?: Prisma.XOR<Prisma.SpaceScalarRelationFilter, Prisma.SpaceWhereInput>
 }
 
 export type ActionOrderByWithRelationInput = {
@@ -246,7 +247,8 @@ export type ActionOrderByWithRelationInput = {
   removedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   name?: Prisma.SortOrder
   conditions?: Prisma.SortOrderInput | Prisma.SortOrder
-  tenantId?: Prisma.SortOrder
+  spaceId?: Prisma.SortOrder
+  space?: Prisma.SpaceOrderByWithRelationInput
 }
 
 export type ActionWhereUniqueInput = Prisma.AtLeast<{
@@ -260,7 +262,8 @@ export type ActionWhereUniqueInput = Prisma.AtLeast<{
   removedAt?: Prisma.DateTimeNullableFilter<"Action"> | Date | string | null
   name?: Prisma.EnumAbilityActionsFilter<"Action"> | $Enums.AbilityActions
   conditions?: Prisma.JsonNullableFilter<"Action">
-  tenantId?: Prisma.StringFilter<"Action"> | string
+  spaceId?: Prisma.StringFilter<"Action"> | string
+  space?: Prisma.XOR<Prisma.SpaceScalarRelationFilter, Prisma.SpaceWhereInput>
 }, "id" | "seq">
 
 export type ActionOrderByWithAggregationInput = {
@@ -271,7 +274,7 @@ export type ActionOrderByWithAggregationInput = {
   removedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   name?: Prisma.SortOrder
   conditions?: Prisma.SortOrderInput | Prisma.SortOrder
-  tenantId?: Prisma.SortOrder
+  spaceId?: Prisma.SortOrder
   _count?: Prisma.ActionCountOrderByAggregateInput
   _avg?: Prisma.ActionAvgOrderByAggregateInput
   _max?: Prisma.ActionMaxOrderByAggregateInput
@@ -290,7 +293,7 @@ export type ActionScalarWhereWithAggregatesInput = {
   removedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Action"> | Date | string | null
   name?: Prisma.EnumAbilityActionsWithAggregatesFilter<"Action"> | $Enums.AbilityActions
   conditions?: Prisma.JsonNullableWithAggregatesFilter<"Action">
-  tenantId?: Prisma.StringWithAggregatesFilter<"Action"> | string
+  spaceId?: Prisma.StringWithAggregatesFilter<"Action"> | string
 }
 
 export type ActionCreateInput = {
@@ -301,7 +304,7 @@ export type ActionCreateInput = {
   removedAt?: Date | string | null
   name?: $Enums.AbilityActions
   conditions?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
-  tenantId: string
+  space: Prisma.SpaceCreateNestedOneWithoutActionsInput
 }
 
 export type ActionUncheckedCreateInput = {
@@ -312,7 +315,7 @@ export type ActionUncheckedCreateInput = {
   removedAt?: Date | string | null
   name?: $Enums.AbilityActions
   conditions?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
-  tenantId: string
+  spaceId: string
 }
 
 export type ActionUpdateInput = {
@@ -322,7 +325,7 @@ export type ActionUpdateInput = {
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   name?: Prisma.EnumAbilityActionsFieldUpdateOperationsInput | $Enums.AbilityActions
   conditions?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
-  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
+  space?: Prisma.SpaceUpdateOneRequiredWithoutActionsNestedInput
 }
 
 export type ActionUncheckedUpdateInput = {
@@ -333,7 +336,7 @@ export type ActionUncheckedUpdateInput = {
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   name?: Prisma.EnumAbilityActionsFieldUpdateOperationsInput | $Enums.AbilityActions
   conditions?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
-  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
+  spaceId?: Prisma.StringFieldUpdateOperationsInput | string
 }
 
 export type ActionCreateManyInput = {
@@ -344,7 +347,7 @@ export type ActionCreateManyInput = {
   removedAt?: Date | string | null
   name?: $Enums.AbilityActions
   conditions?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
-  tenantId: string
+  spaceId: string
 }
 
 export type ActionUpdateManyMutationInput = {
@@ -354,7 +357,6 @@ export type ActionUpdateManyMutationInput = {
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   name?: Prisma.EnumAbilityActionsFieldUpdateOperationsInput | $Enums.AbilityActions
   conditions?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
-  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
 }
 
 export type ActionUncheckedUpdateManyInput = {
@@ -365,7 +367,7 @@ export type ActionUncheckedUpdateManyInput = {
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   name?: Prisma.EnumAbilityActionsFieldUpdateOperationsInput | $Enums.AbilityActions
   conditions?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
-  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
+  spaceId?: Prisma.StringFieldUpdateOperationsInput | string
 }
 
 export type ActionCountOrderByAggregateInput = {
@@ -376,7 +378,7 @@ export type ActionCountOrderByAggregateInput = {
   removedAt?: Prisma.SortOrder
   name?: Prisma.SortOrder
   conditions?: Prisma.SortOrder
-  tenantId?: Prisma.SortOrder
+  spaceId?: Prisma.SortOrder
 }
 
 export type ActionAvgOrderByAggregateInput = {
@@ -390,7 +392,7 @@ export type ActionMaxOrderByAggregateInput = {
   updatedAt?: Prisma.SortOrder
   removedAt?: Prisma.SortOrder
   name?: Prisma.SortOrder
-  tenantId?: Prisma.SortOrder
+  spaceId?: Prisma.SortOrder
 }
 
 export type ActionMinOrderByAggregateInput = {
@@ -400,15 +402,166 @@ export type ActionMinOrderByAggregateInput = {
   updatedAt?: Prisma.SortOrder
   removedAt?: Prisma.SortOrder
   name?: Prisma.SortOrder
-  tenantId?: Prisma.SortOrder
+  spaceId?: Prisma.SortOrder
 }
 
 export type ActionSumOrderByAggregateInput = {
   seq?: Prisma.SortOrder
 }
 
+export type ActionListRelationFilter = {
+  every?: Prisma.ActionWhereInput
+  some?: Prisma.ActionWhereInput
+  none?: Prisma.ActionWhereInput
+}
+
+export type ActionOrderByRelationAggregateInput = {
+  _count?: Prisma.SortOrder
+}
+
 export type EnumAbilityActionsFieldUpdateOperationsInput = {
   set?: $Enums.AbilityActions
+}
+
+export type ActionCreateNestedManyWithoutSpaceInput = {
+  create?: Prisma.XOR<Prisma.ActionCreateWithoutSpaceInput, Prisma.ActionUncheckedCreateWithoutSpaceInput> | Prisma.ActionCreateWithoutSpaceInput[] | Prisma.ActionUncheckedCreateWithoutSpaceInput[]
+  connectOrCreate?: Prisma.ActionCreateOrConnectWithoutSpaceInput | Prisma.ActionCreateOrConnectWithoutSpaceInput[]
+  createMany?: Prisma.ActionCreateManySpaceInputEnvelope
+  connect?: Prisma.ActionWhereUniqueInput | Prisma.ActionWhereUniqueInput[]
+}
+
+export type ActionUncheckedCreateNestedManyWithoutSpaceInput = {
+  create?: Prisma.XOR<Prisma.ActionCreateWithoutSpaceInput, Prisma.ActionUncheckedCreateWithoutSpaceInput> | Prisma.ActionCreateWithoutSpaceInput[] | Prisma.ActionUncheckedCreateWithoutSpaceInput[]
+  connectOrCreate?: Prisma.ActionCreateOrConnectWithoutSpaceInput | Prisma.ActionCreateOrConnectWithoutSpaceInput[]
+  createMany?: Prisma.ActionCreateManySpaceInputEnvelope
+  connect?: Prisma.ActionWhereUniqueInput | Prisma.ActionWhereUniqueInput[]
+}
+
+export type ActionUpdateManyWithoutSpaceNestedInput = {
+  create?: Prisma.XOR<Prisma.ActionCreateWithoutSpaceInput, Prisma.ActionUncheckedCreateWithoutSpaceInput> | Prisma.ActionCreateWithoutSpaceInput[] | Prisma.ActionUncheckedCreateWithoutSpaceInput[]
+  connectOrCreate?: Prisma.ActionCreateOrConnectWithoutSpaceInput | Prisma.ActionCreateOrConnectWithoutSpaceInput[]
+  upsert?: Prisma.ActionUpsertWithWhereUniqueWithoutSpaceInput | Prisma.ActionUpsertWithWhereUniqueWithoutSpaceInput[]
+  createMany?: Prisma.ActionCreateManySpaceInputEnvelope
+  set?: Prisma.ActionWhereUniqueInput | Prisma.ActionWhereUniqueInput[]
+  disconnect?: Prisma.ActionWhereUniqueInput | Prisma.ActionWhereUniqueInput[]
+  delete?: Prisma.ActionWhereUniqueInput | Prisma.ActionWhereUniqueInput[]
+  connect?: Prisma.ActionWhereUniqueInput | Prisma.ActionWhereUniqueInput[]
+  update?: Prisma.ActionUpdateWithWhereUniqueWithoutSpaceInput | Prisma.ActionUpdateWithWhereUniqueWithoutSpaceInput[]
+  updateMany?: Prisma.ActionUpdateManyWithWhereWithoutSpaceInput | Prisma.ActionUpdateManyWithWhereWithoutSpaceInput[]
+  deleteMany?: Prisma.ActionScalarWhereInput | Prisma.ActionScalarWhereInput[]
+}
+
+export type ActionUncheckedUpdateManyWithoutSpaceNestedInput = {
+  create?: Prisma.XOR<Prisma.ActionCreateWithoutSpaceInput, Prisma.ActionUncheckedCreateWithoutSpaceInput> | Prisma.ActionCreateWithoutSpaceInput[] | Prisma.ActionUncheckedCreateWithoutSpaceInput[]
+  connectOrCreate?: Prisma.ActionCreateOrConnectWithoutSpaceInput | Prisma.ActionCreateOrConnectWithoutSpaceInput[]
+  upsert?: Prisma.ActionUpsertWithWhereUniqueWithoutSpaceInput | Prisma.ActionUpsertWithWhereUniqueWithoutSpaceInput[]
+  createMany?: Prisma.ActionCreateManySpaceInputEnvelope
+  set?: Prisma.ActionWhereUniqueInput | Prisma.ActionWhereUniqueInput[]
+  disconnect?: Prisma.ActionWhereUniqueInput | Prisma.ActionWhereUniqueInput[]
+  delete?: Prisma.ActionWhereUniqueInput | Prisma.ActionWhereUniqueInput[]
+  connect?: Prisma.ActionWhereUniqueInput | Prisma.ActionWhereUniqueInput[]
+  update?: Prisma.ActionUpdateWithWhereUniqueWithoutSpaceInput | Prisma.ActionUpdateWithWhereUniqueWithoutSpaceInput[]
+  updateMany?: Prisma.ActionUpdateManyWithWhereWithoutSpaceInput | Prisma.ActionUpdateManyWithWhereWithoutSpaceInput[]
+  deleteMany?: Prisma.ActionScalarWhereInput | Prisma.ActionScalarWhereInput[]
+}
+
+export type ActionCreateWithoutSpaceInput = {
+  id?: string
+  seq?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string | null
+  removedAt?: Date | string | null
+  name?: $Enums.AbilityActions
+  conditions?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+}
+
+export type ActionUncheckedCreateWithoutSpaceInput = {
+  id?: string
+  seq?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string | null
+  removedAt?: Date | string | null
+  name?: $Enums.AbilityActions
+  conditions?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+}
+
+export type ActionCreateOrConnectWithoutSpaceInput = {
+  where: Prisma.ActionWhereUniqueInput
+  create: Prisma.XOR<Prisma.ActionCreateWithoutSpaceInput, Prisma.ActionUncheckedCreateWithoutSpaceInput>
+}
+
+export type ActionCreateManySpaceInputEnvelope = {
+  data: Prisma.ActionCreateManySpaceInput | Prisma.ActionCreateManySpaceInput[]
+  skipDuplicates?: boolean
+}
+
+export type ActionUpsertWithWhereUniqueWithoutSpaceInput = {
+  where: Prisma.ActionWhereUniqueInput
+  update: Prisma.XOR<Prisma.ActionUpdateWithoutSpaceInput, Prisma.ActionUncheckedUpdateWithoutSpaceInput>
+  create: Prisma.XOR<Prisma.ActionCreateWithoutSpaceInput, Prisma.ActionUncheckedCreateWithoutSpaceInput>
+}
+
+export type ActionUpdateWithWhereUniqueWithoutSpaceInput = {
+  where: Prisma.ActionWhereUniqueInput
+  data: Prisma.XOR<Prisma.ActionUpdateWithoutSpaceInput, Prisma.ActionUncheckedUpdateWithoutSpaceInput>
+}
+
+export type ActionUpdateManyWithWhereWithoutSpaceInput = {
+  where: Prisma.ActionScalarWhereInput
+  data: Prisma.XOR<Prisma.ActionUpdateManyMutationInput, Prisma.ActionUncheckedUpdateManyWithoutSpaceInput>
+}
+
+export type ActionScalarWhereInput = {
+  AND?: Prisma.ActionScalarWhereInput | Prisma.ActionScalarWhereInput[]
+  OR?: Prisma.ActionScalarWhereInput[]
+  NOT?: Prisma.ActionScalarWhereInput | Prisma.ActionScalarWhereInput[]
+  id?: Prisma.StringFilter<"Action"> | string
+  seq?: Prisma.IntFilter<"Action"> | number
+  createdAt?: Prisma.DateTimeFilter<"Action"> | Date | string
+  updatedAt?: Prisma.DateTimeNullableFilter<"Action"> | Date | string | null
+  removedAt?: Prisma.DateTimeNullableFilter<"Action"> | Date | string | null
+  name?: Prisma.EnumAbilityActionsFilter<"Action"> | $Enums.AbilityActions
+  conditions?: Prisma.JsonNullableFilter<"Action">
+  spaceId?: Prisma.StringFilter<"Action"> | string
+}
+
+export type ActionCreateManySpaceInput = {
+  id?: string
+  seq?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string | null
+  removedAt?: Date | string | null
+  name?: $Enums.AbilityActions
+  conditions?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+}
+
+export type ActionUpdateWithoutSpaceInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  name?: Prisma.EnumAbilityActionsFieldUpdateOperationsInput | $Enums.AbilityActions
+  conditions?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+}
+
+export type ActionUncheckedUpdateWithoutSpaceInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  seq?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  name?: Prisma.EnumAbilityActionsFieldUpdateOperationsInput | $Enums.AbilityActions
+  conditions?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+}
+
+export type ActionUncheckedUpdateManyWithoutSpaceInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  seq?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  name?: Prisma.EnumAbilityActionsFieldUpdateOperationsInput | $Enums.AbilityActions
+  conditions?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
 }
 
 
@@ -421,7 +574,8 @@ export type ActionSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   removedAt?: boolean
   name?: boolean
   conditions?: boolean
-  tenantId?: boolean
+  spaceId?: boolean
+  space?: boolean | Prisma.SpaceDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["action"]>
 
 export type ActionSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -432,7 +586,8 @@ export type ActionSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extens
   removedAt?: boolean
   name?: boolean
   conditions?: boolean
-  tenantId?: boolean
+  spaceId?: boolean
+  space?: boolean | Prisma.SpaceDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["action"]>
 
 export type ActionSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -443,7 +598,8 @@ export type ActionSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extens
   removedAt?: boolean
   name?: boolean
   conditions?: boolean
-  tenantId?: boolean
+  spaceId?: boolean
+  space?: boolean | Prisma.SpaceDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["action"]>
 
 export type ActionSelectScalar = {
@@ -454,14 +610,25 @@ export type ActionSelectScalar = {
   removedAt?: boolean
   name?: boolean
   conditions?: boolean
-  tenantId?: boolean
+  spaceId?: boolean
 }
 
-export type ActionOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "seq" | "createdAt" | "updatedAt" | "removedAt" | "name" | "conditions" | "tenantId", ExtArgs["result"]["action"]>
+export type ActionOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "seq" | "createdAt" | "updatedAt" | "removedAt" | "name" | "conditions" | "spaceId", ExtArgs["result"]["action"]>
+export type ActionInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  space?: boolean | Prisma.SpaceDefaultArgs<ExtArgs>
+}
+export type ActionIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  space?: boolean | Prisma.SpaceDefaultArgs<ExtArgs>
+}
+export type ActionIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  space?: boolean | Prisma.SpaceDefaultArgs<ExtArgs>
+}
 
 export type $ActionPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "Action"
-  objects: {}
+  objects: {
+    space: Prisma.$SpacePayload<ExtArgs>
+  }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
     seq: number
@@ -470,7 +637,7 @@ export type $ActionPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs
     removedAt: Date | null
     name: $Enums.AbilityActions
     conditions: runtime.JsonValue | null
-    tenantId: string
+    spaceId: string
   }, ExtArgs["result"]["action"]>
   composites: {}
 }
@@ -865,6 +1032,7 @@ readonly fields: ActionFieldRefs;
  */
 export interface Prisma__ActionClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
+  space<T extends Prisma.SpaceDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.SpaceDefaultArgs<ExtArgs>>): Prisma.Prisma__SpaceClient<runtime.Types.Result.GetResult<Prisma.$SpacePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -901,7 +1069,7 @@ export interface ActionFieldRefs {
   readonly removedAt: Prisma.FieldRef<"Action", 'DateTime'>
   readonly name: Prisma.FieldRef<"Action", 'AbilityActions'>
   readonly conditions: Prisma.FieldRef<"Action", 'Json'>
-  readonly tenantId: Prisma.FieldRef<"Action", 'String'>
+  readonly spaceId: Prisma.FieldRef<"Action", 'String'>
 }
     
 
@@ -918,6 +1086,10 @@ export type ActionFindUniqueArgs<ExtArgs extends runtime.Types.Extensions.Intern
    * Omit specific fields from the Action
    */
   omit?: Prisma.ActionOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ActionInclude<ExtArgs> | null
   /**
    * Filter, which Action to fetch.
    */
@@ -937,6 +1109,10 @@ export type ActionFindUniqueOrThrowArgs<ExtArgs extends runtime.Types.Extensions
    */
   omit?: Prisma.ActionOmit<ExtArgs> | null
   /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ActionInclude<ExtArgs> | null
+  /**
    * Filter, which Action to fetch.
    */
   where: Prisma.ActionWhereUniqueInput
@@ -954,6 +1130,10 @@ export type ActionFindFirstArgs<ExtArgs extends runtime.Types.Extensions.Interna
    * Omit specific fields from the Action
    */
   omit?: Prisma.ActionOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ActionInclude<ExtArgs> | null
   /**
    * Filter, which Action to fetch.
    */
@@ -1003,6 +1183,10 @@ export type ActionFindFirstOrThrowArgs<ExtArgs extends runtime.Types.Extensions.
    */
   omit?: Prisma.ActionOmit<ExtArgs> | null
   /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ActionInclude<ExtArgs> | null
+  /**
    * Filter, which Action to fetch.
    */
   where?: Prisma.ActionWhereInput
@@ -1051,6 +1235,10 @@ export type ActionFindManyArgs<ExtArgs extends runtime.Types.Extensions.Internal
    */
   omit?: Prisma.ActionOmit<ExtArgs> | null
   /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ActionInclude<ExtArgs> | null
+  /**
    * Filter, which Actions to fetch.
    */
   where?: Prisma.ActionWhereInput
@@ -1094,6 +1282,10 @@ export type ActionCreateArgs<ExtArgs extends runtime.Types.Extensions.InternalAr
    */
   omit?: Prisma.ActionOmit<ExtArgs> | null
   /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ActionInclude<ExtArgs> | null
+  /**
    * The data needed to create a Action.
    */
   data: Prisma.XOR<Prisma.ActionCreateInput, Prisma.ActionUncheckedCreateInput>
@@ -1127,6 +1319,10 @@ export type ActionCreateManyAndReturnArgs<ExtArgs extends runtime.Types.Extensio
    */
   data: Prisma.ActionCreateManyInput | Prisma.ActionCreateManyInput[]
   skipDuplicates?: boolean
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ActionIncludeCreateManyAndReturn<ExtArgs> | null
 }
 
 /**
@@ -1141,6 +1337,10 @@ export type ActionUpdateArgs<ExtArgs extends runtime.Types.Extensions.InternalAr
    * Omit specific fields from the Action
    */
   omit?: Prisma.ActionOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ActionInclude<ExtArgs> | null
   /**
    * The data needed to update a Action.
    */
@@ -1193,6 +1393,10 @@ export type ActionUpdateManyAndReturnArgs<ExtArgs extends runtime.Types.Extensio
    * Limit how many Actions to update.
    */
   limit?: number
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ActionIncludeUpdateManyAndReturn<ExtArgs> | null
 }
 
 /**
@@ -1207,6 +1411,10 @@ export type ActionUpsertArgs<ExtArgs extends runtime.Types.Extensions.InternalAr
    * Omit specific fields from the Action
    */
   omit?: Prisma.ActionOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ActionInclude<ExtArgs> | null
   /**
    * The filter to search for the Action to update in case it exists.
    */
@@ -1233,6 +1441,10 @@ export type ActionDeleteArgs<ExtArgs extends runtime.Types.Extensions.InternalAr
    * Omit specific fields from the Action
    */
   omit?: Prisma.ActionOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ActionInclude<ExtArgs> | null
   /**
    * Filter which Action to delete.
    */
@@ -1265,4 +1477,8 @@ export type ActionDefaultArgs<ExtArgs extends runtime.Types.Extensions.InternalA
    * Omit specific fields from the Action
    */
   omit?: Prisma.ActionOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ActionInclude<ExtArgs> | null
 }

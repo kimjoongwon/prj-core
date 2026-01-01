@@ -4,7 +4,7 @@ import { FileDto } from "../file.dto";
 
 export class CreateFileDto extends OmitType(FileDto, [
 	...COMMON_ENTITY_FIELDS,
-	"tenant",
+	"space",
 	"classification",
 	"associations",
 ]) {}
