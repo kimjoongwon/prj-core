@@ -182,7 +182,7 @@ export class AuthFacade {
 	}): Promise<LoginResult> {
 		const { email, password } = params;
 		const user = await this.usersService.findUserForAuth(email);
-
+		console.log("user", user);
 		if (!user) {
 			throw new UnauthorizedException("유저가 존재하지 않습니다.");
 		}

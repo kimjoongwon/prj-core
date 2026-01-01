@@ -9,13 +9,13 @@ import { ApiProperty } from "@nestjs/swagger";
  */
 export class LoginPayloadDto extends LoginSchema {
 	@ApiProperty({
-		example: "plate@gmail.com",
+		example: "ceo@f45training.co.kr",
 		description: "사용자 이메일",
 	})
 	email: string;
 
 	@ApiProperty({
-		example: "rkdmf12!@",
+		example: "SuperAdmin123!@#",
 		description: "사용자 비밀번호 (8자 이상)",
 	})
 	password: string;
