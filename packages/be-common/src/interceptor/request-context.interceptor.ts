@@ -1,6 +1,8 @@
 import { CONTEXT_KEYS } from "@cocrepo/constant";
 import { type TenantDto, type UserDto } from "@cocrepo/dto";
+import { Roles } from "@cocrepo/prisma";
 import {
+	BadRequestException,
 	type CallHandler,
 	type ExecutionContext,
 	Injectable,
@@ -40,10 +42,23 @@ export class RequestContextInterceptor implements NestInterceptor {
 
 			// Space ID 설정 (X-Space-ID 헤더)
 			// - 헤더 있음: 해당 Space 데이터만 조회
-			// - 헤더 없음: 모든 데이터 조회 (프론트엔드에서 SUPER_ADMIN인 경우 헤더 안 보냄)
+			// - 헤더 없음: 모든 데이터 조회 (SUPER_ADMIN만 허용)
 			const spaceIdFromHeader = request.headers["x-space-id"] as
 				| string
 				| undefined;
+
+			// x-space-id 헤더가 없는 경우, SUPER_ADMIN인지 확인
+			if (!spaceIdFromHeader && user) {
+				const isSuperAdmin = user.tenants?.some(
+					(t: TenantDto) => t.role?.name === Roles.SUPER_ADMIN,
+				);
+
+				if (!isSuperAdmin) {
+					throw new BadRequestException(
+						"X-Space-ID 헤더가 필요합니다. Space를 선택해주세요.",
+					);
+				}
+			}
 
 			// SPACE_ID 컨텍스트 설정
 			this.cls.set(CONTEXT_KEYS.SPACE_ID, spaceIdFromHeader || undefined);
