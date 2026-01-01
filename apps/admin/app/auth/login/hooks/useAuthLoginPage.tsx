@@ -3,15 +3,19 @@ import { LoginSchema, validateSchema } from "@cocrepo/schema";
 import type { LoginPageState } from "@cocrepo/ui";
 import { useLocalObservable } from "mobx-react-lite";
 import { useRouter } from "next/navigation";
+import { usePersistStore } from "@/stores/AppStoreProvider";
 
 // 로그인 페이지에 필요한 모든 속성을 생성하는 훅
 export const useAuthLoginPage = () => {
 	const router = useRouter();
+	const persistStore = usePersistStore();
 	const loginMutation = useLogin();
 
+	const isDev = process.env.NODE_ENV === "development";
+
 	const state = useLocalObservable<LoginPageState>(() => ({
-		email: "",
-		password: "",
+		email: isDev ? "ceo@f45training.co.kr" : "",
+		password: isDev ? "SuperAdmin123" : "",
 		errorMessage: "",
 	}));
 
@@ -29,15 +33,45 @@ export const useAuthLoginPage = () => {
 		}
 
 		try {
-			await loginMutation.mutateAsync({
+			const response = await loginMutation.mutateAsync({
 				data: {
 					email: result.data.email,
 					password: result.data.password,
 				},
 			});
 
-			// 로그인 성공 시 대시보드로 이동
-			router.push("/");
+			const data = response.data;
+
+			// 1. 토큰 만료 시간 저장
+			if (data?.accessTokenExpiresAt && data?.refreshTokenExpiresAt) {
+				persistStore.setTokenExpiries(
+					data.accessTokenExpiresAt,
+					data.refreshTokenExpiresAt,
+				);
+			}
+
+			// 2. Space 선택 (selectedSpaceId 우선, 없으면 첫 번째 tenant)
+			const tenants = data?.user?.tenants;
+			let targetTenant = data?.selectedSpaceId
+				? tenants?.find((t) => t.spaceId === data.selectedSpaceId)
+				: undefined;
+
+			if (!targetTenant) {
+				targetTenant = tenants?.[0];
+			}
+
+			if (targetTenant?.spaceId && targetTenant?.space?.ground?.name) {
+				const groundName = targetTenant.space.ground.name;
+				persistStore.setSpace(targetTenant.spaceId, groundName);
+				// 3. 대시보드로 이동
+				router.push("/");
+			} else {
+				// Space/Ground가 없는 경우
+				// TODO: Space 선택 페이지 구현 후 활성화
+				// alert("Space를 선택해주세요.");
+				// router.push("/select-space");
+				router.push("/");
+			}
 		} catch (_error) {
 			state.errorMessage =
 				"로그인에 실패했습니다. 이메일과 비밀번호를 확인해주세요.";

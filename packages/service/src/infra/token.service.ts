@@ -17,6 +17,14 @@ import { Request, Response } from "express";
 import { ClsService } from "nestjs-cls";
 import { TokenStorageService } from "./token-storage.service";
 
+/**
+ * 토큰 만료 시간 정보
+ */
+export interface TokenExpiryInfo {
+	accessTokenExpiresAt: number; // Unix timestamp (milliseconds)
+	refreshTokenExpiresAt: number; // Unix timestamp (milliseconds)
+}
+
 @Injectable()
 export class TokenService {
 	private readonly logger = new Logger(TokenService.name);
@@ -118,6 +126,66 @@ export class TokenService {
 		);
 		this.logger.debug(`토큰 생성 및 Redis 저장 완료: userId=${payload.userId}`);
 		return tokenPair;
+	}
+
+	/**
+	 * 토큰 만료 시간 계산
+	 * 설정 파일의 expires/refresh 값을 Unix timestamp로 변환
+	 */
+	calculateTokenExpiryTimes(): TokenExpiryInfo {
+		const authConfig = this.configService.get<AuthConfig>("auth");
+		if (!authConfig) {
+			throw new Error("Auth configuration is not defined.");
+		}
+
+		const now = Date.now();
+
+		// Access Token 만료 시간 계산
+		const accessExpiresMs = this.parseExpiresIn(authConfig.expires);
+		const accessTokenExpiresAt = now + accessExpiresMs;
+
+		// Refresh Token 만료 시간 계산
+		const refreshExpiresMs = this.parseExpiresIn(authConfig.refresh);
+		const refreshTokenExpiresAt = now + refreshExpiresMs;
+
+		return {
+			accessTokenExpiresAt,
+			refreshTokenExpiresAt,
+		};
+	}
+
+	/**
+	 * expires 문자열을 밀리초로 변환
+	 * 예: "1h" -> 3600000, "7d" -> 604800000, "30m" -> 1800000
+	 */
+	private parseExpiresIn(expiresIn: string): number {
+		const match = expiresIn.match(/^(\d+)([smhdw])$/);
+		if (!match) {
+			// 숫자만 있는 경우 초 단위로 처리
+			const seconds = parseInt(expiresIn, 10);
+			if (!isNaN(seconds)) {
+				return seconds * 1000;
+			}
+			throw new Error(`Invalid expires format: ${expiresIn}`);
+		}
+
+		const value = parseInt(match[1], 10);
+		const unit = match[2];
+
+		switch (unit) {
+			case "s":
+				return value * 1000;
+			case "m":
+				return value * 60 * 1000;
+			case "h":
+				return value * 60 * 60 * 1000;
+			case "d":
+				return value * 24 * 60 * 60 * 1000;
+			case "w":
+				return value * 7 * 24 * 60 * 60 * 1000;
+			default:
+				throw new Error(`Unknown time unit: ${unit}`);
+		}
 	}
 
 	/**

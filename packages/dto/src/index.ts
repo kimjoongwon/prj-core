@@ -31,3 +31,4 @@ export * from "./update";
 export * from "./user.dto";
 export * from "./user-association.dto";
 export * from "./user-classification.dto";
+export * from "./users";

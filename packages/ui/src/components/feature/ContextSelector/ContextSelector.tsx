@@ -37,8 +37,8 @@ export const ContextSelector = observer(
 
 		// 현재 컨텍스트 정보
 		const context =
-			persistStore.spaceId && persistStore.spaceName
-				? { id: persistStore.spaceId, name: persistStore.spaceName }
+			persistStore.spaceId && persistStore.groundName
+				? { id: persistStore.spaceId, name: persistStore.groundName }
 				: null;
 
 		const handleChangeContext = () => {

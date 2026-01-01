@@ -6,8 +6,10 @@ import {
 	Header,
 	PageLayout,
 	SideNav,
+	SpaceAlert,
 	UserMenu,
 } from "@cocrepo/ui";
+import { useSpaceGuard } from "@/hooks";
 
 /**
  * Admin 레이아웃
@@ -40,6 +42,8 @@ export default function AdminLayout({
 }: {
 	children: React.ReactNode;
 }) {
+	const { showAlert, handleConfirm, handleDismiss } = useSpaceGuard();
+
 	return (
 		<PageLayout
 			header={
@@ -56,6 +60,16 @@ export default function AdminLayout({
 			leftAside={<SideNav />}
 		>
 			{children}
+
+			{/* Space 미선택 Alert */}
+			{showAlert && (
+				<SpaceAlert
+					title="Space 선택 필요"
+					message="서비스 이용을 위해 Space를 선택해주세요."
+					onConfirm={handleConfirm}
+					onDismiss={handleDismiss}
+				/>
+			)}
 		</PageLayout>
 	);
 }

@@ -5,6 +5,7 @@ import {
 	PasswordField,
 	StringField,
 	UUIDField,
+	UUIDFieldOptional,
 } from "@cocrepo/decorator";
 import { User } from "@cocrepo/prisma";
 import { Exclude } from "class-transformer";
@@ -29,6 +30,12 @@ export class UserDto extends AbstractDto implements User {
 	@Exclude()
 	@PasswordField({ description: ResponseExcludedField })
 	password!: string;
+
+	@UUIDFieldOptional({
+		nullable: true,
+		description: "현재 선택된 Space ID",
+	})
+	selectedSpaceId: string | null = null;
 
 	@ClassField(() => ProfileDto, {
 		isArray: true,

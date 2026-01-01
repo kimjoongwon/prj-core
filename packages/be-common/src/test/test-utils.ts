@@ -26,7 +26,6 @@ export interface TestUserData {
 	spaceId: string;
 	tenants?: Array<{
 		id: string;
-		main: boolean;
 		spaceId: string;
 		roleId: string;
 	}>;
@@ -49,7 +48,6 @@ export const createTestUser = (
 		tenants: [
 			{
 				id: "tenant-test-id",
-				main: true,
 				spaceId: "space-test-id",
 				roleId: "role-test-id",
 			},
@@ -80,7 +78,6 @@ export const createTestUserDto = (
 			{
 				id: "tenant-test-id",
 				name: "Test Tenant",
-				main: true,
 				spaceId: "space-test-id",
 				roleId: "role-test-id",
 				space: {
@@ -114,7 +111,6 @@ export const createTestUserEntity = (overrides: Partial<User> = {}): User => {
 			{
 				id: "tenant-test-id",
 				name: "Test Tenant",
-				main: true,
 				spaceId: "space-test-id",
 				roleId: "role-test-id",
 				space: {

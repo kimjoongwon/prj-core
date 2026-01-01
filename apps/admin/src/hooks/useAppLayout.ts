@@ -134,8 +134,8 @@ export function useAppLayout(): UseAppLayoutReturn {
 
 	// 현재 컨텍스트 (PersistStore에서 가져옴)
 	const currentContext: ContextSelectorContext | null =
-		persistStore.spaceId && persistStore.spaceName
-			? { id: persistStore.spaceId, name: persistStore.spaceName }
+		persistStore.spaceId && persistStore.groundName
+			? { id: persistStore.spaceId, name: persistStore.groundName }
 			: null;
 
 	return {

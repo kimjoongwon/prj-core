@@ -22,6 +22,19 @@ const nextConfig: NextConfig = {
 	],
 	typedRoutes: true,
 	cacheComponents: true,
+	// 개발 환경 프록시 설정
+	async rewrites() {
+		return {
+			// basePath를 무시하고 /api 경로를 프록시
+			beforeFiles: [
+				{
+					source: "/api/:path*",
+					destination: "https://stg.cocdev.co.kr/api/:path*",
+					basePath: false,
+				},
+			],
+		};
+	},
 };
 
 export default nextConfig;

@@ -17,7 +17,6 @@ describe("UsersService", () => {
 		tenants: [
 			{
 				id: "tenant-test-id",
-				main: true,
 				spaceId: "space-test-id",
 				roleId: "role-test-id",
 				space: { id: "space-test-id", name: "Test Space" },
@@ -61,7 +60,7 @@ describe("UsersService", () => {
 		it("ID로 사용자를 조회해야 한다", async () => {
 			// Given
 			const userId = "user-test-id";
-			mockRepository.findByIdWithTenantsAndProfiles.mockResolvedValue(
+			mockRepository.findByIdWithRelations.mockResolvedValue(
 				mockUser as any,
 			);
 
@@ -70,7 +69,7 @@ describe("UsersService", () => {
 
 			// Then
 			expect(
-				mockRepository.findByIdWithTenantsAndProfiles,
+				mockRepository.findByIdWithRelations,
 			).toHaveBeenCalledWith(userId);
 			expect(result).toEqual(mockUser);
 		});
@@ -78,14 +77,14 @@ describe("UsersService", () => {
 		it("사용자가 없으면 null을 반환해야 한다", async () => {
 			// Given
 			const userId = "non-existent-user";
-			mockRepository.findByIdWithTenantsAndProfiles.mockResolvedValue(null);
+			mockRepository.findByIdWithRelations.mockResolvedValue(null);
 
 			// When
 			const result = await service.getByIdWithTenants(userId);
 
 			// Then
 			expect(
-				mockRepository.findByIdWithTenantsAndProfiles,
+				mockRepository.findByIdWithRelations,
 			).toHaveBeenCalledWith(userId);
 			expect(result).toBeNull();
 		});
@@ -95,7 +94,7 @@ describe("UsersService", () => {
 		it("이메일로 인증용 사용자를 조회해야 한다", async () => {
 			// Given
 			const email = "test@example.com";
-			mockRepository.findByEmailWithTenantsAndProfiles.mockResolvedValue(
+			mockRepository.findByEmailWithRelations.mockResolvedValue(
 				mockUser as any,
 			);
 
@@ -104,7 +103,7 @@ describe("UsersService", () => {
 
 			// Then
 			expect(
-				mockRepository.findByEmailWithTenantsAndProfiles,
+				mockRepository.findByEmailWithRelations,
 			).toHaveBeenCalledWith(email);
 			expect(result).toEqual(mockUser);
 		});
@@ -112,14 +111,14 @@ describe("UsersService", () => {
 		it("이메일로 사용자를 찾지 못하면 null을 반환해야 한다", async () => {
 			// Given
 			const email = "nonexistent@example.com";
-			mockRepository.findByEmailWithTenantsAndProfiles.mockResolvedValue(null);
+			mockRepository.findByEmailWithRelations.mockResolvedValue(null);
 
 			// When
 			const result = await service.findUserForAuth(email);
 
 			// Then
 			expect(
-				mockRepository.findByEmailWithTenantsAndProfiles,
+				mockRepository.findByEmailWithRelations,
 			).toHaveBeenCalledWith(email);
 			expect(result).toBeNull();
 		});

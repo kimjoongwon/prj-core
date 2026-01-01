@@ -1,6 +1,11 @@
 import { PRISMA_SERVICE_TOKEN } from "@cocrepo/constant";
 import { ResponseEntity } from "@cocrepo/entity";
-import { PrismaService, TokenService, UsersService } from "@cocrepo/service";
+import {
+	PrismaService,
+	TokenExpiryInfo,
+	TokenService,
+	UsersService,
+} from "@cocrepo/service";
 import { HashedPassword, PlainPassword } from "@cocrepo/vo";
 import {
 	BadRequestException,
@@ -11,6 +16,17 @@ import {
 	UnauthorizedException,
 } from "@nestjs/common";
 import { JwtService } from "@nestjs/jwt";
+
+/**
+ * 로그인 결과 타입
+ */
+export interface LoginResult {
+	accessToken: string;
+	refreshToken: string;
+	accessTokenExpiresAt: number;
+	refreshTokenExpiresAt: number;
+	user: Awaited<ReturnType<UsersService["findUserForAuth"]>>;
+}
 
 /**
  * 인증 Facade
@@ -38,8 +54,13 @@ export class AuthFacade {
 
 	/**
 	 * 새로운 토큰 생성 (리프레시 토큰에서)
+	 * 만료 시간 정보도 함께 반환
 	 */
-	async getNewToken(refreshToken: string) {
+	async getNewToken(refreshToken: string): Promise<{
+		newAccessToken: string;
+		newRefreshToken: string;
+		tokenExpiryInfo: TokenExpiryInfo;
+	}> {
 		const { userId } = this.jwtService.verify<{ userId: string }>(refreshToken);
 
 		// Redis에서 Refresh Token 검증
@@ -58,9 +79,13 @@ export class AuthFacade {
 			userId,
 		});
 
+		// 만료 시간 계산
+		const tokenExpiryInfo = this.tokenService.calculateTokenExpiryTimes();
+
 		return {
 			newAccessToken: tokenPair.accessToken.value,
 			newRefreshToken: tokenPair.refreshToken.value,
+			tokenExpiryInfo,
 		};
 	}
 
@@ -129,7 +154,6 @@ export class AuthFacade {
 				password: hashedPassword.value,
 				tenants: {
 					create: {
-						main: true,
 						spaceId: space.id,
 						roleId: userRole.id,
 					},
@@ -150,8 +174,9 @@ export class AuthFacade {
 
 	/**
 	 * 로그인 처리
+	 * 토큰, 만료 시간, 사용자 정보를 함께 반환
 	 */
-	async login(params: { email: string; password: string }) {
+	async login(params: { email: string; password: string }): Promise<LoginResult> {
 		const { email, password } = params;
 		const user = await this.usersService.findUserForAuth(email);
 
@@ -173,8 +198,14 @@ export class AuthFacade {
 			userId: user.id,
 		});
 
+		// 만료 시간 계산
+		const tokenExpiryInfo = this.tokenService.calculateTokenExpiryTimes();
+
 		return {
-			...tokenPair.toObject(),
+			accessToken: tokenPair.accessToken.value,
+			refreshToken: tokenPair.refreshToken.value,
+			accessTokenExpiresAt: tokenExpiryInfo.accessTokenExpiresAt,
+			refreshTokenExpiresAt: tokenExpiryInfo.refreshTokenExpiresAt,
 			user,
 		};
 	}

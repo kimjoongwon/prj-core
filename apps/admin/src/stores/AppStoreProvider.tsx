@@ -1,5 +1,6 @@
 "use client";
 
+import { setApiPersistStore } from "@cocrepo/api";
 import { ADMIN_MENUS } from "@cocrepo/constant";
 import { type AbilityActions, useAbility } from "@cocrepo/hook";
 import {
@@ -32,6 +33,9 @@ function createRootStore(): RootStore {
 	rootStore.persistStore = new PersistStore({
 		storageKey: "admin-persist",
 	});
+
+	// API 인터셉터에 PersistStore 참조 주입 (x-space-id 헤더용)
+	setApiPersistStore(rootStore.persistStore);
 
 	return rootStore;
 }

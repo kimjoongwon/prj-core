@@ -11,7 +11,12 @@
 //     ├─── Profile (확장: nickname, avatar 등)
 //     ├─── UserClassification ─── Category (분류)
 //     ├─── UserAssociation ─── Group (그룹핑)
-//     └─── Tenant (Bridge: User + Space + Role)
+//     ├─── Tenant (Bridge: User + Space + Role)
+//     └─── selectedSpace ─── Space (현재 선택한 Space)
+//
+// 데이터 관계 개념:
+//   - Tenant: User가 접근 가능한 Space + Role 목록 (권한/자격)
+//   - selectedSpaceId: 현재 작업 중인 Space (상태)
 //
 // ============================================================================
 
@@ -19,19 +24,21 @@
 // @description: 독립적으로 존재하는 핵심 사용자 도메인 객체
 // @extended-by: Profile
 model User {
-  id             String              @id @default(uuid())
-  seq            Int                 @unique @default(autoincrement())
-  updatedAt      DateTime?           @updatedAt @map("updated_at") @db.Timestamptz(6)
-  createdAt      DateTime            @default(now()) @map("created_at") @db.Timestamptz(6)
-  removedAt      DateTime?           @map("removed_at") @db.Timestamptz(6)
-  phone          String              @unique
-  name           String              @unique
-  email          String              @unique
-  password       String
-  profiles       Profile[]
-  tenants        Tenant[]
-  classification UserClassification?
-  associations   UserAssociation[]
+  id              String              @id @default(uuid())
+  seq             Int                 @unique @default(autoincrement())
+  updatedAt       DateTime?           @updatedAt @map("updated_at") @db.Timestamptz(6)
+  createdAt       DateTime            @default(now()) @map("created_at") @db.Timestamptz(6)
+  removedAt       DateTime?           @map("removed_at") @db.Timestamptz(6)
+  phone           String              @unique
+  name            String              @unique
+  email           String              @unique
+  password        String
+  selectedSpaceId String?             @map("selected_space_id")
+  selectedSpace   Space?              @relation("UserSelectedSpace", fields: [selectedSpaceId], references: [id])
+  profiles        Profile[]
+  tenants         Tenant[]
+  classification  UserClassification?
+  associations    UserAssociation[]
 
   @@map("users")
 }

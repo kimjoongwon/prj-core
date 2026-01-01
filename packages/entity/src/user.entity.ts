@@ -1,5 +1,6 @@
 import {
 	Profile,
+	Space,
 	Tenant,
 	UserAssociation,
 	User as UserEntity,
@@ -11,6 +12,16 @@ export class User extends AbstractEntity implements UserEntity {
 	email!: string;
 	phone!: string;
 	password!: string;
+
+	/**
+	 * 현재 선택된 Space ID
+	 */
+	selectedSpaceId: string | null = null;
+
+	/**
+	 * 현재 선택된 Space (관계)
+	 */
+	selectedSpace?: Space | null;
 
 	profiles?: Profile[];
 	tenants?: Tenant[];

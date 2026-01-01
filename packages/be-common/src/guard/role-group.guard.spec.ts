@@ -25,7 +25,6 @@ describe("RoleGroupGuard", () => {
 		tenants: [
 			{
 				id: "tenant-1",
-				main: true,
 				role: {
 					name: "USER",
 					associations: [
@@ -132,7 +131,7 @@ describe("RoleGroupGuard", () => {
 				// Given
 				mockReflector.get.mockReturnValue(["일반"]);
 				const user = createMockUser({
-					tenants: [{ id: "tenant-1", main: false, role: {} }],
+					tenants: [{ id: "tenant-1", role: {} }],
 				});
 				const context = createMockExecutionContext(user);
 
@@ -147,7 +146,7 @@ describe("RoleGroupGuard", () => {
 				// Given
 				mockReflector.get.mockReturnValue(["일반"]);
 				const user = createMockUser({
-					tenants: [{ id: "tenant-1", main: true, role: null }],
+					tenants: [{ id: "tenant-1", role: null }],
 				});
 				const context = createMockExecutionContext(user);
 

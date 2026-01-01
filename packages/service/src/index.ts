@@ -7,6 +7,7 @@ export {
 	createPrismaClient,
 	PrismaService,
 	RedisService,
+	TokenExpiryInfo,
 	TokenService,
 	TokenStorageService,
 } from "./infra";

@@ -13,14 +13,19 @@ describe("AuthController", () => {
 	let mockTokenService: jest.Mocked<TokenService>;
 	let mockClsService: jest.Mocked<ClsService>;
 
+	const mockTokenExpiryInfo = {
+		accessTokenExpiresAt: Date.now() + 60 * 60 * 1000, // 1시간 후
+		refreshTokenExpiresAt: Date.now() + 7 * 24 * 60 * 60 * 1000, // 7일 후
+	};
+
 	const mockUser = {
 		id: "user-test-id",
 		email: "test@example.com",
 		name: "Test User",
+		selectedSpaceId: null,
 		tenants: [
 			{
 				id: "tenant-test-id",
-				main: true,
 				spaceId: "space-test-id",
 			},
 		],
@@ -86,6 +91,8 @@ describe("AuthController", () => {
 			mockAuthFacade.login.mockResolvedValue({
 				accessToken: "access-token",
 				refreshToken: "refresh-token",
+				accessTokenExpiresAt: mockTokenExpiryInfo.accessTokenExpiresAt,
+				refreshTokenExpiresAt: mockTokenExpiryInfo.refreshTokenExpiresAt,
 				user: mockUser as any,
 			});
 
@@ -105,9 +112,16 @@ describe("AuthController", () => {
 			expect(result.accessToken).toBe("access-token");
 			expect(result.refreshToken).toBe("refresh-token");
 			expect(result.mainTenantId).toBe("tenant-test-id");
+			expect(result.accessTokenExpiresAt).toBe(
+				mockTokenExpiryInfo.accessTokenExpiresAt,
+			);
+			expect(result.refreshTokenExpiresAt).toBe(
+				mockTokenExpiryInfo.refreshTokenExpiresAt,
+			);
+			expect(result.selectedSpaceId).toBeNull();
 		});
 
-		it("메인 테넌트가 없으면 빈 문자열을 반환해야 한다", async () => {
+		it("기본 테넌트(첫 번째)가 없으면 빈 문자열을 반환해야 한다", async () => {
 			// Given
 			const loginDto: LoginPayloadDto = {
 				email: "test@example.com",
@@ -115,11 +129,13 @@ describe("AuthController", () => {
 			};
 			const userWithoutMainTenant = {
 				...mockUser,
-				tenants: [{ id: "tenant-id", main: false }],
+				tenants: [],
 			};
 			mockAuthFacade.login.mockResolvedValue({
 				accessToken: "access-token",
 				refreshToken: "refresh-token",
+				accessTokenExpiresAt: mockTokenExpiryInfo.accessTokenExpiresAt,
+				refreshTokenExpiresAt: mockTokenExpiryInfo.refreshTokenExpiresAt,
 				user: userWithoutMainTenant as any,
 			});
 
@@ -129,6 +145,31 @@ describe("AuthController", () => {
 			// Then
 			expect(result.mainTenantId).toBe("");
 		});
+
+		it("selectedSpaceId가 있으면 응답에 포함되어야 한다", async () => {
+			// Given
+			const loginDto: LoginPayloadDto = {
+				email: "test@example.com",
+				password: "password123",
+			};
+			const userWithSelectedSpace = {
+				...mockUser,
+				selectedSpaceId: "selected-space-id",
+			};
+			mockAuthFacade.login.mockResolvedValue({
+				accessToken: "access-token",
+				refreshToken: "refresh-token",
+				accessTokenExpiresAt: mockTokenExpiryInfo.accessTokenExpiresAt,
+				refreshTokenExpiresAt: mockTokenExpiryInfo.refreshTokenExpiresAt,
+				user: userWithSelectedSpace as any,
+			});
+
+			// When
+			const result = await controller.login(loginDto, mockResponse as any);
+
+			// Then
+			expect(result.selectedSpaceId).toBe("selected-space-id");
+		});
 	});
 
 	describe("refreshToken", () => {
@@ -137,6 +178,7 @@ describe("AuthController", () => {
 			mockAuthFacade.getNewToken.mockResolvedValue({
 				newAccessToken: "new-access-token",
 				newRefreshToken: "new-refresh-token",
+				tokenExpiryInfo: mockTokenExpiryInfo,
 			});
 			mockAuthFacade.getCurrentUser.mockResolvedValue(mockUser as any);
 
@@ -155,6 +197,12 @@ describe("AuthController", () => {
 				"new-access-token",
 			);
 			expect(result.accessToken).toBe("new-access-token");
+			expect(result.accessTokenExpiresAt).toBe(
+				mockTokenExpiryInfo.accessTokenExpiresAt,
+			);
+			expect(result.refreshTokenExpiresAt).toBe(
+				mockTokenExpiryInfo.refreshTokenExpiresAt,
+			);
 		});
 
 		it("리프레시 토큰이 없으면 UnauthorizedException을 던져야 한다", async () => {
@@ -175,6 +223,7 @@ describe("AuthController", () => {
 			mockAuthFacade.getNewToken.mockResolvedValue({
 				newAccessToken: "new-access-token",
 				newRefreshToken: "new-refresh-token",
+				tokenExpiryInfo: mockTokenExpiryInfo,
 			});
 			mockAuthFacade.getCurrentUser.mockResolvedValue(null);
 
@@ -191,6 +240,7 @@ describe("AuthController", () => {
 			mockAuthFacade.getNewToken.mockResolvedValue({
 				newAccessToken: "new-access-token",
 				newRefreshToken: "new-refresh-token",
+				tokenExpiryInfo: mockTokenExpiryInfo,
 			});
 
 			// When
@@ -204,6 +254,9 @@ describe("AuthController", () => {
 			expect(mockTokenService.setAccessTokenCookie).toHaveBeenCalled();
 			expect(mockTokenService.setRefreshTokenCookie).toHaveBeenCalled();
 			expect(result.accessToken).toBe("new-access-token");
+			expect(result.accessTokenExpiresAt).toBe(
+				mockTokenExpiryInfo.accessTokenExpiresAt,
+			);
 		});
 	});
 

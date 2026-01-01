@@ -2,7 +2,7 @@ import "dotenv/config";
 import { PrismaPg } from "@prisma/adapter-pg";
 import { hash } from "bcrypt";
 import pg from "pg";
-import { PrismaClient } from "./generated/client/client";
+import { PrismaClient } from "./src/generated/client/client";
 import {
 	groundSeedData,
 	roleAssociationSeedData,
@@ -61,7 +61,6 @@ async function main() {
 				some: {
 					userId: superAdminUser.id,
 					roleId: roles.SUPER_ADMIN.id,
-					main: true,
 				},
 			},
 		},
@@ -72,7 +71,6 @@ async function main() {
 			data: {
 				tenants: {
 					create: {
-						main: true,
 						userId: superAdminUser.id,
 						roleId: roles.SUPER_ADMIN.id,
 					},
@@ -233,7 +231,6 @@ async function createRegularUsersAndGrounds(adminRole: any, _userRole: any) {
 				if (!existingTenant) {
 					await prisma.tenant.create({
 						data: {
-							main: true,
 							userId: adminUser.id,
 							spaceId: space.id,
 							roleId: adminRole.id,
@@ -277,26 +274,34 @@ async function createRegularUsersAndGrounds(adminRole: any, _userRole: any) {
 	// 일반 유저들 생성 및 그라운드에 할당
 	for (let userIndex = 0; userIndex < userSeedData.length; userIndex++) {
 		const userData = userSeedData[userIndex];
-		const userMapping = userGroundMapping[userIndex];
+		// 이메일 기반으로 유저-그라운드 매핑 찾기
+		const userMapping = userGroundMapping.find(
+			(m) => m.userEmail === userData.email,
+		);
+
+		if (!userMapping) {
+			console.log(`유저 매핑을 찾을 수 없음: ${userData.email}`);
+			continue;
+		}
 
 		try {
 			// 유저가 이미 존재하는지 확인
 			const existingUser = await prisma.user.findFirst({
-				where: { name: userData.profile.name },
+				where: { email: userData.email },
 			});
 
 			if (!existingUser) {
 				const hashedPassword = await hash(userData.password, 10);
 
-				// 유저가 소속될 그라운드들
+				// 유저가 소속될 그라운드들 (groundNames 기반으로 찾기)
 				const userGrounds: Array<{
 					ground: any;
 					index: number;
 					spaceId: string;
 				}> = [];
-				for (const groundIndex of userMapping.groundIndices) {
+				for (const groundName of userMapping.groundNames) {
 					const groundInfo = createdGrounds.find(
-						(g) => g.index === groundIndex,
+						(g) => g.ground.name === groundName,
 					);
 					if (groundInfo) {
 						userGrounds.push(groundInfo);

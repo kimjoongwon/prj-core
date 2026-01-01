@@ -88,9 +88,14 @@ export class AuthController {
 		@Body() loginDto: LoginPayloadDto,
 		@Res({ passthrough: true }) res: Response,
 	) {
-		const { accessToken, refreshToken, user } =
-			await this.authFacade.login(loginDto);
-		const mainTenantId = user.tenants?.find((tenant) => tenant.main)?.id ?? "";
+		const {
+			accessToken,
+			refreshToken,
+			accessTokenExpiresAt,
+			refreshTokenExpiresAt,
+			user,
+		} = await this.authFacade.login(loginDto);
+		const mainTenantId = user?.tenants?.[0]?.id ?? "";
 
 		this.tokenService.setAccessTokenCookie(res, accessToken);
 		this.tokenService.setRefreshTokenCookie(res, refreshToken);
@@ -98,6 +103,9 @@ export class AuthController {
 		return plainToInstance(TokenDto, {
 			accessToken,
 			refreshToken,
+			accessTokenExpiresAt,
+			refreshTokenExpiresAt,
+			selectedSpaceId: user?.selectedSpaceId ?? null,
 			user: plainToInstance(UserDto, user),
 			mainTenantId,
 		});
@@ -128,7 +136,7 @@ export class AuthController {
 			);
 		}
 
-		const { newAccessToken, newRefreshToken } =
+		const { newAccessToken, newRefreshToken, tokenExpiryInfo } =
 			await this.authFacade.getNewToken(refreshToken);
 
 		this.tokenService.setAccessTokenCookie(res, newAccessToken);
@@ -140,11 +148,14 @@ export class AuthController {
 			throw new UnauthorizedException(AuthErrorMessages.USER_NOT_FOUND);
 		}
 
-		const mainTenantId = user.tenants?.find((tenant) => tenant.main)?.id ?? "";
+		const mainTenantId = user.tenants?.[0]?.id ?? "";
 
 		return plainToInstance(TokenDto, {
 			accessToken: newAccessToken,
 			refreshToken: newRefreshToken,
+			accessTokenExpiresAt: tokenExpiryInfo.accessTokenExpiresAt,
+			refreshTokenExpiresAt: tokenExpiryInfo.refreshTokenExpiresAt,
+			selectedSpaceId: user.selectedSpaceId ?? null,
 			user: plainToInstance(UserDto, user),
 			mainTenantId,
 		});
@@ -165,12 +176,12 @@ export class AuthController {
 		@Res({ passthrough: true }) res: Response,
 	): Promise<TokenDto> {
 		const refreshToken = req.cookies.refreshToken;
-		const { newAccessToken, newRefreshToken } =
+		const { newAccessToken, newRefreshToken, tokenExpiryInfo } =
 			await this.authFacade.getNewToken(refreshToken);
 
 		const user = req.user;
 
-		const tenant = user.tenants?.find((tenant) => tenant.main);
+		const tenant = user.tenants?.[0];
 		this.cls.set("hi", "hi");
 		this.tokenService.setAccessTokenCookie(res, newAccessToken);
 		this.tokenService.setRefreshTokenCookie(res, newRefreshToken);
@@ -179,6 +190,9 @@ export class AuthController {
 		return plainToInstance(TokenDto, {
 			accessToken: newAccessToken,
 			refreshToken: newRefreshToken,
+			accessTokenExpiresAt: tokenExpiryInfo.accessTokenExpiresAt,
+			refreshTokenExpiresAt: tokenExpiryInfo.refreshTokenExpiresAt,
+			selectedSpaceId: user.selectedSpaceId ?? null,
 			mainTenantId: tenant?.id || "",
 			user: plainToInstance(UserDto, user),
 		});

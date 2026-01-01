@@ -262,3 +262,6 @@ export * from "./userClassificationDto";
 export * from "./userDto";
 export * from "./verifyToken200AllOf";
 export * from "./zn";
+export * from './updateSelectedSpace200AllOf';
+export * from './updateSelectedSpacePayloadDto';
+export * from './updateSelectedSpaceResponseDto';

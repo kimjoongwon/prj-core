@@ -37,11 +37,11 @@ export class RoleCategoryGuard implements CanActivate {
 			throw new ForbiddenException("사용자에게 할당된 테넌트가 없습니다.");
 		}
 
-		// Find main tenant as fallback
-		const tenant = user.tenants.find((tenant) => tenant.main);
+		// Find first tenant as default
+		const tenant = user.tenants[0];
 
 		if (!tenant) {
-			throw new ForbiddenException("메인 테넌트가 설정되지 않았습니다.");
+			throw new ForbiddenException("기본 테넌트가 설정되지 않았습니다.");
 		}
 
 		if (!tenant.role) {

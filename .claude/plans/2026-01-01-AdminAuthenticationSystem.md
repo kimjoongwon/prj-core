@@ -162,14 +162,15 @@ interface LoginResponse {
     refreshToken: string;          // JWT Refresh Token (httpOnly 쿠키로 설정됨)
     accessTokenExpiresAt: number;  // ⭐ Access Token 만료 시간 (Unix timestamp)
     refreshTokenExpiresAt: number; // ⭐ Refresh Token 만료 시간 (Unix timestamp)
-    mainTenantId: string;          // 메인 테넌트 ID
+    selectedSpaceId: string | null; // ⭐ 마지막 선택한 Space ID (User.selectedSpaceId)
     user: {
       id: string;
       email: string;
       name: string;
+      selectedSpaceId: string | null; // ⭐ User 레벨에도 포함
       tenants: Array<{
         id: string;
-        spaceId: string;           // ⭐ Space ID (첫 번째 사용)
+        spaceId: string;           // Space ID
         space: {
           id: string;
           ground: {                // ⭐ Ground 정보 (Space와 1:1 join)
@@ -184,9 +185,14 @@ interface LoginResponse {
 }
 ```
 
+> **selectedSpaceId 우선순위:**
+> 1. `selectedSpaceId`가 있으면 해당 Space 사용 (마지막 선택 복원)
+> 2. `selectedSpaceId`가 null이면 `tenants[0].spaceId` 사용 (첫 로그인)
+
 > **백엔드 수정 필요:**
 > 1. `accessTokenExpiresAt`, `refreshTokenExpiresAt` 필드 추가
 > 2. `user.tenants[].space.ground` join 추가 (별도 grounds API 호출 불필요)
+> 3. `selectedSpaceId` 필드 추가 (User.selectedSpaceId 반환)
 
 ### 3.4 데이터 관계 구조
 
@@ -195,11 +201,14 @@ interface LoginResponse {
 │  Prisma 스키마 관계                                              │
 ├─────────────────────────────────────────────────────────────────┤
 │                                                                  │
-│  User ──── Tenant (Bridge) ──── Space ◄──── Ground (1:1)        │
-│              │                    │            │                 │
-│              └─ spaceId           │            └─ name, label    │
-│                                   │               address, etc   │
-│                                   │                              │
+│  User ──┬── selectedSpaceId ───────► Space (현재 작업 중인 공간) │
+│         │                              │                         │
+│         └── Tenant (Bridge) ──────► Space ◄──── Ground (1:1)    │
+│               │                        │            │            │
+│               └─ spaceId, roleId       │            └─ name 등   │
+│                                        │                         │
+│  User.selectedSpaceId: 현재 선택된 Space (작업 상태)             │
+│  Tenant: 접근 가능한 Space + Role 목록 (권한/자격)               │
 │  Space: 추상적 컨테이너 (ID만 존재)                               │
 │  Ground: 구체화된 정보 (name, address, phone, email 등)          │
 │                                                                  │
@@ -207,9 +216,10 @@ interface LoginResponse {
 ```
 
 **핵심 포인트:**
+- `User.selectedSpaceId`: 마지막으로 선택한 Space (DB 저장)
 - `/api/v1/grounds` 별도 호출 **불필요**
-- Login 응답에서 `user.tenants[0].space.ground.name` 으로 Ground 이름 추출
-- `spaceId`는 `user.tenants[0].spaceId` 사용
+- Login 응답에서 `selectedSpaceId` 또는 `user.tenants[0].spaceId` 사용
+- **개념 분리**: Tenant는 "권한", selectedSpaceId는 "현재 상태"
 
 ### 3.5 Store 구조 (수정)
 
@@ -329,16 +339,28 @@ async function handleLoginSuccess(response: LoginResponse) {
   const {
     accessTokenExpiresAt,
     refreshTokenExpiresAt,
+    selectedSpaceId,
     user
   } = response.data;
 
   // 1. 토큰 만료 시간 저장 (실제 토큰은 httpOnly 쿠키로 자동 저장됨)
   persistStore.setTokenExpiries(accessTokenExpiresAt, refreshTokenExpiresAt);
 
-  // 2. Space 자동 선택 (첫 번째 tenant 사용)
-  const firstTenant = user.tenants[0];
-  if (firstTenant?.space?.ground) {
-    const { spaceId, space } = firstTenant;
+  // 2. Space 선택 (selectedSpaceId 우선, 없으면 첫 번째 tenant)
+  let targetTenant: Tenant | undefined;
+
+  if (selectedSpaceId) {
+    // DB에 저장된 마지막 선택 Space 복원
+    targetTenant = user.tenants.find(t => t.spaceId === selectedSpaceId);
+  }
+
+  if (!targetTenant) {
+    // selectedSpaceId가 없거나 유효하지 않으면 첫 번째 tenant 사용
+    targetTenant = user.tenants[0];
+  }
+
+  if (targetTenant?.space?.ground) {
+    const { spaceId, space } = targetTenant;
     const groundName = space.ground.name;
 
     // PersistStore에 저장 (x-space-id 헤더용)
@@ -363,7 +385,14 @@ Login API 응답
     ├─ accessTokenExpiresAt ───► PersistStore (만료 시간 저장)
     ├─ refreshTokenExpiresAt ──► PersistStore
     │
-    └─ user.tenants[0]
+    ├─ selectedSpaceId ────────► Space 선택 기준 (우선순위 1)
+    │       │
+    │       ▼
+    │   user.tenants에서 해당 spaceId를 가진 tenant 찾기
+    │       │
+    │       └─ 없으면 user.tenants[0] 사용 (우선순위 2)
+    │
+    └─ targetTenant
          ├─ spaceId ───────────► PersistStore.spaceId
          └─ space.ground.name ─► PersistStore.groundName
 ```
@@ -413,14 +442,52 @@ function checkSpaceSelection() {
 
 | 우선순위 | 작업 | 설명 |
 |:--------:|------|------|
-| 0 | Login API 응답 수정 | `accessTokenExpiresAt`, `refreshTokenExpiresAt` 필드 추가 |
+| 0-1 | Prisma 스키마 수정 | `User.selectedSpaceId` 필드 추가 |
+| 0-2 | Login API 응답 수정 | `accessTokenExpiresAt`, `refreshTokenExpiresAt`, `selectedSpaceId` 필드 추가 |
+| 0-3 | Space 변경 API 추가 | `PATCH /api/v1/users/me/selected-space` 엔드포인트 추가 |
+
+#### Prisma 스키마 변경
+
+```prisma
+// packages/prisma/schema/user.prisma
+model User {
+  // ... 기존 필드들
+  selectedSpaceId  String?   @map("selected_space_id")
+  selectedSpace    Space?    @relation("UserSelectedSpace", fields: [selectedSpaceId], references: [id])
+  // ...
+}
+```
+
+#### Space 변경 API
+
+```typescript
+// PATCH /api/v1/users/me/selected-space
+// Request Body
+interface UpdateSelectedSpaceRequest {
+  spaceId: string;
+}
+
+// Response
+interface UpdateSelectedSpaceResponse {
+  httpStatus: number;
+  message: string;
+  data: {
+    selectedSpaceId: string;
+  };
+}
+```
+
+**호출 시점:**
+- 사용자가 헤더의 Space 드롭다운에서 다른 Space를 선택할 때
+- Space 선택 페이지(`/select-space`)에서 Space를 선택할 때
 
 ### 5.2 신규 생성이 필요한 파일
 
 | 우선순위 | 파일 | 설명 |
 |:--------:|------|------|
 | 1 | `apps/admin/src/hooks/useSpaceGuard.ts` | Space 선택 여부 확인 훅 |
-| 2 | `packages/ui/src/components/widget/SpaceAlert/SpaceAlert.tsx` | Space 선택 Alert 컴포넌트 |
+| 2 | `apps/admin/src/hooks/useChangeSpace.ts` | Space 변경 훅 (API 호출 + Store 업데이트) |
+| 3 | `packages/ui/src/components/widget/SpaceAlert/SpaceAlert.tsx` | Space 선택 Alert 컴포넌트 |
 
 ### 5.3 수정이 필요한 파일
 
@@ -454,17 +521,25 @@ export function useAuthLoginPage() {
         const {
           accessTokenExpiresAt,
           refreshTokenExpiresAt,
+          selectedSpaceId,  // ⭐ 마지막 선택한 Space
           user
         } = response.data!;
 
         // 1. 토큰 만료 시간 저장 (실제 토큰은 httpOnly 쿠키로 자동 저장됨)
         persistStore?.setTokenExpiries(accessTokenExpiresAt, refreshTokenExpiresAt);
 
-        // 2. Space 자동 선택 (첫 번째 tenant 사용)
-        const firstTenant = user.tenants?.[0];
-        if (firstTenant?.spaceId && firstTenant?.space?.ground) {
-          const groundName = firstTenant.space.ground.name;
-          persistStore?.setSpace(firstTenant.spaceId, groundName);
+        // 2. Space 선택 (selectedSpaceId 우선, 없으면 첫 번째 tenant)
+        let targetTenant = selectedSpaceId
+          ? user.tenants?.find(t => t.spaceId === selectedSpaceId)
+          : undefined;
+
+        if (!targetTenant) {
+          targetTenant = user.tenants?.[0];
+        }
+
+        if (targetTenant?.spaceId && targetTenant?.space?.ground) {
+          const groundName = targetTenant.space.ground.name;
+          persistStore?.setSpace(targetTenant.spaceId, groundName);
           // 3. 대시보드로 이동
           router.push("/");
         } else {
@@ -550,7 +625,91 @@ export function useSpaceGuard() {
 }
 ```
 
-### 6.4 Admin Layout에 Space Guard 적용
+### 6.4 useChangeSpace 훅 (Space 변경)
+
+**파일:** `apps/admin/src/hooks/useChangeSpace.ts`
+
+```typescript
+"use client";
+
+import { useCallback } from "react";
+import { usePersistStore } from "@/stores/AppStoreProvider";
+import { useUpdateSelectedSpace } from "@cocrepo/api";
+
+interface UseChangeSpaceOptions {
+  onSuccess?: () => void;
+  onError?: (error: Error) => void;
+}
+
+/**
+ * Space 변경 훅
+ * - API 호출로 DB에 selectedSpaceId 저장
+ * - PersistStore 업데이트 (x-space-id 헤더용)
+ */
+export function useChangeSpace(options?: UseChangeSpaceOptions) {
+  const persistStore = usePersistStore();
+
+  const mutation = useUpdateSelectedSpace({
+    mutation: {
+      onSuccess: (response) => {
+        options?.onSuccess?.();
+      },
+      onError: (error) => {
+        options?.onError?.(error);
+      },
+    },
+  });
+
+  const changeSpace = useCallback(
+    async (spaceId: string, groundName: string) => {
+      // 1. API 호출 (DB 저장)
+      await mutation.mutateAsync({ data: { spaceId } });
+
+      // 2. PersistStore 업데이트 (x-space-id 헤더용)
+      persistStore?.setSpace(spaceId, groundName);
+    },
+    [mutation, persistStore]
+  );
+
+  return {
+    changeSpace,
+    isLoading: mutation.isPending,
+  };
+}
+```
+
+**사용 예시 (헤더 Space 드롭다운):**
+
+```typescript
+function SpaceSelector() {
+  const { changeSpace, isLoading } = useChangeSpace({
+    onSuccess: () => {
+      // 필요시 페이지 새로고침 또는 데이터 refetch
+      window.location.reload();
+    },
+  });
+
+  const handleSelectSpace = (tenant: Tenant) => {
+    changeSpace(tenant.spaceId, tenant.space.ground.name);
+  };
+
+  return (
+    <Dropdown>
+      {tenants.map(tenant => (
+        <DropdownItem
+          key={tenant.id}
+          onClick={() => handleSelectSpace(tenant)}
+          disabled={isLoading}
+        >
+          {tenant.space.ground.name}
+        </DropdownItem>
+      ))}
+    </Dropdown>
+  );
+}
+```
+
+### 6.5 Admin Layout에 Space Guard 적용
 
 **파일:** `apps/admin/app/(admin)/layout.tsx`
 
@@ -689,14 +848,24 @@ describe('useAuthLoginPage', () => {
     data: {
       accessTokenExpiresAt: Date.now() + 60 * 60 * 1000,
       refreshTokenExpiresAt: Date.now() + 7 * 24 * 60 * 60 * 1000,
+      selectedSpaceId: null,  // 첫 로그인
       user: {
-        tenants: [{
-          spaceId: 'space-1',
-          space: {
-            id: 'space-1',
-            ground: { id: 'ground-1', name: 'Ground 1', label: null }
+        tenants: [
+          {
+            spaceId: 'space-1',
+            space: {
+              id: 'space-1',
+              ground: { id: 'ground-1', name: 'Ground 1', label: null }
+            }
+          },
+          {
+            spaceId: 'space-2',
+            space: {
+              id: 'space-2',
+              ground: { id: 'ground-2', name: 'Ground 2', label: null }
+            }
           }
-        }]
+        ]
       },
     },
   };
@@ -720,10 +889,10 @@ describe('useAuthLoginPage', () => {
     );
   });
 
-  it('로그인 성공 시 첫 번째 Space/Ground가 자동 선택된다', async () => {
+  it('selectedSpaceId가 없으면 첫 번째 tenant가 선택된다', async () => {
     // Given
     const { result } = renderHook(() => useAuthLoginPage());
-    mockLoginApi.mockResolvedValue(mockLoginResponse);
+    mockLoginApi.mockResolvedValue(mockLoginResponse); // selectedSpaceId: null
 
     // When
     await act(async () => {
@@ -734,6 +903,28 @@ describe('useAuthLoginPage', () => {
 
     // Then
     expect(mockPersistStore.setSpace).toHaveBeenCalledWith('space-1', 'Ground 1');
+    expect(mockRouter.push).toHaveBeenCalledWith('/');
+  });
+
+  it('selectedSpaceId가 있으면 해당 Space가 선택된다', async () => {
+    // Given
+    const { result } = renderHook(() => useAuthLoginPage());
+    mockLoginApi.mockResolvedValue({
+      data: {
+        ...mockLoginResponse.data,
+        selectedSpaceId: 'space-2',  // 마지막 선택한 Space
+      },
+    });
+
+    // When
+    await act(async () => {
+      result.current.state.email = 'test@test.com';
+      result.current.state.password = 'password123';
+      await result.current.onClickLoginButton();
+    });
+
+    // Then
+    expect(mockPersistStore.setSpace).toHaveBeenCalledWith('space-2', 'Ground 2');
     expect(mockRouter.push).toHaveBeenCalledWith('/');
   });
 
@@ -757,6 +948,7 @@ describe('useAuthLoginPage', () => {
     mockLoginApi.mockResolvedValue({
       data: {
         ...mockLoginResponse.data,
+        selectedSpaceId: null,
         user: { tenants: [] }, // 빈 tenants
       },
     });
@@ -933,7 +1125,6 @@ describe('관리자 로그인 E2E', () => {
 
 | 파일 | 작업 |
 |------|------|
-| `packages/vo/src/auth/token/index.ts` | TokenExpiry export 추가 |
 | `packages/store/src/stores/persistStore.ts` | 토큰 만료 시간 필드 및 메서드 추가 |
 | `apps/admin/app/auth/login/hooks/useAuthLoginPage.tsx` | 토큰 만료 시간 저장 + Space 선택 로직 추가 |
 | `packages/api/src/libs/customAxios.ts` | x-space-id 인터셉터 추가 |
@@ -950,13 +1141,26 @@ describe('관리자 로그인 E2E', () => {
 
 ## 10. 구현 우선순위
 
-1. **PersistStore 수정** - 토큰 만료 시간 필드 및 메서드 추가
-2. **useAuthLoginPage 수정** - 로그인 성공 후 토큰 저장 및 Space 자동 선택
-3. **x-space-id 인터셉터 추가** - 모든 API 요청에 헤더 설정
-4. **useSpaceGuard 훅 생성** - Space 미선택 감지
-5. **SpaceAlert 컴포넌트 생성** - Alert UI
-6. **Admin Layout 수정** - Space Guard 적용
-7. **테스트 코드 작성** - 단위/통합/E2E 테스트
+### 백엔드 (선행 조건)
+
+| 순서 | 작업 | 설명 |
+|:----:|------|------|
+| 0-1 | Prisma 스키마 수정 | `User.selectedSpaceId` 필드 추가 및 마이그레이션 |
+| 0-2 | Login API 응답 수정 | `selectedSpaceId`, 토큰 만료 시간 필드 추가 |
+| 0-3 | Space 변경 API 추가 | `PATCH /api/v1/users/me/selected-space` |
+
+### 프론트엔드
+
+| 순서 | 작업 | 설명 |
+|:----:|------|------|
+| 1 | PersistStore 수정 | 토큰 만료 시간 필드 및 메서드 추가 |
+| 2 | useAuthLoginPage 수정 | `selectedSpaceId` 우선 선택 로직 구현 |
+| 3 | x-space-id 인터셉터 추가 | 모든 API 요청에 헤더 설정 |
+| 4 | useSpaceGuard 훅 생성 | Space 미선택 감지 |
+| 5 | SpaceAlert 컴포넌트 생성 | Alert UI |
+| 6 | Admin Layout 수정 | Space Guard 적용 |
+| 7 | Space 변경 훅 추가 | `useChangeSpace` - API 호출 + Store 업데이트 |
+| 8 | 테스트 코드 작성 | 단위/통합/E2E 테스트 |
 
 ---
 

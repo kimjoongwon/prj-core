@@ -7,6 +7,34 @@ export const AXIOS_INSTANCE = Axios.create({
 	withCredentials: true, // 쿠키/인증 정보 포함
 }); // Orval 생성 코드가 환경별 완전한 URL을 제공
 
+// PersistStore 참조 (앱 초기화 시 설정)
+interface PersistStoreRef {
+	spaceId: string | null;
+}
+let persistStoreRef: PersistStoreRef | null = null;
+
+/**
+ * API 요청에 x-space-id 헤더를 추가하기 위한 PersistStore 참조 설정
+ * 앱 초기화 시 호출하여 Store 참조를 주입합니다.
+ */
+export function setApiPersistStore(store: PersistStoreRef) {
+	persistStoreRef = store;
+}
+
+// Request 인터셉터: x-space-id 헤더 추가
+AXIOS_INSTANCE.interceptors.request.use(
+	(config) => {
+		// spaceId가 있으면 헤더에 추가
+		if (persistStoreRef?.spaceId) {
+			config.headers["x-space-id"] = persistStoreRef.spaceId;
+		}
+		return config;
+	},
+	(error) => {
+		return Promise.reject(error);
+	},
+);
+
 // 409 에러 처리를 위한 response 인터셉터 추가
 AXIOS_INSTANCE.interceptors.response.use(
 	(response) => response,

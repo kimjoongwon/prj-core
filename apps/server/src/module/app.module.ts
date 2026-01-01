@@ -19,6 +19,7 @@ import { AuthModule } from "./auth";
 import { globalModules } from "./global.module";
 import { GroundsModule } from "./grounds";
 import { PrismaModule } from "./prisma.module";
+import { UsersModule } from "./users";
 
 @Module({
 	imports: [
@@ -26,6 +27,7 @@ import { PrismaModule } from "./prisma.module";
 		PrismaModule,
 		AuthModule,
 		GroundsModule,
+		UsersModule,
 		// Resource Modules는 필요할 때 추가합니다.
 		// 가이드: .claude/agents/controller-builder.md
 		RouterModule.register([
@@ -42,6 +44,10 @@ import { PrismaModule } from "./prisma.module";
 							{
 								path: "grounds",
 								module: GroundsModule,
+							},
+							{
+								path: "users",
+								module: UsersModule,
 							},
 							// 새로운 Resource 라우트는 여기에 추가
 						],

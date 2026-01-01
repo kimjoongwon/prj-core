@@ -1,5 +1,10 @@
-import { ClassField, StringField } from "@cocrepo/decorator";
-import { ApiProperty } from "@nestjs/swagger";
+import {
+	ClassField,
+	NumberFieldOptional,
+	StringField,
+	StringFieldOptional,
+} from "@cocrepo/decorator";
+import { ApiProperty, ApiPropertyOptional } from "@nestjs/swagger";
 import { UserDto } from "../user.dto";
 
 export class TokenDto {
@@ -30,4 +35,26 @@ export class TokenDto {
 	})
 	@StringField()
 	mainTenantId: string;
+
+	@ApiProperty({
+		description: "Access Token 만료 시간 (Unix timestamp, milliseconds)",
+		example: 1704067200000,
+	})
+	@NumberFieldOptional()
+	accessTokenExpiresAt?: number;
+
+	@ApiProperty({
+		description: "Refresh Token 만료 시간 (Unix timestamp, milliseconds)",
+		example: 1704672000000,
+	})
+	@NumberFieldOptional()
+	refreshTokenExpiresAt?: number;
+
+	@ApiPropertyOptional({
+		description: "마지막으로 선택한 Space ID (User.selectedSpaceId)",
+		example: "uuid-string",
+		nullable: true,
+	})
+	@StringFieldOptional({ nullable: true })
+	selectedSpaceId?: string | null;
 }

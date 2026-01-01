@@ -10,23 +10,26 @@
 //     │
 //     ├─── SpaceClassification ─── Category (분류)
 //     ├─── SpaceAssociation ─── Group (그룹핑)
-//     └─── Tenant (Bridge: User + Space + Role)
+//     ├─── Tenant (Bridge: User + Space + Role)
+//     └─── usersWithSelected ─── User (이 Space를 선택한 사용자들)
 //
 // ============================================================================
 
 // @schema-type: ABSTRACT ENTITY
 // @description: 구체적인 구현 없이 Ground에게 확장 기반을 제공하는 추상 컨테이너
 // @materialized-by: Ground
+// @connected-by: User.selectedSpaceId (현재 작업 중인 Space로 선택한 사용자들)
 model Space {
-  id             String               @id @default(uuid())
-  seq            Int                  @unique @default(autoincrement())
-  createdAt      DateTime             @default(now()) @map("created_at") @db.Timestamptz(6)
-  updatedAt      DateTime?            @updatedAt @map("updated_at") @db.Timestamptz(6)
-  removedAt      DateTime?            @map("removed_at") @db.Timestamptz(6)
-  ground         Ground?
-  associations   SpaceAssociation[]
-  classification SpaceClassification?
-  tenants        Tenant[]
+  id                String               @id @default(uuid())
+  seq               Int                  @unique @default(autoincrement())
+  createdAt         DateTime             @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt         DateTime?            @updatedAt @map("updated_at") @db.Timestamptz(6)
+  removedAt         DateTime?            @map("removed_at") @db.Timestamptz(6)
+  ground            Ground?
+  associations      SpaceAssociation[]
+  classification    SpaceClassification?
+  tenants           Tenant[]
+  usersWithSelected User[]               @relation("UserSelectedSpace")
 
   @@map("spaces")
 }

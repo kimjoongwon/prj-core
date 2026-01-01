@@ -33,12 +33,15 @@ import type {
 
 import type {
   GetAll200AllOf,
+  GetMyGrounds200AllOf,
   GetNewToken200AllOf,
   Login200AllOf,
   LoginPayloadDto,
   RefreshToken200AllOf,
   SignUpPayloadDto,
   SignUpUser201AllOf,
+  UpdateSelectedSpace200AllOf,
+  UpdateSelectedSpacePayloadDto,
   VerifyToken200AllOf
 } from './model';
 
@@ -933,3 +936,282 @@ export function useGetAllSuspenseInfinite<TData = InfiniteData<Awaited<ReturnTyp
 
   return query;
 }
+
+
+
+
+
+/**
+ * 로그인한 사용자의 현재 Space에 해당하는 Ground 목록을 조회합니다. X-Space-ID 헤더가 필요합니다.
+ * @summary 내 Space의 Ground 목록 조회
+ */
+export const getMyGrounds = (
+    
+ options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
+) => {
+      
+      
+      return customInstance<GetMyGrounds200AllOf>(
+      {url: `/api/v1/grounds/grounds/my`, method: 'GET', signal
+    },
+      options);
+    }
+  
+
+
+
+export const getGetMyGroundsQueryKey = () => {
+    return [
+    `/api/v1/grounds/grounds/my`
+    ] as const;
+    }
+
+export const getGetMyGroundsInfiniteQueryKey = () => {
+    return [
+    'infinite', `/api/v1/grounds/grounds/my`
+    ] as const;
+    }
+
+    
+export const getGetMyGroundsQueryOptions = <TData = Awaited<ReturnType<typeof getMyGrounds>>, TError = ErrorType<void>>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getMyGrounds>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetMyGroundsQueryKey();
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getMyGrounds>>> = ({ signal }) => getMyGrounds(requestOptions, signal);
+
+      
+
+      
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getMyGrounds>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetMyGroundsQueryResult = NonNullable<Awaited<ReturnType<typeof getMyGrounds>>>
+export type GetMyGroundsQueryError = ErrorType<void>
+
+
+export function useGetMyGrounds<TData = Awaited<ReturnType<typeof getMyGrounds>>, TError = ErrorType<void>>(
+  options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getMyGrounds>>, TError, TData>> & Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getMyGrounds>>,
+          TError,
+          Awaited<ReturnType<typeof getMyGrounds>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetMyGrounds<TData = Awaited<ReturnType<typeof getMyGrounds>>, TError = ErrorType<void>>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getMyGrounds>>, TError, TData>> & Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getMyGrounds>>,
+          TError,
+          Awaited<ReturnType<typeof getMyGrounds>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetMyGrounds<TData = Awaited<ReturnType<typeof getMyGrounds>>, TError = ErrorType<void>>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getMyGrounds>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+/**
+ * @summary 내 Space의 Ground 목록 조회
+ */
+
+export function useGetMyGrounds<TData = Awaited<ReturnType<typeof getMyGrounds>>, TError = ErrorType<void>>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getMyGrounds>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient 
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = getGetMyGroundsQueryOptions(options)
+
+  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+
+
+
+export const getGetMyGroundsSuspenseQueryOptions = <TData = Awaited<ReturnType<typeof getMyGrounds>>, TError = ErrorType<void>>( options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getMyGrounds>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetMyGroundsQueryKey();
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getMyGrounds>>> = ({ signal }) => getMyGrounds(requestOptions, signal);
+
+      
+
+      
+
+   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseQueryOptions<Awaited<ReturnType<typeof getMyGrounds>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetMyGroundsSuspenseQueryResult = NonNullable<Awaited<ReturnType<typeof getMyGrounds>>>
+export type GetMyGroundsSuspenseQueryError = ErrorType<void>
+
+
+export function useGetMyGroundsSuspense<TData = Awaited<ReturnType<typeof getMyGrounds>>, TError = ErrorType<void>>(
+  options: { query:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getMyGrounds>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetMyGroundsSuspense<TData = Awaited<ReturnType<typeof getMyGrounds>>, TError = ErrorType<void>>(
+  options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getMyGrounds>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetMyGroundsSuspense<TData = Awaited<ReturnType<typeof getMyGrounds>>, TError = ErrorType<void>>(
+  options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getMyGrounds>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+/**
+ * @summary 내 Space의 Ground 목록 조회
+ */
+
+export function useGetMyGroundsSuspense<TData = Awaited<ReturnType<typeof getMyGrounds>>, TError = ErrorType<void>>(
+  options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getMyGrounds>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient 
+ ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = getGetMyGroundsSuspenseQueryOptions(options)
+
+  const query = useSuspenseQuery(queryOptions, queryClient) as  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+
+
+
+export const getGetMyGroundsSuspenseInfiniteQueryOptions = <TData = InfiniteData<Awaited<ReturnType<typeof getMyGrounds>>>, TError = ErrorType<void>>( options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getMyGrounds>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetMyGroundsInfiniteQueryKey();
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getMyGrounds>>> = ({ signal }) => getMyGrounds(requestOptions, signal);
+
+      
+
+      
+
+   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getMyGrounds>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetMyGroundsSuspenseInfiniteQueryResult = NonNullable<Awaited<ReturnType<typeof getMyGrounds>>>
+export type GetMyGroundsSuspenseInfiniteQueryError = ErrorType<void>
+
+
+export function useGetMyGroundsSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getMyGrounds>>>, TError = ErrorType<void>>(
+  options: { query:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getMyGrounds>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetMyGroundsSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getMyGrounds>>>, TError = ErrorType<void>>(
+  options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getMyGrounds>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetMyGroundsSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getMyGrounds>>>, TError = ErrorType<void>>(
+  options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getMyGrounds>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+/**
+ * @summary 내 Space의 Ground 목록 조회
+ */
+
+export function useGetMyGroundsSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getMyGrounds>>>, TError = ErrorType<void>>(
+  options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getMyGrounds>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient 
+ ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = getGetMyGroundsSuspenseInfiniteQueryOptions(options)
+
+  const query = useSuspenseInfiniteQuery(queryOptions, queryClient) as  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+
+
+
+
+/**
+ * 현재 로그인한 사용자의 선택된 Space를 변경합니다. 변경하려는 Space는 사용자의 Tenant에 포함되어 있어야 합니다.
+ * @summary 선택된 Space 변경
+ */
+export const updateSelectedSpace = (
+    updateSelectedSpacePayloadDto: BodyType<UpdateSelectedSpacePayloadDto>,
+ options?: SecondParameter<typeof customInstance>,) => {
+      
+      
+      return customInstance<UpdateSelectedSpace200AllOf>(
+      {url: `/api/v1/users/me/selected-space`, method: 'PATCH',
+      headers: {'Content-Type': 'application/json', },
+      data: updateSelectedSpacePayloadDto
+    },
+      options);
+    }
+  
+
+
+export const getUpdateSelectedSpaceMutationOptions = <TError = ErrorType<void>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateSelectedSpace>>, TError,{data: BodyType<UpdateSelectedSpacePayloadDto>}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof updateSelectedSpace>>, TError,{data: BodyType<UpdateSelectedSpacePayloadDto>}, TContext> => {
+
+const mutationKey = ['updateSelectedSpace'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof updateSelectedSpace>>, {data: BodyType<UpdateSelectedSpacePayloadDto>}> = (props) => {
+          const {data} = props ?? {};
+
+          return  updateSelectedSpace(data,requestOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type UpdateSelectedSpaceMutationResult = NonNullable<Awaited<ReturnType<typeof updateSelectedSpace>>>
+    export type UpdateSelectedSpaceMutationBody = BodyType<UpdateSelectedSpacePayloadDto>
+    export type UpdateSelectedSpaceMutationError = ErrorType<void>
+
+    /**
+ * @summary 선택된 Space 변경
+ */
+export const useUpdateSelectedSpace = <TError = ErrorType<void>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateSelectedSpace>>, TError,{data: BodyType<UpdateSelectedSpacePayloadDto>}, TContext>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof updateSelectedSpace>>,
+        TError,
+        {data: BodyType<UpdateSelectedSpacePayloadDto>},
+        TContext
+      > => {
+
+      const mutationOptions = getUpdateSelectedSpaceMutationOptions(options);
+
+      return useMutation(mutationOptions, queryClient);
+    }
