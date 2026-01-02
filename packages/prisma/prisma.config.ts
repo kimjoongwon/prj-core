@@ -2,11 +2,8 @@ import * as path from "node:path";
 import * as dotenv from "dotenv";
 import { defineConfig, env } from "prisma/config";
 
-// .env.local 파일 로드 (server 앱의 환경변수 사용)
-// const envPath = path.resolve(__dirname, "./.env");
-// dotenv.config({ path: envPath });
-
-// 현재 디렉토리의 .env.local도 로드 (fallback)
+// .env.local 파일 로드
+// 환경별 변수: DATABASE_URL, DATABASE_URL_STG, DATABASE_URL_PROD 등
 dotenv.config({ path: path.resolve(__dirname, ".env") });
 dotenv.config({ path: path.resolve(__dirname, ".env.local") });
 
@@ -22,6 +19,10 @@ export default defineConfig({
 	},
 
 	// 데이터소스 설정
+	// cross-env로 설정된 DATABASE_URL 환경 변수 사용
+	// - 기본값: .env.local의 DATABASE_URL
+	// - stg: cross-env로 DATABASE_URL_STG → DATABASE_URL로 매핑
+	// - prod: cross-env로 DATABASE_URL_PROD → DATABASE_URL로 매핑
 	datasource: {
 		url: env("DATABASE_URL"),
 		directUrl: env("DIRECT_URL"),
