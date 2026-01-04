@@ -1,7 +1,7 @@
 import { createLogger, navigateTo } from "@cocrepo/toolkit";
 import { isAxiosError } from "axios";
 import { makeAutoObservable } from "mobx";
-import { RootStore } from "./Store";
+import { RootStore } from "./rootStore";
 
 const logger = createLogger("[AuthStore]");
 

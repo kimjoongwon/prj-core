@@ -165,6 +165,7 @@ feat(coin): 멀티시그 지갑 서비스 초기 구현
 | **기획/분석** | planner | 요구사항 → 화면 기획서 작성 (Figma 없을 때) |
 | | design-analyzer | Figma 디자인 분석 및 컴포넌트 매핑 (Figma 있을 때) |
 | | technical-designer | 기획 문서 개발적 강화 및 Entity/API 상세 설계 |
+| | route-designer | 백엔드 엔티티 기반 라우팅 경로 설계 |
 | **프론트엔드** | ui-component-builder | Pure UI 컴포넌트 생성 (components/ui) |
 | | input-component-builder | Input 컴포넌트 생성 (components/inputs) |
 | | page-builder | 페이지 컴포넌트 생성 (useHandlers 분리) |

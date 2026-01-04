@@ -5,7 +5,7 @@ export * from "./navItem";
 export * from "./navigationStore";
 export * from "./navigator";
 export * from "./persistStore";
-export * from "./Store";
+export * from "./rootStore";
 export * from "./storageStore";
 export * from "./tokenStore";
 export * from "./useStore";

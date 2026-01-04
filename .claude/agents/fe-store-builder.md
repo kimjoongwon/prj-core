@@ -8,10 +8,120 @@ tools: Read, Write, Grep, Bash
 
 MobX 기반의 Store를 생성하는 전문가입니다.
 
+---
+
+## 아키텍처 개념
+
+### Store란?
+
+Store는 **UI와 분리된 전역 시스템 로직이 존재하는 계층**입니다. 백엔드 아키텍처와 비교하면 다음과 같습니다:
+
+| 프론트엔드 (Store) | 백엔드 | 설명 |
+|-------------------|--------|------|
+| `*Store` (접미사 있음) | Service Layer | 비즈니스 로직, 상태 관리 |
+| 접미사 없는 클래스 | Domain Model / Entity | 데이터 구조, 도메인 모델 |
+
+### 명명 규칙과 역할
+
+#### 1. `*Store` - Service Layer (비즈니스 로직)
+
+`Store` 접미사가 붙은 클래스는 **비즈니스 로직**을 담당합니다.
+
+```typescript
+// NavigationStore - 네비게이션 비즈니스 로직
+class NavigationStore {
+  selectNavItem(id: string): void { /* 선택 로직 */ }
+  setCurrentPath(path: string): void { /* 경로 동기화 로직 */ }
+  toggleNavItem(id: string): void { /* 펼침/접힘 로직 */ }
+}
+
+// AuthStore - 인증 비즈니스 로직
+class AuthStore {
+  logout(): void { /* 로그아웃 로직 */ }
+  get isAuthenticated(): boolean { /* 인증 상태 판단 */ }
+}
+```
+
+#### 2. 접미사 없음 - Domain Model (데이터 구조)
+
+`Store` 접미사가 없는 클래스는 **도메인 모델**입니다. 데이터 구조와 해당 데이터에 대한 간단한 조작만 담당합니다.
+
+```typescript
+// NavItem - 네비게이션 아이템 도메인 모델
+class NavItem {
+  readonly id: string;
+  readonly label: string;
+  readonly children: NavItem[];
+
+  setActive(value: boolean): void { /* 자신의 상태만 변경 */ }
+  findChildById(id: string): NavItem | undefined { /* 데이터 탐색 */ }
+}
+
+// User - 사용자 도메인 모델
+class User {
+  readonly id: string;
+  readonly email: string;
+  readonly name: string;
+}
+
+// Company - 회사 도메인 모델
+class Company {
+  readonly id: string;
+  readonly name: string;
+}
+```
+
+### 실제 예시
+
+```
+packages/store/src/stores/
+├── navigationStore.ts    # NavigationStore (Service Layer) - 네비게이션 로직
+├── navItem.ts           # NavItem (Domain Model) - 네비게이션 아이템 데이터
+├── authStore.ts         # AuthStore (Service Layer) - 인증 로직
+├── persistStore.ts      # PersistStore (Service Layer) - 영속 데이터 로직
+├── tokenStore.ts        # TokenStore (Service Layer) - 토큰 관리 로직
+└── user.ts              # User (Domain Model) - 사용자 데이터 (예시)
+```
+
+### 설계 원칙
+
+1. **Store는 여러 Domain Model을 조합하여 비즈니스 로직 수행**
+   ```typescript
+   class NavigationStore {
+     private _items: NavItem[];  // Domain Model 컬렉션
+
+     selectNavItem(id: string): void {
+       // NavItem들을 조작하는 비즈니스 로직
+     }
+   }
+   ```
+
+2. **Domain Model은 자신의 데이터만 관리**
+   ```typescript
+   class NavItem {
+     setActive(value: boolean): void {
+       this._active = value;  // 자신의 상태만 변경
+     }
+   }
+   ```
+
+3. **Store 간 상호작용은 RootStore를 통해**
+   ```typescript
+   class AuthStore {
+     logout(): void {
+       this.rootStore.tokenStore?.clearTokens();
+       this.rootStore.persistStore?.clear();
+     }
+   }
+   ```
+
+---
+
 ## 파일 위치
 
 ```
-packages/store/src/stores/{storeName}Store.ts
+packages/store/src/stores/{storeName}Store.ts   # Service Layer
+packages/store/src/stores/{domainName}.ts        # Domain Model
 ```
 
 ---
