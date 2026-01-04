@@ -49,10 +49,10 @@ import { useSpaceGuard } from "@/hooks";
  * +------------------------------------------------------------------------+
  *
  * Feature 컴포넌트가 자체적으로 비즈니스 로직을 처리합니다:
- * - AppLogo: 클릭 시 첫 번째 메뉴로 이동 (MenuStore 사용)
- * - SideNav: 2depth 트리 메뉴 표시 및 선택 (MenuStore 사용) - 데스크톱 전용
- * - BottomTab: 1depth 메뉴 표시 (MenuStore 사용) - 모바일 전용
- * - SubMenuList: 2depth 메뉴 표시 (MenuStore 사용) - 모바일 전용
+ * - AppLogo: 클릭 시 첫 번째 메뉴로 이동 (NavigationStore 사용)
+ * - SideNav: 2depth 트리 메뉴 표시 및 선택 (NavigationStore 사용) - 데스크톱 전용
+ * - BottomTab: 1depth 메뉴 표시 (NavigationStore 사용) - 모바일 전용
+ * - SubMenuList: 2depth 메뉴 표시 (NavigationStore 사용) - 모바일 전용
  * - BackButton: 서브메뉴에서 뒤로가기 - 모바일 전용
  * - SpaceSelector: Space 변경 기능 (PersistStore 사용)
  * - UserMenu: 사용자 정보 표시, 로그아웃 (AuthStore, PersistStore 사용)

@@ -7,6 +7,6 @@
  */
 
 export interface UpdateSelectedSpaceResponseDto {
-	/** 업데이트된 선택 Space ID */
-	selectedSpaceId: string;
+  /** 업데이트된 선택 Space ID */
+  selectedSpaceId: string;
 }

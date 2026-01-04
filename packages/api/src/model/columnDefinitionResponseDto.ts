@@ -7,20 +7,20 @@
  */
 
 export interface ColumnDefinitionResponseDto {
-	id: string;
-	entity: string;
-	field: string;
-	label: string;
-	sortOrder: number;
-	isRequired: boolean;
-	visibleOnDesktop: boolean;
-	visibleOnTablet: boolean;
-	visibleOnMobile: boolean;
-	sortable: boolean;
-	width?: string;
-	minWidth?: string;
-	spaceId: string;
-	subjectId?: string;
-	createdAt: string;
-	updatedAt?: string;
+  id: string;
+  entity: string;
+  field: string;
+  label: string;
+  sortOrder: number;
+  isRequired: boolean;
+  visibleOnDesktop: boolean;
+  visibleOnTablet: boolean;
+  visibleOnMobile: boolean;
+  sortable: boolean;
+  width?: string;
+  minWidth?: string;
+  spaceId: string;
+  subjectId?: string;
+  createdAt: string;
+  updatedAt?: string;
 }

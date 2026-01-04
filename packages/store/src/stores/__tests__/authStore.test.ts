@@ -1,11 +1,10 @@
 /// <reference types="vitest/globals" />
 
-import { AXIOS_INSTANCE } from "@cocrepo/api";
 import { navigateTo } from "@cocrepo/toolkit";
 import { isAxiosError } from "axios";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { AuthStore } from "../authStore";
-import type { PlateStore } from "../plateStore";
+import type { RootStore } from "../Store";
 import type { TokenStore } from "../tokenStore";
 
 // 의존성 모킹
@@ -17,38 +16,22 @@ vi.mock("@cocrepo/toolkit", () => ({
 	})),
 }));
 vi.mock("axios");
-vi.mock("../plateStore");
-vi.mock("../tokenStore");
-
-// AXIOS_INSTANCE 모킹
-vi.mock("@cocrepo/api", () => ({
-	AXIOS_INSTANCE: {
-		interceptors: {
-			response: {
-				use: vi.fn(),
-			},
-			request: {
-				use: vi.fn(),
-			},
-		},
-	},
-}));
 
 describe("AuthStore", () => {
 	let authStore: AuthStore;
-	let mockPlateStore: PlateStore;
+	let mockRootStore: RootStore;
 	let mockTokenStore: TokenStore;
 
 	beforeEach(() => {
-		// PlateStore와 TokenStore 모킹
+		// TokenStore 모킹
 		mockTokenStore = {
 			isAccessTokenExpired: vi.fn().mockReturnValue(false),
-			refreshToken: vi.fn().mockResolvedValue(undefined),
-		} as unknown;
+		} as unknown as TokenStore;
 
-		mockPlateStore = {
+		// RootStore 모킹
+		mockRootStore = {
 			tokenStore: mockTokenStore,
-		} as unknown;
+		} as unknown as RootStore;
 
 		// Mock 리셋
 		vi.clearAllMocks();
@@ -59,27 +42,13 @@ describe("AuthStore", () => {
 			writable: true,
 		});
 
-		authStore = new AuthStore(mockPlateStore);
+		authStore = new AuthStore(mockRootStore);
 	});
 
 	describe("생성자", () => {
-		it("PlateStore 의존성이 올바르게 주입되어야 함", () => {
-			expect(authStore.plateStore).toBeDefined();
-			expect(authStore.plateStore.tokenStore).toBeDefined();
-		});
-
-		it("응답 인터셉터가 등록되어야 함", () => {
-			expect(AXIOS_INSTANCE.interceptors.response.use).toHaveBeenCalledWith(
-				expect.any(Function),
-				expect.any(Function),
-			);
-		});
-
-		it("요청 인터셉터가 등록되어야 함", () => {
-			expect(AXIOS_INSTANCE.interceptors.request.use).toHaveBeenCalledWith(
-				expect.any(Function),
-				expect.any(Function),
-			);
+		it("RootStore 의존성이 올바르게 주입되어야 함", () => {
+			expect(authStore.rootStore).toBeDefined();
+			expect(authStore.rootStore.tokenStore).toBeDefined();
 		});
 
 		it("isLoggingOut 초기값이 false여야 함", () => {
@@ -87,137 +56,106 @@ describe("AuthStore", () => {
 		});
 	});
 
-	describe("응답 인터셉터", () => {
-		let responseInterceptor: unknown;
-		let errorHandler: unknown;
+	describe("isAuthenticated", () => {
+		it("토큰이 만료되지 않았으면 true를 반환해야 함", () => {
+			// Given
+			(mockTokenStore.isAccessTokenExpired as unknown as ReturnType<typeof vi.fn>).mockReturnValue(false);
 
-		beforeEach(() => {
-			const responseCall = (AXIOS_INSTANCE.interceptors.response.use as unknown)
-				.mock.calls[0];
-			responseInterceptor = responseCall[0];
-			errorHandler = responseCall[1];
+			// Then
+			expect(authStore.isAuthenticated).toBe(true);
 		});
 
-		it("정상 응답은 그대로 반환되어야 함", () => {
-			const mockResponse = { data: "test" };
-			const result = responseInterceptor(mockResponse);
-			expect(result).toBe(mockResponse);
+		it("토큰이 만료되었으면 false를 반환해야 함", () => {
+			// Given
+			(mockTokenStore.isAccessTokenExpired as unknown as ReturnType<typeof vi.fn>).mockReturnValue(true);
+
+			// Then
+			expect(authStore.isAuthenticated).toBe(false);
 		});
 
-		it("에러 발생 시 handleAuthError가 호출되어야 함", () => {
-			const mockError = new Error("Test error");
-			const handleAuthErrorSpy = vi.spyOn(authStore, "handleAuthError");
+		it("tokenStore가 없으면 true를 반환해야 함", () => {
+			// Given
+			mockRootStore.tokenStore = undefined;
 
-			errorHandler(mockError);
-
-			expect(handleAuthErrorSpy).toHaveBeenCalledWith(mockError);
-		});
-	});
-
-	describe("요청 인터셉터", () => {
-		let requestInterceptor: unknown;
-		let requestErrorHandler: unknown;
-
-		beforeEach(() => {
-			const requestCall = (AXIOS_INSTANCE.interceptors.request.use as unknown)
-				.mock.calls[0];
-			requestInterceptor = requestCall[0];
-			requestErrorHandler = requestCall[1];
-		});
-
-		it("액세스 토큰이 만료된 경우 토큰 갱신을 호출해야 함", async () => {
-			const mockConfig = { url: "/test" };
-			(mockTokenStore.isAccessTokenExpired as unknown).mockReturnValue(true);
-			(mockTokenStore.refreshToken as unknown).mockResolvedValue(undefined);
-
-			const result = await requestInterceptor(mockConfig);
-
-			expect(mockTokenStore.isAccessTokenExpired).toHaveBeenCalled();
-			expect(mockTokenStore.refreshToken).toHaveBeenCalled();
-			expect(result).toBe(mockConfig);
-		});
-
-		it("액세스 토큰이 유효한 경우 토큰 갱신을 호출하지 않아야 함", async () => {
-			const mockConfig = { url: "/test" };
-			(mockTokenStore.isAccessTokenExpired as unknown).mockReturnValue(false);
-
-			const result = await requestInterceptor(mockConfig);
-
-			expect(mockTokenStore.isAccessTokenExpired).toHaveBeenCalled();
-			expect(mockTokenStore.refreshToken).not.toHaveBeenCalled();
-			expect(result).toBe(mockConfig);
-		});
-
-		it("요청 에러가 발생하면 Promise.reject을 반환해야 함", async () => {
-			const mockError = new Error("Request error");
-			const result = requestErrorHandler(mockError);
-
-			await expect(result).rejects.toBe(mockError);
+			// Then
+			expect(authStore.isAuthenticated).toBe(true);
 		});
 	});
 
 	describe("handleAuthError 메서드", () => {
 		it("401 에러 시 로그인 페이지로 리다이렉트해야 함", async () => {
+			// Given
 			const mockError = {
 				response: { status: 401 },
 			};
-			(isAxiosError as unknown).mockReturnValue(true);
+			(isAxiosError as unknown as ReturnType<typeof vi.fn>).mockReturnValue(true);
 
+			// When
 			await authStore.handleAuthError(mockError);
 
+			// Then
 			expect(window.location.href).toBe("/admin/auth/login");
 		});
 
 		it("401이 아닌 Axios 에러는 그대로 reject해야 함", async () => {
+			// Given
 			const mockError = {
 				response: { status: 500 },
 			};
-			(isAxiosError as unknown).mockReturnValue(true);
+			(isAxiosError as unknown as ReturnType<typeof vi.fn>).mockReturnValue(true);
 
-			await expect(authStore.handleAuthError(mockError)).rejects.toBe(
-				mockError,
-			);
+			// When & Then
+			await expect(authStore.handleAuthError(mockError)).rejects.toBe(mockError);
 		});
 
 		it("Axios 에러가 아닌 경우 그대로 reject해야 함", async () => {
+			// Given
 			const mockError = new Error("일반 에러");
-			(isAxiosError as unknown).mockReturnValue(false);
+			(isAxiosError as unknown as ReturnType<typeof vi.fn>).mockReturnValue(false);
 
-			await expect(authStore.handleAuthError(mockError)).rejects.toBe(
-				mockError,
-			);
+			// When & Then
+			await expect(authStore.handleAuthError(mockError)).rejects.toBe(mockError);
 		});
 	});
 
 	describe("logout 메서드", () => {
-		it("로그아웃 API 호출 성공 시 스토리지를 클리어하고 로그인 페이지로 이동해야 함", async () => {
+		it("로그아웃 API 호출 성공 시 로그인 페이지로 이동해야 함", async () => {
+			// Given
 			const mockLogoutApi = vi.fn().mockResolvedValue(undefined);
 
+			// When
 			await authStore.logout(mockLogoutApi);
 
+			// Then
 			expect(mockLogoutApi).toHaveBeenCalled();
 			expect(navigateTo).toHaveBeenCalledWith("/admin/auth/login", true);
 			expect(authStore.isLoggingOut).toBe(false);
 		});
 
-		it("로그아웃 API 호출 실패 시에도 스토리지를 클리어하고 로그인 페이지로 이동해야 함", async () => {
+		it("로그아웃 API 호출 실패 시에도 로그인 페이지로 이동해야 함", async () => {
+			// Given
 			const mockLogoutApi = vi.fn().mockRejectedValue(new Error("API 에러"));
 
+			// When
 			await authStore.logout(mockLogoutApi);
 
+			// Then
 			expect(mockLogoutApi).toHaveBeenCalled();
 			expect(navigateTo).toHaveBeenCalledWith("/admin/auth/login", true);
 			expect(authStore.isLoggingOut).toBe(false);
 		});
 
-		it("로그아웃 API가 제공되지 않은 경우에도 스토리지를 클리어하고 로그인 페이지로 이동해야 함", async () => {
+		it("로그아웃 API가 제공되지 않은 경우에도 로그인 페이지로 이동해야 함", async () => {
+			// When
 			await authStore.logout();
 
+			// Then
 			expect(navigateTo).toHaveBeenCalledWith("/admin/auth/login", true);
 			expect(authStore.isLoggingOut).toBe(false);
 		});
 
 		it("로그아웃 처리 중 isLoggingOut 상태가 올바르게 관리되어야 함", async () => {
+			// Given
 			const mockLogoutApi = vi.fn().mockImplementation(() => {
 				expect(authStore.isLoggingOut).toBe(true);
 				return Promise.resolve();
@@ -225,37 +163,24 @@ describe("AuthStore", () => {
 
 			expect(authStore.isLoggingOut).toBe(false);
 
+			// When
 			await authStore.logout(mockLogoutApi);
 
+			// Then
 			expect(authStore.isLoggingOut).toBe(false);
 		});
 
 		it("로그아웃 API 에러 발생 시에도 isLoggingOut 상태가 false로 되돌아가야 함", async () => {
+			// Given
 			const mockLogoutApi = vi.fn().mockRejectedValue(new Error("API 에러"));
 
 			expect(authStore.isLoggingOut).toBe(false);
 
+			// When
 			await authStore.logout(mockLogoutApi);
 
+			// Then
 			expect(authStore.isLoggingOut).toBe(false);
-		});
-	});
-
-	describe("토큰스토어가 없는 경우", () => {
-		beforeEach(() => {
-			mockPlateStore.tokenStore = undefined;
-			authStore = new AuthStore(mockPlateStore);
-		});
-
-		it("토큰스토어가 없어도 요청 인터셉터가 정상 작동해야 함", async () => {
-			const requestCall = (AXIOS_INSTANCE.interceptors.request.use as unknown)
-				.mock.calls[0];
-			const requestInterceptor = requestCall[0];
-			const mockConfig = { url: "/test" };
-
-			const result = await requestInterceptor(mockConfig);
-
-			expect(result).toBe(mockConfig);
 		});
 	});
 });

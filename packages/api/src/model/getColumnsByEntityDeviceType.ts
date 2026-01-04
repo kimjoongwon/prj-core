@@ -6,12 +6,12 @@
  * OpenAPI spec version: 1.0.0
  */
 
-export type GetColumnsByEntityDeviceType =
-	(typeof GetColumnsByEntityDeviceType)[keyof typeof GetColumnsByEntityDeviceType];
+export type GetColumnsByEntityDeviceType = typeof GetColumnsByEntityDeviceType[keyof typeof GetColumnsByEntityDeviceType];
+
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export const GetColumnsByEntityDeviceType = {
-	desktop: "desktop",
-	tablet: "tablet",
-	mobile: "mobile",
+  desktop: 'desktop',
+  tablet: 'tablet',
+  mobile: 'mobile',
 } as const;

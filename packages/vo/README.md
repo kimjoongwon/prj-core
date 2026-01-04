@@ -68,17 +68,15 @@ const tokens = tokenPair.toObject();
 ### Cookie VO
 
 ```typescript
-import { AccessTokenCookieOptions, RefreshTokenCookieOptions } from "@cocrepo/vo";
+import { Cookie } from "@cocrepo/vo";
 
-// Access Token 쿠키 옵션 생성
-const accessCookieOptions = AccessTokenCookieOptions.forAccessToken("15m");
+// Access Token 쿠키 생성
+const accessCookie = Cookie.forToken("15m");
+res.cookie("accessToken", token, accessCookie.toExpressOptions());
 
-// Express Response에 쿠키 설정
-res.cookie("accessToken", token, accessCookieOptions.toExpressCookieOptions());
-
-// Refresh Token 쿠키 옵션 생성
-const refreshCookieOptions = RefreshTokenCookieOptions.forRefreshToken("7d");
-res.cookie("refreshToken", token, refreshCookieOptions.toExpressCookieOptions());
+// Refresh Token 쿠키 생성
+const refreshCookie = Cookie.forToken("7d");
+res.cookie("refreshToken", token, refreshCookie.toExpressOptions());
 ```
 
 ### Email/Phone VO
@@ -112,10 +110,7 @@ console.log(phone.formatInternational()); // "+82 10-1234-5678"
 - `TokenPair`: Access Token + Refresh Token 쌍
 
 #### Cookie
-- `JwtExpiration`: JWT 만료 시간 파싱 ("15m", "7d" → 밀리초)
-- `CookieOptionsVo`: Express 쿠키 옵션
-- `AccessTokenCookieOptions`: Access Token 전용 쿠키 옵션
-- `RefreshTokenCookieOptions`: Refresh Token 전용 쿠키 옵션
+- `Cookie`: HTTP 쿠키 설정 (Express CookieOptions 호환, "15m", "7d" 형식 지원)
 
 ### 연락처 (Contact)
 - `Email`: 이메일 주소 (RFC 5322 형식 검증, 소문자 정규화)

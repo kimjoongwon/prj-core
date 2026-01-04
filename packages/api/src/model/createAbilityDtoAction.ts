@@ -9,19 +9,19 @@
 /**
  * 권한 액션
  */
-export type CreateAbilityDtoAction =
-	(typeof CreateAbilityDtoAction)[keyof typeof CreateAbilityDtoAction];
+export type CreateAbilityDtoAction = typeof CreateAbilityDtoAction[keyof typeof CreateAbilityDtoAction];
+
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export const CreateAbilityDtoAction = {
-	CREATE: "CREATE",
-	READ: "READ",
-	UPDATE: "UPDATE",
-	DELETE: "DELETE",
-	ACCESS: "ACCESS",
-	MANAGE: "MANAGE",
-	EXPORT: "EXPORT",
-	IMPORT: "IMPORT",
-	APPROVE: "APPROVE",
-	REJECT: "REJECT",
+  CREATE: 'CREATE',
+  READ: 'READ',
+  UPDATE: 'UPDATE',
+  DELETE: 'DELETE',
+  ACCESS: 'ACCESS',
+  MANAGE: 'MANAGE',
+  EXPORT: 'EXPORT',
+  IMPORT: 'IMPORT',
+  APPROVE: 'APPROVE',
+  REJECT: 'REJECT',
 } as const;

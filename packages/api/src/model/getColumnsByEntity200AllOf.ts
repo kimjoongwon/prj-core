@@ -5,14 +5,14 @@
  * API 문서입니다. 대부분의 엔드포인트는 쿠키 기반 JWT 인증이 필요합니다. (@Public 데코레이터가 있는 엔드포인트는 예외)
  * OpenAPI spec version: 1.0.0
  */
-import type { ColumnDefinitionResponseDto } from "./columnDefinitionResponseDto";
-import type { GetColumnsByEntity200AllOfMeta } from "./getColumnsByEntity200AllOfMeta";
+import type { ColumnDefinitionResponseDto } from './columnDefinitionResponseDto';
+import type { GetColumnsByEntity200AllOfMeta } from './getColumnsByEntity200AllOfMeta';
 
 export type GetColumnsByEntity200AllOf = {
-	/** */
-	httpStatus?: number;
-	/** */
-	message?: string;
-	data?: ColumnDefinitionResponseDto[];
-	meta?: GetColumnsByEntity200AllOfMeta;
+  /** */
+  httpStatus?: number;
+  /** */
+  message?: string;
+  data?: ColumnDefinitionResponseDto[];
+  meta?: GetColumnsByEntity200AllOfMeta;
 };

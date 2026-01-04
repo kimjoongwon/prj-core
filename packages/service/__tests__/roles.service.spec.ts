@@ -1,5 +1,5 @@
-import { RolesRepository } from "@cocrepo/repository";
 import { Roles } from "@cocrepo/prisma";
+import { RolesRepository } from "@cocrepo/repository";
 import { Test, type TestingModule } from "@nestjs/testing";
 import { DeepMockProxy, mockDeep, mockReset } from "jest-mock-extended";
 import { RolesService } from "../src/roles.service";

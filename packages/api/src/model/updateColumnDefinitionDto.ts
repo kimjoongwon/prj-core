@@ -7,14 +7,14 @@
  */
 
 export interface UpdateColumnDefinitionDto {
-	label?: string;
-	sortOrder?: number;
-	isRequired?: boolean;
-	visibleOnDesktop?: boolean;
-	visibleOnTablet?: boolean;
-	visibleOnMobile?: boolean;
-	sortable?: boolean;
-	width?: string;
-	minWidth?: string;
-	subjectId?: string;
+  label?: string;
+  sortOrder?: number;
+  isRequired?: boolean;
+  visibleOnDesktop?: boolean;
+  visibleOnTablet?: boolean;
+  visibleOnMobile?: boolean;
+  sortable?: boolean;
+  width?: string;
+  minWidth?: string;
+  subjectId?: string;
 }

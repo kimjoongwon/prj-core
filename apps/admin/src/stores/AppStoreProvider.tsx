@@ -8,7 +8,8 @@ import {
 	CookieStore,
 	createStoreContext,
 	createStoreSelector,
-	MenuStore,
+	Navigator,
+	NavigationStore,
 	PersistStore,
 	RootStore,
 	RootStoreContext,
@@ -29,7 +30,7 @@ function createRootStore(): RootStore {
 	rootStore.tokenStore = new TokenStore(rootStore);
 	rootStore.cookieStore = new CookieStore();
 	rootStore.authStore = new AuthStore(rootStore);
-	rootStore.menuStore = new MenuStore(ADMIN_MENUS);
+	rootStore.navigationStore = new NavigationStore(ADMIN_MENUS);
 	rootStore.persistStore = new PersistStore({
 		storageKey: "admin-persist",
 	});
@@ -51,14 +52,14 @@ const {
 } = createStoreContext<RootStore>("AppStore");
 
 /**
- * MenuStore selector hook
- * RootStore에서 menuStore만 선택하여 반환
+ * NavigationStore selector hook
+ * RootStore에서 navigationStore만 선택하여 반환
  */
-const useMenuStore = createStoreSelector(useAppStore, (store) => {
-	if (!store.menuStore) {
-		throw new Error("menuStore가 초기화되지 않았습니다.");
+const useNavigationStore = createStoreSelector(useAppStore, (store) => {
+	if (!store.navigationStore) {
+		throw new Error("navigationStore가 초기화되지 않았습니다.");
 	}
-	return store.menuStore;
+	return store.navigationStore;
 });
 
 /**
@@ -80,7 +81,7 @@ interface AppStoreProviderProps {
  * App Store Provider
  *
  * RootStore를 최상단에서 초기화하고 하위 컴포넌트에 제공합니다.
- * Router, Pathname, Ability 변경 시 MenuStore의 핸들러를 자동 업데이트합니다.
+ * Router, Pathname, Ability 변경 시 NavigationStore의 핸들러를 자동 업데이트합니다.
  *
  * RootStoreContext도 함께 제공하여 @cocrepo/ui의 Feature 컴포넌트가
  * @cocrepo/store의 hooks를 사용할 수 있도록 합니다.
@@ -94,7 +95,7 @@ interface AppStoreProviderProps {
  *
  * // 컴포넌트에서 사용
  * const store = useAppStore(); // RootStore 타입
- * const menuStore = useMenuStore(); // MenuStore 타입
+ * const navigationStore = useNavigationStore(); // NavigationStore 타입
  * const persistStore = usePersistStore(); // PersistStore 타입
  * ```
  */
@@ -109,7 +110,7 @@ function AppStoreProvider({ children }: AppStoreProviderProps) {
 /**
  * RootStoreContext Bridge
  * AppStoreContext의 store를 RootStoreContext에도 제공하여
- * @cocrepo/store의 hooks (useMenuStore, usePersistStore 등)가
+ * @cocrepo/store의 hooks (useNavigationStore, usePersistStore 등)가
  * Feature 컴포넌트에서 사용 가능하도록 합니다.
  */
 function RootStoreContextBridge({ children }: { children: ReactNode }) {
@@ -132,29 +133,30 @@ function StoreInitializer({ children }: { children: ReactNode }) {
 	const pathname = usePathname();
 	const ability = useAbility();
 
-	const menuStore = store.menuStore;
+	const navigationStore = store.navigationStore;
 
-	// menuStore가 없으면 초기화 중이므로 렌더링하지 않음
-	if (!menuStore) {
+	// navigationStore가 없으면 초기화 중이므로 렌더링하지 않음
+	if (!navigationStore) {
 		return null;
 	}
 
 	// ability 변경 시 체커 업데이트
 	useEffect(() => {
-		menuStore.setAbilityChecker((action, subject) =>
+		navigationStore.setAbilityChecker((action, subject) =>
 			ability.can(action as AbilityActions, subject),
 		);
-	}, [ability, menuStore]);
+	}, [ability, navigationStore]);
 
-	// router 변경 시 네비게이션 핸들러 업데이트
+	// router 변경 시 Navigator 설정
 	useEffect(() => {
-		menuStore.setNavigateHandler((path) => router.push(path as never));
-	}, [router, menuStore]);
+		const navigator = new Navigator({ router });
+		navigationStore.setNavigator(navigator);
+	}, [router, navigationStore]);
 
 	// URL 경로 변경 시 메뉴 활성화 상태 업데이트
 	useEffect(() => {
-		menuStore.setCurrentPath(pathname);
-	}, [pathname, menuStore]);
+		navigationStore.setCurrentPath(pathname);
+	}, [pathname, navigationStore]);
 
 	return children;
 }
@@ -163,6 +165,6 @@ export {
 	AppStoreContext,
 	AppStoreProvider,
 	useAppStore,
-	useMenuStore,
+	useNavigationStore,
 	usePersistStore,
 };

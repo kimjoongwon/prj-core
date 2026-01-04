@@ -1,6 +1,6 @@
 "use client";
 
-import { useMenuStore } from "@cocrepo/store";
+import { useNavigationStore } from "@cocrepo/store";
 import { cn } from "@heroui/react";
 import { observer } from "mobx-react-lite";
 import { useSyncExternalStore } from "react";
@@ -21,7 +21,7 @@ function useIsMounted(): boolean {
 /**
  * SubNav Feature 컴포넌트
  * Header의 bottom 영역에 사용
- * 현재 선택된 메뉴의 하위 메뉴를 표시합니다.
+ * 현재 선택된 아이템의 하위 아이템을 표시합니다.
  *
  * @example
  * ```tsx
@@ -29,28 +29,28 @@ function useIsMounted(): boolean {
  * ```
  */
 export const SubNav = observer(() => {
-	const menuStore = useMenuStore();
+	const navigationStore = useNavigationStore();
 	const isMounted = useIsMounted();
 
-	// 하위 메뉴는 클라이언트 마운트 후에만 렌더링 (Hydration 오류 방지)
-	const subMenuItems = isMounted ? menuStore.subMenuItems : [];
+	// 하위 아이템은 클라이언트 마운트 후에만 렌더링 (Hydration 오류 방지)
+	const subNavItems = isMounted ? navigationStore.subNavItems : [];
 
-	const handleClickSubMenu = (menuId: string) => {
-		menuStore.selectSubMenu(menuId);
+	const handleClickSubNavItem = (navItemId: string) => {
+		navigationStore.selectSubNavItem(navItemId);
 	};
 
-	// 하위 메뉴가 없으면 렌더링하지 않음
-	if (subMenuItems.length === 0) {
+	// 하위 아이템이 없으면 렌더링하지 않음
+	if (subNavItems.length === 0) {
 		return null;
 	}
 
 	return (
 		<nav className="border-divider flex items-center gap-1 border-t bg-background/50 px-6 py-2">
-			{subMenuItems.map((item) => (
+			{subNavItems.map((item) => (
 				<button
 					key={item.id}
 					type="button"
-					onClick={() => handleClickSubMenu(item.id)}
+					onClick={() => handleClickSubNavItem(item.id)}
 					className={cn(
 						"flex items-center gap-2 rounded-md px-3 py-1.5 text-sm font-medium transition-colors",
 						item.active

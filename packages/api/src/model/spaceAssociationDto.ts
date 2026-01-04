@@ -7,12 +7,12 @@
  */
 
 export interface SpaceAssociationDto {
-	id: string;
-	seq: number;
-	createdAt: string;
-	updatedAt: string;
-	/** @nullable */
-	removedAt: string | null;
-	spaceId: string;
-	groupId: string;
+  id: string;
+  seq: number;
+  createdAt: string;
+  updatedAt: string;
+  /** @nullable */
+  removedAt: string | null;
+  spaceId: string;
+  groupId: string;
 }

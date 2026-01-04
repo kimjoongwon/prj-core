@@ -146,8 +146,8 @@
 
 | Store | 용도 | 경로 | 구현 상태 |
 |-------|------|------|----------|
-| MenuStore | 메뉴 상태 관리, 권한 필터링, 현재 메뉴 선택 | `packages/store/src/stores/menuStore.ts` | 완료 |
-| Menu (클래스) | 메뉴 데이터 모델 | `packages/store/src/stores/menu.ts` | 완료 |
+| NavigationStore | 네비게이션 상태 관리, 권한 필터링, 현재 아이템 선택 | `packages/store/src/stores/navigationStore.ts` | 완료 |
+| NavItem (클래스) | 네비게이션 아이템 데이터 모델 | `packages/store/src/stores/navItem.ts` | 완료 |
 | PersistStore | 영속 데이터 (Space 정보 등) | `packages/store/...` | 완료 |
 | AuthStore | 인증 상태, 로그아웃 | `packages/store/...` | 완료 |
 
@@ -172,19 +172,19 @@
 
 ## 4. 데이터 요구사항
 
-### 메뉴 구조 정의 (기존 구현)
+### 네비게이션 아이템 구조 정의 (기존 구현)
 
-**위치:** `packages/constant/src/routing/admin-menu.ts`
+**위치:** `packages/store/src/stores/navItem.ts`
 
 ```typescript
 // 이미 구현된 인터페이스
-export interface Menu {
+export interface NavItemConfig {
   id: string;
   label: string;
   path?: string;
   icon?: string;
   subject: string;
-  children?: Menu[];
+  children?: NavItemConfig[];
 }
 ```
 
@@ -221,31 +221,35 @@ export const ADMIN_MENUS: Menu[] = [
 
 ### 상태 관리 (기존 Store 활용)
 
-**MenuStore 주요 기능:**
+**NavigationStore 주요 기능:**
 ```typescript
-class MenuStore {
+class NavigationStore {
   // 권한 체크 함수 설정
   setAbilityChecker(checker: AbilityChecker): void;
 
-  // 네비게이션 핸들러 설정
-  setNavigateHandler(handler: (path: string) => void): void;
+  // Navigator 설정
+  setNavigator(navigator: Navigator): void;
 
-  // 권한 필터링된 메뉴
-  get items(): Menu[];
+  // 권한 필터링된 아이템
+  get items(): NavItem[];
 
-  // 현재 선택된 메뉴
-  get selectedMenu(): Menu | null;
-  get selectedSubMenu(): Menu | null;
+  // 현재 선택된 아이템
+  get selectedNavItem(): NavItem | null;
+  get selectedSubNavItem(): NavItem | null;
 
-  // 선택된 메뉴의 하위 메뉴 목록
-  get subMenuItems(): Menu[];
+  // 선택된 아이템의 하위 아이템 목록
+  get subNavItems(): NavItem[];
 
-  // 현재 경로 기반 메뉴 활성화
+  // 현재 경로 기반 아이템 활성화
   setCurrentPath(path: string): void;
 
-  // 메뉴 선택
-  selectMenu(menuId: string): void;
-  selectSubMenu(subMenuId: string): void;
+  // 아이템 선택
+  selectNavItem(navItemId: string): void;
+  selectSubNavItem(subNavItemId: string): void;
+
+  // 펼침/접힘 상태
+  toggleNavItem(navItemId: string): void;
+  isNavItemExpanded(navItemId: string): boolean;
 }
 ```
 
@@ -284,40 +288,40 @@ sessionStorage.getItem('adminRole')  // 관리자 역할
 페이지 진입 (예: /members/grades)
     |
     v
-MenuProvider에서 MenuStore 초기화
+NavigationProvider에서 NavigationStore 초기화
     |
     v
-useEffect에서 menuStore.setCurrentPath(pathname) 호출
+useEffect에서 navigationStore.setCurrentPath(pathname) 호출
     |
     v
-MenuStore가 URL 기반으로 selectedMenu, selectedSubMenu 자동 설정
+NavigationStore가 URL 기반으로 selectedNavItem, selectedSubNavItem 자동 설정
     |
     v
 SideNav에서:
-  - selectedMenu에 해당하는 1depth 메뉴 자동 펼침 (expanded)
-  - selectedSubMenu에 해당하는 2depth 메뉴 활성화 (active) 스타일 적용
+  - selectedNavItem에 해당하는 1depth 아이템 자동 펼침 (expanded)
+  - selectedSubNavItem에 해당하는 2depth 아이템 활성화 (active) 스타일 적용
     |
     v
 사용자가 SideNav의 "예약" (1depth) 클릭
     |
     v
-SideNav.handleToggleMenu("reservations") 호출
+SideNav.handleToggleNavItem("reservations") 호출
     |
     v
-menuStore.toggleMenu("reservations")
-  -> "예약" 메뉴의 펼침/접힘 상태 토글
-  -> 펼쳐지면 하위 메뉴 표시
+navigationStore.toggleNavItem("reservations")
+  -> "예약" 아이템의 펼침/접힘 상태 토글
+  -> 펼쳐지면 하위 아이템 표시
     |
     v
 사용자가 "예약 캘린더" (2depth) 클릭
     |
     v
-SideNav.handleClickSubMenu("reservations-calendar") 호출
+SideNav.handleClickSubNavItem("reservations-calendar") 호출
     |
     v
-menuStore.selectSubMenu("reservations-calendar")
-  -> selectedMenu = reservations (자동 설정)
-  -> selectedSubMenu = reservations-calendar
+navigationStore.selectSubNavItem("reservations-calendar")
+  -> selectedNavItem = reservations (자동 설정)
+  -> selectedSubNavItem = reservations-calendar
   -> /reservations/calendar 로 이동
 ```
 
@@ -433,48 +437,44 @@ menuStore.selectSubMenu("reservations-calendar")
 - icons: lucide-react (ChevronRight, ChevronDown 등)
 
 **사용 Store:**
-- MenuStore (items, selectedMenu, selectedSubMenu, expandedMenuIds)
+- NavigationStore (items, selectedNavItem, selectedSubNavItem, expandedNavItemIds)
 
 **핸들러:**
-- handleToggleMenu(menuId: string) -> menuStore.toggleMenu(menuId)
-- handleClickMenu(menuId: string) -> menuStore.selectMenu(menuId) (하위 메뉴 없는 경우)
-- handleClickSubMenu(subMenuId: string) -> menuStore.selectSubMenu(subMenuId)
+- handleToggleNavItem(navItemId: string) -> navigationStore.toggleNavItem(navItemId)
+- handleClickNavItem(navItemId: string) -> navigationStore.selectNavItem(navItemId) (하위 아이템 없는 경우)
+- handleClickSubNavItem(subNavItemId: string) -> navigationStore.selectSubNavItem(subNavItemId)
 
 **Storybook:** 필요
 
-### 8.2 MenuStore 확장 요청
+### 8.2 NavigationStore 기능 (구현 완료)
 
-**파일:** `packages/store/src/stores/menuStore.ts`
+**파일:** `packages/store/src/stores/navigationStore.ts`
 
-**추가할 기능:**
+**구현된 기능:**
 ```typescript
-class MenuStore {
-  // 기존 기능들...
+class NavigationStore {
+  // 펼침/접힘 상태 관리
+  private _expandedNavItemIds: Set<string> = new Set();
 
-  // 추가: 펼침/접힘 상태 관리
-  expandedMenuIds: Set<string> = new Set();
-
-  // 메뉴 펼침/접힘 토글
-  toggleMenu(menuId: string): void {
-    if (this.expandedMenuIds.has(menuId)) {
-      this.expandedMenuIds.delete(menuId);
+  // 아이템 펼침/접힘 토글
+  toggleNavItem(navItemId: string): void {
+    if (this._expandedNavItemIds.has(navItemId)) {
+      this._expandedNavItemIds.delete(navItemId);
     } else {
-      this.expandedMenuIds.add(menuId);
+      this._expandedNavItemIds.add(navItemId);
     }
   }
 
-  // 메뉴가 펼쳐진 상태인지 확인
-  isMenuExpanded(menuId: string): boolean {
-    return this.expandedMenuIds.has(menuId);
+  // 아이템이 펼쳐진 상태인지 확인
+  isNavItemExpanded(navItemId: string): boolean {
+    return this._expandedNavItemIds.has(navItemId);
   }
 
-  // setCurrentPath에서 selectedMenu의 부모 메뉴 자동 펼침
+  // setCurrentPath에서 selectedNavItem 자동 펼침
   setCurrentPath(path: string): void {
-    // 기존 로직...
-    // 추가: selectedMenu가 있으면 해당 메뉴 자동 펼침
-    if (this.selectedMenu) {
-      this.expandedMenuIds.add(this.selectedMenu.id);
-    }
+    // ... 경로 매칭 로직 ...
+    // selectedNavItem이 있으면 해당 아이템 자동 펼침
+    this._expandedNavItemIds.add(navItem.id);
   }
 }
 ```

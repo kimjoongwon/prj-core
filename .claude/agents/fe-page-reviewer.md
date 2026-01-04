@@ -151,9 +151,9 @@ grep -E "useState\(\(\) => new.*Store" [Provider 파일]
 
 **올바른 패턴:**
 ```typescript
-const storeRef = useRef<MenuStore | null>(null);
+const storeRef = useRef<NavigationStore | null>(null);
 if (!storeRef.current) {
-  storeRef.current = new MenuStore();
+  storeRef.current = new NavigationStore();
 }
 const store = storeRef.current;
 ```
@@ -237,14 +237,14 @@ grep -rE "(Admin|Coin)(Store|Layout|Provider)" packages/
 | `useAdminStore()` | ❌ 위반 | `useAppStore()` |
 | `useAdminLayout()` | ❌ 위반 | `useAppLayout()` |
 | `AdminStoreProvider` | ❌ 위반 | `AppStoreProvider` |
-| `useMenuStore()` | ✅ 올바름 | - |
+| `useNavigationStore()` | ✅ 올바름 | - |
 | `useAppLayout()` | ✅ 올바름 | - |
 
 **위반 발견 시 조치:**
 ```typescript
 파일: packages/store/src/stores/index.ts:15
-현재: export function useAdminMenuStore() { }
-수정: export function useMenuStore() { }
+현재: export function useAdminNavigationStore() { }
+수정: export function useNavigationStore() { }
 이유: 공용 패키지는 여러 앱에서 재사용되므로 앱 종속 이름 금지
 ```
 

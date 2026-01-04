@@ -9,14 +9,14 @@
 /**
  * Subject 타입
  */
-export type SubjectResponseDtoType =
-	(typeof SubjectResponseDtoType)[keyof typeof SubjectResponseDtoType];
+export type SubjectResponseDtoType = typeof SubjectResponseDtoType[keyof typeof SubjectResponseDtoType];
+
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export const SubjectResponseDtoType = {
-	Menu: "Menu",
-	Feature: "Feature",
-	Entity: "Entity",
-	API: "API",
-	Column: "Column",
+  Menu: 'Menu',
+  Feature: 'Feature',
+  Entity: 'Entity',
+  API: 'API',
+  Column: 'Column',
 } as const;

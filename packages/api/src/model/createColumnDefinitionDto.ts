@@ -7,16 +7,16 @@
  */
 
 export interface CreateColumnDefinitionDto {
-	entity: string;
-	field: string;
-	label: string;
-	sortOrder?: number;
-	isRequired?: boolean;
-	visibleOnDesktop?: boolean;
-	visibleOnTablet?: boolean;
-	visibleOnMobile?: boolean;
-	sortable?: boolean;
-	width?: string;
-	minWidth?: string;
-	subjectId?: string;
+  entity: string;
+  field: string;
+  label: string;
+  sortOrder?: number;
+  isRequired?: boolean;
+  visibleOnDesktop?: boolean;
+  visibleOnTablet?: boolean;
+  visibleOnMobile?: boolean;
+  sortable?: boolean;
+  width?: string;
+  minWidth?: string;
+  subjectId?: string;
 }

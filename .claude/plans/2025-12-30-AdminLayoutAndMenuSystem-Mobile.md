@@ -75,12 +75,12 @@
 **Props:**
 ```typescript
 export interface BottomTabProps {
-  /** 1depth 메뉴 목록 */
-  menus: Menu[];
-  /** 현재 선택된 메뉴 ID */
-  selectedMenuId?: string;
+  /** 1depth 네비게이션 아이템 목록 */
+  navItems: NavItem[];
+  /** 현재 선택된 아이템 ID */
+  selectedNavItemId?: string;
   /** 탭 선택 핸들러 */
-  onSelectTab: (menuId: string) => void;
+  onSelectTab: (navItemId: string) => void;
   /** 추가 CSS 클래스 */
   className?: string;
 }
@@ -94,8 +94,8 @@ import { renderLucideIcon } from "../../../utils/iconUtils";
 import { Text } from "../../ui/data-display/Text/Text";
 
 export const BottomTab = observer(({
-  menus,
-  selectedMenuId,
+  navItems,
+  selectedNavItemId,
   onSelectTab,
   className,
 }: BottomTabProps) => {
@@ -103,7 +103,7 @@ export const BottomTab = observer(({
     <div className={cn("md:hidden", className)}>
       <Tabs
         variant="light"
-        selectedKey={selectedMenuId}
+        selectedKey={selectedNavItemId}
         onSelectionChange={(key) => onSelectTab(key as string)}
         classNames={{
           base: "w-full",
@@ -112,13 +112,13 @@ export const BottomTab = observer(({
           cursor: "bg-primary/10",
         }}
       >
-        {menus.map((menu) => (
+        {navItems.map((navItem) => (
           <Tab
-            key={menu.id}
+            key={navItem.id}
             title={
               <div className="flex flex-col items-center gap-1">
-                {menu.icon && renderLucideIcon(menu.icon, "h-6 w-6", 24)}
-                <Text className="text-xs">{menu.label}</Text>
+                {navItem.icon && renderLucideIcon(navItem.icon, "h-6 w-6", 24)}
+                <Text className="text-xs">{navItem.label}</Text>
               </div>
             }
           />
@@ -152,12 +152,12 @@ BottomTab.displayName = "BottomTab";
 **Props:**
 ```typescript
 export interface SubMenuListProps {
-  /** 표시할 서브메뉴 목록 */
-  subMenus: Menu[];
-  /** 현재 선택된 서브메뉴 ID */
-  selectedSubMenuId?: string;
-  /** 서브메뉴 선택 핸들러 */
-  onSelectSubMenu: (subMenuId: string) => void;
+  /** 표시할 서브 네비게이션 아이템 목록 */
+  subNavItems: NavItem[];
+  /** 현재 선택된 서브 아이템 ID */
+  selectedSubNavItemId?: string;
+  /** 서브 아이템 선택 핸들러 */
+  onSelectSubNavItem: (subNavItemId: string) => void;
   /** 추가 CSS 클래스 */
   className?: string;
 }
@@ -172,28 +172,28 @@ import { Text } from "../../ui/data-display/Text/Text";
 import { VStack } from "../../ui/surfaces/VStack/VStack";
 
 export const SubMenuList = observer(({
-  subMenus,
-  selectedSubMenuId,
-  onSelectSubMenu,
+  subNavItems,
+  selectedSubNavItemId,
+  onSelectSubNavItem,
   className,
 }: SubMenuListProps) => {
   return (
     <div className={cn("flex h-full flex-col bg-background", className)}>
       <VStack className="flex-1 overflow-y-auto" gap={0}>
-        {subMenus.map((subMenu) => (
+        {subNavItems.map((subNavItem) => (
           <button
-            key={subMenu.id}
+            key={subNavItem.id}
             type="button"
-            onClick={() => onSelectSubMenu(subMenu.id)}
+            onClick={() => onSelectSubNavItem(subNavItem.id)}
             className={cn(
               "flex w-full items-center justify-between px-4 py-4",
               "border-b border-divider transition-colors",
               "hover:bg-default-100 active:bg-default-200",
-              subMenu.id === selectedSubMenuId && "bg-primary/10"
+              subNavItem.id === selectedSubNavItemId && "bg-primary/10"
             )}
           >
             <Text className="text-base font-medium">
-              {subMenu.label}
+              {subNavItem.label}
             </Text>
             <ChevronRight className="h-5 w-5 text-foreground/40" />
           </button>
@@ -284,12 +284,12 @@ import {
 import { BackButton } from "@cocrepo/ui/widgets";
 import { useState, useEffect } from "react";
 import { useMediaQuery } from "@cocrepo/hook";
-import { useMenuStore } from "@cocrepo/store";
+import { useNavigationStore } from "@cocrepo/store";
 import { observer } from "mobx-react-lite";
 
 const AdminLayout = observer(({ children }: { children: React.ReactNode }) => {
   const isMobile = useMediaQuery("(max-width: 767px)");
-  const menuStore = useMenuStore();
+  const navigationStore = useNavigationStore();
 
   // 모바일: SubMenuList 표시 상태
   const [showSubMenuList, setShowSubMenuList] = useState(false);
@@ -297,17 +297,17 @@ const AdminLayout = observer(({ children }: { children: React.ReactNode }) => {
   /**
    * BottomTab 탭 선택 핸들러
    */
-  const handleSelectTab = (menuId: string) => {
-    const menu = menuStore.items.find((m) => m.id === menuId);
-    if (!menu) return;
+  const handleSelectTab = (navItemId: string) => {
+    const navItem = navigationStore.items.find((m) => m.id === navItemId);
+    if (!navItem) return;
 
-    // 하위 메뉴가 있으면 SubMenuList 표시
-    if (menu.hasChildren) {
-      menuStore.selectMenu(menuId);
+    // 하위 아이템이 있으면 SubMenuList 표시
+    if (navItem.hasChildren) {
+      navigationStore.selectNavItem(navItemId);
       setShowSubMenuList(true);
     } else {
-      // 하위 메뉴 없으면 바로 페이지 이동
-      menuStore.selectMenu(menuId);
+      // 하위 아이템 없으면 바로 페이지 이동
+      navigationStore.selectNavItem(navItemId);
       setShowSubMenuList(false);
     }
   };
@@ -315,8 +315,8 @@ const AdminLayout = observer(({ children }: { children: React.ReactNode }) => {
   /**
    * SubMenuList 항목 선택 핸들러
    */
-  const handleSelectSubMenu = (subMenuId: string) => {
-    menuStore.selectSubMenu(subMenuId);
+  const handleSelectSubNavItem = (subNavItemId: string) => {
+    navigationStore.selectSubNavItem(subNavItemId);
     setShowSubMenuList(false); // 페이지 이동 후 리스트 닫기
   };
 
@@ -345,10 +345,10 @@ const AdminLayout = observer(({ children }: { children: React.ReactNode }) => {
                 <BackButton onBack={handleBack} />
               )}
 
-              {/* 로고 또는 현재 메뉴명 */}
-              {isMobile && showSubMenuList && menuStore.selectedMenu ? (
+              {/* 로고 또는 현재 아이템명 */}
+              {isMobile && showSubMenuList && navigationStore.selectedNavItem ? (
                 <span className="text-lg font-semibold">
-                  {menuStore.selectedMenu.label}
+                  {navigationStore.selectedNavItem.label}
                 </span>
               ) : (
                 <AppLogo icon="LayoutGrid" text={isMobile ? "" : "Admin"} />
@@ -371,19 +371,19 @@ const AdminLayout = observer(({ children }: { children: React.ReactNode }) => {
         // 모바일만 바텀 탭 표시
         isMobile ? (
           <BottomTab
-            menus={menuStore.items}
-            selectedMenuId={menuStore.selectedMenu?.id}
+            navItems={navigationStore.items}
+            selectedNavItemId={navigationStore.selectedNavItem?.id}
             onSelectTab={handleSelectTab}
           />
         ) : null
       }
     >
       {/* 모바일: SubMenuList 또는 페이지 콘텐츠 */}
-      {isMobile && showSubMenuList && menuStore.selectedMenu?.hasChildren ? (
+      {isMobile && showSubMenuList && navigationStore.selectedNavItem?.hasChildren ? (
         <SubMenuList
-          subMenus={menuStore.selectedMenu.children}
-          selectedSubMenuId={menuStore.selectedSubMenu?.id}
-          onSelectSubMenu={handleSelectSubMenu}
+          subNavItems={navigationStore.selectedNavItem.children}
+          selectedSubNavItemId={navigationStore.selectedSubNavItem?.id}
+          onSelectSubNavItem={handleSelectSubNavItem}
         />
       ) : (
         children

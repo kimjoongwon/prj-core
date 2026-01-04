@@ -28,11 +28,11 @@ packages/store/src/stores/{storeName}Store.ts
    ```typescript
    // ❌ 금지 - 앱 이름 포함
    export class AdminAuthStore { }
-   export class CoinMenuStore { }
+   export class CoinNavigationStore { }
 
    // ✅ 권장 - 범용적 이름
    export class AuthStore { }
-   export class MenuStore { }
+   export class NavigationStore { }
    ```
 
 3. **API 호출은 Store에서 직접하지 않음**

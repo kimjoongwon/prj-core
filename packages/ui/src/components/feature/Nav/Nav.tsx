@@ -1,6 +1,6 @@
 "use client";
 
-import { useMenuStore } from "@cocrepo/store";
+import { useNavigationStore } from "@cocrepo/store";
 import { cn, NavbarItem } from "@heroui/react";
 import { observer } from "mobx-react-lite";
 import { renderLucideIcon } from "../../../utils/iconUtils";
@@ -8,7 +8,7 @@ import { renderLucideIcon } from "../../../utils/iconUtils";
 /**
  * Nav Feature 컴포넌트
  * Header의 center 영역에 사용
- * MenuStore를 사용하여 메뉴 상태를 관리합니다.
+ * NavigationStore를 사용하여 네비게이션 상태를 관리합니다.
  *
  * @example
  * ```tsx
@@ -16,19 +16,19 @@ import { renderLucideIcon } from "../../../utils/iconUtils";
  * ```
  */
 export const Nav = observer(() => {
-	const menuStore = useMenuStore();
+	const navigationStore = useNavigationStore();
 
-	const handleClickMenu = (menuId: string) => {
-		menuStore.selectMenu(menuId);
+	const handleClickNavItem = (navItemId: string) => {
+		navigationStore.selectNavItem(navItemId);
 	};
 
 	return (
 		<nav className="flex items-center gap-1">
-			{menuStore.items.map((item) => (
+			{navigationStore.items.map((item) => (
 				<NavbarItem key={item.id}>
 					<button
 						type="button"
-						onClick={() => handleClickMenu(item.id)}
+						onClick={() => handleClickNavItem(item.id)}
 						className={cn(
 							"flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium transition-colors",
 							item.active

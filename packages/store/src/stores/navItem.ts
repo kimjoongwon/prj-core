@@ -1,38 +1,58 @@
 import { makeAutoObservable } from "mobx";
 
 /**
- * 메뉴 설정 인터페이스 (생성자 파라미터용)
+ * 네비게이션 아이템 설정 인터페이스 (생성자 파라미터용)
  */
-export interface MenuConfig {
+export interface NavItemConfig {
 	id: string;
 	label: string;
 	path?: string;
 	icon?: string;
 	subject: string;
-	children?: MenuConfig[];
+	children?: NavItemConfig[];
 }
 
-export class Menu {
+/**
+ * NavItem - 네비게이션 아이템 클래스
+ *
+ * 역할:
+ * - 네비게이션 항목의 데이터와 UI 상태 관리
+ * - 활성화 상태 추적
+ * - 하위 아이템 관리
+ *
+ * @example
+ * ```ts
+ * const navItem = new NavItem({
+ *   id: 'members',
+ *   label: '회원',
+ *   subject: 'Member',
+ *   children: [
+ *     { id: 'member-list', label: '회원 목록', path: '/members/list', subject: 'MemberList' },
+ *   ],
+ * });
+ * ```
+ */
+export class NavItem {
 	readonly id: string;
 	readonly label: string;
 	readonly path: string | undefined;
 	readonly icon: string | undefined;
 	readonly subject: string;
-	readonly children: Menu[];
+	readonly children: NavItem[];
 	private _active: boolean = false;
 
 	/**
-	 * 메뉴 생성
-	 * @param config 메뉴 설정 데이터
+	 * 네비게이션 아이템 생성
+	 * @param config 아이템 설정 데이터
 	 */
-	constructor(config: MenuConfig) {
+	constructor(config: NavItemConfig) {
 		this.id = config.id;
 		this.label = config.label;
 		this.path = config.path;
 		this.icon = config.icon;
 		this.subject = config.subject;
 		this.children = config.children
-			? config.children.map((child) => new Menu(child))
+			? config.children.map((child) => new NavItem(child))
 			: [];
 
 		makeAutoObservable(this);
@@ -53,14 +73,14 @@ export class Menu {
 	}
 
 	/**
-	 * 하위 메뉴가 있는지 확인
+	 * 하위 아이템이 있는지 확인
 	 */
 	get hasChildren(): boolean {
 		return this.children.length > 0;
 	}
 
 	/**
-	 * 첫 번째 하위 메뉴의 경로 반환
+	 * 첫 번째 하위 아이템의 경로 반환
 	 */
 	get firstChildPath(): string | undefined {
 		if (this.hasChildren) {
@@ -70,14 +90,14 @@ export class Menu {
 	}
 
 	/**
-	 * 활성화된 하위 메뉴 반환
+	 * 활성화된 하위 아이템 반환
 	 */
-	get activeChild(): Menu | undefined {
+	get activeChild(): NavItem | undefined {
 		return this.children.find((child) => child.active);
 	}
 
 	/**
-	 * 모든 하위 메뉴의 활성화 상태 초기화
+	 * 모든 하위 아이템의 활성화 상태 초기화
 	 */
 	resetChildrenActive(): void {
 		for (const child of this.children) {
@@ -86,16 +106,16 @@ export class Menu {
 	}
 
 	/**
-	 * ID로 하위 메뉴 찾기
+	 * ID로 하위 아이템 찾기
 	 */
-	findChildById(id: string): Menu | undefined {
+	findChildById(id: string): NavItem | undefined {
 		return this.children.find((child) => child.id === id);
 	}
 
 	/**
-	 * 경로로 하위 메뉴 찾기
+	 * 경로로 하위 아이템 찾기
 	 */
-	findChildByPath(path: string): Menu | undefined {
+	findChildByPath(path: string): NavItem | undefined {
 		return this.children.find(
 			(child) => child.path && path.startsWith(child.path),
 		);

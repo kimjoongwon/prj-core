@@ -443,11 +443,11 @@ export default function UsersLayout({ children }: { children: React.ReactNode })
 "use client";
 
 import { observer } from "mobx-react-lite";
-import { useMenuStore } from "@cocrepo/store";
+import { useNavigationStore } from "@cocrepo/store";
 import { useRouter, usePathname } from "next/navigation";
 
 export const Tabs = observer(() => {
-  const menuStore = useMenuStore();
+  const navigationStore = useNavigationStore();
   const router = useRouter();
   const pathname = usePathname();
 
@@ -457,7 +457,7 @@ export const Tabs = observer(() => {
 
   return (
     <div className="flex gap-2 border-b">
-      {menuStore.subMenuItems.map((tab) => (
+      {navigationStore.subMenuItems.map((tab) => (
         <button
           key={tab.id}
           onClick={() => handleClickTab(tab.path)}
@@ -515,15 +515,15 @@ export default function UsersPage() {
 
 // 기능 컴포넌트가 자체적으로 비즈니스 로직 처리
 const Nav = () => {
-  const menuStore = useMenuStore();
+  const navigationStore = useNavigationStore();
   const router = useRouter();
 
   const handleClickMenu = (menuId: string) => {
-    menuStore.selectMenu(menuId);
-    router.push(menuStore.selectedMenu?.path ?? "/");
+    navigationStore.selectMenu(menuId);
+    router.push(navigationStore.selectedMenu?.path ?? "/");
   };
 
-  return <NavUI items={menuStore.menuItems} onClickMenu={handleClickMenu} />;
+  return <NavUI items={navigationStore.menuItems} onClickMenu={handleClickMenu} />;
 };
 ```
 
@@ -757,25 +757,25 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
 "use client";
 
 import { observer } from "mobx-react-lite";
-import { useMenuStore } from "@cocrepo/store";
+import { useNavigationStore } from "@cocrepo/store";
 import { useRouter } from "next/navigation";
 
 export const Navbar = observer(() => {
-  const menuStore = useMenuStore();
+  const navigationStore = useNavigationStore();
   const router = useRouter();
 
   const handleClickMenu = (menuId: string) => {
-    menuStore.selectMenu(menuId);
-    router.push(menuStore.selectedMenu?.path ?? "/");
+    navigationStore.selectMenu(menuId);
+    router.push(navigationStore.selectedMenu?.path ?? "/");
   };
 
   return (
     <nav className="flex gap-4">
-      {menuStore.menuItems.map((item) => (
+      {navigationStore.menuItems.map((item) => (
         <button
           key={item.id}
           onClick={() => handleClickMenu(item.id)}
-          className={menuStore.selectedMenuId === item.id ? "font-bold" : ""}
+          className={navigationStore.selectedMenuId === item.id ? "font-bold" : ""}
         >
           {item.label}
         </button>
@@ -963,7 +963,7 @@ import { Logo, Navbar, UserMenu, SideMenu } from "@cocrepo/ui/feature";
 
 // Feature 컴포넌트 - 자체 비즈니스 로직
 const Navbar = observer(() => {
-  const menuStore = useMenuStore();
+  const navigationStore = useNavigationStore();
   const router = useRouter();
   // 자체적으로 store, router 사용
 });

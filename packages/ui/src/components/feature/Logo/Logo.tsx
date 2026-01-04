@@ -1,6 +1,6 @@
 "use client";
 
-import { useMenuStore } from "@cocrepo/store";
+import { useNavigationStore } from "@cocrepo/store";
 import { Button, cn } from "@heroui/react";
 import { observer } from "mobx-react-lite";
 import { renderLucideIcon } from "../../../utils/iconUtils";
@@ -17,7 +17,7 @@ export interface AppLogoProps {
 /**
  * AppLogo Feature 컴포넌트
  * Header의 left 영역에 사용
- * 클릭 시 첫 번째 메뉴로 이동합니다.
+ * 클릭 시 첫 번째 아이템으로 이동합니다.
  *
  * @example
  * ```tsx
@@ -26,13 +26,13 @@ export interface AppLogoProps {
  */
 export const AppLogo = observer(
 	({ icon = "LayoutGrid", text = "Admin", className }: AppLogoProps) => {
-		const menuStore = useMenuStore();
+		const navigationStore = useNavigationStore();
 
 		const handleClickLogo = () => {
-			// 첫 번째 메뉴로 이동
-			const firstMenu = menuStore.items[0];
-			if (firstMenu) {
-				menuStore.selectMenu(firstMenu.id);
+			// 첫 번째 아이템으로 이동
+			const firstNavItem = navigationStore.items[0];
+			if (firstNavItem) {
+				navigationStore.selectNavItem(firstNavItem.id);
 			}
 		};
 

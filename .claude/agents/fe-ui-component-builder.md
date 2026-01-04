@@ -396,13 +396,13 @@ export interface ButtonProps {
 // ✅ 올바른 예시 (범용적인 이름)
 export class PersistStore { }
 export function useAppStore() { }
-export function useMenuStore() { }
+export function useNavigationStore() { }
 export function useAppLayout() { }
 
 // ❌ 금지 (앱 이름이 포함된 이름)
 export class AdminPersistStore { }
 export function useAdminStore() { }
-export function useAdminMenuStore() { }
+export function useAdminNavigationStore() { }
 export function useAdminLayout() { }
 ```
 

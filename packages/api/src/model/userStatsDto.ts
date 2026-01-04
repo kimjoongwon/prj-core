@@ -7,12 +7,12 @@
  */
 
 export interface UserStatsDto {
-	/** 전체 회원 수 */
-	total: number;
-	/** 활성 회원 수 (최근 30일 내 활동) */
-	active: number;
-	/** 비활성 회원 수 (30일 이상 미활동) */
-	inactive: number;
-	/** 이번 달 신규 가입자 수 */
-	newThisMonth: number;
+  /** 전체 회원 수 */
+  total: number;
+  /** 활성 회원 수 (최근 30일 내 활동) */
+  active: number;
+  /** 비활성 회원 수 (30일 이상 미활동) */
+  inactive: number;
+  /** 이번 달 신규 가입자 수 */
+  newThisMonth: number;
 }

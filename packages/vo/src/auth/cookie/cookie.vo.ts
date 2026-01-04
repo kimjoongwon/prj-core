@@ -1,6 +1,5 @@
 import { ValueObject } from "../../common/value-object.base";
 import { VoValidationError } from "../../errors/vo.error";
-import type { JwtExpiration } from "./jwt-expiration.vo";
 
 /**
  * Express CookieOptions 호환 인터페이스
@@ -14,7 +13,7 @@ export interface CookieOptions {
 	domain?: string;
 }
 
-interface CookieOptionsProps {
+interface CookieProps {
 	maxAge: number;
 	httpOnly: boolean;
 	secure: boolean;
@@ -23,13 +22,45 @@ interface CookieOptionsProps {
 }
 
 /**
- * 쿠키 옵션 기본 Value Object
- *
- * - 쿠키 설정 캡슐화
- * - Express CookieOptions 변환
+ * JWT 만료 시간을 밀리초로 변환
+ * @param expiresIn - "15m", "7d", "24h", 3600 등
  */
-export class CookieOptionsVo extends ValueObject<CookieOptionsProps> {
-	protected validate(props: CookieOptionsProps): void {
+function parseExpiration(expiresIn: string | number): number {
+	// 숫자인 경우 초 단위로 간주
+	if (typeof expiresIn === "number") {
+		if (expiresIn <= 0) {
+			throw new VoValidationError("만료 시간은 0보다 커야 합니다.");
+		}
+		return expiresIn * 1000;
+	}
+
+	const regex = /^(\d+)([smhd])$/;
+	const match = expiresIn.match(regex);
+
+	if (!match) {
+		throw new VoValidationError(
+			`유효하지 않은 만료 시간 형식입니다: ${expiresIn}. 예: "15m", "7d", "24h"`,
+		);
+	}
+
+	const value = Number.parseInt(match[1], 10);
+	const unit = match[2];
+
+	const unitToMs: Record<string, number> = {
+		s: 1000,
+		m: 60 * 1000,
+		h: 60 * 60 * 1000,
+		d: 24 * 60 * 60 * 1000,
+	};
+
+	return value * unitToMs[unit];
+}
+
+/**
+ * HTTP 쿠키 설정 Value Object
+ */
+export class Cookie extends ValueObject<CookieProps> {
+	protected validate(props: CookieProps): void {
 		if (props.maxAge <= 0) {
 			throw new VoValidationError("maxAge는 0보다 커야 합니다.");
 		}
@@ -40,13 +71,13 @@ export class CookieOptionsVo extends ValueObject<CookieOptionsProps> {
 	}
 
 	/**
-	 * 팩토리 메서드 - 기본 옵션
+	 * 기본 쿠키 생성
 	 */
 	public static create(
 		maxAge: number,
 		isProduction = process.env.NODE_ENV === "production",
-	): CookieOptionsVo {
-		return new CookieOptionsVo({
+	): Cookie {
+		return new Cookie({
 			maxAge,
 			httpOnly: true,
 			secure: isProduction,
@@ -56,19 +87,21 @@ export class CookieOptionsVo extends ValueObject<CookieOptionsProps> {
 	}
 
 	/**
-	 * JWT 만료 시간으로부터 생성
+	 * 토큰용 쿠키 (Access/Refresh 공통)
+	 * @param expiresIn - "15m", "7d", "24h", 3600 등
 	 */
-	public static fromJwtExpiration(
-		expiration: JwtExpiration,
+	public static forToken(
+		expiresIn: string | number,
 		isProduction = process.env.NODE_ENV === "production",
-	): CookieOptionsVo {
-		return CookieOptionsVo.create(expiration.toMilliseconds(), isProduction);
+	): Cookie {
+		const maxAge = parseExpiration(expiresIn);
+		return Cookie.create(maxAge, isProduction);
 	}
 
 	/**
 	 * Express CookieOptions로 변환
 	 */
-	public toExpressCookieOptions(): CookieOptions {
+	public toExpressOptions(): CookieOptions {
 		return {
 			httpOnly: this.props.httpOnly,
 			secure: this.props.secure,
@@ -78,9 +111,6 @@ export class CookieOptionsVo extends ValueObject<CookieOptionsProps> {
 		};
 	}
 
-	/**
-	 * 속성 접근자
-	 */
 	public get maxAge(): number {
 		return this.props.maxAge;
 	}

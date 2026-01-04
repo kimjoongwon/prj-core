@@ -1,10 +1,6 @@
 import { CONTEXT_KEYS, Token, TokenValues } from "@cocrepo/constant";
 import { AuthConfig } from "@cocrepo/type";
-import {
-	AccessTokenCookieOptions,
-	RefreshTokenCookieOptions,
-	TokenPair,
-} from "@cocrepo/vo";
+import { Cookie, TokenPair } from "@cocrepo/vo";
 import {
 	BadRequestException,
 	Injectable,
@@ -48,12 +44,11 @@ export class TokenService {
 			throw new Error("Auth configuration is not defined.");
 		}
 
-		const cookieOptions =
-			key === Token.ACCESS
-				? AccessTokenCookieOptions.forAccessToken(authConfig.expires)
-				: RefreshTokenCookieOptions.forRefreshToken(authConfig.refresh);
+		const expiresIn =
+			key === Token.ACCESS ? authConfig.expires : authConfig.refresh;
+		const cookie = Cookie.forToken(expiresIn);
 
-		return res.cookie(key, value, cookieOptions.toExpressCookieOptions());
+		return res.cookie(key, value, cookie.toExpressOptions());
 	}
 
 	/**
@@ -67,8 +62,6 @@ export class TokenService {
 	 * Refresh Token 쿠키 설정
 	 */
 	setRefreshTokenCookie(res: Response, refreshToken: string) {
-		const test = this.cls.get<string>("hi");
-		console.log("test", test);
 		return this.setTokenToHTTPOnlyCookie(res, Token.REFRESH, refreshToken);
 	}
 
@@ -81,15 +74,11 @@ export class TokenService {
 			throw new Error("Auth configuration is not defined.");
 		}
 
-		const accessOptions = AccessTokenCookieOptions.forAccessToken(
-			authConfig.expires,
-		);
-		const refreshOptions = RefreshTokenCookieOptions.forRefreshToken(
-			authConfig.refresh,
-		);
+		const accessCookie = Cookie.forToken(authConfig.expires);
+		const refreshCookie = Cookie.forToken(authConfig.refresh);
 
-		res.clearCookie(Token.ACCESS, accessOptions.toExpressCookieOptions());
-		res.clearCookie(Token.REFRESH, refreshOptions.toExpressCookieOptions());
+		res.clearCookie(Token.ACCESS, accessCookie.toExpressOptions());
+		res.clearCookie(Token.REFRESH, refreshCookie.toExpressOptions());
 	}
 
 	generateAccessToken(payload: { userId: string }) {

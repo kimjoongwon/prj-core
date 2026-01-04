@@ -10,9 +10,9 @@ import { createContext, type ReactNode, useContext, useRef } from "react";
  * @example
  * ```tsx
  * class MyRootStore {
- *   menuStore: MenuStore;
+ *   navigationStore: NavigationStore;
  *   constructor() {
- *     this.menuStore = new MenuStore();
+ *     this.navigationStore = new NavigationStore();
  *   }
  * }
  *
@@ -25,7 +25,7 @@ import { createContext, type ReactNode, useContext, useRef } from "react";
  *
  * // Hook에서 사용 (완전한 타입 추론)
  * const store = useStore(); // MyRootStore 타입
- * store.menuStore // MenuStore 타입
+ * store.navigationStore // NavigationStore 타입
  * ```
  */
 export function createStoreContext<TStore>(displayName: string) {

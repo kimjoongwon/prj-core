@@ -22,16 +22,17 @@ export const useStore = () => {
 export const useRootStore = useStore;
 
 /**
- * MenuStore를 가져오는 selector hook
- * RootStore에서 menuStore만 선택하여 반환
+ * NavigationStore를 가져오는 selector hook
+ * RootStore에서 navigationStore만 선택하여 반환
  */
-export const useMenuStore = () => {
+export const useNavigationStore = () => {
 	const store = useStore();
-	if (!store.menuStore) {
-		throw new Error("menuStore가 초기화되지 않았습니다.");
+	if (!store.navigationStore) {
+		throw new Error("navigationStore가 초기화되지 않았습니다.");
 	}
-	return store.menuStore;
+	return store.navigationStore;
 };
+
 
 /**
  * PersistStore를 가져오는 selector hook

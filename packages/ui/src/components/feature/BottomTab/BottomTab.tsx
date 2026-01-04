@@ -1,6 +1,6 @@
 "use client";
 
-import { useMenuStore } from "@cocrepo/store";
+import { useNavigationStore } from "@cocrepo/store";
 import { cn, Tab, Tabs } from "@heroui/react";
 import { observer } from "mobx-react-lite";
 import { useMemo, useSyncExternalStore } from "react";
@@ -8,7 +8,7 @@ import { renderLucideIcon } from "../../../utils/iconUtils";
 
 export interface BottomTabProps {
 	/** 탭 선택 시 콜백 (SubMenuList 표시 여부 결정용) */
-	onSelectTab?: (menuId: string, hasChildren: boolean) => void;
+	onSelectTab?: (navItemId: string, hasChildren: boolean) => void;
 	/** 추가 CSS 클래스 */
 	className?: string;
 }
@@ -27,8 +27,8 @@ function useIsMounted(): boolean {
 
 /**
  * BottomTab Feature 컴포넌트
- * 모바일에서 1depth 메뉴를 하단 탭으로 표시합니다.
- * MenuStore를 사용하여 메뉴 상태를 관리합니다.
+ * 모바일에서 1depth 아이템을 하단 탭으로 표시합니다.
+ * NavigationStore를 사용하여 네비게이션 상태를 관리합니다.
  *
  * @example
  * ```tsx
@@ -37,37 +37,37 @@ function useIsMounted(): boolean {
  */
 export const BottomTab = observer(
 	({ onSelectTab, className }: BottomTabProps) => {
-		const menuStore = useMenuStore();
+		const navigationStore = useNavigationStore();
 		const isMounted = useIsMounted();
 
 		// SSR 대응: 클라이언트 마운트 전에는 빈 배열
-		const menuItems = isMounted ? menuStore.items : [];
+		const navItems = isMounted ? navigationStore.items : [];
 
-		// 현재 선택된 메뉴 ID
-		const selectedMenuId = menuStore.selectedMenu?.id;
+		// 현재 선택된 아이템 ID
+		const selectedNavItemId = navigationStore.selectedNavItem?.id;
 
 		// 탭 선택 핸들러
 		const handleSelectionChange = (key: React.Key) => {
-			const menuId = key.toString();
-			const menu = menuStore.findMenuById(menuId);
+			const navItemId = key.toString();
+			const navItem = navigationStore.findNavItemById(navItemId);
 
-			if (!menu) return;
+			if (!navItem) return;
 
-			// 하위 메뉴가 있는 경우
-			if (menu.hasChildren) {
-				menuStore.selectMenu(menuId);
-				onSelectTab?.(menuId, true);
+			// 하위 아이템이 있는 경우
+			if (navItem.hasChildren) {
+				navigationStore.selectNavItem(navItemId);
+				onSelectTab?.(navItemId, true);
 			} else {
-				// 하위 메뉴가 없는 경우 바로 페이지 이동
-				menuStore.selectMenu(menuId);
-				onSelectTab?.(menuId, false);
+				// 하위 아이템이 없는 경우 바로 페이지 이동
+				navigationStore.selectNavItem(navItemId);
+				onSelectTab?.(navItemId, false);
 			}
 		};
 
-		// 렌더링할 메뉴 아이템 (최대 5개)
+		// 렌더링할 네비게이션 아이템 (최대 5개)
 		const displayItems = useMemo(() => {
-			return menuItems.slice(0, 5);
-		}, [menuItems]);
+			return navItems.slice(0, 5);
+		}, [navItems]);
 
 		if (!isMounted || displayItems.length === 0) {
 			return null;
@@ -81,8 +81,8 @@ export const BottomTab = observer(
 				)}
 			>
 				<Tabs
-					aria-label="메뉴 탭"
-					selectedKey={selectedMenuId}
+					aria-label="네비게이션 탭"
+					selectedKey={selectedNavItemId}
 					onSelectionChange={handleSelectionChange}
 					variant="light"
 					classNames={{
@@ -94,30 +94,30 @@ export const BottomTab = observer(
 						tabContent: "group-data-[selected=true]:text-primary",
 					}}
 				>
-					{displayItems.map((menu) => (
+					{displayItems.map((navItem) => (
 						<Tab
-							key={menu.id}
+							key={navItem.id}
 							title={
 								<div className="flex flex-col items-center gap-1">
-									{menu.icon && (
+									{navItem.icon && (
 										<span
 											className={cn(
 												"transition-colors",
-												menu.active ? "text-primary" : "text-foreground/60",
+												navItem.active ? "text-primary" : "text-foreground/60",
 											)}
 										>
-											{renderLucideIcon(menu.icon, "h-6 w-6", 24)}
+											{renderLucideIcon(navItem.icon, "h-6 w-6", 24)}
 										</span>
 									)}
 									<span
 										className={cn(
 											"text-xs transition-colors",
-											menu.active
+											navItem.active
 												? "font-medium text-primary"
 												: "text-foreground/60",
 										)}
 									>
-										{menu.label}
+										{navItem.label}
 									</span>
 								</div>
 							}

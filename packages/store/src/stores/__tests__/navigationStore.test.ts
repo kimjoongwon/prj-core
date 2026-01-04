@@ -1,408 +1,373 @@
 /// <reference types="vitest/globals" />
 
-import type { RouteDto } from "@cocrepo/api";
 import { beforeEach, describe, expect, it, vi } from "vitest";
+import { NavItem, type NavItemConfig } from "../navItem";
 import { NavigationStore } from "../navigationStore";
-import { NavigatorStore } from "../navigatorStore";
-import type { PlateStore } from "../plateStore";
 
-// 의존성 모킹
-vi.mock("../plateStore");
-vi.mock("../navigatorStore");
-
-describe("NavigationStore", () => {
-	let plateStore: PlateStore;
-	let navigatorStore: NavigatorStore;
-	let navigationStore: NavigationStore;
-
-	const mockRoutes: RouteDto[] = [
-		{
-			name: "Dashboard",
-			fullPath: "/dashboard",
-			relativePath: "/dashboard",
-			icon: "dashboard",
-			children: [
-				{
-					name: "Analytics",
-					fullPath: "/dashboard/analytics",
-					relativePath: "/analytics",
-					icon: "chart",
-					children: null,
-				},
-				{
-					name: "Reports",
-					fullPath: "/dashboard/reports",
-					relativePath: "/reports",
-					icon: "report",
-					children: null,
-				},
-			],
-		},
-		{
-			name: "Users",
-			fullPath: "/users",
-			relativePath: "/users",
-			icon: "users",
-			children: [
-				{
-					name: "List",
-					fullPath: "/users/list",
-					relativePath: "/list",
-					icon: "list",
-					children: null,
-				},
-			],
-		},
-		{
-			name: "Settings",
-			fullPath: "/settings",
-			relativePath: "/settings",
-			icon: "settings",
-			children: null,
-		},
-	];
-
-	beforeEach(() => {
-		plateStore = {} as PlateStore;
-		navigatorStore = new NavigatorStore(plateStore);
-
-		// window.location 모킹
-		Object.defineProperty(window, "location", {
-			value: {
-				pathname: "/",
-			},
-			writable: true,
-		});
-
-		// navigatorStore 메서드 모킹
-		vi.spyOn(navigatorStore, "getRouteByFullPath").mockReturnValue(undefined);
+describe("NavItem", () => {
+	const createNavItemConfig = (overrides?: Partial<NavItemConfig>): NavItemConfig => ({
+		id: "nav-1",
+		label: "테스트 아이템",
+		path: "/test",
+		icon: "test-icon",
+		subject: "TestItem",
+		...overrides,
 	});
 
 	describe("생성자", () => {
-		it("routeDtos가 제공되지 않을 때 빈 경로로 초기화되어야 함", () => {
-			navigationStore = new NavigationStore(plateStore, navigatorStore);
+		it("아이템을 올바르게 생성해야 한다", () => {
+			// Given
+			const config = createNavItemConfig();
 
-			expect(navigationStore.routes).toHaveLength(0);
-			expect(navigationStore.currentRoute).toBeUndefined();
+			// When
+			const navItem = new NavItem(config);
+
+			// Then
+			expect(navItem.id).toBe("nav-1");
+			expect(navItem.label).toBe("테스트 아이템");
+			expect(navItem.path).toBe("/test");
+			expect(navItem.icon).toBe("test-icon");
+			expect(navItem.subject).toBe("TestItem");
 		});
 
-		it("routeDtos로부터 경로가 초기화되어야 함", () => {
-			navigationStore = new NavigationStore(
-				plateStore,
-				navigatorStore,
-				mockRoutes,
-			);
+		it("하위 아이템을 재귀적으로 생성해야 한다", () => {
+			// Given
+			const config = createNavItemConfig({
+				children: [
+					{ id: "child-1", label: "자식 1", path: "/test/child1", subject: "Child1" },
+					{ id: "child-2", label: "자식 2", path: "/test/child2", subject: "Child2" },
+				],
+			});
 
-			expect(navigationStore.routes).toHaveLength(3);
-			expect(navigationStore.routes[0].name).toBe("Dashboard");
-			expect(navigationStore.routes[0].children).toHaveLength(2);
-		});
+			// When
+			const navItem = new NavItem(config);
 
-		it("window location으로부터 초기 현재 경로가 설정되어야 함", () => {
-			const mockRoute: RouteDto = {
-				name: "Dashboard",
-				fullPath: "/dashboard",
-				relativePath: "/dashboard",
-				icon: "dashboard",
-				children: null,
-			};
-
-			window.location.pathname = "/dashboard";
-			vi.spyOn(navigatorStore, "getRouteByFullPath").mockReturnValue(mockRoute);
-
-			navigationStore = new NavigationStore(
-				plateStore,
-				navigatorStore,
-				mockRoutes,
-			);
-
-			expect(navigationStore.currentRoute).toEqual(mockRoute);
+			// Then
+			expect(navItem.children).toHaveLength(2);
+			expect(navItem.children[0].id).toBe("child-1");
+			expect(navItem.children[1].id).toBe("child-2");
 		});
 	});
 
-	describe("currentRoute setter와 getter", () => {
-		beforeEach(() => {
-			navigationStore = new NavigationStore(
-				plateStore,
-				navigatorStore,
-				mockRoutes,
-			);
+	describe("active 상태", () => {
+		it("초기 active 상태는 false여야 한다", () => {
+			const navItem = new NavItem(createNavItemConfig());
+			expect(navItem.active).toBe(false);
 		});
 
-		it("currentRoute를 업데이트하고 활성 상태 업데이트를 트리거해야 함", () => {
-			const newRoute: RouteDto = {
-				name: "Dashboard",
-				fullPath: "/dashboard",
-				relativePath: "/dashboard",
-				icon: "dashboard",
-				children: null,
-			};
+		it("setActive로 상태를 변경할 수 있어야 한다", () => {
+			// Given
+			const navItem = new NavItem(createNavItemConfig());
 
-			navigationStore.currentRoute = newRoute;
+			// When
+			navItem.setActive(true);
 
-			expect(navigationStore.currentRoute).toEqual(newRoute);
-		});
-
-		it("같은 경로를 설정할 때 업데이트를 트리거하지 않아야 함", () => {
-			const route: RouteDto = {
-				name: "Dashboard",
-				fullPath: "/dashboard",
-				relativePath: "/dashboard",
-				icon: "dashboard",
-				children: null,
-			};
-
-			navigationStore.currentRoute = route;
-			const firstRoute = navigationStore.currentRoute;
-
-			navigationStore.currentRoute = route;
-
-			expect(navigationStore.currentRoute).toStrictEqual(firstRoute);
+			// Then
+			expect(navItem.active).toBe(true);
 		});
 	});
 
-	describe("활성 상태 관리", () => {
-		beforeEach(() => {
-			navigationStore = new NavigationStore(
-				plateStore,
-				navigatorStore,
-				mockRoutes,
+	describe("hasChildren", () => {
+		it("자식이 있으면 true를 반환해야 한다", () => {
+			const navItem = new NavItem(
+				createNavItemConfig({
+					children: [{ id: "child", label: "자식", subject: "Child" }],
+				}),
 			);
+			expect(navItem.hasChildren).toBe(true);
 		});
 
-		it("현재 경로가 없을 때 모든 활성 상태를 재설정해야 함", () => {
-			// 먼저 경로를 설정해서 활성 상태로 만들기
-			const route: RouteDto = {
-				name: "Dashboard",
-				fullPath: "/dashboard",
-				relativePath: "/dashboard",
-				icon: "dashboard",
-				children: null,
-			};
-			navigationStore.currentRoute = route;
-
-			// 현재 경로를 undefined로 설정
-			navigationStore.currentRoute = undefined;
-
-			expect(navigationStore.routes[0].active).toBe(false);
-			expect(navigationStore.routes[0].children[0].active).toBe(false);
-		});
-
-		it("정확한 경로 매치에 대해 활성 상태를 설정해야 함", () => {
-			const route: RouteDto = {
-				name: "Dashboard",
-				fullPath: "/dashboard",
-				relativePath: "/dashboard",
-				icon: "dashboard",
-				children: null,
-			};
-
-			navigationStore.currentRoute = route;
-
-			expect(navigationStore.routes[0].active).toBe(true);
-			expect(navigationStore.routes[1].active).toBe(false);
-			expect(navigationStore.routes[2].active).toBe(false);
-		});
-
-		it("자식이 활성화되었을 때 부모 경로의 활성 상태를 설정해야 함", () => {
-			const childRoute: RouteDto = {
-				name: "Analytics",
-				fullPath: "/dashboard/analytics",
-				relativePath: "/analytics",
-				icon: "chart",
-				children: null,
-			};
-
-			navigationStore.currentRoute = childRoute;
-
-			// 부모 경로가 활성화되어야 함
-			expect(navigationStore.routes[0].active).toBe(true);
-			// 자식 경로가 활성화되어야 함
-			expect(navigationStore.routes[0].children[0].active).toBe(true);
-			// 형제 경로는 활성화되지 않아야 함
-			expect(navigationStore.routes[0].children[1].active).toBe(false);
-			// 다른 최상위 경로는 활성화되지 않아야 함
-			expect(navigationStore.routes[1].active).toBe(false);
-		});
-
-		it("중첩된 자식 경로에 대해 활성 상태를 설정해야 함", () => {
-			const deepChildRoute: RouteDto = {
-				name: "User Detail",
-				fullPath: "/users/list/detail",
-				relativePath: "/detail",
-				icon: "detail",
-				children: null,
-			};
-
-			navigationStore.currentRoute = deepChildRoute;
-
-			// 부모 경로들이 활성화되어야 함
-			expect(navigationStore.routes[1].active).toBe(true); // Users
-			expect(navigationStore.routes[1].children[0].active).toBe(true); // List
-		});
-
-		it("유사한 경로를 올바르게 처리해야 함", () => {
-			const route: RouteDto = {
-				name: "User",
-				fullPath: "/user",
-				relativePath: "/user",
-				icon: "user",
-				children: null,
-			};
-
-			navigationStore.currentRoute = route;
-
-			// /user가 현재 경로일 때 /users는 활성화되지 않아야 함
-			expect(navigationStore.routes[1].active).toBe(false);
-		});
-
-		it("자식 경로가 부모 경로로 시작할 때 부모 경로를 활성화해야 함", () => {
-			const childRoute: RouteDto = {
-				name: "Settings Profile",
-				fullPath: "/settings/profile",
-				relativePath: "/profile",
-				icon: "profile",
-				children: null,
-			};
-
-			navigationStore.currentRoute = childRoute;
-
-			// Settings 경로가 활성화되어야 함
-			expect(navigationStore.routes[2].active).toBe(true);
+		it("자식이 없으면 false를 반환해야 한다", () => {
+			const navItem = new NavItem(createNavItemConfig());
+			expect(navItem.hasChildren).toBe(false);
 		});
 	});
 
-	describe("엣지 케이스", () => {
-		beforeEach(() => {
-			navigationStore = new NavigationStore(
-				plateStore,
-				navigatorStore,
-				mockRoutes,
-			);
-		});
-
-		it("빈 경로를 처리해야 함", () => {
-			const emptyRoute: RouteDto = {
-				name: "Root",
-				fullPath: "",
-				relativePath: "",
-				icon: "root",
-				children: null,
-			};
-
-			navigationStore.currentRoute = emptyRoute;
-
-			// 에러가 발생하지 않아야 함
-			expect(navigationStore.currentRoute).toEqual(emptyRoute);
-		});
-
-		it("끝에 슬래시가 있는 경로를 처리해야 함", () => {
-			const routeWithSlash: RouteDto = {
-				name: "Dashboard",
-				fullPath: "/dashboard/",
-				relativePath: "/dashboard/",
-				icon: "dashboard",
-				children: null,
-			};
-
-			navigationStore.currentRoute = routeWithSlash;
-
-			expect(navigationStore.currentRoute).toEqual(routeWithSlash);
-		});
-
-		it("깊게 중첩된 경로를 처리해야 함", () => {
-			const deepRoutes: RouteDto[] = [
-				{
-					name: "Level1",
-					fullPath: "/level1",
-					relativePath: "/level1",
-					icon: "level1",
+	describe("firstChildPath", () => {
+		it("자식이 있으면 첫 번째 자식의 path를 반환해야 한다", () => {
+			const navItem = new NavItem(
+				createNavItemConfig({
 					children: [
-						{
-							name: "Level2",
-							fullPath: "/level1/level2",
-							relativePath: "/level2",
-							icon: "level2",
-							children: [
-								{
-									name: "Level3",
-									fullPath: "/level1/level2/level3",
-									relativePath: "/level3",
-									icon: "level3",
-									children: null,
-								},
-							],
-						},
+						{ id: "child-1", label: "자식 1", path: "/first", subject: "Child1" },
+						{ id: "child-2", label: "자식 2", path: "/second", subject: "Child2" },
 					],
-				},
-			];
-
-			navigationStore = new NavigationStore(
-				plateStore,
-				navigatorStore,
-				deepRoutes,
+				}),
 			);
+			expect(navItem.firstChildPath).toBe("/first");
+		});
 
-			const deepRoute: RouteDto = {
-				name: "Level3",
-				fullPath: "/level1/level2/level3",
-				relativePath: "/level3",
-				icon: "level3",
-				children: null,
-			};
-
-			navigationStore.currentRoute = deepRoute;
-
-			expect(navigationStore.routes[0].active).toBe(true); // Level1
-			expect(navigationStore.routes[0].children[0].active).toBe(true); // Level2
-			expect(navigationStore.routes[0].children[0].children[0].active).toBe(
-				true,
-			); // Level3
+		it("자식이 없으면 자신의 path를 반환해야 한다", () => {
+			const navItem = new NavItem(createNavItemConfig({ path: "/self" }));
+			expect(navItem.firstChildPath).toBe("/self");
 		});
 	});
 
-	describe("initializeCurrentPath", () => {
-		it("누락된 window.location을 우아하게 처리해야 함", () => {
-			// window.location을 undefined로 모킹
-			Object.defineProperty(window, "location", {
-				value: undefined,
-				writable: true,
-			});
+	describe("findChildById", () => {
+		it("ID로 자식 아이템을 찾아야 한다", () => {
+			const navItem = new NavItem(
+				createNavItemConfig({
+					children: [
+						{ id: "child-1", label: "자식 1", subject: "Child1" },
+						{ id: "child-2", label: "자식 2", subject: "Child2" },
+					],
+				}),
+			);
 
-			expect(() => {
-				navigationStore = new NavigationStore(
-					plateStore,
-					navigatorStore,
-					mockRoutes,
-				);
-			}).not.toThrow();
-
-			expect(navigationStore.currentRoute).toBeUndefined();
+			const found = navItem.findChildById("child-2");
+			expect(found?.label).toBe("자식 2");
 		});
 
-		it("pathname이 undefined일 때 빈 문자열을 사용해야 함", () => {
-			Object.defineProperty(window, "location", {
-				value: {},
-				writable: true,
+		it("없는 ID면 undefined를 반환해야 한다", () => {
+			const navItem = new NavItem(createNavItemConfig());
+			expect(navItem.findChildById("nonexistent")).toBeUndefined();
+		});
+	});
+
+	describe("findChildByPath", () => {
+		it("경로로 자식 아이템을 찾아야 한다", () => {
+			const navItem = new NavItem(
+				createNavItemConfig({
+					children: [
+						{ id: "child-1", label: "자식 1", path: "/users", subject: "Child1" },
+						{ id: "child-2", label: "자식 2", path: "/settings", subject: "Child2" },
+					],
+				}),
+			);
+
+			const found = navItem.findChildByPath("/users/123");
+			expect(found?.id).toBe("child-1");
+		});
+	});
+
+	describe("resetChildrenActive", () => {
+		it("모든 자식의 active 상태를 false로 설정해야 한다", () => {
+			const navItem = new NavItem(
+				createNavItemConfig({
+					children: [
+						{ id: "child-1", label: "자식 1", subject: "Child1" },
+						{ id: "child-2", label: "자식 2", subject: "Child2" },
+					],
+				}),
+			);
+
+			navItem.children[0].setActive(true);
+			navItem.children[1].setActive(true);
+
+			navItem.resetChildrenActive();
+
+			expect(navItem.children[0].active).toBe(false);
+			expect(navItem.children[1].active).toBe(false);
+		});
+	});
+});
+
+describe("NavigationStore", () => {
+	const createNavItemConfigs = (): NavItemConfig[] => [
+		{
+			id: "members",
+			label: "회원",
+			subject: "Member",
+			children: [
+				{ id: "member-list", label: "회원 목록", path: "/members/list", subject: "MemberList" },
+				{ id: "member-add", label: "회원 추가", path: "/members/add", subject: "MemberAdd" },
+			],
+		},
+		{
+			id: "settings",
+			label: "설정",
+			subject: "Settings",
+			children: [
+				{ id: "general", label: "일반", path: "/settings/general", subject: "General" },
+				{ id: "security", label: "보안", path: "/settings/security", subject: "Security" },
+			],
+		},
+		{
+			id: "dashboard",
+			label: "대시보드",
+			path: "/dashboard",
+			subject: "Dashboard",
+		},
+	];
+
+	let navigationStore: NavigationStore;
+	let mockNavigate: ReturnType<typeof vi.fn>;
+
+	beforeEach(() => {
+		mockNavigate = vi.fn();
+		navigationStore = new NavigationStore(createNavItemConfigs(), {
+			onNavigate: mockNavigate,
+		});
+	});
+
+	describe("생성자", () => {
+		it("아이템을 올바르게 초기화해야 한다", () => {
+			expect(navigationStore.allItems).toHaveLength(3);
+			expect(navigationStore.allItems[0].id).toBe("members");
+		});
+	});
+
+	describe("items (권한 필터링)", () => {
+		it("abilityChecker가 없으면 모든 아이템을 반환해야 한다", () => {
+			expect(navigationStore.items).toHaveLength(3);
+		});
+
+		it("abilityChecker로 아이템을 필터링해야 한다", () => {
+			// Given
+			const abilityChecker = vi.fn().mockImplementation((action, subject) => {
+				return subject !== "Security"; // Security만 숨김
 			});
+			navigationStore.setAbilityChecker(abilityChecker);
 
-			vi.spyOn(navigatorStore, "getRouteByFullPath").mockImplementation(
-				(path) => {
-					expect(path).toBe("");
-					return undefined;
-				},
-			);
+			// When
+			const items = navigationStore.items;
 
-			navigationStore = new NavigationStore(
-				plateStore,
-				navigatorStore,
-				mockRoutes,
-			);
+			// Then
+			const settingsItem = items.find((m) => m.id === "settings");
+			expect(settingsItem?.children).toHaveLength(1);
+			expect(settingsItem?.children[0].id).toBe("general");
+		});
+	});
 
-			expect(navigatorStore.getRouteByFullPath).toHaveBeenCalledWith(
-				"",
-				expect.any(Array),
-			);
+	describe("setCurrentPath", () => {
+		it("경로를 기반으로 활성 아이템을 설정해야 한다", () => {
+			// When
+			navigationStore.setCurrentPath("/members/list");
+
+			// Then
+			expect(navigationStore.selectedNavItem?.id).toBe("members");
+			expect(navigationStore.selectedSubNavItem?.id).toBe("member-list");
+		});
+
+		it("중첩 경로도 매칭해야 한다", () => {
+			// When
+			navigationStore.setCurrentPath("/members/add");
+
+			// Then
+			expect(navigationStore.selectedNavItem?.id).toBe("members");
+			expect(navigationStore.selectedSubNavItem?.id).toBe("member-add");
+		});
+
+		it("children이 없는 아이템도 매칭해야 한다", () => {
+			// When
+			navigationStore.setCurrentPath("/dashboard");
+
+			// Then
+			expect(navigationStore.selectedNavItem?.id).toBe("dashboard");
+			expect(navigationStore.selectedSubNavItem).toBeNull();
+		});
+
+		it("동일한 경로로 재호출하면 무시해야 한다", () => {
+			// Given
+			navigationStore.setCurrentPath("/members/list");
+			const selectedNavItem = navigationStore.selectedNavItem;
+
+			// When
+			navigationStore.setCurrentPath("/members/list");
+
+			// Then - 동일한 인스턴스여야 함
+			expect(navigationStore.selectedNavItem).toBe(selectedNavItem);
+		});
+	});
+
+	describe("selectNavItem", () => {
+		it("아이템을 선택하고 첫 번째 자식으로 네비게이션해야 한다", () => {
+			// When
+			navigationStore.selectNavItem("members");
+
+			// Then
+			expect(navigationStore.selectedNavItem?.id).toBe("members");
+			expect(mockNavigate).toHaveBeenCalledWith("/members/list");
+		});
+	});
+
+	describe("selectSubNavItem", () => {
+		it("하위 아이템을 선택하고 네비게이션해야 한다", () => {
+			// When
+			navigationStore.selectSubNavItem("member-add");
+
+			// Then
+			expect(navigationStore.selectedSubNavItem?.id).toBe("member-add");
+			expect(mockNavigate).toHaveBeenCalledWith("/members/add");
+		});
+
+		it("부모 아이템도 자동으로 선택해야 한다", () => {
+			// When
+			navigationStore.selectSubNavItem("security");
+
+			// Then
+			expect(navigationStore.selectedNavItem?.id).toBe("settings");
+			expect(navigationStore.selectedSubNavItem?.id).toBe("security");
+		});
+	});
+
+	describe("toggleNavItem", () => {
+		it("아이템 펼침/접힘을 토글해야 한다", () => {
+			// Given
+			expect(navigationStore.isNavItemExpanded("members")).toBe(false);
+
+			// When
+			navigationStore.toggleNavItem("members");
+
+			// Then
+			expect(navigationStore.isNavItemExpanded("members")).toBe(true);
+
+			// When
+			navigationStore.toggleNavItem("members");
+
+			// Then
+			expect(navigationStore.isNavItemExpanded("members")).toBe(false);
+		});
+	});
+
+	describe("expandNavItem", () => {
+		it("아이템을 펼쳐야 한다", () => {
+			// When
+			navigationStore.expandNavItem("settings");
+
+			// Then
+			expect(navigationStore.isNavItemExpanded("settings")).toBe(true);
+		});
+	});
+
+	describe("findNavItemById", () => {
+		it("ID로 아이템을 찾아야 한다", () => {
+			const navItem = navigationStore.findNavItemById("settings");
+			expect(navItem?.label).toBe("설정");
+		});
+	});
+
+	describe("findSubNavItemById", () => {
+		it("ID로 하위 아이템을 찾아야 한다", () => {
+			const subNavItem = navigationStore.findSubNavItemById("security");
+			expect(subNavItem?.label).toBe("보안");
+		});
+	});
+
+	describe("subNavItems", () => {
+		it("선택된 아이템의 하위 아이템을 반환해야 한다", () => {
+			// Given
+			navigationStore.setCurrentPath("/members/list");
+
+			// When
+			const subNavItems = navigationStore.subNavItems;
+
+			// Then
+			expect(subNavItems).toHaveLength(2);
+			expect(subNavItems[0].id).toBe("member-list");
+		});
+
+		it("선택된 아이템이 없으면 빈 배열을 반환해야 한다", () => {
+			expect(navigationStore.subNavItems).toHaveLength(0);
+		});
+	});
+
+	describe("navigateTo", () => {
+		it("직접 경로로 이동해야 한다", () => {
+			// When
+			navigationStore.navigateTo("/custom/path");
+
+			// Then
+			expect(mockNavigate).toHaveBeenCalledWith("/custom/path");
 		});
 	});
 });
