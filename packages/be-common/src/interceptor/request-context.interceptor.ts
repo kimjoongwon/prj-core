@@ -1,5 +1,5 @@
 import { CONTEXT_KEYS } from "@cocrepo/constant";
-import { type TenantDto, type UserDto } from "@cocrepo/dto";
+import type { TenantDto, UserDto } from "@cocrepo/dto";
 import { Roles } from "@cocrepo/prisma";
 import {
 	BadRequestException,
@@ -8,9 +8,9 @@ import {
 	Injectable,
 	type NestInterceptor,
 } from "@nestjs/common";
-import { type Request } from "express";
-import { ClsService } from "nestjs-cls";
-import { type Observable } from "rxjs";
+import type { Request } from "express";
+import type { ClsService } from "nestjs-cls";
+import type { Observable } from "rxjs";
 import { AppLogger } from "../util/app-logger.util";
 
 @Injectable()

@@ -1,4 +1,4 @@
-import Axios, { AxiosError, AxiosRequestConfig } from "axios";
+import Axios, { type AxiosError, type AxiosRequestConfig } from "axios";
 
 // Orval이 완전한 URL을 생성하므로 baseURL 불필요
 export const AXIOS_INSTANCE = Axios.create({

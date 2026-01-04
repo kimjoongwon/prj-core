@@ -4,7 +4,7 @@ import type { RouteDto } from "@cocrepo/api";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { NavigationStore } from "../navigationStore";
 import { NavigatorStore } from "../navigatorStore";
-import { PlateStore } from "../plateStore";
+import type { PlateStore } from "../plateStore";
 
 // 의존성 모킹
 vi.mock("../plateStore");

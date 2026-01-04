@@ -31,7 +31,7 @@ export class Phone extends ValueObject<PhoneProps> {
 			if (!this.phoneNumber.isValid()) {
 				throw new VoValidationError(`유효하지 않은 전화번호입니다: ${value}`);
 			}
-		} catch (error) {
+		} catch (_error) {
 			throw new VoValidationError(`전화번호 파싱 실패: ${value}`);
 		}
 	}
@@ -41,7 +41,10 @@ export class Phone extends ValueObject<PhoneProps> {
 	 */
 	public static create(phone: string, defaultCountry = "KR"): Phone {
 		try {
-			const phoneNumber = parsePhoneNumber(phone, defaultCountry as any);
+			const phoneNumber = parsePhoneNumber(
+				phone,
+				defaultCountry as "KR" | "US" | "JP" | "CN",
+			);
 
 			if (!phoneNumber.isValid()) {
 				throw new VoValidationError(`유효하지 않은 전화번호입니다: ${phone}`);
@@ -51,7 +54,7 @@ export class Phone extends ValueObject<PhoneProps> {
 				value: phone,
 				normalized: phoneNumber.number,
 			});
-		} catch (error) {
+		} catch (_error) {
 			throw new VoValidationError(`전화번호 생성 실패: ${phone}`);
 		}
 	}

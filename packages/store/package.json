@@ -35,6 +35,8 @@
   "author": "kimjoongwon",
   "license": "ISC",
   "devDependencies": {
+    "@casl/ability": "^6.7.1",
+    "@casl/react": "^4.0.0",
     "@cocrepo/toolkit": "workspace:*",
     "@heroui/react": "catalog:",
     "@tanstack/react-query": "catalog:",

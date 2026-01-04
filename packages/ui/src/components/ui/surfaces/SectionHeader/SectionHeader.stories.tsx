@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/react";
 import { SectionHeader } from "./SectionHeader";
 
-const meta = {
+const meta: Meta<typeof SectionHeader> = {
 	title: "UI/SectionHeader",
 	component: SectionHeader,
 	parameters: {
@@ -24,7 +24,7 @@ const meta = {
 			description: "추가 CSS 클래스",
 		},
 	},
-} satisfies Meta<typeof SectionHeader>;
+};
 
 export default meta;
 type Story = StoryObj<typeof meta>;

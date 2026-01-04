@@ -1,13 +1,13 @@
-import { Selection } from "@heroui/react";
+import type { Selection } from "@heroui/react";
 import {
-	ColumnDef,
-	ExpandedState,
+	type ColumnDef,
+	type ExpandedState,
 	getCoreRowModel,
 	getExpandedRowModel,
 	useReactTable,
 } from "@tanstack/react-table";
 import { useState } from "react";
-import { Table, TableProps } from "../Table/Table";
+import { Table, type TableProps } from "../Table/Table";
 
 export type Key = string | number;
 

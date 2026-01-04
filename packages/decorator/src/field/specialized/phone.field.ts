@@ -3,9 +3,9 @@ import { ApiProperty } from "@nestjs/swagger";
 import { NotEquals } from "class-validator";
 import { PhoneNumberSerializer } from "../../transform.decorators";
 import { IsNullable, IsPhoneNumber } from "../../validator.decorators";
-import {
-	type BaseFieldOptions,
-	type FieldDecoratorOptions,
+import type {
+	BaseFieldOptions,
+	FieldDecoratorOptions,
 } from "../base/field-options.types";
 import { createOptionalField } from "../base/optional-field.factory";
 

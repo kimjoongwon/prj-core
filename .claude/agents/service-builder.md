@@ -111,7 +111,42 @@ NestJS Service 레이어를 생성하는 전문가입니다.
    | `check...` | 확인/검증 | `checkPermission()`, `checkAvailability()` |
    | `...Report` | 리포트/통계 | `getSalesReport()`, `getDailyReport()` |
 
-3. **비즈니스 로직만 담당**
+3. **파라미터는 Entity 타입 사용 (DTO 금지)**
+   - Service 레이어에서는 DTO를 파라미터로 받지 않음
+   - Entity 또는 Prisma 타입을 사용
+   - DTO는 Controller 레이어에서만 사용
+
+   ```typescript
+   // ❌ 금지 - DTO를 파라미터로 사용
+   async create(dto: CreateUserDto): Promise<User> {
+     return this.repository.create(dto);
+   }
+
+   // ❌ 금지 - DTO를 import해서 사용
+   import { CreateUserDto } from "@cocrepo/dto";
+
+   // ✅ 권장 - Entity 타입 사용
+   import { User } from "@cocrepo/entity";
+   import type { Prisma } from "@cocrepo/prisma";
+
+   async create(data: Prisma.UserUncheckedCreateInput): Promise<User> {
+     return this.repository.create(data);
+   }
+
+   // ✅ 권장 - Partial<Entity> 사용 (업데이트)
+   async updateById(id: string, data: Partial<User>): Promise<User> {
+     return this.repository.updateById(id, data);
+   }
+   ```
+
+   **레이어별 타입 사용:**
+   | 레이어 | 타입 | 예시 |
+   |--------|------|------|
+   | Controller | DTO (Request/Response) | `CreateUserDto`, `UserResponseDto` |
+   | Service | Entity, Prisma 타입 | `User`, `Prisma.UserUncheckedCreateInput` |
+   | Repository | Entity, Prisma 타입 | `User`, `Prisma.UserUncheckedCreateInput` |
+
+4. **비즈니스 로직만 담당**
    - 데이터 검증
    - 여러 Repository 조합
    - Context 기반 필터링
@@ -130,6 +165,8 @@ packages/service/src/service/{entity}.service.ts
 
 ```typescript
 import { CONTEXT_KEYS } from "@cocrepo/constant";
+import { {Entity} } from "@cocrepo/entity";
+import type { Prisma } from "@cocrepo/prisma";
 import { Tenant } from "@cocrepo/prisma";
 import { {Entity}sRepository } from "@cocrepo/repository";
 import { Injectable, Logger } from "@nestjs/common";
@@ -147,35 +184,38 @@ export class {Entity}sService {
   /**
    * ID로 조회
    */
-  getById(id: string) {
+  getById(id: string): Promise<{Entity} | null> {
     return this.repository.findById(id);
   }
 
   /**
-   * 생성
+   * 생성 (Prisma 타입 사용 - DTO 금지)
    */
-  create(params: { field1: string; field2: number }) {
-    return this.repository.create(params);
+  create(data: Prisma.{Entity}UncheckedCreateInput): Promise<{Entity}> {
+    return this.repository.create(data);
   }
 
   /**
-   * 업데이트
+   * 업데이트 (Prisma 타입 사용 - DTO 금지)
    */
-  updateById(id: string, data: { field1?: string; field2?: number }) {
+  updateById(
+    id: string,
+    data: Prisma.{Entity}UncheckedUpdateInput,
+  ): Promise<{Entity}> {
     return this.repository.updateById(id, data);
   }
 
   /**
    * 소프트 삭제
    */
-  removeById(id: string) {
+  removeById(id: string): Promise<{Entity}> {
     return this.repository.removeById(id);
   }
 
   /**
    * 물리 삭제
    */
-  deleteById(id: string) {
+  deleteById(id: string): Promise<{Entity}> {
     return this.repository.deleteById(id);
   }
 }
@@ -318,6 +358,9 @@ getByEmail(email: string) {
 - [ ] Repository 주입
 - [ ] ClsService 주입 (Context 필요시)
 - [ ] **Prisma 쿼리 없음 확인**
+- [ ] **DTO 타입 사용 금지 확인**
+  - [ ] `CreateXxxDto`, `UpdateXxxDto` 등 DTO import 없음
+  - [ ] 파라미터는 Entity 또는 Prisma 타입 사용
 - [ ] Repository 메서드 호출만 사용
 - [ ] 비즈니스 로직만 Service에 작성
 

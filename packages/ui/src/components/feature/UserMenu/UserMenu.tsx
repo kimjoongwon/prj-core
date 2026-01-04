@@ -1,5 +1,6 @@
 "use client";
 
+import { useAuthStore, usePersistStore } from "@cocrepo/store";
 import {
 	Avatar,
 	Dropdown,
@@ -7,7 +8,6 @@ import {
 	DropdownMenu,
 	DropdownTrigger,
 } from "@heroui/react";
-import { useAuthStore, usePersistStore } from "@cocrepo/store";
 import { observer } from "mobx-react-lite";
 import { renderLucideIcon } from "../../../utils/iconUtils";
 
@@ -88,6 +88,4 @@ export interface UserMenuUser {
 	avatarUrl?: string;
 }
 
-export interface UserMenuProps {
-	// Props 없음 - 자체적으로 store 사용
-}
+export type UserMenuProps = {};

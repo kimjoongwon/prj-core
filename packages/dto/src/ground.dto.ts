@@ -5,7 +5,7 @@ import {
 	UUIDField,
 	UUIDFieldOptional,
 } from "@cocrepo/decorator";
-import { Ground as GroundEntity } from "@cocrepo/prisma";
+import type { Ground as GroundEntity } from "@cocrepo/prisma";
 import { Expose } from "class-transformer";
 import { AbstractDto } from "./abstract.dto";
 import { SpaceDto } from "./space.dto";

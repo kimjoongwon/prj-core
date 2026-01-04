@@ -1,7 +1,7 @@
 import { makeAutoObservable } from "mobx";
-import { NavigatorStore } from "./navigatorStore";
+import type { NavigatorStore } from "./navigatorStore";
 import { RouteStore } from "./routeStore";
-import { RootStore } from "./Store";
+import type { RootStore } from "./Store";
 
 export class NavigationStore {
 	readonly rootStore: RootStore;

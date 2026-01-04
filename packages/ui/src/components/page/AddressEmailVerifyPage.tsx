@@ -1,6 +1,5 @@
 "use client";
 
-import type React from "react";
 import { Button } from "../inputs/Button/Button";
 import { Input } from "../inputs/Input";
 import { Text } from "../ui/data-display/Text/Text";
@@ -77,16 +76,14 @@ export const AddressEmailVerifyPage = ({
 				)}
 
 				{isEmailCodeSent && (
-					<>
-						<Input
-							path="emailVerificationCode"
-							state={state}
-							variant="flat"
-							type="text"
-							placeholder="이메일 인증번호를 입력하세요"
-							label="이메일 인증번호"
-						/>
-					</>
+					<Input
+						path="emailVerificationCode"
+						state={state}
+						variant="flat"
+						type="text"
+						placeholder="이메일 인증번호를 입력하세요"
+						label="이메일 인증번호"
+					/>
 				)}
 			</VStack>
 

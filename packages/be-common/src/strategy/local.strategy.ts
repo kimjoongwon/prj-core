@@ -1,4 +1,4 @@
-import { AuthFacade } from "@cocrepo/facade";
+import type { AuthFacade } from "@cocrepo/facade";
 import { Injectable } from "@nestjs/common";
 import { PassportStrategy } from "@nestjs/passport";
 import { Strategy } from "passport-local";

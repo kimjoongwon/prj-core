@@ -1,5 +1,5 @@
 import SafeApiKit from "@safe-global/api-kit";
-import Safe, { SafeAccountConfig } from "@safe-global/protocol-kit";
+import Safe, { type SafeAccountConfig } from "@safe-global/protocol-kit";
 import { SAFE_CONFIG, SAFE_TX_SERVICE_URL } from "@/config/web3.config";
 import type { SafeInfo } from "@/stores";
 

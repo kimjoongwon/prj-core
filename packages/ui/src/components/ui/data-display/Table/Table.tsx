@@ -1,14 +1,17 @@
 import {
 	Table as HeroTable,
-	TableProps as HeroTableProps,
+	type TableProps as HeroTableProps,
 	TableBody,
-	TableBodyProps,
+	type TableBodyProps,
 	TableCell,
 	TableColumn,
 	TableHeader,
 	TableRow,
 } from "@heroui/react";
-import { flexRender, Table as ReactTableProps } from "@tanstack/react-table";
+import {
+	flexRender,
+	type Table as ReactTableProps,
+} from "@tanstack/react-table";
 
 export type TableProps<T> = {
 	tableInstance: ReactTableProps<T>;

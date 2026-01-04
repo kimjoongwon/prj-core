@@ -1,6 +1,6 @@
 import { ClassField, StringField, UUIDField } from "@cocrepo/decorator";
 import { User } from "@cocrepo/entity";
-import { Profile } from "@cocrepo/prisma";
+import type { Profile } from "@cocrepo/prisma";
 import { AbstractDto } from "./abstract.dto";
 
 export class ProfileDto extends AbstractDto implements Profile {

@@ -1,7 +1,7 @@
 "use client";
 
-import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 import { usePersistStore } from "@/stores/AppStoreProvider";
 
 /**
@@ -27,7 +27,7 @@ import { usePersistStore } from "@/stores/AppStoreProvider";
  * ```
  */
 export function useSpaceGuard() {
-	const router = useRouter();
+	const _router = useRouter();
 	const persistStore = usePersistStore();
 	const [showAlert, setShowAlert] = useState(false);
 

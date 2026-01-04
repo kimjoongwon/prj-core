@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react";
 import { useState } from "react";
-import { WeekInput } from "./WeekInput";
+import { type RecurringDayOfTheWeek, WeekInput } from "./WeekInput";
 
 const meta: Meta<typeof WeekInput> = {
 	title: "Inputs/WeekInput",
@@ -16,8 +16,11 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
+	args: {
+		value: "MONDAY",
+	},
 	render: (args) => {
-		const [day, setDay] = useState("MONDAY");
-		return <WeekInput {...args} day={day} onChange={setDay} />;
+		const [value, setValue] = useState<RecurringDayOfTheWeek>("MONDAY");
+		return <WeekInput {...args} value={value} onChange={setValue} />;
 	},
 };

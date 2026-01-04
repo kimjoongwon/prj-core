@@ -1,6 +1,6 @@
-import { Option } from "@cocrepo/type";
+import type { Option } from "@cocrepo/type";
 import { Tabs as HeroUITabs, Tab } from "@heroui/react";
-import { Key } from "react";
+import type { Key } from "react";
 
 export interface TabsProps {
 	options: Option[];

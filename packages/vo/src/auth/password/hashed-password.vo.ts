@@ -1,7 +1,7 @@
 import { compare, hash, hashSync } from "bcrypt";
 import { ValueObject } from "../../common/value-object.base";
 import { VoValidationError } from "../../errors/vo.error";
-import { PlainPassword } from "./plain-password.vo";
+import type { PlainPassword } from "./plain-password.vo";
 
 interface HashedPasswordProps {
 	value: string;

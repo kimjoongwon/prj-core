@@ -1,5 +1,5 @@
 import { ConfigService } from "@nestjs/config";
-import { Test, TestingModule } from "@nestjs/testing";
+import { Test, type TestingModule } from "@nestjs/testing";
 import { RedisService } from "../src/infra/redis.service";
 import { TokenStorageService } from "../src/infra/token-storage.service";
 
@@ -19,11 +19,11 @@ describe("TokenStorageService", () => {
 			get: jest.fn(),
 			del: jest.fn(),
 			exists: jest.fn(),
-		} as any;
+		} as unknown;
 
 		mockConfigService = {
 			get: jest.fn().mockReturnValue(mockAuthConfig),
-		} as any;
+		} as unknown;
 
 		const module: TestingModule = await Test.createTestingModule({
 			providers: [

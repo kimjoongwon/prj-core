@@ -1,7 +1,7 @@
-import { Group as GroupEntity, GroupTypes } from "@cocrepo/prisma";
+import type { Group as GroupEntity, GroupTypes } from "@cocrepo/prisma";
 import { AbstractEntity } from "./abstract.entity";
-import { Space } from "./space.entity";
-import { User } from "./user.entity";
+import type { Space } from "./space.entity";
+import type { User } from "./user.entity";
 
 export class Group extends AbstractEntity implements GroupEntity {
 	name!: string;

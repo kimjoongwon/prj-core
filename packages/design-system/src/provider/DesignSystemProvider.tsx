@@ -7,7 +7,7 @@
 import { HeroUIProvider, ToastProvider } from "@heroui/react";
 import { useTheme } from "@heroui/use-theme";
 import type { ReactNode } from "react";
-import { type ThemeConfig } from "../theme/heroui.config";
+import type { ThemeConfig } from "../theme/heroui.config";
 
 export interface DesignSystemProviderProps {
 	children: ReactNode;

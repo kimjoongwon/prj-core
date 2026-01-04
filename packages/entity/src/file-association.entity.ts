@@ -1,4 +1,4 @@
-import {
+import type {
 	File,
 	FileAssociation as FileAssociationEntity,
 	Group,

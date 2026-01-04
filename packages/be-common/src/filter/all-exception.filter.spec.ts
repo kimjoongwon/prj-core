@@ -1,12 +1,12 @@
 import {
-	ArgumentsHost,
+	type ArgumentsHost,
 	HttpException,
 	HttpStatus,
 	InternalServerErrorException,
 	Logger,
 } from "@nestjs/common";
 import { BaseExceptionFilter, HttpAdapterHost } from "@nestjs/core";
-import { Test, TestingModule } from "@nestjs/testing";
+import { Test, type TestingModule } from "@nestjs/testing";
 import { AllExceptionsFilter } from "./all-exception.filter";
 
 describe("AllExceptionsFilter", () => {

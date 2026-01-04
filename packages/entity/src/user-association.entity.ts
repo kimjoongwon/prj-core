@@ -1,7 +1,7 @@
-import { UserAssociation as UserAssociationEntity } from "@cocrepo/prisma";
+import type { UserAssociation as UserAssociationEntity } from "@cocrepo/prisma";
 import { AbstractEntity } from "./abstract.entity";
-import { Group } from "./group.entity";
-import { User } from "./user.entity";
+import type { Group } from "./group.entity";
+import type { User } from "./user.entity";
 
 export class UserAssociation
 	extends AbstractEntity

@@ -1,7 +1,11 @@
 import { PRISMA_SERVICE_TOKEN } from "@cocrepo/constant";
-import { PrismaService, TokenService, UsersService } from "@cocrepo/service";
+import {
+	type PrismaService,
+	TokenService,
+	UsersService,
+} from "@cocrepo/service";
 import { JwtService } from "@nestjs/jwt";
-import { Test, TestingModule } from "@nestjs/testing";
+import { Test, type TestingModule } from "@nestjs/testing";
 import { AuthFacade } from "../src/auth.facade";
 
 describe("AuthFacade", () => {
@@ -25,12 +29,12 @@ describe("AuthFacade", () => {
 		mockUsersService = {
 			getByIdWithTenants: jest.fn(),
 			findUserForAuth: jest.fn(),
-		} as any;
+		} as unknown;
 
 		mockJwtService = {
 			verify: jest.fn(),
 			sign: jest.fn(),
-		} as any;
+		} as unknown;
 
 		mockTokenService = {
 			generateTokens: jest.fn(),
@@ -38,13 +42,13 @@ describe("AuthFacade", () => {
 			validateRefreshTokenFromStorage: jest.fn(),
 			invalidateTokens: jest.fn(),
 			isTokenBlacklisted: jest.fn(),
-		} as any;
+		} as unknown;
 
 		mockPrismaService = {
 			role: { findFirst: jest.fn() },
 			space: { create: jest.fn() },
 			user: { create: jest.fn() },
-		} as any;
+		} as unknown;
 
 		const module: TestingModule = await Test.createTestingModule({
 			providers: [
@@ -68,7 +72,9 @@ describe("AuthFacade", () => {
 			// Given
 			const accessToken = "valid-access-token";
 			mockJwtService.verify.mockReturnValue({ userId: "user-test-id" });
-			mockUsersService.getByIdWithTenants.mockResolvedValue(mockUser as any);
+			mockUsersService.getByIdWithTenants.mockResolvedValue(
+				mockUser as unknown,
+			);
 
 			// When
 			const result = await facade.getCurrentUser(accessToken);
@@ -107,7 +113,7 @@ describe("AuthFacade", () => {
 			mockJwtService.verify.mockReturnValue({ userId: "user-test-id" });
 			mockTokenService.validateRefreshTokenFromStorage.mockResolvedValue(true);
 			mockTokenService.generateTokensWithStorage.mockResolvedValue(
-				mockTokenPair as any,
+				mockTokenPair as unknown,
 			);
 
 			// When

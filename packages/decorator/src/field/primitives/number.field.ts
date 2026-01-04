@@ -11,9 +11,9 @@ import {
 } from "class-validator";
 import { ToArray } from "../../transform.decorators";
 import { IsNullable } from "../../validator.decorators";
-import {
-	type FieldDecoratorOptions,
-	type NumberFieldOptions,
+import type {
+	FieldDecoratorOptions,
+	NumberFieldOptions,
 } from "../base/field-options.types";
 import { createOptionalField } from "../base/optional-field.factory";
 

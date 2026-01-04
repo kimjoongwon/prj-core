@@ -2,14 +2,15 @@
 
 import { usePersistStore } from "@cocrepo/store";
 import {
+	Avatar,
 	Button,
 	Dropdown,
 	DropdownItem,
 	DropdownMenu,
-	DropdownSection,
 	DropdownTrigger,
 } from "@heroui/react";
 import { observer } from "mobx-react-lite";
+import { useEffect, useState } from "react";
 import { renderLucideIcon } from "../../../utils/iconUtils";
 
 export interface SpaceSelectorProps {
@@ -31,6 +32,12 @@ export const SpaceSelector = observer(
 	({ onChangeSpace }: SpaceSelectorProps) => {
 		const persistStore = usePersistStore();
 
+		// Hydration 완료 체크 (서버/클라이언트 불일치 방지)
+		const [isHydrated, setIsHydrated] = useState(false);
+		useEffect(() => {
+			setIsHydrated(true);
+		}, []);
+
 		// 현재 Space 정보
 		const currentSpace =
 			persistStore.spaceId && persistStore.groundName
@@ -51,52 +58,77 @@ export const SpaceSelector = observer(
 			onChangeSpace?.(spaceId, groundName);
 		};
 
-		if (!currentSpace) {
+		// Hydration 완료 전에는 렌더링하지 않음 (SSR/CSR 불일치 방지)
+		if (!isHydrated || !currentSpace) {
 			return null;
 		}
 
 		// Space가 하나뿐이면 드롭다운 없이 표시
 		if (spaces.length <= 1) {
 			return (
-				<Button variant="bordered" size="sm" isDisabled>
-					{currentSpace.name}
-				</Button>
+				<div className="flex items-center gap-2 rounded-lg border border-default-200 bg-default-50 px-3 py-2">
+					<Avatar
+						icon={renderLucideIcon("Building2", "h-4 w-4", 16)}
+						className="h-6 w-6 bg-primary-100 text-primary"
+						size="sm"
+					/>
+					<span className="text-sm font-medium text-default-700">
+						{currentSpace.name}
+					</span>
+				</div>
 			);
 		}
 
 		return (
-			<Dropdown>
+			<Dropdown placement="bottom-end">
 				<DropdownTrigger>
 					<Button
-						variant="bordered"
-						size="sm"
-						endContent={renderLucideIcon("ChevronDown", "h-4 w-4", 16)}
+						variant="flat"
+						className="h-auto min-h-0 gap-2 bg-default-100 px-3 py-2 hover:bg-default-200"
 					>
-						{currentSpace.name}
+						<Avatar
+							icon={renderLucideIcon("Building2", "h-4 w-4", 16)}
+							className="h-6 w-6 bg-primary-100 text-primary"
+							size="sm"
+						/>
+						<span className="text-sm font-medium text-default-700">
+							{currentSpace.name}
+						</span>
+						{renderLucideIcon("ChevronDown", "h-4 w-4 text-default-400", 16)}
 					</Button>
 				</DropdownTrigger>
 				<DropdownMenu
 					aria-label="Space 선택"
+					variant="flat"
 					selectionMode="single"
 					selectedKeys={new Set([currentSpace.id])}
+					className="min-w-[200px]"
 				>
-					<DropdownSection title="Space 선택">
-						{spaces.map((space) => (
-							<DropdownItem
-								key={space.spaceId}
-								startContent={
-									space.spaceId === currentSpace.id
-										? renderLucideIcon("Check", "h-4 w-4 text-primary", 16)
-										: renderLucideIcon("Building2", "h-4 w-4", 16)
-								}
-								onPress={() =>
-									handleSelectSpace(space.spaceId, space.groundName)
-								}
-							>
-								{space.groundName}
-							</DropdownItem>
-						))}
-					</DropdownSection>
+					{spaces.map((space) => (
+						<DropdownItem
+							key={space.spaceId}
+							startContent={
+								<Avatar
+									icon={renderLucideIcon("Building2", "h-4 w-4", 16)}
+									className="h-6 w-6 bg-default-100 text-default-600"
+									size="sm"
+								/>
+							}
+							endContent={
+								space.spaceId === currentSpace.id
+									? renderLucideIcon("Check", "h-4 w-4 text-primary", 16)
+									: null
+							}
+							className={
+								space.spaceId === currentSpace.id
+									? "bg-primary-50 text-primary"
+									: ""
+							}
+							onPress={() => handleSelectSpace(space.spaceId, space.groundName)}
+						>
+							<span className="font-medium">{space.groundName}</span>
+						</DropdownItem>
+					))}
 				</DropdownMenu>
 			</Dropdown>
 		);

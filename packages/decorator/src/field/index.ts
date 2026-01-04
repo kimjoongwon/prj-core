@@ -52,8 +52,8 @@ export const DefaultKey = "default";
  * }
  * ```
  */
-export function Default(value: any) {
-	return (target: any, propertyKey: string) => {
+export function Default(value: unknown) {
+	return (target: object, propertyKey: string) => {
 		Reflect.defineMetadata(DefaultKey, value, target, propertyKey);
 	};
 }

@@ -28,7 +28,7 @@ export const Default: Story = {
 	},
 	render: (args) => {
 		const [value, setValue] = useState("");
-		return <RadioGroup {...args} value={value} onChange={setValue} />;
+		return <RadioGroup {...args} value={value} onValueChange={setValue} />;
 	},
 };
 
@@ -39,6 +39,6 @@ export const WithInitialValue: Story = {
 	},
 	render: (args) => {
 		const [value, setValue] = useState("2");
-		return <RadioGroup {...args} value={value} onChange={setValue} />;
+		return <RadioGroup {...args} value={value} onValueChange={setValue} />;
 	},
 };

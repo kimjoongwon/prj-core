@@ -2,7 +2,7 @@ import {
 	Input as HeroUiInput,
 	type InputProps as HeroUiInputProps,
 } from "@heroui/react";
-import { ChangeEventHandler } from "react";
+import type { ChangeEventHandler } from "react";
 
 export interface InputProps
 	extends Omit<HeroUiInputProps, "onChange" | "onBlur" | "value"> {

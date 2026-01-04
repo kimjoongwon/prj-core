@@ -1,10 +1,9 @@
 "use client";
 
-import { NavbarItem } from "@heroui/react";
 import { useMenuStore } from "@cocrepo/store";
+import { cn, NavbarItem } from "@heroui/react";
 import { observer } from "mobx-react-lite";
 import { renderLucideIcon } from "../../../utils/iconUtils";
-import { cn } from "@heroui/react";
 
 /**
  * Nav Feature 컴포넌트

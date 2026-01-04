@@ -1,7 +1,7 @@
+import { Avatar as HeroAvatar } from "@heroui/react";
 import type { Meta, StoryObj } from "@storybook/react";
-import { Avatar } from "../../ui/data-display/Avatar/Avatar";
+import { Button } from "../../inputs/Button/Button";
 import { Text } from "../../ui/data-display/Text/Text";
-import { Button } from "../../ui/inputs/Button/Button";
 import { HStack } from "../../ui/surfaces/HStack/HStack";
 import { Header } from "./Header";
 
@@ -57,7 +57,7 @@ const SampleUserSection = () => (
 		<Button variant="light" size="sm" isIconOnly>
 			⚙️
 		</Button>
-		<Avatar src="https://via.placeholder.com/32" alt="User avatar" size="sm" />
+		<HeroAvatar src="https://via.placeholder.com/32" name="User" size="sm" />
 	</HStack>
 );
 
@@ -163,9 +163,9 @@ export const DashboardHeader: Story = {
 				<Button variant="light" size="sm" isIconOnly>
 					❓
 				</Button>
-				<Avatar
+				<HeroAvatar
 					src="https://via.placeholder.com/32"
-					alt="Admin avatar"
+					name="Admin"
 					size="sm"
 				/>
 			</HStack>

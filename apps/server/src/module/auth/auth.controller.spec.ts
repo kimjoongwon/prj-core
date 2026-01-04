@@ -1,9 +1,9 @@
 import { CONTEXT_KEYS } from "@cocrepo/constant";
-import { LoginPayloadDto, SignUpPayloadDto } from "@cocrepo/dto";
+import type { LoginPayloadDto, SignUpPayloadDto } from "@cocrepo/dto";
 import { AuthFacade } from "@cocrepo/facade";
 import { TokenService } from "@cocrepo/service";
 import { UnauthorizedException } from "@nestjs/common";
-import { Test, TestingModule } from "@nestjs/testing";
+import { Test, type TestingModule } from "@nestjs/testing";
 import { ClsService } from "nestjs-cls";
 import { AuthController } from "./auth.controller";
 
@@ -51,19 +51,19 @@ describe("AuthController", () => {
 			getNewToken: jest.fn(),
 			getCurrentUser: jest.fn(),
 			logout: jest.fn(),
-		} as any;
+		} as jest.Mocked<AuthFacade>;
 
 		mockTokenService = {
 			setAccessTokenCookie: jest.fn(),
 			setRefreshTokenCookie: jest.fn(),
 			clearTokenCookies: jest.fn(),
 			verifyToken: jest.fn(),
-		} as any;
+		} as jest.Mocked<TokenService>;
 
 		mockClsService = {
 			get: jest.fn(),
 			set: jest.fn(),
-		} as any;
+		} as jest.Mocked<ClsService>;
 
 		const module: TestingModule = await Test.createTestingModule({
 			controllers: [AuthController],
@@ -93,11 +93,11 @@ describe("AuthController", () => {
 				refreshToken: "refresh-token",
 				accessTokenExpiresAt: mockTokenExpiryInfo.accessTokenExpiresAt,
 				refreshTokenExpiresAt: mockTokenExpiryInfo.refreshTokenExpiresAt,
-				user: mockUser as any,
+				user: mockUser as unknown,
 			});
 
 			// When
-			const result = await controller.login(loginDto, mockResponse as any);
+			const result = await controller.login(loginDto, mockResponse as unknown);
 
 			// Then
 			expect(mockAuthFacade.login).toHaveBeenCalledWith(loginDto);
@@ -136,11 +136,11 @@ describe("AuthController", () => {
 				refreshToken: "refresh-token",
 				accessTokenExpiresAt: mockTokenExpiryInfo.accessTokenExpiresAt,
 				refreshTokenExpiresAt: mockTokenExpiryInfo.refreshTokenExpiresAt,
-				user: userWithoutMainTenant as any,
+				user: userWithoutMainTenant as unknown,
 			});
 
 			// When
-			const result = await controller.login(loginDto, mockResponse as any);
+			const result = await controller.login(loginDto, mockResponse as unknown);
 
 			// Then
 			expect(result.mainTenantId).toBe("");
@@ -161,11 +161,11 @@ describe("AuthController", () => {
 				refreshToken: "refresh-token",
 				accessTokenExpiresAt: mockTokenExpiryInfo.accessTokenExpiresAt,
 				refreshTokenExpiresAt: mockTokenExpiryInfo.refreshTokenExpiresAt,
-				user: userWithSelectedSpace as any,
+				user: userWithSelectedSpace as unknown,
 			});
 
 			// When
-			const result = await controller.login(loginDto, mockResponse as any);
+			const result = await controller.login(loginDto, mockResponse as unknown);
 
 			// Then
 			expect(result.selectedSpaceId).toBe("selected-space-id");
@@ -180,12 +180,12 @@ describe("AuthController", () => {
 				newRefreshToken: "new-refresh-token",
 				tokenExpiryInfo: mockTokenExpiryInfo,
 			});
-			mockAuthFacade.getCurrentUser.mockResolvedValue(mockUser as any);
+			mockAuthFacade.getCurrentUser.mockResolvedValue(mockUser as unknown);
 
 			// When
 			const result = await controller.refreshToken(
-				mockRequest as any,
-				mockResponse as any,
+				mockRequest as unknown,
+				mockResponse as unknown,
 			);
 
 			// Then
@@ -212,8 +212,8 @@ describe("AuthController", () => {
 			// When & Then
 			await expect(
 				controller.refreshToken(
-					requestWithoutToken as any,
-					mockResponse as any,
+					requestWithoutToken as unknown,
+					mockResponse as unknown,
 				),
 			).rejects.toThrow(UnauthorizedException);
 		});
@@ -229,7 +229,10 @@ describe("AuthController", () => {
 
 			// When & Then
 			await expect(
-				controller.refreshToken(mockRequest as any, mockResponse as any),
+				controller.refreshToken(
+					mockRequest as unknown,
+					mockResponse as unknown,
+				),
 			).rejects.toThrow(UnauthorizedException);
 		});
 	});
@@ -245,8 +248,8 @@ describe("AuthController", () => {
 
 			// When
 			const result = await controller.getNewToken(
-				mockRequest as any,
-				mockResponse as any,
+				mockRequest as unknown,
+				mockResponse as unknown,
 			);
 
 			// Then
@@ -267,13 +270,13 @@ describe("AuthController", () => {
 				email: "new@example.com",
 				password: "password123",
 				name: "New User",
-			} as any;
+			} as unknown;
 			const signUpResult = {
 				accessToken: "access-token",
 				refreshToken: "refresh-token",
 				user: mockUser,
 			};
-			mockAuthFacade.signUp.mockResolvedValue(signUpResult as any);
+			mockAuthFacade.signUp.mockResolvedValue(signUpResult as unknown);
 
 			// When
 			const result = await controller.signUpUser(signUpDto);
@@ -329,8 +332,8 @@ describe("AuthController", () => {
 
 			// When
 			const result = await controller.logout(
-				mockRequest as any,
-				mockResponse as any,
+				mockRequest as unknown,
+				mockResponse as unknown,
 			);
 
 			// Then
@@ -355,8 +358,8 @@ describe("AuthController", () => {
 
 			// When
 			const result = await controller.logout(
-				requestWithoutUser as any,
-				mockResponse as any,
+				requestWithoutUser as unknown,
+				mockResponse as unknown,
 			);
 
 			// Then

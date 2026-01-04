@@ -1,5 +1,5 @@
 import { CookieStore } from "./cookieStore";
-import { RootStore } from "./Store";
+import type { RootStore } from "./Store";
 
 export class TokenStore {
 	private cookieStore: CookieStore;

@@ -6,7 +6,7 @@ import {
 	UUIDFieldOptional,
 } from "@cocrepo/decorator";
 import { FileAssociation } from "@cocrepo/entity";
-import { File } from "@cocrepo/prisma";
+import type { File } from "@cocrepo/prisma";
 import { AbstractDto } from "./abstract.dto";
 import { FileClassificationDto } from "./file-classification.dto";
 import { SpaceDto } from "./space.dto";

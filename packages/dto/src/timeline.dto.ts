@@ -5,7 +5,7 @@ import {
 	UUIDField,
 	UUIDFieldOptional,
 } from "@cocrepo/decorator";
-import { Timeline } from "@cocrepo/prisma";
+import type { Timeline } from "@cocrepo/prisma";
 import { AbstractDto } from "./abstract.dto";
 import { SessionDto } from "./session.dto";
 

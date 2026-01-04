@@ -3,10 +3,10 @@ import {
 	DropdownMenu,
 	DropdownTrigger,
 	Dropdown as HeroUIDropdown,
-	DropdownItemProps as HeroUIDropdownItemProps,
-	DropdownProps as HeroUIDropdownProps,
+	type DropdownItemProps as HeroUIDropdownItemProps,
+	type DropdownProps as HeroUIDropdownProps,
 } from "@heroui/react";
-import React from "react";
+import type React from "react";
 
 export interface DropdownItemProps
 	extends Omit<HeroUIDropdownItemProps, "children"> {

@@ -1,9 +1,9 @@
 import { useFormField } from "@cocrepo/hook";
 import { tools } from "@cocrepo/toolkit";
-import { MobxProps } from "@cocrepo/type";
+import type { MobxProps } from "@cocrepo/type";
 import { observer } from "mobx-react-lite";
 import {
-	CalendarProps as BaseCalendarProps,
+	type CalendarProps as BaseCalendarProps,
 	Calendar as CalendarComponent,
 } from "./Calendar";
 

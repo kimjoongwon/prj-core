@@ -5,7 +5,7 @@ import { observer } from "mobx-react-lite";
 import {
 	WeekInput as BaseWeekInput,
 	type WeekInputProps as BaseWeekInputProps,
-	RecurringDayOfTheWeek,
+	type RecurringDayOfTheWeek,
 } from "./WeekInput";
 
 export interface WeekInputProps<T = any>

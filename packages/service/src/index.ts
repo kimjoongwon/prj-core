@@ -3,10 +3,14 @@
 
 // Utils
 export {
+	AbilitiesService,
 	AwsService,
+	ColumnDefinitionsService,
 	createPrismaClient,
+	DeviceType,
 	PrismaService,
 	RedisService,
+	SubjectsService,
 	TokenExpiryInfo,
 	TokenService,
 	TokenStorageService,

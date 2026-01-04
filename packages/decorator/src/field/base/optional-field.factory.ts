@@ -20,7 +20,7 @@ import type {
  * @returns Optional 필드 데코레이터 함수
  */
 export function createOptionalField<T extends BaseFieldOptions>(
-	fieldDecorator: (options?: any) => PropertyDecorator,
+	fieldDecorator: (options?: unknown) => PropertyDecorator,
 ) {
 	return (options?: OptionalFieldOptions<T>): PropertyDecorator => {
 		return applyDecorators(

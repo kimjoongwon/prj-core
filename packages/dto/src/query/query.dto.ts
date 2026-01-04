@@ -19,40 +19,32 @@ export class QueryDto {
 	readonly take?: number = undefined;
 
 	private toQueryArgs<T extends object>(query: T) {
-		if (isEmpty(query as any)) {
+		if (isEmpty(query)) {
 			return {};
 		}
-		return Object.entries(query)
-			.map(([key, value]) => {
-				if (key === "take" || key === "skip") {
-					return { [key]: value };
-				}
-				if (key.endsWith("SortOrder")) {
-					return {
-						orderBy: {
-							[key.replace("SortOrder", "")]: value,
-						},
-					};
-				}
-				return {
-					where: {
-						[key]: value,
-					},
-				};
-			})
-			.reduce(
-				(acc, curr) => {
-					const { where = {}, orderBy = {} } = acc;
-					const { where: currWhere = {}, orderBy: currOrderBy = {} } = curr;
-					return {
-						...acc,
-						...curr,
-						where: { ...where, ...currWhere },
-						orderBy: { ...orderBy, ...currOrderBy },
-					};
-				},
-				{ where: {}, orderBy: {} },
-			);
+
+		const result: Record<string, unknown> = {};
+		const where: Record<string, unknown> = {};
+		const orderBy: Record<string, unknown> = {};
+
+		for (const [key, value] of Object.entries(query)) {
+			if (key === "take" || key === "skip") {
+				result[key] = value;
+			} else if (key.endsWith("SortOrder")) {
+				orderBy[key.replace("SortOrder", "")] = value;
+			} else {
+				where[key] = value;
+			}
+		}
+
+		if (Object.keys(where).length > 0) {
+			result.where = where;
+		}
+		if (Object.keys(orderBy).length > 0) {
+			result.orderBy = orderBy;
+		}
+
+		return result;
 	}
 
 	toArgs<T>(rawArgs?: T) {
@@ -74,7 +66,7 @@ export class QueryDto {
 	}
 
 	toCountArgs<T>(includeRemovedItems = false) {
-		const args = this.toQueryArgs(this) as any;
+		const args = this.toQueryArgs(this) as Record<string, unknown>;
 		delete args.include;
 		delete args.skip;
 		delete args.take;

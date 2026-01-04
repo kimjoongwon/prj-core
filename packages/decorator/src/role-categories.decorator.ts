@@ -1,4 +1,4 @@
-import { RoleCategoryNames } from "@cocrepo/enum";
+import type { RoleCategoryNames } from "@cocrepo/enum";
 import { SetMetadata } from "@nestjs/common";
 
 export const ROLE_CATEGORIES_KEY = "roleCategories";

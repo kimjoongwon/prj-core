@@ -4,7 +4,7 @@ import {
 	StringFieldOptional,
 	UUIDField,
 } from "@cocrepo/decorator";
-import { Activity as ActivityEntity } from "@cocrepo/prisma";
+import type { Activity as ActivityEntity } from "@cocrepo/prisma";
 import { AbstractDto } from "./abstract.dto";
 import { RoutineDto } from "./routine.dto";
 import { TaskDto } from "./task.dto";

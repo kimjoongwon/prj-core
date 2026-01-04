@@ -1,6 +1,7 @@
-import { ApiProperty, type ApiPropertyOptions } from "@nestjs/swagger";
+import { ApiProperty } from "@nestjs/swagger";
+import type { ApiPropertyOptions } from "@nestjs/swagger";
 import { plainToClass } from "class-transformer";
-import { ClassConstructor } from "class-transformer/types/interfaces";
+import type { ClassConstructor } from "class-transformer/types/interfaces";
 import { validateSync } from "class-validator";
 
 export class ValidationUtil {
@@ -74,7 +75,7 @@ export function ApiEnumProperty<TEnum>(
 	options: ApiPropertyOptions & { each?: boolean } = {},
 ): PropertyDecorator {
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any
-	const enumValue = getEnum() as any;
+	const enumValue = getEnum() as Record<string, unknown>;
 
 	// Prisma 7: enums are plain objects, extract values for Swagger
 	// ts-jenum: class-based enums need special handling

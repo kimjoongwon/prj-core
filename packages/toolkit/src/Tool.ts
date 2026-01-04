@@ -3,18 +3,18 @@ import { cloneDeep, get, set } from "es-toolkit/compat";
 
 // Object property utilities
 export function getProperty(
-	object: any,
+	object: unknown,
 	path: string | string[],
-	defaultValue?: any,
-): any {
+	defaultValue?: unknown,
+): unknown {
 	return get(object, path, defaultValue);
 }
 
 export function setProperty(
-	object: any,
+	object: object,
 	path: string | string[],
-	value: any,
-): any {
+	value: unknown,
+): object {
 	return set(object, path, value);
 }
 

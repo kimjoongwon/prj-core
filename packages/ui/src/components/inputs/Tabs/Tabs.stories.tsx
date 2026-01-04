@@ -1,5 +1,6 @@
-import { Option } from "@cocrepo/type";
+import type { Option } from "@cocrepo/type";
 import type { Meta, StoryObj } from "@storybook/react";
+import type { Key } from "react";
 import { useState } from "react";
 import { Tabs } from "./Tabs";
 
@@ -17,9 +18,9 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 const options: Option[] = [
-	{ key: "1", label: "Tab 1", value: "1" },
-	{ key: "2", label: "Tab 2", value: "2" },
-	{ key: "3", label: "Tab 3", value: "3" },
+	{ text: "Tab 1", value: "1" },
+	{ text: "Tab 2", value: "2" },
+	{ text: "Tab 3", value: "3" },
 ];
 
 export const Default: Story = {
@@ -27,9 +28,13 @@ export const Default: Story = {
 		options,
 	},
 	render: (args) => {
-		const [selectedTab, setSelectedTab] = useState("1");
+		const [selectedKey, setSelectedKey] = useState<Key>("1");
 		return (
-			<Tabs {...args} selectedTab={selectedTab} onChange={setSelectedTab} />
+			<Tabs
+				{...args}
+				selectedKey={selectedKey as string}
+				onSelectionChange={setSelectedKey}
+			/>
 		);
 	},
 };

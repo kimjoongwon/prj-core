@@ -1,5 +1,6 @@
 "use client";
 
+import type { AbilityResponseDto } from "@cocrepo/api";
 import { DesignSystemProvider } from "@cocrepo/design-system";
 import { AbilityProvider } from "@cocrepo/hook";
 import {
@@ -8,7 +9,8 @@ import {
 	QueryClientProvider,
 } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
-import { type ReactNode } from "react";
+import type { ReactNode } from "react";
+import { useAbilities } from "@/hooks";
 import { AppStoreProvider } from "../src/stores";
 
 interface ProvidersProps {
@@ -45,7 +47,7 @@ function getQueryClient() {
  *
  * Provider 계층 구조:
  * QueryClientProvider
- * └── AbilityProvider (권한 관리)
+ * └── AbilityProviderWrapper (서버에서 권한 로드)
  *     └── AppStoreProvider (RootStore + 주입된 Store들 통합 관리)
  *         └── DesignSystemProvider (UI 시스템)
  */
@@ -59,13 +61,36 @@ export function Providers({ children }: ProvidersProps) {
 
 	return (
 		<QueryClientProvider client={queryClient}>
-			<AbilityProvider>
+			<AbilityProviderWrapper>
 				<AppStoreProvider>
 					<DesignSystemProvider navigate={handleNavigate}>
 						{children}
 					</DesignSystemProvider>
 				</AppStoreProvider>
-			</AbilityProvider>
+			</AbilityProviderWrapper>
 		</QueryClientProvider>
 	);
+}
+
+/**
+ * AbilityProviderWrapper
+ * 서버에서 권한을 로드하여 AbilityProvider에 전달합니다.
+ */
+function AbilityProviderWrapper({ children }: { children: ReactNode }) {
+	const { abilities, isLoading, isError } = useAbilities();
+
+	// API 응답을 AbilityRule 형식으로 변환
+	const rules = abilities?.map((ability: AbilityResponseDto) => ({
+		action: ability.action,
+		subject: ability.subject?.name ?? "",
+		conditions: ability.conditions as Record<string, unknown> | undefined,
+		inverted: !ability.isActive, // isActive가 false면 권한 거부
+	}));
+
+	// API 로딩 중이거나 에러이거나 빈 배열일 때 기본 규칙 사용 (MANAGE all - 전체 권한)
+	// TODO: API 정상화 후 이 fallback 로직 제거
+	const effectiveRules =
+		isLoading || isError || !rules || rules.length === 0 ? undefined : rules;
+
+	return <AbilityProvider rules={effectiveRules}>{children}</AbilityProvider>;
 }

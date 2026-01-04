@@ -1,6 +1,6 @@
 import { useFormField } from "@cocrepo/hook";
 import { tools } from "@cocrepo/toolkit";
-import { MobxProps } from "@cocrepo/type";
+import type { MobxProps } from "@cocrepo/type";
 import { observer } from "mobx-react-lite";
 import {
 	Switch as BaseSwitch,

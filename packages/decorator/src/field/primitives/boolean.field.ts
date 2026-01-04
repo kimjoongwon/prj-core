@@ -3,9 +3,9 @@ import { ApiProperty } from "@nestjs/swagger";
 import { IsBoolean, NotEquals } from "class-validator";
 import { ToBoolean } from "../../transform.decorators";
 import { IsNullable } from "../../validator.decorators";
-import {
-	type BaseFieldOptions,
-	type FieldDecoratorOptions,
+import type {
+	BaseFieldOptions,
+	FieldDecoratorOptions,
 } from "../base/field-options.types";
 import { createOptionalField } from "../base/optional-field.factory";
 

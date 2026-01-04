@@ -38,9 +38,37 @@ Prisma 기반 Repository 레이어를 생성하는 전문가입니다.
    await this.txHost.tx.user.findUnique(...)
    ```
 
-4. **필요한 파라미터만 받기**
+4. **Prisma 타입 활용 (커스텀 타입 선언 금지)**
+   ```typescript
+   // ❌ 금지 - 중복된 커스텀 타입 선언
+   export interface CreateUserParams {
+     name: string;
+     email: string;
+     ...
+   }
+
+   // ✅ 권장 - Prisma에서 제공하는 타입 사용
+   import { Prisma } from "@cocrepo/prisma";
+
+   async create(data: Prisma.UserUncheckedCreateInput): Promise<User>
+   async update(id: string, data: Prisma.UserUncheckedUpdateInput): Promise<User>
+   async createMany(data: Prisma.UserCreateManyInput[]): Promise<number>
+   ```
+
+   **Prisma 타입 종류:**
+   | 타입 | 용도 | 특징 |
+   |------|------|------|
+   | `{Model}UncheckedCreateInput` | 생성 | FK ID를 직접 전달 |
+   | `{Model}UncheckedUpdateInput` | 수정 | FK ID를 직접 전달 |
+   | `{Model}CreateManyInput` | 다중 생성 | Bulk insert용 |
+   | `{Model}CreateInput` | 생성 | 관계를 통한 연결 (connect 등) |
+   | `{Model}UpdateInput` | 수정 | 관계를 통한 연결 (connect 등) |
+
+   > **Unchecked vs Checked**: Repository에서는 FK ID를 직접 다루므로 `Unchecked*` 타입 권장
+
+5. **필요한 파라미터만 받기 (조회용)**
+   - 조회 메서드는 필요한 원시 타입만 받음
    - Prisma Args 전체를 받지 않음
-   - 함수에 필요한 원시 타입만 받음
 
 ---
 
@@ -56,7 +84,7 @@ packages/repository/src/{entity}.repository.ts
 
 ```typescript
 import { {Entity} } from "@cocrepo/entity";
-import { PrismaClient } from "@cocrepo/prisma";
+import { Prisma, PrismaClient } from "@cocrepo/prisma";
 import { Injectable, Logger } from "@nestjs/common";
 import { TransactionHost } from "@nestjs-cls/transactional";
 import { TransactionalAdapterPrisma } from "@nestjs-cls/transactional-adapter-prisma";
@@ -88,27 +116,26 @@ export class {Entity}sRepository {
   }
 
   /**
-   * 생성
+   * 생성 (Prisma 타입 사용)
    */
-  async create(data: { field1: string; field2: number }): Promise<{Entity}> {
+  async create(
+    data: Prisma.{Entity}UncheckedCreateInput,
+  ): Promise<{Entity}> {
     this.logger.debug(`생성 중...`);
 
     const result = await this.txHost.tx.{entity}.create({
-      data: {
-        field1: data.field1,
-        field2: data.field2,
-      },
+      data,
     });
 
     return plainToInstance({Entity}, result);
   }
 
   /**
-   * 업데이트
+   * 업데이트 (Prisma 타입 사용)
    */
   async updateById(
     id: string,
-    data: { field1?: string; field2?: number },
+    data: Prisma.{Entity}UncheckedUpdateInput,
   ): Promise<{Entity}> {
     this.logger.debug(`업데이트 중: ${id.slice(-8)}`);
 
@@ -145,6 +172,22 @@ export class {Entity}sRepository {
     });
 
     return plainToInstance({Entity}, result);
+  }
+
+  /**
+   * 다중 생성 (Prisma 타입 사용)
+   */
+  async createMany(
+    data: Prisma.{Entity}CreateManyInput[],
+  ): Promise<number> {
+    this.logger.debug(`다중 생성: count=${data.length}`);
+
+    const result = await this.txHost.tx.{entity}.createMany({
+      data,
+      skipDuplicates: true,
+    });
+
+    return result.count;
   }
 }
 ```
@@ -262,8 +305,12 @@ async findManyBySpaceId(params: {
 - [ ] `@Injectable()` 데코레이터 추가
 - [ ] `TransactionHost` 주입
 - [ ] `txHost.tx` 직접 사용 (getter 금지)
-- [ ] 메서드명이 비즈니스 목적을 표현
-- [ ] 필요한 파라미터만 받음 (Prisma Args 전체 금지)
+- [ ] 메서드명이 어떤 데이터를 가져오는지 표현
+- [ ] **Prisma 타입 사용** (커스텀 타입 선언 금지)
+  - [ ] `Prisma.{Model}UncheckedCreateInput` (생성)
+  - [ ] `Prisma.{Model}UncheckedUpdateInput` (수정)
+  - [ ] `Prisma.{Model}CreateManyInput` (다중 생성)
+- [ ] 조회 메서드는 필요한 원시 타입만 받음
 - [ ] `plainToInstance()` 로 Entity 변환
 - [ ] Logger 초기화
 

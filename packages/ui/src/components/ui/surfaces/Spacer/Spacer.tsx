@@ -4,7 +4,7 @@ export interface SpacerProps {
 	className?: string;
 }
 
-import React from "react";
+import type React from "react";
 
 /**
  * Spacer component that creates empty space with configurable size using Tailwind's spacing units

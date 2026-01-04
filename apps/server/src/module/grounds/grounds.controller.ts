@@ -7,10 +7,10 @@ import {
 	ResponseMessage,
 } from "@cocrepo/decorator";
 import { GroundDto } from "@cocrepo/dto";
-import { GroundsService } from "@cocrepo/service";
+import type { GroundsService } from "@cocrepo/service";
 import { Controller, Get, HttpStatus } from "@nestjs/common";
 import { ApiOperation, ApiTags } from "@nestjs/swagger";
-import { ClsService } from "nestjs-cls";
+import type { ClsService } from "nestjs-cls";
 
 @ApiTags("GROUNDS")
 @Controller("grounds")

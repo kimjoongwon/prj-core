@@ -1,15 +1,9 @@
 import type { Meta, StoryObj } from "@storybook/react";
 import { ChipSelect } from "./ChipSelect";
 
-type ChipSelectState = {
-	chipSingle?: string | null;
-	chipMultiple?: string[];
-	chipNone?: string[];
-};
-
 const meta = {
 	title: "inputs/ChipSelect",
-	component: ChipSelect<ChipSelectState>,
+	component: ChipSelect,
 	parameters: {
 		layout: "centered",
 		docs: {
@@ -29,15 +23,10 @@ const meta = {
 			control: "select",
 			options: ["single", "multiple", "none"],
 			description: "선택 모드",
-			defaultValue: "multiple",
 		},
-		state: {
+		value: {
 			control: "object",
-			description: "MobX 상태 객체",
-		},
-		path: {
-			control: "text",
-			description: "상태 경로",
+			description: "선택된 값",
 		},
 	},
 } satisfies Meta<typeof ChipSelect>;
@@ -49,8 +38,7 @@ export const 다중선택: Story = {
 	args: {
 		options: ["JavaScript", "TypeScript", "React", "Vue", "Angular"],
 		selectionMode: "multiple",
-		state: { chipMultiple: [] },
-		path: "chipMultiple",
+		value: [],
 	},
 	parameters: {
 		docs: {
@@ -65,8 +53,7 @@ export const 단일선택: Story = {
 	args: {
 		options: ["초급", "중급", "고급"],
 		selectionMode: "single",
-		state: { chipSingle: null },
-		path: "chipSingle",
+		value: null,
 	},
 	parameters: {
 		docs: {
@@ -81,8 +68,7 @@ export const 선택불가: Story = {
 	args: {
 		options: ["읽기전용", "표시용", "비활성"],
 		selectionMode: "none",
-		state: { chipNone: [] },
-		path: "chipNone",
+		value: [],
 	},
 	parameters: {
 		docs: {
@@ -97,8 +83,7 @@ export const 미리선택됨: Story = {
 	args: {
 		options: ["HTML", "CSS", "JavaScript", "TypeScript", "React"],
 		selectionMode: "multiple",
-		state: { chipMultiple: ["JavaScript", "React"] },
-		path: "chipMultiple",
+		value: ["JavaScript", "React"],
 	},
 	parameters: {
 		docs: {
@@ -126,8 +111,7 @@ export const 긴목록: Story = {
 			"Astro",
 		],
 		selectionMode: "multiple",
-		state: { chipMultiple: [] },
-		path: "chipMultiple",
+		value: [],
 	},
 	parameters: {
 		docs: {
@@ -147,8 +131,7 @@ export const 다양한모드비교: Story = {
 	args: {
 		options: ["옵션1", "옵션2", "옵션3"],
 		selectionMode: "multiple",
-		state: { chipMultiple: [] },
-		path: "chipMultiple",
+		value: [],
 	},
 	render: () => (
 		<div className="flex flex-col gap-6">
@@ -157,8 +140,7 @@ export const 다양한모드비교: Story = {
 				<ChipSelect
 					options={["JavaScript", "TypeScript", "React"]}
 					selectionMode="multiple"
-					state={{ chipMultiple: ["React"] }}
-					path="chipMultiple"
+					value={["React"]}
 				/>
 			</div>
 			<div>
@@ -166,8 +148,7 @@ export const 다양한모드비교: Story = {
 				<ChipSelect
 					options={["초급", "중급", "고급"]}
 					selectionMode="single"
-					state={{ chipSingle: "중급" }}
-					path="chipSingle"
+					value="중급"
 				/>
 			</div>
 			<div>
@@ -175,8 +156,7 @@ export const 다양한모드비교: Story = {
 				<ChipSelect
 					options={["읽기전용", "표시용", "정보용"]}
 					selectionMode="none"
-					state={{ chipNone: [] }}
-					path="chipNone"
+					value={[]}
 				/>
 			</div>
 		</div>

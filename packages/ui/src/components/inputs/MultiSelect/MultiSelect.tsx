@@ -1,11 +1,11 @@
 import {
 	Select as NextSelect,
-	SelectProps as NextUISelectProps,
+	type SelectProps as NextUISelectProps,
 	SelectItem,
-	Selection,
+	type Selection,
 } from "@heroui/react";
 
-export interface MultiSelectProps<T>
+export interface MultiSelectProps<_T>
 	extends Omit<
 		NextUISelectProps,
 		"children" | "selectionMode" | "onChange" | "selectedKeys"

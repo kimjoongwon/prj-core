@@ -1,6 +1,6 @@
 import { cva } from "class-variance-authority";
+import type React from "react";
 import type { ElementType, HTMLAttributes, ReactNode } from "react";
-import React from "react";
 
 export interface TextProps extends HTMLAttributes<HTMLElement> {
 	variant?:

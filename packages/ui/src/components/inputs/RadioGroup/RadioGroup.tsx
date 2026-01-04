@@ -1,6 +1,6 @@
 import {
 	RadioGroup as NextUIRadioGroup,
-	RadioGroupProps as NextUIRadioGroupProps,
+	type RadioGroupProps as NextUIRadioGroupProps,
 	Radio,
 } from "@heroui/react";
 

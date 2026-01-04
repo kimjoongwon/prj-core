@@ -7,7 +7,11 @@ export type AbilityActions =
 	| "READ" // 조회
 	| "UPDATE" // 수정
 	| "DELETE" // 삭제
-	| "MANAGE"; // 모든 권한
+	| "MANAGE" // 모든 권한
+	| "EXPORT" // 내보내기
+	| "IMPORT" // 가져오기
+	| "APPROVE" // 승인
+	| "REJECT"; // 거부
 
 /**
  * CASL 권한 규칙

@@ -1,7 +1,7 @@
 import { applyDecorators } from "@nestjs/common";
 import { ApiProperty, type ApiPropertyOptions } from "@nestjs/swagger";
 import { IsEmail } from "class-validator";
-import { type StringFieldOptions } from "../base/field-options.types";
+import type { StringFieldOptions } from "../base/field-options.types";
 import { createOptionalField } from "../base/optional-field.factory";
 import { StringField } from "../primitives/string.field";
 

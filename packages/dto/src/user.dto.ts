@@ -7,7 +7,7 @@ import {
 	UUIDField,
 	UUIDFieldOptional,
 } from "@cocrepo/decorator";
-import { User } from "@cocrepo/prisma";
+import type { User } from "@cocrepo/prisma";
 import { Exclude } from "class-transformer";
 import { ProfileDto, UserClassificationDto } from ".";
 import { AbstractDto } from "./abstract.dto";

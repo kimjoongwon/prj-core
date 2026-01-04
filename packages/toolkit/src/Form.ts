@@ -11,7 +11,7 @@ export type Validation = {
  * 개별 필드에 대한 validation 검증
  */
 export function validateSingleField(
-	value: any,
+	value: unknown,
 	validation: Validation,
 ): { isValid: boolean; errorMessage?: string } {
 	const { required, minLength, maxLength, min, max, patterns } = validation;
@@ -72,11 +72,11 @@ export function validateSingleField(
  * validationFields를 사용한 다중 필드 검증
  */
 export function validateFields(
-	state: any,
+	state: unknown,
 	validationFields: Record<string, Validation>,
 ): { isValid: boolean; errorMessage?: string } {
 	// 간단한 path 접근 구현
-	const getValue = (obj: any, path: string): any => {
+	const getValue = (obj: unknown, path: string): unknown => {
 		return path.split(".").reduce((current, key) => current?.[key], obj);
 	};
 

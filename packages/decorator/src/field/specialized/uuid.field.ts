@@ -1,11 +1,11 @@
 import { applyDecorators } from "@nestjs/common";
-import { type ApiPropertyOptions } from "@nestjs/swagger";
+import type { ApiPropertyOptions } from "@nestjs/swagger";
 import { Type } from "class-transformer";
 import { NotEquals } from "class-validator";
 import { ApiUUIDProperty } from "../../property.decorators";
 import { ToArray } from "../../transform.decorators";
 import { IsNullable } from "../../validator.decorators";
-import { type BaseFieldOptions } from "../base/field-options.types";
+import type { BaseFieldOptions } from "../base/field-options.types";
 import { createOptionalField } from "../base/optional-field.factory";
 
 /**

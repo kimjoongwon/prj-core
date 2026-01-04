@@ -16,7 +16,7 @@ export function ConfigCard({
 	const isActive = status === "active";
 
 	return (
-		<button
+		<button type="button"
 			onClick={onClick}
 			disabled={!isActive}
 			className={`

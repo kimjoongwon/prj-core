@@ -1,7 +1,7 @@
 import { ValidationUtil } from "@cocrepo/decorator";
 import { registerAs } from "@nestjs/config";
 import { IsString } from "class-validator";
-import { AwsConfig } from "./config.type";
+import type { AwsConfig } from "./config.type";
 
 class EnvironmentVariablesValidator {
 	@IsString()

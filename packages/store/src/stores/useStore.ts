@@ -1,7 +1,7 @@
 "use client";
 
 import { createContext, useContext } from "react";
-import { RootStore } from "./Store";
+import type { RootStore } from "./Store";
 
 export const RootStoreContext = createContext<RootStore | null>(null);
 
@@ -15,6 +15,11 @@ export const useStore = () => {
 	}
 	return store;
 };
+
+/**
+ * RootStore를 가져오는 hook (별칭)
+ */
+export const useRootStore = useStore;
 
 /**
  * MenuStore를 가져오는 selector hook

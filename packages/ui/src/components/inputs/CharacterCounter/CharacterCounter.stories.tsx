@@ -42,6 +42,10 @@ export const Danger: Story = {
 };
 
 export const AllStates: Story = {
+	args: {
+		current: 50,
+		max: 100,
+	},
 	render: () => (
 		<div className="w-64 space-y-4">
 			<div>

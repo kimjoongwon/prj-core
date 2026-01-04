@@ -94,7 +94,7 @@ export const 플레이그라운드: Story = {
 };
 
 // Year 컴포넌트 스토리
-const yearMeta = {
+const _yearMeta = {
 	title: "Inputs/Calendar/Year",
 	component: Year,
 	parameters: {
@@ -128,7 +128,7 @@ export const Year기본: StoryObj<typeof Year> = {
 };
 
 // Month 컴포넌트 스토리
-const monthMeta = {
+const _monthMeta = {
 	title: "Inputs/Calendar/Month",
 	component: Month,
 	parameters: {

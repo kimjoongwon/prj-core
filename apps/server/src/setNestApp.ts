@@ -8,7 +8,7 @@ import {
 import { TokenStorageService } from "@cocrepo/service";
 import {
 	ClassSerializerInterceptor,
-	INestApplication,
+	type INestApplication,
 	ValidationPipe,
 } from "@nestjs/common";
 import { HttpAdapterHost, Reflector } from "@nestjs/core";

@@ -1,3 +1,4 @@
+import type { FileDto } from "@cocrepo/api";
 import type { Meta, StoryObj } from "@storybook/react";
 import { useState } from "react";
 import { FileUploader } from "./FileUploader";
@@ -21,7 +22,7 @@ export const Default: Story = {
 		type: "all",
 	},
 	render: (args) => {
-		const [value, setValue] = useState(null);
+		const [value, setValue] = useState<Partial<FileDto> | null>(null);
 		return <FileUploader {...args} value={value} onChange={setValue} />;
 	},
 };
@@ -33,7 +34,7 @@ export const FullWidth: Story = {
 		fullWidth: true,
 	},
 	render: (args) => {
-		const [value, setValue] = useState(null);
+		const [value, setValue] = useState<Partial<FileDto> | null>(null);
 		return <FileUploader {...args} value={value} onChange={setValue} />;
 	},
 };
@@ -44,7 +45,7 @@ export const WithImage: Story = {
 		type: "image",
 	},
 	render: (args) => {
-		const [value, setValue] = useState({
+		const [value, setValue] = useState<Partial<FileDto> | null>({
 			name: "example.png",
 			url: "https://via.placeholder.com/150",
 			mimeType: "image/png",

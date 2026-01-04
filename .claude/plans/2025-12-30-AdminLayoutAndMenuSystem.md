@@ -1,8 +1,8 @@
 # AdminLayout & MenuSystem 화면 기획서
 
-**플랫폼:** Admin Web
-**최종 수정일:** 2026-01-01
-**버전:** 3.0
+**플랫폼:** Admin Web (Desktop + Mobile)
+**최종 수정일:** 2026-01-03
+**버전:** 4.0
 
 ---
 
@@ -13,12 +13,20 @@
 | 1.0 | 2025-12-30 | 초안 작성 |
 | 2.0 | 2026-01-01 | 코드베이스 분석 후 전면 개정 - 네이밍 규칙 수정, 기존 컴포넌트 활용 현황 추가, 현재 구현 구조 반영 |
 | 3.0 | 2026-01-01 | 좌측 사이드바 + 2depth 트리 메뉴 구조로 전면 변경 |
+| 4.0 | 2026-01-03 | 모바일 반응형 레이아웃 - 바텀 탭 + 전체 화면 서브메뉴 추가 |
+
+### 주요 변경 사항 (v4.0)
+
+1. **모바일 반응형 레이아웃 추가**: 768px 이하에서 좌측 사이드바 숨김, 바텀 탭으로 전환
+2. **BottomTab 컴포넌트**: 1depth 메뉴를 하단 탭 바로 표시 (모바일만)
+3. **전체 화면 서브메뉴**: 2depth 메뉴를 전체 화면 리스트로 표시
+4. **터치 인터랙션 최적화**: 모바일 터치 영역 확대 및 네이티브 앱과 유사한 UX
 
 ### 주요 변경 사항 (v3.0)
 
 1. **레이아웃 구조 변경**: 상단 Nav + SubNav 구조 → 좌측 사이드바 + 2depth 트리 메뉴 구조
 2. **SideNav 컴포넌트 필수화**: 좌측 사이드바에 아코디언/트리 형태 메뉴 배치
-3. **Header 단순화**: 메뉴 네비게이션 제거, 로고 + 컨텍스트 + 유저메뉴만 유지
+3. **Header 단순화**: 메뉴 네비게이션 제거, 로고 + Space 셀렉터 + 유저메뉴만 유지
 4. **메뉴 인터랙션 변경**: 1depth 클릭 시 펼침/접힘, 2depth 클릭 시 페이지 이동
 
 ---
@@ -31,10 +39,11 @@
 
 **레이아웃 구조 (좌측 사이드바 + 2depth 트리 메뉴):**
 - **Header**: 상단 헤더
-  - 왼쪽: 로고 (AppLogo) - 클릭 시 대시보드로 이동
-  - 오른쪽: 컨텍스트 셀렉터 (ContextSelector) + 유저 아바타 (UserMenu)
+  - 왼쪽: 로고 (AppLogo) - 클릭 시 첫 번째 메뉴로 이동
+  - 오른쪽: Space 셀렉터 (SpaceSelector) + 유저 아바타 (UserMenu)
 - **Sidebar (좌측)**: 사이드 네비게이션 (SideNav)
   - 2depth 트리 메뉴 구조
+  - 대시보드: 하위 메뉴 없음, 클릭 시 `/dashboard`로 이동
   - 1depth: 메인 카테고리 (회원, 예약, 알림 등) - 클릭 시 펼침/접힘
   - 2depth: 하위 메뉴 - 클릭 시 페이지 이동
 - **Main**: 페이지 콘텐츠 영역
@@ -854,7 +863,419 @@ const filteredMenus = useFilteredMenus(ADMIN_MENUS);
 2. **MenuStore 확장** - toggleMenu, expandedMenuIds 추가
 3. **대시보드 메뉴 추가** - ADMIN_MENUS에 추가
 4. **Layout 수정** - `app/(admin)/layout.tsx`에서 SideNav 적용
-5. UserMenu 실제 사용자 정보 연동
+5. **모바일 반응형 대응** - MobileMenuButton, Drawer 방식 SideNav
+6. UserMenu 실제 사용자 정보 연동
+
+---
+
+## 17. 모바일 반응형 레이아웃 (v4.0)
+
+### 반응형 브레이크포인트
+
+| 뷰포트 | 브레이크포인트 | 레이아웃 모드 | 설명 |
+|--------|---------------|--------------|------|
+| 모바일 | < 768px | Mobile | 좌측 사이드바 숨김, 바텀 탭 표시 |
+| 태블릿/데스크톱 | >= 768px | Desktop | 좌측 사이드바 고정 표시 |
+
+### 모바일 레이아웃 구조
+
+**1depth 메뉴 (바텀 탭):**
+
+```
++----------------------------------------------------------------+
+|               [Logo]               [Space▼] [Avatar▼]         |  <- Header
++----------------------------------------------------------------+
+|                                                                |
+|                                                                |
+|                     페이지 콘텐츠 영역                           |
+|                                                                |
+|                                                                |
++----------------------------------------------------------------+
+| [대시보드] [회원] [예약] [알림] [문의] ...                        |  <- BottomTab (1depth)
++----------------------------------------------------------------+
+```
+
+**2depth 메뉴 선택 시 (전체 화면 리스트):**
+
+1depth 탭 클릭 → 2depth 서브메뉴가 있으면 전체 화면 리스트로 전환
+
+```
++----------------------------------------------------------------+
+|  [←]  회원                                [Space▼] [Avatar▼]  |  <- Header (뒤로가기 추가)
++----------------------------------------------------------------+
+|                                                                |
+|  회원 목록                                              >       |
+|  --------------------------------------------------------      |
+|  회원 등급 관리                                          >       |
+|  --------------------------------------------------------      |
+|  탈퇴 회원                                              >       |
+|                                                                |
++----------------------------------------------------------------+
+| [대시보드] [회원] [예약] [알림] [문의] ...                        |  <- BottomTab (활성화)
++----------------------------------------------------------------+
+```
+
+**하위 메뉴가 없는 1depth (대시보드 등):**
+- 바로 해당 페이지로 이동
+- 전체 화면 리스트 표시 없음
+
+### 모바일 UI 상세
+
+#### Header (모바일)
+
+**구성:**
+- **좌측**:
+  - BackButton (2depth 화면에서만 표시, 뒤로가기)
+  - AppLogo (또는 현재 1depth 메뉴명)
+- **우측**:
+  - SpaceSelector (축소 버전)
+  - UserMenu (아바타만)
+
+**스타일:**
+- 높이: 3.5rem (56px) - 데스크톱보다 약간 낮춤
+- 뒤로가기 터치 영역: 44x44px
+- `md:hidden` 클래스로 모바일만 표시
+
+**상태별 표시:**
+- **일반 페이지**: `[Logo] ... [Space▼] [Avatar▼]`
+- **2depth 리스트**: `[←] 회원 ... [Space▼] [Avatar▼]`
+
+#### BottomTab (신규)
+
+**생성 위치:** `packages/ui/src/components/feature/BottomTab/BottomTab.tsx`
+
+**Props:**
+```typescript
+interface BottomTabProps {
+  /** 1depth 메뉴 목록 */
+  menus: Menu[];
+  /** 현재 선택된 메뉴 ID */
+  selectedMenuId?: string;
+  /** 탭 선택 핸들러 */
+  onSelectTab: (menuId: string) => void;
+}
+```
+
+**스타일:**
+- 높이: 64px
+- 배경: `bg-content1 border-t border-divider`
+- 탭 아이템: 아이콘 + 라벨 (세로 배치)
+- 최대 탭 수: 5개 (그 이상은 "더보기" 처리)
+- 활성 탭: `text-primary`, 비활성: `text-foreground/60`
+- 아이콘 크기: 24x24px
+- 라벨 크기: 10px
+- 각 탭 터치 영역: 최소 48px
+
+**동작:**
+- 하위 메뉴 없는 탭: 바로 페이지 이동
+- 하위 메뉴 있는 탭: SubMenuList 전체 화면 표시
+
+**HeroUI 사용:**
+```tsx
+<Tabs
+  variant="light"
+  selectedKey={selectedMenuId}
+  onSelectionChange={onSelectTab}
+  classNames={{
+    base: "w-full",
+    tabList: "w-full bg-content1 border-t border-divider",
+    tab: "h-16 flex-col gap-1",
+  }}
+>
+  {menus.map((menu) => (
+    <Tab
+      key={menu.id}
+      title={
+        <div className="flex flex-col items-center gap-1">
+          {renderLucideIcon(menu.icon, "h-6 w-6", 24)}
+          <span className="text-xs">{menu.label}</span>
+        </div>
+      }
+    />
+  ))}
+</Tabs>
+```
+
+#### SubMenuList (신규)
+
+**생성 위치:** `packages/ui/src/components/feature/SubMenuList/SubMenuList.tsx`
+
+**역할:**
+- 2depth 메뉴를 전체 화면 리스트로 표시
+- 각 항목 클릭 시 해당 페이지로 이동
+
+**Props:**
+```typescript
+interface SubMenuListProps {
+  /** 표시할 서브메뉴 목록 */
+  subMenus: Menu[];
+  /** 현재 선택된 서브메뉴 ID */
+  selectedSubMenuId?: string;
+  /** 서브메뉴 선택 핸들러 */
+  onSelectSubMenu: (subMenuId: string) => void;
+  /** 뒤로가기 핸들러 */
+  onBack: () => void;
+}
+```
+
+**스타일:**
+- 전체 화면 (Header 아래 ~ BottomTab 위)
+- 배경: `bg-background`
+- 리스트 아이템 높이: 56px
+- 구분선: `border-b border-divider`
+- 우측 화살표 아이콘: `ChevronRight`
+
+**구현:**
+```tsx
+<div className="flex h-full flex-col bg-background">
+  <VStack className="flex-1 overflow-y-auto" gap={0}>
+    {subMenus.map((subMenu) => (
+      <button
+        key={subMenu.id}
+        onClick={() => onSelectSubMenu(subMenu.id)}
+        className={cn(
+          "flex w-full items-center justify-between px-4 py-4",
+          "border-b border-divider hover:bg-default-100",
+          subMenu.active && "bg-primary/10"
+        )}
+      >
+        <Text className="text-base font-medium">
+          {subMenu.label}
+        </Text>
+        <ChevronRight className="h-5 w-5 text-foreground/40" />
+      </button>
+    ))}
+  </VStack>
+</div>
+```
+
+#### Layout 반응형 적용
+
+**파일:** `apps/admin/app/(admin)/layout.tsx`
+
+```tsx
+"use client";
+
+import { PageLayout, Header } from "@cocrepo/ui/layouts";
+import { AppLogo, SpaceSelector, UserMenu, SideNav, MobileMenuButton } from "@cocrepo/ui/feature";
+import { useState } from "react";
+import { useMediaQuery } from "@cocrepo/hook";
+
+export default function AdminLayout({ children }: { children: React.ReactNode }) {
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const isMobile = useMediaQuery("(max-width: 767px)");
+
+  return (
+    <PageLayout
+      header={
+        <Header
+          left={
+            <>
+              {/* 모바일: 햄버거 메뉴 */}
+              {isMobile && (
+                <MobileMenuButton
+                  isOpen={isMobileMenuOpen}
+                  onToggle={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+                />
+              )}
+              <AppLogo icon="LayoutGrid" text={isMobile ? "" : "Admin"} />
+            </>
+          }
+          right={
+            <>
+              <SpaceSelector />
+              <UserMenu />
+            </>
+          }
+        />
+      }
+      leftAside={
+        isMobile ? (
+          // 모바일: Drawer 모드
+          <SideNav
+            isMobile
+            isOpen={isMobileMenuOpen}
+            onClose={() => setIsMobileMenuOpen(false)}
+            width={280}
+          />
+        ) : (
+          // 데스크톱: 고정 사이드바
+          <SideNav width={240} />
+        )
+      }
+    >
+      {children}
+    </PageLayout>
+  );
+}
+```
+
+### 모바일 인터랙션
+
+| 액션 | 트리거 | 결과 |
+|------|--------|------|
+| **BottomTab** | | |
+| 1depth 탭 클릭 (하위 없음) | 대시보드 등 탭 클릭 | 해당 페이지로 이동 |
+| 1depth 탭 클릭 (하위 있음) | 회원, 예약 등 탭 클릭 | SubMenuList 전체 화면 표시 |
+| **SubMenuList** | | |
+| 뒤로가기 버튼 | Header 좌측 뒤로가기 클릭 | SubMenuList 닫힘, 이전 페이지로 복귀 |
+| 2depth 메뉴 선택 | 리스트 항목 클릭 | 해당 페이지로 이동 + SubMenuList 닫힘 |
+| BottomTab 다른 탭 | 다른 1depth 탭 클릭 | 현재 SubMenuList 닫힘 + 새 SubMenuList 또는 페이지 이동 |
+
+### 모바일 상태 흐름
+
+```
+[초기 상태: 대시보드 페이지]
+    ↓
+사용자가 BottomTab에서 "회원" 탭 클릭
+    ↓
+[SubMenuList 표시: 회원 목록, 회원 등급 관리, 탈퇴 회원]
+    ↓
+사용자가 "회원 목록" 클릭
+    ↓
+[회원 목록 페이지로 이동, SubMenuList 닫힘]
+    ↓
+사용자가 BottomTab에서 "예약" 탭 클릭
+    ↓
+[SubMenuList 표시: 예약 목록, 예약 캘린더, ...]
+```
+
+### 터치 제스처 지원
+
+**뒤로가기 스와이프 (선택적):**
+- 화면 왼쪽 가장자리(20px)에서 오른쪽 스와이프
+- SubMenuList 닫힘 (뒤로가기와 동일)
+- iOS/Android 네이티브 앱과 유사한 UX
+
+**리스트 스크롤:**
+- SubMenuList 내에서 세로 스크롤
+- 부드러운 스크롤 애니메이션
+- 오버스크롤 효과 (iOS 스타일)
+
+### 모바일 성능 최적화
+
+1. **조건부 렌더링**: SubMenuList는 표시 필요 시에만 렌더링
+2. **가상화**: 서브메뉴 항목이 많을 경우 react-window 사용
+3. **터치 반응성**: `touchstart` 이벤트 사용, 300ms 지연 제거
+4. **애니메이션 최적화**: `transform`, `opacity`만 사용 (GPU 가속)
+5. **메모이제이션**: 메뉴 데이터 useMemo로 캐싱
+
+### 필요 작업
+
+| 항목 | 현재 상태 | 작업 내용 | 우선순위 |
+|------|----------|----------|----------|
+| BottomTab | 미구현 | 바텀 탭 네비게이션 컴포넌트 생성 | **최우선** |
+| SubMenuList | 미구현 | 전체 화면 서브메뉴 리스트 컴포넌트 생성 | **최우선** |
+| BackButton | 미구현 | Header 뒤로가기 버튼 컴포넌트 생성 | 높음 |
+| useMediaQuery 훅 | 확인 필요 | 반응형 브레이크포인트 감지 훅 | 높음 |
+| Layout 반응형 로직 | 미구현 | 모바일/데스크톱 분기 로직 | 높음 |
+| 터치 제스처 | 미구현 | 스와이프 닫기 구현 | 중간 |
+| SpaceSelector 모바일 최적화 | 부분 완료 | 모바일에서 텍스트 축소 또는 아이콘만 | 중간 |
+
+### 신규 컴포넌트 명세
+
+---
+
+**MobileMenuButton Feature 컴포넌트를 만들어주세요.**
+
+**유형:** feature
+**경로:** `packages/ui/src/components/feature/MobileMenuButton/MobileMenuButton.tsx`
+
+**역할:**
+- 모바일에서 햄버거 메뉴 버튼 표시
+- 열림/닫힘 상태에 따라 아이콘 전환 (Menu ↔ X)
+
+**조합:**
+- ui: IconButton 또는 Button
+- icons: lucide-react (Menu, X)
+
+**Props:**
+```typescript
+interface MobileMenuButtonProps {
+  isOpen: boolean;
+  onToggle: () => void;
+  className?: string;
+}
+```
+
+**스타일:**
+- 크기: 44x44px (터치 영역)
+- 아이콘: 24x24px
+- `md:hidden` - 768px 이상에서 숨김
+- 애니메이션: 200ms fade transition
+
+**Storybook:** 필요
+
+---
+
+### useMediaQuery 훅 확인
+
+**위치:** `packages/hook/src/useMediaQuery.ts` (확인 필요)
+
+**기능:**
+```typescript
+function useMediaQuery(query: string): boolean {
+  const [matches, setMatches] = useState(false);
+
+  useEffect(() => {
+    const media = window.matchMedia(query);
+    if (media.matches !== matches) {
+      setMatches(media.matches);
+    }
+
+    const listener = () => setMatches(media.matches);
+    media.addEventListener("change", listener);
+    return () => media.removeEventListener("change", listener);
+  }, [matches, query]);
+
+  return matches;
+}
+```
+
+**사용 예:**
+```typescript
+const isMobile = useMediaQuery("(max-width: 767px)");
+const isTablet = useMediaQuery("(min-width: 768px) and (max-width: 1023px)");
+const isDesktop = useMediaQuery("(min-width: 1024px)");
+```
+
+---
+
+## 18. 모바일 테스트 체크리스트
+
+### 기능 테스트
+
+- [ ] 햄버거 메뉴 클릭 시 Drawer 열림
+- [ ] Drawer 외부 클릭 시 닫힘
+- [ ] X 버튼 클릭 시 닫힘
+- [ ] 메뉴 선택 시 페이지 이동 + Drawer 자동 닫힘
+- [ ] 왼쪽 스와이프로 Drawer 닫힘
+- [ ] 768px 이상에서 햄버거 메뉴 숨김, 사이드바 고정
+- [ ] 768px 이하에서 햄버거 메뉴 표시, 사이드바 Drawer
+
+### UI/UX 테스트
+
+- [ ] 터치 영역 최소 44x44px
+- [ ] 메뉴 아이템 높이 충분 (48px)
+- [ ] 스크롤 동작 정상
+- [ ] 애니메이션 부드러움 (60fps)
+- [ ] 오버레이 블러 효과 정상
+- [ ] SpaceSelector 모바일에서 정상 표시
+- [ ] UserMenu 모바일에서 정상 표시
+
+### 성능 테스트
+
+- [ ] Drawer 열기/닫기 지연 없음 (< 300ms)
+- [ ] 스와이프 반응성 양호
+- [ ] 메모리 누수 없음
+- [ ] 배터리 소모 정상
+
+### 브라우저 테스트
+
+- [ ] iOS Safari
+- [ ] Android Chrome
+- [ ] Samsung Internet
+- [ ] Firefox Mobile
 
 ---
 

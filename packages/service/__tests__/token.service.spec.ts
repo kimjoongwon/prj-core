@@ -5,7 +5,7 @@ import {
 } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
 import { JwtService, NotBeforeError, TokenExpiredError } from "@nestjs/jwt";
-import { Test, TestingModule } from "@nestjs/testing";
+import { Test, type TestingModule } from "@nestjs/testing";
 import { ClsService } from "nestjs-cls";
 import { TokenService } from "../src/infra/token.service";
 import { TokenStorageService } from "../src/infra/token-storage.service";
@@ -32,11 +32,11 @@ describe("TokenService", () => {
 		mockJwtService = {
 			sign: jest.fn(),
 			verify: jest.fn(),
-		} as any;
+		} as unknown;
 
 		mockConfigService = {
 			get: jest.fn().mockReturnValue(mockAuthConfig),
-		} as any;
+		} as unknown;
 
 		mockTokenStorageService = {
 			saveRefreshToken: jest.fn(),
@@ -44,11 +44,11 @@ describe("TokenService", () => {
 			deleteRefreshToken: jest.fn(),
 			addToBlacklist: jest.fn(),
 			isBlacklisted: jest.fn(),
-		} as any;
+		} as unknown;
 
 		mockClsService = {
 			get: jest.fn(),
-		} as any;
+		} as unknown;
 
 		const module: TestingModule = await Test.createTestingModule({
 			providers: [
@@ -72,7 +72,7 @@ describe("TokenService", () => {
 			// Given
 			const mockReq = {
 				cookies: { [Token.ACCESS]: "test-access-token" },
-			} as any;
+			} as unknown;
 
 			// When
 			const result = service.getTokenFromRequest(mockReq);
@@ -85,7 +85,7 @@ describe("TokenService", () => {
 			// Given
 			const mockReq = {
 				cookies: { [Token.REFRESH]: "test-refresh-token" },
-			} as any;
+			} as unknown;
 
 			// When
 			const result = service.getTokenFromRequest(mockReq, Token.REFRESH);
@@ -96,7 +96,7 @@ describe("TokenService", () => {
 
 		it("토큰이 없으면 BadRequestException을 던져야 한다", () => {
 			// Given
-			const mockReq = { cookies: {} } as any;
+			const mockReq = { cookies: {} } as unknown;
 
 			// When & Then
 			expect(() => service.getTokenFromRequest(mockReq)).toThrow(
@@ -108,7 +108,7 @@ describe("TokenService", () => {
 	describe("setTokenToHTTPOnlyCookie", () => {
 		it("액세스 토큰을 쿠키에 설정해야 한다", () => {
 			// Given
-			const mockRes = { cookie: jest.fn() } as any;
+			const mockRes = { cookie: jest.fn() } as unknown;
 			const token = "test-access-token";
 
 			// When
@@ -126,7 +126,7 @@ describe("TokenService", () => {
 
 		it("리프레시 토큰을 쿠키에 설정해야 한다", () => {
 			// Given
-			const mockRes = { cookie: jest.fn() } as any;
+			const mockRes = { cookie: jest.fn() } as unknown;
 			const token = "test-refresh-token";
 
 			// When
@@ -145,7 +145,7 @@ describe("TokenService", () => {
 		it("auth 설정이 없으면 에러를 던져야 한다", () => {
 			// Given
 			mockConfigService.get.mockReturnValue(null);
-			const mockRes = { cookie: jest.fn() } as any;
+			const mockRes = { cookie: jest.fn() } as unknown;
 
 			// When & Then
 			expect(() =>

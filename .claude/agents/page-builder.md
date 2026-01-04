@@ -244,7 +244,54 @@ export default function AuthLayout({ children }: { children: React.ReactNode }) 
 - 같은 Page를 다른 Layout으로 재사용할 수 있어야 함
 - 관심사 분리: Page는 콘텐츠, Layout은 구조
 
-### 4.4 기타 금지 패턴
+### 4.4 스타일링 규칙 (Critical)
+
+**커스텀 className 사용 금지 - HeroUI와 기존 컴포넌트만 사용**
+
+> **예외**: `components/ui/`와 `components/inputs/`에서만 커스텀 className이 허용됩니다. Page 컴포넌트에서는 금지입니다.
+
+```tsx
+// ❌ 금지 - 커스텀 Tailwind className 직접 사용
+<div className="flex items-center gap-2 rounded-lg border border-default-200 bg-default-50 px-3 py-2">
+  <span className="text-sm font-medium text-default-700">{text}</span>
+</div>
+
+// ✅ 올바른 패턴 - HeroUI 컴포넌트와 레이아웃 컴포넌트 사용
+<HStack gap={2}>
+  <Text size="sm" weight="medium" color="default-700">{text}</Text>
+</HStack>
+```
+
+**레이아웃 배치는 레이아웃 컴포넌트 사용**
+
+```tsx
+// ❌ 금지 - className으로 레이아웃 제어
+<div className="flex flex-col gap-4">
+  <div className="mt-4 mb-2">...</div>
+</div>
+
+// ✅ 올바른 패턴 - 레이아웃 컴포넌트 사용
+<VStack gap={4}>
+  <Spacer y={4} />
+  <Content />
+  <Spacer y={2} />
+</VStack>
+```
+
+**자주 사용되는 스타일 패턴은 컴포넌트로 추출**
+
+빈도가 높은 스타일 패턴이 발견되면:
+1. 기존 컴포넌트에서 해당 스타일을 지원하는지 확인
+2. 지원하지 않으면 **UI 컴포넌트 빌더**에게 새 컴포넌트 생성 요청
+3. 생성된 컴포넌트를 사용
+
+| 허용 | 금지 |
+|------|------|
+| HeroUI 컴포넌트 props (size, color, variant 등) | 직접 Tailwind className 작성 |
+| `<VStack>`, `<HStack>`, `<Spacer />` | `className="flex gap-2 mt-4"` |
+| 기존 UI 컴포넌트 조합 | inline style (`style={{...}}`) |
+
+### 4.5 기타 금지 패턴
 
 ```tsx
 // ❌ handlers 객체로 묶기

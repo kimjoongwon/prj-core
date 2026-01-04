@@ -5,8 +5,8 @@ import { navigateTo } from "@cocrepo/toolkit";
 import { isAxiosError } from "axios";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { AuthStore } from "../authStore";
-import { PlateStore } from "../plateStore";
-import { TokenStore } from "../tokenStore";
+import type { PlateStore } from "../plateStore";
+import type { TokenStore } from "../tokenStore";
 
 // 의존성 모킹
 vi.mock("@cocrepo/toolkit", () => ({
@@ -44,11 +44,11 @@ describe("AuthStore", () => {
 		mockTokenStore = {
 			isAccessTokenExpired: vi.fn().mockReturnValue(false),
 			refreshToken: vi.fn().mockResolvedValue(undefined),
-		} as any;
+		} as unknown;
 
 		mockPlateStore = {
 			tokenStore: mockTokenStore,
-		} as any;
+		} as unknown;
 
 		// Mock 리셋
 		vi.clearAllMocks();
@@ -88,11 +88,11 @@ describe("AuthStore", () => {
 	});
 
 	describe("응답 인터셉터", () => {
-		let responseInterceptor: any;
-		let errorHandler: any;
+		let responseInterceptor: unknown;
+		let errorHandler: unknown;
 
 		beforeEach(() => {
-			const responseCall = (AXIOS_INSTANCE.interceptors.response.use as any)
+			const responseCall = (AXIOS_INSTANCE.interceptors.response.use as unknown)
 				.mock.calls[0];
 			responseInterceptor = responseCall[0];
 			errorHandler = responseCall[1];
@@ -115,20 +115,20 @@ describe("AuthStore", () => {
 	});
 
 	describe("요청 인터셉터", () => {
-		let requestInterceptor: any;
-		let requestErrorHandler: any;
+		let requestInterceptor: unknown;
+		let requestErrorHandler: unknown;
 
 		beforeEach(() => {
-			const requestCall = (AXIOS_INSTANCE.interceptors.request.use as any).mock
-				.calls[0];
+			const requestCall = (AXIOS_INSTANCE.interceptors.request.use as unknown)
+				.mock.calls[0];
 			requestInterceptor = requestCall[0];
 			requestErrorHandler = requestCall[1];
 		});
 
 		it("액세스 토큰이 만료된 경우 토큰 갱신을 호출해야 함", async () => {
 			const mockConfig = { url: "/test" };
-			(mockTokenStore.isAccessTokenExpired as any).mockReturnValue(true);
-			(mockTokenStore.refreshToken as any).mockResolvedValue(undefined);
+			(mockTokenStore.isAccessTokenExpired as unknown).mockReturnValue(true);
+			(mockTokenStore.refreshToken as unknown).mockResolvedValue(undefined);
 
 			const result = await requestInterceptor(mockConfig);
 
@@ -139,7 +139,7 @@ describe("AuthStore", () => {
 
 		it("액세스 토큰이 유효한 경우 토큰 갱신을 호출하지 않아야 함", async () => {
 			const mockConfig = { url: "/test" };
-			(mockTokenStore.isAccessTokenExpired as any).mockReturnValue(false);
+			(mockTokenStore.isAccessTokenExpired as unknown).mockReturnValue(false);
 
 			const result = await requestInterceptor(mockConfig);
 
@@ -161,7 +161,7 @@ describe("AuthStore", () => {
 			const mockError = {
 				response: { status: 401 },
 			};
-			(isAxiosError as any).mockReturnValue(true);
+			(isAxiosError as unknown).mockReturnValue(true);
 
 			await authStore.handleAuthError(mockError);
 
@@ -172,7 +172,7 @@ describe("AuthStore", () => {
 			const mockError = {
 				response: { status: 500 },
 			};
-			(isAxiosError as any).mockReturnValue(true);
+			(isAxiosError as unknown).mockReturnValue(true);
 
 			await expect(authStore.handleAuthError(mockError)).rejects.toBe(
 				mockError,
@@ -181,7 +181,7 @@ describe("AuthStore", () => {
 
 		it("Axios 에러가 아닌 경우 그대로 reject해야 함", async () => {
 			const mockError = new Error("일반 에러");
-			(isAxiosError as any).mockReturnValue(false);
+			(isAxiosError as unknown).mockReturnValue(false);
 
 			await expect(authStore.handleAuthError(mockError)).rejects.toBe(
 				mockError,
@@ -248,8 +248,8 @@ describe("AuthStore", () => {
 		});
 
 		it("토큰스토어가 없어도 요청 인터셉터가 정상 작동해야 함", async () => {
-			const requestCall = (AXIOS_INSTANCE.interceptors.request.use as any).mock
-				.calls[0];
+			const requestCall = (AXIOS_INSTANCE.interceptors.request.use as unknown)
+				.mock.calls[0];
 			const requestInterceptor = requestCall[0];
 			const mockConfig = { url: "/test" };
 

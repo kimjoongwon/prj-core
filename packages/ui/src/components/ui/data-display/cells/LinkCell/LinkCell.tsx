@@ -1,4 +1,4 @@
-import { Link, LinkProps } from "@heroui/react";
+import { Link, type LinkProps } from "@heroui/react";
 
 interface LinkCellViewProps extends LinkProps {
 	value: string;

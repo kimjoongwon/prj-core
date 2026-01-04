@@ -1,6 +1,6 @@
 import { UsersRepository } from "@cocrepo/repository";
-import { Test, TestingModule } from "@nestjs/testing";
-import { DeepMockProxy, mockDeep, mockReset } from "jest-mock-extended";
+import { Test, type TestingModule } from "@nestjs/testing";
+import { type DeepMockProxy, mockDeep, mockReset } from "jest-mock-extended";
 import { UsersService } from "../src/service/users.service";
 
 describe("UsersService", () => {
@@ -61,16 +61,14 @@ describe("UsersService", () => {
 			// Given
 			const userId = "user-test-id";
 			mockRepository.findByIdWithRelations.mockResolvedValue(
-				mockUser as any,
+				mockUser as unknown,
 			);
 
 			// When
 			const result = await service.getByIdWithTenants(userId);
 
 			// Then
-			expect(
-				mockRepository.findByIdWithRelations,
-			).toHaveBeenCalledWith(userId);
+			expect(mockRepository.findByIdWithRelations).toHaveBeenCalledWith(userId);
 			expect(result).toEqual(mockUser);
 		});
 
@@ -83,9 +81,7 @@ describe("UsersService", () => {
 			const result = await service.getByIdWithTenants(userId);
 
 			// Then
-			expect(
-				mockRepository.findByIdWithRelations,
-			).toHaveBeenCalledWith(userId);
+			expect(mockRepository.findByIdWithRelations).toHaveBeenCalledWith(userId);
 			expect(result).toBeNull();
 		});
 	});
@@ -95,16 +91,16 @@ describe("UsersService", () => {
 			// Given
 			const email = "test@example.com";
 			mockRepository.findByEmailWithRelations.mockResolvedValue(
-				mockUser as any,
+				mockUser as unknown,
 			);
 
 			// When
 			const result = await service.findUserForAuth(email);
 
 			// Then
-			expect(
-				mockRepository.findByEmailWithRelations,
-			).toHaveBeenCalledWith(email);
+			expect(mockRepository.findByEmailWithRelations).toHaveBeenCalledWith(
+				email,
+			);
 			expect(result).toEqual(mockUser);
 		});
 
@@ -117,9 +113,9 @@ describe("UsersService", () => {
 			const result = await service.findUserForAuth(email);
 
 			// Then
-			expect(
-				mockRepository.findByEmailWithRelations,
-			).toHaveBeenCalledWith(email);
+			expect(mockRepository.findByEmailWithRelations).toHaveBeenCalledWith(
+				email,
+			);
 			expect(result).toBeNull();
 		});
 	});

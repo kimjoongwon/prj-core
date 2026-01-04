@@ -1,6 +1,6 @@
 import {
 	Switch as NextUISwitch,
-	SwitchProps as NextUISwitchProps,
+	type SwitchProps as NextUISwitchProps,
 } from "@heroui/react";
 
 export interface SwitchProps

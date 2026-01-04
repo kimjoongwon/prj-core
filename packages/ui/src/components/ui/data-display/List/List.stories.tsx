@@ -1,7 +1,34 @@
 import type { Meta, StoryObj } from "@storybook/react";
 import { List } from "./List";
 
-const meta = {
+// 스토리용 샘플 데이터 타입
+interface SampleItem {
+	id: number;
+	name: string;
+	type: string;
+	color: string;
+}
+
+interface SampleUser {
+	id: number;
+	name: string;
+	email: string;
+	role: string;
+}
+
+interface TextItem {
+	id: number;
+	text: string;
+}
+
+interface TaskItem {
+	id: number;
+	title: string;
+	description: string;
+	status: string;
+}
+
+const meta: Meta<typeof List> = {
 	title: "ui/List",
 	component: List,
 	parameters: {
@@ -41,37 +68,34 @@ const meta = {
 			description: "각 아이템 래퍼에 적용할 CSS 클래스",
 		},
 	},
-} satisfies Meta<typeof List>;
+};
 
 export default meta;
 type Story = StoryObj<typeof meta>;
 
 // 스토리용 샘플 데이터
-const 샘플아이템들 = [
+const 샘플아이템들: SampleItem[] = [
 	{ id: 1, name: "사과", type: "과일", color: "빨간색" },
 	{ id: 2, name: "바나나", type: "과일", color: "노란색" },
 	{ id: 3, name: "당근", type: "채소", color: "주황색" },
 	{ id: 4, name: "브로콜리", type: "채소", color: "초록색" },
 ];
 
-const 샘플사용자들 = [
+const 샘플사용자들: SampleUser[] = [
 	{ id: 1, name: "홍길동", email: "hong@example.com", role: "관리자" },
 	{ id: 2, name: "김철수", email: "kim@example.com", role: "사용자" },
 	{ id: 3, name: "이영희", email: "lee@example.com", role: "편집자" },
 ];
 
 export const 수직_리스트: Story = {
-	args: {
-		data: 샘플아이템들,
-		horizontal: false,
-		gap: "0.5rem",
-		placeholder: (
-			<div className="text-gray-500 italic">표시할 아이템이 없습니다</div>
-		),
-	},
-	render: (args) => (
-		<List
-			{...args}
+	render: () => (
+		<List<SampleItem>
+			data={샘플아이템들}
+			horizontal={false}
+			gap="0.5rem"
+			placeholder={
+				<div className="text-gray-500 italic">표시할 아이템이 없습니다</div>
+			}
 			renderItem={(item, index) => (
 				<div className="rounded-lg border bg-white p-3 shadow-sm">
 					<span className="text-gray-400 text-xs">#{index + 1}</span>
@@ -93,18 +117,15 @@ export const 수직_리스트: Story = {
 };
 
 export const 수평_리스트: Story = {
-	args: {
-		data: 샘플아이템들,
-		horizontal: true,
-		gap: "1rem",
-		placeholder: (
-			<div className="text-gray-500 italic">표시할 아이템이 없습니다</div>
-		),
-	},
-	render: (args) => (
+	render: () => (
 		<div style={{ width: "400px" }}>
-			<List
-				{...args}
+			<List<SampleItem>
+				data={샘플아이템들}
+				horizontal={true}
+				gap="1rem"
+				placeholder={
+					<div className="text-gray-500 italic">표시할 아이템이 없습니다</div>
+				}
 				renderItem={(item, index) => (
 					<div className="min-w-[150px] rounded-lg border bg-white p-3 shadow-sm">
 						<div className="mb-1 text-gray-400 text-xs">#{index + 1}</div>
@@ -122,7 +143,7 @@ export const 수평_리스트: Story = {
 												? "orange"
 												: "green",
 							}}
-						></div>
+						/>
 					</div>
 				)}
 			/>
@@ -139,19 +160,16 @@ export const 수평_리스트: Story = {
 };
 
 export const 사용자_리스트: Story = {
-	args: {
-		data: 샘플사용자들,
-		horizontal: false,
-		gap: "0.75rem",
-		placeholder: (
-			<div className="py-8 text-center text-gray-500">
-				사용자를 찾을 수 없습니다
-			</div>
-		),
-	},
-	render: (args) => (
-		<List
-			{...args}
+	render: () => (
+		<List<SampleUser>
+			data={샘플사용자들}
+			horizontal={false}
+			gap="0.75rem"
+			placeholder={
+				<div className="py-8 text-center text-gray-500">
+					사용자를 찾을 수 없습니다
+				</div>
+			}
 			renderItem={(user, index) => (
 				<div className="flex items-center justify-between rounded-lg bg-gray-50 p-3">
 					<div className="flex items-center gap-3">
@@ -180,25 +198,22 @@ export const 사용자_리스트: Story = {
 };
 
 export const 빈_리스트: Story = {
-	args: {
-		data: [],
-		horizontal: false,
-		placeholder: (
-			<div className="py-12 text-center">
-				<div className="mb-4 text-6xl text-gray-400">📭</div>
-				<div className="font-medium text-gray-600 text-lg">
-					아직 아이템이 없습니다
+	render: () => (
+		<List<SampleItem>
+			data={[]}
+			horizontal={false}
+			placeholder={
+				<div className="py-12 text-center">
+					<div className="mb-4 text-6xl text-gray-400">📭</div>
+					<div className="font-medium text-gray-600 text-lg">
+						아직 아이템이 없습니다
+					</div>
+					<div className="mt-1 text-gray-500 text-sm">
+						시작하려면 아이템을 추가하세요
+					</div>
 				</div>
-				<div className="mt-1 text-gray-500 text-sm">
-					시작하려면 아이템을 추가하세요
-				</div>
-			</div>
-		),
-	},
-	render: (args) => (
-		<List
-			{...args}
-			renderItem={(item: any, _index) => (
+			}
+			renderItem={(item) => (
 				<div className="rounded border p-2">{item.name}</div>
 			)}
 		/>
@@ -213,29 +228,29 @@ export const 빈_리스트: Story = {
 };
 
 export const 간격_설정_예제: Story = {
-	args: {
-		data: [
+	render: () => {
+		const data: TextItem[] = [
 			{ id: 1, text: "간격 작음" },
 			{ id: 2, text: "간격 중간" },
 			{ id: 3, text: "간격 큼" },
-		],
-		horizontal: false,
-		gap: "2rem",
+		];
+		return (
+			<div>
+				<h3 className="mb-4 font-medium">Gap: 2rem</h3>
+				<List<TextItem>
+					data={data}
+					horizontal={false}
+					gap="2rem"
+					renderItem={(item, index) => (
+						<div className="rounded border-blue-500 border-l-4 bg-blue-50 p-4">
+							<div className="font-medium">아이템 {index + 1}</div>
+							<div className="text-gray-600 text-sm">{item.text}</div>
+						</div>
+					)}
+				/>
+			</div>
+		);
 	},
-	render: (args) => (
-		<div>
-			<h3 className="mb-4 font-medium">Gap: {args.gap}</h3>
-			<List
-				{...args}
-				renderItem={(item, index) => (
-					<div className="rounded border-blue-500 border-l-4 bg-blue-50 p-4">
-						<div className="font-medium">아이템 {index + 1}</div>
-						<div className="text-gray-600 text-sm">{item.text}</div>
-					</div>
-				)}
-			/>
-		</div>
-	),
 	parameters: {
 		docs: {
 			description: {
@@ -246,31 +261,27 @@ export const 간격_설정_예제: Story = {
 };
 
 export const 간단한_텍스트_리스트: Story = {
-	args: {
-		data: [
+	render: () => {
+		const data: TextItem[] = [
 			{ id: 1, text: "첫 번째 아이템" },
 			{ id: 2, text: "두 번째 아이템" },
 			{ id: 3, text: "세 번째 아이템" },
 			{ id: 4, text: "네 번째 아이템" },
-		],
-		renderItem: (item: any) => <div key={item.id}>{item.text}</div>,
-		placeholder: (
-			<div className="p-4 text-gray-500">사용 가능한 아이템이 없습니다</div>
-		),
+		];
+		return (
+			<List<TextItem>
+				data={data}
+				placeholder={
+					<div className="p-4 text-gray-500">사용 가능한 아이템이 없습니다</div>
+				}
+				renderItem={(item) => (
+					<div className="border-gray-200 border-b px-3 py-2 last:border-b-0 hover:bg-gray-100">
+						{item.text}
+					</div>
+				)}
+			/>
+		);
 	},
-	render: (args) => (
-		<List
-			{...args}
-			renderItem={(item: any) => (
-				<div
-					key={item.id}
-					className="border-gray-200 border-b px-3 py-2 last:border-b-0 hover:bg-gray-100"
-				>
-					{item.text}
-				</div>
-			)}
-		/>
-	),
 	parameters: {
 		docs: {
 			description: {
@@ -281,8 +292,8 @@ export const 간단한_텍스트_리스트: Story = {
 };
 
 export const 카드_리스트: Story = {
-	args: {
-		data: [
+	render: () => {
+		const data: TaskItem[] = [
 			{
 				id: 1,
 				title: "할 일 1",
@@ -301,42 +312,38 @@ export const 카드_리스트: Story = {
 				description: "테스트 케이스 업데이트",
 				status: "진행중",
 			},
-		],
-		renderItem: (task: any) => <div key={task.id}>{task.title}</div>,
-		placeholder: (
-			<div className="rounded-lg border-2 border-gray-300 border-dashed bg-gray-50 p-8 text-center">
-				<div className="mb-2 text-2xl text-gray-400">📋</div>
-				<div className="text-gray-600">사용 가능한 할 일이 없습니다</div>
-			</div>
-		),
-	},
-	render: (args) => (
-		<List
-			{...args}
-			renderItem={(task: any) => (
-				<div
-					key={task.id}
-					className="mb-3 rounded-lg border border-gray-200 bg-white p-4 shadow-sm"
-				>
-					<div className="mb-2 flex items-center justify-between">
-						<h3 className="font-medium text-gray-900">{task.title}</h3>
-						<span
-							className={`rounded-full px-2 py-1 text-xs ${
-								task.status === "완료"
-									? "bg-green-100 text-green-800"
-									: task.status === "진행중"
-										? "bg-blue-100 text-blue-800"
-										: "bg-gray-100 text-gray-800"
-							}`}
-						>
-							{task.status}
-						</span>
+		];
+		return (
+			<List<TaskItem>
+				data={data}
+				placeholder={
+					<div className="rounded-lg border-2 border-gray-300 border-dashed bg-gray-50 p-8 text-center">
+						<div className="mb-2 text-2xl text-gray-400">📋</div>
+						<div className="text-gray-600">사용 가능한 할 일이 없습니다</div>
 					</div>
-					<p className="text-gray-600 text-sm">{task.description}</p>
-				</div>
-			)}
-		/>
-	),
+				}
+				renderItem={(task) => (
+					<div className="mb-3 rounded-lg border border-gray-200 bg-white p-4 shadow-sm">
+						<div className="mb-2 flex items-center justify-between">
+							<h3 className="font-medium text-gray-900">{task.title}</h3>
+							<span
+								className={`rounded-full px-2 py-1 text-xs ${
+									task.status === "완료"
+										? "bg-green-100 text-green-800"
+										: task.status === "진행중"
+											? "bg-blue-100 text-blue-800"
+											: "bg-gray-100 text-gray-800"
+								}`}
+							>
+								{task.status}
+							</span>
+						</div>
+						<p className="text-gray-600 text-sm">{task.description}</p>
+					</div>
+				)}
+			/>
+		);
+	},
 	parameters: {
 		docs: {
 			description: {
@@ -348,21 +355,18 @@ export const 카드_리스트: Story = {
 };
 
 export const 플레이그라운드: Story = {
-	args: {
-		data: 샘플아이템들,
-		horizontal: false,
-		gap: "0.5rem",
-		className: "w-full max-w-md",
-		itemClassName: "list-item",
-		placeholder: (
-			<div className="py-4 text-center text-gray-500">
-				보여줄 아이템이 없습니다
-			</div>
-		),
-	},
-	render: (args) => (
-		<List
-			{...args}
+	render: () => (
+		<List<SampleItem>
+			data={샘플아이템들}
+			horizontal={false}
+			gap="0.5rem"
+			className="w-full max-w-md"
+			itemClassName="list-item"
+			placeholder={
+				<div className="py-4 text-center text-gray-500">
+					보여줄 아이템이 없습니다
+				</div>
+			}
 			renderItem={(item, index) => (
 				<div className="rounded-lg border bg-white p-3 shadow-sm transition-shadow hover:shadow-md">
 					<div className="flex items-center justify-between">

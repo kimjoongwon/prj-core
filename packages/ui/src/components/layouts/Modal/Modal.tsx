@@ -1,13 +1,13 @@
 import {
 	Modal as BaseModal,
 	ModalBody,
-	ModalBodyProps,
+	type ModalBodyProps,
 	ModalContent,
 	ModalFooter,
-	ModalFooterProps,
+	type ModalFooterProps,
 	ModalHeader,
-	ModalHeaderProps,
-	ModalProps,
+	type ModalHeaderProps,
+	type ModalProps,
 } from "@heroui/react";
 
 interface ModalLayoutProps extends ModalProps {

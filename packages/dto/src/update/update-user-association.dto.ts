@@ -1,4 +1,4 @@
-import { Prisma } from "@cocrepo/prisma";
+import type { Prisma } from "@cocrepo/prisma";
 import { PartialType } from "@nestjs/swagger";
 import { CreateUserAssociationDto } from "../create/create-user-association.dto";
 

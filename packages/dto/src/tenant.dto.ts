@@ -4,7 +4,7 @@ import {
 	StringField,
 	UUIDField,
 } from "@cocrepo/decorator";
-import { Tenant } from "@cocrepo/prisma";
+import type { Tenant } from "@cocrepo/prisma";
 import { RoleDto, SpaceDto, UserDto } from ".";
 import { AbstractDto } from "./abstract.dto";
 

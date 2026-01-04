@@ -1,8 +1,8 @@
 import {
 	Checkbox as NextUICheckbox,
-	CheckboxProps as NextUICheckboxProps,
+	type CheckboxProps as NextUICheckboxProps,
 } from "@heroui/react";
-import React from "react";
+import type React from "react";
 import { Text } from "../../ui/data-display/Text/Text";
 
 export interface CheckboxProps extends Omit<NextUICheckboxProps, "onChange"> {

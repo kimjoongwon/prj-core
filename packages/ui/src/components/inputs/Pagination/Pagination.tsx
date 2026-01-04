@@ -1,6 +1,6 @@
 import {
 	Pagination as HeroUiPagination,
-	PaginationProps as HeroUiPaginationProps,
+	type PaginationProps as HeroUiPaginationProps,
 } from "@heroui/react";
 import { parseAsInteger, useQueryStates } from "nuqs";
 

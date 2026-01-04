@@ -9,10 +9,10 @@ import {
 } from "@cocrepo/decorator";
 import { RepeatCycleTypes, SessionTypes } from "@cocrepo/enum";
 import {
-	RepeatCycleTypes as PrismaRepeatCycleTypes,
-	SessionTypes as PrismaSessionTypes,
+	type RepeatCycleTypes as PrismaRepeatCycleTypes,
+	type SessionTypes as PrismaSessionTypes,
 	RecurringDayOfWeek,
-	Session,
+	type Session,
 } from "@cocrepo/prisma";
 import { Transform } from "class-transformer";
 import { AbstractDto } from "./abstract.dto";

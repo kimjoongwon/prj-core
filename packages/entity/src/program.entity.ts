@@ -1,7 +1,7 @@
-import { Program as ProgramEntity } from "@cocrepo/prisma";
+import type { Program as ProgramEntity } from "@cocrepo/prisma";
 import { AbstractEntity } from "./abstract.entity";
-import { Routine } from "./routine.entity";
-import { Session } from "./session.entity";
+import type { Routine } from "./routine.entity";
+import type { Session } from "./session.entity";
 
 export class Program extends AbstractEntity implements ProgramEntity {
 	routineId!: string;

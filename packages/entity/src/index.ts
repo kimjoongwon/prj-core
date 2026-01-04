@@ -1,10 +1,12 @@
 // Abstract Entity
-export * from "./abstract.entity";
+
 // Entities
-export * from "./action.entity";
+export * from "./ability.entity";
+export * from "./abstract.entity";
 export * from "./activity.entity";
 export * from "./assignment.entity";
 export * from "./category.entity";
+export * from "./column-definition.entity";
 // Decorator는 @cocrepo/decorator에서 export됨
 export * from "./exercise.entity";
 export * from "./file.entity";

@@ -1,10 +1,10 @@
 import { useFormField } from "@cocrepo/hook";
 import { tools } from "@cocrepo/toolkit";
-import { MobxProps } from "@cocrepo/type";
+import type { MobxProps } from "@cocrepo/type";
 import { parseAbsoluteToLocal } from "@internationalized/date";
 import { observer } from "mobx-react-lite";
 import {
-	DatePickerProps as BaseDatePickerProps,
+	type DatePickerProps as BaseDatePickerProps,
 	DatePicker as DatePickerComponent,
 } from "./DatePicker";
 

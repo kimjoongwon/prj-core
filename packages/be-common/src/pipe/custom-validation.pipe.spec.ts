@@ -1,4 +1,4 @@
-import { ArgumentMetadata, BadRequestException } from "@nestjs/common";
+import { type ArgumentMetadata, BadRequestException } from "@nestjs/common";
 import { IsEmail, IsOptional, IsString } from "class-validator";
 import { CustomValidationPipe } from "./custom-validation.pipe";
 

@@ -6,11 +6,11 @@ export class StorageStore {
 			storageType === "localStorage" ? localStorage : sessionStorage;
 	}
 
-	setItem(key: string, value: any): void {
+	setItem(key: string, value: unknown): void {
 		this.storage.setItem(key, JSON.stringify(value));
 	}
 
-	getItem(key: string): any {
+	getItem(key: string): unknown {
 		const item = this.storage.getItem(key);
 		if (!item) return null;
 

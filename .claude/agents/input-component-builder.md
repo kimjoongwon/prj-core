@@ -258,6 +258,43 @@ export { [ComponentName] } from "./[ComponentName]";
 
 ## 9. 스타일링 규칙
 
+### 커스텀 className 허용 (Input 컴포넌트 전용)
+
+**Input 컴포넌트(`components/inputs/`)와 UI 컴포넌트(`components/ui/`)에서만 커스텀 className 사용이 허용됩니다.**
+
+이 두 위치는 기본 UI 단위를 만드는 곳이므로 Tailwind className을 직접 사용하여 스타일링합니다.
+
+```tsx
+// ✅ 허용 - Input 컴포넌트 내부에서 Tailwind 직접 사용
+export const CustomInput = ({ size, ...rest }: CustomInputProps) => {
+  return (
+    <input className={inputStyles({ size })} {...rest} />
+  );
+};
+
+// ✅ 허용 - CVA로 variant 정의
+const inputStyles = cva("rounded-md border border-default-300", {
+  variants: {
+    size: {
+      sm: "h-8 text-sm px-2",
+      md: "h-10 text-base px-3",
+      lg: "h-12 text-lg px-4",
+    },
+  },
+});
+```
+
+**다른 컴포넌트 계층에서의 규칙:**
+
+| 위치 | className 사용 |
+|------|:-------------:|
+| `components/ui/` | ✅ 허용 |
+| `components/inputs/` | ✅ 허용 |
+| `components/widget/` | ❌ 금지 |
+| `components/feature/` | ❌ 금지 |
+| `components/page/` | ❌ 금지 |
+| `components/layouts/` | ❌ 금지 |
+
 ### HeroUI 래핑 시
 
 HeroUI 컴포넌트의 기본 스타일을 최대한 활용하고, 필요한 경우에만 커스터마이징합니다.
@@ -266,8 +303,8 @@ HeroUI 컴포넌트의 기본 스타일을 최대한 활용하고, 필요한 경
 // ✅ 좋은 예 - HeroUI 기본 활용
 <HeroUIInput {...rest} size={size} />
 
-// ❌ 나쁜 예 - 불필요한 스타일 오버라이드
-<HeroUIInput {...rest} className="custom-style" />
+// ✅ 허용 - 필요 시 커스텀 스타일 추가 가능 (Input 컴포넌트이므로)
+<HeroUIInput {...rest} className="custom-input-style" />
 ```
 
 ### CVA 사용 (자체 구현 시)

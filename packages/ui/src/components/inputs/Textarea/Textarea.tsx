@@ -1,6 +1,6 @@
 import type { TextAreaProps } from "@heroui/react";
 import { Textarea as BaseTextarea } from "@heroui/react";
-import React from "react";
+import type React from "react";
 
 export interface TextareaProps
 	extends Omit<TextAreaProps, "onChange" | "value"> {

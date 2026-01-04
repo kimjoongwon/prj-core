@@ -1,14 +1,14 @@
 import { Card, CardBody } from "@heroui/react";
 import type { Meta, StoryObj } from "@storybook/react";
+import { Button } from "../../inputs/Button/Button";
 import { Text } from "../../ui/data-display/Text/Text";
-import { Button } from "../../ui/inputs/Button/Button";
 import { HStack } from "../../ui/surfaces/HStack/HStack";
 import { VStack } from "../../ui/surfaces/VStack/VStack";
-import { MainLayout } from "./Main";
+import { Main } from "./Main";
 
-const meta: Meta<typeof MainLayout> = {
+const meta: Meta<typeof Main> = {
 	title: "Layout/AdminMainLayout",
-	component: MainLayout,
+	component: Main,
 	parameters: {
 		layout: "fullscreen",
 	},

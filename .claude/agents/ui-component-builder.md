@@ -229,6 +229,59 @@ export * from "./[ComponentName]";
 
 ## 스타일링 규칙
 
+### 커스텀 className 허용 (UI 컴포넌트 전용)
+
+**UI 컴포넌트(`components/ui/`)와 Input 컴포넌트(`components/inputs/`)에서만 커스텀 className 사용이 허용됩니다.**
+
+이 두 위치는 기본 UI 단위를 만드는 곳이므로 Tailwind className을 직접 사용하여 스타일링합니다.
+
+```tsx
+// ✅ 허용 - UI 컴포넌트 내부에서 Tailwind 직접 사용
+export const Text = ({ size, weight, children }: TextProps) => {
+  return (
+    <span className={textStyles({ size, weight })}>
+      {children}
+    </span>
+  );
+};
+
+// ✅ 허용 - CVA로 variant 정의
+const textStyles = cva("text-default-900", {
+  variants: {
+    size: {
+      sm: "text-sm",
+      md: "text-base",
+      lg: "text-lg",
+    },
+  },
+});
+```
+
+**UI 컴포넌트 설계 원칙:**
+
+| 원칙 | 설명 |
+|------|------|
+| **사용처에서 className 불필요하게 설계** | props로 스타일 제어 가능하도록 variant 제공 |
+| **CVA로 타입 안전한 variant** | 모든 스타일 옵션을 CVA variants로 정의 |
+| **충분한 props 제공** | size, color, weight 등 필요한 스타일 props 노출 |
+
+```tsx
+// UI 컴포넌트가 제공해야 할 패턴
+<Text size="sm" weight="medium">내용</Text>  // 사용처에서 className 없이 사용
+<HStack gap={2} align="center">...</HStack>   // props로 레이아웃 제어
+```
+
+**다른 컴포넌트 계층에서의 규칙:**
+
+| 위치 | className 사용 |
+|------|:-------------:|
+| `components/ui/` | ✅ 허용 |
+| `components/inputs/` | ✅ 허용 |
+| `components/widget/` | ❌ 금지 |
+| `components/feature/` | ❌ 금지 |
+| `components/page/` | ❌ 금지 |
+| `components/layouts/` | ❌ 금지 |
+
 ### CVA (Class Variance Authority) 사용
 
 모든 스타일링은 **CVA**를 이용하여 타입 안전하게 관리합니다.
@@ -279,9 +332,53 @@ export const Component = ({ variant, size, className }: ComponentProps) => {
 - ❌ Tailwind 클래스를 직접 조건부로 작성하지 않음
 - ❌ inline style 절대 금지
 
+## 라이브러리 타입 기반 설계 (Critical)
+
+**라이브러리 컴포넌트를 래핑할 때는 반드시 기존 라이브러리 타입을 기반으로 Props를 설계합니다.**
+
+```tsx
+// ✅ 올바른 패턴 - 라이브러리 타입 상속
+import { Button as HeroButton, ButtonProps as HeroButtonProps } from "@heroui/react";
+
+// 1. 상속 (extends) - 기존 타입 그대로 사용 + 추가
+export interface ButtonProps extends HeroButtonProps {
+  leftIcon?: ReactNode;  // 추가 props
+}
+
+// 2. 생략 (Omit) - 특정 props 제외 후 재정의
+export interface InputProps extends Omit<HeroInputProps, "onChange" | "value"> {
+  value?: string;
+  onChange?: (value: string) => void;  // 시그니처 단순화
+}
+
+// 3. 선택 (Pick) - 필요한 props만 선택
+export interface AvatarProps extends Pick<HeroAvatarProps, "src" | "size" | "name"> {
+  status?: "online" | "offline";
+}
+```
+
+```tsx
+// ❌ 금지 - 라이브러리 타입 무시하고 직접 정의
+export interface ButtonProps {
+  onClick?: () => void;
+  children?: ReactNode;
+  // HeroUI Button이 지원하는 다른 props들이 누락됨
+}
+```
+
+**타입 설계 원칙:**
+
+| 패턴 | 사용 시점 | 예시 |
+|------|----------|------|
+| `extends LibProps` | 기존 props 모두 유지 + 추가 | Button, Card |
+| `Omit<LibProps, 'key'>` | 특정 props 시그니처 변경 | Input (onChange 단순화) |
+| `Pick<LibProps, 'key'>` | 일부 props만 노출 | 제한된 Avatar |
+| `Partial<LibProps>` | 모든 props 선택적으로 | 설정 오버라이드 |
+
 ## 주의사항
 
 - **HeroUI 우선 확인** - 구현 전에 반드시 확인
+- **라이브러리 타입 기반 설계** - 래핑 시 기존 타입 상속/확장 필수
 - **Pure Component 원칙 엄수** - 상태 절대 금지
 - **이벤트는 Props로만** - onClick, onChange 등
 - **CVA로 스타일링** - 타입 안전한 variant 관리

@@ -138,7 +138,59 @@ export const MyWidget = memo(observer<Props>(({ value }) => {
 
 ---
 
-## 6. Widget 후보 예시
+## 6. 스타일링 규칙 (Critical)
+
+**커스텀 className 사용 금지 - HeroUI와 기존 컴포넌트만 사용**
+
+> **예외**: `components/ui/`와 `components/inputs/`에서만 커스텀 className이 허용됩니다. Widget 컴포넌트에서는 금지입니다.
+
+Widget 컴포넌트 내부에서도 직접 Tailwind className을 작성하지 않습니다.
+
+```tsx
+// ❌ 금지 - 커스텀 className 직접 사용
+export const StatusBadge = ({ status }: Props) => {
+  return (
+    <div className="flex items-center gap-2 rounded-lg bg-success-50 px-2 py-1">
+      <span className="text-sm font-medium text-success-700">{status}</span>
+    </div>
+  );
+};
+
+// ✅ 올바른 패턴 - HeroUI와 UI 컴포넌트 사용
+export const StatusBadge = ({ status }: Props) => {
+  const config = statusConfig[status];
+  return (
+    <Chip color={config.color} size="sm">
+      {config.text}
+    </Chip>
+  );
+};
+```
+
+**레이아웃 배치는 레이아웃 컴포넌트 사용**
+
+```tsx
+// ❌ 금지 - className으로 레이아웃 제어
+<div className="flex items-center gap-2">
+  <Avatar />
+  <span className="ml-2">{name}</span>
+</div>
+
+// ✅ 올바른 패턴 - 레이아웃 컴포넌트 사용
+<HStack gap={2} align="center">
+  <Avatar />
+  <Text>{name}</Text>
+</HStack>
+```
+
+**자주 사용되는 스타일 패턴 발견 시:**
+1. 기존 UI 컴포넌트에서 해당 스타일을 지원하는지 확인
+2. 지원하지 않으면 **UI 컴포넌트 빌더**에게 새 컴포넌트 생성 요청
+3. 생성된 컴포넌트를 Widget에서 활용
+
+---
+
+## 7. Widget 후보 예시
 
 | 카테고리 | 컴포넌트 |
 |----------|----------|
@@ -149,10 +201,53 @@ export const MyWidget = memo(observer<Props>(({ value }) => {
 
 ---
 
-## 7. 체크리스트
+## 8. 라이브러리 타입 기반 설계 (Critical)
+
+**라이브러리 컴포넌트를 조합할 때는 반드시 기존 라이브러리 타입을 기반으로 Props를 설계합니다.**
+
+```tsx
+// ✅ 올바른 패턴 - 라이브러리 타입 상속
+import { Chip, ChipProps } from "@heroui/react";
+
+// 상속하여 추가 props 정의
+export interface StatusBadgeProps extends Omit<ChipProps, "color" | "children"> {
+  status: "active" | "inactive" | "pending";
+  label?: string;
+}
+
+export const StatusBadge = ({ status, label, ...rest }: StatusBadgeProps) => {
+  const config = statusConfig[status];
+  return (
+    <Chip {...rest} color={config.color}>
+      {label ?? config.text}
+    </Chip>
+  );
+};
+```
+
+```tsx
+// ❌ 금지 - 라이브러리 타입 무시
+export interface StatusBadgeProps {
+  status: "active" | "inactive";
+  // Chip이 지원하는 size, variant 등 다른 props 누락
+}
+```
+
+**타입 설계 원칙:**
+
+| 패턴 | 사용 시점 | 예시 |
+|------|----------|------|
+| `extends Omit<LibProps, 'key'>` | 일부 props 고정 + 나머지 전달 | StatusBadge (color 고정) |
+| `extends Pick<LibProps, 'key'>` | 일부 props만 노출 | 제한된 UserChip |
+| `extends LibProps` | 모든 props 유지 + 추가 | 확장된 AvatarGroup |
+
+---
+
+## 9. 체크리스트
 
 - [ ] `packages/ui/src/components/widget/[Name]/` 에 생성
 - [ ] 단일 책임 원칙 확인
+- [ ] **라이브러리 타입 기반 Props 설계** (extends/Omit/Pick)
 - [ ] observer 사용 시 memo 제외 확인
 - [ ] Props 인터페이스 export
 - [ ] displayName 설정

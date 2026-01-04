@@ -3,9 +3,9 @@ import { ApiProperty, type ApiPropertyOptions } from "@nestjs/swagger";
 import { Type } from "class-transformer";
 import { IsDefined, NotEquals, ValidateNested } from "class-validator";
 import { ToArray } from "../../transform.decorators";
-import { type Constructor } from "../../use-dto.decorator";
+import type { Constructor } from "../../use-dto.decorator";
 import { IsNullable } from "../../validator.decorators";
-import { type BaseFieldOptions } from "../base/field-options.types";
+import type { BaseFieldOptions } from "../base/field-options.types";
 
 /**
  * 클래스(중첩 객체) 필드 데코레이터

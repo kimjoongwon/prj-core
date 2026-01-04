@@ -38,9 +38,7 @@ model Space {
   timelines         Timeline[]
   tasks             Task[]
   safeWallets       SafeWallet[]
-  actions           Action[]
-  subjects          Subject[]
-  abilities         Ability[]
+  columnDefinitions ColumnDefinition[]
 
   @@map("spaces")
 }

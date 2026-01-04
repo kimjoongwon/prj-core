@@ -1,6 +1,6 @@
-import { Profile as ProfileEntity } from "@cocrepo/prisma";
+import type { Profile as ProfileEntity } from "@cocrepo/prisma";
 import { AbstractEntity } from "./abstract.entity";
-import { User } from "./user.entity";
+import type { User } from "./user.entity";
 
 export class Profile extends AbstractEntity implements ProfileEntity {
 	avatarFileId!: string;

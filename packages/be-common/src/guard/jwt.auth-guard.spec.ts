@@ -1,8 +1,8 @@
 import { PUBLIC_ROUTE_KEY } from "@cocrepo/decorator";
 import { TokenStorageService } from "@cocrepo/service";
-import { ExecutionContext, UnauthorizedException } from "@nestjs/common";
+import { type ExecutionContext, UnauthorizedException } from "@nestjs/common";
 import { Reflector } from "@nestjs/core";
-import { Test, TestingModule } from "@nestjs/testing";
+import { Test, type TestingModule } from "@nestjs/testing";
 import { JwtAuthGuard } from "./jwt.auth-guard";
 
 describe("JwtAuthGuard", () => {

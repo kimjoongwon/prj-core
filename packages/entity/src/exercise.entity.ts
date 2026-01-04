@@ -1,6 +1,6 @@
-import { Exercise as ExerciseEntity } from "@cocrepo/prisma";
+import type { Exercise as ExerciseEntity } from "@cocrepo/prisma";
 import { AbstractEntity } from "./abstract.entity";
-import { Task } from "./task.entity";
+import type { Task } from "./task.entity";
 
 export class Exercise extends AbstractEntity implements ExerciseEntity {
 	duration!: number;

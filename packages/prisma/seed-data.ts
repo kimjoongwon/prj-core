@@ -546,3 +546,307 @@ export const userAgreementMapping: UserAgreementMappingData[] = [
 		], // 모든 동의
 	},
 ];
+
+// ============================================================================
+// Column Definition Seed Data
+// ============================================================================
+
+export interface ColumnDefinitionSeedData {
+	entity: string;
+	field: string;
+	label: string;
+	sortOrder: number;
+	isRequired: boolean;
+	visibleOnDesktop: boolean;
+	visibleOnTablet: boolean;
+	visibleOnMobile: boolean;
+	sortable: boolean;
+	width?: string;
+	minWidth?: string;
+}
+
+/**
+ * User 엔티티 컬럼 정의
+ * - 필수 컬럼: ID, 이름, 이메일, 전화번호, 상태
+ * - 데스크톱/태블릿: 모든 컬럼 표시
+ * - 모바일: 필수 컬럼 + 간단한 정보만
+ */
+export const userColumnDefinitions: ColumnDefinitionSeedData[] = [
+	{
+		entity: "User",
+		field: "id",
+		label: "ID",
+		sortOrder: 0,
+		isRequired: true,
+		visibleOnDesktop: true,
+		visibleOnTablet: true,
+		visibleOnMobile: true,
+		sortable: false,
+		width: "280px",
+		minWidth: "280px",
+	},
+	{
+		entity: "User",
+		field: "name",
+		label: "이름",
+		sortOrder: 1,
+		isRequired: true,
+		visibleOnDesktop: true,
+		visibleOnTablet: true,
+		visibleOnMobile: true,
+		sortable: true,
+		width: "120px",
+		minWidth: "100px",
+	},
+	{
+		entity: "User",
+		field: "email",
+		label: "이메일",
+		sortOrder: 2,
+		isRequired: true,
+		visibleOnDesktop: true,
+		visibleOnTablet: true,
+		visibleOnMobile: false, // 모바일에서는 숨김
+		sortable: true,
+		width: "200px",
+		minWidth: "150px",
+	},
+	{
+		entity: "User",
+		field: "phone",
+		label: "전화번호",
+		sortOrder: 3,
+		isRequired: true,
+		visibleOnDesktop: true,
+		visibleOnTablet: true,
+		visibleOnMobile: true,
+		sortable: false,
+		width: "140px",
+		minWidth: "120px",
+	},
+	{
+		entity: "User",
+		field: "status",
+		label: "상태",
+		sortOrder: 4,
+		isRequired: true,
+		visibleOnDesktop: true,
+		visibleOnTablet: true,
+		visibleOnMobile: true,
+		sortable: true,
+		width: "100px",
+		minWidth: "80px",
+	},
+	{
+		entity: "User",
+		field: "roles",
+		label: "역할",
+		sortOrder: 5,
+		isRequired: false,
+		visibleOnDesktop: true,
+		visibleOnTablet: true,
+		visibleOnMobile: false,
+		sortable: false,
+		width: "120px",
+		minWidth: "100px",
+	},
+	{
+		entity: "User",
+		field: "createdAt",
+		label: "가입일",
+		sortOrder: 6,
+		isRequired: false,
+		visibleOnDesktop: true,
+		visibleOnTablet: false, // 태블릿에서는 숨김
+		visibleOnMobile: false,
+		sortable: true,
+		width: "140px",
+		minWidth: "120px",
+	},
+	{
+		entity: "User",
+		field: "lastLoginAt",
+		label: "최근 로그인",
+		sortOrder: 7,
+		isRequired: false,
+		visibleOnDesktop: true,
+		visibleOnTablet: false,
+		visibleOnMobile: false,
+		sortable: true,
+		width: "140px",
+		minWidth: "120px",
+	},
+];
+
+/**
+ * Reservation 엔티티 컬럼 정의
+ * - 필수 컬럼: ID, 사용자명, 예약일시, 상태
+ * - 데스크톱/태블릿: 모든 컬럼 표시
+ * - 모바일: 필수 컬럼만
+ */
+export const reservationColumnDefinitions: ColumnDefinitionSeedData[] = [
+	{
+		entity: "Reservation",
+		field: "id",
+		label: "예약 ID",
+		sortOrder: 0,
+		isRequired: true,
+		visibleOnDesktop: true,
+		visibleOnTablet: true,
+		visibleOnMobile: true,
+		sortable: false,
+		width: "280px",
+		minWidth: "280px",
+	},
+	{
+		entity: "Reservation",
+		field: "userName",
+		label: "예약자명",
+		sortOrder: 1,
+		isRequired: true,
+		visibleOnDesktop: true,
+		visibleOnTablet: true,
+		visibleOnMobile: true,
+		sortable: true,
+		width: "120px",
+		minWidth: "100px",
+	},
+	{
+		entity: "Reservation",
+		field: "startTime",
+		label: "예약일시",
+		sortOrder: 2,
+		isRequired: true,
+		visibleOnDesktop: true,
+		visibleOnTablet: true,
+		visibleOnMobile: true,
+		sortable: true,
+		width: "180px",
+		minWidth: "150px",
+	},
+	{
+		entity: "Reservation",
+		field: "status",
+		label: "상태",
+		sortOrder: 3,
+		isRequired: true,
+		visibleOnDesktop: true,
+		visibleOnTablet: true,
+		visibleOnMobile: true,
+		sortable: true,
+		width: "100px",
+		minWidth: "80px",
+	},
+	{
+		entity: "Reservation",
+		field: "groundName",
+		label: "지점",
+		sortOrder: 4,
+		isRequired: false,
+		visibleOnDesktop: true,
+		visibleOnTablet: true,
+		visibleOnMobile: false,
+		sortable: false,
+		width: "140px",
+		minWidth: "120px",
+	},
+	{
+		entity: "Reservation",
+		field: "attendees",
+		label: "참석 인원",
+		sortOrder: 5,
+		isRequired: false,
+		visibleOnDesktop: true,
+		visibleOnTablet: false,
+		visibleOnMobile: false,
+		sortable: false,
+		width: "100px",
+		minWidth: "80px",
+	},
+	{
+		entity: "Reservation",
+		field: "createdAt",
+		label: "예약 생성일",
+		sortOrder: 6,
+		isRequired: false,
+		visibleOnDesktop: true,
+		visibleOnTablet: false,
+		visibleOnMobile: false,
+		sortable: true,
+		width: "140px",
+		minWidth: "120px",
+	},
+];
+
+/**
+ * Role 엔티티 컬럼 정의
+ * - 필수 컬럼: 역할명, 설명
+ * - 관리자 전용 화면으로 모바일 지원 불필요
+ */
+export const roleColumnDefinitions: ColumnDefinitionSeedData[] = [
+	{
+		entity: "Role",
+		field: "id",
+		label: "ID",
+		sortOrder: 0,
+		isRequired: true,
+		visibleOnDesktop: true,
+		visibleOnTablet: true,
+		visibleOnMobile: false,
+		sortable: false,
+		width: "280px",
+		minWidth: "280px",
+	},
+	{
+		entity: "Role",
+		field: "name",
+		label: "역할명",
+		sortOrder: 1,
+		isRequired: true,
+		visibleOnDesktop: true,
+		visibleOnTablet: true,
+		visibleOnMobile: false,
+		sortable: true,
+		width: "150px",
+		minWidth: "120px",
+	},
+	{
+		entity: "Role",
+		field: "description",
+		label: "설명",
+		sortOrder: 2,
+		isRequired: false,
+		visibleOnDesktop: true,
+		visibleOnTablet: true,
+		visibleOnMobile: false,
+		sortable: false,
+		width: "300px",
+		minWidth: "200px",
+	},
+	{
+		entity: "Role",
+		field: "userCount",
+		label: "사용자 수",
+		sortOrder: 3,
+		isRequired: false,
+		visibleOnDesktop: true,
+		visibleOnTablet: false,
+		visibleOnMobile: false,
+		sortable: true,
+		width: "100px",
+		minWidth: "80px",
+	},
+	{
+		entity: "Role",
+		field: "createdAt",
+		label: "생성일",
+		sortOrder: 4,
+		isRequired: false,
+		visibleOnDesktop: true,
+		visibleOnTablet: false,
+		visibleOnMobile: false,
+		sortable: true,
+		width: "140px",
+		minWidth: "120px",
+	},
+];

@@ -1,27 +1,9 @@
-import type { Meta, StoryObj } from "@storybook/react-vite";
+import type { Meta, StoryObj } from "@storybook/react";
 import { Checkbox } from "./Checkbox";
-
-type CheckboxState = {
-	checkbox?: boolean;
-	default?: boolean;
-	primary?: boolean;
-	secondary?: boolean;
-	success?: boolean;
-	warning?: boolean;
-	danger?: boolean;
-	small?: boolean;
-	medium?: boolean;
-	large?: boolean;
-	normal?: boolean;
-	selected?: boolean;
-	disabled?: boolean;
-	required?: boolean;
-	invalid?: boolean;
-};
 
 const meta = {
 	title: "inputs/Checkbox",
-	component: Checkbox<CheckboxState>,
+	component: Checkbox,
 	parameters: {
 		layout: "centered",
 	},
@@ -74,16 +56,13 @@ type Story = StoryObj<typeof meta>;
 export const 기본: Story = {
 	args: {
 		children: "체크박스",
-		state: { checkbox: false },
-		path: "checkbox",
 	},
 };
 
 export const 선택됨: Story = {
 	args: {
 		children: "선택된 체크박스",
-		state: { checkbox: true },
-		path: "checkbox",
+		defaultSelected: true,
 	},
 };
 
@@ -91,8 +70,6 @@ export const 비활성화: Story = {
 	args: {
 		children: "비활성화된 체크박스",
 		isDisabled: true,
-		state: { checkbox: false },
-		path: "checkbox",
 	},
 };
 
@@ -100,8 +77,6 @@ export const 필수입력: Story = {
 	args: {
 		children: "필수 체크박스",
 		isRequired: true,
-		state: { checkbox: false },
-		path: "checkbox",
 	},
 };
 
@@ -109,85 +84,49 @@ export const 오류상태: Story = {
 	args: {
 		children: "오류 상태 체크박스",
 		isInvalid: true,
-		state: { checkbox: false },
-		path: "checkbox",
 	},
 };
 
 export const 다양한색상: Story = {
 	args: {
-		path: "default",
-		state: { default: false },
 		children: "색상 예시",
 	},
 	render: () => (
 		<div className="flex flex-col gap-4">
-			<Checkbox color="default" state={{ default: false }} path="default">
-				기본
-			</Checkbox>
-			<Checkbox color="primary" state={{ primary: false }} path="primary">
-				주요
-			</Checkbox>
-			<Checkbox color="secondary" state={{ secondary: false }} path="secondary">
-				보조
-			</Checkbox>
-			<Checkbox color="success" state={{ success: false }} path="success">
-				성공
-			</Checkbox>
-			<Checkbox color="warning" state={{ warning: false }} path="warning">
-				경고
-			</Checkbox>
-			<Checkbox color="danger" state={{ danger: false }} path="danger">
-				위험
-			</Checkbox>
+			<Checkbox color="default">기본</Checkbox>
+			<Checkbox color="primary">주요</Checkbox>
+			<Checkbox color="secondary">보조</Checkbox>
+			<Checkbox color="success">성공</Checkbox>
+			<Checkbox color="warning">경고</Checkbox>
+			<Checkbox color="danger">위험</Checkbox>
 		</div>
 	),
 };
 
 export const 다양한크기: Story = {
 	args: {
-		path: "small",
-		state: { small: false },
 		children: "크기 예시",
 	},
 	render: () => (
 		<div className="flex flex-col gap-4">
-			<Checkbox size="sm" state={{ small: false }} path="small">
-				작은 크기
-			</Checkbox>
-			<Checkbox size="md" state={{ medium: false }} path="medium">
-				보통 크기
-			</Checkbox>
-			<Checkbox size="lg" state={{ large: false }} path="large">
-				큰 크기
-			</Checkbox>
+			<Checkbox size="sm">작은 크기</Checkbox>
+			<Checkbox size="md">보통 크기</Checkbox>
+			<Checkbox size="lg">큰 크기</Checkbox>
 		</div>
 	),
 };
 
 export const 다양한상태: Story = {
 	args: {
-		path: "normal",
-		state: { normal: false },
 		children: "상태 예시",
 	},
 	render: () => (
 		<div className="flex flex-col gap-4">
-			<Checkbox state={{ normal: false }} path="normal">
-				일반 상태
-			</Checkbox>
-			<Checkbox state={{ selected: true }} path="selected">
-				선택됨
-			</Checkbox>
-			<Checkbox isDisabled state={{ disabled: false }} path="disabled">
-				비활성화
-			</Checkbox>
-			<Checkbox isRequired state={{ required: false }} path="required">
-				필수 입력
-			</Checkbox>
-			<Checkbox isInvalid state={{ invalid: false }} path="invalid">
-				오류 상태
-			</Checkbox>
+			<Checkbox>일반 상태</Checkbox>
+			<Checkbox defaultSelected>선택됨</Checkbox>
+			<Checkbox isDisabled>비활성화</Checkbox>
+			<Checkbox isRequired>필수 입력</Checkbox>
+			<Checkbox isInvalid>오류 상태</Checkbox>
 		</div>
 	),
 };

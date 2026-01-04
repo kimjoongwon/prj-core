@@ -1,4 +1,3 @@
-export * from "./update-action.dto";
 export * from "./update-assignment.dto";
 export * from "./update-category.dto";
 export * from "./update-exercise.dto";

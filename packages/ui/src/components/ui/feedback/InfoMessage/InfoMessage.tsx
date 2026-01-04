@@ -1,5 +1,5 @@
 import { cva } from "class-variance-authority";
-import { ReactNode } from "react";
+import type { ReactNode } from "react";
 import { Text } from "../../data-display/Text/Text";
 import { HStack } from "../../surfaces/HStack/HStack";
 

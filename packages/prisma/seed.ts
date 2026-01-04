@@ -4,11 +4,14 @@ import { hash } from "bcrypt";
 import pg from "pg";
 import {
 	groundSeedData,
+	reservationColumnDefinitions,
 	roleAssociationSeedData,
 	roleCategorySeedData,
 	roleClassificationSeedData,
+	roleColumnDefinitions,
 	roleGroupSeedData,
 	roleSeedData,
+	userColumnDefinitions,
 	userGroundMapping,
 	userSeedData,
 } from "./seed-data";
@@ -19,12 +22,12 @@ const pool = new pg.Pool({
 	connectionString: process.env.DATABASE_URL,
 });
 const adapter = new PrismaPg(pool);
-const prisma = new PrismaClient({ adapter } as any);
+const prisma = new PrismaClient({ adapter } as unknown);
 async function main() {
 	const hashedPassword = await hash("rkdmf12!@", 10);
 
 	// Role들을 seed-data.ts 기반으로 생성
-	const roles: Record<string, any> = {};
+	const roles: Record<string, unknown> = {};
 	for (const roleData of roleSeedData) {
 		roles[roleData.name] = await prisma.role.upsert({
 			where: { name: roleData.name },
@@ -155,22 +158,31 @@ async function main() {
 	// 일반 유저들과 그라운드 생성
 	await createRegularUsersAndGrounds(roles.ADMIN, roles.USER);
 
+	// Subject 생성 (메뉴 권한용)
+	await createSubjects();
+
+	// 컬럼 정의 생성
+	await createColumnDefinitions();
+
 	console.log({ superAdminUser });
 }
 
-async function createRegularUsersAndGrounds(adminRole: any, _userRole: any) {
+async function createRegularUsersAndGrounds(
+	adminRole: unknown,
+	_userRole: unknown,
+) {
 	console.log("일반 유저들과 그라운드 생성 시작...");
 
 	// 모든 Role 조회 (seed-data의 role 필드 사용을 위해)
 	const allRoles = await prisma.role.findMany();
-	const roleMap: Record<string, any> = {};
+	const roleMap: Record<string, unknown> = {};
 	for (const role of allRoles) {
 		roleMap[role.name] = role;
 	}
 
 	// 각 그라운드 생성
 	const createdGrounds: Array<{
-		ground: any;
+		ground: unknown;
 		index: number;
 		spaceId: string;
 	}> = [];
@@ -295,7 +307,7 @@ async function createRegularUsersAndGrounds(adminRole: any, _userRole: any) {
 
 				// 유저가 소속될 그라운드들 (groundNames 기반으로 찾기)
 				const userGrounds: Array<{
-					ground: any;
+					ground: unknown;
 					index: number;
 					spaceId: string;
 				}> = [];
@@ -331,7 +343,7 @@ async function createRegularUsersAndGrounds(adminRole: any, _userRole: any) {
 
 					for (let i = 0; i < userGrounds.length; i++) {
 						const groundInfo = userGrounds[i];
-						const isMain = i === 0; // 첫 번째 그라운드를 메인으로 설정
+						const _isMain = i === 0; // 첫 번째 그라운드를 메인으로 설정
 
 						const existingUserTenant = await prisma.tenant.findFirst({
 							where: {
@@ -384,12 +396,12 @@ async function createRoleCategories() {
 	for (const categoryData of roleCategorySeedData) {
 		const roleCategoryEnum = categoryData.roleCategoryEnum;
 
-		const category = await prisma.category.upsert({
+		const _category = await prisma.category.upsert({
 			where: { name: roleCategoryEnum.name },
 			update: {},
 			create: {
 				name: roleCategoryEnum.name, // enum의 name 속성 사용
-				type: categoryData.type as any,
+				type: categoryData.type as unknown,
 				spaceId: tenant.spaceId,
 				// parentId는 나중에 별도로 설정 (현재는 평면 구조)
 			},
@@ -402,7 +414,7 @@ async function createRoleCategories() {
 	console.log("Role 카테고리 생성 완료!");
 }
 
-async function createRoleClassifications(roles: Record<string, any>) {
+async function createRoleClassifications(roles: Record<string, unknown>) {
 	console.log("Role과 Category 연결 (RoleClassification) 시작...");
 
 	for (const classificationData of roleClassificationSeedData) {
@@ -458,7 +470,7 @@ async function createRoleClassifications(roles: Record<string, any>) {
 	console.log("Role과 Category 연결 완료!");
 }
 
-async function createRoleGroupsAndAssociations(roles: Record<string, any>) {
+async function createRoleGroupsAndAssociations(roles: Record<string, unknown>) {
 	console.log("Role 관련 Group 생성 및 RoleAssociation 연결 시작...");
 
 	// seq=1인 tenant 조회 (Group 생성에 필요)
@@ -472,7 +484,7 @@ async function createRoleGroupsAndAssociations(roles: Record<string, any>) {
 	}
 
 	// Role용 Group들 생성 (RoleGroupSeedData 기반)
-	const groups: Record<string, any> = {};
+	const groups: Record<string, unknown> = {};
 	for (const groupData of roleGroupSeedData) {
 		const roleGroupEnum = groupData.roleGroupEnum;
 
@@ -548,6 +560,149 @@ async function createRoleGroupsAndAssociations(roles: Record<string, any>) {
 	}
 
 	console.log("Role 관련 Group 생성 및 RoleAssociation 연결 완료!");
+}
+
+async function createColumnDefinitions() {
+	console.log("컬럼 정의 생성 시작...");
+
+	// 모든 Space 조회
+	const spaces = await prisma.space.findMany({
+		take: 5, // 최대 5개 Space에만 시드 데이터 생성
+	});
+
+	if (spaces.length === 0) {
+		console.error("생성된 Space가 없어 컬럼 정의를 생성할 수 없습니다.");
+		return;
+	}
+
+	// 각 Space에 대해 컬럼 정의 생성
+	for (const space of spaces) {
+		console.log(`Space ${space.id}에 컬럼 정의 생성 중...`);
+
+		// User 엔티티 컬럼 정의
+		for (const columnDef of userColumnDefinitions) {
+			const existing = await prisma.columnDefinition.findFirst({
+				where: {
+					entity: columnDef.entity,
+					field: columnDef.field,
+					spaceId: space.id,
+				},
+			});
+
+			if (!existing) {
+				await prisma.columnDefinition.create({
+					data: {
+						...columnDef,
+						spaceId: space.id,
+					},
+				});
+			}
+		}
+		console.log(`  - User 컬럼 정의 ${userColumnDefinitions.length}개 생성`);
+
+		// Reservation 엔티티 컬럼 정의
+		for (const columnDef of reservationColumnDefinitions) {
+			const existing = await prisma.columnDefinition.findFirst({
+				where: {
+					entity: columnDef.entity,
+					field: columnDef.field,
+					spaceId: space.id,
+				},
+			});
+
+			if (!existing) {
+				await prisma.columnDefinition.create({
+					data: {
+						...columnDef,
+						spaceId: space.id,
+					},
+				});
+			}
+		}
+		console.log(
+			`  - Reservation 컬럼 정의 ${reservationColumnDefinitions.length}개 생성`,
+		);
+
+		// Role 엔티티 컬럼 정의
+		for (const columnDef of roleColumnDefinitions) {
+			const existing = await prisma.columnDefinition.findFirst({
+				where: {
+					entity: columnDef.entity,
+					field: columnDef.field,
+					spaceId: space.id,
+				},
+			});
+
+			if (!existing) {
+				await prisma.columnDefinition.create({
+					data: {
+						...columnDef,
+						spaceId: space.id,
+					},
+				});
+			}
+		}
+		console.log(`  - Role 컬럼 정의 ${roleColumnDefinitions.length}개 생성`);
+	}
+
+	console.log("컬럼 정의 생성 완료!");
+}
+
+async function createSubjects() {
+	console.log("Subject 생성 시작...");
+
+	// 첫 번째 Tenant 조회 (tenantId 필요)
+	const firstTenant = await prisma.tenant.findFirst({
+		where: { seq: 1 },
+	});
+
+	if (!firstTenant) {
+		console.error("Tenant를 찾을 수 없어 Subject를 생성할 수 없습니다.");
+		return;
+	}
+
+	// 메뉴 Subject들 생성
+	const menuSubjects = [
+		// 설정 메뉴
+		{
+			name: "menu:settings",
+			type: "Menu" as const,
+			label: "설정",
+			description: "설정 메뉴",
+		},
+		{
+			name: "menu:settings:columns",
+			type: "Menu" as const,
+			label: "컬럼 가시성 관리",
+			description: "컬럼 가시성 관리 메뉴",
+		},
+		{
+			name: "menu:settings:permissions",
+			type: "Menu" as const,
+			label: "권한 관리",
+			description: "권한 관리 메뉴",
+		},
+	];
+
+	for (const subjectData of menuSubjects) {
+		const existing = await prisma.subject.findFirst({
+			where: { name: subjectData.name },
+		});
+
+		if (!existing) {
+			await prisma.subject.create({
+				data: {
+					...subjectData,
+					tenantId: firstTenant.id,
+				},
+			});
+			console.log(`  - Subject 생성: ${subjectData.name}`);
+		} else {
+			console.log(`  - Subject 이미 존재: ${subjectData.name}`);
+		}
+	}
+
+	console.log("Subject 생성 완료!");
 }
 
 main()

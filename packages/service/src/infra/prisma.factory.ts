@@ -1,9 +1,9 @@
 import { PrismaClient } from "@cocrepo/prisma";
 import { Logger } from "@nestjs/common";
-import { ConfigService } from "@nestjs/config";
+import type { ConfigService } from "@nestjs/config";
 import { PrismaPg } from "@prisma/adapter-pg";
 import pg from "pg";
-import { PrismaService } from "./prisma.service";
+import type { PrismaService } from "./prisma.service";
 
 export function createPrismaClient(
 	configService: ConfigService,

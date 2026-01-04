@@ -1,6 +1,6 @@
 import {
 	DatePicker as HeroUiDatePicker,
-	DatePickerProps as HeroUiDatePickerProps,
+	type DatePickerProps as HeroUiDatePickerProps,
 } from "@heroui/react";
 import type {
 	CalendarDate,

@@ -1,7 +1,7 @@
 import { ValidationUtil } from "@cocrepo/decorator";
 import { registerAs } from "@nestjs/config";
 import { IsNumber, IsOptional, IsString } from "class-validator";
-import { RedisConfig } from "./config.type";
+import type { RedisConfig } from "./config.type";
 
 class EnvironmentVariablesValidator {
 	@IsString()

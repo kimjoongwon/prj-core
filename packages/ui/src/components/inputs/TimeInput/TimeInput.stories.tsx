@@ -20,7 +20,7 @@ export const Default: Story = {
 		label: "Select a time",
 	},
 	render: (args) => {
-		const [value, setValue] = useState("");
-		return <TimeInput {...args} value={value} onChange={setValue} />;
+		const [_value, setValue] = useState<string>("");
+		return <TimeInput {...args} onChange={setValue} />;
 	},
 };

@@ -12,7 +12,9 @@ describe("LoggerUtil", () => {
 
 	beforeEach(() => {
 		// 각 테스트 전에 스파이를 리셋
-		Object.values(consoleSpy).forEach((spy) => spy.mockClear());
+		for (const spy of Object.values(consoleSpy)) {
+			spy.mockClear();
+		}
 	});
 
 	afterEach(() => {

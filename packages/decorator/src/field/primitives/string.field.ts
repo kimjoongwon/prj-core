@@ -5,9 +5,9 @@ import { IsString, MaxLength, MinLength, NotEquals } from "class-validator";
 import { VALIDATION_MESSAGES } from "../../constants/validation-messages";
 import { ToLowerCase, ToUpperCase } from "../../transform.decorators";
 import { IsNullable } from "../../validator.decorators";
-import {
-	type FieldDecoratorOptions,
-	type StringFieldOptions,
+import type {
+	FieldDecoratorOptions,
+	StringFieldOptions,
 } from "../base/field-options.types";
 import { createOptionalField } from "../base/optional-field.factory";
 

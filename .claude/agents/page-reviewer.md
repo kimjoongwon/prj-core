@@ -168,7 +168,60 @@ const store = storeRef.current;
 | `GroundSelectPageProps` | ✅ 올바름 | - |
 | `State` (파일 내부) | ✅ 올바름 | - |
 
-### 9. 공용 패키지 네이밍 규칙 (Critical)
+### 9. 스타일링 규칙 (Critical)
+
+**커스텀 className 사용 금지 - HeroUI와 기존 컴포넌트만 사용**
+
+> **예외**: `components/ui/`와 `components/inputs/`에서만 커스텀 className이 허용됩니다. 이 두 위치를 제외한 모든 컴포넌트에서는 금지입니다.
+
+```bash
+# 검증 명령 - 커스텀 Tailwind 클래스 탐지
+grep -E 'className="[^"]*\b(flex|grid|gap-|mt-|mb-|pt-|pb-|px-|py-|rounded|border|bg-|text-)\b' [생성된 파일 경로]
+```
+
+| 패턴 | 판정 | 조치 |
+|------|------|------|
+| `className="flex items-center gap-2"` | ❌ 위반 | `<HStack gap={2}>` 사용 |
+| `className="flex flex-col gap-4"` | ❌ 위반 | `<VStack gap={4}>` 사용 |
+| `className="mt-4 mb-2"` | ❌ 위반 | `<Spacer y={4} />` 사용 |
+| `className="text-sm font-medium"` | ❌ 위반 | `<Text size="sm" weight="medium">` 사용 |
+| `className="rounded-lg border bg-default-50"` | ❌ 위반 | HeroUI Card 또는 기존 컴포넌트 사용 |
+| HeroUI 컴포넌트 내장 className (variant 등) | ✅ 허용 | - |
+
+**허용되는 className 패턴:**
+
+```tsx
+// ✅ 허용 - HeroUI 컴포넌트의 내장 스타일링 props
+<Button variant="flat" color="primary" size="sm" />
+<Avatar className="h-6 w-6" />  // HeroUI 컴포넌트 크기 조정
+
+// ✅ 허용 - 레이아웃 컴포넌트 사용
+<VStack gap={4}>
+  <Spacer y={2} />
+  <HStack gap={2}>...</HStack>
+</VStack>
+```
+
+**위반 발견 시 조치:**
+
+```typescript
+파일: packages/ui/src/components/page/Login/LoginPage.tsx:25
+현재: <div className="flex items-center gap-2 mt-4">
+수정: <HStack gap={2}><Spacer y={4} />
+이유: 커스텀 className 금지 - 레이아웃 컴포넌트 사용 필수
+
+파일: packages/ui/src/components/page/Login/LoginPage.tsx:30
+현재: <span className="text-sm font-medium text-default-700">{text}</span>
+수정: <Text size="sm" weight="medium" color="default-700">{text}</Text>
+이유: 커스텀 className 금지 - Text 컴포넌트 사용 필수
+```
+
+**자주 사용되는 패턴이 발견되면:**
+1. 기존 컴포넌트에서 해당 스타일을 지원하는지 확인
+2. 지원하지 않으면 **UI 컴포넌트 빌더**에게 새 컴포넌트 생성 요청
+3. 생성된 컴포넌트로 수정 지시
+
+### 10. 공용 패키지 네이밍 규칙 (Critical)
 
 **packages/* 내 앱 종속 이름 사용 금지**
 

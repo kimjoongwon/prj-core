@@ -1,5 +1,5 @@
 import { Card, CardBody, Chip, Progress } from "@heroui/react";
-import React from "react";
+import type React from "react";
 import { Logo } from "../../data-display/Logo/Logo";
 import { Text } from "../../data-display/Text/Text";
 import { VStack } from "../../surfaces/VStack/VStack";

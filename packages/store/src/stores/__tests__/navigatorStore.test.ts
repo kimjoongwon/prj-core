@@ -3,7 +3,7 @@
 import type { RouteDto } from "@cocrepo/api";
 import { beforeEach, describe, expect, it } from "vitest";
 import { NavigatorStore } from "../navigatorStore";
-import { PlateStore } from "../plateStore";
+import type { PlateStore } from "../plateStore";
 
 describe("NavigatorStore", () => {
 	let navigatorStore: NavigatorStore;

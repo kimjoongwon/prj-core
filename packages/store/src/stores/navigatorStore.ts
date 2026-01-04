@@ -1,5 +1,5 @@
-import { RouteStore } from "./routeStore";
-import { type RootStore } from "./Store";
+import type { RouteStore } from "./routeStore";
+import type { RootStore } from "./Store";
 
 export class NavigatorStore {
 	readonly rootStore: RootStore;

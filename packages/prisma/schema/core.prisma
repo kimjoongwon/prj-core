@@ -5,8 +5,19 @@
 // 시스템 전반에서 사용되는 핵심 공통 모델들입니다.
 // Category, Group: 분류/그룹핑 체계
 // Tenant: User + Space + Role을 연결하는 핵심 Bridge
-// Action, Subject, Ability: 권한 체계
+// Subject, Ability: CASL 기반 권한 체계
 // Content, Post: 콘텐츠 관리
+//
+// 관계 구조:
+//   Subject (REFERENCE)
+//     │
+//     ├─── self-reference (parent/children) - 계층 구조
+//     └─── Ability (권한 정의)
+//
+//   Ability (REFERENCE)
+//     │
+//     ├─── Role (역할)
+//     └─── Subject (대상)
 //
 // ============================================================================
 
@@ -102,58 +113,106 @@ model Assignment {
 }
 
 // @schema-type: REFERENCE
-// @description: 권한 체계에서 사용되는 액션 정의 (CREATE, READ, UPDATE, DELETE 등)
-model Action {
-  id         String         @id @default(uuid())
-  seq        Int            @unique @default(autoincrement())
-  createdAt  DateTime       @default(now()) @map("created_at")
-  updatedAt  DateTime?      @updatedAt @map("updated_at") @db.Timestamptz(6)
-  removedAt  DateTime?      @map("removed_at") @db.Timestamptz(6)
-  name       AbilityActions @default(CREATE)
-  conditions Json?
-  spaceId    String         @map("space_id")
-  space      Space          @relation(fields: [spaceId], references: [id])
-
-  @@index([spaceId])
-  @@map("actions")
-}
-
-// @schema-type: REFERENCE
 // @description: 권한 체계에서 사용되는 대상 정의 (권한이 적용되는 리소스)
+// @self-reference: parent/children (계층 구조)
+// @connected-by: Ability
+// @note: Menu, Feature, Entity, API, Column 5가지 타입으로 세밀한 권한 관리
 model Subject {
-  id        String    @id @default(uuid())
-  seq       Int       @unique @default(autoincrement())
-  createdAt DateTime  @default(now()) @map("created_at")
-  updatedAt DateTime? @updatedAt @map("updated_at") @db.Timestamptz(6)
-  removedAt DateTime? @map("removed_at") @db.Timestamptz(6)
-  name      String    @unique
-  spaceId   String    @map("space_id")
-  space     Space     @relation(fields: [spaceId], references: [id])
+  id                String             @id @default(uuid())
+  seq               Int                @unique @default(autoincrement())
+  createdAt         DateTime           @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt         DateTime?          @updatedAt @map("updated_at") @db.Timestamptz(6)
+  removedAt         DateTime?          @map("removed_at") @db.Timestamptz(6)
+  name              String             @unique
+  type              SubjectTypes       @default(Entity)
+  label             String?
+  description       String?
+  parentId          String?            @map("parent_id")
+  tenantId          String             @map("tenant_id")
+  sortOrder         Int                @default(0) @map("sort_order")
+  parent            Subject?           @relation("SubjectHierarchy", fields: [parentId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  children          Subject[]          @relation("SubjectHierarchy")
+  abilities         Ability[]
+  columnDefinitions ColumnDefinition[]
 
-  @@index([spaceId])
+  @@index([tenantId])
+  @@index([type])
+  @@index([parentId])
   @@map("subjects")
 }
 
 // @schema-type: REFERENCE
 // @description: Role에 부여되는 구체적인 권한 정의 (CASL 기반)
 // @connects: Role ─── Subject (특정 대상에 대한 권한)
+// @note: action을 enum으로 직접 관리하여 단순화, 중복 방지를 위한 unique 제약조건 추가
 model Ability {
-  id          String       @id @default(uuid())
-  seq         Int          @unique @default(autoincrement())
-  createdAt   DateTime     @default(now()) @map("created_at") @db.Timestamptz(6)
-  updatedAt   DateTime?    @updatedAt @map("updated_at") @db.Timestamptz(6)
-  removedAt   DateTime?    @map("removed_at") @db.Timestamptz(6)
+  id          String         @id @default(uuid())
+  seq         Int            @unique @default(autoincrement())
+  createdAt   DateTime       @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt   DateTime?      @updatedAt @map("updated_at") @db.Timestamptz(6)
+  removedAt   DateTime?      @map("removed_at") @db.Timestamptz(6)
   type        AbilityTypes
-  roleId      String       @map("role_id")
+  action      AbilityActions
+  roleId      String         @map("role_id")
   description String?
   conditions  Json?
-  subjectId   String       @map("subject_id")
-  spaceId     String       @map("space_id")
-  role        Role         @relation(fields: [roleId], references: [id])
-  space       Space        @relation(fields: [spaceId], references: [id])
+  subjectId   String         @map("subject_id")
+  tenantId    String         @map("tenant_id")
+  isActive    Boolean        @default(true) @map("is_active")
+  role        Role           @relation(fields: [roleId], references: [id])
+  subject     Subject        @relation(fields: [subjectId], references: [id])
 
-  @@index([spaceId])
+  @@unique([roleId, subjectId, action])
+  @@index([tenantId])
+  @@index([roleId])
+  @@index([subjectId])
+  @@index([isActive])
   @@map("abilities")
+}
+
+// @schema-type: METADATA
+// @description: 테이블 컬럼 메타데이터 정의 (디바이스별 가시성, 정렬, 너비 등)
+// @connects: Space (멀티테넌시), Subject (권한 연동, optional)
+model ColumnDefinition {
+  id        String    @id @default(uuid())
+  seq       Int       @unique @default(autoincrement())
+  createdAt DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt DateTime? @updatedAt @map("updated_at") @db.Timestamptz(6)
+  removedAt DateTime? @map("removed_at") @db.Timestamptz(6)
+
+  // 엔티티 및 필드 정보
+  entity    String // 엔티티명 (User, Reservation 등)
+  field     String // 필드명 (email, phone, createdAt 등)
+  label     String // 표시 라벨 (이메일, 전화번호 등)
+  sortOrder Int    @default(0) @map("sort_order")
+
+  // 필수 여부 (필수 컬럼은 모든 디바이스에서 표시)
+  isRequired Boolean @default(false) @map("is_required")
+
+  // 디바이스별 기본 가시성
+  visibleOnDesktop Boolean @default(true) @map("visible_on_desktop")
+  visibleOnTablet  Boolean @default(true) @map("visible_on_tablet")
+  visibleOnMobile  Boolean @default(false) @map("visible_on_mobile")
+
+  // 정렬 가능 여부
+  sortable Boolean @default(false)
+
+  // 너비 설정
+  width    String? // '80px', '120px', 'auto' 등
+  minWidth String? @map("min_width")
+
+  // Space 귀속 (멀티테넌시)
+  spaceId String @map("space_id")
+  space   Space  @relation(fields: [spaceId], references: [id])
+
+  // 컬럼별 권한 (선택적)
+  subjectId String?  @map("subject_id")
+  subject   Subject? @relation(fields: [subjectId], references: [id])
+
+  @@unique([entity, field, spaceId])
+  @@index([entity, spaceId])
+  @@index([subjectId])
+  @@map("column_definitions")
 }
 
 // @schema-type: CONTENT
@@ -240,11 +299,24 @@ enum AbilityActions {
   UPDATE
   DELETE
   ACCESS
+  MANAGE
+  EXPORT
+  IMPORT
+  APPROVE
+  REJECT
 }
 
 enum AbilityTypes {
   CAN
   CAN_NOT
+}
+
+enum SubjectTypes {
+  Menu
+  Feature
+  Entity
+  API
+  Column
 }
 
 enum Roles {

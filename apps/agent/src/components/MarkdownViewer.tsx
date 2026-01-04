@@ -41,6 +41,7 @@ export function MarkdownViewer({
 						<h2 className="text-xl font-bold">{title}</h2>
 					</div>
 					<button
+					type="button"
 						onClick={onClose}
 						className="p-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors"
 					>
@@ -78,6 +79,7 @@ export function MarkdownViewer({
 				{/* 푸터 */}
 				<div className="px-6 py-4 border-t border-gray-200 dark:border-gray-700 flex justify-end gap-3">
 					<button
+					type="button"
 						onClick={() => {
 							navigator.clipboard.writeText(content);
 						}}
@@ -86,6 +88,7 @@ export function MarkdownViewer({
 						복사
 					</button>
 					<button
+					type="button"
 						onClick={onClose}
 						className="px-4 py-2 text-sm bg-purple-600 hover:bg-purple-700 text-white rounded-lg transition-colors"
 					>

@@ -1,5 +1,5 @@
 import { ClassField, UUIDFieldOptional } from "@cocrepo/decorator";
-import { UserClassification } from "@cocrepo/entity";
+import type { UserClassification } from "@cocrepo/entity";
 import { AbstractDto, CategoryDto, UserDto } from ".";
 
 export class UserClassificationDto

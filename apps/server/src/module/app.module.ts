@@ -8,17 +8,20 @@ import {
 } from "@cocrepo/be-common";
 import {
 	Logger,
-	MiddlewareConsumer,
+	type MiddlewareConsumer,
 	Module,
-	OnModuleInit,
+	type OnModuleInit,
 } from "@nestjs/common";
 import { APP_GUARD, RouterModule } from "@nestjs/core";
 import { ThrottlerGuard } from "@nestjs/throttler";
+import { AbilitiesModule } from "./abilities";
 import { AuthModule } from "./auth";
+import { ColumnsModule } from "./columns";
 // Global modules
 import { globalModules } from "./global.module";
 import { GroundsModule } from "./grounds";
 import { PrismaModule } from "./prisma.module";
+import { SubjectsModule } from "./subjects";
 import { UsersModule } from "./users";
 
 @Module({
@@ -28,6 +31,9 @@ import { UsersModule } from "./users";
 		AuthModule,
 		GroundsModule,
 		UsersModule,
+		AbilitiesModule,
+		SubjectsModule,
+		ColumnsModule,
 		// Resource Modules는 필요할 때 추가합니다.
 		// 가이드: .claude/agents/controller-builder.md
 		RouterModule.register([
@@ -48,6 +54,18 @@ import { UsersModule } from "./users";
 							{
 								path: "users",
 								module: UsersModule,
+							},
+							{
+								path: "abilities",
+								module: AbilitiesModule,
+							},
+							{
+								path: "subjects",
+								module: SubjectsModule,
+							},
+							{
+								path: "columns",
+								module: ColumnsModule,
 							},
 							// 새로운 Resource 라우트는 여기에 추가
 						],

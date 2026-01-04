@@ -1,7 +1,7 @@
 import { Card, CardBody } from "@heroui/react";
 import type { Meta, StoryObj } from "@storybook/react";
+import { Button } from "../../inputs/Button/Button";
 import { Text } from "../../ui/data-display/Text/Text";
-import { Button } from "../../ui/inputs/Button/Button";
 import { HStack } from "../../ui/surfaces/HStack/HStack";
 import { VStack } from "../../ui/surfaces/VStack/VStack";
 import { Modal } from "./Modal";
@@ -15,7 +15,7 @@ const meta: Meta<typeof Modal> = {
 	tags: ["autodocs"],
 	decorators: [
 		(Story) => {
-			const pageBuilder = {
+			const _pageBuilder = {
 				name: "Modal Title",
 				state: {},
 			};

@@ -1,6 +1,6 @@
-import { SpaceAssociation as SpaceAssociationEntity } from "@cocrepo/prisma";
+import type { SpaceAssociation as SpaceAssociationEntity } from "@cocrepo/prisma";
 import { AbstractEntity } from "./abstract.entity";
-import { Group } from "./group.entity";
+import type { Group } from "./group.entity";
 
 export class SpaceAssociation
 	extends AbstractEntity

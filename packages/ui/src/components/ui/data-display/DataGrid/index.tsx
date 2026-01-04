@@ -1,7 +1,11 @@
-import { Selection } from "@heroui/react";
+import type { Selection } from "@heroui/react";
 import { action } from "mobx";
 import { observer, useLocalObservable } from "mobx-react-lite";
-import { DataGrid as DataGridComponent, DataGridProps, Key } from "./DataGrid";
+import {
+	DataGrid as DataGridComponent,
+	type DataGridProps,
+	type Key,
+} from "./DataGrid";
 
 export const DataGrid = observer(<T extends any>(props: DataGridProps<T>) => {
 	const { data, state, selectionMode, ...rest } = props;

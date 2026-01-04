@@ -1,8 +1,6 @@
 import { User } from "@cocrepo/entity";
-import { PrismaClient } from "@cocrepo/prisma";
-import { Test, TestingModule } from "@nestjs/testing";
+import { Test, type TestingModule } from "@nestjs/testing";
 import { TransactionHost } from "@nestjs-cls/transactional";
-import { TransactionalAdapterPrisma } from "@nestjs-cls/transactional-adapter-prisma";
 import { UsersRepository } from "../src/users.repository";
 
 describe("UsersRepository", () => {

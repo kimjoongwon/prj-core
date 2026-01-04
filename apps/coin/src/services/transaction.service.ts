@@ -1,6 +1,9 @@
 import SafeApiKit from "@safe-global/api-kit";
 import Safe from "@safe-global/protocol-kit";
-import { MetaTransactionData, OperationType } from "@safe-global/types-kit";
+import {
+	type MetaTransactionData,
+	OperationType,
+} from "@safe-global/types-kit";
 import { encodeFunctionData, parseUnits } from "viem";
 import type { PendingTransaction, SafeTransaction } from "@/stores";
 

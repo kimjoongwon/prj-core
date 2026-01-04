@@ -5,7 +5,7 @@ import {
 	UUIDField,
 	UUIDFieldOptional,
 } from "@cocrepo/decorator";
-import { Category, CategoryTypes } from "@cocrepo/prisma";
+import { type Category, CategoryTypes } from "@cocrepo/prisma";
 import { AbstractDto } from "./abstract.dto";
 
 export class CategoryDto extends AbstractDto implements Category {

@@ -2,10 +2,10 @@ import { cloneDeep } from "@cocrepo/toolkit";
 import type { Option } from "@cocrepo/type";
 import {
 	Select as NextSelect,
-	SelectProps as NextUISelectProps,
+	type SelectProps as NextUISelectProps,
 	SelectItem,
 } from "@heroui/react";
-import React from "react";
+import type React from "react";
 
 export interface SelectProps
 	extends Omit<NextUISelectProps, "children" | "onChange" | "selectedKeys"> {

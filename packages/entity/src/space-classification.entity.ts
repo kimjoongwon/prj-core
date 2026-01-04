@@ -1,7 +1,7 @@
-import { SpaceClassification as SpaceClassificationEntity } from "@cocrepo/prisma";
+import type { SpaceClassification as SpaceClassificationEntity } from "@cocrepo/prisma";
 import { AbstractEntity } from "./abstract.entity";
-import { Category } from "./category.entity";
-import { Space } from "./space.entity";
+import type { Category } from "./category.entity";
+import type { Space } from "./space.entity";
 
 export class SpaceClassification
 	extends AbstractEntity

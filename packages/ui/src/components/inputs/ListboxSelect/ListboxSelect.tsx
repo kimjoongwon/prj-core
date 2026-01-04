@@ -1,7 +1,7 @@
 import type { ListboxProps as HeroListboxProps } from "@heroui/react";
 import { Listbox as HeroListbox, ListboxItem } from "@heroui/react";
 
-export type ListboxSelectProps<T> = Omit<
+export type ListboxSelectProps<_T> = Omit<
 	HeroListboxProps,
 	"state" | "children"
 > & {
@@ -14,7 +14,7 @@ export type ListboxSelectProps<T> = Omit<
 		| undefined;
 };
 
-import { ReactNode } from "react";
+import type { ReactNode } from "react";
 import { Text } from "../../ui/data-display/Text/Text";
 
 export const ListboxSelect = <T extends object>(

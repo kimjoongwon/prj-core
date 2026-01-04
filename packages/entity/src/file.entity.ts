@@ -1,7 +1,7 @@
-import { File as FileEntity } from "@cocrepo/prisma";
+import type { File as FileEntity } from "@cocrepo/prisma";
 import { AbstractEntity } from "./abstract.entity";
-import { Space } from "./space.entity";
-import { User } from "./user.entity";
+import type { Space } from "./space.entity";
+import type { User } from "./user.entity";
 
 export class File extends AbstractEntity implements FileEntity {
 	parentId!: string | null;

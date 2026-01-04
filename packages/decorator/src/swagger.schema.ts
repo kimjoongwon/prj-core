@@ -2,7 +2,7 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment,@typescript-eslint/no-explicit-any,@typescript-eslint/no-unsafe-member-access,@typescript-eslint/no-unsafe-return,@typescript-eslint/no-unsafe-argument */
 
 import { castArray, mapValues } from "@cocrepo/toolkit";
-import { applyDecorators, Type, UseInterceptors } from "@nestjs/common";
+import { applyDecorators, type Type, UseInterceptors } from "@nestjs/common";
 import { FileFieldsInterceptor } from "@nestjs/platform-express";
 import {
 	ApiBody,
@@ -10,7 +10,7 @@ import {
 	ApiExtraModels,
 	getSchemaPath,
 } from "@nestjs/swagger";
-import {
+import type {
 	ReferenceObject,
 	SchemaObject,
 } from "@nestjs/swagger/dist/interfaces/open-api-spec.interface";
@@ -26,9 +26,9 @@ export interface IApiFile {
 const PARAMTYPES_METADATA = "design:paramtypes";
 
 function reverseObjectKeys(
-	originalObject: Record<string, any>,
-): Record<string, any> {
-	const reversedObject: any = {};
+	originalObject: Record<string, unknown>,
+): Record<string, unknown> {
+	const reversedObject: Record<string, unknown> = {};
 	const keys = Object.keys(originalObject).reverse();
 
 	for (const key of keys) {

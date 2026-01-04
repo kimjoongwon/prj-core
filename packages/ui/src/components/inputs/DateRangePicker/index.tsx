@@ -7,7 +7,7 @@ import { observer } from "mobx-react-lite";
 import { useMemo } from "react";
 
 import {
-	DateRangePickerProps as BaseDateRangePickerProps,
+	type DateRangePickerProps as BaseDateRangePickerProps,
 	DateRangePicker as DateRangePickerComponent,
 } from "./DateRangePicker";
 

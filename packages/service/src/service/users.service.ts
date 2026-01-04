@@ -1,8 +1,46 @@
-import { UsersRepository } from "@cocrepo/repository";
-import { ForbiddenException, Injectable } from "@nestjs/common";
+import type {
+	CreateUserParams,
+	FindManyUsersParams,
+	UpdateUserParams,
+	UserStats,
+	UsersRepository,
+} from "@cocrepo/repository";
+import { HashedPassword, PlainPassword } from "@cocrepo/vo";
+import {
+	BadRequestException,
+	ForbiddenException,
+	Injectable,
+	Logger,
+	NotFoundException,
+} from "@nestjs/common";
+
+/**
+ * 회원 목록 조회 결과
+ */
+export interface GetMembersResult {
+	users: Awaited<
+		ReturnType<UsersRepository["findManyBySpaceWithFilters"]>
+	>["users"];
+	totalCount: number;
+	stats: UserStats;
+}
+
+/**
+ * 회원 관리 서비스 에러 메시지
+ */
+const UserServiceErrorMessages = {
+	USER_NOT_FOUND: "회원을 찾을 수 없습니다",
+	EMAIL_ALREADY_EXISTS: "이미 사용 중인 이메일입니다",
+	PHONE_ALREADY_EXISTS: "이미 사용 중인 전화번호입니다",
+	NAME_ALREADY_EXISTS: "이미 사용 중인 이름입니다",
+	SPACE_ACCESS_DENIED: "해당 Space에 접근 권한이 없습니다",
+	CANNOT_DELETE_SELF: "자신의 계정은 삭제할 수 없습니다",
+} as const;
 
 @Injectable()
 export class UsersService {
+	private readonly logger = new Logger(UsersService.name);
+
 	constructor(private readonly repository: UsersRepository) {}
 
 	/**
@@ -17,6 +55,158 @@ export class UsersService {
 	 */
 	findUserForAuth(email: string) {
 		return this.repository.findByEmailWithRelations(email);
+	}
+
+	/**
+	 * Space 내 회원 목록 조회
+	 * 필터링, 검색, 페이지네이션, 통계 정보를 함께 반환합니다.
+	 */
+	async getMembersBySpace(
+		params: FindManyUsersParams,
+	): Promise<GetMembersResult> {
+		this.logger.debug(`Space 내 회원 목록 조회: spaceId=${params.spaceId}`);
+
+		// 회원 목록과 통계를 병렬로 조회
+		const [{ users, totalCount }, stats] = await Promise.all([
+			this.repository.findManyBySpaceWithFilters(params),
+			this.repository.getStatsBySpace(params.spaceId),
+		]);
+
+		return {
+			users,
+			totalCount,
+			stats,
+		};
+	}
+
+	/**
+	 * Space 내 회원 상세 조회
+	 * 해당 Space에 접근 권한이 있는 회원만 조회 가능합니다.
+	 */
+	async getMemberDetailForSpace(userId: string, spaceId: string) {
+		this.logger.debug(
+			`Space 내 회원 상세 조회: userId=${userId}, spaceId=${spaceId}`,
+		);
+
+		const user = await this.repository.findByIdForSpace(userId, spaceId);
+
+		if (!user) {
+			throw new NotFoundException(UserServiceErrorMessages.USER_NOT_FOUND);
+		}
+
+		return user;
+	}
+
+	/**
+	 * 회원 등록
+	 * 중복 검사 후 회원을 생성합니다.
+	 */
+	async createMemberForSpace(
+		params: Omit<CreateUserParams, "password"> & { password: string },
+	) {
+		this.logger.debug(`회원 등록: email=${params.email}`);
+
+		// 중복 검사
+		await this.validateUniqueness(params.email, params.phone, params.name);
+
+		// 비밀번호 해싱
+		const plainPassword = PlainPassword.create(params.password);
+		const hashedPassword = await HashedPassword.fromPlain(plainPassword);
+
+		// 회원 생성
+		const user = await this.repository.create({
+			...params,
+			password: hashedPassword.value,
+		});
+
+		return user;
+	}
+
+	/**
+	 * 회원 수정
+	 * Space 권한 검증 후 회원 정보를 수정합니다.
+	 */
+	async updateMemberForSpace(
+		userId: string,
+		spaceId: string,
+		params: UpdateUserParams,
+	) {
+		this.logger.debug(`회원 수정: userId=${userId}, spaceId=${spaceId}`);
+
+		// 회원 존재 및 Space 접근 권한 확인
+		const existingUser = await this.repository.findByIdForSpace(
+			userId,
+			spaceId,
+		);
+
+		if (!existingUser) {
+			throw new NotFoundException(UserServiceErrorMessages.USER_NOT_FOUND);
+		}
+
+		// 중복 검사 (변경된 필드만)
+		if (params.email && params.email !== existingUser.email) {
+			const emailExists = await this.repository.existsByEmail(params.email);
+			if (emailExists) {
+				throw new BadRequestException(
+					UserServiceErrorMessages.EMAIL_ALREADY_EXISTS,
+				);
+			}
+		}
+
+		if (params.phone && params.phone !== existingUser.phone) {
+			const phoneExists = await this.repository.existsByPhone(params.phone);
+			if (phoneExists) {
+				throw new BadRequestException(
+					UserServiceErrorMessages.PHONE_ALREADY_EXISTS,
+				);
+			}
+		}
+
+		if (params.name && params.name !== existingUser.name) {
+			const nameExists = await this.repository.existsByName(params.name);
+			if (nameExists) {
+				throw new BadRequestException(
+					UserServiceErrorMessages.NAME_ALREADY_EXISTS,
+				);
+			}
+		}
+
+		// 회원 수정
+		const updatedUser = await this.repository.update(userId, params);
+
+		return updatedUser;
+	}
+
+	/**
+	 * 회원 삭제 (Soft Delete)
+	 * Space 권한 검증 후 회원을 삭제합니다.
+	 */
+	async deleteMemberForSpace(
+		userId: string,
+		spaceId: string,
+		currentUserId: string,
+	) {
+		this.logger.debug(`회원 삭제: userId=${userId}, spaceId=${spaceId}`);
+
+		// 자기 자신 삭제 방지
+		if (userId === currentUserId) {
+			throw new BadRequestException(
+				UserServiceErrorMessages.CANNOT_DELETE_SELF,
+			);
+		}
+
+		// 회원 존재 및 Space 접근 권한 확인
+		const existingUser = await this.repository.findByIdForSpace(
+			userId,
+			spaceId,
+		);
+
+		if (!existingUser) {
+			throw new NotFoundException(UserServiceErrorMessages.USER_NOT_FOUND);
+		}
+
+		// 회원 삭제 (Soft Delete)
+		await this.repository.softDelete(userId);
 	}
 
 	/**
@@ -52,5 +242,38 @@ export class UsersService {
 		const updatedSpaceId = await this.repository.updateSpaceId(userId, spaceId);
 
 		return updatedSpaceId;
+	}
+
+	/**
+	 * 고유성 검증 (이메일, 전화번호, 이름)
+	 */
+	private async validateUniqueness(
+		email: string,
+		phone: string,
+		name: string,
+	): Promise<void> {
+		const [emailExists, phoneExists, nameExists] = await Promise.all([
+			this.repository.existsByEmail(email),
+			this.repository.existsByPhone(phone),
+			this.repository.existsByName(name),
+		]);
+
+		if (emailExists) {
+			throw new BadRequestException(
+				UserServiceErrorMessages.EMAIL_ALREADY_EXISTS,
+			);
+		}
+
+		if (phoneExists) {
+			throw new BadRequestException(
+				UserServiceErrorMessages.PHONE_ALREADY_EXISTS,
+			);
+		}
+
+		if (nameExists) {
+			throw new BadRequestException(
+				UserServiceErrorMessages.NAME_ALREADY_EXISTS,
+			);
+		}
 	}
 }

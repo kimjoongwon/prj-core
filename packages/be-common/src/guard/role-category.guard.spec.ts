@@ -1,7 +1,7 @@
 import { RoleCategoryNames } from "@cocrepo/enum";
-import { ExecutionContext, ForbiddenException } from "@nestjs/common";
+import { type ExecutionContext, ForbiddenException } from "@nestjs/common";
 import { Reflector } from "@nestjs/core";
-import { Test, TestingModule } from "@nestjs/testing";
+import { Test, type TestingModule } from "@nestjs/testing";
 import { RoleCategoryGuard } from "./role-category.guard";
 
 describe("RoleCategoryGuard", () => {

@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/react";
 import { Section } from "./Section";
 
-const meta = {
+const meta: Meta<typeof Section> = {
 	title: "UI/Section",
 	component: Section,
 	parameters: {
@@ -20,7 +20,7 @@ const meta = {
 			description: "The content to display inside the section",
 		},
 	},
-} satisfies Meta<typeof Section>;
+};
 
 export default meta;
 type Story = StoryObj<typeof meta>;

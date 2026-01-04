@@ -1,10 +1,10 @@
 import { applyDecorators } from "@nestjs/common";
-import { type ApiPropertyOptions } from "@nestjs/swagger";
+import type { ApiPropertyOptions } from "@nestjs/swagger";
 import { IsEnum, NotEquals } from "class-validator";
 import { ApiEnumProperty } from "../../property.decorators";
 import { ToArray } from "../../transform.decorators";
 import { IsNullable, IsUndefinable } from "../../validator.decorators";
-import { type BaseFieldOptions } from "../base/field-options.types";
+import type { BaseFieldOptions } from "../base/field-options.types";
 
 /**
  * Enum 필드 데코레이터

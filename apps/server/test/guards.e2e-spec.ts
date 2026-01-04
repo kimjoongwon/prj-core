@@ -1,5 +1,5 @@
-import { INestApplication, ValidationPipe } from "@nestjs/common";
-import { Test, TestingModule } from "@nestjs/testing";
+import { type INestApplication, ValidationPipe } from "@nestjs/common";
+import { Test, type TestingModule } from "@nestjs/testing";
 import request from "supertest";
 import { AppModule } from "../src/module/app.module";
 import { GuardTestController } from "./mock-controllers/tenant-injection-test.controller";

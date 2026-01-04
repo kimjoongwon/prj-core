@@ -1,14 +1,14 @@
 import { ResponseEntity } from "@cocrepo/entity";
 import { Prisma } from "@cocrepo/prisma";
 import {
-	ArgumentsHost,
+	type ArgumentsHost,
 	Catch,
 	HttpException,
 	HttpStatus,
 	Logger,
 } from "@nestjs/common";
 import { BaseExceptionFilter } from "@nestjs/core";
-import { Request } from "express";
+import type { Request } from "express";
 
 @Catch()
 export class AllExceptionsFilter extends BaseExceptionFilter {

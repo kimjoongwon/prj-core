@@ -15,7 +15,7 @@ export interface Menu {
  */
 export const ADMIN_PATHS = {
 	// 대시보드
-	DASHBOARD: "/",
+	DASHBOARD: "/dashboard",
 
 	// 회원
 	MEMBERS: "/members",
@@ -56,6 +56,7 @@ export const ADMIN_PATHS = {
 	SETTINGS_GROUND: "/settings/ground",
 	SETTINGS_ADMINS: "/settings/admins",
 	SETTINGS_PERMISSIONS: "/settings/permissions",
+	SETTINGS_COLUMNS: "/settings/columns",
 	SETTINGS_SYSTEM: "/settings/system",
 
 	// 기타
@@ -118,6 +119,7 @@ export const ADMIN_SUBJECTS = {
 	MENU_SETTINGS_GROUND: "menu:settings:ground",
 	MENU_SETTINGS_ADMINS: "menu:settings:admins",
 	MENU_SETTINGS_PERMISSIONS: "menu:settings:permissions",
+	MENU_SETTINGS_COLUMNS: "menu:settings:columns",
 	MENU_SETTINGS_SYSTEM: "menu:settings:system",
 } as const;
 
@@ -339,6 +341,12 @@ export const ADMIN_MENUS: Menu[] = [
 				label: "권한 관리",
 				path: ADMIN_PATHS.SETTINGS_PERMISSIONS,
 				subject: ADMIN_SUBJECTS.MENU_SETTINGS_PERMISSIONS,
+			},
+			{
+				id: "settings-columns",
+				label: "컬럼 가시성 관리",
+				path: ADMIN_PATHS.SETTINGS_COLUMNS,
+				subject: ADMIN_SUBJECTS.MENU_SETTINGS_COLUMNS,
 			},
 			{
 				id: "settings-system",

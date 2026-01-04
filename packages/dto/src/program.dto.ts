@@ -5,7 +5,7 @@ import {
 	StringFieldOptional,
 	UUIDField,
 } from "@cocrepo/decorator";
-import { Program as ProgramEntity } from "@cocrepo/prisma";
+import type { Program as ProgramEntity } from "@cocrepo/prisma";
 import { AbstractDto } from "./abstract.dto";
 import { RoutineDto } from "./routine.dto";
 import { SessionDto } from "./session.dto";

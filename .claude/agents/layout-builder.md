@@ -849,7 +849,60 @@ packages/ui/src/components/
 
 ---
 
-## 10. 체크리스트
+## 10. 스타일링 규칙 (Critical)
+
+**커스텀 className 사용 금지 - HeroUI와 기존 컴포넌트만 사용**
+
+> **예외**: `components/ui/`와 `components/inputs/`에서만 커스텀 className이 허용됩니다. Layout 컴포넌트에서는 금지입니다.
+
+Layout 컴포넌트 내부에서도 직접 Tailwind className을 작성하지 않습니다.
+
+```tsx
+// ❌ 금지 - 커스텀 className 직접 사용
+export const Header = ({ left, center, right }: HeaderProps) => {
+  return (
+    <header className="border-b">
+      <div className="flex items-center h-16 px-6">
+        <div className="flex-shrink-0">{left}</div>
+        <div className="flex-1 mx-6">{center}</div>
+        <div className="flex-shrink-0">{right}</div>
+      </div>
+    </header>
+  );
+};
+
+// ✅ 올바른 패턴 - 레이아웃 컴포넌트와 HeroUI 조합
+export const Header = ({ left, center, right }: HeaderProps) => {
+  return (
+    <header>
+      <HStack align="center" className="h-16 px-6 border-b">
+        <div>{left}</div>
+        <Spacer />
+        <div>{center}</div>
+        <Spacer />
+        <div>{right}</div>
+      </HStack>
+    </header>
+  );
+};
+```
+
+**Layout 컴포넌트 내부 스타일링 원칙:**
+
+| 허용 | 금지 |
+|------|------|
+| `<HStack>`, `<VStack>` 레이아웃 컴포넌트 | `className="flex items-center"` |
+| `<Spacer />` 간격 컴포넌트 | `className="gap-4 mt-2"` |
+| HeroUI Divider 등 | `className="border-b"` |
+
+**자주 사용되는 레이아웃 패턴 발견 시:**
+1. 기존 레이아웃 컴포넌트(HStack, VStack, Spacer)로 해결 가능한지 확인
+2. 해결 불가능하면 **UI 컴포넌트 빌더**에게 새 레이아웃 컴포넌트 생성 요청
+3. 생성된 컴포넌트를 Layout에서 활용
+
+---
+
+## 11. 체크리스트
 
 ### Layout 컴포넌트 설계 시
 

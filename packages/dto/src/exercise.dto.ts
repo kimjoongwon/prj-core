@@ -6,7 +6,7 @@ import {
 	UUIDField,
 	UUIDFieldOptional,
 } from "@cocrepo/decorator";
-import { Exercise as ExcerciesEntity } from "@cocrepo/prisma";
+import type { Exercise as ExcerciesEntity } from "@cocrepo/prisma";
 import { AbstractDto } from "./abstract.dto";
 import { TaskDto } from "./task.dto";
 

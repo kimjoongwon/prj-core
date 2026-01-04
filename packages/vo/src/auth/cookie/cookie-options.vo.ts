@@ -1,6 +1,6 @@
 import { ValueObject } from "../../common/value-object.base";
 import { VoValidationError } from "../../errors/vo.error";
-import { JwtExpiration } from "./jwt-expiration.vo";
+import type { JwtExpiration } from "./jwt-expiration.vo";
 
 /**
  * Express CookieOptions 호환 인터페이스

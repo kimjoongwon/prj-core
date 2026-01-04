@@ -1,9 +1,9 @@
 import { Token } from "@cocrepo/constant";
 import { NestFactory } from "@nestjs/core";
-import { NestExpressApplication } from "@nestjs/platform-express";
+import type { NestExpressApplication } from "@nestjs/platform-express";
 import {
 	DocumentBuilder,
-	SwaggerDocumentOptions,
+	type SwaggerDocumentOptions,
 	SwaggerModule,
 } from "@nestjs/swagger";
 import cookieParser from "cookie-parser";

@@ -1,9 +1,9 @@
-import { Task as TaskEntity } from "@cocrepo/prisma";
+import type { Task as TaskEntity } from "@cocrepo/prisma";
 import { AbstractEntity } from "./abstract.entity";
-import { Activity } from "./activity.entity";
-import { Exercise } from "./exercise.entity";
-import { Space } from "./space.entity";
-import { User } from "./user.entity";
+import type { Activity } from "./activity.entity";
+import type { Exercise } from "./exercise.entity";
+import type { Space } from "./space.entity";
+import type { User } from "./user.entity";
 
 export class Task extends AbstractEntity implements TaskEntity {
 	spaceId!: string;

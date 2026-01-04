@@ -9,9 +9,10 @@
  * class UserDto { constructor(name: string) {} }
  * const UserCtor: Constructor<UserDto, [string]> = UserDto;
  */
-export type Constructor<T = any, Arguments extends unknown[] = any[]> = new (
-	...arguments_: Arguments
-) => T;
+export type Constructor<
+	T = unknown,
+	Arguments extends unknown[] = unknown[],
+> = new (...arguments_: Arguments) => T;
 
 /**
  * @deprecated DtoTransformInterceptor가 @ApiResponseEntity 데코레이터의 메타데이터를 사용하여

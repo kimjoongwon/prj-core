@@ -1,7 +1,7 @@
-import { RoleClassification as RoleClassificationEntity } from "@cocrepo/prisma";
+import type { RoleClassification as RoleClassificationEntity } from "@cocrepo/prisma";
 import { AbstractEntity } from "./abstract.entity";
-import { Category } from "./category.entity";
-import { Role } from "./role.entity";
+import type { Category } from "./category.entity";
+import type { Role } from "./role.entity";
 
 export class RoleClassification
 	extends AbstractEntity

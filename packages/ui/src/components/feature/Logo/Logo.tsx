@@ -39,7 +39,10 @@ export const AppLogo = observer(
 		return (
 			<Button
 				variant="light"
-				className={cn("flex items-center gap-2 p-0 font-bold text-xl", className)}
+				className={cn(
+					"flex items-center gap-2 p-0 font-bold text-xl",
+					className,
+				)}
 				onPress={handleClickLogo}
 			>
 				{icon && renderLucideIcon(icon, "h-5 w-5", 20)}

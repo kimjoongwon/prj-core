@@ -39,6 +39,7 @@ export class MenuStore {
 	private _abilityChecker: AbilityChecker | null = null;
 	private _onNavigate: ((path: string) => void) | null = null;
 	private _expandedMenuIds: Set<string> = new Set();
+	private _currentPath: string = "";
 
 	/**
 	 * MenuStore 생성
@@ -178,6 +179,12 @@ export class MenuStore {
 	 * 현재 경로를 기반으로 메뉴 활성화 상태 설정
 	 */
 	setCurrentPath(path: string): void {
+		// 동일한 경로면 무시 (중복 호출 방지)
+		if (this._currentPath === path) {
+			return;
+		}
+		this._currentPath = path;
+
 		this.resetAllActive();
 
 		for (const menu of this._items) {
@@ -216,6 +223,7 @@ export class MenuStore {
 		this.resetAllActive();
 		menu.setActive(true);
 		this._selectedMenu = menu;
+		this._expandedMenuIds.add(menu.id);
 
 		// 첫 번째 하위 메뉴로 이동
 		const firstPath = menu.firstChildPath;
@@ -225,6 +233,8 @@ export class MenuStore {
 				firstChild.setActive(true);
 				this._selectedSubMenu = firstChild;
 			}
+			// 현재 경로 업데이트 (setCurrentPath 중복 호출 방지)
+			this._currentPath = firstPath;
 			this._onNavigate(firstPath);
 		}
 	}
@@ -233,16 +243,41 @@ export class MenuStore {
 	 * 하위 메뉴 선택
 	 */
 	selectSubMenu(subMenuId: string): void {
-		if (!this._selectedMenu) return;
+		// _selectedMenu가 없으면 부모 메뉴 자동 탐색
+		let parentMenu = this._selectedMenu;
+		let subMenu: Menu | undefined;
 
-		const subMenu = this._selectedMenu.findChildById(subMenuId);
-		if (!subMenu) return;
+		if (!parentMenu) {
+			// 모든 메뉴에서 subMenuId를 가진 부모 찾기
+			for (const menu of this._items) {
+				subMenu = menu.findChildById(subMenuId);
+				if (subMenu) {
+					parentMenu = menu;
+					break;
+				}
+			}
+		} else {
+			subMenu = parentMenu.findChildById(subMenuId);
+		}
 
-		this._selectedMenu.resetChildrenActive();
+		if (!parentMenu || !subMenu) return;
+
+		// 이전 활성 상태 초기화
+		this.resetAllActive();
+
+		// 부모 메뉴 활성화
+		parentMenu.setActive(true);
+		this._selectedMenu = parentMenu;
+		this._expandedMenuIds.add(parentMenu.id);
+
+		// 하위 메뉴 활성화
 		subMenu.setActive(true);
 		this._selectedSubMenu = subMenu;
 
+		// 네비게이션
 		if (subMenu.path && this._onNavigate) {
+			// 현재 경로 업데이트 (setCurrentPath 중복 호출 방지)
+			this._currentPath = subMenu.path;
 			this._onNavigate(subMenu.path);
 		}
 	}

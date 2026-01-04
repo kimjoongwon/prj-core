@@ -1,7 +1,7 @@
 import { createLogger, navigateTo } from "@cocrepo/toolkit";
 import { isAxiosError } from "axios";
 import { makeAutoObservable } from "mobx";
-import { RootStore } from "./Store";
+import type { RootStore } from "./Store";
 
 const logger = createLogger("[AuthStore]");
 
@@ -51,7 +51,7 @@ export class AuthStore {
 		return Promise.reject(error);
 	}
 
-	async logout(logoutApi?: () => Promise<any>) {
+	async logout(logoutApi?: () => Promise<unknown>) {
 		try {
 			this.isLoggingOut = true;
 			logger.info("로그아웃 처리 중...");

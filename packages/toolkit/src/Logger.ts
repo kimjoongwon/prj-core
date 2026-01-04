@@ -20,7 +20,7 @@
  */
 
 export interface LogData {
-	[key: string]: any;
+	[key: string]: unknown;
 }
 
 export interface Logger {

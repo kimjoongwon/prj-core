@@ -1,5 +1,4 @@
 import type { Meta, StoryObj } from "@storybook/react";
-import { useState } from "react";
 import { ListboxSelect } from "./ListboxSelect";
 
 const meta: Meta<typeof ListboxSelect> = {
@@ -26,10 +25,7 @@ export const Default: Story = {
 		title: "Select an option",
 		options,
 		selectionMode: "single",
-	},
-	render: (args) => {
-		const [value, setValue] = useState("1");
-		return <ListboxSelect {...args} value={value} onChange={setValue} />;
+		defaultSelectedKeys: ["1"],
 	},
 };
 
@@ -38,9 +34,6 @@ export const MultiSelect: Story = {
 		title: "Select multiple options",
 		options,
 		selectionMode: "multiple",
-	},
-	render: (args) => {
-		const [value, setValue] = useState(["1", "3"]);
-		return <ListboxSelect {...args} value={value} onChange={setValue} />;
+		defaultSelectedKeys: ["1", "3"],
 	},
 };

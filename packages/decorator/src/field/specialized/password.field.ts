@@ -1,7 +1,7 @@
 import { applyDecorators } from "@nestjs/common";
-import { type ApiPropertyOptions } from "@nestjs/swagger";
+import type { ApiPropertyOptions } from "@nestjs/swagger";
 import { IsPassword } from "../../validator.decorators";
-import { type StringFieldOptions } from "../base/field-options.types";
+import type { StringFieldOptions } from "../base/field-options.types";
 import { createOptionalField } from "../base/optional-field.factory";
 import { StringField } from "../primitives/string.field";
 

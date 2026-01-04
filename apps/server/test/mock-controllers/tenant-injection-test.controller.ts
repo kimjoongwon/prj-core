@@ -15,7 +15,7 @@ import { Controller, Get, HttpStatus, Query, UseGuards } from "@nestjs/common";
 @Controller("api/v1/test-tenant")
 export class TenantInjectionTestController {
 	@Get("info")
-	async getTenantInfo(@Query() query: any) {
+	async getTenantInfo(@Query() query: Record<string, unknown>) {
 		return new ResponseEntity(HttpStatus.OK, "테넌트 정보", {
 			tenantId: query.tenantId,
 		});
@@ -30,7 +30,7 @@ export class TenantInjectionTestController {
 export class GuardTestController {
 	// 기본적으로 인증 필요 (전역 JWT Guard 적용)
 	@Get("debug-query")
-	async debugQuery(@Query() query: any) {
+	async debugQuery(@Query() query: Record<string, unknown>) {
 		return new ResponseEntity(HttpStatus.OK, "Debug query parameters", {
 			receivedQuery: query,
 			hasTenantId: !!query.tenantId,

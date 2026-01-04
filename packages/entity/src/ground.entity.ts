@@ -1,6 +1,6 @@
-import { Ground as GroundEntity } from "@cocrepo/prisma";
+import type { Ground as GroundEntity } from "@cocrepo/prisma";
 import { AbstractEntity } from "./abstract.entity";
-import { Space } from "./space.entity";
+import type { Space } from "./space.entity";
 
 export class Ground extends AbstractEntity implements GroundEntity {
 	name!: string;

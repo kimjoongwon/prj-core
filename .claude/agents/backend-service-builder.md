@@ -35,16 +35,19 @@ tools: Read, Write, Grep, Bash
    - **Repository**: 데이터 접근 (Prisma)
 
 3. **의존성 주입 활용**
-   - 생성자 주입 사용
+   - 생성자 주입 사용 (직접 주입)
    - 글로벌 모듈의 서비스는 `ClsServiceManager` 패턴 사용 (외부 패키지)
 
    ```typescript
-   // 앱 내부 서비스
+   // 앱 내부 서비스 - 직접 주입 (토큰 사용 금지)
    constructor(
      private readonly usersService: UsersService,
-     @Inject(PRISMA_SERVICE_TOKEN)
-     private readonly prisma: PrismaService,
+     private readonly prisma: PrismaService,  // 직접 주입
    ) {}
+
+   // ❌ 금지 - 토큰 사용
+   // @Inject(PRISMA_SERVICE_TOKEN)
+   // private readonly prisma: PrismaService,
 
    // 외부 패키지에서 글로벌 서비스 접근
    private get cls() {
@@ -162,8 +165,7 @@ export class SomeFacade {
   constructor(
     private readonly serviceA: ServiceA,
     private readonly serviceB: ServiceB,
-    @Inject(PRISMA_SERVICE_TOKEN)
-    private readonly prisma: PrismaService
+    private readonly prisma: PrismaService,  // 직접 주입
   ) {}
 
   /**

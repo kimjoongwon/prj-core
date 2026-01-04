@@ -1,12 +1,12 @@
-import { UserDto } from "@cocrepo/dto";
+import type { UserDto } from "@cocrepo/dto";
 import {
-	CanActivate,
-	ExecutionContext,
+	type CanActivate,
+	type ExecutionContext,
 	ForbiddenException,
 	Injectable,
 	UnauthorizedException,
 } from "@nestjs/common";
-import { Reflector } from "@nestjs/core";
+import type { Reflector } from "@nestjs/core";
 import { isEmpty } from "lodash";
 
 @Injectable()

@@ -2,13 +2,17 @@
 
 import {
 	AppLogo,
-	SpaceSelector,
+	BackButton,
+	BottomTab,
 	Header,
 	PageLayout,
 	SideNav,
 	SpaceAlert,
+	SpaceSelector,
+	SubMenuList,
 	UserMenu,
 } from "@cocrepo/ui";
+import { useState } from "react";
 import { useSpaceGuard } from "@/hooks";
 
 /**
@@ -21,7 +25,7 @@ import { useSpaceGuard } from "@/hooks";
  *     - PageLayout (여기) - header, leftAside, rightAside, footer
  *         - SectionLayout (하위 layout.tsx들) - top, left, right, bottom
  *
- * 레이아웃 구조:
+ * 데스크톱 레이아웃 (>= 768px):
  * +------------------+----------------------------------------------------------+
  * |      [Logo]      |                                   [Space▼] [Avatar▼]    |
  * +------------------+----------------------------------------------------------+
@@ -31,9 +35,25 @@ import { useSpaceGuard } from "@/hooks";
  * |                  |                                                          |
  * +------------------+----------------------------------------------------------+
  *
+ * 모바일 레이아웃 (< 768px):
+ * +------------------------------------------------------------------------+
+ * | [뒤로] [Logo]                              [Space▼] [Avatar▼]         |
+ * +------------------------------------------------------------------------+
+ * |                                                                        |
+ * |                        children (Main)                                 |
+ * |                        또는                                            |
+ * |                     SubMenuList (전체 화면)                            |
+ * |                                                                        |
+ * +------------------------------------------------------------------------+
+ * | [대시보드] [회원] [예약] [알림] [설정]    <- BottomTab                  |
+ * +------------------------------------------------------------------------+
+ *
  * Feature 컴포넌트가 자체적으로 비즈니스 로직을 처리합니다:
  * - AppLogo: 클릭 시 첫 번째 메뉴로 이동 (MenuStore 사용)
- * - SideNav: 2depth 트리 메뉴 표시 및 선택 (MenuStore 사용)
+ * - SideNav: 2depth 트리 메뉴 표시 및 선택 (MenuStore 사용) - 데스크톱 전용
+ * - BottomTab: 1depth 메뉴 표시 (MenuStore 사용) - 모바일 전용
+ * - SubMenuList: 2depth 메뉴 표시 (MenuStore 사용) - 모바일 전용
+ * - BackButton: 서브메뉴에서 뒤로가기 - 모바일 전용
  * - SpaceSelector: Space 변경 기능 (PersistStore 사용)
  * - UserMenu: 사용자 정보 표시, 로그아웃 (AuthStore, PersistStore 사용)
  */
@@ -43,12 +63,45 @@ export default function AdminLayout({
 	children: React.ReactNode;
 }) {
 	const { showAlert, handleConfirm, handleDismiss } = useSpaceGuard();
+	const [showSubMenuList, setShowSubMenuList] = useState(false);
+
+	// BottomTab 선택 핸들러
+	const handleSelectTab = (_menuId: string, hasChildren: boolean) => {
+		if (hasChildren) {
+			// 하위 메뉴가 있으면 SubMenuList 표시
+			setShowSubMenuList(true);
+		} else {
+			// 하위 메뉴 없으면 SubMenuList 숨김
+			setShowSubMenuList(false);
+		}
+	};
+
+	// SubMenuList에서 하위 메뉴 선택 시
+	const handleSelectSubMenu = () => {
+		// 하위 메뉴 선택 후 SubMenuList 닫기
+		setShowSubMenuList(false);
+	};
+
+	// SubMenuList에서 뒤로가기
+	const handleBackFromSubMenu = () => {
+		setShowSubMenuList(false);
+	};
 
 	return (
 		<PageLayout
 			header={
 				<Header
-					left={<AppLogo icon="LayoutGrid" text="Admin" />}
+					left={
+						<>
+							{/* 모바일에서 SubMenuList 표시 시 뒤로가기 버튼 */}
+							{showSubMenuList && (
+								<div className="md:hidden">
+									<BackButton onClick={handleBackFromSubMenu} iconOnly />
+								</div>
+							)}
+							<AppLogo icon="LayoutGrid" text="Admin" />
+						</>
+					}
 					right={
 						<>
 							<SpaceSelector />
@@ -60,6 +113,12 @@ export default function AdminLayout({
 			leftAside={<SideNav />}
 		>
 			{children}
+
+			{/* 모바일: SubMenuList (전체 화면) */}
+			{showSubMenuList && <SubMenuList onSelectSubMenu={handleSelectSubMenu} />}
+
+			{/* 모바일: BottomTab (하단 탭 네비게이션) */}
+			<BottomTab onSelectTab={handleSelectTab} />
 
 			{/* Space 미선택 Alert */}
 			{showAlert && (

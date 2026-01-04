@@ -1,12 +1,12 @@
-import {
+import type {
 	RecurringDayOfWeek,
 	RepeatCycleTypes,
 	Session as SessionEntity,
 	SessionTypes,
 } from "@cocrepo/prisma";
 import { AbstractEntity } from "./abstract.entity";
-import { Program } from "./program.entity";
-import { Timeline } from "./timeline.entity";
+import type { Program } from "./program.entity";
+import type { Timeline } from "./timeline.entity";
 
 export class Session extends AbstractEntity implements SessionEntity {
 	type!: SessionTypes;

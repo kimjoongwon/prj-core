@@ -38,7 +38,7 @@ export class AbstractEntity<DTO = unknown, O = never>
 		return plainToInstance(
 			this.dtoClass,
 			this,
-			options as any,
+			options as ClassTransformOptions,
 		) as unknown as DTO;
 	}
 }

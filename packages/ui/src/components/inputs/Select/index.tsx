@@ -1,6 +1,6 @@
 import { useFormField } from "@cocrepo/hook";
 import { tools } from "@cocrepo/toolkit";
-import { MobxProps } from "@cocrepo/type";
+import type { MobxProps } from "@cocrepo/type";
 import { observer } from "mobx-react-lite";
 import {
 	Select as BaseSelect,
@@ -14,9 +14,9 @@ export interface SelectProps<T>
 export const Select = observer(<T extends object>(props: SelectProps<T>) => {
 	const { state, path, options = [], ...rest } = props;
 
-	const _options = tools.cloneDeep(options);
+	const _options = tools.clone(options);
 
-	const value = _options?.find(
+	const value = (_options as Array<{ value: string }>)?.find(
 		(option) => option.value === tools.get(state, path),
 	)?.value;
 

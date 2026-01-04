@@ -184,11 +184,105 @@ export type { CommentListProps } from "./CommentList";
 
 ---
 
-## 6. 체크리스트
+## 6. 스타일링 규칙 (Critical)
+
+**커스텀 className 사용 금지 - HeroUI와 기존 컴포넌트만 사용**
+
+> **예외**: `components/ui/`와 `components/inputs/`에서만 커스텀 className이 허용됩니다. Feature 컴포넌트에서는 금지입니다.
+
+Feature 컴포넌트 내부에서도 직접 Tailwind className을 작성하지 않습니다.
+
+```tsx
+// ❌ 금지 - 커스텀 className 직접 사용
+export const UserMenu = observer(() => {
+  return (
+    <div className="flex items-center gap-2">
+      <span className="text-sm font-medium">{user.name}</span>
+      <button className="px-4 py-2 rounded-lg bg-danger text-white">
+        로그아웃
+      </button>
+    </div>
+  );
+});
+
+// ✅ 올바른 패턴 - HeroUI와 레이아웃 컴포넌트 사용
+export const UserMenu = observer(() => {
+  return (
+    <HStack gap={2} align="center">
+      <Text size="sm" weight="medium">{user.name}</Text>
+      <Button color="danger" onPress={handleLogout}>
+        로그아웃
+      </Button>
+    </HStack>
+  );
+});
+```
+
+**Feature 컴포넌트 스타일링 원칙:**
+
+| 허용 | 금지 |
+|------|------|
+| HeroUI 컴포넌트 (Button, Avatar, Dropdown 등) | 직접 Tailwind className 작성 |
+| `<HStack>`, `<VStack>`, `<Spacer />` 레이아웃 컴포넌트 | `className="flex gap-2 mt-4"` |
+| Widget 컴포넌트 조합 | inline style (`style={{...}}`) |
+
+**자주 사용되는 스타일 패턴 발견 시:**
+1. HeroUI에서 해당 스타일을 지원하는 컴포넌트가 있는지 확인
+2. 기존 UI/Widget 컴포넌트에서 해결 가능한지 확인
+3. 해결 불가능하면 **UI 컴포넌트 빌더** 또는 **Widget 빌더**에게 새 컴포넌트 생성 요청
+4. 생성된 컴포넌트를 Feature에서 활용
+
+---
+
+## 7. 라이브러리 타입 기반 설계 (Critical)
+
+**라이브러리 컴포넌트를 사용할 때는 반드시 기존 라이브러리 타입을 기반으로 Props를 설계합니다.**
+
+```tsx
+// ✅ 올바른 패턴 - 라이브러리 타입 상속
+import { Dropdown, DropdownProps } from "@heroui/react";
+
+// 라이브러리 타입 기반으로 확장
+export interface UserMenuProps extends Omit<DropdownProps, "children"> {
+  onLogout?: () => void;
+  onProfileClick?: () => void;
+}
+
+export const UserMenu = observer(({ onLogout, onProfileClick, ...rest }: UserMenuProps) => {
+  const authStore = useAuthStore();
+
+  return (
+    <Dropdown {...rest}>
+      {/* Feature 로직 */}
+    </Dropdown>
+  );
+});
+```
+
+```tsx
+// ❌ 금지 - 라이브러리 타입 무시
+export interface UserMenuProps {
+  onLogout?: () => void;
+  // Dropdown이 지원하는 placement, isOpen 등 다른 props 누락
+}
+```
+
+**타입 설계 원칙:**
+
+| 패턴 | 사용 시점 | 예시 |
+|------|----------|------|
+| `extends Omit<LibProps, 'key'>` | 일부 props 고정/재정의 | UserMenu (children 고정) |
+| `extends LibProps` | 모든 props 전달 허용 | SearchBar |
+| 자체 Props + spread | 내부에서 라이브러리 사용 | `...rest`로 전달 |
+
+---
+
+## 8. 체크리스트
 
 - [ ] `packages/ui/src/components/feature/[Name]/` 에 생성
 - [ ] API 호출은 `@cocrepo/api` 사용
 - [ ] 라우터 이동은 `next/navigation`의 `useRouter` 사용
+- [ ] **라이브러리 타입 기반 Props 설계** (extends/Omit/Pick)
 - [ ] 복잡한 로직은 `use[Name].ts`로 분리
 - [ ] observer로 감싸기 (MobX 사용 시)
 - [ ] 로딩/에러 상태 처리
