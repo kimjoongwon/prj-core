@@ -77,6 +77,30 @@ rootStore.persistStore = new PersistStore({
 });
 ```
 
+## 백엔드 개발 규칙
+
+### DTO 위치 규칙
+
+- **DTO는 반드시 `packages/dto`에 위치**
+- ❌ `apps/server/src/module/**/dto/` 에 DTO 생성 금지
+- ✅ `packages/dto/src/` 에 DTO 생성
+- Controller에서는 `@cocrepo/dto`에서 import
+
+```typescript
+// ❌ 금지 - 서버 모듈 내 DTO
+import { CreateAbilityDto } from "./dto";
+
+// ✅ 권장 - 패키지에서 import
+import { CreateAbilityDto, AbilityResponseDto } from "@cocrepo/dto";
+```
+
+### 레이어 분리 규칙
+
+- **Controller**: 라우팅, DTO 검증만 담당
+- **Facade**: 여러 Service 조합 (Prisma 직접 호출 금지)
+- **Service**: 단일 도메인 로직 (Repository를 통해서만 데이터 접근)
+- **Repository**: Prisma 쿼리 작성
+
 ## 테스트 작성 규칙
 
 - 테스트 코드의 설명(describe, it)은 한글로 작성합니다
@@ -147,6 +171,7 @@ feat(coin): 멀티시그 지갑 서비스 초기 구현
 | | frontend-architect | React 컴포넌트 아키텍처 설계 |
 | **백엔드** | repository-builder | Prisma Repository 레이어 생성 |
 | | service-builder | NestJS Service 레이어 생성 |
+| | facade-builder | NestJS Facade 레이어 생성 (여러 Service 조합) |
 | | controller-builder | NestJS Controller 레이어 생성 |
 | | backend-architect | NestJS API 설계 |
 | | backend-service-builder | 복합 백엔드 서비스 구현 |

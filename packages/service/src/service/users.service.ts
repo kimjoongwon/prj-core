@@ -1,10 +1,4 @@
-import {
-	CreateUserParams,
-	FindManyUsersParams,
-	UpdateUserParams,
-	UserStats,
-	UsersRepository,
-} from "@cocrepo/repository";
+import { UserStats, UsersRepository } from "@cocrepo/repository";
 import { HashedPassword, PlainPassword } from "@cocrepo/vo";
 import {
 	BadRequestException,
@@ -18,9 +12,7 @@ import {
  * 회원 목록 조회 결과
  */
 export interface GetMembersResult {
-	users: Awaited<
-		ReturnType<UsersRepository["findManyBySpaceWithFilters"]>
-	>["users"];
+	users: Awaited<ReturnType<UsersRepository["findManyBySpaceId"]>>["users"];
 	totalCount: number;
 	stats: UserStats;
 }
@@ -47,28 +39,39 @@ export class UsersService {
 	 * ID로 사용자 조회 (Tenant 정보 포함)
 	 */
 	getByIdWithTenants(id: string) {
-		return this.repository.findByIdWithRelations(id);
+		return this.repository.findByIdWithTenantsAndProfiles(id);
 	}
 
 	/**
 	 * 인증용 유저 조회 (이메일 기반)
 	 */
 	findUserForAuth(email: string) {
-		return this.repository.findByEmailWithRelations(email);
+		return this.repository.findByEmailWithTenantsAndProfiles(email);
 	}
 
 	/**
 	 * Space 내 회원 목록 조회
 	 * 필터링, 검색, 페이지네이션, 통계 정보를 함께 반환합니다.
 	 */
-	async getMembersBySpace(
-		params: FindManyUsersParams,
-	): Promise<GetMembersResult> {
+	async getMembersBySpace(params: {
+		spaceId: string;
+		search?: string;
+		roles?: string[];
+		status?: "active" | "inactive" | "removed";
+		categoryId?: string;
+		groupIds?: string[];
+		createdFrom?: Date;
+		createdTo?: Date;
+		sortBy?: string;
+		sortOrder?: "asc" | "desc";
+		skip?: number;
+		take?: number;
+	}): Promise<GetMembersResult> {
 		this.logger.debug(`Space 내 회원 목록 조회: spaceId=${params.spaceId}`);
 
 		// 회원 목록과 통계를 병렬로 조회
 		const [{ users, totalCount }, stats] = await Promise.all([
-			this.repository.findManyBySpaceWithFilters(params),
+			this.repository.findManyBySpaceId(params),
 			this.repository.getStatsBySpace(params.spaceId),
 		]);
 
@@ -88,7 +91,7 @@ export class UsersService {
 			`Space 내 회원 상세 조회: userId=${userId}, spaceId=${spaceId}`,
 		);
 
-		const user = await this.repository.findByIdForSpace(userId, spaceId);
+		const user = await this.repository.findByIdAndSpaceId(userId, spaceId);
 
 		if (!user) {
 			throw new NotFoundException(UserServiceErrorMessages.USER_NOT_FOUND);
@@ -101,9 +104,16 @@ export class UsersService {
 	 * 회원 등록
 	 * 중복 검사 후 회원을 생성합니다.
 	 */
-	async createMemberForSpace(
-		params: Omit<CreateUserParams, "password"> & { password: string },
-	) {
+	async createMemberForSpace(params: {
+		name: string;
+		email: string;
+		phone: string;
+		password: string;
+		spaceId: string;
+		roleId: string;
+		categoryId?: string;
+		groupIds?: string[];
+	}) {
 		this.logger.debug(`회원 등록: email=${params.email}`);
 
 		// 중복 검사
@@ -114,7 +124,7 @@ export class UsersService {
 		const hashedPassword = await HashedPassword.fromPlain(plainPassword);
 
 		// 회원 생성
-		const user = await this.repository.create({
+		const user = await this.repository.createWithTenantsAndProfiles({
 			...params,
 			password: hashedPassword.value,
 		});
@@ -129,12 +139,18 @@ export class UsersService {
 	async updateMemberForSpace(
 		userId: string,
 		spaceId: string,
-		params: UpdateUserParams,
+		params: {
+			name?: string;
+			email?: string;
+			phone?: string;
+			categoryId?: string;
+			groupIds?: string[];
+		},
 	) {
 		this.logger.debug(`회원 수정: userId=${userId}, spaceId=${spaceId}`);
 
 		// 회원 존재 및 Space 접근 권한 확인
-		const existingUser = await this.repository.findByIdForSpace(
+		const existingUser = await this.repository.findByIdAndSpaceId(
 			userId,
 			spaceId,
 		);
@@ -172,7 +188,10 @@ export class UsersService {
 		}
 
 		// 회원 수정
-		const updatedUser = await this.repository.update(userId, params);
+		const updatedUser = await this.repository.updateWithRelations(
+			userId,
+			params,
+		);
 
 		return updatedUser;
 	}
@@ -196,7 +215,7 @@ export class UsersService {
 		}
 
 		// 회원 존재 및 Space 접근 권한 확인
-		const existingUser = await this.repository.findByIdForSpace(
+		const existingUser = await this.repository.findByIdAndSpaceId(
 			userId,
 			spaceId,
 		);
@@ -206,7 +225,7 @@ export class UsersService {
 		}
 
 		// 회원 삭제 (Soft Delete)
-		await this.repository.softDelete(userId);
+		await this.repository.removeById(userId);
 	}
 
 	/**
@@ -275,5 +294,22 @@ export class UsersService {
 				UserServiceErrorMessages.NAME_ALREADY_EXISTS,
 			);
 		}
+	}
+
+	/**
+	 * 회원가입용 사용자 생성 (Tenant, Profile 포함)
+	 * Facade에서 사용
+	 */
+	createUserForSignUp(params: {
+		name: string;
+		email: string;
+		phone: string;
+		password: string;
+		spaceId: string;
+		roleId: string;
+		nickname?: string;
+	}) {
+		this.logger.debug(`회원가입 사용자 생성: email=${params.email}`);
+		return this.repository.createWithTenantsAndProfiles(params);
 	}
 }

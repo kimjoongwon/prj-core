@@ -5,6 +5,7 @@ import {
 	ApiResponseEntity,
 	ResponseMessage,
 } from "@cocrepo/decorator";
+import { SubjectResponseDto } from "@cocrepo/dto";
 import { SubjectsService } from "@cocrepo/service";
 import {
 	Controller,
@@ -16,7 +17,6 @@ import {
 import { ApiOperation, ApiQuery, ApiTags } from "@nestjs/swagger";
 import { plainToInstance } from "class-transformer";
 import { ClsService } from "nestjs-cls";
-import { SubjectResponseDto } from "./dto";
 
 /**
  * Subjects 에러 메시지 상수

@@ -12,7 +12,30 @@ NestJS API 엔드포인트 구현 시 알아야 할 패턴과 주의사항을 �
 
 ## 하지 말아야 할 것 (Anti-patterns)
 
-### 1. Controller에서 plainToInstance 직접 호출 금지
+### 1. 서버 모듈 내 DTO 생성 금지
+
+**잘못된 예시:**
+
+```
+apps/server/src/module/abilities/dto/  ← ❌ 금지
+apps/server/src/module/users/dto/      ← ❌ 금지
+```
+
+**올바른 위치:**
+
+```
+packages/dto/src/abilities/  ← ✅ 권장
+packages/dto/src/users/      ← ✅ 권장
+```
+
+**이유:**
+- DTO는 공유 패키지 `@cocrepo/dto`에서 관리
+- Controller에서는 `import { ... } from "@cocrepo/dto"` 사용
+- 일관된 DTO 관리 및 재사용성 확보
+
+---
+
+### 2. Controller에서 plainToInstance 직접 호출 금지
 
 **잘못된 예시:**
 

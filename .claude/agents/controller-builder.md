@@ -17,6 +17,25 @@ NestJS REST Controller를 생성하는 전문가입니다.
 
 ---
 
+## 핵심 원칙
+
+### ✅ DTO는 반드시 `@cocrepo/dto`에서 import
+
+- ❌ `apps/server/src/module/**/dto/` 에 DTO 생성 금지
+- ✅ `packages/dto/src/` 에 DTO 생성 (dto-builder 에이전트 참고)
+- Controller에서는 `@cocrepo/dto`에서 import
+
+```typescript
+// ❌ 금지 - 서버 모듈 내 DTO import
+import { CreateAbilityDto } from "./dto";
+import { AbilityResponseDto } from "../abilities/dto";
+
+// ✅ 권장 - 패키지에서 import
+import { CreateAbilityDto, AbilityResponseDto } from "@cocrepo/dto";
+```
+
+---
+
 ## 파일 위치
 
 ```

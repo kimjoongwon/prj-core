@@ -12,7 +12,21 @@ Request/Response DTO 클래스를 생성하는 전문가입니다.
 
 ### ✅ 반드시 지켜야 할 규칙
 
-1. **@cocrepo/decorator 필드 데코레이터 사용**
+1. **DTO는 반드시 `packages/dto`에 위치**
+   - ❌ `apps/server/src/module/**/dto/` 에 DTO 생성 금지
+   - ✅ `packages/dto/src/` 에 DTO 생성
+   - Controller에서는 `@cocrepo/dto`에서 import
+
+   ```typescript
+   // ❌ 금지 - 서버 모듈 내 DTO
+   import { CreateAbilityDto } from "./dto";
+   import { AbilityResponseDto } from "../abilities/dto";
+
+   // ✅ 권장 - 패키지에서 import
+   import { CreateAbilityDto, AbilityResponseDto } from "@cocrepo/dto";
+   ```
+
+2. **@cocrepo/decorator 필드 데코레이터 사용**
    - 모든 필드에 적절한 데코레이터 적용
    - Swagger 문서 및 유효성 검사 자동화
 

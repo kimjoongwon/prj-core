@@ -1,27 +1,9 @@
 import { User } from "@cocrepo/entity";
-import { PrismaClient } from "@cocrepo/prisma";
+import { Prisma, PrismaClient } from "@cocrepo/prisma";
 import { Injectable, Logger } from "@nestjs/common";
 import { TransactionHost } from "@nestjs-cls/transactional";
 import { TransactionalAdapterPrisma } from "@nestjs-cls/transactional-adapter-prisma";
 import { plainToInstance } from "class-transformer";
-
-/**
- * 회원 목록 조회 파라미터
- */
-export interface FindManyUsersParams {
-	spaceId: string;
-	search?: string;
-	roles?: string[];
-	status?: "active" | "inactive" | "removed";
-	categoryId?: string;
-	groupIds?: string[];
-	createdFrom?: Date;
-	createdTo?: Date;
-	sortBy?: string;
-	sortOrder?: "asc" | "desc";
-	skip?: number;
-	take?: number;
-}
 
 /**
  * 회원 통계 결과
@@ -31,31 +13,6 @@ export interface UserStats {
 	active: number;
 	inactive: number;
 	newThisMonth: number;
-}
-
-/**
- * 회원 생성 파라미터
- */
-export interface CreateUserParams {
-	name: string;
-	email: string;
-	phone: string;
-	password: string;
-	spaceId: string;
-	roleId: string;
-	categoryId?: string;
-	groupIds?: string[];
-}
-
-/**
- * 회원 수정 파라미터
- */
-export interface UpdateUserParams {
-	name?: string;
-	email?: string;
-	phone?: string;
-	categoryId?: string;
-	groupIds?: string[];
 }
 
 @Injectable()
@@ -71,9 +28,22 @@ export class UsersRepository {
 	}
 
 	/**
-	 * ID로 사용자 조회 (Tenant, Profile, Space, Ground 포함)
+	 * ID로 조회 (기본 정보만)
 	 */
-	async findByIdWithRelations(id: string): Promise<User | null> {
+	async findById(id: string): Promise<User | null> {
+		this.logger.debug(`ID로 조회: ${id.slice(-8)}`);
+
+		const result = await this.txHost.tx.user.findUnique({
+			where: { id },
+		});
+
+		return result ? plainToInstance(User, result) : null;
+	}
+
+	/**
+	 * ID로 사용자 조회 (Tenant, Profile 포함)
+	 */
+	async findByIdWithTenantsAndProfiles(id: string): Promise<User | null> {
 		this.logger.debug(`ID로 사용자 조회: ${id.slice(-8)}`);
 
 		const result = await this.txHost.tx.user.findUnique({
@@ -117,9 +87,22 @@ export class UsersRepository {
 	}
 
 	/**
-	 * 이메일로 사용자 조회 (Tenant, Profile, Space, Ground 포함)
+	 * 이메일로 조회 (기본 정보만)
 	 */
-	async findByEmailWithRelations(email: string): Promise<User | null> {
+	async findByEmail(email: string): Promise<User | null> {
+		this.logger.debug(`이메일로 조회: ${email}`);
+
+		const result = await this.txHost.tx.user.findUnique({
+			where: { email },
+		});
+
+		return result ? plainToInstance(User, result) : null;
+	}
+
+	/**
+	 * 이메일로 사용자 조회 (Tenant, Profile 포함)
+	 */
+	async findByEmailWithTenantsAndProfiles(email: string): Promise<User | null> {
 		this.logger.debug(`이메일로 사용자 조회: ${email}`);
 
 		const result = await this.txHost.tx.user.findUnique({
@@ -165,9 +148,20 @@ export class UsersRepository {
 	/**
 	 * Space 내 회원 목록 조회 (필터링, 페이지네이션 지원)
 	 */
-	async findManyBySpaceWithFilters(
-		params: FindManyUsersParams,
-	): Promise<{ users: User[]; totalCount: number }> {
+	async findManyBySpaceId(params: {
+		spaceId: string;
+		search?: string;
+		roles?: string[];
+		status?: "active" | "inactive" | "removed";
+		categoryId?: string;
+		groupIds?: string[];
+		createdFrom?: Date;
+		createdTo?: Date;
+		sortBy?: string;
+		sortOrder?: "asc" | "desc";
+		skip?: number;
+		take?: number;
+	}): Promise<{ users: User[]; totalCount: number }> {
 		const {
 			spaceId,
 			search,
@@ -354,14 +348,14 @@ export class UsersRepository {
 	}
 
 	/**
-	 * 회원 상세 조회 (Space 권한 검증 포함)
+	 * ID와 SpaceId로 사용자 조회 (Tenant, Profile 포함)
 	 */
-	async findByIdForSpace(
+	async findByIdAndSpaceId(
 		userId: string,
 		spaceId: string,
 	): Promise<User | null> {
 		this.logger.debug(
-			`Space 내 회원 상세 조회: userId=${userId.slice(-8)}, spaceId=${spaceId.slice(-8)}`,
+			`ID와 SpaceId로 조회: userId=${userId.slice(-8)}, spaceId=${spaceId.slice(-8)}`,
 		);
 
 		const result = await this.txHost.tx.user.findFirst({
@@ -437,9 +431,32 @@ export class UsersRepository {
 	}
 
 	/**
-	 * 회원 생성
+	 * 생성 (Prisma 타입 사용)
 	 */
-	async create(params: CreateUserParams): Promise<User> {
+	async create(data: Prisma.UserUncheckedCreateInput): Promise<User> {
+		this.logger.debug(`생성 중...`);
+
+		const result = await this.txHost.tx.user.create({
+			data,
+		});
+
+		return plainToInstance(User, result);
+	}
+
+	/**
+	 * Tenant, Profile 포함 생성
+	 */
+	async createWithTenantsAndProfiles(params: {
+		name: string;
+		email: string;
+		phone: string;
+		password: string;
+		spaceId: string;
+		roleId: string;
+		categoryId?: string;
+		groupIds?: string[];
+		nickname?: string;
+	}): Promise<User> {
 		const {
 			name,
 			email,
@@ -449,11 +466,11 @@ export class UsersRepository {
 			roleId,
 			categoryId,
 			groupIds,
+			nickname,
 		} = params;
 
-		this.logger.debug(`회원 생성: email=${email}`);
+		this.logger.debug(`Tenant, Profile 포함 생성: email=${email}`);
 
-		// 트랜잭션 내에서 User, Tenant, Profile, Classification, Association 생성
 		const result = await this.txHost.tx.user.create({
 			data: {
 				name,
@@ -469,7 +486,7 @@ export class UsersRepository {
 				profiles: {
 					create: {
 						name,
-						nickname: name, // 기본 닉네임은 이름과 동일
+						nickname: nickname || name,
 					},
 				},
 				...(categoryId && {
@@ -511,12 +528,38 @@ export class UsersRepository {
 	}
 
 	/**
-	 * 회원 수정
+	 * 업데이트 (Prisma 타입 사용)
 	 */
-	async update(userId: string, params: UpdateUserParams): Promise<User> {
+	async updateById(
+		id: string,
+		data: Prisma.UserUncheckedUpdateInput,
+	): Promise<User> {
+		this.logger.debug(`업데이트 중: ${id.slice(-8)}`);
+
+		const result = await this.txHost.tx.user.update({
+			where: { id },
+			data,
+		});
+
+		return plainToInstance(User, result);
+	}
+
+	/**
+	 * 복합 업데이트 (기본 정보 + 관계)
+	 */
+	async updateWithRelations(
+		userId: string,
+		params: {
+			name?: string;
+			email?: string;
+			phone?: string;
+			categoryId?: string;
+			groupIds?: string[];
+		},
+	): Promise<User> {
 		const { name, email, phone, categoryId, groupIds } = params;
 
-		this.logger.debug(`회원 수정: userId=${userId.slice(-8)}`);
+		this.logger.debug(`복합 업데이트: userId=${userId.slice(-8)}`);
 
 		// 기본 정보 업데이트
 		const updateData: Record<string, unknown> = {};
@@ -524,7 +567,6 @@ export class UsersRepository {
 		if (email !== undefined) updateData.email = email;
 		if (phone !== undefined) updateData.phone = phone;
 
-		// User 기본 정보 업데이트
 		if (Object.keys(updateData).length > 0) {
 			await this.txHost.tx.user.update({
 				where: { id: userId },
@@ -534,7 +576,6 @@ export class UsersRepository {
 
 		// 분류 카테고리 업데이트
 		if (categoryId !== undefined) {
-			// 기존 분류 삭제 후 새로 생성
 			await this.txHost.tx.userClassification.deleteMany({
 				where: { userId },
 			});
@@ -551,7 +592,6 @@ export class UsersRepository {
 
 		// 그룹 연결 업데이트
 		if (groupIds !== undefined) {
-			// 기존 연결 삭제 후 새로 생성
 			await this.txHost.tx.userAssociation.deleteMany({
 				where: { userId },
 			});
@@ -592,17 +632,30 @@ export class UsersRepository {
 	}
 
 	/**
-	 * 회원 삭제 (Soft Delete)
+	 * 소프트 삭제
 	 */
-	async softDelete(userId: string): Promise<void> {
-		this.logger.debug(`회원 삭제 (Soft Delete): userId=${userId.slice(-8)}`);
+	async removeById(id: string): Promise<User> {
+		this.logger.debug(`소프트 삭제 중: ${id.slice(-8)}`);
 
-		const now = new Date();
-
-		await this.txHost.tx.user.update({
-			where: { id: userId },
-			data: { removedAt: now },
+		const result = await this.txHost.tx.user.update({
+			where: { id },
+			data: { removedAt: new Date() },
 		});
+
+		return plainToInstance(User, result);
+	}
+
+	/**
+	 * 물리 삭제
+	 */
+	async deleteById(id: string): Promise<User> {
+		this.logger.debug(`삭제 중: ${id.slice(-8)}`);
+
+		const result = await this.txHost.tx.user.delete({
+			where: { id },
+		});
+
+		return plainToInstance(User, result);
 	}
 
 	/**

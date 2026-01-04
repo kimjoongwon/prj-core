@@ -1,3 +1,4 @@
+export * from "./abilities";
 export * from "./abstract.dto";
 export * from "./app-builder.dto";
 export * from "./assignment.dto";

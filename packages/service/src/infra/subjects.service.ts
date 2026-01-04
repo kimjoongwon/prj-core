@@ -1,8 +1,5 @@
 import { Subject } from "@cocrepo/entity";
-import {
-	CreateSubjectParams,
-	SubjectsRepository,
-} from "@cocrepo/repository";
+import { CreateSubjectParams, SubjectsRepository } from "@cocrepo/repository";
 import {
 	BadRequestException,
 	Injectable,

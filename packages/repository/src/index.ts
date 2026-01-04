@@ -14,15 +14,11 @@ export {
 	type UpdateColumnDefinitionParams,
 } from "./column-definitions.repository";
 export { GroundsRepository } from "./grounds.repository";
+export { RolesRepository } from "./roles.repository";
+export { SpacesRepository } from "./spaces.repository";
 export {
 	type CreateSubjectParams,
 	SubjectsRepository,
 	type UpdateSubjectParams,
 } from "./subjects.repository";
-export {
-	type CreateUserParams,
-	type FindManyUsersParams,
-	type UpdateUserParams,
-	type UserStats,
-	UsersRepository,
-} from "./users.repository";
+export { type UserStats, UsersRepository } from "./users.repository";

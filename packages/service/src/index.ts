@@ -15,4 +15,9 @@ export {
 	TokenService,
 	TokenStorageService,
 } from "./infra";
-export { GroundsService, UsersService } from "./service";
+export {
+	GroundsService,
+	RolesService,
+	SpacesService,
+	UsersService,
+} from "./service";

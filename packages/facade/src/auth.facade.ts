@@ -1,7 +1,7 @@
-import { PRISMA_SERVICE_TOKEN } from "@cocrepo/constant";
 import { ResponseEntity } from "@cocrepo/entity";
 import {
-	PrismaService,
+	RolesService,
+	SpacesService,
 	TokenExpiryInfo,
 	TokenService,
 	UsersService,
@@ -10,7 +10,6 @@ import { HashedPassword, PlainPassword } from "@cocrepo/vo";
 import {
 	BadRequestException,
 	HttpStatus,
-	Inject,
 	Injectable,
 	Logger,
 	UnauthorizedException,
@@ -31,6 +30,9 @@ export interface LoginResult {
 /**
  * 인증 Facade
  * 인증 관련 모든 비즈니스 로직 처리
+ *
+ * ✅ Service Layer를 통해 데이터 접근
+ * ❌ Prisma 직접 호출 금지
  */
 @Injectable()
 export class AuthFacade {
@@ -38,9 +40,10 @@ export class AuthFacade {
 
 	constructor(
 		private usersService: UsersService,
+		private rolesService: RolesService,
+		private spacesService: SpacesService,
 		private jwtService: JwtService,
 		private tokenService: TokenService,
-		@Inject(PRISMA_SERVICE_TOKEN) private prisma: PrismaService,
 	) {}
 
 	/**
@@ -125,49 +128,34 @@ export class AuthFacade {
 	}) {
 		const { name, nickname, password, phone, email } = params;
 
-		// 유저 역할 확인
-		const userRole = await this.prisma.role.findFirst({
-			where: { name: "USER" },
-		});
+		// 기본 사용자 역할 조회 (Service Layer 사용)
+		const userRole = await this.rolesService.getDefaultUserRole();
 
 		if (!userRole) {
 			this.logger.error("User role not found");
 			throw new BadRequestException("유저 역할이 존재하지 않습니다.");
 		}
 
-		// Space 생성
-		const space = await this.prisma.space.create({
-			data: {},
-		});
+		// 개인 Space 생성 (Service Layer 사용)
+		const space = await this.spacesService.createPersonalSpace();
 
 		// 비밀번호 해싱
 		const plainPassword = PlainPassword.create(password);
 		const hashedPassword = await HashedPassword.fromPlain(plainPassword);
 
-		// 사용자 생성
-		const { id: userId } = await this.prisma.user.create({
-			data: {
-				name,
-				email,
-				phone: phone ?? "",
-				password: hashedPassword.value,
-				tenants: {
-					create: {
-						spaceId: space.id,
-						roleId: userRole.id,
-					},
-				},
-				profiles: {
-					create: {
-						name,
-						nickname: nickname || name,
-					},
-				},
-			},
+		// 사용자 생성 (Service Layer 사용)
+		const user = await this.usersService.createUserForSignUp({
+			name,
+			email,
+			phone: phone ?? "",
+			password: hashedPassword.value,
+			spaceId: space.id,
+			roleId: userRole.id,
+			nickname,
 		});
 
 		// 토큰 생성
-		const tokenPair = this.tokenService.generateTokens({ userId });
+		const tokenPair = this.tokenService.generateTokens({ userId: user.id });
 		return tokenPair.toObject();
 	}
 

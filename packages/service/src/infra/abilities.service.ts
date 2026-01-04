@@ -44,7 +44,8 @@ export class AbilitiesService {
 		this.logger.debug(`내 권한 조회: userId=${userId.slice(-8)}`);
 
 		// 1. 사용자 조회 (Tenant 포함)
-		const user = await this.usersRepository.findByIdWithRelations(userId);
+		const user =
+			await this.usersRepository.findByIdWithTenantsAndProfiles(userId);
 
 		if (!user) {
 			throw new NotFoundException(AbilityServiceErrorMessages.USER_NOT_FOUND);

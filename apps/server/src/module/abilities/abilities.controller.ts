@@ -5,6 +5,10 @@ import {
 	ApiResponseEntity,
 	ResponseMessage,
 } from "@cocrepo/decorator";
+import {
+	AbilityResponseDto,
+	UpdateRoleAbilitiesRequestDto,
+} from "@cocrepo/dto";
 import { User } from "@cocrepo/entity";
 import { AbilitiesService } from "@cocrepo/service";
 import {
@@ -20,7 +24,6 @@ import {
 import { ApiBody, ApiOperation, ApiParam, ApiTags } from "@nestjs/swagger";
 import { plainToInstance } from "class-transformer";
 import { ClsService } from "nestjs-cls";
-import { AbilityResponseDto, UpdateRoleAbilitiesRequestDto } from "./dto";
 
 /**
  * Abilities 에러 메시지 상수
