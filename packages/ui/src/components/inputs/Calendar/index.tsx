@@ -15,7 +15,7 @@ export const Calendar = observer(
 	<T extends object>(props: CalendarProps<T>) => {
 		const { state, path, ...rest } = props;
 
-		const value = tools.get(state, path) || [];
+		const value = (tools.get(state, path) as string[]) || [];
 		const formField = useFormField({ value, state, path });
 
 		const handleChange = (value: string[]) => {
@@ -25,7 +25,7 @@ export const Calendar = observer(
 		return (
 			<CalendarComponent
 				{...rest}
-				value={formField.state.value}
+				value={formField.state.value as string[]}
 				onChange={handleChange}
 			/>
 		);

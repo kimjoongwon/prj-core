@@ -10,7 +10,7 @@ import {
 	CreateColumnDefinitionDto,
 	UpdateColumnDefinitionDto,
 } from "@cocrepo/dto";
-import type { ColumnDefinitionsService } from "@cocrepo/service";
+import { ColumnDefinitionsService } from "@cocrepo/service";
 import {
 	Body,
 	Controller,
@@ -34,7 +34,7 @@ import {
 	ApiTags,
 } from "@nestjs/swagger";
 import { plainToInstance } from "class-transformer";
-import type { ClsService } from "nestjs-cls";
+import { ClsService } from "nestjs-cls";
 
 /**
  * ColumnDefinitions 에러 메시지 상수

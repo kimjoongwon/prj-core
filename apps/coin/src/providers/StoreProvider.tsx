@@ -1,6 +1,6 @@
 "use client";
 
-import { createContext, type ReactNode, useContext } from "react";
+import { createContext, ReactNode, useContext } from "react";
 import { rootStore } from "@/stores";
 
 const StoreContext = createContext(rootStore);

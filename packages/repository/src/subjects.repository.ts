@@ -1,8 +1,8 @@
 import { Subject } from "@cocrepo/entity";
-import type { PrismaClient, SubjectTypes } from "@cocrepo/prisma";
+import { PrismaClient, SubjectTypes } from "@cocrepo/prisma";
 import { Injectable, Logger } from "@nestjs/common";
-import type { TransactionHost } from "@nestjs-cls/transactional";
-import type { TransactionalAdapterPrisma } from "@nestjs-cls/transactional-adapter-prisma";
+import { TransactionHost } from "@nestjs-cls/transactional";
+import { TransactionalAdapterPrisma } from "@nestjs-cls/transactional-adapter-prisma";
 import { plainToInstance } from "class-transformer";
 
 /**

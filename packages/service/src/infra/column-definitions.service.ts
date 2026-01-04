@@ -1,5 +1,5 @@
-import type { ColumnDefinition } from "@cocrepo/entity";
-import type {
+import { ColumnDefinition } from "@cocrepo/entity";
+import {
 	ColumnDefinitionsRepository,
 	CreateColumnDefinitionParams,
 	UpdateColumnDefinitionParams,

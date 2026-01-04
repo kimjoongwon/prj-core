@@ -1,4 +1,4 @@
-import { AbilityActions, AbilityTypes } from "@cocrepo/prisma";
+import { AbilityActions, AbilityTypes, Prisma } from "@cocrepo/prisma";
 import { ApiProperty } from "@nestjs/swagger";
 import { Type } from "class-transformer";
 import {
@@ -46,7 +46,7 @@ export class CreateAbilityDto {
 		required: false,
 	})
 	@IsOptional()
-	conditions?: Record<string, unknown>;
+	conditions?: Prisma.InputJsonValue;
 
 	@ApiProperty({
 		description: "Subject ID (UUID)",

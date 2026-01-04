@@ -1,8 +1,8 @@
 import { User } from "@cocrepo/entity";
-import type { PrismaClient } from "@cocrepo/prisma";
+import { PrismaClient } from "@cocrepo/prisma";
 import { Injectable, Logger } from "@nestjs/common";
-import type { TransactionHost } from "@nestjs-cls/transactional";
-import type { TransactionalAdapterPrisma } from "@nestjs-cls/transactional-adapter-prisma";
+import { TransactionHost } from "@nestjs-cls/transactional";
+import { TransactionalAdapterPrisma } from "@nestjs-cls/transactional-adapter-prisma";
 import { plainToInstance } from "class-transformer";
 
 /**
@@ -251,13 +251,14 @@ export class UsersRepository {
 
 		// 가입일 범위 필터
 		if (createdFrom || createdTo) {
-			where.createdAt = {};
+			const dateFilter: any = {};
 			if (createdFrom) {
-				where.createdAt.gte = createdFrom;
+				dateFilter.gte = createdFrom;
 			}
 			if (createdTo) {
-				where.createdAt.lte = createdTo;
+				dateFilter.lte = createdTo;
 			}
+			where.createdAt = dateFilter;
 		}
 
 		// 정렬 조건

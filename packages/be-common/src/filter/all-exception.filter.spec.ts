@@ -6,7 +6,7 @@ import {
 	Logger,
 } from "@nestjs/common";
 import { BaseExceptionFilter, HttpAdapterHost } from "@nestjs/core";
-import { Test, type TestingModule } from "@nestjs/testing";
+import { Test, TestingModule } from "@nestjs/testing";
 import { AllExceptionsFilter } from "./all-exception.filter";
 
 describe("AllExceptionsFilter", () => {

@@ -1,7 +1,7 @@
 import { ValidationUtil } from "@cocrepo/decorator";
 import { registerAs } from "@nestjs/config";
 import { IsEmail, IsEnum, IsNumber, IsString, IsUrl } from "class-validator";
-import type { AppConfig } from "./config.type";
+import { AppConfig } from "./config.type";
 
 enum Environment {
 	Development = "development",

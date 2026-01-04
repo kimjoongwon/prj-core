@@ -1,5 +1,6 @@
+import { PRISMA_SERVICE_TOKEN } from "@cocrepo/constant";
 import { ResponseEntity } from "@cocrepo/entity";
-import type {
+import {
 	PrismaService,
 	TokenExpiryInfo,
 	TokenService,
@@ -9,11 +10,12 @@ import { HashedPassword, PlainPassword } from "@cocrepo/vo";
 import {
 	BadRequestException,
 	HttpStatus,
+	Inject,
 	Injectable,
 	Logger,
 	UnauthorizedException,
 } from "@nestjs/common";
-import type { JwtService } from "@nestjs/jwt";
+import { JwtService } from "@nestjs/jwt";
 
 /**
  * 로그인 결과 타입
@@ -38,7 +40,7 @@ export class AuthFacade {
 		private usersService: UsersService,
 		private jwtService: JwtService,
 		private tokenService: TokenService,
-		private prisma: PrismaService,
+		@Inject(PRISMA_SERVICE_TOKEN) private prisma: PrismaService,
 	) {}
 
 	/**

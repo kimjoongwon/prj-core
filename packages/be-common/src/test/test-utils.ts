@@ -3,9 +3,9 @@ import { User } from "@cocrepo/entity";
 import { PrismaService } from "@cocrepo/service";
 import { ConfigService } from "@nestjs/config";
 import { JwtService } from "@nestjs/jwt";
-import { Test, type TestingModule } from "@nestjs/testing";
+import { Test, TestingModule } from "@nestjs/testing";
 import type { Request, Response } from "express";
-import { type DeepMockProxy, mockDeep, mockReset } from "jest-mock-extended";
+import { DeepMockProxy, mockDeep, mockReset } from "jest-mock-extended";
 
 export type MockedPrismaService = DeepMockProxy<PrismaService>;
 

@@ -16,7 +16,7 @@ export const renderLucideIcon = (
 	if (!iconName) return null;
 
 	// LucideIcons에서 해당 아이콘을 찾습니다
-	const IconComponent = (LucideIcons as unknown)[iconName];
+	const IconComponent = (LucideIcons as Record<string, any>)[iconName];
 
 	if (!IconComponent) {
 		console.warn(`Icon "${iconName}" not found in lucide-react`);

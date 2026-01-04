@@ -1,5 +1,5 @@
-import type { Subject } from "@cocrepo/entity";
-import type {
+import { Subject } from "@cocrepo/entity";
+import {
 	CreateSubjectParams,
 	SubjectsRepository,
 } from "@cocrepo/repository";

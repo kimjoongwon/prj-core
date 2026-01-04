@@ -1,8 +1,8 @@
 import { Roles as RolesDecorator } from "@cocrepo/decorator";
 import { Roles } from "@cocrepo/prisma";
-import { type ExecutionContext, ForbiddenException } from "@nestjs/common";
+import { ExecutionContext, ForbiddenException } from "@nestjs/common";
 import { Reflector } from "@nestjs/core";
-import { Test, type TestingModule } from "@nestjs/testing";
+import { Test, TestingModule } from "@nestjs/testing";
 import { RolesGuard } from "./roles.guard";
 
 describe("RolesGuard", () => {

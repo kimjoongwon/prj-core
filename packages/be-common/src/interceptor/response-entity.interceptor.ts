@@ -8,8 +8,8 @@ import {
 	type NestInterceptor,
 } from "@nestjs/common";
 import { HTTP_CODE_METADATA } from "@nestjs/common/constants";
-import type { Reflector } from "@nestjs/core";
-import type { Observable } from "rxjs";
+import { Reflector } from "@nestjs/core";
+import { Observable } from "rxjs";
 import { map } from "rxjs/operators";
 import { isWrappedResponse } from "../util/response.util";
 

@@ -1,6 +1,6 @@
 import { ROLES_KEY } from "@cocrepo/decorator";
-import type { UserDto } from "@cocrepo/dto";
-import type { Roles } from "@cocrepo/prisma";
+import { UserDto } from "@cocrepo/dto";
+import { Roles } from "@cocrepo/prisma";
 import {
 	type CanActivate,
 	type ExecutionContext,

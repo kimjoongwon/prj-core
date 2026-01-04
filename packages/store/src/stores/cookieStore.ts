@@ -7,16 +7,16 @@ export class CookieStore {
 		this.cookies = new Cookies();
 	}
 
-	set(name: string, value: unknown, options?: unknown): void {
-		this.cookies.set(name, value, options);
+	set(name: string, value: unknown, options?: any): void {
+		this.cookies.set(name, value, options as any);
 	}
 
-	get(name: string): unknown {
+	get(name: string): any {
 		return this.cookies.get(name);
 	}
 
-	remove(name: string, options?: unknown): void {
-		this.cookies.remove(name, options);
+	remove(name: string, options?: any): void {
+		this.cookies.remove(name, options as any);
 	}
 
 	getAll(): { [key: string]: unknown } {

@@ -16,7 +16,7 @@ export const Checkbox = observer(
 		const { path, state, ...rest } = props;
 
 		const formField = useFormField({
-			value: tools.get(state, path, false),
+			value: tools.get(state, path, false) as boolean,
 			state,
 			path,
 		});
@@ -28,7 +28,7 @@ export const Checkbox = observer(
 		return (
 			<BaseCheckbox
 				{...rest}
-				isSelected={formField.state.value}
+				isSelected={formField.state.value as boolean}
 				onChange={handleChange}
 			/>
 		);

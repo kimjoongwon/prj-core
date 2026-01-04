@@ -15,7 +15,7 @@ export const MultiSelect = observer(
 	<T extends object>(props: MultiSelectProps<T>) => {
 		const { state, path, ...rest } = props;
 
-		const value = tools.get(state, path) || [];
+		const value = (tools.get(state, path) as string[]) || [];
 		const formField = useFormField({ value, state, path });
 
 		const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -26,7 +26,7 @@ export const MultiSelect = observer(
 		return (
 			<MultiSelectComponent
 				{...rest}
-				selectedKeys={new Set(formField.state.value)}
+				selectedKeys={new Set(formField.state.value as any)}
 				onChange={handleChange}
 			/>
 		);

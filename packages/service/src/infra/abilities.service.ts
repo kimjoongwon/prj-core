@@ -1,5 +1,5 @@
-import type { Ability } from "@cocrepo/entity";
-import type {
+import { Ability } from "@cocrepo/entity";
+import {
 	AbilitiesRepository,
 	CreateAbilityDto,
 	UsersRepository,

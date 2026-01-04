@@ -14,7 +14,7 @@ export interface SwitchProps<T>
 export const Switch = observer(<T extends object>(props: SwitchProps<T>) => {
 	const { path, state, ...rest } = props;
 
-	const initialValue = tools.get(state, path, false);
+	const initialValue = tools.get(state, path, false) as boolean;
 
 	const formField = useFormField({ value: initialValue, state, path });
 
@@ -25,7 +25,7 @@ export const Switch = observer(<T extends object>(props: SwitchProps<T>) => {
 	return (
 		<BaseSwitch
 			{...rest}
-			value={formField.state.value}
+			value={formField.state.value as boolean}
 			onValueChange={handleValueChange}
 		/>
 	);

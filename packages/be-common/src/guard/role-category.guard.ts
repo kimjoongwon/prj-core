@@ -1,6 +1,6 @@
-import type { UserDto } from "@cocrepo/dto";
+import { UserDto } from "@cocrepo/dto";
 import { Category } from "@cocrepo/entity";
-import type { RoleCategoryNames } from "@cocrepo/enum";
+import { RoleCategoryNames } from "@cocrepo/enum";
 import {
 	type CanActivate,
 	type ExecutionContext,
@@ -8,7 +8,7 @@ import {
 	Injectable,
 	UnauthorizedException,
 } from "@nestjs/common";
-import type { Reflector } from "@nestjs/core";
+import { Reflector } from "@nestjs/core";
 import { plainToInstance } from "class-transformer";
 import { isEmpty } from "lodash";
 

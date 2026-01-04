@@ -15,7 +15,7 @@ export const TimeInput = observer(
 	<T extends object>(props: TimeInputProps<T>) => {
 		const { state, path, ...rest } = props;
 
-		const value = tools.get(state, path) || "";
+		const value = (tools.get(state, path) as string | null) || "";
 		const formField = useFormField({ value, state, path });
 
 		const handleChange = (value: string) => {
@@ -25,7 +25,7 @@ export const TimeInput = observer(
 		return (
 			<TimeInputComponent
 				{...rest}
-				value={formField.state.value}
+				value={formField.state.value as any}
 				onChange={handleChange}
 			/>
 		);

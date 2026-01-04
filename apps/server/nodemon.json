@@ -2,6 +2,7 @@
   "watch": [
     "src",
     "../../packages/decorator/dist",
+    "../../packages/facade/dist",
     "../../packages/dto/dist",
     "../../packages/entity/dist",
     "../../packages/enum/dist",

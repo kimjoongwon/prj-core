@@ -57,7 +57,7 @@
 				"noUselessTypeConstraint": "off"
 			},
 			"style": {
-				"useImportType": "error",
+				"useImportType": "off",
 				"noNonNullAssertion": "off",
 				"useNodejsImportProtocol": "error"
 			},

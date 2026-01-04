@@ -1,10 +1,10 @@
 import { makeAutoObservable } from "mobx";
-import type { AuthStore } from "./authStore";
-import type { CookieStore } from "./cookieStore";
-import type { MenuStore } from "./menuStore";
-import type { NavigationStore } from "./navigationStore";
-import type { PersistStore } from "./persistStore";
-import type { TokenStore } from "./tokenStore";
+import { AuthStore } from "./authStore";
+import { CookieStore } from "./cookieStore";
+import { MenuStore } from "./menuStore";
+import { NavigationStore } from "./navigationStore";
+import { PersistStore } from "./persistStore";
+import { TokenStore } from "./tokenStore";
 
 /**
  * RootStore - 모든 하위 Store를 관리하는 최상위 Store

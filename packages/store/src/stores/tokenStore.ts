@@ -1,5 +1,5 @@
 import { CookieStore } from "./cookieStore";
-import type { RootStore } from "./Store";
+import { RootStore } from "./Store";
 
 export class TokenStore {
 	private cookieStore: CookieStore;
@@ -19,7 +19,7 @@ export class TokenStore {
 	}
 
 	getAccessToken(): string | null {
-		return this.cookieStore.get("accessToken") || null;
+		return (this.cookieStore.get("accessToken") as string) || null;
 	}
 
 	setRefreshToken(token: string): void {
@@ -32,7 +32,7 @@ export class TokenStore {
 	}
 
 	getRefreshToken(): string | null {
-		return this.cookieStore.get("refreshToken") || null;
+		return (this.cookieStore.get("refreshToken") as string) || null;
 	}
 
 	clearTokens(): void {

@@ -73,7 +73,7 @@ export class QueryDto {
 		delete args.orderBy;
 		if (!includeRemovedItems) {
 			args.where = {
-				...args.where,
+				...(args.where as Record<string, unknown>),
 				removedAt: null,
 			};
 		}

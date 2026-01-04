@@ -15,7 +15,7 @@ export const Textarea = observer(
 	<T extends object>(props: TextareaProps<T>) => {
 		const { state, path, ...rest } = props;
 
-		const initialValue = tools.get(state, path, "");
+		const initialValue = tools.get(state, path, "") as string;
 
 		const formField = useFormField({ value: initialValue, state, path });
 
@@ -26,7 +26,7 @@ export const Textarea = observer(
 		return (
 			<BaseTextarea
 				{...rest}
-				value={formField.state.value}
+				value={formField.state.value as string}
 				onChange={handleChange}
 			/>
 		);

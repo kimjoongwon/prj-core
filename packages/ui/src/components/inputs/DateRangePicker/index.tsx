@@ -28,9 +28,9 @@ export const DateRangePicker = observer(
 
 		const initialValue = useMemo(() => {
 			const startDateTime =
-				tools.get(state, paths[0]) || new Date().toISOString();
+				(tools.get(state, paths[0]) as string) || new Date().toISOString();
 			const endDateTime =
-				tools.get(state, paths[1]) || new Date().toISOString();
+				(tools.get(state, paths[1]) as string) || new Date().toISOString();
 
 			return {
 				start: parseAbsoluteToLocal(startDateTime),

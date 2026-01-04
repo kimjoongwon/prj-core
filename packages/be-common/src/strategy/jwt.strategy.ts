@@ -1,16 +1,16 @@
 import { CONTEXT_KEYS } from "@cocrepo/constant";
-import type { UsersService } from "@cocrepo/service";
-import type { AuthConfig } from "@cocrepo/type";
+import { UsersService } from "@cocrepo/service";
+import { AuthConfig } from "@cocrepo/type";
 import {
 	Global,
 	Injectable,
 	Logger,
 	UnauthorizedException,
 } from "@nestjs/common";
-import type { ConfigService } from "@nestjs/config";
+import { ConfigService } from "@nestjs/config";
 import { PassportStrategy } from "@nestjs/passport";
-import type { Request } from "express";
-import type { ClsService } from "nestjs-cls";
+import { Request } from "express";
+import { ClsService } from "nestjs-cls";
 import { ExtractJwt, Strategy } from "passport-jwt";
 
 @Global()

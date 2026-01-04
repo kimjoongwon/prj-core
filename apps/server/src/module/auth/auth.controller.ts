@@ -12,9 +12,9 @@ import {
 	TokenDto,
 	UserDto,
 } from "@cocrepo/dto";
-import type { User } from "@cocrepo/entity";
-import type { AuthFacade } from "@cocrepo/facade";
-import type { TokenService } from "@cocrepo/service";
+import { User } from "@cocrepo/entity";
+import { AuthFacade } from "@cocrepo/facade";
+import { TokenService } from "@cocrepo/service";
 import {
 	Body,
 	Controller,
@@ -28,8 +28,8 @@ import {
 } from "@nestjs/common";
 import { ApiBody, ApiOperation, ApiResponse, ApiTags } from "@nestjs/swagger";
 import { plainToInstance } from "class-transformer";
-import type { Request, Response } from "express";
-import type { ClsService } from "nestjs-cls";
+import { Request, Response } from "express";
+import { ClsService } from "nestjs-cls";
 
 /**
  * 인증 관련 에러 메시지 상수

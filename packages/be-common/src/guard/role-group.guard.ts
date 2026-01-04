@@ -1,4 +1,4 @@
-import type { UserDto } from "@cocrepo/dto";
+import { UserDto } from "@cocrepo/dto";
 import {
 	type CanActivate,
 	type ExecutionContext,
@@ -6,7 +6,7 @@ import {
 	Injectable,
 	UnauthorizedException,
 } from "@nestjs/common";
-import type { Reflector } from "@nestjs/core";
+import { Reflector } from "@nestjs/core";
 import { isEmpty } from "lodash";
 
 @Injectable()

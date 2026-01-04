@@ -17,7 +17,7 @@ export const ChipSelect = observer(
 		const { state, path, options = [], selectionMode = "multiple" } = props;
 
 		const value = useMemo(() => {
-			const currentValue = tools.get(state, path);
+			const currentValue = tools.get(state, path) as string | string[] | null;
 			if (selectionMode === "single") {
 				return currentValue;
 			}
@@ -34,7 +34,7 @@ export const ChipSelect = observer(
 			<BaseChipSelect
 				options={options}
 				selectionMode={selectionMode}
-				value={formField.state.value}
+				value={formField.state.value as string | string[] | null}
 				onSelectionChange={handleSelectionChange}
 			/>
 		);

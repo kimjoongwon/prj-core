@@ -1,8 +1,8 @@
 import { PutObjectCommand, S3Client } from "@aws-sdk/client-s3";
-import type { AwsConfig } from "@cocrepo/type";
+import { AwsConfig } from "@cocrepo/type";
 // aws.service.ts
 import { Global, Injectable } from "@nestjs/common";
-import type { ConfigService } from "@nestjs/config";
+import { ConfigService } from "@nestjs/config";
 
 @Global()
 @Injectable()
@@ -35,7 +35,7 @@ export class AwsService {
 		const command = new PutObjectCommand({
 			Bucket: this.aws.s3BucketName, // S3 버킷 이름
 			Key: fileName, // 업로드될 파일의 이름
-			Body: file.buffer, // 업로드할 파일
+			Body: (file as any).buffer, // 업로드할 파일
 			ContentType: `image/${ext}`, // 파일 타입
 		});
 

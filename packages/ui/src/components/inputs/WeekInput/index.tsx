@@ -16,7 +16,7 @@ export const WeekInput = observer(
 	<T extends object>(props: WeekInputProps<T>) => {
 		const { state, path, ...rest } = props;
 
-		const value = tools.get(state, path);
+		const value = tools.get(state, path) as RecurringDayOfTheWeek;
 		const formField = useFormField({ value, state, path });
 
 		const handleChange = (value: RecurringDayOfTheWeek) => {
@@ -26,7 +26,7 @@ export const WeekInput = observer(
 		return (
 			<BaseWeekInput
 				{...rest}
-				value={formField.state.value}
+				value={formField.state.value as RecurringDayOfTheWeek}
 				onChange={handleChange}
 			/>
 		);

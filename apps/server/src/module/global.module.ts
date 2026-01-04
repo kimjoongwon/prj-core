@@ -1,5 +1,5 @@
 import { PRISMA_SERVICE_TOKEN } from "@cocrepo/constant";
-import type { DynamicModule } from "@nestjs/common";
+import { DynamicModule } from "@nestjs/common";
 import { ConfigModule, ConfigService } from "@nestjs/config";
 import { JwtModule } from "@nestjs/jwt";
 import { ThrottlerModule } from "@nestjs/throttler";
@@ -99,8 +99,8 @@ export const globalModules: (DynamicModule | Promise<DynamicModule>)[] = [
 			return {
 				global: true,
 				secret: authConfig.secret,
-				signOptions: { expiresIn: authConfig.expires as string | number },
-			} as const;
+				signOptions: { expiresIn: authConfig.expires as any },
+			};
 		},
 		inject: [ConfigService],
 	}),

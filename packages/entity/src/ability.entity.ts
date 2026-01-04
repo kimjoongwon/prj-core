@@ -2,6 +2,7 @@ import type {
 	AbilityActions,
 	Ability as AbilityEntity,
 	AbilityTypes,
+	Prisma,
 } from "@cocrepo/prisma";
 import { AbstractEntity } from "./abstract.entity";
 import type { Role } from "./role.entity";
@@ -12,7 +13,7 @@ export class Ability extends AbstractEntity implements AbilityEntity {
 	action!: AbilityActions;
 	roleId!: string;
 	description!: string | null;
-	conditions!: Record<string, unknown> | null;
+	conditions!: Prisma.JsonValue | null;
 	subjectId!: string;
 	tenantId!: string;
 	isActive!: boolean;

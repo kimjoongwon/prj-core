@@ -1,5 +1,5 @@
-import { CONTEXT_KEYS, Token, type TokenValues } from "@cocrepo/constant";
-import type { AuthConfig } from "@cocrepo/type";
+import { CONTEXT_KEYS, Token, TokenValues } from "@cocrepo/constant";
+import { AuthConfig } from "@cocrepo/type";
 import {
 	AccessTokenCookieOptions,
 	RefreshTokenCookieOptions,
@@ -11,15 +11,11 @@ import {
 	InternalServerErrorException,
 	Logger,
 } from "@nestjs/common";
-import type { ConfigService } from "@nestjs/config";
-import {
-	type JwtService,
-	NotBeforeError,
-	TokenExpiredError,
-} from "@nestjs/jwt";
-import type { Request, Response } from "express";
-import type { ClsService } from "nestjs-cls";
-import type { TokenStorageService } from "./token-storage.service";
+import { ConfigService } from "@nestjs/config";
+import { JwtService, NotBeforeError, TokenExpiredError } from "@nestjs/jwt";
+import { Request, Response } from "express";
+import { ClsService } from "nestjs-cls";
+import { TokenStorageService } from "./token-storage.service";
 
 /**
  * 토큰 만료 시간 정보
@@ -106,8 +102,8 @@ export class TokenService {
 			throw new Error("JWT refresh expiration is not defined.");
 		}
 		return this.jwtService.sign(payload, {
-			expiresIn: authConfig.refresh as unknown,
-		});
+			expiresIn: authConfig.refresh,
+		} as any);
 	}
 
 	generateTokens(payload: { userId: string }): TokenPair {

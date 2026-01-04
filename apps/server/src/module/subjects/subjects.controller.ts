@@ -5,7 +5,7 @@ import {
 	ApiResponseEntity,
 	ResponseMessage,
 } from "@cocrepo/decorator";
-import type { SubjectsService } from "@cocrepo/service";
+import { SubjectsService } from "@cocrepo/service";
 import {
 	Controller,
 	Get,
@@ -15,7 +15,7 @@ import {
 } from "@nestjs/common";
 import { ApiOperation, ApiQuery, ApiTags } from "@nestjs/swagger";
 import { plainToInstance } from "class-transformer";
-import type { ClsService } from "nestjs-cls";
+import { ClsService } from "nestjs-cls";
 import { SubjectResponseDto } from "./dto";
 
 /**

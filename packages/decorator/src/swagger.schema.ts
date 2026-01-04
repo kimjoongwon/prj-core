@@ -55,7 +55,7 @@ function explore(instance: object, propertyKey: string | symbol) {
 
 	const parametersWithType = mapValues(
 		reverseObjectKeys(routeArgsMetadata),
-		(param) => ({
+		(param: any) => ({
 			type: types[param.index],
 			name: param.data,
 			required: true,

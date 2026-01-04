@@ -17,8 +17,8 @@ import {
 	UserPaginationMetaDto,
 	UserStatsDto,
 } from "@cocrepo/dto";
-import type { User } from "@cocrepo/entity";
-import type { UsersService } from "@cocrepo/service";
+import { User } from "@cocrepo/entity";
+import { UsersService } from "@cocrepo/service";
 import {
 	Body,
 	Controller,
@@ -35,7 +35,7 @@ import {
 } from "@nestjs/common";
 import { ApiBody, ApiOperation, ApiParam, ApiTags } from "@nestjs/swagger";
 import { plainToInstance } from "class-transformer";
-import type { ClsService } from "nestjs-cls";
+import { ClsService } from "nestjs-cls";
 
 /**
  * Users 에러 메시지 상수

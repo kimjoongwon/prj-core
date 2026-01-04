@@ -1,4 +1,4 @@
-import type { GroundsRepository } from "@cocrepo/repository";
+import { GroundsRepository } from "@cocrepo/repository";
 import { Injectable } from "@nestjs/common";
 
 @Injectable()

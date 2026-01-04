@@ -1,12 +1,13 @@
 import { Ability } from "@cocrepo/entity";
-import type {
+import {
 	AbilityActions,
 	AbilityTypes,
+	Prisma,
 	PrismaClient,
 } from "@cocrepo/prisma";
 import { Injectable, Logger } from "@nestjs/common";
-import type { TransactionHost } from "@nestjs-cls/transactional";
-import type { TransactionalAdapterPrisma } from "@nestjs-cls/transactional-adapter-prisma";
+import { TransactionHost } from "@nestjs-cls/transactional";
+import { TransactionalAdapterPrisma } from "@nestjs-cls/transactional-adapter-prisma";
 import { plainToInstance } from "class-transformer";
 
 /**
@@ -19,7 +20,7 @@ export interface CreateAbilityParams {
 	subjectId: string;
 	tenantId: string;
 	description?: string;
-	conditions?: Record<string, unknown>;
+	conditions?: Prisma.InputJsonValue;
 	isActive?: boolean;
 }
 
@@ -30,7 +31,7 @@ export interface UpdateAbilityParams {
 	type?: AbilityTypes;
 	action?: AbilityActions;
 	description?: string;
-	conditions?: Record<string, unknown>;
+	conditions?: Prisma.InputJsonValue;
 	isActive?: boolean;
 }
 
@@ -42,7 +43,7 @@ export interface CreateAbilityDto {
 	action: AbilityActions;
 	subjectId: string;
 	description?: string;
-	conditions?: Record<string, unknown>;
+	conditions?: Prisma.InputJsonValue;
 	isActive?: boolean;
 }
 
@@ -191,7 +192,7 @@ export class AbilitiesRepository {
 				subjectId: data.subjectId,
 				tenantId: data.tenantId,
 				description: data.description,
-				conditions: data.conditions,
+				conditions: data.conditions as any,
 				isActive: data.isActive ?? true,
 			},
 			include: {
@@ -215,7 +216,7 @@ export class AbilitiesRepository {
 				type: data.type,
 				action: data.action,
 				description: data.description,
-				conditions: data.conditions,
+				conditions: data.conditions as any,
 				isActive: data.isActive,
 			},
 			include: {

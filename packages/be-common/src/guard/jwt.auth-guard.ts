@@ -1,12 +1,12 @@
 import { PUBLIC_ROUTE_KEY } from "@cocrepo/decorator";
-import type { TokenStorageService } from "@cocrepo/service";
+import { TokenStorageService } from "@cocrepo/service";
 import {
 	type ExecutionContext,
 	Injectable,
 	Logger,
 	UnauthorizedException,
 } from "@nestjs/common";
-import type { Reflector } from "@nestjs/core";
+import { Reflector } from "@nestjs/core";
 import { AuthGuard } from "@nestjs/passport";
 
 @Injectable()

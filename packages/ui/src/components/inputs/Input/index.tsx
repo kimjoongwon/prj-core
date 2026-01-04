@@ -11,7 +11,7 @@ export interface InputProps<T>
 export const Input = observer(<T extends object>(props: InputProps<T>) => {
 	const { path, state, ...rest } = props;
 
-	const initialValue = tools.get(state, path) || "";
+	const initialValue = (tools.get(state, path) as string | number) || "";
 
 	const formField = useFormField({ value: initialValue, state, path });
 
@@ -26,7 +26,7 @@ export const Input = observer(<T extends object>(props: InputProps<T>) => {
 	return (
 		<BaseInput
 			{...rest}
-			value={formField.state.value}
+			value={formField.state.value as string | number}
 			onChange={handleChange}
 			onBlur={handleBlur}
 		/>

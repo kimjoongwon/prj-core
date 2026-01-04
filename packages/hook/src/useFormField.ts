@@ -10,13 +10,13 @@ import { useLocalObservable } from "mobx-react-lite";
 import { useEffect, useMemo } from "react";
 
 // Base options
-interface UseFormFieldBaseOptions<TState = any, TValue = any> {
+interface UseFormFieldBaseOptions<TState extends object = any, TValue = any> {
 	value: TValue;
 	state: TState;
 }
 
 // Single-path options (discriminated with never types)
-export interface UseFormFieldSingleOptions<TState = any, TValue = any>
+export interface UseFormFieldSingleOptions<TState extends object = any, TValue = any>
 	extends UseFormFieldBaseOptions<TState, TValue> {
 	path: Paths<TState, 4>;
 	paths?: never;
@@ -26,7 +26,7 @@ export interface UseFormFieldSingleOptions<TState = any, TValue = any>
 
 // Multi-path options (discriminated with never types)
 export interface UseFormFieldMultiOptions<
-	TState = any,
+	TState extends object = any,
 	TValue = any,
 	TPaths extends PathTuple<TState> = PathTuple<TState>,
 > extends UseFormFieldBaseOptions<TState, TValue> {
@@ -45,13 +45,13 @@ export interface UseFormFieldReturn<TValue> {
 }
 
 // Single-path overload
-export function useFormField<TState = any, TValue = any>(
+export function useFormField<TState extends object = any, TValue = any>(
 	options: UseFormFieldSingleOptions<TState, TValue>,
 ): UseFormFieldReturn<TValue>;
 
 // Multi-path overload
 export function useFormField<
-	TState = any,
+	TState extends object = any,
 	TValue = any,
 	TPaths extends PathTuple<TState> = PathTuple<TState>,
 >(
@@ -59,7 +59,7 @@ export function useFormField<
 ): UseFormFieldReturn<TValue>;
 
 // Implementation
-export function useFormField<TState = any, TValue = any>(
+export function useFormField<TState extends object = any, TValue = any>(
 	options:
 		| UseFormFieldSingleOptions<TState, TValue>
 		| UseFormFieldMultiOptions<TState, TValue, any>,
@@ -93,7 +93,7 @@ export function useFormField<TState = any, TValue = any>(
 			const setterDisposer = reaction(
 				() => localState.value,
 				(value) => {
-					tools.set(singleOptions.state, singleOptions.path, value);
+					tools.set(singleOptions.state, singleOptions.path, value as TValue);
 				},
 			);
 
