@@ -72,13 +72,6 @@ tools: Task, Read, Grep
 │           │ ✅ 모든 규칙 통과                                    │
 │           ▼                                                     │
 │                                                                 │
-│  Phase 5: 품질 검증 (Quality Assurance) - 선택적                 │
-│  ┌─────────────────┐  ┌─────────────────┐                       │
-│  │ etc-code-       │  │ etc-test-       │                       │
-│  │   reviewer      │  │   engineer      │                       │
-│  │  (병렬 실행)    │  │  (병렬 실행)     │                       │
-│  └─────────────────┘  └─────────────────┘                       │
-│                                                                 │
 └─────────────────────────────────────────────────────────────────┘
 ```
 
@@ -96,46 +89,29 @@ tools: Task, Read, Grep
 | `fe-widget-builder` | Widget 컴포넌트 생성 | Phase 2 |
 | `fe-feature-builder` | Feature 컴포넌트 생성 | Phase 2 |
 | `fe-layout-builder` | Layout 컴포넌트 생성 | Phase 2 |
+| `be-schema-builder` | Prisma 스키마 생성 및 유형 분류 | Phase 3 |
+| `be-entity-builder` | 도메인 Entity 클래스 생성 | Phase 3 |
+| `be-dto-builder` | Request/Response DTO 클래스 생성 | Phase 3 |
 | `be-database-expert` | PostgreSQL/Prisma 스키마 설계 및 최적화 | Phase 3 |
 | `be-repository-builder` | Prisma Repository 레이어 생성 | Phase 3 |
 | `be-service-builder` | NestJS Service 레이어 생성 | Phase 3 |
+| `be-facade-builder` | NestJS Facade 레이어 생성 (여러 Service 조합) | Phase 3 |
 | `be-controller-builder` | NestJS REST Controller 생성 | Phase 3 |
 | `be-seed-maker` | Prisma 스키마 기반 현실적인 시드 데이터 생성 | Phase 3 |
 | `fe-page-builder` | Pure UI 페이지 컴포넌트 생성 (props 주입 방식) | Phase 4 |
 | `fe-page-reviewer` | 페이지 생성 결과의 프로젝트 규칙 준수 검증 | Phase 4.5 |
-| `etc-code-reviewer` | 코드 품질 검토 및 베스트 프랙티스 적용 | Phase 5 |
-| `etc-test-engineer` | 테스트 전략 수립 및 테스트 코드 작성 | Phase 5 |
 
 ### 아키텍처 및 설계 에이전트
 
 | 에이전트 | 역할 | 사용 시점 |
 |---------|------|----------|
-| `fe-frontend-architect` | React/Next.js 컴포넌트 설계 및 상태 관리 | 복잡한 프론트엔드 설계 시 |
-| `be-backend-architect` | NestJS API 설계 및 서버 아키텍처 | 복잡한 백엔드 설계 시 |
 | `be-backend-service-builder` | 복합 백엔드 서비스 레이어 설계/구현 | 복잡한 비즈니스 로직 시 |
-| `fe-react-native-architect` | React Native 컴포넌트 설계 및 네이티브 통합 | 모바일 앱 설계 시 |
-
-### 품질 및 최적화 에이전트
-
-| 에이전트 | 역할 | 사용 시점 |
-|---------|------|----------|
-| `etc-security-auditor` | 보안 취약점 분석 및 보안 강화 | 보안 검토 필요 시 |
-| `etc-performance-optimizer` | 프론트엔드/백엔드 성능 분석 및 최적화 | 성능 개선 필요 시 |
-| `etc-refactoring-expert` | 코드 리팩토링 및 기술 부채 해소 | 코드 개선 필요 시 |
 
 ### 인프라 및 배포 에이전트
 
 | 에이전트 | 역할 | 사용 시점 |
 |---------|------|----------|
-| `etc-devops-engineer` | Docker/K8s/CI/CD 인프라 및 배포 자동화 | 배포 설정 시 |
 | `etc-jenkinsfile-builder` | Jenkins CI/CD 파이프라인 파일 생성 | Jenkins 파이프라인 필요 시 |
-
-### 기타 전문 에이전트
-
-| 에이전트 | 역할 | 사용 시점 |
-|---------|------|----------|
-| `etc-documentation-writer` | 기술 문서 및 API 문서 작성 | 문서화 필요 시 |
-| `fe-expo-migration-expert` | React Native CLI → Expo Module 마이그레이션 | Expo 전환 시 |
 
 ## 실행 모드
 
@@ -367,16 +343,8 @@ Task(subagent_type="fe-page-reviewer", prompt=`
 | Store 패턴 | useRef로 Store 인스턴스 생성 | useRef 패턴으로 변경 지시 |
 
 **검증 결과:**
-- ✅ 모든 규칙 통과 → Phase 5로 진행
+- ✅ 모든 규칙 통과 → 완료
 - ❌ 위반 발견 → fe-page-builder에 수정 지시 → 재검증
-
-### Phase 5: 품질 검증 (선택적, 병렬 실행)
-
-```typescript
-// 코드 리뷰와 테스트 작성 병렬 실행
-Task(subagent_type="etc-code-reviewer", prompt="생성된 코드 검토...", run_in_background=true)
-Task(subagent_type="etc-test-engineer", prompt="테스트 코드 작성...", run_in_background=true)
-```
 
 ## 병렬 실행 전략
 
@@ -430,7 +398,6 @@ Task(subagent_type="be-service-builder", ...)
 | 3 | be-seed-maker | ✅ 완료 | 1.0s |
 | 4 | fe-page-builder | ✅ 완료 | 3.2s |
 | 4.5 | fe-page-reviewer | ✅ 완료 | 1.5s |
-| 5 | etc-code-reviewer | ✅ 완료 | 2.0s |
 
 ### 생성된 파일
 
