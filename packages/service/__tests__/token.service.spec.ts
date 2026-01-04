@@ -6,9 +6,10 @@ import {
 import { ConfigService } from "@nestjs/config";
 import { JwtService, NotBeforeError, TokenExpiredError } from "@nestjs/jwt";
 import { Test, type TestingModule } from "@nestjs/testing";
+import type { Request, Response } from "express";
 import { ClsService } from "nestjs-cls";
-import { TokenService } from "../src/infra/token.service";
-import { TokenStorageService } from "../src/infra/token-storage.service";
+import { TokenService } from "../src/token.service";
+import { TokenStorageService } from "../src/token-storage.service";
 
 describe("TokenService", () => {
 	let service: TokenService;
@@ -32,11 +33,11 @@ describe("TokenService", () => {
 		mockJwtService = {
 			sign: jest.fn(),
 			verify: jest.fn(),
-		} as unknown;
+		} as unknown as jest.Mocked<JwtService>;
 
 		mockConfigService = {
 			get: jest.fn().mockReturnValue(mockAuthConfig),
-		} as unknown;
+		} as unknown as jest.Mocked<ConfigService>;
 
 		mockTokenStorageService = {
 			saveRefreshToken: jest.fn(),
@@ -44,11 +45,11 @@ describe("TokenService", () => {
 			deleteRefreshToken: jest.fn(),
 			addToBlacklist: jest.fn(),
 			isBlacklisted: jest.fn(),
-		} as unknown;
+		} as unknown as jest.Mocked<TokenStorageService>;
 
 		mockClsService = {
 			get: jest.fn(),
-		} as unknown;
+		} as unknown as jest.Mocked<ClsService>;
 
 		const module: TestingModule = await Test.createTestingModule({
 			providers: [
@@ -72,7 +73,7 @@ describe("TokenService", () => {
 			// Given
 			const mockReq = {
 				cookies: { [Token.ACCESS]: "test-access-token" },
-			} as unknown;
+			} as unknown as Request;
 
 			// When
 			const result = service.getTokenFromRequest(mockReq);
@@ -85,7 +86,7 @@ describe("TokenService", () => {
 			// Given
 			const mockReq = {
 				cookies: { [Token.REFRESH]: "test-refresh-token" },
-			} as unknown;
+			} as unknown as Request;
 
 			// When
 			const result = service.getTokenFromRequest(mockReq, Token.REFRESH);
@@ -96,7 +97,7 @@ describe("TokenService", () => {
 
 		it("토큰이 없으면 BadRequestException을 던져야 한다", () => {
 			// Given
-			const mockReq = { cookies: {} } as unknown;
+			const mockReq = { cookies: {} } as unknown as Request;
 
 			// When & Then
 			expect(() => service.getTokenFromRequest(mockReq)).toThrow(
@@ -108,14 +109,16 @@ describe("TokenService", () => {
 	describe("setTokenToHTTPOnlyCookie", () => {
 		it("액세스 토큰을 쿠키에 설정해야 한다", () => {
 			// Given
-			const mockRes = { cookie: jest.fn() } as unknown;
+			const mockRes = { cookie: jest.fn() } as unknown as Response;
 			const token = "test-access-token";
 
 			// When
 			service.setTokenToHTTPOnlyCookie(mockRes, Token.ACCESS, token);
 
 			// Then
-			expect(mockRes.cookie).toHaveBeenCalledWith(
+			expect(
+				(mockRes as unknown as { cookie: jest.Mock }).cookie,
+			).toHaveBeenCalledWith(
 				Token.ACCESS,
 				token,
 				expect.objectContaining({
@@ -126,14 +129,16 @@ describe("TokenService", () => {
 
 		it("리프레시 토큰을 쿠키에 설정해야 한다", () => {
 			// Given
-			const mockRes = { cookie: jest.fn() } as unknown;
+			const mockRes = { cookie: jest.fn() } as unknown as Response;
 			const token = "test-refresh-token";
 
 			// When
 			service.setTokenToHTTPOnlyCookie(mockRes, Token.REFRESH, token);
 
 			// Then
-			expect(mockRes.cookie).toHaveBeenCalledWith(
+			expect(
+				(mockRes as unknown as { cookie: jest.Mock }).cookie,
+			).toHaveBeenCalledWith(
 				Token.REFRESH,
 				token,
 				expect.objectContaining({
@@ -145,7 +150,7 @@ describe("TokenService", () => {
 		it("auth 설정이 없으면 에러를 던져야 한다", () => {
 			// Given
 			mockConfigService.get.mockReturnValue(null);
-			const mockRes = { cookie: jest.fn() } as unknown;
+			const mockRes = { cookie: jest.fn() } as unknown as Response;
 
 			// When & Then
 			expect(() =>

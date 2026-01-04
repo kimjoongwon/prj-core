@@ -74,14 +74,14 @@ describe("UsersRepository", () => {
 		expect(repository).toBeDefined();
 	});
 
-	describe("findByIdWithRelations", () => {
+	describe("findByIdWithTenantsAndProfiles", () => {
 		it("ID로 사용자를 조회해야 한다", async () => {
 			// Given
 			const userId = "user-test-id";
 			mockTxHost.tx.user.findUnique.mockResolvedValue(mockUserData);
 
 			// When
-			const result = await repository.findByIdWithRelations(userId);
+			const result = await repository.findByIdWithTenantsAndProfiles(userId);
 
 			// Then
 			expect(mockTxHost.tx.user.findUnique).toHaveBeenCalledWith({
@@ -102,7 +102,7 @@ describe("UsersRepository", () => {
 			mockTxHost.tx.user.findUnique.mockResolvedValue(null);
 
 			// When
-			const result = await repository.findByIdWithRelations(userId);
+			const result = await repository.findByIdWithTenantsAndProfiles(userId);
 
 			// Then
 			expect(mockTxHost.tx.user.findUnique).toHaveBeenCalledWith({
@@ -118,7 +118,7 @@ describe("UsersRepository", () => {
 			mockTxHost.tx.user.findUnique.mockResolvedValue(mockUserData);
 
 			// When
-			const result = await repository.findByIdWithRelations(userId);
+			const result = await repository.findByIdWithTenantsAndProfiles(userId);
 
 			// Then
 			expect(result?.tenants).toBeDefined();
@@ -126,14 +126,14 @@ describe("UsersRepository", () => {
 		});
 	});
 
-	describe("findByEmailWithRelations", () => {
+	describe("findByEmailWithTenantsAndProfiles", () => {
 		it("이메일로 사용자를 조회해야 한다", async () => {
 			// Given
 			const email = "test@example.com";
 			mockTxHost.tx.user.findUnique.mockResolvedValue(mockUserData);
 
 			// When
-			const result = await repository.findByEmailWithRelations(email);
+			const result = await repository.findByEmailWithTenantsAndProfiles(email);
 
 			// Then
 			expect(mockTxHost.tx.user.findUnique).toHaveBeenCalledWith({
@@ -153,7 +153,7 @@ describe("UsersRepository", () => {
 			mockTxHost.tx.user.findUnique.mockResolvedValue(null);
 
 			// When
-			const result = await repository.findByEmailWithRelations(email);
+			const result = await repository.findByEmailWithTenantsAndProfiles(email);
 
 			// Then
 			expect(mockTxHost.tx.user.findUnique).toHaveBeenCalledWith({
@@ -169,7 +169,7 @@ describe("UsersRepository", () => {
 			mockTxHost.tx.user.findUnique.mockResolvedValue(mockUserData);
 
 			// When
-			await repository.findByEmailWithRelations(email);
+			await repository.findByEmailWithTenantsAndProfiles(email);
 
 			// Then
 			expect(mockTxHost.tx.user.findUnique).toHaveBeenCalledWith(
@@ -178,7 +178,7 @@ describe("UsersRepository", () => {
 						tenants: expect.objectContaining({
 							include: expect.objectContaining({
 								role: expect.any(Object),
-								space: true,
+								space: expect.any(Object),
 							}),
 						}),
 					}),

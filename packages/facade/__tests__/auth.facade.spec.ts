@@ -1,19 +1,22 @@
-import { PRISMA_SERVICE_TOKEN } from "@cocrepo/constant";
 import {
-	type PrismaService,
+	RolesService,
+	SpacesService,
 	TokenService,
 	UsersService,
 } from "@cocrepo/service";
 import { JwtService } from "@nestjs/jwt";
 import { Test, type TestingModule } from "@nestjs/testing";
+import { ClsService } from "nestjs-cls";
 import { AuthFacade } from "../src/auth.facade";
 
 describe("AuthFacade", () => {
 	let facade: AuthFacade;
 	let mockUsersService: jest.Mocked<UsersService>;
+	let mockRolesService: jest.Mocked<RolesService>;
+	let mockSpacesService: jest.Mocked<SpacesService>;
 	let mockJwtService: jest.Mocked<JwtService>;
 	let mockTokenService: jest.Mocked<TokenService>;
-	let mockPrismaService: jest.Mocked<PrismaService>;
+	let mockClsService: jest.Mocked<ClsService>;
 
 	const mockUser = {
 		id: "user-test-id",
@@ -29,12 +32,21 @@ describe("AuthFacade", () => {
 		mockUsersService = {
 			getByIdWithTenants: jest.fn(),
 			findUserForAuth: jest.fn(),
-		} as unknown;
+			createUserForSignUp: jest.fn(),
+		} as unknown as jest.Mocked<UsersService>;
+
+		mockRolesService = {
+			getDefaultUserRole: jest.fn(),
+		} as unknown as jest.Mocked<RolesService>;
+
+		mockSpacesService = {
+			createPersonalSpace: jest.fn(),
+		} as unknown as jest.Mocked<SpacesService>;
 
 		mockJwtService = {
 			verify: jest.fn(),
 			sign: jest.fn(),
-		} as unknown;
+		} as unknown as jest.Mocked<JwtService>;
 
 		mockTokenService = {
 			generateTokens: jest.fn(),
@@ -42,21 +54,22 @@ describe("AuthFacade", () => {
 			validateRefreshTokenFromStorage: jest.fn(),
 			invalidateTokens: jest.fn(),
 			isTokenBlacklisted: jest.fn(),
-		} as unknown;
+			calculateTokenExpiryTimes: jest.fn(),
+		} as unknown as jest.Mocked<TokenService>;
 
-		mockPrismaService = {
-			role: { findFirst: jest.fn() },
-			space: { create: jest.fn() },
-			user: { create: jest.fn() },
-		} as unknown;
+		mockClsService = {
+			get: jest.fn(),
+		} as unknown as jest.Mocked<ClsService>;
 
 		const module: TestingModule = await Test.createTestingModule({
 			providers: [
 				AuthFacade,
 				{ provide: UsersService, useValue: mockUsersService },
+				{ provide: RolesService, useValue: mockRolesService },
+				{ provide: SpacesService, useValue: mockSpacesService },
 				{ provide: JwtService, useValue: mockJwtService },
 				{ provide: TokenService, useValue: mockTokenService },
-				{ provide: PRISMA_SERVICE_TOKEN, useValue: mockPrismaService },
+				{ provide: ClsService, useValue: mockClsService },
 			],
 		}).compile();
 
@@ -73,7 +86,7 @@ describe("AuthFacade", () => {
 			const accessToken = "valid-access-token";
 			mockJwtService.verify.mockReturnValue({ userId: "user-test-id" });
 			mockUsersService.getByIdWithTenants.mockResolvedValue(
-				mockUser as unknown,
+				mockUser as any,
 			);
 
 			// When
@@ -109,11 +122,18 @@ describe("AuthFacade", () => {
 				accessToken: { value: "new-access-token" },
 				refreshToken: { value: "new-refresh-token" },
 			};
+			const mockTokenExpiryInfo = {
+				accessTokenExpiresAt: new Date("2024-01-01T01:00:00Z"),
+				refreshTokenExpiresAt: new Date("2024-01-08T00:00:00Z"),
+			};
 
 			mockJwtService.verify.mockReturnValue({ userId: "user-test-id" });
 			mockTokenService.validateRefreshTokenFromStorage.mockResolvedValue(true);
 			mockTokenService.generateTokensWithStorage.mockResolvedValue(
-				mockTokenPair as unknown,
+				mockTokenPair as any,
+			);
+			mockTokenService.calculateTokenExpiryTimes.mockReturnValue(
+				mockTokenExpiryInfo as any,
 			);
 
 			// When
@@ -127,6 +147,7 @@ describe("AuthFacade", () => {
 			expect(result).toEqual({
 				newAccessToken: "new-access-token",
 				newRefreshToken: "new-refresh-token",
+				tokenExpiryInfo: mockTokenExpiryInfo,
 			});
 		});
 

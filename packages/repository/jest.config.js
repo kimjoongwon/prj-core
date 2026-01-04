@@ -1,0 +1,44 @@
+module.exports = {
+  preset: "ts-jest",
+  testEnvironment: "node",
+  rootDir: ".",
+  testMatch: ["**/__tests__/**/*.spec.ts", "**/__tests__/**/*.test.ts"],
+  moduleFileExtensions: ["ts", "js", "json"],
+  moduleNameMapper: {
+    "^@cocrepo/entity$": "<rootDir>/../entity/dist",
+    "^@cocrepo/prisma$": "<rootDir>/../prisma/dist/src",
+  },
+  transform: {
+    "^.+\\.ts$": [
+      "ts-jest",
+      {
+        tsconfig: {
+          module: "commonjs",
+          target: "es2022",
+          esModuleInterop: true,
+          allowSyntheticDefaultImports: true,
+          experimentalDecorators: true,
+          emitDecoratorMetadata: true,
+          types: ["jest", "node"],
+          skipLibCheck: true,
+          strict: false,
+        },
+      },
+    ],
+  },
+  collectCoverageFrom: [
+    "src/**/*.ts",
+    "!src/**/*.spec.ts",
+    "!src/**/*.test.ts",
+    "!src/**/*.d.ts",
+    "!src/**/index.ts",
+  ],
+  coverageDirectory: "./coverage",
+  coverageReporters: ["text", "lcov", "html"],
+  maxWorkers: 1,
+  testTimeout: 10000,
+  forceExit: true,
+  clearMocks: true,
+  resetMocks: true,
+  restoreMocks: true,
+};

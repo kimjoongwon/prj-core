@@ -1,7 +1,7 @@
 import { UsersRepository } from "@cocrepo/repository";
 import { Test, type TestingModule } from "@nestjs/testing";
 import { type DeepMockProxy, mockDeep, mockReset } from "jest-mock-extended";
-import { UsersService } from "../src/service/users.service";
+import { UsersService } from "../src/users.service";
 
 describe("UsersService", () => {
 	let service: UsersService;
@@ -60,28 +60,32 @@ describe("UsersService", () => {
 		it("ID로 사용자를 조회해야 한다", async () => {
 			// Given
 			const userId = "user-test-id";
-			mockRepository.findByIdWithRelations.mockResolvedValue(
-				mockUser as unknown,
+			mockRepository.findByIdWithTenantsAndProfiles.mockResolvedValue(
+				mockUser as any,
 			);
 
 			// When
 			const result = await service.getByIdWithTenants(userId);
 
 			// Then
-			expect(mockRepository.findByIdWithRelations).toHaveBeenCalledWith(userId);
+			expect(mockRepository.findByIdWithTenantsAndProfiles).toHaveBeenCalledWith(
+				userId,
+			);
 			expect(result).toEqual(mockUser);
 		});
 
 		it("사용자가 없으면 null을 반환해야 한다", async () => {
 			// Given
 			const userId = "non-existent-user";
-			mockRepository.findByIdWithRelations.mockResolvedValue(null);
+			mockRepository.findByIdWithTenantsAndProfiles.mockResolvedValue(null);
 
 			// When
 			const result = await service.getByIdWithTenants(userId);
 
 			// Then
-			expect(mockRepository.findByIdWithRelations).toHaveBeenCalledWith(userId);
+			expect(mockRepository.findByIdWithTenantsAndProfiles).toHaveBeenCalledWith(
+				userId,
+			);
 			expect(result).toBeNull();
 		});
 	});
@@ -90,32 +94,32 @@ describe("UsersService", () => {
 		it("이메일로 인증용 사용자를 조회해야 한다", async () => {
 			// Given
 			const email = "test@example.com";
-			mockRepository.findByEmailWithRelations.mockResolvedValue(
-				mockUser as unknown,
+			mockRepository.findByEmailWithTenantsAndProfiles.mockResolvedValue(
+				mockUser as any,
 			);
 
 			// When
 			const result = await service.findUserForAuth(email);
 
 			// Then
-			expect(mockRepository.findByEmailWithRelations).toHaveBeenCalledWith(
-				email,
-			);
+			expect(
+				mockRepository.findByEmailWithTenantsAndProfiles,
+			).toHaveBeenCalledWith(email);
 			expect(result).toEqual(mockUser);
 		});
 
 		it("이메일로 사용자를 찾지 못하면 null을 반환해야 한다", async () => {
 			// Given
 			const email = "nonexistent@example.com";
-			mockRepository.findByEmailWithRelations.mockResolvedValue(null);
+			mockRepository.findByEmailWithTenantsAndProfiles.mockResolvedValue(null);
 
 			// When
 			const result = await service.findUserForAuth(email);
 
 			// Then
-			expect(mockRepository.findByEmailWithRelations).toHaveBeenCalledWith(
-				email,
-			);
+			expect(
+				mockRepository.findByEmailWithTenantsAndProfiles,
+			).toHaveBeenCalledWith(email);
 			expect(result).toBeNull();
 		});
 	});
