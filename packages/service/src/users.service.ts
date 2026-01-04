@@ -12,7 +12,9 @@ import {
  * 회원 목록 조회 결과
  */
 export interface GetMembersResult {
-	users: Awaited<ReturnType<UsersRepository["findManyBySpaceId"]>>["users"];
+	users: Awaited<
+		ReturnType<UsersRepository["findManyBySpaceIdWithRelations"]>
+	>["users"];
 	totalCount: number;
 	stats: UserStats;
 }
@@ -71,8 +73,8 @@ export class UsersService {
 
 		// 회원 목록과 통계를 병렬로 조회
 		const [{ users, totalCount }, stats] = await Promise.all([
-			this.repository.findManyBySpaceId(params),
-			this.repository.getStatsBySpace(params.spaceId),
+			this.repository.findManyBySpaceIdWithRelations(params),
+			this.repository.getStatsBySpaceId(params.spaceId),
 		]);
 
 		return {
@@ -91,7 +93,10 @@ export class UsersService {
 			`Space 내 회원 상세 조회: userId=${userId}, spaceId=${spaceId}`,
 		);
 
-		const user = await this.repository.findByIdAndSpaceId(userId, spaceId);
+		const user = await this.repository.findByIdAndSpaceIdWithRelations(
+			userId,
+			spaceId,
+		);
 
 		if (!user) {
 			throw new NotFoundException(UserServiceErrorMessages.USER_NOT_FOUND);
@@ -123,10 +128,39 @@ export class UsersService {
 		const plainPassword = PlainPassword.create(params.password);
 		const hashedPassword = await HashedPassword.fromPlain(plainPassword);
 
-		// 회원 생성
-		const user = await this.repository.createWithTenantsAndProfiles({
-			...params,
+		// 회원 생성 - Prisma.UserCreateInput 형태로 전달
+		const user = await this.repository.createWithRelations({
+			name: params.name,
+			email: params.email,
+			phone: params.phone,
 			password: hashedPassword.value,
+			tenants: {
+				create: {
+					space: { connect: { id: params.spaceId } },
+					role: { connect: { id: params.roleId } },
+				},
+			},
+			profiles: {
+				create: {
+					name: params.name,
+					nickname: params.name,
+				},
+			},
+			...(params.categoryId && {
+				classification: {
+					create: {
+						category: { connect: { id: params.categoryId } },
+					},
+				},
+			}),
+			...(params.groupIds &&
+				params.groupIds.length > 0 && {
+					associations: {
+						create: params.groupIds.map((groupId) => ({
+							group: { connect: { id: groupId } },
+						})),
+					},
+				}),
 		});
 
 		return user;
@@ -150,7 +184,7 @@ export class UsersService {
 		this.logger.debug(`회원 수정: userId=${userId}, spaceId=${spaceId}`);
 
 		// 회원 존재 및 Space 접근 권한 확인
-		const existingUser = await this.repository.findByIdAndSpaceId(
+		const existingUser = await this.repository.findByIdAndSpaceIdWithRelations(
 			userId,
 			spaceId,
 		);
@@ -188,9 +222,17 @@ export class UsersService {
 		}
 
 		// 회원 수정
-		const updatedUser = await this.repository.updateWithRelations(
+		const updatedUser = await this.repository.updateByIdWithRelations(
 			userId,
-			params,
+			{
+				name: params.name,
+				email: params.email,
+				phone: params.phone,
+			},
+			{
+				categoryId: params.categoryId,
+				groupIds: params.groupIds,
+			},
 		);
 
 		return updatedUser;
@@ -215,7 +257,7 @@ export class UsersService {
 		}
 
 		// 회원 존재 및 Space 접근 권한 확인
-		const existingUser = await this.repository.findByIdAndSpaceId(
+		const existingUser = await this.repository.findByIdAndSpaceIdWithRelations(
 			userId,
 			spaceId,
 		);
@@ -246,7 +288,7 @@ export class UsersService {
 		spaceId: string,
 	): Promise<string> {
 		// 1. Space 접근 권한 검증
-		const hasAccess = await this.repository.existsTenantByUserAndSpace(
+		const hasAccess = await this.repository.existsTenantByUserIdAndSpaceId(
 			userId,
 			spaceId,
 		);
@@ -258,7 +300,10 @@ export class UsersService {
 		}
 
 		// 2. selectedSpaceId 업데이트
-		const updatedSpaceId = await this.repository.updateSpaceId(userId, spaceId);
+		const updatedSpaceId = await this.repository.updateSelectedSpaceIdById(
+			userId,
+			spaceId,
+		);
 
 		return updatedSpaceId;
 	}
@@ -310,6 +355,23 @@ export class UsersService {
 		nickname?: string;
 	}) {
 		this.logger.debug(`회원가입 사용자 생성: email=${params.email}`);
-		return this.repository.createWithTenantsAndProfiles(params);
+		return this.repository.createWithRelations({
+			name: params.name,
+			email: params.email,
+			phone: params.phone,
+			password: params.password,
+			tenants: {
+				create: {
+					space: { connect: { id: params.spaceId } },
+					role: { connect: { id: params.roleId } },
+				},
+			},
+			profiles: {
+				create: {
+					name: params.name,
+					nickname: params.nickname || params.name,
+				},
+			},
+		});
 	}
 }

@@ -1,34 +1,9 @@
 import { Subject } from "@cocrepo/entity";
-import { PrismaClient, SubjectTypes } from "@cocrepo/prisma";
+import { Prisma, PrismaClient, SubjectTypes } from "@cocrepo/prisma";
 import { Injectable, Logger } from "@nestjs/common";
 import { TransactionHost } from "@nestjs-cls/transactional";
 import { TransactionalAdapterPrisma } from "@nestjs-cls/transactional-adapter-prisma";
 import { plainToInstance } from "class-transformer";
-
-/**
- * Subject 생성 파라미터
- */
-export interface CreateSubjectParams {
-	name: string;
-	type: SubjectTypes;
-	label?: string;
-	description?: string;
-	parentId?: string;
-	tenantId: string;
-	sortOrder?: number;
-}
-
-/**
- * Subject 수정 파라미터
- */
-export interface UpdateSubjectParams {
-	name?: string;
-	type?: SubjectTypes;
-	label?: string;
-	description?: string;
-	parentId?: string;
-	sortOrder?: number;
-}
 
 @Injectable()
 export class SubjectsRepository {
@@ -70,9 +45,11 @@ export class SubjectsRepository {
 	}
 
 	/**
-	 * ID로 조회 (관계 포함)
+	 * ID로 조회 (Parent, Children, Abilities 포함)
 	 */
-	async findByIdWithRelations(id: string): Promise<Subject | null> {
+	async findByIdWithParentAndChildrenAndAbilities(
+		id: string,
+	): Promise<Subject | null> {
 		this.logger.debug(`ID로 조회 (관계 포함): ${id.slice(-8)}`);
 
 		const result = await this.txHost.tx.subject.findUnique({
@@ -111,7 +88,7 @@ export class SubjectsRepository {
 	/**
 	 * 타입별 조회
 	 */
-	async findByType(type: SubjectTypes): Promise<Subject[]> {
+	async findManyByType(type: SubjectTypes): Promise<Subject[]> {
 		this.logger.debug(`타입별 조회: ${type}`);
 
 		const results = await this.txHost.tx.subject.findMany({
@@ -123,12 +100,12 @@ export class SubjectsRepository {
 	}
 
 	/**
-	 * 계층 구조 조회
+	 * Parent ID로 조회 (Children 포함)
 	 * parentId가 null이면 root subjects 조회
 	 */
-	async findWithChildren(parentId?: string): Promise<Subject[]> {
+	async findManyByParentIdWithChildren(parentId?: string): Promise<Subject[]> {
 		this.logger.debug(
-			`계층 구조 조회: parentId=${parentId ? parentId.slice(-8) : "null (root)"}`,
+			`Parent ID로 조회: parentId=${parentId ? parentId.slice(-8) : "null (root)"}`,
 		);
 
 		const results = await this.txHost.tx.subject.findMany({
@@ -149,9 +126,9 @@ export class SubjectsRepository {
 	}
 
 	/**
-	 * 전체 하위 트리 조회 (재귀)
+	 * Parent ID로 전체 하위 트리 조회 (재귀 CTE)
 	 */
-	async findTreeByParentId(parentId: string): Promise<Subject[]> {
+	async findDescendantsByParentId(parentId: string): Promise<Subject[]> {
 		this.logger.debug(`전체 하위 트리 조회: parentId=${parentId.slice(-8)}`);
 
 		// 재귀 CTE를 사용한 전체 하위 트리 조회
@@ -181,19 +158,11 @@ export class SubjectsRepository {
 	/**
 	 * Subject 생성
 	 */
-	async create(data: CreateSubjectParams): Promise<Subject> {
+	async create(data: Prisma.SubjectUncheckedCreateInput): Promise<Subject> {
 		this.logger.debug(`Subject 생성: name=${data.name}`);
 
 		const result = await this.txHost.tx.subject.create({
-			data: {
-				name: data.name,
-				type: data.type,
-				label: data.label,
-				description: data.description,
-				parentId: data.parentId,
-				tenantId: data.tenantId,
-				sortOrder: data.sortOrder ?? 0,
-			},
+			data,
 		});
 
 		return plainToInstance(Subject, result);
@@ -202,29 +171,25 @@ export class SubjectsRepository {
 	/**
 	 * Subject 수정
 	 */
-	async update(id: string, data: UpdateSubjectParams): Promise<Subject> {
+	async updateById(
+		id: string,
+		data: Prisma.SubjectUncheckedUpdateInput,
+	): Promise<Subject> {
 		this.logger.debug(`Subject 수정: id=${id.slice(-8)}`);
 
 		const result = await this.txHost.tx.subject.update({
 			where: { id },
-			data: {
-				name: data.name,
-				type: data.type,
-				label: data.label,
-				description: data.description,
-				parentId: data.parentId,
-				sortOrder: data.sortOrder,
-			},
+			data,
 		});
 
 		return plainToInstance(Subject, result);
 	}
 
 	/**
-	 * Subject 삭제 (Soft Delete)
+	 * Subject 소프트 삭제
 	 */
-	async delete(id: string): Promise<Subject> {
-		this.logger.debug(`Subject 삭제: id=${id.slice(-8)}`);
+	async removeById(id: string): Promise<Subject> {
+		this.logger.debug(`Subject 소프트 삭제: id=${id.slice(-8)}`);
 
 		const result = await this.txHost.tx.subject.update({
 			where: { id },
@@ -232,5 +197,19 @@ export class SubjectsRepository {
 		});
 
 		return plainToInstance(Subject, result);
+	}
+
+	/**
+	 * 다중 Subject 생성
+	 */
+	async createMany(data: Prisma.SubjectCreateManyInput[]): Promise<number> {
+		this.logger.debug(`다중 Subject 생성: count=${data.length}`);
+
+		const result = await this.txHost.tx.subject.createMany({
+			data,
+			skipDuplicates: true,
+		});
+
+		return result.count;
 	}
 }

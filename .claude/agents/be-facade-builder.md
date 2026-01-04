@@ -277,17 +277,30 @@ export class OrderFacade {
 ### 언제 Facade를 사용하나?
 
 ```typescript
-// ❌ 단순 CRUD - Facade 불필요, Service 직접 사용
-async getUser(id: string) {
-  return this.usersService.getById(id);
-}
-
 // ✅ 복잡한 비즈니스 흐름 - Facade 사용
 async signUp(params: SignUpParams) {
   // Role 조회 → Space 생성 → User 생성 → Token 발급
   // 4개의 Service를 조합하는 복잡한 흐름
 }
 ```
+
+### 언제 Facade 없이 Service만 사용하나?
+
+**Facade가 필요 없는 도메인** (모든 API가 단순 CRUD인 경우):
+
+```typescript
+// Controller에서 Service 직접 사용 (Facade 없는 도메인)
+@Controller()
+export class ProductsController {
+  constructor(private readonly productsService: ProductsService) {}
+
+  async getProduct(id: string) {
+    return this.productsService.getById(id);
+  }
+}
+```
+
+**중요**: Facade가 있는 도메인에서는 Controller가 Facade만 사용해야 합니다. 단순 조회도 Facade를 통해 위임해야 Controller의 일관성이 유지됩니다.
 
 ---
 
@@ -319,12 +332,36 @@ async signUp() {
 }
 ```
 
-### 3. 단순 위임만 하는 Facade
+### 3. 단순 위임만 하는 Facade (조건부 허용)
 
 ```typescript
-// ❌ 불필요 - Controller에서 Service 직접 호출하면 됨
+// ⚠️ 조건부 허용 - Controller의 일관성을 위해 필요한 경우
 async getUser(id: string) {
   return this.usersService.getById(id);
+}
+```
+
+**주의**: 단순 위임 메서드는 일반적으로 불필요하지만, **Controller에서 Facade를 사용하는 경우** 일관성을 위해 허용됩니다.
+
+- Controller는 Facade **또는** Service 중 하나만 사용해야 함
+- Facade가 있는 도메인의 Controller는 Facade만 사용
+- 따라서 단순 조회도 Facade를 통해 위임해야 함
+
+```typescript
+// ✅ 허용 - Controller 일관성을 위해 단순 위임도 Facade에 추가
+@Injectable()
+export class AbilitiesFacade {
+  // 복잡한 비즈니스 로직
+  async getMyAbilities(userId: string) {
+    const user = await this.usersService.getById(userId);
+    const roleId = user.tenants[0].roleId;
+    return this.abilitiesService.getAbilitiesByRoleId(roleId);
+  }
+
+  // 단순 위임 - Controller 일관성을 위해 허용
+  async getAbilitiesByRoleId(roleId: string) {
+    return this.abilitiesService.getAbilitiesByRoleId(roleId);
+  }
 }
 ```
 
@@ -339,6 +376,7 @@ async getUser(id: string) {
 - [ ] 여러 Service를 조합하는 비즈니스 흐름
 - [ ] 메서드명이 비즈니스 흐름을 표현
 - [ ] Logger 초기화
+- [ ] **Controller 일관성**: Facade가 있으면 모든 Controller 메서드가 Facade만 사용
 
 ---
 
@@ -353,6 +391,6 @@ export { {Domain}Facade } from "./{domain}.facade";
 
 ## 관련 파일
 
-- Service: `packages/service/src/service/{entity}.service.ts`
+- Service: `packages/service/src/{entity}.service.ts`
 - Controller: `apps/server/src/module/{domain}/{domain}.controller.ts`
 - Repository: `packages/repository/src/{entity}.repository.ts`

@@ -1,9 +1,6 @@
 import { ColumnDefinition } from "@cocrepo/entity";
-import {
-	ColumnDefinitionsRepository,
-	CreateColumnDefinitionParams,
-	UpdateColumnDefinitionParams,
-} from "@cocrepo/repository";
+import { Prisma } from "@cocrepo/prisma";
+import { ColumnDefinitionsRepository } from "@cocrepo/repository";
 import {
 	BadRequestException,
 	Injectable,
@@ -55,7 +52,7 @@ export class ColumnDefinitionsService {
 		);
 
 		// 1. Repository에서 컬럼 조회
-		const columns = await this.repository.findByEntity(entity, spaceId);
+		const columns = await this.repository.findManyByEntityAndSpaceIdWithSubject(entity, spaceId);
 
 		// 2. 디바이스 타입별 필터링
 		if (deviceType) {
@@ -79,7 +76,7 @@ export class ColumnDefinitionsService {
 	async getColumnById(id: string): Promise<ColumnDefinition> {
 		this.logger.debug(`컬럼 정의 조회: id=${id.slice(-8)}`);
 
-		const column = await this.repository.findById(id);
+		const column = await this.repository.findByIdWithSpaceAndSubject(id);
 
 		if (!column) {
 			throw new NotFoundException(
@@ -100,7 +97,7 @@ export class ColumnDefinitionsService {
 	 * @returns 생성된 컬럼 정의
 	 */
 	async createColumn(
-		data: CreateColumnDefinitionParams,
+		data: Prisma.ColumnDefinitionUncheckedCreateInput,
 	): Promise<ColumnDefinition> {
 		this.logger.debug(
 			`컬럼 정의 생성: entity=${data.entity}, field=${data.field}`,
@@ -129,7 +126,7 @@ export class ColumnDefinitionsService {
 	 */
 	async updateColumn(
 		id: string,
-		data: UpdateColumnDefinitionParams,
+		data: Prisma.ColumnDefinitionUncheckedUpdateInput,
 	): Promise<ColumnDefinition> {
 		this.logger.debug(`컬럼 정의 수정: id=${id.slice(-8)}`);
 
@@ -137,7 +134,7 @@ export class ColumnDefinitionsService {
 		await this.getColumnById(id);
 
 		// 업데이트
-		const updatedColumn = await this.repository.update(id, data);
+		const updatedColumn = await this.repository.updateById(id, data);
 
 		this.logger.log(`컬럼 정의 수정 완료: id=${id.slice(-8)}`);
 
@@ -156,7 +153,7 @@ export class ColumnDefinitionsService {
 	async deleteColumn(id: string): Promise<ColumnDefinition> {
 		this.logger.debug(`컬럼 정의 삭제: id=${id.slice(-8)}`);
 
-		const deletedColumn = await this.repository.softDelete(id);
+		const deletedColumn = await this.repository.removeById(id);
 
 		this.logger.log(`컬럼 정의 삭제 완료: id=${id.slice(-8)}`);
 
@@ -179,14 +176,14 @@ export class ColumnDefinitionsService {
 	async initializeDefaultColumns(
 		entity: string,
 		spaceId: string,
-		columns: CreateColumnDefinitionParams[],
+		columns: Prisma.ColumnDefinitionCreateManyInput[],
 	): Promise<number> {
 		this.logger.debug(
 			`기본 컬럼 정의 초기화: entity=${entity}, spaceId=${spaceId.slice(-8)}, count=${columns.length}`,
 		);
 
 		// 1. 이미 존재하는지 확인
-		const existingColumns = await this.repository.findByEntity(entity, spaceId);
+		const existingColumns = await this.repository.findManyByEntityAndSpaceIdWithSubject(entity, spaceId);
 
 		if (existingColumns.length > 0) {
 			throw new BadRequestException(
@@ -216,7 +213,7 @@ export class ColumnDefinitionsService {
 	async getEntitiesBySpace(spaceId: string): Promise<string[]> {
 		this.logger.debug(`Space의 엔티티 조회: spaceId=${spaceId.slice(-8)}`);
 
-		return this.repository.findEntitiesBySpace(spaceId);
+		return this.repository.findDistinctEntitiesBySpaceId(spaceId);
 	}
 
 	/**

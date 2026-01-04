@@ -15,7 +15,7 @@
 
 ### Agents vs Skills
 
-- **agents/**: 설계 및 아키텍처 전문가 (ui-component-builder, backend-architect 등)
+- **agents/**: 설계 및 아키텍처 전문가 (fe-*, be-*, etc-* prefix로 분류)
 - **skills/**: 도구 실행 방법 (type-check, lint-format 등)
 - **hooks/**: 자동 실행 스크립트
 

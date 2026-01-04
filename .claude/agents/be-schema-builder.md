@@ -397,5 +397,5 @@ model EntityAssociation {
 ## 관련 파일
 
 - 유형 분류 체계 문서: `packages/prisma/schema/_base.prisma`
-- Repository 빌더: `.claude/agents/repository-builder.md`
-- 데이터베이스 전문가: `.claude/agents/database-expert.md`
+- Repository 빌더: `.claude/agents/be-repository-builder.md`
+- 데이터베이스 전문가: `.claude/agents/be-database-expert.md`

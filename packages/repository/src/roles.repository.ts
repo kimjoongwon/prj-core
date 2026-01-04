@@ -1,7 +1,9 @@
-import { PrismaClient, Role, Roles } from "@cocrepo/prisma";
+import { Role } from "@cocrepo/entity";
+import { Prisma, PrismaClient, Roles } from "@cocrepo/prisma";
 import { Injectable, Logger } from "@nestjs/common";
 import { TransactionHost } from "@nestjs-cls/transactional";
 import { TransactionalAdapterPrisma } from "@nestjs-cls/transactional-adapter-prisma";
+import { plainToInstance } from "class-transformer";
 
 @Injectable()
 export class RolesRepository {
@@ -21,9 +23,11 @@ export class RolesRepository {
 	async findById(id: string): Promise<Role | null> {
 		this.logger.debug(`ID로 역할 조회: ${id.slice(-8)}`);
 
-		return this.txHost.tx.role.findUnique({
+		const result = await this.txHost.tx.role.findUnique({
 			where: { id },
 		});
+
+		return result ? plainToInstance(Role, result) : null;
 	}
 
 	/**
@@ -32,9 +36,11 @@ export class RolesRepository {
 	async findByName(name: Roles): Promise<Role | null> {
 		this.logger.debug(`이름으로 역할 조회: ${name}`);
 
-		return this.txHost.tx.role.findFirst({
+		const result = await this.txHost.tx.role.findFirst({
 			where: { name },
 		});
+
+		return result ? plainToInstance(Role, result) : null;
 	}
 
 	/**
@@ -43,8 +49,40 @@ export class RolesRepository {
 	async findAll(): Promise<Role[]> {
 		this.logger.debug("전체 역할 목록 조회");
 
-		return this.txHost.tx.role.findMany({
+		const results = await this.txHost.tx.role.findMany({
 			orderBy: { createdAt: "asc" },
 		});
+
+		return results.map((result) => plainToInstance(Role, result));
+	}
+
+	/**
+	 * 역할 생성
+	 */
+	async create(data: Prisma.RoleUncheckedCreateInput): Promise<Role> {
+		this.logger.debug(`역할 생성: name=${data.name}`);
+
+		const result = await this.txHost.tx.role.create({
+			data,
+		});
+
+		return plainToInstance(Role, result);
+	}
+
+	/**
+	 * 역할 수정
+	 */
+	async updateById(
+		id: string,
+		data: Prisma.RoleUncheckedUpdateInput,
+	): Promise<Role> {
+		this.logger.debug(`역할 수정: ${id.slice(-8)}`);
+
+		const result = await this.txHost.tx.role.update({
+			where: { id },
+			data,
+		});
+
+		return plainToInstance(Role, result);
 	}
 }

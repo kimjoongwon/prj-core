@@ -1,51 +1,9 @@
 import { Ability } from "@cocrepo/entity";
-import {
-	AbilityActions,
-	AbilityTypes,
-	Prisma,
-	PrismaClient,
-} from "@cocrepo/prisma";
+import { Prisma, PrismaClient } from "@cocrepo/prisma";
 import { Injectable, Logger } from "@nestjs/common";
 import { TransactionHost } from "@nestjs-cls/transactional";
 import { TransactionalAdapterPrisma } from "@nestjs-cls/transactional-adapter-prisma";
 import { plainToInstance } from "class-transformer";
-
-/**
- * Ability 생성 파라미터
- */
-export interface CreateAbilityParams {
-	type: AbilityTypes;
-	action: AbilityActions;
-	roleId: string;
-	subjectId: string;
-	tenantId: string;
-	description?: string;
-	conditions?: Prisma.InputJsonValue;
-	isActive?: boolean;
-}
-
-/**
- * Ability 수정 파라미터
- */
-export interface UpdateAbilityParams {
-	type?: AbilityTypes;
-	action?: AbilityActions;
-	description?: string;
-	conditions?: Prisma.InputJsonValue;
-	isActive?: boolean;
-}
-
-/**
- * Ability 일괄 생성 DTO
- */
-export interface CreateAbilityDto {
-	type: AbilityTypes;
-	action: AbilityActions;
-	subjectId: string;
-	description?: string;
-	conditions?: Prisma.InputJsonValue;
-	isActive?: boolean;
-}
 
 @Injectable()
 export class AbilitiesRepository {
@@ -60,9 +18,9 @@ export class AbilitiesRepository {
 	}
 
 	/**
-	 * 모든 Ability 조회
+	 * 모든 Ability 조회 (Role, Subject 포함)
 	 */
-	async findAll(): Promise<Ability[]> {
+	async findAllWithRoleAndSubject(): Promise<Ability[]> {
 		this.logger.debug("모든 Ability 조회");
 
 		const results = await this.txHost.tx.ability.findMany({
@@ -78,9 +36,9 @@ export class AbilitiesRepository {
 	}
 
 	/**
-	 * ID로 조회
+	 * ID로 조회 (Role, Subject 포함)
 	 */
-	async findById(id: string): Promise<Ability | null> {
+	async findByIdWithRoleAndSubject(id: string): Promise<Ability | null> {
 		this.logger.debug(`ID로 조회: ${id.slice(-8)}`);
 
 		const result = await this.txHost.tx.ability.findUnique({
@@ -95,10 +53,10 @@ export class AbilitiesRepository {
 	}
 
 	/**
-	 * Role별 Ability 조회 (Subject 관계 포함)
+	 * Role ID로 Ability 목록 조회 (Role, Subject 관계 포함)
 	 */
-	async findByRoleId(roleId: string): Promise<Ability[]> {
-		this.logger.debug(`Role별 Ability 조회: roleId=${roleId.slice(-8)}`);
+	async findManyByRoleIdWithRoleAndSubject(roleId: string): Promise<Ability[]> {
+		this.logger.debug(`Role ID로 Ability 조회: roleId=${roleId.slice(-8)}`);
 
 		const results = await this.txHost.tx.ability.findMany({
 			where: {
@@ -123,11 +81,13 @@ export class AbilitiesRepository {
 	}
 
 	/**
-	 * 여러 Role의 Ability 조회
+	 * 여러 Role ID로 활성화된 Ability 목록 조회 (Role, Subject 관계 포함)
 	 */
-	async findByRoleIds(roleIds: string[]): Promise<Ability[]> {
+	async findManyActiveByRoleIdsWithRoleAndSubject(
+		roleIds: string[],
+	): Promise<Ability[]> {
 		this.logger.debug(
-			`여러 Role의 Ability 조회: roleIds.length=${roleIds.length}`,
+			`여러 Role ID로 Ability 조회: roleIds.length=${roleIds.length}`,
 		);
 
 		const results = await this.txHost.tx.ability.findMany({
@@ -154,11 +114,13 @@ export class AbilitiesRepository {
 	}
 
 	/**
-	 * Subject별 Ability 조회
+	 * Subject ID로 Ability 목록 조회 (Role, Subject 포함)
 	 */
-	async findBySubjectId(subjectId: string): Promise<Ability[]> {
+	async findManyBySubjectIdWithRoleAndSubject(
+		subjectId: string,
+	): Promise<Ability[]> {
 		this.logger.debug(
-			`Subject별 Ability 조회: subjectId=${subjectId.slice(-8)}`,
+			`Subject ID로 Ability 조회: subjectId=${subjectId.slice(-8)}`,
 		);
 
 		const results = await this.txHost.tx.ability.findMany({
@@ -179,22 +141,13 @@ export class AbilitiesRepository {
 	/**
 	 * Ability 생성
 	 */
-	async create(data: CreateAbilityParams): Promise<Ability> {
+	async create(data: Prisma.AbilityUncheckedCreateInput): Promise<Ability> {
 		this.logger.debug(
 			`Ability 생성: roleId=${data.roleId.slice(-8)}, subjectId=${data.subjectId.slice(-8)}`,
 		);
 
 		const result = await this.txHost.tx.ability.create({
-			data: {
-				type: data.type,
-				action: data.action,
-				roleId: data.roleId,
-				subjectId: data.subjectId,
-				tenantId: data.tenantId,
-				description: data.description,
-				conditions: data.conditions as any,
-				isActive: data.isActive ?? true,
-			},
+			data,
 			include: {
 				role: true,
 				subject: true,
@@ -207,18 +160,15 @@ export class AbilitiesRepository {
 	/**
 	 * Ability 수정
 	 */
-	async update(id: string, data: UpdateAbilityParams): Promise<Ability> {
+	async updateById(
+		id: string,
+		data: Prisma.AbilityUncheckedUpdateInput,
+	): Promise<Ability> {
 		this.logger.debug(`Ability 수정: id=${id.slice(-8)}`);
 
 		const result = await this.txHost.tx.ability.update({
 			where: { id },
-			data: {
-				type: data.type,
-				action: data.action,
-				description: data.description,
-				conditions: data.conditions as any,
-				isActive: data.isActive,
-			},
+			data,
 			include: {
 				role: true,
 				subject: true,
@@ -229,10 +179,10 @@ export class AbilitiesRepository {
 	}
 
 	/**
-	 * Ability 삭제 (Soft Delete)
+	 * Ability 소프트 삭제
 	 */
-	async delete(id: string): Promise<Ability> {
-		this.logger.debug(`Ability 삭제: id=${id.slice(-8)}`);
+	async removeById(id: string): Promise<Ability> {
+		this.logger.debug(`Ability 소프트 삭제: id=${id.slice(-8)}`);
 
 		const result = await this.txHost.tx.ability.update({
 			where: { id },
@@ -247,16 +197,15 @@ export class AbilitiesRepository {
 	}
 
 	/**
-	 * 트랜잭션 기반 일괄 업데이트
-	 * 기존 Ability 삭제 후 새로 생성
+	 * Role의 기존 Ability를 삭제하고 새로 생성 (일괄 교체)
 	 */
-	async upsertMany(
+	async replaceByRoleId(
 		roleId: string,
 		tenantId: string,
-		abilities: CreateAbilityDto[],
+		abilities: Prisma.AbilityCreateManyInput[],
 	): Promise<Ability[]> {
 		this.logger.debug(
-			`Ability 일괄 업데이트: roleId=${roleId.slice(-8)}, count=${abilities.length}`,
+			`Ability 일괄 교체: roleId=${roleId.slice(-8)}, count=${abilities.length}`,
 		);
 
 		// 기존 Ability 소프트 삭제
@@ -272,13 +221,9 @@ export class AbilitiesRepository {
 
 		// 새 Ability 생성
 		const createData = abilities.map((ability) => ({
-			type: ability.type,
-			action: ability.action,
+			...ability,
 			roleId,
-			subjectId: ability.subjectId,
 			tenantId,
-			description: ability.description,
-			conditions: ability.conditions,
 			isActive: ability.isActive ?? true,
 		}));
 
@@ -296,5 +241,19 @@ export class AbilitiesRepository {
 		}
 
 		return results;
+	}
+
+	/**
+	 * 다중 Ability 생성
+	 */
+	async createMany(data: Prisma.AbilityCreateManyInput[]): Promise<number> {
+		this.logger.debug(`다중 Ability 생성: count=${data.length}`);
+
+		const result = await this.txHost.tx.ability.createMany({
+			data,
+			skipDuplicates: true,
+		});
+
+		return result.count;
 	}
 }

@@ -1,5 +1,5 @@
 import { Ground } from "@cocrepo/entity";
-import { PrismaClient } from "@cocrepo/prisma";
+import { Prisma, PrismaClient } from "@cocrepo/prisma";
 import { Injectable, Logger } from "@nestjs/common";
 import { TransactionHost } from "@nestjs-cls/transactional";
 import { TransactionalAdapterPrisma } from "@nestjs-cls/transactional-adapter-prisma";
@@ -45,10 +45,10 @@ export class GroundsRepository {
 	}
 
 	/**
-	 * SpaceId로 Ground 목록 조회
+	 * Space ID로 Ground 목록 조회
 	 */
-	async findBySpaceId(spaceId: string): Promise<Ground[]> {
-		this.logger.debug(`SpaceId로 Ground 목록 조회: ${spaceId.slice(-8)}`);
+	async findManyBySpaceId(spaceId: string): Promise<Ground[]> {
+		this.logger.debug(`Space ID로 Ground 목록 조회: ${spaceId.slice(-8)}`);
 
 		const results = await this.txHost.tx.ground.findMany({
 			where: { spaceId, removedAt: null },
@@ -56,5 +56,49 @@ export class GroundsRepository {
 		});
 
 		return results.map((result) => plainToInstance(Ground, result));
+	}
+
+	/**
+	 * Ground 생성
+	 */
+	async create(data: Prisma.GroundUncheckedCreateInput): Promise<Ground> {
+		this.logger.debug("Ground 생성");
+
+		const result = await this.txHost.tx.ground.create({
+			data,
+		});
+
+		return plainToInstance(Ground, result);
+	}
+
+	/**
+	 * Ground 수정
+	 */
+	async updateById(
+		id: string,
+		data: Prisma.GroundUncheckedUpdateInput,
+	): Promise<Ground> {
+		this.logger.debug(`Ground 수정: ${id.slice(-8)}`);
+
+		const result = await this.txHost.tx.ground.update({
+			where: { id },
+			data,
+		});
+
+		return plainToInstance(Ground, result);
+	}
+
+	/**
+	 * Ground 소프트 삭제
+	 */
+	async removeById(id: string): Promise<Ground> {
+		this.logger.debug(`Ground 소프트 삭제: ${id.slice(-8)}`);
+
+		const result = await this.txHost.tx.ground.update({
+			where: { id },
+			data: { removedAt: new Date() },
+		});
+
+		return plainToInstance(Ground, result);
 	}
 }

@@ -5,11 +5,6 @@ import { TransactionHost } from "@nestjs-cls/transactional";
 import { TransactionalAdapterPrisma } from "@nestjs-cls/transactional-adapter-prisma";
 import { plainToInstance } from "class-transformer";
 
-export type CreateColumnDefinitionParams =
-	Prisma.ColumnDefinitionUncheckedCreateInput;
-export type UpdateColumnDefinitionParams =
-	Prisma.ColumnDefinitionUncheckedUpdateInput;
-
 @Injectable()
 export class ColumnDefinitionsRepository {
 	private readonly logger: Logger;
@@ -23,9 +18,26 @@ export class ColumnDefinitionsRepository {
 	}
 
 	/**
-	 * 엔티티의 컬럼 정의 조회 (Space별)
+	 * ID로 조회 (Space, Subject 포함)
 	 */
-	async findByEntity(
+	async findByIdWithSpaceAndSubject(id: string): Promise<ColumnDefinition | null> {
+		this.logger.debug(`컬럼 정의 조회: id=${id.slice(-8)}`);
+
+		const result = await this.txHost.tx.columnDefinition.findUnique({
+			where: { id },
+			include: {
+				space: true,
+				subject: true,
+			},
+		});
+
+		return result ? plainToInstance(ColumnDefinition, result) : null;
+	}
+
+	/**
+	 * 엔티티와 Space ID로 컬럼 정의 목록 조회 (Subject 포함)
+	 */
+	async findManyByEntityAndSpaceIdWithSubject(
 		entity: string,
 		spaceId: string,
 	): Promise<ColumnDefinition[]> {
@@ -46,23 +58,6 @@ export class ColumnDefinitionsRepository {
 		});
 
 		return results.map((result) => plainToInstance(ColumnDefinition, result));
-	}
-
-	/**
-	 * 특정 컬럼 정의 조회
-	 */
-	async findById(id: string): Promise<ColumnDefinition | null> {
-		this.logger.debug(`컬럼 정의 조회: id=${id.slice(-8)}`);
-
-		const result = await this.txHost.tx.columnDefinition.findUnique({
-			where: { id },
-			include: {
-				space: true,
-				subject: true,
-			},
-		});
-
-		return result ? plainToInstance(ColumnDefinition, result) : null;
 	}
 
 	/**
@@ -89,7 +84,7 @@ export class ColumnDefinitionsRepository {
 	/**
 	 * 컬럼 정의 수정
 	 */
-	async update(
+	async updateById(
 		id: string,
 		data: Prisma.ColumnDefinitionUncheckedUpdateInput,
 	): Promise<ColumnDefinition> {
@@ -108,9 +103,9 @@ export class ColumnDefinitionsRepository {
 	}
 
 	/**
-	 * 컬럼 정의 삭제 (Soft Delete)
+	 * 컬럼 정의 소프트 삭제
 	 */
-	async softDelete(id: string): Promise<ColumnDefinition> {
+	async removeById(id: string): Promise<ColumnDefinition> {
 		this.logger.debug(`컬럼 정의 소프트 삭제: id=${id.slice(-8)}`);
 
 		const result = await this.txHost.tx.columnDefinition.update({
@@ -126,7 +121,7 @@ export class ColumnDefinitionsRepository {
 	}
 
 	/**
-	 * 다중 컬럼 정의 생성 (Bulk Insert)
+	 * 다중 컬럼 정의 생성
 	 */
 	async createMany(
 		data: Prisma.ColumnDefinitionCreateManyInput[],
@@ -142,9 +137,9 @@ export class ColumnDefinitionsRepository {
 	}
 
 	/**
-	 * Space의 모든 엔티티 조회
+	 * Space ID로 모든 엔티티명 조회 (중복 제거)
 	 */
-	async findEntitiesBySpace(spaceId: string): Promise<string[]> {
+	async findDistinctEntitiesBySpaceId(spaceId: string): Promise<string[]> {
 		this.logger.debug(`Space의 모든 엔티티 조회: spaceId=${spaceId.slice(-8)}`);
 
 		const results = await this.txHost.tx.columnDefinition.findMany({

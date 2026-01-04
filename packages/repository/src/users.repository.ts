@@ -7,6 +7,7 @@ import { plainToInstance } from "class-transformer";
 
 /**
  * 회원 통계 결과
+ * (조회 결과 타입이므로 허용)
  */
 export interface UserStats {
 	total: number;
@@ -41,7 +42,7 @@ export class UsersRepository {
 	}
 
 	/**
-	 * ID로 사용자 조회 (Tenant, Profile 포함)
+	 * ID로 사용자 조회 (Tenants, Profiles 포함)
 	 */
 	async findByIdWithTenantsAndProfiles(id: string): Promise<User | null> {
 		this.logger.debug(`ID로 사용자 조회: ${id.slice(-8)}`);
@@ -100,7 +101,7 @@ export class UsersRepository {
 	}
 
 	/**
-	 * 이메일로 사용자 조회 (Tenant, Profile 포함)
+	 * 이메일로 사용자 조회 (Tenants, Profiles 포함)
 	 */
 	async findByEmailWithTenantsAndProfiles(email: string): Promise<User | null> {
 		this.logger.debug(`이메일로 사용자 조회: ${email}`);
@@ -146,9 +147,10 @@ export class UsersRepository {
 	}
 
 	/**
-	 * Space 내 회원 목록 조회 (필터링, 페이지네이션 지원)
+	 * Space ID로 회원 목록 조회 (필터링, 페이지네이션 지원)
+	 * - Tenants, Profiles, Classification, Associations 포함
 	 */
-	async findManyBySpaceId(params: {
+	async findManyBySpaceIdWithRelations(params: {
 		spaceId: string;
 		search?: string;
 		roles?: string[];
@@ -194,9 +196,6 @@ export class UsersRepository {
 			where.removedAt = { not: null };
 		} else {
 			where.removedAt = null;
-
-			// active/inactive는 lastLoginAt 기반으로 처리 (현재는 createdAt 기준으로 대체)
-			// 실제 구현 시 Session 테이블 또는 별도 lastLoginAt 필드 참조 필요
 		}
 
 		// 통합 검색
@@ -245,7 +244,7 @@ export class UsersRepository {
 
 		// 가입일 범위 필터
 		if (createdFrom || createdTo) {
-			const dateFilter: any = {};
+			const dateFilter: Record<string, Date> = {};
 			if (createdFrom) {
 				dateFilter.gte = createdFrom;
 			}
@@ -300,13 +299,10 @@ export class UsersRepository {
 	}
 
 	/**
-	 * Space 내 회원 통계 조회
+	 * Space ID로 회원 통계 조회
 	 */
-	async getStatsBySpace(spaceId: string): Promise<UserStats> {
+	async getStatsBySpaceId(spaceId: string): Promise<UserStats> {
 		this.logger.debug(`Space 내 회원 통계 조회: spaceId=${spaceId.slice(-8)}`);
-
-		const thirtyDaysAgo = new Date();
-		thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
 
 		const startOfMonth = new Date();
 		startOfMonth.setDate(1);
@@ -335,7 +331,7 @@ export class UsersRepository {
 		]);
 
 		// 활성/비활성 회원 수 (현재는 단순 분할, 추후 Session 기반으로 개선 필요)
-		// 임시로 50% 활성으로 처리
+		// 임시로 70% 활성으로 처리
 		const active = Math.floor(total * 0.7);
 		const inactive = total - active;
 
@@ -348,14 +344,14 @@ export class UsersRepository {
 	}
 
 	/**
-	 * ID와 SpaceId로 사용자 조회 (Tenant, Profile 포함)
+	 * ID와 Space ID로 사용자 조회 (Tenants, Profiles, Classification, Associations 포함)
 	 */
-	async findByIdAndSpaceId(
+	async findByIdAndSpaceIdWithRelations(
 		userId: string,
 		spaceId: string,
 	): Promise<User | null> {
 		this.logger.debug(
-			`ID와 SpaceId로 조회: userId=${userId.slice(-8)}, spaceId=${spaceId.slice(-8)}`,
+			`ID와 Space ID로 조회: userId=${userId.slice(-8)}, spaceId=${spaceId.slice(-8)}`,
 		);
 
 		const result = await this.txHost.tx.user.findFirst({
@@ -431,10 +427,10 @@ export class UsersRepository {
 	}
 
 	/**
-	 * 생성 (Prisma 타입 사용)
+	 * 생성
 	 */
 	async create(data: Prisma.UserUncheckedCreateInput): Promise<User> {
-		this.logger.debug(`생성 중...`);
+		this.logger.debug("생성 중...");
 
 		const result = await this.txHost.tx.user.create({
 			data,
@@ -444,65 +440,13 @@ export class UsersRepository {
 	}
 
 	/**
-	 * Tenant, Profile 포함 생성
+	 * 관계 포함 생성 (Tenants, Profiles, Classification, Associations)
 	 */
-	async createWithTenantsAndProfiles(params: {
-		name: string;
-		email: string;
-		phone: string;
-		password: string;
-		spaceId: string;
-		roleId: string;
-		categoryId?: string;
-		groupIds?: string[];
-		nickname?: string;
-	}): Promise<User> {
-		const {
-			name,
-			email,
-			phone,
-			password,
-			spaceId,
-			roleId,
-			categoryId,
-			groupIds,
-			nickname,
-		} = params;
-
-		this.logger.debug(`Tenant, Profile 포함 생성: email=${email}`);
+	async createWithRelations(data: Prisma.UserCreateInput): Promise<User> {
+		this.logger.debug("관계 포함 생성 중...");
 
 		const result = await this.txHost.tx.user.create({
-			data: {
-				name,
-				email,
-				phone,
-				password,
-				tenants: {
-					create: {
-						spaceId,
-						roleId,
-					},
-				},
-				profiles: {
-					create: {
-						name,
-						nickname: nickname || name,
-					},
-				},
-				...(categoryId && {
-					classification: {
-						create: {
-							categoryId,
-						},
-					},
-				}),
-				...(groupIds &&
-					groupIds.length > 0 && {
-						associations: {
-							create: groupIds.map((groupId) => ({ groupId })),
-						},
-					}),
-			},
+			data,
 			include: {
 				profiles: true,
 				tenants: {
@@ -528,7 +472,7 @@ export class UsersRepository {
 	}
 
 	/**
-	 * 업데이트 (Prisma 타입 사용)
+	 * 업데이트
 	 */
 	async updateById(
 		id: string,
@@ -545,60 +489,51 @@ export class UsersRepository {
 	}
 
 	/**
-	 * 복합 업데이트 (기본 정보 + 관계)
+	 * 관계 포함 업데이트 (Classification, Associations)
 	 */
-	async updateWithRelations(
+	async updateByIdWithRelations(
 		userId: string,
-		params: {
-			name?: string;
-			email?: string;
-			phone?: string;
-			categoryId?: string;
+		data: Prisma.UserUncheckedUpdateInput,
+		options?: {
+			categoryId?: string | null;
 			groupIds?: string[];
 		},
 	): Promise<User> {
-		const { name, email, phone, categoryId, groupIds } = params;
-
-		this.logger.debug(`복합 업데이트: userId=${userId.slice(-8)}`);
+		this.logger.debug(`관계 포함 업데이트: userId=${userId.slice(-8)}`);
 
 		// 기본 정보 업데이트
-		const updateData: Record<string, unknown> = {};
-		if (name !== undefined) updateData.name = name;
-		if (email !== undefined) updateData.email = email;
-		if (phone !== undefined) updateData.phone = phone;
-
-		if (Object.keys(updateData).length > 0) {
+		if (Object.keys(data).length > 0) {
 			await this.txHost.tx.user.update({
 				where: { id: userId },
-				data: updateData,
+				data,
 			});
 		}
 
 		// 분류 카테고리 업데이트
-		if (categoryId !== undefined) {
+		if (options?.categoryId !== undefined) {
 			await this.txHost.tx.userClassification.deleteMany({
 				where: { userId },
 			});
 
-			if (categoryId) {
+			if (options.categoryId) {
 				await this.txHost.tx.userClassification.create({
 					data: {
 						userId,
-						categoryId,
+						categoryId: options.categoryId,
 					},
 				});
 			}
 		}
 
 		// 그룹 연결 업데이트
-		if (groupIds !== undefined) {
+		if (options?.groupIds !== undefined) {
 			await this.txHost.tx.userAssociation.deleteMany({
 				where: { userId },
 			});
 
-			if (groupIds.length > 0) {
+			if (options.groupIds.length > 0) {
 				await this.txHost.tx.userAssociation.createMany({
-					data: groupIds.map((groupId) => ({ userId, groupId })),
+					data: options.groupIds.map((groupId) => ({ userId, groupId })),
 				});
 			}
 		}
@@ -659,15 +594,14 @@ export class UsersRepository {
 	}
 
 	/**
-	 * 사용자의 spaceId 필드를 업데이트합니다.
-	 *
-	 * @param userId - 사용자 ID
-	 * @param spaceId - 업데이트할 Space ID
-	 * @returns 업데이트된 spaceId
+	 * 사용자의 selectedSpaceId 업데이트
 	 */
-	async updateSpaceId(userId: string, spaceId: string): Promise<string> {
+	async updateSelectedSpaceIdById(
+		userId: string,
+		spaceId: string,
+	): Promise<string> {
 		this.logger.debug(
-			`spaceId 업데이트: userId=${userId.slice(-8)}, spaceId=${spaceId.slice(-8)}`,
+			`selectedSpaceId 업데이트: userId=${userId.slice(-8)}, spaceId=${spaceId.slice(-8)}`,
 		);
 
 		const result = await this.txHost.tx.user.update({
@@ -680,13 +614,9 @@ export class UsersRepository {
 	}
 
 	/**
-	 * 사용자와 Space 간의 Tenant 관계가 존재하는지 확인합니다.
-	 *
-	 * @param userId - 사용자 ID
-	 * @param spaceId - 확인할 Space ID
-	 * @returns Tenant 관계 존재 여부
+	 * 사용자와 Space 간의 Tenant 관계 존재 여부 확인
 	 */
-	async existsTenantByUserAndSpace(
+	async existsTenantByUserIdAndSpaceId(
 		userId: string,
 		spaceId: string,
 	): Promise<boolean> {

@@ -35,7 +35,7 @@ import { UsersModule } from "./users";
 		SubjectsModule,
 		ColumnsModule,
 		// Resource Modules는 필요할 때 추가합니다.
-		// 가이드: .claude/agents/controller-builder.md
+		// 가이드: .claude/agents/be-controller-builder.md
 		RouterModule.register([
 			{
 				path: "api",

@@ -431,7 +431,7 @@ Task(subagent_type="서비스-빌더", ...)
 
 **백엔드:**
 - `packages/repository/src/grounds.repository.ts`
-- `packages/service/src/service/grounds.service.ts`
+- `packages/service/src/grounds.service.ts`
 - `apps/server/src/module/ground/grounds.controller.ts`
 - `apps/server/src/module/ground/grounds.module.ts`
 - `packages/prisma/seed-data.ts` (시드 데이터 추가)

@@ -327,6 +327,6 @@ export { {Entity}sRepository } from "./{entity}.repository";
 
 ## 관련 파일
 
-- Service: `packages/service/src/service/{entity}.service.ts`
+- Service: `packages/service/src/{entity}.service.ts`
 - Entity: `packages/entity/src/{entity}.ts`
 - Prisma Schema: `packages/prisma/prisma/schema.prisma`

@@ -9,8 +9,8 @@ import {
 	AbilityResponseDto,
 	UpdateRoleAbilitiesRequestDto,
 } from "@cocrepo/dto";
-import { User } from "@cocrepo/entity";
-import { AbilitiesService } from "@cocrepo/service";
+import { Ability, User } from "@cocrepo/entity";
+import { AbilitiesFacade } from "@cocrepo/facade";
 import {
 	Body,
 	Controller,
@@ -22,7 +22,6 @@ import {
 	UnauthorizedException,
 } from "@nestjs/common";
 import { ApiBody, ApiOperation, ApiParam, ApiTags } from "@nestjs/swagger";
-import { plainToInstance } from "class-transformer";
 import { ClsService } from "nestjs-cls";
 
 /**
@@ -40,34 +39,9 @@ const AbilitiesErrorMessages = {
 @Controller()
 export class AbilitiesController {
 	constructor(
-		private readonly abilitiesService: AbilitiesService,
+		private readonly abilitiesFacade: AbilitiesFacade,
 		private readonly cls: ClsService,
 	) {}
-
-	/**
-	 * 현재 로그인한 사용자를 가져옵니다.
-	 */
-	private getCurrentUser(): User {
-		const user = this.cls.get<User>(CONTEXT_KEYS.AUTH_USER);
-		if (!user?.id) {
-			throw new UnauthorizedException(AbilitiesErrorMessages.USER_NOT_FOUND);
-		}
-		return user;
-	}
-
-	/**
-	 * 현재 요청의 Space ID를 가져옵니다.
-	 * X-Space-ID 헤더에서 추출됩니다.
-	 */
-	private getSpaceId(): string {
-		const spaceId = this.cls.get<string>(CONTEXT_KEYS.SPACE_ID);
-		if (!spaceId) {
-			throw new UnauthorizedException(
-				AbilitiesErrorMessages.SPACE_NOT_SELECTED,
-			);
-		}
-		return spaceId;
-	}
 
 	@Get("my")
 	@ApiOperation({
@@ -83,16 +57,13 @@ export class AbilitiesController {
 	)
 	@ApiResponseEntity(AbilityResponseDto, HttpStatus.OK, { isArray: true })
 	@ResponseMessage("내 권한 조회 성공")
-	async getMyAbilities(): Promise<AbilityResponseDto[]> {
-		const user = this.getCurrentUser();
+	async getMyAbilities(): Promise<Ability[]> {
+		const user = this.cls.get<User>(CONTEXT_KEYS.AUTH_USER);
+		if (!user?.id) {
+			throw new UnauthorizedException(AbilitiesErrorMessages.USER_NOT_FOUND);
+		}
 
-		const abilities = await this.abilitiesService.getMyAbilities(user.id);
-
-		return abilities.map((ability) =>
-			plainToInstance(AbilityResponseDto, ability, {
-				excludeExtraneousValues: true,
-			}),
-		);
+		return this.abilitiesFacade.getMyAbilities(user.id);
 	}
 
 	@Get("roles/:roleId")
@@ -115,14 +86,8 @@ export class AbilitiesController {
 	@ResponseMessage("Role별 권한 조회 성공")
 	async getAbilitiesByRoleId(
 		@Param("roleId", ParseUUIDPipe) roleId: string,
-	): Promise<AbilityResponseDto[]> {
-		const abilities = await this.abilitiesService.getAbilitiesByRoleId(roleId);
-
-		return abilities.map((ability) =>
-			plainToInstance(AbilityResponseDto, ability, {
-				excludeExtraneousValues: true,
-			}),
-		);
+	): Promise<Ability[]> {
+		return this.abilitiesFacade.getAbilitiesByRoleId(roleId);
 	}
 
 	@Put("roles/:roleId")
@@ -152,19 +117,24 @@ export class AbilitiesController {
 	async updateRoleAbilities(
 		@Param("roleId", ParseUUIDPipe) roleId: string,
 		@Body() body: UpdateRoleAbilitiesRequestDto,
-	): Promise<AbilityResponseDto[]> {
-		const spaceId = this.getSpaceId();
+	): Promise<Ability[]> {
+		const spaceId = this.cls.get<string>(CONTEXT_KEYS.SPACE_ID);
+		if (!spaceId) {
+			throw new UnauthorizedException(
+				AbilitiesErrorMessages.SPACE_NOT_SELECTED,
+			);
+		}
 
-		const updatedAbilities = await this.abilitiesService.updateRoleAbilities(
+		const abilitiesToCreate = body.abilities.map((ability) => ({
+			...ability,
+			roleId,
+			tenantId: spaceId,
+		}));
+
+		return this.abilitiesFacade.updateRoleAbilities(
 			roleId,
 			spaceId,
-			body.abilities,
-		);
-
-		return updatedAbilities.map((ability) =>
-			plainToInstance(AbilityResponseDto, ability, {
-				excludeExtraneousValues: true,
-			}),
+			abilitiesToCreate,
 		);
 	}
 }

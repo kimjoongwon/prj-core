@@ -37,7 +37,7 @@ tools: Read, Write, Grep, Bash
 |------|------|--------------|
 | `packages/prisma/schema/` | Prisma 스키마 | schema-builder |
 | `packages/repository/src/` | Repository 레이어 | repository-builder |
-| `packages/service/src/service/` | Service 레이어 | service-builder |
+| `packages/service/src/` | Service 레이어 | service-builder |
 | `apps/server/src/module/` | Controller 레이어 | controller-builder |
 
 ---
@@ -305,7 +305,7 @@ interface MemberCardProps {
 
 #### 5.6 service-builder 지시
 
-**파일:** `packages/service/src/service/members.service.ts`
+**파일:** `packages/service/src/members.service.ts`
 
 **메서드:**
 | 메서드명 | 책임 |
@@ -478,7 +478,7 @@ interface MemberCardProps {
 |----------|------|----------|
 | schema-builder | Prisma 스키마 | packages/prisma/schema/ |
 | repository-builder | Repository | packages/repository/src/ |
-| service-builder | Service | packages/service/src/service/ |
+| service-builder | Service | packages/service/src/ |
 | controller-builder | Controller | apps/server/src/module/ |
 
 ### 기타

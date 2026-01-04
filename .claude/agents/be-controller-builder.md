@@ -12,12 +12,150 @@ NestJS REST Controller를 생성하는 전문가입니다.
 
 - 새로운 Controller 클래스 생성
 - REST API 엔드포인트 구현
-- DTO ↔ Entity 변환 처리
+- Request DTO → Service 파라미터 변환
 - Module 및 라우팅 설정
 
 ---
 
 ## 핵심 원칙
+
+### ✅ Entity → DTO 변환은 DtoTransformInterceptor가 자동 처리
+
+**중요**: Controller에서 `plainToInstance`를 직접 호출하지 마세요!
+
+`DtoTransformInterceptor`가 `@ApiResponseEntity` 데코레이터의 메타데이터를 읽어 자동으로 Entity를 DTO로 변환합니다.
+
+```typescript
+// ❌ 금지 - 수동 DTO 변환
+async getMyAbilities(): Promise<AbilityResponseDto[]> {
+  const abilities = await this.service.getAbilitiesByRoleId(roleId);
+  return abilities.map((ability) =>
+    plainToInstance(AbilityResponseDto, ability, {
+      excludeExtraneousValues: true,
+    }),
+  );
+}
+
+// ✅ 권장 - Entity 직접 반환 (DtoTransformInterceptor가 자동 변환)
+@ApiResponseEntity(AbilityResponseDto, HttpStatus.OK, { isArray: true })
+async getMyAbilities(): Promise<Ability[]> {
+  // DtoTransformInterceptor가 Entity → DTO 변환을 자동 처리
+  return this.service.getAbilitiesByRoleId(roleId);
+}
+```
+
+**주의사항:**
+- 반환 타입은 `Promise<Entity[]>` 또는 `Promise<Entity>`로 지정
+- `@ApiResponseEntity(ResponseDto, ...)` 데코레이터가 반드시 필요
+- `plainToInstance`, `class-transformer` import 불필요
+
+---
+
+### ✅ Controller는 Facade 또는 Service 중 하나만 사용
+
+**중요**: 하나의 Controller에서 Facade와 Service를 동시에 사용하지 마세요!
+
+Controller는 단일 레이어와만 통신해야 합니다:
+- **Facade가 있는 도메인**: Controller → Facade만 사용
+- **Facade가 없는 도메인**: Controller → Service만 사용
+
+```typescript
+// ❌ 금지 - Facade와 Service 혼용 (안티 패턴)
+@Controller()
+export class AbilitiesController {
+  constructor(
+    private readonly abilitiesFacade: AbilitiesFacade,
+    private readonly abilitiesService: AbilitiesService,  // ❌ 혼용 금지
+  ) {}
+
+  async getMyAbilities() {
+    return this.abilitiesFacade.getMyAbilities(userId);  // Facade 사용
+  }
+
+  async getAbilitiesByRoleId(roleId: string) {
+    return this.abilitiesService.getAbilitiesByRoleId(roleId);  // ❌ Service 직접 사용
+  }
+}
+
+// ✅ 권장 - Facade만 사용
+@Controller()
+export class AbilitiesController {
+  constructor(
+    private readonly abilitiesFacade: AbilitiesFacade,
+  ) {}
+
+  async getMyAbilities() {
+    return this.abilitiesFacade.getMyAbilities(userId);
+  }
+
+  async getAbilitiesByRoleId(roleId: string) {
+    return this.abilitiesFacade.getAbilitiesByRoleId(roleId);  // ✅ Facade 통해 호출
+  }
+}
+```
+
+**Facade에 단순 위임 메서드가 생기더라도 Controller의 일관성이 더 중요합니다.**
+
+---
+
+### ✅ Private 헬퍼 메서드 분리 금지 - 메서드 내 직접 작성
+
+**가독성을 위해 Controller에서 private 헬퍼 메서드를 분리하지 마세요.**
+
+각 API 메서드는 위에서 아래로 읽으면서 흐름을 파악할 수 있어야 합니다.
+
+```typescript
+// ❌ 금지 - private 헬퍼 메서드로 분리
+@Controller()
+export class AbilitiesController {
+  private getCurrentUser(): User {
+    const user = this.cls.get<User>(CONTEXT_KEYS.AUTH_USER);
+    if (!user?.id) {
+      throw new UnauthorizedException("사용자를 찾을 수 없습니다");
+    }
+    return user;
+  }
+
+  private getSpaceId(): string {
+    const spaceId = this.cls.get<string>(CONTEXT_KEYS.SPACE_ID);
+    if (!spaceId) {
+      throw new UnauthorizedException("Space가 선택되지 않았습니다");
+    }
+    return spaceId;
+  }
+
+  async getMyAbilities() {
+    const user = this.getCurrentUser();  // 다른 곳으로 점프해서 읽어야 함
+    return this.facade.getMyAbilities(user.id);
+  }
+}
+
+// ✅ 권장 - 메서드 내 직접 작성
+@Controller()
+export class AbilitiesController {
+  async getMyAbilities() {
+    const user = this.cls.get<User>(CONTEXT_KEYS.AUTH_USER);
+    if (!user?.id) {
+      throw new UnauthorizedException("사용자를 찾을 수 없습니다");
+    }
+
+    return this.facade.getMyAbilities(user.id);
+  }
+
+  async updateRoleAbilities(roleId: string, body: UpdateDto) {
+    const spaceId = this.cls.get<string>(CONTEXT_KEYS.SPACE_ID);
+    if (!spaceId) {
+      throw new UnauthorizedException("Space가 선택되지 않았습니다");
+    }
+
+    return this.facade.updateRoleAbilities(roleId, spaceId, body.abilities);
+  }
+}
+```
+
+**이유**: 메서드를 위에서 아래로 읽으면서 전체 흐름을 한눈에 파악할 수 있습니다.
+
+---
 
 ### ✅ DTO는 반드시 `@cocrepo/dto`에서 import
 
@@ -55,6 +193,7 @@ import {
   Update{Entity}Dto,
   {Entity}Dto,
 } from "@cocrepo/dto";
+import { {Entity} } from "@cocrepo/entity";
 import { {Entity}sService } from "@cocrepo/service";
 import {
   Body,
@@ -347,6 +486,7 @@ return result;
 - [ ] Logger 초기화
 - [ ] 각 메서드에 `@HttpCode(HttpStatus.OK)` 추가
 - [ ] 각 메서드에 `@ApiResponseEntity()` 추가
+- [ ] **Entity 직접 반환** (plainToInstance 사용 금지, DtoTransformInterceptor가 자동 변환)
 - [ ] Module 파일 생성
 - [ ] `app.module.ts`에 Module import
 - [ ] RouterModule에 경로 등록
@@ -355,8 +495,8 @@ return result;
 
 ## 관련 파일
 
-- Service: `packages/service/src/resources/{entity}.service.ts`
-- Repository: `packages/repository/src/repositories/{entity}.repository.ts`
+- Service: `packages/service/src/{entity}.service.ts`
+- Repository: `packages/repository/src/{entity}.repository.ts`
 - DTO: `packages/dto/src/{entity}.dto.ts`
 - Module: `apps/server/src/module/{entity}.module.ts`
 - App Module: `apps/server/src/module/app.module.ts`

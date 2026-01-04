@@ -1,23 +1,19 @@
-// Resources
-// 필요할 때 생성합니다. 가이드: .claude/agents/service-builder.md
+// Services
+// 필요할 때 생성합니다. 가이드: .claude/agents/be-service-builder.md
 
-// Utils
+export { AbilitiesService } from "./abilities.service";
+export { AwsService } from "./aws.service";
 export {
-	AbilitiesService,
-	AwsService,
 	ColumnDefinitionsService,
-	createPrismaClient,
 	DeviceType,
-	PrismaService,
-	RedisService,
-	SubjectsService,
-	TokenExpiryInfo,
-	TokenService,
-	TokenStorageService,
-} from "./infra";
-export {
-	GroundsService,
-	RolesService,
-	SpacesService,
-	UsersService,
-} from "./service";
+} from "./column-definitions.service";
+export { GroundsService } from "./grounds.service";
+export { createPrismaClient } from "./prisma.factory";
+export { PrismaService } from "./prisma.service";
+export { RedisService } from "./redis.service";
+export { RolesService } from "./roles.service";
+export { SpacesService } from "./spaces.service";
+export { SubjectsService } from "./subjects.service";
+export { TokenExpiryInfo, TokenService } from "./token.service";
+export { TokenStorageService } from "./token-storage.service";
+export { UsersService } from "./users.service";

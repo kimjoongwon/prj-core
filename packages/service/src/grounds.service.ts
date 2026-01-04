@@ -23,6 +23,6 @@ export class GroundsService {
 	 * 내 Space의 Ground 목록 조회
 	 */
 	getMyGrounds(spaceId: string) {
-		return this.repository.findBySpaceId(spaceId);
+		return this.repository.findManyBySpaceId(spaceId);
 	}
 }

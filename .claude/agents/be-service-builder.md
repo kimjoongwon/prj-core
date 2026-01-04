@@ -156,7 +156,7 @@ NestJS Service 레이어를 생성하는 전문가입니다.
 ## 파일 위치
 
 ```
-packages/service/src/service/{entity}.service.ts
+packages/service/src/{entity}.service.ts
 ```
 
 ---

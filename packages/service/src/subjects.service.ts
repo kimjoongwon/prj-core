@@ -1,5 +1,6 @@
 import { Subject } from "@cocrepo/entity";
-import { CreateSubjectParams, SubjectsRepository } from "@cocrepo/repository";
+import { Prisma } from "@cocrepo/prisma";
+import { SubjectsRepository } from "@cocrepo/repository";
 import {
 	BadRequestException,
 	Injectable,
@@ -61,10 +62,10 @@ export class SubjectsService {
 
 		if (parentId) {
 			// 특정 부모의 전체 하위 트리 조회 (재귀)
-			subjects = await this.repository.findTreeByParentId(parentId);
+			subjects = await this.repository.findDescendantsByParentId(parentId);
 		} else {
 			// 최상위 Subject와 직접 자식들 조회
-			subjects = await this.repository.findWithChildren();
+			subjects = await this.repository.findManyByParentIdWithChildren();
 		}
 
 		return subjects;
@@ -74,24 +75,26 @@ export class SubjectsService {
 	 * Subject 생성
 	 * parentId가 제공된 경우 부모 Subject의 존재를 검증합니다.
 	 *
-	 * @param dto - Subject 생성 파라미터
+	 * @param data - Subject 생성 파라미터 (Prisma 타입)
 	 * @returns 생성된 Subject
 	 * @throws NotFoundException - 부모 Subject를 찾을 수 없는 경우
 	 * @throws BadRequestException - 유효하지 않은 데이터인 경우
 	 */
-	async createSubject(dto: CreateSubjectParams): Promise<Subject> {
-		this.logger.debug(`Subject 생성: name=${dto.name}, type=${dto.type}`);
+	async createSubject(
+		data: Prisma.SubjectUncheckedCreateInput,
+	): Promise<Subject> {
+		this.logger.debug(`Subject 생성: name=${data.name}, type=${data.type}`);
 
 		// 1. 유효성 검증
-		if (!dto.name || !dto.type || !dto.tenantId) {
+		if (!data.name || !data.type || !data.tenantId) {
 			throw new BadRequestException(
 				SubjectServiceErrorMessages.INVALID_SUBJECT_DATA,
 			);
 		}
 
 		// 2. parentId가 제공된 경우 부모 존재 확인
-		if (dto.parentId) {
-			const parent = await this.repository.findById(dto.parentId);
+		if (data.parentId) {
+			const parent = await this.repository.findById(data.parentId);
 
 			if (!parent) {
 				throw new NotFoundException(
@@ -100,12 +103,12 @@ export class SubjectsService {
 			}
 
 			this.logger.debug(
-				`부모 Subject 확인 완료: parentId=${dto.parentId.slice(-8)}`,
+				`부모 Subject 확인 완료: parentId=${data.parentId.slice(-8)}`,
 			);
 		}
 
 		// 3. Subject 생성
-		const subject = await this.repository.create(dto);
+		const subject = await this.repository.create(data);
 
 		this.logger.log(
 			`Subject 생성 완료: id=${subject.id.slice(-8)}, name=${subject.name}`,
