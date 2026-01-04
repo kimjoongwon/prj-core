@@ -52,7 +52,10 @@ export class ColumnDefinitionsService {
 		);
 
 		// 1. Repository에서 컬럼 조회
-		const columns = await this.repository.findManyByEntityAndSpaceIdWithSubject(entity, spaceId);
+		const columns = await this.repository.findManyByEntityAndSpaceIdWithSubject(
+			entity,
+			spaceId,
+		);
 
 		// 2. 디바이스 타입별 필터링
 		if (deviceType) {
@@ -183,7 +186,11 @@ export class ColumnDefinitionsService {
 		);
 
 		// 1. 이미 존재하는지 확인
-		const existingColumns = await this.repository.findManyByEntityAndSpaceIdWithSubject(entity, spaceId);
+		const existingColumns =
+			await this.repository.findManyByEntityAndSpaceIdWithSubject(
+				entity,
+				spaceId,
+			);
 
 		if (existingColumns.length > 0) {
 			throw new BadRequestException(

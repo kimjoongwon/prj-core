@@ -30,13 +30,6 @@ export class TokenDto {
 	user: UserDto;
 
 	@ApiProperty({
-		description: "메인 테넌트 ID",
-		example: "uuid-string",
-	})
-	@StringField()
-	mainTenantId: string;
-
-	@ApiProperty({
 		description: "Access Token 만료 시간 (Unix timestamp, milliseconds)",
 		example: 1704067200000,
 	})

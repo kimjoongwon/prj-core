@@ -1,4 +1,3 @@
-import { CONTEXT_KEYS } from "@cocrepo/constant";
 import {
 	ApiAuth,
 	ApiErrors,
@@ -8,13 +7,13 @@ import {
 } from "@cocrepo/decorator";
 import {
 	LoginPayloadDto,
+	LoginResponseDto,
 	SignUpPayloadDto,
 	TokenDto,
-	UserDto,
+	TokenRefreshResponseDto,
 } from "@cocrepo/dto";
 import { User } from "@cocrepo/entity";
 import { AuthFacade } from "@cocrepo/facade";
-import { TokenService } from "@cocrepo/service";
 import {
 	Body,
 	Controller,
@@ -24,12 +23,9 @@ import {
 	Post,
 	Req,
 	Res,
-	UnauthorizedException,
 } from "@nestjs/common";
 import { ApiBody, ApiOperation, ApiResponse, ApiTags } from "@nestjs/swagger";
-import { plainToInstance } from "class-transformer";
 import { Request, Response } from "express";
-import { ClsService } from "nestjs-cls";
 
 /**
  * 인증 관련 에러 메시지 상수
@@ -58,11 +54,7 @@ const AuthErrorMessages = {
 @ApiTags("AUTH")
 @Controller()
 export class AuthController {
-	constructor(
-		private readonly authFacade: AuthFacade,
-		private readonly tokenService: TokenService,
-		private readonly cls: ClsService,
-	) {}
+	constructor(private readonly authFacade: AuthFacade) {}
 
 	@Public()
 	@Post("login")
@@ -82,33 +74,13 @@ export class AuthController {
 		{ status: 401, message: AuthErrorMessages.INVALID_CREDENTIALS },
 		500,
 	)
-	@ApiResponseEntity(TokenDto, HttpStatus.OK)
+	@ApiResponseEntity(LoginResponseDto, HttpStatus.OK)
 	@ResponseMessage("로그인 성공")
 	async login(
 		@Body() loginDto: LoginPayloadDto,
 		@Res({ passthrough: true }) res: Response,
 	) {
-		const {
-			accessToken,
-			refreshToken,
-			accessTokenExpiresAt,
-			refreshTokenExpiresAt,
-			user,
-		} = await this.authFacade.login(loginDto);
-		const mainTenantId = user?.tenants?.[0]?.id ?? "";
-
-		this.tokenService.setAccessTokenCookie(res, accessToken);
-		this.tokenService.setRefreshTokenCookie(res, refreshToken);
-
-		return plainToInstance(TokenDto, {
-			accessToken,
-			refreshToken,
-			accessTokenExpiresAt,
-			refreshTokenExpiresAt,
-			selectedSpaceId: user?.selectedSpaceId ?? null,
-			user: plainToInstance(UserDto, user),
-			mainTenantId,
-		});
+		return this.authFacade.loginWithCookie(loginDto, res);
 	}
 
 	@Public()
@@ -122,43 +94,16 @@ export class AuthController {
 		{ status: 401, message: AuthErrorMessages.REFRESH_TOKEN_NOT_FOUND },
 		500,
 	)
-	@ApiResponseEntity(TokenDto, HttpStatus.OK, { withSetCookie: true })
+	@ApiResponseEntity(TokenRefreshResponseDto, HttpStatus.OK, {
+		withSetCookie: true,
+	})
 	@ResponseMessage("토큰 재발급 성공")
 	async refreshToken(
 		@Req() req: Request,
 		@Res({ passthrough: true }) res: Response,
-	): Promise<TokenDto> {
+	) {
 		const refreshToken = req.cookies.refreshToken;
-
-		if (!refreshToken) {
-			throw new UnauthorizedException(
-				AuthErrorMessages.REFRESH_TOKEN_NOT_FOUND,
-			);
-		}
-
-		const { newAccessToken, newRefreshToken, tokenExpiryInfo } =
-			await this.authFacade.getNewToken(refreshToken);
-
-		this.tokenService.setAccessTokenCookie(res, newAccessToken);
-		this.tokenService.setRefreshTokenCookie(res, newRefreshToken);
-
-		const user = await this.authFacade.getCurrentUser(newAccessToken);
-
-		if (!user) {
-			throw new UnauthorizedException(AuthErrorMessages.USER_NOT_FOUND);
-		}
-
-		const mainTenantId = user.tenants?.[0]?.id ?? "";
-
-		return plainToInstance(TokenDto, {
-			accessToken: newAccessToken,
-			refreshToken: newRefreshToken,
-			accessTokenExpiresAt: tokenExpiryInfo.accessTokenExpiresAt,
-			refreshTokenExpiresAt: tokenExpiryInfo.refreshTokenExpiresAt,
-			selectedSpaceId: user.selectedSpaceId ?? null,
-			user: plainToInstance(UserDto, user),
-			mainTenantId,
-		});
+		return this.authFacade.refreshTokenWithCookie(refreshToken, res);
 	}
 
 	@Get("new-token")
@@ -169,33 +114,18 @@ export class AuthController {
 	})
 	@ApiAuth()
 	@ApiErrors({ status: 401, message: AuthErrorMessages.TOKEN_INVALID }, 500)
-	@ApiResponseEntity(TokenDto, HttpStatus.OK, { withSetCookie: true })
+	@ApiResponseEntity(TokenRefreshResponseDto, HttpStatus.OK, {
+		withSetCookie: true,
+	})
 	@ResponseMessage("토큰 갱신 성공")
 	async getNewToken(
 		@Req() req: Request & { user: User },
 		@Res({ passthrough: true }) res: Response,
-	): Promise<TokenDto> {
+	) {
 		const refreshToken = req.cookies.refreshToken;
-		const { newAccessToken, newRefreshToken, tokenExpiryInfo } =
-			await this.authFacade.getNewToken(refreshToken);
-
 		const user = req.user;
 
-		const tenant = user.tenants?.[0];
-		this.cls.set("hi", "hi");
-		this.tokenService.setAccessTokenCookie(res, newAccessToken);
-		this.tokenService.setRefreshTokenCookie(res, newRefreshToken);
-		res.cookie("mainTenantId", tenant?.id);
-
-		return plainToInstance(TokenDto, {
-			accessToken: newAccessToken,
-			refreshToken: newRefreshToken,
-			accessTokenExpiresAt: tokenExpiryInfo.accessTokenExpiresAt,
-			refreshTokenExpiresAt: tokenExpiryInfo.refreshTokenExpiresAt,
-			selectedSpaceId: user.selectedSpaceId ?? null,
-			mainTenantId: tenant?.id || "",
-			user: plainToInstance(UserDto, user),
-		});
+		return this.authFacade.getNewTokenWithCookie(refreshToken, user, res);
 	}
 
 	@Public()
@@ -231,15 +161,7 @@ export class AuthController {
 	@ApiResponseEntity(Boolean, HttpStatus.OK)
 	@ResponseMessage("토큰 유효성 검증 완료")
 	async verifyToken() {
-		const token = this.cls.get<string>(CONTEXT_KEYS.TOKEN);
-		if (!token) {
-			throw new UnauthorizedException(AuthErrorMessages.TOKEN_NOT_FOUND);
-		}
-
-		console.log("token", token);
-
-		const isValid = this.tokenService.verifyToken(token);
-		return isValid;
+		return this.authFacade.verifyToken();
 	}
 
 	@HttpCode(HttpStatus.OK)
@@ -271,19 +193,9 @@ export class AuthController {
 		@Req() req: Request & { user?: User },
 		@Res({ passthrough: true }) res: Response,
 	) {
-		// Redis에서 토큰 무효화
 		const userId = req.user?.id;
 		const accessToken = req.cookies?.accessToken;
 
-		if (userId) {
-			await this.authFacade.logout(userId, accessToken);
-		}
-
-		// HttpOnly 쿠키들을 삭제 (동일한 옵션으로 삭제해야 함)
-		this.tokenService.clearTokenCookies(res);
-		res.clearCookie("tenantId");
-		res.clearCookie("workspaceId");
-
-		return true;
+		return this.authFacade.logoutWithCookie(userId, accessToken, res);
 	}
 }

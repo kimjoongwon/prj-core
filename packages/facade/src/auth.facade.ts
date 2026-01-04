@@ -1,4 +1,10 @@
-import { ResponseEntity } from "@cocrepo/entity";
+import { CONTEXT_KEYS } from "@cocrepo/constant";
+import {
+	LoginResponseDto,
+	TokenRefreshResponseDto,
+	UserDto,
+} from "@cocrepo/dto";
+import { ResponseEntity, User } from "@cocrepo/entity";
 import {
 	RolesService,
 	SpacesService,
@@ -15,17 +21,9 @@ import {
 	UnauthorizedException,
 } from "@nestjs/common";
 import { JwtService } from "@nestjs/jwt";
-
-/**
- * 로그인 결과 타입
- */
-export interface LoginResult {
-	accessToken: string;
-	refreshToken: string;
-	accessTokenExpiresAt: number;
-	refreshTokenExpiresAt: number;
-	user: Awaited<ReturnType<UsersService["findUserForAuth"]>>;
-}
+import { plainToInstance } from "class-transformer";
+import { Response } from "express";
+import { ClsService } from "nestjs-cls";
 
 /**
  * 인증 Facade
@@ -44,6 +42,7 @@ export class AuthFacade {
 		private spacesService: SpacesService,
 		private jwtService: JwtService,
 		private tokenService: TokenService,
+		private cls: ClsService,
 	) {}
 
 	/**
@@ -88,6 +87,61 @@ export class AuthFacade {
 			newAccessToken: tokenPair.accessToken.value,
 			newRefreshToken: tokenPair.refreshToken.value,
 			tokenExpiryInfo,
+		};
+	}
+
+	/**
+	 * 토큰 갱신 처리 (Public 엔드포인트용)
+	 * 리프레시 토큰 검증 → 새 토큰 생성 → 쿠키 설정 → 결과 반환
+	 */
+	async refreshTokenWithCookie(
+		refreshToken: string | undefined,
+		res: Response,
+	): Promise<TokenRefreshResponseDto> {
+		if (!refreshToken) {
+			throw new UnauthorizedException("리프레시 토큰이 존재하지 않습니다");
+		}
+
+		const { newAccessToken, newRefreshToken, tokenExpiryInfo } =
+			await this.getNewToken(refreshToken);
+
+		this.setTokenCookies(res, newAccessToken, newRefreshToken);
+
+		const user = await this.getCurrentUser(newAccessToken);
+
+		if (!user) {
+			throw new UnauthorizedException("사용자를 찾을 수 없습니다");
+		}
+
+		return {
+			accessToken: newAccessToken,
+			refreshToken: newRefreshToken,
+			accessTokenExpiresAt: tokenExpiryInfo.accessTokenExpiresAt,
+			refreshTokenExpiresAt: tokenExpiryInfo.refreshTokenExpiresAt,
+			user: plainToInstance(UserDto, user),
+		};
+	}
+
+	/**
+	 * 토큰 갱신 처리 (인증된 사용자용)
+	 * 리프레시 토큰 검증 → 새 토큰 생성 → 쿠키 설정 → 결과 반환
+	 */
+	async getNewTokenWithCookie(
+		refreshToken: string,
+		user: User,
+		res: Response,
+	): Promise<TokenRefreshResponseDto> {
+		const { newAccessToken, newRefreshToken, tokenExpiryInfo } =
+			await this.getNewToken(refreshToken);
+
+		this.setTokenCookies(res, newAccessToken, newRefreshToken);
+
+		return {
+			accessToken: newAccessToken,
+			refreshToken: newRefreshToken,
+			accessTokenExpiresAt: tokenExpiryInfo.accessTokenExpiresAt,
+			refreshTokenExpiresAt: tokenExpiryInfo.refreshTokenExpiresAt,
+			user: plainToInstance(UserDto, user),
 		};
 	}
 
@@ -166,10 +220,10 @@ export class AuthFacade {
 	async login(params: {
 		email: string;
 		password: string;
-	}): Promise<LoginResult> {
+	}): Promise<LoginResponseDto> {
 		const { email, password } = params;
 		const user = await this.usersService.findUserForAuth(email);
-		console.log("user", user);
+
 		if (!user) {
 			throw new UnauthorizedException("유저가 존재하지 않습니다.");
 		}
@@ -196,12 +250,26 @@ export class AuthFacade {
 			refreshToken: tokenPair.refreshToken.value,
 			accessTokenExpiresAt: tokenExpiryInfo.accessTokenExpiresAt,
 			refreshTokenExpiresAt: tokenExpiryInfo.refreshTokenExpiresAt,
-			user,
+			user: plainToInstance(UserDto, user),
 		};
 	}
 
 	/**
-	 * 로그아웃 - 토큰 무효화
+	 * 로그인 처리 및 쿠키 설정
+	 */
+	async loginWithCookie(
+		params: { email: string; password: string },
+		res: Response,
+	): Promise<LoginResponseDto> {
+		const result = await this.login(params);
+
+		this.setTokenCookies(res, result.accessToken, result.refreshToken);
+
+		return result;
+	}
+
+	/**
+	 * 로그아웃 - 토큰 무효화 및 쿠키 삭제
 	 */
 	async logout(userId: string, accessToken?: string): Promise<void> {
 		await this.tokenService.invalidateTokens(userId, accessToken);
@@ -209,9 +277,61 @@ export class AuthFacade {
 	}
 
 	/**
+	 * 로그아웃 및 쿠키 삭제
+	 */
+	async logoutWithCookie(
+		userId: string | undefined,
+		accessToken: string | undefined,
+		res: Response,
+	): Promise<boolean> {
+		// Redis에서 토큰 무효화
+		if (userId) {
+			await this.logout(userId, accessToken);
+		}
+
+		// HttpOnly 쿠키들을 삭제 (동일한 옵션으로 삭제해야 함)
+		this.clearTokenCookies(res);
+		res.clearCookie("tenantId");
+		res.clearCookie("workspaceId");
+
+		return true;
+	}
+
+	/**
 	 * Access Token 블랙리스트 확인
 	 */
 	async isTokenBlacklisted(accessToken: string): Promise<boolean> {
 		return this.tokenService.isTokenBlacklisted(accessToken);
+	}
+
+	/**
+	 * 토큰 쿠키 설정
+	 */
+	setTokenCookies(
+		res: Response,
+		accessToken: string,
+		refreshToken: string,
+	): void {
+		this.tokenService.setAccessTokenCookie(res, accessToken);
+		this.tokenService.setRefreshTokenCookie(res, refreshToken);
+	}
+
+	/**
+	 * 토큰 쿠키 삭제
+	 */
+	clearTokenCookies(res: Response): void {
+		this.tokenService.clearTokenCookies(res);
+	}
+
+	/**
+	 * 토큰 유효성 검증
+	 */
+	verifyToken(): boolean {
+		const token = this.cls.get<string>(CONTEXT_KEYS.TOKEN);
+		if (!token) {
+			throw new UnauthorizedException("토큰이 존재하지 않습니다");
+		}
+
+		return this.tokenService.verifyToken(token);
 	}
 }

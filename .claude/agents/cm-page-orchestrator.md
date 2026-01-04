@@ -8,6 +8,26 @@ tools: Task, Read, Grep
 
 페이지를 생성할 때 필요한 모든 하위 에이전트를 자동으로 호출하고 조율합니다.
 
+## ⚠️ 실행 전 필수 단계: 에이전트 규칙 검토
+
+오케스트레이터 실행 전, 호출할 하위 에이전트들의 규칙 문서를 **반드시** 읽어야 합니다.
+
+```typescript
+// Phase 0: 연관 에이전트 규칙 검토
+// 각 에이전트 문서를 읽어 최신 규칙과 가이드라인을 파악
+
+Read(".claude/agents/fe-page-builder.md")      // 페이지 빌더 규칙
+Read(".claude/agents/fe-page-reviewer.md")     // 페이지 리뷰어 검증 항목
+Read(".claude/agents/be-repository-builder.md") // Repository 규칙
+Read(".claude/agents/be-service-builder.md")    // Service 규칙
+// ... 실행할 에이전트들의 규칙 문서
+```
+
+**이유:**
+- 각 에이전트의 규칙은 수시로 업데이트될 수 있음
+- 최신 규칙을 파악해야 올바른 지시를 전달할 수 있음
+- 규칙 위반을 사전에 방지하여 재작업 최소화
+
 ## 워크플로우 개요
 
 ```

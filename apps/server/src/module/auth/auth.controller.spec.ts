@@ -1,17 +1,12 @@
-import { CONTEXT_KEYS } from "@cocrepo/constant";
 import type { LoginPayloadDto, SignUpPayloadDto } from "@cocrepo/dto";
 import { AuthFacade } from "@cocrepo/facade";
-import { TokenService } from "@cocrepo/service";
 import { UnauthorizedException } from "@nestjs/common";
 import { Test, type TestingModule } from "@nestjs/testing";
-import { ClsService } from "nestjs-cls";
 import { AuthController } from "./auth.controller";
 
 describe("AuthController", () => {
 	let controller: AuthController;
 	let mockAuthFacade: jest.Mocked<AuthFacade>;
-	let mockTokenService: jest.Mocked<TokenService>;
-	let mockClsService: jest.Mocked<ClsService>;
 
 	const mockTokenExpiryInfo = {
 		accessTokenExpiresAt: Date.now() + 60 * 60 * 1000, // 1시간 후
@@ -47,31 +42,22 @@ describe("AuthController", () => {
 	beforeEach(async () => {
 		mockAuthFacade = {
 			login: jest.fn(),
+			loginWithCookie: jest.fn(),
 			signUp: jest.fn(),
 			getNewToken: jest.fn(),
+			getNewTokenWithCookie: jest.fn(),
+			refreshTokenWithCookie: jest.fn(),
 			getCurrentUser: jest.fn(),
 			logout: jest.fn(),
-		} as any as jest.Mocked<AuthFacade>;
-
-		mockTokenService = {
-			setAccessTokenCookie: jest.fn(),
-			setRefreshTokenCookie: jest.fn(),
-			clearTokenCookies: jest.fn(),
+			logoutWithCookie: jest.fn(),
 			verifyToken: jest.fn(),
-		} as any as jest.Mocked<TokenService>;
-
-		mockClsService = {
-			get: jest.fn(),
-			set: jest.fn(),
-		} as any as jest.Mocked<ClsService>;
+			setTokenCookies: jest.fn(),
+			clearTokenCookies: jest.fn(),
+		} as unknown as jest.Mocked<AuthFacade>;
 
 		const module: TestingModule = await Test.createTestingModule({
 			controllers: [AuthController],
-			providers: [
-				{ provide: AuthFacade, useValue: mockAuthFacade },
-				{ provide: TokenService, useValue: mockTokenService },
-				{ provide: ClsService, useValue: mockClsService },
-			],
+			providers: [{ provide: AuthFacade, useValue: mockAuthFacade }],
 		}).compile();
 
 		controller = module.get<AuthController>(AuthController);
@@ -88,113 +74,57 @@ describe("AuthController", () => {
 				email: "test@example.com",
 				password: "password123",
 			};
-			mockAuthFacade.login.mockResolvedValue({
+			mockAuthFacade.loginWithCookie.mockResolvedValue({
 				accessToken: "access-token",
 				refreshToken: "refresh-token",
 				accessTokenExpiresAt: mockTokenExpiryInfo.accessTokenExpiresAt,
 				refreshTokenExpiresAt: mockTokenExpiryInfo.refreshTokenExpiresAt,
-				user: mockUser as any,
+				user: mockUser as never,
 			});
 
 			// When
-			const result = await controller.login(loginDto, mockResponse as any);
+			const result = await controller.login(
+				loginDto,
+				mockResponse as unknown as never,
+			);
 
 			// Then
-			expect(mockAuthFacade.login).toHaveBeenCalledWith(loginDto);
-			expect(mockTokenService.setAccessTokenCookie).toHaveBeenCalledWith(
+			expect(mockAuthFacade.loginWithCookie).toHaveBeenCalledWith(
+				loginDto,
 				mockResponse,
-				"access-token",
-			);
-			expect(mockTokenService.setRefreshTokenCookie).toHaveBeenCalledWith(
-				mockResponse,
-				"refresh-token",
 			);
 			expect(result.accessToken).toBe("access-token");
 			expect(result.refreshToken).toBe("refresh-token");
-			expect(result.mainTenantId).toBe("tenant-test-id");
 			expect(result.accessTokenExpiresAt).toBe(
 				mockTokenExpiryInfo.accessTokenExpiresAt,
 			);
 			expect(result.refreshTokenExpiresAt).toBe(
 				mockTokenExpiryInfo.refreshTokenExpiresAt,
 			);
-			expect(result.selectedSpaceId).toBeNull();
-		});
-
-		it("기본 테넌트(첫 번째)가 없으면 빈 문자열을 반환해야 한다", async () => {
-			// Given
-			const loginDto: LoginPayloadDto = {
-				email: "test@example.com",
-				password: "password123",
-			};
-			const userWithoutMainTenant = {
-				...mockUser,
-				tenants: [],
-			};
-			mockAuthFacade.login.mockResolvedValue({
-				accessToken: "access-token",
-				refreshToken: "refresh-token",
-				accessTokenExpiresAt: mockTokenExpiryInfo.accessTokenExpiresAt,
-				refreshTokenExpiresAt: mockTokenExpiryInfo.refreshTokenExpiresAt,
-				user: userWithoutMainTenant as any,
-			});
-
-			// When
-			const result = await controller.login(loginDto, mockResponse as any);
-
-			// Then
-			expect(result.mainTenantId).toBe("");
-		});
-
-		it("selectedSpaceId가 있으면 응답에 포함되어야 한다", async () => {
-			// Given
-			const loginDto: LoginPayloadDto = {
-				email: "test@example.com",
-				password: "password123",
-			};
-			const userWithSelectedSpace = {
-				...mockUser,
-				selectedSpaceId: "selected-space-id",
-			};
-			mockAuthFacade.login.mockResolvedValue({
-				accessToken: "access-token",
-				refreshToken: "refresh-token",
-				accessTokenExpiresAt: mockTokenExpiryInfo.accessTokenExpiresAt,
-				refreshTokenExpiresAt: mockTokenExpiryInfo.refreshTokenExpiresAt,
-				user: userWithSelectedSpace as any,
-			});
-
-			// When
-			const result = await controller.login(loginDto, mockResponse as any);
-
-			// Then
-			expect(result.selectedSpaceId).toBe("selected-space-id");
 		});
 	});
 
 	describe("refreshToken", () => {
 		it("리프레시 토큰이 있으면 새 토큰을 발급해야 한다", async () => {
 			// Given
-			mockAuthFacade.getNewToken.mockResolvedValue({
-				newAccessToken: "new-access-token",
-				newRefreshToken: "new-refresh-token",
-				tokenExpiryInfo: mockTokenExpiryInfo,
+			mockAuthFacade.refreshTokenWithCookie.mockResolvedValue({
+				accessToken: "new-access-token",
+				refreshToken: "new-refresh-token",
+				accessTokenExpiresAt: mockTokenExpiryInfo.accessTokenExpiresAt,
+				refreshTokenExpiresAt: mockTokenExpiryInfo.refreshTokenExpiresAt,
+				user: mockUser as never,
 			});
-			mockAuthFacade.getCurrentUser.mockResolvedValue(mockUser as any);
 
 			// When
 			const result = await controller.refreshToken(
-				mockRequest as any,
-				mockResponse as any,
+				mockRequest as unknown as never,
+				mockResponse as unknown as never,
 			);
 
 			// Then
-			expect(mockAuthFacade.getNewToken).toHaveBeenCalledWith(
+			expect(mockAuthFacade.refreshTokenWithCookie).toHaveBeenCalledWith(
 				"test-refresh-token",
-			);
-			expect(mockTokenService.setAccessTokenCookie).toHaveBeenCalledWith(
 				mockResponse,
-				"new-access-token",
 			);
 			expect(result.accessToken).toBe("new-access-token");
 			expect(result.accessTokenExpiresAt).toBe(
@@ -208,28 +138,31 @@ describe("AuthController", () => {
 		it("리프레시 토큰이 없으면 UnauthorizedException을 던져야 한다", async () => {
 			// Given
 			const requestWithoutToken = { cookies: {} };
+			mockAuthFacade.refreshTokenWithCookie.mockRejectedValue(
+				new UnauthorizedException("리프레시 토큰이 존재하지 않습니다"),
+			);
 
 			// When & Then
 			await expect(
 				controller.refreshToken(
-					requestWithoutToken as any,
-					mockResponse as any,
+					requestWithoutToken as unknown as never,
+					mockResponse as unknown as never,
 				),
 			).rejects.toThrow(UnauthorizedException);
 		});
 
 		it("사용자를 찾을 수 없으면 UnauthorizedException을 던져야 한다", async () => {
 			// Given
-			mockAuthFacade.getNewToken.mockResolvedValue({
-				newAccessToken: "new-access-token",
-				newRefreshToken: "new-refresh-token",
-				tokenExpiryInfo: mockTokenExpiryInfo,
-			});
-			mockAuthFacade.getCurrentUser.mockResolvedValue(null);
+			mockAuthFacade.refreshTokenWithCookie.mockRejectedValue(
+				new UnauthorizedException("사용자를 찾을 수 없습니다"),
+			);
 
 			// When & Then
 			await expect(
-				controller.refreshToken(mockRequest as any, mockResponse as any),
+				controller.refreshToken(
+					mockRequest as unknown as never,
+					mockResponse as unknown as never,
+				),
 			).rejects.toThrow(UnauthorizedException);
 		});
 	});
@@ -237,22 +170,26 @@ describe("AuthController", () => {
 	describe("getNewToken", () => {
 		it("인증된 사용자의 토큰을 갱신해야 한다", async () => {
 			// Given
-			mockAuthFacade.getNewToken.mockResolvedValue({
-				newAccessToken: "new-access-token",
-				newRefreshToken: "new-refresh-token",
-				tokenExpiryInfo: mockTokenExpiryInfo,
+			mockAuthFacade.getNewTokenWithCookie.mockResolvedValue({
+				accessToken: "new-access-token",
+				refreshToken: "new-refresh-token",
+				accessTokenExpiresAt: mockTokenExpiryInfo.accessTokenExpiresAt,
+				refreshTokenExpiresAt: mockTokenExpiryInfo.refreshTokenExpiresAt,
+				user: mockUser as never,
 			});
 
 			// When
 			const result = await controller.getNewToken(
-				mockRequest as any,
-				mockResponse as any,
+				mockRequest as unknown as never,
+				mockResponse as unknown as never,
 			);
 
 			// Then
-			expect(mockClsService.set).toHaveBeenCalledWith("hi", "hi");
-			expect(mockTokenService.setAccessTokenCookie).toHaveBeenCalled();
-			expect(mockTokenService.setRefreshTokenCookie).toHaveBeenCalled();
+			expect(mockAuthFacade.getNewTokenWithCookie).toHaveBeenCalledWith(
+				"test-refresh-token",
+				mockUser,
+				mockResponse,
+			);
 			expect(result.accessToken).toBe("new-access-token");
 			expect(result.accessTokenExpiresAt).toBe(
 				mockTokenExpiryInfo.accessTokenExpiresAt,
@@ -267,13 +204,13 @@ describe("AuthController", () => {
 				email: "new@example.com",
 				password: "password123",
 				name: "New User",
-			} as any;
+			} as never;
 			const signUpResult = {
 				accessToken: "access-token",
 				refreshToken: "refresh-token",
 				user: mockUser,
 			};
-			mockAuthFacade.signUp.mockResolvedValue(signUpResult as any);
+			mockAuthFacade.signUp.mockResolvedValue(signUpResult as never);
 
 			// When
 			const result = await controller.signUpUser(signUpDto);
@@ -287,21 +224,21 @@ describe("AuthController", () => {
 	describe("verifyToken", () => {
 		it("유효한 토큰은 true를 반환해야 한다", async () => {
 			// Given
-			mockClsService.get.mockReturnValue("valid-token");
-			mockTokenService.verifyToken.mockReturnValue(true);
+			mockAuthFacade.verifyToken.mockReturnValue(true);
 
 			// When
 			const result = await controller.verifyToken();
 
 			// Then
-			expect(mockClsService.get).toHaveBeenCalledWith(CONTEXT_KEYS.TOKEN);
-			expect(mockTokenService.verifyToken).toHaveBeenCalledWith("valid-token");
+			expect(mockAuthFacade.verifyToken).toHaveBeenCalled();
 			expect(result).toBe(true);
 		});
 
 		it("토큰이 없으면 UnauthorizedException을 던져야 한다", async () => {
 			// Given
-			mockClsService.get.mockReturnValue(null);
+			mockAuthFacade.verifyToken.mockImplementation(() => {
+				throw new UnauthorizedException("토큰이 존재하지 않습니다");
+			});
 
 			// When & Then
 			await expect(controller.verifyToken()).rejects.toThrow(
@@ -311,8 +248,7 @@ describe("AuthController", () => {
 
 		it("유효하지 않은 토큰은 false를 반환해야 한다", async () => {
 			// Given
-			mockClsService.get.mockReturnValue("invalid-token");
-			mockTokenService.verifyToken.mockReturnValue(false);
+			mockAuthFacade.verifyToken.mockReturnValue(false);
 
 			// When
 			const result = await controller.verifyToken();
@@ -325,24 +261,20 @@ describe("AuthController", () => {
 	describe("logout", () => {
 		it("사용자가 있으면 토큰을 무효화해야 한다", async () => {
 			// Given
-			mockAuthFacade.logout.mockResolvedValue(undefined);
+			mockAuthFacade.logoutWithCookie.mockResolvedValue(true);
 
 			// When
 			const result = await controller.logout(
-				mockRequest as any,
-				mockResponse as any,
+				mockRequest as unknown as never,
+				mockResponse as unknown as never,
 			);
 
 			// Then
-			expect(mockAuthFacade.logout).toHaveBeenCalledWith(
+			expect(mockAuthFacade.logoutWithCookie).toHaveBeenCalledWith(
 				"user-test-id",
 				"test-access-token",
-			);
-			expect(mockTokenService.clearTokenCookies).toHaveBeenCalledWith(
 				mockResponse,
 			);
-			expect(mockResponse.clearCookie).toHaveBeenCalledWith("tenantId");
-			expect(mockResponse.clearCookie).toHaveBeenCalledWith("workspaceId");
 			expect(result).toBe(true);
 		});
 
@@ -352,16 +284,18 @@ describe("AuthController", () => {
 				cookies: {},
 				user: undefined,
 			};
+			mockAuthFacade.logoutWithCookie.mockResolvedValue(true);
 
 			// When
 			const result = await controller.logout(
-				requestWithoutUser as any,
-				mockResponse as any,
+				requestWithoutUser as unknown as never,
+				mockResponse as unknown as never,
 			);
 
 			// Then
-			expect(mockAuthFacade.logout).not.toHaveBeenCalled();
-			expect(mockTokenService.clearTokenCookies).toHaveBeenCalledWith(
+			expect(mockAuthFacade.logoutWithCookie).toHaveBeenCalledWith(
+				undefined,
+				undefined,
 				mockResponse,
 			);
 			expect(result).toBe(true);
