@@ -65,7 +65,7 @@ export const ADMIN_PATHS = {
 	SETTINGS_GROUNDS: "/settings/grounds",
 	SETTINGS_ADMINS: "/settings/admins",
 	SETTINGS_ABILITIES: "/settings/abilities",
-	SETTINGS_COLUMNS: "/settings/columns",
+	SETTINGS_COLUMNS: "/settings/ui-configs",
 	SETTINGS_SYSTEM: "/settings/system",
 
 	// 기타
