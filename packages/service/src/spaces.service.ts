@@ -1,5 +1,5 @@
-import { SpacesRepository } from "@cocrepo/repository";
 import { Prisma, Space } from "@cocrepo/prisma";
+import { SpacesRepository } from "@cocrepo/repository";
 import { Injectable, Logger } from "@nestjs/common";
 
 @Injectable()

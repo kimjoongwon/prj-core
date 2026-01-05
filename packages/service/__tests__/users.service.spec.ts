@@ -68,9 +68,9 @@ describe("UsersService", () => {
 			const result = await service.getByIdWithTenants(userId);
 
 			// Then
-			expect(mockRepository.findByIdWithTenantsAndProfiles).toHaveBeenCalledWith(
-				userId,
-			);
+			expect(
+				mockRepository.findByIdWithTenantsAndProfiles,
+			).toHaveBeenCalledWith(userId);
 			expect(result).toEqual(mockUser);
 		});
 
@@ -83,9 +83,9 @@ describe("UsersService", () => {
 			const result = await service.getByIdWithTenants(userId);
 
 			// Then
-			expect(mockRepository.findByIdWithTenantsAndProfiles).toHaveBeenCalledWith(
-				userId,
-			);
+			expect(
+				mockRepository.findByIdWithTenantsAndProfiles,
+			).toHaveBeenCalledWith(userId);
 			expect(result).toBeNull();
 		});
 	});

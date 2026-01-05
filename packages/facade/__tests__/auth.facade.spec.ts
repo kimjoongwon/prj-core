@@ -85,9 +85,7 @@ describe("AuthFacade", () => {
 			// Given
 			const accessToken = "valid-access-token";
 			mockJwtService.verify.mockReturnValue({ userId: "user-test-id" });
-			mockUsersService.getByIdWithTenants.mockResolvedValue(
-				mockUser as any,
-			);
+			mockUsersService.getByIdWithTenants.mockResolvedValue(mockUser as any);
 
 			// When
 			const result = await facade.getCurrentUser(accessToken);

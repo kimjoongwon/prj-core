@@ -1,5 +1,5 @@
-import { RolesRepository } from "@cocrepo/repository";
 import { Role, Roles } from "@cocrepo/prisma";
+import { RolesRepository } from "@cocrepo/repository";
 import { Injectable, Logger } from "@nestjs/common";
 
 @Injectable()

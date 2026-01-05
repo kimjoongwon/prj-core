@@ -1,8 +1,8 @@
 /// <reference types="vitest/globals" />
 
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import { TokenStore } from "../tokenStore";
 import type { RootStore } from "../Store";
+import { TokenStore } from "../tokenStore";
 
 // CookieStore 모킹
 vi.mock("../cookieStore", () => ({

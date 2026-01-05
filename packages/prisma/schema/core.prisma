@@ -118,21 +118,21 @@ model Assignment {
 // @connected-by: Ability
 // @note: Menu, Feature, Entity, API, Column 5가지 타입으로 세밀한 권한 관리
 model Subject {
-  id                String             @id @default(uuid())
-  seq               Int                @unique @default(autoincrement())
-  createdAt         DateTime           @default(now()) @map("created_at") @db.Timestamptz(6)
-  updatedAt         DateTime?          @updatedAt @map("updated_at") @db.Timestamptz(6)
-  removedAt         DateTime?          @map("removed_at") @db.Timestamptz(6)
-  name              String             @unique
-  type              SubjectTypes       @default(Entity)
-  label             String?
-  description       String?
-  parentId          String?            @map("parent_id")
-  tenantId          String             @map("tenant_id")
-  sortOrder         Int                @default(0) @map("sort_order")
-  parent            Subject?           @relation("SubjectHierarchy", fields: [parentId], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  children          Subject[]          @relation("SubjectHierarchy")
-  abilities          Ability[]
+  id          String       @id @default(uuid())
+  seq         Int          @unique @default(autoincrement())
+  createdAt   DateTime     @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt   DateTime?    @updatedAt @map("updated_at") @db.Timestamptz(6)
+  removedAt   DateTime?    @map("removed_at") @db.Timestamptz(6)
+  name        String       @unique
+  type        SubjectTypes @default(Entity)
+  label       String?
+  description String?
+  parentId    String?      @map("parent_id")
+  tenantId    String       @map("tenant_id")
+  sortOrder   Int          @default(0) @map("sort_order")
+  parent      Subject?     @relation("SubjectHierarchy", fields: [parentId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  children    Subject[]    @relation("SubjectHierarchy")
+  abilities   Ability[]
 
   @@index([tenantId])
   @@index([type])
@@ -168,8 +168,6 @@ model Ability {
   @@index([isActive])
   @@map("abilities")
 }
-
-
 
 // @schema-type: CONTENT
 // @description: 게시물 - Content를 감싸는 발행 단위

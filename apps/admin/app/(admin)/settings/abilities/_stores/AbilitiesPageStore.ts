@@ -1,10 +1,10 @@
-import { makeAutoObservable, runInAction } from "mobx";
 import type {
 	AbilityResponseDto,
 	CreateAbilityDto,
 	Roles,
 	SubjectResponseDto,
 } from "@cocrepo/api";
+import { makeAutoObservable, runInAction } from "mobx";
 
 /**
  * 권한 관리 페이지 Store
@@ -129,12 +129,19 @@ export class AbilitiesPageStore {
 		// 기존 활성화된 권한 중 변경되지 않은 것들
 		for (const ability of this.abilities) {
 			const key = `${ability.subjectId}-${ability.action}`;
-			if (!this.changedAbilities.has(key) && ability.type === "CAN" && ability.isActive) {
+			if (
+				!this.changedAbilities.has(key) &&
+				ability.type === "CAN" &&
+				ability.isActive
+			) {
 				result.push({
 					type: "CAN",
 					action: ability.action,
 					subjectId: ability.subjectId,
-					description: typeof ability.description === "string" ? ability.description : undefined,
+					description:
+						typeof ability.description === "string"
+							? ability.description
+							: undefined,
 					conditions: ability.conditions ?? undefined,
 					isActive: true,
 				});

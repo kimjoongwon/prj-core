@@ -14,19 +14,19 @@ import {
 	userGroundMapping,
 	userSeedData,
 } from "./seed-data";
-import { PrismaClient } from "./src/generated/client/client";
 import type {
-	Role,
-	Subject,
 	Ability,
 	Ground,
 	Group,
+	Role,
+	Subject,
 } from "./src/generated/client/client";
+import { PrismaClient } from "./src/generated/client/client";
 import {
-	SubjectTypes,
-	AbilityTypes,
 	AbilityActions,
+	AbilityTypes,
 	CategoryTypes,
+	SubjectTypes,
 } from "./src/generated/client/enums";
 
 // Prisma 7: Adapter 패턴으로 PrismaClient 생성
@@ -179,10 +179,7 @@ async function main() {
 	console.log({ superAdminUser });
 }
 
-async function createRegularUsersAndGrounds(
-	adminRole: Role,
-	_userRole: Role,
-) {
+async function createRegularUsersAndGrounds(adminRole: Role, _userRole: Role) {
 	console.log("일반 유저들과 그라운드 생성 시작...");
 
 	// 모든 Role 조회 (seed-data의 role 필드 사용을 위해)
@@ -609,7 +606,9 @@ async function createSubjects() {
 				},
 			});
 			subjectMap[subjectData.name] = created;
-			console.log(`  - Subject 생성: ${subjectData.name} (${subjectData.type})`);
+			console.log(
+				`  - Subject 생성: ${subjectData.name} (${subjectData.type})`,
+			);
 		} else {
 			subjectMap[subjectData.name] = existing;
 			console.log(`  - Subject 이미 존재: ${subjectData.name}`);
@@ -654,9 +653,7 @@ async function createSubjects() {
 		}
 	}
 
-	console.log(
-		`Subject 생성 완료! (총 ${Object.keys(subjectMap).length}개)`,
-	);
+	console.log(`Subject 생성 완료! (총 ${Object.keys(subjectMap).length}개)`);
 }
 
 async function createAbilities(roles: Record<string, Role>) {

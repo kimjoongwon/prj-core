@@ -59,7 +59,11 @@ describe("AuthStore", () => {
 	describe("isAuthenticated", () => {
 		it("토큰이 만료되지 않았으면 true를 반환해야 함", () => {
 			// Given
-			(mockTokenStore.isAccessTokenExpired as unknown as ReturnType<typeof vi.fn>).mockReturnValue(false);
+			(
+				mockTokenStore.isAccessTokenExpired as unknown as ReturnType<
+					typeof vi.fn
+				>
+			).mockReturnValue(false);
 
 			// Then
 			expect(authStore.isAuthenticated).toBe(true);
@@ -67,7 +71,11 @@ describe("AuthStore", () => {
 
 		it("토큰이 만료되었으면 false를 반환해야 함", () => {
 			// Given
-			(mockTokenStore.isAccessTokenExpired as unknown as ReturnType<typeof vi.fn>).mockReturnValue(true);
+			(
+				mockTokenStore.isAccessTokenExpired as unknown as ReturnType<
+					typeof vi.fn
+				>
+			).mockReturnValue(true);
 
 			// Then
 			expect(authStore.isAuthenticated).toBe(false);
@@ -88,7 +96,9 @@ describe("AuthStore", () => {
 			const mockError = {
 				response: { status: 401 },
 			};
-			(isAxiosError as unknown as ReturnType<typeof vi.fn>).mockReturnValue(true);
+			(isAxiosError as unknown as ReturnType<typeof vi.fn>).mockReturnValue(
+				true,
+			);
 
 			// When
 			await authStore.handleAuthError(mockError);
@@ -102,19 +112,27 @@ describe("AuthStore", () => {
 			const mockError = {
 				response: { status: 500 },
 			};
-			(isAxiosError as unknown as ReturnType<typeof vi.fn>).mockReturnValue(true);
+			(isAxiosError as unknown as ReturnType<typeof vi.fn>).mockReturnValue(
+				true,
+			);
 
 			// When & Then
-			await expect(authStore.handleAuthError(mockError)).rejects.toBe(mockError);
+			await expect(authStore.handleAuthError(mockError)).rejects.toBe(
+				mockError,
+			);
 		});
 
 		it("Axios 에러가 아닌 경우 그대로 reject해야 함", async () => {
 			// Given
 			const mockError = new Error("일반 에러");
-			(isAxiosError as unknown as ReturnType<typeof vi.fn>).mockReturnValue(false);
+			(isAxiosError as unknown as ReturnType<typeof vi.fn>).mockReturnValue(
+				false,
+			);
 
 			// When & Then
-			await expect(authStore.handleAuthError(mockError)).rejects.toBe(mockError);
+			await expect(authStore.handleAuthError(mockError)).rejects.toBe(
+				mockError,
+			);
 		});
 	});
 

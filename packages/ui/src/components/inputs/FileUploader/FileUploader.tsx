@@ -1,4 +1,4 @@
-import type { FileDto } from "@cocrepo/api";
+import type { FileDto } from "@cocrepo/dto";
 import { Button, Card } from "@heroui/react";
 import { X } from "lucide-react";
 import { v4 } from "uuid";

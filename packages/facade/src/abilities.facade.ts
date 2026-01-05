@@ -98,6 +98,10 @@ export class AbilitiesFacade {
 			`Role 권한 일괄 업데이트: roleId=${roleId.slice(-8)}, count=${abilities.length}`,
 		);
 
-		return this.abilitiesService.updateRoleAbilities(roleId, tenantId, abilities);
+		return this.abilitiesService.updateRoleAbilities(
+			roleId,
+			tenantId,
+			abilities,
+		);
 	}
 }

@@ -1,5 +1,12 @@
 "use client";
 
+import {
+	Roles,
+	useGetAbilitiesByRoleId,
+	useGetAllSubjects,
+	useUpdateRoleAbilities,
+} from "@cocrepo/api";
+import { usePermission } from "@cocrepo/hook";
 import { Text } from "@cocrepo/ui";
 import {
 	Button,
@@ -13,13 +20,6 @@ import {
 	Tabs,
 	Tooltip,
 } from "@heroui/react";
-import {
-	Roles,
-	useGetAbilitiesByRoleId,
-	useGetAllSubjects,
-	useUpdateRoleAbilities,
-} from "@cocrepo/api";
-import { usePermission } from "@cocrepo/hook";
 import { Save, ShieldCheck } from "lucide-react";
 import { observer } from "mobx-react-lite";
 import { useCallback, useEffect, useRef } from "react";
@@ -86,10 +86,8 @@ function AbilitiesPage() {
 	const canManageAbilities = usePermission("MANAGE", "entity:Ability");
 
 	// Subject 목록 조회
-	const {
-		data: subjectsData,
-		isLoading: isLoadingSubjects,
-	} = useGetAllSubjects();
+	const { data: subjectsData, isLoading: isLoadingSubjects } =
+		useGetAllSubjects();
 
 	// 역할별 권한 조회 (선택된 역할 기준)
 	// roleId가 필요하지만 현재 API에서 role name으로 조회 가능한지 확인 필요

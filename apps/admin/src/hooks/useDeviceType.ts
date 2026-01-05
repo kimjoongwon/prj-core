@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { getDeviceType, type DeviceType } from "../utils/deviceType";
+import { type DeviceType, getDeviceType } from "../utils/deviceType";
 
 /**
  * useDeviceType Hook

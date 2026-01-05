@@ -142,7 +142,10 @@ describe("PersistStore", () => {
 
 		it("유효하면 false를 반환해야 한다", () => {
 			// Given - 1시간 후 만료
-			persistStore.setTokenExpiries(Date.now() + 3600000, Date.now() + 86400000);
+			persistStore.setTokenExpiries(
+				Date.now() + 3600000,
+				Date.now() + 86400000,
+			);
 
 			// Then
 			expect(persistStore.isAccessTokenExpired).toBe(false);
@@ -164,7 +167,10 @@ describe("PersistStore", () => {
 
 		it("유효하면 false를 반환해야 한다", () => {
 			// Given
-			persistStore.setTokenExpiries(Date.now() + 3600000, Date.now() + 86400000);
+			persistStore.setTokenExpiries(
+				Date.now() + 3600000,
+				Date.now() + 86400000,
+			);
 
 			// Then
 			expect(persistStore.isRefreshTokenExpired).toBe(false);
@@ -174,7 +180,10 @@ describe("PersistStore", () => {
 	describe("isAuthenticated", () => {
 		it("Access Token이 유효하면 true를 반환해야 한다", () => {
 			// Given
-			persistStore.setTokenExpiries(Date.now() + 3600000, Date.now() + 86400000);
+			persistStore.setTokenExpiries(
+				Date.now() + 3600000,
+				Date.now() + 86400000,
+			);
 
 			// Then
 			expect(persistStore.isAuthenticated).toBe(true);
@@ -224,7 +233,10 @@ describe("PersistStore", () => {
 			// Given
 			persistStore.setSpace("space-123", "Test");
 			persistStore.setSpaces([{ spaceId: "space-1", groundName: "G1" }]);
-			persistStore.setTokenExpiries(Date.now() + 3600000, Date.now() + 86400000);
+			persistStore.setTokenExpiries(
+				Date.now() + 3600000,
+				Date.now() + 86400000,
+			);
 
 			// When
 			persistStore.clear();

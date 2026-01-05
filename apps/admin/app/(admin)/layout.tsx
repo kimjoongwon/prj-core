@@ -1,5 +1,7 @@
 "use client";
 
+import { getMyAbilities } from "@cocrepo/api";
+import { AbilityProvider, convertApiToRules } from "@cocrepo/hook";
 import {
 	AppLogo,
 	BackButton,
@@ -12,8 +14,6 @@ import {
 	SubMenuList,
 	UserMenu,
 } from "@cocrepo/ui";
-import { AbilityProvider, convertApiToRules } from "@cocrepo/hook";
-import { getMyAbilities } from "@cocrepo/api";
 import { useCallback, useState } from "react";
 import { useSpaceGuard } from "@/hooks";
 
@@ -124,7 +124,9 @@ export default function AdminLayout({
 				{children}
 
 				{/* 모바일: SubMenuList (전체 화면) */}
-				{showSubMenuList && <SubMenuList onSelectSubNavItem={handleSelectSubMenu} />}
+				{showSubMenuList && (
+					<SubMenuList onSelectSubNavItem={handleSelectSubMenu} />
+				)}
 
 				{/* 모바일: BottomTab (하단 탭 네비게이션) */}
 				<BottomTab onSelectTab={handleSelectTab} />

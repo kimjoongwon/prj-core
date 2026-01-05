@@ -5,7 +5,9 @@ import { NavItem, type NavItemConfig } from "../navItem";
 import { NavigationStore } from "../navigationStore";
 
 describe("NavItem", () => {
-	const createNavItemConfig = (overrides?: Partial<NavItemConfig>): NavItemConfig => ({
+	const createNavItemConfig = (
+		overrides?: Partial<NavItemConfig>,
+	): NavItemConfig => ({
 		id: "nav-1",
 		label: "테스트 아이템",
 		path: "/test",
@@ -34,8 +36,18 @@ describe("NavItem", () => {
 			// Given
 			const config = createNavItemConfig({
 				children: [
-					{ id: "child-1", label: "자식 1", path: "/test/child1", subject: "Child1" },
-					{ id: "child-2", label: "자식 2", path: "/test/child2", subject: "Child2" },
+					{
+						id: "child-1",
+						label: "자식 1",
+						path: "/test/child1",
+						subject: "Child1",
+					},
+					{
+						id: "child-2",
+						label: "자식 2",
+						path: "/test/child2",
+						subject: "Child2",
+					},
 				],
 			});
 
@@ -88,8 +100,18 @@ describe("NavItem", () => {
 			const navItem = new NavItem(
 				createNavItemConfig({
 					children: [
-						{ id: "child-1", label: "자식 1", path: "/first", subject: "Child1" },
-						{ id: "child-2", label: "자식 2", path: "/second", subject: "Child2" },
+						{
+							id: "child-1",
+							label: "자식 1",
+							path: "/first",
+							subject: "Child1",
+						},
+						{
+							id: "child-2",
+							label: "자식 2",
+							path: "/second",
+							subject: "Child2",
+						},
 					],
 				}),
 			);
@@ -128,8 +150,18 @@ describe("NavItem", () => {
 			const navItem = new NavItem(
 				createNavItemConfig({
 					children: [
-						{ id: "child-1", label: "자식 1", path: "/users", subject: "Child1" },
-						{ id: "child-2", label: "자식 2", path: "/settings", subject: "Child2" },
+						{
+							id: "child-1",
+							label: "자식 1",
+							path: "/users",
+							subject: "Child1",
+						},
+						{
+							id: "child-2",
+							label: "자식 2",
+							path: "/settings",
+							subject: "Child2",
+						},
 					],
 				}),
 			);
@@ -168,8 +200,18 @@ describe("NavigationStore", () => {
 			label: "회원",
 			subject: "Member",
 			children: [
-				{ id: "member-list", label: "회원 목록", path: "/members/list", subject: "MemberList" },
-				{ id: "member-add", label: "회원 추가", path: "/members/add", subject: "MemberAdd" },
+				{
+					id: "member-list",
+					label: "회원 목록",
+					path: "/members/list",
+					subject: "MemberList",
+				},
+				{
+					id: "member-add",
+					label: "회원 추가",
+					path: "/members/add",
+					subject: "MemberAdd",
+				},
 			],
 		},
 		{
@@ -177,8 +219,18 @@ describe("NavigationStore", () => {
 			label: "설정",
 			subject: "Settings",
 			children: [
-				{ id: "general", label: "일반", path: "/settings/general", subject: "General" },
-				{ id: "security", label: "보안", path: "/settings/security", subject: "Security" },
+				{
+					id: "general",
+					label: "일반",
+					path: "/settings/general",
+					subject: "General",
+				},
+				{
+					id: "security",
+					label: "보안",
+					path: "/settings/security",
+					subject: "Security",
+				},
 			],
 		},
 		{

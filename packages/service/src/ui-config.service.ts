@@ -1,9 +1,6 @@
 import { UIConfig } from "@cocrepo/entity";
 import { Prisma, UIConfigScope } from "@cocrepo/prisma";
-import {
-	FindEffectiveParams,
-	UIConfigRepository,
-} from "@cocrepo/repository";
+import { FindEffectiveParams, UIConfigRepository } from "@cocrepo/repository";
 import { Injectable, Logger, NotFoundException } from "@nestjs/common";
 
 /**
@@ -183,7 +180,9 @@ export class UIConfigService {
 		// 존재 여부 확인
 		const existing = await this.repository.findById(id);
 		if (!existing) {
-			throw new NotFoundException(UIConfigServiceErrorMessages.CONFIG_NOT_FOUND);
+			throw new NotFoundException(
+				UIConfigServiceErrorMessages.CONFIG_NOT_FOUND,
+			);
 		}
 
 		const result = await this.repository.deleteById(id);

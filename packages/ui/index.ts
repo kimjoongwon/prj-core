@@ -1,4 +1,4 @@
 "use client";
 export * from "./src/components";
-export * from "./src/utils/iconUtils";
 export * from "./src/registry";
+export * from "./src/utils/iconUtils";

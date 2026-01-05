@@ -33,7 +33,6 @@ export const useNavigationStore = () => {
 	return store.navigationStore;
 };
 
-
 /**
  * PersistStore를 가져오는 selector hook
  * RootStore에서 persistStore만 선택하여 반환

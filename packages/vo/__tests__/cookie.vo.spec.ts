@@ -45,7 +45,9 @@ describe("Cookie", () => {
 
 			// When & Then
 			expect(() => Cookie.create(maxAge)).toThrow(VoValidationError);
-			expect(() => Cookie.create(maxAge)).toThrow("maxAge는 0보다 커야 합니다.");
+			expect(() => Cookie.create(maxAge)).toThrow(
+				"maxAge는 0보다 커야 합니다.",
+			);
 		});
 	});
 
