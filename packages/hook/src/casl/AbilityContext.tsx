@@ -3,7 +3,9 @@
 import {
 	createContext,
 	type ReactNode,
+	useCallback,
 	useContext,
+	useEffect,
 	useMemo,
 	useState,
 } from "react";
@@ -66,30 +68,87 @@ const defaultAbility = createAbility(defaultRules);
 const AbilityContext = createContext<AbilityContextValue>({
 	ability: defaultAbility,
 	isLoading: false,
+	refetch: undefined,
 });
 
 export interface AbilityProviderProps {
 	children: ReactNode;
+	/** 직접 전달하는 권한 규칙 */
 	rules?: AbilityRule[];
+	/** API에서 권한을 가져오는 함수 */
+	fetchAbilities?: () => Promise<AbilityRule[]>;
+	/** 인증되지 않은 경우 사용할 기본 규칙 */
+	defaultRulesWhenUnauthenticated?: AbilityRule[];
 }
 
 /**
  * Ability Provider
  * CASL 권한 시스템을 제공합니다.
+ *
+ * 사용 방법:
+ * 1. rules prop: 직접 권한 규칙을 전달
+ * 2. fetchAbilities prop: API에서 권한을 가져오는 함수 전달
+ *
+ * @example
+ * // 직접 규칙 전달
+ * <AbilityProvider rules={[{ action: "MANAGE", subject: "all" }]}>
+ *
+ * // API 연동 (apps/admin에서)
+ * const fetchAbilities = async () => {
+ *   const { data } = await getMyAbilities();
+ *   return convertApiToRules(data?.data ?? []);
+ * };
+ * <AbilityProvider fetchAbilities={fetchAbilities}>
  */
-export function AbilityProvider({ children, rules }: AbilityProviderProps) {
-	const [isLoading] = useState(false);
+export function AbilityProvider({
+	children,
+	rules,
+	fetchAbilities,
+	defaultRulesWhenUnauthenticated,
+}: AbilityProviderProps) {
+	const [isLoading, setIsLoading] = useState(!!fetchAbilities);
+	const [fetchedRules, setFetchedRules] = useState<AbilityRule[] | null>(null);
+
+	const loadAbilities = useCallback(async () => {
+		if (!fetchAbilities) return;
+
+		setIsLoading(true);
+		try {
+			const abilities = await fetchAbilities();
+			setFetchedRules(abilities);
+		} catch (error) {
+			console.error("Failed to fetch abilities:", error);
+			setFetchedRules(defaultRulesWhenUnauthenticated ?? []);
+		} finally {
+			setIsLoading(false);
+		}
+	}, [fetchAbilities, defaultRulesWhenUnauthenticated]);
+
+	useEffect(() => {
+		if (fetchAbilities) {
+			loadAbilities();
+		}
+	}, [fetchAbilities, loadAbilities]);
 
 	const ability = useMemo(() => {
-		return createAbility(rules || defaultRules);
-	}, [rules]);
+		// 우선순위: rules prop > fetchedRules > defaultRules
+		const activeRules = rules ?? fetchedRules ?? defaultRules;
+		return createAbility(activeRules);
+	}, [rules, fetchedRules]);
+
+	const refetch = useCallback(() => {
+		if (fetchAbilities) {
+			loadAbilities();
+		}
+	}, [fetchAbilities, loadAbilities]);
 
 	const value = useMemo(
 		() => ({
 			ability,
 			isLoading,
+			refetch: fetchAbilities ? refetch : undefined,
 		}),
-		[ability, isLoading],
+		[ability, isLoading, refetch, fetchAbilities],
 	);
 
 	return (
@@ -114,6 +173,15 @@ export function useAbility(): AppAbility {
 export function useAbilityLoading(): boolean {
 	const context = useContext(AbilityContext);
 	return context.isLoading;
+}
+
+/**
+ * Ability 새로고침 훅
+ * fetchAbilities가 제공된 경우에만 사용 가능
+ */
+export function useAbilityRefetch(): (() => void) | undefined {
+	const context = useContext(AbilityContext);
+	return context.refetch;
 }
 
 export { createAbility };

@@ -1,4 +1,7 @@
-import type { DeviceType } from "../hooks/useColumnVisibility";
+/**
+ * 디바이스 타입 정의
+ */
+export type DeviceType = "desktop" | "tablet" | "mobile";
 
 /**
  * 디바이스 타입 브레이크포인트 정의

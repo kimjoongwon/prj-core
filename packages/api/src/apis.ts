@@ -37,12 +37,14 @@ import type {
   CreateUser201AllOf,
   CreateUserMemberDto,
   DeleteColumn200AllOf,
+  DeleteConfig200AllOf,
   GetAbilitiesByRoleId200AllOf,
   GetAll200AllOf,
   GetAllSubjects200AllOf,
   GetColumnById200AllOf,
   GetColumnsByEntity200AllOf,
   GetColumnsByEntityParams,
+  GetConfig200AllOf,
   GetEntities200AllOf,
   GetMyAbilities200AllOf,
   GetMyGrounds200AllOf,
@@ -54,6 +56,10 @@ import type {
   Login200AllOf,
   LoginPayloadDto,
   RefreshToken200AllOf,
+  SaveGlobalConfig200AllOf,
+  SaveRoleConfig200AllOf,
+  SaveUIConfigDto,
+  SaveUserConfig200AllOf,
   SignUpPayloadDto,
   SignUpUser201AllOf,
   UpdateColumn200AllOf,
@@ -3600,6 +3606,499 @@ export const useDeleteColumn = <TError = ErrorType<void>,
       > => {
 
       const mutationOptions = getDeleteColumnMutationOptions(options);
+
+      return useMutation(mutationOptions, queryClient);
+    }
+    
+/**
+ * 현재 사용자에게 적용될 UI 설정을 조회합니다. 우선순위(USER > ROLE > GLOBAL)에 따라 가장 구체적인 설정을 반환합니다. 설정이 없으면 null을 반환합니다.
+ * @summary UI 설정 조회
+ */
+export const getConfig = (
+    entity: string,
+    view: string,
+ options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
+) => {
+      
+      
+      return customInstance<GetConfig200AllOf>(
+      {url: `/api/v1/ui-configs/${entity}/${view}`, method: 'GET', signal
+    },
+      options);
+    }
+  
+
+
+
+export const getGetConfigQueryKey = (entity?: string,
+    view?: string,) => {
+    return [
+    `/api/v1/ui-configs/${entity}/${view}`
+    ] as const;
+    }
+
+export const getGetConfigInfiniteQueryKey = (entity?: string,
+    view?: string,) => {
+    return [
+    'infinite', `/api/v1/ui-configs/${entity}/${view}`
+    ] as const;
+    }
+
+    
+export const getGetConfigQueryOptions = <TData = Awaited<ReturnType<typeof getConfig>>, TError = ErrorType<void>>(entity: string,
+    view: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getConfig>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetConfigQueryKey(entity,view);
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getConfig>>> = ({ signal }) => getConfig(entity,view, requestOptions, signal);
+
+      
+
+      
+
+   return  { queryKey, queryFn, enabled: !!(entity && view), ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getConfig>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetConfigQueryResult = NonNullable<Awaited<ReturnType<typeof getConfig>>>
+export type GetConfigQueryError = ErrorType<void>
+
+
+export function useGetConfig<TData = Awaited<ReturnType<typeof getConfig>>, TError = ErrorType<void>>(
+ entity: string,
+    view: string, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getConfig>>, TError, TData>> & Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getConfig>>,
+          TError,
+          Awaited<ReturnType<typeof getConfig>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetConfig<TData = Awaited<ReturnType<typeof getConfig>>, TError = ErrorType<void>>(
+ entity: string,
+    view: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getConfig>>, TError, TData>> & Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getConfig>>,
+          TError,
+          Awaited<ReturnType<typeof getConfig>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetConfig<TData = Awaited<ReturnType<typeof getConfig>>, TError = ErrorType<void>>(
+ entity: string,
+    view: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getConfig>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+/**
+ * @summary UI 설정 조회
+ */
+
+export function useGetConfig<TData = Awaited<ReturnType<typeof getConfig>>, TError = ErrorType<void>>(
+ entity: string,
+    view: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getConfig>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient 
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = getGetConfigQueryOptions(entity,view,options)
+
+  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+
+
+
+export const getGetConfigSuspenseQueryOptions = <TData = Awaited<ReturnType<typeof getConfig>>, TError = ErrorType<void>>(entity: string,
+    view: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getConfig>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetConfigQueryKey(entity,view);
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getConfig>>> = ({ signal }) => getConfig(entity,view, requestOptions, signal);
+
+      
+
+      
+
+   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseQueryOptions<Awaited<ReturnType<typeof getConfig>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetConfigSuspenseQueryResult = NonNullable<Awaited<ReturnType<typeof getConfig>>>
+export type GetConfigSuspenseQueryError = ErrorType<void>
+
+
+export function useGetConfigSuspense<TData = Awaited<ReturnType<typeof getConfig>>, TError = ErrorType<void>>(
+ entity: string,
+    view: string, options: { query:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getConfig>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetConfigSuspense<TData = Awaited<ReturnType<typeof getConfig>>, TError = ErrorType<void>>(
+ entity: string,
+    view: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getConfig>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetConfigSuspense<TData = Awaited<ReturnType<typeof getConfig>>, TError = ErrorType<void>>(
+ entity: string,
+    view: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getConfig>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+/**
+ * @summary UI 설정 조회
+ */
+
+export function useGetConfigSuspense<TData = Awaited<ReturnType<typeof getConfig>>, TError = ErrorType<void>>(
+ entity: string,
+    view: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getConfig>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient 
+ ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = getGetConfigSuspenseQueryOptions(entity,view,options)
+
+  const query = useSuspenseQuery(queryOptions, queryClient) as  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+
+
+
+export const getGetConfigSuspenseInfiniteQueryOptions = <TData = InfiniteData<Awaited<ReturnType<typeof getConfig>>>, TError = ErrorType<void>>(entity: string,
+    view: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getConfig>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetConfigInfiniteQueryKey(entity,view);
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getConfig>>> = ({ signal }) => getConfig(entity,view, requestOptions, signal);
+
+      
+
+      
+
+   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getConfig>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetConfigSuspenseInfiniteQueryResult = NonNullable<Awaited<ReturnType<typeof getConfig>>>
+export type GetConfigSuspenseInfiniteQueryError = ErrorType<void>
+
+
+export function useGetConfigSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getConfig>>>, TError = ErrorType<void>>(
+ entity: string,
+    view: string, options: { query:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getConfig>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetConfigSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getConfig>>>, TError = ErrorType<void>>(
+ entity: string,
+    view: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getConfig>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetConfigSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getConfig>>>, TError = ErrorType<void>>(
+ entity: string,
+    view: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getConfig>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+/**
+ * @summary UI 설정 조회
+ */
+
+export function useGetConfigSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getConfig>>>, TError = ErrorType<void>>(
+ entity: string,
+    view: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getConfig>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient 
+ ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = getGetConfigSuspenseInfiniteQueryOptions(entity,view,options)
+
+  const query = useSuspenseInfiniteQuery(queryOptions, queryClient) as  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+
+
+
+
+/**
+ * 현재 사용자의 개인 UI 설정을 저장합니다. 컬럼 순서, 너비 조정 등을 커스터마이징할 수 있습니다.
+ * @summary 사용자 개인 설정 저장
+ */
+export const saveUserConfig = (
+    entity: string,
+    view: string,
+    saveUIConfigDto: BodyType<SaveUIConfigDto>,
+ options?: SecondParameter<typeof customInstance>,) => {
+      
+      
+      return customInstance<SaveUserConfig200AllOf>(
+      {url: `/api/v1/ui-configs/${entity}/${view}`, method: 'PUT',
+      headers: {'Content-Type': 'application/json', },
+      data: saveUIConfigDto
+    },
+      options);
+    }
+  
+
+
+export const getSaveUserConfigMutationOptions = <TError = ErrorType<void>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof saveUserConfig>>, TError,{entity: string;view: string;data: BodyType<SaveUIConfigDto>}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof saveUserConfig>>, TError,{entity: string;view: string;data: BodyType<SaveUIConfigDto>}, TContext> => {
+
+const mutationKey = ['saveUserConfig'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof saveUserConfig>>, {entity: string;view: string;data: BodyType<SaveUIConfigDto>}> = (props) => {
+          const {entity,view,data} = props ?? {};
+
+          return  saveUserConfig(entity,view,data,requestOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type SaveUserConfigMutationResult = NonNullable<Awaited<ReturnType<typeof saveUserConfig>>>
+    export type SaveUserConfigMutationBody = BodyType<SaveUIConfigDto>
+    export type SaveUserConfigMutationError = ErrorType<void>
+
+    /**
+ * @summary 사용자 개인 설정 저장
+ */
+export const useSaveUserConfig = <TError = ErrorType<void>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof saveUserConfig>>, TError,{entity: string;view: string;data: BodyType<SaveUIConfigDto>}, TContext>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof saveUserConfig>>,
+        TError,
+        {entity: string;view: string;data: BodyType<SaveUIConfigDto>},
+        TContext
+      > => {
+
+      const mutationOptions = getSaveUserConfigMutationOptions(options);
+
+      return useMutation(mutationOptions, queryClient);
+    }
+    
+/**
+ * 특정 역할에 대한 기본 UI 설정을 저장합니다. 해당 역할을 가진 모든 사용자에게 적용됩니다.
+ * @summary 역할별 설정 저장 (관리자)
+ */
+export const saveRoleConfig = (
+    entity: string,
+    view: string,
+    roleId: string,
+    saveUIConfigDto: BodyType<SaveUIConfigDto>,
+ options?: SecondParameter<typeof customInstance>,) => {
+      
+      
+      return customInstance<SaveRoleConfig200AllOf>(
+      {url: `/api/v1/ui-configs/${entity}/${view}/role/${roleId}`, method: 'PUT',
+      headers: {'Content-Type': 'application/json', },
+      data: saveUIConfigDto
+    },
+      options);
+    }
+  
+
+
+export const getSaveRoleConfigMutationOptions = <TError = ErrorType<void>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof saveRoleConfig>>, TError,{entity: string;view: string;roleId: string;data: BodyType<SaveUIConfigDto>}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof saveRoleConfig>>, TError,{entity: string;view: string;roleId: string;data: BodyType<SaveUIConfigDto>}, TContext> => {
+
+const mutationKey = ['saveRoleConfig'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof saveRoleConfig>>, {entity: string;view: string;roleId: string;data: BodyType<SaveUIConfigDto>}> = (props) => {
+          const {entity,view,roleId,data} = props ?? {};
+
+          return  saveRoleConfig(entity,view,roleId,data,requestOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type SaveRoleConfigMutationResult = NonNullable<Awaited<ReturnType<typeof saveRoleConfig>>>
+    export type SaveRoleConfigMutationBody = BodyType<SaveUIConfigDto>
+    export type SaveRoleConfigMutationError = ErrorType<void>
+
+    /**
+ * @summary 역할별 설정 저장 (관리자)
+ */
+export const useSaveRoleConfig = <TError = ErrorType<void>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof saveRoleConfig>>, TError,{entity: string;view: string;roleId: string;data: BodyType<SaveUIConfigDto>}, TContext>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof saveRoleConfig>>,
+        TError,
+        {entity: string;view: string;roleId: string;data: BodyType<SaveUIConfigDto>},
+        TContext
+      > => {
+
+      const mutationOptions = getSaveRoleConfigMutationOptions(options);
+
+      return useMutation(mutationOptions, queryClient);
+    }
+    
+/**
+ * Space 전체의 기본 UI 설정을 저장합니다. 역할별, 개인별 설정이 없는 경우 이 설정이 적용됩니다.
+ * @summary Space 기본 설정 저장 (관리자)
+ */
+export const saveGlobalConfig = (
+    entity: string,
+    view: string,
+    saveUIConfigDto: BodyType<SaveUIConfigDto>,
+ options?: SecondParameter<typeof customInstance>,) => {
+      
+      
+      return customInstance<SaveGlobalConfig200AllOf>(
+      {url: `/api/v1/ui-configs/${entity}/${view}/global`, method: 'PUT',
+      headers: {'Content-Type': 'application/json', },
+      data: saveUIConfigDto
+    },
+      options);
+    }
+  
+
+
+export const getSaveGlobalConfigMutationOptions = <TError = ErrorType<void>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof saveGlobalConfig>>, TError,{entity: string;view: string;data: BodyType<SaveUIConfigDto>}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof saveGlobalConfig>>, TError,{entity: string;view: string;data: BodyType<SaveUIConfigDto>}, TContext> => {
+
+const mutationKey = ['saveGlobalConfig'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof saveGlobalConfig>>, {entity: string;view: string;data: BodyType<SaveUIConfigDto>}> = (props) => {
+          const {entity,view,data} = props ?? {};
+
+          return  saveGlobalConfig(entity,view,data,requestOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type SaveGlobalConfigMutationResult = NonNullable<Awaited<ReturnType<typeof saveGlobalConfig>>>
+    export type SaveGlobalConfigMutationBody = BodyType<SaveUIConfigDto>
+    export type SaveGlobalConfigMutationError = ErrorType<void>
+
+    /**
+ * @summary Space 기본 설정 저장 (관리자)
+ */
+export const useSaveGlobalConfig = <TError = ErrorType<void>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof saveGlobalConfig>>, TError,{entity: string;view: string;data: BodyType<SaveUIConfigDto>}, TContext>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof saveGlobalConfig>>,
+        TError,
+        {entity: string;view: string;data: BodyType<SaveUIConfigDto>},
+        TContext
+      > => {
+
+      const mutationOptions = getSaveGlobalConfigMutationOptions(options);
+
+      return useMutation(mutationOptions, queryClient);
+    }
+    
+/**
+ * UI 설정을 삭제합니다. 삭제 후 코드 기본값이 적용됩니다.
+ * @summary UI 설정 삭제
+ */
+export const deleteConfig = (
+    id: string,
+ options?: SecondParameter<typeof customInstance>,) => {
+      
+      
+      return customInstance<DeleteConfig200AllOf>(
+      {url: `/api/v1/ui-configs/${id}`, method: 'DELETE'
+    },
+      options);
+    }
+  
+
+
+export const getDeleteConfigMutationOptions = <TError = ErrorType<void>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteConfig>>, TError,{id: string}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof deleteConfig>>, TError,{id: string}, TContext> => {
+
+const mutationKey = ['deleteConfig'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof deleteConfig>>, {id: string}> = (props) => {
+          const {id} = props ?? {};
+
+          return  deleteConfig(id,requestOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type DeleteConfigMutationResult = NonNullable<Awaited<ReturnType<typeof deleteConfig>>>
+    
+    export type DeleteConfigMutationError = ErrorType<void>
+
+    /**
+ * @summary UI 설정 삭제
+ */
+export const useDeleteConfig = <TError = ErrorType<void>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteConfig>>, TError,{id: string}, TContext>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof deleteConfig>>,
+        TError,
+        {id: string},
+        TContext
+      > => {
+
+      const mutationOptions = getDeleteConfigMutationOptions(options);
 
       return useMutation(mutationOptions, queryClient);
     }

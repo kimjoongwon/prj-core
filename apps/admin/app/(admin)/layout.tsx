@@ -12,7 +12,9 @@ import {
 	SubMenuList,
 	UserMenu,
 } from "@cocrepo/ui";
-import { useState } from "react";
+import { AbilityProvider, convertApiToRules } from "@cocrepo/hook";
+import { getMyAbilities } from "@cocrepo/api";
+import { useCallback, useState } from "react";
 import { useSpaceGuard } from "@/hooks";
 
 /**
@@ -65,6 +67,12 @@ export default function AdminLayout({
 	const { showAlert, handleConfirm, handleDismiss } = useSpaceGuard();
 	const [showSubMenuList, setShowSubMenuList] = useState(false);
 
+	// 서버에서 권한 정보를 가져오는 함수
+	const fetchAbilities = useCallback(async () => {
+		const response = await getMyAbilities();
+		return convertApiToRules(response.data ?? []);
+	}, []);
+
 	// BottomTab 선택 핸들러
 	const handleSelectTab = (_menuId: string, hasChildren: boolean) => {
 		if (hasChildren) {
@@ -88,47 +96,49 @@ export default function AdminLayout({
 	};
 
 	return (
-		<PageLayout
-			header={
-				<Header
-					left={
-						<>
-							{/* 모바일에서 SubMenuList 표시 시 뒤로가기 버튼 */}
-							{showSubMenuList && (
-								<div className="md:hidden">
-									<BackButton onClick={handleBackFromSubMenu} iconOnly />
-								</div>
-							)}
-							<AppLogo icon="LayoutGrid" text="Admin" />
-						</>
-					}
-					right={
-						<>
-							<SpaceSelector />
-							<UserMenu />
-						</>
-					}
-				/>
-			}
-			leftAside={<SideNav />}
-		>
-			{children}
+		<AbilityProvider fetchAbilities={fetchAbilities}>
+			<PageLayout
+				header={
+					<Header
+						left={
+							<>
+								{/* 모바일에서 SubMenuList 표시 시 뒤로가기 버튼 */}
+								{showSubMenuList && (
+									<div className="md:hidden">
+										<BackButton onClick={handleBackFromSubMenu} iconOnly />
+									</div>
+								)}
+								<AppLogo icon="LayoutGrid" text="Admin" />
+							</>
+						}
+						right={
+							<>
+								<SpaceSelector />
+								<UserMenu />
+							</>
+						}
+					/>
+				}
+				leftAside={<SideNav />}
+			>
+				{children}
 
-			{/* 모바일: SubMenuList (전체 화면) */}
-			{showSubMenuList && <SubMenuList onSelectSubMenu={handleSelectSubMenu} />}
+				{/* 모바일: SubMenuList (전체 화면) */}
+				{showSubMenuList && <SubMenuList onSelectSubNavItem={handleSelectSubMenu} />}
 
-			{/* 모바일: BottomTab (하단 탭 네비게이션) */}
-			<BottomTab onSelectTab={handleSelectTab} />
+				{/* 모바일: BottomTab (하단 탭 네비게이션) */}
+				<BottomTab onSelectTab={handleSelectTab} />
 
-			{/* Space 미선택 Alert */}
-			{showAlert && (
-				<SpaceAlert
-					title="Space 선택 필요"
-					message="서비스 이용을 위해 Space를 선택해주세요."
-					onConfirm={handleConfirm}
-					onDismiss={handleDismiss}
-				/>
-			)}
-		</PageLayout>
+				{/* Space 미선택 Alert */}
+				{showAlert && (
+					<SpaceAlert
+						title="Space 선택 필요"
+						message="서비스 이용을 위해 Space를 선택해주세요."
+						onConfirm={handleConfirm}
+						onDismiss={handleDismiss}
+					/>
+				)}
+			</PageLayout>
+		</AbilityProvider>
 	);
 }

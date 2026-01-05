@@ -6,7 +6,6 @@ export * from "./abstract.entity";
 export * from "./activity.entity";
 export * from "./assignment.entity";
 export * from "./category.entity";
-export * from "./column-definition.entity";
 // Decorator는 @cocrepo/decorator에서 export됨
 export * from "./exercise.entity";
 export * from "./file.entity";
@@ -30,6 +29,7 @@ export * from "./subject.entity";
 export * from "./task.entity";
 export * from "./tenant.entity";
 export * from "./timeline.entity";
+export * from "./ui-config.entity";
 export * from "./user.entity";
 export * from "./user-association.entity";
 export * from "./user-classification.entity";

@@ -1,7 +1,30 @@
+// CASL (권한 시스템)
+export {
+	AccessApiPolicy,
+	AccessFeaturePolicy,
+	AccessMenuPolicy,
+	CaslAbilityFactory,
+	CustomPolicy,
+	ManageEntityPolicy,
+} from "./casl";
+export type {
+	AbilityCondition,
+	Actions,
+	AppAbility,
+	AppAbilityBuilder,
+	AppAbilityClass,
+	ConditionExpression,
+	IPolicyHandler,
+	PolicyHandler,
+	PolicyHandlerCallback,
+	Subjects,
+} from "./casl";
 // Filters
 export { AllExceptionsFilter } from "./filter";
 // Guards
 export {
+	CHECK_POLICIES_KEY,
+	CheckPolicies,
 	JwtAuthGuard,
 	LocalAuthGuard,
 	PoliciesGuard,

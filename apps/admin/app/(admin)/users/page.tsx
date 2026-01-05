@@ -125,7 +125,7 @@ function MembersPage() {
 
 	const onClickViewMember = (id: string) => {
 		// 동적 라우트 이동 (Next.js 타입 시스템 우회)
-		(router.push as (url: string) => void)(`/members/${id}`);
+		(router.push as (url: string) => void)(`/users/${id}`);
 	};
 
 	const onClickEditMember = (id: string) => {

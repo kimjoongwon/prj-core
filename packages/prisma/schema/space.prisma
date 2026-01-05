@@ -11,6 +11,7 @@
 //     ├─── SpaceClassification ─── Category (분류)
 //     ├─── SpaceAssociation ─── Group (그룹핑)
 //     ├─── Tenant (Bridge: User + Space + Role)
+//     ├─── UIConfig (하이브리드 UI Config 시스템)
 //     └─── usersWithSelected ─── User (이 Space를 선택한 사용자들)
 //
 // ============================================================================
@@ -38,7 +39,7 @@ model Space {
   timelines         Timeline[]
   tasks             Task[]
   safeWallets       SafeWallet[]
-  columnDefinitions ColumnDefinition[]
+  uiConfigs         UIConfig[]
 
   @@map("spaces")
 }

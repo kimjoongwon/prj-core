@@ -558,92 +558,218 @@ export function useMenuAccess(menuSubject: string): boolean {
 
 ## 11. 체크리스트
 
-- [ ] Prisma 스키마 업데이트 (Subject 확장, Ability 개선)
-- [ ] 시드 데이터 추가 (Subject, Ability)
-- [ ] Repository 레이어 구현
-- [ ] CaslAbilityFactory 구현
-- [ ] PoliciesGuard 완성
-- [ ] 권한 조회 API 구현
-- [ ] AbilityProvider 구현
-- [ ] Can 컴포넌트 설정
-- [ ] usePermission 훅 구현
-- [ ] 메뉴 시스템에 권한 적용
-- [ ] 관리자 권한 관리 UI 구현
+**CASL 권한 시스템:**
+- [x] Prisma 스키마 업데이트 (Subject 확장, Ability 개선)
+- [x] 시드 데이터 추가 (Subject, Ability)
+- [x] Repository 레이어 구현
+- [x] CaslAbilityFactory 구현
+- [x] PoliciesGuard 완성
+- [x] 권한 조회 API 구현
+- [x] AbilityProvider 구현
+- [x] Can 컴포넌트 설정
+- [x] usePermission 훅 구현
+- [x] 메뉴 시스템에 권한 적용
+- [x] 관리자 권한 관리 UI 구현 (`/settings/abilities`)
+
+**하이브리드 UIConfig 시스템:**
+- [x] UIConfig Prisma 스키마 추가
+- [x] UIConfig 백엔드 (Repository, Service, Controller)
+- [x] FieldRegistry, ViewRegistry, ConfigMerger 구현
+- [x] useDeviceType, useResolvedTableView 훅 구현
+- [ ] UIConfig 관리자 UI 구현 (`/settings/ui-configs`)
 
 ---
 
-## 12. 컬럼 가시성 시스템 (Column Visibility System)
+## 12. 하이브리드 UI Config 시스템
 
-> ⚠️ **핵심 원칙**: 컬럼 가시성은 하드코딩하지 않고, DB 기반 동적 시스템으로 관리합니다.
+> ⚠️ **핵심 원칙**: **코드 기본값 + DB 오버라이드** 하이브리드 방식을 채택합니다.
 
-### 12.1 개요
+### 12.1 아키텍처 개요
 
-Admin 화면에서 테이블 컬럼의 표시/숨김을 디바이스 타입과 역할에 따라 동적으로 제어하는 시스템입니다.
+Admin 화면에서 테이블/폼/상세 뷰의 필드 구성을 관리하는 시스템입니다.
 
-**필요성:**
-- 모바일로 접속하는 관리자 존재 (모바일 반응형 필수)
-- 디바이스별로 표시할 컬럼이 다름 (데이터 밀도 조절)
-- 역할별로 볼 수 있는 컬럼이 다를 수 있음 (권한 연동)
-- 하드코딩 시 유지보수 어려움 → DB 기반 동적 관리
-
-### 12.2 컬럼 정의 스키마
-
-```prisma
-// 테이블 컬럼 정의 (메타데이터)
-model ColumnDefinition {
-  id          String              @id @default(uuid())
-  seq         Int                 @unique @default(autoincrement())
-  createdAt   DateTime            @default(now()) @map("created_at")
-  updatedAt   DateTime?           @updatedAt @map("updated_at") @db.Timestamptz(6)
-  removedAt   DateTime?           @map("removed_at") @db.Timestamptz(6)
-
-  entity      String              // 엔티티명 (User, Reservation 등)
-  field       String              // 필드명 (email, phone, createdAt 등)
-  label       String              // 표시 라벨 (이메일, 전화번호 등)
-  sortOrder   Int                 @default(0) @map("sort_order")
-
-  // 필수 여부 (필수 컬럼은 모든 디바이스에서 표시)
-  isRequired  Boolean             @default(false) @map("is_required")
-
-  // 디바이스별 기본 가시성
-  visibleOnDesktop  Boolean       @default(true) @map("visible_on_desktop")
-  visibleOnTablet   Boolean       @default(true) @map("visible_on_tablet")
-  visibleOnMobile   Boolean       @default(false) @map("visible_on_mobile")
-
-  // 정렬 가능 여부
-  sortable    Boolean             @default(false)
-
-  // 너비 설정
-  width       String?             // '80px', '120px', 'auto' 등
-  minWidth    String?             @map("min_width")
-
-  // Space 귀속 (멀티테넌시)
-  spaceId     String              @map("space_id")
-  space       Space               @relation(fields: [spaceId], references: [id])
-
-  // 컬럼별 권한 (선택적)
-  subjectId   String?             @map("subject_id")
-  subject     Subject?            @relation(fields: [subjectId], references: [id])
-
-  @@unique([entity, field, spaceId])
-  @@index([entity, spaceId])
-  @@map("column_definitions")
-}
+```
+┌──────────────────────────────────────────────────────────────────┐
+│                    코드 기본값 (FieldRegistry)                    │
+│  - 타입 안전                                                      │
+│  - 버전 관리됨                                                    │
+│  - 배포 시 업데이트                                               │
+└──────────────────────────────────────────────────────────────────┘
+                              ↓ 병합
+┌──────────────────────────────────────────────────────────────────┐
+│                    DB 오버라이드 (UIConfig)                       │
+│  - GLOBAL: Space 관리자가 설정                                    │
+│  - ROLE: 역할별 커스터마이징                                      │
+│  - USER: 개인 설정 (컬럼 순서, 너비 조정 등)                       │
+└──────────────────────────────────────────────────────────────────┘
+                              ↓ 필터링
+┌──────────────────────────────────────────────────────────────────┐
+│                    권한 필터 (CASL fields)                        │
+│  - can('read', 'User', ['email', 'phone'])                       │
+│  - 권한 없는 필드는 최종 결과에서 제외                             │
+└──────────────────────────────────────────────────────────────────┘
 ```
 
-### 12.3 컬럼 가시성 규칙
+**설계 원칙:**
+- **코드가 기본**: 타입 안전한 기본값은 코드로 정의 (FieldRegistry, ViewRegistry)
+- **DB는 오버라이드**: 런타임 변경이 필요한 부분만 DB에 저장 (UIConfig)
+- **권한은 CASL**: 필드 수준 권한은 CASL fields로 처리 (별도 테이블 불필요)
+- **DB 없어도 동작**: DB 오버라이드가 없으면 코드 기본값이 그대로 적용됨
 
-#### 필수 컬럼 (isRequired = true)
-- 모든 디바이스에서 항상 표시
-- 숨길 수 없음
-- 예: 선택 체크박스, 이름, 상태, 액션 버튼
+### 12.2 코드 기반: FieldRegistry (필드 메타데이터)
 
-#### 선택 컬럼 (isRequired = false)
-- 디바이스별 기본 가시성 설정에 따름
-- 역할별 권한으로 추가 제어 가능
-- 예: 이메일, 전화번호, 가입일, 닉네임
+```typescript
+// packages/ui/src/registry/field-registry.ts
 
-#### 디바이스 타입 감지
+interface FieldDefinition {
+  field: string;
+  label: string;
+  description?: string;
+  // 테이블
+  width?: number | string;
+  minWidth?: number;
+  sortable?: boolean;
+  align?: 'left' | 'center' | 'right';
+  // 렌더링
+  component?: ComponentType<{ value: unknown }>;
+  formatter?: (value: unknown) => string;
+  // 폼
+  editable?: boolean;
+  required?: boolean;
+  // 반응형 기본값
+  responsive?: {
+    mobile: boolean;
+    tablet: boolean;
+    desktop: boolean;
+  };
+}
+
+type EntityFields<T extends string> = Record<T, FieldDefinition>;
+
+class FieldRegistryClass {
+  private registry = new Map<string, Map<string, FieldDefinition>>();
+
+  register<T extends string>(entity: string, fields: EntityFields<T>) {
+    const fieldMap = new Map(Object.entries(fields));
+    this.registry.set(entity, fieldMap as Map<string, FieldDefinition>);
+  }
+
+  get(entity: string, field: string): FieldDefinition | undefined {
+    return this.registry.get(entity)?.get(field);
+  }
+
+  getAll(entity: string): FieldDefinition[] {
+    const fieldMap = this.registry.get(entity);
+    return fieldMap ? Array.from(fieldMap.values()) : [];
+  }
+
+  getFields(entity: string): string[] {
+    const fieldMap = this.registry.get(entity);
+    return fieldMap ? Array.from(fieldMap.keys()) : [];
+  }
+}
+
+export const FieldRegistry = new FieldRegistryClass();
+```
+
+### 12.3 엔티티별 필드 정의 예시
+
+```typescript
+// packages/ui/src/registry/entities/user.fields.ts
+
+import { FieldRegistry } from '../field-registry';
+import { formatPhoneNumber, formatDateTime } from '@cocrepo/utils';
+import { UserStatusBadge } from '@cocrepo/ui/components';
+
+export const UserFields = {
+  id: {
+    field: 'id',
+    label: 'ID',
+    width: 80,
+    sortable: true,
+    responsive: { mobile: false, tablet: false, desktop: true },
+  },
+  name: {
+    field: 'name',
+    label: '이름',
+    width: 120,
+    sortable: true,
+    required: true,
+    responsive: { mobile: true, tablet: true, desktop: true },
+  },
+  email: {
+    field: 'email',
+    label: '이메일',
+    width: 200,
+    sortable: true,
+    responsive: { mobile: false, tablet: true, desktop: true },
+  },
+  phone: {
+    field: 'phone',
+    label: '전화번호',
+    width: 140,
+    formatter: formatPhoneNumber,
+    responsive: { mobile: true, tablet: true, desktop: true },
+  },
+  status: {
+    field: 'status',
+    label: '상태',
+    width: 100,
+    component: UserStatusBadge,
+    responsive: { mobile: true, tablet: true, desktop: true },
+  },
+  createdAt: {
+    field: 'createdAt',
+    label: '가입일',
+    width: 160,
+    sortable: true,
+    formatter: formatDateTime,
+    responsive: { mobile: false, tablet: false, desktop: true },
+  },
+} satisfies Record<string, FieldDefinition>;
+
+// 레지스트리에 등록
+FieldRegistry.register('User', UserFields);
+```
+
+### 12.4 코드 기반: ViewRegistry (뷰별 구성)
+
+```typescript
+// packages/ui/src/registry/view-registry.ts
+
+interface ViewDefinition {
+  entity: string;
+  view: 'table' | 'form' | 'detail' | 'card';
+  fields: string[];  // 기본 필드 순서
+  defaultSort?: { field: string; direction: 'asc' | 'desc' };
+  pageSize?: number;
+}
+
+class ViewRegistryClass {
+  private registry = new Map<string, ViewDefinition>();
+
+  register(entity: string, view: string, definition: ViewDefinition) {
+    this.registry.set(`${entity}:${view}`, definition);
+  }
+
+  get(entity: string, view: string): ViewDefinition | undefined {
+    return this.registry.get(`${entity}:${view}`);
+  }
+}
+
+export const ViewRegistry = new ViewRegistryClass();
+
+// 사용 예시
+ViewRegistry.register('User', 'table', {
+  entity: 'User',
+  view: 'table',
+  fields: ['name', 'email', 'phone', 'status', 'createdAt'],
+  defaultSort: { field: 'createdAt', direction: 'desc' },
+  pageSize: 20,
+});
+```
+
+### 12.5 디바이스 타입 감지
 
 ```typescript
 enum DeviceType {
@@ -661,242 +787,383 @@ function getDeviceType(): DeviceType {
 }
 ```
 
-### 12.4 API 설계
+### 12.6 DB 기반: UIConfig 스키마 (오버라이드용)
 
-#### 컬럼 정의 조회
+```prisma
+// packages/prisma/schema/ui.prisma
+
+// UI 설정의 범위 (전역 vs 개인)
+enum UIConfigScope {
+  GLOBAL    // Space 전체 기본값
+  ROLE      // Role별 설정
+  USER      // 사용자 개인 설정
+}
+
+// 범용 UI 설정 (오버라이드용)
+model UIConfig {
+  id        String        @id @default(uuid())
+  seq       Int           @unique @default(autoincrement())
+  createdAt DateTime      @default(now()) @map("created_at")
+  updatedAt DateTime?     @updatedAt @map("updated_at")
+
+  // 소속
+  spaceId   String        @map("space_id")
+  space     Space         @relation(fields: [spaceId], references: [id])
+
+  // 대상 지정
+  entity    String        // 'User', 'Reservation', 'Ground'
+  view      String        // 'table', 'form', 'detail', 'card'
+
+  // 범위 (우선순위: USER > ROLE > GLOBAL)
+  scope     UIConfigScope @default(GLOBAL)
+  scopeId   String?       @map("scope_id")  // roleId 또는 userId
+
+  // 설정 데이터 (JSON)
+  config    Json          // FieldConfig[] 또는 ViewConfig
+
+  @@unique([spaceId, entity, view, scope, scopeId])
+  @@index([spaceId, entity, view])
+  @@map("ui_configs")
+}
+```
+
+### 12.7 Config JSON 타입 정의
+
+```typescript
+// packages/dto/src/ui-config/ui-config.types.ts
+
+/** 필드별 설정 (DB 오버라이드용) */
+interface FieldConfig {
+  field: string;
+  visible: boolean;
+  order: number;
+  // 오버라이드 (선택)
+  label?: string;
+  width?: string | number;
+}
+
+/** 테이블 뷰 설정 */
+interface TableViewConfig {
+  fields: FieldConfig[];
+  defaultSort?: { field: string; direction: 'asc' | 'desc' };
+  pageSize?: number;
+}
+```
+
+### 12.8 API 설계
+
+#### UI 설정 조회
 
 ```
-GET /api/v1/columns/:entity
-
-Query Parameters:
-- deviceType: 'desktop' | 'tablet' | 'mobile' (optional, 서버에서 기본 필터링)
+GET /api/v1/ui-config/:entity/:view
 
 Response:
 {
-  data: [
-    {
-      field: "name",
-      label: "이름",
-      isRequired: true,
-      visible: true,
-      sortable: true,
-      width: "120px"
-    },
-    {
-      field: "email",
-      label: "이메일",
-      isRequired: false,
-      visible: true,  // Desktop에서는 true
-      sortable: true,
-      width: "200px"
-    },
-    {
-      field: "phone",
-      label: "전화번호",
-      isRequired: false,
-      visible: false, // Tablet/Mobile에서는 false
-      sortable: false,
-      width: "140px"
-    }
-  ]
+  data: {
+    fields: [
+      { field: "name", order: 0, visible: true },
+      { field: "email", order: 1, visible: true },
+      { field: "phone", order: 2, visible: false }  // 사용자가 숨김 처리
+    ],
+    defaultSort: { field: "createdAt", direction: "desc" }
+  }
 }
+
+// DB에 오버라이드가 없으면 빈 객체 반환 (프론트에서 코드 기본값 사용)
+{ data: null }
 ```
 
-#### 컬럼 정의 수정 (관리자)
+#### UI 설정 저장 (개인 설정)
 
 ```
-PUT /api/v1/columns/:entity
+PUT /api/v1/ui-config/:entity/:view
 
 Body:
 {
-  columns: [
-    {
-      field: "email",
-      visibleOnDesktop: true,
-      visibleOnTablet: true,
-      visibleOnMobile: false
-    }
+  fields: [
+    { field: "name", order: 0, visible: true },
+    { field: "status", order: 1, visible: true },
+    { field: "email", order: 2, visible: false }  // 컬럼 숨김
   ]
 }
 ```
 
-### 12.5 프론트엔드 연동
-
-#### useColumnVisibility 훅
+### 12.9 프론트엔드: 병합 로직 (핵심)
 
 ```typescript
-interface ColumnConfig {
-  field: string;
-  label: string;
-  isRequired: boolean;
-  visible: boolean;
-  sortable: boolean;
-  width?: string;
+// packages/ui/src/registry/config-merger.ts
+
+interface MergeContext {
+  entity: string;
+  view: 'table' | 'form' | 'detail';
+  ability: AppAbility;
+  deviceType: DeviceType;
 }
 
-export function useColumnVisibility(entity: string): {
-  columns: ColumnConfig[];
-  visibleColumns: ColumnConfig[];
-  isLoading: boolean;
-  deviceType: DeviceType;
-} {
-  const deviceType = useDeviceType();
-  const { data, isLoading } = useGetColumns(entity, { deviceType });
+class ConfigMerger {
+  /**
+   * 코드 기본값 + DB 오버라이드 + 권한 필터링
+   */
+  merge(
+    codeDefault: ViewDefinition,
+    dbOverride: TableViewConfig | null,
+    context: MergeContext,
+  ): ResolvedViewConfig {
+    const { entity, ability, deviceType } = context;
 
-  const visibleColumns = useMemo(() => {
-    if (!data?.data) return [];
-    return data.data.filter(col => col.visible);
-  }, [data]);
+    // 1단계: 코드 기본값에서 필드 목록 구성
+    let fields = codeDefault.fields.map((fieldName, index) => ({
+      ...FieldRegistry.get(entity, fieldName),
+      field: fieldName,
+      order: index,
+      visible: true,
+    }));
+
+    // 2단계: DB 오버라이드 적용
+    if (dbOverride?.fields?.length) {
+      fields = this.applyOverride(fields, dbOverride.fields);
+    }
+
+    // 3단계: 반응형 필터링
+    fields = fields.filter(f => {
+      const responsive = f.responsive ?? { mobile: true, tablet: true, desktop: true };
+      return responsive[deviceType];
+    });
+
+    // 4단계: 권한 필터링 (CASL fields)
+    fields = fields.filter(f => ability.can('read', entity, f.field));
+
+    // 5단계: visible + order 기준 정렬
+    fields = fields
+      .filter(f => f.visible)
+      .sort((a, b) => a.order - b.order);
+
+    return {
+      ...codeDefault,
+      fields,
+      defaultSort: dbOverride?.defaultSort ?? codeDefault.defaultSort,
+      pageSize: dbOverride?.pageSize ?? codeDefault.pageSize,
+    };
+  }
+
+  private applyOverride(
+    defaults: ResolvedField[],
+    overrides: FieldConfig[],
+  ): ResolvedField[] {
+    const overrideMap = new Map(overrides.map(o => [o.field, o]));
+
+    return defaults.map(field => {
+      const override = overrideMap.get(field.field);
+      if (!override) return field;
+
+      return {
+        ...field,
+        ...override,  // visible, order, width 등 오버라이드
+      };
+    });
+  }
+}
+
+export const configMerger = new ConfigMerger();
+```
+
+### 12.10 프론트엔드: useResolvedTableView 훅
+
+```typescript
+// packages/ui/src/hooks/useResolvedTableView.ts
+
+interface UseResolvedTableViewOptions {
+  entity: string;
+}
+
+export function useResolvedTableView({ entity }: UseResolvedTableViewOptions) {
+  const ability = useAbility();
+  const deviceType = useDeviceType();
+
+  // 코드 기본값
+  const codeDefault = useMemo(
+    () => ViewRegistry.get(entity, 'table'),
+    [entity]
+  );
+
+  // DB 오버라이드 (서버에서 조회, 없으면 null)
+  const { data: dbOverride, isLoading } = useGetUIConfig(entity, 'table');
+
+  // 병합된 최종 설정
+  const resolved = useMemo(() => {
+    if (!codeDefault) return null;
+
+    return configMerger.merge(codeDefault, dbOverride ?? null, {
+      entity,
+      view: 'table',
+      ability,
+      deviceType,
+    });
+  }, [codeDefault, dbOverride, entity, ability, deviceType]);
+
+  // 사용자 설정 저장
+  const { mutate: saveConfig } = useSaveUIConfig(entity, 'table');
+
+  const updateFieldOrder = useCallback((fields: string[]) => {
+    const fieldConfigs = fields.map((field, index) => ({
+      field,
+      order: index,
+      visible: true,
+    }));
+    saveConfig({ fields: fieldConfigs });
+  }, [saveConfig]);
+
+  const toggleFieldVisibility = useCallback((field: string, visible: boolean) => {
+    const current = dbOverride?.fields ?? [];
+    const updated = current.some(f => f.field === field)
+      ? current.map(f => f.field === field ? { ...f, visible } : f)
+      : [...current, { field, visible, order: 999 }];
+    saveConfig({ fields: updated });
+  }, [dbOverride, saveConfig]);
 
   return {
-    columns: data?.data ?? [],
-    visibleColumns,
+    config: resolved,
     isLoading,
-    deviceType,
+    updateFieldOrder,
+    toggleFieldVisibility,
   };
 }
 ```
 
-#### 테이블 컴포넌트 사용 예시
+### 12.11 테이블 컴포넌트 사용 예시
 
 ```tsx
-function MemberTable() {
-  const { visibleColumns, isLoading } = useColumnVisibility('User');
+// apps/admin/src/app/(admin)/users/_components/UserTable.tsx
 
-  if (isLoading) return <TableSkeleton />;
+export const UserTable = observer(() => {
+  const { config, isLoading, updateFieldOrder } = useResolvedTableView({
+    entity: 'User',
+  });
+
+  if (isLoading || !config) return <TableSkeleton />;
 
   return (
-    <Table>
-      <TableHeader>
-        {visibleColumns.map(col => (
-          <TableColumn
-            key={col.field}
-            style={{ width: col.width }}
-            allowsSorting={col.sortable}
-          >
-            {col.label}
-          </TableColumn>
-        ))}
-      </TableHeader>
-      <TableBody>
-        {/* ... */}
-      </TableBody>
-    </Table>
+    <DataTable
+      columns={config.fields.map(field => ({
+        key: field.field,
+        header: field.label,
+        width: field.width,
+        sortable: field.sortable,
+        render: field.component
+          ? (value) => <field.component value={value} />
+          : field.formatter
+            ? (value) => field.formatter!(value)
+            : undefined,
+      }))}
+      defaultSort={config.defaultSort}
+      pageSize={config.pageSize}
+      onColumnReorder={updateFieldOrder}  // 드래그로 순서 변경
+    />
   );
-}
+});
 ```
 
-### 12.6 권한 연동 (CASL 통합)
+### 12.12 권한 연동 (CASL fields)
 
-컬럼 가시성과 CASL 권한을 통합하여 역할별로 특정 컬럼을 숨길 수 있습니다.
+**별도 Subject 불필요** - CASL의 fields 기능을 직접 활용합니다.
 
 ```typescript
-// Subject로 컬럼 권한 정의
-const columnAbilities = [
-  // ADMIN은 전화번호 컬럼 볼 수 없음
-  { type: 'CAN_NOT', action: 'READ', subject: 'column:user:phone', role: 'ADMIN' },
+// packages/service/src/casl/casl-ability.factory.ts
 
-  // SUPER_ADMIN은 모든 컬럼 접근 가능
-  { type: 'CAN', action: 'READ', subject: 'column:*', role: 'SUPER_ADMIN' },
-];
+// 권한 정의 시 fields 지정
+defineAbility((can, cannot) => {
+  // 기본 사용자: 일부 필드만 읽기 가능
+  can('read', 'User', ['id', 'name', 'email', 'status', 'createdAt']);
 
-// 사용 예시
-<Can I="READ" a="column:user:phone">
-  <TableColumn>전화번호</TableColumn>
-</Can>
+  // 관리자: 추가 필드 읽기 가능
+  if (role === 'ADMIN') {
+    can('read', 'User', ['phone', 'nickname', 'birthDate']);
+  }
+
+  // 슈퍼관리자: 모든 필드 접근 가능
+  if (role === 'SUPER_ADMIN') {
+    can('read', 'User');  // fields 지정 안 하면 전체
+  }
+
+  // 민감한 필드 제외
+  cannot('read', 'User', ['password', 'refreshToken']);
+});
+
+// ConfigMerger에서 필터링 (12.9 참조)
+fields = fields.filter(f => ability.can('read', entity, f.field));
 ```
 
-### 12.7 시드 데이터 예시
+### 12.13 파일 구조
 
-```typescript
-const userColumnSeeds = [
-  // 필수 컬럼
-  { entity: 'User', field: 'checkbox', label: '선택', isRequired: true, sortOrder: 0 },
-  { entity: 'User', field: 'name', label: '이름', isRequired: true, sortOrder: 1, sortable: true },
-  { entity: 'User', field: 'status', label: '상태', isRequired: true, sortOrder: 10 },
-  { entity: 'User', field: 'actions', label: '액션', isRequired: true, sortOrder: 100 },
-
-  // 선택 컬럼 - 디바이스별 가시성
-  {
-    entity: 'User',
-    field: 'email',
-    label: '이메일',
-    isRequired: false,
-    visibleOnDesktop: true,
-    visibleOnTablet: true,
-    visibleOnMobile: false,  // 모바일에서 숨김
-    sortOrder: 2,
-    sortable: true,
-  },
-  {
-    entity: 'User',
-    field: 'phone',
-    label: '전화번호',
-    isRequired: false,
-    visibleOnDesktop: true,
-    visibleOnTablet: false,  // 태블릿부터 숨김
-    visibleOnMobile: false,
-    sortOrder: 3,
-  },
-  {
-    entity: 'User',
-    field: 'nickname',
-    label: '닉네임',
-    isRequired: false,
-    visibleOnDesktop: true,
-    visibleOnTablet: false,
-    visibleOnMobile: false,
-    sortOrder: 4,
-  },
-  {
-    entity: 'User',
-    field: 'createdAt',
-    label: '가입일',
-    isRequired: false,
-    visibleOnDesktop: true,
-    visibleOnTablet: true,
-    visibleOnMobile: false,
-    sortOrder: 5,
-    sortable: true,
-  },
-];
+```
+packages/ui/src/registry/
+├── field-registry.ts       # FieldRegistry 클래스
+├── view-registry.ts        # ViewRegistry 클래스
+├── config-merger.ts        # 병합 로직
+├── entities/
+│   ├── user.fields.ts      # User 필드 정의
+│   ├── reservation.fields.ts
+│   └── ground.fields.ts
+└── views/
+    ├── user.views.ts       # User 뷰 정의 (table, form, detail)
+    ├── reservation.views.ts
+    └── ground.views.ts
 ```
 
-### 12.8 관리자 UI (컬럼 설정 화면)
+### 12.14 관리자 UI (컬럼 설정 화면)
+
+개인 설정은 드래그 앤 드롭으로 컬럼 순서 변경, 체크박스로 표시/숨김 토글
 
 ```
 ┌─────────────────────────────────────────────────────────────────┐
-│                   컬럼 가시성 설정 (User)                        │
+│                   내 테이블 설정 (User)                          │
 ├─────────────────────────────────────────────────────────────────┤
-│  [저장] [초기화]                                                 │
+│  [저장] [기본값으로 초기화]                                       │
 ├─────────────────────────────────────────────────────────────────┤
-│  컬럼명     │ 필수 │ Desktop │ Tablet │ Mobile │ 정렬 │ 너비   │
+│  ☰ 컬럼명     │ 표시 │ 너비   │  (드래그로 순서 변경)             │
 │  ──────────────────────────────────────────────────────────────  │
-│  선택       │  ✓  │    -    │   -    │   -   │  -  │  40px  │
-│  이름       │  ✓  │    -    │   -    │   -   │  ✓  │ 120px  │
-│  이메일     │  ✗  │   ✓    │   ✓   │   ✗  │  ✓  │ 200px  │
-│  전화번호   │  ✗  │   ✓    │   ✗   │   ✗  │  ✗  │ 140px  │
-│  닉네임     │  ✗  │   ✓    │   ✗   │   ✗  │  ✓  │ 120px  │
-│  역할       │  ✗  │   ✓    │   ✓   │   ✓  │  ✓  │ 100px  │
-│  상태       │  ✓  │    -    │   -    │   -   │  ✗  │  80px  │
-│  가입일     │  ✗  │   ✓    │   ✓   │   ✗  │  ✓  │ 120px  │
-│  액션       │  ✓  │    -    │   -    │   -   │  -  │ 100px  │
+│  ☰ 이름       │  ✓  │ 120px  │                                  │
+│  ☰ 이메일     │  ✓  │ 200px  │                                  │
+│  ☰ 상태       │  ✓  │ 100px  │                                  │
+│  ☰ 전화번호   │  ✗  │ 140px  │  ← 사용자가 숨김 처리             │
+│  ☰ 가입일     │  ✓  │ 160px  │                                  │
 ├─────────────────────────────────────────────────────────────────┤
-│  ✓ 표시  ✗ 숨김  - 필수 (항상 표시)                               │
+│  * 기본값은 코드에 정의됨. 여기서 변경한 내용만 DB에 저장됩니다.    │
 └─────────────────────────────────────────────────────────────────┘
 ```
 
-### 12.9 체크리스트
+### 12.15 체크리스트
 
-- [ ] ColumnDefinition Prisma 스키마 추가
-- [ ] 컬럼 정의 시드 데이터 작성
-- [ ] 컬럼 조회 API 구현
-- [ ] 컬럼 수정 API 구현 (관리자용)
-- [ ] useColumnVisibility 훅 구현
-- [ ] useDeviceType 훅 구현
-- [ ] 테이블 컴포넌트 컬럼 동적 렌더링
-- [ ] 컬럼 설정 관리자 UI 구현
-- [ ] CASL 통합 (역할별 컬럼 권한)
+**코드 기반 (FieldRegistry, ViewRegistry):**
+- [x] FieldRegistry 클래스 구현 (`packages/ui/src/registry/field-registry.ts`)
+- [x] ViewRegistry 클래스 구현 (`packages/ui/src/registry/view-registry.ts`)
+- [x] ConfigMerger 클래스 구현 (`packages/ui/src/registry/config-merger.ts`)
+- [x] User 필드/뷰 정의 (`packages/ui/src/registry/entities/user.fields.ts`)
+- [ ] 기타 엔티티 필드/뷰 정의 (Reservation, Ground 등)
+
+**DB 기반 (UIConfig - 선택적 오버라이드):**
+- [x] UIConfig Prisma 스키마 추가 (`packages/prisma/schema/ui.prisma`)
+- [x] UIConfigScope Enum 추가
+- [ ] Migration 실행
+
+**백엔드:**
+- [x] UIConfigRepository 구현
+- [x] UIConfigService 구현
+- [x] UIConfigController 구현 (GET/PUT/DELETE)
+- [x] UIConfig DTO 정의
+
+**프론트엔드:**
+- [x] useDeviceType 훅 구현
+- [x] useResolvedTableView 훅 구현
+- [ ] AbilityProvider에 fields 권한 연동
+- [ ] 테이블 컴포넌트 동적 렌더링 적용
+- [ ] 개인 설정 UI 구현 (선택적)
+
+**어드민 UI:**
+- [ ] UIConfigsPage 페이지 구현 (`apps/admin/app/(admin)/settings/ui-configs`)
+- [ ] ViewConfigEditor 컴포넌트 구현
+- [ ] ColumnSettingsTable 컴포넌트 구현 (드래그 앤 드롭)
+- [ ] DeviceToggle 컴포넌트 구현
 
 ---
 
@@ -949,8 +1216,6 @@ const userColumnSeeds = [
 Subject 1 ──── N Subject (self-reference, 계층 구조)
         │
         └──── N Ability (Subject에 대한 권한들)
-        │
-        └──── 0..N ColumnDefinition (컬럼별 권한 연동)
 ```
 
 **Enum 추가:**
@@ -961,15 +1226,18 @@ enum SubjectTypes {
   Feature   // 기능 권한
   Entity    // 엔티티 CRUD
   API       // API 엔드포인트
-  Column    // 테이블 컬럼 가시성
 }
 ```
 
+> **참고**: 컬럼 가시성은 별도 Subject 타입으로 관리하지 않습니다. CASL의 fields 기능으로 처리합니다. (12.12절 참조)
+
 ---
 
-#### ColumnDefinition (컬럼 정의 메타데이터)
+#### UIConfig (UI 설정 오버라이드)
 
-**파일 경로:** `packages/prisma/schema/core.prisma` (신규 모델)
+**파일 경로:** `packages/prisma/schema/ui.prisma` (신규 모델)
+
+**역할:** 하이브리드 UI Config 시스템의 DB 오버라이드 저장용. 기본값은 코드(FieldRegistry)에 정의되고, 사용자가 변경한 부분만 이 테이블에 저장됩니다.
 
 **필드 상세:**
 
@@ -979,36 +1247,37 @@ enum SubjectTypes {
 | seq | Int | 시퀀스 | @unique @default(autoincrement()) |
 | createdAt | DateTime | 생성일 | @default(now()) |
 | updatedAt | DateTime? | 수정일 | @updatedAt |
-| removedAt | DateTime? | 삭제일 | - |
-| entity | String | 엔티티명 (User, Reservation 등) | - |
-| field | String | 필드명 (email, phone 등) | - |
-| label | String | 표시 라벨 (이메일, 전화번호 등) | - |
-| sortOrder | Int | 컬럼 표시 순서 | @default(0) |
-| isRequired | Boolean | 필수 컬럼 여부 (필수는 항상 표시) | @default(false) |
-| visibleOnDesktop | Boolean | Desktop에서 기본 표시 여부 | @default(true) |
-| visibleOnTablet | Boolean | Tablet에서 기본 표시 여부 | @default(true) |
-| visibleOnMobile | Boolean | Mobile에서 기본 표시 여부 | @default(false) |
-| sortable | Boolean | 정렬 가능 여부 | @default(false) |
-| width | String? | 컬럼 너비 (px, auto 등) | - |
-| minWidth | String? | 최소 너비 | - |
 | spaceId | String | Space ID (멀티테넌시) | @map("space_id") |
-| subjectId | String? | 권한 Subject ID (선택적) | @map("subject_id") |
+| entity | String | 엔티티명 (User, Reservation 등) | - |
+| view | String | 뷰 타입 (table, form, detail, card) | - |
+| scope | UIConfigScope | 설정 범위 (GLOBAL, ROLE, USER) | @default(GLOBAL) |
+| scopeId | String? | ROLE이면 roleId, USER면 userId | @map("scope_id") |
+| config | Json | 설정 데이터 (FieldConfig[] 등) | - |
 
 **인덱스 설계:**
 
 | 인덱스명 | 필드 | 용도 |
 |----------|------|------|
-| unique_entity_field_space | entity, field, spaceId | 엔티티+필드+Space 조합 고유성 보장 |
-| idx_column_entity_space | entity, spaceId | 엔티티별 컬럼 조회 최적화 |
-| idx_column_subject | subjectId | 권한 연동 조회 |
+| unique_ui_config | spaceId, entity, view, scope, scopeId | 설정 조합 고유성 보장 |
+| idx_ui_config_lookup | spaceId, entity, view | 설정 조회 최적화 |
+
+**Enum 추가:**
+
+```prisma
+enum UIConfigScope {
+  GLOBAL    // Space 전체 기본값
+  ROLE      // Role별 설정
+  USER      // 사용자 개인 설정
+}
+```
 
 **관계:**
 
 ```
-ColumnDefinition N ──── 1 Space
-                 │
-                 └──── 0..1 Subject (컬럼별 권한)
+UIConfig N ──── 1 Space
 ```
+
+**우선순위:** USER > ROLE > GLOBAL (가장 구체적인 설정이 적용됨)
 
 ---
 
@@ -1083,7 +1352,6 @@ model Subject {
   // 추가 관계
   parent      Subject?      @relation("SubjectHierarchy", fields: [parentId], references: [id])
   children    Subject[]     @relation("SubjectHierarchy")
-  columnDefinitions ColumnDefinition[]  // 컬럼 가시성 연동
 
   @@index([spaceId])
   @@index([type])           // 신규 인덱스
@@ -1140,7 +1408,7 @@ model Space {
   // 기존 필드 및 관계...
 
   // 추가 관계
-  columnDefinitions ColumnDefinition[]  // 신규
+  uiConfigs UIConfig[]  // 신규 (하이브리드 UI Config 시스템)
 
   // 나머지는 기존과 동일
 }
@@ -1205,43 +1473,63 @@ include: {
 
 ---
 
-### 2.3 ColumnDefinitionsRepository
+### 2.3 UIConfigRepository
 
-**파일:** `packages/repository/src/column-definitions.repository.ts`
+**파일:** `packages/repository/src/ui-config.repository.ts`
 
 **메서드 명세:**
 
 | 메서드명 | 파라미터 | 반환타입 | 설명 |
 |----------|----------|----------|------|
-| findByEntity | entity: string, spaceId: string | ColumnDefinition[] | 엔티티별 컬럼 정의 조회 |
-| findByEntityAndDevice | entity: string, spaceId: string, deviceType: DeviceType | ColumnDefinition[] | 디바이스별 가시성 필터링 조회 |
-| findByField | entity: string, field: string, spaceId: string | ColumnDefinition \| null | 특정 필드 조회 |
-| createMany | data: CreateColumnDefinitionData[] | ColumnDefinition[] | 컬럼 정의 일괄 생성 |
-| updateByEntity | entity: string, spaceId: string, data: UpdateColumnDefinitionData[] | ColumnDefinition[] | 엔티티의 컬럼 정의 일괄 업데이트 |
-| removeById | id: string | ColumnDefinition | 컬럼 정의 소프트 삭제 |
+| findEffective | params: FindEffectiveParams | UIConfig \| null | 우선순위에 따른 설정 조회 (USER > ROLE > GLOBAL) |
+| findByEntityView | entity: string, view: string, spaceId: string | UIConfig[] | 엔티티+뷰별 모든 설정 조회 |
+| upsert | params: UpsertUIConfigParams | UIConfig | 설정 저장 또는 업데이트 |
+| deleteById | id: string | UIConfig | 설정 삭제 |
 
 **쿼리 로직:**
 
 ```typescript
-// findByEntityAndDevice 예시
-async findByEntityAndDevice(entity: string, spaceId: string, deviceType: DeviceType) {
-  const columns = await this.txHost.tx.columnDefinition.findMany({
+// findEffective - 우선순위에 따른 설정 조회
+async findEffective(params: {
+  spaceId: string;
+  entity: string;
+  view: string;
+  userId?: string;
+  roleId?: string;
+}): Promise<UIConfig | null> {
+  const { spaceId, entity, view, userId, roleId } = params;
+
+  // 우선순위 순으로 조회: USER > ROLE > GLOBAL
+  const configs = await this.txHost.tx.uIConfig.findMany({
     where: {
-      entity,
       spaceId,
-      removedAt: null,
+      entity,
+      view,
       OR: [
-        { isRequired: true },  // 필수 컬럼은 항상 포함
-        deviceType === 'desktop' ? { visibleOnDesktop: true } : {},
-        deviceType === 'tablet' ? { visibleOnTablet: true } : {},
-        deviceType === 'mobile' ? { visibleOnMobile: true } : {},
-      ],
+        { scope: 'USER', scopeId: userId },
+        { scope: 'ROLE', scopeId: roleId },
+        { scope: 'GLOBAL', scopeId: null },
+      ].filter(Boolean),
     },
-    orderBy: { sortOrder: 'asc' },
-    include: { subject: true },  // 권한 연동
+    orderBy: { scope: 'desc' },  // USER > ROLE > GLOBAL
   });
 
-  return columns.map(col => plainToInstance(ColumnDefinition, col));
+  return configs[0] ?? null;
+}
+
+// upsert - 설정 저장 또는 업데이트
+async upsert(params: UpsertUIConfigParams): Promise<UIConfig> {
+  const { spaceId, entity, view, scope, scopeId, config } = params;
+
+  return this.txHost.tx.uIConfig.upsert({
+    where: {
+      spaceId_entity_view_scope_scopeId: {
+        spaceId, entity, view, scope, scopeId: scopeId ?? '',
+      },
+    },
+    create: { spaceId, entity, view, scope, scopeId, config },
+    update: { config },
+  });
 }
 ```
 
@@ -1297,37 +1585,79 @@ async updateRoleAbilities(roleId: string, abilities: UpdateAbilityDto[]): Promis
 
 ---
 
-### 3.3 ColumnDefinitionsService
+### 3.3 UIConfigService
 
-**파일:** `packages/service/src/service/column-definitions.service.ts`
+**파일:** `packages/service/src/service/ui-config.service.ts`
 
 **비즈니스 로직:**
 
 | 메서드명 | 책임 | 호출하는 Repository 메서드 |
 |----------|------|---------------------------|
-| getColumnsByEntity | 엔티티별 컬럼 정의 조회 | findByEntity |
-| getVisibleColumns | 디바이스별 가시성 필터링 조회 | findByEntityAndDevice |
-| updateColumnSettings | 컬럼 설정 일괄 업데이트 | updateByEntity |
-| seedDefaultColumns | 기본 컬럼 시드 생성 | createMany |
+| getConfig | 사용자에게 적용될 설정 조회 | findEffective |
+| saveUserConfig | 사용자 개인 설정 저장 | upsert |
+| saveRoleConfig | 역할별 설정 저장 (관리자) | upsert |
+| saveGlobalConfig | Space 기본 설정 저장 (관리자) | upsert |
+| deleteConfig | 설정 삭제 (기본값으로 복원) | deleteById |
 
-**권한 연동:**
+**캐싱:**
 
 ```typescript
-async getVisibleColumns(
-  entity: string,
-  spaceId: string,
-  deviceType: DeviceType,
-  ability: AppAbility,  // CASL Ability 객체
-): Promise<ColumnDefinition[]> {
-  const columns = await this.repository.findByEntityAndDevice(entity, spaceId, deviceType);
+@Injectable()
+export class UIConfigService {
+  constructor(
+    private readonly repository: UIConfigRepository,
+    private readonly cache: CacheService,
+  ) {}
 
-  // 권한 필터링: subject가 있는 컬럼은 READ 권한 확인
-  return columns.filter(col => {
-    if (!col.subject) return true;
-    return ability.can('READ', col.subject.name);
-  });
+  async getConfig(
+    entity: string,
+    view: string,
+    context: { spaceId: string; userId: string; roleId: string },
+  ): Promise<TableViewConfig | null> {
+    const cacheKey = `ui:${context.spaceId}:${entity}:${view}:${context.userId}`;
+
+    // 캐시 확인
+    const cached = await this.cache.get<TableViewConfig>(cacheKey);
+    if (cached) return cached;
+
+    // DB 조회 (우선순위: USER > ROLE > GLOBAL)
+    const config = await this.repository.findEffective({
+      ...context,
+      entity,
+      view,
+    });
+
+    // 설정이 없으면 null 반환 (프론트에서 코드 기본값 사용)
+    const result = (config?.config as TableViewConfig) ?? null;
+
+    if (result) {
+      await this.cache.set(cacheKey, result, 300); // 5분 캐시
+    }
+    return result;
+  }
+
+  async saveUserConfig(
+    entity: string,
+    view: string,
+    config: TableViewConfig,
+    context: { spaceId: string; userId: string },
+  ): Promise<void> {
+    await this.repository.upsert({
+      spaceId: context.spaceId,
+      entity,
+      view,
+      scope: 'USER',
+      scopeId: context.userId,
+      config,
+    });
+
+    // 캐시 무효화
+    await this.cache.del(`ui:${context.spaceId}:${entity}:${view}:${context.userId}`);
+  }
 }
 ```
+
+> **참고**: 필드 수준 권한 필터링은 프론트엔드의 ConfigMerger에서 CASL fields로 처리합니다. (12.9절 참조)
 
 ---
 
@@ -1622,13 +1952,16 @@ async getVisibleColumns(
 | SubjectsTreeResponseDto | Subject 트리 응답 | subjects: SubjectResponseDto[] |
 | CreateSubjectDto | Subject 생성 | name, type, label?, description?, parentId? |
 
-### 5.3 Columns DTO
+### 5.3 UIConfig DTO
 
 | DTO 클래스 | 용도 | 필드 |
 |------------|------|------|
-| ColumnDefinitionResponseDto | 컬럼 정의 응답 | field, label, isRequired, visible, sortable, width |
-| ColumnsResponseDto | 컬럼 목록 응답 | columns: ColumnDefinitionResponseDto[] |
-| UpdateColumnDefinitionDto | 컬럼 수정 요청 | field, visibleOnDesktop?, visibleOnTablet?, visibleOnMobile? |
+| UIConfigResponseDto | UI 설정 응답 | entity, view, config (JSON) |
+| FieldConfigDto | 필드 설정 | field, visible, order, label?, width? |
+| TableViewConfigDto | 테이블 뷰 설정 | fields: FieldConfigDto[], defaultSort?, pageSize? |
+| SaveUIConfigDto | UI 설정 저장 요청 | fields: FieldConfigDto[] |
+
+> **참고**: UI 메타데이터(label, width, sortable 등)의 기본값은 프론트엔드의 FieldRegistry에 정의됩니다. DTO는 오버라이드 데이터만 전송합니다.
 
 ---
 
@@ -1673,12 +2006,12 @@ async getVisibleColumns(
 
 **순서:**
 
-1. **Enum 추가**: `SubjectTypes`, `AbilityActions` 확장
+1. **Enum 추가**: `SubjectTypes`, `AbilityActions`, `UIConfigScope` 확장
 2. **Subject 모델 수정**: type, label, description, parentId, sortOrder 필드 추가
 3. **Ability 모델 수정**: action, isActive 필드 추가, 제약조건 변경
-4. **ColumnDefinition 모델 생성**: 신규 테이블 생성
-5. **인덱스 추가**: Subject, Ability, ColumnDefinition 인덱스 생성
-6. **시드 데이터 실행**: Subject, Ability, ColumnDefinition 기본 데이터 생성
+4. **UIConfig 모델 생성**: 신규 테이블 생성 (하이브리드 UI 설정용)
+5. **인덱스 추가**: Subject, Ability, UIConfig 인덱스 생성
+6. **시드 데이터 실행**: Subject, Ability 기본 데이터 생성 (UIConfig는 시드 불필요 - 코드 기본값 사용)
 
 **Migration 명령어:**
 
@@ -1778,72 +2111,219 @@ const { mutate: updateAbilities } = useUpdateRoleAbilities();
 
 ---
 
-### 8.2 컬럼 가시성 설정 화면 (ColumnSettingsPage)
+### 8.2 UI 설정 관리 화면 (UIConfigsPage)
 
-**파일:** `apps/admin/src/pages/settings/columns/ColumnSettingsPage.tsx`
+**파일:** `apps/admin/app/(admin)/settings/ui-configs/page.tsx`
+
+**목적:**
+- GLOBAL: Space 전체 기본 설정 (모든 사용자 적용)
+- ROLE: 역할별 기본 설정 (ADMIN, USER 등)
+- 개인 설정(USER)은 각 테이블에서 직접 관리 (8.3절 참조)
+
+**와이어프레임:**
+
+```
+┌─────────────────────────────────────────────────────────────────────┐
+│  UI 설정 관리                                          [저장] [초기화]│
+├─────────────────────────────────────────────────────────────────────┤
+│  범위: [전역 설정 ▼]  [역할별 설정 ▼]        엔티티: [User ▼]         │
+├─────────────────────────────────────────────────────────────────────┤
+│                                                                     │
+│  ┌───────────────────────────────────────────────────────────────┐  │
+│  │  User 테이블 컬럼 설정                                         │  │
+│  ├───────────────────────────────────────────────────────────────┤  │
+│  │  ☰ 컬럼명       │ 표시 │ 너비   │ 정렬  │  디바이스 표시        │  │
+│  │  ─────────────────────────────────────────────────────────────  │  │
+│  │  ☰ 이름        │  ✓  │ 120px  │  1   │ [D][T][M]            │  │
+│  │  ☰ 이메일      │  ✓  │ 200px  │  2   │ [D][T][ ]            │  │
+│  │  ☰ 전화번호    │  ✓  │ 140px  │  3   │ [D][ ][ ]            │  │
+│  │  ☰ 상태        │  ✓  │ 100px  │  4   │ [D][T][M]            │  │
+│  │  ☰ 가입일      │  ✓  │ 160px  │  5   │ [D][T][ ]            │  │
+│  │  ☰ 마지막로그인 │  ✗  │ 160px  │  6   │ [D][ ][ ]            │  │
+│  └───────────────────────────────────────────────────────────────┘  │
+│                                                                     │
+│  [D]=Desktop  [T]=Tablet  [M]=Mobile                                │
+│  * 드래그로 순서 변경, 체크박스로 표시/숨김 토글                       │
+│  * 코드 기본값에서 변경된 항목만 저장됩니다                            │
+└─────────────────────────────────────────────────────────────────────┘
+```
 
 **컴포넌트 구조:**
 
 ```
-ColumnSettingsPage (Page)
+UIConfigsPage (Page)
+├── ScopeSelector (Widget)
+│   ├── Tabs: GLOBAL / ROLE 선택
+│   └── RoleDropdown (ROLE 범위 시)
 ├── EntitySelector (Widget)
-│   └── Select (UI)
-├── ColumnSettingsTable (Feature)
-│   ├── Table (UI)
-│   ├── TableHeader (UI)
-│   ├── TableBody (UI)
-│   ├── TableRow (UI)
-│   └── Checkbox (UI)
-└── SaveButton (UI)
+│   └── Select: User / Reservation / Ground 등
+├── ViewConfigEditor (Feature)
+│   ├── ColumnSettingsTable (Widget)
+│   │   ├── DraggableRow (UI) - 드래그 앤 드롭
+│   │   ├── VisibilityCheckbox (UI)
+│   │   ├── WidthInput (UI)
+│   │   └── DeviceToggle (UI) - D/T/M 토글
+│   └── ActionButtons (Widget)
+│       ├── SaveButton
+│       └── ResetButton
+└── ChangeIndicator (Widget) - 변경사항 표시
 ```
 
 **필요한 컴포넌트:**
 
 | 레이어 | 컴포넌트명 | 설명 | 위치 |
 |--------|-----------|------|------|
-| Page | ColumnSettingsPage | 컬럼 설정 메인 페이지 | apps/admin/src/pages/settings/columns |
-| Feature | ColumnSettingsTable | 컬럼 설정 테이블 | packages/ui/src/components/feature/ColumnSettingsTable |
-| Widget | EntitySelector | 엔티티 선택 드롭다운 | packages/ui/src/components/widgets/EntitySelector |
-| UI | Table, TableHeader, TableBody, TableRow | 테이블 UI | packages/ui/src/components/ui/Table |
+| Page | UIConfigsPage | UI 설정 관리 메인 페이지 | apps/admin/app/(admin)/settings/ui-configs |
+| Feature | ViewConfigEditor | 뷰 설정 편집기 | packages/ui/src/components/feature |
+| Widget | ScopeSelector | 범위 선택 (GLOBAL/ROLE) | packages/ui/src/components/widgets |
+| Widget | EntitySelector | 엔티티 선택 | packages/ui/src/components/widgets |
+| Widget | ColumnSettingsTable | 컬럼 설정 테이블 | packages/ui/src/components/widgets |
+| UI | DraggableRow | 드래그 가능한 행 | packages/ui/src/components/ui |
+| UI | DeviceToggle | 디바이스별 표시 토글 | packages/ui/src/components/ui |
 
 **State 관리:**
 
 ```typescript
-// useColumnSettingsHandlers.ts
-interface ColumnSettingsState {
-  selectedEntity: string | null;
-  columns: ColumnDefinition[];
+// useUIConfigsHandlers.ts
+interface UIConfigsState {
+  scope: 'GLOBAL' | 'ROLE';
+  selectedRoleId: string | null;
+  selectedEntity: string;
+  config: TableViewConfig | null;
+  originalConfig: TableViewConfig | null;
   isDirty: boolean;
 }
 
-function useColumnSettingsHandlers() {
-  const [state, setState] = useState<ColumnSettingsState>({...});
+function useUIConfigsHandlers() {
+  const [state, setState] = useState<UIConfigsState>({...});
 
-  const onSelectEntity = (entity: string) => {
-    // 엔티티 변경 시 컬럼 정의 조회
+  const onChangeScope = (scope: 'GLOBAL' | 'ROLE') => {
+    // 범위 변경
   };
 
-  const onToggleVisible = (field: string, deviceType: DeviceType) => {
-    // 디바이스별 가시성 토글
+  const onSelectRole = (roleId: string) => {
+    // 역할 선택 (ROLE 범위 시)
+  };
+
+  const onSelectEntity = (entity: string) => {
+    // 엔티티 선택 시 해당 설정 조회
+  };
+
+  const onReorderFields = (fromIndex: number, toIndex: number) => {
+    // 드래그 앤 드롭으로 순서 변경
+  };
+
+  const onToggleFieldVisibility = (field: string, visible: boolean) => {
+    // 필드 표시/숨김 토글
+  };
+
+  const onToggleDeviceVisibility = (field: string, device: DeviceType, visible: boolean) => {
+    // 디바이스별 표시 토글
+  };
+
+  const onChangeFieldWidth = (field: string, width: number) => {
+    // 필드 너비 변경
   };
 
   const onClickSave = async () => {
-    // 변경사항 저장 (PUT /api/v1/columns/:entity)
+    // 변경사항 저장
+    if (state.scope === 'GLOBAL') {
+      await saveGlobalConfig({ entity, view: 'table', data: config });
+    } else {
+      await saveRoleConfig({ entity, view: 'table', roleId, data: config });
+    }
   };
 
-  return { state, onSelectEntity, onToggleVisible, onClickSave };
+  const onClickReset = () => {
+    // 코드 기본값으로 초기화
+  };
+
+  return { state, ...handlers };
 }
 ```
 
-**모바일 반응형:**
+**API 연동:**
 
-- Desktop (≥1280px): 전체 테이블 표시
-- Tablet (768-1279px): 스크롤 가능한 테이블
-- Mobile (<768px): 카드 레이아웃으로 전환 (아코디언)
+```typescript
+import {
+  useGetUIConfig,
+  useSaveUIConfigGlobal,
+  useSaveUIConfigRole,
+  useDeleteUIConfig,
+} from '@cocrepo/api';
+
+// 설정 조회 (코드 기본값과 DB 오버라이드 병합된 결과)
+const { data: configData } = useGetUIConfig(entity, 'table');
+
+// 전역 설정 저장
+const { mutate: saveGlobalConfig } = useSaveUIConfigGlobal();
+
+// 역할별 설정 저장
+const { mutate: saveRoleConfig } = useSaveUIConfigRole();
+
+// 설정 삭제 (기본값으로 복원)
+const { mutate: deleteConfig } = useDeleteUIConfig();
+```
+
+**필요한 API:**
+
+| Method | Endpoint | 설명 |
+|--------|----------|------|
+| GET | /api/v1/ui-configs/:entity/:view | 설정 조회 (병합된 결과) |
+| PUT | /api/v1/ui-configs/:entity/:view/global | 전역 설정 저장 |
+| PUT | /api/v1/ui-configs/:entity/:view/role/:roleId | 역할별 설정 저장 |
+| DELETE | /api/v1/ui-configs/:id | 설정 삭제 (기본값 복원) |
 
 ---
 
-### 8.3 MenuStore 연동 방안
+### 8.3 테이블 개인 설정 (선택적 기능)
+
+> **참고**: 하이브리드 UI Config 시스템에서는 별도의 설정 페이지 없이도 동작합니다. 개인 설정 기능이 필요한 경우에만 구현합니다.
+
+**구현 방식 옵션:**
+
+1. **테이블 헤더 내 설정 버튼** (권장)
+   - 테이블 우측 상단에 "⚙️ 컬럼 설정" 버튼
+   - 클릭 시 드롭다운/모달로 컬럼 표시/숨김 토글
+
+2. **드래그 앤 드롭 컬럼 순서 변경**
+   - 테이블 헤더 드래그로 순서 변경
+   - 변경 시 자동으로 UIConfig에 저장
+
+**컴포넌트 구조 (옵션 1):**
+
+```
+DataTable (기존 테이블 컴포넌트)
+├── TableToolbar
+│   ├── ... (기존 도구들)
+│   └── ColumnSettingsButton (신규)
+│       └── ColumnSettingsDropdown
+│           ├── Checkbox (컬럼별 표시/숨김)
+│           └── ResetButton (기본값 복원)
+└── ... (테이블 본문)
+```
+
+**State 관리:**
+
+```typescript
+// useResolvedTableView에 통합 (12.10절 참조)
+const { config, toggleFieldVisibility, resetToDefault } = useResolvedTableView({
+  entity: 'User',
+});
+
+// 사용 예시
+<ColumnSettingsDropdown
+  fields={config.fields}
+  onToggle={(field, visible) => toggleFieldVisibility(field, visible)}
+  onReset={() => resetToDefault()}
+/>
+```
+
+**참고**: 기본값은 코드(FieldRegistry)에 정의되어 있으므로, 사용자 설정이 없어도 정상 동작합니다.
+
+---
+
+### 8.4 MenuStore 연동 방안
 
 **현재 MenuStore 구조:**
 
@@ -1925,26 +2405,26 @@ export const ADMIN_MENU_CONFIG: MenuConfig[] = [
 
 ## 9. 구현 우선순위 및 단계 (상세)
 
-### Phase 1: 기반 구축 (2-3일)
+### Phase 1: 기반 구축
 
 **구현 항목:**
 
 - [ ] Prisma 스키마 수정
   - [ ] Subject 모델 확장 (type, label, description, parentId, sortOrder)
   - [ ] Ability 모델 개선 (action, isActive)
-  - [ ] ColumnDefinition 모델 생성
-  - [ ] Enum 추가 (SubjectTypes, AbilityActions 확장)
+  - [ ] UIConfig 모델 생성 (하이브리드 UI 설정용)
+  - [ ] Enum 추가 (SubjectTypes, AbilityActions, UIConfigScope 확장)
   - [ ] 인덱스 추가
 - [ ] Migration 실행 및 검증
-- [ ] Entity 클래스 생성 (Subject, Ability, ColumnDefinition)
+- [ ] Entity 클래스 생성 (Subject, Ability, UIConfig)
 - [ ] Repository 레이어 구현
   - [ ] SubjectsRepository
   - [ ] AbilitiesRepository
-  - [ ] ColumnDefinitionsRepository
+  - [ ] UIConfigRepository
 - [ ] 시드 데이터 작성
   - [ ] Subject 시드 (Menu, Feature, Entity 타입)
   - [ ] Ability 시드 (Role별 기본 권한)
-  - [ ] ColumnDefinition 시드 (User 엔티티)
+  - [ ] (UIConfig는 시드 불필요 - 코드 기본값 사용)
 
 **검증 기준:**
 
@@ -1958,24 +2438,24 @@ export const ADMIN_MENU_CONFIG: MenuConfig[] = [
 
 ---
 
-### Phase 2: 백엔드 연동 (3-4일)
+### Phase 2: 백엔드 연동
 
 **구현 항목:**
 
 - [ ] Service 레이어 구현
   - [ ] SubjectsService
   - [ ] AbilitiesService
-  - [ ] ColumnDefinitionsService
+  - [ ] UIConfigService
 - [ ] DTO 정의
   - [ ] Abilities DTO (AbilityResponseDto, CreateAbilityDto 등)
   - [ ] Subjects DTO (SubjectResponseDto, SubjectsTreeResponseDto 등)
-  - [ ] Columns DTO (ColumnDefinitionResponseDto 등)
+  - [ ] UIConfig DTO (UIConfigResponseDto, SaveUIConfigDto 등)
 - [ ] Controller 구현
   - [ ] AbilitiesController (GET /my, GET /roles/:id, PUT /roles/:id)
   - [ ] SubjectsController (GET /, POST /)
-  - [ ] ColumnsController (GET /:entity, PUT /:entity)
+  - [ ] UIConfigController (GET /:entity/:view, PUT /:entity/:view)
 - [ ] CASL 통합
-  - [ ] CaslAbilityFactory 구현
+  - [ ] CaslAbilityFactory 구현 (fields 권한 포함)
   - [ ] PoliciesGuard 구현
   - [ ] Policy Handlers (AccessMenuPolicy, ManageEntityPolicy 등)
 - [ ] Swagger 문서화
@@ -1993,16 +2473,22 @@ export const ADMIN_MENU_CONFIG: MenuConfig[] = [
 
 ---
 
-### Phase 3: 프론트엔드 연동 (3-4일)
+### Phase 3: 프론트엔드 연동
 
 **구현 항목:**
 
+- [ ] 하이브리드 UI Config 시스템 구현
+  - [ ] FieldRegistry 클래스 (`packages/ui/src/registry/field-registry.ts`)
+  - [ ] ViewRegistry 클래스 (`packages/ui/src/registry/view-registry.ts`)
+  - [ ] ConfigMerger 클래스 (`packages/ui/src/registry/config-merger.ts`)
+  - [ ] 엔티티별 필드/뷰 정의 (User, Reservation, Ground 등)
 - [ ] Hooks 구현
   - [ ] useAbility, usePermission, useEntityPermissions
-  - [ ] useColumnVisibility, useDeviceType
+  - [ ] useResolvedTableView, useDeviceType
 - [ ] AbilityProvider 구현
   - [ ] AbilityContext 생성
   - [ ] Can 컴포넌트 설정
+  - [ ] fields 권한 연동
 - [ ] MenuStore 연동
   - [ ] abilityChecker 주입
   - [ ] ADMIN_MENU_CONFIG에 subject 매핑
@@ -2013,13 +2499,13 @@ export const ADMIN_MENU_CONFIG: MenuConfig[] = [
   - [ ] RoleSelector
   - [ ] SubjectTree
   - [ ] ActionCheckboxes
-  - [ ] EntitySelector
 
 **검증 기준:**
 
 - Can 컴포넌트로 메뉴 권한 제어 동작 확인
-- useColumnVisibility로 동적 테이블 렌더링 확인
+- useResolvedTableView로 동적 테이블 렌더링 확인 (코드 기본값 + DB 오버라이드)
 - MenuStore 권한 필터링 정상 동작
+- CASL fields 권한으로 컬럼 가시성 제어 확인
 
 **의존성:**
 
@@ -2027,35 +2513,32 @@ export const ADMIN_MENU_CONFIG: MenuConfig[] = [
 
 ---
 
-### Phase 4: 관리자 UI (4-5일)
+### Phase 4: 관리자 UI
 
 **구현 항목:**
 
 - [ ] Feature 컴포넌트
   - [ ] PermissionsMatrix (권한 매트릭스 테이블)
-  - [ ] ColumnSettingsTable (컬럼 설정 테이블)
+  - [ ] TableSettingsPanel (개인 테이블 설정 패널 - 선택적)
 - [ ] Page 컴포넌트
   - [ ] PermissionsPage (권한 관리 화면)
-  - [ ] ColumnSettingsPage (컬럼 설정 화면)
 - [ ] Handlers 구현
   - [ ] usePermissionsHandlers
-  - [ ] useColumnSettingsHandlers
+  - [ ] useTableSettingsHandlers (선택적)
 - [ ] 모바일 반응형
   - [ ] Tablet/Mobile 레이아웃 대응
-  - [ ] ColumnSettingsPage 카드 레이아웃
 - [ ] Storybook 작성
   - [ ] PermissionsMatrix.stories.tsx
-  - [ ] ColumnSettingsTable.stories.tsx
 
 **검증 기준:**
 
 - SUPER_ADMIN으로 권한 관리 화면 접근 및 권한 수정 성공
-- 컬럼 설정 화면에서 디바이스별 가시성 설정 성공
+- CASL fields 권한으로 컬럼 가시성 제어 확인
 - 모바일 디바이스에서 반응형 레이아웃 정상 표시
 
 **의존성:**
 
-- Phase 3 완료 (Hooks, Widgets)
+- Phase 3 완료 (Hooks, Widgets, 하이브리드 UI Config)
 
 ---
 
@@ -2069,9 +2552,10 @@ export const ADMIN_MENU_CONFIG: MenuConfig[] = [
 |--------|-------------|-------------------|
 | Repository | SubjectsRepository | findHierarchyTree: 계층 구조 정확성 검증 |
 | Repository | AbilitiesRepository | findByRoleId: Role별 Ability 조회 정확성 |
-| Repository | ColumnDefinitionsRepository | findByEntityAndDevice: 디바이스 필터링 검��� |
+| Repository | UIConfigRepository | findEffective: 우선순위(USER>ROLE>GLOBAL) 검증 |
 | Service | AbilitiesService | updateRoleAbilities: 트랜잭션 원자성 검증 |
-| Service | ColumnDefinitionsService | getVisibleColumns: 권한 필터링 검증 |
+| Service | UIConfigService | getConfig: 캐싱 및 우선순위 검증 |
+| Frontend | ConfigMerger | merge: 코드 기본값 + DB 오버라이드 + CASL 필터링 검증 |
 | Utils | parseConditions | 조건 템플릿 파싱 정확성 (${user.id} 등) |
 
 **도구:**
@@ -2128,16 +2612,16 @@ export const ADMIN_MENU_CONFIG: MenuConfig[] = [
      2. DB에 Ability 저장 확인
      3. ADMIN으로 로그인 시 "회원" 메뉴 표시
 
-2. **컬럼 설정 화면 플로우**
-   - Given: SUPER_ADMIN으로 로그인
+2. **테이블 컬럼 가시성 플로우 (하이브리드 UI Config)**
+   - Given: 사용자로 로그인
    - When:
-     1. /settings/columns 페이지 접근
-     2. User 엔티티 선택
-     3. "email" 컬럼의 Mobile 가시성 체크
-     4. 저장
+     1. /users 페이지 접근
+     2. 테이블의 컬럼 설정 버튼 클릭
+     3. "email" 컬럼 숨김 처리
    - Then:
-     1. 설정 저장 성공
-     2. Mobile 디바이스에서 User 테이블에 "이메일" 컬럼 표시
+     1. 개인 설정이 UIConfig에 저장됨
+     2. 새로고침 후에도 설정 유지됨
+     3. 다른 사용자에게는 영향 없음 (개인 설정)
 
 3. **역할별 메뉴 접근 제어**
    - Given: ADMIN 역할 (menu:settings:permissions 권한 없음)
@@ -2293,14 +2777,15 @@ private buildInclude(depth: number) {
 - [ ] Orval API 클라이언트 생성
 
 ### Phase 3: 프론트엔드 연동
-- [ ] Hooks 구현 (useAbility, usePermission, useColumnVisibility)
-- [ ] AbilityProvider 구현
+- [ ] 하이브리드 UI Config 시스템 구현 (FieldRegistry, ViewRegistry, ConfigMerger)
+- [ ] Hooks 구현 (useAbility, usePermission, useResolvedTableView)
+- [ ] AbilityProvider 구현 (fields 권한 포함)
 - [ ] MenuStore 연동
 - [ ] UI/Widget 컴포넌트 생성
 
 ### Phase 4: 관리자 UI
 - [ ] PermissionsPage 구현
-- [ ] ColumnSettingsPage 구현
+- [ ] 테이블 개인 설정 기능 구현 (선택적)
 - [ ] 모바일 반응형 적용
 - [ ] Storybook 작성
 

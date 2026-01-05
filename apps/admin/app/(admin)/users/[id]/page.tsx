@@ -51,7 +51,7 @@ export default function MemberDetailPage() {
 
 	// 이벤트 핸들러
 	const onClickBack = () => {
-		router.push("/members");
+		router.push("/users");
 	};
 
 	const onClickEdit = () => {

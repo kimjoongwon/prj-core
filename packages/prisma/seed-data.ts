@@ -548,305 +548,709 @@ export const userAgreementMapping: UserAgreementMappingData[] = [
 ];
 
 // ============================================================================
-// Column Definition Seed Data
+// Subject (CASL 권한 대상) 시드 데이터
 // ============================================================================
 
-export interface ColumnDefinitionSeedData {
-	entity: string;
-	field: string;
+/**
+ * SubjectTypes enum (core.prisma 기준)
+ * - Menu: 메뉴 접근 권한
+ * - Feature: 기능 권한 (내보내기, 가져오기 등)
+ * - Entity: 엔티티 CRUD 권한
+ * - API: API 엔드포인트 권한
+ * - Column: 컬럼 가시성 권한
+ */
+export type SubjectType = "Menu" | "Feature" | "Entity" | "API" | "Column";
+
+export interface SubjectSeedData {
+	name: string;
+	type: SubjectType;
 	label: string;
+	description: string;
 	sortOrder: number;
-	isRequired: boolean;
-	visibleOnDesktop: boolean;
-	visibleOnTablet: boolean;
-	visibleOnMobile: boolean;
-	sortable: boolean;
-	width?: string;
-	minWidth?: string;
+	parentName?: string; // 부모 Subject의 name (시드 실행 시 동적 연결)
 }
 
 /**
- * User 엔티티 컬럼 정의
- * - 필수 컬럼: ID, 이름, 이메일, 전화번호, 상태
- * - 데스크톱/태블릿: 모든 컬럼 표시
- * - 모바일: 필수 컬럼 + 간단한 정보만
+ * Menu Subject 시드 데이터
+ * - 계층 구조를 가진 메뉴 권한 정의
+ * - parentName을 통해 부모-자식 관계 설정
  */
-export const userColumnDefinitions: ColumnDefinitionSeedData[] = [
+export const menuSubjectSeedData: SubjectSeedData[] = [
+	// 대시보드 (최상위)
 	{
-		entity: "User",
-		field: "id",
-		label: "ID",
+		name: "menu:dashboard",
+		type: "Menu",
+		label: "대시보드",
+		description: "대시보드 메뉴 접근 권한",
 		sortOrder: 0,
-		isRequired: true,
-		visibleOnDesktop: true,
-		visibleOnTablet: true,
-		visibleOnMobile: true,
-		sortable: false,
-		width: "280px",
-		minWidth: "280px",
+	},
+	// 회원 관리 (부모)
+	{
+		name: "menu:members",
+		type: "Menu",
+		label: "회원 관리",
+		description: "회원 관리 메뉴 접근 권한",
+		sortOrder: 10,
+	},
+	// 회원 관리 - 하위 메뉴
+	{
+		name: "menu:members:list",
+		type: "Menu",
+		label: "회원 목록",
+		description: "회원 목록 조회 권한",
+		sortOrder: 11,
+		parentName: "menu:members",
 	},
 	{
-		entity: "User",
-		field: "name",
-		label: "이름",
-		sortOrder: 1,
-		isRequired: true,
-		visibleOnDesktop: true,
-		visibleOnTablet: true,
-		visibleOnMobile: true,
-		sortable: true,
-		width: "120px",
-		minWidth: "100px",
+		name: "menu:members:grades",
+		type: "Menu",
+		label: "회원 등급",
+		description: "회원 등급 관리 권한",
+		sortOrder: 12,
+		parentName: "menu:members",
 	},
 	{
-		entity: "User",
-		field: "email",
-		label: "이메일",
-		sortOrder: 2,
-		isRequired: true,
-		visibleOnDesktop: true,
-		visibleOnTablet: true,
-		visibleOnMobile: false, // 모바일에서는 숨김
-		sortable: true,
-		width: "200px",
-		minWidth: "150px",
+		name: "menu:members:withdrawn",
+		type: "Menu",
+		label: "탈퇴 회원",
+		description: "탈퇴 회원 조회 권한",
+		sortOrder: 13,
+		parentName: "menu:members",
+	},
+	// 예약 관리 (최상위)
+	{
+		name: "menu:reservations",
+		type: "Menu",
+		label: "예약 관리",
+		description: "예약 관리 메뉴 접근 권한",
+		sortOrder: 20,
+	},
+	// 알림 (최상위)
+	{
+		name: "menu:notifications",
+		type: "Menu",
+		label: "알림",
+		description: "알림 메뉴 접근 권한",
+		sortOrder: 30,
+	},
+	// 문의 (최상위)
+	{
+		name: "menu:inquiries",
+		type: "Menu",
+		label: "문의",
+		description: "문의 관리 메뉴 접근 권한",
+		sortOrder: 40,
+	},
+	// 콘텐츠 (최상위)
+	{
+		name: "menu:contents",
+		type: "Menu",
+		label: "콘텐츠",
+		description: "콘텐츠 관리 메뉴 접근 권한",
+		sortOrder: 50,
+	},
+	// 설정 (부모)
+	{
+		name: "menu:settings",
+		type: "Menu",
+		label: "설정",
+		description: "설정 메뉴 접근 권한",
+		sortOrder: 100,
+	},
+	// 설정 - 하위 메뉴
+	{
+		name: "menu:settings:ground",
+		type: "Menu",
+		label: "시설 정보",
+		description: "시설 정보 관리 권한",
+		sortOrder: 101,
+		parentName: "menu:settings",
 	},
 	{
-		entity: "User",
-		field: "phone",
-		label: "전화번호",
-		sortOrder: 3,
-		isRequired: true,
-		visibleOnDesktop: true,
-		visibleOnTablet: true,
-		visibleOnMobile: true,
-		sortable: false,
-		width: "140px",
-		minWidth: "120px",
+		name: "menu:settings:admins",
+		type: "Menu",
+		label: "관리자 계정",
+		description: "관리자 계정 관리 권한",
+		sortOrder: 102,
+		parentName: "menu:settings",
 	},
 	{
-		entity: "User",
-		field: "status",
-		label: "상태",
-		sortOrder: 4,
-		isRequired: true,
-		visibleOnDesktop: true,
-		visibleOnTablet: true,
-		visibleOnMobile: true,
-		sortable: true,
-		width: "100px",
-		minWidth: "80px",
+		name: "menu:settings:permissions",
+		type: "Menu",
+		label: "권한 관리",
+		description: "권한 관리 메뉴 접근 권한 (SUPER_ADMIN 전용)",
+		sortOrder: 103,
+		parentName: "menu:settings",
 	},
 	{
-		entity: "User",
-		field: "roles",
+		name: "menu:settings:columns",
+		type: "Menu",
+		label: "컬럼 가시성 관리",
+		description: "컬럼 가시성 관리 메뉴 접근 권한",
+		sortOrder: 104,
+		parentName: "menu:settings",
+	},
+	{
+		name: "menu:settings:system",
+		type: "Menu",
+		label: "시스템 설정",
+		description: "시스템 설정 관리 권한 (SUPER_ADMIN 전용)",
+		sortOrder: 105,
+		parentName: "menu:settings",
+	},
+];
+
+/**
+ * Feature Subject 시드 데이터
+ * - 기능별 권한 정의 (내보내기, 가져오기, 일괄 삭제 등)
+ */
+export const featureSubjectSeedData: SubjectSeedData[] = [
+	{
+		name: "feature:export",
+		type: "Feature",
+		label: "내보내기",
+		description: "데이터 내보내기 기능 권한",
+		sortOrder: 200,
+	},
+	{
+		name: "feature:import",
+		type: "Feature",
+		label: "가져오기",
+		description: "데이터 가져오기 기능 권한",
+		sortOrder: 201,
+	},
+	{
+		name: "feature:bulk-delete",
+		type: "Feature",
+		label: "일괄 삭제",
+		description: "데이터 일괄 삭제 기능 권한",
+		sortOrder: 202,
+	},
+	{
+		name: "feature:send-notification",
+		type: "Feature",
+		label: "알림 발송",
+		description: "알림/푸시 발송 기능 권한",
+		sortOrder: 203,
+	},
+];
+
+/**
+ * Entity Subject 시드 데이터
+ * - 엔티티별 CRUD 권한 정의
+ */
+export const entitySubjectSeedData: SubjectSeedData[] = [
+	{
+		name: "entity:User",
+		type: "Entity",
+		label: "사용자",
+		description: "사용자 엔티티 CRUD 권한",
+		sortOrder: 300,
+	},
+	{
+		name: "entity:Ground",
+		type: "Entity",
+		label: "시설",
+		description: "시설 엔티티 CRUD 권한",
+		sortOrder: 301,
+	},
+	{
+		name: "entity:Space",
+		type: "Entity",
+		label: "공간",
+		description: "공간 엔티티 CRUD 권한",
+		sortOrder: 302,
+	},
+	{
+		name: "entity:Reservation",
+		type: "Entity",
+		label: "예약",
+		description: "예약 엔티티 CRUD 권한",
+		sortOrder: 303,
+	},
+	{
+		name: "entity:Content",
+		type: "Entity",
+		label: "콘텐츠",
+		description: "콘텐츠 엔티티 CRUD 권한",
+		sortOrder: 304,
+	},
+	{
+		name: "entity:Role",
+		type: "Entity",
 		label: "역할",
-		sortOrder: 5,
-		isRequired: false,
-		visibleOnDesktop: true,
-		visibleOnTablet: true,
-		visibleOnMobile: false,
-		sortable: false,
-		width: "120px",
-		minWidth: "100px",
+		description: "역할 엔티티 CRUD 권한",
+		sortOrder: 305,
 	},
 	{
-		entity: "User",
-		field: "createdAt",
-		label: "가입일",
-		sortOrder: 6,
-		isRequired: false,
-		visibleOnDesktop: true,
-		visibleOnTablet: false, // 태블릿에서는 숨김
-		visibleOnMobile: false,
-		sortable: true,
-		width: "140px",
-		minWidth: "120px",
-	},
-	{
-		entity: "User",
-		field: "lastLoginAt",
-		label: "최근 로그인",
-		sortOrder: 7,
-		isRequired: false,
-		visibleOnDesktop: true,
-		visibleOnTablet: false,
-		visibleOnMobile: false,
-		sortable: true,
-		width: "140px",
-		minWidth: "120px",
+		name: "entity:Ability",
+		type: "Entity",
+		label: "권한",
+		description: "권한 엔티티 CRUD 권한",
+		sortOrder: 306,
 	},
 ];
 
 /**
- * Reservation 엔티티 컬럼 정의
- * - 필수 컬럼: ID, 사용자명, 예약일시, 상태
- * - 데스크톱/태블릿: 모든 컬럼 표시
- * - 모바일: 필수 컬럼만
+ * 모든 Subject 시드 데이터를 하나로 합침
  */
-export const reservationColumnDefinitions: ColumnDefinitionSeedData[] = [
+export const subjectSeedData: SubjectSeedData[] = [
+	...menuSubjectSeedData,
+	...featureSubjectSeedData,
+	...entitySubjectSeedData,
+];
+
+// ============================================================================
+// Ability (CASL 권한 정의) 시드 데이터
+// ============================================================================
+
+/**
+ * AbilityActions enum (core.prisma 기준)
+ * - CREATE: 생성 권한
+ * - READ: 조회 권한
+ * - UPDATE: 수정 권한
+ * - DELETE: 삭제 권한
+ * - ACCESS: 접근 권한 (메뉴 등)
+ * - MANAGE: 모든 권한 (SUPER_ADMIN용)
+ * - EXPORT: 내보내기 권한
+ * - IMPORT: 가져오기 권한
+ * - APPROVE: 승인 권한
+ * - REJECT: 반려 권한
+ */
+export type AbilityAction =
+	| "CREATE"
+	| "READ"
+	| "UPDATE"
+	| "DELETE"
+	| "ACCESS"
+	| "MANAGE"
+	| "EXPORT"
+	| "IMPORT"
+	| "APPROVE"
+	| "REJECT";
+
+/**
+ * AbilityTypes enum (core.prisma 기준)
+ * - CAN: 허용
+ * - CAN_NOT: 금지
+ */
+export type AbilityType = "CAN" | "CAN_NOT";
+
+export interface AbilitySeedData {
+	roleName: "USER" | "ADMIN" | "SUPER_ADMIN";
+	subjectName: string; // Subject의 name
+	type: AbilityType;
+	action: AbilityAction;
+	description: string;
+	conditions?: Record<string, unknown>; // CASL conditions (예: 자신의 데이터만 접근)
+	isActive?: boolean;
+}
+
+/**
+ * SUPER_ADMIN 권한 시드 데이터
+ * - MANAGE all: 모든 권한
+ */
+export const superAdminAbilitySeedData: AbilitySeedData[] = [
+	// 모든 메뉴 MANAGE
 	{
-		entity: "Reservation",
-		field: "id",
-		label: "예약 ID",
-		sortOrder: 0,
-		isRequired: true,
-		visibleOnDesktop: true,
-		visibleOnTablet: true,
-		visibleOnMobile: true,
-		sortable: false,
-		width: "280px",
-		minWidth: "280px",
+		roleName: "SUPER_ADMIN",
+		subjectName: "menu:dashboard",
+		type: "CAN",
+		action: "MANAGE",
+		description: "대시보드 전체 관리 권한",
 	},
 	{
-		entity: "Reservation",
-		field: "userName",
-		label: "예약자명",
-		sortOrder: 1,
-		isRequired: true,
-		visibleOnDesktop: true,
-		visibleOnTablet: true,
-		visibleOnMobile: true,
-		sortable: true,
-		width: "120px",
-		minWidth: "100px",
+		roleName: "SUPER_ADMIN",
+		subjectName: "menu:members",
+		type: "CAN",
+		action: "MANAGE",
+		description: "회원 관리 전체 권한",
 	},
 	{
-		entity: "Reservation",
-		field: "startTime",
-		label: "예약일시",
-		sortOrder: 2,
-		isRequired: true,
-		visibleOnDesktop: true,
-		visibleOnTablet: true,
-		visibleOnMobile: true,
-		sortable: true,
-		width: "180px",
-		minWidth: "150px",
+		roleName: "SUPER_ADMIN",
+		subjectName: "menu:reservations",
+		type: "CAN",
+		action: "MANAGE",
+		description: "예약 관리 전체 권한",
 	},
 	{
-		entity: "Reservation",
-		field: "status",
-		label: "상태",
-		sortOrder: 3,
-		isRequired: true,
-		visibleOnDesktop: true,
-		visibleOnTablet: true,
-		visibleOnMobile: true,
-		sortable: true,
-		width: "100px",
-		minWidth: "80px",
+		roleName: "SUPER_ADMIN",
+		subjectName: "menu:notifications",
+		type: "CAN",
+		action: "MANAGE",
+		description: "알림 관리 전체 권한",
 	},
 	{
-		entity: "Reservation",
-		field: "groundName",
-		label: "지점",
-		sortOrder: 4,
-		isRequired: false,
-		visibleOnDesktop: true,
-		visibleOnTablet: true,
-		visibleOnMobile: false,
-		sortable: false,
-		width: "140px",
-		minWidth: "120px",
+		roleName: "SUPER_ADMIN",
+		subjectName: "menu:inquiries",
+		type: "CAN",
+		action: "MANAGE",
+		description: "문의 관리 전체 권한",
 	},
 	{
-		entity: "Reservation",
-		field: "attendees",
-		label: "참석 인원",
-		sortOrder: 5,
-		isRequired: false,
-		visibleOnDesktop: true,
-		visibleOnTablet: false,
-		visibleOnMobile: false,
-		sortable: false,
-		width: "100px",
-		minWidth: "80px",
+		roleName: "SUPER_ADMIN",
+		subjectName: "menu:contents",
+		type: "CAN",
+		action: "MANAGE",
+		description: "콘텐츠 관리 전체 권한",
 	},
 	{
-		entity: "Reservation",
-		field: "createdAt",
-		label: "예약 생성일",
-		sortOrder: 6,
-		isRequired: false,
-		visibleOnDesktop: true,
-		visibleOnTablet: false,
-		visibleOnMobile: false,
-		sortable: true,
-		width: "140px",
-		minWidth: "120px",
+		roleName: "SUPER_ADMIN",
+		subjectName: "menu:settings",
+		type: "CAN",
+		action: "MANAGE",
+		description: "설정 관리 전체 권한",
+	},
+	// 모든 기능 MANAGE
+	{
+		roleName: "SUPER_ADMIN",
+		subjectName: "feature:export",
+		type: "CAN",
+		action: "MANAGE",
+		description: "내보내기 전체 권한",
+	},
+	{
+		roleName: "SUPER_ADMIN",
+		subjectName: "feature:import",
+		type: "CAN",
+		action: "MANAGE",
+		description: "가져오기 전체 권한",
+	},
+	{
+		roleName: "SUPER_ADMIN",
+		subjectName: "feature:bulk-delete",
+		type: "CAN",
+		action: "MANAGE",
+		description: "일괄 삭제 전체 권한",
+	},
+	{
+		roleName: "SUPER_ADMIN",
+		subjectName: "feature:send-notification",
+		type: "CAN",
+		action: "MANAGE",
+		description: "알림 발송 전체 권한",
+	},
+	// 모든 엔티티 MANAGE
+	{
+		roleName: "SUPER_ADMIN",
+		subjectName: "entity:User",
+		type: "CAN",
+		action: "MANAGE",
+		description: "사용자 엔티티 전체 권한",
+	},
+	{
+		roleName: "SUPER_ADMIN",
+		subjectName: "entity:Ground",
+		type: "CAN",
+		action: "MANAGE",
+		description: "시설 엔티티 전체 권한",
+	},
+	{
+		roleName: "SUPER_ADMIN",
+		subjectName: "entity:Space",
+		type: "CAN",
+		action: "MANAGE",
+		description: "공간 엔티티 전체 권한",
+	},
+	{
+		roleName: "SUPER_ADMIN",
+		subjectName: "entity:Reservation",
+		type: "CAN",
+		action: "MANAGE",
+		description: "예약 엔티티 전체 권한",
+	},
+	{
+		roleName: "SUPER_ADMIN",
+		subjectName: "entity:Content",
+		type: "CAN",
+		action: "MANAGE",
+		description: "콘텐츠 엔티티 전체 권한",
+	},
+	{
+		roleName: "SUPER_ADMIN",
+		subjectName: "entity:Role",
+		type: "CAN",
+		action: "MANAGE",
+		description: "역할 엔티티 전체 권한",
+	},
+	{
+		roleName: "SUPER_ADMIN",
+		subjectName: "entity:Ability",
+		type: "CAN",
+		action: "MANAGE",
+		description: "권한 엔티티 전체 권한",
 	},
 ];
 
 /**
- * Role 엔티티 컬럼 정의
- * - 필수 컬럼: 역할명, 설명
- * - 관리자 전용 화면으로 모바일 지원 불필요
+ * ADMIN 권한 시드 데이터
+ * - 메뉴 ACCESS: 대시보드, 회원, 예약, 설정(일부)
+ * - 엔티티: User, Reservation MANAGE / Ground READ, UPDATE
+ * - CAN_NOT: 권한 관리 접근 불가
  */
-export const roleColumnDefinitions: ColumnDefinitionSeedData[] = [
+export const adminAbilitySeedData: AbilitySeedData[] = [
+	// 메뉴 ACCESS
 	{
-		entity: "Role",
-		field: "id",
-		label: "ID",
-		sortOrder: 0,
-		isRequired: true,
-		visibleOnDesktop: true,
-		visibleOnTablet: true,
-		visibleOnMobile: false,
-		sortable: false,
-		width: "280px",
-		minWidth: "280px",
+		roleName: "ADMIN",
+		subjectName: "menu:dashboard",
+		type: "CAN",
+		action: "ACCESS",
+		description: "대시보드 접근 권한",
 	},
 	{
-		entity: "Role",
-		field: "name",
-		label: "역할명",
-		sortOrder: 1,
-		isRequired: true,
-		visibleOnDesktop: true,
-		visibleOnTablet: true,
-		visibleOnMobile: false,
-		sortable: true,
-		width: "150px",
-		minWidth: "120px",
+		roleName: "ADMIN",
+		subjectName: "menu:members",
+		type: "CAN",
+		action: "ACCESS",
+		description: "회원 관리 접근 권한",
 	},
 	{
-		entity: "Role",
-		field: "description",
-		label: "설명",
-		sortOrder: 2,
-		isRequired: false,
-		visibleOnDesktop: true,
-		visibleOnTablet: true,
-		visibleOnMobile: false,
-		sortable: false,
-		width: "300px",
-		minWidth: "200px",
+		roleName: "ADMIN",
+		subjectName: "menu:members:list",
+		type: "CAN",
+		action: "ACCESS",
+		description: "회원 목록 접근 권한",
 	},
 	{
-		entity: "Role",
-		field: "userCount",
-		label: "사용자 수",
-		sortOrder: 3,
-		isRequired: false,
-		visibleOnDesktop: true,
-		visibleOnTablet: false,
-		visibleOnMobile: false,
-		sortable: true,
-		width: "100px",
-		minWidth: "80px",
+		roleName: "ADMIN",
+		subjectName: "menu:members:grades",
+		type: "CAN",
+		action: "ACCESS",
+		description: "회원 등급 접근 권한",
 	},
 	{
-		entity: "Role",
-		field: "createdAt",
-		label: "생성일",
-		sortOrder: 4,
-		isRequired: false,
-		visibleOnDesktop: true,
-		visibleOnTablet: false,
-		visibleOnMobile: false,
-		sortable: true,
-		width: "140px",
-		minWidth: "120px",
+		roleName: "ADMIN",
+		subjectName: "menu:reservations",
+		type: "CAN",
+		action: "ACCESS",
+		description: "예약 관리 접근 권한",
+	},
+	{
+		roleName: "ADMIN",
+		subjectName: "menu:notifications",
+		type: "CAN",
+		action: "ACCESS",
+		description: "알림 접근 권한",
+	},
+	{
+		roleName: "ADMIN",
+		subjectName: "menu:inquiries",
+		type: "CAN",
+		action: "ACCESS",
+		description: "문의 접근 권한",
+	},
+	{
+		roleName: "ADMIN",
+		subjectName: "menu:contents",
+		type: "CAN",
+		action: "ACCESS",
+		description: "콘텐츠 접근 권한",
+	},
+	{
+		roleName: "ADMIN",
+		subjectName: "menu:settings",
+		type: "CAN",
+		action: "ACCESS",
+		description: "설정 접근 권한",
+	},
+	{
+		roleName: "ADMIN",
+		subjectName: "menu:settings:ground",
+		type: "CAN",
+		action: "ACCESS",
+		description: "시설 정보 접근 권한",
+	},
+	{
+		roleName: "ADMIN",
+		subjectName: "menu:settings:columns",
+		type: "CAN",
+		action: "ACCESS",
+		description: "컬럼 가시성 관리 접근 권한",
+	},
+	// 권한 관리 접근 불가 (CAN_NOT)
+	{
+		roleName: "ADMIN",
+		subjectName: "menu:settings:permissions",
+		type: "CAN_NOT",
+		action: "ACCESS",
+		description: "권한 관리 접근 불가",
+	},
+	{
+		roleName: "ADMIN",
+		subjectName: "menu:settings:system",
+		type: "CAN_NOT",
+		action: "ACCESS",
+		description: "시스템 설정 접근 불가",
+	},
+	// 엔티티 권한
+	{
+		roleName: "ADMIN",
+		subjectName: "entity:User",
+		type: "CAN",
+		action: "MANAGE",
+		description: "사용자 엔티티 관리 권한",
+	},
+	{
+		roleName: "ADMIN",
+		subjectName: "entity:Reservation",
+		type: "CAN",
+		action: "MANAGE",
+		description: "예약 엔티티 관리 권한",
+	},
+	{
+		roleName: "ADMIN",
+		subjectName: "entity:Ground",
+		type: "CAN",
+		action: "READ",
+		description: "시설 조회 권한",
+	},
+	{
+		roleName: "ADMIN",
+		subjectName: "entity:Ground",
+		type: "CAN",
+		action: "UPDATE",
+		description: "시설 수정 권한",
+	},
+	{
+		roleName: "ADMIN",
+		subjectName: "entity:Content",
+		type: "CAN",
+		action: "MANAGE",
+		description: "콘텐츠 관리 권한",
+	},
+	// 기능 권한
+	{
+		roleName: "ADMIN",
+		subjectName: "feature:export",
+		type: "CAN",
+		action: "ACCESS",
+		description: "내보내기 권한",
+	},
+	{
+		roleName: "ADMIN",
+		subjectName: "feature:send-notification",
+		type: "CAN",
+		action: "ACCESS",
+		description: "알림 발송 권한",
+	},
+	// 일괄 삭제 불가
+	{
+		roleName: "ADMIN",
+		subjectName: "feature:bulk-delete",
+		type: "CAN_NOT",
+		action: "ACCESS",
+		description: "일괄 삭제 불가",
 	},
 ];
+
+/**
+ * USER 권한 시드 데이터
+ * - 자신의 데이터만 READ, UPDATE 가능 (conditions 사용)
+ * - 자신의 예약만 CREATE, READ 가능
+ */
+export const userAbilitySeedData: AbilitySeedData[] = [
+	// 자신의 User 정보만 조회/수정 가능
+	{
+		roleName: "USER",
+		subjectName: "entity:User",
+		type: "CAN",
+		action: "READ",
+		description: "자신의 사용자 정보 조회 권한",
+		conditions: { id: "{{ user.id }}" },
+	},
+	{
+		roleName: "USER",
+		subjectName: "entity:User",
+		type: "CAN",
+		action: "UPDATE",
+		description: "자신의 사용자 정보 수정 권한",
+		conditions: { id: "{{ user.id }}" },
+	},
+	// 자신의 예약만 생성/조회 가능
+	{
+		roleName: "USER",
+		subjectName: "entity:Reservation",
+		type: "CAN",
+		action: "CREATE",
+		description: "예약 생성 권한",
+	},
+	{
+		roleName: "USER",
+		subjectName: "entity:Reservation",
+		type: "CAN",
+		action: "READ",
+		description: "자신의 예약 조회 권한",
+		conditions: { userId: "{{ user.id }}" },
+	},
+	{
+		roleName: "USER",
+		subjectName: "entity:Reservation",
+		type: "CAN",
+		action: "UPDATE",
+		description: "자신의 예약 수정 권한 (취소 등)",
+		conditions: { userId: "{{ user.id }}" },
+	},
+	// 시설 정보 조회
+	{
+		roleName: "USER",
+		subjectName: "entity:Ground",
+		type: "CAN",
+		action: "READ",
+		description: "시설 정보 조회 권한",
+	},
+	// 콘텐츠 조회
+	{
+		roleName: "USER",
+		subjectName: "entity:Content",
+		type: "CAN",
+		action: "READ",
+		description: "콘텐츠 조회 권한",
+	},
+];
+
+/**
+ * 모든 Ability 시드 데이터를 하나로 합침
+ */
+export const abilitySeedData: AbilitySeedData[] = [
+	...superAdminAbilitySeedData,
+	...adminAbilitySeedData,
+	...userAbilitySeedData,
+];
+
+// ============================================================================
+// Role-Subject-Ability 매핑 요약
+// ============================================================================
+
+/**
+ * 권한 매핑 요약 (문서화용)
+ *
+ * SUPER_ADMIN:
+ * - 모든 Subject에 MANAGE 권한
+ * - 제한 없음
+ *
+ * ADMIN:
+ * - 메뉴: 대시보드, 회원, 예약, 알림, 문의, 콘텐츠, 설정(시설정보, 컬럼관리)
+ * - CAN_NOT: 권한관리, 시스템설정
+ * - 엔티티: User MANAGE, Reservation MANAGE, Ground READ/UPDATE, Content MANAGE
+ * - 기능: 내보내기, 알림발송 가능 / 일괄삭제 불가
+ *
+ * USER:
+ * - 엔티티: 자신의 User READ/UPDATE, 자신의 Reservation CREATE/READ/UPDATE
+ * - 엔티티: Ground READ, Content READ
+ * - 메뉴/기능 접근 없음 (일반 사용자는 Admin 패널 미접근)
+ */
+export const permissionSummary = {
+	SUPER_ADMIN: {
+		description: "시스템 전체 관리자",
+		permissions: "모든 Subject에 MANAGE 권한",
+	},
+	ADMIN: {
+		description: "지점 관리자",
+		permissions:
+			"회원/예약/콘텐츠 관리, 시설정보 수정, 권한관리/시스템설정 접근불가",
+	},
+	USER: {
+		description: "일반 사용자",
+		permissions: "자신의 정보/예약만 접근, 시설/콘텐츠 조회",
+	},
+};

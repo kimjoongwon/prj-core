@@ -1,8 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { getDeviceType } from "../utils/deviceType";
-import type { DeviceType } from "./useColumnVisibility";
+import { getDeviceType, type DeviceType } from "../utils/deviceType";
 
 /**
  * useDeviceType Hook
@@ -14,11 +13,10 @@ import type { DeviceType } from "./useColumnVisibility";
  *
  * @example
  * ```tsx
- * function ResponsiveTable() {
+ * function ResponsiveComponent() {
  *   const deviceType = useDeviceType();
- *   const { columns } = useColumnVisibility("User", deviceType);
  *
- *   return <Table columns={columns} />;
+ *   return <div>Device: {deviceType}</div>;
  * }
  * ```
  */

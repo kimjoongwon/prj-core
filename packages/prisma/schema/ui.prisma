@@ -1,0 +1,63 @@
+// ============================================================================
+// UI Domain - UI 설정 도메인
+// ============================================================================
+//
+// 하이브리드 UI Config 시스템의 DB 오버라이드 저장용 모델입니다.
+// 기본값은 코드(FieldRegistry)에 정의되고, 사용자가 변경한 부분만 저장됩니다.
+//
+// 설계 원칙:
+//   - 코드가 기본: 타입 안전한 기본값은 코드로 정의 (FieldRegistry, ViewRegistry)
+//   - DB는 오버라이드: 런타임 변경이 필요한 부분만 DB에 저장 (UIConfig)
+//   - DB 없어도 동작: DB 오버라이드가 없으면 코드 기본값이 그대로 적용됨
+//
+// 우선순위: USER > ROLE > GLOBAL (가장 구체적인 설정이 적용됨)
+//
+// 관계 구조:
+//   UIConfig (REFERENCE)
+//     │
+//     └─── Space (멀티테넌시)
+//
+// ============================================================================
+
+// UI 설정의 범위 (전역 vs 역할별 vs 개인)
+enum UIConfigScope {
+  GLOBAL // Space 전체 기본값
+  ROLE // Role별 설정
+  USER // 사용자 개인 설정
+}
+
+// @schema-type: REFERENCE
+// @description: 하이브리드 UI Config 시스템의 DB 오버라이드 저장용
+// @connects: Space (멀티테넌시)
+// @note: 기본값은 코드(FieldRegistry)에 정의, 여기는 오버라이드만 저장
+model UIConfig {
+  id        String    @id @default(uuid())
+  seq       Int       @unique @default(autoincrement())
+  createdAt DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt DateTime? @updatedAt @map("updated_at") @db.Timestamptz(6)
+  removedAt DateTime? @map("removed_at") @db.Timestamptz(6)
+
+  // Space 귀속 (멀티테넌시)
+  spaceId String @map("space_id")
+  space   Space  @relation(fields: [spaceId], references: [id])
+
+  // 대상 지정
+  entity String // 엔티티명 (User, Reservation, Ground 등)
+  view   String // 뷰 타입 (table, form, detail, card)
+
+  // 범위 (우선순위: USER > ROLE > GLOBAL)
+  scope   UIConfigScope @default(GLOBAL)
+  scopeId String?       @map("scope_id") // ROLE이면 roleId, USER면 userId
+
+  // 설정 데이터 (JSON)
+  // FieldConfig[] 또는 ViewConfig 형태
+  // 예: [{ field: "email", visible: false, order: 1 }, ...]
+  config Json
+
+  // 복합 유니크 제약조건: 동일 조건에서 중복 설정 방지
+  @@unique([spaceId, entity, view, scope, scopeId])
+  // 설정 조회 최적화 인덱스
+  @@index([spaceId, entity, view])
+  @@index([scope])
+  @@map("ui_configs")
+}

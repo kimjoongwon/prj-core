@@ -4,3 +4,4 @@ export * from "./AbilityContext";
 export * from "./Can";
 export * from "./types";
 export * from "./useMenuAccess";
+export * from "./usePermission";

@@ -639,6 +639,43 @@ export { useNewStore } from "./useStore";
 
 ## ❌ 하지 말아야 할 것
 
+### 0. 페이지 레벨 Store 생성 (Critical!)
+
+**페이지 경로 내에 `_stores` 폴더를 생성하지 않습니다.**
+
+```
+❌ 안티패턴
+apps/admin/app/(admin)/users/
+├── _stores/
+│   └── UserListStore.ts   ← 금지!
+└── page.tsx
+
+✅ Store는 packages/store에만
+packages/store/src/stores/
+├── navigationStore.ts     ← 전역 Store
+├── authStore.ts           ← 전역 Store
+└── ...
+```
+
+**페이지 상태는 URL 기반으로 관리해야 합니다:**
+
+| 상태 유형 | 관리 방법 | 예시 |
+|----------|----------|------|
+| 필터/검색 | `queryParams` | `?search=kim&status=active` |
+| 리소스 식별 | `pathParams` | `/users/123` |
+| 임시 전달 데이터 | `router.push({ state })` | 이전 페이지에서 전달 |
+
+**이유:**
+- URL 상태는 브라우저 히스토리와 동기화됨 (뒤로가기 지원)
+- 북마크/공유 가능
+- 새로고침 시에도 상태 유지
+- 전역 Store 오염 방지
+
+**Store가 적합한 경우:**
+- 여러 페이지에서 공유되는 전역 상태 (인증, 네비게이션)
+- 앱 전체에서 접근해야 하는 설정 (토큰, 퍼시스트 데이터)
+- 복잡한 상태 머신 (멀티스텝 프로세스)
+
 ### 1. Store에서 직접 API 호출
 
 ```typescript

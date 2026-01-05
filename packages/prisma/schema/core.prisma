@@ -132,8 +132,7 @@ model Subject {
   sortOrder         Int                @default(0) @map("sort_order")
   parent            Subject?           @relation("SubjectHierarchy", fields: [parentId], references: [id], onDelete: NoAction, onUpdate: NoAction)
   children          Subject[]          @relation("SubjectHierarchy")
-  abilities         Ability[]
-  columnDefinitions ColumnDefinition[]
+  abilities          Ability[]
 
   @@index([tenantId])
   @@index([type])
@@ -170,50 +169,7 @@ model Ability {
   @@map("abilities")
 }
 
-// @schema-type: METADATA
-// @description: 테이블 컬럼 메타데이터 정의 (디바이스별 가시성, 정렬, 너비 등)
-// @connects: Space (멀티테넌시), Subject (권한 연동, optional)
-model ColumnDefinition {
-  id        String    @id @default(uuid())
-  seq       Int       @unique @default(autoincrement())
-  createdAt DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
-  updatedAt DateTime? @updatedAt @map("updated_at") @db.Timestamptz(6)
-  removedAt DateTime? @map("removed_at") @db.Timestamptz(6)
 
-  // 엔티티 및 필드 정보
-  entity    String // 엔티티명 (User, Reservation 등)
-  field     String // 필드명 (email, phone, createdAt 등)
-  label     String // 표시 라벨 (이메일, 전화번호 등)
-  sortOrder Int    @default(0) @map("sort_order")
-
-  // 필수 여부 (필수 컬럼은 모든 디바이스에서 표시)
-  isRequired Boolean @default(false) @map("is_required")
-
-  // 디바이스별 기본 가시성
-  visibleOnDesktop Boolean @default(true) @map("visible_on_desktop")
-  visibleOnTablet  Boolean @default(true) @map("visible_on_tablet")
-  visibleOnMobile  Boolean @default(false) @map("visible_on_mobile")
-
-  // 정렬 가능 여부
-  sortable Boolean @default(false)
-
-  // 너비 설정
-  width    String? // '80px', '120px', 'auto' 등
-  minWidth String? @map("min_width")
-
-  // Space 귀속 (멀티테넌시)
-  spaceId String @map("space_id")
-  space   Space  @relation(fields: [spaceId], references: [id])
-
-  // 컬럼별 권한 (선택적)
-  subjectId String?  @map("subject_id")
-  subject   Subject? @relation(fields: [subjectId], references: [id])
-
-  @@unique([entity, field, spaceId])
-  @@index([entity, spaceId])
-  @@index([subjectId])
-  @@map("column_definitions")
-}
 
 // @schema-type: CONTENT
 // @description: 게시물 - Content를 감싸는 발행 단위

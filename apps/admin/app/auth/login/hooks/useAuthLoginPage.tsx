@@ -63,8 +63,8 @@ export const useAuthLoginPage = () => {
 			}
 
 			// 3. 현재 Space 선택 (selectedSpaceId 우선, 없으면 첫 번째 tenant)
-			let targetTenant = data?.selectedSpaceId
-				? tenants?.find((t) => t.spaceId === data.selectedSpaceId)
+			let targetTenant = data?.user?.selectedSpaceId
+				? tenants?.find((t) => t.spaceId === data.user.selectedSpaceId)
 				: undefined;
 
 			if (!targetTenant) {

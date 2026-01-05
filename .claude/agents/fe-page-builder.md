@@ -291,7 +291,70 @@ export default function AuthLayout({ children }: { children: React.ReactNode }) 
 | `<VStack>`, `<HStack>`, `<Spacer />` | `className="flex gap-2 mt-4"` |
 | 기존 UI 컴포넌트 조합 | inline style (`style={{...}}`) |
 
-### 4.5 기타 금지 패턴
+### 4.5 페이지 레벨 Store 금지 (Critical!)
+
+**페이지 경로 내에 `_stores` 폴더를 만들지 않습니다.**
+
+페이지 상태는 **URL 기반**으로 관리해야 합니다:
+
+| 상태 유형 | 관리 방법 | 예시 |
+|----------|----------|------|
+| 필터/검색 | `queryParams` | `?search=kim&status=active` |
+| 리소스 식별 | `pathParams` | `/users/123` |
+| 임시 전달 데이터 | `router.push({ state })` | 이전 페이지에서 전달 |
+
+```tsx
+// ❌ 안티패턴 - 페이지 레벨 Store
+apps/admin/app/(admin)/users/
+├── _stores/
+│   └── UserListStore.ts   ← 금지!
+└── page.tsx
+
+// ✅ 올바른 패턴 - URL 기반 상태 관리
+apps/admin/app/(admin)/users/
+├── hooks/
+│   └── useUsersPage.ts    ← queryParams, pathParams 사용
+└── page.tsx
+```
+
+```tsx
+// ✅ 올바른 패턴 - URL 기반 상태 관리
+import { useSearchParams, useParams, useRouter } from "next/navigation";
+
+export const useUsersPage = () => {
+  const searchParams = useSearchParams();
+  const params = useParams();
+  const router = useRouter();
+
+  // URL에서 상태 읽기
+  const search = searchParams.get("search") ?? "";
+  const status = searchParams.get("status") ?? "all";
+  const page = Number(searchParams.get("page") ?? 1);
+
+  // URL 상태 변경
+  const setSearch = (value: string) => {
+    const params = new URLSearchParams(searchParams);
+    params.set("search", value);
+    params.set("page", "1"); // 검색 시 페이지 리셋
+    router.push(`?${params.toString()}`);
+  };
+
+  // 페이지 이동 시 상태 전달
+  const navigateToDetail = (id: string, extraData?: unknown) => {
+    router.push(`/users/${id}`, { state: extraData });
+  };
+
+  return { search, status, page, setSearch, navigateToDetail };
+};
+```
+
+**이유:**
+- URL 상태는 브라우저 히스토리와 동기화됨 (뒤로가기 지원)
+- 북마크/공유 가능
+- 새로고침 시에도 상태 유지
+- 전역 Store 오염 방지
+
+### 4.6 기타 금지 패턴
 
 ```tsx
 // ❌ handlers 객체로 묶기
