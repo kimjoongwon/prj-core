@@ -7,6 +7,12 @@ import {
 	UnsavedChangesIndicator,
 } from "@cocrepo/ui";
 import {
+	useGetConfig,
+	useSaveGlobalConfig,
+	useSaveRoleConfig,
+	useSaveUserConfig,
+} from "@cocrepo/api";
+import {
 	Button,
 	Card,
 	CardBody,
@@ -53,51 +59,81 @@ function UIConfigsPage() {
 	}
 	const store = storeRef.current;
 
-	// API 훅 (현재 API 미구현으로 목 데이터 사용)
-	// const { data, isLoading, refetch } = useGetUIConfig(...);
+	// API 훅
+	const {
+		data: configData,
+		isLoading: isLoadingConfig,
+		refetch: refetchConfig,
+	} = useGetConfig(store.selectedEntity, "table");
 
-	// 목 데이터로 초기화 (API 연동 전까지)
+	const saveUserConfigMutation = useSaveUserConfig();
+	const saveRoleConfigMutation = useSaveRoleConfig();
+	const saveGlobalConfigMutation = useSaveGlobalConfig();
+
+	// API 데이터로 초기화
 	useEffect(() => {
-		const mockColumns: ColumnConfig[] = [
-			{
-				id: "1",
-				field: "name",
-				label: "이름",
-				visible: true,
-				width: 150,
-				sortOrder: 1,
-				responsive: { desktop: true, tablet: true, mobile: true },
-			},
-			{
-				id: "2",
-				field: "email",
-				label: "이메일",
-				visible: true,
-				width: 200,
-				sortOrder: 2,
-				responsive: { desktop: true, tablet: true, mobile: false },
-			},
-			{
-				id: "3",
-				field: "phone",
-				label: "전화번호",
-				visible: true,
-				width: 120,
-				sortOrder: 3,
-				responsive: { desktop: true, tablet: false, mobile: false },
-			},
-			{
-				id: "4",
-				field: "createdAt",
-				label: "가입일",
-				visible: false,
-				width: 100,
-				sortOrder: 4,
-				responsive: { desktop: true, tablet: false, mobile: false },
-			},
-		];
-		store.setOriginalColumns(mockColumns);
-	}, [store]);
+		if (configData?.data?.config?.fields) {
+			// API에서 받은 설정을 ColumnConfig 형식으로 변환
+			const apiColumns: ColumnConfig[] = configData.data.config.fields.map(
+				(field, index) => ({
+					id: String(index + 1),
+					field: field.field,
+					label: field.label || field.field,
+					visible: field.visible,
+					width: field.width || 150,
+					sortOrder: field.order,
+					responsive: { desktop: true, tablet: true, mobile: true },
+				}),
+			);
+			store.setOriginalColumns(apiColumns);
+		} else {
+			// API 데이터가 없으면 목 데이터 사용
+			const mockColumns: ColumnConfig[] = [
+				{
+					id: "1",
+					field: "name",
+					label: "이름",
+					visible: true,
+					width: 150,
+					sortOrder: 1,
+					responsive: { desktop: true, tablet: true, mobile: true },
+				},
+				{
+					id: "2",
+					field: "email",
+					label: "이메일",
+					visible: true,
+					width: 200,
+					sortOrder: 2,
+					responsive: { desktop: true, tablet: true, mobile: false },
+				},
+				{
+					id: "3",
+					field: "phone",
+					label: "전화번호",
+					visible: true,
+					width: 120,
+					sortOrder: 3,
+					responsive: { desktop: true, tablet: false, mobile: false },
+				},
+				{
+					id: "4",
+					field: "createdAt",
+					label: "가입일",
+					visible: false,
+					width: 100,
+					sortOrder: 4,
+					responsive: { desktop: true, tablet: false, mobile: false },
+				},
+			];
+			store.setOriginalColumns(mockColumns);
+		}
+	}, [configData, store]);
+
+	// 로딩 상태 업데이트
+	useEffect(() => {
+		store.setLoading(isLoadingConfig);
+	}, [isLoadingConfig, store]);
 
 	// 범위 탭 변경 핸들러
 	const onChangeScopeTab = (key: React.Key) => {
@@ -133,11 +169,48 @@ function UIConfigsPage() {
 		store.setError(null);
 
 		try {
-			// TODO: API 연동
-			// await saveConfigMutation.mutateAsync({ ... });
-			await new Promise((resolve) => setTimeout(resolve, 1000)); // 목 딜레이
+			// ColumnConfig를 API DTO 형식으로 변환
+			const fields = store.columns.map((col) => ({
+				field: col.field,
+				visible: col.visible,
+				order: col.sortOrder,
+				label: col.label,
+				width: col.width,
+			}));
+
+			const payload = {
+				fields,
+				pageSize: 20,
+			};
+
+			// scope에 따라 적절한 API 호출
+			if (store.scope === "GLOBAL") {
+				await saveGlobalConfigMutation.mutateAsync({
+					entity: store.selectedEntity,
+					view: "table",
+					data: payload,
+				});
+			} else if (store.scope === "ROLE" && store.selectedRoleId) {
+				await saveRoleConfigMutation.mutateAsync({
+					entity: store.selectedEntity,
+					view: "table",
+					roleId: store.selectedRoleId,
+					data: payload,
+				});
+			} else {
+				// USER scope
+				await saveUserConfigMutation.mutateAsync({
+					entity: store.selectedEntity,
+					view: "table",
+					data: payload,
+				});
+			}
+
+			// 저장 성공 후 데이터 새로고침
+			await refetchConfig();
 			store.setOriginalColumns(store.columns);
-		} catch (_error) {
+		} catch (error) {
+			console.error("Failed to save config:", error);
 			store.setError("설정 저장에 실패했습니다.");
 		} finally {
 			store.setSaving(false);
