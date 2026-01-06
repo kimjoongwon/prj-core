@@ -276,6 +276,19 @@ import { CreateAbilityDto, AbilityResponseDto } from "@cocrepo/dto";
 - **Service**: 단일 도메인 로직 (Repository를 통해서만 데이터 접근)
 - **Repository**: Prisma 쿼리 작성
 
+### 시드 데이터 관리 규칙
+
+**seed-data에 영향을 주는 모든 변경이 발생하면 반드시 아래 파일들을 함께 업데이트해야 합니다:**
+
+- `packages/prisma/seed-data.ts` - 시드 데이터 정의
+- `packages/prisma/seed.ts` - 시드 실행 로직
+
+**영향을 주는 변경 예시:**
+- Prisma 스키마에 새로운 모델 추가
+- 기존 모델의 필수 필드 추가/변경
+- Enum 타입 변경
+- 관계(relation) 구조 변경
+
 ## 테스트 작성 규칙
 
 - 테스트 코드의 설명(describe, it)은 한글로 작성합니다

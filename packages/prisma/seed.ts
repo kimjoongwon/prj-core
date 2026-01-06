@@ -15,7 +15,6 @@ import {
 	userSeedData,
 } from "./seed-data";
 import type {
-	Ability,
 	Ground,
 	Group,
 	Role,

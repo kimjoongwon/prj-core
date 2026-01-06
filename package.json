@@ -24,6 +24,7 @@
     "format": "turbo format",
     "test": "turbo test",
     "analyze:components": "./node_modules/.bin/tsx apps/agent/src/scripts/analyze-components.ts",
+    "codegen:api": "pnpm --filter=@cocrepo/api codegen",
     "version:patch": "pnpm -r --filter './packages/**' exec npm version patch --no-git-tag-version",
     "version:minor": "pnpm -r --filter './packages/**' exec npm version minor --no-git-tag-version",
     "version:major": "pnpm -r --filter './packages/**' exec npm version major --no-git-tag-version",
