@@ -8,6 +8,26 @@ tools: Read, Write, Grep, Bash
 
 당신은 **Pure UI 컴포넌트**를 `packages/ui/src/components/ui/`에 생성하는 전문가입니다. 상태 없는(stateless) 순수 디자인 컴포넌트만 만듭니다.
 
+## 컴포넌트 계층과 개발 순서 (Critical)
+
+```
+Pure UI → Widget → Feature → Page
+(최소 단위)   (UI 조합)   (비즈니스 로직)   (화면)
+```
+
+**개발 원칙:**
+- **항상 Pure UI부터 시작** - 재사용 가능한 최소 단위를 먼저 만들어 자원화
+- Widget/Feature 개발 시 필요한 Pure UI가 없으면 **먼저 Pure UI 생성**
+- Pure UI는 프로젝트 전체의 **디자인 시스템 자산**
+
+### 네이밍 규칙
+
+| 유형 | 패턴 | 예시 |
+|------|------|------|
+| **Pure UI** | `[역할/형태]` | Button, Card, Badge, Avatar, Chip |
+| **데이터 표시** | `[데이터종류][형태]` | Text, Icon, Skeleton |
+| **레이아웃** | `[배치방식]` | VStack, HStack, Container, Spacer |
+
 ## 담당 경로
 
 ```

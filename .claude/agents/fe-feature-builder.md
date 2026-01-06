@@ -18,13 +18,75 @@ tools: Read, Write, Grep
 | **특징** | 자체적으로 데이터를 가져오고 상태를 관리하며 페이지 이동을 수행함 | API 호출, 로컬 상태, 이벤트 핸들링, Next.js useRouter |
 | **위치** | `packages/ui/src/components/feature/` | |
 
-### Widget vs Feature vs Page
+### 컴포넌트 계층 구조와 개발 순서 (Critical)
+
+```
+Pure UI → Widget → Feature → Page
+(최소 단위)   (UI 조합)   (비즈니스 로직)   (화면)
+```
+
+**개발 원칙:**
+- **항상 Pure UI → Widget → Feature 순서로 개발**
+- Feature 개발 시 필요한 Widget이 없으면 **먼저 Widget 생성 요청**
+- **최대한 Widget으로 분리** - 순수 UI는 Widget으로, 비즈니스 로직만 Feature에
+- Feature는 **Widget + Store 연결** - Widget에 데이터/핸들러 주입
 
 | 계층 | 상태 | API | 비즈니스 로직 | 라우팅 | 예시 |
 |------|:----:|:---:|:------------:|:------:|------|
-| **Widget** | △ 로컬만 | ❌ | ❌ | ❌ | Dropdown, Modal, Tabs |
-| **Feature** | ✅ | ✅ | ✅ | ✅ | LoginForm, CommentList |
-| **Page** | ✅ | ✅ | ✅ | ✅ | LoginPage, DashboardPage |
+| **Widget** | △ 로컬만 | ❌ | ❌ | ❌ | NavTreePanel, TabBar, MenuList |
+| **Feature** | ✅ | ✅ | ✅ | ✅ | SideNav, BottomTab, SubMenuList |
+| **Page** | ✅ | ✅ | ✅ | ✅ | DashboardPage, UsersPage |
+
+### 네이밍 규칙 (Critical)
+
+**Feature 네이밍: `[위치/역할][기능]`** - "어디서 어떻게 사용되는가"
+
+| 패턴 | 설명 | 예시 |
+|------|------|------|
+| `[위치]Nav` | 특정 위치의 네비게이션 | SideNav, BottomNav, TopNav |
+| `[위치]Tab` | 특정 위치의 탭 | BottomTab, HeaderTab |
+| `[기능]Menu` | 메뉴 기능 | UserMenu, ContextMenu |
+| `[기능]Selector` | 선택 기능 | SpaceSelector, ThemeSelector |
+| `[기능]Form` | 폼 기능 | LoginForm, SearchForm |
+
+**Widget → Feature 분리 패턴:**
+
+```typescript
+// Widget (widget/NavTreePanel.tsx) - 순수 UI
+export interface NavTreePanelProps {
+  items: NavItemData[];
+  expandedKeys: Set<string>;
+  onToggle: (id: string) => void;
+  onSelectItem: (id: string) => void;
+  width?: number;
+}
+
+export const NavTreePanel = ({ items, expandedKeys, onToggle, ... }: NavTreePanelProps) => {
+  // 순수 렌더링만 - Store 접근 없음
+};
+
+// Feature (feature/SideNav.tsx) - 비즈니스 로직
+export const SideNav = observer(({ width, className }: SideNavProps) => {
+  const store = useNavigationStore();
+
+  // Store → Widget props 변환
+  const handleToggle = (id: string) => store.toggleNavItem(id);
+
+  return (
+    <NavTreePanel
+      items={store.items}
+      expandedKeys={store.expandedKeys}
+      onToggle={handleToggle}
+      width={width}
+    />
+  );
+});
+```
+
+**분리의 장점:**
+- Widget은 Storybook에서 독립 테스트 가능
+- Feature 없이 Widget만 다른 곳에서 재사용 가능
+- Store 교체 시 Feature만 수정
 
 ---
 

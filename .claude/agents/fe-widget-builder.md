@@ -20,12 +20,18 @@ tools: Read, Write, Grep
 
 ---
 
-## 2. 컴포넌트 계층 구조
+## 2. 컴포넌트 계층 구조와 개발 순서 (Critical)
 
 ```
-UI 컴포넌트 (Pure, 작은 단위)  →  Widget  →  Feature  →  Page
-   Button, Input, Chip           복합 UI     비즈니스 기능   화면
+Pure UI → Widget → Feature → Page
+(최소 단위)   (UI 조합)   (비즈니스 로직)   (화면)
 ```
+
+**개발 원칙:**
+- **항상 Pure UI → Widget → Feature 순서로 개발**
+- Widget 개발 시 필요한 Pure UI가 없으면 **먼저 Pure UI 생성 요청**
+- **최대한 Widget으로 자원화** - Feature에서 재사용 가능하도록 설계
+- Widget은 **순수 UI 조합** - Store/API 연결 없이 props만으로 동작
 
 | 항목 | UI 컴포넌트 | Widget | Feature |
 |------|------------|--------|----------|
@@ -33,7 +39,35 @@ UI 컴포넌트 (Pure, 작은 단위)  →  Widget  →  Feature  →  Page
 | **의존성** | 없음 (독립) | UI 컴포넌트만 사용 | widget/UI 조합 |
 | **비즈니스** | 무관 | 무관 | 비즈니스 기능 담당 |
 | **위치** | `components/ui/` | `components/widget/` | `components/feature/` |
-| **예시** | Button, Input, Chip | StatusBadge, UserCard | Navbar, UserMenu |
+| **예시** | Button, Input, Chip | NavTreePanel, TabBar | SideNav, BottomTab |
+
+### 네이밍 규칙 (Critical)
+
+**Widget 네이밍: `[기능][UI형태]`** - "무엇을 보여주는가"
+
+| 패턴 | 설명 | 예시 |
+|------|------|------|
+| `[기능]Panel` | 패널 형태의 UI | NavTreePanel, FilterPanel |
+| `[기능]Bar` | 막대 형태의 UI | TabBar, ToolBar, SearchBar |
+| `[기능]List` | 목록 형태의 UI | MenuList, ItemList |
+| `[기능]Card` | 카드 형태의 UI | UserCard, StatCard |
+| `[기능]Badge` | 뱃지 형태의 UI | StatusBadge, CountBadge |
+
+**Widget → Feature 분리 예시:**
+
+```
+Widget (순수 UI)              Feature (비즈니스 로직)
+─────────────────────────────────────────────────────
+NavTreePanel                  → SideNav (NavigationStore 연결)
+TabBar                        → BottomTab (NavigationStore 연결)
+MenuList                      → SubMenuList (NavigationStore 연결)
+UserCard                      → UserMenu (AuthStore 연결)
+SpaceDropdown                 → SpaceSelector (PersistStore 연결)
+```
+
+**분리 기준:**
+- Widget: props로 `items`, `onSelect`, `expandedKeys` 등을 받아 렌더링만
+- Feature: Store에서 데이터를 가져와 Widget에 주입
 
 ---
 

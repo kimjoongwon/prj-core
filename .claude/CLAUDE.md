@@ -1,5 +1,25 @@
 # 프로젝트 개발 가이드
 
+## 기술 스택
+
+### 프론트엔드
+- **프레임워크**: Next.js (App Router)
+- **상태 관리**: MobX (Zustand 사용 안 함)
+- **UI 라이브러리**: HeroUI (NextUI 기반)
+- **스타일링**: Tailwind CSS
+- **API 클라이언트**: Orval (자동 생성) + React Query
+
+### 백엔드
+- **프레임워크**: NestJS
+- **ORM**: Prisma 7.0
+- **데이터베이스**: PostgreSQL
+- **캐싱/세션**: Redis
+
+### 공통
+- **모노레포**: Turborepo (pnpm workspace)
+- **패키지 매니저**: pnpm
+- **런타임**: Node.js
+
 ## Claude Code 버그 회피
 
 - **TodoWrite 도구의 content, activeForm은 영어로 작성** (한글 UTF-8 멀티바이트 문자열 처리 버그 회피)
@@ -10,6 +30,112 @@
 ### 컴포넌트 작성
 
 - ui 컴포넌트를 만들 때는 mobx를 사용합니다
+
+### observer 필수 규칙
+
+**`"use client"` 컴포넌트는 반드시 `observer`로 감싸야 합니다.**
+
+```typescript
+// ❌ 금지 - observer 없음
+"use client";
+export const MyComponent = ({ items }: Props) => {
+  return <div>{items.map(...)}</div>;
+};
+
+// ✅ 올바른 예시 - observer 사용
+"use client";
+import { observer } from "mobx-react-lite";
+
+export const MyComponent = observer(({ items }: Props) => {
+  return <div>{items.map(...)}</div>;
+});
+```
+
+**이유:**
+- MobX observable 변경을 자동 추적하여 리렌더링
+- observer가 내부적으로 memo 처리하므로 별도 memo 불필요
+- props로 전달받은 observable 객체의 변경도 감지
+
+### useMemo/useCallback 사용 금지
+
+**`useMemo`와 `useCallback`은 사용하지 않습니다.**
+
+```typescript
+// ❌ 금지
+const memoizedValue = useMemo(() => computeExpensive(a, b), [a, b]);
+const memoizedCallback = useCallback(() => doSomething(a), [a]);
+
+// ✅ 그냥 사용
+const value = computeExpensive(a, b);
+const callback = () => doSomething(a);
+```
+
+**이유:**
+- React 19+ 및 React Compiler가 자동 최적화 수행
+- 수동 메모이제이션은 오히려 버그 유발 가능성
+- 코드 가독성 저하
+- MobX 사용 시 `observer`가 자동으로 필요한 리렌더링만 처리
+
+### 컴포넌트 계층 구조와 개발 원칙 (Critical)
+
+```
+Pure UI → Widget → Feature → Page
+(최소 단위)   (UI 조합)   (비즈니스 로직)   (화면)
+```
+
+**개발 순서 원칙:**
+1. **항상 Pure UI부터 시작** - 재사용 가능한 최소 단위를 먼저 만들어 자원화
+2. **최대한 Widget으로 분리** - 순수 UI 조합은 Widget으로, Store 연결만 Feature에
+3. **Feature는 Widget + Store 연결** - Widget에 데이터/핸들러 주입하는 역할
+
+**네이밍 규칙:**
+
+| 유형 | 패턴 | 설명 | 예시 |
+|------|------|------|------|
+| **Pure UI** | `[역할/형태]` | 최소 단위 | Button, Card, Badge |
+| **Widget** | `[기능][UI형태]` | "무엇을 보여주는가" | NavTreePanel, TabBar, MenuList |
+| **Feature** | `[위치/역할][기능]` | "어디서 어떻게 사용되는가" | SideNav, BottomTab, UserMenu |
+
+**Widget → Feature 분리 예시:**
+
+```
+Widget (순수 UI)              Feature (비즈니스 로직)
+─────────────────────────────────────────────────────
+NavTreePanel                  → SideNav (NavigationStore 연결)
+TabBar                        → BottomTab (NavigationStore 연결)
+MenuList                      → SubMenuList (NavigationStore 연결)
+UserCard                      → UserMenu (AuthStore 연결)
+```
+
+**분리의 장점:**
+- Widget은 Storybook에서 독립 테스트 가능
+- Feature 없이 Widget만 다른 곳에서 재사용 가능
+- Store 교체 시 Feature만 수정
+
+### SSR/Hydration 관련 주의사항
+
+**`isMounted` 패턴이 필요한 경우와 불필요한 경우를 명확히 구분해야 합니다.**
+
+```typescript
+// ❌ 불필요한 isMounted 패턴 - MobX/Context 기반 store
+const store = useNavigationStore(); // Context Provider에서 주입됨
+const isMounted = useIsMounted();
+const items = isMounted ? store.items : []; // 불필요!
+
+// ✅ 올바른 사용 - 그냥 바로 사용
+const store = useNavigationStore();
+const items = store.items;
+```
+
+**isMounted 패턴이 필요한 경우 (드뭄):**
+- `localStorage`/`sessionStorage` 직접 접근
+- `window`/`document` 객체 의존
+
+**불필요한 경우 (대부분):**
+- MobX + Context Provider 패턴 (프로젝트 표준)
+- useState/React Query
+
+**이유:** `"use client"` 컴포넌트도 서버에서 SSR됩니다. 하지만 Context Provider로 주입되는 store는 서버/클라이언트 모두 동일한 초기값을 가지므로 Hydration mismatch가 발생하지 않습니다.
 - **이벤트 핸들러 네이밍 규칙**:
   - **일반 컴포넌트**: `handle` 접두어 사용 (예: `handleClick`, `handleChange`)
   - **Page 컴포넌트**: `on[Event][UI]` 형태로 직관적 표현 (예: `onClickLoginButton`, `onChangeEmail`)
@@ -36,8 +162,57 @@ const response = await axios.get("/api/v1/grounds");
 
 **API 생성 명령어:**
 ```bash
-pnpm --filter=@cocrepo/api generate
+pnpm --filter=@cocrepo/api codegen
 ```
+
+### 타입/인터페이스 네이밍 규칙
+
+**불필요한 접미사를 붙이지 않습니다.**
+
+```typescript
+// ❌ 금지 - 불필요한 접미사
+interface NavTreeItemData { }
+interface UserInfoData { }
+type ButtonPropsType = { }
+
+// ✅ 올바른 예시 - 간결하게
+interface NavTreeItem { }
+interface UserInfo { }
+type ButtonProps = { }
+```
+
+**피해야 할 접미사:**
+- `Data` - 대부분 불필요
+- `Type` - 이미 타입임이 명확
+- `Interface` - 이미 interface 키워드 사용
+- `Info` - 구체적인 이름 사용 권장
+
+### 타입 의존성 방향 (Widget ↔ Store)
+
+**Widget이 Store 타입을 기반으로 자신의 타입을 정의합니다.**
+
+```typescript
+// ❌ 잘못된 구조 - Store가 UI 타입에 의존
+// @cocrepo/type
+export interface NavTreeItem { ... }
+
+// @cocrepo/store
+import { NavTreeItem } from "@cocrepo/type";
+export class NavItem implements NavTreeItem { }  // Store가 UI 계약에 종속
+
+// ✅ 올바른 구조 - Widget이 Store 타입을 활용
+// @cocrepo/store (독립적)
+export class NavItem { ... }
+
+// @cocrepo/ui (Widget)
+import type { NavItem } from "@cocrepo/store";
+type NavTreeItem = NavItem & {};  // Widget이 Store 타입 기반으로 정의
+```
+
+**원칙:**
+- Store는 UI를 모름 (독립적)
+- Widget이 Store 타입을 import하여 활용
+- 변환 코드 없이 직접 전달 가능
 
 ### 공용 패키지 작성 규칙
 

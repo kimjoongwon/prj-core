@@ -15,6 +15,9 @@ export interface NavItemConfig {
 /**
  * NavItem - 네비게이션 아이템 클래스
  *
+ * NavTreeItemData 인터페이스를 implements하여
+ * Widget(NavTreePanel)에서 직접 사용 가능합니다.
+ *
  * 역할:
  * - 네비게이션 항목의 데이터와 UI 상태 관리
  * - 활성화 상태 추적
