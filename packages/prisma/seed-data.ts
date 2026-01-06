@@ -752,18 +752,18 @@ export const menuSubjectSeedData: SubjectSeedData[] = [
 	},
 	// 설정 - 하위 메뉴
 	{
-		name: "menu:settings:ground",
+		name: "menu:settings:grounds",
 		type: "Menu",
-		label: "Ground 정보",
-		description: "Ground 정보 관리 권한",
+		label: "시설 정보",
+		description: "시설 정보 관리 권한",
 		sortOrder: 101,
 		parentName: "menu:settings",
 	},
 	{
-		name: "menu:settings:roles",
+		name: "menu:settings:admins",
 		type: "Menu",
-		label: "역할 관리",
-		description: "역할 관리 권한",
+		label: "관리자 관리",
+		description: "관리자 관리 권한",
 		sortOrder: 102,
 		parentName: "menu:settings",
 	},
@@ -776,10 +776,10 @@ export const menuSubjectSeedData: SubjectSeedData[] = [
 		parentName: "menu:settings",
 	},
 	{
-		name: "menu:settings:tenants",
+		name: "menu:settings:system",
 		type: "Menu",
-		label: "테넌트 관리",
-		description: "테넌트 관리 권한 (SUPER_ADMIN 전용)",
+		label: "시스템 설정",
+		description: "시스템 설정 관리 권한 (SUPER_ADMIN 전용)",
 		sortOrder: 104,
 		parentName: "menu:settings",
 	},
@@ -1100,17 +1100,17 @@ export const superAdminAbilitySeedData: AbilitySeedData[] = [
 	// 모든 메뉴 MANAGE (2depth - 설정)
 	{
 		roleName: "SUPER_ADMIN",
-		subjectName: "menu:settings:ground",
+		subjectName: "menu:settings:grounds",
 		type: "CAN",
 		action: "MANAGE",
-		description: "Ground 정보 전체 권한",
+		description: "시설 정보 전체 권한",
 	},
 	{
 		roleName: "SUPER_ADMIN",
-		subjectName: "menu:settings:roles",
+		subjectName: "menu:settings:admins",
 		type: "CAN",
 		action: "MANAGE",
-		description: "역할 관리 전체 권한",
+		description: "관리자 관리 전체 권한",
 	},
 	{
 		roleName: "SUPER_ADMIN",
@@ -1121,10 +1121,10 @@ export const superAdminAbilitySeedData: AbilitySeedData[] = [
 	},
 	{
 		roleName: "SUPER_ADMIN",
-		subjectName: "menu:settings:tenants",
+		subjectName: "menu:settings:system",
 		type: "CAN",
 		action: "MANAGE",
-		description: "테넌트 관리 전체 권한",
+		description: "시스템 설정 전체 권한",
 	},
 	{
 		roleName: "SUPER_ADMIN",
@@ -1371,10 +1371,10 @@ export const adminAbilitySeedData: AbilitySeedData[] = [
 	},
 	{
 		roleName: "ADMIN",
-		subjectName: "menu:settings:ground",
+		subjectName: "menu:settings:grounds",
 		type: "CAN",
 		action: "ACCESS",
-		description: "Ground 정보 접근 권한",
+		description: "시설 정보 접근 권한",
 	},
 	{
 		roleName: "ADMIN",
@@ -1386,10 +1386,10 @@ export const adminAbilitySeedData: AbilitySeedData[] = [
 	// 권한 관리 접근 불가 (CAN_NOT)
 	{
 		roleName: "ADMIN",
-		subjectName: "menu:settings:roles",
+		subjectName: "menu:settings:admins",
 		type: "CAN_NOT",
 		action: "ACCESS",
-		description: "역할 관리 접근 불가",
+		description: "관리자 관리 접근 불가",
 	},
 	{
 		roleName: "ADMIN",
@@ -1400,10 +1400,10 @@ export const adminAbilitySeedData: AbilitySeedData[] = [
 	},
 	{
 		roleName: "ADMIN",
-		subjectName: "menu:settings:tenants",
+		subjectName: "menu:settings:system",
 		type: "CAN_NOT",
 		action: "ACCESS",
-		description: "테넌트 관리 접근 불가",
+		description: "시스템 설정 접근 불가",
 	},
 	// 엔티티 권한
 	{
