@@ -89,9 +89,9 @@ function AbilitiesPage() {
 	const { data: subjectsData, isLoading: isLoadingSubjects } =
 		useGetAllSubjects();
 
-	// 역할별 권한 조회 (선택된 역할 기준)
-	// roleId가 필요하지만 현재 API에서 role name으로 조회 가능한지 확인 필요
-	// 우선 임시로 빈 문자열로 설정
+	// 역할별 권한 조회
+	// NOTE: 현재 Roles enum을 사용하고 있지만, API는 실제로 roleId (UUID)를 요구합니다.
+	// 추후 Role name → Role ID 매핑 로직 추가 필요
 	const {
 		data: abilitiesData,
 		isLoading: isLoadingAbilities,
