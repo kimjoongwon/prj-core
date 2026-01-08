@@ -1,5 +1,4 @@
 "use client";
-import { Text } from "@cocrepo/ui";
 import { Card, CardBody, CardHeader } from "@heroui/react";
 
 /**
@@ -9,10 +8,10 @@ export default function NoticesPage() {
 	return (
 		<Card>
 			<CardHeader>
-				<Text variant="h4">공지사항</Text>
+				<h4 className="text-xl font-bold">공지사항</h4>
 			</CardHeader>
 			<CardBody>
-				<Text variant="body1">공지사항 페이지</Text>
+				<p>공지사항 페이지</p>
 			</CardBody>
 		</Card>
 	);

@@ -2,7 +2,6 @@
 
 import { Button } from "../inputs/Button/Button";
 import { Input } from "../inputs/Input";
-import { Text } from "../ui/data-display/Text/Text";
 import { VStack } from "../ui/surfaces/VStack/VStack";
 
 export interface AddressEmailVerifyPageState {
@@ -35,10 +34,10 @@ export const AddressEmailVerifyPage = ({
 	return (
 		<VStack fullWidth gap={8} className="p-4">
 			<VStack fullWidth gap={2}>
-				<Text variant="h3">추가 정보 입력</Text>
-				<Text variant="caption">
+				<h3 className="text-2xl font-bold">추가 정보 입력</h3>
+				<span className="text-sm text-default-500">
 					주소와 이메일 정보를 입력하고 인증해주세요.
-				</Text>
+				</span>
 			</VStack>
 
 			<VStack fullWidth gap={4}>
@@ -69,9 +68,7 @@ export const AddressEmailVerifyPage = ({
 						onPress={onSendEmailVerification}
 						isLoading={isLoading}
 					>
-						<Text variant="body1" className="text-white">
-							이메일 인증번호 발송
-						</Text>
+						<span className="text-white">이메일 인증번호 발송</span>
 					</Button>
 				)}
 
@@ -87,7 +84,7 @@ export const AddressEmailVerifyPage = ({
 				)}
 			</VStack>
 
-			{state.errorMessage && <Text variant="error">{state.errorMessage}</Text>}
+			{state.errorMessage && <span className="text-sm font-medium text-danger">{state.errorMessage}</span>}
 
 			{isEmailCodeSent && (
 				<Button
@@ -97,9 +94,7 @@ export const AddressEmailVerifyPage = ({
 					onPress={onSubmit}
 					isLoading={isLoading}
 				>
-					<Text variant="body1" className="text-white">
-						회원가입 완료
-					</Text>
+					<span className="text-white">회원가입 완료</span>
 				</Button>
 			)}
 		</VStack>

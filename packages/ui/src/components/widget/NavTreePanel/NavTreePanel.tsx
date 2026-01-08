@@ -11,7 +11,6 @@ import type { Selection } from "@react-types/shared";
 import { ChevronRight } from "lucide-react";
 import { observer } from "mobx-react-lite";
 import { renderLucideIcon } from "../../../utils/iconUtils";
-import { Text } from "../../ui/data-display/Text/Text";
 import { VStack } from "../../ui/surfaces/VStack/VStack";
 
 /**
@@ -127,7 +126,7 @@ export const NavTreePanel = observer(
 						)}
 					>
 						{item.icon && renderLucideIcon(item.icon, "h-5 w-5", 20)}
-						<Text>{item.label}</Text>
+						<span>{item.label}</span>
 					</button>
 				))}
 
@@ -215,7 +214,7 @@ export const NavTreePanel = observer(
 													: "text-foreground/60 hover:bg-default-100 hover:text-foreground",
 											)}
 										>
-											<Text>{subItem.label}</Text>
+											<span>{subItem.label}</span>
 										</button>
 									))}
 								</VStack>

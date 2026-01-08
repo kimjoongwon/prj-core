@@ -1,6 +1,5 @@
 "use client";
 
-import { Text } from "@cocrepo/ui";
 import { Card, CardBody, CardHeader, Chip } from "@heroui/react";
 import { Building, Shield } from "lucide-react";
 import type { MemberTenant } from "../../_stores";
@@ -32,10 +31,10 @@ export function MemberTenantInfo({ tenants }: MemberTenantInfoProps) {
 		return (
 			<Card className="border-none shadow-sm">
 				<CardHeader className="flex flex-col items-start gap-2 px-6 pb-0 pt-6">
-					<Text className="text-lg font-semibold">소속 정보</Text>
+					<span className="text-lg font-semibold">소속 정보</span>
 				</CardHeader>
 				<CardBody className="px-6 py-6">
-					<Text className="text-default-500">소속 정보가 없습니다.</Text>
+					<span className="text-default-500">소속 정보가 없습니다.</span>
 				</CardBody>
 			</Card>
 		);
@@ -44,7 +43,7 @@ export function MemberTenantInfo({ tenants }: MemberTenantInfoProps) {
 	return (
 		<Card className="border-none shadow-sm">
 			<CardHeader className="flex flex-col items-start gap-2 px-6 pb-0 pt-6">
-				<Text className="text-lg font-semibold">소속 정보</Text>
+				<span className="text-lg font-semibold">소속 정보</span>
 			</CardHeader>
 			<CardBody className="gap-4 px-6 py-6">
 				{tenants.map((tenant) => (
@@ -58,11 +57,11 @@ export function MemberTenantInfo({ tenants }: MemberTenantInfoProps) {
 							</div>
 							<div className="flex flex-col gap-1">
 								<div className="flex items-center gap-2">
-									<Text className="font-medium">{tenant.space?.name}</Text>
+									<span className="font-medium">{tenant.space?.name}</span>
 								</div>
-								<Text className="text-sm text-default-500">
+								<span className="text-sm text-default-500">
 									역할: {getRoleLabel(tenant.role?.name)}
-								</Text>
+								</span>
 							</div>
 						</div>
 						<div className="flex items-center gap-2">
@@ -72,7 +71,7 @@ export function MemberTenantInfo({ tenants }: MemberTenantInfoProps) {
 								color={getRoleColor(tenant.role?.name)}
 								variant="flat"
 							>
-								<Text>{getRoleLabel(tenant.role?.name)}</Text>
+								<span>{getRoleLabel(tenant.role?.name)}</span>
 							</Chip>
 						</div>
 					</div>

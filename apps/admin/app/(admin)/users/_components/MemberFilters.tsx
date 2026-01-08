@@ -1,6 +1,5 @@
 "use client";
 
-import { Text } from "@cocrepo/ui";
 import {
 	Button,
 	Chip,
@@ -131,7 +130,7 @@ export function MemberFilters({
 						onPress={onClickResetButton}
 						startContent={<RotateCcw className="h-4 w-4" />}
 					>
-						<Text>초기화</Text>
+						<span>초기화</span>
 					</Button>
 				)}
 			</div>
@@ -141,7 +140,7 @@ export function MemberFilters({
 				<div className="flex flex-wrap gap-2">
 					{filters.search && (
 						<Chip variant="flat" onClose={() => onChangeSearch("")} size="sm">
-							<Text>검색: {filters.search}</Text>
+							<span>검색: {filters.search}</span>
 						</Chip>
 					)}
 					{filters.roles.map((role) => (
@@ -154,7 +153,7 @@ export function MemberFilters({
 							}
 							size="sm"
 						>
-							<Text>{ROLE_OPTIONS.find((o) => o.value === role)?.label}</Text>
+							<span>{ROLE_OPTIONS.find((o) => o.value === role)?.label}</span>
 						</Chip>
 					))}
 					{filters.status !== "all" && (
@@ -164,9 +163,9 @@ export function MemberFilters({
 							onClose={() => onChangeStatusFilter("all")}
 							size="sm"
 						>
-							<Text>
+							<span>
 								{STATUS_OPTIONS.find((o) => o.value === filters.status)?.label}
-							</Text>
+							</span>
 						</Chip>
 					)}
 				</div>

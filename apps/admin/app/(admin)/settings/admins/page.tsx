@@ -1,5 +1,4 @@
 "use client";
-import { Text } from "@cocrepo/ui";
 import { Card, CardBody, CardHeader } from "@heroui/react";
 
 /**
@@ -9,10 +8,10 @@ export default function AdminsSettingsPage() {
 	return (
 		<Card>
 			<CardHeader>
-				<Text variant="h4">관리자 계정</Text>
+				<h4 className="text-xl font-bold">관리자 계정</h4>
 			</CardHeader>
 			<CardBody>
-				<Text variant="body1">관리자 계정 페이지</Text>
+				<p>관리자 계정 페이지</p>
 			</CardBody>
 		</Card>
 	);

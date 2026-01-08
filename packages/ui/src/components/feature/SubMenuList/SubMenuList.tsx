@@ -4,7 +4,6 @@ import { useNavigationStore } from "@cocrepo/store";
 import { cn } from "@heroui/react";
 import { observer } from "mobx-react-lite";
 import { useSyncExternalStore } from "react";
-import { Text } from "../../ui/data-display/Text/Text";
 import { VStack } from "../../ui/surfaces/VStack/VStack";
 
 export interface SubMenuListProps {
@@ -77,7 +76,7 @@ export const SubMenuList = observer(
 									: "text-foreground/70 hover:bg-default-100 hover:text-foreground",
 							)}
 						>
-							<Text variant="body1">{subNavItem.label}</Text>
+							<span>{subNavItem.label}</span>
 						</button>
 					))}
 				</VStack>

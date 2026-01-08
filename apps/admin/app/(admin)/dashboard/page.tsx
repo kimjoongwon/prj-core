@@ -1,6 +1,5 @@
 "use client";
 
-import { Text } from "@cocrepo/ui";
 import { Card, CardBody } from "@heroui/react";
 import {
 	Area,
@@ -69,10 +68,10 @@ export default function DashboardPage() {
 		<div className="flex flex-col gap-6 p-6">
 			{/* 헤더 */}
 			<div className="flex flex-col gap-2">
-				<Text className="text-3xl font-bold">대시보드</Text>
-				<Text className="text-default-500">
+				<h1 className="text-3xl font-bold">대시보드</h1>
+				<p className="text-default-500">
 					시스템 현황을 한눈에 확인하세요
-				</Text>
+				</p>
 			</div>
 
 			{/* 통계 카드 */}
@@ -113,10 +112,10 @@ export default function DashboardPage() {
 				<Card>
 					<CardBody className="gap-4 p-6">
 						<div className="flex flex-col gap-1">
-							<Text className="text-lg font-semibold">주간 회원 가입 추이</Text>
-							<Text className="text-sm text-default-500">
+							<h3 className="text-lg font-semibold">주간 회원 가입 추이</h3>
+							<p className="text-sm text-default-500">
 								최근 7일간 신규 회원 가입 현황
-							</Text>
+							</p>
 						</div>
 						<ResponsiveContainer width="100%" height={300}>
 							<AreaChart data={weeklySignupData}>
@@ -152,10 +151,10 @@ export default function DashboardPage() {
 				<Card>
 					<CardBody className="gap-4 p-6">
 						<div className="flex flex-col gap-1">
-							<Text className="text-lg font-semibold">월별 예약 추이</Text>
-							<Text className="text-sm text-default-500">
+							<h3 className="text-lg font-semibold">월별 예약 추이</h3>
+							<p className="text-sm text-default-500">
 								최근 6개월간 예약 건수
-							</Text>
+							</p>
 						</div>
 						<ResponsiveContainer width="100%" height={300}>
 							<BarChart data={monthlyReservationData}>
@@ -179,10 +178,10 @@ export default function DashboardPage() {
 				<Card>
 					<CardBody className="gap-4 p-6">
 						<div className="flex flex-col gap-1">
-							<Text className="text-lg font-semibold">예약 상태 분포</Text>
-							<Text className="text-sm text-default-500">
+							<h3 className="text-lg font-semibold">예약 상태 분포</h3>
+							<p className="text-sm text-default-500">
 								현재 예약 상태별 분포 현황
-							</Text>
+							</p>
 						</div>
 						<ResponsiveContainer width="100%" height={300}>
 							<PieChart>
@@ -217,10 +216,10 @@ export default function DashboardPage() {
 				<Card>
 					<CardBody className="gap-4 p-6">
 						<div className="flex flex-col gap-1">
-							<Text className="text-lg font-semibold">일일 방문자 추이</Text>
-							<Text className="text-sm text-default-500">
+							<h3 className="text-lg font-semibold">일일 방문자 추이</h3>
+							<p className="text-sm text-default-500">
 								오늘 시간대별 방문자 수
-							</Text>
+							</p>
 						</div>
 						<ResponsiveContainer width="100%" height={300}>
 							<LineChart data={dailyVisitorData}>
@@ -270,14 +269,14 @@ function StatCard({ title, value, change, changeType, icon }: StatCardProps) {
 			<CardBody className="gap-3 p-6">
 				<div className="flex items-start justify-between">
 					<div className="flex flex-col gap-1">
-						<Text className="text-sm text-default-500">{title}</Text>
-						<Text className="text-2xl font-bold">{value}</Text>
+						<span className="text-sm text-default-500">{title}</span>
+						<span className="text-2xl font-bold">{value}</span>
 					</div>
 					<div className="text-3xl">{icon}</div>
 				</div>
-				<Text className={`text-sm font-medium ${changeColor}`}>
+				<span className={`text-sm font-medium ${changeColor}`}>
 					{change} <span className="text-default-400">vs 지난 달</span>
-				</Text>
+				</span>
 			</CardBody>
 		</Card>
 	);

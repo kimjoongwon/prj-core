@@ -184,7 +184,7 @@ grep -E 'className="[^"]*\b(flex|grid|gap-|mt-|mb-|pt-|pb-|px-|py-|rounded|borde
 | `className="flex items-center gap-2"` | ❌ 위반 | `<HStack gap={2}>` 사용 |
 | `className="flex flex-col gap-4"` | ❌ 위반 | `<VStack gap={4}>` 사용 |
 | `className="mt-4 mb-2"` | ❌ 위반 | `<Spacer y={4} />` 사용 |
-| `className="text-sm font-medium"` | ❌ 위반 | `<Text size="sm" weight="medium">` 사용 |
+| `className="text-sm font-medium"` | ✅ 허용 | 텍스트 스타일링은 className 허용 |
 | `className="rounded-lg border bg-default-50"` | ❌ 위반 | HeroUI Card 또는 기존 컴포넌트 사용 |
 | HeroUI 컴포넌트 내장 className (variant 등) | ✅ 허용 | - |
 

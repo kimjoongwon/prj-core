@@ -137,6 +137,20 @@ export type { StatusBadgeProps } from "./StatusBadge";
 | **Pure UI** | 상태/API 호출 금지, props로만 동작 |
 | **displayName** | 디버깅을 위해 displayName 설정 |
 
+### Text 컴포넌트 사용 제한 (Critical)
+
+**Text 컴포넌트를 Button, Chip 등 단독으로 텍스트를 받는 컴포넌트의 children으로 사용하면 안 됩니다.**
+
+```tsx
+// ❌ 금지 - 테마 깨짐
+<Button><Text>버튼</Text></Button>
+<Chip><Text>칩</Text></Chip>
+
+// ✅ 올바른 사용
+<Button>버튼</Button>
+<Chip>칩</Chip>
+```
+
 ### memo 사용 규칙
 
 | 상황 | memo 필요 여부 | 이유 |

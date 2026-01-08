@@ -1,6 +1,5 @@
 "use client";
 
-import { Text } from "@cocrepo/ui";
 import { Button, Card, CardBody } from "@heroui/react";
 import { UserPlus } from "lucide-react";
 import { observer } from "mobx-react-lite";
@@ -152,17 +151,17 @@ function MembersPage() {
 			{/* 헤더 */}
 			<div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
 				<div className="flex flex-col gap-1">
-					<Text className="text-2xl font-bold md:text-3xl">회원 관리</Text>
-					<Text className="text-default-500">
+					<h1 className="text-2xl font-bold md:text-3xl">회원 관리</h1>
+					<p className="text-default-500">
 						회원 정보를 조회하고 관리합니다
-					</Text>
+					</p>
 				</div>
 				<Button
 					color="primary"
 					startContent={<UserPlus className="h-4 w-4" />}
 					onPress={onClickCreateMemberButton}
 				>
-					<Text>회원 등록</Text>
+					<span>회원 등록</span>
 				</Button>
 			</div>
 
@@ -185,24 +184,24 @@ function MembersPage() {
 			{/* 에러 표시 */}
 			{error && (
 				<div className="rounded-lg bg-danger-50 p-4">
-					<Text className="text-danger">
+					<span className="text-danger">
 						데이터를 불러오는 중 오류가 발생했습니다.
-					</Text>
+					</span>
 				</div>
 			)}
 
 			{/* 선택된 항목 정보 */}
 			{store.selectedCount > 0 && (
 				<div className="flex items-center gap-4 rounded-lg bg-primary-50 p-4">
-					<Text className="font-medium text-primary">
+					<span className="font-medium text-primary">
 						{store.selectedCount}개 선택됨
-					</Text>
+					</span>
 					<div className="flex gap-2">
 						<Button size="sm" variant="flat" color="primary">
-							<Text>역할 변경</Text>
+							<span>역할 변경</span>
 						</Button>
 						<Button size="sm" variant="flat" color="danger">
-							<Text>삭제</Text>
+							<span>삭제</span>
 						</Button>
 					</div>
 				</div>

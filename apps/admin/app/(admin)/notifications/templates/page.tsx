@@ -1,5 +1,4 @@
 "use client";
-import { Text } from "@cocrepo/ui";
 import { Card, CardBody, CardHeader } from "@heroui/react";
 
 /**
@@ -9,10 +8,10 @@ export default function NotificationTemplatesPage() {
 	return (
 		<Card>
 			<CardHeader>
-				<Text variant="h4">알림 템플릿</Text>
+				<h4 className="text-xl font-bold">알림 템플릿</h4>
 			</CardHeader>
 			<CardBody>
-				<Text variant="body1">알림 템플릿 페이지</Text>
+				<p>알림 템플릿 페이지</p>
 			</CardBody>
 		</Card>
 	);

@@ -1,5 +1,4 @@
 "use client";
-import { Text } from "@cocrepo/ui";
 import { Card, CardBody, CardHeader } from "@heroui/react";
 
 /**
@@ -9,10 +8,10 @@ export default function OneOnOneInquiryPage() {
 	return (
 		<Card>
 			<CardHeader>
-				<Text variant="h4">1:1 문의</Text>
+				<h4 className="text-xl font-bold">1:1 문의</h4>
 			</CardHeader>
 			<CardBody>
-				<Text variant="body1">1:1 문의 페이지</Text>
+				<p>1:1 문의 페이지</p>
 			</CardBody>
 		</Card>
 	);

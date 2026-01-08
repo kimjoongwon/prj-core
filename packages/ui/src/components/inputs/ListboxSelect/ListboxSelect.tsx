@@ -1,5 +1,6 @@
 import type { ListboxProps as HeroListboxProps } from "@heroui/react";
 import { Listbox as HeroListbox, ListboxItem } from "@heroui/react";
+import type { ReactNode } from "react";
 
 export type ListboxSelectProps<_T> = Omit<
 	HeroListboxProps,
@@ -13,9 +14,6 @@ export type ListboxSelectProps<_T> = Omit<
 		  }[]
 		| undefined;
 };
-
-import type { ReactNode } from "react";
-import { Text } from "../../ui/data-display/Text/Text";
 
 export const ListboxSelect = <T extends object>(
 	props: ListboxSelectProps<T>,
@@ -39,9 +37,9 @@ export const ListboxSelect = <T extends object>(
 		<ListboxWrapper>
 			{title && (
 				<div className="mb-3">
-					<Text variant="h6" className="font-semibold">
+					<h6 className="text-base font-bold font-semibold">
 						{title}
-					</Text>
+					</h6>
 				</div>
 			)}
 			<HeroListbox

@@ -1,7 +1,6 @@
 "use client";
 
 import type { UserStatsDto } from "@cocrepo/api";
-import { Text } from "@cocrepo/ui";
 import { Card, CardBody, Skeleton } from "@heroui/react";
 
 interface MemberStatsCardsProps {
@@ -34,11 +33,11 @@ function StatCard({ title, value, icon, color, isLoading }: StatCardProps) {
 					{icon}
 				</div>
 				<div className="flex flex-col">
-					<Text className="text-sm text-default-500">{title}</Text>
+					<span className="text-sm text-default-500">{title}</span>
 					{isLoading ? (
 						<Skeleton className="h-7 w-16 rounded" />
 					) : (
-						<Text className="text-2xl font-bold">{value.toLocaleString()}</Text>
+						<span className="text-2xl font-bold">{value.toLocaleString()}</span>
 					)}
 				</div>
 			</CardBody>

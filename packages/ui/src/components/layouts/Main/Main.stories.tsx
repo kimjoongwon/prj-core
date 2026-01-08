@@ -1,7 +1,6 @@
 import { Card, CardBody } from "@heroui/react";
 import type { Meta, StoryObj } from "@storybook/react";
 import { Button } from "../../inputs/Button/Button";
-import { Text } from "../../ui/data-display/Text/Text";
 import { HStack } from "../../ui/surfaces/HStack/HStack";
 import { VStack } from "../../ui/surfaces/VStack/VStack";
 import { Main } from "./Main";
@@ -23,12 +22,12 @@ type Story = StoryObj<typeof meta>;
 const SampleDashboardContent = () => (
 	<VStack gap={6} className="p-6">
 		<div>
-			<Text variant="h4" className="mb-2">
+			<h4 className="text-xl font-bold mb-2">
 				Admin Dashboard
-			</Text>
-			<Text variant="body1" className="text-default-600">
+			</h4>
+			<p className="text-default-600">
 				Welcome to the admin panel. Here you can manage your application.
-			</Text>
+			</p>
 		</div>
 
 		<div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4">
@@ -41,12 +40,12 @@ const SampleDashboardContent = () => (
 				<Card key={index}>
 					<CardBody className="text-center">
 						<div className="mb-2 text-2xl">{stat.icon}</div>
-						<Text variant="h5" className="mb-1">
+						<h5 className="text-lg font-bold mb-1">
 							{stat.value}
-						</Text>
-						<Text variant="body2" className="text-default-500">
+						</h5>
+						<p className="text-sm text-default-500">
 							{stat.title}
-						</Text>
+						</p>
 					</CardBody>
 				</Card>
 			))}
@@ -54,9 +53,9 @@ const SampleDashboardContent = () => (
 
 		<Card>
 			<CardBody>
-				<Text variant="h6" className="mb-4">
+				<h6 className="text-base font-bold mb-4">
 					Recent Activity
-				</Text>
+				</h6>
 				<VStack gap={3}>
 					{[
 						"New user registration: john@example.com",
@@ -66,9 +65,9 @@ const SampleDashboardContent = () => (
 					].map((activity, index) => (
 						<HStack key={index} gap={3} alignItems="center">
 							<div className="h-2 w-2 rounded-full bg-primary"></div>
-							<Text variant="body2" className="text-default-600">
+							<p className="text-sm text-default-600">
 								{activity}
-							</Text>
+							</p>
 						</HStack>
 					))}
 				</VStack>
@@ -79,9 +78,9 @@ const SampleDashboardContent = () => (
 
 const SampleFormContent = () => (
 	<VStack gap={4} className="p-6">
-		<Text variant="h5" className="mb-4">
+		<h5 className="text-lg font-bold mb-4">
 			User Settings
-		</Text>
+		</h5>
 
 		<div className="space-y-4">
 			<div>
@@ -124,7 +123,7 @@ const SampleFormContent = () => (
 const SampleTableContent = () => (
 	<VStack gap={4} className="p-6">
 		<HStack justifyContent="between" alignItems="center">
-			<Text variant="h5">User Management</Text>
+			<h5 className="text-lg font-bold">User Management</h5>
 			<Button color="primary" size="sm">
 				Add User
 			</Button>
@@ -232,14 +231,14 @@ export const EmptyLayout: Story = {
 		children: (
 			<VStack gap={4} alignItems="center" className="p-12 text-center">
 				<div className="flex h-16 w-16 items-center justify-center rounded-full bg-default-100">
-					<Text variant="h4" className="text-default-400">
+					<h4 className="text-xl font-bold text-default-400">
 						📄
-					</Text>
+					</h4>
 				</div>
-				<Text variant="h5">No Content</Text>
-				<Text variant="body1" className="max-w-md text-default-600">
+				<h5 className="text-lg font-bold">No Content</h5>
+				<p className="max-w-md text-default-600">
 					This is how the main layout looks when there's no content to display.
-				</Text>
+				</p>
 				<Button color="primary">Add Content</Button>
 			</VStack>
 		),
@@ -250,13 +249,13 @@ export const SimpleContent: Story = {
 	args: {
 		children: (
 			<div className="p-6">
-				<Text variant="h6" className="mb-4">
+				<h6 className="text-base font-bold mb-4">
 					Simple Content Area
-				</Text>
-				<Text variant="body1" className="text-default-600">
+				</h6>
+				<p className="text-default-600">
 					This shows the admin main layout with simple text content. The layout
 					provides a bordered container with margin and rounded corners.
-				</Text>
+				</p>
 			</div>
 		),
 	},

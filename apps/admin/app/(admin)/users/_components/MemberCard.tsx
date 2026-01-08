@@ -1,6 +1,5 @@
 "use client";
 
-import { Text } from "@cocrepo/ui";
 import {
 	Avatar,
 	Button,
@@ -97,7 +96,7 @@ export function MemberCard({
 				{/* 정보 */}
 				<div className="flex flex-1 flex-col gap-1">
 					<div className="flex items-center justify-between">
-						<Text className="font-semibold">{member.name}</Text>
+						<span className="font-semibold">{member.name}</span>
 						<Dropdown>
 							<DropdownTrigger>
 								<Button isIconOnly variant="light" size="sm">
@@ -110,14 +109,14 @@ export function MemberCard({
 									startContent={<Eye className="h-4 w-4" />}
 									onPress={() => onClickView(member.id)}
 								>
-									<Text>상세 보기</Text>
+									<span>상세 보기</span>
 								</DropdownItem>
 								<DropdownItem
 									key="edit"
 									startContent={<Edit className="h-4 w-4" />}
 									onPress={() => onClickEdit(member.id)}
 								>
-									<Text>수정</Text>
+									<span>수정</span>
 								</DropdownItem>
 								<DropdownItem
 									key="delete"
@@ -126,23 +125,23 @@ export function MemberCard({
 									color="danger"
 									onPress={() => onClickDelete(member.id)}
 								>
-									<Text>삭제</Text>
+									<span>삭제</span>
 								</DropdownItem>
 							</DropdownMenu>
 						</Dropdown>
 					</div>
-					<Text className="text-sm text-default-500">{member.email}</Text>
-					<Text className="text-sm text-default-400">{member.phone}</Text>
+					<span className="text-sm text-default-500">{member.email}</span>
+					<span className="text-sm text-default-400">{member.phone}</span>
 					<div className="mt-2 flex items-center gap-2">
 						<Chip size="sm" color={getRoleColor(roleName)} variant="flat">
-							<Text>{getRoleLabel(roleName)}</Text>
+							<span>{getRoleLabel(roleName)}</span>
 						</Chip>
 						<Chip
 							size="sm"
 							color={getStatusColor(member.removedAt)}
 							variant="dot"
 						>
-							<Text>{getStatusLabel(member.removedAt)}</Text>
+							<span>{getStatusLabel(member.removedAt)}</span>
 						</Chip>
 					</div>
 				</div>
@@ -174,10 +173,10 @@ export function MemberCardList({
 	if (members.length === 0) {
 		return (
 			<div className="flex flex-col items-center justify-center py-12">
-				<Text className="text-lg text-default-400">회원이 없습니다</Text>
-				<Text className="text-sm text-default-300">
+				<span className="text-lg text-default-400">회원이 없습니다</span>
+				<span className="text-sm text-default-300">
 					검색 조건을 변경하거나 새 회원을 등록해주세요
-				</Text>
+				</span>
 			</div>
 		);
 	}

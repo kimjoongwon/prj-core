@@ -1,6 +1,5 @@
 "use client";
 
-import { Text } from "@cocrepo/ui";
 import {
 	Button,
 	Input,
@@ -204,10 +203,10 @@ export function MemberCreateModal({
 		>
 			<ModalContent>
 				<ModalHeader className="flex flex-col gap-1">
-					<Text className="text-xl font-semibold">회원 등록</Text>
-					<Text className="text-sm text-default-500">
+					<span className="text-xl font-semibold">회원 등록</span>
+					<span className="text-sm text-default-500">
 						새로운 회원 정보를 입력해주세요.
-					</Text>
+					</span>
 				</ModalHeader>
 				<ModalBody className="gap-4">
 					{/* 이름 */}
@@ -319,14 +318,14 @@ export function MemberCreateModal({
 						onPress={handleClose}
 						isDisabled={isSubmitting}
 					>
-						<Text>취소</Text>
+						<span>취소</span>
 					</Button>
 					<Button
 						color="primary"
 						onPress={handleSubmit}
 						isLoading={isSubmitting}
 					>
-						<Text>등록</Text>
+						<span>등록</span>
 					</Button>
 				</ModalFooter>
 			</ModalContent>

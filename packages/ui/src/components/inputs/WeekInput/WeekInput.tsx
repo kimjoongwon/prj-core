@@ -1,5 +1,4 @@
 import { Chip } from "@heroui/chip";
-import { Text } from "../../ui/data-display/Text/Text";
 import { HStack } from "../../ui/surfaces/HStack/HStack";
 import { VStack } from "../../ui/surfaces/VStack/VStack";
 
@@ -61,7 +60,7 @@ export const WeekInput = (props: WeekInputProps) => {
 
 	return (
 		<VStack className="space-y-2" {...rest}>
-			<Text variant="caption">반복 요일</Text>
+			<span className="text-sm text-default-500">반복 요일</span>
 			<HStack className="space-x-2">
 				{dayOptions.map((day) => {
 					return (

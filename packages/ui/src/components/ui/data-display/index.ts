@@ -12,6 +12,5 @@ export * from "./List/List";
 export * from "./Logo/Logo";
 export { SortableMedia } from "./SortableMedia/SortableMedia";
 export * from "./Table/Table";
-export * from "./Text/Text";
 export * from "./User/User";
 export { VideoPlayer } from "./VideoPlayer/VideoPlayer";

@@ -2,7 +2,6 @@
 
 import { Button } from "../inputs/Button/Button";
 import { Input } from "../inputs/Input";
-import { Text } from "../ui/data-display/Text/Text";
 import { VStack } from "../ui/surfaces/VStack/VStack";
 
 export interface PasswordInputPageState {
@@ -30,8 +29,8 @@ export const PasswordInputPage = ({
 	return (
 		<VStack fullWidth gap={8} className="p-4">
 			<VStack fullWidth gap={2}>
-				<Text variant="h3">비밀번호 설정</Text>
-				<Text variant="caption">사용하실 비밀번호를 입력해주세요.</Text>
+				<h3 className="text-2xl font-bold">비밀번호 설정</h3>
+				<span className="text-sm text-default-500">사용하실 비밀번호를 입력해주세요.</span>
 			</VStack>
 
 			<VStack fullWidth gap={4}>
@@ -53,7 +52,7 @@ export const PasswordInputPage = ({
 				/>
 			</VStack>
 
-			{state.errorMessage && <Text variant="error">{state.errorMessage}</Text>}
+			{state.errorMessage && <span className="text-sm font-medium text-danger">{state.errorMessage}</span>}
 
 			<Button
 				color="primary"
@@ -62,9 +61,7 @@ export const PasswordInputPage = ({
 				onPress={onSubmit}
 				isLoading={isLoading}
 			>
-				<Text variant="body1" className="text-white">
-					다음
-				</Text>
+				<span className="text-white">다음</span>
 			</Button>
 		</VStack>
 	);

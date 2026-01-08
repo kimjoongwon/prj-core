@@ -1,5 +1,4 @@
 import { Button, Card, CardBody } from "@heroui/react";
-import { Text } from "../../ui/data-display/Text/Text";
 
 export interface UnsavedChangesIndicatorProps {
 	/** 표시 여부 */
@@ -38,9 +37,9 @@ export const UnsavedChangesIndicator = ({
 		<div className="fixed bottom-4 left-1/2 z-50 -translate-x-1/2 transform">
 			<Card className="border border-primary-200 bg-primary-50 shadow-lg">
 				<CardBody className="flex flex-row items-center gap-4 px-4 py-3">
-					<Text className="text-primary" as="span">
+					<span className="text-primary">
 						저장되지 않은 변경사항이 있습니다
-					</Text>
+					</span>
 					<div className="flex gap-2">
 						<Button
 							size="sm"
@@ -48,7 +47,7 @@ export const UnsavedChangesIndicator = ({
 							onPress={onReset}
 							isDisabled={isSaving}
 						>
-							<Text as="span">초기화</Text>
+							<span>초기화</span>
 						</Button>
 						<Button
 							size="sm"
@@ -56,7 +55,7 @@ export const UnsavedChangesIndicator = ({
 							onPress={onSave}
 							isDisabled={isSaving}
 						>
-							<Text as="span">{isSaving ? "저장 중..." : "저장"}</Text>
+							<span>{isSaving ? "저장 중..." : "저장"}</span>
 						</Button>
 					</div>
 				</CardBody>

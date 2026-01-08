@@ -406,6 +406,32 @@ export interface ButtonProps {
 - **TypeScript 필수** - Props 인터페이스 export
 - **Storybook 필수** - 최소 2개 이상 variant 제공
 
+### Text 컴포넌트 사용 제한 (Critical)
+
+**Text 컴포넌트를 Button, Chip 등 단독으로 텍스트를 받는 컴포넌트의 children으로 사용하면 안 됩니다.**
+
+이런 컴포넌트들은 자체적인 텍스트 스타일링을 가지고 있어서, Text 컴포넌트를 넣으면 테마가 깨집니다.
+
+```tsx
+// ❌ 금지 - 테마 깨짐
+<Button>
+  <Text>버튼 텍스트</Text>
+</Button>
+
+<Chip>
+  <Text>칩 텍스트</Text>
+</Chip>
+
+// ✅ 올바른 사용 - 직접 문자열 전달
+<Button>버튼 텍스트</Button>
+
+<Chip>칩 텍스트</Chip>
+```
+
+**Text 사용 가능한 경우:**
+- 레이아웃 컴포넌트 내부 (`VStack`, `HStack`, `div` 등)
+- 독립적인 텍스트 표시가 필요한 곳
+
 ---
 
 ## 공용 패키지 네이밍 규칙 (Critical)

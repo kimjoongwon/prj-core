@@ -1,6 +1,5 @@
 "use client";
 
-import { Text } from "@cocrepo/ui";
 import {
 	Avatar,
 	Button,
@@ -151,10 +150,10 @@ export function MemberTable({
 	if (members.length === 0) {
 		return (
 			<div className="flex flex-col items-center justify-center py-12">
-				<Text className="text-lg text-default-400">회원이 없습니다</Text>
-				<Text className="text-sm text-default-300">
+				<span className="text-lg text-default-400">회원이 없습니다</span>
+				<span className="text-sm text-default-300">
 					검색 조건을 변경하거나 새 회원을 등록해주세요
-				</Text>
+				</span>
 			</div>
 		);
 	}
@@ -181,12 +180,12 @@ export function MemberTable({
 							onClick={() => onClickSort("seq")}
 							className="flex items-center gap-1"
 						>
-							<Text>번호</Text>
+							<span>번호</span>
 							<SortIcon field="seq" sorting={sorting} />
 						</button>
 					</TableColumn>
 					<TableColumn width={60}>
-						<Text>프로필</Text>
+						<span>프로필</span>
 					</TableColumn>
 					<TableColumn width={120}>
 						<button
@@ -194,7 +193,7 @@ export function MemberTable({
 							onClick={() => onClickSort("name")}
 							className="flex items-center gap-1"
 						>
-							<Text>이름</Text>
+							<span>이름</span>
 							<SortIcon field="name" sorting={sorting} />
 						</button>
 					</TableColumn>
@@ -204,18 +203,18 @@ export function MemberTable({
 							onClick={() => onClickSort("email")}
 							className="flex items-center gap-1"
 						>
-							<Text>이메일</Text>
+							<span>이메일</span>
 							<SortIcon field="email" sorting={sorting} />
 						</button>
 					</TableColumn>
 					<TableColumn width={140}>
-						<Text>전화번호</Text>
+						<span>전화번호</span>
 					</TableColumn>
 					<TableColumn width={100}>
-						<Text>역할</Text>
+						<span>역할</span>
 					</TableColumn>
 					<TableColumn width={80}>
-						<Text>상태</Text>
+						<span>상태</span>
 					</TableColumn>
 					<TableColumn width={120}>
 						<button
@@ -223,12 +222,12 @@ export function MemberTable({
 							onClick={() => onClickSort("createdAt")}
 							className="flex items-center gap-1"
 						>
-							<Text>가입일</Text>
+							<span>가입일</span>
 							<SortIcon field="createdAt" sorting={sorting} />
 						</button>
 					</TableColumn>
 					<TableColumn width={100}>
-						<Text>액션</Text>
+						<span>액션</span>
 					</TableColumn>
 				</TableHeader>
 				<TableBody>
@@ -243,7 +242,7 @@ export function MemberTable({
 									/>
 								</TableCell>
 								<TableCell>
-									<Text className="text-default-500">{member.seq}</Text>
+									<span className="text-default-500">{member.seq}</span>
 								</TableCell>
 								<TableCell>
 									<Avatar
@@ -254,17 +253,17 @@ export function MemberTable({
 									/>
 								</TableCell>
 								<TableCell>
-									<Text className="font-medium">{member.name}</Text>
+									<span className="font-medium">{member.name}</span>
 								</TableCell>
 								<TableCell>
-									<Text className="text-default-500">{member.email}</Text>
+									<span className="text-default-500">{member.email}</span>
 								</TableCell>
 								<TableCell>
-									<Text className="text-default-500">{member.phone}</Text>
+									<span className="text-default-500">{member.phone}</span>
 								</TableCell>
 								<TableCell>
 									<Chip size="sm" color={getRoleColor(roleName)} variant="flat">
-										<Text>{getRoleLabel(roleName)}</Text>
+										<span>{getRoleLabel(roleName)}</span>
 									</Chip>
 								</TableCell>
 								<TableCell>
@@ -273,13 +272,13 @@ export function MemberTable({
 										color={getStatusColor(member.removedAt)}
 										variant="dot"
 									>
-										<Text>{getStatusLabel(member.removedAt)}</Text>
+										<span>{getStatusLabel(member.removedAt)}</span>
 									</Chip>
 								</TableCell>
 								<TableCell>
-									<Text className="text-default-500">
+									<span className="text-default-500">
 										{formatDate(member.createdAt)}
-									</Text>
+									</span>
 								</TableCell>
 								<TableCell>
 									<Dropdown>
@@ -294,14 +293,14 @@ export function MemberTable({
 												startContent={<Eye className="h-4 w-4" />}
 												onPress={() => onClickViewMember(member.id)}
 											>
-												<Text>상세 보기</Text>
+												<span>상세 보기</span>
 											</DropdownItem>
 											<DropdownItem
 												key="edit"
 												startContent={<Edit className="h-4 w-4" />}
 												onPress={() => onClickEditMember(member.id)}
 											>
-												<Text>수정</Text>
+												<span>수정</span>
 											</DropdownItem>
 											<DropdownItem
 												key="delete"
@@ -310,7 +309,7 @@ export function MemberTable({
 												color="danger"
 												onPress={() => onClickDeleteMember(member.id)}
 											>
-												<Text>삭제</Text>
+												<span>삭제</span>
 											</DropdownItem>
 										</DropdownMenu>
 									</Dropdown>
@@ -323,9 +322,9 @@ export function MemberTable({
 
 			{/* 페이지네이션 */}
 			<div className="flex items-center justify-between px-2">
-				<Text className="text-sm text-default-500">
+				<span className="text-sm text-default-500">
 					총 {pagination.total.toLocaleString()}건
-				</Text>
+				</span>
 				<Pagination
 					total={totalPages}
 					page={pagination.page}

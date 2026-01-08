@@ -1,6 +1,5 @@
 "use client";
 
-import { Text } from "@cocrepo/ui";
 import {
 	Avatar,
 	Card,
@@ -76,7 +75,7 @@ export function MemberBasicInfo({ member }: MemberBasicInfoProps) {
 	return (
 		<Card className="border-none shadow-sm">
 			<CardHeader className="flex flex-col items-start gap-2 px-6 pb-0 pt-6">
-				<Text className="text-lg font-semibold">기본 정보</Text>
+				<span className="text-lg font-semibold">기본 정보</span>
 			</CardHeader>
 			<CardBody className="gap-6 px-6 py-6">
 				{/* 프로필 영역 */}
@@ -90,20 +89,20 @@ export function MemberBasicInfo({ member }: MemberBasicInfoProps) {
 					/>
 					<div className="flex flex-col gap-2">
 						<div className="flex items-center gap-2">
-							<Text className="text-xl font-bold">{member.name}</Text>
+							<span className="text-xl font-bold">{member.name}</span>
 							<Chip size="sm" color={getRoleColor(roleName)} variant="flat">
-								<Text>{getRoleLabel(roleName)}</Text>
+								<span>{getRoleLabel(roleName)}</span>
 							</Chip>
 							<Chip
 								size="sm"
 								color={getStatusColor(member.removedAt)}
 								variant="dot"
 							>
-								<Text>{getStatusLabel(member.removedAt)}</Text>
+								<span>{getStatusLabel(member.removedAt)}</span>
 							</Chip>
 						</div>
 						{profile?.nickname && (
-							<Text className="text-default-500">@{profile.nickname}</Text>
+							<span className="text-default-500">@{profile.nickname}</span>
 						)}
 					</div>
 				</div>
@@ -117,8 +116,8 @@ export function MemberBasicInfo({ member }: MemberBasicInfoProps) {
 							<Mail className="h-5 w-5 text-primary" />
 						</div>
 						<div className="flex flex-col">
-							<Text className="text-sm text-default-500">이메일</Text>
-							<Text className="font-medium">{member.email}</Text>
+							<span className="text-sm text-default-500">이메일</span>
+							<span className="font-medium">{member.email}</span>
 						</div>
 					</div>
 
@@ -127,8 +126,8 @@ export function MemberBasicInfo({ member }: MemberBasicInfoProps) {
 							<Phone className="h-5 w-5 text-success" />
 						</div>
 						<div className="flex flex-col">
-							<Text className="text-sm text-default-500">전화번호</Text>
-							<Text className="font-medium">{member.phone || "-"}</Text>
+							<span className="text-sm text-default-500">전화번호</span>
+							<span className="font-medium">{member.phone || "-"}</span>
 						</div>
 					</div>
 
@@ -137,8 +136,8 @@ export function MemberBasicInfo({ member }: MemberBasicInfoProps) {
 							<User className="h-5 w-5 text-warning" />
 						</div>
 						<div className="flex flex-col">
-							<Text className="text-sm text-default-500">회원번호</Text>
-							<Text className="font-medium">#{member.seq}</Text>
+							<span className="text-sm text-default-500">회원번호</span>
+							<span className="font-medium">#{member.seq}</span>
 						</div>
 					</div>
 
@@ -147,10 +146,10 @@ export function MemberBasicInfo({ member }: MemberBasicInfoProps) {
 							<Calendar className="h-5 w-5 text-secondary" />
 						</div>
 						<div className="flex flex-col">
-							<Text className="text-sm text-default-500">가입일</Text>
-							<Text className="font-medium">
+							<span className="text-sm text-default-500">가입일</span>
+							<span className="font-medium">
 								{formatDate(member.createdAt)}
-							</Text>
+							</span>
 						</div>
 					</div>
 				</div>
@@ -160,17 +159,17 @@ export function MemberBasicInfo({ member }: MemberBasicInfoProps) {
 				{/* 추가 정보 */}
 				<div className="grid gap-4 sm:grid-cols-2">
 					<div className="flex flex-col gap-1">
-						<Text className="text-sm text-default-500">최근 수정일</Text>
-						<Text className="font-medium">
+						<span className="text-sm text-default-500">최근 수정일</span>
+						<span className="font-medium">
 							{formatDateTime(member.updatedAt)}
-						</Text>
+						</span>
 					</div>
 					{member.removedAt && (
 						<div className="flex flex-col gap-1">
-							<Text className="text-sm text-default-500">삭제일</Text>
-							<Text className="font-medium text-danger">
+							<span className="text-sm text-default-500">삭제일</span>
+							<span className="font-medium text-danger">
 								{formatDateTime(member.removedAt)}
-							</Text>
+							</span>
 						</div>
 					)}
 				</div>

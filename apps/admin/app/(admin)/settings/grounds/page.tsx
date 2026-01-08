@@ -1,5 +1,4 @@
 "use client";
-import { Text } from "@cocrepo/ui";
 import { Card, CardBody, CardHeader } from "@heroui/react";
 
 /**
@@ -9,10 +8,10 @@ export default function GroundSettingsPage() {
 	return (
 		<Card>
 			<CardHeader>
-				<Text variant="h4">Ground 정보</Text>
+				<h4 className="text-xl font-bold">Ground 정보</h4>
 			</CardHeader>
 			<CardBody>
-				<Text variant="body1">Ground 정보 페이지</Text>
+				<p>Ground 정보 페이지</p>
 			</CardBody>
 		</Card>
 	);

@@ -1,7 +1,6 @@
 import { Avatar as HeroAvatar } from "@heroui/react";
 import type { Meta, StoryObj } from "@storybook/react";
 import { Button } from "../../inputs/Button/Button";
-import { Text } from "../../ui/data-display/Text/Text";
 import { HStack } from "../../ui/surfaces/HStack/HStack";
 import { Header } from "./Header";
 
@@ -22,13 +21,13 @@ type Story = StoryObj<typeof meta>;
 const SampleLogo = () => (
 	<HStack gap={2} alignItems="center">
 		<div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary">
-			<Text variant="body2" className="font-bold text-white">
+			<p className="text-sm font-bold text-white">
 				L
-			</Text>
+			</p>
 		</div>
-		<Text variant="h6" className="font-semibold">
+		<h6 className="text-base font-bold font-semibold">
 			Logo
-		</Text>
+		</h6>
 	</HStack>
 );
 
@@ -73,15 +72,15 @@ const SampleSearchBar = () => (
 
 const SampleBreadcrumb = () => (
 	<HStack gap={1} alignItems="center">
-		<Text variant="body2" className="text-default-500">
+		<p className="text-sm text-default-500">
 			Dashboard
-		</Text>
-		<Text variant="body2" className="text-default-400">
+		</p>
+		<p className="text-sm text-default-400">
 			/
-		</Text>
-		<Text variant="body2" className="text-primary">
+		</p>
+		<p className="text-sm text-primary">
 			Analytics
-		</Text>
+		</p>
 	</HStack>
 );
 
@@ -120,9 +119,9 @@ export const SimpleNavigation: Story = {
 		left: (
 			<HStack gap={2} alignItems="center">
 				<div className="h-6 w-6 rounded bg-primary"></div>
-				<Text variant="subtitle1" className="font-semibold">
+				<span className="text-default-600 font-semibold">
 					Brand
-				</Text>
+				</span>
 			</HStack>
 		),
 		right: (
@@ -145,15 +144,15 @@ export const DashboardHeader: Story = {
 				<Button variant="light" size="sm" isIconOnly>
 					☰
 				</Button>
-				<Text variant="h6" className="font-semibold">
+				<h6 className="text-base font-bold font-semibold">
 					Admin Dashboard
-				</Text>
+				</h6>
 			</HStack>
 		),
 		center: (
-			<Text variant="subtitle1" className="text-default-600">
+			<span className="text-default-600">
 				Welcome back, John!
-			</Text>
+			</span>
 		),
 		right: (
 			<HStack gap={2} alignItems="center">

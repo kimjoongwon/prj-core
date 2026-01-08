@@ -1,5 +1,4 @@
 "use client";
-import { Text } from "@cocrepo/ui";
 import { Card, CardBody, CardHeader } from "@heroui/react";
 
 /**
@@ -9,10 +8,10 @@ export default function WithdrawnMembersPage() {
 	return (
 		<Card>
 			<CardHeader>
-				<Text variant="h4">탈퇴 회원</Text>
+				<h4 className="text-xl font-bold">탈퇴 회원</h4>
 			</CardHeader>
 			<CardBody>
-				<Text variant="body1">탈퇴 회원 페이지</Text>
+				<p>탈퇴 회원 페이지</p>
 			</CardBody>
 		</Card>
 	);

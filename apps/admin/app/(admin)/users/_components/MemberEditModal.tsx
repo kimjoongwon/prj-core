@@ -1,6 +1,5 @@
 "use client";
 
-import { Text } from "@cocrepo/ui";
 import {
 	Button,
 	Input,
@@ -170,10 +169,10 @@ export function MemberEditModal({
 		>
 			<ModalContent>
 				<ModalHeader className="flex flex-col gap-1">
-					<Text className="text-xl font-semibold">회원 정보 수정</Text>
-					<Text className="text-sm text-default-500">
+					<span className="text-xl font-semibold">회원 정보 수정</span>
+					<span className="text-sm text-default-500">
 						회원 정보를 수정합니다. (회원번호: #{member?.seq})
-					</Text>
+					</span>
 				</ModalHeader>
 				<ModalBody className="gap-4">
 					{/* 이름 */}
@@ -231,9 +230,9 @@ export function MemberEditModal({
 
 					{/* 비밀번호 변경 안내 */}
 					<div className="rounded-lg bg-default-100 p-4">
-						<Text className="text-sm text-default-600">
+						<span className="text-sm text-default-600">
 							비밀번호 변경은 회원 상세 페이지에서 별도로 진행해주세요.
-						</Text>
+						</span>
 					</div>
 				</ModalBody>
 				<ModalFooter>
@@ -242,14 +241,14 @@ export function MemberEditModal({
 						onPress={handleClose}
 						isDisabled={isSubmitting}
 					>
-						<Text>취소</Text>
+						<span>취소</span>
 					</Button>
 					<Button
 						color="primary"
 						onPress={handleSubmit}
 						isLoading={isSubmitting}
 					>
-						<Text>저장</Text>
+						<span>저장</span>
 					</Button>
 				</ModalFooter>
 			</ModalContent>

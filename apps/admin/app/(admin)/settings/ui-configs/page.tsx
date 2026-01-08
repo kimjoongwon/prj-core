@@ -1,17 +1,16 @@
 "use client";
 
 import {
-	type ColumnConfig,
-	ColumnSettingsTable,
-	Text,
-	UnsavedChangesIndicator,
-} from "@cocrepo/ui";
-import {
 	useGetConfig,
 	useSaveGlobalConfig,
 	useSaveRoleConfig,
 	useSaveUserConfig,
 } from "@cocrepo/api";
+import {
+	type ColumnConfig,
+	ColumnSettingsTable,
+	UnsavedChangesIndicator,
+} from "@cocrepo/ui";
 import {
 	Button,
 	Card,
@@ -229,11 +228,11 @@ function UIConfigsPage() {
 				<div className="flex flex-col gap-1">
 					<div className="flex items-center gap-2">
 						<Settings className="h-6 w-6 text-primary" />
-						<Text className="text-2xl font-bold md:text-3xl">UI 설정 관리</Text>
+						<h1 className="text-2xl font-bold md:text-3xl">UI 설정 관리</h1>
 					</div>
-					<Text className="text-default-500">
+					<p className="text-default-500">
 						테이블 컬럼의 표시/숨김, 순서, 너비를 설정합니다
-					</Text>
+					</p>
 				</div>
 
 				{/* 저장 버튼 */}
@@ -244,7 +243,7 @@ function UIConfigsPage() {
 							onPress={onClickResetButton}
 							isDisabled={store.isSaving}
 						>
-							<Text>초기화</Text>
+							<span>초기화</span>
 						</Button>
 					)}
 					<Button
@@ -259,7 +258,7 @@ function UIConfigsPage() {
 						onPress={onClickSaveButton}
 						isDisabled={!store.isDirty || store.isSaving}
 					>
-						<Text>{store.isSaving ? "저장 중..." : "저장"}</Text>
+						<span>{store.isSaving ? "저장 중..." : "저장"}</span>
 					</Button>
 				</div>
 			</div>
@@ -267,7 +266,7 @@ function UIConfigsPage() {
 			{/* 에러 표시 */}
 			{store.error && (
 				<div className="rounded-lg bg-danger-50 p-4">
-					<Text className="text-danger">{store.error}</Text>
+					<span className="text-danger">{store.error}</span>
 				</div>
 			)}
 
@@ -331,9 +330,9 @@ function UIConfigsPage() {
 
 			{/* 안내 문구 */}
 			<div className="flex flex-col gap-1 text-sm text-default-400">
-				<Text>[D]=Desktop [T]=Tablet [M]=Mobile</Text>
-				<Text>* 드래그로 순서 변경, 체크박스로 표시/숨김 토글</Text>
-				<Text>* 코드 기본값에서 변경된 항목만 저장됩니다</Text>
+				<span>[D]=Desktop [T]=Tablet [M]=Mobile</span>
+				<span>* 드래그로 순서 변경, 체크박스로 표시/숨김 토글</span>
+				<span>* 코드 기본값에서 변경된 항목만 저장됩니다</span>
 			</div>
 
 			{/* 변경사항 표시 */}

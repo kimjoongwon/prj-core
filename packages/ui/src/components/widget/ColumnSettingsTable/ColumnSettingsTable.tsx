@@ -6,7 +6,6 @@ import {
 	DraggableSortableList,
 	DragHandle,
 } from "../../ui/data-display/DraggableSortableList";
-import { Text } from "../../ui/data-display/Text/Text";
 
 /**
  * 컬럼 설정 데이터 타입
@@ -112,27 +111,27 @@ export function ColumnSettingsTable({
 	return (
 		<Card className="border-none shadow-sm">
 			<CardHeader className="px-6 pb-0 pt-4">
-				<Text variant="label">{entityLabel} 테이블 컬럼 설정</Text>
+				<span className="text-sm font-semibold text-default-700">{entityLabel} 테이블 컬럼 설정</span>
 			</CardHeader>
 			<CardBody className="px-6 py-4">
 				{/* 헤더 행 */}
 				<div className="mb-2 grid grid-cols-[40px_1fr_60px_100px_60px_120px] gap-2 border-b border-default-200 pb-2">
 					<div />
-					<Text variant="caption" className="font-medium">
+					<span className="text-sm text-default-500 font-medium">
 						컬럼명
-					</Text>
-					<Text variant="caption" className="text-center font-medium">
+					</span>
+					<span className="text-sm text-default-500 text-center font-medium">
 						표시
-					</Text>
-					<Text variant="caption" className="font-medium">
+					</span>
+					<span className="text-sm text-default-500 font-medium">
 						너비
-					</Text>
-					<Text variant="caption" className="text-center font-medium">
+					</span>
+					<span className="text-sm text-default-500 text-center font-medium">
 						정렬
-					</Text>
-					<Text variant="caption" className="text-center font-medium">
+					</span>
+					<span className="text-sm text-default-500 text-center font-medium">
 						디바이스
-					</Text>
+					</span>
 				</div>
 
 				{/* 드래그 가능한 행 목록 */}
@@ -156,9 +155,9 @@ export function ColumnSettingsTable({
 							/>
 
 							{/* 컬럼명 */}
-							<Text variant="body2" className="font-medium">
+							<p className="text-sm font-medium">
 								{column.label}
-							</Text>
+							</p>
 
 							{/* 표시 체크박스 */}
 							<div className="flex justify-center">
@@ -192,9 +191,9 @@ export function ColumnSettingsTable({
 							/>
 
 							{/* 정렬 순서 */}
-							<Text variant="caption" className="text-center">
+							<span className="text-sm text-default-500 text-center">
 								{column.sortOrder}
-							</Text>
+							</span>
 
 							{/* 디바이스 토글 */}
 							<div className="flex justify-center">

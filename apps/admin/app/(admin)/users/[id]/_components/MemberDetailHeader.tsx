@@ -1,6 +1,5 @@
 "use client";
 
-import { Text } from "@cocrepo/ui";
 import { Button } from "@heroui/react";
 import { ArrowLeft, Edit, Trash2 } from "lucide-react";
 
@@ -33,8 +32,8 @@ export function MemberDetailHeader({
 					<ArrowLeft className="h-5 w-5" />
 				</Button>
 				<div className="flex flex-col gap-1">
-					<Text className="text-2xl font-bold">{memberName}</Text>
-					<Text className="text-default-500">회원 상세 정보</Text>
+					<span className="text-2xl font-bold">{memberName}</span>
+					<span className="text-default-500">회원 상세 정보</span>
 				</div>
 			</div>
 			<div className="flex gap-2">
@@ -43,7 +42,7 @@ export function MemberDetailHeader({
 					startContent={<Edit className="h-4 w-4" />}
 					onPress={onClickEdit}
 				>
-					<Text>수정</Text>
+					<span>수정</span>
 				</Button>
 				<Button
 					variant="flat"
@@ -51,7 +50,7 @@ export function MemberDetailHeader({
 					startContent={<Trash2 className="h-4 w-4" />}
 					onPress={onClickDelete}
 				>
-					<Text>삭제</Text>
+					<span>삭제</span>
 				</Button>
 			</div>
 		</div>

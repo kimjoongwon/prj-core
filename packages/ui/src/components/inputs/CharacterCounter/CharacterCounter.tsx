@@ -1,5 +1,3 @@
-import { Text } from "../../ui/data-display/Text/Text";
-
 export interface CharacterCounterProps {
 	current: number;
 	max: number;
@@ -25,11 +23,11 @@ export function CharacterCounter({
 
 	const colorClass = getColorClass();
 	const combinedClassName =
-		`text-right ${colorClass} ${className || ""}`.trim();
+		`text-right text-sm text-default-500 ${colorClass} ${className || ""}`.trim();
 
 	return (
-		<Text variant="caption" className={combinedClassName}>
+		<span className={combinedClassName}>
 			{current} / {max}
-		</Text>
+		</span>
 	);
 }

@@ -1,7 +1,6 @@
 import { Card, CardBody } from "@heroui/react";
 import type { Meta, StoryObj } from "@storybook/react";
 import { Button } from "../../inputs/Button/Button";
-import { Text } from "../../ui/data-display/Text/Text";
 import { HStack } from "../../ui/surfaces/HStack/HStack";
 import { VStack } from "../../ui/surfaces/VStack/VStack";
 import { Modal } from "./Modal";
@@ -32,9 +31,9 @@ type Story = StoryObj<typeof meta>;
 // Sample content components
 const SampleFormContent = () => (
 	<VStack gap={4} className="py-2">
-		<Text variant="body1" className="mb-4 text-default-600">
+		<p className="mb-4 text-default-600">
 			Please fill out the form below to continue.
-		</Text>
+		</p>
 
 		<div className="space-y-4">
 			<div>
@@ -79,16 +78,16 @@ const SampleFormContent = () => (
 const SampleConfirmationContent = () => (
 	<VStack gap={4} alignItems="center" className="py-6 text-center">
 		<div className="flex h-16 w-16 items-center justify-center rounded-full bg-warning-100">
-			<Text variant="h4" className="text-warning-600">
+			<h4 className="text-xl font-bold text-warning-600">
 				⚠️
-			</Text>
+			</h4>
 		</div>
 
 		<VStack gap={2} alignItems="center">
-			<Text variant="h6">Confirm Action</Text>
-			<Text variant="body1" className="max-w-md text-default-600">
+			<h6 className="text-base font-bold">Confirm Action</h6>
+			<p className="max-w-md text-default-600">
 				Are you sure you want to delete this item? This action cannot be undone.
-			</Text>
+			</p>
 		</VStack>
 
 		<HStack gap={3} className="mt-4">
@@ -103,32 +102,32 @@ const SampleDetailContent = () => (
 		<div className="grid grid-cols-1 gap-4 md:grid-cols-2">
 			<Card>
 				<CardBody>
-					<Text variant="subtitle1" className="mb-3">
+					<span className="text-default-600 mb-3">
 						User Information
-					</Text>
+					</span>
 					<VStack gap={2}>
 						<HStack justifyContent="between">
-							<Text variant="body2" className="text-default-500">
+							<p className="text-sm text-default-500">
 								Name:
-							</Text>
-							<Text variant="body2">John Doe</Text>
+							</p>
+							<p className="text-sm">John Doe</p>
 						</HStack>
 						<HStack justifyContent="between">
-							<Text variant="body2" className="text-default-500">
+							<p className="text-sm text-default-500">
 								Email:
-							</Text>
-							<Text variant="body2">john@example.com</Text>
+							</p>
+							<p className="text-sm">john@example.com</p>
 						</HStack>
 						<HStack justifyContent="between">
-							<Text variant="body2" className="text-default-500">
+							<p className="text-sm text-default-500">
 								Role:
-							</Text>
-							<Text variant="body2">Administrator</Text>
+							</p>
+							<p className="text-sm">Administrator</p>
 						</HStack>
 						<HStack justifyContent="between">
-							<Text variant="body2" className="text-default-500">
+							<p className="text-sm text-default-500">
 								Status:
-							</Text>
+							</p>
 							<span className="rounded-full bg-success-100 px-2 py-1 text-success-800 text-xs">
 								Active
 							</span>
@@ -139,33 +138,33 @@ const SampleDetailContent = () => (
 
 			<Card>
 				<CardBody>
-					<Text variant="subtitle1" className="mb-3">
+					<span className="text-default-600 mb-3">
 						Activity Summary
-					</Text>
+					</span>
 					<VStack gap={2}>
 						<HStack justifyContent="between">
-							<Text variant="body2" className="text-default-500">
+							<p className="text-sm text-default-500">
 								Last Login:
-							</Text>
-							<Text variant="body2">2 hours ago</Text>
+							</p>
+							<p className="text-sm">2 hours ago</p>
 						</HStack>
 						<HStack justifyContent="between">
-							<Text variant="body2" className="text-default-500">
+							<p className="text-sm text-default-500">
 								Total Sessions:
-							</Text>
-							<Text variant="body2">234</Text>
+							</p>
+							<p className="text-sm">234</p>
 						</HStack>
 						<HStack justifyContent="between">
-							<Text variant="body2" className="text-default-500">
+							<p className="text-sm text-default-500">
 								Created:
-							</Text>
-							<Text variant="body2">Jan 15, 2024</Text>
+							</p>
+							<p className="text-sm">Jan 15, 2024</p>
 						</HStack>
 						<HStack justifyContent="between">
-							<Text variant="body2" className="text-default-500">
+							<p className="text-sm text-default-500">
 								Updated:
-							</Text>
-							<Text variant="body2">Today</Text>
+							</p>
+							<p className="text-sm">Today</p>
 						</HStack>
 					</VStack>
 				</CardBody>
@@ -174,9 +173,9 @@ const SampleDetailContent = () => (
 
 		<Card>
 			<CardBody>
-				<Text variant="subtitle1" className="mb-3">
+				<span className="text-default-600 mb-3">
 					Recent Activity
-				</Text>
+				</span>
 				<VStack gap={3}>
 					{[
 						{ action: "Updated profile information", time: "2 hours ago" },
@@ -187,10 +186,10 @@ const SampleDetailContent = () => (
 						<HStack key={index} gap={3} alignItems="center">
 							<div className="h-2 w-2 rounded-full bg-primary"></div>
 							<VStack gap={0} className="flex-1">
-								<Text variant="body2">{activity.action}</Text>
-								<Text variant="caption" className="text-default-500">
+								<p className="text-sm">{activity.action}</p>
+								<span className="text-sm text-default-500">
 									{activity.time}
-								</Text>
+								</span>
 							</VStack>
 						</HStack>
 					))}
@@ -212,7 +211,7 @@ const SampleDetailContent = () => (
 const SampleListContent = () => (
 	<VStack gap={4} className="py-2">
 		<HStack justifyContent="between" alignItems="center">
-			<Text variant="subtitle1">Select Items</Text>
+			<span className="text-default-600">Select Items</span>
 			<Button size="sm" variant="bordered">
 				Select All
 			</Button>
@@ -236,16 +235,16 @@ const SampleListContent = () => (
 							<div className="flex-1">
 								<HStack justifyContent="between" alignItems="center">
 									<VStack gap={0}>
-										<Text variant="body2" className="font-medium">
+										<p className="text-sm font-medium">
 											{item.name}
-										</Text>
-										<Text variant="caption" className="text-default-500">
+										</p>
+										<span className="text-sm text-default-500">
 											{item.type} • {item.size}
-										</Text>
+										</span>
 									</VStack>
-									<Text variant="body2" className="text-primary">
+									<p className="text-sm text-primary">
 										📄
-									</Text>
+									</p>
 								</HStack>
 							</div>
 						</HStack>
@@ -313,11 +312,11 @@ export const SimpleContent: Story = {
 		modalBody: {
 			children: (
 				<VStack gap={4} alignItems="center" className="py-6 text-center">
-					<Text variant="h6">Simple Modal Content</Text>
-					<Text variant="body1" className="text-default-600">
+					<h6 className="text-base font-bold">Simple Modal Content</h6>
+					<p className="text-default-600">
 						This is a simple modal with minimal content to demonstrate the basic
 						layout.
-					</Text>
+					</p>
 					<Button color="primary">Got it</Button>
 				</VStack>
 			),

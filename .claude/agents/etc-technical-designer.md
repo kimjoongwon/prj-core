@@ -36,8 +36,13 @@ tools: Read, Write, Grep, Bash
 | 경로 | 설명 | 담당 에이전트 |
 |------|------|--------------|
 | `packages/prisma/schema/` | Prisma 스키마 | schema-builder |
+| `packages/prisma/seed*.ts` | 시드 데이터 | seed-maker |
+| `packages/entity/src/` | Entity 클래스 | entity-builder |
+| `packages/vo/src/` | Value Object | vo-builder |
+| `packages/dto/src/` | DTO 클래스 | dto-builder |
 | `packages/repository/src/` | Repository 레이어 | repository-builder |
 | `packages/service/src/` | Service 레이어 | service-builder |
+| `packages/facade/src/` | Facade 레이어 | facade-builder |
 | `apps/server/src/module/` | Controller 레이어 | controller-builder |
 
 ---
@@ -181,15 +186,19 @@ ls packages/ui/src/components/layouts/
 
 #### Phase 1: 백엔드 (API 필요 시)
 
-**순서:** schema-builder → repository-builder → service-builder → controller-builder
+**순서:** schema-builder → seed-maker → entity-builder → vo-builder → dto-builder → repository-builder → service-builder → facade-builder → controller-builder
 
 #### Phase 2: 프론트엔드 컴포넌트
 
-**순서:** ui-component-builder → input-component-builder → widget-builder → feature-builder
+**순서:** ui-component-builder → input-component-builder → widget-builder → feature-builder → store-builder
 
 #### Phase 3: 페이지
 
 **순서:** page-builder → page-reviewer
+
+#### Phase 4: 품질 검증 (QA)
+
+**순서:** fe-testing → be-testing
 
 ---
 
@@ -318,7 +327,26 @@ interface MemberCardProps {
 
 ---
 
-#### 5.7 controller-builder 지시
+#### 5.7 facade-builder 지시
+
+**파일:** `packages/facade/src/members.facade.ts`
+
+**역할:** 여러 Service를 조합하여 복잡한 비즈니스 로직 처리
+
+**메서드:**
+| 메서드명 | 조합하는 Service | 책임 |
+|----------|----------------|------|
+| getMembersWithStats | MembersService + StatsService | 목록 + 통계 조회 |
+| createMemberWithNotification | MembersService + NotificationService | 생성 + 알림 발송 |
+
+**주의사항:**
+- Prisma 직접 호출 금지
+- 트랜잭션 처리 시 반드시 Repository 사용
+- 단일 Service로 처리 가능한 경우 Facade 불필요
+
+---
+
+#### 5.8 controller-builder 지시
 
 **파일:** `apps/server/src/module/members/members.controller.ts`
 
@@ -464,11 +492,13 @@ interface MemberCardProps {
 
 | 에이전트 | 역할 | 생성 위치 |
 |----------|------|----------|
+| design-analyzer | Figma 디자인 분석 | (분석 문서) |
 | ui-component-builder | Pure UI 컴포넌트 | packages/ui/components/ui/ |
 | input-component-builder | 폼 입력 컴포넌트 | packages/ui/components/inputs/ |
 | widget-builder | 데이터 위젯 | packages/ui/components/widget/ |
 | feature-builder | 비즈니스 기능 | packages/ui/components/feature/ |
 | layout-builder | 레이아웃 | packages/ui/components/layouts/ |
+| store-builder | MobX Store | apps/*/app/**/_stores/ |
 | page-builder | 페이지 | apps/*/app/ |
 | page-reviewer | 페이지 검증 | (코드 리뷰) |
 
@@ -476,18 +506,34 @@ interface MemberCardProps {
 
 | 에이전트 | 역할 | 생성 위치 |
 |----------|------|----------|
+| database-expert | DB 설계 자문 | (설계 문서) |
 | schema-builder | Prisma 스키마 | packages/prisma/schema/ |
+| seed-maker | 시드 데이터 | packages/prisma/seed*.ts |
+| entity-builder | Entity 클래스 | packages/entity/src/ |
+| vo-builder | Value Object | packages/vo/src/ |
+| dto-builder | DTO 클래스 | packages/dto/src/ |
 | repository-builder | Repository | packages/repository/src/ |
 | service-builder | Service | packages/service/src/ |
+| facade-builder | Facade (여러 Service 조합) | packages/facade/src/ |
 | controller-builder | Controller | apps/server/src/module/ |
+| backend-service-builder | 복합 백엔드 서비스 | (여러 레이어 통합) |
+
+### QA (품질 검증)
+
+| 에이전트 | 역할 | 대상 |
+|----------|------|------|
+| fe-testing | 프론트엔드 테스트 | 컴포넌트, 페이지 |
+| be-testing | 백엔드 테스트 | Service, Controller |
 
 ### 기타
 
 | 에이전트 | 역할 |
 |----------|------|
+| page-orchestrator | 페이지 생성 전체 조율 |
 | planner | 화면 기획서 작성 |
-| code-reviewer | 코드 품질 검토 |
-| test-engineer | 테스트 작성 |
+| technical-designer | 기획 문서 기술 강화 |
+| route-designer | 라우팅 경로 설계 |
+| jenkinsfile-builder | Jenkins 파이프라인 |
 
 ---
 

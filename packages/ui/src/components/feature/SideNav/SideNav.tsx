@@ -32,12 +32,16 @@ export const SideNav = observer(({ width = 240, className }: SideNavProps) => {
 	const navigationStore = useNavigationStore();
 
 	// 현재 펼쳐진 아이템 ID들
-	// Note: useMemo 대신 직접 계산 - MobX observable 변경 추적을 위해
+	// - 사용자가 수동으로 토글한 아이템 (isNavItemExpanded)
+	// - 현재 활성화된 아이템 (item.active) - 페이지 새로고침 시에도 펼쳐짐
 	const expandedKeys = (() => {
 		const keys = new Set<string>();
 		for (const item of navigationStore.items) {
-			if (item.hasChildren && navigationStore.isNavItemExpanded(item.id)) {
-				keys.add(item.id);
+			if (item.hasChildren) {
+				// 수동 토글 또는 현재 활성 아이템이면 펼침
+				if (navigationStore.isNavItemExpanded(item.id) || item.active) {
+					keys.add(item.id);
+				}
 			}
 		}
 		return keys;

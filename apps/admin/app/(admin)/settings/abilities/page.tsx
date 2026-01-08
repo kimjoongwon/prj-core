@@ -7,7 +7,6 @@ import {
 	useUpdateRoleAbilities,
 } from "@cocrepo/api";
 import { usePermission } from "@cocrepo/hook";
-import { Text } from "@cocrepo/ui";
 import {
 	Button,
 	Card,
@@ -178,11 +177,11 @@ function AbilitiesPage() {
 				<div className="flex flex-col gap-1">
 					<div className="flex items-center gap-2">
 						<ShieldCheck className="h-6 w-6 text-primary" />
-						<Text className="text-2xl font-bold md:text-3xl">권한 관리</Text>
+						<h1 className="text-2xl font-bold md:text-3xl">권한 관리</h1>
 					</div>
-					<Text className="text-default-500">
+					<p className="text-default-500">
 						역할별 권한을 설정하고 관리합니다
-					</Text>
+					</p>
 				</div>
 
 				{/* 저장 버튼 */}
@@ -194,7 +193,7 @@ function AbilitiesPage() {
 								onPress={handleReset}
 								isDisabled={store.isSaving}
 							>
-								<Text>초기화</Text>
+								<span>초기화</span>
 							</Button>
 						)}
 						<Button
@@ -209,7 +208,7 @@ function AbilitiesPage() {
 							onPress={handleSave}
 							isDisabled={!store.hasChanges || store.isSaving}
 						>
-							<Text>{store.isSaving ? "저장 중..." : "변경사항 저장"}</Text>
+							<span>{store.isSaving ? "저장 중..." : "변경사항 저장"}</span>
 						</Button>
 					</div>
 				)}
@@ -218,7 +217,7 @@ function AbilitiesPage() {
 			{/* 에러 표시 */}
 			{store.error && (
 				<div className="rounded-lg bg-danger-50 p-4">
-					<Text className="text-danger">{store.error}</Text>
+					<span className="text-danger">{store.error}</span>
 				</div>
 			)}
 
@@ -257,9 +256,9 @@ function AbilitiesPage() {
 										<Chip size="sm" variant="flat" color="primary">
 											{SUBJECT_TYPE_LABELS[type] ?? type}
 										</Chip>
-										<Text className="text-sm text-default-500">
+										<span className="text-sm text-default-500">
 											{subjects.length}개의 항목
-										</Text>
+										</span>
 									</CardHeader>
 									<CardBody className="gap-2 px-6 py-4">
 										<div className="overflow-x-auto">
@@ -267,9 +266,9 @@ function AbilitiesPage() {
 												<thead>
 													<tr className="border-b border-default-200">
 														<th className="py-3 text-left">
-															<Text className="text-sm font-medium text-default-500">
+															<span className="text-sm font-medium text-default-500">
 																항목
-															</Text>
+															</span>
 														</th>
 														{(ACTIONS_BY_SUBJECT_TYPE[type] ?? []).map(
 															(action) => (
@@ -277,9 +276,9 @@ function AbilitiesPage() {
 																	key={action}
 																	className="px-2 py-3 text-center"
 																>
-																	<Text className="text-sm font-medium text-default-500">
+																	<span className="text-sm font-medium text-default-500">
 																		{ACTION_LABELS[action] ?? action}
-																	</Text>
+																	</span>
 																</th>
 															),
 														)}
@@ -293,16 +292,16 @@ function AbilitiesPage() {
 														>
 															<td className="py-3">
 																<div className="flex flex-col">
-																	<Text className="font-medium">
+																	<span className="font-medium">
 																		{typeof subject.label === "string"
 																			? subject.label
 																			: subject.name}
-																	</Text>
+																	</span>
 																	{typeof subject.description === "string" &&
 																		subject.description && (
-																			<Text className="text-xs text-default-400">
+																			<span className="text-xs text-default-400">
 																				{subject.description}
-																			</Text>
+																			</span>
 																		)}
 																</div>
 															</td>
@@ -357,12 +356,12 @@ function AbilitiesPage() {
 				<div className="fixed bottom-4 left-1/2 z-50 -translate-x-1/2 transform">
 					<Card className="border border-primary-200 bg-primary-50 shadow-lg">
 						<CardBody className="flex flex-row items-center gap-4 px-4 py-3">
-							<Text className="text-primary">
+							<span className="text-primary">
 								저장되지 않은 변경사항이 있습니다
-							</Text>
+							</span>
 							<div className="flex gap-2">
 								<Button size="sm" variant="flat" onPress={handleReset}>
-									<Text>초기화</Text>
+									<span>초기화</span>
 								</Button>
 								<Button
 									size="sm"
@@ -370,7 +369,7 @@ function AbilitiesPage() {
 									onPress={handleSave}
 									isDisabled={store.isSaving}
 								>
-									<Text>저장</Text>
+									<span>저장</span>
 								</Button>
 							</div>
 						</CardBody>

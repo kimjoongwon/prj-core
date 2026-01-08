@@ -4,7 +4,6 @@ import { observer } from "mobx-react-lite";
 import type React from "react";
 import { Button } from "../../inputs/Button/Button";
 import { Input } from "../../inputs/Input";
-import { Text } from "../../ui/data-display/Text/Text";
 import { VStack } from "../../ui/surfaces/VStack/VStack";
 
 export interface State {
@@ -41,8 +40,8 @@ export const LoginPage = observer(
 		return (
 			<VStack fullWidth gap={8} className="p-4">
 				<VStack fullWidth gap={2}>
-					<Text variant="h3">{title}</Text>
-					<Text variant="caption">{caption}</Text>
+					<h3 className="text-2xl font-bold">{title}</h3>
+					<span className="text-sm text-default-500">{caption}</span>
 				</VStack>
 
 				<VStack fullWidth gap={4}>
@@ -67,7 +66,7 @@ export const LoginPage = observer(
 				</VStack>
 
 				{state.errorMessage && (
-					<Text variant="error">{state.errorMessage}</Text>
+					<span className="text-sm font-medium text-danger">{state.errorMessage}</span>
 				)}
 
 				<Button
@@ -77,9 +76,7 @@ export const LoginPage = observer(
 					onPress={onClickLoginButton}
 					isLoading={isLoading}
 				>
-					<Text variant="body1" className="text-white">
-						로그인
-					</Text>
+					<span className="text-white">로그인</span>
 				</Button>
 			</VStack>
 		);

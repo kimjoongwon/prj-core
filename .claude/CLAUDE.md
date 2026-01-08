@@ -27,6 +27,53 @@
 
 ## 프론트엔드 개발 규칙
 
+### UI 디자인 가이드 (HeroUI 공식 스타일)
+
+HeroUI 공식 문서(https://heroui.com) 스타일을 따릅니다.
+
+#### 테마
+- 다크 모드 기본 (`dark` 클래스)
+- 배경: `bg-black` 또는 `bg-background`
+
+#### 배경 효과
+페이지에 블러 그라데이션 오브 효과 적용:
+```tsx
+{/* 좌측 하단 블러 오브 */}
+<div className="fixed bottom-0 left-0 w-[500px] h-[500px] bg-primary/30 rounded-full blur-3xl -translate-x-1/2 translate-y-1/2" />
+
+{/* 우측 상단 블러 오브 */}
+<div className="fixed top-0 right-0 w-[400px] h-[400px] bg-secondary/20 rounded-full blur-3xl translate-x-1/2 -translate-y-1/2 opacity-70" />
+```
+
+#### 레이아웃
+- 컨테이너: `max-w-7xl mx-auto px-6`
+- 섹션 간격: `py-16` 또는 `gap-8`
+- 카드 내부: `p-6`
+
+#### 컴포넌트 스타일
+| 컴포넌트 | 스타일 |
+|---------|--------|
+| 카드 | `bg-content1 shadow-sm rounded-xl` |
+| 버튼 | HeroUI 기본 + `variant="flat"` 선호 |
+| 테두리 | `border-divider` |
+| 둥근 모서리 | `rounded-xl` (큰 요소), `rounded-lg` (작은 요소) |
+
+#### 타이포그래피
+- 대제목: `text-3xl font-bold`
+- 소제목: `text-xl font-semibold`
+- 본문: `text-default-600`
+- 강조 텍스트: 그라데이션 사용 가능
+  ```tsx
+  <span className="bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
+    강조 텍스트
+  </span>
+  ```
+
+#### 간격 규칙
+- 섹션 간: `gap-8` 또는 `mt-8`
+- 요소 간: `gap-4`
+- 컴포넌트 내부: `p-4` ~ `p-6`
+
 ### 컴포넌트 작성
 
 - ui 컴포넌트를 만들 때는 mobx를 사용합니다
@@ -141,10 +188,6 @@ const items = store.items;
   - **Page 컴포넌트**: `on[Event][UI]` 형태로 직관적 표현 (예: `onClickLoginButton`, `onChangeEmail`)
     - Page는 직관적이어야 하므로 어떤 UI를 눌렀는지 명확히 드러나야 함
 - 컴포넌트 내에서 함수를 인라인으로 선언하지 않습니다
-
-### 텍스트 처리
-
-- 모든 컴포넌트의 텍스트는 components 폴더의 Text 컴포넌트로 감싸서 사용합니다
 
 ### API 클라이언트 (Orval 기반)
 

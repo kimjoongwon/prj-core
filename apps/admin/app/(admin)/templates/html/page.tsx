@@ -1,5 +1,4 @@
 "use client";
-import { Text } from "@cocrepo/ui";
 import { Card, CardBody, CardHeader } from "@heroui/react";
 
 /**
@@ -9,10 +8,10 @@ export default function HtmlTemplatesPage() {
 	return (
 		<Card>
 			<CardHeader>
-				<Text variant="h4">HTML 템플릿</Text>
+				<h4 className="text-xl font-bold">HTML 템플릿</h4>
 			</CardHeader>
 			<CardBody>
-				<Text variant="body1">HTML 템플릿 페이지</Text>
+				<p>HTML 템플릿 페이지</p>
 			</CardBody>
 		</Card>
 	);

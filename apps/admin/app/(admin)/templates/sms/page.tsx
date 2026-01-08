@@ -1,5 +1,4 @@
 "use client";
-import { Text } from "@cocrepo/ui";
 import { Card, CardBody, CardHeader } from "@heroui/react";
 
 /**
@@ -9,10 +8,10 @@ export default function SmsTemplatesPage() {
 	return (
 		<Card>
 			<CardHeader>
-				<Text variant="h4">SMS 템플릿</Text>
+				<h4 className="text-xl font-bold">SMS 템플릿</h4>
 			</CardHeader>
 			<CardBody>
-				<Text variant="body1">SMS 템플릿 페이지</Text>
+				<p>SMS 템플릿 페이지</p>
 			</CardBody>
 		</Card>
 	);

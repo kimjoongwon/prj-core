@@ -1,6 +1,5 @@
 "use client";
 
-import { Text } from "@cocrepo/ui";
 import {
 	Button,
 	Modal,
@@ -51,25 +50,25 @@ export function MemberDeleteConfirm({
 			<ModalContent>
 				<ModalHeader className="flex items-center gap-2">
 					<AlertTriangle className="h-5 w-5 text-danger" />
-					<Text className="text-lg font-semibold">회원 삭제</Text>
+					<span className="text-lg font-semibold">회원 삭제</span>
 				</ModalHeader>
 				<ModalBody>
-					<Text className="text-default-600">
-						<Text as="span" className="font-medium">
+					<span className="text-default-600">
+						<span className="font-medium">
 							{member?.name}
-						</Text>
-						<Text as="span"> 회원을 정말 삭제하시겠습니까?</Text>
-					</Text>
-					<Text className="text-sm text-default-500">
+						</span>
+						<span> 회원을 정말 삭제하시겠습니까?</span>
+					</span>
+					<span className="text-sm text-default-500">
 						이 작업은 되돌릴 수 없습니다. 회원의 모든 데이터가 삭제됩니다.
-					</Text>
+					</span>
 				</ModalBody>
 				<ModalFooter>
 					<Button variant="light" onPress={onClose} isDisabled={isDeleting}>
-						<Text>취소</Text>
+						<span>취소</span>
 					</Button>
 					<Button color="danger" onPress={handleConfirm} isLoading={isDeleting}>
-						<Text>삭제</Text>
+						<span>삭제</span>
 					</Button>
 				</ModalFooter>
 			</ModalContent>

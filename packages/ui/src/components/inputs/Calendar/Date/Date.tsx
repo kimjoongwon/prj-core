@@ -1,6 +1,5 @@
 import { getDate } from "@cocrepo/toolkit";
 import { Card, CardBody } from "@heroui/react";
-import { Text } from "../../../ui/data-display/Text/Text";
 
 export interface DateProps {
 	value: string;
@@ -65,7 +64,7 @@ export const Date = (props: DateProps) => {
 				}}
 			/>
 			<CardBody className="text-right">
-				<Text className={!isPressable ? "text-gray-400" : ""}>{date}일</Text>
+				<span className={!isPressable ? "text-gray-400" : ""}>{date}일</span>
 			</CardBody>
 		</Card>
 	);

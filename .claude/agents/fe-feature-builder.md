@@ -232,6 +232,18 @@ export type { CommentListProps } from "./CommentList";
 | **에러/로딩 처리** | 로딩, 에러 상태를 UI로 표현 |
 | **displayName** | 디버깅을 위해 displayName 설정 |
 
+### Text 컴포넌트 사용 제한 (Critical)
+
+**Text 컴포넌트를 Button, Chip 등 단독으로 텍스트를 받는 컴포넌트의 children으로 사용하면 안 됩니다.**
+
+```tsx
+// ❌ 금지 - 테마 깨짐
+<Button><Text>로그아웃</Text></Button>
+
+// ✅ 올바른 사용
+<Button>로그아웃</Button>
+```
+
 ---
 
 ## 5. Feature 예시 목록

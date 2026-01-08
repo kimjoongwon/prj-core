@@ -1,5 +1,4 @@
 "use client";
-import { Text } from "@cocrepo/ui";
 import { Card, CardBody, CardHeader } from "@heroui/react";
 
 /**
@@ -9,10 +8,10 @@ export default function FaqPage() {
 	return (
 		<Card>
 			<CardHeader>
-				<Text variant="h4">FAQ 관리</Text>
+				<h4 className="text-xl font-bold">FAQ 관리</h4>
 			</CardHeader>
 			<CardBody>
-				<Text variant="body1">FAQ 관리 페이지</Text>
+				<p>FAQ 관리 페이지</p>
 			</CardBody>
 		</Card>
 	);

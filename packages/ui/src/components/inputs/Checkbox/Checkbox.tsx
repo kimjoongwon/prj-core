@@ -3,7 +3,6 @@ import {
 	type CheckboxProps as NextUICheckboxProps,
 } from "@heroui/react";
 import type React from "react";
-import { Text } from "../../ui/data-display/Text/Text";
 
 export interface CheckboxProps extends Omit<NextUICheckboxProps, "onChange"> {
 	onChange?: (checked: boolean) => void;
@@ -18,7 +17,7 @@ export const Checkbox = (props: CheckboxProps) => {
 
 	return (
 		<NextUICheckbox {...rest} onChange={handleChange} size={size}>
-			<Text className="font-bold">{props.children}</Text>
+			<span className="font-bold">{props.children}</span>
 		</NextUICheckbox>
 	);
 };
