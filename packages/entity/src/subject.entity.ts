@@ -5,6 +5,7 @@ export class Subject extends AbstractEntity implements SubjectEntity {
 	name!: string;
 	type!: SubjectTypes;
 	label!: string | null;
+	displayName!: string | null;
 	description!: string | null;
 	parentId!: string | null;
 	tenantId!: string;

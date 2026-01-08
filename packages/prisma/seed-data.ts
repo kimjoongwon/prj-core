@@ -830,67 +830,21 @@ export const featureSubjectSeedData: SubjectSeedData[] = [
 
 /**
  * Entity Subject 시드 데이터
- * - 엔티티별 CRUD 권한 정의
+ * - NOTE: Entity/Column Subject는 앱 부트스트랩 시 Prisma 스키마에서 자동 동기화됩니다.
+ * - @displayName 주석을 사용하여 한글명을 정의합니다.
+ * - 자세한 내용은 SubjectSyncService를 참고하세요.
  */
-export const entitySubjectSeedData: SubjectSeedData[] = [
-	{
-		name: "entity:User",
-		type: "Entity",
-		label: "사용자",
-		description: "사용자 엔티티 CRUD 권한",
-		sortOrder: 300,
-	},
-	{
-		name: "entity:Ground",
-		type: "Entity",
-		label: "시설",
-		description: "시설 엔티티 CRUD 권한",
-		sortOrder: 301,
-	},
-	{
-		name: "entity:Space",
-		type: "Entity",
-		label: "공간",
-		description: "공간 엔티티 CRUD 권한",
-		sortOrder: 302,
-	},
-	{
-		name: "entity:Reservation",
-		type: "Entity",
-		label: "예약",
-		description: "예약 엔티티 CRUD 권한",
-		sortOrder: 303,
-	},
-	{
-		name: "entity:Content",
-		type: "Entity",
-		label: "콘텐츠",
-		description: "콘텐츠 엔티티 CRUD 권한",
-		sortOrder: 304,
-	},
-	{
-		name: "entity:Role",
-		type: "Entity",
-		label: "역할",
-		description: "역할 엔티티 CRUD 권한",
-		sortOrder: 305,
-	},
-	{
-		name: "entity:Ability",
-		type: "Entity",
-		label: "권한",
-		description: "권한 엔티티 CRUD 권한",
-		sortOrder: 306,
-	},
-];
+// entitySubjectSeedData는 더 이상 사용하지 않습니다.
+// Entity Subject는 앱 부트스트랩 시 Prisma DMMF에서 자동 생성됩니다.
 
 /**
  * 모든 Subject 시드 데이터를 하나로 합침
+ * - Menu, Feature Subject만 시드로 관리
+ * - Entity, Column Subject는 앱 부트스트랩 시 자동 동기화
  */
 export const subjectSeedData: SubjectSeedData[] = [
 	...menuSubjectSeedData,
 	...featureSubjectSeedData,
-	...entitySubjectSeedData,
 ];
 
 // ============================================================================

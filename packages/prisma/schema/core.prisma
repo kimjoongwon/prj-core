@@ -25,13 +25,16 @@
 // @description: 분류 체계를 정의하는 카테고리 (트리 구조)
 // @self-reference: parent/children
 // @connected-by: XxxClassification 모델들
+/// @displayName 카테고리
 model Category {
   id                   String                @id @default(uuid())
   seq                  Int                   @unique @default(autoincrement())
   createdAt            DateTime              @default(now()) @map("created_at") @db.Timestamptz(6)
   updatedAt            DateTime?             @updatedAt @map("updated_at") @db.Timestamptz(6)
   removedAt            DateTime?             @map("removed_at") @db.Timestamptz(6)
+  /// @displayName 이름
   name                 String                @unique
+  /// @displayName 유형
   type                 CategoryTypes         @default(User)
   parentId             String?               @map("parent_id")
   spaceId              String                @map("space_id")
@@ -52,14 +55,18 @@ model Category {
 // @schema-type: CONCRETE ENTITY
 // @description: 그룹핑 체계를 정의하는 그룹
 // @connected-by: XxxAssociation 모델들
+/// @displayName 그룹
 model Group {
   id                String             @id @default(uuid())
   seq               Int                @unique @default(autoincrement())
   createdAt         DateTime           @default(now()) @map("created_at") @db.Timestamptz(6)
   updatedAt         DateTime?          @updatedAt @map("updated_at") @db.Timestamptz(6)
   removedAt         DateTime?          @map("removed_at") @db.Timestamptz(6)
+  /// @displayName 이름
   name              String
+  /// @displayName 유형
   type              GroupTypes         @default(User)
+  /// @displayName 라벨
   label             String?
   spaceId           String             @map("space_id")
   creatorId         String?            @map("creator_id")
@@ -78,6 +85,7 @@ model Group {
 // @description: User + Space + Role을 연결하는 핵심 다대다 관계 테이블
 // @connects: User ─── Space ─── Role
 // @note: 사용자가 특정 공간에서 어떤 역할을 가지는지를 정의
+/// @displayName 테넌트
 model Tenant {
   id          String       @id @default(uuid())
   seq         Int          @unique @default(autoincrement())
@@ -98,6 +106,7 @@ model Tenant {
 // @schema-type: BRIDGE
 // @description: Tenant에 추가 Role을 할당하는 다대다 관계 테이블
 // @connects: Tenant ─── Role
+/// @displayName 역할 할당
 model Assignment {
   id        String    @id @default(uuid())
   seq       Int       @unique @default(autoincrement())
@@ -117,15 +126,22 @@ model Assignment {
 // @self-reference: parent/children (계층 구조)
 // @connected-by: Ability
 // @note: Menu, Feature, Entity, API, Column 5가지 타입으로 세밀한 권한 관리
+/// @displayName 대상
 model Subject {
   id          String       @id @default(uuid())
   seq         Int          @unique @default(autoincrement())
   createdAt   DateTime     @default(now()) @map("created_at") @db.Timestamptz(6)
   updatedAt   DateTime?    @updatedAt @map("updated_at") @db.Timestamptz(6)
   removedAt   DateTime?    @map("removed_at") @db.Timestamptz(6)
+  /// @displayName 식별자
   name        String       @unique
+  /// @displayName 유형
   type        SubjectTypes @default(Entity)
+  /// @displayName 라벨
   label       String?
+  /// @displayName 표시명
+  displayName String?      @map("display_name")
+  /// @displayName 설명
   description String?
   parentId    String?      @map("parent_id")
   tenantId    String       @map("tenant_id")
@@ -144,13 +160,16 @@ model Subject {
 // @description: Role에 부여되는 구체적인 권한 정의 (CASL 기반)
 // @connects: Role ─── Subject (특정 대상에 대한 권한)
 // @note: action을 enum으로 직접 관리하여 단순화, 중복 방지를 위한 unique 제약조건 추가
+/// @displayName 권한
 model Ability {
   id          String         @id @default(uuid())
   seq         Int            @unique @default(autoincrement())
   createdAt   DateTime       @default(now()) @map("created_at") @db.Timestamptz(6)
   updatedAt   DateTime?      @updatedAt @map("updated_at") @db.Timestamptz(6)
   removedAt   DateTime?      @map("removed_at") @db.Timestamptz(6)
+  /// @displayName 권한 유형
   type        AbilityTypes
+  /// @displayName 액션
   action      AbilityActions
   roleId      String         @map("role_id")
   description String?
@@ -172,6 +191,7 @@ model Ability {
 // @schema-type: CONTENT
 // @description: 게시물 - Content를 감싸는 발행 단위
 // @wraps: Content
+/// @displayName 게시물
 model Post {
   id        String    @id @default(uuid())
   seq       Int       @unique @default(autoincrement())
@@ -186,15 +206,20 @@ model Post {
 
 // @schema-type: CONTENT
 // @description: 사용자 생성 콘텐츠 (텍스트, 에디터 내용 등)
+/// @displayName 콘텐츠
 model Content {
   id          String    @id @default(uuid())
   seq         Int       @unique @default(autoincrement())
   createdAt   DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
   updatedAt   DateTime? @updatedAt @map("updated_at") @db.Timestamptz(6)
   removedAt   DateTime? @map("removed_at") @db.Timestamptz(6)
+  /// @displayName 제목
   title       String?
+  /// @displayName 설명
   description String?
+  /// @displayName 유형
   type        TextTypes @default(Editor)
+  /// @displayName 본문
   text        String?   @db.VarChar(1000)
   fileId      String?   @map("file_id")
   spaceId     String    @map("space_id")

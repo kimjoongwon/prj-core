@@ -20,6 +20,7 @@
 // @description: 구체적인 구현 없이 Ground에게 확장 기반을 제공하는 추상 컨테이너
 // @materialized-by: Ground
 // @connected-by: User.selectedSpaceId (현재 작업 중인 Space로 선택한 사용자들)
+/// @displayName 공간
 model Space {
   id                String               @id @default(uuid())
   seq               Int                  @unique @default(autoincrement())
@@ -47,6 +48,7 @@ model Space {
 // @schema-type: CLASSIFICATION
 // @description: Space에 Category를 연결하여 분류 체계 부여
 // @connects: Space ─── Category
+/// @displayName 공간 분류
 model SpaceClassification {
   id         String    @id @default(uuid())
   seq        Int       @unique @default(autoincrement())
@@ -65,6 +67,7 @@ model SpaceClassification {
 // @schema-type: ASSOCIATION
 // @description: Space와 Group을 연결하여 그룹핑
 // @connects: Space ─── Group
+/// @displayName 공간 그룹
 model SpaceAssociation {
   id        String    @id @default(uuid())
   seq       Int       @unique @default(autoincrement())
@@ -84,17 +87,24 @@ model SpaceAssociation {
 // @description: Space를 구체화하여 실제 비즈니스 의미(name, address 등)를 부여
 // @materializes: Space (1:1)
 // @business-fields: name, label, address, phone, email, businessNo
+/// @displayName 시설
 model Ground {
   id              String    @id @default(uuid())
   seq             Int       @unique @default(autoincrement())
   createdAt       DateTime  @default(now()) @map("created_at")
   updatedAt       DateTime? @updatedAt @map("updated_at") @db.Timestamptz(6)
   removedAt       DateTime? @map("removed_at") @db.Timestamptz(6)
+  /// @displayName 이름
   name            String
+  /// @displayName 라벨
   label           String?
+  /// @displayName 주소
   address         String
+  /// @displayName 전화번호
   phone           String
+  /// @displayName 이메일
   email           String
+  /// @displayName 사업자등록번호
   businessNo      String    @unique @map("business_no")
   spaceId         String    @unique @map("space_id")
   logoImageFileId String?   @map("logo_image_file_id")

@@ -23,15 +23,20 @@
 // @schema-type: CONCRETE ENTITY
 // @description: 독립적으로 존재하는 핵심 사용자 도메인 객체
 // @extended-by: Profile
+/// @displayName 사용자
 model User {
   id                 String              @id @default(uuid())
   seq                Int                 @unique @default(autoincrement())
   updatedAt          DateTime?           @updatedAt @map("updated_at") @db.Timestamptz(6)
   createdAt          DateTime            @default(now()) @map("created_at") @db.Timestamptz(6)
   removedAt          DateTime?           @map("removed_at") @db.Timestamptz(6)
+  /// @displayName 전화번호
   phone              String              @unique
+  /// @displayName 이름
   name               String              @unique
+  /// @displayName 이메일
   email              String              @unique
+  /// @displayName 비밀번호
   password           String
   selectedSpaceId    String?             @map("selected_space_id")
   selectedSpace      Space?              @relation("UserSelectedSpace", fields: [selectedSpaceId], references: [id])
@@ -54,6 +59,7 @@ model User {
 // @schema-type: CLASSIFICATION
 // @description: User에 Category를 연결하여 분류 체계 부여
 // @connects: User ─── Category
+/// @displayName 사용자 분류
 model UserClassification {
   id         String    @id @default(uuid())
   seq        Int       @unique @default(autoincrement())
@@ -72,6 +78,7 @@ model UserClassification {
 // @schema-type: ASSOCIATION
 // @description: User와 Group을 연결하여 그룹핑
 // @connects: User ─── Group
+/// @displayName 사용자 그룹
 model UserAssociation {
   id        String    @id @default(uuid())
   seq       Int       @unique @default(autoincrement())
@@ -90,13 +97,16 @@ model UserAssociation {
 // @description: User에 추가 정보(nickname, avatar)를 부여하는 확장 모델 (1:N)
 // @extends: User
 // @extension-fields: name, nickname, avatarFileId
+/// @displayName 프로필
 model Profile {
   id           String    @id @default(uuid())
   seq          Int       @unique @default(autoincrement())
   createdAt    DateTime  @default(now()) @map("created_at")
   updatedAt    DateTime? @updatedAt @map("updated_at") @db.Timestamptz(6)
   removedAt    DateTime? @map("removed_at") @db.Timestamptz(6)
+  /// @displayName 이름
   name         String
+  /// @displayName 닉네임
   nickname     String    @unique
   userId       String    @map("user_id")
   avatarFileId String?   @map("avatar_file_id")

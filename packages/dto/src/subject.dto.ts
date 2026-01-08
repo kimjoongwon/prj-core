@@ -20,6 +20,9 @@ export class SubjectDto extends AbstractDto implements Subject {
 	label: string | null;
 
 	@StringFieldOptional()
+	displayName: string | null;
+
+	@StringFieldOptional()
 	description: string | null;
 
 	@UUIDFieldOptional()

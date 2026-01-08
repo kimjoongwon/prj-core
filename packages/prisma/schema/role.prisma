@@ -18,12 +18,14 @@
 
 // @schema-type: CONCRETE ENTITY
 // @description: 권한 체계를 정의하는 핵심 역할 도메인 객체
+/// @displayName 역할
 model Role {
   id             String              @id @default(uuid())
   seq            Int                 @unique @default(autoincrement())
   createdAt      DateTime            @default(now()) @map("created_at")
   updatedAt      DateTime?           @updatedAt @map("updated_at") @db.Timestamptz(6)
   removedAt      DateTime?           @map("removed_at") @db.Timestamptz(6)
+  /// @displayName 역할명
   name           Roles               @unique @default(USER)
   abilities      Ability[]
   assignments    Assignment[]
@@ -37,6 +39,7 @@ model Role {
 // @schema-type: ASSOCIATION
 // @description: Role과 Group을 연결하여 그룹핑
 // @connects: Role ─── Group
+/// @displayName 역할 그룹
 model RoleAssociation {
   id        String    @id @default(uuid())
   seq       Int       @unique @default(autoincrement())
@@ -55,6 +58,7 @@ model RoleAssociation {
 // @schema-type: CLASSIFICATION
 // @description: Role에 Category를 연결하여 분류 체계 부여
 // @connects: Role ─── Category
+/// @displayName 역할 분류
 model RoleClassification {
   id         String    @id @default(uuid())
   seq        Int       @unique @default(autoincrement())
