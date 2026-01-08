@@ -7,12 +7,12 @@
  */
 
 export interface UserPaginationMetaDto {
-  /** 전체 회원 수 */
-  total: number;
-  /** 현재 페이지 번호 */
-  page: number;
-  /** 페이지 크기 */
-  limit: number;
-  /** 전체 페이지 수 */
-  totalPages: number;
+	/** 전체 회원 수 */
+	total: number;
+	/** 현재 페이지 번호 */
+	page: number;
+	/** 페이지 크기 */
+	limit: number;
+	/** 전체 페이지 수 */
+	totalPages: number;
 }

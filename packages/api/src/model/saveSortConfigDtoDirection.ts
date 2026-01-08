@@ -9,11 +9,11 @@
 /**
  * 정렬 방향
  */
-export type SaveSortConfigDtoDirection = typeof SaveSortConfigDtoDirection[keyof typeof SaveSortConfigDtoDirection];
-
+export type SaveSortConfigDtoDirection =
+	(typeof SaveSortConfigDtoDirection)[keyof typeof SaveSortConfigDtoDirection];
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export const SaveSortConfigDtoDirection = {
-  asc: 'asc',
-  desc: 'desc',
+	asc: "asc",
+	desc: "desc",
 } as const;

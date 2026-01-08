@@ -66,7 +66,9 @@ export const LoginPage = observer(
 				</VStack>
 
 				{state.errorMessage && (
-					<span className="text-sm font-medium text-danger">{state.errorMessage}</span>
+					<span className="text-sm font-medium text-danger">
+						{state.errorMessage}
+					</span>
 				)}
 
 				<Button

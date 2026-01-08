@@ -152,9 +152,7 @@ function MembersPage() {
 			<div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
 				<div className="flex flex-col gap-1">
 					<h1 className="text-2xl font-bold md:text-3xl">회원 관리</h1>
-					<p className="text-default-500">
-						회원 정보를 조회하고 관리합니다
-					</p>
+					<p className="text-default-500">회원 정보를 조회하고 관리합니다</p>
 				</div>
 				<Button
 					color="primary"

@@ -111,21 +111,19 @@ export function ColumnSettingsTable({
 	return (
 		<Card className="border-none shadow-sm">
 			<CardHeader className="px-6 pb-0 pt-4">
-				<span className="text-sm font-semibold text-default-700">{entityLabel} 테이블 컬럼 설정</span>
+				<span className="text-sm font-semibold text-default-700">
+					{entityLabel} 테이블 컬럼 설정
+				</span>
 			</CardHeader>
 			<CardBody className="px-6 py-4">
 				{/* 헤더 행 */}
 				<div className="mb-2 grid grid-cols-[40px_1fr_60px_100px_60px_120px] gap-2 border-b border-default-200 pb-2">
 					<div />
-					<span className="text-sm text-default-500 font-medium">
-						컬럼명
-					</span>
+					<span className="text-sm text-default-500 font-medium">컬럼명</span>
 					<span className="text-sm text-default-500 text-center font-medium">
 						표시
 					</span>
-					<span className="text-sm text-default-500 font-medium">
-						너비
-					</span>
+					<span className="text-sm text-default-500 font-medium">너비</span>
 					<span className="text-sm text-default-500 text-center font-medium">
 						정렬
 					</span>
@@ -155,9 +153,7 @@ export function ColumnSettingsTable({
 							/>
 
 							{/* 컬럼명 */}
-							<p className="text-sm font-medium">
-								{column.label}
-							</p>
+							<p className="text-sm font-medium">{column.label}</p>
 
 							{/* 표시 체크박스 */}
 							<div className="flex justify-center">

@@ -72,159 +72,159 @@ export const NavTreePanel = observer(
 		// 하위 아이템이 없는 아이템 (대시보드 등)
 		const standaloneItems = items.filter((item) => !item.hasChildren);
 
-	/**
-	 * Accordion 선택 변경 핸들러
-	 */
-	const handleSelectionChange = (keys: Selection) => {
-		if (keys === "all") return;
+		/**
+		 * Accordion 선택 변경 핸들러
+		 */
+		const handleSelectionChange = (keys: Selection) => {
+			if (keys === "all") return;
 
-		const keysSet = keys as Set<string>;
+			const keysSet = keys as Set<string>;
 
-		// 펼쳐진 아이템과 접힌 아이템 동기화
-		for (const item of parentItems) {
-			const isExpanded = expandedKeys.has(item.id);
-			const shouldBeExpanded = keysSet.has(item.id);
+			// 펼쳐진 아이템과 접힌 아이템 동기화
+			for (const item of parentItems) {
+				const isExpanded = expandedKeys.has(item.id);
+				const shouldBeExpanded = keysSet.has(item.id);
 
-			if (isExpanded !== shouldBeExpanded) {
-				onToggle(item.id);
+				if (isExpanded !== shouldBeExpanded) {
+					onToggle(item.id);
+				}
 			}
-		}
-	};
+		};
 
-	/**
-	 * 커스텀 인디케이터 렌더링 (펼침/접힘 아이콘)
-	 */
-	const renderIndicator = ({ isOpen }: AccordionItemIndicatorProps) => (
-		<ChevronRight
-			className={cn(
-				"h-4 w-4 text-foreground/40 transition-transform duration-200",
-				isOpen && "rotate-90",
-			)}
-		/>
-	);
+		/**
+		 * 커스텀 인디케이터 렌더링 (펼침/접힘 아이콘)
+		 */
+		const renderIndicator = ({ isOpen }: AccordionItemIndicatorProps) => (
+			<ChevronRight
+				className={cn(
+					"h-4 w-4 text-foreground/40 transition-transform duration-200",
+					isOpen && "rotate-90",
+				)}
+			/>
+		);
 
-	return (
-		<nav
-			className={cn(
-				"flex h-full flex-col border-r border-divider bg-content1",
-				className,
-			)}
-			style={{ width: `${width}px` }}
-		>
-			<VStack className="flex-1 overflow-y-auto p-3" gap={1}>
-				{/* 단독 아이템 (하위 아이템이 없는 경우) */}
-				{standaloneItems.map((item) => (
-					<button
-						key={item.id}
-						type="button"
-						onClick={() => onSelectItem(item.id)}
-						className={cn(
-							"flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-colors",
-							item.active
-								? "bg-primary/10 text-primary"
-								: "text-foreground/70 hover:bg-default-100 hover:text-foreground",
-						)}
-					>
-						{item.icon && renderLucideIcon(item.icon, "h-5 w-5", 20)}
-						<span>{item.label}</span>
-					</button>
-				))}
+		return (
+			<nav
+				className={cn(
+					"flex h-full flex-col border-r border-divider bg-content1",
+					className,
+				)}
+				style={{ width: `${width}px` }}
+			>
+				<VStack className="flex-1 overflow-y-auto p-3" gap={1}>
+					{/* 단독 아이템 (하위 아이템이 없는 경우) */}
+					{standaloneItems.map((item) => (
+						<button
+							key={item.id}
+							type="button"
+							onClick={() => onSelectItem(item.id)}
+							className={cn(
+								"flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-colors",
+								item.active
+									? "bg-primary/10 text-primary"
+									: "text-foreground/70 hover:bg-default-100 hover:text-foreground",
+							)}
+						>
+							{item.icon && renderLucideIcon(item.icon, "h-5 w-5", 20)}
+							<span>{item.label}</span>
+						</button>
+					))}
 
-				{/* 하위 아이템이 있는 Accordion */}
-				{parentItems.length > 0 && (
-					<Accordion
-						selectionMode="multiple"
-						selectedKeys={expandedKeys}
-						onSelectionChange={handleSelectionChange}
-						className="px-0"
-						itemClasses={{
-							base: "py-0",
-							title: "text-sm font-medium",
-							trigger: cn(
-								"rounded-lg px-3 py-2.5 data-[hover=true]:bg-default-100",
-								"flex-row-reverse justify-between",
-							),
-							indicator: "text-foreground/40",
-							content: "pt-1 pb-0",
-						}}
-						motionProps={{
-							variants: {
-								enter: {
-									y: 0,
-									opacity: 1,
-									height: "auto",
-									transition: {
-										height: { type: "spring", stiffness: 500, damping: 30 },
-										opacity: { duration: 0.2 },
+					{/* 하위 아이템이 있는 Accordion */}
+					{parentItems.length > 0 && (
+						<Accordion
+							selectionMode="multiple"
+							selectedKeys={expandedKeys}
+							onSelectionChange={handleSelectionChange}
+							className="px-0"
+							itemClasses={{
+								base: "py-0",
+								title: "text-sm font-medium",
+								trigger: cn(
+									"rounded-lg px-3 py-2.5 data-[hover=true]:bg-default-100",
+									"flex-row-reverse justify-between",
+								),
+								indicator: "text-foreground/40",
+								content: "pt-1 pb-0",
+							}}
+							motionProps={{
+								variants: {
+									enter: {
+										y: 0,
+										opacity: 1,
+										height: "auto",
+										transition: {
+											height: { type: "spring", stiffness: 500, damping: 30 },
+											opacity: { duration: 0.2 },
+										},
+									},
+									exit: {
+										y: -10,
+										opacity: 0,
+										height: 0,
+										transition: {
+											height: { duration: 0.2 },
+											opacity: { duration: 0.15 },
+										},
 									},
 								},
-								exit: {
-									y: -10,
-									opacity: 0,
-									height: 0,
-									transition: {
-										height: { duration: 0.2 },
-										opacity: { duration: 0.15 },
-									},
-								},
-							},
-						}}
-					>
-						{parentItems.map((item) => (
-							<AccordionItem
-								key={item.id}
-								aria-label={item.label}
-								title={
-									<span
-										className={cn(
-											"transition-colors",
-											item.active ? "text-primary" : "text-foreground/70",
-										)}
-									>
-										{item.label}
-									</span>
-								}
-								startContent={
-									item.icon && (
+							}}
+						>
+							{parentItems.map((item) => (
+								<AccordionItem
+									key={item.id}
+									aria-label={item.label}
+									title={
 										<span
 											className={cn(
 												"transition-colors",
 												item.active ? "text-primary" : "text-foreground/70",
 											)}
 										>
-											{renderLucideIcon(item.icon, "h-5 w-5", 20)}
+											{item.label}
 										</span>
-									)
-								}
-								indicator={renderIndicator}
-								classNames={{
-									title: item.active ? "text-primary" : "text-foreground/70",
-								}}
-							>
-								<VStack gap={0}>
-									{item.children.map((subItem) => (
-										<button
-											key={subItem.id}
-											type="button"
-											onClick={() => onSelectSubItem(subItem.id)}
-											className={cn(
-												"flex w-full items-center rounded-md py-2 pl-11 pr-3 text-sm transition-colors",
-												subItem.active
-													? "bg-primary/10 font-medium text-primary"
-													: "text-foreground/60 hover:bg-default-100 hover:text-foreground",
-											)}
-										>
-											<span>{subItem.label}</span>
-										</button>
-									))}
-								</VStack>
-							</AccordionItem>
-						))}
-					</Accordion>
-				)}
-			</VStack>
-		</nav>
-	);
+									}
+									startContent={
+										item.icon && (
+											<span
+												className={cn(
+													"transition-colors",
+													item.active ? "text-primary" : "text-foreground/70",
+												)}
+											>
+												{renderLucideIcon(item.icon, "h-5 w-5", 20)}
+											</span>
+										)
+									}
+									indicator={renderIndicator}
+									classNames={{
+										title: item.active ? "text-primary" : "text-foreground/70",
+									}}
+								>
+									<VStack gap={0}>
+										{item.children.map((subItem) => (
+											<button
+												key={subItem.id}
+												type="button"
+												onClick={() => onSelectSubItem(subItem.id)}
+												className={cn(
+													"flex w-full items-center rounded-md py-2 pl-11 pr-3 text-sm transition-colors",
+													subItem.active
+														? "bg-primary/10 font-medium text-primary"
+														: "text-foreground/60 hover:bg-default-100 hover:text-foreground",
+												)}
+											>
+												<span>{subItem.label}</span>
+											</button>
+										))}
+									</VStack>
+								</AccordionItem>
+							))}
+						</Accordion>
+					)}
+				</VStack>
+			</nav>
+		);
 	},
 );
 

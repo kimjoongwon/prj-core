@@ -1,119 +1,138 @@
-import { Subject } from "@cocrepo/entity";
-import { Prisma } from "@cocrepo/prisma";
-import { SubjectsRepository } from "@cocrepo/repository";
-import {
-	BadRequestException,
-	Injectable,
-	Logger,
-	NotFoundException,
-} from "@nestjs/common";
+import { getDmmfParser } from "@cocrepo/prisma";
+import { Injectable, Logger } from "@nestjs/common";
 
 /**
- * Subject 서비스 에러 메시지
+ * Subject 정보 (Prisma 모델 기반)
  */
-const SubjectServiceErrorMessages = {
-	SUBJECT_NOT_FOUND: "Subject를 찾을 수 없습니다",
-	PARENT_NOT_FOUND: "부모 Subject를 찾을 수 없습니다",
-	INVALID_SUBJECT_DATA: "유효하지 않은 Subject 데이터입니다",
-} as const;
+export interface SubjectInfo {
+	/** 모델명 (예: User, Reservation) */
+	name: string;
+	/** 표시명 (@displayName 주석) */
+	displayName: string | null;
+	/** 필드 목록 */
+	fields: SubjectFieldInfo[];
+}
 
+/**
+ * Subject 필드 정보
+ */
+export interface SubjectFieldInfo {
+	/** 필드명 */
+	name: string;
+	/** 표시명 (@displayName 주석) */
+	displayName: string | null;
+	/** 필드 타입 */
+	type: string;
+	/** 필수 여부 */
+	isRequired: boolean;
+	/** 관계 필드 여부 */
+	isRelation: boolean;
+}
+
+/**
+ * Subject 서비스 (DMMF 기반)
+ *
+ * Prisma 스키마에서 동적으로 Subject(모델) 목록을 생성합니다.
+ * DB에 저장하지 않고 런타임에 DMMF를 파싱합니다.
+ */
 @Injectable()
 export class SubjectsService {
 	private readonly logger = new Logger(SubjectsService.name);
-
-	constructor(private readonly repository: SubjectsRepository) {}
+	private cachedSubjects: SubjectInfo[] | null = null;
 
 	/**
 	 * 모든 Subject 조회
-	 * Tenant에 속한 모든 Subject를 조회합니다.
+	 * Prisma 스키마의 모든 모델을 Subject로 반환합니다.
 	 *
-	 * @param tenantId - Tenant ID (현재 구현에서는 removedAt=null 조건만 사용)
-	 * @returns 모든 Subject 배열
+	 * @returns Subject 배열
 	 */
-	async getAllSubjects(tenantId: string): Promise<Subject[]> {
-		this.logger.debug(`모든 Subject 조회: tenantId=${tenantId.slice(-8)}`);
+	async getSubjects(): Promise<SubjectInfo[]> {
+		this.logger.debug("모든 Subject 조회");
 
-		// Repository의 findAll 메서드 호출
-		// 참고: 현재 Repository는 tenantId 필터를 지원하지 않으므로,
-		// 향후 필요시 findAll에 tenantId 필터 추가 필요
-		const subjects = await this.repository.findAll();
+		if (this.cachedSubjects) {
+			return this.cachedSubjects;
+		}
 
-		return subjects;
+		const parser = await getDmmfParser();
+		const models = parser.parseModels();
+
+		this.cachedSubjects = models.map((model) => {
+			// 각 모델의 필드 정보 가져오기
+			const fields = parser.parseFieldsByModel(model.name);
+
+			return {
+				name: model.name,
+				displayName: model.displayName,
+				fields: fields.map((field) => ({
+					name: field.name,
+					displayName: field.displayName,
+					type: "String", // DMMF FieldInfo에 type이 없으므로 기본값 사용
+					isRequired: false, // DMMF FieldInfo에 isRequired가 없으므로 기본값 사용
+					isRelation: false, // parseFieldsByModel은 관계 필드를 제외함
+				})),
+			};
+		});
+
+		// 'all' Subject 추가 (모든 모델에 대한 권한)
+		this.cachedSubjects.unshift({
+			name: "all",
+			displayName: "전체",
+			fields: [],
+		});
+
+		return this.cachedSubjects;
 	}
 
 	/**
-	 * Subject 계층 구조 조회
-	 * parentId가 제공되면 해당 부모의 하위 트리를 반환하고,
-	 * parentId가 없으면 최상위 Subject와 그 자식들을 반환합니다.
+	 * Subject 이름 목록 조회
 	 *
-	 * @param tenantId - Tenant ID
-	 * @param parentId - 부모 Subject ID (선택)
-	 * @returns 계층 구조를 포함한 Subject 배열
+	 * @returns Subject 이름 배열
 	 */
-	async getSubjectTree(
-		tenantId: string,
-		parentId?: string,
-	): Promise<Subject[]> {
-		this.logger.debug(
-			`Subject 계층 조회: tenantId=${tenantId.slice(-8)}, parentId=${parentId ? parentId.slice(-8) : "null (root)"}`,
-		);
-
-		let subjects: Subject[];
-
-		if (parentId) {
-			// 특정 부모의 전체 하위 트리 조회 (재귀)
-			subjects = await this.repository.findDescendantsByParentId(parentId);
-		} else {
-			// 최상위 Subject와 직접 자식들 조회
-			subjects = await this.repository.findManyByParentIdWithChildren();
-		}
-
-		return subjects;
+	async getSubjectNames(): Promise<string[]> {
+		const subjects = await this.getSubjects();
+		return subjects.map((s) => s.name);
 	}
 
 	/**
-	 * Subject 생성
-	 * parentId가 제공된 경우 부모 Subject의 존재를 검증합니다.
+	 * 특정 Subject의 필드 목록 조회
 	 *
-	 * @param data - Subject 생성 파라미터 (Prisma 타입)
-	 * @returns 생성된 Subject
-	 * @throws NotFoundException - 부모 Subject를 찾을 수 없는 경우
-	 * @throws BadRequestException - 유효하지 않은 데이터인 경우
+	 * @param subjectName - Subject 이름 (Prisma 모델명)
+	 * @returns 필드 정보 배열
 	 */
-	async createSubject(
-		data: Prisma.SubjectUncheckedCreateInput,
-	): Promise<Subject> {
-		this.logger.debug(`Subject 생성: name=${data.name}, type=${data.type}`);
+	async getSubjectFields(subjectName: string): Promise<SubjectFieldInfo[]> {
+		this.logger.debug(`Subject 필드 조회: ${subjectName}`);
 
-		// 1. 유효성 검증
-		if (!data.name || !data.type || !data.tenantId) {
-			throw new BadRequestException(
-				SubjectServiceErrorMessages.INVALID_SUBJECT_DATA,
-			);
+		if (subjectName === "all") {
+			return [];
 		}
 
-		// 2. parentId가 제공된 경우 부모 존재 확인
-		if (data.parentId) {
-			const parent = await this.repository.findById(data.parentId);
+		const subjects = await this.getSubjects();
+		const subject = subjects.find((s) => s.name === subjectName);
 
-			if (!parent) {
-				throw new NotFoundException(
-					SubjectServiceErrorMessages.PARENT_NOT_FOUND,
-				);
-			}
-
-			this.logger.debug(
-				`부모 Subject 확인 완료: parentId=${data.parentId.slice(-8)}`,
-			);
+		if (!subject) {
+			this.logger.warn(`Subject를 찾을 수 없음: ${subjectName}`);
+			return [];
 		}
 
-		// 3. Subject 생성
-		const subject = await this.repository.create(data);
+		return subject.fields;
+	}
 
-		this.logger.log(
-			`Subject 생성 완료: id=${subject.id.slice(-8)}, name=${subject.name}`,
-		);
+	/**
+	 * 유효한 Subject인지 확인
+	 *
+	 * @param subjectName - Subject 이름
+	 * @returns 유효 여부
+	 */
+	async isValidSubject(subjectName: string): Promise<boolean> {
+		const subjectNames = await this.getSubjectNames();
+		return subjectNames.includes(subjectName);
+	}
 
-		return subject;
+	/**
+	 * 캐시 초기화
+	 */
+	clearCache(): void {
+		this.cachedSubjects = null;
+		this.logger.debug("Subject 캐시 초기화됨");
 	}
 }

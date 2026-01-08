@@ -84,7 +84,11 @@ export const AddressEmailVerifyPage = ({
 				)}
 			</VStack>
 
-			{state.errorMessage && <span className="text-sm font-medium text-danger">{state.errorMessage}</span>}
+			{state.errorMessage && (
+				<span className="text-sm font-medium text-danger">
+					{state.errorMessage}
+				</span>
+			)}
 
 			{isEmailCodeSent && (
 				<Button

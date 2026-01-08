@@ -21,13 +21,9 @@ type Story = StoryObj<typeof meta>;
 const SampleLogo = () => (
 	<HStack gap={2} alignItems="center">
 		<div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary">
-			<p className="text-sm font-bold text-white">
-				L
-			</p>
+			<p className="text-sm font-bold text-white">L</p>
 		</div>
-		<h6 className="text-base font-bold font-semibold">
-			Logo
-		</h6>
+		<h6 className="text-base font-bold font-semibold">Logo</h6>
 	</HStack>
 );
 
@@ -72,15 +68,9 @@ const SampleSearchBar = () => (
 
 const SampleBreadcrumb = () => (
 	<HStack gap={1} alignItems="center">
-		<p className="text-sm text-default-500">
-			Dashboard
-		</p>
-		<p className="text-sm text-default-400">
-			/
-		</p>
-		<p className="text-sm text-primary">
-			Analytics
-		</p>
+		<p className="text-sm text-default-500">Dashboard</p>
+		<p className="text-sm text-default-400">/</p>
+		<p className="text-sm text-primary">Analytics</p>
 	</HStack>
 );
 
@@ -119,9 +109,7 @@ export const SimpleNavigation: Story = {
 		left: (
 			<HStack gap={2} alignItems="center">
 				<div className="h-6 w-6 rounded bg-primary"></div>
-				<span className="text-default-600 font-semibold">
-					Brand
-				</span>
+				<span className="text-default-600 font-semibold">Brand</span>
 			</HStack>
 		),
 		right: (
@@ -144,16 +132,10 @@ export const DashboardHeader: Story = {
 				<Button variant="light" size="sm" isIconOnly>
 					☰
 				</Button>
-				<h6 className="text-base font-bold font-semibold">
-					Admin Dashboard
-				</h6>
+				<h6 className="text-base font-bold font-semibold">Admin Dashboard</h6>
 			</HStack>
 		),
-		center: (
-			<span className="text-default-600">
-				Welcome back, John!
-			</span>
-		),
+		center: <span className="text-default-600">Welcome back, John!</span>,
 		right: (
 			<HStack gap={2} alignItems="center">
 				<Button variant="light" size="sm" isIconOnly>

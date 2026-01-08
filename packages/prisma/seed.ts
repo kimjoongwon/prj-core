@@ -10,23 +10,12 @@ import {
 	roleClassificationSeedData,
 	roleGroupSeedData,
 	roleSeedData,
-	subjectSeedData,
 	userGroundMapping,
 	userSeedData,
 } from "./seed-data";
-import type {
-	Ground,
-	Group,
-	Role,
-	Subject,
-} from "./src/generated/client/client";
+import type { Ground, Group, Role } from "./src/generated/client/client";
 import { PrismaClient } from "./src/generated/client/client";
-import {
-	AbilityActions,
-	AbilityTypes,
-	CategoryTypes,
-	SubjectTypes,
-} from "./src/generated/client/enums";
+import { CategoryTypes } from "./src/generated/client/enums";
 
 // Prisma 7: Adapter 패턴으로 PrismaClient 생성
 const pool = new pg.Pool({
@@ -113,19 +102,6 @@ async function main() {
 		},
 	});
 
-	// Ground 생성 (임시로 주석 처리)
-	// await prisma.ground.create({
-	//   data: {
-	//     name: '플레이트 본점',
-	//     label: '메인 지점',
-	//     address: '서울시 강남구',
-	//     phone: '01073162347',
-	//     email: 'plate@gmail.com',
-	//     businessNo: '12345678901', // 다른 번호
-	//     spaceId: ground.spaceId,
-	//   },
-	// });
-
 	// Group 생성을 위한 tenant 조회
 	const firstTenant = await prisma.tenant.findFirst({
 		where: { seq: 1 },
@@ -169,10 +145,7 @@ async function main() {
 	// 일반 유저들과 그라운드 생성
 	await createRegularUsersAndGrounds(roles.ADMIN, roles.USER);
 
-	// Subject 생성 (메뉴 권한용) - 확장된 버전
-	await createSubjects();
-
-	// Ability 생성 (Role별 권한)
+	// Ability 생성 (Role별 권한) - CASL ABAC 기반
 	await createAbilities(roles);
 
 	console.log({ superAdminUser });
@@ -570,110 +543,8 @@ async function createRoleGroupsAndAssociations(roles: Record<string, Role>) {
 	console.log("Role 관련 Group 생성 및 RoleAssociation 연결 완료!");
 }
 
-async function createSubjects() {
-	console.log("Subject 생성 시작...");
-
-	// 첫 번째 Tenant 조회 (tenantId 필요)
-	const firstTenant = await prisma.tenant.findFirst({
-		where: { seq: 1 },
-	});
-
-	if (!firstTenant) {
-		console.error("Tenant를 찾을 수 없어 Subject를 생성할 수 없습니다.");
-		return;
-	}
-
-	// Subject 생성을 위한 Map (parentName 연결용)
-	const subjectMap: Record<string, Subject> = {};
-
-	// 1단계: 부모가 없는 Subject 먼저 생성
-	const rootSubjects = subjectSeedData.filter((s) => !s.parentName);
-	for (const subjectData of rootSubjects) {
-		const existing = await prisma.subject.findFirst({
-			where: { name: subjectData.name },
-		});
-
-		if (!existing) {
-			const created = await prisma.subject.create({
-				data: {
-					name: subjectData.name,
-					type: subjectData.type as SubjectTypes,
-					label: subjectData.label,
-					description: subjectData.description,
-					sortOrder: subjectData.sortOrder,
-					tenantId: firstTenant.id,
-				},
-			});
-			subjectMap[subjectData.name] = created;
-			console.log(
-				`  - Subject 생성: ${subjectData.name} (${subjectData.type})`,
-			);
-		} else {
-			subjectMap[subjectData.name] = existing;
-			console.log(`  - Subject 이미 존재: ${subjectData.name}`);
-		}
-	}
-
-	// 2단계: 부모가 있는 Subject 생성 (parentId 연결)
-	const childSubjects = subjectSeedData.filter((s) => s.parentName);
-	for (const subjectData of childSubjects) {
-		const existing = await prisma.subject.findFirst({
-			where: { name: subjectData.name },
-		});
-
-		if (!existing) {
-			// 부모 Subject 찾기
-			const parent = subjectMap[subjectData.parentName!];
-			if (!parent) {
-				console.error(
-					`  - 부모 Subject를 찾을 수 없음: ${subjectData.parentName}`,
-				);
-				continue;
-			}
-
-			const created = await prisma.subject.create({
-				data: {
-					name: subjectData.name,
-					type: subjectData.type as SubjectTypes,
-					label: subjectData.label,
-					description: subjectData.description,
-					sortOrder: subjectData.sortOrder,
-					parentId: parent.id,
-					tenantId: firstTenant.id,
-				},
-			});
-			subjectMap[subjectData.name] = created;
-			console.log(
-				`  - Subject 생성: ${subjectData.name} (부모: ${subjectData.parentName})`,
-			);
-		} else {
-			subjectMap[subjectData.name] = existing;
-			console.log(`  - Subject 이미 존재: ${subjectData.name}`);
-		}
-	}
-
-	console.log(`Subject 생성 완료! (총 ${Object.keys(subjectMap).length}개)`);
-}
-
 async function createAbilities(roles: Record<string, Role>) {
-	console.log("Ability 생성 시작...");
-
-	// 첫 번째 Tenant 조회 (tenantId 필요)
-	const firstTenant = await prisma.tenant.findFirst({
-		where: { seq: 1 },
-	});
-
-	if (!firstTenant) {
-		console.error("Tenant를 찾을 수 없어 Ability를 생성할 수 없습니다.");
-		return;
-	}
-
-	// 모든 Subject 조회
-	const allSubjects = await prisma.subject.findMany();
-	const subjectMap: Record<string, Subject> = {};
-	for (const subject of allSubjects) {
-		subjectMap[subject.name] = subject;
-	}
+	console.log("Ability 생성 시작 (CASL ABAC 기반)...");
 
 	let createdCount = 0;
 	let skippedCount = 0;
@@ -686,38 +557,33 @@ async function createAbilities(roles: Record<string, Role>) {
 			continue;
 		}
 
-		// Subject 찾기
-		const subject = subjectMap[abilityData.subjectName];
-		if (!subject) {
-			console.error(`  - Subject를 찾을 수 없음: ${abilityData.subjectName}`);
-			continue;
-		}
-
-		// 중복 확인 (roleId, subjectId, action 조합으로 unique)
+		// 중복 확인 (roleId, subject, action 조합)
 		const existing = await prisma.ability.findFirst({
 			where: {
 				roleId: role.id,
-				subjectId: subject.id,
-				action: abilityData.action as AbilityActions,
+				subject: abilityData.subject,
+				action: abilityData.action,
 			},
 		});
 
 		if (!existing) {
 			await prisma.ability.create({
 				data: {
-					type: abilityData.type as AbilityTypes,
-					action: abilityData.action as AbilityActions,
+					action: abilityData.action,
+					subject: abilityData.subject,
+					inverted: abilityData.inverted,
 					roleId: role.id,
-					subjectId: subject.id,
-					tenantId: firstTenant.id,
 					description: abilityData.description,
+					name: abilityData.name,
 					conditions: abilityData.conditions,
+					reason: abilityData.reason,
 					isActive: abilityData.isActive ?? true,
+					priority: abilityData.priority ?? 0,
 				},
 			});
 			createdCount++;
 			console.log(
-				`  - Ability 생성: ${abilityData.roleName} ${abilityData.type} ${abilityData.action} ${abilityData.subjectName}`,
+				`  - Ability 생성: ${abilityData.roleName} ${abilityData.inverted ? "cannot" : "can"} ${abilityData.action} ${abilityData.subject}`,
 			);
 		} else {
 			skippedCount++;

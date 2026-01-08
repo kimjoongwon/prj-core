@@ -179,9 +179,7 @@ function AbilitiesPage() {
 						<ShieldCheck className="h-6 w-6 text-primary" />
 						<h1 className="text-2xl font-bold md:text-3xl">권한 관리</h1>
 					</div>
-					<p className="text-default-500">
-						역할별 권한을 설정하고 관리합니다
-					</p>
+					<p className="text-default-500">역할별 권한을 설정하고 관리합니다</p>
 				</div>
 
 				{/* 저장 버튼 */}

@@ -5,29 +5,30 @@
  * API 문서입니다. 대부분의 엔드포인트는 쿠키 기반 JWT 인증이 필요합니다. (@Public 데코레이터가 있는 엔드포인트는 예외)
  * OpenAPI spec version: 1.0.0
  */
-import type { UIConfigScopeEnum } from './uIConfigScopeEnum';
-import type { TableViewConfigDto } from './tableViewConfigDto';
+
+import type { TableViewConfigDto } from "./tableViewConfigDto";
+import type { UIConfigScopeEnum } from "./uIConfigScopeEnum";
 
 export interface UIConfigResponseDto {
-  /** UIConfig ID */
-  id: string;
-  /** 엔티티명 (예: User, Reservation, Ground) */
-  entity: string;
-  /** 뷰 타입 (table, form, detail, card) */
-  view: string;
-  /** 설정 범위 (GLOBAL, ROLE, USER) */
-  scope: UIConfigScopeEnum;
-  /** 범위 ID (ROLE이면 roleId, USER면 userId) */
-  scopeId?: string;
-  /** 설정 데이터 (JSON) */
-  config: TableViewConfigDto;
-  /** Space ID */
-  spaceId: string;
-  /** 생성 일시 */
-  createdAt: string;
-  /**
-   * 수정 일시
-   * @nullable
-   */
-  updatedAt?: string | null;
+	/** UIConfig ID */
+	id: string;
+	/** 엔티티명 (예: User, Reservation, Ground) */
+	entity: string;
+	/** 뷰 타입 (table, form, detail, card) */
+	view: string;
+	/** 설정 범위 (GLOBAL, ROLE, USER) */
+	scope: UIConfigScopeEnum;
+	/** 범위 ID (ROLE이면 roleId, USER면 userId) */
+	scopeId?: string;
+	/** 설정 데이터 (JSON) */
+	config: TableViewConfigDto;
+	/** Space ID */
+	spaceId: string;
+	/** 생성 일시 */
+	createdAt: string;
+	/**
+	 * 수정 일시
+	 * @nullable
+	 */
+	updatedAt?: string | null;
 }

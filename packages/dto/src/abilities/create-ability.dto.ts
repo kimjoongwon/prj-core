@@ -1,10 +1,11 @@
-import { AbilityActions, AbilityTypes, Prisma } from "@cocrepo/prisma";
+import { Prisma } from "@cocrepo/prisma";
 import { ApiProperty } from "@nestjs/swagger";
 import { Type } from "class-transformer";
 import {
 	IsArray,
 	IsBoolean,
-	IsEnum,
+	IsIn,
+	IsNumber,
 	IsOptional,
 	IsString,
 	IsUUID,
@@ -12,58 +13,125 @@ import {
 } from "class-validator";
 
 /**
- * 단일 Ability 생성 DTO
+ * CASL Action 타입
+ */
+const ABILITY_ACTIONS = [
+	"create",
+	"read",
+	"update",
+	"delete",
+	"manage",
+] as const;
+
+/**
+ * 단일 Ability 생성 DTO (CASL ABAC 기반)
  */
 export class CreateAbilityDto {
 	@ApiProperty({
-		description: "권한 타입 (허용/거부)",
-		enum: AbilityTypes,
-		example: AbilityTypes.CAN,
+		description: "액션 (create, read, update, delete, manage)",
+		example: "read",
+		enum: ABILITY_ACTIONS,
 	})
-	@IsEnum(AbilityTypes, { message: "유효한 권한 타입을 입력해주세요" })
-	type!: AbilityTypes;
+	@IsIn(ABILITY_ACTIONS, { message: "유효한 액션을 입력해주세요" })
+	action!: string;
 
 	@ApiProperty({
-		description: "권한 액션",
-		enum: AbilityActions,
-		example: AbilityActions.READ,
+		description: "대상 Subject (Prisma 모델명 또는 'all')",
+		example: "User",
 	})
-	@IsEnum(AbilityActions, { message: "유효한 권한 액션을 입력해주세요" })
-	action!: AbilityActions;
+	@IsString({ message: "Subject는 문자열이어야 합니다" })
+	subject!: string;
 
 	@ApiProperty({
-		description: "권한 설명",
-		example: "회원 목록 조회 권한",
+		description: "대상 필드 목록 (빈 배열이면 전체 필드)",
+		example: ["email", "name"],
 		required: false,
+		default: [],
 	})
+	@IsArray()
+	@IsString({ each: true })
 	@IsOptional()
-	@IsString({ message: "설명은 문자열이어야 합니다" })
-	description?: string;
+	fields?: string[];
 
 	@ApiProperty({
 		description: "권한 조건 (JSON 형식)",
-		example: { ownerId: { $eq: "userId" } },
+		example: { id: "${user.id}" },
 		required: false,
 	})
 	@IsOptional()
 	conditions?: Prisma.InputJsonValue;
 
 	@ApiProperty({
-		description: "Subject ID (UUID)",
-		example: "550e8400-e29b-41d4-a716-446655440000",
+		description: "거부 권한 여부 (true: cannot, false: can)",
+		example: false,
+		default: false,
 	})
-	@IsUUID("4", { message: "유효한 Subject ID를 입력해주세요" })
-	subjectId!: string;
+	@IsBoolean()
+	@IsOptional()
+	inverted?: boolean;
+
+	@ApiProperty({
+		description: "거부 사유 (inverted=true일 때 사용)",
+		example: "관리자만 삭제할 수 있습니다",
+		required: false,
+	})
+	@IsString()
+	@IsOptional()
+	reason?: string;
+
+	@ApiProperty({
+		description: "Role ID (Role 기반 권한일 때)",
+		example: "550e8400-e29b-41d4-a716-446655440000",
+		required: false,
+	})
+	@IsUUID("4", { message: "유효한 Role ID를 입력해주세요" })
+	@IsOptional()
+	roleId?: string;
+
+	@ApiProperty({
+		description: "User ID (User 예외 권한일 때)",
+		example: "550e8400-e29b-41d4-a716-446655440001",
+		required: false,
+	})
+	@IsUUID("4", { message: "유효한 User ID를 입력해주세요" })
+	@IsOptional()
+	userId?: string;
+
+	@ApiProperty({
+		description: "권한 이름",
+		example: "본인 정보 조회",
+		required: false,
+	})
+	@IsString()
+	@IsOptional()
+	name?: string;
+
+	@ApiProperty({
+		description: "권한 설명",
+		example: "자신의 프로필 정보만 조회할 수 있습니다",
+		required: false,
+	})
+	@IsString()
+	@IsOptional()
+	description?: string;
 
 	@ApiProperty({
 		description: "활성화 여부",
 		example: true,
 		default: true,
-		required: false,
 	})
-	@IsBoolean({ message: "활성화 여부는 boolean이어야 합니다" })
+	@IsBoolean()
 	@IsOptional()
 	isActive?: boolean;
+
+	@ApiProperty({
+		description: "우선순위 (높을수록 우선)",
+		example: 0,
+		default: 0,
+	})
+	@IsNumber()
+	@IsOptional()
+	priority?: number;
 }
 
 /**
@@ -75,10 +143,10 @@ export class UpdateRoleAbilitiesRequestDto {
 		type: [CreateAbilityDto],
 		example: [
 			{
-				type: AbilityTypes.CAN,
-				action: AbilityActions.READ,
-				subjectId: "550e8400-e29b-41d4-a716-446655440000",
-				description: "회원 목록 조회 권한",
+				action: "read",
+				subject: "User",
+				inverted: false,
+				name: "사용자 조회",
 				isActive: true,
 			},
 		],

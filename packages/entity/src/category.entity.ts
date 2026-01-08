@@ -3,6 +3,7 @@ import type {
 	CategoryTypes,
 } from "@cocrepo/prisma";
 import { AbstractEntity } from "./abstract.entity";
+import type { FieldVisibility } from "./field-visibility.entity";
 import type { Space } from "./space.entity";
 import type { User } from "./user.entity";
 
@@ -17,6 +18,11 @@ export class Category extends AbstractEntity implements CategoryEntity {
 	children?: Category[];
 	space?: Space;
 	creator?: User;
+
+	/**
+	 * 필드 가시성 설정 (RoleCategory로 사용 시)
+	 */
+	fieldVisibilities?: FieldVisibility[];
 
 	/**
 	 * 현재 카테고리부터 루트까지 모든 상위 카테고리 이름을 추출합니다

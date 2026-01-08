@@ -7,8 +7,8 @@
  */
 
 export type GetSubjectTreeParams = {
-/**
- * 부모 Subject ID (UUID). 생략 시 최상위 Subject 반환
- */
-parentId?: string;
+	/**
+	 * 부모 Subject ID (UUID). 생략 시 최상위 Subject 반환
+	 */
+	parentId?: string;
 };

@@ -5,6 +5,7 @@ import type {
 	UserAssociation,
 	User as UserEntity,
 } from "@cocrepo/prisma";
+import type { Ability } from "./ability.entity";
 import { AbstractEntity } from "./abstract.entity";
 
 export class User extends AbstractEntity implements UserEntity {
@@ -26,6 +27,11 @@ export class User extends AbstractEntity implements UserEntity {
 	profiles?: Profile[];
 	tenants?: Tenant[];
 	associations?: UserAssociation[];
+
+	/**
+	 * 사용자별 예외 권한 (CASL)
+	 */
+	abilities?: Ability[];
 
 	/**
 	 * 사용자의 현재 선택된 Space에 해당하는 테넌트를 반환합니다

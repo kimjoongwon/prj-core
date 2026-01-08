@@ -9,19 +9,19 @@
 /**
  * 권한 액션
  */
-export type AbilityResponseDtoAction = typeof AbilityResponseDtoAction[keyof typeof AbilityResponseDtoAction];
-
+export type AbilityResponseDtoAction =
+	(typeof AbilityResponseDtoAction)[keyof typeof AbilityResponseDtoAction];
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export const AbilityResponseDtoAction = {
-  CREATE: 'CREATE',
-  READ: 'READ',
-  UPDATE: 'UPDATE',
-  DELETE: 'DELETE',
-  ACCESS: 'ACCESS',
-  MANAGE: 'MANAGE',
-  EXPORT: 'EXPORT',
-  IMPORT: 'IMPORT',
-  APPROVE: 'APPROVE',
-  REJECT: 'REJECT',
+	CREATE: "CREATE",
+	READ: "READ",
+	UPDATE: "UPDATE",
+	DELETE: "DELETE",
+	ACCESS: "ACCESS",
+	MANAGE: "MANAGE",
+	EXPORT: "EXPORT",
+	IMPORT: "IMPORT",
+	APPROVE: "APPROVE",
+	REJECT: "REJECT",
 } as const;

@@ -47,7 +47,7 @@ export class AbilitiesController {
 	@ApiOperation({
 		summary: "내 권한 조회",
 		description:
-			"현재 로그인한 사용자의 Role에 할당된 모든 권한을 조회합니다. Subject 관계를 포함합니다.",
+			"현재 로그인한 사용자의 Role 권한과 예외 권한을 병합하여 조회합니다.",
 	})
 	@ApiAuth()
 	@ApiErrors(
@@ -68,9 +68,8 @@ export class AbilitiesController {
 
 	@Get("roles/:roleId")
 	@ApiOperation({
-		summary: "Role별 권한 조회",
-		description:
-			"특정 Role에 할당된 모든 권한을 조회합니다. Subject 관계를 포함합니다.",
+		summary: "Role별 기본 권한 조회",
+		description: "특정 Role에 할당된 기본 권한 목록을 조회합니다.",
 	})
 	@ApiAuth()
 	@ApiParam({
@@ -84,17 +83,40 @@ export class AbilitiesController {
 	)
 	@ApiResponseEntity(AbilityResponseDto, HttpStatus.OK, { isArray: true })
 	@ResponseMessage("Role별 권한 조회 성공")
-	async getAbilitiesByRoleId(
+	async getRoleAbilities(
 		@Param("roleId", ParseUUIDPipe) roleId: string,
 	): Promise<Ability[]> {
-		return this.abilitiesFacade.getAbilitiesByRoleId(roleId);
+		return this.abilitiesFacade.getRoleAbilities(roleId);
+	}
+
+	@Get("users/:userId")
+	@ApiOperation({
+		summary: "User별 예외 권한 조회",
+		description: "특정 User에게 할당된 예외 권한 목록을 조회합니다.",
+	})
+	@ApiAuth()
+	@ApiParam({
+		name: "userId",
+		description: "User ID (UUID)",
+		type: String,
+	})
+	@ApiErrors(
+		{ status: 401, message: AbilitiesErrorMessages.USER_NOT_FOUND },
+		500,
+	)
+	@ApiResponseEntity(AbilityResponseDto, HttpStatus.OK, { isArray: true })
+	@ResponseMessage("User별 예외 권한 조회 성공")
+	async getUserAbilities(
+		@Param("userId", ParseUUIDPipe) userId: string,
+	): Promise<Ability[]> {
+		return this.abilitiesFacade.getUserAbilities(userId);
 	}
 
 	@Put("roles/:roleId")
 	@ApiOperation({
-		summary: "Role 권한 수정",
+		summary: "Role 권한 일괄 설정",
 		description:
-			"Role의 권한을 일괄 수정합니다. 기존 권한은 소프트 삭제되고 새로운 권한이 생성됩니다. 트랜잭션으로 원자성을 보장합니다.",
+			"Role의 기본 권한을 일괄 설정합니다. 기존 권한은 소프트 삭제되고 새로운 권한이 생성됩니다.",
 	})
 	@ApiAuth()
 	@ApiParam({
@@ -104,36 +126,64 @@ export class AbilitiesController {
 	})
 	@ApiBody({
 		type: UpdateRoleAbilitiesRequestDto,
-		description: "생성할 Ability 목록",
+		description: "설정할 Ability 목록",
 	})
 	@ApiErrors(
 		{ status: 401, message: AbilitiesErrorMessages.USER_NOT_FOUND },
-		{ status: 401, message: AbilitiesErrorMessages.SPACE_NOT_SELECTED },
 		{ status: 400, message: AbilitiesErrorMessages.ABILITY_UPDATE_FAILED },
 		500,
 	)
 	@ApiResponseEntity(AbilityResponseDto, HttpStatus.OK, { isArray: true })
-	@ResponseMessage("Role 권한 수정 성공")
-	async updateRoleAbilities(
+	@ResponseMessage("Role 권한 설정 성공")
+	async setRoleAbilities(
 		@Param("roleId", ParseUUIDPipe) roleId: string,
 		@Body() body: UpdateRoleAbilitiesRequestDto,
 	): Promise<Ability[]> {
-		const spaceId = this.cls.get<string>(CONTEXT_KEYS.SPACE_ID);
-		if (!spaceId) {
-			throw new UnauthorizedException(
-				AbilitiesErrorMessages.SPACE_NOT_SELECTED,
-			);
-		}
-
 		const abilitiesToCreate = body.abilities.map((ability) => ({
 			...ability,
 			roleId,
-			tenantId: spaceId,
 		}));
 
-		return this.abilitiesFacade.updateRoleAbilities(
+		return this.abilitiesFacade.batchSetRoleAbilities(
 			roleId,
-			spaceId,
+			abilitiesToCreate,
+		);
+	}
+
+	@Put("users/:userId")
+	@ApiOperation({
+		summary: "User 예외 권한 일괄 설정",
+		description:
+			"User의 예외 권한을 일괄 설정합니다. 기존 예외 권한은 소프트 삭제되고 새로운 권한이 생성됩니다.",
+	})
+	@ApiAuth()
+	@ApiParam({
+		name: "userId",
+		description: "User ID (UUID)",
+		type: String,
+	})
+	@ApiBody({
+		type: UpdateRoleAbilitiesRequestDto,
+		description: "설정할 Ability 목록",
+	})
+	@ApiErrors(
+		{ status: 401, message: AbilitiesErrorMessages.USER_NOT_FOUND },
+		{ status: 400, message: AbilitiesErrorMessages.ABILITY_UPDATE_FAILED },
+		500,
+	)
+	@ApiResponseEntity(AbilityResponseDto, HttpStatus.OK, { isArray: true })
+	@ResponseMessage("User 예외 권한 설정 성공")
+	async setUserAbilities(
+		@Param("userId", ParseUUIDPipe) userId: string,
+		@Body() body: UpdateRoleAbilitiesRequestDto,
+	): Promise<Ability[]> {
+		const abilitiesToCreate = body.abilities.map((ability) => ({
+			...ability,
+			userId,
+		}));
+
+		return this.abilitiesFacade.batchSetUserAbilities(
+			userId,
 			abilitiesToCreate,
 		);
 	}

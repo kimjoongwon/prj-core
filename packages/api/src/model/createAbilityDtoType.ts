@@ -9,11 +9,11 @@
 /**
  * 권한 타입 (허용/거부)
  */
-export type CreateAbilityDtoType = typeof CreateAbilityDtoType[keyof typeof CreateAbilityDtoType];
-
+export type CreateAbilityDtoType =
+	(typeof CreateAbilityDtoType)[keyof typeof CreateAbilityDtoType];
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export const CreateAbilityDtoType = {
-  CAN: 'CAN',
-  CAN_NOT: 'CAN_NOT',
+	CAN: "CAN",
+	CAN_NOT: "CAN_NOT",
 } as const;

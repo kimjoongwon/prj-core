@@ -1,6 +1,6 @@
-import { getDMMF } from "@prisma/internals";
 import * as fs from "node:fs";
 import * as path from "node:path";
+import { getDMMF } from "@prisma/internals";
 
 export interface ModelInfo {
 	name: string;
@@ -85,7 +85,9 @@ export class DmmfParser {
 	 * 스키마 디렉토리의 모든 .prisma 파일을 읽어 하나의 문자열로 합칩니다.
 	 */
 	private readSchemaFiles(schemaDir: string): string {
-		const files = fs.readdirSync(schemaDir).filter((f) => f.endsWith(".prisma"));
+		const files = fs
+			.readdirSync(schemaDir)
+			.filter((f) => f.endsWith(".prisma"));
 		const contents: string[] = [];
 
 		for (const file of files) {

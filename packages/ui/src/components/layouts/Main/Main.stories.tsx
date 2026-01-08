@@ -22,9 +22,7 @@ type Story = StoryObj<typeof meta>;
 const SampleDashboardContent = () => (
 	<VStack gap={6} className="p-6">
 		<div>
-			<h4 className="text-xl font-bold mb-2">
-				Admin Dashboard
-			</h4>
+			<h4 className="text-xl font-bold mb-2">Admin Dashboard</h4>
 			<p className="text-default-600">
 				Welcome to the admin panel. Here you can manage your application.
 			</p>
@@ -40,12 +38,8 @@ const SampleDashboardContent = () => (
 				<Card key={index}>
 					<CardBody className="text-center">
 						<div className="mb-2 text-2xl">{stat.icon}</div>
-						<h5 className="text-lg font-bold mb-1">
-							{stat.value}
-						</h5>
-						<p className="text-sm text-default-500">
-							{stat.title}
-						</p>
+						<h5 className="text-lg font-bold mb-1">{stat.value}</h5>
+						<p className="text-sm text-default-500">{stat.title}</p>
 					</CardBody>
 				</Card>
 			))}
@@ -53,9 +47,7 @@ const SampleDashboardContent = () => (
 
 		<Card>
 			<CardBody>
-				<h6 className="text-base font-bold mb-4">
-					Recent Activity
-				</h6>
+				<h6 className="text-base font-bold mb-4">Recent Activity</h6>
 				<VStack gap={3}>
 					{[
 						"New user registration: john@example.com",
@@ -65,9 +57,7 @@ const SampleDashboardContent = () => (
 					].map((activity, index) => (
 						<HStack key={index} gap={3} alignItems="center">
 							<div className="h-2 w-2 rounded-full bg-primary"></div>
-							<p className="text-sm text-default-600">
-								{activity}
-							</p>
+							<p className="text-sm text-default-600">{activity}</p>
 						</HStack>
 					))}
 				</VStack>
@@ -78,9 +68,7 @@ const SampleDashboardContent = () => (
 
 const SampleFormContent = () => (
 	<VStack gap={4} className="p-6">
-		<h5 className="text-lg font-bold mb-4">
-			User Settings
-		</h5>
+		<h5 className="text-lg font-bold mb-4">User Settings</h5>
 
 		<div className="space-y-4">
 			<div>
@@ -231,9 +219,7 @@ export const EmptyLayout: Story = {
 		children: (
 			<VStack gap={4} alignItems="center" className="p-12 text-center">
 				<div className="flex h-16 w-16 items-center justify-center rounded-full bg-default-100">
-					<h4 className="text-xl font-bold text-default-400">
-						📄
-					</h4>
+					<h4 className="text-xl font-bold text-default-400">📄</h4>
 				</div>
 				<h5 className="text-lg font-bold">No Content</h5>
 				<p className="max-w-md text-default-600">
@@ -249,9 +235,7 @@ export const SimpleContent: Story = {
 	args: {
 		children: (
 			<div className="p-6">
-				<h6 className="text-base font-bold mb-4">
-					Simple Content Area
-				</h6>
+				<h6 className="text-base font-bold mb-4">Simple Content Area</h6>
 				<p className="text-default-600">
 					This shows the admin main layout with simple text content. The layout
 					provides a bordered container with margin and rounded corners.

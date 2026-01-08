@@ -30,7 +30,9 @@ export const PasswordInputPage = ({
 		<VStack fullWidth gap={8} className="p-4">
 			<VStack fullWidth gap={2}>
 				<h3 className="text-2xl font-bold">비밀번호 설정</h3>
-				<span className="text-sm text-default-500">사용하실 비밀번호를 입력해주세요.</span>
+				<span className="text-sm text-default-500">
+					사용하실 비밀번호를 입력해주세요.
+				</span>
 			</VStack>
 
 			<VStack fullWidth gap={4}>
@@ -52,7 +54,11 @@ export const PasswordInputPage = ({
 				/>
 			</VStack>
 
-			{state.errorMessage && <span className="text-sm font-medium text-danger">{state.errorMessage}</span>}
+			{state.errorMessage && (
+				<span className="text-sm font-medium text-danger">
+					{state.errorMessage}
+				</span>
+			)}
 
 			<Button
 				color="primary"

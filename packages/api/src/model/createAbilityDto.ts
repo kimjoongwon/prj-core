@@ -5,21 +5,22 @@
  * API 문서입니다. 대부분의 엔드포인트는 쿠키 기반 JWT 인증이 필요합니다. (@Public 데코레이터가 있는 엔드포인트는 예외)
  * OpenAPI spec version: 1.0.0
  */
-import type { CreateAbilityDtoType } from './createAbilityDtoType';
-import type { CreateAbilityDtoAction } from './createAbilityDtoAction';
-import type { CreateAbilityDtoConditions } from './createAbilityDtoConditions';
+
+import type { CreateAbilityDtoAction } from "./createAbilityDtoAction";
+import type { CreateAbilityDtoConditions } from "./createAbilityDtoConditions";
+import type { CreateAbilityDtoType } from "./createAbilityDtoType";
 
 export interface CreateAbilityDto {
-  /** 권한 타입 (허용/거부) */
-  type: CreateAbilityDtoType;
-  /** 권한 액션 */
-  action: CreateAbilityDtoAction;
-  /** 권한 설명 */
-  description?: string;
-  /** 권한 조건 (JSON 형식) */
-  conditions?: CreateAbilityDtoConditions;
-  /** Subject ID (UUID) */
-  subjectId: string;
-  /** 활성화 여부 */
-  isActive?: boolean;
+	/** 권한 타입 (허용/거부) */
+	type: CreateAbilityDtoType;
+	/** 권한 액션 */
+	action: CreateAbilityDtoAction;
+	/** 권한 설명 */
+	description?: string;
+	/** 권한 조건 (JSON 형식) */
+	conditions?: CreateAbilityDtoConditions;
+	/** Subject ID (UUID) */
+	subjectId: string;
+	/** 활성화 여부 */
+	isActive?: boolean;
 }

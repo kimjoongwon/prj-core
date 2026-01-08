@@ -1,73 +1,70 @@
-import { SubjectTypes } from "@cocrepo/prisma";
 import { ApiProperty } from "@nestjs/swagger";
-import { Expose, Type } from "class-transformer";
+import { Expose } from "class-transformer";
 
 /**
- * Subject 응답 DTO (계층 구조 지원)
+ * Subject 응답 DTO (DMMF 기반)
  */
 export class SubjectResponseDto {
 	@ApiProperty({
-		description: "Subject ID (UUID)",
-		example: "550e8400-e29b-41d4-a716-446655440000",
-	})
-	@Expose()
-	id!: string;
-
-	@ApiProperty({
-		description: "Subject 이름",
-		example: "회원 관리",
+		description: "Subject 이름 (Prisma 모델명)",
+		example: "User",
 	})
 	@Expose()
 	name!: string;
 
 	@ApiProperty({
-		description: "Subject 타입",
-		enum: SubjectTypes,
-		example: SubjectTypes.Menu,
-	})
-	@Expose()
-	type!: SubjectTypes;
-
-	@ApiProperty({
-		description: "Subject 레이블",
-		example: "회원 관리 메뉴",
-		required: false,
+		description: "Subject 표시명 (@displayName 주석)",
+		example: "사용자",
 		nullable: true,
 	})
 	@Expose()
-	label?: string | null;
+	displayName!: string | null;
 
 	@ApiProperty({
-		description: "Subject 설명",
-		example: "회원 정보를 관리하는 메뉴",
-		required: false,
+		description: "필드 수",
+		example: 10,
+	})
+	@Expose()
+	fieldCount!: number;
+}
+
+/**
+ * Subject 필드 응답 DTO
+ */
+export class SubjectFieldResponseDto {
+	@ApiProperty({
+		description: "필드 이름",
+		example: "email",
+	})
+	@Expose()
+	name!: string;
+
+	@ApiProperty({
+		description: "필드 표시명 (@displayName 주석)",
+		example: "이메일",
 		nullable: true,
 	})
 	@Expose()
-	description?: string | null;
+	displayName!: string | null;
 
 	@ApiProperty({
-		description: "부모 Subject ID",
-		example: "550e8400-e29b-41d4-a716-446655440001",
-		required: false,
-		nullable: true,
+		description: "필드 타입",
+		example: "String",
 	})
 	@Expose()
-	parentId?: string | null;
+	type!: string;
 
 	@ApiProperty({
-		description: "정렬 순서",
-		example: 1,
+		description: "필수 여부",
+		example: true,
 	})
 	@Expose()
-	sortOrder!: number;
+	isRequired!: boolean;
 
 	@ApiProperty({
-		description: "하위 Subject 목록",
-		type: () => [SubjectResponseDto],
-		required: false,
+		description: "관계 필드 여부",
+		example: false,
 	})
 	@Expose()
-	@Type(() => SubjectResponseDto)
-	children?: SubjectResponseDto[];
+	isRelation!: boolean;
 }

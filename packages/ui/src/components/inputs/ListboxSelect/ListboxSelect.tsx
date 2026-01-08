@@ -37,9 +37,7 @@ export const ListboxSelect = <T extends object>(
 		<ListboxWrapper>
 			{title && (
 				<div className="mb-3">
-					<h6 className="text-base font-bold font-semibold">
-						{title}
-					</h6>
+					<h6 className="text-base font-bold font-semibold">{title}</h6>
 				</div>
 			)}
 			<HeroListbox

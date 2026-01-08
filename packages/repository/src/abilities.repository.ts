@@ -18,34 +18,34 @@ export class AbilitiesRepository {
 	}
 
 	/**
-	 * 모든 Ability 조회 (Role, Subject 포함)
+	 * 모든 Ability 조회 (Role 포함)
 	 */
-	async findAllWithRoleAndSubject(): Promise<Ability[]> {
+	async findAllWithRole(): Promise<Ability[]> {
 		this.logger.debug("모든 Ability 조회");
 
 		const results = await this.txHost.tx.ability.findMany({
 			where: { removedAt: null },
 			include: {
 				role: true,
-				subject: true,
+				user: true,
 			},
-			orderBy: { createdAt: "desc" },
+			orderBy: [{ priority: "desc" }, { createdAt: "desc" }],
 		});
 
 		return results.map((result) => plainToInstance(Ability, result));
 	}
 
 	/**
-	 * ID로 조회 (Role, Subject 포함)
+	 * ID로 조회 (Role 포함)
 	 */
-	async findByIdWithRoleAndSubject(id: string): Promise<Ability | null> {
+	async findByIdWithRole(id: string): Promise<Ability | null> {
 		this.logger.debug(`ID로 조회: ${id.slice(-8)}`);
 
 		const result = await this.txHost.tx.ability.findUnique({
 			where: { id },
 			include: {
 				role: true,
-				subject: true,
+				user: true,
 			},
 		});
 
@@ -53,39 +53,51 @@ export class AbilitiesRepository {
 	}
 
 	/**
-	 * Role ID로 Ability 목록 조회 (Role, Subject 관계 포함)
+	 * Role ID로 활성화된 Ability 목록 조회
 	 */
-	async findManyByRoleIdWithRoleAndSubject(roleId: string): Promise<Ability[]> {
+	async findActiveByRoleId(roleId: string): Promise<Ability[]> {
 		this.logger.debug(`Role ID로 Ability 조회: roleId=${roleId.slice(-8)}`);
 
 		const results = await this.txHost.tx.ability.findMany({
 			where: {
 				roleId,
 				removedAt: null,
+				isActive: true,
 			},
 			include: {
 				role: true,
-				subject: {
-					include: {
-						parent: true,
-						children: {
-							where: { removedAt: null },
-						},
-					},
-				},
 			},
-			orderBy: { createdAt: "desc" },
+			orderBy: [{ priority: "desc" }, { createdAt: "desc" }],
 		});
 
 		return results.map((result) => plainToInstance(Ability, result));
 	}
 
 	/**
-	 * 여러 Role ID로 활성화된 Ability 목록 조회 (Role, Subject 관계 포함)
+	 * User ID로 활성화된 Ability 목록 조회 (예외 권한)
 	 */
-	async findManyActiveByRoleIdsWithRoleAndSubject(
-		roleIds: string[],
-	): Promise<Ability[]> {
+	async findActiveByUserId(userId: string): Promise<Ability[]> {
+		this.logger.debug(`User ID로 Ability 조회: userId=${userId.slice(-8)}`);
+
+		const results = await this.txHost.tx.ability.findMany({
+			where: {
+				userId,
+				removedAt: null,
+				isActive: true,
+			},
+			include: {
+				user: true,
+			},
+			orderBy: [{ priority: "desc" }, { createdAt: "desc" }],
+		});
+
+		return results.map((result) => plainToInstance(Ability, result));
+	}
+
+	/**
+	 * 여러 Role ID로 활성화된 Ability 목록 조회
+	 */
+	async findActiveByRoleIds(roleIds: string[]): Promise<Ability[]> {
 		this.logger.debug(
 			`여러 Role ID로 Ability 조회: roleIds.length=${roleIds.length}`,
 		);
@@ -98,41 +110,29 @@ export class AbilitiesRepository {
 			},
 			include: {
 				role: true,
-				subject: {
-					include: {
-						parent: true,
-						children: {
-							where: { removedAt: null },
-						},
-					},
-				},
 			},
-			orderBy: { createdAt: "desc" },
+			orderBy: [{ priority: "desc" }, { createdAt: "desc" }],
 		});
 
 		return results.map((result) => plainToInstance(Ability, result));
 	}
 
 	/**
-	 * Subject ID로 Ability 목록 조회 (Role, Subject 포함)
+	 * Subject로 Ability 목록 조회
 	 */
-	async findManyBySubjectIdWithRoleAndSubject(
-		subjectId: string,
-	): Promise<Ability[]> {
-		this.logger.debug(
-			`Subject ID로 Ability 조회: subjectId=${subjectId.slice(-8)}`,
-		);
+	async findBySubject(subject: string): Promise<Ability[]> {
+		this.logger.debug(`Subject로 Ability 조회: subject=${subject}`);
 
 		const results = await this.txHost.tx.ability.findMany({
 			where: {
-				subjectId,
+				subject,
 				removedAt: null,
 			},
 			include: {
 				role: true,
-				subject: true,
+				user: true,
 			},
-			orderBy: { createdAt: "desc" },
+			orderBy: [{ priority: "desc" }, { createdAt: "desc" }],
 		});
 
 		return results.map((result) => plainToInstance(Ability, result));
@@ -143,14 +143,14 @@ export class AbilitiesRepository {
 	 */
 	async create(data: Prisma.AbilityUncheckedCreateInput): Promise<Ability> {
 		this.logger.debug(
-			`Ability 생성: roleId=${data.roleId.slice(-8)}, subjectId=${data.subjectId.slice(-8)}`,
+			`Ability 생성: subject=${data.subject}, action=${data.action}`,
 		);
 
 		const result = await this.txHost.tx.ability.create({
 			data,
 			include: {
 				role: true,
-				subject: true,
+				user: true,
 			},
 		});
 
@@ -171,7 +171,7 @@ export class AbilitiesRepository {
 			data,
 			include: {
 				role: true,
-				subject: true,
+				user: true,
 			},
 		});
 
@@ -189,7 +189,7 @@ export class AbilitiesRepository {
 			data: { removedAt: new Date() },
 			include: {
 				role: true,
-				subject: true,
+				user: true,
 			},
 		});
 
@@ -201,7 +201,6 @@ export class AbilitiesRepository {
 	 */
 	async replaceByRoleId(
 		roleId: string,
-		tenantId: string,
 		abilities: Prisma.AbilityCreateManyInput[],
 	): Promise<Ability[]> {
 		this.logger.debug(
@@ -223,7 +222,6 @@ export class AbilitiesRepository {
 		const createData = abilities.map((ability) => ({
 			...ability,
 			roleId,
-			tenantId,
 			isActive: ability.isActive ?? true,
 		}));
 
@@ -234,7 +232,49 @@ export class AbilitiesRepository {
 				data,
 				include: {
 					role: true,
-					subject: true,
+				},
+			});
+			results.push(plainToInstance(Ability, result));
+		}
+
+		return results;
+	}
+
+	/**
+	 * User의 기존 예외 Ability를 삭제하고 새로 생성 (일괄 교체)
+	 */
+	async replaceByUserId(
+		userId: string,
+		abilities: Prisma.AbilityCreateManyInput[],
+	): Promise<Ability[]> {
+		this.logger.debug(
+			`User 예외 Ability 일괄 교체: userId=${userId.slice(-8)}, count=${abilities.length}`,
+		);
+
+		// 기존 Ability 소프트 삭제
+		await this.txHost.tx.ability.updateMany({
+			where: {
+				userId,
+				removedAt: null,
+			},
+			data: {
+				removedAt: new Date(),
+			},
+		});
+
+		// 새 Ability 생성
+		const createData = abilities.map((ability) => ({
+			...ability,
+			userId,
+			isActive: ability.isActive ?? true,
+		}));
+
+		const results: Ability[] = [];
+		for (const data of createData) {
+			const result = await this.txHost.tx.ability.create({
+				data,
+				include: {
+					user: true,
 				},
 			});
 			results.push(plainToInstance(Ability, result));

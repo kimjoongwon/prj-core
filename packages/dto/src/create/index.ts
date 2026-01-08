@@ -15,7 +15,6 @@ export * from "./create-session.dto";
 export * from "./create-space.dto";
 export * from "./create-space-association.dto";
 export * from "./create-space-classification.dto";
-export * from "./create-subject.dto";
 export * from "./create-task.dto";
 export * from "./create-tenant.dto";
 export * from "./create-timeline.dto";

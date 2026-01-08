@@ -52,6 +52,8 @@ model User {
   createdTimelines   Timeline[]          @relation("TimelineCreator")
   createdTasks       Task[]              @relation("TaskCreator")
   createdSafeWallets SafeWallet[]        @relation("SafeWalletCreator")
+  // CASL 예외 권한 (User별)
+  abilities          Ability[]
 
   @@map("users")
 }

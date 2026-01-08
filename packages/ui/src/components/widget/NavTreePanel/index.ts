@@ -1,2 +1,2 @@
-export { NavTreePanel } from "./NavTreePanel";
 export type { NavTreePanelProps } from "./NavTreePanel";
+export { NavTreePanel } from "./NavTreePanel";

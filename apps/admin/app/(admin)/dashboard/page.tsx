@@ -69,9 +69,7 @@ export default function DashboardPage() {
 			{/* 헤더 */}
 			<div className="flex flex-col gap-2">
 				<h1 className="text-3xl font-bold">대시보드</h1>
-				<p className="text-default-500">
-					시스템 현황을 한눈에 확인하세요
-				</p>
+				<p className="text-default-500">시스템 현황을 한눈에 확인하세요</p>
 			</div>
 
 			{/* 통계 카드 */}
@@ -152,9 +150,7 @@ export default function DashboardPage() {
 					<CardBody className="gap-4 p-6">
 						<div className="flex flex-col gap-1">
 							<h3 className="text-lg font-semibold">월별 예약 추이</h3>
-							<p className="text-sm text-default-500">
-								최근 6개월간 예약 건수
-							</p>
+							<p className="text-sm text-default-500">최근 6개월간 예약 건수</p>
 						</div>
 						<ResponsiveContainer width="100%" height={300}>
 							<BarChart data={monthlyReservationData}>

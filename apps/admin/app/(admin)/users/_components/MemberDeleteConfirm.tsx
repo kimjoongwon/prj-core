@@ -54,9 +54,7 @@ export function MemberDeleteConfirm({
 				</ModalHeader>
 				<ModalBody>
 					<span className="text-default-600">
-						<span className="font-medium">
-							{member?.name}
-						</span>
+						<span className="font-medium">{member?.name}</span>
 						<span> 회원을 정말 삭제하시겠습니까?</span>
 					</span>
 					<span className="text-sm text-default-500">

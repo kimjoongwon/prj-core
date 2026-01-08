@@ -78,9 +78,7 @@ const SampleFormContent = () => (
 const SampleConfirmationContent = () => (
 	<VStack gap={4} alignItems="center" className="py-6 text-center">
 		<div className="flex h-16 w-16 items-center justify-center rounded-full bg-warning-100">
-			<h4 className="text-xl font-bold text-warning-600">
-				⚠️
-			</h4>
+			<h4 className="text-xl font-bold text-warning-600">⚠️</h4>
 		</div>
 
 		<VStack gap={2} alignItems="center">
@@ -102,32 +100,22 @@ const SampleDetailContent = () => (
 		<div className="grid grid-cols-1 gap-4 md:grid-cols-2">
 			<Card>
 				<CardBody>
-					<span className="text-default-600 mb-3">
-						User Information
-					</span>
+					<span className="text-default-600 mb-3">User Information</span>
 					<VStack gap={2}>
 						<HStack justifyContent="between">
-							<p className="text-sm text-default-500">
-								Name:
-							</p>
+							<p className="text-sm text-default-500">Name:</p>
 							<p className="text-sm">John Doe</p>
 						</HStack>
 						<HStack justifyContent="between">
-							<p className="text-sm text-default-500">
-								Email:
-							</p>
+							<p className="text-sm text-default-500">Email:</p>
 							<p className="text-sm">john@example.com</p>
 						</HStack>
 						<HStack justifyContent="between">
-							<p className="text-sm text-default-500">
-								Role:
-							</p>
+							<p className="text-sm text-default-500">Role:</p>
 							<p className="text-sm">Administrator</p>
 						</HStack>
 						<HStack justifyContent="between">
-							<p className="text-sm text-default-500">
-								Status:
-							</p>
+							<p className="text-sm text-default-500">Status:</p>
 							<span className="rounded-full bg-success-100 px-2 py-1 text-success-800 text-xs">
 								Active
 							</span>
@@ -138,32 +126,22 @@ const SampleDetailContent = () => (
 
 			<Card>
 				<CardBody>
-					<span className="text-default-600 mb-3">
-						Activity Summary
-					</span>
+					<span className="text-default-600 mb-3">Activity Summary</span>
 					<VStack gap={2}>
 						<HStack justifyContent="between">
-							<p className="text-sm text-default-500">
-								Last Login:
-							</p>
+							<p className="text-sm text-default-500">Last Login:</p>
 							<p className="text-sm">2 hours ago</p>
 						</HStack>
 						<HStack justifyContent="between">
-							<p className="text-sm text-default-500">
-								Total Sessions:
-							</p>
+							<p className="text-sm text-default-500">Total Sessions:</p>
 							<p className="text-sm">234</p>
 						</HStack>
 						<HStack justifyContent="between">
-							<p className="text-sm text-default-500">
-								Created:
-							</p>
+							<p className="text-sm text-default-500">Created:</p>
 							<p className="text-sm">Jan 15, 2024</p>
 						</HStack>
 						<HStack justifyContent="between">
-							<p className="text-sm text-default-500">
-								Updated:
-							</p>
+							<p className="text-sm text-default-500">Updated:</p>
 							<p className="text-sm">Today</p>
 						</HStack>
 					</VStack>
@@ -173,9 +151,7 @@ const SampleDetailContent = () => (
 
 		<Card>
 			<CardBody>
-				<span className="text-default-600 mb-3">
-					Recent Activity
-				</span>
+				<span className="text-default-600 mb-3">Recent Activity</span>
 				<VStack gap={3}>
 					{[
 						{ action: "Updated profile information", time: "2 hours ago" },
@@ -235,16 +211,12 @@ const SampleListContent = () => (
 							<div className="flex-1">
 								<HStack justifyContent="between" alignItems="center">
 									<VStack gap={0}>
-										<p className="text-sm font-medium">
-											{item.name}
-										</p>
+										<p className="text-sm font-medium">{item.name}</p>
 										<span className="text-sm text-default-500">
 											{item.type} • {item.size}
 										</span>
 									</VStack>
-									<p className="text-sm text-primary">
-										📄
-									</p>
+									<p className="text-sm text-primary">📄</p>
 								</HStack>
 							</div>
 						</HStack>

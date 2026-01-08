@@ -7,7 +7,6 @@ export { AbilitiesRepository } from "./abilities.repository";
 export { GroundsRepository } from "./grounds.repository";
 export { RolesRepository } from "./roles.repository";
 export { SpacesRepository } from "./spaces.repository";
-export { SubjectsRepository } from "./subjects.repository";
 export {
 	type FindEffectiveParams,
 	UIConfigRepository,

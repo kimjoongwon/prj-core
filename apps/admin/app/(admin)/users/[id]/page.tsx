@@ -96,9 +96,7 @@ export default function MemberDetailPage() {
 	if (!member) {
 		return (
 			<div className="flex flex-col items-center justify-center gap-4 py-12">
-				<p className="text-lg text-default-500">
-					회원을 찾을 수 없습니다.
-				</p>
+				<p className="text-lg text-default-500">회원을 찾을 수 없습니다.</p>
 			</div>
 		);
 	}

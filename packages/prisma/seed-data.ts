@@ -548,939 +548,649 @@ export const userAgreementMapping: UserAgreementMappingData[] = [
 ];
 
 // ============================================================================
-// Subject (CASL 권한 대상) 시드 데이터
+// Ability (CASL ABAC 권한 정의) 시드 데이터
 // ============================================================================
 
 /**
- * SubjectTypes enum (core.prisma 기준)
- * - Menu: 메뉴 접근 권한
- * - Feature: 기능 권한 (내보내기, 가져오기 등)
- * - Entity: 엔티티 CRUD 권한
- * - API: API 엔드포인트 권한
- * - Column: 컬럼 가시성 권한
- */
-export type SubjectType = "Menu" | "Feature" | "Entity" | "API" | "Column";
-
-export interface SubjectSeedData {
-	name: string;
-	type: SubjectType;
-	label: string;
-	description: string;
-	sortOrder: number;
-	parentName?: string; // 부모 Subject의 name (시드 실행 시 동적 연결)
-}
-
-/**
- * Menu Subject 시드 데이터
- * - 계층 구조를 가진 메뉴 권한 정의
- * - parentName을 통해 부모-자식 관계 설정
- * - 기획서: .claude/plans/2025-12-30-AdminLayoutAndMenuSystem.md (v5.0)
- */
-export const menuSubjectSeedData: SubjectSeedData[] = [
-	// 대시보드 (최상위, 하위 없음)
-	{
-		name: "menu:dashboard",
-		type: "Menu",
-		label: "대시보드",
-		description: "대시보드 메뉴 접근 권한",
-		sortOrder: 0,
-	},
-	// 사용자 (부모)
-	{
-		name: "menu:users",
-		type: "Menu",
-		label: "사용자",
-		description: "사용자 관리 메뉴 접근 권한",
-		sortOrder: 10,
-	},
-	// 사용자 - 하위 메뉴
-	{
-		name: "menu:users:list",
-		type: "Menu",
-		label: "사용자 목록",
-		description: "사용자 목록 조회 권한",
-		sortOrder: 11,
-		parentName: "menu:users",
-	},
-	{
-		name: "menu:users:profiles",
-		type: "Menu",
-		label: "프로필 관리",
-		description: "프로필 관리 권한",
-		sortOrder: 12,
-		parentName: "menu:users",
-	},
-	{
-		name: "menu:users:categories",
-		type: "Menu",
-		label: "분류 관리",
-		description: "사용자 분류 관리 권한",
-		sortOrder: 13,
-		parentName: "menu:users",
-	},
-	{
-		name: "menu:users:groups",
-		type: "Menu",
-		label: "그룹 관리",
-		description: "사용자 그룹 관리 권한",
-		sortOrder: 14,
-		parentName: "menu:users",
-	},
-	// 일정 (부모)
-	{
-		name: "menu:schedules",
-		type: "Menu",
-		label: "일정",
-		description: "일정 관리 메뉴 접근 권한",
-		sortOrder: 20,
-	},
-	// 일정 - 하위 메뉴
-	{
-		name: "menu:schedules:timelines",
-		type: "Menu",
-		label: "타임라인",
-		description: "타임라인 관리 권한",
-		sortOrder: 21,
-		parentName: "menu:schedules",
-	},
-	{
-		name: "menu:schedules:sessions",
-		type: "Menu",
-		label: "세션",
-		description: "세션 관리 권한",
-		sortOrder: 22,
-		parentName: "menu:schedules",
-	},
-	{
-		name: "menu:schedules:programs",
-		type: "Menu",
-		label: "프로그램",
-		description: "프로그램 관리 권한",
-		sortOrder: 23,
-		parentName: "menu:schedules",
-	},
-	{
-		name: "menu:schedules:routines",
-		type: "Menu",
-		label: "루틴",
-		description: "루틴 관리 권한",
-		sortOrder: 24,
-		parentName: "menu:schedules",
-	},
-	// 파일 (부모)
-	{
-		name: "menu:files",
-		type: "Menu",
-		label: "파일",
-		description: "파일 관리 메뉴 접근 권한",
-		sortOrder: 30,
-	},
-	// 파일 - 하위 메뉴
-	{
-		name: "menu:files:list",
-		type: "Menu",
-		label: "파일 목록",
-		description: "파일 목록 조회 권한",
-		sortOrder: 31,
-		parentName: "menu:files",
-	},
-	{
-		name: "menu:files:categories",
-		type: "Menu",
-		label: "분류 관리",
-		description: "파일 분류 관리 권한",
-		sortOrder: 32,
-		parentName: "menu:files",
-	},
-	// 콘텐츠 (부모)
-	{
-		name: "menu:contents",
-		type: "Menu",
-		label: "콘텐츠",
-		description: "콘텐츠 관리 메뉴 접근 권한",
-		sortOrder: 40,
-	},
-	// 콘텐츠 - 하위 메뉴
-	{
-		name: "menu:contents:posts",
-		type: "Menu",
-		label: "게시물",
-		description: "게시물 관리 권한",
-		sortOrder: 41,
-		parentName: "menu:contents",
-	},
-	{
-		name: "menu:contents:list",
-		type: "Menu",
-		label: "콘텐츠 목록",
-		description: "콘텐츠 목록 조회 권한",
-		sortOrder: 42,
-		parentName: "menu:contents",
-	},
-	// 지갑 (부모)
-	{
-		name: "menu:wallets",
-		type: "Menu",
-		label: "지갑",
-		description: "지갑 관리 메뉴 접근 권한",
-		sortOrder: 50,
-	},
-	// 지갑 - 하위 메뉴
-	{
-		name: "menu:wallets:list",
-		type: "Menu",
-		label: "지갑 목록",
-		description: "지갑 목록 조회 권한",
-		sortOrder: 51,
-		parentName: "menu:wallets",
-	},
-	{
-		name: "menu:wallets:transactions",
-		type: "Menu",
-		label: "트랜잭션",
-		description: "트랜잭션 조회 권한",
-		sortOrder: 52,
-		parentName: "menu:wallets",
-	},
-	// 설정 (부모)
-	{
-		name: "menu:settings",
-		type: "Menu",
-		label: "설정",
-		description: "설정 메뉴 접근 권한",
-		sortOrder: 100,
-	},
-	// 설정 - 하위 메뉴
-	{
-		name: "menu:settings:grounds",
-		type: "Menu",
-		label: "시설 정보",
-		description: "시설 정보 관리 권한",
-		sortOrder: 101,
-		parentName: "menu:settings",
-	},
-	{
-		name: "menu:settings:admins",
-		type: "Menu",
-		label: "관리자 관리",
-		description: "관리자 관리 권한",
-		sortOrder: 102,
-		parentName: "menu:settings",
-	},
-	{
-		name: "menu:settings:abilities",
-		type: "Menu",
-		label: "권한 관리",
-		description: "권한 관리 메뉴 접근 권한 (SUPER_ADMIN 전용)",
-		sortOrder: 103,
-		parentName: "menu:settings",
-	},
-	{
-		name: "menu:settings:system",
-		type: "Menu",
-		label: "시스템 설정",
-		description: "시스템 설정 관리 권한 (SUPER_ADMIN 전용)",
-		sortOrder: 104,
-		parentName: "menu:settings",
-	},
-	{
-		name: "menu:settings:ui-configs",
-		type: "Menu",
-		label: "UI 설정",
-		description: "UI 설정 관리 권한",
-		sortOrder: 105,
-		parentName: "menu:settings",
-	},
-];
-
-/**
- * Feature Subject 시드 데이터
- * - 기능별 권한 정의 (내보내기, 가져오기, 일괄 삭제 등)
- */
-export const featureSubjectSeedData: SubjectSeedData[] = [
-	{
-		name: "feature:export",
-		type: "Feature",
-		label: "내보내기",
-		description: "데이터 내보내기 기능 권한",
-		sortOrder: 200,
-	},
-	{
-		name: "feature:import",
-		type: "Feature",
-		label: "가져오기",
-		description: "데이터 가져오기 기능 권한",
-		sortOrder: 201,
-	},
-	{
-		name: "feature:bulk-delete",
-		type: "Feature",
-		label: "일괄 삭제",
-		description: "데이터 일괄 삭제 기능 권한",
-		sortOrder: 202,
-	},
-	{
-		name: "feature:send-notification",
-		type: "Feature",
-		label: "알림 발송",
-		description: "알림/푸시 발송 기능 권한",
-		sortOrder: 203,
-	},
-];
-
-/**
- * Entity Subject 시드 데이터
- * - NOTE: Entity/Column Subject는 앱 부트스트랩 시 Prisma 스키마에서 자동 동기화됩니다.
- * - @displayName 주석을 사용하여 한글명을 정의합니다.
- * - 자세한 내용은 SubjectSyncService를 참고하세요.
- */
-// entitySubjectSeedData는 더 이상 사용하지 않습니다.
-// Entity Subject는 앱 부트스트랩 시 Prisma DMMF에서 자동 생성됩니다.
-
-/**
- * 모든 Subject 시드 데이터를 하나로 합침
- * - Menu, Feature Subject만 시드로 관리
- * - Entity, Column Subject는 앱 부트스트랩 시 자동 동기화
- */
-export const subjectSeedData: SubjectSeedData[] = [
-	...menuSubjectSeedData,
-	...featureSubjectSeedData,
-];
-
-// ============================================================================
-// Ability (CASL 권한 정의) 시드 데이터
-// ============================================================================
-
-/**
- * AbilityActions enum (core.prisma 기준)
- * - CREATE: 생성 권한
- * - READ: 조회 권한
- * - UPDATE: 수정 권한
- * - DELETE: 삭제 권한
- * - ACCESS: 접근 권한 (메뉴 등)
- * - MANAGE: 모든 권한 (SUPER_ADMIN용)
- * - EXPORT: 내보내기 권한
- * - IMPORT: 가져오기 권한
- * - APPROVE: 승인 권한
- * - REJECT: 반려 권한
+ * CASL Action 타입 (문자열 기반)
+ * - create: 생성 권한
+ * - read: 조회 권한
+ * - update: 수정 권한
+ * - delete: 삭제 권한
+ * - access: 접근 권한 (메뉴 등)
+ * - manage: 모든 권한 (SUPER_ADMIN용)
+ * - export: 내보내기 권한
+ * - import: 가져오기 권한
+ * - approve: 승인 권한
+ * - reject: 반려 권한
  */
 export type AbilityAction =
-	| "CREATE"
-	| "READ"
-	| "UPDATE"
-	| "DELETE"
-	| "ACCESS"
-	| "MANAGE"
-	| "EXPORT"
-	| "IMPORT"
-	| "APPROVE"
-	| "REJECT";
+	| "create"
+	| "read"
+	| "update"
+	| "delete"
+	| "access"
+	| "manage"
+	| "export"
+	| "import"
+	| "approve"
+	| "reject";
 
 /**
- * AbilityTypes enum (core.prisma 기준)
- * - CAN: 허용
- * - CAN_NOT: 금지
+ * CASL ABAC 기반 Ability 시드 데이터 인터페이스
+ *
+ * @property roleName - 역할 이름
+ * @property subject - Subject 이름 (Prisma 모델명 또는 'menu:xxx', 'feature:xxx' 등)
+ * @property action - 액션 (소문자 문자열)
+ * @property inverted - true면 cannot (거부), false면 can (허용)
+ * @property description - 권한 설명
+ * @property name - 권한 이름 (선택)
+ * @property reason - 권한 거부 시 표시할 사유 (선택)
+ * @property conditions - CASL conditions (예: 자신의 데이터만 접근)
+ * @property isActive - 활성 상태
+ * @property priority - 우선순위 (높을수록 먼저 적용)
  */
-export type AbilityType = "CAN" | "CAN_NOT";
-
 export interface AbilitySeedData {
 	roleName: "USER" | "ADMIN" | "SUPER_ADMIN";
-	subjectName: string; // Subject의 name
-	type: AbilityType;
+	subject: string; // Prisma 모델명 또는 'all', 'menu:xxx', 'feature:xxx' 등
 	action: AbilityAction;
+	inverted: boolean; // false = can (허용), true = cannot (거부)
 	description: string;
+	name?: string; // 권한 이름 (선택)
+	reason?: string; // 권한 거부 시 표시할 사유 (선택)
 	conditions?: Record<string, unknown>; // CASL conditions (예: 자신의 데이터만 접근)
 	isActive?: boolean;
+	priority?: number; // 우선순위 (높을수록 먼저 적용)
 }
 
 /**
  * SUPER_ADMIN 권한 시드 데이터
- * - MANAGE all: 모든 권한
+ * - manage all: 모든 권한
  */
 export const superAdminAbilitySeedData: AbilitySeedData[] = [
-	// 모든 메뉴 MANAGE (1depth)
+	// 모든 메뉴 manage (1depth)
 	{
 		roleName: "SUPER_ADMIN",
-		subjectName: "menu:dashboard",
-		type: "CAN",
-		action: "MANAGE",
+		subject: "menu:dashboard",
+		action: "manage",
+		inverted: false,
 		description: "대시보드 전체 관리 권한",
 	},
 	{
 		roleName: "SUPER_ADMIN",
-		subjectName: "menu:users",
-		type: "CAN",
-		action: "MANAGE",
+		subject: "menu:users",
+		action: "manage",
+		inverted: false,
 		description: "사용자 관리 전체 권한",
 	},
 	{
 		roleName: "SUPER_ADMIN",
-		subjectName: "menu:schedules",
-		type: "CAN",
-		action: "MANAGE",
+		subject: "menu:schedules",
+		action: "manage",
+		inverted: false,
 		description: "일정 관리 전체 권한",
 	},
 	{
 		roleName: "SUPER_ADMIN",
-		subjectName: "menu:files",
-		type: "CAN",
-		action: "MANAGE",
+		subject: "menu:files",
+		action: "manage",
+		inverted: false,
 		description: "파일 관리 전체 권한",
 	},
 	{
 		roleName: "SUPER_ADMIN",
-		subjectName: "menu:contents",
-		type: "CAN",
-		action: "MANAGE",
+		subject: "menu:contents",
+		action: "manage",
+		inverted: false,
 		description: "콘텐츠 관리 전체 권한",
 	},
 	{
 		roleName: "SUPER_ADMIN",
-		subjectName: "menu:wallets",
-		type: "CAN",
-		action: "MANAGE",
+		subject: "menu:wallets",
+		action: "manage",
+		inverted: false,
 		description: "지갑 관리 전체 권한",
 	},
 	{
 		roleName: "SUPER_ADMIN",
-		subjectName: "menu:settings",
-		type: "CAN",
-		action: "MANAGE",
+		subject: "menu:settings",
+		action: "manage",
+		inverted: false,
 		description: "설정 관리 전체 권한",
 	},
-	// 모든 메뉴 MANAGE (2depth - 사용자)
+	// 모든 메뉴 manage (2depth - 사용자)
 	{
 		roleName: "SUPER_ADMIN",
-		subjectName: "menu:users:list",
-		type: "CAN",
-		action: "MANAGE",
+		subject: "menu:users:list",
+		action: "manage",
+		inverted: false,
 		description: "사용자 목록 전체 권한",
 	},
 	{
 		roleName: "SUPER_ADMIN",
-		subjectName: "menu:users:profiles",
-		type: "CAN",
-		action: "MANAGE",
+		subject: "menu:users:profiles",
+		action: "manage",
+		inverted: false,
 		description: "프로필 관리 전체 권한",
 	},
 	{
 		roleName: "SUPER_ADMIN",
-		subjectName: "menu:users:categories",
-		type: "CAN",
-		action: "MANAGE",
+		subject: "menu:users:categories",
+		action: "manage",
+		inverted: false,
 		description: "사용자 분류 관리 전체 권한",
 	},
 	{
 		roleName: "SUPER_ADMIN",
-		subjectName: "menu:users:groups",
-		type: "CAN",
-		action: "MANAGE",
+		subject: "menu:users:groups",
+		action: "manage",
+		inverted: false,
 		description: "그룹 관리 전체 권한",
 	},
-	// 모든 메뉴 MANAGE (2depth - 일정)
+	// 모든 메뉴 manage (2depth - 일정)
 	{
 		roleName: "SUPER_ADMIN",
-		subjectName: "menu:schedules:timelines",
-		type: "CAN",
-		action: "MANAGE",
+		subject: "menu:schedules:timelines",
+		action: "manage",
+		inverted: false,
 		description: "타임라인 전체 권한",
 	},
 	{
 		roleName: "SUPER_ADMIN",
-		subjectName: "menu:schedules:sessions",
-		type: "CAN",
-		action: "MANAGE",
+		subject: "menu:schedules:sessions",
+		action: "manage",
+		inverted: false,
 		description: "세션 전체 권한",
 	},
 	{
 		roleName: "SUPER_ADMIN",
-		subjectName: "menu:schedules:programs",
-		type: "CAN",
-		action: "MANAGE",
+		subject: "menu:schedules:programs",
+		action: "manage",
+		inverted: false,
 		description: "프로그램 전체 권한",
 	},
 	{
 		roleName: "SUPER_ADMIN",
-		subjectName: "menu:schedules:routines",
-		type: "CAN",
-		action: "MANAGE",
+		subject: "menu:schedules:routines",
+		action: "manage",
+		inverted: false,
 		description: "루틴 전체 권한",
 	},
-	// 모든 메뉴 MANAGE (2depth - 파일)
+	// 모든 메뉴 manage (2depth - 파일)
 	{
 		roleName: "SUPER_ADMIN",
-		subjectName: "menu:files:list",
-		type: "CAN",
-		action: "MANAGE",
+		subject: "menu:files:list",
+		action: "manage",
+		inverted: false,
 		description: "파일 목록 전체 권한",
 	},
 	{
 		roleName: "SUPER_ADMIN",
-		subjectName: "menu:files:categories",
-		type: "CAN",
-		action: "MANAGE",
+		subject: "menu:files:categories",
+		action: "manage",
+		inverted: false,
 		description: "파일 분류 관리 전체 권한",
 	},
-	// 모든 메뉴 MANAGE (2depth - 콘텐츠)
+	// 모든 메뉴 manage (2depth - 콘텐츠)
 	{
 		roleName: "SUPER_ADMIN",
-		subjectName: "menu:contents:posts",
-		type: "CAN",
-		action: "MANAGE",
+		subject: "menu:contents:posts",
+		action: "manage",
+		inverted: false,
 		description: "게시물 전체 권한",
 	},
 	{
 		roleName: "SUPER_ADMIN",
-		subjectName: "menu:contents:list",
-		type: "CAN",
-		action: "MANAGE",
+		subject: "menu:contents:list",
+		action: "manage",
+		inverted: false,
 		description: "콘텐츠 목록 전체 권한",
 	},
-	// 모든 메뉴 MANAGE (2depth - 지갑)
+	// 모든 메뉴 manage (2depth - 지갑)
 	{
 		roleName: "SUPER_ADMIN",
-		subjectName: "menu:wallets:list",
-		type: "CAN",
-		action: "MANAGE",
+		subject: "menu:wallets:list",
+		action: "manage",
+		inverted: false,
 		description: "지갑 목록 전체 권한",
 	},
 	{
 		roleName: "SUPER_ADMIN",
-		subjectName: "menu:wallets:transactions",
-		type: "CAN",
-		action: "MANAGE",
+		subject: "menu:wallets:transactions",
+		action: "manage",
+		inverted: false,
 		description: "트랜잭션 전체 권한",
 	},
-	// 모든 메뉴 MANAGE (2depth - 설정)
+	// 모든 메뉴 manage (2depth - 설정)
 	{
 		roleName: "SUPER_ADMIN",
-		subjectName: "menu:settings:grounds",
-		type: "CAN",
-		action: "MANAGE",
+		subject: "menu:settings:grounds",
+		action: "manage",
+		inverted: false,
 		description: "시설 정보 전체 권한",
 	},
 	{
 		roleName: "SUPER_ADMIN",
-		subjectName: "menu:settings:admins",
-		type: "CAN",
-		action: "MANAGE",
+		subject: "menu:settings:admins",
+		action: "manage",
+		inverted: false,
 		description: "관리자 관리 전체 권한",
 	},
 	{
 		roleName: "SUPER_ADMIN",
-		subjectName: "menu:settings:abilities",
-		type: "CAN",
-		action: "MANAGE",
+		subject: "menu:settings:abilities",
+		action: "manage",
+		inverted: false,
 		description: "권한 관리 전체 권한",
 	},
 	{
 		roleName: "SUPER_ADMIN",
-		subjectName: "menu:settings:system",
-		type: "CAN",
-		action: "MANAGE",
+		subject: "menu:settings:system",
+		action: "manage",
+		inverted: false,
 		description: "시스템 설정 전체 권한",
 	},
 	{
 		roleName: "SUPER_ADMIN",
-		subjectName: "menu:settings:ui-configs",
-		type: "CAN",
-		action: "MANAGE",
+		subject: "menu:settings:ui-configs",
+		action: "manage",
+		inverted: false,
 		description: "UI 설정 전체 권한",
 	},
-	// 모든 기능 MANAGE
+	// 모든 기능 manage
 	{
 		roleName: "SUPER_ADMIN",
-		subjectName: "feature:export",
-		type: "CAN",
-		action: "MANAGE",
+		subject: "feature:export",
+		action: "manage",
+		inverted: false,
 		description: "내보내기 전체 권한",
 	},
 	{
 		roleName: "SUPER_ADMIN",
-		subjectName: "feature:import",
-		type: "CAN",
-		action: "MANAGE",
+		subject: "feature:import",
+		action: "manage",
+		inverted: false,
 		description: "가져오기 전체 권한",
 	},
 	{
 		roleName: "SUPER_ADMIN",
-		subjectName: "feature:bulk-delete",
-		type: "CAN",
-		action: "MANAGE",
+		subject: "feature:bulk-delete",
+		action: "manage",
+		inverted: false,
 		description: "일괄 삭제 전체 권한",
 	},
 	{
 		roleName: "SUPER_ADMIN",
-		subjectName: "feature:send-notification",
-		type: "CAN",
-		action: "MANAGE",
+		subject: "feature:send-notification",
+		action: "manage",
+		inverted: false,
 		description: "알림 발송 전체 권한",
 	},
-	// 모든 엔티티 MANAGE
+	// 모든 엔티티 manage
 	{
 		roleName: "SUPER_ADMIN",
-		subjectName: "entity:User",
-		type: "CAN",
-		action: "MANAGE",
+		subject: "entity:User",
+		action: "manage",
+		inverted: false,
 		description: "사용자 엔티티 전체 권한",
 	},
 	{
 		roleName: "SUPER_ADMIN",
-		subjectName: "entity:Ground",
-		type: "CAN",
-		action: "MANAGE",
+		subject: "entity:Ground",
+		action: "manage",
+		inverted: false,
 		description: "시설 엔티티 전체 권한",
 	},
 	{
 		roleName: "SUPER_ADMIN",
-		subjectName: "entity:Space",
-		type: "CAN",
-		action: "MANAGE",
+		subject: "entity:Space",
+		action: "manage",
+		inverted: false,
 		description: "공간 엔티티 전체 권한",
 	},
 	{
 		roleName: "SUPER_ADMIN",
-		subjectName: "entity:Reservation",
-		type: "CAN",
-		action: "MANAGE",
+		subject: "entity:Reservation",
+		action: "manage",
+		inverted: false,
 		description: "예약 엔티티 전체 권한",
 	},
 	{
 		roleName: "SUPER_ADMIN",
-		subjectName: "entity:Content",
-		type: "CAN",
-		action: "MANAGE",
+		subject: "entity:Content",
+		action: "manage",
+		inverted: false,
 		description: "콘텐츠 엔티티 전체 권한",
 	},
 	{
 		roleName: "SUPER_ADMIN",
-		subjectName: "entity:Role",
-		type: "CAN",
-		action: "MANAGE",
+		subject: "entity:Role",
+		action: "manage",
+		inverted: false,
 		description: "역할 엔티티 전체 권한",
 	},
 	{
 		roleName: "SUPER_ADMIN",
-		subjectName: "entity:Ability",
-		type: "CAN",
-		action: "MANAGE",
+		subject: "entity:Ability",
+		action: "manage",
+		inverted: false,
 		description: "권한 엔티티 전체 권한",
 	},
 ];
 
 /**
  * ADMIN 권한 시드 데이터
- * - 메뉴 ACCESS: 대시보드, 회원, 예약, 설정(일부)
- * - 엔티티: User, Reservation MANAGE / Ground READ, UPDATE
- * - CAN_NOT: 권한 관리 접근 불가
+ * - 메뉴 access: 대시보드, 회원, 예약, 설정(일부)
+ * - 엔티티: User, Reservation manage / Ground read, update
+ * - inverted=true: 권한 관리 접근 불가
  */
 export const adminAbilitySeedData: AbilitySeedData[] = [
-	// 메뉴 ACCESS (1depth)
+	// 메뉴 access (1depth)
 	{
 		roleName: "ADMIN",
-		subjectName: "menu:dashboard",
-		type: "CAN",
-		action: "ACCESS",
+		subject: "menu:dashboard",
+		action: "access",
+		inverted: false,
 		description: "대시보드 접근 권한",
 	},
 	{
 		roleName: "ADMIN",
-		subjectName: "menu:users",
-		type: "CAN",
-		action: "ACCESS",
+		subject: "menu:users",
+		action: "access",
+		inverted: false,
 		description: "사용자 관리 접근 권한",
 	},
 	{
 		roleName: "ADMIN",
-		subjectName: "menu:users:list",
-		type: "CAN",
-		action: "ACCESS",
+		subject: "menu:users:list",
+		action: "access",
+		inverted: false,
 		description: "사용자 목록 접근 권한",
 	},
 	{
 		roleName: "ADMIN",
-		subjectName: "menu:users:profiles",
-		type: "CAN",
-		action: "ACCESS",
+		subject: "menu:users:profiles",
+		action: "access",
+		inverted: false,
 		description: "프로필 관리 접근 권한",
 	},
 	{
 		roleName: "ADMIN",
-		subjectName: "menu:users:categories",
-		type: "CAN",
-		action: "ACCESS",
+		subject: "menu:users:categories",
+		action: "access",
+		inverted: false,
 		description: "사용자 분류 관리 접근 권한",
 	},
 	{
 		roleName: "ADMIN",
-		subjectName: "menu:users:groups",
-		type: "CAN",
-		action: "ACCESS",
+		subject: "menu:users:groups",
+		action: "access",
+		inverted: false,
 		description: "그룹 관리 접근 권한",
 	},
 	{
 		roleName: "ADMIN",
-		subjectName: "menu:schedules",
-		type: "CAN",
-		action: "ACCESS",
+		subject: "menu:schedules",
+		action: "access",
+		inverted: false,
 		description: "일정 관리 접근 권한",
 	},
 	{
 		roleName: "ADMIN",
-		subjectName: "menu:schedules:timelines",
-		type: "CAN",
-		action: "ACCESS",
+		subject: "menu:schedules:timelines",
+		action: "access",
+		inverted: false,
 		description: "타임라인 접근 권한",
 	},
 	{
 		roleName: "ADMIN",
-		subjectName: "menu:schedules:sessions",
-		type: "CAN",
-		action: "ACCESS",
+		subject: "menu:schedules:sessions",
+		action: "access",
+		inverted: false,
 		description: "세션 접근 권한",
 	},
 	{
 		roleName: "ADMIN",
-		subjectName: "menu:schedules:programs",
-		type: "CAN",
-		action: "ACCESS",
+		subject: "menu:schedules:programs",
+		action: "access",
+		inverted: false,
 		description: "프로그램 접근 권한",
 	},
 	{
 		roleName: "ADMIN",
-		subjectName: "menu:schedules:routines",
-		type: "CAN",
-		action: "ACCESS",
+		subject: "menu:schedules:routines",
+		action: "access",
+		inverted: false,
 		description: "루틴 접근 권한",
 	},
 	{
 		roleName: "ADMIN",
-		subjectName: "menu:files",
-		type: "CAN",
-		action: "ACCESS",
+		subject: "menu:files",
+		action: "access",
+		inverted: false,
 		description: "파일 관리 접근 권한",
 	},
 	{
 		roleName: "ADMIN",
-		subjectName: "menu:files:list",
-		type: "CAN",
-		action: "ACCESS",
+		subject: "menu:files:list",
+		action: "access",
+		inverted: false,
 		description: "파일 목록 접근 권한",
 	},
 	{
 		roleName: "ADMIN",
-		subjectName: "menu:files:categories",
-		type: "CAN",
-		action: "ACCESS",
+		subject: "menu:files:categories",
+		action: "access",
+		inverted: false,
 		description: "파일 분류 관리 접근 권한",
 	},
 	{
 		roleName: "ADMIN",
-		subjectName: "menu:contents",
-		type: "CAN",
-		action: "ACCESS",
+		subject: "menu:contents",
+		action: "access",
+		inverted: false,
 		description: "콘텐츠 관리 접근 권한",
 	},
 	{
 		roleName: "ADMIN",
-		subjectName: "menu:contents:posts",
-		type: "CAN",
-		action: "ACCESS",
+		subject: "menu:contents:posts",
+		action: "access",
+		inverted: false,
 		description: "게시물 접근 권한",
 	},
 	{
 		roleName: "ADMIN",
-		subjectName: "menu:contents:list",
-		type: "CAN",
-		action: "ACCESS",
+		subject: "menu:contents:list",
+		action: "access",
+		inverted: false,
 		description: "콘텐츠 목록 접근 권한",
 	},
 	{
 		roleName: "ADMIN",
-		subjectName: "menu:wallets",
-		type: "CAN",
-		action: "ACCESS",
+		subject: "menu:wallets",
+		action: "access",
+		inverted: false,
 		description: "지갑 관리 접근 권한",
 	},
 	{
 		roleName: "ADMIN",
-		subjectName: "menu:wallets:list",
-		type: "CAN",
-		action: "ACCESS",
+		subject: "menu:wallets:list",
+		action: "access",
+		inverted: false,
 		description: "지갑 목록 접근 권한",
 	},
 	{
 		roleName: "ADMIN",
-		subjectName: "menu:wallets:transactions",
-		type: "CAN",
-		action: "ACCESS",
+		subject: "menu:wallets:transactions",
+		action: "access",
+		inverted: false,
 		description: "트랜잭션 접근 권한",
 	},
 	{
 		roleName: "ADMIN",
-		subjectName: "menu:settings",
-		type: "CAN",
-		action: "ACCESS",
+		subject: "menu:settings",
+		action: "access",
+		inverted: false,
 		description: "설정 접근 권한",
 	},
 	{
 		roleName: "ADMIN",
-		subjectName: "menu:settings:grounds",
-		type: "CAN",
-		action: "ACCESS",
+		subject: "menu:settings:grounds",
+		action: "access",
+		inverted: false,
 		description: "시설 정보 접근 권한",
 	},
 	{
 		roleName: "ADMIN",
-		subjectName: "menu:settings:ui-configs",
-		type: "CAN",
-		action: "ACCESS",
+		subject: "menu:settings:ui-configs",
+		action: "access",
+		inverted: false,
 		description: "UI 설정 접근 권한",
 	},
-	// 권한 관리 접근 불가 (CAN_NOT)
+	// 권한 관리 접근 불가 (inverted=true)
 	{
 		roleName: "ADMIN",
-		subjectName: "menu:settings:admins",
-		type: "CAN_NOT",
-		action: "ACCESS",
+		subject: "menu:settings:admins",
+		action: "access",
+		inverted: true,
 		description: "관리자 관리 접근 불가",
 	},
 	{
 		roleName: "ADMIN",
-		subjectName: "menu:settings:abilities",
-		type: "CAN_NOT",
-		action: "ACCESS",
+		subject: "menu:settings:abilities",
+		action: "access",
+		inverted: true,
 		description: "권한 관리 접근 불가",
 	},
 	{
 		roleName: "ADMIN",
-		subjectName: "menu:settings:system",
-		type: "CAN_NOT",
-		action: "ACCESS",
+		subject: "menu:settings:system",
+		action: "access",
+		inverted: true,
 		description: "시스템 설정 접근 불가",
 	},
 	// 엔티티 권한
 	{
 		roleName: "ADMIN",
-		subjectName: "entity:User",
-		type: "CAN",
-		action: "MANAGE",
+		subject: "entity:User",
+		action: "manage",
+		inverted: false,
 		description: "사용자 엔티티 관리 권한",
 	},
 	{
 		roleName: "ADMIN",
-		subjectName: "entity:Reservation",
-		type: "CAN",
-		action: "MANAGE",
+		subject: "entity:Reservation",
+		action: "manage",
+		inverted: false,
 		description: "예약 엔티티 관리 권한",
 	},
 	{
 		roleName: "ADMIN",
-		subjectName: "entity:Ground",
-		type: "CAN",
-		action: "READ",
+		subject: "entity:Ground",
+		action: "read",
+		inverted: false,
 		description: "시설 조회 권한",
 	},
 	{
 		roleName: "ADMIN",
-		subjectName: "entity:Ground",
-		type: "CAN",
-		action: "UPDATE",
+		subject: "entity:Ground",
+		action: "update",
+		inverted: false,
 		description: "시설 수정 권한",
 	},
 	{
 		roleName: "ADMIN",
-		subjectName: "entity:Content",
-		type: "CAN",
-		action: "MANAGE",
+		subject: "entity:Content",
+		action: "manage",
+		inverted: false,
 		description: "콘텐츠 관리 권한",
 	},
 	// 기능 권한
 	{
 		roleName: "ADMIN",
-		subjectName: "feature:export",
-		type: "CAN",
-		action: "ACCESS",
+		subject: "feature:export",
+		action: "access",
+		inverted: false,
 		description: "내보내기 권한",
 	},
 	{
 		roleName: "ADMIN",
-		subjectName: "feature:send-notification",
-		type: "CAN",
-		action: "ACCESS",
+		subject: "feature:send-notification",
+		action: "access",
+		inverted: false,
 		description: "알림 발송 권한",
 	},
-	// 일괄 삭제 불가
+	// 일괄 삭제 불가 (inverted=true)
 	{
 		roleName: "ADMIN",
-		subjectName: "feature:bulk-delete",
-		type: "CAN_NOT",
-		action: "ACCESS",
+		subject: "feature:bulk-delete",
+		action: "access",
+		inverted: true,
 		description: "일괄 삭제 불가",
 	},
 ];
 
 /**
  * USER 권한 시드 데이터
- * - 자신의 데이터만 READ, UPDATE 가능 (conditions 사용)
- * - 자신의 예약만 CREATE, READ 가능
+ * - 자신의 데이터만 read, update 가능 (conditions 사용)
+ * - 자신의 예약만 create, read 가능
  */
 export const userAbilitySeedData: AbilitySeedData[] = [
 	// 자신의 User 정보만 조회/수정 가능
 	{
 		roleName: "USER",
-		subjectName: "entity:User",
-		type: "CAN",
-		action: "READ",
+		subject: "entity:User",
+		action: "read",
+		inverted: false,
 		description: "자신의 사용자 정보 조회 권한",
 		conditions: { id: "{{ user.id }}" },
 	},
 	{
 		roleName: "USER",
-		subjectName: "entity:User",
-		type: "CAN",
-		action: "UPDATE",
+		subject: "entity:User",
+		action: "update",
+		inverted: false,
 		description: "자신의 사용자 정보 수정 권한",
 		conditions: { id: "{{ user.id }}" },
 	},
 	// 자신의 예약만 생성/조회 가능
 	{
 		roleName: "USER",
-		subjectName: "entity:Reservation",
-		type: "CAN",
-		action: "CREATE",
+		subject: "entity:Reservation",
+		action: "create",
+		inverted: false,
 		description: "예약 생성 권한",
 	},
 	{
 		roleName: "USER",
-		subjectName: "entity:Reservation",
-		type: "CAN",
-		action: "READ",
+		subject: "entity:Reservation",
+		action: "read",
+		inverted: false,
 		description: "자신의 예약 조회 권한",
 		conditions: { userId: "{{ user.id }}" },
 	},
 	{
 		roleName: "USER",
-		subjectName: "entity:Reservation",
-		type: "CAN",
-		action: "UPDATE",
+		subject: "entity:Reservation",
+		action: "update",
+		inverted: false,
 		description: "자신의 예약 수정 권한 (취소 등)",
 		conditions: { userId: "{{ user.id }}" },
 	},
 	// 시설 정보 조회
 	{
 		roleName: "USER",
-		subjectName: "entity:Ground",
-		type: "CAN",
-		action: "READ",
+		subject: "entity:Ground",
+		action: "read",
+		inverted: false,
 		description: "시설 정보 조회 권한",
 	},
 	// 콘텐츠 조회
 	{
 		roleName: "USER",
-		subjectName: "entity:Content",
-		type: "CAN",
-		action: "READ",
+		subject: "entity:Content",
+		action: "read",
+		inverted: false,
 		description: "콘텐츠 조회 권한",
 	},
 ];

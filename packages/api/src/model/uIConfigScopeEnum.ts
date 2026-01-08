@@ -9,12 +9,12 @@
 /**
  * 설정 범위 (GLOBAL, ROLE, USER)
  */
-export type UIConfigScopeEnum = typeof UIConfigScopeEnum[keyof typeof UIConfigScopeEnum];
-
+export type UIConfigScopeEnum =
+	(typeof UIConfigScopeEnum)[keyof typeof UIConfigScopeEnum];
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export const UIConfigScopeEnum = {
-  GLOBAL: 'GLOBAL',
-  ROLE: 'ROLE',
-  USER: 'USER',
+	GLOBAL: "GLOBAL",
+	ROLE: "ROLE",
+	USER: "USER",
 } as const;

@@ -5,19 +5,15 @@
 // 시스템 전반에서 사용되는 핵심 공통 모델들입니다.
 // Category, Group: 분류/그룹핑 체계
 // Tenant: User + Space + Role을 연결하는 핵심 Bridge
-// Subject, Ability: CASL 기반 권한 체계
+// Ability: CASL 기반 권한 체계 (ABAC)
+// FieldVisibility, MaskingPattern: 필드 레벨 가시성 제어
 // Content, Post: 콘텐츠 관리
 //
 // 관계 구조:
-//   Subject (REFERENCE)
-//     │
-//     ├─── self-reference (parent/children) - 계층 구조
-//     └─── Ability (권한 정의)
-//
 //   Ability (REFERENCE)
 //     │
-//     ├─── Role (역할)
-//     └─── Subject (대상)
+//     ├─── Role (역할 기반 기본 권한)
+//     └─── User (사용자별 예외 권한)
 //
 // ============================================================================
 
@@ -47,6 +43,8 @@ model Category {
   roleClassifications  RoleClassification[]
   spaceClassifications SpaceClassification[]
   userClassifications  UserClassification[]
+  // 필드 가시성 (RoleCategory로 사용 시)
+  fieldVisibilities    FieldVisibility[]     @relation("FieldVisibilityRoleCategory")
 
   @@index([spaceId])
   @@map("categories")
@@ -76,6 +74,8 @@ model Group {
   roleAssociations  RoleAssociation[]
   spaceAssociations SpaceAssociation[]
   userAssociations  UserAssociation[]
+  // 필드 가시성 (RoleGroup으로 사용 시)
+  fieldVisibilities FieldVisibility[]    @relation("FieldVisibilityRoleGroup")
 
   @@index([spaceId])
   @@map("groups")
@@ -122,70 +122,122 @@ model Assignment {
 }
 
 // @schema-type: REFERENCE
-// @description: 권한 체계에서 사용되는 대상 정의 (권한이 적용되는 리소스)
-// @self-reference: parent/children (계층 구조)
-// @connected-by: Ability
-// @note: Menu, Feature, Entity, API, Column 5가지 타입으로 세밀한 권한 관리
-/// @displayName 대상
-model Subject {
-  id          String       @id @default(uuid())
-  seq         Int          @unique @default(autoincrement())
-  createdAt   DateTime     @default(now()) @map("created_at") @db.Timestamptz(6)
-  updatedAt   DateTime?    @updatedAt @map("updated_at") @db.Timestamptz(6)
-  removedAt   DateTime?    @map("removed_at") @db.Timestamptz(6)
-  /// @displayName 식별자
-  name        String       @unique
-  /// @displayName 유형
-  type        SubjectTypes @default(Entity)
-  /// @displayName 라벨
-  label       String?
-  /// @displayName 표시명
-  displayName String?      @map("display_name")
+// @description: Role 또는 User에 부여되는 구체적인 권한 정의 (CASL ABAC 기반)
+// @connects: Role (역할 기반 기본 권한)
+// @connects: User (사용자별 예외 권한)
+// @note: roleId와 userId 중 하나만 설정 (Role 기반 + User 예외)
+// @note: subject는 Prisma 모델명 또는 'all'을 직접 저장 (동적 Subject)
+/// @displayName 권한
+model Ability {
+  id          String    @id @default(uuid())
+  seq         Int       @unique @default(autoincrement())
+  createdAt   DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt   DateTime? @updatedAt @map("updated_at") @db.Timestamptz(6)
+  removedAt   DateTime? @map("removed_at") @db.Timestamptz(6)
+
+  // CASL 필수 필드
+  /// @displayName 액션
+  action      String    // 'create', 'read', 'update', 'delete', 'manage'
+  /// @displayName 대상
+  subject     String    // Prisma 모델명 또는 'all'
+  /// @displayName 대상 필드
+  fields      String[]  @default([])
+  /// @displayName 조건
+  conditions  Json?     // { "departmentId": "${user.departmentId}" }
+  /// @displayName 거부 여부
+  inverted    Boolean   @default(false) // can(false) vs cannot(true)
+  /// @displayName 거부 사유
+  reason      String?   // 거부 시 사용자에게 보여줄 메시지
+
+  // 연결 대상 (둘 중 하나만 설정)
+  roleId      String?   @map("role_id") // Role 기반 (기본 권한)
+  userId      String?   @map("user_id") // User 기반 (예외 권한)
+
+  // 관계
+  role        Role?     @relation(fields: [roleId], references: [id])
+  user        User?     @relation(fields: [userId], references: [id])
+
+  // 메타데이터
+  /// @displayName 이름
+  name        String?   // "본인 예약만 조회"
   /// @displayName 설명
   description String?
-  parentId    String?      @map("parent_id")
-  tenantId    String       @map("tenant_id")
-  sortOrder   Int          @default(0) @map("sort_order")
-  parent      Subject?     @relation("SubjectHierarchy", fields: [parentId], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  children    Subject[]    @relation("SubjectHierarchy")
-  abilities   Ability[]
+  /// @displayName 활성화 여부
+  isActive    Boolean   @default(true) @map("is_active")
+  /// @displayName 우선순위
+  priority    Int       @default(0) // 높을수록 우선
 
-  @@index([tenantId])
-  @@index([type])
-  @@index([parentId])
-  @@map("subjects")
+  @@index([roleId])
+  @@index([userId])
+  @@index([subject])
+  @@index([isActive])
+  @@map("abilities")
 }
 
 // @schema-type: REFERENCE
-// @description: Role에 부여되는 구체적인 권한 정의 (CASL 기반)
-// @connects: Role ─── Subject (특정 대상에 대한 권한)
-// @note: action을 enum으로 직접 관리하여 단순화, 중복 방지를 위한 unique 제약조건 추가
-/// @displayName 권한
-model Ability {
-  id          String         @id @default(uuid())
-  seq         Int            @unique @default(autoincrement())
-  createdAt   DateTime       @default(now()) @map("created_at") @db.Timestamptz(6)
-  updatedAt   DateTime?      @updatedAt @map("updated_at") @db.Timestamptz(6)
-  removedAt   DateTime?      @map("removed_at") @db.Timestamptz(6)
-  /// @displayName 권한 유형
-  type        AbilityTypes
-  /// @displayName 액션
-  action      AbilityActions
-  roleId      String         @map("role_id")
-  description String?
-  conditions  Json?
-  subjectId   String         @map("subject_id")
-  tenantId    String         @map("tenant_id")
-  isActive    Boolean        @default(true) @map("is_active")
-  role        Role           @relation(fields: [roleId], references: [id])
-  subject     Subject        @relation(fields: [subjectId], references: [id])
+// @description: 마스킹 패턴 정의 - 필드 타입별 마스킹 규칙
+/// @displayName 마스킹 패턴
+model MaskingPattern {
+  id               String              @id @default(uuid())
+  seq              Int                 @unique @default(autoincrement())
+  createdAt        DateTime            @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt        DateTime?           @updatedAt @map("updated_at") @db.Timestamptz(6)
+  removedAt        DateTime?           @map("removed_at") @db.Timestamptz(6)
 
-  @@unique([roleId, subjectId, action])
-  @@index([tenantId])
-  @@index([roleId])
-  @@index([subjectId])
-  @@index([isActive])
-  @@map("abilities")
+  /// @displayName 이름
+  name             String              @unique
+  /// @displayName 필드 타입
+  fieldType        MaskingFieldType
+  /// @displayName 패턴
+  pattern          String              // 마스킹 패턴 (PRESET_* 또는 정규식)
+  /// @displayName 예시
+  example          String?             // 예시 결과
+  /// @displayName 설명
+  description      String?
+
+  fieldVisibilities FieldVisibility[]
+
+  @@map("masking_patterns")
+}
+
+// @schema-type: REFERENCE
+// @description: 필드 가시성 설정 - RoleCategory/RoleGroup별 필드 접근 권한
+// @connects: Category (RoleCategory) - 역할 분류별 가시성
+// @connects: Group (RoleGroup) - 역할 그룹별 가시성 (선택적)
+// @connects: MaskingPattern - 마스킹 적용 시 패턴
+/// @displayName 필드 가시성
+model FieldVisibility {
+  id               String              @id @default(uuid())
+  seq              Int                 @unique @default(autoincrement())
+  createdAt        DateTime            @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt        DateTime?           @updatedAt @map("updated_at") @db.Timestamptz(6)
+  removedAt        DateTime?           @map("removed_at") @db.Timestamptz(6)
+
+  // 대상 정의
+  /// @displayName 대상 모델
+  subject          String              // Prisma 모델명 (User, Reservation 등)
+  /// @displayName 필드명
+  field            String              // 필드명 (email, phone 등)
+
+  // 권한 기준
+  roleCategoryId   String              @map("role_category_id")
+  roleGroupId      String?             @map("role_group_id")  // null이면 기본값
+
+  // 가시성 설정
+  /// @displayName 가시성 유형
+  visibility       FieldVisibilityType @default(FULL)
+  maskingPatternId String?             @map("masking_pattern_id")
+
+  // 관계
+  roleCategory     Category            @relation("FieldVisibilityRoleCategory", fields: [roleCategoryId], references: [id])
+  roleGroup        Group?              @relation("FieldVisibilityRoleGroup", fields: [roleGroupId], references: [id])
+  maskingPattern   MaskingPattern?     @relation(fields: [maskingPatternId], references: [id])
+
+  @@unique([subject, field, roleCategoryId, roleGroupId])
+  @@index([subject])
+  @@index([roleCategoryId])
+  @@index([roleGroupId])
+  @@map("field_visibilities")
 }
 
 // @schema-type: CONTENT
@@ -272,31 +324,24 @@ enum RecurringDayOfWeek {
   SUNDAY
 }
 
-enum AbilityActions {
-  CREATE
-  READ
-  UPDATE
-  DELETE
-  ACCESS
-  MANAGE
-  EXPORT
-  IMPORT
-  APPROVE
-  REJECT
+
+enum FieldVisibilityType {
+  FULL   // 전체 공개
+  MASKED // 부분 마스킹
+  HIDDEN // 숨김
 }
 
-enum AbilityTypes {
-  CAN
-  CAN_NOT
+enum MaskingFieldType {
+  EMAIL       // 이메일
+  PHONE       // 전화번호
+  SSN         // 주민번호
+  CARD_NUMBER // 카드번호
+  ACCOUNT     // 계좌번호
+  ADDRESS     // 주소
+  NAME        // 이름
+  CUSTOM      // 커스텀
 }
 
-enum SubjectTypes {
-  Menu
-  Feature
-  Entity
-  API
-  Column
-}
 
 enum Roles {
   USER
