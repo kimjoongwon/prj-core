@@ -7,6 +7,6 @@
  */
 
 export interface UpdateSelectedSpacePayloadDto {
-	/** 변경할 Space ID */
-	spaceId: string;
+  /** 변경할 Space ID */
+  spaceId: string;
 }

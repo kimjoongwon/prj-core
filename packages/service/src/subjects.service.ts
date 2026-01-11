@@ -1,15 +1,24 @@
 import { getDmmfParser } from "@cocrepo/prisma";
 import { Injectable, Logger } from "@nestjs/common";
+import { PrismaService } from "./prisma.service";
 
 /**
- * Subject 정보 (Prisma 모델 기반)
+ * Subject 정보 (DB 기반)
  */
 export interface SubjectInfo {
-	/** 모델명 (예: User, Reservation) */
+	/** Subject ID */
+	id: string;
+	/** Subject 이름 (예: User, menu:dashboard, entity:User) */
 	name: string;
 	/** 표시명 (@displayName 주석) */
 	displayName: string | null;
-	/** 필드 목록 */
+	/** 그룹 (all, entity, menu, feature) */
+	group: string | null;
+	/** 정렬 순서 */
+	order: number;
+	/** 시스템 생성 여부 */
+	isSystem: boolean;
+	/** 필드 목록 (엔티티 Subject의 경우) */
 	fields: SubjectFieldInfo[];
 }
 
@@ -30,57 +39,99 @@ export interface SubjectFieldInfo {
 }
 
 /**
- * Subject 서비스 (DMMF 기반)
+ * Subject 서비스 (DB 기반)
  *
- * Prisma 스키마에서 동적으로 Subject(모델) 목록을 생성합니다.
- * DB에 저장하지 않고 런타임에 DMMF를 파싱합니다.
+ * Subject 테이블에서 조회하며, 필드 정보는 DMMF에서 가져옵니다.
  */
 @Injectable()
 export class SubjectsService {
 	private readonly logger = new Logger(SubjectsService.name);
-	private cachedSubjects: SubjectInfo[] | null = null;
+	private cachedFieldsByModel: Map<string, SubjectFieldInfo[]> | null = null;
+
+	constructor(private readonly prisma: PrismaService) {}
 
 	/**
 	 * 모든 Subject 조회
-	 * Prisma 스키마의 모든 모델을 Subject로 반환합니다.
 	 *
 	 * @returns Subject 배열
 	 */
 	async getSubjects(): Promise<SubjectInfo[]> {
 		this.logger.debug("모든 Subject 조회");
 
-		if (this.cachedSubjects) {
-			return this.cachedSubjects;
+		const subjects = await this.prisma.subject.findMany({
+			where: { removedAt: null },
+			orderBy: { order: "asc" },
+		});
+
+		// 필드 정보 캐시 로드
+		await this.loadFieldsCache();
+
+		return subjects.map((subject) => ({
+			id: subject.id,
+			name: subject.name,
+			displayName: subject.displayName,
+			group: subject.group,
+			order: subject.order,
+			isSystem: subject.isSystem,
+			fields: this.getFieldsForSubject(subject.name),
+		}));
+	}
+
+	/**
+	 * 그룹별 Subject 조회
+	 *
+	 * @param group - 그룹명 (all, entity, menu, feature)
+	 * @returns Subject 배열
+	 */
+	async getSubjectsByGroup(group: string): Promise<SubjectInfo[]> {
+		this.logger.debug(`그룹별 Subject 조회: ${group}`);
+
+		const subjects = await this.prisma.subject.findMany({
+			where: { group, removedAt: null },
+			orderBy: { order: "asc" },
+		});
+
+		await this.loadFieldsCache();
+
+		return subjects.map((subject) => ({
+			id: subject.id,
+			name: subject.name,
+			displayName: subject.displayName,
+			group: subject.group,
+			order: subject.order,
+			isSystem: subject.isSystem,
+			fields: this.getFieldsForSubject(subject.name),
+		}));
+	}
+
+	/**
+	 * Subject 이름으로 조회
+	 *
+	 * @param name - Subject 이름
+	 * @returns Subject 정보 또는 null
+	 */
+	async getSubjectByName(name: string): Promise<SubjectInfo | null> {
+		this.logger.debug(`Subject 조회: ${name}`);
+
+		const subject = await this.prisma.subject.findUnique({
+			where: { name },
+		});
+
+		if (!subject || subject.removedAt) {
+			return null;
 		}
 
-		const parser = await getDmmfParser();
-		const models = parser.parseModels();
+		await this.loadFieldsCache();
 
-		this.cachedSubjects = models.map((model) => {
-			// 각 모델의 필드 정보 가져오기
-			const fields = parser.parseFieldsByModel(model.name);
-
-			return {
-				name: model.name,
-				displayName: model.displayName,
-				fields: fields.map((field) => ({
-					name: field.name,
-					displayName: field.displayName,
-					type: "String", // DMMF FieldInfo에 type이 없으므로 기본값 사용
-					isRequired: false, // DMMF FieldInfo에 isRequired가 없으므로 기본값 사용
-					isRelation: false, // parseFieldsByModel은 관계 필드를 제외함
-				})),
-			};
-		});
-
-		// 'all' Subject 추가 (모든 모델에 대한 권한)
-		this.cachedSubjects.unshift({
-			name: "all",
-			displayName: "전체",
-			fields: [],
-		});
-
-		return this.cachedSubjects;
+		return {
+			id: subject.id,
+			name: subject.name,
+			displayName: subject.displayName,
+			group: subject.group,
+			order: subject.order,
+			isSystem: subject.isSystem,
+			fields: this.getFieldsForSubject(subject.name),
+		};
 	}
 
 	/**
@@ -89,7 +140,11 @@ export class SubjectsService {
 	 * @returns Subject 이름 배열
 	 */
 	async getSubjectNames(): Promise<string[]> {
-		const subjects = await this.getSubjects();
+		const subjects = await this.prisma.subject.findMany({
+			where: { removedAt: null },
+			select: { name: true },
+			orderBy: { order: "asc" },
+		});
 		return subjects.map((s) => s.name);
 	}
 
@@ -102,19 +157,8 @@ export class SubjectsService {
 	async getSubjectFields(subjectName: string): Promise<SubjectFieldInfo[]> {
 		this.logger.debug(`Subject 필드 조회: ${subjectName}`);
 
-		if (subjectName === "all") {
-			return [];
-		}
-
-		const subjects = await this.getSubjects();
-		const subject = subjects.find((s) => s.name === subjectName);
-
-		if (!subject) {
-			this.logger.warn(`Subject를 찾을 수 없음: ${subjectName}`);
-			return [];
-		}
-
-		return subject.fields;
+		await this.loadFieldsCache();
+		return this.getFieldsForSubject(subjectName);
 	}
 
 	/**
@@ -124,15 +168,99 @@ export class SubjectsService {
 	 * @returns 유효 여부
 	 */
 	async isValidSubject(subjectName: string): Promise<boolean> {
-		const subjectNames = await this.getSubjectNames();
-		return subjectNames.includes(subjectName);
+		const subject = await this.prisma.subject.findUnique({
+			where: { name: subjectName },
+			select: { id: true, removedAt: true },
+		});
+		return !!subject && !subject.removedAt;
+	}
+
+	/**
+	 * Subject ID로 이름 조회
+	 *
+	 * @param id - Subject ID
+	 * @returns Subject 이름 또는 null
+	 */
+	async getSubjectNameById(id: string): Promise<string | null> {
+		const subject = await this.prisma.subject.findUnique({
+			where: { id },
+			select: { name: true },
+		});
+		return subject?.name ?? null;
+	}
+
+	/**
+	 * Subject 이름으로 ID 조회
+	 *
+	 * @param name - Subject 이름
+	 * @returns Subject ID 또는 null
+	 */
+	async getSubjectIdByName(name: string): Promise<string | null> {
+		const subject = await this.prisma.subject.findUnique({
+			where: { name },
+			select: { id: true },
+		});
+		return subject?.id ?? null;
+	}
+
+	/**
+	 * DMMF에서 필드 정보 캐시 로드
+	 */
+	private async loadFieldsCache(): Promise<void> {
+		if (this.cachedFieldsByModel) {
+			return;
+		}
+
+		this.cachedFieldsByModel = new Map();
+
+		try {
+			const parser = await getDmmfParser();
+			const models = parser.parseModels();
+
+			for (const model of models) {
+				const fields = parser.parseFieldsByModel(model.name);
+				this.cachedFieldsByModel.set(
+					model.name,
+					fields.map((field) => ({
+						name: field.name,
+						displayName: field.displayName,
+						type: "String", // DMMF FieldInfo에 type이 없으므로 기본값 사용
+						isRequired: false,
+						isRelation: false,
+					})),
+				);
+			}
+		} catch (error) {
+			this.logger.warn("DMMF 파싱 실패, 필드 정보를 로드할 수 없습니다.", error);
+		}
+	}
+
+	/**
+	 * Subject 이름에서 필드 정보 가져오기
+	 *
+	 * @param subjectName - Subject 이름
+	 * @returns 필드 정보 배열
+	 */
+	private getFieldsForSubject(subjectName: string): SubjectFieldInfo[] {
+		if (!this.cachedFieldsByModel) {
+			return [];
+		}
+
+		// entity:User 형태인 경우 모델명 추출
+		if (subjectName.startsWith("entity:")) {
+			const modelName = subjectName.substring(7); // "entity:" 제거
+			return this.cachedFieldsByModel.get(modelName) ?? [];
+		}
+
+		// 직접 모델명인 경우
+		return this.cachedFieldsByModel.get(subjectName) ?? [];
 	}
 
 	/**
 	 * 캐시 초기화
 	 */
 	clearCache(): void {
-		this.cachedSubjects = null;
-		this.logger.debug("Subject 캐시 초기화됨");
+		this.cachedFieldsByModel = null;
+		this.logger.debug("Subject 필드 캐시 초기화됨");
 	}
 }

@@ -4,7 +4,6 @@ export * from "./CircularImage/CircularImage";
 export * from "./Copyright/Copyright";
 export * from "./cells";
 export * from "./DataGrid/DataGrid";
-export * from "./DeviceToggleGroup";
 export * from "./DraggableSortableList";
 export * from "./FeeTable/FeeTable";
 export * from "./Icon";

@@ -22,6 +22,9 @@ import type { Ability, AbilityBuilder, AbilityClass } from "@casl/ability";
  * - IMPORT: 가져오기 권한
  * - APPROVE: 승인 권한
  * - REJECT: 거절 권한
+ * - READ:FULL: 전체 조회 권한 (마스킹 없음)
+ * - READ:HIDDEN: 숨김 권한
+ * - READ:MASKED:*: 마스킹 조회 권한 (이메일, 전화번호 등)
  */
 export type Actions =
 	| "CREATE"
@@ -33,7 +36,54 @@ export type Actions =
 	| "EXPORT"
 	| "IMPORT"
 	| "APPROVE"
-	| "REJECT";
+	| "REJECT"
+	// Visibility Actions
+	| "READ:FULL"
+	| "READ:HIDDEN"
+	| "READ:MASKED:EMAIL"
+	| "READ:MASKED:PHONE"
+	| "READ:MASKED:NAME"
+	| "READ:MASKED:SSN"
+	| "READ:MASKED:CARD"
+	| "READ:MASKED:ACCOUNT";
+
+/**
+ * Action 마스킹 설정 인터페이스
+ *
+ * @description
+ * Action.config에 저장되는 마스킹 설정을 정의합니다.
+ */
+export interface ActionMaskingConfig {
+	type: "masking";
+	preset?: string; // 'PRESET_EMAIL', 'PRESET_PHONE' 등
+	pattern?: string; // 커스텀 정규식
+	replacement?: string;
+}
+
+/**
+ * Action 포맷팅 설정 인터페이스
+ */
+export interface ActionFormatConfig {
+	type: "format";
+	pattern: string; // 'YYYY-MM-DD' 등
+}
+
+/**
+ * Action 변환 설정 인터페이스
+ */
+export interface ActionTransformConfig {
+	type: "transform";
+	rule: string; // 'uppercase', 'lowercase' 등
+}
+
+/**
+ * Action 설정 유니온 타입
+ */
+export type ActionConfig =
+	| ActionMaskingConfig
+	| ActionFormatConfig
+	| ActionTransformConfig
+	| null;
 
 /**
  * 권한 대상 타입

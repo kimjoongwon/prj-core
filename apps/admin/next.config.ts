@@ -21,7 +21,10 @@ const nextConfig: NextConfig = {
 		"@cocrepo/type",
 	],
 	typedRoutes: true,
-	cacheComponents: true,
+	// cacheComponents: false - 동적 라우트(/users/[id])에서 AppStoreProvider의
+	// useRouter/usePathname 사용으로 인해 비활성화
+	// TODO: 추후 Store Provider 아키텍처 개선 후 재활성화 검토
+	cacheComponents: false,
 	// 개발 환경 프록시 설정
 	async rewrites() {
 		return {

@@ -121,10 +121,19 @@ ls packages/ui/src/components/layouts/
 
 ## 출력 형식
 
-기획 문서에 다음 섹션들을 추가합니다:
+기획 문서를 분석한 후, **별도의 `-design.md` 파일을 생성**합니다.
+
+### 파일명 규칙
+```
+YYYY-MM-DD-[PageName]-design.md
+```
+
+### 설계서 내용
 
 ```markdown
----
+# [PageName] 기술 설계서
+
+> 원본 기획서: `.claude/plans/YYYY-MM-DD-[PageName].md`
 
 ## 🔧 기술 설계
 
@@ -617,14 +626,17 @@ interface MemberCardProps {
    - feature-builder: 1개 컴포넌트
    - page-builder: 1개 페이지
 
-📁 업데이트된 파일: .claude/plans/2025-12-30-MemberListPage.md
+📁 생성된 문서:
+   - 기획서: .claude/plans/2025-12-30-MemberListPage.md
+   - 설계서: .claude/plans/2025-12-30-MemberListPage-design.md
 
-→ 에이전트 실행 순서:
-  1. ui-component-builder (MemberStatusBadge)
-  2. widget-builder (MemberCard)
-  3. feature-builder (MemberFilterPanel)
-  4. page-builder (MemberListPage)
-  5. page-reviewer (검증)
+✅ Stage 1 완료. 사용자 리뷰 후 Stage 2로 진행하세요.
+
+→ 에이전트 실행 순서 (Stage 2~5):
+  1. schema-builder, entity-builder, dto-builder (Stage 2)
+  2. repository-builder, service-builder, controller-builder (Stage 3)
+  3. ui-component-builder, widget-builder, feature-builder (Stage 4)
+  4. page-builder, page-reviewer (Stage 5)
 ```
 
 ---
@@ -636,3 +648,8 @@ interface MemberCardProps {
 3. **구체적 지시**: 에이전트가 바로 작업할 수 있도록 상세히 작성
 4. **의존 관계 고려**: 컴포넌트 간 의존 관계에 따라 실행 순서 결정
 5. **기획 변경 금지**: 기획서의 UX/UI 결정은 변경하지 않음
+6. **하위호환성 미고려 (Critical)**:
+   - 설계 변경 시 하위호환성을 고려하지 않음
+   - 모든 변경은 **전체 마이그레이션** 방식으로 진행
+   - deprecated, fallback, 이전 버전 지원 코드 금지
+   - Entity/API 변경 시 관련된 모든 레이어를 한 번에 수정

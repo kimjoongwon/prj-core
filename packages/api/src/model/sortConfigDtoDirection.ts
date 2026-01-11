@@ -9,11 +9,11 @@
 /**
  * 정렬 방향
  */
-export type SortConfigDtoDirection =
-	(typeof SortConfigDtoDirection)[keyof typeof SortConfigDtoDirection];
+export type SortConfigDtoDirection = typeof SortConfigDtoDirection[keyof typeof SortConfigDtoDirection];
+
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export const SortConfigDtoDirection = {
-	asc: "asc",
-	desc: "desc",
+  asc: 'asc',
+  desc: 'desc',
 } as const;

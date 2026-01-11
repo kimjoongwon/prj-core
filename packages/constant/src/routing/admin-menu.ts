@@ -25,34 +25,45 @@ export const ADMIN_PATHS = {
 
 	// 사용자 (User 엔티티)
 	USERS: "/users",
-	USERS_PROFILES: "/users/profiles",
-	USERS_CATEGORIES: "/users/categories",
-	USERS_GROUPS: "/users/groups",
+	USERS_DETAIL: "/users/[id]",
+	USERS_GRADES: "/users/grades",
+	USERS_WITHDRAWN: "/users/withdrawn",
 
-	// 일정 (Schedule 엔티티)
-	SCHEDULES_TIMELINES: "/schedules/timelines",
-	SCHEDULES_SESSIONS: "/schedules/sessions",
-	SCHEDULES_PROGRAMS: "/schedules/programs",
-	SCHEDULES_ROUTINES: "/schedules/routines",
+	// 예약 (Reservation 엔티티)
+	RESERVATIONS: "/reservations",
+	RESERVATIONS_CALENDAR: "/reservations/calendar",
+	RESERVATIONS_CANCELLED: "/reservations/cancelled",
+	RESERVATIONS_STATS: "/reservations/stats",
 
-	// 파일 (File 엔티티)
-	FILES: "/files",
-	FILES_CATEGORIES: "/files/categories",
+	// 알림 (Notification 엔티티)
+	NOTIFICATIONS_SEND: "/notifications/send",
+	NOTIFICATIONS_HISTORY: "/notifications/history",
+	NOTIFICATIONS_TEMPLATES: "/notifications/templates",
+	NOTIFICATIONS_SETTINGS: "/notifications/settings",
 
-	// 콘텐츠 (Content 엔티티)
-	CONTENTS_POSTS: "/contents/posts",
-	CONTENTS: "/contents",
+	// 문의 (Inquiry 엔티티)
+	INQUIRIES: "/inquiries",
+	INQUIRIES_DIRECT: "/inquiries/direct",
+	INQUIRIES_ANSWERED: "/inquiries/answered",
+	INQUIRIES_FAQ: "/inquiries/faq",
 
-	// 지갑 (Wallet 엔티티)
-	WALLETS: "/wallets",
-	WALLETS_TRANSACTIONS: "/wallets/transactions",
+	// 콘텐츠
+	NOTICES: "/notices",
+	BANNERS: "/banners",
+	EVENTS: "/events",
+	TERMS: "/terms",
+
+	// 템플릿
+	TEMPLATES_SMS: "/templates/sms",
+	TEMPLATES_EMAIL: "/templates/email",
+	TEMPLATES_PUSH: "/templates/push",
+	TEMPLATES_HTML: "/templates/html",
 
 	// 설정
 	SETTINGS_GROUNDS: "/settings/grounds",
 	SETTINGS_ADMINS: "/settings/admins",
 	SETTINGS_ABILITIES: "/settings/abilities",
 	SETTINGS_SYSTEM: "/settings/system",
-	SETTINGS_UI_CONFIGS: "/settings/ui-configs",
 
 	// 기타
 	SELECT_SPACE: "/select-space",
@@ -72,48 +83,59 @@ export const ADMIN_SUBJECTS = {
 
 	// 1depth 메뉴
 	MENU_USERS: "menu:users",
-	MENU_SCHEDULES: "menu:schedules",
-	MENU_FILES: "menu:files",
+	MENU_RESERVATIONS: "menu:reservations",
+	MENU_NOTIFICATIONS: "menu:notifications",
+	MENU_INQUIRIES: "menu:inquiries",
 	MENU_CONTENTS: "menu:contents",
-	MENU_WALLETS: "menu:wallets",
+	MENU_TEMPLATES: "menu:templates",
 	MENU_SETTINGS: "menu:settings",
 
 	// 2depth - 사용자
 	MENU_USERS_LIST: "menu:users:list",
-	MENU_USERS_PROFILES: "menu:users:profiles",
-	MENU_USERS_CATEGORIES: "menu:users:categories",
-	MENU_USERS_GROUPS: "menu:users:groups",
+	MENU_USERS_GRADES: "menu:users:grades",
+	MENU_USERS_WITHDRAWN: "menu:users:withdrawn",
 
-	// 2depth - 일정
-	MENU_SCHEDULES_TIMELINES: "menu:schedules:timelines",
-	MENU_SCHEDULES_SESSIONS: "menu:schedules:sessions",
-	MENU_SCHEDULES_PROGRAMS: "menu:schedules:programs",
-	MENU_SCHEDULES_ROUTINES: "menu:schedules:routines",
+	// 2depth - 예약
+	MENU_RESERVATIONS_LIST: "menu:reservations:list",
+	MENU_RESERVATIONS_CALENDAR: "menu:reservations:calendar",
+	MENU_RESERVATIONS_CANCELLED: "menu:reservations:cancelled",
+	MENU_RESERVATIONS_STATS: "menu:reservations:stats",
 
-	// 2depth - 파일
-	MENU_FILES_LIST: "menu:files:list",
-	MENU_FILES_CATEGORIES: "menu:files:categories",
+	// 2depth - 알림
+	MENU_NOTIFICATIONS_SEND: "menu:notifications:send",
+	MENU_NOTIFICATIONS_HISTORY: "menu:notifications:history",
+	MENU_NOTIFICATIONS_TEMPLATES: "menu:notifications:templates",
+	MENU_NOTIFICATIONS_SETTINGS: "menu:notifications:settings",
+
+	// 2depth - 문의
+	MENU_INQUIRIES_LIST: "menu:inquiries:list",
+	MENU_INQUIRIES_DIRECT: "menu:inquiries:direct",
+	MENU_INQUIRIES_ANSWERED: "menu:inquiries:answered",
+	MENU_INQUIRIES_FAQ: "menu:inquiries:faq",
 
 	// 2depth - 콘텐츠
-	MENU_CONTENTS_POSTS: "menu:contents:posts",
-	MENU_CONTENTS_LIST: "menu:contents:list",
+	MENU_CONTENTS_NOTICES: "menu:contents:notices",
+	MENU_CONTENTS_BANNERS: "menu:contents:banners",
+	MENU_CONTENTS_EVENTS: "menu:contents:events",
+	MENU_CONTENTS_TERMS: "menu:contents:terms",
 
-	// 2depth - 지갑
-	MENU_WALLETS_LIST: "menu:wallets:list",
-	MENU_WALLETS_TRANSACTIONS: "menu:wallets:transactions",
+	// 2depth - 템플릿
+	MENU_TEMPLATES_SMS: "menu:templates:sms",
+	MENU_TEMPLATES_EMAIL: "menu:templates:email",
+	MENU_TEMPLATES_PUSH: "menu:templates:push",
+	MENU_TEMPLATES_HTML: "menu:templates:html",
 
 	// 2depth - 설정
 	MENU_SETTINGS_GROUNDS: "menu:settings:grounds",
 	MENU_SETTINGS_ADMINS: "menu:settings:admins",
 	MENU_SETTINGS_ABILITIES: "menu:settings:abilities",
 	MENU_SETTINGS_SYSTEM: "menu:settings:system",
-	MENU_SETTINGS_UI_CONFIGS: "menu:settings:ui-configs",
 } as const;
 
 /**
  * 어드민 네비게이션 아이템 설정
  *
- * 기획서: .claude/plans/2025-12-30-AdminLayoutAndMenuSystem.md (v5.0)
+ * 현재 구현된 페이지 기준으로 구성됨
  */
 export const ADMIN_NAV_ITEMS: NavItemConfig[] = [
 	{
@@ -136,74 +158,112 @@ export const ADMIN_NAV_ITEMS: NavItemConfig[] = [
 				subject: ADMIN_SUBJECTS.MENU_USERS_LIST,
 			},
 			{
-				id: "users-profiles",
-				label: "프로필 관리",
-				path: ADMIN_PATHS.USERS_PROFILES,
-				subject: ADMIN_SUBJECTS.MENU_USERS_PROFILES,
+				id: "users-grades",
+				label: "등급 관리",
+				path: ADMIN_PATHS.USERS_GRADES,
+				subject: ADMIN_SUBJECTS.MENU_USERS_GRADES,
 			},
 			{
-				id: "users-categories",
-				label: "분류 관리",
-				path: ADMIN_PATHS.USERS_CATEGORIES,
-				subject: ADMIN_SUBJECTS.MENU_USERS_CATEGORIES,
-			},
-			{
-				id: "users-groups",
-				label: "그룹 관리",
-				path: ADMIN_PATHS.USERS_GROUPS,
-				subject: ADMIN_SUBJECTS.MENU_USERS_GROUPS,
+				id: "users-withdrawn",
+				label: "탈퇴 회원",
+				path: ADMIN_PATHS.USERS_WITHDRAWN,
+				subject: ADMIN_SUBJECTS.MENU_USERS_WITHDRAWN,
 			},
 		],
 	},
 	{
-		id: "schedules",
-		label: "일정",
-		icon: "Calendar",
-		subject: ADMIN_SUBJECTS.MENU_SCHEDULES,
+		id: "reservations",
+		label: "예약",
+		icon: "CalendarCheck",
+		subject: ADMIN_SUBJECTS.MENU_RESERVATIONS,
 		children: [
 			{
-				id: "schedules-timelines",
-				label: "타임라인",
-				path: ADMIN_PATHS.SCHEDULES_TIMELINES,
-				subject: ADMIN_SUBJECTS.MENU_SCHEDULES_TIMELINES,
+				id: "reservations-list",
+				label: "예약 목록",
+				path: ADMIN_PATHS.RESERVATIONS,
+				subject: ADMIN_SUBJECTS.MENU_RESERVATIONS_LIST,
 			},
 			{
-				id: "schedules-sessions",
-				label: "세션",
-				path: ADMIN_PATHS.SCHEDULES_SESSIONS,
-				subject: ADMIN_SUBJECTS.MENU_SCHEDULES_SESSIONS,
+				id: "reservations-calendar",
+				label: "캘린더",
+				path: ADMIN_PATHS.RESERVATIONS_CALENDAR,
+				subject: ADMIN_SUBJECTS.MENU_RESERVATIONS_CALENDAR,
 			},
 			{
-				id: "schedules-programs",
-				label: "프로그램",
-				path: ADMIN_PATHS.SCHEDULES_PROGRAMS,
-				subject: ADMIN_SUBJECTS.MENU_SCHEDULES_PROGRAMS,
+				id: "reservations-cancelled",
+				label: "취소 내역",
+				path: ADMIN_PATHS.RESERVATIONS_CANCELLED,
+				subject: ADMIN_SUBJECTS.MENU_RESERVATIONS_CANCELLED,
 			},
 			{
-				id: "schedules-routines",
-				label: "루틴",
-				path: ADMIN_PATHS.SCHEDULES_ROUTINES,
-				subject: ADMIN_SUBJECTS.MENU_SCHEDULES_ROUTINES,
+				id: "reservations-stats",
+				label: "통계",
+				path: ADMIN_PATHS.RESERVATIONS_STATS,
+				subject: ADMIN_SUBJECTS.MENU_RESERVATIONS_STATS,
 			},
 		],
 	},
 	{
-		id: "files",
-		label: "파일",
-		icon: "FolderOpen",
-		subject: ADMIN_SUBJECTS.MENU_FILES,
+		id: "notifications",
+		label: "알림",
+		icon: "Bell",
+		subject: ADMIN_SUBJECTS.MENU_NOTIFICATIONS,
 		children: [
 			{
-				id: "files-list",
-				label: "파일 목록",
-				path: ADMIN_PATHS.FILES,
-				subject: ADMIN_SUBJECTS.MENU_FILES_LIST,
+				id: "notifications-send",
+				label: "알림 발송",
+				path: ADMIN_PATHS.NOTIFICATIONS_SEND,
+				subject: ADMIN_SUBJECTS.MENU_NOTIFICATIONS_SEND,
 			},
 			{
-				id: "files-categories",
-				label: "분류 관리",
-				path: ADMIN_PATHS.FILES_CATEGORIES,
-				subject: ADMIN_SUBJECTS.MENU_FILES_CATEGORIES,
+				id: "notifications-history",
+				label: "발송 내역",
+				path: ADMIN_PATHS.NOTIFICATIONS_HISTORY,
+				subject: ADMIN_SUBJECTS.MENU_NOTIFICATIONS_HISTORY,
+			},
+			{
+				id: "notifications-templates",
+				label: "알림 템플릿",
+				path: ADMIN_PATHS.NOTIFICATIONS_TEMPLATES,
+				subject: ADMIN_SUBJECTS.MENU_NOTIFICATIONS_TEMPLATES,
+			},
+			{
+				id: "notifications-settings",
+				label: "알림 설정",
+				path: ADMIN_PATHS.NOTIFICATIONS_SETTINGS,
+				subject: ADMIN_SUBJECTS.MENU_NOTIFICATIONS_SETTINGS,
+			},
+		],
+	},
+	{
+		id: "inquiries",
+		label: "문의",
+		icon: "MessageSquare",
+		subject: ADMIN_SUBJECTS.MENU_INQUIRIES,
+		children: [
+			{
+				id: "inquiries-list",
+				label: "문의 목록",
+				path: ADMIN_PATHS.INQUIRIES,
+				subject: ADMIN_SUBJECTS.MENU_INQUIRIES_LIST,
+			},
+			{
+				id: "inquiries-direct",
+				label: "1:1 문의",
+				path: ADMIN_PATHS.INQUIRIES_DIRECT,
+				subject: ADMIN_SUBJECTS.MENU_INQUIRIES_DIRECT,
+			},
+			{
+				id: "inquiries-answered",
+				label: "답변 완료",
+				path: ADMIN_PATHS.INQUIRIES_ANSWERED,
+				subject: ADMIN_SUBJECTS.MENU_INQUIRIES_ANSWERED,
+			},
+			{
+				id: "inquiries-faq",
+				label: "FAQ",
+				path: ADMIN_PATHS.INQUIRIES_FAQ,
+				subject: ADMIN_SUBJECTS.MENU_INQUIRIES_FAQ,
 			},
 		],
 	},
@@ -214,36 +274,60 @@ export const ADMIN_NAV_ITEMS: NavItemConfig[] = [
 		subject: ADMIN_SUBJECTS.MENU_CONTENTS,
 		children: [
 			{
-				id: "contents-posts",
-				label: "게시물",
-				path: ADMIN_PATHS.CONTENTS_POSTS,
-				subject: ADMIN_SUBJECTS.MENU_CONTENTS_POSTS,
+				id: "contents-notices",
+				label: "공지사항",
+				path: ADMIN_PATHS.NOTICES,
+				subject: ADMIN_SUBJECTS.MENU_CONTENTS_NOTICES,
 			},
 			{
-				id: "contents-list",
-				label: "콘텐츠 목록",
-				path: ADMIN_PATHS.CONTENTS,
-				subject: ADMIN_SUBJECTS.MENU_CONTENTS_LIST,
+				id: "contents-banners",
+				label: "배너",
+				path: ADMIN_PATHS.BANNERS,
+				subject: ADMIN_SUBJECTS.MENU_CONTENTS_BANNERS,
+			},
+			{
+				id: "contents-events",
+				label: "이벤트",
+				path: ADMIN_PATHS.EVENTS,
+				subject: ADMIN_SUBJECTS.MENU_CONTENTS_EVENTS,
+			},
+			{
+				id: "contents-terms",
+				label: "이용약관",
+				path: ADMIN_PATHS.TERMS,
+				subject: ADMIN_SUBJECTS.MENU_CONTENTS_TERMS,
 			},
 		],
 	},
 	{
-		id: "wallets",
-		label: "지갑",
-		icon: "Wallet",
-		subject: ADMIN_SUBJECTS.MENU_WALLETS,
+		id: "templates",
+		label: "템플릿",
+		icon: "LayoutTemplate",
+		subject: ADMIN_SUBJECTS.MENU_TEMPLATES,
 		children: [
 			{
-				id: "wallets-list",
-				label: "지갑 목록",
-				path: ADMIN_PATHS.WALLETS,
-				subject: ADMIN_SUBJECTS.MENU_WALLETS_LIST,
+				id: "templates-sms",
+				label: "SMS",
+				path: ADMIN_PATHS.TEMPLATES_SMS,
+				subject: ADMIN_SUBJECTS.MENU_TEMPLATES_SMS,
 			},
 			{
-				id: "wallets-transactions",
-				label: "트랜잭션",
-				path: ADMIN_PATHS.WALLETS_TRANSACTIONS,
-				subject: ADMIN_SUBJECTS.MENU_WALLETS_TRANSACTIONS,
+				id: "templates-email",
+				label: "이메일",
+				path: ADMIN_PATHS.TEMPLATES_EMAIL,
+				subject: ADMIN_SUBJECTS.MENU_TEMPLATES_EMAIL,
+			},
+			{
+				id: "templates-push",
+				label: "푸시",
+				path: ADMIN_PATHS.TEMPLATES_PUSH,
+				subject: ADMIN_SUBJECTS.MENU_TEMPLATES_PUSH,
+			},
+			{
+				id: "templates-html",
+				label: "HTML",
+				path: ADMIN_PATHS.TEMPLATES_HTML,
+				subject: ADMIN_SUBJECTS.MENU_TEMPLATES_HTML,
 			},
 		],
 	},
@@ -276,12 +360,6 @@ export const ADMIN_NAV_ITEMS: NavItemConfig[] = [
 				label: "시스템 설정",
 				path: ADMIN_PATHS.SETTINGS_SYSTEM,
 				subject: ADMIN_SUBJECTS.MENU_SETTINGS_SYSTEM,
-			},
-			{
-				id: "settings-ui-configs",
-				label: "UI 설정",
-				path: ADMIN_PATHS.SETTINGS_UI_CONFIGS,
-				subject: ADMIN_SUBJECTS.MENU_SETTINGS_UI_CONFIGS,
 			},
 		],
 	},

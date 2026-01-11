@@ -6,7 +6,6 @@
  * DB에 저장된 권한 정보를 기반으로 런타임에 권한을 구성합니다.
  */
 import { Ability as AbilityEntity } from "@cocrepo/entity";
-import { AbilityTypes } from "@cocrepo/prisma";
 import { AbilitiesRepository } from "@cocrepo/repository";
 import { Injectable, Logger } from "@nestjs/common";
 import { Ability, AbilityBuilder } from "@casl/ability";
@@ -77,10 +76,9 @@ export class CaslAbilityFactory {
 		);
 
 		// DB에서 Role에 해당하는 활성화된 Abilities 조회
-		const abilities =
-			await this.abilitiesRepository.findManyActiveByRoleIdsWithRoleAndSubject([
-				roleId,
-			]);
+		const abilities = await this.abilitiesRepository.findActiveByRoleIds([
+			roleId,
+		]);
 
 		this.logger.debug(
 			`조회된 Ability 개수: ${abilities.length}, roleId=${roleId}`,
@@ -150,13 +148,22 @@ export class CaslAbilityFactory {
 			return;
 		}
 
-		const action = ability.action as Actions;
-		const subject = ability.subject.name;
+		if (!ability.action) {
+			this.logger.warn(
+				`Ability에 Action이 없습니다: abilityId=${ability.id}`,
+			);
+			return;
+		}
+
+		// Action 이름을 대문자로 변환하여 사용
+		const action = ability.action.name.toUpperCase() as Actions;
+		const subject = ability.subject.name as Subjects;
 
 		// conditions 파싱 (템플릿 변수 치환)
 		const conditions = this.parseConditions(ability.conditions, userContext);
 
-		if (ability.type === AbilityTypes.CAN) {
+		// inverted가 false이면 CAN (허용), true이면 CANNOT (거부)
+		if (!ability.inverted) {
 			can(action, subject, conditions);
 			this.logger.verbose(
 				`CAN 권한 추가: action=${action}, subject=${subject}`,

@@ -4,7 +4,6 @@ import { Type } from "class-transformer";
 import {
 	IsArray,
 	IsBoolean,
-	IsIn,
 	IsNumber,
 	IsOptional,
 	IsString,
@@ -13,34 +12,48 @@ import {
 } from "class-validator";
 
 /**
- * CASL Action 타입
- */
-const ABILITY_ACTIONS = [
-	"create",
-	"read",
-	"update",
-	"delete",
-	"manage",
-] as const;
-
-/**
  * 단일 Ability 생성 DTO (CASL ABAC 기반)
+ *
+ * @description
+ * DDD 원칙에 따라 actionId로 Action을 참조합니다.
+ * actionName은 편의를 위해 제공되며, actionId가 없을 때 사용됩니다.
  */
 export class CreateAbilityDto {
 	@ApiProperty({
-		description: "액션 (create, read, update, delete, manage)",
-		example: "read",
-		enum: ABILITY_ACTIONS,
+		description: "Action ID (UUID) - actionId 또는 actionName 중 하나 필수",
+		example: "550e8400-e29b-41d4-a716-446655440000",
+		required: false,
 	})
-	@IsIn(ABILITY_ACTIONS, { message: "유효한 액션을 입력해주세요" })
-	action!: string;
+	@IsUUID("4", { message: "유효한 Action ID를 입력해주세요" })
+	@IsOptional()
+	actionId?: string;
 
 	@ApiProperty({
-		description: "대상 Subject (Prisma 모델명 또는 'all')",
-		example: "User",
+		description: "Action 이름 - actionId가 없을 때 사용 (create, read, read:masked:email 등)",
+		example: "read",
+		required: false,
 	})
-	@IsString({ message: "Subject는 문자열이어야 합니다" })
-	subject!: string;
+	@IsString({ message: "Action 이름은 문자열이어야 합니다" })
+	@IsOptional()
+	actionName?: string;
+
+	@ApiProperty({
+		description: "Subject ID (UUID) - subjectId 또는 subjectName 중 하나 필수",
+		example: "550e8400-e29b-41d4-a716-446655440001",
+		required: false,
+	})
+	@IsUUID("4", { message: "유효한 Subject ID를 입력해주세요" })
+	@IsOptional()
+	subjectId?: string;
+
+	@ApiProperty({
+		description: "Subject 이름 - subjectId가 없을 때 사용 (entity:User, menu:settings 등)",
+		example: "entity:User",
+		required: false,
+	})
+	@IsString({ message: "Subject 이름은 문자열이어야 합니다" })
+	@IsOptional()
+	subjectName?: string;
 
 	@ApiProperty({
 		description: "대상 필드 목록 (빈 배열이면 전체 필드)",
@@ -143,8 +156,8 @@ export class UpdateRoleAbilitiesRequestDto {
 		type: [CreateAbilityDto],
 		example: [
 			{
-				action: "read",
-				subject: "User",
+				actionName: "read",
+				subjectName: "entity:User",
 				inverted: false,
 				name: "사용자 조회",
 				isActive: true,
@@ -156,3 +169,14 @@ export class UpdateRoleAbilitiesRequestDto {
 	@Type(() => CreateAbilityDto)
 	abilities!: CreateAbilityDto[];
 }
+
+/**
+ * Ability 생성 입력 타입 (Service/Facade용)
+ *
+ * DTO에서 roleId/userId를 추가한 형태입니다.
+ * actionName/subjectName으로 지정 시 Service에서 ID로 변환됩니다.
+ */
+export type CreateAbilityInput = CreateAbilityDto & {
+	roleId?: string;
+	userId?: string;
+};

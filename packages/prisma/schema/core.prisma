@@ -5,15 +5,16 @@
 // 시스템 전반에서 사용되는 핵심 공통 모델들입니다.
 // Category, Group: 분류/그룹핑 체계
 // Tenant: User + Space + Role을 연결하는 핵심 Bridge
-// Ability: CASL 기반 권한 체계 (ABAC)
-// FieldVisibility, MaskingPattern: 필드 레벨 가시성 제어
+// Subject, Action, Ability: CASL 기반 권한 체계 (RBAC + ABAC)
 // Content, Post: 콘텐츠 관리
 //
 // 관계 구조:
 //   Ability (REFERENCE)
 //     │
 //     ├─── Role (역할 기반 기본 권한)
-//     └─── User (사용자별 예외 권한)
+//     ├─── User (사용자별 예외 권한)
+//     ├─── Subject (권한 대상)
+//     └─── Action (행위 정의 - 마스킹 설정 포함)
 //
 // ============================================================================
 
@@ -43,8 +44,6 @@ model Category {
   roleClassifications  RoleClassification[]
   spaceClassifications SpaceClassification[]
   userClassifications  UserClassification[]
-  // 필드 가시성 (RoleCategory로 사용 시)
-  fieldVisibilities    FieldVisibility[]     @relation("FieldVisibilityRoleCategory")
 
   @@index([spaceId])
   @@map("categories")
@@ -74,8 +73,6 @@ model Group {
   roleAssociations  RoleAssociation[]
   spaceAssociations SpaceAssociation[]
   userAssociations  UserAssociation[]
-  // 필드 가시성 (RoleGroup으로 사용 시)
-  fieldVisibilities FieldVisibility[]    @relation("FieldVisibilityRoleGroup")
 
   @@index([spaceId])
   @@map("groups")
@@ -122,11 +119,80 @@ model Assignment {
 }
 
 // @schema-type: REFERENCE
+// @description: CASL Subject 정의 (Prisma 모델 기반 + 커스텀 Subject)
+// @note: DMMF에서 자동 동기화되며, 커스텀 Subject도 추가 가능
+/// @displayName Subject
+model Subject {
+  id          String    @id @default(uuid())
+  seq         Int       @unique @default(autoincrement())
+  createdAt   DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt   DateTime? @updatedAt @map("updated_at") @db.Timestamptz(6)
+  removedAt   DateTime? @map("removed_at") @db.Timestamptz(6)
+
+  /// @displayName 이름
+  name        String    @unique  // Prisma 모델명, 'all', 'menu:xxx', 'entity:xxx', 'feature:xxx' 등
+  /// @displayName 표시명
+  displayName String?   @map("display_name")  // 한글 표시명
+  /// @displayName 아이콘
+  icon        String?   // 아이콘 (선택)
+  /// @displayName 정렬 순서
+  order       Int       @default(0)  // UI 정렬 순서
+  /// @displayName 시스템 여부
+  isSystem    Boolean   @default(true) @map("is_system")  // Prisma 모델 기반 여부
+  /// @displayName 그룹
+  group       String?   // 그룹핑 (entity, menu, feature 등)
+
+  // 관계
+  abilities         Ability[]
+
+  @@index([group])
+  @@index([isSystem])
+  @@map("subjects")
+}
+
+// @schema-type: REFERENCE
+// @description: CASL Action 정의 - 행위의 완전한 정의 (마스킹 설정 포함)
+// @note: DDD 원칙에 따라 Action이 마스킹, 포맷팅 등 설정을 config에 포함
+/// @displayName 액션
+model Action {
+  id          String    @id @default(uuid())
+  seq         Int       @unique @default(autoincrement())
+  createdAt   DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt   DateTime? @updatedAt @map("updated_at") @db.Timestamptz(6)
+  removedAt   DateTime? @map("removed_at") @db.Timestamptz(6)
+
+  /// @displayName 이름
+  name        String    @unique  // 'create', 'read', 'read:masked:email', 'read:masked:phone' 등
+  /// @displayName 표시명
+  displayName String?   @map("display_name")
+  /// @displayName 설명
+  description String?
+  /// @displayName 그룹
+  group       String?   // 'crud', 'visibility', 'bulk', 'workflow'
+  /// @displayName 정렬 순서
+  order       Int       @default(0)
+  /// @displayName 시스템 여부
+  isSystem    Boolean   @default(true) @map("is_system")
+
+  // Action 설정 (DDD: Action이 완전한 정의를 가짐)
+  // 마스킹, 포맷팅, 변환 등 다양한 유형 대응
+  /// @displayName 설정
+  config      Json?  // { type: 'masking', preset: 'PRESET_EMAIL' } 등
+
+  // 관계
+  abilities   Ability[]
+
+  @@index([group])
+  @@map("actions")
+}
+
+// @schema-type: REFERENCE
 // @description: Role 또는 User에 부여되는 구체적인 권한 정의 (CASL ABAC 기반)
 // @connects: Role (역할 기반 기본 권한)
 // @connects: User (사용자별 예외 권한)
+// @connects: Subject (권한 대상)
+// @connects: Action (행위 정의)
 // @note: roleId와 userId 중 하나만 설정 (Role 기반 + User 예외)
-// @note: subject는 Prisma 모델명 또는 'all'을 직접 저장 (동적 Subject)
 /// @displayName 권한
 model Ability {
   id          String    @id @default(uuid())
@@ -136,10 +202,6 @@ model Ability {
   removedAt   DateTime? @map("removed_at") @db.Timestamptz(6)
 
   // CASL 필수 필드
-  /// @displayName 액션
-  action      String    // 'create', 'read', 'update', 'delete', 'manage'
-  /// @displayName 대상
-  subject     String    // Prisma 모델명 또는 'all'
   /// @displayName 대상 필드
   fields      String[]  @default([])
   /// @displayName 조건
@@ -149,11 +211,15 @@ model Ability {
   /// @displayName 거부 사유
   reason      String?   // 거부 시 사용자에게 보여줄 메시지
 
-  // 연결 대상 (둘 중 하나만 설정)
+  // 연결 대상
+  subjectId   String    @map("subject_id") // Subject FK
+  actionId    String    @map("action_id")  // Action FK
   roleId      String?   @map("role_id") // Role 기반 (기본 권한)
   userId      String?   @map("user_id") // User 기반 (예외 권한)
 
   // 관계
+  subject     Subject   @relation(fields: [subjectId], references: [id])
+  action      Action    @relation(fields: [actionId], references: [id])
   role        Role?     @relation(fields: [roleId], references: [id])
   user        User?     @relation(fields: [userId], references: [id])
 
@@ -167,77 +233,12 @@ model Ability {
   /// @displayName 우선순위
   priority    Int       @default(0) // 높을수록 우선
 
+  @@index([subjectId])
+  @@index([actionId])
   @@index([roleId])
   @@index([userId])
-  @@index([subject])
   @@index([isActive])
   @@map("abilities")
-}
-
-// @schema-type: REFERENCE
-// @description: 마스킹 패턴 정의 - 필드 타입별 마스킹 규칙
-/// @displayName 마스킹 패턴
-model MaskingPattern {
-  id               String              @id @default(uuid())
-  seq              Int                 @unique @default(autoincrement())
-  createdAt        DateTime            @default(now()) @map("created_at") @db.Timestamptz(6)
-  updatedAt        DateTime?           @updatedAt @map("updated_at") @db.Timestamptz(6)
-  removedAt        DateTime?           @map("removed_at") @db.Timestamptz(6)
-
-  /// @displayName 이름
-  name             String              @unique
-  /// @displayName 필드 타입
-  fieldType        MaskingFieldType
-  /// @displayName 패턴
-  pattern          String              // 마스킹 패턴 (PRESET_* 또는 정규식)
-  /// @displayName 예시
-  example          String?             // 예시 결과
-  /// @displayName 설명
-  description      String?
-
-  fieldVisibilities FieldVisibility[]
-
-  @@map("masking_patterns")
-}
-
-// @schema-type: REFERENCE
-// @description: 필드 가시성 설정 - RoleCategory/RoleGroup별 필드 접근 권한
-// @connects: Category (RoleCategory) - 역할 분류별 가시성
-// @connects: Group (RoleGroup) - 역할 그룹별 가시성 (선택적)
-// @connects: MaskingPattern - 마스킹 적용 시 패턴
-/// @displayName 필드 가시성
-model FieldVisibility {
-  id               String              @id @default(uuid())
-  seq              Int                 @unique @default(autoincrement())
-  createdAt        DateTime            @default(now()) @map("created_at") @db.Timestamptz(6)
-  updatedAt        DateTime?           @updatedAt @map("updated_at") @db.Timestamptz(6)
-  removedAt        DateTime?           @map("removed_at") @db.Timestamptz(6)
-
-  // 대상 정의
-  /// @displayName 대상 모델
-  subject          String              // Prisma 모델명 (User, Reservation 등)
-  /// @displayName 필드명
-  field            String              // 필드명 (email, phone 등)
-
-  // 권한 기준
-  roleCategoryId   String              @map("role_category_id")
-  roleGroupId      String?             @map("role_group_id")  // null이면 기본값
-
-  // 가시성 설정
-  /// @displayName 가시성 유형
-  visibility       FieldVisibilityType @default(FULL)
-  maskingPatternId String?             @map("masking_pattern_id")
-
-  // 관계
-  roleCategory     Category            @relation("FieldVisibilityRoleCategory", fields: [roleCategoryId], references: [id])
-  roleGroup        Group?              @relation("FieldVisibilityRoleGroup", fields: [roleGroupId], references: [id])
-  maskingPattern   MaskingPattern?     @relation(fields: [maskingPatternId], references: [id])
-
-  @@unique([subject, field, roleCategoryId, roleGroupId])
-  @@index([subject])
-  @@index([roleCategoryId])
-  @@index([roleGroupId])
-  @@map("field_visibilities")
 }
 
 // @schema-type: CONTENT
@@ -322,24 +323,6 @@ enum RecurringDayOfWeek {
   FRIDAY
   SATURDAY
   SUNDAY
-}
-
-
-enum FieldVisibilityType {
-  FULL   // 전체 공개
-  MASKED // 부분 마스킹
-  HIDDEN // 숨김
-}
-
-enum MaskingFieldType {
-  EMAIL       // 이메일
-  PHONE       // 전화번호
-  SSN         // 주민번호
-  CARD_NUMBER // 카드번호
-  ACCOUNT     // 계좌번호
-  ADDRESS     // 주소
-  NAME        // 이름
-  CUSTOM      // 커스텀
 }
 
 

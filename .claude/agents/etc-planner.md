@@ -221,6 +221,11 @@ Ground를 선택하는 페이지가 필요해요.
    - 상태 관리 구조
    - 컴포넌트 유형 결정
    - 에이전트 전달 내용
+4. **하위호환성 미고려 (Critical)**:
+   - 기획 변경 시 하위호환성을 고려하지 않음
+   - 모든 변경은 **전체 마이그레이션** 방식으로 진행
+   - deprecated, fallback, 이전 버전 지원 코드 금지
+   - 변경이 필요하면 관련된 모든 코드를 한 번에 수정
 
 ---
 
@@ -231,16 +236,37 @@ Ground를 선택하는 페이지가 필요해요.
 
 ### 파일명 규칙
 ```
-YYYY-MM-DD-[PageName].md
+YYYY-MM-DD-[기능명].md
 ```
 
-### 다음 단계
+### 다음 단계 (5단계 플로우)
 
-기획서 완성 후 **technical-designer**를 호출하여 개발 명세를 추가합니다.
+기획서 완성 후 **Stage 1**의 일부로 **technical-designer**를 호출합니다.
 
 ```
-✅ GroundSelectPage 기획서가 저장되었습니다.
-📁 경로: .claude/plans/2025-12-30-GroundSelectPage.md
-
-→ technical-designer를 호출하여 개발 명세를 추가하세요.
+┌─────────────────────────────────────────────────────────────┐
+│ Stage 1: 데이터 설계                                         │
+│ planner (현재) → technical-designer → [사용자 리뷰] ✓        │
+└─────────────────────────────────────────────────────────────┘
 ```
+
+**완료 후 출력 예시:**
+```
+✅ 기획서가 저장되었습니다.
+📁 기획서: .claude/plans/2026-01-10-MemberList.md
+
+→ 다음: technical-designer를 호출하여 -design.md 설계서를 생성합니다.
+→ Stage 1 완료 후 사용자 리뷰를 진행합니다.
+```
+
+### 5단계 플로우 개요
+
+| Stage | 단계명 | 산출물 |
+|-------|--------|--------|
+| 1 | 데이터 설계 | 기획.md, 기획-design.md |
+| 2 | 스키마 구현 | Prisma, Entity, DTO |
+| 3 | 백엔드 로직 | Repository, Service, Controller |
+| 4 | 컴포넌트 구현 | UI, Widget, Feature |
+| 5 | 페이지 통합 | Page, Route |
+
+자세한 내용은 `cm-stage-orchestrator.md`를 참고하세요.

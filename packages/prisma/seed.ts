@@ -4,16 +4,18 @@ import { hash } from "bcrypt";
 import * as pg from "pg";
 import {
 	abilitySeedData,
+	actionSeedData,
 	groundSeedData,
 	roleAssociationSeedData,
 	roleCategorySeedData,
 	roleClassificationSeedData,
 	roleGroupSeedData,
 	roleSeedData,
+	subjectSeedData,
 	userGroundMapping,
 	userSeedData,
 } from "./seed-data";
-import type { Ground, Group, Role } from "./src/generated/client/client";
+import type { Action, Ground, Group, Role, Subject } from "./src/generated/client/client";
 import { PrismaClient } from "./src/generated/client/client";
 import { CategoryTypes } from "./src/generated/client/enums";
 
@@ -145,8 +147,14 @@ async function main() {
 	// 일반 유저들과 그라운드 생성
 	await createRegularUsersAndGrounds(roles.ADMIN, roles.USER);
 
+	// Subject 생성 (CASL Subject 정의)
+	const subjects = await createSubjects();
+
+	// Action 생성 (CASL Action 정의)
+	const actions = await createActions();
+
 	// Ability 생성 (Role별 권한) - CASL ABAC 기반
-	await createAbilities(roles);
+	await createAbilities(roles, subjects, actions);
 
 	console.log({ superAdminUser });
 }
@@ -543,34 +551,128 @@ async function createRoleGroupsAndAssociations(roles: Record<string, Role>) {
 	console.log("Role 관련 Group 생성 및 RoleAssociation 연결 완료!");
 }
 
-async function createAbilities(roles: Record<string, Role>) {
+async function createSubjects(): Promise<Record<string, Subject>> {
+	console.log("Subject 생성 시작...");
+
+	const subjects: Record<string, Subject> = {};
+	let createdCount = 0;
+	let skippedCount = 0;
+
+	for (const subjectData of subjectSeedData) {
+		const existing = await prisma.subject.findUnique({
+			where: { name: subjectData.name },
+		});
+
+		if (!existing) {
+			const subject = await prisma.subject.create({
+				data: {
+					name: subjectData.name,
+					displayName: subjectData.displayName,
+					group: subjectData.group,
+					order: subjectData.order ?? 0,
+					isSystem: subjectData.isSystem ?? false,
+				},
+			});
+			subjects[subjectData.name] = subject;
+			createdCount++;
+			console.log(`  - Subject 생성: ${subjectData.name} (${subjectData.displayName})`);
+		} else {
+			subjects[subjectData.name] = existing;
+			skippedCount++;
+		}
+	}
+
+	console.log(`Subject 생성 완료! (생성: ${createdCount}개, 스킵: ${skippedCount}개)`);
+	return subjects;
+}
+
+async function createActions(): Promise<Record<string, Action>> {
+	console.log("Action 생성 시작...");
+
+	const actions: Record<string, Action> = {};
+	let createdCount = 0;
+	let skippedCount = 0;
+
+	for (const actionData of actionSeedData) {
+		const existing = await prisma.action.findUnique({
+			where: { name: actionData.name },
+		});
+
+		if (!existing) {
+			const action = await prisma.action.create({
+				data: {
+					name: actionData.name,
+					displayName: actionData.displayName,
+					description: actionData.description,
+					group: actionData.group,
+					order: actionData.order ?? 0,
+					isSystem: actionData.isSystem ?? true,
+					config: actionData.config ?? undefined,
+				},
+			});
+			actions[actionData.name] = action;
+			createdCount++;
+			console.log(`  - Action 생성: ${actionData.name} (${actionData.displayName})`);
+		} else {
+			actions[actionData.name] = existing;
+			skippedCount++;
+		}
+	}
+
+	console.log(`Action 생성 완료! (생성: ${createdCount}개, 스킵: ${skippedCount}개)`);
+	return actions;
+}
+
+async function createAbilities(
+	roles: Record<string, Role>,
+	subjects: Record<string, Subject>,
+	actions: Record<string, Action>,
+) {
 	console.log("Ability 생성 시작 (CASL ABAC 기반)...");
 
 	let createdCount = 0;
 	let skippedCount = 0;
+	let errorCount = 0;
 
 	for (const abilityData of abilitySeedData) {
 		// Role 찾기
 		const role = roles[abilityData.roleName];
 		if (!role) {
 			console.error(`  - Role을 찾을 수 없음: ${abilityData.roleName}`);
+			errorCount++;
 			continue;
 		}
 
-		// 중복 확인 (roleId, subject, action 조합)
+		// Subject 찾기
+		const subject = subjects[abilityData.subject];
+		if (!subject) {
+			console.error(`  - Subject를 찾을 수 없음: ${abilityData.subject}`);
+			errorCount++;
+			continue;
+		}
+
+		// Action 찾기
+		const action = actions[abilityData.actionName];
+		if (!action) {
+			console.error(`  - Action을 찾을 수 없음: ${abilityData.actionName}`);
+			errorCount++;
+			continue;
+		}
+
+		// 중복 확인 (roleId, subjectId, actionId 조합)
 		const existing = await prisma.ability.findFirst({
 			where: {
 				roleId: role.id,
-				subject: abilityData.subject,
-				action: abilityData.action,
+				subjectId: subject.id,
+				actionId: action.id,
 			},
 		});
 
 		if (!existing) {
 			await prisma.ability.create({
 				data: {
-					action: abilityData.action,
-					subject: abilityData.subject,
+					actionId: action.id,
+					subjectId: subject.id,
 					inverted: abilityData.inverted,
 					roleId: role.id,
 					description: abilityData.description,
@@ -583,7 +685,7 @@ async function createAbilities(roles: Record<string, Role>) {
 			});
 			createdCount++;
 			console.log(
-				`  - Ability 생성: ${abilityData.roleName} ${abilityData.inverted ? "cannot" : "can"} ${abilityData.action} ${abilityData.subject}`,
+				`  - Ability 생성: ${abilityData.roleName} ${abilityData.inverted ? "cannot" : "can"} ${abilityData.actionName} ${abilityData.subject}`,
 			);
 		} else {
 			skippedCount++;
@@ -591,7 +693,7 @@ async function createAbilities(roles: Record<string, Role>) {
 	}
 
 	console.log(
-		`Ability 생성 완료! (생성: ${createdCount}개, 스킵: ${skippedCount}개)`,
+		`Ability 생성 완료! (생성: ${createdCount}개, 스킵: ${skippedCount}개, 오류: ${errorCount}개)`,
 	);
 }
 

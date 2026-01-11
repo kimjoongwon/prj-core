@@ -295,6 +295,30 @@ rootStore.persistStore = new PersistStore({
 });
 ```
 
+## 기획/설계 원칙
+
+### 하위호환성 미고려 (Critical)
+
+**모든 기획/설계 변경은 전체 마이그레이션 방식으로 진행합니다.**
+
+```
+❌ 금지:
+- 기존 API 유지하면서 새 API 추가
+- deprecated 마킹 후 나중에 제거
+- 하위호환 래퍼/어댑터 함수 추가
+- 이전 버전 지원 코드
+
+✅ 권장:
+- 기존 코드 삭제 → 새 코드로 전체 교체
+- 호출하는 모든 코드를 한 번에 수정
+- 마이그레이션 완료 후 이전 코드 흔적 없음
+```
+
+**이유:**
+- 이 프로젝트는 내부 사용 목적으로 외부 API 제공 없음
+- 하위호환 코드는 기술 부채가 됨
+- 5단계 플로우에서 각 단계별 리뷰로 변경 영향을 관리
+
 ## 백엔드 개발 규칙
 
 ### DTO 위치 규칙
@@ -379,15 +403,38 @@ feat(coin): 멀티시그 지갑 서비스 초기 구현
 
 ## Agent 활용 가이드
 
-### 오케스트레이터 (메타 에이전트)
+### 5단계 분할 개발 플로우 (권장)
 
-- **page-orchestrator**: 페이지 생성 시 모든 하위 에이전트를 자동 조율
-  - Phase 1: 기획자 (Figma 없을 때) / 디자인-분석가 (Figma 있을 때)
-  - Phase 2: 컴포넌트-빌더 (신규 컴포넌트)
-  - Phase 3: 리포지토리-빌더 → 서비스-빌더 → 컨트롤러-빌더 (백엔드)
-  - Phase 4: 페이지-빌더 (프론트엔드)
-  - Phase 4.5: 페이지-리뷰어 (규칙 검증, 필수)
-  - Phase 5: 코드-리뷰어, 테스트-엔지니어 (품질 검증)
+**stage-orchestrator**를 사용하여 각 단계별 사용자 리뷰를 받으며 개발합니다.
+
+```
+Stage 1: 데이터 설계     → planner → technical-designer → [사용자 리뷰]
+Stage 2: 스키마 구현     → schema → entity → dto → seed → [사용자 리뷰]
+Stage 3: 백엔드 로직     → repository → service → controller → [사용자 리뷰]
+Stage 4: 컴포넌트 구현   → ui → widget → feature → [사용자 리뷰]
+Stage 5: 페이지 통합     → page-builder → page-reviewer → [사용자 리뷰]
+```
+
+**실행 방법:**
+```bash
+# 전체 실행 (Stage 1부터)
+/stage-orchestrator full
+
+# 특정 단계부터 시작
+/stage-orchestrator start stage=3
+
+# 특정 단계만 실행
+/stage-orchestrator run stage=2
+```
+
+**장점:**
+- 각 단계별 사용자 리뷰로 품질 향상
+- 변경 발생 시 영향 범위 최소화 (해당 단계부터 재시작)
+- 단계별 산출물 문서화 (`-design.md`, `-schema.md`, `-backend.md`, `-components.md`, `-complete.md`)
+
+### 레거시 오케스트레이터 (Deprecated)
+
+- ~~**page-orchestrator**~~: `stage-orchestrator`로 대체됨
 
 ### 개별 Agent
 

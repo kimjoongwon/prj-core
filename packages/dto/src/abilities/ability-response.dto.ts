@@ -1,8 +1,14 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { Expose } from "class-transformer";
+import { Expose, Type } from "class-transformer";
+import { ActionResponseDto } from "./action-response.dto";
+import { SubjectResponseDto } from "./subject-response.dto";
 
 /**
  * Ability 응답 DTO (CASL ABAC 기반)
+ *
+ * @description
+ * DDD 원칙에 따라 Ability는 Role + Subject + Action + fields의 연결만 담당합니다.
+ * 마스킹 등의 설정은 Action.config에서 가져옵니다.
  */
 export class AbilityResponseDto {
 	@ApiProperty({
@@ -13,18 +19,36 @@ export class AbilityResponseDto {
 	id!: string;
 
 	@ApiProperty({
-		description: "액션 (create, read, update, delete, manage)",
-		example: "read",
+		description: "Action ID (UUID)",
+		example: "550e8400-e29b-41d4-a716-446655440001",
 	})
 	@Expose()
-	action!: string;
+	actionId!: string;
 
 	@ApiProperty({
-		description: "대상 Subject (Prisma 모델명 또는 'all')",
-		example: "User",
+		description: "Action 상세 정보",
+		type: ActionResponseDto,
+		required: false,
 	})
 	@Expose()
-	subject!: string;
+	@Type(() => ActionResponseDto)
+	action?: ActionResponseDto;
+
+	@ApiProperty({
+		description: "Subject ID (UUID)",
+		example: "550e8400-e29b-41d4-a716-446655440002",
+	})
+	@Expose()
+	subjectId!: string;
+
+	@ApiProperty({
+		description: "Subject 상세 정보",
+		type: SubjectResponseDto,
+		required: false,
+	})
+	@Expose()
+	@Type(() => SubjectResponseDto)
+	subject?: SubjectResponseDto;
 
 	@ApiProperty({
 		description: "대상 필드 목록",
@@ -61,7 +85,7 @@ export class AbilityResponseDto {
 
 	@ApiProperty({
 		description: "Role ID (Role 기반 권한일 때)",
-		example: "550e8400-e29b-41d4-a716-446655440001",
+		example: "550e8400-e29b-41d4-a716-446655440003",
 		required: false,
 		nullable: true,
 	})
@@ -70,7 +94,7 @@ export class AbilityResponseDto {
 
 	@ApiProperty({
 		description: "User ID (User 예외 권한일 때)",
-		example: "550e8400-e29b-41d4-a716-446655440002",
+		example: "550e8400-e29b-41d4-a716-446655440004",
 		required: false,
 		nullable: true,
 	})

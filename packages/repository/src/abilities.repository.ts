@@ -18,7 +18,7 @@ export class AbilitiesRepository {
 	}
 
 	/**
-	 * 모든 Ability 조회 (Role 포함)
+	 * 모든 Ability 조회 (Role, Action 포함)
 	 */
 	async findAllWithRole(): Promise<Ability[]> {
 		this.logger.debug("모든 Ability 조회");
@@ -28,6 +28,8 @@ export class AbilitiesRepository {
 			include: {
 				role: true,
 				user: true,
+				action: true,
+				subject: true,
 			},
 			orderBy: [{ priority: "desc" }, { createdAt: "desc" }],
 		});
@@ -36,7 +38,7 @@ export class AbilitiesRepository {
 	}
 
 	/**
-	 * ID로 조회 (Role 포함)
+	 * ID로 조회 (Role, Action 포함)
 	 */
 	async findByIdWithRole(id: string): Promise<Ability | null> {
 		this.logger.debug(`ID로 조회: ${id.slice(-8)}`);
@@ -46,6 +48,8 @@ export class AbilitiesRepository {
 			include: {
 				role: true,
 				user: true,
+				action: true,
+				subject: true,
 			},
 		});
 
@@ -66,6 +70,8 @@ export class AbilitiesRepository {
 			},
 			include: {
 				role: true,
+				action: true,
+				subject: true,
 			},
 			orderBy: [{ priority: "desc" }, { createdAt: "desc" }],
 		});
@@ -87,6 +93,8 @@ export class AbilitiesRepository {
 			},
 			include: {
 				user: true,
+				action: true,
+				subject: true,
 			},
 			orderBy: [{ priority: "desc" }, { createdAt: "desc" }],
 		});
@@ -109,6 +117,8 @@ export class AbilitiesRepository {
 				isActive: true,
 			},
 			include: {
+				subject: true,
+				action: true,
 				role: true,
 			},
 			orderBy: [{ priority: "desc" }, { createdAt: "desc" }],
@@ -118,17 +128,19 @@ export class AbilitiesRepository {
 	}
 
 	/**
-	 * Subject로 Ability 목록 조회
+	 * Subject ID로 Ability 목록 조회
 	 */
-	async findBySubject(subject: string): Promise<Ability[]> {
-		this.logger.debug(`Subject로 Ability 조회: subject=${subject}`);
+	async findBySubjectId(subjectId: string): Promise<Ability[]> {
+		this.logger.debug(`Subject ID로 Ability 조회: subjectId=${subjectId}`);
 
 		const results = await this.txHost.tx.ability.findMany({
 			where: {
-				subject,
+				subjectId,
 				removedAt: null,
 			},
 			include: {
+				subject: true,
+				action: true,
 				role: true,
 				user: true,
 			},
@@ -143,12 +155,14 @@ export class AbilitiesRepository {
 	 */
 	async create(data: Prisma.AbilityUncheckedCreateInput): Promise<Ability> {
 		this.logger.debug(
-			`Ability 생성: subject=${data.subject}, action=${data.action}`,
+			`Ability 생성: subjectId=${data.subjectId}, actionId=${data.actionId}`,
 		);
 
 		const result = await this.txHost.tx.ability.create({
 			data,
 			include: {
+				subject: true,
+				action: true,
 				role: true,
 				user: true,
 			},
@@ -172,6 +186,8 @@ export class AbilitiesRepository {
 			include: {
 				role: true,
 				user: true,
+				action: true,
+				subject: true,
 			},
 		});
 
@@ -190,6 +206,8 @@ export class AbilitiesRepository {
 			include: {
 				role: true,
 				user: true,
+				action: true,
+				subject: true,
 			},
 		});
 
@@ -232,6 +250,8 @@ export class AbilitiesRepository {
 				data,
 				include: {
 					role: true,
+					action: true,
+					subject: true,
 				},
 			});
 			results.push(plainToInstance(Ability, result));
@@ -275,6 +295,8 @@ export class AbilitiesRepository {
 				data,
 				include: {
 					user: true,
+					action: true,
+					subject: true,
 				},
 			});
 			results.push(plainToInstance(Ability, result));

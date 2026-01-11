@@ -1,3 +1,4 @@
+import { CreateAbilityInput } from "@cocrepo/dto";
 import { Ability } from "@cocrepo/entity";
 import { Prisma } from "@cocrepo/prisma";
 import { AbilitiesRepository } from "@cocrepo/repository";
@@ -101,7 +102,7 @@ export class AbilitiesService {
 		data: Prisma.AbilityUncheckedCreateInput,
 	): Promise<Ability> {
 		this.logger.debug(
-			`권한 생성: subject=${data.subject}, action=${data.action}`,
+			`권한 생성: subjectId=${data.subjectId}, actionId=${data.actionId}`,
 		);
 
 		// 유효성 검증
@@ -149,7 +150,7 @@ export class AbilitiesService {
 	@Transactional()
 	async batchSetRoleAbilities(
 		roleId: string,
-		abilities: Prisma.AbilityCreateManyInput[],
+		abilities: CreateAbilityInput[],
 	): Promise<Ability[]> {
 		this.logger.debug(
 			`Role 권한 일괄 설정: roleId=${roleId.slice(-8)}, count=${abilities.length}`,
@@ -162,7 +163,10 @@ export class AbilitiesService {
 			);
 		}
 
-		return this.repository.replaceByRoleId(roleId, abilities);
+		// DTO를 Prisma 타입으로 변환
+		const prismaAbilities = this.toPrismaCreateInput(abilities);
+
+		return this.repository.replaceByRoleId(roleId, prismaAbilities);
 	}
 
 	/**
@@ -176,7 +180,7 @@ export class AbilitiesService {
 	@Transactional()
 	async batchSetUserAbilities(
 		userId: string,
-		abilities: Prisma.AbilityCreateManyInput[],
+		abilities: CreateAbilityInput[],
 	): Promise<Ability[]> {
 		this.logger.debug(
 			`User 예외 권한 일괄 설정: userId=${userId.slice(-8)}, count=${abilities.length}`,
@@ -189,7 +193,10 @@ export class AbilitiesService {
 			);
 		}
 
-		return this.repository.replaceByUserId(userId, abilities);
+		// DTO를 Prisma 타입으로 변환
+		const prismaAbilities = this.toPrismaCreateInput(abilities);
+
+		return this.repository.replaceByUserId(userId, prismaAbilities);
 	}
 
 	/**
@@ -210,11 +217,46 @@ export class AbilitiesService {
 			);
 		}
 
-		// action, subject 필수
-		if (!data.action || !data.subject) {
+		// actionId, subjectId 필수
+		if (!data.actionId || !data.subjectId) {
 			throw new BadRequestException(
 				AbilityServiceErrorMessages.INVALID_ABILITY_DATA,
 			);
 		}
+	}
+
+	/**
+	 * CreateAbilityInput을 Prisma.AbilityCreateManyInput으로 변환
+	 *
+	 * @param abilities - DTO 배열
+	 * @returns Prisma 타입 배열
+	 * @throws BadRequestException - subjectId 또는 actionId가 없는 경우
+	 */
+	private toPrismaCreateInput(
+		abilities: CreateAbilityInput[],
+	): Prisma.AbilityCreateManyInput[] {
+		return abilities.map((ability) => {
+			// subjectId와 actionId가 필수 (추후 actionName/subjectName → ID 변환 로직 추가 가능)
+			if (!ability.subjectId || !ability.actionId) {
+				throw new BadRequestException(
+					"subjectId와 actionId는 필수입니다. (actionName/subjectName 지원 예정)",
+				);
+			}
+
+			return {
+				subjectId: ability.subjectId,
+				actionId: ability.actionId,
+				fields: ability.fields ?? [],
+				conditions: ability.conditions,
+				inverted: ability.inverted ?? false,
+				reason: ability.reason,
+				roleId: ability.roleId,
+				userId: ability.userId,
+				name: ability.name,
+				description: ability.description,
+				isActive: ability.isActive ?? true,
+				priority: ability.priority ?? 0,
+			};
+		});
 	}
 }

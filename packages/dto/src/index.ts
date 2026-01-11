@@ -26,7 +26,6 @@ export * from "./space-classification.dto";
 export * from "./task.dto";
 export * from "./tenant.dto";
 export * from "./timeline.dto";
-export * from "./ui-config";
 export * from "./update";
 export * from "./user.dto";
 export * from "./user-association.dto";

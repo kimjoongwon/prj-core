@@ -2,6 +2,7 @@
 // 필요할 때 생성합니다. 가이드: .claude/agents/be-service-builder.md
 
 export { AbilitiesService } from "./abilities.service";
+export { ActionsService } from "./actions.service";
 export { AwsService } from "./aws.service";
 export { GroundsService } from "./grounds.service";
 export { createPrismaClient } from "./prisma.factory";
@@ -16,5 +17,4 @@ export {
 } from "./subjects.service";
 export { TokenExpiryInfo, TokenService } from "./token.service";
 export { TokenStorageService } from "./token-storage.service";
-export { UIConfigService } from "./ui-config.service";
 export { UsersService } from "./users.service";

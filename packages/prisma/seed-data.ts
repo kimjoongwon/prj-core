@@ -1,6 +1,473 @@
 // Enum imports
 import { RoleCategoryNames, RoleGroupNames } from "@cocrepo/enum";
 
+// ============================================================================
+// Action 시드 데이터 (CASL Action 정의)
+// ============================================================================
+
+/**
+ * Action 설정 타입 (config JSON 필드)
+ */
+export interface ActionConfigSeedData {
+	type: "masking" | "format" | "transform";
+	preset?: string; // 마스킹 프리셋: PRESET_EMAIL, PRESET_PHONE 등
+	pattern?: string; // 커스텀 정규식
+	replacement?: string; // 치환 문자열
+	rule?: string; // 변환 규칙
+}
+
+/**
+ * Action 시드 데이터 인터페이스
+ */
+export interface ActionSeedData {
+	name: string; // Action 이름 (create, read, read:masked:email 등)
+	displayName: string; // 한글 표시명
+	description?: string; // 설명
+	group: "crud" | "visibility" | "bulk" | "workflow"; // 그룹
+	order?: number; // UI 정렬 순서
+	isSystem?: boolean; // 시스템 기본 Action 여부
+	config?: ActionConfigSeedData | null; // 마스킹, 포맷팅 등 설정
+}
+
+/**
+ * Action 시드 데이터
+ * DDD 원칙: Action이 완전한 정의를 가짐 (config에 마스킹 설정 포함)
+ */
+export const actionSeedData: ActionSeedData[] = [
+	// ---- CRUD 액션 ----
+	{
+		name: "create",
+		displayName: "생성",
+		description: "새로운 리소스를 생성합니다",
+		group: "crud",
+		order: 0,
+		isSystem: true,
+		config: null,
+	},
+	{
+		name: "read",
+		displayName: "조회",
+		description: "리소스를 조회합니다",
+		group: "crud",
+		order: 1,
+		isSystem: true,
+		config: null,
+	},
+	{
+		name: "update",
+		displayName: "수정",
+		description: "리소스를 수정합니다",
+		group: "crud",
+		order: 2,
+		isSystem: true,
+		config: null,
+	},
+	{
+		name: "delete",
+		displayName: "삭제",
+		description: "리소스를 삭제합니다",
+		group: "crud",
+		order: 3,
+		isSystem: true,
+		config: null,
+	},
+	{
+		name: "manage",
+		displayName: "전체 관리",
+		description: "모든 권한을 가집니다",
+		group: "crud",
+		order: 4,
+		isSystem: true,
+		config: null,
+	},
+
+	// ---- Visibility 액션 ----
+	{
+		name: "read:full",
+		displayName: "전체 조회",
+		description: "마스킹 없이 전체 데이터를 조회합니다",
+		group: "visibility",
+		order: 10,
+		isSystem: true,
+		config: null,
+	},
+	{
+		name: "read:hidden",
+		displayName: "숨김",
+		description: "데이터를 숨깁니다",
+		group: "visibility",
+		order: 11,
+		isSystem: true,
+		config: null,
+	},
+	{
+		name: "read:masked:email",
+		displayName: "이메일 마스킹 조회",
+		description: "이메일을 마스킹하여 조회합니다 (예: u***@domain.com)",
+		group: "visibility",
+		order: 12,
+		isSystem: true,
+		config: { type: "masking", preset: "PRESET_EMAIL" },
+	},
+	{
+		name: "read:masked:phone",
+		displayName: "전화번호 마스킹 조회",
+		description: "전화번호를 마스킹하여 조회합니다 (예: 010-****-5678)",
+		group: "visibility",
+		order: 13,
+		isSystem: true,
+		config: { type: "masking", preset: "PRESET_PHONE" },
+	},
+	{
+		name: "read:masked:name",
+		displayName: "이름 마스킹 조회",
+		description: "이름을 마스킹하여 조회합니다 (예: 홍*동)",
+		group: "visibility",
+		order: 14,
+		isSystem: true,
+		config: { type: "masking", preset: "PRESET_NAME" },
+	},
+	{
+		name: "read:masked:ssn",
+		displayName: "주민번호 마스킹 조회",
+		description: "주민번호를 마스킹하여 조회합니다 (예: 920315-*******)",
+		group: "visibility",
+		order: 15,
+		isSystem: true,
+		config: { type: "masking", preset: "PRESET_SSN" },
+	},
+	{
+		name: "read:masked:card",
+		displayName: "카드번호 마스킹 조회",
+		description: "카드번호를 마스킹하여 조회합니다 (예: 1234-****-****-3456)",
+		group: "visibility",
+		order: 16,
+		isSystem: true,
+		config: { type: "masking", preset: "PRESET_CARD" },
+	},
+	{
+		name: "read:masked:account",
+		displayName: "계좌번호 마스킹 조회",
+		description: "계좌번호를 마스킹하여 조회합니다",
+		group: "visibility",
+		order: 17,
+		isSystem: true,
+		config: { type: "masking", preset: "PRESET_ACCOUNT" },
+	},
+
+	// ---- Bulk 액션 ----
+	{
+		name: "export",
+		displayName: "내보내기",
+		description: "데이터를 내보냅니다",
+		group: "bulk",
+		order: 20,
+		isSystem: true,
+		config: null,
+	},
+	{
+		name: "import",
+		displayName: "가져오기",
+		description: "데이터를 가져옵니다",
+		group: "bulk",
+		order: 21,
+		isSystem: true,
+		config: null,
+	},
+
+	// ---- Workflow 액션 ----
+	{
+		name: "access",
+		displayName: "접근",
+		description: "리소스에 접근합니다",
+		group: "workflow",
+		order: 30,
+		isSystem: true,
+		config: null,
+	},
+	{
+		name: "approve",
+		displayName: "승인",
+		description: "리소스를 승인합니다",
+		group: "workflow",
+		order: 31,
+		isSystem: true,
+		config: null,
+	},
+	{
+		name: "reject",
+		displayName: "반려",
+		description: "리소스를 반려합니다",
+		group: "workflow",
+		order: 32,
+		isSystem: true,
+		config: null,
+	},
+];
+
+// ============================================================================
+// Subject 시드 데이터 (CASL Subject 정의)
+// ============================================================================
+
+/**
+ * Subject 시드 데이터 인터페이스
+ */
+export interface SubjectSeedData {
+	name: string; // Subject 이름 (Prisma 모델명, 'all', 'menu:xxx', 'entity:xxx', 'feature:xxx', 'ui:xxx' 등)
+	displayName: string; // 한글 표시명
+	group: "all" | "entity" | "menu" | "feature" | "ui"; // 그룹핑
+	order?: number; // UI 정렬 순서
+	isSystem?: boolean; // 시스템 생성 여부 (DMMF 기반 = true)
+}
+
+/**
+ * Subject 시드 데이터
+ * - Prisma 모델 기반 Subject는 DMMF에서 자동 동기화됨
+ * - 이 배열은 커스텀 Subject만 정의 (메뉴, 기능 등)
+ */
+export const subjectSeedData: SubjectSeedData[] = [
+	// ---- 전체 ----
+	{ name: "all", displayName: "전체", group: "all", order: 0 },
+
+	// ---- 엔티티 (Prisma 모델 기반) ----
+	// DMMF에서 자동 동기화되므로 여기서는 entity: 접두사가 붙은 것들만 정의
+	{ name: "entity:User", displayName: "사용자", group: "entity", order: 1 },
+	{ name: "entity:Ground", displayName: "시설", group: "entity", order: 2 },
+	{ name: "entity:Space", displayName: "공간", group: "entity", order: 3 },
+	{
+		name: "entity:Reservation",
+		displayName: "예약",
+		group: "entity",
+		order: 4,
+	},
+	{ name: "entity:Content", displayName: "콘텐츠", group: "entity", order: 5 },
+	{ name: "entity:Role", displayName: "역할", group: "entity", order: 6 },
+	{ name: "entity:Ability", displayName: "권한", group: "entity", order: 7 },
+
+	// ---- 메뉴 (1depth) ----
+	{
+		name: "menu:dashboard",
+		displayName: "대시보드",
+		group: "menu",
+		order: 100,
+	},
+	{ name: "menu:users", displayName: "사용자 관리", group: "menu", order: 110 },
+	{ name: "menu:schedules", displayName: "일정 관리", group: "menu", order: 120 },
+	{ name: "menu:files", displayName: "파일 관리", group: "menu", order: 130 },
+	{
+		name: "menu:contents",
+		displayName: "콘텐츠 관리",
+		group: "menu",
+		order: 140,
+	},
+	{ name: "menu:wallets", displayName: "지갑 관리", group: "menu", order: 150 },
+	{ name: "menu:settings", displayName: "설정", group: "menu", order: 160 },
+
+	// ---- 메뉴 (2depth - 사용자) ----
+	{
+		name: "menu:users:list",
+		displayName: "사용자 목록",
+		group: "menu",
+		order: 111,
+	},
+	{
+		name: "menu:users:profiles",
+		displayName: "프로필 관리",
+		group: "menu",
+		order: 112,
+	},
+	{
+		name: "menu:users:categories",
+		displayName: "사용자 분류",
+		group: "menu",
+		order: 113,
+	},
+	{
+		name: "menu:users:groups",
+		displayName: "그룹 관리",
+		group: "menu",
+		order: 114,
+	},
+
+	// ---- 메뉴 (2depth - 일정) ----
+	{
+		name: "menu:schedules:timelines",
+		displayName: "타임라인",
+		group: "menu",
+		order: 121,
+	},
+	{
+		name: "menu:schedules:sessions",
+		displayName: "세션",
+		group: "menu",
+		order: 122,
+	},
+	{
+		name: "menu:schedules:programs",
+		displayName: "프로그램",
+		group: "menu",
+		order: 123,
+	},
+	{
+		name: "menu:schedules:routines",
+		displayName: "루틴",
+		group: "menu",
+		order: 124,
+	},
+
+	// ---- 메뉴 (2depth - 파일) ----
+	{
+		name: "menu:files:list",
+		displayName: "파일 목록",
+		group: "menu",
+		order: 131,
+	},
+	{
+		name: "menu:files:categories",
+		displayName: "파일 분류",
+		group: "menu",
+		order: 132,
+	},
+
+	// ---- 메뉴 (2depth - 콘텐츠) ----
+	{
+		name: "menu:contents:posts",
+		displayName: "게시물",
+		group: "menu",
+		order: 141,
+	},
+	{
+		name: "menu:contents:list",
+		displayName: "콘텐츠 목록",
+		group: "menu",
+		order: 142,
+	},
+
+	// ---- 메뉴 (2depth - 지갑) ----
+	{
+		name: "menu:wallets:list",
+		displayName: "지갑 목록",
+		group: "menu",
+		order: 151,
+	},
+	{
+		name: "menu:wallets:transactions",
+		displayName: "트랜잭션",
+		group: "menu",
+		order: 152,
+	},
+
+	// ---- 메뉴 (2depth - 설정) ----
+	{
+		name: "menu:settings:grounds",
+		displayName: "시설 정보",
+		group: "menu",
+		order: 161,
+	},
+	{
+		name: "menu:settings:admins",
+		displayName: "관리자 관리",
+		group: "menu",
+		order: 162,
+	},
+	{
+		name: "menu:settings:abilities",
+		displayName: "권한 관리",
+		group: "menu",
+		order: 163,
+	},
+	{
+		name: "menu:settings:system",
+		displayName: "시스템 설정",
+		group: "menu",
+		order: 164,
+	},
+	{
+		name: "menu:settings:ui-configs",
+		displayName: "UI 설정",
+		group: "menu",
+		order: 165,
+	},
+
+	// ---- 기능 ----
+	{ name: "feature:export", displayName: "내보내기", group: "feature", order: 200 },
+	{ name: "feature:import", displayName: "가져오기", group: "feature", order: 201 },
+	{
+		name: "feature:bulk-delete",
+		displayName: "일괄 삭제",
+		group: "feature",
+		order: 202,
+	},
+	{
+		name: "feature:send-notification",
+		displayName: "알림 발송",
+		group: "feature",
+		order: 203,
+	},
+
+	// ---- UI 요소 ----
+	{
+		name: "ui:mobile-bottom-tab",
+		displayName: "모바일 바텀탭",
+		group: "ui",
+		order: 300,
+	},
+	{
+		name: "ui:mobile-bottom-tab:home",
+		displayName: "바텀탭 - 홈",
+		group: "ui",
+		order: 301,
+	},
+	{
+		name: "ui:mobile-bottom-tab:schedule",
+		displayName: "바텀탭 - 일정",
+		group: "ui",
+		order: 302,
+	},
+	{
+		name: "ui:mobile-bottom-tab:my",
+		displayName: "바텀탭 - 마이페이지",
+		group: "ui",
+		order: 303,
+	},
+	{
+		name: "ui:mobile-bottom-tab:settings",
+		displayName: "바텀탭 - 설정",
+		group: "ui",
+		order: 304,
+	},
+	{
+		name: "ui:main-banner",
+		displayName: "메인 배너",
+		group: "ui",
+		order: 310,
+	},
+	{
+		name: "ui:sidebar-menu",
+		displayName: "사이드바 메뉴",
+		group: "ui",
+		order: 320,
+	},
+	{
+		name: "ui:sidebar-menu:admin",
+		displayName: "사이드바 - 관리자 메뉴",
+		group: "ui",
+		order: 321,
+	},
+	{
+		name: "ui:floating-button:chat",
+		displayName: "플로팅 채팅 버튼",
+		group: "ui",
+		order: 330,
+	},
+	{
+		name: "ui:floating-button:help",
+		displayName: "플로팅 도움말 버튼",
+		group: "ui",
+		order: 331,
+	},
+];
+
 // 시드 데이터를 위한 메타데이터
 export interface UserSeedData {
 	email: string;
@@ -563,6 +1030,9 @@ export const userAgreementMapping: UserAgreementMappingData[] = [
  * - import: 가져오기 권한
  * - approve: 승인 권한
  * - reject: 반려 권한
+ * - read:full: 전체 조회 권한
+ * - read:hidden: 숨김 권한
+ * - read:masked:*: 마스킹 조회 권한
  */
 export type AbilityAction =
 	| "create"
@@ -574,14 +1044,22 @@ export type AbilityAction =
 	| "export"
 	| "import"
 	| "approve"
-	| "reject";
+	| "reject"
+	| "read:full"
+	| "read:hidden"
+	| "read:masked:email"
+	| "read:masked:phone"
+	| "read:masked:name"
+	| "read:masked:ssn"
+	| "read:masked:card"
+	| "read:masked:account";
 
 /**
  * CASL ABAC 기반 Ability 시드 데이터 인터페이스
  *
  * @property roleName - 역할 이름
- * @property subject - Subject 이름 (Prisma 모델명 또는 'menu:xxx', 'feature:xxx' 등)
- * @property action - 액션 (소문자 문자열)
+ * @property subject - Subject 이름 (Prisma 모델명 또는 'menu:xxx', 'feature:xxx', 'ui:xxx' 등)
+ * @property actionName - Action 이름 (Action 테이블 참조)
  * @property inverted - true면 cannot (거부), false면 can (허용)
  * @property description - 권한 설명
  * @property name - 권한 이름 (선택)
@@ -592,8 +1070,8 @@ export type AbilityAction =
  */
 export interface AbilitySeedData {
 	roleName: "USER" | "ADMIN" | "SUPER_ADMIN";
-	subject: string; // Prisma 모델명 또는 'all', 'menu:xxx', 'feature:xxx' 등
-	action: AbilityAction;
+	subject: string; // Prisma 모델명 또는 'all', 'menu:xxx', 'feature:xxx', 'ui:xxx' 등
+	actionName: AbilityAction; // Action 테이블의 name 참조
 	inverted: boolean; // false = can (허용), true = cannot (거부)
 	description: string;
 	name?: string; // 권한 이름 (선택)
@@ -612,49 +1090,49 @@ export const superAdminAbilitySeedData: AbilitySeedData[] = [
 	{
 		roleName: "SUPER_ADMIN",
 		subject: "menu:dashboard",
-		action: "manage",
+		actionName: "manage",
 		inverted: false,
 		description: "대시보드 전체 관리 권한",
 	},
 	{
 		roleName: "SUPER_ADMIN",
 		subject: "menu:users",
-		action: "manage",
+		actionName: "manage",
 		inverted: false,
 		description: "사용자 관리 전체 권한",
 	},
 	{
 		roleName: "SUPER_ADMIN",
 		subject: "menu:schedules",
-		action: "manage",
+		actionName: "manage",
 		inverted: false,
 		description: "일정 관리 전체 권한",
 	},
 	{
 		roleName: "SUPER_ADMIN",
 		subject: "menu:files",
-		action: "manage",
+		actionName: "manage",
 		inverted: false,
 		description: "파일 관리 전체 권한",
 	},
 	{
 		roleName: "SUPER_ADMIN",
 		subject: "menu:contents",
-		action: "manage",
+		actionName: "manage",
 		inverted: false,
 		description: "콘텐츠 관리 전체 권한",
 	},
 	{
 		roleName: "SUPER_ADMIN",
 		subject: "menu:wallets",
-		action: "manage",
+		actionName: "manage",
 		inverted: false,
 		description: "지갑 관리 전체 권한",
 	},
 	{
 		roleName: "SUPER_ADMIN",
 		subject: "menu:settings",
-		action: "manage",
+		actionName: "manage",
 		inverted: false,
 		description: "설정 관리 전체 권한",
 	},
@@ -662,28 +1140,28 @@ export const superAdminAbilitySeedData: AbilitySeedData[] = [
 	{
 		roleName: "SUPER_ADMIN",
 		subject: "menu:users:list",
-		action: "manage",
+		actionName: "manage",
 		inverted: false,
 		description: "사용자 목록 전체 권한",
 	},
 	{
 		roleName: "SUPER_ADMIN",
 		subject: "menu:users:profiles",
-		action: "manage",
+		actionName: "manage",
 		inverted: false,
 		description: "프로필 관리 전체 권한",
 	},
 	{
 		roleName: "SUPER_ADMIN",
 		subject: "menu:users:categories",
-		action: "manage",
+		actionName: "manage",
 		inverted: false,
 		description: "사용자 분류 관리 전체 권한",
 	},
 	{
 		roleName: "SUPER_ADMIN",
 		subject: "menu:users:groups",
-		action: "manage",
+		actionName: "manage",
 		inverted: false,
 		description: "그룹 관리 전체 권한",
 	},
@@ -691,28 +1169,28 @@ export const superAdminAbilitySeedData: AbilitySeedData[] = [
 	{
 		roleName: "SUPER_ADMIN",
 		subject: "menu:schedules:timelines",
-		action: "manage",
+		actionName: "manage",
 		inverted: false,
 		description: "타임라인 전체 권한",
 	},
 	{
 		roleName: "SUPER_ADMIN",
 		subject: "menu:schedules:sessions",
-		action: "manage",
+		actionName: "manage",
 		inverted: false,
 		description: "세션 전체 권한",
 	},
 	{
 		roleName: "SUPER_ADMIN",
 		subject: "menu:schedules:programs",
-		action: "manage",
+		actionName: "manage",
 		inverted: false,
 		description: "프로그램 전체 권한",
 	},
 	{
 		roleName: "SUPER_ADMIN",
 		subject: "menu:schedules:routines",
-		action: "manage",
+		actionName: "manage",
 		inverted: false,
 		description: "루틴 전체 권한",
 	},
@@ -720,14 +1198,14 @@ export const superAdminAbilitySeedData: AbilitySeedData[] = [
 	{
 		roleName: "SUPER_ADMIN",
 		subject: "menu:files:list",
-		action: "manage",
+		actionName: "manage",
 		inverted: false,
 		description: "파일 목록 전체 권한",
 	},
 	{
 		roleName: "SUPER_ADMIN",
 		subject: "menu:files:categories",
-		action: "manage",
+		actionName: "manage",
 		inverted: false,
 		description: "파일 분류 관리 전체 권한",
 	},
@@ -735,14 +1213,14 @@ export const superAdminAbilitySeedData: AbilitySeedData[] = [
 	{
 		roleName: "SUPER_ADMIN",
 		subject: "menu:contents:posts",
-		action: "manage",
+		actionName: "manage",
 		inverted: false,
 		description: "게시물 전체 권한",
 	},
 	{
 		roleName: "SUPER_ADMIN",
 		subject: "menu:contents:list",
-		action: "manage",
+		actionName: "manage",
 		inverted: false,
 		description: "콘텐츠 목록 전체 권한",
 	},
@@ -750,14 +1228,14 @@ export const superAdminAbilitySeedData: AbilitySeedData[] = [
 	{
 		roleName: "SUPER_ADMIN",
 		subject: "menu:wallets:list",
-		action: "manage",
+		actionName: "manage",
 		inverted: false,
 		description: "지갑 목록 전체 권한",
 	},
 	{
 		roleName: "SUPER_ADMIN",
 		subject: "menu:wallets:transactions",
-		action: "manage",
+		actionName: "manage",
 		inverted: false,
 		description: "트랜잭션 전체 권한",
 	},
@@ -765,35 +1243,35 @@ export const superAdminAbilitySeedData: AbilitySeedData[] = [
 	{
 		roleName: "SUPER_ADMIN",
 		subject: "menu:settings:grounds",
-		action: "manage",
+		actionName: "manage",
 		inverted: false,
 		description: "시설 정보 전체 권한",
 	},
 	{
 		roleName: "SUPER_ADMIN",
 		subject: "menu:settings:admins",
-		action: "manage",
+		actionName: "manage",
 		inverted: false,
 		description: "관리자 관리 전체 권한",
 	},
 	{
 		roleName: "SUPER_ADMIN",
 		subject: "menu:settings:abilities",
-		action: "manage",
+		actionName: "manage",
 		inverted: false,
 		description: "권한 관리 전체 권한",
 	},
 	{
 		roleName: "SUPER_ADMIN",
 		subject: "menu:settings:system",
-		action: "manage",
+		actionName: "manage",
 		inverted: false,
 		description: "시스템 설정 전체 권한",
 	},
 	{
 		roleName: "SUPER_ADMIN",
 		subject: "menu:settings:ui-configs",
-		action: "manage",
+		actionName: "manage",
 		inverted: false,
 		description: "UI 설정 전체 권한",
 	},
@@ -801,28 +1279,28 @@ export const superAdminAbilitySeedData: AbilitySeedData[] = [
 	{
 		roleName: "SUPER_ADMIN",
 		subject: "feature:export",
-		action: "manage",
+		actionName: "manage",
 		inverted: false,
 		description: "내보내기 전체 권한",
 	},
 	{
 		roleName: "SUPER_ADMIN",
 		subject: "feature:import",
-		action: "manage",
+		actionName: "manage",
 		inverted: false,
 		description: "가져오기 전체 권한",
 	},
 	{
 		roleName: "SUPER_ADMIN",
 		subject: "feature:bulk-delete",
-		action: "manage",
+		actionName: "manage",
 		inverted: false,
 		description: "일괄 삭제 전체 권한",
 	},
 	{
 		roleName: "SUPER_ADMIN",
 		subject: "feature:send-notification",
-		action: "manage",
+		actionName: "manage",
 		inverted: false,
 		description: "알림 발송 전체 권한",
 	},
@@ -830,49 +1308,49 @@ export const superAdminAbilitySeedData: AbilitySeedData[] = [
 	{
 		roleName: "SUPER_ADMIN",
 		subject: "entity:User",
-		action: "manage",
+		actionName: "manage",
 		inverted: false,
 		description: "사용자 엔티티 전체 권한",
 	},
 	{
 		roleName: "SUPER_ADMIN",
 		subject: "entity:Ground",
-		action: "manage",
+		actionName: "manage",
 		inverted: false,
 		description: "시설 엔티티 전체 권한",
 	},
 	{
 		roleName: "SUPER_ADMIN",
 		subject: "entity:Space",
-		action: "manage",
+		actionName: "manage",
 		inverted: false,
 		description: "공간 엔티티 전체 권한",
 	},
 	{
 		roleName: "SUPER_ADMIN",
 		subject: "entity:Reservation",
-		action: "manage",
+		actionName: "manage",
 		inverted: false,
 		description: "예약 엔티티 전체 권한",
 	},
 	{
 		roleName: "SUPER_ADMIN",
 		subject: "entity:Content",
-		action: "manage",
+		actionName: "manage",
 		inverted: false,
 		description: "콘텐츠 엔티티 전체 권한",
 	},
 	{
 		roleName: "SUPER_ADMIN",
 		subject: "entity:Role",
-		action: "manage",
+		actionName: "manage",
 		inverted: false,
 		description: "역할 엔티티 전체 권한",
 	},
 	{
 		roleName: "SUPER_ADMIN",
 		subject: "entity:Ability",
-		action: "manage",
+		actionName: "manage",
 		inverted: false,
 		description: "권한 엔티티 전체 권한",
 	},
@@ -889,161 +1367,161 @@ export const adminAbilitySeedData: AbilitySeedData[] = [
 	{
 		roleName: "ADMIN",
 		subject: "menu:dashboard",
-		action: "access",
+		actionName: "access",
 		inverted: false,
 		description: "대시보드 접근 권한",
 	},
 	{
 		roleName: "ADMIN",
 		subject: "menu:users",
-		action: "access",
+		actionName: "access",
 		inverted: false,
 		description: "사용자 관리 접근 권한",
 	},
 	{
 		roleName: "ADMIN",
 		subject: "menu:users:list",
-		action: "access",
+		actionName: "access",
 		inverted: false,
 		description: "사용자 목록 접근 권한",
 	},
 	{
 		roleName: "ADMIN",
 		subject: "menu:users:profiles",
-		action: "access",
+		actionName: "access",
 		inverted: false,
 		description: "프로필 관리 접근 권한",
 	},
 	{
 		roleName: "ADMIN",
 		subject: "menu:users:categories",
-		action: "access",
+		actionName: "access",
 		inverted: false,
 		description: "사용자 분류 관리 접근 권한",
 	},
 	{
 		roleName: "ADMIN",
 		subject: "menu:users:groups",
-		action: "access",
+		actionName: "access",
 		inverted: false,
 		description: "그룹 관리 접근 권한",
 	},
 	{
 		roleName: "ADMIN",
 		subject: "menu:schedules",
-		action: "access",
+		actionName: "access",
 		inverted: false,
 		description: "일정 관리 접근 권한",
 	},
 	{
 		roleName: "ADMIN",
 		subject: "menu:schedules:timelines",
-		action: "access",
+		actionName: "access",
 		inverted: false,
 		description: "타임라인 접근 권한",
 	},
 	{
 		roleName: "ADMIN",
 		subject: "menu:schedules:sessions",
-		action: "access",
+		actionName: "access",
 		inverted: false,
 		description: "세션 접근 권한",
 	},
 	{
 		roleName: "ADMIN",
 		subject: "menu:schedules:programs",
-		action: "access",
+		actionName: "access",
 		inverted: false,
 		description: "프로그램 접근 권한",
 	},
 	{
 		roleName: "ADMIN",
 		subject: "menu:schedules:routines",
-		action: "access",
+		actionName: "access",
 		inverted: false,
 		description: "루틴 접근 권한",
 	},
 	{
 		roleName: "ADMIN",
 		subject: "menu:files",
-		action: "access",
+		actionName: "access",
 		inverted: false,
 		description: "파일 관리 접근 권한",
 	},
 	{
 		roleName: "ADMIN",
 		subject: "menu:files:list",
-		action: "access",
+		actionName: "access",
 		inverted: false,
 		description: "파일 목록 접근 권한",
 	},
 	{
 		roleName: "ADMIN",
 		subject: "menu:files:categories",
-		action: "access",
+		actionName: "access",
 		inverted: false,
 		description: "파일 분류 관리 접근 권한",
 	},
 	{
 		roleName: "ADMIN",
 		subject: "menu:contents",
-		action: "access",
+		actionName: "access",
 		inverted: false,
 		description: "콘텐츠 관리 접근 권한",
 	},
 	{
 		roleName: "ADMIN",
 		subject: "menu:contents:posts",
-		action: "access",
+		actionName: "access",
 		inverted: false,
 		description: "게시물 접근 권한",
 	},
 	{
 		roleName: "ADMIN",
 		subject: "menu:contents:list",
-		action: "access",
+		actionName: "access",
 		inverted: false,
 		description: "콘텐츠 목록 접근 권한",
 	},
 	{
 		roleName: "ADMIN",
 		subject: "menu:wallets",
-		action: "access",
+		actionName: "access",
 		inverted: false,
 		description: "지갑 관리 접근 권한",
 	},
 	{
 		roleName: "ADMIN",
 		subject: "menu:wallets:list",
-		action: "access",
+		actionName: "access",
 		inverted: false,
 		description: "지갑 목록 접근 권한",
 	},
 	{
 		roleName: "ADMIN",
 		subject: "menu:wallets:transactions",
-		action: "access",
+		actionName: "access",
 		inverted: false,
 		description: "트랜잭션 접근 권한",
 	},
 	{
 		roleName: "ADMIN",
 		subject: "menu:settings",
-		action: "access",
+		actionName: "access",
 		inverted: false,
 		description: "설정 접근 권한",
 	},
 	{
 		roleName: "ADMIN",
 		subject: "menu:settings:grounds",
-		action: "access",
+		actionName: "access",
 		inverted: false,
 		description: "시설 정보 접근 권한",
 	},
 	{
 		roleName: "ADMIN",
 		subject: "menu:settings:ui-configs",
-		action: "access",
+		actionName: "access",
 		inverted: false,
 		description: "UI 설정 접근 권한",
 	},
@@ -1051,21 +1529,21 @@ export const adminAbilitySeedData: AbilitySeedData[] = [
 	{
 		roleName: "ADMIN",
 		subject: "menu:settings:admins",
-		action: "access",
+		actionName: "access",
 		inverted: true,
 		description: "관리자 관리 접근 불가",
 	},
 	{
 		roleName: "ADMIN",
 		subject: "menu:settings:abilities",
-		action: "access",
+		actionName: "access",
 		inverted: true,
 		description: "권한 관리 접근 불가",
 	},
 	{
 		roleName: "ADMIN",
 		subject: "menu:settings:system",
-		action: "access",
+		actionName: "access",
 		inverted: true,
 		description: "시스템 설정 접근 불가",
 	},
@@ -1073,35 +1551,35 @@ export const adminAbilitySeedData: AbilitySeedData[] = [
 	{
 		roleName: "ADMIN",
 		subject: "entity:User",
-		action: "manage",
+		actionName: "manage",
 		inverted: false,
 		description: "사용자 엔티티 관리 권한",
 	},
 	{
 		roleName: "ADMIN",
 		subject: "entity:Reservation",
-		action: "manage",
+		actionName: "manage",
 		inverted: false,
 		description: "예약 엔티티 관리 권한",
 	},
 	{
 		roleName: "ADMIN",
 		subject: "entity:Ground",
-		action: "read",
+		actionName: "read",
 		inverted: false,
 		description: "시설 조회 권한",
 	},
 	{
 		roleName: "ADMIN",
 		subject: "entity:Ground",
-		action: "update",
+		actionName: "update",
 		inverted: false,
 		description: "시설 수정 권한",
 	},
 	{
 		roleName: "ADMIN",
 		subject: "entity:Content",
-		action: "manage",
+		actionName: "manage",
 		inverted: false,
 		description: "콘텐츠 관리 권한",
 	},
@@ -1109,14 +1587,14 @@ export const adminAbilitySeedData: AbilitySeedData[] = [
 	{
 		roleName: "ADMIN",
 		subject: "feature:export",
-		action: "access",
+		actionName: "access",
 		inverted: false,
 		description: "내보내기 권한",
 	},
 	{
 		roleName: "ADMIN",
 		subject: "feature:send-notification",
-		action: "access",
+		actionName: "access",
 		inverted: false,
 		description: "알림 발송 권한",
 	},
@@ -1124,7 +1602,7 @@ export const adminAbilitySeedData: AbilitySeedData[] = [
 	{
 		roleName: "ADMIN",
 		subject: "feature:bulk-delete",
-		action: "access",
+		actionName: "access",
 		inverted: true,
 		description: "일괄 삭제 불가",
 	},
@@ -1140,7 +1618,7 @@ export const userAbilitySeedData: AbilitySeedData[] = [
 	{
 		roleName: "USER",
 		subject: "entity:User",
-		action: "read",
+		actionName: "read",
 		inverted: false,
 		description: "자신의 사용자 정보 조회 권한",
 		conditions: { id: "{{ user.id }}" },
@@ -1148,7 +1626,7 @@ export const userAbilitySeedData: AbilitySeedData[] = [
 	{
 		roleName: "USER",
 		subject: "entity:User",
-		action: "update",
+		actionName: "update",
 		inverted: false,
 		description: "자신의 사용자 정보 수정 권한",
 		conditions: { id: "{{ user.id }}" },
@@ -1157,14 +1635,14 @@ export const userAbilitySeedData: AbilitySeedData[] = [
 	{
 		roleName: "USER",
 		subject: "entity:Reservation",
-		action: "create",
+		actionName: "create",
 		inverted: false,
 		description: "예약 생성 권한",
 	},
 	{
 		roleName: "USER",
 		subject: "entity:Reservation",
-		action: "read",
+		actionName: "read",
 		inverted: false,
 		description: "자신의 예약 조회 권한",
 		conditions: { userId: "{{ user.id }}" },
@@ -1172,7 +1650,7 @@ export const userAbilitySeedData: AbilitySeedData[] = [
 	{
 		roleName: "USER",
 		subject: "entity:Reservation",
-		action: "update",
+		actionName: "update",
 		inverted: false,
 		description: "자신의 예약 수정 권한 (취소 등)",
 		conditions: { userId: "{{ user.id }}" },
@@ -1181,7 +1659,7 @@ export const userAbilitySeedData: AbilitySeedData[] = [
 	{
 		roleName: "USER",
 		subject: "entity:Ground",
-		action: "read",
+		actionName: "read",
 		inverted: false,
 		description: "시설 정보 조회 권한",
 	},
@@ -1189,7 +1667,7 @@ export const userAbilitySeedData: AbilitySeedData[] = [
 	{
 		roleName: "USER",
 		subject: "entity:Content",
-		action: "read",
+		actionName: "read",
 		inverted: false,
 		description: "콘텐츠 조회 권한",
 	},

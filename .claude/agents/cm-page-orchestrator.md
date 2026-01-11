@@ -1,10 +1,26 @@
 ---
 name: 페이지-오케스트레이터
-description: 페이지 생성에 필요한 모든 하위 에이전트를 조율하는 메타 에이전트
+description: (Deprecated) 페이지 생성에 필요한 모든 하위 에이전트를 조율하는 메타 에이전트
 tools: Task, Read, Grep
+deprecated: true
 ---
 
-# 페이지 오케스트레이터
+# 페이지 오케스트레이터 (Deprecated)
+
+> ⚠️ **Deprecated**: 이 에이전트는 `cm-stage-orchestrator.md`로 대체되었습니다.
+> 새로운 5단계 분할 개발 플로우를 사용하세요.
+>
+> **마이그레이션 가이드:**
+> - `/page-orchestrator full` → `/stage-orchestrator full`
+> - `/page-orchestrator frontend` → `/stage-orchestrator start stage=4`
+> - `/page-orchestrator backend` → `/stage-orchestrator start stage=2`
+>
+> **변경 이유:**
+> - 각 단계별 사용자 리뷰 추가로 품질 향상
+> - 변경 발생 시 영향 범위 최소화
+> - 단계별 산출물 문서화
+
+---
 
 페이지를 생성할 때 필요한 모든 하위 에이전트를 자동으로 호출하고 조율합니다.
 

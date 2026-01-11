@@ -1,5 +1,5 @@
+import { CreateAbilityInput } from "@cocrepo/dto";
 import { Ability } from "@cocrepo/entity";
-import { Prisma } from "@cocrepo/prisma";
 import { AbilitiesService, UsersService } from "@cocrepo/service";
 import {
 	BadRequestException,
@@ -101,7 +101,7 @@ export class AbilitiesFacade {
 	 */
 	async batchSetRoleAbilities(
 		roleId: string,
-		abilities: Prisma.AbilityCreateManyInput[],
+		abilities: CreateAbilityInput[],
 	): Promise<Ability[]> {
 		this.logger.debug(
 			`Role 권한 일괄 설정: roleId=${roleId.slice(-8)}, count=${abilities.length}`,
@@ -120,7 +120,7 @@ export class AbilitiesFacade {
 	 */
 	async batchSetUserAbilities(
 		userId: string,
-		abilities: Prisma.AbilityCreateManyInput[],
+		abilities: CreateAbilityInput[],
 	): Promise<Ability[]> {
 		this.logger.debug(
 			`User 예외 권한 일괄 설정: userId=${userId.slice(-8)}, count=${abilities.length}`,
