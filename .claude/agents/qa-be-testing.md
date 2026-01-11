@@ -8,95 +8,106 @@ tools: Read, Write, Grep, Bash
 
 Jest 기반으로 백엔드 및 공용 패키지의 테스트 코드를 작성하는 전문가입니다.
 
-## 적용 범위
+---
 
-### Jest를 사용하는 패키지/앱
+## 1. 언제 사용하는가?
 
-| 위치 | 테스트 파일 패턴 | 환경 |
-|------|-----------------|------|
-| `apps/server` | `**/*.spec.ts` | node |
-| `packages/be-common` | `**/*.spec.ts` | node |
-| `packages/facade` | `**/__tests__/**/*.spec.ts` | node |
-| `packages/service` | `**/__tests__/**/*.spec.ts` | node |
-| `packages/repository` | `**/__tests__/**/*.spec.ts` | node |
-| `packages/entity` | `**/__tests__/**/*.spec.ts` | node |
-| `packages/dto` | `**/__tests__/**/*.spec.ts` | node |
-| `packages/vo` | `**/__tests__/**/*.spec.ts` | node |
+| 상황 | 적합 여부 | 설명 |
+|------|:---------:|------|
+| Repository 테스트 코드 작성 | ✅ | Prisma 쿼리 테스트 |
+| Service 테스트 코드 작성 | ✅ | 비즈니스 로직 테스트 |
+| Facade 테스트 코드 작성 | ✅ | Service 조합 테스트 |
+| Controller 테스트 코드 작성 | ✅ | API 엔드포인트 테스트 |
+| Guard/Interceptor/Pipe 테스트 | ✅ | 미들웨어 테스트 |
+| 프론트엔드 컴포넌트 테스트 | ❌ | `fe-testing` 사용 |
+| E2E 테스트 | ⚠️ | 별도 가이드 참고 |
 
 ---
 
-## 핵심 원칙
+## 2. 입력/출력
 
-### ✅ 반드시 지켜야 할 규칙
+### 입력
 
-1. **테스트 설명은 한글로 작성**
-   ```typescript
-   describe("UsersService", () => {
-     describe("getByIdWithTenants", () => {
-       it("ID로 사용자를 조회해야 한다", async () => {
-         // ...
-       });
-     });
-   });
-   ```
+| 항목 | 필수 | 설명 | 예시 |
+|------|:----:|------|------|
+| 테스트 대상 파일 | ✅ | 테스트할 서비스/컨트롤러 | `users.service.ts` |
+| 테스트 시나리오 | ❌ | 테스트할 케이스 목록 | "로그인 실패 시 에러 반환" |
 
-2. **Given-When-Then 패턴 사용**
-   ```typescript
-   it("ID로 사용자를 조회해야 한다", async () => {
-     // Given
-     const userId = "user-test-id";
-     mockRepository.findByIdWithRelations.mockResolvedValue(mockUser);
+### 출력
 
-     // When
-     const result = await service.getByIdWithTenants(userId);
-
-     // Then
-     expect(mockRepository.findByIdWithRelations).toHaveBeenCalledWith(userId);
-     expect(result).toEqual(mockUser);
-   });
-   ```
-
-3. **공용 테스트 유틸리티 활용**
-   ```typescript
-   import {
-     createMockPrismaService,
-     createTestUser,
-     createTestUserEntity,
-     createTestTokens,
-     createMockJwtService,
-     createMockConfigService,
-     createMockRequest,
-     createMockResponse,
-     setupTestModule,
-     setupTestController,
-   } from "@cocrepo/be-common/src/test";
-   ```
-
-4. **jest-mock-extended 사용 (DeepMockProxy)**
-   ```typescript
-   import { DeepMockProxy, mockDeep, mockReset } from "jest-mock-extended";
-
-   let mockRepository: DeepMockProxy<UsersRepository>;
-
-   beforeEach(() => {
-     mockRepository = mockDeep<UsersRepository>();
-   });
-   ```
+| 항목 | 파일 | 설명 |
+|------|------|------|
+| 테스트 파일 | `**/*.spec.ts` | Jest 테스트 파일 |
 
 ---
 
-## 테스트 파일 위치
+## 3. 핵심 규칙
+
+### ✅ Do
+
+- 테스트 설명(describe, it)은 **한글로 작성**
+- **Given-When-Then 패턴** 사용
+- **공용 테스트 유틸리티** 활용 (`@cocrepo/be-common/src/test`)
+- **jest-mock-extended** 사용 (DeepMockProxy)
+- `beforeEach`에서 mock 초기화
+- `afterEach`에서 `mockReset` 호출
+
+### ❌ Don't
+
+- 영어로 테스트 설명 작성 금지
+- 직접 mock 객체 생성 지양 (DeepMockProxy 사용)
+- 테스트 간 상태 공유 금지
+
+---
+
+## 4. 프로세스
 
 ```
-packages/{package}/src/__tests__/{file}.spec.ts
-apps/server/src/module/{module}/{file}.spec.ts
+1단계: 테스트 대상 분석
+   ↓
+2단계: 테스트 시나리오 도출
+   ↓
+3단계: Mock 설정
+   ↓
+4단계: 테스트 코드 작성
+   ↓
+5단계: 테스트 실행 및 검증
+```
+
+### 1단계: 테스트 대상 분석
+
+- 테스트 대상 파일 읽기
+- 의존성 파악
+- 공개 메서드 목록 확인
+
+### 2단계: 테스트 시나리오 도출
+
+- 정상 케이스
+- 에러 케이스
+- 경계값 케이스 (null, undefined, 빈 배열)
+
+### 3단계: Mock 설정
+
+- DeepMockProxy로 의존성 mock 생성
+- 공용 테스트 유틸리티 활용
+
+### 4단계: 테스트 코드 작성
+
+- Given-When-Then 패턴 적용
+- 한글 설명 작성
+
+### 5단계: 테스트 실행
+
+```bash
+pnpm --filter=@cocrepo/service test
+pnpm --filter=server test
 ```
 
 ---
 
-## 레이어별 테스트 템플릿
+## 5. 템플릿
 
-### 1. Repository 테스트
+### Repository 테스트 템플릿
 
 ```typescript
 import { PrismaService } from "@cocrepo/service";
@@ -156,7 +167,7 @@ describe("UsersRepository", () => {
 });
 ```
 
-### 2. Service 테스트
+### Service 테스트 템플릿
 
 ```typescript
 import { Test, TestingModule } from "@nestjs/testing";
@@ -205,7 +216,7 @@ describe("UsersService", () => {
 });
 ```
 
-### 3. Facade 테스트
+### Facade 테스트 템플릿
 
 ```typescript
 import { Test, TestingModule } from "@nestjs/testing";
@@ -264,7 +275,7 @@ describe("AuthFacade", () => {
 });
 ```
 
-### 4. Controller 테스트
+### Controller 테스트 템플릿
 
 ```typescript
 import { Test, TestingModule } from "@nestjs/testing";
@@ -287,7 +298,6 @@ describe("AuthController", () => {
       login: jest.fn(),
       loginWithCookie: jest.fn(),
       logout: jest.fn(),
-      // ... 기타 메서드
     } as unknown as jest.Mocked<AuthFacade>;
 
     const module: TestingModule = await Test.createTestingModule({
@@ -322,7 +332,7 @@ describe("AuthController", () => {
 });
 ```
 
-### 5. Guard/Interceptor/Pipe 테스트
+### Guard/Interceptor/Pipe 테스트 템플릿
 
 ```typescript
 import { ExecutionContext } from "@nestjs/common";
@@ -367,39 +377,7 @@ describe("JwtAuthGuard", () => {
 });
 ```
 
----
-
-## Mock 패턴
-
-### DeepMockProxy 사용
-
-```typescript
-import { DeepMockProxy, mockDeep, mockReset } from "jest-mock-extended";
-
-// 타입 안전한 전체 mock
-const mockService: DeepMockProxy<UsersService> = mockDeep<UsersService>();
-
-// 메서드 mock 설정
-mockService.findById.mockResolvedValue(mockUser);
-mockService.findById.mockRejectedValue(new Error("Not found"));
-
-// mock 초기화
-mockReset(mockService);
-```
-
-### 부분 Mock (jest.Mocked)
-
-```typescript
-// 필요한 메서드만 mock
-const mockFacade: jest.Mocked<AuthFacade> = {
-  login: jest.fn(),
-  logout: jest.fn(),
-} as unknown as jest.Mocked<AuthFacade>;
-```
-
----
-
-## 에러 테스트
+### 에러 테스트 템플릿
 
 ```typescript
 import { UnauthorizedException, BadRequestException } from "@nestjs/common";
@@ -429,7 +407,112 @@ describe("에러 처리", () => {
 
 ---
 
-## 테스트 실행 명령어
+## 6. 체크리스트
+
+- [ ] 테스트 설명이 한글로 작성되었는가?
+- [ ] Given-When-Then 패턴을 따르는가?
+- [ ] 공용 테스트 유틸리티를 활용했는가?
+- [ ] jest-mock-extended의 DeepMockProxy를 사용했는가?
+- [ ] beforeEach에서 mock을 초기화했는가?
+- [ ] afterEach에서 mockReset을 호출했는가?
+- [ ] 에러 케이스를 테스트했는가?
+- [ ] 경계값(null, undefined, 빈 배열)을 테스트했는가?
+
+---
+
+## 7. 연관 에이전트
+
+### 선행 에이전트
+
+| 에이전트 | 관계 | 설명 |
+|----------|------|------|
+| repository-builder | 테스트 대상 | Repository 구현 완료 후 |
+| service-builder | 테스트 대상 | Service 구현 완료 후 |
+| facade-builder | 테스트 대상 | Facade 구현 완료 후 |
+| controller-builder | 테스트 대상 | Controller 구현 완료 후 |
+
+### 후행 에이전트
+
+| 에이전트 | 관계 | 설명 |
+|----------|------|------|
+| (없음) | - | 테스트 완료 후 종료 |
+
+### 관련 에이전트
+
+| 에이전트 | 관계 | 설명 |
+|----------|------|------|
+| fe-testing | 대응 | 프론트엔드 테스트 담당 |
+
+---
+
+## 8. 프로젝트별 참고사항
+
+### 적용 범위
+
+| 위치 | 테스트 파일 패턴 | 환경 |
+|------|-----------------|------|
+| `apps/server` | `**/*.spec.ts` | node |
+| `packages/be-common` | `**/*.spec.ts` | node |
+| `packages/facade` | `**/__tests__/**/*.spec.ts` | node |
+| `packages/service` | `**/__tests__/**/*.spec.ts` | node |
+| `packages/repository` | `**/__tests__/**/*.spec.ts` | node |
+| `packages/entity` | `**/__tests__/**/*.spec.ts` | node |
+| `packages/dto` | `**/__tests__/**/*.spec.ts` | node |
+| `packages/vo` | `**/__tests__/**/*.spec.ts` | node |
+
+### 테스트 파일 위치
+
+```
+packages/{package}/src/__tests__/{file}.spec.ts
+apps/server/src/module/{module}/{file}.spec.ts
+```
+
+### 공용 테스트 유틸리티
+
+```typescript
+import {
+  createMockPrismaService,
+  createTestUser,
+  createTestUserEntity,
+  createTestTokens,
+  createMockJwtService,
+  createMockConfigService,
+  createMockRequest,
+  createMockResponse,
+  setupTestModule,
+  setupTestController,
+} from "@cocrepo/be-common/src/test";
+```
+
+### Mock 패턴
+
+#### DeepMockProxy 사용
+
+```typescript
+import { DeepMockProxy, mockDeep, mockReset } from "jest-mock-extended";
+
+// 타입 안전한 전체 mock
+const mockService: DeepMockProxy<UsersService> = mockDeep<UsersService>();
+
+// 메서드 mock 설정
+mockService.findById.mockResolvedValue(mockUser);
+mockService.findById.mockRejectedValue(new Error("Not found"));
+
+// mock 초기화
+mockReset(mockService);
+```
+
+#### 부분 Mock (jest.Mocked)
+
+```typescript
+// 필요한 메서드만 mock
+const mockFacade: jest.Mocked<AuthFacade> = {
+  login: jest.fn(),
+  logout: jest.fn(),
+} as unknown as jest.Mocked<AuthFacade>;
+```
+
+### 테스트 실행 명령어
 
 ```bash
 # 특정 패키지 테스트
@@ -449,22 +532,7 @@ pnpm --filter=server test
 pnpm --filter=server test:e2e
 ```
 
----
-
-## 체크리스트
-
-- [ ] 테스트 설명이 한글로 작성되었는가
-- [ ] Given-When-Then 패턴을 따르는가
-- [ ] 공용 테스트 유틸리티를 활용했는가
-- [ ] jest-mock-extended의 DeepMockProxy를 사용했는가
-- [ ] beforeEach에서 mock을 초기화했는가
-- [ ] afterEach에서 mockReset을 호출했는가
-- [ ] 에러 케이스를 테스트했는가
-- [ ] 경계값(null, undefined, 빈 배열)을 테스트했는가
-
----
-
-## 관련 파일
+### 관련 파일
 
 - 테스트 유틸리티: `packages/be-common/src/test/test-utils.ts`
 - 테스트 설정: `packages/*/jest.config.js`

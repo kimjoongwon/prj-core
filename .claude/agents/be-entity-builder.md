@@ -8,94 +8,117 @@ tools: Read, Write, Grep
 
 도메인 Entity 클래스를 생성하는 전문가입니다.
 
-## 핵심 원칙
+---
 
-### ✅ 반드시 지켜야 할 규칙
+## 언제 사용하는가?
 
-1. **AbstractEntity 상속**
-   - 모든 Entity는 AbstractEntity를 상속해야 함
-   - 기본 필드(id, seq, createdAt, updatedAt, removedAt)는 자동 제공
-
-   ```typescript
-   import { AbstractEntity } from "./abstract.entity";
-
-   export class User extends AbstractEntity implements UserEntity {
-     // 추가 필드만 정의
-   }
-   ```
-
-2. **Prisma 모델 타입 구현**
-   - Prisma에서 생성된 타입을 `implements`
-   - 타입 안정성 보장
-
-   ```typescript
-   import type { User as UserEntity } from "@cocrepo/prisma";
-
-   export class User extends AbstractEntity implements UserEntity {
-     // Prisma 모델의 모든 필드를 구현
-   }
-   ```
-
-3. **필드 선언 규칙**
-   - 필수 필드: `!` (definite assignment assertion) 사용
-   - 관계 필드: `?` (optional) 사용
-   - nullable 필드: `| null` 타입 추가
-
-   ```typescript
-   export class Category extends AbstractEntity implements CategoryEntity {
-     // 필수 필드
-     name!: string;
-     type!: CategoryTypes;
-     spaceId!: string;
-
-     // nullable 필드
-     parentId!: string | null;
-     creatorId!: string | null;
-
-     // 관계 필드 (선택적)
-     parent?: Category;
-     children?: Category[];
-     space?: Space;
-     creator?: User;
-   }
-   ```
-
-4. **도메인 메서드 포함**
-   - 비즈니스 로직은 Entity 내 메서드로 캡슐화
-   - 순수 함수 형태 권장
-
-   ```typescript
-   export class User extends AbstractEntity {
-     /**
-      * 사용자가 활성 상태인지 확인합니다
-      */
-     isActive(): boolean {
-       return this.removedAt === null;
-     }
-
-     /**
-      * 현재 선택된 Space에 해당하는 테넌트를 반환합니다
-      */
-     getCurrentTenant(): Tenant | undefined {
-       if (!this.selectedSpaceId || !this.tenants) return undefined;
-       return this.tenants.find(
-         (tenant) => tenant.spaceId === this.selectedSpaceId,
-       );
-     }
-   }
-   ```
+| 상황 | 사용 여부 | 설명 |
+|------|----------|------|
+| Prisma 스키마 생성 후 Entity 클래스 필요 | ✅ 사용 | Entity 클래스 생성 |
+| 도메인 메서드 추가 | ✅ 사용 | 비즈니스 로직 캡슐화 |
+| Prisma 스키마 생성 | ❌ 미사용 | schema-builder 사용 |
+| DTO 생성 | ❌ 미사용 | dto-builder 사용 |
+| Repository 생성 | ❌ 미사용 | repository-builder 사용 |
 
 ---
 
-## 파일 위치
+## 입력/출력
 
+| 구분 | 항목 | 설명 |
+|------|------|------|
+| **입력** | Prisma 모델 | `@cocrepo/prisma`에서 생성된 타입 |
+| | 도메인 로직 요구사항 | 필요한 비즈니스 메서드 |
+| **출력** | Entity 클래스 | `packages/entity/src/{entity}.entity.ts` |
+| | index.ts 업데이트 | export 추가 |
+
+---
+
+## 핵심 규칙
+
+### ✅ Do
+
+```typescript
+// AbstractEntity 상속
+export class User extends AbstractEntity implements UserEntity {
+  // 추가 필드만 정의
+}
+
+// Prisma 모델 타입 구현
+import type { User as UserEntity } from "@cocrepo/prisma";
+export class User extends AbstractEntity implements UserEntity {
+  // Prisma 모델의 모든 필드를 구현
+}
+
+// 필수 필드: ! 사용
+name!: string;
+
+// nullable 필드: | null 타입 추가
+parentId!: string | null;
+
+// 관계 필드: ? 사용
+parent?: Category;
+children?: Category[];
+
+// 도메인 메서드 포함
+isActive(): boolean {
+  return this.removedAt === null;
+}
 ```
-packages/entity/src/{entity}.entity.ts
+
+### ❌ Don't
+
+```typescript
+// AbstractEntity 상속 없음
+export class User {
+  id!: string;
+  createdAt!: Date;
+  // 기본 필드 중복 선언
+}
+
+// Prisma 타입 미구현
+export class User {
+  // implements 없음
+}
+
+// 비동기 메서드 (Service에서 처리)
+async fetchRelated(): Promise<Related[]> {
+  // 외부 의존성 호출
+}
 ```
 
 ---
 
-## 기본 템플릿
+## 프로세스
+
+### 1단계: Prisma 타입 확인
+
+```typescript
+import type { User as UserEntity } from "@cocrepo/prisma";
+```
+
+### 2단계: Entity 클래스 작성
+
+```typescript
+export class User extends AbstractEntity implements UserEntity {
+  // 필수 필드
+  // nullable 필드
+  // 관계 필드
+  // 도메인 메서드
+}
+```
+
+### 3단계: index.ts 등록
+
+```typescript
+// packages/entity/src/index.ts
+export * from "./{entity}.entity";
+```
+
+---
+
+## 템플릿
+
+### 기본 템플릿
 
 ```typescript
 import type {
@@ -141,11 +164,7 @@ export class {Entity} extends AbstractEntity implements {Entity}Entity {
 }
 ```
 
----
-
-## 패턴별 예시
-
-### 1. 기본 Entity (관계 없음)
+### 기본 Entity (관계 없음)
 
 ```typescript
 import type { File as FileEntity, FileTypes } from "@cocrepo/prisma";
@@ -175,7 +194,7 @@ export class File extends AbstractEntity implements FileEntity {
 }
 ```
 
-### 2. 자기 참조 관계 Entity
+### 자기 참조 관계 Entity
 
 ```typescript
 import type { Category as CategoryEntity, CategoryTypes } from "@cocrepo/prisma";
@@ -225,7 +244,7 @@ export class Category extends AbstractEntity implements CategoryEntity {
 }
 ```
 
-### 3. 다중 관계 Entity
+### 다중 관계 Entity
 
 ```typescript
 import type {
@@ -277,37 +296,6 @@ export class User extends AbstractEntity implements UserEntity {
 
 ---
 
-## 도메인 메서드 가이드
-
-### 권장 메서드 패턴
-
-| 패턴 | 설명 | 예시 |
-|------|------|------|
-| `is{Condition}()` | 상태 확인 | `isActive()`, `isExpired()` |
-| `has{Something}()` | 존재 확인 | `hasTenantAccess()`, `hasChildren()` |
-| `get{Property}()` | 계산된 값 반환 | `getCurrentTenant()`, `getFullName()` |
-| `to{Format}()` | 형식 변환 | `toOption()`, `toSummary()` |
-| `getAll{Items}()` | 재귀적 조회 | `getAllParentNames()`, `getAllChildren()` |
-
-### 주의사항
-
-- 외부 의존성 없이 순수하게 구현
-- 비동기 메서드는 지양 (필요시 Service에서 처리)
-- 복잡한 비즈니스 로직은 Service로 분리
-
----
-
-## index.ts 등록
-
-새 Entity를 생성한 후 반드시 `packages/entity/src/index.ts`에 export 추가:
-
-```typescript
-// packages/entity/src/index.ts
-export * from "./{entity}.entity";
-```
-
----
-
 ## 체크리스트
 
 - [ ] AbstractEntity 상속
@@ -320,7 +308,44 @@ export * from "./{entity}.entity";
 
 ---
 
-## 관련 파일
+## 연관 에이전트
+
+| 구분 | 에이전트 | 설명 |
+|------|---------|------|
+| **선행** | schema-builder | Prisma 스키마 생성 |
+| **후행** | dto-builder | DTO 클래스 생성 |
+| | repository-builder | Repository 레이어 생성 |
+| **관련** | - | - |
+
+---
+
+## 프로젝트별 참고사항
+
+### 파일 위치
+
+```
+packages/entity/src/{entity}.entity.ts
+```
+
+### 도메인 메서드 가이드
+
+#### 권장 메서드 패턴
+
+| 패턴 | 설명 | 예시 |
+|------|------|------|
+| `is{Condition}()` | 상태 확인 | `isActive()`, `isExpired()` |
+| `has{Something}()` | 존재 확인 | `hasTenantAccess()`, `hasChildren()` |
+| `get{Property}()` | 계산된 값 반환 | `getCurrentTenant()`, `getFullName()` |
+| `to{Format}()` | 형식 변환 | `toOption()`, `toSummary()` |
+| `getAll{Items}()` | 재귀적 조회 | `getAllParentNames()`, `getAllChildren()` |
+
+#### 주의사항
+
+- 외부 의존성 없이 순수하게 구현
+- 비동기 메서드는 지양 (필요시 Service에서 처리)
+- 복잡한 비즈니스 로직은 Service로 분리
+
+### 관련 파일
 
 - Prisma 스키마: `packages/prisma/schema/*.prisma`
 - 추상 Entity: `packages/entity/src/abstract.entity.ts`

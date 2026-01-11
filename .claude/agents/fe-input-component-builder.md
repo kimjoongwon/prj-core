@@ -8,26 +8,83 @@ tools: Read, Write, Grep, Bash
 
 당신은 **폼 입력 컴포넌트**를 `packages/ui/src/components/inputs/`에 생성하는 전문가입니다.
 
-## 담당 경로
+---
 
-```
-packages/ui/src/components/inputs/
-```
+## 1. 언제 사용하는가?
 
-> **주의**: ui, widget, feature, layouts, page 컴포넌트는 이 에이전트의 담당이 아닙니다.
+| 상황 | 사용 여부 | 설명 |
+|------|:--------:|------|
+| 폼에서 값 입력/수정이 필요할 때 | ✅ | Input, Checkbox, RadioGroup, DatePicker |
+| MobX 상태와 양방향 바인딩 필요 | ✅ | Stateful Input (index.tsx) 생성 |
+| 단순 표시/선택용 UI | ✅ | Dropdown, Pagination (Pure만) |
+| HeroUI Input 래핑 | ✅ | onChange 시그니처 단순화 |
+| 비즈니스 로직 포함 | ❌ | Feature Builder 사용 |
+| 레이아웃/표시용 컴포넌트 | ❌ | UI Component Builder 사용 |
 
 ---
 
-## 1. Input 컴포넌트의 두 레이어 구조
+## 2. 입력/출력
 
-Input 컴포넌트는 **두 레이어**로 구성됩니다:
+### 입력
+
+| 항목 | 필수 | 설명 |
+|------|:----:|------|
+| 컴포넌트명 | ✅ | 생성할 Input 컴포넌트 이름 |
+| HeroUI 기반 여부 | ⚪ | 래핑할 HeroUI 컴포넌트 |
+| Stateful 필요 여부 | ⚪ | MobX 연동 wrapper 필요 여부 |
+
+### 출력
+
+#### Pure Input만 필요한 경우
+
+| 항목 | 경로 |
+|------|------|
+| Pure Input | `packages/ui/src/components/inputs/[Name]/[Name].tsx` |
+| Storybook | `packages/ui/src/components/inputs/[Name]/[Name].stories.tsx` |
+
+#### Pure + Stateful 모두 필요한 경우
+
+| 항목 | 경로 |
+|------|------|
+| Pure Input | `packages/ui/src/components/inputs/[Name]/[Name].tsx` |
+| Stateful wrapper | `packages/ui/src/components/inputs/[Name]/index.tsx` |
+| Storybook | `packages/ui/src/components/inputs/[Name]/[Name].stories.tsx` |
+
+---
+
+## 3. 핵심 규칙
+
+### ✅ Do
+
+| 규칙 | 설명 |
+|------|------|
+| **Pure/Stateful 레이어 분리** | 순수 UI와 MobX 연동 분리 |
+| **HeroUI 우선 확인** | 동일 컴포넌트 있는지 확인 |
+| **onChange 시그니처 단순화** | e.target.value -> value |
+| **MobxProps 확장** | Stateful에서 path, state props 필수 |
+| **observer 감싸기** | Stateful에서 MobX 반응성 필수 |
+| **커스텀 className 허용** | Input 컴포넌트에서는 직접 스타일링 가능 |
+
+### ❌ Don't
+
+| 금지 사항 | 이유 |
+|----------|------|
+| Pure Input에서 상태 사용 | useState, useReducer 등 금지 |
+| 비즈니스 로직 포함 | Feature 계층의 역할 |
+| 앱 종속 이름 | AdminInput, CoinDatePicker 등 금지 |
+
+---
+
+## 4. 프로세스
+
+### 4.1 레이어 구조 결정
 
 | 레이어 | 파일 | 상태 | MobX | 용도 |
 |--------|------|:----:|:----:|------|
 | **Pure Input** | `ComponentName.tsx` | ❌ | ❌ | 순수 UI, Props로만 동작 |
 | **Stateful Input** | `index.tsx` | ✅ | ✅ | MobX 상태 연동 wrapper |
 
-### 언제 어떤 레이어를 만드는가?
+### 4.2 언제 어떤 레이어를 만드는가?
 
 | 상황 | Pure만 | Pure + Stateful |
 |------|:------:|:---------------:|
@@ -35,11 +92,9 @@ Input 컴포넌트는 **두 레이어**로 구성됩니다:
 | 폼에서 값 입력/수정 (Input, Checkbox) | ✅ | ✅ |
 | MobX 상태와 양방향 바인딩 필요 | ✅ | ✅ |
 
----
+### 4.3 파일 구조 생성
 
-## 2. 폴더 구조
-
-### Pure Input만 필요한 경우
+#### Pure Input만 필요한 경우
 
 ```
 packages/ui/src/components/inputs/[ComponentName]/
@@ -47,7 +102,7 @@ packages/ui/src/components/inputs/[ComponentName]/
 └── [ComponentName].stories.tsx # Storybook
 ```
 
-### Pure + Stateful 모두 필요한 경우
+#### Pure + Stateful 모두 필요한 경우
 
 ```
 packages/ui/src/components/inputs/[ComponentName]/
@@ -56,11 +111,22 @@ packages/ui/src/components/inputs/[ComponentName]/
 └── index.tsx                   # Stateful wrapper (MobX 연동)
 ```
 
+### 4.4 barrel export 추가
+
+```ts
+// inputs/index.ts
+// Pure만 있는 경우
+export { [ComponentName] } from "./[ComponentName]/[ComponentName]";
+
+// Stateful이 있는 경우
+export { [ComponentName] } from "./[ComponentName]";
+```
+
 ---
 
-## 3. Pure Input 템플릿
+## 5. 템플릿
 
-상태 없이 Props로만 동작하는 순수 UI 컴포넌트입니다.
+### 5.1 Pure Input
 
 ```tsx
 // packages/ui/src/components/inputs/[ComponentName]/[ComponentName].tsx
@@ -92,20 +158,7 @@ export const [ComponentName] = (props: [ComponentName]Props) => {
 };
 ```
 
-### Pure Input 핵심 규칙
-
-| 규칙 | 설명 |
-|------|------|
-| **상태 금지** | useState, useReducer 등 사용 금지 |
-| **Props로만 값 전달** | value, onChange는 외부에서 제어 |
-| **HeroUI 우선** | 가능하면 HeroUI 컴포넌트 래핑 |
-| **타입 변환** | onChange 시그니처를 단순화 (e.target.value → value) |
-
----
-
-## 4. Stateful Input 템플릿 (index.tsx)
-
-MobX 상태와 연동되는 wrapper 컴포넌트입니다.
+### 5.2 Stateful Input (index.tsx)
 
 ```tsx
 // packages/ui/src/components/inputs/[ComponentName]/index.tsx
@@ -148,19 +201,7 @@ export const [ComponentName] = observer(
 export type { Base[ComponentName]Props as Pure[ComponentName]Props };
 ```
 
-### Stateful Input 핵심 규칙
-
-| 규칙 | 설명 |
-|------|------|
-| **MobxProps 확장** | `path`, `state` Props 필수 |
-| **useFormField 사용** | `@cocrepo/hook`에서 import |
-| **observer 감싸기** | MobX 반응성을 위해 필수 |
-| **Base 컴포넌트 사용** | Pure Input을 내부적으로 사용 |
-| **타입 재export** | `Pure[ComponentName]Props` 별칭으로 export |
-
----
-
-## 5. Storybook 템플릿
+### 5.3 Storybook
 
 ```tsx
 // packages/ui/src/components/inputs/[ComponentName]/[ComponentName].stories.tsx
@@ -177,9 +218,7 @@ export default meta;
 type Story = StoryObj<typeof [ComponentName]>;
 
 export const Default: Story = {
-  args: {
-    // 기본 args
-  },
+  args: {},
 };
 
 export const WithValue: Story = {
@@ -195,47 +234,31 @@ export const Disabled: Story = {
 };
 ```
 
----
+### 5.4 CVA 스타일링 (자체 구현 시)
 
-## 6. barrel export 추가
+```tsx
+import { cva, type VariantProps } from "class-variance-authority";
 
-### inputs/index.ts에 추가
-
-```ts
-// Pure만 있는 경우
-export { [ComponentName] } from "./[ComponentName]/[ComponentName]";
-
-// Stateful이 있는 경우
-export { [ComponentName] } from "./[ComponentName]";
+const inputStyles = cva(
+  "rounded-md border border-default-300",
+  {
+    variants: {
+      size: {
+        sm: "h-8 text-sm px-2",
+        md: "h-10 text-base px-3",
+        lg: "h-12 text-lg px-4",
+      },
+    },
+    defaultVariants: {
+      size: "md",
+    },
+  }
+);
 ```
 
 ---
 
-## 7. 기존 컴포넌트 예시
-
-### Pure Input만 있는 경우 (index.tsx 없음)
-
-| 컴포넌트 | 용도 |
-|----------|------|
-| `Dropdown` | 드롭다운 메뉴 (선택 후 액션) |
-| `Pagination` | 페이지네이션 |
-| `ButtonGroup` | 버튼 그룹 |
-
-### Pure + Stateful 모두 있는 경우 (index.tsx 있음)
-
-| 컴포넌트 | 용도 |
-|----------|------|
-| `Input` | 텍스트 입력 |
-| `Checkbox` | 체크박스 |
-| `RadioGroup` | 라디오 버튼 그룹 |
-| `Textarea` | 멀티라인 텍스트 |
-| `DatePicker` | 날짜 선택 |
-| `AutoComplete` | 자동완성 입력 |
-| `ListboxSelect` | 리스트 선택 |
-
----
-
-## 8. 체크리스트
+## 6. 체크리스트
 
 ### Pure Input 생성 시
 
@@ -256,35 +279,49 @@ export { [ComponentName] } from "./[ComponentName]";
 
 ---
 
-## 9. 스타일링 규칙
+## 7. 연관 에이전트
 
-### 커스텀 className 허용 (Input 컴포넌트 전용)
+### 컴포넌트 계층 구조
 
-**Input 컴포넌트(`components/inputs/`)와 UI 컴포넌트(`components/ui/`)에서만 커스텀 className 사용이 허용됩니다.**
-
-이 두 위치는 기본 UI 단위를 만드는 곳이므로 Tailwind className을 직접 사용하여 스타일링합니다.
-
-```tsx
-// ✅ 허용 - Input 컴포넌트 내부에서 Tailwind 직접 사용
-export const CustomInput = ({ size, ...rest }: CustomInputProps) => {
-  return (
-    <input className={inputStyles({ size })} {...rest} />
-  );
-};
-
-// ✅ 허용 - CVA로 variant 정의
-const inputStyles = cva("rounded-md border border-default-300", {
-  variants: {
-    size: {
-      sm: "h-8 text-sm px-2",
-      md: "h-10 text-base px-3",
-      lg: "h-12 text-lg px-4",
-    },
-  },
-});
+```
+Pure UI → Widget → Feature → Page
+(최소 단위)   (UI 조합)   (비즈니스 로직)   (화면)
 ```
 
-**다른 컴포넌트 계층에서의 규칙:**
+### 선행 에이전트
+
+| 에이전트 | 관계 |
+|----------|------|
+| design-analyzer | Figma 분석 후 필요한 Input 컴포넌트 식별 |
+| planner | 화면 기획서에서 필요한 폼 요소 도출 |
+
+### 후행 에이전트
+
+| 에이전트 | 관계 |
+|----------|------|
+| fe-widget-builder | Input 컴포넌트를 포함한 Widget 생성 |
+| **fe-feature-builder** | 폼 Feature에서 Input 컴포넌트 사용 |
+| fe-page-builder | Page에서 폼 구성 시 사용 |
+
+### 관련 에이전트
+
+| 에이전트 | 관계 |
+|----------|------|
+| fe-ui-component-builder | 비입력 UI 컴포넌트 담당 (역할 분리) |
+
+---
+
+## 8. 프로젝트별 참고사항
+
+### 담당 경로
+
+```
+packages/ui/src/components/inputs/
+```
+
+> **주의**: ui, widget, feature, layouts, page 컴포넌트는 이 에이전트의 담당이 아닙니다.
+
+### 스타일링 규칙
 
 | 위치 | className 사용 |
 |------|:-------------:|
@@ -295,55 +332,29 @@ const inputStyles = cva("rounded-md border border-default-300", {
 | `components/page/` | ❌ 금지 |
 | `components/layouts/` | ❌ 금지 |
 
-### HeroUI 래핑 시
+### 기존 컴포넌트 예시
 
-HeroUI 컴포넌트의 기본 스타일을 최대한 활용하고, 필요한 경우에만 커스터마이징합니다.
+#### Pure Input만 있는 경우 (index.tsx 없음)
 
-```tsx
-// ✅ 좋은 예 - HeroUI 기본 활용
-<HeroUIInput {...rest} size={size} />
+| 컴포넌트 | 용도 |
+|----------|------|
+| `Dropdown` | 드롭다운 메뉴 (선택 후 액션) |
+| `Pagination` | 페이지네이션 |
+| `ButtonGroup` | 버튼 그룹 |
 
-// ✅ 허용 - 필요 시 커스텀 스타일 추가 가능 (Input 컴포넌트이므로)
-<HeroUIInput {...rest} className="custom-input-style" />
-```
+#### Pure + Stateful 모두 있는 경우 (index.tsx 있음)
 
-### CVA 사용 (자체 구현 시)
+| 컴포넌트 | 용도 |
+|----------|------|
+| `Input` | 텍스트 입력 |
+| `Checkbox` | 체크박스 |
+| `RadioGroup` | 라디오 버튼 그룹 |
+| `Textarea` | 멀티라인 텍스트 |
+| `DatePicker` | 날짜 선택 |
+| `AutoComplete` | 자동완성 입력 |
+| `ListboxSelect` | 리스트 선택 |
 
-```tsx
-import { cva, type VariantProps } from "class-variance-authority";
-
-const inputStyles = cva(
-  "base-input-classes",
-  {
-    variants: {
-      size: {
-        sm: "h-8 text-sm",
-        md: "h-10 text-base",
-        lg: "h-12 text-lg",
-      },
-    },
-    defaultVariants: {
-      size: "md",
-    },
-  }
-);
-```
-
----
-
-## 10. 주의사항
-
-1. **HeroUI 우선 확인** - 구현 전에 HeroUI에 동일 컴포넌트가 있는지 확인
-2. **레이어 구분 명확히** - Pure와 Stateful의 책임 분리
-3. **타입 안전성** - Generic `<T>`를 활용한 타입 추론
-4. **onChange 시그니처** - 이벤트 객체가 아닌 값만 전달
-5. **재사용성** - Pure Input은 MobX 없이도 사용 가능해야 함
-
----
-
-## 11. 공용 패키지 네이밍 규칙 (Critical)
-
-`packages/*` 디렉토리의 공용 패키지는 **특정 앱에 종속된 이름을 사용하지 않습니다**.
+### 공용 패키지 네이밍 규칙
 
 ```typescript
 // ✅ 올바른 예시 (범용적인 이름)
@@ -354,3 +365,11 @@ export const DatePicker = observer(...);
 export const AdminInput = observer(...);
 export const CoinDatePicker = observer(...);
 ```
+
+### 주의사항
+
+1. **HeroUI 우선 확인** - 구현 전에 HeroUI에 동일 컴포넌트가 있는지 확인
+2. **레이어 구분 명확히** - Pure와 Stateful의 책임 분리
+3. **타입 안전성** - Generic `<T>`를 활용한 타입 추론
+4. **onChange 시그니처** - 이벤트 객체가 아닌 값만 전달
+5. **재사용성** - Pure Input은 MobX 없이도 사용 가능해야 함

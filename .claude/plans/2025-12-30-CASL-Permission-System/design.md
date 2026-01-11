@@ -1,9 +1,56 @@
-# CASL 권한 시스템 기술 설계 문서
+# CASL 권한 시스템 기술 설계서
 
-**원본 기획서:** `.claude/plans/2025-12-30-CASL-Permission-System.md`
+**기획서:** `.claude/plans/2025-12-30-CASL-Permission-System.md`
 **작성일:** 2026-01-08
-**수정일:** 2026-01-10
+**수정일:** 2026-01-11
 **작성자:** technical-designer
+
+---
+
+## 5단계 개발 플로우 - Stage별 에이전트 지시
+
+### Stage 2: 스키마 구현 ✅ 완료
+
+| 에이전트 | 작업 | 상태 |
+|----------|------|------|
+| schema-builder | Action 모델 추가 | ✅ |
+| schema-builder | Ability 모델 수정 (actionId FK) | ✅ |
+| schema-builder | FieldVisibility/MaskingPattern 삭제 | ✅ |
+| entity-builder | Action Entity 생성 | ✅ |
+| entity-builder | Ability Entity 수정 | ✅ |
+| dto-builder | ActionResponseDto, AbilityResponseDto 수정 | 🔄 |
+| seed-maker | Action 시드 데이터 추가 | ⏳ |
+
+### Stage 3: 백엔드 로직 ⏳ 대기
+
+| 에이전트 | 작업 |
+|----------|------|
+| repository-builder | ActionsRepository 생성 |
+| repository-builder | AbilitiesRepository 수정 (Action 조인) |
+| service-builder | ActionsService 생성 |
+| service-builder | AbilitiesService 수정 |
+| service-builder | CaslAbilityFactory 수정 |
+| controller-builder | ActionsController 생성 |
+
+### Stage 4: 컴포넌트 구현 ⏳ 대기
+
+| 에이전트 | 컴포넌트 | 유형 |
+|----------|---------|------|
+| ui-component-builder | VisibilityCell | ui |
+| widget-builder | ActionConfigEditor | widget |
+| widget-builder | AbilityRuleList | widget |
+| widget-builder | ConditionEditor | widget |
+| widget-builder | AbilityFormModal | widget |
+| widget-builder | AbilityMatrixView | widget |
+| feature-builder | RoleAbilityManager | feature |
+| feature-builder | UserAbilityManager | feature |
+
+### Stage 5: 페이지 통합 ⏳ 대기
+
+| 에이전트 | 페이지 |
+|----------|--------|
+| page-builder | AbilityManagementPage (Admin) |
+| page-builder | ActionManagementPage (Admin) |
 
 ---
 

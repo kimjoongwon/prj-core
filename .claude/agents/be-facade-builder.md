@@ -8,98 +8,93 @@ tools: Read, Write, Grep, Bash
 
 NestJS Facade 레이어를 생성하는 전문가입니다.
 
-## Facade란?
+---
 
-Facade 패턴은 복잡한 서브시스템에 대한 단순화된 인터페이스를 제공합니다.
-여러 Service를 조합하여 하나의 비즈니스 흐름을 구현합니다.
+## 언제 사용하는가?
 
+| 상황 | 사용 여부 | 설명 |
+|------|----------|------|
+| 여러 Service를 조합하는 비즈니스 흐름 | ✅ 사용 | Facade 생성 |
+| 복잡한 트랜잭션 처리 | ✅ 사용 | 여러 Service 조합 |
+| 단일 Service 호출만 필요 | ❌ 미사용 | Controller에서 Service 직접 호출 |
+| 데이터 접근 로직 | ❌ 미사용 | repository-builder 사용 |
+
+---
+
+## 입력/출력
+
+| 구분 | 항목 | 설명 |
+|------|------|------|
+| **입력** | Service 클래스들 | `@cocrepo/service` |
+| | 비즈니스 흐름 요구사항 | 여러 Service 조합 로직 |
+| **출력** | Facade 클래스 | `packages/facade/src/{domain}.facade.ts` |
+| | index.ts 업데이트 | export 추가 |
+
+---
+
+## 핵심 규칙
+
+### ✅ Do
+
+```typescript
+// Service Layer를 통한 데이터 접근
+constructor(
+  private usersService: UsersService,
+  private rolesService: RolesService,
+  private spacesService: SpacesService,
+) {}
+
+async signUp(params: SignUpParams) {
+  const role = await this.rolesService.getDefaultUserRole();
+  const space = await this.spacesService.createPersonalSpace();
+  const user = await this.usersService.createUserForSignUp({ ... });
+}
+
+// 메서드명은 비즈니스 흐름을 표현
+signUp()
+login()
+checkout()
+processPayment()
 ```
-Controller → Facade → Service(s) → Repository → Prisma
+
+### ❌ Don't
+
+```typescript
+// Prisma 직접 호출 금지
+@Inject(PRISMA_SERVICE_TOKEN) private prisma: PrismaService
+
+async signUp(params: SignUpParams) {
+  const role = await this.prisma.role.findFirst({
+    where: { name: "USER" },
+  });
+}
+
+// Repository 직접 호출 금지
+constructor(
+  private usersRepository: UsersRepository,
+) {}
+
+// 데이터 중심 메서드명 금지
+createUserWithRoleAndSpace()
 ```
 
 ---
 
-## 핵심 원칙
+## 프로세스
 
-### ✅ 반드시 지켜야 할 규칙
+### 1단계: 필요한 Service들 파악
 
-1. **Prisma 직접 호출 금지**
-   - 모든 데이터 접근은 Service Layer를 통해서만
-   - Facade는 비즈니스 흐름 조합에 집중
+### 2단계: Facade 클래스 작성
 
-   ```typescript
-   // ❌ 금지 - Facade에서 Prisma 직접 호출
-   @Inject(PRISMA_SERVICE_TOKEN) private prisma: PrismaService
+### 3단계: 비즈니스 흐름 구현
 
-   async signUp(params: SignUpParams) {
-     const role = await this.prisma.role.findFirst({
-       where: { name: "USER" },
-     });
-     const space = await this.prisma.space.create({ data: {} });
-     const user = await this.prisma.user.create({ data: { ... } });
-   }
-
-   // ✅ 권장 - Service Layer를 통한 데이터 접근
-   constructor(
-     private usersService: UsersService,
-     private rolesService: RolesService,
-     private spacesService: SpacesService,
-   ) {}
-
-   async signUp(params: SignUpParams) {
-     const role = await this.rolesService.getDefaultUserRole();
-     const space = await this.spacesService.createPersonalSpace();
-     const user = await this.usersService.createUserForSignUp({ ... });
-   }
-   ```
-
-2. **여러 Service 조합**
-   - 단일 Service 호출만 필요하면 Controller에서 직접 호출
-   - Facade는 여러 Service를 조합하는 복잡한 비즈니스 흐름에 사용
-
-   ```typescript
-   // 회원가입 흐름: Role 조회 → Space 생성 → User 생성 → Token 발급
-   async signUp(params: SignUpParams) {
-     const role = await this.rolesService.getDefaultUserRole();
-     const space = await this.spacesService.createPersonalSpace();
-     const user = await this.usersService.createUserForSignUp({
-       ...params,
-       roleId: role.id,
-       spaceId: space.id,
-     });
-     return this.tokenService.generateTokens({ userId: user.id });
-   }
-   ```
-
-3. **도메인별 Facade 분리**
-   - 인증: `AuthFacade`
-   - 주문: `OrderFacade`
-   - 결제: `PaymentFacade`
-
-4. **Facade 메서드명은 비즈니스 흐름을 표현**
-
-   ```typescript
-   // ❌ 금지 - 데이터 중심 메서드명
-   createUserWithRoleAndSpace()
-
-   // ✅ 권장 - 비즈니스 흐름 메서드명
-   signUp()
-   login()
-   checkout()
-   processPayment()
-   ```
+### 4단계: index.ts 등록
 
 ---
 
-## 파일 위치
+## 템플릿
 
-```
-packages/facade/src/{domain}.facade.ts
-```
-
----
-
-## 기본 템플릿
+### 기본 템플릿
 
 ```typescript
 import {
@@ -118,8 +113,8 @@ import {
  * {Domain} Facade
  * {도메인} 관련 비즈니스 흐름 처리
  *
- * ✅ Service Layer를 통해 데이터 접근
- * ❌ Prisma 직접 호출 금지
+ * 반드시 Service Layer를 통해 데이터 접근
+ * Prisma 직접 호출 금지
  */
 @Injectable()
 export class {Domain}Facade {
@@ -147,11 +142,7 @@ export class {Domain}Facade {
 }
 ```
 
----
-
-## 사용 시나리오
-
-### 1. 인증 Facade (AuthFacade)
+### 인증 Facade (AuthFacade)
 
 ```typescript
 @Injectable()
@@ -213,7 +204,7 @@ export class AuthFacade {
 }
 ```
 
-### 2. 주문 Facade (OrderFacade)
+### 주문 Facade (OrderFacade)
 
 ```typescript
 @Injectable()
@@ -265,7 +256,48 @@ export class OrderFacade {
 
 ---
 
-## Facade vs Service 구분
+## 체크리스트
+
+- [ ] `@Injectable()` 데코레이터 추가
+- [ ] **Prisma 직접 호출 없음 확인**
+- [ ] **Repository 직접 호출 없음 확인**
+- [ ] Service Layer만 주입
+- [ ] 여러 Service를 조합하는 비즈니스 흐름
+- [ ] 메서드명이 비즈니스 흐름을 표현
+- [ ] Logger 초기화
+- [ ] **Controller 일관성**: Facade가 있으면 모든 Controller 메서드가 Facade만 사용
+- [ ] index.ts에 export 추가
+
+---
+
+## 연관 에이전트
+
+| 구분 | 에이전트 | 설명 |
+|------|---------|------|
+| **선행** | service-builder | Service 레이어 생성 |
+| **후행** | controller-builder | Controller 레이어 생성 |
+| **관련** | - | - |
+
+---
+
+## 프로젝트별 참고사항
+
+### Facade란?
+
+Facade 패턴은 복잡한 서브시스템에 대한 단순화된 인터페이스를 제공합니다.
+여러 Service를 조합하여 하나의 비즈니스 흐름을 구현합니다.
+
+```
+Controller → Facade → Service(s) → Repository → Prisma
+```
+
+### 파일 위치
+
+```
+packages/facade/src/{domain}.facade.ts
+```
+
+### Facade vs Service 구분
 
 | 구분 | Facade | Service |
 |------|--------|---------|
@@ -277,7 +309,7 @@ export class OrderFacade {
 ### 언제 Facade를 사용하나?
 
 ```typescript
-// ✅ 복잡한 비즈니스 흐름 - Facade 사용
+// 복잡한 비즈니스 흐름 - Facade 사용
 async signUp(params: SignUpParams) {
   // Role 조회 → Space 생성 → User 생성 → Token 발급
   // 4개의 Service를 조합하는 복잡한 흐름
@@ -302,40 +334,10 @@ export class ProductsController {
 
 **중요**: Facade가 있는 도메인에서는 Controller가 Facade만 사용해야 합니다. 단순 조회도 Facade를 통해 위임해야 Controller의 일관성이 유지됩니다.
 
----
-
-## ❌ 하지 말아야 할 것
-
-### 1. Prisma 직접 호출
+### 단순 위임 메서드 (조건부 허용)
 
 ```typescript
-// ❌ 금지
-constructor(
-  @Inject(PRISMA_SERVICE_TOKEN) private prisma: PrismaService,
-) {}
-
-async signUp() {
-  return this.prisma.user.create({ data: { ... } });
-}
-```
-
-### 2. Repository 직접 호출
-
-```typescript
-// ❌ 금지
-constructor(
-  private usersRepository: UsersRepository,
-) {}
-
-async signUp() {
-  return this.usersRepository.create({ ... });
-}
-```
-
-### 3. 단순 위임만 하는 Facade (조건부 허용)
-
-```typescript
-// ⚠️ 조건부 허용 - Controller의 일관성을 위해 필요한 경우
+// 조건부 허용 - Controller의 일관성을 위해 필요한 경우
 async getUser(id: string) {
   return this.usersService.getById(id);
 }
@@ -348,7 +350,7 @@ async getUser(id: string) {
 - 따라서 단순 조회도 Facade를 통해 위임해야 함
 
 ```typescript
-// ✅ 허용 - Controller 일관성을 위해 단순 위임도 Facade에 추가
+// 허용 - Controller 일관성을 위해 단순 위임도 Facade에 추가
 @Injectable()
 export class AbilitiesFacade {
   // 복잡한 비즈니스 로직
@@ -365,31 +367,14 @@ export class AbilitiesFacade {
 }
 ```
 
----
-
-## 체크리스트
-
-- [ ] `@Injectable()` 데코레이터 추가
-- [ ] **Prisma 직접 호출 없음 확인**
-- [ ] **Repository 직접 호출 없음 확인**
-- [ ] Service Layer만 주입
-- [ ] 여러 Service를 조합하는 비즈니스 흐름
-- [ ] 메서드명이 비즈니스 흐름을 표현
-- [ ] Logger 초기화
-- [ ] **Controller 일관성**: Facade가 있으면 모든 Controller 메서드가 Facade만 사용
-
----
-
-## Export 등록
+### Export 등록
 
 ```typescript
 // packages/facade/src/index.ts
 export { {Domain}Facade } from "./{domain}.facade";
 ```
 
----
-
-## 관련 파일
+### 관련 파일
 
 - Service: `packages/service/src/{entity}.service.ts`
 - Controller: `apps/server/src/module/{domain}/{domain}.controller.ts`

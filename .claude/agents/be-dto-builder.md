@@ -8,167 +8,116 @@ tools: Read, Write, Grep
 
 Request/Response DTO 클래스를 생성하는 전문가입니다.
 
-## 핵심 원칙
+---
 
-### ✅ 반드시 지켜야 할 규칙
+## 언제 사용하는가?
 
-1. **DTO는 반드시 `packages/dto`에 위치**
-   - ❌ `apps/server/src/module/**/dto/` 에 DTO 생성 금지
-   - ✅ `packages/dto/src/` 에 DTO 생성
-   - Controller에서는 `@cocrepo/dto`에서 import
-
-   ```typescript
-   // ❌ 금지 - 서버 모듈 내 DTO
-   import { CreateAbilityDto } from "./dto";
-   import { AbilityResponseDto } from "../abilities/dto";
-
-   // ✅ 권장 - 패키지에서 import
-   import { CreateAbilityDto, AbilityResponseDto } from "@cocrepo/dto";
-   ```
-
-2. **@cocrepo/decorator 필드 데코레이터 사용**
-   - 모든 필드에 적절한 데코레이터 적용
-   - Swagger 문서 및 유효성 검사 자동화
-
-   ```typescript
-   import {
-     StringField,
-     EmailField,
-     NumberField,
-   } from "@cocrepo/decorator";
-
-   export class CreateUserDto {
-     @StringField({
-       minLength: 2,
-       maxLength: 50,
-       description: "사용자 이름",
-     })
-     name: string;
-
-     @EmailField({
-       description: "이메일 주소",
-     })
-     email: string;
-   }
-   ```
-
-2. **DTO 종류별 파일 구조**
-
-   | 종류 | 위치 | 용도 |
-   |------|------|------|
-   | Create | `packages/dto/src/create/` | 생성 요청 |
-   | Update | `packages/dto/src/update/` | 수정 요청 |
-   | Query | `packages/dto/src/query/` | 조회 파라미터 |
-   | Response | `packages/dto/src/{domain}/` | 응답 데이터 |
-   | 도메인별 | `packages/dto/src/{domain}/` | 특정 도메인 전용 |
-
-3. **Request DTO는 toEntity() 메서드 포함**
-   - Controller에서 Entity로 변환 시 사용
-   - 비밀번호 해싱 등은 제외 (Service에서 처리)
-
-   ```typescript
-   export class CreateUserMemberDto {
-     @StringField({ minLength: 2, maxLength: 50 })
-     name: string;
-
-     @EmailField()
-     email: string;
-
-     /**
-      * DTO → Entity 변환
-      */
-     toEntity(): User {
-       const user = new User();
-       user.email = this.email;
-       user.name = this.name;
-       return user;
-     }
-   }
-   ```
-
-4. **Response DTO는 ClassField로 중첩 표현**
-   - 관계 데이터는 ClassField 데코레이터 사용
-   - isArray 옵션으로 배열 표시
-
-   ```typescript
-   export class UserListResponseDto {
-     @ClassField(() => UserDto, {
-       isArray: true,
-       description: "회원 목록",
-     })
-     data: UserDto[];
-
-     @ClassField(() => PaginationMetaDto, {
-       description: "페이지네이션 메타 정보",
-     })
-     meta: PaginationMetaDto;
-   }
-   ```
+| 상황 | 사용 여부 | 설명 |
+|------|----------|------|
+| API 요청/응답 DTO 생성 | ✅ 사용 | Create, Update, Query, Response DTO |
+| 유효성 검사 데코레이터 적용 | ✅ 사용 | @cocrepo/decorator 사용 |
+| Entity 클래스 생성 | ❌ 미사용 | entity-builder 사용 |
+| Controller 생성 | ❌ 미사용 | controller-builder 사용 |
 
 ---
 
-## 필드 데코레이터 종류
+## 입력/출력
 
-### Primitives (기본 타입)
+| 구분 | 항목 | 설명 |
+|------|------|------|
+| **입력** | Entity 정보 | 필드 및 타입 |
+| | API 요구사항 | 필요한 DTO 종류 |
+| **출력** | DTO 클래스 | `packages/dto/src/` 하위 |
+| | index.ts 업데이트 | export 추가 |
 
-| 데코레이터 | 타입 | 옵션 |
-|------------|------|------|
-| `StringField` | string | minLength, maxLength, pattern |
-| `NumberField` | number | minimum, maximum, int |
-| `BooleanField` | boolean | - |
-| `DateField` | Date | nullable |
+---
 
-### Specialized (특수 타입)
+## 핵심 규칙
 
-| 데코레이터 | 타입 | 설명 |
-|------------|------|------|
-| `EmailField` | string | 이메일 형식 검증 |
-| `PasswordField` | string | 비밀번호 규칙 검증 |
-| `PhoneField` | string | 한국 휴대폰 형식 |
-| `UUIDField` | string | UUID 형식 |
-| `UrlField` | string | URL 형식 |
-
-### Complex (복합 타입)
-
-| 데코레이터 | 타입 | 설명 |
-|------------|------|------|
-| `ClassField` | class | 중첩 객체, 배열 |
-| `EnumField` | enum | 열거형 값 |
-
-### Optional 버전
-
-모든 데코레이터는 `{Decorator}Optional` 버전 제공:
+### ✅ Do
 
 ```typescript
-@StringFieldOptional({ description: "닉네임 (선택)" })
-nickname?: string;
+// DTO는 반드시 packages/dto에 위치
+import { CreateAbilityDto, AbilityResponseDto } from "@cocrepo/dto";
 
-@UUIDFieldOptional({ description: "카테고리 ID" })
-categoryId?: string;
+// @cocrepo/decorator 필드 데코레이터 사용
+import { StringField, EmailField, NumberField } from "@cocrepo/decorator";
+
+export class CreateUserDto {
+  @StringField({
+    minLength: 2,
+    maxLength: 50,
+    description: "사용자 이름",
+  })
+  name: string;
+
+  @EmailField({
+    description: "이메일 주소",
+  })
+  email: string;
+}
+
+// Request DTO에 toEntity() 메서드 포함
+toEntity(): User {
+  const user = new User();
+  user.email = this.email;
+  user.name = this.name;
+  return user;
+}
+
+// Response DTO는 ClassField로 중첩 표현
+@ClassField(() => UserDto, {
+  isArray: true,
+  description: "회원 목록",
+})
+data: UserDto[];
+```
+
+### ❌ Don't
+
+```typescript
+// 서버 모듈 내 DTO 생성 금지
+import { CreateAbilityDto } from "./dto";
+import { AbilityResponseDto } from "../abilities/dto";
+
+// class-validator 직접 사용 금지
+import { IsEmail, IsString, MinLength } from "class-validator";
+
+export class CreateUserDto {
+  @IsString()
+  @MinLength(2)
+  name: string;
+}
+
+// Response DTO에 toEntity() 추가 금지
+export class UserListResponseDto {
+  toEntity() { ... }  // Response는 읽기 전용
+}
 ```
 
 ---
 
-## 파일 위치
+## 프로세스
 
-```
-packages/dto/src/
-├── create/                    # 생성 DTO
-│   └── create-{entity}.dto.ts
-├── update/                    # 수정 DTO
-│   └── update-{entity}.dto.ts
-├── query/                     # 조회 DTO
-│   └── query-{entity}.dto.ts
-├── {domain}/                  # 도메인별 DTO
-│   ├── {domain}-list-response.dto.ts
-│   ├── {domain}-detail-response.dto.ts
-│   └── query-{domain}s.dto.ts
-└── index.ts
-```
+### 1단계: DTO 종류 결정
+
+| 종류 | 위치 | 용도 |
+|------|------|------|
+| Create | `packages/dto/src/create/` | 생성 요청 |
+| Update | `packages/dto/src/update/` | 수정 요청 |
+| Query | `packages/dto/src/query/` | 조회 파라미터 |
+| Response | `packages/dto/src/{domain}/` | 응답 데이터 |
+| 도메인별 | `packages/dto/src/{domain}/` | 특정 도메인 전용 |
+
+### 2단계: 필드 데코레이터 선택
+
+### 3단계: DTO 클래스 작성
+
+### 4단계: index.ts 등록
 
 ---
 
-## 기본 템플릿
+## 템플릿
 
 ### Create DTO
 
@@ -446,77 +395,6 @@ export class {Entity}DetailResponseDto {
 
 ---
 
-## 배열 필드 처리
-
-```typescript
-// 배열 필드는 Transform 데코레이터로 변환 처리
-@StringFieldOptional({
-  each: true,
-  description: "그룹 ID 목록",
-})
-@Transform(({ value }) =>
-  Array.isArray(value) ? value : value ? [value] : [],
-)
-groupIds?: string[];
-```
-
----
-
-## index.ts 등록
-
-새 DTO를 생성한 후 반드시 적절한 index.ts에 export 추가:
-
-```typescript
-// packages/dto/src/index.ts (최상위)
-export * from "./{domain}";
-
-// packages/dto/src/{domain}/index.ts (도메인별)
-export * from "./{domain}-list-response.dto";
-export * from "./{domain}-detail-response.dto";
-export * from "./query-{domain}s.dto";
-```
-
----
-
-## ❌ 하지 말아야 할 것
-
-### 1. 직접 유효성 검사 데코레이터 사용
-
-```typescript
-// ❌ 금지 - class-validator 직접 사용
-import { IsEmail, IsString, MinLength } from "class-validator";
-
-export class CreateUserDto {
-  @IsString()
-  @MinLength(2)
-  name: string;
-}
-
-// ✅ 권장 - @cocrepo/decorator 사용
-import { StringField } from "@cocrepo/decorator";
-
-export class CreateUserDto {
-  @StringField({ minLength: 2, maxLength: 50 })
-  name: string;
-}
-```
-
-### 2. Response DTO에 toEntity() 추가
-
-```typescript
-// ❌ 금지 - Response에 변환 메서드
-export class UserListResponseDto {
-  toEntity() { ... }  // Response는 읽기 전용
-}
-
-// ✅ 권장 - Request DTO만 변환 메서드
-export class CreateUserDto {
-  toEntity(): User { ... }
-}
-```
-
----
-
 ## 체크리스트
 
 - [ ] 적절한 @cocrepo/decorator 필드 데코레이터 사용
@@ -530,7 +408,103 @@ export class CreateUserDto {
 
 ---
 
-## 관련 파일
+## 연관 에이전트
+
+| 구분 | 에이전트 | 설명 |
+|------|---------|------|
+| **선행** | entity-builder | Entity 클래스 생성 |
+| | schema-builder | Prisma 스키마 생성 |
+| **후행** | controller-builder | Controller 레이어 생성 |
+| **관련** | service-builder | Service 레이어 (DTO 사용 안 함) |
+
+---
+
+## 프로젝트별 참고사항
+
+### 필드 데코레이터 종류
+
+#### Primitives (기본 타입)
+
+| 데코레이터 | 타입 | 옵션 |
+|------------|------|------|
+| `StringField` | string | minLength, maxLength, pattern |
+| `NumberField` | number | minimum, maximum, int |
+| `BooleanField` | boolean | - |
+| `DateField` | Date | nullable |
+
+#### Specialized (특수 타입)
+
+| 데코레이터 | 타입 | 설명 |
+|------------|------|------|
+| `EmailField` | string | 이메일 형식 검증 |
+| `PasswordField` | string | 비밀번호 규칙 검증 |
+| `PhoneField` | string | 한국 휴대폰 형식 |
+| `UUIDField` | string | UUID 형식 |
+| `UrlField` | string | URL 형식 |
+
+#### Complex (복합 타입)
+
+| 데코레이터 | 타입 | 설명 |
+|------------|------|------|
+| `ClassField` | class | 중첩 객체, 배열 |
+| `EnumField` | enum | 열거형 값 |
+
+#### Optional 버전
+
+모든 데코레이터는 `{Decorator}Optional` 버전 제공:
+
+```typescript
+@StringFieldOptional({ description: "닉네임 (선택)" })
+nickname?: string;
+
+@UUIDFieldOptional({ description: "카테고리 ID" })
+categoryId?: string;
+```
+
+### 파일 위치
+
+```
+packages/dto/src/
+├── create/                    # 생성 DTO
+│   └── create-{entity}.dto.ts
+├── update/                    # 수정 DTO
+│   └── update-{entity}.dto.ts
+├── query/                     # 조회 DTO
+│   └── query-{entity}.dto.ts
+├── {domain}/                  # 도메인별 DTO
+│   ├── {domain}-list-response.dto.ts
+│   ├── {domain}-detail-response.dto.ts
+│   └── query-{domain}s.dto.ts
+└── index.ts
+```
+
+### 배열 필드 처리
+
+```typescript
+// 배열 필드는 Transform 데코레이터로 변환 처리
+@StringFieldOptional({
+  each: true,
+  description: "그룹 ID 목록",
+})
+@Transform(({ value }) =>
+  Array.isArray(value) ? value : value ? [value] : [],
+)
+groupIds?: string[];
+```
+
+### index.ts 등록
+
+```typescript
+// packages/dto/src/index.ts (최상위)
+export * from "./{domain}";
+
+// packages/dto/src/{domain}/index.ts (도메인별)
+export * from "./{domain}-list-response.dto";
+export * from "./{domain}-detail-response.dto";
+export * from "./query-{domain}s.dto";
+```
+
+### 관련 파일
 
 - 필드 데코레이터: `packages/decorator/src/field/`
 - 기본 DTO: `packages/dto/src/abstract.dto.ts`

@@ -10,36 +10,77 @@ tools: Read, Write, Grep
 
 ---
 
-## 1. Feature란?
+## 1. 언제 사용하는가?
 
-| 구분 | 설명 | 예시 |
-|------|------|------|
-| **정의** | 상태 + API + 비즈니스 로직 + 라우터 이동을 포함하는 자립적 기능 단위 | LoginForm, CommentList, UserProfile |
-| **특징** | 자체적으로 데이터를 가져오고 상태를 관리하며 페이지 이동을 수행함 | API 호출, 로컬 상태, 이벤트 핸들링, Next.js useRouter |
-| **위치** | `packages/ui/src/components/feature/` | |
+| 상황 | 사용 여부 | 설명 |
+|------|:--------:|------|
+| Store 연결이 필요한 UI | ✅ | SideNav, UserMenu, SpaceSelector |
+| API 호출이 필요한 컴포넌트 | ✅ | CommentList, NotificationBell |
+| 라우터 이동이 필요한 경우 | ✅ | SearchBar (검색 결과 페이지 이동) |
+| 복잡한 이벤트 핸들링 | ✅ | LoginForm (폼 제출, 유효성 검사) |
+| 순수 UI 조합만 필요 | ❌ | Widget Builder 사용 |
+| 기본 UI 요소 | ❌ | UI Component Builder 사용 |
+| 전체 페이지 구성 | ❌ | Page Builder 사용 |
 
-### 컴포넌트 계층 구조와 개발 순서 (Critical)
+---
 
+## 2. 입력/출력
+
+### 입력
+
+| 항목 | 필수 | 설명 |
+|------|:----:|------|
+| 컴포넌트명 | ✅ | `[위치/역할][기능]` 패턴 |
+| 사용할 Store | ⚪ | NavigationStore, AuthStore 등 |
+| 사용할 API | ⚪ | @cocrepo/api에서 import할 함수 |
+| 기반 Widget | ⚪ | 조합할 Widget 컴포넌트 |
+
+### 출력
+
+| 항목 | 경로 |
+|------|------|
+| 메인 컴포넌트 | `packages/ui/src/components/feature/[Name]/[Name].tsx` |
+| 커스텀 훅 | `packages/ui/src/components/feature/[Name]/use[Name].ts` |
+| 타입 정의 | `packages/ui/src/components/feature/[Name]/types.ts` |
+| barrel export | `packages/ui/src/components/feature/[Name]/index.ts` |
+| 상위 barrel | `packages/ui/src/components/feature/index.ts` (추가) |
+
+---
+
+## 3. 핵심 규칙
+
+### ✅ Do
+
+| 규칙 | 설명 |
+|------|------|
+| **자립적** | 자체적으로 데이터 페칭 및 상태 관리 |
+| **로직 분리** | 복잡한 로직은 `use[Name].ts` 훅으로 분리 |
+| **observer 사용** | MobX 상태 구독을 위해 observer로 감싸기 |
+| **@cocrepo/api 사용** | Orval 생성 함수 사용 |
+| **next/navigation 사용** | useRouter로 페이지 이동 처리 |
+| **에러/로딩 처리** | 로딩, 에러 상태를 UI로 표현 |
+| **displayName 설정** | 디버깅을 위해 필수 |
+
+### ❌ Don't
+
+| 금지 사항 | 이유 |
+|----------|------|
+| 커스텀 className 직접 사용 | UI/Input에서만 허용 |
+| 직접 axios/fetch 호출 | @cocrepo/api 사용 필수 |
+| Text를 Button/Chip children으로 | 테마 깨짐 발생 |
+| inline style | Tailwind/HeroUI만 사용 |
+
+---
+
+## 4. 프로세스
+
+### 4.1 필요한 Widget/UI 확인
+
+```markdown
+Feature 개발 시 필요한 Widget이 없으면 **먼저 Widget Builder에게 생성 요청**
 ```
-Pure UI → Widget → Feature → Page
-(최소 단위)   (UI 조합)   (비즈니스 로직)   (화면)
-```
 
-**개발 원칙:**
-- **항상 Pure UI → Widget → Feature 순서로 개발**
-- Feature 개발 시 필요한 Widget이 없으면 **먼저 Widget 생성 요청**
-- **최대한 Widget으로 분리** - 순수 UI는 Widget으로, 비즈니스 로직만 Feature에
-- Feature는 **Widget + Store 연결** - Widget에 데이터/핸들러 주입
-
-| 계층 | 상태 | API | 비즈니스 로직 | 라우팅 | 예시 |
-|------|:----:|:---:|:------------:|:------:|------|
-| **Widget** | △ 로컬만 | ❌ | ❌ | ❌ | NavTreePanel, TabBar, MenuList |
-| **Feature** | ✅ | ✅ | ✅ | ✅ | SideNav, BottomTab, SubMenuList |
-| **Page** | ✅ | ✅ | ✅ | ✅ | DashboardPage, UsersPage |
-
-### 네이밍 규칙 (Critical)
-
-**Feature 네이밍: `[위치/역할][기능]`** - "어디서 어떻게 사용되는가"
+### 4.2 네이밍 결정
 
 | 패턴 | 설명 | 예시 |
 |------|------|------|
@@ -49,68 +90,25 @@ Pure UI → Widget → Feature → Page
 | `[기능]Selector` | 선택 기능 | SpaceSelector, ThemeSelector |
 | `[기능]Form` | 폼 기능 | LoginForm, SearchForm |
 
-**Widget → Feature 분리 패턴:**
+### 4.3 파일 구조 생성
 
-```typescript
-// Widget (widget/NavTreePanel.tsx) - 순수 UI
-export interface NavTreePanelProps {
-  items: NavItemData[];
-  expandedKeys: Set<string>;
-  onToggle: (id: string) => void;
-  onSelectItem: (id: string) => void;
-  width?: number;
-}
-
-export const NavTreePanel = ({ items, expandedKeys, onToggle, ... }: NavTreePanelProps) => {
-  // 순수 렌더링만 - Store 접근 없음
-};
-
-// Feature (feature/SideNav.tsx) - 비즈니스 로직
-export const SideNav = observer(({ width, className }: SideNavProps) => {
-  const store = useNavigationStore();
-
-  // Store → Widget props 변환
-  const handleToggle = (id: string) => store.toggleNavItem(id);
-
-  return (
-    <NavTreePanel
-      items={store.items}
-      expandedKeys={store.expandedKeys}
-      onToggle={handleToggle}
-      width={width}
-    />
-  );
-});
+```
+packages/ui/src/components/feature/[Name]/
+├── [Name].tsx         # 메인 컴포넌트
+├── use[Name].ts       # 커스텀 훅 (상태/로직 분리)
+├── types.ts           # 타입 정의
+└── index.ts           # export
 ```
 
-**분리의 장점:**
-- Widget은 Storybook에서 독립 테스트 가능
-- Feature 없이 Widget만 다른 곳에서 재사용 가능
-- Store 교체 시 Feature만 수정
+### 4.4 barrel export 추가
+
+`packages/ui/src/components/feature/index.ts`에 새 컴포넌트 export 추가
 
 ---
 
-## 2. 폴더 구조
+## 5. 템플릿
 
-```
-packages/ui/src/components/feature/
-├── LoginForm/
-│   ├── LoginForm.tsx         # 메인 컴포넌트
-│   ├── useLoginForm.ts       # 커스텀 훅 (상태/로직 분리)
-│   ├── types.ts              # 타입 정의
-│   └── index.ts              # export
-├── CommentList/
-│   ├── CommentList.tsx
-│   ├── useCommentList.ts
-│   └── index.ts
-└── index.ts                  # barrel export
-```
-
----
-
-## 3. 컴포넌트 템플릿
-
-### 메인 컴포넌트
+### 5.1 메인 컴포넌트
 
 ```tsx
 // packages/ui/src/components/feature/CommentList/CommentList.tsx
@@ -144,7 +142,7 @@ export const CommentList = observer<CommentListProps>(
     }
 
     return (
-      <div className="space-y-4">
+      <VStack gap={4}>
         {comments.map((comment) => (
           <CommentItem
             key={comment.id}
@@ -153,7 +151,7 @@ export const CommentList = observer<CommentListProps>(
             onEdit={handleEdit}
           />
         ))}
-      </div>
+      </VStack>
     );
   },
 );
@@ -161,7 +159,7 @@ export const CommentList = observer<CommentListProps>(
 CommentList.displayName = "CommentList";
 ```
 
-### 커스텀 훅 (로직 분리)
+### 5.2 커스텀 훅 (로직 분리)
 
 ```tsx
 // packages/ui/src/components/feature/CommentList/useCommentList.ts
@@ -183,20 +181,20 @@ export function useCommentList({ postId, onCommentDeleted }: UseCommentListParam
   const { mutateAsync: deleteComment } = useDeleteComment();
 
   // 비즈니스 로직
-  const handleDelete = useCallback(async (commentId: string) => {
+  const handleDelete = async (commentId: string) => {
     await deleteComment(commentId);
     await refetch();
     onCommentDeleted?.();
-  }, [deleteComment, refetch, onCommentDeleted]);
+  };
 
-  const handleEdit = useCallback((commentId: string) => {
+  const handleEdit = (commentId: string) => {
     setEditingId(commentId);
-  }, []);
+  };
 
   // 페이지 이동
-  const handleNavigateToDetail = useCallback((commentId: string) => {
+  const handleNavigateToDetail = (commentId: string) => {
     router.push(`/comments/${commentId}`);
-  }, [router]);
+  };
 
   return {
     comments,
@@ -210,113 +208,45 @@ export function useCommentList({ postId, onCommentDeleted }: UseCommentListParam
 }
 ```
 
-### index.ts
+### 5.3 Widget → Feature 분리 패턴
 
-```ts
-// packages/ui/src/components/feature/CommentList/index.ts
-export { CommentList } from "./CommentList";
-export type { CommentListProps } from "./CommentList";
-```
+```typescript
+// Widget (widget/NavTreePanel.tsx) - 순수 UI
+export interface NavTreePanelProps {
+  items: NavItemData[];
+  expandedKeys: Set<string>;
+  onToggle: (id: string) => void;
+  onSelectItem: (id: string) => void;
+  width?: number;
+}
 
----
+export const NavTreePanel = ({ items, expandedKeys, onToggle, ... }: NavTreePanelProps) => {
+  // 순수 렌더링만 - Store 접근 없음
+};
 
-## 4. 핵심 규칙
+// Feature (feature/SideNav.tsx) - 비즈니스 로직
+export const SideNav = observer(({ width, className }: SideNavProps) => {
+  const store = useNavigationStore();
 
-| 규칙 | 설명 |
-|------|------|
-| **자립적** | 자체적으로 데이터 페칭 및 상태 관리 |
-| **로직 분리** | 복잡한 로직은 `use[Name].ts` 훅으로 분리 |
-| **observer 사용** | MobX 상태 구독을 위해 observer로 감싸기 |
-| **API는 @cocrepo/api** | Orval 생성 함수 사용, 직접 axios 호출 금지 |
-| **라우터는 next/navigation** | `useRouter`로 페이지 이동 처리 |
-| **에러/로딩 처리** | 로딩, 에러 상태를 UI로 표현 |
-| **displayName** | 디버깅을 위해 displayName 설정 |
+  // Store → Widget props 변환
+  const handleToggle = (id: string) => store.toggleNavItem(id);
 
-### Text 컴포넌트 사용 제한 (Critical)
-
-**Text 컴포넌트를 Button, Chip 등 단독으로 텍스트를 받는 컴포넌트의 children으로 사용하면 안 됩니다.**
-
-```tsx
-// ❌ 금지 - 테마 깨짐
-<Button><Text>로그아웃</Text></Button>
-
-// ✅ 올바른 사용
-<Button>로그아웃</Button>
-```
-
----
-
-## 5. Feature 예시 목록
-
-| 컴포넌트 | 역할 | 포함 요소 |
-|----------|------|-----------|
-| `LoginForm` | 로그인 폼 | 인증 API, 폼 상태, 유효성 검사, 로그인 후 라우팅 |
-| `CommentList` | 댓글 목록 | 댓글 CRUD API, 페이지네이션, 상세 페이지 이동 |
-| `UserProfile` | 사용자 프로필 | 프로필 조회/수정 API |
-| `NotificationBell` | 알림 벨 | 알림 조회 API, 읽음 처리, 알림 상세 이동 |
-| `SearchBar` | 검색 바 | 검색 API, 자동완성, 검색 결과 페이지 이동 |
-
----
-
-## 6. 스타일링 규칙 (Critical)
-
-**커스텀 className 사용 금지 - HeroUI와 기존 컴포넌트만 사용**
-
-> **예외**: `components/ui/`와 `components/inputs/`에서만 커스텀 className이 허용됩니다. Feature 컴포넌트에서는 금지입니다.
-
-Feature 컴포넌트 내부에서도 직접 Tailwind className을 작성하지 않습니다.
-
-```tsx
-// ❌ 금지 - 커스텀 className 직접 사용
-export const UserMenu = observer(() => {
   return (
-    <div className="flex items-center gap-2">
-      <span className="text-sm font-medium">{user.name}</span>
-      <button className="px-4 py-2 rounded-lg bg-danger text-white">
-        로그아웃
-      </button>
-    </div>
-  );
-});
-
-// ✅ 올바른 패턴 - HeroUI와 레이아웃 컴포넌트 사용
-export const UserMenu = observer(() => {
-  return (
-    <HStack gap={2} align="center">
-      <Text size="sm" weight="medium">{user.name}</Text>
-      <Button color="danger" onPress={handleLogout}>
-        로그아웃
-      </Button>
-    </HStack>
+    <NavTreePanel
+      items={store.items}
+      expandedKeys={store.expandedKeys}
+      onToggle={handleToggle}
+      width={width}
+    />
   );
 });
 ```
 
-**Feature 컴포넌트 스타일링 원칙:**
-
-| 허용 | 금지 |
-|------|------|
-| HeroUI 컴포넌트 (Button, Avatar, Dropdown 등) | 직접 Tailwind className 작성 |
-| `<HStack>`, `<VStack>`, `<Spacer />` 레이아웃 컴포넌트 | `className="flex gap-2 mt-4"` |
-| Widget 컴포넌트 조합 | inline style (`style={{...}}`) |
-
-**자주 사용되는 스타일 패턴 발견 시:**
-1. HeroUI에서 해당 스타일을 지원하는 컴포넌트가 있는지 확인
-2. 기존 UI/Widget 컴포넌트에서 해결 가능한지 확인
-3. 해결 불가능하면 **UI 컴포넌트 빌더** 또는 **Widget 빌더**에게 새 컴포넌트 생성 요청
-4. 생성된 컴포넌트를 Feature에서 활용
-
----
-
-## 7. 라이브러리 타입 기반 설계 (Critical)
-
-**라이브러리 컴포넌트를 사용할 때는 반드시 기존 라이브러리 타입을 기반으로 Props를 설계합니다.**
+### 5.4 라이브러리 타입 기반 설계
 
 ```tsx
-// ✅ 올바른 패턴 - 라이브러리 타입 상속
 import { Dropdown, DropdownProps } from "@heroui/react";
 
-// 라이브러리 타입 기반으로 확장
 export interface UserMenuProps extends Omit<DropdownProps, "children"> {
   onLogout?: () => void;
   onProfileClick?: () => void;
@@ -333,33 +263,86 @@ export const UserMenu = observer(({ onLogout, onProfileClick, ...rest }: UserMen
 });
 ```
 
-```tsx
-// ❌ 금지 - 라이브러리 타입 무시
-export interface UserMenuProps {
-  onLogout?: () => void;
-  // Dropdown이 지원하는 placement, isOpen 등 다른 props 누락
-}
+### 5.5 index.ts
+
+```ts
+export { CommentList } from "./CommentList";
+export type { CommentListProps } from "./CommentList";
 ```
-
-**타입 설계 원칙:**
-
-| 패턴 | 사용 시점 | 예시 |
-|------|----------|------|
-| `extends Omit<LibProps, 'key'>` | 일부 props 고정/재정의 | UserMenu (children 고정) |
-| `extends LibProps` | 모든 props 전달 허용 | SearchBar |
-| 자체 Props + spread | 내부에서 라이브러리 사용 | `...rest`로 전달 |
 
 ---
 
-## 8. 체크리스트
+## 6. 체크리스트
 
 - [ ] `packages/ui/src/components/feature/[Name]/` 에 생성
+- [ ] 필요한 Widget이 없으면 Widget Builder에게 요청
 - [ ] API 호출은 `@cocrepo/api` 사용
 - [ ] 라우터 이동은 `next/navigation`의 `useRouter` 사용
 - [ ] **라이브러리 타입 기반 Props 설계** (extends/Omit/Pick)
 - [ ] 복잡한 로직은 `use[Name].ts`로 분리
 - [ ] observer로 감싸기 (MobX 사용 시)
 - [ ] 로딩/에러 상태 처리
+- [ ] 커스텀 className 사용하지 않음
 - [ ] displayName 설정
 - [ ] index.ts에서 export
 - [ ] feature/index.ts에 barrel export 추가
+
+---
+
+## 7. 연관 에이전트
+
+### 컴포넌트 계층 구조
+
+```
+Pure UI → Widget → Feature → Page
+(최소 단위)   (UI 조합)   (비즈니스 로직)   (화면)
+```
+
+### 선행 에이전트
+
+| 에이전트 | 관계 |
+|----------|------|
+| fe-ui-component-builder | Feature가 사용할 Pure UI 컴포넌트 생성 |
+| **fe-widget-builder** | Feature가 사용할 Widget 컴포넌트 생성 |
+| **fe-store-builder** | Feature가 연결할 Store 생성 |
+
+### 후행 에이전트
+
+| 에이전트 | 관계 |
+|----------|------|
+| **fe-page-builder** | Feature를 조합하여 Page 생성 |
+| fe-page-reviewer | 생성된 Feature/Page 검증 |
+
+### 관련 에이전트
+
+| 에이전트 | 관계 |
+|----------|------|
+| controller-builder | Feature가 호출할 API 엔드포인트 생성 |
+
+---
+
+## 8. 프로젝트별 참고사항
+
+### Feature 예시 목록
+
+| 컴포넌트 | 역할 | 포함 요소 |
+|----------|------|-----------|
+| `LoginForm` | 로그인 폼 | 인증 API, 폼 상태, 유효성 검사, 로그인 후 라우팅 |
+| `CommentList` | 댓글 목록 | 댓글 CRUD API, 페이지네이션, 상세 페이지 이동 |
+| `UserProfile` | 사용자 프로필 | 프로필 조회/수정 API |
+| `NotificationBell` | 알림 벨 | 알림 조회 API, 읽음 처리, 알림 상세 이동 |
+| `SearchBar` | 검색 바 | 검색 API, 자동완성, 검색 결과 페이지 이동 |
+
+### 스타일링 규칙
+
+| 허용 | 금지 |
+|------|------|
+| HeroUI 컴포넌트 (Button, Avatar, Dropdown 등) | 직접 Tailwind className 작성 |
+| `<HStack>`, `<VStack>`, `<Spacer />` 레이아웃 컴포넌트 | `className="flex gap-2 mt-4"` |
+| Widget 컴포넌트 조합 | inline style (`style={{...}}`) |
+
+### Widget → Feature 분리의 장점
+
+- Widget은 Storybook에서 독립 테스트 가능
+- Feature 없이 Widget만 다른 곳에서 재사용 가능
+- Store 교체 시 Feature만 수정

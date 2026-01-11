@@ -8,79 +8,96 @@ tools: Read, Write, Grep, Bash
 
 Prisma 기반 Repository 레이어를 생성하는 전문가입니다.
 
-## 핵심 원칙
+---
 
-### ✅ 반드시 지켜야 할 규칙
+## 언제 사용하는가?
 
-1. **모든 Prisma 쿼리는 Repository에서만 작성**
-   - Service에서 Prisma 쿼리를 작성하면 안 됨
-   - Repository가 데이터 접근의 유일한 창구
-
-2. **메서드명은 어떤 데이터를 가져오는지 표현 (도메인 목적 아님)**
-   ```typescript
-   // ❌ 금지 - 범용 메서드에 Prisma Args 전달
-   findUnique(args: Prisma.UserFindUniqueArgs)
-
-   // ❌ 금지 - 도메인 목적을 표현 (Service 역할)
-   findByEmailForAuth(email: string)
-
-   // ✅ 권장 - 어떤 데이터를 가져오는지 표현 (주요 관계 나열)
-   findByIdWithTenantsAndProfiles(id: string)
-   findByEmailWithTenantsAndProfiles(email: string)
-   ```
-
-3. **txHost.tx 직접 사용**
-   ```typescript
-   // ❌ 금지 - private getter
-   private get prisma() { return this.txHost.tx; }
-
-   // ✅ 권장 - 직접 사용
-   await this.txHost.tx.user.findUnique(...)
-   ```
-
-4. **Prisma 타입 활용 (커스텀 타입 선언 금지)**
-   ```typescript
-   // ❌ 금지 - 중복된 커스텀 타입 선언
-   export interface CreateUserParams {
-     name: string;
-     email: string;
-     ...
-   }
-
-   // ✅ 권장 - Prisma에서 제공하는 타입 사용
-   import { Prisma } from "@cocrepo/prisma";
-
-   async create(data: Prisma.UserUncheckedCreateInput): Promise<User>
-   async update(id: string, data: Prisma.UserUncheckedUpdateInput): Promise<User>
-   async createMany(data: Prisma.UserCreateManyInput[]): Promise<number>
-   ```
-
-   **Prisma 타입 종류:**
-   | 타입 | 용도 | 특징 |
-   |------|------|------|
-   | `{Model}UncheckedCreateInput` | 생성 | FK ID를 직접 전달 |
-   | `{Model}UncheckedUpdateInput` | 수정 | FK ID를 직접 전달 |
-   | `{Model}CreateManyInput` | 다중 생성 | Bulk insert용 |
-   | `{Model}CreateInput` | 생성 | 관계를 통한 연결 (connect 등) |
-   | `{Model}UpdateInput` | 수정 | 관계를 통한 연결 (connect 등) |
-
-   > **Unchecked vs Checked**: Repository에서는 FK ID를 직접 다루므로 `Unchecked*` 타입 권장
-
-5. **필요한 파라미터만 받기 (조회용)**
-   - 조회 메서드는 필요한 원시 타입만 받음
-   - Prisma Args 전체를 받지 않음
+| 상황 | 사용 여부 | 설명 |
+|------|----------|------|
+| 새로운 모델의 데이터 접근 레이어 필요 | ✅ 사용 | Repository 생성 |
+| 복잡한 Prisma 쿼리 추가 | ✅ 사용 | 쿼리 메서드 추가 |
+| 비즈니스 로직 추가 | ❌ 미사용 | service-builder 사용 |
+| Controller 생성 | ❌ 미사용 | controller-builder 사용 |
 
 ---
 
-## 파일 위치
+## 입력/출력
 
+| 구분 | 항목 | 설명 |
+|------|------|------|
+| **입력** | Entity 클래스 | `@cocrepo/entity` |
+| | 필요한 쿼리 패턴 | CRUD, 관계 포함 조회 등 |
+| **출력** | Repository 클래스 | `packages/repository/src/{entity}.repository.ts` |
+| | index.ts 업데이트 | export 추가 |
+
+---
+
+## 핵심 규칙
+
+### ✅ Do
+
+```typescript
+// 모든 Prisma 쿼리는 Repository에서만 작성
+await this.txHost.tx.user.findUnique(...)
+
+// txHost.tx 직접 사용
+await this.txHost.tx.user.findUnique(...)
+
+// 메서드명은 어떤 데이터를 가져오는지 표현
+findByIdWithTenantsAndProfiles(id: string)
+findByEmailWithTenantsAndProfiles(email: string)
+
+// Prisma 타입 활용
+async create(data: Prisma.UserUncheckedCreateInput): Promise<User>
+async update(id: string, data: Prisma.UserUncheckedUpdateInput): Promise<User>
+
+// plainToInstance로 Entity 변환
+return result ? plainToInstance(User, result) : null;
 ```
-packages/repository/src/{entity}.repository.ts
+
+### ❌ Don't
+
+```typescript
+// 범용 메서드에 Prisma Args 전달 금지
+findUnique(args: Prisma.UserFindUniqueArgs)
+
+// 도메인 목적을 표현하면 안 됨 (Service 역할)
+findByEmailForAuth(email: string)
+
+// private getter 금지
+private get prisma() { return this.txHost.tx; }
+
+// 커스텀 타입 선언 금지
+export interface CreateUserParams {
+  name: string;
+  email: string;
+}
 ```
 
 ---
 
-## 기본 템플릿
+## 프로세스
+
+### 1단계: Entity 및 Prisma 타입 import
+
+```typescript
+import { {Entity} } from "@cocrepo/entity";
+import { Prisma, PrismaClient } from "@cocrepo/prisma";
+```
+
+### 2단계: Repository 클래스 작성
+
+### 3단계: 기본 CRUD 메서드 구현
+
+### 4단계: 관계 포함 조회 메서드 구현
+
+### 5단계: index.ts 등록
+
+---
+
+## 템플릿
+
+### 기본 템플릿
 
 ```typescript
 import { {Entity} } from "@cocrepo/entity";
@@ -192,50 +209,6 @@ export class {Entity}sRepository {
 }
 ```
 
----
-
-## 메서드 명명 규칙
-
-> **핵심**: Repository 메서드명은 "어떤 데이터를 가져오는지" 표현
-> - 도메인 목적(ForAuth, ForLogin 등)은 Service에서 표현
-> - **최상위 관계만 나열** (중첩 관계는 생략)
-
-| 패턴 | 설명 | 예시 |
-|------|------|------|
-| `findById` | ID로 단일 조회 | `findById(id)` |
-| `findBy{Condition}` | 조건으로 단일 조회 | `findByEmail(email)` |
-| `findBy{Key}With{Relations}` | 관계 포함 조회 (주요 관계 나열) | `findByIdWithTenantsAndProfiles(id)` |
-| `findManyBy{Condition}` | 조건으로 목록 조회 | `findManyBySpaceId(spaceId)` |
-| `create` | 생성 | `create(data)` |
-| `updateById` | ID로 수정 | `updateById(id, data)` |
-| `removeById` | 소프트 삭제 | `removeById(id)` |
-| `deleteById` | 물리 삭제 | `deleteById(id)` |
-
-### ❌ 잘못된 예시
-```typescript
-// 도메인 목적을 담은 메서드명 - Service 역할임
-findByEmailForAuth(email: string)
-findByIdForProfile(id: string)
-
-// 최상위 관계가 누락된 메서드명
-findByIdWithTenants(id: string)  // profiles도 포함하는데 누락
-
-// 중첩 관계까지 모두 나열 - 너무 김
-findByIdWithTenantsProfilesRolesCategoriesClassifications(id: string)
-```
-
-### ✅ 올바른 예시
-```typescript
-// 최상위 관계만 나열 (중첩 관계는 생략)
-findByEmailWithTenantsAndProfiles(email: string)  // role, category 등은 tenants 하위이므로 생략
-findByIdWithTenantsAndProfiles(id: string)
-findByIdWithOrdersAndPayments(id: string)
-```
-
----
-
-## 복잡한 쿼리 예시
-
 ### 관계 포함 조회
 
 ```typescript
@@ -313,19 +286,66 @@ async findManyBySpaceId(params: {
 - [ ] 조회 메서드는 필요한 원시 타입만 받음
 - [ ] `plainToInstance()` 로 Entity 변환
 - [ ] Logger 초기화
+- [ ] index.ts에 export 추가
 
 ---
 
-## Export 등록
+## 연관 에이전트
+
+| 구분 | 에이전트 | 설명 |
+|------|---------|------|
+| **선행** | entity-builder | Entity 클래스 생성 |
+| | schema-builder | Prisma 스키마 생성 |
+| **후행** | service-builder | Service 레이어 생성 |
+| **관련** | facade-builder | Facade 레이어 (Repository 직접 호출 금지) |
+
+---
+
+## 프로젝트별 참고사항
+
+### 파일 위치
+
+```
+packages/repository/src/{entity}.repository.ts
+```
+
+### 메서드 명명 규칙
+
+> **핵심**: Repository 메서드명은 "어떤 데이터를 가져오는지" 표현
+> - 도메인 목적(ForAuth, ForLogin 등)은 Service에서 표현
+> - **최상위 관계만 나열** (중첩 관계는 생략)
+
+| 패턴 | 설명 | 예시 |
+|------|------|------|
+| `findById` | ID로 단일 조회 | `findById(id)` |
+| `findBy{Condition}` | 조건으로 단일 조회 | `findByEmail(email)` |
+| `findBy{Key}With{Relations}` | 관계 포함 조회 (주요 관계 나열) | `findByIdWithTenantsAndProfiles(id)` |
+| `findManyBy{Condition}` | 조건으로 목록 조회 | `findManyBySpaceId(spaceId)` |
+| `create` | 생성 | `create(data)` |
+| `updateById` | ID로 수정 | `updateById(id, data)` |
+| `removeById` | 소프트 삭제 | `removeById(id)` |
+| `deleteById` | 물리 삭제 | `deleteById(id)` |
+
+### Prisma 타입 종류
+
+| 타입 | 용도 | 특징 |
+|------|------|------|
+| `{Model}UncheckedCreateInput` | 생성 | FK ID를 직접 전달 |
+| `{Model}UncheckedUpdateInput` | 수정 | FK ID를 직접 전달 |
+| `{Model}CreateManyInput` | 다중 생성 | Bulk insert용 |
+| `{Model}CreateInput` | 생성 | 관계를 통한 연결 (connect 등) |
+| `{Model}UpdateInput` | 수정 | 관계를 통한 연결 (connect 등) |
+
+> **Unchecked vs Checked**: Repository에서는 FK ID를 직접 다루므로 `Unchecked*` 타입 권장
+
+### Export 등록
 
 ```typescript
 // packages/repository/src/index.ts
 export { {Entity}sRepository } from "./{entity}.repository";
 ```
 
----
-
-## 관련 파일
+### 관련 파일
 
 - Service: `packages/service/src/{entity}.service.ts`
 - Entity: `packages/entity/src/{entity}.ts`

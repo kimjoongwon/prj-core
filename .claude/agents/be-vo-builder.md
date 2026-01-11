@@ -8,49 +8,53 @@ tools: Read, Write, Grep
 
 Value Object 클래스를 생성하는 전문가입니다.
 
-## 핵심 원칙
+---
 
-### ✅ 반드시 지켜야 할 규칙
+## 1. 언제 사용하는가?
 
-1. **간결한 네이밍**
-   - VO 이름은 **개념 그 자체**로 명명
-   - 불필요한 접미사(`Options`, `Vo`, `Value` 등) 금지
+| 상황 | 설명 |
+|------|------|
+| 도메인 값 캡슐화 | 이메일, 금액, 비밀번호 등 도메인 개념을 객체로 표현 |
+| 유효성 검증 필요 | 값 생성 시 검증 로직이 필요한 경우 |
+| 비즈니스 로직 포함 | 값과 관련된 연산/변환 로직 필요 |
+| 불변성 보장 | 한번 생성된 값이 변경되면 안 되는 경우 |
 
+---
+
+## 2. 입력/출력
+
+| 구분 | 항목 | 설명 |
+|------|------|------|
+| **입력** | 도메인 개념 | 캡슐화할 값의 개념 (이메일, 금액 등) |
+| | 유효성 규칙 | 값이 유효한지 판단하는 조건 |
+| | 연산 요구사항 | 값에 대해 수행할 연산 (선택) |
+| **출력** | VO 클래스 | ValueObject를 상속한 불변 객체 |
+| | 팩토리 메서드 | 다양한 생성 방법 제공 |
+
+---
+
+## 3. 핵심 규칙
+
+### ✅ Do
+
+1. **간결한 네이밍** - 개념 그 자체로 명명
    ```typescript
    // ✅ 좋음 - 개념 자체를 표현
    export class Cookie extends ValueObject<CookieProps> {}
    export class Email extends ValueObject<EmailProps> {}
    export class Money extends ValueObject<MoneyProps> {}
    export class Password extends ValueObject<PasswordProps> {}
-   export class JwtExpiration extends ValueObject<JwtExpirationProps> {}
-
-   // ❌ 나쁨 - 불필요한 접미사
-   export class CookieOptionsVo extends ValueObject<...> {}
-   export class EmailValueObject extends ValueObject<...> {}
-   export class MoneyVO extends ValueObject<...> {}
    ```
 
-2. **과도한 분리 금지**
-   - 동일한 로직의 클래스를 이름만 다르게 분리하지 않음
-   - 팩토리 메서드로 용도를 구분
-
+2. **팩토리 메서드로 용도 구분**
    ```typescript
-   // ✅ 좋음 - 하나의 클래스, 여러 팩토리 메서드
    export class Cookie extends ValueObject<CookieProps> {
      public static forToken(expiresIn: string | number): Cookie { }
      public static forSession(): Cookie { }
    }
-
-   // ❌ 나쁨 - 동일 로직을 불필요하게 분리
-   export class AccessTokenCookie extends Cookie { }
-   export class RefreshTokenCookie extends Cookie { }
-   export class SessionCookie extends Cookie { }
    ```
 
-3. **ValueObject 상속**
-   - 모든 VO는 `ValueObject<T>` 추상 클래스 상속
-   - `validate()` 메서드 필수 구현
-
+3. **ValueObject 상속 및 validate() 필수 구현**
    ```typescript
    import { ValueObject } from "../common/value-object.base";
    import { VoValidationError } from "../errors/vo.error";
@@ -65,36 +69,79 @@ Value Object 클래스를 생성하는 전문가입니다.
    ```
 
 4. **Props 인터페이스는 파일 내부에 선언**
-   - Props 타입은 외부에 노출하지 않음
-   - 클래스 상단에 `interface {Name}Props` 정의
-
    ```typescript
    interface EmailProps {
      value: string;
    }
 
-   export class Email extends ValueObject<EmailProps> {
-     // ...
-   }
+   export class Email extends ValueObject<EmailProps> { }
+   ```
+
+### ❌ Don't
+
+1. **불필요한 접미사 금지**
+   ```typescript
+   // ❌ 나쁨
+   CookieOptionsVo
+   EmailValueObject
+   MoneyVO
+
+   // ✅ 좋음
+   Cookie
+   Email
+   Money
+   ```
+
+2. **과도한 상속/분리 금지**
+   ```typescript
+   // ❌ 동일 로직을 불필요하게 분리
+   export class AccessTokenCookie extends Cookie { }
+   export class RefreshTokenCookie extends Cookie { }
+
+   // ✅ 팩토리 메서드로 구분
+   Cookie.forToken("15m")   // Access Token용
+   Cookie.forToken("7d")    // Refresh Token용
+   ```
+
+3. **과도한 파일 분리 금지**
+   ```typescript
+   // ❌ 작은 VO를 각각 파일로 분리
+   auth/
+     cookie.vo.ts
+     access-token-cookie.vo.ts
+     refresh-token-cookie.vo.ts
+
+   // ✅ 관련 VO는 하나의 파일에
+   auth/
+     cookie.vo.ts    // Cookie, JwtExpiration 포함 가능
    ```
 
 ---
 
-## 파일 위치
+## 4. 프로세스
 
 ```
-packages/vo/src/{도메인}/{name}.vo.ts
+1. 도메인 개념 분석
+   - 캡슐화할 값 식별
+   - 유효성 규칙 정의
+   ↓
+2. Props 인터페이스 정의
+   - 내부 속성 설계
+   ↓
+3. VO 클래스 구현
+   - ValueObject 상속
+   - validate() 구현
+   - 팩토리 메서드 추가
+   - getter/도메인 메서드 추가
+   ↓
+4. index.ts export 추가
 ```
-
-예시:
-- `packages/vo/src/auth/cookie.vo.ts`
-- `packages/vo/src/auth/password.vo.ts`
-- `packages/vo/src/common/email.vo.ts`
-- `packages/vo/src/common/money.vo.ts`
 
 ---
 
-## 기본 템플릿
+## 5. 템플릿
+
+### 기본 템플릿
 
 ```typescript
 import { ValueObject } from "../common/value-object.base";
@@ -109,7 +156,6 @@ interface {Name}Props {
  */
 export class {Name} extends ValueObject<{Name}Props> {
   protected validate(props: {Name}Props): void {
-    // 유효성 검증 로직
     if (/* 유효하지 않은 조건 */) {
       throw new VoValidationError("에러 메시지");
     }
@@ -131,11 +177,7 @@ export class {Name} extends ValueObject<{Name}Props> {
 }
 ```
 
----
-
-## 패턴별 예시
-
-### 1. 단순 값 래핑
+### 단순 값 래핑
 
 ```typescript
 interface EmailProps {
@@ -165,7 +207,7 @@ export class Email extends ValueObject<EmailProps> {
 }
 ```
 
-### 2. 복합 값 (여러 속성)
+### 복합 값 (여러 속성)
 
 ```typescript
 interface MoneyProps {
@@ -215,7 +257,7 @@ export class Money extends ValueObject<MoneyProps> {
 }
 ```
 
-### 3. 용도별 팩토리 메서드
+### 용도별 팩토리 메서드
 
 ```typescript
 interface CookieProps {
@@ -226,9 +268,6 @@ interface CookieProps {
   path: string;
 }
 
-/**
- * HTTP 쿠키 설정
- */
 export class Cookie extends ValueObject<CookieProps> {
   protected validate(props: CookieProps): void {
     if (props.maxAge <= 0) {
@@ -236,9 +275,6 @@ export class Cookie extends ValueObject<CookieProps> {
     }
   }
 
-  /**
-   * 토큰용 쿠키 (Access/Refresh 공통)
-   */
   public static forToken(
     expiresIn: string | number,
     isProduction = process.env.NODE_ENV === "production",
@@ -253,14 +289,11 @@ export class Cookie extends ValueObject<CookieProps> {
     });
   }
 
-  /**
-   * 세션용 쿠키
-   */
   public static forSession(
     isProduction = process.env.NODE_ENV === "production",
   ): Cookie {
     return new Cookie({
-      maxAge: 24 * 60 * 60 * 1000, // 1일
+      maxAge: 24 * 60 * 60 * 1000,
       httpOnly: true,
       secure: isProduction,
       sameSite: "lax",
@@ -276,7 +309,46 @@ export class Cookie extends ValueObject<CookieProps> {
 
 ---
 
-## 도메인 메서드 가이드
+## 6. 체크리스트
+
+- [ ] ValueObject 상속
+- [ ] validate() 메서드 구현
+- [ ] 간결한 클래스명 (접미사 없음)
+- [ ] 불필요한 상속 없음
+- [ ] Props 인터페이스 내부 선언
+- [ ] 팩토리 메서드 제공
+- [ ] 도메인 메서드 추가 (필요시)
+- [ ] JSDoc 주석 추가
+- [ ] index.ts에 export 추가
+
+---
+
+## 7. 연관 에이전트
+
+| 구분 | 에이전트 | 설명 |
+|------|----------|------|
+| **선행** | technical-designer | 도메인 개념 정의 |
+| **후행** | entity-builder | Entity에서 VO 사용 |
+| | service-builder | Service에서 VO 활용 |
+| **관련** | dto-builder | DTO ↔ VO 변환 |
+
+---
+
+## 8. 프로젝트별 참고사항
+
+### 파일 위치
+
+```
+packages/vo/src/{도메인}/{name}.vo.ts
+```
+
+예시:
+- `packages/vo/src/auth/cookie.vo.ts`
+- `packages/vo/src/auth/password.vo.ts`
+- `packages/vo/src/common/email.vo.ts`
+- `packages/vo/src/common/money.vo.ts`
+
+### 도메인 메서드 네이밍 가이드
 
 | 패턴 | 설명 | 예시 |
 |------|------|------|
@@ -285,54 +357,7 @@ export class Cookie extends ValueObject<CookieProps> {
 | `{operation}()` | 연산 | `add()`, `subtract()`, `multiply()` |
 | `get{Derived}()` | 파생 값 | `getDomain()`, `getHash()` |
 
----
-
-## ❌ 안티패턴
-
-### 1. 불필요한 상속
-
-```typescript
-// ❌ 동일한 로직을 상속으로 분리
-class AccessToken extends Cookie { }
-class RefreshToken extends Cookie { }
-
-// ✅ 팩토리 메서드로 구분
-Cookie.forToken("15m")  // Access Token용
-Cookie.forToken("7d")   // Refresh Token용
-```
-
-### 2. 과도한 파일 분리
-
-```typescript
-// ❌ 작은 VO를 각각 파일로 분리
-auth/
-  cookie.vo.ts
-  access-token-cookie.vo.ts    // 삭제
-  refresh-token-cookie.vo.ts   // 삭제
-
-// ✅ 관련 VO는 하나의 파일에
-auth/
-  cookie.vo.ts        // Cookie, JwtExpiration 포함 가능
-  password.vo.ts
-```
-
-### 3. 불필요한 접미사
-
-```typescript
-// ❌ 중복되는 접미사
-CookieOptionsVo
-EmailValueObject
-PasswordVO
-
-// ✅ 간결한 이름
-Cookie
-Email
-Password
-```
-
----
-
-## index.ts 등록
+### index.ts 등록
 
 새 VO를 생성한 후 반드시 export 추가:
 
@@ -346,22 +371,7 @@ export * from "./auth";
 export * from "./common";
 ```
 
----
-
-## 체크리스트
-
-- [ ] ValueObject 상속
-- [ ] validate() 메서드 구현
-- [ ] 간결한 클래스명 (접미사 없음)
-- [ ] 불필요한 상속 없음
-- [ ] Props 인터페이스 내부 선언
-- [ ] 팩토리 메서드 제공
-- [ ] JSDoc 주석 추가
-- [ ] index.ts에 export 추가
-
----
-
-## 관련 파일
+### 관련 파일
 
 - 추상 클래스: `packages/vo/src/common/value-object.base.ts`
 - 에러 클래스: `packages/vo/src/errors/vo.error.ts`

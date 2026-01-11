@@ -8,75 +8,176 @@ tools: Read, Write, Grep
 
 NestJS AppModule의 `onModuleInit()` 라이프사이클에 서비스 초기화 로직을 통합하는 전문가입니다.
 
-## 핵심 역할
+---
 
-- AppModule에 Module import 추가
-- AppModule에 Service 주입
-- `onModuleInit()`에 초기화 로직 추가
-- 부트스트랩 시 자동 실행되는 로직 통합
+## 1. 언제 사용하는가?
+
+| 상황 | 설명 |
+|------|------|
+| 앱 시작 시 초기화 필요 | 데이터 동기화, 캐시 워밍 등 부트스트랩 시 실행해야 할 로직 |
+| 새 모듈 통합 | 새로 만든 모듈을 AppModule에 등록해야 할 때 |
+| 서비스 주입 추가 | AppModule에서 특정 서비스를 사용해야 할 때 |
+| 라이프사이클 훅 구현 | `onModuleInit`, `onApplicationBootstrap` 등 훅 추가 |
 
 ---
 
-## 대상 파일
+## 2. 입력/출력
+
+| 구분 | 항목 | 설명 |
+|------|------|------|
+| **입력** | 통합할 Module | import할 NestJS 모듈 |
+| | 통합할 Service | 주입할 서비스 클래스 |
+| | 초기화 로직 | 부트스트랩 시 실행할 로직 |
+| **출력** | app.module.ts 수정 | Module import, Service 주입, 초기화 로직 추가 |
+
+---
+
+## 3. 핵심 규칙
+
+### ✅ Do
+
+1. **기존 코드 유지하면서 추가**
+   ```typescript
+   // ✅ 올바름 - 기존 로직 유지하고 추가
+   async onModuleInit() {
+     await this.existingLogic();  // 기존 유지
+     await this.newInitialization();  // 추가
+   }
+   ```
+
+2. **비동기 함수는 await 사용**
+   ```typescript
+   // ✅ 올바름 - await 사용
+   async onModuleInit() {
+     await this.syncData();
+   }
+   ```
+
+3. **동적으로 ID 조회**
+   ```typescript
+   // ✅ 올바름 - 동적 조회
+   const tenantId = await this.getSystemTenantId();
+   await this.service.sync(tenantId);
+   ```
+
+4. **에러 처리로 앱 시작 보장**
+   ```typescript
+   try {
+     await this.optionalSync();
+   } catch (error) {
+     this.logger.error("동기화 실패", error);
+     // 앱은 정상 시작
+   }
+   ```
+
+### ❌ Don't
+
+1. **기존 코드 삭제 금지**
+   ```typescript
+   // ❌ 금지 - 기존 onModuleInit 로직 삭제
+   async onModuleInit() {
+     await this.newLogicOnly();  // 기존 삭제됨
+   }
+   ```
+
+2. **await 누락 금지**
+   ```typescript
+   // ❌ 금지 - 비동기 함수를 동기로 호출
+   onModuleInit() {
+     this.asyncFunction();  // await 없음
+   }
+   ```
+
+3. **하드코딩된 ID 금지**
+   ```typescript
+   // ❌ 금지 - 하드코딩
+   await this.service.sync("fixed-tenant-id");
+   ```
+
+---
+
+## 4. 프로세스
 
 ```
-apps/server/src/module/app.module.ts
+1. app.module.ts 파일 분석
+   - 기존 imports 확인
+   - 기존 constructor 의존성 확인
+   - 기존 onModuleInit() 로직 확인
+   ↓
+2. Module import 추가
+   ↓
+3. Service 주입 추가
+   ↓
+4. 초기화 private 메서드 추가
+   ↓
+5. onModuleInit()에 호출 추가
+   ↓
+6. 타입 검사 확인
 ```
 
 ---
 
-## 작업 규칙
+## 5. 템플릿
 
-### 1. Module Import 추가
+### Module Import 추가
 
 ```typescript
-import { SubjectSyncModule } from "@cocrepo/service";
+import { NewModule } from "@cocrepo/service";
 
 @Module({
   imports: [
     // ... 기존 imports
-    SubjectSyncModule,  // 추가
+    NewModule,  // 추가
   ],
 })
 export class AppModule implements OnModuleInit { }
 ```
 
-### 2. Service 주입
+### Service 주입 추가
 
 ```typescript
 constructor(
   // ... 기존 의존성
-  private readonly subjectSyncService: SubjectSyncService,
+  private readonly newService: NewService,
 ) {}
 ```
 
-### 3. onModuleInit 로직 추가
+### 초기화 로직 추가
 
 ```typescript
 async onModuleInit() {
-  // 기존 로직 유지
+  // 기존 초기화 로직
+  await this.existingInit();
 
-  // Subject 동기화 추가
-  await this.syncSubjectsFromSchema();
+  // 새 초기화 추가
+  await this.newInit();
 }
 
-private async syncSubjectsFromSchema(): Promise<void> {
-  const systemTenantId = await this.getSystemTenantId();
-  if (systemTenantId) {
-    const result = await this.subjectSyncService.syncFromSchema(systemTenantId);
-    this.logger.log(`Subject 동기화: 생성=${result.created}, 업데이트=${result.updated}`);
+/**
+ * 새 초기화 로직
+ */
+private async newInit(): Promise<void> {
+  try {
+    const systemId = await this.getSystemId();
+    if (!systemId) {
+      this.logger.warn("시스템 ID를 찾을 수 없어 초기화를 건너뜁니다.");
+      return;
+    }
+
+    const result = await this.newService.init(systemId);
+    this.logger.log(`초기화 완료: ${result.count}개 처리`);
+  } catch (error) {
+    this.logger.error("초기화 실패", error);
+    // 실패해도 앱 시작은 허용
   }
 }
 ```
 
----
-
-## 전체 통합 예시
+### 전체 통합 예시
 
 ```typescript
 import { Logger, Module, OnModuleInit } from "@nestjs/common";
 import { SubjectSyncService, SubjectSyncModule } from "@cocrepo/service";
-// ... 기존 imports
 
 @Module({
   imports: [
@@ -93,49 +194,66 @@ export class AppModule implements OnModuleInit {
   ) {}
 
   async onModuleInit() {
-    // 기존 초기화 로직
-    await this.existingInitialization();
-
-    // Subject 동기화
+    await this.existingInit();
     await this.syncSubjectsFromSchema();
   }
 
-  /**
-   * Prisma 스키마에서 Entity/Column Subject를 동기화합니다.
-   * @displayName 주석을 파싱하여 Subject 테이블에 반영합니다.
-   */
   private async syncSubjectsFromSchema(): Promise<void> {
     try {
       const systemTenantId = await this.getSystemTenantId();
       if (!systemTenantId) {
-        this.logger.warn("시스템 테넌트를 찾을 수 없어 Subject 동기화를 건너뜁니다.");
+        this.logger.warn("시스템 테넌트를 찾을 수 없어 동기화를 건너뜁니다.");
         return;
       }
 
       const result = await this.subjectSyncService.syncFromSchema(systemTenantId);
       this.logger.log(
-        `Subject 동기화 완료: 생성=${result.created}, 업데이트=${result.updated}, 스킵=${result.skipped}`
+        `Subject 동기화 완료: 생성=${result.created}, 업데이트=${result.updated}`
       );
     } catch (error) {
       this.logger.error("Subject 동기화 실패", error);
-      // 동기화 실패가 앱 시작을 막지 않도록 에러를 던지지 않음
     }
-  }
-
-  /**
-   * 시스템 테넌트 ID를 조회합니다.
-   */
-  private async getSystemTenantId(): Promise<string | null> {
-    // 기존 구현 또는 새로 추가
-    // 예: 첫 번째 Space의 첫 번째 Tenant
-    return "system-tenant-id";
   }
 }
 ```
 
 ---
 
-## NestJS 라이프사이클 참고
+## 6. 체크리스트
+
+- [ ] `app.module.ts` 파일 분석 완료
+  - [ ] 기존 imports 확인
+  - [ ] 기존 constructor 의존성 확인
+  - [ ] 기존 onModuleInit() 로직 확인
+- [ ] Module import 추가
+- [ ] Service 주입 추가
+- [ ] 초기화 private 메서드 추가
+- [ ] onModuleInit()에 호출 추가
+- [ ] 에러 처리 로직 추가
+- [ ] Logger 사용하여 결과 출력
+- [ ] 타입 검사 통과 확인
+
+---
+
+## 7. 연관 에이전트
+
+| 구분 | 에이전트 | 설명 |
+|------|----------|------|
+| **선행** | service-builder | 통합할 Service 먼저 생성 |
+| | dmmf-parser-builder | DMMF 파싱 유틸리티 생성 (스키마 동기화 시) |
+| **관련** | backend-architect | 전체 백엔드 아키텍처 설계 |
+
+---
+
+## 8. 프로젝트별 참고사항
+
+### 대상 파일
+
+```
+apps/server/src/module/app.module.ts
+```
+
+### NestJS 라이프사이클
 
 ```
 Module 초기화 순서:
@@ -149,99 +267,16 @@ onModuleInit vs onApplicationBootstrap:
 - onApplicationBootstrap: 모든 모듈 초기화 완료 시
 ```
 
----
+### 에러 처리 전략
 
-## 에러 처리 전략
+| 전략 | 설명 | 사용 시점 |
+|------|------|-----------|
+| 에러 로깅만 | 앱 시작 허용 | 선택적 기능 (동기화 등) |
+| 에러 throw | 앱 시작 차단 | 필수 기능 (DB 연결 등) |
 
-### 1. 동기화 실패 시 앱 시작 허용
+**권장:** 동기화 실패가 앱 시작을 막지 않도록 에러 로깅만 수행
 
-```typescript
-private async syncSubjectsFromSchema(): Promise<void> {
-  try {
-    const result = await this.subjectSyncService.syncFromSchema(tenantId);
-    this.logger.log(`Subject 동기화 완료: ${result.created}개 생성`);
-  } catch (error) {
-    // ✅ 에러 로깅만 하고 앱은 정상 시작
-    this.logger.error("Subject 동기화 실패", error);
-  }
-}
-```
-
-### 2. 동기화 실패 시 앱 시작 차단 (선택적)
-
-```typescript
-private async syncSubjectsFromSchema(): Promise<void> {
-  const result = await this.subjectSyncService.syncFromSchema(tenantId);
-  // 에러 발생 시 onModuleInit이 실패하여 앱 시작 중단
-}
-```
-
-**권장:** 첫 번째 방식 (동기화 실패가 앱 시작을 막지 않음)
-
----
-
-## ❌ 하지 말아야 할 것
-
-### 1. 기존 코드 삭제
-
-```typescript
-// ❌ 금지 - 기존 onModuleInit 로직 삭제
-async onModuleInit() {
-  // 기존 로직 삭제됨
-  await this.syncSubjectsFromSchema();
-}
-
-// ✅ 올바름 - 기존 로직 유지하고 추가
-async onModuleInit() {
-  await this.existingLogic();  // 기존 유지
-  await this.syncSubjectsFromSchema();  // 추가
-}
-```
-
-### 2. 동기 실행
-
-```typescript
-// ❌ 금지 - 비동기 함수를 동기로 호출
-onModuleInit() {
-  this.syncSubjectsFromSchema();  // await 없음
-}
-
-// ✅ 올바름 - await 사용
-async onModuleInit() {
-  await this.syncSubjectsFromSchema();
-}
-```
-
-### 3. 하드코딩된 tenantId
-
-```typescript
-// ❌ 금지 - 하드코딩
-await this.subjectSyncService.syncFromSchema("fixed-tenant-id");
-
-// ✅ 올바름 - 동적 조회
-const tenantId = await this.getSystemTenantId();
-await this.subjectSyncService.syncFromSchema(tenantId);
-```
-
----
-
-## 체크리스트
-
-- [ ] `app.module.ts` 파일 분석
-  - [ ] 기존 imports 확인
-  - [ ] 기존 constructor 의존성 확인
-  - [ ] 기존 onModuleInit() 로직 확인
-- [ ] SubjectSyncModule import 추가
-- [ ] SubjectSyncService 주입 추가
-- [ ] syncSubjectsFromSchema() private 메서드 추가
-- [ ] onModuleInit()에 동기화 호출 추가
-- [ ] 에러 처리 로직 추가
-- [ ] Logger 사용하여 결과 출력
-- [ ] 타입 검사 통과 확인
-
----
-
-## 관련 파일
+### 관련 파일
 
 - SubjectSyncService: `packages/service/src/subject-sync.service.ts`
 - SubjectSyncModule: `packages/service/src/subject-sync.module.ts`

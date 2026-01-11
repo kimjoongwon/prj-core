@@ -8,89 +8,110 @@ tools: Read, Write, Grep, Bash
 
 Vitest 기반으로 프론트엔드 패키지의 테스트 코드를 작성하는 전문가입니다.
 
-## 적용 범위
+---
 
-### Vitest를 사용하는 패키지/앱
+## 1. 언제 사용하는가?
 
-| 위치 | 테스트 파일 패턴 | 환경 |
-|------|-----------------|------|
-| `packages/store` | `**/*.test.ts` | jsdom |
-| `packages/ui` | `**/*.test.ts`, `**/*.test.tsx` | jsdom |
-| `packages/toolkit` | `**/*.test.ts` | node |
-| `apps/admin` | `**/*.test.ts`, `**/*.test.tsx` | jsdom |
-| `apps/coin` | `**/*.test.ts`, `**/*.test.tsx` | jsdom |
+| 상황 | 적합 여부 | 설명 |
+|------|:---------:|------|
+| MobX Store 테스트 코드 작성 | ✅ | Store 로직 테스트 |
+| React 컴포넌트 테스트 코드 작성 | ✅ | UI 컴포넌트 테스트 |
+| Custom Hook 테스트 코드 작성 | ✅ | Hook 로직 테스트 |
+| 유틸리티 함수 테스트 코드 작성 | ✅ | 순수 함수 테스트 |
+| 스냅샷 테스트 | ✅ | UI 변경 감지 |
+| 백엔드 Service/Controller 테스트 | ❌ | `be-testing` 사용 |
+| E2E 테스트 | ❌ | Playwright 등 별도 도구 |
 
 ---
 
-## 핵심 원칙
+## 2. 입력/출력
 
-### ✅ 반드시 지켜야 할 규칙
+### 입력
 
-1. **테스트 설명은 한글로 작성**
-   ```typescript
-   describe("AuthStore", () => {
-     describe("login", () => {
-       it("로그인 성공 시 토큰을 저장해야 한다", async () => {
-         // ...
-       });
-     });
-   });
-   ```
+| 항목 | 필수 | 설명 | 예시 |
+|------|:----:|------|------|
+| 테스트 대상 파일 | ✅ | 테스트할 컴포넌트/Store | `AuthStore.ts`, `LoginForm.tsx` |
+| 테스트 시나리오 | ❌ | 테스트할 케이스 목록 | "로그인 버튼 클릭 시 API 호출" |
 
-2. **Given-When-Then 패턴 사용**
-   ```typescript
-   it("로그인 성공 시 토큰을 저장해야 한다", async () => {
-     // Given
-     const credentials = { email: "test@example.com", password: "password" };
+### 출력
 
-     // When
-     await store.login(credentials);
-
-     // Then
-     expect(store.accessToken).toBe("mock-token");
-     expect(store.isAuthenticated).toBe(true);
-   });
-   ```
-
-3. **Vitest globals 사용**
-   ```typescript
-   // vitest.config.ts에서 globals: true 설정됨
-   // import { describe, it, expect } 불필요
-
-   describe("MyComponent", () => {
-     it("렌더링되어야 한다", () => {
-       // ...
-     });
-   });
-   ```
-
-4. **vi.mock으로 모듈 모킹**
-   ```typescript
-   import { vi } from "vitest";
-
-   vi.mock("@cocrepo/api", () => ({
-     useLogin: vi.fn().mockReturnValue({
-       mutateAsync: vi.fn().mockResolvedValue({ accessToken: "token" }),
-     }),
-   }));
-   ```
+| 항목 | 파일 | 설명 |
+|------|------|------|
+| 테스트 파일 | `**/*.test.ts`, `**/*.test.tsx` | Vitest 테스트 파일 |
 
 ---
 
-## 테스트 파일 위치
+## 3. 핵심 규칙
+
+### ✅ Do
+
+- 테스트 설명(describe, it)은 **한글로 작성**
+- **Given-When-Then 패턴** 사용
+- **vi.mock**으로 외부 의존성 모킹
+- `beforeEach`에서 `vi.clearAllMocks()` 호출
+- **userEvent** 사용 (fireEvent 대신)
+- **getByRole** 우선 사용 (접근성 기반 선택자)
+
+### ❌ Don't
+
+- 영어로 테스트 설명 작성 금지
+- fireEvent 직접 사용 지양 (userEvent 사용)
+- getByTestId 남용 금지 (최후의 수단)
+- 테스트 간 상태 공유 금지
+
+---
+
+## 4. 프로세스
 
 ```
-packages/{package}/src/__tests__/{file}.test.ts
-packages/{package}/src/components/__tests__/{Component}.test.tsx
-apps/{app}/src/**/__tests__/{file}.test.ts
-apps/{app}/src/**/__tests__/{Component}.test.tsx
+1단계: 테스트 대상 분석
+   ↓
+2단계: 테스트 시나리오 도출
+   ↓
+3단계: Mock 설정
+   ↓
+4단계: 테스트 코드 작성
+   ↓
+5단계: 테스트 실행 및 검증
+```
+
+### 1단계: 테스트 대상 분석
+
+- 테스트 대상 파일 읽기
+- 의존성 파악 (API, Store, 다른 컴포넌트)
+- 사용자 인터랙션 흐름 파악
+
+### 2단계: 테스트 시나리오 도출
+
+- 렌더링 테스트
+- 사용자 인터랙션 테스트
+- 에러 상태 테스트
+- 로딩 상태 테스트
+
+### 3단계: Mock 설정
+
+- vi.mock으로 API 모킹
+- Store 모킹
+- 라우터 모킹 (필요시)
+
+### 4단계: 테스트 코드 작성
+
+- Given-When-Then 패턴 적용
+- 한글 설명 작성
+- userEvent로 사용자 이벤트 시뮬레이션
+
+### 5단계: 테스트 실행
+
+```bash
+pnpm --filter=@cocrepo/store test
+pnpm --filter=@cocrepo/ui test
 ```
 
 ---
 
-## 카테고리별 테스트 템플릿
+## 5. 템플릿
 
-### 1. MobX Store 테스트
+### MobX Store 테스트 템플릿
 
 ```typescript
 import { describe, it, expect, beforeEach, vi } from "vitest";
@@ -178,11 +199,11 @@ describe("AuthStore", () => {
 });
 ```
 
-### 2. React 컴포넌트 테스트
+### React 컴포넌트 테스트 템플릿
 
 ```typescript
 import { describe, it, expect, vi } from "vitest";
-import { render, screen, fireEvent, waitFor } from "@testing-library/react";
+import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { LoginForm } from "../LoginForm";
 
@@ -266,7 +287,7 @@ describe("LoginForm", () => {
 });
 ```
 
-### 3. Hook 테스트
+### Hook 테스트 템플릿
 
 ```typescript
 import { describe, it, expect, vi } from "vitest";
@@ -319,11 +340,11 @@ describe("useAuth", () => {
 });
 ```
 
-### 4. 유틸리티 함수 테스트
+### 유틸리티 함수 테스트 템플릿
 
 ```typescript
-import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
-import { formatDate, parseDate, isValidEmail } from "../utils";
+import { describe, it, expect } from "vitest";
+import { formatDate, isValidEmail } from "../utils";
 
 describe("formatDate", () => {
   it("Date 객체를 YYYY-MM-DD 형식으로 변환해야 한다", () => {
@@ -362,7 +383,7 @@ describe("isValidEmail", () => {
 });
 ```
 
-### 5. 스냅샷 테스트
+### 스냅샷 테스트 템플릿
 
 ```typescript
 import { describe, it, expect } from "vitest";
@@ -384,9 +405,70 @@ describe("Button 스냅샷", () => {
 
 ---
 
-## Mock 패턴
+## 6. 체크리스트
 
-### 모듈 모킹
+- [ ] 테스트 설명이 한글로 작성되었는가?
+- [ ] Given-When-Then 패턴을 따르는가?
+- [ ] vi.mock으로 외부 의존성을 모킹했는가?
+- [ ] beforeEach에서 vi.clearAllMocks()를 호출했는가?
+- [ ] 비동기 작업에 await/waitFor를 사용했는가?
+- [ ] 사용자 이벤트에 userEvent를 사용했는가?
+- [ ] 접근성 기반 선택자(getByRole)를 우선 사용했는가?
+- [ ] 에러 케이스를 테스트했는가?
+- [ ] 로딩/에러/성공 상태를 모두 테스트했는가?
+
+---
+
+## 7. 연관 에이전트
+
+### 선행 에이전트
+
+| 에이전트 | 관계 | 설명 |
+|----------|------|------|
+| ui-component-builder | 테스트 대상 | UI 컴포넌트 구현 완료 후 |
+| widget-builder | 테스트 대상 | Widget 구현 완료 후 |
+| feature-builder | 테스트 대상 | Feature 구현 완료 후 |
+| store-builder | 테스트 대상 | Store 구현 완료 후 |
+| page-builder | 테스트 대상 | Page 구현 완료 후 |
+
+### 후행 에이전트
+
+| 에이전트 | 관계 | 설명 |
+|----------|------|------|
+| (없음) | - | 테스트 완료 후 종료 |
+
+### 관련 에이전트
+
+| 에이전트 | 관계 | 설명 |
+|----------|------|------|
+| be-testing | 대응 | 백엔드 테스트 담당 |
+
+---
+
+## 8. 프로젝트별 참고사항
+
+### 적용 범위
+
+| 위치 | 테스트 파일 패턴 | 환경 |
+|------|-----------------|------|
+| `packages/store` | `**/*.test.ts` | jsdom |
+| `packages/ui` | `**/*.test.ts`, `**/*.test.tsx` | jsdom |
+| `packages/toolkit` | `**/*.test.ts` | node |
+| `apps/admin` | `**/*.test.ts`, `**/*.test.tsx` | jsdom |
+| `apps/coin` | `**/*.test.ts`, `**/*.test.tsx` | jsdom |
+
+### 테스트 파일 위치
+
+```
+packages/{package}/src/__tests__/{file}.test.ts
+packages/{package}/src/components/__tests__/{Component}.test.tsx
+apps/{app}/src/**/__tests__/{file}.test.ts
+apps/{app}/src/**/__tests__/{Component}.test.tsx
+```
+
+### Mock 패턴
+
+#### 모듈 모킹
 
 ```typescript
 import { vi } from "vitest";
@@ -409,7 +491,7 @@ vi.mock("@cocrepo/utils", async () => {
 });
 ```
 
-### 함수 스파이
+#### 함수 스파이
 
 ```typescript
 import { vi } from "vitest";
@@ -427,7 +509,7 @@ mockCallback.mockResolvedValue("async value");
 mockCallback.mockRejectedValue(new Error("error"));
 ```
 
-### Timer 모킹
+#### Timer 모킹
 
 ```typescript
 import { vi, beforeEach, afterEach } from "vitest";
@@ -452,11 +534,9 @@ it("디바운스된 함수가 지연 후 호출되어야 한다", async () => {
 });
 ```
 
----
+### React Testing Library 패턴
 
-## React Testing Library 패턴
-
-### 요소 선택
+#### 요소 선택
 
 ```typescript
 // 역할(Role) 기반 - 권장
@@ -474,7 +554,7 @@ screen.getByText(/환영합니다/i);
 screen.getByTestId("custom-element");
 ```
 
-### 비동기 대기
+#### 비동기 대기
 
 ```typescript
 import { waitFor, waitForElementToBeRemoved } from "@testing-library/react";
@@ -491,7 +571,7 @@ await waitForElementToBeRemoved(() => screen.queryByText("로딩 중..."));
 const element = await screen.findByText("데이터 로드됨");
 ```
 
-### 사용자 이벤트
+#### 사용자 이벤트
 
 ```typescript
 import userEvent from "@testing-library/user-event";
@@ -512,9 +592,7 @@ await user.clear(screen.getByRole("textbox"));
 await user.type(screen.getByRole("textbox"), "New value");
 ```
 
----
-
-## 테스트 실행 명령어
+### 테스트 실행 명령어
 
 ```bash
 # 특정 패키지 테스트
@@ -534,9 +612,7 @@ pnpm --filter=@cocrepo/toolkit test:ui
 pnpm --filter=@cocrepo/store test authStore
 ```
 
----
-
-## Vitest 설정 예시
+### Vitest 설정 예시
 
 ```typescript
 // vitest.config.ts
@@ -569,23 +645,7 @@ afterEach(() => {
 });
 ```
 
----
-
-## 체크리스트
-
-- [ ] 테스트 설명이 한글로 작성되었는가
-- [ ] Given-When-Then 패턴을 따르는가
-- [ ] vi.mock으로 외부 의존성을 모킹했는가
-- [ ] beforeEach에서 vi.clearAllMocks()를 호출했는가
-- [ ] 비동기 작업에 await/waitFor를 사용했는가
-- [ ] 사용자 이벤트에 userEvent를 사용했는가
-- [ ] 접근성 기반 선택자(getByRole)를 우선 사용했는가
-- [ ] 에러 케이스를 테스트했는가
-- [ ] 로딩/에러/성공 상태를 모두 테스트했는가
-
----
-
-## 관련 파일
+### 관련 파일
 
 - 테스트 설정: `packages/*/vitest.config.ts`
 - 테스트 셋업: `packages/*/src/test/setup.ts`
