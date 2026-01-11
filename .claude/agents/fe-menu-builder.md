@@ -460,3 +460,255 @@ const SideNav = observer(() => {
 
 **현재 프로젝트 기획:**
 - `.claude/plans/2025-12-30-AdminLayoutAndMenuSystem/`
+
+---
+
+## 12. Admin 메뉴 트리 (전체)
+
+### 1depth 메뉴 목록
+
+| 순서 | ID | 라벨 | 아이콘 | Aggregate Root | 설명 |
+|------|-----|------|--------|----------------|------|
+| 1 | dashboard | 대시보드 | LayoutDashboard | - | 주요 지표 및 현황 요약 |
+| 2 | users | 회원 | Users | User, Profile, Tenant | 회원 정보, 등급, 탈퇴 관리 |
+| 3 | reservations | 예약 | CalendarCheck | Reservation | 예약 조회, 캘린더, 통계 |
+| 4 | notifications | 알림 | Bell | Notification | 알림 발송 및 내역 관리 |
+| 5 | inquiries | 문의 | MessageSquare | Inquiry | 고객 문의 및 FAQ 관리 |
+| 6 | contents | 콘텐츠 | FileText | Content, Post | 공지, 배너, 이벤트, 약관 |
+| 7 | templates | 템플릿 | LayoutTemplate | MessageTemplate | SMS/이메일/푸시 템플릿 |
+| 8 | sessions | 세션 | Clock | Timeline, Session, Program | 타임라인, 세션, 프로그램, 루틴 |
+| 9 | grounds | 시설 | Building | Ground, Space | 시설 정보, 프로그램 정의, 장비 |
+| 10 | admins | 관리자 | UserCog | Admin | 관리자 목록 및 초대 관리 |
+| 11 | roles | 역할/권한 | Shield | Role, Ability | 역할 목록 및 권한 설정 |
+
+---
+
+### 대시보드 (dashboard)
+
+> 주요 지표 및 현황 요약 화면
+
+- 하위 메뉴 없음 (단일 페이지)
+- 경로: `/dashboard`
+
+---
+
+### 회원 (users)
+
+> 회원 정보 조회, 등급 관리, 탈퇴 처리
+
+| 2depth | 경로 | 설명 |
+|--------|------|------|
+| 회원 목록 | /users | 전체 회원 조회 |
+| 등급 관리 | /users/grades | 회원 등급 설정 |
+| 탈퇴 회원 | /users/withdrawn | 탈퇴 처리된 회원 |
+
+**3depth (회원 목록):**
+- `/users` - 전체
+- `/users/active` - 활성 회원
+- `/users/dormant` - 휴면 회원
+- `/users/pending-withdrawal` - 탈퇴대기
+
+---
+
+### 예약 (reservations)
+
+> 예약 조회, 캘린더 뷰, 예약 통계
+
+| 2depth | 경로 | 설명 |
+|--------|------|------|
+| 오늘 예약 | /reservations/today | 금일 예약 현황 |
+| 예약 목록 | /reservations | 전체 예약 조회 |
+| 캘린더 | /reservations/calendar | 캘린더 뷰 |
+| 통계 | /reservations/stats | 예약 통계 |
+
+**3depth (예약 목록):**
+- `/reservations` - 전체
+- `/reservations/pending` - 대기중
+- `/reservations/confirmed` - 확정
+- `/reservations/cancelled` - 취소
+
+---
+
+### 알림 (notifications)
+
+> 알림 발송 및 발송 내역 관리
+
+| 2depth | 경로 | 설명 |
+|--------|------|------|
+| 알림 발송 | /notifications/send | 새 알림 발송 |
+| 발송 내역 | /notifications/history | 발송 기록 조회 |
+| 알림 템플릿 | /notifications/templates | 알림용 템플릿 |
+| 알림 설정 | /notifications/settings | 발송 설정 |
+
+**3depth (발송 내역):**
+- `/notifications/history` - 전체
+- `/notifications/history/sms` - SMS
+- `/notifications/history/email` - 이메일
+- `/notifications/history/push` - 푸시
+
+---
+
+### 문의 (inquiries)
+
+> 고객 문의 접수 및 답변 관리
+
+| 2depth | 경로 | 설명 |
+|--------|------|------|
+| 문의 목록 | /inquiries | 전체 문의 조회 |
+| 1:1 문의 | /inquiries/direct | 1:1 문의 |
+| 답변 완료 | /inquiries/answered | 답변 완료된 문의 |
+| FAQ | /inquiries/faq | 자주 묻는 질문 관리 |
+
+**3depth (문의 목록):**
+- `/inquiries` - 전체
+- `/inquiries/pending` - 대기중
+- `/inquiries/completed` - 답변완료
+
+---
+
+### 콘텐츠 (contents)
+
+> 공지사항, 배너, 이벤트, 이용약관 관리
+
+| 2depth | 경로 | 설명 |
+|--------|------|------|
+| 공지사항 | /notices | 공지사항 관리 |
+| 배너 | /banners | 배너 관리 |
+| 이벤트 | /events | 이벤트 관리 |
+| 이용약관 | /terms | 약관 관리 |
+
+**3depth (이벤트):**
+- `/events` - 전체
+- `/events/ongoing` - 진행중
+- `/events/upcoming` - 예정
+- `/events/ended` - 종료
+
+---
+
+### 템플릿 (templates)
+
+> SMS, 이메일, 푸시, HTML 메시지 템플릿 관리
+
+| 2depth | 경로 | 설명 |
+|--------|------|------|
+| SMS | /templates/sms | SMS 템플릿 |
+| 이메일 | /templates/email | 이메일 템플릿 |
+| 푸시 | /templates/push | 푸시 템플릿 |
+| HTML | /templates/html | HTML 템플릿 |
+
+---
+
+### 세션 (sessions)
+
+> 타임라인, 세션, 프로그램 배정, 루틴 관리
+
+| 2depth | 경로 | 설명 |
+|--------|------|------|
+| 타임라인 | /sessions/timelines | 세션 그룹 관리 |
+| 세션 목록 | /sessions | 전체 세션 조회 |
+| 프로그램 배정 | /sessions/programs | 세션별 프로그램 |
+| 루틴 | /sessions/routines | 루틴 구성 관리 |
+
+**3depth (타임라인):**
+- `/sessions/timelines` - 전체
+- `/sessions/timelines/active` - 활성
+- `/sessions/timelines/archived` - 보관됨
+
+**3depth (세션 목록):**
+- `/sessions` - 전체
+- `/sessions/one-time` - 일회성
+- `/sessions/recurring` - 반복
+- `/sessions/upcoming` - 예정
+- `/sessions/past` - 지난
+
+**3depth (프로그램 배정):**
+- `/sessions/programs` - 전체
+- `/sessions/programs/active` - 진행중
+- `/sessions/programs/full` - 정원마감
+- `/sessions/programs/available` - 예약가능
+
+**3depth (루틴):**
+- `/sessions/routines` - 전체
+- `/sessions/routines/exercise` - 운동
+
+---
+
+### 시설 (grounds)
+
+> 시설 정보, 프로그램 정의, 장비/시설물 관리
+
+| 2depth | 경로 | 설명 |
+|--------|------|------|
+| 시설 정보 | /grounds | 시설 기본 정보 |
+| 프로그램 정의 | /grounds/programs | 프로그램 템플릿 |
+| 장비/시설물 | /grounds/equipment | 장비 관리 |
+
+---
+
+### 관리자 (admins)
+
+> 관리자 계정 및 초대 관리
+
+| 2depth | 경로 | 설명 |
+|--------|------|------|
+| 관리자 목록 | /admins | 전체 관리자 |
+| 초대 관리 | /admins/invitations | 초대 현황 |
+
+**3depth (관리자 목록):**
+- `/admins` - 전체
+- `/admins/active` - 활성
+- `/admins/inactive` - 비활성
+
+**3depth (초대 관리):**
+- `/admins/invitations` - 전체
+- `/admins/invitations/pending` - 대기중
+- `/admins/invitations/expired` - 만료됨
+
+---
+
+### 역할/권한 (roles)
+
+> 역할 목록 및 권한 설정
+
+| 2depth | 경로 | 설명 |
+|--------|------|------|
+| 역할 목록 | /roles | 역할 관리 |
+| 권한 설정 | /roles/abilities | 권한 설정 |
+
+---
+
+## 13. BottomTab 구성
+
+### 기본 탭 (5개)
+
+| 순서 | ID | 라벨 | 동작 |
+|------|-----|------|------|
+| 1 | dashboard | 대시보드 | 바로 이동 |
+| 2 | reservations | 예약 | SubMenuList |
+| 3 | users | 회원 | SubMenuList |
+| 4 | notifications | 알림 | SubMenuList |
+| 5 | more | 더보기 | 나머지 표시 |
+
+### 더보기 메뉴
+
+| 순서 | ID | 라벨 |
+|------|-----|------|
+| 1 | inquiries | 문의 |
+| 2 | contents | 콘텐츠 |
+| 3 | templates | 템플릿 |
+| 4 | sessions | 세션 |
+| 5 | grounds | 시설 |
+| 6 | admins | 관리자 |
+| 7 | roles | 역할/권한 |
+
+---
+
+## 14. FAB 구성
+
+### 기본 액션 (3개)
+
+| ID | 라벨 | 아이콘 | 동작 |
+|----|------|--------|------|
+| today-reservations | 오늘 예약 | CalendarCheck | `/reservations/today` 이동 |
+| quick-reservation | 빠른 예약 | Plus | 예약 모달 |
+| search-member | 회원 검색 | Search | 검색 모달 |

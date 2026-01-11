@@ -101,7 +101,7 @@ Admin 앱의 레이아웃 및 메뉴 시스템을 **모바일 사용자(예약 �
 |------|------|
 | [01-desktop.md](./01-desktop.md) | 데스크톱 레이아웃 (항상 펼침 사이드바) |
 | [02-mobile.md](./02-mobile.md) | 모바일 레이아웃 (사용자 시나리오 기반) |
-| [03-menu-tree.md](./03-menu-tree.md) | 메뉴 트리 상세 (DDD 기반, 3depth 포함) |
+| [03-menu-tree.md](./03-menu-tree.md) | 메뉴 트리 상세 (DDD 기반, 3depth 포함, Session 도메인 포함) |
 | [04-permissions.md](./04-permissions.md) | 권한 체계 및 Subject 네이밍 |
 
 ---
@@ -112,14 +112,15 @@ Admin 앱의 레이아웃 및 메뉴 시스템을 **모바일 사용자(예약 �
 |------|-----|------|--------|----------------|----------|
 | 1 | dashboard | 대시보드 | LayoutDashboard | - | 없음 |
 | 2 | users | 회원 | Users | User+Profile+Tenant | 있음 |
-| 3 | reservations | 예약 | CalendarCheck | Timeline/Session | 있음 |
+| 3 | reservations | 예약 | CalendarCheck | Reservation | 있음 |
 | 4 | notifications | 알림 | Bell | Notification | 있음 |
 | 5 | inquiries | 문의 | MessageSquare | Inquiry | 있음 |
 | 6 | contents | 콘텐츠 | FileText | Content/Post | 있음 |
 | 7 | templates | 템플릿 | LayoutTemplate | MessageTemplate | 있음 |
-| 8 | grounds | 시설 | Building | Ground/Space | 있음 |
-| 9 | admins | 관리자 | UserCog | Admin | 있음 |
-| 10 | roles | 역할/권한 | Shield | Role/Ability | 있음 |
+| 8 | **sessions** | **세션** | **Clock** | **Timeline/Session/Program** | **있음** |
+| 9 | grounds | 시설 | Building | Ground/Space | 있음 |
+| 10 | admins | 관리자 | UserCog | Admin | 있음 |
+| 11 | roles | 역할/권한 | Shield | Role/Ability | 있음 |
 
 ---
 

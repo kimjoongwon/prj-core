@@ -62,14 +62,15 @@
 |------|-----|------|--------|----------------|---------|-----------|
 | 1 | dashboard | 대시보드 | LayoutDashboard | - | menu:dashboard | 없음 |
 | 2 | users | 회원 | Users | User, Profile, Tenant | menu:users | 있음 |
-| 3 | reservations | 예약 | CalendarCheck | Timeline, Session | menu:reservations | 있음 |
+| 3 | reservations | 예약 | CalendarCheck | Reservation | menu:reservations | 있음 |
 | 4 | notifications | 알림 | Bell | Notification | menu:notifications | 있음 |
 | 5 | inquiries | 문의 | MessageSquare | Inquiry | menu:inquiries | 있음 |
 | 6 | contents | 콘텐츠 | FileText | Content, Post | menu:contents | 있음 |
 | 7 | templates | 템플릿 | LayoutTemplate | MessageTemplate | menu:templates | 있음 |
-| 8 | grounds | 시설 | Building | Ground, Space | menu:grounds | 있음 |
-| 9 | admins | 관리자 | UserCog | Admin | menu:admins | 있음 |
-| 10 | roles | 역할/권한 | Shield | Role, Ability | menu:roles | 있음 |
+| 8 | sessions | 세션 | Clock | Timeline, Session, Program | menu:sessions | 있음 |
+| 9 | grounds | 시설 | Building | Ground, Space | menu:grounds | 있음 |
+| 10 | admins | 관리자 | UserCog | Admin | menu:admins | 있음 |
+| 11 | roles | 역할/권한 | Shield | Role, Ability | menu:roles | 있음 |
 
 ---
 
@@ -167,12 +168,58 @@
 | templates-push | 푸시 | /templates/push | menu:templates:push |
 | templates-html | HTML | /templates/html | menu:templates:html |
 
+### 세션 (sessions) - v7.0 신규
+
+> 타임라인, 세션, 프로그램 배정, 루틴을 관리하는 시간 기반 이벤트 도메인
+
+| ID | 라벨 | 경로 | Subject | 설명 |
+|----|------|------|---------|------|
+| sessions-timelines | 타임라인 | /sessions/timelines | menu:sessions:timelines | 세션 그룹 관리 |
+| sessions-list | 세션 목록 | /sessions | menu:sessions:list | 전체 세션 조회 |
+| sessions-programs | 프로그램 배정 | /sessions/programs | menu:sessions:programs | 세션별 프로그램 관리 |
+| sessions-routines | 루틴 | /sessions/routines | menu:sessions:routines | 루틴 구성 관리 |
+
+**3depth (타임라인 하위):**
+| 경로 | 라벨 | 설명 |
+|------|------|------|
+| /sessions/timelines | 전체 | 기본값 |
+| /sessions/timelines/active | 활성 | 진행 중인 타임라인 |
+| /sessions/timelines/archived | 보관됨 | 종료된 타임라인 |
+
+**3depth (세션 목록 하위):**
+| 경로 | 라벨 | 설명 |
+|------|------|------|
+| /sessions | 전체 | 기본값 |
+| /sessions/one-time | 일회성 | ONE_TIME 유형 |
+| /sessions/recurring | 반복 | RECURRING 유형 |
+| /sessions/upcoming | 예정 | 시작 전 세션 |
+| /sessions/past | 지난 | 종료된 세션 |
+
+**3depth (프로그램 배정 하위):**
+| 경로 | 라벨 | 설명 |
+|------|------|------|
+| /sessions/programs | 전체 | 기본값 |
+| /sessions/programs/active | 진행중 | 활성 프로그램 |
+| /sessions/programs/full | 정원마감 | 정원 초과 프로그램 |
+| /sessions/programs/available | 예약가능 | 예약 가능한 프로그램 |
+
+**3depth (루틴 하위):**
+| 경로 | 라벨 | 설명 |
+|------|------|------|
+| /sessions/routines | 전체 | 기본값 |
+| /sessions/routines/exercise | 운동 | 운동 기반 루틴 |
+
+**도메인 관계:**
+- Timeline → Session → Program → Routine → Activity → Task → Exercise
+- 예약(Reservation)과 연계: 예약 생성 시 Session/Program 선택
+- 시설(Ground/Space)과 연계: 타임라인은 Space에 종속
+
 ### 시설 (grounds) - v7.0 신규
 
 | ID | 라벨 | 경로 | Subject |
 |----|------|------|---------|
 | grounds-info | 시설 정보 | /grounds | menu:grounds:info |
-| grounds-programs | 프로그램 | /grounds/programs | menu:grounds:programs |
+| grounds-programs | 프로그램 정의 | /grounds/programs | menu:grounds:programs |
 | grounds-equipment | 장비/시설물 | /grounds/equipment | menu:grounds:equipment |
 
 ### 관리자 (admins) - v7.0 신규
@@ -224,9 +271,10 @@
 | 1 | inquiries | 문의 | MessageSquare |
 | 2 | contents | 콘텐츠 | FileText |
 | 3 | templates | 템플릿 | LayoutTemplate |
-| 4 | grounds | 시설 | Building |
-| 5 | admins | 관리자 | UserCog |
-| 6 | roles | 역할/권한 | Shield |
+| 4 | sessions | 세션 | Clock |
+| 5 | grounds | 시설 | Building |
+| 6 | admins | 관리자 | UserCog |
+| 7 | roles | 역할/권한 | Shield |
 
 ---
 
@@ -341,7 +389,7 @@ const usersMenu: MenuItem = {
 
 ### 메뉴 구조 테스트
 
-- [ ] 1depth 메뉴 10개 정상 표시 (settings 제거, grounds/admins/roles 추가)
+- [ ] 1depth 메뉴 11개 정상 표시 (settings 제거, sessions/grounds/admins/roles 추가)
 - [ ] 각 1depth별 2depth 메뉴 정상 표시
 - [ ] 2depth 클릭 시 올바른 경로로 이동
 - [ ] 3depth 탭 클릭 시 쿼리 파라미터 정상 반영
@@ -355,5 +403,5 @@ const usersMenu: MenuItem = {
 ### 모바일 테스트
 
 - [ ] BottomTab 5개 탭 정상 표시
-- [ ] "더보기" 탭에서 나머지 6개 메뉴 표시
+- [ ] "더보기" 탭에서 나머지 7개 메뉴 표시 (sessions 포함)
 - [ ] SubMenuList에서 2depth 메뉴 정상 표시
