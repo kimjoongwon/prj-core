@@ -14,7 +14,7 @@ import type * as Prisma from "../internal/prismaNamespace"
 
 /**
  * Model Ground
- * @displayName 시설
+ * 
  */
 export type GroundModel = runtime.Types.Result.DefaultSelection<Prisma.$GroundPayload>
 
@@ -758,29 +758,11 @@ export type $GroundPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs
     createdAt: Date
     updatedAt: Date | null
     removedAt: Date | null
-    /**
-     * @displayName 이름
-     */
     name: string
-    /**
-     * @displayName 라벨
-     */
     label: string | null
-    /**
-     * @displayName 주소
-     */
     address: string
-    /**
-     * @displayName 전화번호
-     */
     phone: string
-    /**
-     * @displayName 이메일
-     */
     email: string
-    /**
-     * @displayName 사업자등록번호
-     */
     businessNo: string
     spaceId: string
     logoImageFileId: string | null

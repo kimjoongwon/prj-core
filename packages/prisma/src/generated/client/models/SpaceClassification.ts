@@ -14,7 +14,7 @@ import type * as Prisma from "../internal/prismaNamespace"
 
 /**
  * Model SpaceClassification
- * @displayName 공간 분류
+ * 
  */
 export type SpaceClassificationModel = runtime.Types.Result.DefaultSelection<Prisma.$SpaceClassificationPayload>
 

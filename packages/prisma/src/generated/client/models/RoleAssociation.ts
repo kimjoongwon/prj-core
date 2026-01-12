@@ -14,7 +14,7 @@ import type * as Prisma from "../internal/prismaNamespace"
 
 /**
  * Model RoleAssociation
- * @displayName 역할 그룹
+ * 
  */
 export type RoleAssociationModel = runtime.Types.Result.DefaultSelection<Prisma.$RoleAssociationPayload>
 

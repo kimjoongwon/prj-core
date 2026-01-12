@@ -14,7 +14,7 @@ import type * as Prisma from "../internal/prismaNamespace"
 
 /**
  * Model Assignment
- * @displayName 역할 할당
+ * 
  */
 export type AssignmentModel = runtime.Types.Result.DefaultSelection<Prisma.$AssignmentPayload>
 

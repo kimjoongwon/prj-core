@@ -14,7 +14,7 @@ import type * as Prisma from "../internal/prismaNamespace"
 
 /**
  * Model Tenant
- * @displayName 테넌트
+ * 
  */
 export type TenantModel = runtime.Types.Result.DefaultSelection<Prisma.$TenantPayload>
 
@@ -43,6 +43,7 @@ export type TenantMinAggregateOutputType = {
   userId: string | null
   spaceId: string | null
   roleId: string | null
+  main: boolean | null
 }
 
 export type TenantMaxAggregateOutputType = {
@@ -54,6 +55,7 @@ export type TenantMaxAggregateOutputType = {
   userId: string | null
   spaceId: string | null
   roleId: string | null
+  main: boolean | null
 }
 
 export type TenantCountAggregateOutputType = {
@@ -65,6 +67,7 @@ export type TenantCountAggregateOutputType = {
   userId: number
   spaceId: number
   roleId: number
+  main: number
   _all: number
 }
 
@@ -86,6 +89,7 @@ export type TenantMinAggregateInputType = {
   userId?: true
   spaceId?: true
   roleId?: true
+  main?: true
 }
 
 export type TenantMaxAggregateInputType = {
@@ -97,6 +101,7 @@ export type TenantMaxAggregateInputType = {
   userId?: true
   spaceId?: true
   roleId?: true
+  main?: true
 }
 
 export type TenantCountAggregateInputType = {
@@ -108,6 +113,7 @@ export type TenantCountAggregateInputType = {
   userId?: true
   spaceId?: true
   roleId?: true
+  main?: true
   _all?: true
 }
 
@@ -206,6 +212,7 @@ export type TenantGroupByOutputType = {
   userId: string
   spaceId: string
   roleId: string
+  main: boolean
   _count: TenantCountAggregateOutputType | null
   _avg: TenantAvgAggregateOutputType | null
   _sum: TenantSumAggregateOutputType | null
@@ -240,7 +247,13 @@ export type TenantWhereInput = {
   userId?: Prisma.StringFilter<"Tenant"> | string
   spaceId?: Prisma.StringFilter<"Tenant"> | string
   roleId?: Prisma.StringFilter<"Tenant"> | string
+  main?: Prisma.BoolFilter<"Tenant"> | boolean
   assignments?: Prisma.AssignmentListRelationFilter
+  categories?: Prisma.CategoryListRelationFilter
+  contents?: Prisma.ContentListRelationFilter
+  files?: Prisma.FileListRelationFilter
+  groups?: Prisma.GroupListRelationFilter
+  safeWallets?: Prisma.SafeWalletListRelationFilter
   role?: Prisma.XOR<Prisma.RoleScalarRelationFilter, Prisma.RoleWhereInput>
   space?: Prisma.XOR<Prisma.SpaceScalarRelationFilter, Prisma.SpaceWhereInput>
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
@@ -255,7 +268,13 @@ export type TenantOrderByWithRelationInput = {
   userId?: Prisma.SortOrder
   spaceId?: Prisma.SortOrder
   roleId?: Prisma.SortOrder
+  main?: Prisma.SortOrder
   assignments?: Prisma.AssignmentOrderByRelationAggregateInput
+  categories?: Prisma.CategoryOrderByRelationAggregateInput
+  contents?: Prisma.ContentOrderByRelationAggregateInput
+  files?: Prisma.FileOrderByRelationAggregateInput
+  groups?: Prisma.GroupOrderByRelationAggregateInput
+  safeWallets?: Prisma.SafeWalletOrderByRelationAggregateInput
   role?: Prisma.RoleOrderByWithRelationInput
   space?: Prisma.SpaceOrderByWithRelationInput
   user?: Prisma.UserOrderByWithRelationInput
@@ -273,7 +292,13 @@ export type TenantWhereUniqueInput = Prisma.AtLeast<{
   userId?: Prisma.StringFilter<"Tenant"> | string
   spaceId?: Prisma.StringFilter<"Tenant"> | string
   roleId?: Prisma.StringFilter<"Tenant"> | string
+  main?: Prisma.BoolFilter<"Tenant"> | boolean
   assignments?: Prisma.AssignmentListRelationFilter
+  categories?: Prisma.CategoryListRelationFilter
+  contents?: Prisma.ContentListRelationFilter
+  files?: Prisma.FileListRelationFilter
+  groups?: Prisma.GroupListRelationFilter
+  safeWallets?: Prisma.SafeWalletListRelationFilter
   role?: Prisma.XOR<Prisma.RoleScalarRelationFilter, Prisma.RoleWhereInput>
   space?: Prisma.XOR<Prisma.SpaceScalarRelationFilter, Prisma.SpaceWhereInput>
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
@@ -288,6 +313,7 @@ export type TenantOrderByWithAggregationInput = {
   userId?: Prisma.SortOrder
   spaceId?: Prisma.SortOrder
   roleId?: Prisma.SortOrder
+  main?: Prisma.SortOrder
   _count?: Prisma.TenantCountOrderByAggregateInput
   _avg?: Prisma.TenantAvgOrderByAggregateInput
   _max?: Prisma.TenantMaxOrderByAggregateInput
@@ -307,6 +333,7 @@ export type TenantScalarWhereWithAggregatesInput = {
   userId?: Prisma.StringWithAggregatesFilter<"Tenant"> | string
   spaceId?: Prisma.StringWithAggregatesFilter<"Tenant"> | string
   roleId?: Prisma.StringWithAggregatesFilter<"Tenant"> | string
+  main?: Prisma.BoolWithAggregatesFilter<"Tenant"> | boolean
 }
 
 export type TenantCreateInput = {
@@ -315,7 +342,13 @@ export type TenantCreateInput = {
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
+  main?: boolean
   assignments?: Prisma.AssignmentCreateNestedManyWithoutTenantInput
+  categories?: Prisma.CategoryCreateNestedManyWithoutTenantInput
+  contents?: Prisma.ContentCreateNestedManyWithoutTenantInput
+  files?: Prisma.FileCreateNestedManyWithoutTenantInput
+  groups?: Prisma.GroupCreateNestedManyWithoutTenantInput
+  safeWallets?: Prisma.SafeWalletCreateNestedManyWithoutTenantInput
   role: Prisma.RoleCreateNestedOneWithoutTenantsInput
   space: Prisma.SpaceCreateNestedOneWithoutTenantsInput
   user: Prisma.UserCreateNestedOneWithoutTenantsInput
@@ -330,7 +363,13 @@ export type TenantUncheckedCreateInput = {
   userId: string
   spaceId: string
   roleId: string
+  main?: boolean
   assignments?: Prisma.AssignmentUncheckedCreateNestedManyWithoutTenantInput
+  categories?: Prisma.CategoryUncheckedCreateNestedManyWithoutTenantInput
+  contents?: Prisma.ContentUncheckedCreateNestedManyWithoutTenantInput
+  files?: Prisma.FileUncheckedCreateNestedManyWithoutTenantInput
+  groups?: Prisma.GroupUncheckedCreateNestedManyWithoutTenantInput
+  safeWallets?: Prisma.SafeWalletUncheckedCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUpdateInput = {
@@ -338,7 +377,13 @@ export type TenantUpdateInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  main?: Prisma.BoolFieldUpdateOperationsInput | boolean
   assignments?: Prisma.AssignmentUpdateManyWithoutTenantNestedInput
+  categories?: Prisma.CategoryUpdateManyWithoutTenantNestedInput
+  contents?: Prisma.ContentUpdateManyWithoutTenantNestedInput
+  files?: Prisma.FileUpdateManyWithoutTenantNestedInput
+  groups?: Prisma.GroupUpdateManyWithoutTenantNestedInput
+  safeWallets?: Prisma.SafeWalletUpdateManyWithoutTenantNestedInput
   role?: Prisma.RoleUpdateOneRequiredWithoutTenantsNestedInput
   space?: Prisma.SpaceUpdateOneRequiredWithoutTenantsNestedInput
   user?: Prisma.UserUpdateOneRequiredWithoutTenantsNestedInput
@@ -353,7 +398,13 @@ export type TenantUncheckedUpdateInput = {
   userId?: Prisma.StringFieldUpdateOperationsInput | string
   spaceId?: Prisma.StringFieldUpdateOperationsInput | string
   roleId?: Prisma.StringFieldUpdateOperationsInput | string
+  main?: Prisma.BoolFieldUpdateOperationsInput | boolean
   assignments?: Prisma.AssignmentUncheckedUpdateManyWithoutTenantNestedInput
+  categories?: Prisma.CategoryUncheckedUpdateManyWithoutTenantNestedInput
+  contents?: Prisma.ContentUncheckedUpdateManyWithoutTenantNestedInput
+  files?: Prisma.FileUncheckedUpdateManyWithoutTenantNestedInput
+  groups?: Prisma.GroupUncheckedUpdateManyWithoutTenantNestedInput
+  safeWallets?: Prisma.SafeWalletUncheckedUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantCreateManyInput = {
@@ -365,6 +416,7 @@ export type TenantCreateManyInput = {
   userId: string
   spaceId: string
   roleId: string
+  main?: boolean
 }
 
 export type TenantUpdateManyMutationInput = {
@@ -372,6 +424,7 @@ export type TenantUpdateManyMutationInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  main?: Prisma.BoolFieldUpdateOperationsInput | boolean
 }
 
 export type TenantUncheckedUpdateManyInput = {
@@ -383,6 +436,12 @@ export type TenantUncheckedUpdateManyInput = {
   userId?: Prisma.StringFieldUpdateOperationsInput | string
   spaceId?: Prisma.StringFieldUpdateOperationsInput | string
   roleId?: Prisma.StringFieldUpdateOperationsInput | string
+  main?: Prisma.BoolFieldUpdateOperationsInput | boolean
+}
+
+export type TenantScalarRelationFilter = {
+  is?: Prisma.TenantWhereInput
+  isNot?: Prisma.TenantWhereInput
 }
 
 export type TenantCountOrderByAggregateInput = {
@@ -394,6 +453,7 @@ export type TenantCountOrderByAggregateInput = {
   userId?: Prisma.SortOrder
   spaceId?: Prisma.SortOrder
   roleId?: Prisma.SortOrder
+  main?: Prisma.SortOrder
 }
 
 export type TenantAvgOrderByAggregateInput = {
@@ -409,6 +469,7 @@ export type TenantMaxOrderByAggregateInput = {
   userId?: Prisma.SortOrder
   spaceId?: Prisma.SortOrder
   roleId?: Prisma.SortOrder
+  main?: Prisma.SortOrder
 }
 
 export type TenantMinOrderByAggregateInput = {
@@ -420,15 +481,11 @@ export type TenantMinOrderByAggregateInput = {
   userId?: Prisma.SortOrder
   spaceId?: Prisma.SortOrder
   roleId?: Prisma.SortOrder
+  main?: Prisma.SortOrder
 }
 
 export type TenantSumOrderByAggregateInput = {
   seq?: Prisma.SortOrder
-}
-
-export type TenantScalarRelationFilter = {
-  is?: Prisma.TenantWhereInput
-  isNot?: Prisma.TenantWhereInput
 }
 
 export type TenantListRelationFilter = {
@@ -439,6 +496,38 @@ export type TenantListRelationFilter = {
 
 export type TenantOrderByRelationAggregateInput = {
   _count?: Prisma.SortOrder
+}
+
+export type TenantCreateNestedOneWithoutCategoriesInput = {
+  create?: Prisma.XOR<Prisma.TenantCreateWithoutCategoriesInput, Prisma.TenantUncheckedCreateWithoutCategoriesInput>
+  connectOrCreate?: Prisma.TenantCreateOrConnectWithoutCategoriesInput
+  connect?: Prisma.TenantWhereUniqueInput
+}
+
+export type TenantUpdateOneRequiredWithoutCategoriesNestedInput = {
+  create?: Prisma.XOR<Prisma.TenantCreateWithoutCategoriesInput, Prisma.TenantUncheckedCreateWithoutCategoriesInput>
+  connectOrCreate?: Prisma.TenantCreateOrConnectWithoutCategoriesInput
+  upsert?: Prisma.TenantUpsertWithoutCategoriesInput
+  connect?: Prisma.TenantWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.TenantUpdateToOneWithWhereWithoutCategoriesInput, Prisma.TenantUpdateWithoutCategoriesInput>, Prisma.TenantUncheckedUpdateWithoutCategoriesInput>
+}
+
+export type TenantCreateNestedOneWithoutGroupsInput = {
+  create?: Prisma.XOR<Prisma.TenantCreateWithoutGroupsInput, Prisma.TenantUncheckedCreateWithoutGroupsInput>
+  connectOrCreate?: Prisma.TenantCreateOrConnectWithoutGroupsInput
+  connect?: Prisma.TenantWhereUniqueInput
+}
+
+export type TenantUpdateOneRequiredWithoutGroupsNestedInput = {
+  create?: Prisma.XOR<Prisma.TenantCreateWithoutGroupsInput, Prisma.TenantUncheckedCreateWithoutGroupsInput>
+  connectOrCreate?: Prisma.TenantCreateOrConnectWithoutGroupsInput
+  upsert?: Prisma.TenantUpsertWithoutGroupsInput
+  connect?: Prisma.TenantWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.TenantUpdateToOneWithWhereWithoutGroupsInput, Prisma.TenantUpdateWithoutGroupsInput>, Prisma.TenantUncheckedUpdateWithoutGroupsInput>
+}
+
+export type BoolFieldUpdateOperationsInput = {
+  set?: boolean
 }
 
 export type TenantCreateNestedOneWithoutAssignmentsInput = {
@@ -453,6 +542,34 @@ export type TenantUpdateOneRequiredWithoutAssignmentsNestedInput = {
   upsert?: Prisma.TenantUpsertWithoutAssignmentsInput
   connect?: Prisma.TenantWhereUniqueInput
   update?: Prisma.XOR<Prisma.XOR<Prisma.TenantUpdateToOneWithWhereWithoutAssignmentsInput, Prisma.TenantUpdateWithoutAssignmentsInput>, Prisma.TenantUncheckedUpdateWithoutAssignmentsInput>
+}
+
+export type TenantCreateNestedOneWithoutContentsInput = {
+  create?: Prisma.XOR<Prisma.TenantCreateWithoutContentsInput, Prisma.TenantUncheckedCreateWithoutContentsInput>
+  connectOrCreate?: Prisma.TenantCreateOrConnectWithoutContentsInput
+  connect?: Prisma.TenantWhereUniqueInput
+}
+
+export type TenantUpdateOneRequiredWithoutContentsNestedInput = {
+  create?: Prisma.XOR<Prisma.TenantCreateWithoutContentsInput, Prisma.TenantUncheckedCreateWithoutContentsInput>
+  connectOrCreate?: Prisma.TenantCreateOrConnectWithoutContentsInput
+  upsert?: Prisma.TenantUpsertWithoutContentsInput
+  connect?: Prisma.TenantWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.TenantUpdateToOneWithWhereWithoutContentsInput, Prisma.TenantUpdateWithoutContentsInput>, Prisma.TenantUncheckedUpdateWithoutContentsInput>
+}
+
+export type TenantCreateNestedOneWithoutFilesInput = {
+  create?: Prisma.XOR<Prisma.TenantCreateWithoutFilesInput, Prisma.TenantUncheckedCreateWithoutFilesInput>
+  connectOrCreate?: Prisma.TenantCreateOrConnectWithoutFilesInput
+  connect?: Prisma.TenantWhereUniqueInput
+}
+
+export type TenantUpdateOneRequiredWithoutFilesNestedInput = {
+  create?: Prisma.XOR<Prisma.TenantCreateWithoutFilesInput, Prisma.TenantUncheckedCreateWithoutFilesInput>
+  connectOrCreate?: Prisma.TenantCreateOrConnectWithoutFilesInput
+  upsert?: Prisma.TenantUpsertWithoutFilesInput
+  connect?: Prisma.TenantWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.TenantUpdateToOneWithWhereWithoutFilesInput, Prisma.TenantUpdateWithoutFilesInput>, Prisma.TenantUncheckedUpdateWithoutFilesInput>
 }
 
 export type TenantCreateNestedManyWithoutRoleInput = {
@@ -495,6 +612,20 @@ export type TenantUncheckedUpdateManyWithoutRoleNestedInput = {
   update?: Prisma.TenantUpdateWithWhereUniqueWithoutRoleInput | Prisma.TenantUpdateWithWhereUniqueWithoutRoleInput[]
   updateMany?: Prisma.TenantUpdateManyWithWhereWithoutRoleInput | Prisma.TenantUpdateManyWithWhereWithoutRoleInput[]
   deleteMany?: Prisma.TenantScalarWhereInput | Prisma.TenantScalarWhereInput[]
+}
+
+export type TenantCreateNestedOneWithoutSafeWalletsInput = {
+  create?: Prisma.XOR<Prisma.TenantCreateWithoutSafeWalletsInput, Prisma.TenantUncheckedCreateWithoutSafeWalletsInput>
+  connectOrCreate?: Prisma.TenantCreateOrConnectWithoutSafeWalletsInput
+  connect?: Prisma.TenantWhereUniqueInput
+}
+
+export type TenantUpdateOneRequiredWithoutSafeWalletsNestedInput = {
+  create?: Prisma.XOR<Prisma.TenantCreateWithoutSafeWalletsInput, Prisma.TenantUncheckedCreateWithoutSafeWalletsInput>
+  connectOrCreate?: Prisma.TenantCreateOrConnectWithoutSafeWalletsInput
+  upsert?: Prisma.TenantUpsertWithoutSafeWalletsInput
+  connect?: Prisma.TenantWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.TenantUpdateToOneWithWhereWithoutSafeWalletsInput, Prisma.TenantUpdateWithoutSafeWalletsInput>, Prisma.TenantUncheckedUpdateWithoutSafeWalletsInput>
 }
 
 export type TenantCreateNestedManyWithoutSpaceInput = {
@@ -581,12 +712,184 @@ export type TenantUncheckedUpdateManyWithoutUserNestedInput = {
   deleteMany?: Prisma.TenantScalarWhereInput | Prisma.TenantScalarWhereInput[]
 }
 
+export type TenantCreateWithoutCategoriesInput = {
+  id?: string
+  seq?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string | null
+  removedAt?: Date | string | null
+  main?: boolean
+  assignments?: Prisma.AssignmentCreateNestedManyWithoutTenantInput
+  contents?: Prisma.ContentCreateNestedManyWithoutTenantInput
+  files?: Prisma.FileCreateNestedManyWithoutTenantInput
+  groups?: Prisma.GroupCreateNestedManyWithoutTenantInput
+  safeWallets?: Prisma.SafeWalletCreateNestedManyWithoutTenantInput
+  role: Prisma.RoleCreateNestedOneWithoutTenantsInput
+  space: Prisma.SpaceCreateNestedOneWithoutTenantsInput
+  user: Prisma.UserCreateNestedOneWithoutTenantsInput
+}
+
+export type TenantUncheckedCreateWithoutCategoriesInput = {
+  id?: string
+  seq?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string | null
+  removedAt?: Date | string | null
+  userId: string
+  spaceId: string
+  roleId: string
+  main?: boolean
+  assignments?: Prisma.AssignmentUncheckedCreateNestedManyWithoutTenantInput
+  contents?: Prisma.ContentUncheckedCreateNestedManyWithoutTenantInput
+  files?: Prisma.FileUncheckedCreateNestedManyWithoutTenantInput
+  groups?: Prisma.GroupUncheckedCreateNestedManyWithoutTenantInput
+  safeWallets?: Prisma.SafeWalletUncheckedCreateNestedManyWithoutTenantInput
+}
+
+export type TenantCreateOrConnectWithoutCategoriesInput = {
+  where: Prisma.TenantWhereUniqueInput
+  create: Prisma.XOR<Prisma.TenantCreateWithoutCategoriesInput, Prisma.TenantUncheckedCreateWithoutCategoriesInput>
+}
+
+export type TenantUpsertWithoutCategoriesInput = {
+  update: Prisma.XOR<Prisma.TenantUpdateWithoutCategoriesInput, Prisma.TenantUncheckedUpdateWithoutCategoriesInput>
+  create: Prisma.XOR<Prisma.TenantCreateWithoutCategoriesInput, Prisma.TenantUncheckedCreateWithoutCategoriesInput>
+  where?: Prisma.TenantWhereInput
+}
+
+export type TenantUpdateToOneWithWhereWithoutCategoriesInput = {
+  where?: Prisma.TenantWhereInput
+  data: Prisma.XOR<Prisma.TenantUpdateWithoutCategoriesInput, Prisma.TenantUncheckedUpdateWithoutCategoriesInput>
+}
+
+export type TenantUpdateWithoutCategoriesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  main?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  assignments?: Prisma.AssignmentUpdateManyWithoutTenantNestedInput
+  contents?: Prisma.ContentUpdateManyWithoutTenantNestedInput
+  files?: Prisma.FileUpdateManyWithoutTenantNestedInput
+  groups?: Prisma.GroupUpdateManyWithoutTenantNestedInput
+  safeWallets?: Prisma.SafeWalletUpdateManyWithoutTenantNestedInput
+  role?: Prisma.RoleUpdateOneRequiredWithoutTenantsNestedInput
+  space?: Prisma.SpaceUpdateOneRequiredWithoutTenantsNestedInput
+  user?: Prisma.UserUpdateOneRequiredWithoutTenantsNestedInput
+}
+
+export type TenantUncheckedUpdateWithoutCategoriesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  seq?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  spaceId?: Prisma.StringFieldUpdateOperationsInput | string
+  roleId?: Prisma.StringFieldUpdateOperationsInput | string
+  main?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  assignments?: Prisma.AssignmentUncheckedUpdateManyWithoutTenantNestedInput
+  contents?: Prisma.ContentUncheckedUpdateManyWithoutTenantNestedInput
+  files?: Prisma.FileUncheckedUpdateManyWithoutTenantNestedInput
+  groups?: Prisma.GroupUncheckedUpdateManyWithoutTenantNestedInput
+  safeWallets?: Prisma.SafeWalletUncheckedUpdateManyWithoutTenantNestedInput
+}
+
+export type TenantCreateWithoutGroupsInput = {
+  id?: string
+  seq?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string | null
+  removedAt?: Date | string | null
+  main?: boolean
+  assignments?: Prisma.AssignmentCreateNestedManyWithoutTenantInput
+  categories?: Prisma.CategoryCreateNestedManyWithoutTenantInput
+  contents?: Prisma.ContentCreateNestedManyWithoutTenantInput
+  files?: Prisma.FileCreateNestedManyWithoutTenantInput
+  safeWallets?: Prisma.SafeWalletCreateNestedManyWithoutTenantInput
+  role: Prisma.RoleCreateNestedOneWithoutTenantsInput
+  space: Prisma.SpaceCreateNestedOneWithoutTenantsInput
+  user: Prisma.UserCreateNestedOneWithoutTenantsInput
+}
+
+export type TenantUncheckedCreateWithoutGroupsInput = {
+  id?: string
+  seq?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string | null
+  removedAt?: Date | string | null
+  userId: string
+  spaceId: string
+  roleId: string
+  main?: boolean
+  assignments?: Prisma.AssignmentUncheckedCreateNestedManyWithoutTenantInput
+  categories?: Prisma.CategoryUncheckedCreateNestedManyWithoutTenantInput
+  contents?: Prisma.ContentUncheckedCreateNestedManyWithoutTenantInput
+  files?: Prisma.FileUncheckedCreateNestedManyWithoutTenantInput
+  safeWallets?: Prisma.SafeWalletUncheckedCreateNestedManyWithoutTenantInput
+}
+
+export type TenantCreateOrConnectWithoutGroupsInput = {
+  where: Prisma.TenantWhereUniqueInput
+  create: Prisma.XOR<Prisma.TenantCreateWithoutGroupsInput, Prisma.TenantUncheckedCreateWithoutGroupsInput>
+}
+
+export type TenantUpsertWithoutGroupsInput = {
+  update: Prisma.XOR<Prisma.TenantUpdateWithoutGroupsInput, Prisma.TenantUncheckedUpdateWithoutGroupsInput>
+  create: Prisma.XOR<Prisma.TenantCreateWithoutGroupsInput, Prisma.TenantUncheckedCreateWithoutGroupsInput>
+  where?: Prisma.TenantWhereInput
+}
+
+export type TenantUpdateToOneWithWhereWithoutGroupsInput = {
+  where?: Prisma.TenantWhereInput
+  data: Prisma.XOR<Prisma.TenantUpdateWithoutGroupsInput, Prisma.TenantUncheckedUpdateWithoutGroupsInput>
+}
+
+export type TenantUpdateWithoutGroupsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  main?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  assignments?: Prisma.AssignmentUpdateManyWithoutTenantNestedInput
+  categories?: Prisma.CategoryUpdateManyWithoutTenantNestedInput
+  contents?: Prisma.ContentUpdateManyWithoutTenantNestedInput
+  files?: Prisma.FileUpdateManyWithoutTenantNestedInput
+  safeWallets?: Prisma.SafeWalletUpdateManyWithoutTenantNestedInput
+  role?: Prisma.RoleUpdateOneRequiredWithoutTenantsNestedInput
+  space?: Prisma.SpaceUpdateOneRequiredWithoutTenantsNestedInput
+  user?: Prisma.UserUpdateOneRequiredWithoutTenantsNestedInput
+}
+
+export type TenantUncheckedUpdateWithoutGroupsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  seq?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  spaceId?: Prisma.StringFieldUpdateOperationsInput | string
+  roleId?: Prisma.StringFieldUpdateOperationsInput | string
+  main?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  assignments?: Prisma.AssignmentUncheckedUpdateManyWithoutTenantNestedInput
+  categories?: Prisma.CategoryUncheckedUpdateManyWithoutTenantNestedInput
+  contents?: Prisma.ContentUncheckedUpdateManyWithoutTenantNestedInput
+  files?: Prisma.FileUncheckedUpdateManyWithoutTenantNestedInput
+  safeWallets?: Prisma.SafeWalletUncheckedUpdateManyWithoutTenantNestedInput
+}
+
 export type TenantCreateWithoutAssignmentsInput = {
   id?: string
   seq?: number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
+  main?: boolean
+  categories?: Prisma.CategoryCreateNestedManyWithoutTenantInput
+  contents?: Prisma.ContentCreateNestedManyWithoutTenantInput
+  files?: Prisma.FileCreateNestedManyWithoutTenantInput
+  groups?: Prisma.GroupCreateNestedManyWithoutTenantInput
+  safeWallets?: Prisma.SafeWalletCreateNestedManyWithoutTenantInput
   role: Prisma.RoleCreateNestedOneWithoutTenantsInput
   space: Prisma.SpaceCreateNestedOneWithoutTenantsInput
   user: Prisma.UserCreateNestedOneWithoutTenantsInput
@@ -601,6 +904,12 @@ export type TenantUncheckedCreateWithoutAssignmentsInput = {
   userId: string
   spaceId: string
   roleId: string
+  main?: boolean
+  categories?: Prisma.CategoryUncheckedCreateNestedManyWithoutTenantInput
+  contents?: Prisma.ContentUncheckedCreateNestedManyWithoutTenantInput
+  files?: Prisma.FileUncheckedCreateNestedManyWithoutTenantInput
+  groups?: Prisma.GroupUncheckedCreateNestedManyWithoutTenantInput
+  safeWallets?: Prisma.SafeWalletUncheckedCreateNestedManyWithoutTenantInput
 }
 
 export type TenantCreateOrConnectWithoutAssignmentsInput = {
@@ -624,6 +933,12 @@ export type TenantUpdateWithoutAssignmentsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  main?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  categories?: Prisma.CategoryUpdateManyWithoutTenantNestedInput
+  contents?: Prisma.ContentUpdateManyWithoutTenantNestedInput
+  files?: Prisma.FileUpdateManyWithoutTenantNestedInput
+  groups?: Prisma.GroupUpdateManyWithoutTenantNestedInput
+  safeWallets?: Prisma.SafeWalletUpdateManyWithoutTenantNestedInput
   role?: Prisma.RoleUpdateOneRequiredWithoutTenantsNestedInput
   space?: Prisma.SpaceUpdateOneRequiredWithoutTenantsNestedInput
   user?: Prisma.UserUpdateOneRequiredWithoutTenantsNestedInput
@@ -638,6 +953,178 @@ export type TenantUncheckedUpdateWithoutAssignmentsInput = {
   userId?: Prisma.StringFieldUpdateOperationsInput | string
   spaceId?: Prisma.StringFieldUpdateOperationsInput | string
   roleId?: Prisma.StringFieldUpdateOperationsInput | string
+  main?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  categories?: Prisma.CategoryUncheckedUpdateManyWithoutTenantNestedInput
+  contents?: Prisma.ContentUncheckedUpdateManyWithoutTenantNestedInput
+  files?: Prisma.FileUncheckedUpdateManyWithoutTenantNestedInput
+  groups?: Prisma.GroupUncheckedUpdateManyWithoutTenantNestedInput
+  safeWallets?: Prisma.SafeWalletUncheckedUpdateManyWithoutTenantNestedInput
+}
+
+export type TenantCreateWithoutContentsInput = {
+  id?: string
+  seq?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string | null
+  removedAt?: Date | string | null
+  main?: boolean
+  assignments?: Prisma.AssignmentCreateNestedManyWithoutTenantInput
+  categories?: Prisma.CategoryCreateNestedManyWithoutTenantInput
+  files?: Prisma.FileCreateNestedManyWithoutTenantInput
+  groups?: Prisma.GroupCreateNestedManyWithoutTenantInput
+  safeWallets?: Prisma.SafeWalletCreateNestedManyWithoutTenantInput
+  role: Prisma.RoleCreateNestedOneWithoutTenantsInput
+  space: Prisma.SpaceCreateNestedOneWithoutTenantsInput
+  user: Prisma.UserCreateNestedOneWithoutTenantsInput
+}
+
+export type TenantUncheckedCreateWithoutContentsInput = {
+  id?: string
+  seq?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string | null
+  removedAt?: Date | string | null
+  userId: string
+  spaceId: string
+  roleId: string
+  main?: boolean
+  assignments?: Prisma.AssignmentUncheckedCreateNestedManyWithoutTenantInput
+  categories?: Prisma.CategoryUncheckedCreateNestedManyWithoutTenantInput
+  files?: Prisma.FileUncheckedCreateNestedManyWithoutTenantInput
+  groups?: Prisma.GroupUncheckedCreateNestedManyWithoutTenantInput
+  safeWallets?: Prisma.SafeWalletUncheckedCreateNestedManyWithoutTenantInput
+}
+
+export type TenantCreateOrConnectWithoutContentsInput = {
+  where: Prisma.TenantWhereUniqueInput
+  create: Prisma.XOR<Prisma.TenantCreateWithoutContentsInput, Prisma.TenantUncheckedCreateWithoutContentsInput>
+}
+
+export type TenantUpsertWithoutContentsInput = {
+  update: Prisma.XOR<Prisma.TenantUpdateWithoutContentsInput, Prisma.TenantUncheckedUpdateWithoutContentsInput>
+  create: Prisma.XOR<Prisma.TenantCreateWithoutContentsInput, Prisma.TenantUncheckedCreateWithoutContentsInput>
+  where?: Prisma.TenantWhereInput
+}
+
+export type TenantUpdateToOneWithWhereWithoutContentsInput = {
+  where?: Prisma.TenantWhereInput
+  data: Prisma.XOR<Prisma.TenantUpdateWithoutContentsInput, Prisma.TenantUncheckedUpdateWithoutContentsInput>
+}
+
+export type TenantUpdateWithoutContentsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  main?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  assignments?: Prisma.AssignmentUpdateManyWithoutTenantNestedInput
+  categories?: Prisma.CategoryUpdateManyWithoutTenantNestedInput
+  files?: Prisma.FileUpdateManyWithoutTenantNestedInput
+  groups?: Prisma.GroupUpdateManyWithoutTenantNestedInput
+  safeWallets?: Prisma.SafeWalletUpdateManyWithoutTenantNestedInput
+  role?: Prisma.RoleUpdateOneRequiredWithoutTenantsNestedInput
+  space?: Prisma.SpaceUpdateOneRequiredWithoutTenantsNestedInput
+  user?: Prisma.UserUpdateOneRequiredWithoutTenantsNestedInput
+}
+
+export type TenantUncheckedUpdateWithoutContentsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  seq?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  spaceId?: Prisma.StringFieldUpdateOperationsInput | string
+  roleId?: Prisma.StringFieldUpdateOperationsInput | string
+  main?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  assignments?: Prisma.AssignmentUncheckedUpdateManyWithoutTenantNestedInput
+  categories?: Prisma.CategoryUncheckedUpdateManyWithoutTenantNestedInput
+  files?: Prisma.FileUncheckedUpdateManyWithoutTenantNestedInput
+  groups?: Prisma.GroupUncheckedUpdateManyWithoutTenantNestedInput
+  safeWallets?: Prisma.SafeWalletUncheckedUpdateManyWithoutTenantNestedInput
+}
+
+export type TenantCreateWithoutFilesInput = {
+  id?: string
+  seq?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string | null
+  removedAt?: Date | string | null
+  main?: boolean
+  assignments?: Prisma.AssignmentCreateNestedManyWithoutTenantInput
+  categories?: Prisma.CategoryCreateNestedManyWithoutTenantInput
+  contents?: Prisma.ContentCreateNestedManyWithoutTenantInput
+  groups?: Prisma.GroupCreateNestedManyWithoutTenantInput
+  safeWallets?: Prisma.SafeWalletCreateNestedManyWithoutTenantInput
+  role: Prisma.RoleCreateNestedOneWithoutTenantsInput
+  space: Prisma.SpaceCreateNestedOneWithoutTenantsInput
+  user: Prisma.UserCreateNestedOneWithoutTenantsInput
+}
+
+export type TenantUncheckedCreateWithoutFilesInput = {
+  id?: string
+  seq?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string | null
+  removedAt?: Date | string | null
+  userId: string
+  spaceId: string
+  roleId: string
+  main?: boolean
+  assignments?: Prisma.AssignmentUncheckedCreateNestedManyWithoutTenantInput
+  categories?: Prisma.CategoryUncheckedCreateNestedManyWithoutTenantInput
+  contents?: Prisma.ContentUncheckedCreateNestedManyWithoutTenantInput
+  groups?: Prisma.GroupUncheckedCreateNestedManyWithoutTenantInput
+  safeWallets?: Prisma.SafeWalletUncheckedCreateNestedManyWithoutTenantInput
+}
+
+export type TenantCreateOrConnectWithoutFilesInput = {
+  where: Prisma.TenantWhereUniqueInput
+  create: Prisma.XOR<Prisma.TenantCreateWithoutFilesInput, Prisma.TenantUncheckedCreateWithoutFilesInput>
+}
+
+export type TenantUpsertWithoutFilesInput = {
+  update: Prisma.XOR<Prisma.TenantUpdateWithoutFilesInput, Prisma.TenantUncheckedUpdateWithoutFilesInput>
+  create: Prisma.XOR<Prisma.TenantCreateWithoutFilesInput, Prisma.TenantUncheckedCreateWithoutFilesInput>
+  where?: Prisma.TenantWhereInput
+}
+
+export type TenantUpdateToOneWithWhereWithoutFilesInput = {
+  where?: Prisma.TenantWhereInput
+  data: Prisma.XOR<Prisma.TenantUpdateWithoutFilesInput, Prisma.TenantUncheckedUpdateWithoutFilesInput>
+}
+
+export type TenantUpdateWithoutFilesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  main?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  assignments?: Prisma.AssignmentUpdateManyWithoutTenantNestedInput
+  categories?: Prisma.CategoryUpdateManyWithoutTenantNestedInput
+  contents?: Prisma.ContentUpdateManyWithoutTenantNestedInput
+  groups?: Prisma.GroupUpdateManyWithoutTenantNestedInput
+  safeWallets?: Prisma.SafeWalletUpdateManyWithoutTenantNestedInput
+  role?: Prisma.RoleUpdateOneRequiredWithoutTenantsNestedInput
+  space?: Prisma.SpaceUpdateOneRequiredWithoutTenantsNestedInput
+  user?: Prisma.UserUpdateOneRequiredWithoutTenantsNestedInput
+}
+
+export type TenantUncheckedUpdateWithoutFilesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  seq?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  spaceId?: Prisma.StringFieldUpdateOperationsInput | string
+  roleId?: Prisma.StringFieldUpdateOperationsInput | string
+  main?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  assignments?: Prisma.AssignmentUncheckedUpdateManyWithoutTenantNestedInput
+  categories?: Prisma.CategoryUncheckedUpdateManyWithoutTenantNestedInput
+  contents?: Prisma.ContentUncheckedUpdateManyWithoutTenantNestedInput
+  groups?: Prisma.GroupUncheckedUpdateManyWithoutTenantNestedInput
+  safeWallets?: Prisma.SafeWalletUncheckedUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantCreateWithoutRoleInput = {
@@ -646,7 +1133,13 @@ export type TenantCreateWithoutRoleInput = {
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
+  main?: boolean
   assignments?: Prisma.AssignmentCreateNestedManyWithoutTenantInput
+  categories?: Prisma.CategoryCreateNestedManyWithoutTenantInput
+  contents?: Prisma.ContentCreateNestedManyWithoutTenantInput
+  files?: Prisma.FileCreateNestedManyWithoutTenantInput
+  groups?: Prisma.GroupCreateNestedManyWithoutTenantInput
+  safeWallets?: Prisma.SafeWalletCreateNestedManyWithoutTenantInput
   space: Prisma.SpaceCreateNestedOneWithoutTenantsInput
   user: Prisma.UserCreateNestedOneWithoutTenantsInput
 }
@@ -659,7 +1152,13 @@ export type TenantUncheckedCreateWithoutRoleInput = {
   removedAt?: Date | string | null
   userId: string
   spaceId: string
+  main?: boolean
   assignments?: Prisma.AssignmentUncheckedCreateNestedManyWithoutTenantInput
+  categories?: Prisma.CategoryUncheckedCreateNestedManyWithoutTenantInput
+  contents?: Prisma.ContentUncheckedCreateNestedManyWithoutTenantInput
+  files?: Prisma.FileUncheckedCreateNestedManyWithoutTenantInput
+  groups?: Prisma.GroupUncheckedCreateNestedManyWithoutTenantInput
+  safeWallets?: Prisma.SafeWalletUncheckedCreateNestedManyWithoutTenantInput
 }
 
 export type TenantCreateOrConnectWithoutRoleInput = {
@@ -700,6 +1199,90 @@ export type TenantScalarWhereInput = {
   userId?: Prisma.StringFilter<"Tenant"> | string
   spaceId?: Prisma.StringFilter<"Tenant"> | string
   roleId?: Prisma.StringFilter<"Tenant"> | string
+  main?: Prisma.BoolFilter<"Tenant"> | boolean
+}
+
+export type TenantCreateWithoutSafeWalletsInput = {
+  id?: string
+  seq?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string | null
+  removedAt?: Date | string | null
+  main?: boolean
+  assignments?: Prisma.AssignmentCreateNestedManyWithoutTenantInput
+  categories?: Prisma.CategoryCreateNestedManyWithoutTenantInput
+  contents?: Prisma.ContentCreateNestedManyWithoutTenantInput
+  files?: Prisma.FileCreateNestedManyWithoutTenantInput
+  groups?: Prisma.GroupCreateNestedManyWithoutTenantInput
+  role: Prisma.RoleCreateNestedOneWithoutTenantsInput
+  space: Prisma.SpaceCreateNestedOneWithoutTenantsInput
+  user: Prisma.UserCreateNestedOneWithoutTenantsInput
+}
+
+export type TenantUncheckedCreateWithoutSafeWalletsInput = {
+  id?: string
+  seq?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string | null
+  removedAt?: Date | string | null
+  userId: string
+  spaceId: string
+  roleId: string
+  main?: boolean
+  assignments?: Prisma.AssignmentUncheckedCreateNestedManyWithoutTenantInput
+  categories?: Prisma.CategoryUncheckedCreateNestedManyWithoutTenantInput
+  contents?: Prisma.ContentUncheckedCreateNestedManyWithoutTenantInput
+  files?: Prisma.FileUncheckedCreateNestedManyWithoutTenantInput
+  groups?: Prisma.GroupUncheckedCreateNestedManyWithoutTenantInput
+}
+
+export type TenantCreateOrConnectWithoutSafeWalletsInput = {
+  where: Prisma.TenantWhereUniqueInput
+  create: Prisma.XOR<Prisma.TenantCreateWithoutSafeWalletsInput, Prisma.TenantUncheckedCreateWithoutSafeWalletsInput>
+}
+
+export type TenantUpsertWithoutSafeWalletsInput = {
+  update: Prisma.XOR<Prisma.TenantUpdateWithoutSafeWalletsInput, Prisma.TenantUncheckedUpdateWithoutSafeWalletsInput>
+  create: Prisma.XOR<Prisma.TenantCreateWithoutSafeWalletsInput, Prisma.TenantUncheckedCreateWithoutSafeWalletsInput>
+  where?: Prisma.TenantWhereInput
+}
+
+export type TenantUpdateToOneWithWhereWithoutSafeWalletsInput = {
+  where?: Prisma.TenantWhereInput
+  data: Prisma.XOR<Prisma.TenantUpdateWithoutSafeWalletsInput, Prisma.TenantUncheckedUpdateWithoutSafeWalletsInput>
+}
+
+export type TenantUpdateWithoutSafeWalletsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  main?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  assignments?: Prisma.AssignmentUpdateManyWithoutTenantNestedInput
+  categories?: Prisma.CategoryUpdateManyWithoutTenantNestedInput
+  contents?: Prisma.ContentUpdateManyWithoutTenantNestedInput
+  files?: Prisma.FileUpdateManyWithoutTenantNestedInput
+  groups?: Prisma.GroupUpdateManyWithoutTenantNestedInput
+  role?: Prisma.RoleUpdateOneRequiredWithoutTenantsNestedInput
+  space?: Prisma.SpaceUpdateOneRequiredWithoutTenantsNestedInput
+  user?: Prisma.UserUpdateOneRequiredWithoutTenantsNestedInput
+}
+
+export type TenantUncheckedUpdateWithoutSafeWalletsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  seq?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  spaceId?: Prisma.StringFieldUpdateOperationsInput | string
+  roleId?: Prisma.StringFieldUpdateOperationsInput | string
+  main?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  assignments?: Prisma.AssignmentUncheckedUpdateManyWithoutTenantNestedInput
+  categories?: Prisma.CategoryUncheckedUpdateManyWithoutTenantNestedInput
+  contents?: Prisma.ContentUncheckedUpdateManyWithoutTenantNestedInput
+  files?: Prisma.FileUncheckedUpdateManyWithoutTenantNestedInput
+  groups?: Prisma.GroupUncheckedUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantCreateWithoutSpaceInput = {
@@ -708,7 +1291,13 @@ export type TenantCreateWithoutSpaceInput = {
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
+  main?: boolean
   assignments?: Prisma.AssignmentCreateNestedManyWithoutTenantInput
+  categories?: Prisma.CategoryCreateNestedManyWithoutTenantInput
+  contents?: Prisma.ContentCreateNestedManyWithoutTenantInput
+  files?: Prisma.FileCreateNestedManyWithoutTenantInput
+  groups?: Prisma.GroupCreateNestedManyWithoutTenantInput
+  safeWallets?: Prisma.SafeWalletCreateNestedManyWithoutTenantInput
   role: Prisma.RoleCreateNestedOneWithoutTenantsInput
   user: Prisma.UserCreateNestedOneWithoutTenantsInput
 }
@@ -721,7 +1310,13 @@ export type TenantUncheckedCreateWithoutSpaceInput = {
   removedAt?: Date | string | null
   userId: string
   roleId: string
+  main?: boolean
   assignments?: Prisma.AssignmentUncheckedCreateNestedManyWithoutTenantInput
+  categories?: Prisma.CategoryUncheckedCreateNestedManyWithoutTenantInput
+  contents?: Prisma.ContentUncheckedCreateNestedManyWithoutTenantInput
+  files?: Prisma.FileUncheckedCreateNestedManyWithoutTenantInput
+  groups?: Prisma.GroupUncheckedCreateNestedManyWithoutTenantInput
+  safeWallets?: Prisma.SafeWalletUncheckedCreateNestedManyWithoutTenantInput
 }
 
 export type TenantCreateOrConnectWithoutSpaceInput = {
@@ -756,7 +1351,13 @@ export type TenantCreateWithoutUserInput = {
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
+  main?: boolean
   assignments?: Prisma.AssignmentCreateNestedManyWithoutTenantInput
+  categories?: Prisma.CategoryCreateNestedManyWithoutTenantInput
+  contents?: Prisma.ContentCreateNestedManyWithoutTenantInput
+  files?: Prisma.FileCreateNestedManyWithoutTenantInput
+  groups?: Prisma.GroupCreateNestedManyWithoutTenantInput
+  safeWallets?: Prisma.SafeWalletCreateNestedManyWithoutTenantInput
   role: Prisma.RoleCreateNestedOneWithoutTenantsInput
   space: Prisma.SpaceCreateNestedOneWithoutTenantsInput
 }
@@ -769,7 +1370,13 @@ export type TenantUncheckedCreateWithoutUserInput = {
   removedAt?: Date | string | null
   spaceId: string
   roleId: string
+  main?: boolean
   assignments?: Prisma.AssignmentUncheckedCreateNestedManyWithoutTenantInput
+  categories?: Prisma.CategoryUncheckedCreateNestedManyWithoutTenantInput
+  contents?: Prisma.ContentUncheckedCreateNestedManyWithoutTenantInput
+  files?: Prisma.FileUncheckedCreateNestedManyWithoutTenantInput
+  groups?: Prisma.GroupUncheckedCreateNestedManyWithoutTenantInput
+  safeWallets?: Prisma.SafeWalletUncheckedCreateNestedManyWithoutTenantInput
 }
 
 export type TenantCreateOrConnectWithoutUserInput = {
@@ -806,6 +1413,7 @@ export type TenantCreateManyRoleInput = {
   removedAt?: Date | string | null
   userId: string
   spaceId: string
+  main?: boolean
 }
 
 export type TenantUpdateWithoutRoleInput = {
@@ -813,7 +1421,13 @@ export type TenantUpdateWithoutRoleInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  main?: Prisma.BoolFieldUpdateOperationsInput | boolean
   assignments?: Prisma.AssignmentUpdateManyWithoutTenantNestedInput
+  categories?: Prisma.CategoryUpdateManyWithoutTenantNestedInput
+  contents?: Prisma.ContentUpdateManyWithoutTenantNestedInput
+  files?: Prisma.FileUpdateManyWithoutTenantNestedInput
+  groups?: Prisma.GroupUpdateManyWithoutTenantNestedInput
+  safeWallets?: Prisma.SafeWalletUpdateManyWithoutTenantNestedInput
   space?: Prisma.SpaceUpdateOneRequiredWithoutTenantsNestedInput
   user?: Prisma.UserUpdateOneRequiredWithoutTenantsNestedInput
 }
@@ -826,7 +1440,13 @@ export type TenantUncheckedUpdateWithoutRoleInput = {
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   userId?: Prisma.StringFieldUpdateOperationsInput | string
   spaceId?: Prisma.StringFieldUpdateOperationsInput | string
+  main?: Prisma.BoolFieldUpdateOperationsInput | boolean
   assignments?: Prisma.AssignmentUncheckedUpdateManyWithoutTenantNestedInput
+  categories?: Prisma.CategoryUncheckedUpdateManyWithoutTenantNestedInput
+  contents?: Prisma.ContentUncheckedUpdateManyWithoutTenantNestedInput
+  files?: Prisma.FileUncheckedUpdateManyWithoutTenantNestedInput
+  groups?: Prisma.GroupUncheckedUpdateManyWithoutTenantNestedInput
+  safeWallets?: Prisma.SafeWalletUncheckedUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateManyWithoutRoleInput = {
@@ -837,6 +1457,7 @@ export type TenantUncheckedUpdateManyWithoutRoleInput = {
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   userId?: Prisma.StringFieldUpdateOperationsInput | string
   spaceId?: Prisma.StringFieldUpdateOperationsInput | string
+  main?: Prisma.BoolFieldUpdateOperationsInput | boolean
 }
 
 export type TenantCreateManySpaceInput = {
@@ -847,6 +1468,7 @@ export type TenantCreateManySpaceInput = {
   removedAt?: Date | string | null
   userId: string
   roleId: string
+  main?: boolean
 }
 
 export type TenantUpdateWithoutSpaceInput = {
@@ -854,7 +1476,13 @@ export type TenantUpdateWithoutSpaceInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  main?: Prisma.BoolFieldUpdateOperationsInput | boolean
   assignments?: Prisma.AssignmentUpdateManyWithoutTenantNestedInput
+  categories?: Prisma.CategoryUpdateManyWithoutTenantNestedInput
+  contents?: Prisma.ContentUpdateManyWithoutTenantNestedInput
+  files?: Prisma.FileUpdateManyWithoutTenantNestedInput
+  groups?: Prisma.GroupUpdateManyWithoutTenantNestedInput
+  safeWallets?: Prisma.SafeWalletUpdateManyWithoutTenantNestedInput
   role?: Prisma.RoleUpdateOneRequiredWithoutTenantsNestedInput
   user?: Prisma.UserUpdateOneRequiredWithoutTenantsNestedInput
 }
@@ -867,7 +1495,13 @@ export type TenantUncheckedUpdateWithoutSpaceInput = {
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   userId?: Prisma.StringFieldUpdateOperationsInput | string
   roleId?: Prisma.StringFieldUpdateOperationsInput | string
+  main?: Prisma.BoolFieldUpdateOperationsInput | boolean
   assignments?: Prisma.AssignmentUncheckedUpdateManyWithoutTenantNestedInput
+  categories?: Prisma.CategoryUncheckedUpdateManyWithoutTenantNestedInput
+  contents?: Prisma.ContentUncheckedUpdateManyWithoutTenantNestedInput
+  files?: Prisma.FileUncheckedUpdateManyWithoutTenantNestedInput
+  groups?: Prisma.GroupUncheckedUpdateManyWithoutTenantNestedInput
+  safeWallets?: Prisma.SafeWalletUncheckedUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateManyWithoutSpaceInput = {
@@ -878,6 +1512,7 @@ export type TenantUncheckedUpdateManyWithoutSpaceInput = {
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   userId?: Prisma.StringFieldUpdateOperationsInput | string
   roleId?: Prisma.StringFieldUpdateOperationsInput | string
+  main?: Prisma.BoolFieldUpdateOperationsInput | boolean
 }
 
 export type TenantCreateManyUserInput = {
@@ -888,6 +1523,7 @@ export type TenantCreateManyUserInput = {
   removedAt?: Date | string | null
   spaceId: string
   roleId: string
+  main?: boolean
 }
 
 export type TenantUpdateWithoutUserInput = {
@@ -895,7 +1531,13 @@ export type TenantUpdateWithoutUserInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  main?: Prisma.BoolFieldUpdateOperationsInput | boolean
   assignments?: Prisma.AssignmentUpdateManyWithoutTenantNestedInput
+  categories?: Prisma.CategoryUpdateManyWithoutTenantNestedInput
+  contents?: Prisma.ContentUpdateManyWithoutTenantNestedInput
+  files?: Prisma.FileUpdateManyWithoutTenantNestedInput
+  groups?: Prisma.GroupUpdateManyWithoutTenantNestedInput
+  safeWallets?: Prisma.SafeWalletUpdateManyWithoutTenantNestedInput
   role?: Prisma.RoleUpdateOneRequiredWithoutTenantsNestedInput
   space?: Prisma.SpaceUpdateOneRequiredWithoutTenantsNestedInput
 }
@@ -908,7 +1550,13 @@ export type TenantUncheckedUpdateWithoutUserInput = {
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   spaceId?: Prisma.StringFieldUpdateOperationsInput | string
   roleId?: Prisma.StringFieldUpdateOperationsInput | string
+  main?: Prisma.BoolFieldUpdateOperationsInput | boolean
   assignments?: Prisma.AssignmentUncheckedUpdateManyWithoutTenantNestedInput
+  categories?: Prisma.CategoryUncheckedUpdateManyWithoutTenantNestedInput
+  contents?: Prisma.ContentUncheckedUpdateManyWithoutTenantNestedInput
+  files?: Prisma.FileUncheckedUpdateManyWithoutTenantNestedInput
+  groups?: Prisma.GroupUncheckedUpdateManyWithoutTenantNestedInput
+  safeWallets?: Prisma.SafeWalletUncheckedUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateManyWithoutUserInput = {
@@ -919,6 +1567,7 @@ export type TenantUncheckedUpdateManyWithoutUserInput = {
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   spaceId?: Prisma.StringFieldUpdateOperationsInput | string
   roleId?: Prisma.StringFieldUpdateOperationsInput | string
+  main?: Prisma.BoolFieldUpdateOperationsInput | boolean
 }
 
 
@@ -928,10 +1577,20 @@ export type TenantUncheckedUpdateManyWithoutUserInput = {
 
 export type TenantCountOutputType = {
   assignments: number
+  categories: number
+  contents: number
+  files: number
+  groups: number
+  safeWallets: number
 }
 
 export type TenantCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   assignments?: boolean | TenantCountOutputTypeCountAssignmentsArgs
+  categories?: boolean | TenantCountOutputTypeCountCategoriesArgs
+  contents?: boolean | TenantCountOutputTypeCountContentsArgs
+  files?: boolean | TenantCountOutputTypeCountFilesArgs
+  groups?: boolean | TenantCountOutputTypeCountGroupsArgs
+  safeWallets?: boolean | TenantCountOutputTypeCountSafeWalletsArgs
 }
 
 /**
@@ -951,6 +1610,41 @@ export type TenantCountOutputTypeCountAssignmentsArgs<ExtArgs extends runtime.Ty
   where?: Prisma.AssignmentWhereInput
 }
 
+/**
+ * TenantCountOutputType without action
+ */
+export type TenantCountOutputTypeCountCategoriesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.CategoryWhereInput
+}
+
+/**
+ * TenantCountOutputType without action
+ */
+export type TenantCountOutputTypeCountContentsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.ContentWhereInput
+}
+
+/**
+ * TenantCountOutputType without action
+ */
+export type TenantCountOutputTypeCountFilesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.FileWhereInput
+}
+
+/**
+ * TenantCountOutputType without action
+ */
+export type TenantCountOutputTypeCountGroupsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.GroupWhereInput
+}
+
+/**
+ * TenantCountOutputType without action
+ */
+export type TenantCountOutputTypeCountSafeWalletsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.SafeWalletWhereInput
+}
+
 
 export type TenantSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -961,7 +1655,13 @@ export type TenantSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   userId?: boolean
   spaceId?: boolean
   roleId?: boolean
+  main?: boolean
   assignments?: boolean | Prisma.Tenant$assignmentsArgs<ExtArgs>
+  categories?: boolean | Prisma.Tenant$categoriesArgs<ExtArgs>
+  contents?: boolean | Prisma.Tenant$contentsArgs<ExtArgs>
+  files?: boolean | Prisma.Tenant$filesArgs<ExtArgs>
+  groups?: boolean | Prisma.Tenant$groupsArgs<ExtArgs>
+  safeWallets?: boolean | Prisma.Tenant$safeWalletsArgs<ExtArgs>
   role?: boolean | Prisma.RoleDefaultArgs<ExtArgs>
   space?: boolean | Prisma.SpaceDefaultArgs<ExtArgs>
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
@@ -977,6 +1677,7 @@ export type TenantSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extens
   userId?: boolean
   spaceId?: boolean
   roleId?: boolean
+  main?: boolean
   role?: boolean | Prisma.RoleDefaultArgs<ExtArgs>
   space?: boolean | Prisma.SpaceDefaultArgs<ExtArgs>
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
@@ -991,6 +1692,7 @@ export type TenantSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extens
   userId?: boolean
   spaceId?: boolean
   roleId?: boolean
+  main?: boolean
   role?: boolean | Prisma.RoleDefaultArgs<ExtArgs>
   space?: boolean | Prisma.SpaceDefaultArgs<ExtArgs>
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
@@ -1005,11 +1707,17 @@ export type TenantSelectScalar = {
   userId?: boolean
   spaceId?: boolean
   roleId?: boolean
+  main?: boolean
 }
 
-export type TenantOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "seq" | "createdAt" | "updatedAt" | "removedAt" | "userId" | "spaceId" | "roleId", ExtArgs["result"]["tenant"]>
+export type TenantOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "seq" | "createdAt" | "updatedAt" | "removedAt" | "userId" | "spaceId" | "roleId" | "main", ExtArgs["result"]["tenant"]>
 export type TenantInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   assignments?: boolean | Prisma.Tenant$assignmentsArgs<ExtArgs>
+  categories?: boolean | Prisma.Tenant$categoriesArgs<ExtArgs>
+  contents?: boolean | Prisma.Tenant$contentsArgs<ExtArgs>
+  files?: boolean | Prisma.Tenant$filesArgs<ExtArgs>
+  groups?: boolean | Prisma.Tenant$groupsArgs<ExtArgs>
+  safeWallets?: boolean | Prisma.Tenant$safeWalletsArgs<ExtArgs>
   role?: boolean | Prisma.RoleDefaultArgs<ExtArgs>
   space?: boolean | Prisma.SpaceDefaultArgs<ExtArgs>
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
@@ -1030,6 +1738,11 @@ export type $TenantPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs
   name: "Tenant"
   objects: {
     assignments: Prisma.$AssignmentPayload<ExtArgs>[]
+    categories: Prisma.$CategoryPayload<ExtArgs>[]
+    contents: Prisma.$ContentPayload<ExtArgs>[]
+    files: Prisma.$FilePayload<ExtArgs>[]
+    groups: Prisma.$GroupPayload<ExtArgs>[]
+    safeWallets: Prisma.$SafeWalletPayload<ExtArgs>[]
     role: Prisma.$RolePayload<ExtArgs>
     space: Prisma.$SpacePayload<ExtArgs>
     user: Prisma.$UserPayload<ExtArgs>
@@ -1043,6 +1756,7 @@ export type $TenantPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs
     userId: string
     spaceId: string
     roleId: string
+    main: boolean
   }, ExtArgs["result"]["tenant"]>
   composites: {}
 }
@@ -1438,6 +2152,11 @@ readonly fields: TenantFieldRefs;
 export interface Prisma__TenantClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
   assignments<T extends Prisma.Tenant$assignmentsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Tenant$assignmentsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AssignmentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  categories<T extends Prisma.Tenant$categoriesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Tenant$categoriesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CategoryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  contents<T extends Prisma.Tenant$contentsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Tenant$contentsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ContentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  files<T extends Prisma.Tenant$filesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Tenant$filesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$FilePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  groups<T extends Prisma.Tenant$groupsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Tenant$groupsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$GroupPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  safeWallets<T extends Prisma.Tenant$safeWalletsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Tenant$safeWalletsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$SafeWalletPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   role<T extends Prisma.RoleDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.RoleDefaultArgs<ExtArgs>>): Prisma.Prisma__RoleClient<runtime.Types.Result.GetResult<Prisma.$RolePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   space<T extends Prisma.SpaceDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.SpaceDefaultArgs<ExtArgs>>): Prisma.Prisma__SpaceClient<runtime.Types.Result.GetResult<Prisma.$SpacePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   user<T extends Prisma.UserDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.UserDefaultArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
@@ -1478,6 +2197,7 @@ export interface TenantFieldRefs {
   readonly userId: Prisma.FieldRef<"Tenant", 'String'>
   readonly spaceId: Prisma.FieldRef<"Tenant", 'String'>
   readonly roleId: Prisma.FieldRef<"Tenant", 'String'>
+  readonly main: Prisma.FieldRef<"Tenant", 'Boolean'>
 }
     
 
@@ -1895,6 +2615,126 @@ export type Tenant$assignmentsArgs<ExtArgs extends runtime.Types.Extensions.Inte
   take?: number
   skip?: number
   distinct?: Prisma.AssignmentScalarFieldEnum | Prisma.AssignmentScalarFieldEnum[]
+}
+
+/**
+ * Tenant.categories
+ */
+export type Tenant$categoriesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Category
+   */
+  select?: Prisma.CategorySelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Category
+   */
+  omit?: Prisma.CategoryOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.CategoryInclude<ExtArgs> | null
+  where?: Prisma.CategoryWhereInput
+  orderBy?: Prisma.CategoryOrderByWithRelationInput | Prisma.CategoryOrderByWithRelationInput[]
+  cursor?: Prisma.CategoryWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.CategoryScalarFieldEnum | Prisma.CategoryScalarFieldEnum[]
+}
+
+/**
+ * Tenant.contents
+ */
+export type Tenant$contentsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Content
+   */
+  select?: Prisma.ContentSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Content
+   */
+  omit?: Prisma.ContentOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ContentInclude<ExtArgs> | null
+  where?: Prisma.ContentWhereInput
+  orderBy?: Prisma.ContentOrderByWithRelationInput | Prisma.ContentOrderByWithRelationInput[]
+  cursor?: Prisma.ContentWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.ContentScalarFieldEnum | Prisma.ContentScalarFieldEnum[]
+}
+
+/**
+ * Tenant.files
+ */
+export type Tenant$filesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the File
+   */
+  select?: Prisma.FileSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the File
+   */
+  omit?: Prisma.FileOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.FileInclude<ExtArgs> | null
+  where?: Prisma.FileWhereInput
+  orderBy?: Prisma.FileOrderByWithRelationInput | Prisma.FileOrderByWithRelationInput[]
+  cursor?: Prisma.FileWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.FileScalarFieldEnum | Prisma.FileScalarFieldEnum[]
+}
+
+/**
+ * Tenant.groups
+ */
+export type Tenant$groupsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Group
+   */
+  select?: Prisma.GroupSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Group
+   */
+  omit?: Prisma.GroupOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.GroupInclude<ExtArgs> | null
+  where?: Prisma.GroupWhereInput
+  orderBy?: Prisma.GroupOrderByWithRelationInput | Prisma.GroupOrderByWithRelationInput[]
+  cursor?: Prisma.GroupWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.GroupScalarFieldEnum | Prisma.GroupScalarFieldEnum[]
+}
+
+/**
+ * Tenant.safeWallets
+ */
+export type Tenant$safeWalletsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the SafeWallet
+   */
+  select?: Prisma.SafeWalletSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the SafeWallet
+   */
+  omit?: Prisma.SafeWalletOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.SafeWalletInclude<ExtArgs> | null
+  where?: Prisma.SafeWalletWhereInput
+  orderBy?: Prisma.SafeWalletOrderByWithRelationInput | Prisma.SafeWalletOrderByWithRelationInput[]
+  cursor?: Prisma.SafeWalletWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.SafeWalletScalarFieldEnum | Prisma.SafeWalletScalarFieldEnum[]
 }
 
 /**

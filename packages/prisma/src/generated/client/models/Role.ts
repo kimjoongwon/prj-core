@@ -14,7 +14,7 @@ import type * as Prisma from "../internal/prismaNamespace"
 
 /**
  * Model Role
- * @displayName 역할
+ * 
  */
 export type RoleModel = runtime.Types.Result.DefaultSelection<Prisma.$RolePayload>
 
@@ -952,9 +952,6 @@ export type $RolePayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     createdAt: Date
     updatedAt: Date | null
     removedAt: Date | null
-    /**
-     * @displayName 역할명
-     */
     name: $Enums.Roles
   }, ExtArgs["result"]["role"]>
   composites: {}

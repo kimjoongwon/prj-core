@@ -15,6 +15,7 @@ import {
 import { APP_GUARD, RouterModule } from "@nestjs/core";
 import { ThrottlerGuard } from "@nestjs/throttler";
 import { AbilitiesModule } from "./abilities";
+import { ActionsModule } from "./actions";
 import { AuthModule } from "./auth";
 // Global modules
 import { globalModules } from "./global.module";
@@ -30,8 +31,9 @@ import { UsersModule } from "./users";
 		AuthModule,
 		GroundsModule,
 		UsersModule,
-		AbilitiesModule,
+		ActionsModule,
 		SubjectsModule,
+		AbilitiesModule,
 		// Resource Modules는 필요할 때 추가합니다.
 		// 가이드: .claude/agents/be-controller-builder.md
 		RouterModule.register([
@@ -54,12 +56,16 @@ import { UsersModule } from "./users";
 								module: UsersModule,
 							},
 							{
-								path: "abilities",
-								module: AbilitiesModule,
+								path: "actions",
+								module: ActionsModule,
 							},
 							{
 								path: "subjects",
 								module: SubjectsModule,
+							},
+							{
+								path: "abilities",
+								module: AbilitiesModule,
 							},
 							// 새로운 Resource 라우트는 여기에 추가
 						],

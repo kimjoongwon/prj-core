@@ -43,8 +43,7 @@ export type TimelineMinAggregateOutputType = {
   createdAt: Date | null
   updatedAt: Date | null
   removedAt: Date | null
-  spaceId: string | null
-  creatorId: string | null
+  tenantId: string | null
   name: string | null
   description: string | null
 }
@@ -55,8 +54,7 @@ export type TimelineMaxAggregateOutputType = {
   createdAt: Date | null
   updatedAt: Date | null
   removedAt: Date | null
-  spaceId: string | null
-  creatorId: string | null
+  tenantId: string | null
   name: string | null
   description: string | null
 }
@@ -67,8 +65,7 @@ export type TimelineCountAggregateOutputType = {
   createdAt: number
   updatedAt: number
   removedAt: number
-  spaceId: number
-  creatorId: number
+  tenantId: number
   name: number
   description: number
   _all: number
@@ -89,8 +86,7 @@ export type TimelineMinAggregateInputType = {
   createdAt?: true
   updatedAt?: true
   removedAt?: true
-  spaceId?: true
-  creatorId?: true
+  tenantId?: true
   name?: true
   description?: true
 }
@@ -101,8 +97,7 @@ export type TimelineMaxAggregateInputType = {
   createdAt?: true
   updatedAt?: true
   removedAt?: true
-  spaceId?: true
-  creatorId?: true
+  tenantId?: true
   name?: true
   description?: true
 }
@@ -113,8 +108,7 @@ export type TimelineCountAggregateInputType = {
   createdAt?: true
   updatedAt?: true
   removedAt?: true
-  spaceId?: true
-  creatorId?: true
+  tenantId?: true
   name?: true
   description?: true
   _all?: true
@@ -212,8 +206,7 @@ export type TimelineGroupByOutputType = {
   createdAt: Date
   updatedAt: Date | null
   removedAt: Date | null
-  spaceId: string
-  creatorId: string | null
+  tenantId: string
   name: string
   description: string | null
   _count: TimelineCountAggregateOutputType | null
@@ -247,12 +240,9 @@ export type TimelineWhereInput = {
   createdAt?: Prisma.DateTimeFilter<"Timeline"> | Date | string
   updatedAt?: Prisma.DateTimeNullableFilter<"Timeline"> | Date | string | null
   removedAt?: Prisma.DateTimeNullableFilter<"Timeline"> | Date | string | null
-  spaceId?: Prisma.StringFilter<"Timeline"> | string
-  creatorId?: Prisma.StringNullableFilter<"Timeline"> | string | null
+  tenantId?: Prisma.StringFilter<"Timeline"> | string
   name?: Prisma.StringFilter<"Timeline"> | string
   description?: Prisma.StringNullableFilter<"Timeline"> | string | null
-  space?: Prisma.XOR<Prisma.SpaceScalarRelationFilter, Prisma.SpaceWhereInput>
-  creator?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
   sessions?: Prisma.SessionListRelationFilter
 }
 
@@ -262,12 +252,9 @@ export type TimelineOrderByWithRelationInput = {
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   removedAt?: Prisma.SortOrderInput | Prisma.SortOrder
-  spaceId?: Prisma.SortOrder
-  creatorId?: Prisma.SortOrderInput | Prisma.SortOrder
+  tenantId?: Prisma.SortOrder
   name?: Prisma.SortOrder
   description?: Prisma.SortOrderInput | Prisma.SortOrder
-  space?: Prisma.SpaceOrderByWithRelationInput
-  creator?: Prisma.UserOrderByWithRelationInput
   sessions?: Prisma.SessionOrderByRelationAggregateInput
 }
 
@@ -280,12 +267,9 @@ export type TimelineWhereUniqueInput = Prisma.AtLeast<{
   createdAt?: Prisma.DateTimeFilter<"Timeline"> | Date | string
   updatedAt?: Prisma.DateTimeNullableFilter<"Timeline"> | Date | string | null
   removedAt?: Prisma.DateTimeNullableFilter<"Timeline"> | Date | string | null
-  spaceId?: Prisma.StringFilter<"Timeline"> | string
-  creatorId?: Prisma.StringNullableFilter<"Timeline"> | string | null
+  tenantId?: Prisma.StringFilter<"Timeline"> | string
   name?: Prisma.StringFilter<"Timeline"> | string
   description?: Prisma.StringNullableFilter<"Timeline"> | string | null
-  space?: Prisma.XOR<Prisma.SpaceScalarRelationFilter, Prisma.SpaceWhereInput>
-  creator?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
   sessions?: Prisma.SessionListRelationFilter
 }, "id" | "seq">
 
@@ -295,8 +279,7 @@ export type TimelineOrderByWithAggregationInput = {
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   removedAt?: Prisma.SortOrderInput | Prisma.SortOrder
-  spaceId?: Prisma.SortOrder
-  creatorId?: Prisma.SortOrderInput | Prisma.SortOrder
+  tenantId?: Prisma.SortOrder
   name?: Prisma.SortOrder
   description?: Prisma.SortOrderInput | Prisma.SortOrder
   _count?: Prisma.TimelineCountOrderByAggregateInput
@@ -315,8 +298,7 @@ export type TimelineScalarWhereWithAggregatesInput = {
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Timeline"> | Date | string
   updatedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Timeline"> | Date | string | null
   removedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Timeline"> | Date | string | null
-  spaceId?: Prisma.StringWithAggregatesFilter<"Timeline"> | string
-  creatorId?: Prisma.StringNullableWithAggregatesFilter<"Timeline"> | string | null
+  tenantId?: Prisma.StringWithAggregatesFilter<"Timeline"> | string
   name?: Prisma.StringWithAggregatesFilter<"Timeline"> | string
   description?: Prisma.StringNullableWithAggregatesFilter<"Timeline"> | string | null
 }
@@ -327,10 +309,9 @@ export type TimelineCreateInput = {
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
+  tenantId: string
   name: string
   description?: string | null
-  space: Prisma.SpaceCreateNestedOneWithoutTimelinesInput
-  creator?: Prisma.UserCreateNestedOneWithoutCreatedTimelinesInput
   sessions?: Prisma.SessionCreateNestedManyWithoutTimelineInput
 }
 
@@ -340,8 +321,7 @@ export type TimelineUncheckedCreateInput = {
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
-  spaceId: string
-  creatorId?: string | null
+  tenantId: string
   name: string
   description?: string | null
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutTimelineInput
@@ -352,10 +332,9 @@ export type TimelineUpdateInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  space?: Prisma.SpaceUpdateOneRequiredWithoutTimelinesNestedInput
-  creator?: Prisma.UserUpdateOneWithoutCreatedTimelinesNestedInput
   sessions?: Prisma.SessionUpdateManyWithoutTimelineNestedInput
 }
 
@@ -365,8 +344,7 @@ export type TimelineUncheckedUpdateInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  spaceId?: Prisma.StringFieldUpdateOperationsInput | string
-  creatorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutTimelineNestedInput
@@ -378,8 +356,7 @@ export type TimelineCreateManyInput = {
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
-  spaceId: string
-  creatorId?: string | null
+  tenantId: string
   name: string
   description?: string | null
 }
@@ -389,6 +366,7 @@ export type TimelineUpdateManyMutationInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
@@ -399,20 +377,9 @@ export type TimelineUncheckedUpdateManyInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  spaceId?: Prisma.StringFieldUpdateOperationsInput | string
-  creatorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-}
-
-export type TimelineListRelationFilter = {
-  every?: Prisma.TimelineWhereInput
-  some?: Prisma.TimelineWhereInput
-  none?: Prisma.TimelineWhereInput
-}
-
-export type TimelineOrderByRelationAggregateInput = {
-  _count?: Prisma.SortOrder
 }
 
 export type TimelineCountOrderByAggregateInput = {
@@ -421,8 +388,7 @@ export type TimelineCountOrderByAggregateInput = {
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   removedAt?: Prisma.SortOrder
-  spaceId?: Prisma.SortOrder
-  creatorId?: Prisma.SortOrder
+  tenantId?: Prisma.SortOrder
   name?: Prisma.SortOrder
   description?: Prisma.SortOrder
 }
@@ -437,8 +403,7 @@ export type TimelineMaxOrderByAggregateInput = {
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   removedAt?: Prisma.SortOrder
-  spaceId?: Prisma.SortOrder
-  creatorId?: Prisma.SortOrder
+  tenantId?: Prisma.SortOrder
   name?: Prisma.SortOrder
   description?: Prisma.SortOrder
 }
@@ -449,8 +414,7 @@ export type TimelineMinOrderByAggregateInput = {
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   removedAt?: Prisma.SortOrder
-  spaceId?: Prisma.SortOrder
-  creatorId?: Prisma.SortOrder
+  tenantId?: Prisma.SortOrder
   name?: Prisma.SortOrder
   description?: Prisma.SortOrder
 }
@@ -462,48 +426,6 @@ export type TimelineSumOrderByAggregateInput = {
 export type TimelineScalarRelationFilter = {
   is?: Prisma.TimelineWhereInput
   isNot?: Prisma.TimelineWhereInput
-}
-
-export type TimelineCreateNestedManyWithoutSpaceInput = {
-  create?: Prisma.XOR<Prisma.TimelineCreateWithoutSpaceInput, Prisma.TimelineUncheckedCreateWithoutSpaceInput> | Prisma.TimelineCreateWithoutSpaceInput[] | Prisma.TimelineUncheckedCreateWithoutSpaceInput[]
-  connectOrCreate?: Prisma.TimelineCreateOrConnectWithoutSpaceInput | Prisma.TimelineCreateOrConnectWithoutSpaceInput[]
-  createMany?: Prisma.TimelineCreateManySpaceInputEnvelope
-  connect?: Prisma.TimelineWhereUniqueInput | Prisma.TimelineWhereUniqueInput[]
-}
-
-export type TimelineUncheckedCreateNestedManyWithoutSpaceInput = {
-  create?: Prisma.XOR<Prisma.TimelineCreateWithoutSpaceInput, Prisma.TimelineUncheckedCreateWithoutSpaceInput> | Prisma.TimelineCreateWithoutSpaceInput[] | Prisma.TimelineUncheckedCreateWithoutSpaceInput[]
-  connectOrCreate?: Prisma.TimelineCreateOrConnectWithoutSpaceInput | Prisma.TimelineCreateOrConnectWithoutSpaceInput[]
-  createMany?: Prisma.TimelineCreateManySpaceInputEnvelope
-  connect?: Prisma.TimelineWhereUniqueInput | Prisma.TimelineWhereUniqueInput[]
-}
-
-export type TimelineUpdateManyWithoutSpaceNestedInput = {
-  create?: Prisma.XOR<Prisma.TimelineCreateWithoutSpaceInput, Prisma.TimelineUncheckedCreateWithoutSpaceInput> | Prisma.TimelineCreateWithoutSpaceInput[] | Prisma.TimelineUncheckedCreateWithoutSpaceInput[]
-  connectOrCreate?: Prisma.TimelineCreateOrConnectWithoutSpaceInput | Prisma.TimelineCreateOrConnectWithoutSpaceInput[]
-  upsert?: Prisma.TimelineUpsertWithWhereUniqueWithoutSpaceInput | Prisma.TimelineUpsertWithWhereUniqueWithoutSpaceInput[]
-  createMany?: Prisma.TimelineCreateManySpaceInputEnvelope
-  set?: Prisma.TimelineWhereUniqueInput | Prisma.TimelineWhereUniqueInput[]
-  disconnect?: Prisma.TimelineWhereUniqueInput | Prisma.TimelineWhereUniqueInput[]
-  delete?: Prisma.TimelineWhereUniqueInput | Prisma.TimelineWhereUniqueInput[]
-  connect?: Prisma.TimelineWhereUniqueInput | Prisma.TimelineWhereUniqueInput[]
-  update?: Prisma.TimelineUpdateWithWhereUniqueWithoutSpaceInput | Prisma.TimelineUpdateWithWhereUniqueWithoutSpaceInput[]
-  updateMany?: Prisma.TimelineUpdateManyWithWhereWithoutSpaceInput | Prisma.TimelineUpdateManyWithWhereWithoutSpaceInput[]
-  deleteMany?: Prisma.TimelineScalarWhereInput | Prisma.TimelineScalarWhereInput[]
-}
-
-export type TimelineUncheckedUpdateManyWithoutSpaceNestedInput = {
-  create?: Prisma.XOR<Prisma.TimelineCreateWithoutSpaceInput, Prisma.TimelineUncheckedCreateWithoutSpaceInput> | Prisma.TimelineCreateWithoutSpaceInput[] | Prisma.TimelineUncheckedCreateWithoutSpaceInput[]
-  connectOrCreate?: Prisma.TimelineCreateOrConnectWithoutSpaceInput | Prisma.TimelineCreateOrConnectWithoutSpaceInput[]
-  upsert?: Prisma.TimelineUpsertWithWhereUniqueWithoutSpaceInput | Prisma.TimelineUpsertWithWhereUniqueWithoutSpaceInput[]
-  createMany?: Prisma.TimelineCreateManySpaceInputEnvelope
-  set?: Prisma.TimelineWhereUniqueInput | Prisma.TimelineWhereUniqueInput[]
-  disconnect?: Prisma.TimelineWhereUniqueInput | Prisma.TimelineWhereUniqueInput[]
-  delete?: Prisma.TimelineWhereUniqueInput | Prisma.TimelineWhereUniqueInput[]
-  connect?: Prisma.TimelineWhereUniqueInput | Prisma.TimelineWhereUniqueInput[]
-  update?: Prisma.TimelineUpdateWithWhereUniqueWithoutSpaceInput | Prisma.TimelineUpdateWithWhereUniqueWithoutSpaceInput[]
-  updateMany?: Prisma.TimelineUpdateManyWithWhereWithoutSpaceInput | Prisma.TimelineUpdateManyWithWhereWithoutSpaceInput[]
-  deleteMany?: Prisma.TimelineScalarWhereInput | Prisma.TimelineScalarWhereInput[]
 }
 
 export type TimelineCreateNestedOneWithoutSessionsInput = {
@@ -520,123 +442,15 @@ export type TimelineUpdateOneRequiredWithoutSessionsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.TimelineUpdateToOneWithWhereWithoutSessionsInput, Prisma.TimelineUpdateWithoutSessionsInput>, Prisma.TimelineUncheckedUpdateWithoutSessionsInput>
 }
 
-export type TimelineCreateNestedManyWithoutCreatorInput = {
-  create?: Prisma.XOR<Prisma.TimelineCreateWithoutCreatorInput, Prisma.TimelineUncheckedCreateWithoutCreatorInput> | Prisma.TimelineCreateWithoutCreatorInput[] | Prisma.TimelineUncheckedCreateWithoutCreatorInput[]
-  connectOrCreate?: Prisma.TimelineCreateOrConnectWithoutCreatorInput | Prisma.TimelineCreateOrConnectWithoutCreatorInput[]
-  createMany?: Prisma.TimelineCreateManyCreatorInputEnvelope
-  connect?: Prisma.TimelineWhereUniqueInput | Prisma.TimelineWhereUniqueInput[]
-}
-
-export type TimelineUncheckedCreateNestedManyWithoutCreatorInput = {
-  create?: Prisma.XOR<Prisma.TimelineCreateWithoutCreatorInput, Prisma.TimelineUncheckedCreateWithoutCreatorInput> | Prisma.TimelineCreateWithoutCreatorInput[] | Prisma.TimelineUncheckedCreateWithoutCreatorInput[]
-  connectOrCreate?: Prisma.TimelineCreateOrConnectWithoutCreatorInput | Prisma.TimelineCreateOrConnectWithoutCreatorInput[]
-  createMany?: Prisma.TimelineCreateManyCreatorInputEnvelope
-  connect?: Prisma.TimelineWhereUniqueInput | Prisma.TimelineWhereUniqueInput[]
-}
-
-export type TimelineUpdateManyWithoutCreatorNestedInput = {
-  create?: Prisma.XOR<Prisma.TimelineCreateWithoutCreatorInput, Prisma.TimelineUncheckedCreateWithoutCreatorInput> | Prisma.TimelineCreateWithoutCreatorInput[] | Prisma.TimelineUncheckedCreateWithoutCreatorInput[]
-  connectOrCreate?: Prisma.TimelineCreateOrConnectWithoutCreatorInput | Prisma.TimelineCreateOrConnectWithoutCreatorInput[]
-  upsert?: Prisma.TimelineUpsertWithWhereUniqueWithoutCreatorInput | Prisma.TimelineUpsertWithWhereUniqueWithoutCreatorInput[]
-  createMany?: Prisma.TimelineCreateManyCreatorInputEnvelope
-  set?: Prisma.TimelineWhereUniqueInput | Prisma.TimelineWhereUniqueInput[]
-  disconnect?: Prisma.TimelineWhereUniqueInput | Prisma.TimelineWhereUniqueInput[]
-  delete?: Prisma.TimelineWhereUniqueInput | Prisma.TimelineWhereUniqueInput[]
-  connect?: Prisma.TimelineWhereUniqueInput | Prisma.TimelineWhereUniqueInput[]
-  update?: Prisma.TimelineUpdateWithWhereUniqueWithoutCreatorInput | Prisma.TimelineUpdateWithWhereUniqueWithoutCreatorInput[]
-  updateMany?: Prisma.TimelineUpdateManyWithWhereWithoutCreatorInput | Prisma.TimelineUpdateManyWithWhereWithoutCreatorInput[]
-  deleteMany?: Prisma.TimelineScalarWhereInput | Prisma.TimelineScalarWhereInput[]
-}
-
-export type TimelineUncheckedUpdateManyWithoutCreatorNestedInput = {
-  create?: Prisma.XOR<Prisma.TimelineCreateWithoutCreatorInput, Prisma.TimelineUncheckedCreateWithoutCreatorInput> | Prisma.TimelineCreateWithoutCreatorInput[] | Prisma.TimelineUncheckedCreateWithoutCreatorInput[]
-  connectOrCreate?: Prisma.TimelineCreateOrConnectWithoutCreatorInput | Prisma.TimelineCreateOrConnectWithoutCreatorInput[]
-  upsert?: Prisma.TimelineUpsertWithWhereUniqueWithoutCreatorInput | Prisma.TimelineUpsertWithWhereUniqueWithoutCreatorInput[]
-  createMany?: Prisma.TimelineCreateManyCreatorInputEnvelope
-  set?: Prisma.TimelineWhereUniqueInput | Prisma.TimelineWhereUniqueInput[]
-  disconnect?: Prisma.TimelineWhereUniqueInput | Prisma.TimelineWhereUniqueInput[]
-  delete?: Prisma.TimelineWhereUniqueInput | Prisma.TimelineWhereUniqueInput[]
-  connect?: Prisma.TimelineWhereUniqueInput | Prisma.TimelineWhereUniqueInput[]
-  update?: Prisma.TimelineUpdateWithWhereUniqueWithoutCreatorInput | Prisma.TimelineUpdateWithWhereUniqueWithoutCreatorInput[]
-  updateMany?: Prisma.TimelineUpdateManyWithWhereWithoutCreatorInput | Prisma.TimelineUpdateManyWithWhereWithoutCreatorInput[]
-  deleteMany?: Prisma.TimelineScalarWhereInput | Prisma.TimelineScalarWhereInput[]
-}
-
-export type TimelineCreateWithoutSpaceInput = {
-  id?: string
-  seq?: number
-  createdAt?: Date | string
-  updatedAt?: Date | string | null
-  removedAt?: Date | string | null
-  name: string
-  description?: string | null
-  creator?: Prisma.UserCreateNestedOneWithoutCreatedTimelinesInput
-  sessions?: Prisma.SessionCreateNestedManyWithoutTimelineInput
-}
-
-export type TimelineUncheckedCreateWithoutSpaceInput = {
-  id?: string
-  seq?: number
-  createdAt?: Date | string
-  updatedAt?: Date | string | null
-  removedAt?: Date | string | null
-  creatorId?: string | null
-  name: string
-  description?: string | null
-  sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutTimelineInput
-}
-
-export type TimelineCreateOrConnectWithoutSpaceInput = {
-  where: Prisma.TimelineWhereUniqueInput
-  create: Prisma.XOR<Prisma.TimelineCreateWithoutSpaceInput, Prisma.TimelineUncheckedCreateWithoutSpaceInput>
-}
-
-export type TimelineCreateManySpaceInputEnvelope = {
-  data: Prisma.TimelineCreateManySpaceInput | Prisma.TimelineCreateManySpaceInput[]
-  skipDuplicates?: boolean
-}
-
-export type TimelineUpsertWithWhereUniqueWithoutSpaceInput = {
-  where: Prisma.TimelineWhereUniqueInput
-  update: Prisma.XOR<Prisma.TimelineUpdateWithoutSpaceInput, Prisma.TimelineUncheckedUpdateWithoutSpaceInput>
-  create: Prisma.XOR<Prisma.TimelineCreateWithoutSpaceInput, Prisma.TimelineUncheckedCreateWithoutSpaceInput>
-}
-
-export type TimelineUpdateWithWhereUniqueWithoutSpaceInput = {
-  where: Prisma.TimelineWhereUniqueInput
-  data: Prisma.XOR<Prisma.TimelineUpdateWithoutSpaceInput, Prisma.TimelineUncheckedUpdateWithoutSpaceInput>
-}
-
-export type TimelineUpdateManyWithWhereWithoutSpaceInput = {
-  where: Prisma.TimelineScalarWhereInput
-  data: Prisma.XOR<Prisma.TimelineUpdateManyMutationInput, Prisma.TimelineUncheckedUpdateManyWithoutSpaceInput>
-}
-
-export type TimelineScalarWhereInput = {
-  AND?: Prisma.TimelineScalarWhereInput | Prisma.TimelineScalarWhereInput[]
-  OR?: Prisma.TimelineScalarWhereInput[]
-  NOT?: Prisma.TimelineScalarWhereInput | Prisma.TimelineScalarWhereInput[]
-  id?: Prisma.StringFilter<"Timeline"> | string
-  seq?: Prisma.IntFilter<"Timeline"> | number
-  createdAt?: Prisma.DateTimeFilter<"Timeline"> | Date | string
-  updatedAt?: Prisma.DateTimeNullableFilter<"Timeline"> | Date | string | null
-  removedAt?: Prisma.DateTimeNullableFilter<"Timeline"> | Date | string | null
-  spaceId?: Prisma.StringFilter<"Timeline"> | string
-  creatorId?: Prisma.StringNullableFilter<"Timeline"> | string | null
-  name?: Prisma.StringFilter<"Timeline"> | string
-  description?: Prisma.StringNullableFilter<"Timeline"> | string | null
-}
-
 export type TimelineCreateWithoutSessionsInput = {
   id?: string
   seq?: number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
+  tenantId: string
   name: string
   description?: string | null
-  space: Prisma.SpaceCreateNestedOneWithoutTimelinesInput
-  creator?: Prisma.UserCreateNestedOneWithoutCreatedTimelinesInput
 }
 
 export type TimelineUncheckedCreateWithoutSessionsInput = {
@@ -645,8 +459,7 @@ export type TimelineUncheckedCreateWithoutSessionsInput = {
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
-  spaceId: string
-  creatorId?: string | null
+  tenantId: string
   name: string
   description?: string | null
 }
@@ -672,10 +485,9 @@ export type TimelineUpdateWithoutSessionsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  space?: Prisma.SpaceUpdateOneRequiredWithoutTimelinesNestedInput
-  creator?: Prisma.UserUpdateOneWithoutCreatedTimelinesNestedInput
 }
 
 export type TimelineUncheckedUpdateWithoutSessionsInput = {
@@ -684,148 +496,7 @@ export type TimelineUncheckedUpdateWithoutSessionsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  spaceId?: Prisma.StringFieldUpdateOperationsInput | string
-  creatorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  name?: Prisma.StringFieldUpdateOperationsInput | string
-  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-}
-
-export type TimelineCreateWithoutCreatorInput = {
-  id?: string
-  seq?: number
-  createdAt?: Date | string
-  updatedAt?: Date | string | null
-  removedAt?: Date | string | null
-  name: string
-  description?: string | null
-  space: Prisma.SpaceCreateNestedOneWithoutTimelinesInput
-  sessions?: Prisma.SessionCreateNestedManyWithoutTimelineInput
-}
-
-export type TimelineUncheckedCreateWithoutCreatorInput = {
-  id?: string
-  seq?: number
-  createdAt?: Date | string
-  updatedAt?: Date | string | null
-  removedAt?: Date | string | null
-  spaceId: string
-  name: string
-  description?: string | null
-  sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutTimelineInput
-}
-
-export type TimelineCreateOrConnectWithoutCreatorInput = {
-  where: Prisma.TimelineWhereUniqueInput
-  create: Prisma.XOR<Prisma.TimelineCreateWithoutCreatorInput, Prisma.TimelineUncheckedCreateWithoutCreatorInput>
-}
-
-export type TimelineCreateManyCreatorInputEnvelope = {
-  data: Prisma.TimelineCreateManyCreatorInput | Prisma.TimelineCreateManyCreatorInput[]
-  skipDuplicates?: boolean
-}
-
-export type TimelineUpsertWithWhereUniqueWithoutCreatorInput = {
-  where: Prisma.TimelineWhereUniqueInput
-  update: Prisma.XOR<Prisma.TimelineUpdateWithoutCreatorInput, Prisma.TimelineUncheckedUpdateWithoutCreatorInput>
-  create: Prisma.XOR<Prisma.TimelineCreateWithoutCreatorInput, Prisma.TimelineUncheckedCreateWithoutCreatorInput>
-}
-
-export type TimelineUpdateWithWhereUniqueWithoutCreatorInput = {
-  where: Prisma.TimelineWhereUniqueInput
-  data: Prisma.XOR<Prisma.TimelineUpdateWithoutCreatorInput, Prisma.TimelineUncheckedUpdateWithoutCreatorInput>
-}
-
-export type TimelineUpdateManyWithWhereWithoutCreatorInput = {
-  where: Prisma.TimelineScalarWhereInput
-  data: Prisma.XOR<Prisma.TimelineUpdateManyMutationInput, Prisma.TimelineUncheckedUpdateManyWithoutCreatorInput>
-}
-
-export type TimelineCreateManySpaceInput = {
-  id?: string
-  seq?: number
-  createdAt?: Date | string
-  updatedAt?: Date | string | null
-  removedAt?: Date | string | null
-  creatorId?: string | null
-  name: string
-  description?: string | null
-}
-
-export type TimelineUpdateWithoutSpaceInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  name?: Prisma.StringFieldUpdateOperationsInput | string
-  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  creator?: Prisma.UserUpdateOneWithoutCreatedTimelinesNestedInput
-  sessions?: Prisma.SessionUpdateManyWithoutTimelineNestedInput
-}
-
-export type TimelineUncheckedUpdateWithoutSpaceInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  seq?: Prisma.IntFieldUpdateOperationsInput | number
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  creatorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  name?: Prisma.StringFieldUpdateOperationsInput | string
-  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  sessions?: Prisma.SessionUncheckedUpdateManyWithoutTimelineNestedInput
-}
-
-export type TimelineUncheckedUpdateManyWithoutSpaceInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  seq?: Prisma.IntFieldUpdateOperationsInput | number
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  creatorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  name?: Prisma.StringFieldUpdateOperationsInput | string
-  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-}
-
-export type TimelineCreateManyCreatorInput = {
-  id?: string
-  seq?: number
-  createdAt?: Date | string
-  updatedAt?: Date | string | null
-  removedAt?: Date | string | null
-  spaceId: string
-  name: string
-  description?: string | null
-}
-
-export type TimelineUpdateWithoutCreatorInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  name?: Prisma.StringFieldUpdateOperationsInput | string
-  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  space?: Prisma.SpaceUpdateOneRequiredWithoutTimelinesNestedInput
-  sessions?: Prisma.SessionUpdateManyWithoutTimelineNestedInput
-}
-
-export type TimelineUncheckedUpdateWithoutCreatorInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  seq?: Prisma.IntFieldUpdateOperationsInput | number
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  spaceId?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.StringFieldUpdateOperationsInput | string
-  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  sessions?: Prisma.SessionUncheckedUpdateManyWithoutTimelineNestedInput
-}
-
-export type TimelineUncheckedUpdateManyWithoutCreatorInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  seq?: Prisma.IntFieldUpdateOperationsInput | number
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  spaceId?: Prisma.StringFieldUpdateOperationsInput | string
+  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
@@ -867,12 +538,9 @@ export type TimelineSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs
   createdAt?: boolean
   updatedAt?: boolean
   removedAt?: boolean
-  spaceId?: boolean
-  creatorId?: boolean
+  tenantId?: boolean
   name?: boolean
   description?: boolean
-  space?: boolean | Prisma.SpaceDefaultArgs<ExtArgs>
-  creator?: boolean | Prisma.Timeline$creatorArgs<ExtArgs>
   sessions?: boolean | Prisma.Timeline$sessionsArgs<ExtArgs>
   _count?: boolean | Prisma.TimelineCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["timeline"]>
@@ -883,12 +551,9 @@ export type TimelineSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Exte
   createdAt?: boolean
   updatedAt?: boolean
   removedAt?: boolean
-  spaceId?: boolean
-  creatorId?: boolean
+  tenantId?: boolean
   name?: boolean
   description?: boolean
-  space?: boolean | Prisma.SpaceDefaultArgs<ExtArgs>
-  creator?: boolean | Prisma.Timeline$creatorArgs<ExtArgs>
 }, ExtArgs["result"]["timeline"]>
 
 export type TimelineSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -897,12 +562,9 @@ export type TimelineSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Exte
   createdAt?: boolean
   updatedAt?: boolean
   removedAt?: boolean
-  spaceId?: boolean
-  creatorId?: boolean
+  tenantId?: boolean
   name?: boolean
   description?: boolean
-  space?: boolean | Prisma.SpaceDefaultArgs<ExtArgs>
-  creator?: boolean | Prisma.Timeline$creatorArgs<ExtArgs>
 }, ExtArgs["result"]["timeline"]>
 
 export type TimelineSelectScalar = {
@@ -911,39 +573,22 @@ export type TimelineSelectScalar = {
   createdAt?: boolean
   updatedAt?: boolean
   removedAt?: boolean
-  spaceId?: boolean
-  creatorId?: boolean
+  tenantId?: boolean
   name?: boolean
   description?: boolean
 }
 
-export type TimelineOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "seq" | "createdAt" | "updatedAt" | "removedAt" | "spaceId" | "creatorId" | "name" | "description", ExtArgs["result"]["timeline"]>
+export type TimelineOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "seq" | "createdAt" | "updatedAt" | "removedAt" | "tenantId" | "name" | "description", ExtArgs["result"]["timeline"]>
 export type TimelineInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  space?: boolean | Prisma.SpaceDefaultArgs<ExtArgs>
-  creator?: boolean | Prisma.Timeline$creatorArgs<ExtArgs>
   sessions?: boolean | Prisma.Timeline$sessionsArgs<ExtArgs>
   _count?: boolean | Prisma.TimelineCountOutputTypeDefaultArgs<ExtArgs>
 }
-export type TimelineIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  space?: boolean | Prisma.SpaceDefaultArgs<ExtArgs>
-  creator?: boolean | Prisma.Timeline$creatorArgs<ExtArgs>
-}
-export type TimelineIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  space?: boolean | Prisma.SpaceDefaultArgs<ExtArgs>
-  creator?: boolean | Prisma.Timeline$creatorArgs<ExtArgs>
-}
+export type TimelineIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
+export type TimelineIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
 
 export type $TimelinePayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "Timeline"
   objects: {
-    /**
-     * Space 관계
-     */
-    space: Prisma.$SpacePayload<ExtArgs>
-    /**
-     * 생성자 관계
-     */
-    creator: Prisma.$UserPayload<ExtArgs> | null
     /**
      * 세션 목록
      */
@@ -971,13 +616,9 @@ export type $TimelinePayload<ExtArgs extends runtime.Types.Extensions.InternalAr
      */
     removedAt: Date | null
     /**
-     * Space ID
+     * 테넌트 ID
      */
-    spaceId: string
-    /**
-     * 생성자 ID
-     */
-    creatorId: string | null
+    tenantId: string
     /**
      * 타임라인 이름 (예: "2025년 10월 첫째 주", "가을 시즌")
      */
@@ -1380,8 +1021,6 @@ readonly fields: TimelineFieldRefs;
  */
 export interface Prisma__TimelineClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
-  space<T extends Prisma.SpaceDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.SpaceDefaultArgs<ExtArgs>>): Prisma.Prisma__SpaceClient<runtime.Types.Result.GetResult<Prisma.$SpacePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
-  creator<T extends Prisma.Timeline$creatorArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Timeline$creatorArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   sessions<T extends Prisma.Timeline$sessionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Timeline$sessionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$SessionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -1417,8 +1056,7 @@ export interface TimelineFieldRefs {
   readonly createdAt: Prisma.FieldRef<"Timeline", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"Timeline", 'DateTime'>
   readonly removedAt: Prisma.FieldRef<"Timeline", 'DateTime'>
-  readonly spaceId: Prisma.FieldRef<"Timeline", 'String'>
-  readonly creatorId: Prisma.FieldRef<"Timeline", 'String'>
+  readonly tenantId: Prisma.FieldRef<"Timeline", 'String'>
   readonly name: Prisma.FieldRef<"Timeline", 'String'>
   readonly description: Prisma.FieldRef<"Timeline", 'String'>
 }
@@ -1670,10 +1308,6 @@ export type TimelineCreateManyAndReturnArgs<ExtArgs extends runtime.Types.Extens
    */
   data: Prisma.TimelineCreateManyInput | Prisma.TimelineCreateManyInput[]
   skipDuplicates?: boolean
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.TimelineIncludeCreateManyAndReturn<ExtArgs> | null
 }
 
 /**
@@ -1744,10 +1378,6 @@ export type TimelineUpdateManyAndReturnArgs<ExtArgs extends runtime.Types.Extens
    * Limit how many Timelines to update.
    */
   limit?: number
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.TimelineIncludeUpdateManyAndReturn<ExtArgs> | null
 }
 
 /**
@@ -1814,25 +1444,6 @@ export type TimelineDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.Inte
    * Limit how many Timelines to delete.
    */
   limit?: number
-}
-
-/**
- * Timeline.creator
- */
-export type Timeline$creatorArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  /**
-   * Select specific fields to fetch from the User
-   */
-  select?: Prisma.UserSelect<ExtArgs> | null
-  /**
-   * Omit specific fields from the User
-   */
-  omit?: Prisma.UserOmit<ExtArgs> | null
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.UserInclude<ExtArgs> | null
-  where?: Prisma.UserWhereInput
 }
 
 /**

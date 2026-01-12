@@ -67,6 +67,25 @@ export const RecurringDayOfWeek = {
 export type RecurringDayOfWeek = (typeof RecurringDayOfWeek)[keyof typeof RecurringDayOfWeek]
 
 
+export const AbilityActions = {
+  CREATE: 'CREATE',
+  READ: 'READ',
+  UPDATE: 'UPDATE',
+  DELETE: 'DELETE',
+  ACCESS: 'ACCESS'
+} as const
+
+export type AbilityActions = (typeof AbilityActions)[keyof typeof AbilityActions]
+
+
+export const AbilityTypes = {
+  CAN: 'CAN',
+  CAN_NOT: 'CAN_NOT'
+} as const
+
+export type AbilityTypes = (typeof AbilityTypes)[keyof typeof AbilityTypes]
+
+
 export const Roles = {
   USER: 'USER',
   SUPER_ADMIN: 'SUPER_ADMIN',

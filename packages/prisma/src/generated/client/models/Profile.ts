@@ -14,7 +14,7 @@ import type * as Prisma from "../internal/prismaNamespace"
 
 /**
  * Model Profile
- * @displayName 프로필
+ * 
  */
 export type ProfileModel = runtime.Types.Result.DefaultSelection<Prisma.$ProfilePayload>
 
@@ -670,13 +670,7 @@ export type $ProfilePayload<ExtArgs extends runtime.Types.Extensions.InternalArg
     createdAt: Date
     updatedAt: Date | null
     removedAt: Date | null
-    /**
-     * @displayName 이름
-     */
     name: string
-    /**
-     * @displayName 닉네임
-     */
     nickname: string
     userId: string
     avatarFileId: string | null

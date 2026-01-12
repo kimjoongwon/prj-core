@@ -14,7 +14,7 @@ import type * as Prisma from "../internal/prismaNamespace"
 
 /**
  * Model Content
- * @displayName 콘텐츠
+ * 
  */
 export type ContentModel = runtime.Types.Result.DefaultSelection<Prisma.$ContentPayload>
 
@@ -45,8 +45,7 @@ export type ContentMinAggregateOutputType = {
   type: $Enums.TextTypes | null
   text: string | null
   fileId: string | null
-  spaceId: string | null
-  creatorId: string | null
+  tenantId: string | null
 }
 
 export type ContentMaxAggregateOutputType = {
@@ -60,8 +59,7 @@ export type ContentMaxAggregateOutputType = {
   type: $Enums.TextTypes | null
   text: string | null
   fileId: string | null
-  spaceId: string | null
-  creatorId: string | null
+  tenantId: string | null
 }
 
 export type ContentCountAggregateOutputType = {
@@ -75,8 +73,7 @@ export type ContentCountAggregateOutputType = {
   type: number
   text: number
   fileId: number
-  spaceId: number
-  creatorId: number
+  tenantId: number
   _all: number
 }
 
@@ -100,8 +97,7 @@ export type ContentMinAggregateInputType = {
   type?: true
   text?: true
   fileId?: true
-  spaceId?: true
-  creatorId?: true
+  tenantId?: true
 }
 
 export type ContentMaxAggregateInputType = {
@@ -115,8 +111,7 @@ export type ContentMaxAggregateInputType = {
   type?: true
   text?: true
   fileId?: true
-  spaceId?: true
-  creatorId?: true
+  tenantId?: true
 }
 
 export type ContentCountAggregateInputType = {
@@ -130,8 +125,7 @@ export type ContentCountAggregateInputType = {
   type?: true
   text?: true
   fileId?: true
-  spaceId?: true
-  creatorId?: true
+  tenantId?: true
   _all?: true
 }
 
@@ -232,8 +226,7 @@ export type ContentGroupByOutputType = {
   type: $Enums.TextTypes
   text: string | null
   fileId: string | null
-  spaceId: string
-  creatorId: string | null
+  tenantId: string
   _count: ContentCountAggregateOutputType | null
   _avg: ContentAvgAggregateOutputType | null
   _sum: ContentSumAggregateOutputType | null
@@ -270,10 +263,8 @@ export type ContentWhereInput = {
   type?: Prisma.EnumTextTypesFilter<"Content"> | $Enums.TextTypes
   text?: Prisma.StringNullableFilter<"Content"> | string | null
   fileId?: Prisma.StringNullableFilter<"Content"> | string | null
-  spaceId?: Prisma.StringFilter<"Content"> | string
-  creatorId?: Prisma.StringNullableFilter<"Content"> | string | null
-  space?: Prisma.XOR<Prisma.SpaceScalarRelationFilter, Prisma.SpaceWhereInput>
-  creator?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
+  tenantId?: Prisma.StringFilter<"Content"> | string
+  tenant?: Prisma.XOR<Prisma.TenantScalarRelationFilter, Prisma.TenantWhereInput>
   posts?: Prisma.PostListRelationFilter
 }
 
@@ -288,10 +279,8 @@ export type ContentOrderByWithRelationInput = {
   type?: Prisma.SortOrder
   text?: Prisma.SortOrderInput | Prisma.SortOrder
   fileId?: Prisma.SortOrderInput | Prisma.SortOrder
-  spaceId?: Prisma.SortOrder
-  creatorId?: Prisma.SortOrderInput | Prisma.SortOrder
-  space?: Prisma.SpaceOrderByWithRelationInput
-  creator?: Prisma.UserOrderByWithRelationInput
+  tenantId?: Prisma.SortOrder
+  tenant?: Prisma.TenantOrderByWithRelationInput
   posts?: Prisma.PostOrderByRelationAggregateInput
 }
 
@@ -309,10 +298,8 @@ export type ContentWhereUniqueInput = Prisma.AtLeast<{
   type?: Prisma.EnumTextTypesFilter<"Content"> | $Enums.TextTypes
   text?: Prisma.StringNullableFilter<"Content"> | string | null
   fileId?: Prisma.StringNullableFilter<"Content"> | string | null
-  spaceId?: Prisma.StringFilter<"Content"> | string
-  creatorId?: Prisma.StringNullableFilter<"Content"> | string | null
-  space?: Prisma.XOR<Prisma.SpaceScalarRelationFilter, Prisma.SpaceWhereInput>
-  creator?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
+  tenantId?: Prisma.StringFilter<"Content"> | string
+  tenant?: Prisma.XOR<Prisma.TenantScalarRelationFilter, Prisma.TenantWhereInput>
   posts?: Prisma.PostListRelationFilter
 }, "id" | "seq">
 
@@ -327,8 +314,7 @@ export type ContentOrderByWithAggregationInput = {
   type?: Prisma.SortOrder
   text?: Prisma.SortOrderInput | Prisma.SortOrder
   fileId?: Prisma.SortOrderInput | Prisma.SortOrder
-  spaceId?: Prisma.SortOrder
-  creatorId?: Prisma.SortOrderInput | Prisma.SortOrder
+  tenantId?: Prisma.SortOrder
   _count?: Prisma.ContentCountOrderByAggregateInput
   _avg?: Prisma.ContentAvgOrderByAggregateInput
   _max?: Prisma.ContentMaxOrderByAggregateInput
@@ -350,8 +336,7 @@ export type ContentScalarWhereWithAggregatesInput = {
   type?: Prisma.EnumTextTypesWithAggregatesFilter<"Content"> | $Enums.TextTypes
   text?: Prisma.StringNullableWithAggregatesFilter<"Content"> | string | null
   fileId?: Prisma.StringNullableWithAggregatesFilter<"Content"> | string | null
-  spaceId?: Prisma.StringWithAggregatesFilter<"Content"> | string
-  creatorId?: Prisma.StringNullableWithAggregatesFilter<"Content"> | string | null
+  tenantId?: Prisma.StringWithAggregatesFilter<"Content"> | string
 }
 
 export type ContentCreateInput = {
@@ -365,8 +350,7 @@ export type ContentCreateInput = {
   type?: $Enums.TextTypes
   text?: string | null
   fileId?: string | null
-  space: Prisma.SpaceCreateNestedOneWithoutContentsInput
-  creator?: Prisma.UserCreateNestedOneWithoutCreatedContentsInput
+  tenant: Prisma.TenantCreateNestedOneWithoutContentsInput
   posts?: Prisma.PostCreateNestedManyWithoutContentInput
 }
 
@@ -381,8 +365,7 @@ export type ContentUncheckedCreateInput = {
   type?: $Enums.TextTypes
   text?: string | null
   fileId?: string | null
-  spaceId: string
-  creatorId?: string | null
+  tenantId: string
   posts?: Prisma.PostUncheckedCreateNestedManyWithoutContentInput
 }
 
@@ -396,8 +379,7 @@ export type ContentUpdateInput = {
   type?: Prisma.EnumTextTypesFieldUpdateOperationsInput | $Enums.TextTypes
   text?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   fileId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  space?: Prisma.SpaceUpdateOneRequiredWithoutContentsNestedInput
-  creator?: Prisma.UserUpdateOneWithoutCreatedContentsNestedInput
+  tenant?: Prisma.TenantUpdateOneRequiredWithoutContentsNestedInput
   posts?: Prisma.PostUpdateManyWithoutContentNestedInput
 }
 
@@ -412,8 +394,7 @@ export type ContentUncheckedUpdateInput = {
   type?: Prisma.EnumTextTypesFieldUpdateOperationsInput | $Enums.TextTypes
   text?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   fileId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  spaceId?: Prisma.StringFieldUpdateOperationsInput | string
-  creatorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
   posts?: Prisma.PostUncheckedUpdateManyWithoutContentNestedInput
 }
 
@@ -428,8 +409,7 @@ export type ContentCreateManyInput = {
   type?: $Enums.TextTypes
   text?: string | null
   fileId?: string | null
-  spaceId: string
-  creatorId?: string | null
+  tenantId: string
 }
 
 export type ContentUpdateManyMutationInput = {
@@ -455,8 +435,17 @@ export type ContentUncheckedUpdateManyInput = {
   type?: Prisma.EnumTextTypesFieldUpdateOperationsInput | $Enums.TextTypes
   text?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   fileId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  spaceId?: Prisma.StringFieldUpdateOperationsInput | string
-  creatorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
+}
+
+export type ContentListRelationFilter = {
+  every?: Prisma.ContentWhereInput
+  some?: Prisma.ContentWhereInput
+  none?: Prisma.ContentWhereInput
+}
+
+export type ContentOrderByRelationAggregateInput = {
+  _count?: Prisma.SortOrder
 }
 
 export type ContentScalarRelationFilter = {
@@ -475,8 +464,7 @@ export type ContentCountOrderByAggregateInput = {
   type?: Prisma.SortOrder
   text?: Prisma.SortOrder
   fileId?: Prisma.SortOrder
-  spaceId?: Prisma.SortOrder
-  creatorId?: Prisma.SortOrder
+  tenantId?: Prisma.SortOrder
 }
 
 export type ContentAvgOrderByAggregateInput = {
@@ -494,8 +482,7 @@ export type ContentMaxOrderByAggregateInput = {
   type?: Prisma.SortOrder
   text?: Prisma.SortOrder
   fileId?: Prisma.SortOrder
-  spaceId?: Prisma.SortOrder
-  creatorId?: Prisma.SortOrder
+  tenantId?: Prisma.SortOrder
 }
 
 export type ContentMinOrderByAggregateInput = {
@@ -509,22 +496,53 @@ export type ContentMinOrderByAggregateInput = {
   type?: Prisma.SortOrder
   text?: Prisma.SortOrder
   fileId?: Prisma.SortOrder
-  spaceId?: Prisma.SortOrder
-  creatorId?: Prisma.SortOrder
+  tenantId?: Prisma.SortOrder
 }
 
 export type ContentSumOrderByAggregateInput = {
   seq?: Prisma.SortOrder
 }
 
-export type ContentListRelationFilter = {
-  every?: Prisma.ContentWhereInput
-  some?: Prisma.ContentWhereInput
-  none?: Prisma.ContentWhereInput
+export type ContentCreateNestedManyWithoutTenantInput = {
+  create?: Prisma.XOR<Prisma.ContentCreateWithoutTenantInput, Prisma.ContentUncheckedCreateWithoutTenantInput> | Prisma.ContentCreateWithoutTenantInput[] | Prisma.ContentUncheckedCreateWithoutTenantInput[]
+  connectOrCreate?: Prisma.ContentCreateOrConnectWithoutTenantInput | Prisma.ContentCreateOrConnectWithoutTenantInput[]
+  createMany?: Prisma.ContentCreateManyTenantInputEnvelope
+  connect?: Prisma.ContentWhereUniqueInput | Prisma.ContentWhereUniqueInput[]
 }
 
-export type ContentOrderByRelationAggregateInput = {
-  _count?: Prisma.SortOrder
+export type ContentUncheckedCreateNestedManyWithoutTenantInput = {
+  create?: Prisma.XOR<Prisma.ContentCreateWithoutTenantInput, Prisma.ContentUncheckedCreateWithoutTenantInput> | Prisma.ContentCreateWithoutTenantInput[] | Prisma.ContentUncheckedCreateWithoutTenantInput[]
+  connectOrCreate?: Prisma.ContentCreateOrConnectWithoutTenantInput | Prisma.ContentCreateOrConnectWithoutTenantInput[]
+  createMany?: Prisma.ContentCreateManyTenantInputEnvelope
+  connect?: Prisma.ContentWhereUniqueInput | Prisma.ContentWhereUniqueInput[]
+}
+
+export type ContentUpdateManyWithoutTenantNestedInput = {
+  create?: Prisma.XOR<Prisma.ContentCreateWithoutTenantInput, Prisma.ContentUncheckedCreateWithoutTenantInput> | Prisma.ContentCreateWithoutTenantInput[] | Prisma.ContentUncheckedCreateWithoutTenantInput[]
+  connectOrCreate?: Prisma.ContentCreateOrConnectWithoutTenantInput | Prisma.ContentCreateOrConnectWithoutTenantInput[]
+  upsert?: Prisma.ContentUpsertWithWhereUniqueWithoutTenantInput | Prisma.ContentUpsertWithWhereUniqueWithoutTenantInput[]
+  createMany?: Prisma.ContentCreateManyTenantInputEnvelope
+  set?: Prisma.ContentWhereUniqueInput | Prisma.ContentWhereUniqueInput[]
+  disconnect?: Prisma.ContentWhereUniqueInput | Prisma.ContentWhereUniqueInput[]
+  delete?: Prisma.ContentWhereUniqueInput | Prisma.ContentWhereUniqueInput[]
+  connect?: Prisma.ContentWhereUniqueInput | Prisma.ContentWhereUniqueInput[]
+  update?: Prisma.ContentUpdateWithWhereUniqueWithoutTenantInput | Prisma.ContentUpdateWithWhereUniqueWithoutTenantInput[]
+  updateMany?: Prisma.ContentUpdateManyWithWhereWithoutTenantInput | Prisma.ContentUpdateManyWithWhereWithoutTenantInput[]
+  deleteMany?: Prisma.ContentScalarWhereInput | Prisma.ContentScalarWhereInput[]
+}
+
+export type ContentUncheckedUpdateManyWithoutTenantNestedInput = {
+  create?: Prisma.XOR<Prisma.ContentCreateWithoutTenantInput, Prisma.ContentUncheckedCreateWithoutTenantInput> | Prisma.ContentCreateWithoutTenantInput[] | Prisma.ContentUncheckedCreateWithoutTenantInput[]
+  connectOrCreate?: Prisma.ContentCreateOrConnectWithoutTenantInput | Prisma.ContentCreateOrConnectWithoutTenantInput[]
+  upsert?: Prisma.ContentUpsertWithWhereUniqueWithoutTenantInput | Prisma.ContentUpsertWithWhereUniqueWithoutTenantInput[]
+  createMany?: Prisma.ContentCreateManyTenantInputEnvelope
+  set?: Prisma.ContentWhereUniqueInput | Prisma.ContentWhereUniqueInput[]
+  disconnect?: Prisma.ContentWhereUniqueInput | Prisma.ContentWhereUniqueInput[]
+  delete?: Prisma.ContentWhereUniqueInput | Prisma.ContentWhereUniqueInput[]
+  connect?: Prisma.ContentWhereUniqueInput | Prisma.ContentWhereUniqueInput[]
+  update?: Prisma.ContentUpdateWithWhereUniqueWithoutTenantInput | Prisma.ContentUpdateWithWhereUniqueWithoutTenantInput[]
+  updateMany?: Prisma.ContentUpdateManyWithWhereWithoutTenantInput | Prisma.ContentUpdateManyWithWhereWithoutTenantInput[]
+  deleteMany?: Prisma.ContentScalarWhereInput | Prisma.ContentScalarWhereInput[]
 }
 
 export type ContentCreateNestedOneWithoutPostsInput = {
@@ -545,88 +563,75 @@ export type EnumTextTypesFieldUpdateOperationsInput = {
   set?: $Enums.TextTypes
 }
 
-export type ContentCreateNestedManyWithoutSpaceInput = {
-  create?: Prisma.XOR<Prisma.ContentCreateWithoutSpaceInput, Prisma.ContentUncheckedCreateWithoutSpaceInput> | Prisma.ContentCreateWithoutSpaceInput[] | Prisma.ContentUncheckedCreateWithoutSpaceInput[]
-  connectOrCreate?: Prisma.ContentCreateOrConnectWithoutSpaceInput | Prisma.ContentCreateOrConnectWithoutSpaceInput[]
-  createMany?: Prisma.ContentCreateManySpaceInputEnvelope
-  connect?: Prisma.ContentWhereUniqueInput | Prisma.ContentWhereUniqueInput[]
+export type ContentCreateWithoutTenantInput = {
+  id?: string
+  seq?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string | null
+  removedAt?: Date | string | null
+  title?: string | null
+  description?: string | null
+  type?: $Enums.TextTypes
+  text?: string | null
+  fileId?: string | null
+  posts?: Prisma.PostCreateNestedManyWithoutContentInput
 }
 
-export type ContentUncheckedCreateNestedManyWithoutSpaceInput = {
-  create?: Prisma.XOR<Prisma.ContentCreateWithoutSpaceInput, Prisma.ContentUncheckedCreateWithoutSpaceInput> | Prisma.ContentCreateWithoutSpaceInput[] | Prisma.ContentUncheckedCreateWithoutSpaceInput[]
-  connectOrCreate?: Prisma.ContentCreateOrConnectWithoutSpaceInput | Prisma.ContentCreateOrConnectWithoutSpaceInput[]
-  createMany?: Prisma.ContentCreateManySpaceInputEnvelope
-  connect?: Prisma.ContentWhereUniqueInput | Prisma.ContentWhereUniqueInput[]
+export type ContentUncheckedCreateWithoutTenantInput = {
+  id?: string
+  seq?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string | null
+  removedAt?: Date | string | null
+  title?: string | null
+  description?: string | null
+  type?: $Enums.TextTypes
+  text?: string | null
+  fileId?: string | null
+  posts?: Prisma.PostUncheckedCreateNestedManyWithoutContentInput
 }
 
-export type ContentUpdateManyWithoutSpaceNestedInput = {
-  create?: Prisma.XOR<Prisma.ContentCreateWithoutSpaceInput, Prisma.ContentUncheckedCreateWithoutSpaceInput> | Prisma.ContentCreateWithoutSpaceInput[] | Prisma.ContentUncheckedCreateWithoutSpaceInput[]
-  connectOrCreate?: Prisma.ContentCreateOrConnectWithoutSpaceInput | Prisma.ContentCreateOrConnectWithoutSpaceInput[]
-  upsert?: Prisma.ContentUpsertWithWhereUniqueWithoutSpaceInput | Prisma.ContentUpsertWithWhereUniqueWithoutSpaceInput[]
-  createMany?: Prisma.ContentCreateManySpaceInputEnvelope
-  set?: Prisma.ContentWhereUniqueInput | Prisma.ContentWhereUniqueInput[]
-  disconnect?: Prisma.ContentWhereUniqueInput | Prisma.ContentWhereUniqueInput[]
-  delete?: Prisma.ContentWhereUniqueInput | Prisma.ContentWhereUniqueInput[]
-  connect?: Prisma.ContentWhereUniqueInput | Prisma.ContentWhereUniqueInput[]
-  update?: Prisma.ContentUpdateWithWhereUniqueWithoutSpaceInput | Prisma.ContentUpdateWithWhereUniqueWithoutSpaceInput[]
-  updateMany?: Prisma.ContentUpdateManyWithWhereWithoutSpaceInput | Prisma.ContentUpdateManyWithWhereWithoutSpaceInput[]
-  deleteMany?: Prisma.ContentScalarWhereInput | Prisma.ContentScalarWhereInput[]
+export type ContentCreateOrConnectWithoutTenantInput = {
+  where: Prisma.ContentWhereUniqueInput
+  create: Prisma.XOR<Prisma.ContentCreateWithoutTenantInput, Prisma.ContentUncheckedCreateWithoutTenantInput>
 }
 
-export type ContentUncheckedUpdateManyWithoutSpaceNestedInput = {
-  create?: Prisma.XOR<Prisma.ContentCreateWithoutSpaceInput, Prisma.ContentUncheckedCreateWithoutSpaceInput> | Prisma.ContentCreateWithoutSpaceInput[] | Prisma.ContentUncheckedCreateWithoutSpaceInput[]
-  connectOrCreate?: Prisma.ContentCreateOrConnectWithoutSpaceInput | Prisma.ContentCreateOrConnectWithoutSpaceInput[]
-  upsert?: Prisma.ContentUpsertWithWhereUniqueWithoutSpaceInput | Prisma.ContentUpsertWithWhereUniqueWithoutSpaceInput[]
-  createMany?: Prisma.ContentCreateManySpaceInputEnvelope
-  set?: Prisma.ContentWhereUniqueInput | Prisma.ContentWhereUniqueInput[]
-  disconnect?: Prisma.ContentWhereUniqueInput | Prisma.ContentWhereUniqueInput[]
-  delete?: Prisma.ContentWhereUniqueInput | Prisma.ContentWhereUniqueInput[]
-  connect?: Prisma.ContentWhereUniqueInput | Prisma.ContentWhereUniqueInput[]
-  update?: Prisma.ContentUpdateWithWhereUniqueWithoutSpaceInput | Prisma.ContentUpdateWithWhereUniqueWithoutSpaceInput[]
-  updateMany?: Prisma.ContentUpdateManyWithWhereWithoutSpaceInput | Prisma.ContentUpdateManyWithWhereWithoutSpaceInput[]
-  deleteMany?: Prisma.ContentScalarWhereInput | Prisma.ContentScalarWhereInput[]
+export type ContentCreateManyTenantInputEnvelope = {
+  data: Prisma.ContentCreateManyTenantInput | Prisma.ContentCreateManyTenantInput[]
+  skipDuplicates?: boolean
 }
 
-export type ContentCreateNestedManyWithoutCreatorInput = {
-  create?: Prisma.XOR<Prisma.ContentCreateWithoutCreatorInput, Prisma.ContentUncheckedCreateWithoutCreatorInput> | Prisma.ContentCreateWithoutCreatorInput[] | Prisma.ContentUncheckedCreateWithoutCreatorInput[]
-  connectOrCreate?: Prisma.ContentCreateOrConnectWithoutCreatorInput | Prisma.ContentCreateOrConnectWithoutCreatorInput[]
-  createMany?: Prisma.ContentCreateManyCreatorInputEnvelope
-  connect?: Prisma.ContentWhereUniqueInput | Prisma.ContentWhereUniqueInput[]
+export type ContentUpsertWithWhereUniqueWithoutTenantInput = {
+  where: Prisma.ContentWhereUniqueInput
+  update: Prisma.XOR<Prisma.ContentUpdateWithoutTenantInput, Prisma.ContentUncheckedUpdateWithoutTenantInput>
+  create: Prisma.XOR<Prisma.ContentCreateWithoutTenantInput, Prisma.ContentUncheckedCreateWithoutTenantInput>
 }
 
-export type ContentUncheckedCreateNestedManyWithoutCreatorInput = {
-  create?: Prisma.XOR<Prisma.ContentCreateWithoutCreatorInput, Prisma.ContentUncheckedCreateWithoutCreatorInput> | Prisma.ContentCreateWithoutCreatorInput[] | Prisma.ContentUncheckedCreateWithoutCreatorInput[]
-  connectOrCreate?: Prisma.ContentCreateOrConnectWithoutCreatorInput | Prisma.ContentCreateOrConnectWithoutCreatorInput[]
-  createMany?: Prisma.ContentCreateManyCreatorInputEnvelope
-  connect?: Prisma.ContentWhereUniqueInput | Prisma.ContentWhereUniqueInput[]
+export type ContentUpdateWithWhereUniqueWithoutTenantInput = {
+  where: Prisma.ContentWhereUniqueInput
+  data: Prisma.XOR<Prisma.ContentUpdateWithoutTenantInput, Prisma.ContentUncheckedUpdateWithoutTenantInput>
 }
 
-export type ContentUpdateManyWithoutCreatorNestedInput = {
-  create?: Prisma.XOR<Prisma.ContentCreateWithoutCreatorInput, Prisma.ContentUncheckedCreateWithoutCreatorInput> | Prisma.ContentCreateWithoutCreatorInput[] | Prisma.ContentUncheckedCreateWithoutCreatorInput[]
-  connectOrCreate?: Prisma.ContentCreateOrConnectWithoutCreatorInput | Prisma.ContentCreateOrConnectWithoutCreatorInput[]
-  upsert?: Prisma.ContentUpsertWithWhereUniqueWithoutCreatorInput | Prisma.ContentUpsertWithWhereUniqueWithoutCreatorInput[]
-  createMany?: Prisma.ContentCreateManyCreatorInputEnvelope
-  set?: Prisma.ContentWhereUniqueInput | Prisma.ContentWhereUniqueInput[]
-  disconnect?: Prisma.ContentWhereUniqueInput | Prisma.ContentWhereUniqueInput[]
-  delete?: Prisma.ContentWhereUniqueInput | Prisma.ContentWhereUniqueInput[]
-  connect?: Prisma.ContentWhereUniqueInput | Prisma.ContentWhereUniqueInput[]
-  update?: Prisma.ContentUpdateWithWhereUniqueWithoutCreatorInput | Prisma.ContentUpdateWithWhereUniqueWithoutCreatorInput[]
-  updateMany?: Prisma.ContentUpdateManyWithWhereWithoutCreatorInput | Prisma.ContentUpdateManyWithWhereWithoutCreatorInput[]
-  deleteMany?: Prisma.ContentScalarWhereInput | Prisma.ContentScalarWhereInput[]
+export type ContentUpdateManyWithWhereWithoutTenantInput = {
+  where: Prisma.ContentScalarWhereInput
+  data: Prisma.XOR<Prisma.ContentUpdateManyMutationInput, Prisma.ContentUncheckedUpdateManyWithoutTenantInput>
 }
 
-export type ContentUncheckedUpdateManyWithoutCreatorNestedInput = {
-  create?: Prisma.XOR<Prisma.ContentCreateWithoutCreatorInput, Prisma.ContentUncheckedCreateWithoutCreatorInput> | Prisma.ContentCreateWithoutCreatorInput[] | Prisma.ContentUncheckedCreateWithoutCreatorInput[]
-  connectOrCreate?: Prisma.ContentCreateOrConnectWithoutCreatorInput | Prisma.ContentCreateOrConnectWithoutCreatorInput[]
-  upsert?: Prisma.ContentUpsertWithWhereUniqueWithoutCreatorInput | Prisma.ContentUpsertWithWhereUniqueWithoutCreatorInput[]
-  createMany?: Prisma.ContentCreateManyCreatorInputEnvelope
-  set?: Prisma.ContentWhereUniqueInput | Prisma.ContentWhereUniqueInput[]
-  disconnect?: Prisma.ContentWhereUniqueInput | Prisma.ContentWhereUniqueInput[]
-  delete?: Prisma.ContentWhereUniqueInput | Prisma.ContentWhereUniqueInput[]
-  connect?: Prisma.ContentWhereUniqueInput | Prisma.ContentWhereUniqueInput[]
-  update?: Prisma.ContentUpdateWithWhereUniqueWithoutCreatorInput | Prisma.ContentUpdateWithWhereUniqueWithoutCreatorInput[]
-  updateMany?: Prisma.ContentUpdateManyWithWhereWithoutCreatorInput | Prisma.ContentUpdateManyWithWhereWithoutCreatorInput[]
-  deleteMany?: Prisma.ContentScalarWhereInput | Prisma.ContentScalarWhereInput[]
+export type ContentScalarWhereInput = {
+  AND?: Prisma.ContentScalarWhereInput | Prisma.ContentScalarWhereInput[]
+  OR?: Prisma.ContentScalarWhereInput[]
+  NOT?: Prisma.ContentScalarWhereInput | Prisma.ContentScalarWhereInput[]
+  id?: Prisma.StringFilter<"Content"> | string
+  seq?: Prisma.IntFilter<"Content"> | number
+  createdAt?: Prisma.DateTimeFilter<"Content"> | Date | string
+  updatedAt?: Prisma.DateTimeNullableFilter<"Content"> | Date | string | null
+  removedAt?: Prisma.DateTimeNullableFilter<"Content"> | Date | string | null
+  title?: Prisma.StringNullableFilter<"Content"> | string | null
+  description?: Prisma.StringNullableFilter<"Content"> | string | null
+  type?: Prisma.EnumTextTypesFilter<"Content"> | $Enums.TextTypes
+  text?: Prisma.StringNullableFilter<"Content"> | string | null
+  fileId?: Prisma.StringNullableFilter<"Content"> | string | null
+  tenantId?: Prisma.StringFilter<"Content"> | string
 }
 
 export type ContentCreateWithoutPostsInput = {
@@ -640,8 +645,7 @@ export type ContentCreateWithoutPostsInput = {
   type?: $Enums.TextTypes
   text?: string | null
   fileId?: string | null
-  space: Prisma.SpaceCreateNestedOneWithoutContentsInput
-  creator?: Prisma.UserCreateNestedOneWithoutCreatedContentsInput
+  tenant: Prisma.TenantCreateNestedOneWithoutContentsInput
 }
 
 export type ContentUncheckedCreateWithoutPostsInput = {
@@ -655,8 +659,7 @@ export type ContentUncheckedCreateWithoutPostsInput = {
   type?: $Enums.TextTypes
   text?: string | null
   fileId?: string | null
-  spaceId: string
-  creatorId?: string | null
+  tenantId: string
 }
 
 export type ContentCreateOrConnectWithoutPostsInput = {
@@ -685,8 +688,7 @@ export type ContentUpdateWithoutPostsInput = {
   type?: Prisma.EnumTextTypesFieldUpdateOperationsInput | $Enums.TextTypes
   text?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   fileId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  space?: Prisma.SpaceUpdateOneRequiredWithoutContentsNestedInput
-  creator?: Prisma.UserUpdateOneWithoutCreatedContentsNestedInput
+  tenant?: Prisma.TenantUpdateOneRequiredWithoutContentsNestedInput
 }
 
 export type ContentUncheckedUpdateWithoutPostsInput = {
@@ -700,11 +702,10 @@ export type ContentUncheckedUpdateWithoutPostsInput = {
   type?: Prisma.EnumTextTypesFieldUpdateOperationsInput | $Enums.TextTypes
   text?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   fileId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  spaceId?: Prisma.StringFieldUpdateOperationsInput | string
-  creatorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
 }
 
-export type ContentCreateWithoutSpaceInput = {
+export type ContentCreateManyTenantInput = {
   id?: string
   seq?: number
   createdAt?: Date | string
@@ -715,140 +716,9 @@ export type ContentCreateWithoutSpaceInput = {
   type?: $Enums.TextTypes
   text?: string | null
   fileId?: string | null
-  creator?: Prisma.UserCreateNestedOneWithoutCreatedContentsInput
-  posts?: Prisma.PostCreateNestedManyWithoutContentInput
 }
 
-export type ContentUncheckedCreateWithoutSpaceInput = {
-  id?: string
-  seq?: number
-  createdAt?: Date | string
-  updatedAt?: Date | string | null
-  removedAt?: Date | string | null
-  title?: string | null
-  description?: string | null
-  type?: $Enums.TextTypes
-  text?: string | null
-  fileId?: string | null
-  creatorId?: string | null
-  posts?: Prisma.PostUncheckedCreateNestedManyWithoutContentInput
-}
-
-export type ContentCreateOrConnectWithoutSpaceInput = {
-  where: Prisma.ContentWhereUniqueInput
-  create: Prisma.XOR<Prisma.ContentCreateWithoutSpaceInput, Prisma.ContentUncheckedCreateWithoutSpaceInput>
-}
-
-export type ContentCreateManySpaceInputEnvelope = {
-  data: Prisma.ContentCreateManySpaceInput | Prisma.ContentCreateManySpaceInput[]
-  skipDuplicates?: boolean
-}
-
-export type ContentUpsertWithWhereUniqueWithoutSpaceInput = {
-  where: Prisma.ContentWhereUniqueInput
-  update: Prisma.XOR<Prisma.ContentUpdateWithoutSpaceInput, Prisma.ContentUncheckedUpdateWithoutSpaceInput>
-  create: Prisma.XOR<Prisma.ContentCreateWithoutSpaceInput, Prisma.ContentUncheckedCreateWithoutSpaceInput>
-}
-
-export type ContentUpdateWithWhereUniqueWithoutSpaceInput = {
-  where: Prisma.ContentWhereUniqueInput
-  data: Prisma.XOR<Prisma.ContentUpdateWithoutSpaceInput, Prisma.ContentUncheckedUpdateWithoutSpaceInput>
-}
-
-export type ContentUpdateManyWithWhereWithoutSpaceInput = {
-  where: Prisma.ContentScalarWhereInput
-  data: Prisma.XOR<Prisma.ContentUpdateManyMutationInput, Prisma.ContentUncheckedUpdateManyWithoutSpaceInput>
-}
-
-export type ContentScalarWhereInput = {
-  AND?: Prisma.ContentScalarWhereInput | Prisma.ContentScalarWhereInput[]
-  OR?: Prisma.ContentScalarWhereInput[]
-  NOT?: Prisma.ContentScalarWhereInput | Prisma.ContentScalarWhereInput[]
-  id?: Prisma.StringFilter<"Content"> | string
-  seq?: Prisma.IntFilter<"Content"> | number
-  createdAt?: Prisma.DateTimeFilter<"Content"> | Date | string
-  updatedAt?: Prisma.DateTimeNullableFilter<"Content"> | Date | string | null
-  removedAt?: Prisma.DateTimeNullableFilter<"Content"> | Date | string | null
-  title?: Prisma.StringNullableFilter<"Content"> | string | null
-  description?: Prisma.StringNullableFilter<"Content"> | string | null
-  type?: Prisma.EnumTextTypesFilter<"Content"> | $Enums.TextTypes
-  text?: Prisma.StringNullableFilter<"Content"> | string | null
-  fileId?: Prisma.StringNullableFilter<"Content"> | string | null
-  spaceId?: Prisma.StringFilter<"Content"> | string
-  creatorId?: Prisma.StringNullableFilter<"Content"> | string | null
-}
-
-export type ContentCreateWithoutCreatorInput = {
-  id?: string
-  seq?: number
-  createdAt?: Date | string
-  updatedAt?: Date | string | null
-  removedAt?: Date | string | null
-  title?: string | null
-  description?: string | null
-  type?: $Enums.TextTypes
-  text?: string | null
-  fileId?: string | null
-  space: Prisma.SpaceCreateNestedOneWithoutContentsInput
-  posts?: Prisma.PostCreateNestedManyWithoutContentInput
-}
-
-export type ContentUncheckedCreateWithoutCreatorInput = {
-  id?: string
-  seq?: number
-  createdAt?: Date | string
-  updatedAt?: Date | string | null
-  removedAt?: Date | string | null
-  title?: string | null
-  description?: string | null
-  type?: $Enums.TextTypes
-  text?: string | null
-  fileId?: string | null
-  spaceId: string
-  posts?: Prisma.PostUncheckedCreateNestedManyWithoutContentInput
-}
-
-export type ContentCreateOrConnectWithoutCreatorInput = {
-  where: Prisma.ContentWhereUniqueInput
-  create: Prisma.XOR<Prisma.ContentCreateWithoutCreatorInput, Prisma.ContentUncheckedCreateWithoutCreatorInput>
-}
-
-export type ContentCreateManyCreatorInputEnvelope = {
-  data: Prisma.ContentCreateManyCreatorInput | Prisma.ContentCreateManyCreatorInput[]
-  skipDuplicates?: boolean
-}
-
-export type ContentUpsertWithWhereUniqueWithoutCreatorInput = {
-  where: Prisma.ContentWhereUniqueInput
-  update: Prisma.XOR<Prisma.ContentUpdateWithoutCreatorInput, Prisma.ContentUncheckedUpdateWithoutCreatorInput>
-  create: Prisma.XOR<Prisma.ContentCreateWithoutCreatorInput, Prisma.ContentUncheckedCreateWithoutCreatorInput>
-}
-
-export type ContentUpdateWithWhereUniqueWithoutCreatorInput = {
-  where: Prisma.ContentWhereUniqueInput
-  data: Prisma.XOR<Prisma.ContentUpdateWithoutCreatorInput, Prisma.ContentUncheckedUpdateWithoutCreatorInput>
-}
-
-export type ContentUpdateManyWithWhereWithoutCreatorInput = {
-  where: Prisma.ContentScalarWhereInput
-  data: Prisma.XOR<Prisma.ContentUpdateManyMutationInput, Prisma.ContentUncheckedUpdateManyWithoutCreatorInput>
-}
-
-export type ContentCreateManySpaceInput = {
-  id?: string
-  seq?: number
-  createdAt?: Date | string
-  updatedAt?: Date | string | null
-  removedAt?: Date | string | null
-  title?: string | null
-  description?: string | null
-  type?: $Enums.TextTypes
-  text?: string | null
-  fileId?: string | null
-  creatorId?: string | null
-}
-
-export type ContentUpdateWithoutSpaceInput = {
+export type ContentUpdateWithoutTenantInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -858,11 +728,10 @@ export type ContentUpdateWithoutSpaceInput = {
   type?: Prisma.EnumTextTypesFieldUpdateOperationsInput | $Enums.TextTypes
   text?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   fileId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  creator?: Prisma.UserUpdateOneWithoutCreatedContentsNestedInput
   posts?: Prisma.PostUpdateManyWithoutContentNestedInput
 }
 
-export type ContentUncheckedUpdateWithoutSpaceInput = {
+export type ContentUncheckedUpdateWithoutTenantInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   seq?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -873,11 +742,10 @@ export type ContentUncheckedUpdateWithoutSpaceInput = {
   type?: Prisma.EnumTextTypesFieldUpdateOperationsInput | $Enums.TextTypes
   text?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   fileId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  creatorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   posts?: Prisma.PostUncheckedUpdateManyWithoutContentNestedInput
 }
 
-export type ContentUncheckedUpdateManyWithoutSpaceInput = {
+export type ContentUncheckedUpdateManyWithoutTenantInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   seq?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -888,64 +756,6 @@ export type ContentUncheckedUpdateManyWithoutSpaceInput = {
   type?: Prisma.EnumTextTypesFieldUpdateOperationsInput | $Enums.TextTypes
   text?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   fileId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  creatorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-}
-
-export type ContentCreateManyCreatorInput = {
-  id?: string
-  seq?: number
-  createdAt?: Date | string
-  updatedAt?: Date | string | null
-  removedAt?: Date | string | null
-  title?: string | null
-  description?: string | null
-  type?: $Enums.TextTypes
-  text?: string | null
-  fileId?: string | null
-  spaceId: string
-}
-
-export type ContentUpdateWithoutCreatorInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  title?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  type?: Prisma.EnumTextTypesFieldUpdateOperationsInput | $Enums.TextTypes
-  text?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  fileId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  space?: Prisma.SpaceUpdateOneRequiredWithoutContentsNestedInput
-  posts?: Prisma.PostUpdateManyWithoutContentNestedInput
-}
-
-export type ContentUncheckedUpdateWithoutCreatorInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  seq?: Prisma.IntFieldUpdateOperationsInput | number
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  title?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  type?: Prisma.EnumTextTypesFieldUpdateOperationsInput | $Enums.TextTypes
-  text?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  fileId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  spaceId?: Prisma.StringFieldUpdateOperationsInput | string
-  posts?: Prisma.PostUncheckedUpdateManyWithoutContentNestedInput
-}
-
-export type ContentUncheckedUpdateManyWithoutCreatorInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  seq?: Prisma.IntFieldUpdateOperationsInput | number
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  title?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  type?: Prisma.EnumTextTypesFieldUpdateOperationsInput | $Enums.TextTypes
-  text?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  fileId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  spaceId?: Prisma.StringFieldUpdateOperationsInput | string
 }
 
 
@@ -990,10 +800,8 @@ export type ContentSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   type?: boolean
   text?: boolean
   fileId?: boolean
-  spaceId?: boolean
-  creatorId?: boolean
-  space?: boolean | Prisma.SpaceDefaultArgs<ExtArgs>
-  creator?: boolean | Prisma.Content$creatorArgs<ExtArgs>
+  tenantId?: boolean
+  tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
   posts?: boolean | Prisma.Content$postsArgs<ExtArgs>
   _count?: boolean | Prisma.ContentCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["content"]>
@@ -1009,10 +817,8 @@ export type ContentSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Exten
   type?: boolean
   text?: boolean
   fileId?: boolean
-  spaceId?: boolean
-  creatorId?: boolean
-  space?: boolean | Prisma.SpaceDefaultArgs<ExtArgs>
-  creator?: boolean | Prisma.Content$creatorArgs<ExtArgs>
+  tenantId?: boolean
+  tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["content"]>
 
 export type ContentSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -1026,10 +832,8 @@ export type ContentSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Exten
   type?: boolean
   text?: boolean
   fileId?: boolean
-  spaceId?: boolean
-  creatorId?: boolean
-  space?: boolean | Prisma.SpaceDefaultArgs<ExtArgs>
-  creator?: boolean | Prisma.Content$creatorArgs<ExtArgs>
+  tenantId?: boolean
+  tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["content"]>
 
 export type ContentSelectScalar = {
@@ -1043,31 +847,26 @@ export type ContentSelectScalar = {
   type?: boolean
   text?: boolean
   fileId?: boolean
-  spaceId?: boolean
-  creatorId?: boolean
+  tenantId?: boolean
 }
 
-export type ContentOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "seq" | "createdAt" | "updatedAt" | "removedAt" | "title" | "description" | "type" | "text" | "fileId" | "spaceId" | "creatorId", ExtArgs["result"]["content"]>
+export type ContentOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "seq" | "createdAt" | "updatedAt" | "removedAt" | "title" | "description" | "type" | "text" | "fileId" | "tenantId", ExtArgs["result"]["content"]>
 export type ContentInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  space?: boolean | Prisma.SpaceDefaultArgs<ExtArgs>
-  creator?: boolean | Prisma.Content$creatorArgs<ExtArgs>
+  tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
   posts?: boolean | Prisma.Content$postsArgs<ExtArgs>
   _count?: boolean | Prisma.ContentCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type ContentIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  space?: boolean | Prisma.SpaceDefaultArgs<ExtArgs>
-  creator?: boolean | Prisma.Content$creatorArgs<ExtArgs>
+  tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
 }
 export type ContentIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  space?: boolean | Prisma.SpaceDefaultArgs<ExtArgs>
-  creator?: boolean | Prisma.Content$creatorArgs<ExtArgs>
+  tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
 }
 
 export type $ContentPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "Content"
   objects: {
-    space: Prisma.$SpacePayload<ExtArgs>
-    creator: Prisma.$UserPayload<ExtArgs> | null
+    tenant: Prisma.$TenantPayload<ExtArgs>
     posts: Prisma.$PostPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
@@ -1076,25 +875,12 @@ export type $ContentPayload<ExtArgs extends runtime.Types.Extensions.InternalArg
     createdAt: Date
     updatedAt: Date | null
     removedAt: Date | null
-    /**
-     * @displayName 제목
-     */
     title: string | null
-    /**
-     * @displayName 설명
-     */
     description: string | null
-    /**
-     * @displayName 유형
-     */
     type: $Enums.TextTypes
-    /**
-     * @displayName 본문
-     */
     text: string | null
     fileId: string | null
-    spaceId: string
-    creatorId: string | null
+    tenantId: string
   }, ExtArgs["result"]["content"]>
   composites: {}
 }
@@ -1489,8 +1275,7 @@ readonly fields: ContentFieldRefs;
  */
 export interface Prisma__ContentClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
-  space<T extends Prisma.SpaceDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.SpaceDefaultArgs<ExtArgs>>): Prisma.Prisma__SpaceClient<runtime.Types.Result.GetResult<Prisma.$SpacePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
-  creator<T extends Prisma.Content$creatorArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Content$creatorArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  tenant<T extends Prisma.TenantDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.TenantDefaultArgs<ExtArgs>>): Prisma.Prisma__TenantClient<runtime.Types.Result.GetResult<Prisma.$TenantPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   posts<T extends Prisma.Content$postsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Content$postsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PostPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -1531,8 +1316,7 @@ export interface ContentFieldRefs {
   readonly type: Prisma.FieldRef<"Content", 'TextTypes'>
   readonly text: Prisma.FieldRef<"Content", 'String'>
   readonly fileId: Prisma.FieldRef<"Content", 'String'>
-  readonly spaceId: Prisma.FieldRef<"Content", 'String'>
-  readonly creatorId: Prisma.FieldRef<"Content", 'String'>
+  readonly tenantId: Prisma.FieldRef<"Content", 'String'>
 }
     
 
@@ -1926,25 +1710,6 @@ export type ContentDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.Inter
    * Limit how many Contents to delete.
    */
   limit?: number
-}
-
-/**
- * Content.creator
- */
-export type Content$creatorArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  /**
-   * Select specific fields to fetch from the User
-   */
-  select?: Prisma.UserSelect<ExtArgs> | null
-  /**
-   * Omit specific fields from the User
-   */
-  omit?: Prisma.UserOmit<ExtArgs> | null
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.UserInclude<ExtArgs> | null
-  where?: Prisma.UserWhereInput
 }
 
 /**

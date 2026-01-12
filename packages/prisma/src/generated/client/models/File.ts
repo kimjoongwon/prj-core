@@ -44,8 +44,7 @@ export type FileMinAggregateOutputType = {
   parentId: string | null
   mimeType: string | null
   url: string | null
-  spaceId: string | null
-  creatorId: string | null
+  tenantId: string | null
   createdAt: Date | null
   updatedAt: Date | null
   removedAt: Date | null
@@ -59,8 +58,7 @@ export type FileMaxAggregateOutputType = {
   parentId: string | null
   mimeType: string | null
   url: string | null
-  spaceId: string | null
-  creatorId: string | null
+  tenantId: string | null
   createdAt: Date | null
   updatedAt: Date | null
   removedAt: Date | null
@@ -74,8 +72,7 @@ export type FileCountAggregateOutputType = {
   parentId: number
   mimeType: number
   url: number
-  spaceId: number
-  creatorId: number
+  tenantId: number
   createdAt: number
   updatedAt: number
   removedAt: number
@@ -101,8 +98,7 @@ export type FileMinAggregateInputType = {
   parentId?: true
   mimeType?: true
   url?: true
-  spaceId?: true
-  creatorId?: true
+  tenantId?: true
   createdAt?: true
   updatedAt?: true
   removedAt?: true
@@ -116,8 +112,7 @@ export type FileMaxAggregateInputType = {
   parentId?: true
   mimeType?: true
   url?: true
-  spaceId?: true
-  creatorId?: true
+  tenantId?: true
   createdAt?: true
   updatedAt?: true
   removedAt?: true
@@ -131,8 +126,7 @@ export type FileCountAggregateInputType = {
   parentId?: true
   mimeType?: true
   url?: true
-  spaceId?: true
-  creatorId?: true
+  tenantId?: true
   createdAt?: true
   updatedAt?: true
   removedAt?: true
@@ -233,8 +227,7 @@ export type FileGroupByOutputType = {
   parentId: string | null
   mimeType: string
   url: string
-  spaceId: string
-  creatorId: string | null
+  tenantId: string
   createdAt: Date
   updatedAt: Date | null
   removedAt: Date | null
@@ -271,15 +264,13 @@ export type FileWhereInput = {
   parentId?: Prisma.StringNullableFilter<"File"> | string | null
   mimeType?: Prisma.StringFilter<"File"> | string
   url?: Prisma.StringFilter<"File"> | string
-  spaceId?: Prisma.StringFilter<"File"> | string
-  creatorId?: Prisma.StringNullableFilter<"File"> | string | null
+  tenantId?: Prisma.StringFilter<"File"> | string
   createdAt?: Prisma.DateTimeFilter<"File"> | Date | string
   updatedAt?: Prisma.DateTimeNullableFilter<"File"> | Date | string | null
   removedAt?: Prisma.DateTimeNullableFilter<"File"> | Date | string | null
   parent?: Prisma.XOR<Prisma.FileNullableScalarRelationFilter, Prisma.FileWhereInput> | null
   children?: Prisma.FileListRelationFilter
-  space?: Prisma.XOR<Prisma.SpaceScalarRelationFilter, Prisma.SpaceWhereInput>
-  creator?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
+  tenant?: Prisma.XOR<Prisma.TenantScalarRelationFilter, Prisma.TenantWhereInput>
   associations?: Prisma.FileAssociationListRelationFilter
   classification?: Prisma.XOR<Prisma.FileClassificationNullableScalarRelationFilter, Prisma.FileClassificationWhereInput> | null
 }
@@ -292,15 +283,13 @@ export type FileOrderByWithRelationInput = {
   parentId?: Prisma.SortOrderInput | Prisma.SortOrder
   mimeType?: Prisma.SortOrder
   url?: Prisma.SortOrder
-  spaceId?: Prisma.SortOrder
-  creatorId?: Prisma.SortOrderInput | Prisma.SortOrder
+  tenantId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   removedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   parent?: Prisma.FileOrderByWithRelationInput
   children?: Prisma.FileOrderByRelationAggregateInput
-  space?: Prisma.SpaceOrderByWithRelationInput
-  creator?: Prisma.UserOrderByWithRelationInput
+  tenant?: Prisma.TenantOrderByWithRelationInput
   associations?: Prisma.FileAssociationOrderByRelationAggregateInput
   classification?: Prisma.FileClassificationOrderByWithRelationInput
 }
@@ -316,15 +305,13 @@ export type FileWhereUniqueInput = Prisma.AtLeast<{
   parentId?: Prisma.StringNullableFilter<"File"> | string | null
   mimeType?: Prisma.StringFilter<"File"> | string
   url?: Prisma.StringFilter<"File"> | string
-  spaceId?: Prisma.StringFilter<"File"> | string
-  creatorId?: Prisma.StringNullableFilter<"File"> | string | null
+  tenantId?: Prisma.StringFilter<"File"> | string
   createdAt?: Prisma.DateTimeFilter<"File"> | Date | string
   updatedAt?: Prisma.DateTimeNullableFilter<"File"> | Date | string | null
   removedAt?: Prisma.DateTimeNullableFilter<"File"> | Date | string | null
   parent?: Prisma.XOR<Prisma.FileNullableScalarRelationFilter, Prisma.FileWhereInput> | null
   children?: Prisma.FileListRelationFilter
-  space?: Prisma.XOR<Prisma.SpaceScalarRelationFilter, Prisma.SpaceWhereInput>
-  creator?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
+  tenant?: Prisma.XOR<Prisma.TenantScalarRelationFilter, Prisma.TenantWhereInput>
   associations?: Prisma.FileAssociationListRelationFilter
   classification?: Prisma.XOR<Prisma.FileClassificationNullableScalarRelationFilter, Prisma.FileClassificationWhereInput> | null
 }, "id" | "seq">
@@ -337,8 +324,7 @@ export type FileOrderByWithAggregationInput = {
   parentId?: Prisma.SortOrderInput | Prisma.SortOrder
   mimeType?: Prisma.SortOrder
   url?: Prisma.SortOrder
-  spaceId?: Prisma.SortOrder
-  creatorId?: Prisma.SortOrderInput | Prisma.SortOrder
+  tenantId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   removedAt?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -360,8 +346,7 @@ export type FileScalarWhereWithAggregatesInput = {
   parentId?: Prisma.StringNullableWithAggregatesFilter<"File"> | string | null
   mimeType?: Prisma.StringWithAggregatesFilter<"File"> | string
   url?: Prisma.StringWithAggregatesFilter<"File"> | string
-  spaceId?: Prisma.StringWithAggregatesFilter<"File"> | string
-  creatorId?: Prisma.StringNullableWithAggregatesFilter<"File"> | string | null
+  tenantId?: Prisma.StringWithAggregatesFilter<"File"> | string
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"File"> | Date | string
   updatedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"File"> | Date | string | null
   removedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"File"> | Date | string | null
@@ -379,8 +364,7 @@ export type FileCreateInput = {
   removedAt?: Date | string | null
   parent?: Prisma.FileCreateNestedOneWithoutChildrenInput
   children?: Prisma.FileCreateNestedManyWithoutParentInput
-  space: Prisma.SpaceCreateNestedOneWithoutFilesInput
-  creator?: Prisma.UserCreateNestedOneWithoutCreatedFilesInput
+  tenant: Prisma.TenantCreateNestedOneWithoutFilesInput
   associations?: Prisma.FileAssociationCreateNestedManyWithoutFileInput
   classification?: Prisma.FileClassificationCreateNestedOneWithoutFileInput
 }
@@ -393,8 +377,7 @@ export type FileUncheckedCreateInput = {
   parentId?: string | null
   mimeType: string
   url: string
-  spaceId: string
-  creatorId?: string | null
+  tenantId: string
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
@@ -414,8 +397,7 @@ export type FileUpdateInput = {
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   parent?: Prisma.FileUpdateOneWithoutChildrenNestedInput
   children?: Prisma.FileUpdateManyWithoutParentNestedInput
-  space?: Prisma.SpaceUpdateOneRequiredWithoutFilesNestedInput
-  creator?: Prisma.UserUpdateOneWithoutCreatedFilesNestedInput
+  tenant?: Prisma.TenantUpdateOneRequiredWithoutFilesNestedInput
   associations?: Prisma.FileAssociationUpdateManyWithoutFileNestedInput
   classification?: Prisma.FileClassificationUpdateOneWithoutFileNestedInput
 }
@@ -428,8 +410,7 @@ export type FileUncheckedUpdateInput = {
   parentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   mimeType?: Prisma.StringFieldUpdateOperationsInput | string
   url?: Prisma.StringFieldUpdateOperationsInput | string
-  spaceId?: Prisma.StringFieldUpdateOperationsInput | string
-  creatorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -446,8 +427,7 @@ export type FileCreateManyInput = {
   parentId?: string | null
   mimeType: string
   url: string
-  spaceId: string
-  creatorId?: string | null
+  tenantId: string
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
@@ -472,16 +452,10 @@ export type FileUncheckedUpdateManyInput = {
   parentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   mimeType?: Prisma.StringFieldUpdateOperationsInput | string
   url?: Prisma.StringFieldUpdateOperationsInput | string
-  spaceId?: Prisma.StringFieldUpdateOperationsInput | string
-  creatorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-}
-
-export type FileNullableScalarRelationFilter = {
-  is?: Prisma.FileWhereInput | null
-  isNot?: Prisma.FileWhereInput | null
 }
 
 export type FileListRelationFilter = {
@@ -494,6 +468,11 @@ export type FileOrderByRelationAggregateInput = {
   _count?: Prisma.SortOrder
 }
 
+export type FileNullableScalarRelationFilter = {
+  is?: Prisma.FileWhereInput | null
+  isNot?: Prisma.FileWhereInput | null
+}
+
 export type FileCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   seq?: Prisma.SortOrder
@@ -502,8 +481,7 @@ export type FileCountOrderByAggregateInput = {
   parentId?: Prisma.SortOrder
   mimeType?: Prisma.SortOrder
   url?: Prisma.SortOrder
-  spaceId?: Prisma.SortOrder
-  creatorId?: Prisma.SortOrder
+  tenantId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   removedAt?: Prisma.SortOrder
@@ -522,8 +500,7 @@ export type FileMaxOrderByAggregateInput = {
   parentId?: Prisma.SortOrder
   mimeType?: Prisma.SortOrder
   url?: Prisma.SortOrder
-  spaceId?: Prisma.SortOrder
-  creatorId?: Prisma.SortOrder
+  tenantId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   removedAt?: Prisma.SortOrder
@@ -537,8 +514,7 @@ export type FileMinOrderByAggregateInput = {
   parentId?: Prisma.SortOrder
   mimeType?: Prisma.SortOrder
   url?: Prisma.SortOrder
-  spaceId?: Prisma.SortOrder
-  creatorId?: Prisma.SortOrder
+  tenantId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   removedAt?: Prisma.SortOrder
@@ -552,6 +528,48 @@ export type FileSumOrderByAggregateInput = {
 export type FileScalarRelationFilter = {
   is?: Prisma.FileWhereInput
   isNot?: Prisma.FileWhereInput
+}
+
+export type FileCreateNestedManyWithoutTenantInput = {
+  create?: Prisma.XOR<Prisma.FileCreateWithoutTenantInput, Prisma.FileUncheckedCreateWithoutTenantInput> | Prisma.FileCreateWithoutTenantInput[] | Prisma.FileUncheckedCreateWithoutTenantInput[]
+  connectOrCreate?: Prisma.FileCreateOrConnectWithoutTenantInput | Prisma.FileCreateOrConnectWithoutTenantInput[]
+  createMany?: Prisma.FileCreateManyTenantInputEnvelope
+  connect?: Prisma.FileWhereUniqueInput | Prisma.FileWhereUniqueInput[]
+}
+
+export type FileUncheckedCreateNestedManyWithoutTenantInput = {
+  create?: Prisma.XOR<Prisma.FileCreateWithoutTenantInput, Prisma.FileUncheckedCreateWithoutTenantInput> | Prisma.FileCreateWithoutTenantInput[] | Prisma.FileUncheckedCreateWithoutTenantInput[]
+  connectOrCreate?: Prisma.FileCreateOrConnectWithoutTenantInput | Prisma.FileCreateOrConnectWithoutTenantInput[]
+  createMany?: Prisma.FileCreateManyTenantInputEnvelope
+  connect?: Prisma.FileWhereUniqueInput | Prisma.FileWhereUniqueInput[]
+}
+
+export type FileUpdateManyWithoutTenantNestedInput = {
+  create?: Prisma.XOR<Prisma.FileCreateWithoutTenantInput, Prisma.FileUncheckedCreateWithoutTenantInput> | Prisma.FileCreateWithoutTenantInput[] | Prisma.FileUncheckedCreateWithoutTenantInput[]
+  connectOrCreate?: Prisma.FileCreateOrConnectWithoutTenantInput | Prisma.FileCreateOrConnectWithoutTenantInput[]
+  upsert?: Prisma.FileUpsertWithWhereUniqueWithoutTenantInput | Prisma.FileUpsertWithWhereUniqueWithoutTenantInput[]
+  createMany?: Prisma.FileCreateManyTenantInputEnvelope
+  set?: Prisma.FileWhereUniqueInput | Prisma.FileWhereUniqueInput[]
+  disconnect?: Prisma.FileWhereUniqueInput | Prisma.FileWhereUniqueInput[]
+  delete?: Prisma.FileWhereUniqueInput | Prisma.FileWhereUniqueInput[]
+  connect?: Prisma.FileWhereUniqueInput | Prisma.FileWhereUniqueInput[]
+  update?: Prisma.FileUpdateWithWhereUniqueWithoutTenantInput | Prisma.FileUpdateWithWhereUniqueWithoutTenantInput[]
+  updateMany?: Prisma.FileUpdateManyWithWhereWithoutTenantInput | Prisma.FileUpdateManyWithWhereWithoutTenantInput[]
+  deleteMany?: Prisma.FileScalarWhereInput | Prisma.FileScalarWhereInput[]
+}
+
+export type FileUncheckedUpdateManyWithoutTenantNestedInput = {
+  create?: Prisma.XOR<Prisma.FileCreateWithoutTenantInput, Prisma.FileUncheckedCreateWithoutTenantInput> | Prisma.FileCreateWithoutTenantInput[] | Prisma.FileUncheckedCreateWithoutTenantInput[]
+  connectOrCreate?: Prisma.FileCreateOrConnectWithoutTenantInput | Prisma.FileCreateOrConnectWithoutTenantInput[]
+  upsert?: Prisma.FileUpsertWithWhereUniqueWithoutTenantInput | Prisma.FileUpsertWithWhereUniqueWithoutTenantInput[]
+  createMany?: Prisma.FileCreateManyTenantInputEnvelope
+  set?: Prisma.FileWhereUniqueInput | Prisma.FileWhereUniqueInput[]
+  disconnect?: Prisma.FileWhereUniqueInput | Prisma.FileWhereUniqueInput[]
+  delete?: Prisma.FileWhereUniqueInput | Prisma.FileWhereUniqueInput[]
+  connect?: Prisma.FileWhereUniqueInput | Prisma.FileWhereUniqueInput[]
+  update?: Prisma.FileUpdateWithWhereUniqueWithoutTenantInput | Prisma.FileUpdateWithWhereUniqueWithoutTenantInput[]
+  updateMany?: Prisma.FileUpdateManyWithWhereWithoutTenantInput | Prisma.FileUpdateManyWithWhereWithoutTenantInput[]
+  deleteMany?: Prisma.FileScalarWhereInput | Prisma.FileScalarWhereInput[]
 }
 
 export type FileCreateNestedOneWithoutChildrenInput = {
@@ -640,88 +658,79 @@ export type FileUpdateOneRequiredWithoutAssociationsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.FileUpdateToOneWithWhereWithoutAssociationsInput, Prisma.FileUpdateWithoutAssociationsInput>, Prisma.FileUncheckedUpdateWithoutAssociationsInput>
 }
 
-export type FileCreateNestedManyWithoutSpaceInput = {
-  create?: Prisma.XOR<Prisma.FileCreateWithoutSpaceInput, Prisma.FileUncheckedCreateWithoutSpaceInput> | Prisma.FileCreateWithoutSpaceInput[] | Prisma.FileUncheckedCreateWithoutSpaceInput[]
-  connectOrCreate?: Prisma.FileCreateOrConnectWithoutSpaceInput | Prisma.FileCreateOrConnectWithoutSpaceInput[]
-  createMany?: Prisma.FileCreateManySpaceInputEnvelope
-  connect?: Prisma.FileWhereUniqueInput | Prisma.FileWhereUniqueInput[]
+export type FileCreateWithoutTenantInput = {
+  id?: string
+  seq?: number
+  name: string
+  size: number
+  mimeType: string
+  url: string
+  createdAt?: Date | string
+  updatedAt?: Date | string | null
+  removedAt?: Date | string | null
+  parent?: Prisma.FileCreateNestedOneWithoutChildrenInput
+  children?: Prisma.FileCreateNestedManyWithoutParentInput
+  associations?: Prisma.FileAssociationCreateNestedManyWithoutFileInput
+  classification?: Prisma.FileClassificationCreateNestedOneWithoutFileInput
 }
 
-export type FileUncheckedCreateNestedManyWithoutSpaceInput = {
-  create?: Prisma.XOR<Prisma.FileCreateWithoutSpaceInput, Prisma.FileUncheckedCreateWithoutSpaceInput> | Prisma.FileCreateWithoutSpaceInput[] | Prisma.FileUncheckedCreateWithoutSpaceInput[]
-  connectOrCreate?: Prisma.FileCreateOrConnectWithoutSpaceInput | Prisma.FileCreateOrConnectWithoutSpaceInput[]
-  createMany?: Prisma.FileCreateManySpaceInputEnvelope
-  connect?: Prisma.FileWhereUniqueInput | Prisma.FileWhereUniqueInput[]
+export type FileUncheckedCreateWithoutTenantInput = {
+  id?: string
+  seq?: number
+  name: string
+  size: number
+  parentId?: string | null
+  mimeType: string
+  url: string
+  createdAt?: Date | string
+  updatedAt?: Date | string | null
+  removedAt?: Date | string | null
+  children?: Prisma.FileUncheckedCreateNestedManyWithoutParentInput
+  associations?: Prisma.FileAssociationUncheckedCreateNestedManyWithoutFileInput
+  classification?: Prisma.FileClassificationUncheckedCreateNestedOneWithoutFileInput
 }
 
-export type FileUpdateManyWithoutSpaceNestedInput = {
-  create?: Prisma.XOR<Prisma.FileCreateWithoutSpaceInput, Prisma.FileUncheckedCreateWithoutSpaceInput> | Prisma.FileCreateWithoutSpaceInput[] | Prisma.FileUncheckedCreateWithoutSpaceInput[]
-  connectOrCreate?: Prisma.FileCreateOrConnectWithoutSpaceInput | Prisma.FileCreateOrConnectWithoutSpaceInput[]
-  upsert?: Prisma.FileUpsertWithWhereUniqueWithoutSpaceInput | Prisma.FileUpsertWithWhereUniqueWithoutSpaceInput[]
-  createMany?: Prisma.FileCreateManySpaceInputEnvelope
-  set?: Prisma.FileWhereUniqueInput | Prisma.FileWhereUniqueInput[]
-  disconnect?: Prisma.FileWhereUniqueInput | Prisma.FileWhereUniqueInput[]
-  delete?: Prisma.FileWhereUniqueInput | Prisma.FileWhereUniqueInput[]
-  connect?: Prisma.FileWhereUniqueInput | Prisma.FileWhereUniqueInput[]
-  update?: Prisma.FileUpdateWithWhereUniqueWithoutSpaceInput | Prisma.FileUpdateWithWhereUniqueWithoutSpaceInput[]
-  updateMany?: Prisma.FileUpdateManyWithWhereWithoutSpaceInput | Prisma.FileUpdateManyWithWhereWithoutSpaceInput[]
-  deleteMany?: Prisma.FileScalarWhereInput | Prisma.FileScalarWhereInput[]
+export type FileCreateOrConnectWithoutTenantInput = {
+  where: Prisma.FileWhereUniqueInput
+  create: Prisma.XOR<Prisma.FileCreateWithoutTenantInput, Prisma.FileUncheckedCreateWithoutTenantInput>
 }
 
-export type FileUncheckedUpdateManyWithoutSpaceNestedInput = {
-  create?: Prisma.XOR<Prisma.FileCreateWithoutSpaceInput, Prisma.FileUncheckedCreateWithoutSpaceInput> | Prisma.FileCreateWithoutSpaceInput[] | Prisma.FileUncheckedCreateWithoutSpaceInput[]
-  connectOrCreate?: Prisma.FileCreateOrConnectWithoutSpaceInput | Prisma.FileCreateOrConnectWithoutSpaceInput[]
-  upsert?: Prisma.FileUpsertWithWhereUniqueWithoutSpaceInput | Prisma.FileUpsertWithWhereUniqueWithoutSpaceInput[]
-  createMany?: Prisma.FileCreateManySpaceInputEnvelope
-  set?: Prisma.FileWhereUniqueInput | Prisma.FileWhereUniqueInput[]
-  disconnect?: Prisma.FileWhereUniqueInput | Prisma.FileWhereUniqueInput[]
-  delete?: Prisma.FileWhereUniqueInput | Prisma.FileWhereUniqueInput[]
-  connect?: Prisma.FileWhereUniqueInput | Prisma.FileWhereUniqueInput[]
-  update?: Prisma.FileUpdateWithWhereUniqueWithoutSpaceInput | Prisma.FileUpdateWithWhereUniqueWithoutSpaceInput[]
-  updateMany?: Prisma.FileUpdateManyWithWhereWithoutSpaceInput | Prisma.FileUpdateManyWithWhereWithoutSpaceInput[]
-  deleteMany?: Prisma.FileScalarWhereInput | Prisma.FileScalarWhereInput[]
+export type FileCreateManyTenantInputEnvelope = {
+  data: Prisma.FileCreateManyTenantInput | Prisma.FileCreateManyTenantInput[]
+  skipDuplicates?: boolean
 }
 
-export type FileCreateNestedManyWithoutCreatorInput = {
-  create?: Prisma.XOR<Prisma.FileCreateWithoutCreatorInput, Prisma.FileUncheckedCreateWithoutCreatorInput> | Prisma.FileCreateWithoutCreatorInput[] | Prisma.FileUncheckedCreateWithoutCreatorInput[]
-  connectOrCreate?: Prisma.FileCreateOrConnectWithoutCreatorInput | Prisma.FileCreateOrConnectWithoutCreatorInput[]
-  createMany?: Prisma.FileCreateManyCreatorInputEnvelope
-  connect?: Prisma.FileWhereUniqueInput | Prisma.FileWhereUniqueInput[]
+export type FileUpsertWithWhereUniqueWithoutTenantInput = {
+  where: Prisma.FileWhereUniqueInput
+  update: Prisma.XOR<Prisma.FileUpdateWithoutTenantInput, Prisma.FileUncheckedUpdateWithoutTenantInput>
+  create: Prisma.XOR<Prisma.FileCreateWithoutTenantInput, Prisma.FileUncheckedCreateWithoutTenantInput>
 }
 
-export type FileUncheckedCreateNestedManyWithoutCreatorInput = {
-  create?: Prisma.XOR<Prisma.FileCreateWithoutCreatorInput, Prisma.FileUncheckedCreateWithoutCreatorInput> | Prisma.FileCreateWithoutCreatorInput[] | Prisma.FileUncheckedCreateWithoutCreatorInput[]
-  connectOrCreate?: Prisma.FileCreateOrConnectWithoutCreatorInput | Prisma.FileCreateOrConnectWithoutCreatorInput[]
-  createMany?: Prisma.FileCreateManyCreatorInputEnvelope
-  connect?: Prisma.FileWhereUniqueInput | Prisma.FileWhereUniqueInput[]
+export type FileUpdateWithWhereUniqueWithoutTenantInput = {
+  where: Prisma.FileWhereUniqueInput
+  data: Prisma.XOR<Prisma.FileUpdateWithoutTenantInput, Prisma.FileUncheckedUpdateWithoutTenantInput>
 }
 
-export type FileUpdateManyWithoutCreatorNestedInput = {
-  create?: Prisma.XOR<Prisma.FileCreateWithoutCreatorInput, Prisma.FileUncheckedCreateWithoutCreatorInput> | Prisma.FileCreateWithoutCreatorInput[] | Prisma.FileUncheckedCreateWithoutCreatorInput[]
-  connectOrCreate?: Prisma.FileCreateOrConnectWithoutCreatorInput | Prisma.FileCreateOrConnectWithoutCreatorInput[]
-  upsert?: Prisma.FileUpsertWithWhereUniqueWithoutCreatorInput | Prisma.FileUpsertWithWhereUniqueWithoutCreatorInput[]
-  createMany?: Prisma.FileCreateManyCreatorInputEnvelope
-  set?: Prisma.FileWhereUniqueInput | Prisma.FileWhereUniqueInput[]
-  disconnect?: Prisma.FileWhereUniqueInput | Prisma.FileWhereUniqueInput[]
-  delete?: Prisma.FileWhereUniqueInput | Prisma.FileWhereUniqueInput[]
-  connect?: Prisma.FileWhereUniqueInput | Prisma.FileWhereUniqueInput[]
-  update?: Prisma.FileUpdateWithWhereUniqueWithoutCreatorInput | Prisma.FileUpdateWithWhereUniqueWithoutCreatorInput[]
-  updateMany?: Prisma.FileUpdateManyWithWhereWithoutCreatorInput | Prisma.FileUpdateManyWithWhereWithoutCreatorInput[]
-  deleteMany?: Prisma.FileScalarWhereInput | Prisma.FileScalarWhereInput[]
+export type FileUpdateManyWithWhereWithoutTenantInput = {
+  where: Prisma.FileScalarWhereInput
+  data: Prisma.XOR<Prisma.FileUpdateManyMutationInput, Prisma.FileUncheckedUpdateManyWithoutTenantInput>
 }
 
-export type FileUncheckedUpdateManyWithoutCreatorNestedInput = {
-  create?: Prisma.XOR<Prisma.FileCreateWithoutCreatorInput, Prisma.FileUncheckedCreateWithoutCreatorInput> | Prisma.FileCreateWithoutCreatorInput[] | Prisma.FileUncheckedCreateWithoutCreatorInput[]
-  connectOrCreate?: Prisma.FileCreateOrConnectWithoutCreatorInput | Prisma.FileCreateOrConnectWithoutCreatorInput[]
-  upsert?: Prisma.FileUpsertWithWhereUniqueWithoutCreatorInput | Prisma.FileUpsertWithWhereUniqueWithoutCreatorInput[]
-  createMany?: Prisma.FileCreateManyCreatorInputEnvelope
-  set?: Prisma.FileWhereUniqueInput | Prisma.FileWhereUniqueInput[]
-  disconnect?: Prisma.FileWhereUniqueInput | Prisma.FileWhereUniqueInput[]
-  delete?: Prisma.FileWhereUniqueInput | Prisma.FileWhereUniqueInput[]
-  connect?: Prisma.FileWhereUniqueInput | Prisma.FileWhereUniqueInput[]
-  update?: Prisma.FileUpdateWithWhereUniqueWithoutCreatorInput | Prisma.FileUpdateWithWhereUniqueWithoutCreatorInput[]
-  updateMany?: Prisma.FileUpdateManyWithWhereWithoutCreatorInput | Prisma.FileUpdateManyWithWhereWithoutCreatorInput[]
-  deleteMany?: Prisma.FileScalarWhereInput | Prisma.FileScalarWhereInput[]
+export type FileScalarWhereInput = {
+  AND?: Prisma.FileScalarWhereInput | Prisma.FileScalarWhereInput[]
+  OR?: Prisma.FileScalarWhereInput[]
+  NOT?: Prisma.FileScalarWhereInput | Prisma.FileScalarWhereInput[]
+  id?: Prisma.StringFilter<"File"> | string
+  seq?: Prisma.IntFilter<"File"> | number
+  name?: Prisma.StringFilter<"File"> | string
+  size?: Prisma.IntFilter<"File"> | number
+  parentId?: Prisma.StringNullableFilter<"File"> | string | null
+  mimeType?: Prisma.StringFilter<"File"> | string
+  url?: Prisma.StringFilter<"File"> | string
+  tenantId?: Prisma.StringFilter<"File"> | string
+  createdAt?: Prisma.DateTimeFilter<"File"> | Date | string
+  updatedAt?: Prisma.DateTimeNullableFilter<"File"> | Date | string | null
+  removedAt?: Prisma.DateTimeNullableFilter<"File"> | Date | string | null
 }
 
 export type FileCreateWithoutChildrenInput = {
@@ -735,8 +744,7 @@ export type FileCreateWithoutChildrenInput = {
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
   parent?: Prisma.FileCreateNestedOneWithoutChildrenInput
-  space: Prisma.SpaceCreateNestedOneWithoutFilesInput
-  creator?: Prisma.UserCreateNestedOneWithoutCreatedFilesInput
+  tenant: Prisma.TenantCreateNestedOneWithoutFilesInput
   associations?: Prisma.FileAssociationCreateNestedManyWithoutFileInput
   classification?: Prisma.FileClassificationCreateNestedOneWithoutFileInput
 }
@@ -749,8 +757,7 @@ export type FileUncheckedCreateWithoutChildrenInput = {
   parentId?: string | null
   mimeType: string
   url: string
-  spaceId: string
-  creatorId?: string | null
+  tenantId: string
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
@@ -774,8 +781,7 @@ export type FileCreateWithoutParentInput = {
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
   children?: Prisma.FileCreateNestedManyWithoutParentInput
-  space: Prisma.SpaceCreateNestedOneWithoutFilesInput
-  creator?: Prisma.UserCreateNestedOneWithoutCreatedFilesInput
+  tenant: Prisma.TenantCreateNestedOneWithoutFilesInput
   associations?: Prisma.FileAssociationCreateNestedManyWithoutFileInput
   classification?: Prisma.FileClassificationCreateNestedOneWithoutFileInput
 }
@@ -787,8 +793,7 @@ export type FileUncheckedCreateWithoutParentInput = {
   size: number
   mimeType: string
   url: string
-  spaceId: string
-  creatorId?: string | null
+  tenantId: string
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
@@ -828,8 +833,7 @@ export type FileUpdateWithoutChildrenInput = {
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   parent?: Prisma.FileUpdateOneWithoutChildrenNestedInput
-  space?: Prisma.SpaceUpdateOneRequiredWithoutFilesNestedInput
-  creator?: Prisma.UserUpdateOneWithoutCreatedFilesNestedInput
+  tenant?: Prisma.TenantUpdateOneRequiredWithoutFilesNestedInput
   associations?: Prisma.FileAssociationUpdateManyWithoutFileNestedInput
   classification?: Prisma.FileClassificationUpdateOneWithoutFileNestedInput
 }
@@ -842,8 +846,7 @@ export type FileUncheckedUpdateWithoutChildrenInput = {
   parentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   mimeType?: Prisma.StringFieldUpdateOperationsInput | string
   url?: Prisma.StringFieldUpdateOperationsInput | string
-  spaceId?: Prisma.StringFieldUpdateOperationsInput | string
-  creatorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -867,24 +870,6 @@ export type FileUpdateManyWithWhereWithoutParentInput = {
   data: Prisma.XOR<Prisma.FileUpdateManyMutationInput, Prisma.FileUncheckedUpdateManyWithoutParentInput>
 }
 
-export type FileScalarWhereInput = {
-  AND?: Prisma.FileScalarWhereInput | Prisma.FileScalarWhereInput[]
-  OR?: Prisma.FileScalarWhereInput[]
-  NOT?: Prisma.FileScalarWhereInput | Prisma.FileScalarWhereInput[]
-  id?: Prisma.StringFilter<"File"> | string
-  seq?: Prisma.IntFilter<"File"> | number
-  name?: Prisma.StringFilter<"File"> | string
-  size?: Prisma.IntFilter<"File"> | number
-  parentId?: Prisma.StringNullableFilter<"File"> | string | null
-  mimeType?: Prisma.StringFilter<"File"> | string
-  url?: Prisma.StringFilter<"File"> | string
-  spaceId?: Prisma.StringFilter<"File"> | string
-  creatorId?: Prisma.StringNullableFilter<"File"> | string | null
-  createdAt?: Prisma.DateTimeFilter<"File"> | Date | string
-  updatedAt?: Prisma.DateTimeNullableFilter<"File"> | Date | string | null
-  removedAt?: Prisma.DateTimeNullableFilter<"File"> | Date | string | null
-}
-
 export type FileCreateWithoutClassificationInput = {
   id?: string
   seq?: number
@@ -897,8 +882,7 @@ export type FileCreateWithoutClassificationInput = {
   removedAt?: Date | string | null
   parent?: Prisma.FileCreateNestedOneWithoutChildrenInput
   children?: Prisma.FileCreateNestedManyWithoutParentInput
-  space: Prisma.SpaceCreateNestedOneWithoutFilesInput
-  creator?: Prisma.UserCreateNestedOneWithoutCreatedFilesInput
+  tenant: Prisma.TenantCreateNestedOneWithoutFilesInput
   associations?: Prisma.FileAssociationCreateNestedManyWithoutFileInput
 }
 
@@ -910,8 +894,7 @@ export type FileUncheckedCreateWithoutClassificationInput = {
   parentId?: string | null
   mimeType: string
   url: string
-  spaceId: string
-  creatorId?: string | null
+  tenantId: string
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
@@ -946,8 +929,7 @@ export type FileUpdateWithoutClassificationInput = {
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   parent?: Prisma.FileUpdateOneWithoutChildrenNestedInput
   children?: Prisma.FileUpdateManyWithoutParentNestedInput
-  space?: Prisma.SpaceUpdateOneRequiredWithoutFilesNestedInput
-  creator?: Prisma.UserUpdateOneWithoutCreatedFilesNestedInput
+  tenant?: Prisma.TenantUpdateOneRequiredWithoutFilesNestedInput
   associations?: Prisma.FileAssociationUpdateManyWithoutFileNestedInput
 }
 
@@ -959,8 +941,7 @@ export type FileUncheckedUpdateWithoutClassificationInput = {
   parentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   mimeType?: Prisma.StringFieldUpdateOperationsInput | string
   url?: Prisma.StringFieldUpdateOperationsInput | string
-  spaceId?: Prisma.StringFieldUpdateOperationsInput | string
-  creatorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -980,8 +961,7 @@ export type FileCreateWithoutAssociationsInput = {
   removedAt?: Date | string | null
   parent?: Prisma.FileCreateNestedOneWithoutChildrenInput
   children?: Prisma.FileCreateNestedManyWithoutParentInput
-  space: Prisma.SpaceCreateNestedOneWithoutFilesInput
-  creator?: Prisma.UserCreateNestedOneWithoutCreatedFilesInput
+  tenant: Prisma.TenantCreateNestedOneWithoutFilesInput
   classification?: Prisma.FileClassificationCreateNestedOneWithoutFileInput
 }
 
@@ -993,8 +973,7 @@ export type FileUncheckedCreateWithoutAssociationsInput = {
   parentId?: string | null
   mimeType: string
   url: string
-  spaceId: string
-  creatorId?: string | null
+  tenantId: string
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
@@ -1029,8 +1008,7 @@ export type FileUpdateWithoutAssociationsInput = {
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   parent?: Prisma.FileUpdateOneWithoutChildrenNestedInput
   children?: Prisma.FileUpdateManyWithoutParentNestedInput
-  space?: Prisma.SpaceUpdateOneRequiredWithoutFilesNestedInput
-  creator?: Prisma.UserUpdateOneWithoutCreatedFilesNestedInput
+  tenant?: Prisma.TenantUpdateOneRequiredWithoutFilesNestedInput
   classification?: Prisma.FileClassificationUpdateOneWithoutFileNestedInput
 }
 
@@ -1042,8 +1020,7 @@ export type FileUncheckedUpdateWithoutAssociationsInput = {
   parentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   mimeType?: Prisma.StringFieldUpdateOperationsInput | string
   url?: Prisma.StringFieldUpdateOperationsInput | string
-  spaceId?: Prisma.StringFieldUpdateOperationsInput | string
-  creatorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1051,24 +1028,7 @@ export type FileUncheckedUpdateWithoutAssociationsInput = {
   classification?: Prisma.FileClassificationUncheckedUpdateOneWithoutFileNestedInput
 }
 
-export type FileCreateWithoutSpaceInput = {
-  id?: string
-  seq?: number
-  name: string
-  size: number
-  mimeType: string
-  url: string
-  createdAt?: Date | string
-  updatedAt?: Date | string | null
-  removedAt?: Date | string | null
-  parent?: Prisma.FileCreateNestedOneWithoutChildrenInput
-  children?: Prisma.FileCreateNestedManyWithoutParentInput
-  creator?: Prisma.UserCreateNestedOneWithoutCreatedFilesInput
-  associations?: Prisma.FileAssociationCreateNestedManyWithoutFileInput
-  classification?: Prisma.FileClassificationCreateNestedOneWithoutFileInput
-}
-
-export type FileUncheckedCreateWithoutSpaceInput = {
+export type FileCreateManyTenantInput = {
   id?: string
   seq?: number
   name: string
@@ -1076,99 +1036,53 @@ export type FileUncheckedCreateWithoutSpaceInput = {
   parentId?: string | null
   mimeType: string
   url: string
-  creatorId?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
-  children?: Prisma.FileUncheckedCreateNestedManyWithoutParentInput
-  associations?: Prisma.FileAssociationUncheckedCreateNestedManyWithoutFileInput
-  classification?: Prisma.FileClassificationUncheckedCreateNestedOneWithoutFileInput
 }
 
-export type FileCreateOrConnectWithoutSpaceInput = {
-  where: Prisma.FileWhereUniqueInput
-  create: Prisma.XOR<Prisma.FileCreateWithoutSpaceInput, Prisma.FileUncheckedCreateWithoutSpaceInput>
+export type FileUpdateWithoutTenantInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  size?: Prisma.IntFieldUpdateOperationsInput | number
+  mimeType?: Prisma.StringFieldUpdateOperationsInput | string
+  url?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  parent?: Prisma.FileUpdateOneWithoutChildrenNestedInput
+  children?: Prisma.FileUpdateManyWithoutParentNestedInput
+  associations?: Prisma.FileAssociationUpdateManyWithoutFileNestedInput
+  classification?: Prisma.FileClassificationUpdateOneWithoutFileNestedInput
 }
 
-export type FileCreateManySpaceInputEnvelope = {
-  data: Prisma.FileCreateManySpaceInput | Prisma.FileCreateManySpaceInput[]
-  skipDuplicates?: boolean
+export type FileUncheckedUpdateWithoutTenantInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  seq?: Prisma.IntFieldUpdateOperationsInput | number
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  size?: Prisma.IntFieldUpdateOperationsInput | number
+  parentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  mimeType?: Prisma.StringFieldUpdateOperationsInput | string
+  url?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  children?: Prisma.FileUncheckedUpdateManyWithoutParentNestedInput
+  associations?: Prisma.FileAssociationUncheckedUpdateManyWithoutFileNestedInput
+  classification?: Prisma.FileClassificationUncheckedUpdateOneWithoutFileNestedInput
 }
 
-export type FileUpsertWithWhereUniqueWithoutSpaceInput = {
-  where: Prisma.FileWhereUniqueInput
-  update: Prisma.XOR<Prisma.FileUpdateWithoutSpaceInput, Prisma.FileUncheckedUpdateWithoutSpaceInput>
-  create: Prisma.XOR<Prisma.FileCreateWithoutSpaceInput, Prisma.FileUncheckedCreateWithoutSpaceInput>
-}
-
-export type FileUpdateWithWhereUniqueWithoutSpaceInput = {
-  where: Prisma.FileWhereUniqueInput
-  data: Prisma.XOR<Prisma.FileUpdateWithoutSpaceInput, Prisma.FileUncheckedUpdateWithoutSpaceInput>
-}
-
-export type FileUpdateManyWithWhereWithoutSpaceInput = {
-  where: Prisma.FileScalarWhereInput
-  data: Prisma.XOR<Prisma.FileUpdateManyMutationInput, Prisma.FileUncheckedUpdateManyWithoutSpaceInput>
-}
-
-export type FileCreateWithoutCreatorInput = {
-  id?: string
-  seq?: number
-  name: string
-  size: number
-  mimeType: string
-  url: string
-  createdAt?: Date | string
-  updatedAt?: Date | string | null
-  removedAt?: Date | string | null
-  parent?: Prisma.FileCreateNestedOneWithoutChildrenInput
-  children?: Prisma.FileCreateNestedManyWithoutParentInput
-  space: Prisma.SpaceCreateNestedOneWithoutFilesInput
-  associations?: Prisma.FileAssociationCreateNestedManyWithoutFileInput
-  classification?: Prisma.FileClassificationCreateNestedOneWithoutFileInput
-}
-
-export type FileUncheckedCreateWithoutCreatorInput = {
-  id?: string
-  seq?: number
-  name: string
-  size: number
-  parentId?: string | null
-  mimeType: string
-  url: string
-  spaceId: string
-  createdAt?: Date | string
-  updatedAt?: Date | string | null
-  removedAt?: Date | string | null
-  children?: Prisma.FileUncheckedCreateNestedManyWithoutParentInput
-  associations?: Prisma.FileAssociationUncheckedCreateNestedManyWithoutFileInput
-  classification?: Prisma.FileClassificationUncheckedCreateNestedOneWithoutFileInput
-}
-
-export type FileCreateOrConnectWithoutCreatorInput = {
-  where: Prisma.FileWhereUniqueInput
-  create: Prisma.XOR<Prisma.FileCreateWithoutCreatorInput, Prisma.FileUncheckedCreateWithoutCreatorInput>
-}
-
-export type FileCreateManyCreatorInputEnvelope = {
-  data: Prisma.FileCreateManyCreatorInput | Prisma.FileCreateManyCreatorInput[]
-  skipDuplicates?: boolean
-}
-
-export type FileUpsertWithWhereUniqueWithoutCreatorInput = {
-  where: Prisma.FileWhereUniqueInput
-  update: Prisma.XOR<Prisma.FileUpdateWithoutCreatorInput, Prisma.FileUncheckedUpdateWithoutCreatorInput>
-  create: Prisma.XOR<Prisma.FileCreateWithoutCreatorInput, Prisma.FileUncheckedCreateWithoutCreatorInput>
-}
-
-export type FileUpdateWithWhereUniqueWithoutCreatorInput = {
-  where: Prisma.FileWhereUniqueInput
-  data: Prisma.XOR<Prisma.FileUpdateWithoutCreatorInput, Prisma.FileUncheckedUpdateWithoutCreatorInput>
-}
-
-export type FileUpdateManyWithWhereWithoutCreatorInput = {
-  where: Prisma.FileScalarWhereInput
-  data: Prisma.XOR<Prisma.FileUpdateManyMutationInput, Prisma.FileUncheckedUpdateManyWithoutCreatorInput>
+export type FileUncheckedUpdateManyWithoutTenantInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  seq?: Prisma.IntFieldUpdateOperationsInput | number
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  size?: Prisma.IntFieldUpdateOperationsInput | number
+  parentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  mimeType?: Prisma.StringFieldUpdateOperationsInput | string
+  url?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 export type FileCreateManyParentInput = {
@@ -1178,8 +1092,7 @@ export type FileCreateManyParentInput = {
   size: number
   mimeType: string
   url: string
-  spaceId: string
-  creatorId?: string | null
+  tenantId: string
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
@@ -1195,8 +1108,7 @@ export type FileUpdateWithoutParentInput = {
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   children?: Prisma.FileUpdateManyWithoutParentNestedInput
-  space?: Prisma.SpaceUpdateOneRequiredWithoutFilesNestedInput
-  creator?: Prisma.UserUpdateOneWithoutCreatedFilesNestedInput
+  tenant?: Prisma.TenantUpdateOneRequiredWithoutFilesNestedInput
   associations?: Prisma.FileAssociationUpdateManyWithoutFileNestedInput
   classification?: Prisma.FileClassificationUpdateOneWithoutFileNestedInput
 }
@@ -1208,8 +1120,7 @@ export type FileUncheckedUpdateWithoutParentInput = {
   size?: Prisma.IntFieldUpdateOperationsInput | number
   mimeType?: Prisma.StringFieldUpdateOperationsInput | string
   url?: Prisma.StringFieldUpdateOperationsInput | string
-  spaceId?: Prisma.StringFieldUpdateOperationsInput | string
-  creatorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1225,130 +1136,7 @@ export type FileUncheckedUpdateManyWithoutParentInput = {
   size?: Prisma.IntFieldUpdateOperationsInput | number
   mimeType?: Prisma.StringFieldUpdateOperationsInput | string
   url?: Prisma.StringFieldUpdateOperationsInput | string
-  spaceId?: Prisma.StringFieldUpdateOperationsInput | string
-  creatorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-}
-
-export type FileCreateManySpaceInput = {
-  id?: string
-  seq?: number
-  name: string
-  size: number
-  parentId?: string | null
-  mimeType: string
-  url: string
-  creatorId?: string | null
-  createdAt?: Date | string
-  updatedAt?: Date | string | null
-  removedAt?: Date | string | null
-}
-
-export type FileUpdateWithoutSpaceInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.StringFieldUpdateOperationsInput | string
-  size?: Prisma.IntFieldUpdateOperationsInput | number
-  mimeType?: Prisma.StringFieldUpdateOperationsInput | string
-  url?: Prisma.StringFieldUpdateOperationsInput | string
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  parent?: Prisma.FileUpdateOneWithoutChildrenNestedInput
-  children?: Prisma.FileUpdateManyWithoutParentNestedInput
-  creator?: Prisma.UserUpdateOneWithoutCreatedFilesNestedInput
-  associations?: Prisma.FileAssociationUpdateManyWithoutFileNestedInput
-  classification?: Prisma.FileClassificationUpdateOneWithoutFileNestedInput
-}
-
-export type FileUncheckedUpdateWithoutSpaceInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  seq?: Prisma.IntFieldUpdateOperationsInput | number
-  name?: Prisma.StringFieldUpdateOperationsInput | string
-  size?: Prisma.IntFieldUpdateOperationsInput | number
-  parentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  mimeType?: Prisma.StringFieldUpdateOperationsInput | string
-  url?: Prisma.StringFieldUpdateOperationsInput | string
-  creatorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  children?: Prisma.FileUncheckedUpdateManyWithoutParentNestedInput
-  associations?: Prisma.FileAssociationUncheckedUpdateManyWithoutFileNestedInput
-  classification?: Prisma.FileClassificationUncheckedUpdateOneWithoutFileNestedInput
-}
-
-export type FileUncheckedUpdateManyWithoutSpaceInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  seq?: Prisma.IntFieldUpdateOperationsInput | number
-  name?: Prisma.StringFieldUpdateOperationsInput | string
-  size?: Prisma.IntFieldUpdateOperationsInput | number
-  parentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  mimeType?: Prisma.StringFieldUpdateOperationsInput | string
-  url?: Prisma.StringFieldUpdateOperationsInput | string
-  creatorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-}
-
-export type FileCreateManyCreatorInput = {
-  id?: string
-  seq?: number
-  name: string
-  size: number
-  parentId?: string | null
-  mimeType: string
-  url: string
-  spaceId: string
-  createdAt?: Date | string
-  updatedAt?: Date | string | null
-  removedAt?: Date | string | null
-}
-
-export type FileUpdateWithoutCreatorInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.StringFieldUpdateOperationsInput | string
-  size?: Prisma.IntFieldUpdateOperationsInput | number
-  mimeType?: Prisma.StringFieldUpdateOperationsInput | string
-  url?: Prisma.StringFieldUpdateOperationsInput | string
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  parent?: Prisma.FileUpdateOneWithoutChildrenNestedInput
-  children?: Prisma.FileUpdateManyWithoutParentNestedInput
-  space?: Prisma.SpaceUpdateOneRequiredWithoutFilesNestedInput
-  associations?: Prisma.FileAssociationUpdateManyWithoutFileNestedInput
-  classification?: Prisma.FileClassificationUpdateOneWithoutFileNestedInput
-}
-
-export type FileUncheckedUpdateWithoutCreatorInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  seq?: Prisma.IntFieldUpdateOperationsInput | number
-  name?: Prisma.StringFieldUpdateOperationsInput | string
-  size?: Prisma.IntFieldUpdateOperationsInput | number
-  parentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  mimeType?: Prisma.StringFieldUpdateOperationsInput | string
-  url?: Prisma.StringFieldUpdateOperationsInput | string
-  spaceId?: Prisma.StringFieldUpdateOperationsInput | string
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  children?: Prisma.FileUncheckedUpdateManyWithoutParentNestedInput
-  associations?: Prisma.FileAssociationUncheckedUpdateManyWithoutFileNestedInput
-  classification?: Prisma.FileClassificationUncheckedUpdateOneWithoutFileNestedInput
-}
-
-export type FileUncheckedUpdateManyWithoutCreatorInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  seq?: Prisma.IntFieldUpdateOperationsInput | number
-  name?: Prisma.StringFieldUpdateOperationsInput | string
-  size?: Prisma.IntFieldUpdateOperationsInput | number
-  parentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  mimeType?: Prisma.StringFieldUpdateOperationsInput | string
-  url?: Prisma.StringFieldUpdateOperationsInput | string
-  spaceId?: Prisma.StringFieldUpdateOperationsInput | string
+  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1402,15 +1190,13 @@ export type FileSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   parentId?: boolean
   mimeType?: boolean
   url?: boolean
-  spaceId?: boolean
-  creatorId?: boolean
+  tenantId?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   removedAt?: boolean
   parent?: boolean | Prisma.File$parentArgs<ExtArgs>
   children?: boolean | Prisma.File$childrenArgs<ExtArgs>
-  space?: boolean | Prisma.SpaceDefaultArgs<ExtArgs>
-  creator?: boolean | Prisma.File$creatorArgs<ExtArgs>
+  tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
   associations?: boolean | Prisma.File$associationsArgs<ExtArgs>
   classification?: boolean | Prisma.File$classificationArgs<ExtArgs>
   _count?: boolean | Prisma.FileCountOutputTypeDefaultArgs<ExtArgs>
@@ -1424,14 +1210,12 @@ export type FileSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   parentId?: boolean
   mimeType?: boolean
   url?: boolean
-  spaceId?: boolean
-  creatorId?: boolean
+  tenantId?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   removedAt?: boolean
   parent?: boolean | Prisma.File$parentArgs<ExtArgs>
-  space?: boolean | Prisma.SpaceDefaultArgs<ExtArgs>
-  creator?: boolean | Prisma.File$creatorArgs<ExtArgs>
+  tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["file"]>
 
 export type FileSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -1442,14 +1226,12 @@ export type FileSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   parentId?: boolean
   mimeType?: boolean
   url?: boolean
-  spaceId?: boolean
-  creatorId?: boolean
+  tenantId?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   removedAt?: boolean
   parent?: boolean | Prisma.File$parentArgs<ExtArgs>
-  space?: boolean | Prisma.SpaceDefaultArgs<ExtArgs>
-  creator?: boolean | Prisma.File$creatorArgs<ExtArgs>
+  tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["file"]>
 
 export type FileSelectScalar = {
@@ -1460,32 +1242,28 @@ export type FileSelectScalar = {
   parentId?: boolean
   mimeType?: boolean
   url?: boolean
-  spaceId?: boolean
-  creatorId?: boolean
+  tenantId?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   removedAt?: boolean
 }
 
-export type FileOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "seq" | "name" | "size" | "parentId" | "mimeType" | "url" | "spaceId" | "creatorId" | "createdAt" | "updatedAt" | "removedAt", ExtArgs["result"]["file"]>
+export type FileOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "seq" | "name" | "size" | "parentId" | "mimeType" | "url" | "tenantId" | "createdAt" | "updatedAt" | "removedAt", ExtArgs["result"]["file"]>
 export type FileInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   parent?: boolean | Prisma.File$parentArgs<ExtArgs>
   children?: boolean | Prisma.File$childrenArgs<ExtArgs>
-  space?: boolean | Prisma.SpaceDefaultArgs<ExtArgs>
-  creator?: boolean | Prisma.File$creatorArgs<ExtArgs>
+  tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
   associations?: boolean | Prisma.File$associationsArgs<ExtArgs>
   classification?: boolean | Prisma.File$classificationArgs<ExtArgs>
   _count?: boolean | Prisma.FileCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type FileIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   parent?: boolean | Prisma.File$parentArgs<ExtArgs>
-  space?: boolean | Prisma.SpaceDefaultArgs<ExtArgs>
-  creator?: boolean | Prisma.File$creatorArgs<ExtArgs>
+  tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
 }
 export type FileIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   parent?: boolean | Prisma.File$parentArgs<ExtArgs>
-  space?: boolean | Prisma.SpaceDefaultArgs<ExtArgs>
-  creator?: boolean | Prisma.File$creatorArgs<ExtArgs>
+  tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
 }
 
 export type $FilePayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1493,8 +1271,7 @@ export type $FilePayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   objects: {
     parent: Prisma.$FilePayload<ExtArgs> | null
     children: Prisma.$FilePayload<ExtArgs>[]
-    space: Prisma.$SpacePayload<ExtArgs>
-    creator: Prisma.$UserPayload<ExtArgs> | null
+    tenant: Prisma.$TenantPayload<ExtArgs>
     associations: Prisma.$FileAssociationPayload<ExtArgs>[]
     classification: Prisma.$FileClassificationPayload<ExtArgs> | null
   }
@@ -1506,8 +1283,7 @@ export type $FilePayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     parentId: string | null
     mimeType: string
     url: string
-    spaceId: string
-    creatorId: string | null
+    tenantId: string
     createdAt: Date
     updatedAt: Date | null
     removedAt: Date | null
@@ -1907,8 +1683,7 @@ export interface Prisma__FileClient<T, Null = never, ExtArgs extends runtime.Typ
   readonly [Symbol.toStringTag]: "PrismaPromise"
   parent<T extends Prisma.File$parentArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.File$parentArgs<ExtArgs>>): Prisma.Prisma__FileClient<runtime.Types.Result.GetResult<Prisma.$FilePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   children<T extends Prisma.File$childrenArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.File$childrenArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$FilePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-  space<T extends Prisma.SpaceDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.SpaceDefaultArgs<ExtArgs>>): Prisma.Prisma__SpaceClient<runtime.Types.Result.GetResult<Prisma.$SpacePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
-  creator<T extends Prisma.File$creatorArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.File$creatorArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  tenant<T extends Prisma.TenantDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.TenantDefaultArgs<ExtArgs>>): Prisma.Prisma__TenantClient<runtime.Types.Result.GetResult<Prisma.$TenantPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   associations<T extends Prisma.File$associationsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.File$associationsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$FileAssociationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   classification<T extends Prisma.File$classificationArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.File$classificationArgs<ExtArgs>>): Prisma.Prisma__FileClassificationClient<runtime.Types.Result.GetResult<Prisma.$FileClassificationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   /**
@@ -1947,8 +1722,7 @@ export interface FileFieldRefs {
   readonly parentId: Prisma.FieldRef<"File", 'String'>
   readonly mimeType: Prisma.FieldRef<"File", 'String'>
   readonly url: Prisma.FieldRef<"File", 'String'>
-  readonly spaceId: Prisma.FieldRef<"File", 'String'>
-  readonly creatorId: Prisma.FieldRef<"File", 'String'>
+  readonly tenantId: Prisma.FieldRef<"File", 'String'>
   readonly createdAt: Prisma.FieldRef<"File", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"File", 'DateTime'>
   readonly removedAt: Prisma.FieldRef<"File", 'DateTime'>
@@ -2388,25 +2162,6 @@ export type File$childrenArgs<ExtArgs extends runtime.Types.Extensions.InternalA
   take?: number
   skip?: number
   distinct?: Prisma.FileScalarFieldEnum | Prisma.FileScalarFieldEnum[]
-}
-
-/**
- * File.creator
- */
-export type File$creatorArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  /**
-   * Select specific fields to fetch from the User
-   */
-  select?: Prisma.UserSelect<ExtArgs> | null
-  /**
-   * Omit specific fields from the User
-   */
-  omit?: Prisma.UserOmit<ExtArgs> | null
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.UserInclude<ExtArgs> | null
-  where?: Prisma.UserWhereInput
 }
 
 /**

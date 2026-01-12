@@ -1,3 +1,4 @@
+export * from "./abilityStore";
 export * from "./authStore";
 export * from "./cookieStore";
 export * from "./createStoreContext";
@@ -8,4 +9,5 @@ export * from "./persistStore";
 export * from "./rootStore";
 export * from "./storageStore";
 export * from "./tokenStore";
+export * from "./useAbility";
 export * from "./useStore";
