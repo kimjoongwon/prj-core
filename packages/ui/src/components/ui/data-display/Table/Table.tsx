@@ -1,3 +1,5 @@
+"use client";
+
 import {
 	Table as HeroTable,
 	type TableProps as HeroTableProps,
@@ -12,22 +14,40 @@ import {
 	flexRender,
 	type Table as ReactTableProps,
 } from "@tanstack/react-table";
+import {
+	SortableColumnHeader,
+	type MultiSortDescriptor,
+	type SortEvent,
+} from "./SortableColumnHeader";
 
 export type TableProps<T> = {
 	tableInstance: ReactTableProps<T>;
 	tableBody?: Omit<TableBodyProps<T>, "children">;
-} & HeroTableProps;
+	/** 정렬 상태 (복합 정렬 지원) */
+	sortDescriptor?: MultiSortDescriptor;
+	/** 정렬 변경 핸들러 */
+	onSortChange?: (event: SortEvent) => void;
+	/** 정렬 가능한 컬럼 ID 목록 */
+	sortableColumns?: string[];
+} & Omit<HeroTableProps, "sortDescriptor" | "onSortChange">;
 
-export const Table = <T extends any>({
+export const Table = <T extends object>({
 	tableInstance,
 	selectedKeys,
 	onSelectionChange,
 	tableBody = {
 		emptyContent: "데이터가 없습니다.",
 	},
+	sortDescriptor,
+	onSortChange,
+	sortableColumns = [],
 	...rest
 }: TableProps<T>) => {
 	const headers = tableInstance?.getHeaderGroups?.()?.[0]?.headers || [];
+
+	const isSortable = (columnId: string) => {
+		return sortableColumns.includes(columnId);
+	};
 
 	return (
 		<HeroTable
@@ -38,9 +58,21 @@ export const Table = <T extends any>({
 			<TableHeader>
 				{headers.map((header) => (
 					<TableColumn key={header.id} colSpan={header.colSpan}>
-						{header.isPlaceholder
-							? null
-							: flexRender(header.column.columnDef.header, header.getContext())}
+						{header.isPlaceholder ? null : isSortable(header.id) &&
+						  onSortChange ? (
+							<SortableColumnHeader
+								columnId={header.id}
+								label={flexRender(
+									header.column.columnDef.header,
+									header.getContext(),
+								)}
+								sortDescriptor={sortDescriptor}
+								onSortChange={onSortChange}
+								sortable
+							/>
+						) : (
+							flexRender(header.column.columnDef.header, header.getContext())
+						)}
 					</TableColumn>
 				))}
 			</TableHeader>

@@ -4,11 +4,12 @@ import { observer, useLocalObservable } from "mobx-react-lite";
 import {
 	DataGrid as DataGridComponent,
 	type DataGridProps,
+	type DataGridState,
 	type Key,
 } from "./DataGrid";
 
-export const DataGrid = observer(<T extends any>(props: DataGridProps<T>) => {
-	const { data, state, selectionMode, ...rest } = props;
+export const DataGrid = observer(<T extends object>(props: DataGridProps<T>) => {
+	const { data, state, selectionMode, onSortChange, sortableColumns, isLoading, loadingContent, ...rest } = props;
 
 	const localState = useLocalObservable<{
 		selection: Selection;
@@ -45,8 +46,12 @@ export const DataGrid = observer(<T extends any>(props: DataGridProps<T>) => {
 			selectionMode={selectionMode}
 			selectedKeys={localState.selection}
 			onSelectionChange={onSelectionChange}
+			onSortChange={onSortChange}
+			sortableColumns={sortableColumns}
+			isLoading={isLoading}
+			loadingContent={loadingContent}
 		/>
 	);
 });
 
-export type { DataGridProps, Key };
+export type { DataGridProps, DataGridState, Key };
