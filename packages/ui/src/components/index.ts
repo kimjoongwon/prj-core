@@ -4,3 +4,4 @@ export * from "./layouts";
 export * from "./page";
 export * from "./ui";
 export * from "./widget";
+export * from "./widgets";

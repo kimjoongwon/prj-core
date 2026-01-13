@@ -1,5 +1,6 @@
 import { CreateAbilityInput } from "@cocrepo/dto";
 import { Ability } from "@cocrepo/entity";
+import { Prisma } from "@cocrepo/prisma";
 import { AbilitiesService, UsersService } from "@cocrepo/service";
 import {
 	BadRequestException,
@@ -14,6 +15,7 @@ import {
 const AbilitiesFacadeErrorMessages = {
 	USER_NOT_FOUND: "사용자를 찾을 수 없습니다",
 	ROLE_NOT_FOUND: "역할(Role)을 찾을 수 없습니다",
+	ABILITY_NOT_FOUND: "권한을 찾을 수 없습니다",
 } as const;
 
 /**
@@ -68,6 +70,25 @@ export class AbilitiesFacade {
 	}
 
 	/**
+	 * ID로 Ability 조회
+	 *
+	 * @param id - Ability ID
+	 * @returns Ability
+	 * @throws NotFoundException - 권한을 찾을 수 없는 경우
+	 */
+	async getAbilityById(id: string): Promise<Ability> {
+		this.logger.debug(`권한 조회: id=${id.slice(-8)}`);
+
+		const ability = await this.abilitiesService.getAbilityById(id);
+
+		if (!ability) {
+			throw new NotFoundException(AbilitiesFacadeErrorMessages.ABILITY_NOT_FOUND);
+		}
+
+		return ability;
+	}
+
+	/**
 	 * Role별 기본 권한 조회
 	 *
 	 * @param roleId - Role ID
@@ -89,6 +110,64 @@ export class AbilitiesFacade {
 		this.logger.debug(`User별 예외 권한 조회: userId=${userId.slice(-8)}`);
 
 		return this.abilitiesService.getUserAbilities(userId);
+	}
+
+	/**
+	 * 권한 생성
+	 *
+	 * @param data - Ability 생성 데이터
+	 * @returns 생성된 Ability
+	 */
+	async createAbility(
+		data: Prisma.AbilityUncheckedCreateInput,
+	): Promise<Ability> {
+		this.logger.debug(
+			`권한 생성: subjectId=${data.subjectId}, actionId=${data.actionId}`,
+		);
+
+		return this.abilitiesService.createAbility(data);
+	}
+
+	/**
+	 * 권한 수정
+	 *
+	 * @param id - Ability ID
+	 * @param data - 수정 데이터
+	 * @returns 수정된 Ability
+	 * @throws NotFoundException - 권한을 찾을 수 없는 경우
+	 */
+	async updateAbility(
+		id: string,
+		data: Prisma.AbilityUncheckedUpdateInput,
+	): Promise<Ability> {
+		this.logger.debug(`권한 수정: id=${id.slice(-8)}`);
+
+		// 존재 확인
+		const existing = await this.abilitiesService.getAbilityById(id);
+		if (!existing) {
+			throw new NotFoundException(AbilitiesFacadeErrorMessages.ABILITY_NOT_FOUND);
+		}
+
+		return this.abilitiesService.updateAbility(id, data);
+	}
+
+	/**
+	 * 권한 삭제 (소프트 삭제)
+	 *
+	 * @param id - Ability ID
+	 * @returns 삭제된 Ability
+	 * @throws NotFoundException - 권한을 찾을 수 없는 경우
+	 */
+	async deleteAbility(id: string): Promise<Ability> {
+		this.logger.debug(`권한 삭제: id=${id.slice(-8)}`);
+
+		// 존재 확인
+		const existing = await this.abilitiesService.getAbilityById(id);
+		if (!existing) {
+			throw new NotFoundException(AbilitiesFacadeErrorMessages.ABILITY_NOT_FOUND);
+		}
+
+		return this.abilitiesService.deleteAbility(id);
 	}
 
 	/**

@@ -1,6 +1,16 @@
 import { makeAutoObservable } from "mobx";
 
 /**
+ * 탭 설정 인터페이스 (v7.0 신규)
+ * 페이지 내 3depth 탭 정보
+ */
+export interface TabConfig {
+	id: string;
+	label: string;
+	href: string;
+}
+
+/**
  * 네비게이션 아이템 설정 인터페이스 (생성자 파라미터용)
  */
 export interface NavItemConfig {
@@ -10,6 +20,8 @@ export interface NavItemConfig {
 	icon?: string;
 	subject: string;
 	children?: NavItemConfig[];
+	/** v7.0 신규: 3depth 탭 정보 */
+	tabs?: TabConfig[];
 }
 
 /**
@@ -22,6 +34,7 @@ export interface NavItemConfig {
  * - 네비게이션 항목의 데이터와 UI 상태 관리
  * - 활성화 상태 추적
  * - 하위 아이템 관리
+ * - v7.0: 3depth 탭 관리
  *
  * @example
  * ```ts
@@ -30,7 +43,16 @@ export interface NavItemConfig {
  *   label: '회원',
  *   subject: 'Member',
  *   children: [
- *     { id: 'member-list', label: '회원 목록', path: '/members/list', subject: 'MemberList' },
+ *     {
+ *       id: 'member-list',
+ *       label: '회원 목록',
+ *       path: '/members/list',
+ *       subject: 'MemberList',
+ *       tabs: [
+ *         { id: 'all', label: '전체', href: '/members/list' },
+ *         { id: 'active', label: '활성', href: '/members/list/active' },
+ *       ],
+ *     },
  *   ],
  * });
  * ```
@@ -42,6 +64,8 @@ export class NavItem {
 	readonly icon: string | undefined;
 	readonly subject: string;
 	readonly children: NavItem[];
+	/** v7.0 신규: 3depth 탭 목록 */
+	readonly tabs: TabConfig[];
 	private _active: boolean = false;
 
 	/**
@@ -57,6 +81,7 @@ export class NavItem {
 		this.children = config.children
 			? config.children.map((child) => new NavItem(child))
 			: [];
+		this.tabs = config.tabs ?? [];
 
 		makeAutoObservable(this);
 	}
@@ -80,6 +105,13 @@ export class NavItem {
 	 */
 	get hasChildren(): boolean {
 		return this.children.length > 0;
+	}
+
+	/**
+	 * 탭이 있는지 확인 (v7.0 신규)
+	 */
+	get hasTabs(): boolean {
+		return this.tabs.length > 0;
 	}
 
 	/**
@@ -122,5 +154,12 @@ export class NavItem {
 		return this.children.find(
 			(child) => child.path && path.startsWith(child.path),
 		);
+	}
+
+	/**
+	 * 경로로 탭 찾기 (v7.0 신규)
+	 */
+	findTabByPath(path: string): TabConfig | undefined {
+		return this.tabs.find((tab) => tab.href === path);
 	}
 }

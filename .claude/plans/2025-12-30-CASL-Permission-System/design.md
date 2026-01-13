@@ -2,7 +2,7 @@
 
 **기획서:** `.claude/plans/2025-12-30-CASL-Permission-System.md`
 **작성일:** 2026-01-08
-**수정일:** 2026-01-11
+**수정일:** 2026-01-13
 **작성자:** technical-designer
 
 ---
@@ -18,32 +18,34 @@
 | schema-builder | FieldVisibility/MaskingPattern 삭제 | ✅ |
 | entity-builder | Action Entity 생성 | ✅ |
 | entity-builder | Ability Entity 수정 | ✅ |
-| dto-builder | ActionResponseDto, AbilityResponseDto 수정 | 🔄 |
-| seed-maker | Action 시드 데이터 추가 | ⏳ |
+| dto-builder | ActionResponseDto, AbilityResponseDto 수정 | ✅ |
+| seed-maker | Action 시드 데이터 추가 | ✅ |
 
-### Stage 3: 백엔드 로직 ⏳ 대기
+### Stage 3: 백엔드 로직 ✅ 완료
 
-| 에이전트 | 작업 |
-|----------|------|
-| repository-builder | ActionsRepository 생성 |
-| repository-builder | AbilitiesRepository 수정 (Action 조인) |
-| service-builder | ActionsService 생성 |
-| service-builder | AbilitiesService 수정 |
-| service-builder | CaslAbilityFactory 수정 |
-| controller-builder | ActionsController 생성 |
+| 에이전트 | 작업 | 상태 |
+|----------|------|------|
+| repository-builder | ActionsRepository 생성 | ✅ |
+| repository-builder | AbilitiesRepository 수정 (Action 조인) | ✅ |
+| service-builder | ActionsService 생성 | ✅ |
+| service-builder | AbilitiesService 수정 | ✅ |
+| service-builder | CaslAbilityFactory 수정 | ✅ |
+| controller-builder | ActionsController CRUD 완성 | ✅ |
+| controller-builder | AbilitiesController CRUD + batch | ✅ |
+| controller-builder | SubjectsController fields 추가 | ✅ |
 
-### Stage 4: 컴포넌트 구현 ⏳ 대기
+### Stage 4: 컴포넌트 구현 ✅ 완료
 
-| 에이전트 | 컴포넌트 | 유형 |
-|----------|---------|------|
-| ui-component-builder | VisibilityCell | ui |
-| widget-builder | ActionConfigEditor | widget |
-| widget-builder | AbilityRuleList | widget |
-| widget-builder | ConditionEditor | widget |
-| widget-builder | AbilityFormModal | widget |
-| widget-builder | AbilityMatrixView | widget |
-| feature-builder | RoleAbilityManager | feature |
-| feature-builder | UserAbilityManager | feature |
+| 에이전트 | 컴포넌트 | 유형 | 상태 |
+|----------|---------|------|------|
+| ui-component-builder | VisibilityCell | ui | ✅ |
+| widget-builder | ActionConfigEditor | widget | ✅ |
+| widget-builder | AbilityRuleList | widget | ✅ |
+| widget-builder | ConditionEditor | widget | ✅ |
+| widget-builder | AbilityFormModal | widget | ✅ |
+| widget-builder | AbilityMatrixView | widget | ✅ |
+| feature-builder | RoleAbilityManager | feature | ✅ |
+| feature-builder | UserAbilityManager | feature | ✅ |
 
 ### Stage 5: 페이지 통합 ⏳ 대기
 

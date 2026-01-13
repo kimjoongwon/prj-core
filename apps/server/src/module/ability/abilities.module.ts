@@ -1,11 +1,21 @@
-import { AbilitiesRepository } from "@cocrepo/repository";
-import { AbilitiesService } from "@cocrepo/service";
+import { AbilitiesFacade } from "@cocrepo/facade";
+import { AbilitiesRepository, UsersRepository } from "@cocrepo/repository";
+import { AbilitiesService, UsersService } from "@cocrepo/service";
 import { Module } from "@nestjs/common";
 import { AbilitiesController } from "./abilities.controller";
 
 @Module({
-	providers: [AbilitiesService, AbilitiesRepository],
 	controllers: [AbilitiesController],
+	providers: [
+		// Facade
+		AbilitiesFacade,
+		// Services
+		AbilitiesService,
+		UsersService,
+		// Repositories
+		AbilitiesRepository,
+		UsersRepository,
+	],
 	exports: [AbilitiesService],
 })
 export class AbilitiesModule {}

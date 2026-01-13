@@ -1,258 +1,169 @@
-import { Button, Tooltip } from "@heroui/react";
-import { useMenuPermission } from "@cocrepo/store";
-import { useMemo, useState, type ReactNode } from "react";
+"use client";
+
+import type { NavItem } from "@cocrepo/store";
+import { Button } from "@heroui/react";
+import { observer } from "mobx-react-lite";
 import { renderLucideIcon } from "../../../../utils/iconUtils";
-import { Text } from "../../data-display/Text/Text";
-import type { AdminMenuGroup, AdminMenuItem, AdminSidebarProps } from "./types";
+import type { AdminSidebarProps } from "./types";
 
 /**
- * 권한 기반 메뉴 아이템 필터링 훅
+ * 하위 메뉴 아이템 컴포넌트
  */
-function useFilteredMenuItem(item: AdminMenuItem): AdminMenuItem | null {
-	// permission이 있는 경우 권한 확인
-	const permissionKey = item.permission?.replace("menu:", "") ?? "";
-	const hasPermission = useMenuPermission(permissionKey);
-
-	// permission이 없으면 항상 표시, 있으면 권한 확인
-	const isVisible = !item.permission || hasPermission;
-
-	if (!isVisible) {
-		return null;
-	}
-
-	return item;
+interface SubMenuItemProps {
+	item: NavItem;
+	isSelected: boolean;
+	onItemClick: (itemId: string) => void;
 }
 
-/**
- * 메뉴 아이템 컴포넌트
- */
-interface MenuItemComponentProps {
-	item: AdminMenuItem;
-	activePath?: string;
-	collapsed?: boolean;
-	depth?: number;
-	onMenuClick?: (path: string) => void;
-}
-
-function MenuItemComponent({
+const SubMenuItem = observer(function SubMenuItem({
 	item,
-	activePath,
-	collapsed,
-	depth = 0,
-	onMenuClick,
-}: MenuItemComponentProps) {
-	const [isExpanded, setIsExpanded] = useState(false);
-	const filteredItem = useFilteredMenuItem(item);
-
-	// 하위 메뉴 필터링은 부모 컴포넌트에서 처리
-
-	if (!filteredItem) {
-		return null;
-	}
-
-	const isActive = activePath === item.path;
-	const hasChildren = item.children && item.children.length > 0;
-
-	// 하위 메뉴 중 활성화된 것이 있는지 확인
-	const hasActiveChild = useMemo(() => {
-		if (!item.children || !activePath) return false;
-		return item.children.some(
-			(child) =>
-				child.path === activePath ||
-				child.children?.some((grandChild) => grandChild.path === activePath),
-		);
-	}, [item.children, activePath]);
-
-	// 하위 메뉴에 활성화된 항목이 있으면 자동 펼침
-	const isOpen = isExpanded || hasActiveChild;
-
+	isSelected,
+	onItemClick,
+}: SubMenuItemProps) {
 	const handleClick = () => {
-		if (hasChildren) {
-			setIsExpanded(!isExpanded);
-		} else if (item.path && onMenuClick) {
-			onMenuClick(item.path);
-		}
+		onItemClick(item.id);
 	};
 
-	const content = (
+	return (
 		<Button
-			variant={isActive ? "flat" : "light"}
-			color={isActive ? "primary" : "default"}
-			className={`w-full justify-start ${
-				collapsed ? "px-2" : depth > 0 ? "pl-8" : "px-3"
-			} ${item.disabled ? "opacity-50 cursor-not-allowed" : ""}`}
+			variant={isSelected ? "flat" : "light"}
+			color={isSelected ? "primary" : "default"}
+			className="w-full justify-start pl-11 pr-3"
+			size="sm"
 			onPress={handleClick}
-			isDisabled={item.disabled}
 		>
-			{item.icon && (
-				<span className="flex-shrink-0">
-					{renderLucideIcon(
-						item.icon,
-						`w-5 h-5 ${isActive ? "text-primary" : "text-default-500"}`,
-						20,
-					)}
-				</span>
-			)}
-			{!collapsed && (
-				<>
-					<span className="flex-1 truncate text-left">
-						<Text variant="body2" className={isActive ? "font-medium" : ""}>
-							{item.label}
-						</Text>
-					</span>
-					{item.badge !== undefined && (
-						<span className="ml-2 flex h-5 min-w-5 items-center justify-center rounded-full bg-danger px-1.5 font-medium text-danger-foreground text-xs">
-							{item.badge}
-						</span>
-					)}
-					{hasChildren && (
-						<span className="ml-1">
-							{renderLucideIcon(
-								isOpen ? "ChevronDown" : "ChevronRight",
-								"w-4 h-4 text-default-400",
-								16,
-							)}
-						</span>
-					)}
-				</>
-			)}
+			<span
+				className={`flex-1 truncate text-left text-sm ${isSelected ? "font-medium" : ""}`}
+			>
+				{item.label}
+			</span>
 		</Button>
 	);
+});
+
+/**
+ * 메인 네비게이션 아이템 컴포넌트 (v7.0 - 항상 펼침)
+ */
+interface NavItemComponentProps {
+	item: NavItem;
+	isSelected: boolean;
+	selectedSubItemId: string | null;
+	onNavItemClick: (navItemId: string) => void;
+	onSubNavItemClick: (subNavItemId: string) => void;
+}
+
+const NavItemComponent = observer(function NavItemComponent({
+	item,
+	isSelected,
+	selectedSubItemId,
+	onNavItemClick,
+	onSubNavItemClick,
+}: NavItemComponentProps) {
+	const hasChildren = item.hasChildren;
+
+	const handleClick = () => {
+		onNavItemClick(item.id);
+	};
 
 	return (
 		<div className="w-full">
-			{collapsed ? (
-				<Tooltip content={item.label} placement="right">
-					{content}
-				</Tooltip>
-			) : (
-				content
-			)}
+			{/* 1depth 메뉴 아이템 */}
+			<Button
+				variant={isSelected && !hasChildren ? "flat" : "light"}
+				color={isSelected && !hasChildren ? "primary" : "default"}
+				className="w-full justify-start px-3"
+				onPress={handleClick}
+			>
+				{/* 아이콘 */}
+				{item.icon && (
+					<span className="flex-shrink-0">
+						{renderLucideIcon(
+							item.icon,
+							`w-5 h-5 ${isSelected ? "text-primary" : "text-default-500"}`,
+							20,
+						)}
+					</span>
+				)}
 
-			{/* 하위 메뉴 */}
-			{hasChildren && isOpen && !collapsed && (
-				<div className="mt-1 space-y-1">
-					{item.children?.map((child) => (
-						<MenuItemComponent
+				{/* 라벨 */}
+				<span
+					className={`flex-1 truncate text-left ${isSelected ? "font-medium" : ""}`}
+				>
+					{item.label}
+				</span>
+			</Button>
+
+			{/* 2depth 메뉴 - 항상 표시 (v7.0 변경사항) */}
+			{hasChildren && (
+				<div className="mt-1 space-y-0.5">
+					{item.children.map((child) => (
+						<SubMenuItem
 							key={child.id}
 							item={child}
-							activePath={activePath}
-							collapsed={collapsed}
-							depth={depth + 1}
-							onMenuClick={onMenuClick}
+							isSelected={selectedSubItemId === child.id}
+							onItemClick={onSubNavItemClick}
 						/>
 					))}
 				</div>
 			)}
 		</div>
 	);
-}
+});
 
 /**
- * 메뉴 그룹 컴포넌트
- */
-interface MenuGroupComponentProps {
-	group: AdminMenuGroup;
-	activePath?: string;
-	collapsed?: boolean;
-	onMenuClick?: (path: string) => void;
-}
-
-function MenuGroupComponent({
-	group,
-	activePath,
-	collapsed,
-	onMenuClick,
-}: MenuGroupComponentProps) {
-	// 그룹 내 표시할 아이템이 하나라도 있는지 확인
-	const hasVisibleItems = group.items.length > 0;
-
-	if (!hasVisibleItems) {
-		return null;
-	}
-
-	return (
-		<div className="mb-4">
-			{/* 그룹 라벨 */}
-			{!collapsed && (
-				<div className="mb-2 px-3">
-					<Text
-						variant="caption"
-						className="font-semibold text-default-400 uppercase tracking-wider"
-					>
-						{group.label}
-					</Text>
-				</div>
-			)}
-
-			{/* 그룹 아이템 */}
-			<div className="space-y-1">
-				{group.items.map((item) => (
-					<MenuItemComponent
-						key={item.id}
-						item={item}
-						activePath={activePath}
-						collapsed={collapsed}
-						onMenuClick={onMenuClick}
-					/>
-				))}
-			</div>
-		</div>
-	);
-}
-
-/**
- * AdminSidebar - 권한 기반 메뉴를 표시하는 사이드바
+ * AdminSidebar - 데스크톱 사이드바 (v7.0)
  *
- * 사용 예시:
+ * 기획서 참조: 01-desktop.md
+ * - 항상 펼침 모드 (collapsed 속성 제거)
+ * - 모든 2depth 메뉴 항상 표시
+ * - NavItem 기반 메뉴 시스템
+ *
+ * @example
  * ```tsx
  * <AdminSidebar
- *   menuGroups={menuGroups}
- *   activePath="/admin/users"
- *   onMenuClick={(path) => router.push(path)}
- *   collapsed={isCollapsed}
+ *   navItems={navItems}
+ *   selectedNavItem={selectedNavItem}
+ *   selectedSubNavItem={selectedSubNavItem}
+ *   onNavItemClick={(navItemId) => handleNavItemClick(navItemId)}
+ *   onSubNavItemClick={(subNavItemId) => handleSubNavItemClick(subNavItemId)}
  *   logo={<Logo />}
  * />
  * ```
  */
-export function AdminSidebar({
-	menuGroups,
-	activePath,
-	onMenuClick,
-	collapsed = false,
+export const AdminSidebar = observer(function AdminSidebar({
+	navItems,
+	selectedNavItem,
+	selectedSubNavItem,
+	onNavItemClick,
+	onSubNavItemClick,
 	logo,
 }: AdminSidebarProps) {
 	return (
-		<aside
-			className={`flex h-full flex-col border-divider border-r bg-content1 transition-all duration-300 ${
-				collapsed ? "w-16" : "w-64"
-			}`}
-		>
+		<aside className="flex h-full w-60 flex-col border-divider border-r bg-content1">
 			{/* 로고 영역 */}
 			{logo && (
-				<div
-					className={`flex h-16 items-center border-divider border-b ${
-						collapsed ? "justify-center px-2" : "px-4"
-					}`}
-				>
+				<div className="flex h-14 items-center border-divider border-b px-4">
 					{logo}
 				</div>
 			)}
 
 			{/* 메뉴 영역 */}
-			<nav className="flex-1 overflow-y-auto py-4">
-				{menuGroups.map((group) => (
-					<MenuGroupComponent
-						key={group.id}
-						group={group}
-						activePath={activePath}
-						collapsed={collapsed}
-						onMenuClick={onMenuClick}
-					/>
-				))}
+			<nav className="flex-1 overflow-y-auto py-2">
+				<div className="space-y-1 px-2">
+					{navItems.map((item) => (
+						<NavItemComponent
+							key={item.id}
+							item={item}
+							isSelected={selectedNavItem?.id === item.id}
+							selectedSubItemId={selectedSubNavItem?.id ?? null}
+							onNavItemClick={onNavItemClick}
+							onSubNavItemClick={onSubNavItemClick}
+						/>
+					))}
+				</div>
 			</nav>
 		</aside>
 	);
-}
+});
 
 AdminSidebar.displayName = "AdminSidebar";

@@ -1,3 +1,5 @@
+"use client";
+
 import {
 	Avatar,
 	Button,
@@ -7,50 +9,48 @@ import {
 	DropdownSection,
 	DropdownTrigger,
 } from "@heroui/react";
+import { observer } from "mobx-react-lite";
 import { renderLucideIcon } from "../../../../utils/iconUtils";
-import { Text } from "../../data-display/Text/Text";
 import type { AdminHeaderProps } from "./types";
 
 /**
- * AdminHeader - 관리자 레이아웃 헤더
+ * AdminHeader - 관리자 레이아웃 헤더 (v7.0)
  *
- * 사용 예시:
+ * 기획서 참조: 01-desktop.md, 02-mobile.md
+ * - 데스크톱/모바일 공용 헤더
+ * - 모바일에서는 로고 표시
+ * - 오른쪽: 알림, Space 선택, 사용자 메뉴
+ *
+ * @example
  * ```tsx
  * <AdminHeader
  *   userInfo={{ name: "홍길동", email: "hong@example.com", role: "관리자" }}
  *   onLogout={() => logout()}
- *   onToggleSidebar={() => setCollapsed(!collapsed)}
+ *   logo={<Logo />}
  *   actions={<NotificationButton />}
  * />
  * ```
  */
-export function AdminHeader({
+export const AdminHeader = observer(function AdminHeader({
 	userInfo,
 	actions,
 	onLogout,
-	onToggleSidebar,
+	logo,
 }: AdminHeaderProps) {
+	const handleLogout = () => {
+		onLogout?.();
+	};
+
 	return (
-		<header className="flex h-16 items-center justify-between border-divider border-b bg-content1 px-4">
-			{/* 왼쪽: 사이드바 토글 (모바일) */}
-			<div className="flex items-center gap-2">
-				{onToggleSidebar && (
-					<Button
-						isIconOnly
-						variant="light"
-						size="sm"
-						onPress={onToggleSidebar}
-						className="lg:hidden"
-						aria-label="Toggle sidebar"
-					>
-						{renderLucideIcon("Menu", "w-5 h-5", 20)}
-					</Button>
-				)}
+		<header className="flex h-14 items-center justify-between border-divider border-b bg-content1 px-4">
+			{/* 왼쪽: 로고 (모바일에서만 표시) */}
+			<div className="flex items-center">
+				{logo && <div className="md:hidden">{logo}</div>}
 			</div>
 
 			{/* 오른쪽: 액션 버튼들 + 사용자 메뉴 */}
 			<div className="flex items-center gap-2">
-				{/* 커스텀 액션 영역 */}
+				{/* 커스텀 액션 영역 (알림, Space 선택 등) */}
 				{actions}
 
 				{/* 사용자 드롭다운 */}
@@ -69,19 +69,19 @@ export function AdminHeader({
 									showFallback
 									className="h-8 w-8"
 								/>
-								<div className="hidden flex-col items-start md:flex">
-									<Text variant="body2" className="font-medium">
+								<div className="hidden flex-col items-start sm:flex">
+									<span className="font-medium text-foreground text-sm">
 										{userInfo.name}
-									</Text>
+									</span>
 									{userInfo.role && (
-										<Text variant="caption" className="text-default-500">
+										<span className="text-default-500 text-xs">
 											{userInfo.role}
-										</Text>
+										</span>
 									)}
 								</div>
 								{renderLucideIcon(
 									"ChevronDown",
-									"w-4 h-4 text-default-400",
+									"w-4 h-4 text-default-400 hidden sm:block",
 									16,
 								)}
 							</Button>
@@ -119,7 +119,7 @@ export function AdminHeader({
 										"w-4 h-4 text-danger",
 										16,
 									)}
-									onPress={onLogout}
+									onPress={handleLogout}
 								>
 									로그아웃
 								</DropdownItem>
@@ -130,6 +130,6 @@ export function AdminHeader({
 			</div>
 		</header>
 	);
-}
+});
 
 AdminHeader.displayName = "AdminHeader";

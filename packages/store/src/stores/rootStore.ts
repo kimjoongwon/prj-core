@@ -1,7 +1,9 @@
 import { makeAutoObservable } from "mobx";
 import { AbilityStore } from "./abilityStore";
 import { AuthStore } from "./authStore";
+import { BottomTabStore } from "./bottomTabStore";
 import { CookieStore } from "./cookieStore";
+import { FABStore } from "./fabStore";
 import { NavigationStore } from "./navigationStore";
 import type { Navigator } from "./navigator";
 import { PersistStore } from "./persistStore";
@@ -22,6 +24,10 @@ import { TokenStore } from "./tokenStore";
  * rootStore.cookieStore = new CookieStore();
  * rootStore.authStore = new AuthStore(rootStore);
  * rootStore.navigationStore = new NavigationStore(MENU_CONFIG, { navigator: rootStore.navigator });
+ *
+ * // v7.0 신규: 모바일 지원
+ * rootStore.fabStore = new FABStore(FAB_CONFIG);
+ * rootStore.bottomTabStore = new BottomTabStore(BOTTOM_TAB_CONFIG, { navigationStore: rootStore.navigationStore });
  * ```
  *
  * Store Tree 구조 (앱에 따라 다름):
@@ -31,7 +37,9 @@ import { TokenStore } from "./tokenStore";
  * ├── tokenStore (TokenStore) - 토큰 관리
  * ├── cookieStore (CookieStore) - 쿠키 관리
  * ├── authStore (AuthStore) - 인증 상태 관리
- * └── persistStore (PersistStore) - 영속 저장 관리
+ * ├── persistStore (PersistStore) - 영속 저장 관리
+ * ├── fabStore (FABStore) - v7.0: FAB 상태 관리
+ * └── bottomTabStore (BottomTabStore) - v7.0: BottomTab 상태 관리
  */
 export class RootStore {
 	name: string = "PROTOTYPE";
@@ -44,6 +52,10 @@ export class RootStore {
 	cookieStore?: CookieStore;
 	persistStore?: PersistStore;
 	abilityStore?: AbilityStore;
+	/** v7.0 신규: FAB 상태 관리 */
+	fabStore?: FABStore;
+	/** v7.0 신규: BottomTab 상태 관리 */
+	bottomTabStore?: BottomTabStore;
 
 	constructor() {
 		makeAutoObservable(this);

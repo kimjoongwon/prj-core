@@ -1,13 +1,19 @@
 "use client";
 
 import { setApiPersistStore } from "@cocrepo/api";
-import { ADMIN_MENUS } from "@cocrepo/constant";
+import {
+	ADMIN_FAB_ACTIONS,
+	ADMIN_NAV_ITEMS,
+	BOTTOM_TAB_IDS,
+} from "@cocrepo/constant";
 import { type AbilityActions, useAbility } from "@cocrepo/hook";
 import {
 	AuthStore,
+	BottomTabStore,
 	CookieStore,
 	createStoreContext,
 	createStoreSelector,
+	FABStore,
 	NavigationStore,
 	Navigator,
 	PersistStore,
@@ -30,10 +36,21 @@ function createRootStore(): RootStore {
 	rootStore.tokenStore = new TokenStore(rootStore);
 	rootStore.cookieStore = new CookieStore();
 	rootStore.authStore = new AuthStore(rootStore);
-	rootStore.navigationStore = new NavigationStore(ADMIN_MENUS);
+	rootStore.navigationStore = new NavigationStore(ADMIN_NAV_ITEMS);
 	rootStore.persistStore = new PersistStore({
 		storageKey: "admin-persist",
 	});
+
+	// v7.0 신규: BottomTabStore, FABStore 추가
+	rootStore.bottomTabStore = new BottomTabStore(
+		{
+			tabIds: [...BOTTOM_TAB_IDS],
+			moreTabId: "more",
+		},
+		{ navigationStore: rootStore.navigationStore },
+	);
+
+	rootStore.fabStore = new FABStore({ actions: ADMIN_FAB_ACTIONS });
 
 	// API 인터셉터에 PersistStore 참조 주입 (x-space-id 헤더용)
 	setApiPersistStore(rootStore.persistStore);
@@ -73,6 +90,28 @@ const usePersistStore = createStoreSelector(useAppStore, (store) => {
 	return store.persistStore;
 });
 
+/**
+ * BottomTabStore selector hook (v7.0 신규)
+ * RootStore에서 bottomTabStore만 선택하여 반환
+ */
+const useBottomTabStore = createStoreSelector(useAppStore, (store) => {
+	if (!store.bottomTabStore) {
+		throw new Error("bottomTabStore가 초기화되지 않았습니다.");
+	}
+	return store.bottomTabStore;
+});
+
+/**
+ * FABStore selector hook (v7.0 신규)
+ * RootStore에서 fabStore만 선택하여 반환
+ */
+const useFABStore = createStoreSelector(useAppStore, (store) => {
+	if (!store.fabStore) {
+		throw new Error("fabStore가 초기화되지 않았습니다.");
+	}
+	return store.fabStore;
+});
+
 interface AppStoreProviderProps {
 	children: ReactNode;
 }
@@ -97,6 +136,8 @@ interface AppStoreProviderProps {
  * const store = useAppStore(); // RootStore 타입
  * const navigationStore = useNavigationStore(); // NavigationStore 타입
  * const persistStore = usePersistStore(); // PersistStore 타입
+ * const bottomTabStore = useBottomTabStore(); // BottomTabStore 타입
+ * const fabStore = useFABStore(); // FABStore 타입
  * ```
  */
 function AppStoreProvider({ children }: AppStoreProviderProps) {
@@ -134,6 +175,8 @@ function StoreInitializer({ children }: { children: ReactNode }) {
 	const ability = useAbility();
 
 	const navigationStore = store.navigationStore;
+	const bottomTabStore = store.bottomTabStore;
+	const fabStore = store.fabStore;
 
 	// navigationStore가 없으면 초기화 중이므로 렌더링하지 않음
 	if (!navigationStore) {
@@ -145,18 +188,23 @@ function StoreInitializer({ children }: { children: ReactNode }) {
 		navigationStore.setAbilityChecker((action, subject) =>
 			ability.can(action as AbilityActions, subject),
 		);
-	}, [ability, navigationStore]);
+		fabStore?.setAbilityChecker((action, subject) =>
+			ability.can(action as AbilityActions, subject),
+		);
+	}, [ability, navigationStore, fabStore]);
 
 	// router 변경 시 Navigator 설정
 	useEffect(() => {
 		const navigator = new Navigator({ router });
 		navigationStore.setNavigator(navigator);
-	}, [router, navigationStore]);
+		fabStore?.setNavigator(navigator);
+	}, [router, navigationStore, fabStore]);
 
 	// URL 경로 변경 시 메뉴 활성화 상태 업데이트
 	useEffect(() => {
 		navigationStore.setCurrentPath(pathname);
-	}, [pathname, navigationStore]);
+		bottomTabStore?.updateActiveTabFromPath(pathname);
+	}, [pathname, navigationStore, bottomTabStore]);
 
 	return children;
 }
@@ -165,6 +213,8 @@ export {
 	AppStoreContext,
 	AppStoreProvider,
 	useAppStore,
+	useBottomTabStore,
+	useFABStore,
 	useNavigationStore,
 	usePersistStore,
 };

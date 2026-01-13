@@ -1,7 +1,10 @@
+import { redirect } from "next/navigation";
+
+/**
+ * 루트 페이지
+ *
+ * 대시보드로 리다이렉트합니다.
+ */
 export default function HomePage() {
-	return (
-		<div className="flex h-screen items-center justify-center">
-			<h1 className="text-4xl font-bold">로그인</h1>
-		</div>
-	);
+	redirect("/dashboard");
 }

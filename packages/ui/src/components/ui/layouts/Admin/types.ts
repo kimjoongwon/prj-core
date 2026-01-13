@@ -1,61 +1,5 @@
+import type { FABAction, NavItem, TabConfig } from "@cocrepo/store";
 import type { ReactNode } from "react";
-
-/**
- * 메뉴 아이템 타입
- */
-export interface AdminMenuItem {
-	/**
-	 * 고유 ID
-	 */
-	id: string;
-	/**
-	 * 메뉴 표시 이름
-	 */
-	label: string;
-	/**
-	 * Lucide 아이콘 이름
-	 */
-	icon?: string;
-	/**
-	 * 메뉴 경로 (절대 경로)
-	 */
-	path?: string;
-	/**
-	 * 권한 확인용 Subject (menu:xxx 패턴)
-	 * 예: "menu:dashboard", "menu:users/list"
-	 */
-	permission?: string;
-	/**
-	 * 하위 메뉴
-	 */
-	children?: AdminMenuItem[];
-	/**
-	 * 배지 표시 (알림 수 등)
-	 */
-	badge?: number | string;
-	/**
-	 * 비활성화 여부
-	 */
-	disabled?: boolean;
-}
-
-/**
- * 메뉴 그룹 타입
- */
-export interface AdminMenuGroup {
-	/**
-	 * 그룹 ID
-	 */
-	id: string;
-	/**
-	 * 그룹 표시 이름
-	 */
-	label: string;
-	/**
-	 * 그룹 내 메뉴 아이템
-	 */
-	items: AdminMenuItem[];
-}
 
 /**
  * 사용자 정보 타입
@@ -80,95 +24,187 @@ export interface AdminUserInfo {
 }
 
 /**
- * AdminLayout Props
+ * BottomTab 아이템 인터페이스
+ */
+export interface BottomTabItem {
+	id: string;
+	label: string;
+	icon: string;
+	/** SubMenuList 표시 여부 (children이 있는 경우) */
+	hasSubMenu: boolean;
+}
+
+/**
+ * SubMenu 아이템 인터페이스
+ */
+export interface SubMenuItem {
+	id: string;
+	label: string;
+	path: string;
+}
+
+/**
+ * AdminLayout Props (v7.0)
+ *
+ * NavItem 기반 메뉴 시스템 + 모바일 지원
  */
 export interface AdminLayoutProps {
-	/**
-	 * 메뉴 구성
-	 */
-	menuGroups: AdminMenuGroup[];
-	/**
-	 * 현재 활성 경로
-	 */
-	activePath?: string;
-	/**
-	 * 메뉴 클릭 핸들러
-	 */
-	onMenuClick?: (path: string) => void;
-	/**
-	 * 사용자 정보
-	 */
+	/** 네비게이션 아이템 (NavItem 배열) */
+	navItems: NavItem[];
+
+	/** 현재 선택된 주요 NavItem */
+	selectedNavItem: NavItem | null;
+
+	/** 현재 선택된 하위 NavItem */
+	selectedSubNavItem: NavItem | null;
+
+	/** 모바일 - BottomTab 아이템 목록 */
+	bottomTabItems: BottomTabItem[];
+
+	/** 모바일 - 활성 BottomTab ID */
+	activeBottomTabId: string | null;
+
+	/** 모바일 - SubMenuList 열림 상태 */
+	isSubMenuOpen: boolean;
+
+	/** 모바일 - SubMenuList 제목 */
+	subMenuTitle: string;
+
+	/** 모바일 - SubMenuList 아이템 목록 */
+	subMenuItems: NavItem[];
+
+	/** 모바일 - FAB 열림 상태 */
+	isFABOpen: boolean;
+
+	/** 모바일 - FAB 액션 목록 */
+	fabActions: FABAction[];
+
+	/** 핸들러 - NavItem 클릭 */
+	onNavItemClick: (navItemId: string) => void;
+
+	/** 핸들러 - SubNavItem 클릭 */
+	onSubNavItemClick: (subNavItemId: string) => void;
+
+	/** 핸들러 - BottomTab 클릭 */
+	onBottomTabClick: (tabId: string) => void;
+
+	/** 핸들러 - SubMenuList 닫기 */
+	onSubMenuClose: () => void;
+
+	/** 핸들러 - FAB 토글 */
+	onFABToggle: () => void;
+
+	/** 핸들러 - FAB 액션 클릭 */
+	onFABActionClick: (actionId: string) => void;
+
+	/** 사용자 정보 */
 	userInfo?: AdminUserInfo;
-	/**
-	 * 로고 컴포넌트
-	 */
+
+	/** 로고 컴포넌트 */
 	logo?: ReactNode;
-	/**
-	 * 헤더 오른쪽 영역 (알림, 설정 등)
-	 */
+
+	/** 헤더 오른쪽 영역 (알림, Space 선택 등) */
 	headerActions?: ReactNode;
-	/**
-	 * 로그아웃 핸들러
-	 */
+
+	/** 로그아웃 핸들러 */
 	onLogout?: () => void;
-	/**
-	 * 메인 컨텐츠
-	 */
+
+	/** 메인 콘텐츠 */
 	children: ReactNode;
-	/**
-	 * 사이드바 접힘 상태 (제어)
-	 */
-	collapsed?: boolean;
-	/**
-	 * 사이드바 접힘 상태 변경 핸들러
-	 */
-	onCollapsedChange?: (collapsed: boolean) => void;
 }
 
 /**
- * AdminSidebar Props
+ * AdminSidebar Props (v7.0)
+ *
+ * 항상 펼침 모드 - collapsed 속성 제거
  */
 export interface AdminSidebarProps {
-	/**
-	 * 메뉴 구성
-	 */
-	menuGroups: AdminMenuGroup[];
-	/**
-	 * 현재 활성 경로
-	 */
-	activePath?: string;
-	/**
-	 * 메뉴 클릭 핸들러
-	 */
-	onMenuClick?: (path: string) => void;
-	/**
-	 * 사이드바 접힘 상태
-	 */
-	collapsed?: boolean;
-	/**
-	 * 로고 컴포넌트
-	 */
+	/** 네비게이션 아이템 (NavItem 배열) */
+	navItems: NavItem[];
+
+	/** 현재 선택된 주요 NavItem */
+	selectedNavItem: NavItem | null;
+
+	/** 현재 선택된 하위 NavItem */
+	selectedSubNavItem: NavItem | null;
+
+	/** 핸들러 - NavItem 클릭 */
+	onNavItemClick: (navItemId: string) => void;
+
+	/** 핸들러 - SubNavItem 클릭 */
+	onSubNavItemClick: (subNavItemId: string) => void;
+
+	/** 로고 컴포넌트 */
 	logo?: ReactNode;
 }
 
 /**
- * AdminHeader Props
+ * AdminHeader Props (v7.0)
  */
 export interface AdminHeaderProps {
-	/**
-	 * 사용자 정보
-	 */
+	/** 사용자 정보 */
 	userInfo?: AdminUserInfo;
-	/**
-	 * 오른쪽 영역 (알림, 설정 등)
-	 */
+
+	/** 오른쪽 영역 (알림, Space 선택 등) */
 	actions?: ReactNode;
-	/**
-	 * 로그아웃 핸들러
-	 */
+
+	/** 로그아웃 핸들러 */
 	onLogout?: () => void;
-	/**
-	 * 사이드바 토글 핸들러 (모바일)
-	 */
-	onToggleSidebar?: () => void;
+
+	/** 로고 컴포넌트 (모바일용) */
+	logo?: ReactNode;
 }
+
+/**
+ * AdminBottomTab Props (v7.0 신규)
+ */
+export interface AdminBottomTabProps {
+	/** 탭 아이템 목록 */
+	items: BottomTabItem[];
+
+	/** 활성 탭 ID */
+	activeTabId: string | null;
+
+	/** 탭 클릭 핸들러 */
+	onTabClick: (tabId: string) => void;
+}
+
+/**
+ * AdminFAB Props (v7.0 신규)
+ */
+export interface AdminFABProps {
+	/** FAB 열림 상태 */
+	isOpen: boolean;
+
+	/** FAB 액션 목록 */
+	actions: FABAction[];
+
+	/** FAB 토글 핸들러 */
+	onToggle: () => void;
+
+	/** FAB 액션 클릭 핸들러 */
+	onActionClick: (actionId: string) => void;
+}
+
+/**
+ * AdminSubMenuList Props (v7.0 신규)
+ */
+export interface AdminSubMenuListProps {
+	/** 제목 */
+	title: string;
+
+	/** 서브메뉴 아이템 목록 */
+	items: NavItem[];
+
+	/** 선택된 아이템 ID */
+	selectedItemId: string | null;
+
+	/** 아이템 클릭 핸들러 */
+	onItemClick: (itemId: string) => void;
+
+	/** 닫기 핸들러 */
+	onClose: () => void;
+}
+
+// re-export NavItem 관련 타입
+export type { FABAction, NavItem, TabConfig };

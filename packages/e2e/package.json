@@ -1,0 +1,19 @@
+{
+  "name": "@cocrepo/e2e",
+  "version": "0.0.1",
+  "private": true,
+  "description": "E2E tests using Playwright",
+  "scripts": {
+    "test": "PLAYWRIGHT_BROWSERS_PATH=./browsers playwright test",
+    "test:ui": "PLAYWRIGHT_BROWSERS_PATH=./browsers playwright test --ui",
+    "test:headed": "PLAYWRIGHT_BROWSERS_PATH=./browsers playwright test --headed",
+    "test:debug": "PLAYWRIGHT_BROWSERS_PATH=./browsers playwright test --debug",
+    "test:report": "playwright show-report",
+    "codegen": "PLAYWRIGHT_BROWSERS_PATH=./browsers playwright codegen",
+    "install:browsers": "PLAYWRIGHT_BROWSERS_PATH=./browsers playwright install chromium"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.50.0",
+    "@types/node": "catalog:"
+  }
+}
