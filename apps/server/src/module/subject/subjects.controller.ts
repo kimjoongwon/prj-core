@@ -18,6 +18,7 @@ export class SubjectsController {
 	@Public()
 	@Get()
 	@ApiOperation({
+		operationId: "getSubjects",
 		summary: "Subject 목록 조회",
 		description: "모든 Subject 목록을 조회합니다.",
 	})
@@ -34,31 +35,10 @@ export class SubjectsController {
 	@ApiErrors(500)
 	@ApiResponseEntity(SubjectDto, HttpStatus.OK, { isArray: true })
 	@ResponseMessage("Subject 목록 조회 성공")
-	async getAll(@Query("group") group?: string, @Query("type") type?: string) {
-		let subjects;
-
-		if (group) {
-			subjects = await this.subjectsService.getByGroup(group);
-		} else if (type) {
-			switch (type) {
-				case "entity":
-					subjects = await this.subjectsService.getEntitySubjects();
-					break;
-				case "menu":
-					subjects = await this.subjectsService.getMenuSubjects();
-					break;
-				case "feature":
-					subjects = await this.subjectsService.getFeatureSubjects();
-					break;
-				case "ui":
-					subjects = await this.subjectsService.getUiSubjects();
-					break;
-				default:
-					subjects = await this.subjectsService.getAll();
-			}
-		} else {
-			subjects = await this.subjectsService.getAll();
-		}
+	async getAll(@Query("group") group?: string, @Query("type") _type?: string) {
+		const subjects = group
+			? await this.subjectsService.getSubjectsByGroup(group)
+			: await this.subjectsService.getSubjects();
 
 		return subjects.map((subject) => plainToInstance(SubjectDto, subject));
 	}
@@ -66,6 +46,7 @@ export class SubjectsController {
 	@Public()
 	@Get(":id")
 	@ApiOperation({
+		operationId: "getSubjectById",
 		summary: "Subject 상세 조회",
 		description: "ID로 Subject를 조회합니다.",
 	})
@@ -73,7 +54,7 @@ export class SubjectsController {
 	@ApiResponseEntity(SubjectDto, HttpStatus.OK)
 	@ResponseMessage("Subject 조회 성공")
 	async getById(@Param("id") id: string) {
-		const subject = await this.subjectsService.getById(id);
+		const subject = await this.subjectsService.getSubjectById(id);
 		return plainToInstance(SubjectDto, subject);
 	}
 }

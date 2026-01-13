@@ -5,8 +5,9 @@ import type { User } from "./user.entity";
 
 export class Group extends AbstractEntity implements GroupEntity {
 	name!: string;
-	label!: string;
+	label!: string | null;
 	type!: GroupTypes;
+	tenantId!: string;
 	spaceId!: string;
 	creatorId!: string | null;
 	space?: Space;

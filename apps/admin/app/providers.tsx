@@ -2,7 +2,11 @@
 
 import type { AbilityResponseDto } from "@cocrepo/api";
 import { DesignSystemProvider } from "@cocrepo/design-system";
-import { AbilityProvider } from "@cocrepo/hook";
+import {
+	AbilityProvider,
+	type AbilityActions,
+	type AbilityRule,
+} from "@cocrepo/hook";
 import {
 	isServer,
 	QueryClient,
@@ -80,12 +84,14 @@ function AbilityProviderWrapper({ children }: { children: ReactNode }) {
 	const { abilities, isLoading, isError } = useAbilities();
 
 	// API 응답을 AbilityRule 형식으로 변환
-	const rules = abilities?.map((ability: AbilityResponseDto) => ({
-		action: ability.action,
-		subject: ability.subject?.name ?? "",
-		conditions: ability.conditions as Record<string, unknown> | undefined,
-		inverted: !ability.isActive, // isActive가 false면 권한 거부
-	}));
+	const rules: AbilityRule[] | undefined = abilities?.map(
+		(ability: AbilityResponseDto) => ({
+			action: ability.action as AbilityActions,
+			subject: ability.subject?.name ?? "",
+			conditions: ability.conditions as Record<string, unknown> | undefined,
+			inverted: !ability.isActive, // isActive가 false면 권한 거부
+		}),
+	);
 
 	// API 로딩 중이거나 에러이거나 빈 배열일 때 기본 규칙 사용 (MANAGE all - 전체 권한)
 	// TODO: API 정상화 후 이 fallback 로직 제거

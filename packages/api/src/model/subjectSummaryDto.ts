@@ -5,13 +5,10 @@
  * API 문서입니다. 대부분의 엔드포인트는 쿠키 기반 JWT 인증이 필요합니다. (@Public 데코레이터가 있는 엔드포인트는 예외)
  * OpenAPI spec version: 1.0.0
  */
-import type { UIConfigResponseDto } from './uIConfigResponseDto';
 
-export type SaveGlobalConfig200AllOf = {
-  /** */
-  httpStatus?: number;
-  /** */
-  message?: string;
-  /** @nullable */
-  data?: UIConfigResponseDto;
-};
+export interface SubjectSummaryDto {
+  id: string;
+  name: string;
+  displayName?: string;
+  group?: string;
+}

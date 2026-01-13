@@ -1,6 +1,7 @@
+import { Subject } from "@cocrepo/entity";
 import { getDmmfParser } from "@cocrepo/prisma";
+import { SubjectsRepository } from "@cocrepo/repository";
 import { Injectable, Logger } from "@nestjs/common";
-import { PrismaService } from "./prisma.service";
 
 /**
  * Subject 정보 (DB 기반)
@@ -12,6 +13,8 @@ export interface SubjectInfo {
 	name: string;
 	/** 표시명 (@displayName 주석) */
 	displayName: string | null;
+	/** 아이콘 */
+	icon: string | null;
 	/** 그룹 (all, entity, menu, feature) */
 	group: string | null;
 	/** 정렬 순서 */
@@ -39,7 +42,7 @@ export interface SubjectFieldInfo {
 }
 
 /**
- * Subject 서비스 (DB 기반)
+ * Subject 서비스 (Repository 기반)
  *
  * Subject 테이블에서 조회하며, 필드 정보는 DMMF에서 가져옵니다.
  */
@@ -48,7 +51,7 @@ export class SubjectsService {
 	private readonly logger = new Logger(SubjectsService.name);
 	private cachedFieldsByModel: Map<string, SubjectFieldInfo[]> | null = null;
 
-	constructor(private readonly prisma: PrismaService) {}
+	constructor(private readonly repository: SubjectsRepository) {}
 
 	/**
 	 * 모든 Subject 조회
@@ -58,23 +61,12 @@ export class SubjectsService {
 	async getSubjects(): Promise<SubjectInfo[]> {
 		this.logger.debug("모든 Subject 조회");
 
-		const subjects = await this.prisma.subject.findMany({
-			where: { removedAt: null },
-			orderBy: { order: "asc" },
-		});
+		const subjects = await this.repository.findAll();
 
 		// 필드 정보 캐시 로드
 		await this.loadFieldsCache();
 
-		return subjects.map((subject) => ({
-			id: subject.id,
-			name: subject.name,
-			displayName: subject.displayName,
-			group: subject.group,
-			order: subject.order,
-			isSystem: subject.isSystem,
-			fields: this.getFieldsForSubject(subject.name),
-		}));
+		return subjects.map((subject) => this.toSubjectInfo(subject));
 	}
 
 	/**
@@ -86,22 +78,31 @@ export class SubjectsService {
 	async getSubjectsByGroup(group: string): Promise<SubjectInfo[]> {
 		this.logger.debug(`그룹별 Subject 조회: ${group}`);
 
-		const subjects = await this.prisma.subject.findMany({
-			where: { group, removedAt: null },
-			orderBy: { order: "asc" },
-		});
+		const subjects = await this.repository.findByGroup(group);
 
 		await this.loadFieldsCache();
 
-		return subjects.map((subject) => ({
-			id: subject.id,
-			name: subject.name,
-			displayName: subject.displayName,
-			group: subject.group,
-			order: subject.order,
-			isSystem: subject.isSystem,
-			fields: this.getFieldsForSubject(subject.name),
-		}));
+		return subjects.map((subject) => this.toSubjectInfo(subject));
+	}
+
+	/**
+	 * Subject ID로 조회
+	 *
+	 * @param id - Subject ID
+	 * @returns Subject 정보 또는 null
+	 */
+	async getSubjectById(id: string): Promise<SubjectInfo | null> {
+		this.logger.debug(`Subject ID로 조회: ${id}`);
+
+		const subject = await this.repository.findById(id);
+
+		if (!subject) {
+			return null;
+		}
+
+		await this.loadFieldsCache();
+
+		return this.toSubjectInfo(subject);
 	}
 
 	/**
@@ -113,25 +114,15 @@ export class SubjectsService {
 	async getSubjectByName(name: string): Promise<SubjectInfo | null> {
 		this.logger.debug(`Subject 조회: ${name}`);
 
-		const subject = await this.prisma.subject.findUnique({
-			where: { name },
-		});
+		const subject = await this.repository.findByName(name);
 
-		if (!subject || subject.removedAt) {
+		if (!subject) {
 			return null;
 		}
 
 		await this.loadFieldsCache();
 
-		return {
-			id: subject.id,
-			name: subject.name,
-			displayName: subject.displayName,
-			group: subject.group,
-			order: subject.order,
-			isSystem: subject.isSystem,
-			fields: this.getFieldsForSubject(subject.name),
-		};
+		return this.toSubjectInfo(subject);
 	}
 
 	/**
@@ -140,11 +131,7 @@ export class SubjectsService {
 	 * @returns Subject 이름 배열
 	 */
 	async getSubjectNames(): Promise<string[]> {
-		const subjects = await this.prisma.subject.findMany({
-			where: { removedAt: null },
-			select: { name: true },
-			orderBy: { order: "asc" },
-		});
+		const subjects = await this.repository.findAll();
 		return subjects.map((s) => s.name);
 	}
 
@@ -168,11 +155,8 @@ export class SubjectsService {
 	 * @returns 유효 여부
 	 */
 	async isValidSubject(subjectName: string): Promise<boolean> {
-		const subject = await this.prisma.subject.findUnique({
-			where: { name: subjectName },
-			select: { id: true, removedAt: true },
-		});
-		return !!subject && !subject.removedAt;
+		const subject = await this.repository.findByName(subjectName);
+		return !!subject;
 	}
 
 	/**
@@ -182,10 +166,7 @@ export class SubjectsService {
 	 * @returns Subject 이름 또는 null
 	 */
 	async getSubjectNameById(id: string): Promise<string | null> {
-		const subject = await this.prisma.subject.findUnique({
-			where: { id },
-			select: { name: true },
-		});
+		const subject = await this.repository.findById(id);
 		return subject?.name ?? null;
 	}
 
@@ -196,11 +177,24 @@ export class SubjectsService {
 	 * @returns Subject ID 또는 null
 	 */
 	async getSubjectIdByName(name: string): Promise<string | null> {
-		const subject = await this.prisma.subject.findUnique({
-			where: { name },
-			select: { id: true },
-		});
+		const subject = await this.repository.findByName(name);
 		return subject?.id ?? null;
+	}
+
+	/**
+	 * Subject Entity를 SubjectInfo로 변환
+	 */
+	private toSubjectInfo(subject: Subject): SubjectInfo {
+		return {
+			id: subject.id,
+			name: subject.name,
+			displayName: subject.displayName,
+			icon: subject.icon,
+			group: subject.group,
+			order: subject.order,
+			isSystem: subject.isSystem,
+			fields: this.getFieldsForSubject(subject.name),
+		};
 	}
 
 	/**

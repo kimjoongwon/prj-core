@@ -23,6 +23,7 @@ export class GroundsController {
 	@Public()
 	@Get()
 	@ApiOperation({
+		operationId: "getGrounds",
 		summary: "Ground 목록 조회",
 		description: "모든 Ground 목록을 조회합니다.",
 	})
@@ -35,6 +36,7 @@ export class GroundsController {
 
 	@Get("my")
 	@ApiOperation({
+		operationId: "getMyGrounds",
 		summary: "내 Space의 Ground 목록 조회",
 		description:
 			"X-Space-ID 헤더로 지정한 Space의 Ground를 조회합니다. SUPER_ADMIN은 헤더 없이 모든 Ground 조회 가능.",

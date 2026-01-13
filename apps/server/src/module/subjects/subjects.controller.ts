@@ -17,6 +17,7 @@ export class SubjectsController {
 
 	@Get()
 	@ApiOperation({
+		operationId: "getPrismaSubjects",
 		summary: "모든 Subject 조회",
 		description:
 			"Prisma 스키마의 모든 모델을 Subject로 반환합니다. CASL 권한 설정에 사용됩니다.",
@@ -45,6 +46,7 @@ export class SubjectsController {
 
 	@Get(":name/fields")
 	@ApiOperation({
+		operationId: "getPrismaSubjectFields",
 		summary: "Subject 필드 목록 조회",
 		description:
 			"특정 Subject(Prisma 모델)의 필드 목록을 반환합니다. 필드 레벨 권한 설정에 사용됩니다.",

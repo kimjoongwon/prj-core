@@ -94,7 +94,7 @@ export class SubjectsRepository {
 	async create(data: {
 		name: string;
 		displayName?: string;
-		description?: string;
+		icon?: string;
 		group?: string;
 		order?: number;
 		isSystem?: boolean;
@@ -105,7 +105,7 @@ export class SubjectsRepository {
 			data: {
 				name: data.name,
 				displayName: data.displayName ?? null,
-				description: data.description ?? null,
+				icon: data.icon ?? null,
 				group: data.group ?? null,
 				order: data.order ?? 0,
 				isSystem: data.isSystem ?? false,
@@ -123,7 +123,7 @@ export class SubjectsRepository {
 		data: {
 			name?: string;
 			displayName?: string;
-			description?: string;
+			icon?: string;
 			group?: string;
 			order?: number;
 			isSystem?: boolean;
@@ -136,7 +136,7 @@ export class SubjectsRepository {
 			data: {
 				name: data.name,
 				displayName: data.displayName,
-				description: data.description,
+				icon: data.icon,
 				group: data.group,
 				order: data.order,
 				isSystem: data.isSystem,

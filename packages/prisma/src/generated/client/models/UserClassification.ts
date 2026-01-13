@@ -14,7 +14,7 @@ import type * as Prisma from "../internal/prismaNamespace"
 
 /**
  * Model UserClassification
- * 
+ * @displayName 사용자 분류
  */
 export type UserClassificationModel = runtime.Types.Result.DefaultSelection<Prisma.$UserClassificationPayload>
 

@@ -20,7 +20,7 @@ export class SubjectDto extends AbstractDto implements Subject {
 	displayName!: string | null;
 
 	@StringFieldOptional()
-	description!: string | null;
+	icon!: string | null;
 
 	@StringFieldOptional()
 	group!: string | null;

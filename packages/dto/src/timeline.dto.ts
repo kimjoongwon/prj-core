@@ -11,6 +11,9 @@ import { SessionDto } from "./session.dto";
 
 export class TimelineDto extends AbstractDto implements Timeline {
 	@UUIDField()
+	tenantId: string;
+
+	@UUIDField()
 	spaceId: string;
 
 	@UUIDFieldOptional()

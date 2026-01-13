@@ -6,8 +6,17 @@
  * OpenAPI spec version: 1.0.0
  */
 
-/**
- * Subject 레이블
- * @nullable
- */
-export type SubjectResponseDtoLabel = { [key: string]: unknown } | null;
+export type GetActions200AllOfMeta = {
+  /** */
+  skip?: number;
+  /** */
+  take?: number;
+  /** */
+  itemCount?: number;
+  /** */
+  pageCount?: number;
+  /** */
+  hasNextPage?: boolean;
+  /** */
+  hasPreviousPage?: boolean;
+};

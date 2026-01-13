@@ -59,6 +59,7 @@ export class AuthController {
 	@Public()
 	@Post("login")
 	@ApiOperation({
+		operationId: "login",
 		summary: "사용자 로그인",
 		description: "이메일과 비밀번호로 로그인하여 JWT 토큰을 발급받습니다.",
 	})
@@ -86,6 +87,7 @@ export class AuthController {
 	@Public()
 	@Post("token/refresh")
 	@ApiOperation({
+		operationId: "refreshToken",
 		summary: "토큰 재발급",
 		description:
 			"리프레시 토큰을 사용하여 새로운 액세스 토큰과 리프레시 토큰을 발급받습니다.",
@@ -108,6 +110,7 @@ export class AuthController {
 
 	@Get("new-token")
 	@ApiOperation({
+		operationId: "getNewToken",
 		summary: "인증된 사용자 토큰 갱신",
 		description:
 			"인증된 사용자의 리프레시 토큰을 사용하여 새로운 액세스 토큰을 발급받습니다.",
@@ -132,6 +135,7 @@ export class AuthController {
 	@HttpCode(HttpStatus.CREATED)
 	@Post("sign-up")
 	@ApiOperation({
+		operationId: "signUp",
 		summary: "회원가입",
 		description: "새로운 사용자 계정을 생성하고 JWT 토큰을 발급받습니다.",
 	})
@@ -153,6 +157,7 @@ export class AuthController {
 	@HttpCode(HttpStatus.OK)
 	@Get("verify-token")
 	@ApiOperation({
+		operationId: "verifyToken",
 		summary: "토큰 유효성 검증",
 		description: "현재 요청의 액세스 토큰이 유효한지 검증합니다.",
 	})
@@ -167,6 +172,7 @@ export class AuthController {
 	@HttpCode(HttpStatus.OK)
 	@Post("logout")
 	@ApiOperation({
+		operationId: "logout",
 		summary: "로그아웃",
 		description:
 			"현재 사용자를 로그아웃하고 모든 인증 쿠키를 삭제하고 토큰을 무효화합니다.",

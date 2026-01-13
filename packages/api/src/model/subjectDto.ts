@@ -6,8 +6,17 @@
  * OpenAPI spec version: 1.0.0
  */
 
-/**
- * 권한 조건 (JSON 형식)
- * @nullable
- */
-export type AbilityResponseDtoConditions = { [key: string]: unknown } | null;
+export interface SubjectDto {
+  id: string;
+  seq: number;
+  createdAt: string;
+  updatedAt: string;
+  /** @nullable */
+  removedAt: string | null;
+  name: string;
+  displayName?: string;
+  icon?: string;
+  group?: string;
+  order: number;
+  isSystem: boolean;
+}

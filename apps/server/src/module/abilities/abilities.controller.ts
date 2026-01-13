@@ -45,6 +45,7 @@ export class AbilitiesController {
 
 	@Get("my")
 	@ApiOperation({
+		operationId: "getMyAbilities",
 		summary: "내 권한 조회",
 		description:
 			"현재 로그인한 사용자의 Role 권한과 예외 권한을 병합하여 조회합니다.",
@@ -68,6 +69,7 @@ export class AbilitiesController {
 
 	@Get("roles/:roleId")
 	@ApiOperation({
+		operationId: "getAbilitiesByRoleId",
 		summary: "Role별 기본 권한 조회",
 		description: "특정 Role에 할당된 기본 권한 목록을 조회합니다.",
 	})
@@ -91,6 +93,7 @@ export class AbilitiesController {
 
 	@Get("users/:userId")
 	@ApiOperation({
+		operationId: "getAbilitiesByUserId",
 		summary: "User별 예외 권한 조회",
 		description: "특정 User에게 할당된 예외 권한 목록을 조회합니다.",
 	})
@@ -114,6 +117,7 @@ export class AbilitiesController {
 
 	@Put("roles/:roleId")
 	@ApiOperation({
+		operationId: "setRoleAbilities",
 		summary: "Role 권한 일괄 설정",
 		description:
 			"Role의 기본 권한을 일괄 설정합니다. 기존 권한은 소프트 삭제되고 새로운 권한이 생성됩니다.",
@@ -152,6 +156,7 @@ export class AbilitiesController {
 
 	@Put("users/:userId")
 	@ApiOperation({
+		operationId: "setUserAbilities",
 		summary: "User 예외 권한 일괄 설정",
 		description:
 			"User의 예외 권한을 일괄 설정합니다. 기존 예외 권한은 소프트 삭제되고 새로운 권한이 생성됩니다.",

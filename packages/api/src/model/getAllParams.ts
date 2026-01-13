@@ -6,9 +6,17 @@
  * OpenAPI spec version: 1.0.0
  */
 
-export type GetSubjectTreeParams = {
+export type GetAllParams = {
 /**
- * 부모 Subject ID (UUID). 생략 시 최상위 Subject 반환
+ * Role ID로 필터링
  */
-parentId?: string;
+roleId?: string;
+/**
+ * User ID로 필터링 (예외 권한)
+ */
+userId?: string;
+/**
+ * Subject ID로 필터링
+ */
+subjectId?: string;
 };

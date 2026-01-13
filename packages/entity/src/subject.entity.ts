@@ -9,7 +9,7 @@ import type { Ability } from "./ability.entity";
 export class Subject extends AbstractEntity implements SubjectEntity {
 	name!: string;
 	displayName!: string | null;
-	description!: string | null;
+	icon!: string | null;
 	group!: string | null;
 	order!: number;
 	isSystem!: boolean;

@@ -22,6 +22,12 @@ export function useAbility() {
 	const store = useStore();
 	const abilityStore = store.abilityStore;
 
+	if (!abilityStore) {
+		throw new Error(
+			"AbilityStore가 초기화되지 않았습니다. RootStore에 abilityStore를 주입해주세요.",
+		);
+	}
+
 	const can = useCallback(
 		(action: AppAction, subject: AppSubject, field?: string) => {
 			return abilityStore.can(action, subject, field);

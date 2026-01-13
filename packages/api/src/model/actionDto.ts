@@ -6,17 +6,17 @@
  * OpenAPI spec version: 1.0.0
  */
 
-export type UpdateRoleAbilities200AllOfMeta = {
-  /** */
-  skip?: number;
-  /** */
-  take?: number;
-  /** */
-  itemCount?: number;
-  /** */
-  pageCount?: number;
-  /** */
-  hasNextPage?: boolean;
-  /** */
-  hasPreviousPage?: boolean;
-};
+export interface ActionDto {
+  id: string;
+  seq: number;
+  createdAt: string;
+  updatedAt: string;
+  /** @nullable */
+  removedAt: string | null;
+  name: string;
+  displayName?: string;
+  description?: string;
+  group?: string;
+  order: number;
+  isSystem: boolean;
+}

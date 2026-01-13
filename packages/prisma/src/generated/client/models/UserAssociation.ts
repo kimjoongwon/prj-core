@@ -14,7 +14,7 @@ import type * as Prisma from "../internal/prismaNamespace"
 
 /**
  * Model UserAssociation
- * 
+ * @displayName 사용자 그룹
  */
 export type UserAssociationModel = runtime.Types.Result.DefaultSelection<Prisma.$UserAssociationPayload>
 

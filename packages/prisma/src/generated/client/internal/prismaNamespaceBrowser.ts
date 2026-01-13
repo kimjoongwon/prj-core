@@ -55,8 +55,8 @@ export const ModelName = {
   Group: 'Group',
   Tenant: 'Tenant',
   Assignment: 'Assignment',
-  Action: 'Action',
   Subject: 'Subject',
+  Action: 'Action',
   Ability: 'Ability',
   Post: 'Post',
   Content: 'Content',
@@ -111,7 +111,8 @@ export const CategoryScalarFieldEnum = {
   name: 'name',
   type: 'type',
   parentId: 'parentId',
-  tenantId: 'tenantId'
+  spaceId: 'spaceId',
+  creatorId: 'creatorId'
 } as const
 
 export type CategoryScalarFieldEnum = (typeof CategoryScalarFieldEnum)[keyof typeof CategoryScalarFieldEnum]
@@ -126,7 +127,8 @@ export const GroupScalarFieldEnum = {
   name: 'name',
   type: 'type',
   label: 'label',
-  tenantId: 'tenantId'
+  spaceId: 'spaceId',
+  creatorId: 'creatorId'
 } as const
 
 export type GroupScalarFieldEnum = (typeof GroupScalarFieldEnum)[keyof typeof GroupScalarFieldEnum]
@@ -140,8 +142,7 @@ export const TenantScalarFieldEnum = {
   removedAt: 'removedAt',
   userId: 'userId',
   spaceId: 'spaceId',
-  roleId: 'roleId',
-  main: 'main'
+  roleId: 'roleId'
 } as const
 
 export type TenantScalarFieldEnum = (typeof TenantScalarFieldEnum)[keyof typeof TenantScalarFieldEnum]
@@ -158,6 +159,23 @@ export const AssignmentScalarFieldEnum = {
 } as const
 
 export type AssignmentScalarFieldEnum = (typeof AssignmentScalarFieldEnum)[keyof typeof AssignmentScalarFieldEnum]
+
+
+export const SubjectScalarFieldEnum = {
+  id: 'id',
+  seq: 'seq',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  removedAt: 'removedAt',
+  name: 'name',
+  displayName: 'displayName',
+  icon: 'icon',
+  order: 'order',
+  isSystem: 'isSystem',
+  group: 'group'
+} as const
+
+export type SubjectScalarFieldEnum = (typeof SubjectScalarFieldEnum)[keyof typeof SubjectScalarFieldEnum]
 
 
 export const ActionScalarFieldEnum = {
@@ -178,35 +196,18 @@ export const ActionScalarFieldEnum = {
 export type ActionScalarFieldEnum = (typeof ActionScalarFieldEnum)[keyof typeof ActionScalarFieldEnum]
 
 
-export const SubjectScalarFieldEnum = {
-  id: 'id',
-  seq: 'seq',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt',
-  removedAt: 'removedAt',
-  name: 'name',
-  displayName: 'displayName',
-  description: 'description',
-  group: 'group',
-  order: 'order',
-  isSystem: 'isSystem'
-} as const
-
-export type SubjectScalarFieldEnum = (typeof SubjectScalarFieldEnum)[keyof typeof SubjectScalarFieldEnum]
-
-
 export const AbilityScalarFieldEnum = {
   id: 'id',
   seq: 'seq',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   removedAt: 'removedAt',
-  actionId: 'actionId',
   fields: 'fields',
   conditions: 'conditions',
   inverted: 'inverted',
   reason: 'reason',
   subjectId: 'subjectId',
+  actionId: 'actionId',
   roleId: 'roleId',
   userId: 'userId',
   name: 'name',
@@ -241,7 +242,8 @@ export const ContentScalarFieldEnum = {
   type: 'type',
   text: 'text',
   fileId: 'fileId',
-  tenantId: 'tenantId'
+  spaceId: 'spaceId',
+  creatorId: 'creatorId'
 } as const
 
 export type ContentScalarFieldEnum = (typeof ContentScalarFieldEnum)[keyof typeof ContentScalarFieldEnum]
@@ -255,7 +257,8 @@ export const FileScalarFieldEnum = {
   parentId: 'parentId',
   mimeType: 'mimeType',
   url: 'url',
-  tenantId: 'tenantId',
+  spaceId: 'spaceId',
+  creatorId: 'creatorId',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   removedAt: 'removedAt'
@@ -339,7 +342,8 @@ export const SafeWalletScalarFieldEnum = {
   threshold: 'threshold',
   nonce: 'nonce',
   owners: 'owners',
-  tenantId: 'tenantId'
+  spaceId: 'spaceId',
+  creatorId: 'creatorId'
 } as const
 
 export type SafeWalletScalarFieldEnum = (typeof SafeWalletScalarFieldEnum)[keyof typeof SafeWalletScalarFieldEnum]
@@ -445,7 +449,8 @@ export const TimelineScalarFieldEnum = {
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   removedAt: 'removedAt',
-  tenantId: 'tenantId',
+  spaceId: 'spaceId',
+  creatorId: 'creatorId',
   name: 'name',
   description: 'description'
 } as const
@@ -525,7 +530,8 @@ export const TaskScalarFieldEnum = {
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   removedAt: 'removedAt',
-  tenantId: 'tenantId'
+  spaceId: 'spaceId',
+  creatorId: 'creatorId'
 } as const
 
 export type TaskScalarFieldEnum = (typeof TaskScalarFieldEnum)[keyof typeof TaskScalarFieldEnum]
@@ -558,7 +564,8 @@ export const UserScalarFieldEnum = {
   phone: 'phone',
   name: 'name',
   email: 'email',
-  password: 'password'
+  password: 'password',
+  selectedSpaceId: 'selectedSpaceId'
 } as const
 
 export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]

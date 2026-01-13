@@ -388,8 +388,8 @@ export const ModelName = {
   Group: 'Group',
   Tenant: 'Tenant',
   Assignment: 'Assignment',
-  Action: 'Action',
   Subject: 'Subject',
+  Action: 'Action',
   Ability: 'Ability',
   Post: 'Post',
   Content: 'Content',
@@ -432,7 +432,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "category" | "group" | "tenant" | "assignment" | "action" | "subject" | "ability" | "post" | "content" | "file" | "fileClassification" | "fileAssociation" | "role" | "roleAssociation" | "roleClassification" | "safeWallet" | "safeTransaction" | "safeConfirmation" | "space" | "spaceClassification" | "spaceAssociation" | "ground" | "timeline" | "session" | "program" | "routine" | "activity" | "task" | "exercise" | "user" | "userClassification" | "userAssociation" | "profile"
+    modelProps: "category" | "group" | "tenant" | "assignment" | "subject" | "action" | "ability" | "post" | "content" | "file" | "fileClassification" | "fileAssociation" | "role" | "roleAssociation" | "roleClassification" | "safeWallet" | "safeTransaction" | "safeConfirmation" | "space" | "spaceClassification" | "spaceAssociation" | "ground" | "timeline" | "session" | "program" | "routine" | "activity" | "task" | "exercise" | "user" | "userClassification" | "userAssociation" | "profile"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -732,80 +732,6 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
-    Action: {
-      payload: Prisma.$ActionPayload<ExtArgs>
-      fields: Prisma.ActionFieldRefs
-      operations: {
-        findUnique: {
-          args: Prisma.ActionFindUniqueArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$ActionPayload> | null
-        }
-        findUniqueOrThrow: {
-          args: Prisma.ActionFindUniqueOrThrowArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$ActionPayload>
-        }
-        findFirst: {
-          args: Prisma.ActionFindFirstArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$ActionPayload> | null
-        }
-        findFirstOrThrow: {
-          args: Prisma.ActionFindFirstOrThrowArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$ActionPayload>
-        }
-        findMany: {
-          args: Prisma.ActionFindManyArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$ActionPayload>[]
-        }
-        create: {
-          args: Prisma.ActionCreateArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$ActionPayload>
-        }
-        createMany: {
-          args: Prisma.ActionCreateManyArgs<ExtArgs>
-          result: BatchPayload
-        }
-        createManyAndReturn: {
-          args: Prisma.ActionCreateManyAndReturnArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$ActionPayload>[]
-        }
-        delete: {
-          args: Prisma.ActionDeleteArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$ActionPayload>
-        }
-        update: {
-          args: Prisma.ActionUpdateArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$ActionPayload>
-        }
-        deleteMany: {
-          args: Prisma.ActionDeleteManyArgs<ExtArgs>
-          result: BatchPayload
-        }
-        updateMany: {
-          args: Prisma.ActionUpdateManyArgs<ExtArgs>
-          result: BatchPayload
-        }
-        updateManyAndReturn: {
-          args: Prisma.ActionUpdateManyAndReturnArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$ActionPayload>[]
-        }
-        upsert: {
-          args: Prisma.ActionUpsertArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$ActionPayload>
-        }
-        aggregate: {
-          args: Prisma.ActionAggregateArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.AggregateAction>
-        }
-        groupBy: {
-          args: Prisma.ActionGroupByArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.ActionGroupByOutputType>[]
-        }
-        count: {
-          args: Prisma.ActionCountArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.ActionCountAggregateOutputType> | number
-        }
-      }
-    }
     Subject: {
       payload: Prisma.$SubjectPayload<ExtArgs>
       fields: Prisma.SubjectFieldRefs
@@ -877,6 +803,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         count: {
           args: Prisma.SubjectCountArgs<ExtArgs>
           result: runtime.Types.Utils.Optional<Prisma.SubjectCountAggregateOutputType> | number
+        }
+      }
+    }
+    Action: {
+      payload: Prisma.$ActionPayload<ExtArgs>
+      fields: Prisma.ActionFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.ActionFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ActionPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.ActionFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ActionPayload>
+        }
+        findFirst: {
+          args: Prisma.ActionFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ActionPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.ActionFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ActionPayload>
+        }
+        findMany: {
+          args: Prisma.ActionFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ActionPayload>[]
+        }
+        create: {
+          args: Prisma.ActionCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ActionPayload>
+        }
+        createMany: {
+          args: Prisma.ActionCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.ActionCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ActionPayload>[]
+        }
+        delete: {
+          args: Prisma.ActionDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ActionPayload>
+        }
+        update: {
+          args: Prisma.ActionUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ActionPayload>
+        }
+        deleteMany: {
+          args: Prisma.ActionDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.ActionUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.ActionUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ActionPayload>[]
+        }
+        upsert: {
+          args: Prisma.ActionUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ActionPayload>
+        }
+        aggregate: {
+          args: Prisma.ActionAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateAction>
+        }
+        groupBy: {
+          args: Prisma.ActionGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.ActionGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.ActionCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.ActionCountAggregateOutputType> | number
         }
       }
     }
@@ -2926,7 +2926,8 @@ export const CategoryScalarFieldEnum = {
   name: 'name',
   type: 'type',
   parentId: 'parentId',
-  tenantId: 'tenantId'
+  spaceId: 'spaceId',
+  creatorId: 'creatorId'
 } as const
 
 export type CategoryScalarFieldEnum = (typeof CategoryScalarFieldEnum)[keyof typeof CategoryScalarFieldEnum]
@@ -2941,7 +2942,8 @@ export const GroupScalarFieldEnum = {
   name: 'name',
   type: 'type',
   label: 'label',
-  tenantId: 'tenantId'
+  spaceId: 'spaceId',
+  creatorId: 'creatorId'
 } as const
 
 export type GroupScalarFieldEnum = (typeof GroupScalarFieldEnum)[keyof typeof GroupScalarFieldEnum]
@@ -2955,8 +2957,7 @@ export const TenantScalarFieldEnum = {
   removedAt: 'removedAt',
   userId: 'userId',
   spaceId: 'spaceId',
-  roleId: 'roleId',
-  main: 'main'
+  roleId: 'roleId'
 } as const
 
 export type TenantScalarFieldEnum = (typeof TenantScalarFieldEnum)[keyof typeof TenantScalarFieldEnum]
@@ -2973,6 +2974,23 @@ export const AssignmentScalarFieldEnum = {
 } as const
 
 export type AssignmentScalarFieldEnum = (typeof AssignmentScalarFieldEnum)[keyof typeof AssignmentScalarFieldEnum]
+
+
+export const SubjectScalarFieldEnum = {
+  id: 'id',
+  seq: 'seq',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  removedAt: 'removedAt',
+  name: 'name',
+  displayName: 'displayName',
+  icon: 'icon',
+  order: 'order',
+  isSystem: 'isSystem',
+  group: 'group'
+} as const
+
+export type SubjectScalarFieldEnum = (typeof SubjectScalarFieldEnum)[keyof typeof SubjectScalarFieldEnum]
 
 
 export const ActionScalarFieldEnum = {
@@ -2993,35 +3011,18 @@ export const ActionScalarFieldEnum = {
 export type ActionScalarFieldEnum = (typeof ActionScalarFieldEnum)[keyof typeof ActionScalarFieldEnum]
 
 
-export const SubjectScalarFieldEnum = {
-  id: 'id',
-  seq: 'seq',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt',
-  removedAt: 'removedAt',
-  name: 'name',
-  displayName: 'displayName',
-  description: 'description',
-  group: 'group',
-  order: 'order',
-  isSystem: 'isSystem'
-} as const
-
-export type SubjectScalarFieldEnum = (typeof SubjectScalarFieldEnum)[keyof typeof SubjectScalarFieldEnum]
-
-
 export const AbilityScalarFieldEnum = {
   id: 'id',
   seq: 'seq',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   removedAt: 'removedAt',
-  actionId: 'actionId',
   fields: 'fields',
   conditions: 'conditions',
   inverted: 'inverted',
   reason: 'reason',
   subjectId: 'subjectId',
+  actionId: 'actionId',
   roleId: 'roleId',
   userId: 'userId',
   name: 'name',
@@ -3056,7 +3057,8 @@ export const ContentScalarFieldEnum = {
   type: 'type',
   text: 'text',
   fileId: 'fileId',
-  tenantId: 'tenantId'
+  spaceId: 'spaceId',
+  creatorId: 'creatorId'
 } as const
 
 export type ContentScalarFieldEnum = (typeof ContentScalarFieldEnum)[keyof typeof ContentScalarFieldEnum]
@@ -3070,7 +3072,8 @@ export const FileScalarFieldEnum = {
   parentId: 'parentId',
   mimeType: 'mimeType',
   url: 'url',
-  tenantId: 'tenantId',
+  spaceId: 'spaceId',
+  creatorId: 'creatorId',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   removedAt: 'removedAt'
@@ -3154,7 +3157,8 @@ export const SafeWalletScalarFieldEnum = {
   threshold: 'threshold',
   nonce: 'nonce',
   owners: 'owners',
-  tenantId: 'tenantId'
+  spaceId: 'spaceId',
+  creatorId: 'creatorId'
 } as const
 
 export type SafeWalletScalarFieldEnum = (typeof SafeWalletScalarFieldEnum)[keyof typeof SafeWalletScalarFieldEnum]
@@ -3260,7 +3264,8 @@ export const TimelineScalarFieldEnum = {
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   removedAt: 'removedAt',
-  tenantId: 'tenantId',
+  spaceId: 'spaceId',
+  creatorId: 'creatorId',
   name: 'name',
   description: 'description'
 } as const
@@ -3340,7 +3345,8 @@ export const TaskScalarFieldEnum = {
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   removedAt: 'removedAt',
-  tenantId: 'tenantId'
+  spaceId: 'spaceId',
+  creatorId: 'creatorId'
 } as const
 
 export type TaskScalarFieldEnum = (typeof TaskScalarFieldEnum)[keyof typeof TaskScalarFieldEnum]
@@ -3373,7 +3379,8 @@ export const UserScalarFieldEnum = {
   phone: 'phone',
   name: 'name',
   email: 'email',
-  password: 'password'
+  password: 'password',
+  selectedSpaceId: 'selectedSpaceId'
 } as const
 
 export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]
@@ -3740,8 +3747,8 @@ export type GlobalOmitConfig = {
   group?: Prisma.GroupOmit
   tenant?: Prisma.TenantOmit
   assignment?: Prisma.AssignmentOmit
-  action?: Prisma.ActionOmit
   subject?: Prisma.SubjectOmit
+  action?: Prisma.ActionOmit
   ability?: Prisma.AbilityOmit
   post?: Prisma.PostOmit
   content?: Prisma.ContentOmit

@@ -177,7 +177,7 @@ export class AbilitiesPageStore {
 		};
 
 		for (const subject of this.subjects) {
-			const type = subject.type;
+			const type = subject.type ?? "Entity";
 			if (grouped[type]) {
 				grouped[type].push(subject);
 			}

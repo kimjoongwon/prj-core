@@ -4,6 +4,7 @@ import type { Space } from "./space.entity";
 import type { User } from "./user.entity";
 
 export class File extends AbstractEntity implements FileEntity {
+	tenantId!: string;
 	parentId!: string | null;
 	spaceId!: string;
 	creatorId!: string | null;

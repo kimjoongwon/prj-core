@@ -1,10 +1,10 @@
 "use client";
 
-import type { UserStatsDto } from "@cocrepo/api";
 import { Card, CardBody, Skeleton } from "@heroui/react";
+import type { MemberStats } from "../_stores";
 
 interface MemberStatsCardsProps {
-	stats: UserStatsDto;
+	stats: MemberStats;
 	isLoading: boolean;
 }
 

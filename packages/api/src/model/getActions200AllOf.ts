@@ -5,14 +5,14 @@
  * API 문서입니다. 대부분의 엔드포인트는 쿠키 기반 JWT 인증이 필요합니다. (@Public 데코레이터가 있는 엔드포인트는 예외)
  * OpenAPI spec version: 1.0.0
  */
-import type { AbilityResponseDto } from './abilityResponseDto';
-import type { GetMyAbilities200AllOfMeta } from './getMyAbilities200AllOfMeta';
+import type { ActionDto } from './actionDto';
+import type { GetActions200AllOfMeta } from './getActions200AllOfMeta';
 
-export type GetMyAbilities200AllOf = {
+export type GetActions200AllOf = {
   /** */
   httpStatus?: number;
   /** */
   message?: string;
-  data?: AbilityResponseDto[];
-  meta?: GetMyAbilities200AllOfMeta;
+  data?: ActionDto[];
+  meta?: GetActions200AllOfMeta;
 };

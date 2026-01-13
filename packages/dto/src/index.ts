@@ -1,5 +1,7 @@
 export * from "./abilities";
+export * from "./ability.dto";
 export * from "./abstract.dto";
+export * from "./action.dto";
 export * from "./app-builder.dto";
 export * from "./assignment.dto";
 export * from "./auth";
@@ -23,6 +25,7 @@ export * from "./session.dto";
 export * from "./space.dto";
 export * from "./space-association.dto";
 export * from "./space-classification.dto";
+export * from "./subject.dto";
 export * from "./task.dto";
 export * from "./tenant.dto";
 export * from "./timeline.dto";

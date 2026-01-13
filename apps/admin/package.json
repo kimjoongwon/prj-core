@@ -36,7 +36,8 @@
     "next": "^16.1.0",
     "react": "catalog:",
     "react-cookie": "catalog:",
-    "react-dom": "catalog:"
+    "react-dom": "catalog:",
+    "recharts": "^2.15.0"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "catalog:",

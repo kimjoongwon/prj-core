@@ -6,7 +6,7 @@
  * OpenAPI spec version: 1.0.0
  */
 
-export type GetAllSubjects200AllOfMeta = {
+export type GetAbilities200AllOfMeta = {
   /** */
   skip?: number;
   /** */

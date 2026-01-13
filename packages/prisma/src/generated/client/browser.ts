@@ -19,34 +19,34 @@ export * as $Enums from './enums'
 export * from './enums';
 /**
  * Model Category
- * 
+ * @displayName 카테고리
  */
 export type Category = Prisma.CategoryModel
 /**
  * Model Group
- * 
+ * @displayName 그룹
  */
 export type Group = Prisma.GroupModel
 /**
  * Model Tenant
- * 
+ * @displayName 테넌트
  */
 export type Tenant = Prisma.TenantModel
 /**
  * Model Assignment
- * 
+ * @displayName 역할 할당
  */
 export type Assignment = Prisma.AssignmentModel
+/**
+ * Model Subject
+ * @displayName Subject
+ */
+export type Subject = Prisma.SubjectModel
 /**
  * Model Action
  * @displayName 액션
  */
 export type Action = Prisma.ActionModel
-/**
- * Model Subject
- * @displayName 대상
- */
-export type Subject = Prisma.SubjectModel
 /**
  * Model Ability
  * @displayName 권한
@@ -54,12 +54,12 @@ export type Subject = Prisma.SubjectModel
 export type Ability = Prisma.AbilityModel
 /**
  * Model Post
- * 
+ * @displayName 게시물
  */
 export type Post = Prisma.PostModel
 /**
  * Model Content
- * 
+ * @displayName 콘텐츠
  */
 export type Content = Prisma.ContentModel
 /**
@@ -79,17 +79,17 @@ export type FileClassification = Prisma.FileClassificationModel
 export type FileAssociation = Prisma.FileAssociationModel
 /**
  * Model Role
- * 
+ * @displayName 역할
  */
 export type Role = Prisma.RoleModel
 /**
  * Model RoleAssociation
- * 
+ * @displayName 역할 그룹
  */
 export type RoleAssociation = Prisma.RoleAssociationModel
 /**
  * Model RoleClassification
- * 
+ * @displayName 역할 분류
  */
 export type RoleClassification = Prisma.RoleClassificationModel
 /**
@@ -109,22 +109,22 @@ export type SafeTransaction = Prisma.SafeTransactionModel
 export type SafeConfirmation = Prisma.SafeConfirmationModel
 /**
  * Model Space
- * 
+ * @displayName 공간
  */
 export type Space = Prisma.SpaceModel
 /**
  * Model SpaceClassification
- * 
+ * @displayName 공간 분류
  */
 export type SpaceClassification = Prisma.SpaceClassificationModel
 /**
  * Model SpaceAssociation
- * 
+ * @displayName 공간 그룹
  */
 export type SpaceAssociation = Prisma.SpaceAssociationModel
 /**
  * Model Ground
- * 
+ * @displayName 시설
  */
 export type Ground = Prisma.GroundModel
 /**
@@ -183,21 +183,21 @@ export type Task = Prisma.TaskModel
 export type Exercise = Prisma.ExerciseModel
 /**
  * Model User
- * 
+ * @displayName 사용자
  */
 export type User = Prisma.UserModel
 /**
  * Model UserClassification
- * 
+ * @displayName 사용자 분류
  */
 export type UserClassification = Prisma.UserClassificationModel
 /**
  * Model UserAssociation
- * 
+ * @displayName 사용자 그룹
  */
 export type UserAssociation = Prisma.UserAssociationModel
 /**
  * Model Profile
- * 
+ * @displayName 프로필
  */
 export type Profile = Prisma.ProfileModel

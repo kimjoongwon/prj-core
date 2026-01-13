@@ -12,6 +12,9 @@ import { AbstractDto } from "./abstract.dto";
 import { SpaceDto } from "./space.dto";
 
 export class GroupDto extends AbstractDto implements Group {
+	@UUIDField()
+	tenantId!: string;
+
 	@StringField()
 	name!: string;
 

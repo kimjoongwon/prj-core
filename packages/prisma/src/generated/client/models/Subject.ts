@@ -14,7 +14,7 @@ import type * as Prisma from "../internal/prismaNamespace"
 
 /**
  * Model Subject
- * @displayName 대상
+ * @displayName Subject
  */
 export type SubjectModel = runtime.Types.Result.DefaultSelection<Prisma.$SubjectPayload>
 
@@ -44,10 +44,10 @@ export type SubjectMinAggregateOutputType = {
   removedAt: Date | null
   name: string | null
   displayName: string | null
-  description: string | null
-  group: string | null
+  icon: string | null
   order: number | null
   isSystem: boolean | null
+  group: string | null
 }
 
 export type SubjectMaxAggregateOutputType = {
@@ -58,10 +58,10 @@ export type SubjectMaxAggregateOutputType = {
   removedAt: Date | null
   name: string | null
   displayName: string | null
-  description: string | null
-  group: string | null
+  icon: string | null
   order: number | null
   isSystem: boolean | null
+  group: string | null
 }
 
 export type SubjectCountAggregateOutputType = {
@@ -72,10 +72,10 @@ export type SubjectCountAggregateOutputType = {
   removedAt: number
   name: number
   displayName: number
-  description: number
-  group: number
+  icon: number
   order: number
   isSystem: number
+  group: number
   _all: number
 }
 
@@ -98,10 +98,10 @@ export type SubjectMinAggregateInputType = {
   removedAt?: true
   name?: true
   displayName?: true
-  description?: true
-  group?: true
+  icon?: true
   order?: true
   isSystem?: true
+  group?: true
 }
 
 export type SubjectMaxAggregateInputType = {
@@ -112,10 +112,10 @@ export type SubjectMaxAggregateInputType = {
   removedAt?: true
   name?: true
   displayName?: true
-  description?: true
-  group?: true
+  icon?: true
   order?: true
   isSystem?: true
+  group?: true
 }
 
 export type SubjectCountAggregateInputType = {
@@ -126,10 +126,10 @@ export type SubjectCountAggregateInputType = {
   removedAt?: true
   name?: true
   displayName?: true
-  description?: true
-  group?: true
+  icon?: true
   order?: true
   isSystem?: true
+  group?: true
   _all?: true
 }
 
@@ -227,10 +227,10 @@ export type SubjectGroupByOutputType = {
   removedAt: Date | null
   name: string
   displayName: string | null
-  description: string | null
-  group: string | null
+  icon: string | null
   order: number
   isSystem: boolean
+  group: string | null
   _count: SubjectCountAggregateOutputType | null
   _avg: SubjectAvgAggregateOutputType | null
   _sum: SubjectSumAggregateOutputType | null
@@ -264,10 +264,10 @@ export type SubjectWhereInput = {
   removedAt?: Prisma.DateTimeNullableFilter<"Subject"> | Date | string | null
   name?: Prisma.StringFilter<"Subject"> | string
   displayName?: Prisma.StringNullableFilter<"Subject"> | string | null
-  description?: Prisma.StringNullableFilter<"Subject"> | string | null
-  group?: Prisma.StringNullableFilter<"Subject"> | string | null
+  icon?: Prisma.StringNullableFilter<"Subject"> | string | null
   order?: Prisma.IntFilter<"Subject"> | number
   isSystem?: Prisma.BoolFilter<"Subject"> | boolean
+  group?: Prisma.StringNullableFilter<"Subject"> | string | null
   abilities?: Prisma.AbilityListRelationFilter
 }
 
@@ -279,10 +279,10 @@ export type SubjectOrderByWithRelationInput = {
   removedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   name?: Prisma.SortOrder
   displayName?: Prisma.SortOrderInput | Prisma.SortOrder
-  description?: Prisma.SortOrderInput | Prisma.SortOrder
-  group?: Prisma.SortOrderInput | Prisma.SortOrder
+  icon?: Prisma.SortOrderInput | Prisma.SortOrder
   order?: Prisma.SortOrder
   isSystem?: Prisma.SortOrder
+  group?: Prisma.SortOrderInput | Prisma.SortOrder
   abilities?: Prisma.AbilityOrderByRelationAggregateInput
 }
 
@@ -297,10 +297,10 @@ export type SubjectWhereUniqueInput = Prisma.AtLeast<{
   updatedAt?: Prisma.DateTimeNullableFilter<"Subject"> | Date | string | null
   removedAt?: Prisma.DateTimeNullableFilter<"Subject"> | Date | string | null
   displayName?: Prisma.StringNullableFilter<"Subject"> | string | null
-  description?: Prisma.StringNullableFilter<"Subject"> | string | null
-  group?: Prisma.StringNullableFilter<"Subject"> | string | null
+  icon?: Prisma.StringNullableFilter<"Subject"> | string | null
   order?: Prisma.IntFilter<"Subject"> | number
   isSystem?: Prisma.BoolFilter<"Subject"> | boolean
+  group?: Prisma.StringNullableFilter<"Subject"> | string | null
   abilities?: Prisma.AbilityListRelationFilter
 }, "id" | "seq" | "name">
 
@@ -312,10 +312,10 @@ export type SubjectOrderByWithAggregationInput = {
   removedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   name?: Prisma.SortOrder
   displayName?: Prisma.SortOrderInput | Prisma.SortOrder
-  description?: Prisma.SortOrderInput | Prisma.SortOrder
-  group?: Prisma.SortOrderInput | Prisma.SortOrder
+  icon?: Prisma.SortOrderInput | Prisma.SortOrder
   order?: Prisma.SortOrder
   isSystem?: Prisma.SortOrder
+  group?: Prisma.SortOrderInput | Prisma.SortOrder
   _count?: Prisma.SubjectCountOrderByAggregateInput
   _avg?: Prisma.SubjectAvgOrderByAggregateInput
   _max?: Prisma.SubjectMaxOrderByAggregateInput
@@ -334,10 +334,10 @@ export type SubjectScalarWhereWithAggregatesInput = {
   removedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Subject"> | Date | string | null
   name?: Prisma.StringWithAggregatesFilter<"Subject"> | string
   displayName?: Prisma.StringNullableWithAggregatesFilter<"Subject"> | string | null
-  description?: Prisma.StringNullableWithAggregatesFilter<"Subject"> | string | null
-  group?: Prisma.StringNullableWithAggregatesFilter<"Subject"> | string | null
+  icon?: Prisma.StringNullableWithAggregatesFilter<"Subject"> | string | null
   order?: Prisma.IntWithAggregatesFilter<"Subject"> | number
   isSystem?: Prisma.BoolWithAggregatesFilter<"Subject"> | boolean
+  group?: Prisma.StringNullableWithAggregatesFilter<"Subject"> | string | null
 }
 
 export type SubjectCreateInput = {
@@ -348,10 +348,10 @@ export type SubjectCreateInput = {
   removedAt?: Date | string | null
   name: string
   displayName?: string | null
-  description?: string | null
-  group?: string | null
+  icon?: string | null
   order?: number
   isSystem?: boolean
+  group?: string | null
   abilities?: Prisma.AbilityCreateNestedManyWithoutSubjectInput
 }
 
@@ -363,10 +363,10 @@ export type SubjectUncheckedCreateInput = {
   removedAt?: Date | string | null
   name: string
   displayName?: string | null
-  description?: string | null
-  group?: string | null
+  icon?: string | null
   order?: number
   isSystem?: boolean
+  group?: string | null
   abilities?: Prisma.AbilityUncheckedCreateNestedManyWithoutSubjectInput
 }
 
@@ -377,10 +377,10 @@ export type SubjectUpdateInput = {
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   name?: Prisma.StringFieldUpdateOperationsInput | string
   displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  group?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  icon?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   order?: Prisma.IntFieldUpdateOperationsInput | number
   isSystem?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  group?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   abilities?: Prisma.AbilityUpdateManyWithoutSubjectNestedInput
 }
 
@@ -392,10 +392,10 @@ export type SubjectUncheckedUpdateInput = {
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   name?: Prisma.StringFieldUpdateOperationsInput | string
   displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  group?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  icon?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   order?: Prisma.IntFieldUpdateOperationsInput | number
   isSystem?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  group?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   abilities?: Prisma.AbilityUncheckedUpdateManyWithoutSubjectNestedInput
 }
 
@@ -407,10 +407,10 @@ export type SubjectCreateManyInput = {
   removedAt?: Date | string | null
   name: string
   displayName?: string | null
-  description?: string | null
-  group?: string | null
+  icon?: string | null
   order?: number
   isSystem?: boolean
+  group?: string | null
 }
 
 export type SubjectUpdateManyMutationInput = {
@@ -420,10 +420,10 @@ export type SubjectUpdateManyMutationInput = {
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   name?: Prisma.StringFieldUpdateOperationsInput | string
   displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  group?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  icon?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   order?: Prisma.IntFieldUpdateOperationsInput | number
   isSystem?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  group?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type SubjectUncheckedUpdateManyInput = {
@@ -434,10 +434,10 @@ export type SubjectUncheckedUpdateManyInput = {
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   name?: Prisma.StringFieldUpdateOperationsInput | string
   displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  group?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  icon?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   order?: Prisma.IntFieldUpdateOperationsInput | number
   isSystem?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  group?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type SubjectCountOrderByAggregateInput = {
@@ -448,10 +448,10 @@ export type SubjectCountOrderByAggregateInput = {
   removedAt?: Prisma.SortOrder
   name?: Prisma.SortOrder
   displayName?: Prisma.SortOrder
-  description?: Prisma.SortOrder
-  group?: Prisma.SortOrder
+  icon?: Prisma.SortOrder
   order?: Prisma.SortOrder
   isSystem?: Prisma.SortOrder
+  group?: Prisma.SortOrder
 }
 
 export type SubjectAvgOrderByAggregateInput = {
@@ -467,10 +467,10 @@ export type SubjectMaxOrderByAggregateInput = {
   removedAt?: Prisma.SortOrder
   name?: Prisma.SortOrder
   displayName?: Prisma.SortOrder
-  description?: Prisma.SortOrder
-  group?: Prisma.SortOrder
+  icon?: Prisma.SortOrder
   order?: Prisma.SortOrder
   isSystem?: Prisma.SortOrder
+  group?: Prisma.SortOrder
 }
 
 export type SubjectMinOrderByAggregateInput = {
@@ -481,10 +481,10 @@ export type SubjectMinOrderByAggregateInput = {
   removedAt?: Prisma.SortOrder
   name?: Prisma.SortOrder
   displayName?: Prisma.SortOrder
-  description?: Prisma.SortOrder
-  group?: Prisma.SortOrder
+  icon?: Prisma.SortOrder
   order?: Prisma.SortOrder
   isSystem?: Prisma.SortOrder
+  group?: Prisma.SortOrder
 }
 
 export type SubjectSumOrderByAggregateInput = {
@@ -495,6 +495,10 @@ export type SubjectSumOrderByAggregateInput = {
 export type SubjectScalarRelationFilter = {
   is?: Prisma.SubjectWhereInput
   isNot?: Prisma.SubjectWhereInput
+}
+
+export type BoolFieldUpdateOperationsInput = {
+  set?: boolean
 }
 
 export type SubjectCreateNestedOneWithoutAbilitiesInput = {
@@ -519,10 +523,10 @@ export type SubjectCreateWithoutAbilitiesInput = {
   removedAt?: Date | string | null
   name: string
   displayName?: string | null
-  description?: string | null
-  group?: string | null
+  icon?: string | null
   order?: number
   isSystem?: boolean
+  group?: string | null
 }
 
 export type SubjectUncheckedCreateWithoutAbilitiesInput = {
@@ -533,10 +537,10 @@ export type SubjectUncheckedCreateWithoutAbilitiesInput = {
   removedAt?: Date | string | null
   name: string
   displayName?: string | null
-  description?: string | null
-  group?: string | null
+  icon?: string | null
   order?: number
   isSystem?: boolean
+  group?: string | null
 }
 
 export type SubjectCreateOrConnectWithoutAbilitiesInput = {
@@ -562,10 +566,10 @@ export type SubjectUpdateWithoutAbilitiesInput = {
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   name?: Prisma.StringFieldUpdateOperationsInput | string
   displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  group?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  icon?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   order?: Prisma.IntFieldUpdateOperationsInput | number
   isSystem?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  group?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type SubjectUncheckedUpdateWithoutAbilitiesInput = {
@@ -576,10 +580,10 @@ export type SubjectUncheckedUpdateWithoutAbilitiesInput = {
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   name?: Prisma.StringFieldUpdateOperationsInput | string
   displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  group?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  icon?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   order?: Prisma.IntFieldUpdateOperationsInput | number
   isSystem?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  group?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 
@@ -621,10 +625,10 @@ export type SubjectSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   removedAt?: boolean
   name?: boolean
   displayName?: boolean
-  description?: boolean
-  group?: boolean
+  icon?: boolean
   order?: boolean
   isSystem?: boolean
+  group?: boolean
   abilities?: boolean | Prisma.Subject$abilitiesArgs<ExtArgs>
   _count?: boolean | Prisma.SubjectCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["subject"]>
@@ -637,10 +641,10 @@ export type SubjectSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Exten
   removedAt?: boolean
   name?: boolean
   displayName?: boolean
-  description?: boolean
-  group?: boolean
+  icon?: boolean
   order?: boolean
   isSystem?: boolean
+  group?: boolean
 }, ExtArgs["result"]["subject"]>
 
 export type SubjectSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -651,10 +655,10 @@ export type SubjectSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Exten
   removedAt?: boolean
   name?: boolean
   displayName?: boolean
-  description?: boolean
-  group?: boolean
+  icon?: boolean
   order?: boolean
   isSystem?: boolean
+  group?: boolean
 }, ExtArgs["result"]["subject"]>
 
 export type SubjectSelectScalar = {
@@ -665,13 +669,13 @@ export type SubjectSelectScalar = {
   removedAt?: boolean
   name?: boolean
   displayName?: boolean
-  description?: boolean
-  group?: boolean
+  icon?: boolean
   order?: boolean
   isSystem?: boolean
+  group?: boolean
 }
 
-export type SubjectOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "seq" | "createdAt" | "updatedAt" | "removedAt" | "name" | "displayName" | "description" | "group" | "order" | "isSystem", ExtArgs["result"]["subject"]>
+export type SubjectOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "seq" | "createdAt" | "updatedAt" | "removedAt" | "name" | "displayName" | "icon" | "order" | "isSystem" | "group", ExtArgs["result"]["subject"]>
 export type SubjectInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   abilities?: boolean | Prisma.Subject$abilitiesArgs<ExtArgs>
   _count?: boolean | Prisma.SubjectCountOutputTypeDefaultArgs<ExtArgs>
@@ -699,13 +703,9 @@ export type $SubjectPayload<ExtArgs extends runtime.Types.Extensions.InternalArg
      */
     displayName: string | null
     /**
-     * @displayName 설명
+     * @displayName 아이콘
      */
-    description: string | null
-    /**
-     * @displayName 그룹
-     */
-    group: string | null
+    icon: string | null
     /**
      * @displayName 정렬 순서
      */
@@ -714,6 +714,10 @@ export type $SubjectPayload<ExtArgs extends runtime.Types.Extensions.InternalArg
      * @displayName 시스템 여부
      */
     isSystem: boolean
+    /**
+     * @displayName 그룹
+     */
+    group: string | null
   }, ExtArgs["result"]["subject"]>
   composites: {}
 }
@@ -1145,10 +1149,10 @@ export interface SubjectFieldRefs {
   readonly removedAt: Prisma.FieldRef<"Subject", 'DateTime'>
   readonly name: Prisma.FieldRef<"Subject", 'String'>
   readonly displayName: Prisma.FieldRef<"Subject", 'String'>
-  readonly description: Prisma.FieldRef<"Subject", 'String'>
-  readonly group: Prisma.FieldRef<"Subject", 'String'>
+  readonly icon: Prisma.FieldRef<"Subject", 'String'>
   readonly order: Prisma.FieldRef<"Subject", 'Int'>
   readonly isSystem: Prisma.FieldRef<"Subject", 'Boolean'>
+  readonly group: Prisma.FieldRef<"Subject", 'String'>
 }
     
 

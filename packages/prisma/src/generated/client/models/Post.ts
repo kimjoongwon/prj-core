@@ -14,7 +14,7 @@ import type * as Prisma from "../internal/prismaNamespace"
 
 /**
  * Model Post
- * 
+ * @displayName 게시물
  */
 export type PostModel = runtime.Types.Result.DefaultSelection<Prisma.$PostPayload>
 

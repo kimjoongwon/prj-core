@@ -6,14 +6,17 @@
  * OpenAPI spec version: 1.0.0
  */
 
+export type GetAbilitiesParams = {
 /**
- * 정렬 방향
+ * Role ID로 필터링
  */
-export type SortConfigDtoDirection = typeof SortConfigDtoDirection[keyof typeof SortConfigDtoDirection];
-
-
-// eslint-disable-next-line @typescript-eslint/no-redeclare
-export const SortConfigDtoDirection = {
-  asc: 'asc',
-  desc: 'desc',
-} as const;
+roleId?: string;
+/**
+ * User ID로 필터링 (예외 권한)
+ */
+userId?: string;
+/**
+ * Subject ID로 필터링
+ */
+subjectId?: string;
+};

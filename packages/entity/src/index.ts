@@ -26,6 +26,7 @@ export * from "./session.entity";
 export * from "./space.entity";
 export * from "./space-association.entity";
 export * from "./space-classification.entity";
+export * from "./subject.entity";
 export * from "./task.entity";
 export * from "./tenant.entity";
 export * from "./timeline.entity";

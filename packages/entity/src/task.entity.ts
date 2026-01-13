@@ -6,6 +6,7 @@ import type { Space } from "./space.entity";
 import type { User } from "./user.entity";
 
 export class Task extends AbstractEntity implements TaskEntity {
+	tenantId!: string;
 	spaceId!: string;
 	creatorId!: string | null;
 

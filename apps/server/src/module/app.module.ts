@@ -14,14 +14,14 @@ import {
 } from "@nestjs/common";
 import { APP_GUARD, RouterModule } from "@nestjs/core";
 import { ThrottlerGuard } from "@nestjs/throttler";
-import { AbilitiesModule } from "./abilities";
-import { ActionsModule } from "./actions";
+import { AbilitiesModule } from "./ability";
+import { ActionsModule } from "./action";
 import { AuthModule } from "./auth";
 // Global modules
 import { globalModules } from "./global.module";
 import { GroundsModule } from "./grounds";
 import { PrismaModule } from "./prisma.module";
-import { SubjectsModule } from "./subjects";
+import { SubjectsModule } from "./subject";
 import { UsersModule } from "./users";
 
 @Module({

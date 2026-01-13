@@ -14,7 +14,7 @@ import type * as Prisma from "../internal/prismaNamespace"
 
 /**
  * Model RoleClassification
- * 
+ * @displayName 역할 분류
  */
 export type RoleClassificationModel = runtime.Types.Result.DefaultSelection<Prisma.$RoleClassificationPayload>
 

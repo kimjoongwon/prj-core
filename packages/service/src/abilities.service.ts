@@ -30,6 +30,18 @@ export class AbilitiesService {
 	constructor(private readonly repository: AbilitiesRepository) {}
 
 	/**
+	 * ID로 Ability 조회
+	 *
+	 * @param id - Ability ID
+	 * @returns Ability 또는 null
+	 */
+	async getAbilityById(id: string): Promise<Ability | null> {
+		this.logger.debug(`ID로 Ability 조회: id=${id.slice(-8)}`);
+
+		return this.repository.findByIdWithRole(id);
+	}
+
+	/**
 	 * Role별 기본 권한 조회
 	 *
 	 * @param roleId - Role ID

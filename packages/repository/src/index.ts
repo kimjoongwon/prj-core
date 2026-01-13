@@ -8,4 +8,5 @@ export { ActionsRepository } from "./actions.repository";
 export { GroundsRepository } from "./grounds.repository";
 export { RolesRepository } from "./roles.repository";
 export { SpacesRepository } from "./spaces.repository";
+export { SubjectsRepository } from "./subjects.repository";
 export { type UserStats, UsersRepository } from "./users.repository";

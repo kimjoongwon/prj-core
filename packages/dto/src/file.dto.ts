@@ -12,6 +12,9 @@ import { FileClassificationDto } from "./file-classification.dto";
 import { SpaceDto } from "./space.dto";
 
 export class FileDto extends AbstractDto implements File {
+	@UUIDField()
+	tenantId: string;
+
 	@UUIDFieldOptional()
 	parentId: string | null;
 

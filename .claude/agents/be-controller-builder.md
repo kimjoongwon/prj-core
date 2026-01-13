@@ -36,6 +36,53 @@ NestJS REST Controller를 생성하는 전문가입니다.
 
 ## 핵심 규칙
 
+### ⚠️ operationId 필수 (Critical)
+
+**모든 API 엔드포인트에 `operationId`를 반드시 지정해야 합니다.**
+
+```typescript
+// ✅ 올바른 예시 - operationId 필수
+@Get()
+@ApiOperation({
+  operationId: "getUsers",  // 필수!
+  summary: "회원 목록 조회",
+  description: "현재 Space 내의 회원 목록을 조회합니다.",
+})
+async getUsers() { }
+
+@Get(":id")
+@ApiOperation({
+  operationId: "getUserById",  // 필수!
+  summary: "회원 상세 조회",
+})
+async getUserById(@Param("id") id: string) { }
+
+// ❌ 잘못된 예시 - operationId 누락
+@Get()
+@ApiOperation({
+  summary: "회원 목록 조회",  // operationId 없음 → orval 오류 발생!
+})
+async getAll() { }
+```
+
+**operationId 네이밍 규칙:**
+
+| HTTP 메서드 | 패턴 | 예시 |
+|------------|------|------|
+| `GET` (목록) | `get{Entity}s` | `getUsers`, `getAbilities` |
+| `GET` (단일) | `get{Entity}ById` | `getUserById`, `getAbilityById` |
+| `POST` | `create{Entity}` | `createUser`, `createAbility` |
+| `PATCH` | `update{Entity}` | `updateUser`, `updateAbility` |
+| `DELETE` | `delete{Entity}` | `deleteUser`, `deleteAbility` |
+| `PUT` | `set{Entity}` / `replace{Entity}` | `setRoleAbilities` |
+
+**이유:**
+- operationId가 없으면 NestJS Swagger가 메서드명 기반으로 자동 생성
+- 여러 컨트롤러에 `getAll()`, `getById()` 같은 동일한 메서드명이 있으면 **orval codegen 중복 스키마 오류 발생**
+- 예: `Duplicate schema names detected: 4x GetAll200AllOf`
+
+---
+
 ### ✅ Do
 
 ```typescript
@@ -142,7 +189,7 @@ import {
   Post,
   Query,
 } from "@nestjs/common";
-import { ApiTags } from "@nestjs/swagger";
+import { ApiOperation, ApiTags } from "@nestjs/swagger";
 import { wrapResponse } from "../../util/response.util";
 
 @ApiTags("{ENTITY}S")
@@ -158,6 +205,10 @@ export class {Entity}sController {
    */
   @Post()
   @HttpCode(HttpStatus.OK)
+  @ApiOperation({
+    operationId: "create{Entity}",
+    summary: "{Entity} 생성",
+  })
   @ApiResponseEntity({Entity}Dto, HttpStatus.OK)
   async create(@Body() dto: Create{Entity}Dto) {
     // DTO → params 변환
@@ -175,6 +226,10 @@ export class {Entity}sController {
    */
   @Get(":id")
   @HttpCode(HttpStatus.OK)
+  @ApiOperation({
+    operationId: "get{Entity}ById",
+    summary: "{Entity} 상세 조회",
+  })
   @ApiResponseEntity({Entity}Dto, HttpStatus.OK)
   async getById(@Param("id") id: string) {
     const result = await this.service.getById(id);
@@ -187,6 +242,10 @@ export class {Entity}sController {
    */
   @Patch(":id")
   @HttpCode(HttpStatus.OK)
+  @ApiOperation({
+    operationId: "update{Entity}",
+    summary: "{Entity} 수정",
+  })
   @ApiResponseEntity({Entity}Dto, HttpStatus.OK)
   async updateById(
     @Param("id") id: string,
@@ -206,6 +265,10 @@ export class {Entity}sController {
    */
   @Patch(":id/removedAt")
   @HttpCode(HttpStatus.OK)
+  @ApiOperation({
+    operationId: "remove{Entity}",
+    summary: "{Entity} 소프트 삭제",
+  })
   @ApiResponseEntity({Entity}Dto, HttpStatus.OK)
   async removeById(@Param("id") id: string) {
     const result = await this.service.removeById(id);
@@ -218,6 +281,10 @@ export class {Entity}sController {
    */
   @Delete(":id")
   @HttpCode(HttpStatus.OK)
+  @ApiOperation({
+    operationId: "delete{Entity}",
+    summary: "{Entity} 삭제",
+  })
   @ApiResponseEntity({Entity}Dto, HttpStatus.OK)
   async deleteById(@Param("id") id: string) {
     const result = await this.service.deleteById(id);
@@ -230,6 +297,10 @@ export class {Entity}sController {
    */
   @Get()
   @HttpCode(HttpStatus.OK)
+  @ApiOperation({
+    operationId: "get{Entity}s",
+    summary: "{Entity} 목록 조회",
+  })
   @ApiResponseEntity({Entity}Dto, HttpStatus.OK, { isArray: true })
   async getMany(@Query() query: Query{Entity}Dto) {
     const params = {
@@ -296,6 +367,7 @@ imports: [
 
 - [ ] `@ApiTags()` 데코레이터 추가
 - [ ] `@Controller()` 데코레이터 추가
+- [ ] **각 메서드에 `@ApiOperation({ operationId: "..." })` 추가 (필수!)**
 - [ ] Service 또는 Facade 주입 (하나만)
 - [ ] Logger 초기화
 - [ ] 각 메서드에 `@HttpCode(HttpStatus.OK)` 추가

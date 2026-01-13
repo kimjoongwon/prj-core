@@ -18,6 +18,7 @@ export class ActionsController {
 	@Public()
 	@Get()
 	@ApiOperation({
+		operationId: "getActions",
 		summary: "Action 목록 조회",
 		description: "모든 Action 목록을 조회합니다.",
 	})
@@ -31,14 +32,15 @@ export class ActionsController {
 	@ResponseMessage("Action 목록 조회 성공")
 	async getAll(@Query("group") group?: string) {
 		const actions = group
-			? await this.actionsService.getByGroup(group)
-			: await this.actionsService.getAll();
+			? await this.actionsService.getActionsByGroup(group)
+			: await this.actionsService.getAllActions();
 		return actions.map((action) => plainToInstance(ActionDto, action));
 	}
 
 	@Public()
 	@Get(":id")
 	@ApiOperation({
+		operationId: "getActionById",
 		summary: "Action 상세 조회",
 		description: "ID로 Action을 조회합니다.",
 	})
@@ -46,7 +48,7 @@ export class ActionsController {
 	@ApiResponseEntity(ActionDto, HttpStatus.OK)
 	@ResponseMessage("Action 조회 성공")
 	async getById(@Param("id") id: string) {
-		const action = await this.actionsService.getById(id);
+		const action = await this.actionsService.getActionById(id);
 		return plainToInstance(ActionDto, action);
 	}
 }

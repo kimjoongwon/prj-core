@@ -19,7 +19,8 @@ function DashboardLayoutComponent({ children }: DashboardLayoutProps) {
 	const router = useRouter();
 	const pathname = usePathname();
 	const store = useStore();
-	const { authStore, abilityStore } = store;
+	const { authStore } = store;
+	const abilityStore = store.abilityStore!;
 
 	// 로그인 상태 확인
 	useEffect(() => {

@@ -6,7 +6,17 @@
  * OpenAPI spec version: 1.0.0
  */
 
-/**
- * 너비 오버라이드 (픽셀 또는 비율)
- */
-export type FieldConfigDtoWidth = string | number;
+export type GetSubjects200AllOfMeta = {
+  /** */
+  skip?: number;
+  /** */
+  take?: number;
+  /** */
+  itemCount?: number;
+  /** */
+  pageCount?: number;
+  /** */
+  hasNextPage?: boolean;
+  /** */
+  hasPreviousPage?: boolean;
+};

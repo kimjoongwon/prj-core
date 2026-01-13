@@ -9,6 +9,7 @@ import type { User } from "./user.entity";
 export class Category extends AbstractEntity implements CategoryEntity {
 	name!: string;
 	type!: CategoryTypes;
+	tenantId!: string;
 	parentId!: string | null;
 	spaceId!: string;
 	creatorId!: string | null;

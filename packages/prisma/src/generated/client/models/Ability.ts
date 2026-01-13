@@ -42,10 +42,10 @@ export type AbilityMinAggregateOutputType = {
   createdAt: Date | null
   updatedAt: Date | null
   removedAt: Date | null
-  actionId: string | null
   inverted: boolean | null
   reason: string | null
   subjectId: string | null
+  actionId: string | null
   roleId: string | null
   userId: string | null
   name: string | null
@@ -60,10 +60,10 @@ export type AbilityMaxAggregateOutputType = {
   createdAt: Date | null
   updatedAt: Date | null
   removedAt: Date | null
-  actionId: string | null
   inverted: boolean | null
   reason: string | null
   subjectId: string | null
+  actionId: string | null
   roleId: string | null
   userId: string | null
   name: string | null
@@ -78,12 +78,12 @@ export type AbilityCountAggregateOutputType = {
   createdAt: number
   updatedAt: number
   removedAt: number
-  actionId: number
   fields: number
   conditions: number
   inverted: number
   reason: number
   subjectId: number
+  actionId: number
   roleId: number
   userId: number
   name: number
@@ -110,10 +110,10 @@ export type AbilityMinAggregateInputType = {
   createdAt?: true
   updatedAt?: true
   removedAt?: true
-  actionId?: true
   inverted?: true
   reason?: true
   subjectId?: true
+  actionId?: true
   roleId?: true
   userId?: true
   name?: true
@@ -128,10 +128,10 @@ export type AbilityMaxAggregateInputType = {
   createdAt?: true
   updatedAt?: true
   removedAt?: true
-  actionId?: true
   inverted?: true
   reason?: true
   subjectId?: true
+  actionId?: true
   roleId?: true
   userId?: true
   name?: true
@@ -146,12 +146,12 @@ export type AbilityCountAggregateInputType = {
   createdAt?: true
   updatedAt?: true
   removedAt?: true
-  actionId?: true
   fields?: true
   conditions?: true
   inverted?: true
   reason?: true
   subjectId?: true
+  actionId?: true
   roleId?: true
   userId?: true
   name?: true
@@ -253,12 +253,12 @@ export type AbilityGroupByOutputType = {
   createdAt: Date
   updatedAt: Date | null
   removedAt: Date | null
-  actionId: string
   fields: string[]
   conditions: runtime.JsonValue | null
   inverted: boolean
   reason: string | null
   subjectId: string
+  actionId: string
   roleId: string | null
   userId: string | null
   name: string | null
@@ -296,20 +296,20 @@ export type AbilityWhereInput = {
   createdAt?: Prisma.DateTimeFilter<"Ability"> | Date | string
   updatedAt?: Prisma.DateTimeNullableFilter<"Ability"> | Date | string | null
   removedAt?: Prisma.DateTimeNullableFilter<"Ability"> | Date | string | null
-  actionId?: Prisma.StringFilter<"Ability"> | string
   fields?: Prisma.StringNullableListFilter<"Ability">
   conditions?: Prisma.JsonNullableFilter<"Ability">
   inverted?: Prisma.BoolFilter<"Ability"> | boolean
   reason?: Prisma.StringNullableFilter<"Ability"> | string | null
   subjectId?: Prisma.StringFilter<"Ability"> | string
+  actionId?: Prisma.StringFilter<"Ability"> | string
   roleId?: Prisma.StringNullableFilter<"Ability"> | string | null
   userId?: Prisma.StringNullableFilter<"Ability"> | string | null
   name?: Prisma.StringNullableFilter<"Ability"> | string | null
   description?: Prisma.StringNullableFilter<"Ability"> | string | null
   isActive?: Prisma.BoolFilter<"Ability"> | boolean
   priority?: Prisma.IntFilter<"Ability"> | number
-  action?: Prisma.XOR<Prisma.ActionScalarRelationFilter, Prisma.ActionWhereInput>
   subject?: Prisma.XOR<Prisma.SubjectScalarRelationFilter, Prisma.SubjectWhereInput>
+  action?: Prisma.XOR<Prisma.ActionScalarRelationFilter, Prisma.ActionWhereInput>
   role?: Prisma.XOR<Prisma.RoleNullableScalarRelationFilter, Prisma.RoleWhereInput> | null
   user?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
 }
@@ -320,20 +320,20 @@ export type AbilityOrderByWithRelationInput = {
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   removedAt?: Prisma.SortOrderInput | Prisma.SortOrder
-  actionId?: Prisma.SortOrder
   fields?: Prisma.SortOrder
   conditions?: Prisma.SortOrderInput | Prisma.SortOrder
   inverted?: Prisma.SortOrder
   reason?: Prisma.SortOrderInput | Prisma.SortOrder
   subjectId?: Prisma.SortOrder
+  actionId?: Prisma.SortOrder
   roleId?: Prisma.SortOrderInput | Prisma.SortOrder
   userId?: Prisma.SortOrderInput | Prisma.SortOrder
   name?: Prisma.SortOrderInput | Prisma.SortOrder
   description?: Prisma.SortOrderInput | Prisma.SortOrder
   isActive?: Prisma.SortOrder
   priority?: Prisma.SortOrder
-  action?: Prisma.ActionOrderByWithRelationInput
   subject?: Prisma.SubjectOrderByWithRelationInput
+  action?: Prisma.ActionOrderByWithRelationInput
   role?: Prisma.RoleOrderByWithRelationInput
   user?: Prisma.UserOrderByWithRelationInput
 }
@@ -347,20 +347,20 @@ export type AbilityWhereUniqueInput = Prisma.AtLeast<{
   createdAt?: Prisma.DateTimeFilter<"Ability"> | Date | string
   updatedAt?: Prisma.DateTimeNullableFilter<"Ability"> | Date | string | null
   removedAt?: Prisma.DateTimeNullableFilter<"Ability"> | Date | string | null
-  actionId?: Prisma.StringFilter<"Ability"> | string
   fields?: Prisma.StringNullableListFilter<"Ability">
   conditions?: Prisma.JsonNullableFilter<"Ability">
   inverted?: Prisma.BoolFilter<"Ability"> | boolean
   reason?: Prisma.StringNullableFilter<"Ability"> | string | null
   subjectId?: Prisma.StringFilter<"Ability"> | string
+  actionId?: Prisma.StringFilter<"Ability"> | string
   roleId?: Prisma.StringNullableFilter<"Ability"> | string | null
   userId?: Prisma.StringNullableFilter<"Ability"> | string | null
   name?: Prisma.StringNullableFilter<"Ability"> | string | null
   description?: Prisma.StringNullableFilter<"Ability"> | string | null
   isActive?: Prisma.BoolFilter<"Ability"> | boolean
   priority?: Prisma.IntFilter<"Ability"> | number
-  action?: Prisma.XOR<Prisma.ActionScalarRelationFilter, Prisma.ActionWhereInput>
   subject?: Prisma.XOR<Prisma.SubjectScalarRelationFilter, Prisma.SubjectWhereInput>
+  action?: Prisma.XOR<Prisma.ActionScalarRelationFilter, Prisma.ActionWhereInput>
   role?: Prisma.XOR<Prisma.RoleNullableScalarRelationFilter, Prisma.RoleWhereInput> | null
   user?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
 }, "id" | "seq">
@@ -371,12 +371,12 @@ export type AbilityOrderByWithAggregationInput = {
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   removedAt?: Prisma.SortOrderInput | Prisma.SortOrder
-  actionId?: Prisma.SortOrder
   fields?: Prisma.SortOrder
   conditions?: Prisma.SortOrderInput | Prisma.SortOrder
   inverted?: Prisma.SortOrder
   reason?: Prisma.SortOrderInput | Prisma.SortOrder
   subjectId?: Prisma.SortOrder
+  actionId?: Prisma.SortOrder
   roleId?: Prisma.SortOrderInput | Prisma.SortOrder
   userId?: Prisma.SortOrderInput | Prisma.SortOrder
   name?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -399,12 +399,12 @@ export type AbilityScalarWhereWithAggregatesInput = {
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Ability"> | Date | string
   updatedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Ability"> | Date | string | null
   removedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Ability"> | Date | string | null
-  actionId?: Prisma.StringWithAggregatesFilter<"Ability"> | string
   fields?: Prisma.StringNullableListFilter<"Ability">
   conditions?: Prisma.JsonNullableWithAggregatesFilter<"Ability">
   inverted?: Prisma.BoolWithAggregatesFilter<"Ability"> | boolean
   reason?: Prisma.StringNullableWithAggregatesFilter<"Ability"> | string | null
   subjectId?: Prisma.StringWithAggregatesFilter<"Ability"> | string
+  actionId?: Prisma.StringWithAggregatesFilter<"Ability"> | string
   roleId?: Prisma.StringNullableWithAggregatesFilter<"Ability"> | string | null
   userId?: Prisma.StringNullableWithAggregatesFilter<"Ability"> | string | null
   name?: Prisma.StringNullableWithAggregatesFilter<"Ability"> | string | null
@@ -427,8 +427,8 @@ export type AbilityCreateInput = {
   description?: string | null
   isActive?: boolean
   priority?: number
-  action: Prisma.ActionCreateNestedOneWithoutAbilitiesInput
   subject: Prisma.SubjectCreateNestedOneWithoutAbilitiesInput
+  action: Prisma.ActionCreateNestedOneWithoutAbilitiesInput
   role?: Prisma.RoleCreateNestedOneWithoutAbilitiesInput
   user?: Prisma.UserCreateNestedOneWithoutAbilitiesInput
 }
@@ -439,12 +439,12 @@ export type AbilityUncheckedCreateInput = {
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
-  actionId: string
   fields?: Prisma.AbilityCreatefieldsInput | string[]
   conditions?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   inverted?: boolean
   reason?: string | null
   subjectId: string
+  actionId: string
   roleId?: string | null
   userId?: string | null
   name?: string | null
@@ -466,8 +466,8 @@ export type AbilityUpdateInput = {
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   priority?: Prisma.IntFieldUpdateOperationsInput | number
-  action?: Prisma.ActionUpdateOneRequiredWithoutAbilitiesNestedInput
   subject?: Prisma.SubjectUpdateOneRequiredWithoutAbilitiesNestedInput
+  action?: Prisma.ActionUpdateOneRequiredWithoutAbilitiesNestedInput
   role?: Prisma.RoleUpdateOneWithoutAbilitiesNestedInput
   user?: Prisma.UserUpdateOneWithoutAbilitiesNestedInput
 }
@@ -478,12 +478,12 @@ export type AbilityUncheckedUpdateInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  actionId?: Prisma.StringFieldUpdateOperationsInput | string
   fields?: Prisma.AbilityUpdatefieldsInput | string[]
   conditions?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   inverted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   reason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   subjectId?: Prisma.StringFieldUpdateOperationsInput | string
+  actionId?: Prisma.StringFieldUpdateOperationsInput | string
   roleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   userId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -498,12 +498,12 @@ export type AbilityCreateManyInput = {
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
-  actionId: string
   fields?: Prisma.AbilityCreatefieldsInput | string[]
   conditions?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   inverted?: boolean
   reason?: string | null
   subjectId: string
+  actionId: string
   roleId?: string | null
   userId?: string | null
   name?: string | null
@@ -533,12 +533,12 @@ export type AbilityUncheckedUpdateManyInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  actionId?: Prisma.StringFieldUpdateOperationsInput | string
   fields?: Prisma.AbilityUpdatefieldsInput | string[]
   conditions?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   inverted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   reason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   subjectId?: Prisma.StringFieldUpdateOperationsInput | string
+  actionId?: Prisma.StringFieldUpdateOperationsInput | string
   roleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   userId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -571,12 +571,12 @@ export type AbilityCountOrderByAggregateInput = {
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   removedAt?: Prisma.SortOrder
-  actionId?: Prisma.SortOrder
   fields?: Prisma.SortOrder
   conditions?: Prisma.SortOrder
   inverted?: Prisma.SortOrder
   reason?: Prisma.SortOrder
   subjectId?: Prisma.SortOrder
+  actionId?: Prisma.SortOrder
   roleId?: Prisma.SortOrder
   userId?: Prisma.SortOrder
   name?: Prisma.SortOrder
@@ -596,10 +596,10 @@ export type AbilityMaxOrderByAggregateInput = {
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   removedAt?: Prisma.SortOrder
-  actionId?: Prisma.SortOrder
   inverted?: Prisma.SortOrder
   reason?: Prisma.SortOrder
   subjectId?: Prisma.SortOrder
+  actionId?: Prisma.SortOrder
   roleId?: Prisma.SortOrder
   userId?: Prisma.SortOrder
   name?: Prisma.SortOrder
@@ -614,10 +614,10 @@ export type AbilityMinOrderByAggregateInput = {
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   removedAt?: Prisma.SortOrder
-  actionId?: Prisma.SortOrder
   inverted?: Prisma.SortOrder
   reason?: Prisma.SortOrder
   subjectId?: Prisma.SortOrder
+  actionId?: Prisma.SortOrder
   roleId?: Prisma.SortOrder
   userId?: Prisma.SortOrder
   name?: Prisma.SortOrder
@@ -629,48 +629,6 @@ export type AbilityMinOrderByAggregateInput = {
 export type AbilitySumOrderByAggregateInput = {
   seq?: Prisma.SortOrder
   priority?: Prisma.SortOrder
-}
-
-export type AbilityCreateNestedManyWithoutActionInput = {
-  create?: Prisma.XOR<Prisma.AbilityCreateWithoutActionInput, Prisma.AbilityUncheckedCreateWithoutActionInput> | Prisma.AbilityCreateWithoutActionInput[] | Prisma.AbilityUncheckedCreateWithoutActionInput[]
-  connectOrCreate?: Prisma.AbilityCreateOrConnectWithoutActionInput | Prisma.AbilityCreateOrConnectWithoutActionInput[]
-  createMany?: Prisma.AbilityCreateManyActionInputEnvelope
-  connect?: Prisma.AbilityWhereUniqueInput | Prisma.AbilityWhereUniqueInput[]
-}
-
-export type AbilityUncheckedCreateNestedManyWithoutActionInput = {
-  create?: Prisma.XOR<Prisma.AbilityCreateWithoutActionInput, Prisma.AbilityUncheckedCreateWithoutActionInput> | Prisma.AbilityCreateWithoutActionInput[] | Prisma.AbilityUncheckedCreateWithoutActionInput[]
-  connectOrCreate?: Prisma.AbilityCreateOrConnectWithoutActionInput | Prisma.AbilityCreateOrConnectWithoutActionInput[]
-  createMany?: Prisma.AbilityCreateManyActionInputEnvelope
-  connect?: Prisma.AbilityWhereUniqueInput | Prisma.AbilityWhereUniqueInput[]
-}
-
-export type AbilityUpdateManyWithoutActionNestedInput = {
-  create?: Prisma.XOR<Prisma.AbilityCreateWithoutActionInput, Prisma.AbilityUncheckedCreateWithoutActionInput> | Prisma.AbilityCreateWithoutActionInput[] | Prisma.AbilityUncheckedCreateWithoutActionInput[]
-  connectOrCreate?: Prisma.AbilityCreateOrConnectWithoutActionInput | Prisma.AbilityCreateOrConnectWithoutActionInput[]
-  upsert?: Prisma.AbilityUpsertWithWhereUniqueWithoutActionInput | Prisma.AbilityUpsertWithWhereUniqueWithoutActionInput[]
-  createMany?: Prisma.AbilityCreateManyActionInputEnvelope
-  set?: Prisma.AbilityWhereUniqueInput | Prisma.AbilityWhereUniqueInput[]
-  disconnect?: Prisma.AbilityWhereUniqueInput | Prisma.AbilityWhereUniqueInput[]
-  delete?: Prisma.AbilityWhereUniqueInput | Prisma.AbilityWhereUniqueInput[]
-  connect?: Prisma.AbilityWhereUniqueInput | Prisma.AbilityWhereUniqueInput[]
-  update?: Prisma.AbilityUpdateWithWhereUniqueWithoutActionInput | Prisma.AbilityUpdateWithWhereUniqueWithoutActionInput[]
-  updateMany?: Prisma.AbilityUpdateManyWithWhereWithoutActionInput | Prisma.AbilityUpdateManyWithWhereWithoutActionInput[]
-  deleteMany?: Prisma.AbilityScalarWhereInput | Prisma.AbilityScalarWhereInput[]
-}
-
-export type AbilityUncheckedUpdateManyWithoutActionNestedInput = {
-  create?: Prisma.XOR<Prisma.AbilityCreateWithoutActionInput, Prisma.AbilityUncheckedCreateWithoutActionInput> | Prisma.AbilityCreateWithoutActionInput[] | Prisma.AbilityUncheckedCreateWithoutActionInput[]
-  connectOrCreate?: Prisma.AbilityCreateOrConnectWithoutActionInput | Prisma.AbilityCreateOrConnectWithoutActionInput[]
-  upsert?: Prisma.AbilityUpsertWithWhereUniqueWithoutActionInput | Prisma.AbilityUpsertWithWhereUniqueWithoutActionInput[]
-  createMany?: Prisma.AbilityCreateManyActionInputEnvelope
-  set?: Prisma.AbilityWhereUniqueInput | Prisma.AbilityWhereUniqueInput[]
-  disconnect?: Prisma.AbilityWhereUniqueInput | Prisma.AbilityWhereUniqueInput[]
-  delete?: Prisma.AbilityWhereUniqueInput | Prisma.AbilityWhereUniqueInput[]
-  connect?: Prisma.AbilityWhereUniqueInput | Prisma.AbilityWhereUniqueInput[]
-  update?: Prisma.AbilityUpdateWithWhereUniqueWithoutActionInput | Prisma.AbilityUpdateWithWhereUniqueWithoutActionInput[]
-  updateMany?: Prisma.AbilityUpdateManyWithWhereWithoutActionInput | Prisma.AbilityUpdateManyWithWhereWithoutActionInput[]
-  deleteMany?: Prisma.AbilityScalarWhereInput | Prisma.AbilityScalarWhereInput[]
 }
 
 export type AbilityCreateNestedManyWithoutSubjectInput = {
@@ -712,6 +670,48 @@ export type AbilityUncheckedUpdateManyWithoutSubjectNestedInput = {
   connect?: Prisma.AbilityWhereUniqueInput | Prisma.AbilityWhereUniqueInput[]
   update?: Prisma.AbilityUpdateWithWhereUniqueWithoutSubjectInput | Prisma.AbilityUpdateWithWhereUniqueWithoutSubjectInput[]
   updateMany?: Prisma.AbilityUpdateManyWithWhereWithoutSubjectInput | Prisma.AbilityUpdateManyWithWhereWithoutSubjectInput[]
+  deleteMany?: Prisma.AbilityScalarWhereInput | Prisma.AbilityScalarWhereInput[]
+}
+
+export type AbilityCreateNestedManyWithoutActionInput = {
+  create?: Prisma.XOR<Prisma.AbilityCreateWithoutActionInput, Prisma.AbilityUncheckedCreateWithoutActionInput> | Prisma.AbilityCreateWithoutActionInput[] | Prisma.AbilityUncheckedCreateWithoutActionInput[]
+  connectOrCreate?: Prisma.AbilityCreateOrConnectWithoutActionInput | Prisma.AbilityCreateOrConnectWithoutActionInput[]
+  createMany?: Prisma.AbilityCreateManyActionInputEnvelope
+  connect?: Prisma.AbilityWhereUniqueInput | Prisma.AbilityWhereUniqueInput[]
+}
+
+export type AbilityUncheckedCreateNestedManyWithoutActionInput = {
+  create?: Prisma.XOR<Prisma.AbilityCreateWithoutActionInput, Prisma.AbilityUncheckedCreateWithoutActionInput> | Prisma.AbilityCreateWithoutActionInput[] | Prisma.AbilityUncheckedCreateWithoutActionInput[]
+  connectOrCreate?: Prisma.AbilityCreateOrConnectWithoutActionInput | Prisma.AbilityCreateOrConnectWithoutActionInput[]
+  createMany?: Prisma.AbilityCreateManyActionInputEnvelope
+  connect?: Prisma.AbilityWhereUniqueInput | Prisma.AbilityWhereUniqueInput[]
+}
+
+export type AbilityUpdateManyWithoutActionNestedInput = {
+  create?: Prisma.XOR<Prisma.AbilityCreateWithoutActionInput, Prisma.AbilityUncheckedCreateWithoutActionInput> | Prisma.AbilityCreateWithoutActionInput[] | Prisma.AbilityUncheckedCreateWithoutActionInput[]
+  connectOrCreate?: Prisma.AbilityCreateOrConnectWithoutActionInput | Prisma.AbilityCreateOrConnectWithoutActionInput[]
+  upsert?: Prisma.AbilityUpsertWithWhereUniqueWithoutActionInput | Prisma.AbilityUpsertWithWhereUniqueWithoutActionInput[]
+  createMany?: Prisma.AbilityCreateManyActionInputEnvelope
+  set?: Prisma.AbilityWhereUniqueInput | Prisma.AbilityWhereUniqueInput[]
+  disconnect?: Prisma.AbilityWhereUniqueInput | Prisma.AbilityWhereUniqueInput[]
+  delete?: Prisma.AbilityWhereUniqueInput | Prisma.AbilityWhereUniqueInput[]
+  connect?: Prisma.AbilityWhereUniqueInput | Prisma.AbilityWhereUniqueInput[]
+  update?: Prisma.AbilityUpdateWithWhereUniqueWithoutActionInput | Prisma.AbilityUpdateWithWhereUniqueWithoutActionInput[]
+  updateMany?: Prisma.AbilityUpdateManyWithWhereWithoutActionInput | Prisma.AbilityUpdateManyWithWhereWithoutActionInput[]
+  deleteMany?: Prisma.AbilityScalarWhereInput | Prisma.AbilityScalarWhereInput[]
+}
+
+export type AbilityUncheckedUpdateManyWithoutActionNestedInput = {
+  create?: Prisma.XOR<Prisma.AbilityCreateWithoutActionInput, Prisma.AbilityUncheckedCreateWithoutActionInput> | Prisma.AbilityCreateWithoutActionInput[] | Prisma.AbilityUncheckedCreateWithoutActionInput[]
+  connectOrCreate?: Prisma.AbilityCreateOrConnectWithoutActionInput | Prisma.AbilityCreateOrConnectWithoutActionInput[]
+  upsert?: Prisma.AbilityUpsertWithWhereUniqueWithoutActionInput | Prisma.AbilityUpsertWithWhereUniqueWithoutActionInput[]
+  createMany?: Prisma.AbilityCreateManyActionInputEnvelope
+  set?: Prisma.AbilityWhereUniqueInput | Prisma.AbilityWhereUniqueInput[]
+  disconnect?: Prisma.AbilityWhereUniqueInput | Prisma.AbilityWhereUniqueInput[]
+  delete?: Prisma.AbilityWhereUniqueInput | Prisma.AbilityWhereUniqueInput[]
+  connect?: Prisma.AbilityWhereUniqueInput | Prisma.AbilityWhereUniqueInput[]
+  update?: Prisma.AbilityUpdateWithWhereUniqueWithoutActionInput | Prisma.AbilityUpdateWithWhereUniqueWithoutActionInput[]
+  updateMany?: Prisma.AbilityUpdateManyWithWhereWithoutActionInput | Prisma.AbilityUpdateManyWithWhereWithoutActionInput[]
   deleteMany?: Prisma.AbilityScalarWhereInput | Prisma.AbilityScalarWhereInput[]
 }
 
@@ -808,6 +808,93 @@ export type AbilityUncheckedUpdateManyWithoutUserNestedInput = {
   deleteMany?: Prisma.AbilityScalarWhereInput | Prisma.AbilityScalarWhereInput[]
 }
 
+export type AbilityCreateWithoutSubjectInput = {
+  id?: string
+  seq?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string | null
+  removedAt?: Date | string | null
+  fields?: Prisma.AbilityCreatefieldsInput | string[]
+  conditions?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  inverted?: boolean
+  reason?: string | null
+  name?: string | null
+  description?: string | null
+  isActive?: boolean
+  priority?: number
+  action: Prisma.ActionCreateNestedOneWithoutAbilitiesInput
+  role?: Prisma.RoleCreateNestedOneWithoutAbilitiesInput
+  user?: Prisma.UserCreateNestedOneWithoutAbilitiesInput
+}
+
+export type AbilityUncheckedCreateWithoutSubjectInput = {
+  id?: string
+  seq?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string | null
+  removedAt?: Date | string | null
+  fields?: Prisma.AbilityCreatefieldsInput | string[]
+  conditions?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  inverted?: boolean
+  reason?: string | null
+  actionId: string
+  roleId?: string | null
+  userId?: string | null
+  name?: string | null
+  description?: string | null
+  isActive?: boolean
+  priority?: number
+}
+
+export type AbilityCreateOrConnectWithoutSubjectInput = {
+  where: Prisma.AbilityWhereUniqueInput
+  create: Prisma.XOR<Prisma.AbilityCreateWithoutSubjectInput, Prisma.AbilityUncheckedCreateWithoutSubjectInput>
+}
+
+export type AbilityCreateManySubjectInputEnvelope = {
+  data: Prisma.AbilityCreateManySubjectInput | Prisma.AbilityCreateManySubjectInput[]
+  skipDuplicates?: boolean
+}
+
+export type AbilityUpsertWithWhereUniqueWithoutSubjectInput = {
+  where: Prisma.AbilityWhereUniqueInput
+  update: Prisma.XOR<Prisma.AbilityUpdateWithoutSubjectInput, Prisma.AbilityUncheckedUpdateWithoutSubjectInput>
+  create: Prisma.XOR<Prisma.AbilityCreateWithoutSubjectInput, Prisma.AbilityUncheckedCreateWithoutSubjectInput>
+}
+
+export type AbilityUpdateWithWhereUniqueWithoutSubjectInput = {
+  where: Prisma.AbilityWhereUniqueInput
+  data: Prisma.XOR<Prisma.AbilityUpdateWithoutSubjectInput, Prisma.AbilityUncheckedUpdateWithoutSubjectInput>
+}
+
+export type AbilityUpdateManyWithWhereWithoutSubjectInput = {
+  where: Prisma.AbilityScalarWhereInput
+  data: Prisma.XOR<Prisma.AbilityUpdateManyMutationInput, Prisma.AbilityUncheckedUpdateManyWithoutSubjectInput>
+}
+
+export type AbilityScalarWhereInput = {
+  AND?: Prisma.AbilityScalarWhereInput | Prisma.AbilityScalarWhereInput[]
+  OR?: Prisma.AbilityScalarWhereInput[]
+  NOT?: Prisma.AbilityScalarWhereInput | Prisma.AbilityScalarWhereInput[]
+  id?: Prisma.StringFilter<"Ability"> | string
+  seq?: Prisma.IntFilter<"Ability"> | number
+  createdAt?: Prisma.DateTimeFilter<"Ability"> | Date | string
+  updatedAt?: Prisma.DateTimeNullableFilter<"Ability"> | Date | string | null
+  removedAt?: Prisma.DateTimeNullableFilter<"Ability"> | Date | string | null
+  fields?: Prisma.StringNullableListFilter<"Ability">
+  conditions?: Prisma.JsonNullableFilter<"Ability">
+  inverted?: Prisma.BoolFilter<"Ability"> | boolean
+  reason?: Prisma.StringNullableFilter<"Ability"> | string | null
+  subjectId?: Prisma.StringFilter<"Ability"> | string
+  actionId?: Prisma.StringFilter<"Ability"> | string
+  roleId?: Prisma.StringNullableFilter<"Ability"> | string | null
+  userId?: Prisma.StringNullableFilter<"Ability"> | string | null
+  name?: Prisma.StringNullableFilter<"Ability"> | string | null
+  description?: Prisma.StringNullableFilter<"Ability"> | string | null
+  isActive?: Prisma.BoolFilter<"Ability"> | boolean
+  priority?: Prisma.IntFilter<"Ability"> | number
+}
+
 export type AbilityCreateWithoutActionInput = {
   id?: string
   seq?: number
@@ -872,93 +959,6 @@ export type AbilityUpdateManyWithWhereWithoutActionInput = {
   data: Prisma.XOR<Prisma.AbilityUpdateManyMutationInput, Prisma.AbilityUncheckedUpdateManyWithoutActionInput>
 }
 
-export type AbilityScalarWhereInput = {
-  AND?: Prisma.AbilityScalarWhereInput | Prisma.AbilityScalarWhereInput[]
-  OR?: Prisma.AbilityScalarWhereInput[]
-  NOT?: Prisma.AbilityScalarWhereInput | Prisma.AbilityScalarWhereInput[]
-  id?: Prisma.StringFilter<"Ability"> | string
-  seq?: Prisma.IntFilter<"Ability"> | number
-  createdAt?: Prisma.DateTimeFilter<"Ability"> | Date | string
-  updatedAt?: Prisma.DateTimeNullableFilter<"Ability"> | Date | string | null
-  removedAt?: Prisma.DateTimeNullableFilter<"Ability"> | Date | string | null
-  actionId?: Prisma.StringFilter<"Ability"> | string
-  fields?: Prisma.StringNullableListFilter<"Ability">
-  conditions?: Prisma.JsonNullableFilter<"Ability">
-  inverted?: Prisma.BoolFilter<"Ability"> | boolean
-  reason?: Prisma.StringNullableFilter<"Ability"> | string | null
-  subjectId?: Prisma.StringFilter<"Ability"> | string
-  roleId?: Prisma.StringNullableFilter<"Ability"> | string | null
-  userId?: Prisma.StringNullableFilter<"Ability"> | string | null
-  name?: Prisma.StringNullableFilter<"Ability"> | string | null
-  description?: Prisma.StringNullableFilter<"Ability"> | string | null
-  isActive?: Prisma.BoolFilter<"Ability"> | boolean
-  priority?: Prisma.IntFilter<"Ability"> | number
-}
-
-export type AbilityCreateWithoutSubjectInput = {
-  id?: string
-  seq?: number
-  createdAt?: Date | string
-  updatedAt?: Date | string | null
-  removedAt?: Date | string | null
-  fields?: Prisma.AbilityCreatefieldsInput | string[]
-  conditions?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
-  inverted?: boolean
-  reason?: string | null
-  name?: string | null
-  description?: string | null
-  isActive?: boolean
-  priority?: number
-  action: Prisma.ActionCreateNestedOneWithoutAbilitiesInput
-  role?: Prisma.RoleCreateNestedOneWithoutAbilitiesInput
-  user?: Prisma.UserCreateNestedOneWithoutAbilitiesInput
-}
-
-export type AbilityUncheckedCreateWithoutSubjectInput = {
-  id?: string
-  seq?: number
-  createdAt?: Date | string
-  updatedAt?: Date | string | null
-  removedAt?: Date | string | null
-  actionId: string
-  fields?: Prisma.AbilityCreatefieldsInput | string[]
-  conditions?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
-  inverted?: boolean
-  reason?: string | null
-  roleId?: string | null
-  userId?: string | null
-  name?: string | null
-  description?: string | null
-  isActive?: boolean
-  priority?: number
-}
-
-export type AbilityCreateOrConnectWithoutSubjectInput = {
-  where: Prisma.AbilityWhereUniqueInput
-  create: Prisma.XOR<Prisma.AbilityCreateWithoutSubjectInput, Prisma.AbilityUncheckedCreateWithoutSubjectInput>
-}
-
-export type AbilityCreateManySubjectInputEnvelope = {
-  data: Prisma.AbilityCreateManySubjectInput | Prisma.AbilityCreateManySubjectInput[]
-  skipDuplicates?: boolean
-}
-
-export type AbilityUpsertWithWhereUniqueWithoutSubjectInput = {
-  where: Prisma.AbilityWhereUniqueInput
-  update: Prisma.XOR<Prisma.AbilityUpdateWithoutSubjectInput, Prisma.AbilityUncheckedUpdateWithoutSubjectInput>
-  create: Prisma.XOR<Prisma.AbilityCreateWithoutSubjectInput, Prisma.AbilityUncheckedCreateWithoutSubjectInput>
-}
-
-export type AbilityUpdateWithWhereUniqueWithoutSubjectInput = {
-  where: Prisma.AbilityWhereUniqueInput
-  data: Prisma.XOR<Prisma.AbilityUpdateWithoutSubjectInput, Prisma.AbilityUncheckedUpdateWithoutSubjectInput>
-}
-
-export type AbilityUpdateManyWithWhereWithoutSubjectInput = {
-  where: Prisma.AbilityScalarWhereInput
-  data: Prisma.XOR<Prisma.AbilityUpdateManyMutationInput, Prisma.AbilityUncheckedUpdateManyWithoutSubjectInput>
-}
-
 export type AbilityCreateWithoutRoleInput = {
   id?: string
   seq?: number
@@ -973,8 +973,8 @@ export type AbilityCreateWithoutRoleInput = {
   description?: string | null
   isActive?: boolean
   priority?: number
-  action: Prisma.ActionCreateNestedOneWithoutAbilitiesInput
   subject: Prisma.SubjectCreateNestedOneWithoutAbilitiesInput
+  action: Prisma.ActionCreateNestedOneWithoutAbilitiesInput
   user?: Prisma.UserCreateNestedOneWithoutAbilitiesInput
 }
 
@@ -984,12 +984,12 @@ export type AbilityUncheckedCreateWithoutRoleInput = {
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
-  actionId: string
   fields?: Prisma.AbilityCreatefieldsInput | string[]
   conditions?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   inverted?: boolean
   reason?: string | null
   subjectId: string
+  actionId: string
   userId?: string | null
   name?: string | null
   description?: string | null
@@ -1037,8 +1037,8 @@ export type AbilityCreateWithoutUserInput = {
   description?: string | null
   isActive?: boolean
   priority?: number
-  action: Prisma.ActionCreateNestedOneWithoutAbilitiesInput
   subject: Prisma.SubjectCreateNestedOneWithoutAbilitiesInput
+  action: Prisma.ActionCreateNestedOneWithoutAbilitiesInput
   role?: Prisma.RoleCreateNestedOneWithoutAbilitiesInput
 }
 
@@ -1048,12 +1048,12 @@ export type AbilityUncheckedCreateWithoutUserInput = {
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
-  actionId: string
   fields?: Prisma.AbilityCreatefieldsInput | string[]
   conditions?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   inverted?: boolean
   reason?: string | null
   subjectId: string
+  actionId: string
   roleId?: string | null
   name?: string | null
   description?: string | null
@@ -1085,6 +1085,81 @@ export type AbilityUpdateWithWhereUniqueWithoutUserInput = {
 export type AbilityUpdateManyWithWhereWithoutUserInput = {
   where: Prisma.AbilityScalarWhereInput
   data: Prisma.XOR<Prisma.AbilityUpdateManyMutationInput, Prisma.AbilityUncheckedUpdateManyWithoutUserInput>
+}
+
+export type AbilityCreateManySubjectInput = {
+  id?: string
+  seq?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string | null
+  removedAt?: Date | string | null
+  fields?: Prisma.AbilityCreatefieldsInput | string[]
+  conditions?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  inverted?: boolean
+  reason?: string | null
+  actionId: string
+  roleId?: string | null
+  userId?: string | null
+  name?: string | null
+  description?: string | null
+  isActive?: boolean
+  priority?: number
+}
+
+export type AbilityUpdateWithoutSubjectInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  fields?: Prisma.AbilityUpdatefieldsInput | string[]
+  conditions?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  inverted?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  reason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  priority?: Prisma.IntFieldUpdateOperationsInput | number
+  action?: Prisma.ActionUpdateOneRequiredWithoutAbilitiesNestedInput
+  role?: Prisma.RoleUpdateOneWithoutAbilitiesNestedInput
+  user?: Prisma.UserUpdateOneWithoutAbilitiesNestedInput
+}
+
+export type AbilityUncheckedUpdateWithoutSubjectInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  seq?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  fields?: Prisma.AbilityUpdatefieldsInput | string[]
+  conditions?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  inverted?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  reason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  actionId?: Prisma.StringFieldUpdateOperationsInput | string
+  roleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  userId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  priority?: Prisma.IntFieldUpdateOperationsInput | number
+}
+
+export type AbilityUncheckedUpdateManyWithoutSubjectInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  seq?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  fields?: Prisma.AbilityUpdatefieldsInput | string[]
+  conditions?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  inverted?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  reason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  actionId?: Prisma.StringFieldUpdateOperationsInput | string
+  roleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  userId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  priority?: Prisma.IntFieldUpdateOperationsInput | number
 }
 
 export type AbilityCreateManyActionInput = {
@@ -1162,93 +1237,18 @@ export type AbilityUncheckedUpdateManyWithoutActionInput = {
   priority?: Prisma.IntFieldUpdateOperationsInput | number
 }
 
-export type AbilityCreateManySubjectInput = {
-  id?: string
-  seq?: number
-  createdAt?: Date | string
-  updatedAt?: Date | string | null
-  removedAt?: Date | string | null
-  actionId: string
-  fields?: Prisma.AbilityCreatefieldsInput | string[]
-  conditions?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
-  inverted?: boolean
-  reason?: string | null
-  roleId?: string | null
-  userId?: string | null
-  name?: string | null
-  description?: string | null
-  isActive?: boolean
-  priority?: number
-}
-
-export type AbilityUpdateWithoutSubjectInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  fields?: Prisma.AbilityUpdatefieldsInput | string[]
-  conditions?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
-  inverted?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  reason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  priority?: Prisma.IntFieldUpdateOperationsInput | number
-  action?: Prisma.ActionUpdateOneRequiredWithoutAbilitiesNestedInput
-  role?: Prisma.RoleUpdateOneWithoutAbilitiesNestedInput
-  user?: Prisma.UserUpdateOneWithoutAbilitiesNestedInput
-}
-
-export type AbilityUncheckedUpdateWithoutSubjectInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  seq?: Prisma.IntFieldUpdateOperationsInput | number
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  actionId?: Prisma.StringFieldUpdateOperationsInput | string
-  fields?: Prisma.AbilityUpdatefieldsInput | string[]
-  conditions?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
-  inverted?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  reason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  roleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  userId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  priority?: Prisma.IntFieldUpdateOperationsInput | number
-}
-
-export type AbilityUncheckedUpdateManyWithoutSubjectInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  seq?: Prisma.IntFieldUpdateOperationsInput | number
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  actionId?: Prisma.StringFieldUpdateOperationsInput | string
-  fields?: Prisma.AbilityUpdatefieldsInput | string[]
-  conditions?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
-  inverted?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  reason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  roleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  userId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  priority?: Prisma.IntFieldUpdateOperationsInput | number
-}
-
 export type AbilityCreateManyRoleInput = {
   id?: string
   seq?: number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
-  actionId: string
   fields?: Prisma.AbilityCreatefieldsInput | string[]
   conditions?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   inverted?: boolean
   reason?: string | null
   subjectId: string
+  actionId: string
   userId?: string | null
   name?: string | null
   description?: string | null
@@ -1269,8 +1269,8 @@ export type AbilityUpdateWithoutRoleInput = {
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   priority?: Prisma.IntFieldUpdateOperationsInput | number
-  action?: Prisma.ActionUpdateOneRequiredWithoutAbilitiesNestedInput
   subject?: Prisma.SubjectUpdateOneRequiredWithoutAbilitiesNestedInput
+  action?: Prisma.ActionUpdateOneRequiredWithoutAbilitiesNestedInput
   user?: Prisma.UserUpdateOneWithoutAbilitiesNestedInput
 }
 
@@ -1280,12 +1280,12 @@ export type AbilityUncheckedUpdateWithoutRoleInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  actionId?: Prisma.StringFieldUpdateOperationsInput | string
   fields?: Prisma.AbilityUpdatefieldsInput | string[]
   conditions?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   inverted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   reason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   subjectId?: Prisma.StringFieldUpdateOperationsInput | string
+  actionId?: Prisma.StringFieldUpdateOperationsInput | string
   userId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1299,12 +1299,12 @@ export type AbilityUncheckedUpdateManyWithoutRoleInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  actionId?: Prisma.StringFieldUpdateOperationsInput | string
   fields?: Prisma.AbilityUpdatefieldsInput | string[]
   conditions?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   inverted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   reason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   subjectId?: Prisma.StringFieldUpdateOperationsInput | string
+  actionId?: Prisma.StringFieldUpdateOperationsInput | string
   userId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1318,12 +1318,12 @@ export type AbilityCreateManyUserInput = {
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
-  actionId: string
   fields?: Prisma.AbilityCreatefieldsInput | string[]
   conditions?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   inverted?: boolean
   reason?: string | null
   subjectId: string
+  actionId: string
   roleId?: string | null
   name?: string | null
   description?: string | null
@@ -1344,8 +1344,8 @@ export type AbilityUpdateWithoutUserInput = {
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   priority?: Prisma.IntFieldUpdateOperationsInput | number
-  action?: Prisma.ActionUpdateOneRequiredWithoutAbilitiesNestedInput
   subject?: Prisma.SubjectUpdateOneRequiredWithoutAbilitiesNestedInput
+  action?: Prisma.ActionUpdateOneRequiredWithoutAbilitiesNestedInput
   role?: Prisma.RoleUpdateOneWithoutAbilitiesNestedInput
 }
 
@@ -1355,12 +1355,12 @@ export type AbilityUncheckedUpdateWithoutUserInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  actionId?: Prisma.StringFieldUpdateOperationsInput | string
   fields?: Prisma.AbilityUpdatefieldsInput | string[]
   conditions?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   inverted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   reason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   subjectId?: Prisma.StringFieldUpdateOperationsInput | string
+  actionId?: Prisma.StringFieldUpdateOperationsInput | string
   roleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1374,12 +1374,12 @@ export type AbilityUncheckedUpdateManyWithoutUserInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  actionId?: Prisma.StringFieldUpdateOperationsInput | string
   fields?: Prisma.AbilityUpdatefieldsInput | string[]
   conditions?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   inverted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   reason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   subjectId?: Prisma.StringFieldUpdateOperationsInput | string
+  actionId?: Prisma.StringFieldUpdateOperationsInput | string
   roleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1395,20 +1395,20 @@ export type AbilitySelect<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   createdAt?: boolean
   updatedAt?: boolean
   removedAt?: boolean
-  actionId?: boolean
   fields?: boolean
   conditions?: boolean
   inverted?: boolean
   reason?: boolean
   subjectId?: boolean
+  actionId?: boolean
   roleId?: boolean
   userId?: boolean
   name?: boolean
   description?: boolean
   isActive?: boolean
   priority?: boolean
-  action?: boolean | Prisma.ActionDefaultArgs<ExtArgs>
   subject?: boolean | Prisma.SubjectDefaultArgs<ExtArgs>
+  action?: boolean | Prisma.ActionDefaultArgs<ExtArgs>
   role?: boolean | Prisma.Ability$roleArgs<ExtArgs>
   user?: boolean | Prisma.Ability$userArgs<ExtArgs>
 }, ExtArgs["result"]["ability"]>
@@ -1419,20 +1419,20 @@ export type AbilitySelectCreateManyAndReturn<ExtArgs extends runtime.Types.Exten
   createdAt?: boolean
   updatedAt?: boolean
   removedAt?: boolean
-  actionId?: boolean
   fields?: boolean
   conditions?: boolean
   inverted?: boolean
   reason?: boolean
   subjectId?: boolean
+  actionId?: boolean
   roleId?: boolean
   userId?: boolean
   name?: boolean
   description?: boolean
   isActive?: boolean
   priority?: boolean
-  action?: boolean | Prisma.ActionDefaultArgs<ExtArgs>
   subject?: boolean | Prisma.SubjectDefaultArgs<ExtArgs>
+  action?: boolean | Prisma.ActionDefaultArgs<ExtArgs>
   role?: boolean | Prisma.Ability$roleArgs<ExtArgs>
   user?: boolean | Prisma.Ability$userArgs<ExtArgs>
 }, ExtArgs["result"]["ability"]>
@@ -1443,20 +1443,20 @@ export type AbilitySelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Exten
   createdAt?: boolean
   updatedAt?: boolean
   removedAt?: boolean
-  actionId?: boolean
   fields?: boolean
   conditions?: boolean
   inverted?: boolean
   reason?: boolean
   subjectId?: boolean
+  actionId?: boolean
   roleId?: boolean
   userId?: boolean
   name?: boolean
   description?: boolean
   isActive?: boolean
   priority?: boolean
-  action?: boolean | Prisma.ActionDefaultArgs<ExtArgs>
   subject?: boolean | Prisma.SubjectDefaultArgs<ExtArgs>
+  action?: boolean | Prisma.ActionDefaultArgs<ExtArgs>
   role?: boolean | Prisma.Ability$roleArgs<ExtArgs>
   user?: boolean | Prisma.Ability$userArgs<ExtArgs>
 }, ExtArgs["result"]["ability"]>
@@ -1467,12 +1467,12 @@ export type AbilitySelectScalar = {
   createdAt?: boolean
   updatedAt?: boolean
   removedAt?: boolean
-  actionId?: boolean
   fields?: boolean
   conditions?: boolean
   inverted?: boolean
   reason?: boolean
   subjectId?: boolean
+  actionId?: boolean
   roleId?: boolean
   userId?: boolean
   name?: boolean
@@ -1481,22 +1481,22 @@ export type AbilitySelectScalar = {
   priority?: boolean
 }
 
-export type AbilityOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "seq" | "createdAt" | "updatedAt" | "removedAt" | "actionId" | "fields" | "conditions" | "inverted" | "reason" | "subjectId" | "roleId" | "userId" | "name" | "description" | "isActive" | "priority", ExtArgs["result"]["ability"]>
+export type AbilityOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "seq" | "createdAt" | "updatedAt" | "removedAt" | "fields" | "conditions" | "inverted" | "reason" | "subjectId" | "actionId" | "roleId" | "userId" | "name" | "description" | "isActive" | "priority", ExtArgs["result"]["ability"]>
 export type AbilityInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  action?: boolean | Prisma.ActionDefaultArgs<ExtArgs>
   subject?: boolean | Prisma.SubjectDefaultArgs<ExtArgs>
+  action?: boolean | Prisma.ActionDefaultArgs<ExtArgs>
   role?: boolean | Prisma.Ability$roleArgs<ExtArgs>
   user?: boolean | Prisma.Ability$userArgs<ExtArgs>
 }
 export type AbilityIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  action?: boolean | Prisma.ActionDefaultArgs<ExtArgs>
   subject?: boolean | Prisma.SubjectDefaultArgs<ExtArgs>
+  action?: boolean | Prisma.ActionDefaultArgs<ExtArgs>
   role?: boolean | Prisma.Ability$roleArgs<ExtArgs>
   user?: boolean | Prisma.Ability$userArgs<ExtArgs>
 }
 export type AbilityIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  action?: boolean | Prisma.ActionDefaultArgs<ExtArgs>
   subject?: boolean | Prisma.SubjectDefaultArgs<ExtArgs>
+  action?: boolean | Prisma.ActionDefaultArgs<ExtArgs>
   role?: boolean | Prisma.Ability$roleArgs<ExtArgs>
   user?: boolean | Prisma.Ability$userArgs<ExtArgs>
 }
@@ -1504,8 +1504,8 @@ export type AbilityIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Exte
 export type $AbilityPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "Ability"
   objects: {
-    action: Prisma.$ActionPayload<ExtArgs>
     subject: Prisma.$SubjectPayload<ExtArgs>
+    action: Prisma.$ActionPayload<ExtArgs>
     role: Prisma.$RolePayload<ExtArgs> | null
     user: Prisma.$UserPayload<ExtArgs> | null
   }
@@ -1515,10 +1515,6 @@ export type $AbilityPayload<ExtArgs extends runtime.Types.Extensions.InternalArg
     createdAt: Date
     updatedAt: Date | null
     removedAt: Date | null
-    /**
-     * @displayName 액션 ID
-     */
-    actionId: string
     /**
      * @displayName 대상 필드
      */
@@ -1535,17 +1531,9 @@ export type $AbilityPayload<ExtArgs extends runtime.Types.Extensions.InternalArg
      * @displayName 거부 사유
      */
     reason: string | null
-    /**
-     * @displayName Subject ID
-     */
     subjectId: string
-    /**
-     * @displayName Role ID
-     */
+    actionId: string
     roleId: string | null
-    /**
-     * @displayName User ID
-     */
     userId: string | null
     /**
      * @displayName 이름
@@ -1957,8 +1945,8 @@ readonly fields: AbilityFieldRefs;
  */
 export interface Prisma__AbilityClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
-  action<T extends Prisma.ActionDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.ActionDefaultArgs<ExtArgs>>): Prisma.Prisma__ActionClient<runtime.Types.Result.GetResult<Prisma.$ActionPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   subject<T extends Prisma.SubjectDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.SubjectDefaultArgs<ExtArgs>>): Prisma.Prisma__SubjectClient<runtime.Types.Result.GetResult<Prisma.$SubjectPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  action<T extends Prisma.ActionDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.ActionDefaultArgs<ExtArgs>>): Prisma.Prisma__ActionClient<runtime.Types.Result.GetResult<Prisma.$ActionPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   role<T extends Prisma.Ability$roleArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Ability$roleArgs<ExtArgs>>): Prisma.Prisma__RoleClient<runtime.Types.Result.GetResult<Prisma.$RolePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   user<T extends Prisma.Ability$userArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Ability$userArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   /**
@@ -1995,12 +1983,12 @@ export interface AbilityFieldRefs {
   readonly createdAt: Prisma.FieldRef<"Ability", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"Ability", 'DateTime'>
   readonly removedAt: Prisma.FieldRef<"Ability", 'DateTime'>
-  readonly actionId: Prisma.FieldRef<"Ability", 'String'>
   readonly fields: Prisma.FieldRef<"Ability", 'String[]'>
   readonly conditions: Prisma.FieldRef<"Ability", 'Json'>
   readonly inverted: Prisma.FieldRef<"Ability", 'Boolean'>
   readonly reason: Prisma.FieldRef<"Ability", 'String'>
   readonly subjectId: Prisma.FieldRef<"Ability", 'String'>
+  readonly actionId: Prisma.FieldRef<"Ability", 'String'>
   readonly roleId: Prisma.FieldRef<"Ability", 'String'>
   readonly userId: Prisma.FieldRef<"Ability", 'String'>
   readonly name: Prisma.FieldRef<"Ability", 'String'>

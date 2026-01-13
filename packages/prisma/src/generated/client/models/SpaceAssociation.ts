@@ -14,7 +14,7 @@ import type * as Prisma from "../internal/prismaNamespace"
 
 /**
  * Model SpaceAssociation
- * 
+ * @displayName 공간 그룹
  */
 export type SpaceAssociationModel = runtime.Types.Result.DefaultSelection<Prisma.$SpaceAssociationPayload>
 

@@ -85,6 +85,7 @@ export class UsersController {
 
 	@Get()
 	@ApiOperation({
+		operationId: "getUsers",
 		summary: "회원 목록 조회",
 		description:
 			"현재 Space 내의 회원 목록을 조회합니다. 검색, 필터링, 페이지네이션을 지원하며 통계 정보도 함께 반환합니다.",
@@ -133,6 +134,7 @@ export class UsersController {
 
 	@Get(":id")
 	@ApiOperation({
+		operationId: "getUserById",
 		summary: "회원 상세 조회",
 		description:
 			"특정 회원의 상세 정보를 조회합니다. Profile, Tenant, Role, Space 정보를 포함합니다.",
@@ -164,6 +166,7 @@ export class UsersController {
 	@Post()
 	@HttpCode(HttpStatus.CREATED)
 	@ApiOperation({
+		operationId: "createUser",
 		summary: "회원 등록",
 		description:
 			"새로운 회원을 등록합니다. 이메일, 전화번호, 이름은 중복될 수 없습니다.",
@@ -202,6 +205,7 @@ export class UsersController {
 
 	@Patch(":id")
 	@ApiOperation({
+		operationId: "updateUser",
 		summary: "회원 수정",
 		description: "회원 정보를 수정합니다. 변경하려는 필드만 전송하면 됩니다.",
 	})
@@ -246,6 +250,7 @@ export class UsersController {
 	@Delete(":id")
 	@HttpCode(HttpStatus.NO_CONTENT)
 	@ApiOperation({
+		operationId: "deleteUser",
 		summary: "회원 삭제",
 		description:
 			"회원을 삭제합니다 (Soft Delete). 자신의 계정은 삭제할 수 없습니다.",
@@ -273,6 +278,7 @@ export class UsersController {
 
 	@Patch("me/selected-space")
 	@ApiOperation({
+		operationId: "updateSelectedSpace",
 		summary: "선택된 Space 변경",
 		description:
 			"현재 로그인한 사용자의 선택된 Space를 변경합니다. 변경하려는 Space는 사용자의 Tenant에 포함되어 있어야 합니다.",

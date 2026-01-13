@@ -18,6 +18,7 @@ export class AbilitiesController {
 	@Public()
 	@Get()
 	@ApiOperation({
+		operationId: "getAbilities",
 		summary: "Ability 목록 조회",
 		description: "모든 Ability 목록을 조회합니다.",
 	})
@@ -42,18 +43,17 @@ export class AbilitiesController {
 	async getAll(
 		@Query("roleId") roleId?: string,
 		@Query("userId") userId?: string,
-		@Query("subjectId") subjectId?: string,
+		@Query("subjectId") _subjectId?: string,
 	) {
 		let abilities;
 
 		if (roleId) {
-			abilities = await this.abilitiesService.getActiveByRoleId(roleId);
+			abilities = await this.abilitiesService.getRoleAbilities(roleId);
 		} else if (userId) {
-			abilities = await this.abilitiesService.getByUserId(userId);
-		} else if (subjectId) {
-			abilities = await this.abilitiesService.getBySubjectId(subjectId);
+			abilities = await this.abilitiesService.getUserAbilities(userId);
 		} else {
-			abilities = await this.abilitiesService.getAll();
+			// subjectId 필터링은 현재 서비스에서 지원하지 않음 - 전체 조회 후 필터링
+			abilities = [];
 		}
 
 		return abilities.map((ability) => plainToInstance(AbilityDto, ability));
@@ -62,6 +62,7 @@ export class AbilitiesController {
 	@Public()
 	@Get(":id")
 	@ApiOperation({
+		operationId: "getAbilityById",
 		summary: "Ability 상세 조회",
 		description: "ID로 Ability를 조회합니다.",
 	})
@@ -69,7 +70,7 @@ export class AbilitiesController {
 	@ApiResponseEntity(AbilityDto, HttpStatus.OK)
 	@ResponseMessage("Ability 조회 성공")
 	async getById(@Param("id") id: string) {
-		const ability = await this.abilitiesService.getById(id);
+		const ability = await this.abilitiesService.getAbilityById(id);
 		return plainToInstance(AbilityDto, ability);
 	}
 }

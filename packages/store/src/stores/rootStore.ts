@@ -1,4 +1,5 @@
 import { makeAutoObservable } from "mobx";
+import { AbilityStore } from "./abilityStore";
 import { AuthStore } from "./authStore";
 import { CookieStore } from "./cookieStore";
 import { NavigationStore } from "./navigationStore";
@@ -42,6 +43,7 @@ export class RootStore {
 	authStore?: AuthStore;
 	cookieStore?: CookieStore;
 	persistStore?: PersistStore;
+	abilityStore?: AbilityStore;
 
 	constructor() {
 		makeAutoObservable(this);

@@ -5,6 +5,7 @@ import type { Space } from "./space.entity";
 import type { User } from "./user.entity";
 
 export class Timeline extends AbstractEntity implements TimelineEntity {
+	tenantId!: string;
 	spaceId!: string;
 	creatorId!: string | null;
 	name!: string;
