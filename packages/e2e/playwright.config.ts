@@ -28,8 +28,8 @@ export default defineConfig({
 
   // 글로벌 설정
   use: {
-    // Admin 앱 기본 URL
-    baseURL: "http://localhost:3000",
+    // Admin 앱 기본 URL (basePath: /admin 포함, trailing slash 필수)
+    baseURL: "http://localhost:3000/admin/",
 
     // 스크린샷 (실패 시에만)
     screenshot: "only-on-failure",
@@ -81,7 +81,7 @@ export default defineConfig({
     ? undefined
     : {
         command: "pnpm --filter=admin dev",
-        url: "http://localhost:3000/auth/login",
+        url: "http://localhost:3000/admin/auth/login",
         reuseExistingServer: !process.env.CI,
         timeout: 120000,
         cwd: "../..",

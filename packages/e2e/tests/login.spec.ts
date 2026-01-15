@@ -2,8 +2,8 @@ import { test, expect } from "@playwright/test";
 
 test.describe("로그인 페이지 테스트", () => {
 	test("로그인 페이지 진입 확인", async ({ page }) => {
-		// Given: 로그인 페이지로 이동
-		await page.goto("/auth/login");
+		// Given: 로그인 페이지로 이동 (상대 경로로 baseURL 기준)
+		await page.goto("auth/login");
 
 		// Then: 로그인 페이지가 정상 로드됨
 		await expect(page.getByText("관리자 로그인")).toBeVisible();
