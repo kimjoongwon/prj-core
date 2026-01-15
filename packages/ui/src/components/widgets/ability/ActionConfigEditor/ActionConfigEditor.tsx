@@ -8,8 +8,8 @@ import type {
 } from "@cocrepo/entity";
 import { Card, CardBody, cn } from "@heroui/react";
 import { observer } from "mobx-react-lite";
-import { Input } from "../../../inputs/Input";
-import { Select } from "../../../inputs/Select";
+import { Input } from "../../../inputs/Input/Input";
+import { Select } from "../../../inputs/Select/Select";
 import { HStack } from "../../../ui/surfaces/HStack/HStack";
 import { VStack } from "../../../ui/surfaces/VStack/VStack";
 

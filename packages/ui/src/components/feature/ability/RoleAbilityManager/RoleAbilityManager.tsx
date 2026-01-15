@@ -3,8 +3,8 @@
 import { Card, CardBody, CardHeader } from "@heroui/react";
 import { observer } from "mobx-react-lite";
 import { useEffect } from "react";
-import { Select } from "../../../inputs/Select";
-import { Text } from "../../../ui/feedback/Text/Text";
+import { Select } from "../../../inputs/Select/Select";
+import { Text } from "../../../ui/data-display/Text/Text";
 import { HStack } from "../../../ui/surfaces/HStack/HStack";
 import { VStack } from "../../../ui/surfaces/VStack/VStack";
 import { AbilityFormModal } from "../../../widget/ability/AbilityFormModal";
@@ -112,7 +112,7 @@ export const RoleAbilityManager = observer(
 			<Card className="w-full">
 				<CardHeader>
 					<HStack
-						justifyContent="spaceBetween"
+						justifyContent="between"
 						alignItems="center"
 						className="w-full"
 					>

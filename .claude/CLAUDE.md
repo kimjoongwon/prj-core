@@ -25,6 +25,11 @@
 - **TodoWrite 도구의 content, activeForm은 영어로 작성** (한글 UTF-8 멀티바이트 문자열 처리 버그 회피)
 - Task 도구의 description도 영어로 작성
 
+## Claude Code 작업 원칙
+
+- **AskUserQuestion 도구로 요구사항이나 선택지가 애매할 때 질문** - 추측하지 않고 사용자에게 확인
+- **Task 도구로 적절한 에이전트를 활용하여 작업 수행** - 단순 작업보다 전문 에이전트 활용 우선
+
 ## 프론트엔드 개발 규칙
 
 ### UI 디자인 가이드 (HeroUI 공식 스타일)

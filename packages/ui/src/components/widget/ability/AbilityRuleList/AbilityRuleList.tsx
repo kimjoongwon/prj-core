@@ -14,7 +14,7 @@ import {
 } from "@heroui/react";
 import { Edit2, Plus, Trash2 } from "lucide-react";
 import { observer } from "mobx-react-lite";
-import { Switch } from "../../../inputs/Switch";
+import { Switch } from "../../../inputs/Switch/Switch";
 import { HStack } from "../../../ui/surfaces/HStack/HStack";
 
 /**

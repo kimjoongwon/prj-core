@@ -15,9 +15,9 @@ import {
 } from "@heroui/react";
 import { observer } from "mobx-react-lite";
 import { useEffect, useState } from "react";
-import { Input } from "../../../inputs/Input";
-import { RadioGroup } from "../../../inputs/RadioGroup";
-import { Checkbox } from "../../../inputs/Checkbox";
+import { Input } from "../../../inputs/Input/Input";
+import { RadioGroup } from "../../../inputs/RadioGroup/RadioGroup";
+import { Checkbox } from "../../../inputs/Checkbox/Checkbox";
 import { HStack } from "../../../ui/surfaces/HStack/HStack";
 import { VStack } from "../../../ui/surfaces/VStack/VStack";
 import { ConditionEditor } from "../ConditionEditor";

@@ -226,14 +226,13 @@ export const AbilityMatrixView = observer(
 					isStriped
 				>
 					<TableHeader>
-						{/* 첫 번째 열: 필드명 헤더 */}
 						<TableColumn
 							key="field"
 							className="sticky left-0 bg-content1 z-10 min-w-[120px]"
 						>
 							필드명
 						</TableColumn>
-						{/* 역할 열들 */}
+						{/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
 						{roles.map((role) => (
 							<TableColumn key={role.id} className="min-w-[100px]">
 								<VStack gap={1} alignItems="center">
@@ -245,7 +244,7 @@ export const AbilityMatrixView = observer(
 									</span>
 								</VStack>
 							</TableColumn>
-						))}
+						)) as any}
 					</TableHeader>
 					<TableBody
 						emptyContent={loading ? " " : "필드 정보가 없습니다."}
@@ -254,7 +253,6 @@ export const AbilityMatrixView = observer(
 					>
 						{fields.map((field) => (
 							<TableRow key={field.name}>
-								{/* 필드명 셀 (sticky) */}
 								<TableCell className="sticky left-0 bg-content1 z-10 font-medium">
 									<VStack gap={1} alignItems="start">
 										<span>{getFieldDisplayName(field)}</span>
@@ -265,7 +263,7 @@ export const AbilityMatrixView = observer(
 										)}
 									</VStack>
 								</TableCell>
-								{/* 각 역할에 대한 가시성 셀 */}
+								{/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
 								{roles.map((role) => {
 									const status = getCellStatus(field.name, role.name);
 									return (
@@ -287,7 +285,7 @@ export const AbilityMatrixView = observer(
 											</HStack>
 										</TableCell>
 									);
-								})}
+								}) as any}
 							</TableRow>
 						))}
 					</TableBody>

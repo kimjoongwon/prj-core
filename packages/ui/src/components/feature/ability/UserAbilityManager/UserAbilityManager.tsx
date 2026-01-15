@@ -11,7 +11,7 @@ import {
 } from "@heroui/react";
 import { Plus, Search, User } from "lucide-react";
 import { observer } from "mobx-react-lite";
-import { Text } from "../../../ui/feedback/Text/Text";
+import { Text } from "../../../ui/data-display/Text/Text";
 import { HStack } from "../../../ui/surfaces/HStack/HStack";
 import { VStack } from "../../../ui/surfaces/VStack/VStack";
 import { AbilityFormModal } from "../../../widget/ability/AbilityFormModal";

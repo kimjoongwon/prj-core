@@ -76,11 +76,14 @@ export default defineConfig({
   ],
 
   // 개발 서버 설정 (테스트 실행 전 자동 시작)
-  webServer: {
-    command: "pnpm --filter=admin start:dev",
-    url: "http://localhost:3000",
-    reuseExistingServer: !process.env.CI,
-    timeout: 120000,
-    cwd: "../..",
-  },
+  // SKIP_WEBSERVER=1 환경 변수로 webServer 시작 비활성화 가능
+  webServer: process.env.SKIP_WEBSERVER
+    ? undefined
+    : {
+        command: "pnpm --filter=admin dev",
+        url: "http://localhost:3000/auth/login",
+        reuseExistingServer: !process.env.CI,
+        timeout: 120000,
+        cwd: "../..",
+      },
 });
