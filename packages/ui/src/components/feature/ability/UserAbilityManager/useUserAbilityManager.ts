@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import type { AbilityRule } from "../../../widget/ability/AbilityRuleList";
 import type { AbilityFormData } from "../../../widget/ability/AbilityFormModal";
-import type { FormMode, User, UserAbilityManagerProps } from "./types";
+import type { AbilityUser, FormMode, UserAbilityManagerProps } from "./types";
 
 type UseUserAbilityManagerParams = Pick<
 	UserAbilityManagerProps,
@@ -55,15 +55,14 @@ export function useUserAbilityManager({
 	onLoadSubjectFields,
 }: UseUserAbilityManagerParams) {
 	// 내부 선택된 사용자 상태 (외부 제어가 없을 때 사용)
-	const [internalSelectedUser, setInternalSelectedUser] = useState<User | null>(
-		null,
-	);
+	const [internalSelectedUser, setInternalSelectedUser] =
+		useState<AbilityUser | null>(null);
 	// 외부 제어 여부에 따라 사용할 상태 결정
 	const selectedUser = externalSelectedUser ?? internalSelectedUser;
 
 	// 검색 관련 상태
 	const [searchQuery, setSearchQuery] = useState("");
-	const [searchResults, setSearchResults] = useState<User[]>([]);
+	const [searchResults, setSearchResults] = useState<AbilityUser[]>([]);
 	const [isSearching, setIsSearching] = useState(false);
 
 	// 상태 관리
@@ -116,7 +115,7 @@ export function useUserAbilityManager({
 	/**
 	 * 사용자 선택 핸들러
 	 */
-	const handleUserSelect = (user: User | null) => {
+	const handleUserSelect = (user: AbilityUser | null) => {
 		// 외부 제어가 있으면 외부 콜백 호출
 		if (onUserSelect) {
 			onUserSelect(user);

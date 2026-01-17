@@ -1,5 +1,6 @@
+import type { NavItemConfig } from "@cocrepo/type";
 import { makeAutoObservable } from "mobx";
-import { NavItem, type NavItemConfig } from "./navItem";
+import { NavItem } from "./navItem";
 import type { Navigator } from "./navigator";
 
 /**
@@ -264,19 +265,16 @@ export class NavigationStore {
 	 * 하위 아이템 선택
 	 */
 	selectSubNavItem(subNavItemId: string): void {
-		let parentNavItem = this._selectedNavItem;
+		let parentNavItem: NavItem | undefined;
 		let subNavItem: NavItem | undefined;
 
-		if (!parentNavItem) {
-			for (const navItem of this._items) {
-				subNavItem = navItem.findChildById(subNavItemId);
-				if (subNavItem) {
-					parentNavItem = navItem;
-					break;
-				}
+		// 전체 아이템에서 subNavItemId를 찾음
+		for (const navItem of this._items) {
+			subNavItem = navItem.findChildById(subNavItemId);
+			if (subNavItem) {
+				parentNavItem = navItem;
+				break;
 			}
-		} else {
-			subNavItem = parentNavItem.findChildById(subNavItemId);
 		}
 
 		if (!parentNavItem || !subNavItem) return;

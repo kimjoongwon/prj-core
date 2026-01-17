@@ -224,6 +224,11 @@ export interface SubjectSeedData {
  * Subject 시드 데이터
  * - Prisma 모델 기반 Subject는 DMMF에서 자동 동기화됨
  * - 이 배열은 커스텀 Subject만 정의 (메뉴, 기능 등)
+ *
+ * v7.0 업데이트: Admin 메뉴 구조 변경
+ * - menu:schedules → menu:sessions
+ * - menu:settings → menu:grounds, menu:admins, menu:roles로 분리
+ * - 예약, 알림, 문의, 템플릿 메뉴 추가
  */
 export const subjectSeedData: SubjectSeedData[] = [
 	// ---- 전체 ----
@@ -244,227 +249,398 @@ export const subjectSeedData: SubjectSeedData[] = [
 	{ name: "entity:Role", displayName: "역할", group: "entity", order: 6 },
 	{ name: "entity:Ability", displayName: "권한", group: "entity", order: 7 },
 
-	// ---- 메뉴 (1depth) ----
+	// ============================================================================
+	// v7.0 Admin 메뉴 (1depth)
+	// ============================================================================
 	{
 		name: "menu:dashboard",
 		displayName: "대시보드",
 		group: "menu",
 		order: 100,
 	},
-	{ name: "menu:users", displayName: "사용자 관리", group: "menu", order: 110 },
-	{ name: "menu:schedules", displayName: "일정 관리", group: "menu", order: 120 },
-	{ name: "menu:files", displayName: "파일 관리", group: "menu", order: 130 },
-	{
-		name: "menu:contents",
-		displayName: "콘텐츠 관리",
-		group: "menu",
-		order: 140,
-	},
-	{ name: "menu:wallets", displayName: "지갑 관리", group: "menu", order: 150 },
-	{ name: "menu:settings", displayName: "설정", group: "menu", order: 160 },
+	{ name: "menu:users", displayName: "회원", group: "menu", order: 110 },
+	{ name: "menu:reservations", displayName: "예약", group: "menu", order: 120 },
+	{ name: "menu:notifications", displayName: "알림", group: "menu", order: 130 },
+	{ name: "menu:inquiries", displayName: "문의", group: "menu", order: 140 },
+	{ name: "menu:contents", displayName: "콘텐츠", group: "menu", order: 150 },
+	{ name: "menu:templates", displayName: "템플릿", group: "menu", order: 160 },
+	{ name: "menu:sessions", displayName: "세션", group: "menu", order: 170 },
+	{ name: "menu:grounds", displayName: "시설", group: "menu", order: 180 },
+	{ name: "menu:admins", displayName: "관리자", group: "menu", order: 190 },
+	{ name: "menu:roles", displayName: "역할/권한", group: "menu", order: 200 },
 
-	// ---- 메뉴 (2depth - 사용자) ----
+	// ============================================================================
+	// v7.0 Admin 메뉴 (2depth - 회원)
+	// ============================================================================
 	{
 		name: "menu:users:list",
-		displayName: "사용자 목록",
+		displayName: "회원 목록",
 		group: "menu",
 		order: 111,
 	},
 	{
-		name: "menu:users:profiles",
-		displayName: "프로필 관리",
+		name: "menu:users:grades",
+		displayName: "등급 관리",
 		group: "menu",
 		order: 112,
 	},
 	{
-		name: "menu:users:categories",
-		displayName: "사용자 분류",
+		name: "menu:users:withdrawn",
+		displayName: "탈퇴 회원",
 		group: "menu",
 		order: 113,
 	},
-	{
-		name: "menu:users:groups",
-		displayName: "그룹 관리",
-		group: "menu",
-		order: 114,
-	},
 
-	// ---- 메뉴 (2depth - 일정) ----
+	// ============================================================================
+	// v7.0 Admin 메뉴 (2depth - 예약)
+	// ============================================================================
 	{
-		name: "menu:schedules:timelines",
-		displayName: "타임라인",
+		name: "menu:reservations:today",
+		displayName: "오늘 예약",
 		group: "menu",
 		order: 121,
 	},
 	{
-		name: "menu:schedules:sessions",
-		displayName: "세션",
+		name: "menu:reservations:list",
+		displayName: "예약 목록",
 		group: "menu",
 		order: 122,
 	},
 	{
-		name: "menu:schedules:programs",
-		displayName: "프로그램",
+		name: "menu:reservations:calendar",
+		displayName: "캘린더",
 		group: "menu",
 		order: 123,
 	},
 	{
-		name: "menu:schedules:routines",
-		displayName: "루틴",
+		name: "menu:reservations:stats",
+		displayName: "통계",
 		group: "menu",
 		order: 124,
 	},
 
-	// ---- 메뉴 (2depth - 파일) ----
+	// ============================================================================
+	// v7.0 Admin 메뉴 (2depth - 알림)
+	// ============================================================================
 	{
-		name: "menu:files:list",
-		displayName: "파일 목록",
+		name: "menu:notifications:send",
+		displayName: "알림 발송",
 		group: "menu",
 		order: 131,
 	},
 	{
-		name: "menu:files:categories",
-		displayName: "파일 분류",
+		name: "menu:notifications:history",
+		displayName: "발송 내역",
 		group: "menu",
 		order: 132,
 	},
-
-	// ---- 메뉴 (2depth - 콘텐츠) ----
 	{
-		name: "menu:contents:posts",
-		displayName: "게시물",
+		name: "menu:notifications:templates",
+		displayName: "알림 템플릿",
+		group: "menu",
+		order: 133,
+	},
+	{
+		name: "menu:notifications:settings",
+		displayName: "알림 설정",
+		group: "menu",
+		order: 134,
+	},
+
+	// ============================================================================
+	// v7.0 Admin 메뉴 (2depth - 문의)
+	// ============================================================================
+	{
+		name: "menu:inquiries:list",
+		displayName: "문의 목록",
 		group: "menu",
 		order: 141,
 	},
 	{
-		name: "menu:contents:list",
-		displayName: "콘텐츠 목록",
+		name: "menu:inquiries:direct",
+		displayName: "1:1 문의",
 		group: "menu",
 		order: 142,
 	},
-
-	// ---- 메뉴 (2depth - 지갑) ----
 	{
-		name: "menu:wallets:list",
-		displayName: "지갑 목록",
+		name: "menu:inquiries:answered",
+		displayName: "답변 완료",
+		group: "menu",
+		order: 143,
+	},
+	{
+		name: "menu:inquiries:faq",
+		displayName: "FAQ",
+		group: "menu",
+		order: 144,
+	},
+
+	// ============================================================================
+	// v7.0 Admin 메뉴 (2depth - 콘텐츠)
+	// ============================================================================
+	{
+		name: "menu:contents:notices",
+		displayName: "공지사항",
 		group: "menu",
 		order: 151,
 	},
 	{
-		name: "menu:wallets:transactions",
-		displayName: "트랜잭션",
+		name: "menu:contents:banners",
+		displayName: "배너",
 		group: "menu",
 		order: 152,
 	},
-
-	// ---- 메뉴 (2depth - 설정) ----
 	{
-		name: "menu:settings:grounds",
-		displayName: "시설 정보",
+		name: "menu:contents:events",
+		displayName: "이벤트",
+		group: "menu",
+		order: 153,
+	},
+	{
+		name: "menu:contents:terms",
+		displayName: "이용약관",
+		group: "menu",
+		order: 154,
+	},
+
+	// ============================================================================
+	// v7.0 Admin 메뉴 (2depth - 템플릿)
+	// ============================================================================
+	{
+		name: "menu:templates:sms",
+		displayName: "SMS",
 		group: "menu",
 		order: 161,
 	},
 	{
-		name: "menu:settings:admins",
-		displayName: "관리자 관리",
+		name: "menu:templates:email",
+		displayName: "이메일",
 		group: "menu",
 		order: 162,
 	},
 	{
-		name: "menu:settings:abilities",
-		displayName: "권한 관리",
+		name: "menu:templates:push",
+		displayName: "푸시",
 		group: "menu",
 		order: 163,
 	},
 	{
-		name: "menu:settings:system",
-		displayName: "시스템 설정",
+		name: "menu:templates:html",
+		displayName: "HTML",
 		group: "menu",
 		order: 164,
 	},
+
+	// ============================================================================
+	// v7.0 Admin 메뉴 (2depth - 세션)
+	// ============================================================================
 	{
-		name: "menu:settings:ui-configs",
-		displayName: "UI 설정",
+		name: "menu:sessions:timelines",
+		displayName: "타임라인",
 		group: "menu",
-		order: 165,
+		order: 171,
+	},
+	{
+		name: "menu:sessions:list",
+		displayName: "세션 목록",
+		group: "menu",
+		order: 172,
+	},
+	{
+		name: "menu:sessions:programs",
+		displayName: "프로그램 배정",
+		group: "menu",
+		order: 173,
+	},
+	{
+		name: "menu:sessions:routines",
+		displayName: "루틴",
+		group: "menu",
+		order: 174,
 	},
 
-	// ---- 기능 ----
-	{ name: "feature:export", displayName: "내보내기", group: "feature", order: 200 },
-	{ name: "feature:import", displayName: "가져오기", group: "feature", order: 201 },
+	// ============================================================================
+	// v7.0 Admin 메뉴 (2depth - 시설)
+	// ============================================================================
+	{
+		name: "menu:grounds:info",
+		displayName: "시설 정보",
+		group: "menu",
+		order: 181,
+	},
+	{
+		name: "menu:grounds:programs",
+		displayName: "프로그램 정의",
+		group: "menu",
+		order: 182,
+	},
+	{
+		name: "menu:grounds:equipment",
+		displayName: "장비/시설물",
+		group: "menu",
+		order: 183,
+	},
+
+	// ============================================================================
+	// v7.0 Admin 메뉴 (2depth - 관리자)
+	// ============================================================================
+	{
+		name: "menu:admins:list",
+		displayName: "관리자 목록",
+		group: "menu",
+		order: 191,
+	},
+	{
+		name: "menu:admins:invitations",
+		displayName: "초대 관리",
+		group: "menu",
+		order: 192,
+	},
+
+	// ============================================================================
+	// v7.0 Admin 메뉴 (2depth - 역할/권한)
+	// ============================================================================
+	{
+		name: "menu:roles:list",
+		displayName: "역할 목록",
+		group: "menu",
+		order: 201,
+	},
+	{
+		name: "menu:roles:abilities",
+		displayName: "권한 설정",
+		group: "menu",
+		order: 202,
+	},
+
+	// ============================================================================
+	// 레거시 메뉴 (하위 호환성 - deprecated)
+	// ============================================================================
+	{ name: "menu:schedules", displayName: "일정 관리 (deprecated)", group: "menu", order: 900 },
+	{ name: "menu:files", displayName: "파일 관리", group: "menu", order: 901 },
+	{ name: "menu:wallets", displayName: "지갑 관리", group: "menu", order: 902 },
+	{ name: "menu:settings", displayName: "설정 (deprecated)", group: "menu", order: 903 },
+	{ name: "menu:users:profiles", displayName: "프로필 관리", group: "menu", order: 910 },
+	{ name: "menu:users:categories", displayName: "사용자 분류", group: "menu", order: 911 },
+	{ name: "menu:users:groups", displayName: "그룹 관리", group: "menu", order: 912 },
+	{ name: "menu:schedules:timelines", displayName: "타임라인 (deprecated)", group: "menu", order: 920 },
+	{ name: "menu:schedules:sessions", displayName: "세션 (deprecated)", group: "menu", order: 921 },
+	{ name: "menu:schedules:programs", displayName: "프로그램 (deprecated)", group: "menu", order: 922 },
+	{ name: "menu:schedules:routines", displayName: "루틴 (deprecated)", group: "menu", order: 923 },
+	{ name: "menu:files:list", displayName: "파일 목록", group: "menu", order: 930 },
+	{ name: "menu:files:categories", displayName: "파일 분류", group: "menu", order: 931 },
+	{ name: "menu:contents:posts", displayName: "게시물", group: "menu", order: 940 },
+	{ name: "menu:contents:list", displayName: "콘텐츠 목록", group: "menu", order: 941 },
+	{ name: "menu:wallets:list", displayName: "지갑 목록", group: "menu", order: 950 },
+	{ name: "menu:wallets:transactions", displayName: "트랜잭션", group: "menu", order: 951 },
+	{ name: "menu:settings:grounds", displayName: "시설 정보 (deprecated)", group: "menu", order: 960 },
+	{ name: "menu:settings:admins", displayName: "관리자 관리 (deprecated)", group: "menu", order: 961 },
+	{ name: "menu:settings:abilities", displayName: "권한 관리 (deprecated)", group: "menu", order: 962 },
+	{ name: "menu:settings:system", displayName: "시스템 설정", group: "menu", order: 963 },
+	{ name: "menu:settings:ui-configs", displayName: "UI 설정", group: "menu", order: 964 },
+
+	// ============================================================================
+	// 기능
+	// ============================================================================
+	{ name: "feature:export", displayName: "내보내기", group: "feature", order: 1000 },
+	{ name: "feature:import", displayName: "가져오기", group: "feature", order: 1001 },
 	{
 		name: "feature:bulk-delete",
 		displayName: "일괄 삭제",
 		group: "feature",
-		order: 202,
+		order: 1002,
 	},
 	{
 		name: "feature:send-notification",
 		displayName: "알림 발송",
 		group: "feature",
-		order: 203,
+		order: 1003,
 	},
 
-	// ---- UI 요소 ----
+	// ============================================================================
+	// FAB Quick Actions (v7.0)
+	// ============================================================================
+	{
+		name: "quickAction:todayReservation",
+		displayName: "오늘 예약 바로가기",
+		group: "feature",
+		order: 1100,
+	},
+	{
+		name: "quickAction:quickReservation",
+		displayName: "빠른 예약",
+		group: "feature",
+		order: 1101,
+	},
+	{
+		name: "quickAction:userSearch",
+		displayName: "회원 검색",
+		group: "feature",
+		order: 1102,
+	},
+
+	// ============================================================================
+	// UI 요소
+	// ============================================================================
 	{
 		name: "ui:mobile-bottom-tab",
 		displayName: "모바일 바텀탭",
 		group: "ui",
-		order: 300,
+		order: 1200,
 	},
 	{
 		name: "ui:mobile-bottom-tab:home",
 		displayName: "바텀탭 - 홈",
 		group: "ui",
-		order: 301,
+		order: 1201,
 	},
 	{
 		name: "ui:mobile-bottom-tab:schedule",
 		displayName: "바텀탭 - 일정",
 		group: "ui",
-		order: 302,
+		order: 1202,
 	},
 	{
 		name: "ui:mobile-bottom-tab:my",
 		displayName: "바텀탭 - 마이페이지",
 		group: "ui",
-		order: 303,
+		order: 1203,
 	},
 	{
 		name: "ui:mobile-bottom-tab:settings",
 		displayName: "바텀탭 - 설정",
 		group: "ui",
-		order: 304,
+		order: 1204,
 	},
 	{
 		name: "ui:main-banner",
 		displayName: "메인 배너",
 		group: "ui",
-		order: 310,
+		order: 1210,
 	},
 	{
 		name: "ui:sidebar-menu",
 		displayName: "사이드바 메뉴",
 		group: "ui",
-		order: 320,
+		order: 1220,
 	},
 	{
 		name: "ui:sidebar-menu:admin",
 		displayName: "사이드바 - 관리자 메뉴",
 		group: "ui",
-		order: 321,
+		order: 1221,
 	},
 	{
 		name: "ui:floating-button:chat",
 		displayName: "플로팅 채팅 버튼",
 		group: "ui",
-		order: 330,
+		order: 1230,
 	},
 	{
 		name: "ui:floating-button:help",
 		displayName: "플로팅 도움말 버튼",
 		group: "ui",
-		order: 331,
+		order: 1231,
 	},
 ];
 
@@ -1082,11 +1258,13 @@ export interface AbilitySeedData {
 }
 
 /**
- * SUPER_ADMIN 권한 시드 데이터
+ * SUPER_ADMIN 권한 시드 데이터 (v7.0)
  * - manage all: 모든 권한
  */
 export const superAdminAbilitySeedData: AbilitySeedData[] = [
-	// 모든 메뉴 manage (1depth)
+	// ============================================================================
+	// v7.0 메뉴 manage (1depth)
+	// ============================================================================
 	{
 		roleName: "SUPER_ADMIN",
 		subject: "menu:dashboard",
@@ -1099,21 +1277,28 @@ export const superAdminAbilitySeedData: AbilitySeedData[] = [
 		subject: "menu:users",
 		actionName: "manage",
 		inverted: false,
-		description: "사용자 관리 전체 권한",
+		description: "회원 관리 전체 권한",
 	},
 	{
 		roleName: "SUPER_ADMIN",
-		subject: "menu:schedules",
+		subject: "menu:reservations",
 		actionName: "manage",
 		inverted: false,
-		description: "일정 관리 전체 권한",
+		description: "예약 관리 전체 권한",
 	},
 	{
 		roleName: "SUPER_ADMIN",
-		subject: "menu:files",
+		subject: "menu:notifications",
 		actionName: "manage",
 		inverted: false,
-		description: "파일 관리 전체 권한",
+		description: "알림 관리 전체 권한",
+	},
+	{
+		roleName: "SUPER_ADMIN",
+		subject: "menu:inquiries",
+		actionName: "manage",
+		inverted: false,
+		description: "문의 관리 전체 권한",
 	},
 	{
 		roleName: "SUPER_ADMIN",
@@ -1121,6 +1306,337 @@ export const superAdminAbilitySeedData: AbilitySeedData[] = [
 		actionName: "manage",
 		inverted: false,
 		description: "콘텐츠 관리 전체 권한",
+	},
+	{
+		roleName: "SUPER_ADMIN",
+		subject: "menu:templates",
+		actionName: "manage",
+		inverted: false,
+		description: "템플릿 관리 전체 권한",
+	},
+	{
+		roleName: "SUPER_ADMIN",
+		subject: "menu:sessions",
+		actionName: "manage",
+		inverted: false,
+		description: "세션 관리 전체 권한",
+	},
+	{
+		roleName: "SUPER_ADMIN",
+		subject: "menu:grounds",
+		actionName: "manage",
+		inverted: false,
+		description: "시설 관리 전체 권한",
+	},
+	{
+		roleName: "SUPER_ADMIN",
+		subject: "menu:admins",
+		actionName: "manage",
+		inverted: false,
+		description: "관리자 관리 전체 권한",
+	},
+	{
+		roleName: "SUPER_ADMIN",
+		subject: "menu:roles",
+		actionName: "manage",
+		inverted: false,
+		description: "역할/권한 관리 전체 권한",
+	},
+
+	// ============================================================================
+	// v7.0 메뉴 manage (2depth - 회원)
+	// ============================================================================
+	{
+		roleName: "SUPER_ADMIN",
+		subject: "menu:users:list",
+		actionName: "manage",
+		inverted: false,
+		description: "회원 목록 전체 권한",
+	},
+	{
+		roleName: "SUPER_ADMIN",
+		subject: "menu:users:grades",
+		actionName: "manage",
+		inverted: false,
+		description: "등급 관리 전체 권한",
+	},
+	{
+		roleName: "SUPER_ADMIN",
+		subject: "menu:users:withdrawn",
+		actionName: "manage",
+		inverted: false,
+		description: "탈퇴 회원 전체 권한",
+	},
+
+	// ============================================================================
+	// v7.0 메뉴 manage (2depth - 예약)
+	// ============================================================================
+	{
+		roleName: "SUPER_ADMIN",
+		subject: "menu:reservations:today",
+		actionName: "manage",
+		inverted: false,
+		description: "오늘 예약 전체 권한",
+	},
+	{
+		roleName: "SUPER_ADMIN",
+		subject: "menu:reservations:list",
+		actionName: "manage",
+		inverted: false,
+		description: "예약 목록 전체 권한",
+	},
+	{
+		roleName: "SUPER_ADMIN",
+		subject: "menu:reservations:calendar",
+		actionName: "manage",
+		inverted: false,
+		description: "캘린더 전체 권한",
+	},
+	{
+		roleName: "SUPER_ADMIN",
+		subject: "menu:reservations:stats",
+		actionName: "manage",
+		inverted: false,
+		description: "통계 전체 권한",
+	},
+
+	// ============================================================================
+	// v7.0 메뉴 manage (2depth - 알림)
+	// ============================================================================
+	{
+		roleName: "SUPER_ADMIN",
+		subject: "menu:notifications:send",
+		actionName: "manage",
+		inverted: false,
+		description: "알림 발송 전체 권한",
+	},
+	{
+		roleName: "SUPER_ADMIN",
+		subject: "menu:notifications:history",
+		actionName: "manage",
+		inverted: false,
+		description: "발송 내역 전체 권한",
+	},
+	{
+		roleName: "SUPER_ADMIN",
+		subject: "menu:notifications:templates",
+		actionName: "manage",
+		inverted: false,
+		description: "알림 템플릿 전체 권한",
+	},
+	{
+		roleName: "SUPER_ADMIN",
+		subject: "menu:notifications:settings",
+		actionName: "manage",
+		inverted: false,
+		description: "알림 설정 전체 권한",
+	},
+
+	// ============================================================================
+	// v7.0 메뉴 manage (2depth - 문의)
+	// ============================================================================
+	{
+		roleName: "SUPER_ADMIN",
+		subject: "menu:inquiries:list",
+		actionName: "manage",
+		inverted: false,
+		description: "문의 목록 전체 권한",
+	},
+	{
+		roleName: "SUPER_ADMIN",
+		subject: "menu:inquiries:direct",
+		actionName: "manage",
+		inverted: false,
+		description: "1:1 문의 전체 권한",
+	},
+	{
+		roleName: "SUPER_ADMIN",
+		subject: "menu:inquiries:answered",
+		actionName: "manage",
+		inverted: false,
+		description: "답변 완료 전체 권한",
+	},
+	{
+		roleName: "SUPER_ADMIN",
+		subject: "menu:inquiries:faq",
+		actionName: "manage",
+		inverted: false,
+		description: "FAQ 전체 권한",
+	},
+
+	// ============================================================================
+	// v7.0 메뉴 manage (2depth - 콘텐츠)
+	// ============================================================================
+	{
+		roleName: "SUPER_ADMIN",
+		subject: "menu:contents:notices",
+		actionName: "manage",
+		inverted: false,
+		description: "공지사항 전체 권한",
+	},
+	{
+		roleName: "SUPER_ADMIN",
+		subject: "menu:contents:banners",
+		actionName: "manage",
+		inverted: false,
+		description: "배너 전체 권한",
+	},
+	{
+		roleName: "SUPER_ADMIN",
+		subject: "menu:contents:events",
+		actionName: "manage",
+		inverted: false,
+		description: "이벤트 전체 권한",
+	},
+	{
+		roleName: "SUPER_ADMIN",
+		subject: "menu:contents:terms",
+		actionName: "manage",
+		inverted: false,
+		description: "이용약관 전체 권한",
+	},
+
+	// ============================================================================
+	// v7.0 메뉴 manage (2depth - 템플릿)
+	// ============================================================================
+	{
+		roleName: "SUPER_ADMIN",
+		subject: "menu:templates:sms",
+		actionName: "manage",
+		inverted: false,
+		description: "SMS 템플릿 전체 권한",
+	},
+	{
+		roleName: "SUPER_ADMIN",
+		subject: "menu:templates:email",
+		actionName: "manage",
+		inverted: false,
+		description: "이메일 템플릿 전체 권한",
+	},
+	{
+		roleName: "SUPER_ADMIN",
+		subject: "menu:templates:push",
+		actionName: "manage",
+		inverted: false,
+		description: "푸시 템플릿 전체 권한",
+	},
+	{
+		roleName: "SUPER_ADMIN",
+		subject: "menu:templates:html",
+		actionName: "manage",
+		inverted: false,
+		description: "HTML 템플릿 전체 권한",
+	},
+
+	// ============================================================================
+	// v7.0 메뉴 manage (2depth - 세션)
+	// ============================================================================
+	{
+		roleName: "SUPER_ADMIN",
+		subject: "menu:sessions:timelines",
+		actionName: "manage",
+		inverted: false,
+		description: "타임라인 전체 권한",
+	},
+	{
+		roleName: "SUPER_ADMIN",
+		subject: "menu:sessions:list",
+		actionName: "manage",
+		inverted: false,
+		description: "세션 목록 전체 권한",
+	},
+	{
+		roleName: "SUPER_ADMIN",
+		subject: "menu:sessions:programs",
+		actionName: "manage",
+		inverted: false,
+		description: "프로그램 배정 전체 권한",
+	},
+	{
+		roleName: "SUPER_ADMIN",
+		subject: "menu:sessions:routines",
+		actionName: "manage",
+		inverted: false,
+		description: "루틴 전체 권한",
+	},
+
+	// ============================================================================
+	// v7.0 메뉴 manage (2depth - 시설)
+	// ============================================================================
+	{
+		roleName: "SUPER_ADMIN",
+		subject: "menu:grounds:info",
+		actionName: "manage",
+		inverted: false,
+		description: "시설 정보 전체 권한",
+	},
+	{
+		roleName: "SUPER_ADMIN",
+		subject: "menu:grounds:programs",
+		actionName: "manage",
+		inverted: false,
+		description: "프로그램 정의 전체 권한",
+	},
+	{
+		roleName: "SUPER_ADMIN",
+		subject: "menu:grounds:equipment",
+		actionName: "manage",
+		inverted: false,
+		description: "장비/시설물 전체 권한",
+	},
+
+	// ============================================================================
+	// v7.0 메뉴 manage (2depth - 관리자)
+	// ============================================================================
+	{
+		roleName: "SUPER_ADMIN",
+		subject: "menu:admins:list",
+		actionName: "manage",
+		inverted: false,
+		description: "관리자 목록 전체 권한",
+	},
+	{
+		roleName: "SUPER_ADMIN",
+		subject: "menu:admins:invitations",
+		actionName: "manage",
+		inverted: false,
+		description: "초대 관리 전체 권한",
+	},
+
+	// ============================================================================
+	// v7.0 메뉴 manage (2depth - 역할/권한)
+	// ============================================================================
+	{
+		roleName: "SUPER_ADMIN",
+		subject: "menu:roles:list",
+		actionName: "manage",
+		inverted: false,
+		description: "역할 목록 전체 권한",
+	},
+	{
+		roleName: "SUPER_ADMIN",
+		subject: "menu:roles:abilities",
+		actionName: "manage",
+		inverted: false,
+		description: "권한 설정 전체 권한",
+	},
+
+	// ============================================================================
+	// 레거시 메뉴 manage (하위 호환성)
+	// ============================================================================
+	{
+		roleName: "SUPER_ADMIN",
+		subject: "menu:schedules",
+		actionName: "manage",
+		inverted: false,
+		description: "일정 관리 전체 권한 (deprecated)",
+	},
+	{
+		roleName: "SUPER_ADMIN",
+		subject: "menu:files",
+		actionName: "manage",
+		inverted: false,
+		description: "파일 관리 전체 권한",
 	},
 	{
 		roleName: "SUPER_ADMIN",
@@ -1134,15 +1650,7 @@ export const superAdminAbilitySeedData: AbilitySeedData[] = [
 		subject: "menu:settings",
 		actionName: "manage",
 		inverted: false,
-		description: "설정 관리 전체 권한",
-	},
-	// 모든 메뉴 manage (2depth - 사용자)
-	{
-		roleName: "SUPER_ADMIN",
-		subject: "menu:users:list",
-		actionName: "manage",
-		inverted: false,
-		description: "사용자 목록 전체 권한",
+		description: "설정 관리 전체 권한 (deprecated)",
 	},
 	{
 		roleName: "SUPER_ADMIN",
@@ -1165,36 +1673,34 @@ export const superAdminAbilitySeedData: AbilitySeedData[] = [
 		inverted: false,
 		description: "그룹 관리 전체 권한",
 	},
-	// 모든 메뉴 manage (2depth - 일정)
 	{
 		roleName: "SUPER_ADMIN",
 		subject: "menu:schedules:timelines",
 		actionName: "manage",
 		inverted: false,
-		description: "타임라인 전체 권한",
+		description: "타임라인 전체 권한 (deprecated)",
 	},
 	{
 		roleName: "SUPER_ADMIN",
 		subject: "menu:schedules:sessions",
 		actionName: "manage",
 		inverted: false,
-		description: "세션 전체 권한",
+		description: "세션 전체 권한 (deprecated)",
 	},
 	{
 		roleName: "SUPER_ADMIN",
 		subject: "menu:schedules:programs",
 		actionName: "manage",
 		inverted: false,
-		description: "프로그램 전체 권한",
+		description: "프로그램 전체 권한 (deprecated)",
 	},
 	{
 		roleName: "SUPER_ADMIN",
 		subject: "menu:schedules:routines",
 		actionName: "manage",
 		inverted: false,
-		description: "루틴 전체 권한",
+		description: "루틴 전체 권한 (deprecated)",
 	},
-	// 모든 메뉴 manage (2depth - 파일)
 	{
 		roleName: "SUPER_ADMIN",
 		subject: "menu:files:list",
@@ -1209,7 +1715,6 @@ export const superAdminAbilitySeedData: AbilitySeedData[] = [
 		inverted: false,
 		description: "파일 분류 관리 전체 권한",
 	},
-	// 모든 메뉴 manage (2depth - 콘텐츠)
 	{
 		roleName: "SUPER_ADMIN",
 		subject: "menu:contents:posts",
@@ -1224,7 +1729,6 @@ export const superAdminAbilitySeedData: AbilitySeedData[] = [
 		inverted: false,
 		description: "콘텐츠 목록 전체 권한",
 	},
-	// 모든 메뉴 manage (2depth - 지갑)
 	{
 		roleName: "SUPER_ADMIN",
 		subject: "menu:wallets:list",
@@ -1239,27 +1743,26 @@ export const superAdminAbilitySeedData: AbilitySeedData[] = [
 		inverted: false,
 		description: "트랜잭션 전체 권한",
 	},
-	// 모든 메뉴 manage (2depth - 설정)
 	{
 		roleName: "SUPER_ADMIN",
 		subject: "menu:settings:grounds",
 		actionName: "manage",
 		inverted: false,
-		description: "시설 정보 전체 권한",
+		description: "시설 정보 전체 권한 (deprecated)",
 	},
 	{
 		roleName: "SUPER_ADMIN",
 		subject: "menu:settings:admins",
 		actionName: "manage",
 		inverted: false,
-		description: "관리자 관리 전체 권한",
+		description: "관리자 관리 전체 권한 (deprecated)",
 	},
 	{
 		roleName: "SUPER_ADMIN",
 		subject: "menu:settings:abilities",
 		actionName: "manage",
 		inverted: false,
-		description: "권한 관리 전체 권한",
+		description: "권한 관리 전체 권한 (deprecated)",
 	},
 	{
 		roleName: "SUPER_ADMIN",
@@ -1275,7 +1778,10 @@ export const superAdminAbilitySeedData: AbilitySeedData[] = [
 		inverted: false,
 		description: "UI 설정 전체 권한",
 	},
-	// 모든 기능 manage
+
+	// ============================================================================
+	// 기능 manage
+	// ============================================================================
 	{
 		roleName: "SUPER_ADMIN",
 		subject: "feature:export",
@@ -1304,7 +1810,35 @@ export const superAdminAbilitySeedData: AbilitySeedData[] = [
 		inverted: false,
 		description: "알림 발송 전체 권한",
 	},
-	// 모든 엔티티 manage
+
+	// ============================================================================
+	// FAB Quick Actions manage (v7.0)
+	// ============================================================================
+	{
+		roleName: "SUPER_ADMIN",
+		subject: "quickAction:todayReservation",
+		actionName: "manage",
+		inverted: false,
+		description: "오늘 예약 바로가기 전체 권한",
+	},
+	{
+		roleName: "SUPER_ADMIN",
+		subject: "quickAction:quickReservation",
+		actionName: "manage",
+		inverted: false,
+		description: "빠른 예약 전체 권한",
+	},
+	{
+		roleName: "SUPER_ADMIN",
+		subject: "quickAction:userSearch",
+		actionName: "manage",
+		inverted: false,
+		description: "회원 검색 전체 권한",
+	},
+
+	// ============================================================================
+	// 엔티티 manage
+	// ============================================================================
 	{
 		roleName: "SUPER_ADMIN",
 		subject: "entity:User",

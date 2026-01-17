@@ -1,4 +1,5 @@
-import type { FABAction, NavItem, TabConfig } from "@cocrepo/store";
+import type { FABAction, TabConfig } from "@cocrepo/type";
+import type { NavItem } from "@cocrepo/store";
 import type { ReactNode } from "react";
 
 /**
@@ -58,6 +59,9 @@ export interface AdminLayoutProps {
 	/** 현재 선택된 하위 NavItem */
 	selectedSubNavItem: NavItem | null;
 
+	/** 펼쳐진 NavItem ID Set */
+	expandedNavItemIds: Set<string>;
+
 	/** 모바일 - BottomTab 아이템 목록 */
 	bottomTabItems: BottomTabItem[];
 
@@ -84,6 +88,9 @@ export interface AdminLayoutProps {
 
 	/** 핸들러 - SubNavItem 클릭 */
 	onSubNavItemClick: (subNavItemId: string) => void;
+
+	/** 핸들러 - NavItem 토글 (펼침/접힘) */
+	onNavItemToggle: (navItemId: string) => void;
 
 	/** 핸들러 - BottomTab 클릭 */
 	onBottomTabClick: (tabId: string) => void;
@@ -116,7 +123,7 @@ export interface AdminLayoutProps {
 /**
  * AdminSidebar Props (v7.0)
  *
- * 항상 펼침 모드 - collapsed 속성 제거
+ * 2depth 메뉴 펼침/접힘 지원
  */
 export interface AdminSidebarProps {
 	/** 네비게이션 아이템 (NavItem 배열) */
@@ -128,11 +135,17 @@ export interface AdminSidebarProps {
 	/** 현재 선택된 하위 NavItem */
 	selectedSubNavItem: NavItem | null;
 
+	/** 펼쳐진 NavItem ID Set */
+	expandedNavItemIds: Set<string>;
+
 	/** 핸들러 - NavItem 클릭 */
 	onNavItemClick: (navItemId: string) => void;
 
 	/** 핸들러 - SubNavItem 클릭 */
 	onSubNavItemClick: (subNavItemId: string) => void;
+
+	/** 핸들러 - NavItem 토글 (펼침/접힘) */
+	onNavItemToggle: (navItemId: string) => void;
 
 	/** 로고 컴포넌트 */
 	logo?: ReactNode;
@@ -205,6 +218,3 @@ export interface AdminSubMenuListProps {
 	/** 닫기 핸들러 */
 	onClose: () => void;
 }
-
-// re-export NavItem 관련 타입
-export type { FABAction, NavItem, TabConfig };

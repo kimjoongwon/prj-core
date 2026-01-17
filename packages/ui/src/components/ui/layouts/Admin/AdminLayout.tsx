@@ -50,6 +50,7 @@ export const AdminLayout = observer(function AdminLayout({
 	navItems,
 	selectedNavItem,
 	selectedSubNavItem,
+	expandedNavItemIds,
 	bottomTabItems,
 	activeBottomTabId,
 	isSubMenuOpen,
@@ -59,6 +60,7 @@ export const AdminLayout = observer(function AdminLayout({
 	fabActions,
 	onNavItemClick,
 	onSubNavItemClick,
+	onNavItemToggle,
 	onBottomTabClick,
 	onSubMenuClose,
 	onFABToggle,
@@ -77,8 +79,10 @@ export const AdminLayout = observer(function AdminLayout({
 					navItems={navItems}
 					selectedNavItem={selectedNavItem}
 					selectedSubNavItem={selectedSubNavItem}
+					expandedNavItemIds={expandedNavItemIds}
 					onNavItemClick={onNavItemClick}
 					onSubNavItemClick={onSubNavItemClick}
+					onNavItemToggle={onNavItemToggle}
 					logo={logo}
 				/>
 			</div>

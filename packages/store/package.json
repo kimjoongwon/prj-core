@@ -35,7 +35,8 @@
   "author": "kimjoongwon",
   "license": "ISC",
   "dependencies": {
-    "@casl/ability": "^6.7.3"
+    "@casl/ability": "^6.7.3",
+    "@cocrepo/type": "workspace:*"
   },
   "devDependencies": {
     "@casl/ability": "^6.7.1",

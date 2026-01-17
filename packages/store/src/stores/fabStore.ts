@@ -1,21 +1,6 @@
+import type { FABAction } from "@cocrepo/type";
 import { makeAutoObservable } from "mobx";
 import type { Navigator } from "./navigator";
-
-/**
- * FAB 액션 인터페이스
- * 모바일 FAB에서 표시되는 빠른 액션 정의
- */
-export interface FABAction {
-	id: string;
-	label: string;
-	icon: string;
-	/** 권한 체크용 subject */
-	subject: string;
-	/** 페이지 이동 경로 (href와 modal 중 하나만 사용) */
-	href?: string;
-	/** 모달 열기 ID (href와 modal 중 하나만 사용) */
-	modal?: string;
-}
 
 /**
  * FAB 액션 설정 인터페이스 (생성자 파라미터용)

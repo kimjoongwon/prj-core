@@ -84,9 +84,10 @@ function AbilityProviderWrapper({ children }: { children: ReactNode }) {
 	const { abilities, isLoading, isError } = useAbilities();
 
 	// API 응답을 AbilityRule 형식으로 변환
+	// action.name을 대문자로 변환 (API: "manage" → 코드: "MANAGE")
 	const rules: AbilityRule[] | undefined = abilities?.map(
 		(ability: AbilityResponseDto) => ({
-			action: ability.action as AbilityActions,
+			action: (ability.action as { name?: string })?.name?.toUpperCase() as AbilityActions,
 			subject: ability.subject?.name ?? "",
 			conditions: ability.conditions as Record<string, unknown> | undefined,
 			inverted: !ability.isActive, // isActive가 false면 권한 거부

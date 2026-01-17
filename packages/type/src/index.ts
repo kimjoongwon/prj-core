@@ -136,3 +136,7 @@ export type { JsonArray, JsonObject, JsonValue } from "./json";
 // 페이지 메타 관련 타입
 // ============================================
 export type { IPageMeta } from "./page-meta";
+// ============================================
+// 네비게이션 관련 타입
+// ============================================
+export type { FABAction, NavItemConfig, TabConfig } from "./navigation";

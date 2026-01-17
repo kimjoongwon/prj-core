@@ -6,9 +6,9 @@ import type {
 } from "../../../widget/ability/AbilityFormModal";
 
 /**
- * 사용자 정보 타입
+ * Ability 관리용 사용자 정보 타입
  */
-export interface User {
+export interface AbilityUser {
 	/** 사용자 고유 ID */
 	id: string;
 	/** 사용자 이름 */
@@ -26,11 +26,11 @@ export interface User {
  */
 export interface UserAbilityManagerProps {
 	/** 사용자 검색 함수 */
-	onSearchUsers: (query: string) => Promise<User[]>;
+	onSearchUsers: (query: string) => Promise<AbilityUser[]>;
 	/** 선택된 사용자 (외부 제어용) */
-	selectedUser?: User;
+	selectedUser?: AbilityUser;
 	/** 사용자 선택 콜백 (외부 제어용) */
-	onUserSelect?: (user: User | null) => void;
+	onUserSelect?: (user: AbilityUser | null) => void;
 	/** Ability 규칙 로드 함수 */
 	onLoadAbilities: (userId: string) => Promise<AbilityRule[]>;
 	/** Ability 추가 함수 */

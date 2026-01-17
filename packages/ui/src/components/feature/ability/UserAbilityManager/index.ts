@@ -2,9 +2,9 @@ export { UserAbilityManager } from "./UserAbilityManager";
 export type {
 	AbilityFormData,
 	AbilityRule,
+	AbilityUser,
 	Action,
 	FormMode,
 	Subject,
-	User,
 	UserAbilityManagerProps,
 } from "./types";

@@ -2,6 +2,7 @@
 
 import type { NavItem } from "@cocrepo/store";
 import { Button } from "@heroui/react";
+import { ChevronDown } from "lucide-react";
 import { observer } from "mobx-react-lite";
 import { renderLucideIcon } from "../../../../utils/iconUtils";
 import type { AdminSidebarProps } from "./types";
@@ -42,27 +43,37 @@ const SubMenuItem = observer(function SubMenuItem({
 });
 
 /**
- * 메인 네비게이션 아이템 컴포넌트 (v7.0 - 항상 펼침)
+ * 메인 네비게이션 아이템 컴포넌트 (v7.0 - 펼침/접힘 지원)
  */
 interface NavItemComponentProps {
 	item: NavItem;
 	isSelected: boolean;
+	isExpanded: boolean;
 	selectedSubItemId: string | null;
 	onNavItemClick: (navItemId: string) => void;
 	onSubNavItemClick: (subNavItemId: string) => void;
+	onToggle: (navItemId: string) => void;
 }
 
 const NavItemComponent = observer(function NavItemComponent({
 	item,
 	isSelected,
+	isExpanded,
 	selectedSubItemId,
 	onNavItemClick,
 	onSubNavItemClick,
+	onToggle,
 }: NavItemComponentProps) {
 	const hasChildren = item.hasChildren;
 
 	const handleClick = () => {
-		onNavItemClick(item.id);
+		if (hasChildren) {
+			// 하위 메뉴가 있으면 토글
+			onToggle(item.id);
+		} else {
+			// 하위 메뉴가 없으면 바로 이동
+			onNavItemClick(item.id);
+		}
 	};
 
 	return (
@@ -91,10 +102,19 @@ const NavItemComponent = observer(function NavItemComponent({
 				>
 					{item.label}
 				</span>
+
+				{/* 펼침/접힘 화살표 */}
+				{hasChildren && (
+					<ChevronDown
+						className={`h-4 w-4 text-default-400 transition-transform duration-200 ${
+							isExpanded ? "rotate-180" : ""
+						}`}
+					/>
+				)}
 			</Button>
 
-			{/* 2depth 메뉴 - 항상 표시 (v7.0 변경사항) */}
-			{hasChildren && (
+			{/* 2depth 메뉴 - 펼쳐진 경우에만 표시 */}
+			{hasChildren && isExpanded && (
 				<div className="mt-1 space-y-0.5">
 					{item.children.map((child) => (
 						<SubMenuItem
@@ -114,8 +134,7 @@ const NavItemComponent = observer(function NavItemComponent({
  * AdminSidebar - 데스크톱 사이드바 (v7.0)
  *
  * 기획서 참조: 01-desktop.md
- * - 항상 펼침 모드 (collapsed 속성 제거)
- * - 모든 2depth 메뉴 항상 표시
+ * - 2depth 메뉴 펼침/접힘 지원
  * - NavItem 기반 메뉴 시스템
  *
  * @example
@@ -124,8 +143,10 @@ const NavItemComponent = observer(function NavItemComponent({
  *   navItems={navItems}
  *   selectedNavItem={selectedNavItem}
  *   selectedSubNavItem={selectedSubNavItem}
+ *   expandedNavItemIds={expandedNavItemIds}
  *   onNavItemClick={(navItemId) => handleNavItemClick(navItemId)}
  *   onSubNavItemClick={(subNavItemId) => handleSubNavItemClick(subNavItemId)}
+ *   onNavItemToggle={(navItemId) => handleNavItemToggle(navItemId)}
  *   logo={<Logo />}
  * />
  * ```
@@ -134,8 +155,10 @@ export const AdminSidebar = observer(function AdminSidebar({
 	navItems,
 	selectedNavItem,
 	selectedSubNavItem,
+	expandedNavItemIds,
 	onNavItemClick,
 	onSubNavItemClick,
+	onNavItemToggle,
 	logo,
 }: AdminSidebarProps) {
 	return (
@@ -155,9 +178,11 @@ export const AdminSidebar = observer(function AdminSidebar({
 							key={item.id}
 							item={item}
 							isSelected={selectedNavItem?.id === item.id}
+							isExpanded={expandedNavItemIds.has(item.id)}
 							selectedSubItemId={selectedSubNavItem?.id ?? null}
 							onNavItemClick={onNavItemClick}
 							onSubNavItemClick={onSubNavItemClick}
+							onToggle={onNavItemToggle}
 						/>
 					))}
 				</div>

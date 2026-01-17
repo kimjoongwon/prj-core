@@ -4,10 +4,10 @@ import { useLocalObservable } from "mobx-react-lite";
 import type {
 	AbilityFormData,
 	AbilityRule,
+	AbilityUser,
 	Role,
 	Action,
 	Subject,
-	User,
 } from "@cocrepo/ui";
 
 /**
@@ -198,7 +198,7 @@ export function useAbilitiesPage() {
 	/**
 	 * 사용자 검색
 	 */
-	const handleSearchUsers = async (query: string): Promise<User[]> => {
+	const handleSearchUsers = async (query: string): Promise<AbilityUser[]> => {
 		// TODO: 실제 API 호출로 교체
 		console.log("Search users:", query);
 

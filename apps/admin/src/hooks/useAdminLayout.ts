@@ -36,6 +36,10 @@ export function useAdminLayout() {
 		bottomTabStore.closeSubMenu();
 	};
 
+	const handleNavItemToggle = (navItemId: string) => {
+		navigationStore.toggleNavItem(navItemId);
+	};
+
 	const handleBottomTabClick = (tabId: string) => {
 		bottomTabStore.selectTab(tabId);
 	};
@@ -57,6 +61,7 @@ export function useAdminLayout() {
 		navItems: navigationStore.items,
 		selectedNavItem: navigationStore.selectedNavItem,
 		selectedSubNavItem: navigationStore.selectedSubNavItem,
+		expandedNavItemIds: navigationStore.expandedNavItemIds,
 
 		// 모바일 - BottomTab
 		bottomTabItems: bottomTabStore.tabItems,
@@ -74,6 +79,7 @@ export function useAdminLayout() {
 		// 핸들러
 		onNavItemClick: handleNavItemClick,
 		onSubNavItemClick: handleSubNavItemClick,
+		onNavItemToggle: handleNavItemToggle,
 		onBottomTabClick: handleBottomTabClick,
 		onSubMenuClose: handleSubMenuClose,
 		onFABToggle: handleFABToggle,

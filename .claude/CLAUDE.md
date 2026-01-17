@@ -300,6 +300,45 @@ rootStore.persistStore = new PersistStore({
 });
 ```
 
+### 공통 타입 선언 규칙
+
+**여러 패키지에서 공통으로 사용되는 타입은 반드시 `@cocrepo/type`에 선언합니다.**
+
+```typescript
+// ✅ 올바른 예시 - @cocrepo/type에 타입 정의
+// packages/type/src/navigation.ts
+export interface NavItemConfig { ... }
+export interface TabConfig { ... }
+export interface FABAction { ... }
+
+// 사용하는 곳에서 import
+import type { NavItemConfig, TabConfig } from "@cocrepo/type";
+```
+
+```typescript
+// ❌ 금지 - 다른 패키지에서 타입 정의 후 re-export
+// packages/store/src/navItem.ts
+export interface NavItemConfig { ... }  // 여기서 정의하면 안 됨
+
+// packages/constant/src/admin-menu.ts
+export type { NavItemConfig } from "@cocrepo/store";  // re-export 금지
+```
+
+**규칙:**
+- 2개 이상의 패키지에서 사용되는 타입 → `@cocrepo/type`에 선언
+- 단일 패키지 내부에서만 사용되는 타입 → 해당 패키지에 선언
+- 타입 re-export 금지 → 항상 원본 패키지에서 직접 import
+
+**@cocrepo/type 패키지 구조:**
+```
+packages/type/src/
+├── index.ts          # 모든 타입 export
+├── navigation.ts     # 네비게이션 관련 (NavItemConfig, TabConfig, FABAction)
+├── config.types.ts   # 설정 관련
+├── json.ts           # JSON 관련
+└── page-meta.ts      # 페이지 메타 관련
+```
+
 ## 기획/설계 원칙
 
 ### 하위호환성 미고려 (Critical)

@@ -26,5 +26,8 @@
   "keywords": [],
   "author": "kimjoongwon",
   "license": "ISC",
+  "dependencies": {
+    "@cocrepo/type": "workspace:*"
+  },
   "devDependencies": {}
 }

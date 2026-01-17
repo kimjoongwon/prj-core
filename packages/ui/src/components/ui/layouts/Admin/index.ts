@@ -13,8 +13,7 @@ export type {
 	AdminSubMenuListProps,
 	AdminUserInfo,
 	BottomTabItem,
-	FABAction,
-	NavItem,
 	SubMenuItem,
-	TabConfig,
 } from "./types";
+export type { FABAction, TabConfig } from "@cocrepo/type";
+export type { NavItem } from "@cocrepo/store";
