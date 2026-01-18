@@ -1,6 +1,5 @@
 import type {
 	Profile,
-	Space,
 	Tenant,
 	UserAssociation,
 	User as UserEntity,
@@ -14,16 +13,6 @@ export class User extends AbstractEntity implements UserEntity {
 	phone!: string;
 	password!: string;
 
-	/**
-	 * 현재 선택된 Space ID
-	 */
-	selectedSpaceId: string | null = null;
-
-	/**
-	 * 현재 선택된 Space (관계)
-	 */
-	selectedSpace?: Space | null;
-
 	profiles?: Profile[];
 	tenants?: Tenant[];
 	associations?: UserAssociation[];
@@ -32,16 +21,6 @@ export class User extends AbstractEntity implements UserEntity {
 	 * 사용자별 예외 권한 (CASL)
 	 */
 	abilities?: Ability[];
-
-	/**
-	 * 사용자의 현재 선택된 Space에 해당하는 테넌트를 반환합니다
-	 */
-	getCurrentTenant(): Tenant | undefined {
-		if (!this.selectedSpaceId || !this.tenants) return undefined;
-		return this.tenants.find(
-			(tenant) => tenant.spaceId === this.selectedSpaceId,
-		);
-	}
 
 	/**
 	 * 사용자가 특정 테넌트에 속해 있는지 확인합니다

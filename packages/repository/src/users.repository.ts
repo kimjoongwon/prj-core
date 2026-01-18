@@ -592,47 +592,4 @@ export class UsersRepository {
 
 		return plainToInstance(User, result);
 	}
-
-	/**
-	 * 사용자의 selectedSpaceId 업데이트
-	 */
-	async updateSelectedSpaceIdById(
-		userId: string,
-		spaceId: string,
-	): Promise<string> {
-		this.logger.debug(
-			`selectedSpaceId 업데이트: userId=${userId.slice(-8)}, spaceId=${spaceId.slice(-8)}`,
-		);
-
-		const result = await this.txHost.tx.user.update({
-			where: { id: userId },
-			data: { selectedSpaceId: spaceId },
-			select: { selectedSpaceId: true },
-		});
-
-		return result.selectedSpaceId!;
-	}
-
-	/**
-	 * 사용자와 Space 간의 Tenant 관계 존재 여부 확인
-	 */
-	async existsTenantByUserIdAndSpaceId(
-		userId: string,
-		spaceId: string,
-	): Promise<boolean> {
-		this.logger.debug(
-			`Tenant 관계 확인: userId=${userId.slice(-8)}, spaceId=${spaceId.slice(-8)}`,
-		);
-
-		const tenant = await this.txHost.tx.tenant.findFirst({
-			where: {
-				userId,
-				spaceId,
-				removedAt: null,
-			},
-			select: { id: true },
-		});
-
-		return tenant !== null;
-	}
 }

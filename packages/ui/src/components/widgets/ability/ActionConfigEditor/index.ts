@@ -1,2 +1,2 @@
-export { ActionConfigEditor } from "./ActionConfigEditor";
 export type { ActionConfigEditorProps } from "./ActionConfigEditor";
+export { ActionConfigEditor } from "./ActionConfigEditor";

@@ -3114,7 +3114,10 @@ export const RoleScalarFieldEnum = {
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   removedAt: 'removedAt',
-  name: 'name'
+  name: 'name',
+  displayName: 'displayName',
+  description: 'description',
+  isSystem: 'isSystem'
 } as const
 
 export type RoleScalarFieldEnum = (typeof RoleScalarFieldEnum)[keyof typeof RoleScalarFieldEnum]
@@ -3379,8 +3382,7 @@ export const UserScalarFieldEnum = {
   phone: 'phone',
   name: 'name',
   email: 'email',
-  password: 'password',
-  selectedSpaceId: 'selectedSpaceId'
+  password: 'password'
 } as const
 
 export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]
@@ -3576,20 +3578,6 @@ export type EnumTextTypesFieldRefInput<$PrismaModel> = FieldRefInputType<$Prisma
  * Reference to a field of type 'TextTypes[]'
  */
 export type ListEnumTextTypesFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'TextTypes[]'>
-    
-
-
-/**
- * Reference to a field of type 'Roles'
- */
-export type EnumRolesFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Roles'>
-    
-
-
-/**
- * Reference to a field of type 'Roles[]'
- */
-export type ListEnumRolesFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Roles[]'>
     
 
 

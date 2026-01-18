@@ -452,7 +452,7 @@ feat(coin): 멀티시그 지갑 서비스 초기 구현
 **stage-orchestrator**를 사용하여 각 단계별 사용자 리뷰를 받으며 개발합니다.
 
 ```
-Stage 1: 데이터 설계     → planner → technical-designer → [사용자 리뷰]
+Stage 1: 데이터 설계     → planner → [사용자 리뷰]
 Stage 2: 스키마 구현     → schema → entity → dto → seed → [사용자 리뷰]
 Stage 3: 백엔드 로직     → repository → service → controller → [사용자 리뷰]
 Stage 4: 컴포넌트 구현   → ui → widget → feature → [사용자 리뷰]
@@ -484,9 +484,8 @@ Stage 5: 페이지 통합     → page-builder → page-reviewer → [사용자 
 
 | 카테고리 | Agent | 역할 |
 |---------|-------|------|
-| **기획/분석** | planner | 요구사항 → 화면 기획서 작성 (Figma 없을 때) |
+| **기획/분석** | planner | 요구사항 → 화면 기획서 + 기술 설계서 작성 (Figma 없을 때) |
 | | design-analyzer | Figma 디자인 분석 및 컴포넌트 매핑 (Figma 있을 때) |
-| | technical-designer | 기획 문서 개발적 강화 및 Entity/API 상세 설계 |
 | | route-designer | 백엔드 엔티티 기반 라우팅 경로 설계 |
 | **프론트엔드** | ui-component-builder | Pure UI 컴포넌트 생성 (components/ui) |
 | | input-component-builder | Input 컴포넌트 생성 (components/inputs) |
@@ -513,3 +512,63 @@ Stage 5: 페이지 통합     → page-builder → page-reviewer → [사용자 
 | | jenkinsfile-builder | Jenkins 파이프라인 파일 생성 |
 
 각 Agent의 상세 역할은 `.claude/agents/` 디렉토리를 참고하세요.
+
+### 에이전트 실행 규칙 (Critical)
+
+**에이전트 호출 시 반드시 아래 규칙을 따릅니다.**
+
+#### 1. 시작/종료 선언 (필수)
+
+**시작 시 출력:**
+```
+🚀 [에이전트명] 에이전트 시작
+📋 작업: [작업 내용 요약]
+📂 대상: [대상 파일/폴더]
+```
+
+**종료 시 출력:**
+```
+✅ [에이전트명] 에이전트 완료
+📁 생성/수정된 파일:
+   - [파일 경로 1]
+   - [파일 경로 2]
+```
+
+**실패 시 출력:**
+```
+❌ [에이전트명] 에이전트 실패
+⚠️ 원인: [실패 원인]
+```
+
+#### 2. PROGRESS.md 업데이트 (필수)
+
+기획 폴더에 `PROGRESS.md`가 있으면 에이전트 실행 결과를 기록합니다:
+
+```markdown
+## Stage X: [단계명]
+- [x] [에이전트명] 에이전트 실행 완료 (YYYY-MM-DD HH:MM)
+  - 생성: `파일경로`
+```
+
+#### 3. 에이전트 미호출 시 명시
+
+에이전트를 호출하지 않고 직접 작업할 경우 반드시 선언:
+```
+⚡ 직접 작업 (에이전트 미사용)
+📋 작업: [작업 내용]
+```
+
+#### 예시
+
+```
+🚀 schema-builder 에이전트 시작
+📋 작업: User 모델 Prisma 스키마 생성
+📂 대상: packages/prisma/schema/user.prisma
+
+[... 에이전트 작업 ...]
+
+✅ schema-builder 에이전트 완료
+📁 생성/수정된 파일:
+   - packages/prisma/schema/user.prisma
+   - packages/prisma/schema/enums.prisma
+```

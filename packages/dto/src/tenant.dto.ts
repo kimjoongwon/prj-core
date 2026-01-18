@@ -1,17 +1,9 @@
-import {
-	BooleanField,
-	ClassField,
-	StringField,
-	UUIDField,
-} from "@cocrepo/decorator";
+import { ClassField, StringField, UUIDField } from "@cocrepo/decorator";
 import type { Tenant } from "@cocrepo/prisma";
 import { RoleDto, SpaceDto, UserDto } from ".";
 import { AbstractDto } from "./abstract.dto";
 
 export class TenantDto extends AbstractDto implements Tenant {
-	@BooleanField({ default: false })
-	main: boolean;
-
 	@UUIDField()
 	roleId: string;
 

@@ -1,7 +1,13 @@
 import { applyDecorators } from "@nestjs/common";
 import { ApiProperty } from "@nestjs/swagger";
 import { Type } from "class-transformer";
-import { IsString, MaxLength, MinLength, NotEquals } from "class-validator";
+import {
+	IsString,
+	Matches,
+	MaxLength,
+	MinLength,
+	NotEquals,
+} from "class-validator";
 import { VALIDATION_MESSAGES } from "../../constants/validation-messages";
 import { ToLowerCase, ToUpperCase } from "../../transform.decorators";
 import { IsNullable } from "../../validator.decorators";
@@ -65,6 +71,17 @@ export function StringField(
 
 	if (options.toUpperCase) {
 		decorators.push(ToUpperCase());
+	}
+
+	// 정규식 패턴 검증
+	if (options.pattern) {
+		decorators.push(
+			Matches(new RegExp(options.pattern), {
+				each: options.each,
+				message:
+					options.message || `${options.description || "값"}이 올바른 형식이 아닙니다`,
+			}),
+		);
 	}
 
 	return applyDecorators(...decorators);

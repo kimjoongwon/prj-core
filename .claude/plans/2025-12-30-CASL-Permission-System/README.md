@@ -1,7 +1,7 @@
 # RBAC/ABAC 분리형 권한 시스템
 
 **작성일:** 2025-12-30
-**수정일:** 2026-01-13
+**수정일:** 2026-01-17
 **플랫폼:** Web (Admin/User) + Mobile (User)
 
 ---
@@ -13,13 +13,10 @@ Stage 1: 데이터 설계     ✅ 완료
 Stage 2: 스키마 구현     ✅ 완료
 Stage 3: 백엔드 로직     ✅ 완료
 Stage 4: 컴포넌트 구현   ✅ 완료
-Stage 5: 페이지 통합     ⏳ 대기
+Stage 5: 페이지 통합     ✅ 완료
 ```
 
-**다음 단계:**
-```bash
-/stage-orchestrator start stage=5 plan=2025-12-30-CASL-Permission-System
-```
+**구현 완료일:** 2026-01-17
 
 ---
 
@@ -32,9 +29,9 @@ Stage 5: 페이지 통합     ⏳ 대기
 ├── 01-philosophy.md          ← 설계 철학 (RBAC/ABAC 개념)
 ├── 02-scenarios.md           ← 현실 세계 예시 (F45 시나리오)
 ├── 03-admin-ui.md            ← 관리자 UI 화면 기획
+├── 04-role-crud.md           ← 역할 CRUD 모달 기획 (2026-01-17 추가)
 │
-└── ../2025-12-30-CASL-Permission-System-design.md
-                              ← 기술 설계서 (Entity, API, DTO 등)
+└── design.md                 ← 기술 설계서 (Entity, API, DTO 등)
 ```
 
 ---
@@ -48,6 +45,7 @@ Stage 5: 페이지 통합     ⏳ 대기
 | [01-philosophy.md](./01-philosophy.md) | RBAC/ABAC 역할 분리, Subject 패턴 체계 | ~170줄 |
 | [02-scenarios.md](./02-scenarios.md) | F45 피트니스 시나리오, 권한 흐름 예시 | ~490줄 |
 | [03-admin-ui.md](./03-admin-ui.md) | 관리자 UI 와이어프레임, 화면 흐름 | ~450줄 |
+| [04-role-crud.md](./04-role-crud.md) | 역할 CRUD 모달, URL 기반 라우팅 | ~280줄 |
 
 ### 기술 설계서 (별도 파일)
 

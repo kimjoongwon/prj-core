@@ -14,6 +14,11 @@
       "import": "./index.ts",
       "default": "./index.ts"
     },
+    "./widgets": {
+      "types": "./src/components/widgets/index.ts",
+      "import": "./src/components/widgets/index.ts",
+      "default": "./src/components/widgets/index.ts"
+    },
     "./styles": "./src/styles/globals.css",
     "./package.json": "./package.json"
   },

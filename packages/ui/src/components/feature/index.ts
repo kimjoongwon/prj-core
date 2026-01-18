@@ -9,3 +9,4 @@ export * from "./SpaceSelector";
 export * from "./SubMenuList";
 export * from "./SubNav";
 export * from "./UserMenu";
+export * from "./user";

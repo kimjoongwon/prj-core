@@ -3,10 +3,10 @@ import {
 	RoleGroupGuard,
 	RolesGuard,
 } from "@cocrepo/be-common";
+import { SYSTEM_ROLES } from "@cocrepo/constant";
 import { RoleCategories, RoleGroups, Roles } from "@cocrepo/decorator";
 import { ResponseEntity } from "@cocrepo/entity";
 import { RoleCategoryNames } from "@cocrepo/enum";
-import { Roles as RolesEnum } from "@cocrepo/prisma";
 import { Controller, Get, HttpStatus, Query, UseGuards } from "@nestjs/common";
 
 /**
@@ -114,7 +114,7 @@ export class GuardTestController {
 
 	@Get("roles/user")
 	@UseGuards(RolesGuard)
-	@Roles([RolesEnum.USER])
+	@Roles([SYSTEM_ROLES.USER])
 	async testRolesUser() {
 		return new ResponseEntity(HttpStatus.OK, "USER 역할 권한 테스트 성공", {
 			message: "USER 역할로 접근 성공",
@@ -124,7 +124,7 @@ export class GuardTestController {
 
 	@Get("roles/admin")
 	@UseGuards(RolesGuard)
-	@Roles([RolesEnum.ADMIN])
+	@Roles([SYSTEM_ROLES.ADMIN])
 	async testRolesAdmin() {
 		return new ResponseEntity(HttpStatus.OK, "ADMIN 역할 권한 테스트 성공", {
 			message: "ADMIN 역할로 접근 성공",
@@ -134,7 +134,7 @@ export class GuardTestController {
 
 	@Get("roles/super-admin")
 	@UseGuards(RolesGuard)
-	@Roles([RolesEnum.SUPER_ADMIN])
+	@Roles([SYSTEM_ROLES.SUPER_ADMIN])
 	async testRolesSuperAdmin() {
 		return new ResponseEntity(
 			HttpStatus.OK,
@@ -151,7 +151,7 @@ export class GuardTestController {
 	@Get("combined/admin-category-and-role")
 	@UseGuards(RoleCategoryGuard, RolesGuard)
 	@RoleCategories([RoleCategoryNames.ADMIN])
-	@Roles([RolesEnum.ADMIN])
+	@Roles([SYSTEM_ROLES.ADMIN])
 	async testCombinedAdminCategoryAndRole() {
 		return new ResponseEntity(HttpStatus.OK, "복합 권한 테스트 성공", {
 			message: "관리자 카테고리 + ADMIN 역할 권한으로 접근 성공",

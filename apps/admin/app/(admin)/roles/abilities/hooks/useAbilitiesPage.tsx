@@ -1,14 +1,14 @@
 "use client";
 
-import { useLocalObservable } from "mobx-react-lite";
 import type {
 	AbilityFormData,
 	AbilityRule,
 	AbilityUser,
-	Role,
 	Action,
+	Role,
 	Subject,
 } from "@cocrepo/ui";
+import { useLocalObservable } from "mobx-react-lite";
 
 /**
  * 페이지 상태 타입
@@ -71,13 +71,48 @@ export function useAbilitiesPage() {
 			];
 
 			state.subjects = [
-				{ id: "subj-1", name: "entity:User", displayName: "사용자", group: "entity" },
-				{ id: "subj-2", name: "entity:Reservation", displayName: "예약", group: "entity" },
-				{ id: "subj-3", name: "entity:Payment", displayName: "결제", group: "entity" },
-				{ id: "subj-4", name: "menu:dashboard", displayName: "대시보드", group: "menu" },
-				{ id: "subj-5", name: "menu:settings", displayName: "설정", group: "menu" },
-				{ id: "subj-6", name: "feature:export", displayName: "내보내기", group: "feature" },
-				{ id: "subj-7", name: "ui:mobile-bottom-tab", displayName: "모바일 바텀탭", group: "ui" },
+				{
+					id: "subj-1",
+					name: "entity:User",
+					displayName: "사용자",
+					group: "entity",
+				},
+				{
+					id: "subj-2",
+					name: "entity:Reservation",
+					displayName: "예약",
+					group: "entity",
+				},
+				{
+					id: "subj-3",
+					name: "entity:Payment",
+					displayName: "결제",
+					group: "entity",
+				},
+				{
+					id: "subj-4",
+					name: "menu:dashboard",
+					displayName: "대시보드",
+					group: "menu",
+				},
+				{
+					id: "subj-5",
+					name: "menu:settings",
+					displayName: "설정",
+					group: "menu",
+				},
+				{
+					id: "subj-6",
+					name: "feature:export",
+					displayName: "내보내기",
+					group: "feature",
+				},
+				{
+					id: "subj-7",
+					name: "ui:mobile-bottom-tab",
+					displayName: "모바일 바텀탭",
+					group: "ui",
+				},
 			];
 
 			state.actions = [
@@ -85,13 +120,48 @@ export function useAbilitiesPage() {
 				{ id: "act-2", name: "read", displayName: "조회", group: "crud" },
 				{ id: "act-3", name: "update", displayName: "수정", group: "crud" },
 				{ id: "act-4", name: "delete", displayName: "삭제", group: "crud" },
-				{ id: "act-5", name: "manage", displayName: "전체 관리", group: "crud" },
-				{ id: "act-6", name: "read:full", displayName: "전체 조회", group: "visibility" },
-				{ id: "act-7", name: "read:hidden", displayName: "숨김", group: "visibility" },
-				{ id: "act-8", name: "read:masked:email", displayName: "이메일 마스킹", group: "visibility" },
-				{ id: "act-9", name: "read:masked:phone", displayName: "전화번호 마스킹", group: "visibility" },
-				{ id: "act-10", name: "access", displayName: "접근", group: "workflow" },
-				{ id: "act-11", name: "export", displayName: "내보내기", group: "bulk" },
+				{
+					id: "act-5",
+					name: "manage",
+					displayName: "전체 관리",
+					group: "crud",
+				},
+				{
+					id: "act-6",
+					name: "read:full",
+					displayName: "전체 조회",
+					group: "visibility",
+				},
+				{
+					id: "act-7",
+					name: "read:hidden",
+					displayName: "숨김",
+					group: "visibility",
+				},
+				{
+					id: "act-8",
+					name: "read:masked:email",
+					displayName: "이메일 마스킹",
+					group: "visibility",
+				},
+				{
+					id: "act-9",
+					name: "read:masked:phone",
+					displayName: "전화번호 마스킹",
+					group: "visibility",
+				},
+				{
+					id: "act-10",
+					name: "access",
+					displayName: "접근",
+					group: "workflow",
+				},
+				{
+					id: "act-11",
+					name: "export",
+					displayName: "내보내기",
+					group: "bulk",
+				},
 			];
 		} catch (err) {
 			state.error = err instanceof Error ? err.message : "데이터 로드 실패";
@@ -125,7 +195,9 @@ export function useAbilitiesPage() {
 	/**
 	 * Role별 Ability 로드
 	 */
-	const handleLoadRoleAbilities = async (roleId: string): Promise<AbilityRule[]> => {
+	const handleLoadRoleAbilities = async (
+		roleId: string,
+	): Promise<AbilityRule[]> => {
 		// TODO: 실제 API 호출로 교체
 		console.log("Load abilities for role:", roleId);
 
@@ -162,7 +234,10 @@ export function useAbilitiesPage() {
 	/**
 	 * Role Ability 추가
 	 */
-	const handleAddRoleAbility = async (roleId: string, data: AbilityFormData): Promise<void> => {
+	const handleAddRoleAbility = async (
+		roleId: string,
+		data: AbilityFormData,
+	): Promise<void> => {
 		// TODO: 실제 API 호출로 교체
 		console.log("Add ability for role:", roleId, data);
 	};
@@ -170,7 +245,10 @@ export function useAbilitiesPage() {
 	/**
 	 * Role Ability 수정
 	 */
-	const handleUpdateRoleAbility = async (abilityId: string, data: AbilityFormData): Promise<void> => {
+	const handleUpdateRoleAbility = async (
+		abilityId: string,
+		data: AbilityFormData,
+	): Promise<void> => {
 		// TODO: 실제 API 호출로 교체
 		console.log("Update ability:", abilityId, data);
 	};
@@ -186,7 +264,10 @@ export function useAbilitiesPage() {
 	/**
 	 * Role Ability 활성화 토글
 	 */
-	const handleToggleRoleAbilityActive = async (abilityId: string, isActive: boolean): Promise<void> => {
+	const handleToggleRoleAbilityActive = async (
+		abilityId: string,
+		isActive: boolean,
+	): Promise<void> => {
 		// TODO: 실제 API 호출로 교체
 		console.log("Toggle ability active:", abilityId, isActive);
 	};
@@ -225,14 +306,16 @@ export function useAbilitiesPage() {
 		].filter(
 			(u) =>
 				u.name.includes(query) ||
-				u.email.toLowerCase().includes(query.toLowerCase())
+				u.email.toLowerCase().includes(query.toLowerCase()),
 		);
 	};
 
 	/**
 	 * User별 Ability 로드
 	 */
-	const handleLoadUserAbilities = async (userId: string): Promise<AbilityRule[]> => {
+	const handleLoadUserAbilities = async (
+		userId: string,
+	): Promise<AbilityRule[]> => {
 		// TODO: 실제 API 호출로 교체
 		console.log("Load abilities for user:", userId);
 
@@ -243,7 +326,10 @@ export function useAbilitiesPage() {
 	/**
 	 * User Ability 추가
 	 */
-	const handleAddUserAbility = async (userId: string, data: AbilityFormData): Promise<void> => {
+	const handleAddUserAbility = async (
+		userId: string,
+		data: AbilityFormData,
+	): Promise<void> => {
 		// TODO: 실제 API 호출로 교체
 		console.log("Add ability for user:", userId, data);
 	};
@@ -251,7 +337,10 @@ export function useAbilitiesPage() {
 	/**
 	 * User Ability 수정
 	 */
-	const handleUpdateUserAbility = async (abilityId: string, data: AbilityFormData): Promise<void> => {
+	const handleUpdateUserAbility = async (
+		abilityId: string,
+		data: AbilityFormData,
+	): Promise<void> => {
 		// TODO: 실제 API 호출로 교체
 		console.log("Update user ability:", abilityId, data);
 	};
@@ -267,7 +356,10 @@ export function useAbilitiesPage() {
 	/**
 	 * User Ability 활성화 토글
 	 */
-	const handleToggleUserAbilityActive = async (abilityId: string, isActive: boolean): Promise<void> => {
+	const handleToggleUserAbilityActive = async (
+		abilityId: string,
+		isActive: boolean,
+	): Promise<void> => {
 		// TODO: 실제 API 호출로 교체
 		console.log("Toggle user ability active:", abilityId, isActive);
 	};
@@ -279,7 +371,9 @@ export function useAbilitiesPage() {
 	/**
 	 * Subject 필드 로드 (DMMF 기반)
 	 */
-	const handleLoadSubjectFields = async (subjectName: string): Promise<string[]> => {
+	const handleLoadSubjectFields = async (
+		subjectName: string,
+	): Promise<string[]> => {
 		// TODO: 실제 API 호출로 교체
 		console.log("Load fields for subject:", subjectName);
 
@@ -290,7 +384,14 @@ export function useAbilitiesPage() {
 				case "User":
 					return ["id", "name", "email", "phone", "createdAt", "updatedAt"];
 				case "Reservation":
-					return ["id", "userId", "date", "status", "departmentId", "createdAt"];
+					return [
+						"id",
+						"userId",
+						"date",
+						"status",
+						"departmentId",
+						"createdAt",
+					];
 				case "Payment":
 					return ["id", "amount", "status", "cardNumber", "createdAt"];
 				default:

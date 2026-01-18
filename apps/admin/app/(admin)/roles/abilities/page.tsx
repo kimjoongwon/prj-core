@@ -1,11 +1,11 @@
 "use client";
 
+import { RoleAbilityManager, UserAbilityManager } from "@cocrepo/ui";
 import { Tab, Tabs } from "@heroui/react";
 import { observer } from "mobx-react-lite";
 import { useEffect } from "react";
-import { RoleAbilityManager, UserAbilityManager } from "@cocrepo/ui";
-import { useAbilitiesPage } from "./hooks/useAbilitiesPage";
 import { ActionManagementTab } from "./components/ActionManagementTab";
+import { useAbilitiesPage } from "./hooks/useAbilitiesPage";
 
 /**
  * 권한 관리 페이지
@@ -57,9 +57,7 @@ function AbilitiesPage() {
 			{/* 페이지 헤더 */}
 			<div>
 				<h1 className="text-2xl font-bold">권한 관리</h1>
-				<p className="text-default-500">
-					RBAC/ABAC 기반 권한을 관리합니다.
-				</p>
+				<p className="text-default-500">RBAC/ABAC 기반 권한을 관리합니다.</p>
 			</div>
 
 			{/* 탭 컨테이너 */}

@@ -653,7 +653,7 @@ export interface UserSeedData {
 		name: string;
 		nickname: string;
 	};
-	role?: "USER" | "ADMIN" | "SUPER_ADMIN";
+	role?: string;
 }
 
 export interface GroundSeedData {
@@ -888,18 +888,30 @@ export const roleCategorySeedData: CategorySeedData[] = [
 
 // Role 시드 데이터 (role.prisma의 Role 모델에 대응)
 export interface RoleSeedData {
-	name: "USER" | "ADMIN" | "SUPER_ADMIN";
+	name: string;
+	displayName: string;
+	description: string;
+	isSystem: boolean;
 }
 
 export const roleSeedData: RoleSeedData[] = [
 	{
 		name: "SUPER_ADMIN",
+		displayName: "슈퍼 관리자",
+		description: "시스템의 모든 권한을 가진 최고 관리자",
+		isSystem: true,
 	},
 	{
 		name: "ADMIN",
+		displayName: "관리자",
+		description: "일반 관리 업무를 수행하는 관리자",
+		isSystem: true,
 	},
 	{
 		name: "USER",
+		displayName: "일반 사용자",
+		description: "기본 사용자 역할",
+		isSystem: true,
 	},
 ];
 
@@ -907,7 +919,7 @@ export const roleSeedData: RoleSeedData[] = [
 // role.prisma의 RoleClassification 모델: categoryId, roleId로 연결
 
 export interface RoleClassificationSeedData {
-	roleName: "USER" | "ADMIN" | "SUPER_ADMIN";
+	roleName: string;
 	roleCategoryEnum: RoleCategoryNames; // RoleCategoryNames enum 사용
 }
 
@@ -943,7 +955,7 @@ export const roleGroupSeedData: RoleGroupSeedData[] = [
 
 // Role과 Group 연결 (RoleAssociation) 시드 데이터
 export interface RoleAssociationSeedData {
-	roleName: "USER" | "ADMIN" | "SUPER_ADMIN";
+	roleName: string;
 	roleGroupEnum: RoleGroupNames;
 }
 
@@ -1245,7 +1257,7 @@ export type AbilityAction =
  * @property priority - 우선순위 (높을수록 먼저 적용)
  */
 export interface AbilitySeedData {
-	roleName: "USER" | "ADMIN" | "SUPER_ADMIN";
+	roleName: string;
 	subject: string; // Prisma 모델명 또는 'all', 'menu:xxx', 'feature:xxx', 'ui:xxx' 등
 	actionName: AbilityAction; // Action 테이블의 name 참조
 	inverted: boolean; // false = can (허용), true = cannot (거부)

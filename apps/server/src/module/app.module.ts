@@ -21,6 +21,7 @@ import { AuthModule } from "./auth";
 import { globalModules } from "./global.module";
 import { GroundsModule } from "./grounds";
 import { PrismaModule } from "./prisma.module";
+import { RolesModule } from "./role";
 import { SubjectsModule } from "./subject";
 import { UsersModule } from "./users";
 
@@ -34,6 +35,7 @@ import { UsersModule } from "./users";
 		ActionsModule,
 		SubjectsModule,
 		AbilitiesModule,
+		RolesModule,
 		// Resource Modules는 필요할 때 추가합니다.
 		// 가이드: .claude/agents/be-controller-builder.md
 		RouterModule.register([
@@ -66,6 +68,10 @@ import { UsersModule } from "./users";
 							{
 								path: "abilities",
 								module: AbilitiesModule,
+							},
+							{
+								path: "roles",
+								module: RolesModule,
 							},
 							// 새로운 Resource 라우트는 여기에 추가
 						],

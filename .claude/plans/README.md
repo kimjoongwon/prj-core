@@ -66,6 +66,7 @@ YYYY-MM-DD-{기능명}/
 | [TableMetadataSystem](./2026-01-03-TableMetadataSystem/) | 대형 | - | 테이블 메타데이터 |
 | [AdminTableMetadataSystem](./2026-01-03-AdminTableMetadataSystem/) | 대형 | - | Admin 테이블 메타 |
 | [MemberListPage](./2026-01-03-MemberListPage/) | 중형 | - | 회원 목록 페이지 |
+| [UserList](./2026-01-18-UserList/) | 중형 | 완료 | 회원 목록 (CRUD) |
 
 ---
 

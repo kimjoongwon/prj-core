@@ -25,8 +25,16 @@ model Role {
   createdAt      DateTime            @default(now()) @map("created_at")
   updatedAt      DateTime?           @updatedAt @map("updated_at") @db.Timestamptz(6)
   removedAt      DateTime?           @map("removed_at") @db.Timestamptz(6)
-  /// @displayName 역할명
-  name           Roles               @unique @default(USER)
+
+  /// @displayName 역할 식별자
+  name           String              @unique
+  /// @displayName 표시명
+  displayName    String?             @map("display_name")
+  /// @displayName 설명
+  description    String?
+  /// @displayName 시스템 역할 여부
+  isSystem       Boolean             @default(false) @map("is_system")
+
   abilities      Ability[]
   assignments    Assignment[]
   associations   RoleAssociation[]

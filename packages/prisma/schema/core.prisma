@@ -325,13 +325,6 @@ enum RecurringDayOfWeek {
   SUNDAY
 }
 
-
-enum Roles {
-  USER
-  SUPER_ADMIN
-  ADMIN
-}
-
 enum TemplateNames {
   WELCOME
   EMAIL_VERIFICATION

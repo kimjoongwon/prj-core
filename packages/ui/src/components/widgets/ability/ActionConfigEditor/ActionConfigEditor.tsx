@@ -77,12 +77,7 @@ export interface ActionConfigEditorProps {
  * ```
  */
 export const ActionConfigEditor = observer(
-	({
-		configType,
-		config,
-		onChange,
-		previewValue,
-	}: ActionConfigEditorProps) => {
+	({ configType, config, onChange, previewValue }: ActionConfigEditorProps) => {
 		/**
 		 * 마스킹 설정 변경 핸들러
 		 */
@@ -155,20 +150,14 @@ export const ActionConfigEditor = observer(
 						return previewValue;
 					}
 					case "PRESET_PHONE":
-						return previewValue.replace(
-							/(\d{3})(\d{4})(\d{4})/,
-							"$1-****-$3",
-						);
+						return previewValue.replace(/(\d{3})(\d{4})(\d{4})/, "$1-****-$3");
 					case "PRESET_NAME":
 						if (previewValue.length > 1) {
 							return `${previewValue[0]}${"*".repeat(previewValue.length - 1)}`;
 						}
 						return "*";
 					case "PRESET_SSN":
-						return previewValue.replace(
-							/(\d{6})[-]?(\d{7})/,
-							"$1-*******",
-						);
+						return previewValue.replace(/(\d{6})[-]?(\d{7})/, "$1-*******");
 					case "PRESET_CARD":
 						return previewValue.replace(
 							/(\d{4})(\d{4})(\d{4})(\d{4})/,
@@ -188,10 +177,7 @@ export const ActionConfigEditor = observer(
 			if (maskingConfig.pattern) {
 				try {
 					const regex = new RegExp(maskingConfig.pattern, "g");
-					return previewValue.replace(
-						regex,
-						maskingConfig.replacement || "*",
-					);
+					return previewValue.replace(regex, maskingConfig.replacement || "*");
 				} catch {
 					return previewValue;
 				}
@@ -226,9 +212,7 @@ export const ActionConfigEditor = observer(
 								placeholder="프리셋을 선택하세요"
 								options={MASKING_PRESET_OPTIONS}
 								value={maskingConfig?.preset || ""}
-								onChange={(value) =>
-									handleMaskingChange("preset", value)
-								}
+								onChange={(value) => handleMaskingChange("preset", value)}
 							/>
 
 							{/* 커스텀 패턴 입력 (프리셋이 없을 때만) */}
@@ -239,10 +223,7 @@ export const ActionConfigEditor = observer(
 										placeholder="예: \\d{4}"
 										value={maskingConfig?.pattern || ""}
 										onChange={(value) =>
-											handleMaskingChange(
-												"pattern",
-												String(value),
-											)
+											handleMaskingChange("pattern", String(value))
 										}
 									/>
 									<Input
@@ -250,10 +231,7 @@ export const ActionConfigEditor = observer(
 										placeholder="예: ****"
 										value={maskingConfig?.replacement || ""}
 										onChange={(value) =>
-											handleMaskingChange(
-												"replacement",
-												String(value),
-											)
+											handleMaskingChange("replacement", String(value))
 										}
 									/>
 								</>
@@ -268,14 +246,10 @@ export const ActionConfigEditor = observer(
 									<HStack
 										gap={8}
 										alignItems="center"
-										className={cn(
-											"rounded-lg bg-content3 px-4 py-3",
-										)}
+										className={cn("rounded-lg bg-content3 px-4 py-3")}
 									>
 										<VStack gap={1}>
-											<span className="text-xs text-default-400">
-												원본
-											</span>
+											<span className="text-xs text-default-400">원본</span>
 											<span className="font-mono text-sm text-default-700">
 												{previewValue}
 											</span>
@@ -320,9 +294,7 @@ export const ActionConfigEditor = observer(
 								label="포맷 패턴"
 								placeholder="예: YYYY-MM-DD"
 								value={formatConfig?.pattern || ""}
-								onChange={(value) =>
-									handleFormatChange(String(value))
-								}
+								onChange={(value) => handleFormatChange(String(value))}
 								description="Y: 연도, M: 월, D: 일, H: 시, m: 분, s: 초, #: 숫자"
 							/>
 
@@ -332,27 +304,17 @@ export const ActionConfigEditor = observer(
 									<p className="text-sm font-medium text-default-600">
 										미리보기
 									</p>
-									<div
-										className={cn(
-											"rounded-lg bg-content3 px-4 py-3",
-										)}
-									>
+									<div className={cn("rounded-lg bg-content3 px-4 py-3")}>
 										<HStack gap={8} alignItems="center">
 											<VStack gap={1}>
-												<span className="text-xs text-default-400">
-													원본
-												</span>
+												<span className="text-xs text-default-400">원본</span>
 												<span className="font-mono text-sm text-default-700">
 													{previewValue}
 												</span>
 											</VStack>
-											<span className="text-default-400">
-												→
-											</span>
+											<span className="text-default-400">→</span>
 											<VStack gap={1}>
-												<span className="text-xs text-default-400">
-													패턴
-												</span>
+												<span className="text-xs text-default-400">패턴</span>
 												<span className="font-mono text-sm text-primary">
 													{formatConfig.pattern}
 												</span>
@@ -406,9 +368,7 @@ export const ActionConfigEditor = observer(
 								placeholder="변환 규칙을 선택하세요"
 								options={TRANSFORM_RULE_OPTIONS}
 								value={transformConfig?.rule || ""}
-								onChange={(value) =>
-									handleTransformChange(value)
-								}
+								onChange={(value) => handleTransformChange(value)}
 							/>
 
 							{/* 미리보기 */}
@@ -417,23 +377,15 @@ export const ActionConfigEditor = observer(
 									<p className="text-sm font-medium text-default-600">
 										미리보기
 									</p>
-									<div
-										className={cn(
-											"rounded-lg bg-content3 px-4 py-3",
-										)}
-									>
+									<div className={cn("rounded-lg bg-content3 px-4 py-3")}>
 										<HStack gap={8} alignItems="center">
 											<VStack gap={1}>
-												<span className="text-xs text-default-400">
-													원본
-												</span>
+												<span className="text-xs text-default-400">원본</span>
 												<span className="font-mono text-sm text-default-700">
 													{previewValue}
 												</span>
 											</VStack>
-											<span className="text-default-400">
-												→
-											</span>
+											<span className="text-default-400">→</span>
 											<VStack gap={1}>
 												<span className="text-xs text-default-400">
 													변환 결과

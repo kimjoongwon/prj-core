@@ -2,7 +2,7 @@
 
 **기획서:** `.claude/plans/2025-12-30-CASL-Permission-System.md`
 **작성일:** 2026-01-08
-**수정일:** 2026-01-13
+**수정일:** 2026-01-17
 **작성자:** technical-designer
 
 ---
@@ -47,12 +47,12 @@
 | feature-builder | RoleAbilityManager | feature | ✅ |
 | feature-builder | UserAbilityManager | feature | ✅ |
 
-### Stage 5: 페이지 통합 ⏳ 대기
+### Stage 5: 페이지 통합 ✅ 완료
 
-| 에이전트 | 페이지 |
-|----------|--------|
-| page-builder | AbilityManagementPage (Admin) |
-| page-builder | ActionManagementPage (Admin) |
+| 에이전트 | 페이지 | 상태 |
+|----------|--------|------|
+| page-builder | AbilityManagementPage (Admin) | ✅ |
+| page-builder | RolesPage (Admin) | ✅ |
 
 ---
 

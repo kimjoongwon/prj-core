@@ -1,5 +1,7 @@
 "use client";
 
+import { useDeleteRole, useGetRoles } from "@cocrepo/api";
+import { ConfirmModal } from "@cocrepo/ui/widgets";
 import {
 	Button,
 	Chip,
@@ -10,22 +12,20 @@ import {
 	TableHeader,
 	TableRow,
 } from "@heroui/react";
-import { Plus, Shield, Users } from "lucide-react";
+import { Plus, Shield } from "lucide-react";
 import { observer, useLocalObservable } from "mobx-react-lite";
-import { useEffect } from "react";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 /**
- * 역할 데이터 타입
+ * 역할 데이터 타입 (API 응답에서 추출)
  */
 interface RoleItem {
 	id: string;
 	name: string;
-	displayName: string;
-	description: string;
-	userCount: number;
-	abilityCount: number;
+	displayName?: string;
+	description?: string;
 	isSystem: boolean;
-	createdAt: string;
 }
 
 /**
@@ -33,68 +33,25 @@ interface RoleItem {
  *
  * 시스템에 등록된 역할 목록을 관리합니다.
  * - 역할 조회
- * - 역할별 사용자 수, 권한 수 확인
- * - 역할 추가/수정/삭제 (추후 구현)
+ * - 역할 추가/수정/삭제
  */
 function RolesPage() {
+	const router = useRouter();
+
+	// 역할 목록 조회
+	const { data: rolesResponse, isLoading, refetch } = useGetRoles();
+	const roles = (rolesResponse?.data ?? []) as RoleItem[];
+
+	// 역할 삭제 mutation
+	const deleteRoleMutation = useDeleteRole();
+
 	const state = useLocalObservable(() => ({
-		roles: [] as RoleItem[],
-		isLoading: false,
-		error: null as string | null,
+		// 삭제 모달 상태
+		deleteModal: {
+			isOpen: false,
+			targetRole: null as RoleItem | null,
+		},
 	}));
-
-	/**
-	 * 역할 목록 로드
-	 */
-	const loadRoles = async () => {
-		state.isLoading = true;
-		state.error = null;
-
-		try {
-			// TODO: 실제 API 호출로 교체
-			// 더미 데이터
-			state.roles = [
-				{
-					id: "role-1",
-					name: "SUPER_ADMIN",
-					displayName: "슈퍼 관리자",
-					description: "시스템의 모든 권한을 가진 최고 관리자",
-					userCount: 2,
-					abilityCount: 45,
-					isSystem: true,
-					createdAt: "2024-01-01",
-				},
-				{
-					id: "role-2",
-					name: "ADMIN",
-					displayName: "관리자",
-					description: "일반 관리 업무를 수행하는 관리자",
-					userCount: 5,
-					abilityCount: 32,
-					isSystem: true,
-					createdAt: "2024-01-01",
-				},
-				{
-					id: "role-3",
-					name: "USER",
-					displayName: "일반 사용자",
-					description: "기본 사용자 역할",
-					userCount: 150,
-					abilityCount: 8,
-					isSystem: true,
-					createdAt: "2024-01-01",
-				},
-			];
-		} catch (err) {
-			state.error = err instanceof Error ? err.message : "역할 목록 로드 실패";
-		} finally {
-			state.isLoading = false;
-		}
-	};
-
-	useEffect(() => {
-		loadRoles();
-	}, []);
 
 	/**
 	 * 역할 타입에 따른 Chip 색상
@@ -110,6 +67,43 @@ function RolesPage() {
 		}
 	};
 
+	/**
+	 * 삭제 모달 열기
+	 */
+	const handleOpenDeleteModal = (role: RoleItem) => {
+		state.deleteModal.targetRole = role;
+		state.deleteModal.isOpen = true;
+	};
+
+	/**
+	 * 삭제 모달 닫기
+	 */
+	const handleCloseDeleteModal = () => {
+		state.deleteModal.isOpen = false;
+		state.deleteModal.targetRole = null;
+	};
+
+	/**
+	 * 역할 삭제 실행
+	 */
+	const handleDeleteRole = async () => {
+		const role = state.deleteModal.targetRole;
+		if (!role) return;
+
+		try {
+			await deleteRoleMutation.mutateAsync({ id: role.id });
+
+			// 모달 닫기
+			handleCloseDeleteModal();
+
+			// 목록 새로고침
+			refetch();
+			router.refresh();
+		} catch (err) {
+			console.error("역할 삭제 실패:", err);
+		}
+	};
+
 	return (
 		<div className="space-y-6">
 			{/* 페이지 헤더 */}
@@ -119,9 +113,10 @@ function RolesPage() {
 					<p className="text-default-500">시스템에 등록된 역할을 관리합니다.</p>
 				</div>
 				<Button
+					as={Link}
+					href="/roles/new"
 					color="primary"
 					startContent={<Plus className="h-4 w-4" />}
-					isDisabled
 				>
 					역할 추가
 				</Button>
@@ -137,14 +132,12 @@ function RolesPage() {
 				<TableHeader>
 					<TableColumn>역할</TableColumn>
 					<TableColumn>설명</TableColumn>
-					<TableColumn align="center">사용자 수</TableColumn>
-					<TableColumn align="center">권한 수</TableColumn>
 					<TableColumn align="center">유형</TableColumn>
 					<TableColumn align="center">작업</TableColumn>
 				</TableHeader>
 				<TableBody
-					items={state.roles}
-					isLoading={state.isLoading}
+					items={roles}
+					isLoading={isLoading}
 					emptyContent="등록된 역할이 없습니다."
 				>
 					{(role) => (
@@ -155,25 +148,17 @@ function RolesPage() {
 										<Shield className="h-5 w-5 text-primary" />
 									</div>
 									<div>
-										<p className="font-medium">{role.displayName}</p>
+										<p className="font-medium">
+											{role.displayName || role.name}
+										</p>
 										<p className="text-xs text-default-400">{role.name}</p>
 									</div>
 								</div>
 							</TableCell>
 							<TableCell>
-								<p className="text-sm text-default-600">{role.description}</p>
-							</TableCell>
-							<TableCell>
-								<div className="flex items-center justify-center gap-1">
-									<Users className="h-4 w-4 text-default-400" />
-									<span>{role.userCount}</span>
-								</div>
-							</TableCell>
-							<TableCell>
-								<div className="flex items-center justify-center gap-1">
-									<Shield className="h-4 w-4 text-default-400" />
-									<span>{role.abilityCount}</span>
-								</div>
+								<p className="text-sm text-default-600">
+									{role.description || "-"}
+								</p>
 							</TableCell>
 							<TableCell>
 								<div className="flex justify-center">
@@ -188,14 +173,26 @@ function RolesPage() {
 							</TableCell>
 							<TableCell>
 								<div className="flex justify-center gap-2">
-									<Button size="sm" variant="flat" isDisabled={role.isSystem}>
-										수정
-									</Button>
+									{role.isSystem ? (
+										<Button size="sm" variant="flat" isDisabled>
+											수정
+										</Button>
+									) : (
+										<Button
+											as={Link}
+											href={`/roles/${role.id}/edit`}
+											size="sm"
+											variant="flat"
+										>
+											수정
+										</Button>
+									)}
 									<Button
 										size="sm"
 										variant="flat"
 										color="danger"
 										isDisabled={role.isSystem}
+										onPress={() => handleOpenDeleteModal(role)}
 									>
 										삭제
 									</Button>
@@ -214,6 +211,32 @@ function RolesPage() {
 					수 있습니다.
 				</p>
 			</div>
+
+			{/* 삭제 확인 모달 */}
+			<ConfirmModal
+				isOpen={state.deleteModal.isOpen}
+				onClose={handleCloseDeleteModal}
+				onConfirm={handleDeleteRole}
+				title="역할 삭제"
+				message={
+					state.deleteModal.targetRole ? (
+						<>
+							<strong>
+								{state.deleteModal.targetRole.displayName ||
+									state.deleteModal.targetRole.name}
+							</strong>{" "}
+							역할을 삭제하시겠습니까?
+							<br />
+							<span className="text-default-500">
+								이 작업은 되돌릴 수 없습니다.
+							</span>
+						</>
+					) : null
+				}
+				confirmText="삭제"
+				confirmColor="danger"
+				loading={deleteRoleMutation.isPending}
+			/>
 		</div>
 	);
 }

@@ -67,15 +67,6 @@ export const RecurringDayOfWeek = {
 export type RecurringDayOfWeek = (typeof RecurringDayOfWeek)[keyof typeof RecurringDayOfWeek]
 
 
-export const Roles = {
-  USER: 'USER',
-  SUPER_ADMIN: 'SUPER_ADMIN',
-  ADMIN: 'ADMIN'
-} as const
-
-export type Roles = (typeof Roles)[keyof typeof Roles]
-
-
 export const TemplateNames = {
   WELCOME: 'WELCOME',
   EMAIL_VERIFICATION: 'EMAIL_VERIFICATION',

@@ -299,7 +299,10 @@ export const RoleScalarFieldEnum = {
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   removedAt: 'removedAt',
-  name: 'name'
+  name: 'name',
+  displayName: 'displayName',
+  description: 'description',
+  isSystem: 'isSystem'
 } as const
 
 export type RoleScalarFieldEnum = (typeof RoleScalarFieldEnum)[keyof typeof RoleScalarFieldEnum]
@@ -564,8 +567,7 @@ export const UserScalarFieldEnum = {
   phone: 'phone',
   name: 'name',
   email: 'email',
-  password: 'password',
-  selectedSpaceId: 'selectedSpaceId'
+  password: 'password'
 } as const
 
 export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]

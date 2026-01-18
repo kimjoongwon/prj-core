@@ -11,12 +11,11 @@
 //     ├─── Profile (확장: nickname, avatar 등)
 //     ├─── UserClassification ─── Category (분류)
 //     ├─── UserAssociation ─── Group (그룹핑)
-//     ├─── Tenant (Bridge: User + Space + Role)
-//     └─── selectedSpace ─── Space (현재 선택한 Space)
+//     └─── Tenant (Bridge: User + Space + Role)
 //
 // 데이터 관계 개념:
 //   - Tenant: User가 접근 가능한 Space + Role 목록 (권한/자격)
-//   - selectedSpaceId: 현재 작업 중인 Space (상태)
+//   - 현재 작업 중인 Space는 클라이언트에서 관리 (x-space-id 헤더)
 //
 // ============================================================================
 
@@ -38,8 +37,6 @@ model User {
   email              String              @unique
   /// @displayName 비밀번호
   password           String
-  selectedSpaceId    String?             @map("selected_space_id")
-  selectedSpace      Space?              @relation("UserSelectedSpace", fields: [selectedSpaceId], references: [id])
   profiles           Profile[]
   tenants            Tenant[]
   classification     UserClassification?

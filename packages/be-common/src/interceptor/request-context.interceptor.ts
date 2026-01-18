@@ -1,6 +1,5 @@
-import { CONTEXT_KEYS } from "@cocrepo/constant";
+import { CONTEXT_KEYS, SYSTEM_ROLES } from "@cocrepo/constant";
 import { TenantDto, UserDto } from "@cocrepo/dto";
-import { Roles } from "@cocrepo/prisma";
 import {
 	BadRequestException,
 	type CallHandler,
@@ -50,7 +49,7 @@ export class RequestContextInterceptor implements NestInterceptor {
 			// x-space-id 헤더가 없는 경우, SUPER_ADMIN인지 확인
 			if (!spaceIdFromHeader && user) {
 				const isSuperAdmin = user.tenants?.some(
-					(t: TenantDto) => t.role?.name === Roles.SUPER_ADMIN,
+					(t: TenantDto) => t.role?.name === SYSTEM_ROLES.SUPER_ADMIN,
 				);
 
 				if (!isSuperAdmin) {

@@ -62,9 +62,9 @@ export const useAuthLoginPage = () => {
 				persistStore.setSpaces(spaces);
 			}
 
-			// 3. 현재 Space 선택 (selectedSpaceId 우선, 없으면 첫 번째 tenant)
-			let targetTenant = data?.user?.selectedSpaceId
-				? tenants?.find((t) => t.spaceId === data.user.selectedSpaceId)
+			// 3. 현재 Space 선택 (localStorage 기억값 우선, 없으면 첫 번째 tenant)
+			let targetTenant = persistStore.spaceId
+				? tenants?.find((t) => t.spaceId === persistStore.spaceId)
 				: undefined;
 
 			if (!targetTenant) {

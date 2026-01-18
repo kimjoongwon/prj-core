@@ -2,7 +2,6 @@ import { UserStats, UsersRepository } from "@cocrepo/repository";
 import { HashedPassword, PlainPassword } from "@cocrepo/vo";
 import {
 	BadRequestException,
-	ForbiddenException,
 	Injectable,
 	Logger,
 	NotFoundException,
@@ -27,7 +26,6 @@ const UserServiceErrorMessages = {
 	EMAIL_ALREADY_EXISTS: "이미 사용 중인 이메일입니다",
 	PHONE_ALREADY_EXISTS: "이미 사용 중인 전화번호입니다",
 	NAME_ALREADY_EXISTS: "이미 사용 중인 이름입니다",
-	SPACE_ACCESS_DENIED: "해당 Space에 접근 권한이 없습니다",
 	CANNOT_DELETE_SELF: "자신의 계정은 삭제할 수 없습니다",
 } as const;
 
@@ -268,44 +266,6 @@ export class UsersService {
 
 		// 회원 삭제 (Soft Delete)
 		await this.repository.removeById(userId);
-	}
-
-	/**
-	 * 현재 사용자의 선택된 Space를 변경합니다.
-	 *
-	 * 비즈니스 로직:
-	 * 1. 사용자가 해당 Space에 접근 권한이 있는지 검증 (Tenant 확인)
-	 * 2. 검증 통과 시 User.selectedSpaceId 업데이트
-	 * 3. 업데이트된 selectedSpaceId 반환
-	 *
-	 * @param userId - 사용자 ID
-	 * @param spaceId - 변경할 Space ID
-	 * @returns 업데이트된 selectedSpaceId
-	 * @throws ForbiddenException - Space 접근 권한이 없는 경우
-	 */
-	async updateSelectedSpaceForCurrentUser(
-		userId: string,
-		spaceId: string,
-	): Promise<string> {
-		// 1. Space 접근 권한 검증
-		const hasAccess = await this.repository.existsTenantByUserIdAndSpaceId(
-			userId,
-			spaceId,
-		);
-
-		if (!hasAccess) {
-			throw new ForbiddenException(
-				"해당 Space에 접근 권한이 없습니다. Tenant 목록을 확인해주세요.",
-			);
-		}
-
-		// 2. selectedSpaceId 업데이트
-		const updatedSpaceId = await this.repository.updateSelectedSpaceIdById(
-			userId,
-			spaceId,
-		);
-
-		return updatedSpaceId;
 	}
 
 	/**

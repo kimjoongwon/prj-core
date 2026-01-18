@@ -1,4 +1,4 @@
-import { Roles } from "@cocrepo/prisma";
+import { SYSTEM_ROLES } from "@cocrepo/constant";
 import { RolesRepository } from "@cocrepo/repository";
 import { Test, type TestingModule } from "@nestjs/testing";
 import { DeepMockProxy, mockDeep, mockReset } from "jest-mock-extended";
@@ -10,7 +10,7 @@ describe("RolesService", () => {
 
 	const mockRole = {
 		id: "role-test-id",
-		name: Roles.USER,
+		name: SYSTEM_ROLES.USER,
 		description: "일반 사용자",
 		createdAt: new Date("2024-01-01"),
 		updatedAt: new Date("2024-01-01"),
@@ -73,9 +73,9 @@ describe("RolesService", () => {
 			const result = await service.getDefaultUserRole();
 
 			// Then
-			expect(mockRepository.findByName).toHaveBeenCalledWith(Roles.USER);
+			expect(mockRepository.findByName).toHaveBeenCalledWith(SYSTEM_ROLES.USER);
 			expect(result).toEqual(mockRole);
-			expect(result?.name).toBe(Roles.USER);
+			expect(result?.name).toBe(SYSTEM_ROLES.USER);
 		});
 
 		it("USER 역할이 없으면 null을 반환해야 한다", async () => {
@@ -95,7 +95,7 @@ describe("RolesService", () => {
 			// Given
 			const mockRoles = [
 				mockRole,
-				{ ...mockRole, id: "role-2", name: Roles.ADMIN },
+				{ ...mockRole, id: "role-2", name: SYSTEM_ROLES.ADMIN },
 			];
 			mockRepository.findAll.mockResolvedValue(mockRoles as any);
 

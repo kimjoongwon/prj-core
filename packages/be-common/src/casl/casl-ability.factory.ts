@@ -5,11 +5,13 @@
  * 사용자의 Role에 따라 CASL Ability 객체를 생성합니다.
  * DB에 저장된 권한 정보를 기반으로 런타임에 권한을 구성합니다.
  */
+import { CONTEXT_KEYS } from "@cocrepo/constant";
 import { Ability as AbilityEntity } from "@cocrepo/entity";
 import { AbilitiesRepository } from "@cocrepo/repository";
 import { Injectable, Logger } from "@nestjs/common";
 import { Ability, AbilityBuilder } from "@casl/ability";
 import type { UserDto } from "@cocrepo/dto";
+import { ClsService } from "nestjs-cls";
 import type { Actions, AppAbility, AppAbilityClass, Subjects } from "./types";
 
 /**
@@ -23,16 +25,16 @@ const ALLOWED_TEMPLATE_VARIABLES = [
 	"user.spaceId",
 	"user.email",
 	"user.name",
-	"user.mainTenantId",
-	"user.mainSpaceId",
-	"user.mainRoleId",
+	"user.currentTenantId",
+	"user.currentSpaceId",
+	"user.currentRoleId",
 ] as const;
 
 /**
  * 템플릿 변수 정규식 패턴
  *
  * @description
- * ${user.id}, ${user.mainSpaceId} 등의 패턴을 매칭합니다.
+ * ${user.id}, ${user.currentSpaceId} 등의 패턴을 매칭합니다.
  */
 const TEMPLATE_VARIABLE_PATTERN = /\$\{([^}]+)\}/g;
 
@@ -40,7 +42,10 @@ const TEMPLATE_VARIABLE_PATTERN = /\$\{([^}]+)\}/g;
 export class CaslAbilityFactory {
 	private readonly logger = new Logger(CaslAbilityFactory.name);
 
-	constructor(private readonly abilitiesRepository: AbilitiesRepository) {}
+	constructor(
+		private readonly abilitiesRepository: AbilitiesRepository,
+		private readonly cls: ClsService,
+	) {}
 
 	/**
 	 * 사용자를 위한 CASL Ability 객체를 생성합니다.
@@ -49,7 +54,7 @@ export class CaslAbilityFactory {
 	 * @returns 사용자의 권한이 적용된 AppAbility 객체
 	 *
 	 * @description
-	 * 1. mainTenant에서 Role 정보를 추출
+	 * 1. x-space-id 헤더에서 spaceId를 가져와서 해당 tenant 찾기
 	 * 2. AbilitiesRepository로 권한 조회
 	 * 3. AbilityBuilder로 권한 생성
 	 * 4. conditions 파싱 (템플릿 변수 치환)
@@ -60,19 +65,22 @@ export class CaslAbilityFactory {
 			Ability as AppAbilityClass,
 		);
 
-		// mainTenant에서 Role 정보 추출
-		const mainTenant = user.tenants?.find((tenant) => tenant.main);
+		// x-space-id 헤더에서 spaceId를 가져와서 해당 tenant 찾기
+		const spaceId = this.cls.get<string>(CONTEXT_KEYS.SPACE_ID);
+		const currentTenant = spaceId
+			? user.tenants?.find((tenant) => tenant.spaceId === spaceId)
+			: user.tenants?.[0]; // spaceId가 없으면 첫 번째 tenant 사용
 
-		if (!mainTenant?.role) {
+		if (!currentTenant?.role) {
 			this.logger.warn(
-				`사용자에게 mainTenant 또는 Role이 없습니다: userId=${user.id}`,
+				`사용자에게 현재 Space의 Tenant 또는 Role이 없습니다: userId=${user.id}, spaceId=${spaceId}`,
 			);
 			return build();
 		}
 
-		const roleId = mainTenant.roleId;
+		const roleId = currentTenant.roleId;
 		this.logger.debug(
-			`사용자 권한 생성 시작: userId=${user.id}, roleId=${roleId}`,
+			`사용자 권한 생성 시작: userId=${user.id}, roleId=${roleId}, spaceId=${spaceId}`,
 		);
 
 		// DB에서 Role에 해당하는 활성화된 Abilities 조회
@@ -85,7 +93,7 @@ export class CaslAbilityFactory {
 		);
 
 		// 사용자 컨텍스트 구성 (템플릿 변수 치환용)
-		const userContext = this.buildUserContext(user, mainTenant);
+		const userContext = this.buildUserContext(user, currentTenant);
 
 		// 각 Ability를 CASL 규칙으로 변환
 		for (const ability of abilities) {
@@ -99,12 +107,12 @@ export class CaslAbilityFactory {
 	 * 사용자 컨텍스트를 구성합니다.
 	 *
 	 * @param user - 사용자 정보
-	 * @param mainTenant - 메인 테넌트 정보
+	 * @param currentTenant - 현재 Space의 테넌트 정보
 	 * @returns 템플릿 변수 치환에 사용할 컨텍스트 객체
 	 */
 	private buildUserContext(
 		user: UserDto,
-		mainTenant: NonNullable<UserDto["tenants"]>[number],
+		currentTenant: NonNullable<UserDto["tenants"]>[number],
 	): Record<string, unknown> {
 		return {
 			user: {
@@ -112,9 +120,9 @@ export class CaslAbilityFactory {
 				spaceId: user.spaceId,
 				email: user.email,
 				name: user.name,
-				mainTenantId: mainTenant.id,
-				mainSpaceId: mainTenant.spaceId,
-				mainRoleId: mainTenant.roleId,
+				currentTenantId: currentTenant.id,
+				currentSpaceId: currentTenant.spaceId,
+				currentRoleId: currentTenant.roleId,
 			},
 		};
 	}
@@ -186,7 +194,7 @@ export class CaslAbilityFactory {
 	 * @description
 	 * 보안을 위해 허용된 템플릿 변수만 치환합니다.
 	 * 예: ${user.id} → 실제 사용자 ID
-	 *     ${user.mainSpaceId} → 실제 메인 스페이스 ID
+	 *     ${user.currentSpaceId} → 현재 Space ID
 	 */
 	parseConditions(
 		conditions: unknown,

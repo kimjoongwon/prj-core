@@ -30,11 +30,6 @@ export interface UserDetailResponseDto {
    * @minLength 6
    */
   password: string;
-  /**
-   * 현재 선택된 Space ID
-   * @nullable
-   */
-  selectedSpaceId?: string | null;
   /** 프로필 목록 */
   profiles?: ProfileDto[];
   /** 테넌트 목록 */

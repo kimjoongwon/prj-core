@@ -44,7 +44,6 @@ export type UserMinAggregateOutputType = {
   name: string | null
   email: string | null
   password: string | null
-  selectedSpaceId: string | null
 }
 
 export type UserMaxAggregateOutputType = {
@@ -57,7 +56,6 @@ export type UserMaxAggregateOutputType = {
   name: string | null
   email: string | null
   password: string | null
-  selectedSpaceId: string | null
 }
 
 export type UserCountAggregateOutputType = {
@@ -70,7 +68,6 @@ export type UserCountAggregateOutputType = {
   name: number
   email: number
   password: number
-  selectedSpaceId: number
   _all: number
 }
 
@@ -93,7 +90,6 @@ export type UserMinAggregateInputType = {
   name?: true
   email?: true
   password?: true
-  selectedSpaceId?: true
 }
 
 export type UserMaxAggregateInputType = {
@@ -106,7 +102,6 @@ export type UserMaxAggregateInputType = {
   name?: true
   email?: true
   password?: true
-  selectedSpaceId?: true
 }
 
 export type UserCountAggregateInputType = {
@@ -119,7 +114,6 @@ export type UserCountAggregateInputType = {
   name?: true
   email?: true
   password?: true
-  selectedSpaceId?: true
   _all?: true
 }
 
@@ -219,7 +213,6 @@ export type UserGroupByOutputType = {
   name: string
   email: string
   password: string
-  selectedSpaceId: string | null
   _count: UserCountAggregateOutputType | null
   _avg: UserAvgAggregateOutputType | null
   _sum: UserSumAggregateOutputType | null
@@ -255,8 +248,6 @@ export type UserWhereInput = {
   name?: Prisma.StringFilter<"User"> | string
   email?: Prisma.StringFilter<"User"> | string
   password?: Prisma.StringFilter<"User"> | string
-  selectedSpaceId?: Prisma.StringNullableFilter<"User"> | string | null
-  selectedSpace?: Prisma.XOR<Prisma.SpaceNullableScalarRelationFilter, Prisma.SpaceWhereInput> | null
   profiles?: Prisma.ProfileListRelationFilter
   tenants?: Prisma.TenantListRelationFilter
   classification?: Prisma.XOR<Prisma.UserClassificationNullableScalarRelationFilter, Prisma.UserClassificationWhereInput> | null
@@ -281,8 +272,6 @@ export type UserOrderByWithRelationInput = {
   name?: Prisma.SortOrder
   email?: Prisma.SortOrder
   password?: Prisma.SortOrder
-  selectedSpaceId?: Prisma.SortOrderInput | Prisma.SortOrder
-  selectedSpace?: Prisma.SpaceOrderByWithRelationInput
   profiles?: Prisma.ProfileOrderByRelationAggregateInput
   tenants?: Prisma.TenantOrderByRelationAggregateInput
   classification?: Prisma.UserClassificationOrderByWithRelationInput
@@ -310,8 +299,6 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   createdAt?: Prisma.DateTimeFilter<"User"> | Date | string
   removedAt?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
   password?: Prisma.StringFilter<"User"> | string
-  selectedSpaceId?: Prisma.StringNullableFilter<"User"> | string | null
-  selectedSpace?: Prisma.XOR<Prisma.SpaceNullableScalarRelationFilter, Prisma.SpaceWhereInput> | null
   profiles?: Prisma.ProfileListRelationFilter
   tenants?: Prisma.TenantListRelationFilter
   classification?: Prisma.XOR<Prisma.UserClassificationNullableScalarRelationFilter, Prisma.UserClassificationWhereInput> | null
@@ -336,7 +323,6 @@ export type UserOrderByWithAggregationInput = {
   name?: Prisma.SortOrder
   email?: Prisma.SortOrder
   password?: Prisma.SortOrder
-  selectedSpaceId?: Prisma.SortOrderInput | Prisma.SortOrder
   _count?: Prisma.UserCountOrderByAggregateInput
   _avg?: Prisma.UserAvgOrderByAggregateInput
   _max?: Prisma.UserMaxOrderByAggregateInput
@@ -357,7 +343,6 @@ export type UserScalarWhereWithAggregatesInput = {
   name?: Prisma.StringWithAggregatesFilter<"User"> | string
   email?: Prisma.StringWithAggregatesFilter<"User"> | string
   password?: Prisma.StringWithAggregatesFilter<"User"> | string
-  selectedSpaceId?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
 }
 
 export type UserCreateInput = {
@@ -370,7 +355,6 @@ export type UserCreateInput = {
   name: string
   email: string
   password: string
-  selectedSpace?: Prisma.SpaceCreateNestedOneWithoutUsersWithSelectedInput
   profiles?: Prisma.ProfileCreateNestedManyWithoutUserInput
   tenants?: Prisma.TenantCreateNestedManyWithoutUserInput
   classification?: Prisma.UserClassificationCreateNestedOneWithoutUserInput
@@ -395,7 +379,6 @@ export type UserUncheckedCreateInput = {
   name: string
   email: string
   password: string
-  selectedSpaceId?: string | null
   profiles?: Prisma.ProfileUncheckedCreateNestedManyWithoutUserInput
   tenants?: Prisma.TenantUncheckedCreateNestedManyWithoutUserInput
   classification?: Prisma.UserClassificationUncheckedCreateNestedOneWithoutUserInput
@@ -419,7 +402,6 @@ export type UserUpdateInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
-  selectedSpace?: Prisma.SpaceUpdateOneWithoutUsersWithSelectedNestedInput
   profiles?: Prisma.ProfileUpdateManyWithoutUserNestedInput
   tenants?: Prisma.TenantUpdateManyWithoutUserNestedInput
   classification?: Prisma.UserClassificationUpdateOneWithoutUserNestedInput
@@ -444,7 +426,6 @@ export type UserUncheckedUpdateInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
-  selectedSpaceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   profiles?: Prisma.ProfileUncheckedUpdateManyWithoutUserNestedInput
   tenants?: Prisma.TenantUncheckedUpdateManyWithoutUserNestedInput
   classification?: Prisma.UserClassificationUncheckedUpdateOneWithoutUserNestedInput
@@ -469,7 +450,6 @@ export type UserCreateManyInput = {
   name: string
   email: string
   password: string
-  selectedSpaceId?: string | null
 }
 
 export type UserUpdateManyMutationInput = {
@@ -493,7 +473,6 @@ export type UserUncheckedUpdateManyInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
-  selectedSpaceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type UserNullableScalarRelationFilter = {
@@ -506,16 +485,6 @@ export type UserScalarRelationFilter = {
   isNot?: Prisma.UserWhereInput
 }
 
-export type UserListRelationFilter = {
-  every?: Prisma.UserWhereInput
-  some?: Prisma.UserWhereInput
-  none?: Prisma.UserWhereInput
-}
-
-export type UserOrderByRelationAggregateInput = {
-  _count?: Prisma.SortOrder
-}
-
 export type UserCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   seq?: Prisma.SortOrder
@@ -526,7 +495,6 @@ export type UserCountOrderByAggregateInput = {
   name?: Prisma.SortOrder
   email?: Prisma.SortOrder
   password?: Prisma.SortOrder
-  selectedSpaceId?: Prisma.SortOrder
 }
 
 export type UserAvgOrderByAggregateInput = {
@@ -543,7 +511,6 @@ export type UserMaxOrderByAggregateInput = {
   name?: Prisma.SortOrder
   email?: Prisma.SortOrder
   password?: Prisma.SortOrder
-  selectedSpaceId?: Prisma.SortOrder
 }
 
 export type UserMinOrderByAggregateInput = {
@@ -556,7 +523,6 @@ export type UserMinOrderByAggregateInput = {
   name?: Prisma.SortOrder
   email?: Prisma.SortOrder
   password?: Prisma.SortOrder
-  selectedSpaceId?: Prisma.SortOrder
 }
 
 export type UserSumOrderByAggregateInput = {
@@ -673,48 +639,6 @@ export type UserUpdateOneWithoutCreatedSafeWalletsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutCreatedSafeWalletsInput, Prisma.UserUpdateWithoutCreatedSafeWalletsInput>, Prisma.UserUncheckedUpdateWithoutCreatedSafeWalletsInput>
 }
 
-export type UserCreateNestedManyWithoutSelectedSpaceInput = {
-  create?: Prisma.XOR<Prisma.UserCreateWithoutSelectedSpaceInput, Prisma.UserUncheckedCreateWithoutSelectedSpaceInput> | Prisma.UserCreateWithoutSelectedSpaceInput[] | Prisma.UserUncheckedCreateWithoutSelectedSpaceInput[]
-  connectOrCreate?: Prisma.UserCreateOrConnectWithoutSelectedSpaceInput | Prisma.UserCreateOrConnectWithoutSelectedSpaceInput[]
-  createMany?: Prisma.UserCreateManySelectedSpaceInputEnvelope
-  connect?: Prisma.UserWhereUniqueInput | Prisma.UserWhereUniqueInput[]
-}
-
-export type UserUncheckedCreateNestedManyWithoutSelectedSpaceInput = {
-  create?: Prisma.XOR<Prisma.UserCreateWithoutSelectedSpaceInput, Prisma.UserUncheckedCreateWithoutSelectedSpaceInput> | Prisma.UserCreateWithoutSelectedSpaceInput[] | Prisma.UserUncheckedCreateWithoutSelectedSpaceInput[]
-  connectOrCreate?: Prisma.UserCreateOrConnectWithoutSelectedSpaceInput | Prisma.UserCreateOrConnectWithoutSelectedSpaceInput[]
-  createMany?: Prisma.UserCreateManySelectedSpaceInputEnvelope
-  connect?: Prisma.UserWhereUniqueInput | Prisma.UserWhereUniqueInput[]
-}
-
-export type UserUpdateManyWithoutSelectedSpaceNestedInput = {
-  create?: Prisma.XOR<Prisma.UserCreateWithoutSelectedSpaceInput, Prisma.UserUncheckedCreateWithoutSelectedSpaceInput> | Prisma.UserCreateWithoutSelectedSpaceInput[] | Prisma.UserUncheckedCreateWithoutSelectedSpaceInput[]
-  connectOrCreate?: Prisma.UserCreateOrConnectWithoutSelectedSpaceInput | Prisma.UserCreateOrConnectWithoutSelectedSpaceInput[]
-  upsert?: Prisma.UserUpsertWithWhereUniqueWithoutSelectedSpaceInput | Prisma.UserUpsertWithWhereUniqueWithoutSelectedSpaceInput[]
-  createMany?: Prisma.UserCreateManySelectedSpaceInputEnvelope
-  set?: Prisma.UserWhereUniqueInput | Prisma.UserWhereUniqueInput[]
-  disconnect?: Prisma.UserWhereUniqueInput | Prisma.UserWhereUniqueInput[]
-  delete?: Prisma.UserWhereUniqueInput | Prisma.UserWhereUniqueInput[]
-  connect?: Prisma.UserWhereUniqueInput | Prisma.UserWhereUniqueInput[]
-  update?: Prisma.UserUpdateWithWhereUniqueWithoutSelectedSpaceInput | Prisma.UserUpdateWithWhereUniqueWithoutSelectedSpaceInput[]
-  updateMany?: Prisma.UserUpdateManyWithWhereWithoutSelectedSpaceInput | Prisma.UserUpdateManyWithWhereWithoutSelectedSpaceInput[]
-  deleteMany?: Prisma.UserScalarWhereInput | Prisma.UserScalarWhereInput[]
-}
-
-export type UserUncheckedUpdateManyWithoutSelectedSpaceNestedInput = {
-  create?: Prisma.XOR<Prisma.UserCreateWithoutSelectedSpaceInput, Prisma.UserUncheckedCreateWithoutSelectedSpaceInput> | Prisma.UserCreateWithoutSelectedSpaceInput[] | Prisma.UserUncheckedCreateWithoutSelectedSpaceInput[]
-  connectOrCreate?: Prisma.UserCreateOrConnectWithoutSelectedSpaceInput | Prisma.UserCreateOrConnectWithoutSelectedSpaceInput[]
-  upsert?: Prisma.UserUpsertWithWhereUniqueWithoutSelectedSpaceInput | Prisma.UserUpsertWithWhereUniqueWithoutSelectedSpaceInput[]
-  createMany?: Prisma.UserCreateManySelectedSpaceInputEnvelope
-  set?: Prisma.UserWhereUniqueInput | Prisma.UserWhereUniqueInput[]
-  disconnect?: Prisma.UserWhereUniqueInput | Prisma.UserWhereUniqueInput[]
-  delete?: Prisma.UserWhereUniqueInput | Prisma.UserWhereUniqueInput[]
-  connect?: Prisma.UserWhereUniqueInput | Prisma.UserWhereUniqueInput[]
-  update?: Prisma.UserUpdateWithWhereUniqueWithoutSelectedSpaceInput | Prisma.UserUpdateWithWhereUniqueWithoutSelectedSpaceInput[]
-  updateMany?: Prisma.UserUpdateManyWithWhereWithoutSelectedSpaceInput | Prisma.UserUpdateManyWithWhereWithoutSelectedSpaceInput[]
-  deleteMany?: Prisma.UserScalarWhereInput | Prisma.UserScalarWhereInput[]
-}
-
 export type UserCreateNestedOneWithoutCreatedTimelinesInput = {
   create?: Prisma.XOR<Prisma.UserCreateWithoutCreatedTimelinesInput, Prisma.UserUncheckedCreateWithoutCreatedTimelinesInput>
   connectOrCreate?: Prisma.UserCreateOrConnectWithoutCreatedTimelinesInput
@@ -799,7 +723,6 @@ export type UserCreateWithoutCreatedCategoriesInput = {
   name: string
   email: string
   password: string
-  selectedSpace?: Prisma.SpaceCreateNestedOneWithoutUsersWithSelectedInput
   profiles?: Prisma.ProfileCreateNestedManyWithoutUserInput
   tenants?: Prisma.TenantCreateNestedManyWithoutUserInput
   classification?: Prisma.UserClassificationCreateNestedOneWithoutUserInput
@@ -823,7 +746,6 @@ export type UserUncheckedCreateWithoutCreatedCategoriesInput = {
   name: string
   email: string
   password: string
-  selectedSpaceId?: string | null
   profiles?: Prisma.ProfileUncheckedCreateNestedManyWithoutUserInput
   tenants?: Prisma.TenantUncheckedCreateNestedManyWithoutUserInput
   classification?: Prisma.UserClassificationUncheckedCreateNestedOneWithoutUserInput
@@ -862,7 +784,6 @@ export type UserUpdateWithoutCreatedCategoriesInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
-  selectedSpace?: Prisma.SpaceUpdateOneWithoutUsersWithSelectedNestedInput
   profiles?: Prisma.ProfileUpdateManyWithoutUserNestedInput
   tenants?: Prisma.TenantUpdateManyWithoutUserNestedInput
   classification?: Prisma.UserClassificationUpdateOneWithoutUserNestedInput
@@ -886,7 +807,6 @@ export type UserUncheckedUpdateWithoutCreatedCategoriesInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
-  selectedSpaceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   profiles?: Prisma.ProfileUncheckedUpdateManyWithoutUserNestedInput
   tenants?: Prisma.TenantUncheckedUpdateManyWithoutUserNestedInput
   classification?: Prisma.UserClassificationUncheckedUpdateOneWithoutUserNestedInput
@@ -910,7 +830,6 @@ export type UserCreateWithoutCreatedGroupsInput = {
   name: string
   email: string
   password: string
-  selectedSpace?: Prisma.SpaceCreateNestedOneWithoutUsersWithSelectedInput
   profiles?: Prisma.ProfileCreateNestedManyWithoutUserInput
   tenants?: Prisma.TenantCreateNestedManyWithoutUserInput
   classification?: Prisma.UserClassificationCreateNestedOneWithoutUserInput
@@ -934,7 +853,6 @@ export type UserUncheckedCreateWithoutCreatedGroupsInput = {
   name: string
   email: string
   password: string
-  selectedSpaceId?: string | null
   profiles?: Prisma.ProfileUncheckedCreateNestedManyWithoutUserInput
   tenants?: Prisma.TenantUncheckedCreateNestedManyWithoutUserInput
   classification?: Prisma.UserClassificationUncheckedCreateNestedOneWithoutUserInput
@@ -973,7 +891,6 @@ export type UserUpdateWithoutCreatedGroupsInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
-  selectedSpace?: Prisma.SpaceUpdateOneWithoutUsersWithSelectedNestedInput
   profiles?: Prisma.ProfileUpdateManyWithoutUserNestedInput
   tenants?: Prisma.TenantUpdateManyWithoutUserNestedInput
   classification?: Prisma.UserClassificationUpdateOneWithoutUserNestedInput
@@ -997,7 +914,6 @@ export type UserUncheckedUpdateWithoutCreatedGroupsInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
-  selectedSpaceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   profiles?: Prisma.ProfileUncheckedUpdateManyWithoutUserNestedInput
   tenants?: Prisma.TenantUncheckedUpdateManyWithoutUserNestedInput
   classification?: Prisma.UserClassificationUncheckedUpdateOneWithoutUserNestedInput
@@ -1021,7 +937,6 @@ export type UserCreateWithoutTenantsInput = {
   name: string
   email: string
   password: string
-  selectedSpace?: Prisma.SpaceCreateNestedOneWithoutUsersWithSelectedInput
   profiles?: Prisma.ProfileCreateNestedManyWithoutUserInput
   classification?: Prisma.UserClassificationCreateNestedOneWithoutUserInput
   associations?: Prisma.UserAssociationCreateNestedManyWithoutUserInput
@@ -1045,7 +960,6 @@ export type UserUncheckedCreateWithoutTenantsInput = {
   name: string
   email: string
   password: string
-  selectedSpaceId?: string | null
   profiles?: Prisma.ProfileUncheckedCreateNestedManyWithoutUserInput
   classification?: Prisma.UserClassificationUncheckedCreateNestedOneWithoutUserInput
   associations?: Prisma.UserAssociationUncheckedCreateNestedManyWithoutUserInput
@@ -1084,7 +998,6 @@ export type UserUpdateWithoutTenantsInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
-  selectedSpace?: Prisma.SpaceUpdateOneWithoutUsersWithSelectedNestedInput
   profiles?: Prisma.ProfileUpdateManyWithoutUserNestedInput
   classification?: Prisma.UserClassificationUpdateOneWithoutUserNestedInput
   associations?: Prisma.UserAssociationUpdateManyWithoutUserNestedInput
@@ -1108,7 +1021,6 @@ export type UserUncheckedUpdateWithoutTenantsInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
-  selectedSpaceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   profiles?: Prisma.ProfileUncheckedUpdateManyWithoutUserNestedInput
   classification?: Prisma.UserClassificationUncheckedUpdateOneWithoutUserNestedInput
   associations?: Prisma.UserAssociationUncheckedUpdateManyWithoutUserNestedInput
@@ -1132,7 +1044,6 @@ export type UserCreateWithoutAbilitiesInput = {
   name: string
   email: string
   password: string
-  selectedSpace?: Prisma.SpaceCreateNestedOneWithoutUsersWithSelectedInput
   profiles?: Prisma.ProfileCreateNestedManyWithoutUserInput
   tenants?: Prisma.TenantCreateNestedManyWithoutUserInput
   classification?: Prisma.UserClassificationCreateNestedOneWithoutUserInput
@@ -1156,7 +1067,6 @@ export type UserUncheckedCreateWithoutAbilitiesInput = {
   name: string
   email: string
   password: string
-  selectedSpaceId?: string | null
   profiles?: Prisma.ProfileUncheckedCreateNestedManyWithoutUserInput
   tenants?: Prisma.TenantUncheckedCreateNestedManyWithoutUserInput
   classification?: Prisma.UserClassificationUncheckedCreateNestedOneWithoutUserInput
@@ -1195,7 +1105,6 @@ export type UserUpdateWithoutAbilitiesInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
-  selectedSpace?: Prisma.SpaceUpdateOneWithoutUsersWithSelectedNestedInput
   profiles?: Prisma.ProfileUpdateManyWithoutUserNestedInput
   tenants?: Prisma.TenantUpdateManyWithoutUserNestedInput
   classification?: Prisma.UserClassificationUpdateOneWithoutUserNestedInput
@@ -1219,7 +1128,6 @@ export type UserUncheckedUpdateWithoutAbilitiesInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
-  selectedSpaceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   profiles?: Prisma.ProfileUncheckedUpdateManyWithoutUserNestedInput
   tenants?: Prisma.TenantUncheckedUpdateManyWithoutUserNestedInput
   classification?: Prisma.UserClassificationUncheckedUpdateOneWithoutUserNestedInput
@@ -1243,7 +1151,6 @@ export type UserCreateWithoutCreatedContentsInput = {
   name: string
   email: string
   password: string
-  selectedSpace?: Prisma.SpaceCreateNestedOneWithoutUsersWithSelectedInput
   profiles?: Prisma.ProfileCreateNestedManyWithoutUserInput
   tenants?: Prisma.TenantCreateNestedManyWithoutUserInput
   classification?: Prisma.UserClassificationCreateNestedOneWithoutUserInput
@@ -1267,7 +1174,6 @@ export type UserUncheckedCreateWithoutCreatedContentsInput = {
   name: string
   email: string
   password: string
-  selectedSpaceId?: string | null
   profiles?: Prisma.ProfileUncheckedCreateNestedManyWithoutUserInput
   tenants?: Prisma.TenantUncheckedCreateNestedManyWithoutUserInput
   classification?: Prisma.UserClassificationUncheckedCreateNestedOneWithoutUserInput
@@ -1306,7 +1212,6 @@ export type UserUpdateWithoutCreatedContentsInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
-  selectedSpace?: Prisma.SpaceUpdateOneWithoutUsersWithSelectedNestedInput
   profiles?: Prisma.ProfileUpdateManyWithoutUserNestedInput
   tenants?: Prisma.TenantUpdateManyWithoutUserNestedInput
   classification?: Prisma.UserClassificationUpdateOneWithoutUserNestedInput
@@ -1330,7 +1235,6 @@ export type UserUncheckedUpdateWithoutCreatedContentsInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
-  selectedSpaceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   profiles?: Prisma.ProfileUncheckedUpdateManyWithoutUserNestedInput
   tenants?: Prisma.TenantUncheckedUpdateManyWithoutUserNestedInput
   classification?: Prisma.UserClassificationUncheckedUpdateOneWithoutUserNestedInput
@@ -1354,7 +1258,6 @@ export type UserCreateWithoutCreatedFilesInput = {
   name: string
   email: string
   password: string
-  selectedSpace?: Prisma.SpaceCreateNestedOneWithoutUsersWithSelectedInput
   profiles?: Prisma.ProfileCreateNestedManyWithoutUserInput
   tenants?: Prisma.TenantCreateNestedManyWithoutUserInput
   classification?: Prisma.UserClassificationCreateNestedOneWithoutUserInput
@@ -1378,7 +1281,6 @@ export type UserUncheckedCreateWithoutCreatedFilesInput = {
   name: string
   email: string
   password: string
-  selectedSpaceId?: string | null
   profiles?: Prisma.ProfileUncheckedCreateNestedManyWithoutUserInput
   tenants?: Prisma.TenantUncheckedCreateNestedManyWithoutUserInput
   classification?: Prisma.UserClassificationUncheckedCreateNestedOneWithoutUserInput
@@ -1417,7 +1319,6 @@ export type UserUpdateWithoutCreatedFilesInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
-  selectedSpace?: Prisma.SpaceUpdateOneWithoutUsersWithSelectedNestedInput
   profiles?: Prisma.ProfileUpdateManyWithoutUserNestedInput
   tenants?: Prisma.TenantUpdateManyWithoutUserNestedInput
   classification?: Prisma.UserClassificationUpdateOneWithoutUserNestedInput
@@ -1441,7 +1342,6 @@ export type UserUncheckedUpdateWithoutCreatedFilesInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
-  selectedSpaceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   profiles?: Prisma.ProfileUncheckedUpdateManyWithoutUserNestedInput
   tenants?: Prisma.TenantUncheckedUpdateManyWithoutUserNestedInput
   classification?: Prisma.UserClassificationUncheckedUpdateOneWithoutUserNestedInput
@@ -1465,7 +1365,6 @@ export type UserCreateWithoutCreatedSafeWalletsInput = {
   name: string
   email: string
   password: string
-  selectedSpace?: Prisma.SpaceCreateNestedOneWithoutUsersWithSelectedInput
   profiles?: Prisma.ProfileCreateNestedManyWithoutUserInput
   tenants?: Prisma.TenantCreateNestedManyWithoutUserInput
   classification?: Prisma.UserClassificationCreateNestedOneWithoutUserInput
@@ -1489,7 +1388,6 @@ export type UserUncheckedCreateWithoutCreatedSafeWalletsInput = {
   name: string
   email: string
   password: string
-  selectedSpaceId?: string | null
   profiles?: Prisma.ProfileUncheckedCreateNestedManyWithoutUserInput
   tenants?: Prisma.TenantUncheckedCreateNestedManyWithoutUserInput
   classification?: Prisma.UserClassificationUncheckedCreateNestedOneWithoutUserInput
@@ -1528,7 +1426,6 @@ export type UserUpdateWithoutCreatedSafeWalletsInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
-  selectedSpace?: Prisma.SpaceUpdateOneWithoutUsersWithSelectedNestedInput
   profiles?: Prisma.ProfileUpdateManyWithoutUserNestedInput
   tenants?: Prisma.TenantUpdateManyWithoutUserNestedInput
   classification?: Prisma.UserClassificationUpdateOneWithoutUserNestedInput
@@ -1552,7 +1449,6 @@ export type UserUncheckedUpdateWithoutCreatedSafeWalletsInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
-  selectedSpaceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   profiles?: Prisma.ProfileUncheckedUpdateManyWithoutUserNestedInput
   tenants?: Prisma.TenantUncheckedUpdateManyWithoutUserNestedInput
   classification?: Prisma.UserClassificationUncheckedUpdateOneWithoutUserNestedInput
@@ -1566,96 +1462,6 @@ export type UserUncheckedUpdateWithoutCreatedSafeWalletsInput = {
   abilities?: Prisma.AbilityUncheckedUpdateManyWithoutUserNestedInput
 }
 
-export type UserCreateWithoutSelectedSpaceInput = {
-  id?: string
-  seq?: number
-  updatedAt?: Date | string | null
-  createdAt?: Date | string
-  removedAt?: Date | string | null
-  phone: string
-  name: string
-  email: string
-  password: string
-  profiles?: Prisma.ProfileCreateNestedManyWithoutUserInput
-  tenants?: Prisma.TenantCreateNestedManyWithoutUserInput
-  classification?: Prisma.UserClassificationCreateNestedOneWithoutUserInput
-  associations?: Prisma.UserAssociationCreateNestedManyWithoutUserInput
-  createdCategories?: Prisma.CategoryCreateNestedManyWithoutCreatorInput
-  createdGroups?: Prisma.GroupCreateNestedManyWithoutCreatorInput
-  createdContents?: Prisma.ContentCreateNestedManyWithoutCreatorInput
-  createdFiles?: Prisma.FileCreateNestedManyWithoutCreatorInput
-  createdTimelines?: Prisma.TimelineCreateNestedManyWithoutCreatorInput
-  createdTasks?: Prisma.TaskCreateNestedManyWithoutCreatorInput
-  createdSafeWallets?: Prisma.SafeWalletCreateNestedManyWithoutCreatorInput
-  abilities?: Prisma.AbilityCreateNestedManyWithoutUserInput
-}
-
-export type UserUncheckedCreateWithoutSelectedSpaceInput = {
-  id?: string
-  seq?: number
-  updatedAt?: Date | string | null
-  createdAt?: Date | string
-  removedAt?: Date | string | null
-  phone: string
-  name: string
-  email: string
-  password: string
-  profiles?: Prisma.ProfileUncheckedCreateNestedManyWithoutUserInput
-  tenants?: Prisma.TenantUncheckedCreateNestedManyWithoutUserInput
-  classification?: Prisma.UserClassificationUncheckedCreateNestedOneWithoutUserInput
-  associations?: Prisma.UserAssociationUncheckedCreateNestedManyWithoutUserInput
-  createdCategories?: Prisma.CategoryUncheckedCreateNestedManyWithoutCreatorInput
-  createdGroups?: Prisma.GroupUncheckedCreateNestedManyWithoutCreatorInput
-  createdContents?: Prisma.ContentUncheckedCreateNestedManyWithoutCreatorInput
-  createdFiles?: Prisma.FileUncheckedCreateNestedManyWithoutCreatorInput
-  createdTimelines?: Prisma.TimelineUncheckedCreateNestedManyWithoutCreatorInput
-  createdTasks?: Prisma.TaskUncheckedCreateNestedManyWithoutCreatorInput
-  createdSafeWallets?: Prisma.SafeWalletUncheckedCreateNestedManyWithoutCreatorInput
-  abilities?: Prisma.AbilityUncheckedCreateNestedManyWithoutUserInput
-}
-
-export type UserCreateOrConnectWithoutSelectedSpaceInput = {
-  where: Prisma.UserWhereUniqueInput
-  create: Prisma.XOR<Prisma.UserCreateWithoutSelectedSpaceInput, Prisma.UserUncheckedCreateWithoutSelectedSpaceInput>
-}
-
-export type UserCreateManySelectedSpaceInputEnvelope = {
-  data: Prisma.UserCreateManySelectedSpaceInput | Prisma.UserCreateManySelectedSpaceInput[]
-  skipDuplicates?: boolean
-}
-
-export type UserUpsertWithWhereUniqueWithoutSelectedSpaceInput = {
-  where: Prisma.UserWhereUniqueInput
-  update: Prisma.XOR<Prisma.UserUpdateWithoutSelectedSpaceInput, Prisma.UserUncheckedUpdateWithoutSelectedSpaceInput>
-  create: Prisma.XOR<Prisma.UserCreateWithoutSelectedSpaceInput, Prisma.UserUncheckedCreateWithoutSelectedSpaceInput>
-}
-
-export type UserUpdateWithWhereUniqueWithoutSelectedSpaceInput = {
-  where: Prisma.UserWhereUniqueInput
-  data: Prisma.XOR<Prisma.UserUpdateWithoutSelectedSpaceInput, Prisma.UserUncheckedUpdateWithoutSelectedSpaceInput>
-}
-
-export type UserUpdateManyWithWhereWithoutSelectedSpaceInput = {
-  where: Prisma.UserScalarWhereInput
-  data: Prisma.XOR<Prisma.UserUpdateManyMutationInput, Prisma.UserUncheckedUpdateManyWithoutSelectedSpaceInput>
-}
-
-export type UserScalarWhereInput = {
-  AND?: Prisma.UserScalarWhereInput | Prisma.UserScalarWhereInput[]
-  OR?: Prisma.UserScalarWhereInput[]
-  NOT?: Prisma.UserScalarWhereInput | Prisma.UserScalarWhereInput[]
-  id?: Prisma.StringFilter<"User"> | string
-  seq?: Prisma.IntFilter<"User"> | number
-  updatedAt?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
-  createdAt?: Prisma.DateTimeFilter<"User"> | Date | string
-  removedAt?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
-  phone?: Prisma.StringFilter<"User"> | string
-  name?: Prisma.StringFilter<"User"> | string
-  email?: Prisma.StringFilter<"User"> | string
-  password?: Prisma.StringFilter<"User"> | string
-  selectedSpaceId?: Prisma.StringNullableFilter<"User"> | string | null
-}
-
 export type UserCreateWithoutCreatedTimelinesInput = {
   id?: string
   seq?: number
@@ -1666,7 +1472,6 @@ export type UserCreateWithoutCreatedTimelinesInput = {
   name: string
   email: string
   password: string
-  selectedSpace?: Prisma.SpaceCreateNestedOneWithoutUsersWithSelectedInput
   profiles?: Prisma.ProfileCreateNestedManyWithoutUserInput
   tenants?: Prisma.TenantCreateNestedManyWithoutUserInput
   classification?: Prisma.UserClassificationCreateNestedOneWithoutUserInput
@@ -1690,7 +1495,6 @@ export type UserUncheckedCreateWithoutCreatedTimelinesInput = {
   name: string
   email: string
   password: string
-  selectedSpaceId?: string | null
   profiles?: Prisma.ProfileUncheckedCreateNestedManyWithoutUserInput
   tenants?: Prisma.TenantUncheckedCreateNestedManyWithoutUserInput
   classification?: Prisma.UserClassificationUncheckedCreateNestedOneWithoutUserInput
@@ -1729,7 +1533,6 @@ export type UserUpdateWithoutCreatedTimelinesInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
-  selectedSpace?: Prisma.SpaceUpdateOneWithoutUsersWithSelectedNestedInput
   profiles?: Prisma.ProfileUpdateManyWithoutUserNestedInput
   tenants?: Prisma.TenantUpdateManyWithoutUserNestedInput
   classification?: Prisma.UserClassificationUpdateOneWithoutUserNestedInput
@@ -1753,7 +1556,6 @@ export type UserUncheckedUpdateWithoutCreatedTimelinesInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
-  selectedSpaceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   profiles?: Prisma.ProfileUncheckedUpdateManyWithoutUserNestedInput
   tenants?: Prisma.TenantUncheckedUpdateManyWithoutUserNestedInput
   classification?: Prisma.UserClassificationUncheckedUpdateOneWithoutUserNestedInput
@@ -1777,7 +1579,6 @@ export type UserCreateWithoutCreatedTasksInput = {
   name: string
   email: string
   password: string
-  selectedSpace?: Prisma.SpaceCreateNestedOneWithoutUsersWithSelectedInput
   profiles?: Prisma.ProfileCreateNestedManyWithoutUserInput
   tenants?: Prisma.TenantCreateNestedManyWithoutUserInput
   classification?: Prisma.UserClassificationCreateNestedOneWithoutUserInput
@@ -1801,7 +1602,6 @@ export type UserUncheckedCreateWithoutCreatedTasksInput = {
   name: string
   email: string
   password: string
-  selectedSpaceId?: string | null
   profiles?: Prisma.ProfileUncheckedCreateNestedManyWithoutUserInput
   tenants?: Prisma.TenantUncheckedCreateNestedManyWithoutUserInput
   classification?: Prisma.UserClassificationUncheckedCreateNestedOneWithoutUserInput
@@ -1840,7 +1640,6 @@ export type UserUpdateWithoutCreatedTasksInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
-  selectedSpace?: Prisma.SpaceUpdateOneWithoutUsersWithSelectedNestedInput
   profiles?: Prisma.ProfileUpdateManyWithoutUserNestedInput
   tenants?: Prisma.TenantUpdateManyWithoutUserNestedInput
   classification?: Prisma.UserClassificationUpdateOneWithoutUserNestedInput
@@ -1864,7 +1663,6 @@ export type UserUncheckedUpdateWithoutCreatedTasksInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
-  selectedSpaceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   profiles?: Prisma.ProfileUncheckedUpdateManyWithoutUserNestedInput
   tenants?: Prisma.TenantUncheckedUpdateManyWithoutUserNestedInput
   classification?: Prisma.UserClassificationUncheckedUpdateOneWithoutUserNestedInput
@@ -1888,7 +1686,6 @@ export type UserCreateWithoutClassificationInput = {
   name: string
   email: string
   password: string
-  selectedSpace?: Prisma.SpaceCreateNestedOneWithoutUsersWithSelectedInput
   profiles?: Prisma.ProfileCreateNestedManyWithoutUserInput
   tenants?: Prisma.TenantCreateNestedManyWithoutUserInput
   associations?: Prisma.UserAssociationCreateNestedManyWithoutUserInput
@@ -1912,7 +1709,6 @@ export type UserUncheckedCreateWithoutClassificationInput = {
   name: string
   email: string
   password: string
-  selectedSpaceId?: string | null
   profiles?: Prisma.ProfileUncheckedCreateNestedManyWithoutUserInput
   tenants?: Prisma.TenantUncheckedCreateNestedManyWithoutUserInput
   associations?: Prisma.UserAssociationUncheckedCreateNestedManyWithoutUserInput
@@ -1951,7 +1747,6 @@ export type UserUpdateWithoutClassificationInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
-  selectedSpace?: Prisma.SpaceUpdateOneWithoutUsersWithSelectedNestedInput
   profiles?: Prisma.ProfileUpdateManyWithoutUserNestedInput
   tenants?: Prisma.TenantUpdateManyWithoutUserNestedInput
   associations?: Prisma.UserAssociationUpdateManyWithoutUserNestedInput
@@ -1975,7 +1770,6 @@ export type UserUncheckedUpdateWithoutClassificationInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
-  selectedSpaceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   profiles?: Prisma.ProfileUncheckedUpdateManyWithoutUserNestedInput
   tenants?: Prisma.TenantUncheckedUpdateManyWithoutUserNestedInput
   associations?: Prisma.UserAssociationUncheckedUpdateManyWithoutUserNestedInput
@@ -1999,7 +1793,6 @@ export type UserCreateWithoutAssociationsInput = {
   name: string
   email: string
   password: string
-  selectedSpace?: Prisma.SpaceCreateNestedOneWithoutUsersWithSelectedInput
   profiles?: Prisma.ProfileCreateNestedManyWithoutUserInput
   tenants?: Prisma.TenantCreateNestedManyWithoutUserInput
   classification?: Prisma.UserClassificationCreateNestedOneWithoutUserInput
@@ -2023,7 +1816,6 @@ export type UserUncheckedCreateWithoutAssociationsInput = {
   name: string
   email: string
   password: string
-  selectedSpaceId?: string | null
   profiles?: Prisma.ProfileUncheckedCreateNestedManyWithoutUserInput
   tenants?: Prisma.TenantUncheckedCreateNestedManyWithoutUserInput
   classification?: Prisma.UserClassificationUncheckedCreateNestedOneWithoutUserInput
@@ -2062,7 +1854,6 @@ export type UserUpdateWithoutAssociationsInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
-  selectedSpace?: Prisma.SpaceUpdateOneWithoutUsersWithSelectedNestedInput
   profiles?: Prisma.ProfileUpdateManyWithoutUserNestedInput
   tenants?: Prisma.TenantUpdateManyWithoutUserNestedInput
   classification?: Prisma.UserClassificationUpdateOneWithoutUserNestedInput
@@ -2086,7 +1877,6 @@ export type UserUncheckedUpdateWithoutAssociationsInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
-  selectedSpaceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   profiles?: Prisma.ProfileUncheckedUpdateManyWithoutUserNestedInput
   tenants?: Prisma.TenantUncheckedUpdateManyWithoutUserNestedInput
   classification?: Prisma.UserClassificationUncheckedUpdateOneWithoutUserNestedInput
@@ -2110,7 +1900,6 @@ export type UserCreateWithoutProfilesInput = {
   name: string
   email: string
   password: string
-  selectedSpace?: Prisma.SpaceCreateNestedOneWithoutUsersWithSelectedInput
   tenants?: Prisma.TenantCreateNestedManyWithoutUserInput
   classification?: Prisma.UserClassificationCreateNestedOneWithoutUserInput
   associations?: Prisma.UserAssociationCreateNestedManyWithoutUserInput
@@ -2134,7 +1923,6 @@ export type UserUncheckedCreateWithoutProfilesInput = {
   name: string
   email: string
   password: string
-  selectedSpaceId?: string | null
   tenants?: Prisma.TenantUncheckedCreateNestedManyWithoutUserInput
   classification?: Prisma.UserClassificationUncheckedCreateNestedOneWithoutUserInput
   associations?: Prisma.UserAssociationUncheckedCreateNestedManyWithoutUserInput
@@ -2173,7 +1961,6 @@ export type UserUpdateWithoutProfilesInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
-  selectedSpace?: Prisma.SpaceUpdateOneWithoutUsersWithSelectedNestedInput
   tenants?: Prisma.TenantUpdateManyWithoutUserNestedInput
   classification?: Prisma.UserClassificationUpdateOneWithoutUserNestedInput
   associations?: Prisma.UserAssociationUpdateManyWithoutUserNestedInput
@@ -2197,7 +1984,6 @@ export type UserUncheckedUpdateWithoutProfilesInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
-  selectedSpaceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tenants?: Prisma.TenantUncheckedUpdateManyWithoutUserNestedInput
   classification?: Prisma.UserClassificationUncheckedUpdateOneWithoutUserNestedInput
   associations?: Prisma.UserAssociationUncheckedUpdateManyWithoutUserNestedInput
@@ -2209,77 +1995,6 @@ export type UserUncheckedUpdateWithoutProfilesInput = {
   createdTasks?: Prisma.TaskUncheckedUpdateManyWithoutCreatorNestedInput
   createdSafeWallets?: Prisma.SafeWalletUncheckedUpdateManyWithoutCreatorNestedInput
   abilities?: Prisma.AbilityUncheckedUpdateManyWithoutUserNestedInput
-}
-
-export type UserCreateManySelectedSpaceInput = {
-  id?: string
-  seq?: number
-  updatedAt?: Date | string | null
-  createdAt?: Date | string
-  removedAt?: Date | string | null
-  phone: string
-  name: string
-  email: string
-  password: string
-}
-
-export type UserUpdateWithoutSelectedSpaceInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  phone?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.StringFieldUpdateOperationsInput | string
-  email?: Prisma.StringFieldUpdateOperationsInput | string
-  password?: Prisma.StringFieldUpdateOperationsInput | string
-  profiles?: Prisma.ProfileUpdateManyWithoutUserNestedInput
-  tenants?: Prisma.TenantUpdateManyWithoutUserNestedInput
-  classification?: Prisma.UserClassificationUpdateOneWithoutUserNestedInput
-  associations?: Prisma.UserAssociationUpdateManyWithoutUserNestedInput
-  createdCategories?: Prisma.CategoryUpdateManyWithoutCreatorNestedInput
-  createdGroups?: Prisma.GroupUpdateManyWithoutCreatorNestedInput
-  createdContents?: Prisma.ContentUpdateManyWithoutCreatorNestedInput
-  createdFiles?: Prisma.FileUpdateManyWithoutCreatorNestedInput
-  createdTimelines?: Prisma.TimelineUpdateManyWithoutCreatorNestedInput
-  createdTasks?: Prisma.TaskUpdateManyWithoutCreatorNestedInput
-  createdSafeWallets?: Prisma.SafeWalletUpdateManyWithoutCreatorNestedInput
-  abilities?: Prisma.AbilityUpdateManyWithoutUserNestedInput
-}
-
-export type UserUncheckedUpdateWithoutSelectedSpaceInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  seq?: Prisma.IntFieldUpdateOperationsInput | number
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  phone?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.StringFieldUpdateOperationsInput | string
-  email?: Prisma.StringFieldUpdateOperationsInput | string
-  password?: Prisma.StringFieldUpdateOperationsInput | string
-  profiles?: Prisma.ProfileUncheckedUpdateManyWithoutUserNestedInput
-  tenants?: Prisma.TenantUncheckedUpdateManyWithoutUserNestedInput
-  classification?: Prisma.UserClassificationUncheckedUpdateOneWithoutUserNestedInput
-  associations?: Prisma.UserAssociationUncheckedUpdateManyWithoutUserNestedInput
-  createdCategories?: Prisma.CategoryUncheckedUpdateManyWithoutCreatorNestedInput
-  createdGroups?: Prisma.GroupUncheckedUpdateManyWithoutCreatorNestedInput
-  createdContents?: Prisma.ContentUncheckedUpdateManyWithoutCreatorNestedInput
-  createdFiles?: Prisma.FileUncheckedUpdateManyWithoutCreatorNestedInput
-  createdTimelines?: Prisma.TimelineUncheckedUpdateManyWithoutCreatorNestedInput
-  createdTasks?: Prisma.TaskUncheckedUpdateManyWithoutCreatorNestedInput
-  createdSafeWallets?: Prisma.SafeWalletUncheckedUpdateManyWithoutCreatorNestedInput
-  abilities?: Prisma.AbilityUncheckedUpdateManyWithoutUserNestedInput
-}
-
-export type UserUncheckedUpdateManyWithoutSelectedSpaceInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  seq?: Prisma.IntFieldUpdateOperationsInput | number
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  phone?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.StringFieldUpdateOperationsInput | string
-  email?: Prisma.StringFieldUpdateOperationsInput | string
-  password?: Prisma.StringFieldUpdateOperationsInput | string
 }
 
 
@@ -2413,8 +2128,6 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   name?: boolean
   email?: boolean
   password?: boolean
-  selectedSpaceId?: boolean
-  selectedSpace?: boolean | Prisma.User$selectedSpaceArgs<ExtArgs>
   profiles?: boolean | Prisma.User$profilesArgs<ExtArgs>
   tenants?: boolean | Prisma.User$tenantsArgs<ExtArgs>
   classification?: boolean | Prisma.User$classificationArgs<ExtArgs>
@@ -2440,8 +2153,6 @@ export type UserSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   name?: boolean
   email?: boolean
   password?: boolean
-  selectedSpaceId?: boolean
-  selectedSpace?: boolean | Prisma.User$selectedSpaceArgs<ExtArgs>
 }, ExtArgs["result"]["user"]>
 
 export type UserSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -2454,8 +2165,6 @@ export type UserSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   name?: boolean
   email?: boolean
   password?: boolean
-  selectedSpaceId?: boolean
-  selectedSpace?: boolean | Prisma.User$selectedSpaceArgs<ExtArgs>
 }, ExtArgs["result"]["user"]>
 
 export type UserSelectScalar = {
@@ -2468,12 +2177,10 @@ export type UserSelectScalar = {
   name?: boolean
   email?: boolean
   password?: boolean
-  selectedSpaceId?: boolean
 }
 
-export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "seq" | "updatedAt" | "createdAt" | "removedAt" | "phone" | "name" | "email" | "password" | "selectedSpaceId", ExtArgs["result"]["user"]>
+export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "seq" | "updatedAt" | "createdAt" | "removedAt" | "phone" | "name" | "email" | "password", ExtArgs["result"]["user"]>
 export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  selectedSpace?: boolean | Prisma.User$selectedSpaceArgs<ExtArgs>
   profiles?: boolean | Prisma.User$profilesArgs<ExtArgs>
   tenants?: boolean | Prisma.User$tenantsArgs<ExtArgs>
   classification?: boolean | Prisma.User$classificationArgs<ExtArgs>
@@ -2488,17 +2195,12 @@ export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   abilities?: boolean | Prisma.User$abilitiesArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }
-export type UserIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  selectedSpace?: boolean | Prisma.User$selectedSpaceArgs<ExtArgs>
-}
-export type UserIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  selectedSpace?: boolean | Prisma.User$selectedSpaceArgs<ExtArgs>
-}
+export type UserIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
+export type UserIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
 
 export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "User"
   objects: {
-    selectedSpace: Prisma.$SpacePayload<ExtArgs> | null
     profiles: Prisma.$ProfilePayload<ExtArgs>[]
     tenants: Prisma.$TenantPayload<ExtArgs>[]
     classification: Prisma.$UserClassificationPayload<ExtArgs> | null
@@ -2534,7 +2236,6 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
      * @displayName 비밀번호
      */
     password: string
-    selectedSpaceId: string | null
   }, ExtArgs["result"]["user"]>
   composites: {}
 }
@@ -2929,7 +2630,6 @@ readonly fields: UserFieldRefs;
  */
 export interface Prisma__UserClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
-  selectedSpace<T extends Prisma.User$selectedSpaceArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$selectedSpaceArgs<ExtArgs>>): Prisma.Prisma__SpaceClient<runtime.Types.Result.GetResult<Prisma.$SpacePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   profiles<T extends Prisma.User$profilesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$profilesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ProfilePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   tenants<T extends Prisma.User$tenantsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$tenantsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$TenantPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   classification<T extends Prisma.User$classificationArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$classificationArgs<ExtArgs>>): Prisma.Prisma__UserClassificationClient<runtime.Types.Result.GetResult<Prisma.$UserClassificationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
@@ -2980,7 +2680,6 @@ export interface UserFieldRefs {
   readonly name: Prisma.FieldRef<"User", 'String'>
   readonly email: Prisma.FieldRef<"User", 'String'>
   readonly password: Prisma.FieldRef<"User", 'String'>
-  readonly selectedSpaceId: Prisma.FieldRef<"User", 'String'>
 }
     
 
@@ -3230,10 +2929,6 @@ export type UserCreateManyAndReturnArgs<ExtArgs extends runtime.Types.Extensions
    */
   data: Prisma.UserCreateManyInput | Prisma.UserCreateManyInput[]
   skipDuplicates?: boolean
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.UserIncludeCreateManyAndReturn<ExtArgs> | null
 }
 
 /**
@@ -3304,10 +2999,6 @@ export type UserUpdateManyAndReturnArgs<ExtArgs extends runtime.Types.Extensions
    * Limit how many Users to update.
    */
   limit?: number
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.UserIncludeUpdateManyAndReturn<ExtArgs> | null
 }
 
 /**
@@ -3374,25 +3065,6 @@ export type UserDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.Internal
    * Limit how many Users to delete.
    */
   limit?: number
-}
-
-/**
- * User.selectedSpace
- */
-export type User$selectedSpaceArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  /**
-   * Select specific fields to fetch from the Space
-   */
-  select?: Prisma.SpaceSelect<ExtArgs> | null
-  /**
-   * Omit specific fields from the Space
-   */
-  omit?: Prisma.SpaceOmit<ExtArgs> | null
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.SpaceInclude<ExtArgs> | null
-  where?: Prisma.SpaceWhereInput
 }
 
 /**

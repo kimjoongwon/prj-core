@@ -1,5 +1,5 @@
+import { SYSTEM_ROLES } from "@cocrepo/constant";
 import { Role } from "@cocrepo/entity";
-import { Roles } from "@cocrepo/prisma";
 import { Test, type TestingModule } from "@nestjs/testing";
 import { TransactionHost } from "@nestjs-cls/transactional";
 import { RolesRepository } from "../src/roles.repository";
@@ -21,7 +21,7 @@ describe("RolesRepository", () => {
 	const mockRoleData = {
 		id: "role-test-id",
 		seq: 1,
-		name: Roles.USER,
+		name: SYSTEM_ROLES.USER,
 		createdAt: new Date("2024-01-01"),
 		updatedAt: new Date("2024-01-01"),
 		removedAt: null,
@@ -94,7 +94,7 @@ describe("RolesRepository", () => {
 	describe("findByName", () => {
 		it("이름으로 역할을 조회해야 한다", async () => {
 			// Given
-			const roleName = Roles.USER;
+			const roleName = SYSTEM_ROLES.USER;
 			mockTxHost.tx.role.findFirst.mockResolvedValue(mockRoleData);
 
 			// When
@@ -110,7 +110,7 @@ describe("RolesRepository", () => {
 
 		it("역할을 찾지 못하면 null을 반환해야 한다", async () => {
 			// Given
-			const roleName = Roles.ADMIN;
+			const roleName = SYSTEM_ROLES.ADMIN;
 			mockTxHost.tx.role.findFirst.mockResolvedValue(null);
 
 			// When
@@ -129,7 +129,7 @@ describe("RolesRepository", () => {
 			// Given
 			const mockRoles = [
 				mockRoleData,
-				{ ...mockRoleData, id: "role-2", name: Roles.ADMIN },
+				{ ...mockRoleData, id: "role-2", name: SYSTEM_ROLES.ADMIN },
 			];
 			mockTxHost.tx.role.findMany.mockResolvedValue(mockRoles);
 
@@ -160,11 +160,11 @@ describe("RolesRepository", () => {
 		it("새 역할을 생성해야 한다", async () => {
 			// Given
 			const createData = {
-				name: Roles.ADMIN,
+				name: SYSTEM_ROLES.ADMIN,
 			};
 			mockTxHost.tx.role.create.mockResolvedValue({
 				...mockRoleData,
-				name: Roles.ADMIN,
+				name: SYSTEM_ROLES.ADMIN,
 			});
 
 			// When
@@ -183,10 +183,10 @@ describe("RolesRepository", () => {
 		it("역할을 수정해야 한다", async () => {
 			// Given
 			const roleId = "role-test-id";
-			const updateData = { name: Roles.ADMIN };
+			const updateData = { name: SYSTEM_ROLES.ADMIN };
 			mockTxHost.tx.role.update.mockResolvedValue({
 				...mockRoleData,
-				name: Roles.ADMIN,
+				name: SYSTEM_ROLES.ADMIN,
 			});
 
 			// When

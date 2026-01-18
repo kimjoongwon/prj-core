@@ -40,7 +40,10 @@ export type RoleMinAggregateOutputType = {
   createdAt: Date | null
   updatedAt: Date | null
   removedAt: Date | null
-  name: $Enums.Roles | null
+  name: string | null
+  displayName: string | null
+  description: string | null
+  isSystem: boolean | null
 }
 
 export type RoleMaxAggregateOutputType = {
@@ -49,7 +52,10 @@ export type RoleMaxAggregateOutputType = {
   createdAt: Date | null
   updatedAt: Date | null
   removedAt: Date | null
-  name: $Enums.Roles | null
+  name: string | null
+  displayName: string | null
+  description: string | null
+  isSystem: boolean | null
 }
 
 export type RoleCountAggregateOutputType = {
@@ -59,6 +65,9 @@ export type RoleCountAggregateOutputType = {
   updatedAt: number
   removedAt: number
   name: number
+  displayName: number
+  description: number
+  isSystem: number
   _all: number
 }
 
@@ -78,6 +87,9 @@ export type RoleMinAggregateInputType = {
   updatedAt?: true
   removedAt?: true
   name?: true
+  displayName?: true
+  description?: true
+  isSystem?: true
 }
 
 export type RoleMaxAggregateInputType = {
@@ -87,6 +99,9 @@ export type RoleMaxAggregateInputType = {
   updatedAt?: true
   removedAt?: true
   name?: true
+  displayName?: true
+  description?: true
+  isSystem?: true
 }
 
 export type RoleCountAggregateInputType = {
@@ -96,6 +111,9 @@ export type RoleCountAggregateInputType = {
   updatedAt?: true
   removedAt?: true
   name?: true
+  displayName?: true
+  description?: true
+  isSystem?: true
   _all?: true
 }
 
@@ -191,7 +209,10 @@ export type RoleGroupByOutputType = {
   createdAt: Date
   updatedAt: Date | null
   removedAt: Date | null
-  name: $Enums.Roles
+  name: string
+  displayName: string | null
+  description: string | null
+  isSystem: boolean
   _count: RoleCountAggregateOutputType | null
   _avg: RoleAvgAggregateOutputType | null
   _sum: RoleSumAggregateOutputType | null
@@ -223,7 +244,10 @@ export type RoleWhereInput = {
   createdAt?: Prisma.DateTimeFilter<"Role"> | Date | string
   updatedAt?: Prisma.DateTimeNullableFilter<"Role"> | Date | string | null
   removedAt?: Prisma.DateTimeNullableFilter<"Role"> | Date | string | null
-  name?: Prisma.EnumRolesFilter<"Role"> | $Enums.Roles
+  name?: Prisma.StringFilter<"Role"> | string
+  displayName?: Prisma.StringNullableFilter<"Role"> | string | null
+  description?: Prisma.StringNullableFilter<"Role"> | string | null
+  isSystem?: Prisma.BoolFilter<"Role"> | boolean
   abilities?: Prisma.AbilityListRelationFilter
   assignments?: Prisma.AssignmentListRelationFilter
   associations?: Prisma.RoleAssociationListRelationFilter
@@ -238,6 +262,9 @@ export type RoleOrderByWithRelationInput = {
   updatedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   removedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   name?: Prisma.SortOrder
+  displayName?: Prisma.SortOrderInput | Prisma.SortOrder
+  description?: Prisma.SortOrderInput | Prisma.SortOrder
+  isSystem?: Prisma.SortOrder
   abilities?: Prisma.AbilityOrderByRelationAggregateInput
   assignments?: Prisma.AssignmentOrderByRelationAggregateInput
   associations?: Prisma.RoleAssociationOrderByRelationAggregateInput
@@ -248,13 +275,16 @@ export type RoleOrderByWithRelationInput = {
 export type RoleWhereUniqueInput = Prisma.AtLeast<{
   id?: string
   seq?: number
-  name?: $Enums.Roles
+  name?: string
   AND?: Prisma.RoleWhereInput | Prisma.RoleWhereInput[]
   OR?: Prisma.RoleWhereInput[]
   NOT?: Prisma.RoleWhereInput | Prisma.RoleWhereInput[]
   createdAt?: Prisma.DateTimeFilter<"Role"> | Date | string
   updatedAt?: Prisma.DateTimeNullableFilter<"Role"> | Date | string | null
   removedAt?: Prisma.DateTimeNullableFilter<"Role"> | Date | string | null
+  displayName?: Prisma.StringNullableFilter<"Role"> | string | null
+  description?: Prisma.StringNullableFilter<"Role"> | string | null
+  isSystem?: Prisma.BoolFilter<"Role"> | boolean
   abilities?: Prisma.AbilityListRelationFilter
   assignments?: Prisma.AssignmentListRelationFilter
   associations?: Prisma.RoleAssociationListRelationFilter
@@ -269,6 +299,9 @@ export type RoleOrderByWithAggregationInput = {
   updatedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   removedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   name?: Prisma.SortOrder
+  displayName?: Prisma.SortOrderInput | Prisma.SortOrder
+  description?: Prisma.SortOrderInput | Prisma.SortOrder
+  isSystem?: Prisma.SortOrder
   _count?: Prisma.RoleCountOrderByAggregateInput
   _avg?: Prisma.RoleAvgOrderByAggregateInput
   _max?: Prisma.RoleMaxOrderByAggregateInput
@@ -285,7 +318,10 @@ export type RoleScalarWhereWithAggregatesInput = {
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Role"> | Date | string
   updatedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Role"> | Date | string | null
   removedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Role"> | Date | string | null
-  name?: Prisma.EnumRolesWithAggregatesFilter<"Role"> | $Enums.Roles
+  name?: Prisma.StringWithAggregatesFilter<"Role"> | string
+  displayName?: Prisma.StringNullableWithAggregatesFilter<"Role"> | string | null
+  description?: Prisma.StringNullableWithAggregatesFilter<"Role"> | string | null
+  isSystem?: Prisma.BoolWithAggregatesFilter<"Role"> | boolean
 }
 
 export type RoleCreateInput = {
@@ -294,7 +330,10 @@ export type RoleCreateInput = {
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
-  name?: $Enums.Roles
+  name: string
+  displayName?: string | null
+  description?: string | null
+  isSystem?: boolean
   abilities?: Prisma.AbilityCreateNestedManyWithoutRoleInput
   assignments?: Prisma.AssignmentCreateNestedManyWithoutRoleInput
   associations?: Prisma.RoleAssociationCreateNestedManyWithoutRoleInput
@@ -308,7 +347,10 @@ export type RoleUncheckedCreateInput = {
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
-  name?: $Enums.Roles
+  name: string
+  displayName?: string | null
+  description?: string | null
+  isSystem?: boolean
   abilities?: Prisma.AbilityUncheckedCreateNestedManyWithoutRoleInput
   assignments?: Prisma.AssignmentUncheckedCreateNestedManyWithoutRoleInput
   associations?: Prisma.RoleAssociationUncheckedCreateNestedManyWithoutRoleInput
@@ -321,7 +363,10 @@ export type RoleUpdateInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  name?: Prisma.EnumRolesFieldUpdateOperationsInput | $Enums.Roles
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isSystem?: Prisma.BoolFieldUpdateOperationsInput | boolean
   abilities?: Prisma.AbilityUpdateManyWithoutRoleNestedInput
   assignments?: Prisma.AssignmentUpdateManyWithoutRoleNestedInput
   associations?: Prisma.RoleAssociationUpdateManyWithoutRoleNestedInput
@@ -335,7 +380,10 @@ export type RoleUncheckedUpdateInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  name?: Prisma.EnumRolesFieldUpdateOperationsInput | $Enums.Roles
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isSystem?: Prisma.BoolFieldUpdateOperationsInput | boolean
   abilities?: Prisma.AbilityUncheckedUpdateManyWithoutRoleNestedInput
   assignments?: Prisma.AssignmentUncheckedUpdateManyWithoutRoleNestedInput
   associations?: Prisma.RoleAssociationUncheckedUpdateManyWithoutRoleNestedInput
@@ -349,7 +397,10 @@ export type RoleCreateManyInput = {
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
-  name?: $Enums.Roles
+  name: string
+  displayName?: string | null
+  description?: string | null
+  isSystem?: boolean
 }
 
 export type RoleUpdateManyMutationInput = {
@@ -357,7 +408,10 @@ export type RoleUpdateManyMutationInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  name?: Prisma.EnumRolesFieldUpdateOperationsInput | $Enums.Roles
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isSystem?: Prisma.BoolFieldUpdateOperationsInput | boolean
 }
 
 export type RoleUncheckedUpdateManyInput = {
@@ -366,7 +420,10 @@ export type RoleUncheckedUpdateManyInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  name?: Prisma.EnumRolesFieldUpdateOperationsInput | $Enums.Roles
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isSystem?: Prisma.BoolFieldUpdateOperationsInput | boolean
 }
 
 export type RoleScalarRelationFilter = {
@@ -386,6 +443,9 @@ export type RoleCountOrderByAggregateInput = {
   updatedAt?: Prisma.SortOrder
   removedAt?: Prisma.SortOrder
   name?: Prisma.SortOrder
+  displayName?: Prisma.SortOrder
+  description?: Prisma.SortOrder
+  isSystem?: Prisma.SortOrder
 }
 
 export type RoleAvgOrderByAggregateInput = {
@@ -399,6 +459,9 @@ export type RoleMaxOrderByAggregateInput = {
   updatedAt?: Prisma.SortOrder
   removedAt?: Prisma.SortOrder
   name?: Prisma.SortOrder
+  displayName?: Prisma.SortOrder
+  description?: Prisma.SortOrder
+  isSystem?: Prisma.SortOrder
 }
 
 export type RoleMinOrderByAggregateInput = {
@@ -408,6 +471,9 @@ export type RoleMinOrderByAggregateInput = {
   updatedAt?: Prisma.SortOrder
   removedAt?: Prisma.SortOrder
   name?: Prisma.SortOrder
+  displayName?: Prisma.SortOrder
+  description?: Prisma.SortOrder
+  isSystem?: Prisma.SortOrder
 }
 
 export type RoleSumOrderByAggregateInput = {
@@ -458,10 +524,6 @@ export type RoleUpdateOneWithoutAbilitiesNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.RoleUpdateToOneWithWhereWithoutAbilitiesInput, Prisma.RoleUpdateWithoutAbilitiesInput>, Prisma.RoleUncheckedUpdateWithoutAbilitiesInput>
 }
 
-export type EnumRolesFieldUpdateOperationsInput = {
-  set?: $Enums.Roles
-}
-
 export type RoleCreateNestedOneWithoutAssociationsInput = {
   create?: Prisma.XOR<Prisma.RoleCreateWithoutAssociationsInput, Prisma.RoleUncheckedCreateWithoutAssociationsInput>
   connectOrCreate?: Prisma.RoleCreateOrConnectWithoutAssociationsInput
@@ -496,7 +558,10 @@ export type RoleCreateWithoutTenantsInput = {
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
-  name?: $Enums.Roles
+  name: string
+  displayName?: string | null
+  description?: string | null
+  isSystem?: boolean
   abilities?: Prisma.AbilityCreateNestedManyWithoutRoleInput
   assignments?: Prisma.AssignmentCreateNestedManyWithoutRoleInput
   associations?: Prisma.RoleAssociationCreateNestedManyWithoutRoleInput
@@ -509,7 +574,10 @@ export type RoleUncheckedCreateWithoutTenantsInput = {
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
-  name?: $Enums.Roles
+  name: string
+  displayName?: string | null
+  description?: string | null
+  isSystem?: boolean
   abilities?: Prisma.AbilityUncheckedCreateNestedManyWithoutRoleInput
   assignments?: Prisma.AssignmentUncheckedCreateNestedManyWithoutRoleInput
   associations?: Prisma.RoleAssociationUncheckedCreateNestedManyWithoutRoleInput
@@ -537,7 +605,10 @@ export type RoleUpdateWithoutTenantsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  name?: Prisma.EnumRolesFieldUpdateOperationsInput | $Enums.Roles
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isSystem?: Prisma.BoolFieldUpdateOperationsInput | boolean
   abilities?: Prisma.AbilityUpdateManyWithoutRoleNestedInput
   assignments?: Prisma.AssignmentUpdateManyWithoutRoleNestedInput
   associations?: Prisma.RoleAssociationUpdateManyWithoutRoleNestedInput
@@ -550,7 +621,10 @@ export type RoleUncheckedUpdateWithoutTenantsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  name?: Prisma.EnumRolesFieldUpdateOperationsInput | $Enums.Roles
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isSystem?: Prisma.BoolFieldUpdateOperationsInput | boolean
   abilities?: Prisma.AbilityUncheckedUpdateManyWithoutRoleNestedInput
   assignments?: Prisma.AssignmentUncheckedUpdateManyWithoutRoleNestedInput
   associations?: Prisma.RoleAssociationUncheckedUpdateManyWithoutRoleNestedInput
@@ -563,7 +637,10 @@ export type RoleCreateWithoutAssignmentsInput = {
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
-  name?: $Enums.Roles
+  name: string
+  displayName?: string | null
+  description?: string | null
+  isSystem?: boolean
   abilities?: Prisma.AbilityCreateNestedManyWithoutRoleInput
   associations?: Prisma.RoleAssociationCreateNestedManyWithoutRoleInput
   classification?: Prisma.RoleClassificationCreateNestedOneWithoutRoleInput
@@ -576,7 +653,10 @@ export type RoleUncheckedCreateWithoutAssignmentsInput = {
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
-  name?: $Enums.Roles
+  name: string
+  displayName?: string | null
+  description?: string | null
+  isSystem?: boolean
   abilities?: Prisma.AbilityUncheckedCreateNestedManyWithoutRoleInput
   associations?: Prisma.RoleAssociationUncheckedCreateNestedManyWithoutRoleInput
   classification?: Prisma.RoleClassificationUncheckedCreateNestedOneWithoutRoleInput
@@ -604,7 +684,10 @@ export type RoleUpdateWithoutAssignmentsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  name?: Prisma.EnumRolesFieldUpdateOperationsInput | $Enums.Roles
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isSystem?: Prisma.BoolFieldUpdateOperationsInput | boolean
   abilities?: Prisma.AbilityUpdateManyWithoutRoleNestedInput
   associations?: Prisma.RoleAssociationUpdateManyWithoutRoleNestedInput
   classification?: Prisma.RoleClassificationUpdateOneWithoutRoleNestedInput
@@ -617,7 +700,10 @@ export type RoleUncheckedUpdateWithoutAssignmentsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  name?: Prisma.EnumRolesFieldUpdateOperationsInput | $Enums.Roles
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isSystem?: Prisma.BoolFieldUpdateOperationsInput | boolean
   abilities?: Prisma.AbilityUncheckedUpdateManyWithoutRoleNestedInput
   associations?: Prisma.RoleAssociationUncheckedUpdateManyWithoutRoleNestedInput
   classification?: Prisma.RoleClassificationUncheckedUpdateOneWithoutRoleNestedInput
@@ -630,7 +716,10 @@ export type RoleCreateWithoutAbilitiesInput = {
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
-  name?: $Enums.Roles
+  name: string
+  displayName?: string | null
+  description?: string | null
+  isSystem?: boolean
   assignments?: Prisma.AssignmentCreateNestedManyWithoutRoleInput
   associations?: Prisma.RoleAssociationCreateNestedManyWithoutRoleInput
   classification?: Prisma.RoleClassificationCreateNestedOneWithoutRoleInput
@@ -643,7 +732,10 @@ export type RoleUncheckedCreateWithoutAbilitiesInput = {
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
-  name?: $Enums.Roles
+  name: string
+  displayName?: string | null
+  description?: string | null
+  isSystem?: boolean
   assignments?: Prisma.AssignmentUncheckedCreateNestedManyWithoutRoleInput
   associations?: Prisma.RoleAssociationUncheckedCreateNestedManyWithoutRoleInput
   classification?: Prisma.RoleClassificationUncheckedCreateNestedOneWithoutRoleInput
@@ -671,7 +763,10 @@ export type RoleUpdateWithoutAbilitiesInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  name?: Prisma.EnumRolesFieldUpdateOperationsInput | $Enums.Roles
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isSystem?: Prisma.BoolFieldUpdateOperationsInput | boolean
   assignments?: Prisma.AssignmentUpdateManyWithoutRoleNestedInput
   associations?: Prisma.RoleAssociationUpdateManyWithoutRoleNestedInput
   classification?: Prisma.RoleClassificationUpdateOneWithoutRoleNestedInput
@@ -684,7 +779,10 @@ export type RoleUncheckedUpdateWithoutAbilitiesInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  name?: Prisma.EnumRolesFieldUpdateOperationsInput | $Enums.Roles
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isSystem?: Prisma.BoolFieldUpdateOperationsInput | boolean
   assignments?: Prisma.AssignmentUncheckedUpdateManyWithoutRoleNestedInput
   associations?: Prisma.RoleAssociationUncheckedUpdateManyWithoutRoleNestedInput
   classification?: Prisma.RoleClassificationUncheckedUpdateOneWithoutRoleNestedInput
@@ -697,7 +795,10 @@ export type RoleCreateWithoutAssociationsInput = {
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
-  name?: $Enums.Roles
+  name: string
+  displayName?: string | null
+  description?: string | null
+  isSystem?: boolean
   abilities?: Prisma.AbilityCreateNestedManyWithoutRoleInput
   assignments?: Prisma.AssignmentCreateNestedManyWithoutRoleInput
   classification?: Prisma.RoleClassificationCreateNestedOneWithoutRoleInput
@@ -710,7 +811,10 @@ export type RoleUncheckedCreateWithoutAssociationsInput = {
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
-  name?: $Enums.Roles
+  name: string
+  displayName?: string | null
+  description?: string | null
+  isSystem?: boolean
   abilities?: Prisma.AbilityUncheckedCreateNestedManyWithoutRoleInput
   assignments?: Prisma.AssignmentUncheckedCreateNestedManyWithoutRoleInput
   classification?: Prisma.RoleClassificationUncheckedCreateNestedOneWithoutRoleInput
@@ -738,7 +842,10 @@ export type RoleUpdateWithoutAssociationsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  name?: Prisma.EnumRolesFieldUpdateOperationsInput | $Enums.Roles
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isSystem?: Prisma.BoolFieldUpdateOperationsInput | boolean
   abilities?: Prisma.AbilityUpdateManyWithoutRoleNestedInput
   assignments?: Prisma.AssignmentUpdateManyWithoutRoleNestedInput
   classification?: Prisma.RoleClassificationUpdateOneWithoutRoleNestedInput
@@ -751,7 +858,10 @@ export type RoleUncheckedUpdateWithoutAssociationsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  name?: Prisma.EnumRolesFieldUpdateOperationsInput | $Enums.Roles
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isSystem?: Prisma.BoolFieldUpdateOperationsInput | boolean
   abilities?: Prisma.AbilityUncheckedUpdateManyWithoutRoleNestedInput
   assignments?: Prisma.AssignmentUncheckedUpdateManyWithoutRoleNestedInput
   classification?: Prisma.RoleClassificationUncheckedUpdateOneWithoutRoleNestedInput
@@ -764,7 +874,10 @@ export type RoleCreateWithoutClassificationInput = {
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
-  name?: $Enums.Roles
+  name: string
+  displayName?: string | null
+  description?: string | null
+  isSystem?: boolean
   abilities?: Prisma.AbilityCreateNestedManyWithoutRoleInput
   assignments?: Prisma.AssignmentCreateNestedManyWithoutRoleInput
   associations?: Prisma.RoleAssociationCreateNestedManyWithoutRoleInput
@@ -777,7 +890,10 @@ export type RoleUncheckedCreateWithoutClassificationInput = {
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
-  name?: $Enums.Roles
+  name: string
+  displayName?: string | null
+  description?: string | null
+  isSystem?: boolean
   abilities?: Prisma.AbilityUncheckedCreateNestedManyWithoutRoleInput
   assignments?: Prisma.AssignmentUncheckedCreateNestedManyWithoutRoleInput
   associations?: Prisma.RoleAssociationUncheckedCreateNestedManyWithoutRoleInput
@@ -805,7 +921,10 @@ export type RoleUpdateWithoutClassificationInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  name?: Prisma.EnumRolesFieldUpdateOperationsInput | $Enums.Roles
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isSystem?: Prisma.BoolFieldUpdateOperationsInput | boolean
   abilities?: Prisma.AbilityUpdateManyWithoutRoleNestedInput
   assignments?: Prisma.AssignmentUpdateManyWithoutRoleNestedInput
   associations?: Prisma.RoleAssociationUpdateManyWithoutRoleNestedInput
@@ -818,7 +937,10 @@ export type RoleUncheckedUpdateWithoutClassificationInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  name?: Prisma.EnumRolesFieldUpdateOperationsInput | $Enums.Roles
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isSystem?: Prisma.BoolFieldUpdateOperationsInput | boolean
   abilities?: Prisma.AbilityUncheckedUpdateManyWithoutRoleNestedInput
   assignments?: Prisma.AssignmentUncheckedUpdateManyWithoutRoleNestedInput
   associations?: Prisma.RoleAssociationUncheckedUpdateManyWithoutRoleNestedInput
@@ -890,6 +1012,9 @@ export type RoleSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   updatedAt?: boolean
   removedAt?: boolean
   name?: boolean
+  displayName?: boolean
+  description?: boolean
+  isSystem?: boolean
   abilities?: boolean | Prisma.Role$abilitiesArgs<ExtArgs>
   assignments?: boolean | Prisma.Role$assignmentsArgs<ExtArgs>
   associations?: boolean | Prisma.Role$associationsArgs<ExtArgs>
@@ -905,6 +1030,9 @@ export type RoleSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   updatedAt?: boolean
   removedAt?: boolean
   name?: boolean
+  displayName?: boolean
+  description?: boolean
+  isSystem?: boolean
 }, ExtArgs["result"]["role"]>
 
 export type RoleSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -914,6 +1042,9 @@ export type RoleSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   updatedAt?: boolean
   removedAt?: boolean
   name?: boolean
+  displayName?: boolean
+  description?: boolean
+  isSystem?: boolean
 }, ExtArgs["result"]["role"]>
 
 export type RoleSelectScalar = {
@@ -923,9 +1054,12 @@ export type RoleSelectScalar = {
   updatedAt?: boolean
   removedAt?: boolean
   name?: boolean
+  displayName?: boolean
+  description?: boolean
+  isSystem?: boolean
 }
 
-export type RoleOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "seq" | "createdAt" | "updatedAt" | "removedAt" | "name", ExtArgs["result"]["role"]>
+export type RoleOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "seq" | "createdAt" | "updatedAt" | "removedAt" | "name" | "displayName" | "description" | "isSystem", ExtArgs["result"]["role"]>
 export type RoleInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   abilities?: boolean | Prisma.Role$abilitiesArgs<ExtArgs>
   assignments?: boolean | Prisma.Role$assignmentsArgs<ExtArgs>
@@ -953,9 +1087,21 @@ export type $RolePayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     updatedAt: Date | null
     removedAt: Date | null
     /**
-     * @displayName 역할명
+     * @displayName 역할 식별자
      */
-    name: $Enums.Roles
+    name: string
+    /**
+     * @displayName 표시명
+     */
+    displayName: string | null
+    /**
+     * @displayName 설명
+     */
+    description: string | null
+    /**
+     * @displayName 시스템 역할 여부
+     */
+    isSystem: boolean
   }, ExtArgs["result"]["role"]>
   composites: {}
 }
@@ -1389,7 +1535,10 @@ export interface RoleFieldRefs {
   readonly createdAt: Prisma.FieldRef<"Role", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"Role", 'DateTime'>
   readonly removedAt: Prisma.FieldRef<"Role", 'DateTime'>
-  readonly name: Prisma.FieldRef<"Role", 'Roles'>
+  readonly name: Prisma.FieldRef<"Role", 'String'>
+  readonly displayName: Prisma.FieldRef<"Role", 'String'>
+  readonly description: Prisma.FieldRef<"Role", 'String'>
+  readonly isSystem: Prisma.FieldRef<"Role", 'Boolean'>
 }
     
 
@@ -1608,7 +1757,7 @@ export type RoleCreateArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs
   /**
    * The data needed to create a Role.
    */
-  data?: Prisma.XOR<Prisma.RoleCreateInput, Prisma.RoleUncheckedCreateInput>
+  data: Prisma.XOR<Prisma.RoleCreateInput, Prisma.RoleUncheckedCreateInput>
 }
 
 /**

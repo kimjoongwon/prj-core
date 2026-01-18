@@ -1,5 +1,6 @@
+import type { SystemRoleName } from "@cocrepo/constant";
 import { Role } from "@cocrepo/entity";
-import { Prisma, PrismaClient, Roles } from "@cocrepo/prisma";
+import { Prisma, PrismaClient } from "@cocrepo/prisma";
 import { Injectable, Logger } from "@nestjs/common";
 import { TransactionHost } from "@nestjs-cls/transactional";
 import { TransactionalAdapterPrisma } from "@nestjs-cls/transactional-adapter-prisma";
@@ -31,9 +32,9 @@ export class RolesRepository {
 	}
 
 	/**
-	 * 역할 이름(Enum)으로 조회
+	 * 역할 이름으로 조회
 	 */
-	async findByName(name: Roles): Promise<Role | null> {
+	async findByName(name: SystemRoleName | string): Promise<Role | null> {
 		this.logger.debug(`이름으로 역할 조회: ${name}`);
 
 		const result = await this.txHost.tx.role.findFirst({
@@ -84,5 +85,30 @@ export class RolesRepository {
 		});
 
 		return plainToInstance(Role, result);
+	}
+
+	/**
+	 * 역할 삭제
+	 */
+	async deleteById(id: string): Promise<Role> {
+		this.logger.debug(`역할 삭제: ${id.slice(-8)}`);
+
+		const result = await this.txHost.tx.role.delete({
+			where: { id },
+		});
+
+		return plainToInstance(Role, result);
+	}
+
+	/**
+	 * 역할에 연결된 테넌트 수 조회
+	 * 삭제 가능 여부 체크용
+	 */
+	async countTenantsByRoleId(roleId: string): Promise<number> {
+		this.logger.debug(`역할에 연결된 테넌트 수 조회: ${roleId.slice(-8)}`);
+
+		return this.txHost.tx.tenant.count({
+			where: { roleId },
+		});
 	}
 }

@@ -42,12 +42,4 @@ export class TokenDto {
 	})
 	@NumberFieldOptional()
 	refreshTokenExpiresAt?: number;
-
-	@ApiPropertyOptional({
-		description: "마지막으로 선택한 Space ID (User.selectedSpaceId)",
-		example: "uuid-string",
-		nullable: true,
-	})
-	@StringFieldOptional({ nullable: true })
-	selectedSpaceId?: string | null;
 }

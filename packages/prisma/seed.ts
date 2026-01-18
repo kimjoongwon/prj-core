@@ -33,8 +33,17 @@ async function main() {
 	for (const roleData of roleSeedData) {
 		roles[roleData.name] = await prisma.role.upsert({
 			where: { name: roleData.name },
-			update: {},
-			create: { name: roleData.name },
+			update: {
+				displayName: roleData.displayName,
+				description: roleData.description,
+				isSystem: roleData.isSystem,
+			},
+			create: {
+				name: roleData.name,
+				displayName: roleData.displayName,
+				description: roleData.description,
+				isSystem: roleData.isSystem,
+			},
 		});
 		console.log(`Role 생성 완료: ${roleData.name}`);
 	}
