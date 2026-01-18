@@ -28,7 +28,7 @@ export const StatusChipCell = ({ status, removedAt }: StatusChipCellProps) => {
 	};
 
 	return (
-		<div className="flex justify-center">
+		<div className="flex w-full justify-center">
 			<Chip size="sm" color={config.color} variant="flat">
 				{config.label}
 			</Chip>

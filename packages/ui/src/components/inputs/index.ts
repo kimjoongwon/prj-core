@@ -12,7 +12,7 @@ export { FileUploader } from "./FileUploader";
 export { Input } from "./Input";
 export { ListboxSelect } from "./ListboxSelect";
 export { MultiSelect } from "./MultiSelect";
-export { Pagination } from "./Pagination/Pagination";
+export { Pagination } from "./Pagination";
 export { RadioGroup } from "./RadioGroup";
 export * from "./Select/Select";
 export { Switch } from "./Switch";

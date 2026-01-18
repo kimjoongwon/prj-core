@@ -410,6 +410,47 @@ export function useAdminLayout() { }
 - `packages/ui/src/components/ui/surfaces/VStack/VStack.tsx`
 - `packages/ui/src/components/ui/data-display/Avatar/Avatar.tsx`
 
+### Surface/엘리베이션 시스템
+
+**시각적 계층감을 위한 Surface 컴포넌트가 존재합니다.**
+
+#### 컴포넌트 위치
+
+```
+packages/ui/src/components/ui/surfaces/
+├── Surface/         # 기본 Surface (elevation prop)
+├── PageSurface/     # 페이지 래퍼 (title, description, actions)
+├── SectionSurface/  # 섹션 래퍼 (title, collapsible)
+├── VStack/          # 수직 스택
+├── HStack/          # 수평 스택
+└── ...
+```
+
+#### 엘리베이션 레벨
+
+| 레벨 | 이름 | Shadow | Background | 용도 |
+|------|------|--------|------------|------|
+| 0 | `flat` | none | bg-background | 페이지 배경 |
+| 1 | `raised` | sm | bg-content1 | 페이지 섹션 |
+| 2 | `elevated` | md | bg-content1 + border | 카드, DataGrid |
+| 3 | `floating` | lg | bg-content2 | 드롭다운 |
+| 4 | `overlay` | xl | bg-content2 | 모달 |
+
+#### Surface Props
+
+```tsx
+interface SurfaceProps {
+  elevation?: "flat" | "raised" | "elevated" | "floating" | "overlay";
+  padding?: "none" | "sm" | "md" | "lg";
+  radius?: "none" | "sm" | "md" | "lg" | "xl";
+  as?: ElementType;
+  children?: ReactNode;
+  className?: string;
+}
+```
+
+> **Note**: 새로운 카드/패널 컴포넌트 생성 시 Surface를 기반으로 확장하세요.
+
 ### 출력 형식
 
 ```markdown

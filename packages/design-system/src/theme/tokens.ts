@@ -131,6 +131,45 @@ export const shadows = {
 } as const;
 
 /**
+ * 엘리베이션 시스템
+ * 다크모드에서는 배경색 밝기 + shadow + border 조합으로 계층 표현
+ */
+export const elevation = {
+	/** 레벨 0: 페이지 배경 */
+	flat: {
+		shadow: "shadow-none",
+		background: "bg-background",
+		border: "",
+	},
+	/** 레벨 1: 페이지 섹션 */
+	raised: {
+		shadow: "shadow-sm",
+		background: "bg-content1",
+		border: "",
+	},
+	/** 레벨 2: 카드, DataGrid */
+	elevated: {
+		shadow: "shadow-md",
+		background: "bg-content1",
+		border: "border border-divider",
+	},
+	/** 레벨 3: 드롭다운, 팝오버 */
+	floating: {
+		shadow: "shadow-lg",
+		background: "bg-content2",
+		border: "",
+	},
+	/** 레벨 4: 모달, 다이얼로그 */
+	overlay: {
+		shadow: "shadow-xl",
+		background: "bg-content2",
+		border: "",
+	},
+} as const;
+
+export type ElevationLevel = keyof typeof elevation;
+
+/**
  * Z-index 레이어
  */
 export const zIndex = {
@@ -172,6 +211,7 @@ export const tokens = {
 	breakpoints,
 	borderRadius,
 	shadows,
+	elevation,
 	zIndex,
 	duration,
 } as const;

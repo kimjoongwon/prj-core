@@ -10,6 +10,7 @@ import {
 	Pagination,
 	ProfileCell,
 	RoleChipCell,
+	SectionSurface,
 	StatusChipCell,
 } from "@cocrepo/ui";
 import { Button } from "@heroui/react";
@@ -42,9 +43,7 @@ const columns = [
 	columnHelper.display({
 		id: "role",
 		header: "역할",
-		cell: ({ row }) => (
-			<RoleChipCell role={row.original.tenants?.[0]?.role} />
-		),
+		cell: ({ row }) => <RoleChipCell role={row.original.tenants?.[0]?.role} />,
 	}),
 	columnHelper.accessor("createdAt", {
 		header: "가입일",
@@ -55,7 +54,7 @@ const columns = [
 		header: "상태",
 		cell: ({ row }) => (
 			<StatusChipCell
-				status="active"
+				status={row.original.status ?? "active"}
 				removedAt={row.original.removedAt}
 			/>
 		),
@@ -95,18 +94,8 @@ function UsersAllPage() {
 		limit: state.limit,
 	});
 
-	const users = (usersResponse?.data?.data ?? []) as UserRow[];
-	const totalCount = usersResponse?.data?.meta?.total ?? 0;
-
-	/**
-	 * 페이지 변경
-	 */
-	const handlePageChange = (page: number) => {
-		state.page = page;
-		const params = new URLSearchParams(searchParams.toString());
-		params.set("page", String(page));
-		router.replace(`?${params.toString()}`);
-	};
+	const users = (usersResponse?.data ?? []) as UserRow[];
+	const totalCount = usersResponse?.meta?.total ?? 0;
 
 	/**
 	 * 신규 등록 버튼 클릭
@@ -129,21 +118,23 @@ function UsersAllPage() {
 			</div>
 
 			{/* 회원 DataGrid */}
-			<DataGrid
-				data={users}
-				columns={columns as ColumnDef<UserRow, unknown>[]}
-				state={{ selectedKeys: state.selectedKeys }}
-				isLoading={isLoading}
-				tableBody={{ emptyContent: "등록된 회원이 없습니다." }}
-			/>
+			<SectionSurface padding="none">
+				<DataGrid
+					data={users}
+					columns={columns as ColumnDef<UserRow, unknown>[]}
+					state={{ selectedKeys: state.selectedKeys }}
+					isLoading={isLoading}
+					tableBody={{ emptyContent: "등록된 회원이 없습니다." }}
+				/>
+			</SectionSurface>
 
 			{/* 페이지네이션 */}
 			{totalCount > state.limit && (
 				<div className="flex justify-center">
 					<Pagination
+						state={state}
+						path="page"
 						totalCount={totalCount}
-						page={state.page}
-						onChange={handlePageChange}
 						showControls
 					/>
 				</div>

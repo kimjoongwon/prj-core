@@ -79,6 +79,51 @@ HeroUI 공식 문서(https://heroui.com) 스타일을 따릅니다.
 - 요소 간: `gap-4`
 - 컴포넌트 내부: `p-4` ~ `p-6`
 
+### Surface/엘리베이션 시스템 (Critical)
+
+**페이지 콘텐츠는 반드시 Surface 컴포넌트로 감싸야 합니다.**
+
+#### 엘리베이션 레벨
+
+| 레벨 | 이름 | Shadow | Background | 용도 |
+|------|------|--------|------------|------|
+| 0 | `flat` | none | bg-background | 페이지 배경 |
+| 1 | `raised` | sm | bg-content1 | 페이지 섹션 (PageSurface 기본) |
+| 2 | `elevated` | md | bg-content1 + border | 카드, DataGrid (SectionSurface 기본) |
+| 3 | `floating` | lg | bg-content2 | 드롭다운, 팝오버 |
+| 4 | `overlay` | xl | bg-content2 | 모달, 다이얼로그 |
+
+#### Surface 컴포넌트
+
+| 컴포넌트 | 용도 | 기본 elevation |
+|----------|------|----------------|
+| `Surface` | 기본 Surface | elevated |
+| `PageSurface` | 페이지 래퍼 (title, actions) | raised |
+| `SectionSurface` | 섹션 래퍼 (collapsible) | elevated |
+
+#### 사용 예시
+
+```tsx
+import { PageSurface, SectionSurface } from "@cocrepo/ui";
+
+// 목록 페이지
+<PageSurface
+  title="회원 목록"
+  description="시스템에 등록된 회원을 관리합니다."
+  actions={<Button>회원 등록</Button>}
+>
+  <SectionSurface padding="none">
+    <DataGrid ... />
+  </SectionSurface>
+</PageSurface>
+```
+
+#### 중첩 규칙
+
+- 최대 2단계 중첩: `PageSurface` > `SectionSurface`
+- 내부 Surface는 외부보다 높은 elevation 사용
+- 동일 elevation 중첩 금지
+
 ### 컴포넌트 작성
 
 - ui 컴포넌트를 만들 때는 mobx를 사용합니다

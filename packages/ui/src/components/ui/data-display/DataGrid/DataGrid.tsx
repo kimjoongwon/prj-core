@@ -1,6 +1,6 @@
 "use client";
 
-import { Spinner, type Selection } from "@heroui/react";
+import { type Selection, Spinner } from "@heroui/react";
 import {
 	type ColumnDef,
 	type ExpandedState,
@@ -9,8 +9,11 @@ import {
 	useReactTable,
 } from "@tanstack/react-table";
 import { useState } from "react";
+import type {
+	MultiSortDescriptor,
+	SortEvent,
+} from "../Table/SortableColumnHeader";
 import { Table, type TableProps } from "../Table/Table";
-import type { MultiSortDescriptor, SortEvent } from "../Table/SortableColumnHeader";
 
 export type Key = string | number;
 

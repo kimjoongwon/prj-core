@@ -405,3 +405,53 @@ export default function AuthLayout({ children }: { children: React.ReactNode }) 
 - 북마크/공유 가능
 - 새로고침 시에도 상태 유지
 - 전역 Store 오염 방지
+
+### Surface 시스템 (필수)
+
+**페이지 콘텐츠는 반드시 Surface 컴포넌트로 감싸야 합니다.**
+
+#### 엘리베이션 레벨
+
+| 레벨 | 이름 | 용도 |
+|------|------|------|
+| 0 | `flat` | 페이지 배경 |
+| 1 | `raised` | PageSurface 기본값 |
+| 2 | `elevated` | SectionSurface, 카드, DataGrid |
+| 3 | `floating` | 드롭다운, 팝오버 |
+| 4 | `overlay` | 모달, 다이얼로그 |
+
+#### 사용 패턴
+
+```tsx
+// ✅ 올바른 패턴 - Surface로 감싸기
+import { PageSurface, SectionSurface } from "@cocrepo/ui";
+
+return (
+  <PageSurface
+    title="회원 목록"
+    description="시스템에 등록된 회원을 관리합니다."
+    actions={<Button>회원 등록</Button>}
+  >
+    <div className="space-y-4">
+      <SectionSurface padding="none">
+        <DataGrid ... />
+      </SectionSurface>
+      <Pagination ... />
+    </div>
+  </PageSurface>
+);
+
+// ❌ 금지 - Surface 없이 직접 렌더링
+return (
+  <div className="space-y-4">
+    <DataGrid ... />
+    <Pagination ... />
+  </div>
+);
+```
+
+#### 중첩 규칙
+
+- 최대 2단계 중첩: `PageSurface` > `SectionSurface`
+- 내부 Surface는 외부보다 높은 elevation 사용
+- 동일 elevation 중첩 금지
