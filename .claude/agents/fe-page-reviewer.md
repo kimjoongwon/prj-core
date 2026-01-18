@@ -190,6 +190,33 @@ grep -E "from ['\"]@cocrepo/api['\"]" [생성된 파일 경로]
 | `fetch("/api/` | ❌ 위반 | Orval 생성 함수 사용 |
 | `import { useGetGrounds } from "@cocrepo/api"` | ✅ 올바름 | - |
 
+#### Cell 컴포넌트 재사용 규칙 (Critical - DataGrid/Table 페이지)
+
+```bash
+# 인라인 포맷터/렌더러 함수 검출
+grep -E "const (format|get)[A-Z][a-zA-Z]* = \(" [페이지 파일]
+grep -E "const [a-z]+Color = \(" [페이지 파일]
+```
+
+| 패턴 | 판정 | 조치 |
+|------|------|------|
+| `const formatDate = (date) => ...` | ❌ 위반 | `DateCell` 컴포넌트 사용 |
+| `const getStatusInfo = (user) => ...` | ❌ 위반 | `StatusChipCell` 컴포넌트 사용 |
+| `const getRoleColor = (role) => ...` | ❌ 위반 | `RoleChipCell` 컴포넌트 사용 |
+| `<DateCell value={getValue()} />` | ✅ 올바름 | - |
+| `<StatusChipCell status={...} />` | ✅ 올바름 | - |
+
+**Cell 컴포넌트 위치:** `packages/ui/src/components/ui/data-display/cells/`
+
+**위반 시 수정 지시:**
+```
+파일: apps/admin/app/(admin)/users/page.tsx:17-24
+현재: const formatDate = (date) => { if (!date) return "-"; ... }
+수정: import { DateCell } from "@cocrepo/ui"; 후 cell에서 <DateCell value={...} /> 사용
+
+Cell 컴포넌트가 없으면 ui-component-builder 에이전트로 먼저 생성 요청
+```
+
 #### 스타일링 규칙 (Critical)
 
 ```bash
@@ -286,6 +313,7 @@ grep -rE "(Admin|Coin)[A-Z][a-zA-Z]*Store|use(Admin|Coin)[A-Z]" packages/
 - [ ] Store 인스턴스 생성 패턴 검증 (useRef)
 - [ ] 스타일링 규칙 검증 (커스텀 className 없음)
 - [ ] 공용 패키지 네이밍 검증 (앱 종속 이름 없음)
+- [ ] **Cell 컴포넌트 재사용 검증** (DataGrid/Table 페이지 - 인라인 포맷터 없음)
 
 ---
 

@@ -296,6 +296,80 @@ packages/ui/src/components/ui/
 
 > **주의**: widget, feature, layouts, page 컴포넌트는 이 에이전트의 담당이 아닙니다.
 
+---
+
+## 8.1 Cell 컴포넌트 생성 (DataGrid/Table 전용)
+
+**테이블 셀 렌더링용 Cell 컴포넌트**는 별도 폴더에서 관리합니다.
+
+### Cell 컴포넌트 경로
+
+```
+packages/ui/src/components/ui/data-display/cells/
+├── index.ts           # barrel export
+├── DateCell/          # 날짜 포맷팅
+├── DefaultCell/       # 기본 텍스트
+├── BooleanCell/       # O/X 표시
+├── NumberCell/        # 숫자 포맷팅
+├── StatusChipCell/    # 상태 Chip
+├── RoleChipCell/      # 역할 Chip
+├── ProfileCell/       # 아이콘+이름+부제목
+└── ActionButtonsCell/ # 액션 버튼 그룹
+```
+
+### Cell 컴포넌트 생성 요청 예시
+
+```
+StatusChipCell 컴포넌트를 만들어주세요.
+
+**Props:**
+- status: string (상태값)
+- removedAt?: Date | string | null (삭제 예정 시간)
+
+**경로:** packages/ui/src/components/ui/data-display/cells/StatusChipCell/
+```
+
+### Cell 컴포넌트 템플릿
+
+```tsx
+// packages/ui/src/components/ui/data-display/cells/StatusChipCell/StatusChipCell.tsx
+import { Chip } from "@heroui/react";
+
+interface StatusChipCellProps {
+  status: string;
+  removedAt?: Date | string | null;
+}
+
+const STATUS_CONFIG: Record<string, { label: string; color: "success" | "warning" | "danger" | "default" }> = {
+  active: { label: "활성", color: "success" },
+  inactive: { label: "비활성", color: "default" },
+  pending: { label: "대기", color: "warning" },
+  removed: { label: "탈퇴대기", color: "danger" },
+};
+
+export const StatusChipCell = ({ status, removedAt }: StatusChipCellProps) => {
+  const effectiveStatus = removedAt ? "removed" : status;
+  const config = STATUS_CONFIG[effectiveStatus] ?? { label: effectiveStatus, color: "default" };
+
+  return (
+    <div className="flex justify-center">
+      <Chip size="sm" color={config.color} variant="flat">
+        {config.label}
+      </Chip>
+    </div>
+  );
+};
+```
+
+### Cell 컴포넌트 체크리스트
+
+- [ ] `packages/ui/src/components/ui/data-display/cells/[CellName]/` 에 생성
+- [ ] Props는 단순 값 타입 (복잡한 로직 금지)
+- [ ] HeroUI 컴포넌트 활용 (Chip, Avatar, Button 등)
+- [ ] null/undefined 처리 (`-` 또는 빈 상태)
+- [ ] `cells/index.ts`에 export 추가
+- [ ] `@cocrepo/ui`에서 import 가능 확인
+
 ### 스타일링 규칙
 
 | 위치 | className 사용 |

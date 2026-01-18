@@ -1,57 +1,25 @@
 "use client";
 
 import { type UserDto, useGetUsers } from "@cocrepo/api";
-import { DataGrid, type Key, Pagination } from "@cocrepo/ui";
-import { Avatar, Button, Chip, Link } from "@heroui/react";
+import {
+	ActionButtonsCell,
+	DataGrid,
+	DateCell,
+	DefaultCell,
+	type Key,
+	Pagination,
+	ProfileCell,
+	RoleChipCell,
+	StatusChipCell,
+} from "@cocrepo/ui";
+import { Button } from "@heroui/react";
 import { type ColumnDef, createColumnHelper } from "@tanstack/react-table";
-import { Eye, Pencil, Plus, Trash2, User } from "lucide-react";
+import { Plus, User } from "lucide-react";
 import { observer, useLocalObservable } from "mobx-react-lite";
 import type { Route } from "next";
 import { useRouter, useSearchParams } from "next/navigation";
 
 type UserRow = UserDto & { id: string };
-
-/**
- * 회원 상태에 따른 Chip 색상과 라벨
- */
-const getStatusInfo = (
-	user: UserRow,
-): { label: string; color: "success" | "warning" | "danger" } => {
-	if (user.removedAt) {
-		return { label: "탈퇴대기", color: "danger" };
-	}
-	return { label: "활성", color: "success" };
-};
-
-/**
- * 역할 이름에 따른 Chip 색상
- */
-const getRoleColor = (
-	roleName?: string,
-): "primary" | "secondary" | "default" => {
-	switch (roleName?.toUpperCase()) {
-		case "SUPER_ADMIN":
-		case "ADMIN":
-			return "primary";
-		case "MANAGER":
-			return "secondary";
-		default:
-			return "default";
-	}
-};
-
-/**
- * 날짜 포맷팅
- */
-const formatDate = (date: Date | string | null | undefined): string => {
-	if (!date) return "-";
-	const d = new Date(date);
-	return d.toLocaleDateString("ko-KR", {
-		year: "numeric",
-		month: "2-digit",
-		day: "2-digit",
-	});
-};
 
 // 컬럼 정의
 const columnHelper = createColumnHelper<UserRow>();
@@ -59,105 +27,49 @@ const columnHelper = createColumnHelper<UserRow>();
 const columns = [
 	columnHelper.accessor("name", {
 		header: "회원정보",
-		cell: ({ row }) => {
-			const user = row.original;
-			return (
-				<div className="flex items-center gap-3">
-					<Avatar
-						name={user.name}
-						size="sm"
-						icon={<User className="h-4 w-4" />}
-						classNames={{
-							base: "bg-primary/10",
-							icon: "text-primary",
-						}}
-					/>
-					<div>
-						<p className="font-medium">{user.name}</p>
-						<p className="text-xs text-default-400">{user.email}</p>
-					</div>
-				</div>
-			);
-		},
+		cell: ({ row }) => (
+			<ProfileCell
+				name={row.original.name}
+				subtitle={row.original.email}
+				icon={<User className="h-4 w-4" />}
+			/>
+		),
 	}),
 	columnHelper.accessor("phone", {
 		header: "전화번호",
-		cell: ({ getValue }) => (
-			<span className="text-default-600">{getValue()}</span>
-		),
+		cell: ({ getValue }) => <DefaultCell value={getValue() ?? ""} />,
 	}),
 	columnHelper.display({
 		id: "role",
 		header: "역할",
-		cell: ({ row }) => {
-			const role = row.original.tenants?.[0]?.role;
-			if (!role) return <span className="text-default-400">-</span>;
-			return (
-				<Chip size="sm" color={getRoleColor(role.name)} variant="flat">
-					{role.displayName || role.name}
-				</Chip>
-			);
-		},
+		cell: ({ row }) => (
+			<RoleChipCell role={row.original.tenants?.[0]?.role} />
+		),
 	}),
 	columnHelper.accessor("createdAt", {
 		header: "가입일",
-		cell: ({ getValue }) => (
-			<span className="text-default-600">{formatDate(getValue())}</span>
-		),
+		cell: ({ getValue }) => <DateCell value={getValue()} />,
 	}),
 	columnHelper.display({
 		id: "status",
 		header: "상태",
-		cell: ({ row }) => {
-			const statusInfo = getStatusInfo(row.original);
-			return (
-				<div className="flex justify-center">
-					<Chip size="sm" color={statusInfo.color} variant="flat">
-						{statusInfo.label}
-					</Chip>
-				</div>
-			);
-		},
+		cell: ({ row }) => (
+			<StatusChipCell
+				status="active"
+				removedAt={row.original.removedAt}
+			/>
+		),
 	}),
 	columnHelper.display({
 		id: "actions",
 		header: "작업",
-		cell: ({ row }) => {
-			const user = row.original;
-			return (
-				<div className="flex justify-center gap-1">
-					<Button
-						as={Link}
-						href={`/users/${user.id}`}
-						size="sm"
-						variant="light"
-						isIconOnly
-						aria-label="상세 보기"
-					>
-						<Eye className="h-4 w-4" />
-					</Button>
-					<Button
-						as={Link}
-						href={`/users/${user.id}/edit`}
-						size="sm"
-						variant="light"
-						isIconOnly
-						aria-label="수정"
-					>
-						<Pencil className="h-4 w-4" />
-					</Button>
-					<Button
-						size="sm"
-						variant="light"
-						color="danger"
-						isIconOnly
-						aria-label="삭제"
-					>
-						<Trash2 className="h-4 w-4" />
-					</Button>
-				</div>
-			);
-		},
+		cell: ({ row }) => (
+			<ActionButtonsCell
+				id={row.original.id}
+				basePath="/users"
+				showDelete={false}
+			/>
+		),
 	}),
 ];
 
