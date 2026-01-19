@@ -54,7 +54,7 @@ const columns = [
 		header: "상태",
 		cell: ({ row }) => (
 			<StatusChipCell
-				status={row.original.status ?? "active"}
+				status={row.original.removedAt ? "inactive" : "active"}
 				removedAt={row.original.removedAt}
 			/>
 		),
@@ -94,8 +94,8 @@ function UsersAllPage() {
 		limit: state.limit,
 	});
 
-	const users = (usersResponse?.data ?? []) as UserRow[];
-	const totalCount = usersResponse?.meta?.total ?? 0;
+	const users = (usersResponse?.data?.data ?? []) as UserRow[];
+	const totalCount = usersResponse?.data?.meta?.total ?? 0;
 
 	/**
 	 * 신규 등록 버튼 클릭

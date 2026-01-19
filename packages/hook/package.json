@@ -35,14 +35,23 @@
   },
   "author": "kimjoongwon",
   "license": "ISC",
+  "dependencies": {
+    "@cocrepo/api": "workspace:*",
+    "@cocrepo/store": "workspace:*",
+    "@cocrepo/toolkit": "workspace:*",
+    "@cocrepo/type": "workspace:*",
+    "@tanstack/react-query": "catalog:"
+  },
   "devDependencies": {
     "react": "catalog:",
     "mobx": "catalog:",
     "mobx-react-lite": "catalog:",
     "@types/react": "catalog:",
     "typescript": "catalog:",
-    "vitest": "catalog:",
-    "@cocrepo/type": "workspace:*",
-    "@cocrepo/toolkit": "workspace:*"
+    "vitest": "catalog:"
+  },
+  "peerDependencies": {
+    "next": ">=14.0.0",
+    "react": ">=18.0.0"
   }
 }

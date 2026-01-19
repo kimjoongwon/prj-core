@@ -52,6 +52,7 @@
     "@nestjs/jwt": "^11.0.0",
     "@nestjs/swagger": "^11.2.0",
     "@nestjs/testing": "^11.1.6",
+    "@prisma/adapter-pg": "^6.9.0",
     "@types/bcrypt": "^5.0.2",
     "@types/jest": "^30.0.0",
     "@types/node": "catalog:",
@@ -62,6 +63,7 @@
     "jest-mock-extended": "^4.0.0",
     "libphonenumber-js": "^1.11.17",
     "nestjs-cls": "^6.1.0",
+    "pg": "^8.16.0",
     "ts-jest": "^29.4.1",
     "typescript": "catalog:"
   },

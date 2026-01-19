@@ -6,6 +6,16 @@ export {
 	reload,
 } from "./src/Browser";
 
+// Device utilities
+export type { DeviceType } from "./src/Device";
+export {
+	DEVICE_BREAKPOINTS,
+	getDeviceType,
+	isDesktop,
+	isMobile,
+	isTablet,
+} from "./src/Device";
+
 // DateTime utilities
 export {
 	add,
@@ -54,6 +64,7 @@ export {
 // Namespace objects for convenient grouped access
 import * as BrowserModule from "./src/Browser";
 import * as DateTimeModule from "./src/DateTime";
+import * as DeviceModule from "./src/Device";
 import * as EnvironmentModule from "./src/Environment";
 import * as FormModule from "./src/Form";
 import * as LoggerModule from "./src/Logger";
@@ -65,6 +76,14 @@ export const browser = {
 	reload: BrowserModule.reload,
 	getCurrentUrl: BrowserModule.getCurrentUrl,
 	getUserAgent: BrowserModule.getUserAgent,
+} as const;
+
+export const device = {
+	getDeviceType: DeviceModule.getDeviceType,
+	isMobile: DeviceModule.isMobile,
+	isTablet: DeviceModule.isTablet,
+	isDesktop: DeviceModule.isDesktop,
+	BREAKPOINTS: DeviceModule.DEVICE_BREAKPOINTS,
 } as const;
 
 export const dateTime = {

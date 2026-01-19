@@ -15,7 +15,7 @@ import {
 import { useRouter } from "next/navigation";
 import type { ReactNode } from "react";
 import { useAbilities } from "@/hooks";
-import { AppStoreProvider } from "../src/stores";
+import { AppStoreProvider } from "@/stores";
 
 interface ProvidersProps {
 	children: ReactNode;

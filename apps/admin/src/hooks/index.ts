@@ -1,4 +1,3 @@
-export * from "./useAbilities";
+export { useAbilities, useDeviceType } from "@cocrepo/hook";
 export * from "./useAdminLayout";
-export * from "./useDeviceType";
 export * from "./useSpaceGuard";

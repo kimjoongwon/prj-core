@@ -1,7 +1,7 @@
 "use client";
 
+import { type DeviceType, getDeviceType } from "@cocrepo/toolkit";
 import { useEffect, useState } from "react";
-import { type DeviceType, getDeviceType } from "../utils/deviceType";
 
 /**
  * useDeviceType Hook
