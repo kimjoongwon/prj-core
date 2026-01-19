@@ -14,6 +14,28 @@ import {
 } from "./constants/metadata.constants";
 
 /**
+ * API 응답 엔티티 데코레이터 옵션
+ */
+export interface ApiResponseEntityOptions {
+	/** 배열 응답 여부 */
+	isArray?: boolean;
+	/** Set-Cookie 헤더 포함 여부 */
+	withSetCookie?: boolean;
+	/** 커스텀 메타 DTO (페이지네이션) */
+	metaDto?: Type<unknown>;
+	/** 통계 정보 DTO */
+	statsDto?: Type<unknown>;
+	/** 필터 옵션 DTO */
+	filtersDto?: Type<unknown>;
+	/** 가능한 액션 DTO */
+	actionsDto?: Type<unknown>;
+	/** 집계 데이터 DTO */
+	aggregationsDto?: Type<unknown>;
+	/** 요약 정보 DTO */
+	summaryDto?: Type<unknown>;
+}
+
+/**
  * Primitive 타입을 OpenAPI 스키마로 변환
  */
 const getPrimitiveSchema = (
@@ -46,21 +68,46 @@ const getDataSchema = (
 };
 
 /**
+ * 기본 페이지네이션 스키마 (metaDto가 없을 때 사용)
+ */
+const getDefaultPaginationSchema = (): Record<string, unknown> => ({
+	type: "object",
+	properties: {
+		total: { type: "number", description: "전체 항목 수" },
+		page: { type: "number", description: "현재 페이지" },
+		limit: { type: "number", description: "페이지당 항목 수" },
+		totalPages: { type: "number", description: "전체 페이지 수" },
+	},
+});
+
+/**
  * API 응답 엔티티 데코레이터
  * Swagger 문서에 응답 스키마를 자동으로 생성합니다.
  *
  * @param dataDto - 응답 데이터의 DTO 타입
  * @param httpStatus - HTTP 상태 코드 (기본값: 200)
- * @param options - 추가 옵션 (isArray, withSetCookie)
+ * @param options - 추가 옵션 (isArray, metaDto, statsDto 등)
+ *
+ * @example
+ * // 기본 사용
+ * @ApiResponseEntity(UserDto, HttpStatus.OK)
+ *
+ * // 리스트 응답 (커스텀 meta + stats)
+ * @ApiResponseEntity(UserDto, HttpStatus.OK, {
+ *   isArray: true,
+ *   metaDto: UserPaginationMetaDto,
+ *   statsDto: UserStatsDto
+ * })
  */
 export const ApiResponseEntity = <DataDto extends Type<unknown>>(
 	dataDto: DataDto,
 	httpStatus: HttpStatus = HttpStatus.OK,
-	options?: { isArray?: boolean; withSetCookie?: boolean },
+	options?: ApiResponseEntityOptions,
 ) => {
 	const isPrimitive = getPrimitiveSchema(dataDto) !== null;
 
-	const properties = {
+	// 기본 속성 정의
+	const properties: Record<string, unknown> = {
 		httpStatus: {
 			type: "number",
 			nullable: false,
@@ -70,32 +117,37 @@ export const ApiResponseEntity = <DataDto extends Type<unknown>>(
 		data: getDataSchema(dataDto, options?.isArray),
 	};
 
-	const allOf = options?.isArray
-		? [
-				{
-					properties: {
-						httpStatus: properties.httpStatus,
-						message: { type: "string", nullable: false },
-						data: getDataSchema(dataDto, true),
-						meta: {
-							type: "object",
-							properties: {
-								skip: { type: "number", nullable: false },
-								take: { type: "number", nullable: false },
-								itemCount: { type: "number", nullable: false },
-								pageCount: { type: "number", nullable: false },
-								hasNextPage: { type: "boolean", nullable: false },
-								hasPreviousPage: { type: "boolean", nullable: false },
-							},
-						},
-					},
-				},
-			]
-		: [
-				{
-					properties,
-				},
-			];
+	// meta 필드 추가 (metaDto가 있으면 참조, 없고 isArray면 기본 스키마)
+	if (options?.metaDto) {
+		properties.meta = { $ref: getSchemaPath(options.metaDto) };
+	} else if (options?.isArray) {
+		properties.meta = getDefaultPaginationSchema();
+	}
+
+	// 확장 필드들 추가
+	if (options?.statsDto) {
+		properties.stats = { $ref: getSchemaPath(options.statsDto) };
+	}
+	if (options?.filtersDto) {
+		properties.filters = {
+			type: "array",
+			items: { $ref: getSchemaPath(options.filtersDto) },
+		};
+	}
+	if (options?.actionsDto) {
+		properties.actions = {
+			type: "array",
+			items: { $ref: getSchemaPath(options.actionsDto) },
+		};
+	}
+	if (options?.aggregationsDto) {
+		properties.aggregations = { $ref: getSchemaPath(options.aggregationsDto) };
+	}
+	if (options?.summaryDto) {
+		properties.summary = { $ref: getSchemaPath(options.summaryDto) };
+	}
+
+	const allOf = [{ properties }];
 
 	const headers = options?.withSetCookie
 		? {
@@ -109,29 +161,36 @@ export const ApiResponseEntity = <DataDto extends Type<unknown>>(
 			}
 		: undefined;
 
-	// Primitive 타입은 ApiExtraModels에 dataDto를 등록하지 않음
-	const decorators = isPrimitive
-		? [
-				ApiResponse({
-					status: httpStatus,
-					schema: { allOf },
-					headers,
-				}),
-				HttpCode(httpStatus),
-				SetMetadata(DTO_CLASS_METADATA, dataDto),
-				SetMetadata(DTO_IS_ARRAY_METADATA, options?.isArray ?? false),
-			]
-		: [
-				ApiExtraModels(dataDto),
-				ApiResponse({
-					status: httpStatus,
-					schema: { allOf },
-					headers,
-				}),
-				HttpCode(httpStatus),
-				SetMetadata(DTO_CLASS_METADATA, dataDto),
-				SetMetadata(DTO_IS_ARRAY_METADATA, options?.isArray ?? false),
-			];
+	// ApiExtraModels에 등록할 DTO 수집
+	const extraModels: Type<unknown>[] = [];
+	if (!isPrimitive) {
+		extraModels.push(dataDto);
+	}
+	if (options?.metaDto) extraModels.push(options.metaDto);
+	if (options?.statsDto) extraModels.push(options.statsDto);
+	if (options?.filtersDto) extraModels.push(options.filtersDto);
+	if (options?.actionsDto) extraModels.push(options.actionsDto);
+	if (options?.aggregationsDto) extraModels.push(options.aggregationsDto);
+	if (options?.summaryDto) extraModels.push(options.summaryDto);
+
+	// 데코레이터 구성
+	const decorators: Array<ClassDecorator | MethodDecorator> = [];
+
+	// ApiExtraModels 추가 (등록할 모델이 있을 때만)
+	if (extraModels.length > 0) {
+		decorators.push(ApiExtraModels(...extraModels));
+	}
+
+	decorators.push(
+		ApiResponse({
+			status: httpStatus,
+			schema: { allOf },
+			headers,
+		}),
+		HttpCode(httpStatus),
+		SetMetadata(DTO_CLASS_METADATA, dataDto),
+		SetMetadata(DTO_IS_ARRAY_METADATA, options?.isArray ?? false),
+	);
 
 	return applyDecorators(...decorators);
 };

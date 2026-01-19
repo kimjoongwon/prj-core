@@ -1,5 +1,5 @@
 import { RESPONSE_MESSAGE_METADATA } from "@cocrepo/decorator";
-import { ResponseEntity } from "@cocrepo/entity";
+import { RESPONSE_EXTRA_KEYS, ResponseEntity } from "@cocrepo/entity";
 import {
 	type CallHandler,
 	type ExecutionContext,
@@ -17,7 +17,7 @@ import { isWrappedResponse } from "../util/response.util";
 export class ResponseEntityInterceptor implements NestInterceptor {
 	constructor(private readonly reflector: Reflector) {}
 
-	intercept(context: ExecutionContext, next: CallHandler): Observable<any> {
+	intercept(context: ExecutionContext, next: CallHandler): Observable<unknown> {
 		const handler = context.getHandler();
 		const classRef = context.getClass();
 		const httpResponse = context.switchToHttp().getResponse();
@@ -34,6 +34,11 @@ export class ResponseEntityInterceptor implements NestInterceptor {
 
 		return next.handle().pipe(
 			map((value) => {
+				// NO_CONTENT(204) 처리 - body 전송 안함
+				if (defaultStatus === HttpStatus.NO_CONTENT) {
+					return undefined;
+				}
+
 				if (value instanceof ResponseEntity) {
 					return value;
 				}
@@ -42,12 +47,20 @@ export class ResponseEntityInterceptor implements NestInterceptor {
 				let meta: unknown;
 				let message = messageFromMetadata;
 				let status = defaultStatus;
+				const extras: Record<string, unknown> = {};
 
 				if (isWrappedResponse(value)) {
 					data = value.data;
 					meta = value.meta;
 					message = value.message ?? message;
 					status = value.status ?? status;
+
+					// 확장 필드 분해
+					for (const key of RESPONSE_EXTRA_KEYS) {
+						if (value[key] !== undefined) {
+							extras[key] = value[key];
+						}
+					}
 				} else if (
 					value &&
 					typeof value === "object" &&
@@ -56,7 +69,11 @@ export class ResponseEntityInterceptor implements NestInterceptor {
 						"meta" in (value as Record<string, unknown>) ||
 						"message" in (value as Record<string, unknown>) ||
 						"status" in (value as Record<string, unknown>) ||
-						"httpStatus" in (value as Record<string, unknown>))
+						"httpStatus" in (value as Record<string, unknown>) ||
+						// 확장 필드 키도 체크
+						RESPONSE_EXTRA_KEYS.some(
+							(key) => key in (value as Record<string, unknown>),
+						))
 				) {
 					const record = value as Record<string, unknown>;
 					if (record.data !== undefined) {
@@ -75,13 +92,28 @@ export class ResponseEntityInterceptor implements NestInterceptor {
 					if (typeof explicitStatus === "number") {
 						status = explicitStatus;
 					}
+
+					// 확장 필드 분해
+					for (const key of RESPONSE_EXTRA_KEYS) {
+						if (record[key] !== undefined) {
+							extras[key] = record[key];
+						}
+					}
 				}
 
 				if (!message) {
 					message = status === HttpStatus.CREATED ? "생성 완료" : "성공";
 				}
 
-				return new ResponseEntity(status, message, data, meta as any);
+				// 확장 필드가 있으면 extras로 전달
+				const hasExtras = Object.keys(extras).length > 0;
+				return new ResponseEntity(
+					status,
+					message,
+					data,
+					meta as never,
+					hasExtras ? (extras as never) : undefined,
+				);
 			}),
 		);
 	}

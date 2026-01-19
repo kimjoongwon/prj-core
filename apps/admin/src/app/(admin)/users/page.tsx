@@ -20,7 +20,22 @@ import { observer, useLocalObservable } from "mobx-react-lite";
 import type { Route } from "next";
 import { useRouter, useSearchParams } from "next/navigation";
 
-type UserRow = UserDto & { id: string };
+type UserRow = UserDto & { id: string; status?: string };
+
+/**
+ * Flat API 응답 구조
+ * TODO: Orval 재생성 후 이 타입 제거 (자동 생성됨)
+ */
+interface FlatUsersResponse {
+	data?: UserDto[];
+	meta?: { total: number; page: number; limit: number; totalPages: number };
+	stats?: {
+		total: number;
+		active: number;
+		inactive: number;
+		newThisMonth: number;
+	};
+}
 
 // 컬럼 정의
 const columnHelper = createColumnHelper<UserRow>();
@@ -94,8 +109,11 @@ function UsersAllPage() {
 		limit: state.limit,
 	});
 
-	const users = (usersResponse?.data?.data ?? []) as UserRow[];
-	const totalCount = usersResponse?.data?.meta?.total ?? 0;
+	// Flat 응답 구조: data는 직접 배열, meta는 최상위 레벨
+	// TODO: Orval 재생성 후 타입 단언 제거
+	const response = usersResponse as unknown as FlatUsersResponse | undefined;
+	const users = (response?.data ?? []) as UserRow[];
+	const totalCount = response?.meta?.total ?? 0;
 
 	/**
 	 * 신규 등록 버튼 클릭

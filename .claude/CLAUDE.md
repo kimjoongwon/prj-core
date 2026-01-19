@@ -478,6 +478,93 @@ if (canAccessAllSpaces(tenant)) {
 return this.repository.findBySpaceId(spaceId);  // 일반: Space 필터링
 ```
 
+### API 응답 구조 규칙 (Critical)
+
+모든 API는 `ResponseEntity`로 래핑되어 **Flat + 확장 가능** 구조로 응답합니다.
+
+#### 표준 응답 형식
+
+```typescript
+{
+  httpStatus: 200,           // HTTP 상태 코드
+  message: "성공",           // 한글 응답 메시지
+  data: [...],               // 실제 데이터 (배열 또는 객체)
+  meta?: { ... },            // 페이지네이션 정보 (리스트 응답만)
+
+  // 확장 필드들 (필요한 API만 선택적 사용)
+  stats?: { ... },           // 통계 정보 (활성/비활성 수 등)
+  filters?: [ ... ],         // 적용 가능한 필터 옵션
+  actions?: [ ... ],         // 권한 기반 가능한 액션
+  aggregations?: { ... },    // 집계 데이터 (차트 등)
+  summary?: { ... }          // 요약 정보
+}
+```
+
+#### 프론트엔드 접근 패턴
+
+```typescript
+const { data: response } = useGetUsers(params);
+
+// 직접 접근 (중첩 없음)
+const users = response?.data ?? [];
+const totalCount = response?.meta?.total ?? 0;
+
+// 확장 필드 접근
+const stats = response?.stats;
+const filters = response?.filters;
+```
+
+#### 컨트롤러 작성 패턴
+
+```typescript
+// 리스트 응답 (확장 필드 포함)
+@ApiResponseEntity(UserDto, HttpStatus.OK, {
+  isArray: true,
+  metaDto: UserPaginationMetaDto,
+  statsDto: UserStatsDto
+})
+@ResponseMessage("회원 목록 조회 성공")
+async getUsers() {
+  return wrapResponse(users, { meta, stats });
+}
+
+// 리스트 응답 (확장 필드 없음)
+@ApiResponseEntity(RoleDto, HttpStatus.OK, { isArray: true })
+async getRoles() {
+  return roles;  // 인터셉터가 자동 래핑
+}
+
+// 단일 객체 응답
+@ApiResponseEntity(UserDto, HttpStatus.OK)
+async getUserById() {
+  return user;  // 인터셉터가 자동 래핑
+}
+```
+
+#### 특수 케이스
+
+```typescript
+// DELETE (204 No Content) - body 없음
+@Delete(":id")
+@HttpCode(HttpStatus.NO_CONTENT)
+@ResponseMessage("삭제 성공")
+async delete(): Promise<void> {
+  // 인터셉터가 자동으로 body 제거
+}
+
+// Pagination 없는 리스트 - meta 생략
+@ApiResponseEntity(RoleDto, HttpStatus.OK, { isArray: true })
+async getAll() {
+  return roles;  // meta 없이 반환 가능
+}
+```
+
+#### 금지 사항
+
+- **`*ListResponseDto` 같은 래퍼 DTO 생성 금지** - Flat 구조 사용
+- **`response?.data?.data` 같은 중첩 접근 금지** - 직접 접근
+- **컨트롤러에서 ResponseEntity 직접 생성 금지** - 인터셉터 사용
+
 ## 테스트 작성 규칙
 
 - 테스트 코드의 설명(describe, it)은 한글로 작성합니다

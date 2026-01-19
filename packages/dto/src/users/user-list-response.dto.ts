@@ -1,5 +1,4 @@
-import { ClassField, NumberField } from "@cocrepo/decorator";
-import { UserDto } from "../user.dto";
+import { NumberField } from "@cocrepo/decorator";
 
 /**
  * 회원 목록 통계 정보
@@ -33,25 +32,4 @@ export class UserPaginationMetaDto {
 
 	@NumberField({ description: "전체 페이지 수" })
 	totalPages: number;
-}
-
-/**
- * 회원 목록 응답 DTO
- */
-export class UserListResponseDto {
-	@ClassField(() => UserDto, {
-		isArray: true,
-		description: "회원 목록",
-	})
-	data: UserDto[];
-
-	@ClassField(() => UserPaginationMetaDto, {
-		description: "페이지네이션 메타 정보",
-	})
-	meta: UserPaginationMetaDto;
-
-	@ClassField(() => UserStatsDto, {
-		description: "회원 통계 정보",
-	})
-	stats: UserStatsDto;
 }

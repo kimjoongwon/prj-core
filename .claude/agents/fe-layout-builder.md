@@ -443,3 +443,103 @@ packages/ui/src/components/
 | `<HStack>`, `<VStack>` 레이아웃 컴포넌트 | `className="flex items-center"` |
 | `<Spacer />` 간격 컴포넌트 | `className="gap-4 mt-2"` |
 | HeroUI Divider 등 | `className="border-b"` |
+
+---
+
+## 12. Surface 시스템과 Layout 통합 (Critical)
+
+**Layout에서 PageSurface를 사용하여 콘텐츠 영역에 시각적 계층을 부여합니다.**
+
+### 계층 구조
+
+```
+AdminLayout (bg-background = flat, elevation 0)
+└── 특정 섹션 layout.tsx
+    └── PageSurface (raised, elevation 1) ← 콘텐츠 전체 감싸기
+        ├── 제목/설명
+        ├── 탭 네비게이션 (있다면)
+        └── children (각 page.tsx)
+            └── SectionSurface (elevated, elevation 2) ← DataGrid 등
+```
+
+### 올바른 패턴
+
+```tsx
+// apps/admin/app/(admin)/users/layout.tsx
+"use client";
+
+import { PageSurface } from "@cocrepo/ui";
+import { observer } from "mobx-react-lite";
+
+function UsersLayout({ children }: { children: React.ReactNode }) {
+  return (
+    <PageSurface
+      title="회원 목록"
+      description="시스템에 등록된 회원을 관리합니다."
+    >
+      {children}
+    </PageSurface>
+  );
+}
+
+export default observer(UsersLayout);
+```
+
+```tsx
+// apps/admin/app/(admin)/users/page.tsx
+"use client";
+
+import { SectionSurface } from "@cocrepo/ui";
+
+function UsersPage() {
+  return (
+    <div className="space-y-4">
+      <SectionSurface padding="none">
+        <DataGrid ... />
+      </SectionSurface>
+    </div>
+  );
+}
+```
+
+### 금지 패턴
+
+```tsx
+// ❌ 금지 - 각 page.tsx에서 PageSurface 사용
+// layout.tsx에서 이미 PageSurface로 감쌌다면 page에서 또 사용하면 안 됨
+function UsersPage() {
+  return (
+    <PageSurface title="회원 목록">  {/* ← 중복! */}
+      <DataGrid ... />
+    </PageSurface>
+  );
+}
+
+// ❌ 금지 - Surface 없이 직접 렌더링
+function UsersLayout({ children }) {
+  return (
+    <div className="space-y-6">  {/* ← 계층감 없음 */}
+      <h1>회원 목록</h1>
+      {children}
+    </div>
+  );
+}
+```
+
+### Surface 사용 위치 결정
+
+| 상황 | Surface 위치 | 설명 |
+|------|-------------|------|
+| 단일 페이지 (탭 없음) | layout.tsx에서 PageSurface | 제목 + 콘텐츠 전체 감싸기 |
+| 탭이 있는 페이지 그룹 | layout.tsx에서 PageSurface | 제목 + 탭 + children 전체 감싸기 |
+| 상세/수정/등록 페이지 | page.tsx에서 PageSurface | 별도 레이아웃 필요 시 |
+
+### 엘리베이션 레벨 참고
+
+| 레벨 | 이름 | 용도 |
+|------|------|------|
+| 0 | flat | 페이지 배경 (AdminLayout) |
+| 1 | raised | PageSurface 기본값 |
+| 2 | elevated | SectionSurface, 카드, DataGrid |
+| 3 | floating | 드롭다운, 팝오버 |
+| 4 | overlay | 모달, 다이얼로그 |
