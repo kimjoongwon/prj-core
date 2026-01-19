@@ -445,6 +445,39 @@ import { CreateAbilityDto, AbilityResponseDto } from "@cocrepo/dto";
 - Enum 타입 변경
 - 관계(relation) 구조 변경
 
+### Multi-Tenancy 및 System Space
+
+**X-Space-ID 헤더는 모든 인증된 사용자에게 필수입니다.**
+
+```typescript
+// ❌ 금지 - SUPER_ADMIN도 헤더 없이 요청 불가
+fetch('/api/users', { headers: { Authorization: '...' } });
+
+// ✅ 필수 - 모든 요청에 X-Space-ID 포함
+fetch('/api/users', {
+  headers: {
+    Authorization: '...',
+    'X-Space-ID': spaceId  // System Space 또는 일반 Space
+  }
+});
+```
+
+**System Space (seq=1):**
+- SUPER_ADMIN 전용 Space로 시드 데이터에서 가장 먼저 생성됨
+- `SYSTEM_SPACE.SEQ` 상수로 정의 (`@cocrepo/constant`)
+- 전체 데이터 접근 권한은 Role 기반으로 Service 레이어에서 확인
+
+**권한 유틸리티 (`@cocrepo/be-common`):**
+```typescript
+import { canAccessAllSpaces, isSystemSpace, isSystemTenant } from "@cocrepo/be-common";
+
+// Service에서 전체 접근 권한 확인
+if (canAccessAllSpaces(tenant)) {
+  return this.repository.findAll();  // SUPER_ADMIN: 전체 조회
+}
+return this.repository.findBySpaceId(spaceId);  // 일반: Space 필터링
+```
+
 ## 테스트 작성 규칙
 
 - 테스트 코드의 설명(describe, it)은 한글로 작성합니다

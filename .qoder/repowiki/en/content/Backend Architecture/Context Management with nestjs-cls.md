@@ -95,26 +95,28 @@ CONTEXT_KEYS --> ClsService : "uses for"
 
 The RequestContextInterceptor is responsible for establishing the request context at the beginning of each HTTP request. It extracts user information from the request object and tenant information from headers, then stores this data in the context store for later retrieval.
 
+**Important**: The `X-Space-ID` header is **required** for all authenticated users, including SUPER_ADMIN. SUPER_ADMIN users must use the System Space (seq=1) spaceId. This ensures a consistent request flow without special branching logic.
+
 The interceptor processes the request in the following sequence:
 1. Extract user data from request.user
 2. Set user-related context values
-3. Extract tenant information from x-space-id header
-4. Validate tenant access rights
+3. Extract tenant information from x-space-id header (required for authenticated users)
+4. Validate tenant access rights (throws ForbiddenException if user has no access to the space)
 5. Store tenant data in context
-6. Handle errors gracefully by setting default values
+6. Handle unexpected errors gracefully by setting default values
 
 ```mermaid
 flowchart TD
 Start([Request Received]) --> ExtractUser["Extract User from Request"]
 ExtractUser --> SetUserContext["Set User Context Values"]
-SetUserContext --> ExtractTenant["Extract Tenant from Header"]
+SetUserContext --> CheckHeader{"X-Space-ID Header?"}
+CheckHeader --> |Missing| ThrowBadRequest["Throw BadRequestException"]
+CheckHeader --> |Present| ExtractTenant["Extract Tenant from Header"]
 ExtractTenant --> ValidateTenant["Validate Tenant Access"]
 ValidateTenant --> |Valid| StoreTenant["Store Tenant in Context"]
-ValidateTenant --> |Invalid| SetUndefined["Set Tenant as Undefined"]
+ValidateTenant --> |No Access| ThrowForbidden["Throw ForbiddenException"]
 StoreTenant --> LogSuccess["Log Context Setup Success"]
-SetUndefined --> LogWarning["Log Access Warning"]
 LogSuccess --> Continue["Continue Request Processing"]
-LogWarning --> Continue
 Continue --> End([Next Handler])
 ```
 
@@ -184,25 +186,34 @@ G --> H
 
 ## Error Handling and Fallbacks
 
-The context management system implements comprehensive error handling to ensure that requests can continue even if context setup fails. The system follows a graceful degradation approach, setting undefined values for missing or invalid context data rather than throwing exceptions.
+The context management system implements comprehensive error handling with explicit validation errors for security-critical scenarios:
 
-When errors occur during context setup, the system logs the issue for monitoring purposes while ensuring the request can proceed with default context values. This prevents cascading failures and maintains application availability even when contextual data is incomplete.
+**Explicit Errors (thrown to client):**
+- `BadRequestException`: When X-Space-ID header is missing for authenticated users
+- `ForbiddenException`: When user attempts to access a space they don't have permission for
+
+**Graceful Degradation (for unexpected errors):**
+- Only unexpected errors (not BadRequestException/ForbiddenException) trigger fallback behavior
+- Sets undefined values for context data to prevent cascading failures
+- Logs the error for monitoring purposes
 
 ```mermaid
 stateDiagram-v2
 [*] --> AttemptContextSetup
 AttemptContextSetup --> ExtractUserData
 ExtractUserData --> SetUserContext
-SetUserContext --> ExtractTenantData
+SetUserContext --> CheckHeader
+CheckHeader --> |Missing| ThrowBadRequest
+CheckHeader --> |Present| ExtractTenantData
 ExtractTenantData --> ValidateTenantAccess
 ValidateTenantAccess --> |Success| StoreTenantData
-ValidateTenantAccess --> |Failure| SetTenantUndefined
+ValidateTenantAccess --> |No Access| ThrowForbidden
 StoreTenantData --> LogSuccess
-SetTenantUndefined --> LogWarning
 LogSuccess --> ContextReady
-LogWarning --> ContextReady
+ThrowBadRequest --> [*]
+ThrowForbidden --> [*]
 ContextReady --> [*]
-AttemptContextSetup --> |Exception| HandleError
+AttemptContextSetup --> |Unexpected Exception| HandleError
 HandleError --> SetDefaults
 SetDefaults --> LogError
 LogError --> ContextReady

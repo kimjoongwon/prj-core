@@ -9,3 +9,8 @@ export {
 	RESPONSE_WRAPPER_FLAG,
 	wrapResponse,
 } from "./response.util";
+export {
+	canAccessAllSpaces,
+	isSystemSpace,
+	isSystemTenant,
+} from "./permission.util";

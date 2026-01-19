@@ -1,6 +1,11 @@
 import { CONTEXT_KEYS } from "@cocrepo/constant";
-import type { UserDto } from "@cocrepo/dto";
-import type { CallHandler, ExecutionContext } from "@nestjs/common";
+import { UserDto } from "@cocrepo/dto";
+import {
+	BadRequestException,
+	CallHandler,
+	ExecutionContext,
+	ForbiddenException,
+} from "@nestjs/common";
 import { Test, TestingModule } from "@nestjs/testing";
 import { ClsService } from "nestjs-cls";
 import { of } from "rxjs";
@@ -100,31 +105,15 @@ describe("RequestContextInterceptor", () => {
 			);
 		});
 
-		it("X-Space-ID 헤더가 없으면 user는 저장하고 tenant는 undefined로 설정한다", async () => {
+		it("인증된 사용자가 X-Space-ID 헤더 없이 요청하면 BadRequestException이 발생한다", async () => {
 			const mockUser = createValidUser();
 			const mockRequest = createMockRequest({ user: mockUser });
 			const mockExecutionContext = createMockExecutionContext(mockRequest);
 			const mockCallHandler = createMockCallHandler();
 
-			const result$ = interceptor.intercept(
-				mockExecutionContext,
-				mockCallHandler,
-			);
-			const value = await result$.toPromise();
-
-			expect(value).toBe("test response");
-			expect(mockClsService.set).toHaveBeenCalledWith(
-				CONTEXT_KEYS.AUTH_USER,
-				mockUser,
-			);
-			expect(mockClsService.set).toHaveBeenCalledWith(
-				CONTEXT_KEYS.USER_ID,
-				"user-123",
-			);
-			expect(mockClsService.set).toHaveBeenCalledWith(
-				CONTEXT_KEYS.TENANT,
-				undefined,
-			);
+			expect(() =>
+				interceptor.intercept(mockExecutionContext, mockCallHandler),
+			).toThrow(BadRequestException);
 		});
 
 		it("유효한 spaceId로 요청하면 user와 tenant 컨텍스트를 모두 설정한다", async () => {
@@ -158,7 +147,7 @@ describe("RequestContextInterceptor", () => {
 			});
 		});
 
-		it("사용자가 접근 권한이 없는 spaceId로 요청하면 tenant는 undefined로 설정한다", async () => {
+		it("사용자가 접근 권한이 없는 spaceId로 요청하면 ForbiddenException이 발생한다", async () => {
 			const mockUser = createValidUser();
 			const mockRequest = createMockRequest({
 				headers: { "x-space-id": "unauthorized-space" },
@@ -167,21 +156,9 @@ describe("RequestContextInterceptor", () => {
 			const mockExecutionContext = createMockExecutionContext(mockRequest);
 			const mockCallHandler = createMockCallHandler();
 
-			const result$ = interceptor.intercept(
-				mockExecutionContext,
-				mockCallHandler,
-			);
-			const value = await result$.toPromise();
-
-			expect(value).toBe("test response");
-			expect(mockClsService.set).toHaveBeenCalledWith(
-				CONTEXT_KEYS.AUTH_USER,
-				mockUser,
-			);
-			expect(mockClsService.set).toHaveBeenCalledWith(
-				CONTEXT_KEYS.TENANT,
-				undefined,
-			);
+			expect(() =>
+				interceptor.intercept(mockExecutionContext, mockCallHandler),
+			).toThrow(ForbiddenException);
 		});
 
 		it("여러 tenant가 있는 사용자에서 올바른 spaceId로 tenant를 찾는다", async () => {

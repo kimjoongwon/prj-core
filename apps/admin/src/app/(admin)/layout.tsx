@@ -3,6 +3,7 @@
 import { AdminLayout, AppLogo } from "@cocrepo/ui";
 import { observer } from "mobx-react-lite";
 import type { ReactNode } from "react";
+import { HeaderSpaceSelector } from "@/components/features";
 import { useAdminLayout, useSpaceGuard } from "@/hooks";
 
 interface AdminLayoutWrapperProps {
@@ -38,6 +39,7 @@ function AdminLayoutWrapper({ children }: AdminLayoutWrapperProps) {
 		<AdminLayout
 			{...layoutProps}
 			logo={<AppLogo icon="LayoutGrid" text="플레이트" />}
+			headerActions={<HeaderSpaceSelector />}
 			userInfo={userInfo}
 			onLogout={handleLogout}
 		>

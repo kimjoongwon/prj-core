@@ -68,8 +68,10 @@ async function main() {
 		},
 	});
 
-	// Space 생성 (기존 Space가 있는지 확인)
-	let superAdminSpace = await prisma.space.findFirst({
+	// System Space 생성 (seq=1)
+	// 중요: System Space는 가장 먼저 생성되어 seq=1을 가짐
+	// SYSTEM_SPACE.SEQ (= 1)와 일치하는 Space가 System Space로 취급됨
+	let systemSpace = await prisma.space.findFirst({
 		where: {
 			tenants: {
 				some: {
@@ -80,8 +82,8 @@ async function main() {
 		},
 	});
 
-	if (!superAdminSpace) {
-		superAdminSpace = await prisma.space.create({
+	if (!systemSpace) {
+		systemSpace = await prisma.space.create({
 			data: {
 				tenants: {
 					create: {
@@ -91,9 +93,9 @@ async function main() {
 				},
 			},
 		});
-		console.log("Super Admin Space 생성 완료");
+		console.log("System Space 생성 완료 (seq=1, SUPER_ADMIN 전용)");
 	} else {
-		console.log("Super Admin Space 이미 존재");
+		console.log(`System Space 이미 존재 (seq=${systemSpace.seq})`);
 	}
 
 	// 워크스페이스 생성
@@ -109,7 +111,7 @@ async function main() {
 			phone: "01073162347",
 			email: "plate@gmail.com",
 			businessNo: "12345678902",
-			spaceId: superAdminSpace.id,
+			spaceId: systemSpace.id,
 		},
 	});
 

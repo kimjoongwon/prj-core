@@ -162,16 +162,19 @@ C --> |No| G[Throw Unauthorized Exception]
 The RequestContextInterceptor plays a crucial role in establishing tenant context for each request. This interceptor executes early in the request lifecycle and performs the following steps:
 
 1. Extracts the authenticated user from the request object
-2. Checks for the X-Space-ID header in the request
+2. Validates the X-Space-ID header presence (required for all authenticated users)
 3. Finds the appropriate tenant by matching the spaceId from the header with the user's tenants
-4. Sets the tenant context in the ContextService
+4. Validates the user has access to the requested space
+5. Sets the tenant context in the ContextService
 
-The interceptor handles various edge cases:
-- When no X-Space-ID header is present, the tenant context is set to undefined
-- When the user doesn't have access to the requested spaceId, the tenant context is set to undefined
-- When the user has no tenants, the tenant context is set to undefined
+**Important**: The X-Space-ID header is **required** for all authenticated users, including SUPER_ADMIN. SUPER_ADMIN users access the system through a dedicated System Space (seq=1), ensuring consistent request handling without special branching logic.
 
-This approach ensures that requests without proper tenant context are processed safely, with appropriate authorization checks preventing unauthorized access.
+The interceptor handles the following scenarios:
+- When no X-Space-ID header is present for authenticated users: throws `BadRequestException`
+- When the user doesn't have access to the requested spaceId: throws `ForbiddenException`
+- When the user has no tenants: tenant context is set to undefined
+
+This strict validation approach ensures early detection of authorization issues and consistent error handling across all user roles.
 
 ### Context Propagation
 Once established, the tenant context is propagated throughout the application via the ContextService, which uses cls-hooked (Continuation Local Storage) to maintain context across asynchronous operations. This ensures that the tenant context remains available to all components involved in processing the request, regardless of the call stack or asynchronous boundaries.
@@ -251,7 +254,18 @@ By design, the application prevents cross-tenant data access through multiple me
 - Authorization checks: Guards ensure users have appropriate permissions for the current tenant
 
 ### Administrative Access
-Super administrators may require access to data across multiple tenants for operational purposes. This access is implemented through role-based permissions rather than bypassing tenant isolation. The SUPER_ADMIN role has privileges that allow viewing and managing data across tenants, but this is achieved through explicit permission grants rather than removing isolation controls.
+Super administrators require access to data across multiple tenants for operational purposes. This access is implemented through a dedicated **System Space** (seq=1) combined with role-based permissions.
+
+**System Space Architecture:**
+- SUPER_ADMIN users are assigned to the System Space (the first space created, seq=1)
+- SUPER_ADMIN still uses the X-Space-ID header like all other users (with System Space's spaceId)
+- Cross-tenant data access is determined by role permission checks in the Service layer
+- The `canAccessAllSpaces()` utility function checks if the tenant has SUPER_ADMIN role
+
+This design ensures:
+- **Consistent Request Flow**: No special branching logic in interceptors for SUPER_ADMIN
+- **Explicit Permission Control**: Cross-tenant access is granted through role permissions, not header omission
+- **Auditability**: All requests include a space context, making logging and auditing uniform
 
 The RoleGroupGuard enforces these permissions by checking if the user's role belongs to authorized role groups. For cross-tenant operations, specific role groups are required, ensuring that only appropriately privileged users can perform these actions.
 
