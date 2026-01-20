@@ -14,7 +14,7 @@ export { ListboxSelect } from "./ListboxSelect";
 export { MultiSelect } from "./MultiSelect";
 export { Pagination } from "./Pagination";
 export { RadioGroup } from "./RadioGroup";
-export * from "./Select/Select";
+export { Select } from "./Select/Select";
 export { Switch } from "./Switch";
 export { Tabs } from "./Tabs";
 export { Textarea } from "./Textarea";

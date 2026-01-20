@@ -329,7 +329,7 @@ Pure UI → Widget → Feature → Page
 
 | 에이전트 | 관계 |
 |----------|------|
-| **fe-page-reviewer** | 생성된 Page 규칙 검증 (필수) |
+| **fe-reviewer** | 생성된 Page 규칙 검증 (필수) |
 
 ### 관련 에이전트
 

@@ -6,78 +6,45 @@ import { RootStore } from "./rootStore";
 const logger = createLogger("[AuthStore]");
 
 export class AuthStore {
-	rootStore: RootStore;
-	isLoggingOut = false;
+  rootStore: RootStore;
+  isLoggingOut = false;
 
-	constructor(rootStore: RootStore) {
-		this.rootStore = rootStore;
+  constructor(rootStore: RootStore) {
+    this.rootStore = rootStore;
 
-		// AXIOS_INSTANCE.interceptors.response.use(
-		// 	(response) => response,
-		// 	(error) => {
-		// 		this.handleAuthError(error);
-		// 	},
-		// );
+    makeAutoObservable(this);
+  }
 
-		// AXIOS_INSTANCE.interceptors.request.use(
-		// 	async (config) => {
-		// 		const isATExpired = this.plateStore.tokenStore?.isAccessTokenExpired();
-		// 		if (isATExpired) {
-		// 			await this.plateStore.tokenStore?.refreshToken();
-		// 		}
-		// 		return config;
-		// 	},
-		// 	(error) => {
-		// 		return Promise.reject(error);
-		// 	},
-		// );
+  get isAuthenticated(): boolean {
+    return !this.rootStore.tokenStore?.isAccessTokenExpired();
+  }
 
-		makeAutoObservable(this);
-	}
+  async handleAuthError(error: unknown) {
+    if (isAxiosError(error)) {
+      if (error.response?.status === 401) {
+        window.location.href = "/admin/auth/login";
 
-	get isAuthenticated(): boolean {
-		return !this.rootStore.tokenStore?.isAccessTokenExpired();
-	}
+        return;
+      }
+    }
 
-	async handleAuthError(error: unknown) {
-		if (isAxiosError(error)) {
-			if (error.response?.status === 401) {
-				window.location.href = "/admin/auth/login";
+    return Promise.reject(error);
+  }
 
-				return;
-			}
-		}
+  async logout(logoutApi?: () => Promise<unknown>) {
+    try {
+      this.isLoggingOut = true;
+      logger.info("로그아웃 처리 중...");
 
-		return Promise.reject(error);
-	}
+      if (logoutApi) {
+        await logoutApi();
+      }
 
-	async logout(logoutApi?: () => Promise<unknown>) {
-		try {
-			this.isLoggingOut = true;
-			logger.info("로그아웃 처리 중...");
-
-			// Call backend logout API to clear HttpOnly cookies if provided
-			if (logoutApi) {
-				await logoutApi();
-			}
-
-			// Clear client-side storage
-			// TODO: Implement clearLocalStorage and clearSessionStorage functions
-			// BrowserUtil.clearLocalStorage();
-			// BrowserUtil.clearSessionStorage();
-
-			// Navigate to login page
-			navigateTo("/admin/auth/login", true);
-		} catch (_error) {
-			// logger.error("로그아웃 중 오류가 발생했습니다:", error);
-
-			// Even if API call fails, clear client storage and redirect
-			// TODO: Implement clearLocalStorage and clearSessionStorage functions
-			// BrowserUtil.clearLocalStorage();
-			// BrowserUtil.clearSessionStorage();
-			navigateTo("/admin/auth/login", true);
-		} finally {
-			this.isLoggingOut = false;
-		}
-	}
+      navigateTo("/admin/auth/login", true);
+    } catch (_error) {
+      navigateTo("/admin/auth/login", true);
+    } finally {
+      this.isLoggingOut = false;
+    }
+  }
 }

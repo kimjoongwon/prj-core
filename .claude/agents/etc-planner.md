@@ -335,7 +335,7 @@ ls packages/ui/src/components/layouts/
 | 에이전트 | 상태 | 완료 시간 | 산출물 |
 |----------|:----:|----------|--------|
 | page-builder | ⬜ | - | Page |
-| page-reviewer | ⬜ | - | 검증 완료 |
+| fe-reviewer | ⬜ | - | 검증 완료 |
 
 ---
 
@@ -636,7 +636,7 @@ PageLayout
 
 ### Phase 3: 페이지
 
-**순서:** page-builder → page-reviewer
+**순서:** page-builder → fe-reviewer
 
 ### Phase 4: 품질 검증 (QA)
 
@@ -810,7 +810,7 @@ interface MemberCardProps {
   1. schema-builder, entity-builder, dto-builder (Stage 2)
   2. repository-builder, service-builder, controller-builder (Stage 3)
   3. ui-component-builder, widget-builder, feature-builder (Stage 4)
-  4. page-builder, page-reviewer (Stage 5)
+  4. page-builder, fe-reviewer (Stage 5)
 ```
 
 ### 프로젝트 경로

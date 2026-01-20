@@ -54,7 +54,7 @@ tools: Task, Read, Write, Grep, Bash
 | 2 | 스키마 구현 | Prisma 스키마, Entity, DTO 구현 | schema-builder, entity-builder, dto-builder | `-schema.md` |
 | 3 | 백엔드 로직 | Repository, Service, Controller 구현 | repository-builder, service-builder, controller-builder | `-backend.md` |
 | 4 | 컴포넌트 구현 | UI, Widget, Feature 컴포넌트 구현 | ui-component-builder, widget-builder, feature-builder | `-components.md` |
-| 5 | 페이지 통합 | 페이지 컴포넌트 구현 및 규칙 검증 | page-builder, page-reviewer | `-complete.md` |
+| 5 | 페이지 통합 | 페이지 컴포넌트 구현 및 규칙 검증 | page-builder, fe-reviewer | `-complete.md` |
 
 ---
 
@@ -111,7 +111,7 @@ tools: Task, Read, Write, Grep, Bash
                               ↓ 사용자 승인
 ┌─────────────────────────────────────────────────────────────┐
 │ Stage 5: 페이지 통합                                         │
-│ page-builder → page-reviewer → [사용자 리뷰] ✓               │
+│ page-builder → fe-reviewer → [사용자 리뷰] ✓                 │
 │ 산출물: 기획-complete.md                                     │
 └─────────────────────────────────────────────────────────────┘
 ```
@@ -534,9 +534,9 @@ Stage 5: 페이지 통합
    - Route Page 생성
    ```
 
-2. **page-reviewer**
+2. **fe-reviewer**
    ```
-   Task: fe-page-reviewer
+   Task: fe-reviewer
    - 생성된 페이지 규칙 검증
    - 위반 사항 보고
    ```
@@ -737,4 +737,4 @@ YYYY-MM-DD HH:mm
 
 **Stage 5**
 - `fe-page-builder` - 페이지 컴포넌트
-- `fe-page-reviewer` - 페이지 규칙 검증
+- `fe-reviewer` - 프론트엔드 규칙 검증

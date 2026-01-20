@@ -618,10 +618,10 @@ feat(coin): 멀티시그 지갑 서비스 초기 구현
 
 ```
 Stage 1: 데이터 설계     → planner → [사용자 리뷰]
-Stage 2: 스키마 구현     → schema → entity → dto → seed → [사용자 리뷰]
-Stage 3: 백엔드 로직     → repository → service → controller → [사용자 리뷰]
-Stage 4: 컴포넌트 구현   → ui → widget → feature → [사용자 리뷰]
-Stage 5: 페이지 통합     → page-builder → page-reviewer → [사용자 리뷰]
+Stage 2: 스키마 구현     → schema → entity → dto → seed → be-reviewer → [사용자 리뷰]
+Stage 3: 백엔드 로직     → repository → service → controller → be-reviewer → [사용자 리뷰]
+Stage 4: 컴포넌트 구현   → ui → widget → feature → fe-reviewer → [사용자 리뷰]
+Stage 5: 페이지 통합     → page-builder → fe-reviewer → [사용자 리뷰]
 ```
 
 **실행 방법:**
@@ -668,7 +668,8 @@ Stage 5: 페이지 통합     → page-builder → page-reviewer → [사용자 
 | | dto-builder | Request/Response DTO 클래스 생성 |
 | | database-expert | Prisma 스키마 설계 및 최적화 |
 | | seed-maker | 현실 세계와 연결된 시드 데이터 생성 |
-| **품질** | page-reviewer | 페이지 생성 결과 규칙 검증 (필수) |
+| **품질** | fe-reviewer | 프론트엔드 코드 생성 결과 규칙 검증 |
+| | be-reviewer | 백엔드 코드 생성 결과 규칙 검증 |
 | | code-reviewer | 코드 리뷰 및 개선 제안 |
 | | test-engineer | 테스트 코드 작성 |
 | | refactoring-expert | 코드 리팩토링 |

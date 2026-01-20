@@ -56,7 +56,7 @@ deprecated: true
 - export 등록 확인
 - 최종 단계에서 타입 체크 실행
 - 모듈 등록 확인 (app.module.ts)
-- Phase 4 완료 후 page-reviewer 실행
+- Phase 4 완료 후 fe-reviewer 실행
 
 ### Don't
 
@@ -86,7 +86,7 @@ Phase 4: 페이지 구현
   fe-page-builder
           ↓
 Phase 4.5: 규칙 검증
-  fe-page-reviewer
+  fe-reviewer
 ```
 
 ---
@@ -111,7 +111,7 @@ Phase 4.5: 규칙 검증
 - `etc-technical-designer` - 기술 설계
 - `be-*-builder` - 백엔드 빌더들
 - `fe-*-builder` - 프론트엔드 빌더들
-- `fe-page-reviewer` - 페이지 규칙 검증
+- `fe-reviewer` - 프론트엔드 규칙 검증
 
 ---
 

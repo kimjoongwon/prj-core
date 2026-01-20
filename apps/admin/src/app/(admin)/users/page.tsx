@@ -4,7 +4,9 @@ import { type UserDto, useGetUsers } from "@cocrepo/api";
 import {
 	DataGrid,
 	DateCell,
+	HStack,
 	type Key,
+	PageSurface,
 	Pagination,
 	PhoneCell,
 	ProfileAvatarCell,
@@ -12,6 +14,7 @@ import {
 	RowActionsCell,
 	SectionSurface,
 	StatusChipCell,
+	VStack,
 } from "@cocrepo/ui";
 import { Button } from "@heroui/react";
 import { type ColumnDef, createColumnHelper } from "@tanstack/react-table";
@@ -118,46 +121,49 @@ function UsersAllPage() {
 	/**
 	 * 신규 등록 버튼 클릭
 	 */
-	const handleNewClick = () => {
+	const onClickNewButton = () => {
 		router.push("/users/new" as Route);
 	};
 
 	return (
-		<div className="space-y-4">
-			{/* 상단 액션 영역 */}
-			<div className="flex items-center justify-end">
+		<PageSurface
+			title="회원 목록"
+			description="시스템에 등록된 회원을 관리합니다."
+			actions={
 				<Button
 					color="primary"
 					startContent={<Plus className="h-4 w-4" />}
-					onPress={handleNewClick}
+					onPress={onClickNewButton}
 				>
 					회원 등록
 				</Button>
-			</div>
-
-			{/* 회원 DataGrid */}
-			<SectionSurface padding="none">
-				<DataGrid
-					data={users}
-					columns={columns as ColumnDef<UserRow, unknown>[]}
-					state={{ selectedKeys: state.selectedKeys }}
-					isLoading={isLoading}
-					tableBody={{ emptyContent: "등록된 회원이 없습니다." }}
-				/>
-			</SectionSurface>
-
-			{/* 페이지네이션 */}
-			{totalCount > state.limit && (
-				<div className="flex justify-center">
-					<Pagination
-						state={state}
-						path="page"
-						totalCount={totalCount}
-						showControls
+			}
+		>
+			<VStack gap={4}>
+				{/* 회원 DataGrid */}
+				<SectionSurface padding="none">
+					<DataGrid
+						data={users}
+						columns={columns as ColumnDef<UserRow, unknown>[]}
+						state={{ selectedKeys: state.selectedKeys }}
+						isLoading={isLoading}
+						tableBody={{ emptyContent: "등록된 회원이 없습니다." }}
 					/>
-				</div>
-			)}
-		</div>
+				</SectionSurface>
+
+				{/* 페이지네이션 */}
+				{totalCount > state.limit && (
+					<HStack justifyContent="center">
+						<Pagination
+							state={state}
+							path="page"
+							totalCount={totalCount}
+							showControls
+						/>
+					</HStack>
+				)}
+			</VStack>
+		</PageSurface>
 	);
 }
 
