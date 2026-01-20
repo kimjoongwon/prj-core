@@ -2,14 +2,14 @@
 
 import { type UserDto, useGetUsers } from "@cocrepo/api";
 import {
-	ActionButtonsCell,
 	DataGrid,
 	DateCell,
-	DefaultCell,
 	type Key,
 	Pagination,
-	ProfileCell,
+	PhoneCell,
+	ProfileAvatarCell,
 	RoleChipCell,
+	RowActionsCell,
 	SectionSurface,
 	StatusChipCell,
 } from "@cocrepo/ui";
@@ -44,7 +44,7 @@ const columns = [
 	columnHelper.accessor("name", {
 		header: "회원정보",
 		cell: ({ row }) => (
-			<ProfileCell
+			<ProfileAvatarCell
 				name={row.original.name}
 				subtitle={row.original.email}
 				icon={<User className="h-4 w-4" />}
@@ -53,7 +53,7 @@ const columns = [
 	}),
 	columnHelper.accessor("phone", {
 		header: "전화번호",
-		cell: ({ getValue }) => <DefaultCell value={getValue() ?? ""} />,
+		cell: ({ getValue }) => <PhoneCell value={getValue()} />,
 	}),
 	columnHelper.display({
 		id: "role",
@@ -78,7 +78,7 @@ const columns = [
 		id: "actions",
 		header: "작업",
 		cell: ({ row }) => (
-			<ActionButtonsCell
+			<RowActionsCell
 				id={row.original.id}
 				basePath="/users"
 				showDelete={false}

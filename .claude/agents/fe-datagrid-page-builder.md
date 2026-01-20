@@ -83,7 +83,7 @@ packages/ui/src/components/ui/data-display/cells/
 ├── NumberCell/        # 숫자 포맷팅
 ├── StatusChipCell/    # 상태 Chip (신규 필요 시 생성)
 ├── RoleChipCell/      # 역할 Chip (신규 필요 시 생성)
-└── ActionButtonsCell/ # 액션 버튼 그룹 (신규 필요 시 생성)
+└── RowActionsCell/ # 액션 버튼 그룹 (신규 필요 시 생성)
 ```
 
 ### ❌ 잘못된 예시 (인라인 선언)
@@ -578,16 +578,16 @@ columnHelper.accessor("isActive", {
 });
 ```
 
-### 6.2 아이콘 + 이름 + 부제목 (ProfileCell)
+### 6.2 아이콘 + 이름 + 부제목 (ProfileAvatarCell)
 
 ```tsx
 // 재사용 가능한 Cell 컴포넌트로 분리 권장
-import { ProfileCell } from "@cocrepo/ui";
+import { ProfileAvatarCell } from "@cocrepo/ui";
 
 columnHelper.accessor("name", {
   header: "회원정보",
   cell: ({ row }) => (
-    <ProfileCell
+    <ProfileAvatarCell
       name={row.original.name}
       subtitle={row.original.email}
       icon={<User className="h-4 w-4" />}
@@ -628,16 +628,16 @@ columnHelper.display({
 });
 ```
 
-### 6.5 액션 버튼 (ActionButtonsCell)
+### 6.5 액션 버튼 (RowActionsCell)
 
 ```tsx
-import { ActionButtonsCell } from "@cocrepo/ui";
+import { RowActionsCell } from "@cocrepo/ui";
 
 columnHelper.display({
   id: "actions",
   header: "작업",
   cell: ({ row }) => (
-    <ActionButtonsCell
+    <RowActionsCell
       item={row.original}
       basePath="/users"
       onDelete={handleOpenDeleteModal}

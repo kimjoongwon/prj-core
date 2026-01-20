@@ -1,7 +1,7 @@
 import { Avatar } from "@heroui/react";
 import type { ReactNode } from "react";
 
-interface ProfileCellProps {
+export interface ProfileAvatarCellProps {
 	/** 이름 */
 	name?: string | null;
 	/** 부제목 (이메일, ID 등) */
@@ -15,12 +15,12 @@ interface ProfileCellProps {
 /**
  * 아바타 + 이름 + 부제목을 표시하는 Cell 컴포넌트
  */
-export const ProfileCell = ({
+export const ProfileAvatarCell = ({
 	name,
 	subtitle,
 	src,
 	icon,
-}: ProfileCellProps) => {
+}: ProfileAvatarCellProps) => {
 	return (
 		<div className="flex items-center gap-3">
 			<Avatar

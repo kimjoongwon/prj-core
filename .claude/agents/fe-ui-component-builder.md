@@ -313,8 +313,8 @@ packages/ui/src/components/ui/data-display/cells/
 ├── NumberCell/        # 숫자 포맷팅
 ├── StatusChipCell/    # 상태 Chip
 ├── RoleChipCell/      # 역할 Chip
-├── ProfileCell/       # 아이콘+이름+부제목
-└── ActionButtonsCell/ # 액션 버튼 그룹
+├── ProfileAvatarCell/       # 아이콘+이름+부제목
+└── RowActionsCell/ # 액션 버튼 그룹
 ```
 
 ### Cell 컴포넌트 생성 요청 예시

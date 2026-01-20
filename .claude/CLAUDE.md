@@ -653,6 +653,7 @@ Stage 5: 페이지 통합     → page-builder → page-reviewer → [사용자 
 | | design-analyzer | Figma 디자인 분석 및 컴포넌트 매핑 (Figma 있을 때) |
 | | route-designer | 백엔드 엔티티 기반 라우팅 경로 설계 |
 | **프론트엔드** | ui-component-builder | Pure UI 컴포넌트 생성 (components/ui) |
+| | cell-builder | DataGrid/Table용 Cell 컴포넌트 생성 (계층별) |
 | | input-component-builder | Input 컴포넌트 생성 (components/inputs) |
 | | page-builder | 페이지 컴포넌트 생성 (useHandlers 분리) |
 | | frontend-architect | React 컴포넌트 아키텍처 설계 |

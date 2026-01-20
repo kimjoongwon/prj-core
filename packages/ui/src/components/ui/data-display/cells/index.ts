@@ -1,4 +1,3 @@
-export * from "./ActionButtonsCell/ActionButtonsCell";
 export * from "./BooleanCell/BooleanCell";
 export * from "./DateCell/DateCell";
 export * from "./DateTimeCell/DateTimeCell";
@@ -6,6 +5,8 @@ export * from "./DefaultCell/DefaultCell";
 export * from "./ExpandableCell/ExpandableCell";
 export * from "./LinkCell/LinkCell";
 export * from "./NumberCell/NumberCell";
-export * from "./ProfileCell/ProfileCell";
+export * from "./PhoneCell/PhoneCell";
+export * from "./ProfileAvatarCell/ProfileAvatarCell";
 export * from "./RoleChipCell/RoleChipCell";
+export * from "./RowActionsCell/RowActionsCell";
 export * from "./StatusChipCell/StatusChipCell";

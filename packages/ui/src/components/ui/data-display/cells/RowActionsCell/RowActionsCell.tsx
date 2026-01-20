@@ -1,7 +1,7 @@
 import { Button, Link } from "@heroui/react";
 import { Eye, Pencil, Trash2 } from "lucide-react";
 
-interface ActionButtonsCellProps {
+export interface RowActionsCellProps {
 	/** 아이템 ID */
 	id: string;
 	/** 기본 경로 (예: "/users") */
@@ -21,9 +21,9 @@ interface ActionButtonsCellProps {
 }
 
 /**
- * 액션 버튼들을 표시하는 Cell 컴포넌트
+ * 행 액션 버튼들을 표시하는 Cell 컴포넌트
  */
-export const ActionButtonsCell = ({
+export const RowActionsCell = ({
 	id,
 	basePath,
 	showView = true,
@@ -32,7 +32,7 @@ export const ActionButtonsCell = ({
 	disableEdit = false,
 	disableDelete = false,
 	onDelete,
-}: ActionButtonsCellProps) => {
+}: RowActionsCellProps) => {
 	return (
 		<div className="flex justify-center gap-1">
 			{showView && (
