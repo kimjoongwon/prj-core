@@ -79,7 +79,10 @@ async function createConfig() {
       mode: "tags-split",
 
       // 환경에 따른 OpenAPI 스펙 URL
-      input: apiUrl,
+      input: {
+        target: apiUrl,
+        validation: false, // Swagger 스키마 검증 비활성화
+      },
 
       output: {
         // 생성된 API 클라이언트 코드의 출력 위치

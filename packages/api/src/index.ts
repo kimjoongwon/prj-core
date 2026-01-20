@@ -85,7 +85,9 @@ export interface UserStatsDto {
 export const getMyAbilities = async (): Promise<{
 	data: AbilityResponseDto[];
 }> => {
-	console.warn("getMyAbilities: 임시 더미 함수입니다. 서버 배포 후 실제 API로 교체 필요");
+	console.warn(
+		"getMyAbilities: 임시 더미 함수입니다. 서버 배포 후 실제 API로 교체 필요",
+	);
 	return { data: [] };
 };
 

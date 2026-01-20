@@ -1,7 +1,7 @@
 "use client";
 
-import { SpaceSelectorDropdown } from "@cocrepo/ui";
 import type { SpaceInfo } from "@cocrepo/ui";
+import { SpaceSelectorDropdown } from "@cocrepo/ui";
 import { observer } from "mobx-react-lite";
 import { usePersistStore } from "../../stores/AppStoreProvider";
 

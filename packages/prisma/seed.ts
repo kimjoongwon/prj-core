@@ -15,7 +15,13 @@ import {
 	userGroundMapping,
 	userSeedData,
 } from "./seed-data";
-import type { Action, Ground, Group, Role, Subject } from "./src/generated/client/client";
+import type {
+	Action,
+	Ground,
+	Group,
+	Role,
+	Subject,
+} from "./src/generated/client/client";
 import { PrismaClient } from "./src/generated/client/client";
 import { CategoryTypes } from "./src/generated/client/enums";
 
@@ -586,14 +592,18 @@ async function createSubjects(): Promise<Record<string, Subject>> {
 			});
 			subjects[subjectData.name] = subject;
 			createdCount++;
-			console.log(`  - Subject 생성: ${subjectData.name} (${subjectData.displayName})`);
+			console.log(
+				`  - Subject 생성: ${subjectData.name} (${subjectData.displayName})`,
+			);
 		} else {
 			subjects[subjectData.name] = existing;
 			skippedCount++;
 		}
 	}
 
-	console.log(`Subject 생성 완료! (생성: ${createdCount}개, 스킵: ${skippedCount}개)`);
+	console.log(
+		`Subject 생성 완료! (생성: ${createdCount}개, 스킵: ${skippedCount}개)`,
+	);
 	return subjects;
 }
 
@@ -623,14 +633,18 @@ async function createActions(): Promise<Record<string, Action>> {
 			});
 			actions[actionData.name] = action;
 			createdCount++;
-			console.log(`  - Action 생성: ${actionData.name} (${actionData.displayName})`);
+			console.log(
+				`  - Action 생성: ${actionData.name} (${actionData.displayName})`,
+			);
 		} else {
 			actions[actionData.name] = existing;
 			skippedCount++;
 		}
 	}
 
-	console.log(`Action 생성 완료! (생성: ${createdCount}개, 스킵: ${skippedCount}개)`);
+	console.log(
+		`Action 생성 완료! (생성: ${createdCount}개, 스킵: ${skippedCount}개)`,
+	);
 	return actions;
 }
 

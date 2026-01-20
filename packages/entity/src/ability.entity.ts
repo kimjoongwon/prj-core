@@ -1,4 +1,8 @@
-import type { Ability as AbilityEntity, Prisma, Subject } from "@cocrepo/prisma";
+import type {
+	Ability as AbilityEntity,
+	Prisma,
+	Subject,
+} from "@cocrepo/prisma";
 import { AbstractEntity } from "./abstract.entity";
 import type { Action } from "./action.entity";
 import type { Role } from "./role.entity";

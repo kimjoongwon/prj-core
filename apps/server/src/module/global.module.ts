@@ -6,6 +6,7 @@ import { ThrottlerModule } from "@nestjs/throttler";
 import { ClsPluginTransactional } from "@nestjs-cls/transactional";
 import { TransactionalAdapterPrisma } from "@nestjs-cls/transactional-adapter-prisma";
 import { MailerModule } from "@nestjs-modules/mailer";
+import type { SignOptions } from "jsonwebtoken";
 import { ClsModule } from "nestjs-cls";
 import { LoggerModule } from "nestjs-pino";
 import {
@@ -84,13 +85,15 @@ export const globalModules: (DynamicModule | Promise<DynamicModule>)[] = [
 	}),
 	JwtModule.registerAsync({
 		global: true,
-		useFactory: async (config: ConfigService) => {
-			const authConfig = await config.get<AuthConfig>("auth");
-			if (!authConfig?.secret) {
+		useFactory: (config: ConfigService) => {
+			const authConfig = config.get<AuthConfig>("auth");
+			if (!authConfig) {
+				throw new Error("Auth config is not defined.");
+			}
+			if (!authConfig.secret) {
 				throw new Error("JWT secret is not defined in the configuration.");
 			}
-
-			if (!authConfig?.expires) {
+			if (!authConfig.expires) {
 				throw new Error(
 					"JWT expiration time is not defined in the configuration.",
 				);
@@ -99,7 +102,9 @@ export const globalModules: (DynamicModule | Promise<DynamicModule>)[] = [
 			return {
 				global: true,
 				secret: authConfig.secret,
-				signOptions: { expiresIn: authConfig.expires as any },
+				signOptions: {
+					expiresIn: authConfig.expires as SignOptions["expiresIn"],
+				},
 			};
 		},
 		inject: [ConfigService],

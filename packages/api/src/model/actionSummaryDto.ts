@@ -7,8 +7,8 @@
  */
 
 export interface ActionSummaryDto {
-  id: string;
-  name: string;
-  displayName?: string;
-  group?: string;
+	id: string;
+	name: string;
+	displayName?: string;
+	group?: string;
 }

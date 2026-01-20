@@ -16,8 +16,10 @@ interface UseFormFieldBaseOptions<TState extends object = any, TValue = any> {
 }
 
 // Single-path options (discriminated with never types)
-export interface UseFormFieldSingleOptions<TState extends object = any, TValue = any>
-	extends UseFormFieldBaseOptions<TState, TValue> {
+export interface UseFormFieldSingleOptions<
+	TState extends object = any,
+	TValue = any,
+> extends UseFormFieldBaseOptions<TState, TValue> {
 	path: Paths<TState, 4>;
 	paths?: never;
 	valueSplitter?: never;

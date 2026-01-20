@@ -82,7 +82,9 @@ export class AbilitiesFacade {
 		const ability = await this.abilitiesService.getAbilityById(id);
 
 		if (!ability) {
-			throw new NotFoundException(AbilitiesFacadeErrorMessages.ABILITY_NOT_FOUND);
+			throw new NotFoundException(
+				AbilitiesFacadeErrorMessages.ABILITY_NOT_FOUND,
+			);
 		}
 
 		return ability;
@@ -145,7 +147,9 @@ export class AbilitiesFacade {
 		// 존재 확인
 		const existing = await this.abilitiesService.getAbilityById(id);
 		if (!existing) {
-			throw new NotFoundException(AbilitiesFacadeErrorMessages.ABILITY_NOT_FOUND);
+			throw new NotFoundException(
+				AbilitiesFacadeErrorMessages.ABILITY_NOT_FOUND,
+			);
 		}
 
 		return this.abilitiesService.updateAbility(id, data);
@@ -164,7 +168,9 @@ export class AbilitiesFacade {
 		// 존재 확인
 		const existing = await this.abilitiesService.getAbilityById(id);
 		if (!existing) {
-			throw new NotFoundException(AbilitiesFacadeErrorMessages.ABILITY_NOT_FOUND);
+			throw new NotFoundException(
+				AbilitiesFacadeErrorMessages.ABILITY_NOT_FOUND,
+			);
 		}
 
 		return this.abilitiesService.deleteAbility(id);

@@ -14,7 +14,8 @@ export class RoleDto extends AbstractDto implements Role {
 		description: "역할 식별자",
 		maxLength: 50,
 		pattern: "^[A-Z][A-Z0-9_]*$",
-		message: "역할 식별자는 영문 대문자로 시작하며, 영문 대문자, 숫자, 언더스코어만 사용 가능합니다",
+		message:
+			"역할 식별자는 영문 대문자로 시작하며, 영문 대문자, 숫자, 언더스코어만 사용 가능합니다",
 	})
 	name: string;
 

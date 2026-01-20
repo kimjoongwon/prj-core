@@ -16,10 +16,12 @@
 			"./packages/api/**/*.ts",
 			"./packages/constant/**/*.ts",
 			"./packages/decorator/**/*.ts",
+			"./packages/design-system/**/*.ts",
 			"./packages/dto/**/*.ts",
 			"./packages/entity/**/*.ts",
 			"./packages/enum/**/*.ts",
 			"./packages/facade/**/*.ts",
+			"./packages/hook/**/*.ts",
 			"./packages/prisma/**/*.ts",
 			"./packages/repository/**/*.ts",
 			"./packages/schema/**/*.ts",
@@ -44,7 +46,8 @@
 			"recommended": true,
 			"suspicious": {
 				"noShadowRestrictedNames": "off",
-				"noRedeclare": "off"
+				"noRedeclare": "off",
+				"noTemplateCurlyInString": "off"
 			},
 			"correctness": {
 				"noUnusedImports": "error",

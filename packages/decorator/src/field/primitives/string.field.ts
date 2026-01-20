@@ -79,7 +79,8 @@ export function StringField(
 			Matches(new RegExp(options.pattern), {
 				each: options.each,
 				message:
-					options.message || `${options.description || "값"}이 올바른 형식이 아닙니다`,
+					options.message ||
+					`${options.description || "값"}이 올바른 형식이 아닙니다`,
 			}),
 		);
 	}

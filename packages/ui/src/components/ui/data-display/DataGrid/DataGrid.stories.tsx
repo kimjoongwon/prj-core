@@ -3,7 +3,10 @@ import { createColumnHelper } from "@tanstack/react-table";
 import { observer, useLocalObservable } from "mobx-react-lite";
 import { useState, useEffect } from "react";
 import { DataGrid, type Key } from "./DataGrid";
-import type { MultiSortDescriptor, SortEvent } from "../Table/SortableColumnHeader";
+import type {
+	MultiSortDescriptor,
+	SortEvent,
+} from "../Table/SortableColumnHeader";
 import { Pagination } from "../../../inputs/Pagination/Pagination";
 
 interface SampleData {
@@ -19,7 +22,16 @@ interface SampleData {
 const generateSampleData = (count: number): SampleData[] => {
 	const cities = ["서울", "부산", "대구", "인천", "광주", "대전", "울산"];
 	const statuses: ("활성" | "비활성")[] = ["활성", "비활성"];
-	const names = ["김철수", "이영희", "박민수", "최지영", "정현우", "한소희", "강동원", "송혜교"];
+	const names = [
+		"김철수",
+		"이영희",
+		"박민수",
+		"최지영",
+		"정현우",
+		"한소희",
+		"강동원",
+		"송혜교",
+	];
 
 	return Array.from({ length: count }, (_, i) => ({
 		id: i + 1,
@@ -135,7 +147,7 @@ const DataGridWrapper = observer<{
 const handleSortChange = (
 	event: SortEvent,
 	sorting: MultiSortDescriptor,
-	maxSortColumns = 3
+	maxSortColumns = 3,
 ): MultiSortDescriptor => {
 	const { column, shiftKey, ctrlKey } = event;
 	const existingIndex = sorting.findIndex((s) => s.column === column);
@@ -218,7 +230,9 @@ const MultiSortDataGridWrapper = observer(() => {
 
 	const formatSorting = (sorts: MultiSortDescriptor) => {
 		if (sorts.length === 0) return "없음";
-		return sorts.map((s, i) => `${i + 1}. ${s.column} (${s.direction})`).join(" → ");
+		return sorts
+			.map((s, i) => `${i + 1}. ${s.column} (${s.direction})`)
+			.join(" → ");
 	};
 
 	return (
@@ -278,7 +292,10 @@ const SortableDataGridWrapper = observer(() => {
 	return (
 		<div className="space-y-4">
 			<div className="text-sm text-default-500">
-				현재 정렬: {sorting.length > 0 ? `${sorting[0].column} (${sorting[0].direction})` : "없음"}
+				현재 정렬:{" "}
+				{sorting.length > 0
+					? `${sorting[0].column} (${sorting[0].direction})`
+					: "없음"}
 			</div>
 			<DataGrid
 				data={sortedData}
@@ -388,13 +405,16 @@ const PaginatedDataGridWrapper = observer(() => {
 
 	const formatSorting = (sorts: MultiSortDescriptor) => {
 		if (sorts.length === 0) return "";
-		return " | 정렬: " + sorts.map((s) => `${s.column}(${s.direction})`).join(", ");
+		return (
+			" | 정렬: " + sorts.map((s) => `${s.column}(${s.direction})`).join(", ")
+		);
 	};
 
 	return (
 		<div className="space-y-4">
 			<div className="text-sm text-default-500">
-				총 {totalCount}개 항목 | 페이지 {page} / {Math.ceil(totalCount / pageSize)}
+				총 {totalCount}개 항목 | 페이지 {page} /{" "}
+				{Math.ceil(totalCount / pageSize)}
 				{formatSorting(sorting)}
 			</div>
 			<DataGrid

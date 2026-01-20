@@ -348,9 +348,7 @@ export const AbilityFormModal = observer(
 							<HeroSelect
 								label="Subject"
 								placeholder="Subject를 선택하세요"
-								selectedKeys={
-									formData.subjectId ? [formData.subjectId] : []
-								}
+								selectedKeys={formData.subjectId ? [formData.subjectId] : []}
 								onChange={handleSubjectChange}
 								isDisabled={loading}
 								isRequired
@@ -383,9 +381,7 @@ export const AbilityFormModal = observer(
 							<HeroSelect
 								label="Action"
 								placeholder="Action을 선택하세요"
-								selectedKeys={
-									formData.actionId ? [formData.actionId] : []
-								}
+								selectedKeys={formData.actionId ? [formData.actionId] : []}
 								onChange={handleActionChange}
 								isDisabled={loading}
 								isRequired
@@ -509,11 +505,7 @@ export const AbilityFormModal = observer(
 					</ModalBody>
 					<ModalFooter>
 						<HStack gap={8} justifyContent="end">
-							<Button
-								variant="flat"
-								onPress={onClose}
-								isDisabled={loading}
-							>
+							<Button variant="flat" onPress={onClose} isDisabled={loading}>
 								취소
 							</Button>
 							<Button

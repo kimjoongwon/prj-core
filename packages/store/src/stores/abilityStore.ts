@@ -201,9 +201,7 @@ export class AbilityStore {
 		);
 
 		for (const rule of rules) {
-			const actions = Array.isArray(rule.action)
-				? rule.action
-				: [rule.action];
+			const actions = Array.isArray(rule.action) ? rule.action : [rule.action];
 			const subjects = Array.isArray(rule.subject)
 				? rule.subject
 				: [rule.subject];

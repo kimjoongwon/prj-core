@@ -92,7 +92,9 @@ export const RoleAbilityManager = observer(
 		/**
 		 * Subject 변경 시 필드 로드 (모달에서 Subject 선택 시)
 		 */
-		const handleSubjectFieldsLoad = async (subjectName: string): Promise<string[]> => {
+		const handleSubjectFieldsLoad = async (
+			subjectName: string,
+		): Promise<string[]> => {
 			if (!onLoadSubjectFields) return [];
 
 			try {
@@ -134,9 +136,7 @@ export const RoleAbilityManager = observer(
 						</HStack>
 
 						{/* 에러 메시지 */}
-						{state.error && (
-							<Text className="text-danger">{state.error}</Text>
-						)}
+						{state.error && <Text className="text-danger">{state.error}</Text>}
 
 						{/* Ability 목록 */}
 						{selectedRoleId ? (

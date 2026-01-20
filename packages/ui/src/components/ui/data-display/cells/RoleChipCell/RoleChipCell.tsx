@@ -13,7 +13,9 @@ interface RoleChipCellProps {
 /**
  * 역할 이름에 따른 Chip 색상 결정
  */
-const getRoleColor = (roleName?: string): "primary" | "secondary" | "default" => {
+const getRoleColor = (
+	roleName?: string,
+): "primary" | "secondary" | "default" => {
 	switch (roleName?.toUpperCase()) {
 		case "SUPER_ADMIN":
 		case "ADMIN":

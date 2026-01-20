@@ -99,11 +99,7 @@ export const UserAbilityManager = observer(
 				<CardBody>
 					<VStack gap={6} fullWidth>
 						{/* 헤더 */}
-						<HStack
-							alignItems="center"
-							justifyContent="between"
-							fullWidth
-						>
+						<HStack alignItems="center" justifyContent="between" fullWidth>
 							<Text variant="title">사용자 예외 권한 관리</Text>
 						</HStack>
 
@@ -156,11 +152,7 @@ export const UserAbilityManager = observer(
 						{selectedUser ? (
 							<VStack gap={4} fullWidth>
 								{/* 선택된 사용자 정보 */}
-								<HStack
-									alignItems="center"
-									justifyContent="between"
-									fullWidth
-								>
+								<HStack alignItems="center" justifyContent="between" fullWidth>
 									<HStack alignItems="center" gap={12}>
 										<Avatar
 											size="md"

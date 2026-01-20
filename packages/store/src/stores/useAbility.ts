@@ -137,10 +137,7 @@ export function useCannot(
  */
 export function useMenuPermission(menuPath: string): boolean {
 	const { can } = useAbility();
-	return useMemo(
-		() => can("view", `menu:${menuPath}`),
-		[can, menuPath],
-	);
+	return useMemo(() => can("view", `menu:${menuPath}`), [can, menuPath]);
 }
 
 /**
@@ -198,8 +195,5 @@ export function useEntityPermission(entityName: string) {
  */
 export function useUiPermission(uiElement: string): boolean {
 	const { can } = useAbility();
-	return useMemo(
-		() => can("view", `ui:${uiElement}`),
-		[can, uiElement],
-	);
+	return useMemo(() => can("view", `ui:${uiElement}`), [can, uiElement]);
 }

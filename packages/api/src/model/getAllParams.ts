@@ -7,16 +7,16 @@
  */
 
 export type GetAllParams = {
-/**
- * Role ID로 필터링
- */
-roleId?: string;
-/**
- * User ID로 필터링 (예외 권한)
- */
-userId?: string;
-/**
- * Subject ID로 필터링
- */
-subjectId?: string;
+	/**
+	 * Role ID로 필터링
+	 */
+	roleId?: string;
+	/**
+	 * User ID로 필터링 (예외 권한)
+	 */
+	userId?: string;
+	/**
+	 * Subject ID로 필터링
+	 */
+	subjectId?: string;
 };

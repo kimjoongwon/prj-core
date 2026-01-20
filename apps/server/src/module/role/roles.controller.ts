@@ -22,12 +22,7 @@ import {
 	Post,
 	UseGuards,
 } from "@nestjs/common";
-import {
-	ApiBody,
-	ApiOperation,
-	ApiParam,
-	ApiTags,
-} from "@nestjs/swagger";
+import { ApiBody, ApiOperation, ApiParam, ApiTags } from "@nestjs/swagger";
 import { plainToInstance } from "class-transformer";
 
 @ApiTags("ROLES")

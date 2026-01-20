@@ -144,7 +144,10 @@ export class FABStore {
 		if (!action) return;
 
 		// 권한 체크
-		if (this._abilityChecker && !this._abilityChecker("ACCESS", action.subject)) {
+		if (
+			this._abilityChecker &&
+			!this._abilityChecker("ACCESS", action.subject)
+		) {
 			return;
 		}
 

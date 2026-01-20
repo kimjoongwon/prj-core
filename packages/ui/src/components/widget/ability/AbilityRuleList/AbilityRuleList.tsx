@@ -195,9 +195,7 @@ export const AbilityRuleList = observer(
 												거부
 											</Chip>
 										)}
-										<span className="truncate">
-											{rule.name || "-"}
-										</span>
+										<span className="truncate">{rule.name || "-"}</span>
 									</HStack>
 								</TableCell>
 								<TableCell>

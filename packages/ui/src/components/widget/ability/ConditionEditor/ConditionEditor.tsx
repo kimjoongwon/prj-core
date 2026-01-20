@@ -94,7 +94,11 @@ export const ConditionEditor = observer(
 				const parsed = JSON.parse(trimmed);
 
 				// 객체가 아닌 경우 에러
-				if (typeof parsed !== "object" || parsed === null || Array.isArray(parsed)) {
+				if (
+					typeof parsed !== "object" ||
+					parsed === null ||
+					Array.isArray(parsed)
+				) {
 					setInternalError("조건은 객체 형식이어야 합니다");
 					return;
 				}

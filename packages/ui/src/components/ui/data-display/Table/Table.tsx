@@ -59,7 +59,7 @@ export const Table = <T extends object>({
 				{headers.map((header) => (
 					<TableColumn key={header.id} colSpan={header.colSpan}>
 						{header.isPlaceholder ? null : isSortable(header.id) &&
-						  onSortChange ? (
+							onSortChange ? (
 							<SortableColumnHeader
 								columnId={header.id}
 								label={flexRender(

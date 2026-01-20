@@ -46,7 +46,10 @@ export interface UseSpaceGuardReturn {
  * ```
  */
 export function createUseSpaceGuard(options: UseSpaceGuardOptions) {
-	const { usePersistStore, selectSpacePath: _selectSpacePath = "/select-space" } = options;
+	const {
+		usePersistStore,
+		selectSpacePath: _selectSpacePath = "/select-space",
+	} = options;
 
 	return function useSpaceGuard(): UseSpaceGuardReturn {
 		// TODO: Space 선택 페이지 구현 후 활성화

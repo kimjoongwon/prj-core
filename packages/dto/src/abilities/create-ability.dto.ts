@@ -29,7 +29,8 @@ export class CreateAbilityDto {
 	actionId?: string;
 
 	@ApiProperty({
-		description: "Action 이름 - actionId가 없을 때 사용 (create, read, read:masked:email 등)",
+		description:
+			"Action 이름 - actionId가 없을 때 사용 (create, read, read:masked:email 등)",
 		example: "read",
 		required: false,
 	})
@@ -47,7 +48,8 @@ export class CreateAbilityDto {
 	subjectId?: string;
 
 	@ApiProperty({
-		description: "Subject 이름 - subjectId가 없을 때 사용 (entity:User, menu:settings 등)",
+		description:
+			"Subject 이름 - subjectId가 없을 때 사용 (entity:User, menu:settings 등)",
 		example: "entity:User",
 		required: false,
 	})

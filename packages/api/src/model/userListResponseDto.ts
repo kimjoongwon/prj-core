@@ -5,15 +5,15 @@
  * API 문서입니다. 대부분의 엔드포인트는 쿠키 기반 JWT 인증이 필요합니다. (@Public 데코레이터가 있는 엔드포인트는 예외)
  * OpenAPI spec version: 1.0.0
  */
-import type { UserDto } from './userDto';
-import type { UserPaginationMetaDto } from './userPaginationMetaDto';
-import type { UserStatsDto } from './userStatsDto';
+import type { UserDto } from "./userDto";
+import type { UserPaginationMetaDto } from "./userPaginationMetaDto";
+import type { UserStatsDto } from "./userStatsDto";
 
 export interface UserListResponseDto {
-  /** 회원 목록 */
-  data: UserDto[];
-  /** 페이지네이션 메타 정보 */
-  meta: UserPaginationMetaDto;
-  /** 회원 통계 정보 */
-  stats: UserStatsDto;
+	/** 회원 목록 */
+	data: UserDto[];
+	/** 페이지네이션 메타 정보 */
+	meta: UserPaginationMetaDto;
+	/** 회원 통계 정보 */
+	stats: UserStatsDto;
 }

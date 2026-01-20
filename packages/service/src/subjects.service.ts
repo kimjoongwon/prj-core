@@ -225,7 +225,10 @@ export class SubjectsService {
 				);
 			}
 		} catch (error) {
-			this.logger.warn("DMMF 파싱 실패, 필드 정보를 로드할 수 없습니다.", error);
+			this.logger.warn(
+				"DMMF 파싱 실패, 필드 정보를 로드할 수 없습니다.",
+				error,
+			);
 		}
 	}
 

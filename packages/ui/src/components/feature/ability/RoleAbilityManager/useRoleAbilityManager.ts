@@ -164,7 +164,9 @@ export function useRoleAbilityManager({
 		} catch (err) {
 			runInAction(() => {
 				state.setError(
-					err instanceof Error ? err.message : "권한 목록을 불러오는데 실패했습니다"
+					err instanceof Error
+						? err.message
+						: "권한 목록을 불러오는데 실패했습니다",
 				);
 			});
 		} finally {
@@ -235,7 +237,7 @@ export function useRoleAbilityManager({
 		} catch (err) {
 			runInAction(() => {
 				state.setError(
-					err instanceof Error ? err.message : "저장에 실패했습니다"
+					err instanceof Error ? err.message : "저장에 실패했습니다",
 				);
 			});
 		} finally {
@@ -257,7 +259,7 @@ export function useRoleAbilityManager({
 		} catch (err) {
 			runInAction(() => {
 				state.setError(
-					err instanceof Error ? err.message : "삭제에 실패했습니다"
+					err instanceof Error ? err.message : "삭제에 실패했습니다",
 				);
 			});
 		}
@@ -275,7 +277,7 @@ export function useRoleAbilityManager({
 		} catch (err) {
 			runInAction(() => {
 				state.setError(
-					err instanceof Error ? err.message : "상태 변경에 실패했습니다"
+					err instanceof Error ? err.message : "상태 변경에 실패했습니다",
 				);
 			});
 		}

@@ -1,8 +1,25 @@
 "use client";
 
 import { customInstance } from "@cocrepo/api";
-import type { UserDto, UserListResponseDto } from "@cocrepo/dto";
+import type { UserDto } from "@cocrepo/dto";
 import { UserStatus } from "@cocrepo/dto";
+
+/**
+ * 회원 목록 API 응답 타입
+ */
+interface UserListResponse {
+	data: UserDto[];
+	meta?: {
+		total: number;
+		totalPages: number;
+	};
+	stats?: {
+		total: number;
+		active: number;
+		inactive: number;
+		newThisMonth: number;
+	};
+}
 import { Button, Pagination } from "@heroui/react";
 import { Plus } from "lucide-react";
 import { observer, useLocalObservable } from "mobx-react-lite";
@@ -68,7 +85,7 @@ export const UserList = observer(
 				params.set("page", String(state.page));
 				params.set("limit", String(state.limit));
 
-				const response = await customInstance<{ data: UserListResponseDto }>({
+				const response = await customInstance<{ data: UserListResponse }>({
 					url: `/api/v1/users?${params.toString()}`,
 					method: "GET",
 				});

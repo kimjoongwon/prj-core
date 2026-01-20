@@ -233,18 +233,20 @@ export const AbilityMatrixView = observer(
 							필드명
 						</TableColumn>
 						{/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
-						{roles.map((role) => (
-							<TableColumn key={role.id} className="min-w-[100px]">
-								<VStack gap={1} alignItems="center">
-									<span className="font-medium">
-										{getRoleDisplayName(role)}
-									</span>
-									<span className="text-xs text-default-400">
-										({role.name})
-									</span>
-								</VStack>
-							</TableColumn>
-						)) as any}
+						{
+							roles.map((role) => (
+								<TableColumn key={role.id} className="min-w-[100px]">
+									<VStack gap={1} alignItems="center">
+										<span className="font-medium">
+											{getRoleDisplayName(role)}
+										</span>
+										<span className="text-xs text-default-400">
+											({role.name})
+										</span>
+									</VStack>
+								</TableColumn>
+							)) as any
+						}
 					</TableHeader>
 					<TableBody
 						emptyContent={loading ? " " : "필드 정보가 없습니다."}
@@ -264,28 +266,30 @@ export const AbilityMatrixView = observer(
 									</VStack>
 								</TableCell>
 								{/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
-								{roles.map((role) => {
-									const status = getCellStatus(field.name, role.name);
-									return (
-										<TableCell key={`${field.name}-${role.name}`}>
-											<HStack justifyContent="center">
-												<VisibilityCell
-													status={status}
-													fieldName={getFieldDisplayName(field)}
-													roleName={getRoleDisplayName(role)}
-													editable={editable}
-													onStatusChange={(newStatus) =>
-														handleCellStatusChange(
-															field.name,
-															role.name,
-															newStatus,
-														)
-													}
-												/>
-											</HStack>
-										</TableCell>
-									);
-								}) as any}
+								{
+									roles.map((role) => {
+										const status = getCellStatus(field.name, role.name);
+										return (
+											<TableCell key={`${field.name}-${role.name}`}>
+												<HStack justifyContent="center">
+													<VisibilityCell
+														status={status}
+														fieldName={getFieldDisplayName(field)}
+														roleName={getRoleDisplayName(role)}
+														editable={editable}
+														onStatusChange={(newStatus) =>
+															handleCellStatusChange(
+																field.name,
+																role.name,
+																newStatus,
+															)
+														}
+													/>
+												</HStack>
+											</TableCell>
+										);
+									}) as any
+								}
 							</TableRow>
 						))}
 					</TableBody>
