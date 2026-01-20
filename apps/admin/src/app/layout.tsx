@@ -1,7 +1,7 @@
-import type { Metadata } from "next";
-import "./globals.css";
 import { AppLayout } from "@cocrepo/ui";
+import type { Metadata } from "next";
 import { Providers } from "./providers";
+import "./globals.css";
 
 export const metadata: Metadata = {
 	title: "Admin",

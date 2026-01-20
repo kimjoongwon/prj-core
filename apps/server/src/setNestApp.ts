@@ -43,13 +43,13 @@ export function setNestApp<T extends INestApplication>(app: T): void {
 	);
 
 	// =================================================================
-	// Global Interceptors - 실행 순서:
-	// RequestContextInterceptor → DtoTransformInterceptor → ResponseEntityInterceptor → ClassSerializerInterceptor
+	// Global Interceptors - Response 처리는 역순!
+	// Request: 1→2→3→4 | Response: 4→3→2→1
 	// =================================================================
 	app.useGlobalInterceptors(
-		app.get(RequestContextInterceptor),
-		new DtoTransformInterceptor(app.get(Reflector)),
-		app.get(ResponseEntityInterceptor),
-		new ClassSerializerInterceptor(app.get(Reflector)),
+		app.get(RequestContextInterceptor), // 1
+		app.get(ResponseEntityInterceptor), // 2 (Response: 래핑)
+		new DtoTransformInterceptor(app.get(Reflector)), // 3 (Response: DTO 변환 및 exclude)
+		new ClassSerializerInterceptor(app.get(Reflector)), // 4 (Response: 직렬화)
 	);
 }

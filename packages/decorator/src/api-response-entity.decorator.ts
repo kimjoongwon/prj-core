@@ -9,6 +9,7 @@ import {
 import { ApiExtraModels, ApiResponse, getSchemaPath } from "@nestjs/swagger";
 import {
 	DTO_CLASS_METADATA,
+	DTO_EXCLUDE_FIELDS_METADATA,
 	DTO_IS_ARRAY_METADATA,
 	RESPONSE_MESSAGE_METADATA,
 } from "./constants/metadata.constants";
@@ -16,7 +17,7 @@ import {
 /**
  * API 응답 엔티티 데코레이터 옵션
  */
-export interface ApiResponseEntityOptions {
+export interface ApiResponseEntityOptions<TDto = any> {
 	/** 배열 응답 여부 */
 	isArray?: boolean;
 	/** Set-Cookie 헤더 포함 여부 */
@@ -33,6 +34,8 @@ export interface ApiResponseEntityOptions {
 	aggregationsDto?: Type<unknown>;
 	/** 요약 정보 DTO */
 	summaryDto?: Type<unknown>;
+	/** 응답에서 제외할 필드 목록 (타입 안전) */
+	exclude?: ReadonlyArray<keyof TDto>;
 }
 
 /**
@@ -86,7 +89,7 @@ const getDefaultPaginationSchema = (): Record<string, unknown> => ({
  *
  * @param dataDto - 응답 데이터의 DTO 타입
  * @param httpStatus - HTTP 상태 코드 (기본값: 200)
- * @param options - 추가 옵션 (isArray, metaDto, statsDto 등)
+ * @param options - 추가 옵션 (isArray, metaDto, statsDto, exclude 등)
  *
  * @example
  * // 기본 사용
@@ -98,11 +101,17 @@ const getDefaultPaginationSchema = (): Record<string, unknown> => ({
  *   metaDto: UserPaginationMetaDto,
  *   statsDto: UserStatsDto
  * })
+ *
+ * // 특정 필드 제외
+ * @ApiResponseEntity(ActionDto, HttpStatus.OK, {
+ *   isArray: true,
+ *   exclude: ['config', 'description'] as const
+ * })
  */
 export const ApiResponseEntity = <DataDto extends Type<unknown>>(
 	dataDto: DataDto,
 	httpStatus: HttpStatus = HttpStatus.OK,
-	options?: ApiResponseEntityOptions,
+	options?: ApiResponseEntityOptions<InstanceType<DataDto>>,
 ) => {
 	const isPrimitive = getPrimitiveSchema(dataDto) !== null;
 
@@ -190,6 +199,7 @@ export const ApiResponseEntity = <DataDto extends Type<unknown>>(
 		HttpCode(httpStatus),
 		SetMetadata(DTO_CLASS_METADATA, dataDto),
 		SetMetadata(DTO_IS_ARRAY_METADATA, options?.isArray ?? false),
+		SetMetadata(DTO_EXCLUDE_FIELDS_METADATA, options?.exclude ?? []),
 	);
 
 	return applyDecorators(...decorators);

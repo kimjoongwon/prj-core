@@ -9,7 +9,7 @@ import {
 } from "@cocrepo/decorator";
 import type { Ability, Prisma } from "@cocrepo/prisma";
 import { AbstractDto } from "./abstract.dto";
-import { ActionSummaryDto } from "./action.dto";
+import { ActionDto } from "./action.dto";
 import { SubjectSummaryDto } from "./subject.dto";
 
 /**
@@ -55,8 +55,8 @@ export class AbilityDto extends AbstractDto implements Ability {
 	priority!: number;
 
 	// 관계 (중첩 DTO)
-	@ClassField(() => ActionSummaryDto, { required: false })
-	action?: ActionSummaryDto;
+	@ClassField(() => ActionDto, { required: false })
+	action?: ActionDto;
 
 	@ClassField(() => SubjectSummaryDto, { required: false })
 	subject?: SubjectSummaryDto;
@@ -84,8 +84,8 @@ export class AbilitySummaryDto {
 	@NumberField()
 	priority!: number;
 
-	@ClassField(() => ActionSummaryDto, { required: false })
-	action?: ActionSummaryDto;
+	@ClassField(() => ActionDto, { required: false })
+	action?: ActionDto;
 
 	@ClassField(() => SubjectSummaryDto, { required: false })
 	subject?: SubjectSummaryDto;

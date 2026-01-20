@@ -2,6 +2,7 @@
 
 // be-common imports
 import {
+	DtoTransformInterceptor,
 	LoggerMiddleware,
 	RequestContextInterceptor,
 	ResponseEntityInterceptor,
@@ -81,7 +82,9 @@ import { UsersModule } from "./users";
 		]),
 	],
 	providers: [
+		// Interceptors (setNestApp에서 순서대로 등록됨)
 		RequestContextInterceptor,
+		DtoTransformInterceptor,
 		ResponseEntityInterceptor,
 		// Rate Limiting
 		{

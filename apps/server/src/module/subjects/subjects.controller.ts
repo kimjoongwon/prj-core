@@ -26,7 +26,7 @@ export class SubjectsController {
 	@ApiErrors(401, 500)
 	@ApiResponseEntity(SubjectResponseDto, HttpStatus.OK, { isArray: true })
 	@ResponseMessage("모든 Subject 조회 성공")
-	async getSubjects(): Promise<SubjectResponseDto[]> {
+	async getPrismaSubjects(): Promise<SubjectResponseDto[]> {
 		const subjects = await this.subjectsService.getSubjects();
 
 		return subjects.map((subject) =>
@@ -60,7 +60,7 @@ export class SubjectsController {
 	@ApiErrors(401, 500)
 	@ApiResponseEntity(SubjectFieldResponseDto, HttpStatus.OK, { isArray: true })
 	@ResponseMessage("Subject 필드 목록 조회 성공")
-	async getSubjectFields(
+	async getPrismaSubjectFields(
 		@Param("name") name: string,
 	): Promise<SubjectFieldResponseDto[]> {
 		const fields = await this.subjectsService.getSubjectFields(name);

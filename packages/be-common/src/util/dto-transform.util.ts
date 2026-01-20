@@ -20,25 +20,63 @@ export function isEntity(value: unknown): value is AbstractEntity {
 export function transformToDto<T>(
 	dtoClass: new (...args: any[]) => T,
 	data: unknown,
-	options?: { isArray?: boolean },
+	options?: {
+		isArray?: boolean;
+		excludeFields?: string[];
+	},
 ): T | T[] | unknown {
 	// null/undefined 처리
 	if (data === null || data === undefined) {
 		return data;
 	}
 
-	// 배열 처리
-	if (options?.isArray && Array.isArray(data)) {
-		return data.map((item) =>
-			isEntity(item) ? plainToInstance(dtoClass, item) : item,
-		);
+	// Primitive 타입은 변환 불필요
+	if (typeof data !== "object") {
+		return data;
 	}
 
-	// 단일 Entity 처리
-	if (isEntity(data)) {
-		return plainToInstance(dtoClass, data);
+	// plainToInstance로 변환 (항상 시도)
+	const transformed =
+		options?.isArray && Array.isArray(data)
+			? data.map((item) =>
+					typeof item === "object" && item !== null
+						? plainToInstance(dtoClass, item)
+						: item,
+				)
+			: plainToInstance(dtoClass, data);
+
+	// excludeFields가 있으면 필드 제거
+	if (options?.excludeFields && options.excludeFields.length > 0) {
+		return excludeFieldsFromDto(transformed, options.excludeFields);
 	}
 
-	// Entity가 아니면 원본 반환
-	return data;
+	return transformed;
+}
+
+/**
+ * DTO 또는 DTO 배열에서 특정 필드 제거
+ */
+function excludeFieldsFromDto<T>(
+	data: T | T[],
+	fieldsToExclude: string[],
+): T | T[] {
+	if (Array.isArray(data)) {
+		return data.map((item) => removeFields(item, fieldsToExclude)) as T[];
+	}
+	return removeFields(data, fieldsToExclude) as T;
+}
+
+/**
+ * 객체에서 특정 필드들을 제거
+ */
+function removeFields<T>(obj: T, fields: string[]): Partial<T> {
+	if (!obj || typeof obj !== "object") return obj;
+
+	// 클래스 인스턴스를 일반 객체로 변환
+	const plainObj = JSON.parse(JSON.stringify(obj));
+
+	for (const field of fields) {
+		delete plainObj[field];
+	}
+	return plainObj as Partial<T>;
 }

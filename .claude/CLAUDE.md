@@ -124,6 +124,42 @@ import { PageSurface, SectionSurface } from "@cocrepo/ui";
 - 내부 Surface는 외부보다 높은 elevation 사용
 - 동일 elevation 중첩 금지
 
+#### PageSurface 사용 위치 규칙
+
+**PageSurface는 Page 컴포넌트에서만 사용합니다. Layout에서 사용 금지!**
+
+```typescript
+// ❌ 금지 - Layout에서 PageSurface 사용
+// users/layout.tsx
+function UsersLayout({ children }) {
+  return (
+    <PageSurface title="회원 목록">  {/* Layout에서 사용 금지 */}
+      {children}
+    </PageSurface>
+  );
+}
+
+// ✅ 올바른 예시 - Page에서 PageSurface 사용
+// users/page.tsx (또는 _client.tsx)
+function UsersPage() {
+  return (
+    <PageSurface
+      title="회원 목록"
+      description="시스템에 등록된 회원을 관리합니다."
+      actions={<Button>회원 등록</Button>}
+    >
+      <SectionSurface>...</SectionSurface>
+    </PageSurface>
+  );
+}
+```
+
+**이유:**
+- Layout과 Page 모두에서 PageSurface를 사용하면 타이틀이 중복됨
+- Layout은 구조적 래핑만 담당 (인증 체크, 공통 Provider 등)
+- 페이지별 title, description, actions는 각 Page 컴포넌트에서 처리
+- 하위 페이지(상세/수정/등록)가 다른 타이틀을 가질 때 유연하게 대응 가능
+
 ### 컴포넌트 작성
 
 - ui 컴포넌트를 만들 때는 mobx를 사용합니다

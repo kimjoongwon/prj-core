@@ -30,7 +30,7 @@ export class GroundsController {
 	@ApiErrors(500)
 	@ApiResponseEntity(GroundDto, HttpStatus.OK, { isArray: true })
 	@ResponseMessage("Ground 목록 조회 성공")
-	async getAll() {
+	async getGrounds() {
 		return this.groundsService.getAll();
 	}
 

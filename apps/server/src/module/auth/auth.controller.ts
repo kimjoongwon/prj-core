@@ -150,7 +150,7 @@ export class AuthController {
 	)
 	@ApiResponseEntity(TokenDto, HttpStatus.CREATED)
 	@ResponseMessage("회원가입 성공")
-	async signUpUser(@Body() signUpDto: SignUpPayloadDto) {
+	async signUp(@Body() signUpDto: SignUpPayloadDto) {
 		return this.authFacade.signUp(signUpDto);
 	}
 

@@ -103,7 +103,7 @@ export class AbilitiesController {
 	)
 	@ApiResponseEntity(AbilityResponseDto, HttpStatus.OK, { isArray: true })
 	@ResponseMessage("Role별 권한 조회 성공")
-	async getRoleAbilities(
+	async getAbilitiesByRoleId(
 		@Param("roleId", ParseUUIDPipe) roleId: string,
 	): Promise<Ability[]> {
 		return this.abilitiesFacade.getRoleAbilities(roleId);
@@ -131,7 +131,7 @@ export class AbilitiesController {
 	)
 	@ApiResponseEntity(AbilityResponseDto, HttpStatus.OK, { isArray: true })
 	@ResponseMessage("User별 예외 권한 조회 성공")
-	async getUserAbilities(
+	async getAbilitiesByUserId(
 		@Param("userId", ParseUUIDPipe) userId: string,
 	): Promise<Ability[]> {
 		return this.abilitiesFacade.getUserAbilities(userId);

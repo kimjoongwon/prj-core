@@ -1,5 +1,6 @@
 import {
 	DTO_CLASS_METADATA,
+	DTO_EXCLUDE_FIELDS_METADATA,
 	DTO_IS_ARRAY_METADATA,
 	SKIP_DTO_TRANSFORM,
 } from "@cocrepo/decorator";
@@ -53,6 +54,8 @@ export class DtoTransformInterceptor implements NestInterceptor {
 		// 메타데이터에서 DTO 클래스 정보 추출
 		const dtoClass = this.reflector.get(DTO_CLASS_METADATA, handler);
 		const isArray = this.reflector.get(DTO_IS_ARRAY_METADATA, handler) ?? false;
+		const excludeFields =
+			this.reflector.get<string[]>(DTO_EXCLUDE_FIELDS_METADATA, handler) ?? [];
 
 		// DTO 클래스 메타데이터가 없으면 변환 스킵
 		if (!dtoClass) {
@@ -62,7 +65,7 @@ export class DtoTransformInterceptor implements NestInterceptor {
 		return next.handle().pipe(
 			map((value) => {
 				try {
-					return this.transformValue(value, dtoClass, isArray);
+					return this.transformValue(value, dtoClass, isArray, excludeFields);
 				} catch (error) {
 					this.logger.error(
 						`DTO 변환 실패, 원본 반환: ${error instanceof Error ? error.message : String(error)}`,
@@ -80,6 +83,7 @@ export class DtoTransformInterceptor implements NestInterceptor {
 		value: unknown,
 		dtoClass: any,
 		isArray: boolean,
+		excludeFields: string[],
 	): unknown {
 		// null/undefined 처리
 		if (value === null || value === undefined) {
@@ -90,12 +94,12 @@ export class DtoTransformInterceptor implements NestInterceptor {
 		if (isWrappedResponse(value)) {
 			return {
 				...value,
-				data: this.transformData(value.data, dtoClass, isArray),
+				data: this.transformData(value.data, dtoClass, isArray, excludeFields),
 			};
 		}
 
 		// 직접 데이터 변환
-		return this.transformData(value, dtoClass, isArray);
+		return this.transformData(value, dtoClass, isArray, excludeFields);
 	}
 
 	/**
@@ -105,24 +109,26 @@ export class DtoTransformInterceptor implements NestInterceptor {
 		data: unknown,
 		dtoClass: any,
 		isArray: boolean,
+		excludeFields: string[],
 	): unknown {
 		if (data === null || data === undefined) {
 			return data;
 		}
 
-		// 배열 처리
+		// 배열 처리 - 항상 변환 시도 (Repository가 이미 plainToInstance 호출함)
 		if (isArray && Array.isArray(data)) {
-			return data.map((item) =>
-				isEntity(item) ? transformToDto(dtoClass, item) : item,
-			);
+			return transformToDto(dtoClass, data, {
+				isArray: true,
+				excludeFields,
+			});
 		}
 
-		// 단일 Entity 처리
-		if (isEntity(data)) {
-			return transformToDto(dtoClass, data);
+		// 단일 객체 처리 - 항상 변환 시도
+		if (typeof data === "object") {
+			return transformToDto(dtoClass, data, { excludeFields });
 		}
 
-		// Entity가 아니면 원본 반환 (Primitive 타입, 이미 DTO 등)
+		// Primitive 타입은 원본 반환
 		return data;
 	}
 }

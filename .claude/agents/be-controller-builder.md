@@ -36,26 +36,26 @@ NestJS REST Controller를 생성하는 전문가입니다.
 
 ## 핵심 규칙
 
-### ⚠️ operationId 필수 (Critical)
+### ⚠️ operationId 필수 및 메서드명 일치 (Critical)
 
-**모든 API 엔드포인트에 `operationId`를 반드시 지정해야 합니다.**
+**모든 API 엔드포인트에 `operationId`를 반드시 지정하고, 메서드명과 일치시켜야 합니다.**
 
 ```typescript
-// ✅ 올바른 예시 - operationId 필수
+// ✅ 올바른 예시 - operationId와 메서드명 일치
 @Get()
 @ApiOperation({
   operationId: "getUsers",  // 필수!
   summary: "회원 목록 조회",
   description: "현재 Space 내의 회원 목록을 조회합니다.",
 })
-async getUsers() { }
+async getUsers() { }  // operationId와 동일!
 
 @Get(":id")
 @ApiOperation({
   operationId: "getUserById",  // 필수!
   summary: "회원 상세 조회",
 })
-async getUserById(@Param("id") id: string) { }
+async getUserById(@Param("id") id: string) { }  // operationId와 동일!
 
 // ❌ 잘못된 예시 - operationId 누락
 @Get()
@@ -63,6 +63,14 @@ async getUserById(@Param("id") id: string) { }
   summary: "회원 목록 조회",  // operationId 없음 → orval 오류 발생!
 })
 async getAll() { }
+
+// ❌ 잘못된 예시 - operationId와 메서드명 불일치
+@Get()
+@ApiOperation({
+  operationId: "getUsers",
+  summary: "회원 목록 조회",
+})
+async getAll() { }  // 불일치! → getUsers()로 변경 필요
 ```
 
 **operationId 네이밍 규칙:**
@@ -80,6 +88,10 @@ async getAll() { }
 - operationId가 없으면 NestJS Swagger가 메서드명 기반으로 자동 생성
 - 여러 컨트롤러에 `getAll()`, `getById()` 같은 동일한 메서드명이 있으면 **orval codegen 중복 스키마 오류 발생**
 - 예: `Duplicate schema names detected: 4x GetAll200AllOf`
+- **operationId와 메서드명 일치 규칙:**
+  - 코드 가독성 향상 - operationId만 보고 해당 메서드를 쉽게 찾을 수 있음
+  - 일관성 유지 - API 문서와 코드베이스 간 네이밍 통일
+  - 디버깅 용이 - 에러 로그에서 메서드명으로 추적 가능
 
 ---
 
@@ -368,6 +380,7 @@ imports: [
 - [ ] `@ApiTags()` 데코레이터 추가
 - [ ] `@Controller()` 데코레이터 추가
 - [ ] **각 메서드에 `@ApiOperation({ operationId: "..." })` 추가 (필수!)**
+- [ ] **operationId와 메서드명 일치 확인 (예: operationId: "getUsers" → async getUsers())**
 - [ ] Service 또는 Facade 주입 (하나만)
 - [ ] Logger 초기화
 - [ ] 각 메서드에 `@HttpCode(HttpStatus.OK)` 추가

@@ -197,7 +197,7 @@ describe("AuthController", () => {
 		});
 	});
 
-	describe("signUpUser", () => {
+	describe("signUp", () => {
 		it("회원가입이 성공해야 한다", async () => {
 			// Given
 			const signUpDto: SignUpPayloadDto = {
@@ -213,7 +213,7 @@ describe("AuthController", () => {
 			mockAuthFacade.signUp.mockResolvedValue(signUpResult as never);
 
 			// When
-			const result = await controller.signUpUser(signUpDto);
+			const result = await controller.signUp(signUpDto);
 
 			// Then
 			expect(mockAuthFacade.signUp).toHaveBeenCalledWith(signUpDto);

@@ -35,7 +35,7 @@ export class SubjectsController {
 	@ApiErrors(500)
 	@ApiResponseEntity(SubjectDto, HttpStatus.OK, { isArray: true })
 	@ResponseMessage("Subject 목록 조회 성공")
-	async getAll(@Query("group") group?: string, @Query("type") _type?: string) {
+	async getSubjects(@Query("group") group?: string, @Query("type") _type?: string) {
 		const subjects = group
 			? await this.subjectsService.getSubjectsByGroup(group)
 			: await this.subjectsService.getSubjects();
@@ -58,7 +58,7 @@ export class SubjectsController {
 	@ApiErrors(404, 500)
 	@ApiResponseEntity(SubjectFieldDto, HttpStatus.OK, { isArray: true })
 	@ResponseMessage("Subject 필드 목록 조회 성공")
-	async getFields(@Param("id") id: string) {
+	async getSubjectFields(@Param("id") id: string) {
 		// ID로 Subject를 먼저 조회하여 이름을 가져옴
 		const subject = await this.subjectsService.getSubjectById(id);
 		if (!subject) {
@@ -83,7 +83,7 @@ export class SubjectsController {
 	@ApiErrors(404, 500)
 	@ApiResponseEntity(SubjectDto, HttpStatus.OK)
 	@ResponseMessage("Subject 조회 성공")
-	async getById(@Param("id") id: string) {
+	async getSubjectById(@Param("id") id: string) {
 		const subject = await this.subjectsService.getSubjectById(id);
 		return plainToInstance(SubjectDto, subject);
 	}

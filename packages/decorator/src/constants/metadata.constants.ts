@@ -26,3 +26,9 @@ export const SKIP_DTO_TRANSFORM = "dto:skip_transform";
  * @example @ResponseMessage("사용자 생성 완료")
  */
 export const RESPONSE_MESSAGE_METADATA = "shared:response-message";
+
+/**
+ * DTO 변환 시 제외할 필드 목록
+ * @example SetMetadata(DTO_EXCLUDE_FIELDS_METADATA, ['password', 'deletedAt'])
+ */
+export const DTO_EXCLUDE_FIELDS_METADATA = "api:response:exclude_fields";

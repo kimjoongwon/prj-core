@@ -1,4 +1,5 @@
 import { RoleCategoryGuard } from "@cocrepo/be-common";
+import { ActionExcludePresets } from "@cocrepo/constant";
 import {
   ApiAuth,
   ApiErrors,
@@ -32,7 +33,6 @@ import {
   ApiQuery,
   ApiTags,
 } from "@nestjs/swagger";
-import { plainToInstance } from "class-transformer";
 
 /**
  * Actions 에러 메시지 상수
@@ -60,13 +60,15 @@ export class ActionsController {
     description: "그룹별 필터링 (crud, visibility, workflow)",
   })
   @ApiErrors(500)
-  @ApiResponseEntity(ActionDto, HttpStatus.OK, { isArray: true })
+  @ApiResponseEntity(ActionDto, HttpStatus.OK, {
+    isArray: true,
+    exclude: ActionExcludePresets.LIST,
+  })
   @ResponseMessage("Action 목록 조회 성공")
-  async getAll(@Query("group") group?: string) {
-    const actions = group
+  async getActions(@Query("group") group?: string) {
+    return group
       ? await this.actionsService.getActionsByGroup(group)
       : await this.actionsService.getAllActions();
-    return actions.map((action) => plainToInstance(ActionDto, action));
   }
 
   @Public()
@@ -84,9 +86,8 @@ export class ActionsController {
   @ApiErrors(404, 500)
   @ApiResponseEntity(ActionDto, HttpStatus.OK)
   @ResponseMessage("Action 조회 성공")
-  async getById(@Param("id", ParseUUIDPipe) id: string) {
-    const action = await this.actionsService.getActionById(id);
-    return plainToInstance(ActionDto, action);
+  async getActionById(@Param("id", ParseUUIDPipe) id: string) {
+    return await this.actionsService.getActionById(id);
   }
 
   @Post()
@@ -106,8 +107,8 @@ export class ActionsController {
   @ApiErrors(400, 401, 403, 500)
   @ApiResponseEntity(ActionDto, HttpStatus.CREATED)
   @ResponseMessage("Action 생성 성공")
-  async create(@Body() dto: CreateActionDto) {
-    const action = await this.actionsService.createAction({
+  async createAction(@Body() dto: CreateActionDto) {
+    return await this.actionsService.createAction({
       name: dto.name,
       displayName: dto.displayName,
       description: dto.description,
@@ -116,7 +117,6 @@ export class ActionsController {
       isSystem: dto.isSystem,
       config: dto.config,
     });
-    return plainToInstance(ActionDto, action);
   }
 
   @Patch(":id")
@@ -148,7 +148,7 @@ export class ActionsController {
   )
   @ApiResponseEntity(ActionDto, HttpStatus.OK)
   @ResponseMessage("Action 수정 성공")
-  async updateById(
+  async updateAction(
     @Param("id", ParseUUIDPipe) id: string,
     @Body() dto: UpdateActionDto
   ) {
@@ -170,8 +170,7 @@ export class ActionsController {
       ...(dto.config !== undefined && { config: dto.config }),
     };
 
-    const action = await this.actionsService.updateAction(id, updateData);
-    return plainToInstance(ActionDto, action);
+    return await this.actionsService.updateAction(id, updateData);
   }
 
   @Delete(":id")
@@ -199,7 +198,7 @@ export class ActionsController {
   )
   @ApiResponseEntity(ActionDto, HttpStatus.OK)
   @ResponseMessage("Action 삭제 성공")
-  async deleteById(@Param("id", ParseUUIDPipe) id: string) {
+  async deleteAction(@Param("id", ParseUUIDPipe) id: string) {
     // 시스템 Action 삭제 불가 체크
     const existingAction = await this.actionsService.getActionById(id);
     if (existingAction.isSystem) {
@@ -208,7 +207,6 @@ export class ActionsController {
       );
     }
 
-    const action = await this.actionsService.deleteAction(id);
-    return plainToInstance(ActionDto, action);
+    return await this.actionsService.deleteAction(id);
   }
 }
