@@ -19,7 +19,11 @@ export async function prefetchUsersData(
 ) {
 	const { page = 1, limit = 20 } = params;
 
-	await prefetchGetUsersQuery(queryClient, { page, limit }, {
-		request: withServerCookies(cookies),
-	});
+	await prefetchGetUsersQuery(
+		queryClient,
+		{ page, limit },
+		{
+			request: withServerCookies(cookies),
+		},
+	);
 }

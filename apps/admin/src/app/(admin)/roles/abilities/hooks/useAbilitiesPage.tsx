@@ -11,23 +11,37 @@ import type {
 import { useLocalObservable } from "mobx-react-lite";
 
 /**
+ * Subject 확장 타입 (isSystem 포함)
+ */
+interface SubjectWithSystem extends Subject {
+	/** 시스템 Subject 여부 */
+	isSystem?: boolean;
+}
+
+/**
  * 페이지 상태 타입
  */
 interface AbilitiesPageState {
 	/** 현재 선택된 탭 */
-	activeTab: "role" | "user" | "action";
+	activeTab: "role" | "user" | "action" | "subject" | "ui-visibility";
 	/** Role 목록 */
 	roles: Role[];
 	/** 선택된 Role ID */
 	selectedRoleId: string | null;
 	/** Subject 목록 */
-	subjects: Subject[];
+	subjects: SubjectWithSystem[];
 	/** Action 목록 */
 	actions: Action[];
 	/** 로딩 상태 */
 	isLoading: boolean;
 	/** 에러 메시지 */
 	error: string | null;
+	/** Subject 폼 모달 상태 */
+	subjectFormModal: {
+		isOpen: boolean;
+		mode: "create" | "edit";
+		initialData?: SubjectWithSystem;
+	};
 }
 
 /**
@@ -46,6 +60,11 @@ export function useAbilitiesPage() {
 		actions: [],
 		isLoading: false,
 		error: null,
+		subjectFormModal: {
+			isOpen: false,
+			mode: "create",
+			initialData: undefined,
+		},
 	}));
 
 	// =====================
@@ -76,42 +95,70 @@ export function useAbilitiesPage() {
 					name: "entity:User",
 					displayName: "사용자",
 					group: "entity",
+					isSystem: true,
 				},
 				{
 					id: "subj-2",
 					name: "entity:Reservation",
 					displayName: "예약",
 					group: "entity",
+					isSystem: true,
 				},
 				{
 					id: "subj-3",
 					name: "entity:Payment",
 					displayName: "결제",
 					group: "entity",
+					isSystem: true,
 				},
 				{
 					id: "subj-4",
 					name: "menu:dashboard",
 					displayName: "대시보드",
 					group: "menu",
+					isSystem: true,
 				},
 				{
 					id: "subj-5",
 					name: "menu:settings",
 					displayName: "설정",
 					group: "menu",
+					isSystem: true,
 				},
 				{
 					id: "subj-6",
 					name: "feature:export",
 					displayName: "내보내기",
 					group: "feature",
+					isSystem: true,
 				},
 				{
 					id: "subj-7",
 					name: "ui:mobile-bottom-tab",
 					displayName: "모바일 바텀탭",
 					group: "ui",
+					isSystem: true,
+				},
+				{
+					id: "subj-8",
+					name: "ui:mobile-bottom-tab:home",
+					displayName: "바텀탭 - 홈",
+					group: "ui",
+					isSystem: true,
+				},
+				{
+					id: "subj-9",
+					name: "ui:main-banner",
+					displayName: "메인 배너",
+					group: "ui",
+					isSystem: false,
+				},
+				{
+					id: "subj-10",
+					name: "ui:floating-button:chat",
+					displayName: "플로팅 채팅 버튼",
+					group: "ui",
+					isSystem: false,
 				},
 			];
 
@@ -177,7 +224,9 @@ export function useAbilitiesPage() {
 	/**
 	 * 탭 변경 핸들러
 	 */
-	const handleTabChange = (tab: "role" | "user" | "action") => {
+	const handleTabChange = (
+		tab: "role" | "user" | "action" | "subject" | "ui-visibility",
+	) => {
 		state.activeTab = tab;
 	};
 
@@ -402,6 +451,102 @@ export function useAbilitiesPage() {
 		return [];
 	};
 
+	// =====================
+	// Subject 관리 핸들러
+	// =====================
+
+	/**
+	 * Subject 추가 모달 열기
+	 */
+	const handleOpenAddSubjectModal = () => {
+		state.subjectFormModal = {
+			isOpen: true,
+			mode: "create",
+			initialData: undefined,
+		};
+	};
+
+	/**
+	 * Subject 수정 모달 열기
+	 */
+	const handleOpenEditSubjectModal = (subject: SubjectWithSystem) => {
+		state.subjectFormModal = {
+			isOpen: true,
+			mode: "edit",
+			initialData: subject,
+		};
+	};
+
+	/**
+	 * Subject 모달 닫기
+	 */
+	const handleCloseSubjectModal = () => {
+		state.subjectFormModal = {
+			isOpen: false,
+			mode: "create",
+			initialData: undefined,
+		};
+	};
+
+	/**
+	 * Subject 추가 제출
+	 */
+	const handleAddSubject = async (data: {
+		group: string;
+		name: string;
+		displayName: string;
+		description?: string;
+	}): Promise<void> => {
+		// TODO: 실제 API 호출로 교체
+		console.log("Add subject:", data);
+
+		// 더미: 로컬 상태에 추가
+		const newSubject: SubjectWithSystem = {
+			id: `subj-${Date.now()}`,
+			name: data.name,
+			displayName: data.displayName,
+			group: data.group,
+			isSystem: false,
+		};
+		state.subjects.push(newSubject);
+		handleCloseSubjectModal();
+	};
+
+	/**
+	 * Subject 수정 제출
+	 */
+	const handleUpdateSubject = async (
+		subjectId: string,
+		data: {
+			displayName: string;
+			description?: string;
+		},
+	): Promise<void> => {
+		// TODO: 실제 API 호출로 교체
+		console.log("Update subject:", subjectId, data);
+
+		// 더미: 로컬 상태 업데이트
+		const subject = state.subjects.find((s) => s.id === subjectId);
+		if (subject) {
+			subject.displayName = data.displayName;
+		}
+		handleCloseSubjectModal();
+	};
+
+	/**
+	 * Subject 삭제
+	 */
+	const handleDeleteSubject = async (subjectId: string): Promise<void> => {
+		// TODO: 실제 API 호출로 교체
+		console.log("Delete subject:", subjectId);
+
+		// 더미: 로컬 상태에서 제거
+		const index = state.subjects.findIndex((s) => s.id === subjectId);
+		if (index !== -1) {
+			state.subjects.splice(index, 1);
+		}
+	};
+
 	return {
 		state,
 		initialize,
@@ -422,5 +567,12 @@ export function useAbilitiesPage() {
 		handleToggleUserAbilityActive,
 		// 공통 핸들러
 		handleLoadSubjectFields,
+		// Subject 관리 핸들러
+		handleOpenAddSubjectModal,
+		handleOpenEditSubjectModal,
+		handleCloseSubjectModal,
+		handleAddSubject,
+		handleUpdateSubject,
+		handleDeleteSubject,
 	};
 }

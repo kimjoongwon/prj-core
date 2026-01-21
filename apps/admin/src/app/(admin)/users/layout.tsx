@@ -6,6 +6,8 @@
  */
 export default function UsersLayout({
 	children,
-}: { children: React.ReactNode }) {
+}: {
+	children: React.ReactNode;
+}) {
 	return <>{children}</>;
 }
