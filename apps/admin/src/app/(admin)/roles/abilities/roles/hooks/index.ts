@@ -1,0 +1,1 @@
+export { useRoleAbilitiesPage } from "./useRoleAbilitiesPage";

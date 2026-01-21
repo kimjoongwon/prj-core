@@ -14,8 +14,7 @@ tools: Read, Grep, Task
 
 | 상황 | 사용 여부 | 설명 |
 |------|:--------:|------|
-| Page Builder 결과 검증 | ✅ | 페이지 컴포넌트 규칙 확인 |
-| DataGrid Page Builder 결과 검증 | ✅ | DataGrid 페이지 규칙 확인 |
+| Page Builder 결과 검증 | ✅ | 일반/목록 페이지 규칙 확인 |
 | Feature Builder 결과 검증 | ✅ | Feature 컴포넌트 규칙 확인 |
 | Widget Builder 결과 검증 | ✅ | Widget 컴포넌트 규칙 확인 |
 | UI Component Builder 결과 검증 | ✅ | Pure UI 컴포넌트 규칙 확인 |
@@ -89,6 +88,7 @@ tools: Read, Grep, Task
 | PageSurface 필수 | `grep "PageSurface"` | PageSurface로 감싸기 |
 | 커스텀 className 금지 | `grep 'className="'` | VStack/HStack 등 사용 |
 | Cell 컴포넌트 재사용 | `grep "const format"` | Cell 컴포넌트 사용 |
+| **Prefetch 필수** | page.tsx에서 `"use client"` 없음 확인 | page.tsx + _client.tsx + _prefetch.ts 구조로 분리 |
 
 ### 4.3 Feature 컴포넌트 규칙
 
@@ -175,6 +175,12 @@ grep -E 'className="[^"]*\b(flex|grid|gap-|mt-|mb-)\b' [Page 경로]
 
 # 인라인 포맷터 (DataGrid 페이지)
 grep -E "const (format|get)[A-Z][a-zA-Z]* = \(" [Page 경로]
+
+# Prefetch 필수 - page.tsx가 서버 컴포넌트인지 확인
+grep -L "use client" [Page 경로]/page.tsx  # 파일에 "use client" 없어야 함 (서버 컴포넌트)
+
+# Prefetch 파일 구조 확인 (필수 파일 존재 여부)
+ls [Page 경로]/_client.tsx [Page 경로]/_prefetch.ts  # 둘 다 존재해야 함
 ```
 
 ### 5.3 스타일링 규칙 검증
@@ -215,6 +221,7 @@ grep -E "const (format|get)[A-Z][a-zA-Z]* = \(" [Page 경로]
 | MobX observer | ✅ 통과 | observer 적용됨 |
 | 스타일링 규칙 | ✅ 통과 | 커스텀 className 없음 |
 | Cell 컴포넌트 재사용 | ✅ 통과 | DateCell 등 사용 |
+| **Prefetch 구조** | ✅ 통과 | page.tsx + _client.tsx + _prefetch.ts 구조 |
 
 ### 품질 점수: 100/100
 ```
@@ -259,8 +266,7 @@ fe-widget-builder 에이전트에게 수정 요청 전달
 
 | 에이전트 | 검증 항목 |
 |----------|----------|
-| **fe-page-builder** | Page 컴포넌트 규칙 |
-| **fe-datagrid-page-builder** | DataGrid Page 규칙 |
+| **fe-page-builder** | 일반/목록 페이지 규칙 |
 | **fe-feature-builder** | Feature 컴포넌트 규칙 |
 | **fe-widget-builder** | Widget 컴포넌트 규칙 |
 | **fe-ui-component-builder** | UI 컴포넌트 규칙 |

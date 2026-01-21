@@ -36,6 +36,42 @@ NestJS REST Controller를 생성하는 전문가입니다.
 
 ## 핵심 규칙
 
+### ⚠️ @Controller() 경로 비워두기 (Critical)
+
+**RouterModule에서 경로를 설정하므로, @Controller() 데코레이터는 반드시 빈 값으로 사용합니다.**
+
+```typescript
+// ✅ 올바른 예시 - @Controller() 빈 값
+@ApiTags("USERS")
+@Controller()  // 빈 값!
+export class UsersController { }
+
+// app.module.ts - RouterModule에서 경로 설정
+RouterModule.register([
+  {
+    path: "api/v1",
+    children: [
+      { path: "users", module: UsersModule },  // → /api/v1/users
+    ],
+  },
+])
+
+// ❌ 잘못된 예시 - @Controller()와 RouterModule 경로 중복
+@ApiTags("USERS")
+@Controller("users")  // "users" 지정 → 경로 중복!
+export class UsersController { }
+
+// 결과: /api/v1/users/users (중복!)
+```
+
+**이유:**
+- NestJS에서 `RouterModule.register`와 `@Controller()` 경로가 **합쳐짐**
+- RouterModule: `path: "users"` + Controller: `@Controller("users")` = `/users/users`
+- Orval 생성 시 잘못된 API 경로가 생성되어 **404 에러 또는 304 캐시 문제** 발생
+- 모든 경로는 `app.module.ts`의 RouterModule에서 **단일 관리**
+
+---
+
 ### ⚠️ operationId 필수 및 메서드명 일치 (Critical)
 
 **모든 API 엔드포인트에 `operationId`를 반드시 지정하고, 메서드명과 일치시켜야 합니다.**
@@ -414,7 +450,7 @@ imports: [
 ## 체크리스트
 
 - [ ] `@ApiTags()` 데코레이터 추가
-- [ ] `@Controller()` 데코레이터 추가
+- [ ] **`@Controller()` 빈 값으로 사용 (경로 지정 금지! RouterModule에서 관리)**
 - [ ] **각 메서드에 `@ApiOperation({ operationId: "..." })` 추가 (필수!)**
 - [ ] **operationId와 메서드명 일치 확인 (예: operationId: "getUsers" → async getUsers())**
 - [ ] **URL 파라미터명이 `:{entity}Id` 형식인지 확인 (예: `:userId`, `:orderId`)**

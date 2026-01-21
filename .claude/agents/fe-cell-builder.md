@@ -399,8 +399,7 @@ ls packages/ui/src/components/ui/data-display/cells/
 | 관계 | 에이전트 | 설명 |
 |------|---------|------|
 | **관련** | fe-ui-component-builder | 일반 UI 컴포넌트 (Cell 외) |
-| **관련** | fe-datagrid-page-builder | DataGrid 페이지에서 Cell 사용 |
-| **후행** | fe-page-builder | 페이지에서 컬럼 정의 시 Cell 사용 |
+| **후행** | fe-page-builder | 목록 페이지에서 Cell 사용 |
 
 ---
 

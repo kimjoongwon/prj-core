@@ -6,74 +6,88 @@ tools: Read, Write, Grep, Bash
 
 # 페이지 빌더
 
-**Pure UI 페이지 컴포넌트**를 `packages/ui`에 생성하고, `apps/*`에서 비즈니스 로직과 연결합니다.
+**페이지 컴포넌트**를 생성합니다. 일반 페이지는 `packages/ui`에 Pure UI로, 목록 페이지는 `apps/*`에 직접 생성합니다.
 
 ---
 
-## 1. 언제 사용하는가?
+## 1. 페이지 유형 선택
 
-| 상황 | 사용 여부 | 설명 |
-|------|:--------:|------|
-| 새로운 페이지 화면 구성 | ✅ | LoginPage, DashboardPage, UsersPage |
-| 여러 앱에서 재사용할 페이지 UI | ✅ | 동일한 UI를 admin, coin에서 사용 |
-| Next.js 라우트 페이지 생성 | ✅ | page.tsx + 통합 훅 생성 |
-| 단일 Feature 컴포넌트 | ❌ | Feature Builder 사용 |
-| 레이아웃 구성 | ❌ | Next.js layout.tsx에서 처리 |
+| 유형 | 설명 | 생성 위치 | 예시 |
+|------|------|-----------|------|
+| **일반 페이지** | 폼, 대시보드, 상세 보기 등 | `packages/ui` + `apps/*` | Login, Dashboard, UserDetail |
+| **목록 페이지** | DataGrid/Table 기반 CRUD | `apps/*`만 | UserList, RoleList |
 
----
+### 유형 판단 기준
 
-## 2. 입력/출력
-
-### 입력
-
-| 항목 | 필수 | 설명 |
-|------|:----:|------|
-| 페이지명 | ✅ | `[Name]Page` 패턴 |
-| 페이지 경로 | ✅ | Next.js App Router 경로 |
-| State 정의 | ✅ | 페이지 상태 타입 |
-| 핸들러 목록 | ✅ | `on[Event][UI]` 형태 |
-
-### 출력
-
-| 항목 | 경로 |
+| 상황 | 유형 |
 |------|------|
-| Pure UI Page | `packages/ui/src/components/page/[Name]/[Name]Page.tsx` |
-| Page barrel | `packages/ui/src/components/page/[Name]/index.ts` |
-| 통합 훅 | `apps/*/app/[route]/hooks/use[Route][Name]Page.ts` |
-| 훅 barrel | `apps/*/app/[route]/hooks/index.ts` |
-| Next.js page | `apps/*/app/[route]/page.tsx` |
+| 여러 앱에서 재사용할 페이지 UI | 일반 페이지 |
+| 로그인, 회원가입 등 폼 페이지 | 일반 페이지 |
+| 대시보드, 차트 페이지 | 일반 페이지 |
+| 상세/수정 폼 페이지 | 일반 페이지 |
+| 테이블 + CRUD 기능 | 목록 페이지 |
+| 페이지네이션/정렬/필터 필요 | 목록 페이지 |
 
 ---
 
-## 3. 핵심 규칙
+## 2. 공통 규칙
 
-### ✅ Do
+### ✅ Do (필수)
 
 | 규칙 | 설명 |
 |------|------|
-| **상태 주입** | Page는 state를 props로 받음 (내부 useState 금지) |
-| **핸들러 주입** | 모든 이벤트 핸들러는 props로 받음 |
+| **Prefetch 필수** | 모든 페이지는 서버 사이드 Prefetch 패턴 사용 (섹션 5 참고) |
 | **observer 필수** | MobX 상태 구독을 위해 감싸기 |
-| **핸들러 네이밍** | `on[Event][UI]` 형태 (onClickLoginButton) |
+| **MobX 상태 관리** | `useLocalObservable`로 로컬 상태 관리 |
+| **Orval API 사용** | React Query hook (Orval 생성) 사용 |
 | **URL 기반 상태** | 페이지 상태는 queryParams/pathParams로 관리 |
+| **PageSurface 필수** | 페이지 콘텐츠는 PageSurface로 감싸기 |
 
-### ❌ Don't
+### ❌ Don't (금지)
 
 | 금지 사항 | 이유 |
 |----------|------|
-| Page 내부에서 API 호출 | 통합 훅에서 처리 |
-| Layout 컴포넌트 사용 | Next.js layout.tsx에서만 사용 |
-| handlers 객체로 묶기 | 개별 props로 전달 |
-| packages/ui에 hooks 폴더 | apps에서만 생성 |
+| useState 사용 | MobX useLocalObservable 사용 |
 | useCallback/useMemo | React 19 + MobX 자동 최적화 |
-| 페이지 레벨 _stores 폴더 | URL 기반 상태 관리 사용 |
-| 커스텀 className | UI/Input에서만 허용 |
+| 직접 axios/fetch 호출 | @cocrepo/api 사용 |
+| 인라인 함수 선언 | 함수는 컴포넌트 외부 또는 훅에서 정의 |
+| 커스텀 className (Page/Feature) | VStack/HStack 등 UI 컴포넌트 사용 |
+
+### 핸들러 네이밍 규칙
+
+| 위치 | 패턴 | 예시 |
+|------|------|------|
+| Page 컴포넌트 | `on[Event][UI]` | `onClickLoginButton`, `onChangeEmail` |
+| 일반 컴포넌트 | `handle[Action]` | `handleSubmit`, `handleDelete` |
 
 ---
 
-## 4. 프로세스
+## 3. 폴더 구조 (Prefetch 필수)
 
-### 4.1 아키텍처 이해
+```
+apps/admin/app/[route]/
+├── page.tsx          # 서버 컴포넌트 (Prefetch + HydrationBoundary)
+├── _client.tsx       # 클라이언트 컴포넌트
+├── _prefetch.ts      # Prefetch 설정
+└── hooks/            # 통합 훅 (필요 시)
+    └── use[Route][Name]Page.ts
+```
+
+### 일반 페이지 추가 구조
+
+```
+packages/ui/src/components/page/
+├── Login/
+│   ├── LoginPage.tsx      # Pure UI
+│   └── index.ts           # export (hooks 없음!)
+└── index.ts               # barrel export
+```
+
+---
+
+## 4. 일반 페이지
+
+### 4.1 아키텍처
 
 ```
 ┌─────────────────────────────────────────────────────────────┐
@@ -91,45 +105,16 @@ tools: Read, Write, Grep, Bash
 │                      apps/admin                              │
 │  ┌─────────────────────────────────────────────────────┐    │
 │  │  app/auth/login/                                     │    │
-│  │  ├── page.tsx         ← Page + Hook 연결            │    │
+│  │  ├── page.tsx         ← 서버 컴포넌트 (Prefetch)    │    │
+│  │  ├── _client.tsx      ← Page + Hook 연결            │    │
+│  │  ├── _prefetch.ts     ← Prefetch 설정               │    │
 │  │  └── hooks/                                          │    │
 │  │      └── useAuthLoginPage.ts  ← 비즈니스 로직       │    │
 │  └─────────────────────────────────────────────────────┘    │
 └─────────────────────────────────────────────────────────────┘
 ```
 
-### 4.2 파일 구조 생성
-
-```
-packages/ui/src/components/page/
-├── Login/
-│   ├── LoginPage.tsx      # Pure UI
-│   └── index.ts           # export (hooks 없음!)
-└── index.ts               # barrel export
-
-apps/admin/app/
-├── auth/
-│   └── login/
-│       ├── page.tsx       # Next.js 라우트
-│       └── hooks/
-│           ├── useAuthLoginPage.ts
-│           └── index.ts
-```
-
-### 4.3 네이밍 규칙
-
-| 항목 | 규칙 | 예시 |
-|------|------|------|
-| Page 컴포넌트 | `[Name]Page` | `LoginPage`, `DashboardPage` |
-| 통합 훅 | `use[Route][Name]Page` | `useAuthLoginPage` |
-| 핸들러 | `on[Event][UI]` | `onClickLoginButton`, `onChangeEmail` |
-| State 타입 | 파일 내 `State` | `State` (접두어 불필요) |
-
----
-
-## 5. 템플릿
-
-### 5.1 Pure UI Page 컴포넌트
+### 4.2 Pure UI Page 컴포넌트
 
 ```tsx
 // packages/ui/src/components/page/Login/LoginPage.tsx
@@ -171,15 +156,7 @@ export const LoginPage = observer(
 );
 ```
 
-### 5.2 Page barrel export
-
-```ts
-// packages/ui/src/components/page/Login/index.ts
-export { LoginPage } from "./LoginPage";
-export type { LoginPageProps, State as LoginPageState } from "./LoginPage";
-```
-
-### 5.3 통합 훅
+### 4.3 통합 훅
 
 ```tsx
 // apps/admin/app/auth/login/hooks/useAuthLoginPage.ts
@@ -226,262 +203,38 @@ export const useAuthLoginPage = () => {
 };
 ```
 
-### 5.4 훅 barrel export
+### 4.4 일반 페이지 체크리스트
 
-```ts
-// apps/admin/app/auth/login/hooks/index.ts
-export { useAuthLoginPage } from "./useAuthLoginPage";
-```
-
-### 5.5 Next.js page.tsx
-
-```tsx
-// apps/admin/app/auth/login/page.tsx
-"use client";
-
-import { LoginPage } from "@cocrepo/ui";
-import { useAuthLoginPage } from "./hooks";
-
-export default function LoginPageRoute() {
-  const props = useAuthLoginPage();
-
-  return <LoginPage {...props} />;
-}
-```
-
-### 5.6 URL 기반 상태 관리
-
-```tsx
-// ✅ 올바른 패턴 - URL 기반 상태 관리
-import { useSearchParams, useParams, useRouter } from "next/navigation";
-
-export const useUsersPage = () => {
-  const searchParams = useSearchParams();
-  const params = useParams();
-  const router = useRouter();
-
-  // URL에서 상태 읽기
-  const search = searchParams.get("search") ?? "";
-  const status = searchParams.get("status") ?? "all";
-  const page = Number(searchParams.get("page") ?? 1);
-
-  // URL 상태 변경
-  const setSearch = (value: string) => {
-    const params = new URLSearchParams(searchParams);
-    params.set("search", value);
-    params.set("page", "1");
-    router.push(`?${params.toString()}`);
-  };
-
-  return { search, status, page, setSearch };
-};
-```
-
----
-
-## 6. 체크리스트
-
-### Page 컴포넌트 (packages/ui)
-
+**Pure UI Page (packages/ui)**
 - [ ] `packages/ui/src/components/page/[Name]/` 에 생성
 - [ ] observer로 감싸기
 - [ ] State, Props 인터페이스 정의
 - [ ] 모든 상태/핸들러는 props로 받음
-- [ ] Layout 컴포넌트 사용하지 않음
 - [ ] 커스텀 className 사용하지 않음
 - [ ] hooks 폴더 없음
 
-### 통합 훅 (apps/*)
-
+**통합 훅 (apps/\*)**
 - [ ] `apps/*/app/[route]/hooks/` 에 생성
 - [ ] `use[Route][Name]Page` 네이밍
 - [ ] useLocalObservable로 상태 관리
-- [ ] Orval 생성 API 사용 (직접 axios 금지)
 - [ ] 핸들러 네이밍 `on[Event][UI]`
 
-### page.tsx (apps/*)
-
-- [ ] "use client" 선언
-- [ ] 훅 호출 -> Page에 props 전달
-- [ ] 한 눈에 어떤 props가 전달되는지 파악 가능
-
 ---
 
-## 7. 연관 에이전트
+## 5. 서버 사이드 Prefetch (필수)
 
-### 컴포넌트 계층 구조
+**모든 페이지는 반드시 서버 사이드 Prefetch 패턴을 사용해야 합니다.**
 
-```
-Pure UI → Widget → Feature → Page
-(최소 단위)   (UI 조합)   (비즈니스 로직)   (화면)
-```
+### 5.1 페이지 유형별 Prefetch 데이터
 
-### 선행 에이전트
+| 페이지 유형 | Prefetch 데이터 | 예시 |
+|------------|----------------|------|
+| 데이터 목록 | 목록 데이터, 필터 옵션 | Dashboard, UserList |
+| 상세 보기 | 상세 데이터 | UserDetail, PostDetail |
+| 폼 입력 | 선택 옵션 데이터 (역할 목록 등) | UserCreate, UserEdit |
+| 순수 입력 폼 | 빈 쿼리라도 구조 유지 | Login, Register |
 
-| 에이전트 | 관계 |
-|----------|------|
-| fe-ui-component-builder | Page가 사용할 Pure UI 컴포넌트 생성 |
-| fe-widget-builder | Page가 사용할 Widget 컴포넌트 생성 |
-| **fe-feature-builder** | Page가 사용할 Feature 컴포넌트 생성 |
-| fe-store-builder | 통합 훅에서 사용할 Store 생성 |
-
-### 후행 에이전트
-
-| 에이전트 | 관계 |
-|----------|------|
-| **fe-reviewer** | 생성된 Page 규칙 검증 (필수) |
-
-### 관련 에이전트
-
-| 에이전트 | 관계 |
-|----------|------|
-| route-designer | 페이지 라우팅 경로 설계 |
-| controller-builder | 통합 훅에서 호출할 API 생성 |
-
----
-
-## 8. 프로젝트별 참고사항
-
-### 왜 이렇게 분리하나요?
-
-| 장점 | 설명 |
-|------|------|
-| **재사용성** | 같은 Page를 admin, coin 등 여러 앱에서 사용 가능 |
-| **테스트 용이** | Pure UI는 props만 주면 테스트 가능 |
-| **관심사 분리** | UI는 packages/ui, 로직은 apps에서 관리 |
-
-### Layout 컴포넌트 사용 위치
-
-```tsx
-// ❌ 금지 - Page 내부에 Layout 사용
-export const LoginPage = observer(({ state, ...handlers }: LoginPageProps) => {
-  return (
-    <AuthLayout>           {/* ← Layout이 Page 안에 있으면 안 됨! */}
-      <Input ... />
-      <Button ... />
-    </AuthLayout>
-  );
-});
-
-// ✅ 올바른 패턴 - Page는 순수 UI만 반환
-export const LoginPage = observer(({ state, ...handlers }: LoginPageProps) => {
-  return (
-    <VStack>               {/* ← 순수 UI 컴포넌트만 사용 */}
-      <Input ... />
-      <Button ... />
-    </VStack>
-  );
-});
-
-// ✅ Layout은 Next.js layout.tsx에서 사용
-// apps/admin/app/auth/layout.tsx
-export default function AuthLayout({ children }: { children: React.ReactNode }) {
-  return (
-    <AuthLayoutComponent>   {/* ← Layout은 여기서만 사용 */}
-      {children}
-    </AuthLayoutComponent>
-  );
-}
-```
-
-### 스타일링 규칙
-
-| 허용 | 금지 |
-|------|------|
-| HeroUI 컴포넌트 props (size, color, variant 등) | 직접 Tailwind className 작성 |
-| `<VStack>`, `<HStack>`, `<Spacer />` | `className="flex gap-2 mt-4"` |
-| 기존 UI 컴포넌트 조합 | inline style (`style={{...}}`) |
-
-### 페이지 상태 관리 원칙
-
-| 상태 유형 | 관리 방법 | 예시 |
-|----------|----------|------|
-| 필터/검색 | `queryParams` | `?search=kim&status=active` |
-| 리소스 식별 | `pathParams` | `/users/123` |
-| 임시 전달 데이터 | `router.push({ state })` | 이전 페이지에서 전달 |
-
-**이유:**
-- URL 상태는 브라우저 히스토리와 동기화됨 (뒤로가기 지원)
-- 북마크/공유 가능
-- 새로고침 시에도 상태 유지
-- 전역 Store 오염 방지
-
-### Surface 시스템 (필수)
-
-**페이지 콘텐츠는 반드시 Surface 컴포넌트로 감싸야 합니다.**
-
-#### 엘리베이션 레벨
-
-| 레벨 | 이름 | 용도 |
-|------|------|------|
-| 0 | `flat` | 페이지 배경 |
-| 1 | `raised` | PageSurface 기본값 |
-| 2 | `elevated` | SectionSurface, 카드, DataGrid |
-| 3 | `floating` | 드롭다운, 팝오버 |
-| 4 | `overlay` | 모달, 다이얼로그 |
-
-#### 사용 패턴
-
-```tsx
-// ✅ 올바른 패턴 - Surface로 감싸기
-import { PageSurface, SectionSurface } from "@cocrepo/ui";
-
-return (
-  <PageSurface
-    title="회원 목록"
-    description="시스템에 등록된 회원을 관리합니다."
-    actions={<Button>회원 등록</Button>}
-  >
-    <div className="space-y-4">
-      <SectionSurface padding="none">
-        <DataGrid ... />
-      </SectionSurface>
-      <Pagination ... />
-    </div>
-  </PageSurface>
-);
-
-// ❌ 금지 - Surface 없이 직접 렌더링
-return (
-  <div className="space-y-4">
-    <DataGrid ... />
-    <Pagination ... />
-  </div>
-);
-```
-
-#### 중첩 규칙
-
-- 최대 2단계 중첩: `PageSurface` > `SectionSurface`
-- 내부 Surface는 외부보다 높은 elevation 사용
-- 동일 elevation 중첩 금지
-
----
-
-## 9. 서버 사이드 데이터 Prefetch
-
-데이터를 미리 로드하여 초기 로딩 속도를 개선하는 패턴입니다.
-
-### 언제 사용하나요?
-
-| 페이지 유형 | 패턴 | 예시 |
-|------------|------|------|
-| 데이터 목록 | ✅ 서버 Prefetch | Dashboard, UserList |
-| 상세 보기 | ✅ 서버 Prefetch | UserDetail, PostDetail |
-| 폼 입력 | ❌ 클라이언트 전용 | Login, Register |
-
-### 폴더 구조 (Prefetch 버전)
-
-```
-apps/admin/app/[route]/
-├── page.tsx                     # 서버 컴포넌트 (prefetch + HydrationBoundary)
-├── _client.tsx                  # 클라이언트 컴포넌트
-├── _prefetch.ts                 # prefetch 설정
-└── hooks/
-    └── use[Route][Name]Page.ts
-```
-
-### 서버 컴포넌트 page.tsx
+### 5.2 서버 컴포넌트 (page.tsx)
 
 ```tsx
 // page.tsx - 서버 컴포넌트
@@ -508,7 +261,7 @@ export default async function UsersPage() {
 }
 ```
 
-### Prefetch 설정 (_prefetch.ts)
+### 5.3 Prefetch 설정 (_prefetch.ts)
 
 ```tsx
 // _prefetch.ts
@@ -531,7 +284,7 @@ export async function prefetchUsersData(
 }
 ```
 
-### 클라이언트 컴포넌트 (_client.tsx)
+### 5.4 클라이언트 컴포넌트 (_client.tsx)
 
 ```tsx
 // _client.tsx
@@ -560,17 +313,388 @@ function UsersPageClient({ initialPage }: { initialPage: number }) {
 export default observer(UsersPageClient);
 ```
 
-### 상태 관리 역할 분리
-
-| 상태 유형 | 관리 도구 | 예시 | Prefetch 대상 |
-|----------|----------|------|--------------|
-| 서버 데이터 | React Query | 사용자 목록, API 응답 | ✅ Yes |
-| 로컬 UI 상태 | MobX | 폼 입력, 필터, 모달 | ❌ No |
-
-### 체크리스트 (Prefetch 버전)
+### 5.5 Prefetch 체크리스트
 
 - [ ] page.tsx가 서버 컴포넌트 ("use client" 없음)
 - [ ] HydrationBoundary로 클라이언트 컴포넌트 래핑
 - [ ] withServerCookies로 인증 쿠키 전달
 - [ ] Orval 생성 prefetch 함수 사용 (prefetchGetXXXQuery)
 - [ ] 클라이언트에서 isLoading 제거 (prefetch로 데이터 보장)
+
+---
+
+## 6. 목록 페이지 (DataGrid/Table)
+
+### 6.1 언제 사용하나요?
+
+| 상황 | 테이블 유형 |
+|------|------------|
+| 데이터 50개 미만, 단순 CRUD | Simple Table (HeroUI Table) |
+| 대량 데이터, 페이지네이션 필요 | DataGrid 페이지 |
+| 행 선택, 대량 작업 필요 | DataGrid 페이지 |
+
+### 6.2 Cell 컴포넌트 재사용 규칙 (Critical)
+
+**테이블 셀 렌더링 로직은 반드시 재사용 가능한 Cell 컴포넌트로 분리합니다.**
+
+```
+packages/ui/src/components/ui/data-display/cells/
+├── index.ts
+├── BooleanCell/       # true/false → O/X 표시
+├── DateCell/          # 날짜 포맷팅
+├── DateTimeCell/      # 날짜+시간 포맷팅
+├── DefaultCell/       # 기본 텍스트 (null → "-")
+├── NumberCell/        # 숫자 포맷팅
+├── StatusChipCell/    # 상태 Chip
+├── RoleChipCell/      # 역할 Chip
+└── RowActionsCell/    # 액션 버튼 그룹
+```
+
+### ❌ 잘못된 예시 (인라인 선언)
+
+```tsx
+// ❌ 페이지 내에서 포맷터/렌더러 직접 선언
+const formatDate = (date: Date | string | null): string => {
+  if (!date) return "-";
+  return new Date(date).toLocaleDateString("ko-KR");
+};
+
+columnHelper.accessor("createdAt", {
+  cell: ({ getValue }) => formatDate(getValue()),  // ❌
+});
+```
+
+### ✅ 올바른 예시 (Cell 컴포넌트 사용)
+
+```tsx
+// ✅ @cocrepo/ui의 Cell 컴포넌트 import
+import { DateCell, StatusChipCell } from "@cocrepo/ui";
+
+columnHelper.accessor("createdAt", {
+  cell: ({ getValue }) => <DateCell value={getValue()} />,  // ✅
+});
+
+columnHelper.display({
+  id: "status",
+  cell: ({ row }) => <StatusChipCell status={row.original.status} />,  // ✅
+});
+```
+
+### 6.3 목록 페이지 템플릿
+
+```tsx
+// apps/admin/app/(admin)/[entities]/_client.tsx
+"use client";
+
+import { useDeleteEntity, useGetEntities } from "@cocrepo/api";
+import { DateCell, StatusChipCell, RowActionsCell } from "@cocrepo/ui";
+import { ConfirmModal, PageSurface, SectionSurface } from "@cocrepo/ui/widgets";
+import {
+  Button,
+  Pagination,
+  Table,
+  TableBody,
+  TableCell,
+  TableColumn,
+  TableHeader,
+  TableRow,
+} from "@heroui/react";
+import { Plus } from "lucide-react";
+import { observer, useLocalObservable } from "mobx-react-lite";
+import Link from "next/link";
+import { useRouter, useSearchParams } from "next/navigation";
+
+interface EntityItem {
+  id: string;
+  name: string;
+  status: string;
+  createdAt: string;
+}
+
+interface Props {
+  initialPage: number;
+}
+
+function EntitiesPageClient({ initialPage }: Props) {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+
+  const state = useLocalObservable(() => ({
+    page: initialPage,
+    limit: 20,
+    deleteModal: {
+      isOpen: false,
+      target: null as EntityItem | null,
+    },
+  }));
+
+  // 데이터 조회 (prefetch로 초기 데이터 보장)
+  const { data: response, refetch } = useGetEntities({
+    page: state.page,
+    limit: state.limit,
+  });
+  const items = (response?.data ?? []) as EntityItem[];
+  const meta = response?.meta;
+  const totalPages = meta?.totalPages ?? 1;
+
+  const deleteMutation = useDeleteEntity();
+
+  const handlePageChange = (page: number) => {
+    state.page = page;
+    const params = new URLSearchParams(searchParams.toString());
+    params.set("page", String(page));
+    router.replace(`?${params.toString()}`);
+  };
+
+  const handleOpenDeleteModal = (item: EntityItem) => {
+    state.deleteModal.target = item;
+    state.deleteModal.isOpen = true;
+  };
+
+  const handleCloseDeleteModal = () => {
+    state.deleteModal.isOpen = false;
+    state.deleteModal.target = null;
+  };
+
+  const handleDelete = async () => {
+    const item = state.deleteModal.target;
+    if (!item) return;
+
+    try {
+      await deleteMutation.mutateAsync({ id: item.id });
+      handleCloseDeleteModal();
+      refetch();
+    } catch (err) {
+      console.error("삭제 실패:", err);
+    }
+  };
+
+  return (
+    <PageSurface
+      title="Entity 목록"
+      description="시스템에 등록된 Entity를 관리합니다."
+      actions={
+        <Button
+          as={Link}
+          href="/entities/new"
+          color="primary"
+          startContent={<Plus className="h-4 w-4" />}
+        >
+          Entity 추가
+        </Button>
+      }
+    >
+      <SectionSurface padding="none">
+        <Table aria-label="Entity 목록">
+          <TableHeader>
+            <TableColumn>이름</TableColumn>
+            <TableColumn align="center">상태</TableColumn>
+            <TableColumn align="center">생성일</TableColumn>
+            <TableColumn align="center">작업</TableColumn>
+          </TableHeader>
+          <TableBody items={items} emptyContent="등록된 Entity가 없습니다.">
+            {(item) => (
+              <TableRow key={item.id}>
+                <TableCell>{item.name}</TableCell>
+                <TableCell>
+                  <StatusChipCell status={item.status} />
+                </TableCell>
+                <TableCell>
+                  <DateCell value={item.createdAt} />
+                </TableCell>
+                <TableCell>
+                  <RowActionsCell
+                    item={item}
+                    basePath="/entities"
+                    onDelete={handleOpenDeleteModal}
+                  />
+                </TableCell>
+              </TableRow>
+            )}
+          </TableBody>
+        </Table>
+      </SectionSurface>
+
+      {totalPages > 1 && (
+        <div className="flex justify-center mt-4">
+          <Pagination
+            total={totalPages}
+            page={state.page}
+            onChange={handlePageChange}
+            showControls
+          />
+        </div>
+      )}
+
+      <ConfirmModal
+        isOpen={state.deleteModal.isOpen}
+        onClose={handleCloseDeleteModal}
+        onConfirm={handleDelete}
+        title="Entity 삭제"
+        message={
+          state.deleteModal.target ? (
+            <>
+              <strong>{state.deleteModal.target.name}</strong>을(를) 삭제하시겠습니까?
+            </>
+          ) : null
+        }
+        confirmText="삭제"
+        confirmColor="danger"
+        loading={deleteMutation.isPending}
+      />
+    </PageSurface>
+  );
+}
+
+export default observer(EntitiesPageClient);
+```
+
+### 6.4 컬럼 패턴
+
+```tsx
+import { DateCell, DefaultCell, NumberCell, BooleanCell, StatusChipCell, RoleChipCell, RowActionsCell } from "@cocrepo/ui";
+
+// 날짜
+<DateCell value={item.createdAt} />
+
+// 기본 텍스트 (null → "-")
+<DefaultCell value={item.description} />
+
+// 숫자
+<NumberCell value={item.count} />
+
+// Boolean (O/X)
+<BooleanCell value={item.isActive} />
+
+// 상태 Chip
+<StatusChipCell status={item.status} />
+
+// 역할 Chip
+<RoleChipCell role={item.role} />
+
+// 액션 버튼
+<RowActionsCell item={item} basePath="/users" onDelete={handleOpenDeleteModal} />
+```
+
+### 6.5 목록 페이지 체크리스트
+
+- [ ] **Prefetch 구조** (page.tsx + _client.tsx + _prefetch.ts)
+- [ ] page.tsx에 `"use client"` 없음 (서버 컴포넌트)
+- [ ] _client.tsx에 `"use client"` 선언
+- [ ] `observer` 래핑
+- [ ] `useLocalObservable` 사용
+- [ ] PageSurface + SectionSurface 사용
+- [ ] **Cell 컴포넌트 사용** (인라인 포맷터 금지)
+- [ ] 삭제 시 ConfirmModal 사용
+- [ ] 빈 상태 메시지 설정
+
+---
+
+## 7. Surface 시스템
+
+**페이지 콘텐츠는 반드시 Surface 컴포넌트로 감싸야 합니다.**
+
+### 엘리베이션 레벨
+
+| 레벨 | 이름 | 용도 |
+|------|------|------|
+| 0 | `flat` | 페이지 배경 |
+| 1 | `raised` | PageSurface 기본값 |
+| 2 | `elevated` | SectionSurface, 카드, DataGrid |
+| 3 | `floating` | 드롭다운, 팝오버 |
+| 4 | `overlay` | 모달, 다이얼로그 |
+
+### 사용 패턴
+
+```tsx
+import { PageSurface, SectionSurface } from "@cocrepo/ui";
+
+return (
+  <PageSurface
+    title="회원 목록"
+    description="시스템에 등록된 회원을 관리합니다."
+    actions={<Button>회원 등록</Button>}
+  >
+    <SectionSurface padding="none">
+      <DataGrid ... />
+    </SectionSurface>
+  </PageSurface>
+);
+```
+
+### 중첩 규칙
+
+- 최대 2단계 중첩: `PageSurface` > `SectionSurface`
+- 내부 Surface는 외부보다 높은 elevation 사용
+- 동일 elevation 중첩 금지
+
+---
+
+## 8. URL 기반 상태 관리
+
+```tsx
+import { useSearchParams, useParams, useRouter } from "next/navigation";
+
+export const useUsersPage = () => {
+  const searchParams = useSearchParams();
+  const router = useRouter();
+
+  // URL에서 상태 읽기
+  const search = searchParams.get("search") ?? "";
+  const status = searchParams.get("status") ?? "all";
+  const page = Number(searchParams.get("page") ?? 1);
+
+  // URL 상태 변경
+  const setSearch = (value: string) => {
+    const params = new URLSearchParams(searchParams);
+    params.set("search", value);
+    params.set("page", "1");
+    router.push(`?${params.toString()}`);
+  };
+
+  return { search, status, page, setSearch };
+};
+```
+
+**장점:**
+- 브라우저 히스토리와 동기화 (뒤로가기 지원)
+- 북마크/공유 가능
+- 새로고침 시에도 상태 유지
+
+---
+
+## 9. 연관 에이전트
+
+### 컴포넌트 계층 구조
+
+```
+Pure UI → Widget → Feature → Page
+(최소 단위)   (UI 조합)   (비즈니스 로직)   (화면)
+```
+
+### 선행 에이전트
+
+| 에이전트 | 관계 |
+|----------|------|
+| ui-component-builder | Page가 사용할 Pure UI/Cell 컴포넌트 생성 |
+| widget-builder | Page가 사용할 Widget 컴포넌트 생성 |
+| feature-builder | Page가 사용할 Feature 컴포넌트 생성 |
+| store-builder | 통합 훅에서 사용할 Store 생성 |
+| controller-builder | API 엔드포인트 생성 |
+
+### 후행 에이전트
+
+| 에이전트 | 관계 |
+|----------|------|
+| **fe-reviewer** | 생성된 Page 규칙 검증 (필수) |
+
+---
+
+## 10. 참고 파일
+
+| 유형 | 파일 경로 |
+|------|----------|
+| Simple Table 예시 | `apps/admin/app/(admin)/roles/page.tsx` |
+| Pagination 예시 | `apps/admin/app/(admin)/users/page.tsx` |
+| ConfirmModal | `packages/ui/src/components/widgets/common/ConfirmModal` |
+| **Cell 컴포넌트 폴더** | `packages/ui/src/components/ui/data-display/cells/` |

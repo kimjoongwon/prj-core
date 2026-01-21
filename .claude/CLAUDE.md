@@ -160,6 +160,26 @@ function UsersPage() {
 - 페이지별 title, description, actions는 각 Page 컴포넌트에서 처리
 - 하위 페이지(상세/수정/등록)가 다른 타이틀을 가질 때 유연하게 대응 가능
 
+### 페이지 개발 규칙 (Critical)
+
+**모든 페이지는 반드시 서버 사이드 Prefetch 패턴을 사용해야 합니다.**
+
+```
+apps/admin/app/[route]/
+├── page.tsx          # 서버 컴포넌트 (Prefetch + HydrationBoundary)
+├── _client.tsx       # 클라이언트 컴포넌트
+├── _prefetch.ts      # Prefetch 설정
+└── hooks/            # 통합 훅 (필요 시)
+```
+
+| 파일 | 역할 |
+|------|------|
+| `page.tsx` | 서버 컴포넌트 - `"use client"` 없음, Prefetch 실행 |
+| `_client.tsx` | 클라이언트 컴포넌트 - `"use client"` 선언, UI 렌더링 |
+| `_prefetch.ts` | Orval 생성 `prefetchGetXXXQuery` 함수 사용 |
+
+**상세 템플릿은 `fe-page-builder` 에이전트의 섹션 9를 참고하세요.**
+
 ### 컴포넌트 작성
 
 - ui 컴포넌트를 만들 때는 mobx를 사용합니다

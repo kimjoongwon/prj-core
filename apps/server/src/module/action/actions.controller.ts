@@ -43,7 +43,7 @@ const ActionsErrorMessages = {
 } as const;
 
 @ApiTags("ACTIONS")
-@Controller("actions")
+@Controller()
 export class ActionsController {
   constructor(private readonly actionsService: ActionsService) {}
 

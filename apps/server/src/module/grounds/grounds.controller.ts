@@ -13,7 +13,7 @@ import { ApiOperation, ApiTags } from "@nestjs/swagger";
 import { ClsService } from "nestjs-cls";
 
 @ApiTags("GROUNDS")
-@Controller("grounds")
+@Controller()
 export class GroundsController {
 	constructor(
 		private readonly groundsService: GroundsService,

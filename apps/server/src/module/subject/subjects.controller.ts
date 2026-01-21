@@ -11,7 +11,7 @@ import { ApiOperation, ApiParam, ApiQuery, ApiTags } from "@nestjs/swagger";
 import { plainToInstance } from "class-transformer";
 
 @ApiTags("SUBJECTS")
-@Controller("subjects")
+@Controller()
 export class SubjectsController {
 	constructor(private readonly subjectsService: SubjectsService) {}
 
