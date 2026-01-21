@@ -1,7 +1,6 @@
 "use client";
 
-import { customInstance } from "@cocrepo/api";
-import type { UserDetailResponseDto, UserDto } from "@cocrepo/dto";
+import { useCreateUser, useGetUserById, useUpdateUser } from "@cocrepo/api";
 import { Card, CardBody, CardHeader } from "@heroui/react";
 import { observer, useLocalObservable } from "mobx-react-lite";
 import { useRouter } from "next/navigation";
@@ -37,107 +36,111 @@ export const UserForm = observer(
 		const router = useRouter();
 
 		const state = useLocalObservable(() => ({
-			isLoading: false,
-			isSubmitting: false,
 			error: null as string | null,
 			roles: [] as RoleOption[],
-			initialData: undefined as Partial<UserFormData> | undefined,
 		}));
 
-		/**
-		 * 역할 목록 로드
-		 */
-		const loadRoles = async () => {
-			try {
-				// TODO: 역할 목록 API 호출
-				// 임시 더미 데이터
-				state.roles = [
-					{ id: "role-user", name: "USER", displayName: "일반 사용자" },
-					{ id: "role-manager", name: "MANAGER", displayName: "매니저" },
-				];
-			} catch (err) {
-				console.error("역할 목록 로드 실패:", err);
-			}
-		};
+		// 회원 정보 조회 (수정 모드일 때만)
+		const {
+			data: userResponse,
+			isLoading,
+			error: fetchError,
+		} = useGetUserById(userId ?? "", {
+			query: {
+				enabled: mode === "edit" && !!userId,
+			},
+		});
+		const user = userResponse?.data;
 
-		/**
-		 * 회원 정보 로드 (수정 시)
-		 */
-		const loadUser = async () => {
-			if (mode !== "edit" || !userId) return;
-
-			state.isLoading = true;
-			try {
-				const response = await customInstance<{ data: UserDetailResponseDto }>({
-					url: `/api/v1/users/${userId}`,
-					method: "GET",
-				});
-
-				const user = response.data;
-				state.initialData = {
+		// 초기 데이터 설정
+		const initialData: Partial<UserFormData> | undefined = user
+			? {
 					name: user.name,
 					email: user.email,
 					phone: user.phone,
 					roleId: user.tenants?.[0]?.roleId || "",
-				};
-			} catch (err) {
-				state.error =
-					err instanceof Error
-						? err.message
-						: "회원 정보를 불러오는데 실패했습니다";
-			} finally {
-				state.isLoading = false;
-			}
+				}
+			: undefined;
+
+		// 회원 등록 mutation
+		const { mutate: createUser, isPending: isCreating } = useCreateUser();
+
+		// 회원 수정 mutation
+		const { mutate: updateUser, isPending: isUpdating } = useUpdateUser();
+
+		const isSubmitting = isCreating || isUpdating;
+
+		/**
+		 * 역할 목록 로드
+		 */
+		const loadRoles = () => {
+			// TODO: 역할 목록 API 호출
+			// 임시 더미 데이터
+			state.roles = [
+				{ id: "role-user", name: "USER", displayName: "일반 사용자" },
+				{ id: "role-manager", name: "MANAGER", displayName: "매니저" },
+			];
 		};
 
 		// 초기 데이터 로드
 		useEffect(() => {
 			loadRoles();
-			loadUser();
 		}, []);
+
+		// 페치 에러 처리
+		useEffect(() => {
+			if (fetchError) {
+				state.error = fetchError.message || "회원 정보를 불러오는데 실패했습니다";
+			}
+		}, [fetchError]);
 
 		/**
 		 * 폼 제출
 		 */
-		const handleSubmit = async (data: UserFormData) => {
-			state.isSubmitting = true;
+		const handleSubmit = (data: UserFormData) => {
 			state.error = null;
 
-			try {
-				if (mode === "create") {
-					// 등록 API 호출
-					await customInstance<{ data: UserDto }>({
-						url: "/api/v1/users",
-						method: "POST",
+			if (mode === "create") {
+				// 등록 API 호출
+				createUser(
+					{
 						data: {
 							name: data.name,
 							email: data.email,
 							phone: data.phone,
-							password: data.password,
+							password: data.password!,
 							roleId: data.roleId,
 						},
-					});
-				} else {
-					// 수정 API 호출
-					await customInstance<{ data: UserDto }>({
-						url: `/api/v1/users/${userId}`,
-						method: "PATCH",
+					},
+					{
+						onSuccess: () => {
+							router.push(redirectPath as never);
+						},
+						onError: (err) => {
+							state.error = err.message || "저장에 실패했습니다";
+						},
+					},
+				);
+			} else {
+				// 수정 API 호출
+				updateUser(
+					{
+						id: userId!,
 						data: {
 							name: data.name,
 							email: data.email,
 							phone: data.phone,
 						},
-					});
-				}
-
-				// 성공 시 목록으로 이동
-				router.push(redirectPath as never);
-			} catch (err) {
-				const message =
-					err instanceof Error ? err.message : "저장에 실패했습니다";
-				state.error = message;
-			} finally {
-				state.isSubmitting = false;
+					},
+					{
+						onSuccess: () => {
+							router.push(redirectPath as never);
+						},
+						onError: (err) => {
+							state.error = err.message || "저장에 실패했습니다";
+						},
+					},
+				);
 			}
 		};
 
@@ -148,7 +151,7 @@ export const UserForm = observer(
 			router.back();
 		};
 
-		if (state.isLoading) {
+		if (isLoading) {
 			return (
 				<Card classNames={{ base: "bg-content1" }}>
 					<CardBody>
@@ -177,11 +180,11 @@ export const UserForm = observer(
 
 					<UserFormWidget
 						mode={mode}
-						initialData={state.initialData}
+						initialData={initialData}
 						roles={state.roles}
 						onSubmit={handleSubmit}
 						onCancel={handleCancel}
-						isSubmitting={state.isSubmitting}
+						isSubmitting={isSubmitting}
 					/>
 				</CardBody>
 			</Card>

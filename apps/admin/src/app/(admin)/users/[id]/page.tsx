@@ -1,7 +1,6 @@
 "use client";
 
-import { customInstance } from "@cocrepo/api";
-import type { UserDetailResponseDto } from "@cocrepo/dto";
+import { useDeleteUser, useGetUserById } from "@cocrepo/api";
 import { UserDetailWidget } from "@cocrepo/ui";
 import {
 	Button,
@@ -15,7 +14,6 @@ import { ArrowLeft } from "lucide-react";
 import { observer, useLocalObservable } from "mobx-react-lite";
 import type { Route } from "next";
 import { useParams, useRouter } from "next/navigation";
-import { useEffect } from "react";
 
 /**
  * 회원 상세 페이지
@@ -26,40 +24,15 @@ function UserDetailPage() {
 	const userId = params.id as string;
 
 	const state = useLocalObservable(() => ({
-		user: null as UserDetailResponseDto | null,
-		isLoading: true,
-		error: null as string | null,
 		isDeleteModalOpen: false,
-		isDeleting: false,
 	}));
 
-	/**
-	 * 회원 정보 로드
-	 */
-	const loadUser = async () => {
-		state.isLoading = true;
-		state.error = null;
+	// 회원 상세 조회 - Orval 생성 훅 사용
+	const { data: userResponse, isLoading, error } = useGetUserById(userId);
+	const user = userResponse?.data;
 
-		try {
-			const response = await customInstance<{ data: UserDetailResponseDto }>({
-				url: `/api/v1/users/${userId}`,
-				method: "GET",
-			});
-
-			state.user = response.data;
-		} catch (err) {
-			state.error =
-				err instanceof Error
-					? err.message
-					: "회원 정보를 불러오는데 실패했습니다";
-		} finally {
-			state.isLoading = false;
-		}
-	};
-
-	useEffect(() => {
-		loadUser();
-	}, [userId]);
+	// 회원 삭제 mutation
+	const { mutate: deleteUser, isPending: isDeleting } = useDeleteUser();
 
 	/**
 	 * 뒤로가기
@@ -85,23 +58,21 @@ function UserDetailPage() {
 	/**
 	 * 삭제 확인
 	 */
-	const handleDeleteConfirm = async () => {
-		state.isDeleting = true;
-
-		try {
-			await customInstance({
-				url: `/api/v1/users/${userId}`,
-				method: "DELETE",
-			});
-
-			// 삭제 성공 시 목록으로 이동
-			router.push("/users" as Route);
-		} catch {
-			alert("회원 삭제에 실패했습니다");
-		} finally {
-			state.isDeleting = false;
-			state.isDeleteModalOpen = false;
-		}
+	const handleDeleteConfirm = () => {
+		deleteUser(
+			{ id: userId },
+			{
+				onSuccess: () => {
+					router.push("/users" as Route);
+				},
+				onError: () => {
+					alert("회원 삭제에 실패했습니다");
+				},
+				onSettled: () => {
+					state.isDeleteModalOpen = false;
+				},
+			},
+		);
 	};
 
 	/**
@@ -111,7 +82,7 @@ function UserDetailPage() {
 		state.isDeleteModalOpen = false;
 	};
 
-	if (state.isLoading) {
+	if (isLoading) {
 		return (
 			<div className="flex justify-center py-16">
 				<p className="text-default-500">로딩 중...</p>
@@ -119,7 +90,7 @@ function UserDetailPage() {
 		);
 	}
 
-	if (state.error || !state.user) {
+	if (error || !user) {
 		return (
 			<div className="space-y-4">
 				<Button
@@ -131,7 +102,7 @@ function UserDetailPage() {
 				</Button>
 				<div className="rounded-xl bg-danger-50 p-4">
 					<p className="text-sm text-danger-700">
-						{state.error || "회원을 찾을 수 없습니다"}
+						{error?.message || "회원을 찾을 수 없습니다"}
 					</p>
 				</div>
 			</div>
@@ -151,7 +122,7 @@ function UserDetailPage() {
 
 			{/* 회원 상세 정보 */}
 			<UserDetailWidget
-				user={state.user}
+				user={user}
 				onEdit={handleEdit}
 				onDelete={handleDeleteClick}
 			/>
@@ -166,7 +137,7 @@ function UserDetailPage() {
 					<ModalHeader>회원 삭제</ModalHeader>
 					<ModalBody>
 						<p>
-							<strong>{state.user.name}</strong> 회원을 삭제하시겠습니까?
+							<strong>{user.name}</strong> 회원을 삭제하시겠습니까?
 						</p>
 						<p className="text-sm text-default-500">
 							삭제된 회원은 탈퇴대기 상태로 변경됩니다.
@@ -176,14 +147,14 @@ function UserDetailPage() {
 						<Button
 							variant="flat"
 							onPress={handleDeleteCancel}
-							isDisabled={state.isDeleting}
+							isDisabled={isDeleting}
 						>
 							취소
 						</Button>
 						<Button
 							color="danger"
 							onPress={handleDeleteConfirm}
-							isLoading={state.isDeleting}
+							isLoading={isDeleting}
 						>
 							삭제
 						</Button>

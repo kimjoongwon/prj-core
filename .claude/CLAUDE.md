@@ -671,7 +671,7 @@ Stage 1: 데이터 설계     → planner → [사용자 리뷰]
 Stage 2: 스키마 구현     → schema → entity → dto → seed → be-reviewer → [사용자 리뷰]
 Stage 3: 백엔드 로직     → repository → service → controller → be-reviewer → [사용자 리뷰]
 Stage 4: 컴포넌트 구현   → ui → widget → feature → fe-reviewer → [사용자 리뷰]
-Stage 5: 페이지 통합     → page-builder → fe-reviewer → [사용자 리뷰]
+Stage 5: 페이지 통합     → fe-page-builder → fe-reviewer → [사용자 리뷰]
 ```
 
 **실행 방법:**
@@ -705,7 +705,7 @@ Stage 5: 페이지 통합     → page-builder → fe-reviewer → [사용자 �
 | **프론트엔드** | ui-component-builder | Pure UI 컴포넌트 생성 (components/ui) |
 | | cell-builder | DataGrid/Table용 Cell 컴포넌트 생성 (계층별) |
 | | input-component-builder | Input 컴포넌트 생성 (components/inputs) |
-| | page-builder | 페이지 컴포넌트 생성 (useHandlers 분리) |
+| | fe-page-builder | 페이지 컴포넌트 생성 (useHandlers 분리) |
 | | frontend-architect | React 컴포넌트 아키텍처 설계 |
 | **백엔드** | repository-builder | Prisma Repository 레이어 생성 |
 | | service-builder | NestJS Service 레이어 생성 |

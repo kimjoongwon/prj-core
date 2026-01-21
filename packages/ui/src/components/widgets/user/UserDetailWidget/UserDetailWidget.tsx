@@ -1,6 +1,6 @@
 "use client";
 
-import type { UserDto } from "@cocrepo/dto";
+import type { UserDetailResponseDto } from "@cocrepo/api";
 import {
 	Avatar,
 	Button,
@@ -17,7 +17,7 @@ import { observer } from "mobx-react-lite";
  */
 export interface UserDetailWidgetProps {
 	/** 회원 정보 */
-	user: UserDto;
+	user: UserDetailResponseDto;
 	/** 수정 버튼 클릭 핸들러 */
 	onEdit?: () => void;
 	/** 삭제 버튼 클릭 핸들러 */
@@ -45,7 +45,7 @@ const formatDateTime = (date: Date | string | null | undefined): string => {
  * 회원 상태 정보
  */
 const getStatusInfo = (
-	user: UserDto,
+	user: UserDetailResponseDto,
 ): { label: string; color: "success" | "warning" | "danger" } => {
 	if (user.removedAt) {
 		return { label: "탈퇴대기", color: "danger" };

@@ -455,3 +455,122 @@ return (
 - 최대 2단계 중첩: `PageSurface` > `SectionSurface`
 - 내부 Surface는 외부보다 높은 elevation 사용
 - 동일 elevation 중첩 금지
+
+---
+
+## 9. 서버 사이드 데이터 Prefetch
+
+데이터를 미리 로드하여 초기 로딩 속도를 개선하는 패턴입니다.
+
+### 언제 사용하나요?
+
+| 페이지 유형 | 패턴 | 예시 |
+|------------|------|------|
+| 데이터 목록 | ✅ 서버 Prefetch | Dashboard, UserList |
+| 상세 보기 | ✅ 서버 Prefetch | UserDetail, PostDetail |
+| 폼 입력 | ❌ 클라이언트 전용 | Login, Register |
+
+### 폴더 구조 (Prefetch 버전)
+
+```
+apps/admin/app/[route]/
+├── page.tsx                     # 서버 컴포넌트 (prefetch + HydrationBoundary)
+├── _client.tsx                  # 클라이언트 컴포넌트
+├── _prefetch.ts                 # prefetch 설정
+└── hooks/
+    └── use[Route][Name]Page.ts
+```
+
+### 서버 컴포넌트 page.tsx
+
+```tsx
+// page.tsx - 서버 컴포넌트
+import {
+  dehydrate,
+  HydrationBoundary,
+  QueryClient,
+} from "@tanstack/react-query";
+import { cookies } from "next/headers";
+import UsersPageClient from "./_client";
+import { prefetchUsersData } from "./_prefetch";
+
+export default async function UsersPage() {
+  const queryClient = new QueryClient();
+  const cookieStore = await cookies();
+
+  await prefetchUsersData(queryClient, cookieStore, { page: 1, limit: 20 });
+
+  return (
+    <HydrationBoundary state={dehydrate(queryClient)}>
+      <UsersPageClient initialPage={1} />
+    </HydrationBoundary>
+  );
+}
+```
+
+### Prefetch 설정 (_prefetch.ts)
+
+```tsx
+// _prefetch.ts
+import { prefetchGetUsersQuery } from "@cocrepo/api";
+import { withServerCookies } from "@cocrepo/api/server";
+import type { QueryClient } from "@tanstack/react-query";
+import type { ReadonlyRequestCookies } from "next/dist/server/web/spec-extension/adapters/request-cookies";
+
+export async function prefetchUsersData(
+  queryClient: QueryClient,
+  cookies: ReadonlyRequestCookies,
+  params: { page: number; limit: number },
+) {
+  const { page, limit } = params;
+
+  // Orval 생성 prefetch 함수 사용
+  await prefetchGetUsersQuery(queryClient, { page, limit }, {
+    request: withServerCookies(cookies),
+  });
+}
+```
+
+### 클라이언트 컴포넌트 (_client.tsx)
+
+```tsx
+// _client.tsx
+"use client";
+
+import { useGetUsers } from "@cocrepo/api";
+import { observer, useLocalObservable } from "mobx-react-lite";
+
+function UsersPageClient({ initialPage }: { initialPage: number }) {
+  const state = useLocalObservable(() => ({
+    page: initialPage,
+    limit: 20,
+  }));
+
+  // prefetch로 초기 데이터 보장 - isLoading 불필요
+  const { data: usersResponse } = useGetUsers({
+    page: state.page,
+    limit: state.limit,
+  });
+
+  const users = usersResponse?.data ?? [];
+
+  return (/* ... */);
+}
+
+export default observer(UsersPageClient);
+```
+
+### 상태 관리 역할 분리
+
+| 상태 유형 | 관리 도구 | 예시 | Prefetch 대상 |
+|----------|----------|------|--------------|
+| 서버 데이터 | React Query | 사용자 목록, API 응답 | ✅ Yes |
+| 로컬 UI 상태 | MobX | 폼 입력, 필터, 모달 | ❌ No |
+
+### 체크리스트 (Prefetch 버전)
+
+- [ ] page.tsx가 서버 컴포넌트 ("use client" 없음)
+- [ ] HydrationBoundary로 클라이언트 컴포넌트 래핑
+- [ ] withServerCookies로 인증 쿠키 전달
+- [ ] Orval 생성 prefetch 함수 사용 (prefetchGetXXXQuery)
+- [ ] 클라이언트에서 isLoading 제거 (prefetch로 데이터 보장)

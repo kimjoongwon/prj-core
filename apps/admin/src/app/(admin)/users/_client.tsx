@@ -91,8 +91,8 @@ function UsersPageClient({ initialPage }: UsersPageClientProps) {
 		limit: 20,
 	}));
 
-	// 회원 목록 조회 - Orval 생성 훅 사용
-	const { data: usersResponse, isLoading } = useGetUsers({
+	// 회원 목록 조회 - Orval 생성 훅 사용 (prefetch로 초기 데이터 보장)
+	const { data: usersResponse } = useGetUsers({
 		page: state.page,
 		limit: state.limit,
 	});
@@ -128,7 +128,6 @@ function UsersPageClient({ initialPage }: UsersPageClientProps) {
 						data={users}
 						columns={columns as ColumnDef<UserRow, unknown>[]}
 						state={{ selectedKeys: state.selectedKeys }}
-						isLoading={isLoading}
 						tableBody={{ emptyContent: "등록된 회원이 없습니다." }}
 					/>
 				</SectionSurface>
