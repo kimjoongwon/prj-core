@@ -116,6 +116,9 @@ async function createConfig() {
 
             // Suspense 지원 무한 쿼리 훅 생성 활성화
             useSuspenseInfiniteQuery: true,
+
+            // 서버 컴포넌트용 prefetch 함수 생성 활성화
+            usePrefetch: true,
           },
         },
       },

@@ -280,14 +280,28 @@ const items = store.items;
 - **API 클라이언트는 직접 작성하지 않습니다!**
 - 백엔드 Swagger에서 **Orval**로 자동 생성합니다
 - 생성된 함수는 `@cocrepo/api`에서 import하여 사용
+- **Orval이 생성한 React Query 훅을 반드시 사용** (직접 useQuery 구성 금지)
 
 ```typescript
-// ✅ 올바른 사용
-import { useGetGrounds, useLogin } from "@cocrepo/api";
+// ✅ 올바른 사용 - Orval 생성 훅 사용
+import { useGetUsers, useLogin } from "@cocrepo/api";
+
+const { data, isLoading } = useGetUsers({ page: 1, limit: 10 });
 
 // ❌ 금지 - 직접 axios/fetch 호출
-const response = await axios.get("/api/v1/grounds");
+const response = await axios.get("/api/v1/users");
+
+// ❌ 금지 - useQuery 직접 구성 (Orval 훅이 이미 존재함)
+const { data } = useQuery({
+  queryKey: getGetUsersQueryKey({ page: 1, limit: 10 }),
+  queryFn: () => getUsers({ page: 1, limit: 10 }),
+});
 ```
+
+**예외 케이스 (직접 useQuery 허용):**
+- Orval 훅으로 커버할 수 없는 복잡한 `select` 변환
+- 조건부 `enabled` 로직이 필요한 경우
+- 여러 API를 조합하는 커스텀 훅 작성 시
 
 **API 생성 명령어:**
 ```bash

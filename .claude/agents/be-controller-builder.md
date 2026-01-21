@@ -95,6 +95,42 @@ async getAll() { }  // 불일치! → getUsers()로 변경 필요
 
 ---
 
+### ⚠️ URL 경로 파라미터 네이밍 (Critical)
+
+**URL 경로 파라미터는 `:{entity}Id` 형식으로 명시적으로 작성합니다.**
+
+| 패턴 | 예시 | 설명 |
+|------|------|------|
+| `:{entity}Id` | `:userId`, `:orderId` | 리소스 ID 파라미터 |
+| `:{parent}Id/{children}/:{child}Id` | `:userId/orders/:orderId` | 중첩 라우트 |
+
+```typescript
+// ✅ 올바른 예시 - 명시적 파라미터명
+@Get(":userId")
+async getUserById(@Param("userId") userId: string) { }
+
+@Get(":userId/orders/:orderId")
+async getOrder(
+  @Param("userId") userId: string,
+  @Param("orderId") orderId: string,
+) { }
+
+// ❌ 잘못된 예시 - 모호한 파라미터명
+@Get(":id")
+async getUserById(@Param("id") id: string) { }
+
+@Get(":id/orders/:id")  // 어떤 id인지 불명확
+async getOrder(...) { }
+```
+
+**이유:**
+- 중첩 라우트에서 어떤 리소스의 ID인지 명확히 구분
+- React Query 캐시 키 설계 시 파라미터 의미 명확
+- 권한 검증 코드에서 리소스 소유권 확인 용이
+- 디버깅/로깅 시 파라미터 의미 파악 용이
+
+---
+
 ### ✅ Do
 
 ```typescript
@@ -234,25 +270,25 @@ export class {Entity}sController {
 
   /**
    * 단일 조회
-   * GET /api/v1/{entities}/:id
+   * GET /api/v1/{entities}/:{entity}Id
    */
-  @Get(":id")
+  @Get(":{entity}Id")
   @HttpCode(HttpStatus.OK)
   @ApiOperation({
     operationId: "get{Entity}ById",
     summary: "{Entity} 상세 조회",
   })
   @ApiResponseEntity({Entity}Dto, HttpStatus.OK)
-  async getById(@Param("id") id: string) {
-    const result = await this.service.getById(id);
+  async getById(@Param("{entity}Id") {entity}Id: string) {
+    const result = await this.service.getById({entity}Id);
     return result;
   }
 
   /**
    * 수정
-   * PATCH /api/v1/{entities}/:id
+   * PATCH /api/v1/{entities}/:{entity}Id
    */
-  @Patch(":id")
+  @Patch(":{entity}Id")
   @HttpCode(HttpStatus.OK)
   @ApiOperation({
     operationId: "update{Entity}",
@@ -260,46 +296,46 @@ export class {Entity}sController {
   })
   @ApiResponseEntity({Entity}Dto, HttpStatus.OK)
   async updateById(
-    @Param("id") id: string,
+    @Param("{entity}Id") {entity}Id: string,
     @Body() dto: Update{Entity}Dto,
   ) {
     const data = {
       ...(dto.field1 !== undefined && { field1: dto.field1 }),
       ...(dto.field2 !== undefined && { field2: dto.field2 }),
     };
-    const result = await this.service.updateById(id, data);
+    const result = await this.service.updateById({entity}Id, data);
     return result;
   }
 
   /**
    * 소프트 삭제
-   * PATCH /api/v1/{entities}/:id/removedAt
+   * PATCH /api/v1/{entities}/:{entity}Id/removedAt
    */
-  @Patch(":id/removedAt")
+  @Patch(":{entity}Id/removedAt")
   @HttpCode(HttpStatus.OK)
   @ApiOperation({
     operationId: "remove{Entity}",
     summary: "{Entity} 소프트 삭제",
   })
   @ApiResponseEntity({Entity}Dto, HttpStatus.OK)
-  async removeById(@Param("id") id: string) {
-    const result = await this.service.removeById(id);
+  async removeById(@Param("{entity}Id") {entity}Id: string) {
+    const result = await this.service.removeById({entity}Id);
     return result;
   }
 
   /**
    * 물리 삭제
-   * DELETE /api/v1/{entities}/:id
+   * DELETE /api/v1/{entities}/:{entity}Id
    */
-  @Delete(":id")
+  @Delete(":{entity}Id")
   @HttpCode(HttpStatus.OK)
   @ApiOperation({
     operationId: "delete{Entity}",
     summary: "{Entity} 삭제",
   })
   @ApiResponseEntity({Entity}Dto, HttpStatus.OK)
-  async deleteById(@Param("id") id: string) {
-    const result = await this.service.deleteById(id);
+  async deleteById(@Param("{entity}Id") {entity}Id: string) {
+    const result = await this.service.deleteById({entity}Id);
     return result;
   }
 
@@ -381,6 +417,7 @@ imports: [
 - [ ] `@Controller()` 데코레이터 추가
 - [ ] **각 메서드에 `@ApiOperation({ operationId: "..." })` 추가 (필수!)**
 - [ ] **operationId와 메서드명 일치 확인 (예: operationId: "getUsers" → async getUsers())**
+- [ ] **URL 파라미터명이 `:{entity}Id` 형식인지 확인 (예: `:userId`, `:orderId`)**
 - [ ] Service 또는 Facade 주입 (하나만)
 - [ ] Logger 초기화
 - [ ] 각 메서드에 `@HttpCode(HttpStatus.OK)` 추가
@@ -420,10 +457,10 @@ apps/server/src/module/{entity}.module.ts
 |------------|------|------|
 | `POST` | `/api/v1/{entities}` | 생성 |
 | `GET` | `/api/v1/{entities}` | 목록 조회 |
-| `GET` | `/api/v1/{entities}/:id` | 단일 조회 |
-| `PATCH` | `/api/v1/{entities}/:id` | 수정 |
-| `PATCH` | `/api/v1/{entities}/:id/removedAt` | 소프트 삭제 |
-| `DELETE` | `/api/v1/{entities}/:id` | 물리 삭제 |
+| `GET` | `/api/v1/{entities}/:{entity}Id` | 단일 조회 |
+| `PATCH` | `/api/v1/{entities}/:{entity}Id` | 수정 |
+| `PATCH` | `/api/v1/{entities}/:{entity}Id/removedAt` | 소프트 삭제 |
+| `DELETE` | `/api/v1/{entities}/:{entity}Id` | 물리 삭제 |
 
 ### 핵심 데코레이터
 
@@ -439,9 +476,9 @@ apps/server/src/module/{entity}.module.ts
 ```typescript
 @Post()                     // POST 요청
 @Get()                      // GET 요청
-@Get(":id")                 // GET 요청 (경로 파라미터)
-@Patch(":id")               // PATCH 요청
-@Delete(":id")              // DELETE 요청
+@Get(":{entity}Id")         // GET 요청 (경로 파라미터)
+@Patch(":{entity}Id")       // PATCH 요청
+@Delete(":{entity}Id")      // DELETE 요청
 
 @HttpCode(HttpStatus.OK)    // 응답 상태 코드 (200)
 @ApiResponseEntity(Dto, Status)  // Swagger 응답 문서
@@ -450,10 +487,10 @@ apps/server/src/module/{entity}.module.ts
 #### 파라미터 레벨
 
 ```typescript
-@Body() dto: CreateDto      // 요청 본문
-@Param("id") id: string     // URL 파라미터
-@Query() query: QueryDto    // 쿼리 스트링
-@Req() req: Request         // Express Request 객체
+@Body() dto: CreateDto              // 요청 본문
+@Param("{entity}Id") {entity}Id: string  // URL 파라미터 (명시적 네이밍)
+@Query() query: QueryDto            // 쿼리 스트링
+@Req() req: Request                 // Express Request 객체
 ```
 
 ### DTO → Service 파라미터 변환
@@ -475,13 +512,13 @@ async create(@Body() dto: CreateUserDto) {
 #### Update DTO 변환
 
 ```typescript
-@Patch(":id")
-async updateById(@Param("id") id: string, @Body() dto: UpdateUserDto) {
+@Patch(":userId")
+async updateById(@Param("userId") userId: string, @Body() dto: UpdateUserDto) {
   const data = {
     ...(dto.name !== undefined && { name: dto.name }),
     ...(dto.email !== undefined && { email: dto.email }),
   };
-  return this.service.updateById(id, data);
+  return this.service.updateById(userId, data);
 }
 ```
 

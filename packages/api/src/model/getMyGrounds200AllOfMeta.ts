@@ -7,12 +7,16 @@
  */
 
 export type GetMyGrounds200AllOfMeta = {
-  /** 전체 항목 수 */
-  total?: number;
-  /** 현재 페이지 */
-  page?: number;
-  /** 페이지당 항목 수 */
-  limit?: number;
-  /** 전체 페이지 수 */
-  totalPages?: number;
+  /** */
+  skip?: number;
+  /** */
+  take?: number;
+  /** */
+  itemCount?: number;
+  /** */
+  pageCount?: number;
+  /** */
+  hasNextPage?: boolean;
+  /** */
+  hasPreviousPage?: boolean;
 };

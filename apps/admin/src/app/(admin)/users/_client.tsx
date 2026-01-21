@@ -1,6 +1,6 @@
 "use client";
 
-import type { UserDto } from "@cocrepo/api";
+import { type UserDto, useGetUsers } from "@cocrepo/api";
 import {
 	DataGrid,
 	DateCell,
@@ -17,30 +17,13 @@ import {
 	VStack,
 } from "@cocrepo/ui";
 import { Button } from "@heroui/react";
-import { useQuery } from "@tanstack/react-query";
 import { type ColumnDef, createColumnHelper } from "@tanstack/react-table";
 import { Plus, User } from "lucide-react";
 import { observer, useLocalObservable } from "mobx-react-lite";
 import type { Route } from "next";
 import { useRouter } from "next/navigation";
-import { getGetUsersQueryKey, getUsers } from "./_prefetch";
 
 type UserRow = UserDto & { id: string; status?: string };
-
-/**
- * Flat API 응답 구조
- * TODO: Orval 재생성 후 이 타입 제거 (자동 생성됨)
- */
-interface FlatUsersResponse {
-	data?: UserDto[];
-	meta?: { total: number; page: number; limit: number; totalPages: number };
-	stats?: {
-		total: number;
-		active: number;
-		inactive: number;
-		newThisMonth: number;
-	};
-}
 
 // 컬럼 정의
 const columnHelper = createColumnHelper<UserRow>();
@@ -108,17 +91,14 @@ function UsersPageClient({ initialPage }: UsersPageClientProps) {
 		limit: 20,
 	}));
 
-	// 회원 목록 조회 - prefetch된 데이터와 동일한 queryKey 사용
-	const { data: usersResponse, isLoading } = useQuery({
-		queryKey: getGetUsersQueryKey({ page: state.page, limit: state.limit }),
-		queryFn: () => getUsers({ page: state.page, limit: state.limit }),
+	// 회원 목록 조회 - Orval 생성 훅 사용
+	const { data: usersResponse, isLoading } = useGetUsers({
+		page: state.page,
+		limit: state.limit,
 	});
 
-	// Flat 응답 구조: data는 직접 배열, meta는 최상위 레벨
-	// TODO: Orval 재생성 후 타입 단언 제거
-	const response = usersResponse as unknown as FlatUsersResponse | undefined;
-	const users = (response?.data ?? []) as UserRow[];
-	const totalCount = response?.meta?.total ?? 0;
+	const users = (usersResponse?.data ?? []) as UserRow[];
+	const totalCount = usersResponse?.meta?.total ?? 0;
 
 	/**
 	 * 신규 등록 버튼 클릭

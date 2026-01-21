@@ -14,8 +14,15 @@ export interface TokenDto {
   refreshToken: string;
   /** 인증된 사용자 정보 */
   user: UserDto;
+  /** 메인 테넌트 ID */
+  mainTenantId: string;
   /** Access Token 만료 시간 (Unix timestamp, milliseconds) */
   accessTokenExpiresAt?: number;
   /** Refresh Token 만료 시간 (Unix timestamp, milliseconds) */
   refreshTokenExpiresAt?: number;
+  /**
+   * 마지막으로 선택한 Space ID (User.selectedSpaceId)
+   * @nullable
+   */
+  selectedSpaceId?: string | null;
 }
