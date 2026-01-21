@@ -1,41 +1,20 @@
 import type { Action as ActionEntity, Prisma } from "@cocrepo/prisma";
+import type {
+	ActionConfig,
+	ActionFormatConfig,
+	ActionMaskingConfig,
+	ActionTransformConfig,
+} from "@cocrepo/type";
 import { AbstractEntity } from "./abstract.entity";
 import type { Ability } from "./ability.entity";
 
-/**
- * 마스킹 설정 타입
- */
-export interface ActionMaskingConfig {
-	type: "masking";
-	preset?: string; // 'PRESET_EMAIL', 'PRESET_PHONE' 등
-	pattern?: string; // 커스텀 정규식
-	replacement?: string;
-}
-
-/**
- * 포맷팅 설정 타입
- */
-export interface ActionFormatConfig {
-	type: "format";
-	pattern: string; // 'YYYY-MM-DD' 등
-}
-
-/**
- * 변환 설정 타입
- */
-export interface ActionTransformConfig {
-	type: "transform";
-	rule: string; // 'uppercase', 'lowercase' 등
-}
-
-/**
- * Action 설정 타입 (확장 가능)
- */
-export type ActionConfig =
-	| ActionMaskingConfig
-	| ActionFormatConfig
-	| ActionTransformConfig
-	| null;
+// @cocrepo/type에서 타입 재export (하위 호환성)
+export type {
+	ActionConfig,
+	ActionFormatConfig,
+	ActionMaskingConfig,
+	ActionTransformConfig,
+};
 
 /**
  * Action 엔티티 (CASL Action 정의)

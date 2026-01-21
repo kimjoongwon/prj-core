@@ -55,10 +55,12 @@ export class CaslAbilityFactory {
 	 *
 	 * @description
 	 * 1. x-space-id 헤더에서 spaceId를 가져와서 해당 tenant 찾기
-	 * 2. AbilitiesRepository로 권한 조회
-	 * 3. AbilityBuilder로 권한 생성
-	 * 4. conditions 파싱 (템플릿 변수 치환)
-	 * 5. CAN/CAN_NOT에 따라 can/cannot 호출
+	 * 2. AbilitiesRepository로 Role 기반 권한 조회
+	 * 3. AbilitiesRepository로 User 예외 권한 조회
+	 * 4. 권한 병합 (User 권한이 Role 권한보다 우선 - priority 기반)
+	 * 5. AbilityBuilder로 권한 생성
+	 * 6. conditions 파싱 (템플릿 변수 치환)
+	 * 7. CAN/CAN_NOT에 따라 can/cannot 호출
 	 */
 	async createForUser(user: UserDto): Promise<AppAbility> {
 		const { can, cannot, build } = new AbilityBuilder<AppAbility>(
@@ -83,24 +85,99 @@ export class CaslAbilityFactory {
 			`사용자 권한 생성 시작: userId=${user.id}, roleId=${roleId}, spaceId=${spaceId}`,
 		);
 
-		// DB에서 Role에 해당하는 활성화된 Abilities 조회
-		const abilities = await this.abilitiesRepository.findActiveByRoleIds([
+		// 1. DB에서 Role에 해당하는 활성화된 Abilities 조회
+		const roleAbilities = await this.abilitiesRepository.findActiveByRoleIds([
 			roleId,
 		]);
-
 		this.logger.debug(
-			`조회된 Ability 개수: ${abilities.length}, roleId=${roleId}`,
+			`Role 기반 Ability 조회: ${roleAbilities.length}개, roleId=${roleId}`,
 		);
+
+		// 2. DB에서 User에 해당하는 활성화된 예외 Abilities 조회
+		const userAbilities = await this.abilitiesRepository.findActiveByUserId(
+			user.id,
+		);
+		this.logger.debug(
+			`User 예외 Ability 조회: ${userAbilities.length}개, userId=${user.id}`,
+		);
+
+		// 3. 권한 병합 (User 권한이 Role 권한보다 우선)
+		const mergedAbilities = this.mergeAbilities(roleAbilities, userAbilities);
+		this.logger.debug(`병합된 Ability 개수: ${mergedAbilities.length}`);
 
 		// 사용자 컨텍스트 구성 (템플릿 변수 치환용)
 		const userContext = this.buildUserContext(user, currentTenant);
 
 		// 각 Ability를 CASL 규칙으로 변환
-		for (const ability of abilities) {
+		for (const ability of mergedAbilities) {
 			this.applyAbilityRule(ability, userContext, can, cannot);
 		}
 
 		return build();
+	}
+
+	/**
+	 * Role 권한과 User 예외 권한을 병합합니다.
+	 *
+	 * @param roleAbilities - Role 기반 권한 목록
+	 * @param userAbilities - User 예외 권한 목록
+	 * @returns 병합된 권한 목록 (priority 기준 정렬)
+	 *
+	 * @description
+	 * 동일한 subject + action 조합이 있을 경우 priority가 높은 것이 우선합니다.
+	 * User 예외 권한은 일반적으로 priority가 높게 설정됩니다 (10 이상).
+	 * 병합 후 priority 내림차순으로 정렬하여 반환합니다.
+	 */
+	private mergeAbilities(
+		roleAbilities: AbilityEntity[],
+		userAbilities: AbilityEntity[],
+	): AbilityEntity[] {
+		// subject + action 조합을 키로 사용하여 Map 구성
+		const abilityMap = new Map<string, AbilityEntity>();
+
+		// 1. Role 권한을 먼저 추가
+		for (const ability of roleAbilities) {
+			const key = this.getAbilityKey(ability);
+			if (key) {
+				abilityMap.set(key, ability);
+			}
+		}
+
+		// 2. User 예외 권한으로 덮어쓰기 (priority가 높은 것이 우선)
+		for (const ability of userAbilities) {
+			const key = this.getAbilityKey(ability);
+			if (!key) continue;
+
+			const existingAbility = abilityMap.get(key);
+
+			// 기존 권한이 없거나, User 권한의 priority가 더 높으면 덮어쓰기
+			if (!existingAbility || ability.priority > existingAbility.priority) {
+				abilityMap.set(key, ability);
+				this.logger.debug(
+					`User 예외 권한 적용: subject=${ability.subject?.name}, action=${ability.action?.name}, priority=${ability.priority}`,
+				);
+			}
+		}
+
+		// 3. priority 내림차순으로 정렬
+		const mergedAbilities = Array.from(abilityMap.values()).sort(
+			(a, b) => b.priority - a.priority,
+		);
+
+		return mergedAbilities;
+	}
+
+	/**
+	 * Ability의 고유 키를 생성합니다.
+	 *
+	 * @param ability - Ability 엔티티
+	 * @returns subject + action 조합 키 또는 null
+	 */
+	private getAbilityKey(ability: AbilityEntity): string | null {
+		if (!ability.subject?.name || !ability.action?.name) {
+			return null;
+		}
+		return `${ability.subject.name}:${ability.action.name}`;
 	}
 
 	/**

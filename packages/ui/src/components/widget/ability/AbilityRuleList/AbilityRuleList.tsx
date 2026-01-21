@@ -16,6 +16,7 @@ import { Edit2, Plus, Trash2 } from "lucide-react";
 import { observer } from "mobx-react-lite";
 import { Switch } from "../../../inputs/Switch/Switch";
 import { HStack } from "../../../ui/surfaces/HStack/HStack";
+import { VStack } from "../../../ui/surfaces/VStack/VStack";
 
 /**
  * Ability 규칙 타입
@@ -133,7 +134,7 @@ export const AbilityRuleList = observer(
 		};
 
 		return (
-			<div className="flex flex-col gap-4">
+			<VStack gap={4}>
 				{/* 상단 액션 바 */}
 				{onAddRule && (
 					<HStack justifyContent="end">
@@ -287,7 +288,7 @@ export const AbilityRuleList = observer(
 						))}
 					</TableBody>
 				</Table>
-			</div>
+			</VStack>
 		);
 	},
 );

@@ -110,6 +110,15 @@ export type ValueAggregator<TValue, TPaths extends readonly string[]> = (
 ) => TValue;
 
 // ============================================
+// Action Config 관련 타입
+// ============================================
+export type {
+	ActionConfig,
+	ActionFormatConfig,
+	ActionMaskingConfig,
+	ActionTransformConfig,
+} from "./action-config";
+// ============================================
 // Config 관련 타입
 // ============================================
 export type {

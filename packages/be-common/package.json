@@ -14,7 +14,10 @@
   "scripts": {
     "build": "tsc",
     "start:dev": "tsc --watch",
-    "type-check": "tsc --noEmit"
+    "type-check": "tsc --noEmit",
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "test:cov": "jest --coverage"
   },
   "dependencies": {
     "@casl/ability": "^6.7.5",

@@ -9,6 +9,10 @@ export {
 } from "./casl";
 export type {
 	AbilityCondition,
+	ActionConfig,
+	ActionFormatConfig,
+	ActionMaskingConfig,
+	ActionTransformConfig,
 	Actions,
 	AppAbility,
 	AppAbilityBuilder,
@@ -35,7 +39,10 @@ export {
 } from "./guard";
 // Interceptors
 export {
+	ApplyMasking,
 	DtoTransformInterceptor,
+	MASKING_SUBJECT_KEY,
+	MaskingInterceptor,
 	RequestContextInterceptor,
 	ResponseEntityInterceptor,
 } from "./interceptor";

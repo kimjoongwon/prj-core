@@ -8,6 +8,14 @@
  */
 import type { Ability, AbilityBuilder, AbilityClass } from "@casl/ability";
 
+// Action Config 타입들은 @cocrepo/type에서 re-export
+export type {
+	ActionConfig,
+	ActionFormatConfig,
+	ActionMaskingConfig,
+	ActionTransformConfig,
+} from "@cocrepo/type";
+
 /**
  * 권한 행위 타입
  *
@@ -46,44 +54,6 @@ export type Actions =
 	| "READ:MASKED:SSN"
 	| "READ:MASKED:CARD"
 	| "READ:MASKED:ACCOUNT";
-
-/**
- * Action 마스킹 설정 인터페이스
- *
- * @description
- * Action.config에 저장되는 마스킹 설정을 정의합니다.
- */
-export interface ActionMaskingConfig {
-	type: "masking";
-	preset?: string; // 'PRESET_EMAIL', 'PRESET_PHONE' 등
-	pattern?: string; // 커스텀 정규식
-	replacement?: string;
-}
-
-/**
- * Action 포맷팅 설정 인터페이스
- */
-export interface ActionFormatConfig {
-	type: "format";
-	pattern: string; // 'YYYY-MM-DD' 등
-}
-
-/**
- * Action 변환 설정 인터페이스
- */
-export interface ActionTransformConfig {
-	type: "transform";
-	rule: string; // 'uppercase', 'lowercase' 등
-}
-
-/**
- * Action 설정 유니온 타입
- */
-export type ActionConfig =
-	| ActionMaskingConfig
-	| ActionFormatConfig
-	| ActionTransformConfig
-	| null;
 
 /**
  * 권한 대상 타입

@@ -46,6 +46,10 @@ export type {
 // Types
 export type {
 	AbilityCondition,
+	ActionConfig,
+	ActionFormatConfig,
+	ActionMaskingConfig,
+	ActionTransformConfig,
 	Actions,
 	AppAbility,
 	AppAbilityBuilder,

@@ -18,3 +18,8 @@ export {
 export { TokenExpiryInfo, TokenService } from "./token.service";
 export { TokenStorageService } from "./token-storage.service";
 export { UsersService } from "./users.service";
+export {
+	MaskingService,
+	MASKING_PRESETS,
+	type MaskingPreset,
+} from "./masking.service";

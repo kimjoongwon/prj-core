@@ -1,10 +1,15 @@
 "use client";
 
-import { RoleAbilityManager, UserAbilityManager } from "@cocrepo/ui";
-import { Tab, Tabs } from "@heroui/react";
+import {
+	PageSurface,
+	RoleAbilityManager,
+	SectionSurface,
+	UserAbilityManager,
+} from "@cocrepo/ui";
 import { observer } from "mobx-react-lite";
 import { useEffect } from "react";
 import { ActionManagementTab } from "./components/ActionManagementTab";
+import { StyledTabs, Tab } from "./components/StyledTabs";
 import {
 	type SubjectFormData,
 	SubjectFormModal,
@@ -63,16 +68,16 @@ function AbilitiesPage() {
 	/**
 	 * 탭 변경 이벤트 핸들러
 	 */
-	const onSelectionChange = (key: React.Key) => {
+	const onSelectionChangeTab = (key: React.Key) => {
 		handleTabChange(
 			key as "role" | "user" | "action" | "subject" | "ui-visibility",
 		);
 	};
 
 	/**
-	 * Subject 폼 제출 핸들러
+	 * Subject 폼 모달 제출 핸들러
 	 */
-	const onSubmitSubjectForm = (data: SubjectFormData) => {
+	const onSubmitSubjectFormModal = (data: SubjectFormData) => {
 		if (state.subjectFormModal.mode === "create") {
 			handleAddSubject(data);
 		} else if (state.subjectFormModal.initialData) {
@@ -84,28 +89,19 @@ function AbilitiesPage() {
 	};
 
 	return (
-		<div className="space-y-6">
-			{/* 페이지 헤더 */}
-			<div>
-				<h1 className="text-2xl font-bold">권한 관리</h1>
-				<p className="text-default-500">RBAC/ABAC 기반 권한을 관리합니다.</p>
-			</div>
-
+		<PageSurface
+			title="권한 관리"
+			description="RBAC/ABAC 기반 권한을 관리합니다."
+		>
 			{/* 탭 컨테이너 */}
-			<Tabs
+			<StyledTabs
 				aria-label="권한 관리 탭"
 				selectedKey={state.activeTab}
-				onSelectionChange={onSelectionChange}
-				classNames={{
-					tabList: "bg-content1 rounded-xl p-1",
-					cursor: "bg-primary",
-					tab: "px-4 py-2",
-					tabContent: "group-data-[selected=true]:text-white",
-				}}
+				onSelectionChange={onSelectionChangeTab}
 			>
 				{/* Role 권한 탭 */}
 				<Tab key="role" title="Role 권한">
-					<div className="pt-4">
+					<SectionSurface padding="md" elevation="flat">
 						<RoleAbilityManager
 							roles={state.roles}
 							selectedRoleId={state.selectedRoleId ?? undefined}
@@ -119,12 +115,12 @@ function AbilitiesPage() {
 							actions={state.actions}
 							onLoadSubjectFields={handleLoadSubjectFields}
 						/>
-					</div>
+					</SectionSurface>
 				</Tab>
 
 				{/* User 예외 권한 탭 */}
 				<Tab key="user" title="User 예외 권한">
-					<div className="pt-4">
+					<SectionSurface padding="md" elevation="flat">
 						<UserAbilityManager
 							onSearchUsers={handleSearchUsers}
 							onLoadAbilities={handleLoadUserAbilities}
@@ -136,45 +132,45 @@ function AbilitiesPage() {
 							actions={state.actions}
 							onLoadSubjectFields={handleLoadSubjectFields}
 						/>
-					</div>
+					</SectionSurface>
 				</Tab>
 
 				{/* Subject 관리 탭 */}
 				<Tab key="subject" title="Subject 관리">
-					<div className="pt-4">
+					<SectionSurface padding="md" elevation="flat">
 						<SubjectManagementTab
 							subjects={state.subjects}
 							onAddSubject={handleOpenAddSubjectModal}
 							onEditSubject={handleOpenEditSubjectModal}
 							onDeleteSubject={handleDeleteSubject}
 						/>
-					</div>
+					</SectionSurface>
 				</Tab>
 
 				{/* Action 관리 탭 */}
 				<Tab key="action" title="Action 관리">
-					<div className="pt-4">
+					<SectionSurface padding="md" elevation="flat">
 						<ActionManagementTab actions={state.actions} />
-					</div>
+					</SectionSurface>
 				</Tab>
 
 				{/* UI 가시성 탭 */}
 				<Tab key="ui-visibility" title="UI 가시성">
-					<div className="pt-4">
+					<SectionSurface padding="md" elevation="flat">
 						<UIVisibilityTab subjects={state.subjects} roles={state.roles} />
-					</div>
+					</SectionSurface>
 				</Tab>
-			</Tabs>
+			</StyledTabs>
 
 			{/* Subject 폼 모달 */}
 			<SubjectFormModal
 				isOpen={state.subjectFormModal.isOpen}
 				onClose={handleCloseSubjectModal}
-				onSubmit={onSubmitSubjectForm}
+				onSubmit={onSubmitSubjectFormModal}
 				mode={state.subjectFormModal.mode}
 				initialData={state.subjectFormModal.initialData}
 			/>
-		</div>
+		</PageSurface>
 	);
 }
 
