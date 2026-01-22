@@ -1,2 +1,2 @@
-export type { SubjectFormData, SubjectWithSystem } from "./useSubjectsPage";
+export type { SubjectFormData } from "./useSubjectsPage";
 export { useSubjectsPage } from "./useSubjectsPage";

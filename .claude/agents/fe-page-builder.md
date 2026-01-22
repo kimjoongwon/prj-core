@@ -698,3 +698,83 @@ Pure UI → Widget → Feature → Page
 | Pagination 예시 | `apps/admin/app/(admin)/users/page.tsx` |
 | ConfirmModal | `packages/ui/src/components/widgets/common/ConfirmModal` |
 | **Cell 컴포넌트 폴더** | `packages/ui/src/components/ui/data-display/cells/` |
+
+---
+
+## 11. Entity 도메인 메서드 활용
+
+**컴포넌트에서 반복되는 색상/라벨 매핑 로직은 Entity 클래스의 도메인 메서드를 사용합니다.**
+
+### 11.1 Entity 메서드 사용 패턴
+
+API에서 받은 plain object 데이터를 Entity 인스턴스로 변환하여 메서드를 사용합니다:
+
+```tsx
+import { Subject } from "@cocrepo/entity";
+import { plainToInstance } from "class-transformer";
+
+function SubjectList({ subjects }: { subjects: Subject[] }) {
+  // plain object → Entity 인스턴스 변환
+  const subjectInstances = plainToInstance(Subject, subjects);
+
+  return (
+    <Table>
+      {subjectInstances.map((subject) => (
+        <TableRow key={subject.id}>
+          <TableCell>
+            {/* Entity 메서드 직접 호출 */}
+            <Chip color={subject.getGroupColor()}>
+              {subject.getGroupLabel()}
+            </Chip>
+          </TableCell>
+        </TableRow>
+      ))}
+    </Table>
+  );
+}
+```
+
+### 11.2 로컬 함수 vs Entity 메서드
+
+| 구분 | 로컬 함수 (❌ 지양) | Entity 메서드 (✅ 권장) |
+|------|-------------------|----------------------|
+| 위치 | 컴포넌트 내 | `@cocrepo/entity` |
+| 재사용 | 불가 (복사/붙여넣기) | 모든 컴포넌트에서 import |
+| 변경 시 | 여러 파일 수정 | 한 곳에서 수정 |
+| 테스트 | 컴포넌트와 함께 테스트 | 독립적 단위 테스트 |
+
+### ❌ 잘못된 예시 (로컬 함수)
+
+```tsx
+// 컴포넌트 내 로컬 함수 - 재사용 불가
+const getGroupColor = (group?: string) => {
+  switch (group) {
+    case "entity": return "primary";
+    case "menu": return "secondary";
+    // ...
+  }
+};
+
+<Chip color={getGroupColor(subject.group)}>{getGroupLabel(subject.group)}</Chip>
+```
+
+### ✅ 올바른 예시 (Entity 메서드)
+
+```tsx
+import { Subject } from "@cocrepo/entity";
+import { plainToInstance } from "class-transformer";
+
+// Entity 인스턴스로 변환 후 메서드 사용
+const instances = plainToInstance(Subject, subjects);
+
+<Chip color={subject.getGroupColor()}>{subject.getGroupLabel()}</Chip>
+```
+
+### 11.3 활용 가능한 Entity 메서드 패턴
+
+| 패턴 | 설명 | 예시 |
+|------|------|------|
+| `get{Property}Color()` | HeroUI 색상 variant 반환 | `getStatusColor()`, `getGroupColor()` |
+| `get{Property}Label()` | 한글 라벨 반환 | `getStatusLabel()`, `getGroupLabel()` |
+| `is{Condition}()` | 조건 확인 | `isActive()`, `isSystem()` |
+| `to{Format}()` | 형식 변환 | `toOption()`, `toDisplayName()` |

@@ -63,4 +63,40 @@ export class Subject extends AbstractEntity implements SubjectEntity {
 		const parts = this.name.split(":");
 		return parts.length > 1 ? parts.slice(1).join(":") : this.name;
 	}
+
+	/**
+	 * 그룹별 색상 (HeroUI variant)
+	 */
+	getGroupColor(): "primary" | "secondary" | "success" | "warning" | "default" {
+		switch (this.group) {
+			case "entity":
+				return "primary";
+			case "menu":
+				return "secondary";
+			case "feature":
+				return "success";
+			case "ui":
+				return "warning";
+			default:
+				return "default";
+		}
+	}
+
+	/**
+	 * 그룹별 한글 라벨
+	 */
+	getGroupLabel(): string {
+		switch (this.group) {
+			case "entity":
+				return "엔티티";
+			case "menu":
+				return "메뉴";
+			case "feature":
+				return "기능";
+			case "ui":
+				return "UI 요소";
+			default:
+				return "기타";
+		}
+	}
 }

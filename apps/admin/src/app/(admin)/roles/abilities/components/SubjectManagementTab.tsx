@@ -1,6 +1,6 @@
 "use client";
 
-import type { Subject } from "@cocrepo/ui";
+import type { Subject } from "@cocrepo/entity";
 import {
 	Button,
 	Card,
@@ -21,21 +21,13 @@ import { ChevronDown, Edit2, Plus, Trash2 } from "lucide-react";
 import { observer } from "mobx-react-lite";
 import { useState } from "react";
 
-/**
- * Subject 확장 타입 (isSystem 포함)
- */
-interface SubjectWithSystem extends Subject {
-	/** 시스템 Subject 여부 */
-	isSystem?: boolean;
-}
-
 interface SubjectManagementTabProps {
-	/** Subject 목록 */
-	subjects: SubjectWithSystem[];
+	/** Subject 목록 (Entity 인스턴스) */
+	subjects: Subject[];
 	/** Subject 추가 핸들러 */
 	onAddSubject?: () => void;
 	/** Subject 수정 핸들러 */
-	onEditSubject?: (subject: SubjectWithSystem) => void;
+	onEditSubject?: (subject: Subject) => void;
 	/** Subject 삭제 핸들러 */
 	onDeleteSubject?: (subjectId: string) => void;
 }
@@ -70,32 +62,6 @@ export const SubjectManagementTab = observer(
 		const [selectedGroup, setSelectedGroup] = useState<SubjectGroupKey>("all");
 
 		/**
-		 * 그룹별 색상 매핑
-		 */
-		const getGroupColor = (group?: string) => {
-			switch (group) {
-				case "entity":
-					return "primary";
-				case "menu":
-					return "secondary";
-				case "feature":
-					return "success";
-				case "ui":
-					return "warning";
-				default:
-					return "default";
-			}
-		};
-
-		/**
-		 * 그룹별 라벨 매핑
-		 */
-		const getGroupLabel = (group?: string) => {
-			const found = SUBJECT_GROUPS.find((g) => g.key === group);
-			return found?.label ?? "기타";
-		};
-
-		/**
 		 * 선택된 그룹의 라벨 가져오기
 		 */
 		const getSelectedGroupLabel = () => {
@@ -121,7 +87,7 @@ export const SubjectManagementTab = observer(
 		/**
 		 * Subject 수정 버튼 클릭
 		 */
-		const handleEditSubject = (subject: SubjectWithSystem) => {
+		const handleEditSubject = (subject: Subject) => {
 			onEditSubject?.(subject);
 		};
 
@@ -210,10 +176,10 @@ export const SubjectManagementTab = observer(
 										<TableCell>
 											<Chip
 												size="sm"
-												color={getGroupColor(subject.group)}
+												color={subject.getGroupColor()}
 												variant="flat"
 											>
-												{getGroupLabel(subject.group)}
+												{subject.getGroupLabel()}
 											</Chip>
 										</TableCell>
 										<TableCell>

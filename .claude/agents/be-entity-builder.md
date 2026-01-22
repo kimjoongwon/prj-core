@@ -336,8 +336,62 @@ packages/entity/src/{entity}.entity.ts
 | `is{Condition}()` | 상태 확인 | `isActive()`, `isExpired()` |
 | `has{Something}()` | 존재 확인 | `hasTenantAccess()`, `hasChildren()` |
 | `get{Property}()` | 계산된 값 반환 | `getCurrentTenant()`, `getFullName()` |
+| `get{Property}Color()` | UI 색상 variant 반환 | `getGroupColor()`, `getStatusColor()` |
+| `get{Property}Label()` | 한글 라벨 반환 | `getGroupLabel()`, `getStatusLabel()` |
 | `to{Format}()` | 형식 변환 | `toOption()`, `toSummary()` |
 | `getAll{Items}()` | 재귀적 조회 | `getAllParentNames()`, `getAllChildren()` |
+
+#### UI 관련 도메인 메서드 예시
+
+UI에서 반복적으로 사용되는 색상/라벨 매핑 로직은 Entity 메서드로 캡슐화합니다:
+
+```typescript
+// Subject Entity 예시
+export class Subject extends AbstractEntity implements SubjectEntity {
+  group!: string | null;
+
+  /**
+   * 그룹별 색상 (HeroUI variant)
+   */
+  getGroupColor(): "primary" | "secondary" | "success" | "warning" | "default" {
+    switch (this.group) {
+      case "entity":
+        return "primary";
+      case "menu":
+        return "secondary";
+      case "feature":
+        return "success";
+      case "ui":
+        return "warning";
+      default:
+        return "default";
+    }
+  }
+
+  /**
+   * 그룹별 한글 라벨
+   */
+  getGroupLabel(): string {
+    switch (this.group) {
+      case "entity":
+        return "엔티티";
+      case "menu":
+        return "메뉴";
+      case "feature":
+        return "기능";
+      case "ui":
+        return "UI 요소";
+      default:
+        return "기타";
+    }
+  }
+}
+```
+
+**장점:**
+- 컴포넌트에서 중복 함수 제거
+- 일관된 색상/라벨 유지
+- 변경 시 한 곳에서만 수정
 
 #### 주의사항
 

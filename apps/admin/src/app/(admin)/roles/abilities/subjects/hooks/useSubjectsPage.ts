@@ -4,18 +4,11 @@ import {
 	useGetSubjects,
 	getGetSubjectsQueryKey,
 } from "@cocrepo/api";
-import type { Subject } from "@cocrepo/ui";
+import { Subject } from "@cocrepo/entity";
 import { useQueryClient } from "@tanstack/react-query";
+import { plainToInstance } from "class-transformer";
 import { useLocalObservable } from "mobx-react-lite";
 import { runInAction } from "mobx";
-
-/**
- * Subject 확장 타입 (isSystem 포함)
- */
-export interface SubjectWithSystem extends Subject {
-	/** 시스템 Subject 여부 */
-	isSystem?: boolean;
-}
 
 /**
  * Subject 폼 데이터
@@ -32,6 +25,22 @@ export interface SubjectFormData {
 }
 
 /**
+ * Subject 폼 초기 데이터 (모달용)
+ */
+interface SubjectFormInitialData {
+	/** Subject ID (수정 모드에서 사용) */
+	id: string;
+	/** 그룹 */
+	group?: string;
+	/** Subject 이름 */
+	name: string;
+	/** 표시명 */
+	displayName?: string;
+	/** 설명 */
+	description?: string;
+}
+
+/**
  * 페이지 상태 타입
  */
 interface SubjectsPageState {
@@ -41,7 +50,7 @@ interface SubjectsPageState {
 	subjectFormModal: {
 		isOpen: boolean;
 		mode: "create" | "edit";
-		initialData?: SubjectWithSystem;
+		initialData?: SubjectFormInitialData;
 	};
 }
 
@@ -75,16 +84,12 @@ export function useSubjectsPage() {
 	// =====================
 
 	/**
-	 * Subject 목록 변환
+	 * Subject 목록 변환 (Entity 인스턴스로 변환)
 	 */
-	const subjects: SubjectWithSystem[] =
-		subjectsResponse?.data?.map((subject) => ({
-			id: subject.id,
-			name: subject.name,
-			displayName: subject.displayName ?? subject.name,
-			group: subject.group,
-			isSystem: subject.isSystem,
-		})) ?? [];
+	const subjects: Subject[] = plainToInstance(
+		Subject,
+		subjectsResponse?.data ?? [],
+	);
 
 	// =====================
 	// Subject 관리 핸들러
@@ -106,12 +111,17 @@ export function useSubjectsPage() {
 	/**
 	 * Subject 수정 버튼 클릭
 	 */
-	const onClickEditSubjectButton = (subject: SubjectWithSystem) => {
+	const onClickEditSubjectButton = (subject: Subject) => {
 		runInAction(() => {
 			state.subjectFormModal = {
 				isOpen: true,
 				mode: "edit",
-				initialData: subject,
+				initialData: {
+					id: subject.id,
+					group: subject.group ?? undefined,
+					name: subject.name,
+					displayName: subject.displayName ?? undefined,
+				},
 			};
 		});
 	};
