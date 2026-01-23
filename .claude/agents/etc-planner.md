@@ -335,7 +335,7 @@ ls packages/ui/src/components/layouts/
 | 에이전트 | 상태 | 완료 시간 | 산출물 |
 |----------|:----:|----------|--------|
 | page-builder | ⬜ | - | Page |
-| fe-reviewer | ⬜ | - | 검증 완료 |
+| /fe-review (Skill) | ⬜ | - | 검증 완료 |
 
 ---
 
@@ -636,7 +636,7 @@ PageLayout
 
 ### Phase 3: 페이지
 
-**순서:** page-builder → fe-reviewer
+**순서:** page-builder → /fe-review (Skill)
 
 ### Phase 4: 품질 검증 (QA)
 
@@ -774,8 +774,8 @@ interface MemberCardProps {
 
 | 에이전트 | 관계 | 설명 |
 |----------|------|------|
-| design-analyzer | 대체 | Figma 디자인이 있을 때 사용 |
-| route-designer | 참고 | 라우팅 경로 설계 필요 시 |
+| /design-analyze (Skill) | 대체 | Figma 디자인이 있을 때 사용 |
+| /route-design (Skill) | 참고 | 라우팅 경로 설계 필요 시 |
 | database-expert | 참고 | DB 설계 자문 |
 
 ---
@@ -810,7 +810,7 @@ interface MemberCardProps {
   1. schema-builder, entity-builder, dto-builder (Stage 2)
   2. repository-builder, service-builder, controller-builder (Stage 3)
   3. ui-component-builder, widget-builder, feature-builder (Stage 4)
-  4. page-builder, fe-reviewer (Stage 5)
+  4. page-builder, /fe-review (Skill) (Stage 5)
 ```
 
 ### 프로젝트 경로

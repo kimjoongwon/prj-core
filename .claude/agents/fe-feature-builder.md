@@ -311,7 +311,7 @@ Pure UI → Widget → Feature → Page
 | 에이전트 | 관계 |
 |----------|------|
 | **fe-page-builder** | Feature를 조합하여 Page 생성 |
-| fe-reviewer | 생성된 Feature/Page 검증 |
+| /fe-review (Skill) | 생성된 Feature/Page 검증 |
 
 ### 관련 에이전트
 

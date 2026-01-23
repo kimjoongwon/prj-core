@@ -688,10 +688,10 @@ feat(coin): 멀티시그 지갑 서비스 초기 구현
 
 ```
 Stage 1: 데이터 설계     → planner → [사용자 리뷰]
-Stage 2: 스키마 구현     → schema → entity → dto → seed → be-reviewer → [사용자 리뷰]
-Stage 3: 백엔드 로직     → repository → service → controller → be-reviewer → [사용자 리뷰]
-Stage 4: 컴포넌트 구현   → ui → widget → feature → fe-reviewer → [사용자 리뷰]
-Stage 5: 페이지 통합     → fe-page-builder → fe-reviewer → [사용자 리뷰]
+Stage 2: 스키마 구현     → schema → entity → dto → seed → /be-review (Skill) → [사용자 리뷰]
+Stage 3: 백엔드 로직     → repository → service → controller → /be-review (Skill) → [사용자 리뷰]
+Stage 4: 컴포넌트 구현   → ui → widget → feature → /fe-review (Skill) → [사용자 리뷰]
+Stage 5: 페이지 통합     → fe-page-builder → /fe-review (Skill) → [사용자 리뷰]
 ```
 
 **실행 방법:**
@@ -720,8 +720,8 @@ Stage 5: 페이지 통합     → fe-page-builder → fe-reviewer → [사용자
 | 카테고리 | Agent | 역할 |
 |---------|-------|------|
 | **기획/분석** | planner | 요구사항 → 화면 기획서 + 기술 설계서 작성 (Figma 없을 때) |
-| | design-analyzer | Figma 디자인 분석 및 컴포넌트 매핑 (Figma 있을 때) |
-| | route-designer | 백엔드 엔티티 기반 라우팅 경로 설계 |
+| | /design-analyze (Skill) | Figma 디자인 분석 및 컴포넌트 매핑 (Figma 있을 때) |
+| | /route-design (Skill) | 백엔드 엔티티 기반 라우팅 경로 설계 |
 | **프론트엔드** | ui-component-builder | Pure UI 컴포넌트 생성 (components/ui) |
 | | cell-builder | DataGrid/Table용 Cell 컴포넌트 생성 (계층별) |
 | | input-component-builder | Input 컴포넌트 생성 (components/inputs) |
@@ -738,8 +738,8 @@ Stage 5: 페이지 통합     → fe-page-builder → fe-reviewer → [사용자
 | | dto-builder | Request/Response DTO 클래스 생성 |
 | | database-expert | Prisma 스키마 설계 및 최적화 |
 | | seed-maker | 현실 세계와 연결된 시드 데이터 생성 |
-| **품질** | fe-reviewer | 프론트엔드 코드 생성 결과 규칙 검증 |
-| | be-reviewer | 백엔드 코드 생성 결과 규칙 검증 |
+| **품질** | /fe-review (Skill) | 프론트엔드 코드 규칙 검증 (리포트만) |
+| | /be-review (Skill) | 백엔드 코드 규칙 검증 (리포트만) |
 | | code-reviewer | 코드 리뷰 및 개선 제안 |
 | | test-engineer | 테스트 코드 작성 |
 | | refactoring-expert | 코드 리팩토링 |
