@@ -14,12 +14,12 @@
 | planner | ✅ | 2026-01-18 | 기획서 폴더 |
 
 **산출물:**
-- [x] `.claude/plans/2026-01-18-UserList/README.md`
-- [x] `.claude/plans/2026-01-18-UserList/01-overview.md`
-- [x] `.claude/plans/2026-01-18-UserList/02-structure.md`
-- [x] `.claude/plans/2026-01-18-UserList/03-interactions.md`
-- [x] `.claude/plans/2026-01-18-UserList/04-ui-details.md`
-- [x] `.claude/plans/2026-01-18-UserList/05-technical-design.md`
+- [x] `apps/proposal/plans/2026-01-18-UserList/README.md`
+- [x] `apps/proposal/plans/2026-01-18-UserList/01-overview.md`
+- [x] `apps/proposal/plans/2026-01-18-UserList/02-structure.md`
+- [x] `apps/proposal/plans/2026-01-18-UserList/03-interactions.md`
+- [x] `apps/proposal/plans/2026-01-18-UserList/04-ui-details.md`
+- [x] `apps/proposal/plans/2026-01-18-UserList/05-technical-design.md`
 
 ---
 

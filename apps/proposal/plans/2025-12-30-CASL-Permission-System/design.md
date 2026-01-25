@@ -1,6 +1,6 @@
 # CASL 권한 시스템 기술 설계서
 
-**기획서:** `.claude/plans/2025-12-30-CASL-Permission-System.md`
+**기획서:** `apps/proposal/plans/2025-12-30-CASL-Permission-System.md`
 **작성일:** 2026-01-08
 **수정일:** 2026-01-17
 **작성자:** technical-designer

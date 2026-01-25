@@ -8,12 +8,12 @@
 ### 문서
 | 단계 | 문서 | 경로 |
 |------|------|------|
-| Stage 1 | 기획서 | `.claude/plans/2025-12-30-AdminLayoutAndMenuSystem/` |
-| Stage 1 | 설계서 | `.claude/plans/2025-12-30-AdminLayoutAndMenuSystem-design.md` |
-| Stage 2 | 스키마 | `.claude/plans/2025-12-30-AdminLayoutAndMenuSystem-schema.md` |
+| Stage 1 | 기획서 | `apps/proposal/plans/2025-12-30-AdminLayoutAndMenuSystem/` |
+| Stage 1 | 설계서 | `apps/proposal/plans/2025-12-30-AdminLayoutAndMenuSystem-design.md` |
+| Stage 2 | 스키마 | `apps/proposal/plans/2025-12-30-AdminLayoutAndMenuSystem-schema.md` |
 | Stage 3 | 백엔드 | 스킵 (프론트엔드만 구현) |
-| Stage 4 | 컴포넌트 | `.claude/plans/2025-12-30-AdminLayoutAndMenuSystem-components.md` |
-| Stage 5 | 완료 보고서 | `.claude/plans/2025-12-30-AdminLayoutAndMenuSystem-complete.md` |
+| Stage 4 | 컴포넌트 | `apps/proposal/plans/2025-12-30-AdminLayoutAndMenuSystem-components.md` |
+| Stage 5 | 완료 보고서 | `apps/proposal/plans/2025-12-30-AdminLayoutAndMenuSystem-complete.md` |
 
 ---
 
@@ -220,10 +220,10 @@ export const ADMIN_FAB_ACTIONS: FABAction[] = [
 
 ## 참고 문서
 
-- 기획서: `.claude/plans/2025-12-30-AdminLayoutAndMenuSystem/`
+- 기획서: `apps/proposal/plans/2025-12-30-AdminLayoutAndMenuSystem/`
   - `01-desktop.md` - 데스크톱 레이아웃 기획
   - `02-mobile.md` - 모바일 레이아웃 기획
   - `03-menu-tree.md` - 메뉴 트리 구조
   - `04-permissions.md` - 권한 체계
-- 설계서: `.claude/plans/2025-12-30-AdminLayoutAndMenuSystem-design.md`
-- 컴포넌트 결과: `.claude/plans/2025-12-30-AdminLayoutAndMenuSystem-components.md`
+- 설계서: `apps/proposal/plans/2025-12-30-AdminLayoutAndMenuSystem-design.md`
+- 컴포넌트 결과: `apps/proposal/plans/2025-12-30-AdminLayoutAndMenuSystem-components.md`

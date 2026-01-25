@@ -95,8 +95,8 @@
 ```
 /stage-orchestrator start stage=3
 
-**기획서:** .claude/plans/2026-01-10-MemberList.md
-**설계서:** .claude/plans/2026-01-10-MemberList-design.md
+**기획서:** apps/proposal/plans/2026-01-10-MemberList.md
+**설계서:** apps/proposal/plans/2026-01-10-MemberList-design.md
 ```
 
 ### 특정 단계만 실행
@@ -106,7 +106,7 @@
 ```
 /stage-orchestrator run stage=2
 
-**설계서:** .claude/plans/2026-01-10-MemberList-design.md
+**설계서:** apps/proposal/plans/2026-01-10-MemberList-design.md
 ```
 
 ### 상태 확인
@@ -116,7 +116,7 @@
 ```
 /stage-orchestrator status
 
-**기획서:** .claude/plans/2026-01-10-MemberList.md
+**기획서:** apps/proposal/plans/2026-01-10-MemberList.md
 ```
 
 ---
@@ -134,8 +134,8 @@
 **산출물:**
 | 파일 | 설명 |
 |------|------|
-| `.claude/plans/YYYY-MM-DD-{기능명}.md` | 화면 기획서 |
-| `.claude/plans/YYYY-MM-DD-{기능명}-design.md` | 기술 설계서 |
+| `apps/proposal/plans/YYYY-MM-DD-{기능명}.md` | 화면 기획서 |
+| `apps/proposal/plans/YYYY-MM-DD-{기능명}-design.md` | 기술 설계서 |
 
 **리뷰 포인트:**
 - Entity 설계가 요구사항에 맞는가?
@@ -162,7 +162,7 @@
 | `packages/entity/src/{entity}.entity.ts` | Entity 클래스 |
 | `packages/dto/src/{domain}/*.dto.ts` | DTO 클래스 |
 | `packages/prisma/seed-data.ts` | 시드 데이터 |
-| `.claude/plans/YYYY-MM-DD-{기능명}-schema.md` | 결과 문서 |
+| `apps/proposal/plans/YYYY-MM-DD-{기능명}-schema.md` | 결과 문서 |
 
 **실행되는 명령:**
 ```bash
@@ -194,7 +194,7 @@ pnpm --filter=@cocrepo/prisma migrate dev --name {name}
 | `packages/service/src/{entities}.service.ts` | Service |
 | `apps/server/src/module/{domain}/{entities}.controller.ts` | Controller |
 | `apps/server/src/module/{domain}/{entities}.module.ts` | Module |
-| `.claude/plans/YYYY-MM-DD-{기능명}-backend.md` | 결과 문서 |
+| `apps/proposal/plans/YYYY-MM-DD-{기능명}-backend.md` | 결과 문서 |
 
 **후속 작업:**
 ```bash
@@ -231,7 +231,7 @@ pnpm --filter=@cocrepo/api generate  # Orval API 클라이언트 생성
 | `packages/ui/src/components/inputs/{Component}/` | Input |
 | `packages/ui/src/components/widget/{Component}/` | Widget |
 | `packages/ui/src/components/feature/{Component}/` | Feature |
-| `.claude/plans/YYYY-MM-DD-{기능명}-components.md` | 결과 문서 |
+| `apps/proposal/plans/YYYY-MM-DD-{기능명}-components.md` | 결과 문서 |
 
 **리뷰 포인트:**
 - 컴포넌트 계층이 올바른가? (ui → widget → feature)
@@ -253,7 +253,7 @@ pnpm --filter=@cocrepo/api generate  # Orval API 클라이언트 생성
 | `packages/ui/src/components/page/{Page}/` | Pure UI Page |
 | `apps/{app}/app/{route}/page.tsx` | Route Page |
 | `apps/{app}/app/{route}/hooks/use{Page}.ts` | 통합 훅 |
-| `.claude/plans/YYYY-MM-DD-{기능명}-complete.md` | 완료 보고서 |
+| `apps/proposal/plans/YYYY-MM-DD-{기능명}-complete.md` | 완료 보고서 |
 
 **규칙 검증 항목:**
 - useCallback/useMemo 금지
@@ -281,16 +281,16 @@ pnpm --filter=@cocrepo/api generate  # Orval API 클라이언트 생성
 ```
 
 **결과:**
-- `.claude/plans/2026-01-10-MemberList.md` (기획서)
-- `.claude/plans/2026-01-10-MemberList-design.md` (설계서)
+- `apps/proposal/plans/2026-01-10-MemberList.md` (기획서)
+- `apps/proposal/plans/2026-01-10-MemberList-design.md` (설계서)
 
 **Claude 출력:**
 ```
 ✅ Stage 1 완료: 데이터 설계
 
 📁 생성된 문서:
-- 기획서: .claude/plans/2026-01-10-MemberList.md
-- 설계서: .claude/plans/2026-01-10-MemberList-design.md
+- 기획서: apps/proposal/plans/2026-01-10-MemberList.md
+- 설계서: apps/proposal/plans/2026-01-10-MemberList-design.md
 
 📋 사용자 리뷰 포인트:
 - [ ] Entity 설계가 요구사항에 맞는가?
@@ -307,7 +307,7 @@ Stage 2 진행
 
 **결과:**
 - Prisma 스키마, Entity, DTO 생성
-- `.claude/plans/2026-01-10-MemberList-schema.md`
+- `apps/proposal/plans/2026-01-10-MemberList-schema.md`
 
 #### 3. 계속 진행...
 

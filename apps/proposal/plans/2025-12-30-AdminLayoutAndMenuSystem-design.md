@@ -798,6 +798,6 @@ export type BottomTabId = typeof BOTTOM_TAB_IDS[number];
 
 ## 9. 관련 문서
 
-- 기획서: `.claude/plans/2025-12-30-AdminLayoutAndMenuSystem/`
+- 기획서: `apps/proposal/plans/2025-12-30-AdminLayoutAndMenuSystem/`
 - 권한 체계: `04-permissions.md`
 - 메뉴 트리: `03-menu-tree.md`

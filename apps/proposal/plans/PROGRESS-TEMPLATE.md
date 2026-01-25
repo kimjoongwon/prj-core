@@ -14,12 +14,12 @@
 | planner | ⬜ | - | 기획서 폴더 |
 
 **산출물:**
-- [ ] `.claude/plans/YYYY-MM-DD-[PageName]/README.md`
-- [ ] `.claude/plans/YYYY-MM-DD-[PageName]/01-overview.md`
-- [ ] `.claude/plans/YYYY-MM-DD-[PageName]/02-structure.md`
-- [ ] `.claude/plans/YYYY-MM-DD-[PageName]/03-interactions.md`
-- [ ] `.claude/plans/YYYY-MM-DD-[PageName]/04-ui-details.md`
-- [ ] `.claude/plans/YYYY-MM-DD-[PageName]/05-technical-design.md`
+- [ ] `apps/proposal/plans/YYYY-MM-DD-[PageName]/README.md`
+- [ ] `apps/proposal/plans/YYYY-MM-DD-[PageName]/01-overview.md`
+- [ ] `apps/proposal/plans/YYYY-MM-DD-[PageName]/02-structure.md`
+- [ ] `apps/proposal/plans/YYYY-MM-DD-[PageName]/03-interactions.md`
+- [ ] `apps/proposal/plans/YYYY-MM-DD-[PageName]/04-ui-details.md`
+- [ ] `apps/proposal/plans/YYYY-MM-DD-[PageName]/05-technical-design.md`
 
 ---
 

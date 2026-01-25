@@ -450,7 +450,7 @@ const SideNav = observer(() => {
 프로젝트별 구체적인 메뉴 구성은 아래 문서를 참조:
 
 ```
-.claude/plans/{date}-{ProjectName}MenuSystem/
+apps/proposal/plans/{date}-{ProjectName}MenuSystem/
 ├── README.md           # 전체 개요
 ├── 01-desktop.md       # 데스크톱 레이아웃
 ├── 02-mobile.md        # 모바일 레이아웃
@@ -459,7 +459,7 @@ const SideNav = observer(() => {
 ```
 
 **현재 프로젝트 기획:**
-- `.claude/plans/2025-12-30-AdminLayoutAndMenuSystem/`
+- `apps/proposal/plans/2025-12-30-AdminLayoutAndMenuSystem/`
 
 ---
 

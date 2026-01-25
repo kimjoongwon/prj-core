@@ -1,6 +1,14 @@
 "use client";
 
-import { Card, CardBody, CardHeader, Chip, Divider, Tab, Tabs } from "@heroui/react";
+import {
+	Card,
+	CardBody,
+	CardHeader,
+	Chip,
+	Divider,
+	Tab,
+	Tabs,
+} from "@heroui/react";
 import { MermaidChart } from "../../components/MermaidChart";
 
 const wbsMainChart = `
@@ -99,9 +107,24 @@ const wbsData = [
 		id: "1",
 		name: "기획 및 분석",
 		children: [
-			{ id: "1.1", name: "요구사항 정의", duration: "3일", status: "completed" },
-			{ id: "1.2", name: "기능 명세서 작성", duration: "2일", status: "completed" },
-			{ id: "1.3", name: "화면 설계 (와이어프레임)", duration: "3일", status: "in-progress" },
+			{
+				id: "1.1",
+				name: "요구사항 정의",
+				duration: "3일",
+				status: "completed",
+			},
+			{
+				id: "1.2",
+				name: "기능 명세서 작성",
+				duration: "2일",
+				status: "completed",
+			},
+			{
+				id: "1.3",
+				name: "화면 설계 (와이어프레임)",
+				duration: "3일",
+				status: "in-progress",
+			},
 		],
 	},
 	{
@@ -109,8 +132,18 @@ const wbsData = [
 		name: "설계",
 		children: [
 			{ id: "2.1", name: "DB 스키마 설계", duration: "2일", status: "pending" },
-			{ id: "2.2", name: "API 설계 (OpenAPI)", duration: "2일", status: "pending" },
-			{ id: "2.3", name: "시스템 아키텍처 설계", duration: "1일", status: "pending" },
+			{
+				id: "2.2",
+				name: "API 설계 (OpenAPI)",
+				duration: "2일",
+				status: "pending",
+			},
+			{
+				id: "2.3",
+				name: "시스템 아키텍처 설계",
+				duration: "1일",
+				status: "pending",
+			},
 		],
 	},
 	{
@@ -118,9 +151,24 @@ const wbsData = [
 		name: "백엔드 개발",
 		children: [
 			{ id: "3.1", name: "예약 CRUD API", duration: "5일", status: "pending" },
-			{ id: "3.2", name: "가용성 확인 로직", duration: "3일", status: "pending" },
-			{ id: "3.3", name: "결제 연동 (PG사)", duration: "5일", status: "pending" },
-			{ id: "3.4", name: "알림 시스템 (이메일/SMS)", duration: "3일", status: "pending" },
+			{
+				id: "3.2",
+				name: "가용성 확인 로직",
+				duration: "3일",
+				status: "pending",
+			},
+			{
+				id: "3.3",
+				name: "결제 연동 (PG사)",
+				duration: "5일",
+				status: "pending",
+			},
+			{
+				id: "3.4",
+				name: "알림 시스템 (이메일/SMS)",
+				duration: "3일",
+				status: "pending",
+			},
 			{ id: "3.5", name: "인증/인가", duration: "2일", status: "pending" },
 		],
 	},
@@ -128,28 +176,63 @@ const wbsData = [
 		id: "4",
 		name: "프론트엔드 개발",
 		children: [
-			{ id: "4.1", name: "예약 페이지 (캘린더, 타임슬롯)", duration: "7일", status: "pending" },
+			{
+				id: "4.1",
+				name: "예약 페이지 (캘린더, 타임슬롯)",
+				duration: "7일",
+				status: "pending",
+			},
 			{ id: "4.2", name: "결제 페이지", duration: "3일", status: "pending" },
-			{ id: "4.3", name: "관리자 대시보드", duration: "5일", status: "pending" },
-			{ id: "4.4", name: "마이페이지 (예약 내역)", duration: "3일", status: "pending" },
+			{
+				id: "4.3",
+				name: "관리자 대시보드",
+				duration: "5일",
+				status: "pending",
+			},
+			{
+				id: "4.4",
+				name: "마이페이지 (예약 내역)",
+				duration: "3일",
+				status: "pending",
+			},
 		],
 	},
 	{
 		id: "5",
 		name: "테스트 및 QA",
 		children: [
-			{ id: "5.1", name: "단위 테스트 작성", duration: "3일", status: "pending" },
+			{
+				id: "5.1",
+				name: "단위 테스트 작성",
+				duration: "3일",
+				status: "pending",
+			},
 			{ id: "5.2", name: "통합 테스트", duration: "2일", status: "pending" },
-			{ id: "5.3", name: "UAT (사용자 수용 테스트)", duration: "3일", status: "pending" },
+			{
+				id: "5.3",
+				name: "UAT (사용자 수용 테스트)",
+				duration: "3일",
+				status: "pending",
+			},
 		],
 	},
 	{
 		id: "6",
 		name: "배포 및 운영",
 		children: [
-			{ id: "6.1", name: "스테이징 환경 배포", duration: "1일", status: "pending" },
+			{
+				id: "6.1",
+				name: "스테이징 환경 배포",
+				duration: "1일",
+				status: "pending",
+			},
 			{ id: "6.2", name: "프로덕션 배포", duration: "1일", status: "pending" },
-			{ id: "6.3", name: "모니터링/로깅 설정", duration: "1일", status: "pending" },
+			{
+				id: "6.3",
+				name: "모니터링/로깅 설정",
+				duration: "1일",
+				status: "pending",
+			},
 		],
 	},
 ];
@@ -226,7 +309,10 @@ export function WBSClient() {
 							</CardHeader>
 							<Divider />
 							<CardBody>
-								<MermaidChart chart={wbsBackendChart} className="min-h-[400px]" />
+								<MermaidChart
+									chart={wbsBackendChart}
+									className="min-h-[400px]"
+								/>
 							</CardBody>
 						</Card>
 					</Tab>
@@ -238,7 +324,10 @@ export function WBSClient() {
 							</CardHeader>
 							<Divider />
 							<CardBody>
-								<MermaidChart chart={wbsFrontendChart} className="min-h-[400px]" />
+								<MermaidChart
+									chart={wbsFrontendChart}
+									className="min-h-[400px]"
+								/>
 							</CardBody>
 						</Card>
 					</Tab>
@@ -246,7 +335,10 @@ export function WBSClient() {
 					<Tab key="list" title="작업 목록">
 						<div className="mt-4 space-y-4">
 							{wbsData.map((phase) => (
-								<Card key={phase.id} className="bg-content1 shadow-sm rounded-xl">
+								<Card
+									key={phase.id}
+									className="bg-content1 shadow-sm rounded-xl"
+								>
 									<CardHeader>
 										<h3 className="text-lg font-semibold">
 											{phase.id}. {phase.name}

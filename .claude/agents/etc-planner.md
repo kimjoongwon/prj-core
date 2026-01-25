@@ -39,7 +39,7 @@ Figma 디자인 없이 사용자의 요구사항만으로 **화면 기획서**�
 **폴더 구조로 출력 (필수)**
 
 ```
-.claude/plans/YYYY-MM-DD-[PageName]/
+apps/proposal/plans/YYYY-MM-DD-[PageName]/
 ├── README.md                # 개요 + 목차 + 진행 상황
 ├── PROGRESS.md              # 에이전트 실행 진행 상황 추적 (필수)
 ├── 01-overview.md           # 화면 개요 (목적, 진입/이탈 조건, 데이터)
@@ -197,7 +197,7 @@ ls packages/ui/src/components/layouts/
 **폴더 생성 후 파일 분리 저장:**
 
 ```bash
-.claude/plans/YYYY-MM-DD-[PageName]/
+apps/proposal/plans/YYYY-MM-DD-[PageName]/
 ├── README.md               # 개요
 ├── PROGRESS.md             # 진행 상황 추적
 ├── 01-overview.md          # 화면 개요
@@ -214,7 +214,7 @@ ls packages/ui/src/components/layouts/
 ### 폴더 구조
 
 ```
-.claude/plans/YYYY-MM-DD-[PageName]/
+apps/proposal/plans/YYYY-MM-DD-[PageName]/
 ├── README.md
 ├── PROGRESS.md
 ├── 01-overview.md
@@ -796,7 +796,7 @@ interface MemberCardProps {
 ```
 ✅ 기획서 및 기술 설계서가 저장되었습니다.
 
-📁 기획서 폴더: .claude/plans/2026-01-18-UserList/
+📁 기획서 폴더: apps/proposal/plans/2026-01-18-UserList/
    ├── README.md
    ├── 01-overview.md
    ├── 02-structure.md

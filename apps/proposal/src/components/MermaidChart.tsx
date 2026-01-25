@@ -1,7 +1,7 @@
 "use client";
 
-import { useEffect, useRef } from "react";
 import mermaid from "mermaid";
+import { useEffect, useRef } from "react";
 
 interface MermaidChartProps {
 	chart: string;
@@ -28,10 +28,7 @@ export function MermaidChart({ chart, className = "" }: MermaidChartProps) {
 		const renderChart = async () => {
 			if (containerRef.current) {
 				containerRef.current.innerHTML = "";
-				const { svg } = await mermaid.render(
-					`mermaid-${Date.now()}`,
-					chart,
-				);
+				const { svg } = await mermaid.render(`mermaid-${Date.now()}`, chart);
 				containerRef.current.innerHTML = svg;
 			}
 		};

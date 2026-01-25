@@ -1,7 +1,7 @@
 # 역할(Role) 관리 CRUD 모달 기능 기획서
 
 **작성일:** 2026-01-17
-**관련 기획:** `.claude/plans/2025-12-30-CASL-Permission-System/`
+**관련 기획:** `apps/proposal/plans/2025-12-30-CASL-Permission-System/`
 
 ---
 

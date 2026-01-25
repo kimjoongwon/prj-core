@@ -1,31 +1,14 @@
 "use client";
 
-import { observer } from "mobx-react-lite";
-import {
-	Button,
-	Card,
-	CardBody,
-	CardHeader,
-	Chip,
-	Divider,
-	Tab,
-	Tabs,
-} from "@heroui/react";
+import { Button, Card, CardBody, Chip, Divider } from "@heroui/react";
 import {
 	ArrowRight,
-	Brain,
-	Calendar,
 	CheckCircle,
 	Cloud,
 	Code2,
-	Database,
-	FileText,
 	GitBranch,
-	Home,
 	Layers,
-	LayoutDashboard,
 	Lightbulb,
-	ListTree,
 	Rocket,
 	Server,
 	Shield,
@@ -33,166 +16,12 @@ import {
 	Users,
 	Zap,
 } from "lucide-react";
-import type { Key } from "react";
-import { useState } from "react";
+import { observer } from "mobx-react-lite";
 
-const ProposalPage = observer(() => {
-	const [selectedTab, setSelectedTab] = useState<Key>("intro");
-
-	const handleTabChange = (key: Key) => {
-		setSelectedTab(key);
-	};
-
-	return (
-		<div className="relative min-h-screen">
-			{/* 배경 블러 오브 */}
-			<div className="fixed bottom-0 left-0 w-[500px] h-[500px] bg-primary/30 rounded-full blur-3xl -translate-x-1/2 translate-y-1/2 pointer-events-none" />
-			<div className="fixed top-0 right-0 w-[400px] h-[400px] bg-secondary/20 rounded-full blur-3xl translate-x-1/2 -translate-y-1/2 opacity-70 pointer-events-none" />
-
-			{/* 헤더 */}
-			<header className="border-b border-divider bg-background/60 backdrop-blur-md sticky top-0 z-50">
-				<div className="max-w-7xl mx-auto px-6 py-4">
-					<div className="flex items-center gap-3">
-						<Brain className="w-8 h-8 text-primary" />
-						<div>
-							<h1 className="text-xl font-bold">
-								<span className="bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
-									AI 주도 기획
-								</span>
-							</h1>
-							<p className="text-xs text-default-500">
-								Proposal & Planning Dashboard
-							</p>
-						</div>
-					</div>
-				</div>
-			</header>
-
-			{/* 메인 컨텐츠 */}
-			<main className="max-w-7xl mx-auto px-6 py-8">
-				<Tabs
-					aria-label="기획 메뉴"
-					selectedKey={selectedTab as string}
-					onSelectionChange={handleTabChange}
-					color="primary"
-					variant="underlined"
-					classNames={{
-						tabList:
-							"gap-6 w-full relative rounded-none p-0 border-b border-divider",
-						cursor: "w-full bg-primary",
-						tab: "max-w-fit px-0 h-12",
-						tabContent: "group-data-[selected=true]:text-primary",
-					}}
-				>
-					<Tab
-						key="intro"
-						title={
-							<div className="flex items-center gap-2">
-								<Home className="w-4 h-4" />
-								<span>소개</span>
-							</div>
-						}
-					>
-						<IntroPanel />
-					</Tab>
-					<Tab
-						key="dashboard"
-						title={
-							<div className="flex items-center gap-2">
-								<LayoutDashboard className="w-4 h-4" />
-								<span>대시보드</span>
-							</div>
-						}
-					>
-						<DashboardPanel />
-					</Tab>
-					<Tab
-						key="wbs"
-						title={
-							<div className="flex items-center gap-2">
-								<ListTree className="w-4 h-4" />
-								<span>WBS</span>
-							</div>
-						}
-					>
-						<WBSPanel />
-					</Tab>
-					<Tab
-						key="requirements"
-						title={
-							<div className="flex items-center gap-2">
-								<FileText className="w-4 h-4" />
-								<span>요구사항</span>
-							</div>
-						}
-					>
-						<RequirementsPanel />
-					</Tab>
-					<Tab
-						key="screens"
-						title={
-							<div className="flex items-center gap-2">
-								<Target className="w-4 h-4" />
-								<span>화면 설계</span>
-							</div>
-						}
-					>
-						<ScreensPanel />
-					</Tab>
-					<Tab
-						key="api"
-						title={
-							<div className="flex items-center gap-2">
-								<Server className="w-4 h-4" />
-								<span>API 설계</span>
-							</div>
-						}
-					>
-						<APIPanel />
-					</Tab>
-					<Tab
-						key="database"
-						title={
-							<div className="flex items-center gap-2">
-								<Database className="w-4 h-4" />
-								<span>DB 설계</span>
-							</div>
-						}
-					>
-						<DatabasePanel />
-					</Tab>
-					<Tab
-						key="milestones"
-						title={
-							<div className="flex items-center gap-2">
-								<GitBranch className="w-4 h-4" />
-								<span>마일스톤</span>
-							</div>
-						}
-					>
-						<MilestonesPanel />
-					</Tab>
-					<Tab
-						key="schedule"
-						title={
-							<div className="flex items-center gap-2">
-								<Calendar className="w-4 h-4" />
-								<span>일정</span>
-							</div>
-						}
-					>
-						<SchedulePanel />
-					</Tab>
-				</Tabs>
-			</main>
-		</div>
-	);
-});
-
-export default ProposalPage;
-
-/** 소개 패널 (랜딩 페이지) */
-function IntroPanel() {
+/**
+ * 소개 페이지 (랜딩 페이지)
+ */
+const IntroPage = observer(() => {
 	return (
 		<div className="py-8 space-y-16">
 			{/* Hero 섹션 */}
@@ -208,7 +37,9 @@ function IntroPanel() {
 			<Footer />
 		</div>
 	);
-}
+});
+
+export default IntroPage;
 
 function HeroSection() {
 	return (
@@ -392,9 +223,12 @@ function TechStackSection() {
 				<Chip color="primary" variant="flat" className="mb-4">
 					Tech Stack
 				</Chip>
-				<h3 className="text-3xl md:text-4xl font-bold mb-4">검증된 기술 스택</h3>
+				<h3 className="text-3xl md:text-4xl font-bold mb-4">
+					검증된 기술 스택
+				</h3>
 				<p className="text-default-600 text-lg max-w-2xl mx-auto">
-					최신 기술과 안정성을 동시에 확보한 기술 스택으로 프로젝트를 진행합니다.
+					최신 기술과 안정성을 동시에 확보한 기술 스택으로 프로젝트를
+					진행합니다.
 				</p>
 			</div>
 
@@ -483,131 +317,5 @@ function Footer() {
 				</div>
 			</div>
 		</footer>
-	);
-}
-
-/** 대시보드 패널 */
-function DashboardPanel() {
-	return (
-		<div className="py-8">
-			<EmptyState
-				title="대시보드"
-				description="프로젝트 전체 현황을 한눈에 볼 수 있습니다."
-			/>
-		</div>
-	);
-}
-
-/** WBS 패널 */
-function WBSPanel() {
-	return (
-		<div className="py-8">
-			<EmptyState
-				title="WBS (Work Breakdown Structure)"
-				description="작업 분해 구조를 정의하고 관리합니다."
-			/>
-		</div>
-	);
-}
-
-/** 요구사항 패널 */
-function RequirementsPanel() {
-	return (
-		<div className="py-8">
-			<EmptyState
-				title="요구사항 정의서"
-				description="기능/비기능 요구사항을 정의하고 추적합니다."
-			/>
-		</div>
-	);
-}
-
-/** 화면 설계 패널 */
-function ScreensPanel() {
-	return (
-		<div className="py-8">
-			<EmptyState
-				title="화면 설계서"
-				description="와이어프레임 및 화면 흐름을 설계합니다."
-			/>
-		</div>
-	);
-}
-
-/** API 설계 패널 */
-function APIPanel() {
-	return (
-		<div className="py-8">
-			<EmptyState
-				title="API 설계서"
-				description="REST API 엔드포인트를 설계하고 문서화합니다."
-			/>
-		</div>
-	);
-}
-
-/** DB 설계 패널 */
-function DatabasePanel() {
-	return (
-		<div className="py-8">
-			<EmptyState
-				title="DB 설계서"
-				description="데이터베이스 스키마와 ERD를 설계합니다."
-			/>
-		</div>
-	);
-}
-
-/** 마일스톤 패널 */
-function MilestonesPanel() {
-	return (
-		<div className="py-8">
-			<EmptyState
-				title="마일스톤"
-				description="프로젝트 주요 이정표를 관리합니다."
-			/>
-		</div>
-	);
-}
-
-/** 일정 패널 */
-function SchedulePanel() {
-	return (
-		<div className="py-8">
-			<EmptyState
-				title="프로젝트 일정"
-				description="간트 차트 형태로 일정을 관리합니다."
-			/>
-		</div>
-	);
-}
-
-/** 빈 상태 컴포넌트 */
-function EmptyState({
-	title,
-	description,
-}: {
-	title: string;
-	description: string;
-}) {
-	return (
-		<Card className="bg-content1/50 border border-divider">
-			<CardHeader className="pb-0">
-				<h2 className="text-2xl font-bold">{title}</h2>
-			</CardHeader>
-			<CardBody>
-				<div className="flex flex-col items-center justify-center py-16 text-center">
-					<div className="w-16 h-16 rounded-full bg-default-100 flex items-center justify-center mb-4">
-						<Chip color="default" variant="flat" size="sm">
-							준비 중
-						</Chip>
-					</div>
-					<p className="text-default-500 mb-2">{description}</p>
-					<p className="text-default-400 text-sm">
-						이 영역은 기능 구현 전 빈 상태입니다.
-					</p>
-				</div>
-			</CardBody>
-		</Card>
 	);
 }

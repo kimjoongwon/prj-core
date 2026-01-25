@@ -7,7 +7,7 @@
 ## 폴더 구조
 
 ```
-.claude/plans/
+apps/proposal/plans/
 ├── README.md                              ← 현재 문서
 │
 ├── {기능명}/                              ← 대형 기획 (800줄 이상)

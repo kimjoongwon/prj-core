@@ -31,7 +31,7 @@ tools: Task, Read, Write, Grep, Bash
 | 모드 | O | `full`, `start stage=N`, `run stage=N`, `status` |
 | 페이지명 | O (full) | 생성할 페이지/기능 이름 |
 | 요구사항 | O (full) | 기능 요구사항 목록 |
-| 기획서 경로 | O (start/run) | `.claude/plans/` 내 기획서 경로 |
+| 기획서 경로 | O (start/run) | `apps/proposal/plans/` 내 기획서 경로 |
 | 설계서 경로 | △ | Stage 2 이상 시작 시 필요 |
 
 ### 출력
@@ -135,8 +135,8 @@ tools: Task, Read, Write, Grep, Bash
 ```
 /stage-orchestrator start stage=3
 
-**기획서:** .claude/plans/2026-01-10-MemberListPage.md
-**설계서:** .claude/plans/2026-01-10-MemberListPage-design.md
+**기획서:** apps/proposal/plans/2026-01-10-MemberListPage.md
+**설계서:** apps/proposal/plans/2026-01-10-MemberListPage-design.md
 ```
 
 #### 3. 특정 단계만 실행
@@ -144,7 +144,7 @@ tools: Task, Read, Write, Grep, Bash
 ```
 /stage-orchestrator run stage=2
 
-**설계서:** .claude/plans/2026-01-10-MemberListPage-design.md
+**설계서:** apps/proposal/plans/2026-01-10-MemberListPage-design.md
 ```
 
 #### 4. 상태 확인
@@ -152,7 +152,7 @@ tools: Task, Read, Write, Grep, Bash
 ```
 /stage-orchestrator status
 
-**기획서:** .claude/plans/2026-01-10-MemberListPage.md
+**기획서:** apps/proposal/plans/2026-01-10-MemberListPage.md
 ```
 
 ---
@@ -181,16 +181,16 @@ tools: Task, Read, Write, Grep, Bash
    ```
 
 **산출물:**
-- `.claude/plans/YYYY-MM-DD-{기능명}.md` - 기획서
-- `.claude/plans/YYYY-MM-DD-{기능명}-design.md` - 기술 설계서
+- `apps/proposal/plans/YYYY-MM-DD-{기능명}.md` - 기획서
+- `apps/proposal/plans/YYYY-MM-DD-{기능명}-design.md` - 기술 설계서
 
 **완료 후 출력:**
 ```
 ✅ Stage 1 완료: 데이터 설계
 
 📁 생성된 문서:
-- 기획서: .claude/plans/2026-01-10-MemberListPage.md
-- 설계서: .claude/plans/2026-01-10-MemberListPage-design.md
+- 기획서: apps/proposal/plans/2026-01-10-MemberListPage.md
+- 설계서: apps/proposal/plans/2026-01-10-MemberListPage-design.md
 
 📋 사용자 리뷰 포인트:
 - [ ] Entity 설계가 요구사항에 맞는가?
@@ -291,7 +291,7 @@ Stage 3: 백엔드 로직
 - DTO: packages/dto/src/members/*.dto.ts (4개)
 - Seed: packages/prisma/seed-data.ts (수정)
 
-📄 결과 문서: .claude/plans/2026-01-10-MemberListPage-schema.md
+📄 결과 문서: apps/proposal/plans/2026-01-10-MemberListPage-schema.md
 
 📋 사용자 리뷰 포인트:
 - [ ] Prisma 스키마가 설계와 일치하는가?
@@ -389,7 +389,7 @@ YYYY-MM-DD HH:mm
 - Controller: apps/server/src/module/members/members.controller.ts
 - Module: apps/server/src/module/members/members.module.ts
 
-📄 결과 문서: .claude/plans/2026-01-10-MemberListPage-backend.md
+📄 결과 문서: apps/proposal/plans/2026-01-10-MemberListPage-backend.md
 
 🔧 후속 작업 필요:
 - Orval API 클라이언트 생성: pnpm --filter=@cocrepo/api generate
@@ -506,7 +506,7 @@ Stage 5: 페이지 통합
 - Widget: MemberCard
 - Feature: MemberFilterPanel
 
-📄 결과 문서: .claude/plans/2026-01-10-MemberListPage-components.md
+📄 결과 문서: apps/proposal/plans/2026-01-10-MemberListPage-components.md
 
 📋 사용자 리뷰 포인트:
 - [ ] 컴포넌트 계층이 올바른가? (ui → widget → feature)
@@ -601,7 +601,7 @@ YYYY-MM-DD HH:mm
 - 통합 훅: apps/admin/app/(admin)/members/hooks/useMemberListPage.ts
 - Route Page: apps/admin/app/(admin)/members/page.tsx
 
-📄 결과 문서: .claude/plans/2026-01-10-MemberListPage-complete.md
+📄 결과 문서: apps/proposal/plans/2026-01-10-MemberListPage-complete.md
 
 ✅ 규칙 검증: 모두 통과
 
