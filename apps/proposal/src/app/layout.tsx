@@ -10,6 +10,7 @@ import {
 	FileText,
 	GitBranch,
 	Home,
+	Image,
 	LayoutDashboard,
 	ListTree,
 	Server,
@@ -29,6 +30,7 @@ const tabs = [
 	{ key: "/database", label: "DB 설계", icon: Database },
 	{ key: "/milestones", label: "마일스톤", icon: GitBranch },
 	{ key: "/schedule", label: "일정", icon: Calendar },
+	{ key: "/image-gen", label: "이미지 생성", icon: Image },
 ] as const;
 
 /**

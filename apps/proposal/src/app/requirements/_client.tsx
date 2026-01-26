@@ -1,11 +1,13 @@
 "use client";
 
-import { Button, Card, CardBody, Divider, Spinner } from "@heroui/react";
+import { Button, Card, CardBody, Spinner } from "@heroui/react";
 import { Plus, RefreshCw } from "lucide-react";
 import { observer } from "mobx-react-lite";
+import { useEffect, useState } from "react";
 
 import {
-	AIChat,
+	FloatingChatButton,
+	FloatingChatPanel,
 	GraphSidebar,
 	NodeDetail,
 	RequirementGraph,
@@ -30,11 +32,32 @@ export const RequirementsPageClient = observer(() => {
 	} = useRequirementGraph();
 
 	const { askQuestion } = useGraphAI({ graph });
+	const [isChatOpen, setIsChatOpen] = useState(false);
+
+	// 키보드 단축키 (⌘K)
+	useEffect(() => {
+		const handleKeyDown = (e: KeyboardEvent) => {
+			if ((e.metaKey || e.ctrlKey) && e.key === "k") {
+				e.preventDefault();
+				setIsChatOpen((prev) => !prev);
+			}
+			if (e.key === "Escape" && isChatOpen) {
+				setIsChatOpen(false);
+			}
+		};
+
+		document.addEventListener("keydown", handleKeyDown);
+		return () => document.removeEventListener("keydown", handleKeyDown);
+	}, [isChatOpen]);
 
 	// 연결된 노드 클릭 핸들러
 	const handleConnectedNodeClick = (nodeId: string) => {
 		selectNodeById(nodeId);
 	};
+
+	// 채팅 열기/닫기 핸들러
+	const handleOpenChat = () => setIsChatOpen(true);
+	const handleCloseChat = () => setIsChatOpen(false);
 
 	if (isLoading) {
 		return (
@@ -92,13 +115,6 @@ export const RequirementsPageClient = observer(() => {
 						</h2>
 						<GraphSidebar filter={filter} onFilterChange={updateFilter} />
 					</div>
-
-					<Divider />
-
-					{/* AI 채팅 패널 */}
-					<div className="h-[400px] p-4">
-						<AIChat graph={graph} onQuery={askQuestion} />
-					</div>
 				</aside>
 
 				{/* 중앙 그래프 뷰어 */}
@@ -127,6 +143,15 @@ export const RequirementsPageClient = observer(() => {
 					/>
 				</aside>
 			</div>
+
+			{/* 플로팅 AI 채팅 */}
+			{!isChatOpen && <FloatingChatButton onPress={handleOpenChat} />}
+			<FloatingChatPanel
+				isOpen={isChatOpen}
+				onClose={handleCloseChat}
+				graph={graph}
+				onQuery={askQuestion}
+			/>
 		</div>
 	);
 });

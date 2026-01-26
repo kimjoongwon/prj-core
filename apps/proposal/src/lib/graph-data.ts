@@ -1,7 +1,18 @@
 import type { RequirementGraph } from "../components/requirements/types";
 
 /**
- * 샘플 요구사항 그래프 데이터 로드
+ * API에서 요구사항 그래프 데이터 로드
+ */
+export async function loadGraphFromAPI(): Promise<RequirementGraph> {
+	const response = await fetch("/api/requirements");
+	if (!response.ok) {
+		throw new Error("요구사항 데이터를 불러올 수 없습니다");
+	}
+	return response.json();
+}
+
+/**
+ * 샘플 요구사항 그래프 데이터 로드 (JSON 파일 직접)
  */
 export async function loadSampleGraph(): Promise<RequirementGraph> {
 	// 동적 import로 JSON 데이터 로드

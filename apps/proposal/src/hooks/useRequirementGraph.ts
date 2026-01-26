@@ -7,7 +7,7 @@ import type {
 	RequirementGraph,
 	RequirementNode,
 } from "../components/requirements/types";
-import { sampleGraph } from "../lib/graph-data";
+import { loadGraphFromAPI } from "../lib/graph-data";
 
 /**
  * 기본 필터 상태
@@ -19,11 +19,26 @@ const DEFAULT_FILTER: GraphFilterState = {
 };
 
 /**
+ * 기본 그래프 구조 (초기 상태용)
+ */
+const EMPTY_GRAPH: RequirementGraph = {
+	id: "",
+	name: "",
+	version: "",
+	nodes: [],
+	edges: [],
+	metadata: {
+		createdAt: "",
+		updatedAt: "",
+	},
+};
+
+/**
  * 요구사항 그래프 데이터 및 상태 관리 훅
  */
 export function useRequirementGraph() {
 	// 그래프 데이터
-	const [graph, setGraph] = useState<RequirementGraph>(sampleGraph);
+	const [graph, setGraph] = useState<RequirementGraph>(EMPTY_GRAPH);
 
 	// 필터 상태
 	const [filter, setFilter] = useState<GraphFilterState>(DEFAULT_FILTER);
@@ -34,22 +49,21 @@ export function useRequirementGraph() {
 	);
 
 	// 로딩 상태
-	const [isLoading, setIsLoading] = useState(false);
+	const [isLoading, setIsLoading] = useState(true);
 
 	// 에러 상태
 	const [error, setError] = useState<Error | null>(null);
 
 	/**
-	 * 그래프 데이터 로드 (옵션)
+	 * 그래프 데이터 로드 (API에서)
 	 */
-	const loadGraph = async (graphId?: string) => {
+	const loadGraph = async () => {
 		setIsLoading(true);
 		setError(null);
 
 		try {
-			// TODO: API에서 그래프 데이터 로드
-			// 현재는 샘플 데이터 사용
-			setGraph(sampleGraph);
+			const data = await loadGraphFromAPI();
+			setGraph(data);
 		} catch (err) {
 			setError(err instanceof Error ? err : new Error("그래프 로드 실패"));
 		} finally {

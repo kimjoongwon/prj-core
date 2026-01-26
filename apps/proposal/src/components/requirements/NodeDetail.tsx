@@ -1,12 +1,13 @@
 "use client";
 
-import { Chip, Divider } from "@heroui/react";
+import { Button, Chip, Divider } from "@heroui/react";
 import {
 	ArrowDownRight,
 	ArrowUpRight,
 	Box,
 	Code,
 	Database,
+	FileEdit,
 	FileText,
 	Globe,
 	Layers,
@@ -18,6 +19,8 @@ import {
 	Zap,
 } from "lucide-react";
 import { observer } from "mobx-react-lite";
+import type { Route } from "next";
+import Link from "next/link";
 
 import type {
 	EdgeType,
@@ -126,6 +129,21 @@ export const NodeDetail = observer(
 						)}
 					</div>
 				</div>
+
+				{/* 화면 타입인 경우 화면설계 버튼 */}
+				{node.type === "screen" && (
+					<Link href={`/screens/${node.id}` as Route}>
+						<Button
+							color="primary"
+							variant="flat"
+							size="sm"
+							startContent={<FileEdit className="size-4" />}
+							className="w-full"
+						>
+							화면설계 작성
+						</Button>
+					</Link>
+				)}
 
 				{/* 설명 */}
 				<div>

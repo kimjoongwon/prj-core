@@ -2,9 +2,7 @@ import path from "node:path";
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-	// 정적 HTML 생성
-	output: "export",
-	// static export 시 이미지 최적화 비활성화
+	// 이미지 최적화 비활성화
 	images: { unoptimized: true },
 	// Turbopack 모노레포 설정
 	turbopack: {
