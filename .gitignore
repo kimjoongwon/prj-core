@@ -20,3 +20,8 @@ packages/*/dist
 
 # Claude Code settings
 .claude/*.local.json
+
+# SQLite/Turso DB files
+*.db
+*.db-shm
+*.db-wal
