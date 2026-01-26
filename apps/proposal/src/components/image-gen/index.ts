@@ -3,6 +3,7 @@
  * @module components/image-gen
  */
 
+export { ComfyUIStatusBanner } from "./ComfyUIStatusBanner";
 export { GenerationProgress } from "./GenerationProgress";
 export { HistoryPanel } from "./HistoryPanel";
 export { ImageCard } from "./ImageCard";

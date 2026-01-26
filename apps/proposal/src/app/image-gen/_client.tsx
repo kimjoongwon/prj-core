@@ -4,6 +4,7 @@ import { Card, CardBody, CardHeader, Divider } from "@heroui/react";
 import { ImageIcon } from "lucide-react";
 import { observer } from "mobx-react-lite";
 import {
+  ComfyUIStatusBanner,
   GenerationProgress,
   HistoryPanel,
   ImageGallery,
@@ -41,6 +42,9 @@ export const ImageGenClient = observer(() => {
           ComfyUI 기반 아이콘 및 이미지 생성
         </p>
       </div>
+
+      {/* ComfyUI 연결 상태 배너 */}
+      <ComfyUIStatusBanner />
 
       <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
         {/* 메인 영역 */}
