@@ -49,7 +49,12 @@ RequirementGraph의 nodes와 edges에 추가할 JSON 형식:
       "type": "screen",
       "name": "회원 목록 화면",
       "description": "회원 목록을 테이블 형태로 표시",
-      "path": "/users"
+      "path": "/users",
+      "screenDesign": {
+        "markdown": "# 회원 목록 화면\n\n## 목적\n회원 정보를 테이블로 조회...\n\n## 레이아웃\n...",
+        "figmaUrl": "",
+        "updatedAt": null
+      }
     }
   ],
   "edges": [
@@ -82,6 +87,8 @@ RequirementGraph의 nodes와 edges에 추가할 JSON 형식:
 3단계: 라우팅 경로 설계
    ↓
 4단계: 관계(edges) 연결
+   ↓
+5단계: 화면별 기획 문서 작성 (screenDesign)
    ↓
 → L5-L6 기획자에게 전달
 ```
@@ -122,9 +129,16 @@ RequirementGraph의 nodes와 edges에 추가할 JSON 형식:
   "type": "screen",
   "name": "회원 목록 화면",
   "description": "회원 목록을 테이블 형태로 표시",
-  "path": "/users"  // 라우팅 경로 필수!
+  "path": "/users",
+  "screenDesign": {
+    "markdown": "# 회원 목록 화면\n\n## 목적\n...",
+    "figmaUrl": "",
+    "updatedAt": null
+  }
 }
 ```
+
+> **필수 필드:** `path`와 `screenDesign`은 모든 screen 노드에 필수입니다.
 
 ### 3단계: 라우팅 경로 설계
 
@@ -151,6 +165,81 @@ RequirementGraph의 nodes와 edges에 추가할 JSON 형식:
 | 목표 → 기능 | L2 Goal | L3 Feature | `parent` |
 | 기능 → 화면 | L3 Feature | L4 Screen | `implements` |
 
+### 5단계: 화면별 기획 문서 작성 (screenDesign)
+
+**모든 screen(L4) 노드에는 `screenDesign` 필드를 포함해야 합니다.**
+
+**screenDesign 구조:**
+```json
+{
+  "screenDesign": {
+    "markdown": "...",      // 화면 기획 문서 (Markdown 형식)
+    "figmaUrl": "",         // Figma URL (있으면 입력, 없으면 빈 문자열)
+    "updatedAt": null       // 최초 생성 시 null
+  }
+}
+```
+
+**markdown 필드 템플릿:**
+
+```markdown
+# [화면명]
+
+## 목적
+[화면의 목적과 사용자 가치 설명]
+
+## 진입/이탈 조건
+
+| 조건 | 설명 |
+|------|------|
+| 진입 | [어떤 경로로 이 화면에 접근하는지] |
+| 이탈 | [이 화면에서 어디로 이동할 수 있는지] |
+
+## 레이아웃
+
+### Desktop (≥1280px)
+\`\`\`
+[ASCII 다이어그램 - 02-structure.md 형식 참고]
+\`\`\`
+
+### Tablet (768-1279px)
+\`\`\`
+[ASCII 다이어그램]
+\`\`\`
+
+### Mobile (<768px)
+\`\`\`
+[ASCII 다이어그램]
+\`\`\`
+
+## 컴포넌트 구성
+
+| 영역 | 컴포넌트 | 유형 | 설명 |
+|------|----------|------|------|
+| Header | PageTitle | ui | 페이지 제목 |
+| ... | ... | ... | ... |
+
+## 상태 및 데이터
+
+| 상태 | 타입 | 설명 |
+|------|------|------|
+| isLoading | boolean | 데이터 로딩 중 |
+| ... | ... | ... |
+
+## 관련 API
+
+| 메서드 | 엔드포인트 | 설명 |
+|--------|-----------|------|
+| GET | /api/[resource] | 목록 조회 |
+| ... | ... | ... |
+```
+
+**작성 원칙:**
+- 02-structure.md의 내용을 각 화면별로 분리하여 `screenDesign.markdown`에 저장
+- 모든 화면에 Desktop/Tablet/Mobile 레이아웃 포함
+- 컴포넌트 구성은 Pure UI → Widget → Feature 계층 명시
+- 관련 API는 L5-L6에서 상세화 예정임을 전제로 기본 정보만 기술
+
 ---
 
 ## 4. 품질 체크리스트
@@ -166,6 +255,8 @@ RequirementGraph의 nodes와 edges에 추가할 JSON 형식:
 - [ ] 라우팅 경로(path)가 RESTful 규칙을 따르는가?
 - [ ] 화면명이 "[무엇] 화면" 형태인가?
 - [ ] 경로에 중복이 없는가?
+- [ ] 모든 screen 노드에 `screenDesign` 필드가 포함되었는가?
+- [ ] `screenDesign.markdown`에 레이아웃과 컴포넌트 구성이 명시되었는가?
 
 ---
 
@@ -199,7 +290,12 @@ RequirementGraph의 nodes와 edges에 추가할 JSON 형식:
       "type": "screen",
       "name": "[화면명]",
       "description": "[화면 설명]",
-      "path": "/[경로]"
+      "path": "/[경로]",
+      "screenDesign": {
+        "markdown": "# [화면명]\n\n## 목적\n[목적 설명]\n\n## 진입/이탈 조건\n...\n\n## 레이아웃\n...\n\n## 컴포넌트 구성\n...\n\n## 관련 API\n...",
+        "figmaUrl": "",
+        "updatedAt": null
+      }
     }
   ],
   "edges": [
@@ -395,12 +491,84 @@ RequirementGraph의 nodes와 edges에 추가할 JSON 형식:
     { "id": "L3-FTR-004", "level": 3, "type": "feature", "name": "회원 수정", "description": "기존 회원 정보 수정" },
     { "id": "L3-FTR-005", "level": 3, "type": "feature", "name": "예약 목록 조회", "description": "날짜, 상태별 필터링이 가능한 예약 목록" },
     { "id": "L3-FTR-006", "level": 3, "type": "feature", "name": "예약 캘린더 뷰", "description": "월간/주간 캘린더로 예약 현황 시각화" },
-    { "id": "L4-SCR-001", "level": 4, "type": "screen", "name": "회원 목록 화면", "description": "회원 목록 테이블", "path": "/users" },
-    { "id": "L4-SCR-002", "level": 4, "type": "screen", "name": "회원 상세 화면", "description": "회원 상세 정보", "path": "/users/:id" },
-    { "id": "L4-SCR-003", "level": 4, "type": "screen", "name": "회원 등록 화면", "description": "회원 등록 폼", "path": "/users/new" },
-    { "id": "L4-SCR-004", "level": 4, "type": "screen", "name": "회원 수정 화면", "description": "회원 수정 폼", "path": "/users/:id/edit" },
-    { "id": "L4-SCR-005", "level": 4, "type": "screen", "name": "예약 목록 화면", "description": "예약 목록 테이블", "path": "/reservations" },
-    { "id": "L4-SCR-006", "level": 4, "type": "screen", "name": "예약 캘린더 화면", "description": "예약 캘린더 뷰", "path": "/reservations/calendar" }
+    {
+      "id": "L4-SCR-001",
+      "level": 4,
+      "type": "screen",
+      "name": "회원 목록 화면",
+      "description": "회원 목록 테이블",
+      "path": "/users",
+      "screenDesign": {
+        "markdown": "# 회원 목록 화면\n\n## 목적\n등록된 회원을 검색, 필터링하여 목록으로 조회합니다.\n\n## 진입/이탈 조건\n\n| 조건 | 설명 |\n|------|------|\n| 진입 | 메인 메뉴 '회원 관리' 클릭 |\n| 이탈 | 회원 행 클릭 → 상세 화면, '등록' 버튼 클릭 → 등록 화면 |\n\n## 레이아웃\n\n### Desktop (≥1280px)\n```\n┌────────────────────────────────────────────────────────────────────────┐\n│  [브레드크럼]              [회원 등록 버튼]                              │\n├────────────────────────────────────────────────────────────────────────┤\n│  ┌───────────────────────────────────────────────────────────────────┐ │\n│  │ [검색어 입력...]  [역할 ▼]                              [검색]    │ │\n│  └───────────────────────────────────────────────────────────────────┘ │\n│  ┌───────────────────────────────────────────────────────────────────┐ │\n│  │ □ | 이름 | 이메일 | 역할 | 가입일 | 액션                          │ │\n│  ├───────────────────────────────────────────────────────────────────┤ │\n│  │ □ | 홍길동 | hong@... | USER | 2024-01-01 | [수정][삭제]          │ │\n│  └───────────────────────────────────────────────────────────────────┘ │\n│  [< 이전]  1  2  3  ...  10  [다음 >]                                   │\n└────────────────────────────────────────────────────────────────────────┘\n```\n\n## 컴포넌트 구성\n\n| 영역 | 컴포넌트 | 유형 | 설명 |\n|------|----------|------|------|\n| Header | PageTitle | ui | 페이지 제목 |\n| Filter | SearchInput | inputs | 검색어 입력 |\n| Filter | Select | inputs | 역할 필터 |\n| Content | DataTable | ui | 회원 테이블 |\n| Footer | Pagination | ui | 페이지 이동 |\n\n## 관련 API\n\n| 메서드 | 엔드포인트 | 설명 |\n|--------|-----------|------|\n| GET | /api/users | 회원 목록 조회 |",
+        "figmaUrl": "",
+        "updatedAt": null
+      }
+    },
+    {
+      "id": "L4-SCR-002",
+      "level": 4,
+      "type": "screen",
+      "name": "회원 상세 화면",
+      "description": "회원 상세 정보",
+      "path": "/users/:id",
+      "screenDesign": {
+        "markdown": "# 회원 상세 화면\n\n## 목적\n개별 회원의 상세 정보를 조회합니다.\n\n## 진입/이탈 조건\n\n| 조건 | 설명 |\n|------|------|\n| 진입 | 회원 목록에서 행 클릭 |\n| 이탈 | '수정' 버튼 → 수정 화면, '목록' 버튼 → 목록 화면 |\n\n## 레이아웃\n\n### Desktop (≥1280px)\n```\n┌────────────────────────────────────────────────────────────────────────┐\n│  [← 목록]  회원 상세            [수정] [삭제]                           │\n├────────────────────────────────────────────────────────────────────────┤\n│  ┌───────────────────────────────────────────────────────────────────┐ │\n│  │ 기본 정보                                                          │ │\n│  │ 이름: 홍길동                                                       │ │\n│  │ 이메일: hong@example.com                                           │ │\n│  │ 역할: USER                                                         │ │\n│  │ 가입일: 2024-01-01                                                 │ │\n│  └───────────────────────────────────────────────────────────────────┘ │\n└────────────────────────────────────────────────────────────────────────┘\n```\n\n## 컴포넌트 구성\n\n| 영역 | 컴포넌트 | 유형 | 설명 |\n|------|----------|------|------|\n| Header | PageTitle | ui | 페이지 제목 |\n| Content | UserCard | widgets | 회원 정보 카드 |\n| Action | Button | ui | 수정/삭제 버튼 |\n\n## 관련 API\n\n| 메서드 | 엔드포인트 | 설명 |\n|--------|-----------|------|\n| GET | /api/users/:id | 회원 상세 조회 |",
+        "figmaUrl": "",
+        "updatedAt": null
+      }
+    },
+    {
+      "id": "L4-SCR-003",
+      "level": 4,
+      "type": "screen",
+      "name": "회원 등록 화면",
+      "description": "회원 등록 폼",
+      "path": "/users/new",
+      "screenDesign": {
+        "markdown": "# 회원 등록 화면\n\n## 목적\n새로운 회원을 등록합니다.\n\n## 진입/이탈 조건\n\n| 조건 | 설명 |\n|------|------|\n| 진입 | 회원 목록에서 '등록' 버튼 클릭 |\n| 이탈 | '저장' 완료 → 목록 화면, '취소' → 목록 화면 |\n\n## 컴포넌트 구성\n\n| 영역 | 컴포넌트 | 유형 | 설명 |\n|------|----------|------|------|\n| Content | UserForm | widgets | 회원 정보 입력 폼 |\n| Action | Button | ui | 저장/취소 버튼 |\n\n## 관련 API\n\n| 메서드 | 엔드포인트 | 설명 |\n|--------|-----------|------|\n| POST | /api/users | 회원 등록 |",
+        "figmaUrl": "",
+        "updatedAt": null
+      }
+    },
+    {
+      "id": "L4-SCR-004",
+      "level": 4,
+      "type": "screen",
+      "name": "회원 수정 화면",
+      "description": "회원 수정 폼",
+      "path": "/users/:id/edit",
+      "screenDesign": {
+        "markdown": "# 회원 수정 화면\n\n## 목적\n기존 회원 정보를 수정합니다.\n\n## 진입/이탈 조건\n\n| 조건 | 설명 |\n|------|------|\n| 진입 | 회원 상세에서 '수정' 버튼 클릭 |\n| 이탈 | '저장' 완료 → 상세 화면, '취소' → 상세 화면 |\n\n## 컴포넌트 구성\n\n| 영역 | 컴포넌트 | 유형 | 설명 |\n|------|----------|------|------|\n| Content | UserForm | widgets | 회원 정보 수정 폼 |\n| Action | Button | ui | 저장/취소 버튼 |\n\n## 관련 API\n\n| 메서드 | 엔드포인트 | 설명 |\n|--------|-----------|------|\n| GET | /api/users/:id | 기존 정보 조회 |\n| PUT | /api/users/:id | 회원 수정 |",
+        "figmaUrl": "",
+        "updatedAt": null
+      }
+    },
+    {
+      "id": "L4-SCR-005",
+      "level": 4,
+      "type": "screen",
+      "name": "예약 목록 화면",
+      "description": "예약 목록 테이블",
+      "path": "/reservations",
+      "screenDesign": {
+        "markdown": "# 예약 목록 화면\n\n## 목적\n예약 목록을 날짜, 상태별로 필터링하여 조회합니다.\n\n## 컴포넌트 구성\n\n| 영역 | 컴포넌트 | 유형 | 설명 |\n|------|----------|------|------|\n| Filter | DateRangePicker | inputs | 날짜 범위 선택 |\n| Filter | StatusSelect | inputs | 상태 필터 |\n| Content | ReservationTable | widgets | 예약 테이블 |\n\n## 관련 API\n\n| 메서드 | 엔드포인트 | 설명 |\n|--------|-----------|------|\n| GET | /api/reservations | 예약 목록 조회 |",
+        "figmaUrl": "",
+        "updatedAt": null
+      }
+    },
+    {
+      "id": "L4-SCR-006",
+      "level": 4,
+      "type": "screen",
+      "name": "예약 캘린더 화면",
+      "description": "예약 캘린더 뷰",
+      "path": "/reservations/calendar",
+      "screenDesign": {
+        "markdown": "# 예약 캘린더 화면\n\n## 목적\n월간/주간 캘린더로 예약 현황을 시각화합니다.\n\n## 컴포넌트 구성\n\n| 영역 | 컴포넌트 | 유형 | 설명 |\n|------|----------|------|------|\n| Header | ViewToggle | ui | 월간/주간 전환 |\n| Content | ReservationCalendar | widgets | 캘린더 뷰 |\n\n## 관련 API\n\n| 메서드 | 엔드포인트 | 설명 |\n|--------|-----------|------|\n| GET | /api/reservations | 기간별 예약 조회 |",
+        "figmaUrl": "",
+        "updatedAt": null
+      }
+    }
   ],
   "edges": [
     { "id": "e-010", "source": "L2-GOL-001", "target": "L3-FTR-001", "type": "parent" },
