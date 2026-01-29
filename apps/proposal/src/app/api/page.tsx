@@ -1,21 +1,10 @@
-"use client";
+import { ApiPageClient } from "./_client";
 
-import { observer } from "mobx-react-lite";
-import { EmptyState } from "../../components/EmptyState";
+export const metadata = {
+	title: "API 설계 | 제대로 만드는 사람들",
+	description: "REST API 엔드포인트 설계 및 스펙 문서",
+};
 
-/**
- * API 설계 페이지
- * REST API 엔드포인트 설계 및 문서화
- */
-function ApiPage() {
-	return (
-		<div className="py-8">
-			<EmptyState
-				title="API 설계"
-				description="REST API 엔드포인트 설계 및 스펙을 관리합니다."
-			/>
-		</div>
-	);
+export default function ApiPage() {
+	return <ApiPageClient />;
 }
-
-export default observer(ApiPage);
