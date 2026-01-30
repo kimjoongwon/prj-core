@@ -5,17 +5,42 @@ import {
 } from "@heroui/react";
 
 export interface RadioOption {
+	/** 표시 텍스트 */
 	text: string;
+	/** 옵션 값 */
 	value: any;
 }
 
 export interface RadioGroupProps
 	extends Omit<NextUIRadioGroupProps, "onValueChange" | "value"> {
+	/** 라디오 옵션 목록 */
 	options?: RadioOption[];
+	/** 선택된 값 */
 	value?: string;
+	/** 값 변경 핸들러 */
 	onValueChange?: (value: string) => void;
 }
 
+/**
+ * RadioGroup 컴포넌트
+ * 라디오 버튼 그룹 컴포넌트입니다.
+ *
+ * @example
+ * ```tsx
+ * const options = [
+ *   { value: "card", text: "신용카드" },
+ *   { value: "bank", text: "계좌이체" },
+ *   { value: "phone", text: "휴대폰결제" },
+ * ];
+ *
+ * <RadioGroup
+ *   label="결제 방법"
+ *   options={options}
+ *   value={paymentMethod}
+ *   onValueChange={setPaymentMethod}
+ * />
+ * ```
+ */
 export const RadioGroup = (props: RadioGroupProps) => {
 	const {
 		options = [

@@ -35,7 +35,10 @@ export class SubjectsController {
 	@ApiErrors(500)
 	@ApiResponseEntity(SubjectDto, HttpStatus.OK, { isArray: true })
 	@ResponseMessage("Subject 목록 조회 성공")
-	async getSubjects(@Query("group") group?: string, @Query("type") _type?: string) {
+	async getSubjects(
+		@Query("group") group?: string,
+		@Query("type") _type?: string,
+	) {
 		const subjects = group
 			? await this.subjectsService.getSubjectsByGroup(group)
 			: await this.subjectsService.getSubjects();

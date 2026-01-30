@@ -4,11 +4,30 @@ import { Maximize, Minimize, Pause, Play } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 
 export interface VideoPlayerProps {
+	/** 비디오 소스 URL */
 	src: string;
+	/** 모달 열림 상태 */
 	isOpen: boolean;
+	/** 모달 닫기 핸들러 */
 	onClose: () => void;
 }
 
+/**
+ * VideoPlayer 컴포넌트
+ * 모달에서 비디오를 재생합니다. 재생/일시정지, 전체화면 기능을 제공합니다.
+ *
+ * @example
+ * ```tsx
+ * const [isOpen, setIsOpen] = useState(false);
+ *
+ * <Button onPress={() => setIsOpen(true)}>비디오 보기</Button>
+ * <VideoPlayer
+ *   src="/videos/intro.mp4"
+ *   isOpen={isOpen}
+ *   onClose={() => setIsOpen(false)}
+ * />
+ * ```
+ */
 export const VideoPlayer = (props: VideoPlayerProps) => {
 	const { src, isOpen, onClose } = props;
 	const [isPlaying, setIsPlaying] = useState(false);

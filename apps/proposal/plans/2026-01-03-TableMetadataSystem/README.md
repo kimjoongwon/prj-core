@@ -1,4 +1,4 @@
-# 테이블 메타데이터 시스템 기획서
+# MetaDataGrid 시스템 기획서
 
 **작성일:** 2026-01-03
 **플랫폼:** Admin Web (Desktop + Tablet + Mobile)
@@ -16,7 +16,7 @@
 ```
 메타데이터 = columns + data + leftInputs + rightInputs
      ↓
-TablePage 컴포넌트 (기존 DataGrid, Pagination 활용)
+MetaDataGrid 컴포넌트 (기존 DataGrid, Pagination 활용)
      ↓
 완성된 테이블 UI (URL querystring 자동 연동)
 ```
@@ -54,12 +54,15 @@ TablePage 컴포넌트 (기존 DataGrid, Pagination 활용)
 
 ## 진행 상황
 
-- [ ] 타입 정의 완료
-- [ ] 컴포넌트 구현
-- [ ] 입력 컴포넌트 (nuqs 연동)
-- [ ] 훅 구현
-- [ ] 기존 컴포넌트 연동
+- [x] 타입 정의 완료 (2026-01-30)
+- [x] 컴포넌트 구현 (2026-01-30)
+- [x] 입력 컴포넌트 (nuqs 연동) (2026-01-30)
+- [x] 훅 구현 (2026-01-30)
+- [x] 기존 컴포넌트 연동 (2026-01-30)
+- [x] TablePage → MetaDataGrid 리네이밍 (2026-01-30)
 - [ ] CASL 권한 연동
+
+**상세 진행 상황:** [PROGRESS.md](./PROGRESS.md)
 
 ---
 

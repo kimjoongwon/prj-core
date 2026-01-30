@@ -48,6 +48,12 @@ grep -rEn "axios\.|fetch\(" [대상경로] --include="*.tsx" --include="*.ts"
 
 # 3. 공용 패키지 앱 종속 이름 검사
 grep -rEn "(Admin|Coin)[A-Z][a-zA-Z]*Store|use(Admin|Coin)[A-Z]" packages/ --include="*.ts" --include="*.tsx"
+
+# 4. packages/ui에서 Context API 사용 금지 검사
+grep -rEn "createContext|useContext" packages/ui/ --include="*.tsx" --include="*.ts"
+
+# 5. 컴포넌트 폴더 내 hooks/, utils/, inputs/ 하위 폴더 금지 검사
+find packages/ui/src/components -type d \( -name "hooks" -o -name "utils" -o -name "inputs" \) | grep -v "components/inputs$"
 ```
 
 ### 2단계: 컴포넌트 유형별 검증
@@ -119,6 +125,8 @@ done
 - [ ] API 직접 호출 금지 (axios, fetch)
 - [ ] observer 필수 ("use client" 컴포넌트)
 - [ ] 공용 패키지 앱 종속 이름 금지
+- [ ] **packages/ui에서 Context API 사용 금지 (createContext, useContext)**
+- [ ] **컴포넌트 폴더 내 hooks/, utils/, inputs/ 하위 폴더 금지 (패키지 레벨에서 관리)**
 
 ### Page 전용
 

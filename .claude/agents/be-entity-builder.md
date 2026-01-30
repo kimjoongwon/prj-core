@@ -1,7 +1,7 @@
 ---
 name: 엔티티-빌더
 description: 도메인 Entity 클래스를 생성하는 전문가
-tools: Read, Write, Grep
+tools: Read, Write, Grep, Bash
 ---
 
 # Entity Builder

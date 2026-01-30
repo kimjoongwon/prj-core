@@ -12,15 +12,15 @@ tools: Read, Write, Grep, Bash
 
 ## 1. 언제 사용하는가?
 
-| 상황 | 사용 여부 | 설명 |
-|------|:--------:|------|
-| 새로운 기본 UI 요소가 필요할 때 | ✅ | Button, Card, Badge, Avatar 등 |
-| 레이아웃 컴포넌트가 필요할 때 | ✅ | VStack, HStack, Container, Spacer |
-| 데이터 표시용 컴포넌트가 필요할 때 | ✅ | Text, Icon, Skeleton |
-| HeroUI에 없는 커스텀 UI가 필요할 때 | ✅ | 프로젝트 전용 스타일 컴포넌트 |
-| 비즈니스 로직이 포함된 컴포넌트 | ❌ | Feature Builder 사용 |
-| 여러 UI를 조합한 복합 컴포넌트 | ❌ | Widget Builder 사용 |
-| 폼 입력 컴포넌트 | ❌ | Input Component Builder 사용 |
+| 상황                                | 사용 여부 | 설명                              |
+| ----------------------------------- | :-------: | --------------------------------- |
+| 새로운 기본 UI 요소가 필요할 때     |    ✅     | Button, Card, Badge, Avatar 등    |
+| 레이아웃 컴포넌트가 필요할 때       |    ✅     | VStack, HStack, Container, Spacer |
+| 데이터 표시용 컴포넌트가 필요할 때  |    ✅     | Text, Icon, Skeleton              |
+| HeroUI에 없는 커스텀 UI가 필요할 때 |    ✅     | 프로젝트 전용 스타일 컴포넌트     |
+| 비즈니스 로직이 포함된 컴포넌트     |    ❌     | Feature Builder 사용              |
+| 여러 UI를 조합한 복합 컴포넌트      |    ❌     | Widget Builder 사용               |
+| 폼 입력 컴포넌트                    |    ❌     | Input Component Builder 사용      |
 
 ---
 
@@ -28,20 +28,20 @@ tools: Read, Write, Grep, Bash
 
 ### 입력
 
-| 항목 | 필수 | 설명 |
-|------|:----:|------|
-| 컴포넌트명 | ✅ | 생성할 컴포넌트 이름 |
-| Props 정의 | ✅ | 타입과 설명 |
-| Storybook 필요 여부 | ⚪ | 기본값: 필요 |
+| 항목                | 필수 | 설명                 |
+| ------------------- | :--: | -------------------- |
+| 컴포넌트명          |  ✅  | 생성할 컴포넌트 이름 |
+| Props 정의          |  ✅  | 타입과 설명          |
+| Storybook 필요 여부 |  ⚪  | 기본값: 필요         |
 
 ### 출력
 
-| 항목 | 경로 |
-|------|------|
-| 메인 컴포넌트 | `packages/ui/src/components/ui/[Name]/[Name].tsx` |
-| Storybook | `packages/ui/src/components/ui/[Name]/[Name].stories.tsx` |
-| barrel export | `packages/ui/src/components/ui/[Name]/index.ts` |
-| 상위 barrel | `packages/ui/src/components/ui/index.ts` (추가) |
+| 항목          | 경로                                                      |
+| ------------- | --------------------------------------------------------- |
+| 메인 컴포넌트 | `packages/ui/src/components/ui/[Name]/[Name].tsx`         |
+| Storybook     | `packages/ui/src/components/ui/[Name]/[Name].stories.tsx` |
+| barrel export | `packages/ui/src/components/ui/[Name]/index.ts`           |
+| 상위 barrel   | `packages/ui/src/components/ui/index.ts` (추가)           |
 
 ---
 
@@ -49,25 +49,27 @@ tools: Read, Write, Grep, Bash
 
 ### ✅ Do
 
-| 규칙 | 설명 |
-|------|------|
-| **HeroUI 우선 확인** | 구현 전에 HeroUI에 동일/비슷한 컴포넌트 확인 |
-| **Pure Component** | 오직 Props를 받아 렌더링만 |
-| **이벤트는 콜백으로** | onClick, onChange 등은 Props로 받음 |
-| **Storybook 필수** | 다양한 variants 표현 |
-| **CVA 스타일링** | 타입 안전한 variant 관리 |
-| **라이브러리 타입 기반** | HeroUI 래핑 시 기존 타입 상속/확장 |
+| 규칙                     | 설명                                         |
+| ------------------------ | -------------------------------------------- |
+| **HeroUI 우선 확인**     | 구현 전에 HeroUI에 동일/비슷한 컴포넌트 확인 |
+| **Pure Component**       | 오직 Props를 받아 렌더링만                   |
+| **이벤트는 콜백으로**    | onClick, onChange 등은 Props로 받음          |
+| **Storybook 필수**       | 다양한 variants 표현                         |
+| **CVA 스타일링**         | 타입 안전한 variant 관리                     |
+| **라이브러리 타입 기반** | HeroUI 래핑 시 기존 타입 상속/확장           |
 
 ### ❌ Don't
 
-| 금지 사항 | 이유 |
-|----------|------|
-| `useState`, `useReducer` 사용 | 상태 관리는 상위 계층에서 |
-| API 호출, Side Effect | Pure Component 원칙 위반 |
-| 비즈니스 로직 포함 | Feature 계층의 역할 |
-| 복잡한 이벤트 처리 | 콜백 호출만 허용 |
-| inline style | Tailwind/CVA만 사용 |
-| Text를 Button/Chip children으로 | 테마 깨짐 발생 |
+| 금지 사항                                          | 이유                                                              |
+| -------------------------------------------------- | ----------------------------------------------------------------- |
+| `useState`, `useReducer` 사용                      | 상태 관리는 상위 계층에서                                         |
+| **Context API 사용 (createContext, useContext)**   | **packages/ui에서 Context 사용 금지 - props drilling 사용**       |
+| **컴포넌트 폴더 내 hooks/, utils/ 하위 폴더 생성** | **패키지 레벨에서 관리 (hooks → src/hooks/, utils → src/utils/)** |
+| API 호출, Side Effect                              | Pure Component 원칙 위반                                          |
+| 비즈니스 로직 포함                                 | Feature 계층의 역할                                               |
+| 복잡한 이벤트 처리                                 | 콜백 호출만 허용                                                  |
+| inline style                                       | Tailwind/CVA만 사용                                               |
+| Text를 Button/Chip children으로                    | 테마 깨짐 발생                                                    |
 
 ---
 
@@ -77,6 +79,7 @@ tools: Read, Write, Grep, Bash
 
 ```markdown
 HeroUI 문서를 확인하여 동일/비슷한 컴포넌트가 있는지 검사:
+
 - 있다면: "이 컴포넌트는 HeroUI에 이미 존재합니다. `import { ComponentName } from '@heroui/react'`로 사용하세요."
 - 없다면: 다음 단계 진행
 ```
@@ -103,6 +106,11 @@ packages/ui/src/components/ui/[ComponentName]/
 ├── [ComponentName].tsx         # 메인 컴포넌트
 ├── [ComponentName].stories.tsx # Storybook
 └── index.ts                    # barrel export
+
+# ⚠️ 컴포넌트 폴더 내 hooks/, utils/ 하위 폴더 생성 금지!
+# 재사용 가능한 훅/유틸은 패키지 레벨에서 관리:
+packages/ui/src/hooks/use[Name].ts       # 재사용 가능한 훅
+packages/ui/src/utils/[utilName].ts      # 재사용 가능한 유틸
 ```
 
 ### 4.4 barrel export 추가
@@ -144,26 +152,23 @@ export function [ComponentName]({
 ```tsx
 import { cva, type VariantProps } from "class-variance-authority";
 
-const componentStyles = cva(
-  "base-classes",
-  {
-    variants: {
-      variant: {
-        default: "variant-default-classes",
-        primary: "variant-primary-classes",
-      },
-      size: {
-        sm: "size-sm-classes",
-        md: "size-md-classes",
-        lg: "size-lg-classes",
-      },
+const componentStyles = cva("base-classes", {
+  variants: {
+    variant: {
+      default: "variant-default-classes",
+      primary: "variant-primary-classes",
     },
-    defaultVariants: {
-      variant: "default",
-      size: "md",
+    size: {
+      sm: "size-sm-classes",
+      md: "size-md-classes",
+      lg: "size-lg-classes",
     },
-  }
-);
+  },
+  defaultVariants: {
+    variant: "default",
+    size: "md",
+  },
+});
 
 export interface ComponentProps extends VariantProps<typeof componentStyles> {
   className?: string;
@@ -181,7 +186,10 @@ export const Component = ({ variant, size, className }: ComponentProps) => {
 ### 5.3 라이브러리 타입 기반 설계
 
 ```tsx
-import { Button as HeroButton, ButtonProps as HeroButtonProps } from "@heroui/react";
+import {
+  Button as HeroButton,
+  ButtonProps as HeroButtonProps,
+} from "@heroui/react";
 
 // 상속 (extends)
 export interface ButtonProps extends HeroButtonProps {
@@ -195,7 +203,10 @@ export interface InputProps extends Omit<HeroInputProps, "onChange" | "value"> {
 }
 
 // 선택 (Pick)
-export interface AvatarProps extends Pick<HeroAvatarProps, "src" | "size" | "name"> {
+export interface AvatarProps extends Pick<
+  HeroAvatarProps,
+  "src" | "size" | "name"
+> {
   status?: "online" | "offline";
 }
 ```
@@ -265,23 +276,23 @@ Pure UI → Widget → Feature → Page
 
 ### 선행 에이전트
 
-| 에이전트 | 관계 |
-|----------|------|
+| 에이전트                | 관계                                  |
+| ----------------------- | ------------------------------------- |
 | /design-analyze (Skill) | Figma 분석 후 필요한 UI 컴포넌트 식별 |
-| planner | 화면 기획서에서 필요한 UI 요소 도출 |
+| planner                 | 화면 기획서에서 필요한 UI 요소 도출   |
 
 ### 후행 에이전트
 
-| 에이전트 | 관계 |
-|----------|------|
+| 에이전트              | 관계                                      |
+| --------------------- | ----------------------------------------- |
 | **fe-widget-builder** | 생성된 UI 컴포넌트를 조합하여 Widget 생성 |
-| fe-feature-builder | Widget과 함께 Feature 컴포넌트에서 사용 |
-| fe-page-builder | 최종 Page에서 활용 |
+| fe-feature-builder    | Widget과 함께 Feature 컴포넌트에서 사용   |
+| fe-page-builder       | 최종 Page에서 활용                        |
 
 ### 관련 에이전트
 
-| 에이전트 | 관계 |
-|----------|------|
+| 에이전트                   | 관계                              |
+| -------------------------- | --------------------------------- |
 | fe-input-component-builder | 폼 입력 컴포넌트 담당 (역할 분리) |
 
 ---
@@ -340,7 +351,10 @@ interface StatusChipCellProps {
   removedAt?: Date | string | null;
 }
 
-const STATUS_CONFIG: Record<string, { label: string; color: "success" | "warning" | "danger" | "default" }> = {
+const STATUS_CONFIG: Record<
+  string,
+  { label: string; color: "success" | "warning" | "danger" | "default" }
+> = {
   active: { label: "활성", color: "success" },
   inactive: { label: "비활성", color: "default" },
   pending: { label: "대기", color: "warning" },
@@ -349,7 +363,10 @@ const STATUS_CONFIG: Record<string, { label: string; color: "success" | "warning
 
 export const StatusChipCell = ({ status, removedAt }: StatusChipCellProps) => {
   const effectiveStatus = removedAt ? "removed" : status;
-  const config = STATUS_CONFIG[effectiveStatus] ?? { label: effectiveStatus, color: "default" };
+  const config = STATUS_CONFIG[effectiveStatus] ?? {
+    label: effectiveStatus,
+    color: "default",
+  };
 
   return (
     <div className="flex justify-center">
@@ -372,23 +389,23 @@ export const StatusChipCell = ({ status, removedAt }: StatusChipCellProps) => {
 
 ### 스타일링 규칙
 
-| 위치 | className 사용 |
-|------|:-------------:|
-| `components/ui/` | ✅ 허용 |
-| `components/inputs/` | ✅ 허용 |
-| `components/widget/` | ❌ 금지 |
-| `components/feature/` | ❌ 금지 |
-| `components/page/` | ❌ 금지 |
-| `components/layouts/` | ❌ 금지 |
+| 위치                  | className 사용 |
+| --------------------- | :------------: |
+| `components/ui/`      |    ✅ 허용     |
+| `components/inputs/`  |    ✅ 허용     |
+| `components/widget/`  |    ❌ 금지     |
+| `components/feature/` |    ❌ 금지     |
+| `components/page/`    |    ❌ 금지     |
+| `components/layouts/` |    ❌ 금지     |
 
 ### 공용 패키지 네이밍 규칙
 
 ```typescript
 // ✅ 올바른 예시 (범용적인 이름)
-export function useAppLayout() { }
+export function useAppLayout() {}
 
 // ❌ 금지 (앱 이름이 포함된 이름)
-export function useAdminLayout() { }
+export function useAdminLayout() {}
 ```
 
 ### Text 컴포넌트 사용 제한
@@ -428,13 +445,13 @@ packages/ui/src/components/ui/surfaces/
 
 #### 엘리베이션 레벨
 
-| 레벨 | 이름 | Shadow | Background | 용도 |
-|------|------|--------|------------|------|
-| 0 | `flat` | none | bg-background | 페이지 배경 |
-| 1 | `raised` | sm | bg-content1 | 페이지 섹션 |
-| 2 | `elevated` | md | bg-content1 + border | 카드, DataGrid |
-| 3 | `floating` | lg | bg-content2 | 드롭다운 |
-| 4 | `overlay` | xl | bg-content2 | 모달 |
+| 레벨 | 이름       | Shadow | Background           | 용도           |
+| ---- | ---------- | ------ | -------------------- | -------------- |
+| 0    | `flat`     | none   | bg-background        | 페이지 배경    |
+| 1    | `raised`   | sm     | bg-content1          | 페이지 섹션    |
+| 2    | `elevated` | md     | bg-content1 + border | 카드, DataGrid |
+| 3    | `floating` | lg     | bg-content2          | 드롭다운       |
+| 4    | `overlay`  | xl     | bg-content2          | 모달           |
 
 #### Surface Props
 
@@ -459,6 +476,7 @@ interface SurfaceProps {
 ### [ComponentName]
 
 **생성된 파일:**
+
 - `packages/ui/src/components/ui/[ComponentName]/[ComponentName].tsx`
 - `packages/ui/src/components/ui/[ComponentName]/[ComponentName].stories.tsx`
 - `packages/ui/src/components/ui/[ComponentName]/index.ts`
@@ -471,11 +489,13 @@ interface SurfaceProps {
 | onClick | () => void | ❌ | 클릭 이벤트 |
 
 **Pure Component 체크:**
+
 - ✅ 내부 상태 없음
 - ✅ Side Effect 없음
 - ✅ 이벤트는 콜백으로만 처리
 - ✅ Storybook 스토리 생성됨
 
 **확인 방법:**
+
 - Storybook: `pnpm --filter @cocrepo/storybook dev`
 ```

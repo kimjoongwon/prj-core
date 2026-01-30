@@ -1,1 +1,0 @@
-export { useUserAbilitiesPage } from "./useUserAbilitiesPage";

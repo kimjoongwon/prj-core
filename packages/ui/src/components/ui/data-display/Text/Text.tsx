@@ -3,6 +3,7 @@ import type React from "react";
 import type { ElementType, HTMLAttributes, ReactNode } from "react";
 
 export interface TextProps extends HTMLAttributes<HTMLElement> {
+	/** 텍스트 변형 (스타일 프리셋) @default "body1" */
 	variant?:
 		| "h1"
 		| "h2"
@@ -19,9 +20,13 @@ export interface TextProps extends HTMLAttributes<HTMLElement> {
 		| "label"
 		| "text"
 		| "error";
+	/** 렌더링할 HTML 태그 @default 시맨틱 태그 자동 선택 */
 	as?: ElementType;
+	/** 텍스트 콘텐츠 */
 	children?: ReactNode;
+	/** 텍스트 말줄임 처리 @default false */
 	truncate?: boolean;
+	/** 줄 수 제한 (line-clamp) @default "none" */
 	lineClamp?: 1 | 2 | 3 | 4 | 5 | 6 | "none";
 }
 
@@ -125,6 +130,28 @@ const getSemanticTag = (
 	}
 };
 
+/**
+ * Text 컴포넌트
+ * 다양한 텍스트 스타일 프리셋을 제공하는 타이포그래피 컴포넌트입니다.
+ *
+ * @example
+ * ```tsx
+ * // 제목
+ * <Text variant="h1">대제목</Text>
+ * <Text variant="h3">소제목</Text>
+ *
+ * // 본문
+ * <Text variant="body1">일반 텍스트</Text>
+ * <Text variant="caption">작은 설명</Text>
+ *
+ * // 말줄임
+ * <Text truncate>긴 텍스트가 잘립니다...</Text>
+ * <Text lineClamp={2}>2줄까지만 표시됩니다...</Text>
+ *
+ * // 커스텀 태그
+ * <Text variant="body1" as="span">인라인 텍스트</Text>
+ * ```
+ */
 export const Text = (props: TextProps) => {
 	const {
 		children,

@@ -7,15 +7,22 @@ import { Input } from "../../inputs/Input";
 import { VStack } from "../../ui/surfaces/VStack/VStack";
 
 export interface State {
+	/** 이메일 */
 	email: string;
+	/** 비밀번호 */
 	password: string;
+	/** 에러 메시지 */
 	errorMessage: string;
 }
 
 export interface LoginPageProps {
+	/** 로그인 상태 객체 */
 	state: State;
+	/** 로그인 버튼 클릭 핸들러 */
 	onClickLoginButton: () => void;
+	/** 입력 필드 키다운 핸들러 (Enter 키 처리) */
 	onKeyDownInput: (e: React.KeyboardEvent) => void;
+	/** 로딩 상태 */
 	isLoading?: boolean;
 	/** 로그인 페이지 제목 (예: "관리자 로그인", "파트너 로그인") */
 	title: string;
@@ -25,8 +32,22 @@ export interface LoginPageProps {
 
 /**
  * LoginPage 컴포넌트
- * 순수 UI 컴포넌트로, Layout은 포함하지 않습니다.
- * Layout은 반드시 Next.js layout.tsx에서 적용해야 합니다.
+ * 이메일/비밀번호 기반 로그인 페이지입니다.
+ * 순수 UI 컴포넌트로, Layout은 Next.js layout.tsx에서 적용합니다.
+ *
+ * @example
+ * ```tsx
+ * const [state] = useState({ email: "", password: "", errorMessage: "" });
+ *
+ * <LoginPage
+ *   state={state}
+ *   title="관리자 로그인"
+ *   caption="관리자 계정으로 로그인해주세요."
+ *   onClickLoginButton={handleLogin}
+ *   onKeyDownInput={(e) => e.key === "Enter" && handleLogin()}
+ *   isLoading={isLoading}
+ * />
+ * ```
  */
 export const LoginPage = observer(
 	({

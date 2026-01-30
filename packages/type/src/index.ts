@@ -142,10 +142,25 @@ export type {
 // ============================================
 export type { JsonArray, JsonObject, JsonValue } from "./json";
 // ============================================
+// 네비게이션 관련 타입
+// ============================================
+export type { FABAction, NavItemConfig, TabConfig } from "./navigation";
+// ============================================
 // 페이지 메타 관련 타입
 // ============================================
 export type { IPageMeta } from "./page-meta";
 // ============================================
-// 네비게이션 관련 타입
+// 테이블 관련 타입
 // ============================================
-export type { FABAction, NavItemConfig, TabConfig } from "./navigation";
+export type {
+	DropdownItem,
+	InputConfig,
+	InputHandlers,
+	InputType,
+	InputTypeProps,
+	MetaDataGridColumnConfig,
+	MetaDataGridConfig,
+	ResponsiveConfig,
+	SelectionConfig,
+	SelectOption,
+} from "./table";

@@ -6,6 +6,17 @@ import {
 	DropdownTrigger,
 } from "@heroui/react";
 
+/**
+ * User 컴포넌트
+ * 사용자 아바타와 드롭다운 메뉴를 표시하는 기본 컴포넌트입니다.
+ *
+ * @example
+ * ```tsx
+ * <User />
+ * ```
+ *
+ * @deprecated Avatar 컴포넌트를 사용하세요.
+ */
 export const User = () => {
 	return (
 		<Dropdown>

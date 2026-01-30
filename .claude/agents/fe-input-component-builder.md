@@ -70,6 +70,8 @@ tools: Read, Write, Grep, Bash
 | 금지 사항 | 이유 |
 |----------|------|
 | Pure Input에서 상태 사용 | useState, useReducer 등 금지 |
+| **Context API 사용 (createContext, useContext)** | **packages/ui에서 Context 사용 금지 - props drilling 사용** |
+| **컴포넌트 폴더 내 hooks/, utils/ 하위 폴더 생성** | **패키지 레벨에서 관리 (hooks → src/hooks/, utils → src/utils/)** |
 | 비즈니스 로직 포함 | Feature 계층의 역할 |
 | 앱 종속 이름 | AdminInput, CoinDatePicker 등 금지 |
 

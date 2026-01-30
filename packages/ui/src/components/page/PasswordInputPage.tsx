@@ -5,21 +5,43 @@ import { Input } from "../inputs/Input";
 import { VStack } from "../ui/surfaces/VStack/VStack";
 
 export interface PasswordInputPageState {
+	/** 비밀번호 */
 	password: string;
+	/** 비밀번호 확인 */
 	passwordConfirm: string;
+	/** 에러 메시지 */
 	errorMessage: string;
 }
 
 export interface PasswordInputPageProps {
+	/** 페이지 상태 객체 */
 	state: PasswordInputPageState;
+	/** 다음 단계 제출 핸들러 */
 	onSubmit: () => void;
+	/** 로딩 상태 */
 	isLoading?: boolean;
 }
 
 /**
  * PasswordInputPage 컴포넌트
- * 순수 UI 컴포넌트로, Layout은 포함하지 않습니다.
- * Layout은 반드시 Next.js layout.tsx에서 적용해야 합니다.
+ * 비밀번호 설정 페이지입니다.
+ * 회원가입 과정에서 비밀번호를 입력받고 확인합니다.
+ * 순수 UI 컴포넌트로, Layout은 Next.js layout.tsx에서 적용합니다.
+ *
+ * @example
+ * ```tsx
+ * const [state] = useState({
+ *   password: "",
+ *   passwordConfirm: "",
+ *   errorMessage: "",
+ * });
+ *
+ * <PasswordInputPage
+ *   state={state}
+ *   onSubmit={handlePasswordSubmit}
+ *   isLoading={isLoading}
+ * />
+ * ```
  */
 export const PasswordInputPage = ({
 	state,

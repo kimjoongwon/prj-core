@@ -1,108 +1,22 @@
 "use client";
 
-import { type UserDto, useGetUsers } from "@cocrepo/api";
-import {
-	DataGrid,
-	DateCell,
-	HStack,
-	type Key,
-	PageSurface,
-	Pagination,
-	PhoneCell,
-	ProfileAvatarCell,
-	RoleChipCell,
-	RowActionsCell,
-	SectionSurface,
-	StatusChipCell,
-	VStack,
-} from "@cocrepo/ui";
+import { PageSurface, SectionSurface, VStack } from "@cocrepo/ui";
 import { Button } from "@heroui/react";
-import { type ColumnDef, createColumnHelper } from "@tanstack/react-table";
-import { Plus, User } from "lucide-react";
-import { observer, useLocalObservable } from "mobx-react-lite";
+import { Plus } from "lucide-react";
+import { observer } from "mobx-react-lite";
 import type { Route } from "next";
 import { useRouter } from "next/navigation";
-
-type UserRow = UserDto & { id: string; status?: string };
-
-// 컬럼 정의
-const columnHelper = createColumnHelper<UserRow>();
-
-const columns = [
-	columnHelper.accessor("name", {
-		header: "회원정보",
-		cell: ({ row }) => (
-			<ProfileAvatarCell
-				name={row.original.name}
-				subtitle={row.original.email}
-				icon={<User className="h-4 w-4" />}
-			/>
-		),
-	}),
-	columnHelper.accessor("phone", {
-		header: "전화번호",
-		cell: ({ getValue }) => <PhoneCell value={getValue()} />,
-	}),
-	columnHelper.display({
-		id: "role",
-		header: "역할",
-		cell: ({ row }) => <RoleChipCell role={row.original.tenants?.[0]?.role} />,
-	}),
-	columnHelper.accessor("createdAt", {
-		header: "가입일",
-		cell: ({ getValue }) => <DateCell value={getValue()} />,
-	}),
-	columnHelper.display({
-		id: "status",
-		header: "상태",
-		cell: ({ row }) => (
-			<StatusChipCell
-				status={row.original.removedAt ? "inactive" : "active"}
-				removedAt={row.original.removedAt}
-			/>
-		),
-	}),
-	columnHelper.display({
-		id: "actions",
-		header: "작업",
-		cell: ({ row }) => (
-			<RowActionsCell
-				id={row.original.id}
-				basePath="/users"
-				showDelete={false}
-			/>
-		),
-	}),
-];
 
 interface UsersPageClientProps {
 	initialPage: number;
 }
 
 /**
- * 회원 목록 페이지 - 클라이언트 컴포넌트
+ * 회원 목록 페이지 - 클라이언트 컴포넌트 (TODO: API 구현 후 활성화)
  */
-function UsersPageClient({ initialPage }: UsersPageClientProps) {
+function UsersPageClient({ initialPage: _initialPage }: UsersPageClientProps) {
 	const router = useRouter();
 
-	const state = useLocalObservable(() => ({
-		selectedKeys: [] as Key[],
-		page: initialPage,
-		limit: 20,
-	}));
-
-	// 회원 목록 조회 - Orval 생성 훅 사용 (prefetch로 초기 데이터 보장)
-	const { data: usersResponse } = useGetUsers({
-		page: state.page,
-		limit: state.limit,
-	});
-
-	const users = (usersResponse?.data ?? []) as UserRow[];
-	const totalCount = usersResponse?.meta?.total ?? 0;
-
-	/**
-	 * 신규 등록 버튼 클릭
-	 */
 	const onClickNewButton = () => {
 		router.push("/users/new" as Route);
 	};
@@ -122,27 +36,16 @@ function UsersPageClient({ initialPage }: UsersPageClientProps) {
 			}
 		>
 			<VStack gap={4}>
-				{/* 회원 DataGrid */}
-				<SectionSurface padding="none">
-					<DataGrid
-						data={users}
-						columns={columns as ColumnDef<UserRow, unknown>[]}
-						state={{ selectedKeys: state.selectedKeys }}
-						tableBody={{ emptyContent: "등록된 회원이 없습니다." }}
-					/>
+				<SectionSurface>
+					<div className="flex flex-col items-center justify-center gap-4 py-16">
+						<h2 className="text-xl font-semibold text-default-500">
+							회원 목록 기능은 구현 예정입니다.
+						</h2>
+						<p className="text-default-400">
+							회원 API 개발 완료 후 활성화됩니다.
+						</p>
+					</div>
 				</SectionSurface>
-
-				{/* 페이지네이션 */}
-				{totalCount > state.limit && (
-					<HStack justifyContent="center">
-						<Pagination
-							state={state}
-							path="page"
-							totalCount={totalCount}
-							showControls
-						/>
-					</HStack>
-				)}
 			</VStack>
 		</PageSurface>
 	);

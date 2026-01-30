@@ -6,10 +6,25 @@ import {
 } from "../../../inputs/Dropdown/Dropdown";
 
 interface AvatarProps {
+	/** 사용자 정보(이름, 설명) 표시 여부 @default true */
 	showInfo?: boolean;
+	/** 메뉴 액션 핸들러 (profile, settings, help, logout 등) */
 	onMenuAction?: (key: string) => void;
 }
 
+/**
+ * Avatar 컴포넌트
+ * 사용자 아바타와 드롭다운 메뉴를 표시합니다.
+ *
+ * @example
+ * ```tsx
+ * // 데스크탑: 사용자 정보와 함께 표시
+ * <Avatar showInfo onMenuAction={(key) => handleAction(key)} />
+ *
+ * // 모바일: 아바타만 표시
+ * <Avatar showInfo={false} onMenuAction={handleAction} />
+ * ```
+ */
 export const Avatar = (props: AvatarProps) => {
 	const { showInfo = true, onMenuAction } = props;
 

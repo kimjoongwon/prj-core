@@ -1,6 +1,6 @@
 "use client";
 
-import { Button, Textarea } from "@heroui/react";
+import { PromptForm } from "@cocrepo/ui";
 import { Sparkles } from "lucide-react";
 import { observer } from "mobx-react-lite";
 
@@ -13,6 +13,10 @@ interface PromptInputProps {
 	onGenerate: () => void;
 }
 
+/**
+ * 이미지 생성용 프롬프트 입력 컴포넌트
+ * PromptForm을 이미지 생성에 맞게 커스터마이징
+ */
 export const PromptInput = observer(
 	({
 		prompt,
@@ -22,73 +26,25 @@ export const PromptInput = observer(
 		onNegativePromptChange,
 		onGenerate,
 	}: PromptInputProps) => {
-		const handleKeyDown = (e: React.KeyboardEvent) => {
-			if (e.key === "Enter" && e.metaKey && !isGenerating && prompt.trim()) {
-				onGenerate();
-			}
-		};
-
 		return (
-			<div className="space-y-4">
-				<div>
-					<label className="block text-sm font-medium text-default-700 mb-2">
-						프롬프트
-					</label>
-					<Textarea
-						placeholder="생성할 아이콘을 설명하세요... (예: delivery motorcycle, red color)"
-						value={prompt}
-						onValueChange={onPromptChange}
-						onKeyDown={handleKeyDown}
-						minRows={3}
-						maxRows={6}
-						variant="bordered"
-						classNames={{
-							input: "text-sm",
-							inputWrapper: "bg-content1",
-						}}
-					/>
-					<p className="text-xs text-default-400 mt-1">
-						기본 스타일: flat icon, minimalist, clean lines
-					</p>
-				</div>
-
-				<div>
-					<label className="block text-sm font-medium text-default-700 mb-2">
-						네거티브 프롬프트 (선택)
-					</label>
-					<Textarea
-						placeholder="제외할 요소... (예: realistic, complex)"
-						value={negativePrompt}
-						onValueChange={onNegativePromptChange}
-						minRows={2}
-						maxRows={4}
-						variant="bordered"
-						classNames={{
-							input: "text-sm",
-							inputWrapper: "bg-content1",
-						}}
-					/>
-					<p className="text-xs text-default-400 mt-1">
-						기본 제외: blurry, low quality, watermark, text
-					</p>
-				</div>
-
-				<Button
-					color="primary"
-					size="lg"
-					className="w-full"
-					isLoading={isGenerating}
-					isDisabled={!prompt.trim() || isGenerating}
-					onPress={onGenerate}
-					startContent={!isGenerating && <Sparkles className="w-4 h-4" />}
-				>
-					{isGenerating ? "생성 중..." : "이미지 생성"}
-				</Button>
-
-				<p className="text-xs text-default-500 text-center">
-					⌘ + Enter로 빠르게 생성
-				</p>
-			</div>
+			<PromptForm
+				prompt={prompt}
+				negativePrompt={negativePrompt}
+				isProcessing={isGenerating}
+				onPromptChange={onPromptChange}
+				onNegativePromptChange={onNegativePromptChange}
+				onSubmit={onGenerate}
+				promptLabel="프롬프트"
+				promptPlaceholder="생성할 아이콘을 설명하세요... (예: delivery motorcycle, red color)"
+				promptHint="기본 스타일: flat icon, minimalist, clean lines"
+				negativePromptLabel="네거티브 프롬프트 (선택)"
+				negativePromptPlaceholder="제외할 요소... (예: realistic, complex)"
+				negativePromptHint="기본 제외: blurry, low quality, watermark, text"
+				submitLabel="이미지 생성"
+				processingLabel="생성 중..."
+				submitIcon={<Sparkles className="w-4 h-4" />}
+				shortcutHint="⌘ + Enter로 빠르게 생성"
+			/>
 		);
 	},
 );

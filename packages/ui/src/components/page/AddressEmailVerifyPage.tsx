@@ -5,24 +5,51 @@ import { Input } from "../inputs/Input";
 import { VStack } from "../ui/surfaces/VStack/VStack";
 
 export interface AddressEmailVerifyPageState {
+	/** 주소 */
 	address: string;
+	/** 이메일 */
 	email: string;
+	/** 이메일 인증번호 */
 	emailVerificationCode: string;
+	/** 에러 메시지 */
 	errorMessage: string;
 }
 
 export interface AddressEmailVerifyPageProps {
+	/** 페이지 상태 객체 */
 	state: AddressEmailVerifyPageState;
+	/** 이메일 인증번호 발송 핸들러 */
 	onSendEmailVerification: () => void;
+	/** 회원가입 완료 제출 핸들러 */
 	onSubmit: () => void;
+	/** 이메일 인증번호 발송 여부 */
 	isEmailCodeSent?: boolean;
+	/** 로딩 상태 */
 	isLoading?: boolean;
 }
 
 /**
  * AddressEmailVerifyPage 컴포넌트
- * 순수 UI 컴포넌트로, Layout은 포함하지 않습니다.
- * Layout은 반드시 Next.js layout.tsx에서 적용해야 합니다.
+ * 주소와 이메일 인증을 위한 회원가입 추가 정보 입력 페이지입니다.
+ * 순수 UI 컴포넌트로, Layout은 Next.js layout.tsx에서 적용합니다.
+ *
+ * @example
+ * ```tsx
+ * const [state] = useState({
+ *   address: "",
+ *   email: "",
+ *   emailVerificationCode: "",
+ *   errorMessage: "",
+ * });
+ *
+ * <AddressEmailVerifyPage
+ *   state={state}
+ *   onSendEmailVerification={handleSendCode}
+ *   onSubmit={handleSubmit}
+ *   isEmailCodeSent={isCodeSent}
+ *   isLoading={isLoading}
+ * />
+ * ```
  */
 export const AddressEmailVerifyPage = ({
 	state,

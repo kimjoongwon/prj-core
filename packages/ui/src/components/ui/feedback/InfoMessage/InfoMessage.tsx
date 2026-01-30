@@ -4,9 +4,13 @@ import { Text } from "../../data-display/Text/Text";
 import { HStack } from "../../surfaces/HStack/HStack";
 
 export interface InfoMessageProps {
+	/** 메시지 본문 */
 	message: string;
+	/** 메시지 유형 @default "info" */
 	variant?: "info" | "warning" | "error" | "success";
+	/** 커스텀 아이콘 */
 	icon?: ReactNode;
+	/** 추가 CSS 클래스 */
 	className?: string;
 }
 
@@ -59,6 +63,25 @@ const defaultIcons = {
 	success: "✅",
 };
 
+/**
+ * InfoMessage 컴포넌트
+ * 다양한 상태의 알림 메시지를 표시합니다.
+ *
+ * @example
+ * ```tsx
+ * <InfoMessage message="정보 메시지입니다." variant="info" />
+ * <InfoMessage message="주의가 필요합니다." variant="warning" />
+ * <InfoMessage message="오류가 발생했습니다." variant="error" />
+ * <InfoMessage message="성공적으로 처리되었습니다." variant="success" />
+ *
+ * // 커스텀 아이콘
+ * <InfoMessage
+ *   message="파일이 업로드되었습니다."
+ *   variant="success"
+ *   icon={<Upload className="h-5 w-5" />}
+ * />
+ * ```
+ */
 export const InfoMessage = ({
 	message,
 	variant = "info",

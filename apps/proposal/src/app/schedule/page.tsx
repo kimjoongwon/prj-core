@@ -1,7 +1,7 @@
 "use client";
 
+import { EmptyState } from "@cocrepo/ui";
 import { observer } from "mobx-react-lite";
-import { EmptyState } from "../../components/EmptyState";
 
 /**
  * 일정 페이지

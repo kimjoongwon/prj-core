@@ -4,18 +4,47 @@ import { X } from "lucide-react";
 import { v4 } from "uuid";
 
 export interface FileUploaderProps {
+	/** 라벨 텍스트 */
 	label?: string;
+	/** 허용 파일 타입 */
 	type: "image" | "video" | "all";
+	/** 현재 파일 값 */
 	value?: Partial<FileDto> | null;
+	/** 파일 변경 핸들러 */
 	onChange?: (fileDto: Partial<FileDto> | null) => void;
+	/** 파일 목록 변경 핸들러 */
 	onFilesChange?: (
 		type: "image" | "video" | "all",
 		fileDtos: Partial<FileDto>[],
 	) => void;
+	/** 파일 삭제 핸들러 */
 	onFileRemove?: (fileDto: Partial<FileDto>) => void;
+	/** 전체 너비 사용 여부 */
 	fullWidth?: boolean;
 }
 
+/**
+ * FileUploader 컴포넌트
+ * 이미지/비디오/모든 파일을 업로드할 수 있는 컴포넌트입니다.
+ *
+ * @example
+ * ```tsx
+ * // 이미지 업로드
+ * <FileUploader
+ *   label="프로필 이미지"
+ *   type="image"
+ *   value={profileImage}
+ *   onChange={setProfileImage}
+ * />
+ *
+ * // 비디오 업로드
+ * <FileUploader
+ *   type="video"
+ *   value={video}
+ *   onChange={setVideo}
+ * />
+ * ```
+ */
 export const FileUploader = (props: FileUploaderProps) => {
 	const {
 		type = "image",

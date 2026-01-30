@@ -41,7 +41,25 @@ export interface NotFoundProps {
 }
 
 /**
- * 404 Not Found 페이지 컴포넌트 (Pure Function)
+ * NotFound 컴포넌트
+ * 404 페이지를 찾을 수 없을 때 표시하는 페이지입니다.
+ *
+ * @example
+ * ```tsx
+ * // 기본 사용
+ * <NotFound
+ *   onHomeClick={() => router.push("/")}
+ *   onBackClick={() => router.back()}
+ * />
+ *
+ * // 커스텀 메시지
+ * <NotFound
+ *   title="접근 권한이 없습니다"
+ *   description="이 페이지에 접근할 권한이 없습니다."
+ *   homeButtonText="대시보드로 이동"
+ *   onHomeClick={() => router.push("/dashboard")}
+ * />
+ * ```
  */
 export function NotFound({
 	title = "페이지를 찾을 수 없습니다",

@@ -1,11 +1,11 @@
 "use client";
 
+import { ImageCard } from "@cocrepo/ui";
 import { Button } from "@heroui/react";
 import { Download, RefreshCw } from "lucide-react";
 import { observer } from "mobx-react-lite";
 import type { ImageHistoryImage } from "@/lib/image-history";
 import { getProxyImageUrl } from "@/lib/image-history";
-import { ImageCard } from "./ImageCard";
 
 interface ImageGalleryProps {
 	images: ImageHistoryImage[];
@@ -14,6 +14,10 @@ interface ImageGalleryProps {
 	onDownloadAll?: () => void;
 }
 
+/**
+ * 이미지 갤러리 컴포넌트 (도메인 특화)
+ * ImageHistoryImage 타입을 사용하여 ComfyUI 이미지 표시
+ */
 export const ImageGallery = observer(
 	({ images, prompt, onRegenerate, onDownloadAll }: ImageGalleryProps) => {
 		const handleDownload = async (image: ImageHistoryImage) => {

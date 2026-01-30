@@ -66,7 +66,7 @@ function AbilitiesLayout({ children }: { children: React.ReactNode }) {
 		const selectedTab = TAB_ITEMS.find((tab) => tab.key === key);
 		if (selectedTab) {
 			// Next.js typed routes 우회 - 아직 생성되지 않은 경로 허용
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any
+			// biome-ignore lint/suspicious/noExplicitAny: Next.js typed routes 우회
 			router.push(selectedTab.path as any);
 		}
 	};

@@ -170,7 +170,7 @@ export const DatabasePageClient = observer(() => {
 						<Divider />
 						<CardBody>
 							{mermaidERD ? (
-								<MermaidChart chart={mermaidERD} className="min-h-[400px]" />
+								<MermaidChart diagram={mermaidERD} className="min-h-[400px]" />
 							) : (
 								<p className="text-center text-default-500">
 									ERD를 생성할 Entity가 없습니다

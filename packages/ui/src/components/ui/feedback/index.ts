@@ -1,3 +1,4 @@
+export * from "./EmptyState";
 export * from "./InfoMessage/InfoMessage";
 export * from "./Message/Message";
 export * from "./NotFound/NotFound";

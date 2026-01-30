@@ -5,10 +5,26 @@ import { useState } from "react";
 import { VideoPlayer } from "../VideoPlayer/VideoPlayer";
 
 export interface SortableMediaProps {
+	/** 미디어 객체 (id, url, mimeType 포함) */
 	media: Partial<any>; // TODO: Replace with proper FileDto type when available
+	/** 삭제 핸들러 */
 	onRemove: (id: string) => void;
 }
 
+/**
+ * SortableMedia 컴포넌트
+ * 드래그로 정렬 가능한 미디어(이미지/비디오) 아이템입니다.
+ *
+ * @example
+ * ```tsx
+ * <SortableMedia
+ *   media={{ id: "1", url: "/image.jpg", mimeType: "image/jpeg" }}
+ *   onRemove={(id) => handleRemove(id)}
+ * />
+ * ```
+ *
+ * @see DraggableSortableList 여러 미디어를 정렬하려면 DraggableSortableList와 함께 사용하세요.
+ */
 export function SortableMedia({ media, onRemove }: SortableMediaProps) {
 	const [isVideoPlayerOpen, setIsVideoPlayerOpen] = useState(false);
 

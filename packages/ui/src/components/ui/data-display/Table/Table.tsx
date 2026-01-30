@@ -21,7 +21,9 @@ import {
 } from "./SortableColumnHeader";
 
 export type TableProps<T> = {
+	/** React Table 인스턴스 */
 	tableInstance: ReactTableProps<T>;
+	/** TableBody 추가 props */
 	tableBody?: Omit<TableBodyProps<T>, "children">;
 	/** 정렬 상태 (복합 정렬 지원) */
 	sortDescriptor?: MultiSortDescriptor;
@@ -31,6 +33,29 @@ export type TableProps<T> = {
 	sortableColumns?: string[];
 } & Omit<HeroTableProps, "sortDescriptor" | "onSortChange">;
 
+/**
+ * Table 컴포넌트
+ * HeroUI Table과 React Table을 통합한 테이블 컴포넌트입니다.
+ *
+ * @example
+ * ```tsx
+ * const table = useReactTable({
+ *   data,
+ *   columns,
+ *   getCoreRowModel: getCoreRowModel(),
+ * });
+ *
+ * <Table
+ *   tableInstance={table}
+ *   sortDescriptor={sorting}
+ *   onSortChange={handleSortChange}
+ *   sortableColumns={["name", "createdAt"]}
+ *   selectionMode="multiple"
+ * />
+ * ```
+ *
+ * @see DataGrid 더 간편한 사용을 원한다면 DataGrid 컴포넌트를 권장합니다.
+ */
 export const Table = <T extends object>({
 	tableInstance,
 	selectedKeys,

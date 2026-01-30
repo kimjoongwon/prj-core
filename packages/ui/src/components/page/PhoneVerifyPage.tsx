@@ -5,23 +5,49 @@ import { Input } from "../inputs/Input";
 import { VStack } from "../ui/surfaces/VStack/VStack";
 
 export interface PhoneVerifyPageState {
+	/** 전화번호 */
 	phone: string;
+	/** 인증번호 */
 	verificationCode: string;
+	/** 에러 메시지 */
 	errorMessage: string;
 }
 
 export interface PhoneVerifyPageProps {
+	/** 페이지 상태 객체 */
 	state: PhoneVerifyPageState;
+	/** 인증번호 발송 핸들러 */
 	onSendVerificationCode: () => void;
+	/** 인증번호 확인 핸들러 */
 	onVerifyCode: () => void;
+	/** 인증번호 발송 여부 */
 	isCodeSent?: boolean;
+	/** 로딩 상태 */
 	isLoading?: boolean;
 }
 
 /**
  * PhoneVerifyPage 컴포넌트
- * 순수 UI 컴포넌트로, Layout은 포함하지 않습니다.
- * Layout은 반드시 Next.js layout.tsx에서 적용해야 합니다.
+ * 전화번호 인증 페이지입니다.
+ * 회원가입 과정에서 전화번호를 입력받고 SMS 인증을 수행합니다.
+ * 순수 UI 컴포넌트로, Layout은 Next.js layout.tsx에서 적용합니다.
+ *
+ * @example
+ * ```tsx
+ * const [state] = useState({
+ *   phone: "",
+ *   verificationCode: "",
+ *   errorMessage: "",
+ * });
+ *
+ * <PhoneVerifyPage
+ *   state={state}
+ *   onSendVerificationCode={handleSendCode}
+ *   onVerifyCode={handleVerify}
+ *   isCodeSent={isCodeSent}
+ *   isLoading={isLoading}
+ * />
+ * ```
  */
 export const PhoneVerifyPage = ({
 	state,

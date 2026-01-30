@@ -8,13 +8,34 @@ interface ParentMenuInfo {
 	icon?: string;
 }
 
-interface CollapsibleSidebarProps {
+export interface CollapsibleSidebarProps {
+	/** 사이드바 내부 컨텐츠 */
 	children: React.ReactNode;
+	/** 상위 메뉴 정보 (아이콘, 이름, 경로) */
 	parentMenuInfo?: ParentMenuInfo | null;
+	/** 접힌 상태 여부 */
 	isCollapsed: boolean;
+	/** 접힘/펼침 토글 핸들러 */
 	onToggle: () => void;
 }
 
+/**
+ * CollapsibleSidebar 컴포넌트
+ * 접을 수 있는 사이드바 레이아웃입니다.
+ * 상위 메뉴 정보와 함께 네비게이션 아이템을 표시합니다.
+ *
+ * @example
+ * ```tsx
+ * <CollapsibleSidebar
+ *   parentMenuInfo={{ name: "설정", pathname: "/settings", icon: "Settings" }}
+ *   isCollapsed={isCollapsed}
+ *   onToggle={toggleSidebar}
+ * >
+ *   <NavItem>메뉴 1</NavItem>
+ *   <NavItem>메뉴 2</NavItem>
+ * </CollapsibleSidebar>
+ * ```
+ */
 export const CollapsibleSidebar = (props: CollapsibleSidebarProps) => {
 	const { children, parentMenuInfo, isCollapsed, onToggle } = props;
 

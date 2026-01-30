@@ -17,9 +17,19 @@ export interface SpaceAlertProps {
 }
 
 /**
- * Space 선택 Alert 컴포넌트
- *
+ * SpaceAlert 컴포넌트
  * Space가 선택되지 않았을 때 표시되는 모달 Alert입니다.
+ *
+ * @example
+ * ```tsx
+ * <SpaceAlert
+ *   title="Space 선택 필요"
+ *   message="서비스 이용을 위해 Space를 선택해주세요."
+ *   confirmText="Space 선택하기"
+ *   onConfirm={handleSelectSpace}
+ *   onDismiss={handleDismiss}
+ * />
+ * ```
  */
 export function SpaceAlert({
 	title = "Space 선택 필요",

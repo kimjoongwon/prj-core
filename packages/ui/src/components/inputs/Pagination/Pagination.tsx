@@ -16,9 +16,19 @@ export interface PaginationProps
 }
 
 /**
- * Pagination Pure 컴포넌트
+ * Pagination 컴포넌트
+ * HeroUI Pagination을 래핑하여 totalCount/limit 기반으로 전체 페이지 수를 자동 계산합니다.
  *
- * HeroUI Pagination을 래핑하여 totalCount/limit 기반으로 total 페이지 수를 계산합니다.
+ * @example
+ * ```tsx
+ * <Pagination
+ *   totalCount={100}
+ *   limit={10}
+ *   page={currentPage}
+ *   onChange={setCurrentPage}
+ * />
+ * // totalCount=100, limit=10 → total=10 페이지
+ * ```
  */
 export const Pagination = (props: PaginationProps) => {
 	const { totalCount, limit = 20, page = 1, onChange, ...rest } = props;

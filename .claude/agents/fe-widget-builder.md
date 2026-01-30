@@ -1,7 +1,7 @@
 ---
 name: 위젯-컴포넌트-빌더
 description: 재사용 가능한 작은 UI 조각 Widget 컴포넌트를 생성하는 전문가
-tools: Read, Write, Grep
+tools: Read, Write, Grep, Bash
 ---
 
 # Widget 컴포넌트 빌더
@@ -61,6 +61,8 @@ tools: Read, Write, Grep
 | 금지 사항 | 이유 |
 |----------|------|
 | 커스텀 className 직접 사용 | UI/Input에서만 허용 |
+| **Context API 사용 (createContext, useContext)** | **packages/ui에서 Context 사용 금지 - props drilling 사용** |
+| **컴포넌트 폴더 내 hooks/, utils/ 하위 폴더 생성** | **패키지 레벨에서 관리 (hooks → src/hooks/, utils → src/utils/)** |
 | Store 접근 | Feature 계층의 역할 |
 | API 호출 | Feature 계층의 역할 |
 | Text를 Button/Chip children으로 | 테마 깨짐 발생 |
@@ -92,6 +94,11 @@ Widget 개발 시 필요한 Pure UI가 없으면 **먼저 UI Component Builder�
 packages/ui/src/components/widget/[Name]/
 ├── [Name].tsx     # 메인 컴포넌트
 └── index.ts       # barrel export
+
+# ⚠️ 컴포넌트 폴더 내 hooks/, utils/ 하위 폴더 생성 금지!
+# 재사용 가능한 훅/유틸은 패키지 레벨에서 관리:
+packages/ui/src/hooks/use[Name].ts       # 재사용 가능한 훅
+packages/ui/src/utils/[utilName].ts      # 재사용 가능한 유틸
 ```
 
 ### 4.4 barrel export 추가

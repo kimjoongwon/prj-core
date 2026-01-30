@@ -1,7 +1,7 @@
 ---
 name: 기능-컴포넌트-빌더
 description: 비즈니스 기능을 담당하는 Feature 컴포넌트를 생성하는 전문가
-tools: Read, Write, Grep
+tools: Read, Write, Grep, Bash
 ---
 
 # Feature 컴포넌트 빌더
@@ -66,6 +66,8 @@ tools: Read, Write, Grep
 | 금지 사항 | 이유 |
 |----------|------|
 | **apps/*/src에 feature 폴더 생성** | **Feature는 반드시 packages/ui에만 존재** |
+| **Context API 사용 (createContext, useContext)** | **packages/ui에서 Context 사용 금지 - props drilling 사용** |
+| **컴포넌트 폴더 내 hooks/, utils/, inputs/ 하위 폴더 생성** | **패키지 레벨에서 관리 (hooks → src/hooks/, utils → src/utils/, inputs → components/inputs/)** |
 | 커스텀 className 직접 사용 | UI/Input에서만 허용 |
 | 직접 axios/fetch 호출 | @cocrepo/api 사용 필수 |
 | Text를 Button/Chip children으로 | 테마 깨짐 발생 |
@@ -98,9 +100,13 @@ Feature 개발 시 필요한 Widget이 없으면 **먼저 Widget Builder에게 �
 ```
 packages/ui/src/components/feature/[Name]/
 ├── [Name].tsx         # 메인 컴포넌트
-├── use[Name].ts       # 커스텀 훅 (상태/로직 분리)
-├── types.ts           # 타입 정의
+├── types.ts           # 타입 정의 (해당 Feature 전용)
 └── index.ts           # export
+
+# ⚠️ 컴포넌트 폴더 내 hooks/, utils/, inputs/ 하위 폴더 생성 금지!
+# 재사용 가능한 훅/유틸은 패키지 레벨에서 관리:
+packages/ui/src/hooks/use[Name].ts       # 재사용 가능한 훅
+packages/ui/src/utils/[utilName].ts      # 재사용 가능한 유틸
 ```
 
 ### 4.4 barrel export 추가

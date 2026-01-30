@@ -5,12 +5,36 @@ import { Text } from "../../data-display/Text/Text";
 import { VStack } from "../../surfaces/VStack/VStack";
 
 export interface SplashScreenProps {
+	/** 메인 타이틀 @default "앱을 준비하고 있습니다" */
 	title?: string;
+	/** 서브 타이틀 @default "잠시만 기다려주세요..." */
 	subtitle?: string;
+	/** 진행률 (0-100, 미제공시 무한 로딩) */
 	progress?: number;
+	/** 프로그레스 바 표시 여부 @default true */
 	showProgress?: boolean;
 }
 
+/**
+ * SplashScreen 컴포넌트
+ * 앱 초기화 중 표시하는 스플래시 화면입니다.
+ *
+ * @example
+ * ```tsx
+ * // 기본 사용 (무한 로딩)
+ * <SplashScreen />
+ *
+ * // 진행률 표시
+ * <SplashScreen progress={75} />
+ *
+ * // 커스텀 메시지
+ * <SplashScreen
+ *   title="데이터를 불러오는 중"
+ *   subtitle="잠시만 기다려주세요"
+ *   progress={loadingProgress}
+ * />
+ * ```
+ */
 export const SplashScreen: React.FC<SplashScreenProps> = ({
 	title = "앱을 준비하고 있습니다",
 	subtitle = "잠시만 기다려주세요...",

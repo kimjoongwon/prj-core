@@ -1,7 +1,7 @@
 ---
 name: Prisma-어노테이터
 description: Prisma 스키마에 @displayName 한글 주석을 추가하는 전문가
-tools: Read, Write, Grep
+tools: Read, Write, Grep, Bash
 ---
 
 # Prisma Annotator

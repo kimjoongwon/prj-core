@@ -1,14 +1,13 @@
 "use client";
 
-import { Button, Chip, Divider } from "@heroui/react";
+import type { DetailConnection, DetailItem } from "@cocrepo/ui";
+import { DetailPanel } from "@cocrepo/ui";
+import { Button } from "@heroui/react";
 import {
-	ArrowDownRight,
-	ArrowUpRight,
 	Box,
 	Code,
 	Database,
 	FileEdit,
-	FileText,
 	Globe,
 	Layers,
 	LayoutGrid,
@@ -25,7 +24,6 @@ import Link from "next/link";
 import type {
 	EdgeType,
 	NodeType,
-	RequirementEdge,
 	RequirementGraph,
 	RequirementNode,
 } from "./types";
@@ -63,214 +61,141 @@ const NODE_TYPE_ICONS: Record<NodeType, React.ReactNode> = {
 };
 
 /**
+ * metadata를 Record<string, string | number | boolean>으로 변환
+ */
+function convertMetadata(
+	metadata?: Record<string, unknown>,
+): Record<string, string | number | boolean> | undefined {
+	if (!metadata) return undefined;
+
+	const result: Record<string, string | number | boolean> = {};
+	for (const [key, value] of Object.entries(metadata)) {
+		if (
+			typeof value === "string" ||
+			typeof value === "number" ||
+			typeof value === "boolean"
+		) {
+			result[key] = value;
+		} else {
+			result[key] = String(value);
+		}
+	}
+	return result;
+}
+
+/**
+ * RequirementNode를 DetailItem으로 변환
+ */
+function convertToDetailItem(
+	node: RequirementNode,
+	graph: RequirementGraph,
+): DetailItem {
+	const nodeColor = NODE_TYPE_COLORS[node.type];
+
+	// 연결 정보 수집
+	const incomingEdges = graph.edges.filter((e) => e.target === node.id);
+	const outgoingEdges = graph.edges.filter((e) => e.source === node.id);
+
+	const getConnectedNode = (nodeId: string) =>
+		graph.nodes.find((n) => n.id === nodeId);
+
+	const incomingConnections: DetailConnection[] = [];
+	for (const edge of incomingEdges) {
+		const sourceNode = getConnectedNode(edge.source);
+		if (!sourceNode) continue;
+
+		const sourceNodeColor = NODE_TYPE_COLORS[sourceNode.type];
+		const edgeColor = EDGE_TYPE_COLORS[edge.type as EdgeType];
+
+		incomingConnections.push({
+			id: edge.id,
+			itemId: sourceNode.id,
+			itemName: sourceNode.name,
+			typeLabel: EDGE_TYPE_LABELS[edge.type as EdgeType],
+			typeColor: edgeColor,
+			icon: NODE_TYPE_ICONS[sourceNode.type],
+			iconBgColor: sourceNodeColor.fill,
+		});
+	}
+
+	const outgoingConnections: DetailConnection[] = [];
+	for (const edge of outgoingEdges) {
+		const targetNode = getConnectedNode(edge.target);
+		if (!targetNode) continue;
+
+		const targetNodeColor = NODE_TYPE_COLORS[targetNode.type];
+		const edgeColor = EDGE_TYPE_COLORS[edge.type as EdgeType];
+
+		outgoingConnections.push({
+			id: edge.id,
+			itemId: targetNode.id,
+			itemName: targetNode.name,
+			typeLabel: EDGE_TYPE_LABELS[edge.type as EdgeType],
+			typeColor: edgeColor,
+			icon: NODE_TYPE_ICONS[targetNode.type],
+			iconBgColor: targetNodeColor.fill,
+		});
+	}
+
+	return {
+		id: node.id,
+		name: node.name,
+		description: node.description,
+		levelLabel: `L${node.level}${node.subLevel ? `.${node.subLevel}` : ""}`,
+		typeLabel: NODE_TYPE_LABELS[node.type],
+		pathLabel: node.path,
+		icon: NODE_TYPE_ICONS[node.type],
+		headerBgColor: nodeColor.fill,
+		iconBgColor: nodeColor.fill,
+		metadata: convertMetadata(node.metadata),
+		incomingConnections,
+		outgoingConnections,
+	};
+}
+
+/**
  * 노드 상세 정보 패널
+ * DetailPanel을 요구사항 그래프 노드에 맞게 커스터마이징
  */
 export const NodeDetail = observer(
 	({ node, graph, onConnectedNodeClick }: NodeDetailProps) => {
 		if (!node) {
 			return (
-				<div className="flex h-full flex-col items-center justify-center p-4 text-center text-default-400">
-					<FileText className="mb-2 size-8" />
-					<p className="text-sm">노드를 선택하면</p>
-					<p className="text-sm">상세 정보가 표시됩니다</p>
-				</div>
+				<DetailPanel
+					item={null}
+					emptyMessage="노드를 선택하면"
+					emptyDescription="상세 정보가 표시됩니다"
+				/>
 			);
 		}
 
-		// 연결된 엣지 찾기
-		const incomingEdges = graph.edges.filter((e) => e.target === node.id);
-		const outgoingEdges = graph.edges.filter((e) => e.source === node.id);
+		const detailItem = convertToDetailItem(node, graph);
 
-		// 연결된 노드 정보 가져오기
-		const getConnectedNode = (nodeId: string) => {
-			return graph.nodes.find((n) => n.id === nodeId);
+		// 화면 타입인 경우 추가 액션 렌더링
+		const renderActionButton = () => {
+			if (node.type !== "screen") return null;
+
+			return (
+				<Link href={`/screens/${node.id}` as Route}>
+					<Button
+						color="primary"
+						variant="flat"
+						size="sm"
+						startContent={<FileEdit className="size-4" />}
+						className="w-full"
+					>
+						화면설계 작성
+					</Button>
+				</Link>
+			);
 		};
 
-		const nodeColor = NODE_TYPE_COLORS[node.type];
-
 		return (
-			<div className="flex h-full flex-col gap-4 overflow-y-auto">
-				{/* 노드 헤더 */}
-				<div
-					className="rounded-lg p-3"
-					style={{ backgroundColor: `${nodeColor.fill}20` }}
-				>
-					<div className="mb-2 flex items-center gap-2">
-						<div
-							className="flex size-8 items-center justify-center rounded-md"
-							style={{ backgroundColor: nodeColor.fill }}
-						>
-							{NODE_TYPE_ICONS[node.type]}
-						</div>
-						<div className="flex-1">
-							<h3 className="font-semibold text-default-800">{node.name}</h3>
-							<p className="text-xs text-default-500">{node.id}</p>
-						</div>
-					</div>
-					<div className="flex flex-wrap gap-1">
-						<Chip
-							size="sm"
-							variant="flat"
-							style={{
-								backgroundColor: nodeColor.fill,
-								color: "#ffffff",
-							}}
-						>
-							L{node.level}
-							{node.subLevel ? `.${node.subLevel}` : ""}
-						</Chip>
-						<Chip size="sm" variant="flat" color="default">
-							{NODE_TYPE_LABELS[node.type]}
-						</Chip>
-						{node.path && (
-							<Chip size="sm" variant="flat" color="primary">
-								{node.path}
-							</Chip>
-						)}
-					</div>
-				</div>
-
-				{/* 화면 타입인 경우 화면설계 버튼 */}
-				{node.type === "screen" && (
-					<Link href={`/screens/${node.id}` as Route}>
-						<Button
-							color="primary"
-							variant="flat"
-							size="sm"
-							startContent={<FileEdit className="size-4" />}
-							className="w-full"
-						>
-							화면설계 작성
-						</Button>
-					</Link>
-				)}
-
-				{/* 설명 */}
-				<div>
-					<h4 className="mb-1 text-xs font-semibold text-default-500">설명</h4>
-					<p className="text-sm text-default-700">{node.description}</p>
-				</div>
-
-				{/* 메타데이터 */}
-				{node.metadata && Object.keys(node.metadata).length > 0 && (
-					<div>
-						<h4 className="mb-1 text-xs font-semibold text-default-500">
-							메타데이터
-						</h4>
-						<div className="space-y-1 rounded-md bg-content2 p-2">
-							{Object.entries(node.metadata).map(([key, value]) => (
-								<div key={key} className="flex justify-between text-xs">
-									<span className="text-default-500">{key}</span>
-									<span className="font-mono text-default-700">
-										{String(value)}
-									</span>
-								</div>
-							))}
-						</div>
-					</div>
-				)}
-
-				<Divider />
-
-				{/* 들어오는 연결 */}
-				{incomingEdges.length > 0 && (
-					<div>
-						<h4 className="mb-2 flex items-center gap-1 text-xs font-semibold text-default-500">
-							<ArrowDownRight className="size-3" />
-							들어오는 연결 ({incomingEdges.length})
-						</h4>
-						<div className="space-y-1">
-							{incomingEdges.map((edge) => {
-								const sourceNode = getConnectedNode(edge.source);
-								if (!sourceNode) return null;
-
-								return (
-									<ConnectionItem
-										key={edge.id}
-										edge={edge}
-										node={sourceNode}
-										direction="incoming"
-										onClick={() => onConnectedNodeClick?.(sourceNode.id)}
-									/>
-								);
-							})}
-						</div>
-					</div>
-				)}
-
-				{/* 나가는 연결 */}
-				{outgoingEdges.length > 0 && (
-					<div>
-						<h4 className="mb-2 flex items-center gap-1 text-xs font-semibold text-default-500">
-							<ArrowUpRight className="size-3" />
-							나가는 연결 ({outgoingEdges.length})
-						</h4>
-						<div className="space-y-1">
-							{outgoingEdges.map((edge) => {
-								const targetNode = getConnectedNode(edge.target);
-								if (!targetNode) return null;
-
-								return (
-									<ConnectionItem
-										key={edge.id}
-										edge={edge}
-										node={targetNode}
-										direction="outgoing"
-										onClick={() => onConnectedNodeClick?.(targetNode.id)}
-									/>
-								);
-							})}
-						</div>
-					</div>
-				)}
-			</div>
-		);
-	},
-);
-
-/**
- * 연결 항목 컴포넌트
- */
-interface ConnectionItemProps {
-	edge: RequirementEdge;
-	node: RequirementNode;
-	direction: "incoming" | "outgoing";
-	onClick: () => void;
-}
-
-const ConnectionItem = observer(
-	({ edge, node, direction, onClick }: ConnectionItemProps) => {
-		const nodeColor = NODE_TYPE_COLORS[node.type];
-		const edgeColor = EDGE_TYPE_COLORS[edge.type as EdgeType];
-
-		return (
-			<button
-				type="button"
-				onClick={onClick}
-				className="flex w-full items-center gap-2 rounded-md bg-content2 p-2 text-left transition-colors hover:bg-content3"
-			>
-				<div
-					className="flex size-6 shrink-0 items-center justify-center rounded"
-					style={{ backgroundColor: nodeColor.fill }}
-				>
-					{NODE_TYPE_ICONS[node.type]}
-				</div>
-				<div className="min-w-0 flex-1">
-					<p className="truncate text-sm font-medium text-default-800">
-						{node.name}
-					</p>
-					<div className="flex items-center gap-1">
-						<span
-							className="inline-block size-2 rounded-full"
-							style={{ backgroundColor: edgeColor }}
-						/>
-						<span className="text-xs text-default-500">
-							{direction === "incoming" ? "← " : "→ "}
-							{EDGE_TYPE_LABELS[edge.type as EdgeType]}
-						</span>
-					</div>
-				</div>
-			</button>
+			<DetailPanel
+				item={detailItem}
+				onConnectionClick={onConnectedNodeClick}
+				actionButton={renderActionButton()}
+			/>
 		);
 	},
 );

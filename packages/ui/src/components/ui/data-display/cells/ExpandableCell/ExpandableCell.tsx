@@ -43,14 +43,40 @@ const DocumentIcon = ({ className }: { className?: string }) => (
 );
 
 interface ExpandableCellProps {
+	/** 표시할 값 */
 	value: string | number;
+	/** 확장 가능한 트리 구조 여부 @default true */
 	expandable?: boolean;
+	/** 트리 깊이 (들여쓰기 계산용) @default 0 */
 	depth?: number;
+	/** 하위 항목 존재 여부 (폴더/문서 아이콘 결정) @default false */
 	canExpand?: boolean;
+	/** 현재 확장 상태 @default false */
 	isExpanded?: boolean;
+	/** 확장/축소 토글 핸들러 */
 	onToggleExpand?: () => void;
 }
 
+/**
+ * ExpandableCell 컴포넌트
+ * 트리 구조에서 확장/축소 가능한 셀을 표시합니다.
+ * 폴더/문서 아이콘과 연결선을 포함합니다.
+ *
+ * @example
+ * ```tsx
+ * // 폴더 (확장 가능)
+ * <ExpandableCell
+ *   value="상위 메뉴"
+ *   depth={0}
+ *   canExpand
+ *   isExpanded={expanded}
+ *   onToggleExpand={() => setExpanded(!expanded)}
+ * />
+ *
+ * // 문서 (확장 불가)
+ * <ExpandableCell value="하위 항목" depth={1} canExpand={false} />
+ * ```
+ */
 export const ExpandableCell = ({
 	value,
 	expandable = true,

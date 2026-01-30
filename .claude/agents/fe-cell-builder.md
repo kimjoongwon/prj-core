@@ -135,6 +135,7 @@ Pure UI Cell → Widget Cell → Feature Cell
 | 금지 사항 | 이유 |
 |----------|------|
 | Pure UI Cell에서 useState | Widget/Feature 계층에서 처리 |
+| **Context API 사용 (createContext, useContext)** | **packages/ui에서 Context 사용 금지 - props drilling 사용** |
 | Widget Cell에서 라우팅/API 호출 | Feature 계층에서 처리 |
 | 복잡한 Props 구조 | `row.original` 전체 전달 금지 |
 | 인라인 스타일 | Tailwind CSS만 사용 |

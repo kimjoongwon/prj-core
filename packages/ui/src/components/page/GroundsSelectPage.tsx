@@ -11,16 +11,37 @@ import {
 
 import { useState } from "react";
 
+/** 그라운드 정보 */
 interface Ground {
+	/** 그라운드 ID */
 	id: string;
+	/** 그라운드 이름 */
 	name: string;
 }
 
 export interface GroundsSelectPageProps {
+	/** 그라운드 목록 */
 	grounds: Ground[];
+	/** 그라운드 선택 핸들러 */
 	onSelect: (groundId: string) => void;
 }
 
+/**
+ * GroundsSelectPage 컴포넌트
+ * 그라운드 선택 모달 페이지입니다.
+ * 여러 그라운드에 속한 사용자가 접근할 그라운드를 선택합니다.
+ *
+ * @example
+ * ```tsx
+ * <GroundsSelectPage
+ *   grounds={[
+ *     { id: "g1", name: "메인 그라운드" },
+ *     { id: "g2", name: "테스트 그라운드" },
+ *   ]}
+ *   onSelect={(groundId) => handleGroundSelect(groundId)}
+ * />
+ * ```
+ */
 export const GroundsSelectPage = ({
 	grounds,
 	onSelect,
