@@ -265,6 +265,33 @@ UserCard                      → UserMenu (AuthStore 연결)
 - Feature 없이 Widget만 다른 곳에서 재사용 가능
 - Store 교체 시 Feature만 수정
 
+### 컴포넌트 위치 규칙 (Critical)
+
+**UI 컴포넌트는 반드시 `packages/ui`에만 생성합니다. `apps/*/src`에 생성 금지!**
+
+| 컴포넌트 유형 | 올바른 위치 | 금지 위치 |
+|--------------|-------------|-----------|
+| Pure UI | `packages/ui/src/components/ui/` | ❌ `apps/*/src/components/ui/` |
+| Widget | `packages/ui/src/components/widget/` | ❌ `apps/*/src/components/widget/` |
+| **Feature** | `packages/ui/src/components/feature/` | ❌ `apps/*/src/components/features/` |
+| Input | `packages/ui/src/components/inputs/` | ❌ `apps/*/src/components/inputs/` |
+| Layout | `packages/ui/src/components/layout/` | ❌ `apps/*/src/components/layout/` |
+| Cell | `packages/ui/src/components/cell/` | ❌ `apps/*/src/components/cell/` |
+
+**앱(`apps/*`)에서 허용되는 것:**
+- `app/` - Next.js App Router 페이지
+- `stores/` - 앱별 Store 설정/주입
+- `hooks/` - 앱 전용 훅 (페이지 핸들러 등)
+- `providers/` - 앱 전용 Provider
+
+```typescript
+// ✅ 올바른 예시 - packages/ui에서 import
+import { SideNav, UserMenu } from "@cocrepo/ui";
+
+// ❌ 금지 - apps 내부에 Feature 생성
+// apps/admin/src/components/features/HeaderSpaceSelector.tsx  ← 금지!
+```
+
 ### SSR/Hydration 관련 주의사항
 
 **`isMounted` 패턴이 필요한 경우와 불필요한 경우를 명확히 구분해야 합니다.**

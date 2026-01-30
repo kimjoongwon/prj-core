@@ -2,6 +2,7 @@
 export * from "./ability";
 export * from "./BottomTab";
 export { CollapsibleSidebar } from "./CollapsibleSidebar/CollapsibleSidebarLayout";
+export * from "./HeaderSpaceSelector";
 export * from "./Logo";
 export * from "./Nav";
 export * from "./SideNav";

@@ -47,11 +47,14 @@ tools: Read, Write, Grep, Bash
 
 | 금지 사항 | 이유 |
 |----------|------|
+| **apps/*/src에 feature 폴더 생성** | **Feature는 packages/ui에서만 존재** |
 | useState 사용 | MobX useLocalObservable 사용 |
 | useCallback/useMemo | React 19 + MobX 자동 최적화 |
 | 직접 axios/fetch 호출 | @cocrepo/api 사용 |
 | 인라인 함수 선언 | 함수는 컴포넌트 외부 또는 훅에서 정의 |
 | 커스텀 className (Page/Feature) | VStack/HStack 등 UI 컴포넌트 사용 |
+
+> ⚠️ **Feature 위치 규칙**: Page에서 Feature를 사용할 때, Feature는 반드시 `packages/ui/src/components/feature/`에서 import합니다. `apps/*/src/components/features/` 같은 앱 내부에 Feature를 만들지 않습니다.
 
 ### 핸들러 네이밍 규칙
 

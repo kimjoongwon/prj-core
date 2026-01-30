@@ -65,10 +65,13 @@ tools: Read, Write, Grep
 
 | 금지 사항 | 이유 |
 |----------|------|
+| **apps/*/src에 feature 폴더 생성** | **Feature는 반드시 packages/ui에만 존재** |
 | 커스텀 className 직접 사용 | UI/Input에서만 허용 |
 | 직접 axios/fetch 호출 | @cocrepo/api 사용 필수 |
 | Text를 Button/Chip children으로 | 테마 깨짐 발생 |
 | inline style | Tailwind/HeroUI만 사용 |
+
+> ⚠️ **Critical**: Feature 컴포넌트는 **절대로** `apps/admin/src/components/features/`, `apps/*/src/feature/` 등 앱 폴더에 생성하지 않습니다. 모든 Feature는 `packages/ui/src/components/feature/`에서만 생성하여 재사용성을 보장합니다.
 
 ---
 
