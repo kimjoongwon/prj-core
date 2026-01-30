@@ -14,14 +14,37 @@
 ```
 
 ### Agents vs Skills
-
-- **agents/**: 설계 및 아키텍처 전문가 (fe-*, be-*, etc-* prefix로 분류)
-- **skills/**: 도구 실행 방법 (type-check, lint-format 등)
-- **hooks/**: 자동 실행 스크립트
-
-## 🚀 사용 방법
-
-프로젝트 루트에서 Claude Code를 실행하면 자동으로 이 설정이 적용됩니다.
+ 
+ - **agents/**: 설계 및 아키텍처 전문가 (fe-*, be-*, etc-* prefix로 분류)
+ - **skills/**: 도구 실행 방법 (type-check, lint-format 등)
+ - **hooks/**: 자동 실행 스크립트
+ 
+ ## 🚀 사용 방법
+ 
+ 프로젝트 루트에서 Claude Code를 실행하면 자동으로 이 설정이 적용됩니다.
+ 
+ ### 에이전트 동기화 (OpenCode ↔ Claude Code)
+ 
+ 에이전트 파일을 수정할 때마다 자동으로 Claude Code 형식으로 변환됩니다:
+ 
+ ```bash
+ # 에이전트 파일 감시 시작
+ pnpm agent:watch
+ 
+ # 또는 수동 변환
+ CLAUDE_PROJECT_DIR=$(pwd) bash .claude/hooks/agent-sync.sh
+ ```
+ 
+ **변환 흐름:**
+ 1. OpenCode로 `.claude/agents/*.md` 파일 수정
+ 2. 감시기가 파일 변경 감지
+ 3. 자동으로 Claude Code 호환 형식으로 변환
+ 4. OpenCode와 Claude Code 모두에서 사용 가능
+ 
+ **참고:**
+ - `_TEMPLATE.md` 파일은 변환에서 제외
+ - 1초 디바운스로 연속 변경 방지
+ - Ctrl+C로 감시 중지
 
 ## 📝 개발 가이드
 

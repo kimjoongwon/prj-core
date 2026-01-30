@@ -1,8 +1,13 @@
 ---
-name: 요구사항 기획 오케스트레이터
 description: L0-L10 레이어별 기획 에이전트를 총괄 조율하는 오케스트레이터
-tools: Task, Read, Write, Grep, Bash
+mode: subagent
+tools:
+  write: true
+  edit: true
+  bash: true
 ---
+
+
 
 # 요구사항 기획 오케스트레이터
 

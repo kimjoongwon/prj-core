@@ -1,8 +1,13 @@
 ---
-name: 컨트롤러-빌더
 description: NestJS REST Controller를 생성하는 전문가
-tools: Read, Write, Grep, Bash
+mode: subagent
+tools:
+  write: true
+  edit: true
+  bash: true
 ---
+
+
 
 # 컨트롤러-빌더
 

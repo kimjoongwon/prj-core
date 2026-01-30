@@ -42,7 +42,8 @@
     "release:patch": "pnpm version:patch && pnpm build:packages && pnpm publish:packages && pnpm update:app-deps",
     "release:minor": "pnpm version:minor && pnpm build:packages && pnpm publish:packages && pnpm update:app-deps",
     "release:major": "pnpm version:major && pnpm build:packages && pnpm publish:packages && pnpm update:app-deps",
-    "release:pkg": "node scripts/release-pkg.js"
+    "release:pkg": "node scripts/release-pkg.js",
+    "agent:watch": "node .claude/scripts/watch-agents.js"
   },
   "devDependencies": {
     "@biomejs/biome": "catalog:",
