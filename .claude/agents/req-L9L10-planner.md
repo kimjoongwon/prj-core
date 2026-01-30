@@ -272,7 +272,7 @@ tools: Read, Write, Grep, Bash
 | 에이전트 | 관계 | 설명 |
 |----------|------|------|
 | req-L7L8-planner | 이전 단계 | 데이터모델/컴포넌트 |
-| req-orchestrator | 상위 | 전체 기획 흐름 조율 |
+| orch-requirement | 상위 | 전체 기획 흐름 조율 |
 
 ### 후행 에이전트
 

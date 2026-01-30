@@ -36,7 +36,12 @@ const DATA_PATH = path.join(
  * 원천 데이터에서 화면 정보와 설계 데이터를 한 번에 조회
  */
 async function getScreenWithDesign(screenId: string): Promise<{
-	screen: { id: string; name: string; description: string; path?: string } | null;
+	screen: {
+		id: string;
+		name: string;
+		description: string;
+		path?: string;
+	} | null;
 	design: { markdown: string; figmaUrl: string };
 }> {
 	const data = await fs.readFile(DATA_PATH, "utf-8");

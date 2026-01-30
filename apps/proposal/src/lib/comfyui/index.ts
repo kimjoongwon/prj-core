@@ -5,13 +5,13 @@
 
 export { ComfyUIClient, comfyUIClient } from "./client";
 export type {
-  ComfyUIHistory,
-  ComfyUIHistoryEntry,
-  ComfyUIImage,
-  ComfyUINodeOutput,
-  ComfyUIWebSocketMessage,
-  GenerateImageRequest,
-  GenerateImageResponse,
-  GenerationStatus,
-  QueuePromptResponse,
+	ComfyUIHistory,
+	ComfyUIHistoryEntry,
+	ComfyUIImage,
+	ComfyUINodeOutput,
+	ComfyUIWebSocketMessage,
+	GenerateImageRequest,
+	GenerateImageResponse,
+	GenerationStatus,
+	QueuePromptResponse,
 } from "./types";

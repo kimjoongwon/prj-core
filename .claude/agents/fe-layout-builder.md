@@ -174,7 +174,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
 ### 관련 에이전트
 | 에이전트 | 관계 |
 |---------|------|
-| `cm-stage-orchestrator` | Stage 4에서 호출 |
+| `orch-stage` | Stage 4에서 호출 |
 | `fe-widget-builder` | Feature 내부에서 사용할 Widget 생성 |
 
 ---

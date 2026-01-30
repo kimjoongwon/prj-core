@@ -79,26 +79,26 @@
 
 ```bash
 # Stage 1: 데이터 설계 (기획서 → 기술 설계서)
-/stage-orchestrator run stage=1 plan=2025-12-30-SignupSystem
+/orch-stage run stage=1 plan=2025-12-30-SignupSystem
 
 # Stage 2: 스키마 구현 (Prisma 스키마, Entity, DTO)
-/stage-orchestrator run stage=2 plan=2025-12-30-SignupSystem
+/orch-stage run stage=2 plan=2025-12-30-SignupSystem
 
 # Stage 3: 백엔드 로직 (Repository, Service, Controller)
-/stage-orchestrator run stage=3 plan=2025-12-30-SignupSystem
+/orch-stage run stage=3 plan=2025-12-30-SignupSystem
 
 # Stage 4: 컴포넌트 구현 (UI, Widget, Feature)
-/stage-orchestrator run stage=4 plan=2025-12-30-SignupSystem
+/orch-stage run stage=4 plan=2025-12-30-SignupSystem
 
 # Stage 5: 페이지 통합 (Page 빌더, 리뷰어)
-/stage-orchestrator run stage=5 plan=2025-12-30-SignupSystem
+/orch-stage run stage=5 plan=2025-12-30-SignupSystem
 ```
 
 ### 전체 실행
 
 ```bash
 # Stage 1부터 순차 실행 (각 단계별 리뷰)
-/stage-orchestrator full plan=2025-12-30-SignupSystem
+/orch-stage full plan=2025-12-30-SignupSystem
 ```
 
 ---

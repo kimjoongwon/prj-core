@@ -18,16 +18,27 @@ export async function POST(request: NextRequest) {
 		const body: RequestBody = await request.json();
 		const { screenId, screenName, question, markdownContent, figmaUrl } = body;
 
-		const systemPrompt = `당신은 UI/UX 화면 설계 전문가입니다. 사용자가 작성 중인 화면 기획서를 도와주세요.
+		const systemPrompt =
+			`당신은 UI/UX 화면 설계 전문가입니다. 사용자가 작성 중인 화면 기획서를 도와주세요.
 
 현재 작업 중인 화면:
-- ID: ` + screenId + `
-- 이름: ` + screenName + `
-` + (figmaUrl ? `- Figma 디자인: ` + figmaUrl : "- Figma 디자인: 연결되지 않음") + `
+- ID: ` +
+			screenId +
+			`
+- 이름: ` +
+			screenName +
+			`
+` +
+			(figmaUrl
+				? `- Figma 디자인: ${figmaUrl}`
+				: "- Figma 디자인: 연결되지 않음") +
+			`
 
 현재 마크다운 기획서 내용:
 \`\`\`markdown
-` + (markdownContent || "(비어있음)") + `
+` +
+			(markdownContent || "(비어있음)") +
+			`
 \`\`\`
 
 규칙:
@@ -57,8 +68,7 @@ export async function POST(request: NextRequest) {
 		});
 
 		const answer =
-			completion.choices[0]?.message?.content ||
-			"응답을 생성할 수 없습니다.";
+			completion.choices[0]?.message?.content || "응답을 생성할 수 없습니다.";
 
 		let suggestedMarkdown: string | null = null;
 		let cleanAnswer = answer;

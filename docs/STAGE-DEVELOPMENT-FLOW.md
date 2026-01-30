@@ -79,7 +79,7 @@
 새 기능을 처음부터 개발할 때 사용합니다.
 
 ```
-/stage-orchestrator full
+/orch-stage full
 
 **페이지명:** MemberListPage
 **요구사항:**
@@ -93,7 +93,7 @@
 이미 기획/설계가 완료된 상태에서 시작할 때 사용합니다.
 
 ```
-/stage-orchestrator start stage=3
+/orch-stage start stage=3
 
 **기획서:** apps/proposal/plans/2026-01-10-MemberList.md
 **설계서:** apps/proposal/plans/2026-01-10-MemberList-design.md
@@ -104,7 +104,7 @@
 특정 단계만 다시 실행할 때 사용합니다.
 
 ```
-/stage-orchestrator run stage=2
+/orch-stage run stage=2
 
 **설계서:** apps/proposal/plans/2026-01-10-MemberList-design.md
 ```
@@ -114,7 +114,7 @@
 현재 진행 상태를 확인합니다.
 
 ```
-/stage-orchestrator status
+/orch-stage status
 
 **기획서:** apps/proposal/plans/2026-01-10-MemberList.md
 ```
@@ -270,7 +270,7 @@ pnpm --filter=@cocrepo/api generate  # Orval API 클라이언트 생성
 #### 1. Stage 1 실행
 
 ```
-/stage-orchestrator full
+/orch-stage full
 
 **페이지명:** MemberListPage
 **요구사항:**
@@ -335,7 +335,7 @@ Stage 2 진행
 
 ```
 # 설계서 수정 후 Stage 2부터 재시작
-/stage-orchestrator start stage=2 plan=2026-01-10-MemberList
+/orch-stage start stage=2 plan=2026-01-10-MemberList
 ```
 
 #### API 변경 시 (Stage 3 리뷰 중)
@@ -344,7 +344,7 @@ Stage 2 진행
 
 ```
 # 설계서 수정 후 Stage 3부터 재시작
-/stage-orchestrator start stage=3 plan=2026-01-10-MemberList
+/orch-stage start stage=3 plan=2026-01-10-MemberList
 ```
 
 #### 컴포넌트 수정 시 (Stage 4 리뷰 중)
@@ -353,7 +353,7 @@ Stage 2 진행
 
 ```
 # Stage 4만 다시 실행
-/stage-orchestrator run stage=4 plan=2026-01-10-MemberList
+/orch-stage run stage=4 plan=2026-01-10-MemberList
 ```
 
 ---
@@ -397,6 +397,5 @@ Stage 2 진행
 
 ## 관련 문서
 
-- 에이전트 상세: `.claude/agents/cm-stage-orchestrator.md`
-- 기획자 가이드: `.claude/agents/etc-planner.md`
-- 기술 설계자 가이드: `.claude/agents/etc-technical-designer.md`
+- 에이전트 상세: `.claude/agents/orch-stage.md`
+- 기획 오케스트레이터: `.claude/agents/orch-requirement.md`

@@ -19,6 +19,13 @@ import {
 import { observer } from "mobx-react-lite";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useEffect, useState } from "react";
+
+import {
+	FloatingChatButton,
+	FloatingChatPanel,
+} from "../components/requirements";
+import { useGlobalAI } from "../hooks/useGlobalAI";
 
 const tabs = [
 	{ key: "/", label: "소개", icon: Home },
@@ -39,9 +46,30 @@ const tabs = [
  */
 const RootLayout = observer(({ children }: { children: React.ReactNode }) => {
 	const pathname = usePathname();
+	const [isChatOpen, setIsChatOpen] = useState(false);
+	const { askQuestion } = useGlobalAI();
 
 	// 현재 경로에 맞는 탭 키 찾기
 	const currentTab = tabs.find((tab) => tab.key === pathname)?.key ?? "/";
+
+	// 전역 키보드 단축키 (⌘K)
+	useEffect(() => {
+		const handleKeyDown = (e: KeyboardEvent) => {
+			if ((e.metaKey || e.ctrlKey) && e.key === "k") {
+				e.preventDefault();
+				setIsChatOpen((prev) => !prev);
+			}
+			if (e.key === "Escape" && isChatOpen) {
+				setIsChatOpen(false);
+			}
+		};
+
+		document.addEventListener("keydown", handleKeyDown);
+		return () => document.removeEventListener("keydown", handleKeyDown);
+	}, [isChatOpen]);
+
+	const handleOpenChat = () => setIsChatOpen(true);
+	const handleCloseChat = () => setIsChatOpen(false);
 
 	return (
 		<html lang="ko" className="dark">
@@ -114,6 +142,14 @@ const RootLayout = observer(({ children }: { children: React.ReactNode }) => {
 							{/* 페이지 컨텐츠 */}
 							{children}
 						</main>
+
+						{/* 전역 플로팅 AI 채팅 */}
+						{!isChatOpen && <FloatingChatButton onPress={handleOpenChat} />}
+						<FloatingChatPanel
+							isOpen={isChatOpen}
+							onClose={handleCloseChat}
+							onQuery={askQuestion}
+						/>
 					</div>
 				</Providers>
 			</body>

@@ -9,13 +9,7 @@ import {
 	Tab,
 	Tabs,
 } from "@heroui/react";
-import {
-	ArrowRight,
-	Database,
-	FileJson,
-	Monitor,
-	Server,
-} from "lucide-react";
+import { Database, FileJson, Monitor, Server } from "lucide-react";
 import { observer } from "mobx-react-lite";
 import { useMemo, useState } from "react";
 
@@ -23,12 +17,14 @@ import type { ApiView, HttpMethod } from "../../components/requirements/types";
 import { useRequirementGraph } from "../../hooks/useRequirementGraph";
 import {
 	extractApis,
-	findNodeById,
 	getNodeNames,
 	groupApisByMethod,
 } from "../../lib/graph-extractors";
 
-const METHOD_COLORS: Record<HttpMethod, "success" | "primary" | "warning" | "secondary" | "danger"> = {
+const METHOD_COLORS: Record<
+	HttpMethod,
+	"success" | "primary" | "warning" | "secondary" | "danger"
+> = {
 	GET: "success",
 	POST: "primary",
 	PUT: "warning",
@@ -41,7 +37,9 @@ const METHOD_COLORS: Record<HttpMethod, "success" | "primary" | "warning" | "sec
  */
 export const ApiPageClient = observer(() => {
 	const { graph, isLoading, error } = useRequirementGraph();
-	const [selectedMethod, setSelectedMethod] = useState<HttpMethod | "ALL">("ALL");
+	const [selectedMethod, setSelectedMethod] = useState<HttpMethod | "ALL">(
+		"ALL",
+	);
 
 	const apis = useMemo(() => (graph ? extractApis(graph) : []), [graph]);
 	const groupedApis = useMemo(() => groupApisByMethod(apis), [apis]);
@@ -101,7 +99,9 @@ export const ApiPageClient = observer(() => {
 			<Tabs
 				aria-label="API 메서드 필터"
 				selectedKey={selectedMethod}
-				onSelectionChange={(key) => setSelectedMethod(key as HttpMethod | "ALL")}
+				onSelectionChange={(key) =>
+					setSelectedMethod(key as HttpMethod | "ALL")
+				}
 				color="primary"
 				variant="underlined"
 				classNames={{
@@ -160,7 +160,13 @@ function StatCard({
  * API 카드 컴포넌트
  */
 const ApiCard = observer(
-	({ api, graph }: { api: ApiView; graph: import("../../components/requirements/types").RequirementGraph }) => {
+	({
+		api,
+		graph,
+	}: {
+		api: ApiView;
+		graph: import("../../components/requirements/types").RequirementGraph;
+	}) => {
 		const screenNames = getNodeNames(graph, api.calledByScreens);
 		const entityNames = getNodeNames(graph, api.usesEntities);
 
@@ -201,7 +207,9 @@ const ApiCard = observer(
 									))}
 								</div>
 							) : (
-								<span className="text-xs text-default-400">연결된 화면 없음</span>
+								<span className="text-xs text-default-400">
+									연결된 화면 없음
+								</span>
 							)}
 						</div>
 
@@ -220,7 +228,9 @@ const ApiCard = observer(
 									))}
 								</div>
 							) : (
-								<span className="text-xs text-default-400">연결된 Entity 없음</span>
+								<span className="text-xs text-default-400">
+									연결된 Entity 없음
+								</span>
 							)}
 						</div>
 					</div>

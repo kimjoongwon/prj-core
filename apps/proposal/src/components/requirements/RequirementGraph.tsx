@@ -3,7 +3,7 @@
 import type { EdgeData, GraphOptions, NodeData } from "@antv/g6";
 import { Graph } from "@antv/g6";
 import { observer } from "mobx-react-lite";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 
 import type {
 	EdgeType,
@@ -81,22 +81,19 @@ export const RequirementGraph = observer(
 	({ graph, filter, selectedNodeId, onNodeSelect }: RequirementGraphProps) => {
 		const containerRef = useRef<HTMLDivElement>(null);
 		const graphRef = useRef<Graph | null>(null);
-		const [isReady, setIsReady] = useState(false);
+		const cleanupRef = useRef(false);
 
 		// 필터링된 노드/엣지 계산
 		const filteredNodes = graph.nodes.filter((node) => {
-			// 레벨 필터
 			if (!filter.selectedLevels.includes(node.level)) {
 				return false;
 			}
-			// 타입 필터
 			if (
 				filter.selectedTypes.length > 0 &&
 				!filter.selectedTypes.includes(node.type)
 			) {
 				return false;
 			}
-			// 검색 필터
 			if (filter.searchQuery) {
 				const query = filter.searchQuery.toLowerCase();
 				return (
@@ -114,42 +111,49 @@ export const RequirementGraph = observer(
 				filteredNodeIds.has(edge.source) && filteredNodeIds.has(edge.target),
 		);
 
-		// G6 그래프 초기화
+		// 데이터 키
+		const dataKey = JSON.stringify({
+			nodeIds: filteredNodes.map((n) => n.id).sort(),
+			edgeIds: filteredEdges.map((e) => e.id).sort(),
+		});
+
+		// G6 그래프 초기화 및 업데이트
 		useEffect(() => {
 			if (!containerRef.current) return;
 
-			const container = containerRef.current;
-			const width = container.offsetWidth;
-			const height = container.offsetHeight;
+			cleanupRef.current = false;
 
-			// 기존 그래프 정리
-			if (graphRef.current) {
-				graphRef.current.destroy();
+			const container = containerRef.current;
+			const width = container.offsetWidth || 800;
+			const height = container.offsetHeight || 600;
+
+			// G6 데이터 형식
+			const g6Data = {
+				nodes: filteredNodes.map((node) => ({
+					id: node.id,
+					data: { ...node, label: node.name },
+				})),
+				edges: filteredEdges.map((edge) => ({
+					id: edge.id,
+					source: edge.source,
+					target: edge.target,
+					data: { ...edge },
+				})),
+			};
+
+			// 기존 그래프가 있으면 데이터만 업데이트
+			if (graphRef.current && !graphRef.current.destroyed) {
+				graphRef.current.setData(g6Data);
+				graphRef.current.render();
+				return;
 			}
 
-			// G6 그래프 설정
+			// 새 그래프 생성
 			const graphOptions: GraphOptions = {
 				container,
 				width,
 				height,
-				data: {
-					nodes: filteredNodes.map((node) => ({
-						id: node.id,
-						data: {
-							...node,
-							label: node.name,
-						},
-					})),
-					edges: filteredEdges.map((edge) => ({
-						id: edge.id,
-						source: edge.source,
-						target: edge.target,
-						data: {
-							...edge,
-						},
-					})),
-				},
-				// 레이아웃 설정 (계층형)
+				data: g6Data,
 				layout: {
 					type: "dagre",
 					rankdir: "TB",
@@ -157,7 +161,6 @@ export const RequirementGraph = observer(
 					ranksep: 60,
 					align: "DL",
 				},
-				// 노드 스타일
 				node: {
 					type: "rect",
 					style: {
@@ -191,7 +194,6 @@ export const RequirementGraph = observer(
 						},
 					},
 				},
-				// 엣지 스타일
 				edge: {
 					type: "polyline",
 					style: {
@@ -199,9 +201,7 @@ export const RequirementGraph = observer(
 						lineWidth: 2,
 						endArrow: true,
 						endArrowSize: 8,
-						router: {
-							type: "orth",
-						},
+						router: { type: "orth" },
 					},
 					state: {
 						highlight: {
@@ -213,7 +213,6 @@ export const RequirementGraph = observer(
 						},
 					},
 				},
-				// 동작 설정
 				behaviors: [
 					"drag-canvas",
 					"zoom-canvas",
@@ -229,7 +228,6 @@ export const RequirementGraph = observer(
 						multiple: false,
 					},
 				],
-				// 플러그인
 				plugins: [
 					{
 						type: "minimap",
@@ -237,18 +235,18 @@ export const RequirementGraph = observer(
 						position: "bottom-right",
 					},
 				],
-				// 테마 (다크)
 				theme: "dark",
 				background: "transparent",
 				autoFit: "view",
 				padding: 40,
 			};
 
-			// G6 그래프 생성
 			const g6Graph = new Graph(graphOptions);
+			graphRef.current = g6Graph;
 
 			// 이벤트 리스너
 			g6Graph.on("node:click", (e) => {
+				if (cleanupRef.current) return;
 				const event = e as unknown as {
 					targetType: string;
 					target: { id: string };
@@ -261,19 +259,23 @@ export const RequirementGraph = observer(
 			});
 
 			g6Graph.on("canvas:click", () => {
+				if (cleanupRef.current) return;
 				onNodeSelect?.(null);
 			});
 
 			// 렌더링
-			g6Graph.render().then(() => {
-				setIsReady(true);
+			g6Graph.render().catch(() => {
+				// cleanup 후 에러는 무시
 			});
-
-			graphRef.current = g6Graph;
 
 			// 리사이즈 핸들러
 			const handleResize = () => {
-				if (graphRef.current && containerRef.current) {
+				if (
+					!cleanupRef.current &&
+					graphRef.current &&
+					!graphRef.current.destroyed &&
+					containerRef.current
+				) {
 					graphRef.current.setSize(
 						containerRef.current.offsetWidth,
 						containerRef.current.offsetHeight,
@@ -284,28 +286,51 @@ export const RequirementGraph = observer(
 			window.addEventListener("resize", handleResize);
 
 			return () => {
+				cleanupRef.current = true;
 				window.removeEventListener("resize", handleResize);
-				if (graphRef.current) {
+				if (graphRef.current && !graphRef.current.destroyed) {
 					graphRef.current.destroy();
-					graphRef.current = null;
 				}
+				graphRef.current = null;
 			};
-		}, [filteredNodes, filteredEdges, graph.nodes, onNodeSelect]);
+			// eslint-disable-next-line react-hooks/exhaustive-deps
+		}, [dataKey]);
 
 		// 선택된 노드 상태 업데이트
 		useEffect(() => {
-			if (!graphRef.current || !isReady) return;
+			if (cleanupRef.current) return;
+			if (!graphRef.current || graphRef.current.destroyed) return;
 
-			// 모든 노드의 selected 상태 초기화
-			graph.nodes.forEach((node) => {
-				graphRef.current?.setElementState(node.id, []);
-			});
+			const g6Graph = graphRef.current;
 
-			// 선택된 노드에 selected 상태 적용
-			if (selectedNodeId) {
-				graphRef.current.setElementState(selectedNodeId, ["selected"]);
-			}
-		}, [selectedNodeId, isReady, graph.nodes]);
+			// 렌더링 완료 후 상태 업데이트를 위해 약간의 지연
+			const timeoutId = setTimeout(() => {
+				if (
+					cleanupRef.current ||
+					!graphRef.current ||
+					graphRef.current.destroyed
+				)
+					return;
+
+				try {
+					const nodeIds = g6Graph.getNodeData().map((n) => n.id);
+
+					nodeIds.forEach((nodeId) => {
+						if (cleanupRef.current || g6Graph.destroyed) return;
+						g6Graph.setElementState(nodeId, []);
+					});
+
+					if (selectedNodeId && nodeIds.includes(selectedNodeId)) {
+						if (cleanupRef.current || g6Graph.destroyed) return;
+						g6Graph.setElementState(selectedNodeId, ["selected"]);
+					}
+				} catch {
+					// 그래프가 렌더링 중이거나 파괴된 경우 무시
+				}
+			}, 100);
+
+			return () => clearTimeout(timeoutId);
+		}, [selectedNodeId, dataKey]);
 
 		return (
 			<div

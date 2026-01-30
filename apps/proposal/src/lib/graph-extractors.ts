@@ -3,9 +3,9 @@
  */
 
 import type {
+	ActionView,
 	ApiMetadata,
 	ApiView,
-	ActionView,
 	ComponentMetadata,
 	ComponentType,
 	ComponentView,
@@ -15,7 +15,6 @@ import type {
 	FieldConstraint,
 	FieldType,
 	HttpMethod,
-	RequirementEdge,
 	RequirementGraph,
 	RequirementNode,
 	ScreenView,
@@ -34,7 +33,7 @@ export function extractApis(graph: RequirementGraph): ApiView[] {
 	);
 
 	return apiNodes.map((node) => {
-		const metadata = (node.metadata as ApiMetadata) ?? {
+		const metadata = (node.metadata as unknown as ApiMetadata) ?? {
 			method: parseMethodFromName(node.name),
 			endpoint: parseEndpointFromName(node.name),
 		};
@@ -392,10 +391,7 @@ export function findNodeById(
 /**
  * ID 목록으로 노드 이름 목록 가져오기
  */
-export function getNodeNames(
-	graph: RequirementGraph,
-	ids: string[],
-): string[] {
+export function getNodeNames(graph: RequirementGraph, ids: string[]): string[] {
 	return ids
 		.map((id) => findNodeById(graph, id)?.name)
 		.filter((name): name is string => name !== undefined);

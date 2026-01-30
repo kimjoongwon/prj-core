@@ -325,7 +325,7 @@ RequirementGraph의 nodes와 edges에 추가할 JSON 형식:
 | 에이전트 | 관계 | 설명 |
 |----------|------|------|
 | req-L0L2-planner | 이전 단계 | 컨텍스트/사용자/목표 |
-| req-orchestrator | 상위 | 전체 기획 흐름 조율 |
+| orch-requirement | 상위 | 전체 기획 흐름 조율 |
 
 ### 후행 에이전트
 

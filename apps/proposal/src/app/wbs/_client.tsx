@@ -1,413 +1,676 @@
 "use client";
 
 import {
+	Button,
 	Card,
 	CardBody,
 	CardHeader,
 	Chip,
 	Divider,
+	Input,
+	Modal,
+	ModalBody,
+	ModalContent,
+	ModalFooter,
+	ModalHeader,
+	Select,
+	SelectItem,
+	Spinner,
 	Tab,
 	Tabs,
+	useDisclosure,
 } from "@heroui/react";
-import { MermaidChart } from "../../components/MermaidChart";
+import {
+	Calendar,
+	FileText,
+	FolderOpen,
+	List,
+	Plus,
+	RefreshCw,
+	Sparkles,
+	Trash2,
+} from "lucide-react";
+import dynamic from "next/dynamic";
+import { useEffect, useState } from "react";
 
-const wbsMainChart = `
-flowchart TB
-    ROOT[예약 서비스]
+import type { PlanFolder, WbsData, WbsTask } from "../../types/wbs";
 
-    ROOT --> A[1. 기획 및 분석]
-    ROOT --> B[2. 설계]
-    ROOT --> C[3. 백엔드 개발]
-    ROOT --> D[4. 프론트엔드 개발]
-    ROOT --> E[5. 테스트 및 QA]
-    ROOT --> F[6. 배포 및 운영]
-
-    A --> A1[1.1 요구사항 정의]
-    A --> A2[1.2 기능 명세서 작성]
-    A --> A3[1.3 화면 설계]
-
-    B --> B1[2.1 DB 스키마 설계]
-    B --> B2[2.2 API 설계]
-    B --> B3[2.3 아키텍처 설계]
-
-    C --> C1[3.1 예약 모듈]
-    C --> C2[3.2 결제 연동]
-    C --> C3[3.3 알림 시스템]
-
-    D --> D1[4.1 예약 페이지]
-    D --> D2[4.2 관리자 페이지]
-    D --> D3[4.3 마이페이지]
-
-    E --> E1[5.1 단위 테스트]
-    E --> E2[5.2 통합 테스트]
-    E --> E3[5.3 사용자 테스트]
-
-    F --> F1[6.1 스테이징 배포]
-    F --> F2[6.2 프로덕션 배포]
-    F --> F3[6.3 모니터링 설정]
-`;
-
-const wbsBackendChart = `
-flowchart TB
-    BE[백엔드 개발]
-
-    BE --> RES[예약 모듈]
-    BE --> PAY[결제 연동]
-    BE --> NOTI[알림 시스템]
-    BE --> AUTH[인증/인가]
-
-    RES --> RES1[예약 CRUD API]
-    RES --> RES2[가용성 확인 로직]
-    RES --> RES3[예약 상태 관리]
-    RES --> RES4[취소/환불 처리]
-
-    PAY --> PAY1[PG사 연동]
-    PAY --> PAY2[결제 검증]
-    PAY --> PAY3[환불 처리]
-
-    NOTI --> NOTI1[이메일 발송]
-    NOTI --> NOTI2[SMS 발송]
-    NOTI --> NOTI3[푸시 알림]
-
-    AUTH --> AUTH1[JWT 인증]
-    AUTH --> AUTH2[권한 관리]
-`;
-
-const wbsFrontendChart = `
-flowchart TB
-    FE[프론트엔드 개발]
-
-    FE --> BOOK[예약 페이지]
-    FE --> ADMIN[관리자 페이지]
-    FE --> MY[마이페이지]
-    FE --> COMMON[공통 컴포넌트]
-
-    BOOK --> BOOK1[서비스 선택]
-    BOOK --> BOOK2[일정 선택 캘린더]
-    BOOK --> BOOK3[예약 정보 입력]
-    BOOK --> BOOK4[결제 페이지]
-    BOOK --> BOOK5[예약 완료 페이지]
-
-    ADMIN --> ADMIN1[예약 현황 대시보드]
-    ADMIN --> ADMIN2[예약 관리 목록]
-    ADMIN --> ADMIN3[서비스/상품 관리]
-    ADMIN --> ADMIN4[일정 관리]
-
-    MY --> MY1[예약 내역 조회]
-    MY --> MY2[예약 상세 보기]
-    MY --> MY3[예약 취소/변경]
-
-    COMMON --> COMMON1[캘린더 컴포넌트]
-    COMMON --> COMMON2[타임슬롯 선택]
-    COMMON --> COMMON3[예약 카드]
-`;
-
-const wbsData = [
-	{
-		id: "1",
-		name: "기획 및 분석",
-		children: [
-			{
-				id: "1.1",
-				name: "요구사항 정의",
-				duration: "3일",
-				status: "completed",
-			},
-			{
-				id: "1.2",
-				name: "기능 명세서 작성",
-				duration: "2일",
-				status: "completed",
-			},
-			{
-				id: "1.3",
-				name: "화면 설계 (와이어프레임)",
-				duration: "3일",
-				status: "in-progress",
-			},
-		],
-	},
-	{
-		id: "2",
-		name: "설계",
-		children: [
-			{ id: "2.1", name: "DB 스키마 설계", duration: "2일", status: "pending" },
-			{
-				id: "2.2",
-				name: "API 설계 (OpenAPI)",
-				duration: "2일",
-				status: "pending",
-			},
-			{
-				id: "2.3",
-				name: "시스템 아키텍처 설계",
-				duration: "1일",
-				status: "pending",
-			},
-		],
-	},
-	{
-		id: "3",
-		name: "백엔드 개발",
-		children: [
-			{ id: "3.1", name: "예약 CRUD API", duration: "5일", status: "pending" },
-			{
-				id: "3.2",
-				name: "가용성 확인 로직",
-				duration: "3일",
-				status: "pending",
-			},
-			{
-				id: "3.3",
-				name: "결제 연동 (PG사)",
-				duration: "5일",
-				status: "pending",
-			},
-			{
-				id: "3.4",
-				name: "알림 시스템 (이메일/SMS)",
-				duration: "3일",
-				status: "pending",
-			},
-			{ id: "3.5", name: "인증/인가", duration: "2일", status: "pending" },
-		],
-	},
-	{
-		id: "4",
-		name: "프론트엔드 개발",
-		children: [
-			{
-				id: "4.1",
-				name: "예약 페이지 (캘린더, 타임슬롯)",
-				duration: "7일",
-				status: "pending",
-			},
-			{ id: "4.2", name: "결제 페이지", duration: "3일", status: "pending" },
-			{
-				id: "4.3",
-				name: "관리자 대시보드",
-				duration: "5일",
-				status: "pending",
-			},
-			{
-				id: "4.4",
-				name: "마이페이지 (예약 내역)",
-				duration: "3일",
-				status: "pending",
-			},
-		],
-	},
-	{
-		id: "5",
-		name: "테스트 및 QA",
-		children: [
-			{
-				id: "5.1",
-				name: "단위 테스트 작성",
-				duration: "3일",
-				status: "pending",
-			},
-			{ id: "5.2", name: "통합 테스트", duration: "2일", status: "pending" },
-			{
-				id: "5.3",
-				name: "UAT (사용자 수용 테스트)",
-				duration: "3일",
-				status: "pending",
-			},
-		],
-	},
-	{
-		id: "6",
-		name: "배포 및 운영",
-		children: [
-			{
-				id: "6.1",
-				name: "스테이징 환경 배포",
-				duration: "1일",
-				status: "pending",
-			},
-			{ id: "6.2", name: "프로덕션 배포", duration: "1일", status: "pending" },
-			{
-				id: "6.3",
-				name: "모니터링/로깅 설정",
-				duration: "1일",
-				status: "pending",
-			},
-		],
-	},
-];
-
-function getStatusColor(status: string) {
-	switch (status) {
-		case "completed":
-			return "success";
-		case "in-progress":
-			return "warning";
-		default:
-			return "default";
-	}
+/**
+ * GanttChart에서 변환된 ID를 원래 형식으로 복원 (하이픈을 점으로)
+ * 예: "1-2" → "1.2"
+ */
+function restoreTaskId(sanitizedId: string): string {
+	return sanitizedId.replace(/-/g, ".");
 }
 
-function getStatusLabel(status: string) {
-	switch (status) {
-		case "completed":
-			return "완료";
-		case "in-progress":
-			return "진행중";
-		default:
-			return "예정";
-	}
+// SSR 비활성화하여 간트 차트 로드
+const GanttChart = dynamic(
+	() =>
+		import("../../components/GanttChart").then((mod) => mod.GanttChartInner),
+	{
+		ssr: false,
+		loading: () => (
+			<div className="flex h-[500px] items-center justify-center">
+				<Spinner size="lg" label="간트 차트 로딩 중..." />
+			</div>
+		),
+	},
+);
+
+type ViewMode = "Day" | "Week" | "Month";
+
+interface WbsSummary {
+	id: string;
+	name: string;
+	description: string;
+	startDate: string;
+	taskCount: number;
+	sourceType: "plan" | "manual";
+	sourcePath?: string;
+	updatedAt: string;
 }
 
+/**
+ * 진행 상태에 따른 색상 반환
+ */
+function getStatusColor(progress: number): "success" | "warning" | "default" {
+	if (progress === 100) return "success";
+	if (progress > 0) return "warning";
+	return "default";
+}
+
+/**
+ * 진행 상태 레이블 반환
+ */
+function getStatusLabel(progress: number): string {
+	if (progress === 100) return "완료";
+	if (progress > 0) return "진행중";
+	return "예정";
+}
+
+/**
+ * 태스크를 계층 구조로 그룹화
+ */
+function groupTasksByParent(
+	tasks: WbsTask[],
+): Map<string | undefined, WbsTask[]> {
+	const groups = new Map<string | undefined, WbsTask[]>();
+
+	for (const task of tasks) {
+		const parentId = task.parentId;
+		if (!groups.has(parentId)) {
+			groups.set(parentId, []);
+		}
+		groups.get(parentId)!.push(task);
+	}
+
+	return groups;
+}
+
+/**
+ * 통계 계산
+ */
+function calculateStats(tasks: WbsTask[]) {
+	const leafTasks = tasks.filter((t) => !t.isGroup);
+	const completed = leafTasks.filter((t) => t.progress === 100).length;
+	const inProgress = leafTasks.filter(
+		(t) => t.progress > 0 && t.progress < 100,
+	).length;
+	const pending = leafTasks.filter((t) => t.progress === 0).length;
+	const groups = tasks.filter((t) => t.isGroup).length;
+
+	return { total: leafTasks.length, completed, inProgress, pending, groups };
+}
+
+/**
+ * WBS 페이지 클라이언트 컴포넌트
+ */
 export function WBSClient() {
-	return (
-		<div className="min-h-screen bg-black p-8">
-			{/* 배경 효과 */}
-			<div className="fixed bottom-0 left-0 w-[500px] h-[500px] bg-primary/30 rounded-full blur-3xl -translate-x-1/2 translate-y-1/2" />
-			<div className="fixed top-0 right-0 w-[400px] h-[400px] bg-secondary/20 rounded-full blur-3xl translate-x-1/2 -translate-y-1/2 opacity-70" />
+	// WBS 목록 상태
+	const [wbsList, setWbsList] = useState<WbsSummary[]>([]);
+	const [selectedWbsId, setSelectedWbsId] = useState<string | null>(null);
+	const [wbsData, setWbsData] = useState<WbsData | null>(null);
+	const [isLoading, setIsLoading] = useState(true);
+	const [error, setError] = useState<string | null>(null);
+	const [viewMode, setViewMode] = useState<ViewMode>("Week");
+	const [activeTab, setActiveTab] = useState<"gantt" | "list">("gantt");
 
-			<div className="relative z-10 max-w-7xl mx-auto">
-				{/* 헤더 */}
-				<div className="mb-8">
-					<h1 className="text-3xl font-bold mb-2">
+	// 생성 모달 상태
+	const { isOpen, onOpen, onClose } = useDisclosure();
+	const [planFolders, setPlanFolders] = useState<PlanFolder[]>([]);
+	const [selectedPlanId, setSelectedPlanId] = useState<string>("");
+	const [startDate, setStartDate] = useState(
+		new Date().toISOString().split("T")[0],
+	);
+	const [isGenerating, setIsGenerating] = useState(false);
+
+	// WBS 목록 로드
+	const loadWbsList = async () => {
+		try {
+			const response = await fetch("/api/wbs/list");
+			if (!response.ok) throw new Error("WBS 목록 로드 실패");
+			const data = await response.json();
+			setWbsList(data);
+
+			// 기본 선택: 첫 번째 WBS
+			if (data.length > 0 && !selectedWbsId) {
+				setSelectedWbsId(data[0].id);
+			}
+		} catch (err) {
+			console.error("WBS 목록 로드 실패:", err);
+		}
+	};
+
+	// 특정 WBS 데이터 로드
+	const loadWbsData = async (id: string) => {
+		setIsLoading(true);
+		setError(null);
+
+		try {
+			const response = await fetch(`/api/wbs/${id}`);
+			if (!response.ok) throw new Error("WBS 데이터 로드 실패");
+			const data = await response.json();
+			setWbsData(data);
+		} catch (err) {
+			setError(err instanceof Error ? err.message : "알 수 없는 오류");
+			setWbsData(null);
+		} finally {
+			setIsLoading(false);
+		}
+	};
+
+	// 기획 폴더 목록 로드
+	const loadPlanFolders = async () => {
+		try {
+			const response = await fetch("/api/wbs/plans");
+			if (!response.ok) throw new Error("기획 폴더 목록 로드 실패");
+			const data = await response.json();
+			setPlanFolders(data);
+		} catch (err) {
+			console.error("기획 폴더 목록 로드 실패:", err);
+		}
+	};
+
+	// WBS 생성
+	const handleGenerateWbs = async () => {
+		if (!selectedPlanId) return;
+
+		setIsGenerating(true);
+		try {
+			const response = await fetch("/api/wbs/generate", {
+				method: "POST",
+				headers: { "Content-Type": "application/json" },
+				body: JSON.stringify({
+					planId: selectedPlanId,
+					options: { startDate },
+					saveToFile: true,
+				}),
+			});
+
+			if (!response.ok) {
+				const error = await response.json();
+				throw new Error(error.error || "WBS 생성 실패");
+			}
+
+			const result = await response.json();
+
+			// 목록 새로고침 및 새로 생성된 WBS 선택
+			await loadWbsList();
+			setSelectedWbsId(result.wbs.id);
+			onClose();
+		} catch (err) {
+			alert(err instanceof Error ? err.message : "WBS 생성에 실패했습니다");
+		} finally {
+			setIsGenerating(false);
+		}
+	};
+
+	// WBS 삭제
+	const handleDeleteWbs = async (id: string) => {
+		if (!confirm("이 WBS를 삭제하시겠습니까?")) return;
+
+		try {
+			const response = await fetch(`/api/wbs/${id}`, { method: "DELETE" });
+			if (!response.ok) throw new Error("WBS 삭제 실패");
+
+			await loadWbsList();
+			if (selectedWbsId === id) {
+				setSelectedWbsId(wbsList.length > 1 ? wbsList[0].id : null);
+			}
+		} catch (_err) {
+			alert("WBS 삭제에 실패했습니다");
+		}
+	};
+
+	// 초기 로드
+	useEffect(() => {
+		loadWbsList();
+	}, []);
+
+	// 선택된 WBS 변경 시 데이터 로드
+	useEffect(() => {
+		if (selectedWbsId) {
+			loadWbsData(selectedWbsId);
+		} else {
+			setWbsData(null);
+			setIsLoading(false);
+		}
+	}, [selectedWbsId]);
+
+	// 모달 열릴 때 기획 폴더 로드
+	useEffect(() => {
+		if (isOpen) {
+			loadPlanFolders();
+		}
+	}, [isOpen]);
+
+	// 태스크 날짜 변경 핸들러
+	const handleDateChange = async (
+		task: { id: string },
+		start: Date,
+		end: Date,
+	) => {
+		if (!selectedWbsId) return;
+
+		try {
+			const originalId = restoreTaskId(task.id);
+			await fetch(`/api/wbs/${selectedWbsId}`, {
+				method: "PATCH",
+				headers: { "Content-Type": "application/json" },
+				body: JSON.stringify({
+					taskId: originalId,
+					updates: {
+						start: start.toISOString().split("T")[0],
+						end: end.toISOString().split("T")[0],
+					},
+				}),
+			});
+			loadWbsData(selectedWbsId);
+		} catch (err) {
+			console.error("날짜 변경 실패:", err);
+		}
+	};
+
+	// 태스크 진행률 변경 핸들러
+	const handleProgressChange = async (
+		task: { id: string },
+		progress: number,
+	) => {
+		if (!selectedWbsId) return;
+
+		try {
+			const originalId = restoreTaskId(task.id);
+			await fetch(`/api/wbs/${selectedWbsId}`, {
+				method: "PATCH",
+				headers: { "Content-Type": "application/json" },
+				body: JSON.stringify({
+					taskId: originalId,
+					updates: { progress: Math.round(progress) },
+				}),
+			});
+			loadWbsData(selectedWbsId);
+		} catch (err) {
+			console.error("진행률 변경 실패:", err);
+		}
+	};
+
+	return (
+		<div className="py-8">
+			{/* 헤더 */}
+			<div className="mb-6 flex items-center justify-between">
+				<div>
+					<h2 className="text-2xl font-bold text-default-800">
 						<span className="bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
-							예약 서비스
+							WBS
 						</span>{" "}
-						WBS
-					</h1>
-					<p className="text-default-600">
-						Work Breakdown Structure - 프로젝트 작업 분해 구조
+						관리
+					</h2>
+					<p className="mt-1 text-sm text-default-500">
+						Work Breakdown Structure - 기획 문서 기반 자동 생성
 					</p>
 				</div>
-
-				{/* 탭 영역 */}
-				<Tabs
-					aria-label="WBS 뷰"
-					color="primary"
-					variant="underlined"
-					classNames={{
-						tabList: "gap-6",
-						tab: "px-0 h-12",
-					}}
-				>
-					<Tab key="overview" title="전체 구조">
-						<Card className="bg-content1 shadow-sm rounded-xl mt-4">
-							<CardHeader>
-								<h2 className="text-xl font-semibold">프로젝트 전체 WBS</h2>
-							</CardHeader>
-							<Divider />
-							<CardBody>
-								<MermaidChart chart={wbsMainChart} className="min-h-[500px]" />
-							</CardBody>
-						</Card>
-					</Tab>
-
-					<Tab key="backend" title="백엔드 상세">
-						<Card className="bg-content1 shadow-sm rounded-xl mt-4">
-							<CardHeader>
-								<h2 className="text-xl font-semibold">백엔드 개발 WBS</h2>
-							</CardHeader>
-							<Divider />
-							<CardBody>
-								<MermaidChart
-									chart={wbsBackendChart}
-									className="min-h-[400px]"
-								/>
-							</CardBody>
-						</Card>
-					</Tab>
-
-					<Tab key="frontend" title="프론트엔드 상세">
-						<Card className="bg-content1 shadow-sm rounded-xl mt-4">
-							<CardHeader>
-								<h2 className="text-xl font-semibold">프론트엔드 개발 WBS</h2>
-							</CardHeader>
-							<Divider />
-							<CardBody>
-								<MermaidChart
-									chart={wbsFrontendChart}
-									className="min-h-[400px]"
-								/>
-							</CardBody>
-						</Card>
-					</Tab>
-
-					<Tab key="list" title="작업 목록">
-						<div className="mt-4 space-y-4">
-							{wbsData.map((phase) => (
-								<Card
-									key={phase.id}
-									className="bg-content1 shadow-sm rounded-xl"
-								>
-									<CardHeader>
-										<h3 className="text-lg font-semibold">
-											{phase.id}. {phase.name}
-										</h3>
-									</CardHeader>
-									<Divider />
-									<CardBody>
-										<div className="space-y-3">
-											{phase.children.map((task) => (
-												<div
-													key={task.id}
-													className="flex items-center justify-between p-3 bg-content2 rounded-lg"
-												>
-													<div className="flex items-center gap-3">
-														<span className="text-default-500 font-mono text-sm">
-															{task.id}
-														</span>
-														<span>{task.name}</span>
-													</div>
-													<div className="flex items-center gap-3">
-														<span className="text-default-500 text-sm">
-															{task.duration}
-														</span>
-														<Chip
-															size="sm"
-															color={getStatusColor(task.status)}
-															variant="flat"
-														>
-															{getStatusLabel(task.status)}
-														</Chip>
-													</div>
-												</div>
-											))}
-										</div>
-									</CardBody>
-								</Card>
-							))}
-						</div>
-					</Tab>
-				</Tabs>
-
-				{/* 요약 카드 */}
-				<div className="grid grid-cols-1 md:grid-cols-4 gap-4 mt-8">
-					<Card className="bg-content1 shadow-sm rounded-xl">
-						<CardBody className="text-center py-6">
-							<p className="text-3xl font-bold text-primary">6</p>
-							<p className="text-default-600 text-sm">주요 단계</p>
-						</CardBody>
-					</Card>
-					<Card className="bg-content1 shadow-sm rounded-xl">
-						<CardBody className="text-center py-6">
-							<p className="text-3xl font-bold text-success">2</p>
-							<p className="text-default-600 text-sm">완료</p>
-						</CardBody>
-					</Card>
-					<Card className="bg-content1 shadow-sm rounded-xl">
-						<CardBody className="text-center py-6">
-							<p className="text-3xl font-bold text-warning">1</p>
-							<p className="text-default-600 text-sm">진행중</p>
-						</CardBody>
-					</Card>
-					<Card className="bg-content1 shadow-sm rounded-xl">
-						<CardBody className="text-center py-6">
-							<p className="text-3xl font-bold text-default-400">17</p>
-							<p className="text-default-600 text-sm">예정</p>
-						</CardBody>
-					</Card>
+				<div className="flex gap-2">
+					<Button
+						color="primary"
+						startContent={<Plus className="size-4" />}
+						onPress={onOpen}
+					>
+						기획에서 생성
+					</Button>
+					<Button
+						variant="flat"
+						startContent={<RefreshCw className="size-4" />}
+						onPress={loadWbsList}
+					>
+						새로고침
+					</Button>
 				</div>
 			</div>
+
+			{/* WBS 목록 카드 */}
+			<div className="mb-6">
+				<Card className="bg-content1 shadow-sm">
+					<CardHeader className="pb-2">
+						<div className="flex items-center gap-2">
+							<FolderOpen className="size-5 text-primary" />
+							<span className="font-semibold">WBS 목록</span>
+							<Chip size="sm" variant="flat">
+								{wbsList.length}개
+							</Chip>
+						</div>
+					</CardHeader>
+					<Divider />
+					<CardBody className="pt-3">
+						{wbsList.length === 0 ? (
+							<div className="flex flex-col items-center justify-center py-8 text-default-500">
+								<FileText className="mb-2 size-12 opacity-50" />
+								<p>생성된 WBS가 없습니다</p>
+								<p className="text-sm">
+									&quot;기획에서 생성&quot; 버튼을 눌러 WBS를 생성하세요
+								</p>
+							</div>
+						) : (
+							<div className="flex flex-wrap gap-2">
+								{wbsList.map((wbs) => (
+									<div key={wbs.id} className="flex items-center gap-1">
+										<Button
+											size="sm"
+											variant={selectedWbsId === wbs.id ? "solid" : "flat"}
+											color={selectedWbsId === wbs.id ? "primary" : "default"}
+											onPress={() => setSelectedWbsId(wbs.id)}
+											className="flex items-center gap-2"
+										>
+											{wbs.sourceType === "plan" ? (
+												<Sparkles className="size-3" />
+											) : (
+												<FileText className="size-3" />
+											)}
+											{wbs.name}
+											<Chip size="sm" variant="flat" className="ml-1">
+												{wbs.taskCount}
+											</Chip>
+										</Button>
+										<Button
+											size="sm"
+											variant="light"
+											color="danger"
+											isIconOnly
+											onPress={() => handleDeleteWbs(wbs.id)}
+										>
+											<Trash2 className="size-3" />
+										</Button>
+									</div>
+								))}
+							</div>
+						)}
+					</CardBody>
+				</Card>
+			</div>
+
+			{/* 선택된 WBS 표시 */}
+			{isLoading ? (
+				<div className="flex h-64 items-center justify-center">
+					<Spinner size="lg" label="WBS 데이터 로딩 중..." />
+				</div>
+			) : error ? (
+				<div className="flex h-64 flex-col items-center justify-center gap-4">
+					<p className="text-danger">오류: {error}</p>
+					<Button
+						color="primary"
+						onPress={() => selectedWbsId && loadWbsData(selectedWbsId)}
+					>
+						다시 시도
+					</Button>
+				</div>
+			) : !wbsData ? (
+				<div className="flex h-64 flex-col items-center justify-center gap-4 text-default-500">
+					<Calendar className="size-16 opacity-50" />
+					<p>WBS를 선택하거나 새로 생성하세요</p>
+				</div>
+			) : (
+				<>
+					{/* WBS 정보 헤더 */}
+					<div className="mb-4">
+						<h3 className="text-xl font-bold">{wbsData.name}</h3>
+						<p className="text-sm text-default-500">
+							시작일: {wbsData.startDate}
+							{wbsData.metadata.sourcePath && (
+								<span className="ml-4">
+									소스: {wbsData.metadata.sourcePath}
+								</span>
+							)}
+						</p>
+					</div>
+
+					{/* 통계 카드 */}
+					<div className="mb-6 grid grid-cols-2 gap-4 sm:grid-cols-4">
+						<Card className="bg-content1 shadow-sm">
+							<CardBody className="py-4 text-center">
+								<p className="text-2xl font-bold text-primary">
+									{calculateStats(wbsData.tasks).groups}
+								</p>
+								<p className="text-xs text-default-500">주요 단계</p>
+							</CardBody>
+						</Card>
+						<Card className="bg-content1 shadow-sm">
+							<CardBody className="py-4 text-center">
+								<p className="text-2xl font-bold text-success">
+									{calculateStats(wbsData.tasks).completed}
+								</p>
+								<p className="text-xs text-default-500">완료</p>
+							</CardBody>
+						</Card>
+						<Card className="bg-content1 shadow-sm">
+							<CardBody className="py-4 text-center">
+								<p className="text-2xl font-bold text-warning">
+									{calculateStats(wbsData.tasks).inProgress}
+								</p>
+								<p className="text-xs text-default-500">진행중</p>
+							</CardBody>
+						</Card>
+						<Card className="bg-content1 shadow-sm">
+							<CardBody className="py-4 text-center">
+								<p className="text-2xl font-bold text-default-400">
+									{calculateStats(wbsData.tasks).pending}
+								</p>
+								<p className="text-xs text-default-500">예정</p>
+							</CardBody>
+						</Card>
+					</div>
+
+					{/* 탭 + 뷰 모드 선택 */}
+					<div className="mb-4 flex items-center justify-between">
+						<Tabs
+							aria-label="WBS 뷰"
+							selectedKey={activeTab}
+							onSelectionChange={(key) => setActiveTab(key as "gantt" | "list")}
+							color="primary"
+							variant="underlined"
+						>
+							<Tab
+								key="gantt"
+								title={
+									<div className="flex items-center gap-2">
+										<Calendar className="size-4" />
+										<span>간트 차트</span>
+									</div>
+								}
+							/>
+							<Tab
+								key="list"
+								title={
+									<div className="flex items-center gap-2">
+										<List className="size-4" />
+										<span>작업 목록</span>
+									</div>
+								}
+							/>
+						</Tabs>
+
+						{activeTab === "gantt" && (
+							<div className="flex gap-2">
+								{(["Day", "Week", "Month"] as const).map((mode) => (
+									<Button
+										key={mode}
+										size="sm"
+										variant={viewMode === mode ? "solid" : "flat"}
+										color={viewMode === mode ? "primary" : "default"}
+										onPress={() => setViewMode(mode)}
+									>
+										{mode === "Day" ? "일" : mode === "Week" ? "주" : "월"}
+									</Button>
+								))}
+							</div>
+						)}
+					</div>
+
+					{/* 콘텐츠 */}
+					{activeTab === "gantt" ? (
+						<Card className="bg-content1 shadow-sm">
+							<CardBody className="p-4">
+								<GanttChart
+									tasks={wbsData.tasks}
+									viewMode={viewMode}
+									height={500}
+									onDateChange={handleDateChange}
+									onProgressChange={handleProgressChange}
+								/>
+							</CardBody>
+						</Card>
+					) : (
+						<div className="space-y-4">
+							{wbsData.tasks
+								.filter((t) => t.isGroup)
+								.map((group) => {
+									const taskGroups = groupTasksByParent(wbsData.tasks);
+									const children = taskGroups.get(group.id) || [];
+
+									return (
+										<Card key={group.id} className="bg-content1 shadow-sm">
+											<CardHeader className="pb-2">
+												<div className="flex w-full items-center justify-between">
+													<h3 className="text-lg font-semibold">
+														{group.id}. {group.name}
+													</h3>
+													<Chip
+														size="sm"
+														color={getStatusColor(group.progress)}
+														variant="flat"
+													>
+														{group.progress}%
+													</Chip>
+												</div>
+											</CardHeader>
+											<Divider />
+											<CardBody className="pt-3">
+												<div className="space-y-2">
+													{children.map((task) => (
+														<div
+															key={task.id}
+															className="flex items-center justify-between rounded-lg bg-content2 p-3"
+														>
+															<div className="flex items-center gap-3">
+																<span className="font-mono text-sm text-default-500">
+																	{task.id}
+																</span>
+																<span>{task.name}</span>
+															</div>
+															<div className="flex items-center gap-3">
+																<span className="text-xs text-default-500">
+																	{task.start} ~ {task.end}
+																</span>
+																<Chip
+																	size="sm"
+																	color={getStatusColor(task.progress)}
+																	variant="flat"
+																>
+																	{getStatusLabel(task.progress)}
+																</Chip>
+															</div>
+														</div>
+													))}
+												</div>
+											</CardBody>
+										</Card>
+									);
+								})}
+						</div>
+					)}
+				</>
+			)}
+
+			{/* WBS 생성 모달 */}
+			<Modal isOpen={isOpen} onClose={onClose} size="lg">
+				<ModalContent>
+					<ModalHeader className="flex items-center gap-2">
+						<Sparkles className="size-5 text-primary" />
+						기획 문서에서 WBS 생성
+					</ModalHeader>
+					<ModalBody>
+						<p className="mb-4 text-sm text-default-500">
+							기획 문서(README.md)를 분석하여 5단계 개발 플로우 기반의 WBS를
+							자동으로 생성합니다.
+						</p>
+
+						<Select
+							label="기획 문서 선택"
+							placeholder="WBS를 생성할 기획을 선택하세요"
+							selectedKeys={selectedPlanId ? [selectedPlanId] : []}
+							onSelectionChange={(keys) => {
+								const selected = Array.from(keys)[0] as string;
+								setSelectedPlanId(selected || "");
+							}}
+							classNames={{
+								trigger: "h-auto py-2",
+							}}
+						>
+							{planFolders.map((folder) => (
+								<SelectItem key={folder.id} textValue={folder.name}>
+									<div className="flex flex-col">
+										<span className="font-medium">{folder.name}</span>
+										<span className="text-xs text-default-500">
+											{folder.path} ({folder.documentCount}개 문서)
+										</span>
+									</div>
+								</SelectItem>
+							))}
+						</Select>
+
+						<Input
+							type="date"
+							label="프로젝트 시작일"
+							value={startDate}
+							onChange={(e) => setStartDate(e.target.value)}
+						/>
+
+						<div className="rounded-lg bg-content2 p-3">
+							<p className="text-sm font-medium">생성될 WBS 구조</p>
+							<ul className="mt-2 space-y-1 text-xs text-default-500">
+								<li>Stage 1: 데이터 설계 (3일)</li>
+								<li>Stage 2: 스키마 구현 (2일)</li>
+								<li>Stage 3: 백엔드 로직 (5일)</li>
+								<li>Stage 4: 컴포넌트 구현 (5일)</li>
+								<li>Stage 5: 페이지 통합 (3일)</li>
+								<li>테스트 및 QA (3일)</li>
+							</ul>
+						</div>
+					</ModalBody>
+					<ModalFooter>
+						<Button variant="flat" onPress={onClose}>
+							취소
+						</Button>
+						<Button
+							color="primary"
+							onPress={handleGenerateWbs}
+							isLoading={isGenerating}
+							isDisabled={!selectedPlanId}
+							startContent={!isGenerating && <Sparkles className="size-4" />}
+						>
+							WBS 생성
+						</Button>
+					</ModalFooter>
+				</ModalContent>
+			</Modal>
 		</div>
 	);
 }

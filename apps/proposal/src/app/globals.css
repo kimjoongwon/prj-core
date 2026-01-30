@@ -9,3 +9,27 @@ body {
   font-family: "Pretendard", sans-serif;
   min-height: 100vh;
 }
+
+/* frappe-gantt CSS variables for dark mode */
+:root {
+  --g-arrow-color: #a1a1aa;
+  --g-bar-color: #27272a;
+  --g-bar-border: #3f3f46;
+  --g-tick-color-thick: #3f3f46;
+  --g-tick-color: #27272a;
+  --g-actions-background: #27272a;
+  --g-border-color: #3f3f46;
+  --g-text-muted: #a1a1aa;
+  --g-text-light: #fafafa;
+  --g-text-dark: #fafafa;
+  --g-progress-color: #52525b;
+  --g-handle-color: #71717a;
+  --g-weekend-label-color: #3f3f46;
+  --g-expected-progress: #52525b;
+  --g-header-background: #18181b;
+  --g-row-color: #18181b;
+  --g-row-border-color: #3f3f46;
+  --g-today-highlight: #a855f7;
+  --g-popup-actions: #27272a;
+  --g-weekend-highlight-color: #1f1f23;
+}

@@ -684,69 +684,138 @@ feat(coin): 멀티시그 지갑 서비스 초기 구현
 
 ### 5단계 분할 개발 플로우 (권장)
 
-**stage-orchestrator**를 사용하여 각 단계별 사용자 리뷰를 받으며 개발합니다.
+**orch-stage**를 사용하여 각 단계별 사용자 리뷰를 받으며 개발합니다.
+
+#### 핵심 개념: 기능 단위 기획
 
 ```
-Stage 1: 데이터 설계     → planner → [사용자 리뷰]
-Stage 2: 스키마 구현     → schema → entity → dto → seed → /be-review (Skill) → [사용자 리뷰]
-Stage 3: 백엔드 로직     → repository → service → controller → /be-review (Skill) → [사용자 리뷰]
-Stage 4: 컴포넌트 구현   → ui → widget → feature → /fe-review (Skill) → [사용자 리뷰]
-Stage 5: 페이지 통합     → fe-page-builder → /fe-review (Skill) → [사용자 리뷰]
+1 기획 = 1 기능(도메인) = 1 백엔드 + N 페이지
 ```
 
-**실행 방법:**
+- **Stage 1-3**: 기능 전체를 한 번에 처리 (기획, 스키마, 백엔드)
+- **Stage 4-5**: 페이지별로 반복 실행 (컴포넌트, 페이지)
+
+#### 플로우
+
+```
+Stage 1: 기획 (기능 전체)    → orch-requirement (L0~L10) → [리뷰]
+Stage 2: 스키마 (기능 전체)  → schema → entity → dto → seed → [리뷰]
+Stage 3: 백엔드 (기능 전체)  → repository → service → controller → [리뷰]
+Stage 4: 컴포넌트 (페이지별) → ui → widget → feature → [리뷰] ← page 파라미터 필요
+Stage 5: 페이지 (페이지별)   → fe-page-builder → [리뷰] ← page 파라미터 필요
+```
+
+#### 기획서 폴더 구조
+
+```
+apps/proposal/plans/
+└── [project]/              # 프로젝트 (수주 단위)
+    └── [app]/              # 앱 (admin-web, admin-mobile, service-web 등)
+        └── YYYY-MM-DD-[feature]/  # 기능 (Member, Order 등)
+```
+
+#### 실행 방법
+
 ```bash
-# 전체 실행 (Stage 1부터)
-/stage-orchestrator full
+# 1. 전체 기능 기획 시작 (프로젝트/앱을 질문으로 선택)
+/orch-stage full
+# 📌 프로젝트 선택? → project-alpha
+# 📌 앱 선택? → admin-web
+# 📌 기능명? → Member
+# 📌 요구사항? → 회원 목록/상세/등록/수정/삭제
 
-# 특정 단계부터 시작
-/stage-orchestrator start stage=3
+# → Stage 1~3 순차 진행 (기능 전체)
 
-# 특정 단계만 실행
-/stage-orchestrator run stage=2
+# 2. 페이지별 프론트엔드 개발
+/orch-stage run stage=4 plan=project-alpha/admin-web/2026-01-30-Member page=MemberList
+/orch-stage run stage=5 plan=project-alpha/admin-web/2026-01-30-Member page=MemberList
+
+/orch-stage run stage=4 plan=project-alpha/admin-web/2026-01-30-Member page=MemberDetail
+/orch-stage run stage=5 plan=project-alpha/admin-web/2026-01-30-Member page=MemberDetail
+
+# ... MemberCreate, MemberEdit 반복
 ```
 
-**장점:**
-- 각 단계별 사용자 리뷰로 품질 향상
-- 변경 발생 시 영향 범위 최소화 (해당 단계부터 재시작)
-- 단계별 산출물 문서화 (`-design.md`, `-schema.md`, `-backend.md`, `-components.md`, `-complete.md`)
-
-### 레거시 오케스트레이터 (Deprecated)
-
-- ~~**page-orchestrator**~~: `stage-orchestrator`로 대체됨
+#### 장점
+- **기능 단위 백엔드**: API/스키마가 한 번에 완성되어 일관성 유지
+- **페이지별 프론트엔드**: 점진적 개발, 컴포넌트 재사용 가능
+- **각 단계별 리뷰**: 문제 발견 시 해당 단계부터 재시작
 
 ### 개별 Agent
 
-| 카테고리 | Agent | 역할 |
-|---------|-------|------|
-| **기획/분석** | planner | 요구사항 → 화면 기획서 + 기술 설계서 작성 (Figma 없을 때) |
-| | /design-analyze (Skill) | Figma 디자인 분석 및 컴포넌트 매핑 (Figma 있을 때) |
-| | /route-design (Skill) | 백엔드 엔티티 기반 라우팅 경로 설계 |
-| **프론트엔드** | ui-component-builder | Pure UI 컴포넌트 생성 (components/ui) |
-| | cell-builder | DataGrid/Table용 Cell 컴포넌트 생성 (계층별) |
-| | input-component-builder | Input 컴포넌트 생성 (components/inputs) |
-| | fe-page-builder | 페이지 컴포넌트 생성 (useHandlers 분리) |
-| | frontend-architect | React 컴포넌트 아키텍처 설계 |
-| **백엔드** | repository-builder | Prisma Repository 레이어 생성 |
-| | service-builder | NestJS Service 레이어 생성 |
-| | facade-builder | NestJS Facade 레이어 생성 (여러 Service 조합) |
-| | controller-builder | NestJS Controller 레이어 생성 |
-| | backend-architect | NestJS API 설계 |
-| | backend-service-builder | 복합 백엔드 서비스 구현 |
-| **데이터** | schema-builder | Prisma 스키마 생성 및 유형 분류 |
-| | entity-builder | 도메인 Entity 클래스 생성 |
-| | dto-builder | Request/Response DTO 클래스 생성 |
-| | database-expert | Prisma 스키마 설계 및 최적화 |
-| | seed-maker | 현실 세계와 연결된 시드 데이터 생성 |
-| **품질** | /fe-review (Skill) | 프론트엔드 코드 규칙 검증 (리포트만) |
-| | /be-review (Skill) | 백엔드 코드 규칙 검증 (리포트만) |
-| | code-reviewer | 코드 리뷰 및 개선 제안 |
-| | test-engineer | 테스트 코드 작성 |
-| | refactoring-expert | 코드 리팩토링 |
-| | performance-optimizer | 성능 최적화 |
-| | security-auditor | 보안 취약점 분석 |
-| **인프라** | devops-engineer | 배포 및 인프라 설정 |
-| | jenkinsfile-builder | Jenkins 파이프라인 파일 생성 |
+#### 오케스트레이터 (orch-*)
+
+| Agent | 역할 |
+|-------|------|
+| orch-stage | 5단계 분할 개발 플로우를 조율하는 메타 에이전트 |
+| orch-requirement | L0-L10 레이어별 기획 에이전트를 총괄 조율하는 오케스트레이터 |
+
+#### 기획/분석 (req-*)
+
+| Agent | 역할 |
+|-------|------|
+| req-L0L2-planner | 시스템 컨텍스트, 사용자(Actor), 사용자 목표(Goal) 레이어 기획 |
+| req-L3L4-planner | 기능(Feature)과 화면(Screen) 레이어 기획 |
+| req-L5L6-planner | 인터랙션(Action)과 API 레이어 기획 |
+| req-L7L8-planner | 데이터 모델(Entity)과 UI 컴포넌트 레이어 기획 |
+| req-L9L10-planner | 비즈니스 로직과 테스트 레이어 기획 |
+| /design-analyze (Skill) | Figma 디자인 분석 및 컴포넌트 매핑 (Figma 있을 때) |
+| /route-design (Skill) | 백엔드 엔티티 기반 라우팅 경로 설계 |
+
+#### 프론트엔드 (fe-*)
+
+| Agent | 역할 |
+|-------|------|
+| fe-ui-component-builder | Pure UI 컴포넌트 생성 (packages/ui/src/components/ui) |
+| fe-cell-builder | DataGrid/Table용 Cell 컴포넌트 생성 (계층별) |
+| fe-input-component-builder | Input 컴포넌트 생성 (packages/ui/src/components/inputs) |
+| fe-widget-builder | 재사용 가능한 작은 UI 조각 Widget 컴포넌트 생성 |
+| fe-feature-builder | 비즈니스 기능을 담당하는 Feature 컴포넌트 생성 |
+| fe-layout-builder | Layout 컴포넌트 설계 및 생성 |
+| fe-page-builder | 페이지 컴포넌트 생성 (useHandlers 분리) |
+| fe-menu-builder | 메뉴 시스템 컴포넌트 생성 |
+| fe-store-builder | MobX 기반 Store 생성 |
+| fe-api-integrator | Orval 생성 React Query 훅을 사용하여 더미 데이터를 실제 API 호출로 교체 |
+
+#### 백엔드 (be-*)
+
+| Agent | 역할 |
+|-------|------|
+| be-schema-builder | Prisma 스키마 생성 및 유형 분류 |
+| be-entity-builder | 도메인 Entity 클래스 생성 |
+| be-dto-builder | Request/Response DTO 클래스 생성 |
+| be-vo-builder | Value Object 클래스 생성 |
+| be-repository-builder | Prisma 기반 Repository 레이어 생성 |
+| be-service-builder | NestJS Service 레이어 생성 |
+| be-facade-builder | NestJS Facade 레이어 생성 (여러 Service 조합) |
+| be-controller-builder | NestJS REST Controller 생성 |
+| be-backend-service-builder | 복합 백엔드 서비스 구현 |
+| be-database-expert | PostgreSQL/Prisma 데이터베이스 설계 및 최적화 |
+| be-seed-maker | 현실 세계와 연결된 시드 데이터 생성 |
+| be-bootstrap-integrator | AppModule 부트스트랩에 서비스를 통합 |
+| be-prisma-annotator | Prisma 스키마에 @displayName 한글 주석 추가 |
+| be-dmmf-parser-builder | Prisma DMMF 파싱 유틸리티 생성 |
+
+#### 품질/테스트 (qa-*)
+
+| Agent | 역할 |
+|-------|------|
+| qa-be-testing | Jest 기반 백엔드 및 공용 패키지 테스트 코드 작성 |
+| qa-fe-testing | Vitest 기반 프론트엔드 패키지 테스트 코드 작성 |
+| qa-type-checker | TypeScript 타입 에러를 근본 원인까지 추적하여 해결 |
+| /fe-review (Skill) | 프론트엔드 코드 규칙 검증 (리포트만) |
+| /be-review (Skill) | 백엔드 코드 규칙 검증 (리포트만) |
+| /type-check (Skill) | TypeScript 타입 에러 정확히 검사 및 보고 |
+| /lint-format (Skill) | Biome으로 린트 및 포맷 검사/수정 |
+| /vitest (Skill) | Vitest 테스트 프레임워크 패턴 |
+| /testing-best-practices (Skill) | JavaScript 테스팅 모범 사례 제공 |
+| /nestjs-best-practices (Skill) | NestJS 베스트 프랙티스 및 아키텍처 패턴 |
+
+#### 인프라 (etc-*)
+
+| Agent | 역할 |
+|-------|------|
+| etc-jenkinsfile-builder | Jenkins CI/CD 파이프라인 파일 생성 |
 
 각 Agent의 상세 역할은 `.claude/agents/` 디렉토리를 참고하세요.
 

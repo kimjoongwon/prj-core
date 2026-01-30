@@ -1,13 +1,6 @@
 "use client";
 
-import {
-	Button,
-	Card,
-	CardBody,
-	CardHeader,
-	Chip,
-	Input,
-} from "@heroui/react";
+import { Card, CardBody, CardHeader, Chip, Input } from "@heroui/react";
 import {
 	Box,
 	ExternalLink,
@@ -22,9 +15,8 @@ import type { Route } from "next";
 import Link from "next/link";
 import { useMemo, useState } from "react";
 
-import type { ScreenView } from "../../components/requirements/types";
 import { useRequirementGraph } from "../../hooks/useRequirementGraph";
-import { extractScreens, getNodeNames } from "../../lib/graph-extractors";
+import { extractScreens } from "../../lib/graph-extractors";
 
 interface ScreenNode {
 	id: string;

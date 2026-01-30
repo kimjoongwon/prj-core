@@ -318,7 +318,12 @@ export interface EntityMetadata {
 /**
  * 컴포넌트 타입
  */
-export type ComponentType = "ui" | "inputs" | "widgets" | "features" | "layouts";
+export type ComponentType =
+	| "ui"
+	| "inputs"
+	| "widgets"
+	| "features"
+	| "layouts";
 
 /**
  * Component 메타데이터 (L8)

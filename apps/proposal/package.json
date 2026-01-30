@@ -24,6 +24,7 @@
     "@libsql/client": "^0.17.0",
     "class-variance-authority": "catalog:",
     "framer-motion": "catalog:",
+    "frappe-gantt": "^1.0.4",
     "lucide-react": "catalog:",
     "mermaid": "^11.12.2",
     "next": "^16.1.0",

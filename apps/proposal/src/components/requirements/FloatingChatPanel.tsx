@@ -20,8 +20,8 @@ interface FloatingChatPanelProps {
 	isOpen: boolean;
 	/** 패널 닫기 핸들러 */
 	onClose: () => void;
-	/** 그래프 데이터 (컨텍스트용) */
-	graph: RequirementGraph;
+	/** 그래프 데이터 (컨텍스트용, 없으면 범용 AI 모드) */
+	graph?: RequirementGraph;
 	/** AI 질의 함수 */
 	onQuery: (question: string) => Promise<string>;
 }
@@ -52,7 +52,9 @@ export const FloatingChatPanel = observer(
 			const handleMouseMove = (e: MouseEvent) => {
 				if (!isResizing.current) return;
 				const newHeight = window.innerHeight - e.clientY - 20;
-				setPanelHeight(Math.max(300, Math.min(newHeight, window.innerHeight - 100)));
+				setPanelHeight(
+					Math.max(300, Math.min(newHeight, window.innerHeight - 100)),
+				);
 			};
 
 			const handleMouseUp = () => {
@@ -143,13 +145,20 @@ export const FloatingChatPanel = observer(
 			}
 		};
 
-		// 예시 질문들
-		const exampleQuestions = [
-			"User 엔티티 수정 시 영향받는 화면은?",
-			"회원 목록 화면이 호출하는 API는?",
-			"회원 등록 기능의 테스트 케이스는?",
-			"이 프로젝트의 전체 구조를 설명해줘",
-		];
+		// 예시 질문들 (graph 여부에 따라 다르게)
+		const exampleQuestions = graph
+			? [
+					"User 엔티티 수정 시 영향받는 화면은?",
+					"회원 목록 화면이 호출하는 API는?",
+					"회원 등록 기능의 테스트 케이스는?",
+					"이 프로젝트의 전체 구조를 설명해줘",
+				]
+			: [
+					"이 프로젝트의 기술 스택을 알려줘",
+					"화면 설계 시 고려할 점은?",
+					"API 설계 규칙을 설명해줘",
+					"DB 스키마 설계 방법은?",
+				];
 
 		if (!isOpen) return null;
 
@@ -189,6 +198,7 @@ export const FloatingChatPanel = observer(
 					<div
 						ref={resizeRef}
 						onMouseDown={handleResizeStart}
+						aria-hidden="true"
 						className="absolute -top-1 left-0 right-0 h-2 cursor-ns-resize hover:bg-primary/20"
 					/>
 				)}
@@ -205,7 +215,9 @@ export const FloatingChatPanel = observer(
 							</h3>
 							{panelSize !== "minimized" && (
 								<p className="text-xs text-default-500">
-									{graph.name} • {graph.nodes.length}개 노드
+									{graph
+										? `${graph.name} • ${graph.nodes.length}개 노드`
+										: "무엇이든 물어보세요"}
 								</p>
 							)}
 						</div>

@@ -3,17 +3,26 @@
 import { Button, Card, CardBody, Spinner } from "@heroui/react";
 import { Plus, RefreshCw } from "lucide-react";
 import { observer } from "mobx-react-lite";
-import { useEffect, useState } from "react";
+import dynamic from "next/dynamic";
 
-import {
-	FloatingChatButton,
-	FloatingChatPanel,
-	GraphSidebar,
-	NodeDetail,
-	RequirementGraph,
-} from "../../components/requirements";
-import { useGraphAI } from "../../hooks/useGraphAI";
+import { GraphSidebar, NodeDetail } from "../../components/requirements";
 import { useRequirementGraph } from "../../hooks/useRequirementGraph";
+
+// G6는 클라이언트 전용 라이브러리이므로 SSR 비활성화
+const RequirementGraph = dynamic(
+	() =>
+		import("../../components/requirements/RequirementGraph").then(
+			(mod) => mod.RequirementGraph,
+		),
+	{
+		ssr: false,
+		loading: () => (
+			<div className="flex h-full w-full items-center justify-center">
+				<Spinner size="lg" label="그래프 초기화 중..." />
+			</div>
+		),
+	},
+);
 
 /**
  * 요구사항 그래프 페이지 클라이언트 컴포넌트
@@ -31,33 +40,10 @@ export const RequirementsPageClient = observer(() => {
 		getFilteredNodeCount,
 	} = useRequirementGraph();
 
-	const { askQuestion } = useGraphAI({ graph });
-	const [isChatOpen, setIsChatOpen] = useState(false);
-
-	// 키보드 단축키 (⌘K)
-	useEffect(() => {
-		const handleKeyDown = (e: KeyboardEvent) => {
-			if ((e.metaKey || e.ctrlKey) && e.key === "k") {
-				e.preventDefault();
-				setIsChatOpen((prev) => !prev);
-			}
-			if (e.key === "Escape" && isChatOpen) {
-				setIsChatOpen(false);
-			}
-		};
-
-		document.addEventListener("keydown", handleKeyDown);
-		return () => document.removeEventListener("keydown", handleKeyDown);
-	}, [isChatOpen]);
-
 	// 연결된 노드 클릭 핸들러
 	const handleConnectedNodeClick = (nodeId: string) => {
 		selectNodeById(nodeId);
 	};
-
-	// 채팅 열기/닫기 핸들러
-	const handleOpenChat = () => setIsChatOpen(true);
-	const handleCloseChat = () => setIsChatOpen(false);
 
 	if (isLoading) {
 		return (
@@ -143,15 +129,6 @@ export const RequirementsPageClient = observer(() => {
 					/>
 				</aside>
 			</div>
-
-			{/* 플로팅 AI 채팅 */}
-			{!isChatOpen && <FloatingChatButton onPress={handleOpenChat} />}
-			<FloatingChatPanel
-				isOpen={isChatOpen}
-				onClose={handleCloseChat}
-				graph={graph}
-				onQuery={askQuestion}
-			/>
 		</div>
 	);
 });

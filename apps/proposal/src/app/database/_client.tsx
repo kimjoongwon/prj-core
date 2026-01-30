@@ -27,7 +27,10 @@ import {
 	getNodeNames,
 } from "../../lib/graph-extractors";
 
-const FIELD_TYPE_COLORS: Record<FieldType, "default" | "primary" | "secondary" | "success" | "warning" | "danger"> = {
+const FIELD_TYPE_COLORS: Record<
+	FieldType,
+	"default" | "primary" | "secondary" | "success" | "warning" | "danger"
+> = {
 	String: "default",
 	Int: "primary",
 	Float: "primary",
@@ -160,7 +163,9 @@ export const DatabasePageClient = observer(() => {
 				) : (
 					<Card className="bg-content1 shadow-sm">
 						<CardHeader>
-							<h3 className="text-lg font-semibold">Entity Relationship Diagram</h3>
+							<h3 className="text-lg font-semibold">
+								Entity Relationship Diagram
+							</h3>
 						</CardHeader>
 						<Divider />
 						<CardBody>
@@ -346,10 +351,10 @@ function FieldRow({ field }: { field: EntityFieldView }) {
 			<td className="px-3 py-2">
 				<div className="flex items-center gap-2">
 					{isPK && (
-						<Key className="size-3 text-warning" title="Primary Key" />
+						<Key className="size-3 text-warning" aria-label="Primary Key" />
 					)}
 					{isFK && (
-						<Link2 className="size-3 text-secondary" title="Foreign Key" />
+						<Link2 className="size-3 text-secondary" aria-label="Foreign Key" />
 					)}
 					<code className="font-mono text-xs">{field.name}</code>
 				</div>

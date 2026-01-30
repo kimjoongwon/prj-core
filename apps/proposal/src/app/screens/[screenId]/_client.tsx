@@ -1,7 +1,7 @@
 "use client";
 
 import { Button, Tab, Tabs } from "@heroui/react";
-import { ArrowLeft, Download, Eye, FileCode, Figma, Save } from "lucide-react";
+import { ArrowLeft, Download, Eye, Figma, FileCode, Save } from "lucide-react";
 import { observer } from "mobx-react-lite";
 import type { Route } from "next";
 import Link from "next/link";

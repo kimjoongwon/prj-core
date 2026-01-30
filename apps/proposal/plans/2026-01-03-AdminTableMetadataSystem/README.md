@@ -18,7 +18,7 @@ Stage 5: 페이지 통합     ⏳ 대기
 
 **다음 단계:**
 ```bash
-/stage-orchestrator start stage=1 plan=2026-01-03-AdminTableMetadataSystem
+/orch-stage start stage=1 plan=2026-01-03-AdminTableMetadataSystem
 ```
 
 ---
