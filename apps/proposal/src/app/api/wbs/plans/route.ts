@@ -10,28 +10,40 @@ import { NextResponse } from "next/server";
 
 import type { PlanFolder } from "../../../../types/wbs";
 
+// proposal 앱의 plans 폴더 (apps/proposal/plans/)
 const PLANS_PATH = path.join(process.cwd(), "plans");
 
-export async function GET() {
-	try {
-		const entries = await fs.readdir(PLANS_PATH, { withFileTypes: true });
+/**
+ * 중첩된 폴더를 재귀적으로 탐색하여 날짜 형식 기획 폴더 찾기
+ */
+async function findPlanFolders(
+	basePath: string,
+	relativePath = "",
+): Promise<PlanFolder[]> {
+	const folders: PlanFolder[] = [];
+	const currentPath = path.join(basePath, relativePath);
 
-		const folders: PlanFolder[] = [];
+	try {
+		const entries = await fs.readdir(currentPath, { withFileTypes: true });
 
 		for (const entry of entries) {
-			// 폴더만 처리 (날짜 형식으로 시작하는 것)
-			if (entry.isDirectory() && /^\d{4}-\d{2}-\d{2}/.test(entry.name)) {
-				const folderPath = path.join(PLANS_PATH, entry.name);
+			if (!entry.isDirectory()) continue;
+
+			const entryRelativePath = relativePath
+				? `${relativePath}/${entry.name}`
+				: entry.name;
+
+			// 날짜 형식으로 시작하는 폴더 = 기획 폴더
+			if (/^\d{4}-\d{2}-\d{2}/.test(entry.name)) {
+				const folderPath = path.join(basePath, entryRelativePath);
 				const readmePath = path.join(folderPath, "README.md");
 
-				// README.md 존재 여부 확인
 				let hasReadme = false;
 				let name = entry.name;
 				try {
 					const readmeContent = await fs.readFile(readmePath, "utf-8");
 					hasReadme = true;
 
-					// 제목 추출
 					const titleMatch = readmeContent.match(/^#\s+(.+)$/m);
 					if (titleMatch) {
 						name = titleMatch[1].trim();
@@ -40,23 +52,34 @@ export async function GET() {
 					// README.md가 없으면 폴더명 사용
 				}
 
-				// 폴더 내 문서 수 계산
 				const files = await fs.readdir(folderPath);
 				const documentCount = files.filter((f) => f.endsWith(".md")).length;
-
-				// 최종 수정일
 				const stat = await fs.stat(folderPath);
 
 				folders.push({
-					id: entry.name,
+					id: entryRelativePath.replace(/\//g, "__"),
 					name,
-					path: `plans/${entry.name}`,
+					path: `plans/${entryRelativePath}`,
 					hasReadme,
 					documentCount,
 					lastModified: stat.mtime.toISOString(),
 				});
+			} else {
+				// 하위 폴더 재귀 탐색 (_로 시작하는 폴더도 포함)
+				const subFolders = await findPlanFolders(basePath, entryRelativePath);
+				folders.push(...subFolders);
 			}
 		}
+	} catch {
+		// 폴더 읽기 실패 시 무시
+	}
+
+	return folders;
+}
+
+export async function GET() {
+	try {
+		const folders = await findPlanFolders(PLANS_PATH);
 
 		// 최신순 정렬
 		folders.sort(

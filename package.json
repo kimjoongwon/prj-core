@@ -19,6 +19,7 @@
     "start:admin": "turbo start:dev --filter=admin",
     "start:admin:full": "turbo start:dev --filter=admin --filter=server... --concurrency=20",
     "start:storybook": "turbo start:dev --filter=storybook",
+    "start:proposal": "turbo start:dev --filter=proposal",
     "lint": "turbo lint",
     "lint:fix": "turbo lint:fix",
     "format": "turbo format",

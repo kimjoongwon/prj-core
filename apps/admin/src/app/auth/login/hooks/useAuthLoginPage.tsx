@@ -75,13 +75,13 @@ export const useAuthLoginPage = () => {
 				const groundName = targetTenant.space.ground.name;
 				persistStore.setSpace(targetTenant.spaceId, groundName);
 				// 4. 대시보드로 이동
-				router.push("/");
+				router.push("/dashboard");
 			} else {
 				// Space/Ground가 없는 경우
 				// TODO: Space 선택 페이지 구현 후 활성화
 				// alert("Space를 선택해주세요.");
 				// router.push("/select-space");
-				router.push("/");
+				router.push("/dashboard");
 			}
 		} catch (_error) {
 			state.errorMessage =

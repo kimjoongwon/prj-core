@@ -1,6 +1,6 @@
 "use client";
 
-import { PageSurface, SectionSurface } from "@cocrepo/ui";
+import { SectionSurface } from "@cocrepo/ui";
 import { observer } from "mobx-react-lite";
 import { UIVisibilityTab } from "../components/UIVisibilityTab";
 import { useUIElementsPage } from "./hooks";
@@ -14,20 +14,15 @@ function UIElementsPageClient() {
 	const { state, onChangeVisibility, onSave, onReset } = useUIElementsPage();
 
 	return (
-		<PageSurface
-			title="UI 가시성"
-			description="Role별 UI 요소의 가시성을 관리합니다."
-		>
-			<SectionSurface padding="none" elevation="flat">
-				<UIVisibilityTab
-					subjects={state.subjects}
-					roles={state.roles}
-					onChangeVisibility={onChangeVisibility}
-					onSave={onSave}
-					onReset={onReset}
-				/>
-			</SectionSurface>
-		</PageSurface>
+		<SectionSurface padding="none">
+			<UIVisibilityTab
+				subjects={state.subjects}
+				roles={state.roles}
+				onChangeVisibility={onChangeVisibility}
+				onSave={onSave}
+				onReset={onReset}
+			/>
+		</SectionSurface>
 	);
 }
 

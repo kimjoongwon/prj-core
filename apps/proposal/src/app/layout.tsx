@@ -8,9 +8,7 @@ import {
 	Calendar,
 	Database,
 	FileText,
-	GitBranch,
 	Home,
-	Image,
 	LayoutDashboard,
 	ListTree,
 	Server,
@@ -21,6 +19,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 
+import { PlansBreadcrumb } from "../components/plans";
 import {
 	FloatingChatButton,
 	FloatingChatPanel,
@@ -35,9 +34,7 @@ const tabs = [
 	{ key: "/screens", label: "화면 설계", icon: Target },
 	{ key: "/api", label: "API 설계", icon: Server },
 	{ key: "/database", label: "DB 설계", icon: Database },
-	{ key: "/milestones", label: "마일스톤", icon: GitBranch },
 	{ key: "/schedule", label: "일정", icon: Calendar },
-	{ key: "/image-gen", label: "이미지 생성", icon: Image },
 ] as const;
 
 /**
@@ -107,39 +104,48 @@ const RootLayout = observer(({ children }: { children: React.ReactNode }) => {
 							</div>
 						</header>
 
+						{/* 기획서 선택 Breadcrumb */}
+						<div className="border-b border-divider bg-background/40">
+							<div className="max-w-7xl mx-auto px-6">
+								<PlansBreadcrumb />
+							</div>
+						</div>
+
+						{/* 탭 네비게이션 - 전체 너비 divider */}
+						<div className="border-b border-divider">
+							<div className="max-w-7xl mx-auto px-6">
+								<Tabs
+									aria-label="기획 메뉴"
+									selectedKey={currentTab}
+									color="primary"
+									variant="underlined"
+									classNames={{
+										tabList: "gap-6 w-full relative rounded-none p-0",
+										cursor: "w-full bg-primary",
+										tab: "max-w-fit px-0 h-12",
+										tabContent: "group-data-[selected=true]:text-primary",
+									}}
+								>
+									{tabs.map((tab) => (
+										<Tab
+											key={tab.key}
+											title={
+												<Link
+													href={tab.key as "/"}
+													className="flex items-center gap-2 py-2"
+												>
+													<tab.icon className="w-4 h-4" />
+													<span>{tab.label}</span>
+												</Link>
+											}
+										/>
+									))}
+								</Tabs>
+							</div>
+						</div>
+
 						{/* 메인 컨텐츠 */}
 						<main className="max-w-7xl mx-auto px-6 py-8">
-							{/* 탭 네비게이션 */}
-							<Tabs
-								aria-label="기획 메뉴"
-								selectedKey={currentTab}
-								color="primary"
-								variant="underlined"
-								classNames={{
-									tabList:
-										"gap-6 w-full relative rounded-none p-0 border-b border-divider",
-									cursor: "w-full bg-primary",
-									tab: "max-w-fit px-0 h-12",
-									tabContent: "group-data-[selected=true]:text-primary",
-								}}
-							>
-								{tabs.map((tab) => (
-									<Tab
-										key={tab.key}
-										title={
-											<Link
-												href={tab.key as "/"}
-												className="flex items-center gap-2 py-2"
-											>
-												<tab.icon className="w-4 h-4" />
-												<span>{tab.label}</span>
-											</Link>
-										}
-									/>
-								))}
-							</Tabs>
-
-							{/* 페이지 컨텐츠 */}
 							{children}
 						</main>
 

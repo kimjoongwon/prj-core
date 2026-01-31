@@ -11,6 +11,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { generateWbsFromPlan, parsePlanDocument } from "../../../../lib/wbs";
 import type { WbsGenerationOptions } from "../../../../types/wbs";
 
+// proposal 앱의 plans 및 data 폴더
 const PLANS_PATH = path.join(process.cwd(), "plans");
 const WBS_DATA_PATH = path.join(process.cwd(), "data/wbs");
 
@@ -31,8 +32,9 @@ export async function POST(request: NextRequest) {
 			);
 		}
 
-		// 기획 폴더 경로
-		const planFolderPath = path.join(PLANS_PATH, body.planId);
+		// 기획 폴더 경로 (ID에서 __를 /로 복원)
+		const planPath = body.planId.replace(/__/g, "/");
+		const planFolderPath = path.join(PLANS_PATH, planPath);
 		const readmePath = path.join(planFolderPath, "README.md");
 
 		// README.md 읽기

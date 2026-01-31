@@ -1,5 +1,6 @@
 "use client";
 
+import { PageSurface } from "@cocrepo/ui";
 import { Tab, Tabs } from "@heroui/react";
 import { observer } from "mobx-react-lite";
 import { usePathname, useRouter } from "next/navigation";
@@ -23,11 +24,7 @@ const TAB_ITEMS = [
 	{ key: "users", title: "User 예외 권한", path: "/roles/abilities/users" },
 	{ key: "subjects", title: "Subject 관리", path: "/roles/abilities/subjects" },
 	{ key: "actions", title: "Action 관리", path: "/roles/abilities/actions" },
-	{
-		key: "ui-elements",
-		title: "UI 가시성",
-		path: "/roles/abilities/ui-elements",
-	},
+	{ key: "ui-elements", title: "UI 가시성", path: "/roles/abilities/ui-elements" },
 ] as const;
 
 /**
@@ -39,13 +36,8 @@ const DEFAULT_TAB_KEY = "roles";
  * 권한 관리 레이아웃
  *
  * URL 기반 탭 네비게이션을 제공합니다.
- * - /roles/abilities/roles - Role 권한
- * - /roles/abilities/users - User 예외 권한
- * - /roles/abilities/subjects - Subject 관리
- * - /roles/abilities/actions - Action 관리
- * - /roles/abilities/ui-elements - UI 가시성
- *
- * PageSurface는 각 Page 컴포넌트에서 담당합니다.
+ * - 상위 메뉴명 "역할/권한"을 PageSurface title로 표시
+ * - 하위 탭들을 Tabs로 네비게이션
  */
 function AbilitiesLayout({ children }: { children: React.ReactNode }) {
 	const pathname = usePathname();
@@ -65,7 +57,6 @@ function AbilitiesLayout({ children }: { children: React.ReactNode }) {
 	const onChangeTabSelection = (key: Key) => {
 		const selectedTab = TAB_ITEMS.find((tab) => tab.key === key);
 		if (selectedTab) {
-			// Next.js typed routes 우회 - 아직 생성되지 않은 경로 허용
 			// biome-ignore lint/suspicious/noExplicitAny: Next.js typed routes 우회
 			router.push(selectedTab.path as any);
 		}
@@ -74,7 +65,10 @@ function AbilitiesLayout({ children }: { children: React.ReactNode }) {
 	const activeKey = getActiveTabKey();
 
 	return (
-		<div className="space-y-6">
+		<PageSurface
+			title="권한 설정"
+			description="역할별 권한을 관리합니다."
+		>
 			{/* 탭 네비게이션 */}
 			<Tabs
 				aria-label="권한 관리 탭"
@@ -88,8 +82,8 @@ function AbilitiesLayout({ children }: { children: React.ReactNode }) {
 			</Tabs>
 
 			{/* 탭 콘텐츠 영역 */}
-			{children}
-		</div>
+			<div className="mt-6">{children}</div>
+		</PageSurface>
 	);
 }
 

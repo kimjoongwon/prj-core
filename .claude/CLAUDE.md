@@ -736,10 +736,27 @@ Stage 5: 페이지 (페이지별)   → fe-page-builder → [리뷰] ← page �
 
 ```
 apps/proposal/plans/
-└── [project]/              # 프로젝트 (수주 단위)
-    └── [app]/              # 앱 (admin-web, admin-mobile, service-web 등)
-        └── YYYY-MM-DD-[feature]/  # 기능 (Member, Order 등)
+│
+├── _core/                              # 공통 시스템 기획 (프로젝트 무관)
+│   ├── README.md                       # _core 구조 설명 문서
+│   ├── infrastructure/                 # 인프라 레이어 (CASL, 인증, 멀티테넌시)
+│   ├── navigation/                     # 네비게이션 레이어 (메뉴 시스템)
+│   ├── ui-system/                      # UI 시스템 레이어 (Surface, DataGrid)
+│   └── shared-domain/                  # 공유 도메인 레이어 (Role, Tenant)
+│
+├── [project]/                          # 프로젝트 (수주 단위)
+│   └── [app]/                          # 앱 (admin-web, admin-mobile 등)
+│       ├── _app.md                     # 앱 메타 + 사용하는 공통 시스템 목록
+│       └── YYYY-MM-DD-[feature]/       # 기능 (Member, Order 등)
+│
+└── prj-core/                           # 자체 서비스
+    └── admin-web/
+        ├── _app.md
+        └── ...
 ```
+
+**`_core/` 폴더**: 모든 프로젝트에서 재사용 가능한 공통 시스템 기획
+- 상세 내용은 `apps/proposal/plans/_core/README.md` 참조
 
 #### 실행 방법
 
@@ -786,6 +803,7 @@ apps/proposal/plans/
 | req-L5L6-planner | 인터랙션(Action)과 API 레이어 기획 |
 | req-L7L8-planner | 데이터 모델(Entity)과 UI 컴포넌트 레이어 기획 |
 | req-L9L10-planner | 비즈니스 로직과 테스트 레이어 기획 |
+| req-reverse-engineer | 기존 코드를 분석하여 L0-L10 형식 기획서 역생성 |
 | /design-analyze (Skill) | Figma 디자인 분석 및 컴포넌트 매핑 (Figma 있을 때) |
 | /route-design (Skill) | 백엔드 엔티티 기반 라우팅 경로 설계 |
 

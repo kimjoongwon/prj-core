@@ -28,9 +28,23 @@ tools: Task, Read, Write, Grep, Bash
 
 ```
 apps/proposal/plans/
-└── [project]/              # 프로젝트 (수주 단위)
-    └── [app]/              # 앱 (admin-web, admin-mobile, service-web 등)
-        └── YYYY-MM-DD-[feature]/  # 기능 (Member, Order 등)
+│
+├── _core/                              # 공통 시스템 기획 (프로젝트 무관)
+│   ├── README.md                       # _core 구조 설명
+│   ├── infrastructure/                 # 인프라 (CASL, 인증, 멀티테넌시)
+│   ├── navigation/                     # 네비게이션 (메뉴 시스템)
+│   ├── ui-system/                      # UI 시스템 (Surface, DataGrid)
+│   └── shared-domain/                  # 공유 도메인 (Role, Tenant)
+│
+├── [project]/                          # 프로젝트 (수주 단위)
+│   └── [app]/                          # 앱 (admin-web, admin-mobile 등)
+│       ├── _app.md                     # 앱 메타 + 사용하는 공통 시스템 목록
+│       └── YYYY-MM-DD-[feature]/       # 기능 (Member, Order 등)
+│
+└── prj-core/                           # 자체 서비스
+    └── admin-web/
+        ├── _app.md
+        └── ...
 ```
 
 ### 예시 구조
@@ -71,6 +85,29 @@ apps/proposal/plans/
 📌 기능명을 입력하세요: Member
 📌 요구사항을 입력하세요: ...
 ```
+
+### 공통 시스템 기획 (core= 파라미터)
+
+공통 시스템을 기획할 때는 `core=` 파라미터를 사용합니다:
+
+```bash
+# 공통 시스템 기획 시작
+/orch-stage full core=infrastructure feature=RateLimiting
+
+# 기존 공통 시스템 수정
+/orch-stage run stage=2 plan=_core/infrastructure/2026-01-31-CASL
+```
+
+**core= 옵션:**
+- `infrastructure` - 인프라 레이어 (CASL, 인증, 멀티테넌시)
+- `navigation` - 네비게이션 레이어 (메뉴 시스템)
+- `ui-system` - UI 시스템 레이어 (Surface, DataGrid)
+- `shared-domain` - 공유 도메인 레이어 (Role, Tenant)
+
+**공통 시스템 기획 시 특징:**
+- `project`와 `app` 질문 생략
+- 출력 위치: `apps/proposal/plans/_core/{core}/{YYYY-MM-DD-feature}/`
+- 프로젝트 독립적이므로 프로젝트별 커스터마이징은 `_app.md`에서 관리
 
 ---
 
@@ -117,8 +154,9 @@ apps/proposal/plans/
 | 항목 | 필수 | 설명 |
 |------|------|------|
 | 모드 | O | `full`, `start stage=N`, `run stage=N`, `status` |
-| **project** | O | 프로젝트명 (실행 시 질문) |
-| **app** | O | 앱명 (실행 시 질문) |
+| **project** | △ | 프로젝트명 (실행 시 질문, core= 사용 시 불필요) |
+| **app** | △ | 앱명 (실행 시 질문, core= 사용 시 불필요) |
+| **core** | △ | 공통 시스템 카테고리 (infrastructure/navigation/ui-system/shared-domain) |
 | 기능명 | O (full) | 생성할 기능/도메인 이름 (예: Member) |
 | 요구사항 | O (full) | 기능 요구사항 목록 |
 | plan | O (start/run) | 기획서 폴더 경로 |
@@ -126,6 +164,7 @@ apps/proposal/plans/
 
 ### 출력 (폴더 구조)
 
+**프로젝트 기능 기획:**
 ```
 apps/proposal/plans/[project]/[app]/YYYY-MM-DD-[feature]/
 ├── README.md
@@ -139,6 +178,18 @@ apps/proposal/plans/[project]/[app]/YYYY-MM-DD-[feature]/
 ├── [feature]-backend.md          # Stage 3
 ├── [feature]-[page]-components.md  # Stage 4 (페이지별)
 └── [feature]-[page]-complete.md    # Stage 5 (페이지별)
+```
+
+**공통 시스템 기획 (core= 사용 시):**
+```
+apps/proposal/plans/_core/[core]/YYYY-MM-DD-[feature]/
+├── README.md
+├── PROGRESS.md
+├── 01-overview.md
+├── 02-structure.md
+├── 03-interactions.md
+├── 04-ui-details.md
+└── 05-technical-design.md
 ```
 
 ---

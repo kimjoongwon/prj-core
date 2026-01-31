@@ -3,8 +3,8 @@ import { redirect } from "next/navigation";
 /**
  * 루트 페이지
  *
- * 대시보드로 리다이렉트합니다.
+ * 로그인 페이지로 리다이렉트합니다.
  */
 export default function HomePage() {
-	redirect("/dashboard");
+	redirect("/auth/login");
 }
