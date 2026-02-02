@@ -8,6 +8,7 @@ import type {
 	RequirementNode,
 } from "../components/requirements/types";
 import { loadGraphFromAPI } from "../lib/graph-data";
+import { usePlanSelectionStore } from "../stores/PlanSelectionContext";
 
 /**
  * 기본 필터 상태
@@ -37,6 +38,10 @@ const EMPTY_GRAPH: RequirementGraph = {
  * 요구사항 그래프 데이터 및 상태 관리 훅
  */
 export function useRequirementGraph() {
+	// 브레드크럼 선택 상태
+	const planStore = usePlanSelectionStore();
+	const projectId = planStore.requirementGraphId;
+
 	// 그래프 데이터
 	const [graph, setGraph] = useState<RequirementGraph>(EMPTY_GRAPH);
 
@@ -57,12 +62,12 @@ export function useRequirementGraph() {
 	/**
 	 * 그래프 데이터 로드 (API에서)
 	 */
-	const loadGraph = async () => {
+	const loadGraph = async (project?: string) => {
 		setIsLoading(true);
 		setError(null);
 
 		try {
-			const data = await loadGraphFromAPI();
+			const data = await loadGraphFromAPI(project);
 			setGraph(data);
 		} catch (err) {
 			setError(err instanceof Error ? err : new Error("그래프 로드 실패"));
@@ -166,10 +171,12 @@ export function useRequirementGraph() {
 		return impacted;
 	};
 
-	// 초기 로드
+	// 브레드크럼 선택 변경 시 그래프 다시 로드
 	useEffect(() => {
-		loadGraph();
-	}, []);
+		if (projectId) {
+			loadGraph(projectId);
+		}
+	}, [projectId]);
 
 	return {
 		// 상태

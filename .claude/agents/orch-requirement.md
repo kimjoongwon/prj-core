@@ -289,3 +289,150 @@ await fs.writeFile(syncPath, JSON.stringify(syncData, null, '\t'), 'utf-8');
 - [ ] **proposal 앱 동기화 실행** (Critical!)
 - [ ] 동기화 파일 생성 확인
 - [ ] API 테스트: `curl http://localhost:3001/api/requirements?project=[syncId]`
+
+---
+
+## 8. 에이전트 실수 방지 (Critical!)
+
+**반복되는 실수를 방지하기 위한 필수 규칙입니다.**
+
+### 8.1 JSON 필드명 규칙 (타입 일치 필수!)
+
+proposal 앱의 타입 정의(`apps/proposal/src/components/requirements/types.ts`)와 **정확히 일치**해야 합니다.
+
+#### ❌ 금지된 필드명 (자주 실수함)
+
+```json
+// ❌ 노드에서 잘못된 필드명
+{
+  "label": "회원 목록",        // ❌ label 사용 금지!
+  "title": "회원 목록"         // ❌ title 사용 금지!
+}
+
+// ❌ 엣지에서 잘못된 필드명
+{
+  "from": "L3-FEA-001",       // ❌ from 사용 금지!
+  "to": "L4-SCR-001"          // ❌ to 사용 금지!
+}
+```
+
+#### ✅ 올바른 필드명 (타입 정의 기준)
+
+```json
+// ✅ RequirementNode - 올바른 필드명
+{
+  "id": "L4-SCR-001",
+  "level": 4,
+  "subLevel": "1",
+  "type": "screen",
+  "name": "회원 목록 화면",    // ✅ name 사용!
+  "description": "회원 목록을 표시하는 화면",
+  "path": "/users",
+  "metadata": { ... }
+}
+
+// ✅ RequirementEdge - 올바른 필드명
+{
+  "id": "e-001",              // ✅ id 필수!
+  "source": "L3-FEA-001",     // ✅ source 사용!
+  "target": "L4-SCR-001",     // ✅ target 사용!
+  "type": "implements",
+  "label": "구현"
+}
+```
+
+#### 필드명 매핑표
+
+| 잘못된 필드명 | 올바른 필드명 | 위치 |
+|---------------|--------------|------|
+| `label` | `name` | Node |
+| `title` | `name` | Node |
+| `from` | `source` | Edge |
+| `to` | `target` | Edge |
+
+### 8.2 파일명 생성 규칙 (planSelectionStore 기준!)
+
+proposal 앱의 `planSelectionStore.requirementGraphId` 로직과 **정확히 일치**해야 합니다.
+
+#### 파일명 생성 공식
+
+```typescript
+// planSelectionStore.ts의 로직
+const featureName = selectedFeatureId
+  .replace(/^\d{4}-\d{2}-\d{2}-/, "")  // 날짜 제거
+  .toLowerCase();                       // 소문자 변환
+
+// 결과 파일명
+if (isCore) {
+  return `_core__${categoryId}__${featureName}.json`;
+} else {
+  return `${projectId}__${appId}__${featureName}.json`;
+}
+```
+
+#### 예시 매핑
+
+| 폴더 경로 | 생성되는 ID | 파일명 |
+|-----------|-------------|--------|
+| `_core/navigation/2026-01-31-Navigation-reverse/` | `_core__navigation__navigation-reverse` | `_core__navigation__navigation-reverse.json` |
+| `_core/infrastructure/2026-01-31-CASL/` | `_core__infrastructure__casl` | `_core__infrastructure__casl.json` |
+| `prj-core/admin-web/2026-02-02-User/` | `prj-core__admin-web__user` | `prj-core__admin-web__user.json` |
+
+#### ❌ 흔한 실수
+
+```
+폴더: 2026-01-31-Navigation-reverse
+❌ 잘못: _core__navigation__navigation.json      (reverse 누락!)
+❌ 잘못: _core__navigation__Navigation-reverse.json  (대문자!)
+✅ 올바름: _core__navigation__navigation-reverse.json
+```
+
+### 8.3 동기화 파일 구조 (루트 필드 필수!)
+
+`data/requirements/` 폴더의 JSON 파일은 **RequirementGraph 타입**과 일치해야 합니다.
+
+```json
+{
+  "id": "project__app__feature",      // ✅ 필수: 파일명과 동일
+  "name": "기능 한글명",                // ✅ 필수
+  "version": "1.0.0",                 // ✅ 필수
+  "nodes": [...],                     // ✅ 필수
+  "edges": [...],                     // ✅ 필수
+  "metadata": {                       // ✅ 필수
+    "createdAt": "2026-01-31T10:00:00Z",
+    "updatedAt": "2026-01-31T10:00:00Z"
+  }
+}
+```
+
+### 8.4 동기화 체크리스트 (매 실행 시 확인!)
+
+기획 완료 후 **반드시 아래 체크리스트를 수행**합니다:
+
+```bash
+# 1. plans 폴더에 requirement-graph.json 생성 확인
+ls apps/proposal/plans/[project]/[app]/YYYY-MM-DD-[Domain]/requirement-graph.json
+
+# 2. 파일명 계산 (정확히!)
+# 예: 2026-02-02-User → user (날짜 제거, 소문자)
+# 파일명: [project]__[app]__user.json
+
+# 3. data/requirements/ 폴더에 동기화 파일 생성
+ls apps/proposal/data/requirements/[project]__[app]__[domain].json
+
+# 4. JSON 필드명 검증 (name, source, target 확인)
+cat apps/proposal/data/requirements/[project]__[app]__[domain].json | grep -E '"(name|label|source|target|from|to)"'
+
+# 5. 브라우저에서 테스트
+# - PlansBreadcrumb에서 해당 기능 선택
+# - 요구사항/화면설계/API설계 탭에서 데이터 표시 확인
+```
+
+### 8.5 실수 발생 시 복구 절차
+
+동기화 누락이나 필드명 오류 발견 시:
+
+1. **plans 폴더의 requirement-graph.json 수정** (원본)
+2. **data/requirements/ 파일 삭제** (잘못된 파일)
+3. **올바른 파일명으로 재생성** (위 규칙 적용)
+4. **브라우저에서 테스트** (모든 탭 확인)

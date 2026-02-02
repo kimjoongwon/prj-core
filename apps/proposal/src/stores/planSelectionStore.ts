@@ -189,6 +189,31 @@ export class PlanSelectionStore {
   }
 
   /**
+   * 현재 선택된 기획서의 requirement graph ID
+   * 형식: {project}__{app}__{feature} 또는 _core__{category}__{feature}
+   * 예: prj-core__admin-web__user, _core__navigation__navigation
+   */
+  get requirementGraphId(): string | null {
+    if (!this.selectedProjectId || !this.selectedSecondLevelId || !this.selectedFeatureId) {
+      return null;
+    }
+
+    // feature ID에서 날짜 부분 제거하고 소문자로 변환
+    // 예: "2026-02-02-User" → "user"
+    const featureName = this.selectedFeatureId
+      .replace(/^\d{4}-\d{2}-\d{2}-/, "")
+      .toLowerCase();
+
+    if (this.isCore()) {
+      // _core 카테고리: _core__{category}__{feature}
+      return `_core__${this.selectedSecondLevelId}__${featureName}`;
+    }
+
+    // 프로젝트: {project}__{app}__{feature}
+    return `${this.selectedProjectId}__${this.selectedSecondLevelId}__${featureName}`;
+  }
+
+  /**
    * 1단계 선택 (프로젝트 또는 _core)
    */
   selectFirstLevel(id: string) {

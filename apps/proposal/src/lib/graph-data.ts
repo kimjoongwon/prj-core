@@ -2,9 +2,13 @@ import type { RequirementGraph } from "../components/requirements/types";
 
 /**
  * API에서 요구사항 그래프 데이터 로드
+ * @param project - 프로젝트 ID (예: "prj-core__admin-web__user")
  */
-export async function loadGraphFromAPI(): Promise<RequirementGraph> {
-	const response = await fetch("/api/requirements");
+export async function loadGraphFromAPI(project?: string): Promise<RequirementGraph> {
+	const url = project
+		? `/api/requirements?project=${encodeURIComponent(project)}`
+		: "/api/requirements";
+	const response = await fetch(url);
 	if (!response.ok) {
 		throw new Error("요구사항 데이터를 불러올 수 없습니다");
 	}

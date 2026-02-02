@@ -3,17 +3,7 @@
 import { Providers } from "./providers";
 import "./globals.css";
 import { Tab, Tabs } from "@heroui/react";
-import {
-	Brain,
-	Calendar,
-	Database,
-	FileText,
-	Home,
-	LayoutDashboard,
-	ListTree,
-	Server,
-	Target,
-} from "lucide-react";
+import { Brain, FileText, Home, Server, Target } from "lucide-react";
 import { observer } from "mobx-react-lite";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -28,13 +18,9 @@ import { useGlobalAI } from "../hooks/useGlobalAI";
 
 const tabs = [
 	{ key: "/", label: "소개", icon: Home },
-	{ key: "/dashboard", label: "대시보드", icon: LayoutDashboard },
-	{ key: "/wbs", label: "WBS", icon: ListTree },
 	{ key: "/requirements", label: "요구사항", icon: FileText },
 	{ key: "/screens", label: "화면 설계", icon: Target },
 	{ key: "/api", label: "API 설계", icon: Server },
-	{ key: "/database", label: "DB 설계", icon: Database },
-	{ key: "/schedule", label: "일정", icon: Calendar },
 ] as const;
 
 /**
