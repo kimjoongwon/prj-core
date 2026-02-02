@@ -12,6 +12,7 @@ import {
 	QueryClient,
 	QueryClientProvider,
 } from "@tanstack/react-query";
+import { NuqsAdapter } from "nuqs/adapters/next/app";
 import { useRouter } from "next/navigation";
 import type { ReactNode } from "react";
 import { useAbilities } from "@/hooks";
@@ -65,13 +66,15 @@ export function Providers({ children }: ProvidersProps) {
 
 	return (
 		<QueryClientProvider client={queryClient}>
-			<AbilityProviderWrapper>
-				<AppStoreProvider>
-					<DesignSystemProvider navigate={handleNavigate}>
-						{children}
-					</DesignSystemProvider>
-				</AppStoreProvider>
-			</AbilityProviderWrapper>
+			<NuqsAdapter>
+				<AbilityProviderWrapper>
+					<AppStoreProvider>
+						<DesignSystemProvider navigate={handleNavigate}>
+							{children}
+						</DesignSystemProvider>
+					</AppStoreProvider>
+				</AbilityProviderWrapper>
+			</NuqsAdapter>
 		</QueryClientProvider>
 	);
 }

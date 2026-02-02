@@ -1,26 +1,29 @@
+import { prefetchGetUsersQuery } from "@cocrepo/api";
+import { withServerCookies } from "@cocrepo/api/server";
 import type { QueryClient } from "@tanstack/react-query";
 import type { ReadonlyRequestCookies } from "next/dist/server/web/spec-extension/adapters/request-cookies";
 
 interface PrefetchUsersParams {
-	page?: number;
-	limit?: number;
+	take?: number;
+	skip?: number;
 }
 
 /**
- * Users 데이터 프리페칭 함수 (TODO: API 구현 후 활성화)
+ * Users 데이터 프리페칭 함수
+ * SSR 시점에 데이터를 미리 조회하여 클라이언트로 전달합니다.
  */
 export async function prefetchUsersData(
-	_queryClient: QueryClient,
-	_cookies: ReadonlyRequestCookies,
-	_params: PrefetchUsersParams = {},
+	queryClient: QueryClient,
+	cookies: ReadonlyRequestCookies,
+	params: PrefetchUsersParams = {},
 ) {
-	// TODO: prefetchGetUsersQuery가 생성되면 활성화
-	// const { page = 1, limit = 20 } = params;
-	// await prefetchGetUsersQuery(
-	// 	queryClient,
-	// 	{ page, limit },
-	// 	{
-	// 		request: withServerCookies(cookies),
-	// 	},
-	// );
+	const { take = 20, skip = 0 } = params;
+
+	await prefetchGetUsersQuery(
+		queryClient,
+		{ take, skip },
+		{
+			request: withServerCookies(cookies),
+		},
+	);
 }

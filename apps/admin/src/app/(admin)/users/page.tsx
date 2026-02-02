@@ -8,7 +8,7 @@ import UsersPageClient from "./_client";
 import { prefetchUsersData } from "./_prefetch";
 
 interface UsersPageProps {
-	searchParams: Promise<{ page?: string }>;
+	searchParams: Promise<{ take?: string; skip?: string }>;
 }
 
 /**
@@ -20,13 +20,14 @@ export default async function UsersPage({ searchParams }: UsersPageProps) {
 	const cookieStore = await cookies();
 	const params = await searchParams;
 
-	const page = Number(params.page) || 1;
+	const take = Number(params.take) || 20;
+	const skip = Number(params.skip) || 0;
 
-	await prefetchUsersData(queryClient, cookieStore, { page, limit: 20 });
+	await prefetchUsersData(queryClient, cookieStore, { take, skip });
 
 	return (
 		<HydrationBoundary state={dehydrate(queryClient)}>
-			<UsersPageClient initialPage={page} />
+			<UsersPageClient />
 		</HydrationBoundary>
 	);
 }

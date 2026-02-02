@@ -52,32 +52,51 @@
 
 ---
 
-## Stage 4: 컴포넌트
+## Stage 4: 컴포넌트 (UserList)
 
-신규 컴포넌트 (기획 완료, 개발 대기):
-- [ ] UserRoleCell - 역할 뱃지 Cell
-- [ ] UserStatusCell - 상태 뱃지 Cell
-- [ ] SearchFilterBar - 검색+필터 Widget
-- [ ] FilterPanel - 접이식 필터 패널 Widget
+### Cell 컴포넌트
+- [x] UserRoleCell - 역할 뱃지 Cell (2026-02-02)
+  - 생성: `packages/ui/src/components/ui/data-display/cells/UserRoleCell/`
+  - 기존 `RoleChipCell`을 래핑하여 tenants 배열에서 첫 번째 역할 표시
+- [x] StatusChipCell - 상태 뱃지 Cell (기존)
+  - 위치: `packages/ui/src/components/ui/data-display/cells/StatusChipCell/`
+  - removedAt 기반 상태 계산 지원
+- [x] DateTimeCell - 날짜 포맷팅 Cell (기존)
+  - 위치: `packages/ui/src/components/ui/data-display/cells/DateTimeCell/`
 
-기존 컴포넌트 (확인 필요):
-- [ ] DateTimeCell - 날짜 포맷팅 Cell 존재 여부 확인
-- [ ] StatsCard - 통계 카드 Widget 존재 여부 확인
+### Widget 컴포넌트
+- [x] SearchFilterBar - 검색+필터 Widget (2026-02-02)
+  - 생성: `packages/ui/src/components/widget/SearchFilterBar/`
+- [x] StatsCard - 통계 카드 Widget (2026-02-02)
+  - 생성: `packages/ui/src/components/widget/StatsCard/`
+- [x] FilterPanel - 접이식 필터 패널 Widget (기존)
+  - 위치: `packages/ui/src/components/widget/FilterPanel/`
 
 ---
 
-## Stage 5: 페이지
+## Stage 5: 페이지 (UserList)
 
-- [ ] UserList 페이지 (`/users`) 대기 중
+- [x] UserList 페이지 (`/users`) 완료 (2026-02-02)
+  - 수정: `apps/admin/src/app/(admin)/users/page.tsx` - skip/take 기반 SSR
+  - 수정: `apps/admin/src/app/(admin)/users/_prefetch.ts` - skip/take 파라미터
+  - 수정: `apps/admin/src/app/(admin)/users/_client.tsx` - MetaDataGrid 기반 재구현
 
-개발 명령어:
-```bash
-# Stage 4: 컴포넌트 개발
-/orch-stage run stage=4 plan=prj-core/admin-web/2026-02-02-User page=UserList
+### 구현된 기능
+- [x] 이용자 목록 테이블 (MetaDataGrid + DataGrid)
+- [x] 통계 카드 (전체/활성/비활성)
+- [x] 검색 기능 (이름, 이메일, 전화번호) - nuqs URL 동기화
+- [x] 페이지네이션 - nuqs 기반 skip/take
+- [x] SSR Prefetch 적용
 
-# Stage 5: 페이지 개발
-/orch-stage run stage=5 plan=prj-core/admin-web/2026-02-02-User page=UserList
-```
+### 사용된 컴포넌트
+- `PageSurface` / `SectionSurface` - Surface 시스템
+- `MetaDataGrid` - 선언적 DataGrid Feature
+- `useMetaDataGridQueryStates` - nuqs URL 상태 관리
+- `StatsCard` - 통계 카드 Widget
+- `UserRoleCell` - 역할 Cell
+- `StatusChipCell` - 상태 Cell
+- `DateTimeCell` - 날짜 Cell
+- `PhoneCell` - 전화번호 Cell
 
 ---
 

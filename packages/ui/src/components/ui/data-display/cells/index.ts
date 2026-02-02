@@ -10,3 +10,4 @@ export * from "./ProfileAvatarCell/ProfileAvatarCell";
 export * from "./RoleChipCell/RoleChipCell";
 export * from "./RowActionsCell/RowActionsCell";
 export * from "./StatusChipCell/StatusChipCell";
+export * from "./UserRoleCell";
