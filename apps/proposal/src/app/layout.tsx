@@ -131,9 +131,7 @@ const RootLayout = observer(({ children }: { children: React.ReactNode }) => {
 						</div>
 
 						{/* 메인 컨텐츠 */}
-						<main className="max-w-7xl mx-auto px-6 py-8">
-							{children}
-						</main>
+						<main className="max-w-7xl mx-auto px-6 py-8">{children}</main>
 
 						{/* 전역 플로팅 AI 채팅 */}
 						{!isChatOpen && <FloatingChatButton onPress={handleOpenChat} />}

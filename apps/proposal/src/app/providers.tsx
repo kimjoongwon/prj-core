@@ -1,11 +1,8 @@
 "use client";
 
 import { DesignSystemProvider } from "@cocrepo/design-system";
-import { useMemo, type ReactNode } from "react";
-import {
-	PlanSelectionProvider,
-	PlanSelectionStore,
-} from "../stores";
+import { type ReactNode, useMemo } from "react";
+import { PlanSelectionProvider, PlanSelectionStore } from "../stores";
 
 interface ProvidersProps {
 	children: ReactNode;

@@ -71,7 +71,6 @@ export async function GET(request: NextRequest) {
 	}
 }
 
-
 /**
  * PUT /api/requirements
  * 요구사항 그래프 데이터 저장 (전체 업데이트)

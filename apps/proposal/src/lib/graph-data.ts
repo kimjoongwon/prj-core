@@ -4,7 +4,9 @@ import type { RequirementGraph } from "../components/requirements/types";
  * API에서 요구사항 그래프 데이터 로드
  * @param project - 프로젝트 ID (예: "prj-core__admin-web__user")
  */
-export async function loadGraphFromAPI(project?: string): Promise<RequirementGraph> {
+export async function loadGraphFromAPI(
+	project?: string,
+): Promise<RequirementGraph> {
 	const url = project
 		? `/api/requirements?project=${encodeURIComponent(project)}`
 		: "/api/requirements";

@@ -1,6 +1,13 @@
 "use client";
 
-import { Card, CardBody, CardHeader, Chip, Input, Spinner } from "@heroui/react";
+import {
+	Card,
+	CardBody,
+	CardHeader,
+	Chip,
+	Input,
+	Spinner,
+} from "@heroui/react";
 import {
 	Box,
 	ExternalLink,
@@ -39,7 +46,7 @@ export const ScreenDesignListClient = observer(() => {
 		const result: Record<string, boolean> = {};
 		for (const node of graph?.nodes ?? []) {
 			if (node.type === "screen") {
-				const screenDesign = (node.metadata as { markdown?: string } | undefined);
+				const screenDesign = node.metadata as { markdown?: string } | undefined;
 				result[node.id] = !!screenDesign?.markdown?.trim();
 			}
 		}
@@ -130,7 +137,11 @@ export const ScreenDesignListClient = observer(() => {
 			{filteredScreens.length === 0 ? (
 				<div className="flex flex-col items-center justify-center py-16 text-default-500">
 					<Monitor className="mb-4 size-12" />
-					<p>{totalCount === 0 ? "화면 노드(L4)가 없습니다" : "검색 결과가 없습니다"}</p>
+					<p>
+						{totalCount === 0
+							? "화면 노드(L4)가 없습니다"
+							: "검색 결과가 없습니다"}
+					</p>
 				</div>
 			) : (
 				<div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
@@ -162,7 +173,9 @@ export const ScreenDesignListClient = observer(() => {
 												<h3 className="truncate text-sm font-semibold text-default-800">
 													{screen.name}
 												</h3>
-												<p className="truncate text-xs text-default-400">{screen.id}</p>
+												<p className="truncate text-xs text-default-400">
+													{screen.id}
+												</p>
 											</div>
 										</div>
 										<Chip
