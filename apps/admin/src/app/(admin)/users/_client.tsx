@@ -14,10 +14,8 @@ import {
 	UserRoleCell,
 	VStack,
 } from "@cocrepo/ui";
-import { Plus, UserCheck, UserMinus, Users } from "lucide-react";
+import { UserCheck, UserMinus, Users } from "lucide-react";
 import { observer } from "mobx-react-lite";
-import type { Route } from "next";
-import { useRouter } from "next/navigation";
 
 /**
  * 컬럼 정의
@@ -86,8 +84,6 @@ const leftInputs: InputConfig[] = [
  * 회원 목록 페이지 - 클라이언트 컴포넌트
  */
 function UsersPageClient() {
-	const router = useRouter();
-
 	// nuqs 기반 URL 상태 관리
 	const [queryStates, setQueryStates] = useMetaDataGridQueryStates(leftInputs);
 
@@ -103,22 +99,6 @@ function UsersPageClient() {
 	const stats = response?.stats;
 	const totalCount = meta?.total ?? 0;
 
-	// 우측 입력 정의 (버튼) - 핸들러 필요로 컴포넌트 내부에서 정의
-	const rightInputs: InputConfig[] = [
-		{
-			type: "button",
-			id: "create",
-			label: "회원 등록",
-			props: {
-				color: "primary",
-				startContent: <Plus className="h-4 w-4" />,
-			},
-			handlers: {
-				onClick: () => router.push("/users/new" as Route),
-			},
-		},
-	];
-
 	return (
 		<PageSurface
 			title="이용자 목록"
@@ -127,30 +107,32 @@ function UsersPageClient() {
 			<VStack gap={4}>
 				{/* 통계 카드 */}
 				{stats && (
-					<div className="grid grid-cols-1 gap-4 md:grid-cols-3">
-						<StatsCard
-							title="전체 이용자"
-							value={stats.total ?? 0}
-							icon={<Users className="size-5" />}
-							color="primary"
-						/>
-						<StatsCard
-							title="활성 이용자"
-							value={stats.active ?? 0}
-							icon={<UserCheck className="size-5" />}
-							color="success"
-						/>
-						<StatsCard
-							title="비활성 이용자"
-							value={stats.inactive ?? 0}
-							icon={<UserMinus className="size-5" />}
-							color="default"
-						/>
-					</div>
+					<SectionSurface>
+						<div className="grid grid-cols-1 gap-4 md:grid-cols-3">
+							<StatsCard
+								title="전체 이용자"
+								value={stats.total ?? 0}
+								icon={<Users className="size-5" />}
+								color="primary"
+							/>
+							<StatsCard
+								title="활성 이용자"
+								value={stats.active ?? 0}
+								icon={<UserCheck className="size-5" />}
+								color="success"
+							/>
+							<StatsCard
+								title="비활성 이용자"
+								value={stats.inactive ?? 0}
+								icon={<UserMinus className="size-5" />}
+								color="default"
+							/>
+						</div>
+					</SectionSurface>
 				)}
 
 				{/* MetaDataGrid */}
-				<SectionSurface padding="none">
+				<SectionSurface>
 					<MetaDataGrid
 						config={{
 							entity: "User",
@@ -161,7 +143,6 @@ function UsersPageClient() {
 							setQueryStates,
 							columns,
 							leftInputs,
-							rightInputs,
 							emptyMessage: "조회된 이용자가 없습니다.",
 						}}
 					/>
