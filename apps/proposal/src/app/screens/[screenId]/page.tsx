@@ -1,100 +1,88 @@
-import { promises as fs } from "node:fs";
-import path from "node:path";
+"use client";
 
+import { Spinner } from "@heroui/react";
+import { Monitor } from "lucide-react";
+import { observer } from "mobx-react-lite";
+import { useParams } from "next/navigation";
+
+import { useRequirementGraph } from "../../../hooks/useRequirementGraph";
 import { ScreenDesignClient } from "./_client";
 
-interface ScreenDesign {
-	markdown: string;
-	figmaUrl: string;
-	updatedAt: string | null;
-}
-
-interface ScreenNode {
-	id: string;
-	name: string;
-	description: string;
-	path?: string;
-	type: string;
-	level: number;
-	screenDesign?: ScreenDesign;
-}
-
-interface RequirementsGraph {
-	version: string;
-	name: string;
-	description: string;
-	nodes: ScreenNode[];
-	edges: Array<{ source: string; target: string; type: string }>;
-}
-
-const DATA_PATH = path.join(
-	process.cwd(),
-	"data/requirements/sample-project.json",
-);
-
 /**
- * 원천 데이터에서 화면 정보와 설계 데이터를 한 번에 조회
+ * 화면설계 상세 페이지
+ * SOT 원칙: useRequirementGraph 훅을 통해 목록 페이지와 동일한 데이터 소스 사용
  */
-async function getScreenWithDesign(screenId: string): Promise<{
-	screen: {
-		id: string;
-		name: string;
-		description: string;
-		path?: string;
-	} | null;
-	design: { markdown: string; figmaUrl: string };
-}> {
-	const data = await fs.readFile(DATA_PATH, "utf-8");
-	const graph: RequirementsGraph = JSON.parse(data);
+const ScreenDesignPage = observer(() => {
+	const params = useParams();
+	const screenId = params.screenId as string;
 
-	const node = graph.nodes.find(
-		(n) => n.id === screenId && n.type === "screen",
-	);
+	const { graph, isLoading, error } = useRequirementGraph();
 
-	if (!node) {
-		return { screen: null, design: { markdown: "", figmaUrl: "" } };
+	// 로딩 중
+	if (isLoading) {
+		return (
+			<div className="flex h-screen items-center justify-center">
+				<Spinner size="lg" />
+				<span className="ml-2 text-default-500">화면 데이터 로딩 중...</span>
+			</div>
+		);
 	}
 
-	return {
-		screen: {
-			id: node.id,
-			name: node.name,
-			description: node.description,
-			path: node.path,
-		},
-		design: {
-			markdown: node.screenDesign?.markdown || "",
-			figmaUrl: node.screenDesign?.figmaUrl || "",
-		},
-	};
-}
+	// 에러
+	if (error) {
+		return (
+			<div className="flex h-screen flex-col items-center justify-center text-danger">
+				<Monitor className="mb-4 size-12" />
+				<p>데이터를 불러올 수 없습니다</p>
+				<p className="mt-2 text-sm text-default-400">{error.message}</p>
+			</div>
+		);
+	}
 
-interface PageProps {
-	params: Promise<{ screenId: string }>;
-}
+	// 그래프에서 화면 노드 찾기
+	const screenNode = graph.nodes.find(
+		(node) => node.id === screenId && node.type === "screen",
+	);
 
-export default async function ScreenDesignPage({ params }: PageProps) {
-	const { screenId } = await params;
-
-	const { screen, design } = await getScreenWithDesign(screenId);
-
-	if (!screen) {
+	if (!screenNode) {
 		return (
 			<div className="flex h-screen items-center justify-center">
 				<div className="text-center">
+					<Monitor className="mx-auto mb-4 size-12 text-danger" />
 					<h1 className="text-xl font-bold text-danger">화면을 찾을 수 없음</h1>
 					<p className="mt-2 text-default-500">ID: {screenId}</p>
+					<p className="mt-1 text-sm text-default-400">
+						브레드크럼에서 올바른 기획서를 선택했는지 확인해주세요.
+					</p>
 				</div>
 			</div>
 		);
 	}
 
+	// 메타데이터에서 screenDesign 정보 추출 (SOT: req-L3L4-planner 에이전트 구조 준수)
+	const metadata = screenNode.metadata as {
+		screenDesign?: {
+			markdown?: string;
+			figmaUrl?: string;
+			updatedAt?: string | null;
+		};
+	} | undefined;
+
+	const screenDesign = metadata?.screenDesign;
+
 	return (
 		<ScreenDesignClient
 			screenId={screenId}
-			screen={screen}
-			initialMarkdown={design.markdown}
-			initialFigmaUrl={design.figmaUrl}
+			screen={{
+				id: screenNode.id,
+				name: screenNode.name,
+				description: screenNode.description,
+				path: screenNode.path,
+			}}
+			initialMarkdown={screenDesign?.markdown ?? ""}
+			initialFigmaUrl={screenDesign?.figmaUrl ?? ""}
 		/>
 	);
-}
+});
+
+export default ScreenDesignPage;

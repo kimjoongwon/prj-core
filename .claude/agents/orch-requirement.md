@@ -428,7 +428,55 @@ cat apps/proposal/data/requirements/[project]__[app]__[domain].json | grep -E '"
 # - 요구사항/화면설계/API설계 탭에서 데이터 표시 확인
 ```
 
-### 8.5 실수 발생 시 복구 절차
+### 8.5 화면(L4) 노드 screenDesign 필수 (Critical!)
+
+**모든 screen(L4) 노드에는 반드시 `metadata.screenDesign`을 포함해야 합니다.**
+
+이 필드가 없으면 화면 설계 상세 페이지(`/screens/:screenId`)에서 기획 내용이 표시되지 않습니다.
+
+#### 필수 구조
+
+```json
+{
+  "id": "USR-L4-SCR-001",
+  "level": 4,
+  "type": "screen",
+  "name": "이용자 목록 화면",
+  "description": "이용자 목록 조회 화면",
+  "path": "/users",
+  "metadata": {
+    "screenDesign": {
+      "markdown": "# 이용자 목록 화면\n\n## 목적\n...\n\n## 레이아웃\n...\n\n## 컴포넌트 구성\n...",
+      "figmaUrl": "",
+      "updatedAt": null
+    }
+  }
+}
+```
+
+#### screenDesign.markdown 필수 섹션
+
+| 섹션 | 설명 |
+|------|------|
+| `# 화면명` | 화면 제목 |
+| `## 목적` | 화면의 목적과 사용자 가치 |
+| `## 진입/이탈 조건` | 어디서 오고 어디로 가는지 |
+| `## 레이아웃` | Desktop/Mobile ASCII 다이어그램 |
+| `## 컴포넌트 구성` | 사용하는 컴포넌트 테이블 |
+| `## 상태 및 데이터` | 화면 상태 정의 |
+| `## 관련 API` | 호출하는 API 목록 |
+
+#### req-L3L4-planner 에이전트 호출 시 확인
+
+```bash
+# L3L4 기획 완료 후 반드시 확인:
+# 1. 모든 L4 노드에 metadata.screenDesign 존재 여부
+# 2. markdown 필드에 레이아웃과 컴포넌트 구성 포함 여부
+
+cat requirement-graph.json | grep -A 20 '"type": "screen"'
+```
+
+### 8.6 실수 발생 시 복구 절차
 
 동기화 누락이나 필드명 오류 발견 시:
 

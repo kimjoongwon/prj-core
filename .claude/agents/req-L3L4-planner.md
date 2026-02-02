@@ -50,10 +50,12 @@ RequirementGraph의 nodes와 edges에 추가할 JSON 형식:
       "name": "회원 목록 화면",
       "description": "회원 목록을 테이블 형태로 표시",
       "path": "/users",
-      "screenDesign": {
-        "markdown": "# 회원 목록 화면\n\n## 목적\n회원 정보를 테이블로 조회...\n\n## 레이아웃\n...",
-        "figmaUrl": "",
-        "updatedAt": null
+      "metadata": {
+        "screenDesign": {
+          "markdown": "# 회원 목록 화면\n\n## 목적\n회원 정보를 테이블로 조회...\n\n## 레이아웃\n...",
+          "figmaUrl": "",
+          "updatedAt": null
+        }
       }
     }
   ],
@@ -74,6 +76,8 @@ RequirementGraph의 nodes와 edges에 추가할 JSON 형식:
   ]
 }
 ```
+
+> **중요 (SOT 원칙):** `screenDesign`은 반드시 `metadata` 필드 안에 저장합니다. 이는 `RequirementNode` 타입 정의와 일치해야 하며, 화면 설계 페이지에서 올바르게 데이터를 읽을 수 있습니다.
 
 ---
 
@@ -130,15 +134,17 @@ RequirementGraph의 nodes와 edges에 추가할 JSON 형식:
   "name": "회원 목록 화면",
   "description": "회원 목록을 테이블 형태로 표시",
   "path": "/users",
-  "screenDesign": {
-    "markdown": "# 회원 목록 화면\n\n## 목적\n...",
-    "figmaUrl": "",
-    "updatedAt": null
+  "metadata": {
+    "screenDesign": {
+      "markdown": "# 회원 목록 화면\n\n## 목적\n...",
+      "figmaUrl": "",
+      "updatedAt": null
+    }
   }
 }
 ```
 
-> **필수 필드:** `path`와 `screenDesign`은 모든 screen 노드에 필수입니다.
+> **필수 필드:** `path`와 `metadata.screenDesign`은 모든 screen 노드에 필수입니다.
 
 ### 3단계: 라우팅 경로 설계
 
@@ -167,15 +173,17 @@ RequirementGraph의 nodes와 edges에 추가할 JSON 형식:
 
 ### 5단계: 화면별 기획 문서 작성 (screenDesign)
 
-**모든 screen(L4) 노드에는 `screenDesign` 필드를 포함해야 합니다.**
+**모든 screen(L4) 노드에는 `metadata.screenDesign` 필드를 포함해야 합니다.**
 
-**screenDesign 구조:**
+**screenDesign 구조 (metadata 안에 저장):**
 ```json
 {
-  "screenDesign": {
-    "markdown": "...",      // 화면 기획 문서 (Markdown 형식)
-    "figmaUrl": "",         // Figma URL (있으면 입력, 없으면 빈 문자열)
-    "updatedAt": null       // 최초 생성 시 null
+  "metadata": {
+    "screenDesign": {
+      "markdown": "...",      // 화면 기획 문서 (Markdown 형식)
+      "figmaUrl": "",         // Figma URL (있으면 입력, 없으면 빈 문자열)
+      "updatedAt": null       // 최초 생성 시 null
+    }
   }
 }
 ```
@@ -255,8 +263,8 @@ RequirementGraph의 nodes와 edges에 추가할 JSON 형식:
 - [ ] 라우팅 경로(path)가 RESTful 규칙을 따르는가?
 - [ ] 화면명이 "[무엇] 화면" 형태인가?
 - [ ] 경로에 중복이 없는가?
-- [ ] 모든 screen 노드에 `screenDesign` 필드가 포함되었는가?
-- [ ] `screenDesign.markdown`에 레이아웃과 컴포넌트 구성이 명시되었는가?
+- [ ] 모든 screen 노드에 `metadata.screenDesign` 필드가 포함되었는가?
+- [ ] `metadata.screenDesign.markdown`에 레이아웃과 컴포넌트 구성이 명시되었는가?
 
 ---
 
@@ -291,10 +299,12 @@ RequirementGraph의 nodes와 edges에 추가할 JSON 형식:
       "name": "[화면명]",
       "description": "[화면 설명]",
       "path": "/[경로]",
-      "screenDesign": {
-        "markdown": "# [화면명]\n\n## 목적\n[목적 설명]\n\n## 진입/이탈 조건\n...\n\n## 레이아웃\n...\n\n## 컴포넌트 구성\n...\n\n## 관련 API\n...",
-        "figmaUrl": "",
-        "updatedAt": null
+      "metadata": {
+        "screenDesign": {
+          "markdown": "# [화면명]\n\n## 목적\n[목적 설명]\n\n## 진입/이탈 조건\n...\n\n## 레이아웃\n...\n\n## 컴포넌트 구성\n...\n\n## 관련 API\n...",
+          "figmaUrl": "",
+          "updatedAt": null
+        }
       }
     }
   ],

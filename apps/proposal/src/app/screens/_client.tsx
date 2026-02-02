@@ -133,7 +133,7 @@ export const ScreenDesignListClient = observer(() => {
 					<p>{totalCount === 0 ? "화면 노드(L4)가 없습니다" : "검색 결과가 없습니다"}</p>
 				</div>
 			) : (
-				<div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+				<div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
 					{filteredScreens.map((screen) => {
 						const isCompleted = statuses[screen.id];
 
@@ -141,77 +141,70 @@ export const ScreenDesignListClient = observer(() => {
 							<Link
 								key={screen.id}
 								href={`/screens/${screen.id}` as Route}
-								className="block"
+								className="block w-full"
 							>
 								<Card
 									isPressable
-									className="h-full transition-all hover:scale-[1.02] hover:shadow-lg"
+									className="h-[200px] w-full transition-all hover:scale-[1.02] hover:shadow-lg"
 								>
-									<CardHeader className="flex items-start justify-between gap-2 pb-2">
-										<div className="flex items-center gap-2">
+									<CardHeader className="flex items-start justify-between gap-2 pb-1">
+										<div className="flex min-w-0 flex-1 items-center gap-2">
 											<div
-												className={`flex size-8 items-center justify-center rounded-lg ${
+												className={`flex size-7 shrink-0 items-center justify-center rounded-lg ${
 													isCompleted
 														? "bg-success/20 text-success"
 														: "bg-warning/20 text-warning"
 												}`}
 											>
-												<FileText className="size-4" />
+												<FileText className="size-3.5" />
 											</div>
-											<div>
-												<h3 className="text-sm font-semibold text-default-800">
+											<div className="min-w-0 flex-1">
+												<h3 className="truncate text-sm font-semibold text-default-800">
 													{screen.name}
 												</h3>
-												<p className="text-xs text-default-400">{screen.id}</p>
+												<p className="truncate text-xs text-default-400">{screen.id}</p>
 											</div>
 										</div>
 										<Chip
 											size="sm"
 											variant="flat"
 											color={isCompleted ? "success" : "warning"}
+											className="shrink-0"
 										>
 											{isCompleted ? "완료" : "미작성"}
 										</Chip>
 									</CardHeader>
-									<CardBody className="pt-0">
-										<p className="mb-3 line-clamp-2 text-sm text-default-600">
-											{screen.description}
+									<CardBody className="flex flex-col gap-2 pt-0">
+										<p className="line-clamp-2 text-xs text-default-600">
+											{screen.description || "-"}
 										</p>
 
 										{/* 경로 */}
-										{screen.path && (
-											<div className="mb-3 flex items-center gap-1 text-xs text-default-400">
-												<ExternalLink className="size-3" />
-												<code>{screen.path}</code>
-											</div>
-										)}
+										<div className="flex items-center gap-1 text-xs text-default-400">
+											<ExternalLink className="size-3 shrink-0" />
+											<code className="truncate">{screen.path || "-"}</code>
+										</div>
 
 										{/* 연결 정보 */}
-										<div className="flex flex-wrap gap-2">
-											{screen.components.length > 0 && (
-												<div className="flex items-center gap-1 rounded-md bg-content2 px-2 py-1">
-													<Box className="size-3 text-secondary" />
-													<span className="text-xs text-default-500">
-														{screen.components.length}개 컴포넌트
-													</span>
-												</div>
-											)}
-											{screen.actions.length > 0 && (
-												<div className="flex items-center gap-1 rounded-md bg-content2 px-2 py-1">
-													<MousePointer className="size-3 text-warning" />
-													<span className="text-xs text-default-500">
-														{screen.actions.length}개 액션
-													</span>
-												</div>
-											)}
-											{screen.apis.length > 0 && (
-												<div className="flex items-center gap-1 rounded-md bg-content2 px-2 py-1">
-													<Server className="size-3 text-primary" />
-													<span className="text-xs text-default-500">
-														{screen.apis.length}개 API
-													</span>
-												</div>
-											)}
+										<div className="mt-auto flex flex-wrap gap-1.5">
+											<div className="flex items-center gap-1 rounded-md bg-content2 px-1.5 py-0.5">
+												<Box className="size-3 text-secondary" />
+												<span className="text-xs text-default-500">
+													{screen.components.length}
+												</span>
+											</div>
+											<div className="flex items-center gap-1 rounded-md bg-content2 px-1.5 py-0.5">
+												<MousePointer className="size-3 text-warning" />
+												<span className="text-xs text-default-500">
+													{screen.actions.length}
+												</span>
+											</div>
+											<div className="flex items-center gap-1 rounded-md bg-content2 px-1.5 py-0.5">
+												<Server className="size-3 text-primary" />
+												<span className="text-xs text-default-500">
+													{screen.apis.length}
+												</span>
+											</div>
 										</div>
 									</CardBody>
 								</Card>
