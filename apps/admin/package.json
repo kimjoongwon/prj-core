@@ -11,7 +11,11 @@
     "lint": "biome check .",
     "lint:fix": "biome check --write .",
     "format": "biome format --write .",
-    "clean": "rm -rf node_modules && rm -rf .next && rm -rf package-lock.json"
+    "clean": "rm -rf node_modules && rm -rf .next && rm -rf package-lock.json",
+    "test:e2e": "playwright test",
+    "test:e2e:ui": "playwright test --ui",
+    "test:e2e:headed": "playwright test --headed",
+    "test:e2e:report": "playwright show-report"
   },
   "dependencies": {
     "@cocrepo/api": "workspace:^",
@@ -40,6 +44,7 @@
     "recharts": "^2.15.0"
   },
   "devDependencies": {
+    "@playwright/test": "^1.57.0",
     "@tailwindcss/postcss": "catalog:",
     "@types/node": "catalog:",
     "@types/react": "catalog:",

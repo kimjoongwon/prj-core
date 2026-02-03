@@ -26,3 +26,8 @@ logs
 
 # Next.js cache
 next-env.d.ts
+
+# Playwright
+/playwright-browsers/
+/playwright-report/
+/test-results/

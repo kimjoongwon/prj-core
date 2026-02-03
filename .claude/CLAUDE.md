@@ -862,6 +862,12 @@ apps/proposal/plans/
 |-------|------|
 | etc-jenkinsfile-builder | Jenkins CI/CD 파이프라인 파일 생성 |
 
+#### 개발 도구 (dev-*)
+
+| Agent | 역할 |
+|-------|------|
+| dev-service-starter | 개발 서비스 시작 (admin, server, storybook 등) |
+
 각 Agent의 상세 역할은 `.claude/agents/` 디렉토리를 참고하세요.
 
 ### 에이전트 실행 규칙 (Critical)
