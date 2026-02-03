@@ -14,7 +14,7 @@ import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 
 interface RoleEditPageClientProps {
-	id: string;
+	roleId: string;
 }
 
 /**
@@ -32,18 +32,18 @@ interface RoleEditFormState {
 /**
  * 역할 수정 페이지 - 클라이언트 컴포넌트
  */
-function RoleEditPageClient({ id }: RoleEditPageClientProps) {
+function RoleEditPageClient({ roleId }: RoleEditPageClientProps) {
 	const router = useRouter();
 
 	// API 조회
-	const { data: response, isLoading } = useGetRoleById(id);
+	const { data: response, isLoading } = useGetRoleById(roleId);
 	const role = response?.data;
 
 	// 수정 Mutation
 	const { mutate: updateRole, isPending } = useUpdateRole({
 		mutation: {
 			onSuccess: () => {
-				router.push(`/roles/${id}` as Route);
+				router.push(`/roles/${roleId}` as Route);
 			},
 		},
 	});
@@ -88,7 +88,7 @@ function RoleEditPageClient({ id }: RoleEditPageClientProps) {
 	 * 뒤로가기 핸들러
 	 */
 	const onClickBackButton = () => {
-		router.push(`/roles/${id}` as Route);
+		router.push(`/roles/${roleId}` as Route);
 	};
 
 	/**
@@ -111,7 +111,7 @@ function RoleEditPageClient({ id }: RoleEditPageClientProps) {
 			description: state.description || undefined,
 		};
 
-		updateRole({ id, data });
+		updateRole({ id: roleId, data });
 	};
 
 	if (isLoading) {

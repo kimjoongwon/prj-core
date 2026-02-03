@@ -8,7 +8,7 @@ import { prefetchRoleDetailData } from "../_prefetch";
 import RoleEditPageClient from "./_client";
 
 interface RoleEditPageProps {
-	params: Promise<{ id: string }>;
+	params: Promise<{ roleId: string }>;
 }
 
 /**
@@ -16,15 +16,15 @@ interface RoleEditPageProps {
  * SSR 시점에 데이터를 프리페칭하여 클라이언트에 전달합니다.
  */
 export default async function RoleEditPage({ params }: RoleEditPageProps) {
-	const { id } = await params;
+	const { roleId } = await params;
 	const queryClient = new QueryClient();
 	const cookieStore = await cookies();
 
-	await prefetchRoleDetailData(queryClient, cookieStore, id);
+	await prefetchRoleDetailData(queryClient, cookieStore, roleId);
 
 	return (
 		<HydrationBoundary state={dehydrate(queryClient)}>
-			<RoleEditPageClient id={id} />
+			<RoleEditPageClient roleId={roleId} />
 		</HydrationBoundary>
 	);
 }

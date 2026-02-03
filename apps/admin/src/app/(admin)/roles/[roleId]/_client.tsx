@@ -29,23 +29,23 @@ import type { Route } from "next";
 import { useRouter } from "next/navigation";
 
 interface RoleDetailPageClientProps {
-	id: string;
+	roleId: string;
 }
 
 /**
  * 역할 상세 페이지 - 클라이언트 컴포넌트
  */
-function RoleDetailPageClient({ id }: RoleDetailPageClientProps) {
+function RoleDetailPageClient({ roleId }: RoleDetailPageClientProps) {
 	const router = useRouter();
 	const deleteModal = useDisclosure();
 
 	// API 조회
-	const { data: response, isLoading } = useGetRoleById(id);
+	const { data: response, isLoading } = useGetRoleById(roleId);
 	const role = response?.data;
 
 	// 역할별 권한 조회
 	const { data: abilitiesResponse, isLoading: isLoadingAbilities } =
-		useGetAbilitiesByRoleId(id);
+		useGetAbilitiesByRoleId(roleId);
 	const abilities = abilitiesResponse?.data ?? [];
 
 	// 삭제 Mutation
@@ -69,14 +69,14 @@ function RoleDetailPageClient({ id }: RoleDetailPageClientProps) {
 	 * 수정 페이지 이동 핸들러
 	 */
 	const onClickEditButton = () => {
-		router.push(`/roles/${id}/edit` as Route);
+		router.push(`/roles/${roleId}/edit` as Route);
 	};
 
 	/**
 	 * 삭제 확인 핸들러
 	 */
 	const onClickDeleteConfirm = () => {
-		deleteRole({ id });
+		deleteRole({ id: roleId });
 	};
 
 	if (isLoading) {

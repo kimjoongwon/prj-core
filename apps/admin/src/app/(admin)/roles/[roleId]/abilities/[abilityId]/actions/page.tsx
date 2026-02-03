@@ -6,7 +6,7 @@ import {
 import AbilityActionsPageClient from "./_client";
 
 interface AbilityActionsPageProps {
-	params: Promise<{ id: string; abilityId: string }>;
+	params: Promise<{ roleId: string; abilityId: string }>;
 }
 
 /**
@@ -15,7 +15,7 @@ interface AbilityActionsPageProps {
 export default async function AbilityActionsPage({
 	params,
 }: AbilityActionsPageProps) {
-	const { id: roleId, abilityId } = await params;
+	const { roleId, abilityId } = await params;
 	const queryClient = new QueryClient();
 
 	// TODO: prefetch ability data

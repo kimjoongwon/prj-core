@@ -8,14 +8,14 @@ import type { ReadonlyRequestCookies } from "next/dist/server/web/spec-extension
 export async function prefetchRoleDetailData(
 	queryClient: QueryClient,
 	cookieStore: ReadonlyRequestCookies,
-	id: string,
+	roleId: string,
 ) {
 	const cookieHeader = cookieStore
 		.getAll()
 		.map((c) => `${c.name}=${c.value}`)
 		.join("; ");
 
-	await prefetchGetRoleByIdQuery(queryClient, id, {
+	await prefetchGetRoleByIdQuery(queryClient, roleId, {
 		request: {
 			headers: {
 				Cookie: cookieHeader,
