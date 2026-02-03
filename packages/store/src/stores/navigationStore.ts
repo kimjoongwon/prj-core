@@ -225,11 +225,17 @@ export class NavigationStore {
 			}
 
 			// 직접 경로 매칭 (children 없는 경우)
-			if (navItem.path && path.startsWith(navItem.path)) {
-				navItem.setActive(true);
-				this._selectedNavItem = navItem;
-				this._selectedSubNavItem = null;
-				return;
+			// 경로 경계 체크: 정확히 일치하거나, 경로 + '/'로 시작해야 함
+			if (navItem.path) {
+				const isExactMatch = path === navItem.path;
+				const isPrefixMatch = path.startsWith(navItem.path + "/");
+
+				if (isExactMatch || isPrefixMatch) {
+					navItem.setActive(true);
+					this._selectedNavItem = navItem;
+					this._selectedSubNavItem = null;
+					return;
+				}
 			}
 		}
 

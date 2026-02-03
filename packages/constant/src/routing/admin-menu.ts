@@ -91,9 +91,13 @@ export const ADMIN_PATHS = {
 	ADMINS_INVITATIONS_PENDING: "/admins/invitations/pending",
 	ADMINS_INVITATIONS_EXPIRED: "/admins/invitations/expired",
 
-	// 역할/권한 (v7.0 - 설정에서 분리)
+	// 역할 관리 (v7.0 - 설정에서 분리)
 	ROLES: "/roles",
-	ROLES_ABILITIES: "/roles/abilities",
+	ROLES_NEW: "/roles/new",
+	ROLES_DETAIL: "/roles/[id]",
+	ROLES_EDIT: "/roles/[id]/edit",
+	ROLES_ABILITY_SUBJECTS: "/roles/[id]/abilities/[abilityId]/subjects",
+	ROLES_ABILITY_ACTIONS: "/roles/[id]/abilities/[abilityId]/actions",
 
 	// 기타
 	SELECT_SPACE: "/select-space",
@@ -173,9 +177,7 @@ export const ADMIN_SUBJECTS = {
 	MENU_ADMINS_LIST: "menu:admins:list",
 	MENU_ADMINS_INVITATIONS: "menu:admins:invitations",
 
-	// 2depth - 역할/권한 (v7.0)
-	MENU_ROLES_LIST: "menu:roles:list",
-	MENU_ROLES_ABILITIES: "menu:roles:abilities",
+	// 역할 관리 (단일 메뉴, 2depth 없음)
 
 	// FAB 액션 (v7.0 신규)
 	QUICK_ACTION_TODAY_RESERVATION: "quickAction:todayReservation",
@@ -629,26 +631,13 @@ export const ADMIN_NAV_ITEMS: NavItemConfig[] = [
 		],
 	},
 
-	// 11. 역할/권한 (v7.0 - 설정에서 분리)
+	// 11. 역할 관리 (v7.0 - 설정에서 분리, 단일 메뉴)
 	{
 		id: "roles",
-		label: "역할/권한",
+		label: "역할 관리",
 		icon: "Shield",
+		path: ADMIN_PATHS.ROLES,
 		subject: ADMIN_SUBJECTS.MENU_ROLES,
-		children: [
-			{
-				id: "roles-list",
-				label: "역할 목록",
-				path: ADMIN_PATHS.ROLES,
-				subject: ADMIN_SUBJECTS.MENU_ROLES_LIST,
-			},
-			{
-				id: "roles-abilities",
-				label: "권한 설정",
-				path: ADMIN_PATHS.ROLES_ABILITIES,
-				subject: ADMIN_SUBJECTS.MENU_ROLES_ABILITIES,
-			},
-		],
 	},
 ];
 

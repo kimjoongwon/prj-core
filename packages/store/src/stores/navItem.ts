@@ -126,11 +126,29 @@ export class NavItem {
 
 	/**
 	 * 경로로 하위 아이템 찾기
+	 * 가장 구체적인 경로(가장 긴 매칭)를 우선 반환합니다.
+	 * 경로 경계를 체크하여 /roles가 /rolesX를 매칭하지 않도록 합니다.
 	 */
 	findChildByPath(path: string): NavItem | undefined {
-		return this.children.find(
-			(child) => child.path && path.startsWith(child.path),
-		);
+		let bestMatch: NavItem | undefined;
+		let bestMatchLength = 0;
+
+		for (const child of this.children) {
+			if (!child.path) continue;
+
+			// 경로 매칭 체크: 정확히 일치하거나, 경로 + '/'로 시작해야 함
+			const isExactMatch = path === child.path;
+			const isPrefixMatch = path.startsWith(child.path + "/");
+
+			if (isExactMatch || isPrefixMatch) {
+				if (child.path.length > bestMatchLength) {
+					bestMatch = child;
+					bestMatchLength = child.path.length;
+				}
+			}
+		}
+
+		return bestMatch;
 	}
 
 	/**

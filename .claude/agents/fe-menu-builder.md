@@ -115,6 +115,88 @@ app/(admin)/
 
 ---
 
+## 2.1 라우팅 패턴 선택 가이드
+
+### 핵심 원칙: 속성 vs 관계
+
+**라우팅 경로 설계 시 가장 먼저 구분할 것:**
+
+| 유형 | 설명 | 라우팅 패턴 | UI 패턴 |
+|------|------|------------|---------|
+| **속성 (Attribute)** | 동일 엔티티의 필터링 조건 | `/{entity}/{value}` | 탭 |
+| **관계 (Relation)** | 다른 엔티티로의 탐색 | `/{parent}/:id/{child}` | 중첩 라우팅 |
+
+### 속성 기반 - 탭 사용
+
+엔티티의 status, type, category 등 **속성값**으로 필터링:
+
+```
+/users                  → 전체 회원
+/users/active           → status='active' 필터
+/users/dormant          → status='dormant' 필터
+/users/pending-withdrawal → status='pending-withdrawal' 필터
+```
+
+**특징:**
+- 같은 테이블, 같은 컬럼의 WHERE 조건
+- UI에서 탭으로 전환
+- 목록 개수가 탭에 표시됨
+
+### 관계 기반 - 중첩 라우팅 사용
+
+엔티티 간 **1:N 또는 N:M 관계**를 따라 탐색:
+
+```
+/roles                              → 역할 목록
+/roles/:roleId                      → 역할 상세
+/roles/:roleId/abilities            → 해당 역할의 권한 목록
+/roles/:roleId/abilities/:abilityId → 권한 상세
+```
+
+**특징:**
+- 부모 → 자식 엔티티로 계층 탐색
+- "리스트 → 상세 → 리스트 → 상세" 반복 가능
+- 상세 페이지에서 연관 데이터 목록 표시
+
+### 판단 플로우차트
+
+```
+경로 설계 시 질문:
+│
+├─ "같은 엔티티의 다른 상태/유형을 보여줄 건가?"
+│   └─ YES → 탭 (/{entity}/{attribute-value})
+│
+└─ "연관된 다른 엔티티의 데이터를 보여줄 건가?"
+    └─ YES → 중첩 라우팅 (/{parent}/:id/{child})
+```
+
+### 혼합 예시
+
+복잡한 도메인에서 두 패턴이 함께 사용:
+
+```
+/orders                        → 주문 목록
+/orders/pending                → 주문 (status=pending 필터) ← 탭
+/orders/completed              → 주문 (status=completed 필터) ← 탭
+/orders/:orderId               → 주문 상세
+/orders/:orderId/items         → 주문 상품 목록 ← 중첩
+/orders/:orderId/items/:itemId → 주문 상품 상세 ← 중첩
+```
+
+### Prisma 스키마 기반 판단
+
+```prisma
+model User {
+  status  UserStatus   // ← enum → 탭
+  role    Role @relation(...)  // ← relation → 중첩
+}
+
+// /users/active    ← status enum 값
+// /users/:id/role  ← role relation 탐색
+```
+
+---
+
 ## 3. 메뉴 데이터 인터페이스
 
 ```typescript
@@ -668,12 +750,17 @@ apps/proposal/plans/{date}-{ProjectName}MenuSystem/
 
 ### 역할/권한 (roles)
 
-> 역할 목록 및 권한 설정
+> 역할 목록 및 권한 설정 - **중첩 라우팅 패턴 적용**
 
-| 2depth | 경로 | 설명 |
-|--------|------|------|
-| 역할 목록 | /roles | 역할 관리 |
-| 권한 설정 | /roles/abilities | 권한 설정 |
+| 경로 | 설명 | 패턴 |
+|------|------|------|
+| /roles | 역할 목록 | 목록 |
+| /roles/new | 역할 등록 | 생성 |
+| /roles/:roleId | 역할 상세 (+ 권한 목록) | 상세 |
+| /roles/:roleId/edit | 역할 수정 | 수정 |
+| /roles/:roleId/abilities/:abilityId | 권한 상세 | 중첩 상세 |
+
+**하위 메뉴 없음** (단일 메뉴, 중첩 라우팅으로 탐색)
 
 ---
 
