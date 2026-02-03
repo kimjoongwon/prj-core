@@ -180,6 +180,33 @@ apps/admin/app/[route]/
 
 **상세 템플릿은 `fe-page-builder` 에이전트의 섹션 9를 참고하세요.**
 
+### 라우팅 규칙 (Critical)
+
+#### 동적 경로 파라미터 네이밍
+
+**동적 경로 파라미터는 축약하지 않고 전체 엔티티 이름을 명시합니다.**
+
+```typescript
+// ❌ 금지 - 축약된 파라미터명
+"/users/[id]"
+"/roles/[id]/edit"
+"/timelines/[id]/sessions"
+
+// ✅ 올바른 예시 - 명확한 엔티티명
+"/users/[userId]"
+"/roles/[roleId]/edit"
+"/timelines/[timelineId]/sessions"
+```
+
+**이유:**
+- 중첩 경로에서 어떤 ID인지 명확히 구분 (`/roles/[roleId]/abilities/[abilityId]`)
+- 코드 가독성 향상
+- 타입 안정성 강화
+
+**적용 위치:**
+- `packages/constant/src/routing/admin-menu.ts`의 모든 경로 정의
+- Next.js 파일 시스템 라우팅 폴더명 (`app/(admin)/users/[userId]/`)
+
 ### 컴포넌트 작성
 
 - ui 컴포넌트를 만들 때는 mobx를 사용합니다
@@ -784,6 +811,35 @@ apps/proposal/plans/
 - **기능 단위 백엔드**: API/스키마가 한 번에 완성되어 일관성 유지
 - **페이지별 프론트엔드**: 점진적 개발, 컴포넌트 재사용 가능
 - **각 단계별 리뷰**: 문제 발견 시 해당 단계부터 재시작
+
+#### Stage 4: 자동 메뉴 업데이트
+
+**Stage 4에서는 목록 페이지(List) 개발 시 `fe-menu-builder` 에이전트가 자동으로 실행됩니다.**
+
+```
+Stage 4: 컴포넌트 (페이지별)
+├── ui-component-builder
+├── widget-builder
+├── feature-builder
+├── store-builder
+└── menu-builder (자동) ← 목록 페이지 개발 시만 실행
+    - admin-menu.ts 업데이트
+    - 경로, Subject, 아이콘 설정
+    - 엔티티 관계 기반 경로 구조 적용
+```
+
+**자동 실행 조건:**
+- 페이지 타입이 "List" (목록 페이지)인 경우에만 실행
+- MemberList, UserList 등 첫 페이지 개발 시 메뉴 자동 생성
+- Detail, Create, Edit 페이지는 메뉴 업데이트 없음
+
+**업데이트 내용:**
+- `packages/constant/src/routing/admin-menu.ts`에 새 메뉴 항목 추가
+- 경로 구조가 엔티티 관계 규칙을 따르는지 검증
+- Subject 자동 생성 (예: `menu:members`, `menu:members:list`)
+- 적절한 아이콘 자동 선택
+
+이 자동화로 메뉴 시스템이 항상 최신 상태로 유지됩니다.
 
 ### 개별 Agent
 

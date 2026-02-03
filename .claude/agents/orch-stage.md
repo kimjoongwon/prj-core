@@ -648,6 +648,15 @@ pnpm --filter=@cocrepo/api generate
    - 해당 페이지에 필요한 Store 생성
    ```
 
+6. **menu-builder** (순차 - 첫 페이지 개발 시만)
+   ```
+   Task: fe-menu-builder
+   - 조건: 목록 페이지(List) 개발 시에만 실행
+   - admin-menu.ts에 새 메뉴 항목 추가
+   - 경로, Subject, 아이콘 설정
+   - 엔티티 관계 기반 경로 구조 적용
+   ```
+
 **산출물 문서 생성:**
 
 페이지별로 `-{페이지명}-components.md` 파일 생성:
@@ -679,6 +688,18 @@ YYYY-MM-DD HH:mm
 |---------|------|-----------|-----------|
 | MemberFilterPanel | `components/feature/MemberFilterPanel/` | MemberListStore | 신규 |
 
+### Store
+| Store | 경로 | 설명 |
+|-------|------|------|
+| MemberListStore | `stores/member/MemberListStore.ts` | 회원 목록 상태 관리 |
+
+### Menu (목록 페이지만)
+| 항목 | 값 | 설명 |
+|------|-----|------|
+| 메뉴 추가 | `admin-menu.ts` | 1depth: members, 2depth: members-list |
+| 경로 추가 | `admin-menu.ts` | /members, /members/active 등 |
+| Subject 추가 | `admin-menu.ts` | menu:members, menu:members:list |
+
 ## 컴포넌트 계층
 ```
 MemberListPage
@@ -703,6 +724,8 @@ Stage 5: 페이지 통합 (page=MemberList)
 - UI: MemberStatusBadge (신규)
 - Widget: MemberCard (신규)
 - Feature: MemberFilterPanel (신규)
+- Store: MemberListStore (신규)
+- Menu: admin-menu.ts에 회원 메뉴 추가 ✨
 
 📄 결과 문서: apps/proposal/plans/YYYY-MM-DD-Member/Member-MemberList-components.md
 
@@ -710,6 +733,7 @@ Stage 5: 페이지 통합 (page=MemberList)
 - [ ] 컴포넌트 계층이 올바른가? (ui → widget → feature)
 - [ ] 재사용성이 적절한가?
 - [ ] 다른 페이지에서 재사용할 컴포넌트가 있는가?
+- [ ] 메뉴 구조가 적절한가? (목록 페이지만)
 
 → 리뷰 완료 후 "Stage 5 진행 page=MemberList" 또는 수정 요청을 해주세요.
 ```

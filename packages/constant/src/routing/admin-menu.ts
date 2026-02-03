@@ -17,7 +17,7 @@ export const ADMIN_PATHS = {
 	USERS_ACTIVE: "/users/active",
 	USERS_DORMANT: "/users/dormant",
 	USERS_PENDING_WITHDRAWAL: "/users/pending-withdrawal",
-	USERS_DETAIL: "/users/[id]",
+	USERS_DETAIL: "/users/[userId]",
 	USERS_GRADES: "/users/grades",
 	USERS_WITHDRAWN: "/users/withdrawn",
 
@@ -62,21 +62,30 @@ export const ADMIN_PATHS = {
 	TEMPLATES_PUSH: "/templates/push",
 	TEMPLATES_HTML: "/templates/html",
 
-	// 세션 (v7.0 신규)
+	// 타임라인 (Timeline 1:N → Session)
+	TIMELINES: "/timelines",
+	TIMELINES_ACTIVE: "/timelines/active",
+	TIMELINES_ARCHIVED: "/timelines/archived",
+	TIMELINES_SESSIONS: "/timelines/[timelineId]/sessions", // 중첩 라우팅
+
+	// 세션 (Session 1:N → Program)
 	SESSIONS: "/sessions",
 	SESSIONS_ONE_TIME: "/sessions/one-time",
 	SESSIONS_RECURRING: "/sessions/recurring",
 	SESSIONS_UPCOMING: "/sessions/upcoming",
 	SESSIONS_PAST: "/sessions/past",
-	SESSIONS_TIMELINES: "/sessions/timelines",
-	SESSIONS_TIMELINES_ACTIVE: "/sessions/timelines/active",
-	SESSIONS_TIMELINES_ARCHIVED: "/sessions/timelines/archived",
-	SESSIONS_PROGRAMS: "/sessions/programs",
-	SESSIONS_PROGRAMS_ACTIVE: "/sessions/programs/active",
-	SESSIONS_PROGRAMS_FULL: "/sessions/programs/full",
-	SESSIONS_PROGRAMS_AVAILABLE: "/sessions/programs/available",
-	SESSIONS_ROUTINES: "/sessions/routines",
-	SESSIONS_ROUTINES_EXERCISE: "/sessions/routines/exercise",
+	SESSIONS_PROGRAMS: "/sessions/[sessionId]/programs", // 중첩 라우팅
+
+	// 프로그램 (Program N:1 → Session, N:1 → Routine)
+	PROGRAMS: "/programs",
+	PROGRAMS_ACTIVE: "/programs/active",
+	PROGRAMS_FULL: "/programs/full",
+	PROGRAMS_AVAILABLE: "/programs/available",
+
+	// 루틴 (Routine 1:N → Activity)
+	ROUTINES: "/routines",
+	ROUTINES_EXERCISE: "/routines/exercise",
+	ROUTINES_ACTIVITIES: "/routines/[routineId]/activities", // 중첩 라우팅
 
 	// 시설 (v7.0 - 설정에서 분리)
 	GROUNDS: "/grounds",
@@ -94,10 +103,10 @@ export const ADMIN_PATHS = {
 	// 역할 관리 (v7.0 - 설정에서 분리)
 	ROLES: "/roles",
 	ROLES_NEW: "/roles/new",
-	ROLES_DETAIL: "/roles/[id]",
-	ROLES_EDIT: "/roles/[id]/edit",
-	ROLES_ABILITY_SUBJECTS: "/roles/[id]/abilities/[abilityId]/subjects",
-	ROLES_ABILITY_ACTIONS: "/roles/[id]/abilities/[abilityId]/actions",
+	ROLES_DETAIL: "/roles/[roleId]",
+	ROLES_EDIT: "/roles/[roleId]/edit",
+	ROLES_ABILITY_SUBJECTS: "/roles/[roleId]/abilities/[abilityId]/subjects",
+	ROLES_ABILITY_ACTIONS: "/roles/[roleId]/abilities/[abilityId]/actions",
 
 	// 기타
 	SELECT_SPACE: "/select-space",
@@ -122,7 +131,10 @@ export const ADMIN_SUBJECTS = {
 	MENU_INQUIRIES: "menu:inquiries",
 	MENU_CONTENTS: "menu:contents",
 	MENU_TEMPLATES: "menu:templates",
+	MENU_TIMELINES: "menu:timelines",
 	MENU_SESSIONS: "menu:sessions",
+	MENU_PROGRAMS: "menu:programs",
+	MENU_ROUTINES: "menu:routines",
 	MENU_GROUNDS: "menu:grounds",
 	MENU_ADMINS: "menu:admins",
 	MENU_ROLES: "menu:roles",
@@ -162,11 +174,17 @@ export const ADMIN_SUBJECTS = {
 	MENU_TEMPLATES_PUSH: "menu:templates:push",
 	MENU_TEMPLATES_HTML: "menu:templates:html",
 
-	// 2depth - 세션 (v7.0 신규)
-	MENU_SESSIONS_TIMELINES: "menu:sessions:timelines",
+	// 2depth - 타임라인
+	MENU_TIMELINES_LIST: "menu:timelines:list",
+
+	// 2depth - 세션
 	MENU_SESSIONS_LIST: "menu:sessions:list",
-	MENU_SESSIONS_PROGRAMS: "menu:sessions:programs",
-	MENU_SESSIONS_ROUTINES: "menu:sessions:routines",
+
+	// 2depth - 프로그램
+	MENU_PROGRAMS_LIST: "menu:programs:list",
+
+	// 2depth - 루틴
+	MENU_ROUTINES_LIST: "menu:routines:list",
 
 	// 2depth - 시설 (v7.0)
 	MENU_GROUNDS_INFO: "menu:grounds:info",
@@ -467,32 +485,42 @@ export const ADMIN_NAV_ITEMS: NavItemConfig[] = [
 		],
 	},
 
-	// 8. 세션 (v7.0 신규)
+	// 8. 타임라인 (v7.0 신규)
+	{
+		id: "timelines",
+		label: "타임라인",
+		icon: "Calendar",
+		subject: ADMIN_SUBJECTS.MENU_TIMELINES,
+		children: [
+			{
+				id: "timelines-list",
+				label: "타임라인",
+				path: ADMIN_PATHS.TIMELINES,
+				subject: ADMIN_SUBJECTS.MENU_TIMELINES_LIST,
+				tabs: [
+					{ id: "all", label: "전체", href: ADMIN_PATHS.TIMELINES },
+					{
+						id: "active",
+						label: "활성",
+						href: ADMIN_PATHS.TIMELINES_ACTIVE,
+					},
+					{
+						id: "archived",
+						label: "보관됨",
+						href: ADMIN_PATHS.TIMELINES_ARCHIVED,
+					},
+				],
+			},
+		],
+	},
+
+	// 9. 세션 (v7.0 신규)
 	{
 		id: "sessions",
 		label: "세션",
 		icon: "Clock",
 		subject: ADMIN_SUBJECTS.MENU_SESSIONS,
 		children: [
-			{
-				id: "sessions-timelines",
-				label: "타임라인",
-				path: ADMIN_PATHS.SESSIONS_TIMELINES,
-				subject: ADMIN_SUBJECTS.MENU_SESSIONS_TIMELINES,
-				tabs: [
-					{ id: "all", label: "전체", href: ADMIN_PATHS.SESSIONS_TIMELINES },
-					{
-						id: "active",
-						label: "활성",
-						href: ADMIN_PATHS.SESSIONS_TIMELINES_ACTIVE,
-					},
-					{
-						id: "archived",
-						label: "보관됨",
-						href: ADMIN_PATHS.SESSIONS_TIMELINES_ARCHIVED,
-					},
-				],
-			},
 			{
 				id: "sessions-list",
 				label: "세션 목록",
@@ -518,48 +546,68 @@ export const ADMIN_NAV_ITEMS: NavItemConfig[] = [
 					{ id: "past", label: "지난", href: ADMIN_PATHS.SESSIONS_PAST },
 				],
 			},
+		],
+	},
+
+	// 10. 프로그램 (v7.0 신규)
+	{
+		id: "programs",
+		label: "프로그램",
+		icon: "ListTodo",
+		subject: ADMIN_SUBJECTS.MENU_PROGRAMS,
+		children: [
 			{
-				id: "sessions-programs",
-				label: "프로그램 배정",
-				path: ADMIN_PATHS.SESSIONS_PROGRAMS,
-				subject: ADMIN_SUBJECTS.MENU_SESSIONS_PROGRAMS,
+				id: "programs-list",
+				label: "프로그램",
+				path: ADMIN_PATHS.PROGRAMS,
+				subject: ADMIN_SUBJECTS.MENU_PROGRAMS_LIST,
 				tabs: [
-					{ id: "all", label: "전체", href: ADMIN_PATHS.SESSIONS_PROGRAMS },
+					{ id: "all", label: "전체", href: ADMIN_PATHS.PROGRAMS },
 					{
 						id: "active",
 						label: "진행중",
-						href: ADMIN_PATHS.SESSIONS_PROGRAMS_ACTIVE,
+						href: ADMIN_PATHS.PROGRAMS_ACTIVE,
 					},
 					{
 						id: "full",
 						label: "정원마감",
-						href: ADMIN_PATHS.SESSIONS_PROGRAMS_FULL,
+						href: ADMIN_PATHS.PROGRAMS_FULL,
 					},
 					{
 						id: "available",
 						label: "예약가능",
-						href: ADMIN_PATHS.SESSIONS_PROGRAMS_AVAILABLE,
-					},
-				],
-			},
-			{
-				id: "sessions-routines",
-				label: "루틴",
-				path: ADMIN_PATHS.SESSIONS_ROUTINES,
-				subject: ADMIN_SUBJECTS.MENU_SESSIONS_ROUTINES,
-				tabs: [
-					{ id: "all", label: "전체", href: ADMIN_PATHS.SESSIONS_ROUTINES },
-					{
-						id: "exercise",
-						label: "운동",
-						href: ADMIN_PATHS.SESSIONS_ROUTINES_EXERCISE,
+						href: ADMIN_PATHS.PROGRAMS_AVAILABLE,
 					},
 				],
 			},
 		],
 	},
 
-	// 9. 시설 (v7.0 - 설정에서 분리)
+	// 11. 루틴 (v7.0 신규)
+	{
+		id: "routines",
+		label: "루틴",
+		icon: "Repeat",
+		subject: ADMIN_SUBJECTS.MENU_ROUTINES,
+		children: [
+			{
+				id: "routines-list",
+				label: "루틴",
+				path: ADMIN_PATHS.ROUTINES,
+				subject: ADMIN_SUBJECTS.MENU_ROUTINES_LIST,
+				tabs: [
+					{ id: "all", label: "전체", href: ADMIN_PATHS.ROUTINES },
+					{
+						id: "exercise",
+						label: "운동",
+						href: ADMIN_PATHS.ROUTINES_EXERCISE,
+					},
+				],
+			},
+		],
+	},
+
+	// 12. 시설 (v7.0 - 설정에서 분리)
 	{
 		id: "grounds",
 		label: "시설",
@@ -587,7 +635,7 @@ export const ADMIN_NAV_ITEMS: NavItemConfig[] = [
 		],
 	},
 
-	// 10. 관리자 (v7.0 - 설정에서 분리)
+	// 13. 관리자 (v7.0 - 설정에서 분리)
 	{
 		id: "admins",
 		label: "관리자",
@@ -631,7 +679,7 @@ export const ADMIN_NAV_ITEMS: NavItemConfig[] = [
 		],
 	},
 
-	// 11. 역할 관리 (v7.0 - 설정에서 분리, 단일 메뉴)
+	// 14. 역할 관리 (v7.0 - 설정에서 분리, 단일 메뉴)
 	{
 		id: "roles",
 		label: "역할 관리",
