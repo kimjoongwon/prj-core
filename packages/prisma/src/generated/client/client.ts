@@ -103,6 +103,16 @@ export type Ability = Prisma.AbilityModel
  */
 export type Grant = Prisma.GrantModel
 /**
+ * Model OidcClient
+ * @displayName OIDC 클라이언트
+ */
+export type OidcClient = Prisma.OidcClientModel
+/**
+ * Model OidcModel
+ * @displayName OIDC 모델
+ */
+export type OidcModel = Prisma.OidcModelModel
+/**
  * Model Role
  * @displayName 역할
  */

@@ -397,6 +397,8 @@ export const ModelName = {
   Action: 'Action',
   Ability: 'Ability',
   Grant: 'Grant',
+  OidcClient: 'OidcClient',
+  OidcModel: 'OidcModel',
   Role: 'Role',
   RoleAssociation: 'RoleAssociation',
   RoleClassification: 'RoleClassification',
@@ -434,7 +436,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "category" | "group" | "tenant" | "assignment" | "post" | "content" | "file" | "fileClassification" | "fileAssociation" | "subject" | "action" | "ability" | "grant" | "role" | "roleAssociation" | "roleClassification" | "safeWallet" | "safeTransaction" | "safeConfirmation" | "space" | "spaceClassification" | "spaceAssociation" | "ground" | "timeline" | "session" | "program" | "routine" | "activity" | "task" | "exercise" | "translation" | "user" | "userClassification" | "userAssociation" | "profile"
+    modelProps: "category" | "group" | "tenant" | "assignment" | "post" | "content" | "file" | "fileClassification" | "fileAssociation" | "subject" | "action" | "ability" | "grant" | "oidcClient" | "oidcModel" | "role" | "roleAssociation" | "roleClassification" | "safeWallet" | "safeTransaction" | "safeConfirmation" | "space" | "spaceClassification" | "spaceAssociation" | "ground" | "timeline" | "session" | "program" | "routine" | "activity" | "task" | "exercise" | "translation" | "user" | "userClassification" | "userAssociation" | "profile"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -1397,6 +1399,154 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         count: {
           args: Prisma.GrantCountArgs<ExtArgs>
           result: runtime.Types.Utils.Optional<Prisma.GrantCountAggregateOutputType> | number
+        }
+      }
+    }
+    OidcClient: {
+      payload: Prisma.$OidcClientPayload<ExtArgs>
+      fields: Prisma.OidcClientFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.OidcClientFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OidcClientPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.OidcClientFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OidcClientPayload>
+        }
+        findFirst: {
+          args: Prisma.OidcClientFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OidcClientPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.OidcClientFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OidcClientPayload>
+        }
+        findMany: {
+          args: Prisma.OidcClientFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OidcClientPayload>[]
+        }
+        create: {
+          args: Prisma.OidcClientCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OidcClientPayload>
+        }
+        createMany: {
+          args: Prisma.OidcClientCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.OidcClientCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OidcClientPayload>[]
+        }
+        delete: {
+          args: Prisma.OidcClientDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OidcClientPayload>
+        }
+        update: {
+          args: Prisma.OidcClientUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OidcClientPayload>
+        }
+        deleteMany: {
+          args: Prisma.OidcClientDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.OidcClientUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.OidcClientUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OidcClientPayload>[]
+        }
+        upsert: {
+          args: Prisma.OidcClientUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OidcClientPayload>
+        }
+        aggregate: {
+          args: Prisma.OidcClientAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateOidcClient>
+        }
+        groupBy: {
+          args: Prisma.OidcClientGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.OidcClientGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.OidcClientCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.OidcClientCountAggregateOutputType> | number
+        }
+      }
+    }
+    OidcModel: {
+      payload: Prisma.$OidcModelPayload<ExtArgs>
+      fields: Prisma.OidcModelFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.OidcModelFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OidcModelPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.OidcModelFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OidcModelPayload>
+        }
+        findFirst: {
+          args: Prisma.OidcModelFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OidcModelPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.OidcModelFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OidcModelPayload>
+        }
+        findMany: {
+          args: Prisma.OidcModelFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OidcModelPayload>[]
+        }
+        create: {
+          args: Prisma.OidcModelCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OidcModelPayload>
+        }
+        createMany: {
+          args: Prisma.OidcModelCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.OidcModelCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OidcModelPayload>[]
+        }
+        delete: {
+          args: Prisma.OidcModelDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OidcModelPayload>
+        }
+        update: {
+          args: Prisma.OidcModelUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OidcModelPayload>
+        }
+        deleteMany: {
+          args: Prisma.OidcModelDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.OidcModelUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.OidcModelUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OidcModelPayload>[]
+        }
+        upsert: {
+          args: Prisma.OidcModelUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OidcModelPayload>
+        }
+        aggregate: {
+          args: Prisma.OidcModelAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateOidcModel>
+        }
+        groupBy: {
+          args: Prisma.OidcModelGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.OidcModelGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.OidcModelCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.OidcModelCountAggregateOutputType> | number
         }
       }
     }
@@ -3270,6 +3420,47 @@ export const GrantScalarFieldEnum = {
 export type GrantScalarFieldEnum = (typeof GrantScalarFieldEnum)[keyof typeof GrantScalarFieldEnum]
 
 
+export const OidcClientScalarFieldEnum = {
+  id: 'id',
+  seq: 'seq',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  removedAt: 'removedAt',
+  clientId: 'clientId',
+  clientSecret: 'clientSecret',
+  clientName: 'clientName',
+  redirectUris: 'redirectUris',
+  grantTypes: 'grantTypes',
+  responseTypes: 'responseTypes',
+  tokenEndpointAuthMethod: 'tokenEndpointAuthMethod',
+  scope: 'scope',
+  isActive: 'isActive',
+  logoUri: 'logoUri',
+  policyUri: 'policyUri',
+  tosUri: 'tosUri',
+  spaceId: 'spaceId'
+} as const
+
+export type OidcClientScalarFieldEnum = (typeof OidcClientScalarFieldEnum)[keyof typeof OidcClientScalarFieldEnum]
+
+
+export const OidcModelScalarFieldEnum = {
+  id: 'id',
+  seq: 'seq',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  key: 'key',
+  modelType: 'modelType',
+  payload: 'payload',
+  expiresAt: 'expiresAt',
+  userCode: 'userCode',
+  grantId: 'grantId',
+  uid: 'uid'
+} as const
+
+export type OidcModelScalarFieldEnum = (typeof OidcModelScalarFieldEnum)[keyof typeof OidcModelScalarFieldEnum]
+
+
 export const RoleScalarFieldEnum = {
   id: 'id',
   seq: 'seq',
@@ -3621,6 +3812,13 @@ export const NullableJsonNullValueInput = {
 export type NullableJsonNullValueInput = (typeof NullableJsonNullValueInput)[keyof typeof NullableJsonNullValueInput]
 
 
+export const JsonNullValueInput = {
+  JsonNull: JsonNull
+} as const
+
+export type JsonNullValueInput = (typeof JsonNullValueInput)[keyof typeof JsonNullValueInput]
+
+
 export const QueryMode = {
   default: 'default',
   insensitive: 'insensitive'
@@ -3934,6 +4132,8 @@ export type GlobalOmitConfig = {
   action?: Prisma.ActionOmit
   ability?: Prisma.AbilityOmit
   grant?: Prisma.GrantOmit
+  oidcClient?: Prisma.OidcClientOmit
+  oidcModel?: Prisma.OidcModelOmit
   role?: Prisma.RoleOmit
   roleAssociation?: Prisma.RoleAssociationOmit
   roleClassification?: Prisma.RoleClassificationOmit

@@ -64,6 +64,8 @@ export const ModelName = {
   Action: 'Action',
   Ability: 'Ability',
   Grant: 'Grant',
+  OidcClient: 'OidcClient',
+  OidcModel: 'OidcModel',
   Role: 'Role',
   RoleAssociation: 'RoleAssociation',
   RoleClassification: 'RoleClassification',
@@ -305,6 +307,47 @@ export const GrantScalarFieldEnum = {
 } as const
 
 export type GrantScalarFieldEnum = (typeof GrantScalarFieldEnum)[keyof typeof GrantScalarFieldEnum]
+
+
+export const OidcClientScalarFieldEnum = {
+  id: 'id',
+  seq: 'seq',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  removedAt: 'removedAt',
+  clientId: 'clientId',
+  clientSecret: 'clientSecret',
+  clientName: 'clientName',
+  redirectUris: 'redirectUris',
+  grantTypes: 'grantTypes',
+  responseTypes: 'responseTypes',
+  tokenEndpointAuthMethod: 'tokenEndpointAuthMethod',
+  scope: 'scope',
+  isActive: 'isActive',
+  logoUri: 'logoUri',
+  policyUri: 'policyUri',
+  tosUri: 'tosUri',
+  spaceId: 'spaceId'
+} as const
+
+export type OidcClientScalarFieldEnum = (typeof OidcClientScalarFieldEnum)[keyof typeof OidcClientScalarFieldEnum]
+
+
+export const OidcModelScalarFieldEnum = {
+  id: 'id',
+  seq: 'seq',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  key: 'key',
+  modelType: 'modelType',
+  payload: 'payload',
+  expiresAt: 'expiresAt',
+  userCode: 'userCode',
+  grantId: 'grantId',
+  uid: 'uid'
+} as const
+
+export type OidcModelScalarFieldEnum = (typeof OidcModelScalarFieldEnum)[keyof typeof OidcModelScalarFieldEnum]
 
 
 export const RoleScalarFieldEnum = {
@@ -656,6 +699,13 @@ export const NullableJsonNullValueInput = {
 } as const
 
 export type NullableJsonNullValueInput = (typeof NullableJsonNullValueInput)[keyof typeof NullableJsonNullValueInput]
+
+
+export const JsonNullValueInput = {
+  JsonNull: 'JsonNull'
+} as const
+
+export type JsonNullValueInput = (typeof JsonNullValueInput)[keyof typeof JsonNullValueInput]
 
 
 export const QueryMode = {

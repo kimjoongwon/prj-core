@@ -2347,6 +2347,69 @@ export const abilitySeedData: AbilitySeedData[] = [
 // Role-Subject-Ability 매핑 요약
 // ============================================================================
 
+// ============================================================================
+// OIDC Client 시드 데이터
+// ============================================================================
+
+/**
+ * OIDC Client 시드 데이터 인터페이스
+ */
+export interface OidcClientSeedData {
+	clientId: string;
+	clientSecret: string | null;
+	clientName: string;
+	redirectUris: string[];
+	grantTypes: string[];
+	responseTypes: string[];
+	tokenEndpointAuthMethod: string;
+	scope: string;
+	isActive: boolean;
+	logoUri?: string | null;
+	policyUri?: string | null;
+	tosUri?: string | null;
+}
+
+/**
+ * OIDC Client 시드 데이터
+ * 기본 클라이언트 애플리케이션 정의
+ */
+export const oidcClientSeedData: OidcClientSeedData[] = [
+	{
+		clientId: "prj-core-admin",
+		clientSecret: "admin-secret-change-in-production",
+		clientName: "PRJ Core Admin",
+		redirectUris: [
+			"http://localhost:3000/api/auth/callback/oidc",
+			"http://localhost:3001/api/auth/callback/oidc",
+		],
+		grantTypes: ["authorization_code", "refresh_token"],
+		responseTypes: ["code"],
+		tokenEndpointAuthMethod: "client_secret_basic",
+		scope: "openid profile email roles",
+		isActive: true,
+		logoUri: null,
+		policyUri: null,
+		tosUri: null,
+	},
+	{
+		clientId: "prj-core-mobile",
+		clientSecret: null, // Public client (PKCE required)
+		clientName: "PRJ Core Mobile App",
+		redirectUris: [
+			"prjcore://auth/callback",
+			"exp://localhost:8081/--/auth/callback",
+		],
+		grantTypes: ["authorization_code", "refresh_token"],
+		responseTypes: ["code"],
+		tokenEndpointAuthMethod: "none", // Public client
+		scope: "openid profile email",
+		isActive: true,
+		logoUri: null,
+		policyUri: null,
+		tosUri: null,
+	},
+];
+
 /**
  * 권한 매핑 요약 (문서화용)
  *

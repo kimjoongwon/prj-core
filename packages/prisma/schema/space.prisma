@@ -36,6 +36,7 @@ model Space {
   timelines      Timeline[]
   tasks          Task[]
   safeWallets    SafeWallet[]
+  oidcClients    OidcClient[]
 
   @@map("spaces")
 }

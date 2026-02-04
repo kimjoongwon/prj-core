@@ -1,0 +1,84 @@
+// ============================================================================
+// OIDC Domain - OpenID Connect 도메인
+// ============================================================================
+//
+// OIDC Provider에서 사용하는 모델들입니다.
+// oidc-provider 라이브러리의 Adapter 인터페이스와 호환됩니다.
+//
+// 모델:
+//   - OidcClient: OIDC 클라이언트 애플리케이션 정보
+//   - OidcModel: oidc-provider가 저장하는 모든 토큰/세션 데이터
+//
+// ============================================================================
+
+// @schema-type: CONCRETE ENTITY
+// @description: OIDC 클라이언트 애플리케이션
+/// @displayName OIDC 클라이언트
+model OidcClient {
+  id                      String    @id @default(uuid())
+  seq                     Int       @unique @default(autoincrement())
+  createdAt               DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt               DateTime? @updatedAt @map("updated_at") @db.Timestamptz(6)
+  removedAt               DateTime? @map("removed_at") @db.Timestamptz(6)
+  /// @displayName 클라이언트 ID
+  clientId                String    @unique @map("client_id")
+  /// @displayName 클라이언트 시크릿
+  clientSecret            String?   @map("client_secret")
+  /// @displayName 클라이언트 이름
+  clientName              String    @map("client_name")
+  /// @displayName 리다이렉트 URI 목록
+  redirectUris            String[]  @map("redirect_uris")
+  /// @displayName 허용된 Grant 타입
+  grantTypes              String[]  @default(["authorization_code"]) @map("grant_types")
+  /// @displayName 응답 타입
+  responseTypes           String[]  @default(["code"]) @map("response_types")
+  /// @displayName 토큰 엔드포인트 인증 방식
+  tokenEndpointAuthMethod String    @default("client_secret_basic") @map("token_endpoint_auth_method")
+  /// @displayName 허용된 스코프
+  scope                   String    @default("openid profile email")
+  /// @displayName 활성화 여부
+  isActive                Boolean   @default(true) @map("is_active")
+  /// @displayName 로고 URI
+  logoUri                 String?   @map("logo_uri")
+  /// @displayName 정책 URI
+  policyUri               String?   @map("policy_uri")
+  /// @displayName 서비스 약관 URI
+  tosUri                  String?   @map("tos_uri")
+  /// @displayName 소속 Space
+  spaceId                 String?   @map("space_id")
+  space                   Space?    @relation(fields: [spaceId], references: [id])
+
+  @@index([spaceId])
+  @@index([isActive])
+  @@map("oidc_clients")
+}
+
+// @schema-type: REFERENCE
+// @description: oidc-provider가 사용하는 범용 모델 저장소
+// @note: AccessToken, RefreshToken, AuthorizationCode, Session, Grant 등 모든 OIDC 모델을 저장
+/// @displayName OIDC 모델
+model OidcModel {
+  id        String    @id @default(uuid())
+  seq       Int       @unique @default(autoincrement())
+  createdAt DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt DateTime? @updatedAt @map("updated_at") @db.Timestamptz(6)
+  /// @displayName 모델 키 (jti 또는 uid)
+  key       String    @unique
+  /// @displayName 모델 타입
+  modelType String    @map("model_type")
+  /// @displayName 페이로드 (JSON)
+  payload   Json
+  /// @displayName 만료 시간
+  expiresAt DateTime? @map("expires_at") @db.Timestamptz(6)
+  /// @displayName 사용자 코드 (DeviceCode용)
+  userCode  String?   @unique @map("user_code")
+  /// @displayName Grant ID (토큰 취소용)
+  grantId   String?   @map("grant_id")
+  /// @displayName 세션 UID
+  uid       String?   @unique
+
+  @@index([modelType])
+  @@index([grantId])
+  @@index([expiresAt])
+  @@map("oidc_models")
+}

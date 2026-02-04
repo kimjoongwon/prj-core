@@ -10,6 +10,7 @@ import {
 	abilitySeedData,
 	actionSeedData,
 	groundSeedData,
+	oidcClientSeedData,
 	roleAssociationSeedData,
 	roleCategorySeedData,
 	roleClassificationSeedData,
@@ -177,6 +178,9 @@ async function main() {
 
 	// Ability 생성 (Role별 권한) - CASL ABAC 기반
 	await createAbilities(roles, subjects, actions);
+
+	// OIDC Client 생성
+	await createOidcClients();
 
 	console.log({ superAdminUser });
 }
@@ -837,6 +841,49 @@ main()
 		await prisma.$disconnect();
 		process.exit(1);
 	});
+
+async function createOidcClients() {
+	console.log("\n========================================");
+	console.log("OIDC Client 시드 데이터 삽입 중...");
+	console.log("========================================");
+
+	let createdCount = 0;
+	let skippedCount = 0;
+
+	for (const clientData of oidcClientSeedData) {
+		const existing = await prisma.oidcClient.findUnique({
+			where: { clientId: clientData.clientId },
+		});
+
+		if (!existing) {
+			await prisma.oidcClient.create({
+				data: {
+					clientId: clientData.clientId,
+					clientSecret: clientData.clientSecret,
+					clientName: clientData.clientName,
+					redirectUris: clientData.redirectUris,
+					grantTypes: clientData.grantTypes,
+					responseTypes: clientData.responseTypes,
+					tokenEndpointAuthMethod: clientData.tokenEndpointAuthMethod,
+					scope: clientData.scope,
+					isActive: clientData.isActive,
+					logoUri: clientData.logoUri ?? null,
+					policyUri: clientData.policyUri ?? null,
+					tosUri: clientData.tosUri ?? null,
+				},
+			});
+			createdCount++;
+			console.log(`  - OIDC Client 생성: ${clientData.clientId} (${clientData.clientName})`);
+		} else {
+			skippedCount++;
+			console.log(`  - OIDC Client 이미 존재: ${clientData.clientId}`);
+		}
+	}
+
+	console.log(
+		`✅ OIDC Client 시드 완료! (생성: ${createdCount}개, 스킵: ${skippedCount}개)`,
+	);
+}
 
 const spaceGroupSeed: Array<{ name: string; label: string; spaceId: string }> =
 	[

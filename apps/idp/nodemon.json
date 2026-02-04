@@ -1,0 +1,19 @@
+{
+  "watch": [
+    "src",
+    "../../packages/decorator/dist",
+    "../../packages/facade/dist",
+    "../../packages/dto/dist",
+    "../../packages/entity/dist",
+    "../../packages/enum/dist",
+    "../../packages/repository/dist",
+    "../../packages/service/dist",
+    "../../packages/toolkit/dist"
+  ],
+  "ext": "ts,js,ejs",
+  "ignore": [
+    "src/**/*.spec.ts",
+    "src/**/*.test.ts"
+  ],
+  "exec": "nest start"
+}
