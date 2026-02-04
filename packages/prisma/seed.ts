@@ -1,4 +1,8 @@
-import "dotenv/config";
+import { config } from "dotenv";
+import { resolve } from "path";
+// Load .env.local from packages/prisma directory
+config({ path: resolve(__dirname, ".env.local") });
+
 import { PrismaPg } from "@prisma/adapter-pg";
 import { hash } from "bcrypt";
 import * as pg from "pg";
@@ -653,21 +657,19 @@ async function createAbilities(
 	subjects: Record<string, Subject>,
 	actions: Record<string, Action>,
 ) {
-	console.log("Ability 생성 시작 (CASL ABAC 기반)...");
+	console.log("Ability & Grant 생성 시작 (Grant 기반 CASL ABAC)...");
 
-	let createdCount = 0;
-	let skippedCount = 0;
+	let abilityCreatedCount = 0;
+	let abilitySkippedCount = 0;
+	let grantCreatedCount = 0;
+	let grantSkippedCount = 0;
 	let errorCount = 0;
 
-	for (const abilityData of abilitySeedData) {
-		// Role 찾기
-		const role = roles[abilityData.roleName];
-		if (!role) {
-			console.error(`  - Role을 찾을 수 없음: ${abilityData.roleName}`);
-			errorCount++;
-			continue;
-		}
+	// 1단계: 고유한 Ability 정의 생성 (중복 제거)
+	console.log("  [1/2] Ability 정의 생성 중...");
+	const abilityMap: Record<string, string> = {}; // Key: subject+action+inverted → Value: abilityId
 
+	for (const abilityData of abilitySeedData) {
 		// Subject 찾기
 		const subject = subjects[abilityData.subject];
 		if (!subject) {
@@ -684,41 +686,110 @@ async function createAbilities(
 			continue;
 		}
 
-		// 중복 확인 (roleId, subjectId, actionId 조합)
-		const existing = await prisma.ability.findFirst({
+		// Ability 고유 키 생성 (subject + action + inverted + conditions)
+		const abilityKey = `${subject.id}:${action.id}:${abilityData.inverted}:${JSON.stringify(abilityData.conditions ?? null)}`;
+
+		// 이미 생성된 Ability인지 확인
+		if (abilityMap[abilityKey]) {
+			continue; // 이미 생성됨
+		}
+
+		// Ability name 생성 (예: "Read User Email Masked")
+		const abilityName = abilityData.name ??
+			`${abilityData.inverted ? "Cannot" : "Can"} ${action.displayName} ${subject.displayName}`;
+
+		// Ability 생성 (name 기반 중복 확인)
+		let ability = await prisma.ability.findUnique({
+			where: { name: abilityName },
+		});
+
+		if (!ability) {
+			ability = await prisma.ability.create({
+				data: {
+					name: abilityName,
+					description: abilityData.description,
+					subjectId: subject.id,
+					actionId: action.id,
+					fields: [], // 기본값: 빈 배열 (전체 필드)
+					conditions: abilityData.conditions ?? null,
+					inverted: abilityData.inverted,
+					reason: abilityData.reason ?? null,
+				},
+			});
+			abilityCreatedCount++;
+			console.log(`    - Ability 생성: ${abilityName}`);
+		} else {
+			abilitySkippedCount++;
+		}
+
+		abilityMap[abilityKey] = ability.id;
+	}
+
+	console.log(
+		`  [1/2] Ability 정의 완료! (생성: ${abilityCreatedCount}개, 스킵: ${abilitySkippedCount}개)`,
+	);
+
+	// 2단계: Grant 생성 (Role ↔ Ability 연결)
+	console.log("  [2/2] Grant 생성 중 (Role ↔ Ability)...");
+
+	for (const abilityData of abilitySeedData) {
+		// Role 찾기
+		const role = roles[abilityData.roleName];
+		if (!role) {
+			console.error(`  - Role을 찾을 수 없음: ${abilityData.roleName}`);
+			errorCount++;
+			continue;
+		}
+
+		// Subject, Action 찾기
+		const subject = subjects[abilityData.subject];
+		const action = actions[abilityData.actionName];
+		if (!subject || !action) {
+			continue; // 이미 1단계에서 에러 출력됨
+		}
+
+		// Ability 찾기
+		const abilityKey = `${subject.id}:${action.id}:${abilityData.inverted}:${JSON.stringify(abilityData.conditions ?? null)}`;
+		const abilityId = abilityMap[abilityKey];
+		if (!abilityId) {
+			console.error(`  - Ability를 찾을 수 없음: ${abilityKey}`);
+			errorCount++;
+			continue;
+		}
+
+		// Grant 중복 확인
+		const existing = await prisma.grant.findFirst({
 			where: {
-				roleId: role.id,
-				subjectId: subject.id,
-				actionId: action.id,
+				granteeType: "Role",
+				granteeId: role.id,
+				abilityId: abilityId,
 			},
 		});
 
 		if (!existing) {
-			await prisma.ability.create({
+			await prisma.grant.create({
 				data: {
-					actionId: action.id,
-					subjectId: subject.id,
-					inverted: abilityData.inverted,
-					roleId: role.id,
-					description: abilityData.description,
-					name: abilityData.name,
-					conditions: abilityData.conditions,
-					reason: abilityData.reason,
+					granteeType: "Role",
+					granteeId: role.id,
+					abilityId: abilityId,
 					isActive: abilityData.isActive ?? true,
-					priority: abilityData.priority ?? 0,
+					priority: abilityData.priority ?? 0, // Role 권한은 보통 0-9
 				},
 			});
-			createdCount++;
+			grantCreatedCount++;
 			console.log(
-				`  - Ability 생성: ${abilityData.roleName} ${abilityData.inverted ? "cannot" : "can"} ${abilityData.actionName} ${abilityData.subject}`,
+				`    - Grant 생성: ${abilityData.roleName} → ${abilityData.inverted ? "cannot" : "can"} ${abilityData.actionName} ${abilityData.subject}`,
 			);
 		} else {
-			skippedCount++;
+			grantSkippedCount++;
 		}
 	}
 
 	console.log(
-		`Ability 생성 완료! (생성: ${createdCount}개, 스킵: ${skippedCount}개, 오류: ${errorCount}개)`,
+		`  [2/2] Grant 생성 완료! (생성: ${grantCreatedCount}개, 스킵: ${grantSkippedCount}개)`,
+	);
+	console.log(
+		`\n✅ Ability & Grant 전체 완료! (Ability: ${abilityCreatedCount}개, Grant: ${grantCreatedCount}개, 오류: ${errorCount}개)`,
 	);
 }
 

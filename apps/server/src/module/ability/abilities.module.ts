@@ -1,5 +1,9 @@
 import { AbilitiesFacade } from "@cocrepo/facade";
-import { AbilitiesRepository, UsersRepository } from "@cocrepo/repository";
+import {
+	AbilitiesRepository,
+	GrantsRepository,
+	UsersRepository,
+} from "@cocrepo/repository";
 import { AbilitiesService, UsersService } from "@cocrepo/service";
 import { Module } from "@nestjs/common";
 import { AbilitiesController } from "./abilities.controller";
@@ -14,6 +18,7 @@ import { AbilitiesController } from "./abilities.controller";
 		UsersService,
 		// Repositories
 		AbilitiesRepository,
+		GrantsRepository,
 		UsersRepository,
 	],
 	exports: [AbilitiesService],

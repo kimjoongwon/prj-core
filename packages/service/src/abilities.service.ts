@@ -1,7 +1,11 @@
 import { CreateAbilityInput } from "@cocrepo/dto";
 import { Ability } from "@cocrepo/entity";
 import { Prisma } from "@cocrepo/prisma";
-import { AbilitiesRepository } from "@cocrepo/repository";
+import {
+	AbilitiesRepository,
+	GrantsRepository,
+	GranteeType,
+} from "@cocrepo/repository";
 import { BadRequestException, Injectable, Logger } from "@nestjs/common";
 import { Transactional } from "@nestjs-cls/transactional";
 
@@ -10,24 +14,26 @@ import { Transactional } from "@nestjs-cls/transactional";
  */
 const AbilityServiceErrorMessages = {
 	INVALID_ABILITY_DATA: "유효하지 않은 권한 데이터입니다",
-	ROLE_OR_USER_REQUIRED: "roleId 또는 userId 중 하나는 필수입니다",
-	BOTH_ROLE_AND_USER:
-		"roleId와 userId를 동시에 설정할 수 없습니다. 둘 중 하나만 설정하세요",
+	ABILITY_NOT_FOUND: "권한을 찾을 수 없습니다",
 } as const;
 
 /**
  * Ability 서비스 (CASL ABAC 기반)
  *
- * Role 기반 기본 권한과 User 기반 예외 권한을 관리합니다.
+ * 재사용 가능한 권한 정의(Ability)와 할당(Grant)을 관리합니다.
  *
- * ✅ 단일 Repository 의존
- * ❌ 다른 도메인 Repository 의존 금지
+ * ✅ AbilitiesRepository + GrantsRepository 의존
+ * ✅ Ability: 권한 정의만 관리 (subject + action + fields + conditions)
+ * ✅ Grant: Role/User에 대한 권한 할당 관리 (polymorphic)
  */
 @Injectable()
 export class AbilitiesService {
 	private readonly logger = new Logger(AbilitiesService.name);
 
-	constructor(private readonly repository: AbilitiesRepository) {}
+	constructor(
+		private readonly abilitiesRepository: AbilitiesRepository,
+		private readonly grantsRepository: GrantsRepository,
+	) {}
 
 	/**
 	 * ID로 Ability 조회
@@ -38,31 +44,52 @@ export class AbilitiesService {
 	async getAbilityById(id: string): Promise<Ability | null> {
 		this.logger.debug(`ID로 Ability 조회: id=${id.slice(-8)}`);
 
-		return this.repository.findByIdWithRole(id);
+		return this.abilitiesRepository.findById(id);
 	}
 
 	/**
 	 * Role별 기본 권한 조회
 	 *
 	 * @param roleId - Role ID
-	 * @returns 활성화된 Ability 배열
+	 * @returns 활성화된 Ability 배열 (Grant를 통해 조회)
 	 */
 	async getRoleAbilities(roleId: string): Promise<Ability[]> {
 		this.logger.debug(`Role별 권한 조회: roleId=${roleId.slice(-8)}`);
 
-		return this.repository.findActiveByRoleId(roleId);
+		// Grant를 통해 Role의 Ability 조회
+		const grants = await this.grantsRepository.findActiveByRoleIds([roleId]);
+
+		// Grant에서 Ability 추출 (엔티티 메서드 유지)
+		return grants
+			.filter((grant) => grant.ability)
+			.map((grant) => {
+				const ability = grant.ability!;
+				// priority를 Grant에서 가져와 설정
+				ability.priority = grant.priority;
+				return ability as Ability;
+			});
 	}
 
 	/**
 	 * User별 예외 권한 조회
 	 *
 	 * @param userId - User ID
-	 * @returns 활성화된 Ability 배열
+	 * @returns 활성화된 Ability 배열 (Grant를 통해 조회)
 	 */
 	async getUserAbilities(userId: string): Promise<Ability[]> {
 		this.logger.debug(`User별 예외 권한 조회: userId=${userId.slice(-8)}`);
 
-		return this.repository.findActiveByUserId(userId);
+		// Grant를 통해 User의 Ability 조회
+		const grants = await this.grantsRepository.findActiveByUserId(userId);
+
+		// Grant에서 Ability 추출 (엔티티 메서드 유지)
+		return grants
+			.filter((grant) => grant.ability)
+			.map((grant) => {
+				const ability = grant.ability!;
+				ability.priority = grant.priority;
+				return ability as Ability;
+			});
 	}
 
 	/**
@@ -81,22 +108,38 @@ export class AbilitiesService {
 			`권한 병합 조회: roleIds=${roleIds.length}, userId=${userId?.slice(-8) ?? "없음"}`,
 		);
 
-		// 1. Role 기반 권한 조회
-		const roleAbilities = await this.repository.findActiveByRoleIds(roleIds);
+		// 1. Role 기반 권한 조회 (Grant → Ability)
+		const roleGrants = await this.grantsRepository.findActiveByRoleIds(roleIds);
+		const roleAbilities = roleGrants
+			.filter((grant) => grant.ability)
+			.map((grant) => {
+				const ability = grant.ability!;
+				ability.priority = grant.priority;
+				return ability as Ability;
+			});
 
 		// 2. User 예외 권한 조회 (있는 경우)
 		const userAbilities = userId
-			? await this.repository.findActiveByUserId(userId)
+			? await this.grantsRepository.findActiveByUserId(userId).then((grants) =>
+					grants
+						.filter((grant) => grant.ability)
+						.map((grant) => {
+							const ability = grant.ability!;
+							ability.priority = grant.priority;
+							return ability as Ability;
+						}),
+				)
 			: [];
 
 		// 3. 병합 (User 권한이 우선)
-		// User 권한의 priority를 높게 설정하여 우선순위 보장
 		const merged = [...userAbilities, ...roleAbilities];
 
 		// priority와 createdAt 기준으로 정렬
 		merged.sort((a, b) => {
-			if (b.priority !== a.priority) {
-				return b.priority - a.priority;
+			const aPriority = a.priority ?? 0;
+			const bPriority = b.priority ?? 0;
+			if (bPriority !== aPriority) {
+				return bPriority - aPriority;
 			}
 			return b.createdAt.getTime() - a.createdAt.getTime();
 		});
@@ -105,38 +148,40 @@ export class AbilitiesService {
 	}
 
 	/**
-	 * 권한 생성
+	 * 권한 정의 생성
 	 *
-	 * @param data - Ability 생성 데이터
+	 * @param data - Ability 생성 데이터 (재사용 가능한 권한 정의)
 	 * @returns 생성된 Ability
+	 * @description 권한 정의만 생성합니다. Role/User에 할당하려면 Grant를 생성하세요.
 	 */
 	async createAbility(
 		data: Prisma.AbilityUncheckedCreateInput,
 	): Promise<Ability> {
 		this.logger.debug(
-			`권한 생성: subjectId=${data.subjectId}, actionId=${data.actionId}`,
+			`권한 정의 생성: name=${data.name}, subjectId=${data.subjectId}, actionId=${data.actionId}`,
 		);
 
 		// 유효성 검증
 		this.validateAbilityData(data);
 
-		return this.repository.create(data);
+		return this.abilitiesRepository.create(data);
 	}
 
 	/**
-	 * 권한 수정
+	 * 권한 정의 수정
 	 *
 	 * @param id - Ability ID
 	 * @param data - 수정 데이터
 	 * @returns 수정된 Ability
+	 * @description Ability 정의만 수정합니다. Grant 메타데이터(isActive, priority)는 변경되지 않습니다.
 	 */
 	async updateAbility(
 		id: string,
 		data: Prisma.AbilityUncheckedUpdateInput,
 	): Promise<Ability> {
-		this.logger.debug(`권한 수정: id=${id.slice(-8)}`);
+		this.logger.debug(`권한 정의 수정: id=${id.slice(-8)}`);
 
-		return this.repository.updateById(id, data);
+		return this.abilitiesRepository.updateById(id, data);
 	}
 
 	/**
@@ -144,131 +189,32 @@ export class AbilitiesService {
 	 *
 	 * @param id - Ability ID
 	 * @returns 삭제된 Ability
+	 * @description Ability와 연결된 모든 Grant를 소프트 삭제합니다.
 	 */
+	@Transactional()
 	async deleteAbility(id: string): Promise<Ability> {
 		this.logger.debug(`권한 삭제: id=${id.slice(-8)}`);
 
-		return this.repository.removeById(id);
-	}
+		// 1. Ability 소프트 삭제
+		const ability = await this.abilitiesRepository.removeById(id);
 
-	/**
-	 * Role 권한 일괄 설정
-	 * 기존 Ability를 소프트 삭제하고 새로운 Ability를 생성합니다.
-	 *
-	 * @param roleId - Role ID
-	 * @param abilities - 설정할 권한 배열
-	 * @returns 생성된 Ability 배열
-	 */
-	@Transactional()
-	async batchSetRoleAbilities(
-		roleId: string,
-		abilities: CreateAbilityInput[],
-	): Promise<Ability[]> {
-		this.logger.debug(
-			`Role 권한 일괄 설정: roleId=${roleId.slice(-8)}, count=${abilities.length}`,
-		);
+		// 2. 연결된 모든 Grant 소프트 삭제
+		await this.grantsRepository.deleteByAbilityId(id);
 
-		// 유효성 검증
-		if (!roleId) {
-			throw new BadRequestException(
-				AbilityServiceErrorMessages.INVALID_ABILITY_DATA,
-			);
-		}
+		this.logger.debug(`권한 및 연결된 Grant 삭제 완료: id=${id.slice(-8)}`);
 
-		// DTO를 Prisma 타입으로 변환
-		const prismaAbilities = this.toPrismaCreateInput(abilities);
-
-		return this.repository.replaceByRoleId(roleId, prismaAbilities);
-	}
-
-	/**
-	 * User 예외 권한 일괄 설정
-	 * 기존 예외 Ability를 소프트 삭제하고 새로운 Ability를 생성합니다.
-	 *
-	 * @param userId - User ID
-	 * @param abilities - 설정할 권한 배열
-	 * @returns 생성된 Ability 배열
-	 */
-	@Transactional()
-	async batchSetUserAbilities(
-		userId: string,
-		abilities: CreateAbilityInput[],
-	): Promise<Ability[]> {
-		this.logger.debug(
-			`User 예외 권한 일괄 설정: userId=${userId.slice(-8)}, count=${abilities.length}`,
-		);
-
-		// 유효성 검증
-		if (!userId) {
-			throw new BadRequestException(
-				AbilityServiceErrorMessages.INVALID_ABILITY_DATA,
-			);
-		}
-
-		// DTO를 Prisma 타입으로 변환
-		const prismaAbilities = this.toPrismaCreateInput(abilities);
-
-		return this.repository.replaceByUserId(userId, prismaAbilities);
+		return ability;
 	}
 
 	/**
 	 * Ability 데이터 유효성 검증
 	 */
 	private validateAbilityData(data: Prisma.AbilityUncheckedCreateInput): void {
-		// roleId와 userId 중 하나는 필수
-		if (!data.roleId && !data.userId) {
-			throw new BadRequestException(
-				AbilityServiceErrorMessages.ROLE_OR_USER_REQUIRED,
-			);
-		}
-
-		// roleId와 userId 동시 설정 불가
-		if (data.roleId && data.userId) {
-			throw new BadRequestException(
-				AbilityServiceErrorMessages.BOTH_ROLE_AND_USER,
-			);
-		}
-
-		// actionId, subjectId 필수
-		if (!data.actionId || !data.subjectId) {
+		// actionId, subjectId, name 필수
+		if (!data.actionId || !data.subjectId || !data.name) {
 			throw new BadRequestException(
 				AbilityServiceErrorMessages.INVALID_ABILITY_DATA,
 			);
 		}
-	}
-
-	/**
-	 * CreateAbilityInput을 Prisma.AbilityCreateManyInput으로 변환
-	 *
-	 * @param abilities - DTO 배열
-	 * @returns Prisma 타입 배열
-	 * @throws BadRequestException - subjectId 또는 actionId가 없는 경우
-	 */
-	private toPrismaCreateInput(
-		abilities: CreateAbilityInput[],
-	): Prisma.AbilityCreateManyInput[] {
-		return abilities.map((ability) => {
-			// subjectId와 actionId가 필수 (추후 actionName/subjectName → ID 변환 로직 추가 가능)
-			if (!ability.subjectId || !ability.actionId) {
-				throw new BadRequestException(
-					"subjectId와 actionId는 필수입니다. (actionName/subjectName 지원 예정)",
-				);
-			}
-
-			return {
-				subjectId: ability.subjectId,
-				actionId: ability.actionId,
-				fields: ability.fields ?? [],
-				conditions: ability.conditions,
-				inverted: ability.inverted ?? false,
-				reason: ability.reason,
-				roleId: ability.roleId,
-				userId: ability.userId,
-				name: ability.name,
-				description: ability.description,
-				isActive: ability.isActive ?? true,
-				priority: ability.priority ?? 0,
-			};
-		});
 	}
 }

@@ -65,8 +65,6 @@ import type {
   Login200AllOf,
   LoginPayloadDto,
   RefreshToken200AllOf,
-  SetRoleAbilities200AllOf,
-  SetUserAbilities200AllOf,
   SignUp201AllOf,
   SignUpPayloadDto,
   UpdateAbility200AllOf,
@@ -74,7 +72,6 @@ import type {
   UpdateAction200AllOf,
   UpdateActionDto,
   UpdateRole200AllOf,
-  UpdateRoleAbilitiesRequestDto,
   UpdateRoleDto,
   UpdateUser200AllOf,
   UpdateUserMemberDto,
@@ -3835,72 +3832,6 @@ export const prefetchGetAbilitiesByRoleIdInfiniteQuery = async <TData = Awaited<
 
 
 /**
- * Role의 기본 권한을 일괄 설정합니다. 기존 권한은 소프트 삭제되고 새로운 권한이 생성됩니다.
- * @summary Role 권한 일괄 설정
- */
-export const setRoleAbilities = (
-    roleId: string,
-    updateRoleAbilitiesRequestDto: BodyType<UpdateRoleAbilitiesRequestDto>,
- options?: SecondParameter<typeof customInstance>,) => {
-      
-      
-      return customInstance<SetRoleAbilities200AllOf>(
-      {url: `/api/v1/abilities/roles/${roleId}`, method: 'PUT',
-      headers: {'Content-Type': 'application/json', },
-      data: updateRoleAbilitiesRequestDto
-    },
-      options);
-    }
-  
-
-
-export const getSetRoleAbilitiesMutationOptions = <TError = ErrorType<void>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof setRoleAbilities>>, TError,{roleId: string;data: BodyType<UpdateRoleAbilitiesRequestDto>}, TContext>, request?: SecondParameter<typeof customInstance>}
-): UseMutationOptions<Awaited<ReturnType<typeof setRoleAbilities>>, TError,{roleId: string;data: BodyType<UpdateRoleAbilitiesRequestDto>}, TContext> => {
-
-const mutationKey = ['setRoleAbilities'];
-const {mutation: mutationOptions, request: requestOptions} = options ?
-      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
-      options
-      : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }, request: undefined};
-
-      
-
-
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof setRoleAbilities>>, {roleId: string;data: BodyType<UpdateRoleAbilitiesRequestDto>}> = (props) => {
-          const {roleId,data} = props ?? {};
-
-          return  setRoleAbilities(roleId,data,requestOptions)
-        }
-
-        
-
-
-  return  { mutationFn, ...mutationOptions }}
-
-    export type SetRoleAbilitiesMutationResult = NonNullable<Awaited<ReturnType<typeof setRoleAbilities>>>
-    export type SetRoleAbilitiesMutationBody = BodyType<UpdateRoleAbilitiesRequestDto>
-    export type SetRoleAbilitiesMutationError = ErrorType<void>
-
-    /**
- * @summary Role 권한 일괄 설정
- */
-export const useSetRoleAbilities = <TError = ErrorType<void>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof setRoleAbilities>>, TError,{roleId: string;data: BodyType<UpdateRoleAbilitiesRequestDto>}, TContext>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient): UseMutationResult<
-        Awaited<ReturnType<typeof setRoleAbilities>>,
-        TError,
-        {roleId: string;data: BodyType<UpdateRoleAbilitiesRequestDto>},
-        TContext
-      > => {
-
-      const mutationOptions = getSetRoleAbilitiesMutationOptions(options);
-
-      return useMutation(mutationOptions, queryClient);
-    }
-    
-/**
  * 특정 User에게 할당된 예외 권한 목록을 조회합니다.
  * @summary User별 예외 권한 조회
  */
@@ -4138,72 +4069,6 @@ export const prefetchGetAbilitiesByUserIdInfiniteQuery = async <TData = Awaited<
 
 
 
-/**
- * User의 예외 권한을 일괄 설정합니다. 기존 예외 권한은 소프트 삭제되고 새로운 권한이 생성됩니다.
- * @summary User 예외 권한 일괄 설정
- */
-export const setUserAbilities = (
-    userId: string,
-    updateRoleAbilitiesRequestDto: BodyType<UpdateRoleAbilitiesRequestDto>,
- options?: SecondParameter<typeof customInstance>,) => {
-      
-      
-      return customInstance<SetUserAbilities200AllOf>(
-      {url: `/api/v1/abilities/users/${userId}`, method: 'PUT',
-      headers: {'Content-Type': 'application/json', },
-      data: updateRoleAbilitiesRequestDto
-    },
-      options);
-    }
-  
-
-
-export const getSetUserAbilitiesMutationOptions = <TError = ErrorType<void>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof setUserAbilities>>, TError,{userId: string;data: BodyType<UpdateRoleAbilitiesRequestDto>}, TContext>, request?: SecondParameter<typeof customInstance>}
-): UseMutationOptions<Awaited<ReturnType<typeof setUserAbilities>>, TError,{userId: string;data: BodyType<UpdateRoleAbilitiesRequestDto>}, TContext> => {
-
-const mutationKey = ['setUserAbilities'];
-const {mutation: mutationOptions, request: requestOptions} = options ?
-      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
-      options
-      : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }, request: undefined};
-
-      
-
-
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof setUserAbilities>>, {userId: string;data: BodyType<UpdateRoleAbilitiesRequestDto>}> = (props) => {
-          const {userId,data} = props ?? {};
-
-          return  setUserAbilities(userId,data,requestOptions)
-        }
-
-        
-
-
-  return  { mutationFn, ...mutationOptions }}
-
-    export type SetUserAbilitiesMutationResult = NonNullable<Awaited<ReturnType<typeof setUserAbilities>>>
-    export type SetUserAbilitiesMutationBody = BodyType<UpdateRoleAbilitiesRequestDto>
-    export type SetUserAbilitiesMutationError = ErrorType<void>
-
-    /**
- * @summary User 예외 권한 일괄 설정
- */
-export const useSetUserAbilities = <TError = ErrorType<void>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof setUserAbilities>>, TError,{userId: string;data: BodyType<UpdateRoleAbilitiesRequestDto>}, TContext>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient): UseMutationResult<
-        Awaited<ReturnType<typeof setUserAbilities>>,
-        TError,
-        {userId: string;data: BodyType<UpdateRoleAbilitiesRequestDto>},
-        TContext
-      > => {
-
-      const mutationOptions = getSetUserAbilitiesMutationOptions(options);
-
-      return useMutation(mutationOptions, queryClient);
-    }
-    
 /**
  * ID로 특정 권한을 조회합니다.
  * @summary 권한 상세 조회
@@ -4443,8 +4308,8 @@ export const prefetchGetAbilityByIdInfiniteQuery = async <TData = Awaited<Return
 
 
 /**
- * 기존 권한의 정보를 수정합니다.
- * @summary 권한 수정
+ * 기존 권한 정의를 수정합니다. Grant 메타데이터(isActive, priority)는 변경되지 않습니다.
+ * @summary 권한 정의 수정
  */
 export const updateAbility = (
     id: string,
@@ -4492,7 +4357,7 @@ const {mutation: mutationOptions, request: requestOptions} = options ?
     export type UpdateAbilityMutationError = ErrorType<void>
 
     /**
- * @summary 권한 수정
+ * @summary 권한 정의 수정
  */
 export const useUpdateAbility = <TError = ErrorType<void>,
     TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateAbility>>, TError,{id: string;data: BodyType<UpdateAbilityDto>}, TContext>, request?: SecondParameter<typeof customInstance>}
@@ -4572,8 +4437,8 @@ export const useDeleteAbility = <TError = ErrorType<void>,
     }
     
 /**
- * 새로운 권한을 생성합니다. roleId 또는 userId 중 하나는 필수입니다.
- * @summary 권한 생성
+ * 재사용 가능한 권한 정의를 생성합니다. Role/User에 할당하려면 Grant를 생성하세요.
+ * @summary 권한 정의 생성
  */
 export const createAbility = (
     createAbilityDto: BodyType<CreateAbilityDto>,
@@ -4621,7 +4486,7 @@ const {mutation: mutationOptions, request: requestOptions} = options ?
     export type CreateAbilityMutationError = ErrorType<void>
 
     /**
- * @summary 권한 생성
+ * @summary 권한 정의 생성
  */
 export const useCreateAbility = <TError = ErrorType<void>,
     TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createAbility>>, TError,{data: BodyType<CreateAbilityDto>}, TContext>, request?: SecondParameter<typeof customInstance>}

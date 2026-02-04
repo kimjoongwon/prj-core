@@ -13,8 +13,9 @@ import { ActionDto } from "./action.dto";
 import { SubjectSummaryDto } from "./subject.dto";
 
 /**
- * Ability 응답 DTO
- * CASL ABAC 권한 - Role/User와 Subject+Action의 연결
+ * Ability 응답 DTO (Grant 기반)
+ * 재사용 가능한 권한 정의
+ * - Role/User 연결은 Grant 테이블에서 관리
  */
 export class AbilityDto extends AbstractDto implements Ability {
 	// CASL 필수 필드
@@ -35,24 +36,12 @@ export class AbilityDto extends AbstractDto implements Ability {
 	@UUIDField()
 	subjectId!: string;
 
-	@UUIDFieldOptional()
-	roleId!: string | null;
-
-	@UUIDFieldOptional()
-	userId!: string | null;
-
 	// 메타데이터
-	@StringFieldOptional()
-	name!: string | null;
+	@StringField()
+	name!: string; // Required unique identifier
 
 	@StringFieldOptional()
 	description!: string | null;
-
-	@BooleanField()
-	isActive!: boolean;
-
-	@NumberField()
-	priority!: number;
 
 	// 관계 (중첩 DTO)
 	@ClassField(() => ActionDto, { required: false })
@@ -60,6 +49,10 @@ export class AbilityDto extends AbstractDto implements Ability {
 
 	@ClassField(() => SubjectSummaryDto, { required: false })
 	subject?: SubjectSummaryDto;
+
+	// Grant에서 조회할 때 설정되는 필드 (optional)
+	@NumberField({ required: false })
+	priority?: number;
 }
 
 /**
@@ -68,6 +61,9 @@ export class AbilityDto extends AbstractDto implements Ability {
 export class AbilitySummaryDto {
 	@UUIDField()
 	id!: string;
+
+	@StringField()
+	name!: string;
 
 	@UUIDField()
 	actionId!: string;
@@ -78,11 +74,8 @@ export class AbilitySummaryDto {
 	@BooleanField()
 	inverted!: boolean;
 
-	@BooleanField()
-	isActive!: boolean;
-
-	@NumberField()
-	priority!: number;
+	@NumberField({ required: false })
+	priority?: number; // From Grant (optional)
 
 	@ClassField(() => ActionDto, { required: false })
 	action?: ActionDto;

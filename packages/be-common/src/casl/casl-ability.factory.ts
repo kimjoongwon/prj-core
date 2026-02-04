@@ -7,7 +7,7 @@
  */
 import { CONTEXT_KEYS } from "@cocrepo/constant";
 import { Ability as AbilityEntity } from "@cocrepo/entity";
-import { AbilitiesRepository } from "@cocrepo/repository";
+import { GrantsRepository } from "@cocrepo/repository";
 import { Injectable, Logger } from "@nestjs/common";
 import { Ability, AbilityBuilder } from "@casl/ability";
 import type { UserDto } from "@cocrepo/dto";
@@ -43,7 +43,7 @@ export class CaslAbilityFactory {
 	private readonly logger = new Logger(CaslAbilityFactory.name);
 
 	constructor(
-		private readonly abilitiesRepository: AbilitiesRepository,
+		private readonly grantsRepository: GrantsRepository,
 		private readonly cls: ClsService,
 	) {}
 
@@ -55,9 +55,9 @@ export class CaslAbilityFactory {
 	 *
 	 * @description
 	 * 1. x-space-id 헤더에서 spaceId를 가져와서 해당 tenant 찾기
-	 * 2. AbilitiesRepository로 Role 기반 권한 조회
-	 * 3. AbilitiesRepository로 User 예외 권한 조회
-	 * 4. 권한 병합 (User 권한이 Role 권한보다 우선 - priority 기반)
+	 * 2. GrantsRepository로 Role 기반 권한 조회 (Grant → Ability)
+	 * 3. GrantsRepository로 User 예외 권한 조회 (Grant → Ability)
+	 * 4. 권한 병합 (User 권한이 Role 권한보다 우선 - Grant.priority 기반)
 	 * 5. AbilityBuilder로 권한 생성
 	 * 6. conditions 파싱 (템플릿 변수 치환)
 	 * 7. CAN/CAN_NOT에 따라 can/cannot 호출
@@ -85,18 +85,30 @@ export class CaslAbilityFactory {
 			`사용자 권한 생성 시작: userId=${user.id}, roleId=${roleId}, spaceId=${spaceId}`,
 		);
 
-		// 1. DB에서 Role에 해당하는 활성화된 Abilities 조회
-		const roleAbilities = await this.abilitiesRepository.findActiveByRoleIds([
+		// 1. DB에서 Role에 해당하는 활성화된 Grants 조회 (Ability 포함)
+		const roleGrants = await this.grantsRepository.findActiveByRoleIds([
 			roleId,
 		]);
+		// Grant에서 Ability 추출 (Grant.priority를 Ability.priority로 복사)
+		const roleAbilities = roleGrants
+			.filter((grant) => grant.ability)
+			.map((grant) => ({
+				...grant.ability!,
+				priority: grant.priority, // Grant의 priority 사용
+			}));
 		this.logger.debug(
 			`Role 기반 Ability 조회: ${roleAbilities.length}개, roleId=${roleId}`,
 		);
 
-		// 2. DB에서 User에 해당하는 활성화된 예외 Abilities 조회
-		const userAbilities = await this.abilitiesRepository.findActiveByUserId(
-			user.id,
-		);
+		// 2. DB에서 User에 해당하는 활성화된 예외 Grants 조회 (Ability 포함)
+		const userGrants = await this.grantsRepository.findActiveByUserId(user.id);
+		// Grant에서 Ability 추출 (Grant.priority를 Ability.priority로 복사)
+		const userAbilities = userGrants
+			.filter((grant) => grant.ability)
+			.map((grant) => ({
+				...grant.ability!,
+				priority: grant.priority, // Grant의 priority 사용
+			}));
 		this.logger.debug(
 			`User 예외 Ability 조회: ${userAbilities.length}개, userId=${user.id}`,
 		);

@@ -167,15 +167,15 @@ export class AbilitiesController {
 	}
 
 	/**
-	 * 권한 생성 (관리자 전용)
+	 * 권한 정의 생성 (관리자 전용)
 	 * POST /api/v1/abilities
 	 */
 	@Post()
 	@ApiOperation({
 		operationId: "createAbility",
-		summary: "권한 생성",
+		summary: "권한 정의 생성",
 		description:
-			"새로운 권한을 생성합니다. roleId 또는 userId 중 하나는 필수입니다.",
+			"재사용 가능한 권한 정의를 생성합니다. Role/User에 할당하려면 Grant를 생성하세요.",
 	})
 	@ApiAuth()
 	@ApiBody({
@@ -188,7 +188,7 @@ export class AbilitiesController {
 		500,
 	)
 	@ApiResponseEntity(AbilityResponseDto, HttpStatus.CREATED)
-	@ResponseMessage("권한 생성 성공")
+	@ResponseMessage("권한 정의 생성 성공")
 	async createAbility(@Body() dto: CreateAbilityDto): Promise<Ability> {
 		const data = {
 			actionId: dto.actionId,
@@ -197,26 +197,23 @@ export class AbilitiesController {
 			conditions: dto.conditions ?? null,
 			inverted: dto.inverted ?? false,
 			reason: dto.reason ?? null,
-			roleId: dto.roleId ?? null,
-			userId: dto.userId ?? null,
-			name: dto.name ?? null,
+			name: dto.name ?? "Unnamed Ability", // name is now required
 			description: dto.description ?? null,
-			isActive: dto.isActive ?? true,
-			priority: dto.priority ?? 0,
 		};
 
 		return this.abilitiesFacade.createAbility(data);
 	}
 
 	/**
-	 * 권한 수정 (관리자 전용)
+	 * 권한 정의 수정 (관리자 전용)
 	 * PATCH /api/v1/abilities/:id
 	 */
 	@Patch(":id")
 	@ApiOperation({
 		operationId: "updateAbility",
-		summary: "권한 수정",
-		description: "기존 권한의 정보를 수정합니다.",
+		summary: "권한 정의 수정",
+		description:
+			"기존 권한 정의를 수정합니다. Grant 메타데이터(isActive, priority)는 변경되지 않습니다.",
 	})
 	@ApiAuth()
 	@ApiParam({
@@ -235,7 +232,7 @@ export class AbilitiesController {
 		500,
 	)
 	@ApiResponseEntity(AbilityResponseDto, HttpStatus.OK)
-	@ResponseMessage("권한 수정 성공")
+	@ResponseMessage("권한 정의 수정 성공")
 	async updateAbility(
 		@Param("id", ParseUUIDPipe) id: string,
 		@Body() dto: UpdateAbilityDto,
@@ -247,12 +244,8 @@ export class AbilitiesController {
 			...(dto.conditions !== undefined && { conditions: dto.conditions }),
 			...(dto.inverted !== undefined && { inverted: dto.inverted }),
 			...(dto.reason !== undefined && { reason: dto.reason }),
-			...(dto.roleId !== undefined && { roleId: dto.roleId }),
-			...(dto.userId !== undefined && { userId: dto.userId }),
 			...(dto.name !== undefined && { name: dto.name }),
 			...(dto.description !== undefined && { description: dto.description }),
-			...(dto.isActive !== undefined && { isActive: dto.isActive }),
-			...(dto.priority !== undefined && { priority: dto.priority }),
 		};
 
 		return this.abilitiesFacade.updateAbility(id, data);
@@ -288,89 +281,7 @@ export class AbilitiesController {
 		return this.abilitiesFacade.deleteAbility(id);
 	}
 
-	/**
-	 * Role 권한 일괄 설정 (관리자 전용)
-	 * PUT /api/v1/abilities/roles/:roleId
-	 */
-	@Put("roles/:roleId")
-	@ApiOperation({
-		operationId: "setRoleAbilities",
-		summary: "Role 권한 일괄 설정",
-		description:
-			"Role의 기본 권한을 일괄 설정합니다. 기존 권한은 소프트 삭제되고 새로운 권한이 생성됩니다.",
-	})
-	@ApiAuth()
-	@ApiParam({
-		name: "roleId",
-		description: "Role ID (UUID)",
-		type: String,
-	})
-	@ApiBody({
-		type: UpdateRoleAbilitiesRequestDto,
-		description: "설정할 Ability 목록",
-	})
-	@ApiErrors(
-		{ status: 401, message: AbilitiesErrorMessages.USER_NOT_FOUND },
-		{ status: 400, message: AbilitiesErrorMessages.ABILITY_UPDATE_FAILED },
-		500,
-	)
-	@ApiResponseEntity(AbilityResponseDto, HttpStatus.OK, { isArray: true })
-	@ResponseMessage("Role 권한 설정 성공")
-	async setRoleAbilities(
-		@Param("roleId", ParseUUIDPipe) roleId: string,
-		@Body() body: UpdateRoleAbilitiesRequestDto,
-	): Promise<Ability[]> {
-		const abilitiesToCreate = body.abilities.map((ability) => ({
-			...ability,
-			roleId,
-		}));
-
-		return this.abilitiesFacade.batchSetRoleAbilities(
-			roleId,
-			abilitiesToCreate,
-		);
-	}
-
-	/**
-	 * User 예외 권한 일괄 설정 (관리자 전용)
-	 * PUT /api/v1/abilities/users/:userId
-	 */
-	@Put("users/:userId")
-	@ApiOperation({
-		operationId: "setUserAbilities",
-		summary: "User 예외 권한 일괄 설정",
-		description:
-			"User의 예외 권한을 일괄 설정합니다. 기존 예외 권한은 소프트 삭제되고 새로운 권한이 생성됩니다.",
-	})
-	@ApiAuth()
-	@ApiParam({
-		name: "userId",
-		description: "User ID (UUID)",
-		type: String,
-	})
-	@ApiBody({
-		type: UpdateRoleAbilitiesRequestDto,
-		description: "설정할 Ability 목록",
-	})
-	@ApiErrors(
-		{ status: 401, message: AbilitiesErrorMessages.USER_NOT_FOUND },
-		{ status: 400, message: AbilitiesErrorMessages.ABILITY_UPDATE_FAILED },
-		500,
-	)
-	@ApiResponseEntity(AbilityResponseDto, HttpStatus.OK, { isArray: true })
-	@ResponseMessage("User 예외 권한 설정 성공")
-	async setUserAbilities(
-		@Param("userId", ParseUUIDPipe) userId: string,
-		@Body() body: UpdateRoleAbilitiesRequestDto,
-	): Promise<Ability[]> {
-		const abilitiesToCreate = body.abilities.map((ability) => ({
-			...ability,
-			userId,
-		}));
-
-		return this.abilitiesFacade.batchSetUserAbilities(
-			userId,
-			abilitiesToCreate,
-		);
-	}
+	// TODO: Implement Grant-based batch assignment endpoints
+	// PUT /api/v1/grants/roles/:roleId
+	// PUT /api/v1/grants/users/:userId
 }

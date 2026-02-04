@@ -3,12 +3,12 @@
 // ============================================================================
 //
 // Role은 시스템의 권한 체계를 정의합니다.
-// Ability를 통해 권한이 부여되고, Tenant를 통해 User와 Space에 연결됩니다.
+// Grant를 통해 Ability가 부여되고, Tenant를 통해 User와 Space에 연결됩니다.
 //
 // 관계 구조:
 //   Role (구체 엔티티)
 //     │
-//     ├─── Ability (권한 정의)
+//     ├─── Grant ─── Ability (권한 정의)
 //     ├─── Assignment ─── Tenant (추가 역할 할당)
 //     ├─── RoleClassification ─── Category (분류)
 //     ├─── RoleAssociation ─── Group (그룹핑)
@@ -35,7 +35,6 @@ model Role {
   /// @displayName 시스템 역할 여부
   isSystem       Boolean             @default(false) @map("is_system")
 
-  abilities      Ability[]
   assignments    Assignment[]
   associations   RoleAssociation[]
   classification RoleClassification?

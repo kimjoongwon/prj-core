@@ -5,20 +5,25 @@ import type {
 } from "@cocrepo/prisma";
 import { AbstractEntity } from "./abstract.entity";
 import type { Action } from "./action.entity";
-import type { Role } from "./role.entity";
-import type { User } from "./user.entity";
+import type { Grant } from "./grant.entity";
 
 /**
  * Ability 엔티티 (CASL ABAC 기반)
  *
- * Role 또는 User에 부여되는 구체적인 권한을 정의합니다.
- * - roleId만 있으면 Role 기반 기본 권한
- * - userId만 있으면 User 예외 권한
+ * 재사용 가능한 권한 정의를 담당합니다.
+ * - 권한 정의만 담당, 실제 부여는 Grant 테이블에서 관리
+ * - Grant를 통해 Role 또는 User에 연결됩니다
  *
- * DDD 원칙에 따라 Ability는 Role + Subject + Action + fields의 연결만 담당합니다.
+ * DDD 원칙에 따라 Ability는 Subject + Action + fields + conditions 조합으로 권한을 정의합니다.
  * 마스킹 등의 설정은 Action.config에서 가져옵니다.
  */
 export class Ability extends AbstractEntity implements AbilityEntity {
+	// 메타데이터
+	/** 권한 이름 (재사용 가능한 고유 이름) */
+	name!: string;
+	/** 권한 설명 */
+	description!: string | null;
+
 	// CASL 필수 필드
 	/** 대상 필드 목록 (빈 배열이면 전체 필드) */
 	fields!: string[];
@@ -34,40 +39,15 @@ export class Ability extends AbstractEntity implements AbilityEntity {
 	subjectId!: string;
 	/** Action ID (행위 정의) */
 	actionId!: string;
-	/** Role ID (Role 기반 권한일 때) */
-	roleId!: string | null;
-	/** User ID (User 예외 권한일 때) */
-	userId!: string | null;
 
-	// 메타데이터
-	/** 권한 이름 */
-	name!: string | null;
-	/** 권한 설명 */
-	description!: string | null;
-	/** 활성화 여부 */
-	isActive!: boolean;
-	/** 우선순위 (높을수록 우선) */
-	priority!: number;
+	// Grant에서 조회할 때 설정되는 필드 (optional)
+	/** 우선순위 (Grant.priority 값) */
+	priority?: number;
 
 	// 관계
 	subject?: Subject;
 	action?: Action;
-	role?: Role;
-	user?: User;
-
-	/**
-	 * 역할 기반 권한인지 확인
-	 */
-	isRoleBased(): boolean {
-		return this.roleId !== null && this.userId === null;
-	}
-
-	/**
-	 * 사용자 기반 예외 권한인지 확인
-	 */
-	isUserException(): boolean {
-		return this.userId !== null;
-	}
+	grants?: Grant[]; // BRIDGE를 통해 Role/User에 연결
 
 	/**
 	 * 허용 권한인지 확인

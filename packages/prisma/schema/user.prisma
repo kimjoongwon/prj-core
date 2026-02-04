@@ -4,6 +4,7 @@
 //
 // User는 시스템의 핵심 사용자 엔티티입니다.
 // Profile을 통해 추가 정보가 확장되고, Tenant를 통해 Space와 Role에 연결됩니다.
+// Grant를 통해 사용자별 예외 권한(Ability)을 부여받을 수 있습니다.
 //
 // 관계 구조:
 //   User (구체 엔티티)
@@ -11,6 +12,7 @@
 //     ├─── Profile (확장: nickname, avatar 등)
 //     ├─── UserClassification ─── Category (분류)
 //     ├─── UserAssociation ─── Group (그룹핑)
+//     ├─── Grant ─── Ability (사용자별 예외 권한)
 //     └─── Tenant (Bridge: User + Space + Role)
 //
 // 데이터 관계 개념:
@@ -49,8 +51,6 @@ model User {
   createdTimelines   Timeline[]          @relation("TimelineCreator")
   createdTasks       Task[]              @relation("TaskCreator")
   createdSafeWallets SafeWallet[]        @relation("SafeWalletCreator")
-  // CASL 예외 권한 (User별)
-  abilities          Ability[]
 
   @@map("users")
 }

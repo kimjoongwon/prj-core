@@ -9,9 +9,6 @@ import type { ActionResponseDto } from './actionResponseDto';
 import type { SubjectResponseDto } from './subjectResponseDto';
 import type { AbilityResponseDtoConditions } from './abilityResponseDtoConditions';
 import type { AbilityResponseDtoReason } from './abilityResponseDtoReason';
-import type { AbilityResponseDtoRoleId } from './abilityResponseDtoRoleId';
-import type { AbilityResponseDtoUserId } from './abilityResponseDtoUserId';
-import type { AbilityResponseDtoName } from './abilityResponseDtoName';
 import type { AbilityResponseDtoDescription } from './abilityResponseDtoDescription';
 import type { AbilityResponseDtoUpdatedAt } from './abilityResponseDtoUpdatedAt';
 
@@ -40,30 +37,13 @@ export interface AbilityResponseDto {
    * @nullable
    */
   reason?: AbilityResponseDtoReason;
-  /**
-   * Role ID (Role 기반 권한일 때)
-   * @nullable
-   */
-  roleId?: AbilityResponseDtoRoleId;
-  /**
-   * User ID (User 예외 권한일 때)
-   * @nullable
-   */
-  userId?: AbilityResponseDtoUserId;
-  /**
-   * 권한 이름
-   * @nullable
-   */
-  name?: AbilityResponseDtoName;
+  /** 권한 이름 (고유 식별자) */
+  name: string;
   /**
    * 권한 설명
    * @nullable
    */
   description?: AbilityResponseDtoDescription;
-  /** 활성화 여부 */
-  isActive: boolean;
-  /** 우선순위 (높을수록 우선) */
-  priority: number;
   /** 생성 일시 */
   createdAt: string;
   /**

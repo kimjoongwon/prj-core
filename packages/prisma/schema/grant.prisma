@@ -1,0 +1,169 @@
+// ============================================================================
+// Grant Domain - 권한 부여 도메인
+// ============================================================================
+//
+// CASL 기반 권한 체계 (RBAC + ABAC)를 정의합니다.
+// Subject: 권한 대상 (Prisma 모델명 또는 커스텀)
+// Action: 행위 정의 (마스킹 설정 포함)
+// Ability: 재사용 가능한 권한 정의 (Subject + Action 조합)
+// Grant: Role/User에 Ability를 부여하는 다형성 BRIDGE
+//
+// 관계 구조:
+//   Ability (REFERENCE)
+//     │
+//     ├─── Grant (BRIDGE) ──┬─── Role (역할 기반 권한)
+//     │                     └─── User (사용자별 예외 권한)
+//     ├─── Subject (권한 대상)
+//     └─── Action (행위 정의)
+//
+// ============================================================================
+
+// @schema-type: REFERENCE
+// @description: CASL Subject 정의 (Prisma 모델 기반 + 커스텀 Subject)
+// @note: DMMF에서 자동 동기화되며, 커스텀 Subject도 추가 가능
+/// @displayName Subject
+model Subject {
+  id        String    @id @default(uuid())
+  seq       Int       @unique @default(autoincrement())
+  createdAt DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt DateTime? @updatedAt @map("updated_at") @db.Timestamptz(6)
+  removedAt DateTime? @map("removed_at") @db.Timestamptz(6)
+
+  /// @displayName 이름
+  name        String  @unique // Prisma 모델명, 'all', 'menu:xxx', 'entity:xxx', 'feature:xxx' 등
+  /// @displayName 표시명
+  displayName String? @map("display_name") // 한글 표시명
+  /// @displayName 아이콘
+  icon        String? // 아이콘 (선택)
+  /// @displayName 정렬 순서
+  order       Int     @default(0) // UI 정렬 순서
+  /// @displayName 시스템 여부
+  isSystem    Boolean @default(true) @map("is_system") // Prisma 모델 기반 여부
+  /// @displayName 그룹
+  group       String? // 그룹핑 (entity, menu, feature 등)
+
+  // 관계
+  abilities Ability[]
+
+  @@index([group])
+  @@index([isSystem])
+  @@map("subjects")
+}
+
+// @schema-type: REFERENCE
+// @description: CASL Action 정의 - 행위의 완전한 정의 (마스킹 설정 포함)
+// @note: DDD 원칙에 따라 Action이 마스킹, 포맷팅 등 설정을 config에 포함
+/// @displayName 액션
+model Action {
+  id        String    @id @default(uuid())
+  seq       Int       @unique @default(autoincrement())
+  createdAt DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt DateTime? @updatedAt @map("updated_at") @db.Timestamptz(6)
+  removedAt DateTime? @map("removed_at") @db.Timestamptz(6)
+
+  /// @displayName 이름
+  name        String  @unique // 'create', 'read', 'read:masked:email', 'read:masked:phone' 등
+  /// @displayName 표시명
+  displayName String? @map("display_name")
+  /// @displayName 설명
+  description String?
+  /// @displayName 그룹
+  group       String? // 'crud', 'visibility', 'bulk', 'workflow'
+  /// @displayName 정렬 순서
+  order       Int     @default(0)
+  /// @displayName 시스템 여부
+  isSystem    Boolean @default(true) @map("is_system")
+
+  // Action 설정 (DDD: Action이 완전한 정의를 가짐)
+  // 마스킹, 포맷팅, 변환 등 다양한 유형 대응
+  /// @displayName 설정
+  config Json? // { type: 'masking', preset: 'PRESET_EMAIL' } 등
+
+  // 관계
+  abilities Ability[]
+
+  @@index([group])
+  @@map("actions")
+}
+
+// @schema-type: REFERENCE
+// @description: 재사용 가능한 권한 정의 (CASL ABAC 기반)
+// @connects: Grant (BRIDGE를 통해 Role/User에 연결)
+// @connects: Subject (권한 대상)
+// @connects: Action (행위 정의)
+// @note: 권한 정의만 담당, 실제 부여는 Grant 테이블에서 관리
+/// @displayName 권한
+model Ability {
+  id        String    @id @default(uuid())
+  seq       Int       @unique @default(autoincrement())
+  createdAt DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt DateTime? @updatedAt @map("updated_at") @db.Timestamptz(6)
+  removedAt DateTime? @map("removed_at") @db.Timestamptz(6)
+
+  // 메타데이터
+  /// @displayName 이름
+  name        String  @unique // "Read User Email Masked" (재사용 가능한 고유 이름)
+  /// @displayName 설명
+  description String?
+
+  // CASL 필수 필드
+  /// @displayName 대상 필드
+  fields     String[] @default([])
+  /// @displayName 조건
+  conditions Json? // { "departmentId": "${user.departmentId}" }
+  /// @displayName 거부 여부
+  inverted   Boolean  @default(false) // can(false) vs cannot(true)
+  /// @displayName 거부 사유
+  reason     String? // 거부 시 사용자에게 보여줄 메시지
+
+  // 연결 대상
+  subjectId String @map("subject_id") // Subject FK
+  actionId  String @map("action_id") // Action FK
+
+  // 관계
+  subject Subject @relation(fields: [subjectId], references: [id])
+  action  Action  @relation(fields: [actionId], references: [id])
+  grants  Grant[] // BRIDGE를 통해 Role/User에 연결
+
+  @@index([subjectId])
+  @@index([actionId])
+  @@index([name])
+  @@map("abilities")
+}
+
+// @schema-type: BRIDGE
+// @description: Role 또는 User에 Ability를 부여하는 다형성 중간 테이블
+// @connects: Role/User ─── Ability (다대다 + 메타데이터)
+// @polymorphic: granteeType (Role | User) + granteeId
+// @note: 권한 부여 관계를 명시적으로 관리하며 활성화 상태와 우선순위 제공
+/// @displayName 권한 부여
+model Grant {
+  id        String    @id @default(uuid())
+  seq       Int       @unique @default(autoincrement())
+  createdAt DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt DateTime? @updatedAt @map("updated_at") @db.Timestamptz(6)
+  removedAt DateTime? @map("removed_at") @db.Timestamptz(6)
+
+  // 다형성 FK (Polymorphic Association)
+  /// @displayName 권한 대상 유형
+  granteeType String @map("grantee_type") // "Role" | "User"
+  /// @displayName 권한 대상 ID
+  granteeId   String @map("grantee_id") // roleId or userId
+  /// @displayName 권한 ID
+  abilityId   String @map("ability_id")
+
+  // 메타데이터
+  /// @displayName 활성화 여부
+  isActive Boolean @default(true) @map("is_active")
+  /// @displayName 우선순위
+  priority Int     @default(0) // User 권한: 10+, Role 권한: 0-9
+
+  // 관계
+  ability Ability @relation(fields: [abilityId], references: [id])
+
+  @@unique([granteeType, granteeId, abilityId])
+  @@index([granteeType, granteeId])
+  @@index([abilityId])
+  @@index([isActive])
+  @@map("grants")
+}

@@ -84,54 +84,20 @@ export class AbilityResponseDto {
 	reason?: string | null;
 
 	@ApiProperty({
-		description: "Role ID (Role 기반 권한일 때)",
-		example: "550e8400-e29b-41d4-a716-446655440003",
-		required: false,
-		nullable: true,
+		description: "권한 이름 (고유 식별자)",
+		example: "Read User Email Masked",
 	})
 	@Expose()
-	roleId?: string | null;
-
-	@ApiProperty({
-		description: "User ID (User 예외 권한일 때)",
-		example: "550e8400-e29b-41d4-a716-446655440004",
-		required: false,
-		nullable: true,
-	})
-	@Expose()
-	userId?: string | null;
-
-	@ApiProperty({
-		description: "권한 이름",
-		example: "본인 정보 조회",
-		required: false,
-		nullable: true,
-	})
-	@Expose()
-	name?: string | null;
+	name!: string;
 
 	@ApiProperty({
 		description: "권한 설명",
-		example: "자신의 프로필 정보만 조회할 수 있습니다",
+		example: "사용자 이메일을 마스킹하여 조회합니다",
 		required: false,
 		nullable: true,
 	})
 	@Expose()
 	description?: string | null;
-
-	@ApiProperty({
-		description: "활성화 여부",
-		example: true,
-	})
-	@Expose()
-	isActive!: boolean;
-
-	@ApiProperty({
-		description: "우선순위 (높을수록 우선)",
-		example: 0,
-	})
-	@Expose()
-	priority!: number;
 
 	@ApiProperty({
 		description: "생성 일시",

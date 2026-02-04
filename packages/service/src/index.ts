@@ -4,6 +4,7 @@
 export { AbilitiesService } from "./abilities.service";
 export { ActionsService } from "./actions.service";
 export { AwsService } from "./aws.service";
+export { GrantsService } from "./grants.service";
 export { GroundsService } from "./grounds.service";
 export { createPrismaClient } from "./prisma.factory";
 export { PrismaService } from "./prisma.service";

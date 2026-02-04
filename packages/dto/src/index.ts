@@ -11,6 +11,7 @@ export * from "./exercise.dto";
 export * from "./file.dto";
 export * from "./file-association.dto";
 export * from "./file-classification.dto";
+export * from "./grants";
 export * from "./ground.dto";
 export * from "./group.dto";
 export * from "./profile.dto";

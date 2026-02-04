@@ -176,41 +176,4 @@ export class AbilitiesFacade {
 		return this.abilitiesService.deleteAbility(id);
 	}
 
-	/**
-	 * Role 권한 일괄 설정
-	 * 기존 Ability를 소프트 삭제하고 새로운 Ability를 생성합니다.
-	 *
-	 * @param roleId - Role ID
-	 * @param abilities - 설정할 권한 배열
-	 * @returns 생성된 Ability 배열
-	 */
-	async batchSetRoleAbilities(
-		roleId: string,
-		abilities: CreateAbilityInput[],
-	): Promise<Ability[]> {
-		this.logger.debug(
-			`Role 권한 일괄 설정: roleId=${roleId.slice(-8)}, count=${abilities.length}`,
-		);
-
-		return this.abilitiesService.batchSetRoleAbilities(roleId, abilities);
-	}
-
-	/**
-	 * User 예외 권한 일괄 설정
-	 * 기존 예외 Ability를 소프트 삭제하고 새로운 Ability를 생성합니다.
-	 *
-	 * @param userId - User ID
-	 * @param abilities - 설정할 권한 배열
-	 * @returns 생성된 Ability 배열
-	 */
-	async batchSetUserAbilities(
-		userId: string,
-		abilities: CreateAbilityInput[],
-	): Promise<Ability[]> {
-		this.logger.debug(
-			`User 예외 권한 일괄 설정: userId=${userId.slice(-8)}, count=${abilities.length}`,
-		);
-
-		return this.abilitiesService.batchSetUserAbilities(userId, abilities);
-	}
 }
