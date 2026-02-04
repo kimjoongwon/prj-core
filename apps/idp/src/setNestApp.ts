@@ -1,7 +1,6 @@
 import {
 	type ArgumentsHost,
 	Catch,
-	ClassSerializerInterceptor,
 	type ExceptionFilter,
 	HttpException,
 	HttpStatus,
@@ -9,11 +8,13 @@ import {
 	Logger,
 	ValidationPipe,
 } from "@nestjs/common";
-import { Reflector } from "@nestjs/core";
 import type { Response } from "express";
 
 /**
  * IdP 전용 간단한 예외 필터
+ *
+ * oidc-provider가 자체적으로 응답을 처리하므로,
+ * 이미 응답이 전송된 경우 추가 처리를 하지 않습니다.
  */
 @Catch()
 class IdpExceptionFilter implements ExceptionFilter {
@@ -22,6 +23,14 @@ class IdpExceptionFilter implements ExceptionFilter {
 	catch(exception: unknown, host: ArgumentsHost) {
 		const ctx = host.switchToHttp();
 		const response = ctx.getResponse<Response>();
+
+		// oidc-provider가 이미 응답을 보낸 경우 무시
+		if (response.headersSent) {
+			this.logger.debug(
+				"Headers already sent, skipping exception filter response",
+			);
+			return;
+		}
 
 		let status = HttpStatus.INTERNAL_SERVER_ERROR;
 		let message = "Internal server error";
@@ -61,9 +70,7 @@ export function setNestApp<T extends INestApplication>(app: T): void {
 
 	// =================================================================
 	// Global Interceptors
-	// IdP는 JWT Guard를 전역으로 사용하지 않음 (OIDC Provider가 자체 인증 처리)
+	// IdP는 ClassSerializerInterceptor를 사용하지 않음
+	// oidc-provider가 자체적으로 응답을 처리하며, NestJS 인터셉터와 충돌함
 	// =================================================================
-	app.useGlobalInterceptors(
-		new ClassSerializerInterceptor(app.get(Reflector)),
-	);
 }

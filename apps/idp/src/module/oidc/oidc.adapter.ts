@@ -1,5 +1,8 @@
-import { PRISMA_SERVICE_TOKEN } from "@cocrepo/constant";
-import { Inject, Injectable } from "@nestjs/common";
+import { PrismaClient } from "@cocrepo/prisma";
+import { Injectable, Logger, OnModuleDestroy } from "@nestjs/common";
+import { ConfigService } from "@nestjs/config";
+import { PrismaPg } from "@prisma/adapter-pg";
+import pg from "pg";
 
 // Prisma types for OidcModel operations
 interface OidcModelData {
@@ -32,7 +35,7 @@ interface OidcPrismaClient {
 	oidcModel: OidcModelDelegate;
 }
 
-// oidc-provider is ESM-only, define types locally
+// oidc-provider 타입 (@types/oidc-provider 기반)
 interface AdapterPayload {
 	[key: string]: unknown;
 	accountId?: string;
@@ -181,16 +184,103 @@ export class PrismaOidcAdapter implements Adapter {
 /**
  * Prisma Adapter Factory
  * oidc-provider가 각 모델 타입별로 어댑터 인스턴스를 생성할 때 사용
+ *
+ * - DIRECT_URL을 사용하여 RLS 우회
+ * - OIDC 토큰/세션 저장은 tenant 컨텍스트 없이 접근해야 함
  */
 @Injectable()
-export class PrismaOidcAdapterFactory {
-	constructor(
-		@Inject(PRISMA_SERVICE_TOKEN)
-		private readonly prisma: OidcPrismaClient,
-	) {}
+export class PrismaOidcAdapterFactory implements OnModuleDestroy {
+	private readonly logger = new Logger(PrismaOidcAdapterFactory.name);
+	private prisma: PrismaClient | null = null;
+	private pool: pg.Pool | null = null;
+
+	constructor(private readonly configService: ConfigService) {}
+
+	/**
+	 * DIRECT_URL을 사용하는 별도 Prisma 클라이언트 생성
+	 * - RLS 우회를 위해 직접 연결 사용
+	 */
+	private async getPrismaClient(): Promise<PrismaClient> {
+		if (this.prisma) return this.prisma;
+
+		const directUrl = this.configService.get<string>("DIRECT_URL");
+		const databaseUrl = this.configService.get<string>("DATABASE_URL");
+
+		// DIRECT_URL 우선 사용 (pgbouncer 우회)
+		const connectionUrl = directUrl || databaseUrl;
+
+		if (!connectionUrl) {
+			throw new Error("DATABASE_URL or DIRECT_URL is not defined");
+		}
+
+		this.logger.debug(
+			`OIDC Adapter용 Prisma 클라이언트 생성 (directUrl: ${directUrl ? "사용" : "미사용"})`,
+		);
+
+		// PostgreSQL connection pool 생성
+		this.pool = new pg.Pool({
+			connectionString: connectionUrl,
+			max: 10,
+			idleTimeoutMillis: 30000,
+		});
+
+		// Prisma PostgreSQL Adapter 생성
+		const adapter = new PrismaPg(this.pool);
+
+		// PrismaClient with adapter
+		this.prisma = new PrismaClient({
+			adapter,
+		});
+
+		return this.prisma;
+	}
+
+	async onModuleDestroy() {
+		if (this.prisma) {
+			await this.prisma.$disconnect();
+		}
+		if (this.pool) {
+			await this.pool.end();
+		}
+	}
 
 	createAdapter(modelType: string): Adapter {
-		return new PrismaOidcAdapter(modelType, this.prisma);
+		// 동기적 호출을 위해 Promise를 캐싱하는 방식으로 변경
+		// oidc-provider는 동기적으로 어댑터를 생성하므로 lazy initialization 사용
+		return new PrismaOidcAdapter(modelType, this.getPrismaClientSync());
+	}
+
+	/**
+	 * 동기적으로 Prisma 클라이언트 반환 (초기화는 비동기로 진행됨)
+	 * oidc-provider의 adapter factory는 동기적으로 호출되므로
+	 * 프록시 패턴을 사용하여 실제 호출 시점에 await
+	 */
+	private getPrismaClientSync(): OidcPrismaClient {
+		const factory = this;
+		return {
+			oidcModel: {
+				async upsert(args) {
+					const prisma = await factory.getPrismaClient();
+					// eslint-disable-next-line @typescript-eslint/no-explicit-any
+					return prisma.oidcModel.upsert(args as any);
+				},
+				async findUnique(args) {
+					const prisma = await factory.getPrismaClient();
+					// eslint-disable-next-line @typescript-eslint/no-explicit-any
+					return prisma.oidcModel.findUnique(args as any);
+				},
+				async deleteMany(args) {
+					const prisma = await factory.getPrismaClient();
+					// eslint-disable-next-line @typescript-eslint/no-explicit-any
+					return prisma.oidcModel.deleteMany(args as any);
+				},
+				async update(args) {
+					const prisma = await factory.getPrismaClient();
+					// eslint-disable-next-line @typescript-eslint/no-explicit-any
+					return prisma.oidcModel.update(args as any);
+				},
+			},
+		} as OidcPrismaClient;
 	}
 
 	getAdapterFactory(): (modelType: string) => Adapter {

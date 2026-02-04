@@ -1,7 +1,7 @@
 import { Injectable, Logger } from "@nestjs/common";
 import { UsersService, AbilitiesService, RolesService } from "@cocrepo/service";
 
-// oidc-provider is ESM-only, define types locally
+// oidc-provider 타입 (@types/oidc-provider 기반)
 interface AccountClaims {
 	sub: string;
 	[key: string]: unknown;
@@ -11,6 +11,7 @@ interface ClaimsParameterMember {
 	essential?: boolean;
 	value?: string;
 	values?: string[];
+	[key: string]: unknown;
 }
 
 interface Account {
@@ -18,16 +19,17 @@ interface Account {
 	claims: (
 		use: string,
 		scope: string,
-		claims: { [key: string]: ClaimsParameterMember },
+		claims: { [key: string]: ClaimsParameterMember | null },
 		rejected: string[],
-	) => Promise<AccountClaims>;
+	) => AccountClaims | Promise<AccountClaims>;
+	[key: string]: unknown;
 }
 
 type FindAccount = (
 	ctx: unknown,
 	id: string,
 	token?: unknown,
-) => Promise<Account | undefined>;
+) => Account | Promise<Account | undefined>;
 
 /**
  * OIDC 토큰에 포함될 권한 형식

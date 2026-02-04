@@ -5,16 +5,10 @@ import { PrismaOidcAdapterFactory } from "./oidc.adapter";
 import { OidcClientRepository } from "./oidc-client.repository";
 import type { OidcConfig } from "../../config/oidc.config";
 
-// Koa-like context for oidc-provider
-interface KoaLikeContext {
-	type: string;
-	body: string;
-}
-
-// oidc-provider types (ESM module, define locally)
+// oidc-provider 타입 (@types/oidc-provider 기반)
 interface OidcConfiguration {
 	adapter?: (modelName: string) => unknown;
-	findAccount?: (ctx: unknown, id: string, token?: unknown) => Promise<unknown>;
+	findAccount?: (ctx: unknown, id: string, token?: unknown) => unknown;
 	clients?: Array<{
 		client_id: string;
 		client_secret?: string;
@@ -35,10 +29,10 @@ interface OidcConfiguration {
 	ttl?: Record<string, number>;
 	interactions?: { url: (ctx: unknown, interaction: { uid: string }) => string };
 	pkce?: { required: () => boolean };
-	renderError?: (ctx: KoaLikeContext, out: Record<string, unknown>, error: Error) => Promise<void>;
+	renderError?: (ctx: { type: string; body: string }, out: Record<string, unknown>, error: Error) => Promise<void>;
 }
 
-export interface InteractionDetails {
+interface Interaction {
 	uid: string;
 	prompt: {
 		name: string;
@@ -58,14 +52,7 @@ export interface InteractionDetails {
 	grantId?: string;
 }
 
-export interface OidcClientInfo {
-	clientId: string;
-	clientName?: string;
-	logoUri?: string;
-	[key: string]: unknown;
-}
-
-export interface OidcGrant {
+interface Grant {
 	accountId: string;
 	clientId: string;
 	addOIDCScope: (scope: string) => void;
@@ -73,25 +60,30 @@ export interface OidcGrant {
 	save: (ttl?: number) => Promise<string>;
 }
 
-interface OidcGrantConstructor {
-	new (options: { accountId: string; clientId: string }): OidcGrant;
-	find: (grantId: string) => Promise<OidcGrant | undefined>;
+interface Client {
+	find: (clientId: string) => Promise<unknown | undefined>;
 }
 
+interface OidcClientInfo {
+	clientId: string;
+	clientName?: string;
+	logoUri?: string;
+	[key: string]: unknown;
+}
+
+// Provider 인스턴스 타입 (동적으로 import한 실제 인스턴스)
 interface OidcProviderInstance {
 	callback: () => (req: unknown, res: unknown) => void;
 	on: (event: string, handler: (...args: unknown[]) => void) => void;
-	interactionDetails: (req: unknown, res: unknown) => Promise<InteractionDetails>;
+	interactionDetails: (req: unknown, res: unknown) => Promise<Interaction>;
 	interactionResult: (
 		req: unknown,
 		res: unknown,
 		result: Record<string, unknown>,
-		options?: { mergeWithLastSubmission?: boolean }
+		options?: { mergeWithLastSubmission?: boolean },
 	) => Promise<string>;
-	Client: {
-		find: (clientId: string) => Promise<OidcClientInfo | undefined>;
-	};
-	Grant: OidcGrantConstructor;
+	Client: { find: (clientId: string) => Promise<OidcClientInfo | undefined> };
+	Grant: { new (options: { accountId: string; clientId: string }): Grant; find: (grantId: string) => Promise<Grant | undefined> };
 }
 
 @Injectable()
@@ -151,14 +143,11 @@ export class OidcProviderService {
 		// DB에서 클라이언트 로드
 		const dbClients = await this.loadClientsFromDatabase();
 
-		return {
-			adapter: this.adapterFactory.getAdapterFactory(),
-			findAccount: this.accountService.findAccount,
-
-			// DB에서 로드한 클라이언트 + 개발용 기본 클라이언트
-			clients: [
-				...dbClients,
-				// seed-data.ts와 동일한 기본 클라이언트 (DB 접근 실패 시 사용)
+		// DB에서 로드 성공 시 DB 클라이언트만 사용, 실패 시 기본 클라이언트 사용
+		const clients = dbClients.length > 0
+			? dbClients
+			: [
+				// seed-data.ts와 동일한 기본 클라이언트 (DB 접근 실패 시 폴백)
 				{
 					client_id: "prj-core-admin",
 					client_secret: "admin-secret-change-in-production",
@@ -181,7 +170,13 @@ export class OidcProviderService {
 					token_endpoint_auth_method: "none", // Public client (PKCE)
 					scope: "openid profile email offline_access",
 				},
-			],
+			];
+
+		return {
+			adapter: this.adapterFactory.getAdapterFactory(),
+			findAccount: this.accountService.findAccount,
+
+			clients,
 
 			// 지원하는 클레임 정의
 			claims: {

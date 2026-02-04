@@ -21,7 +21,7 @@ async function bootstrap() {
 	// =================================================================
 	// 2. View Engine 설정 (EJS for login/consent pages)
 	// =================================================================
-	app.setBaseViewsDir(join(__dirname, "views"));
+	app.setBaseViewsDir(join(__dirname, "src", "views"));
 	app.setViewEngine("ejs");
 
 	// =================================================================
