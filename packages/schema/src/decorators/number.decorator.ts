@@ -62,13 +62,13 @@ export function Number(
 
 	if (min !== undefined) {
 		decorators.push(
-			Min(min, { each, message: VALIDATION_MESSAGES.MIN_VALUE(min) }),
+			Min(min, { each, message: VALIDATION_MESSAGES.MIN_VALUE }),
 		);
 	}
 
 	if (max !== undefined) {
 		decorators.push(
-			Max(max, { each, message: VALIDATION_MESSAGES.MAX_VALUE(max) }),
+			Max(max, { each, message: VALIDATION_MESSAGES.MAX_VALUE }),
 		);
 	}
 

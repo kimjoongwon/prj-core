@@ -21,6 +21,7 @@
   },
   "dependencies": {
     "@casl/ability": "^6.7.5",
+    "@cocrepo/be-i18n": "workspace:*",
     "@cocrepo/constant": "workspace:*",
     "@cocrepo/decorator": "workspace:*",
     "@cocrepo/dto": "workspace:*",

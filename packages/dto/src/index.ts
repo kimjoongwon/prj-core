@@ -30,6 +30,7 @@ export * from "./subject.dto";
 export * from "./task.dto";
 export * from "./tenant.dto";
 export * from "./timeline.dto";
+export * from "./translations";
 export * from "./update";
 export * from "./user.dto";
 export * from "./user-association.dto";

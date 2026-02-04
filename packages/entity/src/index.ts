@@ -31,6 +31,7 @@ export * from "./subject.entity";
 export * from "./task.entity";
 export * from "./tenant.entity";
 export * from "./timeline.entity";
+export * from "./translation.entity";
 export * from "./user.entity";
 export * from "./user-association.entity";
 export * from "./user-classification.entity";

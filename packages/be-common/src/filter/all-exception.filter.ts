@@ -9,12 +9,17 @@ import {
 } from "@nestjs/common";
 import { BaseExceptionFilter } from "@nestjs/core";
 import type { Request } from "express";
+import { TranslationService } from "@cocrepo/be-i18n";
 
 @Catch()
 export class AllExceptionsFilter extends BaseExceptionFilter {
 	private readonly logger = new Logger(AllExceptionsFilter.name);
 
-	catch(exception: unknown, host: ArgumentsHost) {
+	constructor(private readonly translationService: TranslationService) {
+		super();
+	}
+
+	async catch(exception: unknown, host: ArgumentsHost) {
 		const ctx = host.switchToHttp();
 		const request = ctx.getRequest<Request>();
 
@@ -30,12 +35,12 @@ export class AllExceptionsFilter extends BaseExceptionFilter {
 			errorData = typeof response === "object" ? response : null;
 		} else if (exception instanceof Prisma.PrismaClientKnownRequestError) {
 			// Prisma 알려진 에러 처리
-			message = this.getPrismaErrorMessage(exception);
+			message = await this.getPrismaErrorMessage(exception);
 			errorData = { code: exception.code, meta: exception.meta };
 		} else if (exception instanceof Prisma.PrismaClientValidationError) {
 			// Prisma 유효성 검사 에러
 			status = HttpStatus.BAD_REQUEST;
-			message = "데이터베이스 스키마 불일치 오류";
+			message = await this.translationService.translate("error.prisma.P2016");
 		} else if (exception instanceof Error) {
 			message = exception.message;
 		}
@@ -61,20 +66,17 @@ export class AllExceptionsFilter extends BaseExceptionFilter {
 		);
 	}
 
-	private getPrismaErrorMessage(
+	private async getPrismaErrorMessage(
 		exception: Prisma.PrismaClientKnownRequestError,
-	): string {
-		switch (exception.code) {
-			case "P2002":
-				return "중복된 데이터가 존재합니다";
-			case "P2025":
-				return "요청한 데이터를 찾을 수 없습니다";
-			case "P2003":
-				return "연관된 데이터가 존재하지 않습니다";
-			case "P2016":
-				return "데이터베이스 스키마 불일치 오류";
-			default:
-				return `데이터베이스 오류 (${exception.code})`;
+	): Promise<string> {
+		const key = `error.prisma.${exception.code}`;
+		const translated = await this.translationService.translate(key);
+
+		// 번역 키를 찾을 수 없는 경우 (키 자체가 반환됨)
+		if (translated === key) {
+			return `데이터베이스 오류 (${exception.code})`;
 		}
+
+		return translated;
 	}
 }

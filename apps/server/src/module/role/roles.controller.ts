@@ -41,7 +41,7 @@ export class RolesController {
 	@ApiAuth()
 	@ApiErrors(401, 403, 500)
 	@ApiResponseEntity(RoleDto, HttpStatus.OK, { isArray: true })
-	@ResponseMessage("역할 목록 조회 성공")
+	@ResponseMessage("common.role.list.success")
 	async getRoles() {
 		const roles = await this.rolesService.getAll();
 		return roles.map((role) => plainToInstance(RoleDto, role));
@@ -63,7 +63,7 @@ export class RolesController {
 	})
 	@ApiErrors(401, 403, 404, 500)
 	@ApiResponseEntity(RoleDto, HttpStatus.OK)
-	@ResponseMessage("역할 조회 성공")
+	@ResponseMessage("common.role.read.success")
 	async getRoleById(@Param("id", ParseUUIDPipe) id: string) {
 		const role = await this.rolesService.getById(id);
 		return plainToInstance(RoleDto, role);
@@ -86,7 +86,7 @@ export class RolesController {
 	})
 	@ApiErrors(400, 401, 403, 409, 500)
 	@ApiResponseEntity(RoleDto, HttpStatus.CREATED)
-	@ResponseMessage("역할 생성 성공")
+	@ResponseMessage("common.role.create.success")
 	async createRole(@Body() dto: CreateRoleDto) {
 		const role = await this.rolesService.create(dto);
 		return plainToInstance(RoleDto, role);
@@ -114,7 +114,7 @@ export class RolesController {
 	})
 	@ApiErrors(400, 401, 403, 404, 500)
 	@ApiResponseEntity(RoleDto, HttpStatus.OK)
-	@ResponseMessage("역할 수정 성공")
+	@ResponseMessage("common.role.update.success")
 	async updateRole(
 		@Param("id", ParseUUIDPipe) id: string,
 		@Body() dto: UpdateRoleDto,
@@ -141,7 +141,7 @@ export class RolesController {
 	})
 	@ApiErrors(400, 401, 403, 404, 500)
 	@ApiResponseEntity(RoleDto, HttpStatus.OK)
-	@ResponseMessage("역할 삭제 성공")
+	@ResponseMessage("common.role.delete.success")
 	async deleteRole(@Param("id", ParseUUIDPipe) id: string) {
 		const role = await this.rolesService.delete(id);
 		return plainToInstance(RoleDto, role);

@@ -1,0 +1,22 @@
+{
+  "SUPER_ADMIN": {
+    "name": "슈퍼 관리자",
+    "description": "시스템의 모든 권한을 가진 최고 관리자"
+  },
+  "ADMIN": {
+    "name": "관리자",
+    "description": "일반 관리 업무를 수행하는 관리자"
+  },
+  "USER": {
+    "name": "일반 사용자",
+    "description": "기본 사용자 역할"
+  },
+  "category": {
+    "COMMON": "공통",
+    "ADMIN": "관리자",
+    "USER": "사용자",
+    "MANAGER": "매니저",
+    "DEVELOPER": "개발자",
+    "GUEST": "게스트"
+  }
+}

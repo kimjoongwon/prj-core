@@ -97,7 +97,7 @@ export class UsersController {
 		metaDto: UserPaginationMetaDto,
 		statsDto: UserStatsDto,
 	})
-	@ResponseMessage("회원 목록 조회 성공")
+	@ResponseMessage("common.user.list.success")
 	async getUsers(@Query() query: QueryUsersDto) {
 		const spaceId = this.getSpaceId();
 
@@ -154,7 +154,7 @@ export class UsersController {
 		500,
 	)
 	@ApiResponseEntity(UserDetailResponseDto, HttpStatus.OK)
-	@ResponseMessage("회원 상세 조회 성공")
+	@ResponseMessage("common.user.read.success")
 	async getUserById(
 		@Param("id", ParseUUIDPipe) id: string,
 	): Promise<UserDetailResponseDto> {
@@ -187,7 +187,7 @@ export class UsersController {
 		500,
 	)
 	@ApiResponseEntity(UserDto, HttpStatus.CREATED)
-	@ResponseMessage("회원 등록 성공")
+	@ResponseMessage("common.user.create.success")
 	async createUser(@Body() dto: CreateUserMemberDto): Promise<UserDto> {
 		const spaceId = this.getSpaceId();
 
@@ -231,7 +231,7 @@ export class UsersController {
 		500,
 	)
 	@ApiResponseEntity(UserDto, HttpStatus.OK)
-	@ResponseMessage("회원 수정 성공")
+	@ResponseMessage("common.user.update.success")
 	async updateUser(
 		@Param("id", ParseUUIDPipe) id: string,
 		@Body() dto: UpdateUserMemberDto,
@@ -270,7 +270,7 @@ export class UsersController {
 		{ status: 404, message: UsersErrorMessages.USER_NOT_FOUND },
 		500,
 	)
-	@ResponseMessage("회원 삭제 성공")
+	@ResponseMessage("common.user.delete.success")
 	async deleteUser(@Param("id", ParseUUIDPipe) id: string): Promise<void> {
 		const spaceId = this.getSpaceId();
 		const currentUser = this.getCurrentUser();

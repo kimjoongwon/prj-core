@@ -1,0 +1,135 @@
+{
+  "success": "성공",
+  "created": "생성 완료",
+  "updated": "수정 완료",
+  "deleted": "삭제 완료",
+  "notFound": "요청한 데이터를 찾을 수 없습니다",
+  "list": {
+    "success": "목록 조회 성공"
+  },
+  "read": {
+    "success": "조회 성공"
+  },
+  "create": {
+    "success": "생성 성공"
+  },
+  "update": {
+    "success": "수정 성공"
+  },
+  "delete": {
+    "success": "삭제 성공"
+  },
+  "auth": {
+    "login": {
+      "success": "로그인 성공"
+    },
+    "logout": {
+      "success": "로그아웃 성공"
+    },
+    "register": {
+      "success": "회원가입 성공"
+    },
+    "refresh": {
+      "success": "토큰 재발급 성공"
+    },
+    "renew": {
+      "success": "토큰 갱신 성공"
+    },
+    "validate": {
+      "success": "토큰 유효성 검증 완료"
+    }
+  },
+  "user": {
+    "list": {
+      "success": "회원 목록 조회 성공"
+    },
+    "read": {
+      "success": "회원 상세 조회 성공"
+    },
+    "create": {
+      "success": "회원 등록 성공"
+    },
+    "update": {
+      "success": "회원 수정 성공"
+    },
+    "delete": {
+      "success": "회원 삭제 성공"
+    }
+  },
+  "role": {
+    "list": {
+      "success": "역할 목록 조회 성공"
+    },
+    "read": {
+      "success": "역할 조회 성공"
+    },
+    "create": {
+      "success": "역할 생성 성공"
+    },
+    "update": {
+      "success": "역할 수정 성공"
+    },
+    "delete": {
+      "success": "역할 삭제 성공"
+    }
+  },
+  "ability": {
+    "my": {
+      "success": "내 권한 조회 성공"
+    },
+    "byRole": {
+      "success": "Role별 권한 조회 성공"
+    },
+    "byUser": {
+      "success": "User별 예외 권한 조회 성공"
+    },
+    "read": {
+      "success": "권한 조회 성공"
+    },
+    "create": {
+      "success": "권한 정의 생성 성공"
+    },
+    "update": {
+      "success": "권한 정의 수정 성공"
+    },
+    "delete": {
+      "success": "권한 삭제 성공"
+    }
+  },
+  "action": {
+    "list": {
+      "success": "Action 목록 조회 성공"
+    },
+    "read": {
+      "success": "Action 조회 성공"
+    },
+    "create": {
+      "success": "Action 생성 성공"
+    },
+    "update": {
+      "success": "Action 수정 성공"
+    },
+    "delete": {
+      "success": "Action 삭제 성공"
+    }
+  },
+  "subject": {
+    "list": {
+      "success": "Subject 목록 조회 성공"
+    },
+    "fields": {
+      "success": "Subject 필드 목록 조회 성공"
+    },
+    "read": {
+      "success": "Subject 조회 성공"
+    }
+  },
+  "ground": {
+    "list": {
+      "success": "Ground 목록 조회 성공"
+    },
+    "mySpace": {
+      "success": "내 Space의 Ground 목록 조회 성공"
+    }
+  }
+}

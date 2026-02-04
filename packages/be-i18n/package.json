@@ -1,0 +1,43 @@
+{
+  "name": "@cocrepo/be-i18n",
+  "version": "0.1.0",
+  "private": true,
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "require": "./dist/index.js",
+      "default": "./dist/index.js"
+    }
+  },
+  "scripts": {
+    "build": "tsc",
+    "start:dev": "tsc --watch",
+    "type-check": "tsc --noEmit",
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "test:cov": "jest --coverage"
+  },
+  "dependencies": {
+    "@cocrepo/constant": "workspace:*",
+    "@cocrepo/prisma": "workspace:*",
+    "@cocrepo/service": "workspace:*",
+    "nestjs-i18n": "^10.4.14"
+  },
+  "peerDependencies": {
+    "@nestjs/common": "^11.1.3",
+    "@nestjs/core": "^11.1.6",
+    "nestjs-cls": "^6.1.0"
+  },
+  "devDependencies": {
+    "@nestjs/common": "^11.1.3",
+    "@nestjs/core": "^11.1.6",
+    "@types/jest": "^30.0.0",
+    "@types/node": "catalog:",
+    "jest": "^30.1.3",
+    "nestjs-cls": "^6.1.0",
+    "ts-jest": "^29.4.1",
+    "typescript": "catalog:"
+  }
+}

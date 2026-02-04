@@ -29,7 +29,7 @@ export class GroundsController {
 	})
 	@ApiErrors(500)
 	@ApiResponseEntity(GroundDto, HttpStatus.OK, { isArray: true })
-	@ResponseMessage("Ground 목록 조회 성공")
+	@ResponseMessage("common.ground.list.success")
 	async getGrounds() {
 		return this.groundsService.getAll();
 	}
@@ -44,7 +44,7 @@ export class GroundsController {
 	@ApiAuth()
 	@ApiErrors(500)
 	@ApiResponseEntity(GroundDto, HttpStatus.OK, { isArray: true })
-	@ResponseMessage("내 Space의 Ground 목록 조회 성공")
+	@ResponseMessage("common.ground.mySpace.success")
 	async getMyGrounds() {
 		const spaceId = this.cls.get<string | undefined>(CONTEXT_KEYS.SPACE_ID);
 		return this.groundsService.getMyGrounds(spaceId);

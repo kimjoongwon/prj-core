@@ -16,6 +16,7 @@ import {
 	roleGroupSeedData,
 	roleSeedData,
 	subjectSeedData,
+	translationSeedData,
 	userGroundMapping,
 	userSeedData,
 } from "./seed-data";
@@ -790,6 +791,40 @@ async function createAbilities(
 	);
 	console.log(
 		`\n✅ Ability & Grant 전체 완료! (Ability: ${abilityCreatedCount}개, Grant: ${grantCreatedCount}개, 오류: ${errorCount}개)`,
+	);
+
+	// ========================================
+	// 7. Translation 시드 데이터 삽입
+	// ========================================
+	console.log("\n========================================");
+	console.log("7. Translation (번역) 시드 데이터 삽입 중...");
+	console.log("========================================");
+
+	let translationCreatedCount = 0;
+	let translationSkippedCount = 0;
+
+	for (const translation of translationSeedData) {
+		const existing = await prisma.translation.findUnique({
+			where: {
+				languageCode_key: {
+					languageCode: translation.languageCode,
+					key: translation.key,
+				},
+			},
+		});
+
+		if (!existing) {
+			await prisma.translation.create({
+				data: translation,
+			});
+			translationCreatedCount++;
+		} else {
+			translationSkippedCount++;
+		}
+	}
+
+	console.log(
+		`✅ Translation 시드 완료! (생성: ${translationCreatedCount}개, 스킵: ${translationSkippedCount}개)`,
 	);
 }
 

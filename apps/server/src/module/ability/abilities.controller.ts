@@ -71,7 +71,7 @@ export class AbilitiesController {
 		500,
 	)
 	@ApiResponseEntity(AbilityResponseDto, HttpStatus.OK, { isArray: true })
-	@ResponseMessage("내 권한 조회 성공")
+	@ResponseMessage("common.ability.my.success")
 	async getMyAbilities(): Promise<Ability[]> {
 		const user = this.cls.get<User>(CONTEXT_KEYS.AUTH_USER);
 		if (!user?.id) {
@@ -102,7 +102,7 @@ export class AbilitiesController {
 		500,
 	)
 	@ApiResponseEntity(AbilityResponseDto, HttpStatus.OK, { isArray: true })
-	@ResponseMessage("Role별 권한 조회 성공")
+	@ResponseMessage("common.ability.byRole.success")
 	async getAbilitiesByRoleId(
 		@Param("roleId", ParseUUIDPipe) roleId: string,
 	): Promise<Ability[]> {
@@ -130,7 +130,7 @@ export class AbilitiesController {
 		500,
 	)
 	@ApiResponseEntity(AbilityResponseDto, HttpStatus.OK, { isArray: true })
-	@ResponseMessage("User별 예외 권한 조회 성공")
+	@ResponseMessage("common.ability.byUser.success")
 	async getAbilitiesByUserId(
 		@Param("userId", ParseUUIDPipe) userId: string,
 	): Promise<Ability[]> {
@@ -159,7 +159,7 @@ export class AbilitiesController {
 		500,
 	)
 	@ApiResponseEntity(AbilityResponseDto, HttpStatus.OK)
-	@ResponseMessage("권한 조회 성공")
+	@ResponseMessage("common.ability.read.success")
 	async getAbilityById(
 		@Param("id", ParseUUIDPipe) id: string,
 	): Promise<Ability> {
@@ -188,7 +188,7 @@ export class AbilitiesController {
 		500,
 	)
 	@ApiResponseEntity(AbilityResponseDto, HttpStatus.CREATED)
-	@ResponseMessage("권한 정의 생성 성공")
+	@ResponseMessage("common.ability.create.success")
 	async createAbility(@Body() dto: CreateAbilityDto): Promise<Ability> {
 		const data = {
 			actionId: dto.actionId,
@@ -232,7 +232,7 @@ export class AbilitiesController {
 		500,
 	)
 	@ApiResponseEntity(AbilityResponseDto, HttpStatus.OK)
-	@ResponseMessage("권한 정의 수정 성공")
+	@ResponseMessage("common.ability.update.success")
 	async updateAbility(
 		@Param("id", ParseUUIDPipe) id: string,
 		@Body() dto: UpdateAbilityDto,
@@ -274,7 +274,7 @@ export class AbilitiesController {
 		500,
 	)
 	@ApiResponseEntity(AbilityResponseDto, HttpStatus.OK)
-	@ResponseMessage("권한 삭제 성공")
+	@ResponseMessage("common.ability.delete.success")
 	async deleteAbility(
 		@Param("id", ParseUUIDPipe) id: string,
 	): Promise<Ability> {

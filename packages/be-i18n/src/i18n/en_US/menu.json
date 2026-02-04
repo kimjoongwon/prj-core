@@ -1,0 +1,101 @@
+{
+  "dashboard": "Dashboard",
+  "users": {
+    "title": "Members",
+    "list": "Member List",
+    "grades": "Grade Management",
+    "withdrawn": "Withdrawn Members"
+  },
+  "reservations": {
+    "title": "Reservations",
+    "today": "Today's Reservations",
+    "list": "Reservation List",
+    "calendar": "Calendar",
+    "stats": "Statistics"
+  },
+  "notifications": {
+    "title": "Notifications",
+    "send": "Send Notification",
+    "history": "Send History",
+    "templates": "Notification Templates",
+    "settings": "Notification Settings"
+  },
+  "inquiries": {
+    "title": "Inquiries",
+    "list": "Inquiry List",
+    "direct": "Direct Inquiry",
+    "answered": "Answered",
+    "faq": "FAQ"
+  },
+  "contents": {
+    "title": "Contents",
+    "notices": "Notices",
+    "banners": "Banners",
+    "events": "Events",
+    "terms": "Terms of Service"
+  },
+  "templates": {
+    "title": "Templates",
+    "sms": "SMS",
+    "email": "Email",
+    "push": "Push",
+    "html": "HTML"
+  },
+  "timelines": {
+    "title": "Timelines",
+    "list": "Timeline"
+  },
+  "sessions": {
+    "title": "Sessions",
+    "list": "Session List"
+  },
+  "programs": {
+    "title": "Programs",
+    "list": "Programs"
+  },
+  "routines": {
+    "title": "Routines",
+    "list": "Routine"
+  },
+  "grounds": {
+    "title": "Facilities",
+    "info": "Facility Information",
+    "programs": "Program Definition",
+    "equipment": "Equipment/Facilities"
+  },
+  "admins": {
+    "title": "Administrators",
+    "list": "Administrator List",
+    "invitations": "Invitation Management"
+  },
+  "roles": {
+    "title": "Role Management"
+  },
+  "tabs": {
+    "all": "All",
+    "active": "Active",
+    "dormant": "Dormant",
+    "pendingWithdrawal": "Pending Withdrawal",
+    "pending": "Pending",
+    "confirmed": "Confirmed",
+    "cancelled": "Cancelled",
+    "completed": "Completed",
+    "ongoing": "Ongoing",
+    "upcoming": "Upcoming",
+    "ended": "Ended",
+    "oneTime": "One-time",
+    "recurring": "Recurring",
+    "past": "Past",
+    "full": "Full",
+    "available": "Available",
+    "exercise": "Exercise",
+    "inactive": "Inactive",
+    "expired": "Expired",
+    "archived": "Archived"
+  },
+  "fab": {
+    "todayReservation": "Today's Reservation",
+    "quickReservation": "Quick Reservation",
+    "userSearch": "Member Search"
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "required": "这是必填项",
+  "stringType": "必须是字符串",
+  "numberType": "必须是数字",
+  "booleanType": "必须是布尔值",
+  "arrayType": "必须是数组",
+  "objectType": "必须是对象",
+  "emailFormat": "请输入有效的电子邮件地址",
+  "minLength": "最少需要{{min}}个字符",
+  "maxLength": "最多允许{{max}}个字符",
+  "min": "最小值为{{min}}",
+  "max": "最大值为{{max}}",
+  "pattern": "格式不正确",
+  "enum": "无效的值",
+  "unique": "此值已在使用中",
+  "url": "请输入有效的URL",
+  "uuid": "请输入有效的UUID",
+  "date": "请输入有效的日期",
+  "positiveNumber": "必须是正数",
+  "negativeNumber": "必须是负数",
+  "integer": "必须是整数"
+}

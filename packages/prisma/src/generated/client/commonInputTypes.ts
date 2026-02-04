@@ -355,6 +355,23 @@ export type EnumRecurringDayOfWeekNullableWithAggregatesFilter<$PrismaModel = ne
   _max?: Prisma.NestedEnumRecurringDayOfWeekNullableFilter<$PrismaModel>
 }
 
+export type EnumLanguageCodeFilter<$PrismaModel = never> = {
+  equals?: $Enums.LanguageCode | Prisma.EnumLanguageCodeFieldRefInput<$PrismaModel>
+  in?: $Enums.LanguageCode[] | Prisma.ListEnumLanguageCodeFieldRefInput<$PrismaModel>
+  notIn?: $Enums.LanguageCode[] | Prisma.ListEnumLanguageCodeFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumLanguageCodeFilter<$PrismaModel> | $Enums.LanguageCode
+}
+
+export type EnumLanguageCodeWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.LanguageCode | Prisma.EnumLanguageCodeFieldRefInput<$PrismaModel>
+  in?: $Enums.LanguageCode[] | Prisma.ListEnumLanguageCodeFieldRefInput<$PrismaModel>
+  notIn?: $Enums.LanguageCode[] | Prisma.ListEnumLanguageCodeFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumLanguageCodeWithAggregatesFilter<$PrismaModel> | $Enums.LanguageCode
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumLanguageCodeFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumLanguageCodeFilter<$PrismaModel>
+}
+
 export type NestedStringFilter<$PrismaModel = never> = {
   equals?: string | Prisma.StringFieldRefInput<$PrismaModel>
   in?: string[] | Prisma.ListStringFieldRefInput<$PrismaModel>
@@ -680,6 +697,23 @@ export type NestedEnumRecurringDayOfWeekNullableWithAggregatesFilter<$PrismaMode
   _count?: Prisma.NestedIntNullableFilter<$PrismaModel>
   _min?: Prisma.NestedEnumRecurringDayOfWeekNullableFilter<$PrismaModel>
   _max?: Prisma.NestedEnumRecurringDayOfWeekNullableFilter<$PrismaModel>
+}
+
+export type NestedEnumLanguageCodeFilter<$PrismaModel = never> = {
+  equals?: $Enums.LanguageCode | Prisma.EnumLanguageCodeFieldRefInput<$PrismaModel>
+  in?: $Enums.LanguageCode[] | Prisma.ListEnumLanguageCodeFieldRefInput<$PrismaModel>
+  notIn?: $Enums.LanguageCode[] | Prisma.ListEnumLanguageCodeFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumLanguageCodeFilter<$PrismaModel> | $Enums.LanguageCode
+}
+
+export type NestedEnumLanguageCodeWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.LanguageCode | Prisma.EnumLanguageCodeFieldRefInput<$PrismaModel>
+  in?: $Enums.LanguageCode[] | Prisma.ListEnumLanguageCodeFieldRefInput<$PrismaModel>
+  notIn?: $Enums.LanguageCode[] | Prisma.ListEnumLanguageCodeFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumLanguageCodeWithAggregatesFilter<$PrismaModel> | $Enums.LanguageCode
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumLanguageCodeFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumLanguageCodeFilter<$PrismaModel>
 }
 
 

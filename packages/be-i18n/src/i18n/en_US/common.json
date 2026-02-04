@@ -1,0 +1,135 @@
+{
+  "success": "Success",
+  "created": "Created successfully",
+  "updated": "Updated successfully",
+  "deleted": "Deleted successfully",
+  "notFound": "Requested data not found",
+  "list": {
+    "success": "List retrieved successfully"
+  },
+  "read": {
+    "success": "Retrieved successfully"
+  },
+  "create": {
+    "success": "Created successfully"
+  },
+  "update": {
+    "success": "Updated successfully"
+  },
+  "delete": {
+    "success": "Deleted successfully"
+  },
+  "auth": {
+    "login": {
+      "success": "Login successful"
+    },
+    "logout": {
+      "success": "Logout successful"
+    },
+    "register": {
+      "success": "Registration successful"
+    },
+    "refresh": {
+      "success": "Token refreshed successfully"
+    },
+    "renew": {
+      "success": "Token renewed successfully"
+    },
+    "validate": {
+      "success": "Token validated successfully"
+    }
+  },
+  "user": {
+    "list": {
+      "success": "User list retrieved successfully"
+    },
+    "read": {
+      "success": "User details retrieved successfully"
+    },
+    "create": {
+      "success": "User registered successfully"
+    },
+    "update": {
+      "success": "User updated successfully"
+    },
+    "delete": {
+      "success": "User deleted successfully"
+    }
+  },
+  "role": {
+    "list": {
+      "success": "Role list retrieved successfully"
+    },
+    "read": {
+      "success": "Role retrieved successfully"
+    },
+    "create": {
+      "success": "Role created successfully"
+    },
+    "update": {
+      "success": "Role updated successfully"
+    },
+    "delete": {
+      "success": "Role deleted successfully"
+    }
+  },
+  "ability": {
+    "my": {
+      "success": "My permissions retrieved successfully"
+    },
+    "byRole": {
+      "success": "Permissions by role retrieved successfully"
+    },
+    "byUser": {
+      "success": "Exception permissions by user retrieved successfully"
+    },
+    "read": {
+      "success": "Permission retrieved successfully"
+    },
+    "create": {
+      "success": "Permission definition created successfully"
+    },
+    "update": {
+      "success": "Permission definition updated successfully"
+    },
+    "delete": {
+      "success": "Permission deleted successfully"
+    }
+  },
+  "action": {
+    "list": {
+      "success": "Action list retrieved successfully"
+    },
+    "read": {
+      "success": "Action retrieved successfully"
+    },
+    "create": {
+      "success": "Action created successfully"
+    },
+    "update": {
+      "success": "Action updated successfully"
+    },
+    "delete": {
+      "success": "Action deleted successfully"
+    }
+  },
+  "subject": {
+    "list": {
+      "success": "Subject list retrieved successfully"
+    },
+    "fields": {
+      "success": "Subject fields retrieved successfully"
+    },
+    "read": {
+      "success": "Subject retrieved successfully"
+    }
+  },
+  "ground": {
+    "list": {
+      "success": "Ground list retrieved successfully"
+    },
+    "mySpace": {
+      "success": "My space ground list retrieved successfully"
+    }
+  }
+}

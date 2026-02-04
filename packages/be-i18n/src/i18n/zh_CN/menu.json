@@ -1,0 +1,101 @@
+{
+  "dashboard": "仪表板",
+  "users": {
+    "title": "会员",
+    "list": "会员列表",
+    "grades": "等级管理",
+    "withdrawn": "退出会员"
+  },
+  "reservations": {
+    "title": "预约",
+    "today": "今日预约",
+    "list": "预约列表",
+    "calendar": "日历",
+    "stats": "统计"
+  },
+  "notifications": {
+    "title": "通知",
+    "send": "发送通知",
+    "history": "发送历史",
+    "templates": "通知模板",
+    "settings": "通知设置"
+  },
+  "inquiries": {
+    "title": "咨询",
+    "list": "咨询列表",
+    "direct": "一对一咨询",
+    "answered": "已答复",
+    "faq": "常见问题"
+  },
+  "contents": {
+    "title": "内容",
+    "notices": "公告",
+    "banners": "横幅",
+    "events": "活动",
+    "terms": "服务条款"
+  },
+  "templates": {
+    "title": "模板",
+    "sms": "短信",
+    "email": "电子邮件",
+    "push": "推送",
+    "html": "HTML"
+  },
+  "timelines": {
+    "title": "时间线",
+    "list": "时间线"
+  },
+  "sessions": {
+    "title": "会话",
+    "list": "会话列表"
+  },
+  "programs": {
+    "title": "项目",
+    "list": "项目"
+  },
+  "routines": {
+    "title": "例程",
+    "list": "例程"
+  },
+  "grounds": {
+    "title": "设施",
+    "info": "设施信息",
+    "programs": "项目定义",
+    "equipment": "设备/设施"
+  },
+  "admins": {
+    "title": "管理员",
+    "list": "管理员列表",
+    "invitations": "邀请管理"
+  },
+  "roles": {
+    "title": "角色管理"
+  },
+  "tabs": {
+    "all": "全部",
+    "active": "活跃",
+    "dormant": "休眠",
+    "pendingWithdrawal": "待退出",
+    "pending": "待处理",
+    "confirmed": "已确认",
+    "cancelled": "已取消",
+    "completed": "已完成",
+    "ongoing": "进行中",
+    "upcoming": "即将开始",
+    "ended": "已结束",
+    "oneTime": "一次性",
+    "recurring": "重复",
+    "past": "过去",
+    "full": "已满",
+    "available": "可用",
+    "exercise": "运动",
+    "inactive": "未激活",
+    "expired": "已过期",
+    "archived": "已归档"
+  },
+  "fab": {
+    "todayReservation": "今日预约",
+    "quickReservation": "快速预约",
+    "userSearch": "会员搜索"
+  }
+}

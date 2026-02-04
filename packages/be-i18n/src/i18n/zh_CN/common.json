@@ -1,0 +1,135 @@
+{
+  "success": "成功",
+  "created": "创建成功",
+  "updated": "更新成功",
+  "deleted": "删除成功",
+  "notFound": "未找到请求的数据",
+  "list": {
+    "success": "列表查询成功"
+  },
+  "read": {
+    "success": "查询成功"
+  },
+  "create": {
+    "success": "创建成功"
+  },
+  "update": {
+    "success": "更新成功"
+  },
+  "delete": {
+    "success": "删除成功"
+  },
+  "auth": {
+    "login": {
+      "success": "登录成功"
+    },
+    "logout": {
+      "success": "登出成功"
+    },
+    "register": {
+      "success": "注册成功"
+    },
+    "refresh": {
+      "success": "令牌刷新成功"
+    },
+    "renew": {
+      "success": "令牌更新成功"
+    },
+    "validate": {
+      "success": "令牌验证成功"
+    }
+  },
+  "user": {
+    "list": {
+      "success": "会员列表查询成功"
+    },
+    "read": {
+      "success": "会员详情查询成功"
+    },
+    "create": {
+      "success": "会员注册成功"
+    },
+    "update": {
+      "success": "会员更新成功"
+    },
+    "delete": {
+      "success": "会员删除成功"
+    }
+  },
+  "role": {
+    "list": {
+      "success": "角色列表查询成功"
+    },
+    "read": {
+      "success": "角色查询成功"
+    },
+    "create": {
+      "success": "角色创建成功"
+    },
+    "update": {
+      "success": "角色更新成功"
+    },
+    "delete": {
+      "success": "角色删除成功"
+    }
+  },
+  "ability": {
+    "my": {
+      "success": "我的权限查询成功"
+    },
+    "byRole": {
+      "success": "角色权限查询成功"
+    },
+    "byUser": {
+      "success": "用户异常权限查询成功"
+    },
+    "read": {
+      "success": "权限查询成功"
+    },
+    "create": {
+      "success": "权限定义创建成功"
+    },
+    "update": {
+      "success": "权限定义更新成功"
+    },
+    "delete": {
+      "success": "权限删除成功"
+    }
+  },
+  "action": {
+    "list": {
+      "success": "动作列表查询成功"
+    },
+    "read": {
+      "success": "动作查询成功"
+    },
+    "create": {
+      "success": "动作创建成功"
+    },
+    "update": {
+      "success": "动作更新成功"
+    },
+    "delete": {
+      "success": "动作删除成功"
+    }
+  },
+  "subject": {
+    "list": {
+      "success": "主体列表查询成功"
+    },
+    "fields": {
+      "success": "主体字段列表查询成功"
+    },
+    "read": {
+      "success": "主体查询成功"
+    }
+  },
+  "ground": {
+    "list": {
+      "success": "Ground列表查询成功"
+    },
+    "mySpace": {
+      "success": "我的空间Ground列表查询成功"
+    }
+  }
+}

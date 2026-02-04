@@ -70,7 +70,7 @@ export function String(
 	decorators.push(
 		MinLength(minLength, {
 			each,
-			message: VALIDATION_MESSAGES.MIN_LENGTH(minLength),
+			message: VALIDATION_MESSAGES.MIN_LENGTH,
 		}),
 	);
 
@@ -78,7 +78,7 @@ export function String(
 		decorators.push(
 			MaxLength(maxLength, {
 				each,
-				message: VALIDATION_MESSAGES.MAX_LENGTH(maxLength),
+				message: VALIDATION_MESSAGES.MAX_LENGTH,
 			}),
 		);
 	}

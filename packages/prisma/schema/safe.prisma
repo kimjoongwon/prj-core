@@ -13,7 +13,7 @@ model SafeWallet {
   spaceId      String            @map("space_id")
   creatorId    String?           @map("creator_id")
   space        Space             @relation(fields: [spaceId], references: [id])
-  creator      User?             @relation("SafeWalletCreator", fields: [creatorId], references: [id])
+  creator      User?             @relation(fields: [creatorId], references: [id])
   transactions SafeTransaction[]
 
   @@index([spaceId])

@@ -81,6 +81,7 @@ export const ModelName = {
   Activity: 'Activity',
   Task: 'Task',
   Exercise: 'Exercise',
+  Translation: 'Translation',
   User: 'User',
   UserClassification: 'UserClassification',
   UserAssociation: 'UserAssociation',
@@ -569,6 +570,20 @@ export const ExerciseScalarFieldEnum = {
 } as const
 
 export type ExerciseScalarFieldEnum = (typeof ExerciseScalarFieldEnum)[keyof typeof ExerciseScalarFieldEnum]
+
+
+export const TranslationScalarFieldEnum = {
+  id: 'id',
+  languageCode: 'languageCode',
+  key: 'key',
+  text: 'text',
+  category: 'category',
+  isTranslated: 'isTranslated',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type TranslationScalarFieldEnum = (typeof TranslationScalarFieldEnum)[keyof typeof TranslationScalarFieldEnum]
 
 
 export const UserScalarFieldEnum = {

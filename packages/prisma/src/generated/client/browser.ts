@@ -187,6 +187,11 @@ export type Task = Prisma.TaskModel
  */
 export type Exercise = Prisma.ExerciseModel
 /**
+ * Model Translation
+ * @displayName 번역
+ */
+export type Translation = Prisma.TranslationModel
+/**
  * Model User
  * @displayName 사용자
  */

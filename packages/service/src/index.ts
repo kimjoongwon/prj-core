@@ -18,6 +18,7 @@ export {
 } from "./subjects.service";
 export { TokenExpiryInfo, TokenService } from "./token.service";
 export { TokenStorageService } from "./token-storage.service";
+export { TranslationsService } from "./translations.service";
 export { UsersService } from "./users.service";
 export {
 	MaskingService,

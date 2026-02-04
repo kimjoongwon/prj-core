@@ -5,6 +5,7 @@ import {
 	RequestContextInterceptor,
 	ResponseEntityInterceptor,
 } from "@cocrepo/be-common";
+import { TranslationService } from "@cocrepo/be-i18n";
 import { TokenStorageService } from "@cocrepo/service";
 import {
 	ClassSerializerInterceptor,
@@ -15,12 +16,13 @@ import { HttpAdapterHost, Reflector } from "@nestjs/core";
 
 export function setNestApp<T extends INestApplication>(app: T): void {
 	const httpAdapterHost = app.get(HttpAdapterHost);
+	const translationService = app.get(TranslationService);
 
 	// =================================================================
 	// Global Exception Filters (모든 예외를 일관되게 처리)
 	// =================================================================
 	app.useGlobalFilters(
-		new AllExceptionsFilter(httpAdapterHost.httpAdapter), // 전역 예외 처리
+		new AllExceptionsFilter(translationService), // 전역 예외 처리
 	);
 
 	// =================================================================

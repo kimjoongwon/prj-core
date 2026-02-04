@@ -1,0 +1,135 @@
+{
+  "success": "成功",
+  "created": "作成完了",
+  "updated": "更新完了",
+  "deleted": "削除完了",
+  "notFound": "リクエストされたデータが見つかりません",
+  "list": {
+    "success": "リスト取得成功"
+  },
+  "read": {
+    "success": "取得成功"
+  },
+  "create": {
+    "success": "作成成功"
+  },
+  "update": {
+    "success": "更新成功"
+  },
+  "delete": {
+    "success": "削除成功"
+  },
+  "auth": {
+    "login": {
+      "success": "ログイン成功"
+    },
+    "logout": {
+      "success": "ログアウト成功"
+    },
+    "register": {
+      "success": "登録成功"
+    },
+    "refresh": {
+      "success": "トークン再発行成功"
+    },
+    "renew": {
+      "success": "トークン更新成功"
+    },
+    "validate": {
+      "success": "トークン検証成功"
+    }
+  },
+  "user": {
+    "list": {
+      "success": "会員リスト取得成功"
+    },
+    "read": {
+      "success": "会員詳細取得成功"
+    },
+    "create": {
+      "success": "会員登録成功"
+    },
+    "update": {
+      "success": "会員更新成功"
+    },
+    "delete": {
+      "success": "会員削除成功"
+    }
+  },
+  "role": {
+    "list": {
+      "success": "ロールリスト取得成功"
+    },
+    "read": {
+      "success": "ロール取得成功"
+    },
+    "create": {
+      "success": "ロール作成成功"
+    },
+    "update": {
+      "success": "ロール更新成功"
+    },
+    "delete": {
+      "success": "ロール削除成功"
+    }
+  },
+  "ability": {
+    "my": {
+      "success": "自分の権限取得成功"
+    },
+    "byRole": {
+      "success": "ロール別権限取得成功"
+    },
+    "byUser": {
+      "success": "ユーザー別例外権限取得成功"
+    },
+    "read": {
+      "success": "権限取得成功"
+    },
+    "create": {
+      "success": "権限定義作成成功"
+    },
+    "update": {
+      "success": "権限定義更新成功"
+    },
+    "delete": {
+      "success": "権限削除成功"
+    }
+  },
+  "action": {
+    "list": {
+      "success": "アクションリスト取得成功"
+    },
+    "read": {
+      "success": "アクション取得成功"
+    },
+    "create": {
+      "success": "アクション作成成功"
+    },
+    "update": {
+      "success": "アクション更新成功"
+    },
+    "delete": {
+      "success": "アクション削除成功"
+    }
+  },
+  "subject": {
+    "list": {
+      "success": "サブジェクトリスト取得成功"
+    },
+    "fields": {
+      "success": "サブジェクトフィールドリスト取得成功"
+    },
+    "read": {
+      "success": "サブジェクト取得成功"
+    }
+  },
+  "ground": {
+    "list": {
+      "success": "Groundリスト取得成功"
+    },
+    "mySpace": {
+      "success": "自分のスペースのGroundリスト取得成功"
+    }
+  }
+}

@@ -76,7 +76,7 @@ export class AuthController {
 		500,
 	)
 	@ApiResponseEntity(LoginResponseDto, HttpStatus.OK)
-	@ResponseMessage("로그인 성공")
+	@ResponseMessage("common.auth.login.success")
 	async login(
 		@Body() loginDto: LoginPayloadDto,
 		@Res({ passthrough: true }) res: Response,
@@ -99,7 +99,7 @@ export class AuthController {
 	@ApiResponseEntity(TokenRefreshResponseDto, HttpStatus.OK, {
 		withSetCookie: true,
 	})
-	@ResponseMessage("토큰 재발급 성공")
+	@ResponseMessage("common.auth.refresh.success")
 	async refreshToken(
 		@Req() req: Request,
 		@Res({ passthrough: true }) res: Response,
@@ -120,7 +120,7 @@ export class AuthController {
 	@ApiResponseEntity(TokenRefreshResponseDto, HttpStatus.OK, {
 		withSetCookie: true,
 	})
-	@ResponseMessage("토큰 갱신 성공")
+	@ResponseMessage("common.auth.renew.success")
 	async getNewToken(
 		@Req() req: Request & { user: User },
 		@Res({ passthrough: true }) res: Response,
@@ -149,7 +149,7 @@ export class AuthController {
 		500,
 	)
 	@ApiResponseEntity(TokenDto, HttpStatus.CREATED)
-	@ResponseMessage("회원가입 성공")
+	@ResponseMessage("common.auth.register.success")
 	async signUp(@Body() signUpDto: SignUpPayloadDto) {
 		return this.authFacade.signUp(signUpDto);
 	}
@@ -164,7 +164,7 @@ export class AuthController {
 	@ApiAuth()
 	@ApiErrors({ status: 401, message: AuthErrorMessages.TOKEN_INVALID })
 	@ApiResponseEntity(Boolean, HttpStatus.OK)
-	@ResponseMessage("토큰 유효성 검증 완료")
+	@ResponseMessage("common.auth.validate.success")
 	async verifyToken() {
 		return this.authFacade.verifyToken();
 	}
@@ -194,7 +194,7 @@ export class AuthController {
 		},
 	})
 	@ApiResponseEntity(Boolean, HttpStatus.OK)
-	@ResponseMessage("로그아웃 성공")
+	@ResponseMessage("common.auth.logout.success")
 	async logout(
 		@Req() req: Request & { user?: User },
 		@Res({ passthrough: true }) res: Response,

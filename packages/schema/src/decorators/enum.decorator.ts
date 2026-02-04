@@ -35,7 +35,7 @@ export function Enum(
 	const decorators: PropertyDecorator[] = [
 		IsEnum(enumType, {
 			each,
-			message: VALIDATION_MESSAGES.INVALID_ENUM(enumValues.map(String)),
+			message: VALIDATION_MESSAGES.INVALID_ENUM,
 		}),
 	];
 

@@ -1,0 +1,101 @@
+{
+  "dashboard": "대시보드",
+  "users": {
+    "title": "회원",
+    "list": "회원 목록",
+    "grades": "등급 관리",
+    "withdrawn": "탈퇴 회원"
+  },
+  "reservations": {
+    "title": "예약",
+    "today": "오늘 예약",
+    "list": "예약 목록",
+    "calendar": "캘린더",
+    "stats": "통계"
+  },
+  "notifications": {
+    "title": "알림",
+    "send": "알림 발송",
+    "history": "발송 내역",
+    "templates": "알림 템플릿",
+    "settings": "알림 설정"
+  },
+  "inquiries": {
+    "title": "문의",
+    "list": "문의 목록",
+    "direct": "1:1 문의",
+    "answered": "답변 완료",
+    "faq": "FAQ"
+  },
+  "contents": {
+    "title": "콘텐츠",
+    "notices": "공지사항",
+    "banners": "배너",
+    "events": "이벤트",
+    "terms": "이용약관"
+  },
+  "templates": {
+    "title": "템플릿",
+    "sms": "SMS",
+    "email": "이메일",
+    "push": "푸시",
+    "html": "HTML"
+  },
+  "timelines": {
+    "title": "타임라인",
+    "list": "타임라인"
+  },
+  "sessions": {
+    "title": "세션",
+    "list": "세션 목록"
+  },
+  "programs": {
+    "title": "프로그램",
+    "list": "프로그램"
+  },
+  "routines": {
+    "title": "루틴",
+    "list": "루틴"
+  },
+  "grounds": {
+    "title": "시설",
+    "info": "시설 정보",
+    "programs": "프로그램 정의",
+    "equipment": "장비/시설물"
+  },
+  "admins": {
+    "title": "관리자",
+    "list": "관리자 목록",
+    "invitations": "초대 관리"
+  },
+  "roles": {
+    "title": "역할 관리"
+  },
+  "tabs": {
+    "all": "전체",
+    "active": "활성",
+    "dormant": "휴면",
+    "pendingWithdrawal": "탈퇴대기",
+    "pending": "대기중",
+    "confirmed": "확정",
+    "cancelled": "취소",
+    "completed": "답변완료",
+    "ongoing": "진행중",
+    "upcoming": "예정",
+    "ended": "종료",
+    "oneTime": "일회성",
+    "recurring": "반복",
+    "past": "지난",
+    "full": "정원마감",
+    "available": "예약가능",
+    "exercise": "운동",
+    "inactive": "비활성",
+    "expired": "만료됨",
+    "archived": "보관됨"
+  },
+  "fab": {
+    "todayReservation": "오늘 예약",
+    "quickReservation": "빠른 예약",
+    "userSearch": "회원 검색"
+  }
+}

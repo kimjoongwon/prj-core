@@ -44,13 +44,13 @@ model User {
   classification     UserClassification?
   associations       UserAssociation[]
   // Creator 관계
-  createdCategories  Category[]          @relation("CategoryCreator")
-  createdGroups      Group[]             @relation("GroupCreator")
-  createdContents    Content[]           @relation("ContentCreator")
-  createdFiles       File[]              @relation("FileCreator")
-  createdTimelines   Timeline[]          @relation("TimelineCreator")
-  createdTasks       Task[]              @relation("TaskCreator")
-  createdSafeWallets SafeWallet[]        @relation("SafeWalletCreator")
+  createdCategories  Category[]
+  createdGroups      Group[]
+  createdContents    Content[]
+  createdFiles       File[]
+  createdTimelines   Timeline[]
+  createdTasks       Task[]
+  createdSafeWallets SafeWallet[]
 
   @@map("users")
 }

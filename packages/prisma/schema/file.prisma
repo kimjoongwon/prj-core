@@ -33,7 +33,7 @@ model File {
   parent         File?               @relation("FileParent", fields: [parentId], references: [id])
   children       File[]              @relation("FileParent")
   space          Space               @relation(fields: [spaceId], references: [id])
-  creator        User?               @relation("FileCreator", fields: [creatorId], references: [id])
+  creator        User?               @relation(fields: [creatorId], references: [id])
   associations   FileAssociation[]
   classification FileClassification?
 

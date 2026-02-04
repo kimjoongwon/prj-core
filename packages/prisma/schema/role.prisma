@@ -20,20 +20,20 @@
 // @description: 권한 체계를 정의하는 핵심 역할 도메인 객체
 /// @displayName 역할
 model Role {
-  id             String              @id @default(uuid())
-  seq            Int                 @unique @default(autoincrement())
-  createdAt      DateTime            @default(now()) @map("created_at")
-  updatedAt      DateTime?           @updatedAt @map("updated_at") @db.Timestamptz(6)
-  removedAt      DateTime?           @map("removed_at") @db.Timestamptz(6)
+  id        String    @id @default(uuid())
+  seq       Int       @unique @default(autoincrement())
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime? @updatedAt @map("updated_at") @db.Timestamptz(6)
+  removedAt DateTime? @map("removed_at") @db.Timestamptz(6)
 
   /// @displayName 역할 식별자
-  name           String              @unique
+  name        String  @unique
   /// @displayName 표시명
-  displayName    String?             @map("display_name")
+  displayName String? @map("display_name")
   /// @displayName 설명
-  description    String?
+  description String?
   /// @displayName 시스템 역할 여부
-  isSystem       Boolean             @default(false) @map("is_system")
+  isSystem    Boolean @default(false) @map("is_system")
 
   assignments    Assignment[]
   associations   RoleAssociation[]

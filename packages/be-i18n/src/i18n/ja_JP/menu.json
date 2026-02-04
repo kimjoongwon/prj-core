@@ -1,0 +1,101 @@
+{
+  "dashboard": "ダッシュボード",
+  "users": {
+    "title": "会員",
+    "list": "会員リスト",
+    "grades": "グレード管理",
+    "withdrawn": "退会会員"
+  },
+  "reservations": {
+    "title": "予約",
+    "today": "今日の予約",
+    "list": "予約リスト",
+    "calendar": "カレンダー",
+    "stats": "統計"
+  },
+  "notifications": {
+    "title": "通知",
+    "send": "通知送信",
+    "history": "送信履歴",
+    "templates": "通知テンプレート",
+    "settings": "通知設定"
+  },
+  "inquiries": {
+    "title": "お問い合わせ",
+    "list": "お問い合わせリスト",
+    "direct": "1:1お問い合わせ",
+    "answered": "回答済み",
+    "faq": "よくある質問"
+  },
+  "contents": {
+    "title": "コンテンツ",
+    "notices": "お知らせ",
+    "banners": "バナー",
+    "events": "イベント",
+    "terms": "利用規約"
+  },
+  "templates": {
+    "title": "テンプレート",
+    "sms": "SMS",
+    "email": "メール",
+    "push": "プッシュ",
+    "html": "HTML"
+  },
+  "timelines": {
+    "title": "タイムライン",
+    "list": "タイムライン"
+  },
+  "sessions": {
+    "title": "セッション",
+    "list": "セッションリスト"
+  },
+  "programs": {
+    "title": "プログラム",
+    "list": "プログラム"
+  },
+  "routines": {
+    "title": "ルーティン",
+    "list": "ルーティン"
+  },
+  "grounds": {
+    "title": "施設",
+    "info": "施設情報",
+    "programs": "プログラム定義",
+    "equipment": "設備/施設"
+  },
+  "admins": {
+    "title": "管理者",
+    "list": "管理者リスト",
+    "invitations": "招待管理"
+  },
+  "roles": {
+    "title": "ロール管理"
+  },
+  "tabs": {
+    "all": "全体",
+    "active": "アクティブ",
+    "dormant": "休眠",
+    "pendingWithdrawal": "退会待ち",
+    "pending": "待機中",
+    "confirmed": "確定",
+    "cancelled": "キャンセル",
+    "completed": "完了",
+    "ongoing": "進行中",
+    "upcoming": "予定",
+    "ended": "終了",
+    "oneTime": "一回限り",
+    "recurring": "繰り返し",
+    "past": "過去",
+    "full": "満員",
+    "available": "予約可能",
+    "exercise": "運動",
+    "inactive": "非アクティブ",
+    "expired": "期限切れ",
+    "archived": "アーカイブ済み"
+  },
+  "fab": {
+    "todayReservation": "今日の予約",
+    "quickReservation": "クイック予約",
+    "userSearch": "会員検索"
+  }
+}

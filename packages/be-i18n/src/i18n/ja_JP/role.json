@@ -1,0 +1,22 @@
+{
+  "SUPER_ADMIN": {
+    "name": "スーパー管理者",
+    "description": "システムのすべての権限を持つ最高管理者"
+  },
+  "ADMIN": {
+    "name": "管理者",
+    "description": "一般的な管理業務を行う管理者"
+  },
+  "USER": {
+    "name": "一般ユーザー",
+    "description": "基本ユーザーロール"
+  },
+  "category": {
+    "COMMON": "共通",
+    "ADMIN": "管理者",
+    "USER": "ユーザー",
+    "MANAGER": "マネージャー",
+    "DEVELOPER": "開発者",
+    "GUEST": "ゲスト"
+  }
+}

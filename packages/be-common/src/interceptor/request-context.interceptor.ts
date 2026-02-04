@@ -11,6 +11,7 @@ import {
 import { Request } from "express";
 import { ClsService } from "nestjs-cls";
 import { Observable } from "rxjs";
+import { parseAcceptLanguage } from "@cocrepo/be-i18n";
 import { AppLogger } from "../util/app-logger.util";
 
 @Injectable()
@@ -39,6 +40,14 @@ export class RequestContextInterceptor implements NestInterceptor {
 				this.cls.set(CONTEXT_KEYS.AUTH_USER, undefined);
 				this.cls.set(CONTEXT_KEYS.USER_ID, undefined);
 			}
+
+			// 언어 설정 (Accept-Language 또는 x-language 헤더)
+			const languageFromHeader =
+				(request.headers["x-language"] as string | undefined) ||
+				(request.headers["accept-language"] as string | undefined);
+
+			const language = parseAcceptLanguage(languageFromHeader);
+			this.cls.set(CONTEXT_KEYS.LANGUAGE, language);
 
 			// Space ID 설정 (X-Space-ID 헤더 필수)
 			// 모든 인증된 사용자는 x-space-id 헤더를 포함해야 함
@@ -85,6 +94,7 @@ export class RequestContextInterceptor implements NestInterceptor {
 				userId: user.id,
 				spaceId: spaceIdFromHeader.slice(-8),
 				tenantId: tenant.id.slice(-8),
+				language,
 			});
 		} catch (error) {
 			// 의도적으로 발생시킨 HTTP 예외는 다시 throw

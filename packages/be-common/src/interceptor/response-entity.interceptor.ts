@@ -9,13 +9,17 @@ import {
 } from "@nestjs/common";
 import { HTTP_CODE_METADATA } from "@nestjs/common/constants";
 import { Reflector } from "@nestjs/core";
-import { Observable } from "rxjs";
-import { map } from "rxjs/operators";
+import { Observable, from } from "rxjs";
+import { map, switchMap } from "rxjs/operators";
 import { isWrappedResponse } from "../util/response.util";
+import { TranslationService } from "@cocrepo/be-i18n";
 
 @Injectable()
 export class ResponseEntityInterceptor implements NestInterceptor {
-	constructor(private readonly reflector: Reflector) {}
+	constructor(
+		private readonly reflector: Reflector,
+		private readonly translationService: TranslationService,
+	) {}
 
 	intercept(context: ExecutionContext, next: CallHandler): Observable<unknown> {
 		const handler = context.getHandler();
@@ -33,7 +37,7 @@ export class ResponseEntityInterceptor implements NestInterceptor {
 			this.reflector.get<string>(RESPONSE_MESSAGE_METADATA, classRef);
 
 		return next.handle().pipe(
-			map((value) => {
+			switchMap(async (value) => {
 				// NO_CONTENT(204) 처리 - body 전송 안함
 				if (defaultStatus === HttpStatus.NO_CONTENT) {
 					return undefined;
@@ -101,8 +105,14 @@ export class ResponseEntityInterceptor implements NestInterceptor {
 					}
 				}
 
+				// 메시지 번역
 				if (!message) {
-					message = status === HttpStatus.CREATED ? "생성 완료" : "성공";
+					const defaultKey =
+						status === HttpStatus.CREATED ? "common.created" : "common.success";
+					message = await this.translationService.translate(defaultKey);
+				} else {
+					// 메시지가 번역 키인 경우 번역
+					message = await this.translationService.translate(message);
 				}
 
 				// 확장 필드가 있으면 extras로 전달

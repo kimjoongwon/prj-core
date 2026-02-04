@@ -14,7 +14,7 @@ model Timeline {
   name        String /// 타임라인 이름 (예: "2025년 10월 첫째 주", "가을 시즌")
   description String? /// 타임라인 설명
   space       Space     @relation(fields: [spaceId], references: [id]) /// Space 관계
-  creator     User?     @relation("TimelineCreator", fields: [creatorId], references: [id]) /// 생성자 관계
+  creator     User?     @relation(fields: [creatorId], references: [id]) /// 생성자 관계
   sessions    Session[] /// 세션 목록
 
   @@index([spaceId])
@@ -135,7 +135,7 @@ model Task {
   spaceId    String     @map("space_id") /// Space ID
   creatorId  String?    @map("creator_id") /// 생성자 ID
   space      Space      @relation(fields: [spaceId], references: [id]) /// Space 관계
-  creator    User?      @relation("TaskCreator", fields: [creatorId], references: [id]) /// 생성자 관계
+  creator    User?      @relation(fields: [creatorId], references: [id]) /// 생성자 관계
   activities Activity[] /// 이 Task를 사용하는 Activity 목록 (여러 루틴에서 재사용 가능)
   exercise   Exercise? /// 운동 도메인 확장 (1:1, optional - 미래에 treatment, service 등 추가 가능)
 

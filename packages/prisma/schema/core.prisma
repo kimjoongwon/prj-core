@@ -34,7 +34,7 @@ model Category {
   parent               Category?             @relation("CategoryToCategory", fields: [parentId], references: [id])
   children             Category[]            @relation("CategoryToCategory")
   space                Space                 @relation(fields: [spaceId], references: [id])
-  creator              User?                 @relation("CategoryCreator", fields: [creatorId], references: [id])
+  creator              User?                 @relation(fields: [creatorId], references: [id])
   fileClassifications  FileClassification[]
   roleClassifications  RoleClassification[]
   spaceClassifications SpaceClassification[]
@@ -63,7 +63,7 @@ model Group {
   spaceId           String             @map("space_id")
   creatorId         String?            @map("creator_id")
   space             Space              @relation(fields: [spaceId], references: [id])
-  creator           User?              @relation("GroupCreator", fields: [creatorId], references: [id])
+  creator           User?              @relation(fields: [creatorId], references: [id])
   fileAssociations  FileAssociation[]
   roleAssociations  RoleAssociation[]
   spaceAssociations SpaceAssociation[]
@@ -150,7 +150,7 @@ model Content {
   spaceId     String    @map("space_id")
   creatorId   String?   @map("creator_id")
   space       Space     @relation(fields: [spaceId], references: [id])
-  creator     User?     @relation("ContentCreator", fields: [creatorId], references: [id])
+  creator     User?     @relation(fields: [creatorId], references: [id])
   posts       Post[]
 
   @@index([spaceId])

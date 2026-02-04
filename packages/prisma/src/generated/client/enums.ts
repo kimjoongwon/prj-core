@@ -111,3 +111,13 @@ export const GroupTypes = {
 } as const
 
 export type GroupTypes = (typeof GroupTypes)[keyof typeof GroupTypes]
+
+
+export const LanguageCode = {
+  ko_KR: 'ko_KR',
+  en_US: 'en_US',
+  zh_CN: 'zh_CN',
+  ja_JP: 'ja_JP'
+} as const
+
+export type LanguageCode = (typeof LanguageCode)[keyof typeof LanguageCode]
