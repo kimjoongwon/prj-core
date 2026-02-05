@@ -16,7 +16,7 @@
     "type-check": "tsc --noEmit",
     "generate": "prisma generate",
     "build": "rm -rf dist && tsc",
-    "start:dev": "rm -rf dist && tsc --watch",
+    "start:dev": "tsc --watch",
     "format": "biome format --write .",
     "db:pull": "prisma db pull",
     "db:pull:stg": "cross-env DATABASE_URL=$DATABASE_URL_STG DIRECT_URL=$DIRECT_URL_STG prisma db pull",

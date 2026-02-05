@@ -18,7 +18,7 @@
     }
   },
   "scripts": {
-    "start:dev": "rm -rf dist && tsc --watch",
+    "start:dev": "tsc --watch",
     "build": "rm -rf dist && tsc",
     "format": "biome format --write ."
   },

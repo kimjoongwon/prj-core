@@ -1,4 +1,4 @@
-import type { ActionDto } from "@cocrepo/dto";
+import type { ActionDto } from "./action.dto";
 
 /**
  * 자주 사용하는 exclude 필드 프리셋

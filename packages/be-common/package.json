@@ -13,7 +13,7 @@
   },
   "scripts": {
     "build": "rm -rf dist && tsc",
-    "start:dev": "rm -rf dist && tsc --watch",
+    "start:dev": "tsc --watch",
     "type-check": "tsc --noEmit",
     "test": "jest",
     "test:watch": "jest --watch",
