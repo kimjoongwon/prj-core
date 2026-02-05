@@ -1,5 +1,5 @@
 import { PRISMA_SERVICE_TOKEN } from "@cocrepo/constant";
-import { createPrismaClient } from "@cocrepo/service";
+import { PrismaService, createPrismaClient } from "@cocrepo/service";
 import { Global, Logger, Module, OnModuleInit } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
 
@@ -11,8 +11,12 @@ import { ConfigService } from "@nestjs/config";
 			useFactory: createPrismaClient,
 			inject: [ConfigService],
 		},
+		{
+			provide: PrismaService,
+			useExisting: PRISMA_SERVICE_TOKEN,
+		},
 	],
-	exports: [PRISMA_SERVICE_TOKEN],
+	exports: [PRISMA_SERVICE_TOKEN, PrismaService],
 })
 export class PrismaModule implements OnModuleInit {
 	private readonly logger = new Logger(PrismaModule.name);

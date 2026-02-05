@@ -4,6 +4,7 @@ import {
 	type ArgumentsHost,
 	Catch,
 	HttpException,
+	type HttpServer,
 	HttpStatus,
 	Logger,
 } from "@nestjs/common";
@@ -15,8 +16,11 @@ import { TranslationService } from "@cocrepo/be-i18n";
 export class AllExceptionsFilter extends BaseExceptionFilter {
 	private readonly logger = new Logger(AllExceptionsFilter.name);
 
-	constructor(private readonly translationService: TranslationService) {
-		super();
+	constructor(
+		applicationRef: HttpServer,
+		private readonly translationService: TranslationService,
+	) {
+		super(applicationRef);
 	}
 
 	async catch(exception: unknown, host: ArgumentsHost) {

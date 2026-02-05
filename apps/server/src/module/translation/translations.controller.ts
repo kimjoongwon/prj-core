@@ -168,25 +168,39 @@ export class TranslationsController {
 	 * 번역 캐시 무효화
 	 * DELETE /api/v1/translations/cache
 	 */
-	@Delete("cache/:languageCode?")
+	@Delete("cache")
+	@HttpCode(HttpStatus.NO_CONTENT)
+	@ApiOperation({
+		operationId: "invalidateAllTranslationCache",
+		summary: "전체 번역 캐시 무효화",
+		description:
+			"Redis에 캐시된 모든 번역 데이터를 무효화합니다. SUPER_ADMIN 전용.",
+	})
+	@ApiAuth()
+	@ApiErrors(500)
+	@ResponseMessage("common.translation.cache.invalidated")
+	async invalidateAllCache(): Promise<void> {
+		await this.translationsFacade.invalidateCache(undefined as any);
+	}
+
+	@Delete("cache/:languageCode")
 	@HttpCode(HttpStatus.NO_CONTENT)
 	@ApiOperation({
 		operationId: "invalidateTranslationCache",
-		summary: "번역 캐시 무효화",
+		summary: "언어별 번역 캐시 무효화",
 		description:
-			"Redis에 캐시된 번역 데이터를 무효화합니다. languageCode가 없으면 전체 캐시를 무효화합니다. SUPER_ADMIN 전용.",
+			"Redis에 캐시된 특정 언어의 번역 데이터를 무효화합니다. SUPER_ADMIN 전용.",
 	})
 	@ApiAuth()
 	@ApiParam({
 		name: "languageCode",
-		description: "언어 코드 (선택적)",
+		description: "언어 코드",
 		type: String,
-		required: false,
 	})
 	@ApiErrors(500)
 	@ResponseMessage("common.translation.cache.invalidated")
 	async invalidateCache(
-		@Param("languageCode") languageCode?: string,
+		@Param("languageCode") languageCode: string,
 	): Promise<void> {
 		await this.translationsFacade.invalidateCache(
 			languageCode as any,

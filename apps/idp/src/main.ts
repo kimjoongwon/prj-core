@@ -1,9 +1,9 @@
+import { join } from "node:path";
 import { NestFactory } from "@nestjs/core";
 import type { NestExpressApplication } from "@nestjs/platform-express";
 import { DocumentBuilder, SwaggerModule } from "@nestjs/swagger";
 import cookieParser from "cookie-parser";
 import { Logger } from "nestjs-pino";
-import { join } from "node:path";
 import { AppModule } from "./module/app.module";
 import { setNestApp } from "./setNestApp";
 

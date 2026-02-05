@@ -30,7 +30,6 @@ export {
 	CHECK_POLICIES_KEY,
 	CheckPolicies,
 	JwtAuthGuard,
-	LocalAuthGuard,
 	PoliciesGuard,
 	PublicGuard,
 	RoleCategoryGuard,
@@ -59,7 +58,7 @@ export {
 // Providers
 export { GeneratorProvider } from "./provider";
 // Strategies
-export { JwtStrategy, LocalStrategy } from "./strategy";
+export { JwtStrategy } from "./strategy";
 export type { ResponseWrapOptions, WrappedResponse } from "./util";
 // Utils
 export {

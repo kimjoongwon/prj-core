@@ -36,10 +36,7 @@ export class OidcController {
 	 * 모든 OIDC 엔드포인트를 oidc-provider에 위임
 	 */
 	@All("*path")
-	async handleOidc(
-		@Req() req: Request,
-		@Res() res: Response,
-	): Promise<void> {
+	async handleOidc(@Req() req: Request, @Res() res: Response): Promise<void> {
 		const provider = this.oidcProviderService.getProvider();
 		const callback = provider.callback();
 

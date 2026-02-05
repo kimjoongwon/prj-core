@@ -1,4 +1,4 @@
-import { JwtStrategy, LocalStrategy } from "@cocrepo/be-common";
+import { JwtStrategy } from "@cocrepo/be-common";
 import { AuthFacade } from "@cocrepo/facade";
 import {
 	RolesRepository,
@@ -22,7 +22,6 @@ import { AuthController } from "./auth.controller";
 		TokenService,
 		TokenStorageService,
 		RedisService,
-		LocalStrategy,
 		JwtStrategy,
 		UsersService,
 		UsersRepository,

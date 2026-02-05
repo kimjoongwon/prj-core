@@ -26,6 +26,13 @@
         <% } %>
       </div>
 
+      <!-- Dev Mode Badge -->
+      <% if (locals.isDev) { %>
+        <div class="bg-yellow-500/20 border border-yellow-500/50 text-yellow-400 p-3 rounded-lg mb-6 text-center text-sm">
+          DEV MODE - Super Admin 계정이 자동 입력되었습니다
+        </div>
+      <% } %>
+
       <!-- Error Message -->
       <% if (locals.error) { %>
         <div class="bg-red-500/20 border border-red-500/50 text-red-400 p-4 rounded-lg mb-6">
@@ -49,6 +56,7 @@
             autocomplete="email"
             class="w-full px-4 py-3 bg-gray-700/50 border border-gray-600 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all placeholder-gray-400"
             placeholder="your@email.com"
+            <% if (locals.isDev) { %>value="ceo@f45training.co.kr"<% } %>
           >
         </div>
 
@@ -61,6 +69,7 @@
             autocomplete="current-password"
             class="w-full px-4 py-3 bg-gray-700/50 border border-gray-600 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all placeholder-gray-400"
             placeholder="********"
+            <% if (locals.isDev) { %>value="SuperAdmin123!@#"<% } %>
           >
         </div>
 

@@ -1,11 +1,11 @@
 import { Token } from "@cocrepo/constant";
 import { applyDecorators } from "@nestjs/common";
-import { ApiCookieAuth, ApiHeader } from "@nestjs/swagger";
+import { ApiCookieAuth, ApiHeader, ApiSecurity } from "@nestjs/swagger";
 
 /**
- * Access Token 쿠키 인증 문서화
+ * API 인증 문서화 (Cookie + OAuth2 병행)
  * @description @Public 데코레이터가 없는 일반 보호 엔드포인트에 사용
- * JWT Access Token이 쿠키로 전송되어야 함을 명시
+ * Cookie 또는 OAuth2 Bearer Token으로 인증 가능함을 명시
  * X-Space-ID 헤더가 필요함을 명시 (SUPER_ADMIN이 아닌 경우 필수)
  *
  * @example
@@ -16,6 +16,7 @@ import { ApiCookieAuth, ApiHeader } from "@nestjs/swagger";
 export const ApiAuth = () =>
 	applyDecorators(
 		ApiCookieAuth(Token.ACCESS),
+		ApiSecurity("oauth2", ["openid", "profile", "email", "roles"]),
 		ApiHeader({
 			name: "X-Space-ID",
 			description:

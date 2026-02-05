@@ -10,6 +10,7 @@ import { RedisService } from "./redis.service";
 const REDIS_KEYS = {
 	REFRESH_TOKEN: "refresh:",
 	BLACKLIST: "blacklist:",
+	OIDC_STATE: "oidc:state:",
 } as const;
 
 /**
@@ -131,6 +132,31 @@ export class TokenStorageService {
 	async invalidateAllUserTokens(userId: string): Promise<void> {
 		await this.deleteRefreshToken(userId);
 		this.logger.log(`사용자 ${userId}의 모든 토큰 무효화됨`);
+	}
+
+	/**
+	 * OIDC State를 Redis에 저장 (CSRF 방지)
+	 */
+	async saveOidcState(state: string, ttlSeconds = 600): Promise<void> {
+		const key = `${REDIS_KEYS.OIDC_STATE}${state}`;
+		await this.redisService.set(key, "1", ttlSeconds);
+		this.logger.debug(`OIDC state 저장: ttl=${ttlSeconds}s`);
+	}
+
+	/**
+	 * OIDC State 검증 및 소비 (일회용)
+	 * 존재하면 즉시 삭제 후 true, 없으면 false
+	 */
+	async validateAndConsumeOidcState(state: string): Promise<boolean> {
+		const key = `${REDIS_KEYS.OIDC_STATE}${state}`;
+		const exists = await this.redisService.exists(key);
+
+		if (!exists) {
+			return false;
+		}
+
+		await this.redisService.del(key);
+		return true;
 	}
 
 	/**

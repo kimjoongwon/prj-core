@@ -7,6 +7,7 @@ import {
 	RequestContextInterceptor,
 	ResponseEntityInterceptor,
 } from "@cocrepo/be-common";
+import { I18nModule } from "@cocrepo/be-i18n";
 import {
 	Logger,
 	type MiddlewareConsumer,
@@ -31,6 +32,7 @@ import { UsersModule } from "./users";
 	imports: [
 		...globalModules,
 		PrismaModule,
+		I18nModule,
 		AuthModule,
 		GroundsModule,
 		UsersModule,

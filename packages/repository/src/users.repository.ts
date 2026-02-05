@@ -88,6 +88,21 @@ export class UsersRepository {
 	}
 
 	/**
+	 * 이메일로 인증용 경량 조회 (id, email, password만)
+	 * 로그인 비밀번호 검증 시 deep join 없이 최소 필드만 반환합니다.
+	 */
+	async findByEmailForAuth(
+		email: string,
+	): Promise<{ id: string; email: string; password: string } | null> {
+		this.logger.debug(`인증용 이메일 조회: ${email}`);
+
+		return this.txHost.tx.user.findUnique({
+			where: { email },
+			select: { id: true, email: true, password: true },
+		});
+	}
+
+	/**
 	 * 이메일로 조회 (기본 정보만)
 	 */
 	async findByEmail(email: string): Promise<User | null> {

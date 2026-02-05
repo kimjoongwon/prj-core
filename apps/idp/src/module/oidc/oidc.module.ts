@@ -1,24 +1,26 @@
 import { Module, type OnModuleInit } from "@nestjs/common";
-import { OidcProviderService } from "./oidc-provider.service";
-import { OidcController } from "./oidc.controller";
 import { AccountService } from "./account.service";
-import { PrismaOidcAdapterFactory } from "./oidc.adapter";
+import { DirectUserRepository } from "./direct-user.repository";
+import { RedisOidcAdapterFactory } from "./oidc.adapter";
+import { OidcController } from "./oidc.controller";
 import { OidcClientRepository } from "./oidc-client.repository";
-import { UsersRepository } from "@cocrepo/repository";
-import { UsersService } from "@cocrepo/service";
+import { OidcConfigurationService } from "./oidc-configuration.service";
+import { OidcProviderService } from "./oidc-provider.service";
 
 @Module({
 	controllers: [OidcController],
 	providers: [
+		// OIDC Core
 		OidcProviderService,
+		OidcConfigurationService,
 		AccountService,
-		PrismaOidcAdapterFactory,
+
+		// Data Access (Global PrismaClient 직접 주입 - IDP는 tenant 컨텍스트 없이 동작)
+		RedisOidcAdapterFactory,
 		OidcClientRepository,
-		// User
-		UsersRepository,
-		UsersService,
+		DirectUserRepository,
 	],
-	exports: [OidcProviderService],
+	exports: [OidcProviderService, DirectUserRepository],
 })
 export class OidcModule implements OnModuleInit {
 	constructor(private readonly oidcProviderService: OidcProviderService) {}

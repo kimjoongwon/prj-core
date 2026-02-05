@@ -12,6 +12,7 @@ export * from "./file.dto";
 export * from "./file-association.dto";
 export * from "./file-classification.dto";
 export * from "./grants";
+export * from "./oidc";
 export * from "./ground.dto";
 export * from "./group.dto";
 export * from "./profile.dto";

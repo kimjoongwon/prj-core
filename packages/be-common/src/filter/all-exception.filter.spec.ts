@@ -41,17 +41,18 @@ describe("AllExceptionsFilter", () => {
 			httpAdapter: {
 				reply: jest.fn(),
 				getRequestUrl: jest.fn(),
+				isHeadersSent: jest.fn().mockReturnValue(false),
 			},
 		} as any;
 
-		const module: TestingModule = await Test.createTestingModule({
-			providers: [
-				AllExceptionsFilter,
-				{ provide: HttpAdapterHost, useValue: mockHttpAdapterHost },
-			],
-		}).compile();
+		const mockTranslationService = {
+			translate: jest.fn().mockImplementation((key: string) => key),
+		};
 
-		filter = module.get<AllExceptionsFilter>(AllExceptionsFilter);
+		filter = new AllExceptionsFilter(
+			mockHttpAdapterHost.httpAdapter as any,
+			mockTranslationService as any,
+		);
 
 		// Logger.error 모킹
 		loggerErrorSpy = jest.spyOn(Logger.prototype, "error").mockImplementation();

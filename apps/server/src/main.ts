@@ -49,17 +49,38 @@ async function bootstrap() {
 	// =================================================================
 	// 5. API 문서 설정 (Swagger)
 	// =================================================================
+	const oidcIssuer = process.env.OIDC_ISSUER || "http://localhost:3007";
+
 	const config = new DocumentBuilder()
 		.setTitle(process.env.APP_NAME || "NestJS Application")
 		.setVersion("1.0.0")
 		.setDescription(
-			"API 문서입니다. 대부분의 엔드포인트는 쿠키 기반 JWT 인증이 필요합니다. (@Public 데코레이터가 있는 엔드포인트는 예외)",
+			"API 문서입니다. 대부분의 엔드포인트는 인증이 필요합니다.\n\n" +
+				"**인증 방법:**\n" +
+				"1. OAuth2 (권장) - Authorize 버튼 클릭 후 OIDC 로그인\n" +
+				"2. Cookie - 브라우저에서 로그인 후 쿠키 자동 전송",
 		)
 		.addCookieAuth(Token.ACCESS, {
 			type: "apiKey",
 			in: "cookie",
 			name: Token.ACCESS,
 			description: "JWT Access Token (HttpOnly 쿠키로 자동 전송)",
+		})
+		.addOAuth2({
+			type: "oauth2",
+			description: "OIDC Authorization Code + PKCE 인증",
+			flows: {
+				authorizationCode: {
+					authorizationUrl: `${oidcIssuer}/oidc/auth`,
+					tokenUrl: `${oidcIssuer}/oidc/token`,
+					scopes: {
+						openid: "OpenID Connect 기본 인증",
+						profile: "프로필 정보 (이름)",
+						email: "이메일 주소",
+						roles: "역할 및 Space 정보",
+					},
+				},
+			},
 		})
 		.build();
 
@@ -69,12 +90,24 @@ async function bootstrap() {
 	};
 
 	const document = SwaggerModule.createDocument(app, config, options);
-	SwaggerModule.setup("api", app, document); // /api 경로에서 문서 제공
+
+	const port = process.env.APP_PORT || 3006;
+
+	SwaggerModule.setup("api", app, document, {
+		swaggerOptions: {
+			persistAuthorization: true,
+			oauth2RedirectUrl: `http://localhost:${port}/api/oauth2-redirect.html`,
+			initOAuth: {
+				clientId: "prj-core-swagger",
+				scopes: ["openid", "profile", "email", "roles"],
+				usePkceWithAuthorizationCodeGrant: true,
+			},
+		},
+	});
 
 	// =================================================================
 	// 6. 서버 시작 및 로깅
 	// =================================================================
-	const port = process.env.APP_PORT || 3006;
 	await app.listen(port);
 
 	const logger = app.get(Logger);

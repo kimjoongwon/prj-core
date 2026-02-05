@@ -6,13 +6,33 @@
  * DB에 저장된 권한 정보를 기반으로 런타임에 권한을 구성합니다.
  */
 import { CONTEXT_KEYS } from "@cocrepo/constant";
-import { Ability as AbilityEntity } from "@cocrepo/entity";
 import { GrantsRepository } from "@cocrepo/repository";
 import { Injectable, Logger } from "@nestjs/common";
 import { Ability, AbilityBuilder } from "@casl/ability";
 import type { UserDto } from "@cocrepo/dto";
+import type {
+	Ability as PrismaAbility,
+	Action as PrismaAction,
+	Subject as PrismaSubject,
+} from "@cocrepo/prisma";
 import { ClsService } from "nestjs-cls";
 import type { Actions, AppAbility, AppAbilityClass, Subjects } from "./types";
+
+/**
+ * Grant에서 추출한 Ability 데이터와 priority를 결합한 타입
+ *
+ * @description
+ * Prisma에서 조회한 Ability 데이터를 spread하고 Grant.priority를 추가하면
+ * AbilityEntity 클래스의 메서드(isAllowed, isDenied 등)를 잃게 됩니다.
+ * mergeAbilities/applyAbilityRule에서는 메서드가 필요 없으므로
+ * Prisma의 데이터 타입에 관계 필드와 required priority를 추가한
+ * 구조적 타입을 사용합니다.
+ */
+type AbilityWithPriority = PrismaAbility & {
+	priority: number;
+	subject?: PrismaSubject;
+	action?: PrismaAction;
+};
 
 /**
  * 템플릿 변수 파싱에 사용되는 허용된 변수 목록
@@ -90,7 +110,7 @@ export class CaslAbilityFactory {
 			roleId,
 		]);
 		// Grant에서 Ability 추출 (Grant.priority를 Ability.priority로 복사)
-		const roleAbilities = roleGrants
+		const roleAbilities: AbilityWithPriority[] = roleGrants
 			.filter((grant) => grant.ability)
 			.map((grant) => ({
 				...grant.ability!,
@@ -103,7 +123,7 @@ export class CaslAbilityFactory {
 		// 2. DB에서 User에 해당하는 활성화된 예외 Grants 조회 (Ability 포함)
 		const userGrants = await this.grantsRepository.findActiveByUserId(user.id);
 		// Grant에서 Ability 추출 (Grant.priority를 Ability.priority로 복사)
-		const userAbilities = userGrants
+		const userAbilities: AbilityWithPriority[] = userGrants
 			.filter((grant) => grant.ability)
 			.map((grant) => ({
 				...grant.ability!,
@@ -141,11 +161,11 @@ export class CaslAbilityFactory {
 	 * 병합 후 priority 내림차순으로 정렬하여 반환합니다.
 	 */
 	private mergeAbilities(
-		roleAbilities: AbilityEntity[],
-		userAbilities: AbilityEntity[],
-	): AbilityEntity[] {
+		roleAbilities: AbilityWithPriority[],
+		userAbilities: AbilityWithPriority[],
+	): AbilityWithPriority[] {
 		// subject + action 조합을 키로 사용하여 Map 구성
-		const abilityMap = new Map<string, AbilityEntity>();
+		const abilityMap = new Map<string, AbilityWithPriority>();
 
 		// 1. Role 권한을 먼저 추가
 		for (const ability of roleAbilities) {
@@ -182,10 +202,10 @@ export class CaslAbilityFactory {
 	/**
 	 * Ability의 고유 키를 생성합니다.
 	 *
-	 * @param ability - Ability 엔티티
+	 * @param ability - Ability 데이터 (priority 포함)
 	 * @returns subject + action 조합 키 또는 null
 	 */
-	private getAbilityKey(ability: AbilityEntity): string | null {
+	private getAbilityKey(ability: AbilityWithPriority): string | null {
 		if (!ability.subject?.name || !ability.action?.name) {
 			return null;
 		}
@@ -219,13 +239,13 @@ export class CaslAbilityFactory {
 	/**
 	 * 단일 Ability 규칙을 적용합니다.
 	 *
-	 * @param ability - DB에서 조회한 Ability 엔티티
+	 * @param ability - Grant에서 추출한 Ability 데이터 (priority 포함)
 	 * @param userContext - 사용자 컨텍스트
 	 * @param can - CASL can 함수
 	 * @param cannot - CASL cannot 함수
 	 */
 	private applyAbilityRule(
-		ability: AbilityEntity,
+		ability: AbilityWithPriority,
 		userContext: Record<string, unknown>,
 		can: (
 			action: Actions,

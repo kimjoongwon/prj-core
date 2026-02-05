@@ -15,6 +15,7 @@ import {
 	authConfig,
 	awsConfig,
 	corsConfig,
+	oidcConfig,
 	redisConfig,
 	smtpConfig,
 } from "../config";
@@ -27,6 +28,7 @@ export const globalModules: (DynamicModule | Promise<DynamicModule>)[] = [
 			authConfig,
 			appConfig,
 			corsConfig,
+			oidcConfig,
 			smtpConfig,
 			awsConfig,
 			redisConfig,

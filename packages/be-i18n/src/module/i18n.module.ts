@@ -5,13 +5,14 @@ import {
 	AcceptLanguageResolver,
 } from "nestjs-i18n";
 import { join } from "node:path";
+import { TranslationService } from "../service/translation.service";
 
 @Module({
 	imports: [
 		NestI18nModule.forRoot({
 			fallbackLanguage: "ko_KR",
 			loaderOptions: {
-				path: join(__dirname, "../i18n/"),
+				path: join(__dirname, "../../src/i18n/"),
 				watch: process.env.NODE_ENV === "development",
 			},
 			resolvers: [
@@ -21,6 +22,7 @@ import { join } from "node:path";
 			typesOutputPath: join(__dirname, "../generated/i18n.generated.ts"),
 		}),
 	],
-	exports: [NestI18nModule],
+	providers: [TranslationService],
+	exports: [NestI18nModule, TranslationService],
 })
 export class I18nModule {}

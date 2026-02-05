@@ -95,7 +95,7 @@ function AbilityProviderWrapper({ children }: { children: ReactNode }) {
 			)?.name?.toUpperCase() as AbilityActions,
 			subject: ability.subject?.name ?? "",
 			conditions: ability.conditions as Record<string, unknown> | undefined,
-			inverted: !ability.isActive, // isActive가 false면 권한 거부
+			inverted: ability.inverted,
 		}),
 	);
 

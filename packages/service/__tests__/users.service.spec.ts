@@ -94,32 +94,31 @@ describe("UsersService", () => {
 		it("이메일로 인증용 사용자를 조회해야 한다", async () => {
 			// Given
 			const email = "test@example.com";
-			mockRepository.findByEmailWithTenantsAndProfiles.mockResolvedValue(
-				mockUser as any,
-			);
+			const authUser = {
+				id: "user-test-id",
+				email: "test@example.com",
+				password: "$2b$10$hashedPassword",
+			};
+			mockRepository.findByEmailForAuth.mockResolvedValue(authUser);
 
 			// When
 			const result = await service.findUserForAuth(email);
 
 			// Then
-			expect(
-				mockRepository.findByEmailWithTenantsAndProfiles,
-			).toHaveBeenCalledWith(email);
-			expect(result).toEqual(mockUser);
+			expect(mockRepository.findByEmailForAuth).toHaveBeenCalledWith(email);
+			expect(result).toEqual(authUser);
 		});
 
 		it("이메일로 사용자를 찾지 못하면 null을 반환해야 한다", async () => {
 			// Given
 			const email = "nonexistent@example.com";
-			mockRepository.findByEmailWithTenantsAndProfiles.mockResolvedValue(null);
+			mockRepository.findByEmailForAuth.mockResolvedValue(null);
 
 			// When
 			const result = await service.findUserForAuth(email);
 
 			// Then
-			expect(
-				mockRepository.findByEmailWithTenantsAndProfiles,
-			).toHaveBeenCalledWith(email);
+			expect(mockRepository.findByEmailForAuth).toHaveBeenCalledWith(email);
 			expect(result).toBeNull();
 		});
 	});

@@ -1,13 +1,11 @@
 import { Module } from "@nestjs/common";
+import { OidcModule } from "../oidc/oidc.module";
 import { InteractionController } from "./interaction.controller";
 import { InteractionService } from "./interaction.service";
-import { UsersRepository } from "@cocrepo/repository";
-import { UsersService } from "@cocrepo/service";
-import { OidcModule } from "../oidc/oidc.module";
 
 @Module({
 	imports: [OidcModule],
 	controllers: [InteractionController],
-	providers: [InteractionService, UsersRepository, UsersService],
+	providers: [InteractionService],
 })
 export class InteractionModule {}

@@ -1,89 +1,35 @@
-import { PrismaClient } from "@cocrepo/prisma";
-import { Injectable, Logger, OnModuleDestroy } from "@nestjs/common";
-import { ConfigService } from "@nestjs/config";
-import { PrismaPg } from "@prisma/adapter-pg";
-import pg from "pg";
+import { RedisService } from "@cocrepo/service";
+import { Injectable } from "@nestjs/common";
+import type { AdapterPayload, OidcAdapter } from "./types";
 
-// Prisma types for OidcModel operations
-interface OidcModelData {
-	key: string;
-	modelType: string;
-	payload: object;
-	expiresAt: Date | null;
-	grantId: string | null;
-	userCode: string | null;
-	uid: string | null;
+const KEY_PREFIX = "oidc";
+
+function key(modelType: string, id: string): string {
+	return `${KEY_PREFIX}:${modelType}:${id}`;
 }
 
-interface OidcModelDelegate {
-	upsert: (args: {
-		where: { key: string };
-		create: Omit<OidcModelData, "expiresAt"> & { expiresAt: Date | null };
-		update: Partial<OidcModelData>;
-	}) => Promise<OidcModelData>;
-	findUnique: (args: {
-		where: { key?: string; userCode?: string; uid?: string };
-	}) => Promise<(OidcModelData & { expiresAt: Date | null }) | null>;
-	deleteMany: (args: { where: { key?: string; grantId?: string } }) => Promise<unknown>;
-	update: (args: {
-		where: { key: string };
-		data: { payload: object };
-	}) => Promise<OidcModelData>;
+function uidKey(modelType: string, uid: string): string {
+	return `${KEY_PREFIX}:${modelType}:uid:${uid}`;
 }
 
-interface OidcPrismaClient {
-	oidcModel: OidcModelDelegate;
+function userCodeKey(modelType: string, userCode: string): string {
+	return `${KEY_PREFIX}:${modelType}:userCode:${userCode}`;
 }
 
-// oidc-provider 타입 (@types/oidc-provider 기반)
-interface AdapterPayload {
-	[key: string]: unknown;
-	accountId?: string;
-	acr?: string;
-	amr?: string[];
-	authTime?: number;
-	claims?: object;
-	clientId?: string;
-	consumed?: number;
-	deviceInfo?: object;
-	exp?: number;
-	grantId?: string;
-	gty?: string;
-	iat?: number;
-	iiat?: number;
-	jti?: string;
-	kind?: string;
-	nonce?: string;
-	params?: object;
-	resource?: string;
-	result?: object;
-	rotations?: number;
-	scope?: string;
-	session?: { uid: string; jti: string };
-	sessionUid?: string;
-	sid?: string;
-	uid?: string;
-	userCode?: string;
-}
-
-interface Adapter {
-	upsert(id: string, payload: AdapterPayload, expiresIn: number): Promise<void>;
-	find(id: string): Promise<AdapterPayload | undefined | void>;
-	findByUserCode?(userCode: string): Promise<AdapterPayload | undefined | void>;
-	findByUid?(uid: string): Promise<AdapterPayload | undefined | void>;
-	destroy(id: string): Promise<void>;
-	revokeByGrantId?(grantId: string): Promise<void>;
-	consume?(id: string): Promise<void>;
+function grantKey(modelType: string, grantId: string): string {
+	return `${KEY_PREFIX}:${modelType}:grant:${grantId}`;
 }
 
 /**
- * Prisma Adapter for oidc-provider
- * oidc-provider가 토큰, 세션 등을 저장/조회할 때 사용하는 어댑터
+ * Redis Adapter for oidc-provider
+ *
+ * oidc-provider가 토큰, 세션 등을 저장/조회할 때 사용하는 어댑터.
+ * Redis의 네이티브 TTL을 활용하여 만료 관리를 자동화합니다.
  */
-export class PrismaOidcAdapter implements Adapter {
+export class RedisOidcAdapter implements OidcAdapter {
 	constructor(
 		private readonly modelType: string,
-		private readonly prisma: OidcPrismaClient,
+		private readonly redisService: RedisService,
 	) {}
 
 	async upsert(
@@ -91,199 +37,157 @@ export class PrismaOidcAdapter implements Adapter {
 		payload: AdapterPayload,
 		expiresIn: number,
 	): Promise<void> {
-		const expiresAt = expiresIn
-			? new Date(Date.now() + expiresIn * 1000)
-			: null;
+		const mainKey = key(this.modelType, id);
+		const data = JSON.stringify(payload);
+		const client = this.redisService.getClient();
+		const pipeline = client.pipeline();
 
-		await this.prisma.oidcModel.upsert({
-			where: { key: id },
-			create: {
-				key: id,
-				modelType: this.modelType,
-				payload: payload as object,
-				expiresAt,
-				grantId: payload.grantId,
-				userCode: payload.userCode,
-				uid: payload.uid,
-			},
-			update: {
-				payload: payload as object,
-				expiresAt,
-				grantId: payload.grantId,
-				userCode: payload.userCode,
-				uid: payload.uid,
-			},
-		});
+		if (expiresIn) {
+			pipeline.setex(mainKey, expiresIn, data);
+		} else {
+			pipeline.set(mainKey, data);
+		}
+
+		// uid 보조 인덱스 (Session 조회용)
+		if (payload.uid) {
+			const uid = uidKey(this.modelType, payload.uid);
+			if (expiresIn) {
+				pipeline.setex(uid, expiresIn, id);
+			} else {
+				pipeline.set(uid, id);
+			}
+		}
+
+		// userCode 보조 인덱스 (Device Flow용)
+		if (payload.userCode) {
+			const uc = userCodeKey(this.modelType, payload.userCode);
+			if (expiresIn) {
+				pipeline.setex(uc, expiresIn, id);
+			} else {
+				pipeline.set(uc, id);
+			}
+		}
+
+		// grantId SET 인덱스 (Grant 일괄 삭제용)
+		if (payload.grantId) {
+			const gk = grantKey(this.modelType, payload.grantId);
+			pipeline.sadd(gk, id);
+			if (expiresIn) {
+				pipeline.expire(gk, expiresIn);
+			}
+		}
+
+		await pipeline.exec();
 	}
 
 	async find(id: string): Promise<AdapterPayload | undefined> {
-		const model = await this.prisma.oidcModel.findUnique({
-			where: { key: id },
-		});
-
-		if (!model || (model.expiresAt && model.expiresAt < new Date())) {
-			return undefined;
-		}
-
-		return model.payload as AdapterPayload;
+		const data = await this.redisService.get(key(this.modelType, id));
+		if (!data) return undefined;
+		return JSON.parse(data) as AdapterPayload;
 	}
 
 	async findByUserCode(userCode: string): Promise<AdapterPayload | undefined> {
-		const model = await this.prisma.oidcModel.findUnique({
-			where: { userCode },
-		});
-
-		if (!model || (model.expiresAt && model.expiresAt < new Date())) {
-			return undefined;
-		}
-
-		return model.payload as AdapterPayload;
+		const id = await this.redisService.get(
+			userCodeKey(this.modelType, userCode),
+		);
+		if (!id) return undefined;
+		return this.find(id);
 	}
 
 	async findByUid(uid: string): Promise<AdapterPayload | undefined> {
-		const model = await this.prisma.oidcModel.findUnique({
-			where: { uid },
-		});
-
-		if (!model || (model.expiresAt && model.expiresAt < new Date())) {
-			return undefined;
-		}
-
-		return model.payload as AdapterPayload;
+		const id = await this.redisService.get(uidKey(this.modelType, uid));
+		if (!id) return undefined;
+		return this.find(id);
 	}
 
 	async destroy(id: string): Promise<void> {
-		await this.prisma.oidcModel.deleteMany({
-			where: { key: id },
-		});
+		const mainKey = key(this.modelType, id);
+		const data = await this.redisService.get(mainKey);
+
+		if (data) {
+			const payload = JSON.parse(data) as AdapterPayload;
+			const client = this.redisService.getClient();
+			const pipeline = client.pipeline();
+
+			pipeline.del(mainKey);
+
+			if (payload.uid) {
+				pipeline.del(uidKey(this.modelType, payload.uid));
+			}
+			if (payload.userCode) {
+				pipeline.del(userCodeKey(this.modelType, payload.userCode));
+			}
+			if (payload.grantId) {
+				pipeline.srem(grantKey(this.modelType, payload.grantId), id);
+			}
+
+			await pipeline.exec();
+		} else {
+			await this.redisService.del(mainKey);
+		}
 	}
 
 	async revokeByGrantId(grantId: string): Promise<void> {
-		await this.prisma.oidcModel.deleteMany({
-			where: { grantId },
-		});
+		const gk = grantKey(this.modelType, grantId);
+		const client = this.redisService.getClient();
+		const members = await client.smembers(gk);
+
+		if (members.length === 0) return;
+
+		const pipeline = client.pipeline();
+
+		for (const id of members) {
+			const mainKey = key(this.modelType, id);
+			const data = await this.redisService.get(mainKey);
+			pipeline.del(mainKey);
+
+			if (data) {
+				const payload = JSON.parse(data) as AdapterPayload;
+				if (payload.uid) {
+					pipeline.del(uidKey(this.modelType, payload.uid));
+				}
+				if (payload.userCode) {
+					pipeline.del(userCodeKey(this.modelType, payload.userCode));
+				}
+			}
+		}
+
+		pipeline.del(gk);
+		await pipeline.exec();
 	}
 
 	async consume(id: string): Promise<void> {
-		const model = await this.prisma.oidcModel.findUnique({
-			where: { key: id },
-		});
+		const mainKey = key(this.modelType, id);
+		const client = this.redisService.getClient();
+		const data = await this.redisService.get(mainKey);
 
-		if (model) {
-			const payload = model.payload as AdapterPayload;
+		if (data) {
+			const payload = JSON.parse(data) as AdapterPayload;
 			payload.consumed = Math.floor(Date.now() / 1000);
 
-			await this.prisma.oidcModel.update({
-				where: { key: id },
-				data: { payload: payload as object },
-			});
+			// TTL 유지하면서 payload 업데이트
+			const ttl = await client.ttl(mainKey);
+			if (ttl > 0) {
+				await client.setex(mainKey, ttl, JSON.stringify(payload));
+			} else {
+				await client.set(mainKey, JSON.stringify(payload));
+			}
 		}
 	}
 }
 
 /**
- * Prisma Adapter Factory
- * oidc-provider가 각 모델 타입별로 어댑터 인스턴스를 생성할 때 사용
+ * Redis Adapter Factory
  *
- * - DIRECT_URL을 사용하여 RLS 우회
- * - OIDC 토큰/세션 저장은 tenant 컨텍스트 없이 접근해야 함
+ * oidc-provider가 각 모델 타입별로 어댑터 인스턴스를 생성할 때 사용.
+ * RedisService를 주입받아 RedisOidcAdapter에 전달합니다.
  */
 @Injectable()
-export class PrismaOidcAdapterFactory implements OnModuleDestroy {
-	private readonly logger = new Logger(PrismaOidcAdapterFactory.name);
-	private prisma: PrismaClient | null = null;
-	private pool: pg.Pool | null = null;
+export class RedisOidcAdapterFactory {
+	constructor(private readonly redisService: RedisService) {}
 
-	constructor(private readonly configService: ConfigService) {}
-
-	/**
-	 * DIRECT_URL을 사용하는 별도 Prisma 클라이언트 생성
-	 * - RLS 우회를 위해 직접 연결 사용
-	 */
-	private async getPrismaClient(): Promise<PrismaClient> {
-		if (this.prisma) return this.prisma;
-
-		const directUrl = this.configService.get<string>("DIRECT_URL");
-		const databaseUrl = this.configService.get<string>("DATABASE_URL");
-
-		// DIRECT_URL 우선 사용 (pgbouncer 우회)
-		const connectionUrl = directUrl || databaseUrl;
-
-		if (!connectionUrl) {
-			throw new Error("DATABASE_URL or DIRECT_URL is not defined");
-		}
-
-		this.logger.debug(
-			`OIDC Adapter용 Prisma 클라이언트 생성 (directUrl: ${directUrl ? "사용" : "미사용"})`,
-		);
-
-		// PostgreSQL connection pool 생성
-		this.pool = new pg.Pool({
-			connectionString: connectionUrl,
-			max: 10,
-			idleTimeoutMillis: 30000,
-		});
-
-		// Prisma PostgreSQL Adapter 생성
-		const adapter = new PrismaPg(this.pool);
-
-		// PrismaClient with adapter
-		this.prisma = new PrismaClient({
-			adapter,
-		});
-
-		return this.prisma;
-	}
-
-	async onModuleDestroy() {
-		if (this.prisma) {
-			await this.prisma.$disconnect();
-		}
-		if (this.pool) {
-			await this.pool.end();
-		}
-	}
-
-	createAdapter(modelType: string): Adapter {
-		// 동기적 호출을 위해 Promise를 캐싱하는 방식으로 변경
-		// oidc-provider는 동기적으로 어댑터를 생성하므로 lazy initialization 사용
-		return new PrismaOidcAdapter(modelType, this.getPrismaClientSync());
-	}
-
-	/**
-	 * 동기적으로 Prisma 클라이언트 반환 (초기화는 비동기로 진행됨)
-	 * oidc-provider의 adapter factory는 동기적으로 호출되므로
-	 * 프록시 패턴을 사용하여 실제 호출 시점에 await
-	 */
-	private getPrismaClientSync(): OidcPrismaClient {
-		const factory = this;
-		return {
-			oidcModel: {
-				async upsert(args) {
-					const prisma = await factory.getPrismaClient();
-					// eslint-disable-next-line @typescript-eslint/no-explicit-any
-					return prisma.oidcModel.upsert(args as any);
-				},
-				async findUnique(args) {
-					const prisma = await factory.getPrismaClient();
-					// eslint-disable-next-line @typescript-eslint/no-explicit-any
-					return prisma.oidcModel.findUnique(args as any);
-				},
-				async deleteMany(args) {
-					const prisma = await factory.getPrismaClient();
-					// eslint-disable-next-line @typescript-eslint/no-explicit-any
-					return prisma.oidcModel.deleteMany(args as any);
-				},
-				async update(args) {
-					const prisma = await factory.getPrismaClient();
-					// eslint-disable-next-line @typescript-eslint/no-explicit-any
-					return prisma.oidcModel.update(args as any);
-				},
-			},
-		} as OidcPrismaClient;
-	}
-
-	getAdapterFactory(): (modelType: string) => Adapter {
-		return (modelType: string) => this.createAdapter(modelType);
+	getAdapterFactory(): (modelType: string) => OidcAdapter {
+		return (modelType: string) =>
+			new RedisOidcAdapter(modelType, this.redisService);
 	}
 }

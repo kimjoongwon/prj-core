@@ -15,14 +15,14 @@ import {
 import { HttpAdapterHost, Reflector } from "@nestjs/core";
 
 export function setNestApp<T extends INestApplication>(app: T): void {
-	const httpAdapterHost = app.get(HttpAdapterHost);
+	const { httpAdapter } = app.get(HttpAdapterHost);
 	const translationService = app.get(TranslationService);
 
 	// =================================================================
 	// Global Exception Filters (모든 예외를 일관되게 처리)
 	// =================================================================
 	app.useGlobalFilters(
-		new AllExceptionsFilter(translationService), // 전역 예외 처리
+		new AllExceptionsFilter(httpAdapter, translationService),
 	);
 
 	// =================================================================

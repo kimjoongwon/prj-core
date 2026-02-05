@@ -10,6 +10,7 @@
 		"includes": [
 			"./apps/admin/**/*.ts",
 			"./apps/admin/**/*.tsx",
+			"./apps/idp/src/**/*.ts",
 			"./apps/proposal/**/*.ts",
 			"./apps/proposal/**/*.tsx",
 			"./apps/server/src/module/**/*.ts",

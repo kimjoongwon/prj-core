@@ -43,10 +43,10 @@ export class UsersService {
 	}
 
 	/**
-	 * 인증용 유저 조회 (이메일 기반)
+	 * 인증용 경량 유저 조회 (이메일 기반, id/email/password만)
 	 */
 	findUserForAuth(email: string) {
-		return this.repository.findByEmailWithTenantsAndProfiles(email);
+		return this.repository.findByEmailForAuth(email);
 	}
 
 	/**

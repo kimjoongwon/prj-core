@@ -1,5 +1,4 @@
 import { createLogger, navigateTo } from "@cocrepo/toolkit";
-import { isAxiosError } from "axios";
 import { makeAutoObservable } from "mobx";
 import { RootStore } from "./rootStore";
 
@@ -16,18 +15,12 @@ export class AuthStore {
   }
 
   get isAuthenticated(): boolean {
-    return !this.rootStore.tokenStore?.isAccessTokenExpired();
+    return !this.rootStore.persistStore?.isAccessTokenExpired;
   }
 
   async handleAuthError(error: unknown) {
-    if (isAxiosError(error)) {
-      if (error.response?.status === 401) {
-        window.location.href = "/admin/auth/login";
-
-        return;
-      }
-    }
-
+    // 401은 customAxios 인터셉터에서 토큰 갱신을 시도합니다.
+    // 갱신 실패 시 인터셉터가 로그인 페이지로 리다이렉트합니다.
     return Promise.reject(error);
   }
 

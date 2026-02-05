@@ -1,11 +1,10 @@
 /// <reference types="vitest/globals" />
 
 import { navigateTo } from "@cocrepo/toolkit";
-import { isAxiosError } from "axios";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { AuthStore } from "../authStore";
+import type { PersistStore } from "../persistStore";
 import type { RootStore } from "../Store";
-import type { TokenStore } from "../tokenStore";
 
 // 의존성 모킹
 vi.mock("@cocrepo/toolkit", () => ({
@@ -15,22 +14,21 @@ vi.mock("@cocrepo/toolkit", () => ({
 		error: vi.fn(),
 	})),
 }));
-vi.mock("axios");
 
 describe("AuthStore", () => {
 	let authStore: AuthStore;
 	let mockRootStore: RootStore;
-	let mockTokenStore: TokenStore;
+	let mockPersistStore: Partial<PersistStore>;
 
 	beforeEach(() => {
-		// TokenStore 모킹
-		mockTokenStore = {
-			isAccessTokenExpired: vi.fn().mockReturnValue(false),
-		} as unknown as TokenStore;
+		// PersistStore 모킹
+		mockPersistStore = {
+			isAccessTokenExpired: false,
+		};
 
 		// RootStore 모킹
 		mockRootStore = {
-			tokenStore: mockTokenStore,
+			persistStore: mockPersistStore as PersistStore,
 		} as unknown as RootStore;
 
 		// Mock 리셋
@@ -48,7 +46,7 @@ describe("AuthStore", () => {
 	describe("생성자", () => {
 		it("RootStore 의존성이 올바르게 주입되어야 함", () => {
 			expect(authStore.rootStore).toBeDefined();
-			expect(authStore.rootStore.tokenStore).toBeDefined();
+			expect(authStore.rootStore.persistStore).toBeDefined();
 		});
 
 		it("isLoggingOut 초기값이 false여야 함", () => {
@@ -58,76 +56,38 @@ describe("AuthStore", () => {
 
 	describe("isAuthenticated", () => {
 		it("토큰이 만료되지 않았으면 true를 반환해야 함", () => {
-			// Given
-			(
-				mockTokenStore.isAccessTokenExpired as unknown as ReturnType<
-					typeof vi.fn
-				>
-			).mockReturnValue(false);
-
+			// Given - beforeEach에서 isAccessTokenExpired: false로 설정됨
 			// Then
 			expect(authStore.isAuthenticated).toBe(true);
 		});
 
 		it("토큰이 만료되었으면 false를 반환해야 함", () => {
-			// Given
-			(
-				mockTokenStore.isAccessTokenExpired as unknown as ReturnType<
-					typeof vi.fn
-				>
-			).mockReturnValue(true);
+			// Given - MobX computed는 비-observable mock 변경을 감지하지 못하므로 새 인스턴스 생성
+			const expiredRootStore = {
+				persistStore: { isAccessTokenExpired: true } as PersistStore,
+			} as unknown as RootStore;
+			const expiredAuthStore = new AuthStore(expiredRootStore);
 
 			// Then
-			expect(authStore.isAuthenticated).toBe(false);
+			expect(expiredAuthStore.isAuthenticated).toBe(false);
 		});
 
-		it("tokenStore가 없으면 true를 반환해야 함", () => {
-			// Given
-			mockRootStore.tokenStore = undefined;
+		it("persistStore가 없으면 true를 반환해야 함", () => {
+			// Given - persistStore 없이 새 인스턴스 생성
+			const noPersistRootStore = {
+				persistStore: undefined,
+			} as unknown as RootStore;
+			const noPersistAuthStore = new AuthStore(noPersistRootStore);
 
 			// Then
-			expect(authStore.isAuthenticated).toBe(true);
+			expect(noPersistAuthStore.isAuthenticated).toBe(true);
 		});
 	});
 
 	describe("handleAuthError 메서드", () => {
-		it("401 에러 시 로그인 페이지로 리다이렉트해야 함", async () => {
+		it("에러를 그대로 reject해야 함", async () => {
 			// Given
-			const mockError = {
-				response: { status: 401 },
-			};
-			(isAxiosError as unknown as ReturnType<typeof vi.fn>).mockReturnValue(
-				true,
-			);
-
-			// When
-			await authStore.handleAuthError(mockError);
-
-			// Then
-			expect(window.location.href).toBe("/admin/auth/login");
-		});
-
-		it("401이 아닌 Axios 에러는 그대로 reject해야 함", async () => {
-			// Given
-			const mockError = {
-				response: { status: 500 },
-			};
-			(isAxiosError as unknown as ReturnType<typeof vi.fn>).mockReturnValue(
-				true,
-			);
-
-			// When & Then
-			await expect(authStore.handleAuthError(mockError)).rejects.toBe(
-				mockError,
-			);
-		});
-
-		it("Axios 에러가 아닌 경우 그대로 reject해야 함", async () => {
-			// Given
-			const mockError = new Error("일반 에러");
-			(isAxiosError as unknown as ReturnType<typeof vi.fn>).mockReturnValue(
-				false,
-			);
+			const mockError = new Error("인증 에러");
 
 			// When & Then
 			await expect(authStore.handleAuthError(mockError)).rejects.toBe(

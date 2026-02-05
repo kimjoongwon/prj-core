@@ -29,15 +29,11 @@ const nextConfig: NextConfig = {
 	async rewrites() {
 		return {
 			// basePath를 무시하고 /api 경로를 프록시
+			// OIDC callback 포함 모든 /api/v1 요청을 백엔드로 프록시
 			beforeFiles: [
-				// {
-				// 	source: "/api/:path*",
-				// 	destination: "https://stg.cocdev.co.kr/api/:path*",
-				// 	basePath: false,
-				// },
 				{
-					source: "/api/:path*",
-					destination: "http://localhost:3006/api/:path*",
+					source: "/api/v1/:path*",
+					destination: "http://localhost:3006/api/v1/:path*",
 					basePath: false,
 				},
 			],

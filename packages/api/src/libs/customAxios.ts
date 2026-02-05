@@ -1,4 +1,8 @@
-import Axios, { type AxiosError, type AxiosRequestConfig } from "axios";
+import Axios, {
+	type AxiosError,
+	type AxiosRequestConfig,
+	type InternalAxiosRequestConfig,
+} from "axios";
 
 // Orval이 완전한 URL을 생성하므로 baseURL 불필요
 export const AXIOS_INSTANCE = Axios.create({
@@ -10,6 +14,8 @@ export const AXIOS_INSTANCE = Axios.create({
 // PersistStore 참조 (앱 초기화 시 설정)
 interface PersistStoreRef {
 	spaceId: string | null;
+	accessTokenExpiresAt?: number | null;
+	refreshTokenExpiresAt?: number | null;
 }
 let persistStoreRef: PersistStoreRef | null = null;
 
@@ -35,10 +41,75 @@ AXIOS_INSTANCE.interceptors.request.use(
 	},
 );
 
-// 409 에러 처리를 위한 response 인터셉터 추가
+// 토큰 갱신 상태 관리
+let isRefreshing = false;
+let failedQueue: Array<{
+	resolve: (value: unknown) => void;
+	reject: (reason: unknown) => void;
+}> = [];
+
+const processQueue = (error: unknown) => {
+	for (const { resolve, reject } of failedQueue) {
+		if (error) {
+			reject(error);
+		} else {
+			resolve(undefined);
+		}
+	}
+	failedQueue = [];
+};
+
+// Response 인터셉터: 401 토큰 갱신 + 409 에러 처리
 AXIOS_INSTANCE.interceptors.response.use(
 	(response) => response,
-	(error: AxiosError) => {
+	async (error: AxiosError) => {
+		const originalRequest = error.config as InternalAxiosRequestConfig & {
+			_retry?: boolean;
+		};
+
+		// 401 토큰 만료 시 갱신 시도
+		if (
+			error.response?.status === 401 &&
+			originalRequest &&
+			!originalRequest._retry
+		) {
+			// refresh 엔드포인트 자체의 401은 갱신 시도하지 않음
+			if (originalRequest.url?.includes("/auth/token/refresh")) {
+				window.location.href = "/admin/auth/login";
+				return Promise.reject(error);
+			}
+
+			// 이미 갱신 중이면 큐에 추가하여 대기
+			if (isRefreshing) {
+				return new Promise((resolve, reject) => {
+					failedQueue.push({ resolve, reject });
+				}).then(() => AXIOS_INSTANCE(originalRequest));
+			}
+
+			originalRequest._retry = true;
+			isRefreshing = true;
+
+			try {
+				const refreshResponse = await AXIOS_INSTANCE.post("/api/v1/auth/token/refresh");
+				// refresh 응답에서 만료 시간 추출하여 PersistStore 업데이트
+				const responseData = (refreshResponse.data as { data?: { accessTokenExpiresAt?: number; refreshTokenExpiresAt?: number } })?.data;
+				if (responseData?.accessTokenExpiresAt && persistStoreRef) {
+					persistStoreRef.accessTokenExpiresAt = responseData.accessTokenExpiresAt;
+					persistStoreRef.refreshTokenExpiresAt = responseData.refreshTokenExpiresAt;
+				}
+				processQueue(null);
+				// 갱신 성공 → 원래 요청 재시도 (새 쿠키 자동 적용)
+				return AXIOS_INSTANCE(originalRequest);
+			} catch (refreshError) {
+				processQueue(refreshError);
+				window.location.href = "/admin/auth/login";
+				return Promise.reject(refreshError);
+			} finally {
+				isRefreshing = false;
+			}
+		}
+
+		// 409 Conflict 에러 처리
 		if (error.response?.status === 409) {
 			const responseData = error.response.data as { message?: string };
 			const errorMessage =
