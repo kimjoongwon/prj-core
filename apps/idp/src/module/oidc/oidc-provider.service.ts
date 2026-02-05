@@ -86,6 +86,26 @@ interface OidcProviderInstance {
 	Grant: { new (options: { accountId: string; clientId: string }): Grant; find: (grantId: string) => Promise<Grant | undefined> };
 }
 
+// Express Request/Response를 oidc-provider 호환 형태로 변환하기 위한 타입
+// oidc-provider는 Koa 기반이므로 Express와 호환되도록 래핑
+export type KoaLikeRequest = ExpressRequest & { [key: string]: unknown };
+export type KoaLikeResponse = ExpressResponse & { [key: string]: unknown };
+
+interface ExpressRequest {
+	method: string;
+	url: string;
+	header(name: string): string | undefined;
+	[key: string]: unknown;
+}
+
+interface ExpressResponse {
+	status: number;
+	redirect: (url: string) => void;
+	render: (view: string, data?: Record<string, unknown>) => string | void;
+	body?: unknown;
+	[key: string]: unknown;
+}
+
 @Injectable()
 export class OidcProviderService {
 	private provider: OidcProviderInstance | null = null;
@@ -184,8 +204,6 @@ export class OidcProviderService {
 				profile: ["name", "updated_at"],
 				email: ["email", "email_verified"],
 				phone: ["phone_number", "phone_number_verified"],
-				roles: ["roles"],
-				permissions: ["permissions"],
 			},
 
 			// 기능 활성화

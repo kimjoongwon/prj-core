@@ -4,13 +4,8 @@ import { OidcController } from "./oidc.controller";
 import { AccountService } from "./account.service";
 import { PrismaOidcAdapterFactory } from "./oidc.adapter";
 import { OidcClientRepository } from "./oidc-client.repository";
-import {
-	UsersRepository,
-	RolesRepository,
-	AbilitiesRepository,
-	GrantsRepository,
-} from "@cocrepo/repository";
-import { UsersService, RolesService, AbilitiesService } from "@cocrepo/service";
+import { UsersRepository } from "@cocrepo/repository";
+import { UsersService } from "@cocrepo/service";
 
 @Module({
 	controllers: [OidcController],
@@ -19,15 +14,9 @@ import { UsersService, RolesService, AbilitiesService } from "@cocrepo/service";
 		AccountService,
 		PrismaOidcAdapterFactory,
 		OidcClientRepository,
-		// User & Roles
+		// User
 		UsersRepository,
 		UsersService,
-		RolesRepository,
-		RolesService,
-		// Abilities (CASL)
-		AbilitiesRepository,
-		GrantsRepository,
-		AbilitiesService,
 	],
 	exports: [OidcProviderService],
 })

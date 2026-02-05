@@ -26,8 +26,6 @@ import { OidcProviderService } from "./oidc-provider.service";
  * - `profile` - 이름, 수정일
  * - `email` - 이메일 주소
  * - `phone` - 전화번호
- * - `roles` - 사용자 역할 목록 (커스텀)
- * - `permissions` - CASL 권한 목록 (커스텀)
  */
 @ApiExcludeController()
 @Controller("oidc")

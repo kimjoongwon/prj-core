@@ -18,7 +18,7 @@ import {
 	ApiTags,
 } from "@nestjs/swagger";
 import type { Response } from "express";
-import { OidcProviderService } from "../oidc/oidc-provider.service";
+import { OidcProviderService, type KoaLikeRequest, type KoaLikeResponse } from "../oidc/oidc-provider.service";
 import { InteractionService } from "./interaction.service";
 import { LoginDto } from "./dto/login.dto";
 
@@ -71,8 +71,8 @@ export class InteractionController {
 		try {
 			const provider = this.oidcProviderService.getProvider();
 			const interaction = await provider.interactionDetails(
-				res.req as any,
-				res as any,
+				res.req as unknown as KoaLikeRequest,
+				res as unknown as KoaLikeResponse,
 			);
 
 			const { prompt, params, session } = interaction;
@@ -136,8 +136,8 @@ export class InteractionController {
 		try {
 			const provider = this.oidcProviderService.getProvider();
 			const interaction = await provider.interactionDetails(
-				res.req as any,
-				res as any,
+				res.req as unknown as KoaLikeRequest,
+				res as unknown as KoaLikeResponse,
 			);
 
 			// 사용자 인증
@@ -166,8 +166,8 @@ export class InteractionController {
 			};
 
 			const redirectTo = await provider.interactionResult(
-				res.req as any,
-				res as any,
+				res.req as unknown as KoaLikeRequest,
+				res as unknown as KoaLikeResponse,
 				result,
 				{ mergeWithLastSubmission: false },
 			);
@@ -207,8 +207,8 @@ export class InteractionController {
 		try {
 			const provider = this.oidcProviderService.getProvider();
 			const interaction = await provider.interactionDetails(
-				res.req as any,
-				res as any,
+				res.req as unknown as KoaLikeRequest,
+				res as unknown as KoaLikeResponse,
 			);
 
 			const { prompt, params, session } = interaction;
@@ -222,18 +222,20 @@ export class InteractionController {
 					});
 
 			if (grant) {
+				const details = prompt.details || {};
+
 				// 누락된 OIDC scope 추가
-				if (prompt.details.missingOIDCScope) {
-					for (const scope of prompt.details.missingOIDCScope as string[]) {
+				const missingOIDCScope = details.missingOIDCScope as string[] | undefined;
+				if (missingOIDCScope) {
+					for (const scope of missingOIDCScope) {
 						grant.addOIDCScope(scope);
 					}
 				}
 
 				// 누락된 resource scope 추가
-				if (prompt.details.missingResourceScopes) {
-					for (const [indicator, scopes] of Object.entries(
-						prompt.details.missingResourceScopes as Record<string, string[]>,
-					)) {
+				const missingResourceScopes = details.missingResourceScopes as Record<string, string[]> | undefined;
+				if (missingResourceScopes) {
+					for (const [indicator, scopes] of Object.entries(missingResourceScopes)) {
 						grant.addResourceScope(indicator, scopes.join(" "));
 					}
 				}
@@ -241,12 +243,12 @@ export class InteractionController {
 				const grantId = await grant.save();
 
 				const result = { consent: { grantId } };
-				const redirectTo = await provider.interactionResult(
-					res.req as any,
-					res as any,
-					result,
-					{ mergeWithLastSubmission: true },
-				);
+			const redirectTo = await provider.interactionResult(
+				res.req as unknown as KoaLikeRequest,
+				res as unknown as KoaLikeResponse,
+				result,
+				{ mergeWithLastSubmission: false },
+			);
 
 				return res.redirect(redirectTo);
 			}
@@ -292,8 +294,8 @@ export class InteractionController {
 			};
 
 			const redirectTo = await provider.interactionResult(
-				res.req as any,
-				res as any,
+				res.req as unknown as KoaLikeRequest,
+				res as unknown as KoaLikeResponse,
 				result,
 				{ mergeWithLastSubmission: false },
 			);

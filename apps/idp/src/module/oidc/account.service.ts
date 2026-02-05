@@ -1,5 +1,5 @@
 import { Injectable, Logger } from "@nestjs/common";
-import { UsersService, AbilitiesService, RolesService } from "@cocrepo/service";
+import { UsersService } from "@cocrepo/service";
 
 // oidc-provider 타입 (@types/oidc-provider 기반)
 interface AccountClaims {
@@ -32,16 +32,6 @@ type FindAccount = (
 ) => Account | Promise<Account | undefined>;
 
 /**
- * OIDC 토큰에 포함될 권한 형식
- */
-interface AbilityClaim {
-	action: string;
-	subject: string;
-	fields?: string[];
-	conditions?: Record<string, unknown>;
-}
-
-/**
  * OIDC Account Service
  * oidc-provider가 사용자 정보를 조회할 때 사용
  */
@@ -51,8 +41,6 @@ export class AccountService {
 
 	constructor(
 		private readonly usersService: UsersService,
-		private readonly rolesService: RolesService,
-		private readonly abilitiesService: AbilitiesService,
 	) {}
 
 	/**
@@ -103,106 +91,10 @@ export class AccountService {
 					result.phone_number_verified = true;
 				}
 
-				// roles scope (커스텀) - Tenant의 Role 정보 추출
-				if (scopeArray.includes("roles")) {
-					const roles = await this.getRoleNamesFromTenants(user.tenants);
-					result.roles = roles;
-					this.logger.debug(`User ${user.id} roles: ${roles.join(", ")}`);
-				}
-
-				// permissions scope (커스텀) - CASL Ability 연동
-				if (scopeArray.includes("permissions")) {
-					const permissions = await this.getPermissionsForUser(user);
-					result.permissions = permissions;
-					this.logger.debug(
-						`User ${user.id} permissions count: ${permissions.length}`,
-					);
-				}
-
 				return result;
 			},
 		};
 
 		return account;
 	};
-
-	/**
-	 * Tenant 목록에서 Role 이름 조회
-	 * @param tenants - 사용자의 Tenant 목록 (roleId 포함)
-	 * @returns Role 이름 배열 (중복 제거)
-	 */
-	private async getRoleNamesFromTenants(
-		tenants?: Array<{ roleId?: string }>,
-	): Promise<string[]> {
-		if (!tenants || tenants.length === 0) {
-			return [];
-		}
-
-		// roleId 추출 (중복 제거)
-		const roleIds = [...new Set(
-			tenants
-				.filter((tenant) => tenant.roleId)
-				.map((tenant) => tenant.roleId!),
-		)];
-
-		if (roleIds.length === 0) {
-			return [];
-		}
-
-		// RolesService로 Role 정보 조회
-		const roles = await Promise.all(
-			roleIds.map((id) => this.rolesService.getById(id)),
-		);
-
-		return roles
-			.filter((role) => role?.name)
-			.map((role) => role!.name);
-	}
-
-	/**
-	 * 사용자의 CASL 권한 조회
-	 * - Role 기반 권한 + User 예외 권한 병합
-	 *
-	 * @param user - 사용자 정보 (tenants 포함)
-	 * @returns AbilityClaim 배열
-	 */
-	private async getPermissionsForUser(user: {
-		id: string;
-		tenants?: Array<{ roleId?: string }>;
-	}): Promise<AbilityClaim[]> {
-		try {
-			// Tenant에서 roleId 추출
-			const roleIds =
-				user.tenants
-					?.filter((tenant) => tenant.roleId)
-					.map((tenant) => tenant.roleId!) ?? [];
-
-			if (roleIds.length === 0) {
-				this.logger.debug(`User ${user.id} has no roles`);
-				return [];
-			}
-
-			// AbilitiesService로 병합된 권한 조회
-			const abilities = await this.abilitiesService.getMergedAbilities(
-				roleIds,
-				user.id,
-			);
-
-			// OIDC 토큰용 형식으로 변환
-			return abilities.map((ability) => ({
-				action: ability.action?.name ?? "unknown",
-				subject: ability.subject?.name ?? "unknown",
-				...(ability.fields && { fields: ability.fields }),
-				...(ability.conditions && {
-					conditions: ability.conditions as Record<string, unknown>,
-				}),
-			}));
-		} catch (error) {
-			this.logger.error(
-				`Failed to load permissions for user ${user.id}:`,
-				error,
-			);
-			return [];
-		}
-	}
 }
