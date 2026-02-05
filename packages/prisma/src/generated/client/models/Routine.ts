@@ -22,23 +22,12 @@ export type RoutineModel = runtime.Types.Result.DefaultSelection<Prisma.$Routine
 
 export type AggregateRoutine = {
   _count: RoutineCountAggregateOutputType | null
-  _avg: RoutineAvgAggregateOutputType | null
-  _sum: RoutineSumAggregateOutputType | null
   _min: RoutineMinAggregateOutputType | null
   _max: RoutineMaxAggregateOutputType | null
 }
 
-export type RoutineAvgAggregateOutputType = {
-  seq: number | null
-}
-
-export type RoutineSumAggregateOutputType = {
-  seq: number | null
-}
-
 export type RoutineMinAggregateOutputType = {
   id: string | null
-  seq: number | null
   createdAt: Date | null
   updatedAt: Date | null
   removedAt: Date | null
@@ -48,7 +37,6 @@ export type RoutineMinAggregateOutputType = {
 
 export type RoutineMaxAggregateOutputType = {
   id: string | null
-  seq: number | null
   createdAt: Date | null
   updatedAt: Date | null
   removedAt: Date | null
@@ -58,7 +46,6 @@ export type RoutineMaxAggregateOutputType = {
 
 export type RoutineCountAggregateOutputType = {
   id: number
-  seq: number
   createdAt: number
   updatedAt: number
   removedAt: number
@@ -68,17 +55,8 @@ export type RoutineCountAggregateOutputType = {
 }
 
 
-export type RoutineAvgAggregateInputType = {
-  seq?: true
-}
-
-export type RoutineSumAggregateInputType = {
-  seq?: true
-}
-
 export type RoutineMinAggregateInputType = {
   id?: true
-  seq?: true
   createdAt?: true
   updatedAt?: true
   removedAt?: true
@@ -88,7 +66,6 @@ export type RoutineMinAggregateInputType = {
 
 export type RoutineMaxAggregateInputType = {
   id?: true
-  seq?: true
   createdAt?: true
   updatedAt?: true
   removedAt?: true
@@ -98,7 +75,6 @@ export type RoutineMaxAggregateInputType = {
 
 export type RoutineCountAggregateInputType = {
   id?: true
-  seq?: true
   createdAt?: true
   updatedAt?: true
   removedAt?: true
@@ -145,18 +121,6 @@ export type RoutineAggregateArgs<ExtArgs extends runtime.Types.Extensions.Intern
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
    * 
-   * Select which fields to average
-  **/
-  _avg?: RoutineAvgAggregateInputType
-  /**
-   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-   * 
-   * Select which fields to sum
-  **/
-  _sum?: RoutineSumAggregateInputType
-  /**
-   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-   * 
    * Select which fields to find the minimum value
   **/
   _min?: RoutineMinAggregateInputType
@@ -187,23 +151,18 @@ export type RoutineGroupByArgs<ExtArgs extends runtime.Types.Extensions.Internal
   take?: number
   skip?: number
   _count?: RoutineCountAggregateInputType | true
-  _avg?: RoutineAvgAggregateInputType
-  _sum?: RoutineSumAggregateInputType
   _min?: RoutineMinAggregateInputType
   _max?: RoutineMaxAggregateInputType
 }
 
 export type RoutineGroupByOutputType = {
   id: string
-  seq: number
   createdAt: Date
   updatedAt: Date | null
   removedAt: Date | null
   name: string
   label: string
   _count: RoutineCountAggregateOutputType | null
-  _avg: RoutineAvgAggregateOutputType | null
-  _sum: RoutineSumAggregateOutputType | null
   _min: RoutineMinAggregateOutputType | null
   _max: RoutineMaxAggregateOutputType | null
 }
@@ -228,7 +187,6 @@ export type RoutineWhereInput = {
   OR?: Prisma.RoutineWhereInput[]
   NOT?: Prisma.RoutineWhereInput | Prisma.RoutineWhereInput[]
   id?: Prisma.StringFilter<"Routine"> | string
-  seq?: Prisma.IntFilter<"Routine"> | number
   createdAt?: Prisma.DateTimeFilter<"Routine"> | Date | string
   updatedAt?: Prisma.DateTimeNullableFilter<"Routine"> | Date | string | null
   removedAt?: Prisma.DateTimeNullableFilter<"Routine"> | Date | string | null
@@ -240,7 +198,6 @@ export type RoutineWhereInput = {
 
 export type RoutineOrderByWithRelationInput = {
   id?: Prisma.SortOrder
-  seq?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   removedAt?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -252,7 +209,6 @@ export type RoutineOrderByWithRelationInput = {
 
 export type RoutineWhereUniqueInput = Prisma.AtLeast<{
   id?: string
-  seq?: number
   AND?: Prisma.RoutineWhereInput | Prisma.RoutineWhereInput[]
   OR?: Prisma.RoutineWhereInput[]
   NOT?: Prisma.RoutineWhereInput | Prisma.RoutineWhereInput[]
@@ -263,21 +219,18 @@ export type RoutineWhereUniqueInput = Prisma.AtLeast<{
   label?: Prisma.StringFilter<"Routine"> | string
   activities?: Prisma.ActivityListRelationFilter
   programs?: Prisma.ProgramListRelationFilter
-}, "id" | "seq">
+}, "id">
 
 export type RoutineOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
-  seq?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   removedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   name?: Prisma.SortOrder
   label?: Prisma.SortOrder
   _count?: Prisma.RoutineCountOrderByAggregateInput
-  _avg?: Prisma.RoutineAvgOrderByAggregateInput
   _max?: Prisma.RoutineMaxOrderByAggregateInput
   _min?: Prisma.RoutineMinOrderByAggregateInput
-  _sum?: Prisma.RoutineSumOrderByAggregateInput
 }
 
 export type RoutineScalarWhereWithAggregatesInput = {
@@ -285,7 +238,6 @@ export type RoutineScalarWhereWithAggregatesInput = {
   OR?: Prisma.RoutineScalarWhereWithAggregatesInput[]
   NOT?: Prisma.RoutineScalarWhereWithAggregatesInput | Prisma.RoutineScalarWhereWithAggregatesInput[]
   id?: Prisma.StringWithAggregatesFilter<"Routine"> | string
-  seq?: Prisma.IntWithAggregatesFilter<"Routine"> | number
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Routine"> | Date | string
   updatedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Routine"> | Date | string | null
   removedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Routine"> | Date | string | null
@@ -295,7 +247,6 @@ export type RoutineScalarWhereWithAggregatesInput = {
 
 export type RoutineCreateInput = {
   id?: string
-  seq?: number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
@@ -307,7 +258,6 @@ export type RoutineCreateInput = {
 
 export type RoutineUncheckedCreateInput = {
   id?: string
-  seq?: number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
@@ -330,7 +280,6 @@ export type RoutineUpdateInput = {
 
 export type RoutineUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  seq?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -342,7 +291,6 @@ export type RoutineUncheckedUpdateInput = {
 
 export type RoutineCreateManyInput = {
   id?: string
-  seq?: number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
@@ -361,7 +309,6 @@ export type RoutineUpdateManyMutationInput = {
 
 export type RoutineUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  seq?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -376,7 +323,6 @@ export type RoutineScalarRelationFilter = {
 
 export type RoutineCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
-  seq?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   removedAt?: Prisma.SortOrder
@@ -384,13 +330,8 @@ export type RoutineCountOrderByAggregateInput = {
   label?: Prisma.SortOrder
 }
 
-export type RoutineAvgOrderByAggregateInput = {
-  seq?: Prisma.SortOrder
-}
-
 export type RoutineMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
-  seq?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   removedAt?: Prisma.SortOrder
@@ -400,16 +341,11 @@ export type RoutineMaxOrderByAggregateInput = {
 
 export type RoutineMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
-  seq?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   removedAt?: Prisma.SortOrder
   name?: Prisma.SortOrder
   label?: Prisma.SortOrder
-}
-
-export type RoutineSumOrderByAggregateInput = {
-  seq?: Prisma.SortOrder
 }
 
 export type RoutineCreateNestedOneWithoutProgramsInput = {
@@ -442,7 +378,6 @@ export type RoutineUpdateOneRequiredWithoutActivitiesNestedInput = {
 
 export type RoutineCreateWithoutProgramsInput = {
   id?: string
-  seq?: number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
@@ -453,7 +388,6 @@ export type RoutineCreateWithoutProgramsInput = {
 
 export type RoutineUncheckedCreateWithoutProgramsInput = {
   id?: string
-  seq?: number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
@@ -490,7 +424,6 @@ export type RoutineUpdateWithoutProgramsInput = {
 
 export type RoutineUncheckedUpdateWithoutProgramsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  seq?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -501,7 +434,6 @@ export type RoutineUncheckedUpdateWithoutProgramsInput = {
 
 export type RoutineCreateWithoutActivitiesInput = {
   id?: string
-  seq?: number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
@@ -512,7 +444,6 @@ export type RoutineCreateWithoutActivitiesInput = {
 
 export type RoutineUncheckedCreateWithoutActivitiesInput = {
   id?: string
-  seq?: number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
@@ -549,7 +480,6 @@ export type RoutineUpdateWithoutActivitiesInput = {
 
 export type RoutineUncheckedUpdateWithoutActivitiesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  seq?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -600,7 +530,6 @@ export type RoutineCountOutputTypeCountProgramsArgs<ExtArgs extends runtime.Type
 
 export type RoutineSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
-  seq?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   removedAt?: boolean
@@ -613,7 +542,6 @@ export type RoutineSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs 
 
 export type RoutineSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
-  seq?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   removedAt?: boolean
@@ -623,7 +551,6 @@ export type RoutineSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Exten
 
 export type RoutineSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
-  seq?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   removedAt?: boolean
@@ -633,7 +560,6 @@ export type RoutineSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Exten
 
 export type RoutineSelectScalar = {
   id?: boolean
-  seq?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   removedAt?: boolean
@@ -641,7 +567,7 @@ export type RoutineSelectScalar = {
   label?: boolean
 }
 
-export type RoutineOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "seq" | "createdAt" | "updatedAt" | "removedAt" | "name" | "label", ExtArgs["result"]["routine"]>
+export type RoutineOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "createdAt" | "updatedAt" | "removedAt" | "name" | "label", ExtArgs["result"]["routine"]>
 export type RoutineInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   activities?: boolean | Prisma.Routine$activitiesArgs<ExtArgs>
   programs?: boolean | Prisma.Routine$programsArgs<ExtArgs>
@@ -664,10 +590,6 @@ export type $RoutinePayload<ExtArgs extends runtime.Types.Extensions.InternalArg
      * 고유 식별자
      */
     id: string
-    /**
-     * 순번
-     */
-    seq: number
     /**
      * 생성 일시
      */
@@ -1114,7 +1036,6 @@ export interface Prisma__RoutineClient<T, Null = never, ExtArgs extends runtime.
  */
 export interface RoutineFieldRefs {
   readonly id: Prisma.FieldRef<"Routine", 'String'>
-  readonly seq: Prisma.FieldRef<"Routine", 'Int'>
   readonly createdAt: Prisma.FieldRef<"Routine", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"Routine", 'DateTime'>
   readonly removedAt: Prisma.FieldRef<"Routine", 'DateTime'>

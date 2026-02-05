@@ -20,23 +20,12 @@ export type OidcClientModel = runtime.Types.Result.DefaultSelection<Prisma.$Oidc
 
 export type AggregateOidcClient = {
   _count: OidcClientCountAggregateOutputType | null
-  _avg: OidcClientAvgAggregateOutputType | null
-  _sum: OidcClientSumAggregateOutputType | null
   _min: OidcClientMinAggregateOutputType | null
   _max: OidcClientMaxAggregateOutputType | null
 }
 
-export type OidcClientAvgAggregateOutputType = {
-  seq: number | null
-}
-
-export type OidcClientSumAggregateOutputType = {
-  seq: number | null
-}
-
 export type OidcClientMinAggregateOutputType = {
   id: string | null
-  seq: number | null
   createdAt: Date | null
   updatedAt: Date | null
   removedAt: Date | null
@@ -49,12 +38,10 @@ export type OidcClientMinAggregateOutputType = {
   logoUri: string | null
   policyUri: string | null
   tosUri: string | null
-  spaceId: string | null
 }
 
 export type OidcClientMaxAggregateOutputType = {
   id: string | null
-  seq: number | null
   createdAt: Date | null
   updatedAt: Date | null
   removedAt: Date | null
@@ -67,12 +54,10 @@ export type OidcClientMaxAggregateOutputType = {
   logoUri: string | null
   policyUri: string | null
   tosUri: string | null
-  spaceId: string | null
 }
 
 export type OidcClientCountAggregateOutputType = {
   id: number
-  seq: number
   createdAt: number
   updatedAt: number
   removedAt: number
@@ -88,22 +73,12 @@ export type OidcClientCountAggregateOutputType = {
   logoUri: number
   policyUri: number
   tosUri: number
-  spaceId: number
   _all: number
 }
 
 
-export type OidcClientAvgAggregateInputType = {
-  seq?: true
-}
-
-export type OidcClientSumAggregateInputType = {
-  seq?: true
-}
-
 export type OidcClientMinAggregateInputType = {
   id?: true
-  seq?: true
   createdAt?: true
   updatedAt?: true
   removedAt?: true
@@ -116,12 +91,10 @@ export type OidcClientMinAggregateInputType = {
   logoUri?: true
   policyUri?: true
   tosUri?: true
-  spaceId?: true
 }
 
 export type OidcClientMaxAggregateInputType = {
   id?: true
-  seq?: true
   createdAt?: true
   updatedAt?: true
   removedAt?: true
@@ -134,12 +107,10 @@ export type OidcClientMaxAggregateInputType = {
   logoUri?: true
   policyUri?: true
   tosUri?: true
-  spaceId?: true
 }
 
 export type OidcClientCountAggregateInputType = {
   id?: true
-  seq?: true
   createdAt?: true
   updatedAt?: true
   removedAt?: true
@@ -155,7 +126,6 @@ export type OidcClientCountAggregateInputType = {
   logoUri?: true
   policyUri?: true
   tosUri?: true
-  spaceId?: true
   _all?: true
 }
 
@@ -197,18 +167,6 @@ export type OidcClientAggregateArgs<ExtArgs extends runtime.Types.Extensions.Int
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
    * 
-   * Select which fields to average
-  **/
-  _avg?: OidcClientAvgAggregateInputType
-  /**
-   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-   * 
-   * Select which fields to sum
-  **/
-  _sum?: OidcClientSumAggregateInputType
-  /**
-   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-   * 
    * Select which fields to find the minimum value
   **/
   _min?: OidcClientMinAggregateInputType
@@ -239,15 +197,12 @@ export type OidcClientGroupByArgs<ExtArgs extends runtime.Types.Extensions.Inter
   take?: number
   skip?: number
   _count?: OidcClientCountAggregateInputType | true
-  _avg?: OidcClientAvgAggregateInputType
-  _sum?: OidcClientSumAggregateInputType
   _min?: OidcClientMinAggregateInputType
   _max?: OidcClientMaxAggregateInputType
 }
 
 export type OidcClientGroupByOutputType = {
   id: string
-  seq: number
   createdAt: Date
   updatedAt: Date | null
   removedAt: Date | null
@@ -263,10 +218,7 @@ export type OidcClientGroupByOutputType = {
   logoUri: string | null
   policyUri: string | null
   tosUri: string | null
-  spaceId: string | null
   _count: OidcClientCountAggregateOutputType | null
-  _avg: OidcClientAvgAggregateOutputType | null
-  _sum: OidcClientSumAggregateOutputType | null
   _min: OidcClientMinAggregateOutputType | null
   _max: OidcClientMaxAggregateOutputType | null
 }
@@ -291,7 +243,6 @@ export type OidcClientWhereInput = {
   OR?: Prisma.OidcClientWhereInput[]
   NOT?: Prisma.OidcClientWhereInput | Prisma.OidcClientWhereInput[]
   id?: Prisma.StringFilter<"OidcClient"> | string
-  seq?: Prisma.IntFilter<"OidcClient"> | number
   createdAt?: Prisma.DateTimeFilter<"OidcClient"> | Date | string
   updatedAt?: Prisma.DateTimeNullableFilter<"OidcClient"> | Date | string | null
   removedAt?: Prisma.DateTimeNullableFilter<"OidcClient"> | Date | string | null
@@ -307,13 +258,10 @@ export type OidcClientWhereInput = {
   logoUri?: Prisma.StringNullableFilter<"OidcClient"> | string | null
   policyUri?: Prisma.StringNullableFilter<"OidcClient"> | string | null
   tosUri?: Prisma.StringNullableFilter<"OidcClient"> | string | null
-  spaceId?: Prisma.StringNullableFilter<"OidcClient"> | string | null
-  space?: Prisma.XOR<Prisma.SpaceNullableScalarRelationFilter, Prisma.SpaceWhereInput> | null
 }
 
 export type OidcClientOrderByWithRelationInput = {
   id?: Prisma.SortOrder
-  seq?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   removedAt?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -329,13 +277,10 @@ export type OidcClientOrderByWithRelationInput = {
   logoUri?: Prisma.SortOrderInput | Prisma.SortOrder
   policyUri?: Prisma.SortOrderInput | Prisma.SortOrder
   tosUri?: Prisma.SortOrderInput | Prisma.SortOrder
-  spaceId?: Prisma.SortOrderInput | Prisma.SortOrder
-  space?: Prisma.SpaceOrderByWithRelationInput
 }
 
 export type OidcClientWhereUniqueInput = Prisma.AtLeast<{
   id?: string
-  seq?: number
   clientId?: string
   AND?: Prisma.OidcClientWhereInput | Prisma.OidcClientWhereInput[]
   OR?: Prisma.OidcClientWhereInput[]
@@ -354,13 +299,10 @@ export type OidcClientWhereUniqueInput = Prisma.AtLeast<{
   logoUri?: Prisma.StringNullableFilter<"OidcClient"> | string | null
   policyUri?: Prisma.StringNullableFilter<"OidcClient"> | string | null
   tosUri?: Prisma.StringNullableFilter<"OidcClient"> | string | null
-  spaceId?: Prisma.StringNullableFilter<"OidcClient"> | string | null
-  space?: Prisma.XOR<Prisma.SpaceNullableScalarRelationFilter, Prisma.SpaceWhereInput> | null
-}, "id" | "seq" | "clientId">
+}, "id" | "clientId">
 
 export type OidcClientOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
-  seq?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   removedAt?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -376,12 +318,9 @@ export type OidcClientOrderByWithAggregationInput = {
   logoUri?: Prisma.SortOrderInput | Prisma.SortOrder
   policyUri?: Prisma.SortOrderInput | Prisma.SortOrder
   tosUri?: Prisma.SortOrderInput | Prisma.SortOrder
-  spaceId?: Prisma.SortOrderInput | Prisma.SortOrder
   _count?: Prisma.OidcClientCountOrderByAggregateInput
-  _avg?: Prisma.OidcClientAvgOrderByAggregateInput
   _max?: Prisma.OidcClientMaxOrderByAggregateInput
   _min?: Prisma.OidcClientMinOrderByAggregateInput
-  _sum?: Prisma.OidcClientSumOrderByAggregateInput
 }
 
 export type OidcClientScalarWhereWithAggregatesInput = {
@@ -389,7 +328,6 @@ export type OidcClientScalarWhereWithAggregatesInput = {
   OR?: Prisma.OidcClientScalarWhereWithAggregatesInput[]
   NOT?: Prisma.OidcClientScalarWhereWithAggregatesInput | Prisma.OidcClientScalarWhereWithAggregatesInput[]
   id?: Prisma.StringWithAggregatesFilter<"OidcClient"> | string
-  seq?: Prisma.IntWithAggregatesFilter<"OidcClient"> | number
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"OidcClient"> | Date | string
   updatedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"OidcClient"> | Date | string | null
   removedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"OidcClient"> | Date | string | null
@@ -405,12 +343,10 @@ export type OidcClientScalarWhereWithAggregatesInput = {
   logoUri?: Prisma.StringNullableWithAggregatesFilter<"OidcClient"> | string | null
   policyUri?: Prisma.StringNullableWithAggregatesFilter<"OidcClient"> | string | null
   tosUri?: Prisma.StringNullableWithAggregatesFilter<"OidcClient"> | string | null
-  spaceId?: Prisma.StringNullableWithAggregatesFilter<"OidcClient"> | string | null
 }
 
 export type OidcClientCreateInput = {
   id?: string
-  seq?: number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
@@ -426,12 +362,10 @@ export type OidcClientCreateInput = {
   logoUri?: string | null
   policyUri?: string | null
   tosUri?: string | null
-  space?: Prisma.SpaceCreateNestedOneWithoutOidcClientsInput
 }
 
 export type OidcClientUncheckedCreateInput = {
   id?: string
-  seq?: number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
@@ -447,7 +381,6 @@ export type OidcClientUncheckedCreateInput = {
   logoUri?: string | null
   policyUri?: string | null
   tosUri?: string | null
-  spaceId?: string | null
 }
 
 export type OidcClientUpdateInput = {
@@ -467,12 +400,10 @@ export type OidcClientUpdateInput = {
   logoUri?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   policyUri?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tosUri?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  space?: Prisma.SpaceUpdateOneWithoutOidcClientsNestedInput
 }
 
 export type OidcClientUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  seq?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -488,12 +419,10 @@ export type OidcClientUncheckedUpdateInput = {
   logoUri?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   policyUri?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tosUri?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  spaceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type OidcClientCreateManyInput = {
   id?: string
-  seq?: number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
@@ -509,7 +438,6 @@ export type OidcClientCreateManyInput = {
   logoUri?: string | null
   policyUri?: string | null
   tosUri?: string | null
-  spaceId?: string | null
 }
 
 export type OidcClientUpdateManyMutationInput = {
@@ -533,7 +461,6 @@ export type OidcClientUpdateManyMutationInput = {
 
 export type OidcClientUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  seq?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -549,12 +476,10 @@ export type OidcClientUncheckedUpdateManyInput = {
   logoUri?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   policyUri?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tosUri?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  spaceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type OidcClientCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
-  seq?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   removedAt?: Prisma.SortOrder
@@ -570,16 +495,10 @@ export type OidcClientCountOrderByAggregateInput = {
   logoUri?: Prisma.SortOrder
   policyUri?: Prisma.SortOrder
   tosUri?: Prisma.SortOrder
-  spaceId?: Prisma.SortOrder
-}
-
-export type OidcClientAvgOrderByAggregateInput = {
-  seq?: Prisma.SortOrder
 }
 
 export type OidcClientMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
-  seq?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   removedAt?: Prisma.SortOrder
@@ -592,12 +511,10 @@ export type OidcClientMaxOrderByAggregateInput = {
   logoUri?: Prisma.SortOrder
   policyUri?: Prisma.SortOrder
   tosUri?: Prisma.SortOrder
-  spaceId?: Prisma.SortOrder
 }
 
 export type OidcClientMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
-  seq?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   removedAt?: Prisma.SortOrder
@@ -610,21 +527,6 @@ export type OidcClientMinOrderByAggregateInput = {
   logoUri?: Prisma.SortOrder
   policyUri?: Prisma.SortOrder
   tosUri?: Prisma.SortOrder
-  spaceId?: Prisma.SortOrder
-}
-
-export type OidcClientSumOrderByAggregateInput = {
-  seq?: Prisma.SortOrder
-}
-
-export type OidcClientListRelationFilter = {
-  every?: Prisma.OidcClientWhereInput
-  some?: Prisma.OidcClientWhereInput
-  none?: Prisma.OidcClientWhereInput
-}
-
-export type OidcClientOrderByRelationAggregateInput = {
-  _count?: Prisma.SortOrder
 }
 
 export type OidcClientCreateredirectUrisInput = {
@@ -654,222 +556,10 @@ export type OidcClientUpdateresponseTypesInput = {
   push?: string | string[]
 }
 
-export type OidcClientCreateNestedManyWithoutSpaceInput = {
-  create?: Prisma.XOR<Prisma.OidcClientCreateWithoutSpaceInput, Prisma.OidcClientUncheckedCreateWithoutSpaceInput> | Prisma.OidcClientCreateWithoutSpaceInput[] | Prisma.OidcClientUncheckedCreateWithoutSpaceInput[]
-  connectOrCreate?: Prisma.OidcClientCreateOrConnectWithoutSpaceInput | Prisma.OidcClientCreateOrConnectWithoutSpaceInput[]
-  createMany?: Prisma.OidcClientCreateManySpaceInputEnvelope
-  connect?: Prisma.OidcClientWhereUniqueInput | Prisma.OidcClientWhereUniqueInput[]
-}
-
-export type OidcClientUncheckedCreateNestedManyWithoutSpaceInput = {
-  create?: Prisma.XOR<Prisma.OidcClientCreateWithoutSpaceInput, Prisma.OidcClientUncheckedCreateWithoutSpaceInput> | Prisma.OidcClientCreateWithoutSpaceInput[] | Prisma.OidcClientUncheckedCreateWithoutSpaceInput[]
-  connectOrCreate?: Prisma.OidcClientCreateOrConnectWithoutSpaceInput | Prisma.OidcClientCreateOrConnectWithoutSpaceInput[]
-  createMany?: Prisma.OidcClientCreateManySpaceInputEnvelope
-  connect?: Prisma.OidcClientWhereUniqueInput | Prisma.OidcClientWhereUniqueInput[]
-}
-
-export type OidcClientUpdateManyWithoutSpaceNestedInput = {
-  create?: Prisma.XOR<Prisma.OidcClientCreateWithoutSpaceInput, Prisma.OidcClientUncheckedCreateWithoutSpaceInput> | Prisma.OidcClientCreateWithoutSpaceInput[] | Prisma.OidcClientUncheckedCreateWithoutSpaceInput[]
-  connectOrCreate?: Prisma.OidcClientCreateOrConnectWithoutSpaceInput | Prisma.OidcClientCreateOrConnectWithoutSpaceInput[]
-  upsert?: Prisma.OidcClientUpsertWithWhereUniqueWithoutSpaceInput | Prisma.OidcClientUpsertWithWhereUniqueWithoutSpaceInput[]
-  createMany?: Prisma.OidcClientCreateManySpaceInputEnvelope
-  set?: Prisma.OidcClientWhereUniqueInput | Prisma.OidcClientWhereUniqueInput[]
-  disconnect?: Prisma.OidcClientWhereUniqueInput | Prisma.OidcClientWhereUniqueInput[]
-  delete?: Prisma.OidcClientWhereUniqueInput | Prisma.OidcClientWhereUniqueInput[]
-  connect?: Prisma.OidcClientWhereUniqueInput | Prisma.OidcClientWhereUniqueInput[]
-  update?: Prisma.OidcClientUpdateWithWhereUniqueWithoutSpaceInput | Prisma.OidcClientUpdateWithWhereUniqueWithoutSpaceInput[]
-  updateMany?: Prisma.OidcClientUpdateManyWithWhereWithoutSpaceInput | Prisma.OidcClientUpdateManyWithWhereWithoutSpaceInput[]
-  deleteMany?: Prisma.OidcClientScalarWhereInput | Prisma.OidcClientScalarWhereInput[]
-}
-
-export type OidcClientUncheckedUpdateManyWithoutSpaceNestedInput = {
-  create?: Prisma.XOR<Prisma.OidcClientCreateWithoutSpaceInput, Prisma.OidcClientUncheckedCreateWithoutSpaceInput> | Prisma.OidcClientCreateWithoutSpaceInput[] | Prisma.OidcClientUncheckedCreateWithoutSpaceInput[]
-  connectOrCreate?: Prisma.OidcClientCreateOrConnectWithoutSpaceInput | Prisma.OidcClientCreateOrConnectWithoutSpaceInput[]
-  upsert?: Prisma.OidcClientUpsertWithWhereUniqueWithoutSpaceInput | Prisma.OidcClientUpsertWithWhereUniqueWithoutSpaceInput[]
-  createMany?: Prisma.OidcClientCreateManySpaceInputEnvelope
-  set?: Prisma.OidcClientWhereUniqueInput | Prisma.OidcClientWhereUniqueInput[]
-  disconnect?: Prisma.OidcClientWhereUniqueInput | Prisma.OidcClientWhereUniqueInput[]
-  delete?: Prisma.OidcClientWhereUniqueInput | Prisma.OidcClientWhereUniqueInput[]
-  connect?: Prisma.OidcClientWhereUniqueInput | Prisma.OidcClientWhereUniqueInput[]
-  update?: Prisma.OidcClientUpdateWithWhereUniqueWithoutSpaceInput | Prisma.OidcClientUpdateWithWhereUniqueWithoutSpaceInput[]
-  updateMany?: Prisma.OidcClientUpdateManyWithWhereWithoutSpaceInput | Prisma.OidcClientUpdateManyWithWhereWithoutSpaceInput[]
-  deleteMany?: Prisma.OidcClientScalarWhereInput | Prisma.OidcClientScalarWhereInput[]
-}
-
-export type OidcClientCreateWithoutSpaceInput = {
-  id?: string
-  seq?: number
-  createdAt?: Date | string
-  updatedAt?: Date | string | null
-  removedAt?: Date | string | null
-  clientId: string
-  clientSecret?: string | null
-  clientName: string
-  redirectUris?: Prisma.OidcClientCreateredirectUrisInput | string[]
-  grantTypes?: Prisma.OidcClientCreategrantTypesInput | string[]
-  responseTypes?: Prisma.OidcClientCreateresponseTypesInput | string[]
-  tokenEndpointAuthMethod?: string
-  scope?: string
-  isActive?: boolean
-  logoUri?: string | null
-  policyUri?: string | null
-  tosUri?: string | null
-}
-
-export type OidcClientUncheckedCreateWithoutSpaceInput = {
-  id?: string
-  seq?: number
-  createdAt?: Date | string
-  updatedAt?: Date | string | null
-  removedAt?: Date | string | null
-  clientId: string
-  clientSecret?: string | null
-  clientName: string
-  redirectUris?: Prisma.OidcClientCreateredirectUrisInput | string[]
-  grantTypes?: Prisma.OidcClientCreategrantTypesInput | string[]
-  responseTypes?: Prisma.OidcClientCreateresponseTypesInput | string[]
-  tokenEndpointAuthMethod?: string
-  scope?: string
-  isActive?: boolean
-  logoUri?: string | null
-  policyUri?: string | null
-  tosUri?: string | null
-}
-
-export type OidcClientCreateOrConnectWithoutSpaceInput = {
-  where: Prisma.OidcClientWhereUniqueInput
-  create: Prisma.XOR<Prisma.OidcClientCreateWithoutSpaceInput, Prisma.OidcClientUncheckedCreateWithoutSpaceInput>
-}
-
-export type OidcClientCreateManySpaceInputEnvelope = {
-  data: Prisma.OidcClientCreateManySpaceInput | Prisma.OidcClientCreateManySpaceInput[]
-  skipDuplicates?: boolean
-}
-
-export type OidcClientUpsertWithWhereUniqueWithoutSpaceInput = {
-  where: Prisma.OidcClientWhereUniqueInput
-  update: Prisma.XOR<Prisma.OidcClientUpdateWithoutSpaceInput, Prisma.OidcClientUncheckedUpdateWithoutSpaceInput>
-  create: Prisma.XOR<Prisma.OidcClientCreateWithoutSpaceInput, Prisma.OidcClientUncheckedCreateWithoutSpaceInput>
-}
-
-export type OidcClientUpdateWithWhereUniqueWithoutSpaceInput = {
-  where: Prisma.OidcClientWhereUniqueInput
-  data: Prisma.XOR<Prisma.OidcClientUpdateWithoutSpaceInput, Prisma.OidcClientUncheckedUpdateWithoutSpaceInput>
-}
-
-export type OidcClientUpdateManyWithWhereWithoutSpaceInput = {
-  where: Prisma.OidcClientScalarWhereInput
-  data: Prisma.XOR<Prisma.OidcClientUpdateManyMutationInput, Prisma.OidcClientUncheckedUpdateManyWithoutSpaceInput>
-}
-
-export type OidcClientScalarWhereInput = {
-  AND?: Prisma.OidcClientScalarWhereInput | Prisma.OidcClientScalarWhereInput[]
-  OR?: Prisma.OidcClientScalarWhereInput[]
-  NOT?: Prisma.OidcClientScalarWhereInput | Prisma.OidcClientScalarWhereInput[]
-  id?: Prisma.StringFilter<"OidcClient"> | string
-  seq?: Prisma.IntFilter<"OidcClient"> | number
-  createdAt?: Prisma.DateTimeFilter<"OidcClient"> | Date | string
-  updatedAt?: Prisma.DateTimeNullableFilter<"OidcClient"> | Date | string | null
-  removedAt?: Prisma.DateTimeNullableFilter<"OidcClient"> | Date | string | null
-  clientId?: Prisma.StringFilter<"OidcClient"> | string
-  clientSecret?: Prisma.StringNullableFilter<"OidcClient"> | string | null
-  clientName?: Prisma.StringFilter<"OidcClient"> | string
-  redirectUris?: Prisma.StringNullableListFilter<"OidcClient">
-  grantTypes?: Prisma.StringNullableListFilter<"OidcClient">
-  responseTypes?: Prisma.StringNullableListFilter<"OidcClient">
-  tokenEndpointAuthMethod?: Prisma.StringFilter<"OidcClient"> | string
-  scope?: Prisma.StringFilter<"OidcClient"> | string
-  isActive?: Prisma.BoolFilter<"OidcClient"> | boolean
-  logoUri?: Prisma.StringNullableFilter<"OidcClient"> | string | null
-  policyUri?: Prisma.StringNullableFilter<"OidcClient"> | string | null
-  tosUri?: Prisma.StringNullableFilter<"OidcClient"> | string | null
-  spaceId?: Prisma.StringNullableFilter<"OidcClient"> | string | null
-}
-
-export type OidcClientCreateManySpaceInput = {
-  id?: string
-  seq?: number
-  createdAt?: Date | string
-  updatedAt?: Date | string | null
-  removedAt?: Date | string | null
-  clientId: string
-  clientSecret?: string | null
-  clientName: string
-  redirectUris?: Prisma.OidcClientCreateredirectUrisInput | string[]
-  grantTypes?: Prisma.OidcClientCreategrantTypesInput | string[]
-  responseTypes?: Prisma.OidcClientCreateresponseTypesInput | string[]
-  tokenEndpointAuthMethod?: string
-  scope?: string
-  isActive?: boolean
-  logoUri?: string | null
-  policyUri?: string | null
-  tosUri?: string | null
-}
-
-export type OidcClientUpdateWithoutSpaceInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  clientId?: Prisma.StringFieldUpdateOperationsInput | string
-  clientSecret?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  clientName?: Prisma.StringFieldUpdateOperationsInput | string
-  redirectUris?: Prisma.OidcClientUpdateredirectUrisInput | string[]
-  grantTypes?: Prisma.OidcClientUpdategrantTypesInput | string[]
-  responseTypes?: Prisma.OidcClientUpdateresponseTypesInput | string[]
-  tokenEndpointAuthMethod?: Prisma.StringFieldUpdateOperationsInput | string
-  scope?: Prisma.StringFieldUpdateOperationsInput | string
-  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  logoUri?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  policyUri?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  tosUri?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-}
-
-export type OidcClientUncheckedUpdateWithoutSpaceInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  seq?: Prisma.IntFieldUpdateOperationsInput | number
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  clientId?: Prisma.StringFieldUpdateOperationsInput | string
-  clientSecret?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  clientName?: Prisma.StringFieldUpdateOperationsInput | string
-  redirectUris?: Prisma.OidcClientUpdateredirectUrisInput | string[]
-  grantTypes?: Prisma.OidcClientUpdategrantTypesInput | string[]
-  responseTypes?: Prisma.OidcClientUpdateresponseTypesInput | string[]
-  tokenEndpointAuthMethod?: Prisma.StringFieldUpdateOperationsInput | string
-  scope?: Prisma.StringFieldUpdateOperationsInput | string
-  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  logoUri?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  policyUri?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  tosUri?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-}
-
-export type OidcClientUncheckedUpdateManyWithoutSpaceInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  seq?: Prisma.IntFieldUpdateOperationsInput | number
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  clientId?: Prisma.StringFieldUpdateOperationsInput | string
-  clientSecret?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  clientName?: Prisma.StringFieldUpdateOperationsInput | string
-  redirectUris?: Prisma.OidcClientUpdateredirectUrisInput | string[]
-  grantTypes?: Prisma.OidcClientUpdategrantTypesInput | string[]
-  responseTypes?: Prisma.OidcClientUpdateresponseTypesInput | string[]
-  tokenEndpointAuthMethod?: Prisma.StringFieldUpdateOperationsInput | string
-  scope?: Prisma.StringFieldUpdateOperationsInput | string
-  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  logoUri?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  policyUri?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  tosUri?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-}
-
 
 
 export type OidcClientSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
-  seq?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   removedAt?: boolean
@@ -885,13 +575,10 @@ export type OidcClientSelect<ExtArgs extends runtime.Types.Extensions.InternalAr
   logoUri?: boolean
   policyUri?: boolean
   tosUri?: boolean
-  spaceId?: boolean
-  space?: boolean | Prisma.OidcClient$spaceArgs<ExtArgs>
 }, ExtArgs["result"]["oidcClient"]>
 
 export type OidcClientSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
-  seq?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   removedAt?: boolean
@@ -907,13 +594,10 @@ export type OidcClientSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Ex
   logoUri?: boolean
   policyUri?: boolean
   tosUri?: boolean
-  spaceId?: boolean
-  space?: boolean | Prisma.OidcClient$spaceArgs<ExtArgs>
 }, ExtArgs["result"]["oidcClient"]>
 
 export type OidcClientSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
-  seq?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   removedAt?: boolean
@@ -929,13 +613,10 @@ export type OidcClientSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Ex
   logoUri?: boolean
   policyUri?: boolean
   tosUri?: boolean
-  spaceId?: boolean
-  space?: boolean | Prisma.OidcClient$spaceArgs<ExtArgs>
 }, ExtArgs["result"]["oidcClient"]>
 
 export type OidcClientSelectScalar = {
   id?: boolean
-  seq?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   removedAt?: boolean
@@ -951,28 +632,15 @@ export type OidcClientSelectScalar = {
   logoUri?: boolean
   policyUri?: boolean
   tosUri?: boolean
-  spaceId?: boolean
 }
 
-export type OidcClientOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "seq" | "createdAt" | "updatedAt" | "removedAt" | "clientId" | "clientSecret" | "clientName" | "redirectUris" | "grantTypes" | "responseTypes" | "tokenEndpointAuthMethod" | "scope" | "isActive" | "logoUri" | "policyUri" | "tosUri" | "spaceId", ExtArgs["result"]["oidcClient"]>
-export type OidcClientInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  space?: boolean | Prisma.OidcClient$spaceArgs<ExtArgs>
-}
-export type OidcClientIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  space?: boolean | Prisma.OidcClient$spaceArgs<ExtArgs>
-}
-export type OidcClientIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  space?: boolean | Prisma.OidcClient$spaceArgs<ExtArgs>
-}
+export type OidcClientOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "createdAt" | "updatedAt" | "removedAt" | "clientId" | "clientSecret" | "clientName" | "redirectUris" | "grantTypes" | "responseTypes" | "tokenEndpointAuthMethod" | "scope" | "isActive" | "logoUri" | "policyUri" | "tosUri", ExtArgs["result"]["oidcClient"]>
 
 export type $OidcClientPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "OidcClient"
-  objects: {
-    space: Prisma.$SpacePayload<ExtArgs> | null
-  }
+  objects: {}
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
-    seq: number
     createdAt: Date
     updatedAt: Date | null
     removedAt: Date | null
@@ -1024,10 +692,6 @@ export type $OidcClientPayload<ExtArgs extends runtime.Types.Extensions.Internal
      * @displayName 서비스 약관 URI
      */
     tosUri: string | null
-    /**
-     * @displayName 소속 Space
-     */
-    spaceId: string | null
   }, ExtArgs["result"]["oidcClient"]>
   composites: {}
 }
@@ -1422,7 +1086,6 @@ readonly fields: OidcClientFieldRefs;
  */
 export interface Prisma__OidcClientClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
-  space<T extends Prisma.OidcClient$spaceArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.OidcClient$spaceArgs<ExtArgs>>): Prisma.Prisma__SpaceClient<runtime.Types.Result.GetResult<Prisma.$SpacePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1453,7 +1116,6 @@ export interface Prisma__OidcClientClient<T, Null = never, ExtArgs extends runti
  */
 export interface OidcClientFieldRefs {
   readonly id: Prisma.FieldRef<"OidcClient", 'String'>
-  readonly seq: Prisma.FieldRef<"OidcClient", 'Int'>
   readonly createdAt: Prisma.FieldRef<"OidcClient", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"OidcClient", 'DateTime'>
   readonly removedAt: Prisma.FieldRef<"OidcClient", 'DateTime'>
@@ -1469,7 +1131,6 @@ export interface OidcClientFieldRefs {
   readonly logoUri: Prisma.FieldRef<"OidcClient", 'String'>
   readonly policyUri: Prisma.FieldRef<"OidcClient", 'String'>
   readonly tosUri: Prisma.FieldRef<"OidcClient", 'String'>
-  readonly spaceId: Prisma.FieldRef<"OidcClient", 'String'>
 }
     
 
@@ -1486,10 +1147,6 @@ export type OidcClientFindUniqueArgs<ExtArgs extends runtime.Types.Extensions.In
    * Omit specific fields from the OidcClient
    */
   omit?: Prisma.OidcClientOmit<ExtArgs> | null
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.OidcClientInclude<ExtArgs> | null
   /**
    * Filter, which OidcClient to fetch.
    */
@@ -1509,10 +1166,6 @@ export type OidcClientFindUniqueOrThrowArgs<ExtArgs extends runtime.Types.Extens
    */
   omit?: Prisma.OidcClientOmit<ExtArgs> | null
   /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.OidcClientInclude<ExtArgs> | null
-  /**
    * Filter, which OidcClient to fetch.
    */
   where: Prisma.OidcClientWhereUniqueInput
@@ -1530,10 +1183,6 @@ export type OidcClientFindFirstArgs<ExtArgs extends runtime.Types.Extensions.Int
    * Omit specific fields from the OidcClient
    */
   omit?: Prisma.OidcClientOmit<ExtArgs> | null
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.OidcClientInclude<ExtArgs> | null
   /**
    * Filter, which OidcClient to fetch.
    */
@@ -1583,10 +1232,6 @@ export type OidcClientFindFirstOrThrowArgs<ExtArgs extends runtime.Types.Extensi
    */
   omit?: Prisma.OidcClientOmit<ExtArgs> | null
   /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.OidcClientInclude<ExtArgs> | null
-  /**
    * Filter, which OidcClient to fetch.
    */
   where?: Prisma.OidcClientWhereInput
@@ -1635,10 +1280,6 @@ export type OidcClientFindManyArgs<ExtArgs extends runtime.Types.Extensions.Inte
    */
   omit?: Prisma.OidcClientOmit<ExtArgs> | null
   /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.OidcClientInclude<ExtArgs> | null
-  /**
    * Filter, which OidcClients to fetch.
    */
   where?: Prisma.OidcClientWhereInput
@@ -1682,10 +1323,6 @@ export type OidcClientCreateArgs<ExtArgs extends runtime.Types.Extensions.Intern
    */
   omit?: Prisma.OidcClientOmit<ExtArgs> | null
   /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.OidcClientInclude<ExtArgs> | null
-  /**
    * The data needed to create a OidcClient.
    */
   data: Prisma.XOR<Prisma.OidcClientCreateInput, Prisma.OidcClientUncheckedCreateInput>
@@ -1719,10 +1356,6 @@ export type OidcClientCreateManyAndReturnArgs<ExtArgs extends runtime.Types.Exte
    */
   data: Prisma.OidcClientCreateManyInput | Prisma.OidcClientCreateManyInput[]
   skipDuplicates?: boolean
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.OidcClientIncludeCreateManyAndReturn<ExtArgs> | null
 }
 
 /**
@@ -1737,10 +1370,6 @@ export type OidcClientUpdateArgs<ExtArgs extends runtime.Types.Extensions.Intern
    * Omit specific fields from the OidcClient
    */
   omit?: Prisma.OidcClientOmit<ExtArgs> | null
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.OidcClientInclude<ExtArgs> | null
   /**
    * The data needed to update a OidcClient.
    */
@@ -1793,10 +1422,6 @@ export type OidcClientUpdateManyAndReturnArgs<ExtArgs extends runtime.Types.Exte
    * Limit how many OidcClients to update.
    */
   limit?: number
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.OidcClientIncludeUpdateManyAndReturn<ExtArgs> | null
 }
 
 /**
@@ -1811,10 +1436,6 @@ export type OidcClientUpsertArgs<ExtArgs extends runtime.Types.Extensions.Intern
    * Omit specific fields from the OidcClient
    */
   omit?: Prisma.OidcClientOmit<ExtArgs> | null
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.OidcClientInclude<ExtArgs> | null
   /**
    * The filter to search for the OidcClient to update in case it exists.
    */
@@ -1842,10 +1463,6 @@ export type OidcClientDeleteArgs<ExtArgs extends runtime.Types.Extensions.Intern
    */
   omit?: Prisma.OidcClientOmit<ExtArgs> | null
   /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.OidcClientInclude<ExtArgs> | null
-  /**
    * Filter which OidcClient to delete.
    */
   where: Prisma.OidcClientWhereUniqueInput
@@ -1866,25 +1483,6 @@ export type OidcClientDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.In
 }
 
 /**
- * OidcClient.space
- */
-export type OidcClient$spaceArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  /**
-   * Select specific fields to fetch from the Space
-   */
-  select?: Prisma.SpaceSelect<ExtArgs> | null
-  /**
-   * Omit specific fields from the Space
-   */
-  omit?: Prisma.SpaceOmit<ExtArgs> | null
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.SpaceInclude<ExtArgs> | null
-  where?: Prisma.SpaceWhereInput
-}
-
-/**
  * OidcClient without action
  */
 export type OidcClientDefaultArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1896,8 +1494,4 @@ export type OidcClientDefaultArgs<ExtArgs extends runtime.Types.Extensions.Inter
    * Omit specific fields from the OidcClient
    */
   omit?: Prisma.OidcClientOmit<ExtArgs> | null
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.OidcClientInclude<ExtArgs> | null
 }

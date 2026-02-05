@@ -18,7 +18,7 @@ describe("SpacesRepository", () => {
 
 	const mockSpaceData = {
 		id: "space-test-id",
-		seq: 1,
+		isSystem: false,
 		createdAt: new Date("2024-01-01"),
 		updatedAt: new Date("2024-01-01"),
 		removedAt: null,
@@ -28,7 +28,6 @@ describe("SpacesRepository", () => {
 		...mockSpaceData,
 		ground: {
 			id: "ground-test-id",
-			seq: 1,
 			name: "Test Ground",
 		},
 	};

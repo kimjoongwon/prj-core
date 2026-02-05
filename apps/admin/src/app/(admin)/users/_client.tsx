@@ -22,12 +22,6 @@ import { observer } from "mobx-react-lite";
  */
 const columns: MetaDataGridColumnConfig<UserDto>[] = [
 	{
-		field: "seq",
-		label: "번호",
-		size: 80,
-		isRequired: true,
-	},
-	{
 		field: "name",
 		label: "이름",
 		size: 150,

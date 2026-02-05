@@ -20,10 +20,11 @@
 /// @displayName 공간
 model Space {
   id             String               @id @default(uuid())
-  seq            Int                  @unique @default(autoincrement())
   createdAt      DateTime             @default(now()) @map("created_at") @db.Timestamptz(6)
   updatedAt      DateTime?            @updatedAt @map("updated_at") @db.Timestamptz(6)
   removedAt      DateTime?            @map("removed_at") @db.Timestamptz(6)
+  /// @displayName 시스템 Space 여부
+  isSystem       Boolean              @default(false) @map("is_system")
   ground         Ground?
   associations   SpaceAssociation[]
   classification SpaceClassification?
@@ -36,7 +37,6 @@ model Space {
   timelines      Timeline[]
   tasks          Task[]
   safeWallets    SafeWallet[]
-  oidcClients    OidcClient[]
 
   @@map("spaces")
 }
@@ -47,7 +47,6 @@ model Space {
 /// @displayName 공간 분류
 model SpaceClassification {
   id         String    @id @default(uuid())
-  seq        Int       @unique @default(autoincrement())
   categoryId String    @map("category_id")
   spaceId    String    @unique @map("space_id")
   createdAt  DateTime  @default(now()) @map("created_at")
@@ -66,7 +65,6 @@ model SpaceClassification {
 /// @displayName 공간 그룹
 model SpaceAssociation {
   id        String    @id @default(uuid())
-  seq       Int       @unique @default(autoincrement())
   createdAt DateTime  @default(now()) @map("created_at")
   updatedAt DateTime? @updatedAt @map("updated_at") @db.Timestamptz(6)
   removedAt DateTime? @map("removed_at") @db.Timestamptz(6)
@@ -86,7 +84,6 @@ model SpaceAssociation {
 /// @displayName 시설
 model Ground {
   id              String    @id @default(uuid())
-  seq             Int       @unique @default(autoincrement())
   createdAt       DateTime  @default(now()) @map("created_at")
   updatedAt       DateTime? @updatedAt @map("updated_at") @db.Timestamptz(6)
   removedAt       DateTime? @map("removed_at") @db.Timestamptz(6)

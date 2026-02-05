@@ -29,7 +29,6 @@ describe("CaslAbilityFactory", () => {
 	): AbilityEntity => {
 		const ability = {
 			id: "ability-test-id",
-			seq: 1,
 			subjectId: "subject-test-id",
 			actionId: "action-test-id",
 			roleId: "role-test-id",

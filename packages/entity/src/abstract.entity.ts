@@ -12,7 +12,6 @@ export class AbstractEntity<DTO = unknown, O = never>
 	implements BaseEntityFields
 {
 	id!: string;
-	seq!: number;
 	createdAt!: Date;
 	updatedAt!: Date | null;
 	removedAt!: Date | null;

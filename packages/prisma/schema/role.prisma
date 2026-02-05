@@ -21,7 +21,6 @@
 /// @displayName 역할
 model Role {
   id        String    @id @default(uuid())
-  seq       Int       @unique @default(autoincrement())
   createdAt DateTime  @default(now()) @map("created_at")
   updatedAt DateTime? @updatedAt @map("updated_at") @db.Timestamptz(6)
   removedAt DateTime? @map("removed_at") @db.Timestamptz(6)
@@ -49,7 +48,6 @@ model Role {
 /// @displayName 역할 그룹
 model RoleAssociation {
   id        String    @id @default(uuid())
-  seq       Int       @unique @default(autoincrement())
   createdAt DateTime  @default(now()) @map("created_at")
   updatedAt DateTime? @updatedAt @map("updated_at") @db.Timestamptz(6)
   removedAt DateTime? @map("removed_at") @db.Timestamptz(6)
@@ -68,7 +66,6 @@ model RoleAssociation {
 /// @displayName 역할 분류
 model RoleClassification {
   id         String    @id @default(uuid())
-  seq        Int       @unique @default(autoincrement())
   categoryId String    @map("category_id")
   roleId     String    @unique @map("role_id")
   createdAt  DateTime  @default(now()) @map("created_at")

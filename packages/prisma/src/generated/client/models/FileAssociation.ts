@@ -20,23 +20,12 @@ export type FileAssociationModel = runtime.Types.Result.DefaultSelection<Prisma.
 
 export type AggregateFileAssociation = {
   _count: FileAssociationCountAggregateOutputType | null
-  _avg: FileAssociationAvgAggregateOutputType | null
-  _sum: FileAssociationSumAggregateOutputType | null
   _min: FileAssociationMinAggregateOutputType | null
   _max: FileAssociationMaxAggregateOutputType | null
 }
 
-export type FileAssociationAvgAggregateOutputType = {
-  seq: number | null
-}
-
-export type FileAssociationSumAggregateOutputType = {
-  seq: number | null
-}
-
 export type FileAssociationMinAggregateOutputType = {
   id: string | null
-  seq: number | null
   createdAt: Date | null
   updatedAt: Date | null
   removedAt: Date | null
@@ -46,7 +35,6 @@ export type FileAssociationMinAggregateOutputType = {
 
 export type FileAssociationMaxAggregateOutputType = {
   id: string | null
-  seq: number | null
   createdAt: Date | null
   updatedAt: Date | null
   removedAt: Date | null
@@ -56,7 +44,6 @@ export type FileAssociationMaxAggregateOutputType = {
 
 export type FileAssociationCountAggregateOutputType = {
   id: number
-  seq: number
   createdAt: number
   updatedAt: number
   removedAt: number
@@ -66,17 +53,8 @@ export type FileAssociationCountAggregateOutputType = {
 }
 
 
-export type FileAssociationAvgAggregateInputType = {
-  seq?: true
-}
-
-export type FileAssociationSumAggregateInputType = {
-  seq?: true
-}
-
 export type FileAssociationMinAggregateInputType = {
   id?: true
-  seq?: true
   createdAt?: true
   updatedAt?: true
   removedAt?: true
@@ -86,7 +64,6 @@ export type FileAssociationMinAggregateInputType = {
 
 export type FileAssociationMaxAggregateInputType = {
   id?: true
-  seq?: true
   createdAt?: true
   updatedAt?: true
   removedAt?: true
@@ -96,7 +73,6 @@ export type FileAssociationMaxAggregateInputType = {
 
 export type FileAssociationCountAggregateInputType = {
   id?: true
-  seq?: true
   createdAt?: true
   updatedAt?: true
   removedAt?: true
@@ -143,18 +119,6 @@ export type FileAssociationAggregateArgs<ExtArgs extends runtime.Types.Extension
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
    * 
-   * Select which fields to average
-  **/
-  _avg?: FileAssociationAvgAggregateInputType
-  /**
-   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-   * 
-   * Select which fields to sum
-  **/
-  _sum?: FileAssociationSumAggregateInputType
-  /**
-   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-   * 
    * Select which fields to find the minimum value
   **/
   _min?: FileAssociationMinAggregateInputType
@@ -185,23 +149,18 @@ export type FileAssociationGroupByArgs<ExtArgs extends runtime.Types.Extensions.
   take?: number
   skip?: number
   _count?: FileAssociationCountAggregateInputType | true
-  _avg?: FileAssociationAvgAggregateInputType
-  _sum?: FileAssociationSumAggregateInputType
   _min?: FileAssociationMinAggregateInputType
   _max?: FileAssociationMaxAggregateInputType
 }
 
 export type FileAssociationGroupByOutputType = {
   id: string
-  seq: number
   createdAt: Date
   updatedAt: Date | null
   removedAt: Date | null
   fileId: string
   groupId: string
   _count: FileAssociationCountAggregateOutputType | null
-  _avg: FileAssociationAvgAggregateOutputType | null
-  _sum: FileAssociationSumAggregateOutputType | null
   _min: FileAssociationMinAggregateOutputType | null
   _max: FileAssociationMaxAggregateOutputType | null
 }
@@ -226,7 +185,6 @@ export type FileAssociationWhereInput = {
   OR?: Prisma.FileAssociationWhereInput[]
   NOT?: Prisma.FileAssociationWhereInput | Prisma.FileAssociationWhereInput[]
   id?: Prisma.StringFilter<"FileAssociation"> | string
-  seq?: Prisma.IntFilter<"FileAssociation"> | number
   createdAt?: Prisma.DateTimeFilter<"FileAssociation"> | Date | string
   updatedAt?: Prisma.DateTimeNullableFilter<"FileAssociation"> | Date | string | null
   removedAt?: Prisma.DateTimeNullableFilter<"FileAssociation"> | Date | string | null
@@ -238,7 +196,6 @@ export type FileAssociationWhereInput = {
 
 export type FileAssociationOrderByWithRelationInput = {
   id?: Prisma.SortOrder
-  seq?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   removedAt?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -250,7 +207,6 @@ export type FileAssociationOrderByWithRelationInput = {
 
 export type FileAssociationWhereUniqueInput = Prisma.AtLeast<{
   id?: string
-  seq?: number
   groupId_fileId?: Prisma.FileAssociationGroupIdFileIdCompoundUniqueInput
   AND?: Prisma.FileAssociationWhereInput | Prisma.FileAssociationWhereInput[]
   OR?: Prisma.FileAssociationWhereInput[]
@@ -262,21 +218,18 @@ export type FileAssociationWhereUniqueInput = Prisma.AtLeast<{
   groupId?: Prisma.StringFilter<"FileAssociation"> | string
   file?: Prisma.XOR<Prisma.FileScalarRelationFilter, Prisma.FileWhereInput>
   group?: Prisma.XOR<Prisma.GroupScalarRelationFilter, Prisma.GroupWhereInput>
-}, "id" | "seq" | "groupId_fileId">
+}, "id" | "groupId_fileId">
 
 export type FileAssociationOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
-  seq?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   removedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   fileId?: Prisma.SortOrder
   groupId?: Prisma.SortOrder
   _count?: Prisma.FileAssociationCountOrderByAggregateInput
-  _avg?: Prisma.FileAssociationAvgOrderByAggregateInput
   _max?: Prisma.FileAssociationMaxOrderByAggregateInput
   _min?: Prisma.FileAssociationMinOrderByAggregateInput
-  _sum?: Prisma.FileAssociationSumOrderByAggregateInput
 }
 
 export type FileAssociationScalarWhereWithAggregatesInput = {
@@ -284,7 +237,6 @@ export type FileAssociationScalarWhereWithAggregatesInput = {
   OR?: Prisma.FileAssociationScalarWhereWithAggregatesInput[]
   NOT?: Prisma.FileAssociationScalarWhereWithAggregatesInput | Prisma.FileAssociationScalarWhereWithAggregatesInput[]
   id?: Prisma.StringWithAggregatesFilter<"FileAssociation"> | string
-  seq?: Prisma.IntWithAggregatesFilter<"FileAssociation"> | number
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"FileAssociation"> | Date | string
   updatedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"FileAssociation"> | Date | string | null
   removedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"FileAssociation"> | Date | string | null
@@ -294,7 +246,6 @@ export type FileAssociationScalarWhereWithAggregatesInput = {
 
 export type FileAssociationCreateInput = {
   id?: string
-  seq?: number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
@@ -304,7 +255,6 @@ export type FileAssociationCreateInput = {
 
 export type FileAssociationUncheckedCreateInput = {
   id?: string
-  seq?: number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
@@ -323,7 +273,6 @@ export type FileAssociationUpdateInput = {
 
 export type FileAssociationUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  seq?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -333,7 +282,6 @@ export type FileAssociationUncheckedUpdateInput = {
 
 export type FileAssociationCreateManyInput = {
   id?: string
-  seq?: number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
@@ -350,7 +298,6 @@ export type FileAssociationUpdateManyMutationInput = {
 
 export type FileAssociationUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  seq?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -375,7 +322,6 @@ export type FileAssociationGroupIdFileIdCompoundUniqueInput = {
 
 export type FileAssociationCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
-  seq?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   removedAt?: Prisma.SortOrder
@@ -383,13 +329,8 @@ export type FileAssociationCountOrderByAggregateInput = {
   groupId?: Prisma.SortOrder
 }
 
-export type FileAssociationAvgOrderByAggregateInput = {
-  seq?: Prisma.SortOrder
-}
-
 export type FileAssociationMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
-  seq?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   removedAt?: Prisma.SortOrder
@@ -399,16 +340,11 @@ export type FileAssociationMaxOrderByAggregateInput = {
 
 export type FileAssociationMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
-  seq?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   removedAt?: Prisma.SortOrder
   fileId?: Prisma.SortOrder
   groupId?: Prisma.SortOrder
-}
-
-export type FileAssociationSumOrderByAggregateInput = {
-  seq?: Prisma.SortOrder
 }
 
 export type FileAssociationCreateNestedManyWithoutGroupInput = {
@@ -497,7 +433,6 @@ export type FileAssociationUncheckedUpdateManyWithoutFileNestedInput = {
 
 export type FileAssociationCreateWithoutGroupInput = {
   id?: string
-  seq?: number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
@@ -506,7 +441,6 @@ export type FileAssociationCreateWithoutGroupInput = {
 
 export type FileAssociationUncheckedCreateWithoutGroupInput = {
   id?: string
-  seq?: number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
@@ -544,7 +478,6 @@ export type FileAssociationScalarWhereInput = {
   OR?: Prisma.FileAssociationScalarWhereInput[]
   NOT?: Prisma.FileAssociationScalarWhereInput | Prisma.FileAssociationScalarWhereInput[]
   id?: Prisma.StringFilter<"FileAssociation"> | string
-  seq?: Prisma.IntFilter<"FileAssociation"> | number
   createdAt?: Prisma.DateTimeFilter<"FileAssociation"> | Date | string
   updatedAt?: Prisma.DateTimeNullableFilter<"FileAssociation"> | Date | string | null
   removedAt?: Prisma.DateTimeNullableFilter<"FileAssociation"> | Date | string | null
@@ -554,7 +487,6 @@ export type FileAssociationScalarWhereInput = {
 
 export type FileAssociationCreateWithoutFileInput = {
   id?: string
-  seq?: number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
@@ -563,7 +495,6 @@ export type FileAssociationCreateWithoutFileInput = {
 
 export type FileAssociationUncheckedCreateWithoutFileInput = {
   id?: string
-  seq?: number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
@@ -598,7 +529,6 @@ export type FileAssociationUpdateManyWithWhereWithoutFileInput = {
 
 export type FileAssociationCreateManyGroupInput = {
   id?: string
-  seq?: number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
@@ -615,7 +545,6 @@ export type FileAssociationUpdateWithoutGroupInput = {
 
 export type FileAssociationUncheckedUpdateWithoutGroupInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  seq?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -624,7 +553,6 @@ export type FileAssociationUncheckedUpdateWithoutGroupInput = {
 
 export type FileAssociationUncheckedUpdateManyWithoutGroupInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  seq?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -633,7 +561,6 @@ export type FileAssociationUncheckedUpdateManyWithoutGroupInput = {
 
 export type FileAssociationCreateManyFileInput = {
   id?: string
-  seq?: number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
@@ -650,7 +577,6 @@ export type FileAssociationUpdateWithoutFileInput = {
 
 export type FileAssociationUncheckedUpdateWithoutFileInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  seq?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -659,7 +585,6 @@ export type FileAssociationUncheckedUpdateWithoutFileInput = {
 
 export type FileAssociationUncheckedUpdateManyWithoutFileInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  seq?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -670,7 +595,6 @@ export type FileAssociationUncheckedUpdateManyWithoutFileInput = {
 
 export type FileAssociationSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
-  seq?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   removedAt?: boolean
@@ -682,7 +606,6 @@ export type FileAssociationSelect<ExtArgs extends runtime.Types.Extensions.Inter
 
 export type FileAssociationSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
-  seq?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   removedAt?: boolean
@@ -694,7 +617,6 @@ export type FileAssociationSelectCreateManyAndReturn<ExtArgs extends runtime.Typ
 
 export type FileAssociationSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
-  seq?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   removedAt?: boolean
@@ -706,7 +628,6 @@ export type FileAssociationSelectUpdateManyAndReturn<ExtArgs extends runtime.Typ
 
 export type FileAssociationSelectScalar = {
   id?: boolean
-  seq?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   removedAt?: boolean
@@ -714,7 +635,7 @@ export type FileAssociationSelectScalar = {
   groupId?: boolean
 }
 
-export type FileAssociationOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "seq" | "createdAt" | "updatedAt" | "removedAt" | "fileId" | "groupId", ExtArgs["result"]["fileAssociation"]>
+export type FileAssociationOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "createdAt" | "updatedAt" | "removedAt" | "fileId" | "groupId", ExtArgs["result"]["fileAssociation"]>
 export type FileAssociationInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   file?: boolean | Prisma.FileDefaultArgs<ExtArgs>
   group?: boolean | Prisma.GroupDefaultArgs<ExtArgs>
@@ -736,7 +657,6 @@ export type $FileAssociationPayload<ExtArgs extends runtime.Types.Extensions.Int
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
-    seq: number
     createdAt: Date
     updatedAt: Date | null
     removedAt: Date | null
@@ -1168,7 +1088,6 @@ export interface Prisma__FileAssociationClient<T, Null = never, ExtArgs extends 
  */
 export interface FileAssociationFieldRefs {
   readonly id: Prisma.FieldRef<"FileAssociation", 'String'>
-  readonly seq: Prisma.FieldRef<"FileAssociation", 'Int'>
   readonly createdAt: Prisma.FieldRef<"FileAssociation", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"FileAssociation", 'DateTime'>
   readonly removedAt: Prisma.FieldRef<"FileAssociation", 'DateTime'>

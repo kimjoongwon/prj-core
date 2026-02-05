@@ -586,9 +586,9 @@ fetch('/api/users', {
 });
 ```
 
-**System Space (seq=1):**
-- SUPER_ADMIN 전용 Space로 시드 데이터에서 가장 먼저 생성됨
-- `SYSTEM_SPACE.SEQ` 상수로 정의 (`@cocrepo/constant`)
+**System Space (isSystem=true):**
+- SUPER_ADMIN 전용 Space로 시드 데이터에서 `isSystem: true`로 생성됨
+- `SYSTEM_SPACE.IS_SYSTEM` 상수로 정의 (`@cocrepo/constant`)
 - 전체 데이터 접근 권한은 Role 기반으로 Service 레이어에서 확인
 
 **권한 유틸리티 (`@cocrepo/be-common`):**

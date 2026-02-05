@@ -3219,7 +3219,6 @@ export type TransactionIsolationLevel = (typeof TransactionIsolationLevel)[keyof
 
 export const CategoryScalarFieldEnum = {
   id: 'id',
-  seq: 'seq',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   removedAt: 'removedAt',
@@ -3235,7 +3234,6 @@ export type CategoryScalarFieldEnum = (typeof CategoryScalarFieldEnum)[keyof typ
 
 export const GroupScalarFieldEnum = {
   id: 'id',
-  seq: 'seq',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   removedAt: 'removedAt',
@@ -3251,7 +3249,6 @@ export type GroupScalarFieldEnum = (typeof GroupScalarFieldEnum)[keyof typeof Gr
 
 export const TenantScalarFieldEnum = {
   id: 'id',
-  seq: 'seq',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   removedAt: 'removedAt',
@@ -3265,7 +3262,6 @@ export type TenantScalarFieldEnum = (typeof TenantScalarFieldEnum)[keyof typeof 
 
 export const AssignmentScalarFieldEnum = {
   id: 'id',
-  seq: 'seq',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   removedAt: 'removedAt',
@@ -3278,7 +3274,6 @@ export type AssignmentScalarFieldEnum = (typeof AssignmentScalarFieldEnum)[keyof
 
 export const PostScalarFieldEnum = {
   id: 'id',
-  seq: 'seq',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   removedAt: 'removedAt',
@@ -3290,7 +3285,6 @@ export type PostScalarFieldEnum = (typeof PostScalarFieldEnum)[keyof typeof Post
 
 export const ContentScalarFieldEnum = {
   id: 'id',
-  seq: 'seq',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   removedAt: 'removedAt',
@@ -3308,7 +3302,6 @@ export type ContentScalarFieldEnum = (typeof ContentScalarFieldEnum)[keyof typeo
 
 export const FileScalarFieldEnum = {
   id: 'id',
-  seq: 'seq',
   name: 'name',
   size: 'size',
   parentId: 'parentId',
@@ -3326,7 +3319,6 @@ export type FileScalarFieldEnum = (typeof FileScalarFieldEnum)[keyof typeof File
 
 export const FileClassificationScalarFieldEnum = {
   id: 'id',
-  seq: 'seq',
   categoryId: 'categoryId',
   fileId: 'fileId',
   createdAt: 'createdAt',
@@ -3339,7 +3331,6 @@ export type FileClassificationScalarFieldEnum = (typeof FileClassificationScalar
 
 export const FileAssociationScalarFieldEnum = {
   id: 'id',
-  seq: 'seq',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   removedAt: 'removedAt',
@@ -3352,7 +3343,6 @@ export type FileAssociationScalarFieldEnum = (typeof FileAssociationScalarFieldE
 
 export const SubjectScalarFieldEnum = {
   id: 'id',
-  seq: 'seq',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   removedAt: 'removedAt',
@@ -3369,7 +3359,6 @@ export type SubjectScalarFieldEnum = (typeof SubjectScalarFieldEnum)[keyof typeo
 
 export const ActionScalarFieldEnum = {
   id: 'id',
-  seq: 'seq',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   removedAt: 'removedAt',
@@ -3387,7 +3376,6 @@ export type ActionScalarFieldEnum = (typeof ActionScalarFieldEnum)[keyof typeof 
 
 export const AbilityScalarFieldEnum = {
   id: 'id',
-  seq: 'seq',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   removedAt: 'removedAt',
@@ -3406,7 +3394,6 @@ export type AbilityScalarFieldEnum = (typeof AbilityScalarFieldEnum)[keyof typeo
 
 export const GrantScalarFieldEnum = {
   id: 'id',
-  seq: 'seq',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   removedAt: 'removedAt',
@@ -3422,7 +3409,6 @@ export type GrantScalarFieldEnum = (typeof GrantScalarFieldEnum)[keyof typeof Gr
 
 export const OidcClientScalarFieldEnum = {
   id: 'id',
-  seq: 'seq',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   removedAt: 'removedAt',
@@ -3437,8 +3423,7 @@ export const OidcClientScalarFieldEnum = {
   isActive: 'isActive',
   logoUri: 'logoUri',
   policyUri: 'policyUri',
-  tosUri: 'tosUri',
-  spaceId: 'spaceId'
+  tosUri: 'tosUri'
 } as const
 
 export type OidcClientScalarFieldEnum = (typeof OidcClientScalarFieldEnum)[keyof typeof OidcClientScalarFieldEnum]
@@ -3446,7 +3431,6 @@ export type OidcClientScalarFieldEnum = (typeof OidcClientScalarFieldEnum)[keyof
 
 export const OidcModelScalarFieldEnum = {
   id: 'id',
-  seq: 'seq',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   key: 'key',
@@ -3463,7 +3447,6 @@ export type OidcModelScalarFieldEnum = (typeof OidcModelScalarFieldEnum)[keyof t
 
 export const RoleScalarFieldEnum = {
   id: 'id',
-  seq: 'seq',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   removedAt: 'removedAt',
@@ -3478,7 +3461,6 @@ export type RoleScalarFieldEnum = (typeof RoleScalarFieldEnum)[keyof typeof Role
 
 export const RoleAssociationScalarFieldEnum = {
   id: 'id',
-  seq: 'seq',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   removedAt: 'removedAt',
@@ -3491,7 +3473,6 @@ export type RoleAssociationScalarFieldEnum = (typeof RoleAssociationScalarFieldE
 
 export const RoleClassificationScalarFieldEnum = {
   id: 'id',
-  seq: 'seq',
   categoryId: 'categoryId',
   roleId: 'roleId',
   createdAt: 'createdAt',
@@ -3504,7 +3485,6 @@ export type RoleClassificationScalarFieldEnum = (typeof RoleClassificationScalar
 
 export const SafeWalletScalarFieldEnum = {
   id: 'id',
-  seq: 'seq',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   removedAt: 'removedAt',
@@ -3522,7 +3502,6 @@ export type SafeWalletScalarFieldEnum = (typeof SafeWalletScalarFieldEnum)[keyof
 
 export const SafeTransactionScalarFieldEnum = {
   id: 'id',
-  seq: 'seq',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   removedAt: 'removedAt',
@@ -3547,7 +3526,6 @@ export type SafeTransactionScalarFieldEnum = (typeof SafeTransactionScalarFieldE
 
 export const SafeConfirmationScalarFieldEnum = {
   id: 'id',
-  seq: 'seq',
   createdAt: 'createdAt',
   safeTransactionId: 'safeTransactionId',
   owner: 'owner',
@@ -3559,10 +3537,10 @@ export type SafeConfirmationScalarFieldEnum = (typeof SafeConfirmationScalarFiel
 
 export const SpaceScalarFieldEnum = {
   id: 'id',
-  seq: 'seq',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
-  removedAt: 'removedAt'
+  removedAt: 'removedAt',
+  isSystem: 'isSystem'
 } as const
 
 export type SpaceScalarFieldEnum = (typeof SpaceScalarFieldEnum)[keyof typeof SpaceScalarFieldEnum]
@@ -3570,7 +3548,6 @@ export type SpaceScalarFieldEnum = (typeof SpaceScalarFieldEnum)[keyof typeof Sp
 
 export const SpaceClassificationScalarFieldEnum = {
   id: 'id',
-  seq: 'seq',
   categoryId: 'categoryId',
   spaceId: 'spaceId',
   createdAt: 'createdAt',
@@ -3583,7 +3560,6 @@ export type SpaceClassificationScalarFieldEnum = (typeof SpaceClassificationScal
 
 export const SpaceAssociationScalarFieldEnum = {
   id: 'id',
-  seq: 'seq',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   removedAt: 'removedAt',
@@ -3596,7 +3572,6 @@ export type SpaceAssociationScalarFieldEnum = (typeof SpaceAssociationScalarFiel
 
 export const GroundScalarFieldEnum = {
   id: 'id',
-  seq: 'seq',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   removedAt: 'removedAt',
@@ -3616,7 +3591,6 @@ export type GroundScalarFieldEnum = (typeof GroundScalarFieldEnum)[keyof typeof 
 
 export const TimelineScalarFieldEnum = {
   id: 'id',
-  seq: 'seq',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   removedAt: 'removedAt',
@@ -3631,7 +3605,6 @@ export type TimelineScalarFieldEnum = (typeof TimelineScalarFieldEnum)[keyof typ
 
 export const SessionScalarFieldEnum = {
   id: 'id',
-  seq: 'seq',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   removedAt: 'removedAt',
@@ -3650,7 +3623,6 @@ export type SessionScalarFieldEnum = (typeof SessionScalarFieldEnum)[keyof typeo
 
 export const ProgramScalarFieldEnum = {
   id: 'id',
-  seq: 'seq',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   removedAt: 'removedAt',
@@ -3667,7 +3639,6 @@ export type ProgramScalarFieldEnum = (typeof ProgramScalarFieldEnum)[keyof typeo
 
 export const RoutineScalarFieldEnum = {
   id: 'id',
-  seq: 'seq',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   removedAt: 'removedAt',
@@ -3680,7 +3651,6 @@ export type RoutineScalarFieldEnum = (typeof RoutineScalarFieldEnum)[keyof typeo
 
 export const ActivityScalarFieldEnum = {
   id: 'id',
-  seq: 'seq',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   removedAt: 'removedAt',
@@ -3697,7 +3667,6 @@ export type ActivityScalarFieldEnum = (typeof ActivityScalarFieldEnum)[keyof typ
 
 export const TaskScalarFieldEnum = {
   id: 'id',
-  seq: 'seq',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   removedAt: 'removedAt',
@@ -3710,7 +3679,6 @@ export type TaskScalarFieldEnum = (typeof TaskScalarFieldEnum)[keyof typeof Task
 
 export const ExerciseScalarFieldEnum = {
   id: 'id',
-  seq: 'seq',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   removedAt: 'removedAt',
@@ -3742,7 +3710,6 @@ export type TranslationScalarFieldEnum = (typeof TranslationScalarFieldEnum)[key
 
 export const UserScalarFieldEnum = {
   id: 'id',
-  seq: 'seq',
   updatedAt: 'updatedAt',
   createdAt: 'createdAt',
   removedAt: 'removedAt',
@@ -3757,7 +3724,6 @@ export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof User
 
 export const UserClassificationScalarFieldEnum = {
   id: 'id',
-  seq: 'seq',
   categoryId: 'categoryId',
   userId: 'userId',
   createdAt: 'createdAt',
@@ -3770,7 +3736,6 @@ export type UserClassificationScalarFieldEnum = (typeof UserClassificationScalar
 
 export const UserAssociationScalarFieldEnum = {
   id: 'id',
-  seq: 'seq',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   removedAt: 'removedAt',
@@ -3783,7 +3748,6 @@ export type UserAssociationScalarFieldEnum = (typeof UserAssociationScalarFieldE
 
 export const ProfileScalarFieldEnum = {
   id: 'id',
-  seq: 'seq',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   removedAt: 'removedAt',
@@ -3865,20 +3829,6 @@ export type ListStringFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaMod
 
 
 /**
- * Reference to a field of type 'Int'
- */
-export type IntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int'>
-    
-
-
-/**
- * Reference to a field of type 'Int[]'
- */
-export type ListIntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int[]'>
-    
-
-
-/**
  * Reference to a field of type 'DateTime'
  */
 export type DateTimeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DateTime'>
@@ -3931,6 +3881,20 @@ export type EnumTextTypesFieldRefInput<$PrismaModel> = FieldRefInputType<$Prisma
  * Reference to a field of type 'TextTypes[]'
  */
 export type ListEnumTextTypesFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'TextTypes[]'>
+    
+
+
+/**
+ * Reference to a field of type 'Int'
+ */
+export type IntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int'>
+    
+
+
+/**
+ * Reference to a field of type 'Int[]'
+ */
+export type ListIntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int[]'>
     
 
 

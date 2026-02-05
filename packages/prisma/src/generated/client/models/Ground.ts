@@ -20,23 +20,12 @@ export type GroundModel = runtime.Types.Result.DefaultSelection<Prisma.$GroundPa
 
 export type AggregateGround = {
   _count: GroundCountAggregateOutputType | null
-  _avg: GroundAvgAggregateOutputType | null
-  _sum: GroundSumAggregateOutputType | null
   _min: GroundMinAggregateOutputType | null
   _max: GroundMaxAggregateOutputType | null
 }
 
-export type GroundAvgAggregateOutputType = {
-  seq: number | null
-}
-
-export type GroundSumAggregateOutputType = {
-  seq: number | null
-}
-
 export type GroundMinAggregateOutputType = {
   id: string | null
-  seq: number | null
   createdAt: Date | null
   updatedAt: Date | null
   removedAt: Date | null
@@ -53,7 +42,6 @@ export type GroundMinAggregateOutputType = {
 
 export type GroundMaxAggregateOutputType = {
   id: string | null
-  seq: number | null
   createdAt: Date | null
   updatedAt: Date | null
   removedAt: Date | null
@@ -70,7 +58,6 @@ export type GroundMaxAggregateOutputType = {
 
 export type GroundCountAggregateOutputType = {
   id: number
-  seq: number
   createdAt: number
   updatedAt: number
   removedAt: number
@@ -87,17 +74,8 @@ export type GroundCountAggregateOutputType = {
 }
 
 
-export type GroundAvgAggregateInputType = {
-  seq?: true
-}
-
-export type GroundSumAggregateInputType = {
-  seq?: true
-}
-
 export type GroundMinAggregateInputType = {
   id?: true
-  seq?: true
   createdAt?: true
   updatedAt?: true
   removedAt?: true
@@ -114,7 +92,6 @@ export type GroundMinAggregateInputType = {
 
 export type GroundMaxAggregateInputType = {
   id?: true
-  seq?: true
   createdAt?: true
   updatedAt?: true
   removedAt?: true
@@ -131,7 +108,6 @@ export type GroundMaxAggregateInputType = {
 
 export type GroundCountAggregateInputType = {
   id?: true
-  seq?: true
   createdAt?: true
   updatedAt?: true
   removedAt?: true
@@ -185,18 +161,6 @@ export type GroundAggregateArgs<ExtArgs extends runtime.Types.Extensions.Interna
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
    * 
-   * Select which fields to average
-  **/
-  _avg?: GroundAvgAggregateInputType
-  /**
-   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-   * 
-   * Select which fields to sum
-  **/
-  _sum?: GroundSumAggregateInputType
-  /**
-   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-   * 
    * Select which fields to find the minimum value
   **/
   _min?: GroundMinAggregateInputType
@@ -227,15 +191,12 @@ export type GroundGroupByArgs<ExtArgs extends runtime.Types.Extensions.InternalA
   take?: number
   skip?: number
   _count?: GroundCountAggregateInputType | true
-  _avg?: GroundAvgAggregateInputType
-  _sum?: GroundSumAggregateInputType
   _min?: GroundMinAggregateInputType
   _max?: GroundMaxAggregateInputType
 }
 
 export type GroundGroupByOutputType = {
   id: string
-  seq: number
   createdAt: Date
   updatedAt: Date | null
   removedAt: Date | null
@@ -249,8 +210,6 @@ export type GroundGroupByOutputType = {
   logoImageFileId: string | null
   imageFileId: string | null
   _count: GroundCountAggregateOutputType | null
-  _avg: GroundAvgAggregateOutputType | null
-  _sum: GroundSumAggregateOutputType | null
   _min: GroundMinAggregateOutputType | null
   _max: GroundMaxAggregateOutputType | null
 }
@@ -275,7 +234,6 @@ export type GroundWhereInput = {
   OR?: Prisma.GroundWhereInput[]
   NOT?: Prisma.GroundWhereInput | Prisma.GroundWhereInput[]
   id?: Prisma.StringFilter<"Ground"> | string
-  seq?: Prisma.IntFilter<"Ground"> | number
   createdAt?: Prisma.DateTimeFilter<"Ground"> | Date | string
   updatedAt?: Prisma.DateTimeNullableFilter<"Ground"> | Date | string | null
   removedAt?: Prisma.DateTimeNullableFilter<"Ground"> | Date | string | null
@@ -293,7 +251,6 @@ export type GroundWhereInput = {
 
 export type GroundOrderByWithRelationInput = {
   id?: Prisma.SortOrder
-  seq?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   removedAt?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -311,7 +268,6 @@ export type GroundOrderByWithRelationInput = {
 
 export type GroundWhereUniqueInput = Prisma.AtLeast<{
   id?: string
-  seq?: number
   businessNo?: string
   spaceId?: string
   AND?: Prisma.GroundWhereInput | Prisma.GroundWhereInput[]
@@ -328,11 +284,10 @@ export type GroundWhereUniqueInput = Prisma.AtLeast<{
   logoImageFileId?: Prisma.StringNullableFilter<"Ground"> | string | null
   imageFileId?: Prisma.StringNullableFilter<"Ground"> | string | null
   space?: Prisma.XOR<Prisma.SpaceScalarRelationFilter, Prisma.SpaceWhereInput>
-}, "id" | "seq" | "businessNo" | "spaceId">
+}, "id" | "businessNo" | "spaceId">
 
 export type GroundOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
-  seq?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   removedAt?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -346,10 +301,8 @@ export type GroundOrderByWithAggregationInput = {
   logoImageFileId?: Prisma.SortOrderInput | Prisma.SortOrder
   imageFileId?: Prisma.SortOrderInput | Prisma.SortOrder
   _count?: Prisma.GroundCountOrderByAggregateInput
-  _avg?: Prisma.GroundAvgOrderByAggregateInput
   _max?: Prisma.GroundMaxOrderByAggregateInput
   _min?: Prisma.GroundMinOrderByAggregateInput
-  _sum?: Prisma.GroundSumOrderByAggregateInput
 }
 
 export type GroundScalarWhereWithAggregatesInput = {
@@ -357,7 +310,6 @@ export type GroundScalarWhereWithAggregatesInput = {
   OR?: Prisma.GroundScalarWhereWithAggregatesInput[]
   NOT?: Prisma.GroundScalarWhereWithAggregatesInput | Prisma.GroundScalarWhereWithAggregatesInput[]
   id?: Prisma.StringWithAggregatesFilter<"Ground"> | string
-  seq?: Prisma.IntWithAggregatesFilter<"Ground"> | number
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Ground"> | Date | string
   updatedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Ground"> | Date | string | null
   removedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Ground"> | Date | string | null
@@ -374,7 +326,6 @@ export type GroundScalarWhereWithAggregatesInput = {
 
 export type GroundCreateInput = {
   id?: string
-  seq?: number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
@@ -391,7 +342,6 @@ export type GroundCreateInput = {
 
 export type GroundUncheckedCreateInput = {
   id?: string
-  seq?: number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
@@ -424,7 +374,6 @@ export type GroundUpdateInput = {
 
 export type GroundUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  seq?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -441,7 +390,6 @@ export type GroundUncheckedUpdateInput = {
 
 export type GroundCreateManyInput = {
   id?: string
-  seq?: number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
@@ -473,7 +421,6 @@ export type GroundUpdateManyMutationInput = {
 
 export type GroundUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  seq?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -495,7 +442,6 @@ export type GroundNullableScalarRelationFilter = {
 
 export type GroundCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
-  seq?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   removedAt?: Prisma.SortOrder
@@ -510,13 +456,8 @@ export type GroundCountOrderByAggregateInput = {
   imageFileId?: Prisma.SortOrder
 }
 
-export type GroundAvgOrderByAggregateInput = {
-  seq?: Prisma.SortOrder
-}
-
 export type GroundMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
-  seq?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   removedAt?: Prisma.SortOrder
@@ -533,7 +474,6 @@ export type GroundMaxOrderByAggregateInput = {
 
 export type GroundMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
-  seq?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   removedAt?: Prisma.SortOrder
@@ -546,10 +486,6 @@ export type GroundMinOrderByAggregateInput = {
   spaceId?: Prisma.SortOrder
   logoImageFileId?: Prisma.SortOrder
   imageFileId?: Prisma.SortOrder
-}
-
-export type GroundSumOrderByAggregateInput = {
-  seq?: Prisma.SortOrder
 }
 
 export type GroundCreateNestedOneWithoutSpaceInput = {
@@ -586,7 +522,6 @@ export type GroundUncheckedUpdateOneWithoutSpaceNestedInput = {
 
 export type GroundCreateWithoutSpaceInput = {
   id?: string
-  seq?: number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
@@ -602,7 +537,6 @@ export type GroundCreateWithoutSpaceInput = {
 
 export type GroundUncheckedCreateWithoutSpaceInput = {
   id?: string
-  seq?: number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
@@ -649,7 +583,6 @@ export type GroundUpdateWithoutSpaceInput = {
 
 export type GroundUncheckedUpdateWithoutSpaceInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  seq?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -667,7 +600,6 @@ export type GroundUncheckedUpdateWithoutSpaceInput = {
 
 export type GroundSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
-  seq?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   removedAt?: boolean
@@ -685,7 +617,6 @@ export type GroundSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs =
 
 export type GroundSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
-  seq?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   removedAt?: boolean
@@ -703,7 +634,6 @@ export type GroundSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extens
 
 export type GroundSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
-  seq?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   removedAt?: boolean
@@ -721,7 +651,6 @@ export type GroundSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extens
 
 export type GroundSelectScalar = {
   id?: boolean
-  seq?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   removedAt?: boolean
@@ -736,7 +665,7 @@ export type GroundSelectScalar = {
   imageFileId?: boolean
 }
 
-export type GroundOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "seq" | "createdAt" | "updatedAt" | "removedAt" | "name" | "label" | "address" | "phone" | "email" | "businessNo" | "spaceId" | "logoImageFileId" | "imageFileId", ExtArgs["result"]["ground"]>
+export type GroundOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "createdAt" | "updatedAt" | "removedAt" | "name" | "label" | "address" | "phone" | "email" | "businessNo" | "spaceId" | "logoImageFileId" | "imageFileId", ExtArgs["result"]["ground"]>
 export type GroundInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   space?: boolean | Prisma.SpaceDefaultArgs<ExtArgs>
 }
@@ -754,7 +683,6 @@ export type $GroundPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
-    seq: number
     createdAt: Date
     updatedAt: Date | null
     removedAt: Date | null
@@ -1210,7 +1138,6 @@ export interface Prisma__GroundClient<T, Null = never, ExtArgs extends runtime.T
  */
 export interface GroundFieldRefs {
   readonly id: Prisma.FieldRef<"Ground", 'String'>
-  readonly seq: Prisma.FieldRef<"Ground", 'Int'>
   readonly createdAt: Prisma.FieldRef<"Ground", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"Ground", 'DateTime'>
   readonly removedAt: Prisma.FieldRef<"Ground", 'DateTime'>

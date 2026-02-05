@@ -80,23 +80,16 @@ async function main() {
 		},
 	});
 
-	// System Space 생성 (seq=1)
-	// 중요: System Space는 가장 먼저 생성되어 seq=1을 가짐
-	// SYSTEM_SPACE.SEQ (= 1)와 일치하는 Space가 System Space로 취급됨
+	// System Space 생성 (isSystem=true)
+	// 중요: System Space는 isSystem 플래그로 식별
 	let systemSpace = await prisma.space.findFirst({
-		where: {
-			tenants: {
-				some: {
-					userId: superAdminUser.id,
-					roleId: roles.SUPER_ADMIN.id,
-				},
-			},
-		},
+		where: { isSystem: true },
 	});
 
 	if (!systemSpace) {
 		systemSpace = await prisma.space.create({
 			data: {
+				isSystem: true,
 				tenants: {
 					create: {
 						userId: superAdminUser.id,
@@ -105,9 +98,9 @@ async function main() {
 				},
 			},
 		});
-		console.log("System Space 생성 완료 (seq=1, SUPER_ADMIN 전용)");
+		console.log("System Space 생성 완료 (isSystem=true, SUPER_ADMIN 전용)");
 	} else {
-		console.log(`System Space 이미 존재 (seq=${systemSpace.seq})`);
+		console.log(`System Space 이미 존재 (id=${systemSpace.id})`);
 	}
 
 	// 워크스페이스 생성
@@ -127,9 +120,9 @@ async function main() {
 		},
 	});
 
-	// Group 생성을 위한 tenant 조회
+	// Group 생성을 위한 tenant 조회 (System Space의 첫 번째 tenant)
 	const firstTenant = await prisma.tenant.findFirst({
-		where: { seq: 1 },
+		where: { space: { isSystem: true } },
 	});
 
 	if (firstTenant) {
@@ -155,7 +148,7 @@ async function main() {
 			}
 		}
 	} else {
-		console.error("seq=1인 tenant를 찾을 수 없어 Group을 생성할 수 없습니다.");
+		console.error("System Space의 tenant를 찾을 수 없어 Group을 생성할 수 없습니다.");
 	}
 
 	// Role 타입 카테고리 생성
@@ -397,13 +390,13 @@ async function createRegularUsersAndGrounds(adminRole: Role, _userRole: Role) {
 async function createRoleCategories() {
 	console.log("Role 카테고리 생성 시작...");
 
-	// seq=1인 tenant 조회
+	// System Space의 tenant 조회
 	const tenant = await prisma.tenant.findFirst({
-		where: { seq: 1 },
+		where: { space: { isSystem: true } },
 	});
 
 	if (!tenant) {
-		console.error("seq=1인 tenant를 찾을 수 없습니다.");
+		console.error("System Space의 tenant를 찾을 수 없습니다.");
 		return;
 	}
 
@@ -488,13 +481,13 @@ async function createRoleClassifications(roles: Record<string, Role>) {
 async function createRoleGroupsAndAssociations(roles: Record<string, Role>) {
 	console.log("Role 관련 Group 생성 및 RoleAssociation 연결 시작...");
 
-	// seq=1인 tenant 조회 (Group 생성에 필요)
+	// System Space의 tenant 조회 (Group 생성에 필요)
 	const tenant = await prisma.tenant.findFirst({
-		where: { seq: 1 },
+		where: { space: { isSystem: true } },
 	});
 
 	if (!tenant) {
-		console.error("seq=1인 tenant를 찾을 수 없습니다.");
+		console.error("System Space의 tenant를 찾을 수 없습니다.");
 		return;
 	}
 

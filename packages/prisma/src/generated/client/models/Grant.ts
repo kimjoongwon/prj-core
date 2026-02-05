@@ -27,18 +27,15 @@ export type AggregateGrant = {
 }
 
 export type GrantAvgAggregateOutputType = {
-  seq: number | null
   priority: number | null
 }
 
 export type GrantSumAggregateOutputType = {
-  seq: number | null
   priority: number | null
 }
 
 export type GrantMinAggregateOutputType = {
   id: string | null
-  seq: number | null
   createdAt: Date | null
   updatedAt: Date | null
   removedAt: Date | null
@@ -51,7 +48,6 @@ export type GrantMinAggregateOutputType = {
 
 export type GrantMaxAggregateOutputType = {
   id: string | null
-  seq: number | null
   createdAt: Date | null
   updatedAt: Date | null
   removedAt: Date | null
@@ -64,7 +60,6 @@ export type GrantMaxAggregateOutputType = {
 
 export type GrantCountAggregateOutputType = {
   id: number
-  seq: number
   createdAt: number
   updatedAt: number
   removedAt: number
@@ -78,18 +73,15 @@ export type GrantCountAggregateOutputType = {
 
 
 export type GrantAvgAggregateInputType = {
-  seq?: true
   priority?: true
 }
 
 export type GrantSumAggregateInputType = {
-  seq?: true
   priority?: true
 }
 
 export type GrantMinAggregateInputType = {
   id?: true
-  seq?: true
   createdAt?: true
   updatedAt?: true
   removedAt?: true
@@ -102,7 +94,6 @@ export type GrantMinAggregateInputType = {
 
 export type GrantMaxAggregateInputType = {
   id?: true
-  seq?: true
   createdAt?: true
   updatedAt?: true
   removedAt?: true
@@ -115,7 +106,6 @@ export type GrantMaxAggregateInputType = {
 
 export type GrantCountAggregateInputType = {
   id?: true
-  seq?: true
   createdAt?: true
   updatedAt?: true
   removedAt?: true
@@ -215,7 +205,6 @@ export type GrantGroupByArgs<ExtArgs extends runtime.Types.Extensions.InternalAr
 
 export type GrantGroupByOutputType = {
   id: string
-  seq: number
   createdAt: Date
   updatedAt: Date | null
   removedAt: Date | null
@@ -251,7 +240,6 @@ export type GrantWhereInput = {
   OR?: Prisma.GrantWhereInput[]
   NOT?: Prisma.GrantWhereInput | Prisma.GrantWhereInput[]
   id?: Prisma.StringFilter<"Grant"> | string
-  seq?: Prisma.IntFilter<"Grant"> | number
   createdAt?: Prisma.DateTimeFilter<"Grant"> | Date | string
   updatedAt?: Prisma.DateTimeNullableFilter<"Grant"> | Date | string | null
   removedAt?: Prisma.DateTimeNullableFilter<"Grant"> | Date | string | null
@@ -265,7 +253,6 @@ export type GrantWhereInput = {
 
 export type GrantOrderByWithRelationInput = {
   id?: Prisma.SortOrder
-  seq?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   removedAt?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -279,7 +266,6 @@ export type GrantOrderByWithRelationInput = {
 
 export type GrantWhereUniqueInput = Prisma.AtLeast<{
   id?: string
-  seq?: number
   granteeType_granteeId_abilityId?: Prisma.GrantGranteeTypeGranteeIdAbilityIdCompoundUniqueInput
   AND?: Prisma.GrantWhereInput | Prisma.GrantWhereInput[]
   OR?: Prisma.GrantWhereInput[]
@@ -293,11 +279,10 @@ export type GrantWhereUniqueInput = Prisma.AtLeast<{
   isActive?: Prisma.BoolFilter<"Grant"> | boolean
   priority?: Prisma.IntFilter<"Grant"> | number
   ability?: Prisma.XOR<Prisma.AbilityScalarRelationFilter, Prisma.AbilityWhereInput>
-}, "id" | "seq" | "granteeType_granteeId_abilityId">
+}, "id" | "granteeType_granteeId_abilityId">
 
 export type GrantOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
-  seq?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   removedAt?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -318,7 +303,6 @@ export type GrantScalarWhereWithAggregatesInput = {
   OR?: Prisma.GrantScalarWhereWithAggregatesInput[]
   NOT?: Prisma.GrantScalarWhereWithAggregatesInput | Prisma.GrantScalarWhereWithAggregatesInput[]
   id?: Prisma.StringWithAggregatesFilter<"Grant"> | string
-  seq?: Prisma.IntWithAggregatesFilter<"Grant"> | number
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Grant"> | Date | string
   updatedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Grant"> | Date | string | null
   removedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Grant"> | Date | string | null
@@ -331,7 +315,6 @@ export type GrantScalarWhereWithAggregatesInput = {
 
 export type GrantCreateInput = {
   id?: string
-  seq?: number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
@@ -344,7 +327,6 @@ export type GrantCreateInput = {
 
 export type GrantUncheckedCreateInput = {
   id?: string
-  seq?: number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
@@ -369,7 +351,6 @@ export type GrantUpdateInput = {
 
 export type GrantUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  seq?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -382,7 +363,6 @@ export type GrantUncheckedUpdateInput = {
 
 export type GrantCreateManyInput = {
   id?: string
-  seq?: number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
@@ -406,7 +386,6 @@ export type GrantUpdateManyMutationInput = {
 
 export type GrantUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  seq?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -435,7 +414,6 @@ export type GrantGranteeTypeGranteeIdAbilityIdCompoundUniqueInput = {
 
 export type GrantCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
-  seq?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   removedAt?: Prisma.SortOrder
@@ -447,13 +425,11 @@ export type GrantCountOrderByAggregateInput = {
 }
 
 export type GrantAvgOrderByAggregateInput = {
-  seq?: Prisma.SortOrder
   priority?: Prisma.SortOrder
 }
 
 export type GrantMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
-  seq?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   removedAt?: Prisma.SortOrder
@@ -466,7 +442,6 @@ export type GrantMaxOrderByAggregateInput = {
 
 export type GrantMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
-  seq?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   removedAt?: Prisma.SortOrder
@@ -478,7 +453,6 @@ export type GrantMinOrderByAggregateInput = {
 }
 
 export type GrantSumOrderByAggregateInput = {
-  seq?: Prisma.SortOrder
   priority?: Prisma.SortOrder
 }
 
@@ -526,7 +500,6 @@ export type GrantUncheckedUpdateManyWithoutAbilityNestedInput = {
 
 export type GrantCreateWithoutAbilityInput = {
   id?: string
-  seq?: number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
@@ -538,7 +511,6 @@ export type GrantCreateWithoutAbilityInput = {
 
 export type GrantUncheckedCreateWithoutAbilityInput = {
   id?: string
-  seq?: number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
@@ -579,7 +551,6 @@ export type GrantScalarWhereInput = {
   OR?: Prisma.GrantScalarWhereInput[]
   NOT?: Prisma.GrantScalarWhereInput | Prisma.GrantScalarWhereInput[]
   id?: Prisma.StringFilter<"Grant"> | string
-  seq?: Prisma.IntFilter<"Grant"> | number
   createdAt?: Prisma.DateTimeFilter<"Grant"> | Date | string
   updatedAt?: Prisma.DateTimeNullableFilter<"Grant"> | Date | string | null
   removedAt?: Prisma.DateTimeNullableFilter<"Grant"> | Date | string | null
@@ -592,7 +563,6 @@ export type GrantScalarWhereInput = {
 
 export type GrantCreateManyAbilityInput = {
   id?: string
-  seq?: number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
@@ -615,7 +585,6 @@ export type GrantUpdateWithoutAbilityInput = {
 
 export type GrantUncheckedUpdateWithoutAbilityInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  seq?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -627,7 +596,6 @@ export type GrantUncheckedUpdateWithoutAbilityInput = {
 
 export type GrantUncheckedUpdateManyWithoutAbilityInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  seq?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -641,7 +609,6 @@ export type GrantUncheckedUpdateManyWithoutAbilityInput = {
 
 export type GrantSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
-  seq?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   removedAt?: boolean
@@ -655,7 +622,6 @@ export type GrantSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
 
 export type GrantSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
-  seq?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   removedAt?: boolean
@@ -669,7 +635,6 @@ export type GrantSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensi
 
 export type GrantSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
-  seq?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   removedAt?: boolean
@@ -683,7 +648,6 @@ export type GrantSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensi
 
 export type GrantSelectScalar = {
   id?: boolean
-  seq?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   removedAt?: boolean
@@ -694,7 +658,7 @@ export type GrantSelectScalar = {
   priority?: boolean
 }
 
-export type GrantOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "seq" | "createdAt" | "updatedAt" | "removedAt" | "granteeType" | "granteeId" | "abilityId" | "isActive" | "priority", ExtArgs["result"]["grant"]>
+export type GrantOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "createdAt" | "updatedAt" | "removedAt" | "granteeType" | "granteeId" | "abilityId" | "isActive" | "priority", ExtArgs["result"]["grant"]>
 export type GrantInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   ability?: boolean | Prisma.AbilityDefaultArgs<ExtArgs>
 }
@@ -712,7 +676,6 @@ export type $GrantPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
-    seq: number
     createdAt: Date
     updatedAt: Date | null
     removedAt: Date | null
@@ -1161,7 +1124,6 @@ export interface Prisma__GrantClient<T, Null = never, ExtArgs extends runtime.Ty
  */
 export interface GrantFieldRefs {
   readonly id: Prisma.FieldRef<"Grant", 'String'>
-  readonly seq: Prisma.FieldRef<"Grant", 'Int'>
   readonly createdAt: Prisma.FieldRef<"Grant", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"Grant", 'DateTime'>
   readonly removedAt: Prisma.FieldRef<"Grant", 'DateTime'>

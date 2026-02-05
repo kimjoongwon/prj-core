@@ -15,5 +15,6 @@
     "src/**/*.spec.ts",
     "src/**/*.test.ts"
   ],
+  "delay": 4000,
   "exec": "nest start"
 }

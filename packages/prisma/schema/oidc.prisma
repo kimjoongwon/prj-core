@@ -16,7 +16,6 @@
 /// @displayName OIDC 클라이언트
 model OidcClient {
   id                      String    @id @default(uuid())
-  seq                     Int       @unique @default(autoincrement())
   createdAt               DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
   updatedAt               DateTime? @updatedAt @map("updated_at") @db.Timestamptz(6)
   removedAt               DateTime? @map("removed_at") @db.Timestamptz(6)
@@ -44,11 +43,6 @@ model OidcClient {
   policyUri               String?   @map("policy_uri")
   /// @displayName 서비스 약관 URI
   tosUri                  String?   @map("tos_uri")
-  /// @displayName 소속 Space
-  spaceId                 String?   @map("space_id")
-  space                   Space?    @relation(fields: [spaceId], references: [id])
-
-  @@index([spaceId])
   @@index([isActive])
   @@map("oidc_clients")
 }
@@ -59,7 +53,6 @@ model OidcClient {
 /// @displayName OIDC 모델
 model OidcModel {
   id        String    @id @default(uuid())
-  seq       Int       @unique @default(autoincrement())
   createdAt DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
   updatedAt DateTime? @updatedAt @map("updated_at") @db.Timestamptz(6)
   /// @displayName 모델 키 (jti 또는 uid)

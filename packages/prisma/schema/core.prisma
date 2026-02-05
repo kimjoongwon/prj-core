@@ -20,7 +20,6 @@
 /// @displayName 카테고리
 model Category {
   id                   String                @id @default(uuid())
-  seq                  Int                   @unique @default(autoincrement())
   createdAt            DateTime              @default(now()) @map("created_at") @db.Timestamptz(6)
   updatedAt            DateTime?             @updatedAt @map("updated_at") @db.Timestamptz(6)
   removedAt            DateTime?             @map("removed_at") @db.Timestamptz(6)
@@ -50,7 +49,6 @@ model Category {
 /// @displayName 그룹
 model Group {
   id                String             @id @default(uuid())
-  seq               Int                @unique @default(autoincrement())
   createdAt         DateTime           @default(now()) @map("created_at") @db.Timestamptz(6)
   updatedAt         DateTime?          @updatedAt @map("updated_at") @db.Timestamptz(6)
   removedAt         DateTime?          @map("removed_at") @db.Timestamptz(6)
@@ -80,7 +78,6 @@ model Group {
 /// @displayName 테넌트
 model Tenant {
   id          String       @id @default(uuid())
-  seq         Int          @unique @default(autoincrement())
   createdAt   DateTime     @default(now()) @map("created_at") @db.Timestamptz(6)
   updatedAt   DateTime?    @updatedAt @map("updated_at") @db.Timestamptz(6)
   removedAt   DateTime?    @map("removed_at") @db.Timestamptz(6)
@@ -101,7 +98,6 @@ model Tenant {
 /// @displayName 역할 할당
 model Assignment {
   id        String    @id @default(uuid())
-  seq       Int       @unique @default(autoincrement())
   createdAt DateTime  @default(now()) @map("created_at")
   updatedAt DateTime? @updatedAt @map("updated_at") @db.Timestamptz(6)
   removedAt DateTime? @map("removed_at") @db.Timestamptz(6)
@@ -119,7 +115,6 @@ model Assignment {
 /// @displayName 게시물
 model Post {
   id        String    @id @default(uuid())
-  seq       Int       @unique @default(autoincrement())
   createdAt DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
   updatedAt DateTime? @updatedAt @map("updated_at") @db.Timestamptz(6)
   removedAt DateTime? @map("removed_at") @db.Timestamptz(6)
@@ -134,7 +129,6 @@ model Post {
 /// @displayName 콘텐츠
 model Content {
   id          String    @id @default(uuid())
-  seq         Int       @unique @default(autoincrement())
   createdAt   DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
   updatedAt   DateTime? @updatedAt @map("updated_at") @db.Timestamptz(6)
   removedAt   DateTime? @map("removed_at") @db.Timestamptz(6)

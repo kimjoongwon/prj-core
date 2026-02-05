@@ -7,7 +7,6 @@ export class UpdateUserAssociationDto
 	implements Prisma.UserAssociationCreateInput
 {
 	id?: string | undefined;
-	seq?: number | undefined;
 	createdAt?: string | Date | undefined;
 	updatedAt?: string | Date | null | undefined;
 	removedAt?: string | Date | null | undefined;

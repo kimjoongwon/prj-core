@@ -15,7 +15,6 @@ describe("UsersRepository", () => {
 
 	const mockUserData = {
 		id: "user-test-id",
-		seq: 1,
 		email: "test@example.com",
 		name: "Test User",
 		phone: "010-1234-5678",

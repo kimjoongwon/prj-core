@@ -3,5 +3,4 @@ export const COMMON_ENTITY_FIELDS = [
 	"createdAt",
 	"updatedAt",
 	"removedAt",
-	"seq",
 ] as const;

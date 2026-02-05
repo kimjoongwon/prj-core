@@ -1,19 +1,19 @@
-import { SYSTEM_ROLES, SYSTEM_SPACE } from "@cocrepo/constant";
+import { SYSTEM_ROLES } from "@cocrepo/constant";
 import type { TenantDto } from "@cocrepo/dto";
 
 /**
  * System Space 여부 확인
- * seq=1인 Space는 시스템 관리용 Space
+ * isSystem=true인 Space는 시스템 관리용 Space
  */
-export function isSystemSpace(space: { seq: number }): boolean {
-	return space.seq === SYSTEM_SPACE.SEQ;
+export function isSystemSpace(space: { isSystem: boolean }): boolean {
+	return space.isSystem === true;
 }
 
 /**
  * System Space에 속한 Tenant인지 확인
  */
 export function isSystemTenant(tenant: TenantDto): boolean {
-	return tenant.space?.seq === SYSTEM_SPACE.SEQ;
+	return tenant.space?.isSystem === true;
 }
 
 /**

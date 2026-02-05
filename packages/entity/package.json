@@ -13,8 +13,8 @@
   "types": "./dist/index.d.ts",
   "scripts": {
     "type-check": "tsc --noEmit",
-    "build": "tsc",
-    "start:dev": "tsc --watch",
+    "build": "rm -rf dist && tsc",
+    "start:dev": "rm -rf dist && tsc --watch",
     "format": "biome format --write .",
     "clean": "rm -rf dist && rm -rf node_modules"
   },

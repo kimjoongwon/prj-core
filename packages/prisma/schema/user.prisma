@@ -27,7 +27,6 @@
 /// @displayName 사용자
 model User {
   id                 String              @id @default(uuid())
-  seq                Int                 @unique @default(autoincrement())
   updatedAt          DateTime?           @updatedAt @map("updated_at") @db.Timestamptz(6)
   createdAt          DateTime            @default(now()) @map("created_at") @db.Timestamptz(6)
   removedAt          DateTime?           @map("removed_at") @db.Timestamptz(6)
@@ -61,7 +60,6 @@ model User {
 /// @displayName 사용자 분류
 model UserClassification {
   id         String    @id @default(uuid())
-  seq        Int       @unique @default(autoincrement())
   categoryId String    @map("category_id")
   userId     String    @unique @map("user_id")
   createdAt  DateTime  @default(now()) @map("created_at")
@@ -80,7 +78,6 @@ model UserClassification {
 /// @displayName 사용자 그룹
 model UserAssociation {
   id        String    @id @default(uuid())
-  seq       Int       @unique @default(autoincrement())
   createdAt DateTime  @default(now()) @map("created_at")
   updatedAt DateTime? @updatedAt @map("updated_at") @db.Timestamptz(6)
   removedAt DateTime? @map("removed_at") @db.Timestamptz(6)
@@ -99,7 +96,6 @@ model UserAssociation {
 /// @displayName 프로필
 model Profile {
   id           String    @id @default(uuid())
-  seq          Int       @unique @default(autoincrement())
   createdAt    DateTime  @default(now()) @map("created_at")
   updatedAt    DateTime? @updatedAt @map("updated_at") @db.Timestamptz(6)
   removedAt    DateTime? @map("removed_at") @db.Timestamptz(6)

@@ -19,12 +19,6 @@ import Link from "next/link";
  */
 const columns: MetaDataGridColumnConfig<RoleDto>[] = [
   {
-    field: "seq",
-    label: "번호",
-    size: 80,
-    isRequired: true,
-  },
-  {
     field: "name",
     label: "역할 식별자",
     size: 180,

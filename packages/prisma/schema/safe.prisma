@@ -1,7 +1,6 @@
 // Safe Wallet Model
 model SafeWallet {
   id           String            @id @default(uuid())
-  seq          Int               @unique @default(autoincrement())
   createdAt    DateTime          @default(now()) @map("created_at") @db.Timestamptz(6)
   updatedAt    DateTime?         @updatedAt @map("updated_at") @db.Timestamptz(6)
   removedAt    DateTime?         @map("removed_at") @db.Timestamptz(6)
@@ -23,7 +22,6 @@ model SafeWallet {
 // Safe Transaction Model
 model SafeTransaction {
   id                    String             @id @default(uuid())
-  seq                   Int                @unique @default(autoincrement())
   createdAt             DateTime           @default(now()) @map("created_at") @db.Timestamptz(6)
   updatedAt             DateTime?          @updatedAt @map("updated_at") @db.Timestamptz(6)
   removedAt             DateTime?          @map("removed_at") @db.Timestamptz(6)
@@ -50,7 +48,6 @@ model SafeTransaction {
 // Safe Confirmation Model (서명)
 model SafeConfirmation {
   id                String          @id @default(uuid())
-  seq               Int             @unique @default(autoincrement())
   createdAt         DateTime        @default(now()) @map("created_at") @db.Timestamptz(6)
   safeTransactionId String          @map("safe_transaction_id")
   safeTransaction   SafeTransaction @relation(fields: [safeTransactionId], references: [id])

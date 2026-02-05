@@ -25,7 +25,6 @@ describe("AbilitiesFacade", () => {
 
 	const mockAbility: Ability = {
 		id: "ability-test-id",
-		seq: 1,
 		type: "CAN",
 		action: "READ",
 		roleId: "role-test-id",

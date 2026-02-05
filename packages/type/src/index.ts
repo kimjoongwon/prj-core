@@ -16,7 +16,6 @@ export type Constructor<T = any, Arguments extends unknown[] = any[]> = new (
  */
 export interface BaseEntityFields {
 	id: string;
-	seq: number;
 	createdAt: Date;
 	updatedAt: Date | null;
 	removedAt: Date | null;

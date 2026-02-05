@@ -98,7 +98,6 @@ export const createTestUserEntity = (overrides: Partial<User> = {}): User => {
 	const user = new User();
 	Object.assign(user, {
 		id: "user-test-id",
-		seq: 1,
 		spaceId: "space-test-id",
 		email: "test@example.com",
 		name: "Test User",

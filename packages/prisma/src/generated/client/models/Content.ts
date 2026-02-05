@@ -20,23 +20,12 @@ export type ContentModel = runtime.Types.Result.DefaultSelection<Prisma.$Content
 
 export type AggregateContent = {
   _count: ContentCountAggregateOutputType | null
-  _avg: ContentAvgAggregateOutputType | null
-  _sum: ContentSumAggregateOutputType | null
   _min: ContentMinAggregateOutputType | null
   _max: ContentMaxAggregateOutputType | null
 }
 
-export type ContentAvgAggregateOutputType = {
-  seq: number | null
-}
-
-export type ContentSumAggregateOutputType = {
-  seq: number | null
-}
-
 export type ContentMinAggregateOutputType = {
   id: string | null
-  seq: number | null
   createdAt: Date | null
   updatedAt: Date | null
   removedAt: Date | null
@@ -51,7 +40,6 @@ export type ContentMinAggregateOutputType = {
 
 export type ContentMaxAggregateOutputType = {
   id: string | null
-  seq: number | null
   createdAt: Date | null
   updatedAt: Date | null
   removedAt: Date | null
@@ -66,7 +54,6 @@ export type ContentMaxAggregateOutputType = {
 
 export type ContentCountAggregateOutputType = {
   id: number
-  seq: number
   createdAt: number
   updatedAt: number
   removedAt: number
@@ -81,17 +68,8 @@ export type ContentCountAggregateOutputType = {
 }
 
 
-export type ContentAvgAggregateInputType = {
-  seq?: true
-}
-
-export type ContentSumAggregateInputType = {
-  seq?: true
-}
-
 export type ContentMinAggregateInputType = {
   id?: true
-  seq?: true
   createdAt?: true
   updatedAt?: true
   removedAt?: true
@@ -106,7 +84,6 @@ export type ContentMinAggregateInputType = {
 
 export type ContentMaxAggregateInputType = {
   id?: true
-  seq?: true
   createdAt?: true
   updatedAt?: true
   removedAt?: true
@@ -121,7 +98,6 @@ export type ContentMaxAggregateInputType = {
 
 export type ContentCountAggregateInputType = {
   id?: true
-  seq?: true
   createdAt?: true
   updatedAt?: true
   removedAt?: true
@@ -173,18 +149,6 @@ export type ContentAggregateArgs<ExtArgs extends runtime.Types.Extensions.Intern
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
    * 
-   * Select which fields to average
-  **/
-  _avg?: ContentAvgAggregateInputType
-  /**
-   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-   * 
-   * Select which fields to sum
-  **/
-  _sum?: ContentSumAggregateInputType
-  /**
-   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-   * 
    * Select which fields to find the minimum value
   **/
   _min?: ContentMinAggregateInputType
@@ -215,15 +179,12 @@ export type ContentGroupByArgs<ExtArgs extends runtime.Types.Extensions.Internal
   take?: number
   skip?: number
   _count?: ContentCountAggregateInputType | true
-  _avg?: ContentAvgAggregateInputType
-  _sum?: ContentSumAggregateInputType
   _min?: ContentMinAggregateInputType
   _max?: ContentMaxAggregateInputType
 }
 
 export type ContentGroupByOutputType = {
   id: string
-  seq: number
   createdAt: Date
   updatedAt: Date | null
   removedAt: Date | null
@@ -235,8 +196,6 @@ export type ContentGroupByOutputType = {
   spaceId: string
   creatorId: string | null
   _count: ContentCountAggregateOutputType | null
-  _avg: ContentAvgAggregateOutputType | null
-  _sum: ContentSumAggregateOutputType | null
   _min: ContentMinAggregateOutputType | null
   _max: ContentMaxAggregateOutputType | null
 }
@@ -261,7 +220,6 @@ export type ContentWhereInput = {
   OR?: Prisma.ContentWhereInput[]
   NOT?: Prisma.ContentWhereInput | Prisma.ContentWhereInput[]
   id?: Prisma.StringFilter<"Content"> | string
-  seq?: Prisma.IntFilter<"Content"> | number
   createdAt?: Prisma.DateTimeFilter<"Content"> | Date | string
   updatedAt?: Prisma.DateTimeNullableFilter<"Content"> | Date | string | null
   removedAt?: Prisma.DateTimeNullableFilter<"Content"> | Date | string | null
@@ -279,7 +237,6 @@ export type ContentWhereInput = {
 
 export type ContentOrderByWithRelationInput = {
   id?: Prisma.SortOrder
-  seq?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   removedAt?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -297,7 +254,6 @@ export type ContentOrderByWithRelationInput = {
 
 export type ContentWhereUniqueInput = Prisma.AtLeast<{
   id?: string
-  seq?: number
   AND?: Prisma.ContentWhereInput | Prisma.ContentWhereInput[]
   OR?: Prisma.ContentWhereInput[]
   NOT?: Prisma.ContentWhereInput | Prisma.ContentWhereInput[]
@@ -314,11 +270,10 @@ export type ContentWhereUniqueInput = Prisma.AtLeast<{
   space?: Prisma.XOR<Prisma.SpaceScalarRelationFilter, Prisma.SpaceWhereInput>
   creator?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
   posts?: Prisma.PostListRelationFilter
-}, "id" | "seq">
+}, "id">
 
 export type ContentOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
-  seq?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   removedAt?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -330,10 +285,8 @@ export type ContentOrderByWithAggregationInput = {
   spaceId?: Prisma.SortOrder
   creatorId?: Prisma.SortOrderInput | Prisma.SortOrder
   _count?: Prisma.ContentCountOrderByAggregateInput
-  _avg?: Prisma.ContentAvgOrderByAggregateInput
   _max?: Prisma.ContentMaxOrderByAggregateInput
   _min?: Prisma.ContentMinOrderByAggregateInput
-  _sum?: Prisma.ContentSumOrderByAggregateInput
 }
 
 export type ContentScalarWhereWithAggregatesInput = {
@@ -341,7 +294,6 @@ export type ContentScalarWhereWithAggregatesInput = {
   OR?: Prisma.ContentScalarWhereWithAggregatesInput[]
   NOT?: Prisma.ContentScalarWhereWithAggregatesInput | Prisma.ContentScalarWhereWithAggregatesInput[]
   id?: Prisma.StringWithAggregatesFilter<"Content"> | string
-  seq?: Prisma.IntWithAggregatesFilter<"Content"> | number
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Content"> | Date | string
   updatedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Content"> | Date | string | null
   removedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Content"> | Date | string | null
@@ -356,7 +308,6 @@ export type ContentScalarWhereWithAggregatesInput = {
 
 export type ContentCreateInput = {
   id?: string
-  seq?: number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
@@ -372,7 +323,6 @@ export type ContentCreateInput = {
 
 export type ContentUncheckedCreateInput = {
   id?: string
-  seq?: number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
@@ -403,7 +353,6 @@ export type ContentUpdateInput = {
 
 export type ContentUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  seq?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -419,7 +368,6 @@ export type ContentUncheckedUpdateInput = {
 
 export type ContentCreateManyInput = {
   id?: string
-  seq?: number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
@@ -446,7 +394,6 @@ export type ContentUpdateManyMutationInput = {
 
 export type ContentUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  seq?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -466,7 +413,6 @@ export type ContentScalarRelationFilter = {
 
 export type ContentCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
-  seq?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   removedAt?: Prisma.SortOrder
@@ -479,13 +425,8 @@ export type ContentCountOrderByAggregateInput = {
   creatorId?: Prisma.SortOrder
 }
 
-export type ContentAvgOrderByAggregateInput = {
-  seq?: Prisma.SortOrder
-}
-
 export type ContentMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
-  seq?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   removedAt?: Prisma.SortOrder
@@ -500,7 +441,6 @@ export type ContentMaxOrderByAggregateInput = {
 
 export type ContentMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
-  seq?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   removedAt?: Prisma.SortOrder
@@ -511,10 +451,6 @@ export type ContentMinOrderByAggregateInput = {
   fileId?: Prisma.SortOrder
   spaceId?: Prisma.SortOrder
   creatorId?: Prisma.SortOrder
-}
-
-export type ContentSumOrderByAggregateInput = {
-  seq?: Prisma.SortOrder
 }
 
 export type ContentListRelationFilter = {
@@ -631,7 +567,6 @@ export type ContentUncheckedUpdateManyWithoutCreatorNestedInput = {
 
 export type ContentCreateWithoutPostsInput = {
   id?: string
-  seq?: number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
@@ -646,7 +581,6 @@ export type ContentCreateWithoutPostsInput = {
 
 export type ContentUncheckedCreateWithoutPostsInput = {
   id?: string
-  seq?: number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
@@ -691,7 +625,6 @@ export type ContentUpdateWithoutPostsInput = {
 
 export type ContentUncheckedUpdateWithoutPostsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  seq?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -706,7 +639,6 @@ export type ContentUncheckedUpdateWithoutPostsInput = {
 
 export type ContentCreateWithoutSpaceInput = {
   id?: string
-  seq?: number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
@@ -721,7 +653,6 @@ export type ContentCreateWithoutSpaceInput = {
 
 export type ContentUncheckedCreateWithoutSpaceInput = {
   id?: string
-  seq?: number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
@@ -765,7 +696,6 @@ export type ContentScalarWhereInput = {
   OR?: Prisma.ContentScalarWhereInput[]
   NOT?: Prisma.ContentScalarWhereInput | Prisma.ContentScalarWhereInput[]
   id?: Prisma.StringFilter<"Content"> | string
-  seq?: Prisma.IntFilter<"Content"> | number
   createdAt?: Prisma.DateTimeFilter<"Content"> | Date | string
   updatedAt?: Prisma.DateTimeNullableFilter<"Content"> | Date | string | null
   removedAt?: Prisma.DateTimeNullableFilter<"Content"> | Date | string | null
@@ -780,7 +710,6 @@ export type ContentScalarWhereInput = {
 
 export type ContentCreateWithoutCreatorInput = {
   id?: string
-  seq?: number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
@@ -795,7 +724,6 @@ export type ContentCreateWithoutCreatorInput = {
 
 export type ContentUncheckedCreateWithoutCreatorInput = {
   id?: string
-  seq?: number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
@@ -836,7 +764,6 @@ export type ContentUpdateManyWithWhereWithoutCreatorInput = {
 
 export type ContentCreateManySpaceInput = {
   id?: string
-  seq?: number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
@@ -864,7 +791,6 @@ export type ContentUpdateWithoutSpaceInput = {
 
 export type ContentUncheckedUpdateWithoutSpaceInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  seq?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -879,7 +805,6 @@ export type ContentUncheckedUpdateWithoutSpaceInput = {
 
 export type ContentUncheckedUpdateManyWithoutSpaceInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  seq?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -893,7 +818,6 @@ export type ContentUncheckedUpdateManyWithoutSpaceInput = {
 
 export type ContentCreateManyCreatorInput = {
   id?: string
-  seq?: number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
@@ -921,7 +845,6 @@ export type ContentUpdateWithoutCreatorInput = {
 
 export type ContentUncheckedUpdateWithoutCreatorInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  seq?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -936,7 +859,6 @@ export type ContentUncheckedUpdateWithoutCreatorInput = {
 
 export type ContentUncheckedUpdateManyWithoutCreatorInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  seq?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -981,7 +903,6 @@ export type ContentCountOutputTypeCountPostsArgs<ExtArgs extends runtime.Types.E
 
 export type ContentSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
-  seq?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   removedAt?: boolean
@@ -1000,7 +921,6 @@ export type ContentSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs 
 
 export type ContentSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
-  seq?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   removedAt?: boolean
@@ -1017,7 +937,6 @@ export type ContentSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Exten
 
 export type ContentSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
-  seq?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   removedAt?: boolean
@@ -1034,7 +953,6 @@ export type ContentSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Exten
 
 export type ContentSelectScalar = {
   id?: boolean
-  seq?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   removedAt?: boolean
@@ -1047,7 +965,7 @@ export type ContentSelectScalar = {
   creatorId?: boolean
 }
 
-export type ContentOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "seq" | "createdAt" | "updatedAt" | "removedAt" | "title" | "description" | "type" | "text" | "fileId" | "spaceId" | "creatorId", ExtArgs["result"]["content"]>
+export type ContentOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "createdAt" | "updatedAt" | "removedAt" | "title" | "description" | "type" | "text" | "fileId" | "spaceId" | "creatorId", ExtArgs["result"]["content"]>
 export type ContentInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   space?: boolean | Prisma.SpaceDefaultArgs<ExtArgs>
   creator?: boolean | Prisma.Content$creatorArgs<ExtArgs>
@@ -1072,7 +990,6 @@ export type $ContentPayload<ExtArgs extends runtime.Types.Extensions.InternalArg
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
-    seq: number
     createdAt: Date
     updatedAt: Date | null
     removedAt: Date | null
@@ -1522,7 +1439,6 @@ export interface Prisma__ContentClient<T, Null = never, ExtArgs extends runtime.
  */
 export interface ContentFieldRefs {
   readonly id: Prisma.FieldRef<"Content", 'String'>
-  readonly seq: Prisma.FieldRef<"Content", 'Int'>
   readonly createdAt: Prisma.FieldRef<"Content", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"Content", 'DateTime'>
   readonly removedAt: Prisma.FieldRef<"Content", 'DateTime'>

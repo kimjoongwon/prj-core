@@ -27,18 +27,15 @@ export type AggregateFile = {
 }
 
 export type FileAvgAggregateOutputType = {
-  seq: number | null
   size: number | null
 }
 
 export type FileSumAggregateOutputType = {
-  seq: number | null
   size: number | null
 }
 
 export type FileMinAggregateOutputType = {
   id: string | null
-  seq: number | null
   name: string | null
   size: number | null
   parentId: string | null
@@ -53,7 +50,6 @@ export type FileMinAggregateOutputType = {
 
 export type FileMaxAggregateOutputType = {
   id: string | null
-  seq: number | null
   name: string | null
   size: number | null
   parentId: string | null
@@ -68,7 +64,6 @@ export type FileMaxAggregateOutputType = {
 
 export type FileCountAggregateOutputType = {
   id: number
-  seq: number
   name: number
   size: number
   parentId: number
@@ -84,18 +79,15 @@ export type FileCountAggregateOutputType = {
 
 
 export type FileAvgAggregateInputType = {
-  seq?: true
   size?: true
 }
 
 export type FileSumAggregateInputType = {
-  seq?: true
   size?: true
 }
 
 export type FileMinAggregateInputType = {
   id?: true
-  seq?: true
   name?: true
   size?: true
   parentId?: true
@@ -110,7 +102,6 @@ export type FileMinAggregateInputType = {
 
 export type FileMaxAggregateInputType = {
   id?: true
-  seq?: true
   name?: true
   size?: true
   parentId?: true
@@ -125,7 +116,6 @@ export type FileMaxAggregateInputType = {
 
 export type FileCountAggregateInputType = {
   id?: true
-  seq?: true
   name?: true
   size?: true
   parentId?: true
@@ -227,7 +217,6 @@ export type FileGroupByArgs<ExtArgs extends runtime.Types.Extensions.InternalArg
 
 export type FileGroupByOutputType = {
   id: string
-  seq: number
   name: string
   size: number
   parentId: string | null
@@ -265,7 +254,6 @@ export type FileWhereInput = {
   OR?: Prisma.FileWhereInput[]
   NOT?: Prisma.FileWhereInput | Prisma.FileWhereInput[]
   id?: Prisma.StringFilter<"File"> | string
-  seq?: Prisma.IntFilter<"File"> | number
   name?: Prisma.StringFilter<"File"> | string
   size?: Prisma.IntFilter<"File"> | number
   parentId?: Prisma.StringNullableFilter<"File"> | string | null
@@ -286,7 +274,6 @@ export type FileWhereInput = {
 
 export type FileOrderByWithRelationInput = {
   id?: Prisma.SortOrder
-  seq?: Prisma.SortOrder
   name?: Prisma.SortOrder
   size?: Prisma.SortOrder
   parentId?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -307,7 +294,6 @@ export type FileOrderByWithRelationInput = {
 
 export type FileWhereUniqueInput = Prisma.AtLeast<{
   id?: string
-  seq?: number
   AND?: Prisma.FileWhereInput | Prisma.FileWhereInput[]
   OR?: Prisma.FileWhereInput[]
   NOT?: Prisma.FileWhereInput | Prisma.FileWhereInput[]
@@ -327,11 +313,10 @@ export type FileWhereUniqueInput = Prisma.AtLeast<{
   creator?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
   associations?: Prisma.FileAssociationListRelationFilter
   classification?: Prisma.XOR<Prisma.FileClassificationNullableScalarRelationFilter, Prisma.FileClassificationWhereInput> | null
-}, "id" | "seq">
+}, "id">
 
 export type FileOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
-  seq?: Prisma.SortOrder
   name?: Prisma.SortOrder
   size?: Prisma.SortOrder
   parentId?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -354,7 +339,6 @@ export type FileScalarWhereWithAggregatesInput = {
   OR?: Prisma.FileScalarWhereWithAggregatesInput[]
   NOT?: Prisma.FileScalarWhereWithAggregatesInput | Prisma.FileScalarWhereWithAggregatesInput[]
   id?: Prisma.StringWithAggregatesFilter<"File"> | string
-  seq?: Prisma.IntWithAggregatesFilter<"File"> | number
   name?: Prisma.StringWithAggregatesFilter<"File"> | string
   size?: Prisma.IntWithAggregatesFilter<"File"> | number
   parentId?: Prisma.StringNullableWithAggregatesFilter<"File"> | string | null
@@ -369,7 +353,6 @@ export type FileScalarWhereWithAggregatesInput = {
 
 export type FileCreateInput = {
   id?: string
-  seq?: number
   name: string
   size: number
   mimeType: string
@@ -387,7 +370,6 @@ export type FileCreateInput = {
 
 export type FileUncheckedCreateInput = {
   id?: string
-  seq?: number
   name: string
   size: number
   parentId?: string | null
@@ -422,7 +404,6 @@ export type FileUpdateInput = {
 
 export type FileUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  seq?: Prisma.IntFieldUpdateOperationsInput | number
   name?: Prisma.StringFieldUpdateOperationsInput | string
   size?: Prisma.IntFieldUpdateOperationsInput | number
   parentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -440,7 +421,6 @@ export type FileUncheckedUpdateInput = {
 
 export type FileCreateManyInput = {
   id?: string
-  seq?: number
   name: string
   size: number
   parentId?: string | null
@@ -466,7 +446,6 @@ export type FileUpdateManyMutationInput = {
 
 export type FileUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  seq?: Prisma.IntFieldUpdateOperationsInput | number
   name?: Prisma.StringFieldUpdateOperationsInput | string
   size?: Prisma.IntFieldUpdateOperationsInput | number
   parentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -496,7 +475,6 @@ export type FileOrderByRelationAggregateInput = {
 
 export type FileCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
-  seq?: Prisma.SortOrder
   name?: Prisma.SortOrder
   size?: Prisma.SortOrder
   parentId?: Prisma.SortOrder
@@ -510,13 +488,11 @@ export type FileCountOrderByAggregateInput = {
 }
 
 export type FileAvgOrderByAggregateInput = {
-  seq?: Prisma.SortOrder
   size?: Prisma.SortOrder
 }
 
 export type FileMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
-  seq?: Prisma.SortOrder
   name?: Prisma.SortOrder
   size?: Prisma.SortOrder
   parentId?: Prisma.SortOrder
@@ -531,7 +507,6 @@ export type FileMaxOrderByAggregateInput = {
 
 export type FileMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
-  seq?: Prisma.SortOrder
   name?: Prisma.SortOrder
   size?: Prisma.SortOrder
   parentId?: Prisma.SortOrder
@@ -545,7 +520,6 @@ export type FileMinOrderByAggregateInput = {
 }
 
 export type FileSumOrderByAggregateInput = {
-  seq?: Prisma.SortOrder
   size?: Prisma.SortOrder
 }
 
@@ -572,6 +546,14 @@ export type FileUncheckedCreateNestedManyWithoutParentInput = {
   connectOrCreate?: Prisma.FileCreateOrConnectWithoutParentInput | Prisma.FileCreateOrConnectWithoutParentInput[]
   createMany?: Prisma.FileCreateManyParentInputEnvelope
   connect?: Prisma.FileWhereUniqueInput | Prisma.FileWhereUniqueInput[]
+}
+
+export type IntFieldUpdateOperationsInput = {
+  set?: number
+  increment?: number
+  decrement?: number
+  multiply?: number
+  divide?: number
 }
 
 export type FileUpdateOneWithoutChildrenNestedInput = {
@@ -726,7 +708,6 @@ export type FileUncheckedUpdateManyWithoutCreatorNestedInput = {
 
 export type FileCreateWithoutChildrenInput = {
   id?: string
-  seq?: number
   name: string
   size: number
   mimeType: string
@@ -743,7 +724,6 @@ export type FileCreateWithoutChildrenInput = {
 
 export type FileUncheckedCreateWithoutChildrenInput = {
   id?: string
-  seq?: number
   name: string
   size: number
   parentId?: string | null
@@ -765,7 +745,6 @@ export type FileCreateOrConnectWithoutChildrenInput = {
 
 export type FileCreateWithoutParentInput = {
   id?: string
-  seq?: number
   name: string
   size: number
   mimeType: string
@@ -782,7 +761,6 @@ export type FileCreateWithoutParentInput = {
 
 export type FileUncheckedCreateWithoutParentInput = {
   id?: string
-  seq?: number
   name: string
   size: number
   mimeType: string
@@ -836,7 +814,6 @@ export type FileUpdateWithoutChildrenInput = {
 
 export type FileUncheckedUpdateWithoutChildrenInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  seq?: Prisma.IntFieldUpdateOperationsInput | number
   name?: Prisma.StringFieldUpdateOperationsInput | string
   size?: Prisma.IntFieldUpdateOperationsInput | number
   parentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -872,7 +849,6 @@ export type FileScalarWhereInput = {
   OR?: Prisma.FileScalarWhereInput[]
   NOT?: Prisma.FileScalarWhereInput | Prisma.FileScalarWhereInput[]
   id?: Prisma.StringFilter<"File"> | string
-  seq?: Prisma.IntFilter<"File"> | number
   name?: Prisma.StringFilter<"File"> | string
   size?: Prisma.IntFilter<"File"> | number
   parentId?: Prisma.StringNullableFilter<"File"> | string | null
@@ -887,7 +863,6 @@ export type FileScalarWhereInput = {
 
 export type FileCreateWithoutClassificationInput = {
   id?: string
-  seq?: number
   name: string
   size: number
   mimeType: string
@@ -904,7 +879,6 @@ export type FileCreateWithoutClassificationInput = {
 
 export type FileUncheckedCreateWithoutClassificationInput = {
   id?: string
-  seq?: number
   name: string
   size: number
   parentId?: string | null
@@ -953,7 +927,6 @@ export type FileUpdateWithoutClassificationInput = {
 
 export type FileUncheckedUpdateWithoutClassificationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  seq?: Prisma.IntFieldUpdateOperationsInput | number
   name?: Prisma.StringFieldUpdateOperationsInput | string
   size?: Prisma.IntFieldUpdateOperationsInput | number
   parentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -970,7 +943,6 @@ export type FileUncheckedUpdateWithoutClassificationInput = {
 
 export type FileCreateWithoutAssociationsInput = {
   id?: string
-  seq?: number
   name: string
   size: number
   mimeType: string
@@ -987,7 +959,6 @@ export type FileCreateWithoutAssociationsInput = {
 
 export type FileUncheckedCreateWithoutAssociationsInput = {
   id?: string
-  seq?: number
   name: string
   size: number
   parentId?: string | null
@@ -1036,7 +1007,6 @@ export type FileUpdateWithoutAssociationsInput = {
 
 export type FileUncheckedUpdateWithoutAssociationsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  seq?: Prisma.IntFieldUpdateOperationsInput | number
   name?: Prisma.StringFieldUpdateOperationsInput | string
   size?: Prisma.IntFieldUpdateOperationsInput | number
   parentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1053,7 +1023,6 @@ export type FileUncheckedUpdateWithoutAssociationsInput = {
 
 export type FileCreateWithoutSpaceInput = {
   id?: string
-  seq?: number
   name: string
   size: number
   mimeType: string
@@ -1070,7 +1039,6 @@ export type FileCreateWithoutSpaceInput = {
 
 export type FileUncheckedCreateWithoutSpaceInput = {
   id?: string
-  seq?: number
   name: string
   size: number
   parentId?: string | null
@@ -1113,7 +1081,6 @@ export type FileUpdateManyWithWhereWithoutSpaceInput = {
 
 export type FileCreateWithoutCreatorInput = {
   id?: string
-  seq?: number
   name: string
   size: number
   mimeType: string
@@ -1130,7 +1097,6 @@ export type FileCreateWithoutCreatorInput = {
 
 export type FileUncheckedCreateWithoutCreatorInput = {
   id?: string
-  seq?: number
   name: string
   size: number
   parentId?: string | null
@@ -1173,7 +1139,6 @@ export type FileUpdateManyWithWhereWithoutCreatorInput = {
 
 export type FileCreateManyParentInput = {
   id?: string
-  seq?: number
   name: string
   size: number
   mimeType: string
@@ -1203,7 +1168,6 @@ export type FileUpdateWithoutParentInput = {
 
 export type FileUncheckedUpdateWithoutParentInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  seq?: Prisma.IntFieldUpdateOperationsInput | number
   name?: Prisma.StringFieldUpdateOperationsInput | string
   size?: Prisma.IntFieldUpdateOperationsInput | number
   mimeType?: Prisma.StringFieldUpdateOperationsInput | string
@@ -1220,7 +1184,6 @@ export type FileUncheckedUpdateWithoutParentInput = {
 
 export type FileUncheckedUpdateManyWithoutParentInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  seq?: Prisma.IntFieldUpdateOperationsInput | number
   name?: Prisma.StringFieldUpdateOperationsInput | string
   size?: Prisma.IntFieldUpdateOperationsInput | number
   mimeType?: Prisma.StringFieldUpdateOperationsInput | string
@@ -1234,7 +1197,6 @@ export type FileUncheckedUpdateManyWithoutParentInput = {
 
 export type FileCreateManySpaceInput = {
   id?: string
-  seq?: number
   name: string
   size: number
   parentId?: string | null
@@ -1264,7 +1226,6 @@ export type FileUpdateWithoutSpaceInput = {
 
 export type FileUncheckedUpdateWithoutSpaceInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  seq?: Prisma.IntFieldUpdateOperationsInput | number
   name?: Prisma.StringFieldUpdateOperationsInput | string
   size?: Prisma.IntFieldUpdateOperationsInput | number
   parentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1281,7 +1242,6 @@ export type FileUncheckedUpdateWithoutSpaceInput = {
 
 export type FileUncheckedUpdateManyWithoutSpaceInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  seq?: Prisma.IntFieldUpdateOperationsInput | number
   name?: Prisma.StringFieldUpdateOperationsInput | string
   size?: Prisma.IntFieldUpdateOperationsInput | number
   parentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1295,7 +1255,6 @@ export type FileUncheckedUpdateManyWithoutSpaceInput = {
 
 export type FileCreateManyCreatorInput = {
   id?: string
-  seq?: number
   name: string
   size: number
   parentId?: string | null
@@ -1325,7 +1284,6 @@ export type FileUpdateWithoutCreatorInput = {
 
 export type FileUncheckedUpdateWithoutCreatorInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  seq?: Prisma.IntFieldUpdateOperationsInput | number
   name?: Prisma.StringFieldUpdateOperationsInput | string
   size?: Prisma.IntFieldUpdateOperationsInput | number
   parentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1342,7 +1300,6 @@ export type FileUncheckedUpdateWithoutCreatorInput = {
 
 export type FileUncheckedUpdateManyWithoutCreatorInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  seq?: Prisma.IntFieldUpdateOperationsInput | number
   name?: Prisma.StringFieldUpdateOperationsInput | string
   size?: Prisma.IntFieldUpdateOperationsInput | number
   parentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1396,7 +1353,6 @@ export type FileCountOutputTypeCountAssociationsArgs<ExtArgs extends runtime.Typ
 
 export type FileSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
-  seq?: boolean
   name?: boolean
   size?: boolean
   parentId?: boolean
@@ -1418,7 +1374,6 @@ export type FileSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
 
 export type FileSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
-  seq?: boolean
   name?: boolean
   size?: boolean
   parentId?: boolean
@@ -1436,7 +1391,6 @@ export type FileSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensio
 
 export type FileSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
-  seq?: boolean
   name?: boolean
   size?: boolean
   parentId?: boolean
@@ -1454,7 +1408,6 @@ export type FileSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensio
 
 export type FileSelectScalar = {
   id?: boolean
-  seq?: boolean
   name?: boolean
   size?: boolean
   parentId?: boolean
@@ -1467,7 +1420,7 @@ export type FileSelectScalar = {
   removedAt?: boolean
 }
 
-export type FileOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "seq" | "name" | "size" | "parentId" | "mimeType" | "url" | "spaceId" | "creatorId" | "createdAt" | "updatedAt" | "removedAt", ExtArgs["result"]["file"]>
+export type FileOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "size" | "parentId" | "mimeType" | "url" | "spaceId" | "creatorId" | "createdAt" | "updatedAt" | "removedAt", ExtArgs["result"]["file"]>
 export type FileInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   parent?: boolean | Prisma.File$parentArgs<ExtArgs>
   children?: boolean | Prisma.File$childrenArgs<ExtArgs>
@@ -1500,7 +1453,6 @@ export type $FilePayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
-    seq: number
     name: string
     size: number
     parentId: string | null
@@ -1941,7 +1893,6 @@ export interface Prisma__FileClient<T, Null = never, ExtArgs extends runtime.Typ
  */
 export interface FileFieldRefs {
   readonly id: Prisma.FieldRef<"File", 'String'>
-  readonly seq: Prisma.FieldRef<"File", 'Int'>
   readonly name: Prisma.FieldRef<"File", 'String'>
   readonly size: Prisma.FieldRef<"File", 'Int'>
   readonly parentId: Prisma.FieldRef<"File", 'String'>

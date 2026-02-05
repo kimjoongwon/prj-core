@@ -20,23 +20,12 @@ export type SpaceClassificationModel = runtime.Types.Result.DefaultSelection<Pri
 
 export type AggregateSpaceClassification = {
   _count: SpaceClassificationCountAggregateOutputType | null
-  _avg: SpaceClassificationAvgAggregateOutputType | null
-  _sum: SpaceClassificationSumAggregateOutputType | null
   _min: SpaceClassificationMinAggregateOutputType | null
   _max: SpaceClassificationMaxAggregateOutputType | null
 }
 
-export type SpaceClassificationAvgAggregateOutputType = {
-  seq: number | null
-}
-
-export type SpaceClassificationSumAggregateOutputType = {
-  seq: number | null
-}
-
 export type SpaceClassificationMinAggregateOutputType = {
   id: string | null
-  seq: number | null
   categoryId: string | null
   spaceId: string | null
   createdAt: Date | null
@@ -46,7 +35,6 @@ export type SpaceClassificationMinAggregateOutputType = {
 
 export type SpaceClassificationMaxAggregateOutputType = {
   id: string | null
-  seq: number | null
   categoryId: string | null
   spaceId: string | null
   createdAt: Date | null
@@ -56,7 +44,6 @@ export type SpaceClassificationMaxAggregateOutputType = {
 
 export type SpaceClassificationCountAggregateOutputType = {
   id: number
-  seq: number
   categoryId: number
   spaceId: number
   createdAt: number
@@ -66,17 +53,8 @@ export type SpaceClassificationCountAggregateOutputType = {
 }
 
 
-export type SpaceClassificationAvgAggregateInputType = {
-  seq?: true
-}
-
-export type SpaceClassificationSumAggregateInputType = {
-  seq?: true
-}
-
 export type SpaceClassificationMinAggregateInputType = {
   id?: true
-  seq?: true
   categoryId?: true
   spaceId?: true
   createdAt?: true
@@ -86,7 +64,6 @@ export type SpaceClassificationMinAggregateInputType = {
 
 export type SpaceClassificationMaxAggregateInputType = {
   id?: true
-  seq?: true
   categoryId?: true
   spaceId?: true
   createdAt?: true
@@ -96,7 +73,6 @@ export type SpaceClassificationMaxAggregateInputType = {
 
 export type SpaceClassificationCountAggregateInputType = {
   id?: true
-  seq?: true
   categoryId?: true
   spaceId?: true
   createdAt?: true
@@ -143,18 +119,6 @@ export type SpaceClassificationAggregateArgs<ExtArgs extends runtime.Types.Exten
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
    * 
-   * Select which fields to average
-  **/
-  _avg?: SpaceClassificationAvgAggregateInputType
-  /**
-   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-   * 
-   * Select which fields to sum
-  **/
-  _sum?: SpaceClassificationSumAggregateInputType
-  /**
-   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-   * 
    * Select which fields to find the minimum value
   **/
   _min?: SpaceClassificationMinAggregateInputType
@@ -185,23 +149,18 @@ export type SpaceClassificationGroupByArgs<ExtArgs extends runtime.Types.Extensi
   take?: number
   skip?: number
   _count?: SpaceClassificationCountAggregateInputType | true
-  _avg?: SpaceClassificationAvgAggregateInputType
-  _sum?: SpaceClassificationSumAggregateInputType
   _min?: SpaceClassificationMinAggregateInputType
   _max?: SpaceClassificationMaxAggregateInputType
 }
 
 export type SpaceClassificationGroupByOutputType = {
   id: string
-  seq: number
   categoryId: string
   spaceId: string
   createdAt: Date
   updatedAt: Date | null
   removedAt: Date | null
   _count: SpaceClassificationCountAggregateOutputType | null
-  _avg: SpaceClassificationAvgAggregateOutputType | null
-  _sum: SpaceClassificationSumAggregateOutputType | null
   _min: SpaceClassificationMinAggregateOutputType | null
   _max: SpaceClassificationMaxAggregateOutputType | null
 }
@@ -226,7 +185,6 @@ export type SpaceClassificationWhereInput = {
   OR?: Prisma.SpaceClassificationWhereInput[]
   NOT?: Prisma.SpaceClassificationWhereInput | Prisma.SpaceClassificationWhereInput[]
   id?: Prisma.StringFilter<"SpaceClassification"> | string
-  seq?: Prisma.IntFilter<"SpaceClassification"> | number
   categoryId?: Prisma.StringFilter<"SpaceClassification"> | string
   spaceId?: Prisma.StringFilter<"SpaceClassification"> | string
   createdAt?: Prisma.DateTimeFilter<"SpaceClassification"> | Date | string
@@ -238,7 +196,6 @@ export type SpaceClassificationWhereInput = {
 
 export type SpaceClassificationOrderByWithRelationInput = {
   id?: Prisma.SortOrder
-  seq?: Prisma.SortOrder
   categoryId?: Prisma.SortOrder
   spaceId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -250,7 +207,6 @@ export type SpaceClassificationOrderByWithRelationInput = {
 
 export type SpaceClassificationWhereUniqueInput = Prisma.AtLeast<{
   id?: string
-  seq?: number
   spaceId?: string
   categoryId_spaceId?: Prisma.SpaceClassificationCategoryIdSpaceIdCompoundUniqueInput
   AND?: Prisma.SpaceClassificationWhereInput | Prisma.SpaceClassificationWhereInput[]
@@ -262,21 +218,18 @@ export type SpaceClassificationWhereUniqueInput = Prisma.AtLeast<{
   removedAt?: Prisma.DateTimeNullableFilter<"SpaceClassification"> | Date | string | null
   category?: Prisma.XOR<Prisma.CategoryScalarRelationFilter, Prisma.CategoryWhereInput>
   space?: Prisma.XOR<Prisma.SpaceScalarRelationFilter, Prisma.SpaceWhereInput>
-}, "id" | "seq" | "spaceId" | "categoryId_spaceId">
+}, "id" | "spaceId" | "categoryId_spaceId">
 
 export type SpaceClassificationOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
-  seq?: Prisma.SortOrder
   categoryId?: Prisma.SortOrder
   spaceId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   removedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   _count?: Prisma.SpaceClassificationCountOrderByAggregateInput
-  _avg?: Prisma.SpaceClassificationAvgOrderByAggregateInput
   _max?: Prisma.SpaceClassificationMaxOrderByAggregateInput
   _min?: Prisma.SpaceClassificationMinOrderByAggregateInput
-  _sum?: Prisma.SpaceClassificationSumOrderByAggregateInput
 }
 
 export type SpaceClassificationScalarWhereWithAggregatesInput = {
@@ -284,7 +237,6 @@ export type SpaceClassificationScalarWhereWithAggregatesInput = {
   OR?: Prisma.SpaceClassificationScalarWhereWithAggregatesInput[]
   NOT?: Prisma.SpaceClassificationScalarWhereWithAggregatesInput | Prisma.SpaceClassificationScalarWhereWithAggregatesInput[]
   id?: Prisma.StringWithAggregatesFilter<"SpaceClassification"> | string
-  seq?: Prisma.IntWithAggregatesFilter<"SpaceClassification"> | number
   categoryId?: Prisma.StringWithAggregatesFilter<"SpaceClassification"> | string
   spaceId?: Prisma.StringWithAggregatesFilter<"SpaceClassification"> | string
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"SpaceClassification"> | Date | string
@@ -294,7 +246,6 @@ export type SpaceClassificationScalarWhereWithAggregatesInput = {
 
 export type SpaceClassificationCreateInput = {
   id?: string
-  seq?: number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
@@ -304,7 +255,6 @@ export type SpaceClassificationCreateInput = {
 
 export type SpaceClassificationUncheckedCreateInput = {
   id?: string
-  seq?: number
   categoryId: string
   spaceId: string
   createdAt?: Date | string
@@ -323,7 +273,6 @@ export type SpaceClassificationUpdateInput = {
 
 export type SpaceClassificationUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  seq?: Prisma.IntFieldUpdateOperationsInput | number
   categoryId?: Prisma.StringFieldUpdateOperationsInput | string
   spaceId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -333,7 +282,6 @@ export type SpaceClassificationUncheckedUpdateInput = {
 
 export type SpaceClassificationCreateManyInput = {
   id?: string
-  seq?: number
   categoryId: string
   spaceId: string
   createdAt?: Date | string
@@ -350,7 +298,6 @@ export type SpaceClassificationUpdateManyMutationInput = {
 
 export type SpaceClassificationUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  seq?: Prisma.IntFieldUpdateOperationsInput | number
   categoryId?: Prisma.StringFieldUpdateOperationsInput | string
   spaceId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -380,7 +327,6 @@ export type SpaceClassificationCategoryIdSpaceIdCompoundUniqueInput = {
 
 export type SpaceClassificationCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
-  seq?: Prisma.SortOrder
   categoryId?: Prisma.SortOrder
   spaceId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -388,13 +334,8 @@ export type SpaceClassificationCountOrderByAggregateInput = {
   removedAt?: Prisma.SortOrder
 }
 
-export type SpaceClassificationAvgOrderByAggregateInput = {
-  seq?: Prisma.SortOrder
-}
-
 export type SpaceClassificationMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
-  seq?: Prisma.SortOrder
   categoryId?: Prisma.SortOrder
   spaceId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -404,16 +345,11 @@ export type SpaceClassificationMaxOrderByAggregateInput = {
 
 export type SpaceClassificationMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
-  seq?: Prisma.SortOrder
   categoryId?: Prisma.SortOrder
   spaceId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   removedAt?: Prisma.SortOrder
-}
-
-export type SpaceClassificationSumOrderByAggregateInput = {
-  seq?: Prisma.SortOrder
 }
 
 export type SpaceClassificationCreateNestedManyWithoutCategoryInput = {
@@ -492,7 +428,6 @@ export type SpaceClassificationUncheckedUpdateOneWithoutSpaceNestedInput = {
 
 export type SpaceClassificationCreateWithoutCategoryInput = {
   id?: string
-  seq?: number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
@@ -501,7 +436,6 @@ export type SpaceClassificationCreateWithoutCategoryInput = {
 
 export type SpaceClassificationUncheckedCreateWithoutCategoryInput = {
   id?: string
-  seq?: number
   spaceId: string
   createdAt?: Date | string
   updatedAt?: Date | string | null
@@ -539,7 +473,6 @@ export type SpaceClassificationScalarWhereInput = {
   OR?: Prisma.SpaceClassificationScalarWhereInput[]
   NOT?: Prisma.SpaceClassificationScalarWhereInput | Prisma.SpaceClassificationScalarWhereInput[]
   id?: Prisma.StringFilter<"SpaceClassification"> | string
-  seq?: Prisma.IntFilter<"SpaceClassification"> | number
   categoryId?: Prisma.StringFilter<"SpaceClassification"> | string
   spaceId?: Prisma.StringFilter<"SpaceClassification"> | string
   createdAt?: Prisma.DateTimeFilter<"SpaceClassification"> | Date | string
@@ -549,7 +482,6 @@ export type SpaceClassificationScalarWhereInput = {
 
 export type SpaceClassificationCreateWithoutSpaceInput = {
   id?: string
-  seq?: number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
@@ -558,7 +490,6 @@ export type SpaceClassificationCreateWithoutSpaceInput = {
 
 export type SpaceClassificationUncheckedCreateWithoutSpaceInput = {
   id?: string
-  seq?: number
   categoryId: string
   createdAt?: Date | string
   updatedAt?: Date | string | null
@@ -591,7 +522,6 @@ export type SpaceClassificationUpdateWithoutSpaceInput = {
 
 export type SpaceClassificationUncheckedUpdateWithoutSpaceInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  seq?: Prisma.IntFieldUpdateOperationsInput | number
   categoryId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -600,7 +530,6 @@ export type SpaceClassificationUncheckedUpdateWithoutSpaceInput = {
 
 export type SpaceClassificationCreateManyCategoryInput = {
   id?: string
-  seq?: number
   spaceId: string
   createdAt?: Date | string
   updatedAt?: Date | string | null
@@ -617,7 +546,6 @@ export type SpaceClassificationUpdateWithoutCategoryInput = {
 
 export type SpaceClassificationUncheckedUpdateWithoutCategoryInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  seq?: Prisma.IntFieldUpdateOperationsInput | number
   spaceId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -626,7 +554,6 @@ export type SpaceClassificationUncheckedUpdateWithoutCategoryInput = {
 
 export type SpaceClassificationUncheckedUpdateManyWithoutCategoryInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  seq?: Prisma.IntFieldUpdateOperationsInput | number
   spaceId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -637,7 +564,6 @@ export type SpaceClassificationUncheckedUpdateManyWithoutCategoryInput = {
 
 export type SpaceClassificationSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
-  seq?: boolean
   categoryId?: boolean
   spaceId?: boolean
   createdAt?: boolean
@@ -649,7 +575,6 @@ export type SpaceClassificationSelect<ExtArgs extends runtime.Types.Extensions.I
 
 export type SpaceClassificationSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
-  seq?: boolean
   categoryId?: boolean
   spaceId?: boolean
   createdAt?: boolean
@@ -661,7 +586,6 @@ export type SpaceClassificationSelectCreateManyAndReturn<ExtArgs extends runtime
 
 export type SpaceClassificationSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
-  seq?: boolean
   categoryId?: boolean
   spaceId?: boolean
   createdAt?: boolean
@@ -673,7 +597,6 @@ export type SpaceClassificationSelectUpdateManyAndReturn<ExtArgs extends runtime
 
 export type SpaceClassificationSelectScalar = {
   id?: boolean
-  seq?: boolean
   categoryId?: boolean
   spaceId?: boolean
   createdAt?: boolean
@@ -681,7 +604,7 @@ export type SpaceClassificationSelectScalar = {
   removedAt?: boolean
 }
 
-export type SpaceClassificationOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "seq" | "categoryId" | "spaceId" | "createdAt" | "updatedAt" | "removedAt", ExtArgs["result"]["spaceClassification"]>
+export type SpaceClassificationOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "categoryId" | "spaceId" | "createdAt" | "updatedAt" | "removedAt", ExtArgs["result"]["spaceClassification"]>
 export type SpaceClassificationInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   category?: boolean | Prisma.CategoryDefaultArgs<ExtArgs>
   space?: boolean | Prisma.SpaceDefaultArgs<ExtArgs>
@@ -703,7 +626,6 @@ export type $SpaceClassificationPayload<ExtArgs extends runtime.Types.Extensions
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
-    seq: number
     categoryId: string
     spaceId: string
     createdAt: Date
@@ -1135,7 +1057,6 @@ export interface Prisma__SpaceClassificationClient<T, Null = never, ExtArgs exte
  */
 export interface SpaceClassificationFieldRefs {
   readonly id: Prisma.FieldRef<"SpaceClassification", 'String'>
-  readonly seq: Prisma.FieldRef<"SpaceClassification", 'Int'>
   readonly categoryId: Prisma.FieldRef<"SpaceClassification", 'String'>
   readonly spaceId: Prisma.FieldRef<"SpaceClassification", 'String'>
   readonly createdAt: Prisma.FieldRef<"SpaceClassification", 'DateTime'>

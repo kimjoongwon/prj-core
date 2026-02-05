@@ -20,23 +20,12 @@ export type AssignmentModel = runtime.Types.Result.DefaultSelection<Prisma.$Assi
 
 export type AggregateAssignment = {
   _count: AssignmentCountAggregateOutputType | null
-  _avg: AssignmentAvgAggregateOutputType | null
-  _sum: AssignmentSumAggregateOutputType | null
   _min: AssignmentMinAggregateOutputType | null
   _max: AssignmentMaxAggregateOutputType | null
 }
 
-export type AssignmentAvgAggregateOutputType = {
-  seq: number | null
-}
-
-export type AssignmentSumAggregateOutputType = {
-  seq: number | null
-}
-
 export type AssignmentMinAggregateOutputType = {
   id: string | null
-  seq: number | null
   createdAt: Date | null
   updatedAt: Date | null
   removedAt: Date | null
@@ -46,7 +35,6 @@ export type AssignmentMinAggregateOutputType = {
 
 export type AssignmentMaxAggregateOutputType = {
   id: string | null
-  seq: number | null
   createdAt: Date | null
   updatedAt: Date | null
   removedAt: Date | null
@@ -56,7 +44,6 @@ export type AssignmentMaxAggregateOutputType = {
 
 export type AssignmentCountAggregateOutputType = {
   id: number
-  seq: number
   createdAt: number
   updatedAt: number
   removedAt: number
@@ -66,17 +53,8 @@ export type AssignmentCountAggregateOutputType = {
 }
 
 
-export type AssignmentAvgAggregateInputType = {
-  seq?: true
-}
-
-export type AssignmentSumAggregateInputType = {
-  seq?: true
-}
-
 export type AssignmentMinAggregateInputType = {
   id?: true
-  seq?: true
   createdAt?: true
   updatedAt?: true
   removedAt?: true
@@ -86,7 +64,6 @@ export type AssignmentMinAggregateInputType = {
 
 export type AssignmentMaxAggregateInputType = {
   id?: true
-  seq?: true
   createdAt?: true
   updatedAt?: true
   removedAt?: true
@@ -96,7 +73,6 @@ export type AssignmentMaxAggregateInputType = {
 
 export type AssignmentCountAggregateInputType = {
   id?: true
-  seq?: true
   createdAt?: true
   updatedAt?: true
   removedAt?: true
@@ -143,18 +119,6 @@ export type AssignmentAggregateArgs<ExtArgs extends runtime.Types.Extensions.Int
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
    * 
-   * Select which fields to average
-  **/
-  _avg?: AssignmentAvgAggregateInputType
-  /**
-   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-   * 
-   * Select which fields to sum
-  **/
-  _sum?: AssignmentSumAggregateInputType
-  /**
-   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-   * 
    * Select which fields to find the minimum value
   **/
   _min?: AssignmentMinAggregateInputType
@@ -185,23 +149,18 @@ export type AssignmentGroupByArgs<ExtArgs extends runtime.Types.Extensions.Inter
   take?: number
   skip?: number
   _count?: AssignmentCountAggregateInputType | true
-  _avg?: AssignmentAvgAggregateInputType
-  _sum?: AssignmentSumAggregateInputType
   _min?: AssignmentMinAggregateInputType
   _max?: AssignmentMaxAggregateInputType
 }
 
 export type AssignmentGroupByOutputType = {
   id: string
-  seq: number
   createdAt: Date
   updatedAt: Date | null
   removedAt: Date | null
   roleId: string
   tenantId: string
   _count: AssignmentCountAggregateOutputType | null
-  _avg: AssignmentAvgAggregateOutputType | null
-  _sum: AssignmentSumAggregateOutputType | null
   _min: AssignmentMinAggregateOutputType | null
   _max: AssignmentMaxAggregateOutputType | null
 }
@@ -226,7 +185,6 @@ export type AssignmentWhereInput = {
   OR?: Prisma.AssignmentWhereInput[]
   NOT?: Prisma.AssignmentWhereInput | Prisma.AssignmentWhereInput[]
   id?: Prisma.StringFilter<"Assignment"> | string
-  seq?: Prisma.IntFilter<"Assignment"> | number
   createdAt?: Prisma.DateTimeFilter<"Assignment"> | Date | string
   updatedAt?: Prisma.DateTimeNullableFilter<"Assignment"> | Date | string | null
   removedAt?: Prisma.DateTimeNullableFilter<"Assignment"> | Date | string | null
@@ -238,7 +196,6 @@ export type AssignmentWhereInput = {
 
 export type AssignmentOrderByWithRelationInput = {
   id?: Prisma.SortOrder
-  seq?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   removedAt?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -250,7 +207,6 @@ export type AssignmentOrderByWithRelationInput = {
 
 export type AssignmentWhereUniqueInput = Prisma.AtLeast<{
   id?: string
-  seq?: number
   AND?: Prisma.AssignmentWhereInput | Prisma.AssignmentWhereInput[]
   OR?: Prisma.AssignmentWhereInput[]
   NOT?: Prisma.AssignmentWhereInput | Prisma.AssignmentWhereInput[]
@@ -261,21 +217,18 @@ export type AssignmentWhereUniqueInput = Prisma.AtLeast<{
   tenantId?: Prisma.StringFilter<"Assignment"> | string
   role?: Prisma.XOR<Prisma.RoleScalarRelationFilter, Prisma.RoleWhereInput>
   tenant?: Prisma.XOR<Prisma.TenantScalarRelationFilter, Prisma.TenantWhereInput>
-}, "id" | "seq">
+}, "id">
 
 export type AssignmentOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
-  seq?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   removedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   roleId?: Prisma.SortOrder
   tenantId?: Prisma.SortOrder
   _count?: Prisma.AssignmentCountOrderByAggregateInput
-  _avg?: Prisma.AssignmentAvgOrderByAggregateInput
   _max?: Prisma.AssignmentMaxOrderByAggregateInput
   _min?: Prisma.AssignmentMinOrderByAggregateInput
-  _sum?: Prisma.AssignmentSumOrderByAggregateInput
 }
 
 export type AssignmentScalarWhereWithAggregatesInput = {
@@ -283,7 +236,6 @@ export type AssignmentScalarWhereWithAggregatesInput = {
   OR?: Prisma.AssignmentScalarWhereWithAggregatesInput[]
   NOT?: Prisma.AssignmentScalarWhereWithAggregatesInput | Prisma.AssignmentScalarWhereWithAggregatesInput[]
   id?: Prisma.StringWithAggregatesFilter<"Assignment"> | string
-  seq?: Prisma.IntWithAggregatesFilter<"Assignment"> | number
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Assignment"> | Date | string
   updatedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Assignment"> | Date | string | null
   removedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Assignment"> | Date | string | null
@@ -293,7 +245,6 @@ export type AssignmentScalarWhereWithAggregatesInput = {
 
 export type AssignmentCreateInput = {
   id?: string
-  seq?: number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
@@ -303,7 +254,6 @@ export type AssignmentCreateInput = {
 
 export type AssignmentUncheckedCreateInput = {
   id?: string
-  seq?: number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
@@ -322,7 +272,6 @@ export type AssignmentUpdateInput = {
 
 export type AssignmentUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  seq?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -332,7 +281,6 @@ export type AssignmentUncheckedUpdateInput = {
 
 export type AssignmentCreateManyInput = {
   id?: string
-  seq?: number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
@@ -349,7 +297,6 @@ export type AssignmentUpdateManyMutationInput = {
 
 export type AssignmentUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  seq?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -369,7 +316,6 @@ export type AssignmentOrderByRelationAggregateInput = {
 
 export type AssignmentCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
-  seq?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   removedAt?: Prisma.SortOrder
@@ -377,13 +323,8 @@ export type AssignmentCountOrderByAggregateInput = {
   tenantId?: Prisma.SortOrder
 }
 
-export type AssignmentAvgOrderByAggregateInput = {
-  seq?: Prisma.SortOrder
-}
-
 export type AssignmentMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
-  seq?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   removedAt?: Prisma.SortOrder
@@ -393,16 +334,11 @@ export type AssignmentMaxOrderByAggregateInput = {
 
 export type AssignmentMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
-  seq?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   removedAt?: Prisma.SortOrder
   roleId?: Prisma.SortOrder
   tenantId?: Prisma.SortOrder
-}
-
-export type AssignmentSumOrderByAggregateInput = {
-  seq?: Prisma.SortOrder
 }
 
 export type AssignmentCreateNestedManyWithoutTenantInput = {
@@ -491,7 +427,6 @@ export type AssignmentUncheckedUpdateManyWithoutRoleNestedInput = {
 
 export type AssignmentCreateWithoutTenantInput = {
   id?: string
-  seq?: number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
@@ -500,7 +435,6 @@ export type AssignmentCreateWithoutTenantInput = {
 
 export type AssignmentUncheckedCreateWithoutTenantInput = {
   id?: string
-  seq?: number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
@@ -538,7 +472,6 @@ export type AssignmentScalarWhereInput = {
   OR?: Prisma.AssignmentScalarWhereInput[]
   NOT?: Prisma.AssignmentScalarWhereInput | Prisma.AssignmentScalarWhereInput[]
   id?: Prisma.StringFilter<"Assignment"> | string
-  seq?: Prisma.IntFilter<"Assignment"> | number
   createdAt?: Prisma.DateTimeFilter<"Assignment"> | Date | string
   updatedAt?: Prisma.DateTimeNullableFilter<"Assignment"> | Date | string | null
   removedAt?: Prisma.DateTimeNullableFilter<"Assignment"> | Date | string | null
@@ -548,7 +481,6 @@ export type AssignmentScalarWhereInput = {
 
 export type AssignmentCreateWithoutRoleInput = {
   id?: string
-  seq?: number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
@@ -557,7 +489,6 @@ export type AssignmentCreateWithoutRoleInput = {
 
 export type AssignmentUncheckedCreateWithoutRoleInput = {
   id?: string
-  seq?: number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
@@ -592,7 +523,6 @@ export type AssignmentUpdateManyWithWhereWithoutRoleInput = {
 
 export type AssignmentCreateManyTenantInput = {
   id?: string
-  seq?: number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
@@ -609,7 +539,6 @@ export type AssignmentUpdateWithoutTenantInput = {
 
 export type AssignmentUncheckedUpdateWithoutTenantInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  seq?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -618,7 +547,6 @@ export type AssignmentUncheckedUpdateWithoutTenantInput = {
 
 export type AssignmentUncheckedUpdateManyWithoutTenantInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  seq?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -627,7 +555,6 @@ export type AssignmentUncheckedUpdateManyWithoutTenantInput = {
 
 export type AssignmentCreateManyRoleInput = {
   id?: string
-  seq?: number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
@@ -644,7 +571,6 @@ export type AssignmentUpdateWithoutRoleInput = {
 
 export type AssignmentUncheckedUpdateWithoutRoleInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  seq?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -653,7 +579,6 @@ export type AssignmentUncheckedUpdateWithoutRoleInput = {
 
 export type AssignmentUncheckedUpdateManyWithoutRoleInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  seq?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -664,7 +589,6 @@ export type AssignmentUncheckedUpdateManyWithoutRoleInput = {
 
 export type AssignmentSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
-  seq?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   removedAt?: boolean
@@ -676,7 +600,6 @@ export type AssignmentSelect<ExtArgs extends runtime.Types.Extensions.InternalAr
 
 export type AssignmentSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
-  seq?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   removedAt?: boolean
@@ -688,7 +611,6 @@ export type AssignmentSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Ex
 
 export type AssignmentSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
-  seq?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   removedAt?: boolean
@@ -700,7 +622,6 @@ export type AssignmentSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Ex
 
 export type AssignmentSelectScalar = {
   id?: boolean
-  seq?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   removedAt?: boolean
@@ -708,7 +629,7 @@ export type AssignmentSelectScalar = {
   tenantId?: boolean
 }
 
-export type AssignmentOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "seq" | "createdAt" | "updatedAt" | "removedAt" | "roleId" | "tenantId", ExtArgs["result"]["assignment"]>
+export type AssignmentOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "createdAt" | "updatedAt" | "removedAt" | "roleId" | "tenantId", ExtArgs["result"]["assignment"]>
 export type AssignmentInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   role?: boolean | Prisma.RoleDefaultArgs<ExtArgs>
   tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
@@ -730,7 +651,6 @@ export type $AssignmentPayload<ExtArgs extends runtime.Types.Extensions.Internal
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
-    seq: number
     createdAt: Date
     updatedAt: Date | null
     removedAt: Date | null
@@ -1162,7 +1082,6 @@ export interface Prisma__AssignmentClient<T, Null = never, ExtArgs extends runti
  */
 export interface AssignmentFieldRefs {
   readonly id: Prisma.FieldRef<"Assignment", 'String'>
-  readonly seq: Prisma.FieldRef<"Assignment", 'Int'>
   readonly createdAt: Prisma.FieldRef<"Assignment", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"Assignment", 'DateTime'>
   readonly removedAt: Prisma.FieldRef<"Assignment", 'DateTime'>

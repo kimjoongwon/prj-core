@@ -51,7 +51,7 @@ export class RequestContextInterceptor implements NestInterceptor {
 
 			// Space ID 설정 (X-Space-ID 헤더 필수)
 			// 모든 인증된 사용자는 x-space-id 헤더를 포함해야 함
-			// SUPER_ADMIN도 System Space (seq=1)의 spaceId를 사용해야 함
+			// SUPER_ADMIN도 System Space (isSystem=true)의 spaceId를 사용해야 함
 			const spaceIdFromHeader = request.headers["x-space-id"] as
 				| string
 				| undefined;

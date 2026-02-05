@@ -1,4 +1,4 @@
-import { ClassField } from "@cocrepo/decorator";
+import { BooleanField, ClassField } from "@cocrepo/decorator";
 import type { Space } from "@cocrepo/prisma";
 import { AbstractDto } from "./abstract.dto";
 import { GroundDto } from "./ground.dto";
@@ -7,6 +7,9 @@ import { SpaceClassificationDto } from "./space-classification.dto";
 import { TenantDto } from "./tenant.dto";
 
 export class SpaceDto extends AbstractDto implements Space {
+	@BooleanField()
+	isSystem!: boolean;
+
 	@ClassField(() => TenantDto, {
 		required: false,
 		swagger: false,

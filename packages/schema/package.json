@@ -19,8 +19,8 @@
     "README.md"
   ],
   "scripts": {
-    "build": "tsc",
-    "start:dev": "tsc --watch",
+    "build": "rm -rf dist && tsc",
+    "start:dev": "rm -rf dist && tsc --watch",
     "type-check": "tsc --noEmit",
     "format": "biome format --write .",
     "clean": "rm -rf dist && rm -rf node_modules"

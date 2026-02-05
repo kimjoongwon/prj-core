@@ -30,20 +30,17 @@ export type AggregateExercise = {
 }
 
 export type ExerciseAvgAggregateOutputType = {
-  seq: number | null
   duration: number | null
   count: number | null
 }
 
 export type ExerciseSumAggregateOutputType = {
-  seq: number | null
   duration: number | null
   count: number | null
 }
 
 export type ExerciseMinAggregateOutputType = {
   id: string | null
-  seq: number | null
   createdAt: Date | null
   updatedAt: Date | null
   removedAt: Date | null
@@ -58,7 +55,6 @@ export type ExerciseMinAggregateOutputType = {
 
 export type ExerciseMaxAggregateOutputType = {
   id: string | null
-  seq: number | null
   createdAt: Date | null
   updatedAt: Date | null
   removedAt: Date | null
@@ -73,7 +69,6 @@ export type ExerciseMaxAggregateOutputType = {
 
 export type ExerciseCountAggregateOutputType = {
   id: number
-  seq: number
   createdAt: number
   updatedAt: number
   removedAt: number
@@ -89,20 +84,17 @@ export type ExerciseCountAggregateOutputType = {
 
 
 export type ExerciseAvgAggregateInputType = {
-  seq?: true
   duration?: true
   count?: true
 }
 
 export type ExerciseSumAggregateInputType = {
-  seq?: true
   duration?: true
   count?: true
 }
 
 export type ExerciseMinAggregateInputType = {
   id?: true
-  seq?: true
   createdAt?: true
   updatedAt?: true
   removedAt?: true
@@ -117,7 +109,6 @@ export type ExerciseMinAggregateInputType = {
 
 export type ExerciseMaxAggregateInputType = {
   id?: true
-  seq?: true
   createdAt?: true
   updatedAt?: true
   removedAt?: true
@@ -132,7 +123,6 @@ export type ExerciseMaxAggregateInputType = {
 
 export type ExerciseCountAggregateInputType = {
   id?: true
-  seq?: true
   createdAt?: true
   updatedAt?: true
   removedAt?: true
@@ -234,7 +224,6 @@ export type ExerciseGroupByArgs<ExtArgs extends runtime.Types.Extensions.Interna
 
 export type ExerciseGroupByOutputType = {
   id: string
-  seq: number
   createdAt: Date
   updatedAt: Date | null
   removedAt: Date | null
@@ -272,7 +261,6 @@ export type ExerciseWhereInput = {
   OR?: Prisma.ExerciseWhereInput[]
   NOT?: Prisma.ExerciseWhereInput | Prisma.ExerciseWhereInput[]
   id?: Prisma.StringFilter<"Exercise"> | string
-  seq?: Prisma.IntFilter<"Exercise"> | number
   createdAt?: Prisma.DateTimeFilter<"Exercise"> | Date | string
   updatedAt?: Prisma.DateTimeNullableFilter<"Exercise"> | Date | string | null
   removedAt?: Prisma.DateTimeNullableFilter<"Exercise"> | Date | string | null
@@ -288,7 +276,6 @@ export type ExerciseWhereInput = {
 
 export type ExerciseOrderByWithRelationInput = {
   id?: Prisma.SortOrder
-  seq?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   removedAt?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -304,7 +291,6 @@ export type ExerciseOrderByWithRelationInput = {
 
 export type ExerciseWhereUniqueInput = Prisma.AtLeast<{
   id?: string
-  seq?: number
   taskId?: string
   AND?: Prisma.ExerciseWhereInput | Prisma.ExerciseWhereInput[]
   OR?: Prisma.ExerciseWhereInput[]
@@ -319,11 +305,10 @@ export type ExerciseWhereUniqueInput = Prisma.AtLeast<{
   videoFileId?: Prisma.StringNullableFilter<"Exercise"> | string | null
   name?: Prisma.StringFilter<"Exercise"> | string
   task?: Prisma.XOR<Prisma.TaskScalarRelationFilter, Prisma.TaskWhereInput>
-}, "id" | "seq" | "taskId">
+}, "id" | "taskId">
 
 export type ExerciseOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
-  seq?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   removedAt?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -346,7 +331,6 @@ export type ExerciseScalarWhereWithAggregatesInput = {
   OR?: Prisma.ExerciseScalarWhereWithAggregatesInput[]
   NOT?: Prisma.ExerciseScalarWhereWithAggregatesInput | Prisma.ExerciseScalarWhereWithAggregatesInput[]
   id?: Prisma.StringWithAggregatesFilter<"Exercise"> | string
-  seq?: Prisma.IntWithAggregatesFilter<"Exercise"> | number
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Exercise"> | Date | string
   updatedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Exercise"> | Date | string | null
   removedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Exercise"> | Date | string | null
@@ -361,7 +345,6 @@ export type ExerciseScalarWhereWithAggregatesInput = {
 
 export type ExerciseCreateInput = {
   id?: string
-  seq?: number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
@@ -376,7 +359,6 @@ export type ExerciseCreateInput = {
 
 export type ExerciseUncheckedCreateInput = {
   id?: string
-  seq?: number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
@@ -405,7 +387,6 @@ export type ExerciseUpdateInput = {
 
 export type ExerciseUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  seq?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -420,7 +401,6 @@ export type ExerciseUncheckedUpdateInput = {
 
 export type ExerciseCreateManyInput = {
   id?: string
-  seq?: number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
@@ -448,7 +428,6 @@ export type ExerciseUpdateManyMutationInput = {
 
 export type ExerciseUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  seq?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -468,7 +447,6 @@ export type ExerciseNullableScalarRelationFilter = {
 
 export type ExerciseCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
-  seq?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   removedAt?: Prisma.SortOrder
@@ -482,14 +460,12 @@ export type ExerciseCountOrderByAggregateInput = {
 }
 
 export type ExerciseAvgOrderByAggregateInput = {
-  seq?: Prisma.SortOrder
   duration?: Prisma.SortOrder
   count?: Prisma.SortOrder
 }
 
 export type ExerciseMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
-  seq?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   removedAt?: Prisma.SortOrder
@@ -504,7 +480,6 @@ export type ExerciseMaxOrderByAggregateInput = {
 
 export type ExerciseMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
-  seq?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   removedAt?: Prisma.SortOrder
@@ -518,7 +493,6 @@ export type ExerciseMinOrderByAggregateInput = {
 }
 
 export type ExerciseSumOrderByAggregateInput = {
-  seq?: Prisma.SortOrder
   duration?: Prisma.SortOrder
   count?: Prisma.SortOrder
 }
@@ -557,7 +531,6 @@ export type ExerciseUncheckedUpdateOneWithoutTaskNestedInput = {
 
 export type ExerciseCreateWithoutTaskInput = {
   id?: string
-  seq?: number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
@@ -571,7 +544,6 @@ export type ExerciseCreateWithoutTaskInput = {
 
 export type ExerciseUncheckedCreateWithoutTaskInput = {
   id?: string
-  seq?: number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
@@ -614,7 +586,6 @@ export type ExerciseUpdateWithoutTaskInput = {
 
 export type ExerciseUncheckedUpdateWithoutTaskInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  seq?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -630,7 +601,6 @@ export type ExerciseUncheckedUpdateWithoutTaskInput = {
 
 export type ExerciseSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
-  seq?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   removedAt?: boolean
@@ -646,7 +616,6 @@ export type ExerciseSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs
 
 export type ExerciseSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
-  seq?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   removedAt?: boolean
@@ -662,7 +631,6 @@ export type ExerciseSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Exte
 
 export type ExerciseSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
-  seq?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   removedAt?: boolean
@@ -678,7 +646,6 @@ export type ExerciseSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Exte
 
 export type ExerciseSelectScalar = {
   id?: boolean
-  seq?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   removedAt?: boolean
@@ -691,7 +658,7 @@ export type ExerciseSelectScalar = {
   name?: boolean
 }
 
-export type ExerciseOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "seq" | "createdAt" | "updatedAt" | "removedAt" | "duration" | "count" | "taskId" | "description" | "imageFileId" | "videoFileId" | "name", ExtArgs["result"]["exercise"]>
+export type ExerciseOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "createdAt" | "updatedAt" | "removedAt" | "duration" | "count" | "taskId" | "description" | "imageFileId" | "videoFileId" | "name", ExtArgs["result"]["exercise"]>
 export type ExerciseInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   task?: boolean | Prisma.TaskDefaultArgs<ExtArgs>
 }
@@ -715,10 +682,6 @@ export type $ExercisePayload<ExtArgs extends runtime.Types.Extensions.InternalAr
      * 고유 식별자
      */
     id: string
-    /**
-     * 순번
-     */
-    seq: number
     /**
      * 생성 일시
      */
@@ -1184,7 +1147,6 @@ export interface Prisma__ExerciseClient<T, Null = never, ExtArgs extends runtime
  */
 export interface ExerciseFieldRefs {
   readonly id: Prisma.FieldRef<"Exercise", 'String'>
-  readonly seq: Prisma.FieldRef<"Exercise", 'Int'>
   readonly createdAt: Prisma.FieldRef<"Exercise", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"Exercise", 'DateTime'>
   readonly removedAt: Prisma.FieldRef<"Exercise", 'DateTime'>

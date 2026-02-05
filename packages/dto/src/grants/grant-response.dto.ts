@@ -17,13 +17,6 @@ export class GrantResponseDto {
 	id!: string;
 
 	@ApiProperty({
-		description: "시퀀스 번호 (자동 증가)",
-		example: 1,
-	})
-	@Expose()
-	seq!: number;
-
-	@ApiProperty({
 		description: "권한 대상 유형 (Role 또는 User)",
 		example: "Role",
 	})

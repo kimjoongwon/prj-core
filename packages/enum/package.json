@@ -2,7 +2,7 @@
   "name": "@cocrepo/enum",
   "version": "0.1.11",
   "description": "Shared Enum",
-  "types": "dist/index.d.ts",
+  "types": "./dist/index.d.ts",
   "publishConfig": {
     "access": "public"
   },
@@ -10,7 +10,6 @@
     "dist"
   ],
   "main": "./dist/index.js",
-  "types": "./dist/index.d.ts",
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
@@ -19,8 +18,8 @@
     }
   },
   "scripts": {
-    "start:dev": "tsc --watch",
-    "build": "tsc",
+    "start:dev": "rm -rf dist && tsc --watch",
+    "build": "rm -rf dist && tsc",
     "format": "biome format --write ."
   },
   "keywords": [],

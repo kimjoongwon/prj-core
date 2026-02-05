@@ -20,23 +20,12 @@ export type FileClassificationModel = runtime.Types.Result.DefaultSelection<Pris
 
 export type AggregateFileClassification = {
   _count: FileClassificationCountAggregateOutputType | null
-  _avg: FileClassificationAvgAggregateOutputType | null
-  _sum: FileClassificationSumAggregateOutputType | null
   _min: FileClassificationMinAggregateOutputType | null
   _max: FileClassificationMaxAggregateOutputType | null
 }
 
-export type FileClassificationAvgAggregateOutputType = {
-  seq: number | null
-}
-
-export type FileClassificationSumAggregateOutputType = {
-  seq: number | null
-}
-
 export type FileClassificationMinAggregateOutputType = {
   id: string | null
-  seq: number | null
   categoryId: string | null
   fileId: string | null
   createdAt: Date | null
@@ -46,7 +35,6 @@ export type FileClassificationMinAggregateOutputType = {
 
 export type FileClassificationMaxAggregateOutputType = {
   id: string | null
-  seq: number | null
   categoryId: string | null
   fileId: string | null
   createdAt: Date | null
@@ -56,7 +44,6 @@ export type FileClassificationMaxAggregateOutputType = {
 
 export type FileClassificationCountAggregateOutputType = {
   id: number
-  seq: number
   categoryId: number
   fileId: number
   createdAt: number
@@ -66,17 +53,8 @@ export type FileClassificationCountAggregateOutputType = {
 }
 
 
-export type FileClassificationAvgAggregateInputType = {
-  seq?: true
-}
-
-export type FileClassificationSumAggregateInputType = {
-  seq?: true
-}
-
 export type FileClassificationMinAggregateInputType = {
   id?: true
-  seq?: true
   categoryId?: true
   fileId?: true
   createdAt?: true
@@ -86,7 +64,6 @@ export type FileClassificationMinAggregateInputType = {
 
 export type FileClassificationMaxAggregateInputType = {
   id?: true
-  seq?: true
   categoryId?: true
   fileId?: true
   createdAt?: true
@@ -96,7 +73,6 @@ export type FileClassificationMaxAggregateInputType = {
 
 export type FileClassificationCountAggregateInputType = {
   id?: true
-  seq?: true
   categoryId?: true
   fileId?: true
   createdAt?: true
@@ -143,18 +119,6 @@ export type FileClassificationAggregateArgs<ExtArgs extends runtime.Types.Extens
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
    * 
-   * Select which fields to average
-  **/
-  _avg?: FileClassificationAvgAggregateInputType
-  /**
-   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-   * 
-   * Select which fields to sum
-  **/
-  _sum?: FileClassificationSumAggregateInputType
-  /**
-   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-   * 
    * Select which fields to find the minimum value
   **/
   _min?: FileClassificationMinAggregateInputType
@@ -185,23 +149,18 @@ export type FileClassificationGroupByArgs<ExtArgs extends runtime.Types.Extensio
   take?: number
   skip?: number
   _count?: FileClassificationCountAggregateInputType | true
-  _avg?: FileClassificationAvgAggregateInputType
-  _sum?: FileClassificationSumAggregateInputType
   _min?: FileClassificationMinAggregateInputType
   _max?: FileClassificationMaxAggregateInputType
 }
 
 export type FileClassificationGroupByOutputType = {
   id: string
-  seq: number
   categoryId: string
   fileId: string
   createdAt: Date
   updatedAt: Date | null
   removedAt: Date | null
   _count: FileClassificationCountAggregateOutputType | null
-  _avg: FileClassificationAvgAggregateOutputType | null
-  _sum: FileClassificationSumAggregateOutputType | null
   _min: FileClassificationMinAggregateOutputType | null
   _max: FileClassificationMaxAggregateOutputType | null
 }
@@ -226,7 +185,6 @@ export type FileClassificationWhereInput = {
   OR?: Prisma.FileClassificationWhereInput[]
   NOT?: Prisma.FileClassificationWhereInput | Prisma.FileClassificationWhereInput[]
   id?: Prisma.StringFilter<"FileClassification"> | string
-  seq?: Prisma.IntFilter<"FileClassification"> | number
   categoryId?: Prisma.StringFilter<"FileClassification"> | string
   fileId?: Prisma.StringFilter<"FileClassification"> | string
   createdAt?: Prisma.DateTimeFilter<"FileClassification"> | Date | string
@@ -238,7 +196,6 @@ export type FileClassificationWhereInput = {
 
 export type FileClassificationOrderByWithRelationInput = {
   id?: Prisma.SortOrder
-  seq?: Prisma.SortOrder
   categoryId?: Prisma.SortOrder
   fileId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -250,7 +207,6 @@ export type FileClassificationOrderByWithRelationInput = {
 
 export type FileClassificationWhereUniqueInput = Prisma.AtLeast<{
   id?: string
-  seq?: number
   fileId?: string
   categoryId_fileId?: Prisma.FileClassificationCategoryIdFileIdCompoundUniqueInput
   AND?: Prisma.FileClassificationWhereInput | Prisma.FileClassificationWhereInput[]
@@ -262,21 +218,18 @@ export type FileClassificationWhereUniqueInput = Prisma.AtLeast<{
   removedAt?: Prisma.DateTimeNullableFilter<"FileClassification"> | Date | string | null
   category?: Prisma.XOR<Prisma.CategoryScalarRelationFilter, Prisma.CategoryWhereInput>
   file?: Prisma.XOR<Prisma.FileScalarRelationFilter, Prisma.FileWhereInput>
-}, "id" | "seq" | "fileId" | "categoryId_fileId">
+}, "id" | "fileId" | "categoryId_fileId">
 
 export type FileClassificationOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
-  seq?: Prisma.SortOrder
   categoryId?: Prisma.SortOrder
   fileId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   removedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   _count?: Prisma.FileClassificationCountOrderByAggregateInput
-  _avg?: Prisma.FileClassificationAvgOrderByAggregateInput
   _max?: Prisma.FileClassificationMaxOrderByAggregateInput
   _min?: Prisma.FileClassificationMinOrderByAggregateInput
-  _sum?: Prisma.FileClassificationSumOrderByAggregateInput
 }
 
 export type FileClassificationScalarWhereWithAggregatesInput = {
@@ -284,7 +237,6 @@ export type FileClassificationScalarWhereWithAggregatesInput = {
   OR?: Prisma.FileClassificationScalarWhereWithAggregatesInput[]
   NOT?: Prisma.FileClassificationScalarWhereWithAggregatesInput | Prisma.FileClassificationScalarWhereWithAggregatesInput[]
   id?: Prisma.StringWithAggregatesFilter<"FileClassification"> | string
-  seq?: Prisma.IntWithAggregatesFilter<"FileClassification"> | number
   categoryId?: Prisma.StringWithAggregatesFilter<"FileClassification"> | string
   fileId?: Prisma.StringWithAggregatesFilter<"FileClassification"> | string
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"FileClassification"> | Date | string
@@ -294,7 +246,6 @@ export type FileClassificationScalarWhereWithAggregatesInput = {
 
 export type FileClassificationCreateInput = {
   id?: string
-  seq?: number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
@@ -304,7 +255,6 @@ export type FileClassificationCreateInput = {
 
 export type FileClassificationUncheckedCreateInput = {
   id?: string
-  seq?: number
   categoryId: string
   fileId: string
   createdAt?: Date | string
@@ -323,7 +273,6 @@ export type FileClassificationUpdateInput = {
 
 export type FileClassificationUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  seq?: Prisma.IntFieldUpdateOperationsInput | number
   categoryId?: Prisma.StringFieldUpdateOperationsInput | string
   fileId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -333,7 +282,6 @@ export type FileClassificationUncheckedUpdateInput = {
 
 export type FileClassificationCreateManyInput = {
   id?: string
-  seq?: number
   categoryId: string
   fileId: string
   createdAt?: Date | string
@@ -350,7 +298,6 @@ export type FileClassificationUpdateManyMutationInput = {
 
 export type FileClassificationUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  seq?: Prisma.IntFieldUpdateOperationsInput | number
   categoryId?: Prisma.StringFieldUpdateOperationsInput | string
   fileId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -380,7 +327,6 @@ export type FileClassificationCategoryIdFileIdCompoundUniqueInput = {
 
 export type FileClassificationCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
-  seq?: Prisma.SortOrder
   categoryId?: Prisma.SortOrder
   fileId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -388,13 +334,8 @@ export type FileClassificationCountOrderByAggregateInput = {
   removedAt?: Prisma.SortOrder
 }
 
-export type FileClassificationAvgOrderByAggregateInput = {
-  seq?: Prisma.SortOrder
-}
-
 export type FileClassificationMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
-  seq?: Prisma.SortOrder
   categoryId?: Prisma.SortOrder
   fileId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -404,16 +345,11 @@ export type FileClassificationMaxOrderByAggregateInput = {
 
 export type FileClassificationMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
-  seq?: Prisma.SortOrder
   categoryId?: Prisma.SortOrder
   fileId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   removedAt?: Prisma.SortOrder
-}
-
-export type FileClassificationSumOrderByAggregateInput = {
-  seq?: Prisma.SortOrder
 }
 
 export type FileClassificationCreateNestedManyWithoutCategoryInput = {
@@ -492,7 +428,6 @@ export type FileClassificationUncheckedUpdateOneWithoutFileNestedInput = {
 
 export type FileClassificationCreateWithoutCategoryInput = {
   id?: string
-  seq?: number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
@@ -501,7 +436,6 @@ export type FileClassificationCreateWithoutCategoryInput = {
 
 export type FileClassificationUncheckedCreateWithoutCategoryInput = {
   id?: string
-  seq?: number
   fileId: string
   createdAt?: Date | string
   updatedAt?: Date | string | null
@@ -539,7 +473,6 @@ export type FileClassificationScalarWhereInput = {
   OR?: Prisma.FileClassificationScalarWhereInput[]
   NOT?: Prisma.FileClassificationScalarWhereInput | Prisma.FileClassificationScalarWhereInput[]
   id?: Prisma.StringFilter<"FileClassification"> | string
-  seq?: Prisma.IntFilter<"FileClassification"> | number
   categoryId?: Prisma.StringFilter<"FileClassification"> | string
   fileId?: Prisma.StringFilter<"FileClassification"> | string
   createdAt?: Prisma.DateTimeFilter<"FileClassification"> | Date | string
@@ -549,7 +482,6 @@ export type FileClassificationScalarWhereInput = {
 
 export type FileClassificationCreateWithoutFileInput = {
   id?: string
-  seq?: number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
@@ -558,7 +490,6 @@ export type FileClassificationCreateWithoutFileInput = {
 
 export type FileClassificationUncheckedCreateWithoutFileInput = {
   id?: string
-  seq?: number
   categoryId: string
   createdAt?: Date | string
   updatedAt?: Date | string | null
@@ -591,7 +522,6 @@ export type FileClassificationUpdateWithoutFileInput = {
 
 export type FileClassificationUncheckedUpdateWithoutFileInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  seq?: Prisma.IntFieldUpdateOperationsInput | number
   categoryId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -600,7 +530,6 @@ export type FileClassificationUncheckedUpdateWithoutFileInput = {
 
 export type FileClassificationCreateManyCategoryInput = {
   id?: string
-  seq?: number
   fileId: string
   createdAt?: Date | string
   updatedAt?: Date | string | null
@@ -617,7 +546,6 @@ export type FileClassificationUpdateWithoutCategoryInput = {
 
 export type FileClassificationUncheckedUpdateWithoutCategoryInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  seq?: Prisma.IntFieldUpdateOperationsInput | number
   fileId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -626,7 +554,6 @@ export type FileClassificationUncheckedUpdateWithoutCategoryInput = {
 
 export type FileClassificationUncheckedUpdateManyWithoutCategoryInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  seq?: Prisma.IntFieldUpdateOperationsInput | number
   fileId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -637,7 +564,6 @@ export type FileClassificationUncheckedUpdateManyWithoutCategoryInput = {
 
 export type FileClassificationSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
-  seq?: boolean
   categoryId?: boolean
   fileId?: boolean
   createdAt?: boolean
@@ -649,7 +575,6 @@ export type FileClassificationSelect<ExtArgs extends runtime.Types.Extensions.In
 
 export type FileClassificationSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
-  seq?: boolean
   categoryId?: boolean
   fileId?: boolean
   createdAt?: boolean
@@ -661,7 +586,6 @@ export type FileClassificationSelectCreateManyAndReturn<ExtArgs extends runtime.
 
 export type FileClassificationSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
-  seq?: boolean
   categoryId?: boolean
   fileId?: boolean
   createdAt?: boolean
@@ -673,7 +597,6 @@ export type FileClassificationSelectUpdateManyAndReturn<ExtArgs extends runtime.
 
 export type FileClassificationSelectScalar = {
   id?: boolean
-  seq?: boolean
   categoryId?: boolean
   fileId?: boolean
   createdAt?: boolean
@@ -681,7 +604,7 @@ export type FileClassificationSelectScalar = {
   removedAt?: boolean
 }
 
-export type FileClassificationOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "seq" | "categoryId" | "fileId" | "createdAt" | "updatedAt" | "removedAt", ExtArgs["result"]["fileClassification"]>
+export type FileClassificationOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "categoryId" | "fileId" | "createdAt" | "updatedAt" | "removedAt", ExtArgs["result"]["fileClassification"]>
 export type FileClassificationInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   category?: boolean | Prisma.CategoryDefaultArgs<ExtArgs>
   file?: boolean | Prisma.FileDefaultArgs<ExtArgs>
@@ -703,7 +626,6 @@ export type $FileClassificationPayload<ExtArgs extends runtime.Types.Extensions.
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
-    seq: number
     categoryId: string
     fileId: string
     createdAt: Date
@@ -1135,7 +1057,6 @@ export interface Prisma__FileClassificationClient<T, Null = never, ExtArgs exten
  */
 export interface FileClassificationFieldRefs {
   readonly id: Prisma.FieldRef<"FileClassification", 'String'>
-  readonly seq: Prisma.FieldRef<"FileClassification", 'Int'>
   readonly categoryId: Prisma.FieldRef<"FileClassification", 'String'>
   readonly fileId: Prisma.FieldRef<"FileClassification", 'String'>
   readonly createdAt: Prisma.FieldRef<"FileClassification", 'DateTime'>

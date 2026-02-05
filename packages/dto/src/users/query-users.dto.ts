@@ -25,7 +25,6 @@ export enum UserSortField {
 	CREATED_AT = "createdAt",
 	NAME = "name",
 	EMAIL = "email",
-	SEQ = "seq",
 }
 
 /**

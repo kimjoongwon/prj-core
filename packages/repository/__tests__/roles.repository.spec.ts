@@ -20,7 +20,6 @@ describe("RolesRepository", () => {
 
 	const mockRoleData = {
 		id: "role-test-id",
-		seq: 1,
 		name: SYSTEM_ROLES.USER,
 		createdAt: new Date("2024-01-01"),
 		updatedAt: new Date("2024-01-01"),

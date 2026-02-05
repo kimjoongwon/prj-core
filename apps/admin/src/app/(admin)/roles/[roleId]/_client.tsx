@@ -284,10 +284,6 @@ function RoleDetailPageClient({ roleId }: RoleDetailPageClientProps) {
 						<h3 className="text-lg font-semibold mb-4">추가 정보</h3>
 						<dl className="grid grid-cols-1 md:grid-cols-2 gap-4">
 							<div>
-								<dt className="text-sm text-default-500 mb-1">번호</dt>
-								<dd>{role.seq}</dd>
-							</div>
-							<div>
 								<dt className="text-sm text-default-500 mb-1">상태</dt>
 								<dd>
 									<Chip

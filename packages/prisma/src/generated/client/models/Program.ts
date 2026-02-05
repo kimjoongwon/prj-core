@@ -29,18 +29,15 @@ export type AggregateProgram = {
 }
 
 export type ProgramAvgAggregateOutputType = {
-  seq: number | null
   capacity: number | null
 }
 
 export type ProgramSumAggregateOutputType = {
-  seq: number | null
   capacity: number | null
 }
 
 export type ProgramMinAggregateOutputType = {
   id: string | null
-  seq: number | null
   createdAt: Date | null
   updatedAt: Date | null
   removedAt: Date | null
@@ -54,7 +51,6 @@ export type ProgramMinAggregateOutputType = {
 
 export type ProgramMaxAggregateOutputType = {
   id: string | null
-  seq: number | null
   createdAt: Date | null
   updatedAt: Date | null
   removedAt: Date | null
@@ -68,7 +64,6 @@ export type ProgramMaxAggregateOutputType = {
 
 export type ProgramCountAggregateOutputType = {
   id: number
-  seq: number
   createdAt: number
   updatedAt: number
   removedAt: number
@@ -83,18 +78,15 @@ export type ProgramCountAggregateOutputType = {
 
 
 export type ProgramAvgAggregateInputType = {
-  seq?: true
   capacity?: true
 }
 
 export type ProgramSumAggregateInputType = {
-  seq?: true
   capacity?: true
 }
 
 export type ProgramMinAggregateInputType = {
   id?: true
-  seq?: true
   createdAt?: true
   updatedAt?: true
   removedAt?: true
@@ -108,7 +100,6 @@ export type ProgramMinAggregateInputType = {
 
 export type ProgramMaxAggregateInputType = {
   id?: true
-  seq?: true
   createdAt?: true
   updatedAt?: true
   removedAt?: true
@@ -122,7 +113,6 @@ export type ProgramMaxAggregateInputType = {
 
 export type ProgramCountAggregateInputType = {
   id?: true
-  seq?: true
   createdAt?: true
   updatedAt?: true
   removedAt?: true
@@ -223,7 +213,6 @@ export type ProgramGroupByArgs<ExtArgs extends runtime.Types.Extensions.Internal
 
 export type ProgramGroupByOutputType = {
   id: string
-  seq: number
   createdAt: Date
   updatedAt: Date | null
   removedAt: Date | null
@@ -260,7 +249,6 @@ export type ProgramWhereInput = {
   OR?: Prisma.ProgramWhereInput[]
   NOT?: Prisma.ProgramWhereInput | Prisma.ProgramWhereInput[]
   id?: Prisma.StringFilter<"Program"> | string
-  seq?: Prisma.IntFilter<"Program"> | number
   createdAt?: Prisma.DateTimeFilter<"Program"> | Date | string
   updatedAt?: Prisma.DateTimeNullableFilter<"Program"> | Date | string | null
   removedAt?: Prisma.DateTimeNullableFilter<"Program"> | Date | string | null
@@ -276,7 +264,6 @@ export type ProgramWhereInput = {
 
 export type ProgramOrderByWithRelationInput = {
   id?: Prisma.SortOrder
-  seq?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   removedAt?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -292,7 +279,6 @@ export type ProgramOrderByWithRelationInput = {
 
 export type ProgramWhereUniqueInput = Prisma.AtLeast<{
   id?: string
-  seq?: number
   sessionId_routineId?: Prisma.ProgramSessionIdRoutineIdCompoundUniqueInput
   AND?: Prisma.ProgramWhereInput | Prisma.ProgramWhereInput[]
   OR?: Prisma.ProgramWhereInput[]
@@ -308,11 +294,10 @@ export type ProgramWhereUniqueInput = Prisma.AtLeast<{
   level?: Prisma.StringNullableFilter<"Program"> | string | null
   routine?: Prisma.XOR<Prisma.RoutineScalarRelationFilter, Prisma.RoutineWhereInput>
   session?: Prisma.XOR<Prisma.SessionScalarRelationFilter, Prisma.SessionWhereInput>
-}, "id" | "seq" | "sessionId_routineId">
+}, "id" | "sessionId_routineId">
 
 export type ProgramOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
-  seq?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   removedAt?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -334,7 +319,6 @@ export type ProgramScalarWhereWithAggregatesInput = {
   OR?: Prisma.ProgramScalarWhereWithAggregatesInput[]
   NOT?: Prisma.ProgramScalarWhereWithAggregatesInput | Prisma.ProgramScalarWhereWithAggregatesInput[]
   id?: Prisma.StringWithAggregatesFilter<"Program"> | string
-  seq?: Prisma.IntWithAggregatesFilter<"Program"> | number
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Program"> | Date | string
   updatedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Program"> | Date | string | null
   removedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Program"> | Date | string | null
@@ -348,7 +332,6 @@ export type ProgramScalarWhereWithAggregatesInput = {
 
 export type ProgramCreateInput = {
   id?: string
-  seq?: number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
@@ -362,7 +345,6 @@ export type ProgramCreateInput = {
 
 export type ProgramUncheckedCreateInput = {
   id?: string
-  seq?: number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
@@ -389,7 +371,6 @@ export type ProgramUpdateInput = {
 
 export type ProgramUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  seq?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -403,7 +384,6 @@ export type ProgramUncheckedUpdateInput = {
 
 export type ProgramCreateManyInput = {
   id?: string
-  seq?: number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
@@ -428,7 +408,6 @@ export type ProgramUpdateManyMutationInput = {
 
 export type ProgramUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  seq?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -457,7 +436,6 @@ export type ProgramSessionIdRoutineIdCompoundUniqueInput = {
 
 export type ProgramCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
-  seq?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   removedAt?: Prisma.SortOrder
@@ -470,13 +448,11 @@ export type ProgramCountOrderByAggregateInput = {
 }
 
 export type ProgramAvgOrderByAggregateInput = {
-  seq?: Prisma.SortOrder
   capacity?: Prisma.SortOrder
 }
 
 export type ProgramMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
-  seq?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   removedAt?: Prisma.SortOrder
@@ -490,7 +466,6 @@ export type ProgramMaxOrderByAggregateInput = {
 
 export type ProgramMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
-  seq?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   removedAt?: Prisma.SortOrder
@@ -503,7 +478,6 @@ export type ProgramMinOrderByAggregateInput = {
 }
 
 export type ProgramSumOrderByAggregateInput = {
-  seq?: Prisma.SortOrder
   capacity?: Prisma.SortOrder
 }
 
@@ -593,7 +567,6 @@ export type ProgramUncheckedUpdateManyWithoutRoutineNestedInput = {
 
 export type ProgramCreateWithoutSessionInput = {
   id?: string
-  seq?: number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
@@ -606,7 +579,6 @@ export type ProgramCreateWithoutSessionInput = {
 
 export type ProgramUncheckedCreateWithoutSessionInput = {
   id?: string
-  seq?: number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
@@ -648,7 +620,6 @@ export type ProgramScalarWhereInput = {
   OR?: Prisma.ProgramScalarWhereInput[]
   NOT?: Prisma.ProgramScalarWhereInput | Prisma.ProgramScalarWhereInput[]
   id?: Prisma.StringFilter<"Program"> | string
-  seq?: Prisma.IntFilter<"Program"> | number
   createdAt?: Prisma.DateTimeFilter<"Program"> | Date | string
   updatedAt?: Prisma.DateTimeNullableFilter<"Program"> | Date | string | null
   removedAt?: Prisma.DateTimeNullableFilter<"Program"> | Date | string | null
@@ -662,7 +633,6 @@ export type ProgramScalarWhereInput = {
 
 export type ProgramCreateWithoutRoutineInput = {
   id?: string
-  seq?: number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
@@ -675,7 +645,6 @@ export type ProgramCreateWithoutRoutineInput = {
 
 export type ProgramUncheckedCreateWithoutRoutineInput = {
   id?: string
-  seq?: number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
@@ -714,7 +683,6 @@ export type ProgramUpdateManyWithWhereWithoutRoutineInput = {
 
 export type ProgramCreateManySessionInput = {
   id?: string
-  seq?: number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
@@ -739,7 +707,6 @@ export type ProgramUpdateWithoutSessionInput = {
 
 export type ProgramUncheckedUpdateWithoutSessionInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  seq?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -752,7 +719,6 @@ export type ProgramUncheckedUpdateWithoutSessionInput = {
 
 export type ProgramUncheckedUpdateManyWithoutSessionInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  seq?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -765,7 +731,6 @@ export type ProgramUncheckedUpdateManyWithoutSessionInput = {
 
 export type ProgramCreateManyRoutineInput = {
   id?: string
-  seq?: number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
@@ -790,7 +755,6 @@ export type ProgramUpdateWithoutRoutineInput = {
 
 export type ProgramUncheckedUpdateWithoutRoutineInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  seq?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -803,7 +767,6 @@ export type ProgramUncheckedUpdateWithoutRoutineInput = {
 
 export type ProgramUncheckedUpdateManyWithoutRoutineInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  seq?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -818,7 +781,6 @@ export type ProgramUncheckedUpdateManyWithoutRoutineInput = {
 
 export type ProgramSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
-  seq?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   removedAt?: boolean
@@ -834,7 +796,6 @@ export type ProgramSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs 
 
 export type ProgramSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
-  seq?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   removedAt?: boolean
@@ -850,7 +811,6 @@ export type ProgramSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Exten
 
 export type ProgramSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
-  seq?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   removedAt?: boolean
@@ -866,7 +826,6 @@ export type ProgramSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Exten
 
 export type ProgramSelectScalar = {
   id?: boolean
-  seq?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   removedAt?: boolean
@@ -878,7 +837,7 @@ export type ProgramSelectScalar = {
   level?: boolean
 }
 
-export type ProgramOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "seq" | "createdAt" | "updatedAt" | "removedAt" | "routineId" | "sessionId" | "instructorId" | "capacity" | "name" | "level", ExtArgs["result"]["program"]>
+export type ProgramOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "createdAt" | "updatedAt" | "removedAt" | "routineId" | "sessionId" | "instructorId" | "capacity" | "name" | "level", ExtArgs["result"]["program"]>
 export type ProgramInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   routine?: boolean | Prisma.RoutineDefaultArgs<ExtArgs>
   session?: boolean | Prisma.SessionDefaultArgs<ExtArgs>
@@ -909,10 +868,6 @@ export type $ProgramPayload<ExtArgs extends runtime.Types.Extensions.InternalArg
      * 고유 식별자
      */
     id: string
-    /**
-     * 순번
-     */
-    seq: number
     /**
      * 생성 일시
      */
@@ -1375,7 +1330,6 @@ export interface Prisma__ProgramClient<T, Null = never, ExtArgs extends runtime.
  */
 export interface ProgramFieldRefs {
   readonly id: Prisma.FieldRef<"Program", 'String'>
-  readonly seq: Prisma.FieldRef<"Program", 'Int'>
   readonly createdAt: Prisma.FieldRef<"Program", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"Program", 'DateTime'>
   readonly removedAt: Prisma.FieldRef<"Program", 'DateTime'>
