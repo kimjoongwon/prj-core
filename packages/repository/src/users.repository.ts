@@ -171,11 +171,11 @@ export class UsersRepository {
 	}
 
 	/**
-	 * Space ID로 회원 목록 조회 (필터링, 페이지네이션 지원)
+	 * 접근 가능한 Space ID 목록으로 회원 목록 조회 (필터링, 페이지네이션 지원)
 	 * - Tenants, Profiles, Classification, Associations 포함
 	 */
-	async findManyBySpaceIdWithRelations(params: {
-		spaceId: string;
+	async findManyBySpaceIdsWithRelations(params: {
+		spaceIds: string[];
 		search?: string;
 		roles?: string[];
 		status?: "active" | "inactive" | "removed";
@@ -189,7 +189,7 @@ export class UsersRepository {
 		take?: number;
 	}): Promise<{ users: User[]; totalCount: number }> {
 		const {
-			spaceId,
+			spaceIds,
 			search,
 			roles,
 			status,
@@ -203,13 +203,13 @@ export class UsersRepository {
 			take = 20,
 		} = params;
 
-		this.logger.debug(`Space 내 회원 목록 조회: spaceId=${spaceId.slice(-8)}`);
+		this.logger.debug(`접근 가능 Space 내 회원 목록 조회: spaceIds=${spaceIds.length}개`);
 
 		// 기본 where 조건 구성
 		const where: Record<string, unknown> = {
 			tenants: {
 				some: {
-					spaceId,
+					spaceId: { in: spaceIds },
 					removedAt: null,
 				},
 			},
@@ -240,7 +240,7 @@ export class UsersRepository {
 		if (roles && roles.length > 0) {
 			where.tenants = {
 				some: {
-					spaceId,
+					spaceId: { in: spaceIds },
 					removedAt: null,
 					role: {
 						name: { in: roles },
@@ -289,7 +289,7 @@ export class UsersRepository {
 					profiles: true,
 					tenants: {
 						where: {
-							spaceId,
+							spaceId: { in: spaceIds },
 							removedAt: null,
 						},
 						include: {
@@ -323,10 +323,10 @@ export class UsersRepository {
 	}
 
 	/**
-	 * Space ID로 회원 통계 조회
+	 * 접근 가능한 Space ID 목록으로 회원 통계 조회
 	 */
-	async countStatsBySpaceId(spaceId: string): Promise<UserStats> {
-		this.logger.debug(`Space 내 회원 통계 조회: spaceId=${spaceId.slice(-8)}`);
+	async countStatsBySpaceIds(spaceIds: string[]): Promise<UserStats> {
+		this.logger.debug(`접근 가능 Space 내 회원 통계 조회: spaceIds=${spaceIds.length}개`);
 
 		const startOfMonth = new Date();
 		startOfMonth.setDate(1);
@@ -335,7 +335,7 @@ export class UsersRepository {
 		const baseWhere = {
 			tenants: {
 				some: {
-					spaceId,
+					spaceId: { in: spaceIds },
 					removedAt: null,
 				},
 			},

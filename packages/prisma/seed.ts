@@ -175,6 +175,9 @@ async function main() {
 	// Ground Space에 BRANCH SpaceClassification 할당
 	await classifyGroundSpacesAsBranch(systemSpace.id);
 
+	// 상위 SpaceCategory(ROOT) tenant → 하위 SpaceCategory(BRANCH) Space에 tenant 생성
+	await createHierarchicalTenants(systemSpace.id);
+
 	// Subject 생성 (CASL Subject 정의)
 	const subjects = await createSubjects();
 
@@ -1063,6 +1066,67 @@ async function classifyGroundSpacesAsBranch(systemSpaceId: string) {
 
 	console.log(
 		`Ground Space BRANCH 할당 완료! (생성: ${createdCount}개, 스킵: ${skippedCount}개)`,
+	);
+}
+
+async function createHierarchicalTenants(systemSpaceId: string) {
+	console.log("계층적 Tenant 생성 시작 (ROOT → BRANCH)...");
+
+	// 1. ROOT Space(= System Space)의 tenant 목록 조회
+	const rootTenants = await prisma.tenant.findMany({
+		where: { spaceId: systemSpaceId },
+	});
+
+	if (rootTenants.length === 0) {
+		console.log("ROOT Space에 tenant가 없어 스킵합니다.");
+		return;
+	}
+
+	// 2. BRANCH 카테고리의 모든 Space 조회 (= Ground Space들)
+	const branchSpaces = await prisma.space.findMany({
+		where: {
+			classification: {
+				category: { name: "지점" },
+			},
+		},
+	});
+
+	if (branchSpaces.length === 0) {
+		console.log("BRANCH Space가 없어 스킵합니다.");
+		return;
+	}
+
+	let createdCount = 0;
+	let skippedCount = 0;
+
+	// 3. ROOT tenant의 각 사용자에 대해 모든 BRANCH Space에 동일 role로 tenant 생성
+	for (const rootTenant of rootTenants) {
+		for (const branchSpace of branchSpaces) {
+			const existing = await prisma.tenant.findFirst({
+				where: {
+					userId: rootTenant.userId,
+					spaceId: branchSpace.id,
+					roleId: rootTenant.roleId,
+				},
+			});
+
+			if (!existing) {
+				await prisma.tenant.create({
+					data: {
+						userId: rootTenant.userId,
+						spaceId: branchSpace.id,
+						roleId: rootTenant.roleId,
+					},
+				});
+				createdCount++;
+			} else {
+				skippedCount++;
+			}
+		}
+	}
+
+	console.log(
+		`계층적 Tenant 생성 완료! (생성: ${createdCount}개, 스킵: ${skippedCount}개)`,
 	);
 }
 

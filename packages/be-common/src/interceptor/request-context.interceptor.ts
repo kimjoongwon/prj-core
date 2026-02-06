@@ -73,6 +73,7 @@ export class RequestContextInterceptor implements NestInterceptor {
 				!Array.isArray(user.tenants)
 			) {
 				this.cls.set(CONTEXT_KEYS.TENANT, undefined);
+				this.cls.set(CONTEXT_KEYS.ACCESSIBLE_SPACE_IDS, undefined);
 				return;
 			}
 
@@ -90,10 +91,17 @@ export class RequestContextInterceptor implements NestInterceptor {
 			// Tenant 설정
 			this.cls.set(CONTEXT_KEYS.TENANT, tenant);
 
+			// 사용자의 전체 tenant spaceIds를 접근 가능 Space ID 배열로 설정
+			const accessibleSpaceIds = Array.from(
+				new Set(user.tenants.map((t: TenantDto) => t.spaceId)),
+			);
+			this.cls.set(CONTEXT_KEYS.ACCESSIBLE_SPACE_IDS, accessibleSpaceIds);
+
 			this.logger.dev("Request 컨텍스트 설정 완료", {
 				userId: user.id,
 				spaceId: spaceIdFromHeader.slice(-8),
 				tenantId: tenant.id.slice(-8),
+				accessibleSpaces: accessibleSpaceIds.length,
 				language,
 			});
 		} catch (error) {
@@ -113,6 +121,7 @@ export class RequestContextInterceptor implements NestInterceptor {
 			this.cls.set(CONTEXT_KEYS.AUTH_USER, undefined);
 			this.cls.set(CONTEXT_KEYS.USER_ID, undefined);
 			this.cls.set(CONTEXT_KEYS.TENANT, undefined);
+			this.cls.set(CONTEXT_KEYS.ACCESSIBLE_SPACE_IDS, undefined);
 		}
 	}
 }

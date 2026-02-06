@@ -90,7 +90,8 @@ const SWAGGER_SPACE_SELECTOR_JS = `
       })
       .then(function(r) { return r.json(); })
       .then(function(response) {
-        var spaces = (response && response.data) || [];
+        var raw = response && response.data;
+        var spaces = Array.isArray(raw) ? raw : [];
         select.innerHTML = '<option value="">-- Space 선택 --</option>';
         spaces.forEach(function(s) {
           var opt = document.createElement('option');

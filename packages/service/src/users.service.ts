@@ -1,3 +1,4 @@
+import { CONTEXT_KEYS } from "@cocrepo/constant";
 import { UsersRepository } from "@cocrepo/repository";
 import type { UserStats } from "@cocrepo/type";
 import { HashedPassword, PlainPassword } from "@cocrepo/vo";
@@ -7,13 +8,14 @@ import {
 	Logger,
 	NotFoundException,
 } from "@nestjs/common";
+import { ClsService } from "nestjs-cls";
 
 /**
  * 회원 목록 조회 결과
  */
 export interface GetMembersResult {
 	users: Awaited<
-		ReturnType<UsersRepository["findManyBySpaceIdWithRelations"]>
+		ReturnType<UsersRepository["findManyBySpaceIdsWithRelations"]>
 	>["users"];
 	totalCount: number;
 	stats: UserStats;
@@ -34,7 +36,10 @@ const UserServiceErrorMessages = {
 export class UsersService {
 	private readonly logger = new Logger(UsersService.name);
 
-	constructor(private readonly repository: UsersRepository) {}
+	constructor(
+		private readonly repository: UsersRepository,
+		private readonly cls: ClsService,
+	) {}
 
 	/**
 	 * ID로 사용자 조회 (Tenant 정보 포함)
@@ -51,11 +56,10 @@ export class UsersService {
 	}
 
 	/**
-	 * Space 내 회원 목록 조회
-	 * 필터링, 검색, 페이지네이션, 통계 정보를 함께 반환합니다.
+	 * 접근 가능한 Space 내 회원 목록 조회
+	 * CLS 컨텍스트에서 ACCESSIBLE_SPACE_IDS를 가져와 필터링합니다.
 	 */
 	async getMembersBySpace(params: {
-		spaceId: string;
 		search?: string;
 		roles?: string[];
 		status?: "active" | "inactive" | "removed";
@@ -68,12 +72,13 @@ export class UsersService {
 		skip?: number;
 		take?: number;
 	}): Promise<GetMembersResult> {
-		this.logger.debug(`Space 내 회원 목록 조회: spaceId=${params.spaceId}`);
+		const spaceIds = this.cls.get<string[]>(CONTEXT_KEYS.ACCESSIBLE_SPACE_IDS) ?? [];
+		this.logger.debug(`접근 가능 Space 내 회원 목록 조회: spaceIds=${spaceIds.length}개`);
 
 		// 회원 목록과 통계를 병렬로 조회
 		const [{ users, totalCount }, stats] = await Promise.all([
-			this.repository.findManyBySpaceIdWithRelations(params),
-			this.repository.countStatsBySpaceId(params.spaceId),
+			this.repository.findManyBySpaceIdsWithRelations({ ...params, spaceIds }),
+			this.repository.countStatsBySpaceIds(spaceIds),
 		]);
 
 		return {
