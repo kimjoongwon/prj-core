@@ -1,5 +1,10 @@
 // Enum imports
-import { RoleCategoryNames, RoleGroupNames } from "@cocrepo/enum";
+import {
+	RoleCategoryNames,
+	RoleGroupNames,
+	SpaceCategoryNames,
+	SpaceGroupNames,
+} from "@cocrepo/enum";
 
 // ============================================================================
 // Action 시드 데이터 (CASL Action 정의)
@@ -780,19 +785,9 @@ export interface GroundSeedData {
 	businessNo: string;
 }
 
-// 10명의 다양한 역할 유저 데이터 (SUPER_ADMIN 1명, ADMIN 3명, USER 6명)
+// 9명의 다양한 역할 유저 데이터 (ADMIN 3명, USER 6명)
+// SUPER_ADMIN은 main()에서 admin@plate.com으로 별도 생성됨
 export const userSeedData: UserSeedData[] = [
-	// SUPER_ADMIN 1명 - 본사 대표
-	{
-		email: "ceo@f45training.co.kr",
-		phone: "01012345678",
-		password: "SuperAdmin123!@#",
-		profile: {
-			name: "김대표",
-			nickname: "대표님",
-		},
-		role: "SUPER_ADMIN",
-	},
 	// ADMIN 3명 - 각 지점 관리자
 	{
 		email: "manager.gwanghwamun@f45.kr",
@@ -984,6 +979,10 @@ export interface CategorySeedData {
 
 export const roleCategorySeedData: CategorySeedData[] = [
 	{
+		roleCategoryEnum: RoleCategoryNames.ROOT,
+		type: "Role",
+	},
+	{
 		roleCategoryEnum: RoleCategoryNames.COMMON,
 		type: "Role",
 	},
@@ -1041,7 +1040,7 @@ export interface RoleClassificationSeedData {
 export const roleClassificationSeedData: RoleClassificationSeedData[] = [
 	{
 		roleName: "SUPER_ADMIN",
-		roleCategoryEnum: RoleCategoryNames.COMMON, // "공통" 카테고리
+		roleCategoryEnum: RoleCategoryNames.ROOT, // "루트" 카테고리
 	},
 	{
 		roleName: "ADMIN",
@@ -1061,6 +1060,9 @@ export interface RoleGroupSeedData {
 
 export const roleGroupSeedData: RoleGroupSeedData[] = [
 	{
+		roleGroupEnum: RoleGroupNames.ROOT,
+	},
+	{
 		roleGroupEnum: RoleGroupNames.NORMAL,
 	},
 	{
@@ -1075,10 +1077,10 @@ export interface RoleAssociationSeedData {
 }
 
 export const roleAssociationSeedData: RoleAssociationSeedData[] = [
-	// SUPER_ADMIN은 VIP 그룹
+	// SUPER_ADMIN은 ROOT 그룹
 	{
 		roleName: "SUPER_ADMIN",
-		roleGroupEnum: RoleGroupNames.VIP,
+		roleGroupEnum: RoleGroupNames.ROOT,
 	},
 	// ADMIN은 VIP 그룹
 	{
@@ -1099,23 +1101,8 @@ export interface UserGroundMappingData {
 }
 
 // 유저와 그라운드 매핑 (정합성 보장 - 역할에 맞는 논리적 연결)
+// SUPER_ADMIN(admin@plate.com)은 System Space만 사용하므로 Ground 매핑 없음
 export const userGroundMapping: UserGroundMappingData[] = [
-	// SUPER_ADMIN - 모든 지점 접근 가능
-	{
-		userEmail: "ceo@f45training.co.kr",
-		groundNames: [
-			"F45 광화문",
-			"F45 강남1호",
-			"F45 삼성",
-			"F45 잠실",
-			"크로스핏 이태원",
-			"크로스핏 마포",
-			"애니타임피트니스 역삼",
-			"애니타임피트니스 신논현",
-			"스포애니 홍대",
-			"스포애니 건대",
-		],
-	},
 	// ADMIN - 담당 지점만 (F45 계열)
 	{
 		userEmail: "manager.gwanghwamun@f45.kr",
@@ -1256,17 +1243,8 @@ export interface UserAgreementMappingData {
 }
 
 // 유저와 약관 동의 매핑 (정합성 보장)
+// SUPER_ADMIN(admin@plate.com)은 별도로 약관 동의하지 않음 (시스템 관리자)
 export const userAgreementMapping: UserAgreementMappingData[] = [
-	// SUPER_ADMIN - 모든 약관 동의
-	{
-		userEmail: "ceo@f45training.co.kr",
-		agreements: [
-			"TERMS_OF_SERVICE",
-			"PRIVACY_POLICY",
-			"MARKETING_CONSENT",
-			"LOCATION_CONSENT",
-		],
-	},
 	// ADMIN들 - 필수 + 마케팅 동의
 	{
 		userEmail: "manager.gwanghwamun@f45.kr",
@@ -2457,6 +2435,33 @@ export const permissionSummary = {
 		permissions: "자신의 정보/예약만 접근, 시설/콘텐츠 조회",
 	},
 };
+
+// ============================================================================
+// Space Category 시드 데이터 (SpaceCategoryNames enum 활용)
+// ============================================================================
+
+export interface SpaceCategorySeedData {
+	spaceCategoryEnum: SpaceCategoryNames;
+	type: "Space";
+	parentCategoryCode?: string;
+}
+
+export const spaceCategorySeedData: SpaceCategorySeedData[] = [
+	{ spaceCategoryEnum: SpaceCategoryNames.ROOT, type: "Space" },
+	{ spaceCategoryEnum: SpaceCategoryNames.BRANCH, type: "Space", parentCategoryCode: "ROOT" },
+];
+
+// ============================================================================
+// Space Group 시드 데이터 (SpaceGroupNames enum 활용)
+// ============================================================================
+
+export interface SpaceGroupSeedData {
+	spaceGroupEnum: SpaceGroupNames;
+}
+
+export const spaceGroupSeedData: SpaceGroupSeedData[] = [
+	{ spaceGroupEnum: SpaceGroupNames.ROOT },
+];
 
 // ============================================================================
 // Translation 시드 데이터

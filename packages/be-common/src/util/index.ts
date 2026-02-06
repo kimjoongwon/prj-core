@@ -11,6 +11,5 @@ export {
 } from "./response.util";
 export {
 	canAccessAllSpaces,
-	isSystemSpace,
-	isSystemTenant,
+	isRootSpaceCategory,
 } from "./permission.util";

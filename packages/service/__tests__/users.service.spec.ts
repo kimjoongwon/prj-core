@@ -99,26 +99,26 @@ describe("UsersService", () => {
 				email: "test@example.com",
 				password: "$2b$10$hashedPassword",
 			};
-			mockRepository.findByEmailForAuth.mockResolvedValue(authUser);
+			mockRepository.findByEmailSelectCredentials.mockResolvedValue(authUser);
 
 			// When
 			const result = await service.findUserForAuth(email);
 
 			// Then
-			expect(mockRepository.findByEmailForAuth).toHaveBeenCalledWith(email);
+			expect(mockRepository.findByEmailSelectCredentials).toHaveBeenCalledWith(email);
 			expect(result).toEqual(authUser);
 		});
 
 		it("이메일로 사용자를 찾지 못하면 null을 반환해야 한다", async () => {
 			// Given
 			const email = "nonexistent@example.com";
-			mockRepository.findByEmailForAuth.mockResolvedValue(null);
+			mockRepository.findByEmailSelectCredentials.mockResolvedValue(null);
 
 			// When
 			const result = await service.findUserForAuth(email);
 
 			// Then
-			expect(mockRepository.findByEmailForAuth).toHaveBeenCalledWith(email);
+			expect(mockRepository.findByEmailSelectCredentials).toHaveBeenCalledWith(email);
 			expect(result).toBeNull();
 		});
 	});

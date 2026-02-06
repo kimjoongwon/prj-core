@@ -1,5 +1,5 @@
 import { Action } from "@cocrepo/entity";
-import { Prisma } from "@cocrepo/prisma";
+import type { Prisma } from "@cocrepo/prisma";
 import { ActionsRepository } from "@cocrepo/repository";
 import { Injectable, Logger, NotFoundException } from "@nestjs/common";
 
@@ -52,7 +52,7 @@ export class ActionsService {
 	 * @returns CRUD Action 배열
 	 */
 	async getCrudActions(): Promise<Action[]> {
-		return this.repository.findCrudActions();
+		return this.repository.findByGroup("crud");
 	}
 
 	/**
@@ -61,7 +61,7 @@ export class ActionsService {
 	 * @returns Visibility Action 배열
 	 */
 	async getVisibilityActions(): Promise<Action[]> {
-		return this.repository.findVisibilityActions();
+		return this.repository.findByGroup("visibility");
 	}
 
 	/**

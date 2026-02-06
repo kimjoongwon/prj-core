@@ -1,6 +1,6 @@
 import { SYSTEM_ROLES } from "@cocrepo/constant";
 import { CreateRoleDto, UpdateRoleDto } from "@cocrepo/dto";
-import { Role } from "@cocrepo/prisma";
+import { Role } from "@cocrepo/entity";
 import { RolesRepository } from "@cocrepo/repository";
 import {
 	BadRequestException,

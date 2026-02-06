@@ -1,4 +1,5 @@
-import { UserStats, UsersRepository } from "@cocrepo/repository";
+import { UsersRepository } from "@cocrepo/repository";
+import type { UserStats } from "@cocrepo/type";
 import { HashedPassword, PlainPassword } from "@cocrepo/vo";
 import {
 	BadRequestException,
@@ -46,7 +47,7 @@ export class UsersService {
 	 * 인증용 경량 유저 조회 (이메일 기반, id/email/password만)
 	 */
 	findUserForAuth(email: string) {
-		return this.repository.findByEmailForAuth(email);
+		return this.repository.findByEmailSelectCredentials(email);
 	}
 
 	/**
@@ -72,7 +73,7 @@ export class UsersService {
 		// 회원 목록과 통계를 병렬로 조회
 		const [{ users, totalCount }, stats] = await Promise.all([
 			this.repository.findManyBySpaceIdWithRelations(params),
-			this.repository.getStatsBySpaceId(params.spaceId),
+			this.repository.countStatsBySpaceId(params.spaceId),
 		]);
 
 		return {

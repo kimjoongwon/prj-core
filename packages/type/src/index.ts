@@ -149,6 +149,10 @@ export type { FABAction, NavItemConfig, TabConfig } from "./navigation";
 // ============================================
 export type { IPageMeta } from "./page-meta";
 // ============================================
+// 통계 관련 타입
+// ============================================
+export type { UserStats } from "./user-stats";
+// ============================================
 // 테이블 관련 타입
 // ============================================
 export type {

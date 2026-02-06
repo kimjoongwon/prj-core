@@ -4,9 +4,11 @@ import {
 	ApiResponseEntity,
 	Public,
 	ResponseMessage,
+	SkipSpaceCheck,
 } from "@cocrepo/decorator";
 import {
 	SignUpPayloadDto,
+	SpaceDto,
 	TokenRefreshResponseDto,
 	VerifyTokenResponseDto,
 } from "@cocrepo/dto";
@@ -22,8 +24,9 @@ import {
 	Req,
 	Res,
 } from "@nestjs/common";
+import { Token } from "@cocrepo/constant";
 import { ConfigService } from "@nestjs/config";
-import { ApiBody, ApiOperation, ApiResponse, ApiTags } from "@nestjs/swagger";
+import { ApiBody, ApiCookieAuth, ApiOperation, ApiResponse, ApiSecurity, ApiTags } from "@nestjs/swagger";
 import { Request, Response } from "express";
 
 /**
@@ -158,6 +161,24 @@ export class AuthController {
 	@ResponseMessage("common.auth.validate.success")
 	async verifyToken() {
 		return this.authFacade.verifyToken();
+	}
+
+	@SkipSpaceCheck()
+	@HttpCode(HttpStatus.OK)
+	@Get("my-spaces")
+	@ApiOperation({
+		operationId: "getMySpaces",
+		summary: "내 Space 목록 조회",
+		description:
+			"현재 인증된 사용자가 접근 가능한 Space 목록을 반환합니다. X-Space-ID 헤더가 필요하지 않습니다.",
+	})
+	@ApiCookieAuth(Token.ACCESS)
+	@ApiSecurity("oauth2", ["openid", "profile", "email", "roles"])
+	@ApiErrors(401, 500)
+	@ApiResponseEntity(SpaceDto, HttpStatus.OK, { isArray: true })
+	@ResponseMessage("내 Space 목록 조회 성공")
+	async getMySpaces() {
+		return this.authFacade.getMySpaces();
 	}
 
 	@HttpCode(HttpStatus.OK)

@@ -1,10 +1,10 @@
 import { CONTEXT_KEYS } from "@cocrepo/constant";
 import {
+	SpaceDto,
 	TokenRefreshResponseDto,
 	UserDto,
 	VerifyTokenResponseDto,
 } from "@cocrepo/dto";
-import { User } from "@cocrepo/entity";
 import {
 	RolesService,
 	SpacesService,
@@ -307,6 +307,28 @@ export class AuthFacade {
 		const refreshTokenExpiresAt = Date.now() + 30 * 24 * 60 * 60 * 1000; // 30일 (추정)
 
 		return { valid: true, accessTokenExpiresAt, refreshTokenExpiresAt };
+	}
+
+	/**
+	 * 현재 사용자의 Space 목록 조회
+	 *
+	 * @description tenant에 소속된 Space만 반환 (Ground 포함)
+	 */
+	async getMySpaces(): Promise<SpaceDto[]> {
+		const user = this.cls.get<UserDto>(CONTEXT_KEYS.AUTH_USER);
+		if (!user?.tenants) {
+			return [];
+		}
+
+		const tenantSpaceIds = Array.from(
+			new Set(user.tenants.map((t) => t.spaceId)),
+		);
+
+		const spaces = await this.spacesService.findByIdsWithGround(
+			tenantSpaceIds,
+		);
+
+		return spaces.map((space) => plainToInstance(SpaceDto, space));
 	}
 
 	/**

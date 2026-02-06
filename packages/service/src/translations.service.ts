@@ -5,7 +5,7 @@ import {
 	UpdateTranslationDto,
 } from "@cocrepo/dto";
 import { Translation } from "@cocrepo/entity";
-import { Prisma } from "@cocrepo/prisma";
+import type { Prisma } from "@cocrepo/prisma";
 import { TranslationsRepository } from "@cocrepo/repository";
 import {
 	BadRequestException,

@@ -1,9 +1,9 @@
 import { CreateGrantDto, GranteeTypeEnum, UpdateGrantDto } from "@cocrepo/dto";
 import { Grant } from "@cocrepo/entity";
-import { Prisma } from "@cocrepo/prisma";
+import { GranteeType } from "@cocrepo/enum";
+import type { Prisma } from "@cocrepo/prisma";
 import {
 	AbilitiesRepository,
-	GranteeType,
 	GrantsRepository,
 	RolesRepository,
 	UsersRepository,
@@ -156,7 +156,7 @@ export class GrantsService {
 		// Grant 존재 여부 확인 (findById가 없으므로 update 시 에러로 처리)
 		// Repository에 findById가 없는 경우, update 실패 시 NotFoundException 발생
 		try {
-			return await this.grantsRepository.update(id, {
+			return await this.grantsRepository.updateById(id, {
 				isActive: dto.isActive,
 				priority: dto.priority,
 			});
@@ -181,7 +181,7 @@ export class GrantsService {
 		this.logger.debug(`Grant 삭제: id=${id.slice(-8)}`);
 
 		try {
-			await this.grantsRepository.softDelete(id);
+			await this.grantsRepository.removeById(id);
 		} catch (error) {
 			if (
 				error instanceof Error &&

@@ -6,7 +6,6 @@ import type { SpaceClassification } from "./space-classification.entity";
 import type { Tenant } from "./tenant.entity";
 
 export class Space extends AbstractEntity implements SpaceEntity {
-	isSystem!: boolean;
 	tenants?: Tenant[];
 	spaceClassifications?: SpaceClassification[];
 	spaceAssociations?: SpaceAssociation[];

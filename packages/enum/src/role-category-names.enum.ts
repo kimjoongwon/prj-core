@@ -2,6 +2,7 @@ import { Enum, EnumType } from "ts-jenum";
 
 @Enum("code")
 export class RoleCategoryNames extends EnumType<RoleCategoryNames>() {
+	static readonly ROOT = new RoleCategoryNames("ROOT", "루트");
 	static readonly COMMON = new RoleCategoryNames("COMMON", "공통");
 	static readonly ADMIN = new RoleCategoryNames("ADMIN", "관리자");
 	static readonly USER = new RoleCategoryNames("USER", "사용자");

@@ -1,10 +1,9 @@
 import { CreateAbilityInput } from "@cocrepo/dto";
 import { Ability } from "@cocrepo/entity";
-import { Prisma } from "@cocrepo/prisma";
+import type { Prisma } from "@cocrepo/prisma";
 import {
 	AbilitiesRepository,
 	GrantsRepository,
-	GranteeType,
 } from "@cocrepo/repository";
 import { BadRequestException, Injectable, Logger } from "@nestjs/common";
 import { Transactional } from "@nestjs-cls/transactional";
@@ -199,7 +198,7 @@ export class AbilitiesService {
 		const ability = await this.abilitiesRepository.removeById(id);
 
 		// 2. 연결된 모든 Grant 소프트 삭제
-		await this.grantsRepository.deleteByAbilityId(id);
+		await this.grantsRepository.removeByAbilityId(id);
 
 		this.logger.debug(`권한 및 연결된 Grant 삭제 완료: id=${id.slice(-8)}`);
 

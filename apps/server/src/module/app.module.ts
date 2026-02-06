@@ -8,6 +8,8 @@ import {
 	ResponseEntityInterceptor,
 } from "@cocrepo/be-common";
 import { I18nModule } from "@cocrepo/be-i18n";
+import { SpacesRepository } from "@cocrepo/repository";
+import { SpacesService } from "@cocrepo/service";
 import {
 	Logger,
 	type MiddlewareConsumer,
@@ -90,6 +92,9 @@ import { UsersModule } from "./users";
 		]),
 	],
 	providers: [
+		// Space 도메인 (RequestContextInterceptor 의존)
+		SpacesRepository,
+		SpacesService,
 		// Interceptors (setNestApp에서 순서대로 등록됨)
 		RequestContextInterceptor,
 		DtoTransformInterceptor,

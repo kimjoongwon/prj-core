@@ -11,4 +11,6 @@ export const CONTEXT_KEYS = {
 	SERVICE_NAME: "request.service_name_key",
 	/** 요청된 Space ID (X-Space-ID 헤더) - undefined이면 모든 데이터 조회 */
 	SPACE_ID: "request.space_id",
+	/** SpaceCategory 위계 기반 접근 가능한 Space ID 배열 */
+	ACCESSIBLE_SPACE_IDS: "request.accessible_space_ids",
 } as const;

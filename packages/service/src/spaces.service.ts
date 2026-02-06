@@ -1,4 +1,5 @@
-import { Prisma, Space } from "@cocrepo/prisma";
+import { Space } from "@cocrepo/entity";
+import type { Prisma } from "@cocrepo/prisma";
 import { SpacesRepository } from "@cocrepo/repository";
 import { Injectable, Logger } from "@nestjs/common";
 
@@ -29,6 +30,20 @@ export class SpacesService {
 	 */
 	create(data?: Prisma.SpaceUncheckedCreateInput): Promise<Space> {
 		return this.repository.create(data);
+	}
+
+	/**
+	 * SpaceCategory 위계 기반 접근 가능한 Space ID 배열 조회
+	 */
+	getAccessibleSpaceIds(spaceId: string): Promise<string[]> {
+		return this.repository.findSpaceIdsByCategoryHierarchy(spaceId);
+	}
+
+	/**
+	 * 여러 ID로 Space 조회 (Ground 포함)
+	 */
+	findByIdsWithGround(ids: string[]): Promise<Space[]> {
+		return this.repository.findByIdsWithGround(ids);
 	}
 
 	/**

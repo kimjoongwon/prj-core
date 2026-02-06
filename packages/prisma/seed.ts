@@ -16,6 +16,8 @@ import {
 	roleClassificationSeedData,
 	roleGroupSeedData,
 	roleSeedData,
+	spaceCategorySeedData,
+	spaceGroupSeedData,
 	subjectSeedData,
 	translationSeedData,
 	userGroundMapping,
@@ -28,7 +30,7 @@ import type {
 	Role,
 	Subject,
 } from "./src/generated/client/client";
-import { PrismaClient } from "./src/generated/client/client";
+import { Prisma, PrismaClient } from "./src/generated/client/client";
 import { CategoryTypes } from "./src/generated/client/enums";
 
 // Prisma 7: Adapter 패턴으로 PrismaClient 생성
@@ -80,16 +82,19 @@ async function main() {
 		},
 	});
 
-	// System Space 생성 (isSystem=true)
-	// 중요: System Space는 isSystem 플래그로 식별
+	// System Space 생성 (SpaceCategory ROOT로 식별)
+	// SpaceClassification을 통해 ROOT Category가 연결된 Space가 System Space
 	let systemSpace = await prisma.space.findFirst({
-		where: { isSystem: true },
+		where: {
+			classification: {
+				category: { name: "루트" },
+			},
+		},
 	});
 
 	if (!systemSpace) {
 		systemSpace = await prisma.space.create({
 			data: {
-				isSystem: true,
 				tenants: {
 					create: {
 						userId: superAdminUser.id,
@@ -98,10 +103,14 @@ async function main() {
 				},
 			},
 		});
-		console.log("System Space 생성 완료 (isSystem=true, SUPER_ADMIN 전용)");
+		console.log("System Space 생성 완료 (SUPER_ADMIN 전용)");
 	} else {
 		console.log(`System Space 이미 존재 (id=${systemSpace.id})`);
 	}
+
+	// Space Category/Group 생성 및 System Space 연결
+	await createSpaceCategoriesAndClassifications(systemSpace.id);
+	await createSpaceGroupsAndAssociations(systemSpace.id);
 
 	// 워크스페이스 생성
 	const _ground = await prisma.ground.upsert({
@@ -122,7 +131,7 @@ async function main() {
 
 	// Group 생성을 위한 tenant 조회 (System Space의 첫 번째 tenant)
 	const firstTenant = await prisma.tenant.findFirst({
-		where: { space: { isSystem: true } },
+		where: { spaceId: systemSpace.id },
 	});
 
 	if (firstTenant) {
@@ -152,16 +161,19 @@ async function main() {
 	}
 
 	// Role 타입 카테고리 생성
-	await createRoleCategories();
+	await createRoleCategories(systemSpace.id);
 
 	// Role과 Category 연결 (RoleClassification)
 	await createRoleClassifications(roles);
 
 	// Role 관련 Group 생성 및 RoleAssociation 연결
-	await createRoleGroupsAndAssociations(roles);
+	await createRoleGroupsAndAssociations(roles, systemSpace.id);
 
 	// 일반 유저들과 그라운드 생성
 	await createRegularUsersAndGrounds(roles.ADMIN, roles.USER);
+
+	// Ground Space에 BRANCH SpaceClassification 할당
+	await classifyGroundSpacesAsBranch(systemSpace.id);
 
 	// Subject 생성 (CASL Subject 정의)
 	const subjects = await createSubjects();
@@ -387,12 +399,12 @@ async function createRegularUsersAndGrounds(adminRole: Role, _userRole: Role) {
 	console.log("일반 유저들과 그라운드 생성 완료!");
 }
 
-async function createRoleCategories() {
+async function createRoleCategories(systemSpaceId: string) {
 	console.log("Role 카테고리 생성 시작...");
 
 	// System Space의 tenant 조회
 	const tenant = await prisma.tenant.findFirst({
-		where: { space: { isSystem: true } },
+		where: { spaceId: systemSpaceId },
 	});
 
 	if (!tenant) {
@@ -411,7 +423,6 @@ async function createRoleCategories() {
 				name: roleCategoryEnum.name, // enum의 name 속성 사용
 				type: categoryData.type as CategoryTypes,
 				spaceId: tenant.spaceId,
-				// parentId는 나중에 별도로 설정 (현재는 평면 구조)
 			},
 		});
 		console.log(
@@ -433,12 +444,11 @@ async function createRoleClassifications(roles: Record<string, Role>) {
 			continue;
 		}
 
-		// 해당 Category 찾기 (enum 사용)
+		// 해당 Category 찾기 (name unique 기반)
 		const roleCategoryEnum = classificationData.roleCategoryEnum;
-		const category = await prisma.category.findFirst({
+		const category = await prisma.category.findUnique({
 			where: {
-				name: roleCategoryEnum.name, // enum의 name 속성 사용
-				type: "Role",
+				name: roleCategoryEnum.name,
 			},
 		});
 
@@ -478,12 +488,12 @@ async function createRoleClassifications(roles: Record<string, Role>) {
 	console.log("Role과 Category 연결 완료!");
 }
 
-async function createRoleGroupsAndAssociations(roles: Record<string, Role>) {
+async function createRoleGroupsAndAssociations(roles: Record<string, Role>, systemSpaceId: string) {
 	console.log("Role 관련 Group 생성 및 RoleAssociation 연결 시작...");
 
 	// System Space의 tenant 조회 (Group 생성에 필요)
 	const tenant = await prisma.tenant.findFirst({
-		where: { space: { isSystem: true } },
+		where: { spaceId: systemSpaceId },
 	});
 
 	if (!tenant) {
@@ -630,7 +640,9 @@ async function createActions(): Promise<Record<string, Action>> {
 					group: actionData.group,
 					order: actionData.order ?? 0,
 					isSystem: actionData.isSystem ?? true,
-					config: actionData.config ?? undefined,
+					config: actionData.config
+					? (actionData.config as unknown as Prisma.InputJsonObject)
+					: undefined,
 				},
 			});
 			actions[actionData.name] = action;
@@ -709,7 +721,9 @@ async function createAbilities(
 					subjectId: subject.id,
 					actionId: action.id,
 					fields: [], // 기본값: 빈 배열 (전체 필드)
-					conditions: abilityData.conditions ?? null,
+					conditions: abilityData.conditions
+					? (abilityData.conditions as unknown as Prisma.InputJsonObject)
+					: Prisma.JsonNull,
 					inverted: abilityData.inverted,
 					reason: abilityData.reason ?? null,
 				},
@@ -875,6 +889,180 @@ async function createOidcClients() {
 
 	console.log(
 		`✅ OIDC Client 시드 완료! (생성: ${createdCount}개, 스킵: ${skippedCount}개)`,
+	);
+}
+
+async function createSpaceCategoriesAndClassifications(systemSpaceId: string) {
+	console.log("Space Category 및 SpaceClassification 생성 시작...");
+
+	// 생성된 Category를 code로 추적 (parentId 연결용)
+	const categoryMap: Record<string, { id: string }> = {};
+
+	for (const categoryData of spaceCategorySeedData) {
+		const spaceCategoryEnum = categoryData.spaceCategoryEnum;
+
+		// parentId 결정
+		let parentId: string | undefined;
+		if (categoryData.parentCategoryCode) {
+			const parentCategory = categoryMap[categoryData.parentCategoryCode];
+			if (parentCategory) {
+				parentId = parentCategory.id;
+			}
+		}
+
+		// Category 생성 (type="Space")
+		const category = await prisma.category.upsert({
+			where: { name: spaceCategoryEnum.name },
+			update: { parentId: parentId ?? null },
+			create: {
+				name: spaceCategoryEnum.name,
+				type: categoryData.type as CategoryTypes,
+				spaceId: systemSpaceId,
+				parentId: parentId,
+			},
+		});
+		categoryMap[spaceCategoryEnum.code] = { id: category.id };
+		console.log(
+			`Space Category 생성 완료: ${spaceCategoryEnum.code} - ${spaceCategoryEnum.name}`,
+		);
+	}
+
+	// SpaceClassification 생성: System Space ↔ ROOT Category 연결
+	const rootCategory = categoryMap.ROOT;
+	if (rootCategory) {
+		const existingClassification =
+			await prisma.spaceClassification.findFirst({
+				where: {
+					spaceId: systemSpaceId,
+					categoryId: rootCategory.id,
+				},
+			});
+
+		if (!existingClassification) {
+			await prisma.spaceClassification.create({
+				data: {
+					spaceId: systemSpaceId,
+					categoryId: rootCategory.id,
+				},
+			});
+			console.log("SpaceClassification 생성: System Space ↔ ROOT");
+		} else {
+			console.log("SpaceClassification 이미 존재: System Space ↔ ROOT");
+		}
+	}
+
+	console.log("Space Category 및 SpaceClassification 생성 완료!");
+}
+
+async function createSpaceGroupsAndAssociations(systemSpaceId: string) {
+	console.log("Space Group 및 SpaceAssociation 생성 시작...");
+
+	for (const groupData of spaceGroupSeedData) {
+		const spaceGroupEnum = groupData.spaceGroupEnum;
+
+		// Group 생성 (type="Space")
+		let group = await prisma.group.findFirst({
+			where: {
+				name: spaceGroupEnum.name,
+				type: "Space",
+				spaceId: systemSpaceId,
+			},
+		});
+
+		if (!group) {
+			group = await prisma.group.create({
+				data: {
+					name: spaceGroupEnum.name,
+					type: "Space",
+					spaceId: systemSpaceId,
+				},
+			});
+			console.log(
+				`Space Group 생성 완료: ${spaceGroupEnum.code} - ${spaceGroupEnum.name}`,
+			);
+		} else {
+			console.log(
+				`Space Group 이미 존재: ${spaceGroupEnum.code} - ${spaceGroupEnum.name}`,
+			);
+		}
+
+		// SpaceAssociation 생성: System Space ↔ SUPER Group 연결
+		const existingAssociation = await prisma.spaceAssociation.findFirst({
+			where: {
+				spaceId: systemSpaceId,
+				groupId: group.id,
+			},
+		});
+
+		if (!existingAssociation) {
+			await prisma.spaceAssociation.create({
+				data: {
+					spaceId: systemSpaceId,
+					groupId: group.id,
+				},
+			});
+			console.log(
+				`SpaceAssociation 생성: System Space ↔ ${spaceGroupEnum.code}`,
+			);
+		} else {
+			console.log(
+				`SpaceAssociation 이미 존재: System Space ↔ ${spaceGroupEnum.code}`,
+			);
+		}
+	}
+
+	console.log("Space Group 및 SpaceAssociation 생성 완료!");
+}
+
+async function classifyGroundSpacesAsBranch(systemSpaceId: string) {
+	console.log("Ground Space에 BRANCH SpaceClassification 할당 시작...");
+
+	// BRANCH Category 조회
+	const branchCategory = await prisma.category.findFirst({
+		where: { name: "지점", type: "Space" },
+	});
+
+	if (!branchCategory) {
+		console.error("BRANCH Space Category를 찾을 수 없습니다.");
+		return;
+	}
+
+	// 모든 Ground 조회 (spaceId 포함)
+	const grounds = await prisma.ground.findMany();
+
+	let createdCount = 0;
+	let skippedCount = 0;
+
+	for (const ground of grounds) {
+		// System Space의 Ground는 제외 (System Space는 ROOT)
+		if (ground.spaceId === systemSpaceId) {
+			continue;
+		}
+
+		// 이미 SpaceClassification이 존재하는지 확인
+		const existing = await prisma.spaceClassification.findFirst({
+			where: {
+				spaceId: ground.spaceId,
+				categoryId: branchCategory.id,
+			},
+		});
+
+		if (!existing) {
+			await prisma.spaceClassification.create({
+				data: {
+					spaceId: ground.spaceId,
+					categoryId: branchCategory.id,
+				},
+			});
+			createdCount++;
+			console.log(`  - BRANCH 할당: ${ground.name} (spaceId=${ground.spaceId.slice(-8)})`);
+		} else {
+			skippedCount++;
+		}
+	}
+
+	console.log(
+		`Ground Space BRANCH 할당 완료! (생성: ${createdCount}개, 스킵: ${skippedCount}개)`,
 	);
 }
 

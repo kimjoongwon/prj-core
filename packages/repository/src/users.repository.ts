@@ -1,20 +1,10 @@
 import { User } from "@cocrepo/entity";
 import { Prisma, PrismaClient } from "@cocrepo/prisma";
+import type { UserStats } from "@cocrepo/type";
 import { Injectable, Logger } from "@nestjs/common";
 import { TransactionHost } from "@nestjs-cls/transactional";
 import { TransactionalAdapterPrisma } from "@nestjs-cls/transactional-adapter-prisma";
 import { plainToInstance } from "class-transformer";
-
-/**
- * 회원 통계 결과
- * (조회 결과 타입이므로 허용)
- */
-export interface UserStats {
-	total: number;
-	active: number;
-	inactive: number;
-	newThisMonth: number;
-}
 
 @Injectable()
 export class UsersRepository {
@@ -76,6 +66,16 @@ export class UsersRepository {
 						space: {
 							include: {
 								ground: true,
+								classification: {
+									include: {
+										category: {
+											include: {
+												parent: true,
+												children: true,
+											},
+										},
+									},
+								},
 							},
 						},
 					},
@@ -88,10 +88,9 @@ export class UsersRepository {
 	}
 
 	/**
-	 * 이메일로 인증용 경량 조회 (id, email, password만)
-	 * 로그인 비밀번호 검증 시 deep join 없이 최소 필드만 반환합니다.
+	 * 이메일로 조회 (id, email, password만 select)
 	 */
-	async findByEmailForAuth(
+	async findByEmailSelectCredentials(
 		email: string,
 	): Promise<{ id: string; email: string; password: string } | null> {
 		this.logger.debug(`인증용 이메일 조회: ${email}`);
@@ -150,6 +149,16 @@ export class UsersRepository {
 						space: {
 							include: {
 								ground: true,
+								classification: {
+									include: {
+										category: {
+											include: {
+												parent: true,
+												children: true,
+											},
+										},
+									},
+								},
 							},
 						},
 					},
@@ -316,7 +325,7 @@ export class UsersRepository {
 	/**
 	 * Space ID로 회원 통계 조회
 	 */
-	async getStatsBySpaceId(spaceId: string): Promise<UserStats> {
+	async countStatsBySpaceId(spaceId: string): Promise<UserStats> {
 		this.logger.debug(`Space 내 회원 통계 조회: spaceId=${spaceId.slice(-8)}`);
 
 		const startOfMonth = new Date();

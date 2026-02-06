@@ -586,14 +586,14 @@ fetch('/api/users', {
 });
 ```
 
-**System Space (isSystem=true):**
-- SUPER_ADMIN 전용 Space로 시드 데이터에서 `isSystem: true`로 생성됨
-- `SYSTEM_SPACE.IS_SYSTEM` 상수로 정의 (`@cocrepo/constant`)
+**System Space (SpaceCategory ROOT로 식별):**
+- SUPER_ADMIN 전용 Space로 SpaceClassification을 통해 ROOT Category가 연결됨
+- `isRootSpaceCategory(tenant)` 함수로 식별 (`@cocrepo/be-common`)
 - 전체 데이터 접근 권한은 Role 기반으로 Service 레이어에서 확인
 
 **권한 유틸리티 (`@cocrepo/be-common`):**
 ```typescript
-import { canAccessAllSpaces, isSystemSpace, isSystemTenant } from "@cocrepo/be-common";
+import { canAccessAllSpaces, isRootSpaceCategory } from "@cocrepo/be-common";
 
 // Service에서 전체 접근 권한 확인
 if (canAccessAllSpaces(tenant)) {

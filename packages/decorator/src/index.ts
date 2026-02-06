@@ -15,6 +15,7 @@ export * from "./public-route.decorator";
 export * from "./role-categories.decorator";
 export * from "./role-groups.decorator";
 export * from "./roles.decorator";
+export * from "./skip-space-check.decorator";
 export * from "./swagger.schema";
 
 // Transform decorators

@@ -1,5 +1,5 @@
 import { Subject } from "@cocrepo/entity";
-import { PrismaClient } from "@cocrepo/prisma";
+import { Prisma, PrismaClient } from "@cocrepo/prisma";
 import { Injectable, Logger } from "@nestjs/common";
 import { TransactionHost } from "@nestjs-cls/transactional";
 import { TransactionalAdapterPrisma } from "@nestjs-cls/transactional-adapter-prisma";
@@ -91,25 +91,13 @@ export class SubjectsRepository {
 	/**
 	 * Subject 생성
 	 */
-	async create(data: {
-		name: string;
-		displayName?: string;
-		icon?: string;
-		group?: string;
-		order?: number;
-		isSystem?: boolean;
-	}): Promise<Subject> {
+	async create(
+		data: Prisma.SubjectUncheckedCreateInput,
+	): Promise<Subject> {
 		this.logger.debug(`Subject 생성: ${data.name}`);
 
 		const result = await this.txHost.tx.subject.create({
-			data: {
-				name: data.name,
-				displayName: data.displayName ?? null,
-				icon: data.icon ?? null,
-				group: data.group ?? null,
-				order: data.order ?? 0,
-				isSystem: data.isSystem ?? false,
-			},
+			data,
 		});
 
 		return plainToInstance(Subject, result);
@@ -120,27 +108,13 @@ export class SubjectsRepository {
 	 */
 	async updateById(
 		id: string,
-		data: {
-			name?: string;
-			displayName?: string;
-			icon?: string;
-			group?: string;
-			order?: number;
-			isSystem?: boolean;
-		},
+		data: Prisma.SubjectUncheckedUpdateInput,
 	): Promise<Subject> {
 		this.logger.debug(`Subject 수정: ${id.slice(-8)}`);
 
 		const result = await this.txHost.tx.subject.update({
 			where: { id },
-			data: {
-				name: data.name,
-				displayName: data.displayName,
-				icon: data.icon,
-				group: data.group,
-				order: data.order,
-				isSystem: data.isSystem,
-			},
+			data,
 		});
 
 		return plainToInstance(Subject, result);
@@ -177,31 +151,4 @@ export class SubjectsRepository {
 		return plainToInstance(Subject, results);
 	}
 
-	/**
-	 * Entity Subject 목록 조회
-	 */
-	async findEntitySubjects(): Promise<Subject[]> {
-		return this.findByPattern("entity:");
-	}
-
-	/**
-	 * Menu Subject 목록 조회
-	 */
-	async findMenuSubjects(): Promise<Subject[]> {
-		return this.findByPattern("menu:");
-	}
-
-	/**
-	 * Feature Subject 목록 조회
-	 */
-	async findFeatureSubjects(): Promise<Subject[]> {
-		return this.findByPattern("feature:");
-	}
-
-	/**
-	 * UI Subject 목록 조회
-	 */
-	async findUiSubjects(): Promise<Subject[]> {
-		return this.findByPattern("ui:");
-	}
 }

@@ -23,8 +23,6 @@ model Space {
   createdAt      DateTime             @default(now()) @map("created_at") @db.Timestamptz(6)
   updatedAt      DateTime?            @updatedAt @map("updated_at") @db.Timestamptz(6)
   removedAt      DateTime?            @map("removed_at") @db.Timestamptz(6)
-  /// @displayName 시스템 Space 여부
-  isSystem       Boolean              @default(false) @map("is_system")
   ground         Ground?
   associations   SpaceAssociation[]
   classification SpaceClassification?

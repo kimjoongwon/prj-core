@@ -29,7 +29,6 @@ export type SpaceMinAggregateOutputType = {
   createdAt: Date | null
   updatedAt: Date | null
   removedAt: Date | null
-  isSystem: boolean | null
 }
 
 export type SpaceMaxAggregateOutputType = {
@@ -37,7 +36,6 @@ export type SpaceMaxAggregateOutputType = {
   createdAt: Date | null
   updatedAt: Date | null
   removedAt: Date | null
-  isSystem: boolean | null
 }
 
 export type SpaceCountAggregateOutputType = {
@@ -45,7 +43,6 @@ export type SpaceCountAggregateOutputType = {
   createdAt: number
   updatedAt: number
   removedAt: number
-  isSystem: number
   _all: number
 }
 
@@ -55,7 +52,6 @@ export type SpaceMinAggregateInputType = {
   createdAt?: true
   updatedAt?: true
   removedAt?: true
-  isSystem?: true
 }
 
 export type SpaceMaxAggregateInputType = {
@@ -63,7 +59,6 @@ export type SpaceMaxAggregateInputType = {
   createdAt?: true
   updatedAt?: true
   removedAt?: true
-  isSystem?: true
 }
 
 export type SpaceCountAggregateInputType = {
@@ -71,7 +66,6 @@ export type SpaceCountAggregateInputType = {
   createdAt?: true
   updatedAt?: true
   removedAt?: true
-  isSystem?: true
   _all?: true
 }
 
@@ -152,7 +146,6 @@ export type SpaceGroupByOutputType = {
   createdAt: Date
   updatedAt: Date | null
   removedAt: Date | null
-  isSystem: boolean
   _count: SpaceCountAggregateOutputType | null
   _min: SpaceMinAggregateOutputType | null
   _max: SpaceMaxAggregateOutputType | null
@@ -181,7 +174,6 @@ export type SpaceWhereInput = {
   createdAt?: Prisma.DateTimeFilter<"Space"> | Date | string
   updatedAt?: Prisma.DateTimeNullableFilter<"Space"> | Date | string | null
   removedAt?: Prisma.DateTimeNullableFilter<"Space"> | Date | string | null
-  isSystem?: Prisma.BoolFilter<"Space"> | boolean
   ground?: Prisma.XOR<Prisma.GroundNullableScalarRelationFilter, Prisma.GroundWhereInput> | null
   associations?: Prisma.SpaceAssociationListRelationFilter
   classification?: Prisma.XOR<Prisma.SpaceClassificationNullableScalarRelationFilter, Prisma.SpaceClassificationWhereInput> | null
@@ -200,7 +192,6 @@ export type SpaceOrderByWithRelationInput = {
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   removedAt?: Prisma.SortOrderInput | Prisma.SortOrder
-  isSystem?: Prisma.SortOrder
   ground?: Prisma.GroundOrderByWithRelationInput
   associations?: Prisma.SpaceAssociationOrderByRelationAggregateInput
   classification?: Prisma.SpaceClassificationOrderByWithRelationInput
@@ -222,7 +213,6 @@ export type SpaceWhereUniqueInput = Prisma.AtLeast<{
   createdAt?: Prisma.DateTimeFilter<"Space"> | Date | string
   updatedAt?: Prisma.DateTimeNullableFilter<"Space"> | Date | string | null
   removedAt?: Prisma.DateTimeNullableFilter<"Space"> | Date | string | null
-  isSystem?: Prisma.BoolFilter<"Space"> | boolean
   ground?: Prisma.XOR<Prisma.GroundNullableScalarRelationFilter, Prisma.GroundWhereInput> | null
   associations?: Prisma.SpaceAssociationListRelationFilter
   classification?: Prisma.XOR<Prisma.SpaceClassificationNullableScalarRelationFilter, Prisma.SpaceClassificationWhereInput> | null
@@ -241,7 +231,6 @@ export type SpaceOrderByWithAggregationInput = {
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   removedAt?: Prisma.SortOrderInput | Prisma.SortOrder
-  isSystem?: Prisma.SortOrder
   _count?: Prisma.SpaceCountOrderByAggregateInput
   _max?: Prisma.SpaceMaxOrderByAggregateInput
   _min?: Prisma.SpaceMinOrderByAggregateInput
@@ -255,7 +244,6 @@ export type SpaceScalarWhereWithAggregatesInput = {
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Space"> | Date | string
   updatedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Space"> | Date | string | null
   removedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Space"> | Date | string | null
-  isSystem?: Prisma.BoolWithAggregatesFilter<"Space"> | boolean
 }
 
 export type SpaceCreateInput = {
@@ -263,7 +251,6 @@ export type SpaceCreateInput = {
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
-  isSystem?: boolean
   ground?: Prisma.GroundCreateNestedOneWithoutSpaceInput
   associations?: Prisma.SpaceAssociationCreateNestedManyWithoutSpaceInput
   classification?: Prisma.SpaceClassificationCreateNestedOneWithoutSpaceInput
@@ -282,7 +269,6 @@ export type SpaceUncheckedCreateInput = {
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
-  isSystem?: boolean
   ground?: Prisma.GroundUncheckedCreateNestedOneWithoutSpaceInput
   associations?: Prisma.SpaceAssociationUncheckedCreateNestedManyWithoutSpaceInput
   classification?: Prisma.SpaceClassificationUncheckedCreateNestedOneWithoutSpaceInput
@@ -301,7 +287,6 @@ export type SpaceUpdateInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  isSystem?: Prisma.BoolFieldUpdateOperationsInput | boolean
   ground?: Prisma.GroundUpdateOneWithoutSpaceNestedInput
   associations?: Prisma.SpaceAssociationUpdateManyWithoutSpaceNestedInput
   classification?: Prisma.SpaceClassificationUpdateOneWithoutSpaceNestedInput
@@ -320,7 +305,6 @@ export type SpaceUncheckedUpdateInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  isSystem?: Prisma.BoolFieldUpdateOperationsInput | boolean
   ground?: Prisma.GroundUncheckedUpdateOneWithoutSpaceNestedInput
   associations?: Prisma.SpaceAssociationUncheckedUpdateManyWithoutSpaceNestedInput
   classification?: Prisma.SpaceClassificationUncheckedUpdateOneWithoutSpaceNestedInput
@@ -339,7 +323,6 @@ export type SpaceCreateManyInput = {
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
-  isSystem?: boolean
 }
 
 export type SpaceUpdateManyMutationInput = {
@@ -347,7 +330,6 @@ export type SpaceUpdateManyMutationInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  isSystem?: Prisma.BoolFieldUpdateOperationsInput | boolean
 }
 
 export type SpaceUncheckedUpdateManyInput = {
@@ -355,7 +337,6 @@ export type SpaceUncheckedUpdateManyInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  isSystem?: Prisma.BoolFieldUpdateOperationsInput | boolean
 }
 
 export type SpaceScalarRelationFilter = {
@@ -368,7 +349,6 @@ export type SpaceCountOrderByAggregateInput = {
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   removedAt?: Prisma.SortOrder
-  isSystem?: Prisma.SortOrder
 }
 
 export type SpaceMaxOrderByAggregateInput = {
@@ -376,7 +356,6 @@ export type SpaceMaxOrderByAggregateInput = {
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   removedAt?: Prisma.SortOrder
-  isSystem?: Prisma.SortOrder
 }
 
 export type SpaceMinOrderByAggregateInput = {
@@ -384,7 +363,6 @@ export type SpaceMinOrderByAggregateInput = {
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   removedAt?: Prisma.SortOrder
-  isSystem?: Prisma.SortOrder
 }
 
 export type SpaceCreateNestedOneWithoutCategoriesInput = {
@@ -546,7 +524,6 @@ export type SpaceCreateWithoutCategoriesInput = {
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
-  isSystem?: boolean
   ground?: Prisma.GroundCreateNestedOneWithoutSpaceInput
   associations?: Prisma.SpaceAssociationCreateNestedManyWithoutSpaceInput
   classification?: Prisma.SpaceClassificationCreateNestedOneWithoutSpaceInput
@@ -564,7 +541,6 @@ export type SpaceUncheckedCreateWithoutCategoriesInput = {
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
-  isSystem?: boolean
   ground?: Prisma.GroundUncheckedCreateNestedOneWithoutSpaceInput
   associations?: Prisma.SpaceAssociationUncheckedCreateNestedManyWithoutSpaceInput
   classification?: Prisma.SpaceClassificationUncheckedCreateNestedOneWithoutSpaceInput
@@ -598,7 +574,6 @@ export type SpaceUpdateWithoutCategoriesInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  isSystem?: Prisma.BoolFieldUpdateOperationsInput | boolean
   ground?: Prisma.GroundUpdateOneWithoutSpaceNestedInput
   associations?: Prisma.SpaceAssociationUpdateManyWithoutSpaceNestedInput
   classification?: Prisma.SpaceClassificationUpdateOneWithoutSpaceNestedInput
@@ -616,7 +591,6 @@ export type SpaceUncheckedUpdateWithoutCategoriesInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  isSystem?: Prisma.BoolFieldUpdateOperationsInput | boolean
   ground?: Prisma.GroundUncheckedUpdateOneWithoutSpaceNestedInput
   associations?: Prisma.SpaceAssociationUncheckedUpdateManyWithoutSpaceNestedInput
   classification?: Prisma.SpaceClassificationUncheckedUpdateOneWithoutSpaceNestedInput
@@ -634,7 +608,6 @@ export type SpaceCreateWithoutGroupsInput = {
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
-  isSystem?: boolean
   ground?: Prisma.GroundCreateNestedOneWithoutSpaceInput
   associations?: Prisma.SpaceAssociationCreateNestedManyWithoutSpaceInput
   classification?: Prisma.SpaceClassificationCreateNestedOneWithoutSpaceInput
@@ -652,7 +625,6 @@ export type SpaceUncheckedCreateWithoutGroupsInput = {
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
-  isSystem?: boolean
   ground?: Prisma.GroundUncheckedCreateNestedOneWithoutSpaceInput
   associations?: Prisma.SpaceAssociationUncheckedCreateNestedManyWithoutSpaceInput
   classification?: Prisma.SpaceClassificationUncheckedCreateNestedOneWithoutSpaceInput
@@ -686,7 +658,6 @@ export type SpaceUpdateWithoutGroupsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  isSystem?: Prisma.BoolFieldUpdateOperationsInput | boolean
   ground?: Prisma.GroundUpdateOneWithoutSpaceNestedInput
   associations?: Prisma.SpaceAssociationUpdateManyWithoutSpaceNestedInput
   classification?: Prisma.SpaceClassificationUpdateOneWithoutSpaceNestedInput
@@ -704,7 +675,6 @@ export type SpaceUncheckedUpdateWithoutGroupsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  isSystem?: Prisma.BoolFieldUpdateOperationsInput | boolean
   ground?: Prisma.GroundUncheckedUpdateOneWithoutSpaceNestedInput
   associations?: Prisma.SpaceAssociationUncheckedUpdateManyWithoutSpaceNestedInput
   classification?: Prisma.SpaceClassificationUncheckedUpdateOneWithoutSpaceNestedInput
@@ -722,7 +692,6 @@ export type SpaceCreateWithoutTenantsInput = {
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
-  isSystem?: boolean
   ground?: Prisma.GroundCreateNestedOneWithoutSpaceInput
   associations?: Prisma.SpaceAssociationCreateNestedManyWithoutSpaceInput
   classification?: Prisma.SpaceClassificationCreateNestedOneWithoutSpaceInput
@@ -740,7 +709,6 @@ export type SpaceUncheckedCreateWithoutTenantsInput = {
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
-  isSystem?: boolean
   ground?: Prisma.GroundUncheckedCreateNestedOneWithoutSpaceInput
   associations?: Prisma.SpaceAssociationUncheckedCreateNestedManyWithoutSpaceInput
   classification?: Prisma.SpaceClassificationUncheckedCreateNestedOneWithoutSpaceInput
@@ -774,7 +742,6 @@ export type SpaceUpdateWithoutTenantsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  isSystem?: Prisma.BoolFieldUpdateOperationsInput | boolean
   ground?: Prisma.GroundUpdateOneWithoutSpaceNestedInput
   associations?: Prisma.SpaceAssociationUpdateManyWithoutSpaceNestedInput
   classification?: Prisma.SpaceClassificationUpdateOneWithoutSpaceNestedInput
@@ -792,7 +759,6 @@ export type SpaceUncheckedUpdateWithoutTenantsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  isSystem?: Prisma.BoolFieldUpdateOperationsInput | boolean
   ground?: Prisma.GroundUncheckedUpdateOneWithoutSpaceNestedInput
   associations?: Prisma.SpaceAssociationUncheckedUpdateManyWithoutSpaceNestedInput
   classification?: Prisma.SpaceClassificationUncheckedUpdateOneWithoutSpaceNestedInput
@@ -810,7 +776,6 @@ export type SpaceCreateWithoutContentsInput = {
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
-  isSystem?: boolean
   ground?: Prisma.GroundCreateNestedOneWithoutSpaceInput
   associations?: Prisma.SpaceAssociationCreateNestedManyWithoutSpaceInput
   classification?: Prisma.SpaceClassificationCreateNestedOneWithoutSpaceInput
@@ -828,7 +793,6 @@ export type SpaceUncheckedCreateWithoutContentsInput = {
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
-  isSystem?: boolean
   ground?: Prisma.GroundUncheckedCreateNestedOneWithoutSpaceInput
   associations?: Prisma.SpaceAssociationUncheckedCreateNestedManyWithoutSpaceInput
   classification?: Prisma.SpaceClassificationUncheckedCreateNestedOneWithoutSpaceInput
@@ -862,7 +826,6 @@ export type SpaceUpdateWithoutContentsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  isSystem?: Prisma.BoolFieldUpdateOperationsInput | boolean
   ground?: Prisma.GroundUpdateOneWithoutSpaceNestedInput
   associations?: Prisma.SpaceAssociationUpdateManyWithoutSpaceNestedInput
   classification?: Prisma.SpaceClassificationUpdateOneWithoutSpaceNestedInput
@@ -880,7 +843,6 @@ export type SpaceUncheckedUpdateWithoutContentsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  isSystem?: Prisma.BoolFieldUpdateOperationsInput | boolean
   ground?: Prisma.GroundUncheckedUpdateOneWithoutSpaceNestedInput
   associations?: Prisma.SpaceAssociationUncheckedUpdateManyWithoutSpaceNestedInput
   classification?: Prisma.SpaceClassificationUncheckedUpdateOneWithoutSpaceNestedInput
@@ -898,7 +860,6 @@ export type SpaceCreateWithoutFilesInput = {
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
-  isSystem?: boolean
   ground?: Prisma.GroundCreateNestedOneWithoutSpaceInput
   associations?: Prisma.SpaceAssociationCreateNestedManyWithoutSpaceInput
   classification?: Prisma.SpaceClassificationCreateNestedOneWithoutSpaceInput
@@ -916,7 +877,6 @@ export type SpaceUncheckedCreateWithoutFilesInput = {
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
-  isSystem?: boolean
   ground?: Prisma.GroundUncheckedCreateNestedOneWithoutSpaceInput
   associations?: Prisma.SpaceAssociationUncheckedCreateNestedManyWithoutSpaceInput
   classification?: Prisma.SpaceClassificationUncheckedCreateNestedOneWithoutSpaceInput
@@ -950,7 +910,6 @@ export type SpaceUpdateWithoutFilesInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  isSystem?: Prisma.BoolFieldUpdateOperationsInput | boolean
   ground?: Prisma.GroundUpdateOneWithoutSpaceNestedInput
   associations?: Prisma.SpaceAssociationUpdateManyWithoutSpaceNestedInput
   classification?: Prisma.SpaceClassificationUpdateOneWithoutSpaceNestedInput
@@ -968,7 +927,6 @@ export type SpaceUncheckedUpdateWithoutFilesInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  isSystem?: Prisma.BoolFieldUpdateOperationsInput | boolean
   ground?: Prisma.GroundUncheckedUpdateOneWithoutSpaceNestedInput
   associations?: Prisma.SpaceAssociationUncheckedUpdateManyWithoutSpaceNestedInput
   classification?: Prisma.SpaceClassificationUncheckedUpdateOneWithoutSpaceNestedInput
@@ -986,7 +944,6 @@ export type SpaceCreateWithoutSafeWalletsInput = {
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
-  isSystem?: boolean
   ground?: Prisma.GroundCreateNestedOneWithoutSpaceInput
   associations?: Prisma.SpaceAssociationCreateNestedManyWithoutSpaceInput
   classification?: Prisma.SpaceClassificationCreateNestedOneWithoutSpaceInput
@@ -1004,7 +961,6 @@ export type SpaceUncheckedCreateWithoutSafeWalletsInput = {
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
-  isSystem?: boolean
   ground?: Prisma.GroundUncheckedCreateNestedOneWithoutSpaceInput
   associations?: Prisma.SpaceAssociationUncheckedCreateNestedManyWithoutSpaceInput
   classification?: Prisma.SpaceClassificationUncheckedCreateNestedOneWithoutSpaceInput
@@ -1038,7 +994,6 @@ export type SpaceUpdateWithoutSafeWalletsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  isSystem?: Prisma.BoolFieldUpdateOperationsInput | boolean
   ground?: Prisma.GroundUpdateOneWithoutSpaceNestedInput
   associations?: Prisma.SpaceAssociationUpdateManyWithoutSpaceNestedInput
   classification?: Prisma.SpaceClassificationUpdateOneWithoutSpaceNestedInput
@@ -1056,7 +1011,6 @@ export type SpaceUncheckedUpdateWithoutSafeWalletsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  isSystem?: Prisma.BoolFieldUpdateOperationsInput | boolean
   ground?: Prisma.GroundUncheckedUpdateOneWithoutSpaceNestedInput
   associations?: Prisma.SpaceAssociationUncheckedUpdateManyWithoutSpaceNestedInput
   classification?: Prisma.SpaceClassificationUncheckedUpdateOneWithoutSpaceNestedInput
@@ -1074,7 +1028,6 @@ export type SpaceCreateWithoutClassificationInput = {
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
-  isSystem?: boolean
   ground?: Prisma.GroundCreateNestedOneWithoutSpaceInput
   associations?: Prisma.SpaceAssociationCreateNestedManyWithoutSpaceInput
   tenants?: Prisma.TenantCreateNestedManyWithoutSpaceInput
@@ -1092,7 +1045,6 @@ export type SpaceUncheckedCreateWithoutClassificationInput = {
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
-  isSystem?: boolean
   ground?: Prisma.GroundUncheckedCreateNestedOneWithoutSpaceInput
   associations?: Prisma.SpaceAssociationUncheckedCreateNestedManyWithoutSpaceInput
   tenants?: Prisma.TenantUncheckedCreateNestedManyWithoutSpaceInput
@@ -1126,7 +1078,6 @@ export type SpaceUpdateWithoutClassificationInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  isSystem?: Prisma.BoolFieldUpdateOperationsInput | boolean
   ground?: Prisma.GroundUpdateOneWithoutSpaceNestedInput
   associations?: Prisma.SpaceAssociationUpdateManyWithoutSpaceNestedInput
   tenants?: Prisma.TenantUpdateManyWithoutSpaceNestedInput
@@ -1144,7 +1095,6 @@ export type SpaceUncheckedUpdateWithoutClassificationInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  isSystem?: Prisma.BoolFieldUpdateOperationsInput | boolean
   ground?: Prisma.GroundUncheckedUpdateOneWithoutSpaceNestedInput
   associations?: Prisma.SpaceAssociationUncheckedUpdateManyWithoutSpaceNestedInput
   tenants?: Prisma.TenantUncheckedUpdateManyWithoutSpaceNestedInput
@@ -1162,7 +1112,6 @@ export type SpaceCreateWithoutAssociationsInput = {
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
-  isSystem?: boolean
   ground?: Prisma.GroundCreateNestedOneWithoutSpaceInput
   classification?: Prisma.SpaceClassificationCreateNestedOneWithoutSpaceInput
   tenants?: Prisma.TenantCreateNestedManyWithoutSpaceInput
@@ -1180,7 +1129,6 @@ export type SpaceUncheckedCreateWithoutAssociationsInput = {
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
-  isSystem?: boolean
   ground?: Prisma.GroundUncheckedCreateNestedOneWithoutSpaceInput
   classification?: Prisma.SpaceClassificationUncheckedCreateNestedOneWithoutSpaceInput
   tenants?: Prisma.TenantUncheckedCreateNestedManyWithoutSpaceInput
@@ -1214,7 +1162,6 @@ export type SpaceUpdateWithoutAssociationsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  isSystem?: Prisma.BoolFieldUpdateOperationsInput | boolean
   ground?: Prisma.GroundUpdateOneWithoutSpaceNestedInput
   classification?: Prisma.SpaceClassificationUpdateOneWithoutSpaceNestedInput
   tenants?: Prisma.TenantUpdateManyWithoutSpaceNestedInput
@@ -1232,7 +1179,6 @@ export type SpaceUncheckedUpdateWithoutAssociationsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  isSystem?: Prisma.BoolFieldUpdateOperationsInput | boolean
   ground?: Prisma.GroundUncheckedUpdateOneWithoutSpaceNestedInput
   classification?: Prisma.SpaceClassificationUncheckedUpdateOneWithoutSpaceNestedInput
   tenants?: Prisma.TenantUncheckedUpdateManyWithoutSpaceNestedInput
@@ -1250,7 +1196,6 @@ export type SpaceCreateWithoutGroundInput = {
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
-  isSystem?: boolean
   associations?: Prisma.SpaceAssociationCreateNestedManyWithoutSpaceInput
   classification?: Prisma.SpaceClassificationCreateNestedOneWithoutSpaceInput
   tenants?: Prisma.TenantCreateNestedManyWithoutSpaceInput
@@ -1268,7 +1213,6 @@ export type SpaceUncheckedCreateWithoutGroundInput = {
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
-  isSystem?: boolean
   associations?: Prisma.SpaceAssociationUncheckedCreateNestedManyWithoutSpaceInput
   classification?: Prisma.SpaceClassificationUncheckedCreateNestedOneWithoutSpaceInput
   tenants?: Prisma.TenantUncheckedCreateNestedManyWithoutSpaceInput
@@ -1302,7 +1246,6 @@ export type SpaceUpdateWithoutGroundInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  isSystem?: Prisma.BoolFieldUpdateOperationsInput | boolean
   associations?: Prisma.SpaceAssociationUpdateManyWithoutSpaceNestedInput
   classification?: Prisma.SpaceClassificationUpdateOneWithoutSpaceNestedInput
   tenants?: Prisma.TenantUpdateManyWithoutSpaceNestedInput
@@ -1320,7 +1263,6 @@ export type SpaceUncheckedUpdateWithoutGroundInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  isSystem?: Prisma.BoolFieldUpdateOperationsInput | boolean
   associations?: Prisma.SpaceAssociationUncheckedUpdateManyWithoutSpaceNestedInput
   classification?: Prisma.SpaceClassificationUncheckedUpdateOneWithoutSpaceNestedInput
   tenants?: Prisma.TenantUncheckedUpdateManyWithoutSpaceNestedInput
@@ -1338,7 +1280,6 @@ export type SpaceCreateWithoutTimelinesInput = {
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
-  isSystem?: boolean
   ground?: Prisma.GroundCreateNestedOneWithoutSpaceInput
   associations?: Prisma.SpaceAssociationCreateNestedManyWithoutSpaceInput
   classification?: Prisma.SpaceClassificationCreateNestedOneWithoutSpaceInput
@@ -1356,7 +1297,6 @@ export type SpaceUncheckedCreateWithoutTimelinesInput = {
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
-  isSystem?: boolean
   ground?: Prisma.GroundUncheckedCreateNestedOneWithoutSpaceInput
   associations?: Prisma.SpaceAssociationUncheckedCreateNestedManyWithoutSpaceInput
   classification?: Prisma.SpaceClassificationUncheckedCreateNestedOneWithoutSpaceInput
@@ -1390,7 +1330,6 @@ export type SpaceUpdateWithoutTimelinesInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  isSystem?: Prisma.BoolFieldUpdateOperationsInput | boolean
   ground?: Prisma.GroundUpdateOneWithoutSpaceNestedInput
   associations?: Prisma.SpaceAssociationUpdateManyWithoutSpaceNestedInput
   classification?: Prisma.SpaceClassificationUpdateOneWithoutSpaceNestedInput
@@ -1408,7 +1347,6 @@ export type SpaceUncheckedUpdateWithoutTimelinesInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  isSystem?: Prisma.BoolFieldUpdateOperationsInput | boolean
   ground?: Prisma.GroundUncheckedUpdateOneWithoutSpaceNestedInput
   associations?: Prisma.SpaceAssociationUncheckedUpdateManyWithoutSpaceNestedInput
   classification?: Prisma.SpaceClassificationUncheckedUpdateOneWithoutSpaceNestedInput
@@ -1426,7 +1364,6 @@ export type SpaceCreateWithoutTasksInput = {
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
-  isSystem?: boolean
   ground?: Prisma.GroundCreateNestedOneWithoutSpaceInput
   associations?: Prisma.SpaceAssociationCreateNestedManyWithoutSpaceInput
   classification?: Prisma.SpaceClassificationCreateNestedOneWithoutSpaceInput
@@ -1444,7 +1381,6 @@ export type SpaceUncheckedCreateWithoutTasksInput = {
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
-  isSystem?: boolean
   ground?: Prisma.GroundUncheckedCreateNestedOneWithoutSpaceInput
   associations?: Prisma.SpaceAssociationUncheckedCreateNestedManyWithoutSpaceInput
   classification?: Prisma.SpaceClassificationUncheckedCreateNestedOneWithoutSpaceInput
@@ -1478,7 +1414,6 @@ export type SpaceUpdateWithoutTasksInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  isSystem?: Prisma.BoolFieldUpdateOperationsInput | boolean
   ground?: Prisma.GroundUpdateOneWithoutSpaceNestedInput
   associations?: Prisma.SpaceAssociationUpdateManyWithoutSpaceNestedInput
   classification?: Prisma.SpaceClassificationUpdateOneWithoutSpaceNestedInput
@@ -1496,7 +1431,6 @@ export type SpaceUncheckedUpdateWithoutTasksInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  isSystem?: Prisma.BoolFieldUpdateOperationsInput | boolean
   ground?: Prisma.GroundUncheckedUpdateOneWithoutSpaceNestedInput
   associations?: Prisma.SpaceAssociationUncheckedUpdateManyWithoutSpaceNestedInput
   classification?: Prisma.SpaceClassificationUncheckedUpdateOneWithoutSpaceNestedInput
@@ -1617,7 +1551,6 @@ export type SpaceSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   createdAt?: boolean
   updatedAt?: boolean
   removedAt?: boolean
-  isSystem?: boolean
   ground?: boolean | Prisma.Space$groundArgs<ExtArgs>
   associations?: boolean | Prisma.Space$associationsArgs<ExtArgs>
   classification?: boolean | Prisma.Space$classificationArgs<ExtArgs>
@@ -1637,7 +1570,6 @@ export type SpaceSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensi
   createdAt?: boolean
   updatedAt?: boolean
   removedAt?: boolean
-  isSystem?: boolean
 }, ExtArgs["result"]["space"]>
 
 export type SpaceSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -1645,7 +1577,6 @@ export type SpaceSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensi
   createdAt?: boolean
   updatedAt?: boolean
   removedAt?: boolean
-  isSystem?: boolean
 }, ExtArgs["result"]["space"]>
 
 export type SpaceSelectScalar = {
@@ -1653,10 +1584,9 @@ export type SpaceSelectScalar = {
   createdAt?: boolean
   updatedAt?: boolean
   removedAt?: boolean
-  isSystem?: boolean
 }
 
-export type SpaceOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "createdAt" | "updatedAt" | "removedAt" | "isSystem", ExtArgs["result"]["space"]>
+export type SpaceOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "createdAt" | "updatedAt" | "removedAt", ExtArgs["result"]["space"]>
 export type SpaceInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   ground?: boolean | Prisma.Space$groundArgs<ExtArgs>
   associations?: boolean | Prisma.Space$associationsArgs<ExtArgs>
@@ -1694,10 +1624,6 @@ export type $SpacePayload<ExtArgs extends runtime.Types.Extensions.InternalArgs 
     createdAt: Date
     updatedAt: Date | null
     removedAt: Date | null
-    /**
-     * @displayName 시스템 Space 여부
-     */
-    isSystem: boolean
   }, ExtArgs["result"]["space"]>
   composites: {}
 }
@@ -2136,7 +2062,6 @@ export interface SpaceFieldRefs {
   readonly createdAt: Prisma.FieldRef<"Space", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"Space", 'DateTime'>
   readonly removedAt: Prisma.FieldRef<"Space", 'DateTime'>
-  readonly isSystem: Prisma.FieldRef<"Space", 'Boolean'>
 }
     
 

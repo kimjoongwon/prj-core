@@ -1,17 +1,10 @@
+import { GranteeType } from "@cocrepo/enum";
 import { Grant } from "@cocrepo/entity";
 import { Prisma, PrismaClient } from "@cocrepo/prisma";
 import { Injectable, Logger } from "@nestjs/common";
 import { TransactionHost } from "@nestjs-cls/transactional";
 import { TransactionalAdapterPrisma } from "@nestjs-cls/transactional-adapter-prisma";
 import { plainToInstance } from "class-transformer";
-
-/**
- * GranteeType Enum (권한 대상 유형)
- */
-export enum GranteeType {
-	Role = "Role",
-	User = "User",
-}
 
 /**
  * Grants Repository
@@ -172,7 +165,7 @@ export class GrantsRepository {
 	/**
 	 * Grant 수정 (활성화 여부, 우선순위)
 	 */
-	async update(
+	async updateById(
 		id: string,
 		data: Prisma.GrantUncheckedUpdateInput,
 	): Promise<Grant> {
@@ -197,7 +190,7 @@ export class GrantsRepository {
 	/**
 	 * Grant 소프트 삭제
 	 */
-	async softDelete(id: string): Promise<Grant> {
+	async removeById(id: string): Promise<Grant> {
 		this.logger.debug(`Grant 소프트 삭제: id=${id.slice(-8)}`);
 
 		const result = await this.txHost.tx.grant.update({
@@ -219,7 +212,7 @@ export class GrantsRepository {
 	/**
 	 * Ability ID로 모든 Grant 소프트 삭제
 	 */
-	async deleteByAbilityId(abilityId: string): Promise<number> {
+	async removeByAbilityId(abilityId: string): Promise<number> {
 		this.logger.debug(
 			`Ability ID로 Grant 소프트 삭제: abilityId=${abilityId.slice(-8)}`,
 		);

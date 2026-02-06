@@ -2,6 +2,7 @@ import { Enum, EnumType } from "ts-jenum";
 
 @Enum("code")
 export class RoleGroupNames extends EnumType<RoleGroupNames>() {
+	static readonly ROOT = new RoleGroupNames("ROOT", "루트");
 	static readonly NORMAL = new RoleGroupNames("NORMAL", "일반");
 	static readonly VIP = new RoleGroupNames("VIP", "VIP");
 

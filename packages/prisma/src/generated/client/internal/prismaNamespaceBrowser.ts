@@ -428,8 +428,7 @@ export const SpaceScalarFieldEnum = {
   id: 'id',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
-  removedAt: 'removedAt',
-  isSystem: 'isSystem'
+  removedAt: 'removedAt'
 } as const
 
 export type SpaceScalarFieldEnum = (typeof SpaceScalarFieldEnum)[keyof typeof SpaceScalarFieldEnum]

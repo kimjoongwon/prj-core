@@ -92,20 +92,6 @@ export class ActionsRepository {
 	}
 
 	/**
-	 * CRUD Action 목록 조회
-	 */
-	async findCrudActions(): Promise<Action[]> {
-		return this.findByGroup("crud");
-	}
-
-	/**
-	 * Visibility Action 목록 조회 (마스킹 등)
-	 */
-	async findVisibilityActions(): Promise<Action[]> {
-		return this.findByGroup("visibility");
-	}
-
-	/**
 	 * Action 생성
 	 */
 	async create(data: Prisma.ActionUncheckedCreateInput): Promise<Action> {

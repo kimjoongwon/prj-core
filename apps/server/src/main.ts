@@ -11,6 +11,139 @@ import { Logger } from "nestjs-pino";
 import { AppModule } from "./module/app.module";
 import { setNestApp } from "./setNestApp";
 
+/**
+ * Swagger UI Space 선택 플러그인
+ * - topbar에 Space 드롭다운 추가
+ * - 인증 후 Load 버튼으로 접근 가능한 Space 목록 로드
+ * - 선택된 Space ID를 모든 API 요청의 X-Space-ID 헤더에 자동 주입
+ */
+const SWAGGER_SPACE_SELECTOR_JS = `
+(function() {
+  'use strict';
+  var STORAGE_KEY = 'swagger-space-id';
+
+  // fetch를 패치하여 X-Space-ID 헤더 자동 주입
+  var origFetch = window.fetch;
+  window.fetch = function(url, init) {
+    var spaceId = localStorage.getItem(STORAGE_KEY);
+    if (spaceId && typeof url === 'string' && url.indexOf('/api/v1/') !== -1) {
+      init = init || {};
+      if (init.headers instanceof Headers) {
+        init.headers.set('X-Space-ID', spaceId);
+      } else if (typeof init.headers === 'object') {
+        init.headers['X-Space-ID'] = spaceId;
+      } else {
+        init.headers = { 'X-Space-ID': spaceId };
+      }
+    }
+    return origFetch.apply(this, arguments);
+  };
+
+  function getAuthToken() {
+    try {
+      var auth = window.ui && window.ui.getState().toJS().auth.authorized;
+      if (auth && auth.oauth2 && auth.oauth2.token) {
+        return auth.oauth2.token.access_token;
+      }
+      if (auth && auth.accessToken && auth.accessToken.value) {
+        return auth.accessToken.value;
+      }
+    } catch (e) { /* ignore */ }
+    return '';
+  }
+
+  function createSpaceSelector() {
+    var topbar = document.querySelector('.topbar-wrapper');
+    if (!topbar || document.getElementById('space-selector')) return;
+
+    var container = document.createElement('div');
+    container.id = 'space-selector';
+    container.style.cssText = 'display:flex;align-items:center;gap:8px;margin-left:auto;padding-right:12px;';
+
+    var label = document.createElement('span');
+    label.textContent = 'Space:';
+    label.style.cssText = 'color:#fff;font-size:13px;font-weight:600;white-space:nowrap;';
+
+    var select = document.createElement('select');
+    select.id = 'space-select';
+    select.style.cssText = 'padding:5px 10px;border-radius:4px;background:#2b3137;color:#fff;border:1px solid #555;font-size:13px;min-width:220px;cursor:pointer;';
+    select.innerHTML = '<option value="">-- Authorize 후 Load 클릭 --</option>';
+
+    var savedSpaceId = localStorage.getItem(STORAGE_KEY) || '';
+
+    var loadBtn = document.createElement('button');
+    loadBtn.textContent = 'Load';
+    loadBtn.style.cssText = 'padding:5px 14px;border-radius:4px;background:#4990e2;color:#fff;border:none;cursor:pointer;font-size:13px;font-weight:600;white-space:nowrap;';
+    loadBtn.title = 'Authorize 인증 후 클릭하면 Space 목록을 불러옵니다';
+
+    loadBtn.addEventListener('click', function() {
+      var token = getAuthToken();
+      if (!token) {
+        alert('먼저 Authorize 버튼으로 인증해주세요.');
+        return;
+      }
+      loadBtn.textContent = '...';
+      loadBtn.disabled = true;
+
+      origFetch('/api/v1/auth/my-spaces', {
+        headers: { 'Authorization': 'Bearer ' + token }
+      })
+      .then(function(r) { return r.json(); })
+      .then(function(response) {
+        var spaces = (response && response.data) || [];
+        select.innerHTML = '<option value="">-- Space 선택 --</option>';
+        spaces.forEach(function(s) {
+          var opt = document.createElement('option');
+          opt.value = s.id;
+          var text = (s.ground && s.ground.name) ? s.ground.name : s.id;
+          opt.textContent = text;
+          if (s.id === savedSpaceId) opt.selected = true;
+          select.appendChild(opt);
+        });
+        if (spaces.length === 0) {
+          select.innerHTML = '<option value="">접근 가능한 Space가 없습니다</option>';
+        }
+      })
+      .catch(function(err) {
+        alert('Space 로드 실패: ' + err.message);
+      })
+      .finally(function() {
+        loadBtn.textContent = 'Load';
+        loadBtn.disabled = false;
+      });
+    });
+
+    select.addEventListener('change', function() {
+      var value = select.value;
+      if (value) {
+        localStorage.setItem(STORAGE_KEY, value);
+      } else {
+        localStorage.removeItem(STORAGE_KEY);
+      }
+    });
+
+    container.appendChild(label);
+    container.appendChild(select);
+    container.appendChild(loadBtn);
+    topbar.appendChild(container);
+  }
+
+  function waitForSwagger() {
+    if (document.querySelector('.topbar-wrapper')) {
+      createSpaceSelector();
+    } else {
+      setTimeout(waitForSwagger, 500);
+    }
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', function() { setTimeout(waitForSwagger, 300); });
+  } else {
+    setTimeout(waitForSwagger, 300);
+  }
+})();
+`;
+
 async function bootstrap() {
 	// =================================================================
 	// 1. 애플리케이션 생성 및 기본 설정
@@ -103,6 +236,7 @@ async function bootstrap() {
 				usePkceWithAuthorizationCodeGrant: true,
 			},
 		},
+		customJsStr: SWAGGER_SPACE_SELECTOR_JS,
 	});
 
 	// =================================================================
