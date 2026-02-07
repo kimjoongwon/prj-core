@@ -61,11 +61,11 @@ describe("Guards E2E 테스트", () => {
 			}
 		});
 
-		it("공통 카테고리 권한으로 접근 성공", async () => {
+		it("공유 카테고리 권한으로 접근 성공", async () => {
 			if (!jwtToken || !spaceId) return;
 
 			const response = await request(app.getHttpServer())
-				.get("/api/v1/test-guards/role-category/common")
+				.get("/api/v1/test-guards/role-category/shared")
 				.set("Authorization", `Bearer ${jwtToken}`)
 				.set("X-Space-ID", spaceId);
 
@@ -73,23 +73,23 @@ describe("Guards E2E 테스트", () => {
 			expect([200, 403]).toContain(response.status);
 		});
 
-		it("관리자 카테고리 권한 테스트", async () => {
+		it("워크스페이스 카테고리 권한 테스트", async () => {
 			if (!jwtToken || !spaceId) return;
 
 			const response = await request(app.getHttpServer())
-				.get("/api/v1/test-guards/role-category/admin")
+				.get("/api/v1/test-guards/role-category/workspace")
 				.set("Authorization", `Bearer ${jwtToken}`)
 				.set("X-Space-ID", spaceId);
 
-			// 관리자 카테고리 권한이 없으면 403
+			// 워크스페이스 카테고리 권한이 없으면 403
 			expect([200, 403]).toContain(response.status);
 		});
 
-		it("사용자 카테고리 권한 테스트", async () => {
+		it("공개 카테고리 권한 테스트", async () => {
 			if (!jwtToken || !spaceId) return;
 
 			const response = await request(app.getHttpServer())
-				.get("/api/v1/test-guards/role-category/user")
+				.get("/api/v1/test-guards/role-category/public")
 				.set("Authorization", `Bearer ${jwtToken}`)
 				.set("X-Space-ID", spaceId);
 
@@ -98,7 +98,7 @@ describe("Guards E2E 테스트", () => {
 
 		it("인증 없이 접근 시 401 반환", async () => {
 			const response = await request(app.getHttpServer()).get(
-				"/api/v1/test-guards/role-category/common",
+				"/api/v1/test-guards/role-category/shared",
 			);
 
 			expect(response.status).toBe(401);
@@ -116,29 +116,29 @@ describe("Guards E2E 테스트", () => {
 			if (!jwtToken || !spaceId) return;
 
 			const response = await request(app.getHttpServer())
-				.get("/api/v1/test-guards/role-group/normal")
+				.get("/api/v1/test-guards/role-group/standard")
 				.set("Authorization", `Bearer ${jwtToken}`)
 				.set("X-Space-ID", spaceId);
 
 			expect([200, 403]).toContain(response.status);
 		});
 
-		it("VIP 그룹 권한 테스트", async () => {
+		it("프리미엄 그룹 권한 테스트", async () => {
 			if (!jwtToken || !spaceId) return;
 
 			const response = await request(app.getHttpServer())
-				.get("/api/v1/test-guards/role-group/vip")
+				.get("/api/v1/test-guards/role-group/premium")
 				.set("Authorization", `Bearer ${jwtToken}`)
 				.set("X-Space-ID", spaceId);
 
 			expect([200, 403]).toContain(response.status);
 		});
 
-		it("관리자 그룹 권한 테스트", async () => {
+		it("신뢰 그룹 권한 테스트", async () => {
 			if (!jwtToken || !spaceId) return;
 
 			const response = await request(app.getHttpServer())
-				.get("/api/v1/test-guards/role-group/admin")
+				.get("/api/v1/test-guards/role-group/trusted")
 				.set("Authorization", `Bearer ${jwtToken}`)
 				.set("X-Space-ID", spaceId);
 
@@ -147,7 +147,7 @@ describe("Guards E2E 테스트", () => {
 
 		it("인증 없이 접근 시 401 반환", async () => {
 			const response = await request(app.getHttpServer()).get(
-				"/api/v1/test-guards/role-group/normal",
+				"/api/v1/test-guards/role-group/standard",
 			);
 
 			expect(response.status).toBe(401);
@@ -161,33 +161,33 @@ describe("Guards E2E 테스트", () => {
 			}
 		});
 
-		it("USER 역할 권한 테스트", async () => {
+		it("VIEW 역할 권한 테스트", async () => {
 			if (!jwtToken || !spaceId) return;
 
 			const response = await request(app.getHttpServer())
-				.get("/api/v1/test-guards/roles/user")
+				.get("/api/v1/test-guards/roles/view")
 				.set("Authorization", `Bearer ${jwtToken}`)
 				.set("X-Space-ID", spaceId);
 
 			expect([200, 403]).toContain(response.status);
 		});
 
-		it("ADMIN 역할 권한 테스트", async () => {
+		it("MANAGE 역할 권한 테스트", async () => {
 			if (!jwtToken || !spaceId) return;
 
 			const response = await request(app.getHttpServer())
-				.get("/api/v1/test-guards/roles/admin")
+				.get("/api/v1/test-guards/roles/manage")
 				.set("Authorization", `Bearer ${jwtToken}`)
 				.set("X-Space-ID", spaceId);
 
 			expect([200, 403]).toContain(response.status);
 		});
 
-		it("SUPER_ADMIN 역할 권한 테스트", async () => {
+		it("FULL_ACCESS 역할 권한 테스트", async () => {
 			if (!jwtToken || !spaceId) return;
 
 			const response = await request(app.getHttpServer())
-				.get("/api/v1/test-guards/roles/super-admin")
+				.get("/api/v1/test-guards/roles/full-access")
 				.set("Authorization", `Bearer ${jwtToken}`)
 				.set("X-Space-ID", spaceId);
 
@@ -196,7 +196,7 @@ describe("Guards E2E 테스트", () => {
 
 		it("인증 없이 접근 시 401 반환", async () => {
 			const response = await request(app.getHttpServer()).get(
-				"/api/v1/test-guards/roles/user",
+				"/api/v1/test-guards/roles/view",
 			);
 
 			expect(response.status).toBe(401);
@@ -210,11 +210,11 @@ describe("Guards E2E 테스트", () => {
 			}
 		});
 
-		it("관리자 카테고리 + ADMIN 역할 복합 권한 테스트", async () => {
+		it("워크스페이스 카테고리 + MANAGE 역할 복합 권한 테스트", async () => {
 			if (!jwtToken || !spaceId) return;
 
 			const response = await request(app.getHttpServer())
-				.get("/api/v1/test-guards/combined/admin-category-and-role")
+				.get("/api/v1/test-guards/combined/workspace-category-and-role")
 				.set("Authorization", `Bearer ${jwtToken}`)
 				.set("X-Space-ID", spaceId);
 
@@ -224,7 +224,7 @@ describe("Guards E2E 테스트", () => {
 
 		it("인증 없이 복합 권한 엔드포인트 접근 시 401 반환", async () => {
 			const response = await request(app.getHttpServer()).get(
-				"/api/v1/test-guards/combined/admin-category-and-role",
+				"/api/v1/test-guards/combined/workspace-category-and-role",
 			);
 
 			expect(response.status).toBe(401);
@@ -242,7 +242,7 @@ describe("Guards E2E 테스트", () => {
 			if (!jwtToken || !spaceId) return;
 
 			const response = await request(app.getHttpServer())
-				.get("/api/v1/test-guards/roles/super-admin")
+				.get("/api/v1/test-guards/roles/full-access")
 				.set("Authorization", `Bearer ${jwtToken}`)
 				.set("X-Space-ID", spaceId);
 

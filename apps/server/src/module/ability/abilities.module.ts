@@ -1,3 +1,4 @@
+import { SpaceContext } from "@cocrepo/be-common";
 import { AbilitiesFacade } from "@cocrepo/facade";
 import {
 	AbilitiesRepository,
@@ -20,6 +21,8 @@ import { AbilitiesController } from "./abilities.controller";
 		AbilitiesRepository,
 		GrantsRepository,
 		UsersRepository,
+		// Context
+		SpaceContext,
 	],
 	exports: [AbilitiesService],
 })

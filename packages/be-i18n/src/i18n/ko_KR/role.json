@@ -1,22 +1,22 @@
 {
-  "SUPER_ADMIN": {
-    "name": "슈퍼 관리자",
-    "description": "시스템의 모든 권한을 가진 최고 관리자"
+  "FULL_ACCESS": {
+    "name": "전체 접근",
+    "description": "시스템의 모든 권한을 가진 전체 접근 역할"
   },
-  "ADMIN": {
-    "name": "관리자",
-    "description": "일반 관리 업무를 수행하는 관리자"
+  "MANAGE": {
+    "name": "관리",
+    "description": "관리 업무를 수행하는 역할"
   },
-  "USER": {
-    "name": "일반 사용자",
-    "description": "기본 사용자 역할"
+  "VIEW": {
+    "name": "조회",
+    "description": "기본 조회 역할"
   },
   "category": {
-    "COMMON": "공통",
-    "ADMIN": "관리자",
-    "USER": "사용자",
-    "MANAGER": "매니저",
-    "DEVELOPER": "개발자",
-    "GUEST": "게스트"
+    "SHARED": "공유",
+    "WORKSPACE": "워크스페이스",
+    "PUBLIC": "공개",
+    "PROJECT": "프로젝트",
+    "TECHNICAL": "기술",
+    "RESTRICTED": "제한"
   }
 }

@@ -18,7 +18,7 @@ import type {
 
 /**
  * 기본 Ability 생성
- * SUPER_ADMIN은 모든 권한을 가짐
+ * FULL_ACCESS는 모든 권한을 가짐
  */
 function createAbility(rules: AbilityRule[]): AppAbility {
 	return {
@@ -59,7 +59,7 @@ function createAbility(rules: AbilityRule[]): AppAbility {
 }
 
 /**
- * 기본 규칙 (SUPER_ADMIN - 모든 권한)
+ * 기본 규칙 (FULL_ACCESS - 모든 권한)
  */
 const defaultRules: AbilityRule[] = [{ action: "MANAGE", subject: "all" }];
 

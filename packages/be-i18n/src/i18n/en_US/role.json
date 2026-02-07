@@ -1,22 +1,22 @@
 {
-  "SUPER_ADMIN": {
-    "name": "Super Administrator",
-    "description": "The highest administrator with all system permissions"
+  "FULL_ACCESS": {
+    "name": "Full Access",
+    "description": "Full access role with all system permissions"
   },
-  "ADMIN": {
-    "name": "Administrator",
-    "description": "Administrator who performs general management tasks"
+  "MANAGE": {
+    "name": "Manage",
+    "description": "Role that performs management tasks"
   },
-  "USER": {
-    "name": "User",
-    "description": "Basic user role"
+  "VIEW": {
+    "name": "View",
+    "description": "Basic view role"
   },
   "category": {
-    "COMMON": "Common",
-    "ADMIN": "Administrator",
-    "USER": "User",
-    "MANAGER": "Manager",
-    "DEVELOPER": "Developer",
-    "GUEST": "Guest"
+    "SHARED": "Shared",
+    "WORKSPACE": "Workspace",
+    "PUBLIC": "Public",
+    "PROJECT": "Project",
+    "TECHNICAL": "Technical",
+    "RESTRICTED": "Restricted"
   }
 }

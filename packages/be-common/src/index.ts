@@ -1,3 +1,12 @@
+// Context (Space 스코프)
+export {
+	AccessibleSpaces,
+	OnlyMySpace,
+	SPACE_SCOPE_KEY,
+	SpaceContext,
+	SpaceScope,
+	SpaceScopeInterceptor,
+} from "./context";
 // CASL (권한 시스템)
 export {
 	AccessApiPolicy,
@@ -35,6 +44,7 @@ export {
 	RoleCategoryGuard,
 	RoleGroupGuard,
 	RolesGuard,
+	SpaceAccessGuard,
 } from "./guard";
 // Interceptors
 export {
@@ -42,13 +52,16 @@ export {
 	DtoTransformInterceptor,
 	MASKING_SUBJECT_KEY,
 	MaskingInterceptor,
-	RequestContextInterceptor,
 	ResponseEntityInterceptor,
 } from "./interceptor";
 // Lib
 export { DateTimeUtil } from "./lib";
 // Middleware
-export { LoggerMiddleware } from "./middleware";
+export {
+	AuthMiddleware,
+	LoggerMiddleware,
+	RequestContextMiddleware,
+} from "./middleware";
 // Pipes
 export {
 	CustomValidationPipe,
@@ -63,6 +76,8 @@ export type { ResponseWrapOptions, WrappedResponse } from "./util";
 // Utils
 export {
 	AppLogger,
+	canAccessAllSpaces,
+	isRootSpaceCategory,
 	isWrappedResponse,
 	RESPONSE_WRAPPER_FLAG,
 	wrapResponse,

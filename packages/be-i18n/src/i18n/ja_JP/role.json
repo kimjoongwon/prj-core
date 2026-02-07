@@ -1,22 +1,22 @@
 {
-  "SUPER_ADMIN": {
-    "name": "スーパー管理者",
-    "description": "システムのすべての権限を持つ最高管理者"
+  "FULL_ACCESS": {
+    "name": "フルアクセス",
+    "description": "システムのすべての権限を持つフルアクセスロール"
   },
-  "ADMIN": {
-    "name": "管理者",
-    "description": "一般的な管理業務を行う管理者"
+  "MANAGE": {
+    "name": "管理",
+    "description": "管理業務を行うロール"
   },
-  "USER": {
-    "name": "一般ユーザー",
-    "description": "基本ユーザーロール"
+  "VIEW": {
+    "name": "閲覧",
+    "description": "基本閲覧ロール"
   },
   "category": {
-    "COMMON": "共通",
-    "ADMIN": "管理者",
-    "USER": "ユーザー",
-    "MANAGER": "マネージャー",
-    "DEVELOPER": "開発者",
-    "GUEST": "ゲスト"
+    "SHARED": "共有",
+    "WORKSPACE": "ワークスペース",
+    "PUBLIC": "公開",
+    "PROJECT": "プロジェクト",
+    "TECHNICAL": "技術",
+    "RESTRICTED": "制限"
   }
 }

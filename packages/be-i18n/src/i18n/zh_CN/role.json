@@ -1,22 +1,22 @@
 {
-  "SUPER_ADMIN": {
-    "name": "超级管理员",
-    "description": "拥有所有系统权限的最高管理员"
+  "FULL_ACCESS": {
+    "name": "完全访问",
+    "description": "拥有所有系统权限的完全访问角色"
   },
-  "ADMIN": {
-    "name": "管理员",
-    "description": "执行一般管理任务的管理员"
+  "MANAGE": {
+    "name": "管理",
+    "description": "执行管理任务的角色"
   },
-  "USER": {
-    "name": "普通用户",
-    "description": "基本用户角色"
+  "VIEW": {
+    "name": "查看",
+    "description": "基本查看角色"
   },
   "category": {
-    "COMMON": "通用",
-    "ADMIN": "管理员",
-    "USER": "用户",
-    "MANAGER": "经理",
-    "DEVELOPER": "开发者",
-    "GUEST": "访客"
+    "SHARED": "共享",
+    "WORKSPACE": "工作区",
+    "PUBLIC": "公开",
+    "PROJECT": "项目",
+    "TECHNICAL": "技术",
+    "RESTRICTED": "受限"
   }
 }

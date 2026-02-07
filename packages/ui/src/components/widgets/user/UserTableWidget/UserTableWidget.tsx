@@ -56,10 +56,10 @@ const getRoleColor = (
 	roleName?: string,
 ): "primary" | "secondary" | "default" => {
 	switch (roleName?.toUpperCase()) {
-		case "SUPER_ADMIN":
-		case "ADMIN":
+		case "FULL_ACCESS":
+		case "MANAGE":
 			return "primary";
-		case "MANAGER":
+		case "PROJECT":
 			return "secondary";
 		default:
 			return "default";

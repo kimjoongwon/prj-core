@@ -4,3 +4,4 @@ export { PublicGuard } from "./public.guard";
 export { RoleCategoryGuard } from "./role-category.guard";
 export { RoleGroupGuard } from "./role-group.guard";
 export { RolesGuard } from "./roles.guard";
+export { SpaceAccessGuard } from "./space-access.guard";

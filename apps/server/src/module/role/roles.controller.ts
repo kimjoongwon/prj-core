@@ -32,7 +32,7 @@ export class RolesController {
 
 	@Get()
 	@UseGuards(RolesGuard)
-	@Roles([SYSTEM_ROLES.ADMIN, SYSTEM_ROLES.SUPER_ADMIN])
+	@Roles([SYSTEM_ROLES.MANAGE, SYSTEM_ROLES.FULL_ACCESS])
 	@ApiOperation({
 		operationId: "getRoles",
 		summary: "역할 목록 조회",
@@ -49,7 +49,7 @@ export class RolesController {
 
 	@Get(":id")
 	@UseGuards(RolesGuard)
-	@Roles([SYSTEM_ROLES.ADMIN, SYSTEM_ROLES.SUPER_ADMIN])
+	@Roles([SYSTEM_ROLES.MANAGE, SYSTEM_ROLES.FULL_ACCESS])
 	@ApiOperation({
 		operationId: "getRoleById",
 		summary: "역할 상세 조회",
@@ -72,12 +72,12 @@ export class RolesController {
 	@Post()
 	@HttpCode(HttpStatus.CREATED)
 	@UseGuards(RolesGuard)
-	@Roles([SYSTEM_ROLES.SUPER_ADMIN])
+	@Roles([SYSTEM_ROLES.FULL_ACCESS])
 	@ApiOperation({
 		operationId: "createRole",
 		summary: "역할 생성",
 		description:
-			"새로운 역할을 생성합니다. SUPER_ADMIN 전용 API입니다. 역할 식별자(name)는 영문 대문자와 언더스코어만 사용 가능합니다.",
+			"새로운 역할을 생성합니다. FULL_ACCESS 전용 API입니다. 역할 식별자(name)는 영문 대문자와 언더스코어만 사용 가능합니다.",
 	})
 	@ApiAuth()
 	@ApiBody({
@@ -95,12 +95,12 @@ export class RolesController {
 	@Patch(":id")
 	@HttpCode(HttpStatus.OK)
 	@UseGuards(RolesGuard)
-	@Roles([SYSTEM_ROLES.SUPER_ADMIN])
+	@Roles([SYSTEM_ROLES.FULL_ACCESS])
 	@ApiOperation({
 		operationId: "updateRole",
 		summary: "역할 수정",
 		description:
-			"역할 정보를 수정합니다. SUPER_ADMIN 전용 API이며, 시스템 역할(SUPER_ADMIN, ADMIN, USER)은 수정할 수 없습니다.",
+			"역할 정보를 수정합니다. FULL_ACCESS 전용 API이며, 시스템 역할(FULL_ACCESS, MANAGE, VIEW)은 수정할 수 없습니다.",
 	})
 	@ApiAuth()
 	@ApiParam({
@@ -126,12 +126,12 @@ export class RolesController {
 	@Delete(":id")
 	@HttpCode(HttpStatus.OK)
 	@UseGuards(RolesGuard)
-	@Roles([SYSTEM_ROLES.SUPER_ADMIN])
+	@Roles([SYSTEM_ROLES.FULL_ACCESS])
 	@ApiOperation({
 		operationId: "deleteRole",
 		summary: "역할 삭제",
 		description:
-			"역할을 삭제합니다. SUPER_ADMIN 전용 API이며, 시스템 역할은 삭제할 수 없고, 연결된 사용자가 있으면 삭제할 수 없습니다.",
+			"역할을 삭제합니다. FULL_ACCESS 전용 API이며, 시스템 역할은 삭제할 수 없고, 연결된 사용자가 있으면 삭제할 수 없습니다.",
 	})
 	@ApiAuth()
 	@ApiParam({

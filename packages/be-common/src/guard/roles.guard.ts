@@ -1,6 +1,6 @@
 import { CONTEXT_KEYS, type SystemRoleName } from "@cocrepo/constant";
 import { ROLES_KEY } from "@cocrepo/decorator";
-import { UserDto } from "@cocrepo/dto";
+import { TenantDto, UserDto } from "@cocrepo/dto";
 import {
 	type CanActivate,
 	type ExecutionContext,
@@ -9,8 +9,8 @@ import {
 	UnauthorizedException,
 } from "@nestjs/common";
 import { Reflector } from "@nestjs/core";
-import { isEmpty } from "lodash";
 import { ClsService } from "nestjs-cls";
+import { isEmpty } from "lodash";
 
 @Injectable()
 export class RolesGuard implements CanActivate {
@@ -26,8 +26,7 @@ export class RolesGuard implements CanActivate {
 			return true;
 		}
 
-		const request = context.switchToHttp().getRequest();
-		const user = <UserDto>request.user;
+		const user = this.cls.get<UserDto | undefined>(CONTEXT_KEYS.AUTH_USER);
 
 		if (!user) {
 			throw new UnauthorizedException("인증된 사용자가 필요합니다.");
@@ -37,13 +36,9 @@ export class RolesGuard implements CanActivate {
 			throw new ForbiddenException("사용자에게 할당된 테넌트가 없습니다.");
 		}
 
-		// x-space-id 헤더에서 spaceId 가져오기
-		const spaceId = this.cls.get<string>(CONTEXT_KEYS.SPACE_ID);
-
-		// spaceId로 해당 tenant 찾기
-		const tenant = spaceId
-			? user.tenants.find((t) => t.spaceId === spaceId)
-			: user.tenants[0]; // spaceId가 없으면 첫 번째 tenant 사용
+		// CLS에서 tenant 읽기 (RequestContextMiddleware가 설정)
+		const tenant = this.cls.get<TenantDto | undefined>(CONTEXT_KEYS.TENANT);
+		const spaceId = this.cls.get<string | undefined>(CONTEXT_KEYS.SPACE_ID);
 
 		if (!tenant) {
 			throw new ForbiddenException("해당 Space에 대한 테넌트가 없습니다.");
@@ -55,8 +50,13 @@ export class RolesGuard implements CanActivate {
 
 		const hasRequiredRole = roles.includes(tenant.role.name as SystemRoleName);
 		if (!hasRequiredRole) {
+			const endpoint = `${context.getClass().name}.${context.getHandler().name}`;
 			throw new ForbiddenException(
-				`이 작업을 수행하려면 다음 역할 중 하나가 필요합니다: ${roles.join(", ")}. 현재 역할: ${tenant.role.name}`,
+				`[RolesGuard] 접근 거부\n` +
+					`- 엔드포인트: ${endpoint}\n` +
+					`- 사용자: ${user.id} (space: ${spaceId ?? "없음"})\n` +
+					`- 현재 역할: ${tenant.role.name}\n` +
+					`- 요구 조건: ${roles.join(", ")}`,
 			);
 		}
 

@@ -98,12 +98,12 @@ async function main() {
 				tenants: {
 					create: {
 						userId: superAdminUser.id,
-						roleId: roles.SUPER_ADMIN.id,
+						roleId: roles.FULL_ACCESS.id,
 					},
 				},
 			},
 		});
-		console.log("System Space 생성 완료 (SUPER_ADMIN 전용)");
+		console.log("System Space 생성 완료 (FULL_ACCESS 전용)");
 	} else {
 		console.log(`System Space 이미 존재 (id=${systemSpace.id})`);
 	}
@@ -170,7 +170,7 @@ async function main() {
 	await createRoleGroupsAndAssociations(roles, systemSpace.id);
 
 	// 일반 유저들과 그라운드 생성
-	await createRegularUsersAndGrounds(roles.ADMIN, roles.USER);
+	await createRegularUsersAndGrounds(roles.MANAGE, roles.VIEW);
 
 	// Ground Space에 BRANCH SpaceClassification 할당
 	await classifyGroundSpacesAsBranch(systemSpace.id);
@@ -362,7 +362,7 @@ async function createRegularUsersAndGrounds(adminRole: Role, _userRole: Role) {
 
 					// 각 그라운드에 대한 Tenant 생성 (중복 확인)
 					// userData.role 또는 기본값 "USER" 사용
-					const assignedRole = roleMap[userData.role || "USER"];
+					const assignedRole = roleMap[userData.role || "VIEW"];
 
 					for (let i = 0; i < userGrounds.length; i++) {
 						const groundInfo = userGrounds[i];
@@ -388,7 +388,7 @@ async function createRegularUsersAndGrounds(adminRole: Role, _userRole: Role) {
 					}
 
 					console.log(
-						`유저 생성 완료: ${userData.profile.name} [${userData.role || "USER"}] (그라운드 ${userGrounds.length}개 소속)`,
+						`유저 생성 완료: ${userData.profile.name} [${userData.role || "VIEW"}] (그라운드 ${userGrounds.length}개 소속)`,
 					);
 				}
 			} else {

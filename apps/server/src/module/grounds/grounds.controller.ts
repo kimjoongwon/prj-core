@@ -39,7 +39,7 @@ export class GroundsController {
 		operationId: "getMyGrounds",
 		summary: "내 Space의 Ground 목록 조회",
 		description:
-			"X-Space-ID 헤더로 지정한 Space의 Ground를 조회합니다. SUPER_ADMIN은 헤더 없이 모든 Ground 조회 가능.",
+			"X-Space-ID 헤더로 지정한 Space의 Ground를 조회합니다. FULL_ACCESS는 헤더 없이 모든 Ground 조회 가능.",
 	})
 	@ApiAuth()
 	@ApiErrors(500)

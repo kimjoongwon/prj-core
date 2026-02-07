@@ -11,6 +11,7 @@
 _core/
 ├── infrastructure/          # 인프라 레이어
 │   ├── 2026-01-31-CASL/    # 권한 시스템 (RBAC + ABAC)
+│   ├── 2026-02-07-SpaceAccessControl/  # Space 기반 접근 제어
 │   ├── Authentication/      # 인증 시스템 (예정)
 │   └── MultiTenancy/        # 멀티테넌시 (예정)
 │
@@ -92,6 +93,7 @@ _core/
 | 시스템 | 폴더 | 설명 | 상태 |
 |--------|------|------|------|
 | CASL | `2026-01-31-CASL/` | RBAC+ABAC 권한 관리 | ✅ 완료 |
+| SpaceAccessControl | `2026-02-07-SpaceAccessControl/` | Space 기반 접근 제어 (Guard/Interceptor/SpaceContext) | ✅ 완료 |
 | Authentication | (예정) | 인증 시스템 | ⏳ 예정 |
 | MultiTenancy | (예정) | 멀티테넌시 | ⏳ 예정 |
 
@@ -136,3 +138,4 @@ _core/
 | 날짜 | 변경 내용 |
 |------|----------|
 | 2026-01-31 | _core 구조 초기 생성, CASL/MenuSystem 이동 |
+| 2026-02-07 | SpaceAccessControl 인프라 시스템 추가 |

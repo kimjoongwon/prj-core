@@ -1,8 +1,24 @@
 import { PUBLIC_ROUTE_KEY } from "@cocrepo/decorator";
-import { TokenStorageService } from "@cocrepo/service";
 import { ExecutionContext, UnauthorizedException } from "@nestjs/common";
 import { Reflector } from "@nestjs/core";
 import { Test, TestingModule } from "@nestjs/testing";
+
+// @cocrepo/service import 체인의 masking.interceptor 에러 회피
+jest.mock("@cocrepo/service", () => {
+	class TokenStorageService {
+		isBlacklisted = jest.fn();
+		saveRefreshToken = jest.fn();
+		validateRefreshToken = jest.fn();
+		deleteRefreshToken = jest.fn();
+		addToBlacklist = jest.fn();
+	}
+	return {
+		__esModule: true,
+		TokenStorageService,
+	};
+});
+
+import { TokenStorageService } from "@cocrepo/service";
 import { JwtAuthGuard } from "./jwt.auth-guard";
 
 describe("JwtAuthGuard", () => {
@@ -16,6 +32,7 @@ describe("JwtAuthGuard", () => {
 			method: string;
 			authorization: string;
 			cookies: Record<string, string>;
+			user: any;
 		}> = {},
 	): ExecutionContext => {
 		const request = {
@@ -25,6 +42,7 @@ describe("JwtAuthGuard", () => {
 				authorization: overrides.authorization,
 			},
 			cookies: overrides.cookies || {},
+			user: overrides.user,
 		};
 
 		const handler = jest.fn();
@@ -71,13 +89,13 @@ describe("JwtAuthGuard", () => {
 	});
 
 	describe("canActivate", () => {
-		it("공개 라우트는 true를 반환해야 한다", () => {
+		it("공개 라우트는 true를 반환해야 한다", async () => {
 			// Given
 			mockReflector.get.mockReturnValue(true);
 			const context = createMockExecutionContext();
 
 			// When
-			const result = guard.canActivate(context);
+			const result = await guard.canActivate(context);
 
 			// Then
 			expect(result).toBe(true);
@@ -103,42 +121,70 @@ describe("JwtAuthGuard", () => {
 				"blacklisted-token",
 			);
 		});
-	});
 
-	describe("handleRequest", () => {
-		it("유효한 사용자를 반환해야 한다", () => {
+		it("request.user가 있으면 true를 반환해야 한다", async () => {
 			// Given
-			const user = { id: "user-test-id", email: "test@example.com" };
+			mockReflector.get.mockReturnValue(false);
+			mockTokenStorageService.isBlacklisted.mockResolvedValue(false);
+			const user = { id: "user-1", email: "test@example.com" };
+			const context = createMockExecutionContext({
+				cookies: { accessToken: "valid-token" },
+				user,
+			});
 
 			// When
-			const result = guard.handleRequest(null, user, null);
+			const result = await guard.canActivate(context);
 
 			// Then
-			expect(result).toEqual(user);
+			expect(result).toBe(true);
 		});
 
-		it("에러가 있으면 에러를 던져야 한다", () => {
+		it("request.user가 없으면 UnauthorizedException을 던져야 한다", async () => {
 			// Given
-			const error = new Error("Auth error");
+			mockReflector.get.mockReturnValue(false);
+			mockTokenStorageService.isBlacklisted.mockResolvedValue(false);
+			const context = createMockExecutionContext({
+				cookies: { accessToken: "valid-token" },
+				user: undefined,
+			});
 
 			// When & Then
-			expect(() => guard.handleRequest(error, null, null)).toThrow(error);
-		});
-
-		it("사용자가 없으면 UnauthorizedException을 던져야 한다", () => {
-			// When & Then
-			expect(() => guard.handleRequest(null, null, null)).toThrow(
+			await expect(guard.canActivate(context)).rejects.toThrow(
 				UnauthorizedException,
 			);
 		});
 
-		it("사용자가 없을 때 info가 있으면 UnauthorizedException을 던져야 한다", () => {
+		it("쿠키에 accessToken이 없으면 블랙리스트 체크를 건너뛰어야 한다", async () => {
 			// Given
-			const info = { message: "Token expired" };
+			mockReflector.get.mockReturnValue(false);
+			const user = { id: "user-1", email: "test@example.com" };
+			const context = createMockExecutionContext({ user });
 
-			// When & Then
-			expect(() => guard.handleRequest(null, null, info)).toThrow(
-				UnauthorizedException,
+			// When
+			const result = await guard.canActivate(context);
+
+			// Then
+			expect(result).toBe(true);
+			expect(mockTokenStorageService.isBlacklisted).not.toHaveBeenCalled();
+		});
+
+		it("토큰이 블랙리스트에 없으면 다음 단계로 진행해야 한다", async () => {
+			// Given
+			mockReflector.get.mockReturnValue(false);
+			mockTokenStorageService.isBlacklisted.mockResolvedValue(false);
+			const user = { id: "user-1", email: "test@example.com" };
+			const context = createMockExecutionContext({
+				cookies: { accessToken: "valid-token" },
+				user,
+			});
+
+			// When
+			const result = await guard.canActivate(context);
+
+			// Then
+			expect(result).toBe(true);
+			expect(mockTokenStorageService.isBlacklisted).toHaveBeenCalledWith(
+				"valid-token",
 			);
 		});
 	});

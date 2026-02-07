@@ -48,6 +48,10 @@ const ALLOWED_TEMPLATE_VARIABLES = [
 	"user.currentTenantId",
 	"user.currentSpaceId",
 	"user.currentRoleId",
+	"user.roleCategory",
+	"user.roleGroupNames",
+	"user.userCategory",
+	"user.userGroupNames",
 ] as const;
 
 /**
@@ -223,6 +227,26 @@ export class CaslAbilityFactory {
 		user: UserDto,
 		currentTenant: NonNullable<UserDto["tenants"]>[number],
 	): Record<string, unknown> {
+		// 역할 카테고리
+		const roleCategory =
+			currentTenant.role?.classification?.category?.name ?? "";
+
+		// 역할 그룹 이름 배열
+		const roleGroupNames =
+			(currentTenant.role as any)?.associations
+				?.map((ac: any) => ac.group?.name)
+				.filter(Boolean) ?? [];
+
+		// 이용자 카테고리
+		const userCategory =
+			(user as any).classification?.category?.name ?? "";
+
+		// 이용자 그룹 이름 배열
+		const userGroupNames =
+			(user as any).associations
+				?.map((a: any) => a.group?.name)
+				.filter(Boolean) ?? [];
+
 		return {
 			user: {
 				id: user.id,
@@ -232,6 +256,10 @@ export class CaslAbilityFactory {
 				currentTenantId: currentTenant.id,
 				currentSpaceId: currentTenant.spaceId,
 				currentRoleId: currentTenant.roleId,
+				roleCategory,
+				roleGroupNames,
+				userCategory,
+				userGroupNames,
 			},
 		};
 	}

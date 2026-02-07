@@ -2,13 +2,13 @@ import { Enum, EnumType } from "ts-jenum";
 
 @Enum("code")
 export class RoleCategoryNames extends EnumType<RoleCategoryNames>() {
-	static readonly ROOT = new RoleCategoryNames("ROOT", "루트");
-	static readonly COMMON = new RoleCategoryNames("COMMON", "공통");
-	static readonly ADMIN = new RoleCategoryNames("ADMIN", "관리자");
-	static readonly USER = new RoleCategoryNames("USER", "사용자");
-	static readonly MANAGER = new RoleCategoryNames("MANAGER", "매니저");
-	static readonly DEVELOPER = new RoleCategoryNames("DEVELOPER", "개발자");
-	static readonly GUEST = new RoleCategoryNames("GUEST", "게스트");
+	static readonly PLATFORM = new RoleCategoryNames("PLATFORM", "플랫폼");
+	static readonly SHARED = new RoleCategoryNames("SHARED", "공유");
+	static readonly WORKSPACE = new RoleCategoryNames("WORKSPACE", "워크스페이스");
+	static readonly PUBLIC = new RoleCategoryNames("PUBLIC", "공개");
+	static readonly PROJECT = new RoleCategoryNames("PROJECT", "프로젝트");
+	static readonly TECHNICAL = new RoleCategoryNames("TECHNICAL", "기술");
+	static readonly RESTRICTED = new RoleCategoryNames("RESTRICTED", "제한");
 
 	private constructor(
 		readonly _code: string,

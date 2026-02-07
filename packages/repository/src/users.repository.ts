@@ -61,6 +61,9 @@ export class UsersRepository {
 										},
 									},
 								},
+								associations: {
+									include: { group: true },
+								},
 							},
 						},
 						space: {
@@ -81,6 +84,12 @@ export class UsersRepository {
 					},
 				},
 				profiles: true,
+				classification: {
+					include: { category: true },
+				},
+				associations: {
+					include: { group: true },
+				},
 			},
 		});
 
@@ -144,6 +153,9 @@ export class UsersRepository {
 										},
 									},
 								},
+								associations: {
+									include: { group: true },
+								},
 							},
 						},
 						space: {
@@ -164,6 +176,12 @@ export class UsersRepository {
 					},
 				},
 				profiles: true,
+				classification: {
+					include: { category: true },
+				},
+				associations: {
+					include: { group: true },
+				},
 			},
 		});
 

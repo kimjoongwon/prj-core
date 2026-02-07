@@ -2,8 +2,9 @@ import {
 	AllExceptionsFilter,
 	DtoTransformInterceptor,
 	JwtAuthGuard,
-	RequestContextInterceptor,
 	ResponseEntityInterceptor,
+	SpaceAccessGuard,
+	SpaceScopeInterceptor,
 } from "@cocrepo/be-common";
 import { TranslationService } from "@cocrepo/be-i18n";
 import { TokenStorageService } from "@cocrepo/service";
@@ -37,21 +38,23 @@ export function setNestApp<T extends INestApplication>(app: T): void {
 	);
 
 	// =================================================================
-	// Global Guards (JWT 인증)
-	// Rate Limiting은 AppModule에서 APP_GUARD로 등록
+	// Global Guards (JWT 인증 + Space 접근 제어)
+	// AuthMiddleware가 request.user를 설정한 후 Guard가 검증
 	// =================================================================
 	app.useGlobalGuards(
 		new JwtAuthGuard(app.get(Reflector), app.get(TokenStorageService)),
+		app.get(SpaceAccessGuard),
 	);
 
 	// =================================================================
 	// Global Interceptors - Response 처리는 역순!
 	// Request: 1→2→3→4 | Response: 4→3→2→1
+	// RequestContextInterceptor 제거 → Middleware로 이동
 	// =================================================================
 	app.useGlobalInterceptors(
-		app.get(RequestContextInterceptor), // 1
+		app.get(SpaceScopeInterceptor), // 1 (Request: 데코레이터 기반 EFFECTIVE_SPACE_IDS 계산)
 		app.get(ResponseEntityInterceptor), // 2 (Response: 래핑)
-		new DtoTransformInterceptor(app.get(Reflector)), // 3 (Response: DTO 변환 및 exclude)
-		new ClassSerializerInterceptor(app.get(Reflector)), // 4 (Response: 직렬화)
+		new ClassSerializerInterceptor(app.get(Reflector)), // 3 (Response: 직렬화)
+		new DtoTransformInterceptor(app.get(Reflector)), // 4 (Response: DTO 변환 및 exclude)
 	);
 }

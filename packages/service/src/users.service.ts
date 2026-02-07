@@ -1,4 +1,4 @@
-import { CONTEXT_KEYS } from "@cocrepo/constant";
+import { SpaceContext } from "@cocrepo/be-common";
 import { UsersRepository } from "@cocrepo/repository";
 import type { UserStats } from "@cocrepo/type";
 import { HashedPassword, PlainPassword } from "@cocrepo/vo";
@@ -8,7 +8,6 @@ import {
 	Logger,
 	NotFoundException,
 } from "@nestjs/common";
-import { ClsService } from "nestjs-cls";
 
 /**
  * 회원 목록 조회 결과
@@ -38,7 +37,7 @@ export class UsersService {
 
 	constructor(
 		private readonly repository: UsersRepository,
-		private readonly cls: ClsService,
+		private readonly spaceCtx: SpaceContext,
 	) {}
 
 	/**
@@ -72,7 +71,7 @@ export class UsersService {
 		skip?: number;
 		take?: number;
 	}): Promise<GetMembersResult> {
-		const spaceIds = this.cls.get<string[]>(CONTEXT_KEYS.ACCESSIBLE_SPACE_IDS) ?? [];
+		const spaceIds = this.spaceCtx.spaceIds;
 		this.logger.debug(`접근 가능 Space 내 회원 목록 조회: spaceIds=${spaceIds.length}개`);
 
 		// 회원 목록과 통계를 병렬로 조회

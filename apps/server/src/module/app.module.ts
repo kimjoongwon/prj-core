@@ -2,10 +2,14 @@
 
 // be-common imports
 import {
+	AuthMiddleware,
 	DtoTransformInterceptor,
 	LoggerMiddleware,
-	RequestContextInterceptor,
+	RequestContextMiddleware,
 	ResponseEntityInterceptor,
+	SpaceAccessGuard,
+	SpaceContext,
+	SpaceScopeInterceptor,
 } from "@cocrepo/be-common";
 import { I18nModule } from "@cocrepo/be-i18n";
 import { SpacesRepository } from "@cocrepo/repository";
@@ -25,6 +29,7 @@ import { AuthModule } from "./auth";
 import { globalModules } from "./global.module";
 import { GroundsModule } from "./grounds";
 import { PrismaModule } from "./prisma.module";
+import { RedisModule } from "./redis.module";
 import { RolesModule } from "./role";
 import { SubjectsModule } from "./subject";
 import { TranslationsModule } from "./translation";
@@ -34,6 +39,7 @@ import { UsersModule } from "./users";
 	imports: [
 		...globalModules,
 		PrismaModule,
+		RedisModule,
 		I18nModule,
 		AuthModule,
 		GroundsModule,
@@ -92,13 +98,19 @@ import { UsersModule } from "./users";
 		]),
 	],
 	providers: [
-		// Space 도메인 (RequestContextInterceptor 의존)
+		// Space 도메인 (RequestContextMiddleware 의존)
 		SpacesRepository,
 		SpacesService,
+		// Guards (setNestApp에서 순서대로 등록됨)
+		SpaceAccessGuard,
+		// Middleware (DI 주입 필요)
+		RequestContextMiddleware,
 		// Interceptors (setNestApp에서 순서대로 등록됨)
-		RequestContextInterceptor,
+		SpaceScopeInterceptor,
 		DtoTransformInterceptor,
 		ResponseEntityInterceptor,
+		// Space Context (Service에서 주입)
+		SpaceContext,
 		// Rate Limiting
 		{
 			provide: APP_GUARD,
@@ -115,6 +127,8 @@ export class AppModule implements OnModuleInit {
 	}
 
 	configure(consumer: MiddlewareConsumer) {
-		consumer.apply(LoggerMiddleware).forRoutes("*");
+		consumer
+			.apply(AuthMiddleware, RequestContextMiddleware, LoggerMiddleware)
+			.forRoutes("*");
 	}
 }

@@ -65,7 +65,7 @@ export type Actions =
  * - User, Ground - 엔티티 CRUD 권한
  * - api:users - API 엔드포인트 권한
  * - column:user:email - 테이블 컬럼 가시성
- * - all - 모든 권한 (SUPER_ADMIN용)
+ * - all - 모든 권한 (FULL_ACCESS용)
  */
 export type Subjects = string;
 

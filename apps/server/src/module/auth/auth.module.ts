@@ -1,4 +1,4 @@
-import { JwtStrategy } from "@cocrepo/be-common";
+import { JwtStrategy, SpaceContext } from "@cocrepo/be-common";
 import { AuthFacade } from "@cocrepo/facade";
 import {
 	RolesRepository,
@@ -29,6 +29,7 @@ import { AuthController } from "./auth.controller";
 		RolesRepository,
 		SpacesService,
 		SpacesRepository,
+		SpaceContext,
 	],
 	controllers: [AuthController],
 	exports: [AuthFacade, TokenStorageService, RedisService],

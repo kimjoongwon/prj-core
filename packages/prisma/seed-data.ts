@@ -785,10 +785,10 @@ export interface GroundSeedData {
 	businessNo: string;
 }
 
-// 9명의 다양한 역할 유저 데이터 (ADMIN 3명, USER 6명)
-// SUPER_ADMIN은 main()에서 admin@plate.com으로 별도 생성됨
+// 9명의 다양한 역할 유저 데이터 (MANAGE 3명, VIEW 6명)
+// FULL_ACCESS는 main()에서 admin@plate.com으로 별도 생성됨
 export const userSeedData: UserSeedData[] = [
-	// ADMIN 3명 - 각 지점 관리자
+	// MANAGE 3명 - 각 지점 관리자
 	{
 		email: "manager.gwanghwamun@f45.kr",
 		phone: "01023456789",
@@ -797,7 +797,7 @@ export const userSeedData: UserSeedData[] = [
 			name: "이점장",
 			nickname: "광화문점장",
 		},
-		role: "ADMIN",
+		role: "MANAGE",
 	},
 	{
 		email: "manager.gangnam@f45.kr",
@@ -807,7 +807,7 @@ export const userSeedData: UserSeedData[] = [
 			name: "박매니저",
 			nickname: "강남매니저",
 		},
-		role: "ADMIN",
+		role: "MANAGE",
 	},
 	{
 		email: "manager.itaewon@crossfit.kr",
@@ -817,9 +817,9 @@ export const userSeedData: UserSeedData[] = [
 			name: "최코치",
 			nickname: "이태원코치",
 		},
-		role: "ADMIN",
+		role: "MANAGE",
 	},
-	// USER 6명 - 실제 회원들
+	// VIEW 6명 - 실제 회원들
 	{
 		email: "minsu.kim92@gmail.com",
 		phone: "01056789012",
@@ -828,7 +828,7 @@ export const userSeedData: UserSeedData[] = [
 			name: "김민수",
 			nickname: "민수",
 		},
-		role: "USER",
+		role: "VIEW",
 	},
 	{
 		email: "seoyeon_lee@naver.com",
@@ -838,7 +838,7 @@ export const userSeedData: UserSeedData[] = [
 			name: "이서연",
 			nickname: "서연",
 		},
-		role: "USER",
+		role: "VIEW",
 	},
 	{
 		email: "yejun.park@kakao.com",
@@ -848,7 +848,7 @@ export const userSeedData: UserSeedData[] = [
 			name: "박예준",
 			nickname: "예준",
 		},
-		role: "USER",
+		role: "VIEW",
 	},
 	{
 		email: "jiwoo0315@gmail.com",
@@ -858,7 +858,7 @@ export const userSeedData: UserSeedData[] = [
 			name: "최지우",
 			nickname: "지우",
 		},
-		role: "USER",
+		role: "VIEW",
 	},
 	{
 		email: "hayoon.jung@naver.com",
@@ -868,7 +868,7 @@ export const userSeedData: UserSeedData[] = [
 			name: "정하윤",
 			nickname: "하윤",
 		},
-		role: "USER",
+		role: "VIEW",
 	},
 	{
 		email: "doyoon.kang@gmail.com",
@@ -878,7 +878,7 @@ export const userSeedData: UserSeedData[] = [
 			name: "강도윤",
 			nickname: "도윤",
 		},
-		role: "USER",
+		role: "VIEW",
 	},
 ];
 
@@ -979,23 +979,23 @@ export interface CategorySeedData {
 
 export const roleCategorySeedData: CategorySeedData[] = [
 	{
-		roleCategoryEnum: RoleCategoryNames.ROOT,
+		roleCategoryEnum: RoleCategoryNames.PLATFORM,
 		type: "Role",
 	},
 	{
-		roleCategoryEnum: RoleCategoryNames.COMMON,
+		roleCategoryEnum: RoleCategoryNames.SHARED,
 		type: "Role",
 	},
 	{
-		roleCategoryEnum: RoleCategoryNames.USER,
+		roleCategoryEnum: RoleCategoryNames.PUBLIC,
 		type: "Role",
 	},
 	{
-		roleCategoryEnum: RoleCategoryNames.ADMIN,
+		roleCategoryEnum: RoleCategoryNames.WORKSPACE,
 		type: "Role",
 	},
 	{
-		roleCategoryEnum: RoleCategoryNames.MANAGER,
+		roleCategoryEnum: RoleCategoryNames.PROJECT,
 		type: "Role",
 	},
 ];
@@ -1010,21 +1010,21 @@ export interface RoleSeedData {
 
 export const roleSeedData: RoleSeedData[] = [
 	{
-		name: "SUPER_ADMIN",
-		displayName: "슈퍼 관리자",
-		description: "시스템의 모든 권한을 가진 최고 관리자",
+		name: "FULL_ACCESS",
+		displayName: "전체 접근",
+		description: "시스템의 모든 권한을 가진 전체 접근 역할",
 		isSystem: true,
 	},
 	{
-		name: "ADMIN",
-		displayName: "관리자",
-		description: "일반 관리 업무를 수행하는 관리자",
+		name: "MANAGE",
+		displayName: "관리",
+		description: "관리 업무를 수행하는 역할",
 		isSystem: true,
 	},
 	{
-		name: "USER",
-		displayName: "일반 사용자",
-		description: "기본 사용자 역할",
+		name: "VIEW",
+		displayName: "조회",
+		description: "기본 조회 역할",
 		isSystem: true,
 	},
 ];
@@ -1039,16 +1039,16 @@ export interface RoleClassificationSeedData {
 
 export const roleClassificationSeedData: RoleClassificationSeedData[] = [
 	{
-		roleName: "SUPER_ADMIN",
-		roleCategoryEnum: RoleCategoryNames.ROOT, // "루트" 카테고리
+		roleName: "FULL_ACCESS",
+		roleCategoryEnum: RoleCategoryNames.PLATFORM, // "플랫폼" 카테고리
 	},
 	{
-		roleName: "ADMIN",
-		roleCategoryEnum: RoleCategoryNames.ADMIN, // "운영자" 카테고리
+		roleName: "MANAGE",
+		roleCategoryEnum: RoleCategoryNames.WORKSPACE, // "워크스페이스" 카테고리
 	},
 	{
-		roleName: "USER",
-		roleCategoryEnum: RoleCategoryNames.USER, // "유저" 카테고리
+		roleName: "VIEW",
+		roleCategoryEnum: RoleCategoryNames.PUBLIC, // "공개" 카테고리
 	},
 ];
 
@@ -1060,13 +1060,13 @@ export interface RoleGroupSeedData {
 
 export const roleGroupSeedData: RoleGroupSeedData[] = [
 	{
-		roleGroupEnum: RoleGroupNames.ROOT,
+		roleGroupEnum: RoleGroupNames.TRUSTED,
 	},
 	{
-		roleGroupEnum: RoleGroupNames.NORMAL,
+		roleGroupEnum: RoleGroupNames.STANDARD,
 	},
 	{
-		roleGroupEnum: RoleGroupNames.VIP,
+		roleGroupEnum: RoleGroupNames.PREMIUM,
 	},
 ];
 
@@ -1077,20 +1077,20 @@ export interface RoleAssociationSeedData {
 }
 
 export const roleAssociationSeedData: RoleAssociationSeedData[] = [
-	// SUPER_ADMIN은 ROOT 그룹
+	// FULL_ACCESS는 TRUSTED 그룹
 	{
-		roleName: "SUPER_ADMIN",
-		roleGroupEnum: RoleGroupNames.ROOT,
+		roleName: "FULL_ACCESS",
+		roleGroupEnum: RoleGroupNames.TRUSTED,
 	},
-	// ADMIN은 VIP 그룹
+	// MANAGE는 PREMIUM 그룹
 	{
-		roleName: "ADMIN",
-		roleGroupEnum: RoleGroupNames.VIP,
+		roleName: "MANAGE",
+		roleGroupEnum: RoleGroupNames.PREMIUM,
 	},
-	// USER는 NORMAL 그룹
+	// VIEW는 STANDARD 그룹
 	{
-		roleName: "USER",
-		roleGroupEnum: RoleGroupNames.NORMAL,
+		roleName: "VIEW",
+		roleGroupEnum: RoleGroupNames.STANDARD,
 	},
 ];
 
@@ -1101,9 +1101,9 @@ export interface UserGroundMappingData {
 }
 
 // 유저와 그라운드 매핑 (정합성 보장 - 역할에 맞는 논리적 연결)
-// SUPER_ADMIN(admin@plate.com)은 System Space만 사용하므로 Ground 매핑 없음
+// FULL_ACCESS(admin@plate.com)은 System Space만 사용하므로 Ground 매핑 없음
 export const userGroundMapping: UserGroundMappingData[] = [
-	// ADMIN - 담당 지점만 (F45 계열)
+	// MANAGE - 담당 지점만 (F45 계열)
 	{
 		userEmail: "manager.gwanghwamun@f45.kr",
 		groundNames: ["F45 광화문"],
@@ -1112,12 +1112,12 @@ export const userGroundMapping: UserGroundMappingData[] = [
 		userEmail: "manager.gangnam@f45.kr",
 		groundNames: ["F45 강남1호", "F45 삼성"], // 강남 지역 담당
 	},
-	// ADMIN - 크로스핏 담당
+	// MANAGE - 크로스핏 담당
 	{
 		userEmail: "manager.itaewon@crossfit.kr",
 		groundNames: ["크로스핏 이태원", "크로스핏 마포"],
 	},
-	// USER - 가입한 지점 (일반 회원)
+	// VIEW - 가입한 지점 (일반 회원)
 	{
 		userEmail: "minsu.kim92@gmail.com",
 		groundNames: ["F45 광화문"], // 광화문 회원
@@ -1243,9 +1243,9 @@ export interface UserAgreementMappingData {
 }
 
 // 유저와 약관 동의 매핑 (정합성 보장)
-// SUPER_ADMIN(admin@plate.com)은 별도로 약관 동의하지 않음 (시스템 관리자)
+// FULL_ACCESS(admin@plate.com)은 별도로 약관 동의하지 않음 (시스템 관리자)
 export const userAgreementMapping: UserAgreementMappingData[] = [
-	// ADMIN들 - 필수 + 마케팅 동의
+	// MANAGE들 - 필수 + 마케팅 동의
 	{
 		userEmail: "manager.gwanghwamun@f45.kr",
 		agreements: ["TERMS_OF_SERVICE", "PRIVACY_POLICY", "MARKETING_CONSENT"],
@@ -1258,7 +1258,7 @@ export const userAgreementMapping: UserAgreementMappingData[] = [
 		userEmail: "manager.itaewon@crossfit.kr",
 		agreements: ["TERMS_OF_SERVICE", "PRIVACY_POLICY", "LOCATION_CONSENT"],
 	},
-	// USER들 - 다양한 동의 패턴 (테스트 시나리오)
+	// VIEW들 - 다양한 동의 패턴 (테스트 시나리오)
 	{
 		userEmail: "minsu.kim92@gmail.com",
 		agreements: [
@@ -1306,7 +1306,7 @@ export const userAgreementMapping: UserAgreementMappingData[] = [
  * - update: 수정 권한
  * - delete: 삭제 권한
  * - access: 접근 권한 (메뉴 등)
- * - manage: 모든 권한 (SUPER_ADMIN용)
+ * - manage: 모든 권한 (FULL_ACCESS용)
  * - export: 내보내기 권한
  * - import: 가져오기 권한
  * - approve: 승인 권한
@@ -1363,85 +1363,85 @@ export interface AbilitySeedData {
 }
 
 /**
- * SUPER_ADMIN 권한 시드 데이터 (v7.0)
+ * FULL_ACCESS 권한 시드 데이터 (v7.0)
  * - manage all: 모든 권한
  */
-export const superAdminAbilitySeedData: AbilitySeedData[] = [
+export const fullAccessAbilitySeedData: AbilitySeedData[] = [
 	// ============================================================================
 	// v7.0 메뉴 manage (1depth)
 	// ============================================================================
 	{
-		roleName: "SUPER_ADMIN",
+		roleName: "FULL_ACCESS",
 		subject: "menu:dashboard",
 		actionName: "manage",
 		inverted: false,
 		description: "대시보드 전체 관리 권한",
 	},
 	{
-		roleName: "SUPER_ADMIN",
+		roleName: "FULL_ACCESS",
 		subject: "menu:users",
 		actionName: "manage",
 		inverted: false,
 		description: "회원 관리 전체 권한",
 	},
 	{
-		roleName: "SUPER_ADMIN",
+		roleName: "FULL_ACCESS",
 		subject: "menu:reservations",
 		actionName: "manage",
 		inverted: false,
 		description: "예약 관리 전체 권한",
 	},
 	{
-		roleName: "SUPER_ADMIN",
+		roleName: "FULL_ACCESS",
 		subject: "menu:notifications",
 		actionName: "manage",
 		inverted: false,
 		description: "알림 관리 전체 권한",
 	},
 	{
-		roleName: "SUPER_ADMIN",
+		roleName: "FULL_ACCESS",
 		subject: "menu:inquiries",
 		actionName: "manage",
 		inverted: false,
 		description: "문의 관리 전체 권한",
 	},
 	{
-		roleName: "SUPER_ADMIN",
+		roleName: "FULL_ACCESS",
 		subject: "menu:contents",
 		actionName: "manage",
 		inverted: false,
 		description: "콘텐츠 관리 전체 권한",
 	},
 	{
-		roleName: "SUPER_ADMIN",
+		roleName: "FULL_ACCESS",
 		subject: "menu:templates",
 		actionName: "manage",
 		inverted: false,
 		description: "템플릿 관리 전체 권한",
 	},
 	{
-		roleName: "SUPER_ADMIN",
+		roleName: "FULL_ACCESS",
 		subject: "menu:sessions",
 		actionName: "manage",
 		inverted: false,
 		description: "세션 관리 전체 권한",
 	},
 	{
-		roleName: "SUPER_ADMIN",
+		roleName: "FULL_ACCESS",
 		subject: "menu:grounds",
 		actionName: "manage",
 		inverted: false,
 		description: "시설 관리 전체 권한",
 	},
 	{
-		roleName: "SUPER_ADMIN",
+		roleName: "FULL_ACCESS",
 		subject: "menu:admins",
 		actionName: "manage",
 		inverted: false,
 		description: "관리자 관리 전체 권한",
 	},
 	{
-		roleName: "SUPER_ADMIN",
+		roleName: "FULL_ACCESS",
 		subject: "menu:roles",
 		actionName: "manage",
 		inverted: false,
@@ -1452,21 +1452,21 @@ export const superAdminAbilitySeedData: AbilitySeedData[] = [
 	// v7.0 메뉴 manage (2depth - 회원)
 	// ============================================================================
 	{
-		roleName: "SUPER_ADMIN",
+		roleName: "FULL_ACCESS",
 		subject: "menu:users:list",
 		actionName: "manage",
 		inverted: false,
 		description: "회원 목록 전체 권한",
 	},
 	{
-		roleName: "SUPER_ADMIN",
+		roleName: "FULL_ACCESS",
 		subject: "menu:users:grades",
 		actionName: "manage",
 		inverted: false,
 		description: "등급 관리 전체 권한",
 	},
 	{
-		roleName: "SUPER_ADMIN",
+		roleName: "FULL_ACCESS",
 		subject: "menu:users:withdrawn",
 		actionName: "manage",
 		inverted: false,
@@ -1477,28 +1477,28 @@ export const superAdminAbilitySeedData: AbilitySeedData[] = [
 	// v7.0 메뉴 manage (2depth - 예약)
 	// ============================================================================
 	{
-		roleName: "SUPER_ADMIN",
+		roleName: "FULL_ACCESS",
 		subject: "menu:reservations:today",
 		actionName: "manage",
 		inverted: false,
 		description: "오늘 예약 전체 권한",
 	},
 	{
-		roleName: "SUPER_ADMIN",
+		roleName: "FULL_ACCESS",
 		subject: "menu:reservations:list",
 		actionName: "manage",
 		inverted: false,
 		description: "예약 목록 전체 권한",
 	},
 	{
-		roleName: "SUPER_ADMIN",
+		roleName: "FULL_ACCESS",
 		subject: "menu:reservations:calendar",
 		actionName: "manage",
 		inverted: false,
 		description: "캘린더 전체 권한",
 	},
 	{
-		roleName: "SUPER_ADMIN",
+		roleName: "FULL_ACCESS",
 		subject: "menu:reservations:stats",
 		actionName: "manage",
 		inverted: false,
@@ -1509,28 +1509,28 @@ export const superAdminAbilitySeedData: AbilitySeedData[] = [
 	// v7.0 메뉴 manage (2depth - 알림)
 	// ============================================================================
 	{
-		roleName: "SUPER_ADMIN",
+		roleName: "FULL_ACCESS",
 		subject: "menu:notifications:send",
 		actionName: "manage",
 		inverted: false,
 		description: "알림 발송 전체 권한",
 	},
 	{
-		roleName: "SUPER_ADMIN",
+		roleName: "FULL_ACCESS",
 		subject: "menu:notifications:history",
 		actionName: "manage",
 		inverted: false,
 		description: "발송 내역 전체 권한",
 	},
 	{
-		roleName: "SUPER_ADMIN",
+		roleName: "FULL_ACCESS",
 		subject: "menu:notifications:templates",
 		actionName: "manage",
 		inverted: false,
 		description: "알림 템플릿 전체 권한",
 	},
 	{
-		roleName: "SUPER_ADMIN",
+		roleName: "FULL_ACCESS",
 		subject: "menu:notifications:settings",
 		actionName: "manage",
 		inverted: false,
@@ -1541,28 +1541,28 @@ export const superAdminAbilitySeedData: AbilitySeedData[] = [
 	// v7.0 메뉴 manage (2depth - 문의)
 	// ============================================================================
 	{
-		roleName: "SUPER_ADMIN",
+		roleName: "FULL_ACCESS",
 		subject: "menu:inquiries:list",
 		actionName: "manage",
 		inverted: false,
 		description: "문의 목록 전체 권한",
 	},
 	{
-		roleName: "SUPER_ADMIN",
+		roleName: "FULL_ACCESS",
 		subject: "menu:inquiries:direct",
 		actionName: "manage",
 		inverted: false,
 		description: "1:1 문의 전체 권한",
 	},
 	{
-		roleName: "SUPER_ADMIN",
+		roleName: "FULL_ACCESS",
 		subject: "menu:inquiries:answered",
 		actionName: "manage",
 		inverted: false,
 		description: "답변 완료 전체 권한",
 	},
 	{
-		roleName: "SUPER_ADMIN",
+		roleName: "FULL_ACCESS",
 		subject: "menu:inquiries:faq",
 		actionName: "manage",
 		inverted: false,
@@ -1573,28 +1573,28 @@ export const superAdminAbilitySeedData: AbilitySeedData[] = [
 	// v7.0 메뉴 manage (2depth - 콘텐츠)
 	// ============================================================================
 	{
-		roleName: "SUPER_ADMIN",
+		roleName: "FULL_ACCESS",
 		subject: "menu:contents:notices",
 		actionName: "manage",
 		inverted: false,
 		description: "공지사항 전체 권한",
 	},
 	{
-		roleName: "SUPER_ADMIN",
+		roleName: "FULL_ACCESS",
 		subject: "menu:contents:banners",
 		actionName: "manage",
 		inverted: false,
 		description: "배너 전체 권한",
 	},
 	{
-		roleName: "SUPER_ADMIN",
+		roleName: "FULL_ACCESS",
 		subject: "menu:contents:events",
 		actionName: "manage",
 		inverted: false,
 		description: "이벤트 전체 권한",
 	},
 	{
-		roleName: "SUPER_ADMIN",
+		roleName: "FULL_ACCESS",
 		subject: "menu:contents:terms",
 		actionName: "manage",
 		inverted: false,
@@ -1605,28 +1605,28 @@ export const superAdminAbilitySeedData: AbilitySeedData[] = [
 	// v7.0 메뉴 manage (2depth - 템플릿)
 	// ============================================================================
 	{
-		roleName: "SUPER_ADMIN",
+		roleName: "FULL_ACCESS",
 		subject: "menu:templates:sms",
 		actionName: "manage",
 		inverted: false,
 		description: "SMS 템플릿 전체 권한",
 	},
 	{
-		roleName: "SUPER_ADMIN",
+		roleName: "FULL_ACCESS",
 		subject: "menu:templates:email",
 		actionName: "manage",
 		inverted: false,
 		description: "이메일 템플릿 전체 권한",
 	},
 	{
-		roleName: "SUPER_ADMIN",
+		roleName: "FULL_ACCESS",
 		subject: "menu:templates:push",
 		actionName: "manage",
 		inverted: false,
 		description: "푸시 템플릿 전체 권한",
 	},
 	{
-		roleName: "SUPER_ADMIN",
+		roleName: "FULL_ACCESS",
 		subject: "menu:templates:html",
 		actionName: "manage",
 		inverted: false,
@@ -1637,28 +1637,28 @@ export const superAdminAbilitySeedData: AbilitySeedData[] = [
 	// v7.0 메뉴 manage (2depth - 세션)
 	// ============================================================================
 	{
-		roleName: "SUPER_ADMIN",
+		roleName: "FULL_ACCESS",
 		subject: "menu:sessions:timelines",
 		actionName: "manage",
 		inverted: false,
 		description: "타임라인 전체 권한",
 	},
 	{
-		roleName: "SUPER_ADMIN",
+		roleName: "FULL_ACCESS",
 		subject: "menu:sessions:list",
 		actionName: "manage",
 		inverted: false,
 		description: "세션 목록 전체 권한",
 	},
 	{
-		roleName: "SUPER_ADMIN",
+		roleName: "FULL_ACCESS",
 		subject: "menu:sessions:programs",
 		actionName: "manage",
 		inverted: false,
 		description: "프로그램 배정 전체 권한",
 	},
 	{
-		roleName: "SUPER_ADMIN",
+		roleName: "FULL_ACCESS",
 		subject: "menu:sessions:routines",
 		actionName: "manage",
 		inverted: false,
@@ -1669,21 +1669,21 @@ export const superAdminAbilitySeedData: AbilitySeedData[] = [
 	// v7.0 메뉴 manage (2depth - 시설)
 	// ============================================================================
 	{
-		roleName: "SUPER_ADMIN",
+		roleName: "FULL_ACCESS",
 		subject: "menu:grounds:info",
 		actionName: "manage",
 		inverted: false,
 		description: "시설 정보 전체 권한",
 	},
 	{
-		roleName: "SUPER_ADMIN",
+		roleName: "FULL_ACCESS",
 		subject: "menu:grounds:programs",
 		actionName: "manage",
 		inverted: false,
 		description: "프로그램 정의 전체 권한",
 	},
 	{
-		roleName: "SUPER_ADMIN",
+		roleName: "FULL_ACCESS",
 		subject: "menu:grounds:equipment",
 		actionName: "manage",
 		inverted: false,
@@ -1694,14 +1694,14 @@ export const superAdminAbilitySeedData: AbilitySeedData[] = [
 	// v7.0 메뉴 manage (2depth - 관리자)
 	// ============================================================================
 	{
-		roleName: "SUPER_ADMIN",
+		roleName: "FULL_ACCESS",
 		subject: "menu:admins:list",
 		actionName: "manage",
 		inverted: false,
 		description: "관리자 목록 전체 권한",
 	},
 	{
-		roleName: "SUPER_ADMIN",
+		roleName: "FULL_ACCESS",
 		subject: "menu:admins:invitations",
 		actionName: "manage",
 		inverted: false,
@@ -1712,14 +1712,14 @@ export const superAdminAbilitySeedData: AbilitySeedData[] = [
 	// v7.0 메뉴 manage (2depth - 역할/권한)
 	// ============================================================================
 	{
-		roleName: "SUPER_ADMIN",
+		roleName: "FULL_ACCESS",
 		subject: "menu:roles:list",
 		actionName: "manage",
 		inverted: false,
 		description: "역할 목록 전체 권한",
 	},
 	{
-		roleName: "SUPER_ADMIN",
+		roleName: "FULL_ACCESS",
 		subject: "menu:roles:abilities",
 		actionName: "manage",
 		inverted: false,
@@ -1730,154 +1730,154 @@ export const superAdminAbilitySeedData: AbilitySeedData[] = [
 	// 레거시 메뉴 manage (하위 호환성)
 	// ============================================================================
 	{
-		roleName: "SUPER_ADMIN",
+		roleName: "FULL_ACCESS",
 		subject: "menu:schedules",
 		actionName: "manage",
 		inverted: false,
 		description: "일정 관리 전체 권한 (deprecated)",
 	},
 	{
-		roleName: "SUPER_ADMIN",
+		roleName: "FULL_ACCESS",
 		subject: "menu:files",
 		actionName: "manage",
 		inverted: false,
 		description: "파일 관리 전체 권한",
 	},
 	{
-		roleName: "SUPER_ADMIN",
+		roleName: "FULL_ACCESS",
 		subject: "menu:wallets",
 		actionName: "manage",
 		inverted: false,
 		description: "지갑 관리 전체 권한",
 	},
 	{
-		roleName: "SUPER_ADMIN",
+		roleName: "FULL_ACCESS",
 		subject: "menu:settings",
 		actionName: "manage",
 		inverted: false,
 		description: "설정 관리 전체 권한 (deprecated)",
 	},
 	{
-		roleName: "SUPER_ADMIN",
+		roleName: "FULL_ACCESS",
 		subject: "menu:users:profiles",
 		actionName: "manage",
 		inverted: false,
 		description: "프로필 관리 전체 권한",
 	},
 	{
-		roleName: "SUPER_ADMIN",
+		roleName: "FULL_ACCESS",
 		subject: "menu:users:categories",
 		actionName: "manage",
 		inverted: false,
 		description: "사용자 분류 관리 전체 권한",
 	},
 	{
-		roleName: "SUPER_ADMIN",
+		roleName: "FULL_ACCESS",
 		subject: "menu:users:groups",
 		actionName: "manage",
 		inverted: false,
 		description: "그룹 관리 전체 권한",
 	},
 	{
-		roleName: "SUPER_ADMIN",
+		roleName: "FULL_ACCESS",
 		subject: "menu:schedules:timelines",
 		actionName: "manage",
 		inverted: false,
 		description: "타임라인 전체 권한 (deprecated)",
 	},
 	{
-		roleName: "SUPER_ADMIN",
+		roleName: "FULL_ACCESS",
 		subject: "menu:schedules:sessions",
 		actionName: "manage",
 		inverted: false,
 		description: "세션 전체 권한 (deprecated)",
 	},
 	{
-		roleName: "SUPER_ADMIN",
+		roleName: "FULL_ACCESS",
 		subject: "menu:schedules:programs",
 		actionName: "manage",
 		inverted: false,
 		description: "프로그램 전체 권한 (deprecated)",
 	},
 	{
-		roleName: "SUPER_ADMIN",
+		roleName: "FULL_ACCESS",
 		subject: "menu:schedules:routines",
 		actionName: "manage",
 		inverted: false,
 		description: "루틴 전체 권한 (deprecated)",
 	},
 	{
-		roleName: "SUPER_ADMIN",
+		roleName: "FULL_ACCESS",
 		subject: "menu:files:list",
 		actionName: "manage",
 		inverted: false,
 		description: "파일 목록 전체 권한",
 	},
 	{
-		roleName: "SUPER_ADMIN",
+		roleName: "FULL_ACCESS",
 		subject: "menu:files:categories",
 		actionName: "manage",
 		inverted: false,
 		description: "파일 분류 관리 전체 권한",
 	},
 	{
-		roleName: "SUPER_ADMIN",
+		roleName: "FULL_ACCESS",
 		subject: "menu:contents:posts",
 		actionName: "manage",
 		inverted: false,
 		description: "게시물 전체 권한",
 	},
 	{
-		roleName: "SUPER_ADMIN",
+		roleName: "FULL_ACCESS",
 		subject: "menu:contents:list",
 		actionName: "manage",
 		inverted: false,
 		description: "콘텐츠 목록 전체 권한",
 	},
 	{
-		roleName: "SUPER_ADMIN",
+		roleName: "FULL_ACCESS",
 		subject: "menu:wallets:list",
 		actionName: "manage",
 		inverted: false,
 		description: "지갑 목록 전체 권한",
 	},
 	{
-		roleName: "SUPER_ADMIN",
+		roleName: "FULL_ACCESS",
 		subject: "menu:wallets:transactions",
 		actionName: "manage",
 		inverted: false,
 		description: "트랜잭션 전체 권한",
 	},
 	{
-		roleName: "SUPER_ADMIN",
+		roleName: "FULL_ACCESS",
 		subject: "menu:settings:grounds",
 		actionName: "manage",
 		inverted: false,
 		description: "시설 정보 전체 권한 (deprecated)",
 	},
 	{
-		roleName: "SUPER_ADMIN",
+		roleName: "FULL_ACCESS",
 		subject: "menu:settings:admins",
 		actionName: "manage",
 		inverted: false,
 		description: "관리자 관리 전체 권한 (deprecated)",
 	},
 	{
-		roleName: "SUPER_ADMIN",
+		roleName: "FULL_ACCESS",
 		subject: "menu:settings:abilities",
 		actionName: "manage",
 		inverted: false,
 		description: "권한 관리 전체 권한 (deprecated)",
 	},
 	{
-		roleName: "SUPER_ADMIN",
+		roleName: "FULL_ACCESS",
 		subject: "menu:settings:system",
 		actionName: "manage",
 		inverted: false,
 		description: "시스템 설정 전체 권한",
 	},
 	{
-		roleName: "SUPER_ADMIN",
+		roleName: "FULL_ACCESS",
 		subject: "menu:settings:ui-configs",
 		actionName: "manage",
 		inverted: false,
@@ -1888,28 +1888,28 @@ export const superAdminAbilitySeedData: AbilitySeedData[] = [
 	// 기능 manage
 	// ============================================================================
 	{
-		roleName: "SUPER_ADMIN",
+		roleName: "FULL_ACCESS",
 		subject: "feature:export",
 		actionName: "manage",
 		inverted: false,
 		description: "내보내기 전체 권한",
 	},
 	{
-		roleName: "SUPER_ADMIN",
+		roleName: "FULL_ACCESS",
 		subject: "feature:import",
 		actionName: "manage",
 		inverted: false,
 		description: "가져오기 전체 권한",
 	},
 	{
-		roleName: "SUPER_ADMIN",
+		roleName: "FULL_ACCESS",
 		subject: "feature:bulk-delete",
 		actionName: "manage",
 		inverted: false,
 		description: "일괄 삭제 전체 권한",
 	},
 	{
-		roleName: "SUPER_ADMIN",
+		roleName: "FULL_ACCESS",
 		subject: "feature:send-notification",
 		actionName: "manage",
 		inverted: false,
@@ -1920,21 +1920,21 @@ export const superAdminAbilitySeedData: AbilitySeedData[] = [
 	// FAB Quick Actions manage (v7.0)
 	// ============================================================================
 	{
-		roleName: "SUPER_ADMIN",
+		roleName: "FULL_ACCESS",
 		subject: "quickAction:todayReservation",
 		actionName: "manage",
 		inverted: false,
 		description: "오늘 예약 바로가기 전체 권한",
 	},
 	{
-		roleName: "SUPER_ADMIN",
+		roleName: "FULL_ACCESS",
 		subject: "quickAction:quickReservation",
 		actionName: "manage",
 		inverted: false,
 		description: "빠른 예약 전체 권한",
 	},
 	{
-		roleName: "SUPER_ADMIN",
+		roleName: "FULL_ACCESS",
 		subject: "quickAction:userSearch",
 		actionName: "manage",
 		inverted: false,
@@ -1945,49 +1945,49 @@ export const superAdminAbilitySeedData: AbilitySeedData[] = [
 	// 엔티티 manage
 	// ============================================================================
 	{
-		roleName: "SUPER_ADMIN",
+		roleName: "FULL_ACCESS",
 		subject: "entity:User",
 		actionName: "manage",
 		inverted: false,
 		description: "사용자 엔티티 전체 권한",
 	},
 	{
-		roleName: "SUPER_ADMIN",
+		roleName: "FULL_ACCESS",
 		subject: "entity:Ground",
 		actionName: "manage",
 		inverted: false,
 		description: "시설 엔티티 전체 권한",
 	},
 	{
-		roleName: "SUPER_ADMIN",
+		roleName: "FULL_ACCESS",
 		subject: "entity:Space",
 		actionName: "manage",
 		inverted: false,
 		description: "공간 엔티티 전체 권한",
 	},
 	{
-		roleName: "SUPER_ADMIN",
+		roleName: "FULL_ACCESS",
 		subject: "entity:Reservation",
 		actionName: "manage",
 		inverted: false,
 		description: "예약 엔티티 전체 권한",
 	},
 	{
-		roleName: "SUPER_ADMIN",
+		roleName: "FULL_ACCESS",
 		subject: "entity:Content",
 		actionName: "manage",
 		inverted: false,
 		description: "콘텐츠 엔티티 전체 권한",
 	},
 	{
-		roleName: "SUPER_ADMIN",
+		roleName: "FULL_ACCESS",
 		subject: "entity:Role",
 		actionName: "manage",
 		inverted: false,
 		description: "역할 엔티티 전체 권한",
 	},
 	{
-		roleName: "SUPER_ADMIN",
+		roleName: "FULL_ACCESS",
 		subject: "entity:Ability",
 		actionName: "manage",
 		inverted: false,
@@ -1996,169 +1996,169 @@ export const superAdminAbilitySeedData: AbilitySeedData[] = [
 ];
 
 /**
- * ADMIN 권한 시드 데이터
+ * MANAGE 권한 시드 데이터
  * - 메뉴 access: 대시보드, 회원, 예약, 설정(일부)
  * - 엔티티: User, Reservation manage / Ground read, update
  * - inverted=true: 권한 관리 접근 불가
  */
-export const adminAbilitySeedData: AbilitySeedData[] = [
+export const manageAbilitySeedData: AbilitySeedData[] = [
 	// 메뉴 access (1depth)
 	{
-		roleName: "ADMIN",
+		roleName: "MANAGE",
 		subject: "menu:dashboard",
 		actionName: "access",
 		inverted: false,
 		description: "대시보드 접근 권한",
 	},
 	{
-		roleName: "ADMIN",
+		roleName: "MANAGE",
 		subject: "menu:users",
 		actionName: "access",
 		inverted: false,
 		description: "사용자 관리 접근 권한",
 	},
 	{
-		roleName: "ADMIN",
+		roleName: "MANAGE",
 		subject: "menu:users:list",
 		actionName: "access",
 		inverted: false,
 		description: "사용자 목록 접근 권한",
 	},
 	{
-		roleName: "ADMIN",
+		roleName: "MANAGE",
 		subject: "menu:users:profiles",
 		actionName: "access",
 		inverted: false,
 		description: "프로필 관리 접근 권한",
 	},
 	{
-		roleName: "ADMIN",
+		roleName: "MANAGE",
 		subject: "menu:users:categories",
 		actionName: "access",
 		inverted: false,
 		description: "사용자 분류 관리 접근 권한",
 	},
 	{
-		roleName: "ADMIN",
+		roleName: "MANAGE",
 		subject: "menu:users:groups",
 		actionName: "access",
 		inverted: false,
 		description: "그룹 관리 접근 권한",
 	},
 	{
-		roleName: "ADMIN",
+		roleName: "MANAGE",
 		subject: "menu:schedules",
 		actionName: "access",
 		inverted: false,
 		description: "일정 관리 접근 권한",
 	},
 	{
-		roleName: "ADMIN",
+		roleName: "MANAGE",
 		subject: "menu:schedules:timelines",
 		actionName: "access",
 		inverted: false,
 		description: "타임라인 접근 권한",
 	},
 	{
-		roleName: "ADMIN",
+		roleName: "MANAGE",
 		subject: "menu:schedules:sessions",
 		actionName: "access",
 		inverted: false,
 		description: "세션 접근 권한",
 	},
 	{
-		roleName: "ADMIN",
+		roleName: "MANAGE",
 		subject: "menu:schedules:programs",
 		actionName: "access",
 		inverted: false,
 		description: "프로그램 접근 권한",
 	},
 	{
-		roleName: "ADMIN",
+		roleName: "MANAGE",
 		subject: "menu:schedules:routines",
 		actionName: "access",
 		inverted: false,
 		description: "루틴 접근 권한",
 	},
 	{
-		roleName: "ADMIN",
+		roleName: "MANAGE",
 		subject: "menu:files",
 		actionName: "access",
 		inverted: false,
 		description: "파일 관리 접근 권한",
 	},
 	{
-		roleName: "ADMIN",
+		roleName: "MANAGE",
 		subject: "menu:files:list",
 		actionName: "access",
 		inverted: false,
 		description: "파일 목록 접근 권한",
 	},
 	{
-		roleName: "ADMIN",
+		roleName: "MANAGE",
 		subject: "menu:files:categories",
 		actionName: "access",
 		inverted: false,
 		description: "파일 분류 관리 접근 권한",
 	},
 	{
-		roleName: "ADMIN",
+		roleName: "MANAGE",
 		subject: "menu:contents",
 		actionName: "access",
 		inverted: false,
 		description: "콘텐츠 관리 접근 권한",
 	},
 	{
-		roleName: "ADMIN",
+		roleName: "MANAGE",
 		subject: "menu:contents:posts",
 		actionName: "access",
 		inverted: false,
 		description: "게시물 접근 권한",
 	},
 	{
-		roleName: "ADMIN",
+		roleName: "MANAGE",
 		subject: "menu:contents:list",
 		actionName: "access",
 		inverted: false,
 		description: "콘텐츠 목록 접근 권한",
 	},
 	{
-		roleName: "ADMIN",
+		roleName: "MANAGE",
 		subject: "menu:wallets",
 		actionName: "access",
 		inverted: false,
 		description: "지갑 관리 접근 권한",
 	},
 	{
-		roleName: "ADMIN",
+		roleName: "MANAGE",
 		subject: "menu:wallets:list",
 		actionName: "access",
 		inverted: false,
 		description: "지갑 목록 접근 권한",
 	},
 	{
-		roleName: "ADMIN",
+		roleName: "MANAGE",
 		subject: "menu:wallets:transactions",
 		actionName: "access",
 		inverted: false,
 		description: "트랜잭션 접근 권한",
 	},
 	{
-		roleName: "ADMIN",
+		roleName: "MANAGE",
 		subject: "menu:settings",
 		actionName: "access",
 		inverted: false,
 		description: "설정 접근 권한",
 	},
 	{
-		roleName: "ADMIN",
+		roleName: "MANAGE",
 		subject: "menu:settings:grounds",
 		actionName: "access",
 		inverted: false,
 		description: "시설 정보 접근 권한",
 	},
 	{
-		roleName: "ADMIN",
+		roleName: "MANAGE",
 		subject: "menu:settings:ui-configs",
 		actionName: "access",
 		inverted: false,
@@ -2166,21 +2166,21 @@ export const adminAbilitySeedData: AbilitySeedData[] = [
 	},
 	// 권한 관리 접근 불가 (inverted=true)
 	{
-		roleName: "ADMIN",
+		roleName: "MANAGE",
 		subject: "menu:settings:admins",
 		actionName: "access",
 		inverted: true,
 		description: "관리자 관리 접근 불가",
 	},
 	{
-		roleName: "ADMIN",
+		roleName: "MANAGE",
 		subject: "menu:settings:abilities",
 		actionName: "access",
 		inverted: true,
 		description: "권한 관리 접근 불가",
 	},
 	{
-		roleName: "ADMIN",
+		roleName: "MANAGE",
 		subject: "menu:settings:system",
 		actionName: "access",
 		inverted: true,
@@ -2188,35 +2188,35 @@ export const adminAbilitySeedData: AbilitySeedData[] = [
 	},
 	// 엔티티 권한
 	{
-		roleName: "ADMIN",
+		roleName: "MANAGE",
 		subject: "entity:User",
 		actionName: "manage",
 		inverted: false,
 		description: "사용자 엔티티 관리 권한",
 	},
 	{
-		roleName: "ADMIN",
+		roleName: "MANAGE",
 		subject: "entity:Reservation",
 		actionName: "manage",
 		inverted: false,
 		description: "예약 엔티티 관리 권한",
 	},
 	{
-		roleName: "ADMIN",
+		roleName: "MANAGE",
 		subject: "entity:Ground",
 		actionName: "read",
 		inverted: false,
 		description: "시설 조회 권한",
 	},
 	{
-		roleName: "ADMIN",
+		roleName: "MANAGE",
 		subject: "entity:Ground",
 		actionName: "update",
 		inverted: false,
 		description: "시설 수정 권한",
 	},
 	{
-		roleName: "ADMIN",
+		roleName: "MANAGE",
 		subject: "entity:Content",
 		actionName: "manage",
 		inverted: false,
@@ -2224,14 +2224,14 @@ export const adminAbilitySeedData: AbilitySeedData[] = [
 	},
 	// 기능 권한
 	{
-		roleName: "ADMIN",
+		roleName: "MANAGE",
 		subject: "feature:export",
 		actionName: "access",
 		inverted: false,
 		description: "내보내기 권한",
 	},
 	{
-		roleName: "ADMIN",
+		roleName: "MANAGE",
 		subject: "feature:send-notification",
 		actionName: "access",
 		inverted: false,
@@ -2239,7 +2239,7 @@ export const adminAbilitySeedData: AbilitySeedData[] = [
 	},
 	// 일괄 삭제 불가 (inverted=true)
 	{
-		roleName: "ADMIN",
+		roleName: "MANAGE",
 		subject: "feature:bulk-delete",
 		actionName: "access",
 		inverted: true,
@@ -2248,14 +2248,14 @@ export const adminAbilitySeedData: AbilitySeedData[] = [
 ];
 
 /**
- * USER 권한 시드 데이터
+ * VIEW 권한 시드 데이터
  * - 자신의 데이터만 read, update 가능 (conditions 사용)
  * - 자신의 예약만 create, read 가능
  */
-export const userAbilitySeedData: AbilitySeedData[] = [
+export const viewAbilitySeedData: AbilitySeedData[] = [
 	// 자신의 User 정보만 조회/수정 가능
 	{
-		roleName: "USER",
+		roleName: "VIEW",
 		subject: "entity:User",
 		actionName: "read",
 		inverted: false,
@@ -2263,7 +2263,7 @@ export const userAbilitySeedData: AbilitySeedData[] = [
 		conditions: { id: "{{ user.id }}" },
 	},
 	{
-		roleName: "USER",
+		roleName: "VIEW",
 		subject: "entity:User",
 		actionName: "update",
 		inverted: false,
@@ -2272,14 +2272,14 @@ export const userAbilitySeedData: AbilitySeedData[] = [
 	},
 	// 자신의 예약만 생성/조회 가능
 	{
-		roleName: "USER",
+		roleName: "VIEW",
 		subject: "entity:Reservation",
 		actionName: "create",
 		inverted: false,
 		description: "예약 생성 권한",
 	},
 	{
-		roleName: "USER",
+		roleName: "VIEW",
 		subject: "entity:Reservation",
 		actionName: "read",
 		inverted: false,
@@ -2287,7 +2287,7 @@ export const userAbilitySeedData: AbilitySeedData[] = [
 		conditions: { userId: "{{ user.id }}" },
 	},
 	{
-		roleName: "USER",
+		roleName: "VIEW",
 		subject: "entity:Reservation",
 		actionName: "update",
 		inverted: false,
@@ -2296,7 +2296,7 @@ export const userAbilitySeedData: AbilitySeedData[] = [
 	},
 	// 시설 정보 조회
 	{
-		roleName: "USER",
+		roleName: "VIEW",
 		subject: "entity:Ground",
 		actionName: "read",
 		inverted: false,
@@ -2304,7 +2304,7 @@ export const userAbilitySeedData: AbilitySeedData[] = [
 	},
 	// 콘텐츠 조회
 	{
-		roleName: "USER",
+		roleName: "VIEW",
 		subject: "entity:Content",
 		actionName: "read",
 		inverted: false,
@@ -2316,9 +2316,9 @@ export const userAbilitySeedData: AbilitySeedData[] = [
  * 모든 Ability 시드 데이터를 하나로 합침
  */
 export const abilitySeedData: AbilitySeedData[] = [
-	...superAdminAbilitySeedData,
-	...adminAbilitySeedData,
-	...userAbilitySeedData,
+	...fullAccessAbilitySeedData,
+	...manageAbilitySeedData,
+	...viewAbilitySeedData,
 ];
 
 // ============================================================================
@@ -2405,32 +2405,32 @@ export const oidcClientSeedData: OidcClientSeedData[] = [
 /**
  * 권한 매핑 요약 (문서화용)
  *
- * SUPER_ADMIN:
+ * FULL_ACCESS:
  * - 모든 Subject에 MANAGE 권한
  * - 제한 없음
  *
- * ADMIN:
+ * MANAGE:
  * - 메뉴: 대시보드, 사용자, 일정, 파일, 콘텐츠, 지갑, 설정(Ground정보, UI설정)
  * - CAN_NOT: 역할관리, 권한관리, 테넌트관리
  * - 엔티티: User MANAGE, Reservation MANAGE, Ground READ/UPDATE, Content MANAGE
  * - 기능: 내보내기, 알림발송 가능 / 일괄삭제 불가
  *
- * USER:
+ * VIEW:
  * - 엔티티: 자신의 User READ/UPDATE, 자신의 Reservation CREATE/READ/UPDATE
  * - 엔티티: Ground READ, Content READ
  * - 메뉴/기능 접근 없음 (일반 사용자는 Admin 패널 미접근)
  */
 export const permissionSummary = {
-	SUPER_ADMIN: {
+	FULL_ACCESS: {
 		description: "시스템 전체 관리자",
 		permissions: "모든 Subject에 MANAGE 권한",
 	},
-	ADMIN: {
+	MANAGE: {
 		description: "지점 관리자",
 		permissions:
 			"사용자/일정/파일/콘텐츠/지갑 관리, Ground정보/UI설정 수정, 역할/권한/테넌트관리 접근불가",
 	},
-	USER: {
+	VIEW: {
 		description: "일반 사용자",
 		permissions: "자신의 정보/예약만 접근, 시설/콘텐츠 조회",
 	},

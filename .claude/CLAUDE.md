@@ -574,7 +574,7 @@ import { CreateAbilityDto, AbilityResponseDto } from "@cocrepo/dto";
 **X-Space-ID 헤더는 모든 인증된 사용자에게 필수입니다.**
 
 ```typescript
-// ❌ 금지 - SUPER_ADMIN도 헤더 없이 요청 불가
+// ❌ 금지 - FULL_ACCESS도 헤더 없이 요청 불가
 fetch('/api/users', { headers: { Authorization: '...' } });
 
 // ✅ 필수 - 모든 요청에 X-Space-ID 포함
@@ -587,7 +587,7 @@ fetch('/api/users', {
 ```
 
 **System Space (SpaceCategory ROOT로 식별):**
-- SUPER_ADMIN 전용 Space로 SpaceClassification을 통해 ROOT Category가 연결됨
+- FULL_ACCESS 전용 Space로 SpaceClassification을 통해 ROOT Category가 연결됨
 - `isRootSpaceCategory(tenant)` 함수로 식별 (`@cocrepo/be-common`)
 - 전체 데이터 접근 권한은 Role 기반으로 Service 레이어에서 확인
 
@@ -597,7 +597,7 @@ import { canAccessAllSpaces, isRootSpaceCategory } from "@cocrepo/be-common";
 
 // Service에서 전체 접근 권한 확인
 if (canAccessAllSpaces(tenant)) {
-  return this.repository.findAll();  // SUPER_ADMIN: 전체 조회
+  return this.repository.findAll();  // FULL_ACCESS: 전체 조회
 }
 return this.repository.findBySpaceId(spaceId);  // 일반: Space 필터링
 ```
