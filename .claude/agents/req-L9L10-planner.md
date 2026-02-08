@@ -344,7 +344,7 @@ tools: Read, Write, Grep, Bash
 |------|------|
 | **Given** | 관리자(ADMIN) 권한으로 로그인되어 있다 |
 |           | 회원이 10명 등록되어 있다 |
-| **When** | GET /api/users?page=1&limit=10 호출 |
+| **When** | GET /api/users?skip=0&take=10 호출 |
 | **Then** | 200 OK 응답 |
 |          | data 배열에 10개의 회원 정보 포함 |
 |          | meta.total === 10 |

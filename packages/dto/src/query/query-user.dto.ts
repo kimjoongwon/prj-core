@@ -1,8 +1,4 @@
-import { EnumFieldOptional } from "@cocrepo/decorator";
-import { SortOrder } from "@cocrepo/enum";
-import { QueryDto } from "./query.dto";
+import type { Prisma } from "@cocrepo/prisma";
+import { PrismaQueryDto } from "./prisma-query.dto";
 
-export class QueryUserDto extends QueryDto {
-	@EnumFieldOptional(() => SortOrder)
-	createdAtSortOrder: SortOrder;
-}
+export class QueryUserDto extends PrismaQueryDto<Prisma.UserWhereInput> {}

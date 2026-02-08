@@ -2,7 +2,7 @@
 
 import { customInstance } from "@cocrepo/api";
 import type { UserDto } from "@cocrepo/dto";
-import { UserStatus } from "@cocrepo/dto";
+import { DeleteFilter } from "@cocrepo/enum";
 
 /**
  * 회원 목록 API 응답 타입
@@ -32,7 +32,7 @@ import { UserSearchWidget, UserTableWidget } from "../../../widgets/user";
  */
 export interface UserListProps {
 	/** 상태 필터 (탭별) */
-	statusFilter?: UserStatus;
+	statusFilter?: DeleteFilter;
 	/** 신규 등록 버튼 클릭 핸들러 */
 	onNewClick?: () => void;
 }

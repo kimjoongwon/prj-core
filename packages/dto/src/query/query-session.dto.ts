@@ -1,11 +1,8 @@
-import { EnumFieldOptional, StringFieldOptional } from "@cocrepo/decorator";
-import { Order } from "../constant";
-import { QueryDto } from "./query.dto";
+import { StringFieldOptional } from "@cocrepo/decorator";
+import type { Prisma } from "@cocrepo/prisma";
+import { PrismaQueryDto } from "./prisma-query.dto";
 
-export class QuerySessionDto extends QueryDto {
+export class QuerySessionDto extends PrismaQueryDto<Prisma.SessionWhereInput> {
 	@StringFieldOptional({ nullable: true, default: null })
-	timelineId: string | null;
-
-	@EnumFieldOptional(() => Order, { default: Order.DESC })
-	startDateTimeSortOrder: Order;
+	timelineId?: string | null;
 }

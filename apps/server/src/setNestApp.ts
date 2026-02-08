@@ -8,6 +8,7 @@ import {
 } from "@cocrepo/be-common";
 import { TranslationService } from "@cocrepo/be-i18n";
 import { TokenStorageService } from "@cocrepo/service";
+import { ClsService } from "nestjs-cls";
 import {
 	ClassSerializerInterceptor,
 	type INestApplication,
@@ -42,7 +43,7 @@ export function setNestApp<T extends INestApplication>(app: T): void {
 	// AuthMiddleware가 request.user를 설정한 후 Guard가 검증
 	// =================================================================
 	app.useGlobalGuards(
-		new JwtAuthGuard(app.get(Reflector), app.get(TokenStorageService)),
+		new JwtAuthGuard(app.get(Reflector), app.get(TokenStorageService), app.get(ClsService)),
 		app.get(SpaceAccessGuard),
 	);
 

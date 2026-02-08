@@ -1,14 +1,11 @@
-import { EnumFieldOptional, UUIDFieldOptional } from "@cocrepo/decorator";
-import { SortOrder } from "@cocrepo/enum";
-import { QueryDto } from "./query.dto";
+import { UUIDFieldOptional } from "@cocrepo/decorator";
+import type { Prisma } from "@cocrepo/prisma";
+import { PrismaQueryDto } from "./prisma-query.dto";
 
-export class QueryRoleAssociationDto extends QueryDto {
+export class QueryRoleAssociationDto extends PrismaQueryDto<Prisma.RoleAssociationWhereInput> {
 	@UUIDFieldOptional()
-	roleId: string;
+	roleId?: string;
 
 	@UUIDFieldOptional()
-	groupId: string;
-
-	@EnumFieldOptional(() => SortOrder)
-	createdAtSortOrder: SortOrder;
+	groupId?: string;
 }

@@ -82,9 +82,9 @@ export class UsersController {
   @Get()
   @ApiOperation({
     operationId: "getUsers",
-    summary: "회원 목록 조회",
+    summary: "사용자 목록 조회",
     description:
-      "현재 Space 내의 회원 목록을 조회합니다. 검색, 필터링, 페이지네이션을 지원하며 통계 정보도 함께 반환합니다.",
+      "현재 Space 내의 사용자 목록을 조회합니다. 검색, 필터링, 페이지네이션을 지원하며 통계 정보도 함께 반환합니다.",
   })
   @ApiAuth()
   @ApiErrors(
@@ -100,31 +100,19 @@ export class UsersController {
   @ResponseMessage("common.user.list.success")
   async getUsers(@Query() query: QueryUsersDto) {
     const { users, totalCount, stats } =
-      await this.usersService.getMembersBySpace({
-        search: query.search,
-        roles: query.roles,
-        status: query.status,
-        categoryId: query.categoryId,
-        groupIds: query.groupIds,
-        createdFrom: query.createdFrom,
-        createdTo: query.createdTo,
-        sortBy: query.sortBy,
-        sortOrder: query.sortOrder,
-        skip: query.getSkip(),
-        take: query.getTake(),
-      });
+      await this.usersService.getUsersBySpace(query);
 
-    const limit = query.limit ?? 20;
-    const page = query.page ?? 1;
+    const skip = query.skip ?? 0;
+    const take = query.take ?? 10;
 
     return wrapResponse(
       users.map((user) => plainToInstance(UserDto, user)),
       {
         meta: plainToInstance(UserPaginationMetaDto, {
           total: totalCount,
-          page,
-          limit,
-          totalPages: Math.ceil(totalCount / limit),
+          skip,
+          take,
+          totalPages: take > 0 ? Math.ceil(totalCount / take) : 1,
         }),
         stats: plainToInstance(UserStatsDto, stats),
       }
@@ -134,14 +122,14 @@ export class UsersController {
   @Get(":id")
   @ApiOperation({
     operationId: "getUserById",
-    summary: "회원 상세 조회",
+    summary: "사용자 상세 조회",
     description:
-      "특정 회원의 상세 정보를 조회합니다. Profile, Tenant, Role, Space 정보를 포함합니다.",
+      "특정 사용자의 상세 정보를 조회합니다. Profile, Tenant, Role, Space 정보를 포함합니다.",
   })
   @ApiAuth()
   @ApiParam({
     name: "id",
-    description: "회원 ID (UUID)",
+    description: "사용자 ID (UUID)",
     type: String,
   })
   @ApiErrors(
@@ -157,7 +145,7 @@ export class UsersController {
   ): Promise<UserDetailResponseDto> {
     const spaceId = this.getSpaceId();
 
-    const user = await this.usersService.getMemberDetailForSpace(id, spaceId);
+    const user = await this.usersService.getUserDetailForSpace(id, spaceId);
 
     return plainToInstance(UserDetailResponseDto, user);
   }
@@ -166,14 +154,14 @@ export class UsersController {
   @HttpCode(HttpStatus.CREATED)
   @ApiOperation({
     operationId: "createUser",
-    summary: "회원 등록",
+    summary: "사용자 등록",
     description:
-      "새로운 회원을 등록합니다. 이메일, 전화번호, 이름은 중복될 수 없습니다.",
+      "새로운 사용자를 등록합니다. 이메일, 전화번호, 이름은 중복될 수 없습니다.",
   })
   @ApiAuth()
   @ApiBody({
     type: CreateUserMemberDto,
-    description: "회원 등록 정보",
+    description: "사용자 등록 정보",
   })
   @ApiErrors(
     { status: 400, message: UsersErrorMessages.EMAIL_ALREADY_EXISTS },
@@ -188,7 +176,7 @@ export class UsersController {
   async createUser(@Body() dto: CreateUserMemberDto): Promise<UserDto> {
     const spaceId = this.getSpaceId();
 
-    const user = await this.usersService.createMemberForSpace({
+    const user = await this.usersService.createUserForSpace({
       name: dto.name,
       email: dto.email,
       phone: dto.phone,
@@ -205,18 +193,18 @@ export class UsersController {
   @Patch(":id")
   @ApiOperation({
     operationId: "updateUser",
-    summary: "회원 수정",
-    description: "회원 정보를 수정합니다. 변경하려는 필드만 전송하면 됩니다.",
+    summary: "사용자 수정",
+    description: "사용자 정보를 수정합니다. 변경하려는 필드만 전송하면 됩니다.",
   })
   @ApiAuth()
   @ApiParam({
     name: "id",
-    description: "회원 ID (UUID)",
+    description: "사용자 ID (UUID)",
     type: String,
   })
   @ApiBody({
     type: UpdateUserMemberDto,
-    description: "회원 수정 정보",
+    description: "사용자 수정 정보",
   })
   @ApiErrors(
     { status: 400, message: UsersErrorMessages.EMAIL_ALREADY_EXISTS },
@@ -235,7 +223,7 @@ export class UsersController {
   ): Promise<UserDto> {
     const spaceId = this.getSpaceId();
 
-    const user = await this.usersService.updateMemberForSpace(id, spaceId, {
+    const user = await this.usersService.updateUserForSpace(id, spaceId, {
       name: dto.name,
       email: dto.email,
       phone: dto.phone,
@@ -250,14 +238,14 @@ export class UsersController {
   @HttpCode(HttpStatus.NO_CONTENT)
   @ApiOperation({
     operationId: "deleteUser",
-    summary: "회원 삭제",
+    summary: "사용자 삭제",
     description:
-      "회원을 삭제합니다 (Soft Delete). 자신의 계정은 삭제할 수 없습니다.",
+      "사용자를 삭제합니다 (Soft Delete). 자신의 계정은 삭제할 수 없습니다.",
   })
   @ApiAuth()
   @ApiParam({
     name: "id",
-    description: "회원 ID (UUID)",
+    description: "사용자 ID (UUID)",
     type: String,
   })
   @ApiErrors(
@@ -272,6 +260,6 @@ export class UsersController {
     const spaceId = this.getSpaceId();
     const currentUser = this.getCurrentUser();
 
-    await this.usersService.deleteMemberForSpace(id, spaceId, currentUser.id);
+    await this.usersService.deleteUserForSpace(id, spaceId, currentUser.id);
   }
 }

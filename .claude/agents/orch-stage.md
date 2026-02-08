@@ -199,7 +199,7 @@ apps/proposal/plans/_core/[core]/YYYY-MM-DD-[feature]/
 | Stage | 이름 | 핵심 목표 | 주요 에이전트 | 산출물 |
 |-------|------|----------|--------------|--------|
 | 1 | 데이터 설계 | 요구사항에서 기획서와 기술 설계서 작성 | planner, technical-designer | `-design.md` |
-| 2 | 스키마 구현 | Prisma 스키마, Entity, DTO 구현 | schema-builder, entity-builder, dto-builder | `-schema.md` |
+| 2 | 스키마 구현 | Prisma 스키마, Entity, DTO 구현 | schema-builder, entity-builder, dto-builder, query-dto-builder | `-schema.md` |
 | 3 | 백엔드 로직 | Repository, Service, Controller 구현 | repository-builder, service-builder, controller-builder | `-backend.md` |
 | 4 | 컴포넌트 구현 | UI, Widget, Feature 컴포넌트 구현 | ui-component-builder, widget-builder, feature-builder | `-components.md` |
 | 5 | 페이지 통합 | 페이지 컴포넌트 구현 및 규칙 검증 | page-builder, /fe-review (Skill) | `-complete.md` |
@@ -238,7 +238,8 @@ apps/proposal/plans/_core/[core]/YYYY-MM-DD-[feature]/
                               ↓ 사용자 승인
 ┌─────────────────────────────────────────────────────────────┐
 │ Stage 2: 스키마 구현 (기능 전체)                              │
-│ schema-builder → entity-builder → dto-builder → seed-maker  │
+│ schema-builder → entity-builder → dto-builder                │
+│ → query-dto-builder → seed-maker                             │
 │ → [사용자 리뷰] ✓                                            │
 │ 산출물: {기능명}-schema.md                                   │
 └─────────────────────────────────────────────────────────────┘
@@ -422,10 +423,17 @@ apps/proposal/plans/_core/[core]/YYYY-MM-DD-[feature]/
    ```
    Task: be-dto-builder
    - 설계서에서 API 정보 추출
-   - Request/Response DTO 생성
+   - Create/Update/Response DTO 생성
    ```
 
-5. **seed-maker** (필요시)
+5. **query-dto-builder**
+   ```
+   Task: be-query-dto-builder
+   - PrismaQueryDto 기반 목록 조회용 Query DTO 생성
+   - 필터/정렬/페이지네이션 + toPrismaWhere/toPrismaOrderBy
+   ```
+
+6. **seed-maker** (필요시)
    ```
    Task: be-seed-maker
    - 시드 데이터 생성
@@ -945,7 +953,8 @@ YYYY-MM-DD HH:mm
 - `be-schema-builder` - Prisma 스키마 생성
 - `be-entity-builder` - Entity 클래스 생성
 - `be-vo-builder` - Value Object 생성
-- `be-dto-builder` - DTO 클래스 생성
+- `be-dto-builder` - Create/Update/Response DTO 생성
+- `be-query-dto-builder` - Query DTO 생성 (PrismaQueryDto 기반)
 - `be-seed-maker` - 시드 데이터 생성
 
 **Stage 3**

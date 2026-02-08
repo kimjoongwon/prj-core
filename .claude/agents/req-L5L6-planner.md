@@ -205,9 +205,9 @@ interface ApiParameter {
     "method": "GET",
     "endpoint": "/api/users",
     "queryParams": [
-      { "name": "page", "type": "number", "description": "페이지 번호" },
-      { "name": "limit", "type": "number", "description": "페이지당 개수" },
-      { "name": "search", "type": "string", "description": "검색어" },
+      { "name": "skip", "type": "number", "description": "건너뛸 항목 수 (offset)" },
+      { "name": "take", "type": "number", "description": "조회할 항목 수" },
+      { "name": "name", "type": "string", "description": "이름 검색" },
       { "name": "status", "type": "string", "description": "상태 필터" }
     ],
     "responseBody": "L7-ENT-001",

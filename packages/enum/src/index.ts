@@ -1,4 +1,5 @@
 export * from "./category-names.enum";
+export * from "./delete-filter.enum";
 export * from "./category-types.enum";
 export * from "./grantee-type.enum";
 export * from "./group-names.enum";

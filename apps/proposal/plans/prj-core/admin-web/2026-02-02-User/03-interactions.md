@@ -102,11 +102,11 @@
     │      - 현재 DESC → 없음
     │
     ├─[2] 쿼리 파라미터 구성
-    │      - sortBy: 정렬 필드
-    │      - sortOrder: 'asc' | 'desc'
+    │      - sort: 정렬 필드 배열 (JSON:API 컨벤션)
+    │      - 부호 없음=ASC, -prefix=DESC (예: name, -createdAt)
     │      - 기존 검색/필터/페이지 유지
     │
-    ├─[3] API 호출: GET /api/users?sortBy=...&sortOrder=...
+    ├─[3] API 호출: GET /api/users?sort=name&sort=-createdAt
     │
     └─[4] 목록 갱신 (정렬 아이콘 상태 업데이트)
 ```
@@ -146,8 +146,7 @@
 | groupIds | string[] | X | - | 그룹 ID 목록 (복수) |
 | createdFrom | date | X | - | 가입일 시작 |
 | createdTo | date | X | - | 가입일 종료 |
-| sortBy | enum | X | createdAt | 정렬 기준 (seq, name, email, createdAt) |
-| sortOrder | enum | X | desc | 정렬 순서 (asc, desc) |
+| sort | string[] | X | -createdAt | 복합 정렬 (JSON:API 컨벤션). 부호 없음=ASC, -prefix=DESC. 허용 필드: createdAt, name, email |
 | page | number | X | 1 | 페이지 번호 |
 | limit | number | X | 20 | 페이지 크기 (1-100) |
 
@@ -215,8 +214,7 @@ const { data, isLoading, isError } = useGetUsers({
   status: "active",
   page: 1,
   limit: 20,
-  sortBy: "createdAt",
-  sortOrder: "desc",
+  sort: ["-createdAt"],
 });
 ```
 

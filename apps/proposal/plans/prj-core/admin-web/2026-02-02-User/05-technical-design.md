@@ -30,10 +30,9 @@ interface UserListQueryParams {
   groupIds?: string[];
   createdFrom?: string;  // ISO8601
   createdTo?: string;    // ISO8601
-  sortBy?: UserSortField;
-  sortOrder?: SortOrder;
-  page?: number;
-  limit?: number;
+  sort?: string[];  // JSON:API 컨벤션: 부호 없음=ASC, -prefix=DESC (예: ["name", "-createdAt"])
+  skip?: number;
+  take?: number;
 }
 
 // URL searchParams → 쿼리 파라미터 변환
@@ -46,10 +45,9 @@ function parseSearchParams(searchParams: URLSearchParams): UserListQueryParams {
     groupIds: searchParams.getAll('groupIds'),
     createdFrom: searchParams.get('createdFrom') || undefined,
     createdTo: searchParams.get('createdTo') || undefined,
-    sortBy: (searchParams.get('sortBy') as UserSortField) || undefined,
-    sortOrder: (searchParams.get('sortOrder') as SortOrder) || undefined,
-    page: searchParams.get('page') ? Number(searchParams.get('page')) : 1,
-    limit: searchParams.get('limit') ? Number(searchParams.get('limit')) : 20,
+    sort: searchParams.getAll('sort').length > 0 ? searchParams.getAll('sort') : undefined,
+    skip: searchParams.get('skip') ? Number(searchParams.get('skip')) : undefined,
+    take: searchParams.get('take') ? Number(searchParams.get('take')) : undefined,
   };
 }
 ```
@@ -99,26 +97,27 @@ function handleFilterChange(newFilters: Partial<UserFilters>) {
 #### USR-L9-LOG-004: 정렬 상태 토글 로직
 
 ```typescript
-function handleSortChange(field: UserSortField) {
-  let newSortBy: UserSortField | undefined = field;
-  let newSortOrder: SortOrder | undefined;
+function handleSortToggle(field: string) {
+  const currentSort = queryParams.sort ?? [];
+  const ascEntry = field;         // "name"
+  const descEntry = `-${field}`;  // "-name"
 
-  if (queryParams.sortBy === field) {
-    if (queryParams.sortOrder === 'asc') {
-      newSortOrder = 'desc';
-    } else if (queryParams.sortOrder === 'desc') {
-      // 정렬 해제
-      newSortBy = undefined;
-      newSortOrder = undefined;
-    }
+  let newSort: string[];
+
+  if (currentSort.includes(ascEntry)) {
+    // ASC → DESC
+    newSort = currentSort.map((s) => (s === ascEntry ? descEntry : s));
+  } else if (currentSort.includes(descEntry)) {
+    // DESC → 정렬 해제
+    newSort = currentSort.filter((s) => s !== descEntry);
   } else {
-    newSortOrder = 'asc';
+    // 없음 → ASC 추가
+    newSort = [...currentSort, ascEntry];
   }
 
   updateSearchParams({
     ...queryParams,
-    sortBy: newSortBy,
-    sortOrder: newSortOrder,
+    sort: newSort.length > 0 ? newSort : undefined,
   });
 }
 ```
@@ -242,10 +241,10 @@ describe('이용자 목록 페이지', () => {
       // When: 이름 컬럼 헤더 클릭
       await userEvent.click(screen.getByText('이름'));
 
-      // Then: 오름차순 정렬 API 호출
+      // Then: 오름차순 정렬 API 호출 (JSON:API 컨벤션)
       await waitFor(() => {
         expect(mockUseGetUsers).toHaveBeenCalledWith(
-          expect.objectContaining({ sortBy: 'name', sortOrder: 'asc' })
+          expect.objectContaining({ sort: expect.arrayContaining(['name']) })
         );
       });
 
@@ -255,7 +254,7 @@ describe('이용자 목록 페이지', () => {
       // Then: 내림차순 정렬 API 호출
       await waitFor(() => {
         expect(mockUseGetUsers).toHaveBeenCalledWith(
-          expect.objectContaining({ sortBy: 'name', sortOrder: 'desc' })
+          expect.objectContaining({ sort: expect.arrayContaining(['-name']) })
         );
       });
     });

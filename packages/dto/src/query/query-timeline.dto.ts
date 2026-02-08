@@ -1,10 +1,10 @@
+import { StringFieldOptional } from "@cocrepo/decorator";
+import type { Prisma } from "@cocrepo/prisma";
 import { Transform } from "class-transformer";
-import { IsOptional } from "class-validator";
-import { QueryDto } from "./query.dto";
+import { PrismaQueryDto } from "./prisma-query.dto";
 
-export class QueryTimelineDto extends QueryDto {
-	// @UUIDFieldOptional({ nullable: true, default: null })
-	@IsOptional()
+export class QueryTimelineDto extends PrismaQueryDto<Prisma.TimelineWhereInput> {
+	@StringFieldOptional({ nullable: true, default: null })
 	@Transform(({ value }) => (value === "null" ? null : value))
-	timelineId: string | null;
+	timelineId?: string | null;
 }

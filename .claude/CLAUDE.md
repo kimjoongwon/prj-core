@@ -360,15 +360,15 @@ const items = store.items;
 // ✅ 올바른 사용 - Orval 생성 훅 사용
 import { useGetUsers, useLogin } from "@cocrepo/api";
 
-const { data, isLoading } = useGetUsers({ page: 1, limit: 10 });
+const { data, isLoading } = useGetUsers({ skip: 0, take: 10 });
 
 // ❌ 금지 - 직접 axios/fetch 호출
 const response = await axios.get("/api/v1/users");
 
 // ❌ 금지 - useQuery 직접 구성 (Orval 훅이 이미 존재함)
 const { data } = useQuery({
-  queryKey: getGetUsersQueryKey({ page: 1, limit: 10 }),
-  queryFn: () => getUsers({ page: 1, limit: 10 }),
+  queryKey: getGetUsersQueryKey({ skip: 0, take: 10 }),
+  queryFn: () => getUsers({ skip: 0, take: 10 }),
 });
 ```
 
@@ -753,7 +753,7 @@ feat(coin): 멀티시그 지갑 서비스 초기 구현
 
 ```
 Stage 1: 기획 (기능 전체)    → orch-requirement (L0~L10) → [리뷰]
-Stage 2: 스키마 (기능 전체)  → schema → entity → dto → seed → [리뷰]
+Stage 2: 스키마 (기능 전체)  → schema → entity → dto → query-dto → seed → [리뷰]
 Stage 3: 백엔드 (기능 전체)  → repository → service → controller → [리뷰]
 Stage 4: 컴포넌트 (페이지별) → ui → widget → feature → [리뷰] ← page 파라미터 필요
 Stage 5: 페이지 (페이지별)   → fe-page-builder → [리뷰] ← page 파라미터 필요
@@ -884,7 +884,8 @@ Stage 4: 컴포넌트 (페이지별)
 |-------|------|
 | be-schema-builder | Prisma 스키마 생성 및 유형 분류 |
 | be-entity-builder | 도메인 Entity 클래스 생성 |
-| be-dto-builder | Request/Response DTO 클래스 생성 |
+| be-dto-builder | Create/Update/Response DTO 클래스 생성 |
+| be-query-dto-builder | PrismaQueryDto 기반 목록 조회용 Query DTO 생성 |
 | be-vo-builder | Value Object 클래스 생성 |
 | be-repository-builder | Prisma 기반 Repository 레이어 생성 |
 | be-service-builder | NestJS Service 레이어 생성 |

@@ -1,4 +1,5 @@
 export * from "./page-meta.dto";
+export * from "./prisma-query.dto";
 export * from "./query.dto";
 export * from "./query-action.dto";
 export * from "./query-assignment.dto";
@@ -14,7 +15,6 @@ export * from "./query-role.dto";
 export * from "./query-role-association.dto";
 export * from "./query-role-classification.dto";
 export * from "./query-routine.dto";
-export * from "./query-service.dto";
 export * from "./query-session.dto";
 export * from "./query-space.dto";
 export * from "./query-space-association.dto";
@@ -25,4 +25,3 @@ export * from "./query-timeline.dto";
 export * from "./query-user.dto";
 export * from "./query-user-association.dto";
 export * from "./query-user-classification.dto";
-export * from "./query-workspace.dto";

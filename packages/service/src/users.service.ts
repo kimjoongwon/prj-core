@@ -1,4 +1,6 @@
 import { SpaceContext } from "@cocrepo/be-common";
+import type { QueryUsersDto } from "@cocrepo/dto";
+import type { Prisma } from "@cocrepo/prisma";
 import { UsersRepository } from "@cocrepo/repository";
 import type { UserStats } from "@cocrepo/type";
 import { HashedPassword, PlainPassword } from "@cocrepo/vo";
@@ -8,23 +10,24 @@ import {
 	Logger,
 	NotFoundException,
 } from "@nestjs/common";
+import { AuthCacheService } from "./auth-cache.service";
 
 /**
- * 회원 목록 조회 결과
+ * 사용자 목록 조회 결과
  */
-export interface GetMembersResult {
+export interface GetUsersResult {
 	users: Awaited<
-		ReturnType<UsersRepository["findManyBySpaceIdsWithRelations"]>
+		ReturnType<UsersRepository["findManyBySpaceIds"]>
 	>["users"];
 	totalCount: number;
 	stats: UserStats;
 }
 
 /**
- * 회원 관리 서비스 에러 메시지
+ * 사용자 관리 서비스 에러 메시지
  */
 const UserServiceErrorMessages = {
-	USER_NOT_FOUND: "회원을 찾을 수 없습니다",
+	USER_NOT_FOUND: "사용자를 찾을 수 없습니다",
 	EMAIL_ALREADY_EXISTS: "이미 사용 중인 이메일입니다",
 	PHONE_ALREADY_EXISTS: "이미 사용 중인 전화번호입니다",
 	NAME_ALREADY_EXISTS: "이미 사용 중인 이름입니다",
@@ -38,6 +41,7 @@ export class UsersService {
 	constructor(
 		private readonly repository: UsersRepository,
 		private readonly spaceCtx: SpaceContext,
+		private readonly authCacheService: AuthCacheService,
 	) {}
 
 	/**
@@ -55,28 +59,29 @@ export class UsersService {
 	}
 
 	/**
-	 * 접근 가능한 Space 내 회원 목록 조회
+	 * 접근 가능한 Space 내 사용자 목록 조회
 	 * CLS 컨텍스트에서 ACCESSIBLE_SPACE_IDS를 가져와 필터링합니다.
+	 * DTO → Prisma 변환을 Service에서 수행하고 Repository에는 원시값만 전달합니다.
 	 */
-	async getMembersBySpace(params: {
-		search?: string;
-		roles?: string[];
-		status?: "active" | "inactive" | "removed";
-		categoryId?: string;
-		groupIds?: string[];
-		createdFrom?: Date;
-		createdTo?: Date;
-		sortBy?: string;
-		sortOrder?: "asc" | "desc";
-		skip?: number;
-		take?: number;
-	}): Promise<GetMembersResult> {
+	async getUsersBySpace(query: QueryUsersDto): Promise<GetUsersResult> {
 		const spaceIds = this.spaceCtx.spaceIds;
-		this.logger.debug(`접근 가능 Space 내 회원 목록 조회: spaceIds=${spaceIds.length}개`);
+		this.logger.debug(`접근 가능 Space 내 사용자 목록 조회: spaceIds=${spaceIds.length}개`);
 
-		// 회원 목록과 통계를 병렬로 조회
+		const baseWhere: Partial<Prisma.UserWhereInput> = {
+			tenants: { some: { spaceId: { in: spaceIds }, removedAt: null } },
+		};
+
+		const where = query.toPrismaWhere(baseWhere);
+		const orderBy = query.toPrismaOrderBy();
+
 		const [{ users, totalCount }, stats] = await Promise.all([
-			this.repository.findManyBySpaceIdsWithRelations({ ...params, spaceIds }),
+			this.repository.findManyBySpaceIds({
+				where,
+				orderBy,
+				skip: query.skip ?? 0,
+				take: query.take ?? 10,
+				spaceIds,
+			}),
 			this.repository.countStatsBySpaceIds(spaceIds),
 		]);
 
@@ -88,12 +93,12 @@ export class UsersService {
 	}
 
 	/**
-	 * Space 내 회원 상세 조회
-	 * 해당 Space에 접근 권한이 있는 회원만 조회 가능합니다.
+	 * Space 내 사용자 상세 조회
+	 * 해당 Space에 접근 권한이 있는 사용자만 조회 가능합니다.
 	 */
-	async getMemberDetailForSpace(userId: string, spaceId: string) {
+	async getUserDetailForSpace(userId: string, spaceId: string) {
 		this.logger.debug(
-			`Space 내 회원 상세 조회: userId=${userId}, spaceId=${spaceId}`,
+			`Space 내 사용자 상세 조회: userId=${userId}, spaceId=${spaceId}`,
 		);
 
 		const user = await this.repository.findByIdAndSpaceIdWithRelations(
@@ -109,10 +114,10 @@ export class UsersService {
 	}
 
 	/**
-	 * 회원 등록
-	 * 중복 검사 후 회원을 생성합니다.
+	 * 사용자 등록
+	 * 중복 검사 후 사용자를 생성합니다.
 	 */
-	async createMemberForSpace(params: {
+	async createUserForSpace(params: {
 		name: string;
 		email: string;
 		phone: string;
@@ -122,7 +127,7 @@ export class UsersService {
 		categoryId?: string;
 		groupIds?: string[];
 	}) {
-		this.logger.debug(`회원 등록: email=${params.email}`);
+		this.logger.debug(`사용자 등록: email=${params.email}`);
 
 		// 중복 검사
 		await this.validateUniqueness(params.email, params.phone, params.name);
@@ -131,7 +136,7 @@ export class UsersService {
 		const plainPassword = PlainPassword.create(params.password);
 		const hashedPassword = await HashedPassword.fromPlain(plainPassword);
 
-		// 회원 생성 - Prisma.UserCreateInput 형태로 전달
+		// 사용자 생성 - Prisma.UserCreateInput 형태로 전달
 		const user = await this.repository.createWithRelations({
 			name: params.name,
 			email: params.email,
@@ -170,10 +175,10 @@ export class UsersService {
 	}
 
 	/**
-	 * 회원 수정
-	 * Space 권한 검증 후 회원 정보를 수정합니다.
+	 * 사용자 수정
+	 * Space 권한 검증 후 사용자 정보를 수정합니다.
 	 */
-	async updateMemberForSpace(
+	async updateUserForSpace(
 		userId: string,
 		spaceId: string,
 		params: {
@@ -184,9 +189,9 @@ export class UsersService {
 			groupIds?: string[];
 		},
 	) {
-		this.logger.debug(`회원 수정: userId=${userId}, spaceId=${spaceId}`);
+		this.logger.debug(`사용자 수정: userId=${userId}, spaceId=${spaceId}`);
 
-		// 회원 존재 및 Space 접근 권한 확인
+		// 사용자 존재 및 Space 접근 권한 확인
 		const existingUser = await this.repository.findByIdAndSpaceIdWithRelations(
 			userId,
 			spaceId,
@@ -224,7 +229,7 @@ export class UsersService {
 			}
 		}
 
-		// 회원 수정
+		// 사용자 수정
 		const updatedUser = await this.repository.updateByIdWithRelations(
 			userId,
 			{
@@ -238,19 +243,20 @@ export class UsersService {
 			},
 		);
 
+		await this.authCacheService.invalidate(userId);
 		return updatedUser;
 	}
 
 	/**
-	 * 회원 삭제 (Soft Delete)
-	 * Space 권한 검증 후 회원을 삭제합니다.
+	 * 사용자 삭제 (Soft Delete)
+	 * Space 권한 검증 후 사용자를 삭제합니다.
 	 */
-	async deleteMemberForSpace(
+	async deleteUserForSpace(
 		userId: string,
 		spaceId: string,
 		currentUserId: string,
 	) {
-		this.logger.debug(`회원 삭제: userId=${userId}, spaceId=${spaceId}`);
+		this.logger.debug(`사용자 삭제: userId=${userId}, spaceId=${spaceId}`);
 
 		// 자기 자신 삭제 방지
 		if (userId === currentUserId) {
@@ -259,7 +265,7 @@ export class UsersService {
 			);
 		}
 
-		// 회원 존재 및 Space 접근 권한 확인
+		// 사용자 존재 및 Space 접근 권한 확인
 		const existingUser = await this.repository.findByIdAndSpaceIdWithRelations(
 			userId,
 			spaceId,
@@ -269,8 +275,9 @@ export class UsersService {
 			throw new NotFoundException(UserServiceErrorMessages.USER_NOT_FOUND);
 		}
 
-		// 회원 삭제 (Soft Delete)
+		// 사용자 삭제 (Soft Delete)
 		await this.repository.removeById(userId);
+		await this.authCacheService.invalidate(userId);
 	}
 
 	/**

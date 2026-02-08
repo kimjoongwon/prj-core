@@ -14,8 +14,9 @@ Request/Response DTO 클래스를 생성하는 전문가입니다.
 
 | 상황 | 사용 여부 | 설명 |
 |------|----------|------|
-| API 요청/응답 DTO 생성 | ✅ 사용 | Create, Update, Query, Response DTO |
+| API 요청/응답 DTO 생성 | ✅ 사용 | Create, Update, Response DTO |
 | 유효성 검사 데코레이터 적용 | ✅ 사용 | @cocrepo/decorator 사용 |
+| **Query DTO 생성** | ❌ 미사용 | **query-dto-builder 사용** |
 | Entity 클래스 생성 | ❌ 미사용 | entity-builder 사용 |
 | Controller 생성 | ❌ 미사용 | controller-builder 사용 |
 
@@ -95,6 +96,16 @@ export class UserListResponseDto {
 }
 ```
 
+### Query DTO → query-dto-builder 위임
+
+**Query DTO(목록 조회용)는 `be-query-dto-builder` 에이전트가 전담합니다.**
+
+- PrismaQueryDto 상속, 자동 매핑, toPrismaWhere/toPrismaOrderBy
+- DeleteFilter enum, JSON:API sort 컨벤션
+- 릴레이션 필터, 커스텀 매핑 패턴
+
+Query DTO가 필요하면 `be-query-dto-builder`를 호출하세요.
+
 ---
 
 ## 프로세스
@@ -105,7 +116,7 @@ export class UserListResponseDto {
 |------|------|------|
 | Create | `packages/dto/src/create/` | 생성 요청 |
 | Update | `packages/dto/src/update/` | 수정 요청 |
-| Query | `packages/dto/src/query/` | 조회 파라미터 |
+| Query | → **query-dto-builder 위임** | 조회 파라미터 |
 | Response | `packages/dto/src/{domain}/` | 응답 데이터 |
 | 도메인별 | `packages/dto/src/{domain}/` | 특정 도메인 전용 |
 
@@ -201,99 +212,6 @@ export class Update{Entity}Dto {
 }
 ```
 
-### Query DTO (목록 조회)
-
-```typescript
-import {
-  StringFieldOptional,
-  NumberFieldOptional,
-  DateFieldOptional,
-  EnumFieldOptional,
-} from "@cocrepo/decorator";
-import { SortOrder } from "@cocrepo/enum";
-import { Transform } from "class-transformer";
-import { QueryDto } from "./query.dto";
-
-/**
- * 정렬 가능 필드
- */
-export enum {Entity}SortField {
-  CREATED_AT = "createdAt",
-  NAME = "name",
-  SEQ = "seq",
-}
-
-/**
- * {Entity} 목록 조회용 Query DTO
- */
-export class Query{Entity}sDto extends QueryDto {
-  @StringFieldOptional({
-    description: "검색어 (이름, 이메일 등)",
-  })
-  search?: string;
-
-  @StringFieldOptional({
-    each: true,
-    description: "역할 필터 (복수 선택 가능)",
-  })
-  @Transform(({ value }) => (Array.isArray(value) ? value : [value]))
-  roles?: string[];
-
-  @DateFieldOptional({
-    description: "시작일 (ISO8601)",
-  })
-  createdFrom?: Date;
-
-  @DateFieldOptional({
-    description: "종료일 (ISO8601)",
-  })
-  createdTo?: Date;
-
-  @EnumFieldOptional(() => {Entity}SortField, {
-    description: "정렬 기준 필드",
-  })
-  sortBy?: {Entity}SortField;
-
-  @EnumFieldOptional(() => SortOrder, {
-    description: "정렬 순서 (asc, desc)",
-  })
-  sortOrder?: SortOrder;
-
-  @NumberFieldOptional({
-    minimum: 1,
-    default: 1,
-    int: true,
-    description: "페이지 번호",
-  })
-  page?: number = 1;
-
-  @NumberFieldOptional({
-    minimum: 1,
-    maximum: 100,
-    default: 20,
-    int: true,
-    description: "페이지 크기",
-  })
-  limit?: number = 20;
-
-  /**
-   * skip 값을 계산합니다 (페이지네이션용)
-   */
-  getSkip(): number {
-    const page = this.page ?? 1;
-    const limit = this.limit ?? 20;
-    return (page - 1) * limit;
-  }
-
-  /**
-   * take 값을 반환합니다 (페이지네이션용)
-   */
-  getTake(): number {
-    return this.limit ?? 20;
-  }
-}
-```
-
 ### Response DTO (목록)
 
 ```typescript
@@ -307,11 +225,11 @@ export class {Entity}PaginationMetaDto {
   @NumberField({ description: "전체 개수" })
   total: number;
 
-  @NumberField({ description: "현재 페이지 번호" })
-  page: number;
+  @NumberField({ description: "건너뛴 항목 수 (offset)" })
+  skip: number;
 
-  @NumberField({ description: "페이지 크기" })
-  limit: number;
+  @NumberField({ description: "조회 항목 수" })
+  take: number;
 
   @NumberField({ description: "전체 페이지 수" })
   totalPages: number;
@@ -400,11 +318,11 @@ export class {Entity}DetailResponseDto {
 - [ ] 적절한 @cocrepo/decorator 필드 데코레이터 사용
 - [ ] 모든 필드에 description 옵션 추가
 - [ ] Request DTO에 toEntity() 메서드 구현 (필요시)
-- [ ] Query DTO는 QueryDto 상속
 - [ ] Response DTO는 ClassField로 중첩 객체 표현
 - [ ] Optional 필드는 `?` 표시 및 Optional 데코레이터 사용
 - [ ] 배열 필드는 Transform 데코레이터 추가
 - [ ] index.ts에 export 추가
+- [ ] Query DTO가 필요하면 `be-query-dto-builder` 에이전트에 위임
 
 ---
 
@@ -414,6 +332,7 @@ export class {Entity}DetailResponseDto {
 |------|---------|------|
 | **선행** | entity-builder | Entity 클래스 생성 |
 | | schema-builder | Prisma 스키마 생성 |
+| **동료** | query-dto-builder | Query DTO 전담 (목록 조회) |
 | **후행** | controller-builder | Controller 레이어 생성 |
 | **관련** | service-builder | Service 레이어 (DTO 사용 안 함) |
 
@@ -469,12 +388,12 @@ packages/dto/src/
 │   └── create-{entity}.dto.ts
 ├── update/                    # 수정 DTO
 │   └── update-{entity}.dto.ts
-├── query/                     # 조회 DTO
+├── query/                     # 조회 DTO (→ query-dto-builder 전담)
 │   └── query-{entity}.dto.ts
 ├── {domain}/                  # 도메인별 DTO
 │   ├── {domain}-list-response.dto.ts
 │   ├── {domain}-detail-response.dto.ts
-│   └── query-{domain}s.dto.ts
+│   └── query-{domain}s.dto.ts  # (→ query-dto-builder 전담)
 └── index.ts
 ```
 
@@ -508,5 +427,5 @@ export * from "./query-{domain}s.dto";
 
 - 필드 데코레이터: `packages/decorator/src/field/`
 - 기본 DTO: `packages/dto/src/abstract.dto.ts`
-- Query 기본: `packages/dto/src/query/query.dto.ts`
 - Entity: `packages/entity/src/`
+- Query DTO 관련: `be-query-dto-builder` 에이전트 참조

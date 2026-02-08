@@ -1,3 +1,4 @@
+import { CONTEXT_KEYS } from "@cocrepo/constant";
 import { PUBLIC_ROUTE_KEY } from "@cocrepo/decorator";
 import { TokenStorageService } from "@cocrepo/service";
 import {
@@ -8,13 +9,14 @@ import {
 	UnauthorizedException,
 } from "@nestjs/common";
 import { Reflector } from "@nestjs/core";
+import { ClsService } from "nestjs-cls";
 
 /**
  * JWT 인증 Guard (Passport 의존 제거)
  *
  * AuthMiddleware가 먼저 실행되어 request.user를 설정한 상태에서 동작
  * - request.user 존재 여부 확인
- * - Access Token 블랙리스트 확인
+ * - Access Token 블랙리스트 확인 (Bearer/Cookie 모두)
  */
 @Injectable()
 export class JwtAuthGuard implements CanActivate {
@@ -23,6 +25,7 @@ export class JwtAuthGuard implements CanActivate {
 	constructor(
 		private reflector: Reflector,
 		private tokenStorageService: TokenStorageService,
+		private cls: ClsService,
 	) {}
 
 	async canActivate(context: ExecutionContext): Promise<boolean> {
@@ -37,8 +40,10 @@ export class JwtAuthGuard implements CanActivate {
 
 		const request = context.switchToHttp().getRequest();
 
-		// Access Token 블랙리스트 확인
-		const accessToken = request.cookies?.accessToken;
+		// Access Token 블랙리스트 확인 (JwtStrategy extractor가 CLS에 저장한 토큰)
+		const accessToken = this.cls.get<string | undefined>(
+			CONTEXT_KEYS.TOKEN,
+		);
 		if (accessToken) {
 			const isBlacklisted =
 				await this.tokenStorageService.isBlacklisted(accessToken);

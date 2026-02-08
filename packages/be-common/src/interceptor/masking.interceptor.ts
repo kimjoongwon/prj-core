@@ -1,4 +1,5 @@
-import { MaskingService, MASKING_PRESETS } from "@cocrepo/service";
+import { MASKING_PRESETS } from "@cocrepo/constant";
+import { MaskingService } from "@cocrepo/service";
 import type { ActionConfig } from "@cocrepo/type";
 import {
 	type CallHandler,

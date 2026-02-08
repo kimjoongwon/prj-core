@@ -1,5 +1,6 @@
 import { CONTEXT_KEYS } from "@cocrepo/constant";
-import { UsersService } from "@cocrepo/service";
+import { User } from "@cocrepo/entity";
+import { AuthCacheService, UsersService } from "@cocrepo/service";
 import {
 	Global,
 	Injectable,
@@ -8,6 +9,7 @@ import {
 } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
 import { PassportStrategy } from "@nestjs/passport";
+import { plainToInstance } from "class-transformer";
 import { Request } from "express";
 import jwksRsa from "jwks-rsa";
 import { ClsService } from "nestjs-cls";
@@ -29,6 +31,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
 		readonly config: ConfigService,
 		readonly usersService: UsersService,
 		private readonly cls: ClsService,
+		private readonly authCacheService: AuthCacheService,
 	) {
 		const oidcConfig = config.get<OidcServerConfig>("oidc");
 
@@ -76,14 +79,32 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
 	}
 
 	async validate(payload: { sub: string; iat: number; exp: number }) {
-		this.logger.debug(`JWT 검증 - sub: ${payload.sub}`);
+		const userId = payload.sub;
 
-		const user = await this.usersService.getByIdWithTenants(payload.sub);
+		// 1. Redis 캐시 조회 (실패 시 null → DB fallback)
+		const cached = await this.authCacheService.get(userId);
+		if (cached) {
+			this.logger.debug(`JWT 검증 - 캐시 히트: ${userId}`);
+			return plainToInstance(User, JSON.parse(cached));
+		}
+
+		// 2. 캐시 미스 → DB 조회
+		this.logger.debug(`JWT 검증 - DB 조회: ${userId}`);
+		const user = await this.usersService.getByIdWithTenants(userId);
 
 		if (!user) {
-			this.logger.warn(`사용자를 찾을 수 없음: ${payload.sub}`);
+			this.logger.warn(`사용자를 찾을 수 없음: ${userId}`);
 			throw new UnauthorizedException("사용자를 찾을 수 없습니다");
 		}
+
+		// 3. Redis 캐시 저장 (실패해도 인증은 성공)
+		const nowSeconds = Math.floor(Date.now() / 1000);
+		const remainingSeconds = payload.exp - nowSeconds;
+		await this.authCacheService.set(
+			userId,
+			JSON.stringify(user),
+			remainingSeconds,
+		);
 
 		return user;
 	}

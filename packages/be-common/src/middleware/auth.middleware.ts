@@ -1,6 +1,6 @@
-import { Injectable, type NestMiddleware } from "@nestjs/common";
+import { Injectable, Logger, type NestMiddleware } from "@nestjs/common";
 import type { NextFunction, Request, Response } from "express";
-import * as passport from "passport";
+import passport from "passport";
 
 /**
  * JWT 인증을 Middleware에서 수행하여 Guard 이전에 request.user를 설정
@@ -10,11 +10,16 @@ import * as passport from "passport";
  */
 @Injectable()
 export class AuthMiddleware implements NestMiddleware {
+	private readonly logger = new Logger(AuthMiddleware.name);
+
 	use(req: Request, res: Response, next: NextFunction) {
 		passport.authenticate(
 			"jwt",
 			{ session: false },
-			(err: any, user: any) => {
+			(err: Error | null, user: Express.User | false | null) => {
+				if (err) {
+					this.logger.debug(`JWT 인증 에러: ${err.message}`);
+				}
 				if (user) {
 					req.user = user;
 				}

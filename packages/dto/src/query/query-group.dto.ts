@@ -1,14 +1,11 @@
-import { EnumFieldOptional, StringFieldOptional } from "@cocrepo/decorator";
-import { Order } from "../constant";
-import { QueryDto } from "./query.dto";
+import { StringFieldOptional } from "@cocrepo/decorator";
+import type { Prisma } from "@cocrepo/prisma";
+import { PrismaQueryDto } from "./prisma-query.dto";
 
-export class QueryGroupDto extends QueryDto {
+export class QueryGroupDto extends PrismaQueryDto<Prisma.GroupWhereInput> {
 	@StringFieldOptional()
-	name: string;
+	name?: string;
 
 	@StringFieldOptional()
-	serviceId: string;
-
-	@EnumFieldOptional(() => Order, { default: Order.ASC })
-	orderByCreatedAt: Order;
+	serviceId?: string;
 }
