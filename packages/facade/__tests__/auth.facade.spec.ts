@@ -21,16 +21,6 @@ describe("AuthFacade", () => {
 	let mockAuthCacheService: jest.Mocked<AuthCacheService>;
 	let mockClsService: jest.Mocked<ClsService>;
 
-	const mockUser = {
-		id: "user-test-id",
-		email: "test@example.com",
-		name: "Test User",
-		phone: "010-1234-5678",
-		password: "$2b$10$hashedPassword",
-		tenants: [],
-		profiles: [],
-	};
-
 	beforeEach(async () => {
 		mockUsersService = {
 			getByIdWithTenants: jest.fn(),
@@ -101,147 +91,50 @@ describe("AuthFacade", () => {
 		expect(facade).toBeDefined();
 	});
 
-	describe("getCurrentUser", () => {
-		it("액세스 토큰으로 현재 사용자를 조회해야 한다", async () => {
-			// Given
-			const accessToken = "valid-access-token";
-			mockJwtService.verify.mockReturnValue({ userId: "user-test-id" });
-			mockUsersService.getByIdWithTenants.mockResolvedValue(mockUser as any);
-
+	describe("getAuthorizationUrl", () => {
+		it("PKCE code_challenge와 state를 포함한 URL을 생성해야 한다", async () => {
 			// When
-			const result = await facade.getCurrentUser(accessToken);
+			const url = await facade.getAuthorizationUrl();
 
 			// Then
-			expect(mockJwtService.verify).toHaveBeenCalledWith(accessToken);
-			expect(mockUsersService.getByIdWithTenants).toHaveBeenCalledWith(
-				"user-test-id",
-			);
-			expect(result).toEqual(mockUser);
-		});
-
-		it("유효하지 않은 토큰이면 에러를 던져야 한다", async () => {
-			// Given
-			const accessToken = "invalid-token";
-			mockJwtService.verify.mockImplementation(() => {
-				throw new Error("Invalid token");
-			});
-
-			// When & Then
-			await expect(facade.getCurrentUser(accessToken)).rejects.toThrow(
-				"Invalid token",
+			expect(url).toContain("/oidc/auth?");
+			expect(url).toContain("response_type=code");
+			expect(url).toContain("code_challenge=");
+			expect(url).toContain("code_challenge_method=S256");
+			expect(url).toContain("state=");
+			expect(mockTokenStorageService.saveOidcState).toHaveBeenCalledWith(
+				expect.any(String),
+				expect.any(String),
 			);
 		});
 	});
 
-	describe("getNewToken", () => {
-		it("리프레시 토큰으로 새로운 토큰을 생성해야 한다", async () => {
+	describe("verifyToken", () => {
+		it("유효한 토큰의 만료 시간을 반환해야 한다", () => {
 			// Given
-			const refreshToken = "valid-refresh-token";
-			const mockTokenPair = {
-				accessToken: { value: "new-access-token" },
-				refreshToken: { value: "new-refresh-token" },
-			};
-			const mockTokenExpiryInfo = {
-				accessTokenExpiresAt: new Date("2024-01-01T01:00:00Z"),
-				refreshTokenExpiresAt: new Date("2024-01-08T00:00:00Z"),
-			};
-
-			mockJwtService.verify.mockReturnValue({ userId: "user-test-id" });
-			mockTokenService.validateRefreshTokenFromStorage.mockResolvedValue(true);
-			mockTokenService.generateTokensWithStorage.mockResolvedValue(
-				mockTokenPair as any,
-			);
-			mockTokenService.calculateTokenExpiryTimes.mockReturnValue(
-				mockTokenExpiryInfo as any,
-			);
+			const exp = Math.floor(Date.now() / 1000) + 3600;
+			const fakeToken = `header.${Buffer.from(JSON.stringify({ sub: "user-1", exp })).toString("base64url")}.signature`;
+			mockClsService.get.mockReturnValue(fakeToken);
 
 			// When
-			const result = await facade.getNewToken(refreshToken);
+			const result = facade.verifyToken();
 
 			// Then
-			expect(mockJwtService.verify).toHaveBeenCalledWith(refreshToken);
-			expect(
-				mockTokenService.validateRefreshTokenFromStorage,
-			).toHaveBeenCalledWith("user-test-id", refreshToken);
-			expect(result).toEqual({
-				newAccessToken: "new-access-token",
-				newRefreshToken: "new-refresh-token",
-				tokenExpiryInfo: mockTokenExpiryInfo,
-			});
-		});
-
-		it("유효하지 않은 리프레시 토큰이면 UnauthorizedException을 던져야 한다", async () => {
-			// Given
-			const refreshToken = "invalid-refresh-token";
-			mockJwtService.verify.mockReturnValue({ userId: "user-test-id" });
-			mockTokenService.validateRefreshTokenFromStorage.mockResolvedValue(false);
-
-			// When & Then
-			await expect(facade.getNewToken(refreshToken)).rejects.toThrow(
-				"유효하지 않은 리프레시 토큰입니다.",
-			);
+			expect(result.valid).toBe(true);
+			expect(result.accessTokenExpiresAt).toBe(exp * 1000);
 		});
 	});
 
-	describe("logout", () => {
-		it("토큰을 무효화해야 한다", async () => {
+	describe("getMySpaces", () => {
+		it("사용자가 없으면 빈 배열을 반환해야 한다", async () => {
 			// Given
-			const userId = "user-test-id";
-			const accessToken = "access-token";
-			mockTokenService.invalidateTokens.mockResolvedValue(undefined);
+			mockClsService.get.mockReturnValue(undefined);
 
 			// When
-			await facade.logout(userId, accessToken);
+			const result = await facade.getMySpaces();
 
 			// Then
-			expect(mockTokenService.invalidateTokens).toHaveBeenCalledWith(
-				userId,
-				accessToken,
-			);
-		});
-
-		it("액세스 토큰 없이 로그아웃해야 한다", async () => {
-			// Given
-			const userId = "user-test-id";
-			mockTokenService.invalidateTokens.mockResolvedValue(undefined);
-
-			// When
-			await facade.logout(userId);
-
-			// Then
-			expect(mockTokenService.invalidateTokens).toHaveBeenCalledWith(
-				userId,
-				undefined,
-			);
-		});
-	});
-
-	describe("isTokenBlacklisted", () => {
-		it("블랙리스트된 토큰은 true를 반환해야 한다", async () => {
-			// Given
-			const accessToken = "blacklisted-token";
-			mockTokenService.isTokenBlacklisted.mockResolvedValue(true);
-
-			// When
-			const result = await facade.isTokenBlacklisted(accessToken);
-
-			// Then
-			expect(mockTokenService.isTokenBlacklisted).toHaveBeenCalledWith(
-				accessToken,
-			);
-			expect(result).toBe(true);
-		});
-
-		it("블랙리스트에 없는 토큰은 false를 반환해야 한다", async () => {
-			// Given
-			const accessToken = "valid-token";
-			mockTokenService.isTokenBlacklisted.mockResolvedValue(false);
-
-			// When
-			const result = await facade.isTokenBlacklisted(accessToken);
-
-			// Then
-			expect(result).toBe(false);
+			expect(result).toEqual([]);
 		});
 	});
 });
