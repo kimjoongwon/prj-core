@@ -1,4 +1,4 @@
-import type { LanguageCode } from "@cocrepo/constant";
+import { TRANSLATION_ERRORS, type LanguageCode } from "@cocrepo/constant";
 import {
 	CreateTranslationDto,
 	GetTranslationsDto,
@@ -16,14 +16,6 @@ import {
 import { Transactional } from "@nestjs-cls/transactional";
 import { RedisService } from "./redis.service";
 
-/**
- * Translation 서비스 에러 메시지
- */
-const TranslationServiceErrorMessages = {
-	TRANSLATION_NOT_FOUND: "번역을 찾을 수 없습니다",
-	DUPLICATE_KEY: "이미 존재하는 번역 키입니다",
-	INVALID_TRANSLATION_DATA: "유효하지 않은 번역 데이터입니다",
-} as const;
 
 /**
  * Translation 서비스 (Admin용)
@@ -92,7 +84,7 @@ export class TranslationsService {
 
 		if (!translation) {
 			throw new NotFoundException(
-				TranslationServiceErrorMessages.TRANSLATION_NOT_FOUND,
+				TRANSLATION_ERRORS.NOT_FOUND,
 			);
 		}
 
@@ -134,7 +126,7 @@ export class TranslationsService {
 
 		if (existing) {
 			throw new BadRequestException(
-				TranslationServiceErrorMessages.DUPLICATE_KEY,
+				TRANSLATION_ERRORS.DUPLICATE_KEY,
 			);
 		}
 
@@ -173,7 +165,7 @@ export class TranslationsService {
 
 		if (!existing) {
 			throw new NotFoundException(
-				TranslationServiceErrorMessages.TRANSLATION_NOT_FOUND,
+				TRANSLATION_ERRORS.NOT_FOUND,
 			);
 		}
 
@@ -209,7 +201,7 @@ export class TranslationsService {
 
 		if (!existing) {
 			throw new NotFoundException(
-				TranslationServiceErrorMessages.TRANSLATION_NOT_FOUND,
+				TRANSLATION_ERRORS.NOT_FOUND,
 			);
 		}
 

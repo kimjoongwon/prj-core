@@ -1,14 +1,9 @@
+import { ACTION_ERRORS } from "@cocrepo/constant";
 import { Action } from "@cocrepo/entity";
 import type { Prisma } from "@cocrepo/prisma";
 import { ActionsRepository } from "@cocrepo/repository";
 import { Injectable, Logger, NotFoundException } from "@nestjs/common";
 
-/**
- * Action 서비스 에러 메시지
- */
-const ActionServiceErrorMessages = {
-	ACTION_NOT_FOUND: "Action을 찾을 수 없습니다",
-} as const;
 
 /**
  * Action 서비스
@@ -76,7 +71,7 @@ export class ActionsService {
 
 		const action = await this.repository.findById(id);
 		if (!action) {
-			throw new NotFoundException(ActionServiceErrorMessages.ACTION_NOT_FOUND);
+			throw new NotFoundException(ACTION_ERRORS.NOT_FOUND);
 		}
 
 		return action;
@@ -94,7 +89,7 @@ export class ActionsService {
 
 		const action = await this.repository.findByName(name);
 		if (!action) {
-			throw new NotFoundException(ActionServiceErrorMessages.ACTION_NOT_FOUND);
+			throw new NotFoundException(ACTION_ERRORS.NOT_FOUND);
 		}
 
 		return action;

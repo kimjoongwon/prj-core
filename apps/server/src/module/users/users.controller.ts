@@ -1,5 +1,5 @@
 import { wrapResponse } from "@cocrepo/be-common";
-import { CONTEXT_KEYS } from "@cocrepo/constant";
+import { CONTEXT_KEYS, USER_ERRORS } from "@cocrepo/constant";
 import {
   ApiAuth,
   ApiErrors,
@@ -35,18 +35,6 @@ import { ApiBody, ApiOperation, ApiParam, ApiTags } from "@nestjs/swagger";
 import { plainToInstance } from "class-transformer";
 import { ClsService } from "nestjs-cls";
 
-/**
- * Users 에러 메시지 상수
- */
-const UsersErrorMessages = {
-  USER_NOT_FOUND: "사용자를 찾을 수 없습니다",
-  SPACE_NOT_SELECTED:
-    "Space가 선택되지 않았습니다. X-Space-ID 헤더를 확인해주세요.",
-  EMAIL_ALREADY_EXISTS: "이미 사용 중인 이메일입니다",
-  PHONE_ALREADY_EXISTS: "이미 사용 중인 전화번호입니다",
-  NAME_ALREADY_EXISTS: "이미 사용 중인 이름입니다",
-  CANNOT_DELETE_SELF: "자신의 계정은 삭제할 수 없습니다",
-} as const;
 
 @ApiTags("USERS")
 @Controller()
@@ -63,7 +51,7 @@ export class UsersController {
   private getSpaceId(): string {
     const spaceId = this.cls.get<string>(CONTEXT_KEYS.SPACE_ID);
     if (!spaceId) {
-      throw new UnauthorizedException(UsersErrorMessages.SPACE_NOT_SELECTED);
+      throw new UnauthorizedException(USER_ERRORS.SPACE_NOT_SELECTED);
     }
     return spaceId;
   }
@@ -74,7 +62,7 @@ export class UsersController {
   private getCurrentUser(): User {
     const user = this.cls.get<User>(CONTEXT_KEYS.AUTH_USER);
     if (!user?.id) {
-      throw new UnauthorizedException(UsersErrorMessages.USER_NOT_FOUND);
+      throw new UnauthorizedException(USER_ERRORS.USER_NOT_FOUND);
     }
     return user;
   }
@@ -88,8 +76,8 @@ export class UsersController {
   })
   @ApiAuth()
   @ApiErrors(
-    { status: 401, message: UsersErrorMessages.USER_NOT_FOUND },
-    { status: 401, message: UsersErrorMessages.SPACE_NOT_SELECTED },
+    { status: 401, message: USER_ERRORS.USER_NOT_FOUND },
+    { status: 401, message: USER_ERRORS.SPACE_NOT_SELECTED },
     500
   )
   @ApiResponseEntity(UserDto, HttpStatus.OK, {
@@ -133,9 +121,9 @@ export class UsersController {
     type: String,
   })
   @ApiErrors(
-    { status: 401, message: UsersErrorMessages.USER_NOT_FOUND },
-    { status: 401, message: UsersErrorMessages.SPACE_NOT_SELECTED },
-    { status: 404, message: UsersErrorMessages.USER_NOT_FOUND },
+    { status: 401, message: USER_ERRORS.USER_NOT_FOUND },
+    { status: 401, message: USER_ERRORS.SPACE_NOT_SELECTED },
+    { status: 404, message: USER_ERRORS.USER_NOT_FOUND },
     500
   )
   @ApiResponseEntity(UserDetailResponseDto, HttpStatus.OK)
@@ -164,11 +152,11 @@ export class UsersController {
     description: "사용자 등록 정보",
   })
   @ApiErrors(
-    { status: 400, message: UsersErrorMessages.EMAIL_ALREADY_EXISTS },
-    { status: 400, message: UsersErrorMessages.PHONE_ALREADY_EXISTS },
-    { status: 400, message: UsersErrorMessages.NAME_ALREADY_EXISTS },
-    { status: 401, message: UsersErrorMessages.USER_NOT_FOUND },
-    { status: 401, message: UsersErrorMessages.SPACE_NOT_SELECTED },
+    { status: 400, message: USER_ERRORS.EMAIL_ALREADY_EXISTS },
+    { status: 400, message: USER_ERRORS.PHONE_ALREADY_EXISTS },
+    { status: 400, message: USER_ERRORS.NAME_ALREADY_EXISTS },
+    { status: 401, message: USER_ERRORS.USER_NOT_FOUND },
+    { status: 401, message: USER_ERRORS.SPACE_NOT_SELECTED },
     500
   )
   @ApiResponseEntity(UserDto, HttpStatus.CREATED)
@@ -207,12 +195,12 @@ export class UsersController {
     description: "사용자 수정 정보",
   })
   @ApiErrors(
-    { status: 400, message: UsersErrorMessages.EMAIL_ALREADY_EXISTS },
-    { status: 400, message: UsersErrorMessages.PHONE_ALREADY_EXISTS },
-    { status: 400, message: UsersErrorMessages.NAME_ALREADY_EXISTS },
-    { status: 401, message: UsersErrorMessages.USER_NOT_FOUND },
-    { status: 401, message: UsersErrorMessages.SPACE_NOT_SELECTED },
-    { status: 404, message: UsersErrorMessages.USER_NOT_FOUND },
+    { status: 400, message: USER_ERRORS.EMAIL_ALREADY_EXISTS },
+    { status: 400, message: USER_ERRORS.PHONE_ALREADY_EXISTS },
+    { status: 400, message: USER_ERRORS.NAME_ALREADY_EXISTS },
+    { status: 401, message: USER_ERRORS.USER_NOT_FOUND },
+    { status: 401, message: USER_ERRORS.SPACE_NOT_SELECTED },
+    { status: 404, message: USER_ERRORS.USER_NOT_FOUND },
     500
   )
   @ApiResponseEntity(UserDto, HttpStatus.OK)
@@ -249,10 +237,10 @@ export class UsersController {
     type: String,
   })
   @ApiErrors(
-    { status: 400, message: UsersErrorMessages.CANNOT_DELETE_SELF },
-    { status: 401, message: UsersErrorMessages.USER_NOT_FOUND },
-    { status: 401, message: UsersErrorMessages.SPACE_NOT_SELECTED },
-    { status: 404, message: UsersErrorMessages.USER_NOT_FOUND },
+    { status: 400, message: USER_ERRORS.CANNOT_DELETE_SELF },
+    { status: 401, message: USER_ERRORS.USER_NOT_FOUND },
+    { status: 401, message: USER_ERRORS.SPACE_NOT_SELECTED },
+    { status: 404, message: USER_ERRORS.USER_NOT_FOUND },
     500
   )
   @ResponseMessage("common.user.delete.success")

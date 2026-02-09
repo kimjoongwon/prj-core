@@ -1,4 +1,5 @@
 import { RoleCategoryGuard } from "@cocrepo/be-common";
+import { ACTION_ERRORS } from "@cocrepo/constant";
 import {
 	ApiAuth,
 	ApiErrors,
@@ -38,13 +39,6 @@ import {
 	ApiTags,
 } from "@nestjs/swagger";
 
-/**
- * Actions 에러 메시지 상수
- */
-const ActionsErrorMessages = {
-	SYSTEM_ACTION_MODIFY_NOT_ALLOWED: "시스템 Action은 수정할 수 없습니다",
-	SYSTEM_ACTION_DELETE_NOT_ALLOWED: "시스템 Action은 삭제할 수 없습니다",
-} as const;
 
 @ApiTags("ACTIONS")
 @Controller()
@@ -147,7 +141,7 @@ export class ActionsController {
 		400,
 		401,
 		403,
-		{ status: 404, message: "Action을 찾을 수 없습니다" },
+		{ status: 404, message: ACTION_ERRORS.NOT_FOUND },
 		500,
 	)
 	@ApiResponseEntity(ActionDto, HttpStatus.OK)
@@ -160,7 +154,7 @@ export class ActionsController {
 		const existingAction = await this.actionsService.getActionById(id);
 		if (existingAction.isSystem) {
 			throw new BadRequestException(
-				ActionsErrorMessages.SYSTEM_ACTION_MODIFY_NOT_ALLOWED,
+				ACTION_ERRORS.SYSTEM_ACTION_MODIFY_NOT_ALLOWED,
 			);
 		}
 
@@ -197,7 +191,7 @@ export class ActionsController {
 		400,
 		401,
 		403,
-		{ status: 404, message: "Action을 찾을 수 없습니다" },
+		{ status: 404, message: ACTION_ERRORS.NOT_FOUND },
 		500,
 	)
 	@ApiResponseEntity(ActionDto, HttpStatus.OK)
@@ -207,7 +201,7 @@ export class ActionsController {
 		const existingAction = await this.actionsService.getActionById(id);
 		if (existingAction.isSystem) {
 			throw new BadRequestException(
-				ActionsErrorMessages.SYSTEM_ACTION_DELETE_NOT_ALLOWED,
+				ACTION_ERRORS.SYSTEM_ACTION_DELETE_NOT_ALLOWED,
 			);
 		}
 

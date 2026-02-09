@@ -1,4 +1,5 @@
 import { SpaceContext } from "@cocrepo/be-common";
+import { USER_ERRORS } from "@cocrepo/constant";
 import type { QueryUsersDto } from "@cocrepo/dto";
 import type { Prisma } from "@cocrepo/prisma";
 import { UsersRepository } from "@cocrepo/repository";
@@ -23,16 +24,6 @@ export interface GetUsersResult {
 	stats: UserStats;
 }
 
-/**
- * 사용자 관리 서비스 에러 메시지
- */
-const UserServiceErrorMessages = {
-	USER_NOT_FOUND: "사용자를 찾을 수 없습니다",
-	EMAIL_ALREADY_EXISTS: "이미 사용 중인 이메일입니다",
-	PHONE_ALREADY_EXISTS: "이미 사용 중인 전화번호입니다",
-	NAME_ALREADY_EXISTS: "이미 사용 중인 이름입니다",
-	CANNOT_DELETE_SELF: "자신의 계정은 삭제할 수 없습니다",
-} as const;
 
 @Injectable()
 export class UsersService {
@@ -107,7 +98,7 @@ export class UsersService {
 		);
 
 		if (!user) {
-			throw new NotFoundException(UserServiceErrorMessages.USER_NOT_FOUND);
+			throw new NotFoundException(USER_ERRORS.USER_NOT_FOUND);
 		}
 
 		return user;
@@ -198,7 +189,7 @@ export class UsersService {
 		);
 
 		if (!existingUser) {
-			throw new NotFoundException(UserServiceErrorMessages.USER_NOT_FOUND);
+			throw new NotFoundException(USER_ERRORS.USER_NOT_FOUND);
 		}
 
 		// 중복 검사 (변경된 필드만)
@@ -206,7 +197,7 @@ export class UsersService {
 			const emailExists = await this.repository.existsByEmail(params.email);
 			if (emailExists) {
 				throw new BadRequestException(
-					UserServiceErrorMessages.EMAIL_ALREADY_EXISTS,
+					USER_ERRORS.EMAIL_ALREADY_EXISTS,
 				);
 			}
 		}
@@ -215,7 +206,7 @@ export class UsersService {
 			const phoneExists = await this.repository.existsByPhone(params.phone);
 			if (phoneExists) {
 				throw new BadRequestException(
-					UserServiceErrorMessages.PHONE_ALREADY_EXISTS,
+					USER_ERRORS.PHONE_ALREADY_EXISTS,
 				);
 			}
 		}
@@ -224,7 +215,7 @@ export class UsersService {
 			const nameExists = await this.repository.existsByName(params.name);
 			if (nameExists) {
 				throw new BadRequestException(
-					UserServiceErrorMessages.NAME_ALREADY_EXISTS,
+					USER_ERRORS.NAME_ALREADY_EXISTS,
 				);
 			}
 		}
@@ -261,7 +252,7 @@ export class UsersService {
 		// 자기 자신 삭제 방지
 		if (userId === currentUserId) {
 			throw new BadRequestException(
-				UserServiceErrorMessages.CANNOT_DELETE_SELF,
+				USER_ERRORS.CANNOT_DELETE_SELF,
 			);
 		}
 
@@ -272,7 +263,7 @@ export class UsersService {
 		);
 
 		if (!existingUser) {
-			throw new NotFoundException(UserServiceErrorMessages.USER_NOT_FOUND);
+			throw new NotFoundException(USER_ERRORS.USER_NOT_FOUND);
 		}
 
 		// 사용자 삭제 (Soft Delete)
@@ -296,19 +287,19 @@ export class UsersService {
 
 		if (emailExists) {
 			throw new BadRequestException(
-				UserServiceErrorMessages.EMAIL_ALREADY_EXISTS,
+				USER_ERRORS.EMAIL_ALREADY_EXISTS,
 			);
 		}
 
 		if (phoneExists) {
 			throw new BadRequestException(
-				UserServiceErrorMessages.PHONE_ALREADY_EXISTS,
+				USER_ERRORS.PHONE_ALREADY_EXISTS,
 			);
 		}
 
 		if (nameExists) {
 			throw new BadRequestException(
-				UserServiceErrorMessages.NAME_ALREADY_EXISTS,
+				USER_ERRORS.NAME_ALREADY_EXISTS,
 			);
 		}
 	}

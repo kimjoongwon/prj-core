@@ -1,3 +1,4 @@
+import { ABILITY_ERRORS } from "@cocrepo/constant";
 import { CreateAbilityInput } from "@cocrepo/dto";
 import { Ability } from "@cocrepo/entity";
 import { Prisma } from "@cocrepo/prisma";
@@ -9,14 +10,6 @@ import {
 	NotFoundException,
 } from "@nestjs/common";
 
-/**
- * Abilities Facade 에러 메시지
- */
-const AbilitiesFacadeErrorMessages = {
-	USER_NOT_FOUND: "사용자를 찾을 수 없습니다",
-	ROLE_NOT_FOUND: "역할(Role)을 찾을 수 없습니다",
-	ABILITY_NOT_FOUND: "권한을 찾을 수 없습니다",
-} as const;
 
 /**
  * Abilities Facade (CASL ABAC 기반)
@@ -50,7 +43,7 @@ export class AbilitiesFacade {
 		const user = await this.usersService.getByIdWithTenants(userId);
 
 		if (!user) {
-			throw new NotFoundException(AbilitiesFacadeErrorMessages.USER_NOT_FOUND);
+			throw new NotFoundException(ABILITY_ERRORS.USER_NOT_FOUND);
 		}
 
 		// 2. 사용자의 모든 Tenant에서 Role ID 추출
@@ -59,7 +52,7 @@ export class AbilitiesFacade {
 				`사용자에게 Tenant가 할당되지 않았습니다: userId=${userId.slice(-8)}`,
 			);
 			throw new BadRequestException(
-				AbilitiesFacadeErrorMessages.ROLE_NOT_FOUND,
+				ABILITY_ERRORS.ROLE_NOT_FOUND,
 			);
 		}
 
@@ -83,7 +76,7 @@ export class AbilitiesFacade {
 
 		if (!ability) {
 			throw new NotFoundException(
-				AbilitiesFacadeErrorMessages.ABILITY_NOT_FOUND,
+				ABILITY_ERRORS.NOT_FOUND,
 			);
 		}
 
@@ -148,7 +141,7 @@ export class AbilitiesFacade {
 		const existing = await this.abilitiesService.getAbilityById(id);
 		if (!existing) {
 			throw new NotFoundException(
-				AbilitiesFacadeErrorMessages.ABILITY_NOT_FOUND,
+				ABILITY_ERRORS.NOT_FOUND,
 			);
 		}
 
@@ -169,7 +162,7 @@ export class AbilitiesFacade {
 		const existing = await this.abilitiesService.getAbilityById(id);
 		if (!existing) {
 			throw new NotFoundException(
-				AbilitiesFacadeErrorMessages.ABILITY_NOT_FOUND,
+				ABILITY_ERRORS.NOT_FOUND,
 			);
 		}
 

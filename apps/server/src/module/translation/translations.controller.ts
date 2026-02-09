@@ -1,3 +1,4 @@
+import { TRANSLATION_ERRORS } from "@cocrepo/constant";
 import {
 	ApiAuth,
 	ApiErrors,
@@ -25,14 +26,6 @@ import {
 } from "@nestjs/common";
 import { ApiBody, ApiOperation, ApiParam, ApiTags } from "@nestjs/swagger";
 
-/**
- * Translations 에러 메시지 상수
- */
-const TranslationsErrorMessages = {
-	TRANSLATION_NOT_FOUND: "번역을 찾을 수 없습니다",
-	DUPLICATE_KEY: "이미 존재하는 번역 키입니다",
-	INVALID_TRANSLATION_DATA: "유효하지 않은 번역 데이터입니다",
-} as const;
 
 @ApiTags("TRANSLATIONS")
 @Controller()
@@ -77,7 +70,7 @@ export class TranslationsController {
 		type: String,
 	})
 	@ApiErrors(
-		{ status: 404, message: TranslationsErrorMessages.TRANSLATION_NOT_FOUND },
+		{ status: 404, message: TRANSLATION_ERRORS.NOT_FOUND },
 		500,
 	)
 	@ApiResponseEntity(TranslationResponseDto, HttpStatus.OK)
@@ -99,7 +92,7 @@ export class TranslationsController {
 	@ApiAuth()
 	@ApiBody({ type: CreateTranslationDto })
 	@ApiErrors(
-		{ status: 400, message: TranslationsErrorMessages.DUPLICATE_KEY },
+		{ status: 400, message: TRANSLATION_ERRORS.DUPLICATE_KEY },
 		500,
 	)
 	@ApiResponseEntity(TranslationResponseDto, HttpStatus.CREATED)
@@ -126,7 +119,7 @@ export class TranslationsController {
 	})
 	@ApiBody({ type: UpdateTranslationDto })
 	@ApiErrors(
-		{ status: 404, message: TranslationsErrorMessages.TRANSLATION_NOT_FOUND },
+		{ status: 404, message: TRANSLATION_ERRORS.NOT_FOUND },
 		500,
 	)
 	@ApiResponseEntity(TranslationResponseDto, HttpStatus.OK)
@@ -156,7 +149,7 @@ export class TranslationsController {
 		type: String,
 	})
 	@ApiErrors(
-		{ status: 404, message: TranslationsErrorMessages.TRANSLATION_NOT_FOUND },
+		{ status: 404, message: TRANSLATION_ERRORS.NOT_FOUND },
 		500,
 	)
 	@ResponseMessage("common.translation.delete.success")

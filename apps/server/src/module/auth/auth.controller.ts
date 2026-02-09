@@ -12,6 +12,7 @@ import {
 	TokenRefreshResponseDto,
 	VerifyTokenResponseDto,
 } from "@cocrepo/dto";
+import { AUTH_ERRORS } from "@cocrepo/constant";
 import { AuthFacade } from "@cocrepo/facade";
 import {
 	Body,
@@ -29,25 +30,6 @@ import { ConfigService } from "@nestjs/config";
 import { ApiBody, ApiCookieAuth, ApiOperation, ApiResponse, ApiSecurity, ApiTags } from "@nestjs/swagger";
 import { Request, Response } from "express";
 
-/**
- * 인증 관련 에러 메시지 상수
- */
-const AuthErrorMessages = {
-	// 토큰 관련
-	REFRESH_TOKEN_NOT_FOUND: "리프레시 토큰이 존재하지 않습니다",
-	TOKEN_INVALID: "토큰이 유효하지 않습니다",
-
-	// 사용자
-	USER_NOT_FOUND: "사용자를 찾을 수 없습니다",
-
-	// 회원가입
-	INVALID_SIGNUP_FORMAT: "입력 형식이 올바르지 않습니다",
-	EMAIL_ALREADY_EXISTS: "이미 사용 중인 이메일입니다",
-
-	// OIDC
-	OIDC_CALLBACK_FAILED: "OIDC 인증 콜백 처리에 실패했습니다",
-	OIDC_STATE_MISMATCH: "OIDC state 검증에 실패했습니다",
-} as const;
 
 @ApiTags("AUTH")
 @Controller()
@@ -97,7 +79,7 @@ export class AuthController {
 			await this.authFacade.handleOidcCallback(code, state, res);
 			return res.redirect(`${frontendUrl}/admin/dashboard`);
 		} catch (_e) {
-			const loginUrl = `${frontendUrl}/admin/auth/login?error=${encodeURIComponent(AuthErrorMessages.OIDC_CALLBACK_FAILED)}`;
+			const loginUrl = `${frontendUrl}/admin/auth/login?error=${encodeURIComponent(AUTH_ERRORS.OIDC_CALLBACK_FAILED)}`;
 			return res.redirect(loginUrl);
 		}
 	}
@@ -111,7 +93,7 @@ export class AuthController {
 			"리프레시 토큰을 사용하여 IDP에서 새로운 토큰을 발급받습니다.",
 	})
 	@ApiErrors(
-		{ status: 401, message: AuthErrorMessages.REFRESH_TOKEN_NOT_FOUND },
+		{ status: 401, message: AUTH_ERRORS.REFRESH_TOKEN_NOT_FOUND },
 		500,
 	)
 	@ApiResponseEntity(TokenRefreshResponseDto, HttpStatus.OK, {
@@ -139,8 +121,8 @@ export class AuthController {
 		description: "회원가입 정보 (이메일, 비밀번호, 사용자명 등)",
 	})
 	@ApiErrors(
-		{ status: 400, message: AuthErrorMessages.INVALID_SIGNUP_FORMAT },
-		{ status: 409, message: AuthErrorMessages.EMAIL_ALREADY_EXISTS },
+		{ status: 400, message: AUTH_ERRORS.INVALID_SIGNUP_FORMAT },
+		{ status: 409, message: AUTH_ERRORS.EMAIL_ALREADY_EXISTS },
 		500,
 	)
 	@ResponseMessage("common.auth.register.success")
@@ -156,7 +138,7 @@ export class AuthController {
 		description: "현재 요청의 액세스 토큰이 유효한지 검증합니다.",
 	})
 	@ApiAuth()
-	@ApiErrors({ status: 401, message: AuthErrorMessages.TOKEN_INVALID })
+	@ApiErrors({ status: 401, message: AUTH_ERRORS.TOKEN_INVALID })
 	@ApiResponseEntity(VerifyTokenResponseDto, HttpStatus.OK)
 	@ResponseMessage("common.auth.validate.success")
 	async verifyToken() {

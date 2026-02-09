@@ -1,4 +1,4 @@
-import type { LanguageCode } from "@cocrepo/constant";
+import { TRANSLATION_ERRORS, type LanguageCode } from "@cocrepo/constant";
 import {
 	CreateTranslationDto,
 	GetTranslationsDto,
@@ -9,12 +9,6 @@ import { TranslationsService } from "@cocrepo/service";
 import { Injectable, Logger, NotFoundException } from "@nestjs/common";
 import { plainToInstance } from "class-transformer";
 
-/**
- * Translations Facade 에러 메시지
- */
-const TranslationsFacadeErrorMessages = {
-	TRANSLATION_NOT_FOUND: "번역을 찾을 수 없습니다",
-} as const;
 
 /**
  * Translations Facade
@@ -78,7 +72,7 @@ export class TranslationsFacade {
 
 		if (!translation) {
 			throw new NotFoundException(
-				TranslationsFacadeErrorMessages.TRANSLATION_NOT_FOUND,
+				TRANSLATION_ERRORS.NOT_FOUND,
 			);
 		}
 

@@ -1,3 +1,4 @@
+import { GRANT_ERRORS } from "@cocrepo/constant";
 import { CreateGrantDto, GranteeTypeEnum, UpdateGrantDto } from "@cocrepo/dto";
 import { Grant } from "@cocrepo/entity";
 import { GranteeType } from "@cocrepo/enum";
@@ -16,16 +17,6 @@ import {
 } from "@nestjs/common";
 import { Transactional } from "@nestjs-cls/transactional";
 
-/**
- * Grants 서비스 에러 메시지
- */
-const GrantsServiceErrorMessages = {
-	GRANT_NOT_FOUND: "Grant를 찾을 수 없습니다",
-	ROLE_NOT_FOUND: "Role을 찾을 수 없습니다",
-	USER_NOT_FOUND: "User를 찾을 수 없습니다",
-	ABILITY_NOT_FOUND: "Ability를 찾을 수 없습니다",
-	DUPLICATE_GRANT: "이미 동일한 Grant가 존재합니다",
-} as const;
 
 /**
  * Grants 서비스
@@ -90,7 +81,7 @@ export class GrantsService {
 				error.message.includes("Unique constraint")
 			) {
 				throw new BadRequestException(
-					GrantsServiceErrorMessages.DUPLICATE_GRANT,
+					GRANT_ERRORS.DUPLICATE_GRANT,
 				);
 			}
 			throw error;
@@ -165,7 +156,7 @@ export class GrantsService {
 				error instanceof Error &&
 				error.message.includes("Record to update not found")
 			) {
-				throw new NotFoundException(GrantsServiceErrorMessages.GRANT_NOT_FOUND);
+				throw new NotFoundException(GRANT_ERRORS.NOT_FOUND);
 			}
 			throw error;
 		}
@@ -187,7 +178,7 @@ export class GrantsService {
 				error instanceof Error &&
 				error.message.includes("Record to update not found")
 			) {
-				throw new NotFoundException(GrantsServiceErrorMessages.GRANT_NOT_FOUND);
+				throw new NotFoundException(GRANT_ERRORS.NOT_FOUND);
 			}
 			throw error;
 		}
@@ -249,12 +240,12 @@ export class GrantsService {
 		if (granteeType === GranteeTypeEnum.Role) {
 			const role = await this.rolesRepository.findById(granteeId);
 			if (!role) {
-				throw new NotFoundException(GrantsServiceErrorMessages.ROLE_NOT_FOUND);
+				throw new NotFoundException(GRANT_ERRORS.ROLE_NOT_FOUND);
 			}
 		} else if (granteeType === GranteeTypeEnum.User) {
 			const user = await this.usersRepository.findById(granteeId);
 			if (!user) {
-				throw new NotFoundException(GrantsServiceErrorMessages.USER_NOT_FOUND);
+				throw new NotFoundException(GRANT_ERRORS.USER_NOT_FOUND);
 			}
 		}
 	}
@@ -269,7 +260,7 @@ export class GrantsService {
 		const ability = await this.abilitiesRepository.findById(abilityId);
 		if (!ability) {
 			throw new NotFoundException(
-				GrantsServiceErrorMessages.ABILITY_NOT_FOUND,
+				GRANT_ERRORS.ABILITY_NOT_FOUND,
 			);
 		}
 	}

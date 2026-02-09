@@ -1,3 +1,4 @@
+import { ABILITY_ERRORS } from "@cocrepo/constant";
 import { CreateAbilityInput } from "@cocrepo/dto";
 import { Ability } from "@cocrepo/entity";
 import type { Prisma } from "@cocrepo/prisma";
@@ -8,13 +9,6 @@ import {
 import { BadRequestException, Injectable, Logger } from "@nestjs/common";
 import { Transactional } from "@nestjs-cls/transactional";
 
-/**
- * Ability 서비스 에러 메시지
- */
-const AbilityServiceErrorMessages = {
-	INVALID_ABILITY_DATA: "유효하지 않은 권한 데이터입니다",
-	ABILITY_NOT_FOUND: "권한을 찾을 수 없습니다",
-} as const;
 
 /**
  * Ability 서비스 (CASL ABAC 기반)
@@ -212,7 +206,7 @@ export class AbilitiesService {
 		// actionId, subjectId, name 필수
 		if (!data.actionId || !data.subjectId || !data.name) {
 			throw new BadRequestException(
-				AbilityServiceErrorMessages.INVALID_ABILITY_DATA,
+				ABILITY_ERRORS.INVALID_DATA,
 			);
 		}
 	}
