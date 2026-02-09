@@ -135,28 +135,32 @@ export class TokenStorageService {
 	}
 
 	/**
-	 * OIDC State를 Redis에 저장 (CSRF 방지)
+	 * OIDC State와 PKCE code_verifier를 Redis에 저장 (CSRF 방지 + PKCE)
 	 */
-	async saveOidcState(state: string, ttlSeconds = 600): Promise<void> {
+	async saveOidcState(
+		state: string,
+		codeVerifier: string,
+		ttlSeconds = 600,
+	): Promise<void> {
 		const key = `${REDIS_KEYS.OIDC_STATE}${state}`;
-		await this.redisService.set(key, "1", ttlSeconds);
-		this.logger.debug(`OIDC state 저장: ttl=${ttlSeconds}s`);
+		await this.redisService.set(key, codeVerifier, ttlSeconds);
+		this.logger.debug(`OIDC state + PKCE 저장: ttl=${ttlSeconds}s`);
 	}
 
 	/**
 	 * OIDC State 검증 및 소비 (일회용)
-	 * 존재하면 즉시 삭제 후 true, 없으면 false
+	 * getdel 패턴으로 존재 확인, 값 반환, 삭제를 처리하여 Race Condition 방지
+	 * @returns code_verifier (존재하면) 또는 null (유효하지 않으면)
 	 */
-	async validateAndConsumeOidcState(state: string): Promise<boolean> {
+	async validateAndConsumeOidcState(
+		state: string,
+	): Promise<string | null> {
 		const key = `${REDIS_KEYS.OIDC_STATE}${state}`;
-		const exists = await this.redisService.exists(key);
-
-		if (!exists) {
-			return false;
-		}
+		const codeVerifier = await this.redisService.get(key);
+		if (!codeVerifier) return null;
 
 		await this.redisService.del(key);
-		return true;
+		return codeVerifier;
 	}
 
 	/**

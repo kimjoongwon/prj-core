@@ -1,10 +1,12 @@
 import {
+	AuthCacheService,
 	RolesService,
 	SpacesService,
 	TokenService,
+	TokenStorageService,
 	UsersService,
 } from "@cocrepo/service";
-import { JwtService } from "@nestjs/jwt";
+import { ConfigService } from "@nestjs/config";
 import { Test, type TestingModule } from "@nestjs/testing";
 import { ClsService } from "nestjs-cls";
 import { AuthFacade } from "../src/auth.facade";
@@ -14,8 +16,9 @@ describe("AuthFacade", () => {
 	let mockUsersService: jest.Mocked<UsersService>;
 	let mockRolesService: jest.Mocked<RolesService>;
 	let mockSpacesService: jest.Mocked<SpacesService>;
-	let mockJwtService: jest.Mocked<JwtService>;
 	let mockTokenService: jest.Mocked<TokenService>;
+	let mockTokenStorageService: jest.Mocked<TokenStorageService>;
+	let mockAuthCacheService: jest.Mocked<AuthCacheService>;
 	let mockClsService: jest.Mocked<ClsService>;
 
 	const mockUser = {
@@ -43,23 +46,39 @@ describe("AuthFacade", () => {
 			createPersonalSpace: jest.fn(),
 		} as unknown as jest.Mocked<SpacesService>;
 
-		mockJwtService = {
-			verify: jest.fn(),
-			sign: jest.fn(),
-		} as unknown as jest.Mocked<JwtService>;
-
 		mockTokenService = {
-			generateTokens: jest.fn(),
-			generateTokensWithStorage: jest.fn(),
-			validateRefreshTokenFromStorage: jest.fn(),
-			invalidateTokens: jest.fn(),
+			setAccessTokenCookie: jest.fn(),
+			setRefreshTokenCookie: jest.fn(),
+			clearTokenCookies: jest.fn(),
 			isTokenBlacklisted: jest.fn(),
-			calculateTokenExpiryTimes: jest.fn(),
 		} as unknown as jest.Mocked<TokenService>;
+
+		mockTokenStorageService = {
+			saveOidcState: jest.fn(),
+			validateAndConsumeOidcState: jest.fn(),
+			isBlacklisted: jest.fn(),
+			addToBlacklist: jest.fn(),
+		} as unknown as jest.Mocked<TokenStorageService>;
+
+		mockAuthCacheService = {
+			get: jest.fn(),
+			set: jest.fn(),
+			invalidate: jest.fn(),
+		} as unknown as jest.Mocked<AuthCacheService>;
 
 		mockClsService = {
 			get: jest.fn(),
 		} as unknown as jest.Mocked<ClsService>;
+
+		const mockConfigService = {
+			get: jest.fn().mockReturnValue({
+				issuer: "http://localhost:3007",
+				jwksUri: "http://localhost:3007/oidc/jwks",
+				clientId: "test-client",
+				clientSecret: "test-secret",
+				redirectUri: "http://localhost:3000/api/v1/auth/callback",
+			}),
+		};
 
 		const module: TestingModule = await Test.createTestingModule({
 			providers: [
@@ -67,8 +86,10 @@ describe("AuthFacade", () => {
 				{ provide: UsersService, useValue: mockUsersService },
 				{ provide: RolesService, useValue: mockRolesService },
 				{ provide: SpacesService, useValue: mockSpacesService },
-				{ provide: JwtService, useValue: mockJwtService },
 				{ provide: TokenService, useValue: mockTokenService },
+				{ provide: TokenStorageService, useValue: mockTokenStorageService },
+				{ provide: AuthCacheService, useValue: mockAuthCacheService },
+				{ provide: ConfigService, useValue: mockConfigService },
 				{ provide: ClsService, useValue: mockClsService },
 			],
 		}).compile();

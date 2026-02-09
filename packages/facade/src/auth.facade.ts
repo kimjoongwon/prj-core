@@ -6,6 +6,7 @@ import {
 	VerifyTokenResponseDto,
 } from "@cocrepo/dto";
 import {
+	AuthCacheService,
 	RolesService,
 	SpacesService,
 	TokenService,
@@ -60,6 +61,7 @@ export class AuthFacade {
 		private spacesService: SpacesService,
 		private tokenService: TokenService,
 		private tokenStorageService: TokenStorageService,
+		private authCacheService: AuthCacheService,
 		private configService: ConfigService,
 		private cls: ClsService,
 	) {
@@ -74,11 +76,20 @@ export class AuthFacade {
 
 	/**
 	 * OIDC Authorization URL 생성
-	 * state를 내부에서 생성하고 Redis에 저장 (CSRF 방지)
+	 * state(CSRF 방지) + PKCE(code_verifier/code_challenge) 적용
 	 */
 	async getAuthorizationUrl(): Promise<string> {
 		const state = crypto.randomBytes(32).toString("hex");
-		await this.tokenStorageService.saveOidcState(state);
+
+		// PKCE: code_verifier 생성 → SHA256 해시 → code_challenge
+		const codeVerifier = crypto.randomBytes(32).toString("base64url");
+		const codeChallenge = crypto
+			.createHash("sha256")
+			.update(codeVerifier)
+			.digest("base64url");
+
+		// state와 code_verifier를 함께 Redis에 저장
+		await this.tokenStorageService.saveOidcState(state, codeVerifier);
 
 		const params = new URLSearchParams({
 			response_type: "code",
@@ -86,6 +97,8 @@ export class AuthFacade {
 			redirect_uri: this.oidcConfig.redirectUri,
 			scope: "openid profile email roles",
 			state,
+			code_challenge: codeChallenge,
+			code_challenge_method: "S256",
 		});
 
 		return `${this.oidcConfig.issuer}/oidc/auth?${params.toString()}`;
@@ -93,7 +106,7 @@ export class AuthFacade {
 
 	/**
 	 * OIDC Callback 처리 - Authorization Code → Token 교환
-	 * state를 검증하여 CSRF 공격 방지
+	 * state 검증(CSRF 방지) + PKCE code_verifier 적용
 	 * HttpOnly 쿠키에 토큰을 저장하고 반환값 없음 (리다이렉트는 Controller에서 처리)
 	 */
 	async handleOidcCallback(
@@ -101,24 +114,38 @@ export class AuthFacade {
 		state: string,
 		res: Response,
 	): Promise<void> {
-		// OIDC state 검증 (일회용 - 검증 후 즉시 소비)
-		const isValidState =
+		// OIDC state 검증 + PKCE code_verifier 조회 (일회용 - 검증 후 즉시 소비)
+		const codeVerifier =
 			await this.tokenStorageService.validateAndConsumeOidcState(state);
-		if (!isValidState) {
+		if (!codeVerifier) {
 			throw new UnauthorizedException(
 				"OIDC state 검증에 실패했습니다",
 			);
 		}
 
-		// IDP token endpoint에 code 교환
-		const tokenResponse = await this.exchangeCodeForTokens(code);
+		// IDP token endpoint에 code + code_verifier 교환
+		const tokenResponse = await this.exchangeCodeForTokens(
+			code,
+			codeVerifier,
+		);
 
-		// access_token에서 사용자 정보 추출 (sub claim)
+		// access_token에서 사용자 정보 추출 (sub, exp claim)
 		const payload = this.decodeAccessToken(tokenResponse.access_token);
 		const user = await this.usersService.getByIdWithTenants(payload.sub);
 
 		if (!user) {
 			throw new UnauthorizedException("사용자를 찾을 수 없습니다");
+		}
+
+		// 인증 사용자 캐시 미리 적재 (첫 API 요청 시 DB 재조회 방지)
+		const expSeconds = (payload as { exp?: number }).exp ?? 0;
+		const remainingSeconds = expSeconds - Math.floor(Date.now() / 1000);
+		if (remainingSeconds > 0) {
+			await this.authCacheService.set(
+				payload.sub,
+				JSON.stringify(user),
+				remainingSeconds,
+			);
 		}
 
 		// HttpOnly 쿠키에 토큰 저장 (유일한 쿠키 설정 지점)
@@ -130,10 +157,11 @@ export class AuthFacade {
 	}
 
 	/**
-	 * IDP Token Endpoint에 Authorization Code 교환
+	 * IDP Token Endpoint에 Authorization Code + PKCE code_verifier 교환
 	 */
 	private async exchangeCodeForTokens(
 		code: string,
+		codeVerifier: string,
 	): Promise<OidcTokenResponse> {
 		const tokenUrl = `${this.oidcConfig.issuer}/oidc/token`;
 
@@ -143,6 +171,7 @@ export class AuthFacade {
 			redirect_uri: this.oidcConfig.redirectUri,
 			client_id: this.oidcConfig.clientId,
 			client_secret: this.oidcConfig.clientSecret,
+			code_verifier: codeVerifier,
 		});
 
 		const response = await fetch(tokenUrl, {

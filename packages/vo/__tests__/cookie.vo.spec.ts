@@ -13,7 +13,7 @@ describe("Cookie", () => {
 			// Then
 			expect(cookie.maxAge).toBe(maxAge);
 			expect(cookie.httpOnly).toBe(true);
-			expect(cookie.sameSite).toBe("strict");
+			expect(cookie.sameSite).toBe("lax");
 			expect(cookie.path).toBe("/");
 		});
 
@@ -141,7 +141,7 @@ describe("Cookie", () => {
 				maxAge: 3600000,
 				httpOnly: true,
 				secure: true,
-				sameSite: "strict",
+				sameSite: "lax",
 				path: "/",
 			});
 		});

@@ -81,7 +81,7 @@ export class Cookie extends ValueObject<CookieProps> {
 			maxAge,
 			httpOnly: true,
 			secure: isProduction,
-			sameSite: "strict",
+			sameSite: "lax",
 			path: "/",
 		});
 	}
