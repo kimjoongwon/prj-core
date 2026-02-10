@@ -199,7 +199,6 @@ function RoleDetailPageClient({ roleId }: RoleDetailPageClientProps) {
 									<TableColumn>액션 (Action)</TableColumn>
 									<TableColumn>필드</TableColumn>
 									<TableColumn>유형</TableColumn>
-									<TableColumn>상태</TableColumn>
 								</TableHeader>
 								<TableBody>
 									{abilities.map((ability) => (
@@ -260,15 +259,6 @@ function RoleDetailPageClient({ roleId }: RoleDetailPageClientProps) {
 														허용
 													</Chip>
 												)}
-											</TableCell>
-											<TableCell>
-												<Chip
-													size="sm"
-													color={ability.isActive ? "success" : "default"}
-													variant="dot"
-												>
-													{ability.isActive ? "활성" : "비활성"}
-												</Chip>
 											</TableCell>
 										</TableRow>
 									))}

@@ -25,6 +25,8 @@
 | `dashboard` | `read` | 대시보드 조회 |
 | `user` | `read`, `create`, `update`, `delete` | 사용자 관리 |
 | `admin` | `read`, `create`, `update`, `delete` | 관리자 관리 |
+| `oidcClient` | `read`, `create`, `update`, `delete`, `manage` | OIDC 클라이언트 관리 |
+| `oidcSession` | `read`, `manage` | OIDC 세션/토큰 관리 |
 
 ### 메뉴 상수 위치
 
@@ -37,6 +39,7 @@
 | 기능 | 폴더 | 상태 | 설명 |
 |------|------|------|------|
 | User | [2026-02-02-User](./2026-02-02-User/) | 기획 완료 | 이용자 목록 조회 (조회 전용) |
+| IdpManagement | [2026-02-10-IdpManagement](./2026-02-10-IdpManagement/) | 기획 완료 | OIDC Client CRUD + 세션/토큰 관리 |
 
 ---
 
@@ -44,5 +47,6 @@
 
 | 날짜 | 변경 내용 |
 |------|----------|
+| 2026-02-10 | IdpManagement 기능 기획 추가 |
 | 2026-02-02 | User 기능 기획 추가 |
 | 2026-01-31 | _app.md 초기 생성 |

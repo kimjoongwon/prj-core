@@ -23,3 +23,5 @@ export { TranslationsService } from "./translations.service";
 export { UsersService } from "./users.service";
 export { MaskingService } from "./masking.service";
 export { MASKING_PRESETS, type MaskingPreset } from "@cocrepo/constant";
+export { OidcClientsService } from "./oidc-clients.service";
+export { OidcSessionsService } from "./oidc-sessions.service";

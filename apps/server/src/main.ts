@@ -22,8 +22,10 @@ const SWAGGER_SPACE_SELECTOR_JS = `
   'use strict';
   var STORAGE_KEY = 'swagger-space-id';
 
-  // fetch를 패치하여 X-Space-ID 헤더 자동 주입
+  // fetch를 패치하여 X-Space-ID 헤더 자동 주입 + 401 시 재인증 트리거
   var origFetch = window.fetch;
+  var isReauthorizing = false;
+
   window.fetch = function(url, init) {
     var spaceId = localStorage.getItem(STORAGE_KEY);
     if (spaceId && typeof url === 'string' && url.indexOf('/api/v1/') !== -1) {
@@ -36,7 +38,21 @@ const SWAGGER_SPACE_SELECTOR_JS = `
         init.headers = { 'X-Space-ID': spaceId };
       }
     }
-    return origFetch.apply(this, arguments);
+    return origFetch.apply(this, arguments).then(function(response) {
+      if (response.status === 401 && !isReauthorizing && typeof url === 'string' && url.indexOf('/api/v1/') !== -1) {
+        isReauthorizing = true;
+        try {
+          if (window.ui) {
+            window.ui.authActions.logout(['oauth2']);
+          }
+        } catch (e) { /* ignore */ }
+        alert('인증이 만료되었습니다. Authorize 버튼을 클릭하여 다시 로그인해주세요.');
+        var authBtn = document.querySelector('.btn.authorize');
+        if (authBtn) authBtn.click();
+        isReauthorizing = false;
+      }
+      return response;
+    });
   };
 
   function getAuthToken() {

@@ -1,0 +1,26 @@
+import type { OidcClient as OidcClientEntity } from "@cocrepo/prisma";
+
+import { AbstractEntity } from "./abstract.entity";
+
+export class OidcClient extends AbstractEntity implements OidcClientEntity {
+	clientId!: string;
+	clientSecret!: string | null;
+	clientName!: string;
+	redirectUris!: string[];
+	grantTypes!: string[];
+	responseTypes!: string[];
+	tokenEndpointAuthMethod!: string;
+	scope!: string;
+	isActive!: boolean;
+	logoUri!: string | null;
+	policyUri!: string | null;
+	tosUri!: string | null;
+
+	isPublicClient(): boolean {
+		return this.tokenEndpointAuthMethod === "none";
+	}
+
+	isConfidentialClient(): boolean {
+		return this.tokenEndpointAuthMethod !== "none";
+	}
+}

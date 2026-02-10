@@ -85,13 +85,13 @@ function UsersPageClient() {
 	const { data: response, isLoading } = useGetUsers({
 		take: queryStates.take,
 		skip: queryStates.skip,
-		search: queryStates.search || undefined,
+		name: queryStates.search || undefined,
 	});
 
 	const users = response?.data ?? [];
 	const meta = response?.meta;
 	const stats = response?.stats;
-	const totalCount = meta?.total ?? 0;
+	const totalCount = meta?.totalCount ?? 0;
 
 	return (
 		<PageSurface

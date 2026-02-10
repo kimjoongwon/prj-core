@@ -31,7 +31,8 @@ export type DataGridProps<T> = Omit<
 	/** DataGrid 상태 */
 	state: DataGridState;
 	/** 컬럼 정의 */
-	columns: ColumnDef<T, unknown>[];
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
+	columns: ColumnDef<T, any>[];
 	/** 데이터 배열 (id 필드 필수) */
 	data: (T & { id: Key })[];
 	/** 정렬 변경 핸들러 */

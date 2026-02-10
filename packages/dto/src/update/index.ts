@@ -8,6 +8,7 @@ export * from "./update-file-association.dto";
 export * from "./update-file-classification.dto";
 export * from "./update-ground.dto";
 export * from "./update-group.dto";
+export * from "./update-oidc-client.dto";
 export * from "./update-program.dto";
 export * from "./update-role.dto";
 export * from "./update-role-association.dto";

@@ -14,6 +14,8 @@ export * from "./file-association.entity";
 export * from "./file-classification.entity";
 export * from "./grant.entity";
 export * from "./ground.entity";
+export * from "./oidc-client.entity";
+export * from "./oidc-model.entity";
 export * from "./group.entity";
 export * from "./profile.entity";
 export * from "./program.entity";

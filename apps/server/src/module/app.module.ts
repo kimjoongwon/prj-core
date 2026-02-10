@@ -32,6 +32,8 @@ import { PrismaModule } from "./prisma.module";
 import { RedisModule } from "./redis.module";
 import { RolesModule } from "./role";
 import { SubjectsModule } from "./subject";
+import { OidcClientsModule } from "./oidc-client";
+import { OidcSessionsModule } from "./oidc-session";
 import { TranslationsModule } from "./translation";
 import { UsersModule } from "./users";
 
@@ -49,6 +51,8 @@ import { UsersModule } from "./users";
 		AbilitiesModule,
 		RolesModule,
 		TranslationsModule,
+		OidcClientsModule,
+		OidcSessionsModule,
 		// Resource Modules는 필요할 때 추가합니다.
 		// 가이드: .claude/agents/be-controller-builder.md
 		RouterModule.register([
@@ -89,6 +93,14 @@ import { UsersModule } from "./users";
 							{
 								path: "translations",
 								module: TranslationsModule,
+							},
+							{
+								path: "oidc-clients",
+								module: OidcClientsModule,
+							},
+							{
+								path: "oidc-sessions",
+								module: OidcSessionsModule,
 							},
 							// 새로운 Resource 라우트는 여기에 추가
 						],

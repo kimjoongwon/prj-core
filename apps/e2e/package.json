@@ -1,0 +1,25 @@
+{
+  "name": "@cocrepo/e2e",
+  "version": "0.0.1",
+  "private": true,
+  "description": "E2E tests using Playwright",
+  "scripts": {
+    "test": "PLAYWRIGHT_BROWSERS_PATH=./browsers playwright test",
+    "test:admin": "PLAYWRIGHT_BROWSERS_PATH=./browsers playwright test --project=admin-chromium",
+    "test:admin:mobile": "PLAYWRIGHT_BROWSERS_PATH=./browsers playwright test --project=admin-mobile",
+    "test:proposal": "PLAYWRIGHT_BROWSERS_PATH=./browsers playwright test --project=proposal-chromium",
+    "test:proposal:mobile": "PLAYWRIGHT_BROWSERS_PATH=./browsers playwright test --project=proposal-mobile",
+    "test:ui": "PLAYWRIGHT_BROWSERS_PATH=./browsers playwright test --ui",
+    "test:headed": "PLAYWRIGHT_BROWSERS_PATH=./browsers playwright test --headed",
+    "test:debug": "PLAYWRIGHT_BROWSERS_PATH=./browsers playwright test --debug",
+    "test:report": "playwright show-report",
+    "codegen:admin": "PLAYWRIGHT_BROWSERS_PATH=./browsers playwright codegen http://localhost:3000/admin/",
+    "codegen:proposal": "PLAYWRIGHT_BROWSERS_PATH=./browsers playwright codegen http://localhost:3001/",
+    "install:browsers": "PLAYWRIGHT_BROWSERS_PATH=./browsers playwright install chromium",
+    "install:browsers:all": "PLAYWRIGHT_BROWSERS_PATH=./browsers playwright install"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.57.0",
+    "@types/node": "catalog:"
+  }
+}

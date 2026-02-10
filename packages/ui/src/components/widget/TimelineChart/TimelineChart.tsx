@@ -479,16 +479,17 @@ export const TimelineChart = observer(
 				date_format: "YYYY-MM-DD",
 				language: "ko",
 				popup: null,
-				on_click: (task: GanttTask) => {
-					onItemClickRef.current?.(task);
+				on_click: (task: unknown) => {
+					onItemClickRef.current?.(task as GanttTask);
 				},
-				on_date_change: (task: GanttTask, start: Date, end: Date) => {
-					onDateChangeRef.current?.(task, start, end);
+				on_date_change: (task: unknown, start: Date, end: Date) => {
+					onDateChangeRef.current?.(task as GanttTask, start, end);
 				},
-				on_progress_change: (task: GanttTask, progress: number) => {
-					onProgressChangeRef.current?.(task, progress);
+				on_progress_change: (task: unknown, progress: number) => {
+					onProgressChangeRef.current?.(task as GanttTask, progress);
 				},
-			});
+				// eslint-disable-next-line @typescript-eslint/no-explicit-any
+			} as any);
 
 			return () => {
 				if (containerRef.current) {
