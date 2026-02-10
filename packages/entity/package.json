@@ -29,6 +29,7 @@
     "@nestjs/swagger": "^11.2.0"
   },
   "devDependencies": {
+    "@cocrepo/tsconfig": "workspace:*",
     "@nestjs/common": "^11.1.3",
     "@nestjs/swagger": "^11.2.0",
     "@types/node": "catalog:",

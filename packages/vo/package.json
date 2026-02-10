@@ -34,6 +34,7 @@
     "libphonenumber-js": "^1.11.17"
   },
   "devDependencies": {
+    "@cocrepo/tsconfig": "workspace:*",
     "@types/bcrypt": "^5.0.2",
     "@types/jest": "^30.0.0",
     "@types/node": "catalog:",
