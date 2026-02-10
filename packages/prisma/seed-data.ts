@@ -2362,7 +2362,7 @@ export const oidcClientSeedData: OidcClientSeedData[] = [
 		],
 		grantTypes: ["authorization_code", "refresh_token"],
 		responseTypes: ["code"],
-		tokenEndpointAuthMethod: "client_secret_basic",
+		tokenEndpointAuthMethod: "client_secret_post",
 		scope: "openid profile email roles",
 		isActive: true,
 		logoUri: null,

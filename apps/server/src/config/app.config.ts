@@ -25,10 +25,10 @@ class EnvironmentVariablesValidator {
 	@IsString()
 	API_PREFIX!: string;
 
-	@IsUrl()
+	@IsUrl({ require_tld: false })
 	FRONTEND_DOMAIN!: string;
 
-	@IsUrl()
+	@IsUrl({ require_tld: false })
 	BACKEND_DOMAIN!: string;
 
 	@IsString()
