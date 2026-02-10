@@ -99,6 +99,7 @@ export class AuthFacade {
 			state,
 			code_challenge: codeChallenge,
 			code_challenge_method: "S256",
+			prompt: "login",
 		});
 
 		return `${this.oidcConfig.issuer}/oidc/auth?${params.toString()}`;

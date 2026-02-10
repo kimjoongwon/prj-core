@@ -1,5 +1,6 @@
 "use client";
 
+import { useLogout } from "@cocrepo/api";
 import type { SpaceInfo } from "@cocrepo/ui";
 import { AdminLayout, AppLogo, HeaderSpaceSelector } from "@cocrepo/ui";
 import { observer } from "mobx-react-lite";
@@ -31,10 +32,18 @@ function AdminLayoutWrapper({ children }: AdminLayoutWrapperProps) {
 		role: "Owner",
 	};
 
-	// 로그아웃 핸들러
+	// 로그아웃
+	const { mutate: logoutMutate } = useLogout({
+		mutation: {
+			onSettled: () => {
+				persistStore.clearSpace();
+				window.location.href = "/admin/auth/login";
+			},
+		},
+	});
+
 	const handleLogout = () => {
-		// TODO: 로그아웃 로직 구현
-		console.log("로그아웃");
+		logoutMutate();
 	};
 
 	// Space 선택 핸들러

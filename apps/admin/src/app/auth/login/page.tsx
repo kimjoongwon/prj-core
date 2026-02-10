@@ -1,23 +1,33 @@
 "use client";
 
-import { LoginPage } from "@cocrepo/ui";
+import { Button, Spinner } from "@heroui/react";
+import { observer } from "mobx-react-lite";
 
 import { useAuthLoginPage } from "./hooks";
 
-const Page = () => {
-	const { state, onClickLoginButton, onKeyDownInput, isLoading } =
-		useAuthLoginPage();
+const Page = observer(() => {
+	const { errorMessage, isRedirecting, onClickRetry } = useAuthLoginPage();
+
+	if (isRedirecting) {
+		return (
+			<div className="flex flex-col items-center gap-4 p-8">
+				<Spinner size="lg" />
+				<p className="text-default-500">로그인 페이지로 이동 중...</p>
+			</div>
+		);
+	}
 
 	return (
-		<LoginPage
-			state={state}
-			onClickLoginButton={onClickLoginButton}
-			onKeyDownInput={onKeyDownInput}
-			isLoading={isLoading}
-			title="관리자 로그인"
-			caption="관리자 계정으로 로그인하세요"
-		/>
+		<div className="flex flex-col items-center gap-6 p-8">
+			<div className="text-center">
+				<h3 className="text-2xl font-bold">로그인 실패</h3>
+				<p className="mt-2 text-sm text-danger">{errorMessage}</p>
+			</div>
+			<Button color="primary" size="lg" fullWidth onPress={onClickRetry}>
+				다시 로그인
+			</Button>
+		</div>
 	);
-};
+});
 
 export default Page;
