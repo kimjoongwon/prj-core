@@ -19,7 +19,13 @@
       "import": "./src/components/widgets/index.ts",
       "default": "./src/components/widgets/index.ts"
     },
+    "./hero": {
+      "types": "./hero.tsx",
+      "import": "./hero.tsx",
+      "default": "./hero.tsx"
+    },
     "./styles": "./src/styles/globals.css",
+    "./styles/base": "./src/styles/base.css",
     "./package.json": "./package.json"
   },
   "main": "./index.ts",
@@ -28,6 +34,7 @@
   "files": [
     "src",
     "index.ts",
+    "hero.tsx",
     "README.md"
   ],
   "scripts": {

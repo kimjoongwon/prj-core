@@ -20,8 +20,8 @@
     }
   },
   "scripts": {
-    "start:dev": "tsc --watch",
-    "build": "rm -rf dist && tsc",
+    "start:dev": "tsc --build --watch",
+    "build": "tsc --build",
     "format": "biome format --write .",
     "type-check": "tsc --noEmit",
     "clean": "rm -rf dist && rm -rf node_modules"

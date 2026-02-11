@@ -3,7 +3,6 @@ export {
 	AccessibleSpaces,
 	OnlyMySpace,
 	SPACE_SCOPE_KEY,
-	SpaceContext,
 	SpaceScope,
 	SpaceScopeInterceptor,
 } from "./context";

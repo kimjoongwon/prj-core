@@ -2,7 +2,8 @@ import { CONTEXT_KEYS } from "@cocrepo/constant";
 import type { NextFunction, Request, Response } from "express";
 
 // import 체인의 masking.interceptor 로드 에러를 회피하기 위한 mock
-jest.mock("@cocrepo/be-i18n", () => ({
+jest.mock("@cocrepo/toolkit", () => ({
+	...jest.requireActual("@cocrepo/toolkit"),
 	parseAcceptLanguage: jest.fn((lang: string | undefined) => lang || "ko_KR"),
 }));
 jest.mock("@cocrepo/repository", () => ({

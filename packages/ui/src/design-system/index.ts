@@ -1,7 +1,7 @@
 /**
- * @cocrepo/design-system
+ * Design System
  *
- * HeroUI 기반 디자인 시스템 패키지
+ * HeroUI 기반 디자인 시스템
  * 테마, 토큰, Provider를 중앙에서 관리합니다.
  */
 

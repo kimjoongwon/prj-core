@@ -13,7 +13,6 @@ const nextConfig: NextConfig = {
 	},
 	transpilePackages: [
 		"@cocrepo/ui",
-		"@cocrepo/design-system",
 		"@cocrepo/api",
 		"@cocrepo/store",
 		"@cocrepo/toolkit",

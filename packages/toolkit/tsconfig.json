@@ -11,11 +11,17 @@
     "allowSyntheticDefaultImports": true,
     "sourceMap": true,
     "outDir": "./dist",
+    "rootDir": ".",
+    "composite": true,
+    "tsBuildInfoFile": "./dist/.tsbuildinfo",
     "skipLibCheck": true,
     "strict": false,
     "strictNullChecks": false,
     "noImplicitAny": false
   },
+  "references": [
+    { "path": "../constant" }
+  ],
   "include": ["src/**/*", "index.ts"],
   "exclude": ["node_modules", "dist"]
 }

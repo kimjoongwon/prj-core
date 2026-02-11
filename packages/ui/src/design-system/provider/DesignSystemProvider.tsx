@@ -27,7 +27,7 @@ export interface DesignSystemProviderProps {
  *
  * @example
  * ```tsx
- * import { DesignSystemProvider } from '@cocrepo/design-system';
+ * import { DesignSystemProvider } from '@cocrepo/ui';
  *
  * function App() {
  *   return (

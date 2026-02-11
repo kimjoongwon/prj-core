@@ -6,7 +6,7 @@ import {
 	SpaceAccessGuard,
 	SpaceScopeInterceptor,
 } from "@cocrepo/be-common";
-import { TranslationService } from "@cocrepo/be-i18n";
+import { TranslationService } from "@cocrepo/service";
 import { TokenStorageService } from "@cocrepo/service";
 import { ClsService } from "nestjs-cls";
 import {

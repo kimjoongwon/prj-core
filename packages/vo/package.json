@@ -20,8 +20,8 @@
   },
   "scripts": {
     "type-check": "tsc --noEmit",
-    "build": "rm -rf dist && tsc",
-    "start:dev": "tsc --watch",
+    "build": "tsc --build",
+    "start:dev": "tsc --build --watch",
     "format": "biome format --write .",
     "test": "jest",
     "test:watch": "jest --watch",

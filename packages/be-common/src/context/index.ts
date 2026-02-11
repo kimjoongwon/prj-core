@@ -1,4 +1,3 @@
-export { SpaceContext } from "./space-context";
 export { SpaceScopeInterceptor } from "./space-scope.interceptor";
 export {
 	AccessibleSpaces,

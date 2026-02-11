@@ -19,8 +19,8 @@
     }
   },
   "scripts": {
-    "start:dev": "tsc --watch",
-    "build": "rm -rf dist && tsc",
+    "start:dev": "tsc --build --watch",
+    "build": "tsc --build",
     "format": "biome format --write .",
     "type-check": "tsc --noEmit",
     "test": "vitest",
@@ -51,6 +51,7 @@
     "vitest": "catalog:"
   },
   "dependencies": {
+    "@cocrepo/constant": "workspace:*",
     "es-toolkit": "^1.26.1"
   }
 }

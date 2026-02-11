@@ -1,4 +1,4 @@
-import { SpaceContext } from "@cocrepo/be-common";
+import { SpaceContext } from "@cocrepo/service";
 import { UsersRepository } from "@cocrepo/repository";
 import { UsersService } from "@cocrepo/service";
 import { Module } from "@nestjs/common";

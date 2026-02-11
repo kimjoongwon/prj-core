@@ -12,8 +12,8 @@
     }
   },
   "scripts": {
-    "build": "rm -rf dist && tsc",
-    "start:dev": "tsc --watch",
+    "build": "tsc --build",
+    "start:dev": "tsc --build --watch",
     "type-check": "tsc --noEmit",
     "test": "jest",
     "test:watch": "jest --watch",
@@ -21,7 +21,6 @@
   },
   "dependencies": {
     "@casl/ability": "^6.7.5",
-    "@cocrepo/be-i18n": "workspace:*",
     "@cocrepo/constant": "workspace:*",
     "@cocrepo/decorator": "workspace:*",
     "@cocrepo/dto": "workspace:*",
@@ -31,6 +30,7 @@
     "@cocrepo/prisma": "workspace:*",
     "@cocrepo/repository": "workspace:*",
     "@cocrepo/service": "workspace:*",
+    "@cocrepo/toolkit": "workspace:*",
     "@cocrepo/type": "workspace:*",
     "jwks-rsa": "^3.2.2",
     "lodash": "^4.17.21"

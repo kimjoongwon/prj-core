@@ -1,4 +1,4 @@
-import { SpaceContext } from "@cocrepo/be-common";
+import { SpaceContext } from "./context/space-context";
 import { USER_ERRORS } from "@cocrepo/constant";
 import type { QueryUsersDto } from "@cocrepo/dto";
 import type { Prisma } from "@cocrepo/prisma";

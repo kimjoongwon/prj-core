@@ -1,6 +1,6 @@
 "use client";
 
-import { DesignSystemProvider } from "@cocrepo/design-system";
+import { DesignSystemProvider } from "@cocrepo/ui";
 import { type ReactNode, useMemo } from "react";
 import { PlanSelectionProvider, PlanSelectionStore } from "../stores";
 

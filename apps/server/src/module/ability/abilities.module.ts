@@ -1,4 +1,4 @@
-import { SpaceContext } from "@cocrepo/be-common";
+import { SpaceContext } from "@cocrepo/service";
 import { AbilitiesFacade } from "@cocrepo/facade";
 import {
 	AbilitiesRepository,

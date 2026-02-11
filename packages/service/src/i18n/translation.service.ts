@@ -7,7 +7,7 @@ import {
 	type LanguageCode,
 } from "@cocrepo/constant";
 import { type PrismaClient } from "@cocrepo/prisma";
-import { PrismaService } from "@cocrepo/service";
+import { PrismaService } from "../prisma.service";
 
 /**
  * 다국어 번역 서비스

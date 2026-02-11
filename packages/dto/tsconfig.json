@@ -3,8 +3,19 @@
   "compilerOptions": {
     "outDir": "./dist",
     "rootDir": "./src",
-    "useDefineForClassFields": false
+    "useDefineForClassFields": false,
+    "strictPropertyInitialization": false,
+    "tsBuildInfoFile": "./dist/.tsbuildinfo"
   },
+  "references": [
+    { "path": "../constant" },
+    { "path": "../prisma" },
+    { "path": "../decorator" },
+    { "path": "../entity" },
+    { "path": "../enum" },
+    { "path": "../schema" },
+    { "path": "../toolkit" }
+  ],
   "include": ["src/**/*.ts"],
   "exclude": ["node_modules", "dist"]
 }

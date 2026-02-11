@@ -12,7 +12,7 @@ import { Reflector } from "@nestjs/core";
 import { Observable, from } from "rxjs";
 import { map, switchMap } from "rxjs/operators";
 import { isWrappedResponse } from "../util/response.util";
-import { TranslationService } from "@cocrepo/be-i18n";
+import { TranslationService } from "@cocrepo/service";
 
 @Injectable()
 export class ResponseEntityInterceptor implements NestInterceptor {

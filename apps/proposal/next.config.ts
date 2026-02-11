@@ -9,7 +9,7 @@ const nextConfig: NextConfig = {
 		// 모노레포 루트 디렉토리 설정 (워크스페이스 패키지 해석용)
 		root: path.join(__dirname, "../.."),
 	},
-	transpilePackages: ["@cocrepo/ui", "@cocrepo/design-system", "@heroui/react"],
+	transpilePackages: ["@cocrepo/ui", "@heroui/react"],
 	typedRoutes: true,
 };
 

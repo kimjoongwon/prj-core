@@ -1,7 +1,7 @@
 "use client";
 
 import type { AbilityResponseDto } from "@cocrepo/api";
-import { DesignSystemProvider } from "@cocrepo/design-system";
+import { DesignSystemProvider } from "@cocrepo/ui";
 import {
 	type AbilityActions,
 	AbilityProvider,

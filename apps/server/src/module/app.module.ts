@@ -8,10 +8,9 @@ import {
 	RequestContextMiddleware,
 	ResponseEntityInterceptor,
 	SpaceAccessGuard,
-	SpaceContext,
 	SpaceScopeInterceptor,
 } from "@cocrepo/be-common";
-import { I18nModule } from "@cocrepo/be-i18n";
+import { I18nModule, SpaceContext } from "@cocrepo/service";
 import { SpacesRepository } from "@cocrepo/repository";
 import { SpacesService } from "@cocrepo/service";
 import {

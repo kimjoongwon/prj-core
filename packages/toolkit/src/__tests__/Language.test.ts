@@ -1,5 +1,5 @@
 import { DEFAULT_LANGUAGE, LanguageCode } from "@cocrepo/constant";
-import { parseAcceptLanguage } from "./language.util";
+import { parseAcceptLanguage } from "../Language";
 
 describe("parseAcceptLanguage", () => {
 	describe("기본 언어 테스트", () => {

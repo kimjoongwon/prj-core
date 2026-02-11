@@ -15,7 +15,7 @@ export class UserDetailResponseDto extends UserDto {
  */
 export class UserDetailWrapperResponseDto {
 	@ClassField(() => UserDetailResponseDto, {
-		description: "회원 상세 정보",
+		description: "회원 상세 정보-",
 	})
 	data: UserDetailResponseDto;
 }

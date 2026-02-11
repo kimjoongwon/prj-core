@@ -2,7 +2,7 @@ import { CONTEXT_KEYS } from "@cocrepo/constant";
 import { TenantDto, UserDto } from "@cocrepo/dto";
 import { Injectable, type NestMiddleware } from "@nestjs/common";
 import type { NextFunction, Request, Response } from "express";
-import { parseAcceptLanguage } from "@cocrepo/be-i18n";
+import { parseAcceptLanguage } from "@cocrepo/toolkit";
 import { SpacesRepository } from "@cocrepo/repository";
 import { RedisService } from "@cocrepo/service";
 import { ClsService } from "nestjs-cls";

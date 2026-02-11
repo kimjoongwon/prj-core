@@ -1,4 +1,5 @@
-import { JwtStrategy, SpaceContext } from "@cocrepo/be-common";
+import { JwtStrategy } from "@cocrepo/be-common";
+import { SpaceContext } from "@cocrepo/service";
 import { AuthFacade } from "@cocrepo/facade";
 import {
 	RolesRepository,

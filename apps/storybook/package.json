@@ -15,7 +15,7 @@
   },
   "license": "ISC",
   "dependencies": {
-    "@cocrepo/design-system": "workspace:^",
+
     "@heroui/react": "catalog:",
     "@cocrepo/store": "workspace:^",
     "@cocrepo/ui": "workspace:^",

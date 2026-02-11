@@ -1,3 +1,9 @@
+// Context
+export { SpaceContext } from "./context/space-context";
+
+// I18n
+export { I18nModule, TranslationService } from "./i18n";
+
 // Services
 // 필요할 때 생성합니다. 가이드: .claude/agents/be-service-builder.md
 

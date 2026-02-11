@@ -1,3 +1,6 @@
+// Language utilities
+export { parseAcceptLanguage } from "./src/Language";
+
 // Browser utilities
 export {
 	getCurrentUrl,
@@ -129,6 +132,12 @@ export const tool = {
 	setProperty: ToolModule.setProperty,
 	deepClone: ToolModule.deepClone,
 	createRange: ToolModule.createRange,
+} as const;
+
+import * as LanguageModule from "./src/Language";
+
+export const language = {
+	parseAcceptLanguage: LanguageModule.parseAcceptLanguage,
 } as const;
 
 // es-toolkit utilities re-export for convenient access

@@ -10,7 +10,7 @@ import {
 } from "@nestjs/common";
 import { BaseExceptionFilter } from "@nestjs/core";
 import type { Request } from "express";
-import { TranslationService } from "@cocrepo/be-i18n";
+import { TranslationService } from "@cocrepo/service";
 
 @Catch()
 export class AllExceptionsFilter extends BaseExceptionFilter {
