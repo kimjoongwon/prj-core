@@ -3,13 +3,21 @@
  * Generated API client and types from OpenAPI specs using orval
  */
 
-// Export all APIs
+// ─── Server APIs (port 3006) ───
 export * from "./apis";
-// Export custom axios instance for direct usage if needed
 export {
 	AXIOS_INSTANCE,
 	customInstance,
 	setApiPersistStore,
 } from "./libs/customAxios";
-// Export all types and models
 export * from "./model";
+
+// ─── IDP APIs (port 3007) ───
+// NOTE: IDP codegen 최초 실행 전에는 빈 파일일 수 있음
+// export * from "./idp-apis";
+// export * from "./idp-model";
+export {
+	IDP_AXIOS_INSTANCE,
+	customIdpInstance,
+	setIdpBaseUrl,
+} from "./libs/customIdpAxios";

@@ -25,6 +25,8 @@
   ],
   "scripts": {
     "codegen": "orval --config orval.config.js",
+    "codegen:server": "orval --config orval.config.js --project store",
+    "codegen:idp": "orval --config orval.config.js --project idp",
     "codegen:local": "ORVAL_ENV=local orval --config orval.config.js",
     "codegen:stg": "ORVAL_ENV=stg orval --config orval.config.js",
     "codegen:prod": "ORVAL_ENV=prod orval --config orval.config.js",

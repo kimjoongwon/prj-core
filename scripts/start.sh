@@ -34,47 +34,86 @@ FILTERS=""
 SERVICES=""
 HAS_FRONTEND="false"
 HAS_BACKEND="false"
+HAS_IDP="false"
 
 for choice in $choices; do
   case $choice in
     1) FILTERS="$FILTERS --filter=server..."; SERVICES="$SERVICES server"; HAS_BACKEND="true" ;;
     2) FILTERS="$FILTERS --filter=admin"; SERVICES="$SERVICES admin"; HAS_FRONTEND="true" ;;
-    3) FILTERS="$FILTERS --filter=idp..."; SERVICES="$SERVICES idp" ;;
+    3) FILTERS="$FILTERS --filter=idp..."; SERVICES="$SERVICES idp"; HAS_IDP="true" ;;
     4) FILTERS="$FILTERS --filter=storybook"; SERVICES="$SERVICES storybook" ;;
     5) FILTERS="$FILTERS --filter=proposal"; SERVICES="$SERVICES proposal"; HAS_FRONTEND="true" ;;
     *) echo -e "${YELLOW}잘못된 번호: ${choice}${RESET}"; exit 1 ;;
   esac
 done
 
-# 프론트엔드(admin/proposal) 선택 시 codegen 환경 질문
+# 프론트엔드(admin/proposal) 선택 시 codegen 질문
 CODEGEN_ENV=""
+CODEGEN_TARGET=""
 if [[ "$HAS_FRONTEND" == "true" ]]; then
   echo ""
-  echo -e "${BOLD}📦 API 코드젠 환경${RESET}"
-  echo -e "  ${CYAN}1${RESET})  local      ${DIM}로컬 서버 (localhost:3006)${RESET}"
-  echo -e "  ${CYAN}2${RESET})  stg        ${DIM}스테이징 서버${RESET}"
-  echo -e "  ${CYAN}3${RESET})  prod       ${DIM}운영 서버${RESET}"
-  echo -e "  ${CYAN}4${RESET})  건너뛰기   ${DIM}코드젠 실행 안 함${RESET}"
+  echo -e "${BOLD}📦 API 코드젠 대상${RESET}"
+  echo -e "  ${CYAN}1${RESET})  전체         ${DIM}Server + IDP${RESET}"
+  echo -e "  ${CYAN}2${RESET})  Server만     ${DIM}백엔드 서버 (port 3006)${RESET}"
+  echo -e "  ${CYAN}3${RESET})  IDP만        ${DIM}인증 서버 (port 3007)${RESET}"
+  echo -e "  ${CYAN}4${RESET})  건너뛰기     ${DIM}코드젠 실행 안 함${RESET}"
   echo ""
   echo -ne "${BOLD}번호 선택: ${RESET}"
-  read -r codegen_choice
+  read -r codegen_target_choice
 
-  case $codegen_choice in
-    1) CODEGEN_ENV="local" ;;
-    2) CODEGEN_ENV="stg" ;;
-    3) CODEGEN_ENV="prod" ;;
-    4|"") CODEGEN_ENV="" ;;
-    *) echo -e "${YELLOW}잘못된 번호: ${codegen_choice}${RESET}"; exit 1 ;;
+  case $codegen_target_choice in
+    1) CODEGEN_TARGET="all" ;;
+    2) CODEGEN_TARGET="server" ;;
+    3) CODEGEN_TARGET="idp" ;;
+    4|"") CODEGEN_TARGET="" ;;
+    *) echo -e "${YELLOW}잘못된 번호: ${codegen_target_choice}${RESET}"; exit 1 ;;
   esac
+
+  if [[ -n "$CODEGEN_TARGET" ]]; then
+    echo ""
+    echo -e "${BOLD}📦 API 코드젠 환경${RESET}"
+    echo -e "  ${CYAN}1${RESET})  local      ${DIM}로컬 서버${RESET}"
+    echo -e "  ${CYAN}2${RESET})  stg        ${DIM}스테이징 서버${RESET}"
+    echo -e "  ${CYAN}3${RESET})  prod       ${DIM}운영 서버${RESET}"
+    echo ""
+    echo -ne "${BOLD}번호 선택: ${RESET}"
+    read -r codegen_choice
+
+    case $codegen_choice in
+      1) CODEGEN_ENV="local" ;;
+      2) CODEGEN_ENV="stg" ;;
+      3) CODEGEN_ENV="prod" ;;
+      *) echo -e "${YELLOW}잘못된 번호: ${codegen_choice}${RESET}"; exit 1 ;;
+    esac
+  fi
 fi
 
-# local 선택 시: 백엔드 없으면 자동 추가
-if [[ "$CODEGEN_ENV" == "local" && "$HAS_BACKEND" != "true" ]]; then
-  FILTERS="$FILTERS --filter=server..."
-  SERVICES="$SERVICES server"
-  HAS_BACKEND="true"
-  echo -e "\n${YELLOW}⚠️  local 코드젠은 서버가 필요합니다. server를 자동으로 포함합니다.${RESET}"
+# local 선택 시: 필요한 서버가 없으면 자동 추가
+if [[ "$CODEGEN_ENV" == "local" ]]; then
+  if [[ ("$CODEGEN_TARGET" == "all" || "$CODEGEN_TARGET" == "server") && "$HAS_BACKEND" != "true" ]]; then
+    FILTERS="$FILTERS --filter=server..."
+    SERVICES="$SERVICES server"
+    HAS_BACKEND="true"
+    echo -e "\n${YELLOW}⚠️  local 코드젠은 서버가 필요합니다. server를 자동으로 포함합니다.${RESET}"
+  fi
+  if [[ ("$CODEGEN_TARGET" == "all" || "$CODEGEN_TARGET" == "idp") && "$HAS_IDP" != "true" ]]; then
+    FILTERS="$FILTERS --filter=idp..."
+    SERVICES="$SERVICES idp"
+    HAS_IDP="true"
+    echo -e "${YELLOW}⚠️  local 코드젠은 IDP 서버가 필요합니다. idp를 자동으로 포함합니다.${RESET}"
+  fi
 fi
+
+# codegen 실행 커맨드 결정
+resolve_codegen_cmd() {
+  local env=$1
+  local target=$2
+  case $target in
+    all)    echo "pnpm --filter=@cocrepo/api codegen:${env}" ;;
+    server) echo "ORVAL_ENV=${env} pnpm --filter=@cocrepo/api codegen:server" ;;
+    idp)    echo "ORVAL_ENV=${env} pnpm --filter=@cocrepo/api codegen:idp" ;;
+  esac
+}
 
 echo -e "\n${GREEN}▶${SERVICES} 시작${RESET}\n"
 
@@ -83,21 +122,36 @@ if [[ "$CODEGEN_ENV" == "local" ]]; then
   turbo start:dev $FILTERS --concurrency=20 &
   TURBO_PID=$!
 
-  echo -e "${DIM}서버 시작 대기 중...${RESET}"
-  until curl -s -o /dev/null -w "%{http_code}" http://localhost:3006/api-json 2>/dev/null | grep -q "200"; do
-    sleep 2
-  done
+  # Server health check
+  if [[ "$CODEGEN_TARGET" == "all" || "$CODEGEN_TARGET" == "server" ]]; then
+    echo -e "${DIM}Server(3006) 시작 대기 중...${RESET}"
+    until curl -s -o /dev/null -w "%{http_code}" http://localhost:3006/api-json 2>/dev/null | grep -q "200"; do
+      sleep 2
+    done
+    echo -e "${GREEN}✅ Server 준비 완료${RESET}"
+  fi
 
-  echo -e "${GREEN}✅ 서버 준비 완료. API 코드젠 실행...${RESET}"
-  pnpm --filter=@cocrepo/api codegen:local
+  # IDP health check
+  if [[ "$CODEGEN_TARGET" == "all" || "$CODEGEN_TARGET" == "idp" ]]; then
+    echo -e "${DIM}IDP(3007) 시작 대기 중...${RESET}"
+    until curl -s -o /dev/null -w "%{http_code}" http://localhost:3007/api-json 2>/dev/null | grep -q "200"; do
+      sleep 2
+    done
+    echo -e "${GREEN}✅ IDP 준비 완료${RESET}"
+  fi
+
+  echo -e "${GREEN}▶ API 코드젠 실행...${RESET}"
+  CODEGEN_CMD=$(resolve_codegen_cmd "$CODEGEN_ENV" "$CODEGEN_TARGET")
+  eval $CODEGEN_CMD
   echo -e "${GREEN}✅ API 코드젠 완료${RESET}"
 
   wait $TURBO_PID
 
 elif [[ -n "$CODEGEN_ENV" ]]; then
   # stg/prod: 코드젠 먼저 실행 (서버 불필요)
-  echo -e "${GREEN}▶ API 코드젠 (${CODEGEN_ENV}) 실행...${RESET}"
-  pnpm --filter=@cocrepo/api codegen:${CODEGEN_ENV}
+  echo -e "${GREEN}▶ API 코드젠 (${CODEGEN_ENV} / ${CODEGEN_TARGET}) 실행...${RESET}"
+  CODEGEN_CMD=$(resolve_codegen_cmd "$CODEGEN_ENV" "$CODEGEN_TARGET")
+  eval $CODEGEN_CMD
   echo -e "${GREEN}✅ API 코드젠 완료${RESET}\n"
 
   turbo start:dev $FILTERS --concurrency=20

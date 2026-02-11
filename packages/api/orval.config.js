@@ -3,13 +3,22 @@
 
 const http = require("http");
 
-const environments = {
+const serverEnvironments = {
   development: "http://localhost:3006/api-json",
   local: "http://localhost:3006/api-json",
   stg: "https://stg.cocdev.co.kr/api-json",
   staging: "https://stg.cocdev.co.kr/api-json",
   prod: "https://cocdev.co.kr/api-json",
   production: "https://cocdev.co.kr/api-json",
+};
+
+const idpEnvironments = {
+  development: "http://localhost:3007/api-json",
+  local: "http://localhost:3007/api-json",
+  stg: "https://stg-idp.cocdev.co.kr/api-json",
+  staging: "https://stg-idp.cocdev.co.kr/api-json",
+  prod: "https://idp.cocdev.co.kr/api-json",
+  production: "https://idp.cocdev.co.kr/api-json",
 };
 
 /**
@@ -44,44 +53,82 @@ async function isServerRunning(url, timeout = 2000) {
 }
 
 /**
- * 사용할 API URL 결정
+ * 환경 맵에서 API URL을 결정
+ * - 명시적 환경 지정 시 해당 URL 사용
  * - localhost가 실행 중이면 localhost 사용
- * - 아니면 staging 서버 사용
+ * - 아니면 staging 서버로 fallback
+ *
+ * @param {Record<string, string>} envMap - 환경별 URL 매핑
+ * @param {string} label - 로깅용 라벨 (예: "Server", "IDP")
  */
-async function getApiUrl() {
+async function resolveApiUrl(envMap, label) {
   const orvalEnv = process.env.ORVAL_ENV;
 
   // 명시적 환경 지정 시 바로 해당 URL 사용
   if (orvalEnv) {
-    const url = environments[orvalEnv];
+    const url = envMap[orvalEnv];
     if (!url) {
       throw new Error(`알 수 없는 ORVAL_ENV: ${orvalEnv} (local|stg|prod)`);
     }
-    console.log(`🎯 ORVAL_ENV=${orvalEnv} → ${url}`);
+    console.log(`🎯 [${label}] ORVAL_ENV=${orvalEnv} → ${url}`);
     return url;
   }
 
-  // ORVAL_ENV 미지정: 기존 자동 감지 로직 유지
-  const localhostUrl = environments.development;
+  // ORVAL_ENV 미지정: localhost 자동 감지
+  const localhostUrl = envMap.development;
   const isLocalRunning = await isServerRunning(localhostUrl);
 
   if (isLocalRunning) {
-    console.log(`✅ localhost:3006 서버가 실행 중입니다.`);
+    console.log(`✅ [${label}] ${new URL(localhostUrl).host} 서버가 실행 중입니다.`);
     return localhostUrl;
   }
 
-  console.log(`⚠️  localhost:3006 서버가 실행되지 않았습니다.`);
-  console.log(`🔄 Fallback: staging 서버를 사용합니다.`);
-  return environments.staging;
+  console.log(`⚠️  [${label}] ${new URL(localhostUrl).host} 서버가 실행되지 않았습니다.`);
+  console.log(`🔄 [${label}] Fallback: staging 서버를 사용합니다.`);
+  return envMap.staging;
 }
+
+/** Server API URL 결정 */
+async function getApiUrl() {
+  return resolveApiUrl(serverEnvironments, "Server");
+}
+
+/** IDP API URL 결정 */
+async function getIdpApiUrl() {
+  return resolveApiUrl(idpEnvironments, "IDP");
+}
+
+/** 공통 React Query 훅 생성 옵션 */
+const queryOptions = {
+  // 기본 useQuery 훅 생성 활성화
+  useQuery: true,
+
+  // 무한 스크롤용 useInfiniteQuery 비활성화
+  useInfinite: false,
+
+  // Suspense 지원 useQuery 훅 생성 활성화
+  useSuspenseQuery: true,
+
+  // Suspense 지원 무한 쿼리 훅 생성 활성화
+  useSuspenseInfiniteQuery: true,
+
+  // 서버 컴포넌트용 prefetch 함수 생성 활성화
+  usePrefetch: true,
+};
 
 // 비동기 설정 래퍼
 async function createConfig() {
-  const apiUrl = await getApiUrl();
+  const [apiUrl, idpApiUrl] = await Promise.all([
+    getApiUrl(),
+    getIdpApiUrl(),
+  ]);
 
-  console.log(`🚀 Orval 설정 로드됨 - API URL: ${apiUrl}`);
+  console.log(`🚀 Orval 설정 로드됨`);
+  console.log(`   Server API: ${apiUrl}`);
+  console.log(`   IDP API:    ${idpApiUrl}`);
 
   return {
+    // ─── Server API (port 3006) ───
     store: {
       // OpenAPI 태그별로 파일 분할하여 생성
       mode: "tags-split",
@@ -112,22 +159,31 @@ async function createConfig() {
           },
 
           // React Query 훅 생성 옵션
-          query: {
-            // 기본 useQuery 훅 생성 활성화
-            useQuery: true,
+          query: queryOptions,
+        },
+      },
+    },
 
-            // 무한 스크롤용 useInfiniteQuery 비활성화
-            useInfinite: false,
+    // ─── IDP API (port 3007) ───
+    idp: {
+      mode: "tags-split",
 
-            // Suspense 지원 useQuery 훅 생성 활성화
-            useSuspenseQuery: true,
+      input: {
+        target: idpApiUrl,
+        validation: false,
+      },
 
-            // Suspense 지원 무한 쿼리 훅 생성 활성화
-            useSuspenseInfiniteQuery: true,
+      output: {
+        target: "src/idp-apis.ts",
+        schemas: "src/idp-model",
+        client: "react-query",
 
-            // 서버 컴포넌트용 prefetch 함수 생성 활성화
-            usePrefetch: true,
+        override: {
+          mutator: {
+            path: "./src/libs/customIdpAxios.ts",
+            name: "customIdpInstance",
           },
+          query: queryOptions,
         },
       },
     },
