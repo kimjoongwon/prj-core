@@ -9,7 +9,6 @@
 2. Cookie - 브라우저에서 로그인 후 쿠키 자동 전송
  * OpenAPI spec version: 1.0.0
  */
-import type { SubjectResponseDtoDisplayName } from './subjectResponseDtoDisplayName';
 
 export interface SubjectResponseDto {
   /** Subject 이름 (Prisma 모델명) */
@@ -18,7 +17,7 @@ export interface SubjectResponseDto {
    * Subject 표시명 (@displayName 주석)
    * @nullable
    */
-  displayName: SubjectResponseDtoDisplayName;
+  displayName: string | null;
   /** 필드 수 */
   fieldCount: number;
 }

@@ -12,9 +12,6 @@
 import type { ActionResponseDto } from './actionResponseDto';
 import type { SubjectResponseDto } from './subjectResponseDto';
 import type { AbilityResponseDtoConditions } from './abilityResponseDtoConditions';
-import type { AbilityResponseDtoReason } from './abilityResponseDtoReason';
-import type { AbilityResponseDtoDescription } from './abilityResponseDtoDescription';
-import type { AbilityResponseDtoUpdatedAt } from './abilityResponseDtoUpdatedAt';
 
 export interface AbilityResponseDto {
   /** Ability ID (UUID) */
@@ -40,19 +37,19 @@ export interface AbilityResponseDto {
    * 거부 사유
    * @nullable
    */
-  reason?: AbilityResponseDtoReason;
+  reason?: string | null;
   /** 권한 이름 (고유 식별자) */
   name: string;
   /**
    * 권한 설명
    * @nullable
    */
-  description?: AbilityResponseDtoDescription;
+  description?: string | null;
   /** 생성 일시 */
   createdAt: string;
   /**
    * 수정 일시
    * @nullable
    */
-  updatedAt?: AbilityResponseDtoUpdatedAt;
+  updatedAt?: string | null;
 }

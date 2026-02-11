@@ -9,11 +9,7 @@
 2. Cookie - 브라우저에서 로그인 후 쿠키 자동 전송
  * OpenAPI spec version: 1.0.0
  */
-import type { ActionResponseDtoDisplayName } from './actionResponseDtoDisplayName';
-import type { ActionResponseDtoDescription } from './actionResponseDtoDescription';
-import type { ActionResponseDtoGroup } from './actionResponseDtoGroup';
 import type { ActionResponseDtoConfig } from './actionResponseDtoConfig';
-import type { ActionResponseDtoUpdatedAt } from './actionResponseDtoUpdatedAt';
 
 export interface ActionResponseDto {
   /** Action ID (UUID) */
@@ -24,17 +20,17 @@ export interface ActionResponseDto {
    * 표시명
    * @nullable
    */
-  displayName?: ActionResponseDtoDisplayName;
+  displayName?: string | null;
   /**
    * 설명
    * @nullable
    */
-  description?: ActionResponseDtoDescription;
+  description?: string | null;
   /**
    * 그룹 (crud, visibility, bulk, workflow)
    * @nullable
    */
-  group?: ActionResponseDtoGroup;
+  group?: string | null;
   /** 정렬 순서 */
   order: number;
   /** 시스템 여부 (시스템 기본 Action인지) */
@@ -50,5 +46,5 @@ export interface ActionResponseDto {
    * 수정 일시
    * @nullable
    */
-  updatedAt?: ActionResponseDtoUpdatedAt;
+  updatedAt?: string | null;
 }
