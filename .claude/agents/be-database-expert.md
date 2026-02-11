@@ -261,7 +261,7 @@ const users = await prisma.user.findMany({
 ### Prisma 스키마 위치
 
 ```
-packages/prisma/schema/*.prisma
+packages/be-prisma/schema/*.prisma
 ```
 
 ### 공통 시스템 필드

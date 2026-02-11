@@ -25,7 +25,7 @@ Prisma DMMF(Data Model Meta Format)를 파싱하여 모델/필드 정보를 추�
 
 | 구분 | 항목 | 설명 |
 |------|------|------|
-| **입력** | Prisma 스키마 | `packages/prisma/schema/*.prisma` |
+| **입력** | Prisma 스키마 | `packages/be-prisma/schema/*.prisma` |
 | | 파싱 요구사항 | 추출할 정보 (모델명, 필드명, displayName 등) |
 | **출력** | DmmfParser 클래스 | DMMF 파싱 유틸리티 |
 | | 인터페이스 | ModelInfo, FieldInfo 등 반환 타입 |
@@ -242,7 +242,7 @@ export function getDmmfParser(): DmmfParser {
 
 ## 6. 체크리스트
 
-- [ ] `packages/prisma/src/utils/dmmf-parser.ts` 파일 생성
+- [ ] `packages/be-prisma/src/utils/dmmf-parser.ts` 파일 생성
 - [ ] ModelInfo, FieldInfo 인터페이스 정의
 - [ ] DmmfParser 클래스 구현
   - [ ] parseModels() 메서드
@@ -273,7 +273,7 @@ export function getDmmfParser(): DmmfParser {
 ### 파일 위치
 
 ```
-packages/prisma/src/utils/dmmf-parser.ts
+packages/be-prisma/src/utils/dmmf-parser.ts
 ```
 
 ### 사용 예시
@@ -315,5 +315,5 @@ model User {
 
 ### 관련 파일
 
-- Prisma 스키마: `packages/prisma/schema/*.prisma`
-- SubjectSyncService: `packages/service/src/subject-sync.service.ts`
+- Prisma 스키마: `packages/be-prisma/schema/*.prisma`
+- SubjectSyncService: `packages/be-service/src/subject-sync.service.ts`

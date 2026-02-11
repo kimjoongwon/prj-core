@@ -49,7 +49,7 @@ npx tsc --noEmit --pretty
 
 ### ❌ 타입 에러 발견
 
-**packages/ui/src/components/page/DogWalkRequestPage.tsx**
+**packages/fe-ui/src/components/page/DogWalkRequestPage.tsx**
 - **53번째 줄**: `TS2339` - Property 'children' does not exist on type 'InfoMessageProps'
 - **89번째 줄**: `TS2339` - Property 'color' does not exist on type 'TextProps'
 

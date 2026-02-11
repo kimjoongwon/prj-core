@@ -344,14 +344,14 @@ export class Cookie extends ValueObject<CookieProps> {
 ### 파일 위치
 
 ```
-packages/vo/src/{도메인}/{name}.vo.ts
+packages/be-vo/src/{도메인}/{name}.vo.ts
 ```
 
 예시:
-- `packages/vo/src/auth/cookie.vo.ts`
-- `packages/vo/src/auth/password.vo.ts`
-- `packages/vo/src/common/email.vo.ts`
-- `packages/vo/src/common/money.vo.ts`
+- `packages/be-vo/src/auth/cookie.vo.ts`
+- `packages/be-vo/src/auth/password.vo.ts`
+- `packages/be-vo/src/common/email.vo.ts`
+- `packages/be-vo/src/common/money.vo.ts`
 
 ### 도메인 메서드 네이밍 가이드
 
@@ -367,17 +367,17 @@ packages/vo/src/{도메인}/{name}.vo.ts
 새 VO를 생성한 후 반드시 export 추가:
 
 ```typescript
-// packages/vo/src/auth/index.ts
+// packages/be-vo/src/auth/index.ts
 export * from "./cookie.vo";
 export * from "./password.vo";
 
-// packages/vo/src/index.ts
+// packages/be-vo/src/index.ts
 export * from "./auth";
 export * from "./common";
 ```
 
 ### 관련 파일
 
-- 추상 클래스: `packages/vo/src/common/value-object.base.ts`
-- 에러 클래스: `packages/vo/src/errors/vo.error.ts`
-- VO export: `packages/vo/src/index.ts`
+- 추상 클래스: `packages/be-vo/src/common/value-object.base.ts`
+- 에러 클래스: `packages/be-vo/src/errors/vo.error.ts`
+- VO export: `packages/be-vo/src/index.ts`

@@ -8,28 +8,28 @@
     "generator": "req-reverse-engineer",
     "version": "v7.0",
     "sourceFiles": [
-      "packages/type/src/navigation.ts",
-      "packages/store/src/stores/navigationStore.ts",
-      "packages/store/src/stores/navItem.ts",
-      "packages/store/src/stores/navigator.ts",
-      "packages/store/src/stores/bottomTabStore.ts",
-      "packages/store/src/stores/fabStore.ts",
-      "packages/store/src/stores/rootStore.ts",
-      "packages/store/src/stores/useStore.ts",
-      "packages/constant/src/routing/admin-menu.ts",
-      "packages/ui/src/components/widget/NavTreePanel/NavTreePanel.tsx",
-      "packages/ui/src/components/feature/SideNav/SideNav.tsx",
-      "packages/ui/src/components/feature/Nav/Nav.tsx",
-      "packages/ui/src/components/feature/SubNav/SubNav.tsx",
-      "packages/ui/src/components/feature/BottomTab/BottomTab.tsx",
-      "packages/ui/src/components/feature/SubMenuList/SubMenuList.tsx",
-      "packages/ui/src/components/ui/layouts/Admin/AdminLayout.tsx",
-      "packages/ui/src/components/ui/layouts/Admin/AdminSidebar.tsx",
-      "packages/ui/src/components/ui/layouts/Admin/AdminHeader.tsx",
-      "packages/ui/src/components/ui/layouts/Admin/AdminBottomTab.tsx",
-      "packages/ui/src/components/ui/layouts/Admin/AdminSubMenuList.tsx",
-      "packages/ui/src/components/ui/layouts/Admin/AdminFAB.tsx",
-      "packages/ui/src/components/ui/permission/CanMenu.tsx"
+      "packages/common-type/src/navigation.ts",
+      "packages/fe-store/src/stores/navigationStore.ts",
+      "packages/fe-store/src/stores/navItem.ts",
+      "packages/fe-store/src/stores/navigator.ts",
+      "packages/fe-store/src/stores/bottomTabStore.ts",
+      "packages/fe-store/src/stores/fabStore.ts",
+      "packages/fe-store/src/stores/rootStore.ts",
+      "packages/fe-store/src/stores/useStore.ts",
+      "packages/common-constant/src/routing/admin-menu.ts",
+      "packages/fe-ui/src/components/widget/NavTreePanel/NavTreePanel.tsx",
+      "packages/fe-ui/src/components/feature/SideNav/SideNav.tsx",
+      "packages/fe-ui/src/components/feature/Nav/Nav.tsx",
+      "packages/fe-ui/src/components/feature/SubNav/SubNav.tsx",
+      "packages/fe-ui/src/components/feature/BottomTab/BottomTab.tsx",
+      "packages/fe-ui/src/components/feature/SubMenuList/SubMenuList.tsx",
+      "packages/fe-ui/src/components/ui/layouts/Admin/AdminLayout.tsx",
+      "packages/fe-ui/src/components/ui/layouts/Admin/AdminSidebar.tsx",
+      "packages/fe-ui/src/components/ui/layouts/Admin/AdminHeader.tsx",
+      "packages/fe-ui/src/components/ui/layouts/Admin/AdminBottomTab.tsx",
+      "packages/fe-ui/src/components/ui/layouts/Admin/AdminSubMenuList.tsx",
+      "packages/fe-ui/src/components/ui/layouts/Admin/AdminFAB.tsx",
+      "packages/fe-ui/src/components/ui/permission/CanMenu.tsx"
     ],
     "createdAt": "2026-01-31T10:00:00Z",
     "updatedAt": "2026-01-31T10:00:00Z"
@@ -162,7 +162,7 @@
       "description": "전체 레이아웃 (Desktop + Mobile)",
       "path": "/",
       "metadata": {
-        "source": "packages/ui/src/components/ui/layouts/Admin/AdminLayout.tsx"
+        "source": "packages/fe-ui/src/components/ui/layouts/Admin/AdminLayout.tsx"
       }
     },
     {
@@ -172,7 +172,7 @@
       "name": "AdminSidebar",
       "description": "데스크톱 사이드바",
       "metadata": {
-        "source": "packages/ui/src/components/ui/layouts/Admin/AdminSidebar.tsx"
+        "source": "packages/fe-ui/src/components/ui/layouts/Admin/AdminSidebar.tsx"
       }
     },
     {
@@ -182,7 +182,7 @@
       "name": "AdminHeader",
       "description": "헤더",
       "metadata": {
-        "source": "packages/ui/src/components/ui/layouts/Admin/AdminHeader.tsx"
+        "source": "packages/fe-ui/src/components/ui/layouts/Admin/AdminHeader.tsx"
       }
     },
     {
@@ -192,7 +192,7 @@
       "name": "AdminBottomTab",
       "description": "모바일 하단 탭",
       "metadata": {
-        "source": "packages/ui/src/components/ui/layouts/Admin/AdminBottomTab.tsx"
+        "source": "packages/fe-ui/src/components/ui/layouts/Admin/AdminBottomTab.tsx"
       }
     },
     {
@@ -202,7 +202,7 @@
       "name": "AdminSubMenuList",
       "description": "모바일 서브메뉴 리스트",
       "metadata": {
-        "source": "packages/ui/src/components/ui/layouts/Admin/AdminSubMenuList.tsx"
+        "source": "packages/fe-ui/src/components/ui/layouts/Admin/AdminSubMenuList.tsx"
       }
     },
     {
@@ -212,7 +212,7 @@
       "name": "AdminFAB",
       "description": "모바일 FAB",
       "metadata": {
-        "source": "packages/ui/src/components/ui/layouts/Admin/AdminFAB.tsx"
+        "source": "packages/fe-ui/src/components/ui/layouts/Admin/AdminFAB.tsx"
       }
     },
     {
@@ -399,7 +399,7 @@
       "name": "NavItem",
       "description": "네비게이션 아이템 클래스",
       "metadata": {
-        "source": "packages/store/src/stores/navItem.ts"
+        "source": "packages/fe-store/src/stores/navItem.ts"
       }
     },
     {
@@ -410,7 +410,7 @@
       "name": "NavigationStore",
       "description": "네비게이션 상태 관리 Store",
       "metadata": {
-        "source": "packages/store/src/stores/navigationStore.ts"
+        "source": "packages/fe-store/src/stores/navigationStore.ts"
       }
     },
     {
@@ -421,7 +421,7 @@
       "name": "BottomTabStore",
       "description": "모바일 하단 탭 상태 관리 Store",
       "metadata": {
-        "source": "packages/store/src/stores/bottomTabStore.ts"
+        "source": "packages/fe-store/src/stores/bottomTabStore.ts"
       }
     },
     {
@@ -432,7 +432,7 @@
       "name": "FABStore",
       "description": "FAB 상태 관리 Store",
       "metadata": {
-        "source": "packages/store/src/stores/fabStore.ts"
+        "source": "packages/fe-store/src/stores/fabStore.ts"
       }
     },
     {
@@ -444,7 +444,7 @@
       "description": "트리 형태 네비게이션 Widget",
       "metadata": {
         "componentType": "widget",
-        "source": "packages/ui/src/components/widget/NavTreePanel/",
+        "source": "packages/fe-ui/src/components/widget/NavTreePanel/",
         "existing": true
       }
     },
@@ -457,7 +457,7 @@
       "description": "Store 연결 사이드바 Feature",
       "metadata": {
         "componentType": "feature",
-        "source": "packages/ui/src/components/feature/SideNav/",
+        "source": "packages/fe-ui/src/components/feature/SideNav/",
         "existing": true
       }
     },
@@ -470,7 +470,7 @@
       "description": "Header용 네비게이션 Feature",
       "metadata": {
         "componentType": "feature",
-        "source": "packages/ui/src/components/feature/Nav/",
+        "source": "packages/fe-ui/src/components/feature/Nav/",
         "existing": true
       }
     },
@@ -483,7 +483,7 @@
       "description": "2depth 네비게이션 Feature",
       "metadata": {
         "componentType": "feature",
-        "source": "packages/ui/src/components/feature/SubNav/",
+        "source": "packages/fe-ui/src/components/feature/SubNav/",
         "existing": true
       }
     },
@@ -496,7 +496,7 @@
       "description": "Store 연결 하단 탭 Feature",
       "metadata": {
         "componentType": "feature",
-        "source": "packages/ui/src/components/feature/BottomTab/",
+        "source": "packages/fe-ui/src/components/feature/BottomTab/",
         "existing": true
       }
     },
@@ -509,7 +509,7 @@
       "description": "Store 연결 서브메뉴 Feature",
       "metadata": {
         "componentType": "feature",
-        "source": "packages/ui/src/components/feature/SubMenuList/",
+        "source": "packages/fe-ui/src/components/feature/SubMenuList/",
         "existing": true
       }
     },
@@ -522,7 +522,7 @@
       "description": "전체 레이아웃 Layout",
       "metadata": {
         "componentType": "layout",
-        "source": "packages/ui/src/components/ui/layouts/Admin/",
+        "source": "packages/fe-ui/src/components/ui/layouts/Admin/",
         "existing": true
       }
     },
@@ -535,7 +535,7 @@
       "description": "사이드바 Pure UI",
       "metadata": {
         "componentType": "ui",
-        "source": "packages/ui/src/components/ui/layouts/Admin/",
+        "source": "packages/fe-ui/src/components/ui/layouts/Admin/",
         "existing": true
       }
     },
@@ -548,7 +548,7 @@
       "description": "헤더 Pure UI",
       "metadata": {
         "componentType": "ui",
-        "source": "packages/ui/src/components/ui/layouts/Admin/",
+        "source": "packages/fe-ui/src/components/ui/layouts/Admin/",
         "existing": true
       }
     },
@@ -561,7 +561,7 @@
       "description": "하단 탭 Pure UI",
       "metadata": {
         "componentType": "ui",
-        "source": "packages/ui/src/components/ui/layouts/Admin/",
+        "source": "packages/fe-ui/src/components/ui/layouts/Admin/",
         "existing": true
       }
     },
@@ -574,7 +574,7 @@
       "description": "서브메뉴 Pure UI",
       "metadata": {
         "componentType": "ui",
-        "source": "packages/ui/src/components/ui/layouts/Admin/",
+        "source": "packages/fe-ui/src/components/ui/layouts/Admin/",
         "existing": true
       }
     },
@@ -587,7 +587,7 @@
       "description": "FAB Pure UI",
       "metadata": {
         "componentType": "ui",
-        "source": "packages/ui/src/components/ui/layouts/Admin/",
+        "source": "packages/fe-ui/src/components/ui/layouts/Admin/",
         "existing": true
       }
     },

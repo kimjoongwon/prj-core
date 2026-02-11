@@ -74,8 +74,8 @@ sequenceDiagram
 | 단계 | 파일 | 핵심 로직 |
 |------|------|----------|
 | 로그인 시작 | `apps/admin/src/app/auth/login/hooks/useAuthLoginPage.tsx:28` | `window.location.href = "/api/v1/auth/login"` |
-| Authorization URL 생성 | `packages/facade/src/auth.facade.ts:79-91` | `getAuthorizationUrl()` - scope: `openid profile email roles` |
-| State 저장 (Redis) | `packages/service/src/token-storage.service.ts:140-143` | `saveOidcState()` - TTL 10분, 일회용 |
+| Authorization URL 생성 | `packages/be-facade/src/auth.facade.ts:79-91` | `getAuthorizationUrl()` - scope: `openid profile email roles` |
+| State 저장 (Redis) | `packages/be-service/src/token-storage.service.ts:140-143` | `saveOidcState()` - TTL 10분, 일회용 |
 | IDP 리다이렉트 | `apps/server/src/module/auth/auth.controller.ts:64-67` | `login()` - Authorization URL로 redirect |
 | Interaction 화면 | `apps/idp/src/module/interaction/interaction.controller.ts:58-93` | `getInteraction()` - prompt에 따라 login/consent 분기 |
 | 사용자 인증 | `apps/idp/src/module/interaction/interaction.service.ts:67-94` | `validateUser()` - bcrypt 비밀번호 검증 |
@@ -85,8 +85,8 @@ sequenceDiagram
 | Claims 빌드 | `apps/idp/src/module/oidc/account.service.ts:107-140` | `buildFullClaims()` - 전체 claims 빌드 후 캐시 |
 | Claims 필터 | `apps/idp/src/module/oidc/account.service.ts:145-173` | `filterClaimsByScope()` - scope별 claims 필터링 |
 | Callback 처리 | `apps/server/src/module/auth/auth.controller.ts:78-100` | `handleCallback()` - 에러 처리 + 쿠키 설정 + 리다이렉트 |
-| State 검증 + 토큰 교환 | `packages/facade/src/auth.facade.ts:99-130` | `handleOidcCallback()` - state 검증 → code 교환 → 쿠키 설정 |
-| IDP 토큰 교환 | `packages/facade/src/auth.facade.ts:135-163` | `exchangeCodeForTokens()` - IDP token endpoint 호출 |
+| State 검증 + 토큰 교환 | `packages/be-facade/src/auth.facade.ts:99-130` | `handleOidcCallback()` - state 검증 → code 교환 → 쿠키 설정 |
+| IDP 토큰 교환 | `packages/be-facade/src/auth.facade.ts:135-163` | `exchangeCodeForTokens()` - IDP token endpoint 호출 |
 
 ---
 
@@ -141,7 +141,7 @@ sequenceDiagram
 |-----------|------|----------|
 | JwtAuthGuard | `packages/be-common/src/guard/jwt.auth-guard.ts:13-73` | 블랙리스트 확인 + Passport 인증 |
 | JwtStrategy | `packages/be-common/src/strategy/jwt.strategy.ts:25-90` | JWKS 기반 RS256 검증, Bearer/쿠키 추출, 사용자 조회 |
-| Request 인터셉터 | `packages/api/src/libs/customAxios.ts:31-42` | `x-space-id` 헤더 자동 추가 |
+| Request 인터셉터 | `packages/fe-api/src/libs/customAxios.ts:31-42` | `x-space-id` 헤더 자동 추가 |
 
 ---
 
@@ -204,9 +204,9 @@ sequenceDiagram
 
 | 구성 요소 | 파일 | 핵심 로직 |
 |-----------|------|----------|
-| 401 인터셉터 | `packages/api/src/libs/customAxios.ts:63-124` | 토큰 갱신 + 큐 패턴 + PersistStore 업데이트 |
+| 401 인터셉터 | `packages/fe-api/src/libs/customAxios.ts:63-124` | 토큰 갱신 + 큐 패턴 + PersistStore 업데이트 |
 | Refresh 엔드포인트 | `apps/server/src/module/auth/auth.controller.ts:102-124` | 쿠키에서 refreshToken 추출 |
-| IDP 토큰 갱신 | `packages/facade/src/auth.facade.ts:168-226` | `refreshTokenWithIdp()` |
+| IDP 토큰 갱신 | `packages/be-facade/src/auth.facade.ts:168-226` | `refreshTokenWithIdp()` |
 
 ---
 
@@ -244,11 +244,11 @@ sequenceDiagram
 
 | 구성 요소 | 파일 | 핵심 로직 |
 |-----------|------|----------|
-| 프론트엔드 로그아웃 | `packages/store/src/stores/authStore.ts:27-42` | `logout(logoutApi?)` - API 호출 후 리다이렉트 |
+| 프론트엔드 로그아웃 | `packages/fe-store/src/stores/authStore.ts:27-42` | `logout(logoutApi?)` - API 호출 후 리다이렉트 |
 | 로그아웃 컨트롤러 | `apps/server/src/module/auth/auth.controller.ts:163-184` | 쿠키에서 accessToken 추출 |
-| IDP 토큰 폐기 | `packages/facade/src/auth.facade.ts:251-271` | `revokeToken()` - revocation endpoint 호출 |
-| 쿠키 삭제 | `packages/facade/src/auth.facade.ts:231-246` | `logoutWithCookie()` |
-| 토큰 쿠키 관리 | `packages/service/src/token.service.ts:64-75` | `clearTokenCookies()` |
+| IDP 토큰 폐기 | `packages/be-facade/src/auth.facade.ts:251-271` | `revokeToken()` - revocation endpoint 호출 |
+| 쿠키 삭제 | `packages/be-facade/src/auth.facade.ts:231-246` | `logoutWithCookie()` |
+| 토큰 쿠키 관리 | `packages/be-service/src/token.service.ts:64-75` | `clearTokenCookies()` |
 
 ---
 
@@ -291,7 +291,7 @@ IDP에서 설정하는 토큰 수명 (`apps/idp/src/module/oidc/oidc-configurati
 
 ### 쿠키 만료 시간
 
-Server의 `TokenService`에서 설정 (`packages/service/src/token.service.ts:34-45`):
+Server의 `TokenService`에서 설정 (`packages/be-service/src/token.service.ts:34-45`):
 
 쿠키 만료 시간은 `auth` 설정의 `expires`/`refresh` 값에 따라 `Cookie.forToken()` (Value Object)으로 생성됩니다.
 
@@ -503,9 +503,9 @@ apps/idp/src/module/
 
 | 파일 | 역할 |
 |------|------|
-| `packages/facade/src/auth.facade.ts` | OIDC 인증 비즈니스 로직 (토큰 교환, 갱신, 폐기, 회원가입) |
-| `packages/service/src/token.service.ts` | 토큰 쿠키 관리 (설정/삭제), Cookie VO 활용 |
-| `packages/service/src/token-storage.service.ts` | Redis 기반 토큰 블랙리스트, OIDC State 관리 |
+| `packages/be-facade/src/auth.facade.ts` | OIDC 인증 비즈니스 로직 (토큰 교환, 갱신, 폐기, 회원가입) |
+| `packages/be-service/src/token.service.ts` | 토큰 쿠키 관리 (설정/삭제), Cookie VO 활용 |
+| `packages/be-service/src/token-storage.service.ts` | Redis 기반 토큰 블랙리스트, OIDC State 관리 |
 | `packages/be-common/src/strategy/jwt.strategy.ts` | JWKS 기반 JWT 검증 전략 (Bearer → 쿠키 순서) |
 | `packages/be-common/src/guard/jwt.auth-guard.ts` | 인증 Guard (블랙리스트 + JWT 검증) |
 
@@ -515,5 +515,5 @@ apps/idp/src/module/
 |------|------|
 | `apps/admin/src/app/auth/login/hooks/useAuthLoginPage.tsx` | 로그인 페이지 훅 (OIDC 리다이렉트) |
 | `apps/admin/next.config.ts` | API 프록시 설정 (rewrite: `/api/v1/*` → Server) |
-| `packages/api/src/libs/customAxios.ts` | Axios 인터셉터 (401 토큰 갱신, x-space-id 헤더, PersistStore 업데이트) |
-| `packages/store/src/stores/authStore.ts` | 인증 상태 관리 Store (로그아웃 처리) |
+| `packages/fe-api/src/libs/customAxios.ts` | Axios 인터셉터 (401 토큰 갱신, x-space-id 헤더, PersistStore 업데이트) |
+| `packages/fe-store/src/stores/authStore.ts` | 인증 상태 관리 Store (로그아웃 처리) |

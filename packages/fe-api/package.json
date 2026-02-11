@@ -55,7 +55,7 @@
   "repository": {
     "type": "git",
     "url": "git+https://github.com/your-org/prj-core.git",
-    "directory": "packages/api"
+    "directory": "packages/fe-api"
   },
   "bugs": {
     "url": "https://github.com/your-org/prj-core/issues"

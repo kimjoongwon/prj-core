@@ -40,8 +40,8 @@
 
 ## Stage 2: 스키마
 
-- [x] 기존 User 스키마 존재 (`packages/prisma/schema/user.prisma`)
-- [x] 기존 DTO 존재 (`packages/dto/src/user.dto.ts`, `packages/dto/src/users/`)
+- [x] 기존 User 스키마 존재 (`packages/be-prisma/schema/user.prisma`)
+- [x] 기존 DTO 존재 (`packages/be-dto/src/user.dto.ts`, `packages/be-dto/src/users/`)
 
 ---
 
@@ -56,21 +56,21 @@
 
 ### Cell 컴포넌트
 - [x] UserRoleCell - 역할 뱃지 Cell (2026-02-02)
-  - 생성: `packages/ui/src/components/ui/data-display/cells/UserRoleCell/`
+  - 생성: `packages/fe-ui/src/components/ui/data-display/cells/UserRoleCell/`
   - 기존 `RoleChipCell`을 래핑하여 tenants 배열에서 첫 번째 역할 표시
 - [x] StatusChipCell - 상태 뱃지 Cell (기존)
-  - 위치: `packages/ui/src/components/ui/data-display/cells/StatusChipCell/`
+  - 위치: `packages/fe-ui/src/components/ui/data-display/cells/StatusChipCell/`
   - removedAt 기반 상태 계산 지원
 - [x] DateTimeCell - 날짜 포맷팅 Cell (기존)
-  - 위치: `packages/ui/src/components/ui/data-display/cells/DateTimeCell/`
+  - 위치: `packages/fe-ui/src/components/ui/data-display/cells/DateTimeCell/`
 
 ### Widget 컴포넌트
 - [x] SearchFilterBar - 검색+필터 Widget (2026-02-02)
-  - 생성: `packages/ui/src/components/widget/SearchFilterBar/`
+  - 생성: `packages/fe-ui/src/components/widget/SearchFilterBar/`
 - [x] StatsCard - 통계 카드 Widget (2026-02-02)
-  - 생성: `packages/ui/src/components/widget/StatsCard/`
+  - 생성: `packages/fe-ui/src/components/widget/StatsCard/`
 - [x] FilterPanel - 접이식 필터 패널 Widget (기존)
-  - 위치: `packages/ui/src/components/widget/FilterPanel/`
+  - 위치: `packages/fe-ui/src/components/widget/FilterPanel/`
 
 ---
 

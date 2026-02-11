@@ -43,10 +43,10 @@ allowed-tools: Bash, Read, Grep
 
 ```bash
 # Prisma 스키마에서 엔티티 목록 확인
-ls packages/prisma/schema/*.prisma
+ls packages/be-prisma/schema/*.prisma
 
 # 특정 엔티티 스키마 확인
-cat packages/prisma/schema/user.prisma
+cat packages/be-prisma/schema/user.prisma
 ```
 
 ### 2단계: 엔티티-경로 매핑 규칙
@@ -75,7 +75,7 @@ cat packages/prisma/schema/user.prisma
 
 ```bash
 # 메뉴 설정 파일 확인
-cat packages/constant/src/routing/admin-menu.ts
+cat packages/common-constant/src/routing/admin-menu.ts
 
 # 기존 라우트 파일 구조 확인
 ls apps/admin/app/

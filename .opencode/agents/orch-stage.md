@@ -400,21 +400,21 @@ YYYY-MM-DD HH:mm
 ### Prisma 스키마
 | 파일 | 설명 |
 |------|------|
-| `packages/prisma/schema/{domain}.prisma` | ... |
+| `packages/be-prisma/schema/{domain}.prisma` | ... |
 
 ### Entity
 | 파일 | 설명 |
 |------|------|
-| `packages/entity/src/{entity}.entity.ts` | ... |
+| `packages/be-entity/src/{entity}.entity.ts` | ... |
 
 ### DTO
 | 파일 | 설명 |
 |------|------|
-| `packages/dto/src/{domain}/create-{entity}.dto.ts` | 생성 요청 |
-| `packages/dto/src/{domain}/{entity}-response.dto.ts` | 응답 |
+| `packages/be-dto/src/{domain}/create-{entity}.dto.ts` | 생성 요청 |
+| `packages/be-dto/src/{domain}/{entity}-response.dto.ts` | 응답 |
 
 ### 시드 데이터
-- `packages/prisma/seed-data.ts` (수정됨)
+- `packages/be-prisma/seed-data.ts` (수정됨)
 
 ## 실행된 명령
 - `pnpm --filter=@cocrepo/prisma generate`
@@ -429,10 +429,10 @@ Stage 3: 백엔드 로직
 ✅ Stage 2 완료: 스키마 구현
 
 📁 생성된 파일:
-- Prisma: packages/prisma/schema/member.prisma
-- Entity: packages/entity/src/member.entity.ts
-- DTO: packages/dto/src/members/*.dto.ts (4개)
-- Seed: packages/prisma/seed-data.ts (수정)
+- Prisma: packages/be-prisma/schema/member.prisma
+- Entity: packages/be-entity/src/member.entity.ts
+- DTO: packages/be-dto/src/members/*.dto.ts (4개)
+- Seed: packages/be-prisma/seed-data.ts (수정)
 
 📄 결과 문서: apps/proposal/plans/2026-01-10-MemberListPage-schema.md
 
@@ -496,12 +496,12 @@ YYYY-MM-DD HH:mm
 ### Repository
 | 파일 | 메서드 |
 |------|--------|
-| `packages/repository/src/{entity}s.repository.ts` | findById, findMany, create, updateById, removeById |
+| `packages/be-repository/src/{entity}s.repository.ts` | findById, findMany, create, updateById, removeById |
 
 ### Service
 | 파일 | 메서드 |
 |------|--------|
-| `packages/service/src/{entity}s.service.ts` | get{Entity}s, get{Entity}ById, create{Entity}, update{Entity}, delete{Entity} |
+| `packages/be-service/src/{entity}s.service.ts` | get{Entity}s, get{Entity}ById, create{Entity}, update{Entity}, delete{Entity} |
 
 ### Controller
 | 파일 | 엔드포인트 |
@@ -527,8 +527,8 @@ YYYY-MM-DD HH:mm
 ✅ Stage 3 완료: 백엔드 로직
 
 📁 생성된 파일:
-- Repository: packages/repository/src/members.repository.ts
-- Service: packages/service/src/members.service.ts
+- Repository: packages/be-repository/src/members.repository.ts
+- Service: packages/be-service/src/members.service.ts
 - Controller: apps/server/src/module/members/members.controller.ts
 - Module: apps/server/src/module/members/members.module.ts
 
@@ -717,7 +717,7 @@ YYYY-MM-DD HH:mm
 ## 생성된 파일
 
 ### Page 컴포넌트
-- `packages/ui/src/components/page/MemberListPage/`
+- `packages/fe-ui/src/components/page/MemberListPage/`
 - `apps/admin/app/(admin)/members/page.tsx`
 - `apps/admin/app/(admin)/members/_client.tsx`
 - `apps/admin/app/(admin)/members/_prefetch.ts`
@@ -744,7 +744,7 @@ YYYY-MM-DD HH:mm
 ✅ Stage 5 완료: MemberList 페이지 통합
 
 📁 생성된 파일:
-- Pure UI Page: packages/ui/src/components/page/MemberListPage/
+- Pure UI Page: packages/fe-ui/src/components/page/MemberListPage/
 - Route Page: apps/admin/app/(admin)/members/page.tsx
 - Client: apps/admin/app/(admin)/members/_client.tsx
 - Prefetch: apps/admin/app/(admin)/members/_prefetch.ts

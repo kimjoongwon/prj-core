@@ -137,25 +137,25 @@ proposal 앱과 호환을 위해 아래 타입을 사용합니다:
 
 | 레이어 | 경로 패턴 | 탐색 명령어 |
 |--------|----------|------------|
-| L7 Entity | `packages/prisma/schema/*.prisma` | `grep -l "model {Domain}" packages/prisma/schema/` |
-| L7 Entity | `packages/entity/src/*.entity.ts` | `ls packages/entity/src/ \| grep -i {domain}` |
+| L7 Entity | `packages/be-prisma/schema/*.prisma` | `grep -l "model {Domain}" packages/be-prisma/schema/` |
+| L7 Entity | `packages/be-entity/src/*.entity.ts` | `ls packages/be-entity/src/ \| grep -i {domain}` |
 | L6 API | `apps/server/src/module/**/*.controller.ts` | `find apps/server/src/module -name "*{domain}*.controller.ts"` |
-| L6 DTO | `packages/dto/src/**/*.dto.ts` | `find packages/dto/src -name "*{domain}*.dto.ts"` |
+| L6 DTO | `packages/be-dto/src/**/*.dto.ts` | `find packages/be-dto/src -name "*{domain}*.dto.ts"` |
 | L9 Guard | `packages/be-common/src/guard/*.guard.ts` | `ls packages/be-common/src/guard/` |
 | L4 Screen | `apps/*/app/**/*.tsx` | `find apps/{app}/app -name "page.tsx" \| xargs grep -l "{domain}"` |
-| L8 Component | `packages/ui/src/components/**/*.tsx` | `grep -r "{Domain}" packages/ui/src/components/` |
+| L8 Component | `packages/fe-ui/src/components/**/*.tsx` | `grep -r "{Domain}" packages/fe-ui/src/components/` |
 
 **탐색 결과 구조:**
 ```json
 {
   "discovery": {
-    "prismaModels": ["packages/prisma/schema/role.prisma"],
-    "entities": ["packages/entity/src/role.entity.ts"],
+    "prismaModels": ["packages/be-prisma/schema/role.prisma"],
+    "entities": ["packages/be-entity/src/role.entity.ts"],
     "controllers": ["apps/server/src/module/role/role.controller.ts"],
-    "dtos": ["packages/dto/src/role/*.dto.ts"],
+    "dtos": ["packages/be-dto/src/role/*.dto.ts"],
     "guards": ["packages/be-common/src/guard/roles.guard.ts"],
     "pages": ["apps/admin/app/roles/page.tsx"],
-    "components": ["packages/ui/src/components/widgets/RoleTable.tsx"]
+    "components": ["packages/fe-ui/src/components/widgets/RoleTable.tsx"]
   }
 }
 ```
@@ -187,7 +187,7 @@ model Role {
   "description": "역할 엔티티 (Prisma model)",
   "metadata": {
     "tableName": "roles",
-    "source": "packages/prisma/schema/role.prisma"
+    "source": "packages/be-prisma/schema/role.prisma"
   }
 }
 ```
@@ -204,7 +204,7 @@ model Role {
   "metadata": {
     "fieldType": "String",
     "constraints": ["unique", "required"],
-    "source": "packages/prisma/schema/role.prisma:3"
+    "source": "packages/be-prisma/schema/role.prisma:3"
   }
 }
 ```
@@ -310,7 +310,7 @@ export class CreateRoleDto {
   "metadata": {
     "validationType": "input",
     "rules": ["string", "minLength:2", "maxLength:50"],
-    "source": "packages/dto/src/role/create-role.dto.ts:5"
+    "source": "packages/be-dto/src/role/create-role.dto.ts:5"
   }
 }
 ```
@@ -345,7 +345,7 @@ export default async function RolesPage() {
 
 **컴포넌트 분석 (L8):**
 ```typescript
-// packages/ui/src/components/widgets/RoleTable.tsx
+// packages/fe-ui/src/components/widgets/RoleTable.tsx
 interface RoleTableProps {
   roles: Role[];
   onRowClick?: (id: string) => void;
@@ -366,7 +366,7 @@ interface RoleTableProps {
       "roles": "Role[]",
       "onRowClick": "(id: string) => void"
     },
-    "source": "packages/ui/src/components/widgets/RoleTable.tsx"
+    "source": "packages/fe-ui/src/components/widgets/RoleTable.tsx"
   }
 }
 ```
@@ -546,7 +546,7 @@ domain: 도메인명 (소문자, 예: role, permission)
     "generatedAt": "2026-01-31T10:00:00Z",
     "generator": "req-reverse-engineer",
     "sourceFiles": [
-      "packages/prisma/schema/role.prisma",
+      "packages/be-prisma/schema/role.prisma",
       "apps/server/src/module/role/role.controller.ts",
       "apps/admin/app/roles/page.tsx"
     ]
@@ -798,9 +798,9 @@ proposal 앱의 `RequirementGraph` 인터페이스에 맞춘 형식입니다:
 📂 대상: project-alpha/admin-web
 
 [1단계] 코드 탐색...
-  - Prisma: packages/prisma/schema/role.prisma ✅
+  - Prisma: packages/be-prisma/schema/role.prisma ✅
   - Controller: apps/server/src/module/role/role.controller.ts ✅
-  - DTO: packages/dto/src/role/*.dto.ts ✅
+  - DTO: packages/be-dto/src/role/*.dto.ts ✅
   - Guard: packages/be-common/src/guard/roles.guard.ts ✅
   - Pages: apps/admin/app/roles/page.tsx ✅
 

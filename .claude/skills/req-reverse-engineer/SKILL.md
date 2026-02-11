@@ -68,13 +68,13 @@ L1 사용자 집합     →  L0 컨텍스트
 
 | 레이어 | 경로 패턴 |
 |--------|----------|
-| L7 Entity | `packages/prisma/schema/*.prisma` |
-| L7 Entity | `packages/entity/src/*.entity.ts` |
+| L7 Entity | `packages/be-prisma/schema/*.prisma` |
+| L7 Entity | `packages/be-entity/src/*.entity.ts` |
 | L6 API | `apps/server/src/module/**/*.controller.ts` |
-| L6 DTO | `packages/dto/src/**/*.dto.ts` |
+| L6 DTO | `packages/be-dto/src/**/*.dto.ts` |
 | L9 Guard | `packages/be-common/src/guard/*.guard.ts` |
 | L4 Screen | `apps/*/app/**/*.tsx` |
-| L8 Component | `packages/ui/src/components/**/*.tsx` |
+| L8 Component | `packages/fe-ui/src/components/**/*.tsx` |
 
 ---
 
@@ -161,7 +161,7 @@ apps/proposal/plans/[project]/[app]/YYYY-MM-DD-[domain]-reverse/
 📂 대상: project-alpha/admin-web
 
 [1단계] 코드 탐색...
-  - Prisma: packages/prisma/schema/role.prisma ✅
+  - Prisma: packages/be-prisma/schema/role.prisma ✅
   - Controller: apps/server/src/module/role/role.controller.ts ✅
 
 [2-7단계] 분석 및 역추론...

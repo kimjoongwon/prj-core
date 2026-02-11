@@ -279,8 +279,8 @@ export const userAgreementMapping = [
 ### 파일 위치
 
 ```
-packages/prisma/seed-data.ts  - 시드 데이터 정의
-packages/prisma/seed.ts       - 시드 실행 로직
+packages/be-prisma/seed-data.ts  - 시드 데이터 정의
+packages/be-prisma/seed.ts       - 시드 실행 로직
 ```
 
 ### 권장 데이터 수량
@@ -332,5 +332,5 @@ const firstNames = ["민수", "서연", "예준", "지우", "하윤", "도윤"];
 
 ### 관련 파일
 
-- Prisma 스키마: `packages/prisma/prisma/schema/*.prisma`
-- Enum 정의: `packages/enum/src/`
+- Prisma 스키마: `packages/be-prisma/prisma/schema/*.prisma`
+- Enum 정의: `packages/common-enum/src/`

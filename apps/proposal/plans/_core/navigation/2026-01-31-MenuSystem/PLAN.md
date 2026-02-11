@@ -431,9 +431,9 @@ Widget
 
 | 유형 | 위치 |
 |------|------|
-| Layout | `packages/ui/src/components/ui/layouts/Admin/` |
-| Feature | `packages/ui/src/components/feature/` |
-| Widget | `packages/ui/src/components/widget/` |
+| Layout | `packages/fe-ui/src/components/ui/layouts/Admin/` |
+| Feature | `packages/fe-ui/src/components/feature/` |
+| Widget | `packages/fe-ui/src/components/widget/` |
 
 ---
 
@@ -645,30 +645,30 @@ describe('메뉴 시스템 통합', () => {
 
 | 파일 | 역할 |
 |------|------|
-| `packages/constant/src/routing/admin-menu.ts` | ADMIN_PATHS, ADMIN_SUBJECTS, ADMIN_NAV_ITEMS |
-| `packages/type/src/navigation.ts` | NavItemConfig, TabConfig, FABAction |
+| `packages/common-constant/src/routing/admin-menu.ts` | ADMIN_PATHS, ADMIN_SUBJECTS, ADMIN_NAV_ITEMS |
+| `packages/common-type/src/navigation.ts` | NavItemConfig, TabConfig, FABAction |
 
 ### Store
 
 | 파일 | 역할 |
 |------|------|
-| `packages/store/src/stores/navItem.ts` | NavItem 클래스 |
-| `packages/store/src/stores/navigationStore.ts` | NavigationStore |
-| `packages/store/src/stores/bottomTabStore.ts` | BottomTabStore |
-| `packages/store/src/stores/fabStore.ts` | FABStore |
-| `packages/store/src/stores/rootStore.ts` | RootStore |
-| `packages/store/src/providers/createAppStoreProvider.tsx` | Provider 팩토리 |
+| `packages/fe-store/src/stores/navItem.ts` | NavItem 클래스 |
+| `packages/fe-store/src/stores/navigationStore.ts` | NavigationStore |
+| `packages/fe-store/src/stores/bottomTabStore.ts` | BottomTabStore |
+| `packages/fe-store/src/stores/fabStore.ts` | FABStore |
+| `packages/fe-store/src/stores/rootStore.ts` | RootStore |
+| `packages/fe-store/src/providers/createAppStoreProvider.tsx` | Provider 팩토리 |
 
 ### UI 컴포넌트
 
 | 파일 | 역할 |
 |------|------|
-| `packages/ui/src/components/ui/layouts/Admin/AdminLayout.tsx` | 통합 레이아웃 |
-| `packages/ui/src/components/ui/layouts/Admin/AdminSidebar.tsx` | 사이드바 |
-| `packages/ui/src/components/ui/layouts/Admin/AdminBottomTab.tsx` | 하단 탭 |
-| `packages/ui/src/components/ui/layouts/Admin/AdminFAB.tsx` | FAB |
-| `packages/ui/src/components/widget/NavTreePanel/NavTreePanel.tsx` | 트리 패널 |
-| `packages/ui/src/components/feature/SideNav/SideNav.tsx` | 사이드바 Feature |
+| `packages/fe-ui/src/components/ui/layouts/Admin/AdminLayout.tsx` | 통합 레이아웃 |
+| `packages/fe-ui/src/components/ui/layouts/Admin/AdminSidebar.tsx` | 사이드바 |
+| `packages/fe-ui/src/components/ui/layouts/Admin/AdminBottomTab.tsx` | 하단 탭 |
+| `packages/fe-ui/src/components/ui/layouts/Admin/AdminFAB.tsx` | FAB |
+| `packages/fe-ui/src/components/widget/NavTreePanel/NavTreePanel.tsx` | 트리 패널 |
+| `packages/fe-ui/src/components/feature/SideNav/SideNav.tsx` | 사이드바 Feature |
 
 ### 앱
 

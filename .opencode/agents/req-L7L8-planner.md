@@ -376,16 +376,16 @@ tools:
 **확인 명령어:**
 \`\`\`bash
 # UI 컴포넌트 목록
-ls packages/ui/src/components/ui/
+ls packages/fe-ui/src/components/ui/
 
 # Input 컴포넌트 목록
-ls packages/ui/src/components/inputs/
+ls packages/fe-ui/src/components/inputs/
 
 # Widget 컴포넌트 목록
-ls packages/ui/src/components/widgets/
+ls packages/fe-ui/src/components/widgets/
 
 # Feature 컴포넌트 목록
-ls packages/ui/src/components/features/
+ls packages/fe-ui/src/components/features/
 \`\`\`
 
 | 컴포넌트 | 유형 | 경로 | 용도 |
@@ -675,7 +675,7 @@ Component 노드는 `/screens` 탭에서 화면별 사용 컴포넌트 목록 �
   "metadata": {
     "componentType": "inputs",
     "existing": true,
-    "path": "packages/ui/src/components/inputs/SearchInput"
+    "path": "packages/fe-ui/src/components/inputs/SearchInput"
   }
 }
 ```

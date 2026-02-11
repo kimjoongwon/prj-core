@@ -299,7 +299,7 @@ describe('이용자 목록 페이지', () => {
 
 #### USR-L10-TST-002: Cell 컴포넌트 테스트
 
-**파일**: `packages/ui/src/components/cell/__tests__/UserRoleCell.test.tsx`
+**파일**: `packages/fe-ui/src/components/cell/__tests__/UserRoleCell.test.tsx`
 
 ```typescript
 describe('UserRoleCell', () => {

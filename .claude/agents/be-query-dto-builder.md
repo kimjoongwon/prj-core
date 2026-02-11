@@ -27,7 +27,7 @@ PrismaQueryDto 기반 목록 조회용 Query DTO 클래스를 생성하는 전�
 |------|------|------|
 | **입력** | Entity 정보 | Prisma 모델 필드 및 관계 |
 | | API 요구사항 | 필요한 필터/정렬 조건 |
-| **출력** | Query DTO 클래스 | `packages/dto/src/query/` 또는 `packages/dto/src/{domain}/` |
+| **출력** | Query DTO 클래스 | `packages/be-dto/src/query/` 또는 `packages/be-dto/src/{domain}/` |
 | | index.ts 업데이트 | export 추가 |
 
 ---
@@ -35,12 +35,12 @@ PrismaQueryDto 기반 목록 조회용 Query DTO 클래스를 생성하는 전�
 ## 핵심 개념: DTO 계층 구조
 
 ```
-QueryDto (packages/dto/src/query/query.dto.ts)
+QueryDto (packages/be-dto/src/query/query.dto.ts)
 ├── skip?: number        # Prisma 호환 오프셋
 ├── take?: number        # Prisma 호환 리밋
 └── toPageMetaDto()      # 페이지네이션 메타 변환
 
-    └── PrismaQueryDto<TWhere> (packages/dto/src/query/prisma-query.dto.ts)
+    └── PrismaQueryDto<TWhere> (packages/be-dto/src/query/prisma-query.dto.ts)
         ├── toPrismaWhere()     # 컨벤션 기반 자동 매핑 + 커스텀
         ├── toPrismaOrderBy()   # sort[] → Prisma orderBy[] 변환
         ├── containsFilter()    # 부분 일치 조건 (contains + insensitive)
@@ -248,7 +248,7 @@ query.toPrismaOrderBy()
 
 ```bash
 # Prisma 모델 확인
-Grep "model {Entity}" packages/prisma/schema/
+Grep "model {Entity}" packages/be-prisma/schema/
 ```
 
 - 필드 목록 및 타입 파악
@@ -596,7 +596,7 @@ export class QueryRoleDto extends PrismaQueryDto<Prisma.RoleWhereInput> {
 ### 신규 Query DTO
 
 ```
-packages/dto/src/
+packages/be-dto/src/
 ├── query/                          # 범용 Query DTO
 │   ├── query.dto.ts                # 베이스 (skip/take)
 │   ├── prisma-query.dto.ts         # Prisma 자동 매핑 베이스
@@ -648,9 +648,9 @@ packages/dto/src/
 
 ## 관련 파일
 
-- 베이스 QueryDto: `packages/dto/src/query/query.dto.ts`
-- PrismaQueryDto: `packages/dto/src/query/prisma-query.dto.ts`
-- DeleteFilter enum: `packages/enum/src/delete-filter.enum.ts`
-- SortOrder: `packages/enum/src/sort-order.enum.ts`
-- 필드 데코레이터: `packages/decorator/src/field/`
-- Prisma 모델: `packages/prisma/schema/`
+- 베이스 QueryDto: `packages/be-dto/src/query/query.dto.ts`
+- PrismaQueryDto: `packages/be-dto/src/query/prisma-query.dto.ts`
+- DeleteFilter enum: `packages/common-enum/src/delete-filter.enum.ts`
+- SortOrder: `packages/common-enum/src/sort-order.enum.ts`
+- 필드 데코레이터: `packages/be-decorator/src/field/`
+- Prisma 모델: `packages/be-prisma/schema/`

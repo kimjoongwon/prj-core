@@ -28,7 +28,7 @@ Request/Response DTO 클래스를 생성하는 전문가입니다.
 |------|------|------|
 | **입력** | Entity 정보 | 필드 및 타입 |
 | | API 요구사항 | 필요한 DTO 종류 |
-| **출력** | DTO 클래스 | `packages/dto/src/` 하위 |
+| **출력** | DTO 클래스 | `packages/be-dto/src/` 하위 |
 | | index.ts 업데이트 | export 추가 |
 
 ---
@@ -38,7 +38,7 @@ Request/Response DTO 클래스를 생성하는 전문가입니다.
 ### ✅ Do
 
 ```typescript
-// DTO는 반드시 packages/dto에 위치
+// DTO는 반드시 packages/be-dto에 위치
 import { CreateAbilityDto, AbilityResponseDto } from "@cocrepo/dto";
 
 // @cocrepo/decorator 필드 데코레이터 사용
@@ -114,11 +114,11 @@ Query DTO가 필요하면 `be-query-dto-builder`를 호출하세요.
 
 | 종류 | 위치 | 용도 |
 |------|------|------|
-| Create | `packages/dto/src/create/` | 생성 요청 |
-| Update | `packages/dto/src/update/` | 수정 요청 |
+| Create | `packages/be-dto/src/create/` | 생성 요청 |
+| Update | `packages/be-dto/src/update/` | 수정 요청 |
 | Query | → **query-dto-builder 위임** | 조회 파라미터 |
-| Response | `packages/dto/src/{domain}/` | 응답 데이터 |
-| 도메인별 | `packages/dto/src/{domain}/` | 특정 도메인 전용 |
+| Response | `packages/be-dto/src/{domain}/` | 응답 데이터 |
+| 도메인별 | `packages/be-dto/src/{domain}/` | 특정 도메인 전용 |
 
 ### 2단계: 필드 데코레이터 선택
 
@@ -383,7 +383,7 @@ categoryId?: string;
 ### 파일 위치
 
 ```
-packages/dto/src/
+packages/be-dto/src/
 ├── create/                    # 생성 DTO
 │   └── create-{entity}.dto.ts
 ├── update/                    # 수정 DTO
@@ -414,10 +414,10 @@ groupIds?: string[];
 ### index.ts 등록
 
 ```typescript
-// packages/dto/src/index.ts (최상위)
+// packages/be-dto/src/index.ts (최상위)
 export * from "./{domain}";
 
-// packages/dto/src/{domain}/index.ts (도메인별)
+// packages/be-dto/src/{domain}/index.ts (도메인별)
 export * from "./{domain}-list-response.dto";
 export * from "./{domain}-detail-response.dto";
 export * from "./query-{domain}s.dto";
@@ -425,7 +425,7 @@ export * from "./query-{domain}s.dto";
 
 ### 관련 파일
 
-- 필드 데코레이터: `packages/decorator/src/field/`
-- 기본 DTO: `packages/dto/src/abstract.dto.ts`
-- Entity: `packages/entity/src/`
+- 필드 데코레이터: `packages/be-decorator/src/field/`
+- 기본 DTO: `packages/be-dto/src/abstract.dto.ts`
+- Entity: `packages/be-entity/src/`
 - Query DTO 관련: `be-query-dto-builder` 에이전트 참조

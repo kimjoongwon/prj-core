@@ -204,7 +204,7 @@ apps/admin/app/[route]/
 - 타입 안정성 강화
 
 **적용 위치:**
-- `packages/constant/src/routing/admin-menu.ts`의 모든 경로 정의
+- `packages/common-constant/src/routing/admin-menu.ts`의 모든 경로 정의
 - Next.js 파일 시스템 라우팅 폴더명 (`app/(admin)/users/[userId]/`)
 
 ### 컴포넌트 작성
@@ -294,16 +294,16 @@ UserCard                      → UserMenu (AuthStore 연결)
 
 ### 컴포넌트 위치 규칙 (Critical)
 
-**UI 컴포넌트는 반드시 `packages/ui`에만 생성합니다. `apps/*/src`에 생성 금지!**
+**UI 컴포넌트는 반드시 `packages/fe-ui`에만 생성합니다. `apps/*/src`에 생성 금지!**
 
 | 컴포넌트 유형 | 올바른 위치 | 금지 위치 |
 |--------------|-------------|-----------|
-| Pure UI | `packages/ui/src/components/ui/` | ❌ `apps/*/src/components/ui/` |
-| Widget | `packages/ui/src/components/widget/` | ❌ `apps/*/src/components/widget/` |
-| **Feature** | `packages/ui/src/components/feature/` | ❌ `apps/*/src/components/features/` |
-| Input | `packages/ui/src/components/inputs/` | ❌ `apps/*/src/components/inputs/` |
-| Layout | `packages/ui/src/components/layout/` | ❌ `apps/*/src/components/layout/` |
-| Cell | `packages/ui/src/components/cell/` | ❌ `apps/*/src/components/cell/` |
+| Pure UI | `packages/fe-ui/src/components/ui/` | ❌ `apps/*/src/components/ui/` |
+| Widget | `packages/fe-ui/src/components/widget/` | ❌ `apps/*/src/components/widget/` |
+| **Feature** | `packages/fe-ui/src/components/feature/` | ❌ `apps/*/src/components/features/` |
+| Input | `packages/fe-ui/src/components/inputs/` | ❌ `apps/*/src/components/inputs/` |
+| Layout | `packages/fe-ui/src/components/layout/` | ❌ `apps/*/src/components/layout/` |
+| Cell | `packages/fe-ui/src/components/cell/` | ❌ `apps/*/src/components/cell/` |
 
 **앱(`apps/*`)에서 허용되는 것:**
 - `app/` - Next.js App Router 페이지
@@ -312,7 +312,7 @@ UserCard                      → UserMenu (AuthStore 연결)
 - `providers/` - 앱 전용 Provider
 
 ```typescript
-// ✅ 올바른 예시 - packages/ui에서 import
+// ✅ 올바른 예시 - packages/fe-ui에서 import
 import { SideNav, UserMenu } from "@cocrepo/ui";
 
 // ❌ 금지 - apps 내부에 Feature 생성
@@ -453,7 +453,7 @@ export function useAdminNavigationStore() { }
 
 **올바른 패턴:**
 ```typescript
-// packages/store - 범용 Store 정의
+// packages/fe-store - 범용 Store 정의
 export class PersistStore {
   constructor(config: { storageKey: string }) { }
 }
@@ -475,7 +475,7 @@ rootStore.persistStore = new PersistStore({
 
 ```typescript
 // ✅ 올바른 예시 - @cocrepo/type에 타입 정의
-// packages/type/src/navigation.ts
+// packages/common-type/src/navigation.ts
 export interface NavItemConfig { ... }
 export interface TabConfig { ... }
 export interface FABAction { ... }
@@ -486,10 +486,10 @@ import type { NavItemConfig, TabConfig } from "@cocrepo/type";
 
 ```typescript
 // ❌ 금지 - 다른 패키지에서 타입 정의 후 re-export
-// packages/store/src/navItem.ts
+// packages/fe-store/src/navItem.ts
 export interface NavItemConfig { ... }  // 여기서 정의하면 안 됨
 
-// packages/constant/src/admin-menu.ts
+// packages/common-constant/src/admin-menu.ts
 export type { NavItemConfig } from "@cocrepo/store";  // re-export 금지
 ```
 
@@ -500,7 +500,7 @@ export type { NavItemConfig } from "@cocrepo/store";  // re-export 금지
 
 **@cocrepo/type 패키지 구조:**
 ```
-packages/type/src/
+packages/common-type/src/
 ├── index.ts          # 모든 타입 export
 ├── navigation.ts     # 네비게이션 관련 (NavItemConfig, TabConfig, FABAction)
 ├── config.types.ts   # 설정 관련
@@ -536,9 +536,9 @@ packages/type/src/
 
 ### DTO 위치 규칙
 
-- **DTO는 반드시 `packages/dto`에 위치**
+- **DTO는 반드시 `packages/be-dto`에 위치**
 - ❌ `apps/server/src/module/**/dto/` 에 DTO 생성 금지
-- ✅ `packages/dto/src/` 에 DTO 생성
+- ✅ `packages/be-dto/src/` 에 DTO 생성
 - Controller에서는 `@cocrepo/dto`에서 import
 
 ```typescript
@@ -560,8 +560,8 @@ import { CreateAbilityDto, AbilityResponseDto } from "@cocrepo/dto";
 
 **seed-data에 영향을 주는 모든 변경이 발생하면 반드시 아래 파일들을 함께 업데이트해야 합니다:**
 
-- `packages/prisma/seed-data.ts` - 시드 데이터 정의
-- `packages/prisma/seed.ts` - 시드 실행 로직
+- `packages/be-prisma/seed-data.ts` - 시드 데이터 정의
+- `packages/be-prisma/seed.ts` - 시드 실행 로직
 
 **영향을 주는 변경 예시:**
 - Prisma 스키마에 새로운 모델 추가
@@ -834,7 +834,7 @@ Stage 4: 컴포넌트 (페이지별)
 - Detail, Create, Edit 페이지는 메뉴 업데이트 없음
 
 **업데이트 내용:**
-- `packages/constant/src/routing/admin-menu.ts`에 새 메뉴 항목 추가
+- `packages/common-constant/src/routing/admin-menu.ts`에 새 메뉴 항목 추가
 - 경로 구조가 엔티티 관계 규칙을 따르는지 검증
 - Subject 자동 생성 (예: `menu:members`, `menu:members:list`)
 - 적절한 아이콘 자동 선택
@@ -867,9 +867,9 @@ Stage 4: 컴포넌트 (페이지별)
 
 | Agent | 역할 |
 |-------|------|
-| fe-ui-component-builder | Pure UI 컴포넌트 생성 (packages/ui/src/components/ui) |
+| fe-ui-component-builder | Pure UI 컴포넌트 생성 (packages/fe-ui/src/components/ui) |
 | fe-cell-builder | DataGrid/Table용 Cell 컴포넌트 생성 (계층별) |
-| fe-input-component-builder | Input 컴포넌트 생성 (packages/ui/src/components/inputs) |
+| fe-input-component-builder | Input 컴포넌트 생성 (packages/fe-ui/src/components/inputs) |
 | fe-widget-builder | 재사용 가능한 작은 UI 조각 Widget 컴포넌트 생성 |
 | fe-feature-builder | 비즈니스 기능을 담당하는 Feature 컴포넌트 생성 |
 | fe-layout-builder | Layout 컴포넌트 설계 및 생성 |
@@ -977,12 +977,12 @@ Stage 4: 컴포넌트 (페이지별)
 ```
 🚀 schema-builder 에이전트 시작
 📋 작업: User 모델 Prisma 스키마 생성
-📂 대상: packages/prisma/schema/user.prisma
+📂 대상: packages/be-prisma/schema/user.prisma
 
 [... 에이전트 작업 ...]
 
 ✅ schema-builder 에이전트 완료
 📁 생성/수정된 파일:
-   - packages/prisma/schema/user.prisma
-   - packages/prisma/schema/enums.prisma
+   - packages/be-prisma/schema/user.prisma
+   - packages/be-prisma/schema/enums.prisma
 ```

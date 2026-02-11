@@ -537,7 +537,7 @@ Kubernetes 환경에서는 OpenBao를 통해 환경 변수가 자동으로 주�
 
 ## 📚 추가 문서
 
-- [Prisma Schema 설계 가이드](./packages/prisma/prisma/models/task.example.md)
+- [Prisma Schema 설계 가이드](./packages/be-prisma/prisma/models/task.example.md)
 - [API 문서](http://localhost:3000/api/docs) (서버 실행 후 접속)
 - [Storybook](http://localhost:6006) (Storybook 실행 후 접속)
 

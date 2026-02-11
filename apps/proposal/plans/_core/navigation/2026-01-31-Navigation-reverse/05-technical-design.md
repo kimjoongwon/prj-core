@@ -109,8 +109,8 @@ private resolvePath(path: string): string {
 
 ### 기존 테스트 파일
 
-- `packages/store/src/stores/__tests__/navigationStore.test.ts`
-- `packages/store/src/stores/__tests__/navigator.test.ts`
+- `packages/fe-store/src/stores/__tests__/navigationStore.test.ts`
+- `packages/fe-store/src/stores/__tests__/navigator.test.ts`
 
 ### NavItem 테스트
 
@@ -201,7 +201,7 @@ private resolvePath(path: string): string {
 ### 상수 파일
 
 ```
-packages/constant/src/routing/admin-menu.ts
+packages/common-constant/src/routing/admin-menu.ts
 ├── ADMIN_PATHS          // 경로 상수
 ├── ADMIN_SUBJECTS       // Subject 상수
 ├── ADMIN_NAV_ITEMS      // 메뉴 설정 (NavItemConfig[])

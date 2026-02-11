@@ -210,12 +210,12 @@ RUN npm install -g pnpm
 
 # 의존성 파일 복사
 COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
-COPY packages/prisma/package.json ./packages/prisma/
-COPY packages/dto/package.json ./packages/dto/
-COPY packages/entity/package.json ./packages/entity/
-COPY packages/repository/package.json ./packages/repository/
-COPY packages/service/package.json ./packages/service/
-COPY packages/facade/package.json ./packages/facade/
+COPY packages/be-prisma/package.json ./packages/be-prisma/
+COPY packages/be-dto/package.json ./packages/be-dto/
+COPY packages/be-entity/package.json ./packages/be-entity/
+COPY packages/be-repository/package.json ./packages/be-repository/
+COPY packages/be-service/package.json ./packages/be-service/
+COPY packages/be-facade/package.json ./packages/be-facade/
 COPY apps/server/package.json ./apps/server/
 
 # 의존성 설치
@@ -240,15 +240,15 @@ RUN npm install -g pnpm
 
 # 프로덕션 의존성만 설치
 COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
-COPY packages/prisma/package.json ./packages/prisma/
+COPY packages/be-prisma/package.json ./packages/be-prisma/
 COPY apps/server/package.json ./apps/server/
 
 RUN pnpm install --frozen-lockfile --prod
 
 # 빌드 결과물 복사
 COPY --from=builder /app/apps/server/dist ./apps/server/dist
-COPY --from=builder /app/packages/prisma/generated ./packages/prisma/generated
-COPY --from=builder /app/packages/prisma/schema ./packages/prisma/schema
+COPY --from=builder /app/packages/be-prisma/generated ./packages/be-prisma/generated
+COPY --from=builder /app/packages/be-prisma/schema ./packages/be-prisma/schema
 
 # 환경 변수
 ENV NODE_ENV=production
@@ -272,9 +272,9 @@ RUN npm install -g pnpm
 
 # 의존성 파일 복사
 COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
-COPY packages/ui/package.json ./packages/ui/
-COPY packages/store/package.json ./packages/store/
-COPY packages/api/package.json ./packages/api/
+COPY packages/fe-ui/package.json ./packages/fe-ui/
+COPY packages/fe-store/package.json ./packages/fe-store/
+COPY packages/fe-api/package.json ./packages/fe-api/
 COPY apps/admin/package.json ./apps/admin/
 
 # 의존성 설치

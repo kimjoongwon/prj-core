@@ -418,7 +418,7 @@
 				"componentType": "widgets",
 				"existing": true,
 				"package": "@cocrepo/ui",
-				"path": "packages/ui/src/components/widget/DataGrid",
+				"path": "packages/fe-ui/src/components/widget/DataGrid",
 				"props": {
 					"columns": "ColumnDef[]",
 					"data": "T[]",
@@ -437,7 +437,7 @@
 				"componentType": "ui",
 				"existing": false,
 				"package": "@cocrepo/ui",
-				"path": "packages/ui/src/components/cell/UserRoleCell",
+				"path": "packages/fe-ui/src/components/cell/UserRoleCell",
 				"props": {
 					"roles": "RoleDto[]"
 				}
@@ -453,7 +453,7 @@
 				"componentType": "ui",
 				"existing": false,
 				"package": "@cocrepo/ui",
-				"path": "packages/ui/src/components/cell/UserStatusCell",
+				"path": "packages/fe-ui/src/components/cell/UserStatusCell",
 				"props": {
 					"status": "UserStatus"
 				}
@@ -469,7 +469,7 @@
 				"componentType": "ui",
 				"existing": true,
 				"package": "@cocrepo/ui",
-				"path": "packages/ui/src/components/cell/DateTimeCell",
+				"path": "packages/fe-ui/src/components/cell/DateTimeCell",
 				"props": {
 					"value": "Date | string",
 					"format": "string"
@@ -486,7 +486,7 @@
 				"componentType": "widgets",
 				"existing": true,
 				"package": "@cocrepo/ui",
-				"path": "packages/ui/src/components/widget/StatsCard",
+				"path": "packages/fe-ui/src/components/widget/StatsCard",
 				"props": {
 					"title": "string",
 					"value": "number",
@@ -504,7 +504,7 @@
 				"componentType": "widgets",
 				"existing": false,
 				"package": "@cocrepo/ui",
-				"path": "packages/ui/src/components/widget/SearchFilterBar",
+				"path": "packages/fe-ui/src/components/widget/SearchFilterBar",
 				"props": {
 					"searchPlaceholder": "string",
 					"onSearch": "(value: string) => void",
@@ -523,7 +523,7 @@
 				"componentType": "widgets",
 				"existing": false,
 				"package": "@cocrepo/ui",
-				"path": "packages/ui/src/components/widget/FilterPanel",
+				"path": "packages/fe-ui/src/components/widget/FilterPanel",
 				"props": {
 					"isOpen": "boolean",
 					"filters": "FilterConfig[]",

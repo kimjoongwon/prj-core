@@ -27,7 +27,7 @@ NestJS Service 레이어를 생성하는 전문가입니다.
 |------|------|------|
 | **입력** | Repository 클래스 | `@cocrepo/repository` |
 | | 비즈니스 요구사항 | 도메인 로직 |
-| **출력** | Service 클래스 | `packages/service/src/{entity}.service.ts` |
+| **출력** | Service 클래스 | `packages/be-service/src/{entity}.service.ts` |
 | | index.ts 업데이트 | export 추가 |
 
 ---
@@ -274,7 +274,7 @@ export class OrdersService {
 ### 파일 위치
 
 ```
-packages/service/src/{entity}.service.ts
+packages/be-service/src/{entity}.service.ts
 ```
 
 ### 네이밍 규칙 상세
@@ -341,5 +341,5 @@ if (!tenant?.spaceId) {
 
 ### 관련 파일
 
-- Repository: `packages/repository/src/{entity}.repository.ts`
-- Entity: `packages/entity/src/{entity}.ts`
+- Repository: `packages/be-repository/src/{entity}.repository.ts`
+- Entity: `packages/be-entity/src/{entity}.ts`

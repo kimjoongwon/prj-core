@@ -43,7 +43,7 @@ tools:
 
 | 항목 | 경로 |
 |------|------|
-| Layout 컴포넌트 | `packages/ui/src/components/ui/layouts/{Name}/` |
+| Layout 컴포넌트 | `packages/fe-ui/src/components/ui/layouts/{Name}/` |
 | index.ts | export 파일 |
 | Next.js layout.tsx | `apps/{app}/app/.../layout.tsx` |
 
@@ -94,7 +94,7 @@ tools:
 ### 3단계: Layout 컴포넌트 생성
 
 ```
-packages/ui/src/components/ui/layouts/
+packages/fe-ui/src/components/ui/layouts/
 ├── AppLayout/
 │   ├── AppLayout.tsx
 │   └── index.ts
@@ -290,7 +290,7 @@ const { onClickMenu, onLogout } = useAppLayout();  // ❌
 />
 
 // 4. Page 컴포넌트 내부에서 Layout 사용
-// packages/ui/src/components/page/Login/LoginPage.tsx
+// packages/fe-ui/src/components/page/Login/LoginPage.tsx
 export const LoginPage = () => {
   return (
     <AuthLayout>       // ❌ Page 안에 Layout이 있으면 안 됨!
@@ -406,7 +406,7 @@ export const Main = ({ children, className }: MainProps) => {
 ## 10. 폴더 구조
 
 ```
-packages/ui/src/components/
+packages/fe-ui/src/components/
 ├── ui/layouts/                    # Layout 컴포넌트 (순수 위치 정의)
 │   ├── AppLayout/
 │   │   ├── AppLayout.tsx

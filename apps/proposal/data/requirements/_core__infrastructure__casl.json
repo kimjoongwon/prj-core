@@ -7,14 +7,14 @@
     "generatedAt": "2026-01-31T16:30:00Z",
     "generator": "req-reverse-engineer",
     "sourceFiles": [
-      "packages/prisma/schema/role.prisma",
-      "packages/prisma/schema/core.prisma",
+      "packages/be-prisma/schema/role.prisma",
+      "packages/be-prisma/schema/core.prisma",
       "packages/be-common/src/casl/casl-ability.factory.ts",
       "packages/be-common/src/guard/roles.guard.ts",
-      "packages/decorator/src/roles.decorator.ts",
-      "packages/entity/src/role.entity.ts",
-      "packages/entity/src/ability.entity.ts",
-      "packages/service/src/roles.service.ts",
+      "packages/be-decorator/src/roles.decorator.ts",
+      "packages/be-entity/src/role.entity.ts",
+      "packages/be-entity/src/ability.entity.ts",
+      "packages/be-service/src/roles.service.ts",
       "apps/server/src/module/role/roles.controller.ts",
       "apps/server/src/module/ability/abilities.controller.ts"
     ],
@@ -498,7 +498,7 @@
       "description": "역할 엔티티",
       "metadata": {
         "tableName": "roles",
-        "source": "packages/prisma/schema/role.prisma"
+        "source": "packages/be-prisma/schema/role.prisma"
       }
     },
     {
@@ -510,7 +510,7 @@
       "description": "권한 엔티티 (CASL)",
       "metadata": {
         "tableName": "abilities",
-        "source": "packages/prisma/schema/core.prisma"
+        "source": "packages/be-prisma/schema/core.prisma"
       }
     },
     {
@@ -522,7 +522,7 @@
       "description": "권한 대상 엔티티",
       "metadata": {
         "tableName": "subjects",
-        "source": "packages/prisma/schema/core.prisma"
+        "source": "packages/be-prisma/schema/core.prisma"
       }
     },
     {
@@ -534,7 +534,7 @@
       "description": "권한 행위 엔티티",
       "metadata": {
         "tableName": "actions",
-        "source": "packages/prisma/schema/core.prisma"
+        "source": "packages/be-prisma/schema/core.prisma"
       }
     },
     {
@@ -607,7 +607,7 @@
       "metadata": {
         "componentType": "ui",
         "existing": true,
-        "path": "packages/ui/src/components/ui/Badge"
+        "path": "packages/fe-ui/src/components/ui/Badge"
       }
     },
     {
@@ -664,7 +664,7 @@
       "name": "시스템 역할 보호",
       "description": "isSystem=true인 역할은 수정/삭제 불가",
       "metadata": {
-        "source": "packages/service/src/roles.service.ts:78"
+        "source": "packages/be-service/src/roles.service.ts:78"
       }
     },
     {
@@ -675,7 +675,7 @@
       "name": "연결된 테넌트 확인",
       "description": "테넌트가 연결된 역할은 삭제 불가",
       "metadata": {
-        "source": "packages/service/src/roles.service.ts:106"
+        "source": "packages/be-service/src/roles.service.ts:106"
       }
     },
     {
@@ -686,7 +686,7 @@
       "name": "역할 이름 중복 체크",
       "description": "역할 이름(name)은 고유해야 함",
       "metadata": {
-        "source": "packages/service/src/roles.service.ts:52"
+        "source": "packages/be-service/src/roles.service.ts:52"
       }
     }
   ],

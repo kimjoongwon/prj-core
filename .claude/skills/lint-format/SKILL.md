@@ -45,10 +45,10 @@ npx biome check .
 
 ```bash
 # 특정 파일
-npx biome check --write packages/ui/src/components/page/MyPage.tsx
+npx biome check --write packages/fe-ui/src/components/page/MyPage.tsx
 
 # 특정 폴더
-npx biome check --write packages/ui/src/components/
+npx biome check --write packages/fe-ui/src/components/
 ```
 
 ## 결과 분석
@@ -60,11 +60,11 @@ npx biome check --write packages/ui/src/components/
 
 ### ❌ 에러 발견
 
-**packages/ui/src/components/page/MyPage.tsx**
+**packages/fe-ui/src/components/page/MyPage.tsx**
 - **12:5** - lint/suspicious/noExplicitAny: Unexpected any. Specify a different type.
 - **25:1** - format: Expected indent of 2 spaces
 
-**packages/ui/src/components/ui/Button.tsx**
+**packages/fe-ui/src/components/ui/Button.tsx**
 - **8:10** - lint/style/useConst: Use const instead of let
 
 ### 자동 수정됨

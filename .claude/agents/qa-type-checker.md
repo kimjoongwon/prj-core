@@ -53,8 +53,8 @@ tools: Read, Write, Grep, Bash
 2. 문제 코드 위치 확인
    ↓
 3. 관련 타입 정의 추적
-   ├── Orval 생성 타입 (packages/api/src/model/)
-   ├── 백엔드 DTO (packages/dto/src/)
+   ├── Orval 생성 타입 (packages/fe-api/src/model/)
+   ├── 백엔드 DTO (packages/be-dto/src/)
    └── 백엔드 컨트롤러 (apps/server/src/module/)
    ↓
 4. 근본 원인 파악
@@ -74,11 +74,11 @@ tools: Read, Write, Grep, Bash
 ```
 프론트엔드 코드
   ↓ import
-packages/api/src/apis.ts (Orval 생성 훅)
+packages/fe-api/src/apis.ts (Orval 생성 훅)
   ↓ 반환 타입
-packages/api/src/model/*.ts (Orval 생성 타입)
+packages/fe-api/src/model/*.ts (Orval 생성 타입)
   ↓ 원본
-packages/dto/src/**/*.dto.ts (백엔드 DTO)
+packages/be-dto/src/**/*.dto.ts (백엔드 DTO)
   ↓ 사용
 apps/server/src/module/**/**.controller.ts (백엔드 컨트롤러)
 ```
@@ -124,12 +124,12 @@ error TS2339: Property 'meta' does not exist on type 'GetUsers200AllOf'.
 
 **1단계: Orval 생성 타입 확인**
 ```bash
-# packages/api/src/model/에서 관련 타입 찾기
-grep -r "GetUsers200" packages/api/src/model/
+# packages/fe-api/src/model/에서 관련 타입 찾기
+grep -r "GetUsers200" packages/fe-api/src/model/
 ```
 
 ```typescript
-// packages/api/src/model/getUsers200AllOf.ts
+// packages/fe-api/src/model/getUsers200AllOf.ts
 export type GetUsers200AllOf = {
   httpStatus?: number;
   message?: string;
@@ -139,7 +139,7 @@ export type GetUsers200AllOf = {
 
 **2단계: 중첩된 타입 확인**
 ```typescript
-// packages/api/src/model/userListResponseDto.ts
+// packages/fe-api/src/model/userListResponseDto.ts
 export interface UserListResponseDto {
   data: UserDto[];
   meta: UserPaginationMetaDto;  // ← meta는 여기!
@@ -183,8 +183,8 @@ const totalCount = usersResponse?.data?.meta?.total ?? 0;
 
 ### API 타입 불일치 해결 시
 
-- [ ] `packages/api/src/model/` 타입 확인
-- [ ] `packages/dto/src/` DTO 확인
+- [ ] `packages/fe-api/src/model/` 타입 확인
+- [ ] `packages/be-dto/src/` DTO 확인
 - [ ] 백엔드 컨트롤러 응답 확인
 - [ ] 래퍼 구조 (`data.data`, `data.meta`) 고려
 - [ ] 올바른 접근 경로로 수정
@@ -214,7 +214,7 @@ pnpm --filter=@cocrepo/api codegen
 ```bash
 # 특정 패키지
 pnpm tsc --noEmit -p apps/admin/tsconfig.json
-pnpm tsc --noEmit -p packages/ui/tsconfig.json
+pnpm tsc --noEmit -p packages/fe-ui/tsconfig.json
 
 # 전체 (turbo 사용 시)
 pnpm typecheck

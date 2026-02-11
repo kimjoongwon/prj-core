@@ -104,34 +104,34 @@ VIEW (조회)
 
 | 레이어 | 파일 | 설명 |
 |--------|------|------|
-| Prisma | `packages/prisma/schema/grant.prisma` | Subject, Action, Ability, Grant 모델 |
-| Prisma | `packages/prisma/schema/role.prisma` | Role, RoleAssociation, RoleClassification |
-| Entity | `packages/entity/src/ability.entity.ts` | Ability 도메인 엔티티 |
-| Entity | `packages/entity/src/grant.entity.ts` | Grant 도메인 엔티티 |
-| Entity | `packages/entity/src/role.entity.ts` | Role 도메인 엔티티 |
-| Repository | `packages/repository/src/abilities.repository.ts` | Ability CRUD |
-| Repository | `packages/repository/src/grants.repository.ts` | Grant 조회 (Role/User 기반) |
-| Service | `packages/service/src/abilities.service.ts` | Ability 비즈니스 로직 |
-| Service | `packages/service/src/grants.service.ts` | Grant 비즈니스 로직 |
-| Facade | `packages/facade/src/abilities.facade.ts` | Ability + Grant 조합 로직 |
+| Prisma | `packages/be-prisma/schema/grant.prisma` | Subject, Action, Ability, Grant 모델 |
+| Prisma | `packages/be-prisma/schema/role.prisma` | Role, RoleAssociation, RoleClassification |
+| Entity | `packages/be-entity/src/ability.entity.ts` | Ability 도메인 엔티티 |
+| Entity | `packages/be-entity/src/grant.entity.ts` | Grant 도메인 엔티티 |
+| Entity | `packages/be-entity/src/role.entity.ts` | Role 도메인 엔티티 |
+| Repository | `packages/be-repository/src/abilities.repository.ts` | Ability CRUD |
+| Repository | `packages/be-repository/src/grants.repository.ts` | Grant 조회 (Role/User 기반) |
+| Service | `packages/be-service/src/abilities.service.ts` | Ability 비즈니스 로직 |
+| Service | `packages/be-service/src/grants.service.ts` | Grant 비즈니스 로직 |
+| Facade | `packages/be-facade/src/abilities.facade.ts` | Ability + Grant 조합 로직 |
 | CASL | `packages/be-common/src/casl/casl-ability.factory.ts` | CASL Ability 생성 팩토리 (GrantsRepository 사용) |
 | Guard | `packages/be-common/src/guard/roles.guard.ts` | @Roles 데코레이터 Guard |
 | Guard | `packages/be-common/src/guard/role-category.guard.ts` | @RoleCategories 데코레이터 Guard |
 | Guard | `packages/be-common/src/guard/role-group.guard.ts` | @RoleGroups 데코레이터 Guard |
 | Guard | `packages/be-common/src/guard/space-access.guard.ts` | X-Space-ID 기반 접근 Guard |
-| Decorator | `packages/decorator/src/roles.decorator.ts` | @Roles 데코레이터 |
-| Decorator | `packages/decorator/src/role-categories.decorator.ts` | @RoleCategories 데코레이터 |
-| Decorator | `packages/decorator/src/role-groups.decorator.ts` | @RoleGroups 데코레이터 |
-| Decorator | `packages/decorator/src/skip-space-check.decorator.ts` | @SkipSpaceCheck 데코레이터 |
+| Decorator | `packages/be-decorator/src/roles.decorator.ts` | @Roles 데코레이터 |
+| Decorator | `packages/be-decorator/src/role-categories.decorator.ts` | @RoleCategories 데코레이터 |
+| Decorator | `packages/be-decorator/src/role-groups.decorator.ts` | @RoleGroups 데코레이터 |
+| Decorator | `packages/be-decorator/src/skip-space-check.decorator.ts` | @SkipSpaceCheck 데코레이터 |
 | Controller | `apps/server/src/module/role/roles.controller.ts` | 역할 CRUD API |
 | Controller | `apps/server/src/module/ability/abilities.controller.ts` | Ability/Grant API |
-| DTO | `packages/dto/src/ability.dto.ts` | AbilityDto, AbilitySummaryDto |
-| DTO | `packages/dto/src/abilities/` | CreateAbilityDto, AbilityResponseDto |
-| DTO | `packages/dto/src/grants/` | CreateGrantDto, UpdateGrantDto, GrantResponseDto |
-| Enum | `packages/enum/src/role-category-names.enum.ts` | RoleCategoryNames (ts-jenum) |
-| Enum | `packages/enum/src/role-group-names.enum.ts` | RoleGroupNames (ts-jenum) |
-| Constant | `packages/constant/src/schema/role-type.constant.ts` | SYSTEM_ROLES 상수 |
-| Store | `packages/store/src/stores/abilityStore.ts` | 프론트엔드 Ability 상태 관리 |
+| DTO | `packages/be-dto/src/ability.dto.ts` | AbilityDto, AbilitySummaryDto |
+| DTO | `packages/be-dto/src/abilities/` | CreateAbilityDto, AbilityResponseDto |
+| DTO | `packages/be-dto/src/grants/` | CreateGrantDto, UpdateGrantDto, GrantResponseDto |
+| Enum | `packages/common-enum/src/role-category-names.enum.ts` | RoleCategoryNames (ts-jenum) |
+| Enum | `packages/common-enum/src/role-group-names.enum.ts` | RoleGroupNames (ts-jenum) |
+| Constant | `packages/common-constant/src/schema/role-type.constant.ts` | SYSTEM_ROLES 상수 |
+| Store | `packages/fe-store/src/stores/abilityStore.ts` | 프론트엔드 Ability 상태 관리 |
 
 ---
 

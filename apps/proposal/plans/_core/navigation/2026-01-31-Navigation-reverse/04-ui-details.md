@@ -10,7 +10,7 @@
 ### NavItem 클래스
 
 ```typescript
-// packages/store/src/stores/navItem.ts
+// packages/fe-store/src/stores/navItem.ts
 
 class NavItem {
   readonly id: string;           // 아이템 고유 ID
@@ -41,7 +41,7 @@ class NavItem {
 ### 타입 정의
 
 ```typescript
-// packages/type/src/navigation.ts
+// packages/common-type/src/navigation.ts
 
 // 탭 설정 (v7.0 신규)
 interface TabConfig {
@@ -75,7 +75,7 @@ interface FABAction {
 ### BottomTab 타입
 
 ```typescript
-// packages/store/src/stores/bottomTabStore.ts
+// packages/fe-store/src/stores/bottomTabStore.ts
 
 interface BottomTabItem {
   id: string;
@@ -231,7 +231,7 @@ interface SideNavProps {
 ### 아이콘 렌더링 유틸
 
 ```typescript
-// packages/ui/src/utils/iconUtils.ts
+// packages/fe-ui/src/utils/iconUtils.ts
 
 export function renderLucideIcon(
   iconName: string,      // Lucide 아이콘 이름 (예: "Users", "Bell")

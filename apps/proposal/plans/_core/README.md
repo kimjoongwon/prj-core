@@ -33,10 +33,10 @@ _core/
 
 | 카테고리 | 역할 | 매핑되는 코드 |
 |----------|------|---------------|
-| `infrastructure/` | 인프라 레벨 공통 시스템 | `packages/be-common/`, `packages/store/` |
-| `navigation/` | 네비게이션 관련 | `packages/store/`, `packages/constant/routing/` |
-| `ui-system/` | UI 시스템 공통 | `packages/ui/src/components/` |
-| `shared-domain/` | 여러 프로젝트 공유 도메인 | `packages/entity/`, `packages/service/` |
+| `infrastructure/` | 인프라 레벨 공통 시스템 | `packages/be-common/`, `packages/fe-store/` |
+| `navigation/` | 네비게이션 관련 | `packages/fe-store/`, `packages/common-constant/routing/` |
+| `ui-system/` | UI 시스템 공통 | `packages/fe-ui/src/components/` |
+| `shared-domain/` | 여러 프로젝트 공유 도메인 | `packages/be-entity/`, `packages/be-service/` |
 
 ---
 
@@ -71,7 +71,7 @@ _core/
 ## 프로젝트별 확장
 
 - 추가 Subject: `member`, `reservation`
-- 메뉴 상수: `packages/constant/src/routing/project-alpha-menu.ts`
+- 메뉴 상수: `packages/common-constant/src/routing/project-alpha-menu.ts`
 ```
 
 ### 2. 기획서 내에서 참조

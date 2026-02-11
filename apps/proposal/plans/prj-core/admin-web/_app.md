@@ -30,7 +30,7 @@
 
 ### 메뉴 상수 위치
 
-- `packages/constant/src/routing/admin-menu.ts`
+- `packages/common-constant/src/routing/admin-menu.ts`
 
 ---
 

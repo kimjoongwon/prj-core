@@ -87,17 +87,17 @@ type AbilityChecker = (action: string, subject: string) => boolean;
 
 | 레이어 | 파일 | 역할 |
 |--------|------|------|
-| 타입 | `packages/type/src/navigation.ts` | NavItemConfig, TabConfig, FABAction 인터페이스 |
-| Store | `packages/store/src/stores/navigationStore.ts` | 메뉴 상태 관리 |
-| Store | `packages/store/src/stores/navItem.ts` | 메뉴 아이템 클래스 |
-| Store | `packages/store/src/stores/navigator.ts` | 라우터 래퍼 |
-| Store | `packages/store/src/stores/bottomTabStore.ts` | 모바일 하단 탭 상태 |
-| Store | `packages/store/src/stores/fabStore.ts` | FAB 상태 관리 |
-| Widget | `packages/ui/src/components/widget/NavTreePanel/` | 트리 UI |
-| Feature | `packages/ui/src/components/feature/SideNav/` | Sidebar 연결 |
-| Feature | `packages/ui/src/components/feature/Nav/` | Header 네비게이션 |
-| Feature | `packages/ui/src/components/feature/SubNav/` | 2depth 네비게이션 |
-| Feature | `packages/ui/src/components/feature/BottomTab/` | 모바일 하단 탭 |
-| Feature | `packages/ui/src/components/feature/SubMenuList/` | 모바일 서브메뉴 |
-| Layout | `packages/ui/src/components/ui/layouts/Admin/` | 레이아웃 컴포넌트들 |
-| 상수 | `packages/constant/src/routing/admin-menu.ts` | 메뉴 설정 데이터 |
+| 타입 | `packages/common-type/src/navigation.ts` | NavItemConfig, TabConfig, FABAction 인터페이스 |
+| Store | `packages/fe-store/src/stores/navigationStore.ts` | 메뉴 상태 관리 |
+| Store | `packages/fe-store/src/stores/navItem.ts` | 메뉴 아이템 클래스 |
+| Store | `packages/fe-store/src/stores/navigator.ts` | 라우터 래퍼 |
+| Store | `packages/fe-store/src/stores/bottomTabStore.ts` | 모바일 하단 탭 상태 |
+| Store | `packages/fe-store/src/stores/fabStore.ts` | FAB 상태 관리 |
+| Widget | `packages/fe-ui/src/components/widget/NavTreePanel/` | 트리 UI |
+| Feature | `packages/fe-ui/src/components/feature/SideNav/` | Sidebar 연결 |
+| Feature | `packages/fe-ui/src/components/feature/Nav/` | Header 네비게이션 |
+| Feature | `packages/fe-ui/src/components/feature/SubNav/` | 2depth 네비게이션 |
+| Feature | `packages/fe-ui/src/components/feature/BottomTab/` | 모바일 하단 탭 |
+| Feature | `packages/fe-ui/src/components/feature/SubMenuList/` | 모바일 서브메뉴 |
+| Layout | `packages/fe-ui/src/components/ui/layouts/Admin/` | 레이아웃 컴포넌트들 |
+| 상수 | `packages/common-constant/src/routing/admin-menu.ts` | 메뉴 설정 데이터 |

@@ -30,7 +30,7 @@ tools: Read, Write, Grep, Bash
 | | 도메인 설명 | 비즈니스 컨텍스트 |
 | | 필드 목록 | 필드명, 타입, 설명 |
 | | 관계 정보 | 연결할 다른 모델 |
-| **출력** | Prisma 스키마 파일 | `packages/prisma/schema/{domain}.prisma` |
+| **출력** | Prisma 스키마 파일 | `packages/be-prisma/schema/{domain}.prisma` |
 | | 유형 분류 주석 | `@schema-type` 등 |
 
 ---
@@ -322,7 +322,7 @@ model EntityAssociation {
 ### 파일 위치
 
 ```
-packages/prisma/schema/{domain}.prisma
+packages/be-prisma/schema/{domain}.prisma
 ```
 
 기존 도메인 파일:
@@ -385,7 +385,7 @@ packages/prisma/schema/{domain}.prisma
 **유형:** [SCHEMA TYPE]
 
 **생성된 파일:**
-- `packages/prisma/schema/[domain].prisma`
+- `packages/be-prisma/schema/[domain].prisma`
 
 **관계 구조:**
 [Entity] ([유형])

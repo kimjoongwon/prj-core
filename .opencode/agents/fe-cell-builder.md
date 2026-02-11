@@ -115,10 +115,10 @@ Pure UI Cell → Widget Cell → Feature Cell
 
 | 항목 | 경로 |
 |------|------|
-| Cell 컴포넌트 | `packages/ui/src/components/ui/data-display/cells/[CellName]/[CellName].tsx` |
-| Storybook | `packages/ui/src/components/ui/data-display/cells/[CellName]/[CellName].stories.tsx` |
-| barrel export | `packages/ui/src/components/ui/data-display/cells/[CellName]/index.ts` |
-| cells index | `packages/ui/src/components/ui/data-display/cells/index.ts` (추가) |
+| Cell 컴포넌트 | `packages/fe-ui/src/components/ui/data-display/cells/[CellName]/[CellName].tsx` |
+| Storybook | `packages/fe-ui/src/components/ui/data-display/cells/[CellName]/[CellName].stories.tsx` |
+| barrel export | `packages/fe-ui/src/components/ui/data-display/cells/[CellName]/index.ts` |
+| cells index | `packages/fe-ui/src/components/ui/data-display/cells/index.ts` (추가) |
 
 ---
 
@@ -153,7 +153,7 @@ Pure UI Cell → Widget Cell → Feature Cell
 ### 5.1 Pure UI Cell
 
 ```tsx
-// packages/ui/src/components/ui/data-display/cells/PhoneCell/PhoneCell.tsx
+// packages/fe-ui/src/components/ui/data-display/cells/PhoneCell/PhoneCell.tsx
 
 interface PhoneCellProps {
   /** 전화번호 */
@@ -176,7 +176,7 @@ export const PhoneCell = ({ value }: PhoneCellProps) => {
 ### 5.2 Widget Cell
 
 ```tsx
-// packages/ui/src/components/ui/data-display/cells/TagsCell/TagsCell.tsx
+// packages/fe-ui/src/components/ui/data-display/cells/TagsCell/TagsCell.tsx
 import { Chip } from "@heroui/react";
 
 interface TagsCellProps {
@@ -215,7 +215,7 @@ export const TagsCell = ({ tags, maxDisplay = 3 }: TagsCellProps) => {
 ### 5.3 Feature Cell
 
 ```tsx
-// packages/ui/src/components/ui/data-display/cells/ActionButtonsCell/ActionButtonsCell.tsx
+// packages/fe-ui/src/components/ui/data-display/cells/ActionButtonsCell/ActionButtonsCell.tsx
 import { Button, Tooltip } from "@heroui/react";
 import { Eye, Pencil, Trash2 } from "lucide-react";
 import type { Route } from "next";
@@ -296,7 +296,7 @@ export const ActionButtonsCell = ({
 ### 5.4 Storybook
 
 ```tsx
-// packages/ui/src/components/ui/data-display/cells/PhoneCell/PhoneCell.stories.tsx
+// packages/fe-ui/src/components/ui/data-display/cells/PhoneCell/PhoneCell.stories.tsx
 import type { Meta, StoryObj } from "@storybook/react";
 import { PhoneCell } from "./PhoneCell";
 
@@ -360,7 +360,7 @@ export type { PhoneCellProps } from "./PhoneCell";
 
 ```bash
 # 기존 Cell 목록 확인
-ls packages/ui/src/components/ui/data-display/cells/
+ls packages/fe-ui/src/components/ui/data-display/cells/
 ```
 
 기존 Cell로 해결 가능하면 새로 만들지 않음.
@@ -371,7 +371,7 @@ ls packages/ui/src/components/ui/data-display/cells/
 
 ### Step 5: Export 추가
 
-`packages/ui/src/components/ui/data-display/cells/index.ts`에 export 추가.
+`packages/fe-ui/src/components/ui/data-display/cells/index.ts`에 export 추가.
 
 ---
 
@@ -448,10 +448,10 @@ ls packages/ui/src/components/ui/data-display/cells/
 ### [CellName] (계층: Pure UI / Widget / Feature)
 
 **생성된 파일:**
-- `packages/ui/src/components/ui/data-display/cells/[CellName]/[CellName].tsx`
-- `packages/ui/src/components/ui/data-display/cells/[CellName]/[CellName].stories.tsx`
-- `packages/ui/src/components/ui/data-display/cells/[CellName]/index.ts`
-- `packages/ui/src/components/ui/data-display/cells/index.ts` (export 추가)
+- `packages/fe-ui/src/components/ui/data-display/cells/[CellName]/[CellName].tsx`
+- `packages/fe-ui/src/components/ui/data-display/cells/[CellName]/[CellName].stories.tsx`
+- `packages/fe-ui/src/components/ui/data-display/cells/[CellName]/index.ts`
+- `packages/fe-ui/src/components/ui/data-display/cells/index.ts` (export 추가)
 
 **Props:**
 | 이름 | 타입 | 필수 | 설명 |

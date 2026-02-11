@@ -278,6 +278,6 @@ onModuleInit vs onApplicationBootstrap:
 
 ### 관련 파일
 
-- SubjectSyncService: `packages/service/src/subject-sync.service.ts`
-- SubjectSyncModule: `packages/service/src/subject-sync.module.ts`
-- DmmfParser: `packages/prisma/src/utils/dmmf-parser.ts`
+- SubjectSyncService: `packages/be-service/src/subject-sync.service.ts`
+- SubjectSyncModule: `packages/be-service/src/subject-sync.module.ts`
+- DmmfParser: `packages/be-prisma/src/utils/dmmf-parser.ts`

@@ -25,7 +25,7 @@ Prisma 스키마 파일에 `/// @displayName 한글명` 주석을 추가하는 �
 
 | 구분 | 항목 | 설명 |
 |------|------|------|
-| **입력** | Prisma 스키마 파일 | `packages/prisma/schema/*.prisma` |
+| **입력** | Prisma 스키마 파일 | `packages/be-prisma/schema/*.prisma` |
 | | 한글 매핑 정보 | 모델명/필드명 → 한글명 대응 |
 | **출력** | 주석이 추가된 스키마 | `/// @displayName 한글명` 주석 포함 |
 
@@ -108,7 +108,7 @@ Prisma 스키마 파일에 `/// @displayName 한글명` 주석을 추가하는 �
 
 ```
 1. 스키마 파일 목록 확인
-   └── ls packages/prisma/schema/*.prisma
+   └── ls packages/be-prisma/schema/*.prisma
    ↓
 2. 각 파일 분석
    - 모델 목록 확인
@@ -181,7 +181,7 @@ model User {
 
 ## 6. 체크리스트
 
-- [ ] 모든 스키마 파일 확인 (`packages/prisma/schema/*.prisma`)
+- [ ] 모든 스키마 파일 확인 (`packages/be-prisma/schema/*.prisma`)
 - [ ] 각 모델에 `/// @displayName` 주석 추가
 - [ ] 비즈니스 필드에 `/// @displayName` 주석 추가
 - [ ] 기존 주석 유지 확인
@@ -207,7 +207,7 @@ model User {
 ### 대상 파일
 
 ```
-packages/prisma/schema/*.prisma
+packages/be-prisma/schema/*.prisma
 ```
 
 ### 한글 매핑 가이드
@@ -288,5 +288,5 @@ packages/prisma/schema/*.prisma
 
 ### 관련 파일
 
-- DmmfParser: `packages/prisma/src/utils/dmmf-parser.ts`
-- SubjectSyncService: `packages/service/src/subject-sync.service.ts`
+- DmmfParser: `packages/be-prisma/src/utils/dmmf-parser.ts`
+- SubjectSyncService: `packages/be-service/src/subject-sync.service.ts`

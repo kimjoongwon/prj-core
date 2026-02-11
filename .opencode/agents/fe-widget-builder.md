@@ -11,7 +11,7 @@ tools:
 
 # Widget 컴포넌트 빌더
 
-**재사용 가능한 작은 UI 조각**을 `packages/ui/src/components/widget`에 생성합니다.
+**재사용 가능한 작은 UI 조각**을 `packages/fe-ui/src/components/widget`에 생성합니다.
 
 ---
 
@@ -42,9 +42,9 @@ tools:
 
 | 항목 | 경로 |
 |------|------|
-| 메인 컴포넌트 | `packages/ui/src/components/widget/[Name]/[Name].tsx` |
-| barrel export | `packages/ui/src/components/widget/[Name]/index.ts` |
-| 상위 barrel | `packages/ui/src/components/widget/index.ts` (추가) |
+| 메인 컴포넌트 | `packages/fe-ui/src/components/widget/[Name]/[Name].tsx` |
+| barrel export | `packages/fe-ui/src/components/widget/[Name]/index.ts` |
+| 상위 barrel | `packages/fe-ui/src/components/widget/index.ts` (추가) |
 
 ---
 
@@ -96,19 +96,19 @@ Widget 개발 시 필요한 Pure UI가 없으면 **먼저 UI Component Builder�
 ### 4.3 파일 구조 생성
 
 ```
-packages/ui/src/components/widget/[Name]/
+packages/fe-ui/src/components/widget/[Name]/
 ├── [Name].tsx     # 메인 컴포넌트
 └── index.ts       # barrel export
 
 # ⚠️ 컴포넌트 폴더 내 hooks/, utils/ 하위 폴더 생성 금지!
 # 재사용 가능한 훅/유틸은 패키지 레벨에서 관리:
-packages/ui/src/hooks/use[Name].ts       # 재사용 가능한 훅
-packages/ui/src/utils/[utilName].ts      # 재사용 가능한 유틸
+packages/fe-ui/src/hooks/use[Name].ts       # 재사용 가능한 훅
+packages/fe-ui/src/utils/[utilName].ts      # 재사용 가능한 유틸
 ```
 
 ### 4.4 barrel export 추가
 
-`packages/ui/src/components/widget/index.ts`에 새 컴포넌트 export 추가
+`packages/fe-ui/src/components/widget/index.ts`에 새 컴포넌트 export 추가
 
 ---
 
@@ -117,7 +117,7 @@ packages/ui/src/utils/[utilName].ts      # 재사용 가능한 유틸
 ### 5.1 기본 Widget
 
 ```tsx
-// packages/ui/src/components/widget/StatusBadge/StatusBadge.tsx
+// packages/fe-ui/src/components/widget/StatusBadge/StatusBadge.tsx
 import { Chip } from "../../ui/data-display/Chip/Chip";
 
 type Status = "active" | "inactive" | "pending";
@@ -192,7 +192,7 @@ export type { StatusBadgeProps } from "./StatusBadge";
 
 ## 6. 체크리스트
 
-- [ ] `packages/ui/src/components/widget/[Name]/` 에 생성
+- [ ] `packages/fe-ui/src/components/widget/[Name]/` 에 생성
 - [ ] 필요한 Pure UI가 없으면 UI Component Builder에게 요청
 - [ ] 단일 책임 원칙 확인
 - [ ] 커스텀 className 사용하지 않음 (HeroUI/레이아웃 컴포넌트만)

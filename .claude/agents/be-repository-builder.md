@@ -27,7 +27,7 @@ Prisma 기반 Repository 레이어를 생성하는 전문가입니다.
 |------|------|------|
 | **입력** | Entity 클래스 | `@cocrepo/entity` |
 | | 필요한 쿼리 패턴 | CRUD, 관계 포함 조회 등 |
-| **출력** | Repository 클래스 | `packages/repository/src/{entity}.repository.ts` |
+| **출력** | Repository 클래스 | `packages/be-repository/src/{entity}.repository.ts` |
 | | index.ts 업데이트 | export 추가 |
 
 ---
@@ -434,7 +434,7 @@ async findManyBySpaceId(params: {
 ### 파일 위치
 
 ```
-packages/repository/src/{entity}.repository.ts
+packages/be-repository/src/{entity}.repository.ts
 ```
 
 ### 메서드 명명 규칙
@@ -475,7 +475,7 @@ packages/repository/src/{entity}.repository.ts
 ### Export 등록
 
 ```typescript
-// packages/repository/src/index.ts
+// packages/be-repository/src/index.ts
 // ✅ Repository 클래스만 export
 export { {Entity}sRepository } from "./{entity}.repository";
 
@@ -486,6 +486,6 @@ export { {Entity}sRepository } from "./{entity}.repository";
 
 ### 관련 파일
 
-- Service: `packages/service/src/{entity}.service.ts`
-- Entity: `packages/entity/src/{entity}.ts`
-- Prisma Schema: `packages/prisma/prisma/schema.prisma`
+- Service: `packages/be-service/src/{entity}.service.ts`
+- Entity: `packages/be-entity/src/{entity}.ts`
+- Prisma Schema: `packages/be-prisma/prisma/schema.prisma`

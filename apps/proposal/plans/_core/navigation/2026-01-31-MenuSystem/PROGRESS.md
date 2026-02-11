@@ -28,27 +28,27 @@
 ## 분석된 파일 목록
 
 ### 상수/설정
-- `packages/constant/src/routing/admin-menu.ts`
-- `packages/type/src/navigation.ts`
+- `packages/common-constant/src/routing/admin-menu.ts`
+- `packages/common-type/src/navigation.ts`
 
 ### Store
-- `packages/store/src/stores/navItem.ts`
-- `packages/store/src/stores/navigationStore.ts`
-- `packages/store/src/stores/bottomTabStore.ts`
-- `packages/store/src/stores/fabStore.ts`
-- `packages/store/src/stores/rootStore.ts`
-- `packages/store/src/stores/persistStore.ts`
-- `packages/store/src/stores/abilityStore.ts`
-- `packages/store/src/providers/createAppStoreProvider.tsx`
+- `packages/fe-store/src/stores/navItem.ts`
+- `packages/fe-store/src/stores/navigationStore.ts`
+- `packages/fe-store/src/stores/bottomTabStore.ts`
+- `packages/fe-store/src/stores/fabStore.ts`
+- `packages/fe-store/src/stores/rootStore.ts`
+- `packages/fe-store/src/stores/persistStore.ts`
+- `packages/fe-store/src/stores/abilityStore.ts`
+- `packages/fe-store/src/providers/createAppStoreProvider.tsx`
 
 ### UI 컴포넌트
-- `packages/ui/src/components/ui/layouts/Admin/AdminLayout.tsx`
-- `packages/ui/src/components/ui/layouts/Admin/AdminSidebar.tsx`
-- `packages/ui/src/components/ui/layouts/Admin/AdminBottomTab.tsx`
-- `packages/ui/src/components/ui/layouts/Admin/AdminFAB.tsx`
-- `packages/ui/src/components/widget/NavTreePanel/NavTreePanel.tsx`
-- `packages/ui/src/components/feature/SideNav/SideNav.tsx`
-- `packages/ui/src/components/feature/SubNav/SubNav.tsx`
+- `packages/fe-ui/src/components/ui/layouts/Admin/AdminLayout.tsx`
+- `packages/fe-ui/src/components/ui/layouts/Admin/AdminSidebar.tsx`
+- `packages/fe-ui/src/components/ui/layouts/Admin/AdminBottomTab.tsx`
+- `packages/fe-ui/src/components/ui/layouts/Admin/AdminFAB.tsx`
+- `packages/fe-ui/src/components/widget/NavTreePanel/NavTreePanel.tsx`
+- `packages/fe-ui/src/components/feature/SideNav/SideNav.tsx`
+- `packages/fe-ui/src/components/feature/SubNav/SubNav.tsx`
 
 ### 앱
 - `apps/admin/src/stores/AppStoreProvider.tsx`

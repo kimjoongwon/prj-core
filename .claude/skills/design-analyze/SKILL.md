@@ -22,7 +22,7 @@ Figma MCP를 통해 가져온 디자인을 분석하고, 기존 컴포넌트로 
 
 - ✅ 화면 목적과 사용자 시나리오 분석
 - ✅ 필요한 API와 상태 관리 요구사항 도출
-- ✅ `packages/ui/components.json` 참조하여 기존 컴포넌트 매핑
+- ✅ `packages/fe-ui/components.json` 참조하여 기존 컴포넌트 매핑
 - ✅ 신규 컴포넌트는 Component Builder 위임 명세 작성
 
 ---
@@ -43,7 +43,7 @@ Figma MCP를 통해 가져온 디자인을 분석하고, 기존 컴포넌트로 
 
 ```bash
 # 컴포넌트 목록 조회
-cat packages/ui/components.json
+cat packages/fe-ui/components.json
 
 # 또는 분석 명령 실행
 pnpm --filter=@cocrepo/ui analyze:components
@@ -53,20 +53,20 @@ pnpm --filter=@cocrepo/ui analyze:components
 
 ```bash
 # 레이아웃 컴포넌트
-ls packages/ui/src/components/layout/
+ls packages/fe-ui/src/components/layout/
 
 # 각 레이아웃 Props 확인
-grep -l "Props" packages/ui/src/components/layout/**/*.tsx
+grep -l "Props" packages/fe-ui/src/components/layout/**/*.tsx
 ```
 
 ### 3단계: UI 컴포넌트 확인
 
 ```bash
 # UI 컴포넌트
-ls packages/ui/src/components/ui/
+ls packages/fe-ui/src/components/ui/
 
 # Input 컴포넌트
-ls packages/ui/src/components/inputs/
+ls packages/fe-ui/src/components/inputs/
 ```
 
 ---
@@ -161,7 +161,7 @@ ls packages/ui/src/components/inputs/
 ### Layout
 - **DashboardLayout** - 전체 레이아웃 구조
   - Props: header, leftSidebar, children
-  - 경로: packages/ui/src/components/layout/Dashboard/
+  - 경로: packages/fe-ui/src/components/layout/Dashboard/
 
 ### UI Components
 - **Button** - 액션 버튼
@@ -178,7 +178,7 @@ ls packages/ui/src/components/inputs/
 - 컴포넌트명: [컴포넌트명]
 - Props: [Props 목록]
 - 카테고리: ui / widget / feature
-- 경로: packages/ui/src/components/[카테고리]/[컴포넌트명]/
+- 경로: packages/fe-ui/src/components/[카테고리]/[컴포넌트명]/
 
 ## 5. 다음 단계
 1. 위의 "4. 신규 컴포넌트 제안" 내용을 Component Builder Agent에게 전달
@@ -221,7 +221,7 @@ import { Card, Badge, Avatar } from "@heroui/react";
 
 ### 분석 전
 - [ ] Figma URL에서 `file-key`와 `node-id` 추출했는가?
-- [ ] `packages/ui/components.json` 읽어 기존 컴포넌트 목록 확인했는가?
+- [ ] `packages/fe-ui/components.json` 읽어 기존 컴포넌트 목록 확인했는가?
 
 ### 분석 중
 - [ ] 화면 목적과 사용자 시나리오 파악했는가?

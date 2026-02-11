@@ -27,7 +27,7 @@ NestJS Facade 레이어를 생성하는 전문가입니다.
 |------|------|------|
 | **입력** | Service 클래스들 | `@cocrepo/service` |
 | | 비즈니스 흐름 요구사항 | 여러 Service 조합 로직 |
-| **출력** | Facade 클래스 | `packages/facade/src/{domain}.facade.ts` |
+| **출력** | Facade 클래스 | `packages/be-facade/src/{domain}.facade.ts` |
 | | index.ts 업데이트 | export 추가 |
 
 ---
@@ -294,7 +294,7 @@ Controller → Facade → Service(s) → Repository → Prisma
 ### 파일 위치
 
 ```
-packages/facade/src/{domain}.facade.ts
+packages/be-facade/src/{domain}.facade.ts
 ```
 
 ### Facade vs Service 구분
@@ -370,12 +370,12 @@ export class AbilitiesFacade {
 ### Export 등록
 
 ```typescript
-// packages/facade/src/index.ts
+// packages/be-facade/src/index.ts
 export { {Domain}Facade } from "./{domain}.facade";
 ```
 
 ### 관련 파일
 
-- Service: `packages/service/src/{entity}.service.ts`
+- Service: `packages/be-service/src/{entity}.service.ts`
 - Controller: `apps/server/src/module/{domain}/{domain}.controller.ts`
-- Repository: `packages/repository/src/{entity}.repository.ts`
+- Repository: `packages/be-repository/src/{entity}.repository.ts`

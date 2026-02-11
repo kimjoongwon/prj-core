@@ -65,8 +65,8 @@ export class DmmfParser {
 			path.resolve(__dirname, "../../schema"), // dist/src에서 실행 시
 			path.resolve(__dirname, "../schema"), // src에서 실행 시
 			path.resolve(__dirname, "../../../schema"), // dist/src/utils에서 실행 시
-			path.resolve(process.cwd(), "packages/prisma/schema"),
-			path.resolve(process.cwd(), "../../packages/prisma/schema"), // apps/server에서 실행 시
+			path.resolve(process.cwd(), "packages/be-prisma/schema"),
+			path.resolve(process.cwd(), "../../packages/be-prisma/schema"), // apps/server에서 실행 시
 			path.resolve(process.cwd(), "schema"),
 		];
 

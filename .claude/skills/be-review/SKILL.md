@@ -57,10 +57,10 @@ grep -rn "this\.prisma\." apps/server/src/module/**/*.facade.ts --include="*.ts"
 
 ```bash
 # PrismaService 주입 확인
-grep -L "PrismaService" packages/repository/src/*.ts 2>/dev/null
+grep -L "PrismaService" packages/be-repository/src/*.ts 2>/dev/null
 
 # 비즈니스 로직 존재 확인 (if/for/while 문)
-grep -rEn "if\s*\(|for\s*\(|while\s*\(" packages/repository/src/*.ts
+grep -rEn "if\s*\(|for\s*\(|while\s*\(" packages/be-repository/src/*.ts
 ```
 
 #### Service 규칙
@@ -103,7 +103,7 @@ grep -L "@ApiResponseEntity" apps/server/src/module/**/*.controller.ts 2>/dev/nu
 grep -rn "new ResponseEntity\|ResponseEntity\." apps/server/src/module/**/*.controller.ts
 
 # *ListResponseDto 래퍼 DTO 금지
-find packages/dto/src -name "*ListResponse*.dto.ts" -type f
+find packages/be-dto/src -name "*ListResponse*.dto.ts" -type f
 ```
 
 ### 4단계: Multi-Tenancy 검증
@@ -138,7 +138,7 @@ Controller → Facade → Service → Repository → Prisma
 
 ### Critical 규칙
 
-- [ ] DTO 위치: packages/dto 필수 (apps/server/dto 금지)
+- [ ] DTO 위치: packages/be-dto 필수 (apps/server/dto 금지)
 - [ ] Service에서 Prisma 직접 호출 금지
 - [ ] Facade에서 Prisma 직접 호출 금지
 - [ ] Controller에서 비즈니스 로직 금지
@@ -175,7 +175,7 @@ Controller → Facade → Service → Repository → Prisma
 
 | 규칙 | 상태 | 비고 |
 |------|------|------|
-| DTO 위치 | ✅ 통과 | packages/dto에 위치 |
+| DTO 위치 | ✅ 통과 | packages/be-dto에 위치 |
 | 레이어 분리 | ✅ 통과 | 의존성 방향 준수 |
 | Prisma 직접 호출 금지 | ✅ 통과 | Repository 통해 접근 |
 | API 응답 구조 | ✅ 통과 | @ApiResponseEntity 사용 |
@@ -200,7 +200,7 @@ Controller → Facade → Service → Repository → Prisma
 ```
 파일: apps/server/src/module/ability/dto/create-ability.dto.ts
 현재: apps/server/src/module/ability/dto/에 위치
-수정 방향: packages/dto/src/ability/에 이동
+수정 방향: packages/be-dto/src/ability/에 이동
 ```
 
 #### 2. Service에서 Prisma 직접 호출 위반
@@ -211,7 +211,7 @@ Controller → Facade → Service → Repository → Prisma
 ```
 
 ### 수정 방법
-1. DTO는 반드시 packages/dto에 위치해야 합니다
+1. DTO는 반드시 packages/be-dto에 위치해야 합니다
 2. Service는 Repository를 통해서만 데이터에 접근합니다
 
 ### 품질 점수: 60/100

@@ -49,11 +49,11 @@ grep -rEn "axios\.|fetch\(" [대상경로] --include="*.tsx" --include="*.ts"
 # 3. 공용 패키지 앱 종속 이름 검사
 grep -rEn "(Admin|Coin)[A-Z][a-zA-Z]*Store|use(Admin|Coin)[A-Z]" packages/ --include="*.ts" --include="*.tsx"
 
-# 4. packages/ui에서 Context API 사용 금지 검사
-grep -rEn "createContext|useContext" packages/ui/ --include="*.tsx" --include="*.ts"
+# 4. packages/fe-ui에서 Context API 사용 금지 검사
+grep -rEn "createContext|useContext" packages/fe-ui/ --include="*.tsx" --include="*.ts"
 
 # 5. 컴포넌트 폴더 내 hooks/, utils/, inputs/ 하위 폴더 금지 검사
-find packages/ui/src/components -type d \( -name "hooks" -o -name "utils" -o -name "inputs" \) | grep -v "components/inputs$"
+find packages/fe-ui/src/components -type d \( -name "hooks" -o -name "utils" -o -name "inputs" \) | grep -v "components/inputs$"
 ```
 
 ### 2단계: 컴포넌트 유형별 검증
@@ -125,7 +125,7 @@ done
 - [ ] API 직접 호출 금지 (axios, fetch)
 - [ ] observer 필수 ("use client" 컴포넌트)
 - [ ] 공용 패키지 앱 종속 이름 금지
-- [ ] **packages/ui에서 Context API 사용 금지 (createContext, useContext)**
+- [ ] **packages/fe-ui에서 Context API 사용 금지 (createContext, useContext)**
 - [ ] **컴포넌트 폴더 내 hooks/, utils/, inputs/ 하위 폴더 금지 (패키지 레벨에서 관리)**
 
 ### Page 전용
@@ -175,7 +175,7 @@ done
 ## ⚠️ 프론트엔드 리뷰 - 수정 필요
 
 ### 검증 대상
-- **경로:** packages/ui/src/components/widget/UserCard/
+- **경로:** packages/fe-ui/src/components/widget/UserCard/
 - **유형:** Widget
 - **파일 수:** 2개
 
@@ -183,14 +183,14 @@ done
 
 #### 1. Store 직접 접근 위반
 ```
-파일: packages/ui/src/components/widget/UserCard/UserCard.tsx:15
+파일: packages/fe-ui/src/components/widget/UserCard/UserCard.tsx:15
 현재: const store = useUserStore();
 수정 방향: props로 userData 전달받도록 변경
 ```
 
 #### 2. 커스텀 className 위반
 ```
-파일: packages/ui/src/components/widget/UserCard/UserCard.tsx:28
+파일: packages/fe-ui/src/components/widget/UserCard/UserCard.tsx:28
 현재: <div className="flex items-center gap-2">
 수정 방향: <HStack gap={2}> 사용
 ```

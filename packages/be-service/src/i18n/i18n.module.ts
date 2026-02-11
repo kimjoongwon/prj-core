@@ -9,7 +9,7 @@ import { TranslationService } from "./translation.service";
 
 // webpack 번들 환경에서는 __dirname이 원본 소스 위치가 아닌 출력 파일 위치를 가리킴
 // process.cwd() 기반으로 패키지 경로를 해석하면 tsc/webpack 모두 호환
-const SERVICE_PKG_ROOT = resolve(process.cwd(), "../../packages/service");
+const SERVICE_PKG_ROOT = resolve(process.cwd(), "../../packages/be-service");
 
 @Module({
 	imports: [

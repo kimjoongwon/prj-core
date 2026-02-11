@@ -42,11 +42,11 @@ export default defineConfig({
           environment: "jsdom",
           globals: true,
           setupFiles: [path.resolve(dirname, "./test-setup.js")],
-          include: ["../../packages/ui/src/**/*.test.{ts,tsx}"],
+          include: ["../../packages/fe-ui/src/**/*.test.{ts,tsx}"],
         },
         resolve: {
           alias: {
-            "@cocrepo/frontend": path.resolve(dirname, "../../packages/ui"),
+            "@cocrepo/frontend": path.resolve(dirname, "../../packages/fe-ui"),
           },
         },
       },

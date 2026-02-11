@@ -72,7 +72,7 @@
 
 - 페이지는 각 앱에서 직접 개발 (apps/admin, apps/coin 등)
 - UI 컴포넌트를 조합하여 구성
-- 재사용 가능한 UI는 packages/ui에서 import
+- 재사용 가능한 UI는 packages/fe-ui에서 import
 
 ## 🤝 팀 협업
 

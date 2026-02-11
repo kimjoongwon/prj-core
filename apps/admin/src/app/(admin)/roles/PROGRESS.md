@@ -13,7 +13,7 @@
 - 기존 Role 스키마/API 존재하므로 스킵
 
 ### Stage 2: 스키마 ⏭️ SKIP
-- 기존 Prisma 스키마 존재: `packages/prisma/schema/role.prisma`
+- 기존 Prisma 스키마 존재: `packages/be-prisma/schema/role.prisma`
 
 ### Stage 3: 백엔드 ⏭️ SKIP
 - 기존 API 존재: `useGetRoles`, `useCreateRole`, `useUpdateRole`, `useDeleteRole`

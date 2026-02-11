@@ -28,7 +28,7 @@ tools: Read, Write, Grep, Bash
 |------|------|------|
 | **입력** | Prisma 모델 | `@cocrepo/prisma`에서 생성된 타입 |
 | | 도메인 로직 요구사항 | 필요한 비즈니스 메서드 |
-| **출력** | Entity 클래스 | `packages/entity/src/{entity}.entity.ts` |
+| **출력** | Entity 클래스 | `packages/be-entity/src/{entity}.entity.ts` |
 | | index.ts 업데이트 | export 추가 |
 
 ---
@@ -110,7 +110,7 @@ export class User extends AbstractEntity implements UserEntity {
 ### 3단계: index.ts 등록
 
 ```typescript
-// packages/entity/src/index.ts
+// packages/be-entity/src/index.ts
 export * from "./{entity}.entity";
 ```
 
@@ -324,7 +324,7 @@ export class User extends AbstractEntity implements UserEntity {
 ### 파일 위치
 
 ```
-packages/entity/src/{entity}.entity.ts
+packages/be-entity/src/{entity}.entity.ts
 ```
 
 ### 도메인 메서드 가이드
@@ -401,6 +401,6 @@ export class Subject extends AbstractEntity implements SubjectEntity {
 
 ### 관련 파일
 
-- Prisma 스키마: `packages/prisma/schema/*.prisma`
-- 추상 Entity: `packages/entity/src/abstract.entity.ts`
-- Entity export: `packages/entity/src/index.ts`
+- Prisma 스키마: `packages/be-prisma/schema/*.prisma`
+- 추상 Entity: `packages/be-entity/src/abstract.entity.ts`
+- Entity export: `packages/be-entity/src/index.ts`

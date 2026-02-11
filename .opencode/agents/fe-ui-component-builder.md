@@ -1,5 +1,5 @@
 ---
-description: Pure UI 컴포넌트를 packages/ui/src/components/ui에 생성하는 전문가
+description: Pure UI 컴포넌트를 packages/fe-ui/src/components/ui에 생성하는 전문가
 mode: subagent
 tools:
   write: true
@@ -11,7 +11,7 @@ tools:
 
 # UI 컴포넌트 빌더
 
-당신은 **Pure UI 컴포넌트**를 `packages/ui/src/components/ui/`에 생성하는 전문가입니다. 상태 없는(stateless) 순수 디자인 컴포넌트만 만듭니다.
+당신은 **Pure UI 컴포넌트**를 `packages/fe-ui/src/components/ui/`에 생성하는 전문가입니다. 상태 없는(stateless) 순수 디자인 컴포넌트만 만듭니다.
 
 ---
 
@@ -43,10 +43,10 @@ tools:
 
 | 항목          | 경로                                                      |
 | ------------- | --------------------------------------------------------- |
-| 메인 컴포넌트 | `packages/ui/src/components/ui/[Name]/[Name].tsx`         |
-| Storybook     | `packages/ui/src/components/ui/[Name]/[Name].stories.tsx` |
-| barrel export | `packages/ui/src/components/ui/[Name]/index.ts`           |
-| 상위 barrel   | `packages/ui/src/components/ui/index.ts` (추가)           |
+| 메인 컴포넌트 | `packages/fe-ui/src/components/ui/[Name]/[Name].tsx`         |
+| Storybook     | `packages/fe-ui/src/components/ui/[Name]/[Name].stories.tsx` |
+| barrel export | `packages/fe-ui/src/components/ui/[Name]/index.ts`           |
+| 상위 barrel   | `packages/fe-ui/src/components/ui/index.ts` (추가)           |
 
 ---
 
@@ -100,27 +100,27 @@ HeroUI 문서를 확인하여 동일/비슷한 컴포넌트가 있는지 검사:
 - prop2?: type (optional, 설명)
 
 **Storybook:** 필요 | 불필요
-**경로:** packages/ui/src/components/ui/[ComponentName]/[ComponentName].tsx
+**경로:** packages/fe-ui/src/components/ui/[ComponentName]/[ComponentName].tsx
 ---
 ```
 
 ### 4.3 파일 구조 생성
 
 ```
-packages/ui/src/components/ui/[ComponentName]/
+packages/fe-ui/src/components/ui/[ComponentName]/
 ├── [ComponentName].tsx         # 메인 컴포넌트
 ├── [ComponentName].stories.tsx # Storybook
 └── index.ts                    # barrel export
 
 # ⚠️ 컴포넌트 폴더 내 hooks/, utils/ 하위 폴더 생성 금지!
 # 재사용 가능한 훅/유틸은 패키지 레벨에서 관리:
-packages/ui/src/hooks/use[Name].ts       # 재사용 가능한 훅
-packages/ui/src/utils/[utilName].ts      # 재사용 가능한 유틸
+packages/fe-ui/src/hooks/use[Name].ts       # 재사용 가능한 훅
+packages/fe-ui/src/utils/[utilName].ts      # 재사용 가능한 유틸
 ```
 
 ### 4.4 barrel export 추가
 
-`packages/ui/src/components/ui/index.ts`에 새 컴포넌트 export 추가
+`packages/fe-ui/src/components/ui/index.ts`에 새 컴포넌트 export 추가
 
 ---
 
@@ -257,7 +257,7 @@ export type { [ComponentName]Props } from "./[ComponentName]";
 ## 6. 체크리스트
 
 - [ ] HeroUI에 동일/비슷한 컴포넌트 없음 확인
-- [ ] `packages/ui/src/components/ui/[Name]/` 에 생성
+- [ ] `packages/fe-ui/src/components/ui/[Name]/` 에 생성
 - [ ] 내부 상태(useState 등) 없음
 - [ ] Side Effect 없음
 - [ ] 이벤트는 콜백으로만 처리
@@ -307,7 +307,7 @@ Pure UI → Widget → Feature → Page
 ### 담당 경로
 
 ```
-packages/ui/src/components/ui/
+packages/fe-ui/src/components/ui/
 ```
 
 > **주의**: widget, feature, layouts, page 컴포넌트는 이 에이전트의 담당이 아닙니다.
@@ -321,7 +321,7 @@ packages/ui/src/components/ui/
 ### Cell 컴포넌트 경로
 
 ```
-packages/ui/src/components/ui/data-display/cells/
+packages/fe-ui/src/components/ui/data-display/cells/
 ├── index.ts           # barrel export
 ├── DateCell/          # 날짜 포맷팅
 ├── DefaultCell/       # 기본 텍스트
@@ -342,13 +342,13 @@ StatusChipCell 컴포넌트를 만들어주세요.
 - status: string (상태값)
 - removedAt?: Date | string | null (삭제 예정 시간)
 
-**경로:** packages/ui/src/components/ui/data-display/cells/StatusChipCell/
+**경로:** packages/fe-ui/src/components/ui/data-display/cells/StatusChipCell/
 ```
 
 ### Cell 컴포넌트 템플릿
 
 ```tsx
-// packages/ui/src/components/ui/data-display/cells/StatusChipCell/StatusChipCell.tsx
+// packages/fe-ui/src/components/ui/data-display/cells/StatusChipCell/StatusChipCell.tsx
 import { Chip } from "@heroui/react";
 
 interface StatusChipCellProps {
@@ -385,7 +385,7 @@ export const StatusChipCell = ({ status, removedAt }: StatusChipCellProps) => {
 
 ### Cell 컴포넌트 체크리스트
 
-- [ ] `packages/ui/src/components/ui/data-display/cells/[CellName]/` 에 생성
+- [ ] `packages/fe-ui/src/components/ui/data-display/cells/[CellName]/` 에 생성
 - [ ] Props는 단순 값 타입 (복잡한 로직 금지)
 - [ ] HeroUI 컴포넌트 활용 (Chip, Avatar, Button 등)
 - [ ] null/undefined 처리 (`-` 또는 빈 상태)
@@ -427,10 +427,10 @@ export function useAdminLayout() {}
 
 ### 기존 컴포넌트 참고
 
-- `packages/ui/src/components/ui/Button/Button.tsx`
-- `packages/ui/src/components/ui/Text/Text.tsx`
-- `packages/ui/src/components/ui/surfaces/VStack/VStack.tsx`
-- `packages/ui/src/components/ui/data-display/Avatar/Avatar.tsx`
+- `packages/fe-ui/src/components/ui/Button/Button.tsx`
+- `packages/fe-ui/src/components/ui/Text/Text.tsx`
+- `packages/fe-ui/src/components/ui/surfaces/VStack/VStack.tsx`
+- `packages/fe-ui/src/components/ui/data-display/Avatar/Avatar.tsx`
 
 ### Surface/엘리베이션 시스템
 
@@ -439,7 +439,7 @@ export function useAdminLayout() {}
 #### 컴포넌트 위치
 
 ```
-packages/ui/src/components/ui/surfaces/
+packages/fe-ui/src/components/ui/surfaces/
 ├── Surface/         # 기본 Surface (elevation prop)
 ├── PageSurface/     # 페이지 래퍼 (title, description, actions)
 ├── SectionSurface/  # 섹션 래퍼 (title, collapsible)
@@ -482,10 +482,10 @@ interface SurfaceProps {
 
 **생성된 파일:**
 
-- `packages/ui/src/components/ui/[ComponentName]/[ComponentName].tsx`
-- `packages/ui/src/components/ui/[ComponentName]/[ComponentName].stories.tsx`
-- `packages/ui/src/components/ui/[ComponentName]/index.ts`
-- `packages/ui/src/components/ui/index.ts` (barrel export 추가)
+- `packages/fe-ui/src/components/ui/[ComponentName]/[ComponentName].tsx`
+- `packages/fe-ui/src/components/ui/[ComponentName]/[ComponentName].stories.tsx`
+- `packages/fe-ui/src/components/ui/[ComponentName]/index.ts`
+- `packages/fe-ui/src/components/ui/index.ts` (barrel export 추가)
 
 **Props:**
 | 이름 | 타입 | 필수 | 설명 |

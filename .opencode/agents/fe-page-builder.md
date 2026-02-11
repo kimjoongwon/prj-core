@@ -59,7 +59,7 @@ tools:
 | 인라인 함수 선언 | 함수는 컴포넌트 외부 또는 훅에서 정의 |
 | 커스텀 className (Page/Feature) | VStack/HStack 등 UI 컴포넌트 사용 |
 
-> ⚠️ **Feature 위치 규칙**: Page에서 Feature를 사용할 때, Feature는 반드시 `packages/ui/src/components/feature/`에서 import합니다. `apps/*/src/components/features/` 같은 앱 내부에 Feature를 만들지 않습니다.
+> ⚠️ **Feature 위치 규칙**: Page에서 Feature를 사용할 때, Feature는 반드시 `packages/fe-ui/src/components/feature/`에서 import합니다. `apps/*/src/components/features/` 같은 앱 내부에 Feature를 만들지 않습니다.
 
 ### 핸들러 네이밍 규칙
 
@@ -84,7 +84,7 @@ apps/admin/app/[route]/
 ### 일반 페이지 추가 구조
 
 ```
-packages/ui/src/components/page/
+packages/fe-ui/src/components/page/
 ├── Login/
 │   ├── LoginPage.tsx      # Pure UI
 │   └── index.ts           # export (hooks 없음!)
@@ -125,7 +125,7 @@ packages/ui/src/components/page/
 ### 4.2 Pure UI Page 컴포넌트
 
 ```tsx
-// packages/ui/src/components/page/Login/LoginPage.tsx
+// packages/fe-ui/src/components/page/Login/LoginPage.tsx
 "use client";
 
 import { observer } from "mobx-react-lite";
@@ -214,7 +214,7 @@ export const useAuthLoginPage = () => {
 ### 4.4 일반 페이지 체크리스트
 
 **Pure UI Page (packages/ui)**
-- [ ] `packages/ui/src/components/page/[Name]/` 에 생성
+- [ ] `packages/fe-ui/src/components/page/[Name]/` 에 생성
 - [ ] observer로 감싸기
 - [ ] State, Props 인터페이스 정의
 - [ ] 모든 상태/핸들러는 props로 받음
@@ -346,7 +346,7 @@ export default observer(UsersPageClient);
 **테이블 셀 렌더링 로직은 반드시 재사용 가능한 Cell 컴포넌트로 분리합니다.**
 
 ```
-packages/ui/src/components/ui/data-display/cells/
+packages/fe-ui/src/components/ui/data-display/cells/
 ├── index.ts
 ├── BooleanCell/       # true/false → O/X 표시
 ├── DateCell/          # 날짜 포맷팅
@@ -704,8 +704,8 @@ Pure UI → Widget → Feature → Page
 |------|----------|
 | Simple Table 예시 | `apps/admin/app/(admin)/roles/page.tsx` |
 | Pagination 예시 | `apps/admin/app/(admin)/users/page.tsx` |
-| ConfirmModal | `packages/ui/src/components/widgets/common/ConfirmModal` |
-| **Cell 컴포넌트 폴더** | `packages/ui/src/components/ui/data-display/cells/` |
+| ConfirmModal | `packages/fe-ui/src/components/widgets/common/ConfirmModal` |
+| **Cell 컴포넌트 폴더** | `packages/fe-ui/src/components/ui/data-display/cells/` |
 
 ---
 

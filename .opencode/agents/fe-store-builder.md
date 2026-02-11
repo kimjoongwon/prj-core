@@ -45,11 +45,11 @@ MobX 기반의 Store를 생성하는 전문가입니다.
 
 | 항목 | 경로 |
 |------|------|
-| Store 클래스 | `packages/store/src/stores/[name]Store.ts` |
-| Domain Model | `packages/store/src/stores/[name].ts` (필요시) |
-| useStore hook | `packages/store/src/stores/useStore.ts` (추가) |
-| RootStore 등록 | `packages/store/src/stores/Store.ts` (수정) |
-| barrel export | `packages/store/src/stores/index.ts` (추가) |
+| Store 클래스 | `packages/fe-store/src/stores/[name]Store.ts` |
+| Domain Model | `packages/fe-store/src/stores/[name].ts` (필요시) |
+| useStore hook | `packages/fe-store/src/stores/useStore.ts` (추가) |
+| RootStore 등록 | `packages/fe-store/src/stores/Store.ts` (수정) |
+| barrel export | `packages/fe-store/src/stores/index.ts` (추가) |
 
 ---
 
@@ -97,7 +97,7 @@ MobX 기반의 Store를 생성하는 전문가입니다.
 ### 4.3 파일 구조
 
 ```
-packages/store/src/stores/
+packages/fe-store/src/stores/
 ├── Store.ts              # RootStore
 ├── useStore.ts           # useStore hooks
 ├── index.ts              # barrel export
@@ -280,7 +280,7 @@ class NavItem {
 ### 5.5 RootStore 등록
 
 ```typescript
-// packages/store/src/stores/Store.ts
+// packages/fe-store/src/stores/Store.ts
 import { makeAutoObservable } from "mobx";
 import { NewStore } from "./newStore";
 
@@ -297,7 +297,7 @@ export class RootStore {
 ### 5.6 useStore Hook 추가
 
 ```typescript
-// packages/store/src/stores/useStore.ts
+// packages/fe-store/src/stores/useStore.ts
 
 /**
  * NewStore를 가져오는 selector hook
@@ -314,7 +314,7 @@ export const useNewStore = () => {
 ### 5.7 Export 추가
 
 ```typescript
-// packages/store/src/stores/index.ts
+// packages/fe-store/src/stores/index.ts
 export { NewStore } from "./newStore";
 export { useNewStore } from "./useStore";
 ```
@@ -406,7 +406,7 @@ apps/admin/app/(admin)/users/
 └── page.tsx
 
 ✅ Store는 packages/store에만
-packages/store/src/stores/
+packages/fe-store/src/stores/
 ├── navigationStore.ts     ← 전역 Store
 ├── authStore.ts           ← 전역 Store
 └── ...
@@ -447,6 +447,6 @@ useEffect(() => {
 
 ### 관련 파일
 
-- RootStore: `packages/store/src/stores/Store.ts`
-- useStore hooks: `packages/store/src/stores/useStore.ts`
-- Export: `packages/store/src/stores/index.ts`
+- RootStore: `packages/fe-store/src/stores/Store.ts`
+- useStore hooks: `packages/fe-store/src/stores/useStore.ts`
+- Export: `packages/fe-store/src/stores/index.ts`

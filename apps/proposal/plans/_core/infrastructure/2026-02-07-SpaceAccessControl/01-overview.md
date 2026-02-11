@@ -168,13 +168,13 @@ AXIOS_INSTANCE.interceptors.request.use((config) => {
 | Context | `packages/be-common/src/context/space-context.ts` | SpaceContext Injectable |
 | Context | `packages/be-common/src/context/space-scope.interceptor.ts` | SpaceScopeInterceptor |
 | Context | `packages/be-common/src/context/space-scope.decorator.ts` | @OnlyMySpace, @AccessibleSpaces |
-| Decorator | `packages/decorator/src/skip-space-check.decorator.ts` | @SkipSpaceCheck |
-| Decorator | `packages/decorator/src/public-route.decorator.ts` | @PublicRoute |
-| Constant | `packages/constant/src/context/context-keys.constant.ts` | CLS 키 상수 |
+| Decorator | `packages/be-decorator/src/skip-space-check.decorator.ts` | @SkipSpaceCheck |
+| Decorator | `packages/be-decorator/src/public-route.decorator.ts` | @PublicRoute |
+| Constant | `packages/common-constant/src/context/context-keys.constant.ts` | CLS 키 상수 |
 | Util | `packages/be-common/src/util/permission.util.ts` | canAccessAllSpaces, isRootSpaceCategory |
 | Setup | `apps/server/src/setNestApp.ts` | 글로벌 Guard/Interceptor 등록 |
-| FE API | `packages/api/src/libs/customAxios.ts` | x-space-id 헤더 자동 추가 |
-| FE Store | `packages/store/src/stores/persistStore.ts` | spaceId 보관 |
+| FE API | `packages/fe-api/src/libs/customAxios.ts` | x-space-id 헤더 자동 추가 |
+| FE Store | `packages/fe-store/src/stores/persistStore.ts` | spaceId 보관 |
 
 ---
 
