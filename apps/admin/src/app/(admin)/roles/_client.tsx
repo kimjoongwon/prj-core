@@ -120,9 +120,8 @@ function RolesPageClient() {
                     {columns.map((col) => (
                       <th
                         key={col.field}
-                        className={`px-4 py-3 text-left font-medium text-default-500 ${
-                          col.align === "center" ? "text-center" : ""
-                        }`}
+                        className={`px-4 py-3 text-left font-medium text-default-500 ${col.align === "center" ? "text-center" : ""
+                          }`}
                         style={{ width: col.size }}
                       >
                         {col.label}
@@ -145,15 +144,14 @@ function RolesPageClient() {
                         return (
                           <td
                             key={col.field}
-                            className={`px-4 py-3 ${
-                              col.align === "center" ? "text-center" : ""
-                            }`}
+                            className={`px-4 py-3 ${col.align === "center" ? "text-center" : ""
+                              }`}
                           >
                             {typeof cellFn === "function"
                               ? cellFn({
-                                  getValue: () => value,
-                                  row: { original: role },
-                                } as never)
+                                getValue: () => value,
+                                row: { original: role },
+                              } as never)
                               : String(value ?? "-")}
                           </td>
                         );

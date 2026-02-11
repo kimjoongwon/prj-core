@@ -28,7 +28,7 @@ import { plainToInstance } from "class-transformer";
 @ApiTags("ROLES")
 @Controller()
 export class RolesController {
-	constructor(private readonly rolesService: RolesService) {}
+	constructor(private readonly rolesService: RolesService) { }
 
 	@Get()
 	@UseGuards(RolesGuard)

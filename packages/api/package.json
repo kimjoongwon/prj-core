@@ -24,13 +24,16 @@
     "README.md"
   ],
   "scripts": {
-    "start:dev": "pnpm codegen",
+    "start:dev": "pnpm codegen:local",
     "build": "orval --config orval.config.js",
     "lint": "biome lint",
     "format": "biome format --write .",
     "type-check": "tsc --noEmit",
     "clean": "rm -rf .turbo && rm -rf node_modules && rm -rf dist",
-    "codegen": "orval --config orval.config.js"
+    "codegen": "orval --config orval.config.js",
+    "codegen:local": "ORVAL_ENV=local orval --config orval.config.js",
+    "codegen:stg": "ORVAL_ENV=stg orval --config orval.config.js",
+    "codegen:prod": "ORVAL_ENV=prod orval --config orval.config.js"
   },
   "dependencies": {
     "axios": "catalog:"

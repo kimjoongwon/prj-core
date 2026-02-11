@@ -7,6 +7,8 @@ import { Logger } from "nestjs-pino";
 import { AppModule } from "./module/app.module";
 import { setNestApp } from "./setNestApp";
 
+declare const module: any;
+
 async function bootstrap() {
   // =================================================================
   // 1. 애플리케이션 생성 및 기본 설정
@@ -70,6 +72,13 @@ async function bootstrap() {
   logger.log(
     `🔑 OIDC Discovery: http://localhost:${port}/oidc/.well-known/openid-configuration`
   );
+
+  return app;
 }
 
-bootstrap();
+bootstrap().then((app) => {
+  if (module.hot) {
+    module.hot.accept();
+    module.hot.dispose(() => app.close());
+  }
+});

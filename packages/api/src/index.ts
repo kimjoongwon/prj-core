@@ -5,7 +5,6 @@
 
 // Export all APIs
 export * from "./apis";
-export * as APIManager from "./apis";
 // Export custom axios instance for direct usage if needed
 export {
 	AXIOS_INSTANCE,

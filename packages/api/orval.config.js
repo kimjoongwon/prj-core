@@ -4,9 +4,12 @@
 const http = require("http");
 
 const environments = {
-  development: "http://localhost:3006/api-json", // development 별칭
-  staging: "https://stg.cocdev.co.kr/api-json", // staging 별칭
-  production: "https://cocdev.co.kr/api-json", // production 별칭
+  development: "http://localhost:3006/api-json",
+  local: "http://localhost:3006/api-json",
+  stg: "https://stg.cocdev.co.kr/api-json",
+  staging: "https://stg.cocdev.co.kr/api-json",
+  prod: "https://cocdev.co.kr/api-json",
+  production: "https://cocdev.co.kr/api-json",
 };
 
 /**
@@ -46,14 +49,19 @@ async function isServerRunning(url, timeout = 2000) {
  * - 아니면 staging 서버 사용
  */
 async function getApiUrl() {
-  const env = process.env.NODE_ENV || "development";
+  const orvalEnv = process.env.ORVAL_ENV;
 
-  // production 환경은 항상 production URL 사용
-  if (env === "production") {
-    return environments.production;
+  // 명시적 환경 지정 시 바로 해당 URL 사용
+  if (orvalEnv) {
+    const url = environments[orvalEnv];
+    if (!url) {
+      throw new Error(`알 수 없는 ORVAL_ENV: ${orvalEnv} (local|stg|prod)`);
+    }
+    console.log(`🎯 ORVAL_ENV=${orvalEnv} → ${url}`);
+    return url;
   }
 
-  // development 환경에서 localhost 체크
+  // ORVAL_ENV 미지정: 기존 자동 감지 로직 유지
   const localhostUrl = environments.development;
   const isLocalRunning = await isServerRunning(localhostUrl);
 
