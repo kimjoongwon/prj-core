@@ -14,7 +14,7 @@ import { TenantDto } from "./tenant.dto";
 import { UserAssociationDto } from "./user-association.dto";
 
 export class UserDto extends AbstractDto implements User {
-	@UUIDField({ description: "소속 공간 ID" })
+	@UUIDField({ description: "소속 공간 ID-" })
 	spaceId: string;
 
 	@EmailField({ description: "이메일 주소" })

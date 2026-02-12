@@ -91,7 +91,7 @@ function UsersPageClient() {
 	const users = response?.data ?? [];
 	const meta = response?.meta;
 	const stats = response?.stats;
-	const totalCount = meta?.totalCount ?? 0;
+	const totalCount = meta?.total ?? 0;
 
 	return (
 		<PageSurface

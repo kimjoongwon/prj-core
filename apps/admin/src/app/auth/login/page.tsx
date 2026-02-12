@@ -2,10 +2,11 @@
 
 import { Button, Spinner } from "@heroui/react";
 import { observer } from "mobx-react-lite";
+import { Suspense } from "react";
 
 import { useAuthLoginPage } from "./hooks";
 
-const Page = observer(() => {
+const LoginContent = observer(() => {
 	const { errorMessage, isRedirecting, onClickRetry } = useAuthLoginPage();
 
 	if (isRedirecting) {
@@ -29,5 +30,19 @@ const Page = observer(() => {
 		</div>
 	);
 });
+
+const Page = () => {
+	return (
+		<Suspense
+			fallback={
+				<div className="flex flex-col items-center gap-4 p-8">
+					<Spinner size="lg" />
+				</div>
+			}
+		>
+			<LoginContent />
+		</Suspense>
+	);
+};
 
 export default Page;
