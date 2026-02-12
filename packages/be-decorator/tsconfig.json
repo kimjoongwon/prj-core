@@ -6,10 +6,10 @@
     "tsBuildInfoFile": "./dist/.tsbuildinfo"
   },
   "references": [
-    { "path": "../constant" },
-    { "path": "../prisma" },
-    { "path": "../schema" },
-    { "path": "../toolkit" }
+    { "path": "../common-constant" },
+    { "path": "../be-prisma" },
+    { "path": "../common-schema" },
+    { "path": "../common-toolkit" }
   ],
   "include": ["src/**/*.ts"],
   "exclude": ["node_modules", "dist"]

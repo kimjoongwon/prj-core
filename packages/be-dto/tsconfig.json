@@ -8,13 +8,13 @@
     "tsBuildInfoFile": "./dist/.tsbuildinfo"
   },
   "references": [
-    { "path": "../constant" },
-    { "path": "../prisma" },
-    { "path": "../decorator" },
-    { "path": "../entity" },
-    { "path": "../enum" },
-    { "path": "../schema" },
-    { "path": "../toolkit" }
+    { "path": "../common-constant" },
+    { "path": "../be-prisma" },
+    { "path": "../be-decorator" },
+    { "path": "../be-entity" },
+    { "path": "../common-enum" },
+    { "path": "../common-schema" },
+    { "path": "../common-toolkit" }
   ],
   "include": ["src/**/*.ts"],
   "exclude": ["node_modules", "dist"]

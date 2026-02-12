@@ -6,16 +6,16 @@
     "tsBuildInfoFile": "./dist/.tsbuildinfo"
   },
   "references": [
-    { "path": "../constant" },
-    { "path": "../decorator" },
-    { "path": "../dto" },
-    { "path": "../entity" },
-    { "path": "../enum" },
-    { "path": "../facade" },
-    { "path": "../prisma" },
-    { "path": "../repository" },
-    { "path": "../service" },
-    { "path": "../toolkit" }
+    { "path": "../common-constant" },
+    { "path": "../be-decorator" },
+    { "path": "../be-dto" },
+    { "path": "../be-entity" },
+    { "path": "../common-enum" },
+    { "path": "../be-facade" },
+    { "path": "../be-prisma" },
+    { "path": "../be-repository" },
+    { "path": "../be-service" },
+    { "path": "../common-toolkit" }
   ],
   "include": ["src/**/*.ts"],
   "exclude": ["node_modules", "dist", "**/__tests__/**", "**/*.spec.ts"]

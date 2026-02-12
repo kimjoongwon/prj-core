@@ -6,8 +6,8 @@
     "tsBuildInfoFile": "./dist/.tsbuildinfo"
   },
   "references": [
-    { "path": "../prisma" },
-    { "path": "../decorator" }
+    { "path": "../be-prisma" },
+    { "path": "../be-decorator" }
   ],
   "include": ["src/**/*.ts"],
   "exclude": ["node_modules", "dist"]

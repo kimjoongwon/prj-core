@@ -19,9 +19,7 @@
     "strictNullChecks": false,
     "noImplicitAny": false
   },
-  "references": [
-    { "path": "../constant" }
-  ],
+  "references": [{ "path": "../common-constant" }],
   "include": ["src/**/*", "index.ts"],
   "exclude": ["node_modules", "dist"]
 }

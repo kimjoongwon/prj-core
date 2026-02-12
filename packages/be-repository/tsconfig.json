@@ -6,8 +6,8 @@
     "tsBuildInfoFile": "./dist/.tsbuildinfo"
   },
   "references": [
-    { "path": "../entity" },
-    { "path": "../prisma" }
+    { "path": "../be-entity" },
+    { "path": "../be-prisma" }
   ],
   "include": ["src/**/*.ts"],
   "exclude": ["node_modules", "dist"]

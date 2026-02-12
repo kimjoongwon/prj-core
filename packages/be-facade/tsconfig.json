@@ -6,10 +6,10 @@
     "tsBuildInfoFile": "./dist/.tsbuildinfo"
   },
   "references": [
-    { "path": "../constant" },
-    { "path": "../entity" },
-    { "path": "../service" },
-    { "path": "../vo" }
+    { "path": "../common-constant" },
+    { "path": "../be-entity" },
+    { "path": "../be-service" },
+    { "path": "../be-vo" }
   ],
   "include": ["src/**/*.ts"],
   "exclude": ["node_modules", "dist"]
