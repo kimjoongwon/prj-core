@@ -52,17 +52,17 @@
   "author": "kimjoongwon",
   "license": "ISC",
   "devDependencies": {
+    "@cocrepo/api": "workspace:*",
+    "@cocrepo/hook": "workspace:*",
+    "@cocrepo/store": "workspace:*",
+    "@cocrepo/toolkit": "workspace:*",
+    "@cocrepo/type": "workspace:*",
     "@dnd-kit/core": "^6.3.1",
     "@dnd-kit/sortable": "^10.0.0",
     "@dnd-kit/utilities": "^3.2.2",
     "@heroui/react": "catalog:",
     "@heroui/use-theme": "catalog:",
     "@internationalized/date": "^3.8.2",
-    "@cocrepo/api": "workspace:*",
-    "@cocrepo/hook": "workspace:*",
-    "@cocrepo/store": "workspace:*",
-    "@cocrepo/type": "workspace:*",
-    "@cocrepo/toolkit": "workspace:*",
     "@storybook/react": "^9.0.18",
     "@storybook/react-vite": "catalog:",
     "@tailwindcss/postcss": "catalog:",
@@ -108,5 +108,8 @@
     "typescript": "catalog:",
     "uuid": "catalog:",
     "vitest": "catalog:"
+  },
+  "dependencies": {
+    "@react-aria/ssr": "^3.9.10"
   }
 }

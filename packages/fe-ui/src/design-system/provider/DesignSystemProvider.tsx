@@ -6,6 +6,7 @@
  */
 import { HeroUIProvider, ToastProvider } from "@heroui/react";
 import { useTheme } from "@heroui/use-theme";
+import { SSRProvider } from "@react-aria/ssr";
 import type { ReactNode } from "react";
 import type { ThemeConfig } from "../theme/heroui.config";
 
@@ -43,10 +44,12 @@ export function DesignSystemProvider({
 	navigate,
 }: DesignSystemProviderProps) {
 	return (
-		<HeroUIProvider navigate={navigate}>
-			{children}
-			<ToastProvider />
-		</HeroUIProvider>
+		<SSRProvider>
+			<HeroUIProvider navigate={navigate}>
+				{children}
+				<ToastProvider />
+			</HeroUIProvider>
+		</SSRProvider>
 	);
 }
 
