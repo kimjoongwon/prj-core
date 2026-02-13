@@ -40,7 +40,11 @@ const pool = new pg.Pool({
 const adapter = new PrismaPg(pool);
 const prisma = new PrismaClient({ adapter });
 async function main() {
-	const hashedPassword = await hash("rkdmf12!@", 10);
+	// Super Admin 데이터를 seed-data에서 가져오기
+	const superAdminData = userSeedData.find((u) => u.role === "FULL_ACCESS");
+	if (!superAdminData) throw new Error("FULL_ACCESS 유저 데이터가 seed-data에 없습니다.");
+
+	const hashedPassword = await hash(superAdminData.password, 10);
 
 	// Role들을 seed-data.ts 기반으로 생성
 	const roles: Record<string, Role> = {};
@@ -62,21 +66,21 @@ async function main() {
 		console.log(`Role 생성 완료: ${roleData.name}`);
 	}
 
-	// Super Admin 유저 생성
+	// Super Admin 유저 생성 (seed-data 기반)
 	const superAdminUser = await prisma.user.upsert({
 		where: {
-			phone: "01073162347",
+			phone: superAdminData.phone,
 		},
 		update: {},
 		create: {
-			name: "Super Admin",
-			phone: "01073162347",
-			email: "admin@plate.com",
+			name: superAdminData.profile.name,
+			phone: superAdminData.phone,
+			email: superAdminData.email,
 			password: hashedPassword,
 			profiles: {
 				create: {
-					name: "Plate",
-					nickname: "플레이트",
+					name: superAdminData.profile.name,
+					nickname: superAdminData.profile.nickname,
 				},
 			},
 		},
@@ -112,22 +116,30 @@ async function main() {
 	await createSpaceCategoriesAndClassifications(systemSpace.id);
 	await createSpaceGroupsAndAssociations(systemSpace.id);
 
-	// 워크스페이스 생성
-	const _ground = await prisma.ground.upsert({
-		where: {
-			businessNo: "12345678902",
-		},
-		update: {},
-		create: {
-			name: "(주)플레이트",
-			label: "본점",
-			address: "서울시 강남구",
-			phone: "01073162347",
-			email: "plate@gmail.com",
-			businessNo: "12345678902",
-			spaceId: systemSpace.id,
-		},
-	});
+	// System Space Ground 생성 (seed-data 기반)
+	const systemGroundData = groundSeedData.find((g) => g.isSystem);
+	if (systemGroundData) {
+		await prisma.ground.upsert({
+			where: { businessNo: systemGroundData.businessNo },
+			update: {
+				name: systemGroundData.name,
+				label: systemGroundData.label,
+				address: systemGroundData.address,
+				phone: systemGroundData.phone,
+				email: systemGroundData.email,
+			},
+			create: {
+				name: systemGroundData.name,
+				label: systemGroundData.label,
+				address: systemGroundData.address,
+				phone: systemGroundData.phone,
+				email: systemGroundData.email,
+				businessNo: systemGroundData.businessNo,
+				spaceId: systemSpace.id,
+			},
+		});
+		console.log(`System Ground 생성 완료: ${systemGroundData.name}`);
+	}
 
 	// Group 생성을 위한 tenant 조회 (System Space의 첫 번째 tenant)
 	const firstTenant = await prisma.tenant.findFirst({
@@ -211,6 +223,7 @@ async function createRegularUsersAndGrounds(adminRole: Role, _userRole: Role) {
 	}> = [];
 	for (let i = 0; i < groundSeedData.length; i++) {
 		const groundData = groundSeedData[i];
+		if (groundData.isSystem) continue; // System Ground는 이미 생성됨
 
 		try {
 			// 그라운드가 이미 존재하는지 확인

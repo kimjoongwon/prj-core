@@ -783,11 +783,22 @@ export interface GroundSeedData {
 	phone: string;
 	email: string;
 	businessNo: string;
+	isSystem?: boolean; // System Space에 연결되는 Ground
 }
 
-// 9명의 다양한 역할 유저 데이터 (MANAGE 3명, VIEW 6명)
-// FULL_ACCESS는 main()에서 admin@plate.com으로 별도 생성됨
+// 10명의 다양한 역할 유저 데이터 (FULL_ACCESS 1명, MANAGE 3명, VIEW 6명)
 export const userSeedData: UserSeedData[] = [
+	// FULL_ACCESS 1명 - 플랫폼 관리자
+	{
+		email: "admin@plate.com",
+		phone: "01073162347",
+		password: "rkdmf12!@",
+		profile: {
+			name: "Super Admin",
+			nickname: "플레이트",
+		},
+		role: "FULL_ACCESS",
+	},
 	// MANAGE 3명 - 각 지점 관리자
 	{
 		email: "manager.gwanghwamun@f45.kr",
@@ -882,8 +893,18 @@ export const userSeedData: UserSeedData[] = [
 	},
 ];
 
-// 현실적인 피트니스 센터 그라운드 데이터 (10개)
+// 현실적인 피트니스 센터 그라운드 데이터 (11개: System 1 + Branch 10)
 export const groundSeedData: GroundSeedData[] = [
+	// 플랫폼 운영본부 (System Space Ground)
+	{
+		name: "플랫폼 운영본부",
+		label: "본사",
+		address: "서울시 강남구",
+		phone: "02-0000-0000",
+		email: "admin@plate.com",
+		businessNo: "000-00-00000",
+		isSystem: true,
+	},
 	// F45 Training 지점들
 	{
 		name: "F45 광화문",
@@ -1101,8 +1122,12 @@ export interface UserGroundMappingData {
 }
 
 // 유저와 그라운드 매핑 (정합성 보장 - 역할에 맞는 논리적 연결)
-// FULL_ACCESS(admin@plate.com)은 System Space만 사용하므로 Ground 매핑 없음
 export const userGroundMapping: UserGroundMappingData[] = [
+	// FULL_ACCESS - 플랫폼 운영본부 (System Space)
+	{
+		userEmail: "admin@plate.com",
+		groundNames: ["플랫폼 운영본부"],
+	},
 	// MANAGE - 담당 지점만 (F45 계열)
 	{
 		userEmail: "manager.gwanghwamun@f45.kr",
