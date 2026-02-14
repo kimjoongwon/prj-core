@@ -19,17 +19,17 @@ export class SpaceAccessGuard implements CanActivate {
 	) {}
 
 	canActivate(context: ExecutionContext): boolean {
-		// @PublicRoute이면 skip
-		const isPublic = this.reflector.get<boolean>(
+		// @PublicRoute이면 skip (메서드 → 클래스 순으로 확인)
+		const isPublic = this.reflector.getAllAndOverride<boolean>(
 			PUBLIC_ROUTE_KEY,
-			context.getHandler(),
+			[context.getHandler(), context.getClass()],
 		);
 		if (isPublic) return true;
 
-		// @SkipSpaceCheck이면 skip (인증은 필요하지만 Space 선택이 불필요한 엔드포인트)
-		const skipSpaceCheck = this.reflector.get<boolean>(
+		// @SkipSpaceCheck이면 skip (메서드 → 클래스 순으로 확인)
+		const skipSpaceCheck = this.reflector.getAllAndOverride<boolean>(
 			SKIP_SPACE_CHECK_KEY,
-			context.getHandler(),
+			[context.getHandler(), context.getClass()],
 		);
 		if (skipSpaceCheck) return true;
 

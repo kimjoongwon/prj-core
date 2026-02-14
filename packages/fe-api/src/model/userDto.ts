@@ -33,6 +33,34 @@ export interface UserDto {
    * @minLength 6
    */
   password: string;
+  /** 로그인 실패 횟수 */
+  failedLoginAttempts: number;
+  /**
+   * 잠금 해제 시각
+   * @nullable
+   */
+  lockedUntil: string | null;
+  /** 영구 잠금 여부 */
+  isPermanentlyLocked: boolean;
+  /** 비밀번호 변경 필요 */
+  mustChangePassword: boolean;
+  /**
+   * 비밀번호 변경일
+   * @nullable
+   */
+  passwordChangedAt: string | null;
+  /**
+   * 마지막 로그인 시각
+   * @nullable
+   */
+  lastLoginAt: string | null;
+  /**
+   * 마지막 로그인 IP
+   * @nullable
+   */
+  lastLoginIp?: string | null;
+  /** 활성 상태 */
+  isActive: boolean;
   /** 프로필 목록 */
   profiles?: ProfileDto[];
   /** 테넌트 목록 */

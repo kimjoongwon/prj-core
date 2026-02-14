@@ -34,6 +34,10 @@
   },
   "author": "kimjoongwon",
   "license": "ISC",
+  "peerDependencies": {
+    "@cocrepo/api": "workspace:*",
+    "@cocrepo/hook": "workspace:*"
+  },
   "dependencies": {
     "@casl/ability": "^6.7.3",
     "@cocrepo/type": "workspace:*"

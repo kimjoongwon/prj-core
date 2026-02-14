@@ -27,8 +27,11 @@
     "test": "jest"
   },
   "dependencies": {
+    "@cocrepo/constant": "workspace:*",
     "@cocrepo/entity": "workspace:*",
+    "@cocrepo/enum": "workspace:*",
     "@cocrepo/prisma": "workspace:*",
+    "@cocrepo/type": "workspace:*",
     "class-transformer": "^0.5.1"
   },
   "peerDependencies": {

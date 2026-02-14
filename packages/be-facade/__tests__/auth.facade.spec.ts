@@ -105,6 +105,8 @@ describe("AuthFacade", () => {
 			expect(mockTokenStorageService.saveOidcState).toHaveBeenCalledWith(
 				expect.any(String),
 				expect.any(String),
+				600,
+				undefined,
 			);
 		});
 	});

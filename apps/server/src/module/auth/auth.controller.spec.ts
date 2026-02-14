@@ -1,5 +1,6 @@
 import type { SignUpPayloadDto } from "@cocrepo/dto";
 import { AuthFacade } from "@cocrepo/facade";
+import { AuthAuditLogService } from "@cocrepo/service";
 import { UnauthorizedException } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
 import { Test, type TestingModule } from "@nestjs/testing";
@@ -8,6 +9,7 @@ import { AuthController } from "./auth.controller";
 describe("AuthController", () => {
 	let controller: AuthController;
 	let mockAuthFacade: jest.Mocked<AuthFacade>;
+	let mockAuthAuditLogService: jest.Mocked<AuthAuditLogService>;
 	let mockConfigService: jest.Mocked<ConfigService>;
 
 	const mockTokenExpiryInfo = {
@@ -38,8 +40,12 @@ describe("AuthController", () => {
 		cookies: {
 			accessToken: "test-access-token",
 			refreshToken: "test-refresh-token",
+			sessionId: "test-session-id",
 		},
 		user: mockUser,
+		headers: { "user-agent": "test-agent" },
+		ip: "127.0.0.1",
+		socket: { remoteAddress: "127.0.0.1" },
 	};
 
 	beforeEach(async () => {
@@ -54,6 +60,10 @@ describe("AuthController", () => {
 			clearTokenCookies: jest.fn(),
 		} as unknown as jest.Mocked<AuthFacade>;
 
+		mockAuthAuditLogService = {
+			getAuditLogs: jest.fn(),
+		} as unknown as jest.Mocked<AuthAuditLogService>;
+
 		mockConfigService = {
 			get: jest.fn().mockReturnValue("http://localhost:3000"),
 		} as unknown as jest.Mocked<ConfigService>;
@@ -62,6 +72,7 @@ describe("AuthController", () => {
 			controllers: [AuthController],
 			providers: [
 				{ provide: AuthFacade, useValue: mockAuthFacade },
+				{ provide: AuthAuditLogService, useValue: mockAuthAuditLogService },
 				{ provide: ConfigService, useValue: mockConfigService },
 			],
 		}).compile();
@@ -81,10 +92,10 @@ describe("AuthController", () => {
 			);
 
 			// When
-			await controller.login(mockResponse as unknown as never);
+			await controller.login(undefined as unknown as string, mockResponse as unknown as never);
 
 			// Then
-			expect(mockAuthFacade.getAuthorizationUrl).toHaveBeenCalled();
+			expect(mockAuthFacade.getAuthorizationUrl).toHaveBeenCalledWith(undefined);
 			expect(mockResponse.redirect).toHaveBeenCalledWith(
 				"https://idp.example.com/oidc/auth?response_type=code&client_id=test",
 			);
@@ -102,6 +113,7 @@ describe("AuthController", () => {
 				"state-value",
 				undefined as unknown as string,
 				undefined as unknown as string,
+				mockRequest as unknown as never,
 				mockResponse as unknown as never,
 			);
 
@@ -109,6 +121,7 @@ describe("AuthController", () => {
 			expect(mockAuthFacade.handleOidcCallback).toHaveBeenCalledWith(
 				"auth-code",
 				"state-value",
+				mockRequest,
 				mockResponse,
 			);
 			expect(mockResponse.redirect).toHaveBeenCalledWith(
@@ -123,6 +136,7 @@ describe("AuthController", () => {
 				undefined as unknown as string,
 				"access_denied",
 				"사용자가 인증을 거부했습니다",
+				mockRequest as unknown as never,
 				mockResponse as unknown as never,
 			);
 
@@ -145,6 +159,7 @@ describe("AuthController", () => {
 				"invalid-state",
 				undefined as unknown as string,
 				undefined as unknown as string,
+				mockRequest as unknown as never,
 				mockResponse as unknown as never,
 			);
 
@@ -175,6 +190,7 @@ describe("AuthController", () => {
 			// Then
 			expect(mockAuthFacade.refreshTokenWithIdp).toHaveBeenCalledWith(
 				"test-refresh-token",
+				"test-session-id",
 				mockResponse,
 			);
 			expect(result.accessToken).toBe("new-access-token");
@@ -295,6 +311,7 @@ describe("AuthController", () => {
 			// Then
 			expect(mockAuthFacade.logoutWithCookie).toHaveBeenCalledWith(
 				"test-access-token",
+				"test-session-id",
 				mockResponse,
 			);
 			expect(result).toBe(true);
@@ -316,6 +333,7 @@ describe("AuthController", () => {
 
 			// Then
 			expect(mockAuthFacade.logoutWithCookie).toHaveBeenCalledWith(
+				undefined,
 				undefined,
 				mockResponse,
 			);

@@ -6,6 +6,7 @@ export * from "./abstract.entity";
 export * from "./action.entity";
 export * from "./activity.entity";
 export * from "./assignment.entity";
+export * from "./auth-audit-log.entity";
 export * from "./category.entity";
 // Decorator는 @cocrepo/decorator에서 export됨
 export * from "./exercise.entity";
@@ -17,6 +18,7 @@ export * from "./ground.entity";
 export * from "./oidc-client.entity";
 export * from "./oidc-model.entity";
 export * from "./group.entity";
+export * from "./password-history.entity";
 export * from "./profile.entity";
 export * from "./program.entity";
 // Response Entity

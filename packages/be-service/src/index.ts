@@ -7,7 +7,12 @@ export { I18nModule, TranslationService } from "./i18n";
 // Services
 // 필요할 때 생성합니다. 가이드: .claude/agents/be-service-builder.md
 
+export {
+	type GetAuditLogsResult,
+	AuthAuditLogService,
+} from "./auth-audit-log.service";
 export { AuthCacheService } from "./auth-cache.service";
+export { EmailService } from "./email.service";
 export { AbilitiesService } from "./abilities.service";
 export { ActionsService } from "./actions.service";
 export { AwsService } from "./aws.service";
@@ -24,7 +29,11 @@ export {
 	SubjectsService,
 } from "./subjects.service";
 export { TokenService } from "./token.service";
-export { TokenStorageService } from "./token-storage.service";
+export {
+	TokenStorageService,
+	type SessionInfo,
+	type SessionMetadata,
+} from "./token-storage.service";
 export { TranslationsService } from "./translations.service";
 export { UsersService } from "./users.service";
 export { MaskingService } from "./masking.service";

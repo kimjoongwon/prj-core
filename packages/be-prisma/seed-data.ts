@@ -2412,6 +2412,22 @@ export const oidcClientSeedData: OidcClientSeedData[] = [
 		tosUri: null,
 	},
 	{
+		clientId: "prj-core-idp-console",
+		clientSecret: "idp-console-secret-change-in-production",
+		clientName: "PRJ Core IDP 관리 콘솔",
+		redirectUris: [
+			"http://localhost:3008/api/v1/auth/callback",
+		],
+		grantTypes: ["authorization_code", "refresh_token"],
+		responseTypes: ["code"],
+		tokenEndpointAuthMethod: "client_secret_post",
+		scope: "openid profile email roles",
+		isActive: true,
+		logoUri: null,
+		policyUri: null,
+		tosUri: null,
+	},
+	{
 		clientId: "prj-core-swagger",
 		clientSecret: null,
 		clientName: "PRJ Core Swagger UI",

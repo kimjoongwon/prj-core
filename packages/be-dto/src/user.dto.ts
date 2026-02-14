@@ -1,9 +1,13 @@
 import { ResponseExcludedField } from "@cocrepo/constant";
 import {
+	BooleanField,
 	ClassField,
+	DateField,
 	EmailField,
+	NumberField,
 	PasswordField,
 	StringField,
+	StringFieldOptional,
 	UUIDField,
 } from "@cocrepo/decorator";
 import type { User } from "@cocrepo/prisma";
@@ -29,6 +33,30 @@ export class UserDto extends AbstractDto implements User {
 	@Exclude()
 	@PasswordField({ description: ResponseExcludedField })
 	password!: string;
+
+	@NumberField({ description: "로그인 실패 횟수" })
+	failedLoginAttempts!: number;
+
+	@DateField({ nullable: true, description: "잠금 해제 시각" })
+	lockedUntil!: Date | null;
+
+	@BooleanField({ description: "영구 잠금 여부" })
+	isPermanentlyLocked!: boolean;
+
+	@BooleanField({ description: "비밀번호 변경 필요" })
+	mustChangePassword!: boolean;
+
+	@DateField({ nullable: true, description: "비밀번호 변경일" })
+	passwordChangedAt!: Date | null;
+
+	@DateField({ nullable: true, description: "마지막 로그인 시각" })
+	lastLoginAt!: Date | null;
+
+	@StringFieldOptional({ nullable: true, description: "마지막 로그인 IP" })
+	lastLoginIp!: string | null;
+
+	@BooleanField({ description: "활성 상태" })
+	isActive!: boolean;
 
 	@ClassField(() => ProfileDto, {
 		isArray: true,

@@ -1,5 +1,5 @@
 import * as crypto from "node:crypto";
-import { CONTEXT_KEYS } from "@cocrepo/constant";
+import { CONTEXT_KEYS, Token } from "@cocrepo/constant";
 import {
 	SpaceDto,
 	TokenRefreshResponseDto,
@@ -8,7 +8,9 @@ import {
 } from "@cocrepo/dto";
 import {
 	AuthCacheService,
+	EmailService,
 	RolesService,
+	type SessionInfo,
 	SpacesService,
 	TokenService,
 	TokenStorageService,
@@ -23,7 +25,8 @@ import {
 } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
 import { plainToInstance } from "class-transformer";
-import { Response } from "express";
+import { Cookie } from "@cocrepo/vo";
+import { Request, Response } from "express";
 import { ClsService } from "nestjs-cls";
 
 interface OidcServerConfig {
@@ -62,6 +65,7 @@ export class AuthFacade {
 		private tokenService: TokenService,
 		private tokenStorageService: TokenStorageService,
 		private authCacheService: AuthCacheService,
+		private emailService: EmailService,
 		private configService: ConfigService,
 		private cls: ClsService,
 	) {
@@ -77,8 +81,9 @@ export class AuthFacade {
 	/**
 	 * OIDC Authorization URL 생성
 	 * state(CSRF 방지) + PKCE(code_verifier/code_challenge) 적용
+	 * @param returnTo 인증 완료 후 리다이렉트할 프론트엔드 경로 (예: /admin/dashboard)
 	 */
-	async getAuthorizationUrl(): Promise<string> {
+	async getAuthorizationUrl(returnTo?: string): Promise<string> {
 		const state = crypto.randomBytes(32).toString("hex");
 
 		// PKCE: code_verifier 생성 → SHA256 해시 → code_challenge
@@ -88,8 +93,8 @@ export class AuthFacade {
 			.update(codeVerifier)
 			.digest("base64url");
 
-		// state와 code_verifier를 함께 Redis에 저장
-		await this.tokenStorageService.saveOidcState(state, codeVerifier);
+		// state와 code_verifier, returnTo를 함께 Redis에 저장
+		await this.tokenStorageService.saveOidcState(state, codeVerifier, 600, returnTo);
 
 		const params = new URLSearchParams({
 			response_type: "code",
@@ -108,21 +113,25 @@ export class AuthFacade {
 	/**
 	 * OIDC Callback 처리 - Authorization Code → Token 교환
 	 * state 검증(CSRF 방지) + PKCE code_verifier 적용
-	 * HttpOnly 쿠키에 토큰을 저장하고 반환값 없음 (리다이렉트는 Controller에서 처리)
+	 * HttpOnly 쿠키에 토큰을 저장하고 세션을 생성합니다.
+	 * @returns returnTo 경로 (인증 완료 후 리다이렉트할 프론트엔드 경로)
 	 */
 	async handleOidcCallback(
 		code: string,
 		state: string,
+		req: Request,
 		res: Response,
-	): Promise<void> {
+	): Promise<string | undefined> {
 		// OIDC state 검증 + PKCE code_verifier 조회 (일회용 - 검증 후 즉시 소비)
-		const codeVerifier =
+		const stateData =
 			await this.tokenStorageService.validateAndConsumeOidcState(state);
-		if (!codeVerifier) {
+		if (!stateData) {
 			throw new UnauthorizedException(
 				"OIDC state 검증에 실패했습니다",
 			);
 		}
+
+		const { codeVerifier, returnTo } = stateData;
 
 		// IDP token endpoint에 code + code_verifier 교환
 		const tokenResponse = await this.exchangeCodeForTokens(
@@ -149,12 +158,29 @@ export class AuthFacade {
 			);
 		}
 
-		// HttpOnly 쿠키에 토큰 저장 (유일한 쿠키 설정 지점)
+		// 세션 생성 및 저장 (멀티 디바이스 지원)
+		const sessionId = this.tokenStorageService.generateSessionId();
+		if (tokenResponse.refresh_token) {
+			await this.tokenStorageService.saveSession(
+				payload.sub,
+				sessionId,
+				tokenResponse.refresh_token,
+				{
+					userAgent: req.headers["user-agent"] || "unknown",
+					ipAddress: req.ip || req.socket.remoteAddress || "unknown",
+				},
+			);
+		}
+
+		// HttpOnly 쿠키에 토큰 + 세션 ID 저장
 		this.setTokenCookies(
 			res,
 			tokenResponse.access_token,
 			tokenResponse.refresh_token,
 		);
+		this.setSessionIdCookie(res, sessionId);
+
+		return returnTo;
 	}
 
 	/**
@@ -197,6 +223,7 @@ export class AuthFacade {
 	 */
 	async refreshTokenWithIdp(
 		refreshToken: string,
+		sessionId: string | undefined,
 		res: Response,
 	): Promise<TokenRefreshResponseDto> {
 		if (!refreshToken) {
@@ -237,6 +264,17 @@ export class AuthFacade {
 			throw new UnauthorizedException("사용자를 찾을 수 없습니다");
 		}
 
+		// 세션 활동 시간 및 refresh token 업데이트
+		if (sessionId) {
+			const newRefreshToken =
+				tokenResponse.refresh_token || refreshToken;
+			await this.tokenStorageService.updateSession(
+				payload.sub,
+				sessionId,
+				newRefreshToken,
+			);
+		}
+
 		// 새 토큰으로 쿠키 업데이트
 		this.setTokenCookies(
 			res,
@@ -256,19 +294,50 @@ export class AuthFacade {
 	}
 
 	/**
-	 * 로그아웃 - IDP 토큰 Revocation + 쿠키 삭제
+	 * 로그아웃 - IDP Revocation + 블랙리스트 + 세션 삭제 + 쿠키 삭제
 	 */
 	async logoutWithCookie(
 		accessToken: string | undefined,
+		sessionId: string | undefined,
 		res: Response,
 	): Promise<boolean> {
-		// IDP에 토큰 무효화 요청
 		if (accessToken) {
+			// 1. IDP에 토큰 무효화 요청 (best-effort)
 			await this.revokeToken(accessToken);
+
+			try {
+				// 2. Access Token 블랙리스트 등록 (JwtAuthGuard에서 차단)
+				const payload = this.decodeAccessToken(accessToken);
+				const expSeconds = (payload as { exp?: number }).exp ?? 0;
+				const remainingSeconds =
+					expSeconds - Math.floor(Date.now() / 1000);
+				if (remainingSeconds > 0) {
+					await this.tokenStorageService.addToBlacklist(
+						accessToken,
+						remainingSeconds,
+					);
+				}
+
+				// 3. 현재 세션 삭제 (Redis)
+				if (sessionId) {
+					await this.tokenStorageService.deleteSession(
+						payload.sub,
+						sessionId,
+					);
+				} else {
+					// sessionId 없으면 레거시 방식으로 전체 삭제
+					await this.tokenStorageService.deleteRefreshToken(
+						payload.sub,
+					);
+				}
+			} catch (error) {
+				this.logger.warn(`로그아웃 토큰 정리 실패: ${error}`);
+			}
 		}
 
-		// 쿠키 삭제
+		// 4. 쿠키 삭제
 		this.clearTokenCookies(res);
+		res.clearCookie(Token.SESSION_ID);
 		res.clearCookie("tenantId");
 		res.clearCookie("workspaceId");
 
@@ -400,6 +469,161 @@ export class AuthFacade {
 	}
 
 	/**
+	 * 비밀번호 변경
+	 *
+	 * CLS에서 현재 사용자 ID를 가져와 비밀번호를 변경합니다.
+	 * logoutOtherDevices가 true이면 현재 세션을 제외한 다른 세션을 무효화합니다.
+	 */
+	async changePassword(params: {
+		currentPassword: string;
+		newPassword: string;
+		logoutOtherDevices?: boolean;
+		currentSessionId?: string;
+	}): Promise<boolean> {
+		const userId = this.cls.get<string>(CONTEXT_KEYS.USER_ID);
+		if (!userId) {
+			throw new UnauthorizedException("인증 정보가 없습니다");
+		}
+
+		await this.usersService.changePassword(
+			userId,
+			params.currentPassword,
+			params.newPassword,
+		);
+
+		// 다른 기기 로그아웃 옵션
+		if (params.logoutOtherDevices && params.currentSessionId) {
+			await this.tokenStorageService.deleteOtherSessions(
+				userId,
+				params.currentSessionId,
+			);
+		}
+
+		return true;
+	}
+
+	/**
+	 * 계정 잠금 해제 (관리자 전용)
+	 */
+	async unlockAccount(userId: string): Promise<boolean> {
+		await this.usersService.unlockAccount(userId);
+		return true;
+	}
+
+	/**
+	 * 비밀번호 강제 재설정 (관리자 전용)
+	 * 임시 비밀번호를 생성하고 이메일로 발송합니다.
+	 */
+	async forceResetPassword(userId: string): Promise<boolean> {
+		const result = await this.usersService.forceResetPassword(userId);
+
+		// 임시 비밀번호 이메일 발송
+		await this.emailService.sendTemporaryPasswordEmail(
+			result.email,
+			result.temporaryPassword,
+		);
+
+		// 해당 사용자의 모든 세션 무효화
+		await this.tokenStorageService.deleteRefreshToken(userId);
+
+		return true;
+	}
+
+	/**
+	 * 사용자 전체 세션 무효화 (관리자 전용)
+	 */
+	async invalidateUserSessions(userId: string): Promise<boolean> {
+		await this.tokenStorageService.deleteRefreshToken(userId);
+		await this.authCacheService.invalidate(userId);
+		return true;
+	}
+
+	/**
+	 * 사용자 보안 정보 조회 (관리자 전용)
+	 */
+	async getUserSecurityInfo(userId: string) {
+		return this.usersService.getSecurityInfo(userId);
+	}
+
+	// =========================================================================
+	// 세션 관리 (멀티 디바이스)
+	// =========================================================================
+
+	/**
+	 * 내 활성 세션 목록 조회
+	 */
+	async getMySessions(currentSessionId?: string): Promise<SessionInfo[]> {
+		const userId = this.cls.get<string>(CONTEXT_KEYS.USER_ID);
+		if (!userId) {
+			throw new UnauthorizedException("인증 정보가 없습니다");
+		}
+
+		return this.tokenStorageService.getUserSessions(
+			userId,
+			currentSessionId,
+		);
+	}
+
+	/**
+	 * 특정 세션 종료 (다른 기기)
+	 */
+	async revokeSession(sessionId: string): Promise<boolean> {
+		const userId = this.cls.get<string>(CONTEXT_KEYS.USER_ID);
+		if (!userId) {
+			throw new UnauthorizedException("인증 정보가 없습니다");
+		}
+
+		// 세션의 refresh token으로 IDP revocation 호출
+		const session = await this.tokenStorageService.getSessionForRevocation(
+			userId,
+			sessionId,
+		);
+		if (session?.refreshToken) {
+			await this.revokeToken(session.refreshToken);
+		}
+
+		await this.tokenStorageService.deleteSession(userId, sessionId);
+		return true;
+	}
+
+	/**
+	 * 현재 세션을 제외한 다른 모든 세션 종료
+	 */
+	async revokeOtherSessions(currentSessionId: string): Promise<number> {
+		const userId = this.cls.get<string>(CONTEXT_KEYS.USER_ID);
+		if (!userId) {
+			throw new UnauthorizedException("인증 정보가 없습니다");
+		}
+
+		// 다른 세션들의 refresh token으로 IDP revocation 호출
+		const sessions = await this.tokenStorageService.getUserSessions(
+			userId,
+			currentSessionId,
+		);
+		for (const session of sessions) {
+			if (!session.isCurrent) {
+				const sessionData =
+					await this.tokenStorageService.getSessionForRevocation(
+						userId,
+						session.sessionId,
+					);
+				if (sessionData?.refreshToken) {
+					await this.revokeToken(sessionData.refreshToken);
+				}
+			}
+		}
+
+		return this.tokenStorageService.deleteOtherSessions(
+			userId,
+			currentSessionId,
+		);
+	}
+
+	// =========================================================================
+	// 쿠키 관리
+	// =========================================================================
+
+	/**
 	 * 토큰 쿠키 설정
 	 */
 	setTokenCookies(
@@ -411,6 +635,14 @@ export class AuthFacade {
 		if (refreshToken) {
 			this.tokenService.setRefreshTokenCookie(res, refreshToken);
 		}
+	}
+
+	/**
+	 * 세션 ID 쿠키 설정
+	 */
+	private setSessionIdCookie(res: Response, sessionId: string): void {
+		const cookie = Cookie.forToken("7d");
+		res.cookie(Token.SESSION_ID, sessionId, cookie.toExpressOptions());
 	}
 
 	/**

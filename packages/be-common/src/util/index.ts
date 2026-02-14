@@ -13,3 +13,8 @@ export {
 	canAccessAllSpaces,
 	isRootSpaceCategory,
 } from "./permission.util";
+export type {
+	PasswordPolicyResult,
+	PasswordPolicyRule,
+} from "./password-policy";
+export { validatePasswordPolicy } from "./password-policy";

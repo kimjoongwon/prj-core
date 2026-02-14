@@ -11,19 +11,32 @@ YELLOW='\033[33m'
 DIM='\033[2m'
 RESET='\033[0m'
 
-echo ""
-echo -e "${BOLD}🚀 서비스 시작${RESET}"
-echo ""
-echo -e "  ${CYAN}1${RESET})  server       ${DIM}백엔드 서버${RESET}"
-echo -e "  ${CYAN}2${RESET})  admin        ${DIM}어드민 프론트엔드${RESET}"
-echo -e "  ${CYAN}3${RESET})  idp          ${DIM}인증 서버${RESET}"
-echo -e "  ${CYAN}4${RESET})  storybook    ${DIM}스토리북${RESET}"
-echo -e "  ${CYAN}5${RESET})  proposal     ${DIM}기획서${RESET}"
-echo ""
-echo -e "  ${DIM}복수 선택 가능 (예: 1 2)${RESET}"
-echo ""
-echo -ne "${BOLD}번호 선택: ${RESET}"
-read -r choices
+# -- 인자 제거 (pnpm이 -- 를 전달할 수 있음)
+ARGS=()
+for arg in "$@"; do
+  [[ "$arg" != "--" ]] && ARGS+=("$arg")
+done
+
+if [[ ${#ARGS[@]} -gt 0 ]]; then
+  # 커맨드라인 인자로 전달된 경우
+  choices="${ARGS[*]}"
+else
+  # 대화형 모드
+  echo ""
+  echo -e "${BOLD}🚀 서비스 시작${RESET}"
+  echo ""
+  echo -e "  ${CYAN}1${RESET})  server       ${DIM}백엔드 서버${RESET}"
+  echo -e "  ${CYAN}2${RESET})  admin        ${DIM}어드민 프론트엔드${RESET}"
+  echo -e "  ${CYAN}3${RESET})  idp-server   ${DIM}인증 서버 (백엔드)${RESET}"
+  echo -e "  ${CYAN}4${RESET})  idp-client   ${DIM}인증 서버 (프론트엔드)${RESET}"
+  echo -e "  ${CYAN}5${RESET})  storybook    ${DIM}스토리북${RESET}"
+  echo -e "  ${CYAN}6${RESET})  proposal     ${DIM}기획서${RESET}"
+  echo ""
+  echo -e "  ${DIM}복수 선택 가능 (예: 1 2)${RESET}"
+  echo ""
+  echo -ne "${BOLD}번호 선택: ${RESET}"
+  read -r choices
+fi
 
 if [[ -z "$choices" ]]; then
   echo -e "\n${YELLOW}선택이 없습니다.${RESET}"
@@ -36,21 +49,40 @@ HAS_FRONTEND="false"
 HAS_BACKEND="false"
 HAS_IDP="false"
 
+# 서비스별 포트 조회
+get_port() {
+  case $1 in
+    server)     echo 3006 ;;
+    admin)      echo 3000 ;;
+    idp-server) echo 3007 ;;
+    idp-client) echo 3008 ;;
+    storybook)  echo 6006 ;;
+    proposal)   echo 3001 ;;
+  esac
+}
+
 for choice in $choices; do
   case $choice in
     1) FILTERS="$FILTERS --filter=server..."; SERVICES="$SERVICES server"; HAS_BACKEND="true" ;;
     2) FILTERS="$FILTERS --filter=admin"; SERVICES="$SERVICES admin"; HAS_FRONTEND="true" ;;
-    3) FILTERS="$FILTERS --filter=idp..."; SERVICES="$SERVICES idp"; HAS_IDP="true" ;;
-    4) FILTERS="$FILTERS --filter=storybook"; SERVICES="$SERVICES storybook" ;;
-    5) FILTERS="$FILTERS --filter=proposal"; SERVICES="$SERVICES proposal"; HAS_FRONTEND="true" ;;
+    3) FILTERS="$FILTERS --filter=idp-server..."; SERVICES="$SERVICES idp-server"; HAS_IDP="true" ;;
+    4) FILTERS="$FILTERS --filter=idp-client"; SERVICES="$SERVICES idp-client"; HAS_FRONTEND="true" ;;
+    5) FILTERS="$FILTERS --filter=storybook"; SERVICES="$SERVICES storybook" ;;
+    6) FILTERS="$FILTERS --filter=proposal"; SERVICES="$SERVICES proposal"; HAS_FRONTEND="true" ;;
     *) echo -e "${YELLOW}잘못된 번호: ${choice}${RESET}"; exit 1 ;;
   esac
 done
 
+# 커맨드라인 인자 모드 여부
+INTERACTIVE="true"
+if [[ ${#ARGS[@]} -gt 0 ]]; then
+  INTERACTIVE="false"
+fi
+
 # 프론트엔드(admin/proposal) 선택 시 codegen 질문
 CODEGEN_ENV=""
 CODEGEN_TARGET=""
-if [[ "$HAS_FRONTEND" == "true" ]]; then
+if [[ "$HAS_FRONTEND" == "true" && "$INTERACTIVE" == "true" ]]; then
   echo ""
   echo -e "${BOLD}📦 API 코드젠 대상${RESET}"
   echo -e "  ${CYAN}1${RESET})  전체         ${DIM}Server + IDP${RESET}"
@@ -97,10 +129,10 @@ if [[ "$CODEGEN_ENV" == "local" ]]; then
     echo -e "\n${YELLOW}⚠️  local 코드젠은 서버가 필요합니다. server를 자동으로 포함합니다.${RESET}"
   fi
   if [[ ("$CODEGEN_TARGET" == "all" || "$CODEGEN_TARGET" == "idp") && "$HAS_IDP" != "true" ]]; then
-    FILTERS="$FILTERS --filter=idp..."
-    SERVICES="$SERVICES idp"
+    FILTERS="$FILTERS --filter=idp-server..."
+    SERVICES="$SERVICES idp-server"
     HAS_IDP="true"
-    echo -e "${YELLOW}⚠️  local 코드젠은 IDP 서버가 필요합니다. idp를 자동으로 포함합니다.${RESET}"
+    echo -e "${YELLOW}⚠️  local 코드젠은 IDP 서버가 필요합니다. idp-server를 자동으로 포함합니다.${RESET}"
   fi
 fi
 
@@ -114,6 +146,24 @@ resolve_codegen_cmd() {
     idp)    echo "ORVAL_ENV=${env} pnpm --filter=@cocrepo/api codegen:idp" ;;
   esac
 }
+
+# 종료 시 선택된 서비스의 포트 프로세스 정리
+cleanup() {
+  echo ""
+  echo -e "${YELLOW}🛑 서비스 종료 중...${RESET}"
+  for svc in $SERVICES; do
+    port=$(get_port "$svc")
+    if [ -n "$port" ]; then
+      pids=$(lsof -ti :"$port" 2>/dev/null || true)
+      if [ -n "$pids" ]; then
+        echo -e "  ${DIM}포트 ${port} (${svc}) 프로세스 종료${RESET}"
+        echo "$pids" | xargs kill -9 2>/dev/null || true
+      fi
+    fi
+  done
+  echo -e "${GREEN}✅ 정리 완료${RESET}"
+}
+trap cleanup EXIT INT TERM
 
 echo -e "\n${GREEN}▶${SERVICES} 시작${RESET}\n"
 

@@ -525,6 +525,138 @@ export class UsersRepository {
 	}
 
 	/**
+	 * ID로 비밀번호 해시만 조회
+	 */
+	async findPasswordById(
+		id: string,
+	): Promise<{ password: string } | null> {
+		this.logger.debug(`비밀번호 해시 조회: ${id.slice(-8)}`);
+
+		return this.txHost.tx.user.findUnique({
+			where: { id },
+			select: { password: true },
+		});
+	}
+
+	/**
+	 * 비밀번호 업데이트 (관련 필드 함께)
+	 */
+	async updatePassword(
+		id: string,
+		hashedPassword: string,
+	): Promise<void> {
+		this.logger.debug(`비밀번호 업데이트: ${id.slice(-8)}`);
+
+		await this.txHost.tx.user.update({
+			where: { id },
+			data: {
+				password: hashedPassword,
+				passwordChangedAt: new Date(),
+				mustChangePassword: false,
+				failedLoginAttempts: 0,
+				lockedUntil: null,
+				isPermanentlyLocked: false,
+			},
+		});
+	}
+
+	/**
+	 * 비밀번호 히스토리 조회 (최신순)
+	 */
+	async getPasswordHistory(
+		userId: string,
+		limit: number,
+	): Promise<{ id: string; passwordHash: string }[]> {
+		this.logger.debug(`비밀번호 히스토리 조회: ${userId.slice(-8)}, limit=${limit}`);
+
+		return this.txHost.tx.passwordHistory.findMany({
+			where: { userId },
+			select: { id: true, passwordHash: true },
+			orderBy: { createdAt: "desc" },
+			take: limit,
+		});
+	}
+
+	/**
+	 * 비밀번호 히스토리 추가
+	 */
+	async addPasswordHistory(
+		userId: string,
+		passwordHash: string,
+	): Promise<void> {
+		this.logger.debug(`비밀번호 히스토리 추가: ${userId.slice(-8)}`);
+
+		await this.txHost.tx.passwordHistory.create({
+			data: { userId, passwordHash },
+		});
+	}
+
+	/**
+	 * 오래된 비밀번호 히스토리 삭제 (최대 N개 유지)
+	 */
+	async prunePasswordHistory(
+		userId: string,
+		maxCount: number,
+	): Promise<void> {
+		this.logger.debug(`비밀번호 히스토리 정리: ${userId.slice(-8)}, max=${maxCount}`);
+
+		const histories = await this.txHost.tx.passwordHistory.findMany({
+			where: { userId },
+			select: { id: true },
+			orderBy: { createdAt: "desc" },
+			skip: maxCount,
+		});
+
+		if (histories.length > 0) {
+			await this.txHost.tx.passwordHistory.deleteMany({
+				where: { id: { in: histories.map((h) => h.id) } },
+			});
+		}
+	}
+
+	/**
+	 * 계정 잠금 해제 (failedLoginAttempts 초기화, lockedUntil null, isPermanentlyLocked false)
+	 */
+	async unlockAccount(id: string): Promise<void> {
+		this.logger.debug(`계정 잠금 해제: ${id.slice(-8)}`);
+
+		await this.txHost.tx.user.update({
+			where: { id },
+			data: {
+				failedLoginAttempts: 0,
+				lockedUntil: null,
+				isPermanentlyLocked: false,
+			},
+		});
+	}
+
+	/**
+	 * 사용자 보안 정보 조회 (잠금 상태, 로그인 시도 횟수 등)
+	 */
+	async findSecurityInfoById(id: string): Promise<{
+		failedLoginAttempts: number;
+		lockedUntil: Date | null;
+		isPermanentlyLocked: boolean;
+		passwordChangedAt: Date | null;
+		lastLoginAt: Date | null;
+		email: string;
+	} | null> {
+		this.logger.debug(`보안 정보 조회: ${id.slice(-8)}`);
+
+		return this.txHost.tx.user.findUnique({
+			where: { id, removedAt: null },
+			select: {
+				failedLoginAttempts: true,
+				lockedUntil: true,
+				isPermanentlyLocked: true,
+				passwordChangedAt: true,
+				lastLoginAt: true,
+				email: true,
+			},
+		});
+	}
+
+	/**
 	 * 물리 삭제
 	 */
 	async deleteById(id: string): Promise<User> {

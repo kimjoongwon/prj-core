@@ -1,3 +1,4 @@
+export * from "./change-password.dto";
 export * from "./login-payload.dto";
 export * from "./login-response.dto";
 export * from "./sign-up-payload.dto";

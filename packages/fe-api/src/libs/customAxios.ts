@@ -19,6 +19,17 @@ interface PersistStoreRef {
 }
 let persistStoreRef: PersistStoreRef | null = null;
 
+// 401 발생 시 리다이렉트할 로그인 URL (앱별 설정 가능)
+let loginRedirectUrl = "/admin/auth/login";
+
+/**
+ * 401 토큰 만료 시 리다이렉트할 로그인 URL 설정
+ * 앱 초기화 시 호출하여 앱별 로그인 경로를 지정합니다.
+ */
+export function setLoginRedirectUrl(url: string) {
+	loginRedirectUrl = url;
+}
+
 /**
  * API 요청에 x-space-id 헤더를 추가하기 위한 PersistStore 참조 설정
  * 앱 초기화 시 호출하여 Store 참조를 주입합니다.
@@ -75,7 +86,7 @@ AXIOS_INSTANCE.interceptors.response.use(
 		) {
 			// refresh 엔드포인트 자체의 401은 갱신 시도하지 않음
 			if (originalRequest.url?.includes("/auth/token/refresh")) {
-				window.location.href = "/admin/auth/login";
+				window.location.href = loginRedirectUrl;
 				return Promise.reject(error);
 			}
 
@@ -102,7 +113,7 @@ AXIOS_INSTANCE.interceptors.response.use(
 				return AXIOS_INSTANCE(originalRequest);
 			} catch (refreshError) {
 				processQueue(refreshError);
-				window.location.href = "/admin/auth/login";
+				window.location.href = loginRedirectUrl;
 				return Promise.reject(refreshError);
 			} finally {
 				isRefreshing = false;

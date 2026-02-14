@@ -71,7 +71,12 @@ export {
 export { GeneratorProvider } from "./provider";
 // Strategies
 export { JwtStrategy } from "./strategy";
-export type { ResponseWrapOptions, WrappedResponse } from "./util";
+export type {
+	PasswordPolicyResult,
+	PasswordPolicyRule,
+	ResponseWrapOptions,
+	WrappedResponse,
+} from "./util";
 // Utils
 export {
 	AppLogger,
@@ -79,5 +84,6 @@ export {
 	isRootSpaceCategory,
 	isWrappedResponse,
 	RESPONSE_WRAPPER_FLAG,
+	validatePasswordPolicy,
 	wrapResponse,
 } from "./util";

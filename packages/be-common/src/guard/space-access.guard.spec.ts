@@ -15,11 +15,14 @@ describe("SpaceAccessGuard", () => {
 		const handler = jest.fn();
 		Object.defineProperty(handler, "name", { value: "testHandler" });
 
+		class TestController {}
+
 		return {
 			switchToHttp: () => ({
 				getRequest: () => ({}),
 			}),
 			getHandler: () => handler,
+			getClass: () => TestController,
 		} as unknown as ExecutionContext;
 	};
 
@@ -66,7 +69,7 @@ describe("SpaceAccessGuard", () => {
 		describe("데코레이터에 의한 skip", () => {
 			it("@PublicRoute 데코레이터가 있으면 true를 반환해야 한다", () => {
 				// Given
-				mockReflector.get.mockImplementation((key: string) => {
+				mockReflector.getAllAndOverride.mockImplementation((key: string) => {
 					if (key === PUBLIC_ROUTE_KEY) return true;
 					return undefined;
 				});
@@ -77,15 +80,15 @@ describe("SpaceAccessGuard", () => {
 
 				// Then
 				expect(result).toBe(true);
-				expect(mockReflector.get).toHaveBeenCalledWith(
+				expect(mockReflector.getAllAndOverride).toHaveBeenCalledWith(
 					PUBLIC_ROUTE_KEY,
-					context.getHandler(),
+					[context.getHandler(), context.getClass()],
 				);
 			});
 
 			it("@SkipSpaceCheck 데코레이터가 있으면 true를 반환해야 한다", () => {
 				// Given
-				mockReflector.get.mockImplementation((key: string) => {
+				mockReflector.getAllAndOverride.mockImplementation((key: string) => {
 					if (key === PUBLIC_ROUTE_KEY) return false;
 					if (key === SKIP_SPACE_CHECK_KEY) return true;
 					return undefined;
@@ -97,9 +100,9 @@ describe("SpaceAccessGuard", () => {
 
 				// Then
 				expect(result).toBe(true);
-				expect(mockReflector.get).toHaveBeenCalledWith(
+				expect(mockReflector.getAllAndOverride).toHaveBeenCalledWith(
 					SKIP_SPACE_CHECK_KEY,
-					context.getHandler(),
+					[context.getHandler(), context.getClass()],
 				);
 			});
 		});
@@ -107,7 +110,7 @@ describe("SpaceAccessGuard", () => {
 		describe("비인증 요청 처리", () => {
 			it("비인증 요청(user=undefined)이면 true를 반환해야 한다 (JwtAuthGuard가 처리)", () => {
 				// Given
-				mockReflector.get.mockReturnValue(undefined);
+				mockReflector.getAllAndOverride.mockReturnValue(undefined);
 				mockClsService.get.mockReturnValue(undefined);
 				const context = createMockExecutionContext();
 
@@ -122,7 +125,7 @@ describe("SpaceAccessGuard", () => {
 		describe("X-Space-ID 헤더 검증", () => {
 			it("인증된 사용자가 X-Space-ID 없이 요청하면 BadRequestException을 던져야 한다", () => {
 				// Given
-				mockReflector.get.mockReturnValue(undefined);
+				mockReflector.getAllAndOverride.mockReturnValue(undefined);
 				const user = createMockUser();
 				mockClsService.get.mockImplementation((key: string) => {
 					if (key === CONTEXT_KEYS.AUTH_USER) return user;
@@ -140,7 +143,7 @@ describe("SpaceAccessGuard", () => {
 
 			it("인증 + X-Space-ID + 해당 tenant가 있으면 true를 반환해야 한다", () => {
 				// Given
-				mockReflector.get.mockReturnValue(undefined);
+				mockReflector.getAllAndOverride.mockReturnValue(undefined);
 				const user = createMockUser();
 				mockClsService.get.mockImplementation((key: string) => {
 					if (key === CONTEXT_KEYS.AUTH_USER) return user;
@@ -158,7 +161,7 @@ describe("SpaceAccessGuard", () => {
 
 			it("인증 + X-Space-ID + 해당 tenant가 없으면 ForbiddenException을 던져야 한다", () => {
 				// Given
-				mockReflector.get.mockReturnValue(undefined);
+				mockReflector.getAllAndOverride.mockReturnValue(undefined);
 				const user = createMockUser();
 				mockClsService.get.mockImplementation((key: string) => {
 					if (key === CONTEXT_KEYS.AUTH_USER) return user;
@@ -178,7 +181,7 @@ describe("SpaceAccessGuard", () => {
 		describe("tenants가 비정상인 경우", () => {
 			it("인증 + X-Space-ID + tenants가 null이면 true를 반환해야 한다", () => {
 				// Given
-				mockReflector.get.mockReturnValue(undefined);
+				mockReflector.getAllAndOverride.mockReturnValue(undefined);
 				const user = createMockUser({ tenants: null });
 				mockClsService.get.mockImplementation((key: string) => {
 					if (key === CONTEXT_KEYS.AUTH_USER) return user;
@@ -196,7 +199,7 @@ describe("SpaceAccessGuard", () => {
 
 			it("인증 + X-Space-ID + tenants가 undefined이면 true를 반환해야 한다", () => {
 				// Given
-				mockReflector.get.mockReturnValue(undefined);
+				mockReflector.getAllAndOverride.mockReturnValue(undefined);
 				const user = createMockUser({ tenants: undefined });
 				mockClsService.get.mockImplementation((key: string) => {
 					if (key === CONTEXT_KEYS.AUTH_USER) return user;

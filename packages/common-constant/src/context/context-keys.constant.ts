@@ -8,6 +8,8 @@ export const CONTEXT_KEYS = {
 	LANGUAGE: "request.language_key",
 	TENANT: "request.tenant_key",
 	TOKEN: "request.token_key",
+	/** 현재 세션 ID (sessionId 쿠키) */
+	SESSION_ID: "request.session_id",
 	SERVICE_NAME: "request.service_name_key",
 	/** 요청된 Space ID (X-Space-ID 헤더) - undefined이면 모든 데이터 조회 */
 	SPACE_ID: "request.space_id",

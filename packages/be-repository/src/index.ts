@@ -4,6 +4,7 @@ export { PRISMA_SERVICE_TOKEN } from "@cocrepo/constant";
 // Repositories
 // 필요할 때 생성합니다. 가이드: .claude/agents/be-repository-builder.md
 export { AbilitiesRepository } from "./abilities.repository";
+export { AuthAuditLogsRepository } from "./auth-audit-logs.repository";
 export { ActionsRepository } from "./actions.repository";
 export { GrantsRepository } from "./grants.repository";
 export { GroundsRepository } from "./grounds.repository";

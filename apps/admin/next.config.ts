@@ -12,12 +12,13 @@ const nextConfig: NextConfig = {
 		root: path.join(__dirname, "../.."),
 	},
 	transpilePackages: [
-		"@cocrepo/ui",
 		"@cocrepo/api",
+		"@cocrepo/constant",
+		"@cocrepo/hook",
 		"@cocrepo/store",
 		"@cocrepo/toolkit",
-		"@cocrepo/hook",
 		"@cocrepo/type",
+		"@cocrepo/ui",
 	],
 	typedRoutes: true,
 	// cacheComponents: false - 동적 라우트(/users/[id])에서 AppStoreProvider의

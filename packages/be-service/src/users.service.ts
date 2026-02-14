@@ -1,5 +1,6 @@
 import { SpaceContext } from "./context/space-context";
 import { USER_ERRORS } from "@cocrepo/constant";
+import { validatePasswordPolicy } from "@cocrepo/be-common";
 import type { QueryUsersDto } from "@cocrepo/dto";
 import type { Prisma } from "@cocrepo/prisma";
 import { UsersRepository } from "@cocrepo/repository";
@@ -272,6 +273,135 @@ export class UsersService {
 	}
 
 	/**
+	 * 비밀번호 변경
+	 *
+	 * 1. 현재 비밀번호 검증
+	 * 2. 비밀번호 정책 검증
+	 * 3. 이전 비밀번호 재사용 확인
+	 * 4. 비밀번호 변경 + 히스토리 저장
+	 */
+	async changePassword(
+		userId: string,
+		currentPassword: string,
+		newPassword: string,
+	): Promise<void> {
+		this.logger.debug(`비밀번호 변경: userId=${userId.slice(-8)}`);
+
+		// 1. 현재 비밀번호 확인
+		const user = await this.repository.findPasswordById(userId);
+		if (!user) {
+			throw new NotFoundException(USER_ERRORS.USER_NOT_FOUND);
+		}
+
+		const currentHashed = HashedPassword.fromHash(user.password);
+		const currentPlain = PlainPassword.create(currentPassword);
+		const isCurrentValid = await currentHashed.compare(currentPlain);
+		if (!isCurrentValid) {
+			throw new BadRequestException("CURRENT_PASSWORD_INCORRECT");
+		}
+
+		// 2. 비밀번호 정책 검증
+		const policyResult = validatePasswordPolicy(newPassword);
+		if (!policyResult.isValid) {
+			const failedRules = policyResult.rules
+				.filter((r) => !r.passed)
+				.map((r) => r.label)
+				.join(", ");
+			throw new BadRequestException(
+				`PASSWORD_POLICY_VIOLATION: ${failedRules}`,
+			);
+		}
+
+		// 3. 현재 비밀번호와 동일한지 확인
+		const newPlain = PlainPassword.create(newPassword);
+		const isSameAsCurrent = await currentHashed.compare(newPlain);
+		if (isSameAsCurrent) {
+			throw new BadRequestException("PASSWORD_REUSE");
+		}
+
+		// 4. 이전 비밀번호 재사용 확인 (최근 5개)
+		const histories = await this.repository.getPasswordHistory(userId, 5);
+		for (const history of histories) {
+			const historyHashed = HashedPassword.fromHash(history.passwordHash);
+			const isReused = await historyHashed.compare(newPlain);
+			if (isReused) {
+				throw new BadRequestException("PASSWORD_REUSE");
+			}
+		}
+
+		// 5. 비밀번호 변경
+		const newHashed = await HashedPassword.fromPlain(newPlain);
+		await this.repository.updatePassword(userId, newHashed.value);
+
+		// 6. 히스토리 저장 (이전 비밀번호를 히스토리에 추가)
+		await this.repository.addPasswordHistory(userId, user.password);
+		await this.repository.prunePasswordHistory(userId, 5);
+
+		// 7. 인증 캐시 무효화
+		await this.authCacheService.invalidate(userId);
+	}
+
+	/**
+	 * 계정 잠금 해제 (관리자 전용)
+	 */
+	async unlockAccount(userId: string): Promise<void> {
+		this.logger.debug(`계정 잠금 해제: userId=${userId.slice(-8)}`);
+
+		const user = await this.repository.findById(userId);
+		if (!user) {
+			throw new NotFoundException(USER_ERRORS.USER_NOT_FOUND);
+		}
+
+		await this.repository.unlockAccount(userId);
+		await this.authCacheService.invalidate(userId);
+	}
+
+	/**
+	 * 비밀번호 강제 재설정 (관리자 전용)
+	 * 임시 비밀번호를 생성하고 이메일로 발송합니다.
+	 *
+	 * @returns 생성된 임시 비밀번호 (관리자 확인용)
+	 */
+	async forceResetPassword(userId: string): Promise<{ temporaryPassword: string; email: string }> {
+		this.logger.debug(`비밀번호 강제 재설정: userId=${userId.slice(-8)}`);
+
+		const securityInfo = await this.repository.findSecurityInfoById(userId);
+		if (!securityInfo) {
+			throw new NotFoundException(USER_ERRORS.USER_NOT_FOUND);
+		}
+
+		// 임시 비밀번호 생성 (12자리, 대소문자+숫자+특수문자)
+		const temporaryPassword = this.generateTemporaryPassword();
+
+		// 비밀번호 변경
+		const plainPassword = PlainPassword.create(temporaryPassword);
+		const hashedPassword = await HashedPassword.fromPlain(plainPassword);
+		await this.repository.updatePassword(userId, hashedPassword.value);
+
+		// 잠금도 해제
+		await this.repository.unlockAccount(userId);
+
+		// 캐시 무효화
+		await this.authCacheService.invalidate(userId);
+
+		return { temporaryPassword, email: securityInfo.email };
+	}
+
+	/**
+	 * 사용자 보안 정보 조회 (관리자 전용)
+	 */
+	async getSecurityInfo(userId: string) {
+		this.logger.debug(`사용자 보안 정보 조회: userId=${userId.slice(-8)}`);
+
+		const info = await this.repository.findSecurityInfoById(userId);
+		if (!info) {
+			throw new NotFoundException(USER_ERRORS.USER_NOT_FOUND);
+		}
+
+		return info;
+	}
+
+	/**
 	 * 고유성 검증 (이메일, 전화번호, 이름)
 	 */
 	private async validateUniqueness(
@@ -302,6 +432,32 @@ export class UsersService {
 				USER_ERRORS.NAME_ALREADY_EXISTS,
 			);
 		}
+	}
+
+	/**
+	 * 임시 비밀번호 생성 (12자리)
+	 */
+	private generateTemporaryPassword(): string {
+		const upper = "ABCDEFGHJKLMNPQRSTUVWXYZ";
+		const lower = "abcdefghjkmnpqrstuvwxyz";
+		const digits = "23456789";
+		const special = "!@#$%&*";
+		const all = upper + lower + digits + special;
+
+		let password = "";
+		// 각 종류에서 최소 1개씩
+		password += upper[Math.floor(Math.random() * upper.length)];
+		password += lower[Math.floor(Math.random() * lower.length)];
+		password += digits[Math.floor(Math.random() * digits.length)];
+		password += special[Math.floor(Math.random() * special.length)];
+
+		// 나머지 8자리 랜덤
+		for (let i = 0; i < 8; i++) {
+			password += all[Math.floor(Math.random() * all.length)];
+		}
+
+		// 셔플
+		return password.split("").sort(() => Math.random() - 0.5).join("");
 	}
 
 	/**

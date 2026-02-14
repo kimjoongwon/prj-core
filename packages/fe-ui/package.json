@@ -53,6 +53,9 @@
   "license": "ISC",
   "devDependencies": {
     "@cocrepo/api": "workspace:*",
+    "@cocrepo/dto": "workspace:*",
+    "@cocrepo/entity": "workspace:*",
+    "@cocrepo/enum": "workspace:*",
     "@cocrepo/hook": "workspace:*",
     "@cocrepo/store": "workspace:*",
     "@cocrepo/toolkit": "workspace:*",

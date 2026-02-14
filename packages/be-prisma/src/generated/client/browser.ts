@@ -13,10 +13,20 @@
  * 🟢 You can import this file directly.
  */
 
-import * as Prisma from './internal/prismaNamespaceBrowser'
+import * as Prisma from './internal/prismaNamespaceBrowser.js'
 export { Prisma }
-export * as $Enums from './enums'
-export * from './enums';
+export * as $Enums from './enums.js'
+export * from './enums.js';
+/**
+ * Model AuthAuditLog
+ * @displayName 인증 감사 로그
+ */
+export type AuthAuditLog = Prisma.AuthAuditLogModel
+/**
+ * Model PasswordHistory
+ * @displayName 비밀번호 히스토리
+ */
+export type PasswordHistory = Prisma.PasswordHistoryModel
 /**
  * Model Category
  * @displayName 카테고리

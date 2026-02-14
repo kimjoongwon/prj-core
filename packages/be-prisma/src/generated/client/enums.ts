@@ -9,6 +9,15 @@
 * 🟢 You can import this file directly.
 */
 
+export const AuthAuditResult = {
+  SUCCESS: 'SUCCESS',
+  FAILURE: 'FAILURE',
+  LOCKED: 'LOCKED'
+} as const
+
+export type AuthAuditResult = (typeof AuthAuditResult)[keyof typeof AuthAuditResult]
+
+
 export const SMSStatus = {
   PROGRESS: 'PROGRESS',
   PENDING: 'PENDING',

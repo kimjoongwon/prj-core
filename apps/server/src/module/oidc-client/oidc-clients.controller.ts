@@ -4,7 +4,10 @@ import {
 	ApiErrors,
 	ApiResponseEntity,
 	ResponseMessage,
+	Roles,
+	SkipSpaceCheck,
 } from "@cocrepo/decorator";
+import { SYSTEM_ROLES } from "@cocrepo/constant";
 import {
 	CreateOidcClientDto,
 	OidcClientDto,
@@ -31,6 +34,8 @@ import { plainToInstance } from "class-transformer";
 
 @ApiTags("OIDC_CLIENTS")
 @Controller()
+@Roles([SYSTEM_ROLES.FULL_ACCESS])
+@SkipSpaceCheck()
 export class OidcClientsController {
 	constructor(private readonly oidcClientsService: OidcClientsService) {}
 

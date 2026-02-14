@@ -108,6 +108,10 @@ export const ADMIN_PATHS = {
 	ROLES_ABILITY_SUBJECTS: "/roles/[roleId]/abilities/[abilityId]/subjects",
 	ROLES_ABILITY_ACTIONS: "/roles/[roleId]/abilities/[abilityId]/actions",
 
+	// 내 계정 (Self-Service)
+	MY_SESSIONS: "/my-sessions",
+	MY_ACCOUNT_CHANGE_PASSWORD: "/my-account/change-password",
+
 	// 기타
 	SELECT_SPACE: "/select-space",
 	AUTH_LOGIN: "/auth/login",
@@ -196,6 +200,11 @@ export const ADMIN_SUBJECTS = {
 	MENU_ADMINS_INVITATIONS: "menu:admins:invitations",
 
 	// 역할 관리 (단일 메뉴, 2depth 없음)
+
+	// 내 계정 (Self-Service)
+	MENU_MY_ACCOUNT: "menu:my-account",
+	MENU_MY_ACCOUNT_SESSIONS: "menu:my-account:sessions",
+	MENU_MY_ACCOUNT_CHANGE_PASSWORD: "menu:my-account:change-password",
 
 	// FAB 액션 (v7.0 신규)
 	QUICK_ACTION_TODAY_RESERVATION: "quickAction:todayReservation",
@@ -686,6 +695,28 @@ export const ADMIN_NAV_ITEMS: NavItemConfig[] = [
 		icon: "Shield",
 		path: ADMIN_PATHS.ROLES,
 		subject: ADMIN_SUBJECTS.MENU_ROLES,
+	},
+
+	// 15. 내 계정 (Self-Service)
+	{
+		id: "my-account",
+		label: "내 계정",
+		icon: "UserCircle",
+		subject: ADMIN_SUBJECTS.MENU_MY_ACCOUNT,
+		children: [
+			{
+				id: "my-account-sessions",
+				label: "세션 관리",
+				path: ADMIN_PATHS.MY_SESSIONS,
+				subject: ADMIN_SUBJECTS.MENU_MY_ACCOUNT_SESSIONS,
+			},
+			{
+				id: "my-account-change-password",
+				label: "비밀번호 변경",
+				path: ADMIN_PATHS.MY_ACCOUNT_CHANGE_PASSWORD,
+				subject: ADMIN_SUBJECTS.MENU_MY_ACCOUNT_CHANGE_PASSWORD,
+			},
+		],
 	},
 ];
 

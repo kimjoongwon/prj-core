@@ -4,7 +4,10 @@ import {
 	ApiErrors,
 	ApiResponseEntity,
 	ResponseMessage,
+	Roles,
+	SkipSpaceCheck,
 } from "@cocrepo/decorator";
+import { SYSTEM_ROLES } from "@cocrepo/constant";
 import { OidcSessionDto, PageMetaDto, QueryOidcSessionDto } from "@cocrepo/dto";
 import { OidcSessionsService } from "@cocrepo/service";
 import {
@@ -22,6 +25,8 @@ import { plainToInstance } from "class-transformer";
 
 @ApiTags("OIDC_SESSIONS")
 @Controller()
+@Roles([SYSTEM_ROLES.FULL_ACCESS])
+@SkipSpaceCheck()
 export class OidcSessionsController {
 	constructor(private readonly oidcSessionsService: OidcSessionsService) {}
 
