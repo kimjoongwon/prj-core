@@ -222,6 +222,91 @@ export class GrantsService {
 		return this.grantsRepository.findByAbilityId(abilityId);
 	}
 
+	/**
+	 * Role에 Ability 배치 할당 (전체 동기화)
+	 *
+	 * 기존 Grant 목록과 새 목록을 비교하여:
+	 * - 새로 추가된 Ability는 Grant 생성
+	 * - 제거된 Ability는 Grant 소프트 삭제
+	 * - 변경된 메타데이터(isActive, priority)는 업데이트
+	 *
+	 * @param roleId - Role ID
+	 * @param items - 배치 할당 항목 배열
+	 * @returns 최종 Grant 목록
+	 */
+	@Transactional()
+	async batchAssignToRole(roleId: string, items: { abilityId: string; isActive?: boolean; priority?: number }[]): Promise<Grant[]> {
+		// 1. Role 존재 확인
+		const role = await this.rolesRepository.findById(roleId);
+		if (!role) {
+			throw new NotFoundException(GRANT_ERRORS.ROLE_NOT_FOUND);
+		}
+
+		// 2. 현재 Role의 Grant 목록 조회
+		const existingGrants = await this.grantsRepository.findByGranteeTypeAndIds(
+			GranteeType.Role,
+			[roleId],
+			{ includeAbility: true },
+		);
+
+		// 3. 동기화 계산
+		const existingMap = new Map(existingGrants.map(g => [g.abilityId, g]));
+		const newMap = new Map(items.map(item => [item.abilityId, item]));
+
+		// 3a. 추가할 Grant (새 목록에만 있는 것)
+		const toCreate = items.filter(item => !existingMap.has(item.abilityId));
+
+		// 3b. 삭제할 Grant (기존에만 있는 것)
+		const toRemove = existingGrants.filter(g => !newMap.has(g.abilityId));
+
+		// 3c. 업데이트할 Grant (양쪽에 있지만 값이 다른 것)
+		const toUpdate = items.filter(item => {
+			const existing = existingMap.get(item.abilityId);
+			if (!existing) return false;
+			return existing.isActive !== (item.isActive ?? true) ||
+			       existing.priority !== (item.priority ?? 0);
+		});
+
+		// 4. Ability 존재 확인 (추가할 것들만)
+		for (const item of toCreate) {
+			await this.validateAbility(item.abilityId);
+		}
+
+		// 5. 실행
+		// 5a. 삭제
+		for (const grant of toRemove) {
+			await this.grantsRepository.removeById(grant.id);
+		}
+
+		// 5b. 추가
+		if (toCreate.length > 0) {
+			const createInputs = toCreate.map(item => ({
+				granteeType: GranteeTypeEnum.Role as string,
+				granteeId: roleId,
+				abilityId: item.abilityId,
+				isActive: item.isActive ?? true,
+				priority: item.priority ?? 0,
+			}));
+			await this.grantsRepository.createMany(createInputs);
+		}
+
+		// 5c. 업데이트
+		for (const item of toUpdate) {
+			const existing = existingMap.get(item.abilityId)!;
+			await this.grantsRepository.updateById(existing.id, {
+				isActive: item.isActive ?? true,
+				priority: item.priority ?? 0,
+			});
+		}
+
+		// 6. 최종 결과 조회
+		return this.grantsRepository.findByGranteeTypeAndIds(
+			GranteeType.Role,
+			[roleId],
+			{ includeAbility: true },
+		);
+	}
+
 	// ============================================================================
 	// Private 검증 메서드
 	// ============================================================================

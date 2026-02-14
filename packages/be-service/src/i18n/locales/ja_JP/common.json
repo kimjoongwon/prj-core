@@ -73,6 +73,14 @@
       "success": "ロール削除成功"
     }
   },
+  "grant": {
+    "batchAssign": {
+      "success": "権限割り当てが保存されました"
+    },
+    "byRole": {
+      "success": "ロール別権限取得成功"
+    }
+  },
   "ability": {
     "my": {
       "success": "自分の権限取得成功"

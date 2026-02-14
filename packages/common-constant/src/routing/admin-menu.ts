@@ -105,8 +105,22 @@ export const ADMIN_PATHS = {
 	ROLES_NEW: "/roles/new",
 	ROLES_DETAIL: "/roles/[roleId]",
 	ROLES_EDIT: "/roles/[roleId]/edit",
-	ROLES_ABILITY_SUBJECTS: "/roles/[roleId]/abilities/[abilityId]/subjects",
-	ROLES_ABILITY_ACTIONS: "/roles/[roleId]/abilities/[abilityId]/actions",
+
+	// 권한 정의 (Ability)
+	ABILITIES: "/abilities",
+	ABILITIES_NEW: "/abilities/new",
+	ABILITIES_DETAIL: "/abilities/[abilityId]",
+	ABILITIES_EDIT: "/abilities/[abilityId]/edit",
+
+	// 액션 (Action)
+	ACTIONS: "/actions",
+	ACTIONS_NEW: "/actions/new",
+	ACTIONS_DETAIL: "/actions/[actionId]",
+	ACTIONS_EDIT: "/actions/[actionId]/edit",
+
+	// 대상 (Subject)
+	SUBJECTS: "/subjects",
+	SUBJECTS_DETAIL: "/subjects/[subjectId]",
 
 	// 내 계정 (Self-Service)
 	MY_SESSIONS: "/my-sessions",
@@ -199,7 +213,14 @@ export const ADMIN_SUBJECTS = {
 	MENU_ADMINS_LIST: "menu:admins:list",
 	MENU_ADMINS_INVITATIONS: "menu:admins:invitations",
 
-	// 역할 관리 (단일 메뉴, 2depth 없음)
+	// 2depth - 권한 관리
+	MENU_ROLES_LIST: "menu:roles:list",
+	MENU_ABILITIES: "menu:abilities",
+	MENU_ABILITIES_LIST: "menu:abilities:list",
+	MENU_ACTIONS: "menu:actions",
+	MENU_ACTIONS_LIST: "menu:actions:list",
+	MENU_SUBJECTS: "menu:subjects",
+	MENU_SUBJECTS_LIST: "menu:subjects:list",
 
 	// 내 계정 (Self-Service)
 	MENU_MY_ACCOUNT: "menu:my-account",
@@ -688,13 +709,38 @@ export const ADMIN_NAV_ITEMS: NavItemConfig[] = [
 		],
 	},
 
-	// 14. 역할 관리 (v7.0 - 설정에서 분리, 단일 메뉴)
+	// 14. 권한 관리 (v7.0 - 설정에서 분리)
 	{
 		id: "roles",
-		label: "역할 관리",
+		label: "권한 관리",
 		icon: "Shield",
-		path: ADMIN_PATHS.ROLES,
 		subject: ADMIN_SUBJECTS.MENU_ROLES,
+		children: [
+			{
+				id: "roles-list",
+				label: "역할",
+				path: ADMIN_PATHS.ROLES,
+				subject: ADMIN_SUBJECTS.MENU_ROLES_LIST,
+			},
+			{
+				id: "abilities-list",
+				label: "권한 정의",
+				path: ADMIN_PATHS.ABILITIES,
+				subject: ADMIN_SUBJECTS.MENU_ABILITIES_LIST,
+			},
+			{
+				id: "actions-list",
+				label: "액션",
+				path: ADMIN_PATHS.ACTIONS,
+				subject: ADMIN_SUBJECTS.MENU_ACTIONS_LIST,
+			},
+			{
+				id: "subjects-list",
+				label: "대상",
+				path: ADMIN_PATHS.SUBJECTS,
+				subject: ADMIN_SUBJECTS.MENU_SUBJECTS_LIST,
+			},
+		],
 	},
 
 	// 15. 내 계정 (Self-Service)

@@ -41,6 +41,15 @@ export class AbilitiesService {
 	}
 
 	/**
+	 * 전체 Ability 목록 조회
+	 * Subject, Action 정보를 포함하여 반환합니다.
+	 */
+	async getAllAbilities(): Promise<Ability[]> {
+		this.logger.debug('전체 Ability 목록 조회');
+		return this.abilitiesRepository.findAll();
+	}
+
+	/**
 	 * Role별 기본 권한 조회
 	 *
 	 * @param roleId - Role ID

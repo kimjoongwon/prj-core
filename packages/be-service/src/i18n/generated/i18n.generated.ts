@@ -80,6 +80,14 @@ export type I18nTranslations = {
                 "success": string;
             };
         };
+        "grant": {
+            "batchAssign": {
+                "success": string;
+            };
+            "byRole": {
+                "success": string;
+            };
+        };
         "ability": {
             "my": {
                 "success": string;

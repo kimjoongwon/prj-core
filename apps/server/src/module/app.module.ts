@@ -26,6 +26,7 @@ import { ActionsModule } from "./action";
 import { AuthModule } from "./auth";
 // Global modules
 import { globalModules } from "./global.module";
+import { GrantsModule } from "./grant";
 import { GroundsModule } from "./grounds";
 import { PrismaModule } from "./prisma.module";
 import { RedisModule } from "./redis.module";
@@ -49,6 +50,7 @@ import { UsersModule } from "./users";
 		SubjectsModule,
 		AbilitiesModule,
 		RolesModule,
+		GrantsModule,
 		TranslationsModule,
 		OidcClientsModule,
 		OidcSessionsModule,
@@ -88,6 +90,10 @@ import { UsersModule } from "./users";
 							{
 								path: "roles",
 								module: RolesModule,
+							},
+							{
+								path: "grants",
+								module: GrantsModule,
 							},
 							{
 								path: "translations",

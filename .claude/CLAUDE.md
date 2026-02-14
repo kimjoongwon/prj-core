@@ -757,6 +757,7 @@ Stage 2: 스키마 (기능 전체)  → schema → entity → dto → query-dto 
 Stage 3: 백엔드 (기능 전체)  → repository → service → controller → [리뷰]
 Stage 4: 컴포넌트 (페이지별) → ui → widget → feature → [리뷰] ← page 파라미터 필요
 Stage 5: 페이지 (페이지별)   → fe-page-builder → [리뷰] ← page 파라미터 필요
+Stage 6: E2E 검증 (선택적)   → qa-be-e2e-testing → qa-fe-e2e-testing → [리뷰]
 ```
 
 #### 기획서 폴더 구조
@@ -904,6 +905,8 @@ Stage 4: 컴포넌트 (페이지별)
 |-------|------|
 | qa-be-testing | Jest 기반 백엔드 및 공용 패키지 테스트 코드 작성 |
 | qa-fe-testing | Vitest 기반 프론트엔드 패키지 테스트 코드 작성 |
+| qa-be-e2e-testing | Jest+Supertest 기반 백엔드 E2E 테스트 작성 |
+| qa-fe-e2e-testing | Playwright 기반 프론트엔드 E2E 테스트 작성 |
 | qa-type-checker | TypeScript 타입 에러를 근본 원인까지 추적하여 해결 |
 | /fe-review (Skill) | 프론트엔드 코드 규칙 검증 (리포트만) |
 | /be-review (Skill) | 백엔드 코드 규칙 검증 (리포트만) |

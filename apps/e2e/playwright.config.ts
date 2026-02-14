@@ -6,6 +6,7 @@ import { defineConfig, devices } from "@playwright/test";
  * 앱별 테스트 실행:
  *   pnpm --filter=@cocrepo/e2e test:admin
  *   pnpm --filter=@cocrepo/e2e test:proposal
+ *   pnpm --filter=@cocrepo/e2e test:idp
  *
  * @see https://playwright.dev/docs/test-configuration
  */
@@ -36,21 +37,35 @@ export default defineConfig({
 
   // 앱별 프로젝트 설정
   projects: [
-    // ── Admin ──
+    // ── Admin Auth Setup ──
     {
-      name: "admin-chromium",
-      testMatch: "**/admin/**/*.spec.ts",
+      name: "admin-setup",
+      testMatch: "**/admin/helpers/*.setup.ts",
       use: {
         ...devices["Desktop Chrome"],
         baseURL: "http://localhost:3000/admin/",
       },
     },
+
+    // ── Admin ──
+    {
+      name: "admin-chromium",
+      testMatch: "**/admin/**/*.spec.ts",
+      dependencies: ["admin-setup"],
+      use: {
+        ...devices["Desktop Chrome"],
+        baseURL: "http://localhost:3000/admin/",
+        storageState: "tests/admin/helpers/.auth/admin.json",
+      },
+    },
     {
       name: "admin-mobile",
       testMatch: "**/admin/**/*.spec.ts",
+      dependencies: ["admin-setup"],
       use: {
         ...devices["Pixel 5"],
         baseURL: "http://localhost:3000/admin/",
+        storageState: "tests/admin/helpers/.auth/admin.json",
       },
     },
 
@@ -71,6 +86,24 @@ export default defineConfig({
         baseURL: "http://localhost:3001/",
       },
     },
+
+    // ── IDP (Identity Provider) ──
+    {
+      name: "idp-chromium",
+      testMatch: "**/idp/**/*.spec.ts",
+      use: {
+        ...devices["Desktop Chrome"],
+        baseURL: "http://localhost:3008/",
+      },
+    },
+    {
+      name: "idp-mobile",
+      testMatch: "**/idp/**/*.spec.ts",
+      use: {
+        ...devices["Pixel 5"],
+        baseURL: "http://localhost:3008/",
+      },
+    },
   ],
 
   // 개발 서버 설정 (SKIP_WEBSERVER=1 로 비활성화)
@@ -87,6 +120,13 @@ export default defineConfig({
         {
           command: "pnpm --filter=proposal start:dev",
           url: "http://localhost:3001/",
+          reuseExistingServer: !process.env.CI,
+          timeout: 120000,
+          cwd: "../..",
+        },
+        {
+          command: "pnpm --filter=idp-client dev",
+          url: "http://localhost:3008/",
           reuseExistingServer: !process.env.CI,
           timeout: 120000,
           cwd: "../..",

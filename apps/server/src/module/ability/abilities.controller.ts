@@ -38,6 +38,24 @@ export class AbilitiesController {
   ) {}
 
   /**
+   * 전체 권한 정의 목록 조회
+   * GET /api/v1/abilities
+   */
+  @Get()
+  @ApiOperation({
+    operationId: "getAbilities",
+    summary: "전체 권한 정의 목록 조회",
+    description: "모든 권한 정의(Ability) 목록을 조회합니다. Subject, Action 정보를 포함합니다.",
+  })
+  @ApiAuth()
+  @ApiErrors(401, 500)
+  @ApiResponseEntity(AbilityResponseDto, HttpStatus.OK, { isArray: true })
+  @ResponseMessage("common.ability.list.success")
+  async getAbilities(): Promise<Ability[]> {
+    return this.abilitiesFacade.getAllAbilities();
+  }
+
+  /**
    * 내 권한 조회 (로그인 필수)
    * GET /api/v1/abilities/my
    *
@@ -260,8 +278,4 @@ export class AbilitiesController {
   ): Promise<Ability> {
     return this.abilitiesFacade.deleteAbility(id);
   }
-
-  // TODO: Implement Grant-based batch assignment endpoints
-  // PUT /api/v1/grants/roles/:roleId
-  // PUT /api/v1/grants/users/:userId
 }

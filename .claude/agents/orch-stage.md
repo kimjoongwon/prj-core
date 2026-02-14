@@ -144,6 +144,7 @@ apps/proposal/plans/
 | 3 | 기능 전체 | Repository/Service/Controller 한 번에 생성 |
 | 4 | **페이지별** | 각 페이지의 컴포넌트를 개별 생성 |
 | 5 | **페이지별** | 각 페이지를 개별 생성 |
+| 6 | 기능 전체 (선택) | E2E 테스트 검증 |
 
 ---
 
@@ -203,6 +204,7 @@ apps/proposal/plans/_core/[core]/YYYY-MM-DD-[feature]/
 | 3 | 백엔드 로직 | Repository, Service, Controller 구현 | repository-builder, service-builder, controller-builder | `-backend.md` |
 | 4 | 컴포넌트 구현 | UI, Widget, Feature 컴포넌트 구현 | ui-component-builder, widget-builder, feature-builder | `-components.md` |
 | 5 | 페이지 통합 | 페이지 컴포넌트 구현 및 규칙 검증 | page-builder, /fe-review (Skill) | `-complete.md` |
+| 6 | E2E 검증 (선택) | E2E 테스트 작성 및 실행 | qa-be-e2e-testing, qa-fe-e2e-testing | `-e2e.md` |
 
 ---
 
@@ -266,6 +268,14 @@ apps/proposal/plans/_core/[core]/YYYY-MM-DD-[feature]/
 │ 산출물: {기능명}-{페이지명}-complete.md                       │
 │                                                              │
 │ ⚠️ page 파라미터로 특정 페이지 지정 필요                      │
+└─────────────────────────────────────────────────────────────┘
+                              ↓ 사용자 요청 시 (선택적)
+┌─────────────────────────────────────────────────────────────┐
+│ Stage 6: E2E 검증 (선택적)                                    │
+│ qa-be-e2e-testing → qa-fe-e2e-testing → [사용자 리뷰] ✓      │
+│ 산출물: {기능명}-e2e.md                                       │
+│                                                              │
+│ ⚠️ Stage 5 모든 페이지 완료 후 실행                           │
 └─────────────────────────────────────────────────────────────┘
 ```
 
@@ -847,6 +857,80 @@ YYYY-MM-DD HH:mm
 
 ---
 
+### Stage 6: E2E 검증 (선택적)
+
+**목표**: E2E 테스트 작성 및 실행으로 전체 기능 검증
+
+**⚠️ 선택적 단계**: 사용자가 요청할 때만 실행합니다.
+
+```bash
+/orch-stage run stage=6 plan=YYYY-MM-DD-Member
+```
+
+**전제조건**: Stage 5 모든 페이지 완료
+
+**에이전트 호출 순서:**
+
+1. **qa-be-e2e-testing** (백엔드 E2E)
+   ```
+   Task: qa-be-e2e-testing
+   - Controller의 API 엔드포인트 E2E 테스트
+   - 인증/인가 통합 테스트
+   - CRUD 플로우 테스트
+   ```
+
+2. **qa-fe-e2e-testing** (프론트엔드 E2E)
+   ```
+   Task: qa-fe-e2e-testing
+   - Playwright 기반 페이지 E2E 테스트
+   - 사용자 플로우 테스트
+   - 폼 제출/검증 테스트
+   ```
+
+**산출물 문서 생성:**
+
+기능 폴더에 `-e2e.md` 파일 생성:
+
+```markdown
+# {기능명} E2E 테스트 결과
+
+## 생성 일시
+YYYY-MM-DD HH:mm
+
+## 백엔드 E2E 테스트
+| 파일 | 테스트 수 | 결과 |
+|------|----------|------|
+| `apps/server/test/{domain}.e2e-spec.ts` | N개 | ✅ 통과 |
+
+## 프론트엔드 E2E 테스트
+| 파일 | 테스트 수 | 결과 |
+|------|----------|------|
+| `apps/e2e/tests/{app}/{feature}.spec.ts` | N개 | ✅ 통과 |
+
+## 실행 명령
+- 백엔드: `pnpm --filter=server test:e2e`
+- 프론트엔드: `pnpm --filter=@cocrepo/e2e test:{app}`
+```
+
+**완료 후 출력:**
+```
+✅ Stage 6 완료: E2E 검증
+
+📁 생성된 파일:
+- 백엔드: apps/server/test/members.e2e-spec.ts
+- 프론트엔드: apps/e2e/tests/admin/members.spec.ts
+
+📄 결과 문서: apps/proposal/plans/YYYY-MM-DD-Member/Member-e2e.md
+
+📋 사용자 리뷰 포인트:
+- [ ] 모든 E2E 테스트가 통과하는가?
+- [ ] 주요 사용자 시나리오가 커버되는가?
+
+🎉 Member 기능 개발 완료!
+```
+
+---
+
 ## 9. 체크리스트
 
 ### 실행 전 확인
@@ -886,6 +970,11 @@ YYYY-MM-DD HH:mm
 - [ ] 규칙 검증 통과
 - [ ] 페이지 렌더링 성공
 
+**Stage 6** (선택)
+- [ ] 백엔드 E2E 테스트 통과
+- [ ] 프론트엔드 E2E 테스트 통과
+- [ ] 주요 사용자 시나리오 커버
+
 ---
 
 ## 10. 재시작/롤백 가이드
@@ -899,6 +988,7 @@ YYYY-MM-DD HH:mm
 | Stage 3 | Stage 3~5 | 백엔드부터 재생성 |
 | Stage 4 | Stage 4~5 | 컴포넌트부터 재생성 |
 | Stage 5 | Stage 5만 | 페이지만 수정 |
+| Stage 6 | Stage 6만 | E2E 테스트만 수정 |
 
 ### 재시작 명령 예시
 
@@ -938,8 +1028,10 @@ YYYY-MM-DD HH:mm
 ### 후행 에이전트
 | 에이전트 | 용도 |
 |---------|------|
-| `qa-fe-testing` | 프론트엔드 테스트 작성 |
-| `qa-be-testing` | 백엔드 테스트 작성 |
+| `qa-fe-testing` | 프론트엔드 단위 테스트 작성 |
+| `qa-be-testing` | 백엔드 단위 테스트 작성 |
+| `qa-fe-e2e-testing` | Playwright 기반 프론트엔드 E2E 테스트 |
+| `qa-be-e2e-testing` | Jest+Supertest 기반 백엔드 E2E 테스트 |
 | `code-reviewer` | 코드 리뷰 |
 
 ### Stage별 호출 에이전트
@@ -973,3 +1065,7 @@ YYYY-MM-DD HH:mm
 **Stage 5**
 - `fe-page-builder` - 페이지 컴포넌트
 - `/fe-review` (Skill) - 프론트엔드 규칙 검증
+
+**Stage 6** (선택적)
+- `qa-be-e2e-testing` - 백엔드 E2E 테스트
+- `qa-fe-e2e-testing` - 프론트엔드 E2E 테스트

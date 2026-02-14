@@ -73,6 +73,14 @@
       "success": "역할 삭제 성공"
     }
   },
+  "grant": {
+    "batchAssign": {
+      "success": "권한 할당이 저장되었습니다"
+    },
+    "byRole": {
+      "success": "역할별 권한 조회 성공"
+    }
+  },
   "ability": {
     "my": {
       "success": "내 권한 조회 성공"

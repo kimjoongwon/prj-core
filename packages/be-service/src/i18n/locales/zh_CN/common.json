@@ -73,6 +73,14 @@
       "success": "角色删除成功"
     }
   },
+  "grant": {
+    "batchAssign": {
+      "success": "权限分配已保存"
+    },
+    "byRole": {
+      "success": "角色权限查询成功"
+    }
+  },
   "ability": {
     "my": {
       "success": "我的权限查询成功"

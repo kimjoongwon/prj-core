@@ -73,6 +73,14 @@
       "success": "Role deleted successfully"
     }
   },
+  "grant": {
+    "batchAssign": {
+      "success": "Permissions assigned successfully"
+    },
+    "byRole": {
+      "success": "Role grants retrieved successfully"
+    }
+  },
   "ability": {
     "my": {
       "success": "My permissions retrieved successfully"

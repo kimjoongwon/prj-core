@@ -84,6 +84,14 @@ export class AbilitiesFacade {
 	}
 
 	/**
+	 * 전체 Ability 목록 조회
+	 */
+	async getAllAbilities(): Promise<Ability[]> {
+		this.logger.debug('전체 Ability 목록 조회');
+		return this.abilitiesService.getAllAbilities();
+	}
+
+	/**
 	 * Role별 기본 권한 조회
 	 *
 	 * @param roleId - Role ID
