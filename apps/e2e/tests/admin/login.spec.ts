@@ -1,15 +1,22 @@
 import { test, expect } from "@playwright/test";
 
 test.describe("로그인 페이지 테스트", () => {
-	test("로그인 페이지 진입 확인", async ({ page }) => {
-		// Given: 로그인 페이지로 이동 (상대 경로로 baseURL 기준)
+	test("로그인 페이지 진입 시 IDP 로그인 페이지로 리다이렉트되어야 한다", async ({
+		page,
+	}) => {
+		// Given: 로그인 페이지로 이동 (OIDC 플로우로 IDP 서버로 리다이렉트)
 		await page.goto("auth/login");
 
-		// Then: 로그인 페이지가 정상 로드됨
-		await expect(page.getByText("관리자 로그인")).toBeVisible();
-		await expect(page.getByText("관리자 계정으로 로그인하세요")).toBeVisible();
+		// Then: IDP 로그인 페이지가 표시됨
+		await expect(
+			page.getByRole("heading", { name: "로그인" }),
+		).toBeVisible({ timeout: 30000 });
 
-		// 스크린샷 저장
-		await page.screenshot({ path: "screenshots/login-page.png" });
+		// Then: IDP 로그인 폼이 표시됨
+		await expect(page.getByLabel("이메일")).toBeVisible();
+		await expect(page.getByLabel("비밀번호")).toBeVisible();
+		await expect(
+			page.getByRole("button", { name: "로그인" }),
+		).toBeVisible();
 	});
 });

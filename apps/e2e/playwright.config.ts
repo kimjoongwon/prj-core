@@ -1,4 +1,8 @@
+import path from "node:path";
 import { defineConfig, devices } from "@playwright/test";
+
+// npx playwright test 직접 실행 시에도 로컬 browsers 경로 사용
+process.env.PLAYWRIGHT_BROWSERS_PATH ??= path.join(__dirname, "browsers");
 
 /**
  * Playwright E2E 테스트 설정 (멀티앱)

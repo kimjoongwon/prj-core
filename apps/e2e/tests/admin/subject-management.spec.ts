@@ -57,25 +57,41 @@ test.describe("Subject 관리 페이지", () => {
 	// ── E2E-008: Subject 필드 조회 (entity vs non-entity) ──
 
 	test.describe("[E2E-008] Subject 필드 조회", () => {
+		/**
+		 * Subject 목록 API를 직접 호출하여 특정 이름의 Subject ID를 추출합니다.
+		 * SSR prefetch로 인해 브라우저에서 API 호출이 발생하지 않으므로
+		 * page.evaluate(fetch)를 사용합니다. (Subject API는 @Public)
+		 */
+		async function getSubjectIdByName(
+			page: import("@playwright/test").Page,
+			name: string,
+		): Promise<string> {
+			const subjectId = await page.evaluate(async (targetName) => {
+				const resp = await fetch("/api/v1/subjects");
+				const body = await resp.json();
+				const subjects = (body.data ?? body) as {
+					name: string;
+					id: string;
+				}[];
+				const found = subjects.find((s) => s.name === targetName);
+				return found?.id ?? null;
+			}, name);
+			if (!subjectId) {
+				throw new Error(`Subject "${name}" not found in API response`);
+			}
+			return subjectId;
+		}
+
 		test("entity 그룹 Subject 상세에서 필드 목록이 표시되어야 한다", async ({
 			page,
 		}) => {
-			// Given: Subject 목록 API 응답에서 entity:User의 ID 추출
-			const subjectsResponse = page.waitForResponse(
-				(resp) =>
-					resp.url().includes("/subjects") &&
-					resp.request().method() === "GET" &&
-					resp.status() === 200,
-			);
+			// Given: Subject ID 추출
 			await page.goto("./subjects");
-			const response = await subjectsResponse;
-			const responseBody = await response.json();
-			const entityUser = responseBody.data?.find(
-				(s: { name: string }) => s.name === "entity:User",
-			);
+			await page.waitForLoadState("networkidle");
+			const entityUserId = await getSubjectIdByName(page, "entity:User");
 
 			// When: Subject 상세 페이지로 직접 이동
-			await page.goto(`./subjects/${entityUser.id}`);
+			await page.goto(`./subjects/${entityUserId}`);
 			await page.waitForLoadState("networkidle");
 
 			// Then: 기본 정보 섹션 표시
@@ -96,22 +112,16 @@ test.describe("Subject 관리 페이지", () => {
 		test("menu 그룹 Subject 상세에서 필드 없음 안내가 표시되어야 한다", async ({
 			page,
 		}) => {
-			// Given: Subject 목록 API 응답에서 menu:dashboard의 ID 추출
-			const subjectsResponse = page.waitForResponse(
-				(resp) =>
-					resp.url().includes("/subjects") &&
-					resp.request().method() === "GET" &&
-					resp.status() === 200,
-			);
+			// Given: Subject ID 추출
 			await page.goto("./subjects");
-			const response = await subjectsResponse;
-			const responseBody = await response.json();
-			const menuDashboard = responseBody.data?.find(
-				(s: { name: string }) => s.name === "menu:dashboard",
+			await page.waitForLoadState("networkidle");
+			const menuDashboardId = await getSubjectIdByName(
+				page,
+				"menu:dashboard",
 			);
 
 			// When: Subject 상세 페이지로 직접 이동
-			await page.goto(`./subjects/${menuDashboard.id}`);
+			await page.goto(`./subjects/${menuDashboardId}`);
 			await page.waitForLoadState("networkidle");
 
 			// Then: 기본 정보 섹션 표시
@@ -126,22 +136,13 @@ test.describe("Subject 관리 페이지", () => {
 		test("Subject 상세에서 목록으로 돌아갈 수 있어야 한다", async ({
 			page,
 		}) => {
-			// Given: Subject 목록 API 응답에서 entity:User의 ID 추출
-			const subjectsResponse = page.waitForResponse(
-				(resp) =>
-					resp.url().includes("/subjects") &&
-					resp.request().method() === "GET" &&
-					resp.status() === 200,
-			);
+			// Given: Subject ID 추출
 			await page.goto("./subjects");
-			const response = await subjectsResponse;
-			const responseBody = await response.json();
-			const entityUser = responseBody.data?.find(
-				(s: { name: string }) => s.name === "entity:User",
-			);
+			await page.waitForLoadState("networkidle");
+			const entityUserId = await getSubjectIdByName(page, "entity:User");
 
 			// Given: Subject 상세 페이지
-			await page.goto(`./subjects/${entityUser.id}`);
+			await page.goto(`./subjects/${entityUserId}`);
 			await page.waitForLoadState("networkidle");
 
 			// When: 목록으로 버튼/링크 클릭

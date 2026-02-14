@@ -54,8 +54,8 @@ function getErrorMessage(data: LoginErrorResponse): string {
  * - "비밀번호를 잊으셨나요?" 링크
  */
 export function LoginForm({ uid, client, isDev }: LoginFormProps) {
-	const [email, setEmail] = useState(isDev ? "ceo@f45training.co.kr" : "");
-	const [password, setPassword] = useState(isDev ? "SuperAdmin123!@#" : "");
+	const [email, setEmail] = useState(isDev ? "admin@plate.com" : "");
+	const [password, setPassword] = useState(isDev ? "rkdmf12!@" : "");
 	const [remember, setRemember] = useState(false);
 	const [error, setError] = useState<LoginErrorResponse | null>(null);
 	const [isSubmitting, setIsSubmitting] = useState(false);

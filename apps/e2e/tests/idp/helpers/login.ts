@@ -56,3 +56,36 @@ export async function navigateToLoginForm(page: Page) {
 		.getByRole("button", { name: "로그인" })
 		.waitFor({ state: "visible", timeout: 30000 });
 }
+
+/**
+ * OIDC 동의 화면으로 이동합니다.
+ * (로그인 후 동의 화면에서 멈춤)
+ *
+ * 1. /auth/login → OIDC 리다이렉트 → /interaction/[uid]
+ * 2. 시드 데이터의 FULL_ACCESS 계정으로 로그인
+ * 3. OIDC 동의 화면 렌더링 대기
+ */
+export async function navigateToConsentForm(page: Page) {
+	await page.goto("/auth/login");
+
+	// 로그인 폼 대기
+	const loginButton = page.getByRole("button", { name: "로그인" });
+	await loginButton.waitFor({ state: "visible", timeout: 30000 });
+
+	// 시드 데이터 계정 입력
+	const emailInput = page.getByLabel("이메일");
+	const passwordInput = page.getByLabel("비밀번호");
+
+	await emailInput.clear();
+	await emailInput.fill(ADMIN_EMAIL);
+	await passwordInput.clear();
+	await passwordInput.fill(ADMIN_PASSWORD);
+
+	// 로그인
+	await loginButton.click();
+
+	// 동의 화면 대기
+	await page
+		.getByRole("button", { name: "허용" })
+		.waitFor({ state: "visible", timeout: 30000 });
+}

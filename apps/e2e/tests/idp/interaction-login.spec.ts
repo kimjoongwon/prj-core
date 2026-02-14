@@ -47,7 +47,7 @@ test.describe("OIDC 로그인 인터랙션", () => {
 
 			// Then: 이메일/비밀번호가 자동 입력됨
 			await expect(page.getByLabel("이메일")).toHaveValue(
-				"ceo@f45training.co.kr",
+				"admin@plate.com",
 			);
 		});
 	});

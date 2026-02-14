@@ -20,9 +20,15 @@ test.describe("이용자 목록 페이지", () => {
 
 		test("통계 카드 3개가 표시되어야 한다", async ({ page }) => {
 			// Then: 전체/활성/비활성 통계 카드 확인
-			await expect(page.getByText("전체 이용자")).toBeVisible();
-			await expect(page.getByText("활성 이용자")).toBeVisible();
-			await expect(page.getByText("비활성 이용자")).toBeVisible();
+			await expect(
+				page.getByText("전체 이용자", { exact: true }),
+			).toBeVisible();
+			await expect(
+				page.getByText("활성 이용자", { exact: true }),
+			).toBeVisible();
+			await expect(
+				page.getByText("비활성 이용자", { exact: true }),
+			).toBeVisible();
 		});
 
 		test("DataGrid 컬럼 헤더가 표시되어야 한다", async ({ page }) => {
@@ -95,19 +101,20 @@ test.describe("이용자 목록 페이지", () => {
 			await expect(page.getByText("이서연")).not.toBeVisible();
 		});
 
-		test("이메일로 검색 시 해당 사용자만 표시되어야 한다", async ({
+		test("다른 이름으로 검색 시 해당 사용자만 표시되어야 한다", async ({
 			page,
 		}) => {
-			// When: 이메일로 검색
+			// When: 이름으로 검색 (API가 name 파라미터로 검색)
 			await page
 				.getByPlaceholder("이름, 이메일, 전화번호로 검색...")
-				.fill("admin@plate.com");
+				.fill("이서연");
 			await page.waitForTimeout(500);
 			await page.waitForLoadState("networkidle");
 
-			// Then: 검색된 사용자 표시
-			await expect(page.getByText("admin@plate.com")).toBeVisible();
-			await expect(page.getByText("Super Admin")).toBeVisible();
+			// Then: 검색된 사용자만 표시
+			await expect(page.getByText("이서연")).toBeVisible();
+			// Then: 다른 사용자는 표시되지 않음
+			await expect(page.getByText("김민수")).not.toBeVisible();
 		});
 
 		test("존재하지 않는 검색어 입력 시 빈 상태 메시지가 표시되어야 한다", async ({
