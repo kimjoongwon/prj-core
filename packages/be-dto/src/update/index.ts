@@ -11,6 +11,7 @@ export * from "./update-group.dto";
 export * from "./update-oidc-client.dto";
 export * from "./update-program.dto";
 export * from "./update-role.dto";
+export * from "./update-security-policy.dto";
 export * from "./update-role-association.dto";
 export * from "./update-role-classification.dto";
 export * from "./update-routine.dto";

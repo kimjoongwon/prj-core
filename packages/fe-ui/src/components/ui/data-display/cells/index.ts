@@ -1,4 +1,5 @@
 export * from "./ActiveStatusCell/ActiveStatusCell";
+export * from "./AuditResultBadge";
 export * from "./AuthMethodCell/AuthMethodCell";
 export * from "./BooleanCell/BooleanCell";
 export * from "./DateCell/DateCell";

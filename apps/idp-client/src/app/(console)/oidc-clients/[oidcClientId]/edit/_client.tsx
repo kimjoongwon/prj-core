@@ -2,56 +2,20 @@
 
 import { useGetOidcClient, useUpdateOidcClient } from "@cocrepo/api";
 import {
+	OidcClientForm,
 	PageSurface,
-	RedirectUriListInput,
-	SectionSurface,
-	VStack,
 } from "@cocrepo/ui";
-import {
-	Button,
-	Checkbox,
-	CheckboxGroup,
-	Input,
-	Select,
-	SelectItem,
-} from "@heroui/react";
-import { ArrowLeft, Save } from "lucide-react";
+import { Button } from "@heroui/react";
+import { ArrowLeft } from "lucide-react";
 import { observer, useLocalObservable } from "mobx-react-lite";
 import type { Route } from "next";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 
-/**
- * 인증 방식 옵션
- */
-const AUTH_METHOD_OPTIONS = [
-	{ value: "client_secret_basic", label: "client_secret_basic" },
-	{ value: "client_secret_post", label: "client_secret_post" },
-	{ value: "none", label: "none (Public Client)" },
-];
-
-/**
- * Grant Type 옵션
- */
-const GRANT_TYPE_OPTIONS = [
-	{ value: "authorization_code", label: "authorization_code" },
-	{ value: "client_credentials", label: "client_credentials" },
-	{ value: "refresh_token", label: "refresh_token" },
-];
-
-/**
- * Response Type 옵션
- */
-const RESPONSE_TYPE_OPTIONS = [
-	{ value: "code", label: "code" },
-];
-
-/**
- * 폼 상태
- */
 interface OidcClientEditFormState {
 	clientName: string;
 	clientSecret: string;
+	isPublic: boolean;
 	tokenEndpointAuthMethod: string;
 	grantTypes: string[];
 	responseTypes: string[];
@@ -63,6 +27,7 @@ interface OidcClientEditFormState {
 	errors: Record<string, string>;
 	redirectUriErrors: Record<number, string>;
 	isInitialized: boolean;
+	clientId: string;
 }
 
 interface OidcClientEditPageClientProps {
@@ -89,8 +54,10 @@ function OidcClientEditPageClient({
 	});
 
 	const state = useLocalObservable<OidcClientEditFormState>(() => ({
+		clientId: "",
 		clientName: "",
 		clientSecret: "",
+		isPublic: false,
 		tokenEndpointAuthMethod: "client_secret_basic",
 		grantTypes: [],
 		responseTypes: [],
@@ -184,7 +151,9 @@ function OidcClientEditPageClient({
 			oidcClientId,
 			data: {
 				clientName: state.clientName,
-				clientSecret: isPublic ? undefined : state.clientSecret || undefined,
+				clientSecret: isPublic
+					? undefined
+					: state.clientSecret || undefined,
 				tokenEndpointAuthMethod: state.tokenEndpointAuthMethod,
 				grantTypes: state.grantTypes,
 				responseTypes: state.responseTypes,
@@ -247,193 +216,14 @@ function OidcClientEditPageClient({
 				</Button>
 			}
 		>
-			<VStack gap={4}>
-				{/* 기본 정보 */}
-				<SectionSurface>
-					<div className="space-y-6 p-6">
-						<h3 className="text-lg font-semibold">기본 정보</h3>
-
-						<Input
-							label="Client ID"
-							value={client.clientId}
-							isReadOnly
-							isDisabled
-							description="Client ID는 수정할 수 없습니다."
-						/>
-
-						<Input
-							label="이름"
-							placeholder="My Application"
-							value={state.clientName}
-							onValueChange={(v) => {
-								state.clientName = v;
-							}}
-							isInvalid={!!state.errors.clientName}
-							errorMessage={state.errors.clientName}
-							isRequired
-						/>
-
-						<Input
-							label="Client Secret"
-							placeholder={
-								isPublic
-									? "Public 클라이언트는 Secret이 필요 없습니다"
-									: "변경하지 않으려면 비워두세요"
-							}
-							value={state.clientSecret}
-							onValueChange={(v) => {
-								state.clientSecret = v;
-							}}
-							isDisabled={isPublic}
-							description={
-								isPublic
-									? undefined
-									: "비워두면 기존 Secret이 유지됩니다."
-							}
-						/>
-					</div>
-				</SectionSurface>
-
-				{/* 인증 설정 */}
-				<SectionSurface>
-					<div className="space-y-6 p-6">
-						<h3 className="text-lg font-semibold">인증 설정</h3>
-
-						<Select
-							label="인증 방식"
-							selectedKeys={[state.tokenEndpointAuthMethod]}
-							onSelectionChange={(keys) => {
-								const selected = Array.from(keys)[0] as string;
-								if (selected) {
-									state.tokenEndpointAuthMethod = selected;
-								}
-							}}
-							isRequired
-						>
-							{AUTH_METHOD_OPTIONS.map((opt) => (
-								<SelectItem key={opt.value}>
-									{opt.label}
-								</SelectItem>
-							))}
-						</Select>
-
-						<CheckboxGroup
-							label="Grant Types"
-							value={state.grantTypes}
-							onValueChange={(v) => {
-								state.grantTypes = v;
-							}}
-							isInvalid={!!state.errors.grantTypes}
-							errorMessage={state.errors.grantTypes}
-							isRequired
-						>
-							{GRANT_TYPE_OPTIONS.map((opt) => (
-								<Checkbox key={opt.value} value={opt.value}>
-									{opt.label}
-								</Checkbox>
-							))}
-						</CheckboxGroup>
-
-						<CheckboxGroup
-							label="Response Types"
-							value={state.responseTypes}
-							onValueChange={(v) => {
-								state.responseTypes = v;
-							}}
-							isInvalid={!!state.errors.responseTypes}
-							errorMessage={state.errors.responseTypes}
-							isRequired
-						>
-							{RESPONSE_TYPE_OPTIONS.map((opt) => (
-								<Checkbox key={opt.value} value={opt.value}>
-									{opt.label}
-								</Checkbox>
-							))}
-						</CheckboxGroup>
-
-						<Input
-							label="스코프"
-							placeholder="openid profile email"
-							value={state.scope}
-							onValueChange={(v) => {
-								state.scope = v;
-							}}
-							isRequired
-							description="공백으로 구분하여 입력합니다."
-						/>
-					</div>
-				</SectionSurface>
-
-				{/* Redirect URIs */}
-				<SectionSurface>
-					<div className="space-y-4 p-6">
-						<h3 className="text-lg font-semibold">Redirect URIs</h3>
-						{state.errors.redirectUris && (
-							<p className="text-sm text-danger">
-								{state.errors.redirectUris}
-							</p>
-						)}
-						<RedirectUriListInput
-							value={state.redirectUris}
-							onChange={(uris) => {
-								state.redirectUris = uris;
-							}}
-							errors={state.redirectUriErrors}
-						/>
-					</div>
-				</SectionSurface>
-
-				{/* 추가 정보 */}
-				<SectionSurface>
-					<div className="space-y-6 p-6">
-						<h3 className="text-lg font-semibold">
-							추가 정보 (선택)
-						</h3>
-
-						<Input
-							label="로고 URI"
-							placeholder="https://example.com/logo.png"
-							value={state.logoUri}
-							onValueChange={(v) => {
-								state.logoUri = v;
-							}}
-						/>
-
-						<Input
-							label="정책 URI"
-							placeholder="https://example.com/privacy"
-							value={state.policyUri}
-							onValueChange={(v) => {
-								state.policyUri = v;
-							}}
-						/>
-
-						<Input
-							label="약관 URI"
-							placeholder="https://example.com/terms"
-							value={state.tosUri}
-							onValueChange={(v) => {
-								state.tosUri = v;
-							}}
-						/>
-					</div>
-				</SectionSurface>
-
-				{/* 버튼 영역 */}
-				<div className="flex justify-end gap-2">
-					<Button variant="flat" onPress={onClickBackButton}>
-						취소
-					</Button>
-					<Button
-						color="primary"
-						startContent={<Save className="h-4 w-4" />}
-						onPress={onClickSubmitButton}
-						isLoading={isPending}
-					>
-						저장
-					</Button>
-				</div>
-			</VStack>
+			<OidcClientForm
+				mode="edit"
+				state={state}
+				onSubmit={onClickSubmitButton}
+				onCancel={onClickBackButton}
+				isSubmitting={isPending}
+				readonlyClientId={client.clientId}
+			/>
 		</PageSurface>
 	);
 }

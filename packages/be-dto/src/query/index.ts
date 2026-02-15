@@ -11,6 +11,7 @@ export * from "./query-file-association.dto";
 export * from "./query-file-classification.dto";
 export * from "./query-ground.dto";
 export * from "./query-group.dto";
+export * from "./query-idp-account.dto";
 export * from "./query-oidc-client.dto";
 export * from "./query-oidc-session.dto";
 export * from "./query-program.dto";

@@ -24,7 +24,7 @@ export const SelectInput = observer(({ config }: SelectInputProps) => {
 				setValue(selected || null);
 			}}
 			classNames={{
-				base: "max-w-xs",
+				base: "min-w-[160px] max-w-xs",
 				trigger: "h-10",
 			}}
 			aria-label={config.label ?? config.id}

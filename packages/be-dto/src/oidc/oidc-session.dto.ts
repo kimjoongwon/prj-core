@@ -16,6 +16,9 @@ export class OidcSessionDto {
 	@StringFieldOptional({ description: "세션 UID" })
 	uid: string | null;
 
+	@StringFieldOptional({ description: "계정 ID" })
+	accountId: string | null;
+
 	@DateField({ nullable: true })
 	expiresAt: Date | null;
 

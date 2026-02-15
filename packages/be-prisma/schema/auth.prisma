@@ -3,7 +3,7 @@
 // ============================================================================
 //
 // 인증 보안 관련 모델들입니다.
-// 감사 로그, 비밀번호 히스토리 등이 포함됩니다.
+// 감사 로그, 비밀번호 히스토리, 보안 정책 등이 포함됩니다.
 //
 // 관계 구조:
 //   User (구체 엔티티)
@@ -11,7 +11,54 @@
 //     ├─── AuthAuditLog (인증 감사 로그)
 //     └─── PasswordHistory (비밀번호 재사용 방지)
 //
+//   SecurityPolicy (싱글턴 - 시스템 전역 보안 정책)
+//
 // ============================================================================
+
+// @schema-type: REFERENCE
+// @description: 시스템 전역 보안 정책 (싱글턴)
+/// @displayName 보안 정책
+model SecurityPolicy {
+  id                        String    @id @default(uuid())
+  createdAt                 DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt                 DateTime? @updatedAt @map("updated_at") @db.Timestamptz(6)
+  /// @displayName 정책 키
+  key                       String    @unique
+
+  // 비밀번호 정책
+  /// @displayName 최소 비밀번호 길이
+  passwordMinLength         Int       @default(8) @map("password_min_length")
+  /// @displayName 대문자 필수
+  passwordRequireUppercase  Boolean   @default(true) @map("password_require_uppercase")
+  /// @displayName 소문자 필수
+  passwordRequireLowercase  Boolean   @default(true) @map("password_require_lowercase")
+  /// @displayName 숫자 필수
+  passwordRequireNumber     Boolean   @default(true) @map("password_require_number")
+  /// @displayName 특수문자 필수
+  passwordRequireSpecial    Boolean   @default(true) @map("password_require_special")
+  /// @displayName 비밀번호 만료 일수 (0=무제한)
+  passwordExpirationDays    Int       @default(0) @map("password_expiration_days")
+  /// @displayName 비밀번호 재사용 제한 횟수
+  passwordReuseLimit        Int       @default(3) @map("password_reuse_limit")
+
+  // 잠금 정책
+  /// @displayName 일시 잠금 임계값
+  temporaryLockThreshold    Int       @default(5) @map("temporary_lock_threshold")
+  /// @displayName 일시 잠금 시간 (분)
+  temporaryLockDurationMin  Int       @default(15) @map("temporary_lock_duration_min")
+  /// @displayName 영구 잠금 임계값
+  permanentLockThreshold    Int       @default(10) @map("permanent_lock_threshold")
+
+  // 세션 정책
+  /// @displayName Access Token TTL (초)
+  accessTokenTtlSec         Int       @default(3600) @map("access_token_ttl_sec")
+  /// @displayName Refresh Token TTL (초)
+  refreshTokenTtlSec        Int       @default(2592000) @map("refresh_token_ttl_sec")
+  /// @displayName 세션 TTL (초)
+  sessionTtlSec             Int       @default(86400) @map("session_ttl_sec")
+
+  @@map("security_policies")
+}
 
 // @schema-type: REFERENCE
 // @description: 로그인 시도 감사 로그

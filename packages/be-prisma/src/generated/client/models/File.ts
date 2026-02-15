@@ -548,14 +548,6 @@ export type FileUncheckedCreateNestedManyWithoutParentInput = {
   connect?: Prisma.FileWhereUniqueInput | Prisma.FileWhereUniqueInput[]
 }
 
-export type IntFieldUpdateOperationsInput = {
-  set?: number
-  increment?: number
-  decrement?: number
-  multiply?: number
-  divide?: number
-}
-
 export type FileUpdateOneWithoutChildrenNestedInput = {
   create?: Prisma.XOR<Prisma.FileCreateWithoutChildrenInput, Prisma.FileUncheckedCreateWithoutChildrenInput>
   connectOrCreate?: Prisma.FileCreateOrConnectWithoutChildrenInput

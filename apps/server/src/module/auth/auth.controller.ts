@@ -9,6 +9,7 @@ import {
   SkipSpaceCheck,
 } from "@cocrepo/decorator";
 import {
+  AuditLogStatsDto,
   AuthAuditLogDto,
   AuthSessionInfoDto,
   ChangePasswordDto,
@@ -238,6 +239,25 @@ export class AuthController {
         meta: new PageMetaDto(skip, take, totalCount),
       }
     );
+  }
+
+  @Roles([SYSTEM_ROLES.FULL_ACCESS])
+  @SkipSpaceCheck()
+  @HttpCode(HttpStatus.OK)
+  @Get("audit-logs/stats")
+  @ApiOperation({
+    operationId: "getAuthAuditLogStats",
+    summary: "감사 로그 통계 조회",
+    description:
+      "오늘의 로그인 성공/실패/잠금 건수와 전체 건수를 조회합니다.",
+  })
+  @ApiAuth()
+  @ApiErrors(401, 403, 500)
+  @ApiResponseEntity(AuditLogStatsDto, HttpStatus.OK)
+  @ResponseMessage("감사 로그 통계 조회 성공")
+  async getAuthAuditLogStats() {
+    const stats = await this.authAuditLogService.getStats();
+    return plainToInstance(AuditLogStatsDto, stats);
   }
 
   @SkipSpaceCheck()

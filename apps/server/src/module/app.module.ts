@@ -28,12 +28,15 @@ import { AuthModule } from "./auth";
 import { globalModules } from "./global.module";
 import { GrantsModule } from "./grant";
 import { GroundsModule } from "./grounds";
+import { IdpAccountsModule } from "./idp-accounts";
+import { IdpDashboardModule } from "./idp-dashboard";
 import { PrismaModule } from "./prisma.module";
 import { RedisModule } from "./redis.module";
 import { RolesModule } from "./role";
 import { SubjectsModule } from "./subject";
 import { OidcClientsModule } from "./oidc-client";
 import { OidcSessionsModule } from "./oidc-session";
+import { SecurityPolicyModule } from "./security-policy";
 import { TranslationsModule } from "./translation";
 import { UsersModule } from "./users";
 
@@ -54,6 +57,9 @@ import { UsersModule } from "./users";
 		TranslationsModule,
 		OidcClientsModule,
 		OidcSessionsModule,
+		SecurityPolicyModule,
+		IdpAccountsModule,
+		IdpDashboardModule,
 		// Resource Modules는 필요할 때 추가합니다.
 		// 가이드: .claude/agents/be-controller-builder.md
 		RouterModule.register([
@@ -106,6 +112,18 @@ import { UsersModule } from "./users";
 							{
 								path: "oidc-sessions",
 								module: OidcSessionsModule,
+							},
+							{
+								path: "idp/security-policy",
+								module: SecurityPolicyModule,
+							},
+							{
+								path: "idp/accounts",
+								module: IdpAccountsModule,
+							},
+							{
+								path: "idp/dashboard",
+								module: IdpDashboardModule,
 							},
 							// 새로운 Resource 라우트는 여기에 추가
 						],

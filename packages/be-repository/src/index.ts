@@ -11,6 +11,7 @@ export { GroundsRepository } from "./grounds.repository";
 export { OidcClientsRepository } from "./oidc-clients.repository";
 export { OidcModelsRepository } from "./oidc-models.repository";
 export { RolesRepository } from "./roles.repository";
+export { SecurityPoliciesRepository } from "./security-policies.repository";
 export { SpacesRepository } from "./spaces.repository";
 export { SubjectsRepository } from "./subjects.repository";
 export { TranslationsRepository } from "./translations.repository";

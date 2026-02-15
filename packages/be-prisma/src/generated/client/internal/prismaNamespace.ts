@@ -384,6 +384,7 @@ type FieldRefInputType<Model, FieldType> = Model extends never ? never : FieldRe
 
 
 export const ModelName = {
+  SecurityPolicy: 'SecurityPolicy',
   AuthAuditLog: 'AuthAuditLog',
   PasswordHistory: 'PasswordHistory',
   Category: 'Category',
@@ -438,10 +439,84 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "authAuditLog" | "passwordHistory" | "category" | "group" | "tenant" | "assignment" | "post" | "content" | "file" | "fileClassification" | "fileAssociation" | "subject" | "action" | "ability" | "grant" | "oidcClient" | "oidcModel" | "role" | "roleAssociation" | "roleClassification" | "safeWallet" | "safeTransaction" | "safeConfirmation" | "space" | "spaceClassification" | "spaceAssociation" | "ground" | "timeline" | "session" | "program" | "routine" | "activity" | "task" | "exercise" | "translation" | "user" | "userClassification" | "userAssociation" | "profile"
+    modelProps: "securityPolicy" | "authAuditLog" | "passwordHistory" | "category" | "group" | "tenant" | "assignment" | "post" | "content" | "file" | "fileClassification" | "fileAssociation" | "subject" | "action" | "ability" | "grant" | "oidcClient" | "oidcModel" | "role" | "roleAssociation" | "roleClassification" | "safeWallet" | "safeTransaction" | "safeConfirmation" | "space" | "spaceClassification" | "spaceAssociation" | "ground" | "timeline" | "session" | "program" | "routine" | "activity" | "task" | "exercise" | "translation" | "user" | "userClassification" | "userAssociation" | "profile"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
+    SecurityPolicy: {
+      payload: Prisma.$SecurityPolicyPayload<ExtArgs>
+      fields: Prisma.SecurityPolicyFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.SecurityPolicyFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SecurityPolicyPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.SecurityPolicyFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SecurityPolicyPayload>
+        }
+        findFirst: {
+          args: Prisma.SecurityPolicyFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SecurityPolicyPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.SecurityPolicyFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SecurityPolicyPayload>
+        }
+        findMany: {
+          args: Prisma.SecurityPolicyFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SecurityPolicyPayload>[]
+        }
+        create: {
+          args: Prisma.SecurityPolicyCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SecurityPolicyPayload>
+        }
+        createMany: {
+          args: Prisma.SecurityPolicyCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.SecurityPolicyCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SecurityPolicyPayload>[]
+        }
+        delete: {
+          args: Prisma.SecurityPolicyDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SecurityPolicyPayload>
+        }
+        update: {
+          args: Prisma.SecurityPolicyUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SecurityPolicyPayload>
+        }
+        deleteMany: {
+          args: Prisma.SecurityPolicyDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.SecurityPolicyUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.SecurityPolicyUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SecurityPolicyPayload>[]
+        }
+        upsert: {
+          args: Prisma.SecurityPolicyUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SecurityPolicyPayload>
+        }
+        aggregate: {
+          args: Prisma.SecurityPolicyAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateSecurityPolicy>
+        }
+        groupBy: {
+          args: Prisma.SecurityPolicyGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.SecurityPolicyGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.SecurityPolicyCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.SecurityPolicyCountAggregateOutputType> | number
+        }
+      }
+    }
     AuthAuditLog: {
       payload: Prisma.$AuthAuditLogPayload<ExtArgs>
       fields: Prisma.AuthAuditLogFieldRefs
@@ -3367,6 +3442,29 @@ export const TransactionIsolationLevel = runtime.makeStrictEnum({
 export type TransactionIsolationLevel = (typeof TransactionIsolationLevel)[keyof typeof TransactionIsolationLevel]
 
 
+export const SecurityPolicyScalarFieldEnum = {
+  id: 'id',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  key: 'key',
+  passwordMinLength: 'passwordMinLength',
+  passwordRequireUppercase: 'passwordRequireUppercase',
+  passwordRequireLowercase: 'passwordRequireLowercase',
+  passwordRequireNumber: 'passwordRequireNumber',
+  passwordRequireSpecial: 'passwordRequireSpecial',
+  passwordExpirationDays: 'passwordExpirationDays',
+  passwordReuseLimit: 'passwordReuseLimit',
+  temporaryLockThreshold: 'temporaryLockThreshold',
+  temporaryLockDurationMin: 'temporaryLockDurationMin',
+  permanentLockThreshold: 'permanentLockThreshold',
+  accessTokenTtlSec: 'accessTokenTtlSec',
+  refreshTokenTtlSec: 'refreshTokenTtlSec',
+  sessionTtlSec: 'sessionTtlSec'
+} as const
+
+export type SecurityPolicyScalarFieldEnum = (typeof SecurityPolicyScalarFieldEnum)[keyof typeof SecurityPolicyScalarFieldEnum]
+
+
 export const AuthAuditLogScalarFieldEnum = {
   id: 'id',
   createdAt: 'createdAt',
@@ -4025,6 +4123,27 @@ export type ListDateTimeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaM
 
 
 /**
+ * Reference to a field of type 'Int'
+ */
+export type IntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int'>
+    
+
+
+/**
+ * Reference to a field of type 'Int[]'
+ */
+export type ListIntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int[]'>
+    
+
+
+/**
+ * Reference to a field of type 'Boolean'
+ */
+export type BooleanFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Boolean'>
+    
+
+
+/**
  * Reference to a field of type 'AuthAuditResult'
  */
 export type EnumAuthAuditResultFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'AuthAuditResult'>
@@ -4077,27 +4196,6 @@ export type EnumTextTypesFieldRefInput<$PrismaModel> = FieldRefInputType<$Prisma
  * Reference to a field of type 'TextTypes[]'
  */
 export type ListEnumTextTypesFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'TextTypes[]'>
-    
-
-
-/**
- * Reference to a field of type 'Int'
- */
-export type IntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int'>
-    
-
-
-/**
- * Reference to a field of type 'Int[]'
- */
-export type ListIntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int[]'>
-    
-
-
-/**
- * Reference to a field of type 'Boolean'
- */
-export type BooleanFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Boolean'>
     
 
 
@@ -4279,6 +4377,7 @@ export type PrismaClientOptions = ({
   comments?: runtime.SqlCommenterPlugin[]
 }
 export type GlobalOmitConfig = {
+  securityPolicy?: Prisma.SecurityPolicyOmit
   authAuditLog?: Prisma.AuthAuditLogOmit
   passwordHistory?: Prisma.PasswordHistoryOmit
   category?: Prisma.CategoryOmit

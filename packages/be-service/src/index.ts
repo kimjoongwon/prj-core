@@ -39,4 +39,14 @@ export { UsersService } from "./users.service";
 export { MaskingService } from "./masking.service";
 export { MASKING_PRESETS, type MaskingPreset } from "@cocrepo/constant";
 export { OidcClientsService } from "./oidc-clients.service";
+export { SecurityPolicyService } from "./security-policy.service";
 export { OidcSessionsService } from "./oidc-sessions.service";
+export {
+	type DashboardStats,
+	type LoginTrendItem,
+	IdpDashboardService,
+} from "./idp-dashboard.service";
+export {
+	type IdpAccountInfo,
+	IdpAccountService,
+} from "./idp-account.service";

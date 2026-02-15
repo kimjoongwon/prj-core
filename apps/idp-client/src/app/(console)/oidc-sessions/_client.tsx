@@ -2,12 +2,16 @@
 
 import {
 	useGetOidcSessions,
+	useGetOidcSessionStats,
 	useRevokeOidcSession,
 	useRevokeOidcSessionsByGrant,
+	useRevokeAllOidcSessions,
 	type OidcSessionDto,
 } from "@cocrepo/api";
+import { MODEL_TYPE_OPTIONS } from "@cocrepo/constant";
 import type { InputConfig, MetaDataGridColumnConfig } from "@cocrepo/type";
 import {
+	ConfirmModal,
 	DateTimeCell,
 	ExpiryCell,
 	MetaDataGrid,
@@ -17,36 +21,13 @@ import {
 	SectionSurface,
 	useMetaDataGridQueryStates,
 } from "@cocrepo/ui";
-import {
-	Button,
-	Modal,
-	ModalBody,
-	ModalContent,
-	ModalFooter,
-	ModalHeader,
-	useDisclosure,
-} from "@heroui/react";
-import { Ban } from "lucide-react";
+import { Button, Card, CardBody, useDisclosure } from "@heroui/react";
+import { Activity, Trash2 } from "lucide-react";
 import { observer, useLocalObservable } from "mobx-react-lite";
 import { useQueryClient } from "@tanstack/react-query";
 
 /**
- * 모델 타입 필터 옵션
- */
-const MODEL_TYPE_OPTIONS = [
-	{ value: "", label: "전체" },
-	{ value: "AccessToken", label: "Access Token" },
-	{ value: "RefreshToken", label: "Refresh Token" },
-	{ value: "AuthorizationCode", label: "Auth Code" },
-	{ value: "Session", label: "Session" },
-	{ value: "Grant", label: "Grant" },
-	{ value: "ClientCredentials", label: "Client Credentials" },
-	{ value: "DeviceCode", label: "Device Code" },
-	{ value: "Interaction", label: "Interaction" },
-];
-
-/**
- * 좌측 입력 정의 (모델 타입 필터)
+ * 좌측 입력 정의 (모델 타입 필터 + accountId 검색)
  */
 const leftInputs: InputConfig[] = [
 	{
@@ -54,7 +35,18 @@ const leftInputs: InputConfig[] = [
 		id: "modelType",
 		placeholder: "모델 타입",
 		props: {
-			options: MODEL_TYPE_OPTIONS,
+			options: MODEL_TYPE_OPTIONS as unknown as Array<{
+				value: string;
+				label: string;
+			}>,
+		},
+	},
+	{
+		type: "search",
+		id: "accountId",
+		placeholder: "Account ID 검색...",
+		props: {
+			debounceMs: 300,
 		},
 	},
 ];
@@ -64,7 +56,8 @@ const leftInputs: InputConfig[] = [
  */
 function OidcSessionsPageClient() {
 	const queryClient = useQueryClient();
-	const { isOpen, onOpen, onOpenChange } = useDisclosure();
+	const revokeModal = useDisclosure();
+	const revokeAllModal = useDisclosure();
 
 	const state = useLocalObservable(() => ({
 		grantIdToRevoke: null as string | null,
@@ -77,12 +70,20 @@ function OidcSessionsPageClient() {
 		take: queryStates.take,
 		skip: queryStates.skip,
 		modelType: queryStates.modelType || undefined,
+		accountId: queryStates.accountId || undefined,
 	});
+
+	const { data: statsResponse } = useGetOidcSessionStats();
 
 	const { mutate: revokeSession } = useRevokeOidcSession({
 		mutation: {
 			onSuccess: () => {
-				queryClient.invalidateQueries({ queryKey: ["getOidcSessions"] });
+				queryClient.invalidateQueries({
+					queryKey: ["getOidcSessions"],
+				});
+				queryClient.invalidateQueries({
+					queryKey: ["getOidcSessionStats"],
+				});
 			},
 		},
 	});
@@ -94,7 +95,25 @@ function OidcSessionsPageClient() {
 					queryClient.invalidateQueries({
 						queryKey: ["getOidcSessions"],
 					});
-					onOpenChange();
+					queryClient.invalidateQueries({
+						queryKey: ["getOidcSessionStats"],
+					});
+					revokeModal.onClose();
+				},
+			},
+		});
+
+	const { mutate: revokeAll, isPending: isRevokingAll } =
+		useRevokeAllOidcSessions({
+			mutation: {
+				onSuccess: () => {
+					queryClient.invalidateQueries({
+						queryKey: ["getOidcSessions"],
+					});
+					queryClient.invalidateQueries({
+						queryKey: ["getOidcSessionStats"],
+					});
+					revokeAllModal.onClose();
 				},
 			},
 		});
@@ -103,19 +122,26 @@ function OidcSessionsPageClient() {
 	const meta = response?.meta;
 	const totalCount = meta?.totalCount ?? 0;
 
+	const stats = statsResponse?.data;
+	const byModelType = (stats?.byModelType ?? {}) as Record<string, number>;
+
 	const onClickRevokeSession = (key: string) => {
 		revokeSession({ key });
 	};
 
 	const onClickGrantId = (grantId: string) => {
 		state.grantIdToRevoke = grantId;
-		onOpen();
+		revokeModal.onOpen();
 	};
 
 	const onClickConfirmRevokeByGrant = () => {
 		if (state.grantIdToRevoke) {
 			revokeByGrant({ grantId: state.grantIdToRevoke });
 		}
+	};
+
+	const onClickConfirmRevokeAll = () => {
+		revokeAll();
 	};
 
 	const columns: MetaDataGridColumnConfig<OidcSessionDto>[] = [
@@ -142,12 +168,28 @@ function OidcSessionsPageClient() {
 			),
 		},
 		{
+			field: "accountId",
+			label: "Account ID",
+			size: 140,
+			cell: ({ getValue }) => {
+				const accountId = getValue() as string | null;
+				if (!accountId)
+					return <span className="text-default-400">-</span>;
+				return (
+					<span className="font-mono text-sm" title={accountId}>
+						{accountId.slice(0, 8)}...
+					</span>
+				);
+			},
+		},
+		{
 			field: "grantId",
 			label: "Grant ID",
 			size: 140,
 			cell: ({ getValue }) => {
 				const grantId = getValue() as string | null;
-				if (!grantId) return <span className="text-default-400">-</span>;
+				if (!grantId)
+					return <span className="text-default-400">-</span>;
 				return (
 					<Button
 						size="sm"
@@ -193,7 +235,51 @@ function OidcSessionsPageClient() {
 		<PageSurface
 			title="OIDC 세션/토큰"
 			description="OIDC 세션 및 토큰을 조회하고 관리합니다."
+			actions={
+				<Button
+					color="danger"
+					variant="flat"
+					startContent={<Trash2 className="h-4 w-4" />}
+					onPress={revokeAllModal.onOpen}
+					isDisabled={totalCount === 0}
+				>
+					전체 폐기
+				</Button>
+			}
 		>
+			{/* 모델 타입별 통계 카드 */}
+			{stats && (
+				<div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
+					<Card className="bg-content1">
+						<CardBody className="flex flex-row items-center gap-3 p-4">
+							<div className="rounded-lg bg-primary p-2">
+								<Activity className="h-5 w-5 text-white" />
+							</div>
+							<div>
+								<p className="text-sm text-default-500">전체</p>
+								<p className="text-2xl font-bold">
+									{stats.totalCount ?? 0}
+								</p>
+							</div>
+						</CardBody>
+					</Card>
+					{Object.entries(byModelType).map(([type, count]) => (
+						<Card key={type} className="bg-content1">
+							<CardBody className="flex flex-row items-center gap-3 p-4">
+								<div>
+									<p className="text-sm text-default-500">
+										{type}
+									</p>
+									<p className="text-2xl font-bold">
+										{count}
+									</p>
+								</div>
+							</CardBody>
+						</Card>
+					))}
+				</div>
+			)}
+
 			<SectionSurface>
 				<MetaDataGrid
 					config={{
@@ -211,39 +297,47 @@ function OidcSessionsPageClient() {
 			</SectionSurface>
 
 			{/* Grant 일괄 폐기 확인 모달 */}
-			<Modal isOpen={isOpen} onOpenChange={onOpenChange}>
-				<ModalContent>
-					{(onClose) => (
-						<>
-							<ModalHeader>Grant 일괄 폐기</ModalHeader>
-							<ModalBody>
-								<p>
-									이 Grant에 연결된 모든 세션 및 토큰을 일괄
-									폐기하시겠습니까?
-								</p>
-								{state.grantIdToRevoke && (
-									<p className="mt-2 rounded-lg bg-default-100 p-2 font-mono text-sm">
-										Grant ID: {state.grantIdToRevoke}
-									</p>
-								)}
-							</ModalBody>
-							<ModalFooter>
-								<Button variant="flat" onPress={onClose}>
-									취소
-								</Button>
-								<Button
-									color="danger"
-									startContent={<Ban className="h-4 w-4" />}
-									onPress={onClickConfirmRevokeByGrant}
-									isLoading={isRevokingByGrant}
-								>
-									일괄 폐기
-								</Button>
-							</ModalFooter>
-						</>
-					)}
-				</ModalContent>
-			</Modal>
+			<ConfirmModal
+				isOpen={revokeModal.isOpen}
+				onClose={revokeModal.onClose}
+				onConfirm={onClickConfirmRevokeByGrant}
+				title="Grant 일괄 폐기"
+				message={
+					<>
+						<p>
+							이 Grant에 연결된 모든 세션 및 토큰을 일괄
+							폐기하시겠습니까?
+						</p>
+						{state.grantIdToRevoke && (
+							<p className="mt-2 rounded-lg bg-default-100 p-2 font-mono text-sm">
+								Grant ID: {state.grantIdToRevoke}
+							</p>
+						)}
+					</>
+				}
+				confirmText="일괄 폐기"
+				confirmColor="danger"
+				iconType="warning"
+				loading={isRevokingByGrant}
+			/>
+
+			{/* 전체 폐기 확인 모달 */}
+			<ConfirmModal
+				isOpen={revokeAllModal.isOpen}
+				onClose={revokeAllModal.onClose}
+				onConfirm={onClickConfirmRevokeAll}
+				title="전체 세션/토큰 폐기"
+				message={
+					<p>
+						모든 OIDC 세션 및 토큰({stats?.totalCount ?? 0}건)을
+						일괄 폐기하시겠습니까? 이 작업은 되돌릴 수 없습니다.
+					</p>
+				}
+				confirmText="전체 폐기"
+				confirmColor="danger"
+				iconType="warning"
+				loading={isRevokingAll}
+			/>
 		</PageSurface>
 	);
 }

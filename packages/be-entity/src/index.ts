@@ -24,6 +24,7 @@ export * from "./program.entity";
 // Response Entity
 export * from "./response.entity";
 export * from "./role.entity";
+export * from "./security-policy.entity";
 export * from "./role-association.entity";
 export * from "./role-classification.entity";
 export * from "./routine.entity";

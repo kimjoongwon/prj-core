@@ -35,6 +35,19 @@ export class PasswordResetController {
 	) {}
 
 	@ApiOperation({
+		operationId: "getPasswordPolicy",
+		summary: "비밀번호 정책 조회",
+		description:
+			"비밀번호 정책(최소 길이, 대소문자/숫자/특수문자 필수 여부)을 반환합니다. 인증 불요.",
+	})
+	@ApiResponse({ status: 200, description: "비밀번호 정책 정보" })
+	@Get("password-policy")
+	async getPasswordPolicy(@Res() res: Response) {
+		const policy = await this.passwordResetService.getPasswordPolicy();
+		return res.json(policy);
+	}
+
+	@ApiOperation({
 		operationId: "requestPasswordReset",
 		summary: "비밀번호 재설정 요청",
 		description:

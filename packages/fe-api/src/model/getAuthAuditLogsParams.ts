@@ -30,6 +30,14 @@ email?: string;
  */
 result?: AuthAuditResult;
 /**
+ * IP 주소 (부분 일치)
+ */
+ipAddress?: string;
+/**
+ * OIDC 클라이언트 ID (부분 일치)
+ */
+clientId?: string;
+/**
  * 시작일 (createdAt >= startDate)
  */
 startDate?: string;

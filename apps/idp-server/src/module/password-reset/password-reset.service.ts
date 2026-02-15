@@ -1,5 +1,4 @@
 import * as crypto from "node:crypto";
-import { validatePasswordPolicy } from "@cocrepo/be-common";
 import { EmailService, RedisService } from "@cocrepo/service";
 import { HashedPassword, PlainPassword } from "@cocrepo/vo";
 import { BadRequestException, Injectable, Logger } from "@nestjs/common";
@@ -43,6 +42,32 @@ export class PasswordResetService {
 		this.idpClientUrl =
 			this.configService.get<string>("IDP_CLIENT_URL") ||
 			"http://localhost:3008";
+	}
+
+	/**
+	 * 비밀번호 정책을 조회합니다 (DB 기반)
+	 */
+	async getPasswordPolicy(): Promise<{
+		minLength: number;
+		maxLength: number;
+		requireUppercase: boolean;
+		requireLowercase: boolean;
+		requireNumber: boolean;
+		requireSpecial: boolean;
+	}> {
+		const prisma = await this.directPrismaProvider.getClient();
+		const policy = await prisma.securityPolicy.findUnique({
+			where: { key: "default" },
+		});
+
+		return {
+			minLength: policy?.passwordMinLength ?? 8,
+			maxLength: 128,
+			requireUppercase: policy?.passwordRequireUppercase ?? true,
+			requireLowercase: policy?.passwordRequireLowercase ?? true,
+			requireNumber: policy?.passwordRequireNumber ?? true,
+			requireSpecial: policy?.passwordRequireSpecial ?? true,
+		};
 	}
 
 	/**
@@ -118,14 +143,32 @@ export class PasswordResetService {
 			throw new BadRequestException("TOKEN_EXPIRED");
 		}
 
-		// 2. 비밀번호 정책 검증
-		const policyResult = validatePasswordPolicy(newPassword);
-		if (!policyResult.isValid) {
-			const failedRules = policyResult.rules
-				.filter((r) => !r.passed)
-				.map((r) => r.label);
+		// 2. 비밀번호 정책 검증 (DB 기반)
+		const passwordPolicy = await this.getPasswordPolicy();
+		const policyErrors: string[] = [];
+
+		if (newPassword.length < passwordPolicy.minLength) {
+			policyErrors.push(`${passwordPolicy.minLength}자 이상`);
+		}
+		if (newPassword.length > passwordPolicy.maxLength) {
+			policyErrors.push(`${passwordPolicy.maxLength}자 이하`);
+		}
+		if (passwordPolicy.requireUppercase && !/[A-Z]/.test(newPassword)) {
+			policyErrors.push("영문 대문자 포함");
+		}
+		if (passwordPolicy.requireLowercase && !/[a-z]/.test(newPassword)) {
+			policyErrors.push("영문 소문자 포함");
+		}
+		if (passwordPolicy.requireNumber && !/[0-9]/.test(newPassword)) {
+			policyErrors.push("숫자 포함");
+		}
+		if (passwordPolicy.requireSpecial && !/[!@#$%^&*()_+\-=\[\]{}|;:,.<>?/~`"']/.test(newPassword)) {
+			policyErrors.push("특수문자 포함");
+		}
+
+		if (policyErrors.length > 0) {
 			throw new BadRequestException(
-				`PASSWORD_POLICY_VIOLATION: ${failedRules.join(", ")}`,
+				`PASSWORD_POLICY_VIOLATION: ${policyErrors.join(", ")}`,
 			);
 		}
 

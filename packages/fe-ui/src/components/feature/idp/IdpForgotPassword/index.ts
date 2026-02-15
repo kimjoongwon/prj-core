@@ -1,0 +1,1 @@
+export { IdpForgotPassword } from "./IdpForgotPassword";

@@ -405,14 +405,6 @@ export type AuthAuditLogOrderByRelationAggregateInput = {
   _count?: Prisma.SortOrder
 }
 
-export type StringFieldUpdateOperationsInput = {
-  set?: string
-}
-
-export type DateTimeFieldUpdateOperationsInput = {
-  set?: Date | string
-}
-
 export type EnumAuthAuditResultFieldUpdateOperationsInput = {
   set?: $Enums.AuthAuditResult
 }

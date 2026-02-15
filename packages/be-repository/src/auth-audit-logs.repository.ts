@@ -46,6 +46,13 @@ export class AuthAuditLogsRepository {
 	}
 
 	/**
+	 * 조건별 건수 조회
+	 */
+	async count(where: Prisma.AuthAuditLogWhereInput): Promise<number> {
+		return this.txHost.tx.authAuditLog.count({ where });
+	}
+
+	/**
 	 * 특정 사용자의 최근 인증 로그 조회
 	 */
 	async findByUserId(userId: string, limit: number): Promise<AuthAuditLog[]> {

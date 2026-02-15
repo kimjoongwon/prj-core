@@ -8,22 +8,14 @@ import {
 import {
 	ActiveStatusCell,
 	AuthMethodCell,
+	ConfirmModal,
 	DateTimeCell,
 	PageSurface,
 	SectionSurface,
 	SecretField,
 	VStack,
 } from "@cocrepo/ui";
-import {
-	Button,
-	Chip,
-	Modal,
-	ModalBody,
-	ModalContent,
-	ModalFooter,
-	ModalHeader,
-	useDisclosure,
-} from "@heroui/react";
+import { Button, Chip, useDisclosure } from "@heroui/react";
 import {
 	ArrowLeft,
 	Edit,
@@ -48,11 +40,9 @@ function OidcClientDetailPageClient({
 	const router = useRouter();
 	const deleteModal = useDisclosure();
 
-	// API 조회
 	const { data: response, isLoading } = useGetOidcClient(oidcClientId);
 	const client = response?.data;
 
-	// 삭제 Mutation
 	const { mutate: deleteClient, isPending: isDeleting } =
 		useDeleteOidcClient({
 			mutation: {
@@ -63,7 +53,6 @@ function OidcClientDetailPageClient({
 			},
 		});
 
-	// 활성/비활성 토글 Mutation
 	const { mutate: toggleActive, isPending: isToggling } =
 		useToggleActiveOidcClient({
 			mutation: {
@@ -245,11 +234,17 @@ function OidcClientDetailPageClient({
 								</dt>
 								<dd>
 									<div className="flex flex-wrap gap-1">
-										{client.responseTypes.map((type: string) => (
-											<Chip key={type} size="sm" variant="flat">
-												{type}
-											</Chip>
-										))}
+										{client.responseTypes.map(
+											(type: string) => (
+												<Chip
+													key={type}
+													size="sm"
+													variant="flat"
+												>
+													{type}
+												</Chip>
+											),
+										)}
 									</div>
 								</dd>
 							</div>
@@ -325,36 +320,28 @@ function OidcClientDetailPageClient({
 			</VStack>
 
 			{/* 삭제 확인 모달 */}
-			<Modal isOpen={deleteModal.isOpen} onClose={deleteModal.onClose}>
-				<ModalContent>
-					<ModalHeader>OIDC 클라이언트 삭제</ModalHeader>
-					<ModalBody>
+			<ConfirmModal
+				isOpen={deleteModal.isOpen}
+				onClose={deleteModal.onClose}
+				onConfirm={onClickDeleteConfirm}
+				title="OIDC 클라이언트 삭제"
+				message={
+					<>
 						<p>
 							<strong>{client.clientId}</strong> 클라이언트를
 							삭제하시겠습니까?
 						</p>
 						<p className="text-sm text-danger mt-2">
-							삭제된 클라이언트는 더 이상 인증에 사용할 수 없습니다.
+							삭제된 클라이언트는 더 이상 인증에 사용할 수
+							없습니다.
 						</p>
-					</ModalBody>
-					<ModalFooter>
-						<Button
-							variant="flat"
-							onPress={deleteModal.onClose}
-							isDisabled={isDeleting}
-						>
-							취소
-						</Button>
-						<Button
-							color="danger"
-							onPress={onClickDeleteConfirm}
-							isLoading={isDeleting}
-						>
-							삭제
-						</Button>
-					</ModalFooter>
-				</ModalContent>
-			</Modal>
+					</>
+				}
+				confirmText="삭제"
+				confirmColor="danger"
+				iconType="delete"
+				loading={isDeleting}
+			/>
 		</PageSurface>
 	);
 }

@@ -18,6 +18,11 @@ export { Prisma }
 export * as $Enums from './enums.js'
 export * from './enums.js';
 /**
+ * Model SecurityPolicy
+ * @displayName 보안 정책
+ */
+export type SecurityPolicy = Prisma.SecurityPolicyModel
+/**
  * Model AuthAuditLog
  * @displayName 인증 감사 로그
  */

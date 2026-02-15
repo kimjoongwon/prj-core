@@ -13,6 +13,16 @@ export interface GetAuditLogsResult {
 }
 
 /**
+ * 감사 로그 통계
+ */
+export interface AuditLogStats {
+	todaySuccessCount: number;
+	todayFailureCount: number;
+	todayLockedCount: number;
+	totalCount: number;
+}
+
+/**
  * 인증 감사 로그 서비스
  *
  * 로그인/인증 시도에 대한 감사 로그를 조회합니다.
@@ -58,5 +68,30 @@ export class AuthAuditLogService {
 		this.logger.debug(`사용자별 최근 감사 로그 조회: userId=${userId.slice(-8)}, limit=${limit}`);
 
 		return this.repository.findByUserId(userId, limit);
+	}
+
+	/**
+	 * 오늘 감사 로그 통계 조회
+	 */
+	async getStats(): Promise<AuditLogStats> {
+		this.logger.debug("감사 로그 통계 조회");
+
+		const today = new Date();
+		today.setHours(0, 0, 0, 0);
+
+		const [todaySuccessCount, todayFailureCount, todayLockedCount, totalCount] =
+			await Promise.all([
+				this.repository.count({ result: "SUCCESS", createdAt: { gte: today } }),
+				this.repository.count({ result: "FAILURE", createdAt: { gte: today } }),
+				this.repository.count({ result: "LOCKED", createdAt: { gte: today } }),
+				this.repository.count({}),
+			]);
+
+		return {
+			todaySuccessCount,
+			todayFailureCount,
+			todayLockedCount,
+			totalCount,
+		};
 	}
 }

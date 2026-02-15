@@ -79,12 +79,17 @@ test.describe("OIDC 세션 관리", () => {
 			).toBeVisible();
 		});
 
-		test("세션 데이터가 없을 때 빈 상태가 표시되어야 한다", async ({
-			page,
-		}) => {
-			// Then: 빈 상태 안내 메시지 확인
+		test("로그인 후 세션 데이터가 표시되어야 한다", async ({ page }) => {
+			// Then: 로그인으로 생성된 OIDC 세션이 존재함
+			// DataGrid 컬럼 헤더가 보이면 데이터 로드 완료
 			await expect(
-				page.getByText("등록된 OIDC 세션/토큰이 없습니다"),
+				page.getByRole("columnheader", { name: "키" }),
+			).toBeVisible();
+			await expect(
+				page.getByRole("columnheader", { name: "모델 타입" }),
+			).toBeVisible();
+			await expect(
+				page.getByRole("columnheader", { name: "Account ID" }),
 			).toBeVisible();
 		});
 	});
@@ -94,8 +99,11 @@ test.describe("OIDC 세션 관리", () => {
 			// Given: 세션 데이터가 있는 페이지
 			await setupMockedSessionsPage(page);
 
-			// Then: 각 행에 폐기 버튼이 존재
-			const revokeButtons = page.getByRole("button", { name: "폐기" });
+			// Then: 각 행에 폐기 버튼이 존재 (exact: true로 "전체 폐기" 버튼 제외)
+			const revokeButtons = page.getByRole("button", {
+				name: "폐기",
+				exact: true,
+			});
 			await expect(revokeButtons.first()).toBeVisible({ timeout: 10000 });
 			expect(await revokeButtons.count()).toBe(2);
 		});

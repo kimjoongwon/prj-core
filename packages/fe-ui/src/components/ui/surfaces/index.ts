@@ -1,3 +1,4 @@
+export * from "./AuthCard";
 export * from "./Container/Container";
 export * from "./HStack/HStack";
 export * from "./PageSurface/PageSurface";

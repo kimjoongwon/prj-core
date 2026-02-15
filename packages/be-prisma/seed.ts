@@ -20,6 +20,7 @@ import {
 	spaceGroupSeedData,
 	subjectSeedData,
 	translationSeedData,
+	securityPolicySeedData,
 	userGroundMapping,
 	userSeedData,
 } from "./seed-data";
@@ -853,6 +854,22 @@ async function createAbilities(
 	console.log(
 		`✅ Translation 시드 완료! (생성: ${translationCreatedCount}개, 스킵: ${translationSkippedCount}개)`,
 	);
+
+	// ============================================================================
+	// Security Policy 시드
+	// ============================================================================
+	const existingPolicy = await prisma.securityPolicy.findUnique({
+		where: { key: securityPolicySeedData.key },
+	});
+
+	if (!existingPolicy) {
+		await prisma.securityPolicy.create({
+			data: securityPolicySeedData,
+		});
+		console.log("✅ SecurityPolicy 기본 정책 생성 완료!");
+	} else {
+		console.log("⏭️ SecurityPolicy 기본 정책 이미 존재 (스킵)");
+	}
 }
 
 main()

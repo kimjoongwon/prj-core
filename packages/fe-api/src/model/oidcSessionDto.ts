@@ -20,6 +20,8 @@ export interface OidcSessionDto {
   grantId?: string;
   /** 세션 UID */
   uid?: string;
+  /** 계정 ID */
+  accountId?: string;
   /** @nullable */
   expiresAt: string | null;
   createdAt: string;

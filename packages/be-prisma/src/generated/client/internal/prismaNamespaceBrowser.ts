@@ -51,6 +51,7 @@ export const AnyNull = runtime.AnyNull
 
 
 export const ModelName = {
+  SecurityPolicy: 'SecurityPolicy',
   AuthAuditLog: 'AuthAuditLog',
   PasswordHistory: 'PasswordHistory',
   Category: 'Category',
@@ -106,6 +107,29 @@ export const TransactionIsolationLevel = {
 } as const
 
 export type TransactionIsolationLevel = (typeof TransactionIsolationLevel)[keyof typeof TransactionIsolationLevel]
+
+
+export const SecurityPolicyScalarFieldEnum = {
+  id: 'id',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  key: 'key',
+  passwordMinLength: 'passwordMinLength',
+  passwordRequireUppercase: 'passwordRequireUppercase',
+  passwordRequireLowercase: 'passwordRequireLowercase',
+  passwordRequireNumber: 'passwordRequireNumber',
+  passwordRequireSpecial: 'passwordRequireSpecial',
+  passwordExpirationDays: 'passwordExpirationDays',
+  passwordReuseLimit: 'passwordReuseLimit',
+  temporaryLockThreshold: 'temporaryLockThreshold',
+  temporaryLockDurationMin: 'temporaryLockDurationMin',
+  permanentLockThreshold: 'permanentLockThreshold',
+  accessTokenTtlSec: 'accessTokenTtlSec',
+  refreshTokenTtlSec: 'refreshTokenTtlSec',
+  sessionTtlSec: 'sessionTtlSec'
+} as const
+
+export type SecurityPolicyScalarFieldEnum = (typeof SecurityPolicyScalarFieldEnum)[keyof typeof SecurityPolicyScalarFieldEnum]
 
 
 export const AuthAuditLogScalarFieldEnum = {

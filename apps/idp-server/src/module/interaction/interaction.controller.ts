@@ -169,6 +169,8 @@ export class InteractionController {
 					error: result.error,
 					remainingAttempts: result.remainingAttempts,
 					lockedUntil: result.lockedUntil?.toISOString(),
+					temporaryLockThreshold: result.temporaryLockThreshold,
+					temporaryLockDurationMin: result.temporaryLockDurationMin,
 				});
 			}
 

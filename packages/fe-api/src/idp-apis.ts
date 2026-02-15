@@ -32,7 +32,9 @@ import type {
 } from '@tanstack/react-query';
 
 import type {
-  OidcLoginPayloadDto
+  ExecutePasswordResetBody,
+  OidcLoginPayloadDto,
+  RequestPasswordResetBody
 } from './idp-model';
 
 import { customIdpInstance } from './libs/customIdpAxios';
@@ -42,8 +44,8 @@ type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
 
 
 /**
- * OIDC 인증 흐름의 로그인 또는 동의 화면을 표시합니다.
- * @summary 인증 상호작용 화면 조회
+ * OIDC 인증 흐름의 로그인 또는 동의에 필요한 데이터를 JSON으로 반환합니다.
+ * @summary 인증 상호작용 데이터 조회
  */
 export const getInteraction = (
     uid: string,
@@ -52,7 +54,7 @@ export const getInteraction = (
       
       
       return customIdpInstance<void>(
-      {url: `/interaction/${uid}`, method: 'GET', signal
+      {url: `/api/interaction/${uid}`, method: 'GET', signal
     },
       options);
     }
@@ -62,13 +64,13 @@ export const getInteraction = (
 
 export const getGetInteractionQueryKey = (uid?: string,) => {
     return [
-    `/interaction/${uid}`
+    `/api/interaction/${uid}`
     ] as const;
     }
 
 export const getGetInteractionInfiniteQueryKey = (uid?: string,) => {
     return [
-    'infinite', `/interaction/${uid}`
+    'infinite', `/api/interaction/${uid}`
     ] as const;
     }
 
@@ -120,7 +122,7 @@ export function useGetInteraction<TData = Awaited<ReturnType<typeof getInteracti
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
- * @summary 인증 상호작용 화면 조회
+ * @summary 인증 상호작용 데이터 조회
  */
 
 export function useGetInteraction<TData = Awaited<ReturnType<typeof getInteraction>>, TError = ErrorType<unknown>>(
@@ -138,7 +140,7 @@ export function useGetInteraction<TData = Awaited<ReturnType<typeof getInteracti
 }
 
 /**
- * @summary 인증 상호작용 화면 조회
+ * @summary 인증 상호작용 데이터 조회
  */
 export const prefetchGetInteractionQuery = async <TData = Awaited<ReturnType<typeof getInteraction>>, TError = ErrorType<unknown>>(
  queryClient: QueryClient, uid: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getInteraction>>, TError, TData>>, request?: SecondParameter<typeof customIdpInstance>}
@@ -189,7 +191,7 @@ export function useGetInteractionSuspense<TData = Awaited<ReturnType<typeof getI
  , queryClient?: QueryClient
   ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
- * @summary 인증 상호작용 화면 조회
+ * @summary 인증 상호작용 데이터 조회
  */
 
 export function useGetInteractionSuspense<TData = Awaited<ReturnType<typeof getInteraction>>, TError = ErrorType<unknown>>(
@@ -244,7 +246,7 @@ export function useGetInteractionSuspenseInfinite<TData = InfiniteData<Awaited<R
  , queryClient?: QueryClient
   ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
- * @summary 인증 상호작용 화면 조회
+ * @summary 인증 상호작용 데이터 조회
  */
 
 export function useGetInteractionSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getInteraction>>>, TError = ErrorType<unknown>>(
@@ -262,7 +264,7 @@ export function useGetInteractionSuspenseInfinite<TData = InfiniteData<Awaited<R
 }
 
 /**
- * @summary 인증 상호작용 화면 조회
+ * @summary 인증 상호작용 데이터 조회
  */
 export const prefetchGetInteractionInfiniteQuery = async <TData = Awaited<ReturnType<typeof getInteraction>>, TError = ErrorType<unknown>>(
  queryClient: QueryClient, uid: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getInteraction>>, TError, TData>>, request?: SecondParameter<typeof customIdpInstance>}
@@ -280,7 +282,7 @@ export const prefetchGetInteractionInfiniteQuery = async <TData = Awaited<Return
 
 
 /**
- * 사용자 인증을 처리하고 OIDC 흐름을 계속합니다.
+ * 사용자 인증을 처리하고 리다이렉트 URL을 반환합니다.
  * @summary 로그인 처리
  */
 export const submitLogin = (
@@ -291,7 +293,7 @@ export const submitLogin = (
       
       
       return customIdpInstance<void>(
-      {url: `/interaction/${uid}/login`, method: 'POST',
+      {url: `/api/interaction/${uid}/login`, method: 'POST',
       headers: {'Content-Type': 'application/json', },
       data: oidcLoginPayloadDto, signal
     },
@@ -347,7 +349,7 @@ export const useSubmitLogin = <TError = ErrorType<void>,
     }
     
 /**
- * 사용자 동의를 처리하고 Authorization Code를 발급합니다.
+ * 사용자 동의를 처리하고 리다이렉트 URL을 반환합니다.
  * @summary 동의 처리
  */
 export const confirmConsent = (
@@ -356,15 +358,15 @@ export const confirmConsent = (
 ) => {
       
       
-      return customIdpInstance<unknown>(
-      {url: `/interaction/${uid}/confirm`, method: 'POST', signal
+      return customIdpInstance<void>(
+      {url: `/api/interaction/${uid}/confirm`, method: 'POST', signal
     },
       options);
     }
   
 
 
-export const getConfirmConsentMutationOptions = <TError = ErrorType<void>,
+export const getConfirmConsentMutationOptions = <TError = ErrorType<unknown>,
     TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof confirmConsent>>, TError,{uid: string}, TContext>, request?: SecondParameter<typeof customIdpInstance>}
 ): UseMutationOptions<Awaited<ReturnType<typeof confirmConsent>>, TError,{uid: string}, TContext> => {
 
@@ -391,12 +393,12 @@ const {mutation: mutationOptions, request: requestOptions} = options ?
 
     export type ConfirmConsentMutationResult = NonNullable<Awaited<ReturnType<typeof confirmConsent>>>
     
-    export type ConfirmConsentMutationError = ErrorType<void>
+    export type ConfirmConsentMutationError = ErrorType<unknown>
 
     /**
  * @summary 동의 처리
  */
-export const useConfirmConsent = <TError = ErrorType<void>,
+export const useConfirmConsent = <TError = ErrorType<unknown>,
     TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof confirmConsent>>, TError,{uid: string}, TContext>, request?: SecondParameter<typeof customIdpInstance>}
  , queryClient?: QueryClient): UseMutationResult<
         Awaited<ReturnType<typeof confirmConsent>>,
@@ -411,7 +413,7 @@ export const useConfirmConsent = <TError = ErrorType<void>,
     }
     
 /**
- * 사용자가 인증을 거부하고 access_denied 에러를 반환합니다.
+ * 사용자가 인증을 거부하고 리다이렉트 URL을 반환합니다.
  * @summary 인증 취소
  */
 export const abortInteraction = (
@@ -420,15 +422,15 @@ export const abortInteraction = (
 ) => {
       
       
-      return customIdpInstance<unknown>(
-      {url: `/interaction/${uid}/abort`, method: 'POST', signal
+      return customIdpInstance<void>(
+      {url: `/api/interaction/${uid}/abort`, method: 'POST', signal
     },
       options);
     }
   
 
 
-export const getAbortInteractionMutationOptions = <TError = ErrorType<void>,
+export const getAbortInteractionMutationOptions = <TError = ErrorType<unknown>,
     TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof abortInteraction>>, TError,{uid: string}, TContext>, request?: SecondParameter<typeof customIdpInstance>}
 ): UseMutationOptions<Awaited<ReturnType<typeof abortInteraction>>, TError,{uid: string}, TContext> => {
 
@@ -455,12 +457,12 @@ const {mutation: mutationOptions, request: requestOptions} = options ?
 
     export type AbortInteractionMutationResult = NonNullable<Awaited<ReturnType<typeof abortInteraction>>>
     
-    export type AbortInteractionMutationError = ErrorType<void>
+    export type AbortInteractionMutationError = ErrorType<unknown>
 
     /**
  * @summary 인증 취소
  */
-export const useAbortInteraction = <TError = ErrorType<void>,
+export const useAbortInteraction = <TError = ErrorType<unknown>,
     TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof abortInteraction>>, TError,{uid: string}, TContext>, request?: SecondParameter<typeof customIdpInstance>}
  , queryClient?: QueryClient): UseMutationResult<
         Awaited<ReturnType<typeof abortInteraction>>,
@@ -470,6 +472,377 @@ export const useAbortInteraction = <TError = ErrorType<void>,
       > => {
 
       const mutationOptions = getAbortInteractionMutationOptions(options);
+
+      return useMutation(mutationOptions, queryClient);
+    }
+    
+/**
+ * 이메일로 비밀번호 재설정 링크를 발송합니다. 보안을 위해 이메일 존재 여부와 관계없이 동일한 응답을 반환합니다.
+ * @summary 비밀번호 재설정 요청
+ */
+export const requestPasswordReset = (
+    requestPasswordResetBody: BodyType<RequestPasswordResetBody>,
+ options?: SecondParameter<typeof customIdpInstance>,signal?: AbortSignal
+) => {
+      
+      
+      return customIdpInstance<void>(
+      {url: `/api/forgot-password`, method: 'POST',
+      headers: {'Content-Type': 'application/json', },
+      data: requestPasswordResetBody, signal
+    },
+      options);
+    }
+  
+
+
+export const getRequestPasswordResetMutationOptions = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof requestPasswordReset>>, TError,{data: BodyType<RequestPasswordResetBody>}, TContext>, request?: SecondParameter<typeof customIdpInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof requestPasswordReset>>, TError,{data: BodyType<RequestPasswordResetBody>}, TContext> => {
+
+const mutationKey = ['requestPasswordReset'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof requestPasswordReset>>, {data: BodyType<RequestPasswordResetBody>}> = (props) => {
+          const {data} = props ?? {};
+
+          return  requestPasswordReset(data,requestOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type RequestPasswordResetMutationResult = NonNullable<Awaited<ReturnType<typeof requestPasswordReset>>>
+    export type RequestPasswordResetMutationBody = BodyType<RequestPasswordResetBody>
+    export type RequestPasswordResetMutationError = ErrorType<unknown>
+
+    /**
+ * @summary 비밀번호 재설정 요청
+ */
+export const useRequestPasswordReset = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof requestPasswordReset>>, TError,{data: BodyType<RequestPasswordResetBody>}, TContext>, request?: SecondParameter<typeof customIdpInstance>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof requestPasswordReset>>,
+        TError,
+        {data: BodyType<RequestPasswordResetBody>},
+        TContext
+      > => {
+
+      const mutationOptions = getRequestPasswordResetMutationOptions(options);
+
+      return useMutation(mutationOptions, queryClient);
+    }
+    
+/**
+ * 비밀번호 재설정 토큰의 유효성을 확인합니다.
+ * @summary 재설정 토큰 검증
+ */
+export const validateResetToken = (
+    token: string,
+ options?: SecondParameter<typeof customIdpInstance>,signal?: AbortSignal
+) => {
+      
+      
+      return customIdpInstance<void>(
+      {url: `/api/reset-password/${token}`, method: 'GET', signal
+    },
+      options);
+    }
+  
+
+
+
+export const getValidateResetTokenQueryKey = (token?: string,) => {
+    return [
+    `/api/reset-password/${token}`
+    ] as const;
+    }
+
+export const getValidateResetTokenInfiniteQueryKey = (token?: string,) => {
+    return [
+    'infinite', `/api/reset-password/${token}`
+    ] as const;
+    }
+
+    
+export const getValidateResetTokenQueryOptions = <TData = Awaited<ReturnType<typeof validateResetToken>>, TError = ErrorType<unknown>>(token: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof validateResetToken>>, TError, TData>>, request?: SecondParameter<typeof customIdpInstance>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getValidateResetTokenQueryKey(token);
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof validateResetToken>>> = ({ signal }) => validateResetToken(token, requestOptions, signal);
+
+      
+
+      
+
+   return  { queryKey, queryFn, enabled: !!(token), ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof validateResetToken>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type ValidateResetTokenQueryResult = NonNullable<Awaited<ReturnType<typeof validateResetToken>>>
+export type ValidateResetTokenQueryError = ErrorType<unknown>
+
+
+export function useValidateResetToken<TData = Awaited<ReturnType<typeof validateResetToken>>, TError = ErrorType<unknown>>(
+ token: string, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof validateResetToken>>, TError, TData>> & Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof validateResetToken>>,
+          TError,
+          Awaited<ReturnType<typeof validateResetToken>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customIdpInstance>}
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useValidateResetToken<TData = Awaited<ReturnType<typeof validateResetToken>>, TError = ErrorType<unknown>>(
+ token: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof validateResetToken>>, TError, TData>> & Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof validateResetToken>>,
+          TError,
+          Awaited<ReturnType<typeof validateResetToken>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customIdpInstance>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useValidateResetToken<TData = Awaited<ReturnType<typeof validateResetToken>>, TError = ErrorType<unknown>>(
+ token: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof validateResetToken>>, TError, TData>>, request?: SecondParameter<typeof customIdpInstance>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+/**
+ * @summary 재설정 토큰 검증
+ */
+
+export function useValidateResetToken<TData = Awaited<ReturnType<typeof validateResetToken>>, TError = ErrorType<unknown>>(
+ token: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof validateResetToken>>, TError, TData>>, request?: SecondParameter<typeof customIdpInstance>}
+ , queryClient?: QueryClient 
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = getValidateResetTokenQueryOptions(token,options)
+
+  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+/**
+ * @summary 재설정 토큰 검증
+ */
+export const prefetchValidateResetTokenQuery = async <TData = Awaited<ReturnType<typeof validateResetToken>>, TError = ErrorType<unknown>>(
+ queryClient: QueryClient, token: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof validateResetToken>>, TError, TData>>, request?: SecondParameter<typeof customIdpInstance>}
+
+  ): Promise<QueryClient> => {
+
+  const queryOptions = getValidateResetTokenQueryOptions(token,options)
+
+  await queryClient.prefetchQuery(queryOptions);
+
+  return queryClient;
+}
+
+
+
+export const getValidateResetTokenSuspenseQueryOptions = <TData = Awaited<ReturnType<typeof validateResetToken>>, TError = ErrorType<unknown>>(token: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof validateResetToken>>, TError, TData>>, request?: SecondParameter<typeof customIdpInstance>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getValidateResetTokenQueryKey(token);
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof validateResetToken>>> = ({ signal }) => validateResetToken(token, requestOptions, signal);
+
+      
+
+      
+
+   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseQueryOptions<Awaited<ReturnType<typeof validateResetToken>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type ValidateResetTokenSuspenseQueryResult = NonNullable<Awaited<ReturnType<typeof validateResetToken>>>
+export type ValidateResetTokenSuspenseQueryError = ErrorType<unknown>
+
+
+export function useValidateResetTokenSuspense<TData = Awaited<ReturnType<typeof validateResetToken>>, TError = ErrorType<unknown>>(
+ token: string, options: { query:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof validateResetToken>>, TError, TData>>, request?: SecondParameter<typeof customIdpInstance>}
+ , queryClient?: QueryClient
+  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useValidateResetTokenSuspense<TData = Awaited<ReturnType<typeof validateResetToken>>, TError = ErrorType<unknown>>(
+ token: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof validateResetToken>>, TError, TData>>, request?: SecondParameter<typeof customIdpInstance>}
+ , queryClient?: QueryClient
+  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useValidateResetTokenSuspense<TData = Awaited<ReturnType<typeof validateResetToken>>, TError = ErrorType<unknown>>(
+ token: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof validateResetToken>>, TError, TData>>, request?: SecondParameter<typeof customIdpInstance>}
+ , queryClient?: QueryClient
+  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+/**
+ * @summary 재설정 토큰 검증
+ */
+
+export function useValidateResetTokenSuspense<TData = Awaited<ReturnType<typeof validateResetToken>>, TError = ErrorType<unknown>>(
+ token: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof validateResetToken>>, TError, TData>>, request?: SecondParameter<typeof customIdpInstance>}
+ , queryClient?: QueryClient 
+ ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = getValidateResetTokenSuspenseQueryOptions(token,options)
+
+  const query = useSuspenseQuery(queryOptions, queryClient) as  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+
+
+
+export const getValidateResetTokenSuspenseInfiniteQueryOptions = <TData = InfiniteData<Awaited<ReturnType<typeof validateResetToken>>>, TError = ErrorType<unknown>>(token: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof validateResetToken>>, TError, TData>>, request?: SecondParameter<typeof customIdpInstance>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getValidateResetTokenInfiniteQueryKey(token);
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof validateResetToken>>> = ({ signal }) => validateResetToken(token, requestOptions, signal);
+
+      
+
+      
+
+   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof validateResetToken>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type ValidateResetTokenSuspenseInfiniteQueryResult = NonNullable<Awaited<ReturnType<typeof validateResetToken>>>
+export type ValidateResetTokenSuspenseInfiniteQueryError = ErrorType<unknown>
+
+
+export function useValidateResetTokenSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof validateResetToken>>>, TError = ErrorType<unknown>>(
+ token: string, options: { query:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof validateResetToken>>, TError, TData>>, request?: SecondParameter<typeof customIdpInstance>}
+ , queryClient?: QueryClient
+  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useValidateResetTokenSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof validateResetToken>>>, TError = ErrorType<unknown>>(
+ token: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof validateResetToken>>, TError, TData>>, request?: SecondParameter<typeof customIdpInstance>}
+ , queryClient?: QueryClient
+  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useValidateResetTokenSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof validateResetToken>>>, TError = ErrorType<unknown>>(
+ token: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof validateResetToken>>, TError, TData>>, request?: SecondParameter<typeof customIdpInstance>}
+ , queryClient?: QueryClient
+  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+/**
+ * @summary 재설정 토큰 검증
+ */
+
+export function useValidateResetTokenSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof validateResetToken>>>, TError = ErrorType<unknown>>(
+ token: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof validateResetToken>>, TError, TData>>, request?: SecondParameter<typeof customIdpInstance>}
+ , queryClient?: QueryClient 
+ ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = getValidateResetTokenSuspenseInfiniteQueryOptions(token,options)
+
+  const query = useSuspenseInfiniteQuery(queryOptions, queryClient) as  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+/**
+ * @summary 재설정 토큰 검증
+ */
+export const prefetchValidateResetTokenInfiniteQuery = async <TData = Awaited<ReturnType<typeof validateResetToken>>, TError = ErrorType<unknown>>(
+ queryClient: QueryClient, token: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof validateResetToken>>, TError, TData>>, request?: SecondParameter<typeof customIdpInstance>}
+
+  ): Promise<QueryClient> => {
+
+  const queryOptions = getValidateResetTokenSuspenseInfiniteQueryOptions(token,options)
+
+  await queryClient.prefetchInfiniteQuery(queryOptions);
+
+  return queryClient;
+}
+
+
+
+
+/**
+ * 토큰을 검증하고 새 비밀번호를 설정합니다. 성공 시 모든 세션이 무효화됩니다.
+ * @summary 비밀번호 재설정 실행
+ */
+export const executePasswordReset = (
+    token: string,
+    executePasswordResetBody: BodyType<ExecutePasswordResetBody>,
+ options?: SecondParameter<typeof customIdpInstance>,signal?: AbortSignal
+) => {
+      
+      
+      return customIdpInstance<void>(
+      {url: `/api/reset-password/${token}`, method: 'POST',
+      headers: {'Content-Type': 'application/json', },
+      data: executePasswordResetBody, signal
+    },
+      options);
+    }
+  
+
+
+export const getExecutePasswordResetMutationOptions = <TError = ErrorType<void>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof executePasswordReset>>, TError,{token: string;data: BodyType<ExecutePasswordResetBody>}, TContext>, request?: SecondParameter<typeof customIdpInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof executePasswordReset>>, TError,{token: string;data: BodyType<ExecutePasswordResetBody>}, TContext> => {
+
+const mutationKey = ['executePasswordReset'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof executePasswordReset>>, {token: string;data: BodyType<ExecutePasswordResetBody>}> = (props) => {
+          const {token,data} = props ?? {};
+
+          return  executePasswordReset(token,data,requestOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type ExecutePasswordResetMutationResult = NonNullable<Awaited<ReturnType<typeof executePasswordReset>>>
+    export type ExecutePasswordResetMutationBody = BodyType<ExecutePasswordResetBody>
+    export type ExecutePasswordResetMutationError = ErrorType<void>
+
+    /**
+ * @summary 비밀번호 재설정 실행
+ */
+export const useExecutePasswordReset = <TError = ErrorType<void>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof executePasswordReset>>, TError,{token: string;data: BodyType<ExecutePasswordResetBody>}, TContext>, request?: SecondParameter<typeof customIdpInstance>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof executePasswordReset>>,
+        TError,
+        {token: string;data: BodyType<ExecutePasswordResetBody>},
+        TContext
+      > => {
+
+      const mutationOptions = getExecutePasswordResetMutationOptions(options);
 
       return useMutation(mutationOptions, queryClient);
     }

@@ -1,5 +1,6 @@
 import { HashedPassword, PlainPassword } from "@cocrepo/vo";
 import { Injectable, Logger } from "@nestjs/common";
+import { DirectPrismaProvider } from "../oidc/direct-prisma.provider";
 import { DirectUserRepository } from "../oidc/direct-user.repository";
 import { OidcProviderService } from "../oidc/oidc-provider.service";
 import type {
@@ -9,12 +10,15 @@ import type {
 	OidcClientInfo,
 } from "../oidc/types";
 
-/** 일시 잠금까지 허용 실패 횟수 */
-const TEMPORARY_LOCK_THRESHOLD = 5;
-/** 영구 잠금까지 허용 실패 횟수 */
-const PERMANENT_LOCK_THRESHOLD = 10;
-/** 일시 잠금 시간 (밀리초) */
-const TEMPORARY_LOCK_DURATION_MS = 15 * 60 * 1000;
+/** 보안 정책 캐시 */
+interface SecurityPolicyCache {
+	temporaryLockThreshold: number;
+	permanentLockThreshold: number;
+	temporaryLockDurationMs: number;
+	cachedAt: number;
+}
+
+const POLICY_CACHE_TTL_MS = 5 * 60 * 1000; // 5분
 
 export interface InteractionViewData {
 	uid: string;
@@ -37,6 +41,10 @@ export interface LoginValidationResult {
 	error?: string;
 	remainingAttempts?: number;
 	lockedUntil?: Date;
+	/** 일시 잠금 임계값 (DB 정책 값) */
+	temporaryLockThreshold?: number;
+	/** 일시 잠금 지속시간 (분, DB 정책 값) */
+	temporaryLockDurationMin?: number;
 }
 
 /**
@@ -48,15 +56,56 @@ export interface LoginValidationResult {
  * - 로그인 완료 처리
  * - 동의(Consent) Grant 처리
  * - Interaction 중단 처리
+ *
+ * 잠금 정책은 SecurityPolicy DB에서 조회합니다 (Redis 캐시 5분).
  */
 @Injectable()
 export class InteractionService {
 	private readonly logger = new Logger(InteractionService.name);
+	private policyCache: SecurityPolicyCache | null = null;
 
 	constructor(
 		private readonly directUserRepository: DirectUserRepository,
 		private readonly oidcProviderService: OidcProviderService,
+		private readonly directPrismaProvider: DirectPrismaProvider,
 	) {}
+
+	/**
+	 * 보안 정책을 조회합니다 (캐시 활용)
+	 */
+	private async getSecurityPolicy(): Promise<SecurityPolicyCache> {
+		if (
+			this.policyCache &&
+			Date.now() - this.policyCache.cachedAt < POLICY_CACHE_TTL_MS
+		) {
+			return this.policyCache;
+		}
+
+		const prisma = await this.directPrismaProvider.getClient();
+		const policy = await prisma.securityPolicy.findUnique({
+			where: { key: "default" },
+		});
+
+		if (!policy) {
+			this.logger.warn("보안 정책이 없어 기본값을 사용합니다");
+			this.policyCache = {
+				temporaryLockThreshold: 5,
+				permanentLockThreshold: 10,
+				temporaryLockDurationMs: 15 * 60 * 1000,
+				cachedAt: Date.now(),
+			};
+			return this.policyCache;
+		}
+
+		this.policyCache = {
+			temporaryLockThreshold: policy.temporaryLockThreshold,
+			permanentLockThreshold: policy.permanentLockThreshold,
+			temporaryLockDurationMs: policy.temporaryLockDurationMin * 60 * 1000,
+			cachedAt: Date.now(),
+		};
+
+		return this.policyCache;
+	}
 
 	/**
 	 * Interaction 상세 정보 조회
@@ -179,6 +228,7 @@ export class InteractionService {
 
 	/**
 	 * 로그인 실패 처리 (횟수 증가 + 잠금 판단 + 감사 로그)
+	 * 잠금 임계값은 SecurityPolicy DB에서 조회합니다.
 	 */
 	private async handleLoginFailure(
 		userId: string,
@@ -186,10 +236,13 @@ export class InteractionService {
 		currentAttempts: number,
 		auditBase: { email: string; ipAddress: string; userAgent?: string; clientId?: string },
 	): Promise<LoginValidationResult> {
+		const policy = await this.getSecurityPolicy();
 		const newAttempts = currentAttempts + 1;
 
-		// 10회 이상 → 영구 잠금
-		if (newAttempts >= PERMANENT_LOCK_THRESHOLD) {
+		const temporaryLockDurationMin = Math.round(policy.temporaryLockDurationMs / 60000);
+
+		// 영구 잠금 임계값 도달
+		if (newAttempts >= policy.permanentLockThreshold) {
 			await this.directUserRepository.updateLoginFailure(userId, newAttempts, {
 				isPermanentlyLocked: true,
 			});
@@ -202,9 +255,9 @@ export class InteractionService {
 			return { success: false, error: "ACCOUNT_LOCKED_PERMANENT" };
 		}
 
-		// 5회 이상 → 15분 일시 잠금
-		if (newAttempts >= TEMPORARY_LOCK_THRESHOLD) {
-			const lockedUntil = new Date(Date.now() + TEMPORARY_LOCK_DURATION_MS);
+		// 일시 잠금 임계값 도달
+		if (newAttempts >= policy.temporaryLockThreshold) {
+			const lockedUntil = new Date(Date.now() + policy.temporaryLockDurationMs);
 			await this.directUserRepository.updateLoginFailure(userId, newAttempts, {
 				lockedUntil,
 			});
@@ -218,6 +271,8 @@ export class InteractionService {
 				success: false,
 				error: "ACCOUNT_LOCKED_TEMPORARY",
 				lockedUntil,
+				temporaryLockThreshold: policy.temporaryLockThreshold,
+				temporaryLockDurationMin,
 			};
 		}
 
@@ -233,7 +288,9 @@ export class InteractionService {
 		return {
 			success: false,
 			error: "INVALID_CREDENTIALS",
-			remainingAttempts: TEMPORARY_LOCK_THRESHOLD - newAttempts,
+			remainingAttempts: policy.temporaryLockThreshold - newAttempts,
+			temporaryLockThreshold: policy.temporaryLockThreshold,
+			temporaryLockDurationMin,
 		};
 	}
 
