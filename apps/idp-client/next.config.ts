@@ -32,6 +32,10 @@ const nextConfig: NextConfig = {
 					destination: "http://localhost:3007/api/forgot-password",
 				},
 				{
+					source: "/api/password-policy",
+					destination: "http://localhost:3007/api/password-policy",
+				},
+				{
 					source: "/api/reset-password/:path*",
 					destination: "http://localhost:3007/api/reset-password/:path*",
 				},

@@ -51,13 +51,49 @@ model SecurityPolicy {
 
   // 세션 정책
   /// @displayName Access Token TTL (초)
-  accessTokenTtlSec         Int       @default(3600) @map("access_token_ttl_sec")
+  accessTokenTtlSec             Int       @default(3600) @map("access_token_ttl_sec")
   /// @displayName Refresh Token TTL (초)
-  refreshTokenTtlSec        Int       @default(2592000) @map("refresh_token_ttl_sec")
+  refreshTokenTtlSec            Int       @default(2592000) @map("refresh_token_ttl_sec")
   /// @displayName 세션 TTL (초)
-  sessionTtlSec             Int       @default(86400) @map("session_ttl_sec")
+  sessionTtlSec                 Int       @default(86400) @map("session_ttl_sec")
+
+  // 화이트리스트 정책 (비활성 시 모든 접근 허용)
+  /// @displayName IP 화이트리스트 활성화
+  ipWhitelistEnabled            Boolean   @default(false) @map("ip_whitelist_enabled")
+  /// @displayName 이메일 도메인 화이트리스트 활성화
+  emailDomainWhitelistEnabled   Boolean   @default(false) @map("email_domain_whitelist_enabled")
+  /// @displayName CORS Origin 화이트리스트 활성화
+  corsOriginWhitelistEnabled    Boolean   @default(false) @map("cors_origin_whitelist_enabled")
 
   @@map("security_policies")
+}
+
+/// @displayName 화이트리스트 유형
+enum WhitelistType {
+  IP
+  EMAIL_DOMAIN
+  CORS_ORIGIN
+}
+
+// @schema-type: REFERENCE
+// @description: 화이트리스트 항목
+/// @displayName 화이트리스트 항목
+model WhitelistEntry {
+  id          String        @id @default(uuid())
+  createdAt   DateTime      @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt   DateTime?     @updatedAt @map("updated_at") @db.Timestamptz(6)
+  /// @displayName 유형
+  type        WhitelistType
+  /// @displayName 값
+  value       String
+  /// @displayName 설명
+  description String?
+  /// @displayName 활성 여부
+  isActive    Boolean       @default(true) @map("is_active")
+
+  @@unique([type, value])
+  @@index([type])
+  @@map("whitelist_entries")
 }
 
 // @schema-type: REFERENCE

@@ -52,6 +52,7 @@ export const AnyNull = runtime.AnyNull
 
 export const ModelName = {
   SecurityPolicy: 'SecurityPolicy',
+  WhitelistEntry: 'WhitelistEntry',
   AuthAuditLog: 'AuthAuditLog',
   PasswordHistory: 'PasswordHistory',
   Category: 'Category',
@@ -126,10 +127,26 @@ export const SecurityPolicyScalarFieldEnum = {
   permanentLockThreshold: 'permanentLockThreshold',
   accessTokenTtlSec: 'accessTokenTtlSec',
   refreshTokenTtlSec: 'refreshTokenTtlSec',
-  sessionTtlSec: 'sessionTtlSec'
+  sessionTtlSec: 'sessionTtlSec',
+  ipWhitelistEnabled: 'ipWhitelistEnabled',
+  emailDomainWhitelistEnabled: 'emailDomainWhitelistEnabled',
+  corsOriginWhitelistEnabled: 'corsOriginWhitelistEnabled'
 } as const
 
 export type SecurityPolicyScalarFieldEnum = (typeof SecurityPolicyScalarFieldEnum)[keyof typeof SecurityPolicyScalarFieldEnum]
+
+
+export const WhitelistEntryScalarFieldEnum = {
+  id: 'id',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  type: 'type',
+  value: 'value',
+  description: 'description',
+  isActive: 'isActive'
+} as const
+
+export type WhitelistEntryScalarFieldEnum = (typeof WhitelistEntryScalarFieldEnum)[keyof typeof WhitelistEntryScalarFieldEnum]
 
 
 export const AuthAuditLogScalarFieldEnum = {

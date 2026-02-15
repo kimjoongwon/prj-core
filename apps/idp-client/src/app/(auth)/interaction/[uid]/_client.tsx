@@ -1,5 +1,6 @@
 "use client";
 
+import { useGetInteraction } from "@cocrepo/api";
 import {
 	AuthCard,
 	AuthCardHeader,
@@ -7,27 +8,6 @@ import {
 	IdpLogin,
 } from "@cocrepo/ui";
 import { Spinner } from "@heroui/react";
-import { useEffect, useState } from "react";
-
-interface InteractionData {
-	type: string;
-	uid: string;
-	client: {
-		clientId: string;
-		clientName: string;
-		logoUri?: string;
-	} | null;
-	prompt: {
-		name: string;
-		details?: {
-			missingOIDCScope?: string[];
-			missingResourceScopes?: Record<string, string[]>;
-		};
-	};
-	params: Record<string, unknown>;
-	session?: Record<string, unknown>;
-	isDev: boolean;
-}
 
 interface InteractionClientProps {
 	uid: string;
@@ -36,40 +16,11 @@ interface InteractionClientProps {
 /**
  * OIDC Interaction 클라이언트 컴포넌트
  *
- * 인터랙션 데이터를 fetch하고, type에 따라 IdpLogin 또는 IdpConsent Feature를 렌더링합니다.
+ * useGetInteraction 쿼리 훅으로 인터랙션 데이터를 조회하고,
+ * type에 따라 IdpLogin 또는 IdpConsent Feature를 렌더링합니다.
  */
 export function InteractionClient({ uid }: InteractionClientProps) {
-	const [data, setData] = useState<InteractionData | null>(null);
-	const [error, setError] = useState<string | null>(null);
-	const [isLoading, setIsLoading] = useState(true);
-
-	useEffect(() => {
-		const fetchInteraction = async () => {
-			try {
-				const response = await fetch(`/api/interaction/${uid}`, {
-					credentials: "include",
-				});
-
-				if (!response.ok) {
-					const errorData = await response.json();
-					setError(
-						errorData.error ||
-							"인터랙션 데이터를 불러올 수 없습니다.",
-					);
-					return;
-				}
-
-				const interactionData = await response.json();
-				setData(interactionData);
-			} catch {
-				setError("서버와 통신할 수 없습니다.");
-			} finally {
-				setIsLoading(false);
-			}
-		};
-
-		fetchInteraction();
-	}, [uid]);
+	const { data, isLoading, error } = useGetInteraction(uid);
 
 	if (isLoading) {
 		return (
@@ -93,7 +44,7 @@ export function InteractionClient({ uid }: InteractionClientProps) {
 				/>
 				<div className="bg-danger/10 border border-danger/30 rounded-lg p-4 mb-6">
 					<p className="text-sm text-danger">
-						{error || "알 수 없는 오류가 발생했습니다."}
+						{error?.message || "알 수 없는 오류가 발생했습니다."}
 					</p>
 				</div>
 				<div className="text-center">
@@ -110,17 +61,23 @@ export function InteractionClient({ uid }: InteractionClientProps) {
 	}
 
 	if (data.type === "consent") {
-		const missingScopes = data.prompt.details?.missingOIDCScope || [];
+		const prompt = data.prompt as {
+			name: string;
+			details?: {
+				missingOIDCScope?: string[];
+			};
+		};
+		const missingScopes = prompt.details?.missingOIDCScope || [];
 		return (
 			<IdpConsent
 				uid={uid}
-				client={data.client}
+				client={data.client ?? null}
 				missingScopes={missingScopes}
 			/>
 		);
 	}
 
 	return (
-		<IdpLogin uid={uid} client={data.client} isDev={data.isDev} />
+		<IdpLogin uid={uid} client={data.client ?? null} isDev={data.isDev} />
 	);
 }

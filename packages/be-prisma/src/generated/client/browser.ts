@@ -23,6 +23,11 @@ export * from './enums.js';
  */
 export type SecurityPolicy = Prisma.SecurityPolicyModel
 /**
+ * Model WhitelistEntry
+ * @displayName 화이트리스트 항목
+ */
+export type WhitelistEntry = Prisma.WhitelistEntryModel
+/**
  * Model AuthAuditLog
  * @displayName 인증 감사 로그
  */

@@ -40,3 +40,4 @@ export * from "./translation.entity";
 export * from "./user.entity";
 export * from "./user-association.entity";
 export * from "./user-classification.entity";
+export * from "./whitelist-entry.entity";

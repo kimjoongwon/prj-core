@@ -33,18 +33,15 @@ export interface PaginationProps
 export const Pagination = (props: PaginationProps) => {
 	const { totalCount, limit = 20, page = 1, onChange, ...rest } = props;
 
-	const total = Math.max(1, Math.ceil(totalCount / limit));
-
-	const handleChange = (newPage: number) => {
-		onChange?.(newPage);
-	};
+	const safeLimit = limit > 0 ? limit : 20;
+	const total = Math.max(1, Math.ceil(totalCount / safeLimit));
 
 	return (
 		<HeroUIPagination
 			{...rest}
 			total={total}
 			page={page}
-			onChange={handleChange}
+			onChange={onChange}
 		/>
 	);
 };

@@ -9,6 +9,7 @@
  * 🟢 You can import this file directly.
  */
 export type * from './models/SecurityPolicy.js'
+export type * from './models/WhitelistEntry.js'
 export type * from './models/AuthAuditLog.js'
 export type * from './models/PasswordHistory.js'
 export type * from './models/Category.js'

@@ -1,4 +1,11 @@
 import {
+	ForgotPasswordResultDto,
+	PasswordPolicyDto,
+	ResetPasswordErrorDto,
+	ResetPasswordResultDto,
+	TokenValidationDto,
+} from "@cocrepo/dto";
+import {
 	Body,
 	Controller,
 	Get,
@@ -40,7 +47,7 @@ export class PasswordResetController {
 		description:
 			"비밀번호 정책(최소 길이, 대소문자/숫자/특수문자 필수 여부)을 반환합니다. 인증 불요.",
 	})
-	@ApiResponse({ status: 200, description: "비밀번호 정책 정보" })
+	@ApiResponse({ status: 200, description: "비밀번호 정책 정보", type: PasswordPolicyDto })
 	@Get("password-policy")
 	async getPasswordPolicy(@Res() res: Response) {
 		const policy = await this.passwordResetService.getPasswordPolicy();
@@ -65,6 +72,7 @@ export class PasswordResetController {
 	@ApiResponse({
 		status: 200,
 		description: "항상 성공 응답 (이메일 존재 여부 노출 방지)",
+		type: ForgotPasswordResultDto,
 	})
 	@HttpCode(HttpStatus.OK)
 	@Post("forgot-password")
@@ -98,6 +106,7 @@ export class PasswordResetController {
 	@ApiResponse({
 		status: 200,
 		description: "토큰 유효성 검증 결과",
+		type: TokenValidationDto,
 	})
 	@Get("reset-password/:token")
 	async validateToken(
@@ -128,8 +137,8 @@ export class PasswordResetController {
 			},
 		},
 	})
-	@ApiResponse({ status: 200, description: "비밀번호 변경 성공" })
-	@ApiResponse({ status: 400, description: "토큰 만료, 정책 미달, 재사용 등" })
+	@ApiResponse({ status: 200, description: "비밀번호 변경 성공", type: ResetPasswordResultDto })
+	@ApiResponse({ status: 400, description: "토큰 만료, 정책 미달, 재사용 등", type: ResetPasswordErrorDto })
 	@HttpCode(HttpStatus.OK)
 	@Post("reset-password/:token")
 	async executeReset(

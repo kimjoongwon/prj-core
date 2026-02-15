@@ -6,6 +6,21 @@
  * OpenAPI spec version: 1.0.0
  */
 
+export * from './abortResultDto';
+export * from './consentResultDto';
 export * from './executePasswordResetBody';
+export * from './forgotPasswordResultDto';
+export * from './interactionClientDto';
+export * from './interactionDataDto';
+export * from './interactionDataDtoClient';
+export * from './interactionDataDtoParams';
+export * from './interactionDataDtoPrompt';
+export * from './interactionDataDtoSession';
+export * from './loginErrorDto';
+export * from './loginSuccessDto';
 export * from './oidcLoginPayloadDto';
+export * from './passwordPolicyDto';
 export * from './requestPasswordResetBody';
+export * from './resetPasswordErrorDto';
+export * from './resetPasswordResultDto';
+export * from './tokenValidationDto';

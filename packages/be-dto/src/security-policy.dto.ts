@@ -65,4 +65,14 @@ export class SecurityPolicyDto implements SecurityPolicy {
 
 	@NumberField({ description: "세션 TTL (초)", min: 60 })
 	sessionTtlSec!: number;
+
+	// 화이트리스트 정책
+	@BooleanField({ description: "IP 화이트리스트 활성화" })
+	ipWhitelistEnabled!: boolean;
+
+	@BooleanField({ description: "이메일 도메인 화이트리스트 활성화" })
+	emailDomainWhitelistEnabled!: boolean;
+
+	@BooleanField({ description: "CORS Origin 화이트리스트 활성화" })
+	corsOriginWhitelistEnabled!: boolean;
 }

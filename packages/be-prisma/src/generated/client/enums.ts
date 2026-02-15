@@ -9,6 +9,15 @@
 * 🟢 You can import this file directly.
 */
 
+export const WhitelistType = {
+  IP: 'IP',
+  EMAIL_DOMAIN: 'EMAIL_DOMAIN',
+  CORS_ORIGIN: 'CORS_ORIGIN'
+} as const
+
+export type WhitelistType = (typeof WhitelistType)[keyof typeof WhitelistType]
+
+
 export const AuthAuditResult = {
   SUCCESS: 'SUCCESS',
   FAILURE: 'FAILURE',

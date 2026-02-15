@@ -385,6 +385,7 @@ type FieldRefInputType<Model, FieldType> = Model extends never ? never : FieldRe
 
 export const ModelName = {
   SecurityPolicy: 'SecurityPolicy',
+  WhitelistEntry: 'WhitelistEntry',
   AuthAuditLog: 'AuthAuditLog',
   PasswordHistory: 'PasswordHistory',
   Category: 'Category',
@@ -439,7 +440,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "securityPolicy" | "authAuditLog" | "passwordHistory" | "category" | "group" | "tenant" | "assignment" | "post" | "content" | "file" | "fileClassification" | "fileAssociation" | "subject" | "action" | "ability" | "grant" | "oidcClient" | "oidcModel" | "role" | "roleAssociation" | "roleClassification" | "safeWallet" | "safeTransaction" | "safeConfirmation" | "space" | "spaceClassification" | "spaceAssociation" | "ground" | "timeline" | "session" | "program" | "routine" | "activity" | "task" | "exercise" | "translation" | "user" | "userClassification" | "userAssociation" | "profile"
+    modelProps: "securityPolicy" | "whitelistEntry" | "authAuditLog" | "passwordHistory" | "category" | "group" | "tenant" | "assignment" | "post" | "content" | "file" | "fileClassification" | "fileAssociation" | "subject" | "action" | "ability" | "grant" | "oidcClient" | "oidcModel" | "role" | "roleAssociation" | "roleClassification" | "safeWallet" | "safeTransaction" | "safeConfirmation" | "space" | "spaceClassification" | "spaceAssociation" | "ground" | "timeline" | "session" | "program" | "routine" | "activity" | "task" | "exercise" | "translation" | "user" | "userClassification" | "userAssociation" | "profile"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -514,6 +515,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         count: {
           args: Prisma.SecurityPolicyCountArgs<ExtArgs>
           result: runtime.Types.Utils.Optional<Prisma.SecurityPolicyCountAggregateOutputType> | number
+        }
+      }
+    }
+    WhitelistEntry: {
+      payload: Prisma.$WhitelistEntryPayload<ExtArgs>
+      fields: Prisma.WhitelistEntryFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.WhitelistEntryFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$WhitelistEntryPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.WhitelistEntryFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$WhitelistEntryPayload>
+        }
+        findFirst: {
+          args: Prisma.WhitelistEntryFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$WhitelistEntryPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.WhitelistEntryFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$WhitelistEntryPayload>
+        }
+        findMany: {
+          args: Prisma.WhitelistEntryFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$WhitelistEntryPayload>[]
+        }
+        create: {
+          args: Prisma.WhitelistEntryCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$WhitelistEntryPayload>
+        }
+        createMany: {
+          args: Prisma.WhitelistEntryCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.WhitelistEntryCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$WhitelistEntryPayload>[]
+        }
+        delete: {
+          args: Prisma.WhitelistEntryDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$WhitelistEntryPayload>
+        }
+        update: {
+          args: Prisma.WhitelistEntryUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$WhitelistEntryPayload>
+        }
+        deleteMany: {
+          args: Prisma.WhitelistEntryDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.WhitelistEntryUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.WhitelistEntryUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$WhitelistEntryPayload>[]
+        }
+        upsert: {
+          args: Prisma.WhitelistEntryUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$WhitelistEntryPayload>
+        }
+        aggregate: {
+          args: Prisma.WhitelistEntryAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateWhitelistEntry>
+        }
+        groupBy: {
+          args: Prisma.WhitelistEntryGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.WhitelistEntryGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.WhitelistEntryCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.WhitelistEntryCountAggregateOutputType> | number
         }
       }
     }
@@ -3459,10 +3534,26 @@ export const SecurityPolicyScalarFieldEnum = {
   permanentLockThreshold: 'permanentLockThreshold',
   accessTokenTtlSec: 'accessTokenTtlSec',
   refreshTokenTtlSec: 'refreshTokenTtlSec',
-  sessionTtlSec: 'sessionTtlSec'
+  sessionTtlSec: 'sessionTtlSec',
+  ipWhitelistEnabled: 'ipWhitelistEnabled',
+  emailDomainWhitelistEnabled: 'emailDomainWhitelistEnabled',
+  corsOriginWhitelistEnabled: 'corsOriginWhitelistEnabled'
 } as const
 
 export type SecurityPolicyScalarFieldEnum = (typeof SecurityPolicyScalarFieldEnum)[keyof typeof SecurityPolicyScalarFieldEnum]
+
+
+export const WhitelistEntryScalarFieldEnum = {
+  id: 'id',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  type: 'type',
+  value: 'value',
+  description: 'description',
+  isActive: 'isActive'
+} as const
+
+export type WhitelistEntryScalarFieldEnum = (typeof WhitelistEntryScalarFieldEnum)[keyof typeof WhitelistEntryScalarFieldEnum]
 
 
 export const AuthAuditLogScalarFieldEnum = {
@@ -4144,6 +4235,20 @@ export type BooleanFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel,
 
 
 /**
+ * Reference to a field of type 'WhitelistType'
+ */
+export type EnumWhitelistTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'WhitelistType'>
+    
+
+
+/**
+ * Reference to a field of type 'WhitelistType[]'
+ */
+export type ListEnumWhitelistTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'WhitelistType[]'>
+    
+
+
+/**
  * Reference to a field of type 'AuthAuditResult'
  */
 export type EnumAuthAuditResultFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'AuthAuditResult'>
@@ -4378,6 +4483,7 @@ export type PrismaClientOptions = ({
 }
 export type GlobalOmitConfig = {
   securityPolicy?: Prisma.SecurityPolicyOmit
+  whitelistEntry?: Prisma.WhitelistEntryOmit
   authAuditLog?: Prisma.AuthAuditLogOmit
   passwordHistory?: Prisma.PasswordHistoryOmit
   category?: Prisma.CategoryOmit

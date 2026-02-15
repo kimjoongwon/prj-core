@@ -1,4 +1,11 @@
-import { OidcLoginPayloadDto } from "@cocrepo/dto";
+import {
+	AbortResultDto,
+	ConsentResultDto,
+	InteractionDataDto,
+	LoginErrorDto,
+	LoginSuccessDto,
+	OidcLoginPayloadDto,
+} from "@cocrepo/dto";
 import {
 	Body,
 	Controller,
@@ -82,6 +89,7 @@ export class InteractionController {
 	@ApiResponse({
 		status: 200,
 		description: "인터랙션 데이터 (type: login | consent)",
+		type: InteractionDataDto,
 	})
 	@Get(":uid")
 	async getInteraction(@Param("uid") uid: string, @Res() res: Response) {
@@ -130,10 +138,12 @@ export class InteractionController {
 	@ApiResponse({
 		status: 200,
 		description: "인증 성공 시 redirectTo URL 반환",
+		type: LoginSuccessDto,
 	})
 	@ApiResponse({
 		status: 401,
 		description: "인증 실패 시 에러 메시지 반환",
+		type: LoginErrorDto,
 	})
 	@ApiBody({ type: OidcLoginPayloadDto })
 	@HttpCode(HttpStatus.OK)
@@ -203,6 +213,7 @@ export class InteractionController {
 	@ApiResponse({
 		status: 200,
 		description: "동의 완료 후 redirectTo URL 반환",
+		type: ConsentResultDto,
 	})
 	@HttpCode(HttpStatus.OK)
 	@Post(":uid/confirm")
@@ -235,6 +246,7 @@ export class InteractionController {
 	@ApiResponse({
 		status: 200,
 		description: "취소 후 redirectTo URL 반환",
+		type: AbortResultDto,
 	})
 	@HttpCode(HttpStatus.OK)
 	@Post(":uid/abort")

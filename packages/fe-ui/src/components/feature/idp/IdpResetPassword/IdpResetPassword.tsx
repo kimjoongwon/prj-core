@@ -1,6 +1,14 @@
 "use client";
 
+import {
+	useExecutePasswordReset,
+	useGetPasswordPolicy,
+	useValidateResetToken,
+	type PasswordPolicyDto,
+	type ResetPasswordErrorDto,
+} from "@cocrepo/api";
 import { PASSWORD_RULES, type PasswordRule } from "@cocrepo/constant";
+import type { AxiosError } from "axios";
 import { observer } from "mobx-react-lite";
 import { useEffect, useState } from "react";
 import {
@@ -9,14 +17,7 @@ import {
 } from "../../../widget/form/ResetPasswordForm/ResetPasswordForm";
 
 /** API 응답으로부터 PasswordRule[] 생성 */
-function buildPasswordRules(policy: {
-	minLength: number;
-	maxLength: number;
-	requireUppercase: boolean;
-	requireLowercase: boolean;
-	requireNumber: boolean;
-	requireSpecial: boolean;
-}): PasswordRule[] {
+function buildPasswordRules(policy: PasswordPolicyDto): PasswordRule[] {
 	const rules: PasswordRule[] = [
 		{
 			rule: "minLength",
@@ -79,87 +80,76 @@ export const IdpResetPassword = observer(
 		const [step, setStep] = useState<ResetPasswordStep>("validating");
 		const [tokenError, setTokenError] = useState<string | null>(null);
 		const [tokenEmail, setTokenEmail] = useState("");
-		const [passwordRules, setPasswordRules] = useState<PasswordRule[]>(PASSWORD_RULES);
+		const [passwordRules, setPasswordRules] =
+			useState<PasswordRule[]>(PASSWORD_RULES);
 
-		// 토큰 검증 + 비밀번호 정책 조회
+		// 토큰 검증
+		const { data: tokenData, isError: isTokenError } =
+			useValidateResetToken(token);
+
+		// 비밀번호 정책 조회
+		const { data: policyData } = useGetPasswordPolicy();
+
+		const resetMutation = useExecutePasswordReset();
+
+		// 토큰 검증 결과 처리
 		useEffect(() => {
-			const initialize = async () => {
-				try {
-					// 토큰 검증과 비밀번호 정책을 병렬 조회
-					const [tokenRes, policyRes] = await Promise.all([
-						fetch(`/api/reset-password/${token}`),
-						fetch("/api/password-policy"),
-					]);
+			if (isTokenError) {
+				setTokenError("서버와 통신할 수 없습니다.");
+				setStep("invalid");
+				return;
+			}
 
-					const tokenData = await tokenRes.json();
+			if (!tokenData) return;
 
-					if (tokenData.valid) {
-						setStep("form");
-						setTokenEmail(tokenData.email || "");
-					} else {
-						setTokenError(
-							tokenData.reason === "TOKEN_EXPIRED"
-								? "링크가 만료되었습니다."
-								: "유효하지 않은 링크입니다.",
-						);
-						setStep("invalid");
-					}
+			if (tokenData.valid) {
+				setStep("form");
+				setTokenEmail(tokenData.email || "");
+			} else {
+				setTokenError(
+					tokenData.reason === "TOKEN_EXPIRED"
+						? "링크가 만료되었습니다."
+						: "유효하지 않은 링크입니다.",
+				);
+				setStep("invalid");
+			}
+		}, [tokenData, isTokenError]);
 
-					// 비밀번호 정책 설정
-					if (policyRes.ok) {
-						const policyData = await policyRes.json();
-						setPasswordRules(buildPasswordRules(policyData));
-					}
-				} catch {
-					setTokenError("서버와 통신할 수 없습니다.");
-					setStep("invalid");
-				}
-			};
-
-			initialize();
-		}, [token]);
+		// 비밀번호 정책 결과 처리
+		useEffect(() => {
+			if (policyData) {
+				setPasswordRules(buildPasswordRules(policyData));
+			}
+		}, [policyData]);
 
 		const handleSubmit = async (data: {
 			password: string;
 			confirmPassword: string;
 		}): Promise<string | null> => {
 			try {
-				const response = await fetch(
-					`/api/reset-password/${token}`,
-					{
-						method: "POST",
-						headers: { "Content-Type": "application/json" },
-						body: JSON.stringify(data),
-					},
-				);
-
-				const result = await response.json();
-
-				if (!response.ok) {
-					const errorCode = result.error || "";
-					if (errorCode === "PASSWORD_REUSE") {
-						return "최근 사용한 비밀번호는 다시 사용할 수 없습니다.";
-					}
-					if (errorCode.startsWith("PASSWORD_POLICY_VIOLATION")) {
-						return "비밀번호가 정책 조건을 충족하지 않습니다.";
-					}
-					if (errorCode === "TOKEN_EXPIRED") {
-						setTokenError("링크가 만료되었습니다.");
-						setStep("invalid");
-						return null;
-					}
-					if (errorCode === "PASSWORD_MISMATCH") {
-						return "비밀번호가 일치하지 않습니다.";
-					}
-					return (
-						result.error ||
-						"비밀번호 재설정에 실패했습니다."
-					);
-				}
-
+				await resetMutation.mutateAsync({ token, data });
 				return null;
-			} catch {
-				return "서버와 통신할 수 없습니다.";
+			} catch (err) {
+				const axiosError =
+					err as AxiosError<ResetPasswordErrorDto>;
+				const errorCode =
+					axiosError.response?.data?.error || "";
+
+				if (errorCode === "PASSWORD_REUSE") {
+					return "최근 사용한 비밀번호는 다시 사용할 수 없습니다.";
+				}
+				if (errorCode.startsWith("PASSWORD_POLICY_VIOLATION")) {
+					return "비밀번호가 정책 조건을 충족하지 않습니다.";
+				}
+				if (errorCode === "TOKEN_EXPIRED") {
+					setTokenError("링크가 만료되었습니다.");
+					setStep("invalid");
+					return null;
+				}
+				if (errorCode === "PASSWORD_MISMATCH") {
+					return "비밀번호가 일치하지 않습니다.";
+				}
+				return errorCode || "비밀번호 재설정에 실패했습니다.";
 			}
 		};
 

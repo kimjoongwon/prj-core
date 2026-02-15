@@ -1,5 +1,11 @@
 "use client";
 
+import {
+	useAbortInteraction,
+	useSubmitLogin,
+	type LoginErrorDto,
+} from "@cocrepo/api";
+import type { AxiosError } from "axios";
 import { observer } from "mobx-react-lite";
 import {
 	OidcLoginForm,
@@ -26,50 +32,35 @@ export interface IdpLoginProps {
  */
 export const IdpLogin = observer(
 	({ uid, client, isDev = false }: IdpLoginProps) => {
+		const loginMutation = useSubmitLogin();
+		const abortMutation = useAbortInteraction();
+
 		const handleSubmit = async (data: {
 			email: string;
 			password: string;
 			remember: boolean;
 		}): Promise<LoginErrorResponse | null> => {
 			try {
-				const response = await fetch(
-					`/api/interaction/${uid}/login`,
-					{
-						method: "POST",
-						headers: { "Content-Type": "application/json" },
-						credentials: "include",
-						body: JSON.stringify(data),
-					},
-				);
-
-				const result = await response.json();
-
-				if (!response.ok) {
-					return result as LoginErrorResponse;
-				}
-
+				const result = await loginMutation.mutateAsync({
+					uid,
+					data,
+				});
 				window.location.href = result.redirectTo;
 				return null;
-			} catch {
+			} catch (err) {
+				const axiosError = err as AxiosError<LoginErrorDto>;
+				if (axiosError.response?.data) {
+					return axiosError.response.data;
+				}
 				return { error: "서버와 통신할 수 없습니다." };
 			}
 		};
 
 		const handleAbort = async () => {
 			try {
-				const response = await fetch(
-					`/api/interaction/${uid}/abort`,
-					{
-						method: "POST",
-						headers: { "Content-Type": "application/json" },
-						credentials: "include",
-					},
-				);
-
-				const data = await response.json();
-
-				if (data.redirectTo) {
-					window.location.href = data.redirectTo;
+				const result = await abortMutation.mutateAsync({ uid });
+				if (result.redirectTo) {
+					window.location.href = result.redirectTo;
 				}
 			} catch {
 				// 에러 무시

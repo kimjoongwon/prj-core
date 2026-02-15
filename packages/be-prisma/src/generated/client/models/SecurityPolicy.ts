@@ -68,6 +68,9 @@ export type SecurityPolicyMinAggregateOutputType = {
   accessTokenTtlSec: number | null
   refreshTokenTtlSec: number | null
   sessionTtlSec: number | null
+  ipWhitelistEnabled: boolean | null
+  emailDomainWhitelistEnabled: boolean | null
+  corsOriginWhitelistEnabled: boolean | null
 }
 
 export type SecurityPolicyMaxAggregateOutputType = {
@@ -88,6 +91,9 @@ export type SecurityPolicyMaxAggregateOutputType = {
   accessTokenTtlSec: number | null
   refreshTokenTtlSec: number | null
   sessionTtlSec: number | null
+  ipWhitelistEnabled: boolean | null
+  emailDomainWhitelistEnabled: boolean | null
+  corsOriginWhitelistEnabled: boolean | null
 }
 
 export type SecurityPolicyCountAggregateOutputType = {
@@ -108,6 +114,9 @@ export type SecurityPolicyCountAggregateOutputType = {
   accessTokenTtlSec: number
   refreshTokenTtlSec: number
   sessionTtlSec: number
+  ipWhitelistEnabled: number
+  emailDomainWhitelistEnabled: number
+  corsOriginWhitelistEnabled: number
   _all: number
 }
 
@@ -154,6 +163,9 @@ export type SecurityPolicyMinAggregateInputType = {
   accessTokenTtlSec?: true
   refreshTokenTtlSec?: true
   sessionTtlSec?: true
+  ipWhitelistEnabled?: true
+  emailDomainWhitelistEnabled?: true
+  corsOriginWhitelistEnabled?: true
 }
 
 export type SecurityPolicyMaxAggregateInputType = {
@@ -174,6 +186,9 @@ export type SecurityPolicyMaxAggregateInputType = {
   accessTokenTtlSec?: true
   refreshTokenTtlSec?: true
   sessionTtlSec?: true
+  ipWhitelistEnabled?: true
+  emailDomainWhitelistEnabled?: true
+  corsOriginWhitelistEnabled?: true
 }
 
 export type SecurityPolicyCountAggregateInputType = {
@@ -194,6 +209,9 @@ export type SecurityPolicyCountAggregateInputType = {
   accessTokenTtlSec?: true
   refreshTokenTtlSec?: true
   sessionTtlSec?: true
+  ipWhitelistEnabled?: true
+  emailDomainWhitelistEnabled?: true
+  corsOriginWhitelistEnabled?: true
   _all?: true
 }
 
@@ -301,6 +319,9 @@ export type SecurityPolicyGroupByOutputType = {
   accessTokenTtlSec: number
   refreshTokenTtlSec: number
   sessionTtlSec: number
+  ipWhitelistEnabled: boolean
+  emailDomainWhitelistEnabled: boolean
+  corsOriginWhitelistEnabled: boolean
   _count: SecurityPolicyCountAggregateOutputType | null
   _avg: SecurityPolicyAvgAggregateOutputType | null
   _sum: SecurityPolicySumAggregateOutputType | null
@@ -344,6 +365,9 @@ export type SecurityPolicyWhereInput = {
   accessTokenTtlSec?: Prisma.IntFilter<"SecurityPolicy"> | number
   refreshTokenTtlSec?: Prisma.IntFilter<"SecurityPolicy"> | number
   sessionTtlSec?: Prisma.IntFilter<"SecurityPolicy"> | number
+  ipWhitelistEnabled?: Prisma.BoolFilter<"SecurityPolicy"> | boolean
+  emailDomainWhitelistEnabled?: Prisma.BoolFilter<"SecurityPolicy"> | boolean
+  corsOriginWhitelistEnabled?: Prisma.BoolFilter<"SecurityPolicy"> | boolean
 }
 
 export type SecurityPolicyOrderByWithRelationInput = {
@@ -364,6 +388,9 @@ export type SecurityPolicyOrderByWithRelationInput = {
   accessTokenTtlSec?: Prisma.SortOrder
   refreshTokenTtlSec?: Prisma.SortOrder
   sessionTtlSec?: Prisma.SortOrder
+  ipWhitelistEnabled?: Prisma.SortOrder
+  emailDomainWhitelistEnabled?: Prisma.SortOrder
+  corsOriginWhitelistEnabled?: Prisma.SortOrder
 }
 
 export type SecurityPolicyWhereUniqueInput = Prisma.AtLeast<{
@@ -387,6 +414,9 @@ export type SecurityPolicyWhereUniqueInput = Prisma.AtLeast<{
   accessTokenTtlSec?: Prisma.IntFilter<"SecurityPolicy"> | number
   refreshTokenTtlSec?: Prisma.IntFilter<"SecurityPolicy"> | number
   sessionTtlSec?: Prisma.IntFilter<"SecurityPolicy"> | number
+  ipWhitelistEnabled?: Prisma.BoolFilter<"SecurityPolicy"> | boolean
+  emailDomainWhitelistEnabled?: Prisma.BoolFilter<"SecurityPolicy"> | boolean
+  corsOriginWhitelistEnabled?: Prisma.BoolFilter<"SecurityPolicy"> | boolean
 }, "id" | "key">
 
 export type SecurityPolicyOrderByWithAggregationInput = {
@@ -407,6 +437,9 @@ export type SecurityPolicyOrderByWithAggregationInput = {
   accessTokenTtlSec?: Prisma.SortOrder
   refreshTokenTtlSec?: Prisma.SortOrder
   sessionTtlSec?: Prisma.SortOrder
+  ipWhitelistEnabled?: Prisma.SortOrder
+  emailDomainWhitelistEnabled?: Prisma.SortOrder
+  corsOriginWhitelistEnabled?: Prisma.SortOrder
   _count?: Prisma.SecurityPolicyCountOrderByAggregateInput
   _avg?: Prisma.SecurityPolicyAvgOrderByAggregateInput
   _max?: Prisma.SecurityPolicyMaxOrderByAggregateInput
@@ -435,6 +468,9 @@ export type SecurityPolicyScalarWhereWithAggregatesInput = {
   accessTokenTtlSec?: Prisma.IntWithAggregatesFilter<"SecurityPolicy"> | number
   refreshTokenTtlSec?: Prisma.IntWithAggregatesFilter<"SecurityPolicy"> | number
   sessionTtlSec?: Prisma.IntWithAggregatesFilter<"SecurityPolicy"> | number
+  ipWhitelistEnabled?: Prisma.BoolWithAggregatesFilter<"SecurityPolicy"> | boolean
+  emailDomainWhitelistEnabled?: Prisma.BoolWithAggregatesFilter<"SecurityPolicy"> | boolean
+  corsOriginWhitelistEnabled?: Prisma.BoolWithAggregatesFilter<"SecurityPolicy"> | boolean
 }
 
 export type SecurityPolicyCreateInput = {
@@ -455,6 +491,9 @@ export type SecurityPolicyCreateInput = {
   accessTokenTtlSec?: number
   refreshTokenTtlSec?: number
   sessionTtlSec?: number
+  ipWhitelistEnabled?: boolean
+  emailDomainWhitelistEnabled?: boolean
+  corsOriginWhitelistEnabled?: boolean
 }
 
 export type SecurityPolicyUncheckedCreateInput = {
@@ -475,6 +514,9 @@ export type SecurityPolicyUncheckedCreateInput = {
   accessTokenTtlSec?: number
   refreshTokenTtlSec?: number
   sessionTtlSec?: number
+  ipWhitelistEnabled?: boolean
+  emailDomainWhitelistEnabled?: boolean
+  corsOriginWhitelistEnabled?: boolean
 }
 
 export type SecurityPolicyUpdateInput = {
@@ -495,6 +537,9 @@ export type SecurityPolicyUpdateInput = {
   accessTokenTtlSec?: Prisma.IntFieldUpdateOperationsInput | number
   refreshTokenTtlSec?: Prisma.IntFieldUpdateOperationsInput | number
   sessionTtlSec?: Prisma.IntFieldUpdateOperationsInput | number
+  ipWhitelistEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  emailDomainWhitelistEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  corsOriginWhitelistEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
 }
 
 export type SecurityPolicyUncheckedUpdateInput = {
@@ -515,6 +560,9 @@ export type SecurityPolicyUncheckedUpdateInput = {
   accessTokenTtlSec?: Prisma.IntFieldUpdateOperationsInput | number
   refreshTokenTtlSec?: Prisma.IntFieldUpdateOperationsInput | number
   sessionTtlSec?: Prisma.IntFieldUpdateOperationsInput | number
+  ipWhitelistEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  emailDomainWhitelistEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  corsOriginWhitelistEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
 }
 
 export type SecurityPolicyCreateManyInput = {
@@ -535,6 +583,9 @@ export type SecurityPolicyCreateManyInput = {
   accessTokenTtlSec?: number
   refreshTokenTtlSec?: number
   sessionTtlSec?: number
+  ipWhitelistEnabled?: boolean
+  emailDomainWhitelistEnabled?: boolean
+  corsOriginWhitelistEnabled?: boolean
 }
 
 export type SecurityPolicyUpdateManyMutationInput = {
@@ -555,6 +606,9 @@ export type SecurityPolicyUpdateManyMutationInput = {
   accessTokenTtlSec?: Prisma.IntFieldUpdateOperationsInput | number
   refreshTokenTtlSec?: Prisma.IntFieldUpdateOperationsInput | number
   sessionTtlSec?: Prisma.IntFieldUpdateOperationsInput | number
+  ipWhitelistEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  emailDomainWhitelistEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  corsOriginWhitelistEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
 }
 
 export type SecurityPolicyUncheckedUpdateManyInput = {
@@ -575,6 +629,9 @@ export type SecurityPolicyUncheckedUpdateManyInput = {
   accessTokenTtlSec?: Prisma.IntFieldUpdateOperationsInput | number
   refreshTokenTtlSec?: Prisma.IntFieldUpdateOperationsInput | number
   sessionTtlSec?: Prisma.IntFieldUpdateOperationsInput | number
+  ipWhitelistEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  emailDomainWhitelistEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  corsOriginWhitelistEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
 }
 
 export type SecurityPolicyCountOrderByAggregateInput = {
@@ -595,6 +652,9 @@ export type SecurityPolicyCountOrderByAggregateInput = {
   accessTokenTtlSec?: Prisma.SortOrder
   refreshTokenTtlSec?: Prisma.SortOrder
   sessionTtlSec?: Prisma.SortOrder
+  ipWhitelistEnabled?: Prisma.SortOrder
+  emailDomainWhitelistEnabled?: Prisma.SortOrder
+  corsOriginWhitelistEnabled?: Prisma.SortOrder
 }
 
 export type SecurityPolicyAvgOrderByAggregateInput = {
@@ -627,6 +687,9 @@ export type SecurityPolicyMaxOrderByAggregateInput = {
   accessTokenTtlSec?: Prisma.SortOrder
   refreshTokenTtlSec?: Prisma.SortOrder
   sessionTtlSec?: Prisma.SortOrder
+  ipWhitelistEnabled?: Prisma.SortOrder
+  emailDomainWhitelistEnabled?: Prisma.SortOrder
+  corsOriginWhitelistEnabled?: Prisma.SortOrder
 }
 
 export type SecurityPolicyMinOrderByAggregateInput = {
@@ -647,6 +710,9 @@ export type SecurityPolicyMinOrderByAggregateInput = {
   accessTokenTtlSec?: Prisma.SortOrder
   refreshTokenTtlSec?: Prisma.SortOrder
   sessionTtlSec?: Prisma.SortOrder
+  ipWhitelistEnabled?: Prisma.SortOrder
+  emailDomainWhitelistEnabled?: Prisma.SortOrder
+  corsOriginWhitelistEnabled?: Prisma.SortOrder
 }
 
 export type SecurityPolicySumOrderByAggregateInput = {
@@ -705,6 +771,9 @@ export type SecurityPolicySelect<ExtArgs extends runtime.Types.Extensions.Intern
   accessTokenTtlSec?: boolean
   refreshTokenTtlSec?: boolean
   sessionTtlSec?: boolean
+  ipWhitelistEnabled?: boolean
+  emailDomainWhitelistEnabled?: boolean
+  corsOriginWhitelistEnabled?: boolean
 }, ExtArgs["result"]["securityPolicy"]>
 
 export type SecurityPolicySelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -725,6 +794,9 @@ export type SecurityPolicySelectCreateManyAndReturn<ExtArgs extends runtime.Type
   accessTokenTtlSec?: boolean
   refreshTokenTtlSec?: boolean
   sessionTtlSec?: boolean
+  ipWhitelistEnabled?: boolean
+  emailDomainWhitelistEnabled?: boolean
+  corsOriginWhitelistEnabled?: boolean
 }, ExtArgs["result"]["securityPolicy"]>
 
 export type SecurityPolicySelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -745,6 +817,9 @@ export type SecurityPolicySelectUpdateManyAndReturn<ExtArgs extends runtime.Type
   accessTokenTtlSec?: boolean
   refreshTokenTtlSec?: boolean
   sessionTtlSec?: boolean
+  ipWhitelistEnabled?: boolean
+  emailDomainWhitelistEnabled?: boolean
+  corsOriginWhitelistEnabled?: boolean
 }, ExtArgs["result"]["securityPolicy"]>
 
 export type SecurityPolicySelectScalar = {
@@ -765,9 +840,12 @@ export type SecurityPolicySelectScalar = {
   accessTokenTtlSec?: boolean
   refreshTokenTtlSec?: boolean
   sessionTtlSec?: boolean
+  ipWhitelistEnabled?: boolean
+  emailDomainWhitelistEnabled?: boolean
+  corsOriginWhitelistEnabled?: boolean
 }
 
-export type SecurityPolicyOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "createdAt" | "updatedAt" | "key" | "passwordMinLength" | "passwordRequireUppercase" | "passwordRequireLowercase" | "passwordRequireNumber" | "passwordRequireSpecial" | "passwordExpirationDays" | "passwordReuseLimit" | "temporaryLockThreshold" | "temporaryLockDurationMin" | "permanentLockThreshold" | "accessTokenTtlSec" | "refreshTokenTtlSec" | "sessionTtlSec", ExtArgs["result"]["securityPolicy"]>
+export type SecurityPolicyOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "createdAt" | "updatedAt" | "key" | "passwordMinLength" | "passwordRequireUppercase" | "passwordRequireLowercase" | "passwordRequireNumber" | "passwordRequireSpecial" | "passwordExpirationDays" | "passwordReuseLimit" | "temporaryLockThreshold" | "temporaryLockDurationMin" | "permanentLockThreshold" | "accessTokenTtlSec" | "refreshTokenTtlSec" | "sessionTtlSec" | "ipWhitelistEnabled" | "emailDomainWhitelistEnabled" | "corsOriginWhitelistEnabled", ExtArgs["result"]["securityPolicy"]>
 
 export type $SecurityPolicyPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "SecurityPolicy"
@@ -832,6 +910,18 @@ export type $SecurityPolicyPayload<ExtArgs extends runtime.Types.Extensions.Inte
      * @displayName 세션 TTL (초)
      */
     sessionTtlSec: number
+    /**
+     * @displayName IP 화이트리스트 활성화
+     */
+    ipWhitelistEnabled: boolean
+    /**
+     * @displayName 이메일 도메인 화이트리스트 활성화
+     */
+    emailDomainWhitelistEnabled: boolean
+    /**
+     * @displayName CORS Origin 화이트리스트 활성화
+     */
+    corsOriginWhitelistEnabled: boolean
   }, ExtArgs["result"]["securityPolicy"]>
   composites: {}
 }
@@ -1272,6 +1362,9 @@ export interface SecurityPolicyFieldRefs {
   readonly accessTokenTtlSec: Prisma.FieldRef<"SecurityPolicy", 'Int'>
   readonly refreshTokenTtlSec: Prisma.FieldRef<"SecurityPolicy", 'Int'>
   readonly sessionTtlSec: Prisma.FieldRef<"SecurityPolicy", 'Int'>
+  readonly ipWhitelistEnabled: Prisma.FieldRef<"SecurityPolicy", 'Boolean'>
+  readonly emailDomainWhitelistEnabled: Prisma.FieldRef<"SecurityPolicy", 'Boolean'>
+  readonly corsOriginWhitelistEnabled: Prisma.FieldRef<"SecurityPolicy", 'Boolean'>
 }
     
 

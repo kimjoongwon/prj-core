@@ -409,10 +409,6 @@ export type EnumAuthAuditResultFieldUpdateOperationsInput = {
   set?: $Enums.AuthAuditResult
 }
 
-export type NullableStringFieldUpdateOperationsInput = {
-  set?: string | null
-}
-
 export type AuthAuditLogCreateNestedManyWithoutUserInput = {
   create?: Prisma.XOR<Prisma.AuthAuditLogCreateWithoutUserInput, Prisma.AuthAuditLogUncheckedCreateWithoutUserInput> | Prisma.AuthAuditLogCreateWithoutUserInput[] | Prisma.AuthAuditLogUncheckedCreateWithoutUserInput[]
   connectOrCreate?: Prisma.AuthAuditLogCreateOrConnectWithoutUserInput | Prisma.AuthAuditLogCreateOrConnectWithoutUserInput[]

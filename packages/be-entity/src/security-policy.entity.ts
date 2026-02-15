@@ -41,6 +41,13 @@ export class SecurityPolicy implements SecurityPolicyModel {
 	sessionTtlSec!: number;
 
 	// ============================================================================
+	// 화이트리스트 정책
+	// ============================================================================
+	ipWhitelistEnabled!: boolean;
+	emailDomainWhitelistEnabled!: boolean;
+	corsOriginWhitelistEnabled!: boolean;
+
+	// ============================================================================
 	// 도메인 메서드
 	// ============================================================================
 

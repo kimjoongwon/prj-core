@@ -2523,6 +2523,9 @@ export interface SecurityPolicySeedData {
 	accessTokenTtlSec: number;
 	refreshTokenTtlSec: number;
 	sessionTtlSec: number;
+	ipWhitelistEnabled: boolean;
+	emailDomainWhitelistEnabled: boolean;
+	corsOriginWhitelistEnabled: boolean;
 }
 
 export const securityPolicySeedData: SecurityPolicySeedData = {
@@ -2540,6 +2543,9 @@ export const securityPolicySeedData: SecurityPolicySeedData = {
 	accessTokenTtlSec: 3600,
 	refreshTokenTtlSec: 2592000,
 	sessionTtlSec: 86400,
+	ipWhitelistEnabled: false,
+	emailDomainWhitelistEnabled: false,
+	corsOriginWhitelistEnabled: false,
 };
 
 // ============================================================================

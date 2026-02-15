@@ -42,4 +42,5 @@ export * from "./user.dto";
 export * from "./user-association.dto";
 export * from "./user-classification.dto";
 export * from "./users";
+export * from "./whitelist-entry.dto";
 export * from "./idp";

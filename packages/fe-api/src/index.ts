@@ -14,9 +14,8 @@ export {
 export * from "./model";
 
 // ─── IDP APIs (port 3007) ───
-// NOTE: IDP codegen 최초 실행 전에는 빈 파일일 수 있음
-// export * from "./idp-apis";
-// export * from "./idp-model";
+export * from "./idp-apis";
+export * from "./idp-model";
 export {
 	IDP_AXIOS_INSTANCE,
 	customIdpInstance,

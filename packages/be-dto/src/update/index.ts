@@ -25,3 +25,4 @@ export * from "./update-timeline.dto";
 export * from "./update-user.dto";
 export * from "./update-user-association.dto";
 export * from "./update-user-classification.dto";
+export * from "./update-whitelist-entry.dto";

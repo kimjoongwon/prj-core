@@ -1,5 +1,6 @@
 "use client";
 
+import { useAbortInteraction, useConfirmConsent } from "@cocrepo/api";
 import { observer } from "mobx-react-lite";
 import { OidcConsentPanel } from "../../../widget/form/OidcConsentPanel/OidcConsentPanel";
 
@@ -23,24 +24,13 @@ export interface IdpConsentProps {
  */
 export const IdpConsent = observer(
 	({ uid, client, missingScopes }: IdpConsentProps) => {
+		const consentMutation = useConfirmConsent();
+		const abortMutation = useAbortInteraction();
+
 		const handleConfirm = async (): Promise<string | null> => {
 			try {
-				const response = await fetch(
-					`/api/interaction/${uid}/confirm`,
-					{
-						method: "POST",
-						headers: { "Content-Type": "application/json" },
-						credentials: "include",
-					},
-				);
-
-				const data = await response.json();
-
-				if (!response.ok) {
-					return data.error || "동의 처리에 실패했습니다.";
-				}
-
-				window.location.href = data.redirectTo;
+				const result = await consentMutation.mutateAsync({ uid });
+				window.location.href = result.redirectTo;
 				return null;
 			} catch {
 				return "서버와 통신할 수 없습니다.";
@@ -49,19 +39,9 @@ export const IdpConsent = observer(
 
 		const handleAbort = async () => {
 			try {
-				const response = await fetch(
-					`/api/interaction/${uid}/abort`,
-					{
-						method: "POST",
-						headers: { "Content-Type": "application/json" },
-						credentials: "include",
-					},
-				);
-
-				const data = await response.json();
-
-				if (data.redirectTo) {
-					window.location.href = data.redirectTo;
+				const result = await abortMutation.mutateAsync({ uid });
+				if (result.redirectTo) {
+					window.location.href = result.redirectTo;
 				}
 			} catch {
 				// 에러 무시
