@@ -8,7 +8,6 @@ import { SubjectDto, SubjectFieldDto } from "@cocrepo/dto";
 import { SubjectsService } from "@cocrepo/service";
 import { Controller, Get, HttpStatus, Param, Query } from "@nestjs/common";
 import { ApiOperation, ApiParam, ApiQuery, ApiTags } from "@nestjs/swagger";
-import { plainToInstance } from "class-transformer";
 
 @ApiTags("SUBJECTS")
 @Controller()
@@ -43,7 +42,7 @@ export class SubjectsController {
 			? await this.subjectsService.getSubjectsByGroup(group)
 			: await this.subjectsService.getSubjects();
 
-		return subjects.map((subject) => plainToInstance(SubjectDto, subject));
+		return subjects;
 	}
 
 	@Public()
@@ -68,8 +67,7 @@ export class SubjectsController {
 			return [];
 		}
 
-		const fields = await this.subjectsService.getSubjectFields(subject.name);
-		return fields.map((field) => plainToInstance(SubjectFieldDto, field));
+		return this.subjectsService.getSubjectFields(subject.name);
 	}
 
 	@Public()
@@ -87,7 +85,6 @@ export class SubjectsController {
 	@ApiResponseEntity(SubjectDto, HttpStatus.OK)
 	@ResponseMessage("common.subject.read.success")
 	async getSubjectById(@Param("id") id: string) {
-		const subject = await this.subjectsService.getSubjectById(id);
-		return plainToInstance(SubjectDto, subject);
+		return this.subjectsService.getSubjectById(id);
 	}
 }

@@ -11,7 +11,6 @@ import { DashboardStatsDto, LoginTrendItemDto } from "@cocrepo/dto";
 import { IdpDashboardService } from "@cocrepo/service";
 import { Controller, Get, HttpStatus } from "@nestjs/common";
 import { ApiOperation, ApiTags } from "@nestjs/swagger";
-import { plainToInstance } from "class-transformer";
 
 @ApiTags("IDP_DASHBOARD")
 @Controller()
@@ -34,8 +33,7 @@ export class IdpDashboardController {
 	@ApiResponseEntity(DashboardStatsDto, HttpStatus.OK)
 	@ResponseMessage("대시보드 통계 조회 성공")
 	async getStats() {
-		const stats = await this.dashboardService.getStats();
-		return plainToInstance(DashboardStatsDto, stats);
+		return this.dashboardService.getStats();
 	}
 
 	@Get("login-trend")
@@ -50,7 +48,6 @@ export class IdpDashboardController {
 	@ApiResponseEntity(LoginTrendItemDto, HttpStatus.OK, { isArray: true })
 	@ResponseMessage("로그인 추이 조회 성공")
 	async getLoginTrend() {
-		const trend = await this.dashboardService.getLoginTrend();
-		return trend.map((item) => plainToInstance(LoginTrendItemDto, item));
+		return this.dashboardService.getLoginTrend();
 	}
 }

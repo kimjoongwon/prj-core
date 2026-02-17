@@ -23,7 +23,6 @@ import {
 	UseGuards,
 } from "@nestjs/common";
 import { ApiBody, ApiOperation, ApiParam, ApiTags } from "@nestjs/swagger";
-import { plainToInstance } from "class-transformer";
 
 @ApiTags("ROLES")
 @Controller()
@@ -43,8 +42,7 @@ export class RolesController {
 	@ApiResponseEntity(RoleDto, HttpStatus.OK, { isArray: true })
 	@ResponseMessage("common.role.list.success")
 	async getRoles() {
-		const roles = await this.rolesService.getAll();
-		return roles.map((role) => plainToInstance(RoleDto, role));
+		return this.rolesService.getAll();
 	}
 
 	@Get(":id")
@@ -65,8 +63,7 @@ export class RolesController {
 	@ApiResponseEntity(RoleDto, HttpStatus.OK)
 	@ResponseMessage("common.role.read.success")
 	async getRoleById(@Param("id", ParseUUIDPipe) id: string) {
-		const role = await this.rolesService.getById(id);
-		return plainToInstance(RoleDto, role);
+		return this.rolesService.getById(id);
 	}
 
 	@Post()
@@ -88,8 +85,7 @@ export class RolesController {
 	@ApiResponseEntity(RoleDto, HttpStatus.CREATED)
 	@ResponseMessage("common.role.create.success")
 	async createRole(@Body() dto: CreateRoleDto) {
-		const role = await this.rolesService.create(dto);
-		return plainToInstance(RoleDto, role);
+		return this.rolesService.create(dto);
 	}
 
 	@Patch(":id")
@@ -119,8 +115,7 @@ export class RolesController {
 		@Param("id", ParseUUIDPipe) id: string,
 		@Body() dto: UpdateRoleDto,
 	) {
-		const role = await this.rolesService.update(id, dto);
-		return plainToInstance(RoleDto, role);
+		return this.rolesService.update(id, dto);
 	}
 
 	@Delete(":id")
@@ -143,7 +138,6 @@ export class RolesController {
 	@ApiResponseEntity(RoleDto, HttpStatus.OK)
 	@ResponseMessage("common.role.delete.success")
 	async deleteRole(@Param("id", ParseUUIDPipe) id: string) {
-		const role = await this.rolesService.delete(id);
-		return plainToInstance(RoleDto, role);
+		return this.rolesService.delete(id);
 	}
 }

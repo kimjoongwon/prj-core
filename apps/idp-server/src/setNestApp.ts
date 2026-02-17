@@ -96,7 +96,9 @@ export function setNestApp<T extends INestApplication>(app: T): void {
 	app.useGlobalInterceptors(
 		app.get(SpaceScopeInterceptor),
 		app.get(ResponseEntityInterceptor),
-		new ClassSerializerInterceptor(app.get(Reflector)),
+		new ClassSerializerInterceptor(app.get(Reflector), {
+			enableCircularCheck: true,
+		}),
 		new DtoTransformInterceptor(app.get(Reflector)),
 	);
 }

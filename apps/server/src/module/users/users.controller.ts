@@ -32,7 +32,6 @@ import {
   UnauthorizedException,
 } from "@nestjs/common";
 import { ApiBody, ApiOperation, ApiParam, ApiTags } from "@nestjs/swagger";
-import { plainToInstance } from "class-transformer";
 import { ClsService } from "nestjs-cls";
 
 
@@ -93,18 +92,15 @@ export class UsersController {
     const skip = query.skip ?? 0;
     const take = query.take ?? 10;
 
-    return wrapResponse(
-      users.map((user) => plainToInstance(UserDto, user)),
-      {
-        meta: plainToInstance(UserPaginationMetaDto, {
-          total: totalCount,
-          skip,
-          take,
-          totalPages: take > 0 ? Math.ceil(totalCount / take) : 1,
-        }),
-        stats: plainToInstance(UserStatsDto, stats),
-      }
-    );
+    return wrapResponse(users, {
+      meta: {
+        total: totalCount,
+        skip,
+        take,
+        totalPages: take > 0 ? Math.ceil(totalCount / take) : 1,
+      },
+      stats,
+    });
   }
 
   @Get(":id")
@@ -133,9 +129,7 @@ export class UsersController {
   ): Promise<UserDetailResponseDto> {
     const spaceId = this.getSpaceId();
 
-    const user = await this.usersService.getUserDetailForSpace(id, spaceId);
-
-    return plainToInstance(UserDetailResponseDto, user);
+    return this.usersService.getUserDetailForSpace(id, spaceId);
   }
 
   @Post()
@@ -164,7 +158,7 @@ export class UsersController {
   async createUser(@Body() dto: CreateUserMemberDto): Promise<UserDto> {
     const spaceId = this.getSpaceId();
 
-    const user = await this.usersService.createUserForSpace({
+    return this.usersService.createUserForSpace({
       name: dto.name,
       email: dto.email,
       phone: dto.phone,
@@ -174,8 +168,6 @@ export class UsersController {
       categoryId: dto.categoryId,
       groupIds: dto.groupIds,
     });
-
-    return plainToInstance(UserDto, user);
   }
 
   @Patch(":id")
@@ -211,15 +203,13 @@ export class UsersController {
   ): Promise<UserDto> {
     const spaceId = this.getSpaceId();
 
-    const user = await this.usersService.updateUserForSpace(id, spaceId, {
+    return this.usersService.updateUserForSpace(id, spaceId, {
       name: dto.name,
       email: dto.email,
       phone: dto.phone,
       categoryId: dto.categoryId,
       groupIds: dto.groupIds,
     });
-
-    return plainToInstance(UserDto, user);
   }
 
   @Delete(":id")

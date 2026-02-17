@@ -26,7 +26,6 @@ import {
 	Query,
 } from "@nestjs/common";
 import { ApiOperation, ApiParam, ApiTags } from "@nestjs/swagger";
-import { plainToInstance } from "class-transformer";
 
 @ApiTags("IDP_ACCOUNTS")
 @Controller()
@@ -53,10 +52,9 @@ export class IdpAccountsController {
 		const skip = query.skip ?? 0;
 		const take = query.take ?? 20;
 
-		return wrapResponse(
-			data.map((account) => plainToInstance(IdpAccountDto, account)),
-			{ meta: new PageMetaDto(skip, take, totalCount) },
-		);
+		return wrapResponse(data, {
+			meta: new PageMetaDto(skip, take, totalCount),
+		});
 	}
 
 	@Get(":userId")
@@ -71,8 +69,7 @@ export class IdpAccountsController {
 	@ApiResponseEntity(IdpAccountDto, HttpStatus.OK)
 	@ResponseMessage("계정 상세 조회 성공")
 	async getAccount(@Param("userId", ParseUUIDPipe) userId: string) {
-		const account = await this.accountService.getById(userId);
-		return plainToInstance(IdpAccountDto, account);
+		return this.accountService.getById(userId);
 	}
 
 	@Patch(":userId/toggle-active")
@@ -87,8 +84,7 @@ export class IdpAccountsController {
 	@ApiResponseEntity(IdpAccountDto, HttpStatus.OK)
 	@ResponseMessage("계정 상태 변경 성공")
 	async toggleActive(@Param("userId", ParseUUIDPipe) userId: string) {
-		const account = await this.accountService.toggleActive(userId);
-		return plainToInstance(IdpAccountDto, account);
+		return this.accountService.toggleActive(userId);
 	}
 
 	@Post(":userId/reset-failed-attempts")

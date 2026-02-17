@@ -30,7 +30,6 @@ import {
 	Query,
 } from "@nestjs/common";
 import { ApiBody, ApiOperation, ApiParam, ApiTags } from "@nestjs/swagger";
-import { plainToInstance } from "class-transformer";
 
 @ApiTags("OIDC_CLIENTS")
 @Controller()
@@ -59,12 +58,9 @@ export class OidcClientsController {
 		const skip = query.skip ?? 0;
 		const take = query.take ?? 20;
 
-		return wrapResponse(
-			data.map((client) => plainToInstance(OidcClientDto, client)),
-			{
-				meta: new PageMetaDto(skip, take, totalCount),
-			},
-		);
+		return wrapResponse(data, {
+			meta: new PageMetaDto(skip, take, totalCount),
+		});
 	}
 
 	@Get(":oidcClientId")
@@ -85,8 +81,7 @@ export class OidcClientsController {
 	async getOidcClient(
 		@Param("oidcClientId", ParseUUIDPipe) oidcClientId: string,
 	) {
-		const client = await this.oidcClientsService.getById(oidcClientId);
-		return plainToInstance(OidcClientDto, client);
+		return this.oidcClientsService.getById(oidcClientId);
 	}
 
 	@Post()
@@ -106,7 +101,7 @@ export class OidcClientsController {
 	@ApiResponseEntity(OidcClientDto, HttpStatus.CREATED)
 	@ResponseMessage("OIDC 클라이언트 등록 성공")
 	async createOidcClient(@Body() dto: CreateOidcClientDto) {
-		const client = await this.oidcClientsService.create({
+		return this.oidcClientsService.create({
 			clientId: dto.clientId,
 			clientSecret: dto.clientSecret,
 			clientName: dto.clientName,
@@ -119,7 +114,6 @@ export class OidcClientsController {
 			policyUri: dto.policyUri,
 			tosUri: dto.tosUri,
 		});
-		return plainToInstance(OidcClientDto, client);
 	}
 
 	@Patch(":oidcClientId")
@@ -145,8 +139,7 @@ export class OidcClientsController {
 		@Param("oidcClientId", ParseUUIDPipe) oidcClientId: string,
 		@Body() dto: UpdateOidcClientDto,
 	) {
-		const client = await this.oidcClientsService.update(oidcClientId, dto);
-		return plainToInstance(OidcClientDto, client);
+		return this.oidcClientsService.update(oidcClientId, dto);
 	}
 
 	@Delete(":oidcClientId")
@@ -188,7 +181,6 @@ export class OidcClientsController {
 	async toggleActiveOidcClient(
 		@Param("oidcClientId", ParseUUIDPipe) oidcClientId: string,
 	) {
-		const client = await this.oidcClientsService.toggleActive(oidcClientId);
-		return plainToInstance(OidcClientDto, client);
+		return this.oidcClientsService.toggleActive(oidcClientId);
 	}
 }

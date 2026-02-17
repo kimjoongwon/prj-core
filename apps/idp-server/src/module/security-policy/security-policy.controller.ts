@@ -20,7 +20,6 @@ import {
 	Patch,
 } from "@nestjs/common";
 import { ApiBody, ApiOperation, ApiTags } from "@nestjs/swagger";
-import { plainToInstance } from "class-transformer";
 
 @ApiTags("SECURITY_POLICY")
 @Controller()
@@ -42,8 +41,7 @@ export class SecurityPolicyController {
 	@ApiResponseEntity(SecurityPolicyDto, HttpStatus.OK)
 	@ResponseMessage("보안 정책 조회 성공")
 	async getSecurityPolicy() {
-		const policy = await this.securityPolicyService.getDefault();
-		return plainToInstance(SecurityPolicyDto, policy);
+		return this.securityPolicyService.getDefault();
 	}
 
 	@Patch()
@@ -62,7 +60,6 @@ export class SecurityPolicyController {
 	@ApiResponseEntity(SecurityPolicyDto, HttpStatus.OK)
 	@ResponseMessage("보안 정책 수정 성공")
 	async updateSecurityPolicy(@Body() dto: UpdateSecurityPolicyDto) {
-		const policy = await this.securityPolicyService.update(dto);
-		return plainToInstance(SecurityPolicyDto, policy);
+		return this.securityPolicyService.update(dto);
 	}
 }

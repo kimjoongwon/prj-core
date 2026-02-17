@@ -35,15 +35,16 @@ export function transformToDto<T>(
 		return data;
 	}
 
-	// plainToInstance로 변환 (항상 시도)
+	// plainToInstance로 변환 (항상 시도, 순환 참조 안전)
+	const transformOptions = { enableCircularCheck: true };
 	const transformed =
 		options?.isArray && Array.isArray(data)
 			? data.map((item) =>
 					typeof item === "object" && item !== null
-						? plainToInstance(dtoClass, item)
+						? plainToInstance(dtoClass, item, transformOptions)
 						: item,
 				)
-			: plainToInstance(dtoClass, data);
+			: plainToInstance(dtoClass, data, transformOptions);
 
 	// excludeFields가 있으면 필드 제거
 	if (options?.excludeFields && options.excludeFields.length > 0) {

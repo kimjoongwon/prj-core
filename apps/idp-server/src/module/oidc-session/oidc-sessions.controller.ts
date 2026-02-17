@@ -20,7 +20,6 @@ import {
 	Query,
 } from "@nestjs/common";
 import { ApiOperation, ApiParam, ApiTags } from "@nestjs/swagger";
-import { plainToInstance } from "class-transformer";
 
 @ApiTags("OIDC_SESSIONS")
 @Controller()
@@ -67,8 +66,7 @@ export class OidcSessionsController {
 	@ApiResponseEntity(OidcSessionStatsDto, HttpStatus.OK)
 	@ResponseMessage("OIDC 세션 통계 조회 성공")
 	async getOidcSessionStats() {
-		const stats = await this.oidcSessionsService.getStats();
-		return plainToInstance(OidcSessionStatsDto, stats);
+		return this.oidcSessionsService.getStats();
 	}
 
 	@Post(":key/revoke")

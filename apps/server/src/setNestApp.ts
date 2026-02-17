@@ -55,7 +55,9 @@ export function setNestApp<T extends INestApplication>(app: T): void {
 	app.useGlobalInterceptors(
 		app.get(SpaceScopeInterceptor), // 1 (Request: 데코레이터 기반 EFFECTIVE_SPACE_IDS 계산)
 		app.get(ResponseEntityInterceptor), // 2 (Response: 래핑)
-		new ClassSerializerInterceptor(app.get(Reflector)), // 3 (Response: 직렬화)
+		new ClassSerializerInterceptor(app.get(Reflector), {
+			enableCircularCheck: true,
+		}), // 3 (Response: 직렬화, 순환 참조 안전)
 		new DtoTransformInterceptor(app.get(Reflector)), // 4 (Response: DTO 변환 및 exclude)
 	);
 }

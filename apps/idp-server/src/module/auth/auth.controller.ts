@@ -48,7 +48,6 @@ import {
   ApiSecurity,
   ApiTags,
 } from "@nestjs/swagger";
-import { plainToInstance } from "class-transformer";
 import { Request, Response } from "express";
 
 @ApiTags("AUTH")
@@ -233,12 +232,9 @@ export class AuthController {
     const skip = query.skip ?? 0;
     const take = query.take ?? 20;
 
-    return wrapResponse(
-      logs.map((log) => plainToInstance(AuthAuditLogDto, log)),
-      {
-        meta: new PageMetaDto(skip, take, totalCount),
-      }
-    );
+    return wrapResponse(logs, {
+      meta: new PageMetaDto(skip, take, totalCount),
+    });
   }
 
   @Roles([SYSTEM_ROLES.FULL_ACCESS])
@@ -256,8 +252,7 @@ export class AuthController {
   @ApiResponseEntity(AuditLogStatsDto, HttpStatus.OK)
   @ResponseMessage("감사 로그 통계 조회 성공")
   async getAuthAuditLogStats() {
-    const stats = await this.authAuditLogService.getStats();
-    return plainToInstance(AuditLogStatsDto, stats);
+    return this.authAuditLogService.getStats();
   }
 
   @SkipSpaceCheck()
