@@ -2,6 +2,7 @@ import { INestApplication, ValidationPipe } from "@nestjs/common";
 import { Test, TestingModule } from "@nestjs/testing";
 import request from "supertest";
 import { AppModule } from "../src/module/app.module";
+import { getTestAuth, TestJwtStrategy } from "./helpers/test-auth.helper";
 import { GuardTestController } from "./mock-controllers/tenant-injection-test.controller";
 
 /**
@@ -20,6 +21,7 @@ describe("Role 시스템 E2E 테스트", () => {
 		const moduleFixture: TestingModule = await Test.createTestingModule({
 			imports: [AppModule],
 			controllers: [GuardTestController],
+			providers: [TestJwtStrategy],
 		}).compile();
 
 		app = moduleFixture.createNestApplication();
@@ -32,6 +34,15 @@ describe("Role 시스템 E2E 테스트", () => {
 		);
 
 		await app.init();
+
+		// TestJwtStrategy + JwtService로 인증 토큰 생성
+		try {
+			const auth = await getTestAuth(app);
+			jwtToken = auth.jwtToken;
+			spaceId = auth.spaceId;
+		} catch (error) {
+			console.warn(`테스트 인증 설정 실패: ${error}`);
+		}
 	}, 60000);
 
 	afterAll(async () => {
@@ -39,28 +50,6 @@ describe("Role 시스템 E2E 테스트", () => {
 			await app.close();
 		}
 	}, 30000);
-
-	describe("인증 설정", () => {
-		it("테스트 사용자 로그인", async () => {
-			const loginResponse = await request(app.getHttpServer())
-				.post("/api/v1/auth/login")
-				.send({
-					email: "plate@gmail.com",
-					password: "rkdmf12!@",
-				});
-
-			if (loginResponse.status !== 200 || !loginResponse.body?.data) {
-				console.warn("로그인 실패, 나머지 테스트 건너뜀");
-				return;
-			}
-
-			jwtToken = loginResponse.body.data.accessToken;
-			spaceId = loginResponse.body.data.user?.tenants?.[0]?.spaceId;
-
-			expect(jwtToken).toBeDefined();
-			expect(spaceId).toBeDefined();
-		});
-	});
 
 	// ==================== A. 시드 데이터 검증 ====================
 

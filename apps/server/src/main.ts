@@ -101,7 +101,7 @@ const SWAGGER_SPACE_SELECTOR_JS = `
       loadBtn.textContent = '...';
       loadBtn.disabled = true;
 
-      origFetch('/api/v1/auth/my-spaces', {
+      origFetch((window.__IDP_SERVER_URL || 'http://localhost:3007') + '/api/v1/auth/my-spaces', {
         headers: { 'Authorization': 'Bearer ' + token }
       })
       .then(function(r) { return r.json(); })
@@ -255,7 +255,7 @@ async function bootstrap() {
         usePkceWithAuthorizationCodeGrant: true,
       },
     },
-    customJsStr: SWAGGER_SPACE_SELECTOR_JS,
+    customJsStr: `window.__IDP_SERVER_URL = '${oidcIssuer}';\n` + SWAGGER_SPACE_SELECTOR_JS,
   });
 
   // =================================================================

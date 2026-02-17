@@ -1,3 +1,4 @@
+import { Public } from "@cocrepo/decorator";
 import {
 	ForgotPasswordResultDto,
 	PasswordPolicyDto,
@@ -32,6 +33,7 @@ import { PasswordResetService } from "./password-reset.service";
  * 비밀번호 찾기/재설정 흐름의 API를 제공합니다.
  * 모든 엔드포인트는 인증 없이 접근 가능합니다.
  */
+@Public()
 @ApiTags("Password Reset")
 @Controller("api")
 export class PasswordResetController {

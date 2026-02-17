@@ -1,17 +1,66 @@
 import { PRISMA_SERVICE_TOKEN } from "@cocrepo/constant";
 import type { DynamicModule } from "@nestjs/common";
 import { ConfigModule, ConfigService } from "@nestjs/config";
+import { JwtModule } from "@nestjs/jwt";
+import { ThrottlerModule } from "@nestjs/throttler";
 import { ClsPluginTransactional } from "@nestjs-cls/transactional";
 import { TransactionalAdapterPrisma } from "@nestjs-cls/transactional-adapter-prisma";
+import { MailerModule } from "@nestjs-modules/mailer";
+import type { SignOptions } from "jsonwebtoken";
 import { ClsModule } from "nestjs-cls";
 import { LoggerModule } from "nestjs-pino";
-import { appConfig, authConfig, oidcConfig, redisConfig } from "../config";
+import {
+	type AuthConfig,
+	appConfig,
+	authConfig,
+	corsConfig,
+	oidcConfig,
+	redisConfig,
+	smtpConfig,
+} from "../config";
 
 export const globalModules: (DynamicModule | Promise<DynamicModule>)[] = [
 	ConfigModule.forRoot({
 		isGlobal: true,
 		envFilePath: [".env.local", ".env"],
-		load: [oidcConfig, authConfig, redisConfig, appConfig],
+		load: [oidcConfig, authConfig, redisConfig, appConfig, corsConfig, smtpConfig],
+	}),
+	ThrottlerModule.forRoot([
+		{
+			name: "short",
+			ttl: 1000,
+			limit: 10,
+		},
+		{
+			name: "medium",
+			ttl: 60000,
+			limit: 100,
+		},
+		{
+			name: "long",
+			ttl: 900000,
+			limit: 1000,
+		},
+	]),
+	MailerModule.forRootAsync({
+		useFactory: async (config: ConfigService) => {
+			const smtpConfig = await config.get("smtp");
+			return {
+				transport: {
+					host: smtpConfig.host,
+					port: smtpConfig.port,
+					secure: true,
+					auth: {
+						user: smtpConfig.username,
+						pass: smtpConfig.password,
+					},
+				},
+				defaults: {
+					from: smtpConfig.sender,
+				},
+			};
+		},
+		inject: [ConfigService],
 	}),
 	ClsModule.forRoot({
 		global: true,
@@ -26,6 +75,32 @@ export const globalModules: (DynamicModule | Promise<DynamicModule>)[] = [
 				}),
 			}),
 		],
+	}),
+	JwtModule.registerAsync({
+		global: true,
+		useFactory: (config: ConfigService) => {
+			const authConf = config.get<AuthConfig>("auth");
+			if (!authConf) {
+				throw new Error("Auth config is not defined.");
+			}
+			if (!authConf.secret) {
+				throw new Error("JWT secret is not defined in the configuration.");
+			}
+			if (!authConf.expires) {
+				throw new Error(
+					"JWT expiration time is not defined in the configuration.",
+				);
+			}
+
+			return {
+				global: true,
+				secret: authConf.secret,
+				signOptions: {
+					expiresIn: authConf.expires as SignOptions["expiresIn"],
+				},
+			};
+		},
+		inject: [ConfigService],
 	}),
 	LoggerModule.forRootAsync({
 		inject: [ConfigService],

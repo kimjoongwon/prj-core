@@ -1,3 +1,4 @@
+import { Public } from "@cocrepo/decorator";
 import {
 	AbortResultDto,
 	ConsentResultDto,
@@ -38,6 +39,7 @@ import { InteractionService } from "./interaction.service";
  * idp-client(Next.js)가 프론트엔드를 담당하고,
  * 이 컨트롤러는 JSON API만 제공합니다.
  */
+@Public()
 @ApiTags("Interaction")
 @Controller("api/interaction")
 export class InteractionController {

@@ -1,28 +1,45 @@
 import {
+	AllExceptionsFilter,
+	DtoTransformInterceptor,
+	JwtAuthGuard,
+	ResponseEntityInterceptor,
+	SpaceAccessGuard,
+	SpaceScopeInterceptor,
+} from "@cocrepo/be-common";
+import { TranslationService } from "@cocrepo/service";
+import { TokenStorageService } from "@cocrepo/service";
+import { ClsService } from "nestjs-cls";
+import {
 	type ArgumentsHost,
 	Catch,
-	type ExceptionFilter,
-	HttpException,
-	HttpStatus,
+	ClassSerializerInterceptor,
+	type HttpServer,
 	type INestApplication,
 	Logger,
 	ValidationPipe,
 } from "@nestjs/common";
-import type { Response } from "express";
+import { BaseExceptionFilter, HttpAdapterHost, Reflector } from "@nestjs/core";
 
 /**
- * IdP 전용 간단한 예외 필터
+ * IdP 전용 예외 필터
  *
- * oidc-provider가 자체적으로 응답을 처리하므로,
- * 이미 응답이 전송된 경우 추가 처리를 하지 않습니다.
+ * AllExceptionsFilter를 래핑하여 oidc-provider가 자체적으로 응답을 처리한 후
+ * 추가 응답을 보내지 않도록 headersSent 체크를 추가합니다.
  */
 @Catch()
-class IdpExceptionFilter implements ExceptionFilter {
-	private readonly logger = new Logger(IdpExceptionFilter.name);
+class IdpAllExceptionsFilter extends BaseExceptionFilter {
+	private readonly logger = new Logger(IdpAllExceptionsFilter.name);
+
+	constructor(
+		applicationRef: HttpServer,
+		private readonly innerFilter: AllExceptionsFilter,
+	) {
+		super(applicationRef);
+	}
 
 	catch(exception: unknown, host: ArgumentsHost) {
 		const ctx = host.switchToHttp();
-		const response = ctx.getResponse<Response>();
+		const response = ctx.getResponse();
 
 		// oidc-provider가 이미 응답을 보낸 경우 무시
 		if (response.headersSent) {
@@ -32,30 +49,25 @@ class IdpExceptionFilter implements ExceptionFilter {
 			return;
 		}
 
-		let status = HttpStatus.INTERNAL_SERVER_ERROR;
-		let message = "Internal server error";
-
-		if (exception instanceof HttpException) {
-			status = exception.getStatus();
-			message = exception.message;
-		} else if (exception instanceof Error) {
-			message = exception.message;
-			this.logger.error(`Unhandled error: ${message}`, exception.stack);
-		}
-
-		response.status(status).json({
-			statusCode: status,
-			message,
-			timestamp: new Date().toISOString(),
-		});
+		return this.innerFilter.catch(exception, host);
 	}
 }
 
 export function setNestApp<T extends INestApplication>(app: T): void {
+	const { httpAdapter } = app.get(HttpAdapterHost);
+	const translationService = app.get(TranslationService);
+
 	// =================================================================
 	// Global Exception Filters
+	// AllExceptionsFilter를 래핑하여 headersSent 체크 추가
 	// =================================================================
-	app.useGlobalFilters(new IdpExceptionFilter());
+	const allExceptionsFilter = new AllExceptionsFilter(
+		httpAdapter,
+		translationService,
+	);
+	app.useGlobalFilters(
+		new IdpAllExceptionsFilter(httpAdapter, allExceptionsFilter),
+	);
 
 	// =================================================================
 	// Global Pipes (데이터 검증 및 변환)
@@ -69,8 +81,22 @@ export function setNestApp<T extends INestApplication>(app: T): void {
 	);
 
 	// =================================================================
-	// Global Interceptors
-	// IdP는 ClassSerializerInterceptor를 사용하지 않음
-	// oidc-provider가 자체적으로 응답을 처리하며, NestJS 인터셉터와 충돌함
+	// Global Guards (JWT 인증 + Space 접근 제어)
+	// @Public() 데코레이터가 있는 OIDC/interaction/password-reset 경로는 스킵됨
 	// =================================================================
+	app.useGlobalGuards(
+		new JwtAuthGuard(app.get(Reflector), app.get(TokenStorageService), app.get(ClsService)),
+		app.get(SpaceAccessGuard),
+	);
+
+	// =================================================================
+	// Global Interceptors - Response 처리는 역순!
+	// Request: 1→2→3→4 | Response: 4→3→2→1
+	// =================================================================
+	app.useGlobalInterceptors(
+		app.get(SpaceScopeInterceptor),
+		app.get(ResponseEntityInterceptor),
+		new ClassSerializerInterceptor(app.get(Reflector)),
+		new DtoTransformInterceptor(app.get(Reflector)),
+	);
 }

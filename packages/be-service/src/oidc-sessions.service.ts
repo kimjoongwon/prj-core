@@ -19,7 +19,7 @@ const MODEL_TYPES = [
 	"Interaction",
 ];
 
-interface OidcRedisSession {
+export interface OidcRedisSession {
 	key: string;
 	modelType: string;
 	grantId: string | null;

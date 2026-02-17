@@ -9,6 +9,7 @@ import {
 } from "@cocrepo/repository";
 import {
 	AuthAuditLogService,
+	AuthCacheService,
 	EmailService,
 	RedisService,
 	RolesService,
@@ -36,6 +37,7 @@ import { AuthController } from "./auth.controller";
 		SpaceContext,
 		AuthAuditLogService,
 		AuthAuditLogsRepository,
+		AuthCacheService,
 		EmailService,
 	],
 	controllers: [AuthController],

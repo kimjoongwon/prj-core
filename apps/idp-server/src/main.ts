@@ -1,6 +1,11 @@
+import { Token } from "@cocrepo/constant";
 import { NestFactory } from "@nestjs/core";
 import type { NestExpressApplication } from "@nestjs/platform-express";
-import { DocumentBuilder, SwaggerModule } from "@nestjs/swagger";
+import {
+  DocumentBuilder,
+  type SwaggerDocumentOptions,
+  SwaggerModule,
+} from "@nestjs/swagger";
 import cookieParser from "cookie-parser";
 import { Logger } from "nestjs-pino";
 import { AppModule } from "./module/app.module";
@@ -43,19 +48,66 @@ async function bootstrap() {
   // =================================================================
   // 5. API 문서 설정 (Swagger)
   // =================================================================
+  const oidcIssuer = process.env.OIDC_ISSUER || "http://localhost:3007";
+
   const config = new DocumentBuilder()
     .setTitle("OIDC Identity Provider")
     .setVersion("1.0.0")
-    .setDescription("OpenID Connect Identity Provider API")
+    .setDescription(
+      "OpenID Connect Identity Provider API\n\n" +
+      "OIDC 인증 및 IDP 관리 API를 제공합니다.\n\n" +
+      "**인증 방법:**\n" +
+      "1. OAuth2 (권장) - Authorize 버튼 클릭 후 OIDC 로그인\n" +
+      "2. Cookie - 브라우저에서 로그인 후 쿠키 자동 전송",
+    )
+    .addCookieAuth(Token.ACCESS, {
+      type: "apiKey",
+      in: "cookie",
+      name: Token.ACCESS,
+      description: "JWT Access Token (HttpOnly 쿠키로 자동 전송)",
+    })
+    .addOAuth2({
+      type: "oauth2",
+      description: "OIDC Authorization Code + PKCE 인증",
+      flows: {
+        authorizationCode: {
+          authorizationUrl: `${oidcIssuer}/oidc/auth`,
+          tokenUrl: `${oidcIssuer}/oidc/token`,
+          scopes: {
+            openid: "OpenID Connect 기본 인증",
+            profile: "프로필 정보 (이름)",
+            email: "이메일 주소",
+            roles: "역할 및 Space 정보",
+          },
+        },
+      },
+    })
     .build();
 
-  const document = SwaggerModule.createDocument(app, config);
-  SwaggerModule.setup("api", app, document);
+  const options: SwaggerDocumentOptions = {
+    operationIdFactory: (_controllerKey: string, methodKey: string) =>
+      methodKey,
+  };
+
+  const document = SwaggerModule.createDocument(app, config, options);
+
+  const port = process.env.APP_PORT || 3007;
+
+  SwaggerModule.setup("api", app, document, {
+    swaggerOptions: {
+      persistAuthorization: true,
+      oauth2RedirectUrl: `http://localhost:${port}/api/oauth2-redirect.html`,
+      initOAuth: {
+        clientId: "prj-core-swagger",
+        scopes: ["openid", "profile", "email", "roles"],
+        usePkceWithAuthorizationCodeGrant: true,
+      },
+    },
+  });
 
   // =================================================================
   // 6. 서버 시작
   // =================================================================
-  const port = process.env.APP_PORT || 3007;
   await app.listen(port);
 
   const logger = app.get(Logger);

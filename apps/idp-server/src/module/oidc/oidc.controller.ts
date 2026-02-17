@@ -1,3 +1,4 @@
+import { Public } from "@cocrepo/decorator";
 import { All, Controller, Req, Res } from "@nestjs/common";
 import { ApiExcludeController } from "@nestjs/swagger";
 import type { Request, Response } from "express";
@@ -27,6 +28,7 @@ import { OidcProviderService } from "./oidc-provider.service";
  * - `email` - 이메일 주소
  * - `phone` - 전화번호
  */
+@Public()
 @ApiExcludeController()
 @Controller("oidc")
 export class OidcController {

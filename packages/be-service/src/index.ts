@@ -40,7 +40,10 @@ export { MaskingService } from "./masking.service";
 export { MASKING_PRESETS, type MaskingPreset } from "@cocrepo/constant";
 export { OidcClientsService } from "./oidc-clients.service";
 export { SecurityPolicyService } from "./security-policy.service";
-export { OidcSessionsService } from "./oidc-sessions.service";
+export {
+	OidcSessionsService,
+	type OidcRedisSession,
+} from "./oidc-sessions.service";
 export {
 	type DashboardStats,
 	type LoginTrendItem,

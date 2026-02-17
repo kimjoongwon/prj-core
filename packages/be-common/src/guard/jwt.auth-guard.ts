@@ -29,9 +29,9 @@ export class JwtAuthGuard implements CanActivate {
 	) {}
 
 	async canActivate(context: ExecutionContext): Promise<boolean> {
-		const isPublic = this.reflector.get<boolean>(
+		const isPublic = this.reflector.getAllAndOverride<boolean>(
 			PUBLIC_ROUTE_KEY,
-			context.getHandler(),
+			[context.getHandler(), context.getClass()],
 		);
 
 		if (isPublic) {

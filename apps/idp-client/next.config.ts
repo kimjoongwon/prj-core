@@ -42,7 +42,7 @@ const nextConfig: NextConfig = {
 				// Main 서버 API 프록시 (관리 콘솔)
 				{
 					source: "/api/v1/:path*",
-					destination: "http://localhost:3006/api/v1/:path*",
+					destination: "http://localhost:3007/api/v1/:path*",
 				},
 			],
 		};

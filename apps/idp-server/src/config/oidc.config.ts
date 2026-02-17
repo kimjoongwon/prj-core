@@ -5,10 +5,16 @@ export interface JwksKeys {
 }
 
 export interface OidcConfig {
+	// OIDC Provider 설정
 	issuer: string;
 	cookieSecret: string;
 	cookieKeys: string[];
 	jwks?: JwksKeys;
+	// OIDC Client 설정 (AuthFacade에서 사용)
+	jwksUri: string;
+	clientId: string;
+	clientSecret: string;
+	redirectUri: string;
 }
 
 export const oidcConfig = registerAs("oidc", (): OidcConfig => {
@@ -22,8 +28,11 @@ export const oidcConfig = registerAs("oidc", (): OidcConfig => {
 		}
 	}
 
+	const issuer = process.env.OIDC_ISSUER || "http://localhost:3007";
+
 	return {
-		issuer: process.env.OIDC_ISSUER || "http://localhost:3007",
+		// OIDC Provider 설정
+		issuer,
 		cookieSecret:
 			process.env.OIDC_COOKIE_SECRET ||
 			"default-cookie-secret-change-in-production",
@@ -32,5 +41,14 @@ export const oidcConfig = registerAs("oidc", (): OidcConfig => {
 				"default-cookie-secret-change-in-production",
 		],
 		jwks,
+		// OIDC Client 설정 (AuthFacade에서 사용)
+		jwksUri: process.env.OIDC_JWKS_URI || `${issuer}/oidc/jwks`,
+		clientId: process.env.OIDC_CLIENT_ID || "prj-core-admin",
+		clientSecret:
+			process.env.OIDC_CLIENT_SECRET ||
+			"admin-secret-change-in-production",
+		redirectUri:
+			process.env.OIDC_REDIRECT_URI ||
+			"http://localhost:3000/api/v1/auth/callback",
 	};
 });

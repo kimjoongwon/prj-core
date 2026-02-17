@@ -4,13 +4,19 @@
 import {
 	AuthMiddleware,
 	DtoTransformInterceptor,
+	JwtStrategy,
 	LoggerMiddleware,
 	RequestContextMiddleware,
 	ResponseEntityInterceptor,
 	SpaceAccessGuard,
 	SpaceScopeInterceptor,
 } from "@cocrepo/be-common";
-import { I18nModule, SpaceContext } from "@cocrepo/service";
+import {
+	AuthCacheService,
+	I18nModule,
+	SpaceContext,
+	TokenStorageService,
+} from "@cocrepo/service";
 import { SpacesRepository } from "@cocrepo/repository";
 import { SpacesService } from "@cocrepo/service";
 import {
@@ -23,20 +29,14 @@ import { APP_GUARD, RouterModule } from "@nestjs/core";
 import { ThrottlerGuard } from "@nestjs/throttler";
 import { AbilitiesModule } from "./ability";
 import { ActionsModule } from "./action";
-import { AuthModule } from "./auth";
 // Global modules
 import { globalModules } from "./global.module";
 import { GrantsModule } from "./grant";
 import { GroundsModule } from "./grounds";
-import { IdpAccountsModule } from "./idp-accounts";
-import { IdpDashboardModule } from "./idp-dashboard";
 import { PrismaModule } from "./prisma.module";
 import { RedisModule } from "./redis.module";
 import { RolesModule } from "./role";
 import { SubjectsModule } from "./subject";
-import { OidcClientsModule } from "./oidc-client";
-import { OidcSessionsModule } from "./oidc-session";
-import { SecurityPolicyModule } from "./security-policy";
 import { TranslationsModule } from "./translation";
 import { UsersModule } from "./users";
 
@@ -46,7 +46,6 @@ import { UsersModule } from "./users";
 		PrismaModule,
 		RedisModule,
 		I18nModule,
-		AuthModule,
 		GroundsModule,
 		UsersModule,
 		ActionsModule,
@@ -55,11 +54,6 @@ import { UsersModule } from "./users";
 		RolesModule,
 		GrantsModule,
 		TranslationsModule,
-		OidcClientsModule,
-		OidcSessionsModule,
-		SecurityPolicyModule,
-		IdpAccountsModule,
-		IdpDashboardModule,
 		// Resource Modules는 필요할 때 추가합니다.
 		// 가이드: .claude/agents/be-controller-builder.md
 		RouterModule.register([
@@ -69,10 +63,6 @@ import { UsersModule } from "./users";
 					{
 						path: "v1",
 						children: [
-							{
-								path: "auth",
-								module: AuthModule,
-							},
 							{
 								path: "grounds",
 								module: GroundsModule,
@@ -105,26 +95,6 @@ import { UsersModule } from "./users";
 								path: "translations",
 								module: TranslationsModule,
 							},
-							{
-								path: "oidc-clients",
-								module: OidcClientsModule,
-							},
-							{
-								path: "oidc-sessions",
-								module: OidcSessionsModule,
-							},
-							{
-								path: "idp/security-policy",
-								module: SecurityPolicyModule,
-							},
-							{
-								path: "idp/accounts",
-								module: IdpAccountsModule,
-							},
-							{
-								path: "idp/dashboard",
-								module: IdpDashboardModule,
-							},
 							// 새로운 Resource 라우트는 여기에 추가
 						],
 					},
@@ -133,9 +103,14 @@ import { UsersModule } from "./users";
 		]),
 	],
 	providers: [
+		// JWT 인증 (passport "jwt" 전략 등록)
+		JwtStrategy,
+		AuthCacheService,
 		// Space 도메인 (RequestContextMiddleware 의존)
 		SpacesRepository,
 		SpacesService,
+		// Token (setNestApp의 JwtAuthGuard 의존)
+		TokenStorageService,
 		// Guards (setNestApp에서 순서대로 등록됨)
 		SpaceAccessGuard,
 		// Middleware (DI 주입 필요)

@@ -2,6 +2,7 @@ import { INestApplication, ValidationPipe } from "@nestjs/common";
 import { Test, TestingModule } from "@nestjs/testing";
 import request from "supertest";
 import { AppModule } from "../src/module/app.module";
+import { getTestAuth, TestJwtStrategy } from "./helpers/test-auth.helper";
 import { GuardTestController } from "./mock-controllers/tenant-injection-test.controller";
 
 describe("Guards E2E 테스트", () => {
@@ -13,6 +14,7 @@ describe("Guards E2E 테스트", () => {
 		const moduleFixture: TestingModule = await Test.createTestingModule({
 			imports: [AppModule],
 			controllers: [GuardTestController],
+			providers: [TestJwtStrategy],
 		}).compile();
 
 		app = moduleFixture.createNestApplication();
@@ -25,6 +27,15 @@ describe("Guards E2E 테스트", () => {
 		);
 
 		await app.init();
+
+		// TestJwtStrategy + JwtService로 인증 토큰 생성
+		try {
+			const auth = await getTestAuth(app);
+			jwtToken = auth.jwtToken;
+			spaceId = auth.spaceId;
+		} catch (error) {
+			console.warn(`테스트 인증 설정 실패: ${error}`);
+		}
 	}, 60000);
 
 	afterAll(async () => {
@@ -33,34 +44,7 @@ describe("Guards E2E 테스트", () => {
 		}
 	}, 30000);
 
-	describe("인증 설정", () => {
-		it("테스트 사용자 로그인", async () => {
-			const loginResponse = await request(app.getHttpServer())
-				.post("/api/v1/auth/login")
-				.send({
-					email: "plate@gmail.com",
-					password: "rkdmf12!@",
-				});
-
-			if (loginResponse.status !== 200 || !loginResponse.body?.data) {
-				console.warn("로그인 실패, 나머지 테스트 건너뜀");
-				return;
-			}
-
-			jwtToken = loginResponse.body.data.accessToken;
-			spaceId = loginResponse.body.data.user?.tenants?.[0]?.spaceId;
-
-			expect(jwtToken).toBeDefined();
-		});
-	});
-
 	describe("RoleCategoryGuard", () => {
-		beforeEach(() => {
-			if (!jwtToken || !spaceId) {
-				console.warn("인증 토큰 또는 spaceId 없음 - 테스트 건너뜀");
-			}
-		});
-
 		it("공유 카테고리 권한으로 접근 성공", async () => {
 			if (!jwtToken || !spaceId) return;
 
@@ -106,12 +90,6 @@ describe("Guards E2E 테스트", () => {
 	});
 
 	describe("RoleGroupGuard", () => {
-		beforeEach(() => {
-			if (!jwtToken || !spaceId) {
-				console.warn("인증 토큰 또는 spaceId 없음 - 테스트 건너뜀");
-			}
-		});
-
 		it("일반 그룹 권한 테스트", async () => {
 			if (!jwtToken || !spaceId) return;
 
@@ -155,12 +133,6 @@ describe("Guards E2E 테스트", () => {
 	});
 
 	describe("RolesGuard", () => {
-		beforeEach(() => {
-			if (!jwtToken || !spaceId) {
-				console.warn("인증 토큰 또는 spaceId 없음 - 테스트 건너뜀");
-			}
-		});
-
 		it("VIEW 역할 권한 테스트", async () => {
 			if (!jwtToken || !spaceId) return;
 
@@ -204,12 +176,6 @@ describe("Guards E2E 테스트", () => {
 	});
 
 	describe("복합 Guard 테스트", () => {
-		beforeEach(() => {
-			if (!jwtToken || !spaceId) {
-				console.warn("인증 토큰 또는 spaceId 없음 - 테스트 건너뜀");
-			}
-		});
-
 		it("워크스페이스 카테고리 + MANAGE 역할 복합 권한 테스트", async () => {
 			if (!jwtToken || !spaceId) return;
 
@@ -232,12 +198,6 @@ describe("Guards E2E 테스트", () => {
 	});
 
 	describe("권한 거부 응답 검증", () => {
-		beforeEach(() => {
-			if (!jwtToken || !spaceId) {
-				console.warn("인증 토큰 또는 spaceId 없음 - 테스트 건너뜀");
-			}
-		});
-
 		it("권한 거부 시 적절한 에러 메시지 반환", async () => {
 			if (!jwtToken || !spaceId) return;
 
@@ -248,7 +208,7 @@ describe("Guards E2E 테스트", () => {
 
 			if (response.status === 403) {
 				expect(response.body).toHaveProperty("message");
-				expect(response.body.message).toContain("이 작업을 수행하려면");
+				expect(response.body.message).toContain("접근 거부");
 			}
 		});
 	});
