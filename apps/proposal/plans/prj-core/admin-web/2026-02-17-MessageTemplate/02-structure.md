@@ -2,7 +2,7 @@
 
 ## 이전 레이어 요약 (L0-L2)
 
-- **L0 Context**: Email/SMS/Push 채널의 메시지 템플릿 관리, 변수 치환 미리보기, 테스트 발송
+- **L0 Context**: Email/SMS/Push 채널의 템플릿 관리, 변수 치환 미리보기, 테스트 발송
 - **L1 Actors**: 시스템 관리자 (FULL_ACCESS) - 전체 템플릿 CRUD/미리보기/테스트, Space 관리자 (MANAGE) - 조회 전용 (향후 확장)
 - **L2 Goals**:
   - GOL-001: 템플릿 목록 조회 (유형별 필터, 검색, 활성/비활성 필터)
@@ -53,7 +53,7 @@
 
 #### MT-L3-FEA-001: 템플릿 목록 표시
 
-**설명**: 등록된 메시지 템플릿을 DataGrid로 표시합니다.
+**설명**: 등록된 템플릿을 DataGrid로 표시합니다.
 
 **표시 컬럼**:
 
@@ -141,7 +141,7 @@
 
 #### MT-L3-FEA-007: 템플릿 등록 폼
 
-**설명**: 새 메시지 템플릿을 등록합니다.
+**설명**: 새 템플릿을 등록합니다.
 
 **필드**:
 
@@ -260,10 +260,10 @@
 
 | ID | 화면명 | 경로 | 기능 연결 | 설명 |
 |----|--------|------|----------|------|
-| MT-L4-SCR-001 | 템플릿 목록 | /message-templates | FEA-001, FEA-002, FEA-003, FEA-004 | 목록 조회 + 검색/필터 |
-| MT-L4-SCR-002 | 템플릿 상세 | /message-templates/[messageTemplateId] | FEA-005, FEA-006, FEA-009, FEA-010, FEA-011, FEA-012 | 상세 정보 + 변수 + 토글 + 미리보기 + 테스트 + 삭제 |
-| MT-L4-SCR-003 | 템플릿 등록 | /message-templates/new | FEA-007, FEA-013 | 등록 폼 + 변수 관리 |
-| MT-L4-SCR-004 | 템플릿 수정 | /message-templates/[messageTemplateId]/edit | FEA-008, FEA-013 | 수정 폼 + 변수 관리 |
+| MT-L4-SCR-001 | 템플릿 목록 | /templates | FEA-001, FEA-002, FEA-003, FEA-004 | 목록 조회 + 검색/필터 |
+| MT-L4-SCR-002 | 템플릿 상세 | /templates/[templateId] | FEA-005, FEA-006, FEA-009, FEA-010, FEA-011, FEA-012 | 상세 정보 + 변수 + 토글 + 미리보기 + 테스트 + 삭제 |
+| MT-L4-SCR-003 | 템플릿 등록 | /templates/new | FEA-007, FEA-013 | 등록 폼 + 변수 관리 |
+| MT-L4-SCR-004 | 템플릿 수정 | /templates/[templateId]/edit | FEA-008, FEA-013 | 수정 폼 + 변수 관리 |
 
 ### 화면 상세
 
@@ -271,7 +271,7 @@
 
 #### MT-L4-SCR-001: 템플릿 목록 화면
 
-**경로**: `/message-templates`
+**경로**: `/templates`
 
 **레이아웃**:
 
@@ -279,8 +279,8 @@
 +-----------------------------------------------------------------+
 | PageSurface                                                      |
 | +-------------------------------------------------------------+ |
-| | Title: 메시지 템플릿                                         | |
-| | Description: 시스템에서 사용하는 메시지 템플릿을 관리합니다    | |
+| | Title: 템플릿                                         | |
+| | Description: 시스템에서 사용하는 템플릿을 관리합니다    | |
 | | Actions: [+ 템플릿 등록]                                     | |
 | +-------------------------------------------------------------+ |
 |                                                                  |
@@ -313,7 +313,7 @@
 | 상태 | 조건 | 표시 |
 |------|------|------|
 | 로딩 | API 호출 중 | DataGrid 스켈레톤 |
-| 빈 상태 | 결과 0건 | "등록된 메시지 템플릿이 없습니다" |
+| 빈 상태 | 결과 0건 | "등록된 템플릿이 없습니다" |
 | 에러 | API 실패 | 에러 메시지 + 재시도 버튼 |
 | 정상 | 데이터 있음 | 목록 표시 |
 
@@ -321,13 +321,13 @@
 - 활성 컬럼의 Switch: 클릭 시 PATCH toggle-status API 즉시 호출
 - 행 클릭: 해당 템플릿 상세 화면으로 이동
 
-**권한 체크**: `can('read', 'messageTemplate')` - FULL_ACCESS
+**권한 체크**: `can('read', 'template')` - FULL_ACCESS
 
 ---
 
 #### MT-L4-SCR-002: 템플릿 상세 화면
 
-**경로**: `/message-templates/[messageTemplateId]`
+**경로**: `/templates/[templateId]`
 
 **레이아웃**:
 
@@ -447,13 +447,13 @@
 | 에러 | API 실패 | 에러 메시지 + 재시도 버튼 |
 | 정상 | 데이터 있음 | 상세 정보 표시 |
 
-**권한 체크**: `can('read', 'messageTemplate')` (조회), `can('update', 'messageTemplate')` (수정/토글), `can('delete', 'messageTemplate')` (삭제)
+**권한 체크**: `can('read', 'template')` (조회), `can('update', 'template')` (수정/토글), `can('delete', 'template')` (삭제)
 
 ---
 
 #### MT-L4-SCR-003: 템플릿 등록 화면
 
-**경로**: `/message-templates/new`
+**경로**: `/templates/new`
 
 **레이아웃**:
 
@@ -461,8 +461,8 @@
 +-----------------------------------------------------------------+
 | PageSurface                                                      |
 | +-------------------------------------------------------------+ |
-| | Title: 메시지 템플릿 등록                                     | |
-| | Description: 새로운 메시지 템플릿을 등록합니다                  | |
+| | Title: 템플릿 등록                                     | |
+| | Description: 새로운 템플릿을 등록합니다                  | |
 | +-------------------------------------------------------------+ |
 |                                                                  |
 | +-------------------------------------------------------------+ |
@@ -520,15 +520,15 @@
 - content: 필수, SMS는 바이트 수 경고, PUSH는 200자 제한
 - 변수명: 영문 카멜케이스 (`/^[a-zA-Z][a-zA-Z0-9]*$/`), 목록 내 중복 불가
 
-**등록 후 동작**: 상세 화면(`/message-templates/[messageTemplateId]`)으로 이동
+**등록 후 동작**: 상세 화면(`/templates/[templateId]`)으로 이동
 
-**권한 체크**: `can('create', 'messageTemplate')` - FULL_ACCESS 전용
+**권한 체크**: `can('create', 'template')` - FULL_ACCESS 전용
 
 ---
 
 #### MT-L4-SCR-004: 템플릿 수정 화면
 
-**경로**: `/message-templates/[messageTemplateId]/edit`
+**경로**: `/templates/[templateId]/edit`
 
 **레이아웃**: 등록 화면(SCR-003)과 동일한 구조이나 기존 데이터를 prefill
 
@@ -538,19 +538,19 @@
 - name, description, subject, content: 수정 가능
 - 변수: 기존 변수 목록 prefill, 추가/수정/삭제 가능
 
-**수정 후 동작**: 상세 화면(`/message-templates/[messageTemplateId]`)으로 이동
+**수정 후 동작**: 상세 화면(`/templates/[templateId]`)으로 이동
 
-**권한 체크**: `can('update', 'messageTemplate')` - FULL_ACCESS 전용
+**권한 체크**: `can('update', 'template')` - FULL_ACCESS 전용
 
 ---
 
 ## 라우팅 구조 요약
 
 ```
-/message-templates                                  -> 템플릿 목록 (MT-L4-SCR-001)
-/message-templates/new                              -> 템플릿 등록 (MT-L4-SCR-003)
-/message-templates/[messageTemplateId]              -> 템플릿 상세 (MT-L4-SCR-002)
-/message-templates/[messageTemplateId]/edit          -> 템플릿 수정 (MT-L4-SCR-004)
+/templates                                  -> 템플릿 목록 (MT-L4-SCR-001)
+/templates/new                              -> 템플릿 등록 (MT-L4-SCR-003)
+/templates/[templateId]              -> 템플릿 상세 (MT-L4-SCR-002)
+/templates/[templateId]/edit          -> 템플릿 수정 (MT-L4-SCR-004)
 ```
 
 ---
@@ -604,15 +604,15 @@
 
 | 화면 | 메서드 | 엔드포인트 | 설명 |
 |------|--------|-----------|------|
-| 템플릿 목록 | GET | /api/v1/message-templates | 목록 조회 (검색, 필터, 페이지네이션) |
-| 템플릿 상세 | GET | /api/v1/message-templates/:id | 상세 조회 (변수 포함) |
-| 템플릿 등록 | POST | /api/v1/message-templates | 템플릿 생성 (변수 포함) |
-| 템플릿 수정 | PATCH | /api/v1/message-templates/:id | 템플릿 수정 (변수 포함) |
-| 템플릿 삭제 | DELETE | /api/v1/message-templates/:id | 소프트 삭제 |
-| 활성/비활성 토글 | PATCH | /api/v1/message-templates/:id/toggle-status | 활성 상태 전환 |
-| 미리보기 | POST | /api/v1/message-templates/:id/preview | 변수 치환 렌더링 |
-| 발송 테스트 | POST | /api/v1/message-templates/:id/send-test | 테스트 발송 |
-| 변수 목록 | GET | /api/v1/message-templates/:id/variables | 변수 목록 조회 |
+| 템플릿 목록 | GET | /api/v1/templates | 목록 조회 (검색, 필터, 페이지네이션) |
+| 템플릿 상세 | GET | /api/v1/templates/:id | 상세 조회 (변수 포함) |
+| 템플릿 등록 | POST | /api/v1/templates | 템플릿 생성 (변수 포함) |
+| 템플릿 수정 | PATCH | /api/v1/templates/:id | 템플릿 수정 (변수 포함) |
+| 템플릿 삭제 | DELETE | /api/v1/templates/:id | 소프트 삭제 |
+| 활성/비활성 토글 | PATCH | /api/v1/templates/:id/toggle-status | 활성 상태 전환 |
+| 미리보기 | POST | /api/v1/templates/:id/preview | 변수 치환 렌더링 |
+| 발송 테스트 | POST | /api/v1/templates/:id/send-test | 테스트 발송 |
+| 변수 목록 | GET | /api/v1/templates/:id/variables | 변수 목록 조회 |
 | 변수 관리 (등록/수정 시) | - | - | 템플릿 생성/수정 API에 변수 배열 포함 |
 
 ---
@@ -635,10 +635,10 @@
     { "id": "MT-L3-FEA-011", "level": 3, "type": "feature", "label": "템플릿 미리보기", "description": "변수에 샘플 데이터 입력 후 치환 렌더링 결과 모달 표시" },
     { "id": "MT-L3-FEA-012", "level": 3, "type": "feature", "label": "발송 테스트", "description": "수신자 정보 + 변수 값 입력 후 실제 발송 실행 모달" },
     { "id": "MT-L3-FEA-013", "level": 3, "type": "feature", "label": "변수 추가/수정/삭제", "description": "등록/수정 폼 내 인라인 변수 관리 테이블" },
-    { "id": "MT-L4-SCR-001", "level": 4, "type": "screen", "label": "템플릿 목록", "metadata": { "path": "/message-templates" } },
-    { "id": "MT-L4-SCR-002", "level": 4, "type": "screen", "label": "템플릿 상세", "metadata": { "path": "/message-templates/[messageTemplateId]" } },
-    { "id": "MT-L4-SCR-003", "level": 4, "type": "screen", "label": "템플릿 등록", "metadata": { "path": "/message-templates/new" } },
-    { "id": "MT-L4-SCR-004", "level": 4, "type": "screen", "label": "템플릿 수정", "metadata": { "path": "/message-templates/[messageTemplateId]/edit" } }
+    { "id": "MT-L4-SCR-001", "level": 4, "type": "screen", "label": "템플릿 목록", "metadata": { "path": "/templates" } },
+    { "id": "MT-L4-SCR-002", "level": 4, "type": "screen", "label": "템플릿 상세", "metadata": { "path": "/templates/[templateId]" } },
+    { "id": "MT-L4-SCR-003", "level": 4, "type": "screen", "label": "템플릿 등록", "metadata": { "path": "/templates/new" } },
+    { "id": "MT-L4-SCR-004", "level": 4, "type": "screen", "label": "템플릿 수정", "metadata": { "path": "/templates/[templateId]/edit" } }
   ],
   "edges": [
     { "from": "MT-L2-GOL-001", "to": "MT-L3-FEA-001", "type": "achieves" },

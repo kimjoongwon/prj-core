@@ -2,7 +2,7 @@
 
 ## 이전 레이어 요약 (L0-L6)
 
-- **L0-L2**: 시스템 관리자가 Email/SMS/Push 메시지 템플릿 CRUD + 변수 관리 + 미리보기 + 발송 테스트
+- **L0-L2**: 시스템 관리자가 Email/SMS/Push 템플릿 CRUD + 변수 관리 + 미리보기 + 발송 테스트
 - **L3**: 13개 기능 (FEA-001~013) - 목록/검색/유형필터/상태필터/상세/변수목록/등록폼/수정폼/삭제/토글/미리보기/발송테스트/변수관리
 - **L4**: 4개 화면 (목록/상세/등록/수정)
 - **L5**: 25개 인터랙션 (ACT-001~025)
@@ -16,20 +16,20 @@
 
 | ID | 엔티티 | 위치 | 상태 | 설명 |
 |----|--------|------|------|------|
-| MT-L7-ENT-001 | MessageTemplate | `@cocrepo/prisma` | 신규 | 메시지 템플릿 (Email/SMS/Push) |
+| MT-L7-ENT-001 | Template | `@cocrepo/prisma` | 신규 | 템플릿 (Email/SMS/Push) |
 | MT-L7-ENT-002 | TemplateVariable | `@cocrepo/prisma` | 신규 | 템플릿 변수 (플레이스홀더 정의) |
 
 ### Enum 정의
 
 | ID | Enum | 값 | 설명 |
 |----|------|----|------|
-| MT-L7-ENM-001 | MessageTemplateType | `EMAIL`, `SMS`, `PUSH` | 메시지 채널 유형 |
+| MT-L7-ENM-001 | TemplateType | `EMAIL`, `SMS`, `PUSH` | 메시지 채널 유형 |
 
 ### 엔티티 관계
 
 ```
 ┌───────────────────────────┐
-│    MessageTemplate        │       ┌───────────────────────────┐
+│    Template        │       ┌───────────────────────────┐
 │                           │       │    TemplateVariable       │
 │ id          (PK, UUID)    │ 1:N   │                           │
 │ code        (unique)      │──────>│ id          (PK, UUID)    │
@@ -37,28 +37,28 @@
 │ type        (Enum)        │       │ description               │
 │ subject                   │       │ defaultValue              │
 │ content                   │       │ isRequired                │
-│ description               │       │ messageTemplateId (FK)    │
+│ description               │       │ templateId (FK)    │
 │ isActive                  │       │ createdAt                 │
 │ createdAt                 │       │ updatedAt                 │
 │ updatedAt                 │       │                           │
-│ removedAt                 │       │ @@unique([messageTemplateId, name]) │
+│ removedAt                 │       │ @@unique([templateId, name]) │
 │                           │       └───────────────────────────┘
-│ @@map("message_templates")│
+│ @@map("templates")│
 └───────────────────────────┘
 ```
 
 **관계 설명**:
-- MessageTemplate (1) -> TemplateVariable (N): 한 템플릿이 여러 변수를 가짐
+- Template (1) -> TemplateVariable (N): 한 템플릿이 여러 변수를 가짐
 - onDelete: Cascade (템플릿 삭제 시 변수도 함께 삭제)
 - 같은 템플릿 내 변수명 중복 방지 (복합 unique 제약)
 
 ### 주요 엔티티 상세
 
-#### MessageTemplate (신규)
+#### Template (신규)
 
 ```prisma
-/// @displayName 메시지 템플릿
-model MessageTemplate {
+/// @displayName 템플릿
+model Template {
   id          String              @id @default(uuid())
   createdAt   DateTime            @default(now()) @db.Timestamptz(6)
   updatedAt   DateTime?           @updatedAt @db.Timestamptz(6)
@@ -66,7 +66,7 @@ model MessageTemplate {
 
   code        String              @unique                     /// 고유 코드 (예: WELCOME_EMAIL)
   name        String                                          /// 한글 이름
-  type        MessageTemplateType                             /// 유형 (EMAIL, SMS, PUSH)
+  type        TemplateType                             /// 유형 (EMAIL, SMS, PUSH)
   subject     String?                                         /// 제목 (EMAIL, PUSH에서 사용)
   content     String                                          /// 본문 (EMAIL: HTML, SMS/PUSH: 텍스트)
   description String?                                         /// 설명
@@ -74,7 +74,7 @@ model MessageTemplate {
 
   variables   TemplateVariable[]                              /// 변수 목록
 
-  @@map("message_templates")
+  @@map("templates")
 }
 ```
 
@@ -92,18 +92,18 @@ model TemplateVariable {
   defaultValue      String?                                    /// 기본값
   isRequired        Boolean          @default(false)           /// 필수 여부
 
-  messageTemplateId String                                     /// FK -> MessageTemplate.id
-  messageTemplate   MessageTemplate  @relation(fields: [messageTemplateId], references: [id], onDelete: Cascade)
+  templateId String                                     /// FK -> Template.id
+  template   Template  @relation(fields: [templateId], references: [id], onDelete: Cascade)
 
-  @@unique([messageTemplateId, name])
+  @@unique([templateId, name])
   @@map("template_variables")
 }
 ```
 
-#### MessageTemplateType (신규 Enum)
+#### TemplateType (신규 Enum)
 
 ```prisma
-enum MessageTemplateType {
+enum TemplateType {
   EMAIL
   SMS
   PUSH
@@ -112,7 +112,7 @@ enum MessageTemplateType {
 
 ### 엔티티 필드 매트릭스
 
-#### MessageTemplate
+#### Template
 
 | 필드 | 타입 | 제약조건 | 기본값 | 설명 |
 |------|------|----------|--------|------|
@@ -122,7 +122,7 @@ enum MessageTemplateType {
 | removedAt | DateTime | optional | - | 소프트 삭제 시간 |
 | code | String | unique, required | - | 시스템 고유 코드 (예: WELCOME_EMAIL) |
 | name | String | required | - | 한글 이름 |
-| type | MessageTemplateType | required | - | 유형 (EMAIL/SMS/PUSH) |
+| type | TemplateType | required | - | 유형 (EMAIL/SMS/PUSH) |
 | subject | String | optional | - | 제목 (EMAIL, PUSH에서 사용) |
 | content | String | required | - | 본문 (EMAIL: HTML, SMS/PUSH: 텍스트) |
 | description | String | optional | - | 설명 |
@@ -139,21 +139,21 @@ enum MessageTemplateType {
 | description | String | optional | - | 한글 설명 |
 | defaultValue | String | optional | - | 기본값 |
 | isRequired | Boolean | required | false | 필수 여부 |
-| messageTemplateId | String | FK, required, index | - | 소속 템플릿 ID |
+| templateId | String | FK, required, index | - | 소속 템플릿 ID |
 
 ### DTO 목록
 
 | DTO | 위치 | 용도 |
 |-----|------|------|
-| MessageTemplateDto | `@cocrepo/dto` | 템플릿 응답용 (variables 포함) |
-| CreateMessageTemplateDto | `@cocrepo/dto` | 등록 요청 (variables 배열 포함) |
-| UpdateMessageTemplateDto | `@cocrepo/dto` | 수정 요청 (variables 배열 - 전체 교체) |
-| QueryMessageTemplateDto | `@cocrepo/dto` | 목록 쿼리 (search, type, isActive, sort, skip, take) |
+| TemplateDto | `@cocrepo/dto` | 템플릿 응답용 (variables 포함) |
+| CreateTemplateDto | `@cocrepo/dto` | 등록 요청 (variables 배열 포함) |
+| UpdateTemplateDto | `@cocrepo/dto` | 수정 요청 (variables 배열 - 전체 교체) |
+| QueryTemplateDto | `@cocrepo/dto` | 목록 쿼리 (search, type, isActive, sort, skip, take) |
 | TemplateVariableDto | `@cocrepo/dto` | 변수 응답용 |
 | CreateTemplateVariableDto | `@cocrepo/dto` | 변수 생성 요청 (등록 시 배열 항목) |
 | UpdateTemplateVariableDto | `@cocrepo/dto` | 변수 수정 요청 (수정 시 배열 항목, id 선택적) |
-| PreviewMessageTemplateDto | `@cocrepo/dto` | 미리보기 요청 (variables: Record<string, string>) |
-| SendTestMessageTemplateDto | `@cocrepo/dto` | 발송 테스트 요청 (recipient + variables) |
+| PreviewTemplateDto | `@cocrepo/dto` | 미리보기 요청 (variables: Record<string, string>) |
+| SendTestTemplateDto | `@cocrepo/dto` | 발송 테스트 요청 (recipient + variables) |
 
 ---
 
@@ -203,8 +203,8 @@ enum MessageTemplateType {
 #### 템플릿 목록 페이지 (SCR-001)
 
 ```
-Page (MessageTemplateListPage)
-└── PageSurface (title="메시지 템플릿", description="...", actions=[등록 버튼])
+Page (TemplateListPage)
+└── PageSurface (title="템플릿", description="...", actions=[등록 버튼])
     ├── SearchFilterBar [기존]
     │   ├── SearchInput (이름/코드 검색)
     │   ├── Select (유형 필터: 전체/EMAIL/SMS/PUSH)
@@ -222,7 +222,7 @@ Page (MessageTemplateListPage)
 #### 템플릿 상세 페이지 (SCR-002)
 
 ```
-Page (MessageTemplateDetailPage)
+Page (TemplateDetailPage)
 └── PageSurface (title=name, description=description, actions=[미리보기, 테스트발송, 수정, 삭제])
     ├── SectionSurface (기본 정보) [기존]
     │   └── DetailPanel [기존]
@@ -249,8 +249,8 @@ Page (MessageTemplateDetailPage)
 #### 템플릿 등록 페이지 (SCR-003)
 
 ```
-Page (MessageTemplateCreatePage)
-└── PageSurface (title="메시지 템플릿 등록", description="새로운 메시지 템플릿을 등록합니다")
+Page (TemplateCreatePage)
+└── PageSurface (title="템플릿 등록", description="새로운 템플릿을 등록합니다")
     ├── SectionSurface (기본 정보) [기존]
     │   ├── RadioGroup: type (EMAIL/SMS/PUSH) [기존]
     │   ├── Input: code (영문 대문자+언더스코어) [기존]
@@ -275,8 +275,8 @@ Page (MessageTemplateCreatePage)
 #### 템플릿 수정 페이지 (SCR-004)
 
 ```
-Page (MessageTemplateEditPage)
-└── PageSurface (title="메시지 템플릿 수정", description="...")
+Page (TemplateEditPage)
+└── PageSurface (title="템플릿 수정", description="...")
     ├── SectionSurface (기본 정보) [기존]
     │   ├── TemplateTypeBadge: type (읽기 전용) [신규]
     │   ├── Text: code (읽기 전용)
@@ -372,8 +372,8 @@ SendTestModal [신규]
 
 | ID | 컴포넌트 | 위치 | 상태 | 설명 |
 |----|---------|------|------|------|
-| MT-L8-CMP-040 | MessageTemplateForm | `@cocrepo/ui` widget/form | 신규 | 등록/수정 공용 폼 (Store 연결, 유형별 동적 필드) |
-| MT-L8-CMP-041 | MessageTemplateActions | `@cocrepo/ui` feature | 신규 | 상세 화면 액션 버튼 그룹 (수정/삭제/토글/미리보기/발송테스트) |
+| MT-L8-CMP-040 | TemplateForm | `@cocrepo/ui` widget/form | 신규 | 등록/수정 공용 폼 (Store 연결, 유형별 동적 필드) |
+| MT-L8-CMP-041 | TemplateActions | `@cocrepo/ui` feature | 신규 | 상세 화면 액션 버튼 그룹 (수정/삭제/토글/미리보기/발송테스트) |
 
 ### 컴포넌트 상세
 
@@ -415,7 +415,7 @@ interface TemplateTypeChipCellProps {
 ```typescript
 interface TemplateActiveToggleCellProps {
   isActive: boolean;
-  messageTemplateId: string;
+  templateId: string;
   onToggle: (id: string) => Promise<void>;
 }
 ```
@@ -667,7 +667,7 @@ interface VariableEditItem {
 interface PreviewModalProps {
   isOpen: boolean;
   onClose: () => void;
-  messageTemplateId: string;
+  templateId: string;
   type: "EMAIL" | "SMS" | "PUSH";
   variables: TemplateVariableDto[];
 }
@@ -699,7 +699,7 @@ interface PreviewModalProps {
 interface SendTestModalProps {
   isOpen: boolean;
   onClose: () => void;
-  messageTemplateId: string;
+  templateId: string;
   type: "EMAIL" | "SMS" | "PUSH";
   variables: TemplateVariableDto[];
 }
@@ -755,16 +755,16 @@ appName:   [서비스__________] (기본값: 서비스)
 
 ---
 
-#### MT-L8-CMP-040: MessageTemplateForm
+#### MT-L8-CMP-040: TemplateForm
 
 **용도**: 등록/수정 공용 폼 (Store 연결)
 
 **Props**:
 ```typescript
-interface MessageTemplateFormProps {
+interface TemplateFormProps {
   mode: "create" | "edit";
-  initialData?: MessageTemplateDto; // 수정 모드일 때 기존 데이터
-  onSubmit: (data: CreateMessageTemplateDto | UpdateMessageTemplateDto) => Promise<void>;
+  initialData?: TemplateDto; // 수정 모드일 때 기존 데이터
+  onSubmit: (data: CreateTemplateDto | UpdateTemplateDto) => Promise<void>;
   onCancel: () => void;
   isSubmitting: boolean;
 }
@@ -788,14 +788,14 @@ interface MessageTemplateFormProps {
 
 ---
 
-#### MT-L8-CMP-041: MessageTemplateActions
+#### MT-L8-CMP-041: TemplateActions
 
 **용도**: 상세 화면의 PageSurface actions 영역에 렌더링되는 액션 버튼 그룹
 
 **Props**:
 ```typescript
-interface MessageTemplateActionsProps {
-  messageTemplateId: string;
+interface TemplateActionsProps {
+  templateId: string;
   isActive: boolean;
   onEdit: () => void;
   onDelete: () => void;
@@ -822,7 +822,7 @@ interface MessageTemplateActionsProps {
 #### 템플릿 목록
 
 ```typescript
-const messageTemplateColumns: ColumnDef<MessageTemplateDto>[] = [
+const templateColumns: ColumnDef<TemplateDto>[] = [
   {
     id: "code",
     header: "코드",
@@ -848,7 +848,7 @@ const messageTemplateColumns: ColumnDef<MessageTemplateDto>[] = [
     cell: ({ row }) => (
       <TemplateActiveToggleCell
         isActive={row.isActive}
-        messageTemplateId={row.id}
+        templateId={row.id}
         onToggle={handleToggleStatus}
       />
     ),
@@ -955,8 +955,8 @@ const variableReadColumns: ColumnDef<TemplateVariableDto>[] = [
 |                                                                  |
 |                      [빈 상자 아이콘]                             |
 |                                                                  |
-|              "등록된 메시지 템플릿이 없습니다."                    |
-|           "새로운 메시지 템플릿을 등록해보세요."                   |
+|              "등록된 템플릿이 없습니다."                    |
+|           "새로운 템플릿을 등록해보세요."                   |
 |                                                                  |
 |                     [+ 템플릿 등록]                               |
 |                                                                  |
@@ -1035,13 +1035,13 @@ packages/fe-ui/src/components/
 │   │   ├── VariableInputForm.tsx
 │   │   └── index.ts
 │   └── form/
-│       └── MessageTemplateForm/
-│           ├── MessageTemplateForm.tsx
+│       └── TemplateForm/
+│           ├── TemplateForm.tsx
 │           └── index.ts
 └── feature/
     └── message-template/
-        ├── MessageTemplateActions/
-        │   ├── MessageTemplateActions.tsx
+        ├── TemplateActions/
+        │   ├── TemplateActions.tsx
         │   └── index.ts
         └── index.ts
 ```
@@ -1059,10 +1059,10 @@ packages/fe-ui/src/components/
       "level": 7,
       "subLevel": "1",
       "type": "entity",
-      "name": "MessageTemplate",
-      "description": "메시지 템플릿 엔티티 (Email/SMS/Push)",
+      "name": "Template",
+      "description": "템플릿 엔티티 (Email/SMS/Push)",
       "metadata": {
-        "tableName": "message_templates",
+        "tableName": "templates",
         "status": "new"
       }
     },
@@ -1083,7 +1083,7 @@ packages/fe-ui/src/components/
       "level": 7,
       "subLevel": "1",
       "type": "entity",
-      "name": "MessageTemplateType",
+      "name": "TemplateType",
       "description": "메시지 유형 Enum (EMAIL, SMS, PUSH)",
       "metadata": {
         "status": "new"
@@ -1094,7 +1094,7 @@ packages/fe-ui/src/components/
       "level": 7,
       "subLevel": "2",
       "type": "entity",
-      "name": "MessageTemplate.id",
+      "name": "Template.id",
       "description": "고유 식별자",
       "metadata": {
         "fieldType": "UUID",
@@ -1107,7 +1107,7 @@ packages/fe-ui/src/components/
       "level": 7,
       "subLevel": "2",
       "type": "entity",
-      "name": "MessageTemplate.createdAt",
+      "name": "Template.createdAt",
       "description": "생성 시간",
       "metadata": {
         "fieldType": "DateTime",
@@ -1120,7 +1120,7 @@ packages/fe-ui/src/components/
       "level": 7,
       "subLevel": "2",
       "type": "entity",
-      "name": "MessageTemplate.updatedAt",
+      "name": "Template.updatedAt",
       "description": "수정 시간",
       "metadata": {
         "fieldType": "DateTime",
@@ -1132,7 +1132,7 @@ packages/fe-ui/src/components/
       "level": 7,
       "subLevel": "2",
       "type": "entity",
-      "name": "MessageTemplate.removedAt",
+      "name": "Template.removedAt",
       "description": "소프트 삭제 시간",
       "metadata": {
         "fieldType": "DateTime",
@@ -1144,7 +1144,7 @@ packages/fe-ui/src/components/
       "level": 7,
       "subLevel": "2",
       "type": "entity",
-      "name": "MessageTemplate.code",
+      "name": "Template.code",
       "description": "시스템 고유 코드",
       "metadata": {
         "fieldType": "String",
@@ -1156,7 +1156,7 @@ packages/fe-ui/src/components/
       "level": 7,
       "subLevel": "2",
       "type": "entity",
-      "name": "MessageTemplate.name",
+      "name": "Template.name",
       "description": "한글 이름",
       "metadata": {
         "fieldType": "String",
@@ -1168,7 +1168,7 @@ packages/fe-ui/src/components/
       "level": 7,
       "subLevel": "2",
       "type": "entity",
-      "name": "MessageTemplate.type",
+      "name": "Template.type",
       "description": "유형 (EMAIL/SMS/PUSH)",
       "metadata": {
         "fieldType": "Enum",
@@ -1181,7 +1181,7 @@ packages/fe-ui/src/components/
       "level": 7,
       "subLevel": "2",
       "type": "entity",
-      "name": "MessageTemplate.subject",
+      "name": "Template.subject",
       "description": "제목 (EMAIL, PUSH에서 사용)",
       "metadata": {
         "fieldType": "String",
@@ -1193,7 +1193,7 @@ packages/fe-ui/src/components/
       "level": 7,
       "subLevel": "2",
       "type": "entity",
-      "name": "MessageTemplate.content",
+      "name": "Template.content",
       "description": "본문 (EMAIL: HTML, SMS/PUSH: 텍스트)",
       "metadata": {
         "fieldType": "String",
@@ -1205,7 +1205,7 @@ packages/fe-ui/src/components/
       "level": 7,
       "subLevel": "2",
       "type": "entity",
-      "name": "MessageTemplate.description",
+      "name": "Template.description",
       "description": "설명",
       "metadata": {
         "fieldType": "String",
@@ -1217,7 +1217,7 @@ packages/fe-ui/src/components/
       "level": 7,
       "subLevel": "2",
       "type": "entity",
-      "name": "MessageTemplate.isActive",
+      "name": "Template.isActive",
       "description": "활성 상태",
       "metadata": {
         "fieldType": "Boolean",
@@ -1317,12 +1317,12 @@ packages/fe-ui/src/components/
       "level": 7,
       "subLevel": "2",
       "type": "entity",
-      "name": "TemplateVariable.messageTemplateId",
+      "name": "TemplateVariable.templateId",
       "description": "소속 템플릿 ID (FK)",
       "metadata": {
         "fieldType": "UUID",
         "constraints": ["fk", "required", "index"],
-        "references": "MessageTemplate.id"
+        "references": "Template.id"
       }
     },
     {
@@ -1351,7 +1351,7 @@ packages/fe-ui/src/components/
         "componentType": "ui",
         "props": {
           "isActive": "boolean",
-          "messageTemplateId": "string",
+          "templateId": "string",
           "onToggle": "(id: string) => Promise<void>"
         },
         "existing": false
@@ -1502,7 +1502,7 @@ packages/fe-ui/src/components/
         "props": {
           "isOpen": "boolean",
           "onClose": "() => void",
-          "messageTemplateId": "string",
+          "templateId": "string",
           "type": "\"EMAIL\" | \"SMS\" | \"PUSH\"",
           "variables": "TemplateVariableDto[]"
         },
@@ -1521,7 +1521,7 @@ packages/fe-ui/src/components/
         "props": {
           "isOpen": "boolean",
           "onClose": "() => void",
-          "messageTemplateId": "string",
+          "templateId": "string",
           "type": "\"EMAIL\" | \"SMS\" | \"PUSH\"",
           "variables": "TemplateVariableDto[]"
         },
@@ -1550,13 +1550,13 @@ packages/fe-ui/src/components/
       "level": 8,
       "subLevel": "2",
       "type": "component",
-      "name": "MessageTemplateForm",
+      "name": "TemplateForm",
       "description": "등록/수정 공용 폼 (유형별 동적 필드, 변수 관리 포함)",
       "metadata": {
         "componentType": "widgets",
         "props": {
           "mode": "\"create\" | \"edit\"",
-          "initialData": "MessageTemplateDto",
+          "initialData": "TemplateDto",
           "onSubmit": "(data) => Promise<void>",
           "onCancel": "() => void",
           "isSubmitting": "boolean"
@@ -1569,12 +1569,12 @@ packages/fe-ui/src/components/
       "level": 8,
       "subLevel": "3",
       "type": "component",
-      "name": "MessageTemplateActions",
+      "name": "TemplateActions",
       "description": "상세 화면 액션 버튼 그룹 (수정/삭제/토글/미리보기/발송테스트)",
       "metadata": {
         "componentType": "features",
         "props": {
-          "messageTemplateId": "string",
+          "templateId": "string",
           "isActive": "boolean",
           "onEdit": "() => void",
           "onDelete": "() => void",

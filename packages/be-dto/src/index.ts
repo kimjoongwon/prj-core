@@ -34,6 +34,7 @@ export * from "./space-association.dto";
 export * from "./space-classification.dto";
 export * from "./subject.dto";
 export * from "./task.dto";
+export * from "./template";
 export * from "./tenant.dto";
 export * from "./timeline.dto";
 export * from "./translations";

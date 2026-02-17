@@ -440,6 +440,23 @@ export type EnumRecurringDayOfWeekNullableWithAggregatesFilter<$PrismaModel = ne
   _max?: Prisma.NestedEnumRecurringDayOfWeekNullableFilter<$PrismaModel>
 }
 
+export type EnumTemplateTypeFilter<$PrismaModel = never> = {
+  equals?: $Enums.TemplateType | Prisma.EnumTemplateTypeFieldRefInput<$PrismaModel>
+  in?: $Enums.TemplateType[] | Prisma.ListEnumTemplateTypeFieldRefInput<$PrismaModel>
+  notIn?: $Enums.TemplateType[] | Prisma.ListEnumTemplateTypeFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumTemplateTypeFilter<$PrismaModel> | $Enums.TemplateType
+}
+
+export type EnumTemplateTypeWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.TemplateType | Prisma.EnumTemplateTypeFieldRefInput<$PrismaModel>
+  in?: $Enums.TemplateType[] | Prisma.ListEnumTemplateTypeFieldRefInput<$PrismaModel>
+  notIn?: $Enums.TemplateType[] | Prisma.ListEnumTemplateTypeFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumTemplateTypeWithAggregatesFilter<$PrismaModel> | $Enums.TemplateType
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumTemplateTypeFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumTemplateTypeFilter<$PrismaModel>
+}
+
 export type EnumLanguageCodeFilter<$PrismaModel = never> = {
   equals?: $Enums.LanguageCode | Prisma.EnumLanguageCodeFieldRefInput<$PrismaModel>
   in?: $Enums.LanguageCode[] | Prisma.ListEnumLanguageCodeFieldRefInput<$PrismaModel>
@@ -840,6 +857,23 @@ export type NestedEnumRecurringDayOfWeekNullableWithAggregatesFilter<$PrismaMode
   _count?: Prisma.NestedIntNullableFilter<$PrismaModel>
   _min?: Prisma.NestedEnumRecurringDayOfWeekNullableFilter<$PrismaModel>
   _max?: Prisma.NestedEnumRecurringDayOfWeekNullableFilter<$PrismaModel>
+}
+
+export type NestedEnumTemplateTypeFilter<$PrismaModel = never> = {
+  equals?: $Enums.TemplateType | Prisma.EnumTemplateTypeFieldRefInput<$PrismaModel>
+  in?: $Enums.TemplateType[] | Prisma.ListEnumTemplateTypeFieldRefInput<$PrismaModel>
+  notIn?: $Enums.TemplateType[] | Prisma.ListEnumTemplateTypeFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumTemplateTypeFilter<$PrismaModel> | $Enums.TemplateType
+}
+
+export type NestedEnumTemplateTypeWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.TemplateType | Prisma.EnumTemplateTypeFieldRefInput<$PrismaModel>
+  in?: $Enums.TemplateType[] | Prisma.ListEnumTemplateTypeFieldRefInput<$PrismaModel>
+  notIn?: $Enums.TemplateType[] | Prisma.ListEnumTemplateTypeFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumTemplateTypeWithAggregatesFilter<$PrismaModel> | $Enums.TemplateType
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumTemplateTypeFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumTemplateTypeFilter<$PrismaModel>
 }
 
 export type NestedEnumLanguageCodeFilter<$PrismaModel = never> = {

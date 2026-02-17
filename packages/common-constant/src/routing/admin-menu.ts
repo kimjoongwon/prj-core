@@ -56,7 +56,11 @@ export const ADMIN_PATHS = {
 	EVENTS_ENDED: "/events/ended",
 	TERMS: "/terms",
 
-	// 템플릿
+	// 템플릿 (Template 엔티티)
+	TEMPLATES: "/templates",
+	TEMPLATES_NEW: "/templates/new",
+	TEMPLATES_DETAIL: "/templates/[templateId]",
+	TEMPLATES_EDIT: "/templates/[templateId]/edit",
 	TEMPLATES_SMS: "/templates/sms",
 	TEMPLATES_EMAIL: "/templates/email",
 	TEMPLATES_PUSH: "/templates/push",
@@ -117,6 +121,18 @@ export const ADMIN_PATHS = {
 	ACTIONS_NEW: "/actions/new",
 	ACTIONS_DETAIL: "/actions/[actionId]",
 	ACTIONS_EDIT: "/actions/[actionId]/edit",
+
+	// 역할 그룹 (Group, type=Role)
+	ROLE_GROUPS: "/roles/groups",
+	ROLE_GROUPS_NEW: "/roles/groups/new",
+	ROLE_GROUPS_DETAIL: "/roles/groups/[groupId]",
+	ROLE_GROUPS_EDIT: "/roles/groups/[groupId]/edit",
+
+	// 역할 카테고리 (Category, type=Role)
+	ROLE_CATEGORIES: "/roles/categories",
+	ROLE_CATEGORIES_NEW: "/roles/categories/new",
+	ROLE_CATEGORIES_DETAIL: "/roles/categories/[categoryId]",
+	ROLE_CATEGORIES_EDIT: "/roles/categories/[categoryId]/edit",
 
 	// 대상 (Subject)
 	SUBJECTS: "/subjects",
@@ -187,6 +203,7 @@ export const ADMIN_SUBJECTS = {
 	MENU_CONTENTS_TERMS: "menu:contents:terms",
 
 	// 2depth - 템플릿
+	MENU_TEMPLATES_LIST: "menu:templates:list",
 	MENU_TEMPLATES_SMS: "menu:templates:sms",
 	MENU_TEMPLATES_EMAIL: "menu:templates:email",
 	MENU_TEMPLATES_PUSH: "menu:templates:push",
@@ -215,6 +232,10 @@ export const ADMIN_SUBJECTS = {
 
 	// 2depth - 권한 관리
 	MENU_ROLES_LIST: "menu:roles:list",
+	MENU_ROLE_GROUPS: "menu:role-groups",
+	MENU_ROLE_GROUPS_LIST: "menu:role-groups:list",
+	MENU_ROLE_CATEGORIES: "menu:role-categories",
+	MENU_ROLE_CATEGORIES_LIST: "menu:role-categories:list",
 	MENU_ABILITIES: "menu:abilities",
 	MENU_ABILITIES_LIST: "menu:abilities:list",
 	MENU_ACTIONS: "menu:actions",
@@ -485,9 +506,15 @@ export const ADMIN_NAV_ITEMS: NavItemConfig[] = [
 	{
 		id: "templates",
 		label: "템플릿",
-		icon: "LayoutTemplate",
+		icon: "Mail",
 		subject: ADMIN_SUBJECTS.MENU_TEMPLATES,
 		children: [
+			{
+				id: "templates-list",
+				label: "템플릿 목록",
+				path: ADMIN_PATHS.TEMPLATES,
+				subject: ADMIN_SUBJECTS.MENU_TEMPLATES_LIST,
+			},
 			{
 				id: "templates-sms",
 				label: "SMS",
@@ -721,6 +748,18 @@ export const ADMIN_NAV_ITEMS: NavItemConfig[] = [
 				label: "역할",
 				path: ADMIN_PATHS.ROLES,
 				subject: ADMIN_SUBJECTS.MENU_ROLES_LIST,
+			},
+			{
+				id: "role-groups-list",
+				label: "역할 그룹",
+				path: ADMIN_PATHS.ROLE_GROUPS,
+				subject: ADMIN_SUBJECTS.MENU_ROLE_GROUPS_LIST,
+			},
+			{
+				id: "role-categories-list",
+				label: "역할 카테고리",
+				path: ADMIN_PATHS.ROLE_CATEGORIES,
+				subject: ADMIN_SUBJECTS.MENU_ROLE_CATEGORIES_LIST,
 			},
 			{
 				id: "abilities-list",

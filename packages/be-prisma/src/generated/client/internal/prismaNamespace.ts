@@ -420,6 +420,8 @@ export const ModelName = {
   Activity: 'Activity',
   Task: 'Task',
   Exercise: 'Exercise',
+  Template: 'Template',
+  TemplateVariable: 'TemplateVariable',
   Translation: 'Translation',
   User: 'User',
   UserClassification: 'UserClassification',
@@ -440,7 +442,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "securityPolicy" | "whitelistEntry" | "authAuditLog" | "passwordHistory" | "category" | "group" | "tenant" | "assignment" | "post" | "content" | "file" | "fileClassification" | "fileAssociation" | "subject" | "action" | "ability" | "grant" | "oidcClient" | "oidcModel" | "role" | "roleAssociation" | "roleClassification" | "safeWallet" | "safeTransaction" | "safeConfirmation" | "space" | "spaceClassification" | "spaceAssociation" | "ground" | "timeline" | "session" | "program" | "routine" | "activity" | "task" | "exercise" | "translation" | "user" | "userClassification" | "userAssociation" | "profile"
+    modelProps: "securityPolicy" | "whitelistEntry" | "authAuditLog" | "passwordHistory" | "category" | "group" | "tenant" | "assignment" | "post" | "content" | "file" | "fileClassification" | "fileAssociation" | "subject" | "action" | "ability" | "grant" | "oidcClient" | "oidcModel" | "role" | "roleAssociation" | "roleClassification" | "safeWallet" | "safeTransaction" | "safeConfirmation" | "space" | "spaceClassification" | "spaceAssociation" | "ground" | "timeline" | "session" | "program" | "routine" | "activity" | "task" | "exercise" | "template" | "templateVariable" | "translation" | "user" | "userClassification" | "userAssociation" | "profile"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -3108,6 +3110,154 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    Template: {
+      payload: Prisma.$TemplatePayload<ExtArgs>
+      fields: Prisma.TemplateFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.TemplateFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TemplatePayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.TemplateFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TemplatePayload>
+        }
+        findFirst: {
+          args: Prisma.TemplateFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TemplatePayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.TemplateFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TemplatePayload>
+        }
+        findMany: {
+          args: Prisma.TemplateFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TemplatePayload>[]
+        }
+        create: {
+          args: Prisma.TemplateCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TemplatePayload>
+        }
+        createMany: {
+          args: Prisma.TemplateCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.TemplateCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TemplatePayload>[]
+        }
+        delete: {
+          args: Prisma.TemplateDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TemplatePayload>
+        }
+        update: {
+          args: Prisma.TemplateUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TemplatePayload>
+        }
+        deleteMany: {
+          args: Prisma.TemplateDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.TemplateUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.TemplateUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TemplatePayload>[]
+        }
+        upsert: {
+          args: Prisma.TemplateUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TemplatePayload>
+        }
+        aggregate: {
+          args: Prisma.TemplateAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateTemplate>
+        }
+        groupBy: {
+          args: Prisma.TemplateGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.TemplateGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.TemplateCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.TemplateCountAggregateOutputType> | number
+        }
+      }
+    }
+    TemplateVariable: {
+      payload: Prisma.$TemplateVariablePayload<ExtArgs>
+      fields: Prisma.TemplateVariableFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.TemplateVariableFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TemplateVariablePayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.TemplateVariableFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TemplateVariablePayload>
+        }
+        findFirst: {
+          args: Prisma.TemplateVariableFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TemplateVariablePayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.TemplateVariableFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TemplateVariablePayload>
+        }
+        findMany: {
+          args: Prisma.TemplateVariableFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TemplateVariablePayload>[]
+        }
+        create: {
+          args: Prisma.TemplateVariableCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TemplateVariablePayload>
+        }
+        createMany: {
+          args: Prisma.TemplateVariableCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.TemplateVariableCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TemplateVariablePayload>[]
+        }
+        delete: {
+          args: Prisma.TemplateVariableDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TemplateVariablePayload>
+        }
+        update: {
+          args: Prisma.TemplateVariableUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TemplateVariablePayload>
+        }
+        deleteMany: {
+          args: Prisma.TemplateVariableDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.TemplateVariableUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.TemplateVariableUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TemplateVariablePayload>[]
+        }
+        upsert: {
+          args: Prisma.TemplateVariableUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TemplateVariablePayload>
+        }
+        aggregate: {
+          args: Prisma.TemplateVariableAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateTemplateVariable>
+        }
+        groupBy: {
+          args: Prisma.TemplateVariableGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.TemplateVariableGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.TemplateVariableCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.TemplateVariableCountAggregateOutputType> | number
+        }
+      }
+    }
     Translation: {
       payload: Prisma.$TranslationPayload<ExtArgs>
       fields: Prisma.TranslationFieldRefs
@@ -4057,6 +4207,37 @@ export const ExerciseScalarFieldEnum = {
 export type ExerciseScalarFieldEnum = (typeof ExerciseScalarFieldEnum)[keyof typeof ExerciseScalarFieldEnum]
 
 
+export const TemplateScalarFieldEnum = {
+  id: 'id',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  removedAt: 'removedAt',
+  code: 'code',
+  name: 'name',
+  type: 'type',
+  subject: 'subject',
+  content: 'content',
+  description: 'description',
+  isActive: 'isActive'
+} as const
+
+export type TemplateScalarFieldEnum = (typeof TemplateScalarFieldEnum)[keyof typeof TemplateScalarFieldEnum]
+
+
+export const TemplateVariableScalarFieldEnum = {
+  id: 'id',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  name: 'name',
+  description: 'description',
+  defaultValue: 'defaultValue',
+  isRequired: 'isRequired',
+  templateId: 'templateId'
+} as const
+
+export type TemplateVariableScalarFieldEnum = (typeof TemplateVariableScalarFieldEnum)[keyof typeof TemplateVariableScalarFieldEnum]
+
+
 export const TranslationScalarFieldEnum = {
   id: 'id',
   languageCode: 'languageCode',
@@ -4361,6 +4542,20 @@ export type ListEnumRecurringDayOfWeekFieldRefInput<$PrismaModel> = FieldRefInpu
 
 
 /**
+ * Reference to a field of type 'TemplateType'
+ */
+export type EnumTemplateTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'TemplateType'>
+    
+
+
+/**
+ * Reference to a field of type 'TemplateType[]'
+ */
+export type ListEnumTemplateTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'TemplateType[]'>
+    
+
+
+/**
  * Reference to a field of type 'LanguageCode'
  */
 export type EnumLanguageCodeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'LanguageCode'>
@@ -4518,6 +4713,8 @@ export type GlobalOmitConfig = {
   activity?: Prisma.ActivityOmit
   task?: Prisma.TaskOmit
   exercise?: Prisma.ExerciseOmit
+  template?: Prisma.TemplateOmit
+  templateVariable?: Prisma.TemplateVariableOmit
   translation?: Prisma.TranslationOmit
   user?: Prisma.UserOmit
   userClassification?: Prisma.UserClassificationOmit

@@ -1,0 +1,1 @@
+export { TemplateTypeChipCell } from "./TemplateTypeChipCell";

@@ -755,9 +755,9 @@ feat(coin): 멀티시그 지갑 서비스 초기 구현
 Stage 1: 기획 (기능 전체)    → orch-requirement (L0~L10) → [리뷰]
 Stage 2: 스키마 (기능 전체)  → schema → entity → dto → query-dto → seed → [리뷰]
 Stage 3: 백엔드 (기능 전체)  → repository → service → controller → [리뷰]
-Stage 4: 컴포넌트 (페이지별) → ui → widget → feature → [리뷰] ← page 파라미터 필요
+Stage 4: 컴포넌트 (페이지별) → page-spec → domain-spec → ui → widget → feature → [리뷰] ← page 파라미터 필요
 Stage 5: 페이지 (페이지별)   → fe-page-builder → [리뷰] ← page 파라미터 필요
-Stage 6: E2E 검증 (선택적)   → qa-be-e2e-testing → qa-fe-e2e-testing → [리뷰]
+Stage 6: E2E 검증 (필수)     → qa-be-e2e-testing → qa-fe-e2e-testing → [리뷰]
 ```
 
 #### 기획서 폴더 구조
@@ -819,6 +819,8 @@ apps/proposal/plans/
 
 ```
 Stage 4: 컴포넌트 (페이지별)
+├── page-spec-builder  ← 첫 번째로 실행 (페이지 SPEC.md 생성)
+├── domain-spec-builder ← 두 번째로 실행 (Feature/Cell/Store SPEC.md 생성)
 ├── ui-component-builder
 ├── widget-builder
 ├── feature-builder
@@ -868,6 +870,8 @@ Stage 4: 컴포넌트 (페이지별)
 
 | Agent | 역할 |
 |-------|------|
+| fe-page-spec-builder | 기능 기획서에서 페이지별 SPEC.md 생성 |
+| fe-domain-spec-builder | 도메인 컴포넌트(Feature, Cell, Store) SPEC.md 생성 |
 | fe-ui-component-builder | Pure UI 컴포넌트 생성 (packages/fe-ui/src/components/ui) |
 | fe-cell-builder | DataGrid/Table용 Cell 컴포넌트 생성 (계층별) |
 | fe-input-component-builder | Input 컴포넌트 생성 (packages/fe-ui/src/components/inputs) |

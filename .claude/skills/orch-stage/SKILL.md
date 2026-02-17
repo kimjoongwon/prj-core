@@ -75,7 +75,7 @@ allowed-tools: Task, Read, Write, Grep, Bash
 Stage 1: 기획 (기능 전체)    → orch-requirement (L0~L10) → [리뷰]
 Stage 2: 스키마 (기능 전체)  → schema → entity → dto → seed → [리뷰]
 Stage 3: 백엔드 (기능 전체)  → repository → service → controller → [리뷰]
-Stage 4: 컴포넌트 (페이지별) → ui → widget → feature → [리뷰]
+Stage 4: 컴포넌트 (페이지별) → page-spec → domain-spec → ui → widget → feature → [리뷰]
 Stage 5: 페이지 (페이지별)   → fe-page-builder → [리뷰]
 ```
 
@@ -149,6 +149,8 @@ apps/proposal/plans/[project]/[app]/YYYY-MM-DD-[feature]/
 - `be-controller-builder` - Controller 생성
 
 **Stage 4**
+- `fe-page-spec-builder` - 페이지별 SPEC.md 생성 (첫 번째로 실행)
+- `fe-domain-spec-builder` - 도메인 컴포넌트(Feature, Cell, Store) SPEC.md 생성
 - `fe-ui-component-builder` - Pure UI 컴포넌트
 - `fe-widget-builder` - Widget 컴포넌트
 - `fe-feature-builder` - Feature 컴포넌트

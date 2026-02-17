@@ -1,4 +1,4 @@
-# MessageTemplate Progress
+# Template Progress
 
 ## Stage 1: 기획
 - [x] L0-L2 기획 (01-overview.md)
@@ -9,34 +9,66 @@
   - L5: 25개 인터랙션 (ACT-001~025), 4개 화면별 액션 정의
   - L6: 8개 API (API-001~008), 상세 스키마 포함
 - [x] L7-L8 기획 (04-ui-details.md) - 2026-02-17
-  - L7: 2개 엔티티 (MessageTemplate, TemplateVariable), 1개 Enum, 19개 필드, 9개 DTO
+  - L7: 2개 엔티티 (Template, TemplateVariable), 1개 Enum, 19개 필드, 9개 DTO
   - L8: 15개 컴포넌트 (Cell 2, Widget 11, Feature 2), 기존 재사용 9개
 - [x] L9-L10 기획 (05-technical-design.md) - 2026-02-17
   - L9: 16개 비즈니스 로직 (백엔드 9개 + 프론트엔드 7개)
   - L10: 7개 테스트 스위트 (백엔드 2개 + 프론트엔드 5개), 총 56개 테스트 케이스
-- [ ] 사용자 리뷰
+- [x] 사용자 리뷰 완료 (2026-02-17)
 
 ## Stage 2: 스키마
-- [ ] Prisma 스키마 (MessageTemplate, TemplateVariable)
-- [ ] Entity 클래스
-- [ ] DTO 클래스
-- [ ] Query DTO 클래스
-- [ ] Repository 클래스
-- [ ] Seed 데이터
-- [ ] 사용자 리뷰
+- [x] Prisma 스키마 (Template, TemplateVariable) - 2026-02-17
+  - `packages/be-prisma/schema/template.prisma`
+  - Template, TemplateVariable 모델 + TemplateType enum
+- [x] Entity 클래스 - 2026-02-17
+  - `packages/be-entity/src/template.entity.ts`
+  - `packages/be-entity/src/template-variable.entity.ts`
+- [x] DTO 클래스 - 2026-02-17
+  - `packages/be-dto/src/template/template.dto.ts` (Response)
+  - `packages/be-dto/src/template/template-variable.dto.ts` (Response)
+  - `packages/be-dto/src/create/create-template.dto.ts`
+  - `packages/be-dto/src/update/update-template.dto.ts`
+  - `packages/be-dto/src/template/preview-template.dto.ts`
+  - `packages/be-dto/src/template/send-test-template.dto.ts`
+- [x] Query DTO 클래스 - 2026-02-17
+  - `packages/be-dto/src/query/query-template.dto.ts`
+  - 필터: search(code/name), type(enum), isActive(boolean)
+- [x] Repository 클래스 - 2026-02-17
+  - `packages/be-repository/src/templates.repository.ts`
+  - 9개 메서드: findById, findByIdOrThrow, findByCode, findMany, create, createWithVariables, updateById, updateWithVariables, removeById
+- [x] Seed 데이터 - 2026-02-17
+  - `packages/be-prisma/seed-data.ts` (6개 템플릿: EMAIL 2, SMS 2, PUSH 2)
+  - `packages/be-prisma/seed.ts` (createTemplates 함수 추가)
+- [x] 사용자 리뷰 완료 (2026-02-17)
 
 ## Stage 3: 백엔드
-- [ ] MessageTemplateService
-- [ ] TemplateVariableService
-- [ ] MessageTemplateController + Module
-- [ ] AppModule 라우팅 등록
-- [ ] 사용자 리뷰
+- [x] TemplatesService - 2026-02-17
+  - `packages/be-service/src/templates.service.ts`
+  - 8개 public 메서드: getTemplates, getTemplateById, create, update, remove, toggleStatus, preview, sendTest
+  - 3개 private 메서드: validateTypeConstraints, validateRecipient, substituteVariables
+  - 발송 테스트는 TODO 처리 (발송 서비스 미구현, 로그만 남김)
+- [x] TemplatesController + TemplatesModule - 2026-02-17
+  - `apps/server/src/module/template/templates.controller.ts` (8개 API 엔드포인트)
+  - `apps/server/src/module/template/templates.module.ts`
+  - `apps/server/src/module/template/index.ts`
+  - API 경로: /api/v1/templates (FULL_ACCESS 권한 필수)
+- [x] AppModule 라우팅 등록 - 2026-02-17
+  - `apps/server/src/module/app.module.ts`에 TemplatesModule import + RouterModule 경로 추가
+- [x] 사용자 리뷰 완료 (2026-02-17)
 
 ## Stage 4: 컴포넌트 (페이지별)
-- [ ] TemplateList 컴포넌트
-- [ ] TemplateDetail 컴포넌트
-- [ ] TemplateCreate 컴포넌트
-- [ ] TemplateEdit 컴포넌트
+- [x] TemplateList 컴포넌트 - 2026-02-17
+  - Cell: `TemplateTypeChipCell` (유형 Chip), `TemplateActiveToggleCell` (인라인 토글)
+  - Menu: `admin-menu.ts`에 템플릿 경로/Subject/메뉴 추가
+  - Widget/Feature: 기존 SearchFilterBar, DataGrid 재사용 (신규 없음)
+- [x] TemplateDetail 컴포넌트 - 2026-02-17
+  - Widget: `TemplateTypeBadge`, `HtmlContentRenderer`, `ByteCounter`, `VariableReadTable`, `VariableInputForm`, `TemplateContentViewer`, `PreviewModal`, `SendTestModal`
+  - Feature: `TemplateActions` (액션 버튼 그룹)
+- [x] TemplateCreate 컴포넌트 - 2026-02-17
+  - Widget: `HtmlEditor`, `VariableEditTable`, `TemplateContentEditor`, `TemplateForm` (등록/수정 공용)
+- [x] TemplateEdit 컴포넌트 - 2026-02-17
+  - TemplateCreate와 공유 (TemplateForm mode="edit")
+- [ ] 사용자 리뷰
 
 ## Stage 5: 페이지 (페이지별)
 - [ ] TemplateList 페이지

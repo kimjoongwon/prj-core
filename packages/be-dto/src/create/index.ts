@@ -18,6 +18,7 @@ export * from "./create-space.dto";
 export * from "./create-space-association.dto";
 export * from "./create-space-classification.dto";
 export * from "./create-task.dto";
+export * from "./create-template.dto";
 export * from "./create-tenant.dto";
 export * from "./create-timeline.dto";
 export * from "./create-user.dto";

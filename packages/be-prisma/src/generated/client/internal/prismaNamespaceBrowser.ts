@@ -87,6 +87,8 @@ export const ModelName = {
   Activity: 'Activity',
   Task: 'Task',
   Exercise: 'Exercise',
+  Template: 'Template',
+  TemplateVariable: 'TemplateVariable',
   Translation: 'Translation',
   User: 'User',
   UserClassification: 'UserClassification',
@@ -648,6 +650,37 @@ export const ExerciseScalarFieldEnum = {
 } as const
 
 export type ExerciseScalarFieldEnum = (typeof ExerciseScalarFieldEnum)[keyof typeof ExerciseScalarFieldEnum]
+
+
+export const TemplateScalarFieldEnum = {
+  id: 'id',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  removedAt: 'removedAt',
+  code: 'code',
+  name: 'name',
+  type: 'type',
+  subject: 'subject',
+  content: 'content',
+  description: 'description',
+  isActive: 'isActive'
+} as const
+
+export type TemplateScalarFieldEnum = (typeof TemplateScalarFieldEnum)[keyof typeof TemplateScalarFieldEnum]
+
+
+export const TemplateVariableScalarFieldEnum = {
+  id: 'id',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  name: 'name',
+  description: 'description',
+  defaultValue: 'defaultValue',
+  isRequired: 'isRequired',
+  templateId: 'templateId'
+} as const
+
+export type TemplateVariableScalarFieldEnum = (typeof TemplateVariableScalarFieldEnum)[keyof typeof TemplateVariableScalarFieldEnum]
 
 
 export const TranslationScalarFieldEnum = {

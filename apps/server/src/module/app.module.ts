@@ -29,14 +29,17 @@ import { APP_GUARD, RouterModule } from "@nestjs/core";
 import { ThrottlerGuard } from "@nestjs/throttler";
 import { AbilitiesModule } from "./ability";
 import { ActionsModule } from "./action";
+import { CategoriesModule } from "./category";
 // Global modules
 import { globalModules } from "./global.module";
 import { GrantsModule } from "./grant";
+import { GroupsModule } from "./group";
 import { GroundsModule } from "./grounds";
 import { PrismaModule } from "./prisma.module";
 import { RedisModule } from "./redis.module";
 import { RolesModule } from "./role";
 import { SubjectsModule } from "./subject";
+import { TemplatesModule } from "./template";
 import { TranslationsModule } from "./translation";
 import { UsersModule } from "./users";
 
@@ -52,8 +55,11 @@ import { UsersModule } from "./users";
 		SubjectsModule,
 		AbilitiesModule,
 		RolesModule,
+		GroupsModule,
+		CategoriesModule,
 		GrantsModule,
 		TranslationsModule,
+		TemplatesModule,
 		// Resource Modules는 필요할 때 추가합니다.
 		// 가이드: .claude/agents/be-controller-builder.md
 		RouterModule.register([
@@ -88,12 +94,24 @@ import { UsersModule } from "./users";
 								module: RolesModule,
 							},
 							{
+								path: "groups",
+								module: GroupsModule,
+							},
+							{
+								path: "categories",
+								module: CategoriesModule,
+							},
+							{
 								path: "grants",
 								module: GrantsModule,
 							},
 							{
 								path: "translations",
 								module: TranslationsModule,
+							},
+							{
+								path: "templates",
+								module: TemplatesModule,
 							},
 							// 새로운 Resource 라우트는 여기에 추가
 						],

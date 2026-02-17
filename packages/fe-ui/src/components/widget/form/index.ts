@@ -4,3 +4,4 @@ export * from "./OidcClientForm";
 export * from "./OidcConsentPanel";
 export * from "./OidcLoginForm";
 export * from "./ResetPasswordForm";
+export * from "./TemplateForm";

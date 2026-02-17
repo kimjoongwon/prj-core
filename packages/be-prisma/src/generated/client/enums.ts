@@ -131,6 +131,15 @@ export const GroupTypes = {
 export type GroupTypes = (typeof GroupTypes)[keyof typeof GroupTypes]
 
 
+export const TemplateType = {
+  EMAIL: 'EMAIL',
+  SMS: 'SMS',
+  PUSH: 'PUSH'
+} as const
+
+export type TemplateType = (typeof TemplateType)[keyof typeof TemplateType]
+
+
 export const LanguageCode = {
   ko_KR: 'ko_KR',
   en_US: 'en_US',

@@ -217,6 +217,16 @@ export type Task = Prisma.TaskModel
  */
 export type Exercise = Prisma.ExerciseModel
 /**
+ * Model Template
+ * @displayName 메시지 템플릿
+ */
+export type Template = Prisma.TemplateModel
+/**
+ * Model TemplateVariable
+ * @displayName 템플릿 변수
+ */
+export type TemplateVariable = Prisma.TemplateVariableModel
+/**
  * Model Translation
  * @displayName 번역
  */

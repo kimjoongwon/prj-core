@@ -34,6 +34,8 @@ export * from "./space-association.entity";
 export * from "./space-classification.entity";
 export * from "./subject.entity";
 export * from "./task.entity";
+export * from "./template.entity";
+export * from "./template-variable.entity";
 export * from "./tenant.entity";
 export * from "./timeline.entity";
 export * from "./translation.entity";

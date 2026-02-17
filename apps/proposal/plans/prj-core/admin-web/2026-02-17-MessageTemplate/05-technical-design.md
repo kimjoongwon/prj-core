@@ -2,10 +2,10 @@
 
 ## 이전 레이어 요약 (L0-L8)
 
-- **L0-L2**: 시스템 관리자가 Email/SMS/Push 메시지 템플릿 CRUD + 변수 관리 + 미리보기 + 발송 테스트
+- **L0-L2**: 시스템 관리자가 Email/SMS/Push 템플릿 CRUD + 변수 관리 + 미리보기 + 발송 테스트
 - **L3-L4**: 13개 기능, 4개 화면 (목록/상세/등록/수정)
 - **L5-L6**: 25개 인터랙션, 8개 API (모두 신규)
-- **L7**: MessageTemplate + TemplateVariable 엔티티 (신규), MessageTemplateType enum, 9개 DTO
+- **L7**: Template + TemplateVariable 엔티티 (신규), TemplateType enum, 9개 DTO
 - **L8**: Cell 2개, Widget 11개, Feature 1개 컴포넌트
 
 ---
@@ -58,8 +58,8 @@
 #### MT-L9-LOG-001: 코드(code) 유니크 검증
 
 ```typescript
-// MessageTemplateService.create()
-async create(dto: CreateMessageTemplateDto): Promise<MessageTemplate> {
+// TemplateService.create()
+async create(dto: CreateTemplateDto): Promise<Template> {
   // 코드 중복 검사
   const existing = await this.repository.findByCode(dto.code);
   if (existing) {
@@ -71,14 +71,14 @@ async create(dto: CreateMessageTemplateDto): Promise<MessageTemplate> {
 }
 ```
 
-**연결**: API-003 (POST /api/v1/message-templates), 필드 code (L7-FLD-005)
+**연결**: API-003 (POST /api/v1/templates), 필드 code (L7-FLD-005)
 
 ---
 
 #### MT-L9-LOG-002: 유형별 필드 검증
 
 ```typescript
-// CreateMessageTemplateDto - class-validator 데코레이터
+// CreateTemplateDto - class-validator 데코레이터
 @ValidateIf((o) => o.type === 'EMAIL' || o.type === 'PUSH')
 @IsNotEmpty({ message: "제목은 필수입니다" })
 @MaxLength(50, {
@@ -88,7 +88,7 @@ async create(dto: CreateMessageTemplateDto): Promise<MessageTemplate> {
 subject?: string;
 
 // 또는 Service 레이어에서 수동 검증
-async validateTypeConstraints(dto: CreateMessageTemplateDto): Promise<void> {
+async validateTypeConstraints(dto: CreateTemplateDto): Promise<void> {
   const { type, subject, content } = dto;
 
   // EMAIL, PUSH: subject 필수
@@ -128,7 +128,7 @@ async validateTypeConstraints(dto: CreateMessageTemplateDto): Promise<void> {
 #### MT-L9-LOG-003: 소프트 삭제 + 비활성화
 
 ```typescript
-// MessageTemplateService.remove()
+// TemplateService.remove()
 async remove(id: string): Promise<void> {
   const template = await this.repository.findByIdOrThrow(id);
 
@@ -144,15 +144,15 @@ async remove(id: string): Promise<void> {
 }
 ```
 
-**연결**: API-005 (DELETE /api/v1/message-templates/:id)
+**연결**: API-005 (DELETE /api/v1/templates/:id)
 
 ---
 
 #### MT-L9-LOG-004: 활성/비활성 토글
 
 ```typescript
-// MessageTemplateService.toggleStatus()
-async toggleStatus(id: string): Promise<MessageTemplate> {
+// TemplateService.toggleStatus()
+async toggleStatus(id: string): Promise<Template> {
   const template = await this.repository.findByIdOrThrow(id);
 
   return this.repository.update(id, {
@@ -161,17 +161,17 @@ async toggleStatus(id: string): Promise<MessageTemplate> {
 }
 ```
 
-**연결**: API-006 (PATCH /api/v1/message-templates/:id/toggle-status)
+**연결**: API-006 (PATCH /api/v1/templates/:id/toggle-status)
 
 ---
 
 #### MT-L9-LOG-005: 변수 치환 미리보기
 
 ```typescript
-// MessageTemplateService.preview()
+// TemplateService.preview()
 async preview(
   id: string,
-  dto: PreviewMessageTemplateDto,
+  dto: PreviewTemplateDto,
 ): Promise<PreviewResult> {
   const template = await this.repository.findByIdOrThrow(id, {
     include: { variables: true },
@@ -221,17 +221,17 @@ async preview(
 }
 ```
 
-**연결**: API-007 (POST /api/v1/message-templates/:id/preview)
+**연결**: API-007 (POST /api/v1/templates/:id/preview)
 
 ---
 
 #### MT-L9-LOG-006: 발송 테스트
 
 ```typescript
-// MessageTemplateService.sendTest()
+// TemplateService.sendTest()
 async sendTest(
   id: string,
-  dto: SendTestMessageTemplateDto,
+  dto: SendTestTemplateDto,
 ): Promise<SendTestResult> {
   const template = await this.repository.findByIdOrThrow(id, {
     include: { variables: true },
@@ -293,7 +293,7 @@ async sendTest(
 }
 
 // 수신자 형식 검증
-private validateRecipient(type: MessageTemplateType, recipient: string): void {
+private validateRecipient(type: TemplateType, recipient: string): void {
   switch (type) {
     case 'EMAIL':
       if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(recipient)) {
@@ -314,24 +314,24 @@ private validateRecipient(type: MessageTemplateType, recipient: string): void {
 }
 ```
 
-**연결**: API-008 (POST /api/v1/message-templates/:id/send-test)
+**연결**: API-008 (POST /api/v1/templates/:id/send-test)
 
 ---
 
 #### MT-L9-LOG-007: 변수 업데이트 (Set Semantics)
 
 ```typescript
-// MessageTemplateRepository.updateWithVariables()
+// TemplateRepository.updateWithVariables()
 async updateWithVariables(
   id: string,
-  dto: UpdateMessageTemplateDto,
-): Promise<MessageTemplate> {
+  dto: UpdateTemplateDto,
+): Promise<Template> {
   const { variables, ...templateData } = dto;
 
   return this.prisma.$transaction(async (tx) => {
     // 1. 기존 변수 전체 삭제
     await tx.templateVariable.deleteMany({
-      where: { messageTemplateId: id },
+      where: { templateId: id },
     });
 
     // 2. 새 변수 일괄 생성 (배열이 있는 경우)
@@ -342,13 +342,13 @@ async updateWithVariables(
           description: v.description ?? null,
           defaultValue: v.defaultValue ?? null,
           isRequired: v.isRequired ?? false,
-          messageTemplateId: id,
+          templateId: id,
         })),
       });
     }
 
     // 3. 템플릿 본체 업데이트
-    return tx.messageTemplate.update({
+    return tx.template.update({
       where: { id },
       data: templateData,
       include: { variables: true },
@@ -363,16 +363,16 @@ async updateWithVariables(
 - 트랜잭션으로 원자성 보장
 - 복잡한 diff 로직 없이 단순하고 안전한 전략
 
-**연결**: API-004 (PATCH /api/v1/message-templates/:id)
+**연결**: API-004 (PATCH /api/v1/templates/:id)
 
 ---
 
 #### MT-L9-LOG-008: 목록 조회 (소프트 삭제 필터링)
 
 ```typescript
-// MessageTemplateRepository.findMany()
-async findMany(query: QueryMessageTemplateDto) {
-  const where: Prisma.MessageTemplateWhereInput = {
+// TemplateRepository.findMany()
+async findMany(query: QueryTemplateDto) {
+  const where: Prisma.TemplateWhereInput = {
     removedAt: null, // 소프트 삭제된 데이터 제외
     ...(query.search && {
       OR: [
@@ -385,21 +385,21 @@ async findMany(query: QueryMessageTemplateDto) {
   };
 
   const [data, total] = await Promise.all([
-    this.prisma.messageTemplate.findMany({
+    this.prisma.template.findMany({
       where,
       skip: query.skip,
       take: query.take,
       orderBy: this.parseSort(query.sort),
       include: { variables: true },
     }),
-    this.prisma.messageTemplate.count({ where }),
+    this.prisma.template.count({ where }),
   ]);
 
   return { data, total };
 }
 ```
 
-**연결**: API-001 (GET /api/v1/message-templates)
+**연결**: API-001 (GET /api/v1/templates)
 
 ---
 
@@ -519,7 +519,7 @@ function validateVariableConsistency(
 #### MT-L9-LOG-012: 등록 폼 유효성 검증
 
 ```typescript
-// MessageTemplateForm 내부 유효성 규칙
+// TemplateForm 내부 유효성 규칙
 const validationRules = {
   type: {
     required: "유형을 선택해주세요",
@@ -583,15 +583,15 @@ const variableNameRules = {
 };
 ```
 
-**연결**: CMP-040 (MessageTemplateForm), ACT-020 (등록 제출), ACT-024 (수정 제출)
+**연결**: CMP-040 (TemplateForm), ACT-020 (등록 제출), ACT-024 (수정 제출)
 
 ---
 
 #### MT-L9-LOG-013: 유형별 폼 동적 전환
 
 ```typescript
-// MessageTemplateForm 내부 로직
-function handleTypeChange(newType: MessageTemplateType) {
+// TemplateForm 내부 로직
+function handleTypeChange(newType: TemplateType) {
   // 유형 변경 시 subject 필드 초기화
   switch (newType) {
     case 'EMAIL':
@@ -619,7 +619,7 @@ function handleTypeChange(newType: MessageTemplateType) {
 
 ```typescript
 // 상세 페이지 삭제 핸들러
-function handleDelete(messageTemplateId: string) {
+function handleDelete(templateId: string) {
   modal.confirm({
     title: "삭제 확인",
     content:
@@ -627,10 +627,10 @@ function handleDelete(messageTemplateId: string) {
     confirmText: "삭제",
     confirmColor: "danger",
     onConfirm: async () => {
-      await deleteMessageTemplate(messageTemplateId);
+      await deleteTemplate(templateId);
       // 성공 토스트 + 목록 화면으로 이동
-      toast.success("메시지 템플릿이 삭제되었습니다.");
-      router.push("/message-templates");
+      toast.success("템플릿이 삭제되었습니다.");
+      router.push("/templates");
     },
   });
 }
@@ -644,14 +644,14 @@ function handleDelete(messageTemplateId: string) {
 
 ```typescript
 // 목록 페이지 인라인 토글 핸들러
-async function handleToggleStatus(messageTemplateId: string) {
+async function handleToggleStatus(templateId: string) {
   // 1. Optimistic UI: Switch 상태 즉시 반전
   queryClient.setQueryData(
-    getGetMessageTemplatesQueryKey(currentParams),
+    getGetTemplatesQueryKey(currentParams),
     (old: ResponseData) => ({
       ...old,
       data: old.data.map((item) =>
-        item.id === messageTemplateId
+        item.id === templateId
           ? { ...item, isActive: !item.isActive }
           : item,
       ),
@@ -660,14 +660,14 @@ async function handleToggleStatus(messageTemplateId: string) {
 
   try {
     // 2. API 호출
-    await toggleStatusMessageTemplate(messageTemplateId);
+    await toggleStatusTemplate(templateId);
 
     // 3. 성공 토스트
     toast.success("템플릿 상태가 변경되었습니다.");
   } catch (error) {
     // 4. 실패 시 롤백
     queryClient.invalidateQueries(
-      getGetMessageTemplatesQueryKey(currentParams),
+      getGetTemplatesQueryKey(currentParams),
     );
     toast.error("상태 변경에 실패했습니다.");
   }
@@ -682,7 +682,7 @@ async function handleToggleStatus(messageTemplateId: string) {
 
 ```typescript
 // SendTestModal 내부 유효성 규칙
-function getRecipientValidation(type: MessageTemplateType) {
+function getRecipientValidation(type: TemplateType) {
   switch (type) {
     case 'EMAIL':
       return {
@@ -716,14 +716,14 @@ function getRecipientValidation(type: MessageTemplateType) {
 
 ### 백엔드 테스트
 
-#### MT-L10-TST-001: MessageTemplateService 유닛 테스트
+#### MT-L10-TST-001: TemplateService 유닛 테스트
 
 ```typescript
-describe('MessageTemplateService', () => {
+describe('TemplateService', () => {
   describe('create', () => {
     it('새 템플릿을 등록한다', async () => {
       // Given
-      const dto: CreateMessageTemplateDto = {
+      const dto: CreateTemplateDto = {
         code: 'WELCOME_EMAIL',
         name: '가입 환영 메시지',
         type: 'EMAIL',
@@ -1052,16 +1052,16 @@ describe('MessageTemplateService', () => {
 
 ---
 
-#### MT-L10-TST-002: MessageTemplateController E2E 테스트
+#### MT-L10-TST-002: TemplateController E2E 테스트
 
 ```typescript
-describe('MessageTemplateController (e2e)', () => {
-  describe('GET /api/v1/message-templates', () => {
+describe('TemplateController (e2e)', () => {
+  describe('GET /api/v1/templates', () => {
     it('템플릿 목록을 반환한다', async () => {
       // Given: 시드 데이터에 템플릿이 등록되어 있다
       // When
       const response = await request(app.getHttpServer())
-        .get('/api/v1/message-templates')
+        .get('/api/v1/templates')
         .set('Authorization', `Bearer ${adminToken}`)
         .set('X-Space-ID', systemSpaceId)
         .expect(200);
@@ -1074,7 +1074,7 @@ describe('MessageTemplateController (e2e)', () => {
     it('유형별 필터링이 적용된다', async () => {
       // When
       const response = await request(app.getHttpServer())
-        .get('/api/v1/message-templates?type=EMAIL')
+        .get('/api/v1/templates?type=EMAIL')
         .set('Authorization', `Bearer ${adminToken}`)
         .set('X-Space-ID', systemSpaceId)
         .expect(200);
@@ -1088,7 +1088,7 @@ describe('MessageTemplateController (e2e)', () => {
     it('검색이 적용된다', async () => {
       // When
       const response = await request(app.getHttpServer())
-        .get('/api/v1/message-templates?search=WELCOME')
+        .get('/api/v1/templates?search=WELCOME')
         .set('Authorization', `Bearer ${adminToken}`)
         .set('X-Space-ID', systemSpaceId)
         .expect(200);
@@ -1104,7 +1104,7 @@ describe('MessageTemplateController (e2e)', () => {
     it('활성 상태 필터링이 적용된다', async () => {
       // When
       const response = await request(app.getHttpServer())
-        .get('/api/v1/message-templates?isActive=true')
+        .get('/api/v1/templates?isActive=true')
         .set('Authorization', `Bearer ${adminToken}`)
         .set('X-Space-ID', systemSpaceId)
         .expect(200);
@@ -1117,16 +1117,16 @@ describe('MessageTemplateController (e2e)', () => {
 
     it('인증 없이 호출하면 401을 반환한다', async () => {
       await request(app.getHttpServer())
-        .get('/api/v1/message-templates')
+        .get('/api/v1/templates')
         .expect(401);
     });
   });
 
-  describe('GET /api/v1/message-templates/:id', () => {
+  describe('GET /api/v1/templates/:id', () => {
     it('템플릿 상세 정보를 변수와 함께 반환한다', async () => {
       // When
       const response = await request(app.getHttpServer())
-        .get(`/api/v1/message-templates/${templateId}`)
+        .get(`/api/v1/templates/${templateId}`)
         .set('Authorization', `Bearer ${adminToken}`)
         .set('X-Space-ID', systemSpaceId)
         .expect(200);
@@ -1138,18 +1138,18 @@ describe('MessageTemplateController (e2e)', () => {
 
     it('존재하지 않는 ID로 조회하면 404를 반환한다', async () => {
       await request(app.getHttpServer())
-        .get('/api/v1/message-templates/non-existent-id')
+        .get('/api/v1/templates/non-existent-id')
         .set('Authorization', `Bearer ${adminToken}`)
         .set('X-Space-ID', systemSpaceId)
         .expect(404);
     });
   });
 
-  describe('POST /api/v1/message-templates', () => {
+  describe('POST /api/v1/templates', () => {
     it('새 템플릿을 등록한다', async () => {
       // When
       const response = await request(app.getHttpServer())
-        .post('/api/v1/message-templates')
+        .post('/api/v1/templates')
         .set('Authorization', `Bearer ${adminToken}`)
         .set('X-Space-ID', systemSpaceId)
         .send({
@@ -1173,7 +1173,7 @@ describe('MessageTemplateController (e2e)', () => {
 
     it('중복 코드로 등록하면 409를 반환한다', async () => {
       await request(app.getHttpServer())
-        .post('/api/v1/message-templates')
+        .post('/api/v1/templates')
         .set('Authorization', `Bearer ${adminToken}`)
         .set('X-Space-ID', systemSpaceId)
         .send({
@@ -1188,7 +1188,7 @@ describe('MessageTemplateController (e2e)', () => {
 
     it('EMAIL 유형에 subject가 없으면 400을 반환한다', async () => {
       await request(app.getHttpServer())
-        .post('/api/v1/message-templates')
+        .post('/api/v1/templates')
         .set('Authorization', `Bearer ${adminToken}`)
         .set('X-Space-ID', systemSpaceId)
         .send({
@@ -1203,7 +1203,7 @@ describe('MessageTemplateController (e2e)', () => {
 
     it('필수 필드가 누락되면 400을 반환한다', async () => {
       await request(app.getHttpServer())
-        .post('/api/v1/message-templates')
+        .post('/api/v1/templates')
         .set('Authorization', `Bearer ${adminToken}`)
         .set('X-Space-ID', systemSpaceId)
         .send({
@@ -1213,11 +1213,11 @@ describe('MessageTemplateController (e2e)', () => {
     });
   });
 
-  describe('PATCH /api/v1/message-templates/:id', () => {
+  describe('PATCH /api/v1/templates/:id', () => {
     it('템플릿을 수정한다', async () => {
       // When
       const response = await request(app.getHttpServer())
-        .patch(`/api/v1/message-templates/${templateId}`)
+        .patch(`/api/v1/templates/${templateId}`)
         .set('Authorization', `Bearer ${adminToken}`)
         .set('X-Space-ID', systemSpaceId)
         .send({
@@ -1233,7 +1233,7 @@ describe('MessageTemplateController (e2e)', () => {
     it('변수를 전체 교체한다 (Set Semantics)', async () => {
       // When
       const response = await request(app.getHttpServer())
-        .patch(`/api/v1/message-templates/${templateId}`)
+        .patch(`/api/v1/templates/${templateId}`)
         .set('Authorization', `Bearer ${adminToken}`)
         .set('X-Space-ID', systemSpaceId)
         .send({
@@ -1250,18 +1250,18 @@ describe('MessageTemplateController (e2e)', () => {
     });
   });
 
-  describe('DELETE /api/v1/message-templates/:id', () => {
+  describe('DELETE /api/v1/templates/:id', () => {
     it('템플릿을 소프트 삭제한다', async () => {
       // When
       await request(app.getHttpServer())
-        .delete(`/api/v1/message-templates/${deleteTargetId}`)
+        .delete(`/api/v1/templates/${deleteTargetId}`)
         .set('Authorization', `Bearer ${adminToken}`)
         .set('X-Space-ID', systemSpaceId)
         .expect(204);
 
       // Then: 삭제된 템플릿은 목록에서 조회되지 않음
       const listResponse = await request(app.getHttpServer())
-        .get('/api/v1/message-templates')
+        .get('/api/v1/templates')
         .set('Authorization', `Bearer ${adminToken}`)
         .set('X-Space-ID', systemSpaceId)
         .expect(200);
@@ -1273,18 +1273,18 @@ describe('MessageTemplateController (e2e)', () => {
     });
   });
 
-  describe('PATCH /api/v1/message-templates/:id/toggle-status', () => {
+  describe('PATCH /api/v1/templates/:id/toggle-status', () => {
     it('활성 상태를 토글한다', async () => {
       // Given: 현재 활성 상태 확인
       const before = await request(app.getHttpServer())
-        .get(`/api/v1/message-templates/${templateId}`)
+        .get(`/api/v1/templates/${templateId}`)
         .set('Authorization', `Bearer ${adminToken}`)
         .set('X-Space-ID', systemSpaceId);
       const wasActive = before.body.data.isActive;
 
       // When
       const response = await request(app.getHttpServer())
-        .patch(`/api/v1/message-templates/${templateId}/toggle-status`)
+        .patch(`/api/v1/templates/${templateId}/toggle-status`)
         .set('Authorization', `Bearer ${adminToken}`)
         .set('X-Space-ID', systemSpaceId)
         .expect(200);
@@ -1294,11 +1294,11 @@ describe('MessageTemplateController (e2e)', () => {
     });
   });
 
-  describe('POST /api/v1/message-templates/:id/preview', () => {
+  describe('POST /api/v1/templates/:id/preview', () => {
     it('변수를 치환한 미리보기 결과를 반환한다', async () => {
       // When
       const response = await request(app.getHttpServer())
-        .post(`/api/v1/message-templates/${emailTemplateId}/preview`)
+        .post(`/api/v1/templates/${emailTemplateId}/preview`)
         .set('Authorization', `Bearer ${adminToken}`)
         .set('X-Space-ID', systemSpaceId)
         .send({
@@ -1315,7 +1315,7 @@ describe('MessageTemplateController (e2e)', () => {
     it('미치환 변수 목록을 반환한다', async () => {
       // When: 일부 변수만 전달
       const response = await request(app.getHttpServer())
-        .post(`/api/v1/message-templates/${emailTemplateId}/preview`)
+        .post(`/api/v1/templates/${emailTemplateId}/preview`)
         .set('Authorization', `Bearer ${adminToken}`)
         .set('X-Space-ID', systemSpaceId)
         .send({
@@ -1328,10 +1328,10 @@ describe('MessageTemplateController (e2e)', () => {
     });
   });
 
-  describe('POST /api/v1/message-templates/:id/send-test', () => {
+  describe('POST /api/v1/templates/:id/send-test', () => {
     it('비활성 템플릿에 발송 테스트 시 400을 반환한다', async () => {
       await request(app.getHttpServer())
-        .post(`/api/v1/message-templates/${inactiveTemplateId}/send-test`)
+        .post(`/api/v1/templates/${inactiveTemplateId}/send-test`)
         .set('Authorization', `Bearer ${adminToken}`)
         .set('X-Space-ID', systemSpaceId)
         .send({
@@ -1343,7 +1343,7 @@ describe('MessageTemplateController (e2e)', () => {
 
     it('유효하지 않은 수신자 형식이면 400을 반환한다', async () => {
       await request(app.getHttpServer())
-        .post(`/api/v1/message-templates/${emailTemplateId}/send-test`)
+        .post(`/api/v1/templates/${emailTemplateId}/send-test`)
         .set('Authorization', `Bearer ${adminToken}`)
         .set('X-Space-ID', systemSpaceId)
         .send({
@@ -1363,10 +1363,10 @@ describe('MessageTemplateController (e2e)', () => {
 #### MT-L10-TST-010: 템플릿 목록 페이지 테스트
 
 ```typescript
-describe('메시지 템플릿 목록 페이지', () => {
+describe('템플릿 목록 페이지', () => {
   it('템플릿 목록을 표시한다', async () => {
     // Given: API가 템플릿 목록 반환
-    mockUseGetMessageTemplates.mockReturnValue({
+    mockUseGetTemplates.mockReturnValue({
       data: {
         data: [mockEmailTemplate, mockSmsTemplate],
         meta: { total: 2, skip: 0, take: 20, totalPages: 1 },
@@ -1375,7 +1375,7 @@ describe('메시지 템플릿 목록 페이지', () => {
     });
 
     // When
-    render(<MessageTemplateListClient />);
+    render(<TemplateListClient />);
 
     // Then
     expect(screen.getByText('WELCOME_EMAIL')).toBeInTheDocument();
@@ -1384,83 +1384,83 @@ describe('메시지 템플릿 목록 페이지', () => {
 
   it('등록 버튼 클릭 시 등록 페이지로 이동한다', async () => {
     // Given
-    render(<MessageTemplateListClient />);
+    render(<TemplateListClient />);
 
     // When
     await userEvent.click(screen.getByText('템플릿 등록'));
 
     // Then
-    expect(router.push).toHaveBeenCalledWith('/message-templates/new');
+    expect(router.push).toHaveBeenCalledWith('/templates/new');
   });
 
   it('행 클릭 시 상세 페이지로 이동한다', async () => {
     // Given
-    render(<MessageTemplateListClient />);
+    render(<TemplateListClient />);
 
     // When
     await userEvent.click(screen.getByText('WELCOME_EMAIL'));
 
     // Then
     expect(router.push).toHaveBeenCalledWith(
-      `/message-templates/${mockEmailTemplate.id}`,
+      `/templates/${mockEmailTemplate.id}`,
     );
   });
 
   it('유형 필터 변경 시 목록이 갱신된다', async () => {
     // Given
-    render(<MessageTemplateListClient />);
+    render(<TemplateListClient />);
 
     // When
     await userEvent.click(screen.getByLabelText('유형'));
     await userEvent.click(screen.getByText('이메일'));
 
     // Then
-    expect(mockUseGetMessageTemplates).toHaveBeenCalledWith(
+    expect(mockUseGetTemplates).toHaveBeenCalledWith(
       expect.objectContaining({ type: 'EMAIL' }),
     );
   });
 
   it('검색어 입력 후 Enter 시 목록이 갱신된다', async () => {
     // Given
-    render(<MessageTemplateListClient />);
+    render(<TemplateListClient />);
 
     // When
     const searchInput = screen.getByPlaceholderText('이름 또는 코드로 검색');
     await userEvent.type(searchInput, 'WELCOME{enter}');
 
     // Then
-    expect(mockUseGetMessageTemplates).toHaveBeenCalledWith(
+    expect(mockUseGetTemplates).toHaveBeenCalledWith(
       expect.objectContaining({ search: 'WELCOME' }),
     );
   });
 
   it('인라인 Switch 토글 시 상태가 변경된다', async () => {
     // Given
-    render(<MessageTemplateListClient />);
+    render(<TemplateListClient />);
 
     // When
     const switches = screen.getAllByRole('switch');
     await userEvent.click(switches[0]);
 
     // Then
-    expect(mockToggleStatusMessageTemplate).toHaveBeenCalledWith(
+    expect(mockToggleStatusTemplate).toHaveBeenCalledWith(
       mockEmailTemplate.id,
     );
   });
 
   it('데이터가 없으면 빈 상태를 표시한다', async () => {
     // Given
-    mockUseGetMessageTemplates.mockReturnValue({
+    mockUseGetTemplates.mockReturnValue({
       data: { data: [], meta: { total: 0, skip: 0, take: 20, totalPages: 0 } },
       isLoading: false,
     });
 
     // When
-    render(<MessageTemplateListClient />);
+    render(<TemplateListClient />);
 
     // Then
     expect(
-      screen.getByText('등록된 메시지 템플릿이 없습니다.'),
+      screen.getByText('등록된 템플릿이 없습니다.'),
     ).toBeInTheDocument();
   });
 });
@@ -1471,10 +1471,10 @@ describe('메시지 템플릿 목록 페이지', () => {
 #### MT-L10-TST-011: 템플릿 등록 폼 테스트
 
 ```typescript
-describe('메시지 템플릿 등록 폼', () => {
+describe('템플릿 등록 폼', () => {
   it('필수 필드 미입력 시 에러를 표시한다', async () => {
     // Given
-    render(<MessageTemplateCreateClient />);
+    render(<TemplateCreateClient />);
 
     // When
     await userEvent.click(screen.getByText('등록'));
@@ -1488,7 +1488,7 @@ describe('메시지 템플릿 등록 폼', () => {
 
   it('코드에 소문자를 입력하면 패턴 에러를 표시한다', async () => {
     // Given
-    render(<MessageTemplateCreateClient />);
+    render(<TemplateCreateClient />);
 
     // When
     await userEvent.type(screen.getByLabelText('코드'), 'lowercase_code');
@@ -1502,7 +1502,7 @@ describe('메시지 템플릿 등록 폼', () => {
 
   it('EMAIL 유형 선택 시 제목 필드와 HTML 에디터가 표시된다', async () => {
     // Given
-    render(<MessageTemplateCreateClient />);
+    render(<TemplateCreateClient />);
 
     // When
     await userEvent.click(screen.getByLabelText('EMAIL'));
@@ -1514,7 +1514,7 @@ describe('메시지 템플릿 등록 폼', () => {
 
   it('SMS 유형 선택 시 제목 필드가 숨겨지고 바이트 카운터가 표시된다', async () => {
     // Given
-    render(<MessageTemplateCreateClient />);
+    render(<TemplateCreateClient />);
 
     // When
     await userEvent.click(screen.getByLabelText('SMS'));
@@ -1526,7 +1526,7 @@ describe('메시지 템플릿 등록 폼', () => {
 
   it('PUSH 유형 선택 시 제목(50자), 본문(200자) 제한이 표시된다', async () => {
     // Given
-    render(<MessageTemplateCreateClient />);
+    render(<TemplateCreateClient />);
 
     // When
     await userEvent.click(screen.getByLabelText('PUSH'));
@@ -1539,7 +1539,7 @@ describe('메시지 템플릿 등록 폼', () => {
 
   it('변수 추가 버튼 클릭 시 빈 행이 추가된다', async () => {
     // Given
-    render(<MessageTemplateCreateClient />);
+    render(<TemplateCreateClient />);
 
     // When
     await userEvent.click(screen.getByText('+ 변수 추가'));
@@ -1551,7 +1551,7 @@ describe('메시지 템플릿 등록 폼', () => {
 
   it('변수 삭제 시 해당 행이 제거된다', async () => {
     // Given
-    render(<MessageTemplateCreateClient />);
+    render(<TemplateCreateClient />);
     await userEvent.click(screen.getByText('+ 변수 추가'));
     await userEvent.click(screen.getByText('+ 변수 추가'));
 
@@ -1566,7 +1566,7 @@ describe('메시지 템플릿 등록 폼', () => {
 
   it('중복 변수명 입력 시 에러를 표시한다', async () => {
     // Given
-    render(<MessageTemplateCreateClient />);
+    render(<TemplateCreateClient />);
     await userEvent.click(screen.getByText('+ 변수 추가'));
     await userEvent.click(screen.getByText('+ 변수 추가'));
 
@@ -1582,21 +1582,21 @@ describe('메시지 템플릿 등록 폼', () => {
 
   it('취소 버튼 클릭 시 목록 페이지로 이동한다', async () => {
     // Given
-    render(<MessageTemplateCreateClient />);
+    render(<TemplateCreateClient />);
 
     // When
     await userEvent.click(screen.getByText('취소'));
 
     // Then
-    expect(router.push).toHaveBeenCalledWith('/message-templates');
+    expect(router.push).toHaveBeenCalledWith('/templates');
   });
 
   it('등록 성공 시 상세 페이지로 이동한다', async () => {
     // Given
-    mockCreateMessageTemplate.mockResolvedValue({
+    mockCreateTemplate.mockResolvedValue({
       data: { id: 'new-template-id' },
     });
-    render(<MessageTemplateCreateClient />);
+    render(<TemplateCreateClient />);
 
     // When: 폼을 모두 채우고 등록
     await userEvent.click(screen.getByLabelText('EMAIL'));
@@ -1608,7 +1608,7 @@ describe('메시지 템플릿 등록 폼', () => {
 
     // Then
     expect(router.push).toHaveBeenCalledWith(
-      '/message-templates/new-template-id',
+      '/templates/new-template-id',
     );
   });
 });
@@ -1619,16 +1619,16 @@ describe('메시지 템플릿 등록 폼', () => {
 #### MT-L10-TST-012: 템플릿 상세 페이지 테스트
 
 ```typescript
-describe('메시지 템플릿 상세 페이지', () => {
+describe('템플릿 상세 페이지', () => {
   it('템플릿 상세 정보를 표시한다', async () => {
     // Given
-    mockUseGetMessageTemplate.mockReturnValue({
+    mockUseGetTemplate.mockReturnValue({
       data: { data: mockEmailTemplate },
       isLoading: false,
     });
 
     // When
-    render(<MessageTemplateDetailClient />);
+    render(<TemplateDetailClient />);
 
     // Then
     expect(screen.getByText('WELCOME_EMAIL')).toBeInTheDocument();
@@ -1638,7 +1638,7 @@ describe('메시지 템플릿 상세 페이지', () => {
 
   it('변수 목록을 표시한다', async () => {
     // Given
-    mockUseGetMessageTemplate.mockReturnValue({
+    mockUseGetTemplate.mockReturnValue({
       data: {
         data: {
           ...mockEmailTemplate,
@@ -1651,7 +1651,7 @@ describe('메시지 템플릿 상세 페이지', () => {
     });
 
     // When
-    render(<MessageTemplateDetailClient />);
+    render(<TemplateDetailClient />);
 
     // Then
     expect(screen.getByText('{{userName}}')).toBeInTheDocument();
@@ -1661,20 +1661,20 @@ describe('메시지 템플릿 상세 페이지', () => {
 
   it('수정 버튼 클릭 시 수정 페이지로 이동한다', async () => {
     // Given
-    render(<MessageTemplateDetailClient />);
+    render(<TemplateDetailClient />);
 
     // When
     await userEvent.click(screen.getByText('수정'));
 
     // Then
     expect(router.push).toHaveBeenCalledWith(
-      `/message-templates/${mockEmailTemplate.id}/edit`,
+      `/templates/${mockEmailTemplate.id}/edit`,
     );
   });
 
   it('삭제 버튼 클릭 시 확인 다이얼로그를 표시한다', async () => {
     // Given
-    render(<MessageTemplateDetailClient />);
+    render(<TemplateDetailClient />);
 
     // When
     await userEvent.click(screen.getByText('삭제'));
@@ -1687,7 +1687,7 @@ describe('메시지 템플릿 상세 페이지', () => {
 
   it('미리보기 버튼 클릭 시 미리보기 모달을 표시한다', async () => {
     // Given
-    render(<MessageTemplateDetailClient />);
+    render(<TemplateDetailClient />);
 
     // When
     await userEvent.click(screen.getByText('미리보기'));
@@ -1699,7 +1699,7 @@ describe('메시지 템플릿 상세 페이지', () => {
 
   it('미리보기 모달에서 변수 입력 후 실행하면 결과를 표시한다', async () => {
     // Given
-    mockPreviewMessageTemplate.mockResolvedValue({
+    mockPreviewTemplate.mockResolvedValue({
       data: {
         type: 'EMAIL',
         subject: '홍길동님, 환영합니다!',
@@ -1707,7 +1707,7 @@ describe('메시지 템플릿 상세 페이지', () => {
         unresolvedVariables: [],
       },
     });
-    render(<MessageTemplateDetailClient />);
+    render(<TemplateDetailClient />);
     await userEvent.click(screen.getByText('미리보기'));
 
     // When
@@ -1723,7 +1723,7 @@ describe('메시지 템플릿 상세 페이지', () => {
 
   it('미리보기에서 미치환 변수가 있으면 경고를 표시한다', async () => {
     // Given
-    mockPreviewMessageTemplate.mockResolvedValue({
+    mockPreviewTemplate.mockResolvedValue({
       data: {
         type: 'EMAIL',
         subject: '{{userName}}님',
@@ -1731,7 +1731,7 @@ describe('메시지 템플릿 상세 페이지', () => {
         unresolvedVariables: ['userName', 'companyName'],
       },
     });
-    render(<MessageTemplateDetailClient />);
+    render(<TemplateDetailClient />);
     await userEvent.click(screen.getByText('미리보기'));
 
     // When
@@ -1743,7 +1743,7 @@ describe('메시지 템플릿 상세 페이지', () => {
 
   it('발송 테스트 버튼 클릭 시 모달을 표시한다', async () => {
     // Given
-    render(<MessageTemplateDetailClient />);
+    render(<TemplateDetailClient />);
 
     // When
     await userEvent.click(screen.getByText('테스트 발송'));
@@ -1755,14 +1755,14 @@ describe('메시지 템플릿 상세 페이지', () => {
 
   it('활성 Switch 토글 시 API를 호출한다', async () => {
     // Given
-    render(<MessageTemplateDetailClient />);
+    render(<TemplateDetailClient />);
 
     // When
     const switchEl = screen.getByRole('switch');
     await userEvent.click(switchEl);
 
     // Then
-    expect(mockToggleStatusMessageTemplate).toHaveBeenCalledWith(
+    expect(mockToggleStatusTemplate).toHaveBeenCalledWith(
       mockEmailTemplate.id,
     );
   });
@@ -1979,8 +1979,8 @@ pnpm --filter=@cocrepo/ui test -- --run TemplateTypeChipCell
     { "id": "MT-L9-LOG-014", "level": 9, "type": "logic", "label": "삭제 확인 다이얼로그 (프론트엔드)" },
     { "id": "MT-L9-LOG-015", "level": 9, "type": "logic", "label": "인라인 활성 토글 Optimistic UI (프론트엔드)" },
     { "id": "MT-L9-LOG-016", "level": 9, "type": "logic", "label": "발송 테스트 수신자 검증 (프론트엔드)" },
-    { "id": "MT-L10-TST-001", "level": 10, "type": "test", "label": "MessageTemplateService 유닛 테스트" },
-    { "id": "MT-L10-TST-002", "level": 10, "type": "test", "label": "MessageTemplateController E2E 테스트" },
+    { "id": "MT-L10-TST-001", "level": 10, "type": "test", "label": "TemplateService 유닛 테스트" },
+    { "id": "MT-L10-TST-002", "level": 10, "type": "test", "label": "TemplateController E2E 테스트" },
     { "id": "MT-L10-TST-010", "level": 10, "type": "test", "label": "템플릿 목록 페이지 테스트" },
     { "id": "MT-L10-TST-011", "level": 10, "type": "test", "label": "템플릿 등록 폼 테스트" },
     { "id": "MT-L10-TST-012", "level": 10, "type": "test", "label": "템플릿 상세 페이지 테스트" },

@@ -15,8 +15,10 @@ export { AuthCacheService } from "./auth-cache.service";
 export { EmailService } from "./email.service";
 export { AbilitiesService } from "./abilities.service";
 export { ActionsService } from "./actions.service";
+export { CategoriesService } from "./categories.service";
 export { AwsService } from "./aws.service";
 export { GrantsService } from "./grants.service";
+export { GroupsService } from "./groups.service";
 export { GroundsService } from "./grounds.service";
 export { createPrismaClient } from "./prisma.factory";
 export { PrismaService } from "./prisma.service";
@@ -28,6 +30,7 @@ export {
 	type SubjectInfo,
 	SubjectsService,
 } from "./subjects.service";
+export { TemplatesService } from "./templates.service";
 export { TokenService } from "./token.service";
 export {
 	TokenStorageService,

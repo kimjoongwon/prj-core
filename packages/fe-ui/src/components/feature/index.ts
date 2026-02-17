@@ -5,6 +5,7 @@ export * from "./idp";
 export { CollapsibleSidebar } from "./CollapsibleSidebar/CollapsibleSidebarLayout";
 export * from "./HeaderSpaceSelector";
 export * from "./Logo";
+export * from "./message-template";
 export * from "./Nav";
 export * from "./SideNav";
 export * from "./SpaceSelector";

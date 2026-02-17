@@ -24,6 +24,7 @@ export * from "./query-space.dto";
 export * from "./query-space-association.dto";
 export * from "./query-space-classification.dto";
 export * from "./query-task.dto";
+export * from "./query-template.dto";
 export * from "./query-tenant.dto";
 export * from "./query-timeline.dto";
 export * from "./query-user.dto";

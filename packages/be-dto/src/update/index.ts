@@ -20,6 +20,7 @@ export * from "./update-space.dto";
 export * from "./update-space-association.dto";
 export * from "./update-space-classification.dto";
 export * from "./update-task.dto";
+export * from "./update-template.dto";
 export * from "./update-tenant.dto";
 export * from "./update-timeline.dto";
 export * from "./update-user.dto";

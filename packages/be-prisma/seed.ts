@@ -19,6 +19,7 @@ import {
 	spaceCategorySeedData,
 	spaceGroupSeedData,
 	subjectSeedData,
+	templateSeedData,
 	translationSeedData,
 	securityPolicySeedData,
 	userGroundMapping,
@@ -202,6 +203,9 @@ async function main() {
 
 	// OIDC Client 생성
 	await createOidcClients();
+
+	// Template 생성
+	await createTemplates();
 
 	console.log({ superAdminUser });
 }
@@ -922,6 +926,52 @@ async function createOidcClients() {
 
 	console.log(
 		`✅ OIDC Client 시드 완료! (생성: ${createdCount}개, 스킵: ${skippedCount}개)`,
+	);
+}
+
+async function createTemplates() {
+	console.log("\n========================================");
+	console.log("Template 시드 데이터 삽입 중...");
+	console.log("========================================");
+
+	let createdCount = 0;
+	let skippedCount = 0;
+
+	for (const templateData of templateSeedData) {
+		const existing = await prisma.template.findUnique({
+			where: { code: templateData.code },
+		});
+
+		if (!existing) {
+			await prisma.template.create({
+				data: {
+					code: templateData.code,
+					name: templateData.name,
+					type: templateData.type,
+					subject: templateData.subject ?? null,
+					content: templateData.content,
+					description: templateData.description ?? null,
+					isActive: templateData.isActive,
+					variables: {
+						create: templateData.variables.map((v) => ({
+							name: v.name,
+							description: v.description ?? null,
+							defaultValue: v.defaultValue ?? null,
+							isRequired: v.isRequired,
+						})),
+					},
+				},
+			});
+			createdCount++;
+			console.log(`  - Template 생성: ${templateData.code} (${templateData.name})`);
+		} else {
+			skippedCount++;
+			console.log(`  - Template 이미 존재: ${templateData.code}`);
+		}
+	}
+
+	console.log(
+		`✅ Template 시드 완료! (생성: ${createdCount}개, 스킵: ${skippedCount}개)`,
 	);
 }
 
