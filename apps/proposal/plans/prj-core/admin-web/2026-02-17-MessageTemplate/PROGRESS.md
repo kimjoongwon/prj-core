@@ -68,10 +68,22 @@
   - Widget: `HtmlEditor`, `VariableEditTable`, `TemplateContentEditor`, `TemplateForm` (등록/수정 공용)
 - [x] TemplateEdit 컴포넌트 - 2026-02-17
   - TemplateCreate와 공유 (TemplateForm mode="edit")
-- [ ] 사용자 리뷰
+- [x] 사용자 리뷰 완료 (2026-02-17)
 
 ## Stage 5: 페이지 (페이지별)
-- [ ] TemplateList 페이지
-- [ ] TemplateDetail 페이지
-- [ ] TemplateCreate 페이지
-- [ ] TemplateEdit 페이지
+- [x] TemplateList 페이지 - 2026-02-17
+  - `apps/admin/src/app/(admin)/templates/page.tsx` (서버 컴포넌트, SSR prefetch)
+  - `apps/admin/src/app/(admin)/templates/_client.tsx` (MetaDataGrid, 3 필터, 6 컬럼)
+  - `apps/admin/src/app/(admin)/templates/_prefetch.ts` (withServerCookies)
+- [x] TemplateDetail 페이지 - 2026-02-17
+  - `apps/admin/src/app/(admin)/templates/[templateId]/page.tsx`
+  - `apps/admin/src/app/(admin)/templates/[templateId]/_client.tsx` (3 모달, TemplateActions, 3 섹션)
+  - `apps/admin/src/app/(admin)/templates/[templateId]/_prefetch.ts`
+- [x] TemplateCreate 페이지 - 2026-02-17
+  - `apps/admin/src/app/(admin)/templates/new/page.tsx`
+  - `apps/admin/src/app/(admin)/templates/new/_client.tsx` (TemplateForm mode="create", 유효성 검증)
+- [x] TemplateEdit 페이지 - 2026-02-17
+  - `apps/admin/src/app/(admin)/templates/[templateId]/edit/page.tsx`
+  - `apps/admin/src/app/(admin)/templates/[templateId]/edit/_client.tsx` (TemplateForm mode="edit", useEffect 초기화)
+  - `apps/admin/src/app/(admin)/templates/[templateId]/edit/_prefetch.ts`
+- [x] 사용자 리뷰 완료 (2026-02-17)
