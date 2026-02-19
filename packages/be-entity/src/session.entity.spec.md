@@ -7,7 +7,7 @@
 
 ## 역할
 
-타임라인(Timeline) 내의 수업 세션을 정의하는 엔티티입니다. 1회성(ONCE) 또는 반복(RECURRING) 세션 유형을 지원하며, 반복 세션의 경우 요일과 반복 주기를 지정합니다. 세션에는 여러 Program이 연결됩니다.
+타임라인(Timeline) 내의 수업 세션을 정의하는 엔티티입니다. 세 가지 유형(일회성/기간형/반복형)을 지원하며, 유형에 따라 날짜/시간 필드 사용 방식이 달라집니다. 세션에는 여러 Program이 연결됩니다.
 
 ## 필드
 
@@ -19,20 +19,23 @@
 | removedAt | Date \| null | nullable | null | 소프트 삭제 일시 |
 | name | string | required | - | 세션 이름 |
 | description | string \| null | nullable | null | 세션 설명 |
-| type | SessionTypes | required | - | 세션 유형 (1회성/반복) |
-| repeatCycleType | RepeatCycleTypes \| null | nullable | null | 반복 주기 유형 (DAILY, WEEKLY 등) |
+| type | SessionTypes | required | ONE_TIME | 세션 유형 |
+| repeatCycleType | RepeatCycleTypes \| null | nullable | null | 반복 주기 유형 (RECURRING 시 사용) |
 | startDateTime | Date \| null | nullable | null | 시작 일시 |
-| endDateTime | Date \| null | nullable | null | 종료 일시 |
-| recurringDayOfWeek | RecurringDayOfWeek \| null | nullable | null | 반복 요일 (반복 세션인 경우) |
+| endDateTime | Date \| null | nullable | null | 종료 일시 (ONE_TIME_RANGE/RECURRING 선택) |
+| recurringDayOfWeek | RecurringDayOfWeek \| null | nullable | null | 반복 요일 (RECURRING 시 사용) |
 | timelineId | string | FK, required | - | 소속 타임라인 ID |
 
 ## Enum
 
 | Enum명 | 값 | 설명 |
 |--------|-----|------|
-| SessionTypes | (Prisma 정의) | 세션 유형 (ONCE: 1회성, RECURRING: 반복) |
-| RepeatCycleTypes | (Prisma 정의) | 반복 주기 유형 (DAILY, WEEKLY, MONTHLY 등) |
-| RecurringDayOfWeek | (Prisma 정의) | 반복 요일 (MON, TUE, WED, THU, FRI, SAT, SUN) |
+| SessionTypes | ONE_TIME | 일회성 특강 (startDateTime 단일 지정) |
+| SessionTypes | ONE_TIME_RANGE | 기간형 집중 프로그램 (startDateTime + endDateTime) |
+| SessionTypes | RECURRING | 정기 반복 클래스 (recurringDayOfWeek + repeatCycleType) |
+| RepeatCycleTypes | WEEKLY | 주간 반복 |
+| RepeatCycleTypes | MONTHLY | 월간 반복 |
+| RecurringDayOfWeek | MON, TUE, WED, THU, FRI, SAT, SUN | 반복 요일 |
 
 ## 관계
 
@@ -47,10 +50,11 @@
 
 ## 비즈니스 규칙
 
-- `type=ONCE`이면 1회성 세션으로 `startDateTime`과 `endDateTime`으로 시간을 지정합니다.
-- `type=RECURRING`이면 반복 세션으로 `repeatCycleType`과 `recurringDayOfWeek`를 지정합니다.
-- 반복 세션의 경우 `startDateTime`과 `endDateTime`은 선택 사항입니다.
-- 하나의 세션에 여러 Program(강사별)이 연결될 수 있습니다.
+- **ONE_TIME**: `startDateTime` 하나만 사용. 특강처럼 단일 일시를 지정.
+- **ONE_TIME_RANGE**: `startDateTime`과 `endDateTime` 모두 사용. 집중 프로그램처럼 기간을 지정. `endDateTime > startDateTime` 제약.
+- **RECURRING**: `recurringDayOfWeek`(요일)와 `repeatCycleType`(주간/월간)을 사용. `startDateTime`, `endDateTime`은 선택적으로 반복 범위를 한정.
+- 하나의 세션에 여러 Program(강사별 개설 클래스)이 연결될 수 있음.
+- 소프트 삭제를 통해 세션 삭제 이력을 보존.
 
 ## 구현 체크리스트
 
@@ -64,3 +68,4 @@
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
 | 2026-02-19 | 초기 생성 (역기획) | req-reverse-engineer |
+| 2026-02-19 | SessionTypes Enum 값 수정 (ONCE→ONE_TIME, ONE_TIME_RANGE 추가), 비즈니스 규칙 상세화 | req-entity-planner |
