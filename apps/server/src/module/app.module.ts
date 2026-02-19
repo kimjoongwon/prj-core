@@ -32,6 +32,7 @@ import { ActionsModule } from "./action";
 import { CategoriesModule } from "./category";
 // Global modules
 import { globalModules } from "./global.module";
+import { ExercisesModule } from "./exercises";
 import { GrantsModule } from "./grant";
 import { GroupsModule } from "./group";
 import { GroundsModule } from "./grounds";
@@ -40,6 +41,7 @@ import { RedisModule } from "./redis.module";
 import { RolesModule } from "./role";
 import { SubjectsModule } from "./subject";
 import { TemplatesModule } from "./template";
+import { TimelinesModule } from "./timelines";
 import { TranslationsModule } from "./translation";
 import { UsersModule } from "./users";
 
@@ -60,6 +62,8 @@ import { UsersModule } from "./users";
 		GrantsModule,
 		TranslationsModule,
 		TemplatesModule,
+		TimelinesModule,
+		ExercisesModule,
 		// Resource Modules는 필요할 때 추가합니다.
 		// 가이드: .claude/agents/be-controller-builder.md
 		RouterModule.register([
@@ -112,6 +116,14 @@ import { UsersModule } from "./users";
 							{
 								path: "templates",
 								module: TemplatesModule,
+							},
+							{
+								path: "timelines",
+								module: TimelinesModule,
+							},
+							{
+								path: "exercises",
+								module: ExercisesModule,
 							},
 							// 새로운 Resource 라우트는 여기에 추가
 						],

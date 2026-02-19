@@ -17,6 +17,7 @@ export { AbilitiesService } from "./abilities.service";
 export { ActionsService } from "./actions.service";
 export { CategoriesService } from "./categories.service";
 export { AwsService } from "./aws.service";
+export { ExercisesService } from "./exercises.service";
 export { GrantsService } from "./grants.service";
 export { GroupsService } from "./groups.service";
 export { GroundsService } from "./grounds.service";
@@ -31,6 +32,7 @@ export {
 	SubjectsService,
 } from "./subjects.service";
 export { TemplatesService } from "./templates.service";
+export { TimelinesService } from "./timelines.service";
 export { TokenService } from "./token.service";
 export {
 	TokenStorageService,

@@ -13,6 +13,44 @@
 > 참고: 이 컴포넌트는 Store에 직접 연결하지 않고 props로 상태를 받는 Presentational Feature입니다.
 > 실제 파일명은 `CollapsibleSidebarLayout.tsx`입니다. index.ts는 존재하지 않습니다.
 
+## 디자인 목업
+
+> 컴포넌트의 시각적 구조와 상태별 UI를 ASCII로 표현합니다.
+
+```
+ 펼쳐진 상태 (288px)         접힌 상태 (20px)
+┌────────────────────┐       ┌──┐
+│ CollapsibleSidebar │       │  │
+│                    │       │  │
+│ ┌────────────────┐ │       │  │
+│ │ 🏠 대시보드  ❮ │ │       │❯ │  ← 토글 버튼
+│ └────────────────┘ │       │  │
+│  (parentMenuInfo)  │       │  │
+│                    │       │  │
+│  children 영역:    │       │  │
+│  ─────────────     │       │  │
+│  📋 예약 목록      │       │  │
+│  👥 회원 관리      │       │  │
+│  ⚙️  설정          │       │  │
+│                    │       │  │
+└────────────────────┘       └──┘
+
+ 헤더 영역 상세 (parentMenuInfo)
+┌────────────────────────────────┐
+│  [🏠]  대시보드          [❮]  │
+│   아이콘  name          토글  │
+└────────────────────────────────┘
+```
+
+### 상태별 UI 변화
+
+| 상태 | 설명 | 시각적 변화 |
+|------|------|-------------|
+| 펼쳐진 상태 | isCollapsed=false | 너비 288px, 텍스트/children 표시, ❮ 아이콘 |
+| 접힌 상태 | isCollapsed=true | 너비 20px, 텍스트/children 숨김, ❯ 아이콘 |
+| 토글 애니메이션 | onToggle 호출 시 | transition-all duration-300 전환 |
+| parentMenuInfo 없음 | prop이 null인 경우 | 헤더 영역 미렌더링 |
+
 ## 의존성
 
 | 타입 | 대상 | 용도 |
@@ -73,3 +111,4 @@ interface CollapsibleSidebarProps {
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
 | 2026-02-18 | 초기 생성 (역기획) | req-reverse-engineer |
+| 2026-02-19 | 디자인 목업 섹션 추가 | req-reverse-engineer |

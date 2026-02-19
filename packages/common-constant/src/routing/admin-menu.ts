@@ -50,6 +50,29 @@ export const ADMIN_PATHS = {
 	SUBJECTS: "/subjects",
 	SUBJECTS_DETAIL: "/subjects/[subjectId]",
 
+	// 타임라인 (Timeline 엔티티)
+	TIMELINES: "/timelines",
+	TIMELINES_NEW: "/timelines/new",
+	TIMELINES_DETAIL: "/timelines/[timelineId]",
+	TIMELINES_EDIT: "/timelines/[timelineId]/edit",
+
+	// 세션 (Session 엔티티 - Timeline 종속)
+	TIMELINE_SESSIONS_NEW: "/timelines/[timelineId]/sessions/new",
+	TIMELINE_SESSIONS_DETAIL: "/timelines/[timelineId]/sessions/[sessionId]",
+	TIMELINE_SESSIONS_EDIT: "/timelines/[timelineId]/sessions/[sessionId]/edit",
+
+	// 시설 (Ground 엔티티)
+	GROUNDS: "/grounds",
+	GROUNDS_NEW: "/grounds/new",
+	GROUNDS_DETAIL: "/grounds/[groundId]",
+	GROUNDS_EDIT: "/grounds/[groundId]/edit",
+
+	// 운동 종목 (Exercise 엔티티)
+	EXERCISES: "/exercises",
+	EXERCISES_NEW: "/exercises/new",
+	EXERCISES_DETAIL: "/exercises/[exerciseId]",
+	EXERCISES_EDIT: "/exercises/[exerciseId]/edit",
+
 	// 루틴 (Routine 엔티티)
 	ROUTINES: "/routines",
 	ROUTINES_NEW: "/routines/new",
@@ -83,6 +106,9 @@ export const ADMIN_SUBJECTS = {
 
 	// 1depth 메뉴
 	MENU_USERS: "menu:users",
+	MENU_GROUNDS: "menu:grounds",
+	MENU_TIMELINES: "menu:timelines",
+	MENU_EXERCISES: "menu:exercises",
 	MENU_ROUTINES: "menu:routines",
 	MENU_TEMPLATES: "menu:templates",
 	MENU_ROLES: "menu:roles",
@@ -90,7 +116,14 @@ export const ADMIN_SUBJECTS = {
 	// 2depth - 회원
 	MENU_USERS_LIST: "menu:users:list",
 
+	// 2depth - 일정 관리
+	MENU_TIMELINES_LIST: "menu:timelines:list",
+
+	// 2depth - 시설 관리
+	MENU_GROUNDS_LIST: "menu:grounds:list",
+
 	// 2depth - 운동 관리
+	MENU_EXERCISES_LIST: "menu:exercises:list",
 	MENU_ROUTINES_LIST: "menu:routines:list",
 
 	// 2depth - 템플릿
@@ -145,13 +178,51 @@ export const ADMIN_NAV_ITEMS: NavItemConfig[] = [
 		],
 	},
 
-	// 3. 운동 관리
+	// 3. 시설 관리
 	{
-		id: "routines",
+		id: "grounds",
+		label: "시설 관리",
+		icon: "Building2",
+		subject: ADMIN_SUBJECTS.MENU_GROUNDS,
+		children: [
+			{
+				id: "grounds-list",
+				label: "시설",
+				path: ADMIN_PATHS.GROUNDS,
+				subject: ADMIN_SUBJECTS.MENU_GROUNDS_LIST,
+			},
+		],
+	},
+
+	// 4. 일정 관리
+	{
+		id: "timelines",
+		label: "일정 관리",
+		icon: "CalendarDays",
+		subject: ADMIN_SUBJECTS.MENU_TIMELINES,
+		children: [
+			{
+				id: "timelines-list",
+				label: "타임라인",
+				path: ADMIN_PATHS.TIMELINES,
+				subject: ADMIN_SUBJECTS.MENU_TIMELINES_LIST,
+			},
+		],
+	},
+
+	// 5. 운동 관리
+	{
+		id: "exercises",
 		label: "운동 관리",
 		icon: "Dumbbell",
-		subject: ADMIN_SUBJECTS.MENU_ROUTINES,
+		subject: ADMIN_SUBJECTS.MENU_EXERCISES,
 		children: [
+			{
+				id: "exercises-list",
+				label: "운동 종목",
+				path: ADMIN_PATHS.EXERCISES,
+				subject: ADMIN_SUBJECTS.MENU_EXERCISES_LIST,
+			},
 			{
 				id: "routines-list",
 				label: "루틴",
@@ -161,7 +232,7 @@ export const ADMIN_NAV_ITEMS: NavItemConfig[] = [
 		],
 	},
 
-	// 4. 템플릿
+	// 6. 템플릿
 	{
 		id: "templates",
 		label: "템플릿",
@@ -177,7 +248,7 @@ export const ADMIN_NAV_ITEMS: NavItemConfig[] = [
 		],
 	},
 
-	// 5. 권한 관리
+	// 7. 권한 관리
 	{
 		id: "roles",
 		label: "권한 관리",
@@ -223,7 +294,7 @@ export const ADMIN_NAV_ITEMS: NavItemConfig[] = [
 		],
 	},
 
-	// 6. 내 계정
+	// 8. 내 계정
 	{
 		id: "my-account",
 		label: "내 계정",

@@ -6,3 +6,5 @@ export { ACTION_ERRORS } from "./action.errors";
 export { ABILITY_ERRORS } from "./ability.errors";
 export { TRANSLATION_ERRORS } from "./translation.errors";
 export { GRANT_ERRORS } from "./grant.errors";
+export { TIMELINE_ERRORS } from "./timeline.errors";
+export { EXERCISE_ERRORS } from "./exercise.errors";

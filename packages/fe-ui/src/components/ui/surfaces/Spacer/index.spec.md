@@ -8,6 +8,44 @@
 
 요소 사이에 빈 공간을 생성하는 유틸리티 컴포넌트. 세로/가로 방향 지정 가능.
 
+## 디자인 목업
+
+> 컴포넌트의 시각적 구조와 변형(variant)별 모습을 ASCII로 표현합니다.
+
+```
+[vertical - 세로 공간 (기본, size=16px)]
+[요소 A]
+         ↕  h-[16px] 빈 공간 (aria-hidden)
+[요소 B]
+
+[vertical - size=32px]
+[요소 A]
+
+         ↕  h-[32px]
+
+[요소 B]
+
+[horizontal - 가로 공간 (size=8px)]
+[요소 A]  ↔  [요소 B]
+           w-[8px]
+
+[실사용 예시]
+<VStack>
+  <제목>
+  ━━━━━━━━   ← Spacer size=16 vertical
+  <본문>
+  ━━━━━━━━   ← Spacer size=32 vertical
+  <버튼>
+</VStack>
+```
+
+### 변형별 외형
+
+| 변형 | 미리보기 |
+|------|---------|
+| vertical (기본) | 세로 방향 빈 공간 (h-[size]px) |
+| horizontal | 가로 방향 빈 공간 (w-[size]px) |
+
 ## Props
 
 ```typescript
@@ -39,3 +77,4 @@ interface SpacerProps {
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
 | 2026-02-18 | 초기 생성 (역기획) | req-reverse-engineer |
+| 2026-02-19 | 디자인 목업 섹션 추가 | req-reverse-engineer |

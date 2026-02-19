@@ -31,7 +31,7 @@ interface SubstituteResult {
 /**
  * 테스트 발송 결과
  */
-interface SendTestResult {
+export interface SendTestResult {
 	/** 발송 성공 여부 */
 	success: boolean;
 	/** 발송 시각 */

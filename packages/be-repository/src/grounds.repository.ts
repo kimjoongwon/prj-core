@@ -45,6 +45,19 @@ export class GroundsRepository {
 	}
 
 	/**
+	 * 사업자등록번호로 Ground 조회 (중복 검증용)
+	 */
+	async findByBusinessNo(businessNo: string): Promise<Ground | null> {
+		this.logger.debug(`사업자등록번호로 Ground 조회: ${businessNo}`);
+
+		const result = await this.txHost.tx.ground.findFirst({
+			where: { businessNo, removedAt: null },
+		});
+
+		return result ? plainToInstance(Ground, result) : null;
+	}
+
+	/**
 	 * Space ID로 Ground 목록 조회
 	 */
 	async findManyBySpaceId(spaceId: string): Promise<Ground[]> {

@@ -126,7 +126,7 @@ export class UsersController {
   @ResponseMessage("common.user.read.success")
   async getUserById(
     @Param("id", ParseUUIDPipe) id: string
-  ): Promise<UserDetailResponseDto> {
+  ) {
     const spaceId = this.getSpaceId();
 
     return this.usersService.getUserDetailForSpace(id, spaceId);
@@ -155,7 +155,7 @@ export class UsersController {
   )
   @ApiResponseEntity(UserDto, HttpStatus.CREATED)
   @ResponseMessage("common.user.create.success")
-  async createUser(@Body() dto: CreateUserMemberDto): Promise<UserDto> {
+  async createUser(@Body() dto: CreateUserMemberDto) {
     const spaceId = this.getSpaceId();
 
     return this.usersService.createUserForSpace({
@@ -200,7 +200,7 @@ export class UsersController {
   async updateUser(
     @Param("id", ParseUUIDPipe) id: string,
     @Body() dto: UpdateUserMemberDto
-  ): Promise<UserDto> {
+  ) {
     const spaceId = this.getSpaceId();
 
     return this.usersService.updateUserForSpace(id, spaceId, {

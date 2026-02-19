@@ -6,7 +6,7 @@
 
 ## 역할
 
-타임라인(Timeline) 리소스에 대한 CRUD REST API를 제공합니다. 현재 Space 기반으로 데이터를 필터링하며, CLS를 통해 요청 컨텍스트를 관리합니다.
+타임라인(Timeline), 세션(Session), 프로그램(Program) 리소스에 대한 CRUD REST API를 제공합니다. 현재 Space 기반으로 데이터를 필터링하며, CLS를 통해 요청 컨텍스트를 관리합니다.
 
 ## 베이스 경로
 
@@ -16,7 +16,7 @@
 
 | 서비스 | 역할 |
 |--------|------|
-| `TimelinesService` | 타임라인 비즈니스 로직 (CRUD) |
+| `TimelinesService` | 타임라인/세션/프로그램 비즈니스 로직 (CRUD) |
 | `ClsService` | 요청 컨텍스트 (SPACE_ID, AUTH_USER) 접근 |
 
 ## 엔드포인트
@@ -38,6 +38,16 @@
 | POST | `/:timelineId/sessions` | `createSession` | `CreateSessionDto` | `SessionDto` | 201 | 세션 등록 |
 | PATCH | `/:timelineId/sessions/:sessionId` | `updateSession` | `UpdateSessionDto` | `SessionDto` | 200 | 세션 수정 |
 | DELETE | `/:timelineId/sessions/:sessionId` | `deleteSession` | - | void | 204 | 세션 삭제 (Soft Delete) |
+
+## 중첩 리소스: Programs (세션 하위)
+
+| Method | 경로 | Operation ID | Query/Body DTO | 반환값 | Status | 설명 |
+|--------|------|-------------|----------------|--------|--------|------|
+| GET | `/:timelineId/sessions/:sessionId/programs` | `getPrograms` | `QueryProgramDto` | `ProgramDto[]` + meta | 200 | 프로그램 목록 조회 |
+| GET | `/:timelineId/sessions/:sessionId/programs/:programId` | `getProgramById` | - | `ProgramDto` | 200 | 프로그램 상세 조회 |
+| POST | `/:timelineId/sessions/:sessionId/programs` | `createProgram` | `CreateProgramDto` | `ProgramDto` | 201 | 프로그램 등록 |
+| PATCH | `/:timelineId/sessions/:sessionId/programs/:programId` | `updateProgram` | `UpdateProgramDto` | `ProgramDto` | 200 | 프로그램 수정 |
+| DELETE | `/:timelineId/sessions/:sessionId/programs/:programId` | `deleteProgram` | - | void | 204 | 프로그램 삭제 (Soft Delete) |
 
 ## 엔드포인트 상세
 
@@ -103,6 +113,43 @@
 - **응답**: 204 No Content
 - **메시지 키**: `common.session.delete.success`
 
+### GET /:timelineId/sessions/:sessionId/programs - 프로그램 목록 조회
+
+- **Path Params**: `timelineId` (UUID), `sessionId` (UUID)
+- **Query DTO**: `QueryProgramDto` (skip, take)
+- **응답 구조**: `wrapResponse(programs, { meta })`
+  - `meta`: `{ total, skip, take, totalPages }`
+- **필터**: 해당 세션의 프로그램만 반환 (removedAt: null)
+- **메시지 키**: `common.program.list.success`
+
+### GET /:timelineId/sessions/:sessionId/programs/:programId - 프로그램 상세 조회
+
+- **Path Params**: `timelineId`, `sessionId`, `programId` (UUID)
+- **응답**: `ProgramDto` (routine, session 관계 포함)
+- **메시지 키**: `common.program.read.success`
+
+### POST /:timelineId/sessions/:sessionId/programs - 프로그램 등록
+
+- **Body DTO**: `CreateProgramDto`
+  - 필수: `name`, `routineId`, `instructorId`, `capacity`
+  - 선택: `level`
+- **sessionId 주입**: URL 파라미터에서 자동 추출
+- **비즈니스 제약**: 같은 세션 내 동일 루틴 중복 불가
+- **메시지 키**: `common.program.create.success`
+
+### PATCH /:timelineId/sessions/:sessionId/programs/:programId - 프로그램 수정
+
+- **Body DTO**: `UpdateProgramDto` (모든 필드 optional)
+- **Partial Update**: 전달된 필드만 수정
+- **비즈니스 제약**: routineId 변경 시 세션 내 중복 확인
+- **메시지 키**: `common.program.update.success`
+
+### DELETE /:timelineId/sessions/:sessionId/programs/:programId - 프로그램 삭제
+
+- **Soft Delete**: `removedAt` 필드 설정
+- **응답**: 204 No Content
+- **메시지 키**: `common.program.delete.success`
+
 ## 인증/인가
 
 | 엔드포인트 | 인증 필요 | X-Space-ID 필요 | 특별 조건 |
@@ -117,6 +164,11 @@
 | POST /:timelineId/sessions | O (`@ApiAuth`) | O | - |
 | PATCH /:timelineId/sessions/:sessionId | O (`@ApiAuth`) | O | - |
 | DELETE /:timelineId/sessions/:sessionId | O (`@ApiAuth`) | O | 프로그램 연결 시 삭제 불가 |
+| GET /:timelineId/sessions/:sessionId/programs | O (`@ApiAuth`) | O | - |
+| GET /:timelineId/sessions/:sessionId/programs/:programId | O (`@ApiAuth`) | O | - |
+| POST /:timelineId/sessions/:sessionId/programs | O (`@ApiAuth`) | O | 루틴 중복 불가 |
+| PATCH /:timelineId/sessions/:sessionId/programs/:programId | O (`@ApiAuth`) | O | 루틴 변경 시 중복 확인 |
+| DELETE /:timelineId/sessions/:sessionId/programs/:programId | O (`@ApiAuth`) | O | - |
 
 ## 에러 처리
 
@@ -124,8 +176,10 @@
 |------|-----------|-----------------|
 | 타임라인 미발견 | 404 | `TIMELINE_ERRORS.TIMELINE_NOT_FOUND` |
 | 세션 미발견 | 404 | `TIMELINE_ERRORS.SESSION_NOT_FOUND` |
+| 프로그램 미발견 | 404 | `TIMELINE_ERRORS.PROGRAM_NOT_FOUND` |
 | 세션이 있는 타임라인 삭제 | 400 | `TIMELINE_ERRORS.TIMELINE_HAS_SESSIONS` |
 | 프로그램 연결 세션 삭제 | 400 | `TIMELINE_ERRORS.SESSION_HAS_PROGRAMS` |
+| 세션 내 루틴 중복 프로그램 등록 | 400 | `TIMELINE_ERRORS.PROGRAM_ROUTINE_DUPLICATED` |
 | Space 미선택 | 401 | 공통 에러 |
 
 ## DTO 정의 (packages/be-dto)
@@ -152,6 +206,15 @@
 | `UpdateSessionDto` | CreateSessionDto의 모든 필드를 optional | 수정 |
 | `QuerySessionsDto` | skip, take, search | 목록 조회 |
 
+### Program DTO
+
+| DTO | 필드 | 설명 |
+|-----|------|------|
+| `ProgramDto` | id, name, routineId, sessionId, instructorId, capacity, level, routine(name), session(name), createdAt | 응답 |
+| `CreateProgramDto` | name(필수), routineId(필수), instructorId(필수), capacity(필수), level(선택) | 등록 |
+| `UpdateProgramDto` | CreateProgramDto의 모든 필드를 optional | 수정 |
+| `QueryProgramDto` | skip, take | 목록 조회 |
+
 ## Swagger 데코레이터
 
 - `@ApiTags("TIMELINES")`: API 태그
@@ -161,15 +224,16 @@
 
 ## 구현 체크리스트
 
-- [ ] timelines.controller.ts
-- [ ] timelines.service.ts
-- [ ] timelines.repository.ts
+- [ ] timelines.controller.ts (Programs 엔드포인트 추가)
+- [ ] timelines.service.ts (Program 메서드 추가)
+- [ ] timelines.repository.ts (Program 쿼리 메서드 추가)
 - [ ] timelines.module.ts
-- [ ] DTO 생성 (packages/be-dto)
-- [ ] E2E 테스트
+- [ ] DTO 확인 (packages/be-dto - 이미 구현됨)
+- [ ] TIMELINE_ERRORS에 PROGRAM_NOT_FOUND, PROGRAM_ROUTINE_DUPLICATED 추가
 
 ## 변경 이력
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
 | 2026-02-19 | 초기 생성 | be-spec-planner |
+| 2026-02-19 | Programs 중첩 리소스 엔드포인트 추가 | orch-requirement |
