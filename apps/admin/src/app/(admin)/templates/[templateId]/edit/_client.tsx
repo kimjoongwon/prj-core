@@ -71,7 +71,7 @@ function TemplateEditPageClient({ templateId }: TemplateEditPageClientProps) {
 				addToast({
 					title: "템플릿 수정 성공",
 					description: "템플릿이 성공적으로 수정되었습니다.",
-					type: "success",
+					color: "success",
 				});
 				router.push(`/templates/${templateId}` as Route);
 			},
@@ -80,7 +80,7 @@ function TemplateEditPageClient({ templateId }: TemplateEditPageClientProps) {
 					title: "템플릿 수정 실패",
 					description:
 						error.message || "템플릿 수정 중 오류가 발생했습니다.",
-					type: "error",
+					color: "danger",
 				});
 			},
 		},
@@ -161,7 +161,6 @@ function TemplateEditPageClient({ templateId }: TemplateEditPageClientProps) {
 				subject: formData.subject.trim() || undefined,
 				content: formData.content,
 				variables: state.variables.map((v) => ({
-					id: v.id,
 					name: v.name,
 					description: v.description || undefined,
 					defaultValue: v.defaultValue || undefined,

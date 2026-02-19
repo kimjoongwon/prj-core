@@ -3,6 +3,7 @@ import { Enum, EnumType } from "ts-jenum";
 @Enum("code")
 export class SessionTypes extends EnumType<SessionTypes>() {
 	static readonly ONE_TIME = new SessionTypes("ONE_TIME", "일회성");
+	static readonly ONE_TIME_RANGE = new SessionTypes("ONE_TIME_RANGE", "기간형");
 	static readonly RECURRING = new SessionTypes("RECURRING", "반복");
 
 	private constructor(

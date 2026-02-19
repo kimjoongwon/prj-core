@@ -11,6 +11,14 @@
  */
 import type { TemplateType } from './templateType';
 
+export interface TemplateVariableDto {
+  id: string;
+  name: string;
+  description: string | null;
+  defaultValue: string | null;
+  isRequired: boolean;
+}
+
 export interface TemplateDto {
   id: string;
   createdAt: string;
@@ -37,4 +45,6 @@ export interface TemplateDto {
   description?: string | null;
   /** 활성 상태 */
   isActive: boolean;
+  /** 템플릿 변수 목록 */
+  variables?: TemplateVariableDto[];
 }

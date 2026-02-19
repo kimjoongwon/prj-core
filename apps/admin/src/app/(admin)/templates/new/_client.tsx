@@ -39,7 +39,7 @@ function TemplateNewPageClient() {
 				addToast({
 					title: "템플릿 등록 성공",
 					description: "템플릿이 성공적으로 등록되었습니다.",
-					type: "success",
+					color: "success",
 				});
 				const templateId = response?.data?.id;
 				if (templateId) {
@@ -51,7 +51,7 @@ function TemplateNewPageClient() {
 					title: "템플릿 등록 실패",
 					description:
 						error.message || "템플릿 등록 중 오류가 발생했습니다.",
-					type: "error",
+					color: "danger",
 				});
 			},
 		},

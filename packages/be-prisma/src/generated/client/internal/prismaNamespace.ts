@@ -4155,6 +4155,8 @@ export const RoutineScalarFieldEnum = {
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   removedAt: 'removedAt',
+  spaceId: 'spaceId',
+  creatorId: 'creatorId',
   name: 'name',
   label: 'label'
 } as const

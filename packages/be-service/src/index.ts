@@ -25,6 +25,7 @@ export { createPrismaClient } from "./prisma.factory";
 export { PrismaService } from "./prisma.service";
 export { RedisService } from "./redis.service";
 export { RolesService } from "./roles.service";
+export { RoutinesService } from "./routines.service";
 export { SpacesService } from "./spaces.service";
 export {
 	type SubjectFieldInfo,

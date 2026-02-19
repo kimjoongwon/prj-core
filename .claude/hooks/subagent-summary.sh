@@ -32,3 +32,11 @@ fi
 
 echo -e "${CYAN}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
 echo ""
+
+# 웹 비주얼라이저에 완료 이벤트 전송 (서버 없으면 조용히 무시)
+AGENT_TYPE="${CLAUDE_SUBAGENT_TYPE:-unknown}"
+DESC_SAFE=$(echo "${SUMMARY:-}" | head -c 200 | sed 's/\\/\\\\/g' | sed 's/"/\\"/g' | tr '\n' ' ')
+curl -s --max-time 1 -X POST http://localhost:9333/event \
+  -H "Content-Type: application/json" \
+  -d "{\"type\":\"done\",\"agent\":\"${AGENT_TYPE}\",\"desc\":\"${DESC_SAFE}\"}" \
+  2>/dev/null || true

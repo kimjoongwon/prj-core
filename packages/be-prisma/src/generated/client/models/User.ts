@@ -317,6 +317,7 @@ export type UserWhereInput = {
   createdTimelines?: Prisma.TimelineListRelationFilter
   createdTasks?: Prisma.TaskListRelationFilter
   createdSafeWallets?: Prisma.SafeWalletListRelationFilter
+  createdRoutines?: Prisma.RoutineListRelationFilter
 }
 
 export type UserOrderByWithRelationInput = {
@@ -349,6 +350,7 @@ export type UserOrderByWithRelationInput = {
   createdTimelines?: Prisma.TimelineOrderByRelationAggregateInput
   createdTasks?: Prisma.TaskOrderByRelationAggregateInput
   createdSafeWallets?: Prisma.SafeWalletOrderByRelationAggregateInput
+  createdRoutines?: Prisma.RoutineOrderByRelationAggregateInput
 }
 
 export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -384,6 +386,7 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   createdTimelines?: Prisma.TimelineListRelationFilter
   createdTasks?: Prisma.TaskListRelationFilter
   createdSafeWallets?: Prisma.SafeWalletListRelationFilter
+  createdRoutines?: Prisma.RoutineListRelationFilter
 }, "id" | "phone" | "name" | "email">
 
 export type UserOrderByWithAggregationInput = {
@@ -462,6 +465,7 @@ export type UserCreateInput = {
   createdTimelines?: Prisma.TimelineCreateNestedManyWithoutCreatorInput
   createdTasks?: Prisma.TaskCreateNestedManyWithoutCreatorInput
   createdSafeWallets?: Prisma.SafeWalletCreateNestedManyWithoutCreatorInput
+  createdRoutines?: Prisma.RoutineCreateNestedManyWithoutCreatorInput
 }
 
 export type UserUncheckedCreateInput = {
@@ -494,6 +498,7 @@ export type UserUncheckedCreateInput = {
   createdTimelines?: Prisma.TimelineUncheckedCreateNestedManyWithoutCreatorInput
   createdTasks?: Prisma.TaskUncheckedCreateNestedManyWithoutCreatorInput
   createdSafeWallets?: Prisma.SafeWalletUncheckedCreateNestedManyWithoutCreatorInput
+  createdRoutines?: Prisma.RoutineUncheckedCreateNestedManyWithoutCreatorInput
 }
 
 export type UserUpdateInput = {
@@ -526,6 +531,7 @@ export type UserUpdateInput = {
   createdTimelines?: Prisma.TimelineUpdateManyWithoutCreatorNestedInput
   createdTasks?: Prisma.TaskUpdateManyWithoutCreatorNestedInput
   createdSafeWallets?: Prisma.SafeWalletUpdateManyWithoutCreatorNestedInput
+  createdRoutines?: Prisma.RoutineUpdateManyWithoutCreatorNestedInput
 }
 
 export type UserUncheckedUpdateInput = {
@@ -558,6 +564,7 @@ export type UserUncheckedUpdateInput = {
   createdTimelines?: Prisma.TimelineUncheckedUpdateManyWithoutCreatorNestedInput
   createdTasks?: Prisma.TaskUncheckedUpdateManyWithoutCreatorNestedInput
   createdSafeWallets?: Prisma.SafeWalletUncheckedUpdateManyWithoutCreatorNestedInput
+  createdRoutines?: Prisma.RoutineUncheckedUpdateManyWithoutCreatorNestedInput
 }
 
 export type UserCreateManyInput = {
@@ -832,6 +839,22 @@ export type UserUpdateOneWithoutCreatedTimelinesNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutCreatedTimelinesInput, Prisma.UserUpdateWithoutCreatedTimelinesInput>, Prisma.UserUncheckedUpdateWithoutCreatedTimelinesInput>
 }
 
+export type UserCreateNestedOneWithoutCreatedRoutinesInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutCreatedRoutinesInput, Prisma.UserUncheckedCreateWithoutCreatedRoutinesInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutCreatedRoutinesInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneWithoutCreatedRoutinesNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutCreatedRoutinesInput, Prisma.UserUncheckedCreateWithoutCreatedRoutinesInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutCreatedRoutinesInput
+  upsert?: Prisma.UserUpsertWithoutCreatedRoutinesInput
+  disconnect?: Prisma.UserWhereInput | boolean
+  delete?: Prisma.UserWhereInput | boolean
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutCreatedRoutinesInput, Prisma.UserUpdateWithoutCreatedRoutinesInput>, Prisma.UserUncheckedUpdateWithoutCreatedRoutinesInput>
+}
+
 export type UserCreateNestedOneWithoutCreatedTasksInput = {
   create?: Prisma.XOR<Prisma.UserCreateWithoutCreatedTasksInput, Prisma.UserUncheckedCreateWithoutCreatedTasksInput>
   connectOrCreate?: Prisma.UserCreateOrConnectWithoutCreatedTasksInput
@@ -919,6 +942,7 @@ export type UserCreateWithoutAuthAuditLogsInput = {
   createdTimelines?: Prisma.TimelineCreateNestedManyWithoutCreatorInput
   createdTasks?: Prisma.TaskCreateNestedManyWithoutCreatorInput
   createdSafeWallets?: Prisma.SafeWalletCreateNestedManyWithoutCreatorInput
+  createdRoutines?: Prisma.RoutineCreateNestedManyWithoutCreatorInput
 }
 
 export type UserUncheckedCreateWithoutAuthAuditLogsInput = {
@@ -950,6 +974,7 @@ export type UserUncheckedCreateWithoutAuthAuditLogsInput = {
   createdTimelines?: Prisma.TimelineUncheckedCreateNestedManyWithoutCreatorInput
   createdTasks?: Prisma.TaskUncheckedCreateNestedManyWithoutCreatorInput
   createdSafeWallets?: Prisma.SafeWalletUncheckedCreateNestedManyWithoutCreatorInput
+  createdRoutines?: Prisma.RoutineUncheckedCreateNestedManyWithoutCreatorInput
 }
 
 export type UserCreateOrConnectWithoutAuthAuditLogsInput = {
@@ -997,6 +1022,7 @@ export type UserUpdateWithoutAuthAuditLogsInput = {
   createdTimelines?: Prisma.TimelineUpdateManyWithoutCreatorNestedInput
   createdTasks?: Prisma.TaskUpdateManyWithoutCreatorNestedInput
   createdSafeWallets?: Prisma.SafeWalletUpdateManyWithoutCreatorNestedInput
+  createdRoutines?: Prisma.RoutineUpdateManyWithoutCreatorNestedInput
 }
 
 export type UserUncheckedUpdateWithoutAuthAuditLogsInput = {
@@ -1028,6 +1054,7 @@ export type UserUncheckedUpdateWithoutAuthAuditLogsInput = {
   createdTimelines?: Prisma.TimelineUncheckedUpdateManyWithoutCreatorNestedInput
   createdTasks?: Prisma.TaskUncheckedUpdateManyWithoutCreatorNestedInput
   createdSafeWallets?: Prisma.SafeWalletUncheckedUpdateManyWithoutCreatorNestedInput
+  createdRoutines?: Prisma.RoutineUncheckedUpdateManyWithoutCreatorNestedInput
 }
 
 export type UserCreateWithoutPasswordHistoryInput = {
@@ -1059,6 +1086,7 @@ export type UserCreateWithoutPasswordHistoryInput = {
   createdTimelines?: Prisma.TimelineCreateNestedManyWithoutCreatorInput
   createdTasks?: Prisma.TaskCreateNestedManyWithoutCreatorInput
   createdSafeWallets?: Prisma.SafeWalletCreateNestedManyWithoutCreatorInput
+  createdRoutines?: Prisma.RoutineCreateNestedManyWithoutCreatorInput
 }
 
 export type UserUncheckedCreateWithoutPasswordHistoryInput = {
@@ -1090,6 +1118,7 @@ export type UserUncheckedCreateWithoutPasswordHistoryInput = {
   createdTimelines?: Prisma.TimelineUncheckedCreateNestedManyWithoutCreatorInput
   createdTasks?: Prisma.TaskUncheckedCreateNestedManyWithoutCreatorInput
   createdSafeWallets?: Prisma.SafeWalletUncheckedCreateNestedManyWithoutCreatorInput
+  createdRoutines?: Prisma.RoutineUncheckedCreateNestedManyWithoutCreatorInput
 }
 
 export type UserCreateOrConnectWithoutPasswordHistoryInput = {
@@ -1137,6 +1166,7 @@ export type UserUpdateWithoutPasswordHistoryInput = {
   createdTimelines?: Prisma.TimelineUpdateManyWithoutCreatorNestedInput
   createdTasks?: Prisma.TaskUpdateManyWithoutCreatorNestedInput
   createdSafeWallets?: Prisma.SafeWalletUpdateManyWithoutCreatorNestedInput
+  createdRoutines?: Prisma.RoutineUpdateManyWithoutCreatorNestedInput
 }
 
 export type UserUncheckedUpdateWithoutPasswordHistoryInput = {
@@ -1168,6 +1198,7 @@ export type UserUncheckedUpdateWithoutPasswordHistoryInput = {
   createdTimelines?: Prisma.TimelineUncheckedUpdateManyWithoutCreatorNestedInput
   createdTasks?: Prisma.TaskUncheckedUpdateManyWithoutCreatorNestedInput
   createdSafeWallets?: Prisma.SafeWalletUncheckedUpdateManyWithoutCreatorNestedInput
+  createdRoutines?: Prisma.RoutineUncheckedUpdateManyWithoutCreatorNestedInput
 }
 
 export type UserCreateWithoutCreatedCategoriesInput = {
@@ -1199,6 +1230,7 @@ export type UserCreateWithoutCreatedCategoriesInput = {
   createdTimelines?: Prisma.TimelineCreateNestedManyWithoutCreatorInput
   createdTasks?: Prisma.TaskCreateNestedManyWithoutCreatorInput
   createdSafeWallets?: Prisma.SafeWalletCreateNestedManyWithoutCreatorInput
+  createdRoutines?: Prisma.RoutineCreateNestedManyWithoutCreatorInput
 }
 
 export type UserUncheckedCreateWithoutCreatedCategoriesInput = {
@@ -1230,6 +1262,7 @@ export type UserUncheckedCreateWithoutCreatedCategoriesInput = {
   createdTimelines?: Prisma.TimelineUncheckedCreateNestedManyWithoutCreatorInput
   createdTasks?: Prisma.TaskUncheckedCreateNestedManyWithoutCreatorInput
   createdSafeWallets?: Prisma.SafeWalletUncheckedCreateNestedManyWithoutCreatorInput
+  createdRoutines?: Prisma.RoutineUncheckedCreateNestedManyWithoutCreatorInput
 }
 
 export type UserCreateOrConnectWithoutCreatedCategoriesInput = {
@@ -1277,6 +1310,7 @@ export type UserUpdateWithoutCreatedCategoriesInput = {
   createdTimelines?: Prisma.TimelineUpdateManyWithoutCreatorNestedInput
   createdTasks?: Prisma.TaskUpdateManyWithoutCreatorNestedInput
   createdSafeWallets?: Prisma.SafeWalletUpdateManyWithoutCreatorNestedInput
+  createdRoutines?: Prisma.RoutineUpdateManyWithoutCreatorNestedInput
 }
 
 export type UserUncheckedUpdateWithoutCreatedCategoriesInput = {
@@ -1308,6 +1342,7 @@ export type UserUncheckedUpdateWithoutCreatedCategoriesInput = {
   createdTimelines?: Prisma.TimelineUncheckedUpdateManyWithoutCreatorNestedInput
   createdTasks?: Prisma.TaskUncheckedUpdateManyWithoutCreatorNestedInput
   createdSafeWallets?: Prisma.SafeWalletUncheckedUpdateManyWithoutCreatorNestedInput
+  createdRoutines?: Prisma.RoutineUncheckedUpdateManyWithoutCreatorNestedInput
 }
 
 export type UserCreateWithoutCreatedGroupsInput = {
@@ -1339,6 +1374,7 @@ export type UserCreateWithoutCreatedGroupsInput = {
   createdTimelines?: Prisma.TimelineCreateNestedManyWithoutCreatorInput
   createdTasks?: Prisma.TaskCreateNestedManyWithoutCreatorInput
   createdSafeWallets?: Prisma.SafeWalletCreateNestedManyWithoutCreatorInput
+  createdRoutines?: Prisma.RoutineCreateNestedManyWithoutCreatorInput
 }
 
 export type UserUncheckedCreateWithoutCreatedGroupsInput = {
@@ -1370,6 +1406,7 @@ export type UserUncheckedCreateWithoutCreatedGroupsInput = {
   createdTimelines?: Prisma.TimelineUncheckedCreateNestedManyWithoutCreatorInput
   createdTasks?: Prisma.TaskUncheckedCreateNestedManyWithoutCreatorInput
   createdSafeWallets?: Prisma.SafeWalletUncheckedCreateNestedManyWithoutCreatorInput
+  createdRoutines?: Prisma.RoutineUncheckedCreateNestedManyWithoutCreatorInput
 }
 
 export type UserCreateOrConnectWithoutCreatedGroupsInput = {
@@ -1417,6 +1454,7 @@ export type UserUpdateWithoutCreatedGroupsInput = {
   createdTimelines?: Prisma.TimelineUpdateManyWithoutCreatorNestedInput
   createdTasks?: Prisma.TaskUpdateManyWithoutCreatorNestedInput
   createdSafeWallets?: Prisma.SafeWalletUpdateManyWithoutCreatorNestedInput
+  createdRoutines?: Prisma.RoutineUpdateManyWithoutCreatorNestedInput
 }
 
 export type UserUncheckedUpdateWithoutCreatedGroupsInput = {
@@ -1448,6 +1486,7 @@ export type UserUncheckedUpdateWithoutCreatedGroupsInput = {
   createdTimelines?: Prisma.TimelineUncheckedUpdateManyWithoutCreatorNestedInput
   createdTasks?: Prisma.TaskUncheckedUpdateManyWithoutCreatorNestedInput
   createdSafeWallets?: Prisma.SafeWalletUncheckedUpdateManyWithoutCreatorNestedInput
+  createdRoutines?: Prisma.RoutineUncheckedUpdateManyWithoutCreatorNestedInput
 }
 
 export type UserCreateWithoutTenantsInput = {
@@ -1479,6 +1518,7 @@ export type UserCreateWithoutTenantsInput = {
   createdTimelines?: Prisma.TimelineCreateNestedManyWithoutCreatorInput
   createdTasks?: Prisma.TaskCreateNestedManyWithoutCreatorInput
   createdSafeWallets?: Prisma.SafeWalletCreateNestedManyWithoutCreatorInput
+  createdRoutines?: Prisma.RoutineCreateNestedManyWithoutCreatorInput
 }
 
 export type UserUncheckedCreateWithoutTenantsInput = {
@@ -1510,6 +1550,7 @@ export type UserUncheckedCreateWithoutTenantsInput = {
   createdTimelines?: Prisma.TimelineUncheckedCreateNestedManyWithoutCreatorInput
   createdTasks?: Prisma.TaskUncheckedCreateNestedManyWithoutCreatorInput
   createdSafeWallets?: Prisma.SafeWalletUncheckedCreateNestedManyWithoutCreatorInput
+  createdRoutines?: Prisma.RoutineUncheckedCreateNestedManyWithoutCreatorInput
 }
 
 export type UserCreateOrConnectWithoutTenantsInput = {
@@ -1557,6 +1598,7 @@ export type UserUpdateWithoutTenantsInput = {
   createdTimelines?: Prisma.TimelineUpdateManyWithoutCreatorNestedInput
   createdTasks?: Prisma.TaskUpdateManyWithoutCreatorNestedInput
   createdSafeWallets?: Prisma.SafeWalletUpdateManyWithoutCreatorNestedInput
+  createdRoutines?: Prisma.RoutineUpdateManyWithoutCreatorNestedInput
 }
 
 export type UserUncheckedUpdateWithoutTenantsInput = {
@@ -1588,6 +1630,7 @@ export type UserUncheckedUpdateWithoutTenantsInput = {
   createdTimelines?: Prisma.TimelineUncheckedUpdateManyWithoutCreatorNestedInput
   createdTasks?: Prisma.TaskUncheckedUpdateManyWithoutCreatorNestedInput
   createdSafeWallets?: Prisma.SafeWalletUncheckedUpdateManyWithoutCreatorNestedInput
+  createdRoutines?: Prisma.RoutineUncheckedUpdateManyWithoutCreatorNestedInput
 }
 
 export type UserCreateWithoutCreatedContentsInput = {
@@ -1619,6 +1662,7 @@ export type UserCreateWithoutCreatedContentsInput = {
   createdTimelines?: Prisma.TimelineCreateNestedManyWithoutCreatorInput
   createdTasks?: Prisma.TaskCreateNestedManyWithoutCreatorInput
   createdSafeWallets?: Prisma.SafeWalletCreateNestedManyWithoutCreatorInput
+  createdRoutines?: Prisma.RoutineCreateNestedManyWithoutCreatorInput
 }
 
 export type UserUncheckedCreateWithoutCreatedContentsInput = {
@@ -1650,6 +1694,7 @@ export type UserUncheckedCreateWithoutCreatedContentsInput = {
   createdTimelines?: Prisma.TimelineUncheckedCreateNestedManyWithoutCreatorInput
   createdTasks?: Prisma.TaskUncheckedCreateNestedManyWithoutCreatorInput
   createdSafeWallets?: Prisma.SafeWalletUncheckedCreateNestedManyWithoutCreatorInput
+  createdRoutines?: Prisma.RoutineUncheckedCreateNestedManyWithoutCreatorInput
 }
 
 export type UserCreateOrConnectWithoutCreatedContentsInput = {
@@ -1697,6 +1742,7 @@ export type UserUpdateWithoutCreatedContentsInput = {
   createdTimelines?: Prisma.TimelineUpdateManyWithoutCreatorNestedInput
   createdTasks?: Prisma.TaskUpdateManyWithoutCreatorNestedInput
   createdSafeWallets?: Prisma.SafeWalletUpdateManyWithoutCreatorNestedInput
+  createdRoutines?: Prisma.RoutineUpdateManyWithoutCreatorNestedInput
 }
 
 export type UserUncheckedUpdateWithoutCreatedContentsInput = {
@@ -1728,6 +1774,7 @@ export type UserUncheckedUpdateWithoutCreatedContentsInput = {
   createdTimelines?: Prisma.TimelineUncheckedUpdateManyWithoutCreatorNestedInput
   createdTasks?: Prisma.TaskUncheckedUpdateManyWithoutCreatorNestedInput
   createdSafeWallets?: Prisma.SafeWalletUncheckedUpdateManyWithoutCreatorNestedInput
+  createdRoutines?: Prisma.RoutineUncheckedUpdateManyWithoutCreatorNestedInput
 }
 
 export type UserCreateWithoutCreatedFilesInput = {
@@ -1759,6 +1806,7 @@ export type UserCreateWithoutCreatedFilesInput = {
   createdTimelines?: Prisma.TimelineCreateNestedManyWithoutCreatorInput
   createdTasks?: Prisma.TaskCreateNestedManyWithoutCreatorInput
   createdSafeWallets?: Prisma.SafeWalletCreateNestedManyWithoutCreatorInput
+  createdRoutines?: Prisma.RoutineCreateNestedManyWithoutCreatorInput
 }
 
 export type UserUncheckedCreateWithoutCreatedFilesInput = {
@@ -1790,6 +1838,7 @@ export type UserUncheckedCreateWithoutCreatedFilesInput = {
   createdTimelines?: Prisma.TimelineUncheckedCreateNestedManyWithoutCreatorInput
   createdTasks?: Prisma.TaskUncheckedCreateNestedManyWithoutCreatorInput
   createdSafeWallets?: Prisma.SafeWalletUncheckedCreateNestedManyWithoutCreatorInput
+  createdRoutines?: Prisma.RoutineUncheckedCreateNestedManyWithoutCreatorInput
 }
 
 export type UserCreateOrConnectWithoutCreatedFilesInput = {
@@ -1837,6 +1886,7 @@ export type UserUpdateWithoutCreatedFilesInput = {
   createdTimelines?: Prisma.TimelineUpdateManyWithoutCreatorNestedInput
   createdTasks?: Prisma.TaskUpdateManyWithoutCreatorNestedInput
   createdSafeWallets?: Prisma.SafeWalletUpdateManyWithoutCreatorNestedInput
+  createdRoutines?: Prisma.RoutineUpdateManyWithoutCreatorNestedInput
 }
 
 export type UserUncheckedUpdateWithoutCreatedFilesInput = {
@@ -1868,6 +1918,7 @@ export type UserUncheckedUpdateWithoutCreatedFilesInput = {
   createdTimelines?: Prisma.TimelineUncheckedUpdateManyWithoutCreatorNestedInput
   createdTasks?: Prisma.TaskUncheckedUpdateManyWithoutCreatorNestedInput
   createdSafeWallets?: Prisma.SafeWalletUncheckedUpdateManyWithoutCreatorNestedInput
+  createdRoutines?: Prisma.RoutineUncheckedUpdateManyWithoutCreatorNestedInput
 }
 
 export type UserCreateWithoutCreatedSafeWalletsInput = {
@@ -1899,6 +1950,7 @@ export type UserCreateWithoutCreatedSafeWalletsInput = {
   createdFiles?: Prisma.FileCreateNestedManyWithoutCreatorInput
   createdTimelines?: Prisma.TimelineCreateNestedManyWithoutCreatorInput
   createdTasks?: Prisma.TaskCreateNestedManyWithoutCreatorInput
+  createdRoutines?: Prisma.RoutineCreateNestedManyWithoutCreatorInput
 }
 
 export type UserUncheckedCreateWithoutCreatedSafeWalletsInput = {
@@ -1930,6 +1982,7 @@ export type UserUncheckedCreateWithoutCreatedSafeWalletsInput = {
   createdFiles?: Prisma.FileUncheckedCreateNestedManyWithoutCreatorInput
   createdTimelines?: Prisma.TimelineUncheckedCreateNestedManyWithoutCreatorInput
   createdTasks?: Prisma.TaskUncheckedCreateNestedManyWithoutCreatorInput
+  createdRoutines?: Prisma.RoutineUncheckedCreateNestedManyWithoutCreatorInput
 }
 
 export type UserCreateOrConnectWithoutCreatedSafeWalletsInput = {
@@ -1977,6 +2030,7 @@ export type UserUpdateWithoutCreatedSafeWalletsInput = {
   createdFiles?: Prisma.FileUpdateManyWithoutCreatorNestedInput
   createdTimelines?: Prisma.TimelineUpdateManyWithoutCreatorNestedInput
   createdTasks?: Prisma.TaskUpdateManyWithoutCreatorNestedInput
+  createdRoutines?: Prisma.RoutineUpdateManyWithoutCreatorNestedInput
 }
 
 export type UserUncheckedUpdateWithoutCreatedSafeWalletsInput = {
@@ -2008,6 +2062,7 @@ export type UserUncheckedUpdateWithoutCreatedSafeWalletsInput = {
   createdFiles?: Prisma.FileUncheckedUpdateManyWithoutCreatorNestedInput
   createdTimelines?: Prisma.TimelineUncheckedUpdateManyWithoutCreatorNestedInput
   createdTasks?: Prisma.TaskUncheckedUpdateManyWithoutCreatorNestedInput
+  createdRoutines?: Prisma.RoutineUncheckedUpdateManyWithoutCreatorNestedInput
 }
 
 export type UserCreateWithoutCreatedTimelinesInput = {
@@ -2039,6 +2094,7 @@ export type UserCreateWithoutCreatedTimelinesInput = {
   createdFiles?: Prisma.FileCreateNestedManyWithoutCreatorInput
   createdTasks?: Prisma.TaskCreateNestedManyWithoutCreatorInput
   createdSafeWallets?: Prisma.SafeWalletCreateNestedManyWithoutCreatorInput
+  createdRoutines?: Prisma.RoutineCreateNestedManyWithoutCreatorInput
 }
 
 export type UserUncheckedCreateWithoutCreatedTimelinesInput = {
@@ -2070,6 +2126,7 @@ export type UserUncheckedCreateWithoutCreatedTimelinesInput = {
   createdFiles?: Prisma.FileUncheckedCreateNestedManyWithoutCreatorInput
   createdTasks?: Prisma.TaskUncheckedCreateNestedManyWithoutCreatorInput
   createdSafeWallets?: Prisma.SafeWalletUncheckedCreateNestedManyWithoutCreatorInput
+  createdRoutines?: Prisma.RoutineUncheckedCreateNestedManyWithoutCreatorInput
 }
 
 export type UserCreateOrConnectWithoutCreatedTimelinesInput = {
@@ -2117,6 +2174,7 @@ export type UserUpdateWithoutCreatedTimelinesInput = {
   createdFiles?: Prisma.FileUpdateManyWithoutCreatorNestedInput
   createdTasks?: Prisma.TaskUpdateManyWithoutCreatorNestedInput
   createdSafeWallets?: Prisma.SafeWalletUpdateManyWithoutCreatorNestedInput
+  createdRoutines?: Prisma.RoutineUpdateManyWithoutCreatorNestedInput
 }
 
 export type UserUncheckedUpdateWithoutCreatedTimelinesInput = {
@@ -2146,6 +2204,151 @@ export type UserUncheckedUpdateWithoutCreatedTimelinesInput = {
   createdGroups?: Prisma.GroupUncheckedUpdateManyWithoutCreatorNestedInput
   createdContents?: Prisma.ContentUncheckedUpdateManyWithoutCreatorNestedInput
   createdFiles?: Prisma.FileUncheckedUpdateManyWithoutCreatorNestedInput
+  createdTasks?: Prisma.TaskUncheckedUpdateManyWithoutCreatorNestedInput
+  createdSafeWallets?: Prisma.SafeWalletUncheckedUpdateManyWithoutCreatorNestedInput
+  createdRoutines?: Prisma.RoutineUncheckedUpdateManyWithoutCreatorNestedInput
+}
+
+export type UserCreateWithoutCreatedRoutinesInput = {
+  id?: string
+  updatedAt?: Date | string | null
+  createdAt?: Date | string
+  removedAt?: Date | string | null
+  phone: string
+  name: string
+  email: string
+  password: string
+  failedLoginAttempts?: number
+  lockedUntil?: Date | string | null
+  isPermanentlyLocked?: boolean
+  mustChangePassword?: boolean
+  passwordChangedAt?: Date | string | null
+  lastLoginAt?: Date | string | null
+  lastLoginIp?: string | null
+  isActive?: boolean
+  profiles?: Prisma.ProfileCreateNestedManyWithoutUserInput
+  tenants?: Prisma.TenantCreateNestedManyWithoutUserInput
+  classification?: Prisma.UserClassificationCreateNestedOneWithoutUserInput
+  associations?: Prisma.UserAssociationCreateNestedManyWithoutUserInput
+  passwordHistory?: Prisma.PasswordHistoryCreateNestedManyWithoutUserInput
+  authAuditLogs?: Prisma.AuthAuditLogCreateNestedManyWithoutUserInput
+  createdCategories?: Prisma.CategoryCreateNestedManyWithoutCreatorInput
+  createdGroups?: Prisma.GroupCreateNestedManyWithoutCreatorInput
+  createdContents?: Prisma.ContentCreateNestedManyWithoutCreatorInput
+  createdFiles?: Prisma.FileCreateNestedManyWithoutCreatorInput
+  createdTimelines?: Prisma.TimelineCreateNestedManyWithoutCreatorInput
+  createdTasks?: Prisma.TaskCreateNestedManyWithoutCreatorInput
+  createdSafeWallets?: Prisma.SafeWalletCreateNestedManyWithoutCreatorInput
+}
+
+export type UserUncheckedCreateWithoutCreatedRoutinesInput = {
+  id?: string
+  updatedAt?: Date | string | null
+  createdAt?: Date | string
+  removedAt?: Date | string | null
+  phone: string
+  name: string
+  email: string
+  password: string
+  failedLoginAttempts?: number
+  lockedUntil?: Date | string | null
+  isPermanentlyLocked?: boolean
+  mustChangePassword?: boolean
+  passwordChangedAt?: Date | string | null
+  lastLoginAt?: Date | string | null
+  lastLoginIp?: string | null
+  isActive?: boolean
+  profiles?: Prisma.ProfileUncheckedCreateNestedManyWithoutUserInput
+  tenants?: Prisma.TenantUncheckedCreateNestedManyWithoutUserInput
+  classification?: Prisma.UserClassificationUncheckedCreateNestedOneWithoutUserInput
+  associations?: Prisma.UserAssociationUncheckedCreateNestedManyWithoutUserInput
+  passwordHistory?: Prisma.PasswordHistoryUncheckedCreateNestedManyWithoutUserInput
+  authAuditLogs?: Prisma.AuthAuditLogUncheckedCreateNestedManyWithoutUserInput
+  createdCategories?: Prisma.CategoryUncheckedCreateNestedManyWithoutCreatorInput
+  createdGroups?: Prisma.GroupUncheckedCreateNestedManyWithoutCreatorInput
+  createdContents?: Prisma.ContentUncheckedCreateNestedManyWithoutCreatorInput
+  createdFiles?: Prisma.FileUncheckedCreateNestedManyWithoutCreatorInput
+  createdTimelines?: Prisma.TimelineUncheckedCreateNestedManyWithoutCreatorInput
+  createdTasks?: Prisma.TaskUncheckedCreateNestedManyWithoutCreatorInput
+  createdSafeWallets?: Prisma.SafeWalletUncheckedCreateNestedManyWithoutCreatorInput
+}
+
+export type UserCreateOrConnectWithoutCreatedRoutinesInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutCreatedRoutinesInput, Prisma.UserUncheckedCreateWithoutCreatedRoutinesInput>
+}
+
+export type UserUpsertWithoutCreatedRoutinesInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutCreatedRoutinesInput, Prisma.UserUncheckedUpdateWithoutCreatedRoutinesInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutCreatedRoutinesInput, Prisma.UserUncheckedCreateWithoutCreatedRoutinesInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutCreatedRoutinesInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutCreatedRoutinesInput, Prisma.UserUncheckedUpdateWithoutCreatedRoutinesInput>
+}
+
+export type UserUpdateWithoutCreatedRoutinesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  phone?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  password?: Prisma.StringFieldUpdateOperationsInput | string
+  failedLoginAttempts?: Prisma.IntFieldUpdateOperationsInput | number
+  lockedUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  isPermanentlyLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  passwordChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastLoginIp?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  profiles?: Prisma.ProfileUpdateManyWithoutUserNestedInput
+  tenants?: Prisma.TenantUpdateManyWithoutUserNestedInput
+  classification?: Prisma.UserClassificationUpdateOneWithoutUserNestedInput
+  associations?: Prisma.UserAssociationUpdateManyWithoutUserNestedInput
+  passwordHistory?: Prisma.PasswordHistoryUpdateManyWithoutUserNestedInput
+  authAuditLogs?: Prisma.AuthAuditLogUpdateManyWithoutUserNestedInput
+  createdCategories?: Prisma.CategoryUpdateManyWithoutCreatorNestedInput
+  createdGroups?: Prisma.GroupUpdateManyWithoutCreatorNestedInput
+  createdContents?: Prisma.ContentUpdateManyWithoutCreatorNestedInput
+  createdFiles?: Prisma.FileUpdateManyWithoutCreatorNestedInput
+  createdTimelines?: Prisma.TimelineUpdateManyWithoutCreatorNestedInput
+  createdTasks?: Prisma.TaskUpdateManyWithoutCreatorNestedInput
+  createdSafeWallets?: Prisma.SafeWalletUpdateManyWithoutCreatorNestedInput
+}
+
+export type UserUncheckedUpdateWithoutCreatedRoutinesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  phone?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  password?: Prisma.StringFieldUpdateOperationsInput | string
+  failedLoginAttempts?: Prisma.IntFieldUpdateOperationsInput | number
+  lockedUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  isPermanentlyLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  passwordChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastLoginIp?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  profiles?: Prisma.ProfileUncheckedUpdateManyWithoutUserNestedInput
+  tenants?: Prisma.TenantUncheckedUpdateManyWithoutUserNestedInput
+  classification?: Prisma.UserClassificationUncheckedUpdateOneWithoutUserNestedInput
+  associations?: Prisma.UserAssociationUncheckedUpdateManyWithoutUserNestedInput
+  passwordHistory?: Prisma.PasswordHistoryUncheckedUpdateManyWithoutUserNestedInput
+  authAuditLogs?: Prisma.AuthAuditLogUncheckedUpdateManyWithoutUserNestedInput
+  createdCategories?: Prisma.CategoryUncheckedUpdateManyWithoutCreatorNestedInput
+  createdGroups?: Prisma.GroupUncheckedUpdateManyWithoutCreatorNestedInput
+  createdContents?: Prisma.ContentUncheckedUpdateManyWithoutCreatorNestedInput
+  createdFiles?: Prisma.FileUncheckedUpdateManyWithoutCreatorNestedInput
+  createdTimelines?: Prisma.TimelineUncheckedUpdateManyWithoutCreatorNestedInput
   createdTasks?: Prisma.TaskUncheckedUpdateManyWithoutCreatorNestedInput
   createdSafeWallets?: Prisma.SafeWalletUncheckedUpdateManyWithoutCreatorNestedInput
 }
@@ -2179,6 +2382,7 @@ export type UserCreateWithoutCreatedTasksInput = {
   createdFiles?: Prisma.FileCreateNestedManyWithoutCreatorInput
   createdTimelines?: Prisma.TimelineCreateNestedManyWithoutCreatorInput
   createdSafeWallets?: Prisma.SafeWalletCreateNestedManyWithoutCreatorInput
+  createdRoutines?: Prisma.RoutineCreateNestedManyWithoutCreatorInput
 }
 
 export type UserUncheckedCreateWithoutCreatedTasksInput = {
@@ -2210,6 +2414,7 @@ export type UserUncheckedCreateWithoutCreatedTasksInput = {
   createdFiles?: Prisma.FileUncheckedCreateNestedManyWithoutCreatorInput
   createdTimelines?: Prisma.TimelineUncheckedCreateNestedManyWithoutCreatorInput
   createdSafeWallets?: Prisma.SafeWalletUncheckedCreateNestedManyWithoutCreatorInput
+  createdRoutines?: Prisma.RoutineUncheckedCreateNestedManyWithoutCreatorInput
 }
 
 export type UserCreateOrConnectWithoutCreatedTasksInput = {
@@ -2257,6 +2462,7 @@ export type UserUpdateWithoutCreatedTasksInput = {
   createdFiles?: Prisma.FileUpdateManyWithoutCreatorNestedInput
   createdTimelines?: Prisma.TimelineUpdateManyWithoutCreatorNestedInput
   createdSafeWallets?: Prisma.SafeWalletUpdateManyWithoutCreatorNestedInput
+  createdRoutines?: Prisma.RoutineUpdateManyWithoutCreatorNestedInput
 }
 
 export type UserUncheckedUpdateWithoutCreatedTasksInput = {
@@ -2288,6 +2494,7 @@ export type UserUncheckedUpdateWithoutCreatedTasksInput = {
   createdFiles?: Prisma.FileUncheckedUpdateManyWithoutCreatorNestedInput
   createdTimelines?: Prisma.TimelineUncheckedUpdateManyWithoutCreatorNestedInput
   createdSafeWallets?: Prisma.SafeWalletUncheckedUpdateManyWithoutCreatorNestedInput
+  createdRoutines?: Prisma.RoutineUncheckedUpdateManyWithoutCreatorNestedInput
 }
 
 export type UserCreateWithoutClassificationInput = {
@@ -2319,6 +2526,7 @@ export type UserCreateWithoutClassificationInput = {
   createdTimelines?: Prisma.TimelineCreateNestedManyWithoutCreatorInput
   createdTasks?: Prisma.TaskCreateNestedManyWithoutCreatorInput
   createdSafeWallets?: Prisma.SafeWalletCreateNestedManyWithoutCreatorInput
+  createdRoutines?: Prisma.RoutineCreateNestedManyWithoutCreatorInput
 }
 
 export type UserUncheckedCreateWithoutClassificationInput = {
@@ -2350,6 +2558,7 @@ export type UserUncheckedCreateWithoutClassificationInput = {
   createdTimelines?: Prisma.TimelineUncheckedCreateNestedManyWithoutCreatorInput
   createdTasks?: Prisma.TaskUncheckedCreateNestedManyWithoutCreatorInput
   createdSafeWallets?: Prisma.SafeWalletUncheckedCreateNestedManyWithoutCreatorInput
+  createdRoutines?: Prisma.RoutineUncheckedCreateNestedManyWithoutCreatorInput
 }
 
 export type UserCreateOrConnectWithoutClassificationInput = {
@@ -2397,6 +2606,7 @@ export type UserUpdateWithoutClassificationInput = {
   createdTimelines?: Prisma.TimelineUpdateManyWithoutCreatorNestedInput
   createdTasks?: Prisma.TaskUpdateManyWithoutCreatorNestedInput
   createdSafeWallets?: Prisma.SafeWalletUpdateManyWithoutCreatorNestedInput
+  createdRoutines?: Prisma.RoutineUpdateManyWithoutCreatorNestedInput
 }
 
 export type UserUncheckedUpdateWithoutClassificationInput = {
@@ -2428,6 +2638,7 @@ export type UserUncheckedUpdateWithoutClassificationInput = {
   createdTimelines?: Prisma.TimelineUncheckedUpdateManyWithoutCreatorNestedInput
   createdTasks?: Prisma.TaskUncheckedUpdateManyWithoutCreatorNestedInput
   createdSafeWallets?: Prisma.SafeWalletUncheckedUpdateManyWithoutCreatorNestedInput
+  createdRoutines?: Prisma.RoutineUncheckedUpdateManyWithoutCreatorNestedInput
 }
 
 export type UserCreateWithoutAssociationsInput = {
@@ -2459,6 +2670,7 @@ export type UserCreateWithoutAssociationsInput = {
   createdTimelines?: Prisma.TimelineCreateNestedManyWithoutCreatorInput
   createdTasks?: Prisma.TaskCreateNestedManyWithoutCreatorInput
   createdSafeWallets?: Prisma.SafeWalletCreateNestedManyWithoutCreatorInput
+  createdRoutines?: Prisma.RoutineCreateNestedManyWithoutCreatorInput
 }
 
 export type UserUncheckedCreateWithoutAssociationsInput = {
@@ -2490,6 +2702,7 @@ export type UserUncheckedCreateWithoutAssociationsInput = {
   createdTimelines?: Prisma.TimelineUncheckedCreateNestedManyWithoutCreatorInput
   createdTasks?: Prisma.TaskUncheckedCreateNestedManyWithoutCreatorInput
   createdSafeWallets?: Prisma.SafeWalletUncheckedCreateNestedManyWithoutCreatorInput
+  createdRoutines?: Prisma.RoutineUncheckedCreateNestedManyWithoutCreatorInput
 }
 
 export type UserCreateOrConnectWithoutAssociationsInput = {
@@ -2537,6 +2750,7 @@ export type UserUpdateWithoutAssociationsInput = {
   createdTimelines?: Prisma.TimelineUpdateManyWithoutCreatorNestedInput
   createdTasks?: Prisma.TaskUpdateManyWithoutCreatorNestedInput
   createdSafeWallets?: Prisma.SafeWalletUpdateManyWithoutCreatorNestedInput
+  createdRoutines?: Prisma.RoutineUpdateManyWithoutCreatorNestedInput
 }
 
 export type UserUncheckedUpdateWithoutAssociationsInput = {
@@ -2568,6 +2782,7 @@ export type UserUncheckedUpdateWithoutAssociationsInput = {
   createdTimelines?: Prisma.TimelineUncheckedUpdateManyWithoutCreatorNestedInput
   createdTasks?: Prisma.TaskUncheckedUpdateManyWithoutCreatorNestedInput
   createdSafeWallets?: Prisma.SafeWalletUncheckedUpdateManyWithoutCreatorNestedInput
+  createdRoutines?: Prisma.RoutineUncheckedUpdateManyWithoutCreatorNestedInput
 }
 
 export type UserCreateWithoutProfilesInput = {
@@ -2599,6 +2814,7 @@ export type UserCreateWithoutProfilesInput = {
   createdTimelines?: Prisma.TimelineCreateNestedManyWithoutCreatorInput
   createdTasks?: Prisma.TaskCreateNestedManyWithoutCreatorInput
   createdSafeWallets?: Prisma.SafeWalletCreateNestedManyWithoutCreatorInput
+  createdRoutines?: Prisma.RoutineCreateNestedManyWithoutCreatorInput
 }
 
 export type UserUncheckedCreateWithoutProfilesInput = {
@@ -2630,6 +2846,7 @@ export type UserUncheckedCreateWithoutProfilesInput = {
   createdTimelines?: Prisma.TimelineUncheckedCreateNestedManyWithoutCreatorInput
   createdTasks?: Prisma.TaskUncheckedCreateNestedManyWithoutCreatorInput
   createdSafeWallets?: Prisma.SafeWalletUncheckedCreateNestedManyWithoutCreatorInput
+  createdRoutines?: Prisma.RoutineUncheckedCreateNestedManyWithoutCreatorInput
 }
 
 export type UserCreateOrConnectWithoutProfilesInput = {
@@ -2677,6 +2894,7 @@ export type UserUpdateWithoutProfilesInput = {
   createdTimelines?: Prisma.TimelineUpdateManyWithoutCreatorNestedInput
   createdTasks?: Prisma.TaskUpdateManyWithoutCreatorNestedInput
   createdSafeWallets?: Prisma.SafeWalletUpdateManyWithoutCreatorNestedInput
+  createdRoutines?: Prisma.RoutineUpdateManyWithoutCreatorNestedInput
 }
 
 export type UserUncheckedUpdateWithoutProfilesInput = {
@@ -2708,6 +2926,7 @@ export type UserUncheckedUpdateWithoutProfilesInput = {
   createdTimelines?: Prisma.TimelineUncheckedUpdateManyWithoutCreatorNestedInput
   createdTasks?: Prisma.TaskUncheckedUpdateManyWithoutCreatorNestedInput
   createdSafeWallets?: Prisma.SafeWalletUncheckedUpdateManyWithoutCreatorNestedInput
+  createdRoutines?: Prisma.RoutineUncheckedUpdateManyWithoutCreatorNestedInput
 }
 
 
@@ -2728,6 +2947,7 @@ export type UserCountOutputType = {
   createdTimelines: number
   createdTasks: number
   createdSafeWallets: number
+  createdRoutines: number
 }
 
 export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -2743,6 +2963,7 @@ export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.I
   createdTimelines?: boolean | UserCountOutputTypeCountCreatedTimelinesArgs
   createdTasks?: boolean | UserCountOutputTypeCountCreatedTasksArgs
   createdSafeWallets?: boolean | UserCountOutputTypeCountCreatedSafeWalletsArgs
+  createdRoutines?: boolean | UserCountOutputTypeCountCreatedRoutinesArgs
 }
 
 /**
@@ -2839,6 +3060,13 @@ export type UserCountOutputTypeCountCreatedSafeWalletsArgs<ExtArgs extends runti
   where?: Prisma.SafeWalletWhereInput
 }
 
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountCreatedRoutinesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.RoutineWhereInput
+}
+
 
 export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -2870,6 +3098,7 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   createdTimelines?: boolean | Prisma.User$createdTimelinesArgs<ExtArgs>
   createdTasks?: boolean | Prisma.User$createdTasksArgs<ExtArgs>
   createdSafeWallets?: boolean | Prisma.User$createdSafeWalletsArgs<ExtArgs>
+  createdRoutines?: boolean | Prisma.User$createdRoutinesArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["user"]>
 
@@ -2945,6 +3174,7 @@ export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   createdTimelines?: boolean | Prisma.User$createdTimelinesArgs<ExtArgs>
   createdTasks?: boolean | Prisma.User$createdTasksArgs<ExtArgs>
   createdSafeWallets?: boolean | Prisma.User$createdSafeWalletsArgs<ExtArgs>
+  createdRoutines?: boolean | Prisma.User$createdRoutinesArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type UserIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
@@ -2966,6 +3196,7 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     createdTimelines: Prisma.$TimelinePayload<ExtArgs>[]
     createdTasks: Prisma.$TaskPayload<ExtArgs>[]
     createdSafeWallets: Prisma.$SafeWalletPayload<ExtArgs>[]
+    createdRoutines: Prisma.$RoutinePayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -3427,6 +3658,7 @@ export interface Prisma__UserClient<T, Null = never, ExtArgs extends runtime.Typ
   createdTimelines<T extends Prisma.User$createdTimelinesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$createdTimelinesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$TimelinePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   createdTasks<T extends Prisma.User$createdTasksArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$createdTasksArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$TaskPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   createdSafeWallets<T extends Prisma.User$createdSafeWalletsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$createdSafeWalletsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$SafeWalletPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  createdRoutines<T extends Prisma.User$createdRoutinesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$createdRoutinesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$RoutinePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -4164,6 +4396,30 @@ export type User$createdSafeWalletsArgs<ExtArgs extends runtime.Types.Extensions
   take?: number
   skip?: number
   distinct?: Prisma.SafeWalletScalarFieldEnum | Prisma.SafeWalletScalarFieldEnum[]
+}
+
+/**
+ * User.createdRoutines
+ */
+export type User$createdRoutinesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Routine
+   */
+  select?: Prisma.RoutineSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Routine
+   */
+  omit?: Prisma.RoutineOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.RoutineInclude<ExtArgs> | null
+  where?: Prisma.RoutineWhereInput
+  orderBy?: Prisma.RoutineOrderByWithRelationInput | Prisma.RoutineOrderByWithRelationInput[]
+  cursor?: Prisma.RoutineWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.RoutineScalarFieldEnum | Prisma.RoutineScalarFieldEnum[]
 }
 
 /**

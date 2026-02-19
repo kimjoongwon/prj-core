@@ -188,7 +188,8 @@ export type Program = Prisma.ProgramModel
  * Model Routine
  * *
  *  * @description 루틴은 반복적으로 수행되는 일련의 활동들의 조합입니다. 여러 Activity를 순서대로 묶어서 하나의 프로그램으로 만듭니다.
- *  * @type 자원 (도메인 독립적)
+ *  * 상위 Space의 루틴은 하위 Space에서 사용할 수 있습니다 (Space 계층 기반 공유).
+ *  * @type 자원
  */
 export type Routine = Prisma.RoutineModel
 /**

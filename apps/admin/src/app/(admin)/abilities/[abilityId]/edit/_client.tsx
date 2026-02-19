@@ -64,7 +64,7 @@ function AbilityEditPageClient({ abilityId }: AbilityEditPageClientProps) {
 				addToast({
 					title: "권한 수정 성공",
 					description: "권한이 성공적으로 수정되었습니다.",
-					type: "success",
+					color: "success",
 				});
 				router.push(`/abilities/${abilityId}` as Route);
 			},
@@ -72,7 +72,7 @@ function AbilityEditPageClient({ abilityId }: AbilityEditPageClientProps) {
 				addToast({
 					title: "권한 수정 실패",
 					description: error.message || "권한 수정 중 오류가 발생했습니다.",
-					type: "error",
+					color: "danger",
 				});
 			},
 		},
@@ -111,7 +111,7 @@ function AbilityEditPageClient({ abilityId }: AbilityEditPageClientProps) {
 			addToast({
 				title: "입력 오류",
 				description: "최소 하나 이상의 필드를 수정해주세요.",
-				type: "error",
+				color: "danger",
 			});
 			return;
 		}
@@ -133,7 +133,7 @@ function AbilityEditPageClient({ abilityId }: AbilityEditPageClientProps) {
 				addToast({
 					title: "입력 오류",
 					description: "Conditions는 유효한 JSON 형식이어야 합니다.",
-					type: "error",
+					color: "danger",
 				});
 				return;
 			}

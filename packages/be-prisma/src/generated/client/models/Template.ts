@@ -250,13 +250,13 @@ export type TemplateOrderByWithRelationInput = {
 
 export type TemplateWhereUniqueInput = Prisma.AtLeast<{
   id?: string
-  code?: string
   AND?: Prisma.TemplateWhereInput | Prisma.TemplateWhereInput[]
   OR?: Prisma.TemplateWhereInput[]
   NOT?: Prisma.TemplateWhereInput | Prisma.TemplateWhereInput[]
   createdAt?: Prisma.DateTimeFilter<"Template"> | Date | string
   updatedAt?: Prisma.DateTimeNullableFilter<"Template"> | Date | string | null
   removedAt?: Prisma.DateTimeNullableFilter<"Template"> | Date | string | null
+  code?: Prisma.StringFilter<"Template"> | string
   name?: Prisma.StringFilter<"Template"> | string
   type?: Prisma.EnumTemplateTypeFilter<"Template"> | $Enums.TemplateType
   subject?: Prisma.StringNullableFilter<"Template"> | string | null
@@ -264,7 +264,7 @@ export type TemplateWhereUniqueInput = Prisma.AtLeast<{
   description?: Prisma.StringNullableFilter<"Template"> | string | null
   isActive?: Prisma.BoolFilter<"Template"> | boolean
   variables?: Prisma.TemplateVariableListRelationFilter
-}, "id" | "code">
+}, "id">
 
 export type TemplateOrderByWithAggregationInput = {
   id?: Prisma.SortOrder

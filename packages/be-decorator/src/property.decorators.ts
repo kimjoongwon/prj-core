@@ -86,7 +86,11 @@ export function ApiEnumProperty<TEnum>(
 	if (typeof enumValue === "function" && enumValue.prototype) {
 		// ts-jenum class: call static values() method if available
 		if (typeof enumValue.values === "function") {
-			enumForSwagger = enumValue.values();
+			// ts-jenum values()는 인스턴스 배열을 반환하므로 code 값(문자열)만 추출
+			const instances = enumValue.values() as Array<{ code?: string }>;
+			enumForSwagger = instances
+				.map((instance) => instance.code)
+				.filter((code): code is string => typeof code === "string");
 		}
 	} else if (
 		enumValue &&

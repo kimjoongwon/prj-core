@@ -53,7 +53,7 @@ function AbilityNewPageClient() {
 				addToast({
 					title: "권한 등록 성공",
 					description: "권한이 성공적으로 등록되었습니다.",
-					type: "success",
+					color: "success",
 				});
 				const abilityId = response?.data?.id;
 				if (abilityId) {
@@ -64,7 +64,7 @@ function AbilityNewPageClient() {
 				addToast({
 					title: "권한 등록 실패",
 					description: error.message || "권한 등록 중 오류가 발생했습니다.",
-					type: "error",
+					color: "danger",
 				});
 			},
 		},
@@ -86,7 +86,7 @@ function AbilityNewPageClient() {
 			addToast({
 				title: "입력 오류",
 				description: "권한 이름을 입력해주세요.",
-				type: "error",
+				color: "danger",
 			});
 			return;
 		}
@@ -95,7 +95,7 @@ function AbilityNewPageClient() {
 			addToast({
 				title: "입력 오류",
 				description: "Subject를 선택해주세요.",
-				type: "error",
+				color: "danger",
 			});
 			return;
 		}
@@ -104,7 +104,7 @@ function AbilityNewPageClient() {
 			addToast({
 				title: "입력 오류",
 				description: "Action을 선택해주세요.",
-				type: "error",
+				color: "danger",
 			});
 			return;
 		}
@@ -126,7 +126,7 @@ function AbilityNewPageClient() {
 				addToast({
 					title: "입력 오류",
 					description: "Conditions는 유효한 JSON 형식이어야 합니다.",
-					type: "error",
+					color: "danger",
 				});
 				return;
 			}
@@ -141,6 +141,8 @@ function AbilityNewPageClient() {
 			conditions: conditionsObject,
 			inverted: state.inverted,
 			reason: state.inverted ? state.reason.trim() || undefined : undefined,
+			isActive: true,
+			priority: 0,
 		};
 
 		createAbility({ data: dto });

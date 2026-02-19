@@ -97,6 +97,7 @@ export class TimelinesController {
 			spaceId,
 			skip,
 			take,
+			search: query.search ?? null,
 		});
 
 		return wrapResponse(timelines, {

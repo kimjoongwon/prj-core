@@ -1,4 +1,4 @@
-import { ClassField, StringField } from "@cocrepo/decorator";
+import { ClassField, StringField, StringFieldOptional } from "@cocrepo/decorator";
 import type { Routine } from "@cocrepo/prisma";
 import { AbstractDto } from "./abstract.dto";
 import { ActivityDto } from "./activity.dto";
@@ -10,6 +10,12 @@ export class RoutineDto extends AbstractDto implements Routine {
 
 	@StringField()
 	label: string;
+
+	@StringField()
+	spaceId: string;
+
+	@StringFieldOptional()
+	creatorId: string | null;
 
 	@ClassField(() => ProgramDto, { isArray: true })
 	programs?: ProgramDto[];

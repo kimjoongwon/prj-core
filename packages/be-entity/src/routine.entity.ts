@@ -6,6 +6,8 @@ import type { Program } from "./program.entity";
 export class Routine extends AbstractEntity implements RoutineEntity {
 	name!: string;
 	label!: string;
+	spaceId!: string;
+	creatorId!: string | null;
 
 	programs?: Program[];
 	activities?: Activity[];

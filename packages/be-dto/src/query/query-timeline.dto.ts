@@ -7,4 +7,8 @@ export class QueryTimelineDto extends PrismaQueryDto<Prisma.TimelineWhereInput> 
 	@StringFieldOptional({ nullable: true, default: null })
 	@Transform(({ value }) => (value === "null" ? null : value))
 	timelineId?: string | null;
+
+	@StringFieldOptional({ nullable: true, default: null })
+	@Transform(({ value }) => (value === "null" ? null : value))
+	search?: string | null;
 }

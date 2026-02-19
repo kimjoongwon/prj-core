@@ -64,7 +64,7 @@ export const HtmlEditor = observer(
 						input: "font-mono text-sm",
 						inputWrapper: "bg-content1",
 					}}
-					spellCheck={false}
+					spellCheck="false"
 				/>
 			</div>
 		);

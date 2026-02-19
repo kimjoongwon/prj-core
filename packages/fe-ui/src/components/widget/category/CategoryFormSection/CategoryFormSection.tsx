@@ -1,6 +1,6 @@
 "use client";
 
-import { Input, Select, SelectItem } from "@heroui/react";
+import { Input, Select, SelectItem, type SharedSelection } from "@heroui/react";
 import { observer } from "mobx-react-lite";
 
 export interface CategoryOption {
@@ -49,9 +49,9 @@ export const CategoryFormSection = observer(
 			onChangeField("name", value);
 		};
 
-		const handleChangeParentId = (keys: Set<string> | "all") => {
+		const handleChangeParentId = (keys: SharedSelection) => {
 			if (keys === "all") return;
-			const selectedKey = Array.from(keys)[0] ?? "";
+			const selectedKey = String(Array.from(keys)[0] ?? "");
 			onChangeField("parentId", selectedKey);
 		};
 

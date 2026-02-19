@@ -185,7 +185,7 @@ function RoleCategoryDetailPageClient({
 							category={{
 								name: category.name,
 								type: category.type,
-								parentName: category.parent?.name,
+								parent: category.parent,
 								parentId: category.parent?.id,
 								createdAt: category.createdAt,
 								updatedAt: category.updatedAt,

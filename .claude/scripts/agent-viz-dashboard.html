@@ -1,0 +1,702 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>🐾 Agent Workshop</title>
+  <style>
+    :root {
+      --bg: #0a0a0f;
+      --surface: #12121e;
+      --surface2: #1c1c2e;
+      --text: #e8e8f5;
+      --text-dim: #7878a0;
+      --radius: 16px;
+      --radius-sm: 10px;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, sans-serif;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* 배경 블러 오브 */
+    .bg-orb {
+      position: fixed;
+      border-radius: 50%;
+      filter: blur(100px);
+      pointer-events: none;
+      z-index: 0;
+    }
+    .bg-orb-1 {
+      width: 600px; height: 600px;
+      background: rgba(124, 77, 255, 0.25);
+      bottom: -150px; left: -150px;
+    }
+    .bg-orb-2 {
+      width: 500px; height: 500px;
+      background: rgba(255, 107, 53, 0.20);
+      top: -100px; right: -100px;
+    }
+    .bg-orb-3 {
+      width: 300px; height: 300px;
+      background: rgba(78, 205, 196, 0.15);
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+    }
+
+    /* 메인 컨테이너 */
+    .container {
+      position: relative;
+      z-index: 1;
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 36px 24px 80px;
+    }
+
+    /* 헤더 */
+    .header {
+      text-align: center;
+      margin-bottom: 52px;
+    }
+    .header h1 {
+      font-size: clamp(1.8rem, 4vw, 2.6rem);
+      font-weight: 800;
+      background: linear-gradient(135deg, #a78bfa, #fb923c, #34d399);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 10px;
+      letter-spacing: -0.5px;
+    }
+    .header .subtitle {
+      color: var(--text-dim);
+      font-size: 1rem;
+      letter-spacing: 0.3px;
+    }
+    .header .stats-bar {
+      display: flex;
+      justify-content: center;
+      gap: 16px;
+      margin-top: 20px;
+      flex-wrap: wrap;
+    }
+    .stat-pill {
+      background: var(--surface);
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 100px;
+      padding: 6px 18px;
+      font-size: 0.82rem;
+      color: var(--text-dim);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .stat-pill strong {
+      color: var(--text);
+      font-size: 1rem;
+      font-weight: 700;
+    }
+
+    /* 섹션 타이틀 */
+    .section-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+    .section-title {
+      font-size: 0.85rem;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: var(--text-dim);
+    }
+    .section-count {
+      background: var(--surface2);
+      border-radius: 100px;
+      padding: 2px 10px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: var(--text-dim);
+    }
+
+    /* 실행 중 그리드 */
+    .active-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 16px;
+      margin-bottom: 52px;
+      min-height: 80px;
+    }
+
+    /* 에이전트 카드 */
+    .agent-card {
+      background: var(--surface);
+      border-radius: var(--radius);
+      padding: 20px;
+      border: 1px solid rgba(255,255,255,0.06);
+      position: relative;
+      overflow: hidden;
+      animation: cardIn 0.45s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+    }
+    .agent-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 3px;
+      background: var(--card-color, #7c4dff);
+      border-radius: var(--radius) var(--radius) 0 0;
+    }
+    .agent-card::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at top left, rgba(255,255,255,0.04), transparent 60%);
+      pointer-events: none;
+    }
+    .agent-card.active {
+      animation: cardIn 0.45s cubic-bezier(0.34, 1.56, 0.64, 1) both,
+                 cardFloat 3s ease-in-out infinite;
+    }
+
+    /* 카드 내용 */
+    .card-top {
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+      margin-bottom: 14px;
+    }
+    .card-emoji {
+      font-size: 2.2rem;
+      line-height: 1;
+      filter: drop-shadow(0 0 10px var(--card-color, #7c4dff));
+      flex-shrink: 0;
+    }
+    .card-meta { flex: 1; min-width: 0; }
+    .card-name {
+      font-weight: 700;
+      font-size: 0.9rem;
+      color: var(--text);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .card-subtype {
+      font-size: 0.72rem;
+      color: var(--card-color, #7c4dff);
+      margin-top: 3px;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+    }
+
+    /* ASCII 얼굴 */
+    .card-face {
+      font-family: 'Courier New', monospace;
+      font-size: 0.82rem;
+      color: var(--card-color, #a78bfa);
+      text-align: center;
+      padding: 10px 0 12px;
+      animation: faceBlink 2.5s ease-in-out infinite;
+      letter-spacing: 1px;
+    }
+
+    /* 설명 */
+    .card-desc {
+      font-size: 0.78rem;
+      color: var(--text-dim);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      margin-bottom: 14px;
+      line-height: 1.4;
+    }
+
+    /* 진행 바 */
+    .progress-wrap {
+      height: 3px;
+      background: rgba(255,255,255,0.06);
+      border-radius: 4px;
+      overflow: hidden;
+      margin-bottom: 10px;
+    }
+    .progress-bar {
+      height: 100%;
+      width: 70%;
+      background: linear-gradient(90deg,
+        transparent,
+        var(--card-color, #7c4dff),
+        transparent
+      );
+      animation: progressSlide 1.8s ease-in-out infinite;
+      border-radius: 4px;
+    }
+
+    /* 타이머 */
+    .card-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .card-timer {
+      font-size: 0.72rem;
+      color: var(--text-dim);
+      font-variant-numeric: tabular-nums;
+    }
+    .card-status {
+      font-size: 0.7rem;
+      color: var(--card-color, #7c4dff);
+      font-weight: 600;
+      animation: dotBlink 1s step-start infinite;
+    }
+
+    /* 완료 목록 */
+    .done-wrap {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    .done-chip {
+      background: var(--surface);
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 100px;
+      padding: 8px 16px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      animation: chipIn 0.35s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+      font-size: 0.82rem;
+    }
+    .done-chip-emoji { font-size: 1.1rem; }
+    .done-chip-name { font-weight: 600; color: var(--text); }
+    .done-chip-time { color: var(--text-dim); font-size: 0.73rem; }
+    .done-chip-check { color: #34d399; font-weight: 700; }
+
+    /* 빈 상태 */
+    .empty-state {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      padding: 40px;
+      color: var(--text-dim);
+      font-size: 0.88rem;
+      width: 100%;
+    }
+    .empty-state .e-icon { font-size: 2.5rem; opacity: 0.4; }
+
+    /* 연결 상태 표시줄 */
+    .status-bar {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background: var(--surface);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 100px;
+      padding: 8px 18px;
+      font-size: 0.78rem;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      z-index: 100;
+      backdrop-filter: blur(10px);
+    }
+    .status-dot {
+      width: 7px; height: 7px;
+      border-radius: 50%;
+      background: #555;
+      transition: background 0.3s;
+    }
+    .status-dot.connected { background: #34d399; animation: pulseDot 2s ease-in-out infinite; }
+    .status-dot.error { background: #f87171; }
+    #status-text { color: var(--text-dim); }
+
+    /* Confetti Canvas */
+    #confetti-canvas {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      pointer-events: none;
+      z-index: 9999;
+    }
+
+    /* ─── 애니메이션 ─── */
+    @keyframes cardIn {
+      from { opacity: 0; transform: translateY(24px) scale(0.92); }
+      to   { opacity: 1; transform: translateY(0)   scale(1); }
+    }
+    @keyframes cardFloat {
+      0%, 100% { transform: translateY(0px); }
+      50%       { transform: translateY(-5px); }
+    }
+    @keyframes chipIn {
+      from { opacity: 0; transform: scale(0.8); }
+      to   { opacity: 1; transform: scale(1); }
+    }
+    @keyframes faceBlink {
+      0%, 90%, 100% { opacity: 1; }
+      95%            { opacity: 0.5; }
+    }
+    @keyframes progressSlide {
+      0%   { transform: translateX(-100%); }
+      100% { transform: translateX(250%); }
+    }
+    @keyframes dotBlink {
+      0%, 100% { opacity: 1; }
+      50%       { opacity: 0; }
+    }
+    @keyframes pulseDot {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(52,211,153,0.4); }
+      50%       { box-shadow: 0 0 0 6px rgba(52,211,153,0); }
+    }
+  </style>
+</head>
+<body>
+
+<!-- 배경 오브 -->
+<div class="bg-orb bg-orb-1"></div>
+<div class="bg-orb bg-orb-2"></div>
+<div class="bg-orb bg-orb-3"></div>
+
+<!-- Confetti -->
+<canvas id="confetti-canvas"></canvas>
+
+<div class="container">
+  <!-- 헤더 -->
+  <div class="header">
+    <h1>🐾 Claude Code Agent Workshop</h1>
+    <div class="subtitle">✨ 에이전트들이 열심히 일하고 있어요!</div>
+    <div class="stats-bar">
+      <div class="stat-pill">🔥 실행 중 <strong id="active-count">0</strong></div>
+      <div class="stat-pill">✅ 완료 <strong id="done-count">0</strong></div>
+      <div class="stat-pill">📊 총 누적 <strong id="total-count">0</strong></div>
+    </div>
+  </div>
+
+  <!-- 실행 중 -->
+  <div class="section-header">
+    <div class="section-title">실행 중</div>
+    <div class="section-count" id="active-badge">0</div>
+  </div>
+  <div class="active-grid" id="active-grid">
+    <div class="empty-state" id="active-empty">
+      <div class="e-icon">😴</div>
+      <div>아직 실행 중인 에이전트가 없어요~</div>
+    </div>
+  </div>
+
+  <!-- 완료 -->
+  <div class="section-header">
+    <div class="section-title">완료</div>
+    <div class="section-count" id="done-badge">0</div>
+  </div>
+  <div class="done-wrap" id="done-list">
+    <div class="empty-state">
+      <div class="e-icon" style="font-size:1.8rem">🌙</div>
+    </div>
+  </div>
+</div>
+
+<!-- 연결 상태 -->
+<div class="status-bar">
+  <div class="status-dot" id="status-dot"></div>
+  <span id="status-text">연결 중...</span>
+</div>
+
+<script>
+// ─── 에이전트 캐릭터 설정 ───────────────────────────────────────
+const CHARS = {
+  orch:    { emoji: '🦁', face: '(◕‿◕)',      color: '#FFD700', label: 'Orchestrator' },
+  fe:      { emoji: '🦊', face: '(•ᴗ•)',       color: '#FF6B35', label: 'Frontend' },
+  be:      { emoji: '🐻', face: '(づ◡﹏◡)づ',  color: '#4ECDC4', label: 'Backend' },
+  qa:      { emoji: '🐸', face: '(⊙_⊙)',       color: '#A8E6CF', label: 'QA/Test' },
+  req:     { emoji: '🦉', face: '(◔_◔)',        color: '#C3B1E1', label: 'Planning' },
+  explore: { emoji: '🐿️', face: '(｡•̀ᴗ-)✧',   color: '#87CEEB', label: 'Explorer' },
+  bash:    { emoji: '🐝', face: '(ɔ◔‿◔)ɔ',    color: '#F7DC6F', label: 'Bash' },
+  general: { emoji: '🐱', face: '(=^_^=)',     color: '#FFC0CB', label: 'General' },
+  plan:    { emoji: '📐', face: '(｀•_•´)',     color: '#B0E0E6', label: 'Planner' },
+  default: { emoji: '🐱', face: '(=^_^=)',     color: '#9090A0', label: 'Agent' },
+};
+
+function getChar(agentType) {
+  if (!agentType) return CHARS.default;
+  const t = agentType.toLowerCase();
+  if (t.startsWith('orch'))    return CHARS.orch;
+  if (t.startsWith('fe-') || t === 'fe') return CHARS.fe;
+  if (t.startsWith('be-') || t === 'be') return CHARS.be;
+  if (t.startsWith('qa-') || t === 'qa') return CHARS.qa;
+  if (t.startsWith('req-') || t === 'req') return CHARS.req;
+  if (t === 'explore')          return CHARS.explore;
+  if (t === 'bash')             return CHARS.bash;
+  if (t.includes('general'))    return CHARS.general;
+  if (t === 'plan')             return CHARS.plan;
+  return CHARS.default;
+}
+
+// ─── 유틸 ──────────────────────────────────────────────────────
+function fmtMs(ms) {
+  if (!ms || ms < 0) return '0s';
+  if (ms < 1000) return `${ms}ms`;
+  if (ms < 60000) return `${Math.round(ms / 1000)}s`;
+  const m = Math.floor(ms / 60000);
+  const s = Math.round((ms % 60000) / 1000);
+  return `${m}m ${s}s`;
+}
+
+function esc(str) {
+  return String(str || '')
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;');
+}
+
+function trunc(str, n) {
+  if (!str) return '';
+  return str.length > n ? str.slice(0, n) + '…' : str;
+}
+
+// ─── 상태 ──────────────────────────────────────────────────────
+const activeAgents = new Map(); // id → info
+let sessionDone = 0;
+let totalEver = 0;
+
+// ─── DOM refs ──────────────────────────────────────────────────
+const activeGrid  = document.getElementById('active-grid');
+const doneList    = document.getElementById('done-list');
+const activeEmpty = document.getElementById('active-empty');
+const $activeCount  = document.getElementById('active-count');
+const $activeBadge  = document.getElementById('active-badge');
+const $doneCount    = document.getElementById('done-count');
+const $doneBadge    = document.getElementById('done-badge');
+const $totalCount   = document.getElementById('total-count');
+const $statusDot    = document.getElementById('status-dot');
+const $statusText   = document.getElementById('status-text');
+
+function updateStats() {
+  const n = activeAgents.size;
+  $activeCount.textContent = n;
+  $activeBadge.textContent = n;
+  $doneCount.textContent   = sessionDone;
+  $doneBadge.textContent   = sessionDone;
+  $totalCount.textContent  = totalEver;
+}
+
+// ─── 카드 렌더링 ───────────────────────────────────────────────
+function makeAgentCard(info) {
+  const char = getChar(info.agent);
+  const div = document.createElement('div');
+  div.className = 'agent-card active';
+  div.id = `card-${info.id}`;
+  div.style.setProperty('--card-color', char.color);
+  div.innerHTML = `
+    <div class="card-top">
+      <div class="card-emoji">${char.emoji}</div>
+      <div class="card-meta">
+        <div class="card-name">${esc(info.agent || 'unknown')}</div>
+        <div class="card-subtype">${char.label}</div>
+      </div>
+    </div>
+    <div class="card-face">${char.face}</div>
+    <div class="card-desc">${esc(trunc(info.desc, 70))}</div>
+    <div class="progress-wrap"><div class="progress-bar"></div></div>
+    <div class="card-footer">
+      <div class="card-timer" id="timer-${info.id}">0s</div>
+      <div class="card-status">● 작업 중</div>
+    </div>
+  `;
+  return div;
+}
+
+function addActiveAgent(info) {
+  activeAgents.set(info.id, info);
+  // 빈 상태 제거
+  if (activeEmpty.parentNode === activeGrid) activeGrid.removeChild(activeEmpty);
+  activeGrid.prepend(makeAgentCard(info));
+  updateStats();
+}
+
+function removeActiveAgent(info) {
+  const card = document.getElementById(`card-${info.id}`);
+  if (card) {
+    card.style.transition = 'opacity 0.3s, transform 0.3s';
+    card.style.opacity = '0';
+    card.style.transform = 'scale(0.9)';
+    setTimeout(() => card.remove(), 300);
+  }
+  activeAgents.delete(info.id);
+  // 빈 상태 복원
+  if (activeAgents.size === 0) {
+    setTimeout(() => {
+      if (activeAgents.size === 0) activeGrid.appendChild(activeEmpty);
+    }, 350);
+  }
+}
+
+function makeDoneChip(info) {
+  const char = getChar(info.agent);
+  const div = document.createElement('div');
+  div.className = 'done-chip';
+  div.innerHTML = `
+    <span class="done-chip-emoji">${char.emoji}</span>
+    <span class="done-chip-name">${esc(info.agent || 'unknown')}</span>
+    <span class="done-chip-time">${fmtMs(info.duration)}</span>
+    <span class="done-chip-check">✓</span>
+  `;
+  return div;
+}
+
+function addDoneItem(info) {
+  // 빈 상태 제거
+  const empty = doneList.querySelector('.empty-state');
+  if (empty) empty.remove();
+
+  doneList.prepend(makeDoneChip(info));
+  sessionDone++;
+  totalEver++;
+  updateStats();
+  // 완료 시 confetti!
+  const char = getChar(info.agent);
+  launchConfetti(char.color);
+}
+
+// ─── 타이머 ────────────────────────────────────────────────────
+setInterval(() => {
+  const now = Date.now();
+  for (const [id, info] of activeAgents) {
+    const el = document.getElementById(`timer-${id}`);
+    if (el) el.textContent = fmtMs(now - info.startedAt);
+  }
+}, 1000);
+
+// ─── SSE 연결 ──────────────────────────────────────────────────
+function connect() {
+  const es = new EventSource('/stream');
+
+  es.onopen = () => {
+    $statusDot.className = 'status-dot connected';
+    $statusText.textContent = '연결됨 ♡';
+  };
+
+  es.onmessage = (e) => {
+    let data;
+    try { data = JSON.parse(e.data); } catch { return; }
+
+    if (data.type === 'snapshot') {
+      // 초기 스냅샷
+      for (const info of data.active) addActiveAgent(info);
+      // 히스토리 (최신순 → 역순으로 prepend)
+      const hist = [...data.history].reverse();
+      for (const info of hist) {
+        const empty = doneList.querySelector('.empty-state');
+        if (empty) empty.remove();
+        doneList.prepend(makeDoneChip(info));
+        sessionDone++;
+        totalEver++;
+      }
+      updateStats();
+      return;
+    }
+
+    if (data.type === 'start') {
+      addActiveAgent(data);
+      return;
+    }
+
+    if (data.type === 'done') {
+      removeActiveAgent(data);
+      addDoneItem(data);
+      return;
+    }
+  };
+
+  es.onerror = () => {
+    $statusDot.className = 'status-dot error';
+    $statusText.textContent = '연결 끊김... 재연결 중';
+    es.close();
+    setTimeout(connect, 3000);
+  };
+}
+
+connect();
+
+// ─── Confetti ──────────────────────────────────────────────────
+const canvas = document.getElementById('confetti-canvas');
+const ctx = canvas.getContext('2d');
+
+function resizeCanvas() {
+  canvas.width  = window.innerWidth;
+  canvas.height = window.innerHeight;
+}
+resizeCanvas();
+window.addEventListener('resize', resizeCanvas);
+
+const CONFETTI_COLORS = [
+  '#FFD700', '#FF6B35', '#4ECDC4', '#A8E6CF',
+  '#C3B1E1', '#87CEEB', '#FFC0CB', '#ffffff',
+];
+const particles = [];
+
+function launchConfetti(primaryColor) {
+  const cx = Math.random() * canvas.width;
+  const cy = canvas.height * 0.5;
+  for (let i = 0; i < 40; i++) {
+    const angle = -Math.PI / 2 + (Math.random() - 0.5) * Math.PI * 0.8;
+    const speed = 3 + Math.random() * 6;
+    particles.push({
+      x: cx + (Math.random() - 0.5) * 80,
+      y: cy,
+      vx: Math.cos(angle) * speed,
+      vy: Math.sin(angle) * speed,
+      size: 4 + Math.random() * 7,
+      color: i < 12 ? primaryColor : CONFETTI_COLORS[Math.floor(Math.random() * CONFETTI_COLORS.length)],
+      life: 1,
+      decay: 0.012 + Math.random() * 0.008,
+      rotation: Math.random() * Math.PI * 2,
+      spin: (Math.random() - 0.5) * 0.25,
+      shape: Math.random() > 0.5 ? 'rect' : 'circle',
+    });
+  }
+}
+
+function drawConfetti() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  for (let i = particles.length - 1; i >= 0; i--) {
+    const p = particles[i];
+    p.x += p.vx;
+    p.y += p.vy;
+    p.vy += 0.18; // 중력
+    p.vx *= 0.99; // 공기 저항
+    p.life -= p.decay;
+    p.rotation += p.spin;
+
+    if (p.life <= 0) { particles.splice(i, 1); continue; }
+
+    ctx.save();
+    ctx.globalAlpha = Math.min(1, p.life * 1.5);
+    ctx.translate(p.x, p.y);
+    ctx.rotate(p.rotation);
+    ctx.fillStyle = p.color;
+
+    if (p.shape === 'circle') {
+      ctx.beginPath();
+      ctx.arc(0, 0, p.size / 2, 0, Math.PI * 2);
+      ctx.fill();
+    } else {
+      ctx.fillRect(-p.size / 2, -p.size * 0.3, p.size, p.size * 0.6);
+    }
+    ctx.restore();
+  }
+  requestAnimationFrame(drawConfetti);
+}
+
+drawConfetti();
+</script>
+</body>
+</html>

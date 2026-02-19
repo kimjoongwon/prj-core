@@ -94,7 +94,7 @@ function TemplateDetailPageClient({
 					addToast({
 						title: "삭제 성공",
 						description: "템플릿이 삭제되었습니다.",
-						type: "success",
+						color: "success",
 					});
 					deleteModal.onClose();
 					router.push("/templates" as Route);
@@ -104,7 +104,7 @@ function TemplateDetailPageClient({
 						title: "삭제 실패",
 						description:
 							error.message || "삭제 중 오류가 발생했습니다.",
-						type: "error",
+						color: "danger",
 					});
 				},
 			},
@@ -122,7 +122,7 @@ function TemplateDetailPageClient({
 					addToast({
 						title: "상태 변경 성공",
 						description: "템플릿 상태가 변경되었습니다.",
-						type: "success",
+						color: "success",
 					});
 					queryClient.invalidateQueries({
 						queryKey: getGetTemplateQueryKey(templateId),
@@ -134,7 +134,7 @@ function TemplateDetailPageClient({
 						description:
 							error.message ||
 							"상태 변경 중 오류가 발생했습니다.",
-						type: "error",
+						color: "danger",
 					});
 				},
 			},
@@ -149,10 +149,10 @@ function TemplateDetailPageClient({
 		variables: Record<string, string>,
 	): Promise<PreviewResult> => {
 		const result = await previewTemplate({
-			id: tplId,
+			templateId: tplId,
 			data: { variables },
 		});
-		return result.data as PreviewResult;
+		return (result as Record<string, unknown>).data as PreviewResult;
 	};
 
 	/**
@@ -164,10 +164,10 @@ function TemplateDetailPageClient({
 		variables: Record<string, string>,
 	) => {
 		const result = await sendTestTemplate({
-			id: tplId,
+			templateId: tplId,
 			data: { recipient, variables },
 		});
-		return result.data as {
+		return (result as Record<string, unknown>).data as {
 			success: boolean;
 			sentAt: string;
 			errorMessage: string | null;
@@ -296,7 +296,7 @@ function TemplateDetailPageClient({
 				<SectionSurface title="콘텐츠">
 					<TemplateContentViewer
 						type={template.type}
-						subject={template.subject}
+						subject={template.subject ?? null}
 						content={template.content}
 					/>
 				</SectionSurface>
