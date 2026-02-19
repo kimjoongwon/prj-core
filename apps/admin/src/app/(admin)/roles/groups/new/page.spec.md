@@ -1,0 +1,75 @@
+# 역할 그룹 등록 페이지 기획서
+
+> 생성일: 2026-02-18
+> 타입: page
+> 경로: `/roles/groups/new`
+
+## 사용자 시나리오
+
+1. 관리자가 새로운 역할 그룹을 등록하기 위해 페이지에 진입한다.
+2. 그룹명(name)과 라벨(label)을 입력한다.
+3. 그룹명은 대문자로 자동 변환된다.
+4. "그룹 등록" 버튼을 클릭하면 유효성 검사 후 API를 호출한다.
+5. 등록 성공 시 역할 그룹 목록 페이지(`/roles/groups`)로 이동한다.
+
+## 레이아웃 구성
+
+| 영역 | 컴포넌트 | 설명 |
+|------|----------|------|
+| 페이지 헤더 | PageSurface | title="역할 그룹 등록", description="새로운 역할 그룹을 등록합니다." |
+| 헤더 액션 | Button | "목록으로" 버튼, ArrowLeft 아이콘 |
+| 입력 폼 | SectionSurface | name, label 입력 필드 |
+| 제출 영역 | Button | "그룹 등록" 버튼, Save 아이콘 |
+
+## 폼 필드 정의
+
+| 필드 | 라벨 | 타입 | 필수 | 유효성 검사 |
+|------|------|------|:----:|-------------|
+| name | 그룹명 | Input | O | 필수, 최대 50자 |
+| label | 라벨 | Input | X | 최대 100자 |
+
+## 페이지 상태
+
+| 상태 | 설명 | UI |
+|------|------|-----|
+| 초기 | 빈 폼 | 입력 필드들 (빈 값) |
+| 유효성 오류 | 검증 실패 | isInvalid + errorMessage 표시 |
+| 제출 중 | API 호출 중 | 등록 버튼 isLoading |
+
+## API 호출
+
+| 시점 | API | 설명 |
+|------|-----|------|
+| 폼 제출 | `useMutation (POST /api/v1/groups)` | 그룹 생성, { name, label, type: "Role" }, 임시 customInstance 사용 |
+
+## 이벤트 핸들러
+
+| 이벤트 | 동작 |
+|--------|------|
+| onClickBackButton | `/roles/groups`로 이동 |
+| onClickSubmitButton | 유효성 검사 -> createGroup 호출 |
+| name Input 변경 | 대문자 자동 변환 (value.toUpperCase()) |
+
+## 폼 상태 관리
+
+`useLocalObservable`로 관리하는 `GroupFormState`:
+- `name`: string
+- `label`: string
+- `errors.name`: string
+
+## 비고
+
+- `type: "Role"` 고정값으로 그룹 생성 시 전달
+- Orval codegen 후 useCreateGroup 훅으로 교체 예정
+
+## 구현 체크리스트
+
+- [x] page.tsx (서버 컴포넌트, prefetch 없음)
+- [x] _client.tsx (클라이언트 컴포넌트, observer)
+- [ ] Orval codegen 후 useCreateGroup 훅 교체
+
+## 변경 이력
+
+| 일자 | 내용 | 작성자 |
+|------|------|--------|
+| 2026-02-18 | 초기 생성 (역기획) | req-reverse-engineer |

@@ -149,8 +149,7 @@ apps/proposal/plans/[project]/[app]/YYYY-MM-DD-[feature]/
 - `be-controller-builder` - Controller 생성
 
 **Stage 4**
-- `fe-page-spec-builder` - 페이지별 SPEC.md 생성 (첫 번째로 실행)
-- `fe-domain-spec-builder` - 도메인 컴포넌트(Feature, Cell, Store) SPEC.md 생성
+- `orch-screen-planner` - 화면 기획 오케스트레이터 (L5-L12)
 - `fe-ui-component-builder` - Pure UI 컴포넌트
 - `fe-widget-builder` - Widget 컴포넌트
 - `fe-feature-builder` - Feature 컴포넌트

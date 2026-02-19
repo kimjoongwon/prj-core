@@ -633,22 +633,6 @@ const SideNav = observer(() => {
 
 ---
 
-## 11. 프로젝트별 기획 문서
-
-프로젝트별 구체적인 메뉴 구성은 아래 문서를 참조:
-
-```
-apps/proposal/plans/{date}-{ProjectName}MenuSystem/
-├── README.md           # 전체 개요
-├── 01-desktop.md       # 데스크톱 레이아웃
-├── 02-mobile.md        # 모바일 레이아웃
-├── 03-menu-tree.md     # 메뉴 트리 상세
-└── 04-permissions.md   # 권한 체계
-```
-
-**현재 프로젝트 기획:**
-- `apps/proposal/plans/2025-12-30-AdminLayoutAndMenuSystem/`
-
 ---
 
 ## 12. Admin 메뉴 트리 (전체)

@@ -1,0 +1,77 @@
+# 역할 카테고리 등록 페이지 기획서
+
+> 생성일: 2026-02-18
+> 타입: page
+> 경로: `/roles/categories/new`
+
+## 사용자 시나리오
+
+1. 관리자가 새로운 역할 카테고리를 등록하기 위해 페이지에 진입한다.
+2. 카테고리명(name)을 입력한다 (대문자 자동 변환).
+3. 상위 카테고리(parentId)를 기존 카테고리 목록에서 선택할 수 있다 (선택하지 않으면 최상위).
+4. "카테고리 등록" 버튼을 클릭하면 유효성 검사 후 API를 호출한다.
+5. 등록 성공 시 역할 카테고리 목록 페이지(`/roles/categories`)로 이동한다.
+
+## 레이아웃 구성
+
+| 영역 | 컴포넌트 | 설명 |
+|------|----------|------|
+| 페이지 헤더 | PageSurface | title="역할 카테고리 등록", description="새로운 역할 카테고리를 등록합니다." |
+| 헤더 액션 | Button | "목록으로" 버튼, ArrowLeft 아이콘 |
+| 입력 폼 | SectionSurface | name, parentId 입력 필드 |
+| 제출 영역 | Button | "카테고리 등록" 버튼, Save 아이콘 |
+
+## 폼 필드 정의
+
+| 필드 | 라벨 | 타입 | 필수 | 유효성 검사 |
+|------|------|------|:----:|-------------|
+| name | 카테고리명 | Input | O | 필수, 최대 50자 |
+| parentId | 상위 카테고리 | Select | X | 기존 카테고리 목록에서 선택, "없음 (최상위)" 가능 |
+
+## 페이지 상태
+
+| 상태 | 설명 | UI |
+|------|------|-----|
+| 초기 | 빈 폼 | 입력 필드들 (빈 값) |
+| 유효성 오류 | 검증 실패 | isInvalid + errorMessage 표시 |
+| 제출 중 | API 호출 중 | 등록 버튼 isLoading |
+
+## API 호출
+
+| 시점 | API | 설명 |
+|------|-----|------|
+| 페이지 진입 | `useQuery (GET /api/v1/categories?type=Role)` | 상위 카테고리 선택 목록, 임시 customInstance 사용 |
+| 폼 제출 | `useMutation (POST /api/v1/categories)` | 카테고리 생성, { name, parentId, type: "Role" }, 임시 customInstance 사용 |
+
+## 이벤트 핸들러
+
+| 이벤트 | 동작 |
+|--------|------|
+| onClickBackButton | `/roles/categories`로 이동 |
+| onClickSubmitButton | 유효성 검사 -> createCategory 호출 |
+| name Input 변경 | 대문자 자동 변환 (value.toUpperCase()) |
+| parentId Select 변경 | state.parentId 업데이트 |
+
+## 폼 상태 관리
+
+`useLocalObservable`로 관리하는 `CategoryFormState`:
+- `name`: string
+- `parentId`: string
+- `errors.name`: string
+
+## 비고
+
+- `type: "Role"` 고정값으로 카테고리 생성 시 전달
+- parentId가 빈 문자열이면 null로 변환하여 최상위 카테고리로 생성
+
+## 구현 체크리스트
+
+- [x] page.tsx (서버 컴포넌트, prefetch 없음)
+- [x] _client.tsx (클라이언트 컴포넌트, observer)
+- [ ] Orval codegen 후 useCreateCategory, useGetCategories 훅 교체
+
+## 변경 이력
+
+| 일자 | 내용 | 작성자 |
+|------|------|--------|
+| 2026-02-18 | 초기 생성 (역기획) | req-reverse-engineer |

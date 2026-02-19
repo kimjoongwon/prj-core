@@ -1,0 +1,73 @@
+# 역할 등록 페이지 기획서
+
+> 생성일: 2026-02-18
+> 타입: page
+> 경로: `/roles/new`
+
+## 사용자 시나리오
+
+1. 관리자가 새로운 역할을 등록하기 위해 페이지에 진입한다.
+2. 역할 식별자(name), 표시명(displayName), 설명(description)을 입력한다.
+3. 역할 식별자는 대문자로 자동 변환되며, `^[A-Z][A-Z0-9_]*$` 패턴을 따라야 한다.
+4. "역할 등록" 버튼을 클릭하면 유효성 검사 후 API를 호출한다.
+5. 등록 성공 시 역할 목록 페이지(`/roles`)로 이동한다.
+
+## 레이아웃 구성
+
+| 영역 | 컴포넌트 | 설명 |
+|------|----------|------|
+| 페이지 헤더 | PageSurface | title="역할 등록", description="새로운 역할을 등록합니다." |
+| 헤더 액션 | Button | "목록으로" 버튼, ArrowLeft 아이콘 |
+| 안내 메시지 | div (primary) | 역할 식별자 입력 규칙 안내 |
+| 입력 폼 | SectionSurface | name, displayName, description 입력 필드 |
+| 제출 영역 | Button | "역할 등록" 버튼, Save 아이콘 |
+
+## 폼 필드 정의
+
+| 필드 | 라벨 | 타입 | 필수 | 유효성 검사 |
+|------|------|------|:----:|-------------|
+| name | 역할 식별자 | Input | O | 필수, `^[A-Z][A-Z0-9_]*$`, 최대 50자 |
+| displayName | 표시명 | Input | X | 최대 50자 |
+| description | 설명 | Textarea | X | 최대 200자, minRows=3 |
+
+## 페이지 상태
+
+| 상태 | 설명 | UI |
+|------|------|-----|
+| 초기 | 빈 폼 | 입력 필드들 (빈 값) |
+| 유효성 오류 | 검증 실패 | isInvalid + errorMessage 표시 |
+| 제출 중 | API 호출 중 | 등록 버튼 isLoading |
+
+## API 호출
+
+| 시점 | API | 설명 |
+|------|-----|------|
+| 폼 제출 | `useCreateRole` (POST /api/v1/roles) | 역할 생성, CreateRoleDto |
+
+## 이벤트 핸들러
+
+| 이벤트 | 동작 |
+|--------|------|
+| onClickBackButton | `/roles`로 이동 |
+| onClickSubmitButton | 유효성 검사 -> createRole 호출 |
+| name Input 변경 | 대문자 자동 변환 (value.toUpperCase()) |
+
+## 폼 상태 관리
+
+`useLocalObservable`로 관리하는 `RoleFormState`:
+- `name`: string
+- `displayName`: string
+- `description`: string
+- `errors.name`: string
+- `errors.displayName`: string
+
+## 구현 체크리스트
+
+- [x] page.tsx (서버 컴포넌트, prefetch 없음)
+- [x] _client.tsx (클라이언트 컴포넌트, observer)
+
+## 변경 이력
+
+| 일자 | 내용 | 작성자 |
+|------|------|--------|
+| 2026-02-18 | 초기 생성 (역기획) | req-reverse-engineer |

@@ -6,21 +6,32 @@ allowed-tools: Read, Write, Grep, Bash
 
 # L9-L10 로직/테스트 기획자 (Logic/Test Planner)
 
-요구사항 그래프의 **L9(비즈니스 로직), L10(테스트)** 레이어를 기획하는 전문가입니다.
+백엔드 **비즈니스 로직과 프론트엔드 Store**를 정의하고 `service.spec.md`, `repository.spec.md`, `store.spec.md`를 생성하는 전문가입니다.
 
 ---
 
 ## 담당 레이어
 
-| 레벨 | 타입 | 서브레벨 | 설명 | ID 패턴 |
-|------|------|----------|------|---------|
-| **L9** | logic | L9.1 | 유효성 검사 | `L9-LOG-###` |
-| **L9** | logic | L9.2 | 권한 검사 | `L9-LOG-###` |
-| **L9** | logic | L9.3 | 계산/변환 | `L9-LOG-###` |
-| **L9** | logic | L9.4 | 엣지케이스 | `L9-LOG-###` |
-| **L10** | test | L10.1 | Happy Path | `L10-TST-###` |
-| **L10** | test | L10.2 | Error Path | `L10-TST-###` |
-| **L10** | test | L10.3 | Edge Case | `L10-TST-###` |
+| 레벨 | 타입 | 설명 |
+|------|------|------|
+| **L9** | logic | 비즈니스 규칙, 유효성 검사, 권한 검사 |
+| **L10** | test | 테스트 케이스 |
+
+---
+
+## 출력 파일
+
+```
+# 백엔드
+apps/server/src/[module]/
+├── [domain].service.spec.md           # Service 기획서
+└── repositories/
+    └── [domain].repository.spec.md    # Repository 기획서
+
+# 프론트엔드
+packages/fe-store/src/stores/
+└── [domain]Store.spec.md              # Store 기획서
+```
 
 ---
 
@@ -28,135 +39,308 @@ allowed-tools: Read, Write, Grep, Bash
 
 | 항목 | 필수 | 설명 |
 |------|:----:|------|
-| L7-L8 기획 결과 | ✅ | 엔티티와 컴포넌트 정의 |
-| L5-L6 기획 결과 | ✅ | API와 인터랙션 정의 |
-| 비즈니스 규칙 | ❌ | 도메인 특화 규칙 |
+| controller.spec.md | ✅ | API 정의 |
+| feature.spec.md | ✅ | 컴포넌트 정의 |
+| app.spec.md | ✅ | 앱 컨텍스트 |
 
 ---
 
 ## 프로세스
 
 ```
-1단계: 유효성 검사 규칙 도출 (L9.1)
+1단계: controller.spec.md 읽기 → API 분석
    ↓
-2단계: 권한 검사 규칙 정의 (L9.2)
+2단계: 비즈니스 규칙 도출 (L9)
    ↓
-3단계: 비즈니스 계산 로직 (L9.3)
+3단계: repository.spec.md 생성
    ↓
-4단계: 엣지케이스 식별 (L9.4)
+4단계: service.spec.md 생성
    ↓
-5단계: 테스트 케이스 작성 (L10)
+5단계: feature.spec.md 읽기 → Store 분석
    ↓
-6단계: 관계(edges) 연결
+6단계: store.spec.md 생성
+   ↓
+7단계: 테스트 케이스 정의 (L10)
    ↓
 → 기획 완료
 ```
 
-### 유효성 검사 유형
-
-| 검사 유형 | 설명 | 예시 |
-|----------|------|------|
-| 필수 값 | null/empty 체크 | 이름 필수 |
-| 형식 검사 | 정규식 매칭 | 이메일, 전화번호 |
-| 범위 검사 | min/max 값 | 나이 0-150 |
-| 유일성 | 중복 불가 | 이메일 unique |
-| 참조 무결성 | FK 존재 확인 | userId 존재 |
-
-### 권한 레벨
-
-| 레벨 | 설명 | 예시 액션 |
-|------|------|----------|
-| Public | 인증 불필요 | 로그인 페이지 |
-| Authenticated | 로그인 필요 | 프로필 조회 |
-| Owner | 본인 데이터만 | 내 예약 수정 |
-| Admin | 관리자 권한 | 회원 삭제 |
-
-### 테스트 분류
-
-| 서브레벨 | 유형 | 설명 |
-|----------|------|------|
-| L10.1 | Happy Path | 정상 시나리오 |
-| L10.2 | Error Path | 에러 시나리오 |
-| L10.3 | Edge Case | 경계 조건 |
-
 ---
 
-## 출력
+## Repository 기획서 템플릿
 
-### JSON 형식
+```markdown
+# [Domain] Repository 기획서
 
-```json
-{
-  "level_range": "L9-L10",
-  "nodes": [
-    {
-      "id": "L9-LOG-001",
-      "level": 9,
-      "subLevel": "1",
-      "type": "logic",
-      "name": "이메일 유효성 검사",
-      "description": "이메일 형식 및 중복 여부 검사",
-      "metadata": {
-        "validationType": "field",
-        "rules": ["email_format", "unique"]
-      }
-    },
-    {
-      "id": "L10-TST-001",
-      "level": 10,
-      "subLevel": "1",
-      "type": "test",
-      "name": "회원 목록 조회 성공",
-      "description": "정상적으로 회원 목록이 조회되는지 테스트",
-      "metadata": {
-        "testType": "happy_path",
-        "given": "로그인된 관리자",
-        "when": "회원 목록 API 호출",
-        "then": "회원 목록 반환"
-      }
-    }
-  ],
-  "edges": [
-    { "id": "e-070", "source": "L9-LOG-001", "target": "L7-FLD-002", "type": "validates" },
-    { "id": "e-071", "source": "L10-TST-001", "target": "L3-FTR-001", "type": "tests" }
-  ]
+> 생성일: YYYY-MM-DD
+> 수정일: YYYY-MM-DD
+> 타입: repository
+> 위치: apps/server/src/[module]/repositories/[domain].repository.ts
+
+## 역할
+
+[도메인] 엔티티의 데이터 접근 계층
+
+## 담당 엔티티
+
+[Entity]
+
+## Prisma 모델
+
+```prisma
+model [Entity] {
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  // ... 필드
 }
 ```
 
-### 출력 파일: 05-technical-design.md
+## 공개 메서드
 
-이 에이전트는 기획서 폴더에 `05-technical-design.md` 파일을 생성합니다.
+| 메서드 | Prisma 메서드 | 반환값 | 설명 |
+|--------|--------------|--------|------|
+| findMany | findMany | [Entity][] | 목록 조회 |
+| findById | findUnique | [Entity] \| null | 단일 조회 |
+| create | create | [Entity] | 생성 |
+| update | update | [Entity] | 수정 |
+| delete | delete | void | 삭제 |
+
+## 쿼리 최적화
+
+| 메서드 | 최적화 방식 |
+|--------|------------|
+| findMany | include 최소화 |
+
+## 구현 체크리스트
+
+- [ ] [domain].repository.ts
+- [ ] 인터페이스 정의
+- [ ] 단위 테스트
+
+## 상위 기획서
+
+- `apps/server/src/[module]/controllers/[domain].controller.spec.md`
+
+## 변경 이력
+
+| 일자 | 내용 | 작성자 |
+|------|------|--------|
+| YYYY-MM-DD | 초기 생성 | req-L9L10-planner |
+```
+
+---
+
+## Service 기획서 템플릿
+
+```markdown
+# [Domain] Service 기획서
+
+> 생성일: YYYY-MM-DD
+> 수정일: YYYY-MM-DD
+> 타입: service
+> 위치: apps/server/src/[module]/[domain].service.ts
+
+## 역할
+
+[도메인] 비즈니스 로직 처리
+
+## 담당 도메인
+
+[Domain]
+
+## 의존성
+
+| 타입 | 대상 | 용도 |
+|------|------|------|
+| Repository | [Domain]Repository | 데이터 접근 |
+| Service | [Other]Service | 연관 도메인 |
+
+## 공개 메서드
+
+| 메서드 | 파라미터 | 반환값 | 설명 |
+|--------|----------|--------|------|
+| findAll | QueryDto | [Entity][] | 목록 조회 |
+| findById | id: string | [Entity] | 상세 조회 |
+| create | CreateDto | [Entity] | 생성 |
+| update | id, UpdateDto | [Entity] | 수정 |
+| delete | id: string | void | 삭제 |
+
+## 비즈니스 규칙
+
+### 생성 규칙
+- [필드명] 필수 입력
+- [필드명] 중복 불가
+
+### 수정 규칙
+- [조건]인 경우만 수정 가능
+
+### 삭제 규칙
+- [조건]인 경우 삭제 불가
+
+## 에러 처리
+
+| 상황 | 에러 코드 | 메시지 |
+|------|----------|--------|
+| Not Found | 404 | [도메인]을 찾을 수 없습니다 |
+| Duplicate | 409 | 이미 존재하는 [필드]입니다 |
+| Forbidden | 403 | 권한이 없습니다 |
+
+## 권한 체크
+
+| 메서드 | 필요 권한 | 체크 방식 |
+|--------|----------|----------|
+| findAll | [DOMAIN]_READ | AbilityChecker |
+| create | [DOMAIN]_CREATE | AbilityChecker |
+| update | [DOMAIN]_UPDATE | AbilityChecker |
+| delete | [DOMAIN]_DELETE | AbilityChecker |
+
+## 구현 체크리스트
+
+- [ ] [domain].service.ts
+- [ ] 단위 테스트
+- [ ] 통합 테스트
+
+## 상위 기획서
+
+- `apps/server/src/[module]/controllers/[domain].controller.spec.md`
+
+## 변경 이력
+
+| 일자 | 내용 | 작성자 |
+|------|------|--------|
+| YYYY-MM-DD | 초기 생성 | req-L9L10-planner |
+```
+
+---
+
+## Store 기획서 템플릿
+
+```markdown
+# [Domain]Store 기획서
+
+> 생성일: YYYY-MM-DD
+> 수정일: YYYY-MM-DD
+> 타입: store
+> 위치: packages/fe-store/src/stores/[domain]Store.ts
+
+## 역할
+
+[도메인] 상태 관리
+
+## 상태 (Observable)
+
+| 속성 | 타입 | 초기값 | 설명 |
+|------|------|--------|------|
+| items | [Entity][] | [] | 목록 데이터 |
+| selectedId | string \| null | null | 선택된 ID |
+| loading | boolean | false | 로딩 상태 |
+| error | string \| null | null | 에러 메시지 |
+
+## 계산된 값 (Computed)
+
+| 속성 | 타입 | 계산 로직 |
+|------|------|----------|
+| selectedItem | [Entity] \| undefined | items.find(i => i.id === selectedId) |
+| isEmpty | boolean | items.length === 0 |
+
+## 액션 (Action)
+
+| 메서드 | 파라미터 | 동작 |
+|--------|----------|------|
+| setSelectedId | id: string | 선택 상태 변경 |
+| clearSelection | - | 선택 해제 |
+| reset | - | 초기화 |
+
+## 비동기 액션 (Flow)
+
+| 메서드 | 파라미터 | API 호출 | 성공 시 동작 |
+|--------|----------|----------|--------------|
+| fetchAll | params? | GET /api/v1/[domain]s | items 설정 |
+| fetchById | id | GET /api/v1/[domain]s/:id | selectedId 설정 |
+| create | data | POST /api/v1/[domain]s | 목록 갱신 |
+| update | id, data | PUT /api/v1/[domain]s/:id | 목록 갱신 |
+| remove | id | DELETE /api/v1/[domain]s/:id | 목록에서 제거 |
+
+## 의존 Store
+
+| Store | 사용 방식 |
+|-------|----------|
+| RootStore | parent |
+
+## RootStore 연결
+
+| 속성명 | 타입 |
+|--------|------|
+| [domain]Store | [Domain]Store |
+
+## 구현 체크리스트
+
+- [ ] [domain]Store.ts
+- [ ] RootStore에 등록
+- [ ] 타입 정의
+
+## 상위 기획서
+
+- `packages/fe-ui/src/components/feature/[FeatureName]/index.spec.md`
+
+## 변경 이력
+
+| 일자 | 내용 | 작성자 |
+|------|------|--------|
+| YYYY-MM-DD | 초기 생성 | req-L9L10-planner |
+```
+
+---
+
+## 테스트 케이스 정의
+
+각 기획서의 `## 구현 체크리스트` 섹션에 포함:
+
+### Repository 테스트
+
+| 테스트 | 설명 |
+|--------|------|
+| findMany with pagination | 페이지네이션 동작 |
+| findById returns entity | ID로 조회 |
+| create with valid data | 생성 성공 |
+| update modifies entity | 수정 성공 |
+| delete removes entity | 삭제 성공 |
+
+### Service 테스트
+
+| 테스트 | 설명 |
+|--------|------|
+| create with valid data | 생성 성공 |
+| create with duplicate field | 중복 에러 |
+| update by owner | 소유자 수정 성공 |
+| update by non-owner | 권한 에러 |
+| delete with constraint | 제약조건 에러 |
+
+### Store 테스트
+
+| 테스트 | 설명 |
+|--------|------|
+| fetchAll sets items | 목록 로드 |
+| fetchById sets selectedId | 상세 로드 |
+| create adds to items | 생성 후 목록 추가 |
+| remove removes from items | 삭제 후 목록 제거 |
+| error handling | 에러 상태 설정 |
 
 ---
 
 ## 품질 체크리스트
 
 ### L9 체크리스트
-- [ ] 모든 필수 필드에 유효성 검사가 있는가?
-- [ ] 모든 API에 권한 검사가 정의되었는가?
-- [ ] 주요 비즈니스 규칙이 문서화되었는가?
-- [ ] 엣지케이스가 식별되었는가?
+- [ ] 모든 API에 비즈니스 규칙이 정의되었는가?
+- [ ] 유효성 검사 규칙이 명시되었는가?
+- [ ] 권한 검사가 정의되었는가?
+- [ ] 에러 케이스가 정의되었는가?
 
 ### L10 체크리스트
-- [ ] 모든 Feature에 Happy Path 테스트가 있는가?
-- [ ] 주요 Error Path가 테스트되는가?
-- [ ] Given-When-Then 형식으로 작성되었는가?
-
----
-
-## 테스트 케이스 템플릿 (Given-When-Then)
-
-```markdown
-### [TC-001] 회원 목록 조회 성공
-
-**분류:** Happy Path
-
-| 구분 | 설명 |
-|------|------|
-| **Given** | 관리자(ADMIN) 권한으로 로그인되어 있다 |
-| **When** | GET /api/users?page=1&limit=10 호출 |
-| **Then** | 200 OK 응답, data 배열에 회원 정보 포함 |
-```
+- [ ] Repository 테스트 케이스가 정의되었는가?
+- [ ] Service 테스트 케이스가 정의되었는가?
+- [ ] Store 테스트 케이스가 정의되었는가?
 
 ---
 
@@ -165,13 +349,15 @@ allowed-tools: Read, Write, Grep, Bash
 ```
 /req-L9L10-planner
 
-L7-L8 기획 결과:
-- L7-ENT-001: User (email, name 필드)
-- L7-FLD-002: User.email
+도메인: Member
+모듈명: member
 
-L5-L6 기획 결과:
-- L6-API-001: GET /api/users
-- L6-API-002: POST /api/users
+Controller 기획서:
+- apps/server/src/member/controllers/member.controller.spec.md
+
+Feature 기획서:
+- packages/fe-ui/src/components/feature/MemberList/index.spec.md
+- packages/fe-ui/src/components/feature/MemberDetail/index.spec.md
 ```
 
 ---

@@ -1,0 +1,76 @@
+# 내 세션 관리 페이지 기획서
+
+> 생성일: 2026-02-18
+> 타입: page
+> 경로: `/my-sessions`
+
+## 사용자 시나리오
+
+1. 관리자가 내 세션 관리 페이지에 진입하여 현재 로그인된 세션 목록을 확인한다
+2. 현재 세션을 확인한다 (브라우저/OS, IP, 마지막 활동 시간, "현재 세션" 배지)
+3. 다른 세션 목록을 확인하고, 개별 세션의 "종료" 버튼으로 세션을 해제한다
+4. "모든 다른 기기에서 로그아웃" 버튼으로 현재 세션을 제외한 모든 세션을 종료한다
+
+## 레이아웃 구성
+
+| 영역 | 컴포넌트 | 설명 |
+|------|----------|------|
+| 페이지 헤더 | `PageSurface` | title="내 세션 관리", description="현재 로그인된 기기를 관리합니다." |
+| 현재 세션 | `SectionSurface` (title="현재 세션") | SessionCard (종료 버튼 없음) |
+| 다른 세션 | `SectionSurface` (title="다른 세션 (N개)") | SessionCard 목록 (종료 버튼 포함) |
+| 일괄 종료 | `Button` | "모든 다른 기기에서 로그아웃" (danger, 우측 정렬) |
+
+## SessionCard 구성
+
+| 요소 | 설명 |
+|------|------|
+| 기기 아이콘 | 모바일: `Smartphone`, 데스크톱: `Monitor` |
+| 브라우저/OS | User-Agent 파싱 (Chrome/Firefox/Safari/Edge + Windows/macOS/Linux/Android/iOS) |
+| 현재 세션 배지 | `Chip` (primary, "현재 세션") - 현재 세션만 |
+| IP 주소 | `Globe` 아이콘 + ipAddress |
+| 마지막 활동 | 상대 시간 ("방금 전", "N분 전", "N시간 전", "N일 전") |
+| 종료 버튼 | `Button` (danger, "종료") - 현재 세션이 아닌 경우만 |
+
+## 페이지 상태
+
+| 상태 | 설명 | UI |
+|------|------|-----|
+| 로딩 | 세션 목록 조회 중 | `Spinner` (size="lg") |
+| 데이터 표시 | 세션 목록 표시 | 현재 세션 + 다른 세션 + 일괄 종료 버튼 |
+| 다른 세션 없음 | 현재 세션만 존재 | "다른 기기에서 로그인된 세션이 없습니다." + 일괄 종료 버튼 숨김 |
+
+## API 호출
+
+| 시점 | API | 설명 |
+|------|-----|------|
+| SSR 프리페칭 | `prefetchGetMySessionsQuery` | 세션 목록 프리페칭 |
+| 클라이언트 | `useGetMySessions()` | 세션 목록 조회 |
+| 개별 종료 시 | `useRevokeSession({ sessionId })` | 특정 세션 종료 |
+| 일괄 종료 시 | `useRevokeOtherSessions()` | 현재 세션 제외 전체 종료 |
+
+## 이벤트 핸들러
+
+| 이벤트 | 동작 |
+|--------|------|
+| onClickRevokeButton(sessionId) | 해당 세션 종료 -> 성공 시 세션 목록 캐시 무효화 |
+| onClickRevokeOthersButton | 모든 다른 세션 종료 -> 성공 시 세션 목록 캐시 무효화 |
+
+## 특이사항
+
+- `AuthSessionInfoDto`의 `isCurrent` 필드로 현재 세션 구분
+- User-Agent 파싱은 클라이언트 사이드 유틸 함수로 처리
+- 상대 시간 포맷은 `formatRelativeTime` 유틸 함수
+- 캐시 무효화: `getGetMySessionsQueryKey()` 사용
+- 아이콘: lucide-react (Globe, Monitor, Smartphone, Trash2)
+
+## 구현 체크리스트
+
+- [x] page.tsx (서버 컴포넌트, Prefetch + HydrationBoundary)
+- [x] _client.tsx (클라이언트 컴포넌트, observer 래핑)
+- [x] _prefetch.ts (prefetchGetMySessionsQuery 호출)
+
+## 변경 이력
+
+| 일자 | 내용 | 작성자 |
+|------|------|--------|
+| 2026-02-18 | 초기 생성 (역기획) | req-reverse-engineer |

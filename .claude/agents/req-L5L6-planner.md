@@ -6,7 +6,26 @@ tools: Read, Write, Grep, Bash
 
 # L5-L6 인터랙션/API 기획자 (Interaction/API Planner)
 
-요구사항 그래프의 **L5(인터랙션), L6(API)** 레이어를 기획하는 전문가입니다.
+특정 화면의 **L5(인터랙션), L6(API)** 레이어를 기획하는 전문가입니다。
+
+---
+
+## 0. 출력 위치 (중요!)
+
+**Sidecar Spec 방식으로 코드 옆에 기획서를 업데이트/생성합니다:**
+
+```
+# page.spec.md 업데이트 (API 호출, 이벤트 핸들러 섹션 추가)
+apps/[app]/app/(admin)/[도메인]/page.spec.md
+apps/[app]/app/(admin)/[도메인]/[entityId]/page.spec.md
+apps/[app]/app/(admin)/[도메인]/new/page.spec.md
+apps/[app]/app/(admin)/[도메인]/[entityId]/edit/page.spec.md
+
+# controller.spec.md 생성
+apps/server/src/[module]/controllers/[domain].controller.spec.md
+```
+
+> **참고:** 이 에이전트는 `orch-screen-planner`에 의해 호출됩니다。직접 호출 시 화면 경로를 지정해야 합니다。
 
 ---
 
@@ -30,52 +49,22 @@ tools: Read, Write, Grep, Bash
 
 | 항목 | 필수 | 설명 |
 |------|:----:|------|
-| L3-L4 기획 결과 | ✅ | 기능과 화면 정의 |
+| 화면 경로 | ✅ | 기획서를 생성할 화면 경로 (예: apps/admin/app/(admin)/members/) |
+| L3-L4 기획 결과 | ✅ | 각 페이지의 `page.spec.md` (기능과 화면 정의) |
+| app.spec.md | ❌ | 앱 전체 컨텍스트 (apps/[app]/app/(admin)/app.spec.md) |
 | API 규칙 | ❌ | 프로젝트의 API 네이밍 규칙 |
 
 ### 출력
 
-```json
-{
-  "level_range": "L5-L6",
-  "nodes": [
-    {
-      "id": "L5-ACT-001",
-      "level": 5,
-      "subLevel": "1",
-      "type": "action",
-      "name": "검색어 입력",
-      "description": "검색창에 검색어를 입력하여 필터링"
-    },
-    {
-      "id": "L6-API-001",
-      "level": 6,
-      "subLevel": "1",
-      "type": "api",
-      "name": "GET /api/users",
-      "description": "회원 목록 조회 API",
-      "metadata": {
-        "method": "GET",
-        "endpoint": "/api/users"
-      }
-    }
-  ],
-  "edges": [
-    {
-      "id": "e-030",
-      "source": "L4-SCR-001",
-      "target": "L5-ACT-001",
-      "type": "parent"
-    },
-    {
-      "id": "e-031",
-      "source": "L4-SCR-001",
-      "target": "L6-API-001",
-      "type": "calls",
-      "label": "호출"
-    }
-  ]
-}
+이 에이전트는 두 가지를 출력합니다:
+
+**1. 각 page.spec.md에 섹션 추가/업데이트:**
+- `## API 호출` 섹션
+- `## 이벤트 핸들러` 섹션
+
+**2. controller.spec.md 생성:**
+```
+apps/server/src/[module]/controllers/[domain].controller.spec.md
 ```
 
 ---
@@ -91,7 +80,7 @@ tools: Read, Write, Grep, Bash
    ↓
 4단계: API 엔드포인트 설계 (L6)
    ↓
-5단계: 관계(edges) 연결
+5단계: page.spec.md 업데이트 + controller.spec.md 생성
    ↓
 → L7-L8 기획자에게 전달
 ```
@@ -107,18 +96,6 @@ tools: Read, Write, Grep, Bash
 | 등록/수정 화면 | 입력, 저장, 취소, 유효성 검사 |
 | 캘린더 화면 | 날짜 선택, 월/주 전환, 이벤트 클릭 |
 
-**액션 노드 형식:**
-```json
-{
-  "id": "L5-ACT-001",
-  "level": 5,
-  "subLevel": "1",  // 1=사용자 액션
-  "type": "action",
-  "name": "검색어 입력",
-  "description": "검색창에 검색어를 입력하여 회원 필터링"
-}
-```
-
 ### 2단계: 시스템 반응 정의 (L5.2)
 
 **반응 유형:**
@@ -128,17 +105,6 @@ tools: Read, Write, Grep, Bash
 | 알림 표시 | 토스트, 모달 | 성공/에러 메시지 |
 | 네비게이션 | 페이지 이동 | 상세 → 목록 |
 | 상태 변경 | 로컬 상태 변경 | 로딩 표시, 폼 활성화 |
-
-```json
-{
-  "id": "L5-ACT-010",
-  "level": 5,
-  "subLevel": "2",  // 2=시스템 반응
-  "type": "action",
-  "name": "목록 갱신",
-  "description": "검색 조건에 맞는 회원 목록 표시"
-}
-```
 
 ### 3단계: 상태 전이 흐름 (L5.3)
 
@@ -166,9 +132,7 @@ tools: Read, Write, Grep, Bash
 | 삭제 | DELETE | /api/[resource]s/:id | 삭제 |
 | 특수 액션 | POST/PATCH | /api/[resource]s/:id/[action] | 상태 변경 등 |
 
-**API 노드 메타데이터 (필수):**
-
-> ⚠️ **중요**: proposal 앱의 `/api` 탭에서 시각화하기 위해 아래 메타데이터를 필수로 포함해야 합니다.
+**API 메타데이터 (필수):**
 
 | 필드 | 타입 | 필수 | 설명 |
 |------|------|:----:|------|
@@ -176,8 +140,8 @@ tools: Read, Write, Grep, Bash
 | endpoint | string | ✅ | API 경로 (예: "/api/users") |
 | queryParams | ApiParameter[] | ❌ | 쿼리 파라미터 목록 (목록 조회 API) |
 | pathParams | ApiParameter[] | ❌ | 경로 파라미터 (예: :id) |
-| requestBody | string | ❌ | 요청 바디 Entity ID (POST/PUT/PATCH) |
-| responseBody | string | ❌ | 응답 바디 Entity ID |
+| requestBody | string | ❌ | 요청 바디 DTO 이름 (POST/PUT/PATCH) |
+| responseBody | string | ❌ | 응답 바디 DTO 이름 |
 | isArrayResponse | boolean | ❌ | 응답이 배열인지 여부 |
 | auth | string | ❌ | 인증 방식 ("Bearer Token", "API Key", "None") |
 | permissions | string[] | ❌ | 필요 권한 목록 |
@@ -192,40 +156,56 @@ interface ApiParameter {
 }
 ```
 
-**API 노드 형식 (상세):**
-```json
-{
-  "id": "L6-API-001",
-  "level": 6,
-  "subLevel": "1",
-  "type": "api",
-  "name": "GET /api/users",
-  "description": "회원 목록 조회 API",
-  "metadata": {
-    "method": "GET",
-    "endpoint": "/api/users",
-    "queryParams": [
-      { "name": "skip", "type": "number", "description": "건너뛸 항목 수 (offset)" },
-      { "name": "take", "type": "number", "description": "조회할 항목 수" },
-      { "name": "name", "type": "string", "description": "이름 검색" },
-      { "name": "status", "type": "string", "description": "상태 필터" }
-    ],
-    "responseBody": "L7-ENT-001",
-    "isArrayResponse": true,
-    "auth": "Bearer Token",
-    "permissions": ["ADMIN", "USER"]
-  }
-}
+### 5단계: page.spec.md 업데이트 + controller.spec.md 생성
+
+이 단계에서 두 가지 출력을 생성합니다:
+
+**1) 각 page.spec.md에 아래 섹션 추가/업데이트:**
+
+```markdown
+## API 호출
+
+| 시점 | API | Method | 성공 시 | 실패 시 |
+|------|-----|--------|--------|--------|
+| 페이지 진입 | /api/[resource] | GET | 목록 표시 | 에러 메시지 |
+| 검색 | /api/[resource]?search=... | GET | 목록 갱신 | 에러 토스트 |
+| 삭제 | /api/[resource]/:id | DELETE | 목록 갱신 + 성공 토스트 | 에러 토스트 |
+
+## 이벤트 핸들러
+
+| 액션 | 트리거 | 결과 | 조건 |
+|------|--------|------|------|
+| 검색어 입력 | 검색창 입력 후 Enter 또는 버튼 클릭 | 목록 갱신 | - |
+| 페이지 이동 | 페이지네이션 버튼 클릭 | 해당 페이지 데이터 로드 | - |
+| 항목 클릭 | 테이블 행 클릭 | 상세 화면 이동 | - |
 ```
 
-### 5단계: 관계 연결
+**2) controller.spec.md 생성:**
 
-**관계 규칙:**
-| 관계 | 소스 | 타겟 | 타입 |
-|------|------|------|------|
-| 화면 → 액션 | L4 Screen | L5 Action | `parent` |
-| 화면 → API | L4 Screen | L6 API | `calls` |
-| 액션 → 시스템 반응 | L5.1 Action | L5.2 Action | `parent` |
+```markdown
+# [Domain] Controller 기획서
+
+## 엔드포인트 목록
+
+| Method | Path | 설명 | 인증 | 권한 |
+|--------|------|------|------|------|
+| GET | /api/[resource] | 목록 조회 | Bearer | MANAGE, VIEW |
+| GET | /api/[resource]/:id | 상세 조회 | Bearer | MANAGE, VIEW |
+| POST | /api/[resource] | 생성 | Bearer | MANAGE |
+| PATCH | /api/[resource]/:id | 수정 | Bearer | MANAGE |
+| DELETE | /api/[resource]/:id | 삭제 | Bearer | MANAGE |
+
+## 엔드포인트 상세
+
+### GET /api/[resource]
+- **설명**: 목록 조회
+- **쿼리 파라미터**: skip, take, name, status
+- **응답**: [Resource]ResponseDto[]
+- **에러**: 401 Unauthorized, 403 Forbidden
+
+### GET /api/[resource]/:id
+...
+```
 
 ---
 
@@ -243,59 +223,32 @@ interface ApiParameter {
 - [ ] 인증/인가가 명시되었는가?
 - [ ] API 경로가 RESTful 규칙을 따르는가?
 
+### 출력 체크리스트
+- [ ] 모든 page.spec.md에 `## API 호출` 섹션이 추가되었는가?
+- [ ] 모든 page.spec.md에 `## 이벤트 핸들러` 섹션이 추가되었는가?
+- [ ] controller.spec.md가 생성되었는가?
+- [ ] controller.spec.md에 모든 엔드포인트가 포함되었는가?
+
 ---
 
 ## 5. 템플릿
 
-### 화면별 인터랙션 매트릭스
-
-| 화면 | 사용자 액션 | 시스템 반응 | API 호출 |
-|------|------------|------------|----------|
-| 회원 목록 | 검색어 입력 | 목록 갱신 | GET /api/users |
-| 회원 목록 | 페이지 이동 | 목록 갱신 | GET /api/users |
-| 회원 목록 | 회원 클릭 | 상세 이동 | - |
-| 회원 상세 | 수정 클릭 | 수정 이동 | - |
-| 회원 상세 | 삭제 클릭 | 확인 모달 | DELETE /api/users/:id |
-
-### 출력 JSON 템플릿
-
-```json
-{
-  "level_range": "L5-L6",
-  "nodes": [],
-  "edges": []
-}
-```
-
----
-
-## 6. 연관 에이전트
-
-### 선행 에이전트
-
-| 에이전트 | 관계 | 설명 |
-|----------|------|------|
-| req-L3L4-planner | 이전 단계 | 기능/화면 |
-| orch-requirement | 상위 | 전체 기획 흐름 조율 |
-
-### 후행 에이전트
-
-| 에이전트 | 관계 | 설명 |
-|----------|------|------|
-| req-L7L8-planner | 다음 단계 | 데이터모델/컴포넌트 기획 |
-
----
-
-## 7. 출력 파일: 03-interactions.md
-
-이 에이전트는 기획서 폴더에 `03-interactions.md` 파일을 생성합니다.
-
-### 03-interactions.md 템플릿
+### page.spec.md에 추가할 API 호출 섹션
 
 ```markdown
-# 03. 인터랙션 정의
+## API 호출
 
-## 사용자 액션
+| 시점 | API | Method | 성공 시 | 실패 시 |
+|------|-----|--------|--------|--------|
+| 페이지 진입 | /api/[resource] | GET | 목록 표시 | 에러 메시지 |
+| 검색 | /api/[resource]?search=... | GET | 목록 갱신 | 에러 토스트 |
+| 삭제 | /api/[resource]/:id | DELETE | 목록 갱신 + 성공 토스트 | 에러 토스트 |
+```
+
+### page.spec.md에 추가할 이벤트 핸들러 섹션
+
+```markdown
+## 이벤트 핸들러
 
 | 액션 | 트리거 | 결과 | 조건 |
 |------|--------|------|------|
@@ -304,9 +257,11 @@ interface ApiParameter {
 | 항목 클릭 | 테이블 행 클릭 | 상세 화면 이동 | - |
 | 등록 버튼 클릭 | 등록 버튼 클릭 | 등록 화면 이동 | 등록 권한 |
 | 삭제 버튼 클릭 | 삭제 아이콘 클릭 | 삭제 확인 모달 표시 | 삭제 권한 |
+```
 
----
+### page.spec.md에 추가할 상태 변화 흐름 섹션
 
+```markdown
 ## 상태 변화 흐름
 
 \`\`\`
@@ -334,25 +289,14 @@ API 호출 (GET /api/[resource])
 │  실패       │──→ [에러 상태] ──→ 재시도 버튼
 └─────────────┘
 \`\`\`
+```
 
----
+### page.spec.md에 추가할 모달 정의 섹션
 
+```markdown
 ## 모달 정의
 
 ### 삭제 확인 모달
-
-\`\`\`
-┌──────────────────────────────────┐
-│         삭제 확인                  │
-├──────────────────────────────────┤
-│                                   │
-│  정말로 삭제하시겠습니까?           │
-│  이 작업은 되돌릴 수 없습니다.      │
-│                                   │
-├──────────────────────────────────┤
-│    [취소]           [삭제]        │
-└──────────────────────────────────┘
-\`\`\`
 
 | 요소 | 설명 |
 |------|------|
@@ -360,38 +304,11 @@ API 호출 (GET /api/[resource])
 | 본문 | 삭제 경고 메시지 |
 | 취소 버튼 | 모달 닫기 |
 | 삭제 버튼 | DELETE API 호출 후 목록 갱신 |
+```
 
-### 등록/수정 폼 모달 (해당 시)
+### page.spec.md에 추가할 피드백 메시지 섹션
 
-\`\`\`
-┌──────────────────────────────────┐
-│         [등록/수정] 제목           │
-├──────────────────────────────────┤
-│                                   │
-│  필드 1: [입력]                    │
-│  필드 2: [입력]                    │
-│  필드 3: [선택 ▼]                  │
-│                                   │
-├──────────────────────────────────┤
-│    [취소]           [저장]        │
-└──────────────────────────────────┘
-\`\`\`
-
----
-
-## API 호출 흐름
-
-| 화면 | 액션 | API | 성공 시 | 실패 시 |
-|------|------|-----|--------|--------|
-| 목록 | 페이지 진입 | GET /api/[resource] | 목록 표시 | 에러 메시지 |
-| 목록 | 검색 | GET /api/[resource]?search=... | 목록 갱신 | 에러 토스트 |
-| 목록 | 삭제 | DELETE /api/[resource]/:id | 목록 갱신 + 성공 토스트 | 에러 토스트 |
-| 상세 | 페이지 진입 | GET /api/[resource]/:id | 상세 표시 | 에러 메시지 |
-| 등록 | 저장 | POST /api/[resource] | 목록 이동 + 성공 토스트 | 에러 토스트 |
-| 수정 | 저장 | PATCH /api/[resource]/:id | 상세 이동 + 성공 토스트 | 에러 토스트 |
-
----
-
+```markdown
 ## 피드백 메시지
 
 | 상황 | 유형 | 메시지 |
@@ -403,47 +320,228 @@ API 호출 (GET /api/[resource])
 | 네트워크 에러 | error | "네트워크 오류가 발생했습니다." |
 ```
 
+### controller.spec.md 템플릿
+
+```markdown
+# [Domain] Controller 기획서
+
+## 개요
+
+- **모듈**: [module명]
+- **경로 접두어**: /api/[resource]
+- **인증**: Bearer Token (JWT)
+
+## 엔드포인트 목록
+
+| Method | Path | 설명 | 인증 | 권한 |
+|--------|------|------|------|------|
+| GET | /api/[resource] | 목록 조회 | Bearer | MANAGE, VIEW |
+| GET | /api/[resource]/:id | 상세 조회 | Bearer | MANAGE, VIEW |
+| POST | /api/[resource] | 생성 | Bearer | MANAGE |
+| PATCH | /api/[resource]/:id | 수정 | Bearer | MANAGE |
+| DELETE | /api/[resource]/:id | 삭제 | Bearer | MANAGE |
+
+## 엔드포인트 상세
+
+### GET /api/[resource]
+
+- **설명**: [resource] 목록 조회
+- **쿼리 파라미터**:
+
+| 파라미터 | 타입 | 필수 | 설명 |
+|----------|------|:----:|------|
+| skip | number | ❌ | 건너뛸 항목 수 |
+| take | number | ❌ | 조회할 항목 수 |
+| search | string | ❌ | 검색어 |
+
+- **응답**: `[Resource]ResponseDto[]`
+- **에러**: 401, 403
+
+### GET /api/[resource]/:id
+
+- **설명**: [resource] 상세 조회
+- **경로 파라미터**: id (string, UUID)
+- **응답**: `[Resource]ResponseDto`
+- **에러**: 401, 403, 404
+
+### POST /api/[resource]
+
+- **설명**: [resource] 생성
+- **요청 바디**: `Create[Resource]Dto`
+- **응답**: `[Resource]ResponseDto` (201)
+- **에러**: 400, 401, 403
+
+### PATCH /api/[resource]/:id
+
+- **설명**: [resource] 수정
+- **경로 파라미터**: id (string, UUID)
+- **요청 바디**: `Update[Resource]Dto`
+- **응답**: `[Resource]ResponseDto`
+- **에러**: 400, 401, 403, 404
+
+### DELETE /api/[resource]/:id
+
+- **설명**: [resource] 삭제
+- **경로 파라미터**: id (string, UUID)
+- **응답**: 204 No Content
+- **에러**: 401, 403, 404
+
+## 변경 이력
+
+| 일자 | 내용 | 작성자 |
+|------|------|--------|
+| YYYY-MM-DD | 초기 생성 | req-L5L6-planner |
+```
+
+---
+
+## 6. 화면별 인터랙션 매트릭스 (참고)
+
+| 화면 | 사용자 액션 | 시스템 반응 | API 호출 |
+|------|------------|------------|----------|
+| 목록 | 검색어 입력 | 목록 갱신 | GET /api/[resource] |
+| 목록 | 페이지 이동 | 목록 갱신 | GET /api/[resource] |
+| 목록 | 항목 클릭 | 상세 이동 | - |
+| 상세 | 수정 클릭 | 수정 이동 | - |
+| 상세 | 삭제 클릭 | 확인 모달 | DELETE /api/[resource]/:id |
+
+---
+
+## 7. 연관 에이전트
+
+### 선행 에이전트
+
+| 에이전트 | 관계 | 설명 |
+|----------|------|------|
+| req-L3L4-planner | 이전 단계 | 기능/화면 |
+| orch-requirement | 상위 | 전체 기획 흐름 조율 |
+
+### 후행 에이전트
+
+| 에이전트 | 관계 | 설명 |
+|----------|------|------|
+| req-L7L8-planner | 다음 단계 | 데이터모델/컴포넌트 기획 |
+
 ---
 
 ## 8. 예시
 
-### 입력 (L3-L4 결과)
-```json
-{
-  "screens": [
-    { "id": "L4-SCR-001", "name": "회원 목록 화면", "path": "/users" },
-    { "id": "L4-SCR-005", "name": "예약 목록 화면", "path": "/reservations" },
-    { "id": "L4-SCR-009", "name": "예약 캘린더 화면", "path": "/reservations/calendar" }
-  ]
-}
+### 입력 (L3-L4 결과 - page.spec.md에서 추출)
+
+대상 화면:
+- `apps/admin/app/(admin)/users/page.spec.md` (목록)
+- `apps/admin/app/(admin)/users/[userId]/page.spec.md` (상세)
+- `apps/admin/app/(admin)/users/new/page.spec.md` (등록)
+- `apps/admin/app/(admin)/users/[userId]/edit/page.spec.md` (수정)
+
+### 출력 1: page.spec.md 업데이트 (목록 페이지 예시)
+
+`apps/admin/app/(admin)/users/page.spec.md`에 아래 섹션 추가:
+
+```markdown
+## API 호출
+
+| 시점 | API | Method | 성공 시 | 실패 시 |
+|------|-----|--------|--------|--------|
+| 페이지 진입 | /api/users | GET | 회원 목록 표시 | 에러 메시지 |
+| 검색 | /api/users?search=... | GET | 목록 갱신 | 에러 토스트 |
+| 삭제 | /api/users/:id | DELETE | 목록 갱신 + 성공 토스트 | 에러 토스트 |
+
+## 이벤트 핸들러
+
+| 액션 | 트리거 | 결과 | 조건 |
+|------|--------|------|------|
+| 검색어 입력 | 검색창 입력 후 Enter 또는 버튼 클릭 | 목록 갱신 | - |
+| 페이지 이동 | 페이지네이션 버튼 클릭 | 해당 페이지 데이터 로드 | - |
+| 회원 클릭 | 테이블 행 클릭 | 상세 화면 이동 | - |
+| 등록 버튼 클릭 | 등록 버튼 클릭 | 등록 화면 이동 | 등록 권한 |
+| 삭제 버튼 클릭 | 삭제 아이콘 클릭 | 삭제 확인 모달 표시 | 삭제 권한 |
+
+## 상태 변화 흐름
+
+...
+
+## 모달 정의
+
+### 삭제 확인 모달
+...
+
+## 피드백 메시지
+...
 ```
 
-### JSON 출력
-```json
-{
-  "level_range": "L5-L6",
-  "nodes": [
-    { "id": "L5-ACT-001", "level": 5, "subLevel": "1", "type": "action", "name": "검색어 입력", "description": "검색창에 검색어 입력" },
-    { "id": "L5-ACT-002", "level": 5, "subLevel": "1", "type": "action", "name": "페이지 이동", "description": "페이지네이션으로 목록 탐색" },
-    { "id": "L5-ACT-003", "level": 5, "subLevel": "1", "type": "action", "name": "회원 클릭", "description": "목록에서 회원 선택" },
-    { "id": "L5-ACT-004", "level": 5, "subLevel": "2", "type": "action", "name": "목록 갱신", "description": "검색 결과 표시" },
-    { "id": "L5-ACT-005", "level": 5, "subLevel": "1", "type": "action", "name": "날짜 필터 선택", "description": "특정 날짜 범위로 예약 필터링" },
-    { "id": "L5-ACT-006", "level": 5, "subLevel": "1", "type": "action", "name": "캘린더 날짜 클릭", "description": "캘린더에서 날짜 클릭" },
-    { "id": "L5-ACT-007", "level": 5, "subLevel": "1", "type": "action", "name": "월/주 전환", "description": "캘린더 뷰 전환" },
-    { "id": "L6-API-001", "level": 6, "subLevel": "1", "type": "api", "name": "GET /api/users", "description": "회원 목록 조회 API", "metadata": { "method": "GET", "endpoint": "/api/users" } },
-    { "id": "L6-API-005", "level": 6, "subLevel": "1", "type": "api", "name": "GET /api/reservations", "description": "예약 목록 조회 API", "metadata": { "method": "GET", "endpoint": "/api/reservations" } }
-  ],
-  "edges": [
-    { "id": "e-030", "source": "L4-SCR-001", "target": "L5-ACT-001", "type": "parent" },
-    { "id": "e-031", "source": "L4-SCR-001", "target": "L5-ACT-002", "type": "parent" },
-    { "id": "e-032", "source": "L4-SCR-001", "target": "L5-ACT-003", "type": "parent" },
-    { "id": "e-033", "source": "L4-SCR-001", "target": "L5-ACT-004", "type": "parent" },
-    { "id": "e-034", "source": "L4-SCR-001", "target": "L6-API-001", "type": "calls", "label": "호출" },
-    { "id": "e-035", "source": "L4-SCR-005", "target": "L5-ACT-005", "type": "parent" },
-    { "id": "e-036", "source": "L4-SCR-005", "target": "L6-API-005", "type": "calls", "label": "호출" },
-    { "id": "e-037", "source": "L4-SCR-009", "target": "L5-ACT-006", "type": "parent" },
-    { "id": "e-038", "source": "L4-SCR-009", "target": "L5-ACT-007", "type": "parent" },
-    { "id": "e-039", "source": "L4-SCR-009", "target": "L6-API-005", "type": "calls", "label": "호출" }
-  ]
-}
+### 출력 2: controller.spec.md 생성
+
+`apps/server/src/user/controllers/user.controller.spec.md`:
+
+```markdown
+# User Controller 기획서
+
+## 개요
+
+- **모듈**: user
+- **경로 접두어**: /api/users
+- **인증**: Bearer Token (JWT)
+
+## 엔드포인트 목록
+
+| Method | Path | 설명 | 인증 | 권한 |
+|--------|------|------|------|------|
+| GET | /api/users | 회원 목록 조회 | Bearer | MANAGE, VIEW |
+| GET | /api/users/:id | 회원 상세 조회 | Bearer | MANAGE, VIEW |
+| POST | /api/users | 회원 생성 | Bearer | MANAGE |
+| PATCH | /api/users/:id | 회원 수정 | Bearer | MANAGE |
+| DELETE | /api/users/:id | 회원 삭제 | Bearer | MANAGE |
+
+## 엔드포인트 상세
+
+### GET /api/users
+
+- **설명**: 회원 목록 조회
+- **쿼리 파라미터**:
+
+| 파라미터 | 타입 | 필수 | 설명 |
+|----------|------|:----:|------|
+| skip | number | ❌ | 건너뛸 항목 수 (offset) |
+| take | number | ❌ | 조회할 항목 수 |
+| name | string | ❌ | 이름 검색 |
+| status | string | ❌ | 상태 필터 |
+
+- **응답**: `UserResponseDto[]`
+- **에러**: 401 Unauthorized, 403 Forbidden
+
+### GET /api/users/:id
+
+- **설명**: 회원 상세 조회
+- **경로 파라미터**: id (string, UUID)
+- **응답**: `UserResponseDto`
+- **에러**: 401, 403, 404
+
+### POST /api/users
+
+- **설명**: 회원 생성
+- **요청 바디**: `CreateUserDto`
+- **응답**: `UserResponseDto` (201)
+- **에러**: 400, 401, 403
+
+### PATCH /api/users/:id
+
+- **설명**: 회원 수정
+- **경로 파라미터**: id (string, UUID)
+- **요청 바디**: `UpdateUserDto`
+- **응답**: `UserResponseDto`
+- **에러**: 400, 401, 403, 404
+
+### DELETE /api/users/:id
+
+- **설명**: 회원 삭제
+- **경로 파라미터**: id (string, UUID)
+- **응답**: 204 No Content
+- **에러**: 401, 403, 404
+
+## 변경 이력
+
+| 일자 | 내용 | 작성자 |
+|------|------|--------|
+| 2026-02-18 | 초기 생성 | req-L5L6-planner |
 ```

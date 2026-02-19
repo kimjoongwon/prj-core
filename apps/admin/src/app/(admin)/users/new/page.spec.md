@@ -1,0 +1,77 @@
+# 이용자 등록 페이지 기획서
+
+> 생성일: 2026-02-18
+> 타입: page
+> 경로: `/users/new`
+
+## 사용자 시나리오
+
+1. 관리자가 `/users/new` 경로에 진입하면 이용자 등록 폼이 표시된다.
+2. 현재 구현은 TODO(미구현) 상태이며, "이 기능은 구현 예정입니다." 메시지가 표시된다.
+3. "목록으로" 버튼을 클릭하면 `/users` 경로로 이동한다.
+
+## 레이아웃 구성 (현재 - TODO 상태)
+
+| 영역 | 컴포넌트 | 설명 |
+|------|----------|------|
+| 상단 | `Button` (variant="light") | "목록으로" + ArrowLeft 아이콘 |
+| 본문 | `div` (bg-content1, rounded-xl) | "회원 등록" 제목 + "이 기능은 구현 예정입니다." 안내 |
+
+## 레이아웃 구성 (기획 - 구현 시)
+
+| 영역 | 컴포넌트 | 설명 |
+|------|----------|------|
+| 페이지 래퍼 | `PageSurface` | title="이용자 등록" |
+| 기본 정보 섹션 | `SectionSurface` | 이름, 이메일, 전화번호, 비밀번호 입력 |
+| 역할/분류 섹션 | `SectionSurface` | 역할 Select, 분류 Select, 그룹 Multi-Select |
+| 하단 액션 | 버튼 영역 | [취소] [등록] |
+
+## 폼 필드 (기획)
+
+| 필드 | 라벨 | 타입 | 필수 | 유효성 검사 |
+|------|------|------|------|------------|
+| name | 이름 | Input | O | 2~50자 |
+| email | 이메일 | Input | O | 이메일 형식 |
+| phone | 전화번호 | Input | O | 한국 휴대폰 형식 (010-XXXX-XXXX) |
+| password | 비밀번호 | Input | O | 8자 이상, 영문+숫자+특수문자 |
+| roleId | 역할 | Select | O | 역할 목록에서 선택 |
+| categoryId | 분류 | Select | X | 카테고리 목록에서 선택 |
+| groupIds | 그룹 | Multi-Select | X | 그룹 목록에서 복수 선택 |
+
+## 페이지 상태
+
+| 상태 | 설명 | UI |
+|------|------|-----|
+| TODO | 미구현 상태 | "이 기능은 구현 예정입니다." 안내 메시지 |
+
+## API 호출 (기획)
+
+| 시점 | API | 설명 |
+|------|-----|------|
+| 페이지 로드 | `useGetRoles()` | 역할 Select 옵션 조회 |
+| 페이지 로드 | `useGetRoleCategories()` | 분류 Select 옵션 조회 |
+| 페이지 로드 | `useGetRoleGroups()` | 그룹 Multi-Select 옵션 조회 |
+| 등록 실행 | `useCreateUser()` | POST /api/v1/users |
+
+## 이벤트 핸들러
+
+| 이벤트 | 동작 |
+|--------|------|
+| 목록으로 버튼 클릭 | `router.push("/users")` |
+
+## 구현 체크리스트
+
+- [x] page.tsx (현재 page.tsx 없음, users/new/page.tsx가 직접 "use client" 컴포넌트)
+- [ ] page.tsx (서버 컴포넌트, Prefetch 패턴 적용)
+- [ ] _client.tsx (클라이언트 컴포넌트, 폼 UI)
+- [ ] _prefetch.ts (역할/분류/그룹 프리페칭)
+
+## 상위 기획서
+
+- `apps/admin/src/app/(admin)/app.spec.md`
+
+## 변경 이력
+
+| 일자 | 내용 | 작성자 |
+|------|------|--------|
+| 2026-02-18 | 초기 생성 (역기획) | req-reverse-engineer |

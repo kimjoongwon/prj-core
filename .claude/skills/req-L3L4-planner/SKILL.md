@@ -6,16 +6,31 @@ allowed-tools: Read, Write, Grep, Bash
 
 # L3-L4 기능/화면 기획자 (Feature/Screen Planner)
 
-요구사항 그래프의 **L3(기능), L4(화면)** 레이어를 기획하는 전문가입니다.
+도메인의 **기능과 화면**을 정의하고 각 페이지별 `page.spec.md`를 생성하는 전문가입니다.
 
 ---
 
 ## 담당 레이어
 
-| 레벨 | 타입 | 설명 | ID 패턴 |
-|------|------|------|---------|
-| **L3** | feature | 사용자 목표를 달성하기 위한 구체적 기능 | `L3-FTR-###` |
-| **L4** | screen | 기능을 구현하는 화면 | `L4-SCR-###` |
+| 레벨 | 타입 | 설명 |
+|------|------|------|
+| **L3** | feature | 사용자 목표를 달성하기 위한 구체적 기능 |
+| **L4** | screen | 기능을 구현하는 화면 |
+
+---
+
+## 출력 파일
+
+```
+apps/[app]/app/(admin)/[도메인]/
+├── page.spec.md                    # 목록 페이지 기획서
+├── [entityId]/
+│   └── page.spec.md                # 상세 페이지 기획서
+├── new/
+│   └── page.spec.md                # 등록 페이지 기획서
+└── [entityId]/edit/
+    └── page.spec.md                # 수정 페이지 기획서
+```
 
 ---
 
@@ -23,88 +38,182 @@ allowed-tools: Read, Write, Grep, Bash
 
 | 항목 | 필수 | 설명 |
 |------|:----:|------|
-| L0-L2 기획 결과 | ✅ | 컨텍스트, Actor, Goal 정의 |
-| 라우팅 규칙 | ❌ | 프로젝트의 URL 구조 |
+| app.spec.md | ✅ | L0-L2 기획 결과 |
+| 앱명 | ✅ | 대상 앱 |
+| 도메인명 | ✅ | 기획할 도메인 |
+| 페이지 목록 | ❌ | 생성할 페이지 목록 |
 
 ---
 
 ## 프로세스
 
 ```
-1단계: 목표별 기능 도출 (L3)
+1단계: app.spec.md 읽기
    ↓
-2단계: 기능별 화면 매핑 (L4)
+2단계: 목표별 필요 화면 도출
    ↓
-3단계: 라우팅 경로 설계
+3단계: 각 화면별 page.spec.md 생성
    ↓
-4단계: 관계(edges) 연결
+4단계: 기존 파일 확인 (있으면 스킵/업데이트)
    ↓
-5단계: 화면별 기획 문서 작성 (screenDesign)
-   ↓
-→ L5-L6 기획자에게 전달
+→ req-L5L6-planner에게 전달
 ```
 
 ### 기능 분류 기준
 
-| 분류 | 설명 | 예시 |
-|------|------|------|
-| 목록 조회 | 여러 항목 조회 | 회원 목록, 예약 목록 |
-| 상세 조회 | 단일 항목 상세 | 회원 상세, 예약 상세 |
-| 생성 | 새 항목 추가 | 회원 등록, 예약 생성 |
-| 수정 | 기존 항목 변경 | 회원 수정, 예약 수정 |
-| 삭제 | 항목 제거 | 회원 삭제, 예약 취소 |
+| 분류 | 설명 | 경로 | 페이지명 |
+|------|------|------|----------|
+| 목록 조회 | 여러 항목 조회 | /[도메인]s | [도메인]List |
+| 상세 조회 | 단일 항목 상세 | /[도메인]s/[entityId] | [도메인]Detail |
+| 생성 | 새 항목 추가 | /[도메인]s/new | [도메인]Create |
+| 수정 | 기존 항목 변경 | /[도메인]s/[entityId]/edit | [도메인]Edit |
 
 ### RESTful 라우팅 규칙
 
 ```
-/[도메인]s               → 목록
-/[도메인]s/new           → 등록
-/[도메인]s/:id           → 상세
-/[도메인]s/:id/edit      → 수정
-/[도메인]s/:id/[action]  → 특수 액션
+/[도메인]s                    → 목록
+/[도메인]s/new                → 등록
+/[도메인]s/[entityId]         → 상세
+/[도메인]s/[entityId]/edit    → 수정
 ```
 
 ---
 
-## 출력
+## 페이지 타입별 기획서 내용
 
-### JSON 형식
+### 목록 페이지 (List)
 
-```json
-{
-  "level_range": "L3-L4",
-  "nodes": [
-    {
-      "id": "L3-FTR-001",
-      "level": 3,
-      "type": "feature",
-      "name": "[기능명]",
-      "description": "[기능 상세 설명]"
-    },
-    {
-      "id": "L4-SCR-001",
-      "level": 4,
-      "type": "screen",
-      "name": "[화면명]",
-      "description": "[화면 설명]",
-      "path": "/[경로]",
-      "screenDesign": {
-        "markdown": "# [화면명]\n\n## 목적\n...",
-        "figmaUrl": "",
-        "updatedAt": null
-      }
-    }
-  ],
-  "edges": [
-    { "id": "e-###", "source": "L2-GOL-###", "target": "L3-FTR-###", "type": "parent" },
-    { "id": "e-###", "source": "L3-FTR-###", "target": "L4-SCR-###", "type": "implements" }
-  ]
-}
+```markdown
+# [도메인] 목록 페이지 기획서
+
+## 사용자 시나리오
+1. 관리자가 [도메인] 메뉴 클릭
+2. [도메인] 목록 페이지 진입
+3. 검색/필터로 원하는 항목 찾기
+4. 특정 항목 클릭 → 상세 페이지 이동
+
+## 레이아웃 구성
+| 영역 | 컴포넌트 | 기획서 |
+|------|----------|--------|
+| Header | [Domain]ListHeader | `./_components/[Domain]ListHeader.spec.md` |
+| Main | [Domain]DataTable | `./_components/[Domain]DataTable.spec.md` |
+| Sidebar | SearchFilter | `./_components/SearchFilter.spec.md` |
+
+## 페이지 상태
+| 상태 | 설명 | UI |
+|------|------|-----|
+| loading | 초기 로딩 | Skeleton |
+| empty | 데이터 없음 | EmptyState |
+| error | API 실패 | ErrorAlert |
+| success | 정상 | DataGrid |
+
+## API 호출
+| 시점 | API | 캐싱 |
+|------|-----|------|
+| 진입 | GET /[api]/[domain]s | 5분 |
+| 검색 | GET /[api]/[domain]s?search= | X |
+
+## 이벤트 핸들러
+| 이벤트 | 동작 |
+|--------|------|
+| onClickCreate | /[domain]s/new 이동 |
+| onClickItem | /[domain]s/:id 이동 |
+| onDelete | 삭제 확인 모달 |
 ```
 
-### 출력 파일: 02-structure.md
+### 상세 페이지 (Detail)
 
-이 에이전트는 기획서 폴더에 `02-structure.md` 파일을 생성합니다.
+```markdown
+# [도메인] 상세 페이지 기획서
+
+## 사용자 시나리오
+1. 목록에서 항목 클릭
+2. 상세 페이지 진입
+3. 상세 정보 확인
+4. 수정/삭제 액션 수행
+
+## 레이아웃 구성
+| 영역 | 컴포넌트 | 기획서 |
+|------|----------|--------|
+| Header | DetailHeader | `./_components/DetailHeader.spec.md` |
+| Main | [Domain]InfoCard | `./_components/[Domain]InfoCard.spec.md` |
+| Tabs | [Domain]Tabs | `./_components/[Domain]Tabs.spec.md` |
+
+## API 호출
+| 시점 | API | 캐싱 |
+|------|-----|------|
+| 진입 | GET /[api]/[domain]s/:id | 1분 |
+| 삭제 | DELETE /[api]/[domain]s/:id | - |
+
+## 이벤트 핸들러
+| 이벤트 | 동작 |
+|--------|------|
+| onClickEdit | /[domain]s/:id/edit 이동 |
+| onClickDelete | 삭제 확인 모달 |
+| onClickBack | /[domain]s 이동 |
+```
+
+### 등록/수정 페이지 (Create/Edit)
+
+```markdown
+# [도메인] 등록 페이지 기획서
+
+## 사용자 시나리오
+1. 목록에서 등록 버튼 클릭
+2. 등록 폼 진입
+3. 필드 입력
+4. 저장 버튼 클릭 → 목록으로 이동
+
+## 레이아웃 구성
+| 영역 | 컴포넌트 | 기획서 |
+|------|----------|--------|
+| Header | FormHeader | `./_components/FormHeader.spec.md` |
+| Main | [Domain]Form | `./_components/[Domain]Form.spec.md` |
+| Footer | FormActions | `./_components/FormActions.spec.md` |
+
+## 폼 필드
+| 필드 | 타입 | 필수 | 유효성 |
+|------|------|------|--------|
+| name | text | O | 최대 50자 |
+| email | email | O | 이메일 형식 |
+| role | select | O | - |
+
+## API 호출
+| 시점 | API | 성공 시 동작 |
+|------|-----|-------------|
+| 저장 | POST /[api]/[domain]s | 목록 이동 |
+| 수정 | PUT /[api]/[domain]s/:id | 상세 이동 |
+
+## 이벤트 핸들러
+| 이벤트 | 동작 |
+|--------|------|
+| onSubmit | API 호출 |
+| onCancel | 이전 페이지 이동 |
+```
+
+---
+
+## 기존 파일 확인 로직
+
+```bash
+# 각 페이지별 .spec.md 존재 확인
+pages=(
+  "page.spec.md"                  # 목록
+  "[entityId]/page.spec.md"      # 상세
+  "new/page.spec.md"             # 등록
+  "[entityId]/edit/page.spec.md" # 수정
+)
+
+for page in "${pages[@]}"; do
+  path="apps/[app]/app/(admin)/[도메인]/$page"
+  if [ -f "$path" ]; then
+    # 존재하면 개선 필요한지 판단
+    # 필요시 업데이트 + 변경 이력 추가
+  else
+    # 없으면 새로 생성
+  fi
+done
+```
 
 ---
 
@@ -118,18 +227,7 @@ allowed-tools: Read, Write, Grep, Bash
 ### L4 체크리스트
 - [ ] 모든 Feature에 구현 화면이 연결되었는가?
 - [ ] 라우팅 경로(path)가 RESTful 규칙을 따르는가?
-- [ ] 모든 screen 노드에 `screenDesign` 필드가 포함되었는가?
-
----
-
-## 기능/화면 매핑 테이블
-
-| Goal | Feature | Screen | Path | 설명 |
-|------|---------|--------|------|------|
-| 회원 조회 | 회원 목록 조회 | 회원 목록 화면 | /users | 목록 테이블 |
-| 회원 조회 | 회원 상세 조회 | 회원 상세 화면 | /users/:id | 상세 정보 |
-| 회원 관리 | 회원 등록 | 회원 등록 화면 | /users/new | 등록 폼 |
-| 회원 관리 | 회원 수정 | 회원 수정 화면 | /users/:id/edit | 수정 폼 |
+- [ ] 각 페이지에 page.spec.md가 생성되었는가?
 
 ---
 
@@ -138,10 +236,15 @@ allowed-tools: Read, Write, Grep, Bash
 ```
 /req-L3L4-planner
 
-L0-L2 기획 결과:
-- L2-GOL-001: 회원 조회
-- L2-GOL-002: 회원 관리
-- L2-GOL-003: 예약 관리
+앱명: admin
+도메인: Member
+app.spec.md 위치: apps/admin/app/(admin)/app.spec.md
+
+필요한 페이지:
+- 목록 (/users)
+- 상세 (/users/[userId])
+- 등록 (/users/new)
+- 수정 (/users/[userId]/edit)
 ```
 
 ---

@@ -6,74 +6,48 @@ tools: Read, Write, Grep, Bash
 
 # L9-L10 로직/테스트 기획자 (Logic/Test Planner)
 
-요구사항 그래프의 **L9(비즈니스 로직), L10(테스트)** 레이어를 기획하는 전문가입니다.
+**L9(비즈니스 로직), L10(테스트)** 레이어를 기획하는 전문가입니다.
 
 ---
 
 ## 1. 담당 레이어
 
-| 레벨 | 타입 | 서브레벨 | 설명 | ID 패턴 |
-|------|------|----------|------|---------|
-| **L9** | logic | L9.1 | 유효성 검사 | `L9-LOG-###` |
-| **L9** | logic | L9.2 | 권한 검사 | `L9-LOG-###` |
-| **L9** | logic | L9.3 | 계산/변환 | `L9-LOG-###` |
-| **L9** | logic | L9.4 | 엣지케이스 | `L9-LOG-###` |
-| **L10** | test | L10.1 | Happy Path | `L10-TST-###` |
-| **L10** | test | L10.2 | Error Path | `L10-TST-###` |
-| **L10** | test | L10.3 | Edge Case | `L10-TST-###` |
+| 레벨 | 타입 | 서브레벨 | 설명 |
+|------|------|----------|------|
+| **L9** | logic | L9.1 | 유효성 검사 |
+| **L9** | logic | L9.2 | 권한 검사 |
+| **L9** | logic | L9.3 | 계산/변환 |
+| **L9** | logic | L9.4 | 엣지케이스 |
+| **L10** | test | L10.1 | Happy Path |
+| **L10** | test | L10.2 | Error Path |
+| **L10** | test | L10.3 | Edge Case |
 
 ---
 
 ## 2. 입력/출력
 
-### 입력
+### 입력 (Sidecar Spec 파일)
 
-| 항목 | 필수 | 설명 |
+| 항목 | 필수 | 경로 |
 |------|:----:|------|
-| L7-L8 기획 결과 | ✅ | 엔티티와 컴포넌트 정의 |
-| L5-L6 기획 결과 | ✅ | API와 인터랙션 정의 |
-| 비즈니스 규칙 | ❌ | 도메인 특화 규칙 |
+| Service 기획서 | ✅ | `apps/server/src/[module]/[domain].service.spec.md` |
+| Controller 기획서 | ✅ | `apps/server/src/[module]/controllers/[domain].controller.spec.md` |
+| 페이지 기획서 | ✅ | `apps/[app]/app/(admin)/[domain]/page.spec.md` |
+| Repository 기획서 | ❌ | `apps/server/src/[module]/repositories/[domain].repository.spec.md` |
+| Store 기획서 | ❌ | `packages/fe-store/src/stores/[domain]Store.spec.md` |
 
-### 출력
+### 출력 (Sidecar Spec)
 
-```json
-{
-  "level_range": "L9-L10",
-  "nodes": [
-    {
-      "id": "L9-LOG-001",
-      "level": 9,
-      "subLevel": "1",
-      "type": "logic",
-      "name": "이메일 유효성 검사",
-      "description": "이메일 형식 및 중복 여부 검사"
-    },
-    {
-      "id": "L10-TST-001",
-      "level": 10,
-      "subLevel": "1",
-      "type": "test",
-      "name": "회원 목록 조회 성공",
-      "description": "정상적으로 회원 목록이 조회되는지 테스트"
-    }
-  ],
-  "edges": [
-    {
-      "id": "e-070",
-      "source": "L9-LOG-001",
-      "target": "L7-FLD-002",
-      "type": "validates",
-      "label": "검증"
-    },
-    {
-      "id": "e-071",
-      "source": "L10-TST-001",
-      "target": "L3-FTR-001",
-      "type": "tests",
-      "label": "테스트"
-    }
-  ]
-}
+```
+apps/server/src/[module]/
+├── [domain].service.spec.md              # 비즈니스 규칙 섹션 추가 (L9)
+├── repositories/
+│   └── [domain].repository.spec.md       # Repository 규칙 섹션 추가 (L9)
+
+packages/fe-store/src/stores/
+└── [domain]Store.spec.md                 # Store 로직 규칙 섹션 추가 (L9)
+
+# L10 테스트 케이스는 기존 각 .spec.md에 "테스트 케이스" 섹션 추가
 ```
 
 ---
@@ -91,7 +65,7 @@ tools: Read, Write, Grep, Bash
    ↓
 5단계: 테스트 케이스 작성 (L10)
    ↓
-6단계: 관계(edges) 연결
+6단계: 기획서에 비즈니스 규칙/테스트 섹션 추가
    ↓
 → 기획 완료
 ```
@@ -108,21 +82,12 @@ tools: Read, Write, Grep, Bash
 | 유일성 | 중복 불가 | 이메일 unique |
 | 참조 무결성 | FK 존재 확인 | userId 존재 |
 
-**유효성 검사 노드:**
-```json
-{
-  "id": "L9-LOG-001",
-  "level": 9,
-  "subLevel": "1",
-  "type": "logic",
-  "name": "이메일 유효성 검사",
-  "description": "이메일 형식 및 중복 여부 검사",
-  "metadata": {
-    "validationType": "field",
-    "rules": ["email_format", "unique"]
-  }
-}
-```
+**유효성 검사 규칙 표 (마크다운):**
+
+| ID | 필드 | 규칙 | 에러 메시지 |
+|----|------|------|------------|
+| V001 | email | RFC 5322 형식 | "유효한 이메일 주소를 입력해주세요" |
+| V002 | email | 시스템 내 중복 불가 | "이미 등록된 이메일입니다" |
 
 ### 2단계: 권한 검사 규칙 (L9.2)
 
@@ -135,21 +100,13 @@ tools: Read, Write, Grep, Bash
 | Owner | 본인 데이터만 | 내 예약 수정 |
 | Admin | 관리자 권한 | 회원 삭제 |
 
-**권한 검사 노드:**
-```json
-{
-  "id": "L9-LOG-002",
-  "level": 9,
-  "subLevel": "2",
-  "type": "logic",
-  "name": "관리자 권한 확인",
-  "description": "회원 관리 작업 시 관리자 권한 검증",
-  "metadata": {
-    "permissionLevel": "admin",
-    "actions": ["create", "update", "delete"]
-  }
-}
-```
+**권한 규칙 표 (마크다운):**
+
+| ID | 기능 | 필요 권한 | 조건 |
+|----|------|----------|------|
+| P001 | 회원 목록 조회 | MANAGE | - |
+| P002 | 본인 정보 조회 | VIEW | user.id === target.id |
+| P003 | 회원 삭제 | FULL_ACCESS | 본인 계정 삭제 불가 |
 
 ### 3단계: 비즈니스 계산 로직 (L9.3)
 
@@ -173,22 +130,6 @@ tools: Read, Write, Grep, Bash
 | 타이밍 | 시간 기반 조건 | 예약 취소 마감 |
 | 상태 전이 | 유효하지 않은 전이 | 취소된 예약 확정 불가 |
 
-**엣지케이스 노드:**
-```json
-{
-  "id": "L9-LOG-004",
-  "level": 9,
-  "subLevel": "4",
-  "type": "logic",
-  "name": "중복 예약 방지",
-  "description": "동일 시간대 중복 예약 차단",
-  "metadata": {
-    "edgeCaseType": "concurrency",
-    "handling": "reject_duplicate"
-  }
-}
-```
-
 ### 5단계: 테스트 케이스 작성 (L10)
 
 **테스트 분류:**
@@ -199,32 +140,14 @@ tools: Read, Write, Grep, Bash
 | L10.2 | Error Path | 에러 시나리오 |
 | L10.3 | Edge Case | 경계 조건 |
 
-**테스트 노드:**
-```json
-{
-  "id": "L10-TST-001",
-  "level": 10,
-  "subLevel": "1",
-  "type": "test",
-  "name": "회원 목록 조회 성공",
-  "description": "정상적으로 회원 목록이 조회되는지 테스트",
-  "metadata": {
-    "testType": "happy_path",
-    "given": "로그인된 관리자",
-    "when": "회원 목록 API 호출",
-    "then": "회원 목록 반환"
-  }
-}
-```
+### 6단계: 기획서에 비즈니스 규칙/테스트 섹션 추가
 
-### 6단계: 관계 연결
+각 Sidecar Spec 파일을 읽은 후, 아래 섹션을 추가하거나 업데이트합니다:
 
-**관계 규칙:**
-| 관계 | 소스 | 타겟 | 타입 |
-|------|------|------|------|
-| 로직 → 필드 | L9 Logic | L7 Field | `validates` |
-| 로직 → API | L9 Logic | L6 API | `validates` |
-| 테스트 → 기능 | L10 Test | L3 Feature | `tests` |
+- `[domain].service.spec.md` → `## 비즈니스 규칙` 섹션 추가
+- `[domain].repository.spec.md` → `## 쿼리 규칙` 섹션 추가
+- `[domain]Store.spec.md` → `## Store 로직 규칙` 섹션 추가
+- 각 `.spec.md` → `## 테스트 케이스` 섹션 추가
 
 ---
 
@@ -303,9 +226,9 @@ tools: Read, Write, Grep, Bash
 
 | ID | 기능 | 필요 권한 | 조건 |
 |----|------|----------|------|
-| P001 | 회원 목록 조회 | ADMIN | - |
-| P002 | 본인 정보 조회 | USER | user.id === target.id |
-| P003 | 회원 삭제 | SUPER_ADMIN | 본인 계정 삭제 불가 |
+| P001 | 회원 목록 조회 | MANAGE | - |
+| P002 | 본인 정보 조회 | VIEW | user.id === target.id |
+| P003 | 회원 삭제 | FULL_ACCESS | 본인 계정 삭제 불가 |
 
 ### 상태 전이 규칙
 
@@ -342,7 +265,7 @@ tools: Read, Write, Grep, Bash
 
 | 구분 | 설명 |
 |------|------|
-| **Given** | 관리자(ADMIN) 권한으로 로그인되어 있다 |
+| **Given** | 관리자(MANAGE) 권한으로 로그인되어 있다 |
 |           | 회원이 10명 등록되어 있다 |
 | **When** | GET /api/users?skip=0&take=10 호출 |
 | **Then** | 200 OK 응답 |
@@ -391,58 +314,127 @@ tools: Read, Write, Grep, Bash
 
 ## 9. 예시
 
-### 입력 (L7-L8 + L5-L6 결과)
-```json
-{
-  "entities": [
-    { "id": "L7-ENT-001", "name": "User" },
-    { "id": "L7-ENT-002", "name": "Reservation" }
-  ],
-  "fields": [
-    { "id": "L7-FLD-002", "name": "User.email" },
-    { "id": "L7-FLD-010", "name": "Reservation.status" }
-  ],
-  "apis": [
-    { "id": "L6-API-003", "name": "POST /api/users" },
-    { "id": "L6-API-007", "name": "POST /api/reservations" },
-    { "id": "L6-API-009", "name": "PATCH /api/reservations/:id/status" }
-  ],
-  "features": [
-    { "id": "L3-FTR-001", "name": "회원 목록 조회" },
-    { "id": "L3-FTR-003", "name": "회원 등록" },
-    { "id": "L3-FTR-007", "name": "예약 생성" },
-    { "id": "L3-FTR-008", "name": "예약 수정/취소" }
-  ]
-}
+### 입력 (Sidecar Spec 파일 읽기)
+
+```
+읽기 대상 파일:
+- apps/server/src/user/user.service.spec.md
+- apps/server/src/user/controllers/user.controller.spec.md
+- apps/admin/app/(admin)/users/page.spec.md
+- apps/server/src/reservation/reservation.service.spec.md
+- apps/server/src/reservation/controllers/reservation.controller.spec.md
 ```
 
-### JSON 출력
-```json
-{
-  "level_range": "L9-L10",
-  "nodes": [
-    { "id": "L9-LOG-001", "level": 9, "subLevel": "1", "type": "logic", "name": "이메일 유효성 검사", "description": "이메일 형식 및 중복 여부 검사" },
-    { "id": "L9-LOG-002", "level": 9, "subLevel": "2", "type": "logic", "name": "관리자 권한 확인", "description": "회원 관리 작업 시 관리자 권한 검증" },
-    { "id": "L9-LOG-003", "level": 9, "subLevel": "1", "type": "logic", "name": "예약 가능 시간 검증", "description": "예약 시간이 운영 시간 내인지 확인" },
-    { "id": "L9-LOG-004", "level": 9, "subLevel": "4", "type": "logic", "name": "중복 예약 방지", "description": "동일 시간대 중복 예약 차단" },
-    { "id": "L9-LOG-005", "level": 9, "subLevel": "4", "type": "logic", "name": "예약 취소 가능 여부", "description": "예약 시작 24시간 전까지만 취소 가능" },
-    { "id": "L10-TST-001", "level": 10, "subLevel": "1", "type": "test", "name": "회원 목록 조회 성공", "description": "정상적으로 회원 목록이 조회되는지 테스트", "metadata": { "given": "관리자 로그인", "when": "회원 목록 API 호출", "then": "회원 목록 반환" } },
-    { "id": "L10-TST-002", "level": 10, "subLevel": "2", "type": "test", "name": "이메일 중복 등록 실패", "description": "중복 이메일로 등록 시 에러 발생 테스트", "metadata": { "given": "기존 이메일 존재", "when": "동일 이메일로 등록 요청", "then": "409 에러" } },
-    { "id": "L10-TST-003", "level": 10, "subLevel": "1", "type": "test", "name": "예약 생성 성공", "description": "정상적으로 예약이 생성되는지 테스트", "metadata": { "given": "로그인 상태, 빈 시간대", "when": "예약 생성 요청", "then": "예약 생성됨" } },
-    { "id": "L10-TST-004", "level": 10, "subLevel": "2", "type": "test", "name": "중복 예약 생성 실패", "description": "동일 시간대 중복 예약 시 에러 발생 테스트", "metadata": { "given": "동일 시간 예약 존재", "when": "예약 생성 요청", "then": "409 에러" } },
-    { "id": "L10-TST-005", "level": 10, "subLevel": "3", "type": "test", "name": "예약 취소 기한 초과 실패", "description": "24시간 이내 예약 취소 시 에러 발생 테스트", "metadata": { "given": "예약 시작 12시간 전", "when": "취소 요청", "then": "400 에러" } }
-  ],
-  "edges": [
-    { "id": "e-070", "source": "L9-LOG-001", "target": "L7-FLD-002", "type": "validates", "label": "검증" },
-    { "id": "e-071", "source": "L9-LOG-002", "target": "L6-API-003", "type": "validates", "label": "권한 체크" },
-    { "id": "e-072", "source": "L9-LOG-003", "target": "L6-API-007", "type": "validates", "label": "시간 검증" },
-    { "id": "e-073", "source": "L9-LOG-004", "target": "L6-API-007", "type": "validates", "label": "중복 체크" },
-    { "id": "e-074", "source": "L9-LOG-005", "target": "L6-API-009", "type": "validates", "label": "취소 가능 체크" },
-    { "id": "e-080", "source": "L10-TST-001", "target": "L3-FTR-001", "type": "tests", "label": "테스트" },
-    { "id": "e-081", "source": "L10-TST-002", "target": "L3-FTR-003", "type": "tests", "label": "테스트" },
-    { "id": "e-082", "source": "L10-TST-003", "target": "L3-FTR-007", "type": "tests", "label": "테스트" },
-    { "id": "e-083", "source": "L10-TST-004", "target": "L3-FTR-007", "type": "tests", "label": "테스트" },
-    { "id": "e-084", "source": "L10-TST-005", "target": "L3-FTR-008", "type": "tests", "label": "테스트" }
-  ]
-}
+파일 읽기 후, 각 기획서에서 다음을 추출합니다:
+- Entity 필드 목록 (Service/Repository spec에서)
+- API 엔드포인트 목록 (Controller spec에서)
+- 페이지 이벤트/인터랙션 (page.spec.md에서)
+
+### 출력 (기존 .spec.md에 섹션 추가)
+
+**`apps/server/src/user/user.service.spec.md` 에 추가:**
+
+```markdown
+## 비즈니스 규칙
+
+### 유효성 검사 규칙
+
+| ID | 필드/기능 | 규칙 | 에러 메시지 |
+|----|----------|------|------------|
+| V001 | 이메일 | RFC 5322 형식 | "유효한 이메일 주소를 입력해주세요" |
+| V002 | 이메일 | 시스템 내 중복 불가 | "이미 등록된 이메일입니다" |
+
+### 권한 규칙
+
+| ID | 기능 | 필요 권한 | 조건 |
+|----|------|----------|------|
+| P001 | 회원 목록 조회 | MANAGE | - |
+| P002 | 회원 삭제 | FULL_ACCESS | 본인 계정 삭제 불가 |
+
+## 테스트 케이스
+
+### [TC-001] 회원 목록 조회 성공
+
+**분류:** Happy Path
+
+| 구분 | 설명 |
+|------|------|
+| **Given** | 관리자(MANAGE) 권한으로 로그인되어 있다 |
+|           | 회원이 10명 등록되어 있다 |
+| **When** | getUsers({ skip: 0, take: 10 }) 호출 |
+| **Then** | 회원 목록 10명 반환 |
+|          | meta.total === 10 |
+
+### [TC-002] 이메일 중복 등록 실패
+
+**분류:** Error Path
+
+| 구분 | 설명 |
+|------|------|
+| **Given** | "test@example.com" 이메일로 등록된 회원이 있다 |
+| **When** | createUser({ email: "test@example.com", ... }) 호출 |
+| **Then** | ConflictException 발생 |
+|          | message: "이미 등록된 이메일입니다" |
+```
+
+**`apps/server/src/reservation/reservation.service.spec.md` 에 추가:**
+
+```markdown
+## 비즈니스 규칙
+
+### 유효성 검사 규칙
+
+| ID | 필드/기능 | 규칙 | 에러 메시지 |
+|----|----------|------|------------|
+| V001 | startAt | 현재 시간 이후여야 함 | "예약 시작 시간은 현재 이후여야 합니다" |
+| V002 | 예약 시간 | 운영 시간 내(09:00-22:00) | "운영 시간 내에서만 예약 가능합니다" |
+
+### 엣지케이스 규칙
+
+| ID | 규칙 | 처리 방식 |
+|----|------|----------|
+| E001 | 동일 시간대 중복 예약 | 409 Conflict 반환 |
+| E002 | 예약 취소 기한 초과 | 400 Bad Request 반환 |
+
+### 시간 기반 규칙
+
+| ID | 규칙 | 조건 |
+|----|------|------|
+| T001 | 예약 취소 가능 | 예약 시작 24시간 전까지 |
+| T002 | 예약 수정 가능 | 예약 시작 1시간 전까지 |
+
+## 테스트 케이스
+
+### [TC-001] 예약 생성 성공
+
+**분류:** Happy Path
+
+| 구분 | 설명 |
+|------|------|
+| **Given** | 로그인 상태이고 해당 시간대에 예약이 없다 |
+| **When** | createReservation({ startAt: 미래시간, ... }) 호출 |
+| **Then** | 예약이 PENDING 상태로 생성됨 |
+
+### [TC-002] 중복 예약 생성 실패
+
+**분류:** Edge Case
+
+| 구분 | 설명 |
+|------|------|
+| **Given** | 동일 시간대에 이미 예약이 존재한다 |
+| **When** | createReservation({ startAt: 동일시간, ... }) 호출 |
+| **Then** | ConflictException 발생 |
+|          | message: "해당 시간대에 이미 예약이 존재합니다" |
+
+### [TC-003] 예약 취소 기한 초과 실패
+
+**분류:** Edge Case
+
+| 구분 | 설명 |
+|------|------|
+| **Given** | 예약 시작까지 12시간 남은 예약이 있다 |
+|           | 예약자 본인으로 로그인되어 있다 |
+| **When** | cancelReservation(reservationId) 호출 |
+| **Then** | BadRequestException 발생 |
+|          | message: "예약 시작 24시간 전까지만 취소 가능합니다" |
 ```

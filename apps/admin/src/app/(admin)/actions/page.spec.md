@@ -1,0 +1,84 @@
+# Action 목록 페이지 기획서
+
+> 생성일: 2026-02-18
+> 타입: page
+> 경로: `/actions`
+
+## 사용자 시나리오
+
+1. 관리자가 시스템에 등록된 Action 목록을 조회한다.
+2. 검색창에 이름을 입력하여 Action을 검색한다.
+3. group 쿼리 파라미터로 그룹별 필터링된 목록을 조회한다.
+4. "등록" 버튼을 클릭하여 새 Action 등록 페이지로 이동한다.
+5. MetaDataGrid에서 Action 행을 클릭하여 상세 페이지로 이동한다.
+
+## 레이아웃 구성
+
+| 영역 | 컴포넌트 | 설명 |
+|------|----------|------|
+| 페이지 래퍼 | `PageSurface` | title="Action 목록", description="시스템에 등록된 Action을 조회합니다." |
+| 데이터 그리드 | `SectionSurface` > `MetaDataGrid` | nuqs 기반 URL 상태 관리, 검색 + 등록 버튼 |
+
+## 컬럼 정의
+
+| 필드 | 라벨 | 크기 | 정렬 | 셀 렌더링 |
+|------|------|------|------|----------|
+| name | 행위 식별자 | 200px | 좌측 | font-mono 텍스트 |
+| displayName | 표시명 | 150px | 좌측 | 기본 텍스트 |
+| group | 분류 | 120px | 중앙 | Chip (crud=primary, visibility=secondary, workflow=success, bulk=warning) |
+| order | 순서 | 80px | 중앙 | 기본 숫자 |
+| isSystem | 시스템 | 100px | 중앙 | Chip (시스템=warning, 사용자=default) |
+| createdAt | 생성일 | 150px | 좌측 | DateTimeCell |
+| removedAt | 상태 | 100px | 중앙 | StatusChipCell |
+
+## 입력 구성 (MetaDataGrid)
+
+**좌측 입력:**
+
+| ID | 타입 | 설명 |
+|----|------|------|
+| search | search | 이름으로 검색 (debounce 300ms) |
+
+**우측 입력:**
+
+| ID | 타입 | 설명 |
+|----|------|------|
+| create | button | "등록" 버튼 (primary, Plus 아이콘) |
+
+## 페이지 상태
+
+| 상태 | 설명 | UI |
+|------|------|-----|
+| 로딩 중 | API 응답 대기 | MetaDataGrid 로딩 상태 |
+| 빈 목록 | 조회된 Action 없음 | "조회된 Action이 없습니다." 메시지 |
+| 데이터 있음 | 정상 표시 | MetaDataGrid 테이블 |
+
+## API 호출
+
+| 시점 | API | 설명 |
+|------|-----|------|
+| SSR Prefetch | `GET /api/v1/actions` (prefetchActionsData) | group 파라미터 포함 프리페치 |
+| 클라이언트 | `GET /api/v1/actions` (useGetActions) | group 쿼리 파라미터로 필터링 |
+
+## 이벤트 핸들러
+
+| 이벤트 | 동작 |
+|--------|------|
+| onClickCreateButton | `/actions/new` 등록 페이지로 router.push |
+
+## URL 상태 (nuqs)
+
+- `useMetaDataGridQueryStates`로 URL 쿼리 파라미터와 동기화
+- `group` 파라미터를 API 호출에 전달
+
+## 구현 체크리스트
+
+- [x] page.tsx (서버 컴포넌트)
+- [x] _client.tsx (클라이언트 컴포넌트)
+- [x] _prefetch.ts (데이터 프리페치)
+
+## 변경 이력
+
+| 일자 | 내용 | 작성자 |
+|------|------|--------|
+| 2026-02-18 | 초기 생성 (역기획) | req-reverse-engineer |

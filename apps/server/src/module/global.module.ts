@@ -32,23 +32,19 @@ export const globalModules: (DynamicModule | Promise<DynamicModule>)[] = [
 			redisConfig,
 		],
 	}),
-	ThrottlerModule.forRoot([
-		{
-			name: "short",
-			ttl: 1000, // 1초
-			limit: 10, // 1초당 10개 요청
-		},
-		{
-			name: "medium",
-			ttl: 60000, // 1분
-			limit: 100, // 1분당 100개 요청
-		},
-		{
-			name: "long",
-			ttl: 900000, // 15분
-			limit: 1000, // 15분당 1000개 요청
-		},
-	]),
+	ThrottlerModule.forRoot(
+		process.env.NODE_ENV === "production"
+			? [
+					{ name: "short", ttl: 1000, limit: 10 },
+					{ name: "medium", ttl: 60000, limit: 100 },
+					{ name: "long", ttl: 900000, limit: 1000 },
+				]
+			: [
+					{ name: "short", ttl: 1000, limit: 1000 },
+					{ name: "medium", ttl: 60000, limit: 10000 },
+					{ name: "long", ttl: 900000, limit: 100000 },
+				],
+	),
 	MailerModule.forRootAsync({
 		useFactory: async (config: ConfigService) => {
 			const smtpConfig = await config.get("smtp");

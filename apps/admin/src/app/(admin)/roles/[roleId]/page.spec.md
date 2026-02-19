@@ -1,0 +1,105 @@
+# 역할 상세 페이지 기획서
+
+> 생성일: 2026-02-18
+> 타입: page
+> 경로: `/roles/[roleId]`
+
+## 사용자 시나리오
+
+1. 관리자가 특정 역할의 상세 정보를 조회한다.
+2. 기본 정보(식별자, 표시명, 설명)와 추가 정보(상태, 생성일, 수정일)를 확인한다.
+3. 시스템 역할인 경우 경고 안내가 표시되고, 수정/삭제 버튼이 숨겨진다.
+4. 권한 목록 섹션에서 역할에 할당된 Ability(권한)를 확인한다.
+5. "권한 편집" 버튼으로 Grant 배치 편집 모드에 진입하여 Ability를 선택/해제할 수 있다.
+6. 편집 모드에서 각 Ability에 대해 활성(isActive) 토글과 우선순위(priority) 값을 설정한다.
+7. "저장" 버튼 클릭 시 변경사항 요약(추가/제거/유지)이 표시되는 확인 모달이 나타난다.
+8. 삭제 버튼 클릭 시 삭제 확인 모달이 나타나고, 확인 시 역할이 삭제된다.
+
+## 레이아웃 구성
+
+| 영역 | 컴포넌트 | 설명 |
+|------|----------|------|
+| 페이지 헤더 | PageSurface | title="역할 상세", description 동적 |
+| 헤더 액션 | Button (목록, 수정, 삭제) | 시스템 역할이 아닌 경우에만 수정/삭제 표시 |
+| 시스템 안내 | div (warning) | isSystem일 때만 표시 |
+| 기본 정보 | SectionSurface > dl | 식별자, 표시명, 설명 |
+| 권한 목록 | SectionSurface > Table | 조회/편집 2가지 모드 |
+| 추가 정보 | SectionSurface > dl | 상태, 생성일, 수정일 |
+| 삭제 모달 | Modal | 삭제 확인 |
+| 저장 모달 | Modal | Grant 배치 저장 확인 (변경사항 요약) |
+
+## 권한 목록 - 조회 모드
+
+| 컬럼 | 설명 |
+|------|------|
+| 대상 (Subject) | subject.displayName 또는 subject.name |
+| 액션 (Action) | action.displayName 또는 action.name |
+| 필드 | fields 배열 (최대 3개 Chip + 나머지 +N개) |
+| 유형 | inverted: true이면 "거부"(danger), false이면 "허용"(success) |
+
+## 권한 목록 - 편집 모드
+
+| 컬럼 | 설명 |
+|------|------|
+| 선택 | Checkbox (Ability 선택/해제) |
+| 대상 (Subject) | subject.displayName 또는 subject.name |
+| 액션 (Action) | action.displayName 또는 action.name |
+| 유형 | inverted 여부 (허용/거부 Chip) |
+| 활성 | Switch (isActive, 선택된 항목만 표시) |
+| 우선순위 | Input type=number (priority, 0~100, 선택된 항목만 표시) |
+
+## 페이지 상태
+
+| 상태 | 설명 | UI |
+|------|------|-----|
+| 로딩 | API 호출 중 | "로딩 중..." 텍스트 |
+| 데이터 없음 | role이 null | "역할을 찾을 수 없습니다." + 목록으로 버튼 |
+| 데이터 표시 | 정상 조회 | 기본 정보 + 권한 목록 + 추가 정보 |
+| 편집 모드 | isEditingGrants = true | 전체 Ability 목록 + 체크박스 테이블 |
+| 삭제 중 | DELETE 호출 중 | 삭제 버튼 isLoading |
+| 저장 중 | PUT 호출 중 | 저장 버튼 isLoading |
+
+## API 호출
+
+| 시점 | API | 설명 |
+|------|-----|------|
+| SSR Prefetch | `prefetchGetRoleByIdQuery` | 역할 상세 프리페치 |
+| 클라이언트 | `useGetRoleById(roleId)` | 역할 상세 조회 (GET /api/v1/roles/:id) |
+| 클라이언트 | `useGetAbilitiesByRoleId(roleId)` | 역할별 Ability 목록 조회 |
+| 편집 모드 진입 시 | `useQuery (getAllAbilities)` | 전체 Ability 목록 조회 (GET /api/v1/abilities), 임시 customInstance 사용 |
+| 삭제 | `useDeleteRole` | 역할 삭제 (DELETE /api/v1/roles/:id) |
+| Grant 저장 | `useMutation (batchAssignGrantsToRole)` | Grant 배치 할당 (PUT /api/v1/grants/roles/:roleId), 임시 customInstance 사용 |
+
+## 이벤트 핸들러
+
+| 이벤트 | 동작 |
+|--------|------|
+| onClickBackButton | `/roles`로 이동 |
+| onClickEditButton | `/roles/${roleId}/edit`로 이동 |
+| deleteModal.onOpen | 삭제 확인 모달 열기 |
+| onClickDeleteConfirm | deleteRole 호출, 성공 시 `/roles`로 이동 |
+| onClickEditGrants | 편집 모드 진입, 현재 Grant를 초기 선택 상태로 설정 |
+| onClickCancelEditGrants | 편집 모드 취소 |
+| handleToggleAbility | Ability 선택/해제 토글 |
+| handleToggleIsActive | Grant isActive 토글 |
+| handleChangePriority | Grant priority 변경 |
+| onClickSaveGrants | 저장 확인 모달 열기 |
+| onClickConfirmSaveGrants | batchAssignGrantsToRole 호출, 성공 시 편집 모드 해제 + 권한 목록 재조회 |
+
+## 구현 체크리스트
+
+- [x] page.tsx (서버 컴포넌트, SSR Prefetch + HydrationBoundary)
+- [x] _client.tsx (클라이언트 컴포넌트, observer)
+- [x] _prefetch.ts (prefetchGetRoleByIdQuery)
+
+## 비고
+
+- 전체 Ability 조회 및 Grant 배치 할당은 Orval 재생성 전 임시 customInstance를 사용 중
+- Grant 편집 모드에서 변경 감지는 `hasChanges` 상태로 관리
+- 변경사항 요약(added, removed, kept)은 `getChangeSummary()` 함수로 계산
+
+## 변경 이력
+
+| 일자 | 내용 | 작성자 |
+|------|------|--------|
+| 2026-02-18 | 초기 생성 (역기획) | req-reverse-engineer |

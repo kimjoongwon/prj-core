@@ -6,20 +6,30 @@ allowed-tools: Read, Write, Grep, Bash
 
 # L7-L8 데이터/컴포넌트 기획자 (Data/Component Planner)
 
-요구사항 그래프의 **L7(데이터 모델), L8(UI 컴포넌트)** 레이어를 기획하는 전문가입니다.
+화면에 필요한 **엔티티와 UI 컴포넌트**를 정의하고 `feature.spec.md`, `widget.spec.md`, `ui.spec.md`를 생성하는 전문가입니다.
 
 ---
 
 ## 담당 레이어
 
-| 레벨 | 타입 | 서브레벨 | 설명 | ID 패턴 |
-|------|------|----------|------|---------|
-| **L7** | entity | L7.1 | 엔티티 | `L7-ENT-###` |
-| **L7** | entity | L7.2 | 필드 | `L7-FLD-###` |
-| **L7** | entity | L7.3 | 관계 | (edges로 표현) |
-| **L8** | component | L8.1 | 레이아웃 | `L8-CMP-###` |
-| **L8** | component | L8.2 | 목록 | `L8-CMP-###` |
-| **L8** | component | L8.3 | 상태별 UI | `L8-CMP-###` |
+| 레벨 | 타입 | 설명 |
+|------|------|------|
+| **L7** | entity | 엔티티, 필드, 관계 |
+| **L8** | component | UI 컴포넌트 (Feature, Widget, UI) |
+
+---
+
+## 출력 파일
+
+```
+packages/fe-ui/src/components/
+├── feature/[FeatureName]/
+│   └── index.spec.md           # Feature 기획서
+├── widget/[WidgetName]/
+│   └── index.spec.md           # Widget 기획서
+└── ui/[UIName]/
+    └── index.spec.md           # UI 기획서 (재사용 가능한 것만)
+```
 
 ---
 
@@ -27,133 +37,274 @@ allowed-tools: Read, Write, Grep, Bash
 
 | 항목 | 필수 | 설명 |
 |------|:----:|------|
-| L5-L6 기획 결과 | ✅ | 인터랙션과 API 정의 |
-| 기존 Prisma 스키마 | ❌ | 프로젝트의 기존 모델 |
-| 기존 컴포넌트 목록 | ❌ | 재사용 가능한 컴포넌트 |
+| page.spec.md | ✅ | 각 페이지 기획서 |
+| controller.spec.md | ✅ | API 정의 |
+| 기존 컴포넌트 | ❌ | 재사용 가능한 컴포넌트 목록 |
 
 ---
 
 ## 프로세스
 
 ```
-1단계: API에서 엔티티 도출 (L7.1)
+1단계: page.spec.md 읽기 → 필요한 컴포넌트 도출
    ↓
-2단계: 엔티티 필드 정의 (L7.2)
+2단계: 기존 컴포넌트 확인 → 재사용 여부 판단
    ↓
-3단계: 엔티티 관계 설계 (L7.3)
+3단계: 컴포넌트 분류 (Feature / Widget / UI)
    ↓
-4단계: 화면별 컴포넌트 도출 (L8)
+4단계: 각 컴포넌트별 .spec.md 생성
    ↓
-5단계: 관계(edges) 연결
+5단계: page.spec.md에 하위 컴포넌트 섹션 업데이트
    ↓
-→ L9-L10 기획자에게 전달
+→ req-L9L10-planner에게 전달
 ```
 
-### 필수 필드
+### 컴포넌트 분류 기준
 
-| 필드 | 타입 | 설명 |
-|------|------|------|
-| id | String (UUID) | 고유 식별자 |
-| createdAt | DateTime | 생성 시간 |
-| updatedAt | DateTime | 수정 시간 |
+| 유형 | 경로 | 특징 | Store | 예시 |
+|------|------|------|-------|------|
+| **Feature** | feature/ | 비즈니스 로직, Store 연결 | O | MemberList, MemberForm |
+| **Widget** | widget/ | 도메인 특화 UI 조합 | X | MemberCard, SearchFilter |
+| **UI** | ui/ | 순수 표현, 상태 없음 | X | Button, Card, Badge |
+| **Input** | inputs/ | value/onChange 패턴 | X | Select, TextInput |
 
-### 관계 유형
+### 컴포넌트 분리 원칙
 
-| 유형 | 설명 | 예시 |
-|------|------|------|
-| 1:1 | 일대일 | User ↔ Profile |
-| 1:N | 일대다 | User → Reservations |
-| N:M | 다대다 | User ↔ Roles |
-
-### 컴포넌트 분류
-
-| 유형 | 경로 | 특징 | 예시 |
-|------|------|------|------|
-| **ui** | components/ui/ | 순수 표현, 상태 없음 | Button, Card, Badge |
-| **inputs** | components/inputs/ | value/onChange 패턴 | Select, TextInput |
-| **widgets** | components/widgets/ | 도메인 특화 | MemberCard, StatCard |
-| **features** | components/features/ | Store 연동 | SideNav, UserMenu |
+```
+Widget (순수 UI)              Feature (비즈니스 로직)
+─────────────────────────────────────────────────────
+NavTreePanel                  → SideNav (NavigationStore 연결)
+DataTable                     → MemberList (MemberStore 연결)
+FormFields                    → MemberForm (MemberStore 연결)
+```
 
 ---
 
-## 출력
+## Feature 기획서 템플릿
 
-### JSON 형식
+```markdown
+# [FeatureName] Feature 기획서
 
-```json
-{
-  "level_range": "L7-L8",
-  "nodes": [
-    {
-      "id": "L7-ENT-001",
-      "level": 7,
-      "subLevel": "1",
-      "type": "entity",
-      "name": "User",
-      "description": "회원 엔티티",
-      "metadata": { "tableName": "users" }
-    },
-    {
-      "id": "L7-FLD-001",
-      "level": 7,
-      "subLevel": "2",
-      "type": "entity",
-      "name": "User.email",
-      "description": "이메일 주소",
-      "metadata": {
-        "fieldType": "String",
-        "constraints": ["unique", "required"]
-      }
-    },
-    {
-      "id": "L8-CMP-001",
-      "level": 8,
-      "subLevel": "2",
-      "type": "component",
-      "name": "UserTable",
-      "description": "회원 목록 테이블",
-      "metadata": {
-        "componentType": "widgets",
-        "props": { "users": "User[]" }
-      }
-    }
-  ],
-  "edges": [
-    { "id": "e-050", "source": "L6-API-001", "target": "L7-ENT-001", "type": "stores" },
-    { "id": "e-051", "source": "L4-SCR-001", "target": "L8-CMP-001", "type": "uses" }
-  ]
+> 생성일: YYYY-MM-DD
+> 수정일: YYYY-MM-DD
+> 타입: feature
+> 위치: packages/fe-ui/src/components/feature/[FeatureName]/
+
+## 역할
+
+[기능 설명]
+
+## 의존성
+
+| 타입 | 대상 | 용도 |
+|------|------|------|
+| Store | [StoreName] | [용도] |
+| Widget | [WidgetName] | [용도] |
+| API | useGet[Domain] | [용도] |
+
+## Props
+
+```typescript
+interface [FeatureName]Props {
+  spaceId: string;
+  initialPageSize?: number;
 }
 ```
 
-### 출력 파일: 04-ui-details.md
+## Store 연결
 
-이 에이전트는 기획서 폴더에 `04-ui-details.md` 파일을 생성합니다.
+| Store | 속성/메서드 | 사용 방식 |
+|-------|------------|----------|
+| [StoreName] | items | 읽기 (표시) |
+| [StoreName] | loading | 읽기 (로딩 표시) |
+| [StoreName] | fetch | 호출 (데이터 로드) |
+
+## 이벤트
+
+| 이벤트 | 발생 조건 | 부모 전달 |
+|--------|----------|----------|
+| onSelect | 행 클릭 | O (id) |
+| onRefresh | 새로고침 버튼 | X |
+
+## 하위 컴포넌트
+
+| 컴포넌트 | 타입 | 기획서 |
+|----------|------|--------|
+| [WidgetName] | widget | `../widget/[WidgetName]/index.spec.md` |
+| [UIName] | ui | `../ui/[UIName]/index.spec.md` |
+
+## 구현 체크리스트
+
+- [ ] index.tsx
+- [ ] observer 적용
+- [ ] Store 주입
+
+## 상위 기획서
+
+- `apps/admin/app/(admin)/[domain]/page.spec.md`
+
+## 변경 이력
+
+| 일자 | 내용 | 작성자 |
+|------|------|--------|
+| YYYY-MM-DD | 초기 생성 | req-L7L8-planner |
+```
+
+---
+
+## Widget 기획서 템플릿
+
+```markdown
+# [WidgetName] Widget 기획서
+
+> 생성일: YYYY-MM-DD
+> 수정일: YYYY-MM-DD
+> 타입: widget
+> 위치: packages/fe-ui/src/components/widget/[WidgetName]/
+
+## 역할
+
+[위젯 설명]
+
+## Props
+
+```typescript
+interface [WidgetName]Props {
+  data: [DataType];
+  variant?: 'compact' | 'full';
+  onClick?: (id: string) => void;
+}
+```
+
+## 하위 UI 컴포넌트
+
+| 컴포넌트 | 기획서 | 역할 |
+|----------|--------|------|
+| [UIName] | `../ui/[UIName]/index.spec.md` | [역할] |
+
+## 상태 관리
+
+**없음** (Store 사용 금지 - 순수 UI)
+
+## 슬롯
+
+| 슬롯 | 설명 |
+|------|------|
+| actions | 우측 액션 영역 |
+| footer | 하단 추가 정보 |
+
+## 디자인 토큰
+
+| 항목 | 값 |
+|------|-----|
+| padding | p-4 |
+| border | border-divider |
+| radius | rounded-xl |
+
+## 구현 체크리스트
+
+- [ ] index.tsx
+- [ ] Storybook 스토리
+
+## 상위 기획서
+
+- `packages/fe-ui/src/components/feature/[FeatureName]/index.spec.md`
+
+## 변경 이력
+
+| 일자 | 내용 | 작성자 |
+|------|------|--------|
+| YYYY-MM-DD | 초기 생성 | req-L7L8-planner |
+```
+
+---
+
+## UI 기획서 템플릿
+
+```markdown
+# [UIName] UI 컴포넌트 기획서
+
+> 생성일: YYYY-MM-DD
+> 수정일: YYYY-MM-DD
+> 타입: ui
+> 위치: packages/fe-ui/src/components/ui/[UIName]/
+
+## 역할
+
+[UI 설명]
+
+## Props
+
+```typescript
+interface [UIName]Props {
+  variant?: 'primary' | 'secondary';
+  size?: 'sm' | 'md' | 'lg';
+  isDisabled?: boolean;
+}
+```
+
+## 상태
+
+| 상태 | 스타일 |
+|------|--------|
+| default | 기본 |
+| hover | 배경 밝아짐 |
+| disabled | opacity 0.5 |
+
+## HeroUI 매핑
+
+기반: `import { [HeroUIComponent] } from '@heroui/react'`
+
+## 구현 체크리스트
+
+- [ ] index.tsx
+- [ ] Storybook 스토리
+
+## 변경 이력
+
+| 일자 | 내용 | 작성자 |
+|------|------|--------|
+| YYYY-MM-DD | 초기 생성 | req-L7L8-planner |
+```
+
+---
+
+## 기존 컴포넌트 재사용 확인
+
+```bash
+# 기존 컴포넌트 존재 확인
+search_paths=(
+  "packages/fe-ui/src/components/feature/[FeatureName]/index.tsx"
+  "packages/fe-ui/src/components/widget/[WidgetName]/index.tsx"
+  "packages/fe-ui/src/components/ui/[UIName]/index.tsx"
+)
+
+for path in "${search_paths[@]}"; do
+  if [ -f "$path" ]; then
+    # 존재하면 .spec.md도 있는지 확인
+    # 있으면 재사용, 없으면 역설계
+  else
+    # 없으면 새로 생성
+  fi
+done
+```
 
 ---
 
 ## 품질 체크리스트
 
 ### L7 체크리스트
-- [ ] 모든 API가 참조하는 엔티티가 정의되었는가?
-- [ ] 필수 필드(id, createdAt, updatedAt)가 포함되었는가?
-- [ ] 필드 타입이 명시되었는가?
-- [ ] 엔티티 간 관계가 정의되었는가?
+- [ ] API 응답에 필요한 엔티티 필드가 정의되었는가?
+- [ ] 엔티티 간 관계가 파악되었는가?
 
 ### L8 체크리스트
 - [ ] 모든 화면에 필요한 컴포넌트가 식별되었는가?
 - [ ] 재사용 가능한 기존 컴포넌트가 확인되었는가?
-- [ ] 컴포넌트 유형이 분류되었는가?
-
----
-
-## 엔티티 필드 매트릭스
-
-| 엔티티 | 필드 | 타입 | 제약조건 | 설명 |
-|--------|------|------|----------|------|
-| User | id | String | @id @default(uuid()) | PK |
-| User | email | String | @unique | 이메일 |
-| User | name | String | - | 이름 |
-| User | role | Enum | - | 역할 |
+- [ ] 컴포넌트 유형이 올바르게 분류되었는가?
+  - Store 사용 → Feature
+  - 순수 UI → Widget
+  - 범용 → UI
+- [ ] 각 컴포넌트별 .spec.md가 생성되었는가?
 
 ---
 
@@ -162,9 +313,15 @@ allowed-tools: Read, Write, Grep, Bash
 ```
 /req-L7L8-planner
 
-L5-L6 기획 결과:
-- L6-API-001: GET /api/users
-- L6-API-002: POST /api/users
+도메인: Member
+페이지 기획서:
+- apps/admin/app/(admin)/users/page.spec.md (목록)
+- apps/admin/app/(admin)/users/[userId]/page.spec.md (상세)
+
+필요한 컴포넌트:
+Feature: MemberList, MemberDetail, MemberForm
+Widget: MemberCard, MemberTable, SearchFilter
+UI: (기존 재사용)
 ```
 
 ---

@@ -1,0 +1,78 @@
+# 역할 수정 페이지 기획서
+
+> 생성일: 2026-02-18
+> 타입: page
+> 경로: `/roles/[roleId]/edit`
+
+## 사용자 시나리오
+
+1. 관리자가 기존 역할의 정보를 수정하기 위해 페이지에 진입한다.
+2. SSR Prefetch로 기존 역할 데이터가 로드되어 폼에 미리 채워진다.
+3. 시스템 역할(isSystem=true)인 경우 "시스템 역할은 수정할 수 없습니다." 안내와 함께 상세 돌아가기 버튼만 표시된다.
+4. 역할 식별자(name)는 읽기 전용으로 표시된다.
+5. 표시명(displayName)과 설명(description)을 수정할 수 있다.
+6. "저장" 버튼 클릭 시 유효성 검사 후 PATCH API를 호출한다.
+7. 수정 성공 시 역할 상세 페이지(`/roles/${roleId}`)로 이동한다.
+
+## 레이아웃 구성
+
+| 영역 | 컴포넌트 | 설명 |
+|------|----------|------|
+| 페이지 헤더 | PageSurface | title="역할 수정", description 동적 |
+| 헤더 액션 | Button | "상세로 돌아가기" 버튼, ArrowLeft 아이콘 |
+| 입력 폼 | SectionSurface | name(읽기전용), displayName, description |
+| 하단 버튼 | Button x2 | "취소", "저장" |
+
+## 폼 필드 정의
+
+| 필드 | 라벨 | 타입 | 필수 | 수정 가능 | 유효성 검사 |
+|------|------|------|:----:|:---------:|-------------|
+| name | 역할 식별자 | Input | - | X (isReadOnly, isDisabled) | - |
+| displayName | 표시명 | Input | X | O | 최대 50자 |
+| description | 설명 | Textarea | X | O | 최대 200자, minRows=3 |
+
+## 페이지 상태
+
+| 상태 | 설명 | UI |
+|------|------|-----|
+| 로딩 | API 호출 중 | "로딩 중..." 텍스트 |
+| 데이터 없음 | role이 null | "역할을 찾을 수 없습니다." + 목록으로 버튼 |
+| 시스템 역할 | isSystem=true | "시스템 역할은 수정할 수 없습니다." + 상세 돌아가기 버튼 |
+| 편집 가능 | 정상 조회 + 비시스템 | 폼 필드 표시 |
+| 유효성 오류 | 검증 실패 | isInvalid + errorMessage 표시 |
+| 제출 중 | PATCH 호출 중 | 저장 버튼 isLoading |
+
+## API 호출
+
+| 시점 | API | 설명 |
+|------|-----|------|
+| SSR Prefetch | `prefetchGetRoleByIdQuery` (../\_prefetch.ts 재사용) | 역할 상세 프리페치 |
+| 클라이언트 | `useGetRoleById(roleId)` | 역할 상세 조회 |
+| 폼 제출 | `useUpdateRole` (PATCH /api/v1/roles/:id) | 역할 수정, UpdateRoleDto |
+
+## 이벤트 핸들러
+
+| 이벤트 | 동작 |
+|--------|------|
+| onClickBackButton | `/roles/${roleId}`로 이동 |
+| onClickListButton | `/roles`로 이동 |
+| onClickSubmitButton | 유효성 검사 -> updateRole 호출 |
+
+## 폼 상태 관리
+
+`useLocalObservable`로 관리하는 `RoleEditFormState`:
+- `displayName`: string
+- `description`: string
+- `errors.displayName`: string
+- `isInitialized`: boolean (useEffect로 초기값 설정, 한 번만)
+
+## 구현 체크리스트
+
+- [x] page.tsx (서버 컴포넌트, SSR Prefetch + HydrationBoundary, ../\_prefetch.ts 재사용)
+- [x] _client.tsx (클라이언트 컴포넌트, observer)
+
+## 변경 이력
+
+| 일자 | 내용 | 작성자 |
+|------|------|--------|
+| 2026-02-18 | 초기 생성 (역기획) | req-reverse-engineer |

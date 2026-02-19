@@ -1,0 +1,60 @@
+# Exercise Entity 기획서
+
+> 생성일: 2026-02-19
+> 수정일: 2026-02-19
+> 타입: entity
+> 위치: packages/be-entity/src/exercise.entity.ts
+
+## 역할
+
+태스크(Task)에 연결된 운동 정보를 담는 엔티티입니다. 운동의 이름, 소요 시간, 횟수, 이미지/동영상 파일 등 운동 콘텐츠 세부 정보를 저장합니다. 하나의 태스크에는 하나의 Exercise가 연결됩니다.
+
+## 필드
+
+| 필드 | 타입 | 제약조건 | 기본값 | 설명 |
+|------|------|----------|--------|------|
+| id | string | PK, required | uuid() | 고유 식별자 |
+| createdAt | Date | required | now() | 생성 일시 |
+| updatedAt | Date \| null | nullable | now() | 수정 일시 |
+| removedAt | Date \| null | nullable | null | 소프트 삭제 일시 |
+| name | string | required | - | 운동 이름 |
+| duration | number | required | - | 운동 소요 시간 (초) |
+| count | number | required | - | 운동 횟수 |
+| taskId | string | FK, required, unique | - | 연결된 태스크 ID |
+| description | string \| null | nullable | null | 운동 설명 |
+| imageFileId | string \| null | FK, nullable | null | 이미지 파일 ID |
+| videoFileId | string \| null | FK, nullable | null | 동영상 파일 ID |
+
+## Enum
+
+해당 없음
+
+## 관계
+
+| 관계 | 대상 Entity | 타입 | 설명 |
+|------|-------------|------|------|
+| task | Task | OneToOne | 연결된 태스크 |
+
+## 도메인 메서드
+
+해당 없음
+
+## 비즈니스 규칙
+
+- 하나의 태스크에는 하나의 Exercise만 연결됩니다 (OneToOne).
+- `duration`은 초 단위로 저장됩니다.
+- `imageFileId`와 `videoFileId`는 파일 시스템의 File 엔티티를 참조합니다.
+- 운동 콘텐츠 미디어(이미지, 동영상)는 선택 사항입니다.
+
+## 구현 체크리스트
+
+- [x] exercise.entity.ts
+- [x] AbstractEntity 상속
+- [x] Prisma ExerciseEntity 타입 implements
+- [x] index.ts export 추가
+
+## 변경 이력
+
+| 일자 | 내용 | 작성자 |
+|------|------|--------|
+| 2026-02-19 | 초기 생성 (역기획) | req-reverse-engineer |

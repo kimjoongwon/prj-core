@@ -1,12 +1,12 @@
 ---
 name: 단계-오케스트레이터
-description: 5단계 분할 개발 플로우를 조율하는 메타 에이전트
+description: 7단계 분할 개발 플로우를 조율하는 메타 에이전트
 tools: Task, Read, Write, Grep, Bash
 ---
 
 # 단계 오케스트레이터 (Stage Orchestrator)
 
-5단계 분할 개발 플로우를 조율하는 메타 에이전트입니다. 각 단계 완료 후 사용자 리뷰를 받고 다음 단계로 진행합니다.
+7단계 분할 개발 플로우를 조율하는 메타 에이전트입니다。각 단계 완료 후 사용자 리뷰를 받고 다음 단계로 진행합니다。
 
 ---
 
@@ -22,96 +22,45 @@ tools: Task, Read, Write, Grep, Bash
 
 ---
 
-## 2. 프로젝트/앱 구조
+## 2. 폴더 구조 (새로운 구조)
 
-### 복수 프로젝트 + 복수 앱 지원
+### 기획서 위치
 
 ```
-apps/proposal/plans/
+apps/[app]/app/(admin)/
+├── app.spec.md                        # 앱 기획서 (L0-L2)
 │
-├── _core/                              # 공통 시스템 기획 (프로젝트 무관)
-│   ├── README.md                       # _core 구조 설명
-│   ├── infrastructure/                 # 인프라 (CASL, 인증, 멀티테넌시)
-│   ├── navigation/                     # 네비게이션 (메뉴 시스템)
-│   ├── ui-system/                      # UI 시스템 (Surface, DataGrid)
-│   └── shared-domain/                  # 공유 도메인 (Role, Tenant)
+├── [도메인]/                           # 도메인별 화면
+│   ├── page.tsx                       # 목록 페이지
+│   ├── page.spec.md                   # 목록 페이지 기획서
+│   ├── [entityId]/
+│   │   ├── page.tsx                   # 상세 페이지
+│   │   ├── page.spec.md              # 상세 페이지 기획서
+│   │   └── edit/
+│   │       ├── page.tsx               # 수정 페이지
+│   │       └── page.spec.md          # 수정 페이지 기획서
+│   └── new/
+│       ├── page.tsx                   # 등록 페이지
+│       └── page.spec.md              # 등록 페이지 기획서
 │
-├── [project]/                          # 프로젝트 (수주 단위)
-│   └── [app]/                          # 앱 (admin-web, admin-mobile 등)
-│       ├── _app.md                     # 앱 메타 + 사용하는 공통 시스템 목록
-│       └── YYYY-MM-DD-[feature]/       # 기능 (Member, Order 등)
-│
-└── prj-core/                           # 자체 서비스
-    └── admin-web/
-        ├── _app.md
-        └── ...
+└── members/[memberId]/                 # 예시: 상세 화면
+    ├── page.tsx
+    └── page.spec.md
 ```
 
-### 예시 구조
+### BE/Store 기획서 위치 (Sidecar Spec)
 
 ```
-apps/proposal/plans/
-├── project-a/
-│   ├── admin-web/
-│   │   ├── 2026-01-30-Member/
-│   │   └── 2026-02-01-Order/
-│   ├── admin-mobile/
-│   │   └── 2026-02-05-Member/
-│   └── service-web/
-│       └── 2026-02-10-Reservation/
-└── project-b/
-    └── admin-web/
-        └── 2026-03-01-Product/
+packages/fe-store/src/stores/
+└── [domain]Store.spec.md              # Store 기획서 (코드 옆)
+
+apps/server/src/[module]/
+├── [name].service.spec.md             # Service 기획서 (코드 옆)
+├── repositories/
+│   └── [name].repository.spec.md      # Repository 기획서 (코드 옆)
+└── controllers/
+    └── [name].controller.spec.md      # Controller 기획서 (코드 옆)
 ```
-
-### 실행 시 질문
-
-`/orch-stage full` 실행 시 **project**와 **app**을 질문합니다:
-
-```
-🚀 orch-stage 시작
-
-📌 프로젝트를 선택하세요:
-1. project-a
-2. project-b
-3. (새 프로젝트 생성)
-
-📌 앱을 선택하세요:
-1. admin-web
-2. admin-mobile
-3. service-web
-4. (새 앱 생성)
-
-📌 기능명을 입력하세요: Member
-📌 요구사항을 입력하세요: ...
-```
-
-### 공통 시스템 기획 (core= 파라미터)
-
-공통 시스템을 기획할 때는 `core=` 파라미터를 사용합니다:
-
-```bash
-# 공통 시스템 기획 시작
-/orch-stage full core=infrastructure feature=RateLimiting
-
-# 기존 공통 시스템 수정
-/orch-stage run stage=2 plan=_core/infrastructure/2026-01-31-CASL
-```
-
-**core= 옵션:**
-- `infrastructure` - 인프라 레이어 (CASL, 인증, 멀티테넌시)
-- `navigation` - 네비게이션 레이어 (메뉴 시스템)
-- `ui-system` - UI 시스템 레이어 (Surface, DataGrid)
-- `shared-domain` - 공유 도메인 레이어 (Role, Tenant)
-
-**공통 시스템 기획 시 특징:**
-- `project`와 `app` 질문 생략
-- 출력 위치: `apps/proposal/plans/_core/{core}/{YYYY-MM-DD-feature}/`
-- 프로젝트 독립적이므로 프로젝트별 커스터마이징은 `_app.md`에서 관리
-
----
-
-## 3. 기능 단위 기획 개념
 
 ### 핵심 원칙
 
@@ -142,9 +91,10 @@ apps/proposal/plans/
 | 1 | 기능 전체 | 모든 화면/API를 한 번에 기획 |
 | 2 | 기능 전체 | 스키마/Entity/DTO 한 번에 생성 |
 | 3 | 기능 전체 | Repository/Service/Controller 한 번에 생성 |
-| 4 | **페이지별** | 각 페이지의 컴포넌트를 개별 생성 |
-| 5 | **페이지별** | 각 페이지를 개별 생성 |
-| 6 | 기능 전체 (선택) | E2E 테스트 검증 |
+| 4 | **페이지별** | 각 페이지의 화면 기획 (page.spec.md + 컴포넌트 spec.md) |
+| 5 | **페이지별** | 각 페이지의 컴포넌트를 개별 생성 |
+| 6 | **페이지별** | 각 페이지를 개별 생성 |
+| 7 | 기능 전체 (선택) | E2E 테스트 검증 |
 
 ---
 
@@ -155,56 +105,54 @@ apps/proposal/plans/
 | 항목 | 필수 | 설명 |
 |------|------|------|
 | 모드 | O | `full`, `start stage=N`, `run stage=N`, `status` |
-| **project** | △ | 프로젝트명 (실행 시 질문, core= 사용 시 불필요) |
-| **app** | △ | 앱명 (실행 시 질문, core= 사용 시 불필요) |
-| **core** | △ | 공통 시스템 카테고리 (infrastructure/navigation/ui-system/shared-domain) |
-| 기능명 | O (full) | 생성할 기능/도메인 이름 (예: Member) |
+| **app** | O | 앱명 (예: admin) |
+| **domain** | O | 도메인명 (예: Member) |
 | 요구사항 | O (full) | 기능 요구사항 목록 |
-| plan | O (start/run) | 기획서 폴더 경로 |
-| **page** | △ | Stage 4-5에서 특정 페이지만 실행할 때 사용 |
+| **page** | △ | Stage 4-6에서 특정 페이지만 실행할 때 사용 |
 
 ### 출력 (폴더 구조)
 
-**프로젝트 기능 기획:**
+**앱/도메인 기획 (Stage 1):**
 ```
-apps/proposal/plans/[project]/[app]/YYYY-MM-DD-[feature]/
-├── README.md
-├── PROGRESS.md
-├── 01-overview.md
-├── 02-structure.md
-├── 03-interactions.md
-├── 04-ui-details.md
-├── 05-technical-design.md
-├── [feature]-schema.md           # Stage 2
-├── [feature]-backend.md          # Stage 3
-├── [feature]-[page]-components.md  # Stage 4 (페이지별)
-└── [feature]-[page]-complete.md    # Stage 5 (페이지별)
+apps/[app]/app/(admin)/
+├── app.spec.md                        # 앱 기획서 (L0-L2) 업데이트
+
+apps/[app]/app/(admin)/[도메인]/
+├── page.spec.md                       # 각 페이지 기획서 (L3-L4)
+├── [entityId]/page.spec.md
+├── new/page.spec.md
+└── [entityId]/edit/page.spec.md
 ```
 
-**공통 시스템 기획 (core= 사용 시):**
+**BE/Store 기획 (Stage 1, Sidecar Spec):**
 ```
-apps/proposal/plans/_core/[core]/YYYY-MM-DD-[feature]/
-├── README.md
-├── PROGRESS.md
-├── 01-overview.md
-├── 02-structure.md
-├── 03-interactions.md
-├── 04-ui-details.md
-└── 05-technical-design.md
+packages/fe-store/src/stores/[domain]Store.spec.md
+apps/server/src/[module]/[name].service.spec.md
+apps/server/src/[module]/repositories/[name].repository.spec.md
+apps/server/src/[module]/controllers/[name].controller.spec.md
+```
+
+**화면별 기획 (Stage 4):**
+```
+apps/[app]/app/(admin)/[도메인]/page.spec.md        # API/이벤트 섹션 업데이트
+packages/fe-ui/src/components/ui/[UIName]/index.spec.md
+packages/fe-ui/src/components/widget/[WidgetName]/index.spec.md
+packages/fe-ui/src/components/feature/[FeatureName]/index.spec.md
 ```
 
 ---
 
 ## 5. Stage 요약
 
-| Stage | 이름 | 핵심 목표 | 주요 에이전트 | 산출물 |
-|-------|------|----------|--------------|--------|
-| 1 | 데이터 설계 | 요구사항에서 기획서와 기술 설계서 작성 | planner, technical-designer | `-design.md` |
-| 2 | 스키마 구현 | Prisma 스키마, Entity, DTO 구현 | schema-builder, entity-builder, dto-builder, query-dto-builder | `-schema.md` |
-| 3 | 백엔드 로직 | Repository, Service, Controller 구현 | repository-builder, service-builder, controller-builder | `-backend.md` |
-| 4 | 컴포넌트 구현 | UI, Widget, Feature 컴포넌트 구현 | ui-component-builder, widget-builder, feature-builder | `-components.md` |
-| 5 | 페이지 통합 | 페이지 컴포넌트 구현 및 규칙 검증 | page-builder, /fe-review (Skill) | `-complete.md` |
-| 6 | E2E 검증 (선택) | E2E 테스트 작성 및 실행 | qa-be-e2e-testing, qa-fe-e2e-testing | `-e2e.md` |
+| Stage | 이름 | 실행 단위 | 핵심 목표 | 주요 에이전트 |
+|-------|------|----------|----------|--------------|
+| 1 | 도메인 기획 | 도메인 전체 | L0-L4 기획 + BE/Store 스펙 | orch-requirement |
+| 2 | 스키마 구현 | 도메인 전체 | Prisma 스키마, Entity, DTO | schema-builder, entity-builder, dto-builder |
+| 3 | 백엔드 구현 | 도메인 전체 | Repository, Service, Controller | repository-builder, service-builder, controller-builder |
+| 4 | 화면 기획 | **페이지별** | L5-L12 기획 | orch-screen-planner |
+| 5 | 컴포넌트 구현 | **페이지별** | UI, Widget, Feature | ui-builder, widget-builder, feature-builder |
+| 6 | 페이지 통합 | **페이지별** | 페이지 컴포넌트 | page-builder |
+| 7 | E2E 검증 | 도메인 전체 | E2E 테스트 | qa-be-e2e-testing, qa-fe-e2e-testing |
 
 ---
 
@@ -229,128 +177,133 @@ apps/proposal/plans/_core/[core]/YYYY-MM-DD-[feature]/
 
 ## 7. 프로세스
 
-### 5단계 플로우 개요
+### 7단계 플로우 개요
 
 ```
 ┌─────────────────────────────────────────────────────────────┐
-│ Stage 1: 기획 (기능 전체)                                    │
-│ orch-requirement (L0~L10) → [사용자 리뷰] ✓                  │
-│ 산출물: {기능명}/ 폴더 (01~05 문서)                           │
+│ Stage 1: 도메인 기획 (도메인 전체)                            │
+│ orch-requirement (L0~L4 + BE/Store 스펙) → [리뷰] ✓          │
+│ 산출물: app.spec.md + page.spec.md + BE/Store .spec.md       │
 └─────────────────────────────────────────────────────────────┘
                               ↓ 사용자 승인
 ┌─────────────────────────────────────────────────────────────┐
-│ Stage 2: 스키마 구현 (기능 전체)                              │
+│ Stage 2: 스키마 구현 (도메인 전체)                            │
 │ schema-builder → entity-builder → dto-builder                │
 │ → query-dto-builder → seed-maker                             │
-│ → [사용자 리뷰] ✓                                            │
-│ 산출물: {기능명}-schema.md                                   │
+│ → [리뷰] ✓                                                   │
 └─────────────────────────────────────────────────────────────┘
                               ↓ 사용자 승인
 ┌─────────────────────────────────────────────────────────────┐
-│ Stage 3: 백엔드 로직 (기능 전체)                              │
+│ Stage 3: 백엔드 구현 (도메인 전체)                            │
 │ repository-builder → service-builder → facade-builder       │
-│ → controller-builder → [사용자 리뷰] ✓                       │
-│ 산출물: {기능명}-backend.md                                  │
+│ → controller-builder → [리뷰] ✓                              │
 └─────────────────────────────────────────────────────────────┘
                               ↓ 사용자 승인 + Orval 실행
 ┌─────────────────────────────────────────────────────────────┐
-│ Stage 4: 컴포넌트 구현 (페이지별 반복)                        │
-│ ui-component → widget-builder → feature-builder             │
-│ → [사용자 리뷰] ✓                                            │
-│ 산출물: {기능명}-{페이지명}-components.md                     │
+│ Stage 4: 화면 기획 (페이지별 반복)                            │
+│ orch-screen-planner (L5~L12) → [리뷰] ✓                      │
+│ 산출물: page.spec.md 업데이트 + 컴포넌트 .spec.md            │
 │                                                              │
 │ ⚠️ page 파라미터로 특정 페이지 지정 필요                      │
 └─────────────────────────────────────────────────────────────┘
                               ↓ 사용자 승인
 ┌─────────────────────────────────────────────────────────────┐
-│ Stage 5: 페이지 통합 (페이지별 반복)                          │
-│ page-builder → /fe-review (Skill) → [사용자 리뷰] ✓          │
-│ 산출물: {기능명}-{페이지명}-complete.md                       │
+│ Stage 5: 컴포넌트 구현 (페이지별 반복)                        │
+│ ui-component → widget-builder → feature-builder             │
+│ → store-builder → [리뷰] ✓                                   │
 │                                                              │
 │ ⚠️ page 파라미터로 특정 페이지 지정 필요                      │
 └─────────────────────────────────────────────────────────────┘
-                              ↓ 사용자 요청 시 (선택적)
+                              ↓ 사용자 승인
 ┌─────────────────────────────────────────────────────────────┐
-│ Stage 6: E2E 검증 (선택적)                                    │
-│ qa-be-e2e-testing → qa-fe-e2e-testing → [사용자 리뷰] ✓      │
-│ 산출물: {기능명}-e2e.md                                       │
+│ Stage 6: 페이지 통합 (페이지별 반복)                          │
+│ page-builder → /fe-review (Skill) → [리뷰] ✓                 │
 │                                                              │
-│ ⚠️ Stage 5 모든 페이지 완료 후 실행                           │
+│ ⚠️ page 파라미터로 특정 페이지 지정 필요                      │
+└─────────────────────────────────────────────────────────────┘
+                              ↓ 사용자 요청 시
+┌─────────────────────────────────────────────────────────────┐
+│ Stage 7: E2E 검증 (선택적)                                    │
+│ qa-be-e2e-testing → qa-fe-e2e-testing → [리뷰] ✓            │
+│                                                              │
+│ ⚠️ 모든 페이지 완료 후 실행                                   │
 └─────────────────────────────────────────────────────────────┘
 ```
 
 ### 실행 모드
 
-#### 1. 전체 실행 (Stage 1부터 - 기능 단위)
+#### 1. 전체 실행 (Stage 1부터)
 
 ```
 /orch-stage full
 
-**기능명:** Member
+**앱:** admin
+**도메인:** Member
 **요구사항:**
 - 회원 목록 조회/검색/필터링
 - 회원 상세 조회
 - 회원 등록/수정/삭제
 ```
 
-#### 2. 특정 단계부터 시작 (Stage 1-3: 기능 전체)
+#### 2. 특정 단계부터 시작
 
 ```
-/orch-stage start stage=2 plan=YYYY-MM-DD-Member
+/orch-stage start stage=2 app=admin domain=Member
 ```
 
-#### 3. 특정 단계만 실행 (Stage 1-3: 기능 전체)
+#### 3. 특정 단계만 실행
 
 ```
-/orch-stage run stage=3 plan=YYYY-MM-DD-Member
+/orch-stage run stage=3 app=admin domain=Member
 ```
 
-#### 4. 페이지별 Stage 4 실행 (컴포넌트)
+#### 4. 페이지별 Stage 4-6 실행
 
 ```
-/orch-stage run stage=4 plan=YYYY-MM-DD-Member page=MemberList
-/orch-stage run stage=4 plan=YYYY-MM-DD-Member page=MemberDetail
-/orch-stage run stage=4 plan=YYYY-MM-DD-Member page=MemberCreate
-/orch-stage run stage=4 plan=YYYY-MM-DD-Member page=MemberEdit
+# 화면 기획 (Stage 4)
+/orch-stage run stage=4 app=admin domain=Member page=List
+/orch-stage run stage=4 app=admin domain=Member page=Detail
+
+# 컴포넌트 구현 (Stage 5)
+/orch-stage run stage=5 app=admin domain=Member page=List
+/orch-stage run stage=5 app=admin domain=Member page=Detail
+
+# 페이지 통합 (Stage 6)
+/orch-stage run stage=6 app=admin domain=Member page=List
+/orch-stage run stage=6 app=admin domain=Member page=Detail
 ```
 
-#### 5. 페이지별 Stage 5 실행 (페이지 통합)
+#### 5. 상태 확인
 
 ```
-/orch-stage run stage=5 plan=YYYY-MM-DD-Member page=MemberList
-/orch-stage run stage=5 plan=YYYY-MM-DD-Member page=MemberDetail
-/orch-stage run stage=5 plan=YYYY-MM-DD-Member page=MemberCreate
-/orch-stage run stage=5 plan=YYYY-MM-DD-Member page=MemberEdit
-```
-
-#### 6. 상태 확인
-
-```
-/orch-stage status plan=YYYY-MM-DD-Member
+/orch-stage status app=admin domain=Member
 ```
 
 ### 전체 워크플로우 예시 (회원 관리)
 
 ```bash
-# 1. 기획 시작 (전체 기능)
+# 1. 도메인 기획 시작
 /orch-stage full
-**기능명:** Member
+**앱:** admin
+**도메인:** Member
 **요구사항:** 회원 목록/상세/등록/수정/삭제
 
 # → Stage 1 완료 → [리뷰]
 # → Stage 2 완료 → [리뷰]
 # → Stage 3 완료 → [리뷰]
 
-# 2. 페이지별 프론트엔드 개발
-/orch-stage run stage=4 plan=YYYY-MM-DD-Member page=MemberList
+# 2. 화면별 프론트엔드 개발 (MemberList)
+/orch-stage run stage=4 app=admin domain=Member page=List
 # → [리뷰]
-/orch-stage run stage=5 plan=YYYY-MM-DD-Member page=MemberList
+/orch-stage run stage=5 app=admin domain=Member page=List
+# → [리뷰]
+/orch-stage run stage=6 app=admin domain=Member page=List
 # → [리뷰]
 
-/orch-stage run stage=4 plan=YYYY-MM-DD-Member page=MemberDetail
-# → [리뷰]
-/orch-stage run stage=5 plan=YYYY-MM-DD-Member page=MemberDetail
-# → [리뷰]
+# 3. 다음 화면 (MemberDetail)
+/orch-stage run stage=4 app=admin domain=Member page=Detail
+/orch-stage run stage=5 app=admin domain=Member page=Detail
+/orch-stage run stage=6 app=admin domain=Member page=Detail
 
 # ... MemberCreate, MemberEdit 반복
 ```
@@ -359,45 +312,39 @@ apps/proposal/plans/_core/[core]/YYYY-MM-DD-[feature]/
 
 ## 8. Stage별 상세 가이드
 
-### Stage 1: 데이터 설계
+### Stage 1: 도메인 기획
 
-**목표**: 요구사항에서 기획서와 기술 설계서 작성
+**목표**: L0-L4 기획 + BE/Store 스펙 작성
 
-**에이전트 호출 순서:**
-
-1. **planner** (또는 /design-analyze Skill - Figma 있을 때)
-   ```
-   Task: etc-planner
-   - 페이지명 전달
-   - 요구사항 전달
-   - 출력: YYYY-MM-DD-{기능명}.md
-   ```
-
-2. **technical-designer**
-   ```
-   Task: etc-technical-designer
-   - 기획서 경로 전달
-   - 출력: YYYY-MM-DD-{기능명}-design.md
-   ```
+**에이전트 호출:**
+```
+Task: orch-requirement
+```
 
 **산출물:**
-- `apps/proposal/plans/YYYY-MM-DD-{기능명}.md` - 기획서
-- `apps/proposal/plans/YYYY-MM-DD-{기능명}-design.md` - 기술 설계서
+- `apps/[app]/app/(admin)/app.spec.md` (앱 기획서 업데이트)
+- `apps/[app]/app/(admin)/[도메인]/page.spec.md` (각 페이지별)
+- `packages/fe-store/src/stores/[domain]Store.spec.md`
+- `apps/server/src/[module]/[name].service.spec.md`
+- `apps/server/src/[module]/repositories/[name].repository.spec.md`
+- `apps/server/src/[module]/controllers/[name].controller.spec.md`
 
 **완료 후 출력:**
 ```
-✅ Stage 1 완료: 데이터 설계
+✅ Stage 1 완료: 도메인 기획
 
-📁 생성된 문서:
-- 기획서: apps/proposal/plans/2026-01-10-MemberListPage.md
-- 설계서: apps/proposal/plans/2026-01-10-MemberListPage-design.md
+📁 생성된 기획서:
+   - app.spec.md (업데이트)
+   - members/page.spec.md
+   - members/[memberId]/page.spec.md
+   - members/new/page.spec.md
+   - members/[memberId]/edit/page.spec.md
+   - packages/fe-store/src/stores/memberStore.spec.md
+   - apps/server/src/members/members.service.spec.md
+   - apps/server/src/members/repositories/members.repository.spec.md
+   - apps/server/src/members/controllers/members.controller.spec.md
 
-📋 사용자 리뷰 포인트:
-- [ ] Entity 설계가 요구사항에 맞는가?
-- [ ] API 설계가 적절한가?
-- [ ] 컴포넌트 분류가 올바른가?
-
-→ 리뷰 완료 후 "Stage 2 진행" 또는 수정 요청을 해주세요.
+📌 다음 단계: Stage 2 (스키마 구현)
 ```
 
 ---
@@ -406,86 +353,13 @@ apps/proposal/plans/_core/[core]/YYYY-MM-DD-[feature]/
 
 **목표**: Prisma 스키마, Entity, DTO 구현
 
-**전제조건**: `-design.md` 파일의 Entity/API 설계 정보
-
-**에이전트 호출 순서:**
-
-1. **schema-builder**
-   ```
-   Task: be-schema-builder
-   - 설계서에서 Entity 정보 추출
-   - Prisma 스키마 생성
-   ```
-
-2. **entity-builder**
-   ```
-   Task: be-entity-builder
-   - 생성된 스키마 기반 Entity 클래스 생성
-   ```
-
-3. **vo-builder** (필요시)
-   ```
-   Task: be-vo-builder
-   - Value Object 필요시 생성
-   ```
-
-4. **dto-builder**
-   ```
-   Task: be-dto-builder
-   - 설계서에서 API 정보 추출
-   - Create/Update/Response DTO 생성
-   ```
-
-5. **query-dto-builder**
-   ```
-   Task: be-query-dto-builder
-   - PrismaQueryDto 기반 목록 조회용 Query DTO 생성
-   - 필터/정렬/페이지네이션 + toPrismaWhere/toPrismaOrderBy
-   ```
-
-6. **seed-maker** (필요시)
-   ```
-   Task: be-seed-maker
-   - 시드 데이터 생성
-   ```
-
-**산출물 문서 생성:**
-
-Stage 완료 후 `-schema.md` 파일 생성:
-
-```markdown
-# {기능명} 스키마 구현 결과
-
-## 생성 일시
-YYYY-MM-DD HH:mm
-
-## 생성된 파일
-
-### Prisma 스키마
-| 파일 | 설명 |
-|------|------|
-| `packages/be-prisma/schema/{domain}.prisma` | ... |
-
-### Entity
-| 파일 | 설명 |
-|------|------|
-| `packages/be-entity/src/{entity}.entity.ts` | ... |
-
-### DTO
-| 파일 | 설명 |
-|------|------|
-| `packages/be-dto/src/{domain}/create-{entity}.dto.ts` | 생성 요청 |
-| `packages/be-dto/src/{domain}/{entity}-response.dto.ts` | 응답 |
-
-### 시드 데이터
-- `packages/be-prisma/seed-data.ts` (수정됨)
-
-## 실행된 명령
-- `pnpm --filter=@cocrepo/prisma generate`
-- `pnpm --filter=@cocrepo/prisma migrate dev --name {name}`
-
-## 다음 단계
-Stage 3: 백엔드 로직
+**에이전트 호출:**
+```
+Task: be-schema-builder
+Task: be-entity-builder
+Task: be-dto-builder
+Task: be-query-dto-builder
+Task: be-seed-maker (필요시)
 ```
 
 **완료 후 출력:**
@@ -493,438 +367,179 @@ Stage 3: 백엔드 로직
 ✅ Stage 2 완료: 스키마 구현
 
 📁 생성된 파일:
-- Prisma: packages/be-prisma/schema/member.prisma
-- Entity: packages/be-entity/src/member.entity.ts
-- DTO: packages/be-dto/src/members/*.dto.ts (4개)
-- Seed: packages/be-prisma/seed-data.ts (수정)
+   - packages/be-prisma/schema/member.prisma
+   - packages/be-entity/src/member.entity.ts
+   - packages/be-dto/src/members/*.dto.ts
 
-📄 결과 문서: apps/proposal/plans/2026-01-10-MemberListPage-schema.md
-
-📋 사용자 리뷰 포인트:
-- [ ] Prisma 스키마가 설계와 일치하는가?
-- [ ] Entity 클래스가 올바른가?
-- [ ] DTO가 API 명세와 맞는가?
-
-→ 리뷰 완료 후 "Stage 3 진행" 또는 수정 요청을 해주세요.
+📌 다음 단계: Stage 3 (백엔드 구현)
 ```
 
 ---
 
-### Stage 3: 백엔드 로직
+### Stage 3: 백엔드 구현
 
 **목표**: Repository, Service, Controller 구현
 
-**전제조건**: Stage 2 완료 (Entity, DTO 존재)
-
-**에이전트 호출 순서:**
-
-1. **repository-builder**
-   ```
-   Task: be-repository-builder
-   - 설계서에서 Repository 메서드 정보 추출
-   - Prisma 기반 Repository 생성
-   ```
-
-2. **service-builder**
-   ```
-   Task: be-service-builder
-   - 설계서에서 Service 메서드 정보 추출
-   - 비즈니스 로직 구현
-   ```
-
-3. **facade-builder** (필요시)
-   ```
-   Task: be-facade-builder
-   - 여러 Service 조합이 필요한 경우 생성
-   ```
-
-4. **controller-builder**
-   ```
-   Task: be-controller-builder
-   - 설계서에서 API 엔드포인트 정보 추출
-   - REST Controller 생성
-   ```
-
-**산출물 문서 생성:**
-
-Stage 완료 후 `-backend.md` 파일 생성:
-
-```markdown
-# {기능명} 백엔드 구현 결과
-
-## 생성 일시
-YYYY-MM-DD HH:mm
-
-## 생성된 파일
-
-### Repository
-| 파일 | 메서드 |
-|------|--------|
-| `packages/be-repository/src/{entity}s.repository.ts` | findById, findMany, create, updateById, removeById |
-
-### Service
-| 파일 | 메서드 |
-|------|--------|
-| `packages/be-service/src/{entity}s.service.ts` | get{Entity}s, get{Entity}ById, create{Entity}, update{Entity}, delete{Entity} |
-
-### Controller
-| 파일 | 엔드포인트 |
-|------|-----------|
-| `apps/server/src/module/{domain}/{entity}s.controller.ts` | GET /api/v1/{entities}, POST /api/v1/{entities}, ... |
-
-## API 요약
-| Method | Path | 설명 |
-|--------|------|------|
-| GET | /api/v1/members | 목록 조회 |
-| GET | /api/v1/members/:id | 상세 조회 |
-| POST | /api/v1/members | 생성 |
-| PATCH | /api/v1/members/:id | 수정 |
-| DELETE | /api/v1/members/:id | 삭제 |
-
-## 다음 단계
-1. Orval 실행: `pnpm --filter=@cocrepo/api generate`
-2. Stage 4: 컴포넌트 구현
+**에이전트 호출:**
+```
+Task: be-repository-builder
+Task: be-service-builder
+Task: be-facade-builder (필요시)
+Task: be-controller-builder
 ```
 
 **완료 후 출력:**
 ```
-✅ Stage 3 완료: 백엔드 로직
+✅ Stage 3 완료: 백엔드 구현
 
 📁 생성된 파일:
-- Repository: packages/be-repository/src/members.repository.ts
-- Service: packages/be-service/src/members.service.ts
-- Controller: apps/server/src/module/members/members.controller.ts
-- Module: apps/server/src/module/members/members.module.ts
+   - packages/be-repository/src/members.repository.ts
+   - packages/be-service/src/members.service.ts
+   - apps/server/src/module/members/members.controller.ts
 
-📄 결과 문서: apps/proposal/plans/2026-01-10-MemberListPage-backend.md
+🔧 후속 작업:
+   - Orval 실행: pnpm --filter=@cocrepo/api generate
 
-🔧 후속 작업 필요:
-- Orval API 클라이언트 생성: pnpm --filter=@cocrepo/api generate
-
-📋 사용자 리뷰 포인트:
-- [ ] API 엔드포인트가 설계와 일치하는가?
-- [ ] 비즈니스 로직이 올바른가?
-
-→ 리뷰 완료 후 "Stage 4 진행" 또는 수정 요청을 해주세요.
-→ (Orval 실행은 Stage 4 시작 전에 자동으로 수행됩니다)
+📌 다음 단계: Stage 4 (화면 기획) - page 파라미터 필요
 ```
 
 ---
 
-### Stage 4: 컴포넌트 구현 (페이지별)
+### Stage 4: 화면 기획 (페이지별)
 
-**목표**: 특정 페이지에 필요한 UI, Widget, Feature 컴포넌트 구현
+**목표**: 특정 화면의 L5-L12 기획서 작성
 
-**⚠️ 페이지별 실행**: 이 Stage는 `page` 파라미터로 특정 페이지를 지정해야 합니다.
+**⚠️ 페이지별 실행**: `page` 파라미터로 특정 화면을 지정해야 합니다。
 
 ```bash
-/orch-stage run stage=4 plan=YYYY-MM-DD-Member page=MemberList
+/orch-stage run stage=4 app=admin domain=Member page=List
 ```
 
-**전제조건**:
-- Stage 3 완료
-- Orval 실행 완료 (API 클라이언트 존재)
-- 기획서의 02-structure.md에서 해당 페이지 정보 확인
-
-**사전 작업 (첫 페이지 실행 시만):**
-```bash
-# Orval API 클라이언트 생성
-pnpm --filter=@cocrepo/api generate
+**에이전트 호출:**
+```
+Task: orch-screen-planner
 ```
 
-**에이전트 호출 순서 (병렬 가능):**
-
-1. **ui-component-builder** (병렬)
-   ```
-   Task: fe-ui-component-builder
-   - 해당 페이지에 필요한 신규 UI 컴포넌트 생성
-   - 이미 존재하는 컴포넌트는 재사용
-   ```
-
-2. **input-component-builder** (병렬)
-   ```
-   Task: fe-input-component-builder
-   - 해당 페이지에 필요한 신규 Input 컴포넌트 생성
-   ```
-
-3. **widget-builder** (병렬)
-   ```
-   Task: fe-widget-builder
-   - 해당 페이지에 필요한 신규 Widget 컴포넌트 생성
-   ```
-
-4. **feature-builder** (순차 - UI/Widget 완료 후)
-   ```
-   Task: fe-feature-builder
-   - 해당 페이지의 Feature 컴포넌트 생성
-   - 비즈니스 로직 + Store 연동
-   ```
-
-5. **store-builder** (순차 - Feature와 함께)
-   ```
-   Task: fe-store-builder
-   - 해당 페이지에 필요한 Store 생성
-   ```
-
-6. **menu-builder** (순차 - 첫 페이지 개발 시만)
-   ```
-   Task: fe-menu-builder
-   - 조건: 목록 페이지(List) 개발 시에만 실행
-   - admin-menu.ts에 새 메뉴 항목 추가
-   - 경로, Subject, 아이콘 설정
-   - 엔티티 관계 기반 경로 구조 적용
-   ```
-
-**산출물 문서 생성:**
-
-페이지별로 `-{페이지명}-components.md` 파일 생성:
-
-```markdown
-# {기능명} - {페이지명} 컴포넌트 구현 결과
-
-## 페이지 정보
-- 기능: Member (회원 관리)
-- 페이지: MemberList (목록)
-
-## 생성 일시
-YYYY-MM-DD HH:mm
-
-## 생성된 컴포넌트
-
-### UI (Pure)
-| 컴포넌트 | 경로 | 설명 | 신규/재사용 |
-|---------|------|------|-----------|
-| MemberStatusBadge | `components/ui/MemberStatusBadge/` | 회원 상태 뱃지 | 신규 |
-
-### Widget
-| 컴포넌트 | 경로 | 설명 | 신규/재사용 |
-|---------|------|------|-----------|
-| MemberCard | `components/widget/MemberCard/` | 회원 정보 카드 | 신규 |
-
-### Feature
-| 컴포넌트 | 경로 | 연동 Store | 신규/재사용 |
-|---------|------|-----------|-----------|
-| MemberFilterPanel | `components/feature/MemberFilterPanel/` | MemberListStore | 신규 |
-
-### Store
-| Store | 경로 | 설명 |
-|-------|------|------|
-| MemberListStore | `stores/member/MemberListStore.ts` | 회원 목록 상태 관리 |
-
-### Menu (목록 페이지만)
-| 항목 | 값 | 설명 |
-|------|-----|------|
-| 메뉴 추가 | `admin-menu.ts` | 1depth: members, 2depth: members-list |
-| 경로 추가 | `admin-menu.ts` | /members, /members/active 등 |
-| Subject 추가 | `admin-menu.ts` | menu:members, menu:members:list |
-
-## 컴포넌트 계층
+**산출물:**
 ```
-MemberListPage
-├── MemberFilterPanel (feature)
-│   ├── Select (inputs)
-│   └── TextInput (inputs)
-├── DataTable (ui)
-│   ├── MemberStatusBadge (ui)
-│   └── Button (ui)
-└── Pagination (ui)
-```
-
-## 다음 단계
-Stage 5: 페이지 통합 (page=MemberList)
+apps/admin/app/(admin)/members/page.spec.md              # API/이벤트 섹션 업데이트
+packages/fe-ui/src/components/ui/[UIName]/index.spec.md   # UI 컴포넌트 기획서
+packages/fe-ui/src/components/widget/[WidgetName]/index.spec.md  # Widget 기획서
+packages/fe-ui/src/components/feature/[FeatureName]/index.spec.md  # Feature 기획서
 ```
 
 **완료 후 출력:**
 ```
-✅ Stage 4 완료: MemberList 컴포넌트 구현
+✅ Stage 4 완료: MemberList 화면 기획
+
+📁 생성/업데이트된 기획서:
+   - members/page.spec.md (API/이벤트 섹션 업데이트)
+   - packages/fe-ui/src/components/ui/MemberStatusBadge/index.spec.md
+   - packages/fe-ui/src/components/widget/MemberTable/index.spec.md
+   - packages/fe-ui/src/components/feature/MemberFilterPanel/index.spec.md
+
+📌 다음 단계: Stage 5 (컴포넌트 구현) page=List
+```
+
+---
+
+### Stage 5: 컴포넌트 구현 (페이지별)
+
+**목표**: UI, Widget, Feature 컴포넌트 구현
+
+**⚠️ 페이지별 실행**: `page` 파라미터 필요
+
+```bash
+/orch-stage run stage=5 app=admin domain=Member page=List
+```
+
+**에이전트 호출:**
+```
+Task: fe-ui-component-builder
+Task: fe-input-component-builder
+Task: fe-widget-builder
+Task: fe-feature-builder
+Task: fe-store-builder
+Task: fe-menu-builder (목록 페이지만)
+```
+
+**완료 후 출력:**
+```
+✅ Stage 5 완료: MemberList 컴포넌트 구현
 
 📁 생성된 컴포넌트:
-- UI: MemberStatusBadge (신규)
-- Widget: MemberCard (신규)
-- Feature: MemberFilterPanel (신규)
-- Store: MemberListStore (신규)
-- Menu: admin-menu.ts에 회원 메뉴 추가 ✨
+   - UI: MemberStatusBadge
+   - Widget: MemberTable
+   - Feature: MemberFilterPanel
+   - Store: MemberStore (도메인 공통)
+   - Menu: admin-menu.ts 업데이트
 
-📄 결과 문서: apps/proposal/plans/YYYY-MM-DD-Member/Member-MemberList-components.md
-
-📋 사용자 리뷰 포인트:
-- [ ] 컴포넌트 계층이 올바른가? (ui → widget → feature)
-- [ ] 재사용성이 적절한가?
-- [ ] 다른 페이지에서 재사용할 컴포넌트가 있는가?
-- [ ] 메뉴 구조가 적절한가? (목록 페이지만)
-
-→ 리뷰 완료 후 "Stage 5 진행 page=MemberList" 또는 수정 요청을 해주세요.
+📌 다음 단계: Stage 6 (페이지 통합) page=List
 ```
 
 ---
 
-### Stage 5: 페이지 통합 (페이지별)
+### Stage 6: 페이지 통합 (페이지별)
 
-**목표**: 특정 페이지 컴포넌트 구현 및 규칙 검증
+**목표**: 페이지 컴포넌트 구현 및 규칙 검증
 
-**⚠️ 페이지별 실행**: 이 Stage는 `page` 파라미터로 특정 페이지를 지정해야 합니다.
+**⚠️ 페이지별 실행**: `page` 파라미터 필요
 
 ```bash
-/orch-stage run stage=5 plan=YYYY-MM-DD-Member page=MemberList
+/orch-stage run stage=6 app=admin domain=Member page=List
 ```
 
-**전제조건**: 해당 페이지의 Stage 4 완료 (컴포넌트 존재)
-
-**에이전트 호출 순서:**
-
-1. **page-builder**
-   ```
-   Task: fe-page-builder
-   - 해당 페이지 정보 추출
-   - Pure UI Page 컴포넌트 생성
-   - 통합 훅 생성
-   - Route Page 생성
-   ```
-
-2. **/fe-review (Skill)**
-   ```
-   Skill: /fe-review
-   - 생성된 페이지 규칙 검증
-   - 위반 사항 리포트 생성
-   ```
-
-**산출물 문서 생성:**
-
-페이지별로 `-{페이지명}-complete.md` 파일 생성:
-
-```markdown
-# {기능명} - {페이지명} 구현 완료 보고서
-
-## 페이지 정보
-- 기능: Member (회원 관리)
-- 페이지: MemberList (목록)
-
-## 생성 일시
-YYYY-MM-DD HH:mm
-
-## 생성된 파일
-
-### Page 컴포넌트
-- `packages/fe-ui/src/components/page/MemberListPage/`
-- `apps/admin/app/(admin)/members/page.tsx`
-- `apps/admin/app/(admin)/members/_client.tsx`
-- `apps/admin/app/(admin)/members/_prefetch.ts`
-
-### 사용된 컴포넌트 (Stage 4에서 생성)
-- MemberStatusBadge (ui)
-- MemberCard (widget)
-- MemberFilterPanel (feature)
-
-## 규칙 검증 결과
-- [ ] useCallback/useMemo 금지: ✅ 통과
-- [ ] 핸들러 네이밍 (on[Event][UI]): ✅ 통과
-- [ ] API 사용 (@cocrepo/api): ✅ 통과
-- [ ] MobX observer: ✅ 통과
-- [ ] SSR Prefetch 패턴: ✅ 통과
-
-## 다음 단계
-- 다른 페이지 개발: MemberDetail, MemberCreate, MemberEdit
-- 또는 테스트 코드 작성
+**에이전트 호출:**
+```
+Task: fe-page-builder
+Skill: /fe-review
 ```
 
 **완료 후 출력:**
 ```
-✅ Stage 5 완료: MemberList 페이지 통합
+✅ Stage 6 완료: MemberList 페이지 통합
 
 📁 생성된 파일:
-- Pure UI Page: packages/fe-ui/src/components/page/MemberListPage/
-- Route Page: apps/admin/app/(admin)/members/page.tsx
-- Client: apps/admin/app/(admin)/members/_client.tsx
-- Prefetch: apps/admin/app/(admin)/members/_prefetch.ts
-
-📄 결과 문서: apps/proposal/plans/YYYY-MM-DD-Member/Member-MemberList-complete.md
+   - packages/fe-ui/src/components/page/MemberListPage/
+   - apps/admin/app/(admin)/members/page.tsx
+   - apps/admin/app/(admin)/members/_client.tsx
+   - apps/admin/app/(admin)/members/_prefetch.ts
 
 ✅ 규칙 검증: 모두 통과
 
-📋 사용자 리뷰 포인트:
-- [ ] 페이지가 기획과 일치하는가?
-- [ ] 모든 기능이 정상 동작하는가?
-
-🎉 MemberList 페이지 완료!
-
 📌 남은 페이지:
-- [ ] MemberDetail
-- [ ] MemberCreate
-- [ ] MemberEdit
+   - [ ] Detail
+   - [ ] Create
+   - [ ] Edit
 
-→ 다음 페이지 진행: /orch-stage run stage=4 plan=YYYY-MM-DD-Member page=MemberDetail
+→ 다음 페이지: /orch-stage run stage=4 app=admin domain=Member page=Detail
 ```
 
 ---
 
-### Stage 6: E2E 검증 (선택적)
+### Stage 7: E2E 검증 (선택적)
 
-**목표**: E2E 테스트 작성 및 실행으로 전체 기능 검증
+**목표**: E2E 테스트 작성 및 실행
 
-**⚠️ 선택적 단계**: 사용자가 요청할 때만 실행합니다.
+**⚠️ 선택적 단계**: 사용자 요청 시에만 실행
 
 ```bash
-/orch-stage run stage=6 plan=YYYY-MM-DD-Member
+/orch-stage run stage=7 app=admin domain=Member
 ```
 
-**전제조건**: Stage 5 모든 페이지 완료
-
-**에이전트 호출 순서:**
-
-1. **qa-be-e2e-testing** (백엔드 E2E)
-   ```
-   Task: qa-be-e2e-testing
-   - Controller의 API 엔드포인트 E2E 테스트
-   - 인증/인가 통합 테스트
-   - CRUD 플로우 테스트
-   ```
-
-2. **qa-fe-e2e-testing** (프론트엔드 E2E)
-   ```
-   Task: qa-fe-e2e-testing
-   - Playwright 기반 페이지 E2E 테스트
-   - 사용자 플로우 테스트
-   - 폼 제출/검증 테스트
-   ```
-
-**산출물 문서 생성:**
-
-기능 폴더에 `-e2e.md` 파일 생성:
-
-```markdown
-# {기능명} E2E 테스트 결과
-
-## 생성 일시
-YYYY-MM-DD HH:mm
-
-## 백엔드 E2E 테스트
-| 파일 | 테스트 수 | 결과 |
-|------|----------|------|
-| `apps/server/test/{domain}.e2e-spec.ts` | N개 | ✅ 통과 |
-
-## 프론트엔드 E2E 테스트
-| 파일 | 테스트 수 | 결과 |
-|------|----------|------|
-| `apps/e2e/tests/{app}/{feature}.spec.ts` | N개 | ✅ 통과 |
-
-## 실행 명령
-- 백엔드: `pnpm --filter=server test:e2e`
-- 프론트엔드: `pnpm --filter=@cocrepo/e2e test:{app}`
+**에이전트 호출:**
+```
+Task: qa-be-e2e-testing
+Task: qa-fe-e2e-testing
 ```
 
 **완료 후 출력:**
 ```
-✅ Stage 6 완료: E2E 검증
+✅ Stage 7 완료: E2E 검증
 
 📁 생성된 파일:
-- 백엔드: apps/server/test/members.e2e-spec.ts
-- 프론트엔드: apps/e2e/tests/admin/members.spec.ts
-
-📄 결과 문서: apps/proposal/plans/YYYY-MM-DD-Member/Member-e2e.md
-
-📋 사용자 리뷰 포인트:
-- [ ] 모든 E2E 테스트가 통과하는가?
-- [ ] 주요 사용자 시나리오가 커버되는가?
+   - apps/server/test/members.e2e-spec.ts
+   - apps/e2e/tests/admin/members.spec.ts
 
 🎉 Member 기능 개발 완료!
 ```
@@ -933,47 +548,17 @@ YYYY-MM-DD HH:mm
 
 ## 9. 체크리스트
 
-### 실행 전 확인
-- [ ] 요구사항이 명확한가?
-- [ ] Figma 디자인이 있는가? (있으면 /design-analyze Skill 사용)
-
 ### Stage별 완료 조건
 
-**Stage 1**
-- [ ] 기획서 생성됨
-- [ ] 설계서 생성됨
-- [ ] Entity 설계가 명확함
-- [ ] API 설계가 명확함
-
-**Stage 2**
-- [ ] Prisma 스키마 생성됨
-- [ ] Entity 클래스 생성됨
-- [ ] DTO 클래스 생성됨
-- [ ] `pnpm prisma generate` 성공
-- [ ] `pnpm prisma migrate dev` 성공
-
-**Stage 3**
-- [ ] Repository 생성됨
-- [ ] Service 생성됨
-- [ ] Controller 생성됨
-- [ ] 서버 시작 성공
-- [ ] Swagger 확인 가능
-
-**Stage 4**
-- [ ] Orval 실행 완료
-- [ ] UI 컴포넌트 생성됨
-- [ ] Widget 컴포넌트 생성됨
-- [ ] Feature 컴포넌트 생성됨
-
-**Stage 5**
-- [ ] 페이지 컴포넌트 생성됨
-- [ ] 규칙 검증 통과
-- [ ] 페이지 렌더링 성공
-
-**Stage 6** (선택)
-- [ ] 백엔드 E2E 테스트 통과
-- [ ] 프론트엔드 E2E 테스트 통과
-- [ ] 주요 사용자 시나리오 커버
+| Stage | 완료 조건 |
+|-------|----------|
+| 1 | app.spec.md 업데이트, page.spec.md 생성, BE/Store .spec.md 생성 |
+| 2 | Prisma 스키마, Entity, DTO 생성, migrate 성공 |
+| 3 | Repository, Service, Controller 생성, 서버 시작 성공 |
+| 4 | page.spec.md API/이벤트 업데이트, 컴포넌트 .spec.md 생성 |
+| 5 | UI, Widget, Feature, Store 생성 |
+| 6 | 페이지 컴포넌트 생성, 규칙 검증 통과 |
+| 7 | E2E 테스트 통과 |
 
 ---
 
@@ -983,24 +568,25 @@ YYYY-MM-DD HH:mm
 
 | 변경 단계 | 영향 범위 | 재작업 범위 |
 |----------|----------|------------|
-| Stage 1 | Stage 1만 | 설계 문서만 수정 |
-| Stage 2 | Stage 2~5 | 스키마부터 재생성 |
-| Stage 3 | Stage 3~5 | 백엔드부터 재생성 |
-| Stage 4 | Stage 4~5 | 컴포넌트부터 재생성 |
-| Stage 5 | Stage 5만 | 페이지만 수정 |
-| Stage 6 | Stage 6만 | E2E 테스트만 수정 |
+| Stage 1 | Stage 1~7 | 전체 재기획 |
+| Stage 2 | Stage 2~7 | 스키마부터 재생성 |
+| Stage 3 | Stage 3~7 | 백엔드부터 재생성 |
+| Stage 4 | Stage 4~7 | 해당 화면 기획부터 |
+| Stage 5 | Stage 5~7 | 해당 화면 컴포넌트부터 |
+| Stage 6 | Stage 6~7 | 해당 페이지만 |
+| Stage 7 | Stage 7만 | E2E 테스트만 |
 
 ### 재시작 명령 예시
 
 ```bash
-# Stage 1 기획 변경 후 Stage 2부터 재시작
-/orch-stage start stage=2 plan=2026-01-10-MemberListPage
+# 도메인 기획 변경
+/orch-stage start stage=1 app=admin domain=Member
 
-# Stage 3 API 변경 후 Stage 3부터 재시작
-/orch-stage start stage=3 plan=2026-01-10-MemberListPage
+# 스키마 변경
+/orch-stage start stage=2 app=admin domain=Member
 
-# 특정 Stage만 다시 실행
-/orch-stage run stage=4 plan=2026-01-10-MemberListPage
+# 특정 화면 컴포넌트만 재실행
+/orch-stage run stage=5 app=admin domain=Member page=List
 ```
 
 ---
@@ -1009,7 +595,7 @@ YYYY-MM-DD HH:mm
 
 ### 하위호환성 미고려 (Critical)
 
-**모든 기획/설계 변경은 전체 마이그레이션 방식으로 진행합니다.**
+**모든 기획/설계 변경은 전체 마이그레이션 방식으로 진행합니다。**
 
 | 원칙 | 설명 |
 |------|------|
@@ -1022,50 +608,21 @@ YYYY-MM-DD HH:mm
 
 ## 12. 연관 에이전트
 
-### 선행 에이전트
-없음 (최상위 오케스트레이터)
+### Stage별 호출 에이전트
+
+| Stage | 호출 에이전트 |
+|-------|--------------|
+| 1 | orch-requirement, req-L0L2-planner, req-L3L4-planner, req-entity-planner, req-store-planner, be-spec-planner |
+| 2 | be-schema-builder, be-entity-builder, be-dto-builder, be-query-dto-builder, be-seed-maker |
+| 3 | be-repository-builder, be-service-builder, be-facade-builder, be-controller-builder |
+| 4 | orch-screen-planner |
+| 5 | fe-ui-component-builder, fe-input-component-builder, fe-widget-builder, fe-feature-builder, fe-store-builder, fe-menu-builder |
+| 6 | fe-page-builder, /fe-review (Skill) |
+| 7 | qa-be-e2e-testing, qa-fe-e2e-testing |
 
 ### 후행 에이전트
+
 | 에이전트 | 용도 |
 |---------|------|
 | `qa-fe-testing` | 프론트엔드 단위 테스트 작성 |
 | `qa-be-testing` | 백엔드 단위 테스트 작성 |
-| `qa-fe-e2e-testing` | Playwright 기반 프론트엔드 E2E 테스트 |
-| `qa-be-e2e-testing` | Jest+Supertest 기반 백엔드 E2E 테스트 |
-| `code-reviewer` | 코드 리뷰 |
-
-### Stage별 호출 에이전트
-
-**Stage 1**
-- `etc-planner` - 기획서 작성
-- `/design-analyze (Skill)` - Figma 디자인 분석 (Figma 있을 때)
-- `etc-technical-designer` - 기술 설계서 작성
-
-**Stage 2**
-- `be-schema-builder` - Prisma 스키마 생성
-- `be-entity-builder` - Entity 클래스 생성
-- `be-vo-builder` - Value Object 생성
-- `be-dto-builder` - Create/Update/Response DTO 생성
-- `be-query-dto-builder` - Query DTO 생성 (PrismaQueryDto 기반)
-- `be-seed-maker` - 시드 데이터 생성
-
-**Stage 3**
-- `be-repository-builder` - Repository 생성
-- `be-service-builder` - Service 생성
-- `be-facade-builder` - Facade 생성
-- `be-controller-builder` - Controller 생성
-
-**Stage 4**
-- `fe-ui-component-builder` - Pure UI 컴포넌트
-- `fe-input-component-builder` - Input 컴포넌트
-- `fe-widget-builder` - Widget 컴포넌트
-- `fe-feature-builder` - Feature 컴포넌트
-- `fe-store-builder` - MobX Store
-
-**Stage 5**
-- `fe-page-builder` - 페이지 컴포넌트
-- `/fe-review` (Skill) - 프론트엔드 규칙 검증
-
-**Stage 6** (선택적)
-- `qa-be-e2e-testing` - 백엔드 E2E 테스트
-- `qa-fe-e2e-testing` - 프론트엔드 E2E 테스트

@@ -1,0 +1,101 @@
+# 템플릿 수정 페이지 기획서
+
+> 생성일: 2026-02-18
+> 타입: page
+> 경로: `/templates/[templateId]/edit`
+
+## 사용자 시나리오
+
+1. 관리자가 템플릿 상세 페이지에서 "수정" 버튼을 클릭하여 수정 페이지에 진입한다
+2. 기존 데이터가 폼에 자동으로 채워진다 (code, type은 읽기 전용)
+3. 이름, 설명, 제목, 본문, 변수를 수정한다
+4. "저장" 버튼을 클릭하면 유효성 검증 후 API를 호출한다
+5. 수정 성공 시 상세 페이지로 이동한다
+6. "취소" 버튼 클릭 시 상세 페이지로 돌아간다
+
+## 레이아웃 구성
+
+| 영역 | 컴포넌트 | 설명 |
+|------|----------|------|
+| 페이지 헤더 | `PageSurface` | title="템플릿 수정", description=동적 |
+| 폼 영역 | `TemplateForm` (mode="edit") | 공통 템플릿 폼 컴포넌트 |
+
+## 폼 필드
+
+| 필드 | 타입 | 필수 | 수정 가능 | 유효성 검증 |
+|------|------|------|----------|------------|
+| type | RadioGroup | O | X (읽기 전용) | - |
+| code | Input | O | X (읽기 전용) | - |
+| name | Input | O | O | 빈 값 불가 |
+| description | Textarea | X | O | - |
+| subject | Input | EMAIL/PUSH일 때 O | O | PUSH는 50자 이하 |
+| content | Textarea | O | O | PUSH는 200자 이하 |
+| variables | VariableEditTable | X | O | 추가/수정/삭제 |
+
+## 변수 편집 (전체 교체 방식)
+
+| 필드 | 설명 |
+|------|------|
+| id | 기존 변수 ID (수정 시), 없으면 신규 생성 |
+| name | 변수명 |
+| description | 설명 (선택) |
+| defaultValue | 기본값 (선택) |
+| isRequired | 필수 여부 |
+
+## 페이지 상태
+
+| 상태 | 설명 | UI |
+|------|------|-----|
+| 로딩 | 기존 데이터 조회 중 | `Spinner` + "로딩 중..." |
+| 데이터 없음 | 템플릿을 찾을 수 없음 | 안내 메시지 + "목록으로" 버튼 |
+| 폼 표시 | 기존 데이터로 폼 채움 | 입력 가능 상태 |
+| 제출 중 | 수정 API 호출 중 | 저장 버튼 로딩 상태 |
+| 성공 | 수정 완료 | 성공 토스트 + 상세 페이지 이동 |
+| 실패 | 수정 실패 | 에러 토스트 |
+
+## API 호출
+
+| 시점 | API | 설명 |
+|------|-----|------|
+| SSR 프리페칭 | `prefetchGetTemplateQuery(templateId)` | 기존 데이터 프리페칭 |
+| 클라이언트 | `useGetTemplate(templateId)` | 기존 데이터 조회 (폼 초기화용) |
+| 수정 제출 시 | `useUpdateTemplate({ id, data })` | UpdateTemplateDto (변수 배열 포함) 전송 |
+
+## 이벤트 핸들러
+
+| 이벤트 | 동작 |
+|--------|------|
+| onFormDataChange | 폼 데이터 업데이트 + 해당 필드 에러 클리어 |
+| onVariablesChange | 변수 목록 업데이트 |
+| onSubmitForm | 유효성 검증 -> updateTemplate API 호출 |
+| onClickCancelButton | `/templates/{templateId}` 상세 페이지로 이동 |
+
+## 유효성 검증 규칙
+
+| 필드 | 규칙 | 에러 메시지 |
+|------|------|------------|
+| name | 빈 값 | "이름을 입력해주세요." |
+| content | 빈 값 | "본문을 입력해주세요." |
+| subject | EMAIL/PUSH인데 빈 값 | "제목을 입력해주세요." |
+| subject | PUSH + 50자 초과 | "제목은 50자 이하로 입력해주세요." |
+| content | PUSH + 200자 초과 | "본문은 200자 이하로 입력해주세요." |
+
+## 특이사항
+
+- 초기화 로직: `useEffect`로 `template` 데이터 수신 시 `state.isInitialized`를 체크하여 1회만 폼 초기화
+- 수정 시 code, type은 전송하지 않음 (읽기 전용)
+- 변수 업데이트는 전체 교체 방식 (Set semantics): id 있으면 수정, 없으면 생성, 요청에 없으면 삭제
+- 로컬 상태 관리: `useLocalObservable` (MobX)
+- FULL_ACCESS 권한 필요
+
+## 구현 체크리스트
+
+- [x] page.tsx (서버 컴포넌트, Prefetch + HydrationBoundary)
+- [x] _client.tsx (클라이언트 컴포넌트, observer 래핑)
+- [x] _prefetch.ts (prefetchGetTemplateQuery 호출)
+
+## 변경 이력
+
+| 일자 | 내용 | 작성자 |
+|------|------|--------|
+| 2026-02-18 | 초기 생성 (역기획) | req-reverse-engineer |

@@ -532,6 +532,123 @@ packages/common-type/src/
 - 하위호환 코드는 기술 부채가 됨
 - 5단계 플로우에서 각 단계별 리뷰로 변경 영향을 관리
 
+### 코드 옆 기획서 (Sidecar Spec) (Critical)
+
+**모든 코드 파일 옆에 .spec.md 기획서가 존재합니다.**
+
+```
+모든 코드 파일 옆에 .spec.md가 존재
+기획서와 코드가 같은 폴더에 있어 발견성/동기화 용이
+이미 있으면 스킵, 개선 필요하면 업데이트 + 변경 이력 기록
+```
+
+#### 기획서 파일 구조
+
+```
+apps/[app]/app/(admin)/
+├── app.spec.md                 # 앱 기획서 (L0-L2: 컨텍스트, Actor, Goal)
+
+apps/[app]/app/(admin)/[도메인]/
+├── page.tsx                    # 목록 페이지
+├── page.spec.md                # 목록 페이지 기획서 ← 코드 옆에 위치
+├── [entityId]/
+│   ├── page.tsx                # 상세 페이지
+│   └── page.spec.md            # 상세 페이지 기획서
+├── new/
+│   ├── page.tsx                # 등록 페이지
+│   └── page.spec.md            # 등록 페이지 기획서
+└── [entityId]/edit/
+    ├── page.tsx                # 수정 페이지
+    └── page.spec.md            # 수정 페이지 기획서
+
+packages/fe-ui/src/components/
+├── feature/[FeatureName]/
+│   ├── index.tsx
+│   └── index.spec.md           # Feature 기획서
+├── widget/[WidgetName]/
+│   ├── index.tsx
+│   └── index.spec.md           # Widget 기획서
+└── ui/[UIName]/
+    ├── index.tsx
+    └── index.spec.md           # UI 기획서
+
+packages/fe-store/src/stores/
+├── [StoreName].ts
+└── [StoreName].spec.md         # Store 기획서
+
+packages/be-entity/src/
+├── [name].entity.ts
+└── [name].entity.spec.md       # Entity 기획서
+
+packages/be-vo/src/[domain]/
+├── [name].vo.ts
+└── [name].vo.spec.md           # VO 기획서
+
+apps/server/src/[module]/
+├── [name].service.ts
+├── [name].service.spec.md      # Service 기획서
+├── repositories/
+│   ├── [name].repository.ts
+│   └── [name].repository.spec.md
+└── controllers/
+    ├── [name].controller.ts
+    └── [name].controller.spec.md
+```
+
+#### 기획서 타입별 내용
+
+| 타입 | 파일 | 핵심 내용 |
+|------|------|----------|
+| **app** | `app.spec.md` | 앱 컨텍스트, 사용자, 목표, 도메인 목록 (L0-L2) |
+| **page** | `page.spec.md` | 시나리오, 레이아웃, API, 이벤트 |
+| **feature** | `index.spec.md` | Store 연결, Props, 이벤트 |
+| **widget** | `index.spec.md` | Props, 하위 UI, 슬롯, 디자인 토큰 |
+| **ui** | `index.spec.md` | Props, 상태, 변형, 접근성 |
+| **store** | `.spec.md` | 상태, 액션, 비동기 흐름 |
+| **entity** | `.entity.spec.md` | 필드, 관계, Enum, 도메인 메서드, 비즈니스 규칙 |
+| **vo** | `.vo.spec.md` | 역할, Props, validate 규칙, 팩토리 메서드, 도메인 메서드 |
+| **service** | `.spec.md` | 메서드, 비즈니스 규칙, 권한 |
+| **repository** | `.spec.md` | 메서드, Prisma 매핑 |
+| **controller** | `.spec.md` | 엔드포인트, 인증/인가 |
+
+#### 기획서 템플릿 위치
+
+```
+.claude/templates/spec/
+├── page.spec.md        # 페이지 기획서 템플릿
+├── feature.spec.md     # Feature 기획서 템플릿
+├── widget.spec.md      # Widget 기획서 템플릿
+├── ui.spec.md          # UI 기획서 템플릿
+├── store.spec.md       # Store 기획서 템플릿
+├── entity.spec.md      # Entity 기획서 템플릿
+├── vo.spec.md          # VO 기획서 템플릿
+├── service.spec.md     # Service 기획서 템플릿
+├── repository.spec.md  # Repository 기획서 템플릿
+└── controller.spec.md  # Controller 기획서 템플릿
+```
+
+#### 기획서 변경 이력 관리
+
+각 기획서 하단에 변경 이력을 기록합니다:
+
+```markdown
+## 변경 이력
+
+| 일자 | 내용 | 작성자 |
+|------|------|--------|
+| 2026-02-18 | 초기 생성 | orch-requirement |
+| 2026-02-19 | 검색 기능 추가 | orch-requirement |
+```
+
+#### 장점
+
+| 항목 | 설명 |
+|------|------|
+| **발견성** | 코드 파일만 보면 기획서도 바로 옆에 있음 |
+| **동기화** | 기획서와 코드가 같은 폴더에 있어 버전 관리 용이 |
+| **점진적** | 한 번에 다 만들지 않고, 필요한 것부터 |
+| **역설계 호환** | 기존 코드 분석 → .spec.md만 생성하면 됨 |
+
 ## 백엔드 개발 규칙
 
 ### DTO 위치 규칙
@@ -736,9 +853,9 @@ feat(coin): 멀티시그 지갑 서비스 초기 구현
 
 ## Agent 활용 가이드
 
-### 5단계 분할 개발 플로우 (권장)
+### 7단계 분할 개발 플로우 (권장)
 
-**orch-stage**를 사용하여 각 단계별 사용자 리뷰를 받으며 개발합니다.
+**orch-stage**를 사용하여 각 단계별 사용자 리뷰를 받으며 개발합니다。
 
 #### 핵심 개념: 기능 단위 기획
 
@@ -747,81 +864,103 @@ feat(coin): 멀티시그 지갑 서비스 초기 구현
 ```
 
 - **Stage 1-3**: 기능 전체를 한 번에 처리 (기획, 스키마, 백엔드)
-- **Stage 4-5**: 페이지별로 반복 실행 (컴포넌트, 페이지)
+- **Stage 4-6**: 페이지별로 반복 실행 (화면 기획, 컴포넌트, 페이지)
+- **Stage 7**: E2E 검증 (선택)
 
 #### 플로우
 
 ```
-Stage 1: 기획 (기능 전체)    → orch-requirement (L0~L10) → [리뷰]
-Stage 2: 스키마 (기능 전체)  → schema → entity → dto → query-dto → seed → [리뷰]
-Stage 3: 백엔드 (기능 전체)  → repository → service → controller → [리뷰]
-Stage 4: 컴포넌트 (페이지별) → page-spec → domain-spec → ui → widget → feature → [리뷰] ← page 파라미터 필요
-Stage 5: 페이지 (페이지별)   → fe-page-builder → [리뷰] ← page 파라미터 필요
-Stage 6: E2E 검증 (필수)     → qa-be-e2e-testing → qa-fe-e2e-testing → [리뷰]
+Stage 1: 도메인 기획        → orch-requirement (L0~L4 + BE/Store 스펙) → [리뷰]
+Stage 2: 스키마 구현        → schema → entity → dto → query-dto → seed → [리뷰]
+Stage 3: 백엔드 구현        → repository → service → controller → [리뷰]
+Stage 4: 화면 기획 (페이지별) → orch-screen-planner (L5~L12) → [리뷰] ← page 파라미터 필요
+Stage 5: 컴포넌트 (페이지별) → ui → widget → feature → store → [리뷰] ← page 파라미터 필요
+Stage 6: 페이지 (페이지별)   → fe-page-builder → [리뷰] ← page 파라미터 필요
+Stage 7: E2E 검증 (선택)    → qa-be-e2e-testing → qa-fe-e2e-testing → [리뷰]
 ```
 
 #### 기획서 폴더 구조
 
 ```
-apps/proposal/plans/
-│
-├── _core/                              # 공통 시스템 기획 (프로젝트 무관)
-│   ├── README.md                       # _core 구조 설명 문서
-│   ├── infrastructure/                 # 인프라 레이어 (CASL, 인증, 멀티테넌시)
-│   ├── navigation/                     # 네비게이션 레이어 (메뉴 시스템)
-│   ├── ui-system/                      # UI 시스템 레이어 (Surface, DataGrid)
-│   └── shared-domain/                  # 공유 도메인 레이어 (Role, Tenant)
-│
-├── [project]/                          # 프로젝트 (수주 단위)
-│   └── [app]/                          # 앱 (admin-web, admin-mobile 등)
-│       ├── _app.md                     # 앱 메타 + 사용하는 공통 시스템 목록
-│       └── YYYY-MM-DD-[feature]/       # 기능 (Member, Order 등)
-│
-└── prj-core/                           # 자체 서비스
-    └── admin-web/
-        ├── _app.md
-        └── ...
-```
+apps/[app]/app/(admin)/
+├── app.spec.md                 # 앱 기획서 (L0-L2: 컨텍스트, Actor, Goal)
 
-**`_core/` 폴더**: 모든 프로젝트에서 재사용 가능한 공통 시스템 기획
-- 상세 내용은 `apps/proposal/plans/_core/README.md` 참조
+apps/[app]/app/(admin)/[도메인]/
+├── page.tsx                    # 목록 페이지
+├── page.spec.md                # 목록 페이지 기획서
+├── [entityId]/
+│   ├── page.tsx                # 상세 페이지
+│   └── page.spec.md            # 상세 페이지 기획서
+├── new/
+│   ├── page.tsx                # 등록 페이지
+│   └── page.spec.md            # 등록 페이지 기획서
+└── [entityId]/edit/
+    ├── page.tsx                # 수정 페이지
+    └── page.spec.md            # 수정 페이지 기획서
+
+packages/fe-ui/src/components/
+├── feature/[FeatureName]/
+│   ├── index.tsx
+│   └── index.spec.md           # Feature 기획서
+├── widget/[WidgetName]/
+│   ├── index.tsx
+│   └── index.spec.md           # Widget 기획서
+└── ui/[UIName]/
+    ├── index.tsx
+    └── index.spec.md           # UI 기획서
+
+packages/fe-store/src/stores/
+├── [StoreName].ts
+└── [StoreName].spec.md         # Store 기획서
+
+apps/server/src/[module]/
+├── [name].service.ts
+├── [name].service.spec.md      # Service 기획서
+├── repositories/
+│   ├── [name].repository.ts
+│   └── [name].repository.spec.md
+└── controllers/
+    ├── [name].controller.ts
+    └── [name].controller.spec.md
+```
 
 #### 실행 방법
 
 ```bash
-# 1. 전체 기능 기획 시작 (프로젝트/앱을 질문으로 선택)
+# 1. 도메인 기획 시작
 /orch-stage full
-# 📌 프로젝트 선택? → project-alpha
-# 📌 앱 선택? → admin-web
-# 📌 기능명? → Member
+# 📌 앱 선택? → admin
+# 📌 도메인명? → Member
 # 📌 요구사항? → 회원 목록/상세/등록/수정/삭제
 
-# → Stage 1~3 순차 진행 (기능 전체)
+# → Stage 1~3 순차 진행 (도메인 전체)
 
-# 2. 페이지별 프론트엔드 개발
-/orch-stage run stage=4 plan=project-alpha/admin-web/2026-01-30-Member page=MemberList
-/orch-stage run stage=5 plan=project-alpha/admin-web/2026-01-30-Member page=MemberList
+# 2. 화면별 프론트엔드 개발
+/orch-stage run stage=4 app=admin domain=Member page=List
+/orch-stage run stage=5 app=admin domain=Member page=List
+/orch-stage run stage=6 app=admin domain=Member page=List
 
-/orch-stage run stage=4 plan=project-alpha/admin-web/2026-01-30-Member page=MemberDetail
-/orch-stage run stage=5 plan=project-alpha/admin-web/2026-01-30-Member page=MemberDetail
+/orch-stage run stage=4 app=admin domain=Member page=Detail
+/orch-stage run stage=5 app=admin domain=Member page=Detail
+/orch-stage run stage=6 app=admin domain=Member page=Detail
 
-# ... MemberCreate, MemberEdit 반복
+# ... Create, Edit 반복
 ```
 
 #### 장점
 - **기능 단위 백엔드**: API/스키마가 한 번에 완성되어 일관성 유지
 - **페이지별 프론트엔드**: 점진적 개발, 컴포넌트 재사용 가능
+- **화면별 기획서**: 코드 옆에 기획서가 있어 참조 용이
 - **각 단계별 리뷰**: 문제 발견 시 해당 단계부터 재시작
 
-#### Stage 4: 자동 메뉴 업데이트
+#### Stage 5: 자동 메뉴 업데이트
 
-**Stage 4에서는 목록 페이지(List) 개발 시 `fe-menu-builder` 에이전트가 자동으로 실행됩니다.**
+**Stage 5에서는 목록 페이지(List) 개발 시 `fe-menu-builder` 에이전트가 자동으로 실행됩니다。**
 
 ```
-Stage 4: 컴포넌트 (페이지별)
-├── page-spec-builder  ← 첫 번째로 실행 (페이지 SPEC.md 생성)
-├── domain-spec-builder ← 두 번째로 실행 (Feature/Cell/Store SPEC.md 생성)
+Stage 5: 컴포넌트 (페이지별)
 ├── ui-component-builder
+├── input-component-builder
 ├── widget-builder
 ├── feature-builder
 ├── store-builder
@@ -836,13 +975,7 @@ Stage 4: 컴포넌트 (페이지별)
 - MemberList, UserList 등 첫 페이지 개발 시 메뉴 자동 생성
 - Detail, Create, Edit 페이지는 메뉴 업데이트 없음
 
-**업데이트 내용:**
-- `packages/common-constant/src/routing/admin-menu.ts`에 새 메뉴 항목 추가
-- 경로 구조가 엔티티 관계 규칙을 따르는지 검증
-- Subject 자동 생성 (예: `menu:members`, `menu:members:list`)
-- 적절한 아이콘 자동 선택
-
-이 자동화로 메뉴 시스템이 항상 최신 상태로 유지됩니다.
+이 자동화로 메뉴 시스템이 항상 최신 상태로 유지됩니다。
 
 ### 개별 Agent
 
@@ -850,19 +983,19 @@ Stage 4: 컴포넌트 (페이지별)
 
 | Agent | 역할 |
 |-------|------|
-| orch-stage | 5단계 분할 개발 플로우를 조율하는 메타 에이전트 |
-| orch-requirement | L0-L10 레이어별 기획 에이전트를 총괄 조율하는 오케스트레이터 |
+| orch-stage | 7단계 분할 개발 플로우를 조율하는 메타 에이전트 |
+| orch-requirement | 코드 옆 기획서(Sidecar Spec) 방식으로 기획서와 코드를 함께 관리하는 오케스트레이터 |
 
 #### 기획/분석 (req-*)
 
 | Agent | 역할 |
 |-------|------|
-| req-L0L2-planner | 시스템 컨텍스트, 사용자(Actor), 사용자 목표(Goal) 레이어 기획 |
-| req-L3L4-planner | 기능(Feature)과 화면(Screen) 레이어 기획 |
-| req-L5L6-planner | 인터랙션(Action)과 API 레이어 기획 |
-| req-L7L8-planner | 데이터 모델(Entity)과 UI 컴포넌트 레이어 기획 |
-| req-L9L10-planner | 비즈니스 로직과 테스트 레이어 기획 |
-| req-reverse-engineer | 기존 코드를 분석하여 L0-L10 형식 기획서 역생성 |
+| req-L0L2-planner | 시스템 컨텍스트, 사용자(Actor), 사용자 목표(Goal) 기획 → `app.spec.md` 업데이트 |
+| req-L3L4-planner | 기능(Feature)과 화면(Screen) 기획 → 각 `page.spec.md` |
+| req-L5L6-planner | 인터랙션(Action)과 API 기획 → `controller.spec.md` + 페이지 API 섹션 |
+| req-L7L8-planner | 엔티티/컴포넌트 기획 → `feature/widget/ui.spec.md` |
+| req-L9L10-planner | 비즈니스 로직/Store/테스트 기획 → `service/repository/store.spec.md` |
+| req-reverse-engineer | 기존 코드를 분석하여 `.spec.md` 역생성 |
 | /design-analyze (Skill) | Figma 디자인 분석 및 컴포넌트 매핑 (Figma 있을 때) |
 | /route-design (Skill) | 백엔드 엔티티 기반 라우팅 경로 설계 |
 
@@ -870,8 +1003,6 @@ Stage 4: 컴포넌트 (페이지별)
 
 | Agent | 역할 |
 |-------|------|
-| fe-page-spec-builder | 기능 기획서에서 페이지별 SPEC.md 생성 |
-| fe-domain-spec-builder | 도메인 컴포넌트(Feature, Cell, Store) SPEC.md 생성 |
 | fe-ui-component-builder | Pure UI 컴포넌트 생성 (packages/fe-ui/src/components/ui) |
 | fe-cell-builder | DataGrid/Table용 Cell 컴포넌트 생성 (계층별) |
 | fe-input-component-builder | Input 컴포넌트 생성 (packages/fe-ui/src/components/inputs) |

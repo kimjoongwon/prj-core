@@ -1,0 +1,86 @@
+# 권한 등록 페이지 기획서
+
+> 생성일: 2026-02-18
+> 타입: page
+> 경로: `/abilities/new`
+
+## 사용자 시나리오
+
+1. 관리자가 "권한 추가" 버튼을 통해 등록 페이지에 진입한다.
+2. 기본 정보(이름, 설명)를 입력한다.
+3. CASL 정보(Subject, Action, Fields, Conditions)를 설정한다.
+4. 필요 시 거부 권한(cannot)으로 전환하고 거부 사유를 입력한다.
+5. "등록" 버튼을 클릭하여 권한을 생성한다.
+6. 등록 성공 시 해당 권한 상세 페이지로 이동한다.
+
+## 레이아웃 구성
+
+| 영역 | 컴포넌트 | 설명 |
+|------|----------|------|
+| 페이지 래퍼 | `PageSurface` | title="권한 등록", description="새로운 CASL 권한을 등록합니다." |
+| 액션 영역 | `Button` x2 | "목록으로" (ArrowLeft) + "등록" (Save, primary) |
+| 기본 정보 섹션 | `SectionSurface` | 이름(Input, 필수), 설명(Textarea) |
+| CASL 정보 섹션 | `SectionSurface` | Subject(Select, 필수), Action(Select, 필수), Fields(Textarea), Conditions(Textarea), 거부 토글(Switch), 거부 사유(Textarea) |
+
+## 폼 필드
+
+| 필드 | 컴포넌트 | 필수 | 유효성 검사 |
+|------|----------|:----:|------------|
+| name | Input | O | 빈 값 검사 |
+| description | Textarea | X | - |
+| subjectId | Select | O | 빈 값 검사 |
+| actionId | Select | O | 빈 값 검사 |
+| fields | Textarea | X | 쉼표 구분 파싱 |
+| conditions | Textarea | X | JSON 형식 검증 |
+| inverted | Switch | X | - |
+| reason | Textarea | X | inverted=true일 때만 활성화 |
+
+## 페이지 상태
+
+| 상태 | 설명 | UI |
+|------|------|-----|
+| 초기 | 빈 폼 표시 | 입력 폼 활성화 |
+| 등록 중 | API 호출 대기 | 등록 버튼 isLoading |
+| 등록 성공 | 성공 토스트 + 이동 | "권한 등록 성공" 토스트 → 상세 페이지 이동 |
+| 등록 실패 | 에러 토스트 | "권한 등록 실패" 에러 메시지 |
+| 입력 오류 | 유효성 검사 실패 | "입력 오류" 토스트 (필수 필드 미입력, JSON 형식 오류) |
+
+## API 호출
+
+| 시점 | API | 설명 |
+|------|-----|------|
+| 페이지 진입 | `GET /api/v1/subjects` (useGetSubjects) | Subject 선택 옵션 로드 |
+| 페이지 진입 | `GET /api/v1/actions` (useGetActions) | Action 선택 옵션 로드 |
+| 등록 버튼 클릭 | `POST /api/v1/abilities` (useCreateAbility) | 권한 생성 |
+
+## 이벤트 핸들러
+
+| 이벤트 | 동작 |
+|--------|------|
+| onClickBackButton | `/abilities` 목록 페이지로 router.push |
+| onClickCreateButton | 유효성 검사 후 createAbility 뮤테이션 실행 |
+
+## 로컬 상태 (useLocalObservable)
+
+| 필드 | 타입 | 초기값 | 설명 |
+|------|------|--------|------|
+| name | string | "" | 권한 이름 |
+| description | string | "" | 설명 |
+| subjectId | string | "" | Subject ID |
+| actionId | string | "" | Action ID |
+| fields | string | "" | 필드 (쉼표 구분 문자열) |
+| conditions | string | "" | 조건 (JSON 문자열) |
+| inverted | boolean | false | 거부 여부 |
+| reason | string | "" | 거부 사유 |
+
+## 구현 체크리스트
+
+- [x] page.tsx (서버 컴포넌트)
+- [x] _client.tsx (클라이언트 컴포넌트)
+- [ ] _prefetch.ts (데이터 프리페치) - 미구현
+
+## 변경 이력
+
+| 일자 | 내용 | 작성자 |
+|------|------|--------|
+| 2026-02-18 | 초기 생성 (역기획) | req-reverse-engineer |

@@ -1,0 +1,85 @@
+# Subject 상세 페이지 기획서
+
+> 생성일: 2026-02-18
+> 타입: page
+> 경로: `/subjects/[subjectId]`
+
+## 사용자 시나리오
+
+1. 관리자가 Subject 목록에서 특정 Subject를 클릭하여 상세 정보를 조회한다
+2. 기본 정보(식별자, 표시명, 아이콘, 분류, 정렬 순서, 시스템 여부, 생성일, 수정일)를 확인한다
+3. entity 그룹 Subject인 경우 DMMF 기반 필드 목록(필드명, 표시명, 타입, 필수, 관계)을 확인한다
+4. 목록으로 버튼을 클릭하여 Subject 목록 페이지로 돌아간다
+
+## 레이아웃 구성
+
+| 영역 | 컴포넌트 | 설명 |
+|------|----------|------|
+| 페이지 헤더 | `PageSurface` | title="Subject 상세", description="Subject의 상세 정보를 조회합니다.", actions에 "목록으로" 버튼 |
+| 기본 정보 | `SectionSurface` (title="기본 정보") | 2컬럼 Grid 레이아웃으로 Subject 속성 표시 |
+| 필드 목록 | `SectionSurface` (title="필드 목록") | entity 그룹만 Table 표시, 비entity는 안내 메시지 |
+
+## 기본 정보 표시 필드
+
+| 필드 | 라벨 | 표시 방식 |
+|------|------|----------|
+| name | 식별자 | 텍스트 |
+| displayName | 표시명 | `DefaultCell` ("-" 폴백) |
+| icon | 아이콘 | `DefaultCell` ("-" 폴백) |
+| group | 분류 | `Chip` (그룹별 색상) |
+| order | 정렬 순서 | 숫자 |
+| isSystem | 시스템 | `BooleanCell` |
+| createdAt | 생성일 | `DateTimeCell` |
+| updatedAt | 수정일 | `DateTimeCell` |
+
+## 필드 목록 테이블 (entity 그룹 전용)
+
+| 컬럼 | 설명 |
+|------|------|
+| 필드명 | field.name |
+| 표시명 | field.displayName ("-" 폴백) |
+| 타입 | field.type (code 스타일) |
+| 필수 | field.isRequired (`BooleanCell`) |
+| 관계 | field.isRelation (`BooleanCell`) |
+
+## 페이지 상태
+
+| 상태 | 설명 | UI |
+|------|------|-----|
+| 로딩 | Subject 상세 조회 중 | `Spinner` (size="lg") |
+| 데이터 없음 | Subject를 찾을 수 없음 | 안내 메시지 + "목록으로" 버튼 |
+| 데이터 표시 | Subject 정보 + 필드 목록 표시 | 기본 정보 + 필드 테이블 |
+| 필드 로딩 | entity 그룹 필드 조회 중 | 필드 섹션 내 `Spinner` |
+| 비entity | entity 그룹이 아닌 Subject | "이 Subject는 Entity 기반이 아니므로 필드 정보가 없습니다." |
+
+## API 호출
+
+| 시점 | API | 설명 |
+|------|-----|------|
+| SSR 프리페칭 | `prefetchGetSubjectByIdQuery(subjectId)` | Subject 상세 프리페칭 |
+| 클라이언트 | `useGetSubjectById(subjectId)` | Subject 상세 조회 |
+| 클라이언트 (조건부) | `getSubjectFields(subjectId)` | entity 그룹일 때만 필드 목록 조회 (useQuery + enabled) |
+
+## 이벤트 핸들러
+
+| 이벤트 | 동작 |
+|--------|------|
+| "목록으로" 버튼 클릭 | `/subjects` 페이지로 이동 |
+
+## 특이사항
+
+- Subject 필드 조회는 `group === "entity"` 조건에서만 `enabled: true`로 실행
+- 필드 조회는 Orval 생성 훅이 아닌 `getSubjectFields` 함수를 `useQuery`에 직접 구성하여 사용
+- Subject는 조회 전용 (수정/삭제 기능 없음)
+
+## 구현 체크리스트
+
+- [x] page.tsx (서버 컴포넌트, Prefetch + HydrationBoundary)
+- [x] _client.tsx (클라이언트 컴포넌트, observer 래핑)
+- [x] _prefetch.ts (prefetchGetSubjectByIdQuery 호출)
+
+## 변경 이력
+
+| 일자 | 내용 | 작성자 |
+|------|------|--------|
+| 2026-02-18 | 초기 생성 (역기획) | req-reverse-engineer |

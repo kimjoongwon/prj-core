@@ -1,0 +1,90 @@
+# 이용자 상세 페이지 기획서
+
+> 생성일: 2026-02-18
+> 타입: page
+> 경로: `/users/[userId]`
+
+## 사용자 시나리오
+
+1. 관리자가 `/users/[userId]` 경로에 진입하면 해당 이용자의 상세 정보가 표시된다.
+2. 현재 구현은 TODO(미구현) 상태이며, "이 기능은 구현 예정입니다." 메시지가 표시된다.
+3. "목록으로" 버튼을 클릭하면 `/users` 경로로 이동한다.
+
+## 레이아웃 구성 (현재 - TODO 상태)
+
+| 영역 | 컴포넌트 | 설명 |
+|------|----------|------|
+| 상단 | `Button` (variant="light") | "목록으로" + ArrowLeft 아이콘 |
+| 본문 | `div` (bg-content1, rounded-xl) | "회원 상세" 제목 + "이 기능은 구현 예정입니다." 안내 |
+
+## 레이아웃 구성 (기획 - 구현 시)
+
+| 영역 | 컴포넌트 | 설명 |
+|------|----------|------|
+| 페이지 래퍼 | `PageSurface` | title="이용자 상세", actions=[수정][삭제] |
+| 기본 정보 섹션 | `SectionSurface` | 이름, 이메일, 전화번호, 가입일, 상태 |
+| 역할/권한 섹션 | `SectionSurface` | Space, 역할, 분류, 그룹 |
+
+## 표시 필드 (기획)
+
+| 필드 | 라벨 | 소스 | 설명 |
+|------|------|------|------|
+| name | 이름 | `UserDetailResponseDto.name` | |
+| email | 이메일 | `UserDetailResponseDto.email` | |
+| phone | 전화번호 | `UserDetailResponseDto.phone` | 포맷팅 표시 |
+| createdAt | 가입일 | `UserDetailResponseDto.createdAt` | 날짜 포맷 |
+| status | 상태 | `UserDetailResponseDto.removedAt` | Badge (활성/비활성) |
+| space | Space | Tenant 정보 | Space 이름 |
+| role | 역할 | Tenant 정보 | 역할 이름 |
+| category | 분류 | Classification 정보 | 카테고리 이름 |
+| groups | 그룹 | Association 정보 | 그룹 이름 목록 |
+
+## 페이지 상태
+
+| 상태 | 설명 | UI |
+|------|------|-----|
+| TODO | 미구현 상태 | "이 기능은 구현 예정입니다." 안내 메시지 |
+
+## API 호출 (기획)
+
+| 시점 | API | 설명 |
+|------|-----|------|
+| SSR Prefetch | `prefetchGetUserById(userId)` | 이용자 상세 정보 프리페칭 |
+| 클라이언트 렌더 | `useGetUserById(userId)` | 이용자 상세 조회 |
+| 삭제 실행 | `useDeleteUser()` | DELETE /api/v1/users/:id |
+
+## 이벤트 핸들러
+
+| 이벤트 | 동작 |
+|--------|------|
+| 목록으로 버튼 클릭 | `router.push("/users")` |
+| 수정 버튼 클릭 (기획) | `router.push("/users/[userId]/edit")` |
+| 삭제 버튼 클릭 (기획) | 삭제 확인 모달 표시 |
+| 삭제 확인 (기획) | `deleteUser({ id: userId })` → 성공 시 목록으로 이동 |
+
+## 삭제 확인 모달 (기획)
+
+| 항목 | 내용 |
+|------|------|
+| 제목 | "삭제 확인" |
+| 본문 | "정말로 삭제하시겠습니까? 이 작업은 되돌릴 수 없습니다." |
+| 자기 계정 경고 | "자신의 계정은 삭제할 수 없습니다." (삭제 버튼 비활성화) |
+| 취소 버튼 | variant="flat", 모달 닫기 |
+| 삭제 버튼 | color="danger", DELETE API 호출 |
+
+## 구현 체크리스트
+
+- [x] page.tsx (현재 "use client" 직접 컴포넌트, TODO 상태)
+- [ ] page.tsx (서버 컴포넌트, Prefetch 패턴 적용)
+- [ ] _client.tsx (클라이언트 컴포넌트, 상세 정보 UI)
+- [ ] _prefetch.ts (getUserById 프리페칭)
+
+## 상위 기획서
+
+- `apps/admin/src/app/(admin)/app.spec.md`
+
+## 변경 이력
+
+| 일자 | 내용 | 작성자 |
+|------|------|--------|
+| 2026-02-18 | 초기 생성 (역기획) | req-reverse-engineer |
