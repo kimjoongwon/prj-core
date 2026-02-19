@@ -25,3 +25,5 @@ packages/*/dist
 *.db
 *.db-shm
 *.db-wal
+# 테스트용 브라우저 바이너리
+browsers/
