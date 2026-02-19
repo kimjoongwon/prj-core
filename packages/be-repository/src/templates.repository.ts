@@ -41,13 +41,13 @@ export class TemplatesRepository {
 	}
 
 	/**
-	 * code(unique key)로 조회 (variables 포함)
+	 * code(unique key)로 조회 (variables 포함, 소프트 삭제 제외)
 	 */
 	async findByCode(code: string): Promise<Template | null> {
 		this.logger.debug(`code로 조회: ${code}`);
 
-		const result = await this.txHost.tx.template.findUnique({
-			where: { code },
+		const result = await this.txHost.tx.template.findFirst({
+			where: { code, removedAt: null },
 			include: { variables: true },
 		});
 

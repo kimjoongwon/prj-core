@@ -88,7 +88,7 @@ function TemplateDetailPageClient({
 	 */
 	const onClickDeleteConfirm = () => {
 		deleteTemplate(
-			{ id: templateId },
+			{ templateId },
 			{
 				onSuccess: () => {
 					addToast({
@@ -116,7 +116,7 @@ function TemplateDetailPageClient({
 	 */
 	const onClickToggleButton = () => {
 		toggleStatus(
-			{ id: templateId },
+			{ templateId },
 			{
 				onSuccess: () => {
 					addToast({

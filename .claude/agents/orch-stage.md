@@ -147,11 +147,11 @@ packages/fe-ui/src/components/feature/[FeatureName]/index.spec.md
 | Stage | 이름 | 실행 단위 | 핵심 목표 | 주요 에이전트 |
 |-------|------|----------|----------|--------------|
 | 1 | 도메인 기획 | 도메인 전체 | L0-L4 기획 + BE/Store 스펙 | orch-requirement |
-| 2 | 스키마 구현 | 도메인 전체 | Prisma 스키마, Entity, DTO | schema-builder, entity-builder, dto-builder |
-| 3 | 백엔드 구현 | 도메인 전체 | Repository, Service, Controller | repository-builder, service-builder, controller-builder |
+| 2 | 스키마 구현 | 도메인 전체 | Prisma 스키마, Entity, DTO + 테스트 | be-schema-builder, be-entity-builder, be-dto-builder, be-query-dto-builder, be-seed-maker, req-test-planner, qa-be-testing |
+| 3 | 백엔드 구현 | 도메인 전체 | Repository, Service, Controller + 테스트 | be-repository-builder, be-service-builder, be-facade-builder, be-controller-builder, req-test-planner, qa-be-testing |
 | 4 | 화면 기획 | **페이지별** | L5-L12 기획 | orch-screen-planner |
-| 5 | 컴포넌트 구현 | **페이지별** | UI, Widget, Feature | ui-builder, widget-builder, feature-builder |
-| 6 | 페이지 통합 | **페이지별** | 페이지 컴포넌트 | page-builder |
+| 5 | 컴포넌트 구현 | **페이지별** | UI, Widget, Feature + 테스트 | fe-ui-component-builder, fe-input-component-builder, fe-widget-builder, fe-feature-builder, fe-store-builder, fe-menu-builder, req-test-planner, qa-fe-testing |
+| 6 | 페이지 통합 | **페이지별** | 페이지 컴포넌트 + 테스트 | fe-page-builder, /fe-review, req-test-planner, qa-fe-testing |
 | 7 | E2E 검증 | 도메인 전체 | E2E 테스트 | qa-be-e2e-testing, qa-fe-e2e-testing |
 
 ---
@@ -190,13 +190,20 @@ packages/fe-ui/src/components/feature/[FeatureName]/index.spec.md
 │ Stage 2: 스키마 구현 (도메인 전체)                            │
 │ schema-builder → entity-builder → dto-builder                │
 │ → query-dto-builder → seed-maker                             │
-│ → [리뷰] ✓                                                   │
+│ ↓                                                            │
+│ req-test-planner → qa-be-testing → 테스트 실행               │
+│ ├─ 통과 → [리뷰] ✓                                           │
+│ └─ 실패 → 자동수정(1회) → 재실행 → [통과 시 리뷰]             │
 └─────────────────────────────────────────────────────────────┘
                               ↓ 사용자 승인
 ┌─────────────────────────────────────────────────────────────┐
 │ Stage 3: 백엔드 구현 (도메인 전체)                            │
 │ repository-builder → service-builder → facade-builder       │
-│ → controller-builder → [리뷰] ✓                              │
+│ → controller-builder                                         │
+│ ↓                                                            │
+│ req-test-planner → qa-be-testing → 테스트 실행               │
+│ ├─ 통과 → [리뷰] ✓                                           │
+│ └─ 실패 → 자동수정(1회) → 재실행 → [통과 시 리뷰]             │
 └─────────────────────────────────────────────────────────────┘
                               ↓ 사용자 승인 + Orval 실행
 ┌─────────────────────────────────────────────────────────────┐
@@ -210,14 +217,22 @@ packages/fe-ui/src/components/feature/[FeatureName]/index.spec.md
 ┌─────────────────────────────────────────────────────────────┐
 │ Stage 5: 컴포넌트 구현 (페이지별 반복)                        │
 │ ui-component → widget-builder → feature-builder             │
-│ → store-builder → [리뷰] ✓                                   │
+│ → store-builder                                              │
+│ ↓                                                            │
+│ req-test-planner → qa-fe-testing → 테스트 실행               │
+│ ├─ 통과 → [리뷰] ✓                                           │
+│ └─ 실패 → 자동수정(1회) → 재실행 → [통과 시 리뷰]             │
 │                                                              │
 │ ⚠️ page 파라미터로 특정 페이지 지정 필요                      │
 └─────────────────────────────────────────────────────────────┘
                               ↓ 사용자 승인
 ┌─────────────────────────────────────────────────────────────┐
 │ Stage 6: 페이지 통합 (페이지별 반복)                          │
-│ page-builder → /fe-review (Skill) → [리뷰] ✓                 │
+│ page-builder → /fe-review (Skill)                            │
+│ ↓                                                            │
+│ req-test-planner → qa-fe-testing → 테스트 실행               │
+│ ├─ 통과 → [리뷰] ✓                                           │
+│ └─ 실패 → 자동수정(1회) → 재실행 → [통과 시 리뷰]             │
 │                                                              │
 │ ⚠️ page 파라미터로 특정 페이지 지정 필요                      │
 └─────────────────────────────────────────────────────────────┘
@@ -351,7 +366,7 @@ Task: orch-requirement
 
 ### Stage 2: 스키마 구현
 
-**목표**: Prisma 스키마, Entity, DTO 구현
+**목표**: Prisma 스키마, Entity, DTO 구현 + 테스트
 
 **에이전트 호출:**
 ```
@@ -360,6 +375,18 @@ Task: be-entity-builder
 Task: be-dto-builder
 Task: be-query-dto-builder
 Task: be-seed-maker (필요시)
+```
+
+**테스트 프로세스:**
+```
+1. req-test-planner 실행 → Entity/DTO .spec.md에 테스트 케이스 섹션 추가
+2. qa-be-testing 실행 → Entity 단위 테스트 코드 작성
+3. 테스트 실행
+4. 결과 확인:
+   - 통과 → 완료
+   - 실패 → 1회 자동 수정 → 재실행
+     - 통과 → 완료
+     - 실패 → 사용자 알림
 ```
 
 **완료 후 출력:**
@@ -371,6 +398,11 @@ Task: be-seed-maker (필요시)
    - packages/be-entity/src/member.entity.ts
    - packages/be-dto/src/members/*.dto.ts
 
+🧪 테스트 결과:
+   - 작성된 테스트: N개
+   - 통과: N개
+   - 실패: 0개
+
 📌 다음 단계: Stage 3 (백엔드 구현)
 ```
 
@@ -378,7 +410,7 @@ Task: be-seed-maker (필요시)
 
 ### Stage 3: 백엔드 구현
 
-**목표**: Repository, Service, Controller 구현
+**목표**: Repository, Service, Controller 구현 + 테스트
 
 **에이전트 호출:**
 ```
@@ -386,6 +418,18 @@ Task: be-repository-builder
 Task: be-service-builder
 Task: be-facade-builder (필요시)
 Task: be-controller-builder
+```
+
+**테스트 프로세스:**
+```
+1. req-test-planner 실행 → Repository/Service/Controller .spec.md에 테스트 케이스 섹션 추가
+2. qa-be-testing 실행 → BE 단위 테스트 코드 작성
+3. 테스트 실행
+4. 결과 확인:
+   - 통과 → 완료
+   - 실패 → 1회 자동 수정 → 재실행
+     - 통과 → 완료
+     - 실패 → 사용자 알림
 ```
 
 **완료 후 출력:**
@@ -396,6 +440,11 @@ Task: be-controller-builder
    - packages/be-repository/src/members.repository.ts
    - packages/be-service/src/members.service.ts
    - apps/server/src/module/members/members.controller.ts
+
+🧪 테스트 결과:
+   - 작성된 테스트: N개
+   - 통과: N개
+   - 실패: 0개
 
 🔧 후속 작업:
    - Orval 실행: pnpm --filter=@cocrepo/api generate
@@ -445,7 +494,7 @@ packages/fe-ui/src/components/feature/[FeatureName]/index.spec.md  # Feature 기
 
 ### Stage 5: 컴포넌트 구현 (페이지별)
 
-**목표**: UI, Widget, Feature 컴포넌트 구현
+**목표**: UI, Widget, Feature 컴포넌트 구현 + 테스트
 
 **⚠️ 페이지별 실행**: `page` 파라미터 필요
 
@@ -463,6 +512,18 @@ Task: fe-store-builder
 Task: fe-menu-builder (목록 페이지만)
 ```
 
+**테스트 프로세스:**
+```
+1. req-test-planner 실행 → Widget/Feature/Store .spec.md에 테스트 케이스 섹션 추가
+2. qa-fe-testing 실행 → 컴포넌트 단위 테스트 코드 작성
+3. 테스트 실행
+4. 결과 확인:
+   - 통과 → 완료
+   - 실패 → 1회 자동 수정 → 재실행
+     - 통과 → 완료
+     - 실패 → 사용자 알림
+```
+
 **완료 후 출력:**
 ```
 ✅ Stage 5 완료: MemberList 컴포넌트 구현
@@ -474,6 +535,11 @@ Task: fe-menu-builder (목록 페이지만)
    - Store: MemberStore (도메인 공통)
    - Menu: admin-menu.ts 업데이트
 
+🧪 테스트 결과:
+   - 작성된 테스트: N개
+   - 통과: N개
+   - 실패: 0개
+
 📌 다음 단계: Stage 6 (페이지 통합) page=List
 ```
 
@@ -481,7 +547,7 @@ Task: fe-menu-builder (목록 페이지만)
 
 ### Stage 6: 페이지 통합 (페이지별)
 
-**목표**: 페이지 컴포넌트 구현 및 규칙 검증
+**목표**: 페이지 컴포넌트 구현, 규칙 검증 + 테스트
 
 **⚠️ 페이지별 실행**: `page` 파라미터 필요
 
@@ -495,6 +561,18 @@ Task: fe-page-builder
 Skill: /fe-review
 ```
 
+**테스트 프로세스:**
+```
+1. req-test-planner 실행 → page.spec.md에 테스트 케이스 섹션 추가
+2. qa-fe-testing 실행 → 페이지 단위 테스트 코드 작성
+3. 테스트 실행
+4. 결과 확인:
+   - 통과 → 완료
+   - 실패 → 1회 자동 수정 → 재실행
+     - 통과 → 완료
+     - 실패 → 사용자 알림
+```
+
 **완료 후 출력:**
 ```
 ✅ Stage 6 완료: MemberList 페이지 통합
@@ -506,6 +584,11 @@ Skill: /fe-review
    - apps/admin/app/(admin)/members/_prefetch.ts
 
 ✅ 규칙 검증: 모두 통과
+
+🧪 테스트 결과:
+   - 작성된 테스트: N개
+   - 통과: N개
+   - 실패: 0개
 
 📌 남은 페이지:
    - [ ] Detail
@@ -553,11 +636,11 @@ Task: qa-fe-e2e-testing
 | Stage | 완료 조건 |
 |-------|----------|
 | 1 | app.spec.md 업데이트, page.spec.md 생성, BE/Store .spec.md 생성 |
-| 2 | Prisma 스키마, Entity, DTO 생성, migrate 성공 |
-| 3 | Repository, Service, Controller 생성, 서버 시작 성공 |
+| 2 | Prisma 스키마, Entity, DTO 생성, migrate 성공, Entity 테스트 통과 |
+| 3 | Repository, Service, Controller 생성, 서버 시작 성공, BE 단위 테스트 통과 |
 | 4 | page.spec.md API/이벤트 업데이트, 컴포넌트 .spec.md 생성 |
-| 5 | UI, Widget, Feature, Store 생성 |
-| 6 | 페이지 컴포넌트 생성, 규칙 검증 통과 |
+| 5 | UI, Widget, Feature, Store 생성, 컴포넌트 테스트 통과 |
+| 6 | 페이지 컴포넌트 생성, 규칙 검증 통과, 페이지 테스트 통과 |
 | 7 | E2E 테스트 통과 |
 
 ---
@@ -613,16 +696,48 @@ Task: qa-fe-e2e-testing
 | Stage | 호출 에이전트 |
 |-------|--------------|
 | 1 | orch-requirement, req-L0L2-planner, req-L3L4-planner, req-entity-planner, req-store-planner, be-spec-planner |
-| 2 | be-schema-builder, be-entity-builder, be-dto-builder, be-query-dto-builder, be-seed-maker |
-| 3 | be-repository-builder, be-service-builder, be-facade-builder, be-controller-builder |
+| 2 | be-schema-builder, be-entity-builder, be-dto-builder, be-query-dto-builder, be-seed-maker, req-test-planner, qa-be-testing |
+| 3 | be-repository-builder, be-service-builder, be-facade-builder, be-controller-builder, req-test-planner, qa-be-testing |
 | 4 | orch-screen-planner |
-| 5 | fe-ui-component-builder, fe-input-component-builder, fe-widget-builder, fe-feature-builder, fe-store-builder, fe-menu-builder |
-| 6 | fe-page-builder, /fe-review (Skill) |
+| 5 | fe-ui-component-builder, fe-input-component-builder, fe-widget-builder, fe-feature-builder, fe-store-builder, fe-menu-builder, req-test-planner, qa-fe-testing |
+| 6 | fe-page-builder, /fe-review (Skill), req-test-planner, qa-fe-testing |
 | 7 | qa-be-e2e-testing, qa-fe-e2e-testing |
 
-### 후행 에이전트
+---
 
-| 에이전트 | 용도 |
-|---------|------|
-| `qa-fe-testing` | 프론트엔드 단위 테스트 작성 |
-| `qa-be-testing` | 백엔드 단위 테스트 작성 |
+## 13. 테스트 실패 처리 규칙
+
+### 자동 수정 정책
+
+| 항목 | 정책 |
+|------|------|
+| **재시도 횟수** | 최대 1회 |
+| **자동 수정** | 테스트 실패 시 에이전트가 코드 자동 수정 |
+| **수정 범위** | 테스트 실패 원인 분석 후 관련 코드만 수정 |
+
+### 실패 시나리오 처리
+
+```
+테스트 실행
+├─ 통과 → 다음 단계 진행
+└─ 실패 → 원인 분석 → 코드 수정 → 재실행
+           ├─ 통과 → 다음 단계 진행
+           └─ 실패 → 사용자 알림 및 수동 개입 요청
+```
+
+### 사용자 알림 형식
+
+```
+⚠️ 테스트 실패 - 자동 수정 불가
+
+📁 실패한 테스트:
+   - [TC-001] 회원 목록 조회 성공
+   - [TC-003] 회원 검색 성공
+
+📋 실패 원인:
+   - 예상 응답값과 실제 응답값 불일치
+
+🔧 권장 조치:
+   - Service 로직 확인
+   - 테스트 케이스 재검토
+```

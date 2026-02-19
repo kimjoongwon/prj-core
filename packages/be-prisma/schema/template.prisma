@@ -28,7 +28,7 @@ model Template {
   updatedAt   DateTime?          @updatedAt @map("updated_at") @db.Timestamptz(6)
   removedAt   DateTime?          @map("removed_at") @db.Timestamptz(6)
   /// @displayName 고유 코드
-  code        String             @unique
+  code        String
   /// @displayName 템플릿 이름
   name        String
   /// @displayName 템플릿 유형

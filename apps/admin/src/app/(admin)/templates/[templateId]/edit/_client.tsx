@@ -154,7 +154,7 @@ function TemplateEditPageClient({ templateId }: TemplateEditPageClientProps) {
 
 		// 수정 시에는 code, type은 보내지 않음 (읽기전용)
 		updateTemplate({
-			id: templateId,
+			templateId,
 			data: {
 				name: formData.name.trim(),
 				description: formData.description.trim() || undefined,
