@@ -1,6 +1,6 @@
 import { CONTEXT_KEYS, PRISMA_SERVICE_TOKEN } from "@cocrepo/constant";
-import { UsersService } from "@cocrepo/service";
 import {
+	Inject,
 	Injectable,
 	type INestApplication,
 	UnauthorizedException,
@@ -16,11 +16,14 @@ import { ExtractJwt, Strategy } from "passport-jwt";
  *
  * 실제 JwtStrategy는 RS256 + JWKS (IDP 서버 필요)를 사용하지만,
  * 테스트에서는 HS256 + AUTH_JWT_SECRET으로 간단히 검증합니다.
+ *
+ * UsersService 대신 PrismaService(@Global)를 직접 사용하여
+ * 테스트 모듈의 DI 스코프 제한을 우회합니다.
  */
 @Injectable()
 export class TestJwtStrategy extends PassportStrategy(Strategy) {
 	constructor(
-		private readonly usersService: UsersService,
+		@Inject(PRISMA_SERVICE_TOKEN) private readonly prisma: any,
 		private readonly cls: ClsService,
 	) {
 		super({
@@ -41,7 +44,15 @@ export class TestJwtStrategy extends PassportStrategy(Strategy) {
 	}
 
 	async validate(payload: { sub: string }) {
-		const user = await this.usersService.getByIdWithTenants(payload.sub);
+		const user = await this.prisma.user.findFirst({
+			where: { id: payload.sub, removedAt: null },
+			include: {
+				tenants: {
+					include: { space: true },
+					where: { removedAt: null },
+				},
+			},
+		});
 		if (!user) {
 			throw new UnauthorizedException("테스트 사용자를 찾을 수 없습니다");
 		}

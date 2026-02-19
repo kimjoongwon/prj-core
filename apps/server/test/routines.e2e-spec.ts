@@ -1,7 +1,8 @@
-import { INestApplication, ValidationPipe } from "@nestjs/common";
+import { INestApplication } from "@nestjs/common";
 import { Test, TestingModule } from "@nestjs/testing";
 import request from "supertest";
 import { AppModule } from "../src/module/app.module";
+import { setNestApp } from "../src/setNestApp";
 import { getTestAuth, TestJwtStrategy } from "./helpers/test-auth.helper";
 
 /**
@@ -29,12 +30,7 @@ describe("Routines API (E2E)", () => {
 		}).compile();
 
 		app = moduleFixture.createNestApplication();
-		app.useGlobalPipes(
-			new ValidationPipe({
-				transform: true,
-				whitelist: true,
-			}),
-		);
+		setNestApp(app);
 		await app.init();
 
 		try {

@@ -5,6 +5,7 @@
   "testRegex": "\\.e2e-spec\\.ts$",
   "transformIgnorePatterns": ["node_modules/(?!(lodash-es)/)"],
   "transform": {
+    "generated/client/client\\.js$": "<rootDir>/test/transforms/prisma-esm-transform.js",
     "^.+\\.(t|j)s$": [
       "ts-jest",
       {

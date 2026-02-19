@@ -278,6 +278,28 @@ export const subjectSeedData: SubjectSeedData[] = [
 	{ name: "menu:grounds", displayName: "시설", group: "menu", order: 180 },
 	{ name: "menu:admins", displayName: "관리자", group: "menu", order: 190 },
 	{ name: "menu:roles", displayName: "역할/권한", group: "menu", order: 200 },
+	// 현재 admin-menu.ts 메뉴 구조에 맞는 추가 subjects
+	{ name: "menu:grounds:list", displayName: "시설 목록", group: "menu", order: 181 },
+	{ name: "menu:timelines", displayName: "일정 관리", group: "menu", order: 210 },
+	{ name: "menu:timelines:list", displayName: "타임라인 목록", group: "menu", order: 211 },
+	{ name: "menu:exercises", displayName: "운동 관리", group: "menu", order: 220 },
+	{ name: "menu:exercises:list", displayName: "운동 종목 목록", group: "menu", order: 221 },
+	{ name: "menu:routines", displayName: "루틴", group: "menu", order: 230 },
+	{ name: "menu:routines:list", displayName: "루틴 목록", group: "menu", order: 231 },
+	{ name: "menu:templates:list", displayName: "템플릿 목록", group: "menu", order: 161 },
+	{ name: "menu:role-groups", displayName: "역할 그룹", group: "menu", order: 202 },
+	{ name: "menu:role-groups:list", displayName: "역할 그룹 목록", group: "menu", order: 203 },
+	{ name: "menu:role-categories", displayName: "역할 카테고리", group: "menu", order: 204 },
+	{ name: "menu:role-categories:list", displayName: "역할 카테고리 목록", group: "menu", order: 205 },
+	{ name: "menu:abilities", displayName: "권한 정의", group: "menu", order: 206 },
+	{ name: "menu:abilities:list", displayName: "권한 정의 목록", group: "menu", order: 207 },
+	{ name: "menu:actions", displayName: "액션", group: "menu", order: 208 },
+	{ name: "menu:actions:list", displayName: "액션 목록", group: "menu", order: 209 },
+	{ name: "menu:subjects", displayName: "대상", group: "menu", order: 212 },
+	{ name: "menu:subjects:list", displayName: "대상 목록", group: "menu", order: 213 },
+	{ name: "menu:my-account", displayName: "내 계정", group: "menu", order: 300 },
+	{ name: "menu:my-account:sessions", displayName: "세션 관리", group: "menu", order: 301 },
+	{ name: "menu:my-account:change-password", displayName: "비밀번호 변경", group: "menu", order: 302 },
 
 	// ============================================================================
 	// v7.0 Admin 메뉴 (2depth - 회원)
@@ -1749,6 +1771,177 @@ export const fullAccessAbilitySeedData: AbilitySeedData[] = [
 		actionName: "manage",
 		inverted: false,
 		description: "권한 설정 전체 권한",
+	},
+
+	// ============================================================================
+	// v7.1 신규 메뉴 manage (1depth - 일정/운동/루틴/내 계정)
+	// ============================================================================
+	{
+		roleName: "FULL_ACCESS",
+		subject: "menu:timelines",
+		actionName: "manage",
+		inverted: false,
+		description: "일정 관리 전체 권한",
+	},
+	{
+		roleName: "FULL_ACCESS",
+		subject: "menu:exercises",
+		actionName: "manage",
+		inverted: false,
+		description: "운동 관리 전체 권한",
+	},
+	{
+		roleName: "FULL_ACCESS",
+		subject: "menu:routines",
+		actionName: "manage",
+		inverted: false,
+		description: "루틴 전체 권한",
+	},
+	{
+		roleName: "FULL_ACCESS",
+		subject: "menu:my-account",
+		actionName: "manage",
+		inverted: false,
+		description: "내 계정 전체 권한",
+	},
+
+	// ============================================================================
+	// v7.1 신규 메뉴 manage (2depth - 시설 목록)
+	// ============================================================================
+	{
+		roleName: "FULL_ACCESS",
+		subject: "menu:grounds:list",
+		actionName: "manage",
+		inverted: false,
+		description: "시설 목록 전체 권한",
+	},
+
+	// ============================================================================
+	// v7.1 신규 메뉴 manage (2depth - 일정/운동/루틴)
+	// ============================================================================
+	{
+		roleName: "FULL_ACCESS",
+		subject: "menu:timelines:list",
+		actionName: "manage",
+		inverted: false,
+		description: "타임라인 목록 전체 권한",
+	},
+	{
+		roleName: "FULL_ACCESS",
+		subject: "menu:exercises:list",
+		actionName: "manage",
+		inverted: false,
+		description: "운동 종목 목록 전체 권한",
+	},
+	{
+		roleName: "FULL_ACCESS",
+		subject: "menu:routines:list",
+		actionName: "manage",
+		inverted: false,
+		description: "루틴 목록 전체 권한",
+	},
+
+	// ============================================================================
+	// v7.1 신규 메뉴 manage (2depth - 템플릿 목록)
+	// ============================================================================
+	{
+		roleName: "FULL_ACCESS",
+		subject: "menu:templates:list",
+		actionName: "manage",
+		inverted: false,
+		description: "템플릿 목록 전체 권한",
+	},
+
+	// ============================================================================
+	// v7.1 신규 메뉴 manage (2depth - 역할/권한 세부)
+	// ============================================================================
+	{
+		roleName: "FULL_ACCESS",
+		subject: "menu:role-groups",
+		actionName: "manage",
+		inverted: false,
+		description: "역할 그룹 전체 권한",
+	},
+	{
+		roleName: "FULL_ACCESS",
+		subject: "menu:role-groups:list",
+		actionName: "manage",
+		inverted: false,
+		description: "역할 그룹 목록 전체 권한",
+	},
+	{
+		roleName: "FULL_ACCESS",
+		subject: "menu:role-categories",
+		actionName: "manage",
+		inverted: false,
+		description: "역할 카테고리 전체 권한",
+	},
+	{
+		roleName: "FULL_ACCESS",
+		subject: "menu:role-categories:list",
+		actionName: "manage",
+		inverted: false,
+		description: "역할 카테고리 목록 전체 권한",
+	},
+	{
+		roleName: "FULL_ACCESS",
+		subject: "menu:abilities",
+		actionName: "manage",
+		inverted: false,
+		description: "권한 정의 전체 권한",
+	},
+	{
+		roleName: "FULL_ACCESS",
+		subject: "menu:abilities:list",
+		actionName: "manage",
+		inverted: false,
+		description: "권한 정의 목록 전체 권한",
+	},
+	{
+		roleName: "FULL_ACCESS",
+		subject: "menu:actions",
+		actionName: "manage",
+		inverted: false,
+		description: "액션 전체 권한",
+	},
+	{
+		roleName: "FULL_ACCESS",
+		subject: "menu:actions:list",
+		actionName: "manage",
+		inverted: false,
+		description: "액션 목록 전체 권한",
+	},
+	{
+		roleName: "FULL_ACCESS",
+		subject: "menu:subjects",
+		actionName: "manage",
+		inverted: false,
+		description: "대상 전체 권한",
+	},
+	{
+		roleName: "FULL_ACCESS",
+		subject: "menu:subjects:list",
+		actionName: "manage",
+		inverted: false,
+		description: "대상 목록 전체 권한",
+	},
+
+	// ============================================================================
+	// v7.1 신규 메뉴 manage (2depth - 내 계정)
+	// ============================================================================
+	{
+		roleName: "FULL_ACCESS",
+		subject: "menu:my-account:sessions",
+		actionName: "manage",
+		inverted: false,
+		description: "세션 관리 전체 권한",
+	},
+	{
+		roleName: "FULL_ACCESS",
+		subject: "menu:my-account:change-password",
+		actionName: "manage",
+		inverted: false,
+		description: "비밀번호 변경 전체 권한",
 	},
 
 	// ============================================================================
