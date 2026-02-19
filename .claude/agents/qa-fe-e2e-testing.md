@@ -39,7 +39,7 @@ Playwright 기반으로 프론트엔드 앱의 E2E 테스트 코드를 작성하
 
 | 항목 | 파일 | 설명 |
 |------|------|------|
-| 테스트 파일 | `apps/e2e/tests/{app}/*.spec.ts` | Playwright 테스트 파일 |
+| 테스트 파일 | `apps/{app}/src/app/**/*.e2e.ts` | Playwright 테스트 파일 (Sidecar) |
 
 ---
 
@@ -50,7 +50,8 @@ Playwright 기반으로 프론트엔드 앱의 E2E 테스트 코드를 작성하
 - 테스트 설명(describe, it)은 **한글로 작성**
 - **Given-When-Then 패턴** 사용
 - **실제 서버 연동** (mock 없음)
-- 기존 `apps/e2e/` 인프라 활용
+- 테스트 파일은 테스트 대상 `page.tsx` 옆에 `page.e2e.ts`로 위치 **(Sidecar)**
+- `apps/e2e/` 인프라 활용 (playwright.config.ts, 인증 헬퍼)
 - `test.skip`으로 인증이 필요한 테스트 표시
 - **접근성 기반 선택자** 우선 사용 (`getByRole`, `getByLabel`, `getByText`)
 - 충분한 `timeout` 설정 (네트워크 지연 고려)
@@ -247,13 +248,33 @@ test.describe("인증 플로우", () => {
 | proposal | proposal-chromium / proposal-mobile | http://localhost:3001/ | 3001 |
 | idp | idp-chromium / idp-mobile | http://localhost:3008/ | 3008 |
 
-### 테스트 파일 위치
+### 테스트 파일 위치 (Sidecar 방식)
+
+테스트 파일은 테스트 대상 페이지 코드 옆에 위치합니다:
 
 ```
-apps/e2e/tests/
-├── admin/          # Admin 앱 E2E 테스트
-├── proposal/       # Proposal 앱 E2E 테스트
-└── idp/            # IDP Client 앱 E2E 테스트
+apps/{app}/src/app/(admin)/[domain]/
+├── page.tsx         # 코드
+├── page.spec.md     # 기획서
+└── page.e2e.ts      # E2E 테스트 ← sidecar
+```
+
+**Playwright 설정 파일과 인증 헬퍼는 `apps/e2e/`에 유지합니다:**
+
+```
+apps/e2e/
+├── playwright.config.ts                 # Playwright 설정 (유지)
+└── tests/
+    └── admin/
+        └── helpers/
+            ├── admin-auth.setup.ts      # 인증 셋업 (유지)
+            ├── login.ts                 # Admin 로그인 헬퍼 (유지)
+            └── .auth/admin.json         # 인증 상태 (유지)
+
+apps/idp-client/src/
+└── e2e/
+    └── helpers/
+        └── login.ts                     # IDP 로그인 헬퍼
 ```
 
 ### 실행 명령어

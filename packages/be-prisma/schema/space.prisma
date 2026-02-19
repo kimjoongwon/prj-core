@@ -35,6 +35,7 @@ model Space {
   timelines      Timeline[]
   tasks          Task[]
   safeWallets    SafeWallet[]
+  routines       Routine[]
 
   @@map("spaces")
 }

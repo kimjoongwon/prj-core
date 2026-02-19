@@ -551,15 +551,19 @@ apps/[app]/app/(admin)/
 apps/[app]/app/(admin)/[도메인]/
 ├── page.tsx                    # 목록 페이지
 ├── page.spec.md                # 목록 페이지 기획서 ← 코드 옆에 위치
+├── page.e2e.ts                 # E2E 테스트 ← sidecar
 ├── [entityId]/
 │   ├── page.tsx                # 상세 페이지
-│   └── page.spec.md            # 상세 페이지 기획서
+│   ├── page.spec.md            # 상세 페이지 기획서
+│   └── page.e2e.ts             # E2E 테스트 ← sidecar
 ├── new/
 │   ├── page.tsx                # 등록 페이지
-│   └── page.spec.md            # 등록 페이지 기획서
+│   ├── page.spec.md            # 등록 페이지 기획서
+│   └── page.e2e.ts             # E2E 테스트 ← sidecar
 └── [entityId]/edit/
     ├── page.tsx                # 수정 페이지
-    └── page.spec.md            # 수정 페이지 기획서
+    ├── page.spec.md            # 수정 페이지 기획서
+    └── page.e2e.ts             # E2E 테스트 ← sidecar
 
 packages/fe-ui/src/components/
 ├── feature/[FeatureName]/
@@ -888,15 +892,19 @@ apps/[app]/app/(admin)/
 apps/[app]/app/(admin)/[도메인]/
 ├── page.tsx                    # 목록 페이지
 ├── page.spec.md                # 목록 페이지 기획서
+├── page.e2e.ts                 # E2E 테스트 (sidecar)
 ├── [entityId]/
 │   ├── page.tsx                # 상세 페이지
-│   └── page.spec.md            # 상세 페이지 기획서
+│   ├── page.spec.md            # 상세 페이지 기획서
+│   └── page.e2e.ts             # E2E 테스트 (sidecar)
 ├── new/
 │   ├── page.tsx                # 등록 페이지
-│   └── page.spec.md            # 등록 페이지 기획서
+│   ├── page.spec.md            # 등록 페이지 기획서
+│   └── page.e2e.ts             # E2E 테스트 (sidecar)
 └── [entityId]/edit/
     ├── page.tsx                # 수정 페이지
-    └── page.spec.md            # 수정 페이지 기획서
+    ├── page.spec.md            # 수정 페이지 기획서
+    └── page.e2e.ts             # E2E 테스트 (sidecar)
 
 packages/fe-ui/src/components/
 ├── feature/[FeatureName]/

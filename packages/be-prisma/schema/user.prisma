@@ -70,6 +70,7 @@ model User {
   createdTimelines      Timeline[]
   createdTasks          Task[]
   createdSafeWallets    SafeWallet[]
+  createdRoutines       Routine[]
 
   @@map("users")
 }

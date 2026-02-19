@@ -1,0 +1,85 @@
+# 타임라인 상세 페이지 기획서
+
+> 생성일: 2026-02-19
+> 타입: page
+> 경로: `/timelines/[timelineId]`
+
+## 사용자 시나리오
+
+1. 관리자가 타임라인 목록에서 타임라인을 클릭하여 상세 페이지에 진입한다
+2. 타임라인의 기본 정보(이름, 설명, 등록일, 등록자)를 확인한다
+3. 하단 세션 목록에서 이 타임라인에 속한 세션들을 조회한다
+4. "세션 등록" 버튼을 클릭하여 새 세션을 추가한다
+5. 세션 이름을 클릭하여 세션 상세 페이지로 이동한다
+6. 상단 "수정" 버튼을 클릭하여 타임라인 정보를 수정한다
+7. 상단 "삭제" 버튼을 클릭하여 타임라인을 삭제하고 목록으로 돌아간다
+
+## 레이아웃 구성
+
+| 영역 | 컴포넌트 | 설명 |
+|------|----------|------|
+| 페이지 헤더 | `PageSurface` | title="{타임라인명}", actions에 "수정", "삭제" 버튼 |
+| 타임라인 정보 | `SectionSurface` | title="기본 정보" - 이름, 설명, Space, 등록자, 등록일 표시 |
+| 세션 목록 | `SectionSurface` | title="세션 목록", actions에 "세션 등록" 버튼 - MetaDataGrid로 세션 표시 |
+
+## 타임라인 정보 필드
+
+| 필드 | 라벨 | 설명 |
+|------|------|------|
+| name | 타임라인명 | 타임라인 이름 |
+| description | 설명 | 없으면 "-" 표시 |
+| space.name | Space | 소속 Space 이름 |
+| creator.name | 등록자 | 생성자 이름 (없으면 "시스템") |
+| createdAt | 등록일 | DateTimeCell 형식 |
+
+## 세션 목록 컬럼 정의
+
+| 필드 | 라벨 | 크기 | 정렬 | 셀 컴포넌트 |
+|------|------|------|------|-------------|
+| name | 세션명 | 200 | - | 링크 스타일 (클릭 시 세션 상세 이동) |
+| type | 유형 | 120 | center | `SessionTypeBadge` (ONE_TIME/ONE_TIME_RANGE/RECURRING 뱃지) |
+| startDateTime | 시작 일시 | 160 | - | `DateTimeCell` (없으면 "-") |
+| endDateTime | 종료 일시 | 160 | - | `DateTimeCell` (없으면 "-", ONE_TIME_RANGE만 표시) |
+| recurringDayOfWeek | 반복 요일 | 100 | center | 요일 한글 표시 (MON→월, RECURRING만 표시) |
+| repeatCycleType | 반복 주기 | 100 | center | WEEKLY→주간, MONTHLY→월간 (RECURRING만) |
+| programsCount | 프로그램 수 | 100 | center | 숫자 (0이면 비활성 스타일) |
+| createdAt | 등록일 | 150 | - | `DateTimeCell` |
+| actions | 액션 | 80 | center | 삭제 아이콘 |
+
+## API 호출
+
+| 시점 | API | 설명 |
+|------|-----|------|
+| SSR 프리페칭 | `prefetchGetTimelineQuery({ timelineId })` | 타임라인 기본 정보 |
+| SSR 프리페칭 | `prefetchGetSessionsQuery({ timelineId, take, skip })` | 세션 목록 첫 페이지 |
+| 타임라인 삭제 | `useDeleteTimeline()` | 타임라인 삭제 후 `/timelines`로 이동 |
+| 세션 삭제 | `useDeleteSession()` | 세션 삭제 후 목록 캐시 무효화 |
+
+## 이벤트 핸들러
+
+| 이벤트 | 동작 |
+|--------|------|
+| "수정" 버튼 클릭 | `/timelines/{timelineId}/edit` 수정 페이지로 이동 |
+| "삭제" 버튼 클릭 | 확인 모달 → `deleteTimeline` 호출 → 성공 시 `/timelines` 이동 |
+| "세션 등록" 버튼 클릭 | `/timelines/{timelineId}/sessions/new` 세션 등록 페이지로 이동 |
+| 세션명 클릭 | `/timelines/{timelineId}/sessions/{sessionId}` 세션 상세 페이지로 이동 |
+| 세션 삭제 아이콘 클릭 | 확인 모달 → `deleteSession` 호출 → 성공 시 세션 목록 캐시 무효화 |
+
+## 비즈니스 규칙
+
+- **타임라인 삭제 제약**: 세션이 있는 타임라인은 삭제 불가 (`sessionsCount > 0` 시 경고 표시)
+- **세션 삭제 제약**: 프로그램이 연결된 세션은 삭제 불가 (`programsCount > 0` 경고)
+- **세션 유형별 컬럼 표시**: type에 따라 날짜/요일 컬럼 표시/숨김
+
+## 구현 체크리스트
+
+- [ ] page.tsx (서버 컴포넌트, Prefetch + HydrationBoundary)
+- [ ] _client.tsx (클라이언트 컴포넌트, observer 래핑)
+- [ ] _prefetch.ts (prefetchGetTimeline, prefetchGetSessions 호출)
+- [ ] hooks/useHandlers.ts (타임라인 삭제, 세션 삭제 핸들러)
+
+## 변경 이력
+
+| 일자 | 내용 | 작성자 |
+|------|------|--------|
+| 2026-02-19 | 초기 생성 | req-L3L4-planner |

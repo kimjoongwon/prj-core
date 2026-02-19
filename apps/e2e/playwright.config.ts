@@ -1,11 +1,15 @@
 import path from "node:path";
 import { defineConfig, devices } from "@playwright/test";
 
-// npx playwright test 직접 실행 시에도 로컬 browsers 경로 사용
-process.env.PLAYWRIGHT_BROWSERS_PATH ??= path.join(__dirname, "browsers");
+// 항상 절대 경로로 browsers 경로 설정 (상대 경로는 CWD에 따라 달라질 수 있음)
+process.env.PLAYWRIGHT_BROWSERS_PATH = path.join(__dirname, "browsers");
 
 /**
- * Playwright E2E 테스트 설정 (멀티앱)
+ * Playwright E2E 테스트 설정 (멀티앱, Sidecar 방식)
+ *
+ * 테스트 파일은 각 페이지 코드 옆에 *.e2e.ts 로 위치합니다:
+ *   apps/admin/src/app/(admin)/templates/page.e2e.ts
+ *   apps/idp-client/src/app/(console)/accounts/page.e2e.ts
  *
  * 앱별 테스트 실행:
  *   pnpm --filter=@cocrepo/e2e test:admin
@@ -15,8 +19,9 @@ process.env.PLAYWRIGHT_BROWSERS_PATH ??= path.join(__dirname, "browsers");
  * @see https://playwright.dev/docs/test-configuration
  */
 export default defineConfig({
-  testDir: "./tests",
-  testMatch: "**/*.spec.ts",
+  // 모노레포 루트에서 *.e2e.ts 파일 탐색
+  testDir: path.join(__dirname, "../.."),
+  testMatch: "**/*.e2e.ts",
 
   fullyParallel: true,
   forbidOnly: !!process.env.CI,
@@ -44,7 +49,8 @@ export default defineConfig({
     // ── Admin Auth Setup ──
     {
       name: "admin-setup",
-      testMatch: "**/admin/helpers/*.setup.ts",
+      // setup 파일은 apps/e2e에 계속 존재
+      testMatch: "**/apps/e2e/tests/admin/helpers/*.setup.ts",
       use: {
         ...devices["Desktop Chrome"],
         baseURL: "http://localhost:3000/admin/",
@@ -54,29 +60,36 @@ export default defineConfig({
     // ── Admin ──
     {
       name: "admin-chromium",
-      testMatch: "**/admin/**/*.spec.ts",
+      testMatch: "**/apps/admin/src/**/*.e2e.ts",
       dependencies: ["admin-setup"],
       use: {
         ...devices["Desktop Chrome"],
         baseURL: "http://localhost:3000/admin/",
-        storageState: "tests/admin/helpers/.auth/admin.json",
+        // testDir 변경으로 절대 경로 사용
+        storageState: path.join(
+          __dirname,
+          "tests/admin/helpers/.auth/admin.json",
+        ),
       },
     },
     {
       name: "admin-mobile",
-      testMatch: "**/admin/**/*.spec.ts",
+      testMatch: "**/apps/admin/src/**/*.e2e.ts",
       dependencies: ["admin-setup"],
       use: {
         ...devices["Pixel 5"],
         baseURL: "http://localhost:3000/admin/",
-        storageState: "tests/admin/helpers/.auth/admin.json",
+        storageState: path.join(
+          __dirname,
+          "tests/admin/helpers/.auth/admin.json",
+        ),
       },
     },
 
     // ── Proposal ──
     {
       name: "proposal-chromium",
-      testMatch: "**/proposal/**/*.spec.ts",
+      testMatch: "**/apps/proposal/src/**/*.e2e.ts",
       use: {
         ...devices["Desktop Chrome"],
         baseURL: "http://localhost:3001/",
@@ -84,7 +97,7 @@ export default defineConfig({
     },
     {
       name: "proposal-mobile",
-      testMatch: "**/proposal/**/*.spec.ts",
+      testMatch: "**/apps/proposal/src/**/*.e2e.ts",
       use: {
         ...devices["Pixel 5"],
         baseURL: "http://localhost:3001/",
@@ -94,7 +107,7 @@ export default defineConfig({
     // ── IDP (Identity Provider) ──
     {
       name: "idp-chromium",
-      testMatch: "**/idp/**/*.spec.ts",
+      testMatch: "**/apps/idp-client/src/**/*.e2e.ts",
       use: {
         ...devices["Desktop Chrome"],
         baseURL: "http://localhost:3008/",
@@ -102,7 +115,7 @@ export default defineConfig({
     },
     {
       name: "idp-mobile",
-      testMatch: "**/idp/**/*.spec.ts",
+      testMatch: "**/apps/idp-client/src/**/*.e2e.ts",
       use: {
         ...devices["Pixel 5"],
         baseURL: "http://localhost:3008/",

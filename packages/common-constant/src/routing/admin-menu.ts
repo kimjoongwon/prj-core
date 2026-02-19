@@ -50,6 +50,12 @@ export const ADMIN_PATHS = {
 	SUBJECTS: "/subjects",
 	SUBJECTS_DETAIL: "/subjects/[subjectId]",
 
+	// 루틴 (Routine 엔티티)
+	ROUTINES: "/routines",
+	ROUTINES_NEW: "/routines/new",
+	ROUTINES_DETAIL: "/routines/[routineId]",
+	ROUTINES_EDIT: "/routines/[routineId]/edit",
+
 	// 템플릿 (Template 엔티티)
 	TEMPLATES: "/templates",
 	TEMPLATES_NEW: "/templates/new",
@@ -77,11 +83,15 @@ export const ADMIN_SUBJECTS = {
 
 	// 1depth 메뉴
 	MENU_USERS: "menu:users",
+	MENU_ROUTINES: "menu:routines",
 	MENU_TEMPLATES: "menu:templates",
 	MENU_ROLES: "menu:roles",
 
 	// 2depth - 회원
 	MENU_USERS_LIST: "menu:users:list",
+
+	// 2depth - 운동 관리
+	MENU_ROUTINES_LIST: "menu:routines:list",
 
 	// 2depth - 템플릿
 	MENU_TEMPLATES_LIST: "menu:templates:list",
@@ -135,7 +145,23 @@ export const ADMIN_NAV_ITEMS: NavItemConfig[] = [
 		],
 	},
 
-	// 3. 템플릿
+	// 3. 운동 관리
+	{
+		id: "routines",
+		label: "운동 관리",
+		icon: "Dumbbell",
+		subject: ADMIN_SUBJECTS.MENU_ROUTINES,
+		children: [
+			{
+				id: "routines-list",
+				label: "루틴",
+				path: ADMIN_PATHS.ROUTINES,
+				subject: ADMIN_SUBJECTS.MENU_ROUTINES_LIST,
+			},
+		],
+	},
+
+	// 4. 템플릿
 	{
 		id: "templates",
 		label: "템플릿",
@@ -151,7 +177,7 @@ export const ADMIN_NAV_ITEMS: NavItemConfig[] = [
 		],
 	},
 
-	// 4. 권한 관리
+	// 5. 권한 관리
 	{
 		id: "roles",
 		label: "권한 관리",
@@ -197,7 +223,7 @@ export const ADMIN_NAV_ITEMS: NavItemConfig[] = [
 		],
 	},
 
-	// 5. 내 계정
+	// 6. 내 계정
 	{
 		id: "my-account",
 		label: "내 계정",

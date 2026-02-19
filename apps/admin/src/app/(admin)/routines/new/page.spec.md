@@ -1,0 +1,122 @@
+# 루틴 등록 페이지 기획서
+
+> 생성일: 2026-02-19
+> 타입: page
+> 경로: `/routines/new`
+
+## 사용자 시나리오
+
+1. 관리자가 루틴 목록에서 "루틴 등록" 버튼을 클릭하여 이 페이지에 진입한다
+2. 루틴 기본 정보(이름, 라벨)를 입력한다
+3. "운동 추가" 버튼으로 운동 선택 모달을 열어 Exercise를 검색·선택한다
+4. 선택된 Activity의 반복 횟수, 휴식 시간, 메모를 입력한다
+5. Activity 카드를 드래그하여 운동 순서를 조정한다
+6. "저장" 버튼을 클릭하여 루틴을 생성한다
+
+## 레이아웃 구성
+
+| 영역 | 컴포넌트 | 설명 |
+|------|----------|------|
+| 페이지 헤더 | `PageSurface` | title="루틴 등록", actions에 "취소" / "저장" 버튼 |
+| 기본 정보 섹션 | `SectionSurface` | title="기본 정보", name/label 입력 필드 |
+| Activity 편집기 | `SectionSurface` | title="운동 구성", Activity 카드 목록 + "운동 추가" 버튼 |
+
+## 폼 필드 정의
+
+### 기본 정보
+
+| 필드 | 컴포넌트 | 유효성 | 설명 |
+|------|----------|--------|------|
+| name | Input | 필수, 1-100자 | 루틴 이름 (예: "풀바디 루틴 A") |
+| label | Input | 필수, 1-50자 | 단축 라벨 (예: "FULL-A") |
+
+### Activity 편집기
+
+Activity 카드 목록 (순서 변경 가능):
+
+| 필드 | 컴포넌트 | 유효성 | 설명 |
+|------|----------|--------|------|
+| taskId | - | 자동 (선택 시 설정) | 선택된 Exercise의 Task ID |
+| exerciseName | 읽기 전용 | - | 선택된 운동명 표시 |
+| repetitions | NumberInput | 최소 1 | 반복 횟수 (세트 수), 기본 1 |
+| restTime | NumberInput | 최소 0 | 다음 운동까지 휴식 시간(초), 기본 0 |
+| notes | Textarea | 선택, 최대 200자 | 특별 지시사항 (예: "천천히 내리기") |
+
+**Activity 카드 액션:**
+- 드래그 핸들: 순서 변경 (drag & drop)
+- 삭제 버튼: 해당 Activity 제거
+
+## Exercise 선택 모달
+
+| 영역 | 설명 |
+|------|------|
+| 검색 | 운동명으로 검색 (debounce 300ms) |
+| 목록 | Exercise 목록 (운동명, 지속 시간, 반복 횟수) |
+| 선택 | 항목 클릭 시 Activity 추가 후 모달 닫기 |
+
+**접근 규칙:** 현재 Space + 상위 Space의 Exercise 검색 가능
+
+## 페이지 상태
+
+| 상태 | 설명 | UI |
+|------|------|-----|
+| 초기 | 빈 폼 | Activity 없음, "운동을 추가해주세요" 안내 |
+| 작성 중 | 폼 입력 | 실시간 유효성 표시 |
+| 저장 중 | API 호출 중 | 저장 버튼 비활성화 + 스피너 |
+| 저장 성공 | 생성 완료 | 생성된 루틴 상세 페이지(`/routines/{routineId}`)로 이동 |
+| 저장 실패 | API 오류 | 에러 토스트 표시, 폼 유지 |
+
+## API 호출
+
+| 시점 | API | 설명 |
+|------|-----|------|
+| 운동 검색 | `useGetExercises({ search, spaceScope: INCLUDE_ANCESTORS })` | Exercise 선택 모달에서 호출 |
+| 저장 | `useCreateRoutine()` | name, label, activities 배열 전송 |
+
+### 요청 데이터 구조
+
+```typescript
+{
+  name: string;          // 루틴 이름
+  label: string;         // 라벨
+  activities: {
+    taskId: string;      // Exercise.taskId
+    order: number;       // 1부터 순서대로
+    repetitions: number; // 반복 횟수
+    restTime: number;    // 휴식 시간 (초)
+    notes?: string;      // 메모
+  }[];
+}
+```
+
+## 이벤트 핸들러
+
+| 이벤트 | 동작 |
+|--------|------|
+| "운동 추가" 버튼 클릭 | Exercise 선택 모달 오픈 |
+| Exercise 선택 | 모달 닫기 + Activity 카드 목록 끝에 추가 (order 자동 부여) |
+| Activity 드래그 완료 | order 값 전체 재정렬 |
+| Activity 삭제 | 해당 Activity 제거 + 나머지 order 재정렬 |
+| "취소" 버튼 클릭 | 변경사항 있을 시 확인 모달 → 확인 시 목록 페이지(`/routines`)로 이동 |
+| "저장" 버튼 클릭 | 유효성 검사 통과 시 `createRoutine` API 호출 |
+
+## 비즈니스 규칙
+
+- Activity가 없는 루틴 저장 허용 (빈 루틴 생성 가능, 나중에 수정)
+- 동일 운동 중복 추가 불가 (`@@unique([routineId, taskId])` 제약)
+- 중복 추가 시도 시 "이미 추가된 운동입니다." 토스트 표시
+- spaceId는 현재 X-Space-ID 헤더에서 서버가 자동 설정
+
+## 구현 체크리스트
+
+- [ ] page.tsx (서버 컴포넌트)
+- [ ] _client.tsx (클라이언트 컴포넌트, observer 래핑)
+- [ ] hooks/useHandlers.ts (Activity 편집, 저장 핸들러)
+- [ ] ExerciseSelectModal (Widget: 운동 선택 모달)
+- [ ] ActivityEditorCard (Widget: 개별 Activity 편집 카드)
+
+## 변경 이력
+
+| 일자 | 내용 | 작성자 |
+|------|------|--------|
+| 2026-02-19 | 초기 생성 | 직접 기획 |

@@ -36,6 +36,8 @@ Admin 앱은 플랫폼의 관리자 콘솔입니다. 회원, 예약, 알림, 콘
 | GOAL-006 | ACT-001 | IDP(Identity Provider) 관리 콘솔에 접근하여 인증 설정을 관리한다 | 낮음 |
 | GOAL-007 | ACT-001, ACT-002, ACT-003 | 자신의 세션을 관리하고 비밀번호를 변경한다 | 중간 |
 | GOAL-008 | ACT-001, ACT-002 | Space를 전환하여 다른 Space의 데이터를 관리한다 | 높음 |
+| GOAL-009 | ACT-001, ACT-002 | 타임라인(Timeline)을 생성/수정/삭제하여 학기나 시즌을 구조화한다 | 높음 |
+| GOAL-010 | ACT-001, ACT-002 | 타임라인 내 세션(Session)을 등록/수정/삭제하여 수업 일정을 관리한다 | 높음 |
 
 ## 도메인 목록
 
@@ -50,6 +52,8 @@ Admin 앱은 플랫폼의 관리자 콘솔입니다. 회원, 예약, 알림, 콘
 | 액션 (Actions) | `/actions` | 액션 CRUD 관리 | 구현 중 |
 | 대상 (Subjects) | `/subjects` | 대상 조회 관리 | 구현 중 |
 | 템플릿 (Templates) | `/templates` | 메시지 템플릿 관리 | 구현 완료 |
+| 루틴 (Routines) | `/routines` | 운동 루틴(커리큘럼) CRUD 관리 | 기획 완료, 구현 TODO |
+| 타임라인 (Timelines) | `/timelines` | 학기/시즌 타임라인 관리 | 기획 중 |
 | 내 세션 | `/my-sessions` | 로그인 세션 관리 | 폴더 존재 |
 | 내 계정 | `/my-account` | 비밀번호 변경 등 | 폴더 존재 |
 
@@ -81,3 +85,4 @@ AdminLayout
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
 | 2026-02-18 | 초기 생성 (역기획) | req-reverse-engineer |
+| 2026-02-19 | Timeline/Session 도메인 추가, GOAL-009/010 추가 | req-L0L2-planner |
