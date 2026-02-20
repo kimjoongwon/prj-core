@@ -1,4 +1,4 @@
-import { test, expect } from "@playwright/test";
+import { expect, test } from "@playwright/test";
 
 test.describe("타임라인 목록 페이지", () => {
 	// ── E2E-001: 목록 렌더링 ──
@@ -64,10 +64,7 @@ test.describe("타임라인 목록 페이지", () => {
 					id: string;
 					name: string;
 				}[]) {
-					if (
-						timeline.name === TEST_NAME ||
-						timeline.name === UPDATED_NAME
-					) {
+					if (timeline.name === TEST_NAME || timeline.name === UPDATED_NAME) {
 						await page.request.delete(
 							`http://localhost:3000/api/v1/timelines/${timeline.id}`,
 							{ headers: spaceHeaders },
@@ -111,7 +108,7 @@ test.describe("타임라인 목록 페이지", () => {
 
 			// Then: 등록한 정보 확인
 			await expect(
-				page.getByText(TEST_NAME, { exact: true }),
+				page.getByRole("heading", { name: TEST_NAME, exact: true }),
 			).toBeVisible({ timeout: 10000 });
 
 			// ── 수정 플로우 ──
@@ -154,15 +151,13 @@ test.describe("타임라인 목록 페이지", () => {
 			await page.waitForLoadState("networkidle");
 
 			await expect(
-				page.getByText(UPDATED_NAME, { exact: true }),
+				page.getByRole("heading", { name: UPDATED_NAME, exact: true }),
 			).toBeVisible({ timeout: 10000 });
 
 			// ── 삭제 플로우 ──
 
 			// When: 삭제 버튼 클릭 (상세 페이지의 삭제 버튼)
-			await page
-				.getByRole("button", { name: "삭제" })
-				.click();
+			await page.getByRole("button", { name: "삭제" }).click();
 
 			// When: 삭제 확인 모달에서 삭제 버튼 클릭
 			await page.waitForTimeout(500);
@@ -182,9 +177,9 @@ test.describe("타임라인 목록 페이지", () => {
 			await page.waitForURL(/\/timelines\/?$/, { timeout: 15000 });
 			await page.waitForLoadState("networkidle");
 
-			await expect(
-				page.getByRole("heading", { name: "타임라인" }),
-			).toBeVisible({ timeout: 10000 });
+			await expect(page.getByRole("heading", { name: "타임라인" })).toBeVisible(
+				{ timeout: 10000 },
+			);
 
 			// Then: 삭제된 타임라인명이 목록에 없음
 			await expect(

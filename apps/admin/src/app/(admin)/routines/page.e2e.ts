@@ -1,4 +1,4 @@
-import { test, expect } from "@playwright/test";
+import { expect, test } from "@playwright/test";
 
 test.describe("루틴 목록 페이지", () => {
 	// ── E2E-001: 목록 렌더링 ──
@@ -10,9 +10,7 @@ test.describe("루틴 목록 페이지", () => {
 			await page.waitForLoadState("networkidle");
 
 			// Then: 타이틀과 설명 확인
-			await expect(
-				page.getByRole("heading", { name: "루틴" }),
-			).toBeVisible();
+			await expect(page.getByRole("heading", { name: "루틴" })).toBeVisible();
 			await expect(
 				page.getByText("운동 루틴(커리큘럼)을 관리합니다."),
 			).toBeVisible();
@@ -35,9 +33,7 @@ test.describe("루틴 목록 페이지", () => {
 			await page.waitForLoadState("networkidle");
 
 			// Then: 검색 필드 확인
-			await expect(
-				page.getByPlaceholder("루틴명으로 검색..."),
-			).toBeVisible();
+			await expect(page.getByPlaceholder("루틴명으로 검색...")).toBeVisible();
 		});
 	});
 
@@ -53,6 +49,17 @@ test.describe("루틴 목록 페이지", () => {
 			const SYSTEM_SPACE_ID = "61ddca20-1752-466e-b4da-879ebdbe54e3";
 			const spaceHeaders = { "x-space-id": SYSTEM_SPACE_ID };
 
+			const clickSaveWithOptionalEmptyActivitiesConfirm = async () => {
+				await page.getByRole("button", { name: "저장" }).click();
+
+				const confirmSaveButton = page.getByRole("button", {
+					name: "저장 진행",
+				});
+				if (await confirmSaveButton.isVisible().catch(() => false)) {
+					await confirmSaveButton.click();
+				}
+			};
+
 			// Cleanup: 기존 E2E 테스트 루틴 삭제
 			try {
 				const resp = await page.request.get(
@@ -62,10 +69,7 @@ test.describe("루틴 목록 페이지", () => {
 				const body = await resp.json();
 				const routines = body.data ?? [];
 				for (const routine of routines as { id: string; name: string }[]) {
-					if (
-						routine.name === TEST_NAME ||
-						routine.name === UPDATED_NAME
-					) {
+					if (routine.name === TEST_NAME || routine.name === UPDATED_NAME) {
 						await page.request.delete(
 							`http://localhost:3000/api/v1/routines/${routine.id}`,
 							{ headers: spaceHeaders },
@@ -97,7 +101,7 @@ test.describe("루틴 목록 페이지", () => {
 					resp.url().includes("/api/v1/routines") &&
 					resp.request().method() === "POST",
 			);
-			await page.getByRole("button", { name: "저장" }).click();
+			await clickSaveWithOptionalEmptyActivitiesConfirm();
 			const response = await createResponse;
 
 			// Then: 201 Created 응답 확인
@@ -109,11 +113,9 @@ test.describe("루틴 목록 페이지", () => {
 
 			// Then: 등록한 정보 확인
 			await expect(
-				page.getByText(TEST_NAME, { exact: true }),
+				page.getByRole("heading", { name: TEST_NAME, exact: true }),
 			).toBeVisible({ timeout: 10000 });
-			await expect(
-				page.getByText(TEST_LABEL, { exact: true }),
-			).toBeVisible();
+			await expect(page.getByText(TEST_LABEL, { exact: true })).toBeVisible();
 
 			// ── 수정 플로우 ──
 
@@ -146,7 +148,7 @@ test.describe("루틴 목록 페이지", () => {
 					resp.url().includes("/api/v1/routines/") &&
 					resp.request().method() === "PATCH",
 			);
-			await page.getByRole("button", { name: "저장" }).click();
+			await clickSaveWithOptionalEmptyActivitiesConfirm();
 			const patchResp = await updateResponse;
 
 			// Then: 200 OK 응답 확인
@@ -161,7 +163,7 @@ test.describe("루틴 목록 페이지", () => {
 			await page.waitForLoadState("networkidle");
 
 			await expect(
-				page.getByText(UPDATED_NAME, { exact: true }),
+				page.getByRole("heading", { name: UPDATED_NAME, exact: true }),
 			).toBeVisible({ timeout: 10000 });
 
 			// ── 삭제 플로우 ──
@@ -187,9 +189,9 @@ test.describe("루틴 목록 페이지", () => {
 			await page.waitForURL(/\/routines\/?$/, { timeout: 15000 });
 			await page.waitForLoadState("networkidle");
 
-			await expect(
-				page.getByRole("heading", { name: "루틴" }),
-			).toBeVisible({ timeout: 10000 });
+			await expect(page.getByRole("heading", { name: "루틴" })).toBeVisible({
+				timeout: 10000,
+			});
 
 			// Then: 삭제된 루틴명이 목록에 없음
 			await expect(

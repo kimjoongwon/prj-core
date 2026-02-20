@@ -1,8 +1,8 @@
 {
   "extends": "@cocrepo/tsconfig/nestjs-app.json",
-  "compilerOptions": {
-    "outDir": "./dist",
-    "baseUrl": "./",
-    "ignoreDeprecations": "6.0"
-  }
+	"compilerOptions": {
+		"outDir": "./dist",
+		"baseUrl": "./",
+		"ignoreDeprecations": "5.0"
+	}
 }

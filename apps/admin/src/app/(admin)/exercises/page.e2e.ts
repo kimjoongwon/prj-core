@@ -1,4 +1,4 @@
-import { test, expect } from "@playwright/test";
+import { expect, test } from "@playwright/test";
 
 test.describe("운동 종목 목록 페이지", () => {
 	// ── E2E-001: 목록 렌더링 ──
@@ -35,9 +35,7 @@ test.describe("운동 종목 목록 페이지", () => {
 			await page.waitForLoadState("networkidle");
 
 			// Then: 검색 필드 확인
-			await expect(
-				page.getByPlaceholder("운동명으로 검색..."),
-			).toBeVisible();
+			await expect(page.getByPlaceholder("운동명으로 검색...")).toBeVisible();
 		});
 	});
 
@@ -110,7 +108,7 @@ test.describe("운동 종목 목록 페이지", () => {
 
 			// Then: 등록한 정보 확인
 			await expect(
-				page.getByText(TEST_NAME, { exact: true }),
+				page.getByRole("heading", { name: TEST_NAME, exact: true }),
 			).toBeVisible({ timeout: 10000 });
 
 			// ── 수정 플로우 ──
@@ -153,7 +151,7 @@ test.describe("운동 종목 목록 페이지", () => {
 			await page.waitForLoadState("networkidle");
 
 			await expect(
-				page.getByText(UPDATED_NAME, { exact: true }),
+				page.getByRole("heading", { name: UPDATED_NAME, exact: true }),
 			).toBeVisible({ timeout: 10000 });
 
 			// ── 삭제 플로우 ──

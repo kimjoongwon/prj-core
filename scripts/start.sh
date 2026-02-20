@@ -25,12 +25,13 @@ else
   echo ""
   echo -e "${BOLD}🚀 서비스 시작${RESET}"
   echo ""
-  echo -e "  ${CYAN}1${RESET})  server       ${DIM}백엔드 서버${RESET}"
-  echo -e "  ${CYAN}2${RESET})  admin        ${DIM}어드민 프론트엔드${RESET}"
-  echo -e "  ${CYAN}3${RESET})  idp-server   ${DIM}인증 서버 (백엔드)${RESET}"
-  echo -e "  ${CYAN}4${RESET})  idp-client   ${DIM}인증 서버 (프론트엔드)${RESET}"
-  echo -e "  ${CYAN}5${RESET})  storybook    ${DIM}스토리북${RESET}"
-  echo -e "  ${CYAN}6${RESET})  proposal     ${DIM}기획서${RESET}"
+  echo -e "  ${CYAN}1${RESET})  server          ${DIM}백엔드 서버${RESET}"
+  echo -e "  ${CYAN}2${RESET})  admin           ${DIM}어드민 프론트엔드${RESET}"
+  echo -e "  ${CYAN}3${RESET})  idp-server      ${DIM}인증 서버 (백엔드)${RESET}"
+  echo -e "  ${CYAN}4${RESET})  idp-client      ${DIM}인증 서버 (프론트엔드)${RESET}"
+  echo -e "  ${CYAN}5${RESET})  storybook       ${DIM}스토리북${RESET}"
+  echo -e "  ${CYAN}6${RESET})  proposal        ${DIM}기획서${RESET}"
+  echo -e "  ${CYAN}7${RESET})  opencode-studio ${DIM}OpenCode Studio${RESET}"
   echo ""
   echo -e "  ${DIM}복수 선택 가능 (예: 1 2)${RESET}"
   echo ""
@@ -52,12 +53,13 @@ HAS_IDP="false"
 # 서비스별 포트 조회
 get_port() {
   case $1 in
-    server)     echo 3006 ;;
-    admin)      echo 3000 ;;
-    idp-server) echo 3007 ;;
-    idp-client) echo 3008 ;;
-    storybook)  echo 6006 ;;
-    proposal)   echo 3001 ;;
+    server)          echo 3006 ;;
+    admin)           echo 3000 ;;
+    idp-server)      echo 3007 ;;
+    idp-client)      echo 3008 ;;
+    storybook)       echo 6006 ;;
+    proposal)        echo 3001 ;;
+    opencode-studio) echo 3010 ;;
   esac
 }
 
@@ -69,6 +71,7 @@ for choice in $choices; do
     4) FILTERS="$FILTERS --filter=idp-client"; SERVICES="$SERVICES idp-client"; HAS_FRONTEND="true" ;;
     5) FILTERS="$FILTERS --filter=storybook"; SERVICES="$SERVICES storybook" ;;
     6) FILTERS="$FILTERS --filter=proposal"; SERVICES="$SERVICES proposal"; HAS_FRONTEND="true" ;;
+    7) FILTERS="$FILTERS --filter=opencode-studio"; SERVICES="$SERVICES opencode-studio"; HAS_FRONTEND="true" ;;
     *) echo -e "${YELLOW}잘못된 번호: ${choice}${RESET}"; exit 1 ;;
   esac
 done

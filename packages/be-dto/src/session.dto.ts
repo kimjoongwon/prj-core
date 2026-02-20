@@ -7,10 +7,15 @@ import {
 	StringFieldOptional,
 	UUIDField,
 } from "@cocrepo/decorator";
-import { RepeatCycleTypes, SessionTypes } from "@cocrepo/enum";
+import {
+	RepeatCycleTypes as RepeatCycleTypeNames,
+	SessionTypes as SessionTypeNames,
+} from "@cocrepo/enum";
 import {
 	type RepeatCycleTypes as PrismaRepeatCycleTypes,
+	RepeatCycleTypes as PrismaRepeatCycleTypesEnum,
 	type SessionTypes as PrismaSessionTypes,
+	SessionTypes as PrismaSessionTypesEnum,
 	RecurringDayOfWeek,
 	type Session,
 } from "@cocrepo/prisma";
@@ -20,12 +25,24 @@ import { ProgramDto } from "./program.dto";
 import { TimelineDto } from "./timeline.dto";
 
 export class SessionDto extends AbstractDto implements Session {
-	@EnumField(() => SessionTypes)
-	@Transform(({ value }) => SessionTypes.findName(value))
+	@EnumField(() => PrismaSessionTypesEnum)
+	@Transform(
+		({ value }) =>
+			typeof value === "string"
+				? (SessionTypeNames.findName(value) ?? value)
+				: value,
+		{ toPlainOnly: true },
+	)
 	type: PrismaSessionTypes;
 
-	@EnumFieldOptional(() => RepeatCycleTypes, { nullable: true })
-	@Transform(({ value }) => RepeatCycleTypes.findName(value))
+	@EnumFieldOptional(() => PrismaRepeatCycleTypesEnum, { nullable: true })
+	@Transform(
+		({ value }) =>
+			typeof value === "string"
+				? (RepeatCycleTypeNames.findName(value) ?? value)
+				: value,
+		{ toPlainOnly: true },
+	)
 	repeatCycleType: PrismaRepeatCycleTypes | null;
 
 	@DateFieldOptional()

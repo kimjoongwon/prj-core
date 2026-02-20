@@ -143,24 +143,28 @@ test.describe("프로그램 등록/수정 연결 플로우", () => {
 			await page.getByLabel("정원").fill(initialCapacity);
 
 			await page.getByRole("button", { name: "루틴 선택" }).click();
-			await expect(
-				page.getByRole("heading", { name: "루틴 선택" }),
-			).toBeVisible();
-			await page.getByLabel("루틴 검색").fill(routineOneName);
-			await page
-				.getByRole("dialog")
+			const routineSelectDialogInCreate = page.getByRole("dialog", {
+				name: "루틴 선택",
+			});
+			await expect(routineSelectDialogInCreate).toBeVisible();
+			await routineSelectDialogInCreate
+				.getByLabel("루틴 검색")
+				.fill(routineOneName);
+			await routineSelectDialogInCreate
 				.getByRole("button", {
 					name: new RegExp(escapeRegExp(routineOneName)),
 				})
 				.click();
 
 			await page.getByRole("button", { name: "강사 선택" }).click();
-			await expect(
-				page.getByRole("heading", { name: "강사 선택" }),
-			).toBeVisible();
-			await page.getByLabel("강사 검색").fill(instructor?.name ?? "");
-			await page
-				.getByRole("dialog")
+			const instructorSelectDialog = page.getByRole("dialog", {
+				name: "강사 선택",
+			});
+			await expect(instructorSelectDialog).toBeVisible();
+			await instructorSelectDialog
+				.getByLabel("강사 검색")
+				.fill(instructor?.name ?? "");
+			await instructorSelectDialog
 				.getByRole("button", {
 					name: new RegExp(escapeRegExp(instructor?.name ?? "")),
 				})
@@ -219,12 +223,14 @@ test.describe("프로그램 등록/수정 연결 플로우", () => {
 			).toBeVisible();
 
 			await page.getByRole("button", { name: "루틴 선택" }).click();
-			await expect(
-				page.getByRole("heading", { name: "루틴 선택" }),
-			).toBeVisible();
-			await page.getByLabel("루틴 검색").fill(routineTwoName);
-			await page
-				.getByRole("dialog")
+			const routineSelectDialogInEdit = page.getByRole("dialog", {
+				name: "루틴 선택",
+			});
+			await expect(routineSelectDialogInEdit).toBeVisible();
+			await routineSelectDialogInEdit
+				.getByLabel("루틴 검색")
+				.fill(routineTwoName);
+			await routineSelectDialogInEdit
 				.getByRole("button", {
 					name: new RegExp(escapeRegExp(routineTwoName)),
 				})

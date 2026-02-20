@@ -1,4 +1,4 @@
-import { test, expect } from "@playwright/test";
+import { expect, test } from "@playwright/test";
 
 test.describe("시설 목록 페이지", () => {
 	// ── E2E-001: 목록 렌더링 ──
@@ -45,11 +45,12 @@ test.describe("시설 목록 페이지", () => {
 
 	test.describe("[E2E-002] 시설 CRUD 플로우", () => {
 		test("시설 등록 → 상세 → 수정 → 삭제 전체 플로우", async ({ page }) => {
-			const TEST_NAME = "E2E 테스트 시설";
-			const TEST_BUSINESS_NO = "000-00-00001";
+			const uniqueSuffix = `${Date.now()}`;
+			const TEST_NAME = `E2E 테스트 시설 ${uniqueSuffix.slice(-6)}`;
+			const TEST_BUSINESS_NO = `${uniqueSuffix.slice(-10, -7)}-${uniqueSuffix.slice(-7, -5)}-${uniqueSuffix.slice(-5)}`;
 			const TEST_ADDRESS = "서울특별시 강남구 테스트로 1";
 			const TEST_PHONE = "02-0000-0001";
-			const TEST_EMAIL = "e2e-test-ground@example.com";
+			const TEST_EMAIL = `e2e-test-ground-${uniqueSuffix}@example.com`;
 			// 시드 데이터 기준 System Space ID (로그인 헬퍼와 동일)
 			const SYSTEM_SPACE_ID = "61ddca20-1752-466e-b4da-879ebdbe54e3";
 			const spaceHeaders = { "x-space-id": SYSTEM_SPACE_ID };
@@ -117,7 +118,7 @@ test.describe("시설 목록 페이지", () => {
 
 			// Then: 등록한 정보 확인
 			await expect(
-				page.getByText(TEST_NAME, { exact: true }),
+				page.getByRole("heading", { name: TEST_NAME, exact: true }),
 			).toBeVisible({ timeout: 10000 });
 			await expect(
 				page.getByText(TEST_BUSINESS_NO, { exact: true }),
@@ -163,7 +164,10 @@ test.describe("시설 목록 페이지", () => {
 			await page.waitForLoadState("networkidle");
 
 			await expect(
-				page.getByText("E2E 수정된 시설", { exact: true }),
+				page.getByRole("heading", {
+					name: "E2E 수정된 시설",
+					exact: true,
+				}),
 			).toBeVisible({ timeout: 10000 });
 
 			// ── 삭제 플로우 (API 직접 호출) ──
