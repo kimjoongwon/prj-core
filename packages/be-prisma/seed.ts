@@ -1534,8 +1534,11 @@ async function createTemplates() {
 	let skippedCount = 0;
 
 	for (const templateData of templateSeedData) {
-		const existing = await prisma.template.findUnique({
-			where: { code: templateData.code },
+		const existing = await prisma.template.findFirst({
+			where: {
+				code: templateData.code,
+				type: templateData.type,
+			},
 		});
 
 		if (!existing) {

@@ -157,7 +157,10 @@ class RunManager {
 			]);
 
 			for (const session of sessions) {
-				if (session.directory !== this.projectDirectory) {
+				if (
+					this.projectDirectory &&
+					session.directory !== this.projectDirectory
+				) {
 					continue;
 				}
 
@@ -402,7 +405,7 @@ class RunManager {
 			}
 		}
 
-		return null;
+		return agentName.trim();
 	}
 
 	private pushEvent(
@@ -605,12 +608,12 @@ function stripAnsi(value: string) {
 }
 
 function resolveProjectDirectory() {
-	const envDirectory = process.env.OPENCODE_PROJECT_DIR;
-	const candidates = [
-		envDirectory,
-		process.cwd(),
-		path.resolve(process.cwd(), "../.."),
-	].filter(Boolean) as string[];
+	const envDirectory = process.env.OPENCODE_PROJECT_DIR?.trim();
+	if (envDirectory) {
+		return envDirectory;
+	}
+
+	const candidates = [process.cwd(), path.resolve(process.cwd(), "../..")];
 
 	for (const candidate of candidates) {
 		if (fs.existsSync(path.join(candidate, ".opencode"))) {
@@ -618,10 +621,14 @@ function resolveProjectDirectory() {
 		}
 	}
 
-	return process.cwd();
+	return "";
 }
 
 function discoverAvailableSubagents(projectDirectory: string) {
+	if (!projectDirectory) {
+		return [];
+	}
+
 	const roots = [path.join(projectDirectory, ".opencode", "agents")];
 	const names = new Map<string, string>();
 

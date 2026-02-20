@@ -2,11 +2,16 @@
   "name": "opencode-studio",
   "private": true,
   "version": "0.0.0",
+  "packageManager": "pnpm@10.16.0",
+  "main": "menubar/main.cjs",
   "scripts": {
     "dev": "next dev --turbopack -p 3010",
     "start:dev": "next dev --turbopack -p 3010",
     "build": "next build",
     "start": "next start -p 3010",
+    "mac:dev": "npx --yes electron ./menubar/main.cjs",
+    "mac:build": "rm -rf dist-mac dist-electron-app && pnpm build && node ./menubar/prepare-build.cjs && CSC_IDENTITY_AUTO_DISCOVERY=false npx --yes electron-builder --mac --dir",
+    "mac:dist": "rm -rf dist-mac dist-electron-app && pnpm build && node ./menubar/prepare-build.cjs && CSC_IDENTITY_AUTO_DISCOVERY=false npx --yes electron-builder --mac",
     "type-check": "tsc --noEmit",
     "lint": "biome check .",
     "lint:fix": "biome check --write .",
@@ -28,5 +33,31 @@
     "@types/react-dom": "catalog:",
     "tailwindcss": "catalog:",
     "typescript": "catalog:"
+  },
+  "build": {
+    "appId": "com.cocrepo.opencodestudio",
+    "productName": "OpenCode Studio",
+    "electronVersion": "40.6.0",
+    "asar": false,
+    "npmRebuild": false,
+    "nodeGypRebuild": false,
+    "directories": {
+      "app": "dist-electron-app",
+      "output": "dist-mac"
+    },
+    "files": [
+      "main.cjs",
+      ".next/standalone/**/*",
+      ".next/static/**/*",
+      "public/**/*",
+      "package.json"
+    ],
+    "mac": {
+      "category": "public.app-category.developer-tools",
+      "target": [
+        "dir",
+        "zip"
+      ]
+    }
   }
 }
