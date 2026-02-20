@@ -11,6 +11,8 @@
 			"./apps/admin/**/*.ts",
 			"./apps/admin/**/*.tsx",
 			"./apps/idp/src/**/*.ts",
+			"./apps/opencode-studio/**/*.ts",
+			"./apps/opencode-studio/**/*.tsx",
 			"./apps/proposal/**/*.ts",
 			"./apps/proposal/**/*.tsx",
 			"./apps/server/src/module/**/*.ts",
