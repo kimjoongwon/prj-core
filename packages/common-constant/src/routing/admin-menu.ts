@@ -85,10 +85,6 @@ export const ADMIN_PATHS = {
 	TEMPLATES_DETAIL: "/templates/[templateId]",
 	TEMPLATES_EDIT: "/templates/[templateId]/edit",
 
-	// 내 계정 (Self-Service)
-	MY_SESSIONS: "/my-sessions",
-	MY_ACCOUNT_CHANGE_PASSWORD: "/my-account/change-password",
-
 	// 인증
 	AUTH_LOGIN: "/auth/login",
 } as const;
@@ -141,11 +137,6 @@ export const ADMIN_SUBJECTS = {
 	MENU_ACTIONS_LIST: "menu:actions:list",
 	MENU_SUBJECTS: "menu:subjects",
 	MENU_SUBJECTS_LIST: "menu:subjects:list",
-
-	// 내 계정 (Self-Service)
-	MENU_MY_ACCOUNT: "menu:my-account",
-	MENU_MY_ACCOUNT_SESSIONS: "menu:my-account:sessions",
-	MENU_MY_ACCOUNT_CHANGE_PASSWORD: "menu:my-account:change-password",
 } as const;
 
 /**
@@ -290,28 +281,6 @@ export const ADMIN_NAV_ITEMS: NavItemConfig[] = [
 				label: "대상",
 				path: ADMIN_PATHS.SUBJECTS,
 				subject: ADMIN_SUBJECTS.MENU_SUBJECTS_LIST,
-			},
-		],
-	},
-
-	// 8. 내 계정
-	{
-		id: "my-account",
-		label: "내 계정",
-		icon: "UserCircle",
-		subject: ADMIN_SUBJECTS.MENU_MY_ACCOUNT,
-		children: [
-			{
-				id: "my-account-sessions",
-				label: "세션 관리",
-				path: ADMIN_PATHS.MY_SESSIONS,
-				subject: ADMIN_SUBJECTS.MENU_MY_ACCOUNT_SESSIONS,
-			},
-			{
-				id: "my-account-change-password",
-				label: "비밀번호 변경",
-				path: ADMIN_PATHS.MY_ACCOUNT_CHANGE_PASSWORD,
-				subject: ADMIN_SUBJECTS.MENU_MY_ACCOUNT_CHANGE_PASSWORD,
 			},
 		],
 	},

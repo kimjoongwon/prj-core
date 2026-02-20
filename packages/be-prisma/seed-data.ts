@@ -372,25 +372,6 @@ export const subjectSeedData: SubjectSeedData[] = [
 		group: "menu",
 		order: 213,
 	},
-	{
-		name: "menu:my-account",
-		displayName: "내 계정",
-		group: "menu",
-		order: 300,
-	},
-	{
-		name: "menu:my-account:sessions",
-		displayName: "세션 관리",
-		group: "menu",
-		order: 301,
-	},
-	{
-		name: "menu:my-account:change-password",
-		displayName: "비밀번호 변경",
-		group: "menu",
-		order: 302,
-	},
-
 	// ============================================================================
 	// v7.0 Admin 메뉴 (2depth - 회원)
 	// ============================================================================
@@ -1864,7 +1845,7 @@ export const fullAccessAbilitySeedData: AbilitySeedData[] = [
 	},
 
 	// ============================================================================
-	// v7.1 신규 메뉴 manage (1depth - 일정/운동/루틴/내 계정)
+	// v7.1 신규 메뉴 manage (1depth - 일정/운동/루틴)
 	// ============================================================================
 	{
 		roleName: "FULL_ACCESS",
@@ -1887,14 +1868,6 @@ export const fullAccessAbilitySeedData: AbilitySeedData[] = [
 		inverted: false,
 		description: "루틴 전체 권한",
 	},
-	{
-		roleName: "FULL_ACCESS",
-		subject: "menu:my-account",
-		actionName: "manage",
-		inverted: false,
-		description: "내 계정 전체 권한",
-	},
-
 	// ============================================================================
 	// v7.1 신규 메뉴 manage (2depth - 시설 목록)
 	// ============================================================================
@@ -2014,24 +1987,6 @@ export const fullAccessAbilitySeedData: AbilitySeedData[] = [
 		actionName: "manage",
 		inverted: false,
 		description: "대상 목록 전체 권한",
-	},
-
-	// ============================================================================
-	// v7.1 신규 메뉴 manage (2depth - 내 계정)
-	// ============================================================================
-	{
-		roleName: "FULL_ACCESS",
-		subject: "menu:my-account:sessions",
-		actionName: "manage",
-		inverted: false,
-		description: "세션 관리 전체 권한",
-	},
-	{
-		roleName: "FULL_ACCESS",
-		subject: "menu:my-account:change-password",
-		actionName: "manage",
-		inverted: false,
-		description: "비밀번호 변경 전체 권한",
 	},
 
 	// ============================================================================

@@ -34,7 +34,6 @@ Admin 앱은 플랫폼의 관리자 콘솔입니다. 회원, 예약, 알림, 콘
 | GOAL-004 | ACT-001, ACT-002 | 메시지 템플릿(SMS, 이메일, 푸시, HTML)을 생성/관리한다 | 중간 |
 | GOAL-005 | ACT-001, ACT-002 | 대시보드에서 주요 지표를 한눈에 확인한다 | 높음 |
 | GOAL-006 | ACT-001 | IDP(Identity Provider) 관리 콘솔에 접근하여 인증 설정을 관리한다 | 낮음 |
-| GOAL-007 | ACT-001, ACT-002, ACT-003 | 자신의 세션을 관리하고 비밀번호를 변경한다 | 중간 |
 | GOAL-008 | ACT-001, ACT-002 | Space를 전환하여 다른 Space의 데이터를 관리한다 | 높음 |
 | GOAL-009 | ACT-001, ACT-002 | 타임라인(Timeline)을 생성/수정/삭제하여 학기나 시즌을 구조화한다 | 높음 |
 | GOAL-010 | ACT-001, ACT-002 | 타임라인 내 세션(Session)을 등록/수정/삭제하여 수업 일정을 관리한다 | 높음 |
@@ -61,8 +60,6 @@ Admin 앱은 플랫폼의 관리자 콘솔입니다. 회원, 예약, 알림, 콘
 | 타임라인 (Timelines) | `/timelines` | 학기/시즌 타임라인 관리 | 기획 중 |
 | 세션 (Sessions) | `/timelines/[timelineId]/sessions` | 세션 일정 관리 (타임라인 하위) | 기획 중 |
 | 프로그램 (Programs) | `/timelines/[timelineId]/sessions/[sessionId]/programs` | 수업 프로그램 관리 (세션 하위) - 강사·루틴·정원 연결 | 기획 중 |
-| 내 세션 | `/my-sessions` | 로그인 세션 관리 | 폴더 존재 |
-| 내 계정 | `/my-account` | 비밀번호 변경 등 | 폴더 존재 |
 
 ## Ground 도메인 맥락
 
@@ -132,3 +129,4 @@ AdminLayout
 | 2026-02-19 | Exercise 도메인 추가 (GOAL-011), 도메인 목록에 운동 종목 항목 추가 | req-L0L2-planner |
 | 2026-02-19 | Ground 도메인 추가 (GOAL-012, 도메인 목록, Ground 맥락 섹션) | req-L0L2-planner |
 | 2026-02-19 | Program 도메인 추가 (GOAL-013), 도메인 목록에 세션/프로그램 항목 추가, Program 맥락 섹션 추가 | orch-requirement |
+| 2026-02-20 | 삭제된 self-service 페이지(`/my-sessions`, `/my-account/change-password`) 관련 항목 정리 | OpenCode |
