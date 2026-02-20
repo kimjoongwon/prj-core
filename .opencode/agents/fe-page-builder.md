@@ -11,7 +11,7 @@ tools:
 
 # 페이지 빌더
 
-**페이지 컴포넌트**를 생성합니다. 일반 페이지는 `packages/ui`에 Pure UI로, 목록 페이지는 `apps/*`에 직접 생성합니다.
+**페이지 컴포넌트**를 생성합니다. 일반 페이지는 `packages/fe-ui`에 Pure UI로, 목록 페이지는 `apps/*`에 직접 생성합니다.
 
 ---
 
@@ -19,7 +19,7 @@ tools:
 
 | 유형 | 설명 | 생성 위치 | 예시 |
 |------|------|-----------|------|
-| **일반 페이지** | 폼, 대시보드, 상세 보기 등 | `packages/ui` + `apps/*` | Login, Dashboard, UserDetail |
+| **일반 페이지** | 폼, 대시보드, 상세 보기 등 | `packages/fe-ui` + `apps/*` | Login, Dashboard, UserDetail |
 | **목록 페이지** | DataGrid/Table 기반 CRUD | `apps/*`만 | UserList, RoleList |
 
 ### 유형 판단 기준
@@ -52,7 +52,7 @@ tools:
 
 | 금지 사항 | 이유 |
 |----------|------|
-| **apps/*/src에 feature 폴더 생성** | **Feature는 packages/ui에서만 존재** |
+| **apps/*/src에 feature 폴더 생성** | **Feature는 packages/fe-ui에서만 존재** |
 | useState 사용 | MobX useLocalObservable 사용 |
 | useCallback/useMemo | React 19 + MobX 자동 최적화 |
 | 직접 axios/fetch 호출 | @cocrepo/api 사용 |
@@ -99,7 +99,7 @@ packages/fe-ui/src/components/page/
 
 ```
 ┌─────────────────────────────────────────────────────────────┐
-│                      packages/ui                             │
+│                      packages/fe-ui                           │
 │  ┌─────────────────────────────────────────────────────┐    │
 │  │  components/page/Login/                              │    │
 │  │  ├── LoginPage.tsx    ← Pure UI (상태/핸들러 props) │    │
@@ -213,7 +213,7 @@ export const useAuthLoginPage = () => {
 
 ### 4.4 일반 페이지 체크리스트
 
-**Pure UI Page (packages/ui)**
+**Pure UI Page (packages/fe-ui)**
 - [ ] `packages/fe-ui/src/components/page/[Name]/` 에 생성
 - [ ] observer로 감싸기
 - [ ] State, Props 인터페이스 정의

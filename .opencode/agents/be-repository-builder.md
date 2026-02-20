@@ -81,6 +81,122 @@ export interface CreateUserParams {
 
 ---
 
+## ⚠️ 자주 발생하는 위반 사례 (Critical)
+
+에이전트가 작업 시 반드시 아래 사례를 확인하고 위반하지 않도록 주의합니다.
+
+### 위반 1: 도메인 목적 메서드명 사용
+
+Repository는 **"어떤 데이터를 가져오는지"만 표현**합니다. "왜 가져오는지(도메인 목적)"는 Service 역할입니다.
+
+```typescript
+// ❌ 위반 - 도메인 목적이 포함된 이름
+findByEmailForAuth(email: string)        // "ForAuth"는 도메인 목적
+findAccessibleSpaceIds(spaceId: string)  // "Accessible"는 도메인 개념
+findCrudActions()                        // "Crud"는 도메인 분류
+findVisibilityActions()                  // "Visibility"는 도메인 분류
+findEntitySubjects()                     // "Entity"는 도메인 분류
+getStatsBySpaceId(spaceId: string)       // "get" prefix, "Stats"는 도메인 개념
+
+// ✅ 올바른 대안
+findByEmailSelectCredentials(email: string)       // 어떤 필드를 가져오는지 표현
+findSpaceIdsByCategoryHierarchy(spaceId: string)  // 데이터 경로를 표현
+findByGroup(group: string)                        // Service에서 findByGroup("crud") 호출
+findByPattern(pattern: string)                    // Service에서 findByPattern("entity:") 호출
+countStatsBySpaceId(spaceId: string)              // count/find prefix 사용
+```
+
+**판별 기준: 메서드명에 아래 단어가 포함되면 위반 의심**
+- `ForAuth`, `ForLogin`, `ForSignUp` 등 목적 접미어
+- `Accessible`, `Available`, `Valid` 등 도메인 형용사
+- `Crud`, `Visibility`, `Entity`, `Menu` 등 도메인 분류어
+- `Active` (필터 조건이라면 `findByIsActive` 또는 파라미터로 전달)
+
+**Service에서의 래핑이 올바른 패턴:**
+```typescript
+// Service (도메인 목적 표현)        → Repository (데이터 설명)
+findUserForAuth(email)               → findByEmailSelectCredentials(email)
+getAccessibleSpaceIds(spaceId)       → findSpaceIdsByCategoryHierarchy(spaceId)
+getCrudActions()                     → findByGroup("crud")
+getEntitySubjects()                  → findByPattern("entity:")
+```
+
+### 위반 2: 메서드 prefix 불일치
+
+Repository에서 허용되는 prefix는 정해져 있습니다.
+
+```typescript
+// ❌ 위반 - get prefix 사용 (Service 전용)
+getStatsBySpaceId(spaceId: string)
+getAll()
+getAllWithRelations()
+
+// ❌ 위반 - 동작과 이름 불일치
+softDelete(id: string)       // → removeById (소프트 삭제는 remove)
+deleteByAbilityId(id: string) // removedAt 설정이면 → removeByAbilityId
+update(id: string, data)     // → updateById (ID 기반이면 By 포함)
+
+// ✅ 올바른 prefix
+findById / findByEmail / findByIds           // 조회
+findManyBySpaceId / findAll                  // 목록 조회
+countBySpaceId / countStatsBySpaceId         // 집계
+create / createMany                          // 생성
+updateById                                   // 수정 (ID 기반)
+removeById / removeByAbilityId               // 소프트 삭제 (removedAt 설정)
+deleteById                                   // 물리 삭제 (실제 DELETE)
+existsByEmail / existsByPhone                // 존재 확인
+```
+
+### 위반 3: 커스텀 타입/Enum 선언
+
+Repository 파일 내에 `interface`, `type`, `enum`을 선언하면 안 됩니다.
+
+```typescript
+// ❌ 위반 - Repository 파일에 타입 선언
+export interface UserStats { total: number; ... }     // → @cocrepo/type 으로 이동
+export enum GranteeType { Role = "Role", ... }        // → @cocrepo/enum 으로 이동
+type CreateParams = { name: string; email: string; }  // → Prisma 타입 사용
+
+// ✅ 올바른 방법
+import type { UserStats } from "@cocrepo/type";       // 공용 타입 패키지에서 import
+import { GranteeType } from "@cocrepo/enum";           // 공용 enum 패키지에서 import
+async create(data: Prisma.UserUncheckedCreateInput)    // Prisma 타입 직접 사용
+```
+
+**타입이 필요한 경우의 올바른 위치:**
+| 타입 종류 | 올바른 위치 | 예시 |
+|----------|------------|------|
+| 공용 interface | `@cocrepo/type` | `UserStats`, `PaginationResult` |
+| 공용 enum | `@cocrepo/enum` | `GranteeType`, `SortOrder` |
+| 생성/수정 파라미터 | Prisma 타입 사용 | `Prisma.UserUncheckedCreateInput` |
+| 인라인 커스텀 타입 | **금지** | `{ name: string; email: string; }` |
+
+### 위반 4: 편의 래퍼 메서드
+
+단순히 파라미터를 하드코딩하는 래퍼 메서드는 Repository에 두지 않습니다.
+
+```typescript
+// ❌ 위반 - 하드코딩 래퍼 (Service 역할)
+async findCrudActions(): Promise<Action[]> {
+  return this.findByGroup("crud");         // "crud"를 하드코딩
+}
+async findEntitySubjects(): Promise<Subject[]> {
+  return this.findByPattern("entity:");    // "entity:"를 하드코딩
+}
+
+// ✅ 올바른 방법 - 범용 메서드만 Repository에 제공
+async findByGroup(group: string): Promise<Action[]> { ... }
+async findByPattern(pattern: string): Promise<Subject[]> { ... }
+
+// Service에서 도메인 의미를 부여
+// actions.service.ts
+getCrudActions() { return this.repository.findByGroup("crud"); }
+// subjects.service.ts
+getEntitySubjects() { return this.repository.findByPattern("entity:"); }
+```
+
+---
+
 ## 프로세스
 
 ### 1단계: Entity 및 Prisma 타입 import
@@ -283,15 +399,27 @@ async findManyBySpaceId(params: {
 - [ ] `@Injectable()` 데코레이터 추가
 - [ ] `TransactionHost` 주입
 - [ ] `txHost.tx` 직접 사용 (getter 금지)
-- [ ] 메서드명이 어떤 데이터를 가져오는지 표현
-- [ ] **Prisma 타입 사용** (커스텀 타입 선언 금지)
+- [ ] **메서드명이 "어떤 데이터를 가져오는지" 표현** (도메인 목적 금지)
+  - [ ] `ForAuth`, `ForLogin` 등 도메인 목적 접미어 없음
+  - [ ] `Crud`, `Entity`, `Visibility` 등 도메인 분류어 없음
+  - [ ] `Accessible`, `Available` 등 도메인 형용사 없음
+- [ ] **메서드 prefix 규칙 준수**
+  - [ ] 조회: `find*`, 집계: `count*`, 존재확인: `exists*`
+  - [ ] 소프트 삭제: `removeById` (❌ `softDelete`)
+  - [ ] ID 기반 수정: `updateById` (❌ `update`)
+  - [ ] `get*` prefix 미사용 (Service 전용)
+- [ ] **Prisma 타입 사용** (커스텀 타입/인라인 타입 선언 금지)
   - [ ] `Prisma.{Model}UncheckedCreateInput` (생성)
   - [ ] `Prisma.{Model}UncheckedUpdateInput` (수정)
   - [ ] `Prisma.{Model}CreateManyInput` (다중 생성)
+- [ ] **Repository 파일 내 `interface`, `type`, `enum` 선언 없음**
+  - [ ] 공용 타입 → `@cocrepo/type`
+  - [ ] 공용 enum → `@cocrepo/enum`
+- [ ] **편의 래퍼 메서드 없음** (파라미터 하드코딩 래퍼는 Service 역할)
 - [ ] 조회 메서드는 필요한 원시 타입만 받음
 - [ ] `plainToInstance()` 로 Entity 변환
 - [ ] Logger 초기화
-- [ ] index.ts에 export 추가
+- [ ] index.ts에 export 추가 (**Repository만 export, 타입은 export 금지**)
 
 ---
 
@@ -324,11 +452,17 @@ packages/be-repository/src/{entity}.repository.ts
 |------|------|------|
 | `findById` | ID로 단일 조회 | `findById(id)` |
 | `findBy{Condition}` | 조건으로 단일 조회 | `findByEmail(email)` |
+| `findBy{Key}Select{Fields}` | 특정 필드만 조회 | `findByEmailSelectCredentials(email)` |
 | `findBy{Key}With{Relations}` | 관계 포함 조회 (주요 관계 나열) | `findByIdWithTenantsAndProfiles(id)` |
 | `findManyBy{Condition}` | 조건으로 목록 조회 | `findManyBySpaceId(spaceId)` |
+| `findAll` | 전체 목록 조회 | `findAll()` |
+| `countBy{Condition}` | 집계 조회 | `countStatsBySpaceId(spaceId)` |
+| `existsBy{Condition}` | 존재 확인 | `existsByEmail(email)` |
 | `create` | 생성 | `create(data)` |
+| `createMany` | 다중 생성 | `createMany(data)` |
 | `updateById` | ID로 수정 | `updateById(id, data)` |
 | `removeById` | 소프트 삭제 | `removeById(id)` |
+| `removeBy{Condition}` | 조건으로 소프트 삭제 | `removeByAbilityId(abilityId)` |
 | `deleteById` | 물리 삭제 | `deleteById(id)` |
 
 ### Prisma 타입 종류
@@ -347,7 +481,12 @@ packages/be-repository/src/{entity}.repository.ts
 
 ```typescript
 // packages/be-repository/src/index.ts
+// ✅ Repository 클래스만 export
 export { {Entity}sRepository } from "./{entity}.repository";
+
+// ❌ 타입/Enum은 export 금지 (각자의 패키지에서 import)
+// export { type UserStats } from "./users.repository";   ← 금지
+// export { GranteeType } from "./grants.repository";      ← 금지
 ```
 
 ### 관련 파일

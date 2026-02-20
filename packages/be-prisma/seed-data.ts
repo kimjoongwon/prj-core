@@ -279,27 +279,117 @@ export const subjectSeedData: SubjectSeedData[] = [
 	{ name: "menu:admins", displayName: "관리자", group: "menu", order: 190 },
 	{ name: "menu:roles", displayName: "역할/권한", group: "menu", order: 200 },
 	// 현재 admin-menu.ts 메뉴 구조에 맞는 추가 subjects
-	{ name: "menu:grounds:list", displayName: "시설 목록", group: "menu", order: 181 },
-	{ name: "menu:timelines", displayName: "일정 관리", group: "menu", order: 210 },
-	{ name: "menu:timelines:list", displayName: "타임라인 목록", group: "menu", order: 211 },
-	{ name: "menu:exercises", displayName: "운동 관리", group: "menu", order: 220 },
-	{ name: "menu:exercises:list", displayName: "운동 종목 목록", group: "menu", order: 221 },
+	{
+		name: "menu:grounds:list",
+		displayName: "시설 목록",
+		group: "menu",
+		order: 181,
+	},
+	{
+		name: "menu:timelines",
+		displayName: "일정 관리",
+		group: "menu",
+		order: 210,
+	},
+	{
+		name: "menu:timelines:list",
+		displayName: "타임라인 목록",
+		group: "menu",
+		order: 211,
+	},
+	{
+		name: "menu:exercises",
+		displayName: "운동 관리",
+		group: "menu",
+		order: 220,
+	},
+	{
+		name: "menu:exercises:list",
+		displayName: "운동 종목 목록",
+		group: "menu",
+		order: 221,
+	},
 	{ name: "menu:routines", displayName: "루틴", group: "menu", order: 230 },
-	{ name: "menu:routines:list", displayName: "루틴 목록", group: "menu", order: 231 },
-	{ name: "menu:templates:list", displayName: "템플릿 목록", group: "menu", order: 161 },
-	{ name: "menu:role-groups", displayName: "역할 그룹", group: "menu", order: 202 },
-	{ name: "menu:role-groups:list", displayName: "역할 그룹 목록", group: "menu", order: 203 },
-	{ name: "menu:role-categories", displayName: "역할 카테고리", group: "menu", order: 204 },
-	{ name: "menu:role-categories:list", displayName: "역할 카테고리 목록", group: "menu", order: 205 },
-	{ name: "menu:abilities", displayName: "권한 정의", group: "menu", order: 206 },
-	{ name: "menu:abilities:list", displayName: "권한 정의 목록", group: "menu", order: 207 },
+	{
+		name: "menu:routines:list",
+		displayName: "루틴 목록",
+		group: "menu",
+		order: 231,
+	},
+	{
+		name: "menu:templates:list",
+		displayName: "템플릿 목록",
+		group: "menu",
+		order: 161,
+	},
+	{
+		name: "menu:role-groups",
+		displayName: "역할 그룹",
+		group: "menu",
+		order: 202,
+	},
+	{
+		name: "menu:role-groups:list",
+		displayName: "역할 그룹 목록",
+		group: "menu",
+		order: 203,
+	},
+	{
+		name: "menu:role-categories",
+		displayName: "역할 카테고리",
+		group: "menu",
+		order: 204,
+	},
+	{
+		name: "menu:role-categories:list",
+		displayName: "역할 카테고리 목록",
+		group: "menu",
+		order: 205,
+	},
+	{
+		name: "menu:abilities",
+		displayName: "권한 정의",
+		group: "menu",
+		order: 206,
+	},
+	{
+		name: "menu:abilities:list",
+		displayName: "권한 정의 목록",
+		group: "menu",
+		order: 207,
+	},
 	{ name: "menu:actions", displayName: "액션", group: "menu", order: 208 },
-	{ name: "menu:actions:list", displayName: "액션 목록", group: "menu", order: 209 },
+	{
+		name: "menu:actions:list",
+		displayName: "액션 목록",
+		group: "menu",
+		order: 209,
+	},
 	{ name: "menu:subjects", displayName: "대상", group: "menu", order: 212 },
-	{ name: "menu:subjects:list", displayName: "대상 목록", group: "menu", order: 213 },
-	{ name: "menu:my-account", displayName: "내 계정", group: "menu", order: 300 },
-	{ name: "menu:my-account:sessions", displayName: "세션 관리", group: "menu", order: 301 },
-	{ name: "menu:my-account:change-password", displayName: "비밀번호 변경", group: "menu", order: 302 },
+	{
+		name: "menu:subjects:list",
+		displayName: "대상 목록",
+		group: "menu",
+		order: 213,
+	},
+	{
+		name: "menu:my-account",
+		displayName: "내 계정",
+		group: "menu",
+		order: 300,
+	},
+	{
+		name: "menu:my-account:sessions",
+		displayName: "세션 관리",
+		group: "menu",
+		order: 301,
+	},
+	{
+		name: "menu:my-account:change-password",
+		displayName: "비밀번호 변경",
+		group: "menu",
+		order: 302,
+	},
 
 	// ============================================================================
 	// v7.0 Admin 메뉴 (2depth - 회원)
@@ -2608,9 +2698,7 @@ export const oidcClientSeedData: OidcClientSeedData[] = [
 		clientId: "prj-core-idp-console",
 		clientSecret: "idp-console-secret-change-in-production",
 		clientName: "PRJ Core IDP 관리 콘솔",
-		redirectUris: [
-			"http://localhost:3008/api/v1/auth/callback",
-		],
+		redirectUris: ["http://localhost:3008/api/v1/auth/callback"],
 		grantTypes: ["authorization_code", "refresh_token"],
 		responseTypes: ["code"],
 		tokenEndpointAuthMethod: "client_secret_post",
@@ -2682,7 +2770,11 @@ export interface SpaceCategorySeedData {
 
 export const spaceCategorySeedData: SpaceCategorySeedData[] = [
 	{ spaceCategoryEnum: SpaceCategoryNames.ROOT, type: "Space" },
-	{ spaceCategoryEnum: SpaceCategoryNames.BRANCH, type: "Space", parentCategoryCode: "ROOT" },
+	{
+		spaceCategoryEnum: SpaceCategoryNames.BRANCH,
+		type: "Space",
+		parentCategoryCode: "ROOT",
+	},
 ];
 
 // ============================================================================
@@ -2810,7 +2902,8 @@ export const templateSeedData: TemplateSeedData[] = [
 		code: "SMS_RESERVATION_REMINDER",
 		name: "예약 리마인더",
 		type: "SMS",
-		content: "[{{groundName}}] {{userName}}님, 오늘 {{reservationTime}} {{programName}} 예약이 있습니다. 시작 10분 전까지 도착해 주세요.",
+		content:
+			"[{{groundName}}] {{userName}}님, 오늘 {{reservationTime}} {{programName}} 예약이 있습니다. 시작 10분 전까지 도착해 주세요.",
 		description: "예약 당일 리마인더 SMS",
 		isActive: true,
 		variables: [
@@ -2824,7 +2917,8 @@ export const templateSeedData: TemplateSeedData[] = [
 		code: "SMS_PAYMENT_COMPLETE",
 		name: "결제 완료",
 		type: "SMS",
-		content: "[{{groundName}}] {{userName}}님, {{amount}}원 결제가 완료되었습니다. 이용권: {{membershipName}} ({{expiryDate}}까지)",
+		content:
+			"[{{groundName}}] {{userName}}님, {{amount}}원 결제가 완료되었습니다. 이용권: {{membershipName}} ({{expiryDate}}까지)",
 		description: "결제 완료 알림 SMS",
 		isActive: true,
 		variables: [
@@ -2841,13 +2935,19 @@ export const templateSeedData: TemplateSeedData[] = [
 		name: "수업 시작 알림",
 		type: "PUSH",
 		subject: "수업이 곧 시작됩니다!",
-		content: "{{userName}}님, {{programName}} 수업이 {{minutesBefore}}분 후 시작됩니다. {{groundName}}에서 만나요!",
+		content:
+			"{{userName}}님, {{programName}} 수업이 {{minutesBefore}}분 후 시작됩니다. {{groundName}}에서 만나요!",
 		description: "수업 시작 전 푸시 알림",
 		isActive: true,
 		variables: [
 			{ name: "userName", description: "회원 이름", isRequired: true },
 			{ name: "programName", description: "프로그램 이름", isRequired: true },
-			{ name: "minutesBefore", description: "시작 전 분", defaultValue: "30", isRequired: false },
+			{
+				name: "minutesBefore",
+				description: "시작 전 분",
+				defaultValue: "30",
+				isRequired: false,
+			},
 			{ name: "groundName", description: "시설 이름", isRequired: true },
 		],
 	},
@@ -2856,19 +2956,426 @@ export const templateSeedData: TemplateSeedData[] = [
 		name: "이용권 만료 예정",
 		type: "PUSH",
 		subject: "이용권 만료 예정 안내",
-		content: "{{userName}}님, {{membershipName}} 이용권이 {{daysLeft}}일 후 만료됩니다. 갱신 시 {{discountRate}} 할인 혜택을 받으실 수 있습니다.",
+		content:
+			"{{userName}}님, {{membershipName}} 이용권이 {{daysLeft}}일 후 만료됩니다. 갱신 시 {{discountRate}} 할인 혜택을 받으실 수 있습니다.",
 		description: "이용권 만료 예정 푸시 알림",
 		isActive: true,
 		variables: [
 			{ name: "userName", description: "회원 이름", isRequired: true },
 			{ name: "membershipName", description: "이용권 이름", isRequired: true },
 			{ name: "daysLeft", description: "남은 일수", isRequired: true },
-			{ name: "discountRate", description: "할인율", defaultValue: "10%", isRequired: false },
+			{
+				name: "discountRate",
+				description: "할인율",
+				defaultValue: "10%",
+				isRequired: false,
+			},
 		],
+	},
+];
+
+// ============================================================================
+// Timeline / Session / Exercise 시드 데이터
+// ============================================================================
+
+export interface TimelineSeedData {
+	id: string;
+	groundName: string;
+	creatorEmail: string;
+	name: string;
+	description: string;
+	seasonTag: "recent" | "mid" | "archive";
+}
+
+export const timelineSeedData: TimelineSeedData[] = [
+	{
+		id: "6f3d4a4c-b130-43a9-9dd6-3ba76ef7f001",
+		groundName: "F45 광화문",
+		creatorEmail: "manager.gwanghwamun@f45.kr",
+		name: "2026 1분기 출근 전 체력 회복",
+		description: "평일 아침 45분 중심의 직장인 타깃 타임라인",
+		seasonTag: "recent",
+	},
+	{
+		id: "6f3d4a4c-b130-43a9-9dd6-3ba76ef7f002",
+		groundName: "F45 광화문",
+		creatorEmail: "manager.gwanghwamun@f45.kr",
+		name: "2025 연말 바디리셋 챌린지",
+		description: "연말 체중 관리 챌린지 운영 이력",
+		seasonTag: "mid",
+	},
+	{
+		id: "6f3d4a4c-b130-43a9-9dd6-3ba76ef7f003",
+		groundName: "F45 강남1호",
+		creatorEmail: "manager.gangnam@f45.kr",
+		name: "2026 상반기 런치 메타콘",
+		description: "점심시간 50분 고강도 순환 트레이닝",
+		seasonTag: "recent",
+	},
+	{
+		id: "6f3d4a4c-b130-43a9-9dd6-3ba76ef7f004",
+		groundName: "F45 강남1호",
+		creatorEmail: "manager.gangnam@f45.kr",
+		name: "2025 Q3 기업 제휴 프로그램",
+		description: "오피스 제휴 회원 대상 저녁 그룹 수업",
+		seasonTag: "archive",
+	},
+	{
+		id: "6f3d4a4c-b130-43a9-9dd6-3ba76ef7f005",
+		groundName: "크로스핏 이태원",
+		creatorEmail: "manager.itaewon@crossfit.kr",
+		name: "2026 Open 준비반",
+		description: "크로스핏 오픈 대비 스킬 + 메타콘 혼합",
+		seasonTag: "recent",
+	},
+	{
+		id: "6f3d4a4c-b130-43a9-9dd6-3ba76ef7f006",
+		groundName: "크로스핏 이태원",
+		creatorEmail: "manager.itaewon@crossfit.kr",
+		name: "2025 기초 역도 적응반",
+		description: "초보 회원 대상 바벨 무빙 패턴 학습",
+		seasonTag: "mid",
+	},
+	{
+		id: "6f3d4a4c-b130-43a9-9dd6-3ba76ef7f007",
+		groundName: "애니타임피트니스 역삼",
+		creatorEmail: "manager.gangnam@f45.kr",
+		name: "2026 체지방 감량 부트캠프",
+		description: "유산소 + 근력 병행형 체지방 감량 과정",
+		seasonTag: "recent",
+	},
+	{
+		id: "6f3d4a4c-b130-43a9-9dd6-3ba76ef7f008",
+		groundName: "애니타임피트니스 신논현",
+		creatorEmail: "manager.gangnam@f45.kr",
+		name: "2025 하반기 근지구력 강화",
+		description: "중급 회원 대상 볼륨 트레이닝 운영",
+		seasonTag: "mid",
+	},
+	{
+		id: "6f3d4a4c-b130-43a9-9dd6-3ba76ef7f009",
+		groundName: "스포애니 홍대",
+		creatorEmail: "manager.itaewon@crossfit.kr",
+		name: "2026 새벽 클래스 파일럿",
+		description: "출근 전 40분 클래스 A/B 테스트",
+		seasonTag: "recent",
+	},
+	{
+		id: "6f3d4a4c-b130-43a9-9dd6-3ba76ef7f010",
+		groundName: "F45 잠실",
+		creatorEmail: "manager.gwanghwamun@f45.kr",
+		name: "2025 여름 시즌 프로그램",
+		description: "주말 중심 체험형 시즌 수업 운영",
+		seasonTag: "archive",
+	},
+];
+
+export interface ExerciseCatalogSeedData {
+	code: string;
+	name: string;
+	category: "strength" | "cardio" | "core" | "mobility";
+	difficulty: "BEGINNER" | "INTERMEDIATE" | "ADVANCED";
+	typicalDurationSec: number;
+	typicalCount: number;
+	caloriesPerMinute: number;
+	description: string;
+}
+
+export const exerciseCatalogSeedData: ExerciseCatalogSeedData[] = [
+	{
+		code: "AIR_SQUAT",
+		name: "에어 스쿼트",
+		category: "strength",
+		difficulty: "BEGINNER",
+		typicalDurationSec: 50,
+		typicalCount: 20,
+		caloriesPerMinute: 8,
+		description: "체중 부하로 하체 패턴을 익히는 기본 스쿼트",
+	},
+	{
+		code: "GOBLET_SQUAT",
+		name: "고블릿 스쿼트",
+		category: "strength",
+		difficulty: "INTERMEDIATE",
+		typicalDurationSec: 60,
+		typicalCount: 14,
+		caloriesPerMinute: 9,
+		description: "덤벨/케틀벨 전면 하중으로 하체 안정성 강화",
+	},
+	{
+		code: "DEADLIFT",
+		name: "데드리프트",
+		category: "strength",
+		difficulty: "INTERMEDIATE",
+		typicalDurationSec: 70,
+		typicalCount: 10,
+		caloriesPerMinute: 10,
+		description: "둔근과 햄스트링 중심의 전신 후면 사슬 강화",
+	},
+	{
+		code: "BENCH_PRESS",
+		name: "벤치프레스",
+		category: "strength",
+		difficulty: "INTERMEDIATE",
+		typicalDurationSec: 65,
+		typicalCount: 10,
+		caloriesPerMinute: 8,
+		description: "가슴/삼두 중심 상체 프레스 기본 동작",
+	},
+	{
+		code: "PUSH_UP",
+		name: "푸시업",
+		category: "strength",
+		difficulty: "BEGINNER",
+		typicalDurationSec: 45,
+		typicalCount: 15,
+		caloriesPerMinute: 8,
+		description: "장비 없이 상체 근지구력을 향상하는 대표 동작",
+	},
+	{
+		code: "PULL_UP",
+		name: "풀업",
+		category: "strength",
+		difficulty: "ADVANCED",
+		typicalDurationSec: 40,
+		typicalCount: 8,
+		caloriesPerMinute: 9,
+		description: "광배/상완 이두를 중심으로 등 근력 강화",
+	},
+	{
+		code: "ROWING_500M",
+		name: "로잉 500m",
+		category: "cardio",
+		difficulty: "INTERMEDIATE",
+		typicalDurationSec: 130,
+		typicalCount: 1,
+		caloriesPerMinute: 12,
+		description: "단시간 고강도 유산소 + 전신 협응 훈련",
+	},
+	{
+		code: "RUN_800M",
+		name: "러닝 800m",
+		category: "cardio",
+		difficulty: "INTERMEDIATE",
+		typicalDurationSec: 260,
+		typicalCount: 1,
+		caloriesPerMinute: 13,
+		description: "중거리 인터벌 구간에서 심폐지구력 향상",
+	},
+	{
+		code: "JUMP_ROPE",
+		name: "줄넘기",
+		category: "cardio",
+		difficulty: "BEGINNER",
+		typicalDurationSec: 120,
+		typicalCount: 80,
+		caloriesPerMinute: 11,
+		description: "짧은 시간에 심박수를 높이는 기초 유산소",
+	},
+	{
+		code: "BIKE_SPRINT",
+		name: "에어바이크 스프린트",
+		category: "cardio",
+		difficulty: "ADVANCED",
+		typicalDurationSec: 45,
+		typicalCount: 1,
+		caloriesPerMinute: 15,
+		description: "20-45초 최대 출력 인터벌",
+	},
+	{
+		code: "BURPEE",
+		name: "버피",
+		category: "cardio",
+		difficulty: "INTERMEDIATE",
+		typicalDurationSec: 55,
+		typicalCount: 15,
+		caloriesPerMinute: 14,
+		description: "전신 지구력/심폐능력을 동시에 자극",
+	},
+	{
+		code: "MOUNTAIN_CLIMBER",
+		name: "마운틴 클라이머",
+		category: "core",
+		difficulty: "BEGINNER",
+		typicalDurationSec: 45,
+		typicalCount: 30,
+		caloriesPerMinute: 11,
+		description: "코어 안정성과 유산소 자극을 동시에 수행",
+	},
+	{
+		code: "PLANK",
+		name: "플랭크",
+		category: "core",
+		difficulty: "BEGINNER",
+		typicalDurationSec: 60,
+		typicalCount: 1,
+		caloriesPerMinute: 6,
+		description: "복부/척추 안정성 기본 유지 동작",
+	},
+	{
+		code: "SIDE_PLANK",
+		name: "사이드 플랭크",
+		category: "core",
+		difficulty: "INTERMEDIATE",
+		typicalDurationSec: 45,
+		typicalCount: 1,
+		caloriesPerMinute: 6,
+		description: "측면 코어와 둔중근 안정화",
+	},
+	{
+		code: "RUSSIAN_TWIST",
+		name: "러시안 트위스트",
+		category: "core",
+		difficulty: "INTERMEDIATE",
+		typicalDurationSec: 50,
+		typicalCount: 24,
+		caloriesPerMinute: 8,
+		description: "회전 코어 자극 및 복사근 강화",
+	},
+	{
+		code: "HIP_BRIDGE",
+		name: "힙 브리지",
+		category: "mobility",
+		difficulty: "BEGINNER",
+		typicalDurationSec: 45,
+		typicalCount: 20,
+		caloriesPerMinute: 6,
+		description: "둔근 활성화와 허리 부담 완화",
+	},
+	{
+		code: "WORLD_GREATEST_STRETCH",
+		name: "월드 그레이티스트 스트레치",
+		category: "mobility",
+		difficulty: "BEGINNER",
+		typicalDurationSec: 75,
+		typicalCount: 8,
+		caloriesPerMinute: 5,
+		description: "고관절/흉추 가동성을 동시에 여는 준비 동작",
+	},
+	{
+		code: "THRUSTER",
+		name: "쓰러스터",
+		category: "strength",
+		difficulty: "ADVANCED",
+		typicalDurationSec: 65,
+		typicalCount: 12,
+		caloriesPerMinute: 12,
+		description: "스쿼트와 오버헤드 프레스를 결합한 복합 전신 운동",
+	},
+];
+
+export interface SessionTemplateSeedData {
+	code: string;
+	name: string;
+	durationMin: number;
+	level: "초급" | "중급" | "고급";
+	focus: "strength" | "metcon" | "recovery";
+}
+
+export const sessionTemplateSeedData: SessionTemplateSeedData[] = [
+	{
+		code: "MORNING_ENGINE",
+		name: "모닝 엔진",
+		durationMin: 45,
+		level: "중급",
+		focus: "metcon",
+	},
+	{
+		code: "LUNCH_METCON",
+		name: "런치 메타콘",
+		durationMin: 50,
+		level: "중급",
+		focus: "metcon",
+	},
+	{
+		code: "AFTERWORK_STRENGTH",
+		name: "애프터워크 스트렝스",
+		durationMin: 55,
+		level: "중급",
+		focus: "strength",
+	},
+	{
+		code: "FOUNDATION_101",
+		name: "파운데이션 101",
+		durationMin: 40,
+		level: "초급",
+		focus: "recovery",
+	},
+	{
+		code: "OPEN_PREP",
+		name: "오픈 프렙",
+		durationMin: 60,
+		level: "고급",
+		focus: "strength",
+	},
+	{
+		code: "SATURDAY_TEAM_WOD",
+		name: "토요 팀 WOD",
+		durationMin: 70,
+		level: "중급",
+		focus: "metcon",
+	},
+];
+
+export interface SessionLoadProfileSeedData {
+	userEmail: string;
+	tier: "HEAVY" | "MEDIUM" | "LIGHT";
+	preferredGroundNames: string[];
+}
+
+export const sessionLoadProfileSeedData: SessionLoadProfileSeedData[] = [
+	{
+		userEmail: "manager.gangnam@f45.kr",
+		tier: "HEAVY",
+		preferredGroundNames: [
+			"F45 강남1호",
+			"애니타임피트니스 역삼",
+			"애니타임피트니스 신논현",
+		],
+	},
+	{
+		userEmail: "manager.gwanghwamun@f45.kr",
+		tier: "MEDIUM",
+		preferredGroundNames: ["F45 광화문", "F45 잠실"],
+	},
+	{
+		userEmail: "manager.itaewon@crossfit.kr",
+		tier: "HEAVY",
+		preferredGroundNames: ["크로스핏 이태원", "스포애니 홍대"],
+	},
+	{
+		userEmail: "minsu.kim92@gmail.com",
+		tier: "MEDIUM",
+		preferredGroundNames: ["F45 광화문"],
+	},
+	{
+		userEmail: "seoyeon_lee@naver.com",
+		tier: "LIGHT",
+		preferredGroundNames: ["F45 강남1호"],
+	},
+	{
+		userEmail: "yejun.park@kakao.com",
+		tier: "HEAVY",
+		preferredGroundNames: ["크로스핏 이태원"],
+	},
+	{
+		userEmail: "jiwoo0315@gmail.com",
+		tier: "MEDIUM",
+		preferredGroundNames: ["애니타임피트니스 역삼", "애니타임피트니스 신논현"],
+	},
+	{
+		userEmail: "hayoon.jung@naver.com",
+		tier: "LIGHT",
+		preferredGroundNames: ["스포애니 홍대"],
+	},
+	{
+		userEmail: "doyoon.kang@gmail.com",
+		tier: "LIGHT",
+		preferredGroundNames: ["F45 잠실", "스포애니 건대"],
 	},
 ];
 
 // ============================================================================
 // Translation 시드 데이터
 // ============================================================================
-export * from './translation-seed-data';
+export * from "./translation-seed-data";

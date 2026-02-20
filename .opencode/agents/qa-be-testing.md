@@ -458,12 +458,12 @@ describe("에러 처리", () => {
 |------|-----------------|------|
 | `apps/server` | `**/*.spec.ts` | node |
 | `packages/be-common` | `**/*.spec.ts` | node |
-| `packages/facade` | `**/__tests__/**/*.spec.ts` | node |
-| `packages/service` | `**/__tests__/**/*.spec.ts` | node |
-| `packages/repository` | `**/__tests__/**/*.spec.ts` | node |
-| `packages/entity` | `**/__tests__/**/*.spec.ts` | node |
-| `packages/dto` | `**/__tests__/**/*.spec.ts` | node |
-| `packages/vo` | `**/__tests__/**/*.spec.ts` | node |
+| `packages/be-facade` | `**/__tests__/**/*.spec.ts` | node |
+| `packages/be-service` | `**/__tests__/**/*.spec.ts` | node |
+| `packages/be-repository` | `**/__tests__/**/*.spec.ts` | node |
+| `packages/be-entity` | `**/__tests__/**/*.spec.ts` | node |
+| `packages/be-dto` | `**/__tests__/**/*.spec.ts` | node |
+| `packages/be-vo` | `**/__tests__/**/*.spec.ts` | node |
 
 ### 테스트 파일 위치
 

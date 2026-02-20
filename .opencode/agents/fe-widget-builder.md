@@ -66,7 +66,7 @@ tools:
 | 금지 사항 | 이유 |
 |----------|------|
 | 커스텀 className 직접 사용 | UI/Input에서만 허용 |
-| **Context API 사용 (createContext, useContext)** | **packages/ui에서 Context 사용 금지 - props drilling 사용** |
+| **Context API 사용 (createContext, useContext)** | **packages/fe-ui에서 Context 사용 금지 - props drilling 사용** |
 | **컴포넌트 폴더 내 hooks/, utils/ 하위 폴더 생성** | **패키지 레벨에서 관리 (hooks → src/hooks/, utils → src/utils/)** |
 | Store 접근 | Feature 계층의 역할 |
 | API 호출 | Feature 계층의 역할 |

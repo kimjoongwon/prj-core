@@ -95,6 +95,11 @@ async fetchRelated(): Promise<Related[]> {
 
 ## 프로세스
 
+### 0단계: 템플릿 파일 확인
+
+Read `.claude/templates/spec/entity.spec.md`
+→ 해당 파일의 형식을 기준으로 entity.spec.md를 생성한다
+
 ### 1단계: Prisma 타입 확인
 
 ```typescript
@@ -118,6 +123,14 @@ export class User extends AbstractEntity implements UserEntity {
 // packages/be-entity/src/index.ts
 export * from "./{entity}.entity";
 ```
+
+### 4단계: entity.spec.md 생성/업데이트
+
+```
+packages/be-entity/src/{entity}.entity.spec.md
+```
+
+기존 spec.md가 있으면 내용을 검토하고 필요 시 업데이트합니다.
 
 ---
 
@@ -310,6 +323,7 @@ export class User extends AbstractEntity implements UserEntity {
 - [ ] nullable 필드에 `| null` 타입 추가
 - [ ] 도메인 메서드에 JSDoc 주석 추가
 - [ ] index.ts에 export 추가
+- [ ] entity.spec.md 생성/업데이트
 
 ---
 

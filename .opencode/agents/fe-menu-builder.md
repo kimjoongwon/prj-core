@@ -15,7 +15,11 @@ Admin/Dashboard 앱의 **메뉴 시스템 컴포넌트**(Sidebar, BottomTab, FAB
 
 ---
 
-## 0. 메뉴 계층 구조 (3 Depth)
+## 0. 메뉴 계층 구조
+
+### 일반적인 패턴: 3 Depth 구조
+
+많은 도메인에서 사용하는 일반적인 메뉴 구조입니다. 하지만 모든 도메인이 반드시 이 구조를 따를 필요는 없습니다.
 
 ```
 1depth (사이드바 메인 메뉴)
@@ -33,6 +37,15 @@ Admin/Dashboard 앱의 **메뉴 시스템 컴포넌트**(Sidebar, BottomTab, FAB
 ├── 하위 기능A (2depth) → /{domain}/feature-a
 └── 하위 기능B (2depth) → /{domain}/feature-b
 ```
+
+### 도메인별로 다른 구조 가능
+
+실제 도메인 특성에 따라 다음과 같은 구조도 가능합니다:
+- **단일 메뉴 + 중첩 라우팅**: 역할/권한처럼 밀접하게 연결된 Aggregate
+- **2depth만 존재**: 대시보드처럼 단일 페이지
+- **엔티티 중심 경로**: 콘텐츠처럼 백엔드 엔티티와 직접 매핑
+
+자세한 내용은 **섹션 2.1 도메인 기반 메뉴 설계 원칙**을 참고하세요.
 
 ---
 
@@ -117,6 +130,128 @@ app/(admin)/
 │   │   └── page.tsx                → /{domain}/{action}
 │   └── layout.tsx                  → 공통 레이아웃 + 탭 UI
 ```
+
+---
+
+## 2.1 도메인 기반 메뉴 설계 원칙
+
+### 핵심: 도메인 특성을 반영한 메뉴 구조
+
+**메뉴는 획일적인 패턴이 아니라, 각 도메인의 본질에 맞춰 설계합니다.**
+
+모든 메뉴가 동일한 구조를 따를 필요는 없습니다. 도메인의 성격, 데이터 관계, 사용자 탐색 흐름에 따라 적합한 패턴을 선택하세요.
+
+### 라우팅 패턴 선택 가이드
+
+**라우팅 경로 설계 시 가장 먼저 구분할 것:**
+
+| 유형 | 설명 | 라우팅 패턴 | UI 패턴 |
+|------|------|------------|---------|
+| **속성 (Attribute)** | 동일 엔티티의 필터링 조건 | `/{entity}/{value}` | 탭 |
+| **관계 (Relation)** | 다른 엔티티로의 탐색 | `/{parent}/:id/{child}` | 중첩 라우팅 |
+
+### 속성 기반 - 탭 사용
+
+엔티티의 status, type, category 등 **속성값**으로 필터링:
+
+```
+/users                  → 전체 회원
+/users/active           → status='active' 필터
+/users/dormant          → status='dormant' 필터
+/users/pending-withdrawal → status='pending-withdrawal' 필터
+```
+
+**특징:**
+- 같은 테이블, 같은 컬럼의 WHERE 조건
+- UI에서 탭으로 전환
+- 목록 개수가 탭에 표시됨
+
+### 관계 기반 - 중첩 라우팅 사용
+
+엔티티 간 **1:N 또는 N:M 관계**를 따라 탐색:
+
+```
+/roles                              → 역할 목록
+/roles/:roleId                      → 역할 상세
+/roles/:roleId/abilities            → 해당 역할의 권한 목록
+/roles/:roleId/abilities/:abilityId → 권한 상세
+```
+
+**특징:**
+- 부모 → 자식 엔티티로 계층 탐색
+- "리스트 → 상세 → 리스트 → 상세" 반복 가능
+- 상세 페이지에서 연관 데이터 목록 표시
+
+### 판단 플로우차트
+
+```
+경로 설계 시 질문:
+│
+├─ "같은 엔티티의 다른 상태/유형을 보여줄 건가?"
+│   └─ YES → 탭 (/{entity}/{attribute-value})
+│
+└─ "연관된 다른 엔티티의 데이터를 보여줄 건가?"
+    └─ YES → 중첩 라우팅 (/{parent}/:id/{child})
+```
+
+### 혼합 예시
+
+복잡한 도메인에서 두 패턴이 함께 사용:
+
+```
+/orders                        → 주문 목록
+/orders/pending                → 주문 (status=pending 필터) ← 탭
+/orders/completed              → 주문 (status=completed 필터) ← 탭
+/orders/:orderId               → 주문 상세
+/orders/:orderId/items         → 주문 상품 목록 ← 중첩
+/orders/:orderId/items/:itemId → 주문 상품 상세 ← 중첩
+```
+
+### Prisma 스키마 기반 판단
+
+```prisma
+model User {
+  status  UserStatus   // ← enum → 탭
+  role    Role @relation(...)  // ← relation → 중첩
+}
+
+// /users/active    ← status enum 값
+// /users/:id/role  ← role relation 탐색
+```
+
+### 도메인별 메뉴 구조 예시
+
+각 도메인의 특성에 따라 다른 메뉴 구조를 선택한 실제 예시:
+
+| 도메인 | 메뉴 구조 | 이유 |
+|--------|----------|------|
+| **회원 (users)** | 2depth 메뉴 + 3depth 탭 | 회원 목록/등급/탈퇴 등 여러 하위 기능이 독립적 |
+| **역할/권한 (roles)** | 단일 메뉴 + 중첩 라우팅 | Role-Ability가 밀접하게 연결된 단일 Aggregate |
+| **예약 (reservations)** | 2depth 메뉴 + 3depth 탭 | 오늘/전체/캘린더/통계 등 다양한 뷰 필요 |
+| **콘텐츠 (contents)** | 2depth 메뉴 (최상위 경로) | 공지/배너/이벤트/약관이 각각 독립적 엔티티 |
+
+**설계 질문:**
+- 하위 기능들이 독립적인가? → 2depth 메뉴로 분리
+- 데이터가 계층적으로 연결되어 있는가? → 중첩 라우팅
+- 동일 엔티티의 다른 상태를 보여주는가? → 3depth 탭
+- URL이 백엔드 엔티티와 직접 매핑되는가? → 최상위 경로 고려
+
+### 도메인 특성을 반영한 경로 패턴
+
+#### 콘텐츠 메뉴: 엔티티 중심 경로
+
+콘텐츠 메뉴는 백엔드 엔티티와 직접 매핑되는 최상위 경로를 사용합니다:
+
+| 메뉴 | 경로 | 이유 |
+|------|------|------|
+| 공지사항 | /notices | 백엔드 Notice 엔티티와 직접 매핑, URL 간결성 |
+| 배너 | /banners | 백엔드 Banner 엔티티와 직접 매핑 |
+| 이벤트 | /events | 백엔드 Event 엔티티와 직접 매핑 |
+| 이용약관 | /terms | 백엔드 Term 엔티티와 직접 매핑 |
+
+**Subject는 여전히 계층 구조 유지:**
+- 1depth: `menu:contents`
+- 2depth: `menu:contents:notices`, `menu:contents:banners` 등
 
 ---
 
@@ -329,11 +464,10 @@ interface TabConfig {
 
 interface Props {
   tabs: TabConfig[];
-  basePath: string;
   children: React.ReactNode;
 }
 
-export default function TabLayout({ tabs, basePath, children }: Props) {
+export default function TabLayout({ tabs, children }: Props) {
   const pathname = usePathname();
 
   // 현재 경로로 활성 탭 판단
@@ -344,10 +478,9 @@ export default function TabLayout({ tabs, basePath, children }: Props) {
     <div>
       <Tabs selectedKey={activeTab}>
         {tabs.map(tab => (
-          <Tab
-            key={tab.id}
-            title={<Link href={tab.href}>{tab.label}</Link>}
-          />
+          <Tab key={tab.id}>
+            <Link href={tab.href}>{tab.label}</Link>
+          </Tab>
         ))}
       </Tabs>
       {children}
@@ -368,12 +501,67 @@ const userTabs = [
 
 export default function UsersLayout({ children }) {
   return (
-    <TabLayout tabs={userTabs} basePath="/users">
+    <TabLayout tabs={userTabs}>
       {children}
     </TabLayout>
   );
 }
 ```
+
+---
+
+## 8.1 Layout vs Page 책임 분리
+
+### 탭 렌더링 위치
+
+**3depth 탭은 layout.tsx에서 렌더링합니다.**
+
+```typescript
+// ✅ 올바른 패턴 - layout.tsx
+export default function UsersLayout({ children }) {
+  const tabs = [
+    { id: 'all', label: '전체', href: '/users' },
+    { id: 'active', label: '활성', href: '/users/active' },
+  ];
+
+  return (
+    <div>
+      <PageTabs tabs={tabs} />
+      {children}
+    </div>
+  );
+}
+
+// page.tsx (또는 _client.tsx)
+export default function UsersPage() {
+  return (
+    <PageSurface title="회원 목록" description="...">
+      <SectionSurface>
+        {/* 페이지 콘텐츠 */}
+      </SectionSurface>
+    </PageSurface>
+  );
+}
+```
+
+### 왜 Layout에서 탭을 렌더링하는가?
+
+1. **공유 UI 요소**: 탭은 하위 경로 간 공유되는 네비게이션
+2. **항상 표시**: `/users`, `/users/active` 등 모든 탭 페이지에서 동일한 탭 UI 유지
+3. **Layout의 역할**: 구조적 네비게이션 요소 제공
+
+### PageSurface와의 차이
+
+| 요소 | 위치 | 이유 |
+|------|------|------|
+| **PageTabs** | Layout | 하위 경로 간 공유되는 네비게이션 |
+| **PageSurface** | Page | 페이지별 고유한 title, description, actions |
+
+### CLAUDE.md 원칙과의 관계
+
+**"PageSurface는 Page에서만 사용"** 원칙은 여전히 유효합니다:
+- ❌ Layout에서 PageSurface 사용 금지 (타이틀 중복 방지)
+- ✅ Layout에서 PageTabs 사용 가능 (공유 네비게이션)
 
 ---
 
@@ -387,7 +575,7 @@ export default function UsersLayout({ children }) {
 | TabBar | BottomTab | NavigationStore |
 | MenuList | SubMenuList | NavigationStore |
 | FABPanel | QuickActionFAB | NavigationStore + AbilityStore |
-| TabsUI | PageTabs | usePathname |
+| TabBar | PageTabs | NavigationStore + usePathname |
 
 ### 분류 원칙
 
@@ -450,22 +638,6 @@ const SideNav = observer(() => {
 
 ---
 
-## 11. 프로젝트별 기획 문서
-
-프로젝트별 구체적인 메뉴 구성은 아래 문서를 참조:
-
-```
-apps/proposal/plans/{date}-{ProjectName}MenuSystem/
-├── README.md           # 전체 개요
-├── 01-desktop.md       # 데스크톱 레이아웃
-├── 02-mobile.md        # 모바일 레이아웃
-├── 03-menu-tree.md     # 메뉴 트리 상세
-└── 04-permissions.md   # 권한 체계
-```
-
-**현재 프로젝트 기획:**
-- `apps/proposal/plans/2025-12-30-AdminLayoutAndMenuSystem/`
-
 ---
 
 ## 12. Admin 메뉴 트리 (전체)
@@ -481,10 +653,13 @@ apps/proposal/plans/{date}-{ProjectName}MenuSystem/
 | 5 | inquiries | 문의 | MessageSquare | Inquiry | 고객 문의 및 FAQ 관리 |
 | 6 | contents | 콘텐츠 | FileText | Content, Post | 공지, 배너, 이벤트, 약관 |
 | 7 | templates | 템플릿 | LayoutTemplate | MessageTemplate | SMS/이메일/푸시 템플릿 |
-| 8 | sessions | 세션 | Clock | Timeline, Session, Program | 타임라인, 세션, 프로그램, 루틴 |
-| 9 | grounds | 시설 | Building | Ground, Space | 시설 정보, 프로그램 정의, 장비 |
-| 10 | admins | 관리자 | UserCog | Admin | 관리자 목록 및 초대 관리 |
-| 11 | roles | 역할/권한 | Shield | Role, Ability | 역할 목록 및 권한 설정 |
+| 8 | timelines | 타임라인 | Calendar | Timeline | 세션 그룹 관리 |
+| 9 | sessions | 세션 | Clock | Session | 세션 관리 |
+| 10 | programs | 프로그램 | ListTodo | Program | 프로그램 관리 |
+| 11 | routines | 루틴 | Repeat | Routine | 루틴 구성 관리 |
+| 12 | grounds | 시설 | Building | Ground, Space | 시설 정보, 프로그램 정의, 장비 |
+| 13 | admins | 관리자 | UserCog | Admin | 관리자 목록 및 초대 관리 |
+| 14 | roles | 역할/권한 | Shield | Role, Ability | 역할 목록 및 권한 설정 |
 
 ---
 
@@ -603,38 +778,76 @@ apps/proposal/plans/{date}-{ProjectName}MenuSystem/
 
 ---
 
-### 세션 (sessions)
+### 타임라인 (timelines)
 
-> 타임라인, 세션, 프로그램 배정, 루틴 관리
+> 세션 그룹 관리
+
+**엔티티 관계:** Timeline (1:N) → Session
 
 | 2depth | 경로 | 설명 |
 |--------|------|------|
-| 타임라인 | /sessions/timelines | 세션 그룹 관리 |
+| 타임라인 | /timelines | 타임라인 목록 |
+
+**3depth:**
+- `/timelines` - 전체
+- `/timelines/active` - 활성
+- `/timelines/archived` - 보관됨
+- **중첩:** `/timelines/:id/sessions` - 해당 타임라인의 세션 목록
+
+---
+
+### 세션 (sessions)
+
+> 세션 관리
+
+**엔티티 관계:** Session (N:1) → Timeline, Session (1:N) → Program
+
+| 2depth | 경로 | 설명 |
+|--------|------|------|
 | 세션 목록 | /sessions | 전체 세션 조회 |
-| 프로그램 배정 | /sessions/programs | 세션별 프로그램 |
-| 루틴 | /sessions/routines | 루틴 구성 관리 |
 
-**3depth (타임라인):**
-- `/sessions/timelines` - 전체
-- `/sessions/timelines/active` - 활성
-- `/sessions/timelines/archived` - 보관됨
-
-**3depth (세션 목록):**
+**3depth:**
 - `/sessions` - 전체
 - `/sessions/one-time` - 일회성
 - `/sessions/recurring` - 반복
 - `/sessions/upcoming` - 예정
 - `/sessions/past` - 지난
+- **중첩:** `/sessions/:id/programs` - 해당 세션의 프로그램 목록
 
-**3depth (프로그램 배정):**
-- `/sessions/programs` - 전체
-- `/sessions/programs/active` - 진행중
-- `/sessions/programs/full` - 정원마감
-- `/sessions/programs/available` - 예약가능
+---
 
-**3depth (루틴):**
-- `/sessions/routines` - 전체
-- `/sessions/routines/exercise` - 운동
+### 프로그램 (programs)
+
+> 프로그램 관리
+
+**엔티티 관계:** Program (N:1) → Session, Program (N:1) → Routine
+
+| 2depth | 경로 | 설명 |
+|--------|------|------|
+| 프로그램 | /programs | 전체 프로그램 조회 |
+
+**3depth:**
+- `/programs` - 전체
+- `/programs/active` - 진행중
+- `/programs/full` - 정원마감
+- `/programs/available` - 예약가능
+
+---
+
+### 루틴 (routines)
+
+> 루틴 구성 관리
+
+**엔티티 관계:** Routine (1:N) → Activity
+
+| 2depth | 경로 | 설명 |
+|--------|------|------|
+| 루틴 | /routines | 루틴 목록 |
+
+**3depth:**
+- `/routines` - 전체
+- `/routines/exercise` - 운동
+- **중첩:** `/routines/:id/activities` - 해당 루틴의 활동 목록
 
 ---
 
@@ -673,12 +886,15 @@ apps/proposal/plans/{date}-{ProjectName}MenuSystem/
 
 ### 역할/권한 (roles)
 
-> 역할 목록 및 권한 설정
+> 역할 목록 및 권한 설정 - 중첩 라우팅
 
-| 2depth | 경로 | 설명 |
-|--------|------|------|
-| 역할 목록 | /roles | 역할 관리 |
-| 권한 설정 | /roles/abilities | 권한 설정 |
+**하위 메뉴 없음** (중첩 라우팅으로 탐색)
+
+| 경로 | 설명 |
+|------|------|
+| /roles | 역할 목록 |
+| /roles/:roleId | 역할 상세 |
+| /roles/:roleId/abilities/:abilityId | 권한 상세 |
 
 ---
 
@@ -701,10 +917,13 @@ apps/proposal/plans/{date}-{ProjectName}MenuSystem/
 | 1 | inquiries | 문의 |
 | 2 | contents | 콘텐츠 |
 | 3 | templates | 템플릿 |
-| 4 | sessions | 세션 |
-| 5 | grounds | 시설 |
-| 6 | admins | 관리자 |
-| 7 | roles | 역할/권한 |
+| 4 | timelines | 타임라인 |
+| 5 | sessions | 세션 |
+| 6 | programs | 프로그램 |
+| 7 | routines | 루틴 |
+| 8 | grounds | 시설 |
+| 9 | admins | 관리자 |
+| 10 | roles | 역할/권한 |
 
 ---
 

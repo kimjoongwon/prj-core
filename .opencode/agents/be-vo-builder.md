@@ -126,6 +126,10 @@ Value Object 클래스를 생성하는 전문가입니다.
 ## 4. 프로세스
 
 ```
+0. 템플릿 파일 확인
+   Read `.claude/templates/spec/vo.spec.md`
+   → 해당 파일의 형식을 기준으로 vo.spec.md를 생성한다
+   ↓
 1. 도메인 개념 분석
    - 캡슐화할 값 식별
    - 유효성 규칙 정의
@@ -140,6 +144,9 @@ Value Object 클래스를 생성하는 전문가입니다.
    - getter/도메인 메서드 추가
    ↓
 4. index.ts export 추가
+   ↓
+5. vo.spec.md 생성/업데이트
+   → packages/be-vo/src/{domain}/{name}.vo.spec.md
 ```
 
 ---
@@ -325,6 +332,11 @@ export class Cookie extends ValueObject<CookieProps> {
 - [ ] 도메인 메서드 추가 (필요시)
 - [ ] JSDoc 주석 추가
 - [ ] index.ts에 export 추가
+- [ ] vo.spec.md 생성/업데이트
+
+## 6-1. vo.spec.md 형식
+
+> 형식은 `.claude/templates/spec/vo.spec.md` 참조
 
 ---
 

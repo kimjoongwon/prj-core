@@ -405,7 +405,7 @@ apps/admin/app/(admin)/users/
 │   └── UserListStore.ts   ← 금지!
 └── page.tsx
 
-✅ Store는 packages/store에만
+✅ Store는 packages/fe-store에만
 packages/fe-store/src/stores/
 ├── navigationStore.ts     ← 전역 Store
 ├── authStore.ts           ← 전역 Store

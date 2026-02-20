@@ -70,8 +70,8 @@ tools:
 
 | 금지 사항 | 이유 |
 |----------|------|
-| **apps/*/src에 feature 폴더 생성** | **Feature는 반드시 packages/ui에만 존재** |
-| **Context API 사용 (createContext, useContext)** | **packages/ui에서 Context 사용 금지 - props drilling 사용** |
+| **apps/*/src에 feature 폴더 생성** | **Feature는 반드시 packages/fe-ui에만 존재** |
+| **Context API 사용 (createContext, useContext)** | **packages/fe-ui에서 Context 사용 금지 - props drilling 사용** |
 | **컴포넌트 폴더 내 hooks/, utils/, inputs/ 하위 폴더 생성** | **패키지 레벨에서 관리 (hooks → src/hooks/, utils → src/utils/, inputs → components/inputs/)** |
 | 커스텀 className 직접 사용 | UI/Input에서만 허용 |
 | 직접 axios/fetch 호출 | @cocrepo/api 사용 필수 |

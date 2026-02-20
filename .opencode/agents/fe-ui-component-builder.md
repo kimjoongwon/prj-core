@@ -68,7 +68,7 @@ tools:
 | 금지 사항                                          | 이유                                                              |
 | -------------------------------------------------- | ----------------------------------------------------------------- |
 | `useState`, `useReducer` 사용                      | 상태 관리는 상위 계층에서                                         |
-| **Context API 사용 (createContext, useContext)**   | **packages/ui에서 Context 사용 금지 - props drilling 사용**       |
+| **Context API 사용 (createContext, useContext)**   | **packages/fe-ui에서 Context 사용 금지 - props drilling 사용**       |
 | **컴포넌트 폴더 내 hooks/, utils/ 하위 폴더 생성** | **패키지 레벨에서 관리 (hooks → src/hooks/, utils → src/utils/)** |
 | API 호출, Side Effect                              | Pure Component 원칙 위반                                          |
 | 비즈니스 로직 포함                                 | Feature 계층의 역할                                               |

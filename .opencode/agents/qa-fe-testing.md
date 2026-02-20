@@ -456,9 +456,9 @@ describe("Button 스냅샷", () => {
 
 | 위치 | 테스트 파일 패턴 | 환경 |
 |------|-----------------|------|
-| `packages/store` | `**/*.test.ts` | jsdom |
-| `packages/ui` | `**/*.test.ts`, `**/*.test.tsx` | jsdom |
-| `packages/toolkit` | `**/*.test.ts` | node |
+| `packages/fe-store` | `**/*.test.ts` | jsdom |
+| `packages/fe-ui` | `**/*.test.ts`, `**/*.test.tsx` | jsdom |
+| `packages/common-toolkit` | `**/*.test.ts` | node |
 | `apps/admin` | `**/*.test.ts`, `**/*.test.tsx` | jsdom |
 | `apps/coin` | `**/*.test.ts`, `**/*.test.tsx` | jsdom |
 

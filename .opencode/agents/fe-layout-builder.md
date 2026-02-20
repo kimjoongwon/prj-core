@@ -548,3 +548,120 @@ function UsersLayout({ children }) {
 | 2 | elevated | SectionSurface, 카드, DataGrid |
 | 3 | floating | 드롭다운, 팝오버 |
 | 4 | overlay | 모달, 다이얼로그 |
+
+---
+
+## 13. 메뉴 계층과 페이지 헤딩 관계 (Critical)
+
+**상위 메뉴명은 layout.tsx의 PageSurface title로, 하위 탭/페이지는 탭 네비게이션으로 표현합니다.**
+
+### 계층 구조 원칙
+
+```
+1depth 메뉴: "역할/권한" (menu:roles)
+└── 2depth 탭들
+    ├── "Role 권한" (/roles/abilities/roles)
+    ├── "User 예외 권한" (/roles/abilities/users)
+    └── "UI 가시성" (/roles/abilities/ui-elements)
+```
+
+**URL 구조와 헤딩 매핑:**
+
+| URL 경로 | 상위 헤딩 (layout) | 탭/콘텐츠 |
+|---------|-------------------|----------|
+| `/roles/abilities/roles` | "역할/권한" | Role 권한 탭 선택 |
+| `/roles/abilities/users` | "역할/권한" | User 예외 권한 탭 선택 |
+| `/users` | "회원" | 회원 목록 |
+| `/users/[id]` | "회원" | 회원 상세 |
+
+### 올바른 패턴
+
+```tsx
+// apps/admin/app/(admin)/roles/abilities/layout.tsx
+"use client";
+
+import { PageSurface } from "@cocrepo/ui";
+import { Tab, Tabs } from "@heroui/react";
+import { observer } from "mobx-react-lite";
+
+const TAB_ITEMS = [
+  { key: "roles", title: "Role 권한", path: "/roles/abilities/roles" },
+  { key: "users", title: "User 예외 권한", path: "/roles/abilities/users" },
+  // ...
+];
+
+function AbilitiesLayout({ children }: { children: React.ReactNode }) {
+  return (
+    <PageSurface
+      title="역할/권한"                    // ← 상위 메뉴명
+      description="역할별 권한을 관리합니다."
+    >
+      {/* 탭 네비게이션 */}
+      <Tabs selectedKey={activeKey} onSelectionChange={onChangeTab}>
+        {TAB_ITEMS.map((tab) => (
+          <Tab key={tab.key} title={tab.title} />
+        ))}
+      </Tabs>
+
+      {/* 탭 콘텐츠 - 각 page.tsx */}
+      {children}
+    </PageSurface>
+  );
+}
+
+export default observer(AbilitiesLayout);
+```
+
+```tsx
+// apps/admin/app/(admin)/roles/abilities/roles/page.tsx
+"use client";
+
+import { SectionSurface } from "@cocrepo/ui";
+import { observer } from "mobx-react-lite";
+
+function RolesAbilitiesPage() {
+  // ❌ PageSurface 사용 금지 - layout에서 이미 사용
+  // ✅ SectionSurface만 사용
+  return (
+    <SectionSurface>
+      {/* 콘텐츠 */}
+    </SectionSurface>
+  );
+}
+
+export default observer(RolesAbilitiesPage);
+```
+
+### 금지 패턴
+
+```tsx
+// ❌ 금지 - 각 탭 페이지에서 PageSurface 사용
+// roles/abilities/roles/page.tsx
+function RolesAbilitiesPage() {
+  return (
+    <PageSurface title="Role 권한">  {/* ← 중복! layout에서 이미 처리 */}
+      ...
+    </PageSurface>
+  );
+}
+
+// ❌ 금지 - layout에 상위 메뉴명 없음
+// roles/abilities/layout.tsx
+function AbilitiesLayout({ children }) {
+  return (
+    <div>
+      <Tabs>...</Tabs>    {/* ← 상위 헤딩 없이 탭만 있음 */}
+      {children}
+    </div>
+  );
+}
+```
+
+### 헤딩 레벨 결정 규칙
+
+| 상황 | PageSurface 위치 | title 값 |
+|------|-----------------|----------|
+| 1depth 메뉴 페이지 | 해당 layout.tsx | 메뉴명 ("회원", "예약") |
+| 탭이 있는 2depth 섹션 | 상위 layout.tsx | 1depth 메뉴명 ("역할/권한") |
+| 탭 없는 하위 페이지 | page.tsx | 페이지 제목 ("회원 상세") |
+| 모달/Drawer 콘텐츠 | 사용 안 함 | 모달 자체 title 사용 |
