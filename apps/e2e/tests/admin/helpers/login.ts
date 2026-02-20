@@ -55,23 +55,46 @@ export async function loginToAdmin(page: Page) {
 			!url.pathname.includes("/auth/login"),
 		{ timeout: 30000 },
 	);
+	await page.waitForLoadState("networkidle");
 
-	// localStorage에 Space 정보 설정 (PersistStore가 사용)
+	// localStorage에 System Space를 최종 확정 (앱 동기화 이후 덮어쓰기)
 	await page.evaluate(
 		({ spaceId, groundName }) => {
-			const persistData = {
-				spaceId,
-				groundName,
-				spaces: [{ spaceId, groundName }],
-				accessTokenExpiresAt: Date.now() + 3600000,
-				refreshTokenExpiresAt: Date.now() + 86400000,
-			};
-			localStorage.setItem("admin-persist", JSON.stringify(persistData));
+			const raw = localStorage.getItem("admin-persist");
+			const parsed = raw ? JSON.parse(raw) : {};
+
+			const spaces = Array.isArray(parsed.spaces)
+				? parsed.spaces
+				: [];
+			const hasSystemSpace = spaces.some(
+				(item: { spaceId?: string }) => item?.spaceId === spaceId,
+			);
+
+			const nextSpaces = hasSystemSpace
+				? spaces
+				: [...spaces, { spaceId, groundName }];
+
+			localStorage.setItem(
+				"admin-persist",
+				JSON.stringify({
+					...parsed,
+					spaceId,
+					groundName,
+					spaces: nextSpaces,
+				}),
+			);
 		},
 		{ spaceId: SYSTEM_SPACE_ID, groundName: SYSTEM_GROUND_NAME },
 	);
 
-	// 페이지 리로드하여 PersistStore가 localStorage에서 spaceId를 읽도록 함
-	await page.reload();
-	await page.waitForLoadState("networkidle");
+	await page.waitForFunction(
+		(expectedSpaceId) => {
+			const raw = localStorage.getItem("admin-persist");
+			if (!raw) return false;
+			const parsed = JSON.parse(raw);
+			return parsed?.spaceId === expectedSpaceId;
+		},
+		SYSTEM_SPACE_ID,
+		{ timeout: 10000 },
+	);
 }
