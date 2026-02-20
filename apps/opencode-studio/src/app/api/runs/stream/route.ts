@@ -18,6 +18,7 @@ export async function GET() {
 		runs: runManager.listRuns(),
 		terminals: runManager.listTerminals(),
 		availableSubagents: runManager.listAvailableSubagents(),
+		runtimeIssue: runManager.getRuntimeIssue(),
 	});
 
 	const createDigest = () => {

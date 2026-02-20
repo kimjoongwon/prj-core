@@ -10,9 +10,10 @@
  * OpenAPI spec version: 1.0.0
  */
 
+import type { CreateRoutineActivityItemDto } from "./createRoutineDto";
+
 export interface UpdateRoutineDto {
-  name?: string;
-  label?: string;
-  spaceId?: string;
-  creatorId?: string;
+	name?: string;
+	label?: string;
+	activities?: CreateRoutineActivityItemDto[];
 }

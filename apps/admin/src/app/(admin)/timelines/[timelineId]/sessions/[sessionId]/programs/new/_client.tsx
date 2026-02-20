@@ -1,17 +1,26 @@
 "use client";
 
-import { useCreateProgram, useGetSessionById } from "@cocrepo/api";
+import {
+	type RoutineDto,
+	type UserDto,
+	useCreateProgram,
+	useGetRoutines,
+	useGetSessionById,
+	useGetUsers,
+} from "@cocrepo/api";
 import { PageSurface, SectionSurface, VStack } from "@cocrepo/ui";
 import {
+	addToast,
 	Button,
 	Input,
 	Select,
 	SelectItem,
-	addToast,
+	useDisclosure,
 } from "@heroui/react";
 import { observer, useLocalObservable } from "mobx-react-lite";
 import type { Route } from "next";
 import { useRouter } from "next/navigation";
+import { ProgramPickerModal } from "../_components/program-picker-modal";
 
 interface ProgramNewPageClientProps {
 	timelineId: string;
@@ -33,11 +42,15 @@ function ProgramNewPageClient({
 	sessionId,
 }: ProgramNewPageClientProps) {
 	const router = useRouter();
+	const routinePickerModal = useDisclosure();
+	const instructorPickerModal = useDisclosure();
 
 	const state = useLocalObservable(() => ({
 		name: "",
 		routineId: "",
+		routineQuery: "",
 		instructorId: "",
+		instructorQuery: "",
 		capacity: "",
 		level: "",
 		errors: {} as Record<string, string>,
@@ -46,12 +59,25 @@ function ProgramNewPageClient({
 	const { data: sessionResponse } = useGetSessionById(timelineId, sessionId);
 	const session = sessionResponse?.data;
 
+	const { data: routinesResponse } = useGetRoutines({
+		take: 50,
+		skip: 0,
+		spaceScope: "INCLUDE_ANCESTORS",
+	});
+	const routines = (routinesResponse?.data ?? []) as RoutineDto[];
+
+	const { data: instructorsResponse } = useGetUsers({
+		take: 50,
+		skip: 0,
+		roles: ["MANAGE", "FULL_ACCESS"],
+		status: "active",
+	});
+	const instructors = (instructorsResponse?.data ?? []) as UserDto[];
+
 	const { mutate: createProgram, isPending } = useCreateProgram();
 
 	const onClickCancelButton = () => {
-		router.push(
-			`/timelines/${timelineId}/sessions/${sessionId}` as Route,
-		);
+		router.push(`/timelines/${timelineId}/sessions/${sessionId}` as Route);
 	};
 
 	const onChangeName = (value: string) => {
@@ -74,6 +100,14 @@ function ProgramNewPageClient({
 		delete state.errors.capacity;
 	};
 
+	const onChangeRoutineQuery = (value: string) => {
+		state.routineQuery = value;
+	};
+
+	const onChangeInstructorQuery = (value: string) => {
+		state.instructorQuery = value;
+	};
+
 	const onChangeLevel = (value: string) => {
 		state.level = value;
 	};
@@ -88,11 +122,11 @@ function ProgramNewPageClient({
 		}
 
 		if (!state.routineId.trim()) {
-			errors.routineId = "루틴 ID를 입력해주세요.";
+			errors.routineId = "루틴을 선택해주세요.";
 		}
 
 		if (!state.instructorId.trim()) {
-			errors.instructorId = "강사 ID를 입력해주세요.";
+			errors.instructorId = "강사를 선택해주세요.";
 		}
 
 		const capacityNum = Number(state.capacity);
@@ -140,12 +174,55 @@ function ProgramNewPageClient({
 		);
 	};
 
-	const descriptionText = [
-		session?.name,
-		session?.timeline?.name,
-	]
+	const descriptionText = [session?.name, session?.timeline?.name]
 		.filter(Boolean)
 		.join(" · ");
+
+	const selectedRoutine = routines.find(
+		(routine) => routine.id === state.routineId,
+	);
+	const selectedInstructor = instructors.find(
+		(instructor) => instructor.id === state.instructorId,
+	);
+
+	const routineQuery = state.routineQuery.trim().toLowerCase();
+	const instructorQuery = state.instructorQuery.trim().toLowerCase();
+
+	const filteredRoutines = routineQuery
+		? routines.filter((routine) =>
+				routine.name.toLowerCase().includes(routineQuery),
+			)
+		: routines;
+	const filteredInstructors = instructorQuery
+		? instructors.filter((instructor) =>
+				instructor.name.toLowerCase().includes(instructorQuery),
+			)
+		: instructors;
+
+	const routineOptions =
+		selectedRoutine &&
+		!filteredRoutines.some((routine) => routine.id === selectedRoutine.id)
+			? [selectedRoutine, ...filteredRoutines]
+			: filteredRoutines;
+	const instructorOptions =
+		selectedInstructor &&
+		!filteredInstructors.some(
+			(instructor) => instructor.id === selectedInstructor.id,
+		)
+			? [selectedInstructor, ...filteredInstructors]
+			: filteredInstructors;
+
+	const routinePickerOptions = routineOptions.map((routine) => ({
+		id: routine.id,
+		name: routine.name,
+		subtitle: `라벨: ${routine.label ?? "-"} · 활동 ${routine.activities?.length ?? 0}개`,
+	}));
+
+	const instructorPickerOptions = instructorOptions.map((instructor) => ({
+		id: instructor.id,
+		name: instructor.name,
+		subtitle: `이메일: ${instructor.email ?? "-"}`,
+	}));
 
 	return (
 		<PageSurface
@@ -169,28 +246,43 @@ function ProgramNewPageClient({
 						isInvalid={!!state.errors.name}
 						errorMessage={state.errors.name}
 					/>
-					<Input
-						label="루틴 ID"
-						labelPlacement="outside"
-						placeholder="루틴 ID를 입력하세요."
-						value={state.routineId}
-						onValueChange={onChangeRoutineId}
-						isRequired
-						isInvalid={!!state.errors.routineId}
-						errorMessage={state.errors.routineId}
-						description="연결할 루틴의 ID를 입력하세요."
-					/>
-					<Input
-						label="강사 ID"
-						labelPlacement="outside"
-						placeholder="강사 사용자 ID를 입력하세요."
-						value={state.instructorId}
-						onValueChange={onChangeInstructorId}
-						isRequired
-						isInvalid={!!state.errors.instructorId}
-						errorMessage={state.errors.instructorId}
-						description="강사로 지정할 사용자 ID를 입력하세요."
-					/>
+					<div className="grid grid-cols-1 gap-2 md:grid-cols-[1fr_auto] md:items-end">
+						<Input
+							label="루틴"
+							labelPlacement="outside"
+							value={selectedRoutine?.name ?? ""}
+							placeholder="루틴을 선택하세요"
+							isReadOnly
+							isRequired
+							isInvalid={!!state.errors.routineId}
+							errorMessage={state.errors.routineId}
+							description="모달에서 루틴을 선택하세요."
+						/>
+						<Button variant="flat" onPress={routinePickerModal.onOpen}>
+							루틴 선택
+						</Button>
+					</div>
+					<div className="grid grid-cols-1 gap-2 md:grid-cols-[1fr_auto] md:items-end">
+						<Input
+							label="강사"
+							labelPlacement="outside"
+							value={selectedInstructor?.name ?? ""}
+							placeholder="강사를 선택하세요"
+							isReadOnly
+							isRequired
+							isInvalid={!!state.errors.instructorId}
+							errorMessage={state.errors.instructorId}
+							description="모달에서 강사를 선택하세요."
+						/>
+						<Button variant="flat" onPress={instructorPickerModal.onOpen}>
+							강사 선택
+						</Button>
+					</div>
+					<div className="rounded-lg bg-content2 p-3 text-sm text-default-600">
+						<p className="font-medium text-default-700">연결 요약</p>
+						<p className="mt-1">루틴: {selectedRoutine?.name ?? "-"}</p>
+						<p>강사: {selectedInstructor?.name ?? "-"}</p>
+					</div>
 					<Input
 						label="정원"
 						labelPlacement="outside"
@@ -213,9 +305,7 @@ function ProgramNewPageClient({
 						}}
 					>
 						{LEVEL_OPTIONS.map((opt) => (
-							<SelectItem key={opt.value}>
-								{opt.label}
-							</SelectItem>
+							<SelectItem key={opt.value}>{opt.label}</SelectItem>
 						))}
 					</Select>
 					<div className="flex justify-end">
@@ -235,6 +325,31 @@ function ProgramNewPageClient({
 					</div>
 				</VStack>
 			</SectionSurface>
+
+			<ProgramPickerModal
+				isOpen={routinePickerModal.isOpen}
+				onClose={routinePickerModal.onClose}
+				title="루틴 선택"
+				searchLabel="루틴 검색"
+				searchPlaceholder="루틴 이름으로 검색하세요."
+				searchValue={state.routineQuery}
+				onSearchValueChange={onChangeRoutineQuery}
+				options={routinePickerOptions}
+				onSelect={onChangeRoutineId}
+				selectedId={state.routineId}
+			/>
+			<ProgramPickerModal
+				isOpen={instructorPickerModal.isOpen}
+				onClose={instructorPickerModal.onClose}
+				title="강사 선택"
+				searchLabel="강사 검색"
+				searchPlaceholder="강사 이름으로 검색하세요."
+				searchValue={state.instructorQuery}
+				onSearchValueChange={onChangeInstructorQuery}
+				options={instructorPickerOptions}
+				onSelect={onChangeInstructorId}
+				selectedId={state.instructorId}
+			/>
 		</PageSurface>
 	);
 }

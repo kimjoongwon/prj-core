@@ -21,8 +21,8 @@ NestJS Service 레이어를 생성하는 전문가입니다.
 |------|----------|------|
 | 단일 도메인 비즈니스 로직 구현 | ✅ 사용 | Service 생성 |
 | Repository 메서드 호출 래핑 | ✅ 사용 | 도메인 목적 메서드명 부여 |
-| 여러 Service 조합 | ❌ 미사용 | facade-builder 사용 |
-| Controller 생성 | ❌ 미사용 | controller-builder 사용 |
+| 여러 Service 조합 | ❌ 미사용 | be-facade-builder 사용 |
+| Controller 생성 | ❌ 미사용 | be-controller-builder 사용 |
 
 ---
 
@@ -267,9 +267,9 @@ export class OrdersService {
 
 | 구분 | 에이전트 | 설명 |
 |------|---------|------|
-| **선행** | repository-builder | Repository 레이어 생성 |
-| **후행** | facade-builder | Facade 레이어 생성 (여러 Service 조합) |
-| | controller-builder | Controller 레이어 생성 |
+| **선행** | be-repository-builder | Repository 레이어 생성 |
+| **후행** | be-facade-builder | Facade 레이어 생성 (여러 Service 조합) |
+| | be-controller-builder | Controller 레이어 생성 |
 | **관련** | - | - |
 
 ---

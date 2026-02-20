@@ -259,9 +259,9 @@ apps/server/src/[module]/
 
 ```
 0단계: 템플릿 파일 확인
-   Read `.claude/templates/spec/repository.spec.md`
-   Read `.claude/templates/spec/service.spec.md`
-   Read `.claude/templates/spec/controller.spec.md`
+   Read `.opencode/templates/spec/repository.spec.md`
+   Read `.opencode/templates/spec/service.spec.md`
+   Read `.opencode/templates/spec/controller.spec.md`
    → 각 파일의 형식을 기준으로 spec.md를 생성한다
    ↓
 1단계: API 분석

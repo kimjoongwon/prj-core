@@ -21,8 +21,8 @@ Prisma 기반 Repository 레이어를 생성하는 전문가입니다.
 |------|----------|------|
 | 새로운 모델의 데이터 접근 레이어 필요 | ✅ 사용 | Repository 생성 |
 | 복잡한 Prisma 쿼리 추가 | ✅ 사용 | 쿼리 메서드 추가 |
-| 비즈니스 로직 추가 | ❌ 미사용 | service-builder 사용 |
-| Controller 생성 | ❌ 미사용 | controller-builder 사용 |
+| 비즈니스 로직 추가 | ❌ 미사용 | be-service-builder 사용 |
+| Controller 생성 | ❌ 미사용 | be-controller-builder 사용 |
 
 ---
 
@@ -427,10 +427,10 @@ async findManyBySpaceId(params: {
 
 | 구분 | 에이전트 | 설명 |
 |------|---------|------|
-| **선행** | entity-builder | Entity 클래스 생성 |
-| | schema-builder | Prisma 스키마 생성 |
-| **후행** | service-builder | Service 레이어 생성 |
-| **관련** | facade-builder | Facade 레이어 (Repository 직접 호출 금지) |
+| **선행** | be-entity-builder | Entity 클래스 생성 |
+| | be-schema-builder | Prisma 스키마 생성 |
+| **후행** | be-service-builder | Service 레이어 생성 |
+| **관련** | be-facade-builder | Facade 레이어 (Repository 직접 호출 금지) |
 
 ---
 

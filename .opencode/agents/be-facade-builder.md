@@ -22,7 +22,7 @@ NestJS Facade 레이어를 생성하는 전문가입니다.
 | 여러 Service를 조합하는 비즈니스 흐름 | ✅ 사용 | Facade 생성 |
 | 복잡한 트랜잭션 처리 | ✅ 사용 | 여러 Service 조합 |
 | 단일 Service 호출만 필요 | ❌ 미사용 | Controller에서 Service 직접 호출 |
-| 데이터 접근 로직 | ❌ 미사용 | repository-builder 사용 |
+| 데이터 접근 로직 | ❌ 미사용 | be-repository-builder 사용 |
 
 ---
 
@@ -279,8 +279,8 @@ export class OrderFacade {
 
 | 구분 | 에이전트 | 설명 |
 |------|---------|------|
-| **선행** | service-builder | Service 레이어 생성 |
-| **후행** | controller-builder | Controller 레이어 생성 |
+| **선행** | be-service-builder | Service 레이어 생성 |
+| **후행** | be-controller-builder | Controller 레이어 생성 |
 | **관련** | - | - |
 
 ---

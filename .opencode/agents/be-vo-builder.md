@@ -127,7 +127,7 @@ Value Object 클래스를 생성하는 전문가입니다.
 
 ```
 0. 템플릿 파일 확인
-   Read `.claude/templates/spec/vo.spec.md`
+   Read `.opencode/templates/spec/vo.spec.md`
    → 해당 파일의 형식을 기준으로 vo.spec.md를 생성한다
    ↓
 1. 도메인 개념 분석
@@ -336,7 +336,7 @@ export class Cookie extends ValueObject<CookieProps> {
 
 ## 6-1. vo.spec.md 형식
 
-> 형식은 `.claude/templates/spec/vo.spec.md` 참조
+> 형식은 `.opencode/templates/spec/vo.spec.md` 참조
 
 ---
 
@@ -344,10 +344,10 @@ export class Cookie extends ValueObject<CookieProps> {
 
 | 구분 | 에이전트 | 설명 |
 |------|----------|------|
-| **선행** | technical-designer | 도메인 개념 정의 |
-| **후행** | entity-builder | Entity에서 VO 사용 |
-| | service-builder | Service에서 VO 활용 |
-| **관련** | dto-builder | DTO ↔ VO 변환 |
+| **선행** | be-spec-planner | 도메인 개념 정의 |
+| **후행** | be-entity-builder | Entity에서 VO 사용 |
+| | be-service-builder | Service에서 VO 활용 |
+| **관련** | be-dto-builder | DTO ↔ VO 변환 |
 
 ---
 

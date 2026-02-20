@@ -23,8 +23,8 @@ tools:
 | 기존 Cell을 재활용하여 새로운 Cell을 만들 때 | ✅ | Widget/Feature Cell 조합 |
 | 값을 포맷팅/표시만 하는 단순 Cell | ✅ | Pure UI Cell |
 | 비즈니스 로직이 포함된 Cell | ✅ | Feature Cell |
-| Cell이 아닌 일반 UI 컴포넌트 | ❌ | ui-component-builder 사용 |
-| 폼 입력 컴포넌트 | ❌ | input-component-builder 사용 |
+| Cell이 아닌 일반 UI 컴포넌트 | ❌ | fe-ui-component-builder 사용 |
+| 폼 입력 컴포넌트 | ❌ | fe-input-component-builder 사용 |
 
 ---
 

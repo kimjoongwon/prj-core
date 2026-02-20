@@ -1,0 +1,93 @@
+# {{name}} Controller 기획서
+
+> 생성일: {{createdDate}}
+> 수정일: {{modifiedDate}}
+> 타입: controller
+> 위치: apps/server/src/{{module}}/controllers/{{controllerName}}.ts
+
+## 역할
+
+{{description}}
+
+## 베이스 경로
+
+`{{basePath}}`
+
+## 엔드포인트
+
+| Method | 경로 | DTO | 반환값 | 설명 |
+|--------|------|-----|--------|------|
+{{#each endpoints}}
+| {{method}} | {{path}} | {{dto}} | {{returnType}} | {{description}} |
+{{/each}}
+
+## 인증/인가
+
+| 엔드포인트 | 인증 필요 | 권한 |
+|------------|----------|------|
+{{#each authRequirements}}
+| {{endpoint}} | {{authRequired}} | {{permission}} |
+{{/each}}
+
+## 요청 예시
+
+{{#each requestExamples}}
+### {{title}}
+
+```http
+{{method}} {{path}}
+Content-Type: application/json
+
+{{requestBody}}
+```
+
+{{/each}}
+
+## 응답 예시
+
+{{#each responseExamples}}
+### {{title}}
+
+```json
+{{responseBody}}
+```
+
+{{/each}}
+
+## 구현 체크리스트
+
+- [ ] {{controllerName}}.ts
+- [ ] DTO 검증
+- [ ] Swagger 데코레이터
+- [ ] E2E 테스트 (Jest + Supertest)
+
+## 테스트 케이스
+
+> 구현 도구: Jest + Supertest
+
+### 테스트 커버리지
+
+| 엔드포인트 | Happy Path | Error Path | Edge Case | 합계 |
+|-----------|:----------:|:----------:|:---------:|:----:|
+
+### [TC-001] 테스트명
+
+**분류:** Happy Path
+
+| 구분 | 내용 |
+|------|------|
+| **Given** | 인증 토큰, X-Space-ID 헤더, 요청 Body |
+| **When** | HTTP 요청 실행 |
+| **Then** | 응답 상태코드, 응답 Body 구조 |
+
+## 상위 기획서
+
+{{#if parentSpec}}
+- `{{parentSpec}}`
+{{/if}}
+
+## 변경 이력
+
+| 일자 | 내용 | 작성자 |
+|------|------|--------|
+| {{createdDate}} | 초기 생성 | {{author}} |

@@ -125,7 +125,7 @@ Store 연동이 필요한가?
 
 ```
 0단계: 템플릿 파일 확인
-   Read `.claude/templates/spec/ui.spec.md`
+   Read `.opencode/templates/spec/ui.spec.md`
    → 해당 파일의 형식을 기준으로 index.spec.md를 생성한다
    ↓
 1단계: 화면 분석

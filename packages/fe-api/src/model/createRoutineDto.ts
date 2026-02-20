@@ -10,9 +10,16 @@
  * OpenAPI spec version: 1.0.0
  */
 
+export interface CreateRoutineActivityItemDto {
+	taskId: string;
+	order?: number;
+	repetitions?: number;
+	restTime?: number;
+	notes?: string;
+}
+
 export interface CreateRoutineDto {
-  name: string;
-  label: string;
-  spaceId: string;
-  creatorId?: string;
+	name: string;
+	label: string;
+	activities?: CreateRoutineActivityItemDto[];
 }

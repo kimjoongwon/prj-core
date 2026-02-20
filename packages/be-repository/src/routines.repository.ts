@@ -123,6 +123,13 @@ export class RoutinesRepository {
 		label: string;
 		spaceId: string;
 		creatorId?: string;
+		activities?: {
+			taskId: string;
+			order: number;
+			repetitions: number;
+			restTime: number;
+			notes?: string;
+		}[];
 	}): Promise<Routine> {
 		this.logger.debug(`루틴 생성: name=${data.name}`);
 
@@ -132,6 +139,17 @@ export class RoutinesRepository {
 				label: data.label,
 				spaceId: data.spaceId,
 				creatorId: data.creatorId ?? null,
+				activities: data.activities
+					? {
+							create: data.activities.map((activity) => ({
+								taskId: activity.taskId,
+								order: activity.order,
+								repetitions: activity.repetitions,
+								restTime: activity.restTime,
+								notes: activity.notes ?? null,
+							})),
+						}
+					: undefined,
 			},
 		});
 
@@ -146,13 +164,36 @@ export class RoutinesRepository {
 		data: {
 			name?: string;
 			label?: string;
+			activities?: {
+				taskId: string;
+				order: number;
+				repetitions: number;
+				restTime: number;
+				notes?: string;
+			}[];
 		},
 	): Promise<Routine> {
 		this.logger.debug(`루틴 수정: ${routineId.slice(-8)}`);
 
 		const result = await this.txHost.tx.routine.update({
 			where: { id: routineId },
-			data,
+			data: {
+				name: data.name,
+				label: data.label,
+				activities:
+					data.activities === undefined
+						? undefined
+						: {
+								deleteMany: {},
+								create: data.activities.map((activity) => ({
+									taskId: activity.taskId,
+									order: activity.order,
+									repetitions: activity.repetitions,
+									restTime: activity.restTime,
+									notes: activity.notes ?? null,
+								})),
+							},
+			},
 		});
 
 		return plainToInstance(Routine, result);

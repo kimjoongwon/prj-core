@@ -2,8 +2,8 @@
 
 import {
 	type ActivityDto,
-	type RoutineDto,
 	getGetRoutinesQueryKey,
+	type RoutineDto,
 	useDeleteRoutine,
 	useGetRoutine,
 } from "@cocrepo/api";
@@ -11,6 +11,7 @@ import { DateTimeCell, PageSurface, SectionSurface, VStack } from "@cocrepo/ui";
 import {
 	addToast,
 	Button,
+	Chip,
 	Modal,
 	ModalBody,
 	ModalContent,
@@ -95,10 +96,7 @@ function RoutineDetailPageClient({ routineId }: RoutineDetailPageClientProps) {
 
 	if (!routine) {
 		return (
-			<PageSurface
-				title="루틴 상세"
-				description="루틴을 찾을 수 없습니다."
-			>
+			<PageSurface title="루틴 상세" description="루틴을 찾을 수 없습니다.">
 				<div className="flex flex-col items-center justify-center gap-4 p-8">
 					<p className="text-default-500">루틴을 찾을 수 없습니다.</p>
 					<Button
@@ -115,6 +113,10 @@ function RoutineDetailPageClient({ routineId }: RoutineDetailPageClientProps) {
 
 	const activities = (routine.activities ?? []) as ActivityDto[];
 	const programs = routine.programs ?? [];
+	const resolvedActivities = activities.filter((activity) =>
+		Boolean(activity.task?.exercise?.name),
+	).length;
+	const unresolvedActivities = activities.length - resolvedActivities;
 
 	return (
 		<PageSurface
@@ -157,6 +159,24 @@ function RoutineDetailPageClient({ routineId }: RoutineDetailPageClientProps) {
 							<p className="mt-1">{activities.length}개</p>
 						</div>
 						<div>
+							<label className="text-sm text-default-500">연결 상태</label>
+							<div className="mt-1">
+								{activities.length === 0 ? (
+									<Chip size="sm" variant="flat" color="warning">
+										활동 없음
+									</Chip>
+								) : unresolvedActivities > 0 ? (
+									<Chip size="sm" variant="flat" color="warning">
+										확인 필요
+									</Chip>
+								) : (
+									<Chip size="sm" variant="flat" color="success">
+										정상
+									</Chip>
+								)}
+							</div>
+						</div>
+						<div>
 							<label className="text-sm text-default-500">등록일</label>
 							<div className="mt-1">
 								<DateTimeCell value={routine.createdAt} />
@@ -171,54 +191,94 @@ function RoutineDetailPageClient({ routineId }: RoutineDetailPageClientProps) {
 					</div>
 				</SectionSurface>
 
-				{/* 운동 구성 */}
-				{activities.length > 0 && (
-					<SectionSurface title="운동 구성">
-						<div className="flex flex-col gap-3">
-							{activities.map((activity, index) => (
-								<div
-									key={activity.id}
-									className="flex flex-col gap-1 p-4 rounded-lg bg-content2"
-								>
-									<p className="font-medium">
-										{index + 1}.{" "}
-										{activity.task?.exercise?.name ?? "알 수 없는 운동"}
-									</p>
-									<div className="flex gap-4 text-sm text-default-500">
-										<span>반복 횟수: {activity.repetitions}회</span>
-										<span>
-											휴식 시간:{" "}
-											{activity.restTime > 0
-												? `${activity.restTime}초`
-												: "없음"}
-										</span>
-									</div>
-									{activity.notes && (
-										<p className="text-sm text-default-400 mt-1">
-											메모: {activity.notes}
-										</p>
-									)}
-								</div>
-							))}
+				<SectionSurface title="연결 요약">
+					<div className="grid grid-cols-1 gap-3 md:grid-cols-3">
+						<div className="rounded-lg bg-content2 p-3">
+							<p className="text-xs text-default-500">전체 활동</p>
+							<p className="mt-1 text-lg font-semibold">
+								{activities.length}개
+							</p>
 						</div>
-					</SectionSurface>
-				)}
+						<div className="rounded-lg bg-content2 p-3">
+							<p className="text-xs text-default-500">연결 정상</p>
+							<p className="mt-1 text-lg font-semibold text-success">
+								{resolvedActivities}개
+							</p>
+						</div>
+						<div className="rounded-lg bg-content2 p-3">
+							<p className="text-xs text-default-500">사용 중 프로그램</p>
+							<p className="mt-1 text-lg font-semibold">{programs.length}개</p>
+						</div>
+					</div>
+				</SectionSurface>
+
+				{/* 운동 구성 */}
+				<SectionSurface title="운동 구성">
+					{activities.length === 0 ? (
+						<p className="text-sm text-default-500">등록된 활동이 없습니다.</p>
+					) : (
+						<div className="flex flex-col gap-3">
+							{activities.map((activity, index) => {
+								const isResolved = Boolean(activity.task?.exercise?.name);
+
+								return (
+									<div
+										key={activity.id}
+										className="flex flex-col gap-1 rounded-lg bg-content2 p-4"
+									>
+										<div className="flex items-center justify-between">
+											<p className="font-medium">
+												{index + 1}.{" "}
+												{activity.task?.exercise?.name ?? "알 수 없는 운동"}
+											</p>
+											<Chip
+												size="sm"
+												variant="flat"
+												color={isResolved ? "success" : "warning"}
+											>
+												{isResolved ? "정상" : "확인필요"}
+											</Chip>
+										</div>
+										<div className="flex gap-4 text-sm text-default-500">
+											<span>반복 횟수: {activity.repetitions}회</span>
+											<span>
+												휴식 시간:{" "}
+												{activity.restTime > 0
+													? `${activity.restTime}초`
+													: "없음"}
+											</span>
+										</div>
+										{activity.notes && (
+											<p className="mt-1 text-sm text-default-400">
+												메모: {activity.notes}
+											</p>
+										)}
+									</div>
+								);
+							})}
+						</div>
+					)}
+				</SectionSurface>
 
 				{/* 사용 중인 프로그램 */}
-				{programs.length > 0 && (
-					<SectionSurface title="사용 중인 프로그램">
+				<SectionSurface title="사용 중인 프로그램">
+					{programs.length === 0 ? (
+						<p className="text-sm text-default-500">
+							현재 이 루틴을 사용하는 프로그램이 없습니다.
+						</p>
+					) : (
 						<div className="flex flex-col gap-2">
 							{programs.map((program) => (
 								<div
 									key={program.id}
-									className="flex items-center justify-between p-3 rounded-lg bg-content2"
+									className="flex items-center justify-between rounded-lg bg-content2 p-3"
 								>
 									<p className="font-medium">{program.name}</p>
 								</div>
 							))}
 						</div>
-					</SectionSurface>
-				)}
+					)}
+				</SectionSurface>
 			</VStack>
 
 			{/* 삭제 확인 모달 */}

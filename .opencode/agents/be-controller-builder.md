@@ -18,8 +18,8 @@ NestJS REST Controller를 생성하는 전문가
 - 상황: 사용 여부: 설명
 - REST API 엔드포인트 생성: ✅ 사용: Controller 생성
 - DTO 검증 및 변환: ✅ 사용: Request DTO 처리
-- 비즈니스 로직 구현: ❌ 미사용: service-builder 또는 facade-builder 사용
-- 데이터 접근 로직: ❌ 미사용: repository-builder 사용
+- 비즈니스 로직 구현: ❌ 미사용: be-service-builder 또는 be-facade-builder 사용
+- 데이터 접근 로직: ❌ 미사용: be-repository-builder 사용
 ---
 
 ## What you need
@@ -63,4 +63,3 @@ NestJS REST Controller를 생성하는 전문가
 - [ ] RouterModule에 경로 등록
 
 ---
-

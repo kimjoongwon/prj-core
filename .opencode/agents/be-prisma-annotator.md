@@ -200,10 +200,10 @@ model User {
 
 | 구분 | 에이전트 | 설명 |
 |------|----------|------|
-| **선행** | schema-builder | Prisma 스키마 생성 |
-| **후행** | dmmf-parser-builder | @displayName 주석을 파싱하는 유틸리티 생성 |
-| | service-builder | 동기화 서비스에서 displayName 활용 |
-| **관련** | database-expert | 스키마 설계 자문 |
+| **선행** | be-schema-builder | Prisma 스키마 생성 |
+| **후행** | be-dmmf-parser-builder | @displayName 주석을 파싱하는 유틸리티 생성 |
+| | be-service-builder | 동기화 서비스에서 displayName 활용 |
+| **관련** | be-database-expert | 스키마 설계 자문 |
 
 ---
 

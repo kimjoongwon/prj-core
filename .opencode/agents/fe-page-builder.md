@@ -684,11 +684,11 @@ Pure UI → Widget → Feature → Page
 
 | 에이전트 | 관계 |
 |----------|------|
-| ui-component-builder | Page가 사용할 Pure UI/Cell 컴포넌트 생성 |
-| widget-builder | Page가 사용할 Widget 컴포넌트 생성 |
-| feature-builder | Page가 사용할 Feature 컴포넌트 생성 |
-| store-builder | 통합 훅에서 사용할 Store 생성 |
-| controller-builder | API 엔드포인트 생성 |
+| fe-ui-component-builder | Page가 사용할 Pure UI/Cell 컴포넌트 생성 |
+| fe-widget-builder | Page가 사용할 Widget 컴포넌트 생성 |
+| fe-feature-builder | Page가 사용할 Feature 컴포넌트 생성 |
+| fe-store-builder | 통합 훅에서 사용할 Store 생성 |
+| be-controller-builder | API 엔드포인트 생성 |
 
 ### 후행 에이전트
 

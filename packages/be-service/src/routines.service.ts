@@ -15,6 +15,9 @@ import { SpaceContext } from "./context/space-context";
 export class RoutinesService {
 	private readonly logger = new Logger(RoutinesService.name);
 
+	private readonly DEFAULT_ACTIVITY_REPETITIONS = 1;
+	private readonly DEFAULT_ACTIVITY_REST_TIME = 0;
+
 	constructor(
 		private readonly routinesRepository: RoutinesRepository,
 		private readonly spaceContext: SpaceContext,
@@ -31,8 +34,12 @@ export class RoutinesService {
 		take: number;
 		search?: string;
 	}): Promise<{ routines: Routine[]; total: number }> {
-		const { spaceScope = SpaceScope.INCLUDE_ANCESTORS, skip, take, search } =
-			params;
+		const {
+			spaceScope = SpaceScope.INCLUDE_ANCESTORS,
+			skip,
+			take,
+			search,
+		} = params;
 		this.logger.debug(`루틴 목록 조회: spaceScope=${spaceScope}`);
 
 		const spaceId = this.spaceContext.spaceId;
@@ -92,6 +99,13 @@ export class RoutinesService {
 		dto: {
 			name: string;
 			label: string;
+			activities?: {
+				taskId: string;
+				order?: number;
+				repetitions?: number;
+				restTime?: number;
+				notes?: string;
+			}[];
 		},
 		userId: string,
 	): Promise<Routine> {
@@ -102,11 +116,14 @@ export class RoutinesService {
 			throw new Error("Space 컨텍스트가 설정되지 않았습니다");
 		}
 
+		this.validateRoutineActivityTasks(dto.activities);
+
 		return this.routinesRepository.createRoutine({
 			name: dto.name,
 			label: dto.label,
 			spaceId,
 			creatorId: userId,
+			activities: this.normalizeRoutineActivities(dto.activities),
 		});
 	}
 
@@ -119,6 +136,13 @@ export class RoutinesService {
 		dto: {
 			name?: string;
 			label?: string;
+			activities?: {
+				taskId: string;
+				order?: number;
+				repetitions?: number;
+				restTime?: number;
+				notes?: string;
+			}[];
 		},
 	): Promise<Routine> {
 		this.logger.debug(`루틴 수정: ${routineId.slice(-8)}`);
@@ -129,12 +153,68 @@ export class RoutinesService {
 			SpaceScope.INCLUDE_ANCESTORS,
 		);
 
+		this.validateRoutineActivityTasks(dto.activities);
+
 		// 현재 Space 소유 여부 확인
 		if (routine.spaceId !== spaceId) {
 			throw new ForbiddenException(ROUTINE_ERRORS.ROUTINE_NOT_OWNED);
 		}
 
-		return this.routinesRepository.updateRoutine(routineId, dto);
+		return this.routinesRepository.updateRoutine(routineId, {
+			name: dto.name,
+			label: dto.label,
+			activities: this.normalizeRoutineActivities(dto.activities),
+		});
+	}
+
+	private validateRoutineActivityTasks(
+		activities?: {
+			taskId: string;
+		}[],
+	): void {
+		if (!activities) {
+			return;
+		}
+
+		const taskIds = new Set<string>();
+		for (const activity of activities) {
+			if (taskIds.has(activity.taskId)) {
+				throw new ConflictException(
+					ROUTINE_ERRORS.ROUTINE_ACTIVITY_TASK_DUPLICATED,
+				);
+			}
+			taskIds.add(activity.taskId);
+		}
+	}
+
+	private normalizeRoutineActivities(
+		activities?: {
+			taskId: string;
+			order?: number;
+			repetitions?: number;
+			restTime?: number;
+			notes?: string;
+		}[],
+	):
+		| {
+				taskId: string;
+				order: number;
+				repetitions: number;
+				restTime: number;
+				notes?: string;
+		  }[]
+		| undefined {
+		if (activities === undefined) {
+			return undefined;
+		}
+
+		return activities.map((activity, index) => ({
+			taskId: activity.taskId,
+			order: activity.order ?? index + 1,
+			repetitions: activity.repetitions ?? this.DEFAULT_ACTIVITY_REPETITIONS,
+			restTime: activity.restTime ?? this.DEFAULT_ACTIVITY_REST_TIME,
+			notes: activity.notes,
+		}));
 	}
 
 	/**

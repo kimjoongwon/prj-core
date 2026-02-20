@@ -193,8 +193,8 @@ packages/fe-ui/src/components/feature/[FeatureName]/index.spec.md
                               ↓ 사용자 승인
 ┌─────────────────────────────────────────────────────────────┐
 │ Stage 2: 스키마 구현 (도메인 전체)                            │
-│ schema-builder → entity-builder → dto-builder                │
-│ → query-dto-builder → seed-maker                             │
+│ be-schema-builder → be-entity-builder → be-dto-builder       │
+│ → be-query-dto-builder → be-seed-maker                       │
 │ ↓                                                            │
 │ req-test-planner → qa-be-testing → 테스트 실행               │
 │ ├─ 통과 → [리뷰] ✓                                           │
@@ -203,8 +203,8 @@ packages/fe-ui/src/components/feature/[FeatureName]/index.spec.md
                               ↓ 사용자 승인
 ┌─────────────────────────────────────────────────────────────┐
 │ Stage 3: 백엔드 구현 (도메인 전체)                            │
-│ repository-builder → service-builder → facade-builder       │
-│ → controller-builder                                         │
+│ be-repository-builder → be-service-builder → be-facade-builder │
+│ → be-controller-builder                                        │
 │ ↓                                                            │
 │ req-test-planner → qa-be-testing → 테스트 실행               │
 │ ├─ 통과 → [리뷰] ✓                                           │
@@ -221,8 +221,8 @@ packages/fe-ui/src/components/feature/[FeatureName]/index.spec.md
                               ↓ 사용자 승인
 ┌─────────────────────────────────────────────────────────────┐
 │ Stage 5: 컴포넌트 구현 (페이지별 반복)                        │
-│ ui-component → widget-builder → feature-builder             │
-│ → store-builder                                              │
+│ fe-ui-component-builder → fe-widget-builder → fe-feature-builder │
+│ → fe-store-builder                                              │
 │ ↓                                                            │
 │ req-test-planner → qa-fe-testing → 테스트 실행               │
 │ ├─ 통과 → [리뷰] ✓                                           │
@@ -233,7 +233,7 @@ packages/fe-ui/src/components/feature/[FeatureName]/index.spec.md
                               ↓ 사용자 승인
 ┌─────────────────────────────────────────────────────────────┐
 │ Stage 6: 페이지 통합 (페이지별 반복)                          │
-│ page-builder → /fe-review (Skill)                            │
+│ fe-page-builder → /fe-review (Skill)                         │
 │ ↓                                                            │
 │ req-test-planner → qa-fe-testing → 테스트 실행               │
 │ ├─ 통과 → [리뷰] ✓                                           │

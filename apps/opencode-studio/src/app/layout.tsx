@@ -3,7 +3,7 @@ import "./globals.css";
 
 export const metadata: Metadata = {
 	title: "OpenCode Studio",
-	description: "Subagent and skill execution visualizer",
+	description: "OpenCode-only subagent and skill execution visualizer",
 };
 
 export default function RootLayout({

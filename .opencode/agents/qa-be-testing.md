@@ -431,10 +431,10 @@ describe("에러 처리", () => {
 
 | 에이전트 | 관계 | 설명 |
 |----------|------|------|
-| repository-builder | 테스트 대상 | Repository 구현 완료 후 |
-| service-builder | 테스트 대상 | Service 구현 완료 후 |
-| facade-builder | 테스트 대상 | Facade 구현 완료 후 |
-| controller-builder | 테스트 대상 | Controller 구현 완료 후 |
+| be-repository-builder | 테스트 대상 | Repository 구현 완료 후 |
+| be-service-builder | 테스트 대상 | Service 구현 완료 후 |
+| be-facade-builder | 테스트 대상 | Facade 구현 완료 후 |
+| be-controller-builder | 테스트 대상 | Controller 구현 완료 후 |
 
 ### 후행 에이전트
 

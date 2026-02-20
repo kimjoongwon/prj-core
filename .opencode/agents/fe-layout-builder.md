@@ -167,7 +167,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
 ### 선행 에이전트
 | 에이전트 | 용도 |
 |---------|------|
-| `etc-technical-designer` | 레이아웃 설계 정보 제공 |
+| `req-ui-planner` | 레이아웃 설계 정보 제공 |
 | `/design-analyze (Skill)` | Figma에서 레이아웃 구조 분석 |
 
 ### 후행 에이전트

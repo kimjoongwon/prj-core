@@ -244,9 +244,9 @@ export class AppModule implements OnModuleInit {
 
 | 구분 | 에이전트 | 설명 |
 |------|----------|------|
-| **선행** | service-builder | 통합할 Service 먼저 생성 |
-| | dmmf-parser-builder | DMMF 파싱 유틸리티 생성 (스키마 동기화 시) |
-| **관련** | backend-architect | 전체 백엔드 아키텍처 설계 |
+| **선행** | be-service-builder | 통합할 Service 먼저 생성 |
+| | be-dmmf-parser-builder | DMMF 파싱 유틸리티 생성 (스키마 동기화 시) |
+| **관련** | be-spec-planner | 전체 백엔드 아키텍처 설계 |
 
 ---
 

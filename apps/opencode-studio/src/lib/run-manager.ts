@@ -52,6 +52,8 @@ const OPENCODE_COMMANDS = new Set([
 	"help",
 ]);
 
+const ACTIVE_TOOL_SIGNAL_MAX_AGE_MS = 10 * 60 * 1000;
+
 interface ToolPart {
 	id: string;
 	type: "tool";
@@ -101,12 +103,13 @@ class RunManager {
 		this.projectDirectory,
 	);
 	private terminals: string[] = [];
+	private runtimeIssue = "";
 	private isPolling = false;
 
 	constructor() {
 		setInterval(() => {
 			void this.pollSessions();
-		}, 1200);
+		}, 700);
 		void this.pollSessions();
 	}
 
@@ -122,6 +125,10 @@ class RunManager {
 
 	listAvailableSubagents() {
 		return this.availableSubagents;
+	}
+
+	getRuntimeIssue() {
+		return this.runtimeIssue;
 	}
 
 	onEvent(handler: (event: StudioEvent) => void) {
@@ -157,7 +164,12 @@ class RunManager {
 				this.ensureRunShell(session);
 
 				const existing = this.runs.get(session.id);
-				if (existing && existing.lastFetchedUpdated >= session.updated) {
+				const shouldProbeActiveRun = existing?.run.status === "running";
+				if (
+					existing &&
+					!shouldProbeActiveRun &&
+					existing.lastFetchedUpdated >= session.updated
+				) {
 					continue;
 				}
 
@@ -174,14 +186,14 @@ class RunManager {
 				const messages = exported.messages.slice(-140);
 				const state = this.ensureRun(session, messages);
 				state.lastFetchedUpdated = session.updated;
-				this.consumeMessageParts(state, messages);
+				this.consumeMessageParts(state, messages, session.updated);
 
 				const assistantText = extractAssistantText(messages);
 				if (assistantText) {
 					state.run.resultText = assistantText;
 				}
 
-				const nextStatus = deriveRunStatus(messages);
+				const nextStatus = deriveRunStatus(messages, session.updated);
 				if (state.run.status !== nextStatus) {
 					state.run.status = nextStatus;
 					state.run.updatedAt = Date.now();
@@ -197,7 +209,10 @@ class RunManager {
 					}
 				}
 			}
-		} catch {
+
+			this.runtimeIssue = "";
+		} catch (error) {
+			this.runtimeIssue = toRuntimeIssue(error);
 			return;
 		} finally {
 			this.isPolling = false;
@@ -254,7 +269,11 @@ class RunManager {
 		return nextState;
 	}
 
-	private consumeMessageParts(state: RunState, messages: SessionMessage[]) {
+	private consumeMessageParts(
+		state: RunState,
+		messages: SessionMessage[],
+		sessionUpdatedAt: number,
+	) {
 		for (const message of messages) {
 			for (const part of message.parts) {
 				if (part.type !== "tool") {
@@ -268,6 +287,11 @@ class RunManager {
 				}
 				state.seenPartState.add(signature);
 
+				const signaturePrefix = `${message.info.id}:${toolPart.id}:`;
+				const sawInFlightState =
+					state.seenPartState.has(`${signaturePrefix}pending`) ||
+					state.seenPartState.has(`${signaturePrefix}running`);
+
 				const payload = {
 					messageId: message.info.id,
 					callId: toolPart.callID ?? toolPart.callId ?? toolPart.id,
@@ -276,7 +300,9 @@ class RunManager {
 				};
 				const taskAgent =
 					toolPart.tool === "task"
-						? extractTaskAgentName(toolPart.state.input)
+						? this.resolveKnownSubagent(
+								extractTaskAgentName(toolPart.state.input),
+							)
 						: null;
 
 				if (
@@ -290,9 +316,33 @@ class RunManager {
 							agent: taskAgent,
 						});
 					}
+
+					if (isInFlightToolSignalStale(message, sessionUpdatedAt)) {
+						this.pushEvent(state.run.id, "tool.call.completed", {
+							...payload,
+							output: "",
+						});
+						if (taskAgent) {
+							this.pushEvent(state.run.id, "subagent.completed", {
+								...payload,
+								agent: taskAgent,
+							});
+						}
+						continue;
+					}
 				}
 
 				if (toolPart.state.status === "completed") {
+					if (!sawInFlightState) {
+						this.pushEvent(state.run.id, "tool.call.started", payload);
+						if (taskAgent) {
+							this.pushEvent(state.run.id, "subagent.started", {
+								...payload,
+								agent: taskAgent,
+							});
+						}
+					}
+
 					this.pushEvent(state.run.id, "tool.call.completed", {
 						...payload,
 						output: toolPart.state.output ?? "",
@@ -314,6 +364,16 @@ class RunManager {
 				}
 
 				if (toolPart.state.status === "error") {
+					if (!sawInFlightState) {
+						this.pushEvent(state.run.id, "tool.call.started", payload);
+						if (taskAgent) {
+							this.pushEvent(state.run.id, "subagent.started", {
+								...payload,
+								agent: taskAgent,
+							});
+						}
+					}
+
 					this.pushEvent(state.run.id, "tool.call.failed", {
 						...payload,
 						error: toolPart.state.error ?? "tool call failed",
@@ -328,6 +388,21 @@ class RunManager {
 				}
 			}
 		}
+	}
+
+	private resolveKnownSubagent(agentName: string) {
+		const normalized = agentName.trim().toLowerCase();
+		if (!normalized) {
+			return null;
+		}
+
+		for (const candidate of this.availableSubagents) {
+			if (candidate.toLowerCase() === normalized) {
+				return candidate;
+			}
+		}
+
+		return null;
 	}
 
 	private pushEvent(
@@ -407,7 +482,10 @@ function extractTaskAgentName(input: Record<string, unknown>) {
 	return "task";
 }
 
-function deriveRunStatus(messages: SessionMessage[]): StudioRun["status"] {
+function deriveRunStatus(
+	messages: SessionMessage[],
+	sessionUpdatedAt: number,
+): StudioRun["status"] {
 	let hasError = false;
 	let hasRunning = false;
 
@@ -429,13 +507,78 @@ function deriveRunStatus(messages: SessionMessage[]): StudioRun["status"] {
 		}
 	}
 
-	if (hasRunning) {
+	if (hasRunning && !isTimestampStale(sessionUpdatedAt)) {
 		return "running";
 	}
 	if (hasError) {
 		return "failed";
 	}
 	return "completed";
+}
+
+function isInFlightToolSignalStale(
+	message: SessionMessage,
+	sessionUpdatedAt: number,
+) {
+	const observedAt = newestTimestamp(
+		message.info.time?.created,
+		sessionUpdatedAt,
+	);
+	return isTimestampStale(observedAt);
+}
+
+function newestTimestamp(...candidates: Array<number | undefined>) {
+	let newest: number | undefined;
+
+	for (const candidate of candidates) {
+		if (typeof candidate !== "number" || !Number.isFinite(candidate)) {
+			continue;
+		}
+
+		if (newest === undefined || candidate > newest) {
+			newest = candidate;
+		}
+	}
+
+	return newest;
+}
+
+function isTimestampStale(timestamp: number | undefined) {
+	const normalized = normalizeEpochMs(timestamp);
+	if (normalized === undefined) {
+		return false;
+	}
+
+	return Date.now() - normalized > ACTIVE_TOOL_SIGNAL_MAX_AGE_MS;
+}
+
+function normalizeEpochMs(timestamp: number | undefined) {
+	if (typeof timestamp !== "number" || !Number.isFinite(timestamp)) {
+		return undefined;
+	}
+
+	if (timestamp < 1_000_000_000_000) {
+		return Math.trunc(timestamp * 1000);
+	}
+
+	return Math.trunc(timestamp);
+}
+
+function toRuntimeIssue(error: unknown) {
+	const code =
+		typeof error === "object" && error !== null && "code" in error
+			? String((error as { code?: unknown }).code ?? "")
+			: "";
+
+	if (code === "ENOENT") {
+		return "opencode CLI를 찾을 수 없습니다. PATH에 opencode를 추가한 뒤 앱을 다시 실행해 주세요.";
+	}
+
+	if (error instanceof Error && error.message.trim()) {
+		return error.message;
+	}
+
+	return "OpenCode 세션 정보를 불러오는 중 알 수 없는 오류가 발생했습니다.";
 }
 
 async function runOpencodeJson<T>(args: string[]) {
@@ -479,10 +622,7 @@ function resolveProjectDirectory() {
 }
 
 function discoverAvailableSubagents(projectDirectory: string) {
-	const roots = [
-		path.join(projectDirectory, ".opencode", "agents"),
-		path.join(projectDirectory, ".claude", "agents"),
-	];
+	const roots = [path.join(projectDirectory, ".opencode", "agents")];
 	const names = new Map<string, string>();
 
 	for (const root of roots) {

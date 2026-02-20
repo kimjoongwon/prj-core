@@ -331,7 +331,7 @@ Pure UI → Widget → Feature → Page
 
 | 에이전트 | 관계 |
 |----------|------|
-| controller-builder | Feature가 호출할 API 엔드포인트 생성 |
+| be-controller-builder | Feature가 호출할 API 엔드포인트 생성 |
 
 ---
 

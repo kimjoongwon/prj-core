@@ -11,6 +11,7 @@ class StudioStore {
 	runTerminalMap: Record<string, string> = {};
 	streamConnected = false;
 	availableSubagents: string[] = [];
+	runtimeIssue = "";
 	private source?: EventSource;
 
 	constructor() {
@@ -129,6 +130,7 @@ class StudioStore {
 						runs: StudioRun[];
 						terminals?: string[];
 						availableSubagents?: string[];
+						runtimeIssue?: string;
 				  }
 				| { type: "event"; event: StudioEvent };
 
@@ -138,6 +140,7 @@ class StudioStore {
 					this.terminals = parsed.terminals ?? this.terminals;
 					this.availableSubagents =
 						parsed.availableSubagents ?? this.availableSubagents;
+					this.runtimeIssue = parsed.runtimeIssue ?? "";
 					if (
 						this.terminalFilterId !== "all" &&
 						!this.terminals.includes(this.terminalFilterId)

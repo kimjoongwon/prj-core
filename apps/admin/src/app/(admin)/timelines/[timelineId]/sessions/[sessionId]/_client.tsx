@@ -1,17 +1,20 @@
 "use client";
 
 import {
-	type ProgramDto,
-	type SessionDto,
 	getGetProgramsQueryKey,
 	getGetSessionsQueryKey,
+	type ProgramDto,
+	type SessionDto,
+	type UserDto,
 	useDeleteProgram,
 	useDeleteSession,
 	useGetPrograms,
 	useGetSessionById,
+	useGetUsers,
 } from "@cocrepo/api";
 import { DateTimeCell, PageSurface, SectionSurface, VStack } from "@cocrepo/ui";
 import {
+	addToast,
 	Button,
 	Chip,
 	Modal,
@@ -25,7 +28,6 @@ import {
 	TableColumn,
 	TableHeader,
 	TableRow,
-	addToast,
 	useDisclosure,
 } from "@heroui/react";
 import { useQueryClient } from "@tanstack/react-query";
@@ -123,15 +125,33 @@ function SessionDetailPageClient({
 	);
 	const programs = (programsResponse?.data ?? []) as ProgramDto[];
 
+	const { data: usersResponse } = useGetUsers({
+		take: 100,
+		skip: 0,
+		status: "active",
+	});
+	const users = (usersResponse?.data ?? []) as UserDto[];
+	const instructorNameById = new Map(users.map((user) => [user.id, user.name]));
+
+	const isConnectionResolved = (program: ProgramDto) => {
+		const hasRoutine = Boolean(program.routine?.id);
+		const hasInstructor = instructorNameById.has(program.instructorId);
+		return hasRoutine && hasInstructor;
+	};
+
+	const totalPrograms = programs.length;
+	const resolvedPrograms = programs.filter((program) =>
+		isConnectionResolved(program),
+	).length;
+	const unresolvedPrograms = totalPrograms - resolvedPrograms;
+
 	const { mutate: deleteSession, isPending: isDeletingSession } =
 		useDeleteSession();
 	const { mutate: deleteProgram, isPending: isDeletingProgram } =
 		useDeleteProgram();
 
 	const onClickEditButton = () => {
-		router.push(
-			`/timelines/${timelineId}/sessions/${sessionId}/edit` as Route,
-		);
+		router.push(`/timelines/${timelineId}/sessions/${sessionId}/edit` as Route);
 	};
 
 	const onClickDeleteSessionButton = () => {
@@ -199,23 +219,23 @@ function SessionDetailPageClient({
 					deleteProgramModal.onClose();
 					state.deleteProgramTarget = null;
 					queryClient.invalidateQueries({
-						queryKey: getGetProgramsQueryKey(
-							timelineId,
-							sessionId,
-						),
+						queryKey: getGetProgramsQueryKey(timelineId, sessionId),
 					});
 					refetchPrograms();
 				},
 				onError: () => {
 					addToast({
 						title: "삭제 실패",
-						description:
-							"프로그램 삭제 중 오류가 발생했습니다.",
+						description: "프로그램 삭제 중 오류가 발생했습니다.",
 						color: "danger",
 					});
 				},
 			},
 		);
+	};
+
+	const getInstructorName = (instructorId: string) => {
+		return instructorNameById.get(instructorId) ?? "확인 필요";
 	};
 
 	return (
@@ -247,21 +267,15 @@ function SessionDetailPageClient({
 				<SectionSurface title="기본 정보">
 					<div className="grid grid-cols-1 gap-4 md:grid-cols-2">
 						<div>
-							<label className="text-sm text-default-500">
-								세션명
-							</label>
+							<label className="text-sm text-default-500">세션명</label>
 							<p className="mt-1">{session?.name ?? "-"}</p>
 						</div>
 						<div>
-							<label className="text-sm text-default-500">
-								유형
-							</label>
+							<label className="text-sm text-default-500">유형</label>
 							<div className="mt-1">
 								{session?.type && (
 									<Chip
-										color={getSessionTypeColor(
-											session.type,
-										)}
+										color={getSessionTypeColor(session.type)}
 										variant="flat"
 										size="sm"
 									>
@@ -273,63 +287,41 @@ function SessionDetailPageClient({
 						{session?.type === "RECURRING" && (
 							<>
 								<div>
-									<label className="text-sm text-default-500">
-										반복 요일
-									</label>
+									<label className="text-sm text-default-500">반복 요일</label>
 									<p className="mt-1">
-										{getDayLabel(
-											session.recurringDayOfWeek ?? null,
-										)}
+										{getDayLabel(session.recurringDayOfWeek ?? null)}
 									</p>
 								</div>
 								<div>
-									<label className="text-sm text-default-500">
-										반복 주기
-									</label>
+									<label className="text-sm text-default-500">반복 주기</label>
 									<p className="mt-1">
-										{getCycleLabel(
-											session.repeatCycleType ?? null,
-										)}
+										{getCycleLabel(session.repeatCycleType ?? null)}
 									</p>
 								</div>
 							</>
 						)}
 						{session?.startDateTime && (
 							<div>
-								<label className="text-sm text-default-500">
-									시작 일시
-								</label>
+								<label className="text-sm text-default-500">시작 일시</label>
 								<div className="mt-1">
-									<DateTimeCell
-										value={session.startDateTime}
-									/>
+									<DateTimeCell value={session.startDateTime} />
 								</div>
 							</div>
 						)}
 						{session?.endDateTime && (
 							<div>
-								<label className="text-sm text-default-500">
-									종료 일시
-								</label>
+								<label className="text-sm text-default-500">종료 일시</label>
 								<div className="mt-1">
-									<DateTimeCell
-										value={session.endDateTime}
-									/>
+									<DateTimeCell value={session.endDateTime} />
 								</div>
 							</div>
 						)}
 						<div>
-							<label className="text-sm text-default-500">
-								설명
-							</label>
-							<p className="mt-1">
-								{session?.description || "-"}
-							</p>
+							<label className="text-sm text-default-500">설명</label>
+							<p className="mt-1">{session?.description || "-"}</p>
 						</div>
 						<div>
-							<label className="text-sm text-default-500">
-								타임라인
-							</label>
+							<label className="text-sm text-default-500">타임라인</label>
 							<div className="mt-1">
 								<Link
 									href={`/timelines/${timelineId}` as Route}
@@ -340,9 +332,7 @@ function SessionDetailPageClient({
 							</div>
 						</div>
 						<div>
-							<label className="text-sm text-default-500">
-								등록일
-							</label>
+							<label className="text-sm text-default-500">등록일</label>
 							<div className="mt-1">
 								{session?.createdAt ? (
 									<DateTimeCell value={session.createdAt} />
@@ -354,9 +344,9 @@ function SessionDetailPageClient({
 					</div>
 				</SectionSurface>
 
-				{/* 프로그램 목록 섹션 */}
+				{/* 프로그램 연결 허브 섹션 */}
 				<SectionSurface
-					title="프로그램"
+					title="프로그램 연결 허브"
 					padding="none"
 					action={
 						<Button
@@ -370,10 +360,30 @@ function SessionDetailPageClient({
 						</Button>
 					}
 				>
+					<div className="grid grid-cols-1 gap-2 px-4 py-3 md:grid-cols-3">
+						<div className="rounded-lg bg-content2 p-3">
+							<p className="text-xs text-default-500">전체 프로그램</p>
+							<p className="mt-1 text-lg font-semibold">{totalPrograms}개</p>
+						</div>
+						<div className="rounded-lg bg-content2 p-3">
+							<p className="text-xs text-default-500">강사 연결 정상</p>
+							<p className="mt-1 text-lg font-semibold text-success">
+								{resolvedPrograms}개
+							</p>
+						</div>
+						<div className="rounded-lg bg-content2 p-3">
+							<p className="text-xs text-default-500">확인 필요</p>
+							<p className="mt-1 text-lg font-semibold text-warning">
+								{unresolvedPrograms}개
+							</p>
+						</div>
+					</div>
 					<Table aria-label="프로그램 목록">
 						<TableHeader>
 							<TableColumn>프로그램명</TableColumn>
 							<TableColumn>루틴명</TableColumn>
+							<TableColumn>강사</TableColumn>
+							<TableColumn align="center">연결 상태</TableColumn>
 							<TableColumn align="center">정원</TableColumn>
 							<TableColumn>난이도</TableColumn>
 							<TableColumn align="center">액션</TableColumn>
@@ -388,33 +398,35 @@ function SessionDetailPageClient({
 										<button
 											type="button"
 											className="text-primary hover:underline cursor-pointer text-left"
-											onClick={() =>
-												onClickProgramName(program)
-											}
+											onClick={() => onClickProgramName(program)}
 										>
 											{program.name}
 										</button>
 									</TableCell>
+									<TableCell>{program.routine?.name ?? "-"}</TableCell>
 									<TableCell>
-										{program.routine?.name ?? "-"}
+										{getInstructorName(program.instructorId)}
 									</TableCell>
 									<TableCell>
-										{program.capacity}명
+										{isConnectionResolved(program) ? (
+											<Chip color="success" variant="flat" size="sm">
+												정상
+											</Chip>
+										) : (
+											<Chip color="warning" variant="flat" size="sm">
+												확인필요
+											</Chip>
+										)}
 									</TableCell>
-									<TableCell>
-										{program.level ?? "-"}
-									</TableCell>
+									<TableCell>{program.capacity}명</TableCell>
+									<TableCell>{program.level ?? "-"}</TableCell>
 									<TableCell>
 										<div className="flex gap-1 justify-center">
 											<Button
 												size="sm"
 												variant="light"
 												isIconOnly
-												onPress={() =>
-													onClickEditProgram(
-														program,
-													)
-												}
+												onPress={() => onClickEditProgram(program)}
 											>
 												<Pencil className="h-4 w-4" />
 											</Button>
@@ -423,11 +435,7 @@ function SessionDetailPageClient({
 												color="danger"
 												variant="light"
 												isIconOnly
-												onPress={() =>
-													onClickDeleteProgramIcon(
-														program,
-													)
-												}
+												onPress={() => onClickDeleteProgramIcon(program)}
 											>
 												<Trash2 className="h-4 w-4" />
 											</Button>
@@ -449,8 +457,7 @@ function SessionDetailPageClient({
 					<ModalHeader>세션 삭제</ModalHeader>
 					<ModalBody>
 						<p>
-							<strong>{session?.name}</strong> 세션을
-							삭제하시겠습니까?
+							<strong>{session?.name}</strong> 세션을 삭제하시겠습니까?
 						</p>
 						<p className="mt-2 text-sm text-danger">
 							프로그램이 연결된 세션은 삭제할 수 없습니다.
@@ -484,10 +491,8 @@ function SessionDetailPageClient({
 					<ModalHeader>프로그램 삭제</ModalHeader>
 					<ModalBody>
 						<p>
-							<strong>
-								{state.deleteProgramTarget?.name}
-							</strong>{" "}
-							프로그램을 삭제하시겠습니까?
+							<strong>{state.deleteProgramTarget?.name}</strong> 프로그램을
+							삭제하시겠습니까?
 						</p>
 					</ModalBody>
 					<ModalFooter>

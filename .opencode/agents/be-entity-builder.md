@@ -21,9 +21,9 @@ tools:
 |------|----------|------|
 | Prisma 스키마 생성 후 Entity 클래스 필요 | ✅ 사용 | Entity 클래스 생성 |
 | 도메인 메서드 추가 | ✅ 사용 | 비즈니스 로직 캡슐화 |
-| Prisma 스키마 생성 | ❌ 미사용 | schema-builder 사용 |
-| DTO 생성 | ❌ 미사용 | dto-builder 사용 |
-| Repository 생성 | ❌ 미사용 | repository-builder 사용 |
+| Prisma 스키마 생성 | ❌ 미사용 | be-schema-builder 사용 |
+| DTO 생성 | ❌ 미사용 | be-dto-builder 사용 |
+| Repository 생성 | ❌ 미사용 | be-repository-builder 사용 |
 
 ---
 
@@ -97,7 +97,7 @@ async fetchRelated(): Promise<Related[]> {
 
 ### 0단계: 템플릿 파일 확인
 
-Read `.claude/templates/spec/entity.spec.md`
+Read `.opencode/templates/spec/entity.spec.md`
 → 해당 파일의 형식을 기준으로 entity.spec.md를 생성한다
 
 ### 1단계: Prisma 타입 확인
@@ -331,9 +331,9 @@ export class User extends AbstractEntity implements UserEntity {
 
 | 구분 | 에이전트 | 설명 |
 |------|---------|------|
-| **선행** | schema-builder | Prisma 스키마 생성 |
-| **후행** | dto-builder | DTO 클래스 생성 |
-| | repository-builder | Repository 레이어 생성 |
+| **선행** | be-schema-builder | Prisma 스키마 생성 |
+| **후행** | be-dto-builder | DTO 클래스 생성 |
+| | be-repository-builder | Repository 레이어 생성 |
 | **관련** | - | - |
 
 ---

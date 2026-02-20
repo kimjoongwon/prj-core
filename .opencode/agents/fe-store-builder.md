@@ -349,8 +349,8 @@ Pure UI → Widget → Feature → Page
 
 | 에이전트 | 관계 |
 |----------|------|
-| technical-designer | Store 설계 정의 |
-| entity-builder | Domain Model 기반이 되는 Entity 정의 |
+| req-store-planner | Store 설계 정의 |
+| be-entity-builder | Domain Model 기반이 되는 Entity 정의 |
 
 ### 후행 에이전트
 

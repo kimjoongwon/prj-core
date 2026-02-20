@@ -21,9 +21,9 @@ Request/Response DTO 클래스를 생성하는 전문가입니다.
 |------|----------|------|
 | API 요청/응답 DTO 생성 | ✅ 사용 | Create, Update, Response DTO |
 | 유효성 검사 데코레이터 적용 | ✅ 사용 | @cocrepo/decorator 사용 |
-| **Query DTO 생성** | ❌ 미사용 | **query-dto-builder 사용** |
-| Entity 클래스 생성 | ❌ 미사용 | entity-builder 사용 |
-| Controller 생성 | ❌ 미사용 | controller-builder 사용 |
+| **Query DTO 생성** | ❌ 미사용 | **be-query-dto-builder 사용** |
+| Entity 클래스 생성 | ❌ 미사용 | be-entity-builder 사용 |
+| Controller 생성 | ❌ 미사용 | be-controller-builder 사용 |
 
 ---
 
@@ -101,7 +101,7 @@ export class UserListResponseDto {
 }
 ```
 
-### Query DTO → query-dto-builder 위임
+### Query DTO → be-query-dto-builder 위임
 
 **Query DTO(목록 조회용)는 `be-query-dto-builder` 에이전트가 전담합니다.**
 
@@ -121,7 +121,7 @@ Query DTO가 필요하면 `be-query-dto-builder`를 호출하세요.
 |------|------|------|
 | Create | `packages/be-dto/src/create/` | 생성 요청 |
 | Update | `packages/be-dto/src/update/` | 수정 요청 |
-| Query | → **query-dto-builder 위임** | 조회 파라미터 |
+| Query | → **be-query-dto-builder 위임** | 조회 파라미터 |
 | Response | `packages/be-dto/src/{domain}/` | 응답 데이터 |
 | 도메인별 | `packages/be-dto/src/{domain}/` | 특정 도메인 전용 |
 
@@ -335,11 +335,11 @@ export class {Entity}DetailResponseDto {
 
 | 구분 | 에이전트 | 설명 |
 |------|---------|------|
-| **선행** | entity-builder | Entity 클래스 생성 |
-| | schema-builder | Prisma 스키마 생성 |
-| **동료** | query-dto-builder | Query DTO 전담 (목록 조회) |
-| **후행** | controller-builder | Controller 레이어 생성 |
-| **관련** | service-builder | Service 레이어 (DTO 사용 안 함) |
+| **선행** | be-entity-builder | Entity 클래스 생성 |
+| | be-schema-builder | Prisma 스키마 생성 |
+| **동료** | be-query-dto-builder | Query DTO 전담 (목록 조회) |
+| **후행** | be-controller-builder | Controller 레이어 생성 |
+| **관련** | be-service-builder | Service 레이어 (DTO 사용 안 함) |
 
 ---
 
@@ -393,12 +393,12 @@ packages/be-dto/src/
 │   └── create-{entity}.dto.ts
 ├── update/                    # 수정 DTO
 │   └── update-{entity}.dto.ts
-├── query/                     # 조회 DTO (→ query-dto-builder 전담)
+├── query/                     # 조회 DTO (→ be-query-dto-builder 전담)
 │   └── query-{entity}.dto.ts
 ├── {domain}/                  # 도메인별 DTO
 │   ├── {domain}-list-response.dto.ts
 │   ├── {domain}-detail-response.dto.ts
-│   └── query-{domain}s.dto.ts  # (→ query-dto-builder 전담)
+│   └── query-{domain}s.dto.ts  # (→ be-query-dto-builder 전담)
 └── index.ts
 ```
 

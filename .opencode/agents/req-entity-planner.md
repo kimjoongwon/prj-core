@@ -42,7 +42,7 @@ tools:
 
 ### 출력 형식 (entity.spec.md)
 
-> 형식은 `.claude/templates/spec/entity.spec.md` 참조
+> 형식은 `.opencode/templates/spec/entity.spec.md` 참조
 
 ---
 
@@ -85,7 +85,7 @@ tools:
 
 ```
 0단계: 템플릿 파일 확인
-   Read `.claude/templates/spec/entity.spec.md`
+   Read `.opencode/templates/spec/entity.spec.md`
    → 해당 파일의 형식을 기준으로 entity.spec.md를 생성한다
    ↓
 1단계: 도메인 분석

@@ -21,8 +21,8 @@ PrismaQueryDto 기반 목록 조회용 Query DTO 클래스를 생성하는 전�
 |------|----------|------|
 | 목록 조회용 Query DTO 생성 | ✅ 사용 | PrismaQueryDto 상속 + 필터/정렬 |
 | 기존 Query DTO 마이그레이션 | ✅ 사용 | QueryDto → PrismaQueryDto 전환 |
-| Create/Update/Response DTO | ❌ 미사용 | dto-builder 사용 |
-| Entity 클래스 생성 | ❌ 미사용 | entity-builder 사용 |
+| Create/Update/Response DTO | ❌ 미사용 | be-dto-builder 사용 |
+| Entity 클래스 생성 | ❌ 미사용 | be-entity-builder 사용 |
 
 ---
 
@@ -643,11 +643,11 @@ packages/be-dto/src/
 
 | 구분 | 에이전트 | 설명 |
 |------|---------|------|
-| **선행** | entity-builder | Entity 클래스 생성 |
-| | schema-builder | Prisma 스키마 생성 |
-| **동료** | dto-builder | Create/Update/Response DTO 생성 |
-| **후행** | repository-builder | Repository에서 toPrismaWhere/toPrismaOrderBy 사용 |
-| | controller-builder | Controller에서 Query DTO를 파라미터로 사용 |
+| **선행** | be-entity-builder | Entity 클래스 생성 |
+| | be-schema-builder | Prisma 스키마 생성 |
+| **동료** | be-dto-builder | Create/Update/Response DTO 생성 |
+| **후행** | be-repository-builder | Repository에서 toPrismaWhere/toPrismaOrderBy 사용 |
+| | be-controller-builder | Controller에서 Query DTO를 파라미터로 사용 |
 
 ---
 

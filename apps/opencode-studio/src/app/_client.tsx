@@ -2,27 +2,8 @@
 
 import { observer } from "mobx-react-lite";
 import { type ChangeEvent, useEffect } from "react";
-import type { StudioEvent, StudioRun } from "@/lib/types";
+import type { StudioRun } from "@/lib/types";
 import { studioStore } from "@/stores/StudioStore";
-
-const EVENT_COLOR: Record<StudioEvent["type"], string> = {
-	"run.started": "bg-blue-100 text-blue-800",
-	"run.completed": "bg-emerald-100 text-emerald-700",
-	"run.failed": "bg-rose-100 text-rose-700",
-	"tool.call.started": "bg-violet-100 text-violet-700",
-	"tool.call.completed": "bg-indigo-100 text-indigo-700",
-	"tool.call.failed": "bg-red-100 text-red-700",
-	"subagent.started": "bg-amber-100 text-amber-700",
-	"subagent.completed": "bg-teal-100 text-teal-700",
-	"subagent.failed": "bg-orange-100 text-orange-700",
-	"skill.loaded": "bg-cyan-100 text-cyan-700",
-};
-
-const STATUS_FACE: Record<string, string> = {
-	running: "(o w o)",
-	completed: "(=^_^=)",
-	failed: "(T_T)",
-};
 
 export const StudioClient = observer(() => {
 	useEffect(() => {
@@ -32,7 +13,6 @@ export const StudioClient = observer(() => {
 		};
 	}, []);
 
-	const activeRun = studioStore.activeRun;
 	const filteredRuns = studioStore.filteredRuns;
 
 	const handleTerminalFilter = (event: ChangeEvent<HTMLSelectElement>) => {
@@ -40,7 +20,7 @@ export const StudioClient = observer(() => {
 	};
 
 	return (
-		<main className="mx-auto min-h-screen w-full max-w-[1500px] p-4 md:p-6">
+		<main className="mx-auto min-h-screen w-full max-w-[1100px] p-4 md:p-6">
 			<header className="mb-4 rounded-3xl border border-[var(--studio-border)] bg-[var(--studio-panel)] p-4 shadow-sm backdrop-blur md:p-5">
 				<div className="flex flex-wrap items-center justify-between gap-3">
 					<div>
@@ -48,7 +28,7 @@ export const StudioClient = observer(() => {
 							OpenCode Studio
 						</p>
 						<h1 className="text-2xl font-extrabold tracking-tight text-[var(--studio-ink)] md:text-3xl">
-							Terminal Subagent Visual Monitor
+							Subagent Live Monitor
 						</h1>
 					</div>
 					<div className="flex items-center gap-2">
@@ -71,318 +51,83 @@ export const StudioClient = observer(() => {
 						</div>
 					</div>
 				</div>
+				{studioStore.runtimeIssue ? (
+					<div className="mt-3 rounded-2xl border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-700">
+						{studioStore.runtimeIssue}
+					</div>
+				) : null}
 			</header>
 
-			<CharacterStage
+			<SubagentPanel
 				runs={filteredRuns}
 				availableSubagents={studioStore.availableSubagents}
+				selectedTerminal={studioStore.terminalFilterId}
 			/>
-
-			<section className="grid gap-4 lg:grid-cols-[minmax(0,320px)_minmax(0,1fr)_minmax(0,380px)]">
-				<div className="min-w-0 space-y-4">
-					<AgentCard run={activeRun} />
-					<TerminalBindingPanel />
-					<RunList
-						runs={filteredRuns}
-						activeRunId={studioStore.activeRunId}
-						onSelect={studioStore.setActiveRun}
-					/>
-				</div>
-
-				<div className="min-w-0 overflow-hidden rounded-3xl border border-[var(--studio-border)] bg-[var(--studio-panel)] p-4 shadow-sm backdrop-blur">
-					<h2 className="mb-3 text-lg font-bold">Execution Timeline</h2>
-					<EventTimeline run={activeRun} />
-				</div>
-
-				<div className="min-w-0 space-y-4">
-					<InspectorCard run={activeRun} />
-					<SkillPanel run={activeRun} />
-				</div>
-			</section>
 		</main>
 	);
 });
 
-function AgentCard({ run }: { run?: StudioRun }) {
-	const status = run?.status ?? "running";
-	const face = STATUS_FACE[status] ?? "(o w o)";
-	const statusText = status === "running" ? "thinking..." : status;
-
-	return (
-		<div className="rounded-3xl border border-[var(--studio-border)] bg-[var(--studio-panel-strong)] p-4 shadow-sm">
-			<p className="text-sm font-semibold text-[var(--studio-muted)]">
-				Agent Buddy
-			</p>
-			<div className="mt-2 flex items-center gap-3 rounded-2xl bg-[var(--studio-blue)]/35 p-3">
-				<div className="studio-float flex size-14 items-center justify-center rounded-full bg-white text-lg font-extrabold shadow-sm">
-					{face}
-				</div>
-				<div>
-					<p className="font-bold">Kkumi Agent</p>
-					<p className="text-sm text-[var(--studio-muted)]">{statusText}</p>
-				</div>
-			</div>
-		</div>
-	);
-}
-
-function TerminalBindingPanel() {
-	const handleBind = (runId: string, event: ChangeEvent<HTMLSelectElement>) => {
-		studioStore.bindRunTerminal(runId, event.target.value);
-	};
-
-	return (
-		<div className="rounded-3xl border border-[var(--studio-border)] bg-[var(--studio-panel)] p-4 shadow-sm">
-			<p className="mb-2 text-sm font-semibold text-[var(--studio-muted)]">
-				Terminal Mapping
-			</p>
-			<div className="max-h-60 space-y-2 overflow-auto pr-1 text-xs">
-				{studioStore.runs.map((run) => (
-					<div key={run.id} className="rounded-xl bg-white p-2">
-						<p className="truncate font-medium">{run.prompt}</p>
-						<select
-							value={studioStore.getRunTerminal(run.id)}
-							onChange={(event) => handleBind(run.id, event)}
-							className="mt-1 w-full rounded-lg border border-[var(--studio-border)] px-2 py-1 text-xs"
-						>
-							<option value="">unassigned</option>
-							{studioStore.terminals.map((terminal) => (
-								<option key={terminal} value={terminal}>
-									{terminal}
-								</option>
-							))}
-						</select>
-					</div>
-				))}
-				{studioStore.runs.length === 0 ? (
-					<p className="rounded-xl bg-white p-2 text-[var(--studio-muted)]">
-						세션이 감지되면 터미널에 매핑할 수 있어요.
-					</p>
-				) : null}
-			</div>
-		</div>
-	);
-}
-
-function RunList({
-	runs,
-	activeRunId,
-	onSelect,
-}: {
-	runs: StudioRun[];
-	activeRunId: string;
-	onSelect: (runId: string) => void;
-}) {
-	return (
-		<div className="rounded-3xl border border-[var(--studio-border)] bg-[var(--studio-panel)] p-4 shadow-sm">
-			<p className="mb-2 text-sm font-semibold text-[var(--studio-muted)]">
-				Runs
-			</p>
-			<div className="max-h-72 space-y-2 overflow-auto pr-1">
-				{runs.map((run) => {
-					const active = activeRunId === run.id;
-					const handleClick = () => {
-						onSelect(run.id);
-					};
-					return (
-						<button
-							type="button"
-							key={run.id}
-							onClick={handleClick}
-							className={`w-full rounded-2xl border p-3 text-left text-sm ${
-								active
-									? "border-blue-300 bg-blue-50"
-									: "border-[var(--studio-border)] bg-white"
-							}`}
-						>
-							<p className="truncate font-semibold">{run.prompt}</p>
-							<p className="mt-1 text-xs text-[var(--studio-muted)]">
-								{run.status}
-							</p>
-						</button>
-					);
-				})}
-				{runs.length === 0 ? (
-					<p className="rounded-2xl bg-white p-3 text-sm text-[var(--studio-muted)]">
-						아직 실행 기록이 없어요.
-					</p>
-				) : null}
-			</div>
-		</div>
-	);
-}
-
-function EventTimeline({ run }: { run?: StudioRun }) {
-	if (!run) {
-		return (
-			<p className="text-sm text-[var(--studio-muted)]">
-				Run을 시작하면 타임라인이 나타납니다.
-			</p>
-		);
-	}
-
-	return (
-		<div className="max-h-[74vh] min-w-0 space-y-2 overflow-auto pr-1">
-			{run.events.map((event) => (
-				<div
-					key={event.id}
-					className="rounded-2xl border border-[var(--studio-border)] bg-white p-3"
-				>
-					<div className="flex items-center justify-between gap-2">
-						<span
-							className={`rounded-full px-2 py-0.5 text-xs font-semibold ${EVENT_COLOR[event.type]}`}
-						>
-							{event.type}
-						</span>
-						<span className="text-xs text-[var(--studio-muted)]">
-							{new Date(event.timestamp).toLocaleTimeString()}
-						</span>
-					</div>
-					<pre className="mt-2 max-w-full overflow-x-auto whitespace-pre-wrap break-words rounded-xl bg-slate-50 p-2 text-xs text-slate-700">
-						{JSON.stringify(event.payload, null, 2)}
-					</pre>
-				</div>
-			))}
-			{run.events.length === 0 ? (
-				<p className="text-sm text-[var(--studio-muted)]">
-					이 런에는 아직 이벤트가 없습니다.
-				</p>
-			) : null}
-		</div>
-	);
-}
-
-function InspectorCard({ run }: { run?: StudioRun }) {
-	return (
-		<div className="rounded-3xl border border-[var(--studio-border)] bg-[var(--studio-panel)] p-4 shadow-sm">
-			<h3 className="text-lg font-bold">Run Detail</h3>
-			{run ? (
-				<div className="mt-3 space-y-2 text-sm">
-					<p>
-						<span className="font-semibold">status:</span> {run.status}
-					</p>
-					<p>
-						<span className="font-semibold">session:</span>{" "}
-						{run.sessionId ?? "-"}
-					</p>
-					<p>
-						<span className="font-semibold">events:</span> {run.events.length}
-					</p>
-					{run.error ? (
-						<p className="rounded-xl bg-rose-50 p-2 text-rose-700">
-							{run.error}
-						</p>
-					) : null}
-					{run.resultText ? (
-						<div>
-							<p className="mb-1 font-semibold">assistant result</p>
-							<pre className="max-h-56 overflow-auto rounded-xl bg-white p-3 text-xs">
-								{run.resultText}
-							</pre>
-						</div>
-					) : null}
-				</div>
-			) : (
-				<p className="mt-3 text-sm text-[var(--studio-muted)]">
-					선택된 런이 없습니다.
-				</p>
-			)}
-		</div>
-	);
-}
-
-function SkillPanel({ run }: { run?: StudioRun }) {
-	const skills = (run?.events ?? []).filter(
-		(event) => event.type === "skill.loaded",
-	);
-	return (
-		<div className="rounded-3xl border border-[var(--studio-border)] bg-[var(--studio-panel)] p-4 shadow-sm">
-			<h3 className="text-lg font-bold">Skill Inspector</h3>
-			<div className="mt-3 space-y-2 text-sm">
-				{skills.map((event) => (
-					<div key={event.id} className="rounded-xl bg-white p-3">
-						<p className="font-semibold">
-							{String(event.payload.skill ?? "unknown")}
-						</p>
-						<p className="text-xs text-[var(--studio-muted)]">
-							{new Date(event.timestamp).toLocaleTimeString()}
-						</p>
-					</div>
-				))}
-				{skills.length === 0 ? (
-					<p className="rounded-xl bg-white p-3 text-[var(--studio-muted)]">
-						아직 로드된 skill이 없습니다.
-					</p>
-				) : null}
-			</div>
-		</div>
-	);
-}
-
-function CharacterStage({
+function SubagentPanel({
 	runs,
 	availableSubagents,
+	selectedTerminal,
 }: {
 	runs: StudioRun[];
 	availableSubagents: string[];
+	selectedTerminal: string;
 }) {
 	const activityMap = collectSubagentActivity(runs);
-	const allSubagents = mergeSubagentNames(
-		availableSubagents,
-		Array.from(activityMap.keys()),
-	);
-	const activityByKey = new Map(
-		Array.from(activityMap.entries()).map(([name, value]) => [
-			name.toLowerCase(),
-			value,
-		]),
-	);
+	const allSubagents = mergeSubagentNames(availableSubagents);
 	const cards = allSubagents
 		.map((name) => {
-			const activeCount =
-				activityByKey.get(name.toLowerCase())?.activeCount ?? 0;
-			const sessions = activityByKey.get(name.toLowerCase())?.sessions ?? [];
-			return { name, activeCount, sessions };
+			const activity = activityMap.get(name) ?? {
+				activeCount: 0,
+				sessions: [],
+			};
+			return { name, activeCount: activity.activeCount };
 		})
 		.sort(
 			(a, b) => b.activeCount - a.activeCount || a.name.localeCompare(b.name),
 		);
 
-	const activeCount = cards.filter((item) => item.activeCount > 0).length;
+	const totalActive = cards.reduce((sum, item) => sum + item.activeCount, 0);
 
 	return (
-		<section className="mb-4 rounded-3xl border border-[var(--studio-border)] bg-[var(--studio-panel)] p-4 shadow-sm">
-			<div className="mb-3 flex items-center justify-between">
-				<h2 className="text-lg font-bold">Subagent Zoo</h2>
-				<span className="rounded-full bg-[var(--studio-blue)]/35 px-2 py-0.5 text-xs font-semibold text-[var(--studio-ink)]">
-					{activeCount}/{cards.length || 0} active
+		<section className="rounded-3xl border border-[var(--studio-border)] bg-[var(--studio-panel)] p-4 shadow-sm">
+			<div className="mb-3 flex flex-wrap items-center justify-between gap-2">
+				<div>
+					<h2 className="text-lg font-bold">Subagents</h2>
+					<p className="text-sm text-[var(--studio-muted)]">
+						Terminal: {selectedTerminal === "all" ? "all" : selectedTerminal}
+					</p>
+				</div>
+				<span className="rounded-full bg-[var(--studio-blue)]/35 px-3 py-1 text-xs font-semibold text-[var(--studio-ink)]">
+					{totalActive} parallel running
 				</span>
 			</div>
+
 			{cards.length === 0 ? (
 				<p className="rounded-2xl bg-white p-3 text-sm text-[var(--studio-muted)]">
-					감지된 서브에이전트가 아직 없습니다.
+					Subagent가 아직 감지되지 않았습니다.
 				</p>
 			) : (
-				<div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
+				<div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
 					{cards.map((item) => {
 						const active = item.activeCount > 0;
 						const tone = toAgentTone(item.name);
-
 						return (
 							<div
 								key={item.name}
-								className={`rounded-2xl border p-3 transition-all duration-300 ${
+								className={`rounded-2xl border p-3 ${
 									active
 										? `${tone.activeCard} shadow-sm`
-										: "border-slate-200 bg-slate-50/90"
+										: "border-slate-200 bg-white"
 								}`}
 							>
-								<div className="mb-2 flex items-center gap-2">
+								<div className="flex items-center gap-2">
 									<div
-										className={`flex size-10 items-center justify-center rounded-full border text-xl transition-all duration-300 ${
-											active
-												? `studio-float ${tone.activeIcon}`
-												: "border-slate-300 bg-slate-200"
+										className={`flex size-10 items-center justify-center rounded-full border text-xl ${
+											active ? tone.activeIcon : "border-slate-300 bg-slate-100"
 										}`}
 									>
 										<span className={active ? "" : "grayscale"}>
@@ -394,21 +139,10 @@ function CharacterStage({
 											{item.name}
 										</p>
 										<p className="text-xs text-[var(--studio-muted)]">
-											{active ? `${item.activeCount} running` : "standby"}
+											{active ? `${item.activeCount} running` : "idle"}
 										</p>
 									</div>
 								</div>
-								<p
-									className={`rounded-xl px-2 py-1 text-xs font-semibold ${
-										active
-											? `studio-pulse ${tone.activeBadge}`
-											: "bg-slate-200 text-slate-600"
-									}`}
-								>
-									{active
-										? `active in ${item.sessions.length} session`
-										: "idle"}
-								</p>
 							</div>
 						);
 					})}
@@ -421,7 +155,7 @@ function CharacterStage({
 function collectSubagentActivity(runs: StudioRun[]) {
 	const callState = new Map<
 		string,
-		{ state: string; agent: string; runId: string }
+		{ state: string; agent: string; runId: string; changedAt: number }
 	>();
 
 	for (const run of runs) {
@@ -448,9 +182,17 @@ function collectSubagentActivity(runs: StudioRun[]) {
 						? "completed"
 						: "failed";
 
-			callState.set(`${run.id}:${callId}`, { state, agent, runId: run.id });
+			callState.set(`${run.id}:${callId}`, {
+				state,
+				agent,
+				runId: run.id,
+				changedAt: event.timestamp,
+			});
 		}
 	}
+
+	const RECENT_ACTIVE_GRACE_MS = 2500;
+	const now = Date.now();
 
 	const activity = new Map<
 		string,
@@ -467,7 +209,11 @@ function collectSubagentActivity(runs: StudioRun[]) {
 			continue;
 		}
 
-		if (call.state === "running") {
+		if (
+			call.state === "running" ||
+			(now - call.changedAt <= RECENT_ACTIVE_GRACE_MS &&
+				(call.state === "completed" || call.state === "failed"))
+		) {
 			entry.activeCount += 1;
 			entry.sessions.add(call.runId);
 		}

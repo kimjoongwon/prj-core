@@ -334,14 +334,14 @@ CRUD 작업별 Happy Path와 Error Path를 도출합니다.
 | 생성 파일 | 위치 | 참조 템플릿 |
 |----------|------|------------|
 | `app.spec.md` | `apps/[app]/app/(admin)/` | 없음 (L0-L2 직접 작성) |
-| `page.spec.md` | 각 페이지 폴더 옆 | `.claude/templates/spec/page.spec.md` |
-| `controller.spec.md` | `apps/server/src/.../controllers/` | `.claude/templates/spec/controller.spec.md` |
-| `service.spec.md` | `apps/server/src/.../` | `.claude/templates/spec/service.spec.md` |
-| `repository.spec.md` | `apps/server/src/.../repositories/` | `.claude/templates/spec/repository.spec.md` |
-| `store.spec.md` | `packages/fe-store/src/stores/` | `.claude/templates/spec/store.spec.md` |
-| `index.spec.md` (feature) | `packages/fe-ui/src/components/feature/[Name]/` | `.claude/templates/spec/feature.spec.md` |
-| `index.spec.md` (widget) | `packages/fe-ui/src/components/widget/[Name]/` | `.claude/templates/spec/widget.spec.md` |
-| `index.spec.md` (ui) | `packages/fe-ui/src/components/ui/[Name]/` | `.claude/templates/spec/ui.spec.md` |
+| `page.spec.md` | 각 페이지 폴더 옆 | `.opencode/templates/spec/page.spec.md` |
+| `controller.spec.md` | `apps/server/src/.../controllers/` | `.opencode/templates/spec/controller.spec.md` |
+| `service.spec.md` | `apps/server/src/.../` | `.opencode/templates/spec/service.spec.md` |
+| `repository.spec.md` | `apps/server/src/.../repositories/` | `.opencode/templates/spec/repository.spec.md` |
+| `store.spec.md` | `packages/fe-store/src/stores/` | `.opencode/templates/spec/store.spec.md` |
+| `index.spec.md` (feature) | `packages/fe-ui/src/components/feature/[Name]/` | `.opencode/templates/spec/feature.spec.md` |
+| `index.spec.md` (widget) | `packages/fe-ui/src/components/widget/[Name]/` | `.opencode/templates/spec/widget.spec.md` |
+| `index.spec.md` (ui) | `packages/fe-ui/src/components/ui/[Name]/` | `.opencode/templates/spec/ui.spec.md` |
 
 **이미 존재하는 .spec.md 처리:**
 - 이미 있으면 스킵 (새로 덮어쓰지 않음)
@@ -397,7 +397,7 @@ CRUD 작업별 Happy Path와 Error Path를 도출합니다.
 
 ### page.spec.md (페이지 기획서)
 
-`.claude/templates/spec/page.spec.md` 템플릿을 기반으로 아래 섹션을 코드에서 채웁니다:
+`.opencode/templates/spec/page.spec.md` 템플릿을 기반으로 아래 섹션을 코드에서 채웁니다:
 
 - **시나리오**: 페이지에서 가능한 흐름 (코드의 이벤트 핸들러에서 도출)
 - **레이아웃**: 렌더링되는 컴포넌트 구조 (JSX 분석)
@@ -406,7 +406,7 @@ CRUD 작업별 Happy Path와 Error Path를 도출합니다.
 
 ### controller.spec.md (Controller 기획서)
 
-`.claude/templates/spec/controller.spec.md` 템플릿을 기반으로 아래 섹션을 채웁니다:
+`.opencode/templates/spec/controller.spec.md` 템플릿을 기반으로 아래 섹션을 채웁니다:
 
 - **엔드포인트 목록**: 메서드/경로/설명/권한
 - **인증/인가**: `@Roles`, `@RoleCategories`, `@RoleGroups` 데코레이터
@@ -414,7 +414,7 @@ CRUD 작업별 Happy Path와 Error Path를 도출합니다.
 
 ### service.spec.md (Service 기획서)
 
-`.claude/templates/spec/service.spec.md` 템플릿을 기반으로 아래 섹션을 채웁니다:
+`.opencode/templates/spec/service.spec.md` 템플릿을 기반으로 아래 섹션을 채웁니다:
 
 - **메서드 목록**: 공개 메서드와 역할
 - **비즈니스 규칙**: 조건 분기, 검증 로직
@@ -423,7 +423,7 @@ CRUD 작업별 Happy Path와 Error Path를 도출합니다.
 
 ### repository.spec.md (Repository 기획서)
 
-`.claude/templates/spec/repository.spec.md` 템플릿을 기반으로 아래 섹션을 채웁니다:
+`.opencode/templates/spec/repository.spec.md` 템플릿을 기반으로 아래 섹션을 채웁니다:
 
 - **메서드 목록**: findMany, findById, create, update, delete 등
 - **Prisma 매핑**: `prisma.[model].[method]()` 호출 분석
@@ -431,7 +431,7 @@ CRUD 작업별 Happy Path와 Error Path를 도출합니다.
 
 ### store.spec.md (Store 기획서)
 
-`.claude/templates/spec/store.spec.md` 템플릿을 기반으로 아래 섹션을 채웁니다:
+`.opencode/templates/spec/store.spec.md` 템플릿을 기반으로 아래 섹션을 채웁니다:
 
 - **상태 (Observable)**: `@observable` 필드 목록
 - **계산값 (Computed)**: `@computed` 게터 목록
