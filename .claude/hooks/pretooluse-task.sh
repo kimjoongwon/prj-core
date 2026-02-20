@@ -6,7 +6,10 @@
 INPUT=$(cat)
 
 # 에이전트 타입과 설명 파싱
-AGENT_TYPE=$(echo "$INPUT" | jq -r '.tool_input.subagent_type // "unknown"' 2>/dev/null || echo "unknown")
+AGENT_TYPE=$(echo "$INPUT" | jq -r '.tool_input.subagent_type // .tool_input.subagentType // empty' 2>/dev/null || echo "")
+if [ -z "$AGENT_TYPE" ] || [ "$AGENT_TYPE" = "null" ]; then
+  AGENT_TYPE="task"
+fi
 DESCRIPTION=$(echo "$INPUT" | jq -r '.tool_input.description // ""' 2>/dev/null || echo "")
 
 # macOS 알림 (서브에이전트 시작)

@@ -1,7 +1,7 @@
 "use client";
 
 import { observer } from "mobx-react-lite";
-import { useEffect } from "react";
+import { type ChangeEvent, useEffect } from "react";
 import type { StudioEvent, StudioRun } from "@/lib/types";
 import { studioStore } from "@/stores/StudioStore";
 
@@ -33,6 +33,11 @@ export const StudioClient = observer(() => {
 	}, []);
 
 	const activeRun = studioStore.activeRun;
+	const filteredRuns = studioStore.filteredRuns;
+
+	const handleTerminalFilter = (event: ChangeEvent<HTMLSelectElement>) => {
+		studioStore.setTerminalFilter(event.target.value);
+	};
 
 	return (
 		<main className="mx-auto min-h-screen w-full max-w-[1500px] p-4 md:p-6">
@@ -46,32 +51,50 @@ export const StudioClient = observer(() => {
 							Terminal Subagent Visual Monitor
 						</h1>
 					</div>
-					<div className="rounded-full border border-[var(--studio-border)] bg-white px-3 py-1 text-sm">
-						{studioStore.streamConnected
-							? "live connected"
-							: "stream reconnecting"}
+					<div className="flex items-center gap-2">
+						<select
+							value={studioStore.terminalFilterId}
+							onChange={handleTerminalFilter}
+							className="max-w-64 rounded-full border border-[var(--studio-border)] bg-white px-3 py-1 text-sm"
+						>
+							<option value="all">all terminals</option>
+							{studioStore.terminals.map((terminal) => (
+								<option key={terminal} value={terminal}>
+									{terminal}
+								</option>
+							))}
+						</select>
+						<div className="rounded-full border border-[var(--studio-border)] bg-white px-3 py-1 text-sm">
+							{studioStore.streamConnected
+								? "live connected"
+								: "stream reconnecting"}
+						</div>
 					</div>
 				</div>
 			</header>
 
-			<CharacterStage runs={studioStore.runs} />
+			<CharacterStage
+				runs={filteredRuns}
+				availableSubagents={studioStore.availableSubagents}
+			/>
 
-			<section className="grid gap-4 lg:grid-cols-[320px_1fr_380px]">
-				<div className="space-y-4">
+			<section className="grid gap-4 lg:grid-cols-[minmax(0,320px)_minmax(0,1fr)_minmax(0,380px)]">
+				<div className="min-w-0 space-y-4">
 					<AgentCard run={activeRun} />
+					<TerminalBindingPanel />
 					<RunList
-						runs={studioStore.runs}
+						runs={filteredRuns}
 						activeRunId={studioStore.activeRunId}
 						onSelect={studioStore.setActiveRun}
 					/>
 				</div>
 
-				<div className="rounded-3xl border border-[var(--studio-border)] bg-[var(--studio-panel)] p-4 shadow-sm backdrop-blur">
+				<div className="min-w-0 overflow-hidden rounded-3xl border border-[var(--studio-border)] bg-[var(--studio-panel)] p-4 shadow-sm backdrop-blur">
 					<h2 className="mb-3 text-lg font-bold">Execution Timeline</h2>
 					<EventTimeline run={activeRun} />
 				</div>
 
-				<div className="space-y-4">
+				<div className="min-w-0 space-y-4">
 					<InspectorCard run={activeRun} />
 					<SkillPanel run={activeRun} />
 				</div>
@@ -98,6 +121,44 @@ function AgentCard({ run }: { run?: StudioRun }) {
 					<p className="font-bold">Kkumi Agent</p>
 					<p className="text-sm text-[var(--studio-muted)]">{statusText}</p>
 				</div>
+			</div>
+		</div>
+	);
+}
+
+function TerminalBindingPanel() {
+	const handleBind = (runId: string, event: ChangeEvent<HTMLSelectElement>) => {
+		studioStore.bindRunTerminal(runId, event.target.value);
+	};
+
+	return (
+		<div className="rounded-3xl border border-[var(--studio-border)] bg-[var(--studio-panel)] p-4 shadow-sm">
+			<p className="mb-2 text-sm font-semibold text-[var(--studio-muted)]">
+				Terminal Mapping
+			</p>
+			<div className="max-h-60 space-y-2 overflow-auto pr-1 text-xs">
+				{studioStore.runs.map((run) => (
+					<div key={run.id} className="rounded-xl bg-white p-2">
+						<p className="truncate font-medium">{run.prompt}</p>
+						<select
+							value={studioStore.getRunTerminal(run.id)}
+							onChange={(event) => handleBind(run.id, event)}
+							className="mt-1 w-full rounded-lg border border-[var(--studio-border)] px-2 py-1 text-xs"
+						>
+							<option value="">unassigned</option>
+							{studioStore.terminals.map((terminal) => (
+								<option key={terminal} value={terminal}>
+									{terminal}
+								</option>
+							))}
+						</select>
+					</div>
+				))}
+				{studioStore.runs.length === 0 ? (
+					<p className="rounded-xl bg-white p-2 text-[var(--studio-muted)]">
+						세션이 감지되면 터미널에 매핑할 수 있어요.
+					</p>
+				) : null}
 			</div>
 		</div>
 	);
@@ -161,7 +222,7 @@ function EventTimeline({ run }: { run?: StudioRun }) {
 	}
 
 	return (
-		<div className="max-h-[74vh] space-y-2 overflow-auto pr-1">
+		<div className="max-h-[74vh] min-w-0 space-y-2 overflow-auto pr-1">
 			{run.events.map((event) => (
 				<div
 					key={event.id}
@@ -177,7 +238,7 @@ function EventTimeline({ run }: { run?: StudioRun }) {
 							{new Date(event.timestamp).toLocaleTimeString()}
 						</span>
 					</div>
-					<pre className="mt-2 overflow-auto rounded-xl bg-slate-50 p-2 text-xs text-slate-700">
+					<pre className="mt-2 max-w-full overflow-x-auto whitespace-pre-wrap break-words rounded-xl bg-slate-50 p-2 text-xs text-slate-700">
 						{JSON.stringify(event.payload, null, 2)}
 					</pre>
 				</div>
@@ -258,56 +319,112 @@ function SkillPanel({ run }: { run?: StudioRun }) {
 	);
 }
 
-function CharacterStage({ runs }: { runs: StudioRun[] }) {
-	const activeSubagents = collectActiveSubagents(runs);
+function CharacterStage({
+	runs,
+	availableSubagents,
+}: {
+	runs: StudioRun[];
+	availableSubagents: string[];
+}) {
+	const activityMap = collectSubagentActivity(runs);
+	const allSubagents = mergeSubagentNames(
+		availableSubagents,
+		Array.from(activityMap.keys()),
+	);
+	const activityByKey = new Map(
+		Array.from(activityMap.entries()).map(([name, value]) => [
+			name.toLowerCase(),
+			value,
+		]),
+	);
+	const cards = allSubagents
+		.map((name) => {
+			const activeCount =
+				activityByKey.get(name.toLowerCase())?.activeCount ?? 0;
+			const sessions = activityByKey.get(name.toLowerCase())?.sessions ?? [];
+			return { name, activeCount, sessions };
+		})
+		.sort(
+			(a, b) => b.activeCount - a.activeCount || a.name.localeCompare(b.name),
+		);
+
+	const activeCount = cards.filter((item) => item.activeCount > 0).length;
 
 	return (
 		<section className="mb-4 rounded-3xl border border-[var(--studio-border)] bg-[var(--studio-panel)] p-4 shadow-sm">
 			<div className="mb-3 flex items-center justify-between">
-				<h2 className="text-lg font-bold">Live Subagents</h2>
+				<h2 className="text-lg font-bold">Subagent Zoo</h2>
 				<span className="rounded-full bg-[var(--studio-blue)]/35 px-2 py-0.5 text-xs font-semibold text-[var(--studio-ink)]">
-					{activeSubagents.length} active
+					{activeCount}/{cards.length || 0} active
 				</span>
 			</div>
-			{activeSubagents.length === 0 ? (
+			{cards.length === 0 ? (
 				<p className="rounded-2xl bg-white p-3 text-sm text-[var(--studio-muted)]">
-					터미널에서 opencode 실행 중 task 서브에이전트가 감지되면 캐릭터가
-					나타납니다.
+					감지된 서브에이전트가 아직 없습니다.
 				</p>
 			) : (
 				<div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
-					{activeSubagents.map((item) => (
-						<div
-							key={`${item.sessionId}:${item.callId}`}
-							className="rounded-2xl border border-[var(--studio-border)] bg-white p-3"
-						>
-							<div className="mb-2 flex items-center gap-2">
-								<div className="studio-float flex size-10 items-center justify-center rounded-full bg-[var(--studio-blue)]/40 text-xs font-extrabold">
-									{toAgentFace(item.agent)}
+					{cards.map((item) => {
+						const active = item.activeCount > 0;
+						const tone = toAgentTone(item.name);
+
+						return (
+							<div
+								key={item.name}
+								className={`rounded-2xl border p-3 transition-all duration-300 ${
+									active
+										? `${tone.activeCard} shadow-sm`
+										: "border-slate-200 bg-slate-50/90"
+								}`}
+							>
+								<div className="mb-2 flex items-center gap-2">
+									<div
+										className={`flex size-10 items-center justify-center rounded-full border text-xl transition-all duration-300 ${
+											active
+												? `studio-float ${tone.activeIcon}`
+												: "border-slate-300 bg-slate-200"
+										}`}
+									>
+										<span className={active ? "" : "grayscale"}>
+											{toAgentMascot(item.name)}
+										</span>
+									</div>
+									<div className="min-w-0">
+										<p className="truncate text-sm font-semibold">
+											{item.name}
+										</p>
+										<p className="text-xs text-[var(--studio-muted)]">
+											{active ? `${item.activeCount} running` : "standby"}
+										</p>
+									</div>
 								</div>
-								<div>
-									<p className="text-sm font-semibold">{item.agent}</p>
-									<p className="text-xs text-[var(--studio-muted)]">
-										session {item.sessionId.slice(0, 14)}...
-									</p>
-								</div>
+								<p
+									className={`rounded-xl px-2 py-1 text-xs font-semibold ${
+										active
+											? `studio-pulse ${tone.activeBadge}`
+											: "bg-slate-200 text-slate-600"
+									}`}
+								>
+									{active
+										? `active in ${item.sessions.length} session`
+										: "idle"}
+								</p>
 							</div>
-							<p className="rounded-xl bg-amber-50 px-2 py-1 text-xs text-amber-700">
-								running now
-							</p>
-						</div>
-					))}
+						);
+					})}
 				</div>
 			)}
 		</section>
 	);
 }
 
-function collectActiveSubagents(runs: StudioRun[]) {
-	const items: { sessionId: string; callId: string; agent: string }[] = [];
+function collectSubagentActivity(runs: StudioRun[]) {
+	const callState = new Map<
+		string,
+		{ state: string; agent: string; runId: string }
+	>();
 
 	for (const run of runs) {
-		const calls = new Map<string, { state: string; agent: string }>();
 		for (const event of run.events) {
 			if (
 				event.type !== "subagent.started" &&
@@ -317,48 +434,154 @@ function collectActiveSubagents(runs: StudioRun[]) {
 				continue;
 			}
 
-			const callId = String(event.payload.callId ?? "");
+			const callId = String(event.payload.callId ?? "").trim();
 			if (!callId) {
 				continue;
 			}
 
-			const agent = String(event.payload.agent ?? "unknown");
+			const rawAgent = String(event.payload.agent ?? "task").trim();
+			const agent = rawAgent && rawAgent !== "unknown" ? rawAgent : "task";
 			const state =
 				event.type === "subagent.started"
 					? "running"
 					: event.type === "subagent.completed"
 						? "completed"
 						: "failed";
-			calls.set(callId, { state, agent });
-		}
 
-		for (const [callId, call] of calls.entries()) {
-			if (call.state !== "running") {
-				continue;
-			}
-			items.push({ sessionId: run.id, callId, agent: call.agent });
+			callState.set(`${run.id}:${callId}`, { state, agent, runId: run.id });
 		}
 	}
 
-	return items;
+	const activity = new Map<
+		string,
+		{ activeCount: number; sessions: Set<string> }
+	>();
+
+	for (const call of callState.values()) {
+		if (!activity.has(call.agent)) {
+			activity.set(call.agent, { activeCount: 0, sessions: new Set<string>() });
+		}
+
+		const entry = activity.get(call.agent);
+		if (!entry) {
+			continue;
+		}
+
+		if (call.state === "running") {
+			entry.activeCount += 1;
+			entry.sessions.add(call.runId);
+		}
+	}
+
+	const normalized = new Map<
+		string,
+		{ activeCount: number; sessions: string[] }
+	>();
+	for (const [agent, value] of activity.entries()) {
+		normalized.set(agent, {
+			activeCount: value.activeCount,
+			sessions: Array.from(value.sessions),
+		});
+	}
+
+	return normalized;
 }
 
-function toAgentFace(agentName: string) {
+function mergeSubagentNames(...groups: string[][]) {
+	const merged = new Map<string, string>();
+
+	for (const group of groups) {
+		for (const rawName of group) {
+			const name = rawName.trim();
+			if (!name) {
+				continue;
+			}
+
+			const key = name.toLowerCase();
+			if (!merged.has(key)) {
+				merged.set(key, name);
+			}
+		}
+	}
+
+	return Array.from(merged.values());
+}
+
+function toAgentMascot(agentName: string) {
 	const key = agentName.toLowerCase();
-	if (key.includes("planner")) {
-		return "(o^-^o)";
+
+	if (key.startsWith("orch-")) {
+		return "🐙";
 	}
-	if (key.includes("builder")) {
-		return "(=^w^=)";
+	if (key.startsWith("req-")) {
+		return "🦉";
 	}
-	if (key.includes("testing") || key.includes("checker")) {
-		return "(o_o)";
+	if (key.startsWith("be-")) {
+		return "🐻";
 	}
-	if (key.includes("review")) {
-		return "(^_-)";
+	if (key.startsWith("fe-")) {
+		return "🦊";
 	}
-	if (key.includes("orch")) {
-		return "(OwO)";
+	if (key.startsWith("qa-")) {
+		return "🐰";
 	}
-	return "(._.)";
+	if (key.startsWith("dev-")) {
+		return "🐶";
+	}
+	if (key.startsWith("etc-")) {
+		return "🐼";
+	}
+
+	return "🐱";
+}
+
+function toAgentTone(agentName: string) {
+	const key = agentName.toLowerCase();
+
+	if (key.startsWith("orch-")) {
+		return {
+			activeCard: "border-indigo-200 bg-gradient-to-br from-white to-indigo-50",
+			activeIcon: "border-indigo-200 bg-indigo-100",
+			activeBadge: "bg-indigo-100 text-indigo-700",
+		};
+	}
+
+	if (key.startsWith("req-")) {
+		return {
+			activeCard: "border-amber-200 bg-gradient-to-br from-white to-amber-50",
+			activeIcon: "border-amber-200 bg-amber-100",
+			activeBadge: "bg-amber-100 text-amber-700",
+		};
+	}
+
+	if (key.startsWith("be-")) {
+		return {
+			activeCard:
+				"border-emerald-200 bg-gradient-to-br from-white to-emerald-50",
+			activeIcon: "border-emerald-200 bg-emerald-100",
+			activeBadge: "bg-emerald-100 text-emerald-700",
+		};
+	}
+
+	if (key.startsWith("fe-")) {
+		return {
+			activeCard: "border-sky-200 bg-gradient-to-br from-white to-sky-50",
+			activeIcon: "border-sky-200 bg-sky-100",
+			activeBadge: "bg-sky-100 text-sky-700",
+		};
+	}
+
+	if (key.startsWith("qa-")) {
+		return {
+			activeCard: "border-rose-200 bg-gradient-to-br from-white to-rose-50",
+			activeIcon: "border-rose-200 bg-rose-100",
+			activeBadge: "bg-rose-100 text-rose-700",
+		};
+	}
+
+	return {
+		activeCard: "border-cyan-200 bg-gradient-to-br from-white to-cyan-50",
+		activeIcon: "border-cyan-200 bg-cyan-100",
+		activeBadge: "bg-cyan-100 text-cyan-700",
+	};
 }
