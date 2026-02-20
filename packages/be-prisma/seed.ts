@@ -917,6 +917,23 @@ function hashToInt(seedKey: string, modulo: number): number {
 	return value % modulo;
 }
 
+function estimateExerciseRpe(
+	difficulty: "BEGINNER" | "INTERMEDIATE" | "ADVANCED",
+) {
+	if (difficulty === "ADVANCED") return 8;
+	if (difficulty === "INTERMEDIATE") return 7;
+	return 5;
+}
+
+function recommendedExerciseRestSec(
+	category: "strength" | "cardio" | "core" | "mobility",
+) {
+	if (category === "strength") return 75;
+	if (category === "cardio") return 35;
+	if (category === "core") return 45;
+	return 60;
+}
+
 function dateByRecencyBand(
 	seedKey: string,
 	seasonTag: "recent" | "mid" | "archive",
@@ -984,6 +1001,10 @@ async function createTimelineSessionExerciseDomainData() {
 		prisma.user.findMany({ where: { email: { in: creatorEmails } } }),
 		prisma.user.findFirst({ where: { email: "admin@plate.com" } }),
 	]);
+
+	if (!fallbackUser) {
+		throw new Error("기본 시드 유저(admin@plate.com)를 찾을 수 없습니다.");
+	}
 
 	const groundByName = new Map(grounds.map((ground) => [ground.name, ground]));
 	const creatorByEmail = new Map(creators.map((user) => [user.email, user]));
@@ -1105,6 +1126,11 @@ async function createTimelineSessionExerciseDomainData() {
 			const estimatedCalories = Math.round(
 				(duration / 60) * exerciseCatalog.caloriesPerMinute,
 			);
+			const targetRpe = estimateExerciseRpe(exerciseCatalog.difficulty);
+			const recommendedRestSec = recommendedExerciseRestSec(
+				exerciseCatalog.category,
+			);
+			const exerciseDescription = `${exerciseCatalog.description} | 카테고리:${exerciseCatalog.category} | 난이도:${exerciseCatalog.difficulty} | 목표RPE:${targetRpe} | 권장휴식:${recommendedRestSec}초 | 예상소모:${estimatedCalories}kcal`;
 
 			const existingExercise = await prisma.exercise.findUnique({
 				where: { id: exerciseId },
@@ -1113,7 +1139,7 @@ async function createTimelineSessionExerciseDomainData() {
 				where: { id: exerciseId },
 				update: {
 					name: exerciseCatalog.name,
-					description: `${exerciseCatalog.description} | 카테고리:${exerciseCatalog.category} | 난이도:${exerciseCatalog.difficulty} | 예상소모:${estimatedCalories}kcal`,
+					description: exerciseDescription,
 					duration,
 					count,
 					taskId,
@@ -1121,7 +1147,7 @@ async function createTimelineSessionExerciseDomainData() {
 				create: {
 					id: exerciseId,
 					name: exerciseCatalog.name,
-					description: `${exerciseCatalog.description} | 카테고리:${exerciseCatalog.category} | 난이도:${exerciseCatalog.difficulty} | 예상소모:${estimatedCalories}kcal`,
+					description: exerciseDescription,
 					duration,
 					count,
 					taskId,
@@ -1207,20 +1233,48 @@ async function createTimelineSessionExerciseDomainData() {
 						routineId,
 						taskId,
 						order,
-						repetitions: order % 2 === 0 ? 3 : 4,
-						restTime: order % 2 === 0 ? 45 : 30,
+						repetitions:
+							template.focus === "strength"
+								? order % 2 === 0
+									? 5
+									: 4
+								: template.focus === "metcon"
+									? order % 2 === 0
+										? 4
+										: 3
+									: 3,
+						restTime: Math.max(
+							20,
+							template.recommendedRestSec + (order % 2 === 0 ? 10 : -10),
+						),
 						notes:
-							order === 4 ? "마지막 라운드는 속도보다 자세 우선" : undefined,
+							order === 4
+								? `${template.coachNote} | 목표 RPE ${template.targetRpe}`
+								: `${template.workRestScheme}`,
 					},
 					create: {
 						id: activityId,
 						routineId,
 						taskId,
 						order,
-						repetitions: order % 2 === 0 ? 3 : 4,
-						restTime: order % 2 === 0 ? 45 : 30,
+						repetitions:
+							template.focus === "strength"
+								? order % 2 === 0
+									? 5
+									: 4
+								: template.focus === "metcon"
+									? order % 2 === 0
+										? 4
+										: 3
+									: 3,
+						restTime: Math.max(
+							20,
+							template.recommendedRestSec + (order % 2 === 0 ? 10 : -10),
+						),
 						notes:
-							order === 4 ? "마지막 라운드는 속도보다 자세 우선" : undefined,
+							order === 4
+								? `${template.coachNote} | 목표 RPE ${template.targetRpe}`
+								: `${template.workRestScheme}`,
 					},
 				});
 
@@ -1278,21 +1332,31 @@ async function createTimelineSessionExerciseDomainData() {
 		const groundRoutines = routinesByGround.get(timelineMeta.groundName) ?? [];
 
 		for (let index = 0; index < sessionCount; index++) {
-			const template =
-				sessionTemplateSeedData[
-					hashToInt(
-						`${timelineMeta.id}:${index}:template`,
-						sessionTemplateSeedData.length,
-					)
-				];
+			const seasonTemplateShift =
+				timelineMeta.seasonTag === "recent"
+					? 0
+					: timelineMeta.seasonTag === "mid"
+						? 2
+						: 4;
+			const templateNoise = hashToInt(
+				`${timelineMeta.id}:${index}:template-noise`,
+				3,
+			);
+			const templateIndex =
+				(index + seasonTemplateShift + templateNoise) %
+				sessionTemplateSeedData.length;
+			const template = sessionTemplateSeedData[templateIndex];
 			const sessionId = stableUuid(`session:${timelineMeta.id}:${index}`);
 			const startDateTime = dateByRecencyBand(
 				`session:${timelineMeta.id}:${index}`,
 				timelineMeta.seasonTag,
 			);
-			const durationMinutes = Math.max(
-				35,
-				template.durationMin + (hashToInt(`${sessionId}:duration`, 21) - 10),
+			const durationMinutes = Math.min(
+				95,
+				Math.max(
+					35,
+					template.durationMin + (hashToInt(`${sessionId}:duration`, 17) - 8),
+				),
 			);
 
 			const typeRoll = hashToInt(`${sessionId}:type`, 100);
@@ -1331,7 +1395,7 @@ async function createTimelineSessionExerciseDomainData() {
 					timelineId: timeline.id,
 					type: sessionType,
 					name: `${template.name} ${index + 1}`,
-					description: `${timelineMeta.groundName} ${template.focus} 세션`,
+					description: `${timelineMeta.groundName} ${template.focus} 세션 | ${template.phaseWeek} | 목표 RPE ${template.targetRpe} | 권장 휴식 ${template.recommendedRestSec}초`,
 					startDateTime,
 					endDateTime,
 					repeatCycleType,
@@ -1342,7 +1406,7 @@ async function createTimelineSessionExerciseDomainData() {
 					timelineId: timeline.id,
 					type: sessionType,
 					name: `${template.name} ${index + 1}`,
-					description: `${timelineMeta.groundName} ${template.focus} 세션`,
+					description: `${timelineMeta.groundName} ${template.focus} 세션 | ${template.phaseWeek} | 목표 RPE ${template.targetRpe} | 권장 휴식 ${template.recommendedRestSec}초`,
 					startDateTime,
 					endDateTime,
 					repeatCycleType,
@@ -1355,6 +1419,13 @@ async function createTimelineSessionExerciseDomainData() {
 			}
 
 			if (groundRoutines.length > 0) {
+				const programCapacity =
+					template.level === "고급"
+						? 14
+						: template.focus === "recovery"
+							? 20
+							: 18;
+
 				const pickedRoutine =
 					groundRoutines[
 						hashToInt(`${sessionId}:routine`, groundRoutines.length)
@@ -1371,30 +1442,18 @@ async function createTimelineSessionExerciseDomainData() {
 					update: {
 						routineId: pickedRoutine.id,
 						sessionId,
-						instructorId:
-							timeline.creatorId ?? fallbackUser?.id ?? "seed-instructor",
-						capacity:
-							template.focus === "recovery"
-								? 20
-								: template.focus === "strength"
-									? 16
-									: 18,
-						name: `${template.name} 프로그램`,
+						instructorId: timeline.creatorId ?? fallbackUser.id,
+						capacity: programCapacity,
+						name: `${template.name} ${template.phaseWeek} 프로그램`,
 						level: pickedRoutine.level,
 					},
 					create: {
 						id: programId,
 						routineId: pickedRoutine.id,
 						sessionId,
-						instructorId:
-							timeline.creatorId ?? fallbackUser?.id ?? "seed-instructor",
-						capacity:
-							template.focus === "recovery"
-								? 20
-								: template.focus === "strength"
-									? 16
-									: 18,
-						name: `${template.name} 프로그램`,
+						instructorId: timeline.creatorId ?? fallbackUser.id,
+						capacity: programCapacity,
+						name: `${template.name} ${template.phaseWeek} 프로그램`,
 						level: pickedRoutine.level,
 					},
 				});

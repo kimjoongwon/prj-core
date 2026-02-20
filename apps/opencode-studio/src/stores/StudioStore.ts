@@ -6,9 +6,6 @@ import type { StudioEvent, StudioRun } from "@/lib/types";
 class StudioStore {
 	runs: StudioRun[] = [];
 	activeRunId = "";
-	prompt =
-		"@be-seed-maker timeline session exercise 관련 시드데이터 만들어줘 (현실반영)";
-	isSubmitting = false;
 	streamConnected = false;
 	private source?: EventSource;
 
@@ -18,10 +15,6 @@ class StudioStore {
 
 	get activeRun() {
 		return this.runs.find((run) => run.id === this.activeRunId) ?? this.runs[0];
-	}
-
-	setPrompt(value: string) {
-		this.prompt = value;
 	}
 
 	setActiveRun(runId: string) {
@@ -75,38 +68,6 @@ class StudioStore {
 		this.source.close();
 		this.source = undefined;
 		this.streamConnected = false;
-	}
-
-	async submitPrompt() {
-		if (!this.prompt.trim() || this.isSubmitting) {
-			return;
-		}
-
-		this.isSubmitting = true;
-		try {
-			const response = await fetch("/api/runs/start", {
-				method: "POST",
-				headers: { "Content-Type": "application/json" },
-				body: JSON.stringify({ prompt: this.prompt.trim() }),
-			});
-
-			if (!response.ok) {
-				throw new Error("Failed to start run");
-			}
-
-			const payload = (await response.json()) as { run: StudioRun };
-			runInAction(() => {
-				this.runs = [
-					payload.run,
-					...this.runs.filter((run) => run.id !== payload.run.id),
-				];
-				this.activeRunId = payload.run.id;
-			});
-		} finally {
-			runInAction(() => {
-				this.isSubmitting = false;
-			});
-		}
 	}
 
 	private mergeEvent(event: StudioEvent) {

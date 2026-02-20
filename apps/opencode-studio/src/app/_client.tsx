@@ -1,7 +1,7 @@
 "use client";
 
 import { observer } from "mobx-react-lite";
-import { type ChangeEvent, useEffect } from "react";
+import { useEffect } from "react";
 import type { StudioEvent, StudioRun } from "@/lib/types";
 import { studioStore } from "@/stores/StudioStore";
 
@@ -32,14 +32,6 @@ export const StudioClient = observer(() => {
 		};
 	}, []);
 
-	const handlePromptChange = (event: ChangeEvent<HTMLTextAreaElement>) => {
-		studioStore.setPrompt(event.target.value);
-	};
-
-	const handleSubmit = () => {
-		void studioStore.submitPrompt();
-	};
-
 	const activeRun = studioStore.activeRun;
 
 	return (
@@ -51,7 +43,7 @@ export const StudioClient = observer(() => {
 							OpenCode Studio
 						</p>
 						<h1 className="text-2xl font-extrabold tracking-tight text-[var(--studio-ink)] md:text-3xl">
-							Subagent + Skill Visual Playground
+							Terminal Subagent Visual Monitor
 						</h1>
 					</div>
 					<div className="rounded-full border border-[var(--studio-border)] bg-white px-3 py-1 text-sm">
@@ -62,15 +54,11 @@ export const StudioClient = observer(() => {
 				</div>
 			</header>
 
+			<CharacterStage runs={studioStore.runs} />
+
 			<section className="grid gap-4 lg:grid-cols-[320px_1fr_380px]">
 				<div className="space-y-4">
 					<AgentCard run={activeRun} />
-					<PromptCard
-						prompt={studioStore.prompt}
-						onPromptChange={handlePromptChange}
-						onSubmit={handleSubmit}
-						isSubmitting={studioStore.isSubmitting}
-					/>
 					<RunList
 						runs={studioStore.runs}
 						activeRunId={studioStore.activeRunId}
@@ -111,40 +99,6 @@ function AgentCard({ run }: { run?: StudioRun }) {
 					<p className="text-sm text-[var(--studio-muted)]">{statusText}</p>
 				</div>
 			</div>
-		</div>
-	);
-}
-
-function PromptCard({
-	prompt,
-	onPromptChange,
-	onSubmit,
-	isSubmitting,
-}: {
-	prompt: string;
-	onPromptChange: (event: ChangeEvent<HTMLTextAreaElement>) => void;
-	onSubmit: () => void;
-	isSubmitting: boolean;
-}) {
-	return (
-		<div className="rounded-3xl border border-[var(--studio-border)] bg-[var(--studio-panel)] p-4 shadow-sm">
-			<p className="mb-2 text-sm font-semibold text-[var(--studio-muted)]">
-				Chat Prompt
-			</p>
-			<textarea
-				className="min-h-32 w-full resize-y rounded-2xl border border-[var(--studio-border)] bg-white p-3 text-sm outline-none focus:border-blue-300"
-				value={prompt}
-				onChange={onPromptChange}
-				placeholder="Try: be-seed-maker로 현실 시드데이터 생성"
-			/>
-			<button
-				type="button"
-				onClick={onSubmit}
-				disabled={isSubmitting}
-				className="mt-3 w-full rounded-2xl bg-[var(--studio-ink)] px-4 py-2 text-sm font-semibold text-white disabled:opacity-60"
-			>
-				{isSubmitting ? "running..." : "Run with OpenCode"}
-			</button>
 		</div>
 	);
 }
@@ -302,4 +256,109 @@ function SkillPanel({ run }: { run?: StudioRun }) {
 			</div>
 		</div>
 	);
+}
+
+function CharacterStage({ runs }: { runs: StudioRun[] }) {
+	const activeSubagents = collectActiveSubagents(runs);
+
+	return (
+		<section className="mb-4 rounded-3xl border border-[var(--studio-border)] bg-[var(--studio-panel)] p-4 shadow-sm">
+			<div className="mb-3 flex items-center justify-between">
+				<h2 className="text-lg font-bold">Live Subagents</h2>
+				<span className="rounded-full bg-[var(--studio-blue)]/35 px-2 py-0.5 text-xs font-semibold text-[var(--studio-ink)]">
+					{activeSubagents.length} active
+				</span>
+			</div>
+			{activeSubagents.length === 0 ? (
+				<p className="rounded-2xl bg-white p-3 text-sm text-[var(--studio-muted)]">
+					터미널에서 opencode 실행 중 task 서브에이전트가 감지되면 캐릭터가
+					나타납니다.
+				</p>
+			) : (
+				<div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
+					{activeSubagents.map((item) => (
+						<div
+							key={`${item.sessionId}:${item.callId}`}
+							className="rounded-2xl border border-[var(--studio-border)] bg-white p-3"
+						>
+							<div className="mb-2 flex items-center gap-2">
+								<div className="studio-float flex size-10 items-center justify-center rounded-full bg-[var(--studio-blue)]/40 text-xs font-extrabold">
+									{toAgentFace(item.agent)}
+								</div>
+								<div>
+									<p className="text-sm font-semibold">{item.agent}</p>
+									<p className="text-xs text-[var(--studio-muted)]">
+										session {item.sessionId.slice(0, 14)}...
+									</p>
+								</div>
+							</div>
+							<p className="rounded-xl bg-amber-50 px-2 py-1 text-xs text-amber-700">
+								running now
+							</p>
+						</div>
+					))}
+				</div>
+			)}
+		</section>
+	);
+}
+
+function collectActiveSubagents(runs: StudioRun[]) {
+	const items: { sessionId: string; callId: string; agent: string }[] = [];
+
+	for (const run of runs) {
+		const calls = new Map<string, { state: string; agent: string }>();
+		for (const event of run.events) {
+			if (
+				event.type !== "subagent.started" &&
+				event.type !== "subagent.completed" &&
+				event.type !== "subagent.failed"
+			) {
+				continue;
+			}
+
+			const callId = String(event.payload.callId ?? "");
+			if (!callId) {
+				continue;
+			}
+
+			const agent = String(event.payload.agent ?? "unknown");
+			const state =
+				event.type === "subagent.started"
+					? "running"
+					: event.type === "subagent.completed"
+						? "completed"
+						: "failed";
+			calls.set(callId, { state, agent });
+		}
+
+		for (const [callId, call] of calls.entries()) {
+			if (call.state !== "running") {
+				continue;
+			}
+			items.push({ sessionId: run.id, callId, agent: call.agent });
+		}
+	}
+
+	return items;
+}
+
+function toAgentFace(agentName: string) {
+	const key = agentName.toLowerCase();
+	if (key.includes("planner")) {
+		return "(o^-^o)";
+	}
+	if (key.includes("builder")) {
+		return "(=^w^=)";
+	}
+	if (key.includes("testing") || key.includes("checker")) {
+		return "(o_o)";
+	}
+	if (key.includes("review")) {
+		return "(^_-)";
+	}
+	if (key.includes("orch")) {
+		return "(OwO)";
+	}
+	return "(._.)";
 }

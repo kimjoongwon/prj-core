@@ -1,5 +1,3 @@
-import { runManager } from "@/lib/run-manager";
-
 export const runtime = "nodejs";
 
 interface StartBody {
@@ -14,6 +12,12 @@ export async function POST(request: Request) {
 		return Response.json({ error: "Prompt is required" }, { status: 400 });
 	}
 
-	const run = runManager.createRun(prompt);
-	return Response.json({ run });
+	return Response.json(
+		{
+			error:
+				"This endpoint is disabled. opencode-studio now monitors terminal sessions only.",
+			prompt,
+		},
+		{ status: 410 },
+	);
 }

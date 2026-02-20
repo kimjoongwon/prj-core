@@ -29,6 +29,9 @@ interface SessionMessage {
 	info: {
 		id: string;
 		role: "user" | "assistant";
+		time?: {
+			created?: number;
+		};
 	};
 	parts: MessagePart[];
 }
@@ -36,36 +39,18 @@ interface SessionMessage {
 interface RunState {
 	run: StudioRun;
 	seenPartState: Set<string>;
-	poller?: NodeJS.Timeout;
-	pollCount: number;
 }
 
 class RunManager {
 	private readonly emitter = new EventEmitter();
 	private readonly runs = new Map<string, RunState>();
+	private isPolling = false;
 
-	createRun(prompt: string) {
-		const now = Date.now();
-		const runId = `run_${now}_${Math.random().toString(36).slice(2, 9)}`;
-		const run: StudioRun = {
-			id: runId,
-			prompt,
-			createdAt: now,
-			updatedAt: now,
-			status: "running",
-			events: [],
-		};
-
-		this.runs.set(runId, {
-			run,
-			seenPartState: new Set(),
-			pollCount: 0,
-		});
-
-		this.pushEvent(runId, "run.started", { prompt });
-		void this.executeRun(runId);
-
-		return run;
+	constructor() {
+		setInterval(() => {
+			void this.pollSessions();
+		}, 1200);
+		void this.pollSessions();
 	}
 
 	listRuns() {
@@ -81,77 +66,91 @@ class RunManager {
 		};
 	}
 
-	private async executeRun(runId: string) {
-		const state = this.runs.get(runId);
-		if (!state) {
+	private async pollSessions() {
+		if (this.isPolling) {
 			return;
 		}
+		this.isPolling = true;
 
 		try {
 			const context = await getOpencodeContext();
-			const created = await opencodeRequest<{ id: string }>({
-				path: "/session",
-				method: "POST",
-				body: { title: `OpenCode Studio ${new Date().toLocaleTimeString()}` },
-				directory: context.projectDirectory,
-			});
-
-			state.run.sessionId = created.id;
-
-			await opencodeRequest({
-				path: `/session/${created.id}/message`,
-				method: "POST",
-				body: {
-					parts: [{ type: "text", text: state.run.prompt }],
-				},
-				directory: context.projectDirectory,
-			});
-
-			state.poller = setInterval(() => {
-				void this.pollRun(runId);
-			}, 1200);
-		} catch (error) {
-			this.failRun(runId, toErrorMessage(error));
-		}
-	}
-
-	private async pollRun(runId: string) {
-		const state = this.runs.get(runId);
-		if (!state || !state.run.sessionId || state.run.status !== "running") {
-			return;
-		}
-
-		state.pollCount += 1;
-
-		try {
-			const context = await getOpencodeContext();
-			const sessionId = state.run.sessionId;
-
-			const messages = await opencodeRequest<SessionMessage[]>({
-				path: `/session/${sessionId}/message?limit=120`,
-				method: "GET",
-				directory: context.projectDirectory,
-			});
-
 			const statuses = await opencodeRequest<Record<string, { type: string }>>({
 				path: "/session/status",
 				method: "GET",
 				directory: context.projectDirectory,
 			});
 
-			this.consumeMessageParts(state, messages);
+			const sessionIds = Object.keys(statuses);
 
-			const assistantText = extractAssistantText(messages);
-			if (assistantText) {
-				state.run.resultText = assistantText;
-			}
+			for (const sessionId of sessionIds) {
+				const messages = await opencodeRequest<SessionMessage[]>({
+					path: `/session/${sessionId}/message?limit=120`,
+					method: "GET",
+					directory: context.projectDirectory,
+				});
 
-			if (statuses[sessionId]?.type === "idle" && state.pollCount > 1) {
-				this.completeRun(runId);
+				const state = this.ensureRun(sessionId, messages);
+				this.consumeMessageParts(state, messages);
+
+				const assistantText = extractAssistantText(messages);
+				if (assistantText) {
+					state.run.resultText = assistantText;
+				}
+
+				const statusType = statuses[sessionId]?.type;
+				const nextStatus =
+					statusType === "error"
+						? "failed"
+						: statusType === "idle"
+							? "completed"
+							: "running";
+				if (state.run.status !== nextStatus) {
+					state.run.status = nextStatus;
+					state.run.updatedAt = Date.now();
+					if (nextStatus === "completed") {
+						this.pushEvent(state.run.id, "run.completed", {
+							text: state.run.resultText ?? "",
+						});
+					}
+					if (nextStatus === "failed") {
+						this.pushEvent(state.run.id, "run.failed", {
+							error: state.run.error ?? "Run failed",
+						});
+					}
+				}
 			}
-		} catch (error) {
-			this.failRun(runId, toErrorMessage(error));
+		} catch {
+			return;
+		} finally {
+			this.isPolling = false;
 		}
+	}
+
+	private ensureRun(sessionId: string, messages: SessionMessage[]) {
+		const existing = this.runs.get(sessionId);
+		if (existing) {
+			return existing;
+		}
+
+		const now = Date.now();
+		const run: StudioRun = {
+			id: sessionId,
+			prompt: extractRunPrompt(messages) || sessionId,
+			createdAt: extractFirstMessageTime(messages) ?? now,
+			updatedAt: now,
+			status: "running",
+			sessionId,
+			events: [],
+		};
+
+		const nextState: RunState = {
+			run,
+			seenPartState: new Set(),
+		};
+
+		this.runs.set(sessionId, nextState);
+		this.pushEvent(run.id, "run.started", { prompt: run.prompt });
+		return nextState;
 	}
 
 	private consumeMessageParts(state: RunState, messages: SessionMessage[]) {
@@ -226,39 +225,6 @@ class RunManager {
 		}
 	}
 
-	private completeRun(runId: string) {
-		const state = this.runs.get(runId);
-		if (!state || state.run.status !== "running") {
-			return;
-		}
-
-		if (state.poller) {
-			clearInterval(state.poller);
-		}
-
-		state.run.status = "completed";
-		state.run.updatedAt = Date.now();
-		this.pushEvent(runId, "run.completed", {
-			text: state.run.resultText ?? "",
-		});
-	}
-
-	private failRun(runId: string, message: string) {
-		const state = this.runs.get(runId);
-		if (!state || state.run.status !== "running") {
-			return;
-		}
-
-		if (state.poller) {
-			clearInterval(state.poller);
-		}
-
-		state.run.status = "failed";
-		state.run.error = message;
-		state.run.updatedAt = Date.now();
-		this.pushEvent(runId, "run.failed", { error: message });
-	}
-
 	private pushEvent(
 		runId: string,
 		type: StudioEvent["type"],
@@ -298,12 +264,25 @@ function extractAssistantText(messages: SessionMessage[]) {
 		.trim();
 }
 
-function toErrorMessage(error: unknown) {
-	if (error instanceof Error) {
-		return error.message;
+function extractRunPrompt(messages: SessionMessage[]) {
+	const user = messages.find((message) => message.info.role === "user");
+	if (!user) {
+		return "";
 	}
 
-	return "Unknown error";
+	return user.parts
+		.filter((part): part is TextPart => part.type === "text")
+		.map((part) => part.text)
+		.join("\n")
+		.trim();
+}
+
+function extractFirstMessageTime(messages: SessionMessage[]) {
+	const created = messages
+		.map((message) => message.info.time?.created)
+		.find((value): value is number => typeof value === "number");
+
+	return created;
 }
 
 declare global {
