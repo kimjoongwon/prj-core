@@ -1,7 +1,8 @@
 import { expect, test } from "@playwright/test";
 
 const API_BASE_URL = "http://localhost:3000/api/v1";
-const SYSTEM_SPACE_ID = "61ddca20-1752-466e-b4da-879ebdbe54e3";
+const SYSTEM_SPACE_ID =
+	process.env.E2E_SYSTEM_SPACE_ID ?? "61ddca20-1752-466e-b4da-879ebdbe54e3";
 const SPACE_HEADERS = { "x-space-id": SYSTEM_SPACE_ID };
 
 interface IdOnlyDto {

@@ -5,7 +5,8 @@ const ADMIN_EMAIL = "admin@plate.com";
 const ADMIN_PASSWORD = "rkdmf12!@";
 
 /** 시드 데이터 기준 System Space (플랫폼 운영본부) */
-const SYSTEM_SPACE_ID = "61ddca20-1752-466e-b4da-879ebdbe54e3";
+const SYSTEM_SPACE_ID =
+	process.env.E2E_SYSTEM_SPACE_ID ?? "61ddca20-1752-466e-b4da-879ebdbe54e3";
 const SYSTEM_GROUND_NAME = "플랫폼 운영본부";
 
 /**
