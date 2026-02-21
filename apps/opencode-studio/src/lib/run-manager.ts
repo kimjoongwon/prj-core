@@ -53,6 +53,7 @@ const OPENCODE_COMMANDS = new Set([
 ]);
 
 const ACTIVE_TOOL_SIGNAL_MAX_AGE_MS = 10 * 60 * 1000;
+const BUILTIN_SUBAGENTS = ["general", "explore"] as const;
 
 interface ToolPart {
 	id: string;
@@ -158,8 +159,7 @@ class RunManager {
 
 			for (const session of sessions) {
 				if (
-					this.projectDirectory &&
-					session.directory !== this.projectDirectory
+					!isSessionInProjectDirectory(session.directory, this.projectDirectory)
 				) {
 					continue;
 				}
@@ -625,12 +625,17 @@ function resolveProjectDirectory() {
 }
 
 function discoverAvailableSubagents(projectDirectory: string) {
+	const names = new Map<string, string>();
+
+	for (const builtIn of BUILTIN_SUBAGENTS) {
+		names.set(builtIn.toLowerCase(), builtIn);
+	}
+
 	if (!projectDirectory) {
-		return [];
+		return Array.from(names.values()).sort((a, b) => a.localeCompare(b));
 	}
 
 	const roots = [path.join(projectDirectory, ".opencode", "agents")];
-	const names = new Map<string, string>();
 
 	for (const root of roots) {
 		if (!fs.existsSync(root)) {
@@ -662,6 +667,40 @@ function discoverAvailableSubagents(projectDirectory: string) {
 	}
 
 	return Array.from(names.values()).sort((a, b) => a.localeCompare(b));
+}
+
+function isSessionInProjectDirectory(
+	sessionDirectory: string,
+	projectDirectory: string,
+) {
+	if (!projectDirectory) {
+		return true;
+	}
+
+	if (!sessionDirectory) {
+		return false;
+	}
+
+	const normalizedProject = normalizePathForCompare(
+		path.resolve(projectDirectory),
+	);
+	const normalizedSession = normalizePathForCompare(
+		path.resolve(sessionDirectory),
+	);
+
+	if (normalizedSession === normalizedProject) {
+		return true;
+	}
+
+	return normalizedSession.startsWith(`${normalizedProject}${path.sep}`);
+}
+
+function normalizePathForCompare(targetPath: string) {
+	if (process.platform !== "win32") {
+		return targetPath;
+	}
+
+	return targetPath.toLowerCase();
 }
 
 async function listInteractiveTerminals() {

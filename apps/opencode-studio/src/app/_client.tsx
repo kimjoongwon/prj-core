@@ -77,7 +77,10 @@ function SubagentPanel({
 	selectedTerminal: string;
 }) {
 	const activityMap = collectSubagentActivity(runs);
-	const allSubagents = mergeSubagentNames(availableSubagents);
+	const allSubagents = mergeSubagentNames(
+		availableSubagents,
+		Array.from(activityMap.keys()),
+	);
 	const cards = allSubagents
 		.map((name) => {
 			const activity = activityMap.get(name) ?? {
@@ -191,7 +194,7 @@ function collectSubagentActivity(runs: StudioRun[]) {
 		}
 	}
 
-	const RECENT_ACTIVE_GRACE_MS = 2500;
+	const RECENT_ACTIVE_GRACE_MS = 5000;
 	const now = Date.now();
 
 	const activity = new Map<

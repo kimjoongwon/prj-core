@@ -3,6 +3,8 @@ import type { StudioRun } from "@/lib/types";
 
 export const runtime = "nodejs";
 
+const ACTIVE_SUBAGENT_GRACE_MS = 6000;
+
 export async function GET() {
 	const runs = runManager.listRuns();
 
@@ -16,7 +18,13 @@ export async function GET() {
 }
 
 function countActiveSubagentCalls(runs: StudioRun[]) {
-	const callState = new Map<string, "running" | "completed" | "failed">();
+	const callState = new Map<
+		string,
+		{
+			state: "running" | "completed" | "failed";
+			changedAt: number;
+		}
+	>();
 
 	for (const run of runs) {
 		for (const event of run.events) {
@@ -35,22 +43,31 @@ function countActiveSubagentCalls(runs: StudioRun[]) {
 
 			const key = `${run.id}:${callId}`;
 			if (event.type === "subagent.started") {
-				callState.set(key, "running");
+				callState.set(key, { state: "running", changedAt: event.timestamp });
 				continue;
 			}
 
 			if (event.type === "subagent.completed") {
-				callState.set(key, "completed");
+				callState.set(key, {
+					state: "completed",
+					changedAt: event.timestamp,
+				});
 				continue;
 			}
 
-			callState.set(key, "failed");
+			callState.set(key, { state: "failed", changedAt: event.timestamp });
 		}
 	}
 
+	const now = Date.now();
 	let activeCount = 0;
-	for (const state of callState.values()) {
-		if (state === "running") {
+	for (const entry of callState.values()) {
+		if (entry.state === "running") {
+			activeCount += 1;
+			continue;
+		}
+
+		if (now - entry.changedAt <= ACTIVE_SUBAGENT_GRACE_MS) {
 			activeCount += 1;
 		}
 	}
