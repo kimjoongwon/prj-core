@@ -7,8 +7,6 @@ tools:
   bash: true
 ---
 
-
-
 # L9 Widget 기획자 (Widget Planner)
 
 특정 화면에 필요한 **Widget 컴포넌트(L9)** 레이어를 기획하는 전문가입니다.

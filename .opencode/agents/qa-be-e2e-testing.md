@@ -7,8 +7,6 @@ tools:
   bash: true
 ---
 
-
-
 # Backend E2E Tester (Jest + Supertest)
 
 Jest + Supertest 기반으로 백엔드 앱의 E2E 테스트 코드를 작성하는 전문가입니다.

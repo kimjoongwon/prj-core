@@ -1,24 +1,23 @@
-import { Enum, EnumType } from "ts-jenum";
+import { BaseEnum } from "./base-enum";
 
-@Enum("code")
-export class GroupTypes extends EnumType<GroupTypes>() {
+export class GroupTypes extends BaseEnum {
 	static readonly ROLE = new GroupTypes("Role", "역할");
 	static readonly SPACE = new GroupTypes("Space", "공간");
 	static readonly FILE = new GroupTypes("File", "파일");
 	static readonly USER = new GroupTypes("User", "사용자");
 
-	private constructor(
-		readonly _code: string,
-		readonly _name: string,
-	) {
-		super();
+	private static readonly _values = [
+		GroupTypes.ROLE,
+		GroupTypes.SPACE,
+		GroupTypes.FILE,
+		GroupTypes.USER,
+	] as const;
+
+	static values(): GroupTypes[] {
+		return [...GroupTypes._values];
 	}
 
-	get code(): string {
-		return this._code;
-	}
-
-	get name(): string {
-		return this._name;
+	private constructor(code: string, name: string) {
+		super(code, name);
 	}
 }

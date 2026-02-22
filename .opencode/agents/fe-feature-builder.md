@@ -7,8 +7,6 @@ tools:
   bash: true
 ---
 
-
-
 # Feature 컴포넌트 빌더
 
 **비즈니스 로직, 상태, API 호출, 라우터 이동을 포함하는 기능 컴포넌트**를 `packages/fe-ui/src/components/feature`에 생성합니다.
@@ -316,6 +314,7 @@ Pure UI → Widget → Feature → Page
 
 | 에이전트 | 관계 |
 |----------|------|
+| req-feature-planner | Feature 기획서(index.spec.md) 기반 구현 |
 | fe-ui-component-builder | Feature가 사용할 Pure UI 컴포넌트 생성 |
 | **fe-widget-builder** | Feature가 사용할 Widget 컴포넌트 생성 |
 | **fe-store-builder** | Feature가 연결할 Store 생성 |

@@ -7,8 +7,6 @@ tools:
   bash: true
 ---
 
-
-
 # L8 UI 컴포넌트 기획자 (UI Component Planner)
 
 특정 화면에 필요한 **Pure UI 컴포넌트(L8)** 레이어를 기획하는 전문가입니다.
@@ -167,7 +165,7 @@ Store 연동이 필요한가?
 
 | 에이전트 | 관계 | 설명 |
 |----------|------|------|
-| req-L5L6-planner | 이전 단계 | 인터랙션/API |
+| req-api-planner | 이전 단계 | 인터랙션/API |
 | orch-screen-planner | 상위 | 화면 기획 조율 |
 
 ### 후행 에이전트

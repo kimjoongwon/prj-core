@@ -213,6 +213,7 @@ Pure UI → Widget → Feature → Page
 
 | 에이전트 | 관계 |
 |----------|------|
+| req-widget-planner | Widget 기획서(index.spec.md) 기반 구현 |
 | **fe-ui-component-builder** | Widget이 사용할 Pure UI 컴포넌트 생성 |
 | fe-input-component-builder | Widget에서 사용할 Input 컴포넌트 생성 |
 

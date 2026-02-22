@@ -318,6 +318,9 @@ export type UserWhereInput = {
   createdTasks?: Prisma.TaskListRelationFilter
   createdSafeWallets?: Prisma.SafeWalletListRelationFilter
   createdRoutines?: Prisma.RoutineListRelationFilter
+  createdAssets?: Prisma.AssetListRelationFilter
+  createdFolders?: Prisma.FolderListRelationFilter
+  createdAlbums?: Prisma.AlbumListRelationFilter
 }
 
 export type UserOrderByWithRelationInput = {
@@ -351,6 +354,9 @@ export type UserOrderByWithRelationInput = {
   createdTasks?: Prisma.TaskOrderByRelationAggregateInput
   createdSafeWallets?: Prisma.SafeWalletOrderByRelationAggregateInput
   createdRoutines?: Prisma.RoutineOrderByRelationAggregateInput
+  createdAssets?: Prisma.AssetOrderByRelationAggregateInput
+  createdFolders?: Prisma.FolderOrderByRelationAggregateInput
+  createdAlbums?: Prisma.AlbumOrderByRelationAggregateInput
 }
 
 export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -387,6 +393,9 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   createdTasks?: Prisma.TaskListRelationFilter
   createdSafeWallets?: Prisma.SafeWalletListRelationFilter
   createdRoutines?: Prisma.RoutineListRelationFilter
+  createdAssets?: Prisma.AssetListRelationFilter
+  createdFolders?: Prisma.FolderListRelationFilter
+  createdAlbums?: Prisma.AlbumListRelationFilter
 }, "id" | "phone" | "name" | "email">
 
 export type UserOrderByWithAggregationInput = {
@@ -466,6 +475,9 @@ export type UserCreateInput = {
   createdTasks?: Prisma.TaskCreateNestedManyWithoutCreatorInput
   createdSafeWallets?: Prisma.SafeWalletCreateNestedManyWithoutCreatorInput
   createdRoutines?: Prisma.RoutineCreateNestedManyWithoutCreatorInput
+  createdAssets?: Prisma.AssetCreateNestedManyWithoutCreatorInput
+  createdFolders?: Prisma.FolderCreateNestedManyWithoutCreatorInput
+  createdAlbums?: Prisma.AlbumCreateNestedManyWithoutCreatorInput
 }
 
 export type UserUncheckedCreateInput = {
@@ -499,6 +511,9 @@ export type UserUncheckedCreateInput = {
   createdTasks?: Prisma.TaskUncheckedCreateNestedManyWithoutCreatorInput
   createdSafeWallets?: Prisma.SafeWalletUncheckedCreateNestedManyWithoutCreatorInput
   createdRoutines?: Prisma.RoutineUncheckedCreateNestedManyWithoutCreatorInput
+  createdAssets?: Prisma.AssetUncheckedCreateNestedManyWithoutCreatorInput
+  createdFolders?: Prisma.FolderUncheckedCreateNestedManyWithoutCreatorInput
+  createdAlbums?: Prisma.AlbumUncheckedCreateNestedManyWithoutCreatorInput
 }
 
 export type UserUpdateInput = {
@@ -532,6 +547,9 @@ export type UserUpdateInput = {
   createdTasks?: Prisma.TaskUpdateManyWithoutCreatorNestedInput
   createdSafeWallets?: Prisma.SafeWalletUpdateManyWithoutCreatorNestedInput
   createdRoutines?: Prisma.RoutineUpdateManyWithoutCreatorNestedInput
+  createdAssets?: Prisma.AssetUpdateManyWithoutCreatorNestedInput
+  createdFolders?: Prisma.FolderUpdateManyWithoutCreatorNestedInput
+  createdAlbums?: Prisma.AlbumUpdateManyWithoutCreatorNestedInput
 }
 
 export type UserUncheckedUpdateInput = {
@@ -565,6 +583,9 @@ export type UserUncheckedUpdateInput = {
   createdTasks?: Prisma.TaskUncheckedUpdateManyWithoutCreatorNestedInput
   createdSafeWallets?: Prisma.SafeWalletUncheckedUpdateManyWithoutCreatorNestedInput
   createdRoutines?: Prisma.RoutineUncheckedUpdateManyWithoutCreatorNestedInput
+  createdAssets?: Prisma.AssetUncheckedUpdateManyWithoutCreatorNestedInput
+  createdFolders?: Prisma.FolderUncheckedUpdateManyWithoutCreatorNestedInput
+  createdAlbums?: Prisma.AlbumUncheckedUpdateManyWithoutCreatorNestedInput
 }
 
 export type UserCreateManyInput = {
@@ -697,6 +718,54 @@ export type UserMinOrderByAggregateInput = {
 
 export type UserSumOrderByAggregateInput = {
   failedLoginAttempts?: Prisma.SortOrder
+}
+
+export type UserCreateNestedOneWithoutCreatedAssetsInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutCreatedAssetsInput, Prisma.UserUncheckedCreateWithoutCreatedAssetsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutCreatedAssetsInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneWithoutCreatedAssetsNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutCreatedAssetsInput, Prisma.UserUncheckedCreateWithoutCreatedAssetsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutCreatedAssetsInput
+  upsert?: Prisma.UserUpsertWithoutCreatedAssetsInput
+  disconnect?: Prisma.UserWhereInput | boolean
+  delete?: Prisma.UserWhereInput | boolean
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutCreatedAssetsInput, Prisma.UserUpdateWithoutCreatedAssetsInput>, Prisma.UserUncheckedUpdateWithoutCreatedAssetsInput>
+}
+
+export type UserCreateNestedOneWithoutCreatedFoldersInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutCreatedFoldersInput, Prisma.UserUncheckedCreateWithoutCreatedFoldersInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutCreatedFoldersInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneWithoutCreatedFoldersNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutCreatedFoldersInput, Prisma.UserUncheckedCreateWithoutCreatedFoldersInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutCreatedFoldersInput
+  upsert?: Prisma.UserUpsertWithoutCreatedFoldersInput
+  disconnect?: Prisma.UserWhereInput | boolean
+  delete?: Prisma.UserWhereInput | boolean
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutCreatedFoldersInput, Prisma.UserUpdateWithoutCreatedFoldersInput>, Prisma.UserUncheckedUpdateWithoutCreatedFoldersInput>
+}
+
+export type UserCreateNestedOneWithoutCreatedAlbumsInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutCreatedAlbumsInput, Prisma.UserUncheckedCreateWithoutCreatedAlbumsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutCreatedAlbumsInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneWithoutCreatedAlbumsNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutCreatedAlbumsInput, Prisma.UserUncheckedCreateWithoutCreatedAlbumsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutCreatedAlbumsInput
+  upsert?: Prisma.UserUpsertWithoutCreatedAlbumsInput
+  disconnect?: Prisma.UserWhereInput | boolean
+  delete?: Prisma.UserWhereInput | boolean
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutCreatedAlbumsInput, Prisma.UserUpdateWithoutCreatedAlbumsInput>, Prisma.UserUncheckedUpdateWithoutCreatedAlbumsInput>
 }
 
 export type UserCreateNestedOneWithoutAuthAuditLogsInput = {
@@ -913,6 +982,474 @@ export type UserUpdateOneRequiredWithoutProfilesNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutProfilesInput, Prisma.UserUpdateWithoutProfilesInput>, Prisma.UserUncheckedUpdateWithoutProfilesInput>
 }
 
+export type UserCreateWithoutCreatedAssetsInput = {
+  id?: string
+  updatedAt?: Date | string | null
+  createdAt?: Date | string
+  removedAt?: Date | string | null
+  phone: string
+  name: string
+  email: string
+  password: string
+  failedLoginAttempts?: number
+  lockedUntil?: Date | string | null
+  isPermanentlyLocked?: boolean
+  mustChangePassword?: boolean
+  passwordChangedAt?: Date | string | null
+  lastLoginAt?: Date | string | null
+  lastLoginIp?: string | null
+  isActive?: boolean
+  profiles?: Prisma.ProfileCreateNestedManyWithoutUserInput
+  tenants?: Prisma.TenantCreateNestedManyWithoutUserInput
+  classification?: Prisma.UserClassificationCreateNestedOneWithoutUserInput
+  associations?: Prisma.UserAssociationCreateNestedManyWithoutUserInput
+  passwordHistory?: Prisma.PasswordHistoryCreateNestedManyWithoutUserInput
+  authAuditLogs?: Prisma.AuthAuditLogCreateNestedManyWithoutUserInput
+  createdCategories?: Prisma.CategoryCreateNestedManyWithoutCreatorInput
+  createdGroups?: Prisma.GroupCreateNestedManyWithoutCreatorInput
+  createdContents?: Prisma.ContentCreateNestedManyWithoutCreatorInput
+  createdFiles?: Prisma.FileCreateNestedManyWithoutCreatorInput
+  createdTimelines?: Prisma.TimelineCreateNestedManyWithoutCreatorInput
+  createdTasks?: Prisma.TaskCreateNestedManyWithoutCreatorInput
+  createdSafeWallets?: Prisma.SafeWalletCreateNestedManyWithoutCreatorInput
+  createdRoutines?: Prisma.RoutineCreateNestedManyWithoutCreatorInput
+  createdFolders?: Prisma.FolderCreateNestedManyWithoutCreatorInput
+  createdAlbums?: Prisma.AlbumCreateNestedManyWithoutCreatorInput
+}
+
+export type UserUncheckedCreateWithoutCreatedAssetsInput = {
+  id?: string
+  updatedAt?: Date | string | null
+  createdAt?: Date | string
+  removedAt?: Date | string | null
+  phone: string
+  name: string
+  email: string
+  password: string
+  failedLoginAttempts?: number
+  lockedUntil?: Date | string | null
+  isPermanentlyLocked?: boolean
+  mustChangePassword?: boolean
+  passwordChangedAt?: Date | string | null
+  lastLoginAt?: Date | string | null
+  lastLoginIp?: string | null
+  isActive?: boolean
+  profiles?: Prisma.ProfileUncheckedCreateNestedManyWithoutUserInput
+  tenants?: Prisma.TenantUncheckedCreateNestedManyWithoutUserInput
+  classification?: Prisma.UserClassificationUncheckedCreateNestedOneWithoutUserInput
+  associations?: Prisma.UserAssociationUncheckedCreateNestedManyWithoutUserInput
+  passwordHistory?: Prisma.PasswordHistoryUncheckedCreateNestedManyWithoutUserInput
+  authAuditLogs?: Prisma.AuthAuditLogUncheckedCreateNestedManyWithoutUserInput
+  createdCategories?: Prisma.CategoryUncheckedCreateNestedManyWithoutCreatorInput
+  createdGroups?: Prisma.GroupUncheckedCreateNestedManyWithoutCreatorInput
+  createdContents?: Prisma.ContentUncheckedCreateNestedManyWithoutCreatorInput
+  createdFiles?: Prisma.FileUncheckedCreateNestedManyWithoutCreatorInput
+  createdTimelines?: Prisma.TimelineUncheckedCreateNestedManyWithoutCreatorInput
+  createdTasks?: Prisma.TaskUncheckedCreateNestedManyWithoutCreatorInput
+  createdSafeWallets?: Prisma.SafeWalletUncheckedCreateNestedManyWithoutCreatorInput
+  createdRoutines?: Prisma.RoutineUncheckedCreateNestedManyWithoutCreatorInput
+  createdFolders?: Prisma.FolderUncheckedCreateNestedManyWithoutCreatorInput
+  createdAlbums?: Prisma.AlbumUncheckedCreateNestedManyWithoutCreatorInput
+}
+
+export type UserCreateOrConnectWithoutCreatedAssetsInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutCreatedAssetsInput, Prisma.UserUncheckedCreateWithoutCreatedAssetsInput>
+}
+
+export type UserUpsertWithoutCreatedAssetsInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutCreatedAssetsInput, Prisma.UserUncheckedUpdateWithoutCreatedAssetsInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutCreatedAssetsInput, Prisma.UserUncheckedCreateWithoutCreatedAssetsInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutCreatedAssetsInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutCreatedAssetsInput, Prisma.UserUncheckedUpdateWithoutCreatedAssetsInput>
+}
+
+export type UserUpdateWithoutCreatedAssetsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  phone?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  password?: Prisma.StringFieldUpdateOperationsInput | string
+  failedLoginAttempts?: Prisma.IntFieldUpdateOperationsInput | number
+  lockedUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  isPermanentlyLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  passwordChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastLoginIp?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  profiles?: Prisma.ProfileUpdateManyWithoutUserNestedInput
+  tenants?: Prisma.TenantUpdateManyWithoutUserNestedInput
+  classification?: Prisma.UserClassificationUpdateOneWithoutUserNestedInput
+  associations?: Prisma.UserAssociationUpdateManyWithoutUserNestedInput
+  passwordHistory?: Prisma.PasswordHistoryUpdateManyWithoutUserNestedInput
+  authAuditLogs?: Prisma.AuthAuditLogUpdateManyWithoutUserNestedInput
+  createdCategories?: Prisma.CategoryUpdateManyWithoutCreatorNestedInput
+  createdGroups?: Prisma.GroupUpdateManyWithoutCreatorNestedInput
+  createdContents?: Prisma.ContentUpdateManyWithoutCreatorNestedInput
+  createdFiles?: Prisma.FileUpdateManyWithoutCreatorNestedInput
+  createdTimelines?: Prisma.TimelineUpdateManyWithoutCreatorNestedInput
+  createdTasks?: Prisma.TaskUpdateManyWithoutCreatorNestedInput
+  createdSafeWallets?: Prisma.SafeWalletUpdateManyWithoutCreatorNestedInput
+  createdRoutines?: Prisma.RoutineUpdateManyWithoutCreatorNestedInput
+  createdFolders?: Prisma.FolderUpdateManyWithoutCreatorNestedInput
+  createdAlbums?: Prisma.AlbumUpdateManyWithoutCreatorNestedInput
+}
+
+export type UserUncheckedUpdateWithoutCreatedAssetsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  phone?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  password?: Prisma.StringFieldUpdateOperationsInput | string
+  failedLoginAttempts?: Prisma.IntFieldUpdateOperationsInput | number
+  lockedUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  isPermanentlyLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  passwordChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastLoginIp?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  profiles?: Prisma.ProfileUncheckedUpdateManyWithoutUserNestedInput
+  tenants?: Prisma.TenantUncheckedUpdateManyWithoutUserNestedInput
+  classification?: Prisma.UserClassificationUncheckedUpdateOneWithoutUserNestedInput
+  associations?: Prisma.UserAssociationUncheckedUpdateManyWithoutUserNestedInput
+  passwordHistory?: Prisma.PasswordHistoryUncheckedUpdateManyWithoutUserNestedInput
+  authAuditLogs?: Prisma.AuthAuditLogUncheckedUpdateManyWithoutUserNestedInput
+  createdCategories?: Prisma.CategoryUncheckedUpdateManyWithoutCreatorNestedInput
+  createdGroups?: Prisma.GroupUncheckedUpdateManyWithoutCreatorNestedInput
+  createdContents?: Prisma.ContentUncheckedUpdateManyWithoutCreatorNestedInput
+  createdFiles?: Prisma.FileUncheckedUpdateManyWithoutCreatorNestedInput
+  createdTimelines?: Prisma.TimelineUncheckedUpdateManyWithoutCreatorNestedInput
+  createdTasks?: Prisma.TaskUncheckedUpdateManyWithoutCreatorNestedInput
+  createdSafeWallets?: Prisma.SafeWalletUncheckedUpdateManyWithoutCreatorNestedInput
+  createdRoutines?: Prisma.RoutineUncheckedUpdateManyWithoutCreatorNestedInput
+  createdFolders?: Prisma.FolderUncheckedUpdateManyWithoutCreatorNestedInput
+  createdAlbums?: Prisma.AlbumUncheckedUpdateManyWithoutCreatorNestedInput
+}
+
+export type UserCreateWithoutCreatedFoldersInput = {
+  id?: string
+  updatedAt?: Date | string | null
+  createdAt?: Date | string
+  removedAt?: Date | string | null
+  phone: string
+  name: string
+  email: string
+  password: string
+  failedLoginAttempts?: number
+  lockedUntil?: Date | string | null
+  isPermanentlyLocked?: boolean
+  mustChangePassword?: boolean
+  passwordChangedAt?: Date | string | null
+  lastLoginAt?: Date | string | null
+  lastLoginIp?: string | null
+  isActive?: boolean
+  profiles?: Prisma.ProfileCreateNestedManyWithoutUserInput
+  tenants?: Prisma.TenantCreateNestedManyWithoutUserInput
+  classification?: Prisma.UserClassificationCreateNestedOneWithoutUserInput
+  associations?: Prisma.UserAssociationCreateNestedManyWithoutUserInput
+  passwordHistory?: Prisma.PasswordHistoryCreateNestedManyWithoutUserInput
+  authAuditLogs?: Prisma.AuthAuditLogCreateNestedManyWithoutUserInput
+  createdCategories?: Prisma.CategoryCreateNestedManyWithoutCreatorInput
+  createdGroups?: Prisma.GroupCreateNestedManyWithoutCreatorInput
+  createdContents?: Prisma.ContentCreateNestedManyWithoutCreatorInput
+  createdFiles?: Prisma.FileCreateNestedManyWithoutCreatorInput
+  createdTimelines?: Prisma.TimelineCreateNestedManyWithoutCreatorInput
+  createdTasks?: Prisma.TaskCreateNestedManyWithoutCreatorInput
+  createdSafeWallets?: Prisma.SafeWalletCreateNestedManyWithoutCreatorInput
+  createdRoutines?: Prisma.RoutineCreateNestedManyWithoutCreatorInput
+  createdAssets?: Prisma.AssetCreateNestedManyWithoutCreatorInput
+  createdAlbums?: Prisma.AlbumCreateNestedManyWithoutCreatorInput
+}
+
+export type UserUncheckedCreateWithoutCreatedFoldersInput = {
+  id?: string
+  updatedAt?: Date | string | null
+  createdAt?: Date | string
+  removedAt?: Date | string | null
+  phone: string
+  name: string
+  email: string
+  password: string
+  failedLoginAttempts?: number
+  lockedUntil?: Date | string | null
+  isPermanentlyLocked?: boolean
+  mustChangePassword?: boolean
+  passwordChangedAt?: Date | string | null
+  lastLoginAt?: Date | string | null
+  lastLoginIp?: string | null
+  isActive?: boolean
+  profiles?: Prisma.ProfileUncheckedCreateNestedManyWithoutUserInput
+  tenants?: Prisma.TenantUncheckedCreateNestedManyWithoutUserInput
+  classification?: Prisma.UserClassificationUncheckedCreateNestedOneWithoutUserInput
+  associations?: Prisma.UserAssociationUncheckedCreateNestedManyWithoutUserInput
+  passwordHistory?: Prisma.PasswordHistoryUncheckedCreateNestedManyWithoutUserInput
+  authAuditLogs?: Prisma.AuthAuditLogUncheckedCreateNestedManyWithoutUserInput
+  createdCategories?: Prisma.CategoryUncheckedCreateNestedManyWithoutCreatorInput
+  createdGroups?: Prisma.GroupUncheckedCreateNestedManyWithoutCreatorInput
+  createdContents?: Prisma.ContentUncheckedCreateNestedManyWithoutCreatorInput
+  createdFiles?: Prisma.FileUncheckedCreateNestedManyWithoutCreatorInput
+  createdTimelines?: Prisma.TimelineUncheckedCreateNestedManyWithoutCreatorInput
+  createdTasks?: Prisma.TaskUncheckedCreateNestedManyWithoutCreatorInput
+  createdSafeWallets?: Prisma.SafeWalletUncheckedCreateNestedManyWithoutCreatorInput
+  createdRoutines?: Prisma.RoutineUncheckedCreateNestedManyWithoutCreatorInput
+  createdAssets?: Prisma.AssetUncheckedCreateNestedManyWithoutCreatorInput
+  createdAlbums?: Prisma.AlbumUncheckedCreateNestedManyWithoutCreatorInput
+}
+
+export type UserCreateOrConnectWithoutCreatedFoldersInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutCreatedFoldersInput, Prisma.UserUncheckedCreateWithoutCreatedFoldersInput>
+}
+
+export type UserUpsertWithoutCreatedFoldersInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutCreatedFoldersInput, Prisma.UserUncheckedUpdateWithoutCreatedFoldersInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutCreatedFoldersInput, Prisma.UserUncheckedCreateWithoutCreatedFoldersInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutCreatedFoldersInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutCreatedFoldersInput, Prisma.UserUncheckedUpdateWithoutCreatedFoldersInput>
+}
+
+export type UserUpdateWithoutCreatedFoldersInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  phone?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  password?: Prisma.StringFieldUpdateOperationsInput | string
+  failedLoginAttempts?: Prisma.IntFieldUpdateOperationsInput | number
+  lockedUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  isPermanentlyLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  passwordChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastLoginIp?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  profiles?: Prisma.ProfileUpdateManyWithoutUserNestedInput
+  tenants?: Prisma.TenantUpdateManyWithoutUserNestedInput
+  classification?: Prisma.UserClassificationUpdateOneWithoutUserNestedInput
+  associations?: Prisma.UserAssociationUpdateManyWithoutUserNestedInput
+  passwordHistory?: Prisma.PasswordHistoryUpdateManyWithoutUserNestedInput
+  authAuditLogs?: Prisma.AuthAuditLogUpdateManyWithoutUserNestedInput
+  createdCategories?: Prisma.CategoryUpdateManyWithoutCreatorNestedInput
+  createdGroups?: Prisma.GroupUpdateManyWithoutCreatorNestedInput
+  createdContents?: Prisma.ContentUpdateManyWithoutCreatorNestedInput
+  createdFiles?: Prisma.FileUpdateManyWithoutCreatorNestedInput
+  createdTimelines?: Prisma.TimelineUpdateManyWithoutCreatorNestedInput
+  createdTasks?: Prisma.TaskUpdateManyWithoutCreatorNestedInput
+  createdSafeWallets?: Prisma.SafeWalletUpdateManyWithoutCreatorNestedInput
+  createdRoutines?: Prisma.RoutineUpdateManyWithoutCreatorNestedInput
+  createdAssets?: Prisma.AssetUpdateManyWithoutCreatorNestedInput
+  createdAlbums?: Prisma.AlbumUpdateManyWithoutCreatorNestedInput
+}
+
+export type UserUncheckedUpdateWithoutCreatedFoldersInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  phone?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  password?: Prisma.StringFieldUpdateOperationsInput | string
+  failedLoginAttempts?: Prisma.IntFieldUpdateOperationsInput | number
+  lockedUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  isPermanentlyLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  passwordChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastLoginIp?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  profiles?: Prisma.ProfileUncheckedUpdateManyWithoutUserNestedInput
+  tenants?: Prisma.TenantUncheckedUpdateManyWithoutUserNestedInput
+  classification?: Prisma.UserClassificationUncheckedUpdateOneWithoutUserNestedInput
+  associations?: Prisma.UserAssociationUncheckedUpdateManyWithoutUserNestedInput
+  passwordHistory?: Prisma.PasswordHistoryUncheckedUpdateManyWithoutUserNestedInput
+  authAuditLogs?: Prisma.AuthAuditLogUncheckedUpdateManyWithoutUserNestedInput
+  createdCategories?: Prisma.CategoryUncheckedUpdateManyWithoutCreatorNestedInput
+  createdGroups?: Prisma.GroupUncheckedUpdateManyWithoutCreatorNestedInput
+  createdContents?: Prisma.ContentUncheckedUpdateManyWithoutCreatorNestedInput
+  createdFiles?: Prisma.FileUncheckedUpdateManyWithoutCreatorNestedInput
+  createdTimelines?: Prisma.TimelineUncheckedUpdateManyWithoutCreatorNestedInput
+  createdTasks?: Prisma.TaskUncheckedUpdateManyWithoutCreatorNestedInput
+  createdSafeWallets?: Prisma.SafeWalletUncheckedUpdateManyWithoutCreatorNestedInput
+  createdRoutines?: Prisma.RoutineUncheckedUpdateManyWithoutCreatorNestedInput
+  createdAssets?: Prisma.AssetUncheckedUpdateManyWithoutCreatorNestedInput
+  createdAlbums?: Prisma.AlbumUncheckedUpdateManyWithoutCreatorNestedInput
+}
+
+export type UserCreateWithoutCreatedAlbumsInput = {
+  id?: string
+  updatedAt?: Date | string | null
+  createdAt?: Date | string
+  removedAt?: Date | string | null
+  phone: string
+  name: string
+  email: string
+  password: string
+  failedLoginAttempts?: number
+  lockedUntil?: Date | string | null
+  isPermanentlyLocked?: boolean
+  mustChangePassword?: boolean
+  passwordChangedAt?: Date | string | null
+  lastLoginAt?: Date | string | null
+  lastLoginIp?: string | null
+  isActive?: boolean
+  profiles?: Prisma.ProfileCreateNestedManyWithoutUserInput
+  tenants?: Prisma.TenantCreateNestedManyWithoutUserInput
+  classification?: Prisma.UserClassificationCreateNestedOneWithoutUserInput
+  associations?: Prisma.UserAssociationCreateNestedManyWithoutUserInput
+  passwordHistory?: Prisma.PasswordHistoryCreateNestedManyWithoutUserInput
+  authAuditLogs?: Prisma.AuthAuditLogCreateNestedManyWithoutUserInput
+  createdCategories?: Prisma.CategoryCreateNestedManyWithoutCreatorInput
+  createdGroups?: Prisma.GroupCreateNestedManyWithoutCreatorInput
+  createdContents?: Prisma.ContentCreateNestedManyWithoutCreatorInput
+  createdFiles?: Prisma.FileCreateNestedManyWithoutCreatorInput
+  createdTimelines?: Prisma.TimelineCreateNestedManyWithoutCreatorInput
+  createdTasks?: Prisma.TaskCreateNestedManyWithoutCreatorInput
+  createdSafeWallets?: Prisma.SafeWalletCreateNestedManyWithoutCreatorInput
+  createdRoutines?: Prisma.RoutineCreateNestedManyWithoutCreatorInput
+  createdAssets?: Prisma.AssetCreateNestedManyWithoutCreatorInput
+  createdFolders?: Prisma.FolderCreateNestedManyWithoutCreatorInput
+}
+
+export type UserUncheckedCreateWithoutCreatedAlbumsInput = {
+  id?: string
+  updatedAt?: Date | string | null
+  createdAt?: Date | string
+  removedAt?: Date | string | null
+  phone: string
+  name: string
+  email: string
+  password: string
+  failedLoginAttempts?: number
+  lockedUntil?: Date | string | null
+  isPermanentlyLocked?: boolean
+  mustChangePassword?: boolean
+  passwordChangedAt?: Date | string | null
+  lastLoginAt?: Date | string | null
+  lastLoginIp?: string | null
+  isActive?: boolean
+  profiles?: Prisma.ProfileUncheckedCreateNestedManyWithoutUserInput
+  tenants?: Prisma.TenantUncheckedCreateNestedManyWithoutUserInput
+  classification?: Prisma.UserClassificationUncheckedCreateNestedOneWithoutUserInput
+  associations?: Prisma.UserAssociationUncheckedCreateNestedManyWithoutUserInput
+  passwordHistory?: Prisma.PasswordHistoryUncheckedCreateNestedManyWithoutUserInput
+  authAuditLogs?: Prisma.AuthAuditLogUncheckedCreateNestedManyWithoutUserInput
+  createdCategories?: Prisma.CategoryUncheckedCreateNestedManyWithoutCreatorInput
+  createdGroups?: Prisma.GroupUncheckedCreateNestedManyWithoutCreatorInput
+  createdContents?: Prisma.ContentUncheckedCreateNestedManyWithoutCreatorInput
+  createdFiles?: Prisma.FileUncheckedCreateNestedManyWithoutCreatorInput
+  createdTimelines?: Prisma.TimelineUncheckedCreateNestedManyWithoutCreatorInput
+  createdTasks?: Prisma.TaskUncheckedCreateNestedManyWithoutCreatorInput
+  createdSafeWallets?: Prisma.SafeWalletUncheckedCreateNestedManyWithoutCreatorInput
+  createdRoutines?: Prisma.RoutineUncheckedCreateNestedManyWithoutCreatorInput
+  createdAssets?: Prisma.AssetUncheckedCreateNestedManyWithoutCreatorInput
+  createdFolders?: Prisma.FolderUncheckedCreateNestedManyWithoutCreatorInput
+}
+
+export type UserCreateOrConnectWithoutCreatedAlbumsInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutCreatedAlbumsInput, Prisma.UserUncheckedCreateWithoutCreatedAlbumsInput>
+}
+
+export type UserUpsertWithoutCreatedAlbumsInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutCreatedAlbumsInput, Prisma.UserUncheckedUpdateWithoutCreatedAlbumsInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutCreatedAlbumsInput, Prisma.UserUncheckedCreateWithoutCreatedAlbumsInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutCreatedAlbumsInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutCreatedAlbumsInput, Prisma.UserUncheckedUpdateWithoutCreatedAlbumsInput>
+}
+
+export type UserUpdateWithoutCreatedAlbumsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  phone?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  password?: Prisma.StringFieldUpdateOperationsInput | string
+  failedLoginAttempts?: Prisma.IntFieldUpdateOperationsInput | number
+  lockedUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  isPermanentlyLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  passwordChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastLoginIp?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  profiles?: Prisma.ProfileUpdateManyWithoutUserNestedInput
+  tenants?: Prisma.TenantUpdateManyWithoutUserNestedInput
+  classification?: Prisma.UserClassificationUpdateOneWithoutUserNestedInput
+  associations?: Prisma.UserAssociationUpdateManyWithoutUserNestedInput
+  passwordHistory?: Prisma.PasswordHistoryUpdateManyWithoutUserNestedInput
+  authAuditLogs?: Prisma.AuthAuditLogUpdateManyWithoutUserNestedInput
+  createdCategories?: Prisma.CategoryUpdateManyWithoutCreatorNestedInput
+  createdGroups?: Prisma.GroupUpdateManyWithoutCreatorNestedInput
+  createdContents?: Prisma.ContentUpdateManyWithoutCreatorNestedInput
+  createdFiles?: Prisma.FileUpdateManyWithoutCreatorNestedInput
+  createdTimelines?: Prisma.TimelineUpdateManyWithoutCreatorNestedInput
+  createdTasks?: Prisma.TaskUpdateManyWithoutCreatorNestedInput
+  createdSafeWallets?: Prisma.SafeWalletUpdateManyWithoutCreatorNestedInput
+  createdRoutines?: Prisma.RoutineUpdateManyWithoutCreatorNestedInput
+  createdAssets?: Prisma.AssetUpdateManyWithoutCreatorNestedInput
+  createdFolders?: Prisma.FolderUpdateManyWithoutCreatorNestedInput
+}
+
+export type UserUncheckedUpdateWithoutCreatedAlbumsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  phone?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  password?: Prisma.StringFieldUpdateOperationsInput | string
+  failedLoginAttempts?: Prisma.IntFieldUpdateOperationsInput | number
+  lockedUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  isPermanentlyLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  passwordChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastLoginIp?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  profiles?: Prisma.ProfileUncheckedUpdateManyWithoutUserNestedInput
+  tenants?: Prisma.TenantUncheckedUpdateManyWithoutUserNestedInput
+  classification?: Prisma.UserClassificationUncheckedUpdateOneWithoutUserNestedInput
+  associations?: Prisma.UserAssociationUncheckedUpdateManyWithoutUserNestedInput
+  passwordHistory?: Prisma.PasswordHistoryUncheckedUpdateManyWithoutUserNestedInput
+  authAuditLogs?: Prisma.AuthAuditLogUncheckedUpdateManyWithoutUserNestedInput
+  createdCategories?: Prisma.CategoryUncheckedUpdateManyWithoutCreatorNestedInput
+  createdGroups?: Prisma.GroupUncheckedUpdateManyWithoutCreatorNestedInput
+  createdContents?: Prisma.ContentUncheckedUpdateManyWithoutCreatorNestedInput
+  createdFiles?: Prisma.FileUncheckedUpdateManyWithoutCreatorNestedInput
+  createdTimelines?: Prisma.TimelineUncheckedUpdateManyWithoutCreatorNestedInput
+  createdTasks?: Prisma.TaskUncheckedUpdateManyWithoutCreatorNestedInput
+  createdSafeWallets?: Prisma.SafeWalletUncheckedUpdateManyWithoutCreatorNestedInput
+  createdRoutines?: Prisma.RoutineUncheckedUpdateManyWithoutCreatorNestedInput
+  createdAssets?: Prisma.AssetUncheckedUpdateManyWithoutCreatorNestedInput
+  createdFolders?: Prisma.FolderUncheckedUpdateManyWithoutCreatorNestedInput
+}
+
 export type UserCreateWithoutAuthAuditLogsInput = {
   id?: string
   updatedAt?: Date | string | null
@@ -943,6 +1480,9 @@ export type UserCreateWithoutAuthAuditLogsInput = {
   createdTasks?: Prisma.TaskCreateNestedManyWithoutCreatorInput
   createdSafeWallets?: Prisma.SafeWalletCreateNestedManyWithoutCreatorInput
   createdRoutines?: Prisma.RoutineCreateNestedManyWithoutCreatorInput
+  createdAssets?: Prisma.AssetCreateNestedManyWithoutCreatorInput
+  createdFolders?: Prisma.FolderCreateNestedManyWithoutCreatorInput
+  createdAlbums?: Prisma.AlbumCreateNestedManyWithoutCreatorInput
 }
 
 export type UserUncheckedCreateWithoutAuthAuditLogsInput = {
@@ -975,6 +1515,9 @@ export type UserUncheckedCreateWithoutAuthAuditLogsInput = {
   createdTasks?: Prisma.TaskUncheckedCreateNestedManyWithoutCreatorInput
   createdSafeWallets?: Prisma.SafeWalletUncheckedCreateNestedManyWithoutCreatorInput
   createdRoutines?: Prisma.RoutineUncheckedCreateNestedManyWithoutCreatorInput
+  createdAssets?: Prisma.AssetUncheckedCreateNestedManyWithoutCreatorInput
+  createdFolders?: Prisma.FolderUncheckedCreateNestedManyWithoutCreatorInput
+  createdAlbums?: Prisma.AlbumUncheckedCreateNestedManyWithoutCreatorInput
 }
 
 export type UserCreateOrConnectWithoutAuthAuditLogsInput = {
@@ -1023,6 +1566,9 @@ export type UserUpdateWithoutAuthAuditLogsInput = {
   createdTasks?: Prisma.TaskUpdateManyWithoutCreatorNestedInput
   createdSafeWallets?: Prisma.SafeWalletUpdateManyWithoutCreatorNestedInput
   createdRoutines?: Prisma.RoutineUpdateManyWithoutCreatorNestedInput
+  createdAssets?: Prisma.AssetUpdateManyWithoutCreatorNestedInput
+  createdFolders?: Prisma.FolderUpdateManyWithoutCreatorNestedInput
+  createdAlbums?: Prisma.AlbumUpdateManyWithoutCreatorNestedInput
 }
 
 export type UserUncheckedUpdateWithoutAuthAuditLogsInput = {
@@ -1055,6 +1601,9 @@ export type UserUncheckedUpdateWithoutAuthAuditLogsInput = {
   createdTasks?: Prisma.TaskUncheckedUpdateManyWithoutCreatorNestedInput
   createdSafeWallets?: Prisma.SafeWalletUncheckedUpdateManyWithoutCreatorNestedInput
   createdRoutines?: Prisma.RoutineUncheckedUpdateManyWithoutCreatorNestedInput
+  createdAssets?: Prisma.AssetUncheckedUpdateManyWithoutCreatorNestedInput
+  createdFolders?: Prisma.FolderUncheckedUpdateManyWithoutCreatorNestedInput
+  createdAlbums?: Prisma.AlbumUncheckedUpdateManyWithoutCreatorNestedInput
 }
 
 export type UserCreateWithoutPasswordHistoryInput = {
@@ -1087,6 +1636,9 @@ export type UserCreateWithoutPasswordHistoryInput = {
   createdTasks?: Prisma.TaskCreateNestedManyWithoutCreatorInput
   createdSafeWallets?: Prisma.SafeWalletCreateNestedManyWithoutCreatorInput
   createdRoutines?: Prisma.RoutineCreateNestedManyWithoutCreatorInput
+  createdAssets?: Prisma.AssetCreateNestedManyWithoutCreatorInput
+  createdFolders?: Prisma.FolderCreateNestedManyWithoutCreatorInput
+  createdAlbums?: Prisma.AlbumCreateNestedManyWithoutCreatorInput
 }
 
 export type UserUncheckedCreateWithoutPasswordHistoryInput = {
@@ -1119,6 +1671,9 @@ export type UserUncheckedCreateWithoutPasswordHistoryInput = {
   createdTasks?: Prisma.TaskUncheckedCreateNestedManyWithoutCreatorInput
   createdSafeWallets?: Prisma.SafeWalletUncheckedCreateNestedManyWithoutCreatorInput
   createdRoutines?: Prisma.RoutineUncheckedCreateNestedManyWithoutCreatorInput
+  createdAssets?: Prisma.AssetUncheckedCreateNestedManyWithoutCreatorInput
+  createdFolders?: Prisma.FolderUncheckedCreateNestedManyWithoutCreatorInput
+  createdAlbums?: Prisma.AlbumUncheckedCreateNestedManyWithoutCreatorInput
 }
 
 export type UserCreateOrConnectWithoutPasswordHistoryInput = {
@@ -1167,6 +1722,9 @@ export type UserUpdateWithoutPasswordHistoryInput = {
   createdTasks?: Prisma.TaskUpdateManyWithoutCreatorNestedInput
   createdSafeWallets?: Prisma.SafeWalletUpdateManyWithoutCreatorNestedInput
   createdRoutines?: Prisma.RoutineUpdateManyWithoutCreatorNestedInput
+  createdAssets?: Prisma.AssetUpdateManyWithoutCreatorNestedInput
+  createdFolders?: Prisma.FolderUpdateManyWithoutCreatorNestedInput
+  createdAlbums?: Prisma.AlbumUpdateManyWithoutCreatorNestedInput
 }
 
 export type UserUncheckedUpdateWithoutPasswordHistoryInput = {
@@ -1199,6 +1757,9 @@ export type UserUncheckedUpdateWithoutPasswordHistoryInput = {
   createdTasks?: Prisma.TaskUncheckedUpdateManyWithoutCreatorNestedInput
   createdSafeWallets?: Prisma.SafeWalletUncheckedUpdateManyWithoutCreatorNestedInput
   createdRoutines?: Prisma.RoutineUncheckedUpdateManyWithoutCreatorNestedInput
+  createdAssets?: Prisma.AssetUncheckedUpdateManyWithoutCreatorNestedInput
+  createdFolders?: Prisma.FolderUncheckedUpdateManyWithoutCreatorNestedInput
+  createdAlbums?: Prisma.AlbumUncheckedUpdateManyWithoutCreatorNestedInput
 }
 
 export type UserCreateWithoutCreatedCategoriesInput = {
@@ -1231,6 +1792,9 @@ export type UserCreateWithoutCreatedCategoriesInput = {
   createdTasks?: Prisma.TaskCreateNestedManyWithoutCreatorInput
   createdSafeWallets?: Prisma.SafeWalletCreateNestedManyWithoutCreatorInput
   createdRoutines?: Prisma.RoutineCreateNestedManyWithoutCreatorInput
+  createdAssets?: Prisma.AssetCreateNestedManyWithoutCreatorInput
+  createdFolders?: Prisma.FolderCreateNestedManyWithoutCreatorInput
+  createdAlbums?: Prisma.AlbumCreateNestedManyWithoutCreatorInput
 }
 
 export type UserUncheckedCreateWithoutCreatedCategoriesInput = {
@@ -1263,6 +1827,9 @@ export type UserUncheckedCreateWithoutCreatedCategoriesInput = {
   createdTasks?: Prisma.TaskUncheckedCreateNestedManyWithoutCreatorInput
   createdSafeWallets?: Prisma.SafeWalletUncheckedCreateNestedManyWithoutCreatorInput
   createdRoutines?: Prisma.RoutineUncheckedCreateNestedManyWithoutCreatorInput
+  createdAssets?: Prisma.AssetUncheckedCreateNestedManyWithoutCreatorInput
+  createdFolders?: Prisma.FolderUncheckedCreateNestedManyWithoutCreatorInput
+  createdAlbums?: Prisma.AlbumUncheckedCreateNestedManyWithoutCreatorInput
 }
 
 export type UserCreateOrConnectWithoutCreatedCategoriesInput = {
@@ -1311,6 +1878,9 @@ export type UserUpdateWithoutCreatedCategoriesInput = {
   createdTasks?: Prisma.TaskUpdateManyWithoutCreatorNestedInput
   createdSafeWallets?: Prisma.SafeWalletUpdateManyWithoutCreatorNestedInput
   createdRoutines?: Prisma.RoutineUpdateManyWithoutCreatorNestedInput
+  createdAssets?: Prisma.AssetUpdateManyWithoutCreatorNestedInput
+  createdFolders?: Prisma.FolderUpdateManyWithoutCreatorNestedInput
+  createdAlbums?: Prisma.AlbumUpdateManyWithoutCreatorNestedInput
 }
 
 export type UserUncheckedUpdateWithoutCreatedCategoriesInput = {
@@ -1343,6 +1913,9 @@ export type UserUncheckedUpdateWithoutCreatedCategoriesInput = {
   createdTasks?: Prisma.TaskUncheckedUpdateManyWithoutCreatorNestedInput
   createdSafeWallets?: Prisma.SafeWalletUncheckedUpdateManyWithoutCreatorNestedInput
   createdRoutines?: Prisma.RoutineUncheckedUpdateManyWithoutCreatorNestedInput
+  createdAssets?: Prisma.AssetUncheckedUpdateManyWithoutCreatorNestedInput
+  createdFolders?: Prisma.FolderUncheckedUpdateManyWithoutCreatorNestedInput
+  createdAlbums?: Prisma.AlbumUncheckedUpdateManyWithoutCreatorNestedInput
 }
 
 export type UserCreateWithoutCreatedGroupsInput = {
@@ -1375,6 +1948,9 @@ export type UserCreateWithoutCreatedGroupsInput = {
   createdTasks?: Prisma.TaskCreateNestedManyWithoutCreatorInput
   createdSafeWallets?: Prisma.SafeWalletCreateNestedManyWithoutCreatorInput
   createdRoutines?: Prisma.RoutineCreateNestedManyWithoutCreatorInput
+  createdAssets?: Prisma.AssetCreateNestedManyWithoutCreatorInput
+  createdFolders?: Prisma.FolderCreateNestedManyWithoutCreatorInput
+  createdAlbums?: Prisma.AlbumCreateNestedManyWithoutCreatorInput
 }
 
 export type UserUncheckedCreateWithoutCreatedGroupsInput = {
@@ -1407,6 +1983,9 @@ export type UserUncheckedCreateWithoutCreatedGroupsInput = {
   createdTasks?: Prisma.TaskUncheckedCreateNestedManyWithoutCreatorInput
   createdSafeWallets?: Prisma.SafeWalletUncheckedCreateNestedManyWithoutCreatorInput
   createdRoutines?: Prisma.RoutineUncheckedCreateNestedManyWithoutCreatorInput
+  createdAssets?: Prisma.AssetUncheckedCreateNestedManyWithoutCreatorInput
+  createdFolders?: Prisma.FolderUncheckedCreateNestedManyWithoutCreatorInput
+  createdAlbums?: Prisma.AlbumUncheckedCreateNestedManyWithoutCreatorInput
 }
 
 export type UserCreateOrConnectWithoutCreatedGroupsInput = {
@@ -1455,6 +2034,9 @@ export type UserUpdateWithoutCreatedGroupsInput = {
   createdTasks?: Prisma.TaskUpdateManyWithoutCreatorNestedInput
   createdSafeWallets?: Prisma.SafeWalletUpdateManyWithoutCreatorNestedInput
   createdRoutines?: Prisma.RoutineUpdateManyWithoutCreatorNestedInput
+  createdAssets?: Prisma.AssetUpdateManyWithoutCreatorNestedInput
+  createdFolders?: Prisma.FolderUpdateManyWithoutCreatorNestedInput
+  createdAlbums?: Prisma.AlbumUpdateManyWithoutCreatorNestedInput
 }
 
 export type UserUncheckedUpdateWithoutCreatedGroupsInput = {
@@ -1487,6 +2069,9 @@ export type UserUncheckedUpdateWithoutCreatedGroupsInput = {
   createdTasks?: Prisma.TaskUncheckedUpdateManyWithoutCreatorNestedInput
   createdSafeWallets?: Prisma.SafeWalletUncheckedUpdateManyWithoutCreatorNestedInput
   createdRoutines?: Prisma.RoutineUncheckedUpdateManyWithoutCreatorNestedInput
+  createdAssets?: Prisma.AssetUncheckedUpdateManyWithoutCreatorNestedInput
+  createdFolders?: Prisma.FolderUncheckedUpdateManyWithoutCreatorNestedInput
+  createdAlbums?: Prisma.AlbumUncheckedUpdateManyWithoutCreatorNestedInput
 }
 
 export type UserCreateWithoutTenantsInput = {
@@ -1519,6 +2104,9 @@ export type UserCreateWithoutTenantsInput = {
   createdTasks?: Prisma.TaskCreateNestedManyWithoutCreatorInput
   createdSafeWallets?: Prisma.SafeWalletCreateNestedManyWithoutCreatorInput
   createdRoutines?: Prisma.RoutineCreateNestedManyWithoutCreatorInput
+  createdAssets?: Prisma.AssetCreateNestedManyWithoutCreatorInput
+  createdFolders?: Prisma.FolderCreateNestedManyWithoutCreatorInput
+  createdAlbums?: Prisma.AlbumCreateNestedManyWithoutCreatorInput
 }
 
 export type UserUncheckedCreateWithoutTenantsInput = {
@@ -1551,6 +2139,9 @@ export type UserUncheckedCreateWithoutTenantsInput = {
   createdTasks?: Prisma.TaskUncheckedCreateNestedManyWithoutCreatorInput
   createdSafeWallets?: Prisma.SafeWalletUncheckedCreateNestedManyWithoutCreatorInput
   createdRoutines?: Prisma.RoutineUncheckedCreateNestedManyWithoutCreatorInput
+  createdAssets?: Prisma.AssetUncheckedCreateNestedManyWithoutCreatorInput
+  createdFolders?: Prisma.FolderUncheckedCreateNestedManyWithoutCreatorInput
+  createdAlbums?: Prisma.AlbumUncheckedCreateNestedManyWithoutCreatorInput
 }
 
 export type UserCreateOrConnectWithoutTenantsInput = {
@@ -1599,6 +2190,9 @@ export type UserUpdateWithoutTenantsInput = {
   createdTasks?: Prisma.TaskUpdateManyWithoutCreatorNestedInput
   createdSafeWallets?: Prisma.SafeWalletUpdateManyWithoutCreatorNestedInput
   createdRoutines?: Prisma.RoutineUpdateManyWithoutCreatorNestedInput
+  createdAssets?: Prisma.AssetUpdateManyWithoutCreatorNestedInput
+  createdFolders?: Prisma.FolderUpdateManyWithoutCreatorNestedInput
+  createdAlbums?: Prisma.AlbumUpdateManyWithoutCreatorNestedInput
 }
 
 export type UserUncheckedUpdateWithoutTenantsInput = {
@@ -1631,6 +2225,9 @@ export type UserUncheckedUpdateWithoutTenantsInput = {
   createdTasks?: Prisma.TaskUncheckedUpdateManyWithoutCreatorNestedInput
   createdSafeWallets?: Prisma.SafeWalletUncheckedUpdateManyWithoutCreatorNestedInput
   createdRoutines?: Prisma.RoutineUncheckedUpdateManyWithoutCreatorNestedInput
+  createdAssets?: Prisma.AssetUncheckedUpdateManyWithoutCreatorNestedInput
+  createdFolders?: Prisma.FolderUncheckedUpdateManyWithoutCreatorNestedInput
+  createdAlbums?: Prisma.AlbumUncheckedUpdateManyWithoutCreatorNestedInput
 }
 
 export type UserCreateWithoutCreatedContentsInput = {
@@ -1663,6 +2260,9 @@ export type UserCreateWithoutCreatedContentsInput = {
   createdTasks?: Prisma.TaskCreateNestedManyWithoutCreatorInput
   createdSafeWallets?: Prisma.SafeWalletCreateNestedManyWithoutCreatorInput
   createdRoutines?: Prisma.RoutineCreateNestedManyWithoutCreatorInput
+  createdAssets?: Prisma.AssetCreateNestedManyWithoutCreatorInput
+  createdFolders?: Prisma.FolderCreateNestedManyWithoutCreatorInput
+  createdAlbums?: Prisma.AlbumCreateNestedManyWithoutCreatorInput
 }
 
 export type UserUncheckedCreateWithoutCreatedContentsInput = {
@@ -1695,6 +2295,9 @@ export type UserUncheckedCreateWithoutCreatedContentsInput = {
   createdTasks?: Prisma.TaskUncheckedCreateNestedManyWithoutCreatorInput
   createdSafeWallets?: Prisma.SafeWalletUncheckedCreateNestedManyWithoutCreatorInput
   createdRoutines?: Prisma.RoutineUncheckedCreateNestedManyWithoutCreatorInput
+  createdAssets?: Prisma.AssetUncheckedCreateNestedManyWithoutCreatorInput
+  createdFolders?: Prisma.FolderUncheckedCreateNestedManyWithoutCreatorInput
+  createdAlbums?: Prisma.AlbumUncheckedCreateNestedManyWithoutCreatorInput
 }
 
 export type UserCreateOrConnectWithoutCreatedContentsInput = {
@@ -1743,6 +2346,9 @@ export type UserUpdateWithoutCreatedContentsInput = {
   createdTasks?: Prisma.TaskUpdateManyWithoutCreatorNestedInput
   createdSafeWallets?: Prisma.SafeWalletUpdateManyWithoutCreatorNestedInput
   createdRoutines?: Prisma.RoutineUpdateManyWithoutCreatorNestedInput
+  createdAssets?: Prisma.AssetUpdateManyWithoutCreatorNestedInput
+  createdFolders?: Prisma.FolderUpdateManyWithoutCreatorNestedInput
+  createdAlbums?: Prisma.AlbumUpdateManyWithoutCreatorNestedInput
 }
 
 export type UserUncheckedUpdateWithoutCreatedContentsInput = {
@@ -1775,6 +2381,9 @@ export type UserUncheckedUpdateWithoutCreatedContentsInput = {
   createdTasks?: Prisma.TaskUncheckedUpdateManyWithoutCreatorNestedInput
   createdSafeWallets?: Prisma.SafeWalletUncheckedUpdateManyWithoutCreatorNestedInput
   createdRoutines?: Prisma.RoutineUncheckedUpdateManyWithoutCreatorNestedInput
+  createdAssets?: Prisma.AssetUncheckedUpdateManyWithoutCreatorNestedInput
+  createdFolders?: Prisma.FolderUncheckedUpdateManyWithoutCreatorNestedInput
+  createdAlbums?: Prisma.AlbumUncheckedUpdateManyWithoutCreatorNestedInput
 }
 
 export type UserCreateWithoutCreatedFilesInput = {
@@ -1807,6 +2416,9 @@ export type UserCreateWithoutCreatedFilesInput = {
   createdTasks?: Prisma.TaskCreateNestedManyWithoutCreatorInput
   createdSafeWallets?: Prisma.SafeWalletCreateNestedManyWithoutCreatorInput
   createdRoutines?: Prisma.RoutineCreateNestedManyWithoutCreatorInput
+  createdAssets?: Prisma.AssetCreateNestedManyWithoutCreatorInput
+  createdFolders?: Prisma.FolderCreateNestedManyWithoutCreatorInput
+  createdAlbums?: Prisma.AlbumCreateNestedManyWithoutCreatorInput
 }
 
 export type UserUncheckedCreateWithoutCreatedFilesInput = {
@@ -1839,6 +2451,9 @@ export type UserUncheckedCreateWithoutCreatedFilesInput = {
   createdTasks?: Prisma.TaskUncheckedCreateNestedManyWithoutCreatorInput
   createdSafeWallets?: Prisma.SafeWalletUncheckedCreateNestedManyWithoutCreatorInput
   createdRoutines?: Prisma.RoutineUncheckedCreateNestedManyWithoutCreatorInput
+  createdAssets?: Prisma.AssetUncheckedCreateNestedManyWithoutCreatorInput
+  createdFolders?: Prisma.FolderUncheckedCreateNestedManyWithoutCreatorInput
+  createdAlbums?: Prisma.AlbumUncheckedCreateNestedManyWithoutCreatorInput
 }
 
 export type UserCreateOrConnectWithoutCreatedFilesInput = {
@@ -1887,6 +2502,9 @@ export type UserUpdateWithoutCreatedFilesInput = {
   createdTasks?: Prisma.TaskUpdateManyWithoutCreatorNestedInput
   createdSafeWallets?: Prisma.SafeWalletUpdateManyWithoutCreatorNestedInput
   createdRoutines?: Prisma.RoutineUpdateManyWithoutCreatorNestedInput
+  createdAssets?: Prisma.AssetUpdateManyWithoutCreatorNestedInput
+  createdFolders?: Prisma.FolderUpdateManyWithoutCreatorNestedInput
+  createdAlbums?: Prisma.AlbumUpdateManyWithoutCreatorNestedInput
 }
 
 export type UserUncheckedUpdateWithoutCreatedFilesInput = {
@@ -1919,6 +2537,9 @@ export type UserUncheckedUpdateWithoutCreatedFilesInput = {
   createdTasks?: Prisma.TaskUncheckedUpdateManyWithoutCreatorNestedInput
   createdSafeWallets?: Prisma.SafeWalletUncheckedUpdateManyWithoutCreatorNestedInput
   createdRoutines?: Prisma.RoutineUncheckedUpdateManyWithoutCreatorNestedInput
+  createdAssets?: Prisma.AssetUncheckedUpdateManyWithoutCreatorNestedInput
+  createdFolders?: Prisma.FolderUncheckedUpdateManyWithoutCreatorNestedInput
+  createdAlbums?: Prisma.AlbumUncheckedUpdateManyWithoutCreatorNestedInput
 }
 
 export type UserCreateWithoutCreatedSafeWalletsInput = {
@@ -1951,6 +2572,9 @@ export type UserCreateWithoutCreatedSafeWalletsInput = {
   createdTimelines?: Prisma.TimelineCreateNestedManyWithoutCreatorInput
   createdTasks?: Prisma.TaskCreateNestedManyWithoutCreatorInput
   createdRoutines?: Prisma.RoutineCreateNestedManyWithoutCreatorInput
+  createdAssets?: Prisma.AssetCreateNestedManyWithoutCreatorInput
+  createdFolders?: Prisma.FolderCreateNestedManyWithoutCreatorInput
+  createdAlbums?: Prisma.AlbumCreateNestedManyWithoutCreatorInput
 }
 
 export type UserUncheckedCreateWithoutCreatedSafeWalletsInput = {
@@ -1983,6 +2607,9 @@ export type UserUncheckedCreateWithoutCreatedSafeWalletsInput = {
   createdTimelines?: Prisma.TimelineUncheckedCreateNestedManyWithoutCreatorInput
   createdTasks?: Prisma.TaskUncheckedCreateNestedManyWithoutCreatorInput
   createdRoutines?: Prisma.RoutineUncheckedCreateNestedManyWithoutCreatorInput
+  createdAssets?: Prisma.AssetUncheckedCreateNestedManyWithoutCreatorInput
+  createdFolders?: Prisma.FolderUncheckedCreateNestedManyWithoutCreatorInput
+  createdAlbums?: Prisma.AlbumUncheckedCreateNestedManyWithoutCreatorInput
 }
 
 export type UserCreateOrConnectWithoutCreatedSafeWalletsInput = {
@@ -2031,6 +2658,9 @@ export type UserUpdateWithoutCreatedSafeWalletsInput = {
   createdTimelines?: Prisma.TimelineUpdateManyWithoutCreatorNestedInput
   createdTasks?: Prisma.TaskUpdateManyWithoutCreatorNestedInput
   createdRoutines?: Prisma.RoutineUpdateManyWithoutCreatorNestedInput
+  createdAssets?: Prisma.AssetUpdateManyWithoutCreatorNestedInput
+  createdFolders?: Prisma.FolderUpdateManyWithoutCreatorNestedInput
+  createdAlbums?: Prisma.AlbumUpdateManyWithoutCreatorNestedInput
 }
 
 export type UserUncheckedUpdateWithoutCreatedSafeWalletsInput = {
@@ -2063,6 +2693,9 @@ export type UserUncheckedUpdateWithoutCreatedSafeWalletsInput = {
   createdTimelines?: Prisma.TimelineUncheckedUpdateManyWithoutCreatorNestedInput
   createdTasks?: Prisma.TaskUncheckedUpdateManyWithoutCreatorNestedInput
   createdRoutines?: Prisma.RoutineUncheckedUpdateManyWithoutCreatorNestedInput
+  createdAssets?: Prisma.AssetUncheckedUpdateManyWithoutCreatorNestedInput
+  createdFolders?: Prisma.FolderUncheckedUpdateManyWithoutCreatorNestedInput
+  createdAlbums?: Prisma.AlbumUncheckedUpdateManyWithoutCreatorNestedInput
 }
 
 export type UserCreateWithoutCreatedTimelinesInput = {
@@ -2095,6 +2728,9 @@ export type UserCreateWithoutCreatedTimelinesInput = {
   createdTasks?: Prisma.TaskCreateNestedManyWithoutCreatorInput
   createdSafeWallets?: Prisma.SafeWalletCreateNestedManyWithoutCreatorInput
   createdRoutines?: Prisma.RoutineCreateNestedManyWithoutCreatorInput
+  createdAssets?: Prisma.AssetCreateNestedManyWithoutCreatorInput
+  createdFolders?: Prisma.FolderCreateNestedManyWithoutCreatorInput
+  createdAlbums?: Prisma.AlbumCreateNestedManyWithoutCreatorInput
 }
 
 export type UserUncheckedCreateWithoutCreatedTimelinesInput = {
@@ -2127,6 +2763,9 @@ export type UserUncheckedCreateWithoutCreatedTimelinesInput = {
   createdTasks?: Prisma.TaskUncheckedCreateNestedManyWithoutCreatorInput
   createdSafeWallets?: Prisma.SafeWalletUncheckedCreateNestedManyWithoutCreatorInput
   createdRoutines?: Prisma.RoutineUncheckedCreateNestedManyWithoutCreatorInput
+  createdAssets?: Prisma.AssetUncheckedCreateNestedManyWithoutCreatorInput
+  createdFolders?: Prisma.FolderUncheckedCreateNestedManyWithoutCreatorInput
+  createdAlbums?: Prisma.AlbumUncheckedCreateNestedManyWithoutCreatorInput
 }
 
 export type UserCreateOrConnectWithoutCreatedTimelinesInput = {
@@ -2175,6 +2814,9 @@ export type UserUpdateWithoutCreatedTimelinesInput = {
   createdTasks?: Prisma.TaskUpdateManyWithoutCreatorNestedInput
   createdSafeWallets?: Prisma.SafeWalletUpdateManyWithoutCreatorNestedInput
   createdRoutines?: Prisma.RoutineUpdateManyWithoutCreatorNestedInput
+  createdAssets?: Prisma.AssetUpdateManyWithoutCreatorNestedInput
+  createdFolders?: Prisma.FolderUpdateManyWithoutCreatorNestedInput
+  createdAlbums?: Prisma.AlbumUpdateManyWithoutCreatorNestedInput
 }
 
 export type UserUncheckedUpdateWithoutCreatedTimelinesInput = {
@@ -2207,6 +2849,9 @@ export type UserUncheckedUpdateWithoutCreatedTimelinesInput = {
   createdTasks?: Prisma.TaskUncheckedUpdateManyWithoutCreatorNestedInput
   createdSafeWallets?: Prisma.SafeWalletUncheckedUpdateManyWithoutCreatorNestedInput
   createdRoutines?: Prisma.RoutineUncheckedUpdateManyWithoutCreatorNestedInput
+  createdAssets?: Prisma.AssetUncheckedUpdateManyWithoutCreatorNestedInput
+  createdFolders?: Prisma.FolderUncheckedUpdateManyWithoutCreatorNestedInput
+  createdAlbums?: Prisma.AlbumUncheckedUpdateManyWithoutCreatorNestedInput
 }
 
 export type UserCreateWithoutCreatedRoutinesInput = {
@@ -2239,6 +2884,9 @@ export type UserCreateWithoutCreatedRoutinesInput = {
   createdTimelines?: Prisma.TimelineCreateNestedManyWithoutCreatorInput
   createdTasks?: Prisma.TaskCreateNestedManyWithoutCreatorInput
   createdSafeWallets?: Prisma.SafeWalletCreateNestedManyWithoutCreatorInput
+  createdAssets?: Prisma.AssetCreateNestedManyWithoutCreatorInput
+  createdFolders?: Prisma.FolderCreateNestedManyWithoutCreatorInput
+  createdAlbums?: Prisma.AlbumCreateNestedManyWithoutCreatorInput
 }
 
 export type UserUncheckedCreateWithoutCreatedRoutinesInput = {
@@ -2271,6 +2919,9 @@ export type UserUncheckedCreateWithoutCreatedRoutinesInput = {
   createdTimelines?: Prisma.TimelineUncheckedCreateNestedManyWithoutCreatorInput
   createdTasks?: Prisma.TaskUncheckedCreateNestedManyWithoutCreatorInput
   createdSafeWallets?: Prisma.SafeWalletUncheckedCreateNestedManyWithoutCreatorInput
+  createdAssets?: Prisma.AssetUncheckedCreateNestedManyWithoutCreatorInput
+  createdFolders?: Prisma.FolderUncheckedCreateNestedManyWithoutCreatorInput
+  createdAlbums?: Prisma.AlbumUncheckedCreateNestedManyWithoutCreatorInput
 }
 
 export type UserCreateOrConnectWithoutCreatedRoutinesInput = {
@@ -2319,6 +2970,9 @@ export type UserUpdateWithoutCreatedRoutinesInput = {
   createdTimelines?: Prisma.TimelineUpdateManyWithoutCreatorNestedInput
   createdTasks?: Prisma.TaskUpdateManyWithoutCreatorNestedInput
   createdSafeWallets?: Prisma.SafeWalletUpdateManyWithoutCreatorNestedInput
+  createdAssets?: Prisma.AssetUpdateManyWithoutCreatorNestedInput
+  createdFolders?: Prisma.FolderUpdateManyWithoutCreatorNestedInput
+  createdAlbums?: Prisma.AlbumUpdateManyWithoutCreatorNestedInput
 }
 
 export type UserUncheckedUpdateWithoutCreatedRoutinesInput = {
@@ -2351,6 +3005,9 @@ export type UserUncheckedUpdateWithoutCreatedRoutinesInput = {
   createdTimelines?: Prisma.TimelineUncheckedUpdateManyWithoutCreatorNestedInput
   createdTasks?: Prisma.TaskUncheckedUpdateManyWithoutCreatorNestedInput
   createdSafeWallets?: Prisma.SafeWalletUncheckedUpdateManyWithoutCreatorNestedInput
+  createdAssets?: Prisma.AssetUncheckedUpdateManyWithoutCreatorNestedInput
+  createdFolders?: Prisma.FolderUncheckedUpdateManyWithoutCreatorNestedInput
+  createdAlbums?: Prisma.AlbumUncheckedUpdateManyWithoutCreatorNestedInput
 }
 
 export type UserCreateWithoutCreatedTasksInput = {
@@ -2383,6 +3040,9 @@ export type UserCreateWithoutCreatedTasksInput = {
   createdTimelines?: Prisma.TimelineCreateNestedManyWithoutCreatorInput
   createdSafeWallets?: Prisma.SafeWalletCreateNestedManyWithoutCreatorInput
   createdRoutines?: Prisma.RoutineCreateNestedManyWithoutCreatorInput
+  createdAssets?: Prisma.AssetCreateNestedManyWithoutCreatorInput
+  createdFolders?: Prisma.FolderCreateNestedManyWithoutCreatorInput
+  createdAlbums?: Prisma.AlbumCreateNestedManyWithoutCreatorInput
 }
 
 export type UserUncheckedCreateWithoutCreatedTasksInput = {
@@ -2415,6 +3075,9 @@ export type UserUncheckedCreateWithoutCreatedTasksInput = {
   createdTimelines?: Prisma.TimelineUncheckedCreateNestedManyWithoutCreatorInput
   createdSafeWallets?: Prisma.SafeWalletUncheckedCreateNestedManyWithoutCreatorInput
   createdRoutines?: Prisma.RoutineUncheckedCreateNestedManyWithoutCreatorInput
+  createdAssets?: Prisma.AssetUncheckedCreateNestedManyWithoutCreatorInput
+  createdFolders?: Prisma.FolderUncheckedCreateNestedManyWithoutCreatorInput
+  createdAlbums?: Prisma.AlbumUncheckedCreateNestedManyWithoutCreatorInput
 }
 
 export type UserCreateOrConnectWithoutCreatedTasksInput = {
@@ -2463,6 +3126,9 @@ export type UserUpdateWithoutCreatedTasksInput = {
   createdTimelines?: Prisma.TimelineUpdateManyWithoutCreatorNestedInput
   createdSafeWallets?: Prisma.SafeWalletUpdateManyWithoutCreatorNestedInput
   createdRoutines?: Prisma.RoutineUpdateManyWithoutCreatorNestedInput
+  createdAssets?: Prisma.AssetUpdateManyWithoutCreatorNestedInput
+  createdFolders?: Prisma.FolderUpdateManyWithoutCreatorNestedInput
+  createdAlbums?: Prisma.AlbumUpdateManyWithoutCreatorNestedInput
 }
 
 export type UserUncheckedUpdateWithoutCreatedTasksInput = {
@@ -2495,6 +3161,9 @@ export type UserUncheckedUpdateWithoutCreatedTasksInput = {
   createdTimelines?: Prisma.TimelineUncheckedUpdateManyWithoutCreatorNestedInput
   createdSafeWallets?: Prisma.SafeWalletUncheckedUpdateManyWithoutCreatorNestedInput
   createdRoutines?: Prisma.RoutineUncheckedUpdateManyWithoutCreatorNestedInput
+  createdAssets?: Prisma.AssetUncheckedUpdateManyWithoutCreatorNestedInput
+  createdFolders?: Prisma.FolderUncheckedUpdateManyWithoutCreatorNestedInput
+  createdAlbums?: Prisma.AlbumUncheckedUpdateManyWithoutCreatorNestedInput
 }
 
 export type UserCreateWithoutClassificationInput = {
@@ -2527,6 +3196,9 @@ export type UserCreateWithoutClassificationInput = {
   createdTasks?: Prisma.TaskCreateNestedManyWithoutCreatorInput
   createdSafeWallets?: Prisma.SafeWalletCreateNestedManyWithoutCreatorInput
   createdRoutines?: Prisma.RoutineCreateNestedManyWithoutCreatorInput
+  createdAssets?: Prisma.AssetCreateNestedManyWithoutCreatorInput
+  createdFolders?: Prisma.FolderCreateNestedManyWithoutCreatorInput
+  createdAlbums?: Prisma.AlbumCreateNestedManyWithoutCreatorInput
 }
 
 export type UserUncheckedCreateWithoutClassificationInput = {
@@ -2559,6 +3231,9 @@ export type UserUncheckedCreateWithoutClassificationInput = {
   createdTasks?: Prisma.TaskUncheckedCreateNestedManyWithoutCreatorInput
   createdSafeWallets?: Prisma.SafeWalletUncheckedCreateNestedManyWithoutCreatorInput
   createdRoutines?: Prisma.RoutineUncheckedCreateNestedManyWithoutCreatorInput
+  createdAssets?: Prisma.AssetUncheckedCreateNestedManyWithoutCreatorInput
+  createdFolders?: Prisma.FolderUncheckedCreateNestedManyWithoutCreatorInput
+  createdAlbums?: Prisma.AlbumUncheckedCreateNestedManyWithoutCreatorInput
 }
 
 export type UserCreateOrConnectWithoutClassificationInput = {
@@ -2607,6 +3282,9 @@ export type UserUpdateWithoutClassificationInput = {
   createdTasks?: Prisma.TaskUpdateManyWithoutCreatorNestedInput
   createdSafeWallets?: Prisma.SafeWalletUpdateManyWithoutCreatorNestedInput
   createdRoutines?: Prisma.RoutineUpdateManyWithoutCreatorNestedInput
+  createdAssets?: Prisma.AssetUpdateManyWithoutCreatorNestedInput
+  createdFolders?: Prisma.FolderUpdateManyWithoutCreatorNestedInput
+  createdAlbums?: Prisma.AlbumUpdateManyWithoutCreatorNestedInput
 }
 
 export type UserUncheckedUpdateWithoutClassificationInput = {
@@ -2639,6 +3317,9 @@ export type UserUncheckedUpdateWithoutClassificationInput = {
   createdTasks?: Prisma.TaskUncheckedUpdateManyWithoutCreatorNestedInput
   createdSafeWallets?: Prisma.SafeWalletUncheckedUpdateManyWithoutCreatorNestedInput
   createdRoutines?: Prisma.RoutineUncheckedUpdateManyWithoutCreatorNestedInput
+  createdAssets?: Prisma.AssetUncheckedUpdateManyWithoutCreatorNestedInput
+  createdFolders?: Prisma.FolderUncheckedUpdateManyWithoutCreatorNestedInput
+  createdAlbums?: Prisma.AlbumUncheckedUpdateManyWithoutCreatorNestedInput
 }
 
 export type UserCreateWithoutAssociationsInput = {
@@ -2671,6 +3352,9 @@ export type UserCreateWithoutAssociationsInput = {
   createdTasks?: Prisma.TaskCreateNestedManyWithoutCreatorInput
   createdSafeWallets?: Prisma.SafeWalletCreateNestedManyWithoutCreatorInput
   createdRoutines?: Prisma.RoutineCreateNestedManyWithoutCreatorInput
+  createdAssets?: Prisma.AssetCreateNestedManyWithoutCreatorInput
+  createdFolders?: Prisma.FolderCreateNestedManyWithoutCreatorInput
+  createdAlbums?: Prisma.AlbumCreateNestedManyWithoutCreatorInput
 }
 
 export type UserUncheckedCreateWithoutAssociationsInput = {
@@ -2703,6 +3387,9 @@ export type UserUncheckedCreateWithoutAssociationsInput = {
   createdTasks?: Prisma.TaskUncheckedCreateNestedManyWithoutCreatorInput
   createdSafeWallets?: Prisma.SafeWalletUncheckedCreateNestedManyWithoutCreatorInput
   createdRoutines?: Prisma.RoutineUncheckedCreateNestedManyWithoutCreatorInput
+  createdAssets?: Prisma.AssetUncheckedCreateNestedManyWithoutCreatorInput
+  createdFolders?: Prisma.FolderUncheckedCreateNestedManyWithoutCreatorInput
+  createdAlbums?: Prisma.AlbumUncheckedCreateNestedManyWithoutCreatorInput
 }
 
 export type UserCreateOrConnectWithoutAssociationsInput = {
@@ -2751,6 +3438,9 @@ export type UserUpdateWithoutAssociationsInput = {
   createdTasks?: Prisma.TaskUpdateManyWithoutCreatorNestedInput
   createdSafeWallets?: Prisma.SafeWalletUpdateManyWithoutCreatorNestedInput
   createdRoutines?: Prisma.RoutineUpdateManyWithoutCreatorNestedInput
+  createdAssets?: Prisma.AssetUpdateManyWithoutCreatorNestedInput
+  createdFolders?: Prisma.FolderUpdateManyWithoutCreatorNestedInput
+  createdAlbums?: Prisma.AlbumUpdateManyWithoutCreatorNestedInput
 }
 
 export type UserUncheckedUpdateWithoutAssociationsInput = {
@@ -2783,6 +3473,9 @@ export type UserUncheckedUpdateWithoutAssociationsInput = {
   createdTasks?: Prisma.TaskUncheckedUpdateManyWithoutCreatorNestedInput
   createdSafeWallets?: Prisma.SafeWalletUncheckedUpdateManyWithoutCreatorNestedInput
   createdRoutines?: Prisma.RoutineUncheckedUpdateManyWithoutCreatorNestedInput
+  createdAssets?: Prisma.AssetUncheckedUpdateManyWithoutCreatorNestedInput
+  createdFolders?: Prisma.FolderUncheckedUpdateManyWithoutCreatorNestedInput
+  createdAlbums?: Prisma.AlbumUncheckedUpdateManyWithoutCreatorNestedInput
 }
 
 export type UserCreateWithoutProfilesInput = {
@@ -2815,6 +3508,9 @@ export type UserCreateWithoutProfilesInput = {
   createdTasks?: Prisma.TaskCreateNestedManyWithoutCreatorInput
   createdSafeWallets?: Prisma.SafeWalletCreateNestedManyWithoutCreatorInput
   createdRoutines?: Prisma.RoutineCreateNestedManyWithoutCreatorInput
+  createdAssets?: Prisma.AssetCreateNestedManyWithoutCreatorInput
+  createdFolders?: Prisma.FolderCreateNestedManyWithoutCreatorInput
+  createdAlbums?: Prisma.AlbumCreateNestedManyWithoutCreatorInput
 }
 
 export type UserUncheckedCreateWithoutProfilesInput = {
@@ -2847,6 +3543,9 @@ export type UserUncheckedCreateWithoutProfilesInput = {
   createdTasks?: Prisma.TaskUncheckedCreateNestedManyWithoutCreatorInput
   createdSafeWallets?: Prisma.SafeWalletUncheckedCreateNestedManyWithoutCreatorInput
   createdRoutines?: Prisma.RoutineUncheckedCreateNestedManyWithoutCreatorInput
+  createdAssets?: Prisma.AssetUncheckedCreateNestedManyWithoutCreatorInput
+  createdFolders?: Prisma.FolderUncheckedCreateNestedManyWithoutCreatorInput
+  createdAlbums?: Prisma.AlbumUncheckedCreateNestedManyWithoutCreatorInput
 }
 
 export type UserCreateOrConnectWithoutProfilesInput = {
@@ -2895,6 +3594,9 @@ export type UserUpdateWithoutProfilesInput = {
   createdTasks?: Prisma.TaskUpdateManyWithoutCreatorNestedInput
   createdSafeWallets?: Prisma.SafeWalletUpdateManyWithoutCreatorNestedInput
   createdRoutines?: Prisma.RoutineUpdateManyWithoutCreatorNestedInput
+  createdAssets?: Prisma.AssetUpdateManyWithoutCreatorNestedInput
+  createdFolders?: Prisma.FolderUpdateManyWithoutCreatorNestedInput
+  createdAlbums?: Prisma.AlbumUpdateManyWithoutCreatorNestedInput
 }
 
 export type UserUncheckedUpdateWithoutProfilesInput = {
@@ -2927,6 +3629,9 @@ export type UserUncheckedUpdateWithoutProfilesInput = {
   createdTasks?: Prisma.TaskUncheckedUpdateManyWithoutCreatorNestedInput
   createdSafeWallets?: Prisma.SafeWalletUncheckedUpdateManyWithoutCreatorNestedInput
   createdRoutines?: Prisma.RoutineUncheckedUpdateManyWithoutCreatorNestedInput
+  createdAssets?: Prisma.AssetUncheckedUpdateManyWithoutCreatorNestedInput
+  createdFolders?: Prisma.FolderUncheckedUpdateManyWithoutCreatorNestedInput
+  createdAlbums?: Prisma.AlbumUncheckedUpdateManyWithoutCreatorNestedInput
 }
 
 
@@ -2948,6 +3653,9 @@ export type UserCountOutputType = {
   createdTasks: number
   createdSafeWallets: number
   createdRoutines: number
+  createdAssets: number
+  createdFolders: number
+  createdAlbums: number
 }
 
 export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -2964,6 +3672,9 @@ export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.I
   createdTasks?: boolean | UserCountOutputTypeCountCreatedTasksArgs
   createdSafeWallets?: boolean | UserCountOutputTypeCountCreatedSafeWalletsArgs
   createdRoutines?: boolean | UserCountOutputTypeCountCreatedRoutinesArgs
+  createdAssets?: boolean | UserCountOutputTypeCountCreatedAssetsArgs
+  createdFolders?: boolean | UserCountOutputTypeCountCreatedFoldersArgs
+  createdAlbums?: boolean | UserCountOutputTypeCountCreatedAlbumsArgs
 }
 
 /**
@@ -3067,6 +3778,27 @@ export type UserCountOutputTypeCountCreatedRoutinesArgs<ExtArgs extends runtime.
   where?: Prisma.RoutineWhereInput
 }
 
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountCreatedAssetsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.AssetWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountCreatedFoldersArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.FolderWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountCreatedAlbumsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.AlbumWhereInput
+}
+
 
 export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -3099,6 +3831,9 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   createdTasks?: boolean | Prisma.User$createdTasksArgs<ExtArgs>
   createdSafeWallets?: boolean | Prisma.User$createdSafeWalletsArgs<ExtArgs>
   createdRoutines?: boolean | Prisma.User$createdRoutinesArgs<ExtArgs>
+  createdAssets?: boolean | Prisma.User$createdAssetsArgs<ExtArgs>
+  createdFolders?: boolean | Prisma.User$createdFoldersArgs<ExtArgs>
+  createdAlbums?: boolean | Prisma.User$createdAlbumsArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["user"]>
 
@@ -3175,6 +3910,9 @@ export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   createdTasks?: boolean | Prisma.User$createdTasksArgs<ExtArgs>
   createdSafeWallets?: boolean | Prisma.User$createdSafeWalletsArgs<ExtArgs>
   createdRoutines?: boolean | Prisma.User$createdRoutinesArgs<ExtArgs>
+  createdAssets?: boolean | Prisma.User$createdAssetsArgs<ExtArgs>
+  createdFolders?: boolean | Prisma.User$createdFoldersArgs<ExtArgs>
+  createdAlbums?: boolean | Prisma.User$createdAlbumsArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type UserIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
@@ -3197,6 +3935,9 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     createdTasks: Prisma.$TaskPayload<ExtArgs>[]
     createdSafeWallets: Prisma.$SafeWalletPayload<ExtArgs>[]
     createdRoutines: Prisma.$RoutinePayload<ExtArgs>[]
+    createdAssets: Prisma.$AssetPayload<ExtArgs>[]
+    createdFolders: Prisma.$FolderPayload<ExtArgs>[]
+    createdAlbums: Prisma.$AlbumPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -3659,6 +4400,9 @@ export interface Prisma__UserClient<T, Null = never, ExtArgs extends runtime.Typ
   createdTasks<T extends Prisma.User$createdTasksArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$createdTasksArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$TaskPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   createdSafeWallets<T extends Prisma.User$createdSafeWalletsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$createdSafeWalletsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$SafeWalletPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   createdRoutines<T extends Prisma.User$createdRoutinesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$createdRoutinesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$RoutinePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  createdAssets<T extends Prisma.User$createdAssetsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$createdAssetsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AssetPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  createdFolders<T extends Prisma.User$createdFoldersArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$createdFoldersArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$FolderPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  createdAlbums<T extends Prisma.User$createdAlbumsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$createdAlbumsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AlbumPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -4420,6 +5164,78 @@ export type User$createdRoutinesArgs<ExtArgs extends runtime.Types.Extensions.In
   take?: number
   skip?: number
   distinct?: Prisma.RoutineScalarFieldEnum | Prisma.RoutineScalarFieldEnum[]
+}
+
+/**
+ * User.createdAssets
+ */
+export type User$createdAssetsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Asset
+   */
+  select?: Prisma.AssetSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Asset
+   */
+  omit?: Prisma.AssetOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.AssetInclude<ExtArgs> | null
+  where?: Prisma.AssetWhereInput
+  orderBy?: Prisma.AssetOrderByWithRelationInput | Prisma.AssetOrderByWithRelationInput[]
+  cursor?: Prisma.AssetWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.AssetScalarFieldEnum | Prisma.AssetScalarFieldEnum[]
+}
+
+/**
+ * User.createdFolders
+ */
+export type User$createdFoldersArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Folder
+   */
+  select?: Prisma.FolderSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Folder
+   */
+  omit?: Prisma.FolderOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.FolderInclude<ExtArgs> | null
+  where?: Prisma.FolderWhereInput
+  orderBy?: Prisma.FolderOrderByWithRelationInput | Prisma.FolderOrderByWithRelationInput[]
+  cursor?: Prisma.FolderWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.FolderScalarFieldEnum | Prisma.FolderScalarFieldEnum[]
+}
+
+/**
+ * User.createdAlbums
+ */
+export type User$createdAlbumsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Album
+   */
+  select?: Prisma.AlbumSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Album
+   */
+  omit?: Prisma.AlbumOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.AlbumInclude<ExtArgs> | null
+  where?: Prisma.AlbumWhereInput
+  orderBy?: Prisma.AlbumOrderByWithRelationInput | Prisma.AlbumOrderByWithRelationInput[]
+  cursor?: Prisma.AlbumWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.AlbumScalarFieldEnum | Prisma.AlbumScalarFieldEnum[]
 }
 
 /**

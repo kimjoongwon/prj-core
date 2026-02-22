@@ -1,23 +1,21 @@
-import { Enum, EnumType } from "ts-jenum";
+import { BaseEnum } from "./base-enum";
 
-@Enum("code")
-export class RoleGroupNames extends EnumType<RoleGroupNames>() {
-	static readonly TRUSTED = new RoleGroupNames("TRUSTED", "신뢰");
-	static readonly STANDARD = new RoleGroupNames("STANDARD", "일반");
-	static readonly PREMIUM = new RoleGroupNames("PREMIUM", "프리미엄");
+export class RoleGroupName extends BaseEnum {
+	static readonly TRUSTED = new RoleGroupName("TRUSTED", "신뢰");
+	static readonly STANDARD = new RoleGroupName("STANDARD", "일반");
+	static readonly PREMIUM = new RoleGroupName("PREMIUM", "프리미엄");
 
-	private constructor(
-		readonly _code: string,
-		readonly _name: string,
-	) {
-		super();
+	private static readonly _values = [
+		RoleGroupName.TRUSTED,
+		RoleGroupName.STANDARD,
+		RoleGroupName.PREMIUM,
+	] as const;
+
+	static values(): RoleGroupName[] {
+		return [...RoleGroupName._values];
 	}
 
-	get code(): string {
-		return this._code;
-	}
-
-	get name(): string {
-		return this._name;
+	private constructor(code: string, name: string) {
+		super(code, name);
 	}
 }

@@ -20,13 +20,11 @@
   (  ♥  )    ← 강아지 발바닥 형상 (size=20 기본)
    ─────
 
-
 [ InfoIcon ]
 
    ╭───╮
    │ i │    ← 원형 테두리 안에 'i'
    ╰───╯
-
 
 [ StarIcon (filled=false) ]
 
@@ -34,13 +32,11 @@
     ╱   ╲    ← 별 윤곽선만 (outlined)
    ╱─────╲
 
-
 [ StarIcon (filled=true) ]
 
       ★
     ╱▓▓▓╲    ← 채워진 별 (filled)
    ╱▓▓▓▓▓╲
-
 
 [ WarningIcon ]
 
@@ -48,7 +44,6 @@
     /  \
    / !! \    ← 경고 삼각형 (느낌표)
   /──────\
-
 
 [ 크기별 비교 (size prop) ]
 

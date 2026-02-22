@@ -7,8 +7,6 @@ tools:
   bash: true
 ---
 
-
-
 # L11 Store 기획자 (Store Planner)
 
 도메인별 **MobX Store(L11)** 레이어를 기획하는 전문가입니다.
@@ -202,7 +200,7 @@ export class RootStore {
 
 | 에이전트 | 관계 | 설명 |
 |----------|------|------|
-| req-L0L2-planner | 이전 단계 | 도메인 기획 |
+| req-context-planner | 이전 단계 | 도메인 기획 |
 | req-entity-planner | 이전 단계 | Entity 정의 |
 | orch-requirement | 상위 | 전체 기획 조율 |
 

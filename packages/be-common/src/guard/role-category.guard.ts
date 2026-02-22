@@ -2,7 +2,7 @@ import { CONTEXT_KEYS } from "@cocrepo/constant";
 import { ROLE_CATEGORIES_KEY } from "@cocrepo/decorator";
 import { TenantDto, UserDto } from "@cocrepo/dto";
 import { Category } from "@cocrepo/entity";
-import { RoleCategoryNames } from "@cocrepo/enum";
+import { RoleCategoryName } from "@cocrepo/enum";
 import {
 	type CanActivate,
 	type ExecutionContext,
@@ -12,8 +12,8 @@ import {
 } from "@nestjs/common";
 import { Reflector } from "@nestjs/core";
 import { plainToInstance } from "class-transformer";
-import { ClsService } from "nestjs-cls";
 import { isEmpty } from "lodash";
+import { ClsService } from "nestjs-cls";
 
 @Injectable()
 export class RoleCategoryGuard implements CanActivate {
@@ -23,7 +23,7 @@ export class RoleCategoryGuard implements CanActivate {
 	) {}
 
 	canActivate(context: ExecutionContext): boolean {
-		const roleCategories = this.reflector.get<RoleCategoryNames[]>(
+		const roleCategories = this.reflector.get<RoleCategoryName[]>(
 			ROLE_CATEGORIES_KEY,
 			context.getHandler(),
 		);

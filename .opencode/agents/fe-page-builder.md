@@ -7,8 +7,6 @@ tools:
   bash: true
 ---
 
-
-
 # 페이지 빌더
 
 **페이지 컴포넌트**를 생성합니다. 일반 페이지는 `packages/fe-ui`에 Pure UI로, 목록 페이지는 `apps/*`에 직접 생성합니다.
@@ -684,6 +682,7 @@ Pure UI → Widget → Feature → Page
 
 | 에이전트 | 관계 |
 |----------|------|
+| req-page-planner | page.spec.md 통합 기획 기반 구현 |
 | fe-ui-component-builder | Page가 사용할 Pure UI/Cell 컴포넌트 생성 |
 | fe-widget-builder | Page가 사용할 Widget 컴포넌트 생성 |
 | fe-feature-builder | Page가 사용할 Feature 컴포넌트 생성 |

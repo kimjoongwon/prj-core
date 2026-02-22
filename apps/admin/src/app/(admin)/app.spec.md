@@ -41,6 +41,9 @@ Admin 앱은 플랫폼의 관리자 콘솔입니다. 회원, 예약, 알림, 콘
 | GOAL-012 | ACT-001 | 시설(Ground)을 등록/목록 조회/상세 조회/수정하여 Space와 연결되는 물리적 시설을 관리한다 | 높음 |
 | GOAL-013 | ACT-001, ACT-002 | 세션 내 프로그램(Program)을 등록/수정/삭제하여 강사·루틴·정원을 포함한 실제 수업 클래스를 관리한다 | 높음 |
 | GOAL-014 | ACT-001, ACT-002, ACT-003 | 에셋을 목록 조회/검색/필터링하고 권한에 따라 미리보기·다운로드·삭제를 수행하여 운영 리소스를 관리한다 | 높음 |
+| GOAL-015 | ACT-001, ACT-002 | 폴더를 생성/수정/삭제하여 계층적 에셋 저장 구조를 관리한다 | 높음 |
+| GOAL-016 | ACT-001, ACT-002 | 앨범을 생성/수정/삭제하여 에셋을 사용자 정의 컬렉션으로 분류한다 | 중간 |
+| GOAL-017 | ACT-001, ACT-002, ACT-003 | 에셋 선택기(Picker)를 통해 다른 리소스(프로필 이미지, 콘텐츠 이미지 등)에 에셋을 연결한다 | 높음 |
 
 ## 도메인 목록
 
@@ -58,10 +61,53 @@ Admin 앱은 플랫폼의 관리자 콘솔입니다. 회원, 예약, 알림, 콘
 | 템플릿 (Templates) | `/templates` | 메시지 템플릿 관리 | 구현 완료 |
 | 루틴 (Routines) | `/routines` | 운동 루틴(커리큘럼) CRUD 관리 | 기획 완료, 구현 TODO |
 | 운동 종목 (Exercises) | `/exercises` | 운동 종목 CRUD 관리. Task와 1:1 연결 | 기획 완료, 구현 TODO |
-| 에셋 (Assets) | `/assets` | 업로드된 에셋 목록 조회/검색/필터링, 미리보기/다운로드, 삭제 및 일괄 삭제 관리 | 기획 완료, 구현 TODO |
+| 에셋 (Assets) | `/assets` | 업로드된 에셋(Image/Video/Document) 목록 조회/검색/필터링, 미리보기/다운로드, 삭제 및 일괄 삭제 관리 | 기획 완료, 구현 TODO |
+| 폴더 (Folders) | `/assets` (에셋 목록 내) | 계층적 폴더 구조 관리 (에셋 목록 페이지 내에서 트리 탐색) | 기획 완료, 구현 TODO |
+| 앨범 (Albums) | `/albums` | 앨범 CRUD 관리. 사용자 정의 에셋 컬렉션 | 기획 완료, 구현 TODO |
 | 타임라인 (Timelines) | `/timelines` | 학기/시즌 타임라인 관리 | 기획 중 |
 | 세션 (Sessions) | `/timelines/[timelineId]/sessions` | 세션 일정 관리 (타임라인 하위) | 기획 중 |
 | 프로그램 (Programs) | `/timelines/[timelineId]/sessions/[sessionId]/programs` | 수업 프로그램 관리 (세션 하위) - 강사·루틴·정원 연결 | 기획 중 |
+
+## Asset 도메인 맥락
+
+Asset은 미디어 리소스(이미지, 비디오, 문서)를 관리하는 도메인입니다. CTI(Class Table Inheritance) 패턴을 사용하여 공통 필드는 Asset, 타입별 필드는 Image/Video/Document로 분리합니다.
+
+```
+Space
+  │
+  ├─── Folder (계층적 폴더 구조, 자기 참조 트리)
+  │     └─── Asset (공통 메타데이터)
+  │           ├─── Image (CTI: width, height, exif)
+  │           ├─── Video (CTI: duration, codec, bitRate)
+  │           └─── Document (CTI: pageCount, extractedText)
+  │                 └─── Derivative (썸네일, 프리뷰, 트랜스코딩)
+  │
+  └─── Album (폴더와 분리된 독립 컬렉션)
+        └─── AlbumEntry (Album N:M Asset, 순서/캡션 포함)
+```
+
+### 핵심 원칙
+
+1. **Folder와 Album 분리**: `type=FOLDER|ALBUM` 통합 모델 대신 별도 모델 사용
+2. **CTI 패턴**: Asset은 공통 필드만, 타입별 상세 정보는 Image/Video/Document로 분리
+3. **AlbumEntry 조인 모델**: 앨범-에셋 N:M 관계를 DDD 용어로 명명
+4. **간결한 네이밍**: 모델명은 간결하게, DB 테이블명(`@@map`)에서만 도메인 명확화
+
+### 에셋 선택기(Picker) 재사용
+
+에셋 선택기는 다른 도메인에서 에셋을 선택할 때 재사용 가능한 컴포넌트입니다.
+
+**사용 시나리오:**
+- 콘텐츠 작성 시 이미지 선택
+- 사용자 프로필 이미지 선택
+- 프로그램 썸네일 이미지 선택
+- 이메일 템플릿 첨부 파일 선택
+
+**지원 모드:**
+- 단일 선택 / 다중 선택
+- 타입별 필터링 (IMAGE, VIDEO, DOCUMENT)
+- 폴더별 필터링
+- 검색
 
 ## Ground 도메인 맥락
 
@@ -127,10 +173,11 @@ AdminLayout
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
 | 2026-02-18 | 초기 생성 (역기획) | req-reverse-engineer |
-| 2026-02-19 | Timeline/Session 도메인 추가, GOAL-009/010 추가 | req-L0L2-planner |
-| 2026-02-19 | Exercise 도메인 추가 (GOAL-011), 도메인 목록에 운동 종목 항목 추가 | req-L0L2-planner |
-| 2026-02-19 | Ground 도메인 추가 (GOAL-012, 도메인 목록, Ground 맥락 섹션) | req-L0L2-planner |
+| 2026-02-19 | Timeline/Session 도메인 추가, GOAL-009/010 추가 | req-context-planner |
+| 2026-02-19 | Exercise 도메인 추가 (GOAL-011), 도메인 목록에 운동 종목 항목 추가 | req-context-planner |
+| 2026-02-19 | Ground 도메인 추가 (GOAL-012, 도메인 목록, Ground 맥락 섹션) | req-context-planner |
 | 2026-02-19 | Program 도메인 추가 (GOAL-013), 도메인 목록에 세션/프로그램 항목 추가, Program 맥락 섹션 추가 | orch-requirement |
 | 2026-02-20 | 삭제된 self-service 페이지(`/my-sessions`, `/my-account/change-password`) 관련 항목 정리 | OpenCode |
 | 2026-02-22 | 에셋 도메인 초안 추가 (GOAL-014, 도메인 목록 항목 추가) | orch-requirement |
 | 2026-02-22 | 도메인 명칭 오기 정정: GOAL-014 및 도메인 목록을 Asset(`/assets`) 기준으로 수정 | OpenCode |
+| 2026-02-22 | Asset 도메인 전체 기획: GOAL-015/016/017 추가, Asset 도메인 맥락 섹션 추가, 폴더/앨범 도메인 항목 추가 | orch-requirement |

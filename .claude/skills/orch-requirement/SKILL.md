@@ -103,15 +103,15 @@ apps/server/src/[module]/
    - Feature/Widget/UI별 index.spec.md 생성
    - Props, Store 연결, 이벤트 정의
    ↓
-4. 백엔드 기획 (L6, L9)
-   - Service/Repository/Controller별 .spec.md 생성
+4. 백엔드 기획 (L6, L9-L10)
+   - Controller/Service/Repository별 .spec.md 생성
    - API 엔드포인트, 비즈니스 규칙 정의
    ↓
 5. Store 기획 (L11)
    - Store별 .spec.md 생성
    - 상태, 액션, 비동기 흐름 정의
    ↓
-6. 테스트 기획 (L10)
+6. 테스트 기획 (L12)
    - 테스트 케이스 정의
 ```
 
@@ -137,14 +137,22 @@ apps/server/src/[module]/
 
 | 에이전트 | 역할 | 출력 |
 |----------|------|------|
-| `/req-L0L2-planner` | 컨텍스트/사용자/목표 | app.spec.md 업데이트 |
-| `/req-L3L4-planner` | 기능/화면 | page.spec.md |
-| `/req-L5L6-planner` | 인터랙션/API | controller.spec.md |
-| `/req-entity-planner` | Prisma 엔티티 설계 | Prisma 기반 (별도 spec 없음) |
+| `/req-context-planner` | 컨텍스트/사용자/목표 | app.spec.md 업데이트 |
+| `/req-screen-planner` | 기능/화면 | page.spec.md |
+| `/req-page-planner` | 페이지 통합 | page.spec.md 통합 섹션 |
+| `/req-api-planner` | 인터랙션/API | controller.spec.md, dto.spec.md |
+| `/req-entity-planner` | Entity/Enum/VO 설계 | entity.spec.md, enum.spec.md, vo.spec.md |
 | `/req-store-planner` | Store 설계 | [domain]Store.spec.md |
-| `/be-spec-planner` | 백엔드 기획 | [domain].service.spec.md, [domain].repository.spec.md, [domain].controller.spec.md |
-| `/req-L7L8-planner` | 컴포넌트 기획 | feature/widget/ui.spec.md |
-| `/req-L9L10-planner` | 로직/테스트 | service/repository/store.spec.md |
+| `/req-ui-planner` | UI 컴포넌트 기획 | ui/index.spec.md |
+| `/req-input-planner` | Input 컴포넌트 기획 | inputs/index.spec.md |
+| `/req-cell-planner` | Cell 컴포넌트 기획 | cells/index.spec.md |
+| `/req-widget-planner` | Widget 기획 | widget/index.spec.md |
+| `/req-layout-planner` | Layout 기획 | layout/index.spec.md |
+| `/req-feature-planner` | Feature 기획 | feature/index.spec.md |
+| `/req-menu-planner` | 메뉴 기획 | admin-menu.spec.md |
+| `/req-logic-planner` | 로직/테스트 | service/repository.spec.md, 테스트 케이스 |
+| `/req-test-planner` | 테스트 케이스 기획 | 각 spec 테스트 섹션 |
+| `/req-api-integration-planner` | API 연동 기획 | hooks/index.spec.md |
 
 ---
 

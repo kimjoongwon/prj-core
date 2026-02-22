@@ -1,6 +1,6 @@
 import type { Subject as SubjectEntity } from "@cocrepo/prisma";
-import { AbstractEntity } from "./abstract.entity";
 import type { Ability } from "./ability.entity";
+import { AbstractEntity } from "./abstract.entity";
 
 /**
  * CASL Subject 엔티티

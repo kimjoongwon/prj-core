@@ -5,8 +5,8 @@ import type {
 	ActionMaskingConfig,
 	ActionTransformConfig,
 } from "@cocrepo/type";
-import { AbstractEntity } from "./abstract.entity";
 import type { Ability } from "./ability.entity";
+import { AbstractEntity } from "./abstract.entity";
 
 // @cocrepo/type에서 타입 재export (하위 호환성)
 export type {

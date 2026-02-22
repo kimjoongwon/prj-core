@@ -7,8 +7,6 @@ tools:
   bash: true
 ---
 
-
-
 # Facade Builder
 
 NestJS Facade 레이어를 생성하는 전문가입니다.

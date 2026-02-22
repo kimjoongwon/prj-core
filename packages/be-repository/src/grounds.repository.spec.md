@@ -50,5 +50,5 @@ Ground(물리적 시설) 엔티티의 데이터 접근을 담당합니다. Groun
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
 | 2026-02-19 | 초기 생성 (역기획) | req-reverse-engineer |
-| 2026-02-19 | findByBusinessNo 추가, CRUD 전체 반영, 구현 체크리스트 업데이트 | be-spec-planner |
+| 2026-02-19 | findByBusinessNo 추가, CRUD 전체 반영, 구현 체크리스트 업데이트 | req-logic-planner |
 | 2026-02-19 | findByBusinessNo() 구현 완료 - be-service-builder | be-service-builder |

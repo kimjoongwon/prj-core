@@ -1,7 +1,11 @@
 import { CONTEXT_KEYS } from "@cocrepo/constant";
 import { ROLE_CATEGORIES_KEY } from "@cocrepo/decorator";
-import { RoleCategoryNames } from "@cocrepo/enum";
-import { ExecutionContext, ForbiddenException, UnauthorizedException } from "@nestjs/common";
+import { RoleCategoryName } from "@cocrepo/enum";
+import {
+	ExecutionContext,
+	ForbiddenException,
+	UnauthorizedException,
+} from "@nestjs/common";
 import { Reflector } from "@nestjs/core";
 import { Test, TestingModule } from "@nestjs/testing";
 import { ClsService } from "nestjs-cls";
@@ -127,7 +131,7 @@ describe("RoleCategoryGuard", () => {
 		describe("사용자 인증 검증", () => {
 			it("사용자가 없으면 UnauthorizedException을 던져야 한다", () => {
 				// Given
-				mockReflector.get.mockReturnValue([RoleCategoryNames.SHARED]);
+				mockReflector.get.mockReturnValue([RoleCategoryName.SHARED]);
 				mockClsService.get.mockReturnValue(undefined);
 				const context = createMockExecutionContext();
 
@@ -140,7 +144,7 @@ describe("RoleCategoryGuard", () => {
 
 			it("사용자에게 테넌트가 없으면 ForbiddenException을 던져야 한다", () => {
 				// Given
-				mockReflector.get.mockReturnValue([RoleCategoryNames.SHARED]);
+				mockReflector.get.mockReturnValue([RoleCategoryName.SHARED]);
 				const user = createMockUser({ tenants: null });
 				mockClsService.get.mockImplementation((key: string) => {
 					if (key === CONTEXT_KEYS.AUTH_USER) return user;
@@ -157,7 +161,7 @@ describe("RoleCategoryGuard", () => {
 
 			it("사용자에게 빈 테넌트 배열이면 ForbiddenException을 던져야 한다", () => {
 				// Given
-				mockReflector.get.mockReturnValue([RoleCategoryNames.SHARED]);
+				mockReflector.get.mockReturnValue([RoleCategoryName.SHARED]);
 				const user = createMockUser({ tenants: [] });
 				mockClsService.get.mockImplementation((key: string) => {
 					if (key === CONTEXT_KEYS.AUTH_USER) return user;
@@ -174,7 +178,7 @@ describe("RoleCategoryGuard", () => {
 
 			it("CLS에서 tenant가 없으면 ForbiddenException을 던져야 한다", () => {
 				// Given
-				mockReflector.get.mockReturnValue([RoleCategoryNames.SHARED]);
+				mockReflector.get.mockReturnValue([RoleCategoryName.SHARED]);
 				const user = createMockUser();
 				mockClsService.get.mockImplementation((key: string) => {
 					if (key === CONTEXT_KEYS.AUTH_USER) return user;
@@ -192,7 +196,7 @@ describe("RoleCategoryGuard", () => {
 
 			it("테넌트에 역할이 없으면 ForbiddenException을 던져야 한다", () => {
 				// Given
-				mockReflector.get.mockReturnValue([RoleCategoryNames.SHARED]);
+				mockReflector.get.mockReturnValue([RoleCategoryName.SHARED]);
 				const user = createMockUser({
 					tenants: [{ id: "tenant-1", spaceId: "space-001", role: null }],
 				});
@@ -215,7 +219,7 @@ describe("RoleCategoryGuard", () => {
 		describe("CLS 기반 테넌트 사용", () => {
 			it("CLS에서 올바른 tenant로 카테고리를 확인해야 한다", () => {
 				// Given
-				mockReflector.get.mockReturnValue([RoleCategoryNames.WORKSPACE]);
+				mockReflector.get.mockReturnValue([RoleCategoryName.WORKSPACE]);
 				const user = createMockUser({
 					tenants: [
 						{
@@ -224,7 +228,11 @@ describe("RoleCategoryGuard", () => {
 							role: {
 								name: "VIEW",
 								classification: {
-									category: { name: "공개", parent: { name: "공유" }, children: [] },
+									category: {
+										name: "공개",
+										parent: { name: "공유" },
+										children: [],
+									},
 								},
 								associations: [],
 							},
@@ -235,7 +243,11 @@ describe("RoleCategoryGuard", () => {
 							role: {
 								name: "MANAGE",
 								classification: {
-									category: { name: "워크스페이스", parent: null, children: [] },
+									category: {
+										name: "워크스페이스",
+										parent: null,
+										children: [],
+									},
 								},
 								associations: [],
 							},
@@ -272,7 +284,7 @@ describe("RoleCategoryGuard", () => {
 		describe("카테고리 권한 검증", () => {
 			it("사용자의 카테고리가 요구된 카테고리와 일치하면 true를 반환해야 한다", () => {
 				// Given
-				mockReflector.get.mockReturnValue([RoleCategoryNames.PUBLIC]);
+				mockReflector.get.mockReturnValue([RoleCategoryName.PUBLIC]);
 				const user = createMockUser();
 				const tenant = createMockTenant();
 				mockClsService.get.mockImplementation((key: string) => {
@@ -292,7 +304,7 @@ describe("RoleCategoryGuard", () => {
 
 			it("사용자의 상위 카테고리가 요구된 카테고리와 일치하면 true를 반환해야 한다", () => {
 				// Given
-				mockReflector.get.mockReturnValue([RoleCategoryNames.SHARED]);
+				mockReflector.get.mockReturnValue([RoleCategoryName.SHARED]);
 				const user = createMockUser();
 				const tenant = createMockTenant();
 				mockClsService.get.mockImplementation((key: string) => {
@@ -312,7 +324,7 @@ describe("RoleCategoryGuard", () => {
 
 			it("사용자의 하위 카테고리가 요구된 카테고리와 일치하면 true를 반환해야 한다", () => {
 				// Given
-				mockReflector.get.mockReturnValue([RoleCategoryNames.RESTRICTED]);
+				mockReflector.get.mockReturnValue([RoleCategoryName.RESTRICTED]);
 				const tenant = createMockTenant({
 					role: {
 						name: "MANAGE",
@@ -350,7 +362,7 @@ describe("RoleCategoryGuard", () => {
 
 			it("사용자의 카테고리가 요구된 카테고리와 일치하지 않으면 ForbiddenException을 던져야 한다", () => {
 				// Given
-				mockReflector.get.mockReturnValue([RoleCategoryNames.WORKSPACE]);
+				mockReflector.get.mockReturnValue([RoleCategoryName.WORKSPACE]);
 				const user = createMockUser();
 				const tenant = createMockTenant();
 				mockClsService.get.mockImplementation((key: string) => {
@@ -370,7 +382,7 @@ describe("RoleCategoryGuard", () => {
 
 			it("역할에 classification이 없으면 ForbiddenException을 던져야 한다", () => {
 				// Given
-				mockReflector.get.mockReturnValue([RoleCategoryNames.SHARED]);
+				mockReflector.get.mockReturnValue([RoleCategoryName.SHARED]);
 				const tenant = createMockTenant({
 					role: {
 						name: "VIEW",
@@ -395,8 +407,8 @@ describe("RoleCategoryGuard", () => {
 			it("여러 카테고리 중 하나라도 일치하면 true를 반환해야 한다", () => {
 				// Given
 				mockReflector.get.mockReturnValue([
-					RoleCategoryNames.WORKSPACE,
-					RoleCategoryNames.PUBLIC,
+					RoleCategoryName.WORKSPACE,
+					RoleCategoryName.PUBLIC,
 				]);
 				const user = createMockUser();
 				const tenant = createMockTenant();

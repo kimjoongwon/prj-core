@@ -6,7 +6,7 @@ import {
 import { SYSTEM_ROLES } from "@cocrepo/constant";
 import { RoleCategories, RoleGroups, Roles } from "@cocrepo/decorator";
 import { ResponseEntity } from "@cocrepo/entity";
-import { RoleCategoryNames } from "@cocrepo/enum";
+import { RoleCategoryName } from "@cocrepo/enum";
 import { Controller, Get, HttpStatus, Query, UseGuards } from "@nestjs/common";
 
 /**
@@ -42,7 +42,7 @@ export class GuardTestController {
 
 	@Get("role-category/shared")
 	@UseGuards(RoleCategoryGuard)
-	@RoleCategories([RoleCategoryNames.SHARED])
+	@RoleCategories([RoleCategoryName.SHARED])
 	async testRoleCategoryShared() {
 		return new ResponseEntity(HttpStatus.OK, "공유 카테고리 권한 테스트 성공", {
 			message: "공유 카테고리 권한으로 접근 성공",
@@ -52,7 +52,7 @@ export class GuardTestController {
 
 	@Get("role-category/workspace")
 	@UseGuards(RoleCategoryGuard)
-	@RoleCategories([RoleCategoryNames.WORKSPACE])
+	@RoleCategories([RoleCategoryName.WORKSPACE])
 	async testRoleCategoryWorkspace() {
 		return new ResponseEntity(
 			HttpStatus.OK,
@@ -66,7 +66,7 @@ export class GuardTestController {
 
 	@Get("role-category/public")
 	@UseGuards(RoleCategoryGuard)
-	@RoleCategories([RoleCategoryNames.PUBLIC])
+	@RoleCategories([RoleCategoryName.PUBLIC])
 	async testRoleCategoryPublic() {
 		return new ResponseEntity(
 			HttpStatus.OK,
@@ -150,7 +150,7 @@ export class GuardTestController {
 
 	@Get("combined/workspace-category-and-role")
 	@UseGuards(RoleCategoryGuard, RolesGuard)
-	@RoleCategories([RoleCategoryNames.WORKSPACE])
+	@RoleCategories([RoleCategoryName.WORKSPACE])
 	@Roles([SYSTEM_ROLES.MANAGE])
 	async testCombinedWorkspaceCategoryAndRole() {
 		return new ResponseEntity(HttpStatus.OK, "복합 권한 테스트 성공", {

@@ -154,8 +154,8 @@ model Reservation {
 
 | 에이전트 | 관계 | 설명 |
 |----------|------|------|
-| req-L0L2-planner | 이전 단계 | 도메인 기획 |
-| req-L5L6-planner | 이전 단계 | API 정의 |
+| req-context-planner | 이전 단계 | 도메인 기획 |
+| req-api-planner | 이전 단계 | API 정의 |
 | orch-requirement | 상위 | 전체 기획 조율 |
 
 ### 후행 에이전트

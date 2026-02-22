@@ -7,8 +7,6 @@ tools:
   bash: true
 ---
 
-
-
 # Frontend E2E Tester (Playwright)
 
 Playwright 기반으로 프론트엔드 앱의 E2E 테스트 코드를 작성하는 전문가입니다.

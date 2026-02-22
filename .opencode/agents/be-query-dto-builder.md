@@ -7,8 +7,6 @@ tools:
   bash: true
 ---
 
-
-
 # Query DTO Builder
 
 PrismaQueryDto 기반 목록 조회용 Query DTO 클래스를 생성하는 전문가입니다.

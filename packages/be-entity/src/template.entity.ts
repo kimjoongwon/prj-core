@@ -1,7 +1,4 @@
-import type {
-	Template as TemplateEntity,
-	TemplateType,
-} from "@cocrepo/prisma";
+import type { Template as TemplateEntity, TemplateType } from "@cocrepo/prisma";
 import { AbstractEntity } from "./abstract.entity";
 import type { TemplateVariable } from "./template-variable.entity";
 

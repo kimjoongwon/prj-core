@@ -7,8 +7,6 @@ tools:
   bash: true
 ---
 
-
-
 # Backend Tester (Jest)
 
 Jest 기반으로 백엔드 및 공용 패키지의 테스트 코드를 작성하는 전문가입니다.

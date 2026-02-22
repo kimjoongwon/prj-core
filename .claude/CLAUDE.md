@@ -878,10 +878,12 @@ Stage 1: 도메인 기획        → orch-requirement (L0~L4 + BE/Store 스펙) 
 Stage 2: 스키마 구현        → schema → entity → dto → query-dto → seed → [리뷰]
 Stage 3: 백엔드 구현        → repository → service → controller → [리뷰]
 Stage 4: 화면 기획 (페이지별) → orch-screen-planner (L5~L12) → [리뷰] ← page 파라미터 권장 (미지정 시 자연어 추론, 불명확 시 확인)
-Stage 5: 컴포넌트 (페이지별) → ui → widget → feature → store → [리뷰] ← page 파라미터 권장 (미지정 시 자연어 추론, 불명확 시 확인)
-Stage 6: 페이지 (페이지별)   → fe-page-builder → [리뷰] ← page 파라미터 권장 (미지정 시 자연어 추론, 불명확 시 확인)
+Stage 5: 컴포넌트 (페이지별) → ui → input → cell → widget → layout → feature → store → menu → [리뷰] ← page 파라미터 권장 (미지정 시 자연어 추론, 불명확 시 확인)
+Stage 6: 페이지 (페이지별)   → fe-page-builder → fe-api-integrator → [리뷰] ← page 파라미터 권장 (미지정 시 자연어 추론, 불명확 시 확인)
 Stage 7: E2E 검증 (선택)    → qa-be-e2e-testing → qa-fe-e2e-testing → [리뷰]
 ```
+
+> 화살표는 의존성 순서를 의미합니다. 동일 Stage 내부의 독립 작업은 `parallel=auto`에서 병렬 fan-out 가능합니다.
 
 #### 기획서 폴더 구조
 
@@ -943,7 +945,8 @@ apps/server/src/[module]/
 # 📌 도메인명? → Member
 # 📌 요구사항? → 회원 목록/상세/등록/수정/삭제
 
-# → Stage 1~3 순차 진행 (도메인 전체)
+# → Stage 1~3은 리뷰 게이트 기준 순차 진행
+# → Stage 내부는 parallel=auto로 fan-out 가능
 
 # 2. 화면별 프론트엔드 개발
 /orch-stage run stage=4 app=admin domain=Member page=List
@@ -961,6 +964,10 @@ apps/server/src/[module]/
 /orch-stage 회원 목록 화면 기획해줘
 /orch-stage 회원 목록 컴포넌트 구현해줘
 /orch-stage 회원 목록 페이지 통합해줘
+
+# 병렬 실행 예시
+/orch-stage run stage=3 app=admin domain=Member targets=User,Post parallel=auto maxConcurrency=2
+/orch-stage run stage=5 app=admin domain=Member pages=List,Detail parallel=auto maxConcurrency=2
 ```
 
 #### 장점
@@ -1007,11 +1014,22 @@ Stage 5: 컴포넌트 (페이지별)
 
 | Agent | 역할 |
 |-------|------|
-| req-L0L2-planner | 시스템 컨텍스트, 사용자(Actor), 사용자 목표(Goal) 기획 → `app.spec.md` 업데이트 |
-| req-L3L4-planner | 기능(Feature)과 화면(Screen) 기획 → 각 `page.spec.md` |
-| req-L5L6-planner | 인터랙션(Action)과 API 기획 → `controller.spec.md` + 페이지 API 섹션 |
-| req-L7L8-planner | 엔티티/컴포넌트 기획 → `feature/widget/ui.spec.md` |
-| req-L9L10-planner | 비즈니스 로직/Store/테스트 기획 → `service/repository/store.spec.md` |
+| req-context-planner | 시스템 컨텍스트, 사용자(Actor), 사용자 목표(Goal) 기획 → `app.spec.md` 업데이트 |
+| req-screen-planner | 도메인 기능/화면 구조 기획 → 각 `page.spec.md` 초안 생성 |
+| req-page-planner | 페이지 통합 기획(SSR/Prefetch/핸들러) → `page.spec.md` 통합 섹션 업데이트 |
+| req-api-planner | 인터랙션(Action)과 API 기획 → `controller.spec.md` + 페이지 API 섹션 |
+| req-entity-planner | Entity/Enum/VO 기획 → `entity.spec.md`, `enum.spec.md`, `vo.spec.md` |
+| req-ui-planner | 화면 UI 기획(L8) → `ui/index.spec.md` |
+| req-input-planner | 입력 컴포넌트 기획 → `inputs/index.spec.md` |
+| req-cell-planner | DataGrid/Table Cell 기획 → `cells/index.spec.md` |
+| req-widget-planner | 화면 Widget 기획(L9) → `widget/index.spec.md` |
+| req-layout-planner | 레이아웃 기획 → `layout/index.spec.md` |
+| req-feature-planner | 화면 Feature 기획(L10) → `feature/index.spec.md` |
+| req-menu-planner | 메뉴/경로/권한 기획 → `admin-menu.spec.md` |
+| req-store-planner | 도메인 Store 기획(L11) → `[domain]Store.spec.md` |
+| req-logic-planner | 비즈니스 로직/테스트 기획 → `service/repository.spec.md` + 테스트 케이스 |
+| req-test-planner | 테스트 케이스 기획(L12) → 기존 `.spec.md` 테스트 섹션 업데이트 |
+| req-api-integration-planner | Orval API 연동 기획 → `hooks/index.spec.md` |
 | req-reverse-engineer | 기존 코드를 분석하여 `.spec.md` 역생성 |
 | /design-analyze (Skill) | Figma 디자인 분석 및 컴포넌트 매핑 (Figma 있을 때) |
 | /route-design (Skill) | 백엔드 엔티티 기반 라우팅 경로 설계 |

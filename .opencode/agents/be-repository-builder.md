@@ -7,8 +7,6 @@ tools:
   bash: true
 ---
 
-
-
 # Repository Builder
 
 Prisma 기반 Repository 레이어를 생성하는 전문가입니다.

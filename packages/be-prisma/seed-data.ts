@@ -1,9 +1,9 @@
 // Enum imports
 import {
-	RoleCategoryNames,
-	RoleGroupNames,
-	SpaceCategoryNames,
-	SpaceGroupNames,
+	RoleCategoryName,
+	RoleGroupName,
+	SpaceCategoryName,
+	SpaceGroupName,
 } from "@cocrepo/enum";
 
 // ============================================================================
@@ -1084,32 +1084,32 @@ export const groundSeedData: GroundSeedData[] = [
 	},
 ];
 
-// Role 타입 카테고리 시드 데이터 (RoleCategoryNames enum 활용)
+// Role 타입 카테고리 시드 데이터 (RoleCategoryName enum 활용)
 export interface CategorySeedData {
-	roleCategoryEnum: RoleCategoryNames;
+	roleCategoryEnum: RoleCategoryName;
 	type: "Role" | "Space" | "File" | "User";
 	parentId?: string;
 }
 
 export const roleCategorySeedData: CategorySeedData[] = [
 	{
-		roleCategoryEnum: RoleCategoryNames.PLATFORM,
+		roleCategoryEnum: RoleCategoryName.PLATFORM,
 		type: "Role",
 	},
 	{
-		roleCategoryEnum: RoleCategoryNames.SHARED,
+		roleCategoryEnum: RoleCategoryName.SHARED,
 		type: "Role",
 	},
 	{
-		roleCategoryEnum: RoleCategoryNames.PUBLIC,
+		roleCategoryEnum: RoleCategoryName.PUBLIC,
 		type: "Role",
 	},
 	{
-		roleCategoryEnum: RoleCategoryNames.WORKSPACE,
+		roleCategoryEnum: RoleCategoryName.WORKSPACE,
 		type: "Role",
 	},
 	{
-		roleCategoryEnum: RoleCategoryNames.PROJECT,
+		roleCategoryEnum: RoleCategoryName.PROJECT,
 		type: "Role",
 	},
 ];
@@ -1148,63 +1148,63 @@ export const roleSeedData: RoleSeedData[] = [
 
 export interface RoleClassificationSeedData {
 	roleName: string;
-	roleCategoryEnum: RoleCategoryNames; // RoleCategoryNames enum 사용
+	roleCategoryEnum: RoleCategoryName; // RoleCategoryName enum 사용
 }
 
 export const roleClassificationSeedData: RoleClassificationSeedData[] = [
 	{
 		roleName: "FULL_ACCESS",
-		roleCategoryEnum: RoleCategoryNames.PLATFORM, // "플랫폼" 카테고리
+		roleCategoryEnum: RoleCategoryName.PLATFORM, // "플랫폼" 카테고리
 	},
 	{
 		roleName: "MANAGE",
-		roleCategoryEnum: RoleCategoryNames.WORKSPACE, // "워크스페이스" 카테고리
+		roleCategoryEnum: RoleCategoryName.WORKSPACE, // "워크스페이스" 카테고리
 	},
 	{
 		roleName: "VIEW",
-		roleCategoryEnum: RoleCategoryNames.PUBLIC, // "공개" 카테고리
+		roleCategoryEnum: RoleCategoryName.PUBLIC, // "공개" 카테고리
 	},
 ];
 
-// Role Group 시드 데이터 (RoleGroupNames enum 활용)
+// Role Group 시드 데이터 (RoleGroupName enum 활용)
 
 export interface RoleGroupSeedData {
-	roleGroupEnum: RoleGroupNames;
+	roleGroupEnum: RoleGroupName;
 }
 
 export const roleGroupSeedData: RoleGroupSeedData[] = [
 	{
-		roleGroupEnum: RoleGroupNames.TRUSTED,
+		roleGroupEnum: RoleGroupName.TRUSTED,
 	},
 	{
-		roleGroupEnum: RoleGroupNames.STANDARD,
+		roleGroupEnum: RoleGroupName.STANDARD,
 	},
 	{
-		roleGroupEnum: RoleGroupNames.PREMIUM,
+		roleGroupEnum: RoleGroupName.PREMIUM,
 	},
 ];
 
 // Role과 Group 연결 (RoleAssociation) 시드 데이터
 export interface RoleAssociationSeedData {
 	roleName: string;
-	roleGroupEnum: RoleGroupNames;
+	roleGroupEnum: RoleGroupName;
 }
 
 export const roleAssociationSeedData: RoleAssociationSeedData[] = [
 	// FULL_ACCESS는 TRUSTED 그룹
 	{
 		roleName: "FULL_ACCESS",
-		roleGroupEnum: RoleGroupNames.TRUSTED,
+		roleGroupEnum: RoleGroupName.TRUSTED,
 	},
 	// MANAGE는 PREMIUM 그룹
 	{
 		roleName: "MANAGE",
-		roleGroupEnum: RoleGroupNames.PREMIUM,
+		roleGroupEnum: RoleGroupName.PREMIUM,
 	},
 	// VIEW는 STANDARD 그룹
 	{
 		roleName: "VIEW",
-		roleGroupEnum: RoleGroupNames.STANDARD,
+		roleGroupEnum: RoleGroupName.STANDARD,
 	},
 ];
 
@@ -2714,34 +2714,34 @@ export const permissionSummary = {
 };
 
 // ============================================================================
-// Space Category 시드 데이터 (SpaceCategoryNames enum 활용)
+// Space Category 시드 데이터 (SpaceCategoryName enum 활용)
 // ============================================================================
 
 export interface SpaceCategorySeedData {
-	spaceCategoryEnum: SpaceCategoryNames;
+	spaceCategoryEnum: SpaceCategoryName;
 	type: "Space";
 	parentCategoryCode?: string;
 }
 
 export const spaceCategorySeedData: SpaceCategorySeedData[] = [
-	{ spaceCategoryEnum: SpaceCategoryNames.ROOT, type: "Space" },
+	{ spaceCategoryEnum: SpaceCategoryName.ROOT, type: "Space" },
 	{
-		spaceCategoryEnum: SpaceCategoryNames.BRANCH,
+		spaceCategoryEnum: SpaceCategoryName.BRANCH,
 		type: "Space",
 		parentCategoryCode: "ROOT",
 	},
 ];
 
 // ============================================================================
-// Space Group 시드 데이터 (SpaceGroupNames enum 활용)
+// Space Group 시드 데이터 (SpaceGroupName enum 활용)
 // ============================================================================
 
 export interface SpaceGroupSeedData {
-	spaceGroupEnum: SpaceGroupNames;
+	spaceGroupEnum: SpaceGroupName;
 }
 
 export const spaceGroupSeedData: SpaceGroupSeedData[] = [
-	{ spaceGroupEnum: SpaceGroupNames.ROOT },
+	{ spaceGroupEnum: SpaceGroupName.ROOT },
 ];
 
 // ============================================================================
@@ -3543,6 +3543,11 @@ export const sessionLoadProfileSeedData: SessionLoadProfileSeedData[] = [
 		preferredGroundNames: ["F45 잠실", "스포애니 건대"],
 	},
 ];
+
+// ============================================================================
+// Asset Domain 시드 데이터
+// ============================================================================
+export * from "./asset-seed-data";
 
 // ============================================================================
 // Translation 시드 데이터

@@ -64,5 +64,5 @@ Ground(시설) 도메인의 비즈니스 로직을 담당하는 서비스입니�
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
 | 2026-02-19 | 초기 생성 (역기획) | req-reverse-engineer |
-| 2026-02-19 | CRUD 전체 메서드 추가, 비즈니스 규칙 상세화, Space 자동 생성 명시, 에러 처리 추가 | be-spec-planner |
+| 2026-02-19 | CRUD 전체 메서드 추가, 비즈니스 규칙 상세화, Space 자동 생성 명시, 에러 처리 추가 | req-logic-planner |
 | 2026-02-19 | CRUD 전체 구현 완료 - be-service-builder | be-service-builder |

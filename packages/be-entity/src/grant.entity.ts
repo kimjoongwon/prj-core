@@ -1,7 +1,7 @@
 import type { Grant as GrantEntity } from "@cocrepo/prisma";
 import { Type } from "class-transformer";
-import { AbstractEntity } from "./abstract.entity";
 import { Ability } from "./ability.entity";
+import { AbstractEntity } from "./abstract.entity";
 
 /**
  * Grant 엔티티 (권한 부여)

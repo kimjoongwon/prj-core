@@ -29,7 +29,6 @@ action="create"  subject="entity:user"
   권한 있음 → <Can> 내부 UI 노출
   권한 없음 → fallback(예: 비활성 버튼 또는 null) 노출
 
-
 [ CanMenu — 메뉴 접근 권한 ]
 
 menu="dashboard"                  menu="settings/general"
@@ -37,14 +36,12 @@ menu="dashboard"                  menu="settings/general"
 │  [대시보드] 메뉴 노출  │         │  접근 불가 → 숨김      │
 └───────────────────────┘         └───────────────────────┘
 
-
 [ CanFeature — 기능 사용 권한 ]
 
 feature="export"                  feature="bulk-edit"
 ┌───────────────────────┐         ┌───────────────────────┐
 │  [내보내기] 버튼 노출  │         │  권한 없음 → 숨김      │
 └───────────────────────┘         └───────────────────────┘
-
 
 [ VisibilityCell — 가시성 상태 표시 ]
 

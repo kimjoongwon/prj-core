@@ -1,7 +1,6 @@
-import { Enum, EnumType } from "ts-jenum";
+import { BaseEnum } from "./base-enum";
 
-@Enum("code")
-export class RecurringDayOfWeek extends EnumType<RecurringDayOfWeek>() {
+export class RecurringDayOfWeek extends BaseEnum {
 	static readonly SUNDAY = new RecurringDayOfWeek("SUN", "Sunday");
 	static readonly MONDAY = new RecurringDayOfWeek("MON", "Monday");
 	static readonly TUESDAY = new RecurringDayOfWeek("TUE", "Tuesday");
@@ -10,26 +9,25 @@ export class RecurringDayOfWeek extends EnumType<RecurringDayOfWeek>() {
 	static readonly FRIDAY = new RecurringDayOfWeek("FRI", "Friday");
 	static readonly SATURDAY = new RecurringDayOfWeek("SAT", "Saturday");
 
-	private constructor(
-		readonly _code: string,
-		readonly _name: string,
-	) {
-		super();
+	private static readonly _values = [
+		RecurringDayOfWeek.SUNDAY,
+		RecurringDayOfWeek.MONDAY,
+		RecurringDayOfWeek.TUESDAY,
+		RecurringDayOfWeek.WEDNESDAY,
+		RecurringDayOfWeek.THURSDAY,
+		RecurringDayOfWeek.FRIDAY,
+		RecurringDayOfWeek.SATURDAY,
+	] as const;
+
+	static values(): RecurringDayOfWeek[] {
+		return [...RecurringDayOfWeek._values];
 	}
 
-	get code(): string {
-		return this._code;
-	}
-
-	get name(): string {
-		return this._name;
+	private constructor(code: string, name: string) {
+		super(code, name);
 	}
 
 	static findName(code: string): string | undefined {
 		return RecurringDayOfWeek.values().find((e) => e.equals(code))?.name;
-	}
-
-	equals(code: string): boolean {
-		return this.code === code;
 	}
 }

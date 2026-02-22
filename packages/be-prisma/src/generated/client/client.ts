@@ -29,8 +29,8 @@ export * from "./enums.js"
  * @example
  * ```
  * const prisma = new PrismaClient()
- * // Fetch zero or more SecurityPolicies
- * const securityPolicies = await prisma.securityPolicy.findMany()
+ * // Fetch zero or more Assets
+ * const assets = await prisma.asset.findMany()
  * ```
  * 
  * Read more in our [docs](https://pris.ly/d/client).
@@ -39,6 +39,46 @@ export const PrismaClient = $Class.getPrismaClientClass()
 export type PrismaClient<LogOpts extends Prisma.LogLevel = never, OmitOpts extends Prisma.PrismaClientOptions["omit"] = Prisma.PrismaClientOptions["omit"], ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = $Class.PrismaClient<LogOpts, OmitOpts, ExtArgs>
 export { Prisma }
 
+/**
+ * Model Asset
+ * @displayName 에셋
+ */
+export type Asset = Prisma.AssetModel
+/**
+ * Model Image
+ * @displayName 이미지 상세
+ */
+export type Image = Prisma.ImageModel
+/**
+ * Model Video
+ * @displayName 비디오 상세
+ */
+export type Video = Prisma.VideoModel
+/**
+ * Model Document
+ * @displayName 문서 상세
+ */
+export type Document = Prisma.DocumentModel
+/**
+ * Model Folder
+ * @displayName 폴더
+ */
+export type Folder = Prisma.FolderModel
+/**
+ * Model Album
+ * @displayName 앨범
+ */
+export type Album = Prisma.AlbumModel
+/**
+ * Model AlbumEntry
+ * @displayName 앨범 엔트리
+ */
+export type AlbumEntry = Prisma.AlbumEntryModel
+/**
+ * Model Derivative
+ * @DisplayName 파생 리소스
+ */
+export type Derivative = Prisma.DerivativeModel
 /**
  * Model SecurityPolicy
  * @displayName 보안 정책

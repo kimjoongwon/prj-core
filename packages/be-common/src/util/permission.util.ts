@@ -1,5 +1,5 @@
-import { SpaceCategoryNames } from "@cocrepo/enum";
 import type { TenantDto } from "@cocrepo/dto";
+import { SpaceCategoryName } from "@cocrepo/enum";
 
 /**
  * Space가 ROOT 카테고리인지 확인
@@ -7,7 +7,7 @@ import type { TenantDto } from "@cocrepo/dto";
  */
 export function isRootSpaceCategory(tenant: TenantDto): boolean {
 	const categoryName = tenant.space?.spaceClassification?.category?.name;
-	return categoryName === SpaceCategoryNames.ROOT.name;
+	return categoryName === SpaceCategoryName.ROOT.name;
 }
 
 /**

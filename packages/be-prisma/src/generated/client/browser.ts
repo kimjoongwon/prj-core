@@ -18,6 +18,46 @@ export { Prisma }
 export * as $Enums from './enums.js'
 export * from './enums.js';
 /**
+ * Model Asset
+ * @displayName 에셋
+ */
+export type Asset = Prisma.AssetModel
+/**
+ * Model Image
+ * @displayName 이미지 상세
+ */
+export type Image = Prisma.ImageModel
+/**
+ * Model Video
+ * @displayName 비디오 상세
+ */
+export type Video = Prisma.VideoModel
+/**
+ * Model Document
+ * @displayName 문서 상세
+ */
+export type Document = Prisma.DocumentModel
+/**
+ * Model Folder
+ * @displayName 폴더
+ */
+export type Folder = Prisma.FolderModel
+/**
+ * Model Album
+ * @displayName 앨범
+ */
+export type Album = Prisma.AlbumModel
+/**
+ * Model AlbumEntry
+ * @displayName 앨범 엔트리
+ */
+export type AlbumEntry = Prisma.AlbumEntryModel
+/**
+ * Model Derivative
+ * @DisplayName 파생 리소스
+ */
+export type Derivative = Prisma.DerivativeModel
+/**
  * Model SecurityPolicy
  * @displayName 보안 정책
  */

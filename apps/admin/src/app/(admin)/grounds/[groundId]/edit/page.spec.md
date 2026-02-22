@@ -126,4 +126,4 @@ GroundEditPage (page.tsx - 서버)
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
-| 2026-02-19 | 초기 생성 | req-L3L4-planner |
+| 2026-02-19 | 초기 생성 | req-screen-planner |

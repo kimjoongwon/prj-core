@@ -1,22 +1,19 @@
-import { Enum, EnumType } from "ts-jenum";
+import { BaseEnum } from "./base-enum";
 
-@Enum("code")
-export class SpaceCategoryNames extends EnumType<SpaceCategoryNames>() {
-	static readonly ROOT = new SpaceCategoryNames("ROOT", "루트");
-	static readonly BRANCH = new SpaceCategoryNames("BRANCH", "지점");
+export class SpaceCategoryName extends BaseEnum {
+	static readonly ROOT = new SpaceCategoryName("ROOT", "루트");
+	static readonly BRANCH = new SpaceCategoryName("BRANCH", "지점");
 
-	private constructor(
-		readonly _code: string,
-		readonly _name: string,
-	) {
-		super();
+	private static readonly _values = [
+		SpaceCategoryName.ROOT,
+		SpaceCategoryName.BRANCH,
+	] as const;
+
+	static values(): SpaceCategoryName[] {
+		return [...SpaceCategoryName._values];
 	}
 
-	get code(): string {
-		return this._code;
-	}
-
-	get name(): string {
-		return this._name;
+	private constructor(code: string, name: string) {
+		super(code, name);
 	}
 }

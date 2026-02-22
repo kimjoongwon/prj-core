@@ -6,7 +6,7 @@ tools: Task, Read, Write, Grep, Bash
 
 # 요구사항 기획 오케스트레이터 (Requirement Orchestrator)
 
-도메인 기획 **L0-L4** 레이어와 **BE/Store 기획**을 순차적으로 조율하는 오케스트레이터입니다。
+도메인 기획 **L0-L4** 레이어와 **BE/Store 기획**을 의존성 기반으로 조율하는 오케스트레이터입니다. 선행 단계는 순차로 진행하고, 독립 레이어는 병렬 fan-out 실행을 지원합니다。
 
 ---
 
@@ -16,20 +16,59 @@ tools: Task, Read, Write, Grep, Bash
 
 | 레벨 | 명칭 | 담당 에이전트 | 출력 위치 |
 |------|------|--------------|----------|
-| L0-L2 | 컨텍스트/사용자/목표 | req-L0L2-planner | `apps/[app]/app/(admin)/app.spec.md` 업데이트 |
-| L3-L4 | 기능/화면 구조 | req-L3L4-planner | 각 `page.spec.md` 생성 |
+| L0-L2 | 컨텍스트/사용자/목표 | req-context-planner | `apps/[app]/app/(admin)/app.spec.md` 업데이트 |
+| L3-L4 | 기능/화면 구조 | req-screen-planner | 각 `page.spec.md` 생성 |
 
-### BE/Store 기획 (L7, L11)
+### FE/BE 기획 (L6-L11)
 
 | 레벨 | 명칭 | 담당 에이전트 | 출력 위치 |
 |------|------|--------------|----------|
+| L6 | API/Controller | req-api-planner | `apps/server/src/[module]/controllers/[domain].controller.spec.md` |
 | L7 | Entity | req-entity-planner | `packages/be-entity/src/{entity}.entity.spec.md` |
+| L9-L10 | Service/Repository 로직/테스트 | req-logic-planner | `apps/server/src/[module]/[domain].service.spec.md`, `apps/server/src/[module]/repositories/[domain].repository.spec.md` |
 | L11 | Store | req-store-planner | `packages/fe-store/src/stores/[domain]Store.spec.md` |
-| BE 스펙 | Repository/Service/Controller | be-spec-planner | Sidecar spec (코드 옆 `.spec.md`) |
+
+### 공용 패키지 기획 (Critical)
+
+| 패키지 | 명칭 | 담당 에이전트 | 출력 위치 |
+|--------|------|--------------|----------|
+| Enum | Enum | req-entity-planner | `packages/common-enum/src/{name}.spec.md` |
+| DTO | Request/Response DTO | req-api-planner | `packages/be-dto/src/{domain}/{name}.dto.spec.md` |
+| VO | Value Object | req-entity-planner | `packages/be-vo/src/{domain}/{name}.vo.spec.md` |
 
 ### 화면별 기획 (L5-L12) → 별도 오케스트레이터
 
 화면별 상세 기획은 `orch-screen-planner`가 담당합니다。
+
+`orch-screen-planner`는 페이지별로 `req-page-planner`, `req-api-planner`, `req-ui-planner`, `req-input-planner`, `req-cell-planner`, `req-widget-planner`, `req-layout-planner`, `req-feature-planner`, `req-menu-planner`, `req-test-planner`, `req-api-integration-planner`를 조합해 실행합니다。
+
+---
+
+## 1.5. 필수 기획서 체크리스트 (Critical)
+
+**새 도메인 기획 시 반드시 아래 기획서들을 모두 생성해야 합니다:**
+
+### 페이지 기획서
+- [ ] `page.spec.md` - 각 화면별 (List, Detail, Create, Edit)
+
+### 백엔드 기획서
+- [ ] `{entity}.entity.spec.md` - 각 Entity별
+- [ ] `{domain}.service.spec.md` - Service 스펙
+- [ ] `{domain}.repository.spec.md` - Repository 스펙
+- [ ] `{domain}.controller.spec.md` - Controller 스펙
+
+### 공용 패키지 기획서 ⚠️ 자주 누락
+- [ ] `{EnumName}.spec.md` - 도메인 Enum (AssetKind, AssetStatus 등)
+- [ ] `{DtoName}.dto.spec.md` - Request/Response DTO
+- [ ] `{VoName}.vo.spec.md` - Value Object (필요시)
+
+### 프론트엔드 기획서 (자주 누락됨 ⚠️)
+- [ ] `{Domain}Store.spec.md` - Store 스펙
+- [ ] `widget/{Widget}/index.spec.md` - 페이지에서 참조하는 모든 Widget
+- [ ] `feature/{Feature}/index.spec.md` - 페이지에서 참조하는 모든 Feature
+
+### 검증 방법
+페이지 기획서의 "레이아웃 구성" 테이블에서 참조하는 컴포넌트들이 실제 `.spec.md`로 존재하는지 확인
 
 ---
 
@@ -68,8 +107,15 @@ tools: Task, Read, Write, Grep, Bash
 
 | 케이스 | 조건 | 실행 에이전트 |
 |--------|------|--------------|
-| 새 도메인 | `app.spec.md`에 해당 도메인 없음 | req-L0L2 → req-L3L4 → req-entity → req-store → be-spec |
+| 새 도메인 | `app.spec.md`에 해당 도메인 없음 | req-context → req-screen → (req-entity ∥ req-store ∥ req-api) → req-logic |
 | 화면 추가 | `app.spec.md`에 해당 도메인 존재 | orch-screen-planner |
+
+### 병렬 실행 규칙 (신규)
+
+- 기본 모드는 `parallel=auto`이며, `req-context-planner`/`req-screen-planner`는 선행 순차로 고정됩니다.
+- `req-entity-planner`, `req-store-planner`, `req-api-planner`는 충돌 없는 경우 병렬 fan-out 가능합니다.
+- `req-logic-planner`는 Entity/API 결과가 준비된 뒤 join 단계에서 실행합니다.
+- 공용 파일(`app.spec.md`, `**/PROGRESS.md`)은 lock 후 단일 writer로 반영합니다.
 
 ---
 
@@ -82,6 +128,8 @@ tools: Task, Read, Write, Grep, Bash
 | 앱 | ✅ | 앱 식별자 | "admin" |
 | 도메인명 | ✅ | 기능 도메인 이름 | "Member", "Order" |
 | 요구사항 | ✅ | 기능 설명 | "회원 목록/상세/등록/수정/삭제" |
+| `parallel` | △ | 병렬 모드 (`off`/`auto`/`force`), 기본 `auto` | `auto` |
+| `maxConcurrency` | △ | 동시 실행 상한 | `3` |
 
 ### 출력
 
@@ -119,6 +167,8 @@ apps/server/src/[module]/
 
 ### 새 도메인 기획
 
+아래 다이어그램은 기본 흐름을 설명합니다. Step 4-6은 `parallel=auto`일 때 병렬 fan-out 후 join으로 실행할 수 있습니다.
+
 ```
 ┌─────────────────────────────────────────────────────────────┐
 │                    오케스트레이터 시작                        │
@@ -136,7 +186,7 @@ apps/server/src/[module]/
                               ▼
 ┌─────────────────────────────────────────────────────────────┐
 │  2단계: 컨텍스트/사용자/목표 기획 (L0-L2)                      │
-│  Task: req-L0L2-planner                                      │
+│  Task: req-context-planner                                      │
 │  → apps/[app]/app/(admin)/app.spec.md 업데이트               │
 │    (도메인 목록 테이블에 엔트리 추가)                          │
 └─────────────────────────────────────────────────────────────┘
@@ -144,7 +194,7 @@ apps/server/src/[module]/
                               ▼
 ┌─────────────────────────────────────────────────────────────┐
 │  3단계: 기능/화면 구조 기획 (L3-L4)                           │
-│  Task: req-L3L4-planner                                      │
+│  Task: req-screen-planner                                      │
 │  → 각 page.spec.md 생성                                     │
 └─────────────────────────────────────────────────────────────┘
                               │
@@ -164,11 +214,17 @@ apps/server/src/[module]/
                               │
                               ▼
 ┌─────────────────────────────────────────────────────────────┐
-│  6단계: BE 스펙 기획                                          │
-│  Task: be-spec-planner                                       │
-│  → [domain].service.spec.md                                  │
-│  → [domain].repository.spec.md                               │
+│  6단계: API/Controller 스펙 기획 (L6)                         │
+│  Task: req-api-planner                                      │
 │  → [domain].controller.spec.md                               │
+└─────────────────────────────────────────────────────────────┘
+                              │
+                              ▼
+┌─────────────────────────────────────────────────────────────┐
+│  7단계: Service/Repository 로직/테스트 기획 (L9-L10)          │
+│  Task: req-logic-planner                                    │
+│  → [domain].service.spec.md                                 │
+│  → [domain].repository.spec.md                              │
 └─────────────────────────────────────────────────────────────┘
                               │
                               ▼
@@ -216,11 +272,11 @@ apps/server/src/[module]/
 ✅ 기존 도메인 확인: 새 도메인입니다
 
 ▶ 1단계: 컨텍스트/사용자/목표 기획 (L0-L2)
-  Task: req-L0L2-planner
+  Task: req-context-planner
   → app.spec.md 업데이트 완료 (Member 도메인 엔트리 추가)
 
 ▶ 2단계: 기능/화면 구조 기획 (L3-L4)
-  Task: req-L3L4-planner
+  Task: req-screen-planner
   → 각 page.spec.md 생성 완료
 
 ▶ 3단계: Entity 기획 (L7)
@@ -231,9 +287,13 @@ apps/server/src/[module]/
   Task: req-store-planner
   → packages/fe-store/src/stores/memberStore.spec.md 생성 완료
 
-▶ 5단계: BE 스펙 기획
-  Task: be-spec-planner
-  → Service/Repository/Controller 스펙 생성 완료
+▶ 5단계: API/Controller 스펙 기획 (L6)
+  Task: req-api-planner
+  → Controller 스펙 생성/업데이트 완료
+
+▶ 6단계: Service/Repository 로직/테스트 기획 (L9-L10)
+  Task: req-logic-planner
+  → Service/Repository 스펙 생성/업데이트 완료
 
 ✅ 도메인 기획 완료
 
@@ -288,6 +348,22 @@ packages/fe-store/src/stores/
 ├── memberStore.ts
 └── memberStore.spec.md                   # L11 Store 스펙
 
+packages/common-enum/src/
+├── member-status.ts
+└── member-status.spec.md                 # Enum 스펙 ⚠️ 필수
+
+packages/be-dto/src/member/
+├── create-member.dto.ts
+├── create-member.dto.spec.md             # DTO 스펙 ⚠️ 필수
+├── update-member.dto.ts
+├── update-member.dto.spec.md
+├── member-response.dto.ts
+└── member-response.dto.spec.md
+
+packages/be-vo/src/member/
+├── member-email.vo.ts
+└── member-email.vo.spec.md               # VO 스펙 (필요시)
+
 apps/server/src/member/
 ├── member.service.ts
 ├── member.service.spec.md                # Service 스펙
@@ -317,7 +393,11 @@ apps/server/src/member/
 - [ ] 각 page.spec.md 생성
 - [ ] Entity 기획서 생성 (`packages/be-entity/src/*.entity.spec.md`)
 - [ ] Store 기획서 생성 (Sidecar)
-- [ ] BE 스펙 기획서 생성 (Sidecar)
+- [ ] Controller/Service/Repository 기획서 생성 (Sidecar)
+- [ ] **Enum 기획서 생성** (`packages/common-enum/src/*.spec.md`) ⚠️ 자주 누락
+- [ ] **DTO 기획서 생성** (`packages/be-dto/src/*/*.dto.spec.md`) ⚠️ 자주 누락
+- [ ] VO 기획서 생성 (필요시)
+- [ ] **검증**: 페이지 기획서에서 참조하는 컴포넌트가 실제 `.spec.md`로 존재하는지 확인
 
 ---
 
@@ -327,11 +407,12 @@ apps/server/src/member/
 
 | 에이전트 | 단계 | 출력 | 설명 |
 |----------|------|------|------|
-| req-L0L2-planner | 1 | `app.spec.md` 업데이트 | 컨텍스트/사용자/목표 기획 |
-| req-L3L4-planner | 2 | 각 `page.spec.md` | 기능/화면 구조 기획 |
+| req-context-planner | 1 | `app.spec.md` 업데이트 | 컨텍스트/사용자/목표 기획 |
+| req-screen-planner | 2 | 각 `page.spec.md` | 기능/화면 구조 기획 |
 | req-entity-planner | 3 | `[entity].entity.spec.md` | Entity 기획 |
 | req-store-planner | 4 | `[domain]Store.spec.md` | Store 기획 |
-| be-spec-planner | 5 | `*.service.spec.md`, `*.repository.spec.md`, `*.controller.spec.md` | BE 스펙 기획 |
+| req-api-planner | 5 | `*.controller.spec.md`, `*.dto.spec.md` | API/Controller/DTO 스펙 기획 |
+| req-logic-planner | 6 | `*.service.spec.md`, `*.repository.spec.md` | Service/Repository 로직/테스트 기획 |
 
 ### 후행 에이전트
 

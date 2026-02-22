@@ -7,8 +7,6 @@ tools:
   bash: true
 ---
 
-
-
 # DTO Builder
 
 Request/Response DTO 클래스를 생성하는 전문가입니다.

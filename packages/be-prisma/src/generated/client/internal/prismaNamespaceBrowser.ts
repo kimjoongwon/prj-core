@@ -51,6 +51,14 @@ export const AnyNull = runtime.AnyNull
 
 
 export const ModelName = {
+  Asset: 'Asset',
+  Image: 'Image',
+  Video: 'Video',
+  Document: 'Document',
+  Folder: 'Folder',
+  Album: 'Album',
+  AlbumEntry: 'AlbumEntry',
+  Derivative: 'Derivative',
   SecurityPolicy: 'SecurityPolicy',
   WhitelistEntry: 'WhitelistEntry',
   AuthAuditLog: 'AuthAuditLog',
@@ -110,6 +118,146 @@ export const TransactionIsolationLevel = {
 } as const
 
 export type TransactionIsolationLevel = (typeof TransactionIsolationLevel)[keyof typeof TransactionIsolationLevel]
+
+
+export const AssetScalarFieldEnum = {
+  id: 'id',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  removedAt: 'removedAt',
+  spaceId: 'spaceId',
+  folderId: 'folderId',
+  kind: 'kind',
+  status: 'status',
+  originalName: 'originalName',
+  storageKey: 'storageKey',
+  mimeType: 'mimeType',
+  extension: 'extension',
+  sizeBytes: 'sizeBytes',
+  checksum: 'checksum',
+  metadata: 'metadata',
+  creatorId: 'creatorId'
+} as const
+
+export type AssetScalarFieldEnum = (typeof AssetScalarFieldEnum)[keyof typeof AssetScalarFieldEnum]
+
+
+export const ImageScalarFieldEnum = {
+  id: 'id',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  removedAt: 'removedAt',
+  width: 'width',
+  height: 'height',
+  orientation: 'orientation',
+  colorSpace: 'colorSpace',
+  hasAlpha: 'hasAlpha',
+  assetId: 'assetId'
+} as const
+
+export type ImageScalarFieldEnum = (typeof ImageScalarFieldEnum)[keyof typeof ImageScalarFieldEnum]
+
+
+export const VideoScalarFieldEnum = {
+  id: 'id',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  removedAt: 'removedAt',
+  width: 'width',
+  height: 'height',
+  durationMs: 'durationMs',
+  frameRate: 'frameRate',
+  codec: 'codec',
+  bitrate: 'bitrate',
+  hasAudio: 'hasAudio',
+  assetId: 'assetId'
+} as const
+
+export type VideoScalarFieldEnum = (typeof VideoScalarFieldEnum)[keyof typeof VideoScalarFieldEnum]
+
+
+export const DocumentScalarFieldEnum = {
+  id: 'id',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  removedAt: 'removedAt',
+  pageCount: 'pageCount',
+  wordCount: 'wordCount',
+  author: 'author',
+  title: 'title',
+  subject: 'subject',
+  keywords: 'keywords',
+  assetId: 'assetId'
+} as const
+
+export type DocumentScalarFieldEnum = (typeof DocumentScalarFieldEnum)[keyof typeof DocumentScalarFieldEnum]
+
+
+export const FolderScalarFieldEnum = {
+  id: 'id',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  removedAt: 'removedAt',
+  spaceId: 'spaceId',
+  parentFolderId: 'parentFolderId',
+  name: 'name',
+  path: 'path',
+  sortOrder: 'sortOrder',
+  creatorId: 'creatorId'
+} as const
+
+export type FolderScalarFieldEnum = (typeof FolderScalarFieldEnum)[keyof typeof FolderScalarFieldEnum]
+
+
+export const AlbumScalarFieldEnum = {
+  id: 'id',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  removedAt: 'removedAt',
+  spaceId: 'spaceId',
+  name: 'name',
+  description: 'description',
+  coverAssetId: 'coverAssetId',
+  sortOrder: 'sortOrder',
+  creatorId: 'creatorId'
+} as const
+
+export type AlbumScalarFieldEnum = (typeof AlbumScalarFieldEnum)[keyof typeof AlbumScalarFieldEnum]
+
+
+export const AlbumEntryScalarFieldEnum = {
+  id: 'id',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  removedAt: 'removedAt',
+  spaceId: 'spaceId',
+  albumId: 'albumId',
+  assetId: 'assetId',
+  position: 'position',
+  caption: 'caption'
+} as const
+
+export type AlbumEntryScalarFieldEnum = (typeof AlbumEntryScalarFieldEnum)[keyof typeof AlbumEntryScalarFieldEnum]
+
+
+export const DerivativeScalarFieldEnum = {
+  id: 'id',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  removedAt: 'removedAt',
+  spaceId: 'spaceId',
+  assetId: 'assetId',
+  kind: 'kind',
+  profile: 'profile',
+  storageKey: 'storageKey',
+  mimeType: 'mimeType',
+  sizeBytes: 'sizeBytes',
+  width: 'width',
+  height: 'height',
+  durationMs: 'durationMs'
+} as const
+
+export type DerivativeScalarFieldEnum = (typeof DerivativeScalarFieldEnum)[keyof typeof DerivativeScalarFieldEnum]
 
 
 export const SecurityPolicyScalarFieldEnum = {
@@ -790,14 +938,6 @@ export const QueryMode = {
 export type QueryMode = (typeof QueryMode)[keyof typeof QueryMode]
 
 
-export const NullsOrder = {
-  first: 'first',
-  last: 'last'
-} as const
-
-export type NullsOrder = (typeof NullsOrder)[keyof typeof NullsOrder]
-
-
 export const JsonNullValueFilter = {
   DbNull: 'DbNull',
   JsonNull: 'JsonNull',
@@ -805,4 +945,12 @@ export const JsonNullValueFilter = {
 } as const
 
 export type JsonNullValueFilter = (typeof JsonNullValueFilter)[keyof typeof JsonNullValueFilter]
+
+
+export const NullsOrder = {
+  first: 'first',
+  last: 'last'
+} as const
+
+export type NullsOrder = (typeof NullsOrder)[keyof typeof NullsOrder]
 

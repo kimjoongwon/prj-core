@@ -7,8 +7,6 @@ tools:
   bash: true
 ---
 
-
-
 # Input 컴포넌트 빌더
 
 당신은 **폼 입력 컴포넌트**를 `packages/fe-ui/src/components/inputs/`에 생성하는 전문가입니다.
@@ -300,7 +298,7 @@ Pure UI → Widget → Feature → Page
 | 에이전트 | 관계 |
 |----------|------|
 | /design-analyze (Skill) | Figma 분석 후 필요한 Input 컴포넌트 식별 |
-| planner | 화면 기획서에서 필요한 폼 요소 도출 |
+| req-input-planner | 화면 기획서에서 필요한 폼 요소 도출 |
 
 ### 후행 에이전트
 

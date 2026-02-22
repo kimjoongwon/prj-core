@@ -1,32 +1,27 @@
-import { Enum, EnumType } from "ts-jenum";
+import { BaseEnum } from "./base-enum";
 
-@Enum("code")
-export class RepeatCycleTypes extends EnumType<RepeatCycleTypes>() {
-	static readonly DAILY = new RepeatCycleTypes("DAILY", "Daily");
-	static readonly WEEKLY = new RepeatCycleTypes("WEEKLY", "Weekly");
-	static readonly MONTHLY = new RepeatCycleTypes("MONTHLY", "Monthly");
-	static readonly YEARLY = new RepeatCycleTypes("YEARLY", "Yearly");
+export class RepeatCycleType extends BaseEnum {
+	static readonly DAILY = new RepeatCycleType("DAILY", "Daily");
+	static readonly WEEKLY = new RepeatCycleType("WEEKLY", "Weekly");
+	static readonly MONTHLY = new RepeatCycleType("MONTHLY", "Monthly");
+	static readonly YEARLY = new RepeatCycleType("YEARLY", "Yearly");
 
-	private constructor(
-		readonly _code: string,
-		readonly _name: string,
-	) {
-		super();
+	private static readonly _values = [
+		RepeatCycleType.DAILY,
+		RepeatCycleType.WEEKLY,
+		RepeatCycleType.MONTHLY,
+		RepeatCycleType.YEARLY,
+	] as const;
+
+	static values(): RepeatCycleType[] {
+		return [...RepeatCycleType._values];
 	}
 
-	get code(): string {
-		return this._code;
-	}
-
-	get name(): string {
-		return this._name;
+	private constructor(code: string, name: string) {
+		super(code, name);
 	}
 
 	static findName(code: string): string | undefined {
-		return RepeatCycleTypes.values().find((e) => e.equals(code))?.name;
-	}
-
-	equals(code: string): boolean {
-		return this.code === code;
+		return RepeatCycleType.values().find((e) => e.equals(code))?.name;
 	}
 }

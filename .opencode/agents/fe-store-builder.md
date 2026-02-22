@@ -7,8 +7,6 @@ tools:
   bash: true
 ---
 
-
-
 # Store Builder (MobX)
 
 MobX 기반의 Store를 생성하는 전문가입니다.

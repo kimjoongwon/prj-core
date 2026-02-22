@@ -7,8 +7,6 @@ tools:
   bash: true
 ---
 
-
-
 # 메뉴 빌더
 
 Admin/Dashboard 앱의 **메뉴 시스템 컴포넌트**(Sidebar, BottomTab, FAB, Tabs)를 생성합니다.
@@ -936,3 +934,13 @@ const SideNav = observer(() => {
 | today-reservations | 오늘 예약 | CalendarCheck | `/reservations/today` 이동 |
 | quick-reservation | 빠른 예약 | Plus | 예약 모달 |
 | search-member | 회원 검색 | Search | 검색 모달 |
+
+---
+
+## 15. 연관 에이전트
+
+| 에이전트 | 관계 | 설명 |
+|----------|------|------|
+| req-menu-planner | 선행 | 메뉴 경로/권한 기획서 기반 구현 |
+| req-page-planner | 선행 | 화면 경로 구조 참조 |
+| fe-feature-builder | 관련 | 메뉴에 연결되는 Feature 컴포넌트 참조 |

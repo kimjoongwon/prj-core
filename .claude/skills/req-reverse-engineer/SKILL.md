@@ -198,5 +198,5 @@ apps/proposal/plans/[project]/[app]/YYYY-MM-DD-[domain]-reverse/
 | 에이전트 | 관계 | 설명 |
 |----------|------|------|
 | `/orch-requirement` | 검증 | 역추론된 기획서 검증 및 보완 |
-| `/req-L0L2-planner` | 보완 | L0-L2 레이어 상세화 |
-| `/req-L3L4-planner` | 보완 | L3-L4 레이어 상세화 |
+| `/req-context-planner` | 보완 | L0-L2 레이어 상세화 |
+| `/req-screen-planner` | 보완 | L3-L4 레이어 상세화 |

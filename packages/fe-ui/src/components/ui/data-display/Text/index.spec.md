@@ -22,7 +22,6 @@
   h5  █████ 제목 (text-lg, bold)
   h6  ████ 제목 (text-base, bold)
 
-
 [ 본문 / 설명 텍스트 ]
 
   body1     일반 본문 텍스트입니다. (text-base, normal, foreground)
@@ -31,14 +30,12 @@
   subtitle2  작은 부제목입니다. (text-sm, normal, default-600)
   title      타이틀 텍스트입니다. (text-xl, normal, foreground)
 
-
 [ 레이블 / 특수 스타일 ]
 
   label    레이블 텍스트  (text-sm, semibold, default-700)
   caption  캡션 텍스트    (text-sm, normal, default-500)
   text     일반 텍스트    (text-base, normal, foreground)
   error    오류 메시지    (text-sm, medium, danger 색상)
-
 
 [ truncate / lineClamp 옵션 ]
 

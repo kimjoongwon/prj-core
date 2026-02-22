@@ -1,0 +1,374 @@
+// ============================================================================
+// Asset Domain - 에셋 도메인
+// ============================================================================
+//
+// 미디어 리소스(이미지, 비디오, 문서)를 관리하는 도메인입니다.
+// CTI(Class Table Inheritance) 패턴을 사용하여 공통 필드는 Asset에,
+// 타입별 필드는 상세 테이블로 분리합니다.
+//
+// 관계 구조:
+//   Asset (CONCRETE ENTITY, CTI 부모)
+//     │
+//     ├─── Image (CTI 상세: 1:1, IMAGE 타입 전용)
+//     ├─── Video (CTI 상세: 1:1, VIDEO 타입 전용)
+//     ├─── Document (CTI 상세: 1:1, DOCUMENT 타입 전용)
+//     ├─── Derivative (EXTENSION: 파생 리소스)
+//     ├─── AlbumEntry (BRIDGE: Album 연결)
+//     └─── Album (커버 이미지로 사용)
+//
+//   Folder (CONCRETE ENTITY, 트리 구조)
+//     │
+//     ├─── Folder (자기 참조: parent/children)
+//     └─── Asset (폴더 내 에셋들)
+//
+//   Album (CONCRETE ENTITY)
+//     │
+//     ├─── AlbumEntry (BRIDGE: Asset 연결)
+//     └─── Asset (커버 이미지)
+//
+// 무결성 보장 계획:
+//   - Prisma 제약:
+//     * kind=IMAGE → Image 1건 존재 (애플리케이션 레벨)
+//     * kind=VIDEO → Video 1건 존재 (애플리케이션 레벨)
+//     * kind=DOCUMENT → Document 1건 존재 (애플리케이션 레벨)
+//     * 서로 다른 상세 테이블 동시 존재 금지 (애플리케이션 레벨)
+//   - 트랜잭션:
+//     * Asset + 상세(Image/Video/Document) 생성/수정/삭제는 단일 트랜잭션 처리
+//     * Album + AlbumEntry 생성/삭제는 단일 트랜잭션 처리
+//
+// ============================================================================
+
+// ----------------------------------------------------------------------------
+// Enums
+// ----------------------------------------------------------------------------
+
+/// @displayName 에셋 타입
+enum AssetKind {
+  IMAGE /// 이미지 파일
+  VIDEO /// 비디오 파일
+  DOCUMENT /// 문서 파일
+}
+
+/// @displayName 에셋 상태
+enum AssetStatus {
+  UPLOADING /// 업로드 진행 중
+  READY /// 업로드 완료, 사용 가능
+  FAILED /// 업로드 실패
+}
+
+/// @displayName 파생 리소스 타입
+enum DerivativeKind {
+  THUMBNAIL /// 썸네일 이미지 (작은 크기)
+  PREVIEW /// 프리뷰 이미지/비디오 (중간 크기)
+  TRANSCODE /// 트랜스코딩된 비디오 (다른 포맷/해상도)
+  TEXT /// 추출된 텍스트
+}
+
+// ----------------------------------------------------------------------------
+// Asset (CTI 부모)
+// ----------------------------------------------------------------------------
+
+// @schema-type: CONCRETE ENTITY
+// @description: 미디어 리소스의 공통 메타데이터를 관리하는 CTI 부모 테이블
+// @extended-by: Image, Video, Document (1:0..1 CTI 상세)
+/// @displayName 에셋
+model Asset {
+  id            String       @id @default(uuid())
+  createdAt     DateTime     @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt     DateTime?    @updatedAt @map("updated_at") @db.Timestamptz(6)
+  removedAt     DateTime?    @map("removed_at") @db.Timestamptz(6)
+  /// @displayName 소속 Space
+  spaceId       String       @map("space_id")
+  /// @displayName 소속 폴더
+  folderId      String       @map("folder_id")
+  /// @displayName 에셋 타입
+  kind          AssetKind
+  /// @displayName 업로드 상태
+  status        AssetStatus  @default(UPLOADING)
+  /// @displayName 원본 파일명
+  originalName  String       @map("original_name")
+  /// @displayName 스토리지 키
+  storageKey    String       @unique @map("storage_key")
+  /// @displayName MIME 타입
+  mimeType      String       @map("mime_type")
+  /// @displayName 파일 확장자
+  extension     String?
+  /// @displayName 파일 크기
+  sizeBytes     BigInt       @map("size_bytes")
+  /// @displayName 파일 체크섬
+  checksum      String?
+  /// @displayName 추가 메타데이터
+  metadata      Json?
+  /// @displayName 생성자
+  creatorId     String?      @map("creator_id")
+  // Relations
+  space         Space        @relation(fields: [spaceId], references: [id])
+  folder        Folder       @relation(fields: [folderId], references: [id])
+  creator       User?        @relation(fields: [creatorId], references: [id])
+  image         Image?
+  video         Video?
+  document      Document?
+  derivatives   Derivative[]
+  albumEntries  AlbumEntry[]
+  coverOfAlbums Album[]      @relation("AlbumCover")
+
+  @@index([spaceId])
+  @@index([folderId])
+  @@index([kind])
+  @@index([status])
+  @@map("assets")
+}
+
+// ----------------------------------------------------------------------------
+// Image (CTI 상세 - IMAGE 타입 전용)
+// ----------------------------------------------------------------------------
+
+// @schema-type: MATERIALIZATION
+// @description: Asset(kind=IMAGE)의 이미지 전용 상세 정보 (CTI 1:1)
+// @materializes: Asset (IMAGE 타입)
+// @business-fields: width, height, orientation, colorSpace, hasAlpha
+/// @displayName 이미지 상세
+model Image {
+  id          String    @id @default(uuid())
+  createdAt   DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt   DateTime? @updatedAt @map("updated_at") @db.Timestamptz(6)
+  removedAt   DateTime? @map("removed_at") @db.Timestamptz(6)
+  /// @displayName 너비 (px)
+  width       Int
+  /// @displayName 높이 (px)
+  height      Int
+  /// @displayName 방향 (EXIF Orientation)
+  orientation Int?
+  /// @displayName 색상 공간
+  colorSpace  String?   @map("color_space")
+  /// @DisplayName 알파 채널 여부
+  hasAlpha    Boolean   @default(false) @map("has_alpha")
+  /// @displayName 원본 Asset ID
+  assetId     String    @unique @map("asset_id")
+  // Relations
+  asset       Asset     @relation(fields: [assetId], references: [id], onDelete: Cascade)
+
+  @@map("images")
+}
+
+// ----------------------------------------------------------------------------
+// Video (CTI 상세 - VIDEO 타입 전용)
+// ----------------------------------------------------------------------------
+
+// @schema-type: MATERIALIZATION
+// @description: Asset(kind=VIDEO)의 비디오 전용 상세 정보 (CTI 1:1)
+// @materializes: Asset (VIDEO 타입)
+// @business-fields: width, height, durationMs, frameRate, codec, bitrate, hasAudio
+/// @displayName 비디오 상세
+model Video {
+  id         String    @id @default(uuid())
+  createdAt  DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt  DateTime? @updatedAt @map("updated_at") @db.Timestamptz(6)
+  removedAt  DateTime? @map("removed_at") @db.Timestamptz(6)
+  /// @displayName 너비 (px)
+  width      Int
+  /// @displayName 높이 (px)
+  height     Int
+  /// @displayName 재생 시간 (ms)
+  durationMs Int       @map("duration_ms")
+  /// @displayName 프레임 레이트 (fps)
+  frameRate  Float?    @map("frame_rate")
+  /// @displayName 비디오 코덱
+  codec      String?
+  /// @displayName 비트레이트 (bps)
+  bitrate    Int?
+  /// @displayName 오디오 포함 여부
+  hasAudio   Boolean   @default(false) @map("has_audio")
+  /// @displayName 원본 Asset ID
+  assetId    String    @unique @map("asset_id")
+  // Relations
+  asset      Asset     @relation(fields: [assetId], references: [id], onDelete: Cascade)
+
+  @@map("videos")
+}
+
+// ----------------------------------------------------------------------------
+// Document (CTI 상세 - DOCUMENT 타입 전용)
+// ----------------------------------------------------------------------------
+
+// @schema-type: MATERIALIZATION
+// @description: Asset(kind=DOCUMENT)의 문서 전용 상세 정보 (CTI 1:1)
+// @materializes: Asset (DOCUMENT 타입)
+// @business-fields: pageCount, wordCount, author, title, subject, keywords
+/// @displayName 문서 상세
+model Document {
+  id        String    @id @default(uuid())
+  createdAt DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt DateTime? @updatedAt @map("updated_at") @db.Timestamptz(6)
+  removedAt DateTime? @map("removed_at") @db.Timestamptz(6)
+  /// @displayName 페이지 수
+  pageCount Int?      @map("page_count")
+  /// @displayName 단어 수
+  wordCount Int?      @map("word_count")
+  /// @displayName 작성자
+  author    String?
+  /// @displayName 제목
+  title     String?
+  /// @displayName 주제
+  subject   String?
+  /// @displayName 키워드
+  keywords  String?
+  /// @displayName 원본 Asset ID
+  assetId   String    @unique @map("asset_id")
+  // Relations
+  asset     Asset     @relation(fields: [assetId], references: [id], onDelete: Cascade)
+
+  @@map("documents")
+}
+
+// ----------------------------------------------------------------------------
+// Folder (계층적 폴더 구조)
+// ----------------------------------------------------------------------------
+
+// @schema-type: CONCRETE ENTITY
+// @description: 에셋의 계층적 저장 구조를 관리하는 폴더 (트리 구조)
+// @self-reference: parent/children
+/// @displayName 폴더
+model Folder {
+  id             String    @id @default(uuid())
+  createdAt      DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt      DateTime? @updatedAt @map("updated_at") @db.Timestamptz(6)
+  removedAt      DateTime? @map("removed_at") @db.Timestamptz(6)
+  /// @displayName 소속 Space
+  spaceId        String    @map("space_id")
+  /// @DisplayName 상위 폴더 ID
+  parentFolderId String?   @map("parent_folder_id")
+  /// @displayName 폴더명
+  name           String
+  /// @displayName 전체 경로
+  path           String    @unique
+  /// @displayName 정렬 순서
+  sortOrder      Int       @default(0) @map("sort_order")
+  /// @displayName 생성자
+  creatorId      String?   @map("creator_id")
+  // Relations
+  space          Space     @relation(fields: [spaceId], references: [id])
+  parent         Folder?   @relation("FolderParent", fields: [parentFolderId], references: [id])
+  children       Folder[]  @relation("FolderParent")
+  creator        User?     @relation(fields: [creatorId], references: [id])
+  assets         Asset[]
+
+  @@index([spaceId])
+  @@index([parentFolderId])
+  @@index([path])
+  @@map("folders")
+}
+
+// ----------------------------------------------------------------------------
+// Album (에셋 컬렉션)
+// ----------------------------------------------------------------------------
+
+// @schema-type: CONCRETE ENTITY
+// @description: 사용자 정의 에셋 컬렉션 (폴더와 분리된 독립적 분류 체계)
+/// @displayName 앨범
+model Album {
+  id           String       @id @default(uuid())
+  createdAt    DateTime     @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt    DateTime?    @updatedAt @map("updated_at") @db.Timestamptz(6)
+  removedAt    DateTime?    @map("removed_at") @db.Timestamptz(6)
+  /// @displayName 소속 Space
+  spaceId      String       @map("space_id")
+  /// @displayName 앨범명
+  name         String
+  /// @displayName 앨범 설명
+  description  String?
+  /// @displayName 커버 이미지 ID
+  coverAssetId String?      @map("cover_asset_id")
+  /// @displayName 정렬 순서
+  sortOrder    Int          @default(0) @map("sort_order")
+  /// @displayName 생성자
+  creatorId    String?      @map("creator_id")
+  // Relations
+  space        Space        @relation(fields: [spaceId], references: [id])
+  coverAsset   Asset?       @relation("AlbumCover", fields: [coverAssetId], references: [id], onDelete: SetNull)
+  creator      User?        @relation(fields: [creatorId], references: [id])
+  entries      AlbumEntry[]
+
+  @@index([spaceId])
+  @@index([name])
+  @@map("albums")
+}
+
+// ----------------------------------------------------------------------------
+// AlbumEntry (Album-Asset 조인 테이블)
+// ----------------------------------------------------------------------------
+
+// @schema-type: BRIDGE
+// @description: Album과 Asset의 N:M 관계를 관리하는 조인 테이블
+// @connects: Album ─── Asset
+/// @displayName 앨범 엔트리
+model AlbumEntry {
+  id        String    @id @default(uuid())
+  createdAt DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt DateTime? @updatedAt @map("updated_at") @db.Timestamptz(6)
+  removedAt DateTime? @map("removed_at") @db.Timestamptz(6)
+  /// @displayName 소속 Space
+  spaceId   String    @map("space_id")
+  /// @displayName 앨범 ID
+  albumId   String    @map("album_id")
+  /// @displayName 에셋 ID
+  assetId   String    @map("asset_id")
+  /// @displayName 앨범 내 순서
+  position  Int
+  /// @displayName 캡션
+  caption   String?
+  // Relations
+  space     Space     @relation(fields: [spaceId], references: [id])
+  album     Album     @relation(fields: [albumId], references: [id], onDelete: Cascade)
+  asset     Asset     @relation(fields: [assetId], references: [id], onDelete: Cascade)
+
+  @@unique([albumId, assetId])
+  @@index([spaceId])
+  @@index([albumId])
+  @@index([assetId])
+  @@map("album_entries")
+}
+
+// ----------------------------------------------------------------------------
+// Derivative (파생 리소스)
+// ----------------------------------------------------------------------------
+
+// @schema-type: EXTENSION
+// @description: Asset의 파생 리소스(썸네일, 프리뷰, 트랜스코딩 등) 관리
+// @extends: Asset (1:N)
+/// @DisplayName 파생 리소스
+model Derivative {
+  id         String         @id @default(uuid())
+  createdAt  DateTime       @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt  DateTime?      @updatedAt @map("updated_at") @db.Timestamptz(6)
+  removedAt  DateTime?      @map("removed_at") @db.Timestamptz(6)
+  /// @displayName 소속 Space
+  spaceId    String         @map("space_id")
+  /// @displayName 원본 Asset ID
+  assetId    String         @map("asset_id")
+  /// @displayName 파생 리소스 종류
+  kind       DerivativeKind
+  /// @displayName 변환 프로필명
+  profile    String         @default("default")
+  /// @displayName 스토리지 키
+  storageKey String         @unique @map("storage_key")
+  /// @displayName MIME 타입
+  mimeType   String         @map("mime_type")
+  /// @displayName 파일 크기
+  sizeBytes  BigInt         @map("size_bytes")
+  /// @displayName 너비 (이미지/비디오)
+  width      Int?
+  /// @displayName 높이 (이미지/비디오)
+  height     Int?
+  /// @displayName 재생 시간 (비디오 트랜스코딩)
+  durationMs Int?           @map("duration_ms")
+  // Relations
+  space      Space          @relation(fields: [spaceId], references: [id])
+  asset      Asset          @relation(fields: [assetId], references: [id], onDelete: Cascade)
+
+  @@unique([assetId, kind, profile])
+  @@index([spaceId])
+  @@index([assetId])
+  @@index([kind])
+  @@map("derivatives")
+}

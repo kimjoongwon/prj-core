@@ -1,21 +1,15 @@
-import { Enum, EnumType } from "ts-jenum";
+import { BaseEnum } from "./base-enum";
 
-@Enum("code")
-export class SpaceGroupNames extends EnumType<SpaceGroupNames>() {
-	static readonly ROOT = new SpaceGroupNames("ROOT", "루트");
+export class SpaceGroupName extends BaseEnum {
+	static readonly ROOT = new SpaceGroupName("ROOT", "루트");
 
-	private constructor(
-		readonly _code: string,
-		readonly _name: string,
-	) {
-		super();
+	private static readonly _values = [SpaceGroupName.ROOT] as const;
+
+	static values(): SpaceGroupName[] {
+		return [...SpaceGroupName._values];
 	}
 
-	get code(): string {
-		return this._code;
-	}
-
-	get name(): string {
-		return this._name;
+	private constructor(code: string, name: string) {
+		super(code, name);
 	}
 }

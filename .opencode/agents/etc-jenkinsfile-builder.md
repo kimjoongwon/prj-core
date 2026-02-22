@@ -7,8 +7,6 @@ tools:
   bash: true
 ---
 
-
-
 # Jenkinsfile 빌더
 
 Jenkins 파이프라인 파일을 생성하는 전문가입니다. 프로젝트의 배포 파이프라인을 자동화합니다.

@@ -43,6 +43,7 @@ model OidcClient {
   policyUri               String?   @map("policy_uri")
   /// @displayName 서비스 약관 URI
   tosUri                  String?   @map("tos_uri")
+
   @@index([isActive])
   @@map("oidc_clients")
 }

@@ -7,8 +7,6 @@ tools:
   bash: true
 ---
 
-
-
 # Entity Builder
 
 도메인 Entity 클래스를 생성하는 전문가입니다.

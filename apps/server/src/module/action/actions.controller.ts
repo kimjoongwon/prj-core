@@ -14,7 +14,7 @@ import {
 	CreateActionDto,
 	UpdateActionDto,
 } from "@cocrepo/dto";
-import { RoleCategoryNames } from "@cocrepo/enum";
+import { RoleCategoryName } from "@cocrepo/enum";
 import { ActionsService } from "@cocrepo/service";
 import {
 	BadRequestException,
@@ -38,7 +38,6 @@ import {
 	ApiQuery,
 	ApiTags,
 } from "@nestjs/swagger";
-
 
 @ApiTags("ACTIONS")
 @Controller()
@@ -91,7 +90,7 @@ export class ActionsController {
 	@Post()
 	@HttpCode(HttpStatus.CREATED)
 	@UseGuards(RoleCategoryGuard)
-	@RoleCategories([RoleCategoryNames.WORKSPACE])
+	@RoleCategories([RoleCategoryName.WORKSPACE])
 	@ApiOperation({
 		operationId: "createAction",
 		summary: "Action 생성",
@@ -120,7 +119,7 @@ export class ActionsController {
 	@Patch(":id")
 	@HttpCode(HttpStatus.OK)
 	@UseGuards(RoleCategoryGuard)
-	@RoleCategories([RoleCategoryNames.WORKSPACE])
+	@RoleCategories([RoleCategoryName.WORKSPACE])
 	@ApiOperation({
 		operationId: "updateAction",
 		summary: "Action 수정",
@@ -174,7 +173,7 @@ export class ActionsController {
 	@Delete(":id")
 	@HttpCode(HttpStatus.OK)
 	@UseGuards(RoleCategoryGuard)
-	@RoleCategories([RoleCategoryNames.WORKSPACE])
+	@RoleCategories([RoleCategoryName.WORKSPACE])
 	@ApiOperation({
 		operationId: "deleteAction",
 		summary: "Action 삭제",

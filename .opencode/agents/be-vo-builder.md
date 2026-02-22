@@ -7,8 +7,6 @@ tools:
   bash: true
 ---
 
-
-
 # VO Builder
 
 Value Object 클래스를 생성하는 전문가입니다.
@@ -344,7 +342,7 @@ export class Cookie extends ValueObject<CookieProps> {
 
 | 구분 | 에이전트 | 설명 |
 |------|----------|------|
-| **선행** | be-spec-planner | 도메인 개념 정의 |
+| **선행** | req-entity-planner | 도메인 개념 정의 |
 | **후행** | be-entity-builder | Entity에서 VO 사용 |
 | | be-service-builder | Service에서 VO 활용 |
 | **관련** | be-dto-builder | DTO ↔ VO 변환 |

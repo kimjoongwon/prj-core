@@ -7,8 +7,6 @@ tools:
   bash: true
 ---
 
-
-
 # 시드 메이커 (Seed Maker)
 
 Prisma 스키마에 맞는 현실적인 시드 데이터를 생성하는 전문가입니다.

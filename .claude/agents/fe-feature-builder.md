@@ -311,6 +311,7 @@ Pure UI → Widget → Feature → Page
 
 | 에이전트 | 관계 |
 |----------|------|
+| req-feature-planner | Feature 기획서(index.spec.md) 기반 구현 |
 | fe-ui-component-builder | Feature가 사용할 Pure UI 컴포넌트 생성 |
 | **fe-widget-builder** | Feature가 사용할 Widget 컴포넌트 생성 |
 | **fe-store-builder** | Feature가 연결할 Store 생성 |

@@ -1,27 +1,29 @@
-import { Enum, EnumType } from "ts-jenum";
+import { BaseEnum } from "./base-enum";
 
-@Enum("code")
-export class RoleCategoryNames extends EnumType<RoleCategoryNames>() {
-	static readonly PLATFORM = new RoleCategoryNames("PLATFORM", "플랫폼");
-	static readonly SHARED = new RoleCategoryNames("SHARED", "공유");
-	static readonly WORKSPACE = new RoleCategoryNames("WORKSPACE", "워크스페이스");
-	static readonly PUBLIC = new RoleCategoryNames("PUBLIC", "공개");
-	static readonly PROJECT = new RoleCategoryNames("PROJECT", "프로젝트");
-	static readonly TECHNICAL = new RoleCategoryNames("TECHNICAL", "기술");
-	static readonly RESTRICTED = new RoleCategoryNames("RESTRICTED", "제한");
+export class RoleCategoryName extends BaseEnum {
+	static readonly PLATFORM = new RoleCategoryName("PLATFORM", "플랫폼");
+	static readonly SHARED = new RoleCategoryName("SHARED", "공유");
+	static readonly WORKSPACE = new RoleCategoryName("WORKSPACE", "워크스페이스");
+	static readonly PUBLIC = new RoleCategoryName("PUBLIC", "공개");
+	static readonly PROJECT = new RoleCategoryName("PROJECT", "프로젝트");
+	static readonly TECHNICAL = new RoleCategoryName("TECHNICAL", "기술");
+	static readonly RESTRICTED = new RoleCategoryName("RESTRICTED", "제한");
 
-	private constructor(
-		readonly _code: string,
-		readonly _name: string,
-	) {
-		super();
+	private static readonly _values = [
+		RoleCategoryName.PLATFORM,
+		RoleCategoryName.SHARED,
+		RoleCategoryName.WORKSPACE,
+		RoleCategoryName.PUBLIC,
+		RoleCategoryName.PROJECT,
+		RoleCategoryName.TECHNICAL,
+		RoleCategoryName.RESTRICTED,
+	] as const;
+
+	static values(): RoleCategoryName[] {
+		return [...RoleCategoryName._values];
 	}
 
-	get code(): string {
-		return this._code;
-	}
-
-	get name(): string {
-		return this._name;
+	private constructor(code: string, name: string) {
+		super(code, name);
 	}
 }

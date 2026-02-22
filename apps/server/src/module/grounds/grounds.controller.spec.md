@@ -111,5 +111,5 @@ Ground(시설) 관련 REST API를 제공합니다. 목록 조회(공개/인증)�
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
 | 2026-02-18 | 초기 생성 (역기획) - GET 2개 | req-reverse-engineer |
-| 2026-02-19 | CRUD 엔드포인트 추가 (GET단건/POST/PATCH/DELETE), 인가 권한 명시, DTO 필드 정의 | be-spec-planner |
+| 2026-02-19 | CRUD 엔드포인트 추가 (GET단건/POST/PATCH/DELETE), 인가 권한 명시, DTO 필드 정의 | req-api-planner |
 | 2026-02-19 | CRUD 전체 구현 완료 - be-service-builder | be-service-builder |

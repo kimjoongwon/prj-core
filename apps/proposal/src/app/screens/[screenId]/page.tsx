@@ -59,7 +59,7 @@ const ScreenDesignPage = observer(() => {
 		);
 	}
 
-	// 메타데이터에서 screenDesign 정보 추출 (SOT: req-L3L4-planner 에이전트 구조 준수)
+	// 메타데이터에서 screenDesign 정보 추출 (SOT: req-screen-planner 에이전트 구조 준수)
 	const metadata = screenNode.metadata as
 		| {
 				screenDesign?: {

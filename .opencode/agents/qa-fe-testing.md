@@ -7,8 +7,6 @@ tools:
   bash: true
 ---
 
-
-
 # Frontend Tester (Vitest)
 
 Vitest 기반으로 프론트엔드 패키지의 테스트 코드를 작성하는 전문가입니다.

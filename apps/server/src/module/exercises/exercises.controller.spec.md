@@ -175,4 +175,4 @@ async deleteExercise(
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
-| 2026-02-19 | 초기 생성 | be-spec-planner |
+| 2026-02-19 | 초기 생성 | req-api-planner |

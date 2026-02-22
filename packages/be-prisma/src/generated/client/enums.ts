@@ -9,6 +9,34 @@
 * 🟢 You can import this file directly.
 */
 
+export const AssetKind = {
+  IMAGE: 'IMAGE',
+  VIDEO: 'VIDEO',
+  DOCUMENT: 'DOCUMENT'
+} as const
+
+export type AssetKind = (typeof AssetKind)[keyof typeof AssetKind]
+
+
+export const AssetStatus = {
+  UPLOADING: 'UPLOADING',
+  READY: 'READY',
+  FAILED: 'FAILED'
+} as const
+
+export type AssetStatus = (typeof AssetStatus)[keyof typeof AssetStatus]
+
+
+export const DerivativeKind = {
+  THUMBNAIL: 'THUMBNAIL',
+  PREVIEW: 'PREVIEW',
+  TRANSCODE: 'TRANSCODE',
+  TEXT: 'TEXT'
+} as const
+
+export type DerivativeKind = (typeof DerivativeKind)[keyof typeof DerivativeKind]
+
+
 export const WhitelistType = {
   IP: 'IP',
   EMAIL_DOMAIN: 'EMAIL_DOMAIN',

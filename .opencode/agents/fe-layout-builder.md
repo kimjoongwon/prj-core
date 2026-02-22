@@ -7,8 +7,6 @@ tools:
   bash: true
 ---
 
-
-
 # 레이아웃 빌더
 
 **Layout 컴포넌트**(AppLayout, PageLayout, SectionLayout)를 설계하고 생성합니다. Layout은 **순수 위치(영역)만 정의**하고, Feature 컴포넌트는 해당 영역에 마운트됩니다.
@@ -167,7 +165,8 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
 ### 선행 에이전트
 | 에이전트 | 용도 |
 |---------|------|
-| `req-ui-planner` | 레이아웃 설계 정보 제공 |
+| `req-layout-planner` | 레이아웃 설계 정보 제공 |
+| `req-page-planner` | 페이지 통합 구조 정보 제공 |
 | `/design-analyze (Skill)` | Figma에서 레이아웃 구조 분석 |
 
 ### 후행 에이전트

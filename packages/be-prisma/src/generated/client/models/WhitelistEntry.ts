@@ -359,10 +359,6 @@ export type EnumWhitelistTypeFieldUpdateOperationsInput = {
   set?: $Enums.WhitelistType
 }
 
-export type NullableStringFieldUpdateOperationsInput = {
-  set?: string | null
-}
-
 
 
 export type WhitelistEntrySelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{

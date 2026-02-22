@@ -162,7 +162,7 @@ Store 연동이 필요한가?
 
 | 에이전트 | 관계 | 설명 |
 |----------|------|------|
-| req-L5L6-planner | 이전 단계 | 인터랙션/API |
+| req-api-planner | 이전 단계 | 인터랙션/API |
 | orch-screen-planner | 상위 | 화면 기획 조율 |
 
 ### 후행 에이전트

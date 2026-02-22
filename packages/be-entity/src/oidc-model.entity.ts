@@ -1,5 +1,5 @@
-import type { JsonValue } from "@cocrepo/type";
 import type { OidcModel as OidcModelEntity } from "@cocrepo/prisma";
+import type { JsonValue } from "@cocrepo/type";
 
 export class OidcModel implements OidcModelEntity {
 	id!: string;

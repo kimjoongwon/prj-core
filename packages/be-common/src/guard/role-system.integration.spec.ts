@@ -1,7 +1,5 @@
-import { CONTEXT_KEYS, SYSTEM_ROLES, type SystemRoleName } from "@cocrepo/constant";
-import { ROLES_KEY, ROLE_CATEGORIES_KEY, ROLE_GROUPS_KEY } from "@cocrepo/decorator";
-import { RoleCategoryNames } from "@cocrepo/enum";
-import { RoleGroupNames } from "@cocrepo/enum";
+import { CONTEXT_KEYS, SYSTEM_ROLES } from "@cocrepo/constant";
+import { RoleCategoryName, RoleGroupName } from "@cocrepo/enum";
 import { ExecutionContext, ForbiddenException } from "@nestjs/common";
 import { Reflector } from "@nestjs/core";
 import { Test, TestingModule } from "@nestjs/testing";
@@ -47,61 +45,61 @@ describe("Role 시스템 통합 테스트", () => {
 			});
 		});
 
-		describe("RoleCategoryNames enum", () => {
+		describe("RoleCategoryName enum", () => {
 			it("7개 멤버를 가져야 한다: PLATFORM, SHARED, WORKSPACE, PUBLIC, PROJECT, TECHNICAL, RESTRICTED", () => {
 				// Then
-				expect(RoleCategoryNames.PLATFORM).toBeDefined();
-				expect(RoleCategoryNames.SHARED).toBeDefined();
-				expect(RoleCategoryNames.WORKSPACE).toBeDefined();
-				expect(RoleCategoryNames.PUBLIC).toBeDefined();
-				expect(RoleCategoryNames.PROJECT).toBeDefined();
-				expect(RoleCategoryNames.TECHNICAL).toBeDefined();
-				expect(RoleCategoryNames.RESTRICTED).toBeDefined();
+				expect(RoleCategoryName.PLATFORM).toBeDefined();
+				expect(RoleCategoryName.SHARED).toBeDefined();
+				expect(RoleCategoryName.WORKSPACE).toBeDefined();
+				expect(RoleCategoryName.PUBLIC).toBeDefined();
+				expect(RoleCategoryName.PROJECT).toBeDefined();
+				expect(RoleCategoryName.TECHNICAL).toBeDefined();
+				expect(RoleCategoryName.RESTRICTED).toBeDefined();
 			});
 
 			it("한글 name이 올바르게 설정되어야 한다", () => {
 				// Then
-				expect(RoleCategoryNames.PLATFORM.name).toBe("플랫폼");
-				expect(RoleCategoryNames.SHARED.name).toBe("공유");
-				expect(RoleCategoryNames.WORKSPACE.name).toBe("워크스페이스");
-				expect(RoleCategoryNames.PUBLIC.name).toBe("공개");
-				expect(RoleCategoryNames.PROJECT.name).toBe("프로젝트");
-				expect(RoleCategoryNames.TECHNICAL.name).toBe("기술");
-				expect(RoleCategoryNames.RESTRICTED.name).toBe("제한");
+				expect(RoleCategoryName.PLATFORM.name).toBe("플랫폼");
+				expect(RoleCategoryName.SHARED.name).toBe("공유");
+				expect(RoleCategoryName.WORKSPACE.name).toBe("워크스페이스");
+				expect(RoleCategoryName.PUBLIC.name).toBe("공개");
+				expect(RoleCategoryName.PROJECT.name).toBe("프로젝트");
+				expect(RoleCategoryName.TECHNICAL.name).toBe("기술");
+				expect(RoleCategoryName.RESTRICTED.name).toBe("제한");
 			});
 
 			it("이전 이름(ROOT, COMMON, ADMIN, USER, MANAGER, DEVELOPER, GUEST)이 없어야 한다", () => {
 				// Then
-				expect(RoleCategoryNames).not.toHaveProperty("ROOT");
-				expect(RoleCategoryNames).not.toHaveProperty("COMMON");
-				expect(RoleCategoryNames).not.toHaveProperty("ADMIN");
-				expect(RoleCategoryNames).not.toHaveProperty("USER");
-				expect(RoleCategoryNames).not.toHaveProperty("MANAGER");
-				expect(RoleCategoryNames).not.toHaveProperty("DEVELOPER");
-				expect(RoleCategoryNames).not.toHaveProperty("GUEST");
+				expect(RoleCategoryName).not.toHaveProperty("ROOT");
+				expect(RoleCategoryName).not.toHaveProperty("COMMON");
+				expect(RoleCategoryName).not.toHaveProperty("ADMIN");
+				expect(RoleCategoryName).not.toHaveProperty("USER");
+				expect(RoleCategoryName).not.toHaveProperty("MANAGER");
+				expect(RoleCategoryName).not.toHaveProperty("DEVELOPER");
+				expect(RoleCategoryName).not.toHaveProperty("GUEST");
 			});
 		});
 
-		describe("RoleGroupNames enum", () => {
+		describe("RoleGroupName enum", () => {
 			it("3개 멤버를 가져야 한다: TRUSTED, STANDARD, PREMIUM", () => {
 				// Then
-				expect(RoleGroupNames.TRUSTED).toBeDefined();
-				expect(RoleGroupNames.STANDARD).toBeDefined();
-				expect(RoleGroupNames.PREMIUM).toBeDefined();
+				expect(RoleGroupName.TRUSTED).toBeDefined();
+				expect(RoleGroupName.STANDARD).toBeDefined();
+				expect(RoleGroupName.PREMIUM).toBeDefined();
 			});
 
 			it("한글 name이 올바르게 설정되어야 한다", () => {
 				// Then
-				expect(RoleGroupNames.TRUSTED.name).toBe("신뢰");
-				expect(RoleGroupNames.STANDARD.name).toBe("일반");
-				expect(RoleGroupNames.PREMIUM.name).toBe("프리미엄");
+				expect(RoleGroupName.TRUSTED.name).toBe("신뢰");
+				expect(RoleGroupName.STANDARD.name).toBe("일반");
+				expect(RoleGroupName.PREMIUM.name).toBe("프리미엄");
 			});
 
 			it("이전 이름(ROOT, NORMAL, VIP)이 없어야 한다", () => {
 				// Then
-				expect(RoleGroupNames).not.toHaveProperty("ROOT");
-				expect(RoleGroupNames).not.toHaveProperty("NORMAL");
-				expect(RoleGroupNames).not.toHaveProperty("VIP");
+				expect(RoleGroupName).not.toHaveProperty("ROOT");
+				expect(RoleGroupName).not.toHaveProperty("NORMAL");
+				expect(RoleGroupName).not.toHaveProperty("VIP");
 			});
 		});
 	});
@@ -130,7 +128,11 @@ describe("Role 시스템 통합 테스트", () => {
 			} as unknown as ExecutionContext;
 		};
 
-		const createMockUser = (roleName: string, category?: any, associations?: any[]) => ({
+		const createMockUser = (
+			roleName: string,
+			category?: any,
+			associations?: any[],
+		) => ({
 			id: "user-test-id",
 			email: "test@example.com",
 			tenants: [
@@ -146,7 +148,11 @@ describe("Role 시스템 통합 테스트", () => {
 			],
 		});
 
-		const createMockTenant = (roleName: string, category?: any, associations?: any[]) => ({
+		const createMockTenant = (
+			roleName: string,
+			category?: any,
+			associations?: any[],
+		) => ({
 			id: "tenant-1",
 			spaceId: "space-001",
 			role: {
@@ -216,7 +222,9 @@ describe("Role 시스템 통합 테스트", () => {
 				const context = createMockExecutionContext();
 
 				// When & Then
-				expect(() => rolesGuard.canActivate(context)).toThrow(ForbiddenException);
+				expect(() => rolesGuard.canActivate(context)).toThrow(
+					ForbiddenException,
+				);
 			});
 
 			it("MANAGE 사용자 -> RolesGuard([MANAGE]) 통과", () => {
@@ -236,7 +244,10 @@ describe("Role 시스템 통합 테스트", () => {
 
 			it("VIEW 사용자 -> RolesGuard([MANAGE, VIEW]) 통과 (여러 역할 중 하나 일치)", () => {
 				// Given
-				mockReflector.get.mockReturnValue([SYSTEM_ROLES.MANAGE, SYSTEM_ROLES.VIEW]);
+				mockReflector.get.mockReturnValue([
+					SYSTEM_ROLES.MANAGE,
+					SYSTEM_ROLES.VIEW,
+				]);
 				const user = createMockUser(SYSTEM_ROLES.VIEW);
 				const tenant = createMockTenant(SYSTEM_ROLES.VIEW);
 				setupCls(user, tenant);
@@ -253,8 +264,12 @@ describe("Role 시스템 통합 테스트", () => {
 		describe("RoleCategoryGuard 교차 검증", () => {
 			it("공개(PUBLIC) 카테고리 사용자 -> RoleCategoryGuard([SHARED]) 통과 (상위 카테고리 포함)", () => {
 				// Given - 공개(PUBLIC)의 상위가 공유(SHARED)
-				mockReflector.get.mockReturnValue([RoleCategoryNames.SHARED]);
-				const category = { name: "공개", parent: { name: "공유" }, children: [] };
+				mockReflector.get.mockReturnValue([RoleCategoryName.SHARED]);
+				const category = {
+					name: "공개",
+					parent: { name: "공유" },
+					children: [],
+				};
 				const user = createMockUser(SYSTEM_ROLES.VIEW, category);
 				const tenant = createMockTenant(SYSTEM_ROLES.VIEW, category);
 				setupCls(user, tenant);
@@ -269,7 +284,7 @@ describe("Role 시스템 통합 테스트", () => {
 
 			it("워크스페이스(WORKSPACE) 카테고리 사용자 -> RoleCategoryGuard([PUBLIC]) 거부", () => {
 				// Given - 워크스페이스의 계층에 공개가 없음
-				mockReflector.get.mockReturnValue([RoleCategoryNames.PUBLIC]);
+				mockReflector.get.mockReturnValue([RoleCategoryName.PUBLIC]);
 				const category = { name: "워크스페이스", parent: null, children: [] };
 				const user = createMockUser(SYSTEM_ROLES.MANAGE, category);
 				const tenant = createMockTenant(SYSTEM_ROLES.MANAGE, category);
@@ -277,7 +292,9 @@ describe("Role 시스템 통합 테스트", () => {
 				const context = createMockExecutionContext();
 
 				// When & Then
-				expect(() => roleCategoryGuard.canActivate(context)).toThrow(ForbiddenException);
+				expect(() => roleCategoryGuard.canActivate(context)).toThrow(
+					ForbiddenException,
+				);
 			});
 		});
 
@@ -287,7 +304,11 @@ describe("Role 시스템 통합 테스트", () => {
 				mockReflector.get.mockReturnValue(["일반"]);
 				const associations = [{ group: { name: "일반" } }];
 				const user = createMockUser(SYSTEM_ROLES.VIEW, undefined, associations);
-				const tenant = createMockTenant(SYSTEM_ROLES.VIEW, undefined, associations);
+				const tenant = createMockTenant(
+					SYSTEM_ROLES.VIEW,
+					undefined,
+					associations,
+				);
 				setupCls(user, tenant);
 				const context = createMockExecutionContext();
 
@@ -303,12 +324,18 @@ describe("Role 시스템 통합 테스트", () => {
 				mockReflector.get.mockReturnValue(["프리미엄"]);
 				const associations = [{ group: { name: "일반" } }];
 				const user = createMockUser(SYSTEM_ROLES.VIEW, undefined, associations);
-				const tenant = createMockTenant(SYSTEM_ROLES.VIEW, undefined, associations);
+				const tenant = createMockTenant(
+					SYSTEM_ROLES.VIEW,
+					undefined,
+					associations,
+				);
 				setupCls(user, tenant);
 				const context = createMockExecutionContext();
 
 				// When & Then
-				expect(() => roleGroupGuard.canActivate(context)).toThrow(ForbiddenException);
+				expect(() => roleGroupGuard.canActivate(context)).toThrow(
+					ForbiddenException,
+				);
 			});
 		});
 
@@ -339,8 +366,12 @@ describe("Role 시스템 통합 테스트", () => {
 
 			it("RoleCategoryGuard 거부 시 에러 메시지에 새 카테고리 이름이 포함되어야 한다", () => {
 				// Given
-				mockReflector.get.mockReturnValue([RoleCategoryNames.WORKSPACE]);
-				const category = { name: "공개", parent: { name: "공유" }, children: [] };
+				mockReflector.get.mockReturnValue([RoleCategoryName.WORKSPACE]);
+				const category = {
+					name: "공개",
+					parent: { name: "공유" },
+					children: [],
+				};
 				const user = createMockUser(SYSTEM_ROLES.VIEW, category);
 				const tenant = createMockTenant(SYSTEM_ROLES.VIEW, category);
 				setupCls(user, tenant);
@@ -363,7 +394,11 @@ describe("Role 시스템 통합 테스트", () => {
 				mockReflector.get.mockReturnValue(["프리미엄"]);
 				const associations = [{ group: { name: "일반" } }];
 				const user = createMockUser(SYSTEM_ROLES.VIEW, undefined, associations);
-				const tenant = createMockTenant(SYSTEM_ROLES.VIEW, undefined, associations);
+				const tenant = createMockTenant(
+					SYSTEM_ROLES.VIEW,
+					undefined,
+					associations,
+				);
 				setupCls(user, tenant);
 				const context = createMockExecutionContext();
 

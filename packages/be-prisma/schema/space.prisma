@@ -36,6 +36,12 @@ model Space {
   tasks          Task[]
   safeWallets    SafeWallet[]
   routines       Routine[]
+  // Asset 도메인
+  folders        Folder[]
+  assets         Asset[]
+  albums         Album[]
+  albumEntries   AlbumEntry[]
+  derivatives    Derivative[]
 
   @@map("spaces")
 }

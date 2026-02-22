@@ -7,8 +7,6 @@ tools:
   bash: true
 ---
 
-
-
 # L10 Feature 기획자 (Feature Planner)
 
 특정 화면에 필요한 **Feature 컴포넌트(L10)** 레이어를 기획하는 전문가입니다.

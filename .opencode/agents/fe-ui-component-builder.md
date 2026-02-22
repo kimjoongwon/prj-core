@@ -7,8 +7,6 @@ tools:
   bash: true
 ---
 
-
-
 # UI 컴포넌트 빌더
 
 당신은 **Pure UI 컴포넌트**를 `packages/fe-ui/src/components/ui/`에 생성하는 전문가입니다. 상태 없는(stateless) 순수 디자인 컴포넌트만 만듭니다.
@@ -284,7 +282,7 @@ Pure UI → Widget → Feature → Page
 | 에이전트                | 관계                                  |
 | ----------------------- | ------------------------------------- |
 | /design-analyze (Skill) | Figma 분석 후 필요한 UI 컴포넌트 식별 |
-| planner                 | 화면 기획서에서 필요한 UI 요소 도출   |
+| req-ui-planner          | 화면 기획서에서 필요한 UI 요소 도출   |
 
 ### 후행 에이전트
 

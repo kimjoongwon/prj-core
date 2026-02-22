@@ -10,24 +10,24 @@ pnpm add @cocrepo/enum
 
 ## 제공 열거형
 
-### CategoryTypes
+### CategoryType
 
 카테고리 타입을 정의합니다:
 
 ```typescript
-import { CategoryTypes } from '@cocrepo/enum';
+import { CategoryType } from '@cocrepo/enum';
 
-const category = CategoryTypes.SERVICE;
+const category = CategoryType.SERVICE;
 ```
 
-### CategoryNames
+### CategoryName
 
 카테고리 이름을 정의합니다:
 
 ```typescript
-import { CategoryNames } from '@cocrepo/enum';
+import { CategoryName } from '@cocrepo/enum';
 
-const name = CategoryNames.PILATES;
+const name = CategoryName.PILATES;
 ```
 
 ### GroupTypes
@@ -40,25 +40,25 @@ import { GroupTypes } from '@cocrepo/enum';
 const groupType = GroupTypes.TEAM;
 ```
 
-### GroupNames
+### GroupName
 
 그룹 이름을 정의합니다:
 
 ```typescript
-import { GroupNames } from '@cocrepo/enum';
+import { GroupName } from '@cocrepo/enum';
 
-const groupName = GroupNames.DEFAULT;
+const groupName = GroupName.DEFAULT;
 ```
 
-### SessionTypes
+### SessionType
 
 세션 타입을 정의합니다:
 
 ```typescript
-import { SessionTypes } from '@cocrepo/enum';
+import { SessionType } from '@cocrepo/enum';
 
-const sessionType = SessionTypes.PRIVATE;
-// SessionTypes.GROUP, SessionTypes.OPEN 등
+const sessionType = SessionType.PRIVATE;
+// SessionType.GROUP, SessionType.OPEN 등
 ```
 
 ### RecurringDayOfWeek
@@ -75,35 +75,35 @@ const days = [
 ];
 ```
 
-### RepeatCycleTypes
+### RepeatCycleType
 
 반복 주기 타입을 정의합니다:
 
 ```typescript
-import { RepeatCycleTypes } from '@cocrepo/enum';
+import { RepeatCycleType } from '@cocrepo/enum';
 
-const cycle = RepeatCycleTypes.WEEKLY;
-// RepeatCycleTypes.DAILY, RepeatCycleTypes.MONTHLY 등
+const cycle = RepeatCycleType.WEEKLY;
+// RepeatCycleType.DAILY, RepeatCycleType.MONTHLY 등
 ```
 
-### RoleCategoryNames
+### RoleCategoryName
 
 역할 카테고리 이름을 정의합니다:
 
 ```typescript
-import { RoleCategoryNames } from '@cocrepo/enum';
+import { RoleCategoryName } from '@cocrepo/enum';
 
-const roleCategory = RoleCategoryNames.SYSTEM;
+const roleCategory = RoleCategoryName.SYSTEM;
 ```
 
-### RoleGroupNames
+### RoleGroupName
 
 역할 그룹 이름을 정의합니다:
 
 ```typescript
-import { RoleGroupNames } from '@cocrepo/enum';
+import { RoleGroupName } from '@cocrepo/enum';
 
-const roleGroup = RoleGroupNames.ADMIN;
+const roleGroup = RoleGroupName.ADMIN;
 ```
 
 ---
@@ -112,47 +112,46 @@ const roleGroup = RoleGroupNames.ADMIN;
 
 ```
 src/
-├── category-names.enum.ts       # 카테고리 이름
-├── category-types.enum.ts       # 카테고리 타입
-├── group-names.enum.ts          # 그룹 이름
-├── group-types.enum.ts          # 그룹 타입
-├── recurring-day-of-week.enum.ts # 반복 요일
-├── repeat-cycle-types.enum.ts   # 반복 주기
-├── role-category-names.enum.ts  # 역할 카테고리
-├── role-group-names.enum.ts     # 역할 그룹
-├── session-types.enum.ts        # 세션 타입
-└── index.ts                     # 통합 export
+├── base-enum.ts                 # 공통 Enum 베이스
+ ├── category-names.enum.ts       # 카테고리 이름
+ ├── category-types.enum.ts       # 카테고리 타입
+ ├── group-names.enum.ts          # 그룹 이름
+ ├── group-types.enum.ts          # 그룹 타입
+ ├── recurring-day-of-week.enum.ts # 반복 요일
+ ├── repeat-cycle-types.enum.ts   # 반복 주기
+ ├── role-category-names.enum.ts  # 역할 카테고리 이름
+ ├── role-group-names.enum.ts     # 역할 그룹 이름
+ ├── space-category-names.enum.ts # 공간 카테고리 이름
+ ├── space-group-names.enum.ts    # 공간 그룹 이름
+ ├── session-types.enum.ts        # 세션 타입
+ └── index.ts                     # 통합 export
 ```
 
-## ts-jenum
+## Enum 구현 방식
 
-이 패키지는 `ts-jenum` 라이브러리를 사용하여 Java 스타일의 강력한 Enum을 제공합니다:
+이 패키지의 Enum은 공통 `BaseEnum`을 상속하는 순수 TypeScript class 방식으로 구현되어, 별도 외부 Enum 라이브러리 없이 사용합니다.
 
 ```typescript
-import { Enum, EnumType } from 'ts-jenum';
+export abstract class BaseEnum {
+  constructor(
+    protected readonly _code: string,
+    protected readonly _name: string,
+  ) {}
 
-@Enum('value')
-export class SessionTypes extends EnumType<SessionTypes>() {
-  static readonly PRIVATE = new SessionTypes('PRIVATE', '1:1 개인 수업');
-  static readonly GROUP = new SessionTypes('GROUP', '그룹 수업');
-  static readonly OPEN = new SessionTypes('OPEN', '오픈 수업');
+  get code(): string {
+    return this._code;
+  }
 
-  private constructor(
-    readonly value: string,
-    readonly description: string,
-  ) {
-    super();
+  get name(): string {
+    return this._name;
+  }
+
+  equals(code: string): boolean {
+    return this.code === code;
   }
 }
 ```
 
-### ts-jenum 장점
-
-- 타입 안정성
-- 추가 속성 지원 (description 등)
-- 메서드 추가 가능
-- 직렬화/역직렬화 지원
-
 ## 의존성
 
-- `ts-jenum` - Java 스타일 Enum 라이브러리
+- 내부 BaseEnum 클래스 기반 구현 (`base-enum.ts`)

@@ -183,3 +183,11 @@ const { data: response } = useGetRoles();
 const roles = response?.data ?? [];  // RoleDto[]
 const meta = response?.meta;         // PaginationMeta | undefined
 ```
+
+## 연관 에이전트
+
+| 에이전트 | 관계 | 설명 |
+|----------|------|------|
+| req-api-integration-planner | 선행 | 훅/API 연동 기획서 기반 구현 |
+| req-api-planner | 선행 | 엔드포인트/DTO 계약 참조 |
+| fe-page-builder | 관련 | 페이지 통합 시 실제 훅 소비 |

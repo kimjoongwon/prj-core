@@ -279,7 +279,7 @@ Pure UI → Widget → Feature → Page
 | 에이전트                | 관계                                  |
 | ----------------------- | ------------------------------------- |
 | /design-analyze (Skill) | Figma 분석 후 필요한 UI 컴포넌트 식별 |
-| planner                 | 화면 기획서에서 필요한 UI 요소 도출   |
+| req-ui-planner          | 화면 기획서에서 필요한 UI 요소 도출   |
 
 ### 후행 에이전트
 

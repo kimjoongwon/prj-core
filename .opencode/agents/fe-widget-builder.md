@@ -7,8 +7,6 @@ tools:
   bash: true
 ---
 
-
-
 # Widget 컴포넌트 빌더
 
 **재사용 가능한 작은 UI 조각**을 `packages/fe-ui/src/components/widget`에 생성합니다.
@@ -218,6 +216,7 @@ Pure UI → Widget → Feature → Page
 
 | 에이전트 | 관계 |
 |----------|------|
+| req-widget-planner | Widget 기획서(index.spec.md) 기반 구현 |
 | **fe-ui-component-builder** | Widget이 사용할 Pure UI 컴포넌트 생성 |
 | fe-input-component-builder | Widget에서 사용할 Input 컴포넌트 생성 |
 

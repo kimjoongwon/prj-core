@@ -92,4 +92,4 @@ Program은 독립 목록 페이지 없이 Session 상세 페이지(`/timelines/[
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
-| 2026-02-19 | 초기 생성 | req-L9L10-planner |
+| 2026-02-19 | 초기 생성 | req-logic-planner |

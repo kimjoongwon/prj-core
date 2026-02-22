@@ -1,24 +1,23 @@
-import { Enum, EnumType } from "ts-jenum";
+import { BaseEnum } from "./base-enum";
 
-@Enum("code")
-export class CategoryTypes extends EnumType<CategoryTypes>() {
-	static readonly ROLE = new CategoryTypes("Role", "역할");
-	static readonly SPACE = new CategoryTypes("Space", "공간");
-	static readonly FILE = new CategoryTypes("File", "파일");
-	static readonly USER = new CategoryTypes("User", "사용자");
+export class CategoryType extends BaseEnum {
+	static readonly ROLE = new CategoryType("Role", "역할");
+	static readonly SPACE = new CategoryType("Space", "공간");
+	static readonly FILE = new CategoryType("File", "파일");
+	static readonly USER = new CategoryType("User", "사용자");
 
-	private constructor(
-		readonly _code: string,
-		readonly _name: string,
-	) {
-		super();
+	private static readonly _values = [
+		CategoryType.ROLE,
+		CategoryType.SPACE,
+		CategoryType.FILE,
+		CategoryType.USER,
+	] as const;
+
+	static values(): CategoryType[] {
+		return [...CategoryType._values];
 	}
 
-	get code(): string {
-		return this._code;
-	}
-
-	get name(): string {
-		return this._name;
+	private constructor(code: string, name: string) {
+		super(code, name);
 	}
 }

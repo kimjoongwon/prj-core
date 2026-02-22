@@ -679,6 +679,7 @@ Pure UI → Widget → Feature → Page
 
 | 에이전트 | 관계 |
 |----------|------|
+| req-page-planner | page.spec.md 통합 기획 기반 구현 |
 | ui-component-builder | Page가 사용할 Pure UI/Cell 컴포넌트 생성 |
 | widget-builder | Page가 사용할 Widget 컴포넌트 생성 |
 | feature-builder | Page가 사용할 Feature 컴포넌트 생성 |

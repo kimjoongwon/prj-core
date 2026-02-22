@@ -7,8 +7,6 @@ tools:
   bash: true
 ---
 
-
-
 # Prisma Annotator
 
 Prisma 스키마 파일에 `/// @displayName 한글명` 주석을 추가하는 전문가입니다.

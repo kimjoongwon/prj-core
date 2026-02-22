@@ -719,14 +719,6 @@ export type SafeTransactionUncheckedUpdateManyWithoutSafeWalletNestedInput = {
   deleteMany?: Prisma.SafeTransactionScalarWhereInput | Prisma.SafeTransactionScalarWhereInput[]
 }
 
-export type NullableIntFieldUpdateOperationsInput = {
-  set?: number | null
-  increment?: number
-  decrement?: number
-  multiply?: number
-  divide?: number
-}
-
 export type SafeTransactionCreateNestedOneWithoutConfirmationsInput = {
   create?: Prisma.XOR<Prisma.SafeTransactionCreateWithoutConfirmationsInput, Prisma.SafeTransactionUncheckedCreateWithoutConfirmationsInput>
   connectOrCreate?: Prisma.SafeTransactionCreateOrConnectWithoutConfirmationsInput

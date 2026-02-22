@@ -7,11 +7,9 @@ tools:
   bash: true
 ---
 
-
-
 # 단계 오케스트레이터 (Stage Orchestrator)
 
-7단계 분할 개발 플로우를 조율하는 메타 에이전트입니다。각 단계 완료 후 사용자 리뷰를 받고 다음 단계로 진행합니다。
+7단계 분할 개발 플로우를 조율하는 메타 에이전트입니다。각 단계 완료 후 사용자 리뷰를 받으며, 단계 내부는 의존성 기반으로 병렬 fan-out 실행을 지원합니다。
 
 ---
 
@@ -109,7 +107,7 @@ apps/server/src/[module]/
 
 ### 3.1 해석 우선순위
 
-1. 명시 파라미터(`stage=`, `app=`, `domain=`, `page=`)를 최우선으로 사용
+1. 명시 파라미터(`stage=`, `app=`, `domain=`, `page=`, `targets=`, `pages=`, `parallel=`)를 최우선으로 사용
 2. 누락된 항목만 자연어에서 추론
 3. 구조화/자연어가 혼합되면 명시값 유지 + 부족값 보정
 
@@ -120,6 +118,7 @@ apps/server/src/[module]/
 | "처음부터", "전체", "기획 시작", "신규 기능" | `full` |
 | "stage N", "N단계" | `run stage=N` |
 | "상태", "진행률", "어디까지" | `status` |
+| "계획", "미리보기", "plan" | `plan` |
 | "화면 기획", "API 기획", "인터랙션" | `run stage=4` |
 | "컴포넌트 구현", "위젯", "feature" | `run stage=5` |
 | "페이지 구현", "페이지 통합" | `run stage=6` |
@@ -131,6 +130,9 @@ apps/server/src/[module]/
 - Stage 4-6인데 `page`가 없으면 자연어에서 페이지를 추론하고, 불명확하면 1회 질문
 - `full` 모드에서 요구사항이 없으면 기본 요구사항 `목록/상세/등록/수정/삭제`
 - `domain`을 추론할 수 없을 때만 1회 질문
+- `parallel` 미지정 시 기본값 `auto`
+- `maxConcurrency` 미지정 시 기본값 `3`
+- `failPolicy` 미지정 시 기본값 `fail-fast`
 
 ### 3.4 페이지 키워드 매핑
 
@@ -140,6 +142,22 @@ apps/server/src/[module]/
 | "상세", "detail", "view" | `Detail` |
 | "등록", "생성", "new", "create" | `Create` |
 | "수정", "edit", "update" | `Edit` |
+
+### 3.5 병렬 실행 파라미터 (신규)
+
+| 파라미터 | 기본값 | 설명 |
+|---------|--------|------|
+| `parallel` | `auto` | `off`(순차), `auto`(의존성 기반 병렬), `force`(강제 병렬) |
+| `maxConcurrency` | `3` | 동시에 실행할 subagent 최대 개수 |
+| `targets` | - | Stage 2-3의 백엔드 작업 단위 목록 (예: `User,Post`) |
+| `pages` | - | Stage 4-6의 페이지 작업 단위 목록 (예: `List,Detail`) |
+| `failPolicy` | `fail-fast` | `fail-fast`(첫 실패 시 중단), `continue`(실패 분리 후 계속) |
+
+### 3.6 기본 동작 규칙 (신규)
+
+- Stage 간 진행은 기존과 동일하게 사용자 리뷰/승인 게이트를 유지합니다.
+- Stage 내부에서 의존성이 없는 작업은 `parallel=auto`일 때 자동 fan-out 됩니다.
+- `targets`/`pages`를 명시하지 않으면 기존 단일 단위 실행 방식으로 동작합니다.
 
 ---
 
@@ -154,6 +172,11 @@ apps/server/src/[module]/
 | **domain** | △ | 자연어에서 추출, 실패 시 1회 질문 |
 | 요구사항 | O (full) | 기능 요구사항 목록 |
 | **page** | △ | Stage 4-6에서 사용, 자연어 키워드로 자동 추론 가능 |
+| `targets` | △ | Stage 2-3에서 엔티티/모듈 다중 지정 (`User,Post`) |
+| `pages` | △ | Stage 4-6에서 페이지 다중 지정 (`List,Detail`) |
+| `parallel` | △ | 병렬 모드 (`off`/`auto`/`force`), 기본 `auto` |
+| `maxConcurrency` | △ | 동시 실행 상한 (기본 `3`) |
+| `failPolicy` | △ | 실패 정책 (`fail-fast`/`continue`) |
 
 ### 출력 (폴더 구조)
 
@@ -189,15 +212,15 @@ packages/fe-ui/src/components/feature/[FeatureName]/index.spec.md
 
 ## 5. Stage 요약
 
-| Stage | 이름 | 실행 단위 | 핵심 목표 | 주요 에이전트 |
-|-------|------|----------|----------|--------------|
-| 1 | 도메인 기획 | 도메인 전체 | L0-L4 기획 + BE/Store 스펙 | orch-requirement |
-| 2 | 스키마 구현 | 도메인 전체 | Prisma 스키마, Entity, DTO + 테스트 | be-schema-builder, be-entity-builder, be-dto-builder, be-query-dto-builder, be-seed-maker, req-test-planner, qa-be-testing |
-| 3 | 백엔드 구현 | 도메인 전체 | Repository, Service, Controller + 테스트 | be-repository-builder, be-service-builder, be-facade-builder, be-controller-builder, req-test-planner, qa-be-testing |
-| 4 | 화면 기획 | **페이지별** | L5-L12 기획 | orch-screen-planner |
-| 5 | 컴포넌트 구현 | **페이지별** | UI, Widget, Feature + 테스트 | fe-ui-component-builder, fe-input-component-builder, fe-widget-builder, fe-feature-builder, fe-store-builder, fe-menu-builder, req-test-planner, qa-fe-testing |
-| 6 | 페이지 통합 | **페이지별** | 페이지 컴포넌트 + 테스트 | fe-page-builder, /fe-review, req-test-planner, qa-fe-testing |
-| 7 | E2E 검증 | 도메인 전체 | E2E 테스트 | qa-be-e2e-testing, qa-fe-e2e-testing |
+| Stage | 이름 | 실행 단위 | 핵심 목표 | 실행 방식 | 주요 에이전트 |
+|-------|------|----------|----------|----------|--------------|
+| 1 | 도메인 기획 | 도메인 전체 | L0-L4 기획 + BE/Store 스펙 | 선행 순차 + 일부 fan-out | orch-requirement |
+| 2 | 스키마 구현 | 도메인 전체 | Prisma 스키마, Entity, DTO + 테스트 | `targets` fan-out + join | be-schema-builder, be-entity-builder, be-dto-builder, be-query-dto-builder, be-seed-maker, req-test-planner, qa-be-testing |
+| 3 | 백엔드 구현 | 도메인 전체 | Repository, Service, Controller + 테스트 | `targets` fan-out + join | be-repository-builder, be-service-builder, be-facade-builder, be-controller-builder, req-test-planner, qa-be-testing |
+| 4 | 화면 기획 | **페이지별** | L5-L12 기획 | `pages` fan-out 가능 | orch-screen-planner |
+| 5 | 컴포넌트 구현 | **페이지별** | UI/Input/Cell/Widget/Layout/Feature + 테스트 | `pages` fan-out + lock merge | fe-ui-component-builder, fe-input-component-builder, fe-cell-builder, fe-widget-builder, fe-layout-builder, fe-feature-builder, fe-store-builder, fe-menu-builder, req-test-planner, qa-fe-testing |
+| 6 | 페이지 통합 | **페이지별** | 페이지 컴포넌트 + API 연동 + 테스트 | `pages` fan-out + lock merge | fe-page-builder, fe-api-integrator, /fe-review, req-test-planner, qa-fe-testing |
+| 7 | E2E 검증 | 도메인 전체 | E2E 테스트 | BE/FE 병렬 + join | qa-be-e2e-testing, qa-fe-e2e-testing |
 
 ---
 
@@ -210,6 +233,9 @@ packages/fe-ui/src/components/feature/[FeatureName]/index.spec.md
 - 산출물 문서는 반드시 지정된 형식으로 생성
 - Stage 3 완료 후 Orval 실행 (Stage 4 진입 전)
 - 변경 발생 시 영향받는 Stage부터 재시작
+- `parallel=auto`를 기본으로 사용하고 작업 단위(`targets`/`pages`)를 명시
+- 병렬 실행 후 join 단계에서 테스트/검증을 1회 수행
+- 공유 파일은 lock 후 단일 writer가 최종 머지
 
 ### Don't
 
@@ -217,6 +243,18 @@ packages/fe-ui/src/components/feature/[FeatureName]/index.spec.md
 - deprecated/하위호환 코드 작성 금지
 - Stage 순서를 건너뛰기 금지
 - 산출물 문서 생성 생략 금지
+- 공유 파일을 여러 subagent가 동시에 수정 금지
+- `parallel=force`로 의존 관계를 무시하고 실행 금지
+
+### 6.1 공유 파일 잠금 규칙 (Critical)
+
+다음 파일은 병렬 작업 중 충돌이 잦으므로 반드시 lock 후 단일 writer로 머지합니다.
+
+- `apps/*/app/(admin)/app.spec.md`
+- `packages/*/src/index.ts`
+- `packages/common-constant/src/routing/admin-menu.ts`
+- `packages/common-constant/src/routing/admin-menu.spec.md`
+- `**/PROGRESS.md`
 
 ---
 
@@ -290,6 +328,8 @@ packages/fe-ui/src/components/feature/[FeatureName]/index.spec.md
 └─────────────────────────────────────────────────────────────┘
 ```
 
+※ 위 화살표는 "의존성 순서"를 의미합니다. 동일 단계의 독립 작업은 `parallel=auto`에서 병렬 fan-out 됩니다.
+
 ### 실행 모드
 
 #### 1. 전체 실행 (Stage 1부터)
@@ -355,6 +395,19 @@ packages/fe-ui/src/components/feature/[FeatureName]/index.spec.md
 
 # 상태 확인
 /orch-stage 회원 관리 진행률 보여줘
+```
+
+#### 7. 병렬 실행 (신규)
+
+```bash
+# Stage 3에서 엔티티 2개 병렬 처리
+/orch-stage run stage=3 app=admin domain=Member targets=User,Post parallel=auto maxConcurrency=2
+
+# Stage 5에서 페이지 2개 병렬 처리
+/orch-stage run stage=5 app=admin domain=Member pages=List,Detail parallel=auto maxConcurrency=2
+
+# 실행 전 DAG 미리보기
+/orch-stage plan stage=3 app=admin domain=Member targets=User,Post
 ```
 
 ### 전체 워크플로우 예시 (회원 관리)
@@ -440,6 +493,15 @@ Task: be-query-dto-builder
 Task: be-seed-maker (필요시)
 ```
 
+**병렬 전략:**
+- `targets` 지정 시 target별로 `be-schema-builder → be-entity-builder → be-dto-builder → be-query-dto-builder` 파이프라인을 병렬 fan-out
+- `be-seed-maker`, `req-test-planner`, `qa-be-testing`은 모든 target 완료 후 join 단계에서 실행
+- 공용 export 파일(`packages/*/src/index.ts`)은 lock 후 단일 머지
+
+```bash
+/orch-stage run stage=2 app=admin domain=Member targets=User,Post parallel=auto maxConcurrency=2
+```
+
 **테스트 프로세스:**
 ```
 1. req-test-planner 실행 → Entity/DTO .spec.md에 테스트 케이스 섹션 추가
@@ -481,6 +543,15 @@ Task: be-repository-builder
 Task: be-service-builder
 Task: be-facade-builder (필요시)
 Task: be-controller-builder
+```
+
+**병렬 전략:**
+- `targets` 지정 시 target별로 `be-repository-builder → be-service-builder → be-controller-builder`를 병렬 fan-out
+- `be-facade-builder`는 cross-target 조합이 필요한 경우 join 이후 실행
+- 테스트(`req-test-planner`, `qa-be-testing`)는 fan-in 완료 후 1회 실행
+
+```bash
+/orch-stage run stage=3 app=admin domain=Member targets=User,Post parallel=auto maxConcurrency=2
 ```
 
 **테스트 프로세스:**
@@ -536,8 +607,13 @@ Task: orch-screen-planner
 ```
 apps/admin/app/(admin)/members/page.spec.md              # API/이벤트 섹션 업데이트
 packages/fe-ui/src/components/ui/[UIName]/index.spec.md   # UI 컴포넌트 기획서
+packages/fe-ui/src/components/inputs/[InputName]/index.spec.md   # Input 기획서
+packages/fe-ui/src/components/ui/data-display/cells/[CellName]/index.spec.md   # Cell 기획서
 packages/fe-ui/src/components/widget/[WidgetName]/index.spec.md  # Widget 기획서
+packages/fe-ui/src/components/layout/[LayoutName]/index.spec.md  # Layout 기획서
 packages/fe-ui/src/components/feature/[FeatureName]/index.spec.md  # Feature 기획서
+packages/common-constant/src/routing/admin-menu.spec.md  # 메뉴 기획서
+apps/admin/src/app/**/hooks/index.spec.md  # API 연동 기획서
 ```
 
 **완료 후 출력:**
@@ -557,7 +633,7 @@ packages/fe-ui/src/components/feature/[FeatureName]/index.spec.md  # Feature 기
 
 ### Stage 5: 컴포넌트 구현 (페이지별)
 
-**목표**: UI, Widget, Feature 컴포넌트 구현 + 테스트
+**목표**: UI/Input/Cell/Widget/Layout/Feature 컴포넌트 구현 + 테스트
 
 **⚠️ 페이지별 실행**: `page` 파라미터 지정 권장 (미지정 시 자연어 추론, 불명확 시 확인)
 
@@ -569,15 +645,26 @@ packages/fe-ui/src/components/feature/[FeatureName]/index.spec.md  # Feature 기
 ```
 Task: fe-ui-component-builder
 Task: fe-input-component-builder
+Task: fe-cell-builder
 Task: fe-widget-builder
+Task: fe-layout-builder
 Task: fe-feature-builder
 Task: fe-store-builder
 Task: fe-menu-builder (목록 페이지만)
 ```
 
+**병렬 전략:**
+- `pages` 지정 시 페이지별로 Stage 5 파이프라인을 병렬 fan-out
+- `fe-menu-builder`는 `List` 페이지가 포함된 경우만 실행하며, `admin-menu.ts` 계열 파일 lock 필요
+- 공용 UI export 파일은 페이지 fan-in 후 단일 머지
+
+```bash
+/orch-stage run stage=5 app=admin domain=Member pages=List,Detail parallel=auto maxConcurrency=2
+```
+
 **테스트 프로세스:**
 ```
-1. req-test-planner 실행 → Widget/Feature/Store .spec.md에 테스트 케이스 섹션 추가
+1. req-test-planner 실행 → UI/Input/Cell/Widget/Layout/Feature/Store .spec.md에 테스트 케이스 섹션 추가
 2. qa-fe-testing 실행 → 컴포넌트 단위 테스트 코드 작성
 3. 테스트 실행
 4. 결과 확인:
@@ -592,11 +679,10 @@ Task: fe-menu-builder (목록 페이지만)
 ✅ Stage 5 완료: MemberList 컴포넌트 구현
 
 📁 생성된 컴포넌트:
-   - UI: MemberStatusBadge
-   - Widget: MemberTable
-   - Feature: MemberFilterPanel
+   - UI/Input/Cell: N개
+   - Widget/Layout/Feature: N개
    - Store: MemberStore (도메인 공통)
-   - Menu: admin-menu.ts 업데이트
+   - Menu: admin-menu.ts 업데이트 (목록 페이지)
 
 🧪 테스트 결과:
    - 작성된 테스트: N개
@@ -610,7 +696,7 @@ Task: fe-menu-builder (목록 페이지만)
 
 ### Stage 6: 페이지 통합 (페이지별)
 
-**목표**: 페이지 컴포넌트 구현, 규칙 검증 + 테스트
+**목표**: 페이지 컴포넌트 구현 + API 연동 + 규칙 검증 + 테스트
 
 **⚠️ 페이지별 실행**: `page` 파라미터 지정 권장 (미지정 시 자연어 추론, 불명확 시 확인)
 
@@ -621,12 +707,22 @@ Task: fe-menu-builder (목록 페이지만)
 **에이전트 호출:**
 ```
 Task: fe-page-builder
+Task: fe-api-integrator
 Skill: /fe-review
+```
+
+**병렬 전략:**
+- `pages` 지정 시 페이지별 `fe-page-builder → fe-api-integrator → /fe-review`를 병렬 fan-out
+- 공용 라우팅/메뉴/훅 index 파일은 lock 후 단일 머지
+- 페이지별 테스트 작성은 병렬 가능하지만 최종 테스트 실행은 join 후 1회 권장
+
+```bash
+/orch-stage run stage=6 app=admin domain=Member pages=List,Detail parallel=auto maxConcurrency=2
 ```
 
 **테스트 프로세스:**
 ```
-1. req-test-planner 실행 → page.spec.md에 테스트 케이스 섹션 추가
+1. req-test-planner 실행 → page.spec.md와 hooks 연동 스펙에 테스트 케이스 섹션 추가
 2. qa-fe-testing 실행 → 페이지 단위 테스트 코드 작성
 3. 테스트 실행
 4. 결과 확인:
@@ -645,6 +741,7 @@ Skill: /fe-review
    - apps/admin/app/(admin)/members/page.tsx
    - apps/admin/app/(admin)/members/_client.tsx
    - apps/admin/app/(admin)/members/_prefetch.ts
+   - apps/admin/app/(admin)/members/hooks/index.ts (API 연동)
 
 ✅ 규칙 검증: 모두 통과
 
@@ -701,10 +798,17 @@ Task: qa-fe-e2e-testing
 | 1 | app.spec.md 업데이트, page.spec.md 생성, BE/Store .spec.md 생성 |
 | 2 | Prisma 스키마, Entity, DTO 생성, migrate 성공, Entity 테스트 통과 |
 | 3 | Repository, Service, Controller 생성, 서버 시작 성공, BE 단위 테스트 통과 |
-| 4 | page.spec.md API/이벤트 업데이트, 컴포넌트 .spec.md 생성 |
-| 5 | UI, Widget, Feature, Store 생성, 컴포넌트 테스트 통과 |
-| 6 | 페이지 컴포넌트 생성, 규칙 검증 통과, 페이지 테스트 통과 |
+| 4 | page.spec.md 통합/API 업데이트, UI/Input/Cell/Widget/Layout/Feature/Menu/API연동 .spec.md 생성 |
+| 5 | UI/Input/Cell/Widget/Layout/Feature/Store 구현, 컴포넌트 테스트 통과 |
+| 6 | 페이지 컴포넌트 + API 연동 구현, 규칙 검증 통과, 페이지 테스트 통과 |
 | 7 | E2E 테스트 통과 |
+
+### 병렬 실행 추가 완료 조건
+
+- [ ] fan-out 대상(`targets`/`pages`)이 누락 없이 모두 처리되었는가?
+- [ ] 공유 파일 lock/머지 전략이 적용되었는가?
+- [ ] join 이후 통합 테스트를 1회 실행했는가?
+- [ ] `failPolicy`에 따른 실패 처리 결과가 리포트에 반영되었는가?
 
 ---
 
@@ -758,12 +862,12 @@ Task: qa-fe-e2e-testing
 
 | Stage | 호출 에이전트 |
 |-------|--------------|
-| 1 | orch-requirement, req-L0L2-planner, req-L3L4-planner, req-entity-planner, req-store-planner, be-spec-planner |
+| 1 | orch-requirement, req-context-planner, req-screen-planner, req-entity-planner, req-store-planner, req-api-planner, req-logic-planner |
 | 2 | be-schema-builder, be-entity-builder, be-dto-builder, be-query-dto-builder, be-seed-maker, req-test-planner, qa-be-testing |
 | 3 | be-repository-builder, be-service-builder, be-facade-builder, be-controller-builder, req-test-planner, qa-be-testing |
 | 4 | orch-screen-planner |
-| 5 | fe-ui-component-builder, fe-input-component-builder, fe-widget-builder, fe-feature-builder, fe-store-builder, fe-menu-builder, req-test-planner, qa-fe-testing |
-| 6 | fe-page-builder, /fe-review (Skill), req-test-planner, qa-fe-testing |
+| 5 | fe-ui-component-builder, fe-input-component-builder, fe-cell-builder, fe-widget-builder, fe-layout-builder, fe-feature-builder, fe-store-builder, fe-menu-builder, req-test-planner, qa-fe-testing |
+| 6 | fe-page-builder, fe-api-integrator, /fe-review (Skill), req-test-planner, qa-fe-testing |
 | 7 | qa-be-e2e-testing, qa-fe-e2e-testing |
 
 ---

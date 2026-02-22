@@ -197,7 +197,7 @@ export class RootStore {
 
 | 에이전트 | 관계 | 설명 |
 |----------|------|------|
-| req-L0L2-planner | 이전 단계 | 도메인 기획 |
+| req-context-planner | 이전 단계 | 도메인 기획 |
 | req-entity-planner | 이전 단계 | Entity 정의 |
 | orch-requirement | 상위 | 전체 기획 조율 |
 

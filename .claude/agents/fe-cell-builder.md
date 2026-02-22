@@ -399,6 +399,7 @@ ls packages/fe-ui/src/components/ui/data-display/cells/
 
 | 관계 | 에이전트 | 설명 |
 |------|---------|------|
+| **선행** | req-cell-planner | Cell 기획서(index.spec.md) 정의 |
 | **관련** | fe-ui-component-builder | 일반 UI 컴포넌트 (Cell 외) |
 | **후행** | fe-page-builder | 목록 페이지에서 Cell 사용 |
 

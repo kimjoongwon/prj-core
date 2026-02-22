@@ -143,7 +143,6 @@ requestReset(email):
 
   return true
 
-
 validateToken(rawToken):
 
   1. 토큰 해시
@@ -154,7 +153,6 @@ validateToken(rawToken):
      → null이면: { valid: false, reason: "TOKEN_EXPIRED" }
 
   3. return { valid: true, email: data.email }
-
 
 executeReset(rawToken, newPassword):
 

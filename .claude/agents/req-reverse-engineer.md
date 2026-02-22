@@ -485,11 +485,18 @@ CRUD 작업별 Happy Path와 Error Path를 도출합니다.
 | 에이전트 | 관계 | 설명 |
 |----------|------|------|
 | orch-requirement | 검증 | 역추론된 기획서 검증 및 보완 |
-| req-L0L2-planner | 보완 | L0-L2 레이어 상세화 → `app.spec.md` 업데이트 |
-| req-L3L4-planner | 보완 | L3-L4 레이어 상세화 → `page.spec.md` 업데이트 |
-| req-L5L6-planner | 보완 | L5-L6 레이어 상세화 → `controller.spec.md` 업데이트 |
-| req-L7L8-planner | 보완 | L7-L8 레이어 상세화 → `feature/widget/ui.spec.md` 업데이트 |
-| req-L9L10-planner | 보완 | L9-L10 레이어 상세화 → `service/repository/store.spec.md` 업데이트 |
+| req-context-planner | 보완 | L0-L2 레이어 상세화 → `app.spec.md` 업데이트 |
+| req-screen-planner | 보완 | L3-L4 레이어 상세화 → `page.spec.md` 업데이트 |
+| req-api-planner | 보완 | L5-L6 레이어 상세화 → `controller.spec.md` 업데이트 |
+| req-entity-planner | 보완 | L7 레이어 상세화 → `entity.spec.md` 업데이트 |
+| req-ui-planner | 보완 | L8 레이어 상세화 → `ui/index.spec.md` 업데이트 |
+| req-input-planner | 보완 | L8 레이어 상세화 → `inputs/index.spec.md` 업데이트 |
+| req-cell-planner | 보완 | L8 레이어 상세화 → `cell/index.spec.md` 업데이트 |
+| req-widget-planner | 보완 | L8 레이어 상세화 → `widget/index.spec.md` 업데이트 |
+| req-layout-planner | 보완 | L8 레이어 상세화 → `layout/index.spec.md` 업데이트 |
+| req-feature-planner | 보완 | L8 레이어 상세화 → `feature/index.spec.md` 업데이트 |
+| req-logic-planner | 보완 | L9-L10 레이어 상세화 → `service/repository.spec.md` + 테스트 케이스 업데이트 |
+| req-store-planner | 보완 | L11 레이어 상세화 → `[domain]Store.spec.md` 업데이트 |
 
 ---
 
