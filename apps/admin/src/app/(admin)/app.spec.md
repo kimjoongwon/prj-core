@@ -40,6 +40,7 @@ Admin 앱은 플랫폼의 관리자 콘솔입니다. 회원, 예약, 알림, 콘
 | GOAL-011 | ACT-001, ACT-002 | 운동 종목(Exercise)을 등록/목록 조회/상세 확인/수정/삭제하여 루틴 구성의 기반 콘텐츠를 관리한다 | 높음 |
 | GOAL-012 | ACT-001 | 시설(Ground)을 등록/목록 조회/상세 조회/수정하여 Space와 연결되는 물리적 시설을 관리한다 | 높음 |
 | GOAL-013 | ACT-001, ACT-002 | 세션 내 프로그램(Program)을 등록/수정/삭제하여 강사·루틴·정원을 포함한 실제 수업 클래스를 관리한다 | 높음 |
+| GOAL-014 | ACT-001, ACT-002, ACT-003 | 에셋을 목록 조회/검색/필터링하고 권한에 따라 미리보기·다운로드·삭제를 수행하여 운영 리소스를 관리한다 | 높음 |
 
 ## 도메인 목록
 
@@ -57,6 +58,7 @@ Admin 앱은 플랫폼의 관리자 콘솔입니다. 회원, 예약, 알림, 콘
 | 템플릿 (Templates) | `/templates` | 메시지 템플릿 관리 | 구현 완료 |
 | 루틴 (Routines) | `/routines` | 운동 루틴(커리큘럼) CRUD 관리 | 기획 완료, 구현 TODO |
 | 운동 종목 (Exercises) | `/exercises` | 운동 종목 CRUD 관리. Task와 1:1 연결 | 기획 완료, 구현 TODO |
+| 에셋 (Assets) | `/assets` | 업로드된 에셋 목록 조회/검색/필터링, 미리보기/다운로드, 삭제 및 일괄 삭제 관리 | 기획 완료, 구현 TODO |
 | 타임라인 (Timelines) | `/timelines` | 학기/시즌 타임라인 관리 | 기획 중 |
 | 세션 (Sessions) | `/timelines/[timelineId]/sessions` | 세션 일정 관리 (타임라인 하위) | 기획 중 |
 | 프로그램 (Programs) | `/timelines/[timelineId]/sessions/[sessionId]/programs` | 수업 프로그램 관리 (세션 하위) - 강사·루틴·정원 연결 | 기획 중 |
@@ -130,3 +132,5 @@ AdminLayout
 | 2026-02-19 | Ground 도메인 추가 (GOAL-012, 도메인 목록, Ground 맥락 섹션) | req-L0L2-planner |
 | 2026-02-19 | Program 도메인 추가 (GOAL-013), 도메인 목록에 세션/프로그램 항목 추가, Program 맥락 섹션 추가 | orch-requirement |
 | 2026-02-20 | 삭제된 self-service 페이지(`/my-sessions`, `/my-account/change-password`) 관련 항목 정리 | OpenCode |
+| 2026-02-22 | 에셋 도메인 초안 추가 (GOAL-014, 도메인 목록 항목 추가) | orch-requirement |
+| 2026-02-22 | 도메인 명칭 오기 정정: GOAL-014 및 도메인 목록을 Asset(`/assets`) 기준으로 수정 | OpenCode |

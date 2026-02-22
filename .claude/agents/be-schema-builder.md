@@ -69,6 +69,64 @@ model User { ... }
 userId String
 ```
 
+### ✅ CTI + 무결성 원칙 (Critical)
+
+#### 1) CTI(Class Table Inheritance) 우선 적용
+
+- 타입 공통 필드는 부모 모델에만 둡니다.
+- 타입 전용 필드는 상세 모델(1:1)로 분리합니다.
+- 부모 모델에 타입 전용 nullable 필드를 섞지 않습니다.
+- 부모 `kind`와 상세 모델의 1:1 관계를 함께 설계합니다.
+
+```prisma
+enum AssetKind {
+  IMAGE
+  VIDEO
+  DOCUMENT
+}
+
+model Asset {
+  id        String    @id @default(uuid())
+  kind      AssetKind
+  mimeType  String
+  sizeBytes BigInt
+
+  image     AssetImage?
+  video     AssetVideo?
+  document  AssetDocument?
+}
+
+model AssetVideo {
+  assetId    String @id @map("asset_id")
+  durationMs Int
+  asset      Asset  @relation(fields: [assetId], references: [id], onDelete: Cascade)
+}
+```
+
+```prisma
+// 금지 예시: 부모 모델에 타입 전용 필드 혼합
+model Asset {
+  id         String @id @default(uuid())
+  kind       AssetKind
+  durationMs Int?   // VIDEO에서만 의미
+  pageCount  Int?   // DOCUMENT에서만 의미
+}
+```
+
+#### 2) 무결성(Integrity) 우선 설계
+
+- Prisma 레벨에서 PK/FK/UNIQUE/INDEX를 먼저 선언합니다.
+- Prisma만으로 강제 불가한 규칙은 migration SQL의 CHECK/Trigger로 보강합니다.
+- 부모/상세 생성, 수정, 삭제는 단일 트랜잭션으로 처리하도록 명시합니다.
+- 소프트 삭제 정책이 있으면 unique 충돌 방지 전략(예: partial unique index)을 함께 제시합니다.
+
+필수로 명시할 항목:
+
+- `kind=VIDEO`이면 `AssetVideo` 1건 존재
+- `kind=DOCUMENT`이면 `AssetDocument` 1건 존재
+- 서로 다른 상세 모델 동시 존재 금지
+- 부모 삭제 시 상세/파생 데이터 정리 규칙
+
 ---
 
 ## 프로세스
@@ -273,6 +331,10 @@ model EntityAssociation {
 - [ ] 관계 다이어그램이 포함되었는가?
 - [ ] `@@map()` 테이블명이 snake_case 복수형인가?
 - [ ] 외래키에 `@map()`이 snake_case로 적용되었는가?
+- [ ] CTI가 필요한 도메인에서 공통/상세 모델이 분리되었는가?
+- [ ] 부모 모델에 타입 전용 nullable 필드가 남아있지 않은가?
+- [ ] Prisma로 강제 불가한 무결성 규칙의 SQL 제약(체크/트리거) 계획이 명시되었는가?
+- [ ] 부모/상세 모델을 단일 트랜잭션으로 처리하는 전략이 명시되었는가?
 
 ---
 
@@ -398,6 +460,11 @@ packages/be-prisma/schema/{domain}.prisma
 |------|------|------|
 | name | String | 이름 |
 | ... | ... | ... |
+
+**무결성 보장 계획:**
+- Prisma 제약: [PK/FK/UNIQUE/INDEX 요약]
+- SQL 제약: [CHECK/Trigger 필요 항목]
+- 트랜잭션: [부모+상세 동시 처리 전략]
 
 **다음 단계:**
 1. `pnpm --filter=@cocrepo/prisma generate` 실행

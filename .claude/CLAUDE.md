@@ -530,7 +530,7 @@ packages/common-type/src/
 **이유:**
 - 이 프로젝트는 내부 사용 목적으로 외부 API 제공 없음
 - 하위호환 코드는 기술 부채가 됨
-- 5단계 플로우에서 각 단계별 리뷰로 변경 영향을 관리
+- 7단계 플로우에서 각 단계별 리뷰로 변경 영향을 관리
 
 ### 코드 옆 기획서 (Sidecar Spec) (Critical)
 
@@ -877,9 +877,9 @@ feat(coin): 멀티시그 지갑 서비스 초기 구현
 Stage 1: 도메인 기획        → orch-requirement (L0~L4 + BE/Store 스펙) → [리뷰]
 Stage 2: 스키마 구현        → schema → entity → dto → query-dto → seed → [리뷰]
 Stage 3: 백엔드 구현        → repository → service → controller → [리뷰]
-Stage 4: 화면 기획 (페이지별) → orch-screen-planner (L5~L12) → [리뷰] ← page 파라미터 필요
-Stage 5: 컴포넌트 (페이지별) → ui → widget → feature → store → [리뷰] ← page 파라미터 필요
-Stage 6: 페이지 (페이지별)   → fe-page-builder → [리뷰] ← page 파라미터 필요
+Stage 4: 화면 기획 (페이지별) → orch-screen-planner (L5~L12) → [리뷰] ← page 파라미터 권장 (미지정 시 자연어 추론, 불명확 시 확인)
+Stage 5: 컴포넌트 (페이지별) → ui → widget → feature → store → [리뷰] ← page 파라미터 권장 (미지정 시 자연어 추론, 불명확 시 확인)
+Stage 6: 페이지 (페이지별)   → fe-page-builder → [리뷰] ← page 파라미터 권장 (미지정 시 자연어 추론, 불명확 시 확인)
 Stage 7: E2E 검증 (선택)    → qa-be-e2e-testing → qa-fe-e2e-testing → [리뷰]
 ```
 
@@ -934,6 +934,8 @@ apps/server/src/[module]/
 
 #### 실행 방법
 
+`/orch-stage`는 구조화 파라미터와 자연어 실행을 모두 지원합니다.
+
 ```bash
 # 1. 도메인 기획 시작
 /orch-stage full
@@ -953,6 +955,12 @@ apps/server/src/[module]/
 /orch-stage run stage=6 app=admin domain=Member page=Detail
 
 # ... Create, Edit 반복
+
+# 자연어로도 실행 가능
+/orch-stage admin 회원 관리 기능 처음부터 진행해줘
+/orch-stage 회원 목록 화면 기획해줘
+/orch-stage 회원 목록 컴포넌트 구현해줘
+/orch-stage 회원 목록 페이지 통합해줘
 ```
 
 #### 장점
@@ -993,6 +1001,7 @@ Stage 5: 컴포넌트 (페이지별)
 |-------|------|
 | orch-stage | 7단계 분할 개발 플로우를 조율하는 메타 에이전트 |
 | orch-requirement | 코드 옆 기획서(Sidecar Spec) 방식으로 기획서와 코드를 함께 관리하는 오케스트레이터 |
+| orch-screen-planner | 단일 화면 기획(L5-L12)을 조율하는 오케스트레이터 |
 
 #### 기획/분석 (req-*)
 

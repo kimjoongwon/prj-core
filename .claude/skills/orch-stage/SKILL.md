@@ -1,12 +1,12 @@
 ---
 name: orch-stage
-description: 5단계 분할 개발 플로우를 조율하는 메타 에이전트. 사용자가 "기획 시작", "Stage 1", "전체 개발", "기능 개발" 등을 요청할 때 사용합니다.
+description: 7단계 분할 개발 플로우를 조율하는 메타 에이전트. 사용자가 "기획 시작", "Stage 1", "전체 개발", "기능 개발" 등을 요청할 때 사용합니다.
 allowed-tools: Task, Read, Write, Grep, Bash
 ---
 
 # 단계 오케스트레이터 (Stage Orchestrator)
 
-5단계 분할 개발 플로우를 조율하는 메타 에이전트입니다. 각 단계 완료 후 사용자 리뷰를 받고 다음 단계로 진행합니다.
+7단계 분할 개발 플로우를 조율하는 메타 에이전트입니다. 각 단계 완료 후 사용자 리뷰를 받고 다음 단계로 진행합니다.
 
 ---
 
@@ -29,8 +29,9 @@ allowed-tools: Task, Read, Write, Grep, Bash
 ```
 /orch-stage full
 
-**기능명:** Member
-**요구사항:**
+앱: admin
+도메인: Member
+요구사항:
 - 회원 목록 조회/검색/필터링
 - 회원 상세 조회
 - 회원 등록/수정/삭제
@@ -39,44 +40,60 @@ allowed-tools: Task, Read, Write, Grep, Bash
 ### 2. 특정 단계부터 시작 (start)
 
 ```
-/orch-stage start stage=2 plan=YYYY-MM-DD-Member
+/orch-stage start stage=2 app=admin domain=Member
 ```
 
 ### 3. 특정 단계만 실행 (run)
 
 ```
-/orch-stage run stage=3 plan=YYYY-MM-DD-Member
+/orch-stage run stage=3 app=admin domain=Member
 ```
 
-### 4. 페이지별 Stage 4-5 실행
+### 4. 페이지별 실행 (Stage 4-6)
 
 ```
-/orch-stage run stage=4 plan=YYYY-MM-DD-Member page=MemberList
-/orch-stage run stage=5 plan=YYYY-MM-DD-Member page=MemberList
+/orch-stage run stage=4 app=admin domain=Member page=List
+/orch-stage run stage=5 app=admin domain=Member page=List
+/orch-stage run stage=6 app=admin domain=Member page=List
 ```
 
-### 5. 공통 시스템 기획 (core=)
+### 5. 상태 확인 (status)
 
 ```
-/orch-stage full core=infrastructure feature=RateLimiting
+/orch-stage status app=admin domain=Member
 ```
 
-### 6. 상태 확인 (status)
+### 6. 자연어 실행 (권장)
 
 ```
-/orch-stage status plan=YYYY-MM-DD-Member
+/orch-stage admin 회원 관리 기능 처음부터 진행해줘
+/orch-stage 회원 관리 3단계 실행해줘
+/orch-stage 회원 목록 화면 기획해줘
+/orch-stage 회원 목록 컴포넌트 구현해줘
+/orch-stage 회원 목록 페이지 통합해줘
+/orch-stage 회원 관리 진행률 보여줘
 ```
+
+자연어 입력 시 해석 규칙:
+
+- 명시 파라미터(`stage=`, `app=`, `domain=`, `page=`)가 있으면 최우선 적용
+- 모드 미지정 시 키워드 기반 추론 (`처음부터/전체`→`full`, `N단계`→`run stage=N`, `진행률/상태`→`status`)
+- Stage 4-6에서 page 미지정 시 자연어에서 페이지를 추론하고, 불명확하면 1회 확인
+- app 미지정 시 기본값 `admin`
+- domain 추론 실패 시에만 사용자에게 1회 질문
 
 ---
 
-## 5단계 플로우
+## 7단계 플로우
 
 ```
-Stage 1: 기획 (기능 전체)    → orch-requirement (L0~L10) → [리뷰]
-Stage 2: 스키마 (기능 전체)  → schema → entity → dto → seed → [리뷰]
-Stage 3: 백엔드 (기능 전체)  → repository → service → controller → [리뷰]
-Stage 4: 컴포넌트 (페이지별) → page-spec → domain-spec → ui → widget → feature → [리뷰]
-Stage 5: 페이지 (페이지별)   → fe-page-builder → [리뷰]
+Stage 1: 도메인 기획        → orch-requirement (L0~L4 + BE/Store 스펙) → [리뷰]
+Stage 2: 스키마 구현        → schema → entity → dto → query-dto → seed → [리뷰]
+Stage 3: 백엔드 구현        → repository → service → controller → [리뷰]
+Stage 4: 화면 기획 (페이지별) → orch-screen-planner (L5~L12) → [리뷰]
+Stage 5: 컴포넌트 (페이지별) → ui → widget → feature → store → [리뷰]
+Stage 6: 페이지 (페이지별)   → fe-page-builder → [리뷰]
+Stage 7: E2E 검증 (선택)    → qa-be-e2e-testing → qa-fe-e2e-testing → [리뷰]
 ```
 
 ---
@@ -85,31 +102,23 @@ Stage 5: 페이지 (페이지별)   → fe-page-builder → [리뷰]
 
 | 항목 | 필수 | 설명 |
 |------|------|------|
-| 모드 | ✅ | `full`, `start stage=N`, `run stage=N`, `status` |
-| project | △ | 프로젝트명 (실행 시 질문) |
-| app | △ | 앱명 (실행 시 질문) |
-| core | △ | 공통 시스템 카테고리 |
-| 기능명 | ✅ (full) | 생성할 기능/도메인 이름 |
-| plan | ✅ (start/run) | 기획서 폴더 경로 |
-| page | △ | Stage 4-5에서 특정 페이지 지정 |
+| 모드 | △ | 구조화 입력 시 권장, 자연어 입력 시 자동 추론 |
+| app | △ | 생략 시 기본값 `admin` |
+| domain | △ | 자연어에서 추론, 실패 시 1회 질문 |
+| 요구사항 | ✅ (full) | 기능 요구사항 목록 |
+| page | △ | Stage 4-6에서 특정 페이지 지정 (`List`, `Detail`, `Create`, `Edit`) |
 
 ---
 
-## 출력 (폴더 구조)
+## 출력 요약
 
 ```
-apps/proposal/plans/[project]/[app]/YYYY-MM-DD-[feature]/
-├── README.md
-├── PROGRESS.md
-├── 01-overview.md
-├── 02-structure.md
-├── 03-interactions.md
-├── 04-ui-details.md
-├── 05-technical-design.md
-├── [feature]-schema.md           # Stage 2
-├── [feature]-backend.md          # Stage 3
-├── [feature]-[page]-components.md  # Stage 4 (페이지별)
-└── [feature]-[page]-complete.md    # Stage 5 (페이지별)
+apps/[app]/app/(admin)/app.spec.md
+apps/[app]/app/(admin)/[도메인]/**/page.spec.md
+packages/fe-store/src/stores/[domain]Store.spec.md
+packages/be-entity/src/[entity].entity.spec.md
+apps/server/src/[module]/**/*.spec.md
+packages/fe-ui/src/components/{ui,widget,feature}/**/index.spec.md
 ```
 
 ---
@@ -118,7 +127,6 @@ apps/proposal/plans/[project]/[app]/YYYY-MM-DD-[feature]/
 
 ### Do
 - 각 Stage 완료 후 반드시 사용자 리뷰 대기
-- Stage 실행 전 해당 에이전트 규칙 문서 읽기
 - Stage 3 완료 후 Orval 실행 (Stage 4 진입 전)
 - 변경 발생 시 영향받는 Stage부터 재시작
 
@@ -131,29 +139,12 @@ apps/proposal/plans/[project]/[app]/YYYY-MM-DD-[feature]/
 
 ## 연관 에이전트
 
-### Stage별 호출 에이전트
-
-**Stage 1**
-- `/orch-requirement` - L0-L10 기획
-- `/design-analyze` - Figma 디자인 분석 (Figma 있을 때)
-
-**Stage 2**
-- `be-schema-builder` - Prisma 스키마 생성
-- `be-entity-builder` - Entity 클래스 생성
-- `be-dto-builder` - DTO 클래스 생성
-- `be-seed-maker` - 시드 데이터 생성
-
-**Stage 3**
-- `be-repository-builder` - Repository 생성
-- `be-service-builder` - Service 생성
-- `be-controller-builder` - Controller 생성
-
-**Stage 4**
-- `orch-screen-planner` - 화면 기획 오케스트레이터 (L5-L12)
-- `fe-ui-component-builder` - Pure UI 컴포넌트
-- `fe-widget-builder` - Widget 컴포넌트
-- `fe-feature-builder` - Feature 컴포넌트
-
-**Stage 5**
-- `fe-page-builder` - 페이지 컴포넌트
-- `/fe-review` - 프론트엔드 규칙 검증
+| Stage | 호출 에이전트 |
+|------|---------------|
+| 1 | orch-requirement |
+| 2 | be-schema-builder, be-entity-builder, be-dto-builder, be-query-dto-builder, be-seed-maker |
+| 3 | be-repository-builder, be-service-builder, be-facade-builder, be-controller-builder |
+| 4 | orch-screen-planner |
+| 5 | fe-ui-component-builder, fe-input-component-builder, fe-widget-builder, fe-feature-builder, fe-store-builder, fe-menu-builder |
+| 6 | fe-page-builder, /fe-review |
+| 7 | qa-be-e2e-testing, qa-fe-e2e-testing |

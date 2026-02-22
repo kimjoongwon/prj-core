@@ -152,7 +152,7 @@ apps/server/src/[module]/
 ┌─────────────────────────────────────────────────────────────┐
 │  4단계: Entity 기획 (L7)                                     │
 │  Task: req-entity-planner                                    │
-│  → Prisma 스키마 기반 (별도 spec 없음)                       │
+│  → packages/be-entity/src/[entity].entity.spec.md           │
 └─────────────────────────────────────────────────────────────┘
                               │
                               ▼
@@ -176,8 +176,8 @@ apps/server/src/[module]/
 │                    오케스트레이터 완료                         │
 │                                                              │
 │  📌 다음 단계:                                               │
-│  - 화면별 기획: /orch-screen-planner domain=[도메인] screen=[화면] │
-│  - 백엔드 구현: /orch-stage run stage=2 plan=[도메인]        │
+│  - 화면별 기획: /orch-screen-planner app=[앱] domain=[도메인] screen=[화면] │
+│  - 백엔드 구현: /orch-stage run stage=2 app=[앱] domain=[도메인] │
 └─────────────────────────────────────────────────────────────┘
 ```
 
@@ -251,9 +251,9 @@ apps/server/src/[module]/
 
 📌 다음 단계:
    1. 화면별 기획:
-      /orch-screen-planner domain=Member screen=List
+      /orch-screen-planner app=admin domain=Member screen=List
    2. 또는 개발 착수:
-      /orch-stage full domain=Member
+      /orch-stage run stage=2 app=admin domain=Member
 ```
 
 ---

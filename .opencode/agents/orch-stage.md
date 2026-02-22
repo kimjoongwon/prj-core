@@ -103,17 +103,57 @@ apps/server/src/[module]/
 
 ---
 
+## 3. 입력 해석 방식 (구조화 + 자연어)
+
+`/orch-stage`는 **구조화 파라미터**와 **자연어 입력**을 모두 허용합니다。
+
+### 3.1 해석 우선순위
+
+1. 명시 파라미터(`stage=`, `app=`, `domain=`, `page=`)를 최우선으로 사용
+2. 누락된 항목만 자연어에서 추론
+3. 구조화/자연어가 혼합되면 명시값 유지 + 부족값 보정
+
+### 3.2 자연어 → 모드/단계 추론 규칙
+
+| 자연어 패턴 | 추론 결과 |
+|------------|----------|
+| "처음부터", "전체", "기획 시작", "신규 기능" | `full` |
+| "stage N", "N단계" | `run stage=N` |
+| "상태", "진행률", "어디까지" | `status` |
+| "화면 기획", "API 기획", "인터랙션" | `run stage=4` |
+| "컴포넌트 구현", "위젯", "feature" | `run stage=5` |
+| "페이지 구현", "페이지 통합" | `run stage=6` |
+| "E2E", "종단 테스트" | `run stage=7` |
+
+### 3.3 기본값/보정 규칙
+
+- `app`이 없으면 기본값 `admin`
+- Stage 4-6인데 `page`가 없으면 자연어에서 페이지를 추론하고, 불명확하면 1회 질문
+- `full` 모드에서 요구사항이 없으면 기본 요구사항 `목록/상세/등록/수정/삭제`
+- `domain`을 추론할 수 없을 때만 1회 질문
+
+### 3.4 페이지 키워드 매핑
+
+| 키워드 | page |
+|-------|------|
+| "목록", "list", "table" | `List` |
+| "상세", "detail", "view" | `Detail` |
+| "등록", "생성", "new", "create" | `Create` |
+| "수정", "edit", "update" | `Edit` |
+
+---
+
 ## 4. 입력/출력
 
 ### 입력
 
 | 항목 | 필수 | 설명 |
 |------|------|------|
-| 모드 | O | `full`, `start stage=N`, `run stage=N`, `status` |
-| **app** | O | 앱명 (예: admin) |
-| **domain** | O | 도메인명 (예: Member) |
+| 모드 | △ | 구조화 입력 시 필수, 자연어 입력 시 자동 추론 |
+| **app** | △ | 생략 시 `admin` 기본값 |
+| **domain** | △ | 자연어에서 추출, 실패 시 1회 질문 |
 | 요구사항 | O (full) | 기능 요구사항 목록 |
-| **page** | △ | Stage 4-6에서 특정 페이지만 실행할 때 사용 |
+| **page** | △ | Stage 4-6에서 사용, 자연어 키워드로 자동 추론 가능 |
 
 ### 출력 (폴더 구조)
 
@@ -216,7 +256,7 @@ packages/fe-ui/src/components/feature/[FeatureName]/index.spec.md
 │ orch-screen-planner (L5~L12) → [리뷰] ✓                      │
 │ 산출물: page.spec.md 업데이트 + 컴포넌트 .spec.md            │
 │                                                              │
-│ ⚠️ page 파라미터로 특정 페이지 지정 필요                      │
+│ ⚠️ page 지정 권장 (미지정 시 자연어 추론, 불명확 시 확인)       │
 └─────────────────────────────────────────────────────────────┘
                               ↓ 사용자 승인
 ┌─────────────────────────────────────────────────────────────┐
@@ -228,7 +268,7 @@ packages/fe-ui/src/components/feature/[FeatureName]/index.spec.md
 │ ├─ 통과 → [리뷰] ✓                                           │
 │ └─ 실패 → 자동수정(1회) → 재실행 → [통과 시 리뷰]             │
 │                                                              │
-│ ⚠️ page 파라미터로 특정 페이지 지정 필요                      │
+│ ⚠️ page 지정 권장 (미지정 시 자연어 추론, 불명확 시 확인)       │
 └─────────────────────────────────────────────────────────────┘
                               ↓ 사용자 승인
 ┌─────────────────────────────────────────────────────────────┐
@@ -239,7 +279,7 @@ packages/fe-ui/src/components/feature/[FeatureName]/index.spec.md
 │ ├─ 통과 → [리뷰] ✓                                           │
 │ └─ 실패 → 자동수정(1회) → 재실행 → [통과 시 리뷰]             │
 │                                                              │
-│ ⚠️ page 파라미터로 특정 페이지 지정 필요                      │
+│ ⚠️ page 지정 권장 (미지정 시 자연어 추론, 불명확 시 확인)       │
 └─────────────────────────────────────────────────────────────┘
                               ↓ 사용자 요청 시
 ┌─────────────────────────────────────────────────────────────┐
@@ -297,6 +337,24 @@ packages/fe-ui/src/components/feature/[FeatureName]/index.spec.md
 
 ```
 /orch-stage status app=admin domain=Member
+```
+
+#### 6. 자연어 실행 예시
+
+```
+# 처음부터 전체 진행
+/orch-stage admin 회원 관리 기능 처음부터 진행해줘
+
+# 특정 단계 실행
+/orch-stage 회원 관리 3단계 실행해줘
+
+# 페이지별 실행 (화면/컴포넌트/페이지)
+/orch-stage 회원 목록 화면 기획해줘
+/orch-stage 회원 목록 컴포넌트 구현해줘
+/orch-stage 회원 목록 페이지 통합해줘
+
+# 상태 확인
+/orch-stage 회원 관리 진행률 보여줘
 ```
 
 ### 전체 워크플로우 예시 (회원 관리)
@@ -454,7 +512,7 @@ Task: be-controller-builder
 🔧 후속 작업:
    - Orval 실행: pnpm --filter=@cocrepo/api generate
 
-📌 다음 단계: Stage 4 (화면 기획) - page 파라미터 필요
+📌 다음 단계: Stage 4 (화면 기획) - page 지정 권장 (미지정 시 자연어 추론, 불명확 시 확인)
 ```
 
 ---
@@ -463,7 +521,7 @@ Task: be-controller-builder
 
 **목표**: 특정 화면의 L5-L12 기획서 작성
 
-**⚠️ 페이지별 실행**: `page` 파라미터로 특정 화면을 지정해야 합니다。
+**⚠️ 페이지별 실행**: `page` 파라미터 지정 권장 (미지정 시 자연어 추론, 불명확 시 확인).
 
 ```bash
 /orch-stage run stage=4 app=admin domain=Member page=List
@@ -501,7 +559,7 @@ packages/fe-ui/src/components/feature/[FeatureName]/index.spec.md  # Feature 기
 
 **목표**: UI, Widget, Feature 컴포넌트 구현 + 테스트
 
-**⚠️ 페이지별 실행**: `page` 파라미터 필요
+**⚠️ 페이지별 실행**: `page` 파라미터 지정 권장 (미지정 시 자연어 추론, 불명확 시 확인)
 
 ```bash
 /orch-stage run stage=5 app=admin domain=Member page=List
@@ -554,7 +612,7 @@ Task: fe-menu-builder (목록 페이지만)
 
 **목표**: 페이지 컴포넌트 구현, 규칙 검증 + 테스트
 
-**⚠️ 페이지별 실행**: `page` 파라미터 필요
+**⚠️ 페이지별 실행**: `page` 파라미터 지정 권장 (미지정 시 자연어 추론, 불명확 시 확인)
 
 ```bash
 /orch-stage run stage=6 app=admin domain=Member page=List

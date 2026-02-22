@@ -1,6 +1,6 @@
 ---
 name: orch-requirement
-description: L0-L10 레이어별 기획 에이전트를 총괄 조율하는 오케스트레이터. 사용자가 "요구사항 기획", "L0-L10 기획", "기능 기획" 등을 요청할 때 사용합니다.
+description: 도메인 기획(L0-L4)과 BE/Store 스펙 기획을 총괄 조율하는 오케스트레이터. 사용자가 "요구사항 기획", "기능 기획" 등을 요청할 때 사용합니다.
 allowed-tools: Task, Read, Write, Grep, Bash
 ---
 

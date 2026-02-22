@@ -60,7 +60,7 @@ packages/fe-ui/src/components/feature/[FeatureName]/index.spec.md         (L10)
 |------|------|----------|
 | 앱 기획서 (L0-L2) | `apps/[app]/app/(admin)/app.spec.md` | 파일 존재 확인 |
 | 페이지 기획서 (L3-L4) | `apps/[app]/app/(admin)/[도메인]/page.spec.md` | 파일 존재 확인 |
-| Entity 기획서 (L7) | `apps/server/src/[module]/[domain].service.spec.md` | 파일 존재 확인 |
+| Entity 기획서 (L7) | `packages/be-entity/src/[entity].entity.spec.md` | 파일 존재 확인 |
 | Store 기획서 (L11) | `packages/fe-store/src/stores/[domain]Store.spec.md` | 파일 존재 확인 |
 
 ---
@@ -153,7 +153,7 @@ packages/fe-ui/src/components/feature/[FeatureName]/index.spec.md         (L10)
 ✅ 전제조건 확인:
    - 앱 기획서: apps/admin/app/(admin)/app.spec.md ✓
    - 페이지 기획서: apps/admin/app/(admin)/members/page.spec.md ✓
-   - Entity 기획서: apps/server/src/member/member.service.spec.md ✓
+   - Entity 기획서: packages/be-entity/src/member.entity.spec.md ✓
    - Store 기획서: packages/fe-store/src/stores/memberStore.spec.md ✓
 
 ▶ 1단계: 인터랙션/API 기획 (L5-L6)
@@ -263,11 +263,11 @@ packages/fe-ui/src/components/feature/[FeatureName]/index.spec.md         (L10)
 다음 기획서가 필요합니다:
 - apps/admin/app/(admin)/app.spec.md (앱 기획서)
 - apps/admin/app/(admin)/members/page.spec.md (페이지 기획서)
-- apps/server/src/member/member.service.spec.md (Entity 기획서)
+- packages/be-entity/src/member.entity.spec.md (Entity 기획서)
 - packages/fe-store/src/stores/memberStore.spec.md (Store 기획서)
 
 먼저 도메인 기획을 진행해주세요:
-/orch-requirement domain=Member
+/orch-requirement app=admin domain=Member
 ```
 
 ### 기존 기획서 존재
