@@ -137,7 +137,132 @@ model Reservation {
 
 ---
 
-## 6. 품질 체크리스트
+## 6. "구현 대상" 섹션 작성 (Critical) - 자동 병렬 실행 지원
+
+**Entity 기획서에 반드시 "구현 대상" 섹션을 작성합니다。이 정보는 orch-stage가 자동으로 병렬 실행을 판단하는 데 사용됩니다。**
+
+### 6.1 섹션 위치
+
+기획서 마지막에 작성합니다:
+
+```markdown
+# [Entity] Entity 기획서
+
+... (기존 섹션들) ...
+
+## 구현 대상 (orch-stage 자동 병렬 실행용)
+
+### Entity 목록
+| Entity | 타입 | 의존성 | 병렬 그룹 |
+|--------|------|--------|----------|
+| ... | ... | ... | ... |
+
+### Enum 목록
+| Enum | 사용 Entity |
+|------|-------------|
+| ... | ... |
+
+### 병렬 실행 DAG
+```
+[다이어그램]
+```
+```
+
+### 6.2 Entity 목록 테이블 작성 규칙
+
+| 컬럼 | 설명 | 예시 |
+|------|------|------|
+| **Entity** | Entity명 | `Asset`, `AssetVideo` |
+| **타입** | 스키마 타입 | `CONCRETE`, `MATERIALIZATION`, `EXTENSION` |
+| **의존성** | 부모 Entity | `-` (없음), `Asset` |
+| **병렬 그룹** | 실행 레벨 | `0` (먼저), `1` (병렬) |
+
+### 6.3 병렬 그룹 할당 규칙
+
+| 상황 | 병렬 그룹 | 설명 |
+|------|----------|------|
+| 의존성 없음 | `0` | 부모 Entity, 독립 Entity |
+| 1개 의존 | `1` | 부모 완료 후 병렬 실행 |
+| 2개 이상 의존 | `2` | 여러 부모 완료 후 실행 |
+
+### 6.4 작성 예시
+
+#### CTI 패턴 (Class Table Inheritance)
+
+```markdown
+## 구현 대상 (orch-stage 자동 병렬 실행용)
+
+### Entity 목록
+| Entity | 타입 | 의존성 | 병렬 그룹 |
+|--------|------|--------|----------|
+| Asset | CONCRETE | - | 0 |
+| AssetImage | MATERIALIZATION | Asset | 1 |
+| AssetVideo | MATERIALIZATION | Asset | 1 |
+| AssetDocument | MATERIALIZATION | Asset | 1 |
+| AssetFolder | CONCRETE | - | 0 |
+| AssetDerivative | CONCRETE | Asset | 1 |
+
+### Enum 목록
+| Enum | 사용 Entity |
+|------|-------------|
+| AssetKind | Asset |
+| AssetStatus | Asset |
+| DerivativeType | AssetDerivative |
+
+### DTO 목록
+| DTO | 타입 | Entity |
+|-----|------|--------|
+| CreateAssetDto | Request | Asset |
+| UpdateAssetDto | Request | Asset |
+| AssetResponseDto | Response | Asset |
+| AssetListQueryDto | Query | Asset |
+| CreateAssetImageDto | Request | AssetImage |
+| AssetImageResponseDto | Response | AssetImage |
+| CreateAssetVideoDto | Request | AssetVideo |
+| AssetVideoResponseDto | Response | AssetVideo |
+
+### 병렬 실행 DAG
+\`\`\`
+Asset (Level 0) ─────────────────────────┐
+  │                                        │
+  ├── AssetImage (Level 1)                 │
+  ├── AssetVideo (Level 1)     병렬 실행   │
+  ├── AssetDocument (Level 1)  ← 가능      │
+  └── AssetDerivative (Level 1)            │
+                                          │
+AssetFolder (Level 0) ────────────────────┘
+\`\`\`
+
+### 병렬 실행 계획
+- Phase 1: Asset, AssetFolder (2개 병렬)
+- Phase 2: Image, Video, Document, Derivative (4개 병렬, maxConcurrency=3 → 2+2)
+```
+
+#### 단일 Entity
+
+```markdown
+## 구현 대상 (orch-stage 자동 병렬 실행용)
+
+### Entity 목록
+| Entity | 타입 | 의존성 | 병렬 그룹 |
+|--------|------|--------|----------|
+| Member | CONCRETE | - | 0 |
+
+### Enum 목록
+| Enum | 사용 Entity |
+|------|-------------|
+| MemberRole | Member |
+| MemberStatus | Member |
+
+### 병렬 실행 DAG
+\`\`\`
+Member (Level 0) → 단일 실행
+\`\`\`
+```
+
+---
+
+## 7. 품질 체크리스트
 
 - [ ] 모든 Entity에 필수 필드(id, createdAt, updatedAt)가 포함되었는가?
 - [ ] 테이블명이 스네이크케이스인가?

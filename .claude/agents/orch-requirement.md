@@ -377,7 +377,100 @@ apps/server/src/member/
 
 ---
 
-## 7. 체크리스트
+## 7. 구현 대상 명시 (Critical) - 자동 병렬 실행 지원
+
+**기획 완료 시 반드시 "구현 대상" 섹션을 작성하여 orch-stage가 자동으로 병렬 실행을 판단할 수 있게 합니다。**
+
+### 7.1 구현 대상 섹션 작성 위치
+
+각 기획서(`entity.spec.md`, `page.spec.md` 등)에 **구현 대상** 섹션을 추가합니다。
+
+### 7.2 Entity 기획서 예시
+
+```markdown
+# Asset Entity 기획서
+
+## 구현 대상 (orch-stage 자동 병렬 실행용)
+
+### Entity 목록
+| Entity | 타입 | 의존성 | 병렬 그룹 |
+|--------|------|--------|----------|
+| Asset | CONCRETE | - | 0 (먼저) |
+| AssetImage | MATERIALIZATION | Asset | 1 (병렬) |
+| AssetVideo | MATERIALIZATION | Asset | 1 (병렬) |
+| AssetDocument | MATERIALIZATION | Asset | 1 (병렬) |
+| AssetFolder | CONCRETE | Asset | 1 (병렬) |
+
+### Enum 목록
+| Enum | 사용 Entity |
+|------|-------------|
+| AssetKind | Asset |
+| AssetStatus | Asset |
+
+### DTO 목록
+| DTO | 타입 | Entity |
+|-----|------|--------|
+| CreateAssetDto | Request | Asset |
+| UpdateAssetDto | Request | Asset |
+| AssetResponseDto | Response | Asset |
+| ... | ... | ... |
+
+### 병렬 실행 DAG
+\`\`\`
+Asset (Level 0)
+  │
+  ├── AssetImage (Level 1) ┐
+  ├── AssetVideo (Level 1) ├─ 병렬 실행 가능
+  ├── AssetDocument (Level 1) │
+  └── AssetFolder (Level 1) ┘
+\`\`\`
+```
+
+### 7.3 Page 기획서 예시
+
+```markdown
+# Asset 목록 페이지 기획서
+
+## 구현 대상 (orch-stage 자동 병렬 실행용)
+
+### UI 컴포넌트
+| 컴포넌트 | 타입 | 위치 |
+|----------|------|------|
+| AssetPreview | Pure UI | packages/fe-ui/src/components/ui/ |
+| AssetTypeInfo | Pure UI | packages/fe-ui/src/components/ui/ |
+| DerivativeList | Pure UI | packages/fe-ui/src/components/ui/ |
+
+### Widget 컴포넌트
+| 컴포넌트 | 위치 |
+|----------|------|
+| AssetListPanel | packages/fe-ui/src/components/widget/ |
+| FolderTree | packages/fe-ui/src/components/widget/ |
+
+### Feature 컴포넌트
+| 컴포넌트 | Store 연결 |
+|----------|-----------|
+| AssetManager | AssetStore |
+| AssetUploader | AssetStore |
+
+### 병렬 실행 가능 항목
+- UI 컴포넌트: 병렬 생성 가능
+- Widget 컴포넌트: 병렬 생성 가능
+- Feature 컴포넌트: Store 완료 후 순차
+```
+
+### 7.4 자동 병렬 판단 규칙
+
+orch-stage는 기획서의 **구현 대상** 섹션을 분석하여:
+
+| 규칙 | 설명 |
+|------|------|
+| **동일 Level** | 같은 Level의 Entity/컴포넌트는 병렬 실행 |
+| **의존성 순서** | 부모 → 자식 순서 보장 |
+| **maxConcurrency** | 기본 3, 너무 많으면 분할 실행 |
+
+---
+
+## 8. 체크리스트
 
 ### 실행 전 확인
 - [ ] 앱이 존재하는가?
@@ -387,6 +480,7 @@ apps/server/src/member/
 ### 각 단계 완료 시
 - [ ] 기획서 파일이 생성되었는가?
 - [ ] 내용이 일관성 있는가?
+- [ ] **구현 대상 섹션이 작성되었는가?** ⚠️ 필수
 
 ### 전체 완료 시
 - [ ] app.spec.md에 도메인 엔트리 추가
@@ -398,6 +492,7 @@ apps/server/src/member/
 - [ ] **DTO 기획서 생성** (`packages/be-dto/src/*/*.dto.spec.md`) ⚠️ 자주 누락
 - [ ] VO 기획서 생성 (필요시)
 - [ ] **검증**: 페이지 기획서에서 참조하는 컴포넌트가 실제 `.spec.md`로 존재하는지 확인
+- [ ] **구현 대상 섹션**: 모든 기획서에 병렬 실행 정보 포함
 
 ---
 

@@ -23,6 +23,23 @@ tools:
 | DTO 생성 | ❌ 미사용 | be-dto-builder 사용 |
 | Repository 생성 | ❌ 미사용 | be-repository-builder 사용 |
 
+### 병렬 실행 컨텍스트 (Critical)
+
+**이 에이전트는 orch-stage에 의해 병렬로 호출될 수 있습니다。**
+
+```
+orch-stage (Orchestrator)
+    │
+    ├── Task: be-entity-builder (Asset)      ┐
+    ├── Task: be-entity-builder (AssetVideo) ├─ 병렬 실행
+    └── Task: be-entity-builder (AssetImage) ┘
+```
+
+**병렬 실행 시 주의사항:**
+- 각 Entity는 독립적인 파일(`{entity}.entity.ts`)에 생성됨
+- `index.ts` export는 fan-in 후 단일 writer가 머지
+- 부모 Entity가 필요한 경우, 의존성 순서대로 실행됨 (Level 0 → Level 1)
+
 ---
 
 ## 입력/출력

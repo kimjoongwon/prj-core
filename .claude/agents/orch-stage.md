@@ -905,3 +905,630 @@ Task: qa-fe-e2e-testing
    - Service 로직 확인
    - 테스트 케이스 재검토
 ```
+
+---
+
+## 14. 병렬 Fan-out 실행 시스템 (Critical)
+
+### 14.1 개요
+
+`targets` 또는 `pages` 파라미터 지정 시, **독립적인 작업 단위를 병렬 Task로 fan-out**하여 실행 시간을 단축합니다。
+
+```
+┌─────────────────────────────────────────────────────────────────┐
+│                      orch-stage (Orchestrator)                   │
+│                                                                  │
+│  1. 의존성 분석 → DAG 구성                                        │
+│  2. 병렬 그룹 식별                                                │
+│  3. Task 도구로 subagent 병렬 실행                               │
+│  4. 결과 fan-in → 후속 작업 진행                                  │
+└─────────────────────────────────────────────────────────────────┘
+                              │
+          ┌───────────────────┼───────────────────┐
+          ▼                   ▼                   ▼
+    ┌──────────┐        ┌──────────┐        ┌──────────┐
+    │ Task 1   │        │ Task 2   │        │ Task 3   │
+    │ (Asset)  │        │ (Video)  │        │ (Image)  │
+    │ builder  │        │ builder  │        │ builder  │
+    └──────────┘        └──────────┘        └──────────┘
+          │                   │                   │
+          └───────────────────┼───────────────────┘
+                              ▼
+                    ┌─────────────────┐
+                    │    Fan-in       │
+                    │  결과 취합       │
+                    └─────────────────┘
+```
+
+### 14.2 병렬 실행 파라미터
+
+| 파라미터 | 기본값 | 설명 |
+|---------|--------|------|
+| `parallel` | `auto` | `off`(순차), `auto`(DAG 기반 병렬), `force`(강제 병렬) |
+| `maxConcurrency` | `3` | 동시 실행 Task 최대 개수 |
+| `targets` | - | Stage 2-3의 작업 단위 목록 (예: `Asset,AssetVideo,AssetImage`) |
+| `pages` | - | Stage 4-6의 페이지 목록 (예: `List,Detail,Create`) |
+| `failPolicy` | `fail-fast` | `fail-fast`(첫 실패 시 중단), `continue`(실패 분리 후 계속) |
+
+### 14.3 Stage별 병렬 실행 전략
+
+#### Stage 2: 스키마 구현
+
+```
+targets=Asset,AssetVideo,AssetImage,AssetDocument
+
+┌──────────────────────────────────────────────────────────────┐
+│ Phase 1: 의존성 분석                                          │
+│   - Asset (부모) → AssetVideo, AssetImage, AssetDocument (자식) │
+│   - DAG: Asset → [AssetVideo, AssetImage, AssetDocument]     │
+└──────────────────────────────────────────────────────────────┘
+                              │
+                              ▼
+┌──────────────────────────────────────────────────────────────┐
+│ Phase 2: Level 0 (부모) - 순차 실행                           │
+│   Task: be-schema-builder (target=Asset)                      │
+│   Task: be-entity-builder (target=Asset)                      │
+│   Task: be-dto-builder (target=Asset)                         │
+│   Task: be-query-dto-builder (target=Asset)                   │
+└──────────────────────────────────────────────────────────────┘
+                              │
+                              ▼
+┌──────────────────────────────────────────────────────────────┐
+│ Phase 3: Level 1 (자식) - 병렬 fan-out                        │
+│   ┌─────────────────┐  ┌─────────────────┐  ┌─────────────────┐
+│   │ Task: schema    │  │ Task: schema    │  │ Task: schema    │
+│   │ (AssetVideo)    │  │ (AssetImage)    │  │ (AssetDocument) │
+│   └────────┬────────┘  └────────┬────────┘  └────────┬────────┘
+│            │                    │                    │
+│   ┌────────▼────────┐  ┌────────▼────────┐  ┌────────▼────────┐
+│   │ Task: entity    │  │ Task: entity    │  │ Task: entity    │
+│   │ (AssetVideo)    │  │ (AssetImage)    │  │ (AssetDocument) │
+│   └────────┬────────┘  └────────┬────────┘  └────────┬────────┘
+│            │                    │                    │
+│   ┌────────▼────────┐  ┌────────▼────────┐  ┌────────▼────────┐
+│   │ Task: dto       │  │ Task: dto       │  │ Task: dto       │
+│   │ (AssetVideo)    │  │ (AssetImage)    │  │ (AssetDocument) │
+│   └────────┬────────┘  └────────┬────────┘  └────────┬────────┘
+└────────────┼────────────────────┼────────────────────┼─────────┘
+             └────────────────────┼────────────────────┘
+                                  ▼
+┌──────────────────────────────────────────────────────────────┐
+│ Phase 4: Fan-in                                              │
+│   - be-seed-maker (모든 target 완료 후)                        │
+│   - req-test-planner                                          │
+│   - qa-be-testing                                             │
+│   - 공용 export 파일 머지 (packages/*/src/index.ts)            │
+└──────────────────────────────────────────────────────────────┘
+```
+
+#### Stage 3: 백엔드 구현
+
+```
+targets=Asset,AssetVideo,AssetImage
+
+┌──────────────────────────────────────────────────────────────┐
+│ 병렬 fan-out (각 target별 독립 실행)                           │
+│   ┌─────────────────┐  ┌─────────────────┐  ┌─────────────────┐
+│   │ Task: repo      │  │ Task: repo      │  │ Task: repo      │
+│   │ (Asset)         │  │ (AssetVideo)    │  │ (AssetImage)    │
+│   └────────┬────────┘  └────────┬────────┘  └────────┬────────┘
+│            │                    │                    │
+│   ┌────────▼────────┐  ┌────────▼────────┐  ┌────────▼────────┐
+│   │ Task: service   │  │ Task: service   │  │ Task: service   │
+│   │ (Asset)         │  │ (AssetVideo)    │  │ (AssetImage)    │
+│   └────────┬────────┘  └────────┬────────┘  └────────┬────────┘
+│            │                    │                    │
+│   ┌────────▼────────┐  ┌────────▼────────┐  ┌────────▼────────┐
+│   │ Task: controller│  │ Task: controller│  │ Task: controller│
+│   │ (Asset)         │  │ (AssetVideo)    │  │ (AssetImage)    │
+│   └────────┬────────┘  └────────┬────────┘  └────────┬────────┘
+└────────────┼────────────────────┼────────────────────┼─────────┘
+             └────────────────────┼────────────────────┘
+                                  ▼
+┌──────────────────────────────────────────────────────────────┐
+│ Fan-in                                                       │
+│   - be-facade-builder (cross-target 조합 필요 시)              │
+│   - req-test-planner                                          │
+│   - qa-be-testing                                             │
+└──────────────────────────────────────────────────────────────┘
+```
+
+#### Stage 5: 컴포넌트 구현 (페이지별)
+
+```
+pages=List,Detail,Create
+
+┌──────────────────────────────────────────────────────────────┐
+│ 병렬 fan-out (각 페이지별 독립 실행)                           │
+│   ┌─────────────────┐  ┌─────────────────┐  ┌─────────────────┐
+│   │ Page: List      │  │ Page: Detail    │  │ Page: Create    │
+│   │                 │  │                 │  │                 │
+│   │ - ui-builder    │  │ - ui-builder    │  │ - ui-builder    │
+│   │ - input-builder │  │ - input-builder │  │ - input-builder │
+│   │ - widget-builder│  │ - widget-builder│  │ - widget-builder│
+│   │ - feature-builder│ │ - feature-builder│ │ - feature-builder│
+│   │ - store-builder │  │ - store-builder │  │ - store-builder │
+│   └────────┬────────┘  └────────┬────────┘  └────────┬────────┘
+└────────────┼────────────────────┼────────────────────┼─────────┘
+             └────────────────────┼────────────────────┘
+                                  ▼
+┌──────────────────────────────────────────────────────────────┐
+│ Fan-in                                                       │
+│   - fe-menu-builder (List 페이지만, admin-menu.ts lock)       │
+│   - 공용 UI export 머지                                        │
+│   - req-test-planner                                          │
+│   - qa-fe-testing                                             │
+└──────────────────────────────────────────────────────────────┘
+```
+
+### 14.4 의존성 DAG 처리 규칙
+
+#### CTI (Class Table Inheritance) 패턴
+
+```
+Asset (부모)
+  ├── AssetImage (1:1 자식)
+  ├── AssetVideo (1:1 자식)
+  └── AssetDocument (1:1 자식)
+```
+
+**의존성 규칙:**
+1. 부모(`Asset`)가 먼저 생성되어야 자식들이 참조 가능
+2. 자식들(`AssetVideo`, `AssetImage`, `AssetDocument`)은 서로 독립적 → 병렬 가능
+
+**실행 순서:**
+```bash
+# Level 0: 부모 먼저
+Level 0: Asset → schema, entity, dto
+
+# Level 1: 자식들 병렬
+Level 1: [AssetVideo, AssetImage, AssetDocument] → 병렬 실행
+```
+
+#### DAG 구성 알고리즘
+
+```
+1. targets 목록 수신
+2. 각 target의 기획서(.spec.md)에서 의존성 파악
+   - @materializes, @extends, @connects 태그 확인
+3. 위상 정렬로 레벨 분리
+   - Level 0: 의존성 없음 (부모)
+   - Level 1: Level 0에 의존
+   - Level N: Level N-1에 의존
+4. 같은 레벨은 병렬 실행
+5. 이전 레벨 완료 후 다음 레벨 시작
+```
+
+### 14.5 Task 도구 호출 패턴
+
+#### 병렬 실행 (fan-out)
+
+orch-stage는 **Task 도구를 여러 개 동시에 호출**하여 병렬 실행합니다:
+
+```
+# 단일 메시지에서 여러 Task 호출
+[Task 도구 호출 1: be-entity-builder, target=AssetVideo]
+[Task 도구 호출 2: be-entity-builder, target=AssetImage]
+[Task 도구 호출 3: be-entity-builder, target=AssetDocument]
+```
+
+**Task 호출 예시:**
+```markdown
+Task:
+  subagent_type: Entity-빌더
+  description: Build AssetVideo entity
+  prompt: |
+    AssetVideo Entity를 생성하세요.
+
+    **기획서:** packages/be-entity/src/asset-video.entity.spec.md
+    **부모 Entity:** Asset (packages/be-entity/src/asset.entity.ts)
+
+    **필드:**
+    - assetId: string (PK, FK to Asset)
+    - durationMs: number
+    - codec: string
+    ...
+```
+
+#### 순차 실행 (fan-in 후)
+
+```
+# fan-in 완료 후 순차 실행
+[Task 도구 호출: be-seed-maker] → 모든 target 완료 후
+[Task 도구 호출: req-test-planner] → 테스트 케이스 생성
+[Task 도구 호출: qa-be-testing] → 테스트 코드 작성
+```
+
+### 14.6 공유 파일 Lock 규칙
+
+병렬 실행 중 여러 Task가 같은 파일을 수정하지 않도록 lock을 사용합니다:
+
+| 파일 | Lock 대상 | 처리 방식 |
+|------|----------|----------|
+| `packages/*/src/index.ts` | export 머지 | fan-in 후 단일 writer |
+| `packages/common-constant/src/routing/admin-menu.ts` | 메뉴 등록 | List 페이지 완료 후 단일 실행 |
+| `apps/*/app/(admin)/app.spec.md` | 앱 기획서 | Stage 1 완료 후 lock |
+| `**/PROGRESS.md` | 진행 상황 | fan-in 후 단일 업데이트 |
+
+### 14.7 실행 예시
+
+#### Asset 도메인 전체 스키마/Entity 병렬 생성
+
+```bash
+# Stage 2: 스키마, Entity, DTO 병렬 생성
+/orch-stage run stage=2 app=admin domain=Asset \
+  targets=Asset,AssetVideo,AssetImage,AssetDocument,AssetFolder \
+  parallel=auto \
+  maxConcurrency=3
+
+# 실행 흐름:
+# 1. DAG 분석 → Asset (Level 0), [Video,Image,Document,Folder] (Level 1)
+# 2. Level 0 실행: Asset schema → entity → dto → query-dto (순차)
+# 3. Level 1 실행: 4개 target 병렬 fan-out (각각 schema → entity → dto)
+# 4. Fan-in: seed-maker, test-planner, be-testing
+```
+
+#### 여러 페이지 컴포넌트 병렬 생성
+
+```bash
+# Stage 5: 3개 페이지 컴포넌트 병렬 생성
+/orch-stage run stage=5 app=admin domain=Asset \
+  pages=List,Detail,Create \
+  parallel=auto \
+  maxConcurrency=2
+
+# 실행 흐름:
+# 1. List 페이지: ui → input → widget → feature → store (순차)
+# 2. Detail 페이지: 동시 실행 (maxConcurrency=2)
+# 3. Create 페이지: List/Detail 중 하나 완료 후 실행
+# 4. Fan-in: menu-builder (List만), export 머지, testing
+```
+
+### 14.8 실패 처리
+
+#### fail-fast (기본)
+
+```
+Task 1: 성공
+Task 2: 실패 → 즉시 중단
+Task 3: 실행 취소
+
+결과: Stage 실패, 사용자 알림
+```
+
+#### continue
+
+```
+Task 1: 성공
+Task 2: 실패 → 실패 기록, 계속
+Task 3: 성공
+
+결과: 부분 성공 리포트
+  - 성공: Asset, AssetImage
+  - 실패: AssetVideo
+  - 권장: 실패한 target만 재실행
+```
+
+### 14.9 진행 상황 표시
+
+```
+🚀 Stage 2: 스키마 구현 시작
+📋 Targets: Asset, AssetVideo, AssetImage, AssetDocument
+⚙️ Parallel: auto (maxConcurrency: 3)
+
+📊 DAG 분석 완료:
+   Level 0: Asset
+   Level 1: AssetVideo, AssetImage, AssetDocument
+
+▶️ Level 0 실행 중...
+   ✅ Asset schema 생성 완료
+   ✅ Asset entity 생성 완료
+   ✅ Asset dto 생성 완료
+
+▶️ Level 1 병렬 실행 중... (3개 Task)
+   ✅ [Task 1] AssetVideo 완료
+   ✅ [Task 2] AssetImage 완료
+   ✅ [Task 3] AssetDocument 완료
+
+▶️ Fan-in 실행 중...
+   ✅ Seed 데이터 생성 완료
+   ✅ 테스트 케이스 생성 완료
+   ✅ 테스트 실행: 15개 통과
+
+✅ Stage 2 완료: 스키마 구현
+
+📁 생성된 파일:
+   - packages/be-prisma/schema/asset.prisma
+   - packages/be-entity/src/asset.entity.ts
+   - packages/be-entity/src/asset-video.entity.ts
+   - packages/be-entity/src/asset-image.entity.ts
+   - packages/be-entity/src/asset-document.entity.ts
+   - packages/be-dto/src/asset/*.dto.ts
+   - ...
+
+📌 다음 단계: Stage 3 (백엔드 구현)
+```
+
+---
+
+## 15. 자동 병렬 판단 시스템 (Critical)
+
+**`targets` 파라미터가 없어도 기획서를 분석하여 자동으로 병렬 실행 여부를 판단합니다。**
+
+### 15.1 개요
+
+```
+┌─────────────────────────────────────────────────────────────────┐
+│                    자동 병렬 판단 플로우                         │
+│                                                                  │
+│  1. 기획서 분석 → "구현 대상" 섹션 파싱                          │
+│  2. 의존성 DAG 구성                                              │
+│  3. 병렬 그룹 식별                                               │
+│  4. 자동으로 fan-out 실행                                        │
+└─────────────────────────────────────────────────────────────────┘
+```
+
+### 15.2 기획서 "구현 대상" 섹션 파싱
+
+#### Entity 기획서 분석
+
+orch-stage는 Entity 기획서(`packages/be-entity/src/*.entity.spec.md`)에서 **구현 대상** 섹션을 찾습니다:
+
+```markdown
+## 구현 대상 (orch-stage 자동 병렬 실행용)
+
+### Entity 목록
+| Entity | 타입 | 의존성 | 병렬 그룹 |
+|--------|------|--------|----------|
+| Asset | CONCRETE | - | 0 |
+| AssetImage | MATERIALIZATION | Asset | 1 |
+| AssetVideo | MATERIALIZATION | Asset | 1 |
+| AssetDocument | MATERIALIZATION | Asset | 1 |
+```
+
+**파싱 규칙:**
+1. `## 구현 대상` 섹션 찾기
+2. 표에서 `Entity`, `의존성`, `병렬 그룹` 컬럼 추출
+3. 동일 병렬 그룹 → 병렬 실행
+
+#### Page 기획서 분석
+
+```markdown
+## 구현 대상 (orch-stage 자동 병렬 실행용)
+
+### UI 컴포넌트
+| 컴포넌트 | 타입 | 위치 |
+|----------|------|------|
+| AssetPreview | Pure UI | ... |
+| AssetTypeInfo | Pure UI | ... |
+
+### Widget 컴포넌트
+| 컴포넌트 | 위치 |
+|----------|------|
+| AssetListPanel | ... |
+
+### 병렬 실행 가능 항목
+- UI 컴포넌트: 병렬 생성 가능
+- Widget 컴포넌트: 병렬 생성 가능
+```
+
+### 15.3 자동 판단 알고리즘
+
+```
+Stage 실행 시작
+    │
+    ▼
+┌─────────────────────────────────────────┐
+│  1단계: targets/pages 파라미터 확인      │
+│  - 있음 → 명시된 targets 사용            │
+│  - 없음 → 기획서 분석으로 자동 판단       │
+└─────────────────────────────────────────┘
+    │
+    ▼
+┌─────────────────────────────────────────┐
+│  2단계: 기획서 "구현 대상" 섹션 검색      │
+│                                         │
+│  Stage 2-3:                             │
+│    - packages/be-entity/src/*.entity.spec.md │
+│    - apps/server/src/*/controllers/*.spec.md │
+│                                         │
+│  Stage 4-6:                             │
+│    - apps/[app]/app/(admin)/[domain]/page.spec.md │
+└─────────────────────────────────────────┘
+    │
+    ▼
+┌─────────────────────────────────────────┐
+│  3단계: DAG 구성                         │
+│  - 의존성 컬럼에서 부모-자식 관계 파악    │
+│  - 위상 정렬로 레벨 분리                  │
+│  - 같은 레벨 = 병렬 실행 가능            │
+└─────────────────────────────────────────┘
+    │
+    ▼
+┌─────────────────────────────────────────┐
+│  4단계: 병렬 실행                        │
+│  - Level 0: 순차 실행                    │
+│  - Level 1+: 병렬 fan-out (maxConcurrency 제한) │
+│  - Fan-in: 후속 작업                     │
+└─────────────────────────────────────────┘
+```
+
+### 15.4 Stage별 자동 판단 규칙
+
+| Stage | 기획서 분석 위치 | 병렬 판단 기준 |
+|-------|-----------------|---------------|
+| 2 | `packages/be-entity/src/*.entity.spec.md` | Entity 목록, 의존성 |
+| 3 | `apps/server/src/*/controllers/*.spec.md` | API 엔드포인트별 |
+| 4 | `apps/[app]/app/(admin)/[domain]/page.spec.md` | 페이지 목록 |
+| 5 | `packages/fe-ui/src/components/*/*.spec.md` | 컴포넌트 타입별 |
+| 6 | `apps/[app]/app/(admin)/[domain]/page.spec.md` | 페이지 목록 |
+
+### 15.5 자동 판단 예시
+
+#### 예시 1: Entity 자동 병렬 (Stage 2)
+
+**입력:**
+```bash
+/orch-stage run stage=2 app=admin domain=Asset
+# targets 파라미터 없음 → 자동 판단
+```
+
+**기획서 분석:**
+```markdown
+# Asset Entity 기획서 (packages/be-entity/src/asset.entity.spec.md)
+
+## 구현 대상
+
+### Entity 목록
+| Entity | 타입 | 의존성 | 병렬 그룹 |
+|--------|------|--------|----------|
+| Asset | CONCRETE | - | 0 |
+| AssetImage | MATERIALIZATION | Asset | 1 |
+| AssetVideo | MATERIALIZATION | Asset | 1 |
+| AssetDocument | MATERIALIZATION | Asset | 1 |
+| AssetFolder | CONCRETE | - | 0 |
+| AssetDerivative | CONCRETE | Asset | 1 |
+```
+
+**자동 판단 결과:**
+```
+📊 기획서 분석 완료:
+   - 검색: packages/be-entity/src/asset*.entity.spec.md
+   - 발견: 6개 Entity
+
+📊 DAG 구성:
+   Level 0: Asset, AssetFolder (의존성 없음)
+   Level 1: AssetImage, AssetVideo, AssetDocument, AssetDerivative (Asset 의존)
+
+⚙️ 병렬 실행 계획:
+   Phase 1: Asset, AssetFolder 병렬 (2개)
+   Phase 2: Image, Video, Document, Derivative 병렬 (4개, maxConcurrency=3 → 2+2)
+```
+
+#### 예시 2: 컴포넌트 자동 병렬 (Stage 5)
+
+**입력:**
+```bash
+/orch-stage run stage=5 app=admin domain=Asset page=List
+# pages 파라미터 없음 → page.spec.md 분석
+```
+
+**기획서 분석:**
+```markdown
+# Asset 목록 페이지 기획서 (apps/admin/app/(admin)/assets/page.spec.md)
+
+## 구현 대상
+
+### UI 컴포넌트
+| 컴포넌트 | 병렬 그룹 |
+|----------|----------|
+| AssetPreview | 0 |
+| AssetTypeInfo | 0 |
+| DerivativeList | 0 |
+
+### Widget 컴포넌트
+| 컴포넌트 | 병렬 그룹 |
+|----------|----------|
+| AssetListPanel | 1 |
+| FolderTree | 1 |
+
+### Feature 컴포넌트
+| 컴포넌트 | 병렬 그룹 | 의존성 |
+|----------|----------|--------|
+| AssetManager | 2 | AssetStore |
+```
+
+**자동 판단 결과:**
+```
+📊 기획서 분석 완료:
+   - 검색: apps/admin/app/(admin)/assets/page.spec.md
+   - 발견: 6개 컴포넌트
+
+📊 실행 계획:
+   Phase 1: UI 3개 병렬 (AssetPreview, AssetTypeInfo, DerivativeList)
+   Phase 2: Widget 2개 병렬 (AssetListPanel, FolderTree)
+   Phase 3: Feature 1개 (AssetManager - Store 완료 후)
+
+▶️ Phase 1 병렬 실행 중... (3개 Task)
+```
+
+### 15.6 명시 vs 자동 판단 우선순위
+
+| 우선순위 | 파라미터 | 동작 |
+|----------|---------|------|
+| 1 | `targets=...` | 명시된 targets만 사용 |
+| 2 | `pages=...` | 명시된 pages만 사용 |
+| 3 | 기획서 분석 | "구현 대상" 섹션에서 자동 추출 |
+
+**혼합 사용 예시:**
+```bash
+# 일부만 명시 + 나머지 자동
+/orch-stage run stage=2 app=admin domain=Asset targets=Asset
+# → Asset만 명시 실행, 나머지는 자동 판단 안 함
+
+# 전체 자동
+/orch-stage run stage=2 app=admin domain=Asset
+# → 기획서에서 모든 Entity 자동 추출
+```
+
+### 15.7 "구현 대상" 섹션이 없을 때
+
+기획서에 "구현 대상" 섹션이 없으면:
+
+1. **Stage 2-3**: 도메인 기획서에서 Entity/API 추론
+   - `app.spec.md`의 도메인 목록
+   - `*.controller.spec.md`의 API 엔드포인트
+
+2. **Stage 4-6**: 페이지 폴더 구조 분석
+   - `apps/[app]/app/(admin)/[domain]/` 하위 폴더
+   - List, Detail, Create, Edit 자동 감지
+
+3. **경고 출력**:
+```
+⚠️ "구현 대상" 섹션을 찾을 수 없습니다.
+📌 폴더 구조 기반 자동 판단:
+   - 감지된 페이지: List, Detail
+   - 권장: 기획서에 "구현 대상" 섹션을 추가하면 더 정확한 병렬 실행 가능
+```
+
+### 15.8 자동 판단 실행 로그 예시
+
+```
+🚀 Stage 2: 스키마 구현 시작
+📋 Domain: Asset
+🔍 자동 판단 모드 (targets 파라미터 없음)
+
+📖 기획서 분석 중...
+   ✅ 발견: packages/be-entity/src/asset.entity.spec.md
+   ✅ 발견: packages/be-entity/src/asset-video.entity.spec.md
+   ✅ 발견: packages/be-entity/src/asset-image.entity.spec.md
+
+📊 "구현 대상" 섹션 파싱:
+   | Entity | 의존성 | 병렬 그룹 |
+   |--------|--------|----------|
+   | Asset | - | 0 |
+   | AssetVideo | Asset | 1 |
+   | AssetImage | Asset | 1 |
+
+📊 DAG 구성 완료:
+   Level 0: Asset
+   Level 1: AssetVideo, AssetImage (병렬)
+
+⚙️ 실행 계획:
+   Phase 1: Asset (1개)
+   Phase 2: Video, Image 병렬 (2개, maxConcurrency=3)
+
+▶️ Phase 1 실행 중...
+   ✅ be-schema-builder: Asset 완료
+   ✅ be-entity-builder: Asset 완료
+   ✅ be-dto-builder: Asset 완료
+
+▶️ Phase 2 병렬 실행 중... (2개 Task 동시)
+   ✅ [Task 1] AssetVideo 완료
+   ✅ [Task 2] AssetImage 완료
+
+✅ Stage 2 완료: 스키마 구현 (자동 병렬)
+
+📌 다음 단계: Stage 3 (백엔드 구현)
+   → 자동 판단으로 3개 Entity 병렬 처리됨
+```
