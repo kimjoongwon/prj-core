@@ -36,16 +36,25 @@ import type {
 } from '@tanstack/react-query';
 
 import type {
+  AddAssetsToAlbum200AllOf,
+  AddAssetsToAlbumDto,
   BatchAssignGrantsToRole200AllOf,
+  BatchDeleteAssetsDto,
   BatchGrantRequestDto,
   CreateAbility201AllOf,
   CreateAbilityDto,
   CreateAction201AllOf,
   CreateActionDto,
+  CreateAlbum201AllOf,
+  CreateAlbumDto,
+  CreateAsset201AllOf,
+  CreateAssetDto,
   CreateCategory201AllOf,
   CreateCategoryDto,
   CreateExercise201AllOf,
   CreateExerciseDto,
+  CreateFolder201AllOf,
+  CreateFolderDto,
   CreateGround201AllOf,
   CreateGroundDto,
   CreateGroup201AllOf,
@@ -78,6 +87,12 @@ import type {
   GetActionById200AllOf,
   GetActions200AllOf,
   GetActionsParams,
+  GetAlbumById200AllOf,
+  GetAlbums200AllOf,
+  GetAlbumsParams,
+  GetAssetById200AllOf,
+  GetAssets200AllOf,
+  GetAssetsParams,
   GetCategories200AllOf,
   GetCategoriesParams,
   GetCategoryById200AllOf,
@@ -85,6 +100,10 @@ import type {
   GetExerciseRoutines200AllOf,
   GetExercises200AllOf,
   GetExercisesParams,
+  GetFolderById200AllOf,
+  GetFolderTree200AllOf,
+  GetFolders200AllOf,
+  GetFoldersParams,
   GetGrantsByRoleId200AllOf,
   GetGround200AllOf,
   GetGrounds200AllOf,
@@ -120,17 +139,34 @@ import type {
   GetUserById200AllOf,
   GetUsers200AllOf,
   GetUsersParams,
+  MoveAsset200AllOf,
+  MoveAssetDto,
+  MoveFolder200AllOf,
+  MoveFolderDto,
   PreviewTemplateDto,
+  ReorderAlbumEntries200AllOf,
+  ReorderAlbumEntriesDto,
+  RestoreAlbum200AllOf,
+  RestoreAsset200AllOf,
+  RestoreFolder200AllOf,
   SendTestTemplateDto,
   ToggleTemplateStatus200AllOf,
   UpdateAbility200AllOf,
   UpdateAbilityDto,
   UpdateAction200AllOf,
   UpdateActionDto,
+  UpdateAlbum200AllOf,
+  UpdateAlbumDto,
+  UpdateAsset200AllOf,
+  UpdateAssetDto,
+  UpdateAssetStatus200AllOf,
+  UpdateAssetStatusDto,
   UpdateCategory200AllOf,
   UpdateCategoryDto,
   UpdateExercise200AllOf,
   UpdateExerciseDto,
+  UpdateFolder200AllOf,
+  UpdateFolderDto,
   UpdateGround200AllOf,
   UpdateGroundDto,
   UpdateGroup200AllOf,
@@ -12221,6 +12257,2915 @@ export const useDeleteRoutine = <TError = ErrorType<void>,
       > => {
 
       const mutationOptions = getDeleteRoutineMutationOptions(options);
+
+      return useMutation(mutationOptions, queryClient);
+    }
+    
+/**
+ * 현재 Space 내의 에셋 목록을 조회합니다. 검색, 필터링, 페이지네이션을 지원하며 통계 정보도 함께 반환합니다.
+ * @summary 에셋 목록 조회
+ */
+export const getAssets = (
+    params?: GetAssetsParams,
+ options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
+) => {
+      
+      
+      return customInstance<GetAssets200AllOf>(
+      {url: `/api/v1/assets`, method: 'GET',
+        params, signal
+    },
+      options);
+    }
+  
+
+
+
+export const getGetAssetsQueryKey = (params?: GetAssetsParams,) => {
+    return [
+    `/api/v1/assets`, ...(params ? [params]: [])
+    ] as const;
+    }
+
+export const getGetAssetsInfiniteQueryKey = (params?: GetAssetsParams,) => {
+    return [
+    'infinite', `/api/v1/assets`, ...(params ? [params]: [])
+    ] as const;
+    }
+
+    
+export const getGetAssetsQueryOptions = <TData = Awaited<ReturnType<typeof getAssets>>, TError = ErrorType<void>>(params?: GetAssetsParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAssets>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetAssetsQueryKey(params);
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getAssets>>> = ({ signal }) => getAssets(params, requestOptions, signal);
+
+      
+
+      
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getAssets>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetAssetsQueryResult = NonNullable<Awaited<ReturnType<typeof getAssets>>>
+export type GetAssetsQueryError = ErrorType<void>
+
+
+export function useGetAssets<TData = Awaited<ReturnType<typeof getAssets>>, TError = ErrorType<void>>(
+ params: undefined |  GetAssetsParams, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAssets>>, TError, TData>> & Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getAssets>>,
+          TError,
+          Awaited<ReturnType<typeof getAssets>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetAssets<TData = Awaited<ReturnType<typeof getAssets>>, TError = ErrorType<void>>(
+ params?: GetAssetsParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAssets>>, TError, TData>> & Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getAssets>>,
+          TError,
+          Awaited<ReturnType<typeof getAssets>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetAssets<TData = Awaited<ReturnType<typeof getAssets>>, TError = ErrorType<void>>(
+ params?: GetAssetsParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAssets>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+/**
+ * @summary 에셋 목록 조회
+ */
+
+export function useGetAssets<TData = Awaited<ReturnType<typeof getAssets>>, TError = ErrorType<void>>(
+ params?: GetAssetsParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAssets>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient 
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = getGetAssetsQueryOptions(params,options)
+
+  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+/**
+ * @summary 에셋 목록 조회
+ */
+export const prefetchGetAssetsQuery = async <TData = Awaited<ReturnType<typeof getAssets>>, TError = ErrorType<void>>(
+ queryClient: QueryClient, params?: GetAssetsParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAssets>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+
+  ): Promise<QueryClient> => {
+
+  const queryOptions = getGetAssetsQueryOptions(params,options)
+
+  await queryClient.prefetchQuery(queryOptions);
+
+  return queryClient;
+}
+
+
+
+export const getGetAssetsSuspenseQueryOptions = <TData = Awaited<ReturnType<typeof getAssets>>, TError = ErrorType<void>>(params?: GetAssetsParams, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAssets>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetAssetsQueryKey(params);
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getAssets>>> = ({ signal }) => getAssets(params, requestOptions, signal);
+
+      
+
+      
+
+   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAssets>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetAssetsSuspenseQueryResult = NonNullable<Awaited<ReturnType<typeof getAssets>>>
+export type GetAssetsSuspenseQueryError = ErrorType<void>
+
+
+export function useGetAssetsSuspense<TData = Awaited<ReturnType<typeof getAssets>>, TError = ErrorType<void>>(
+ params: undefined |  GetAssetsParams, options: { query:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAssets>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetAssetsSuspense<TData = Awaited<ReturnType<typeof getAssets>>, TError = ErrorType<void>>(
+ params?: GetAssetsParams, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAssets>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetAssetsSuspense<TData = Awaited<ReturnType<typeof getAssets>>, TError = ErrorType<void>>(
+ params?: GetAssetsParams, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAssets>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+/**
+ * @summary 에셋 목록 조회
+ */
+
+export function useGetAssetsSuspense<TData = Awaited<ReturnType<typeof getAssets>>, TError = ErrorType<void>>(
+ params?: GetAssetsParams, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAssets>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient 
+ ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = getGetAssetsSuspenseQueryOptions(params,options)
+
+  const query = useSuspenseQuery(queryOptions, queryClient) as  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+
+
+
+export const getGetAssetsSuspenseInfiniteQueryOptions = <TData = InfiniteData<Awaited<ReturnType<typeof getAssets>>>, TError = ErrorType<void>>(params?: GetAssetsParams, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAssets>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetAssetsInfiniteQueryKey(params);
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getAssets>>> = ({ signal }) => getAssets(params, requestOptions, signal);
+
+      
+
+      
+
+   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAssets>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetAssetsSuspenseInfiniteQueryResult = NonNullable<Awaited<ReturnType<typeof getAssets>>>
+export type GetAssetsSuspenseInfiniteQueryError = ErrorType<void>
+
+
+export function useGetAssetsSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getAssets>>>, TError = ErrorType<void>>(
+ params: undefined |  GetAssetsParams, options: { query:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAssets>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetAssetsSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getAssets>>>, TError = ErrorType<void>>(
+ params?: GetAssetsParams, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAssets>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetAssetsSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getAssets>>>, TError = ErrorType<void>>(
+ params?: GetAssetsParams, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAssets>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+/**
+ * @summary 에셋 목록 조회
+ */
+
+export function useGetAssetsSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getAssets>>>, TError = ErrorType<void>>(
+ params?: GetAssetsParams, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAssets>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient 
+ ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = getGetAssetsSuspenseInfiniteQueryOptions(params,options)
+
+  const query = useSuspenseInfiniteQuery(queryOptions, queryClient) as  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+/**
+ * @summary 에셋 목록 조회
+ */
+export const prefetchGetAssetsInfiniteQuery = async <TData = Awaited<ReturnType<typeof getAssets>>, TError = ErrorType<void>>(
+ queryClient: QueryClient, params?: GetAssetsParams, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAssets>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+
+  ): Promise<QueryClient> => {
+
+  const queryOptions = getGetAssetsSuspenseInfiniteQueryOptions(params,options)
+
+  await queryClient.prefetchInfiniteQuery(queryOptions);
+
+  return queryClient;
+}
+
+
+
+
+/**
+ * 새로운 에셋을 생성합니다. 파일 업로드 완료 후 메타데이터 등록에 사용합니다.
+ * @summary 에셋 생성
+ */
+export const createAsset = (
+    createAssetDto: BodyType<CreateAssetDto>,
+ options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
+) => {
+      
+      
+      return customInstance<CreateAsset201AllOf>(
+      {url: `/api/v1/assets`, method: 'POST',
+      headers: {'Content-Type': 'application/json', },
+      data: createAssetDto, signal
+    },
+      options);
+    }
+  
+
+
+export const getCreateAssetMutationOptions = <TError = ErrorType<void>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createAsset>>, TError,{data: BodyType<CreateAssetDto>}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof createAsset>>, TError,{data: BodyType<CreateAssetDto>}, TContext> => {
+
+const mutationKey = ['createAsset'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof createAsset>>, {data: BodyType<CreateAssetDto>}> = (props) => {
+          const {data} = props ?? {};
+
+          return  createAsset(data,requestOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type CreateAssetMutationResult = NonNullable<Awaited<ReturnType<typeof createAsset>>>
+    export type CreateAssetMutationBody = BodyType<CreateAssetDto>
+    export type CreateAssetMutationError = ErrorType<void>
+
+    /**
+ * @summary 에셋 생성
+ */
+export const useCreateAsset = <TError = ErrorType<void>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createAsset>>, TError,{data: BodyType<CreateAssetDto>}, TContext>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof createAsset>>,
+        TError,
+        {data: BodyType<CreateAssetDto>},
+        TContext
+      > => {
+
+      const mutationOptions = getCreateAssetMutationOptions(options);
+
+      return useMutation(mutationOptions, queryClient);
+    }
+    
+/**
+ * 특정 에셋의 상세 정보를 조회합니다. Image/Video/Document 상세 정보를 포함합니다.
+ * @summary 에셋 상세 조회
+ */
+export const getAssetById = (
+    assetId: string,
+ options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
+) => {
+      
+      
+      return customInstance<GetAssetById200AllOf>(
+      {url: `/api/v1/assets/${assetId}`, method: 'GET', signal
+    },
+      options);
+    }
+  
+
+
+
+export const getGetAssetByIdQueryKey = (assetId?: string,) => {
+    return [
+    `/api/v1/assets/${assetId}`
+    ] as const;
+    }
+
+export const getGetAssetByIdInfiniteQueryKey = (assetId?: string,) => {
+    return [
+    'infinite', `/api/v1/assets/${assetId}`
+    ] as const;
+    }
+
+    
+export const getGetAssetByIdQueryOptions = <TData = Awaited<ReturnType<typeof getAssetById>>, TError = ErrorType<void>>(assetId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAssetById>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetAssetByIdQueryKey(assetId);
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getAssetById>>> = ({ signal }) => getAssetById(assetId, requestOptions, signal);
+
+      
+
+      
+
+   return  { queryKey, queryFn, enabled: !!(assetId), ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getAssetById>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetAssetByIdQueryResult = NonNullable<Awaited<ReturnType<typeof getAssetById>>>
+export type GetAssetByIdQueryError = ErrorType<void>
+
+
+export function useGetAssetById<TData = Awaited<ReturnType<typeof getAssetById>>, TError = ErrorType<void>>(
+ assetId: string, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAssetById>>, TError, TData>> & Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getAssetById>>,
+          TError,
+          Awaited<ReturnType<typeof getAssetById>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetAssetById<TData = Awaited<ReturnType<typeof getAssetById>>, TError = ErrorType<void>>(
+ assetId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAssetById>>, TError, TData>> & Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getAssetById>>,
+          TError,
+          Awaited<ReturnType<typeof getAssetById>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetAssetById<TData = Awaited<ReturnType<typeof getAssetById>>, TError = ErrorType<void>>(
+ assetId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAssetById>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+/**
+ * @summary 에셋 상세 조회
+ */
+
+export function useGetAssetById<TData = Awaited<ReturnType<typeof getAssetById>>, TError = ErrorType<void>>(
+ assetId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAssetById>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient 
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = getGetAssetByIdQueryOptions(assetId,options)
+
+  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+/**
+ * @summary 에셋 상세 조회
+ */
+export const prefetchGetAssetByIdQuery = async <TData = Awaited<ReturnType<typeof getAssetById>>, TError = ErrorType<void>>(
+ queryClient: QueryClient, assetId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAssetById>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+
+  ): Promise<QueryClient> => {
+
+  const queryOptions = getGetAssetByIdQueryOptions(assetId,options)
+
+  await queryClient.prefetchQuery(queryOptions);
+
+  return queryClient;
+}
+
+
+
+export const getGetAssetByIdSuspenseQueryOptions = <TData = Awaited<ReturnType<typeof getAssetById>>, TError = ErrorType<void>>(assetId: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAssetById>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetAssetByIdQueryKey(assetId);
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getAssetById>>> = ({ signal }) => getAssetById(assetId, requestOptions, signal);
+
+      
+
+      
+
+   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAssetById>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetAssetByIdSuspenseQueryResult = NonNullable<Awaited<ReturnType<typeof getAssetById>>>
+export type GetAssetByIdSuspenseQueryError = ErrorType<void>
+
+
+export function useGetAssetByIdSuspense<TData = Awaited<ReturnType<typeof getAssetById>>, TError = ErrorType<void>>(
+ assetId: string, options: { query:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAssetById>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetAssetByIdSuspense<TData = Awaited<ReturnType<typeof getAssetById>>, TError = ErrorType<void>>(
+ assetId: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAssetById>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetAssetByIdSuspense<TData = Awaited<ReturnType<typeof getAssetById>>, TError = ErrorType<void>>(
+ assetId: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAssetById>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+/**
+ * @summary 에셋 상세 조회
+ */
+
+export function useGetAssetByIdSuspense<TData = Awaited<ReturnType<typeof getAssetById>>, TError = ErrorType<void>>(
+ assetId: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAssetById>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient 
+ ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = getGetAssetByIdSuspenseQueryOptions(assetId,options)
+
+  const query = useSuspenseQuery(queryOptions, queryClient) as  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+
+
+
+export const getGetAssetByIdSuspenseInfiniteQueryOptions = <TData = InfiniteData<Awaited<ReturnType<typeof getAssetById>>>, TError = ErrorType<void>>(assetId: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAssetById>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetAssetByIdInfiniteQueryKey(assetId);
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getAssetById>>> = ({ signal }) => getAssetById(assetId, requestOptions, signal);
+
+      
+
+      
+
+   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAssetById>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetAssetByIdSuspenseInfiniteQueryResult = NonNullable<Awaited<ReturnType<typeof getAssetById>>>
+export type GetAssetByIdSuspenseInfiniteQueryError = ErrorType<void>
+
+
+export function useGetAssetByIdSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getAssetById>>>, TError = ErrorType<void>>(
+ assetId: string, options: { query:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAssetById>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetAssetByIdSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getAssetById>>>, TError = ErrorType<void>>(
+ assetId: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAssetById>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetAssetByIdSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getAssetById>>>, TError = ErrorType<void>>(
+ assetId: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAssetById>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+/**
+ * @summary 에셋 상세 조회
+ */
+
+export function useGetAssetByIdSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getAssetById>>>, TError = ErrorType<void>>(
+ assetId: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAssetById>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient 
+ ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = getGetAssetByIdSuspenseInfiniteQueryOptions(assetId,options)
+
+  const query = useSuspenseInfiniteQuery(queryOptions, queryClient) as  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+/**
+ * @summary 에셋 상세 조회
+ */
+export const prefetchGetAssetByIdInfiniteQuery = async <TData = Awaited<ReturnType<typeof getAssetById>>, TError = ErrorType<void>>(
+ queryClient: QueryClient, assetId: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAssetById>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+
+  ): Promise<QueryClient> => {
+
+  const queryOptions = getGetAssetByIdSuspenseInfiniteQueryOptions(assetId,options)
+
+  await queryClient.prefetchInfiniteQuery(queryOptions);
+
+  return queryClient;
+}
+
+
+
+
+/**
+ * 에셋 정보를 수정합니다. 변경하려는 필드만 전송하면 됩니다.
+ * @summary 에셋 수정
+ */
+export const updateAsset = (
+    assetId: string,
+    updateAssetDto: BodyType<UpdateAssetDto>,
+ options?: SecondParameter<typeof customInstance>,) => {
+      
+      
+      return customInstance<UpdateAsset200AllOf>(
+      {url: `/api/v1/assets/${assetId}`, method: 'PATCH',
+      headers: {'Content-Type': 'application/json', },
+      data: updateAssetDto
+    },
+      options);
+    }
+  
+
+
+export const getUpdateAssetMutationOptions = <TError = ErrorType<void>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateAsset>>, TError,{assetId: string;data: BodyType<UpdateAssetDto>}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof updateAsset>>, TError,{assetId: string;data: BodyType<UpdateAssetDto>}, TContext> => {
+
+const mutationKey = ['updateAsset'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof updateAsset>>, {assetId: string;data: BodyType<UpdateAssetDto>}> = (props) => {
+          const {assetId,data} = props ?? {};
+
+          return  updateAsset(assetId,data,requestOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type UpdateAssetMutationResult = NonNullable<Awaited<ReturnType<typeof updateAsset>>>
+    export type UpdateAssetMutationBody = BodyType<UpdateAssetDto>
+    export type UpdateAssetMutationError = ErrorType<void>
+
+    /**
+ * @summary 에셋 수정
+ */
+export const useUpdateAsset = <TError = ErrorType<void>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateAsset>>, TError,{assetId: string;data: BodyType<UpdateAssetDto>}, TContext>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof updateAsset>>,
+        TError,
+        {assetId: string;data: BodyType<UpdateAssetDto>},
+        TContext
+      > => {
+
+      const mutationOptions = getUpdateAssetMutationOptions(options);
+
+      return useMutation(mutationOptions, queryClient);
+    }
+    
+/**
+ * 에셋을 삭제합니다 (Soft Delete).
+ * @summary 에셋 삭제
+ */
+export const deleteAsset = (
+    assetId: string,
+ options?: SecondParameter<typeof customInstance>,) => {
+      
+      
+      return customInstance<unknown>(
+      {url: `/api/v1/assets/${assetId}`, method: 'DELETE'
+    },
+      options);
+    }
+  
+
+
+export const getDeleteAssetMutationOptions = <TError = ErrorType<void>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteAsset>>, TError,{assetId: string}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof deleteAsset>>, TError,{assetId: string}, TContext> => {
+
+const mutationKey = ['deleteAsset'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof deleteAsset>>, {assetId: string}> = (props) => {
+          const {assetId} = props ?? {};
+
+          return  deleteAsset(assetId,requestOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type DeleteAssetMutationResult = NonNullable<Awaited<ReturnType<typeof deleteAsset>>>
+    
+    export type DeleteAssetMutationError = ErrorType<void>
+
+    /**
+ * @summary 에셋 삭제
+ */
+export const useDeleteAsset = <TError = ErrorType<void>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteAsset>>, TError,{assetId: string}, TContext>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof deleteAsset>>,
+        TError,
+        {assetId: string},
+        TContext
+      > => {
+
+      const mutationOptions = getDeleteAssetMutationOptions(options);
+
+      return useMutation(mutationOptions, queryClient);
+    }
+    
+/**
+ * 삭제된 에셋을 복원합니다. 전체 접근 권한(FULL_ACCESS)이 필요합니다.
+ * @summary 에셋 복원
+ */
+export const restoreAsset = (
+    assetId: string,
+ options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
+) => {
+      
+      
+      return customInstance<RestoreAsset200AllOf>(
+      {url: `/api/v1/assets/${assetId}/restore`, method: 'POST', signal
+    },
+      options);
+    }
+  
+
+
+export const getRestoreAssetMutationOptions = <TError = ErrorType<void>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof restoreAsset>>, TError,{assetId: string}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof restoreAsset>>, TError,{assetId: string}, TContext> => {
+
+const mutationKey = ['restoreAsset'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof restoreAsset>>, {assetId: string}> = (props) => {
+          const {assetId} = props ?? {};
+
+          return  restoreAsset(assetId,requestOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type RestoreAssetMutationResult = NonNullable<Awaited<ReturnType<typeof restoreAsset>>>
+    
+    export type RestoreAssetMutationError = ErrorType<void>
+
+    /**
+ * @summary 에셋 복원
+ */
+export const useRestoreAsset = <TError = ErrorType<void>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof restoreAsset>>, TError,{assetId: string}, TContext>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof restoreAsset>>,
+        TError,
+        {assetId: string},
+        TContext
+      > => {
+
+      const mutationOptions = getRestoreAssetMutationOptions(options);
+
+      return useMutation(mutationOptions, queryClient);
+    }
+    
+/**
+ * 에셋을 다른 폴더로 이동합니다.
+ * @summary 에셋 이동
+ */
+export const moveAsset = (
+    assetId: string,
+    moveAssetDto: BodyType<MoveAssetDto>,
+ options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
+) => {
+      
+      
+      return customInstance<MoveAsset200AllOf>(
+      {url: `/api/v1/assets/${assetId}/move`, method: 'POST',
+      headers: {'Content-Type': 'application/json', },
+      data: moveAssetDto, signal
+    },
+      options);
+    }
+  
+
+
+export const getMoveAssetMutationOptions = <TError = ErrorType<void>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof moveAsset>>, TError,{assetId: string;data: BodyType<MoveAssetDto>}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof moveAsset>>, TError,{assetId: string;data: BodyType<MoveAssetDto>}, TContext> => {
+
+const mutationKey = ['moveAsset'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof moveAsset>>, {assetId: string;data: BodyType<MoveAssetDto>}> = (props) => {
+          const {assetId,data} = props ?? {};
+
+          return  moveAsset(assetId,data,requestOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type MoveAssetMutationResult = NonNullable<Awaited<ReturnType<typeof moveAsset>>>
+    export type MoveAssetMutationBody = BodyType<MoveAssetDto>
+    export type MoveAssetMutationError = ErrorType<void>
+
+    /**
+ * @summary 에셋 이동
+ */
+export const useMoveAsset = <TError = ErrorType<void>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof moveAsset>>, TError,{assetId: string;data: BodyType<MoveAssetDto>}, TContext>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof moveAsset>>,
+        TError,
+        {assetId: string;data: BodyType<MoveAssetDto>},
+        TContext
+      > => {
+
+      const mutationOptions = getMoveAssetMutationOptions(options);
+
+      return useMutation(mutationOptions, queryClient);
+    }
+    
+/**
+ * 에셋의 상태를 변경합니다. (UPLOADING, READY, FAILED)
+ * @summary 에셋 상태 변경
+ */
+export const updateAssetStatus = (
+    assetId: string,
+    updateAssetStatusDto: BodyType<UpdateAssetStatusDto>,
+ options?: SecondParameter<typeof customInstance>,) => {
+      
+      
+      return customInstance<UpdateAssetStatus200AllOf>(
+      {url: `/api/v1/assets/${assetId}/status`, method: 'PATCH',
+      headers: {'Content-Type': 'application/json', },
+      data: updateAssetStatusDto
+    },
+      options);
+    }
+  
+
+
+export const getUpdateAssetStatusMutationOptions = <TError = ErrorType<void>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateAssetStatus>>, TError,{assetId: string;data: BodyType<UpdateAssetStatusDto>}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof updateAssetStatus>>, TError,{assetId: string;data: BodyType<UpdateAssetStatusDto>}, TContext> => {
+
+const mutationKey = ['updateAssetStatus'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof updateAssetStatus>>, {assetId: string;data: BodyType<UpdateAssetStatusDto>}> = (props) => {
+          const {assetId,data} = props ?? {};
+
+          return  updateAssetStatus(assetId,data,requestOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type UpdateAssetStatusMutationResult = NonNullable<Awaited<ReturnType<typeof updateAssetStatus>>>
+    export type UpdateAssetStatusMutationBody = BodyType<UpdateAssetStatusDto>
+    export type UpdateAssetStatusMutationError = ErrorType<void>
+
+    /**
+ * @summary 에셋 상태 변경
+ */
+export const useUpdateAssetStatus = <TError = ErrorType<void>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateAssetStatus>>, TError,{assetId: string;data: BodyType<UpdateAssetStatusDto>}, TContext>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof updateAssetStatus>>,
+        TError,
+        {assetId: string;data: BodyType<UpdateAssetStatusDto>},
+        TContext
+      > => {
+
+      const mutationOptions = getUpdateAssetStatusMutationOptions(options);
+
+      return useMutation(mutationOptions, queryClient);
+    }
+    
+/**
+ * 여러 에셋을 한 번에 삭제합니다 (Soft Delete).
+ * @summary 에셋 일괄 삭제
+ */
+export const batchDeleteAssets = (
+    batchDeleteAssetsDto: BodyType<BatchDeleteAssetsDto>,
+ options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
+) => {
+      
+      
+      return customInstance<unknown>(
+      {url: `/api/v1/assets/batch-delete`, method: 'POST',
+      headers: {'Content-Type': 'application/json', },
+      data: batchDeleteAssetsDto, signal
+    },
+      options);
+    }
+  
+
+
+export const getBatchDeleteAssetsMutationOptions = <TError = ErrorType<void>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof batchDeleteAssets>>, TError,{data: BodyType<BatchDeleteAssetsDto>}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof batchDeleteAssets>>, TError,{data: BodyType<BatchDeleteAssetsDto>}, TContext> => {
+
+const mutationKey = ['batchDeleteAssets'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof batchDeleteAssets>>, {data: BodyType<BatchDeleteAssetsDto>}> = (props) => {
+          const {data} = props ?? {};
+
+          return  batchDeleteAssets(data,requestOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type BatchDeleteAssetsMutationResult = NonNullable<Awaited<ReturnType<typeof batchDeleteAssets>>>
+    export type BatchDeleteAssetsMutationBody = BodyType<BatchDeleteAssetsDto>
+    export type BatchDeleteAssetsMutationError = ErrorType<void>
+
+    /**
+ * @summary 에셋 일괄 삭제
+ */
+export const useBatchDeleteAssets = <TError = ErrorType<void>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof batchDeleteAssets>>, TError,{data: BodyType<BatchDeleteAssetsDto>}, TContext>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof batchDeleteAssets>>,
+        TError,
+        {data: BodyType<BatchDeleteAssetsDto>},
+        TContext
+      > => {
+
+      const mutationOptions = getBatchDeleteAssetsMutationOptions(options);
+
+      return useMutation(mutationOptions, queryClient);
+    }
+    
+/**
+ * 현재 Space 내의 폴더 목록을 조회합니다. 검색, 필터링, 페이지네이션을 지원합니다.
+ * @summary 폴더 목록 조회
+ */
+export const getFolders = (
+    params?: GetFoldersParams,
+ options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
+) => {
+      
+      
+      return customInstance<GetFolders200AllOf>(
+      {url: `/api/v1/assets/folders`, method: 'GET',
+        params, signal
+    },
+      options);
+    }
+  
+
+
+
+export const getGetFoldersQueryKey = (params?: GetFoldersParams,) => {
+    return [
+    `/api/v1/assets/folders`, ...(params ? [params]: [])
+    ] as const;
+    }
+
+export const getGetFoldersInfiniteQueryKey = (params?: GetFoldersParams,) => {
+    return [
+    'infinite', `/api/v1/assets/folders`, ...(params ? [params]: [])
+    ] as const;
+    }
+
+    
+export const getGetFoldersQueryOptions = <TData = Awaited<ReturnType<typeof getFolders>>, TError = ErrorType<void>>(params?: GetFoldersParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getFolders>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetFoldersQueryKey(params);
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getFolders>>> = ({ signal }) => getFolders(params, requestOptions, signal);
+
+      
+
+      
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getFolders>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetFoldersQueryResult = NonNullable<Awaited<ReturnType<typeof getFolders>>>
+export type GetFoldersQueryError = ErrorType<void>
+
+
+export function useGetFolders<TData = Awaited<ReturnType<typeof getFolders>>, TError = ErrorType<void>>(
+ params: undefined |  GetFoldersParams, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getFolders>>, TError, TData>> & Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getFolders>>,
+          TError,
+          Awaited<ReturnType<typeof getFolders>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetFolders<TData = Awaited<ReturnType<typeof getFolders>>, TError = ErrorType<void>>(
+ params?: GetFoldersParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getFolders>>, TError, TData>> & Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getFolders>>,
+          TError,
+          Awaited<ReturnType<typeof getFolders>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetFolders<TData = Awaited<ReturnType<typeof getFolders>>, TError = ErrorType<void>>(
+ params?: GetFoldersParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getFolders>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+/**
+ * @summary 폴더 목록 조회
+ */
+
+export function useGetFolders<TData = Awaited<ReturnType<typeof getFolders>>, TError = ErrorType<void>>(
+ params?: GetFoldersParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getFolders>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient 
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = getGetFoldersQueryOptions(params,options)
+
+  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+/**
+ * @summary 폴더 목록 조회
+ */
+export const prefetchGetFoldersQuery = async <TData = Awaited<ReturnType<typeof getFolders>>, TError = ErrorType<void>>(
+ queryClient: QueryClient, params?: GetFoldersParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getFolders>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+
+  ): Promise<QueryClient> => {
+
+  const queryOptions = getGetFoldersQueryOptions(params,options)
+
+  await queryClient.prefetchQuery(queryOptions);
+
+  return queryClient;
+}
+
+
+
+export const getGetFoldersSuspenseQueryOptions = <TData = Awaited<ReturnType<typeof getFolders>>, TError = ErrorType<void>>(params?: GetFoldersParams, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getFolders>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetFoldersQueryKey(params);
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getFolders>>> = ({ signal }) => getFolders(params, requestOptions, signal);
+
+      
+
+      
+
+   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseQueryOptions<Awaited<ReturnType<typeof getFolders>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetFoldersSuspenseQueryResult = NonNullable<Awaited<ReturnType<typeof getFolders>>>
+export type GetFoldersSuspenseQueryError = ErrorType<void>
+
+
+export function useGetFoldersSuspense<TData = Awaited<ReturnType<typeof getFolders>>, TError = ErrorType<void>>(
+ params: undefined |  GetFoldersParams, options: { query:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getFolders>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetFoldersSuspense<TData = Awaited<ReturnType<typeof getFolders>>, TError = ErrorType<void>>(
+ params?: GetFoldersParams, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getFolders>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetFoldersSuspense<TData = Awaited<ReturnType<typeof getFolders>>, TError = ErrorType<void>>(
+ params?: GetFoldersParams, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getFolders>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+/**
+ * @summary 폴더 목록 조회
+ */
+
+export function useGetFoldersSuspense<TData = Awaited<ReturnType<typeof getFolders>>, TError = ErrorType<void>>(
+ params?: GetFoldersParams, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getFolders>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient 
+ ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = getGetFoldersSuspenseQueryOptions(params,options)
+
+  const query = useSuspenseQuery(queryOptions, queryClient) as  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+
+
+
+export const getGetFoldersSuspenseInfiniteQueryOptions = <TData = InfiniteData<Awaited<ReturnType<typeof getFolders>>>, TError = ErrorType<void>>(params?: GetFoldersParams, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getFolders>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetFoldersInfiniteQueryKey(params);
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getFolders>>> = ({ signal }) => getFolders(params, requestOptions, signal);
+
+      
+
+      
+
+   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getFolders>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetFoldersSuspenseInfiniteQueryResult = NonNullable<Awaited<ReturnType<typeof getFolders>>>
+export type GetFoldersSuspenseInfiniteQueryError = ErrorType<void>
+
+
+export function useGetFoldersSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getFolders>>>, TError = ErrorType<void>>(
+ params: undefined |  GetFoldersParams, options: { query:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getFolders>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetFoldersSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getFolders>>>, TError = ErrorType<void>>(
+ params?: GetFoldersParams, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getFolders>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetFoldersSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getFolders>>>, TError = ErrorType<void>>(
+ params?: GetFoldersParams, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getFolders>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+/**
+ * @summary 폴더 목록 조회
+ */
+
+export function useGetFoldersSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getFolders>>>, TError = ErrorType<void>>(
+ params?: GetFoldersParams, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getFolders>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient 
+ ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = getGetFoldersSuspenseInfiniteQueryOptions(params,options)
+
+  const query = useSuspenseInfiniteQuery(queryOptions, queryClient) as  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+/**
+ * @summary 폴더 목록 조회
+ */
+export const prefetchGetFoldersInfiniteQuery = async <TData = Awaited<ReturnType<typeof getFolders>>, TError = ErrorType<void>>(
+ queryClient: QueryClient, params?: GetFoldersParams, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getFolders>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+
+  ): Promise<QueryClient> => {
+
+  const queryOptions = getGetFoldersSuspenseInfiniteQueryOptions(params,options)
+
+  await queryClient.prefetchInfiniteQuery(queryOptions);
+
+  return queryClient;
+}
+
+
+
+
+/**
+ * 새로운 폴더를 생성합니다.
+ * @summary 폴더 생성
+ */
+export const createFolder = (
+    createFolderDto: BodyType<CreateFolderDto>,
+ options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
+) => {
+      
+      
+      return customInstance<CreateFolder201AllOf>(
+      {url: `/api/v1/assets/folders`, method: 'POST',
+      headers: {'Content-Type': 'application/json', },
+      data: createFolderDto, signal
+    },
+      options);
+    }
+  
+
+
+export const getCreateFolderMutationOptions = <TError = ErrorType<void>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createFolder>>, TError,{data: BodyType<CreateFolderDto>}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof createFolder>>, TError,{data: BodyType<CreateFolderDto>}, TContext> => {
+
+const mutationKey = ['createFolder'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof createFolder>>, {data: BodyType<CreateFolderDto>}> = (props) => {
+          const {data} = props ?? {};
+
+          return  createFolder(data,requestOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type CreateFolderMutationResult = NonNullable<Awaited<ReturnType<typeof createFolder>>>
+    export type CreateFolderMutationBody = BodyType<CreateFolderDto>
+    export type CreateFolderMutationError = ErrorType<void>
+
+    /**
+ * @summary 폴더 생성
+ */
+export const useCreateFolder = <TError = ErrorType<void>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createFolder>>, TError,{data: BodyType<CreateFolderDto>}, TContext>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof createFolder>>,
+        TError,
+        {data: BodyType<CreateFolderDto>},
+        TContext
+      > => {
+
+      const mutationOptions = getCreateFolderMutationOptions(options);
+
+      return useMutation(mutationOptions, queryClient);
+    }
+    
+/**
+ * 현재 Space 내의 폴더 계층 구조를 트리 형태로 조회합니다.
+ * @summary 폴더 트리 조회
+ */
+export const getFolderTree = (
+    
+ options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
+) => {
+      
+      
+      return customInstance<GetFolderTree200AllOf>(
+      {url: `/api/v1/assets/folders/tree`, method: 'GET', signal
+    },
+      options);
+    }
+  
+
+
+
+export const getGetFolderTreeQueryKey = () => {
+    return [
+    `/api/v1/assets/folders/tree`
+    ] as const;
+    }
+
+export const getGetFolderTreeInfiniteQueryKey = () => {
+    return [
+    'infinite', `/api/v1/assets/folders/tree`
+    ] as const;
+    }
+
+    
+export const getGetFolderTreeQueryOptions = <TData = Awaited<ReturnType<typeof getFolderTree>>, TError = ErrorType<void>>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getFolderTree>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetFolderTreeQueryKey();
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getFolderTree>>> = ({ signal }) => getFolderTree(requestOptions, signal);
+
+      
+
+      
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getFolderTree>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetFolderTreeQueryResult = NonNullable<Awaited<ReturnType<typeof getFolderTree>>>
+export type GetFolderTreeQueryError = ErrorType<void>
+
+
+export function useGetFolderTree<TData = Awaited<ReturnType<typeof getFolderTree>>, TError = ErrorType<void>>(
+  options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getFolderTree>>, TError, TData>> & Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getFolderTree>>,
+          TError,
+          Awaited<ReturnType<typeof getFolderTree>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetFolderTree<TData = Awaited<ReturnType<typeof getFolderTree>>, TError = ErrorType<void>>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getFolderTree>>, TError, TData>> & Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getFolderTree>>,
+          TError,
+          Awaited<ReturnType<typeof getFolderTree>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetFolderTree<TData = Awaited<ReturnType<typeof getFolderTree>>, TError = ErrorType<void>>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getFolderTree>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+/**
+ * @summary 폴더 트리 조회
+ */
+
+export function useGetFolderTree<TData = Awaited<ReturnType<typeof getFolderTree>>, TError = ErrorType<void>>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getFolderTree>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient 
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = getGetFolderTreeQueryOptions(options)
+
+  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+/**
+ * @summary 폴더 트리 조회
+ */
+export const prefetchGetFolderTreeQuery = async <TData = Awaited<ReturnType<typeof getFolderTree>>, TError = ErrorType<void>>(
+ queryClient: QueryClient,  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getFolderTree>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+
+  ): Promise<QueryClient> => {
+
+  const queryOptions = getGetFolderTreeQueryOptions(options)
+
+  await queryClient.prefetchQuery(queryOptions);
+
+  return queryClient;
+}
+
+
+
+export const getGetFolderTreeSuspenseQueryOptions = <TData = Awaited<ReturnType<typeof getFolderTree>>, TError = ErrorType<void>>( options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getFolderTree>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetFolderTreeQueryKey();
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getFolderTree>>> = ({ signal }) => getFolderTree(requestOptions, signal);
+
+      
+
+      
+
+   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseQueryOptions<Awaited<ReturnType<typeof getFolderTree>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetFolderTreeSuspenseQueryResult = NonNullable<Awaited<ReturnType<typeof getFolderTree>>>
+export type GetFolderTreeSuspenseQueryError = ErrorType<void>
+
+
+export function useGetFolderTreeSuspense<TData = Awaited<ReturnType<typeof getFolderTree>>, TError = ErrorType<void>>(
+  options: { query:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getFolderTree>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetFolderTreeSuspense<TData = Awaited<ReturnType<typeof getFolderTree>>, TError = ErrorType<void>>(
+  options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getFolderTree>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetFolderTreeSuspense<TData = Awaited<ReturnType<typeof getFolderTree>>, TError = ErrorType<void>>(
+  options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getFolderTree>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+/**
+ * @summary 폴더 트리 조회
+ */
+
+export function useGetFolderTreeSuspense<TData = Awaited<ReturnType<typeof getFolderTree>>, TError = ErrorType<void>>(
+  options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getFolderTree>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient 
+ ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = getGetFolderTreeSuspenseQueryOptions(options)
+
+  const query = useSuspenseQuery(queryOptions, queryClient) as  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+
+
+
+export const getGetFolderTreeSuspenseInfiniteQueryOptions = <TData = InfiniteData<Awaited<ReturnType<typeof getFolderTree>>>, TError = ErrorType<void>>( options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getFolderTree>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetFolderTreeInfiniteQueryKey();
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getFolderTree>>> = ({ signal }) => getFolderTree(requestOptions, signal);
+
+      
+
+      
+
+   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getFolderTree>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetFolderTreeSuspenseInfiniteQueryResult = NonNullable<Awaited<ReturnType<typeof getFolderTree>>>
+export type GetFolderTreeSuspenseInfiniteQueryError = ErrorType<void>
+
+
+export function useGetFolderTreeSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getFolderTree>>>, TError = ErrorType<void>>(
+  options: { query:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getFolderTree>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetFolderTreeSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getFolderTree>>>, TError = ErrorType<void>>(
+  options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getFolderTree>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetFolderTreeSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getFolderTree>>>, TError = ErrorType<void>>(
+  options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getFolderTree>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+/**
+ * @summary 폴더 트리 조회
+ */
+
+export function useGetFolderTreeSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getFolderTree>>>, TError = ErrorType<void>>(
+  options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getFolderTree>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient 
+ ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = getGetFolderTreeSuspenseInfiniteQueryOptions(options)
+
+  const query = useSuspenseInfiniteQuery(queryOptions, queryClient) as  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+/**
+ * @summary 폴더 트리 조회
+ */
+export const prefetchGetFolderTreeInfiniteQuery = async <TData = Awaited<ReturnType<typeof getFolderTree>>, TError = ErrorType<void>>(
+ queryClient: QueryClient,  options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getFolderTree>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+
+  ): Promise<QueryClient> => {
+
+  const queryOptions = getGetFolderTreeSuspenseInfiniteQueryOptions(options)
+
+  await queryClient.prefetchInfiniteQuery(queryOptions);
+
+  return queryClient;
+}
+
+
+
+
+/**
+ * 특정 폴더의 상세 정보를 조회합니다.
+ * @summary 폴더 상세 조회
+ */
+export const getFolderById = (
+    folderId: string,
+ options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
+) => {
+      
+      
+      return customInstance<GetFolderById200AllOf>(
+      {url: `/api/v1/assets/folders/${folderId}`, method: 'GET', signal
+    },
+      options);
+    }
+  
+
+
+
+export const getGetFolderByIdQueryKey = (folderId?: string,) => {
+    return [
+    `/api/v1/assets/folders/${folderId}`
+    ] as const;
+    }
+
+export const getGetFolderByIdInfiniteQueryKey = (folderId?: string,) => {
+    return [
+    'infinite', `/api/v1/assets/folders/${folderId}`
+    ] as const;
+    }
+
+    
+export const getGetFolderByIdQueryOptions = <TData = Awaited<ReturnType<typeof getFolderById>>, TError = ErrorType<void>>(folderId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getFolderById>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetFolderByIdQueryKey(folderId);
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getFolderById>>> = ({ signal }) => getFolderById(folderId, requestOptions, signal);
+
+      
+
+      
+
+   return  { queryKey, queryFn, enabled: !!(folderId), ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getFolderById>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetFolderByIdQueryResult = NonNullable<Awaited<ReturnType<typeof getFolderById>>>
+export type GetFolderByIdQueryError = ErrorType<void>
+
+
+export function useGetFolderById<TData = Awaited<ReturnType<typeof getFolderById>>, TError = ErrorType<void>>(
+ folderId: string, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getFolderById>>, TError, TData>> & Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getFolderById>>,
+          TError,
+          Awaited<ReturnType<typeof getFolderById>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetFolderById<TData = Awaited<ReturnType<typeof getFolderById>>, TError = ErrorType<void>>(
+ folderId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getFolderById>>, TError, TData>> & Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getFolderById>>,
+          TError,
+          Awaited<ReturnType<typeof getFolderById>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetFolderById<TData = Awaited<ReturnType<typeof getFolderById>>, TError = ErrorType<void>>(
+ folderId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getFolderById>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+/**
+ * @summary 폴더 상세 조회
+ */
+
+export function useGetFolderById<TData = Awaited<ReturnType<typeof getFolderById>>, TError = ErrorType<void>>(
+ folderId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getFolderById>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient 
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = getGetFolderByIdQueryOptions(folderId,options)
+
+  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+/**
+ * @summary 폴더 상세 조회
+ */
+export const prefetchGetFolderByIdQuery = async <TData = Awaited<ReturnType<typeof getFolderById>>, TError = ErrorType<void>>(
+ queryClient: QueryClient, folderId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getFolderById>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+
+  ): Promise<QueryClient> => {
+
+  const queryOptions = getGetFolderByIdQueryOptions(folderId,options)
+
+  await queryClient.prefetchQuery(queryOptions);
+
+  return queryClient;
+}
+
+
+
+export const getGetFolderByIdSuspenseQueryOptions = <TData = Awaited<ReturnType<typeof getFolderById>>, TError = ErrorType<void>>(folderId: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getFolderById>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetFolderByIdQueryKey(folderId);
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getFolderById>>> = ({ signal }) => getFolderById(folderId, requestOptions, signal);
+
+      
+
+      
+
+   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseQueryOptions<Awaited<ReturnType<typeof getFolderById>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetFolderByIdSuspenseQueryResult = NonNullable<Awaited<ReturnType<typeof getFolderById>>>
+export type GetFolderByIdSuspenseQueryError = ErrorType<void>
+
+
+export function useGetFolderByIdSuspense<TData = Awaited<ReturnType<typeof getFolderById>>, TError = ErrorType<void>>(
+ folderId: string, options: { query:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getFolderById>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetFolderByIdSuspense<TData = Awaited<ReturnType<typeof getFolderById>>, TError = ErrorType<void>>(
+ folderId: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getFolderById>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetFolderByIdSuspense<TData = Awaited<ReturnType<typeof getFolderById>>, TError = ErrorType<void>>(
+ folderId: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getFolderById>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+/**
+ * @summary 폴더 상세 조회
+ */
+
+export function useGetFolderByIdSuspense<TData = Awaited<ReturnType<typeof getFolderById>>, TError = ErrorType<void>>(
+ folderId: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getFolderById>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient 
+ ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = getGetFolderByIdSuspenseQueryOptions(folderId,options)
+
+  const query = useSuspenseQuery(queryOptions, queryClient) as  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+
+
+
+export const getGetFolderByIdSuspenseInfiniteQueryOptions = <TData = InfiniteData<Awaited<ReturnType<typeof getFolderById>>>, TError = ErrorType<void>>(folderId: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getFolderById>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetFolderByIdInfiniteQueryKey(folderId);
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getFolderById>>> = ({ signal }) => getFolderById(folderId, requestOptions, signal);
+
+      
+
+      
+
+   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getFolderById>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetFolderByIdSuspenseInfiniteQueryResult = NonNullable<Awaited<ReturnType<typeof getFolderById>>>
+export type GetFolderByIdSuspenseInfiniteQueryError = ErrorType<void>
+
+
+export function useGetFolderByIdSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getFolderById>>>, TError = ErrorType<void>>(
+ folderId: string, options: { query:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getFolderById>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetFolderByIdSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getFolderById>>>, TError = ErrorType<void>>(
+ folderId: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getFolderById>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetFolderByIdSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getFolderById>>>, TError = ErrorType<void>>(
+ folderId: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getFolderById>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+/**
+ * @summary 폴더 상세 조회
+ */
+
+export function useGetFolderByIdSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getFolderById>>>, TError = ErrorType<void>>(
+ folderId: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getFolderById>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient 
+ ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = getGetFolderByIdSuspenseInfiniteQueryOptions(folderId,options)
+
+  const query = useSuspenseInfiniteQuery(queryOptions, queryClient) as  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+/**
+ * @summary 폴더 상세 조회
+ */
+export const prefetchGetFolderByIdInfiniteQuery = async <TData = Awaited<ReturnType<typeof getFolderById>>, TError = ErrorType<void>>(
+ queryClient: QueryClient, folderId: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getFolderById>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+
+  ): Promise<QueryClient> => {
+
+  const queryOptions = getGetFolderByIdSuspenseInfiniteQueryOptions(folderId,options)
+
+  await queryClient.prefetchInfiniteQuery(queryOptions);
+
+  return queryClient;
+}
+
+
+
+
+/**
+ * 폴더 정보를 수정합니다. 변경하려는 필드만 전송하면 됩니다.
+ * @summary 폴더 수정
+ */
+export const updateFolder = (
+    folderId: string,
+    updateFolderDto: BodyType<UpdateFolderDto>,
+ options?: SecondParameter<typeof customInstance>,) => {
+      
+      
+      return customInstance<UpdateFolder200AllOf>(
+      {url: `/api/v1/assets/folders/${folderId}`, method: 'PATCH',
+      headers: {'Content-Type': 'application/json', },
+      data: updateFolderDto
+    },
+      options);
+    }
+  
+
+
+export const getUpdateFolderMutationOptions = <TError = ErrorType<void>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateFolder>>, TError,{folderId: string;data: BodyType<UpdateFolderDto>}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof updateFolder>>, TError,{folderId: string;data: BodyType<UpdateFolderDto>}, TContext> => {
+
+const mutationKey = ['updateFolder'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof updateFolder>>, {folderId: string;data: BodyType<UpdateFolderDto>}> = (props) => {
+          const {folderId,data} = props ?? {};
+
+          return  updateFolder(folderId,data,requestOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type UpdateFolderMutationResult = NonNullable<Awaited<ReturnType<typeof updateFolder>>>
+    export type UpdateFolderMutationBody = BodyType<UpdateFolderDto>
+    export type UpdateFolderMutationError = ErrorType<void>
+
+    /**
+ * @summary 폴더 수정
+ */
+export const useUpdateFolder = <TError = ErrorType<void>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateFolder>>, TError,{folderId: string;data: BodyType<UpdateFolderDto>}, TContext>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof updateFolder>>,
+        TError,
+        {folderId: string;data: BodyType<UpdateFolderDto>},
+        TContext
+      > => {
+
+      const mutationOptions = getUpdateFolderMutationOptions(options);
+
+      return useMutation(mutationOptions, queryClient);
+    }
+    
+/**
+ * 폴더를 삭제합니다 (Soft Delete).
+ * @summary 폴더 삭제
+ */
+export const deleteFolder = (
+    folderId: string,
+ options?: SecondParameter<typeof customInstance>,) => {
+      
+      
+      return customInstance<unknown>(
+      {url: `/api/v1/assets/folders/${folderId}`, method: 'DELETE'
+    },
+      options);
+    }
+  
+
+
+export const getDeleteFolderMutationOptions = <TError = ErrorType<void>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteFolder>>, TError,{folderId: string}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof deleteFolder>>, TError,{folderId: string}, TContext> => {
+
+const mutationKey = ['deleteFolder'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof deleteFolder>>, {folderId: string}> = (props) => {
+          const {folderId} = props ?? {};
+
+          return  deleteFolder(folderId,requestOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type DeleteFolderMutationResult = NonNullable<Awaited<ReturnType<typeof deleteFolder>>>
+    
+    export type DeleteFolderMutationError = ErrorType<void>
+
+    /**
+ * @summary 폴더 삭제
+ */
+export const useDeleteFolder = <TError = ErrorType<void>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteFolder>>, TError,{folderId: string}, TContext>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof deleteFolder>>,
+        TError,
+        {folderId: string},
+        TContext
+      > => {
+
+      const mutationOptions = getDeleteFolderMutationOptions(options);
+
+      return useMutation(mutationOptions, queryClient);
+    }
+    
+/**
+ * 삭제된 폴더를 복원합니다. 전체 접근 권한(FULL_ACCESS)이 필요합니다.
+ * @summary 폴더 복원
+ */
+export const restoreFolder = (
+    folderId: string,
+ options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
+) => {
+      
+      
+      return customInstance<RestoreFolder200AllOf>(
+      {url: `/api/v1/assets/folders/${folderId}/restore`, method: 'POST', signal
+    },
+      options);
+    }
+  
+
+
+export const getRestoreFolderMutationOptions = <TError = ErrorType<void>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof restoreFolder>>, TError,{folderId: string}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof restoreFolder>>, TError,{folderId: string}, TContext> => {
+
+const mutationKey = ['restoreFolder'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof restoreFolder>>, {folderId: string}> = (props) => {
+          const {folderId} = props ?? {};
+
+          return  restoreFolder(folderId,requestOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type RestoreFolderMutationResult = NonNullable<Awaited<ReturnType<typeof restoreFolder>>>
+    
+    export type RestoreFolderMutationError = ErrorType<void>
+
+    /**
+ * @summary 폴더 복원
+ */
+export const useRestoreFolder = <TError = ErrorType<void>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof restoreFolder>>, TError,{folderId: string}, TContext>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof restoreFolder>>,
+        TError,
+        {folderId: string},
+        TContext
+      > => {
+
+      const mutationOptions = getRestoreFolderMutationOptions(options);
+
+      return useMutation(mutationOptions, queryClient);
+    }
+    
+/**
+ * 폴더를 다른 상위 폴더로 이동합니다. targetFolderId가 null이면 루트로 이동합니다.
+ * @summary 폴더 이동
+ */
+export const moveFolder = (
+    folderId: string,
+    moveFolderDto: BodyType<MoveFolderDto>,
+ options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
+) => {
+      
+      
+      return customInstance<MoveFolder200AllOf>(
+      {url: `/api/v1/assets/folders/${folderId}/move`, method: 'POST',
+      headers: {'Content-Type': 'application/json', },
+      data: moveFolderDto, signal
+    },
+      options);
+    }
+  
+
+
+export const getMoveFolderMutationOptions = <TError = ErrorType<void>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof moveFolder>>, TError,{folderId: string;data: BodyType<MoveFolderDto>}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof moveFolder>>, TError,{folderId: string;data: BodyType<MoveFolderDto>}, TContext> => {
+
+const mutationKey = ['moveFolder'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof moveFolder>>, {folderId: string;data: BodyType<MoveFolderDto>}> = (props) => {
+          const {folderId,data} = props ?? {};
+
+          return  moveFolder(folderId,data,requestOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type MoveFolderMutationResult = NonNullable<Awaited<ReturnType<typeof moveFolder>>>
+    export type MoveFolderMutationBody = BodyType<MoveFolderDto>
+    export type MoveFolderMutationError = ErrorType<void>
+
+    /**
+ * @summary 폴더 이동
+ */
+export const useMoveFolder = <TError = ErrorType<void>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof moveFolder>>, TError,{folderId: string;data: BodyType<MoveFolderDto>}, TContext>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof moveFolder>>,
+        TError,
+        {folderId: string;data: BodyType<MoveFolderDto>},
+        TContext
+      > => {
+
+      const mutationOptions = getMoveFolderMutationOptions(options);
+
+      return useMutation(mutationOptions, queryClient);
+    }
+    
+/**
+ * 현재 Space 내의 앨범 목록을 조회합니다. 검색, 필터링, 페이지네이션을 지원합니다.
+ * @summary 앨범 목록 조회
+ */
+export const getAlbums = (
+    params?: GetAlbumsParams,
+ options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
+) => {
+      
+      
+      return customInstance<GetAlbums200AllOf>(
+      {url: `/api/v1/assets/albums`, method: 'GET',
+        params, signal
+    },
+      options);
+    }
+  
+
+
+
+export const getGetAlbumsQueryKey = (params?: GetAlbumsParams,) => {
+    return [
+    `/api/v1/assets/albums`, ...(params ? [params]: [])
+    ] as const;
+    }
+
+export const getGetAlbumsInfiniteQueryKey = (params?: GetAlbumsParams,) => {
+    return [
+    'infinite', `/api/v1/assets/albums`, ...(params ? [params]: [])
+    ] as const;
+    }
+
+    
+export const getGetAlbumsQueryOptions = <TData = Awaited<ReturnType<typeof getAlbums>>, TError = ErrorType<void>>(params?: GetAlbumsParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAlbums>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetAlbumsQueryKey(params);
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getAlbums>>> = ({ signal }) => getAlbums(params, requestOptions, signal);
+
+      
+
+      
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getAlbums>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetAlbumsQueryResult = NonNullable<Awaited<ReturnType<typeof getAlbums>>>
+export type GetAlbumsQueryError = ErrorType<void>
+
+
+export function useGetAlbums<TData = Awaited<ReturnType<typeof getAlbums>>, TError = ErrorType<void>>(
+ params: undefined |  GetAlbumsParams, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAlbums>>, TError, TData>> & Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getAlbums>>,
+          TError,
+          Awaited<ReturnType<typeof getAlbums>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetAlbums<TData = Awaited<ReturnType<typeof getAlbums>>, TError = ErrorType<void>>(
+ params?: GetAlbumsParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAlbums>>, TError, TData>> & Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getAlbums>>,
+          TError,
+          Awaited<ReturnType<typeof getAlbums>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetAlbums<TData = Awaited<ReturnType<typeof getAlbums>>, TError = ErrorType<void>>(
+ params?: GetAlbumsParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAlbums>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+/**
+ * @summary 앨범 목록 조회
+ */
+
+export function useGetAlbums<TData = Awaited<ReturnType<typeof getAlbums>>, TError = ErrorType<void>>(
+ params?: GetAlbumsParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAlbums>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient 
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = getGetAlbumsQueryOptions(params,options)
+
+  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+/**
+ * @summary 앨범 목록 조회
+ */
+export const prefetchGetAlbumsQuery = async <TData = Awaited<ReturnType<typeof getAlbums>>, TError = ErrorType<void>>(
+ queryClient: QueryClient, params?: GetAlbumsParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAlbums>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+
+  ): Promise<QueryClient> => {
+
+  const queryOptions = getGetAlbumsQueryOptions(params,options)
+
+  await queryClient.prefetchQuery(queryOptions);
+
+  return queryClient;
+}
+
+
+
+export const getGetAlbumsSuspenseQueryOptions = <TData = Awaited<ReturnType<typeof getAlbums>>, TError = ErrorType<void>>(params?: GetAlbumsParams, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAlbums>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetAlbumsQueryKey(params);
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getAlbums>>> = ({ signal }) => getAlbums(params, requestOptions, signal);
+
+      
+
+      
+
+   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAlbums>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetAlbumsSuspenseQueryResult = NonNullable<Awaited<ReturnType<typeof getAlbums>>>
+export type GetAlbumsSuspenseQueryError = ErrorType<void>
+
+
+export function useGetAlbumsSuspense<TData = Awaited<ReturnType<typeof getAlbums>>, TError = ErrorType<void>>(
+ params: undefined |  GetAlbumsParams, options: { query:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAlbums>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetAlbumsSuspense<TData = Awaited<ReturnType<typeof getAlbums>>, TError = ErrorType<void>>(
+ params?: GetAlbumsParams, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAlbums>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetAlbumsSuspense<TData = Awaited<ReturnType<typeof getAlbums>>, TError = ErrorType<void>>(
+ params?: GetAlbumsParams, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAlbums>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+/**
+ * @summary 앨범 목록 조회
+ */
+
+export function useGetAlbumsSuspense<TData = Awaited<ReturnType<typeof getAlbums>>, TError = ErrorType<void>>(
+ params?: GetAlbumsParams, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAlbums>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient 
+ ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = getGetAlbumsSuspenseQueryOptions(params,options)
+
+  const query = useSuspenseQuery(queryOptions, queryClient) as  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+
+
+
+export const getGetAlbumsSuspenseInfiniteQueryOptions = <TData = InfiniteData<Awaited<ReturnType<typeof getAlbums>>>, TError = ErrorType<void>>(params?: GetAlbumsParams, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAlbums>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetAlbumsInfiniteQueryKey(params);
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getAlbums>>> = ({ signal }) => getAlbums(params, requestOptions, signal);
+
+      
+
+      
+
+   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAlbums>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetAlbumsSuspenseInfiniteQueryResult = NonNullable<Awaited<ReturnType<typeof getAlbums>>>
+export type GetAlbumsSuspenseInfiniteQueryError = ErrorType<void>
+
+
+export function useGetAlbumsSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getAlbums>>>, TError = ErrorType<void>>(
+ params: undefined |  GetAlbumsParams, options: { query:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAlbums>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetAlbumsSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getAlbums>>>, TError = ErrorType<void>>(
+ params?: GetAlbumsParams, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAlbums>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetAlbumsSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getAlbums>>>, TError = ErrorType<void>>(
+ params?: GetAlbumsParams, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAlbums>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+/**
+ * @summary 앨범 목록 조회
+ */
+
+export function useGetAlbumsSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getAlbums>>>, TError = ErrorType<void>>(
+ params?: GetAlbumsParams, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAlbums>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient 
+ ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = getGetAlbumsSuspenseInfiniteQueryOptions(params,options)
+
+  const query = useSuspenseInfiniteQuery(queryOptions, queryClient) as  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+/**
+ * @summary 앨범 목록 조회
+ */
+export const prefetchGetAlbumsInfiniteQuery = async <TData = Awaited<ReturnType<typeof getAlbums>>, TError = ErrorType<void>>(
+ queryClient: QueryClient, params?: GetAlbumsParams, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAlbums>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+
+  ): Promise<QueryClient> => {
+
+  const queryOptions = getGetAlbumsSuspenseInfiniteQueryOptions(params,options)
+
+  await queryClient.prefetchInfiniteQuery(queryOptions);
+
+  return queryClient;
+}
+
+
+
+
+/**
+ * 새로운 앨범을 생성합니다.
+ * @summary 앨범 생성
+ */
+export const createAlbum = (
+    createAlbumDto: BodyType<CreateAlbumDto>,
+ options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
+) => {
+      
+      
+      return customInstance<CreateAlbum201AllOf>(
+      {url: `/api/v1/assets/albums`, method: 'POST',
+      headers: {'Content-Type': 'application/json', },
+      data: createAlbumDto, signal
+    },
+      options);
+    }
+  
+
+
+export const getCreateAlbumMutationOptions = <TError = ErrorType<void>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createAlbum>>, TError,{data: BodyType<CreateAlbumDto>}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof createAlbum>>, TError,{data: BodyType<CreateAlbumDto>}, TContext> => {
+
+const mutationKey = ['createAlbum'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof createAlbum>>, {data: BodyType<CreateAlbumDto>}> = (props) => {
+          const {data} = props ?? {};
+
+          return  createAlbum(data,requestOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type CreateAlbumMutationResult = NonNullable<Awaited<ReturnType<typeof createAlbum>>>
+    export type CreateAlbumMutationBody = BodyType<CreateAlbumDto>
+    export type CreateAlbumMutationError = ErrorType<void>
+
+    /**
+ * @summary 앨범 생성
+ */
+export const useCreateAlbum = <TError = ErrorType<void>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createAlbum>>, TError,{data: BodyType<CreateAlbumDto>}, TContext>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof createAlbum>>,
+        TError,
+        {data: BodyType<CreateAlbumDto>},
+        TContext
+      > => {
+
+      const mutationOptions = getCreateAlbumMutationOptions(options);
+
+      return useMutation(mutationOptions, queryClient);
+    }
+    
+/**
+ * 특정 앨범의 상세 정보를 조회합니다. 앨범에 포함된 엔트리 목록을 함께 반환합니다.
+ * @summary 앨범 상세 조회
+ */
+export const getAlbumById = (
+    albumId: string,
+ options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
+) => {
+      
+      
+      return customInstance<GetAlbumById200AllOf>(
+      {url: `/api/v1/assets/albums/${albumId}`, method: 'GET', signal
+    },
+      options);
+    }
+  
+
+
+
+export const getGetAlbumByIdQueryKey = (albumId?: string,) => {
+    return [
+    `/api/v1/assets/albums/${albumId}`
+    ] as const;
+    }
+
+export const getGetAlbumByIdInfiniteQueryKey = (albumId?: string,) => {
+    return [
+    'infinite', `/api/v1/assets/albums/${albumId}`
+    ] as const;
+    }
+
+    
+export const getGetAlbumByIdQueryOptions = <TData = Awaited<ReturnType<typeof getAlbumById>>, TError = ErrorType<void>>(albumId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAlbumById>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetAlbumByIdQueryKey(albumId);
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getAlbumById>>> = ({ signal }) => getAlbumById(albumId, requestOptions, signal);
+
+      
+
+      
+
+   return  { queryKey, queryFn, enabled: !!(albumId), ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getAlbumById>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetAlbumByIdQueryResult = NonNullable<Awaited<ReturnType<typeof getAlbumById>>>
+export type GetAlbumByIdQueryError = ErrorType<void>
+
+
+export function useGetAlbumById<TData = Awaited<ReturnType<typeof getAlbumById>>, TError = ErrorType<void>>(
+ albumId: string, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAlbumById>>, TError, TData>> & Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getAlbumById>>,
+          TError,
+          Awaited<ReturnType<typeof getAlbumById>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetAlbumById<TData = Awaited<ReturnType<typeof getAlbumById>>, TError = ErrorType<void>>(
+ albumId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAlbumById>>, TError, TData>> & Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getAlbumById>>,
+          TError,
+          Awaited<ReturnType<typeof getAlbumById>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetAlbumById<TData = Awaited<ReturnType<typeof getAlbumById>>, TError = ErrorType<void>>(
+ albumId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAlbumById>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+/**
+ * @summary 앨범 상세 조회
+ */
+
+export function useGetAlbumById<TData = Awaited<ReturnType<typeof getAlbumById>>, TError = ErrorType<void>>(
+ albumId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAlbumById>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient 
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = getGetAlbumByIdQueryOptions(albumId,options)
+
+  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+/**
+ * @summary 앨범 상세 조회
+ */
+export const prefetchGetAlbumByIdQuery = async <TData = Awaited<ReturnType<typeof getAlbumById>>, TError = ErrorType<void>>(
+ queryClient: QueryClient, albumId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAlbumById>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+
+  ): Promise<QueryClient> => {
+
+  const queryOptions = getGetAlbumByIdQueryOptions(albumId,options)
+
+  await queryClient.prefetchQuery(queryOptions);
+
+  return queryClient;
+}
+
+
+
+export const getGetAlbumByIdSuspenseQueryOptions = <TData = Awaited<ReturnType<typeof getAlbumById>>, TError = ErrorType<void>>(albumId: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAlbumById>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetAlbumByIdQueryKey(albumId);
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getAlbumById>>> = ({ signal }) => getAlbumById(albumId, requestOptions, signal);
+
+      
+
+      
+
+   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAlbumById>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetAlbumByIdSuspenseQueryResult = NonNullable<Awaited<ReturnType<typeof getAlbumById>>>
+export type GetAlbumByIdSuspenseQueryError = ErrorType<void>
+
+
+export function useGetAlbumByIdSuspense<TData = Awaited<ReturnType<typeof getAlbumById>>, TError = ErrorType<void>>(
+ albumId: string, options: { query:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAlbumById>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetAlbumByIdSuspense<TData = Awaited<ReturnType<typeof getAlbumById>>, TError = ErrorType<void>>(
+ albumId: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAlbumById>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetAlbumByIdSuspense<TData = Awaited<ReturnType<typeof getAlbumById>>, TError = ErrorType<void>>(
+ albumId: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAlbumById>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+/**
+ * @summary 앨범 상세 조회
+ */
+
+export function useGetAlbumByIdSuspense<TData = Awaited<ReturnType<typeof getAlbumById>>, TError = ErrorType<void>>(
+ albumId: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAlbumById>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient 
+ ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = getGetAlbumByIdSuspenseQueryOptions(albumId,options)
+
+  const query = useSuspenseQuery(queryOptions, queryClient) as  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+
+
+
+export const getGetAlbumByIdSuspenseInfiniteQueryOptions = <TData = InfiniteData<Awaited<ReturnType<typeof getAlbumById>>>, TError = ErrorType<void>>(albumId: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAlbumById>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetAlbumByIdInfiniteQueryKey(albumId);
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getAlbumById>>> = ({ signal }) => getAlbumById(albumId, requestOptions, signal);
+
+      
+
+      
+
+   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAlbumById>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetAlbumByIdSuspenseInfiniteQueryResult = NonNullable<Awaited<ReturnType<typeof getAlbumById>>>
+export type GetAlbumByIdSuspenseInfiniteQueryError = ErrorType<void>
+
+
+export function useGetAlbumByIdSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getAlbumById>>>, TError = ErrorType<void>>(
+ albumId: string, options: { query:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAlbumById>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetAlbumByIdSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getAlbumById>>>, TError = ErrorType<void>>(
+ albumId: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAlbumById>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetAlbumByIdSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getAlbumById>>>, TError = ErrorType<void>>(
+ albumId: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAlbumById>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+/**
+ * @summary 앨범 상세 조회
+ */
+
+export function useGetAlbumByIdSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getAlbumById>>>, TError = ErrorType<void>>(
+ albumId: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAlbumById>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient 
+ ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = getGetAlbumByIdSuspenseInfiniteQueryOptions(albumId,options)
+
+  const query = useSuspenseInfiniteQuery(queryOptions, queryClient) as  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+/**
+ * @summary 앨범 상세 조회
+ */
+export const prefetchGetAlbumByIdInfiniteQuery = async <TData = Awaited<ReturnType<typeof getAlbumById>>, TError = ErrorType<void>>(
+ queryClient: QueryClient, albumId: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAlbumById>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+
+  ): Promise<QueryClient> => {
+
+  const queryOptions = getGetAlbumByIdSuspenseInfiniteQueryOptions(albumId,options)
+
+  await queryClient.prefetchInfiniteQuery(queryOptions);
+
+  return queryClient;
+}
+
+
+
+
+/**
+ * 앨범 정보를 수정합니다. 변경하려는 필드만 전송하면 됩니다.
+ * @summary 앨범 수정
+ */
+export const updateAlbum = (
+    albumId: string,
+    updateAlbumDto: BodyType<UpdateAlbumDto>,
+ options?: SecondParameter<typeof customInstance>,) => {
+      
+      
+      return customInstance<UpdateAlbum200AllOf>(
+      {url: `/api/v1/assets/albums/${albumId}`, method: 'PATCH',
+      headers: {'Content-Type': 'application/json', },
+      data: updateAlbumDto
+    },
+      options);
+    }
+  
+
+
+export const getUpdateAlbumMutationOptions = <TError = ErrorType<void>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateAlbum>>, TError,{albumId: string;data: BodyType<UpdateAlbumDto>}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof updateAlbum>>, TError,{albumId: string;data: BodyType<UpdateAlbumDto>}, TContext> => {
+
+const mutationKey = ['updateAlbum'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof updateAlbum>>, {albumId: string;data: BodyType<UpdateAlbumDto>}> = (props) => {
+          const {albumId,data} = props ?? {};
+
+          return  updateAlbum(albumId,data,requestOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type UpdateAlbumMutationResult = NonNullable<Awaited<ReturnType<typeof updateAlbum>>>
+    export type UpdateAlbumMutationBody = BodyType<UpdateAlbumDto>
+    export type UpdateAlbumMutationError = ErrorType<void>
+
+    /**
+ * @summary 앨범 수정
+ */
+export const useUpdateAlbum = <TError = ErrorType<void>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateAlbum>>, TError,{albumId: string;data: BodyType<UpdateAlbumDto>}, TContext>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof updateAlbum>>,
+        TError,
+        {albumId: string;data: BodyType<UpdateAlbumDto>},
+        TContext
+      > => {
+
+      const mutationOptions = getUpdateAlbumMutationOptions(options);
+
+      return useMutation(mutationOptions, queryClient);
+    }
+    
+/**
+ * 앨범을 삭제합니다 (Soft Delete).
+ * @summary 앨범 삭제
+ */
+export const deleteAlbum = (
+    albumId: string,
+ options?: SecondParameter<typeof customInstance>,) => {
+      
+      
+      return customInstance<unknown>(
+      {url: `/api/v1/assets/albums/${albumId}`, method: 'DELETE'
+    },
+      options);
+    }
+  
+
+
+export const getDeleteAlbumMutationOptions = <TError = ErrorType<void>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteAlbum>>, TError,{albumId: string}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof deleteAlbum>>, TError,{albumId: string}, TContext> => {
+
+const mutationKey = ['deleteAlbum'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof deleteAlbum>>, {albumId: string}> = (props) => {
+          const {albumId} = props ?? {};
+
+          return  deleteAlbum(albumId,requestOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type DeleteAlbumMutationResult = NonNullable<Awaited<ReturnType<typeof deleteAlbum>>>
+    
+    export type DeleteAlbumMutationError = ErrorType<void>
+
+    /**
+ * @summary 앨범 삭제
+ */
+export const useDeleteAlbum = <TError = ErrorType<void>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteAlbum>>, TError,{albumId: string}, TContext>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof deleteAlbum>>,
+        TError,
+        {albumId: string},
+        TContext
+      > => {
+
+      const mutationOptions = getDeleteAlbumMutationOptions(options);
+
+      return useMutation(mutationOptions, queryClient);
+    }
+    
+/**
+ * 삭제된 앨범을 복원합니다.
+ * @summary 앨범 복원
+ */
+export const restoreAlbum = (
+    albumId: string,
+ options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
+) => {
+      
+      
+      return customInstance<RestoreAlbum200AllOf>(
+      {url: `/api/v1/assets/albums/${albumId}/restore`, method: 'POST', signal
+    },
+      options);
+    }
+  
+
+
+export const getRestoreAlbumMutationOptions = <TError = ErrorType<void>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof restoreAlbum>>, TError,{albumId: string}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof restoreAlbum>>, TError,{albumId: string}, TContext> => {
+
+const mutationKey = ['restoreAlbum'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof restoreAlbum>>, {albumId: string}> = (props) => {
+          const {albumId} = props ?? {};
+
+          return  restoreAlbum(albumId,requestOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type RestoreAlbumMutationResult = NonNullable<Awaited<ReturnType<typeof restoreAlbum>>>
+    
+    export type RestoreAlbumMutationError = ErrorType<void>
+
+    /**
+ * @summary 앨범 복원
+ */
+export const useRestoreAlbum = <TError = ErrorType<void>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof restoreAlbum>>, TError,{albumId: string}, TContext>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof restoreAlbum>>,
+        TError,
+        {albumId: string},
+        TContext
+      > => {
+
+      const mutationOptions = getRestoreAlbumMutationOptions(options);
+
+      return useMutation(mutationOptions, queryClient);
+    }
+    
+/**
+ * 앨범에 하나 이상의 에셋을 엔트리로 추가합니다.
+ * @summary 앨범에 에셋 추가
+ */
+export const addAssetsToAlbum = (
+    albumId: string,
+    addAssetsToAlbumDto: BodyType<AddAssetsToAlbumDto>,
+ options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
+) => {
+      
+      
+      return customInstance<AddAssetsToAlbum200AllOf>(
+      {url: `/api/v1/assets/albums/${albumId}/entries`, method: 'POST',
+      headers: {'Content-Type': 'application/json', },
+      data: addAssetsToAlbumDto, signal
+    },
+      options);
+    }
+  
+
+
+export const getAddAssetsToAlbumMutationOptions = <TError = ErrorType<void>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof addAssetsToAlbum>>, TError,{albumId: string;data: BodyType<AddAssetsToAlbumDto>}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof addAssetsToAlbum>>, TError,{albumId: string;data: BodyType<AddAssetsToAlbumDto>}, TContext> => {
+
+const mutationKey = ['addAssetsToAlbum'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof addAssetsToAlbum>>, {albumId: string;data: BodyType<AddAssetsToAlbumDto>}> = (props) => {
+          const {albumId,data} = props ?? {};
+
+          return  addAssetsToAlbum(albumId,data,requestOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type AddAssetsToAlbumMutationResult = NonNullable<Awaited<ReturnType<typeof addAssetsToAlbum>>>
+    export type AddAssetsToAlbumMutationBody = BodyType<AddAssetsToAlbumDto>
+    export type AddAssetsToAlbumMutationError = ErrorType<void>
+
+    /**
+ * @summary 앨범에 에셋 추가
+ */
+export const useAddAssetsToAlbum = <TError = ErrorType<void>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof addAssetsToAlbum>>, TError,{albumId: string;data: BodyType<AddAssetsToAlbumDto>}, TContext>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof addAssetsToAlbum>>,
+        TError,
+        {albumId: string;data: BodyType<AddAssetsToAlbumDto>},
+        TContext
+      > => {
+
+      const mutationOptions = getAddAssetsToAlbumMutationOptions(options);
+
+      return useMutation(mutationOptions, queryClient);
+    }
+    
+/**
+ * 앨범에서 특정 에셋을 제거합니다.
+ * @summary 앨범에서 에셋 제거
+ */
+export const removeAssetFromAlbum = (
+    albumId: string,
+    assetId: string,
+ options?: SecondParameter<typeof customInstance>,) => {
+      
+      
+      return customInstance<unknown>(
+      {url: `/api/v1/assets/albums/${albumId}/entries/${assetId}`, method: 'DELETE'
+    },
+      options);
+    }
+  
+
+
+export const getRemoveAssetFromAlbumMutationOptions = <TError = ErrorType<void>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof removeAssetFromAlbum>>, TError,{albumId: string;assetId: string}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof removeAssetFromAlbum>>, TError,{albumId: string;assetId: string}, TContext> => {
+
+const mutationKey = ['removeAssetFromAlbum'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof removeAssetFromAlbum>>, {albumId: string;assetId: string}> = (props) => {
+          const {albumId,assetId} = props ?? {};
+
+          return  removeAssetFromAlbum(albumId,assetId,requestOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type RemoveAssetFromAlbumMutationResult = NonNullable<Awaited<ReturnType<typeof removeAssetFromAlbum>>>
+    
+    export type RemoveAssetFromAlbumMutationError = ErrorType<void>
+
+    /**
+ * @summary 앨범에서 에셋 제거
+ */
+export const useRemoveAssetFromAlbum = <TError = ErrorType<void>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof removeAssetFromAlbum>>, TError,{albumId: string;assetId: string}, TContext>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof removeAssetFromAlbum>>,
+        TError,
+        {albumId: string;assetId: string},
+        TContext
+      > => {
+
+      const mutationOptions = getRemoveAssetFromAlbumMutationOptions(options);
+
+      return useMutation(mutationOptions, queryClient);
+    }
+    
+/**
+ * 앨범 내 엔트리의 표시 순서를 변경합니다.
+ * @summary 앨범 엔트리 순서 변경
+ */
+export const reorderAlbumEntries = (
+    albumId: string,
+    reorderAlbumEntriesDto: BodyType<ReorderAlbumEntriesDto>,
+ options?: SecondParameter<typeof customInstance>,) => {
+      
+      
+      return customInstance<ReorderAlbumEntries200AllOf>(
+      {url: `/api/v1/assets/albums/${albumId}/entries/reorder`, method: 'PATCH',
+      headers: {'Content-Type': 'application/json', },
+      data: reorderAlbumEntriesDto
+    },
+      options);
+    }
+  
+
+
+export const getReorderAlbumEntriesMutationOptions = <TError = ErrorType<void>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof reorderAlbumEntries>>, TError,{albumId: string;data: BodyType<ReorderAlbumEntriesDto>}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof reorderAlbumEntries>>, TError,{albumId: string;data: BodyType<ReorderAlbumEntriesDto>}, TContext> => {
+
+const mutationKey = ['reorderAlbumEntries'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof reorderAlbumEntries>>, {albumId: string;data: BodyType<ReorderAlbumEntriesDto>}> = (props) => {
+          const {albumId,data} = props ?? {};
+
+          return  reorderAlbumEntries(albumId,data,requestOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type ReorderAlbumEntriesMutationResult = NonNullable<Awaited<ReturnType<typeof reorderAlbumEntries>>>
+    export type ReorderAlbumEntriesMutationBody = BodyType<ReorderAlbumEntriesDto>
+    export type ReorderAlbumEntriesMutationError = ErrorType<void>
+
+    /**
+ * @summary 앨범 엔트리 순서 변경
+ */
+export const useReorderAlbumEntries = <TError = ErrorType<void>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof reorderAlbumEntries>>, TError,{albumId: string;data: BodyType<ReorderAlbumEntriesDto>}, TContext>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof reorderAlbumEntries>>,
+        TError,
+        {albumId: string;data: BodyType<ReorderAlbumEntriesDto>},
+        TContext
+      > => {
+
+      const mutationOptions = getReorderAlbumEntriesMutationOptions(options);
 
       return useMutation(mutationOptions, queryClient);
     }

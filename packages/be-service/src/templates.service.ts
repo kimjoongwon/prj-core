@@ -1,9 +1,7 @@
 import {
-	CreateTemplateDto,
 	PreviewTemplateDto,
 	QueryTemplateDto,
 	SendTestTemplateDto,
-	UpdateTemplateDto,
 } from "@cocrepo/dto";
 import { Template } from "@cocrepo/entity";
 import { TemplateType } from "@cocrepo/prisma";
@@ -26,6 +24,31 @@ interface SubstituteResult {
 	content: string;
 	/** 미치환 변수 목록 */
 	unresolvedVariables: string[];
+}
+
+interface TemplateVariableInput {
+	name: string;
+	description?: string;
+	defaultValue?: string;
+	isRequired?: boolean;
+}
+
+interface CreateTemplateInput {
+	code: string;
+	name: string;
+	type: TemplateType;
+	subject?: string | null;
+	content: string;
+	description?: string | null;
+	variables?: TemplateVariableInput[];
+}
+
+interface UpdateTemplateInput {
+	name?: string;
+	subject?: string | null;
+	content?: string;
+	description?: string | null;
+	variables?: TemplateVariableInput[];
 }
 
 /**
@@ -88,34 +111,34 @@ export class TemplatesService {
 	 * - 유형별 필드 검증
 	 * - 변수가 있으면 함께 생성
 	 */
-	async create(dto: CreateTemplateDto): Promise<Template> {
-		this.logger.debug(`템플릿 생성 시도: code=${dto.code}`);
+	async create(input: CreateTemplateInput): Promise<Template> {
+		this.logger.debug(`템플릿 생성 시도: code=${input.code}`);
 
 		// 코드 중복 검사
-		const existing = await this.repository.findByCode(dto.code);
+		const existing = await this.repository.findByCode(input.code);
 		if (existing) {
 			throw new ConflictException(
-				`이미 존재하는 템플릿 코드입니다: ${dto.code}`,
+				`이미 존재하는 템플릿 코드입니다: ${input.code}`,
 			);
 		}
 
 		// 유형별 필드 검증
-		this.validateTypeConstraints(dto.type, dto.subject, dto.content);
+		this.validateTypeConstraints(input.type, input.subject, input.content);
 
 		const templateData = {
-			code: dto.code,
-			name: dto.name,
-			type: dto.type,
-			subject: dto.subject ?? null,
-			content: dto.content,
-			description: dto.description ?? null,
+			code: input.code,
+			name: input.name,
+			type: input.type,
+			subject: input.subject ?? null,
+			content: input.content,
+			description: input.description ?? null,
 		};
 
 		// 변수가 있으면 함께 생성
-		if (dto.variables && dto.variables.length > 0) {
+		if (input.variables && input.variables.length > 0) {
 			return this.repository.createWithVariables(
 				templateData,
-				dto.variables.map((v) => ({
+				input.variables.map((v) => ({
 					name: v.name,
 					description: v.description,
 					defaultValue: v.defaultValue,
@@ -133,7 +156,7 @@ export class TemplatesService {
 	 * - 유형별 필드 검증 (기존 type 사용)
 	 * - 변수가 있으면 전체 교체
 	 */
-	async update(id: string, dto: UpdateTemplateDto): Promise<Template> {
+	async update(id: string, input: UpdateTemplateInput): Promise<Template> {
 		this.logger.debug(`템플릿 수정 시도: ${id.slice(-8)}`);
 
 		const template = await this.repository.findByIdOrThrow(id);
@@ -141,23 +164,23 @@ export class TemplatesService {
 		// 유형별 필드 검증 (기존 template의 type 사용)
 		this.validateTypeConstraints(
 			template.type,
-			dto.subject !== undefined ? dto.subject : template.subject,
-			dto.content !== undefined ? dto.content : template.content,
+			input.subject !== undefined ? input.subject : template.subject,
+			input.content !== undefined ? input.content : template.content,
 		);
 
 		const templateData: Record<string, unknown> = {};
-		if (dto.name !== undefined) templateData.name = dto.name;
-		if (dto.subject !== undefined) templateData.subject = dto.subject;
-		if (dto.content !== undefined) templateData.content = dto.content;
-		if (dto.description !== undefined)
-			templateData.description = dto.description;
+		if (input.name !== undefined) templateData.name = input.name;
+		if (input.subject !== undefined) templateData.subject = input.subject;
+		if (input.content !== undefined) templateData.content = input.content;
+		if (input.description !== undefined)
+			templateData.description = input.description;
 
 		// 변수가 있으면 전체 교체
-		if (dto.variables !== undefined) {
+		if (input.variables !== undefined) {
 			return this.repository.updateWithVariables(
 				id,
 				templateData,
-				(dto.variables ?? []).map((v) => ({
+				(input.variables ?? []).map((v) => ({
 					name: v.name,
 					description: v.description,
 					defaultValue: v.defaultValue,
@@ -256,10 +279,7 @@ export class TemplatesService {
 		if (template.variables && template.variables.length > 0) {
 			const missingVariables = template.variables
 				.filter(
-					(v) =>
-						v.isRequired &&
-						!dto.variables[v.name] &&
-						!v.defaultValue,
+					(v) => v.isRequired && !dto.variables[v.name] && !v.defaultValue,
 				)
 				.map((v) => v.name);
 
@@ -321,11 +341,7 @@ export class TemplatesService {
 		}
 
 		// PUSH: content 200자 제한
-		if (
-			type === TemplateType.PUSH &&
-			content &&
-			content.length > 200
-		) {
+		if (type === TemplateType.PUSH && content && content.length > 200) {
 			throw new BadRequestException(
 				"PUSH 템플릿의 본문은 200자를 초과할 수 없습니다",
 			);
@@ -347,18 +363,14 @@ export class TemplatesService {
 			case TemplateType.EMAIL: {
 				const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 				if (!emailRegex.test(recipient)) {
-					throw new BadRequestException(
-						"올바른 이메일 주소를 입력해주세요",
-					);
+					throw new BadRequestException("올바른 이메일 주소를 입력해주세요");
 				}
 				break;
 			}
 			case TemplateType.SMS: {
 				const phoneRegex = /^(\+?\d{1,4}[-\s]?)?\d{8,15}$/;
 				if (!phoneRegex.test(recipient.replace(/[-\s]/g, ""))) {
-					throw new BadRequestException(
-						"올바른 전화번호를 입력해주세요",
-					);
+					throw new BadRequestException("올바른 전화번호를 입력해주세요");
 				}
 				break;
 			}
@@ -397,15 +409,9 @@ export class TemplatesService {
 				if (variable.defaultValue) {
 					const placeholder = `{{${variable.name}}}`;
 					if (subject) {
-						subject = subject.replaceAll(
-							placeholder,
-							variable.defaultValue,
-						);
+						subject = subject.replaceAll(placeholder, variable.defaultValue);
 					}
-					content = content.replaceAll(
-						placeholder,
-						variable.defaultValue,
-					);
+					content = content.replaceAll(placeholder, variable.defaultValue);
 				}
 			}
 		}

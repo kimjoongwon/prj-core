@@ -1,6 +1,7 @@
 # Album Entity 기획서
 
 > 생성일: 2026-02-22
+> 수정일: 2026-02-23
 > 타입: entity
 > 위치: packages/be-entity/src/album.entity.ts
 
@@ -21,37 +22,38 @@
 | createdAt | DateTime | required | now() | 생성 일시 |
 | updatedAt | DateTime | required | now() | 수정 일시 |
 | removedAt | DateTime | optional | - | 삭제 일시 (소프트 삭제) |
+| creatorId | UUID | FK, optional | - | 생성자 ID |
 
 ## 관계
 
 | 관계 | 대상 Entity | 타입 | 설명 |
 |------|-------------|------|------|
 | belongsTo | Space | N:1 | 소속 Space |
-| hasOne | Asset | 0..1:1 | 커버 이미지 |
+| hasOne | Asset | 0..1:1 | 커버 이미지 (coverAsset) |
+| belongsTo | User | 0..1:1 | 생성자 (creator) |
 | hasMany | AlbumEntry | 1:N | 앨범에 포함된 에셋 엔트리들 |
 
 ## 도메인 메서드
 
 | 메서드 | 반환 | 설명 |
 |--------|------|------|
-| getAssetCount() | number | 앨범에 포함된 에셋 수 반환 |
-| setCover(assetId: string) | void | 커버 이미지 설정 |
-| clearCover() | void | 커버 이미지 제거 |
-| softDelete() | void | 소프트 삭제 수행 |
+| hasCover() | boolean | 커버 이미지가 설정되어 있는지 확인합니다 |
+| getEntryCount() | number | 앨범에 포함된 엔트리 수를 반환합니다 |
+| getAssetCount() | number | @deprecated getEntryCount()를 사용하세요 |
 
 ## 비즈니스 규칙
 
 - 앨범명은 Space 내에서 유니크
 - 커버 이미지는 선택사항
 - 앨범 삭제 시 연결된 AlbumEntry도 함께 삭제 (Cascade)
-- 소프트 삭제 정책 적용
+- 소프트 삭제 정책 적용 (removedAt 필드 사용)
 
 ## 구현 체크리스트
 
-- [ ] album.entity.ts
-- [ ] AbstractEntity 상속
-- [ ] Prisma 타입 implements
-- [ ] index.ts export 추가
+- [x] album.entity.ts
+- [x] AbstractEntity 상속
+- [x] Prisma 타입 implements
+- [x] index.ts export 추가
 - [ ] 단위 테스트 (Jest)
 
 ## 테스트 케이스
@@ -62,29 +64,48 @@
 
 | 도메인 메서드 | Happy Path | Error Path | Edge Case | 합계 |
 |-------------|:----------:|:----------:|:---------:|:----:|
-| getAssetCount() | 1 | 0 | 1 | 2 |
-| setCover() | 1 | 0 | 0 | 1 |
-| clearCover() | 1 | 0 | 0 | 1 |
+| hasCover() | 1 | 0 | 1 | 2 |
+| getEntryCount() | 1 | 0 | 1 | 2 |
 
-### [TC-001] setCover()
-
-**분류:** Happy Path
-
-| 구분 | 내용 |
-|------|------|
-| **Given** | coverAssetId가 null인 Album |
-| **When** | setCover(assetId) 호출 |
-| **Then** | coverAssetId가 설정됨 |
-
-### [TC-002] clearCover()
+### [TC-001] hasCover() - 커버 이미지 있음
 
 **분류:** Happy Path
 
 | 구분 | 내용 |
 |------|------|
-| **Given** | coverAssetId가 설정된 Album |
-| **When** | clearCover() 호출 |
-| **Then** | coverAssetId가 null이 됨 |
+| **Given** | coverAssetId가 설정된 Album 인스턴스 |
+| **When** | hasCover() 호출 |
+| **Then** | true 반환 |
+
+### [TC-002] hasCover() - 커버 이미지 없음
+
+**분류:** Edge Case
+
+| 구분 | 내용 |
+|------|------|
+| **Given** | coverAssetId가 null인 Album 인스턴스 |
+| **When** | hasCover() 호출 |
+| **Then** | false 반환 |
+
+### [TC-003] getEntryCount() - 엔트리 있음
+
+**분류:** Happy Path
+
+| 구분 | 내용 |
+|------|------|
+| **Given** | entries 배열이 있는 Album 인스턴스 |
+| **When** | getEntryCount() 호출 |
+| **Then** | entries.length 반환 |
+
+### [TC-004] getEntryCount() - 엔트리 없음
+
+**분류:** Edge Case
+
+| 구분 | 내용 |
+|------|------|
+| **Given** | entries가 undefined인 Album 인스턴스 |
+| **When** | getEntryCount() 호출 |
+| **Then** | 0 반환 |
 
 ## 상위 기획서
 
@@ -95,3 +116,4 @@
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
 | 2026-02-22 | 초기 생성 | orch-requirement |
+| 2026-02-23 | 도메인 메서드 정리 (hasCover, getEntryCount 추가) | be-entity-builder |

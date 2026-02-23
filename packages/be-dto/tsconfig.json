@@ -5,6 +5,8 @@
     "rootDir": "./src",
     "useDefineForClassFields": false,
     "strictPropertyInitialization": false,
+    "allowJs": true,
+    "allowSyntheticDefaultImports": true,
     "tsBuildInfoFile": "./dist/.tsbuildinfo"
   },
   "references": [

@@ -16,14 +16,15 @@
 
 | Method | 경로 | DTO | 반환값 | 설명 |
 |--------|------|-----|--------|------|
-| GET | `/` | AssetQueryDto | Asset[] | 에셋 목록 조회 |
+| GET | `/` | AssetQueryDto | Asset[] + meta + stats | 에셋 목록 조회 |
 | GET | `/:assetId` | - | Asset | 에셋 상세 조회 |
 | POST | `/` | CreateAssetDto | Asset | 에셋 생성 |
 | PATCH | `/:assetId` | UpdateAssetDto | Asset | 에셋 수정 |
-| PATCH | `/:assetId/move` | MoveAssetDto | Asset | 폴더 이동 |
+| POST | `/:assetId/restore` | - | Asset | 에셋 복원 |
+| POST | `/:assetId/move` | MoveAssetDto | Asset | 폴더 이동 |
+| PATCH | `/:assetId/status` | UpdateAssetStatusDto | Asset | 상태 변경 |
 | DELETE | `/:assetId` | - | 204 | 에셋 삭제 |
-| POST | `/batch-delete` | BatchDeleteDto | 204 | 일괄 삭제 |
-| GET | `/:assetId/derivatives` | - | Derivative[] | 파생 리소스 목록 |
+| POST | `/batch-delete` | BatchDeleteAssetsDto | 204 | 일괄 삭제 |
 
 ## 인증/인가
 
@@ -33,10 +34,18 @@
 | GET /:assetId | 필수 | VIEW |
 | POST / | 필수 | MANAGE |
 | PATCH /:assetId | 필수 | MANAGE |
-| PATCH /:assetId/move | 필수 | MANAGE |
+| POST /:assetId/restore | 필수 | FULL_ACCESS |
+| POST /:assetId/move | 필수 | MANAGE |
+| PATCH /:assetId/status | 필수 | MANAGE |
 | DELETE /:assetId | 필수 | MANAGE |
 | POST /batch-delete | 필수 | MANAGE |
-| GET /:assetId/derivatives | 필수 | VIEW |
+
+## Multi-Tenancy
+
+모든 엔드포인트는 `X-Space-ID` 헤더가 필수입니다.
+
+- 일반 사용자: 자신의 Space 내 에셋만 접근 가능
+- FULL_ACCESS 권한: 모든 Space의 에셋 접근 가능 (복원 기능은 FULL_ACCESS만 가능)
 
 ## 요청 예시
 
@@ -59,6 +68,7 @@ Content-Type: application/json
 {
   "folderId": "uuid",
   "kind": "IMAGE",
+  "status": "READY",
   "originalName": "logo.png",
   "storageKey": "uploads/2024/logo.png",
   "mimeType": "image/png",
@@ -71,13 +81,26 @@ Content-Type: application/json
 ### 폴더 이동
 
 ```http
-PATCH /api/v1/assets/uuid/move
+POST /api/v1/assets/uuid/move
 Authorization: Bearer {token}
 X-Space-ID: {spaceId}
 Content-Type: application/json
 
 {
   "targetFolderId": "uuid"
+}
+```
+
+### 상태 변경
+
+```http
+PATCH /api/v1/assets/uuid/status
+Authorization: Bearer {token}
+X-Space-ID: {spaceId}
+Content-Type: application/json
+
+{
+  "status": "READY"
 }
 ```
 
@@ -117,7 +140,15 @@ Content-Type: application/json
   "meta": {
     "total": 125,
     "skip": 0,
-    "take": 20
+    "take": 20,
+    "totalPages": 7
+  },
+  "stats": {
+    "total": 125,
+    "images": 80,
+    "videos": 30,
+    "documents": 15,
+    "totalSize": 1073741824
   }
 }
 ```
@@ -141,6 +172,15 @@ Content-Type: application/json
       "height": 1080,
       "colorSpace": "sRGB"
     },
+    "derivatives": [
+      {
+        "id": "uuid",
+        "kind": "THUMBNAIL",
+        "storageKey": "thumbnails/uuid_200x200.jpg",
+        "width": 200,
+        "height": 200
+      }
+    ],
     "createdAt": "2024-02-22T10:00:00Z"
   }
 }
@@ -148,9 +188,12 @@ Content-Type: application/json
 
 ## 구현 체크리스트
 
-- [ ] asset.controller.ts
-- [ ] DTO 검증
-- [ ] Swagger 데코레이터
+- [x] asset.controller.ts
+- [x] DTO 검증 (BatchDeleteAssetsDto, UpdateAssetStatusDto)
+- [x] Swagger 데코레이터 (@ApiTags, @ApiOperation, @ApiAuth, @ApiErrors, @ApiParam, @ApiBody)
+- [x] ResponseEntity 래핑 (@ApiResponseEntity, @ResponseMessage)
+- [x] Module 등록 (AssetsModule)
+- [x] RouterModule 경로 등록 (/api/v1/assets)
 - [ ] E2E 테스트 (Jest + Supertest)
 
 ## 테스트 케이스
@@ -166,6 +209,9 @@ Content-Type: application/json
 | POST / | 1 | 2 | 0 | 3 |
 | PATCH /:assetId | 1 | 1 | 0 | 2 |
 | DELETE /:assetId | 1 | 1 | 0 | 2 |
+| POST /:assetId/restore | 1 | 1 | 0 | 2 |
+| POST /:assetId/move | 1 | 1 | 0 | 2 |
+| PATCH /:assetId/status | 1 | 1 | 0 | 2 |
 | POST /batch-delete | 1 | 1 | 1 | 3 |
 
 ### [TC-001] GET / - 정상 조회
@@ -176,7 +222,7 @@ Content-Type: application/json
 |------|------|
 | **Given** | 인증 토큰, X-Space-ID 헤더 |
 | **When** | GET /api/v1/assets 요청 |
-| **Then** | 200, 에셋 목록 반환 |
+| **Then** | 200, 에셋 목록 +meta+stats 반환 |
 
 ### [TC-002] GET / - 권한 없음
 
@@ -198,13 +244,24 @@ Content-Type: application/json
 | **When** | POST /api/v1/assets 요청 |
 | **Then** | 201, 생성된 에셋 반환 |
 
+### [TC-004] POST /:assetId/restore - 복원 성공
+
+**분류:** Happy Path
+
+| 구분 | 내용 |
+|------|------|
+| **Given** | FULL_ACCESS 권한, 삭제된 에셋 ID |
+| **When** | POST /api/v1/assets/:assetId/restore 요청 |
+| **Then** | 200, 복원된 에셋 반환 |
+
 ## 상위 기획서
 
 - `apps/admin/src/app/(admin)/app.spec.md`
-- `apps/server/src/module/assets/asset.service.spec.md`
+- `apps/server/src/module/assets/services/asset.service.spec.md`
 
 ## 변경 이력
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
 | 2026-02-22 | 초기 생성 | orch-requirement |
+| 2026-02-23 | 엔드포인트 구현 완료 (restore, move, status, batch-delete 추가) | be-controller-builder |

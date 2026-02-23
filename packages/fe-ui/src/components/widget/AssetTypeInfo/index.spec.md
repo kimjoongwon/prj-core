@@ -1,156 +1,149 @@
 # AssetTypeInfo Widget 기획서
 
 > 생성일: 2026-02-22
-> 수정일: 2026-02-22
+> 수정일: 2026-02-23
 > 타입: widget
 > 위치: packages/fe-ui/src/components/widget/AssetTypeInfo/
 
 ## 역할
 
-에셋 타입에 따라 상세 정보를 조건부 렌더링하는 컴포넌트입니다. ImageInfo, VideoInfo, DocumentInfo를 타입에 따라 표시합니다.
+에셋 타입에 따라 적절한 상세 정보 위젯을 조건부 렌더링하는 래퍼 컴포넌트입니다. 이미지/비디오/문서별로 다른 상세 정보를 표시합니다.
 
 ## 디자인 목업
 
 ```
-[이미지 타입]
-┌─────────────────────────────────────────────┐
-│ 이미지 정보                                  │
-├─────────────────────────────────────────────┤
-│                                             │
-│  해상도          1920 x 1080                │
-│                                             │
-│  색상 공간       sRGB                       │
-│                                             │
-│  방향           가로                        │
-│                                             │
-│  EXIF           [상세 보기]                 │
-│                                             │
-└─────────────────────────────────────────────┘
+[IMAGE 타입]
+┌──────────────────────────────────────────────────────────────────┐
+│ 이미지 정보                                          [접기 ▲]     │
+│ ──────────────────────────────────────────────────────────────── │
+│ 너비            1920 px         │ 색상 공간      sRGB            │
+│ 높이            1080 px         │ 알파 채널      예              │
+│ 방향            1 (정방향)      │                                │
+└──────────────────────────────────────────────────────────────────┘
 
-[비디오 타입]
-┌─────────────────────────────────────────────┐
-│ 비디오 정보                                  │
-├─────────────────────────────────────────────┤
-│                                             │
-│  재생 시간       00:02:30                   │
-│                                             │
-│  해상도          1920 x 1080                │
-│                                             │
-│  프레임 레이트   30 fps                     │
-│                                             │
-│  코덱            H.264                      │
-│                                             │
-│  비트레이트      5000 kbps                  │
-│                                             │
-│  오디오          있음 (AAC)                 │
-│                                             │
-└─────────────────────────────────────────────┘
+[VIDEO 타입]
+┌──────────────────────────────────────────────────────────────────┐
+│ 비디오 정보                                          [접기 ▲]     │
+│ ──────────────────────────────────────────────────────────────── │
+│ 너비            1920 px         │ 프레임 레이트  30 fps          │
+│ 높이            1080 px         │ 비디오 코덱    H.264           │
+│ 재생 시간       02:30           │ 비트레이트      8.5 Mbps        │
+│ 오디오          AAC             │                                │
+└──────────────────────────────────────────────────────────────────┘
 
-[문서 타입]
-┌─────────────────────────────────────────────┐
-│ 문서 정보                                    │
-├─────────────────────────────────────────────┤
-│                                             │
-│  페이지 수       15                         │
-│                                             │
-│  시트 수         -                          │
-│                                             │
-│  슬라이드 수     -                          │
-│                                             │
-│  텍스트 추출     [다운로드]                 │
-│                                             │
-└─────────────────────────────────────────────┘
+[DOCUMENT 타입]
+┌──────────────────────────────────────────────────────────────────┐
+│ 문서 정보                                            [접기 ▲]     │
+│ ──────────────────────────────────────────────────────────────── │
+│ 페이지 수       15              │ 제목          2024년 가이드    │
+│ 단어 수         3,240           │ 주제          사용자 매뉴얼    │
+│ 작성자          홍길동          │ 키워드        가이드, 매뉴얼    │
+└──────────────────────────────────────────────────────────────────┘
 ```
 
 ### 상태별 UI 변화
 
 | 상태 | 설명 | 시각적 변화 |
 |------|------|-------------|
-| `image` | 이미지 타입 | ImageInfo 표시 |
-| `video` | 비디오 타입 | VideoInfo 표시 |
-| `document` | 문서 타입 | DocumentInfo 표시 |
-| `noData` | 상세 정보 없음 | "정보 없음" 메시지 |
+| `image` | 이미지 타입 | ImageDetailInfo 표시 |
+| `video` | 비디오 타입 | VideoDetailInfo 표시 |
+| `document` | 문서 타입 | DocumentDetailInfo 표시 |
+| `noData` | 상세 정보 없음 | 아무것도 렌더링하지 않음 |
+
+### 타입별 렌더링 분기
+
+| kind | 렌더링 컴포넌트 | 기획서 |
+|------|----------------|--------|
+| IMAGE | ImageDetailInfo | `widget/ImageDetailInfo` |
+| VIDEO | VideoDetailInfo | `widget/VideoDetailInfo` |
+| DOCUMENT | DocumentDetailInfo | `widget/DocumentDetailInfo` |
 
 ## Props
 
 ```typescript
 interface AssetTypeInfoProps {
-  asset: Asset;                                // 에셋 데이터
-  imageInfo?: Image;                           // 이미지 상세 정보 (asset.image)
-  videoInfo?: Video;                           // 비디오 상세 정보 (asset.video)
-  documentInfo?: Document;                     // 문서 상세 정보 (asset.document)
-  onExifView?: (exif: Record<string, unknown>) => void; // EXIF 보기 핸들러
-  onTextExtract?: (asset: Asset) => void;      // 텍스트 추출 다운로드 핸들러
-  className?: string;                          // 추가 클래스
+  asset: Asset;                           // 에셋 데이터 (image/video/document 포함)
+  collapsible?: boolean;                  // 접기/펼치기 가능 여부 (기본값: true)
+  defaultExpanded?: boolean;              // 기본 펼침 상태 (기본값: true)
+  className?: string;                     // 추가 클래스
+}
+
+interface Asset {
+  kind: AssetKind;                        // IMAGE | VIDEO | DOCUMENT
+  image?: Image;                          // kind=IMAGE일 때만
+  video?: Video;                          // kind=VIDEO일 때만
+  document?: Document;                    // kind=DOCUMENT일 때만
 }
 ```
 
-## 하위 UI 컴포넌트
+## 하위 Widget 컴포넌트
 
-| 컴포넌트 | 기획서 | 역할 |
-|----------|--------|------|
-| Card | `ui/Card` | 카드 컨테이너 |
-| Button | `ui/Button` | 액션 버튼 |
-| Badge | `ui/Badge` | 정보 뱃지 |
+| 컴포넌트 | 기획서 | 렌더링 조건 |
+|----------|--------|-------------|
+| ImageDetailInfo | `widget/ImageDetailInfo` | kind=IMAGE |
+| VideoDetailInfo | `widget/VideoDetailInfo` | kind=VIDEO |
+| DocumentDetailInfo | `widget/DocumentDetailInfo` | kind=DOCUMENT |
 
 ## 상태 관리
 
-**없음** (Store 사용 금지 - 순수 UI)
+**없음** (하위 컴포넌트에서 로컬 상태만 사용)
 
 ## 슬롯
 
 | 슬롯 | 설명 |
 |------|------|
-| `header` | 헤더 영역 커스터마이징 |
-| `extra` | 타입별 추가 정보 |
+| `fallback` | 상세 정보 없을 때 표시 |
 
-## 타입별 표시 항목
+## 렌더링 로직
 
-### IMAGE 타입
-
-| 항목 | 키 | 포맷 |
-|------|-----|------|
-| 해상도 | width x height | 1920 x 1080 |
-| 색상 공간 | colorSpace | sRGB, Adobe RGB 등 |
-| 방향 | orientation | 가로/세로 |
-| EXIF | exif | 상세 보기 버튼 |
-
-### VIDEO 타입
-
-| 항목 | 키 | 포맷 |
-|------|-----|------|
-| 재생 시간 | durationMs | HH:mm:ss |
-| 해상도 | width x height | 1920 x 1080 |
-| 프레임 레이트 | frameRate | 30 fps |
-| 코덱 | codec | H.264, VP9 등 |
-| 비트레이트 | bitRateKbps | 5000 kbps |
-| 오디오 | hasAudio | 있음/없음 |
-
-### DOCUMENT 타입
-
-| 항목 | 키 | 포맷 |
-|------|-----|------|
-| 페이지 수 | pageCount | 숫자 |
-| 시트 수 | sheetCount | 숫자 (Excel) |
-| 슬라이드 수 | slideCount | 숫자 (PPT) |
-| 텍스트 추출 | extractedTextKey | 다운로드 버튼 |
+```typescript
+function AssetTypeInfo({ asset, collapsible, defaultExpanded, className }: Props) {
+  switch (asset.kind) {
+    case 'IMAGE':
+      if (!asset.image) return null;
+      return (
+        <ImageDetailInfo
+          image={asset.image}
+          collapsible={collapsible}
+          defaultExpanded={defaultExpanded}
+          className={className}
+        />
+      );
+    case 'VIDEO':
+      if (!asset.video) return null;
+      return (
+        <VideoDetailInfo
+          video={asset.video}
+          collapsible={collapsible}
+          defaultExpanded={defaultExpanded}
+          className={className}
+        />
+      );
+    case 'DOCUMENT':
+      if (!asset.document) return null;
+      return (
+        <DocumentDetailInfo
+          document={asset.document}
+          collapsible={collapsible}
+          defaultExpanded={defaultExpanded}
+          className={className}
+        />
+      );
+    default:
+      return null;
+  }
+}
+```
 
 ## 디자인 토큰
 
-| 항목 | 값 |
-|------|-----|
-| 라벨 너비 | 100px |
-| 행 간격 | py-3 |
-| 라운드 | rounded-xl |
-| 배경 | bg-content1 |
+하위 컴포넌트의 토큰을 따름
 
 ## 구현 체크리스트
 
 - [ ] index.tsx
-- [ ] ImageInfo 서브컴포넌트
-- [ ] VideoInfo 서브컴포넌트
-- [ ] DocumentInfo 서브컴포넌트
-- [ ] Storybook 스토리
+- [ ] 타입별 분기 렌더링
+- [ ] Storybook 스토리 (3가지 타입)
 - [ ] 컴포넌트 테스트 (Vitest)
 
 ## 테스트 케이스
@@ -161,56 +154,77 @@ interface AssetTypeInfoProps {
 
 | 기능 | Happy Path | Error Path | Edge Case | 합계 |
 |------|:----------:|:----------:|:---------:|:----:|
-| 타입 분기 | 3 | 0 | 1 | 4 |
-| 정보 표시 | 3 | 0 | 0 | 3 |
-| 액션 | 2 | 0 | 0 | 2 |
+| IMAGE 렌더링 | 1 | 0 | 1 | 2 |
+| VIDEO 렌더링 | 1 | 0 | 1 | 2 |
+| DOCUMENT 렌더링 | 1 | 0 | 1 | 2 |
 
-### [TC-001] 이미지 정보 표시
-
-**분류:** Happy Path
-
-| 구분 | 내용 |
-|------|------|
-| **Given** | asset.kind="IMAGE", imageInfo 존재 |
-| **When** | AssetTypeInfo 렌더링 |
-| **Then** | 해상도, 색상 공간, EXIF 버튼 표시 |
-
-### [TC-002] 비디오 정보 표시
+### [TC-001] IMAGE 타입 렌더링
 
 **분류:** Happy Path
 
 | 구분 | 내용 |
 |------|------|
-| **Given** | asset.kind="VIDEO", videoInfo 존재 |
+| **Given** | asset.kind=IMAGE, asset.image 존재 |
 | **When** | AssetTypeInfo 렌더링 |
-| **Then** | 재생 시간, 코덱, 비트레이트 등 표시 |
+| **Then** | ImageDetailInfo 컴포넌트 렌더링 |
 
-### [TC-003] 문서 정보 표시
+### [TC-002] VIDEO 타입 렌더링
 
 **분류:** Happy Path
 
 | 구분 | 내용 |
 |------|------|
-| **Given** | asset.kind="DOCUMENT", documentInfo 존재 |
+| **Given** | asset.kind=VIDEO, asset.video 존재 |
 | **When** | AssetTypeInfo 렌더링 |
-| **Then** | 페이지 수, 텍스트 추출 버튼 표시 |
+| **Then** | VideoDetailInfo 컴포넌트 렌더링 |
 
-### [TC-004] 상세 정보 없음
+### [TC-003] DOCUMENT 타입 렌더링
+
+**분류:** Happy Path
+
+| 구분 | 내용 |
+|------|------|
+| **Given** | asset.kind=DOCUMENT, asset.document 존재 |
+| **When** | AssetTypeInfo 렌더링 |
+| **Then** | DocumentDetailInfo 컴포넌트 렌더링 |
+
+### [TC-004] IMAGE 데이터 없음
 
 **분류:** Edge Case
 
 | 구분 | 내용 |
 |------|------|
-| **Given** | asset.kind="IMAGE", imageInfo=null |
+| **Given** | asset.kind=IMAGE, asset.image=null |
 | **When** | AssetTypeInfo 렌더링 |
-| **Then** | "정보 없음" 메시지 표시 |
+| **Then** | 아무것도 렌더링하지 않음 |
+
+### [TC-005] VIDEO 데이터 없음
+
+**분류:** Edge Case
+
+| 구분 | 내용 |
+|------|------|
+| **Given** | asset.kind=VIDEO, asset.video=null |
+| **When** | AssetTypeInfo 렌더링 |
+| **Then** | 아무것도 렌더링하지 않음 |
+
+### [TC-006] DOCUMENT 데이터 없음
+
+**분류:** Edge Case
+
+| 구분 | 내용 |
+|------|------|
+| **Given** | asset.kind=DOCUMENT, asset.document=null |
+| **When** | AssetTypeInfo 렌더링 |
+| **Then** | 아무것도 렌더링하지 않음 |
 
 ## 상위 기획서
 
-- `apps/admin/src/app/(admin)/assets/[assetId]/page.spec.md`
+- `apps/admin/app/(admin)/assets/[assetId]/page.spec.md`
 
 ## 변경 이력
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
 | 2026-02-22 | 초기 생성 | req-widget-planner |
+| 2026-02-23 | 하위 Widget 컴포넌트(ImageDetailInfo, VideoDetailInfo, DocumentDetailInfo) 분리 | req-widget-planner |

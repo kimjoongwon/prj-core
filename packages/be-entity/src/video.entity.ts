@@ -67,6 +67,19 @@ export class Video extends AbstractEntity implements VideoEntity {
 	}
 
 	/**
+	 * 해상도 라벨을 반환합니다 (예: "1080p", "4K")
+	 */
+	getResolutionLabel(): string {
+		if (this.height >= 2160) return "4K";
+		if (this.height >= 1440) return "2K";
+		if (this.height >= 1080) return "1080p";
+		if (this.height >= 720) return "720p";
+		if (this.height >= 480) return "480p";
+		if (this.height >= 360) return "360p";
+		return `${this.height}p`;
+	}
+
+	/**
 	 * HD(720p) 이상인지 확인합니다
 	 */
 	isHD(): boolean {

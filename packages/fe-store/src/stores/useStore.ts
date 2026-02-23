@@ -56,3 +56,15 @@ export const useAuthStore = () => {
 	}
 	return store.authStore;
 };
+
+/**
+ * AssetStore를 가져오는 selector hook
+ * RootStore에서 assetStore만 선택하여 반환
+ */
+export const useAssetStore = () => {
+	const store = useStore();
+	if (!store.assetStore) {
+		throw new Error("assetStore가 초기화되지 않았습니다.");
+	}
+	return store.assetStore;
+};

@@ -36,6 +36,20 @@ export class Derivative extends AbstractEntity implements DerivativeEntity {
 	// ============================================================================
 
 	/**
+	 * 이미지 파일인지 확인합니다 (MIME 타입 기반)
+	 */
+	isImage(): boolean {
+		return this.mimeType.startsWith("image/");
+	}
+
+	/**
+	 * 비디오 파일인지 확인합니다 (MIME 타입 기반)
+	 */
+	isVideo(): boolean {
+		return this.mimeType.startsWith("video/");
+	}
+
+	/**
 	 * 썸네일인지 확인합니다
 	 */
 	isThumbnail(): boolean {
@@ -88,5 +102,31 @@ export class Derivative extends AbstractEntity implements DerivativeEntity {
 			return `${this.width}x${this.height}`;
 		}
 		return null;
+	}
+
+	/**
+	 * 해상도 라벨을 반환합니다 (SD, HD, Full HD, 4K 등)
+	 */
+	getResolutionLabel(): string | null {
+		if (this.width === null || this.height === null) {
+			return null;
+		}
+
+		const { width, height } = this;
+		const max = Math.max(width, height);
+		const min = Math.min(width, height);
+
+		// 4K 이상
+		if (max >= 3840) return "4K+";
+		// 4K (UHD)
+		if (max >= 2160) return "4K";
+		// Full HD
+		if (max >= 1920 || min >= 1080) return "Full HD";
+		// HD
+		if (max >= 1280 || min >= 720) return "HD";
+		// SD
+		if (max >= 640 || min >= 480) return "SD";
+		// 저해상도
+		return "Low";
 	}
 }

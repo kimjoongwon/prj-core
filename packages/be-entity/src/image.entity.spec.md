@@ -1,6 +1,7 @@
 # Image Entity 기획서
 
 > 생성일: 2026-02-22
+> 수정일: 2026-02-23
 > 타입: entity
 > 위치: packages/be-entity/src/image.entity.ts
 
@@ -12,20 +13,22 @@ Asset의 CTI(Class Table Inheritance) 서브타입으로, 이미지 타입 에�
 
 | 필드 | 타입 | 제약조건 | 기본값 | 설명 |
 |------|------|----------|--------|------|
-| assetId | UUID | PK, FK, required | - | 부모 Asset ID |
-| spaceId | UUID | FK, required | - | 소속 Space ID |
-| width | Int | required | - | 이미지 너비 (px) |
-| height | Int | required | - | 이미지 높이 (px) |
-| colorSpace | String | optional | - | 색상 공간 (sRGB, Adobe RGB 등) |
-| exif | Json | optional | - | EXIF 메타데이터 |
+| id | UUID | PK, required | uuid() | 고유 식별자 |
 | createdAt | DateTime | required | now() | 생성 일시 |
 | updatedAt | DateTime | required | now() | 수정 일시 |
+| removedAt | DateTime | nullable | null | 삭제 일시 |
+| assetId | UUID | unique, FK, required | - | 부모 Asset ID |
+| width | Int | required | - | 이미지 너비 (px) |
+| height | Int | required | - | 이미지 높이 (px) |
+| orientation | Int | nullable | null | 방향 (EXIF Orientation, 1-8) |
+| colorSpace | String | nullable | null | 색상 공간 (sRGB, Adobe RGB 등) |
+| hasAlpha | Boolean | required | false | 알파 채널 여부 |
 
 ## 관계
 
 | 관계 | 대상 Entity | 타입 | 설명 |
 |------|-------------|------|------|
-| belongsTo | Asset | 1:1 | 부모 Asset (onDelete: Cascade) |
+| asset | Asset | 1:1 | 부모 Asset (onDelete: Cascade) |
 
 ## 도메인 메서드
 
@@ -36,20 +39,20 @@ Asset의 CTI(Class Table Inheritance) 서브타입으로, 이미지 타입 에�
 | isPortrait() | boolean | 세로 방향 여부 |
 | getResolution() | string | 해상도 문자열 반환 (예: "1920x1080") |
 | getMegapixels() | number | 메가픽셀 수 반환 |
-| getExifField(field: string) | any | 특정 EXIF 필드 값 반환 |
 
 ## 비즈니스 규칙
 
 - Image 레코드는 부모 Asset의 kind가 IMAGE인 경우에만 존재
 - Asset 삭제 시 연결된 Image도 함께 삭제 (Cascade)
 - width, height는 0보다 커야 함
+- orientation은 1-8 사이의 EXIF 값
 
 ## 구현 체크리스트
 
-- [ ] image.entity.ts
-- [ ] AbstractEntity 상속
-- [ ] Prisma 타입 implements
-- [ ] index.ts export 추가
+- [x] image.entity.ts
+- [x] AbstractEntity 상속
+- [x] Prisma 타입 implements
+- [x] index.ts export 추가
 - [ ] 단위 테스트 (Jest)
 
 ## 테스트 케이스
@@ -61,7 +64,8 @@ Asset의 CTI(Class Table Inheritance) 서브타입으로, 이미지 타입 에�
 | 도메인 메서드 | Happy Path | Error Path | Edge Case | 합계 |
 |-------------|:----------:|:----------:|:---------:|:----:|
 | getAspectRatio() | 2 | 0 | 1 | 3 |
-| isLandscape/Portrait() | 2 | 0 | 0 | 2 |
+| isLandscape() | 1 | 0 | 0 | 1 |
+| isPortrait() | 1 | 0 | 0 | 1 |
 | getResolution() | 1 | 0 | 0 | 1 |
 | getMegapixels() | 1 | 0 | 0 | 1 |
 
@@ -85,7 +89,17 @@ Asset의 CTI(Class Table Inheritance) 서브타입으로, 이미지 타입 에�
 | **When** | getAspectRatio() 호출 |
 | **Then** | 0.56 (9:16) 반환 |
 
-### [TC-003] isLandscape() - 가로 방향
+### [TC-003] getAspectRatio() - height가 0인 경우
+
+**분류:** Edge Case
+
+| 구분 | 내용 |
+|------|------|
+| **Given** | height=0인 Image |
+| **When** | getAspectRatio() 호출 |
+| **Then** | 0 반환 |
+
+### [TC-004] isLandscape()
 
 **분류:** Happy Path
 
@@ -95,7 +109,7 @@ Asset의 CTI(Class Table Inheritance) 서브타입으로, 이미지 타입 에�
 | **When** | isLandscape() 호출 |
 | **Then** | true 반환 |
 
-### [TC-004] getMegapixels()
+### [TC-005] getMegapixels()
 
 **분류:** Happy Path
 
@@ -115,3 +129,4 @@ Asset의 CTI(Class Table Inheritance) 서브타입으로, 이미지 타입 에�
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
 | 2026-02-22 | 초기 생성 | orch-requirement |
+| 2026-02-23 | 필드 구조 실제 Prisma 스키마에 맞게 업데이트 | entity-builder |

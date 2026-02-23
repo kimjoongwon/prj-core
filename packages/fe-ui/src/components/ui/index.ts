@@ -5,3 +5,8 @@ export * from "./feedback";
 export * from "./layouts";
 export * from "./permission";
 export * from "./surfaces";
+
+// Upload 관련 UI 컴포넌트
+export * from "./DropZone";
+export * from "./FileIcon";
+export * from "./UploadQueueItem";

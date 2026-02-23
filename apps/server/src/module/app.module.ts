@@ -29,6 +29,7 @@ import { APP_GUARD, RouterModule } from "@nestjs/core";
 import { ThrottlerGuard } from "@nestjs/throttler";
 import { AbilitiesModule } from "./ability";
 import { ActionsModule } from "./action";
+import { AssetsModule } from "./assets";
 import { CategoriesModule } from "./category";
 // Global modules
 import { globalModules } from "./global.module";
@@ -66,6 +67,7 @@ import { UsersModule } from "./users";
 		TimelinesModule,
 		ExercisesModule,
 		RoutinesModule,
+		AssetsModule,
 		// Resource Modules는 필요할 때 추가합니다.
 		// 가이드: .claude/agents/be-controller-builder.md
 		RouterModule.register([
@@ -131,6 +133,10 @@ import { UsersModule } from "./users";
 								path: "routines",
 								module: RoutinesModule,
 							},
+							{
+								path: "assets",
+								module: AssetsModule,
+							},
 							// 새로운 Resource 라우트는 여기에 추가
 						],
 					},
@@ -147,11 +153,11 @@ import { UsersModule } from "./users";
 		SpacesService,
 		// Token (setNestApp의 JwtAuthGuard 의존)
 		TokenStorageService,
-		// Guards (setNestApp에서 순서대로 등록됨)
+		// Guards (setNestApp에서 순서대로 등록)
 		SpaceAccessGuard,
 		// Middleware (DI 주입 필요)
 		RequestContextMiddleware,
-		// Interceptors (setNestApp에서 순서대로 등록됨)
+		// Interceptors (setNestApp에서 순차적으로 등록)
 		SpaceScopeInterceptor,
 		DtoTransformInterceptor,
 		ResponseEntityInterceptor,

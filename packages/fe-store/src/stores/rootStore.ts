@@ -1,5 +1,6 @@
 import { makeAutoObservable } from "mobx";
 import { AbilityStore } from "./abilityStore";
+import { AssetStore } from "./assetStore";
 import { AuthStore } from "./authStore";
 import { BottomTabStore } from "./bottomTabStore";
 import { CookieStore } from "./cookieStore";
@@ -28,6 +29,9 @@ import { TokenStore } from "./tokenStore";
  * // v7.0 신규: 모바일 지원
  * rootStore.fabStore = new FABStore(FAB_CONFIG);
  * rootStore.bottomTabStore = new BottomTabStore(BOTTOM_TAB_CONFIG, { navigationStore: rootStore.navigationStore });
+ *
+ * // Asset 관리
+ * rootStore.assetStore = new AssetStore(rootStore);
  * ```
  *
  * Store Tree 구조 (앱에 따라 다름):
@@ -38,8 +42,10 @@ import { TokenStore } from "./tokenStore";
  * ├── cookieStore (CookieStore) - 쿠키 관리
  * ├── authStore (AuthStore) - 인증 상태 관리
  * ├── persistStore (PersistStore) - 영속 저장 관리
+ * ├── abilityStore (AbilityStore) - 권한 관리
  * ├── fabStore (FABStore) - v7.0: FAB 상태 관리
- * └── bottomTabStore (BottomTabStore) - v7.0: BottomTab 상태 관리
+ * ├── bottomTabStore (BottomTabStore) - v7.0: BottomTab 상태 관리
+ * └── assetStore (AssetStore) - 에셋 관리 UI 상태
  */
 export class RootStore {
 	name: string = "PROTOTYPE";
@@ -56,6 +62,8 @@ export class RootStore {
 	fabStore?: FABStore;
 	/** v7.0 신규: BottomTab 상태 관리 */
 	bottomTabStore?: BottomTabStore;
+	/** 에셋 관리 UI 상태 */
+	assetStore?: AssetStore;
 
 	constructor() {
 		makeAutoObservable(this);

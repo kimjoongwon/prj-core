@@ -236,6 +236,35 @@ packages/fe-ui/src/components/feature/[FeatureName]/index.spec.md
 - `parallel=auto`를 기본으로 사용하고 작업 단위(`targets`/`pages`)를 명시
 - 병렬 실행 후 join 단계에서 테스트/검증을 1회 수행
 - 공유 파일은 lock 후 단일 writer가 최종 머지
+- **테스트 에이전트 필수 실행 (Critical)**: 각 Stage 완료 전 반드시 해당 테스트 에이전트 호출
+
+### 6.1 테스트 에이전트 필수 호출 규칙 (Critical)
+
+**각 Stage에서 다음 테스트 에이전트들을 반드시 호출해야 합니다:**
+
+| Stage | 필수 테스트 에이전트 | 호출 시점 |
+|-------|---------------------|----------|
+| **2** | `req-test-planner` → `qa-be-testing` | fan-in 후, 사용자 리뷰 전 |
+| **3** | `req-test-planner` → `qa-be-testing` | fan-in 후, 사용자 리뷰 전 |
+| **5** | `req-test-planner` → `qa-fe-testing` | fan-in 후, 사용자 리뷰 전 |
+| **6** | `req-test-planner` → `qa-fe-testing` | fan-in 후, 사용자 리뷰 전 |
+| **7** | `qa-be-e2e-testing` → `qa-fe-e2e-testing` | 병렬 실행 |
+
+**실행 순서:**
+```
+Stage 2 예시:
+1. Fan-out: be-schema-builder, be-entity-builder, be-dto-builder (병렬)
+2. Fan-in: 공유 파일 머지
+3. 테스트: req-test-planner → qa-be-testing (순차)
+4. 테스트 결과:
+   - 통과 → 사용자 리뷰 요청
+   - 실패 → 자동 수정(1회) → 재실행 → 통과 시 리뷰 요청
+```
+
+**직접 Task 호출 시 주의사항:**
+- `orch-stage run stage=N`을 사용하지 않고 직접 Task로 에이전트를 호출할 경우
+- **반드시 마지막에 테스트 에이전트를 호출**해야 함
+- 누락 시 사용자 리뷰 전에 테스트 에이전트를 별도로 실행해야 함
 
 ### Don't
 

@@ -37,6 +37,7 @@
 |--------|------|------|
 | isRoot() | boolean | 루트 폴더 여부 확인 |
 | getDepth() | number | 폴더 깊이 계산 (path 기준) |
+| getBreadcrumbPath() | string[] | 경로 배열 반환 (브레드크럼용) |
 | updatePath(newParentPath: string) | void | 상위 폴더 변경 시 path 갱신 |
 | isDescendantOf(folderId: string) | boolean | 특정 폴더의 하위 폴더인지 확인 |
 | softDelete() | void | 소프트 삭제 수행 |
@@ -51,10 +52,10 @@
 
 ## 구현 체크리스트
 
-- [ ] folder.entity.ts
-- [ ] AbstractEntity 상속
-- [ ] Prisma 타입 implements
-- [ ] index.ts export 추가
+- [x] folder.entity.ts
+- [x] AbstractEntity 상속
+- [x] Prisma 타입 implements
+- [x] index.ts export 추가
 - [ ] 단위 테스트 (Jest)
 
 ## 테스트 케이스
@@ -67,6 +68,7 @@
 |-------------|:----------:|:----------:|:---------:|:----:|
 | isRoot() | 1 | 0 | 1 | 2 |
 | getDepth() | 2 | 0 | 0 | 2 |
+| getBreadcrumbPath() | 2 | 0 | 1 | 3 |
 | isDescendantOf() | 2 | 0 | 1 | 3 |
 
 ### [TC-001] isRoot() - 루트 폴더
@@ -109,7 +111,37 @@
 | **When** | getDepth() 호출 |
 | **Then** | 2 반환 |
 
-### [TC-005] isDescendantOf() - 직접 하위
+### [TC-005] getBreadcrumbPath() - 루트
+
+**분류:** Happy Path
+
+| 구분 | 내용 |
+|------|------|
+| **Given** | path가 "/"인 Folder |
+| **When** | getBreadcrumbPath() 호출 |
+| **Then** | [] 반환 |
+
+### [TC-006] getBreadcrumbPath() - 2단계 깊이
+
+**분류:** Happy Path
+
+| 구분 | 내용 |
+|------|------|
+| **Given** | path가 "/이미지/배너"인 Folder |
+| **When** | getBreadcrumbPath() 호출 |
+| **Then** | ["이미지", "배너"] 반환 |
+
+### [TC-007] getBreadcrumbPath() - 빈 경로 필터링
+
+**분류:** Edge Case
+
+| 구분 | 내용 |
+|------|------|
+| **Given** | path가 "//이미지"인 Folder (비정상 경로) |
+| **When** | getBreadcrumbPath() 호출 |
+| **Then** | ["이미지"] 반환 (빈 문자열 필터링) |
+
+### [TC-008] isDescendantOf() - 직접 하위
 
 **분류:** Happy Path
 
@@ -128,3 +160,4 @@
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
 | 2026-02-22 | 초기 생성 | orch-requirement |
+| 2026-02-23 | getBreadcrumbPath() 메서드 추가 | entity-builder |

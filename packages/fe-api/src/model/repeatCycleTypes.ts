@@ -15,8 +15,6 @@ export type RepeatCycleTypes = typeof RepeatCycleTypes[keyof typeof RepeatCycleT
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export const RepeatCycleTypes = {
-  DAILY: 'DAILY',
   WEEKLY: 'WEEKLY',
   MONTHLY: 'MONTHLY',
-  YEARLY: 'YEARLY',
 } as const;

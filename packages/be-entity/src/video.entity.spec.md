@@ -1,6 +1,7 @@
 # Video Entity 기획서
 
 > 생성일: 2026-02-22
+> 수정일: 2026-02-23
 > 타입: entity
 > 위치: packages/be-entity/src/video.entity.ts
 
@@ -12,23 +13,24 @@ Asset의 CTI(Class Table Inheritance) 서브타입으로, 비디오 타입 에�
 
 | 필드 | 타입 | 제약조건 | 기본값 | 설명 |
 |------|------|----------|--------|------|
-| assetId | UUID | PK, FK, required | - | 부모 Asset ID |
-| spaceId | UUID | FK, required | - | 소속 Space ID |
-| durationMs | Int | required | - | 재생 시간 (밀리초) |
-| width | Int | optional | - | 비디오 너비 (px) |
-| height | Int | optional | - | 비디오 높이 (px) |
-| frameRate | Decimal | optional | - | 프레임 레이트 (fps) |
-| codec | String | optional | - | 비디오 코덱 (H.264, H.265 등) |
-| bitRateKbps | Int | optional | - | 비트레이트 (kbps) |
-| hasAudio | Boolean | required | false | 오디오 포함 여부 |
+| id | UUID | PK, required | uuid() | 고유 식별자 |
 | createdAt | DateTime | required | now() | 생성 일시 |
 | updatedAt | DateTime | required | now() | 수정 일시 |
+| removedAt | DateTime | nullable | null | 삭제 일시 |
+| assetId | UUID | unique, FK, required | - | 부모 Asset ID |
+| width | Int | required | - | 비디오 너비 (px) |
+| height | Int | required | - | 비디오 높이 (px) |
+| durationMs | Int | required | - | 재생 시간 (밀리초) |
+| frameRate | Float | nullable | null | 프레임 레이트 (fps) |
+| codec | String | nullable | null | 비디오 코덱 (H.264, H.265 등) |
+| bitrate | Int | nullable | null | 비트레이트 (bps) |
+| hasAudio | Boolean | required | false | 오디오 포함 여부 |
 
 ## 관계
 
 | 관계 | 대상 Entity | 타입 | 설명 |
 |------|-------------|------|------|
-| belongsTo | Asset | 1:1 | 부모 Asset (onDelete: Cascade) |
+| asset | Asset | 1:1 | 부모 Asset (onDelete: Cascade) |
 
 ## 도메인 메서드
 
@@ -38,6 +40,7 @@ Asset의 CTI(Class Table Inheritance) 서브타입으로, 비디오 타입 에�
 | getDurationSeconds() | number | 재생 시간을 초 단위로 반환 |
 | getResolution() | string | 해상도 문자열 반환 (예: "1920x1080") |
 | getAspectRatio() | number | 가로세로 비율 반환 |
+| getResolutionLabel() | string | 해상도 라벨 반환 (예: "1080p", "4K") |
 | isHD() | boolean | HD(720p) 이상 여부 |
 | isFullHD() | boolean | Full HD(1080p) 여부 |
 | is4K() | boolean | 4K 여부 |
@@ -46,14 +49,15 @@ Asset의 CTI(Class Table Inheritance) 서브타입으로, 비디오 타입 에�
 
 - Video 레코드는 부모 Asset의 kind가 VIDEO인 경우에만 존재
 - Asset 삭제 시 연결된 Video도 함께 삭제 (Cascade)
-- durationMs는 0보다 커야 함
+- width, height는 0보다 커야 함
+- durationMs는 0 이상이어야 함
 
 ## 구현 체크리스트
 
-- [ ] video.entity.ts
-- [ ] AbstractEntity 상속
-- [ ] Prisma 타입 implements
-- [ ] index.ts export 추가
+- [x] video.entity.ts
+- [x] AbstractEntity 상속
+- [x] Prisma 타입 implements
+- [x] index.ts export 추가
 - [ ] 단위 테스트 (Jest)
 
 ## 테스트 케이스
@@ -66,7 +70,12 @@ Asset의 CTI(Class Table Inheritance) 서브타입으로, 비디오 타입 에�
 |-------------|:----------:|:----------:|:---------:|:----:|
 | getDurationFormatted() | 3 | 0 | 0 | 3 |
 | getDurationSeconds() | 1 | 0 | 0 | 1 |
-| isHD/isFullHD/is4K() | 3 | 0 | 0 | 3 |
+| getResolution() | 1 | 0 | 0 | 1 |
+| getAspectRatio() | 1 | 0 | 1 | 2 |
+| getResolutionLabel() | 6 | 0 | 1 | 7 |
+| isHD() | 1 | 0 | 0 | 1 |
+| isFullHD() | 1 | 0 | 0 | 1 |
+| is4K() | 1 | 0 | 0 | 1 |
 
 ### [TC-001] getDurationFormatted() - 1분 미만
 
@@ -98,7 +107,30 @@ Asset의 CTI(Class Table Inheritance) 서브타입으로, 비디오 타입 에�
 | **When** | getDurationFormatted() 호출 |
 | **Then** | "01:02:00" 반환 |
 
-### [TC-004] isFullHD()
+### [TC-004] getResolutionLabel() - 해상도별 라벨
+
+**분류:** Happy Path
+
+| height | 기대 결과 |
+|--------|----------|
+| 2160 | "4K" |
+| 1440 | "2K" |
+| 1080 | "1080p" |
+| 720 | "720p" |
+| 480 | "480p" |
+| 360 | "360p" |
+
+### [TC-005] getResolutionLabel() - 낮은 해상도
+
+**분류:** Edge Case
+
+| 구분 | 내용 |
+|------|------|
+| **Given** | height=240인 Video |
+| **When** | getResolutionLabel() 호출 |
+| **Then** | "240p" 반환 |
+
+### [TC-006] isFullHD()
 
 **분류:** Happy Path
 
@@ -118,3 +150,5 @@ Asset의 CTI(Class Table Inheritance) 서브타입으로, 비디오 타입 에�
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
 | 2026-02-22 | 초기 생성 | orch-requirement |
+| 2026-02-23 | 필드 구조 실제 Prisma 스키마에 맞게 업데이트 | entity-builder |
+| 2026-02-23 | getResolutionLabel() 메서드 추가 | entity-builder |

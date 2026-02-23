@@ -28,6 +28,31 @@ export class Document extends AbstractEntity implements DocumentEntity {
 	// ============================================================================
 
 	/**
+	 * 메타데이터가 존재하는지 확인합니다
+	 */
+	hasMetadata(): boolean {
+		return (
+			this.author !== null ||
+			this.title !== null ||
+			this.subject !== null ||
+			this.keywords !== null ||
+			this.pageCount !== null ||
+			this.wordCount !== null
+		);
+	}
+
+	/**
+	 * 키워드를 배열로 반환합니다 (쉼표로 구분된 문자열을 분리)
+	 */
+	getKeywordsArray(): string[] {
+		if (!this.keywords) return [];
+		return this.keywords
+			.split(",")
+			.map((keyword) => keyword.trim())
+			.filter((keyword) => keyword.length > 0);
+	}
+
+	/**
 	 * 문서 유형에 따른 콘텐츠 수를 반환합니다
 	 */
 	getContentCount(): number | null {

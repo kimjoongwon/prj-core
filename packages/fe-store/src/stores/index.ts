@@ -1,4 +1,5 @@
 export * from "./abilityStore";
+export * from "./assetStore";
 export * from "./authStore";
 export * from "./bottomTabStore";
 export * from "./cookieStore";

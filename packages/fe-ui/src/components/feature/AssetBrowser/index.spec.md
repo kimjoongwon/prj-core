@@ -1,50 +1,40 @@
 # AssetBrowser Feature 기획서
 
 > 생성일: 2026-02-22
-> 수정일: 2026-02-22
+> 수정일: 2026-02-23
 > 타입: feature
 > 위치: packages/fe-ui/src/components/feature/AssetBrowser/
 
 ## 역할
 
-에셋 브라우저 메인 컴포넌트입니다. 폴더 트리와 에셋 그리드/리스트를 조합하고 AssetStore와 연결합니다.
+에셋 목록을 그리드 또는 리스트 형태로 표시하는 Feature 컴포넌트입니다. AssetStore와 연결하여 뷰 모드, 선택 상태를 관리하며 무한 스크롤을 지원합니다.
 
 ## 디자인 목업
 
 ```
+[그리드 뷰]
 ┌─────────────────────────────────────────────────────────────────────────────┐
-│ 에셋                                    [📤 업로드] [📁 폴더 생성]           │
-│ 미디어 리소스를 관리합니다.                                                  │
-├─────────────────────────────────────────────────────────────────────────────┤
-│ ┌──────────────────┐ ┌─────────────────────────────────────────────────────┐│
-│ │ 📁 폴더          │ │ 🔍 검색...                    [전체▼] [그리드|리스트] ││
-│ │                  │ ├─────────────────────────────────────────────────────┤│
-│ │ 📂 루트          │ │ ┌───────┐ ┌───────┐ ┌───────┐ ┌───────┐ ┌───────┐  ││
-│ │   📂 이미지      │ │ │ [IMG] │ │ [IMG] │ │ [VID] │ │ [DOC] │ │ [IMG] │  ││
-│ │   📂 비디오      │ │ │ image │ │ photo │ │ video │ │ doc   │ │ logo  │  ││
-│ │   📂 문서        │ │ │ .jpg  │ │ .png  │ │ .mp4  │ │ .pdf  │ │ .svg  │  ││
-│ │   📂 보관함      │ │ └───────┘ └───────┘ └───────┘ └───────┘ └───────┘  ││
-│ │                  │ │                                                     ││
-│ │                  │ │ ┌───────┐ ┌───────┐ ┌───────┐ ┌───────┐ ┌───────┐  ││
-│ │                  │ │ │ [IMG] │ │ [IMG] │ │ [VID] │ │ [DOC] │ │ [IMG] │  ││
-│ │                  │ │ │ banner│ │ icon  │ │ promo │ │ guide │ │ hero  │  ││
-│ │                  │ │ │ .webp │ │ .png  │ │ .mov  │ │ .xlsx │ │ .jpg  │  ││
-│ │                  │ │ └───────┘ └───────┘ └───────┘ └───────┘ └───────┘  ││
-│ │                  │ │                                                     ││
-│ │                  │ │                    < 1  2  3  >                     ││
-│ └──────────────────┘ └─────────────────────────────────────────────────────┘│
+│ ┌───────┐ ┌───────┐ ┌───────┐ ┌───────┐ ┌───────┐ ┌───────┐               │
+│ │ [IMG] │ │ [IMG] │ │ [VID] │ │ [DOC] │ │ [IMG] │ │ [IMG] │               │
+│ │ image │ │ photo │ │ video │ │ doc   │ │ logo  │ │ banner│               │
+│ │ .jpg  │ │ .png  │ │ .mp4  │ │ .pdf  │ │ .svg  │ │ .webp │               │
+│ └───────┘ └───────┘ └───────┘ └───────┘ └───────┘ └───────┘               │
+│                                                                             │
+│ ┌───────┐ ┌───────┐ ┌───────┐ ┌───────┐ ┌───────┐ ┌───────┐               │
+│ │ [IMG] │ │ [IMG] │ │ [VID] │ │ [DOC] │ │ [IMG] │ │ [IMG] │               │
+│ │ icon  │ │ hero  │ │ promo │ │ guide │ │ thumb │ │ avatar│               │
+│ │ .png  │ │ .jpg  │ │ .mov  │ │ .xlsx │ │ .gif  │ │ .jpeg │               │
+│ └───────┘ └───────┘ └───────┘ └───────┘ └───────┘ └───────┘               │
 └─────────────────────────────────────────────────────────────────────────────┘
 
 [리스트 뷰]
 ┌─────────────────────────────────────────────────────────────────────────────┐
-│ ...                                                                          │
-│ ┌──────────────────┐ ┌─────────────────────────────────────────────────────┐│
-│ │ 📁 폴더          │ │ ☐ │ 미리보기 │ 파일명      │ 타입 │ 크기   │ 날짜   ││
-│ │    ...           │ ├─────────────────────────────────────────────────────┤│
-│ │                  │ │ ☐ │ [IMG]    │ banner.jpg  │ IMG  │ 2.4 MB │ 02.22 ││
-│ │                  │ │ ☐ │ [IMG]    │ photo.png   │ IMG  │ 1.2 MB │ 02.21 ││
-│ │                  │ │ ☐ │ [VID]    │ promo.mp4   │ VID  │ 45 MB  │ 02.20 ││
-│ └──────────────────┘ └─────────────────────────────────────────────────────┘│
+│ ☐ │ 미리보기 │ 파일명        │ 타입  │ 크기     │ 날짜                      │
+├─────────────────────────────────────────────────────────────────────────────┤
+│ ☐ │ [IMG]    │ banner.jpg    │ IMG   │ 2.4 MB   │ 2026.02.22               │
+│ ☐ │ [IMG]    │ photo.png     │ IMG   │ 1.2 MB   │ 2026.02.21               │
+│ ☐ │ [VID]    │ promo.mp4     │ VID   │ 45 MB    │ 2026.02.20               │
+│ ✓ │ [DOC]    │ guide.pdf     │ DOC   │ 3.5 MB   │ 2026.02.19               │
 └─────────────────────────────────────────────────────────────────────────────┘
 ```
 
@@ -52,42 +42,34 @@
 
 | 상태 | 설명 | 시각적 변화 |
 |------|------|-------------|
-| `loading` | 초기 로딩 | Skeleton |
-| `empty` | 폴더에 에셋 없음 | EmptyState |
+| `loading` | 초기 로딩 | Spinner + "로딩 중..." |
+| `empty` | 폴더에 에셋 없음 | EmptyState (아이콘 + 메시지) |
 | `hasData` | 에셋 존재 | AssetGrid/AssetList |
-| `grid` | 그리드 뷰 | AssetGrid 사용 |
-| `list` | 리스트 뷰 | AssetList 사용 |
+| `grid` | 그리드 뷰 | 6열 그리드 |
+| `list` | 리스트 뷰 | 테이블 형태 |
+| `selected` | 선택됨 | primary border + check 표시 |
 
 ## 의존성
 
 | 타입 | 대상 | 용도 |
 |------|------|------|
-| Store | AssetStore | 에셋 상태 관리 |
-| Widget | FolderTree | 폴더 트리 |
-| Widget | AssetGrid | 그리드 뷰 |
-| Widget | AssetList | 리스트 뷰 |
-| Feature | AssetUploader | 업로드 |
-| UI | SearchInput | 검색 |
-| UI | Button | 액션 버튼 |
+| Store | AssetStore | 뷰 모드, 선택 상태 |
+| UI | VStack, HStack | 레이아웃 |
+| UI | Spinner | 로딩 표시 |
+| Icon | lucide-react | 파일 타입 아이콘 |
 
 ## Props
 
 ```typescript
 interface AssetBrowserProps {
   initialFolderId?: string | null;             // 초기 폴더 ID
-  mode?: "manage" | "picker";                  // 모드 (관리/선택)
-  selectionMode?: "single" | "multiple";       // 선택 모드 (picker 모드)
-  allowedTypes?: AssetKind[];                  // 허용 타입 (picker 모드)
-  showFolderTree?: boolean;                    // 폴더 트리 표시
-  showSearch?: boolean;                        // 검색창 표시
-  showTypeFilter?: boolean;                    // 타입 필터 표시
-  showViewToggle?: boolean;                    // 뷰 토글 표시
-  showUploadButton?: boolean;                  // 업로드 버튼 표시
-  showFolderCreateButton?: boolean;            // 폴더 생성 버튼 표시
-  onAssetSelect?: (assets: Asset[]) => void;   // 에셋 선택 핸들러 (picker)
-  onAssetClick?: (asset: Asset) => void;       // 에셋 클릭 핸들러
-  onFolderChange?: (folder: Folder) => void;   // 폴더 변경 핸들러
+  assets?: Asset[];                            // 에셋 목록 데이터 (외부 주입)
+  isLoading?: boolean;                         // 로딩 상태
+  pickerMode?: boolean;                        // Picker 모드 여부
   className?: string;                          // 추가 클래스
+  onAssetClick?: (asset: Asset) => void;       // 에셋 클릭 핸들러
+  onAssetSelect?: (assets: Asset[]) => void;   // 에셋 선택 핸들러 (Picker)
+  onLoadMore?: () => void;                     // 더 많은 데이터 로드
 }
 ```
 
@@ -96,16 +78,9 @@ interface AssetBrowserProps {
 | Store | 속성/메서드 | 사용 방식 |
 |-------|------------|----------|
 | AssetStore | currentFolderId | 현재 폴더 |
-| AssetStore | searchKeyword | 검색어 |
-| AssetStore | selectedKind | 타입 필터 |
 | AssetStore | viewMode | 뷰 모드 |
 | AssetStore | selectedAssetIds | 선택된 에셋 |
-| AssetStore | pickerMode | Picker 모드 |
-| AssetStore | selectionMode | 선택 모드 |
-| AssetStore | setCurrentFolder() | 폴더 변경 |
-| AssetStore | setSearchKeyword() | 검색 |
-| AssetStore | setSelectedKind() | 타입 필터 |
-| AssetStore | toggleViewMode() | 뷰 토글 |
+| AssetStore | setCurrentFolder() | 폴더 설정 |
 | AssetStore | toggleAssetSelection() | 선택 토글 |
 
 ## 이벤트
@@ -113,44 +88,67 @@ interface AssetBrowserProps {
 | 이벤트 | 발생 조건 | 부모 전달 |
 |--------|----------|----------|
 | `onAssetClick` | 에셋 카드/행 클릭 | O (asset) |
-| `onAssetSelect` | Picker 모드에서 선택 완료 | O (assets) |
-| `onFolderChange` | 폴더 선택 변경 | O (folder) |
-| `search` | 검색어 입력 | X |
-| `viewToggle` | 뷰 모드 변경 | X |
+| `onAssetSelect` | Picker 모드에서 선택 변경 | O (assets) |
+| `onLoadMore` | 스크롤 끝 도달 | O |
 
 ## 하위 컴포넌트
 
 | 컴포넌트 | 타입 | 기획서 |
 |----------|------|--------|
-| FolderTree | widget | `widget/FolderTree` |
-| AssetGrid | widget | `widget/AssetGrid` |
-| AssetList | widget | `widget/AssetList` |
-| AssetUploader | feature | `feature/AssetUploader` |
-| SearchFilterBar | widget | `widget/SearchFilterBar` |
-| TypeFilter | input | `inputs/TypeFilter` |
-| ViewToggle | ui | `ui/ViewToggle` |
+| Spinner | ui | HeroUI |
+| VStack, HStack | ui | `ui/surfaces` |
+
+## 기능
+
+### 무한 스크롤
+
+- 페이지당 20개 에셋 표시
+- 스크롤 끝에서 100px 남았을 때 다음 페이지 로드
+- `onLoadMore` 콜백 호출
+
+### 파일 타입별 아이콘
+
+| Kind | 아이콘 | 색상 |
+|------|--------|------|
+| IMAGE | Image | blue-500 |
+| VIDEO | FileVideo | purple-500 |
+| DOCUMENT | FileText | orange-500 |
+| OTHER | File | gray-500 |
+
+### 썸네일 표시
+
+- metadata.thumbnailUrl 있으면 사용
+- IMAGE 타입이면 `/api/assets/{id}/file` 사용
+- 없으면 타입별 아이콘 표시
 
 ## 레이아웃 구조
 
 ```
-┌─────────────────────────────────────────────────────────────────┐
-│ [Header: Title, Description, Actions]                           │
-├───────────────────┬─────────────────────────────────────────────┤
-│                   │ [Toolbar: Search, Filter, ViewToggle]       │
-│ [FolderTree]      ├─────────────────────────────────────────────┤
-│ 240px             │ [AssetGrid or AssetList]                    │
-│                   │                                             │
-│                   │ [Pagination]                                │
-└───────────────────┴─────────────────────────────────────────────┘
+┌─────────────────────────────────────────────┐
+│ [Grid/List View]                           │
+│ ┌─────┐ ┌─────┐ ┌─────┐ ┌─────┐ ┌─────┐   │
+│ │     │ │     │ │     │ │     │ │     │   │
+│ │ ... │ │ ... │ │ ... │ │ ... │ │ ... │   │
+│ │     │ │     │ │     │ │     │ │     │   │
+│ └─────┘ └─────┘ └─────┘ └─────┘ └─────┘   │
+│                                            │
+│ [Loading Spinner] (조건부)                 │
+└─────────────────────────────────────────────┘
 ```
 
 ## 구현 체크리스트
 
-- [ ] index.tsx
-- [ ] observer 적용
-- [ ] AssetStore 주입
-- [ ] Props 타입 정의
-- [ ] 컴포넌트 테스트 (Vitest)
+- [x] AssetBrowser.tsx
+- [x] observer 적용
+- [x] AssetStore 연결
+- [x] Props 타입 정의
+- [x] index.ts export
+- [x] 그리드 뷰 구현
+- [x] 리스트 뷰 구현
+- [x] 무한 스크롤 구현
+- [x] 파일 크기 포맷팅
+- [x] 날짜 포맷팅
+- [x] 썸네일 표시
 
 ## 테스트 케이스
 
@@ -161,11 +159,11 @@ interface AssetBrowserProps {
 | 기능 | Happy Path | Error Path | Edge Case | 합계 |
 |------|:----------:|:----------:|:---------:|:----:|
 | 초기 렌더링 | 1 | 0 | 0 | 1 |
-| 폴더 변경 | 1 | 0 | 0 | 1 |
-| 뷰 토글 | 1 | 0 | 0 | 1 |
-| 검색 | 1 | 0 | 0 | 1 |
-| 타입 필터 | 1 | 0 | 0 | 1 |
-| 에셋 클릭 | 1 | 0 | 0 | 1 |
+| 그리드 뷰 | 1 | 0 | 0 | 1 |
+| 리스트 뷰 | 1 | 0 | 0 | 1 |
+| 에셋 선택 | 1 | 0 | 0 | 1 |
+| 무한 스크롤 | 1 | 0 | 1 | 2 |
+| 빈 상태 | 1 | 0 | 0 | 1 |
 
 ### [TC-001] 초기 렌더링
 
@@ -173,46 +171,58 @@ interface AssetBrowserProps {
 
 | 구분 | 내용 |
 |------|------|
-| **Given** | AssetBrowser 진입 |
-| **When** | 컴포넌트 렌더링 |
-| **Then** | FolderTree + AssetGrid 표시 |
+| **Given** | assets 목록 제공 |
+| **When** | AssetBrowser 렌더링 |
+| **Then** | 그리드 형태로 에셋 목록 표시 |
 
-### [TC-002] 폴더 변경
-
-**분류:** Happy Path
-
-| 구분 | 내용 |
-|------|------|
-| **Given** | AssetBrowser 렌더링됨 |
-| **When** | FolderTree에서 폴더 선택 |
-| **Then** | setCurrentFolder() 호출, 해당 폴더 에셋 표시 |
-
-### [TC-003] 뷰 토글
+### [TC-002] 뷰 모드 전환
 
 **분류:** Happy Path
 
 | 구분 | 내용 |
 |------|------|
 | **Given** | viewMode="grid" |
-| **When** | 뷰 토글 버튼 클릭 |
-| **Then** | toggleViewMode() 호출, AssetList로 전환 |
+| **When** | Store에서 viewMode="list"로 변경 |
+| **Then** | 리스트 형태로 전환 |
 
-### [TC-004] 검색
+### [TC-003] 에셋 선택
 
 **분류:** Happy Path
 
 | 구분 | 내용 |
 |------|------|
-| **Given** | AssetBrowser 렌더링됨 |
-| **When** | 검색어 입력 |
-| **Then** | setSearchKeyword() 호출, 검색 결과 표시 |
+| **Given** | pickerMode=true |
+| **When** | 에셋 클릭 |
+| **Then** | toggleAssetSelection() 호출 |
+
+### [TC-004] 무한 스크롤
+
+**분류:** Happy Path
+
+| 구분 | 내용 |
+|------|------|
+| **Given** | 100개 이상의 에셋 |
+| **When** | 스크롤 끝 도달 |
+| **Then** | onLoadMore 콜백 호출 |
+
+### [TC-005] 빈 상태
+
+**분류:** Happy Path
+
+| 구분 | 내용 |
+|------|------|
+| **Given** | assets=[] |
+| **When** | 렌더링 |
+| **Then** | EmptyState 표시 |
 
 ## 상위 기획서
 
 - `apps/admin/src/app/(admin)/assets/page.spec.md`
+- `feature/AssetManager`
 
 ## 변경 이력
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
 | 2026-02-22 | 초기 생성 | req-feature-planner |
+| 2026-02-23 | 구현 완료, 체크리스트 업데이트 | fe-feature-builder |

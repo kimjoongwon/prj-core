@@ -44,6 +44,15 @@ export class Folder extends AbstractEntity implements FolderEntity {
 	}
 
 	/**
+	 * 경로 배열을 반환합니다 (브레드크럼용)
+	 * 예: "/이미지/배너" -> ["이미지", "배너"]
+	 */
+	getBreadcrumbPath(): string[] {
+		if (this.path === "/") return [];
+		return this.path.split("/").filter(Boolean);
+	}
+
+	/**
 	 * 특정 폴더의 하위 폴더인지 확인합니다
 	 */
 	isDescendantOf(folderId: string): boolean {

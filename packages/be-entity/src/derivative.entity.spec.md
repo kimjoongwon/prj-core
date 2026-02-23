@@ -1,6 +1,7 @@
 # Derivative Entity 기획서
 
 > 생성일: 2026-02-22
+> 수정일: 2026-02-23
 > 타입: entity
 > 위치: packages/be-entity/src/derivative.entity.ts
 
@@ -49,11 +50,15 @@
 
 | 메서드 | 반환 | 설명 |
 |--------|------|------|
+| isImage() | boolean | 이미지 파일인지 확인 (MIME 타입 기반) |
+| isVideo() | boolean | 비디오 파일인지 확인 (MIME 타입 기반) |
 | isThumbnail() | boolean | 썸네일 여부 확인 |
 | isPreview() | boolean | 프리뷰 여부 확인 |
 | isTranscode() | boolean | 트랜스코딩 여부 확인 |
 | isText() | boolean | 텍스트 추출물 여부 확인 |
 | getHumanReadableSize() | string | 사람이 읽기 쉬운 크기 반환 |
+| getResolution() | string \| null | 해상도 문자열 반환 (예: "1920x1080") |
+| getResolutionLabel() | string \| null | 해상도 라벨 반환 (SD, HD, Full HD, 4K 등) |
 
 ## 비즈니스 규칙
 
@@ -64,10 +69,10 @@
 
 ## 구현 체크리스트
 
-- [ ] derivative.entity.ts
-- [ ] AbstractEntity 상속
-- [ ] Prisma 타입 implements
-- [ ] index.ts export 추가
+- [x] derivative.entity.ts
+- [x] AbstractEntity 상속
+- [x] Prisma 타입 implements
+- [x] index.ts export 추가
 - [ ] 단위 테스트 (Jest)
 
 ## 테스트 케이스
@@ -78,20 +83,34 @@
 
 | 도메인 메서드 | Happy Path | Error Path | Edge Case | 합계 |
 |-------------|:----------:|:----------:|:---------:|:----:|
+| isImage() | 1 | 0 | 1 | 2 |
+| isVideo() | 1 | 0 | 1 | 2 |
 | isThumbnail/Preview/Transcode/Text() | 4 | 0 | 0 | 4 |
 | getHumanReadableSize() | 2 | 0 | 0 | 2 |
+| getResolution() | 1 | 0 | 1 | 2 |
+| getResolutionLabel() | 5 | 0 | 2 | 7 |
 
-### [TC-001] isThumbnail()
+### [TC-001] isImage()
 
 **분류:** Happy Path
 
 | 구분 | 내용 |
 |------|------|
-| **Given** | kind=THUMBNAIL인 Derivative |
-| **When** | isThumbnail() 호출 |
+| **Given** | mimeType="image/jpeg"인 Derivative |
+| **When** | isImage() 호출 |
 | **Then** | true 반환 |
 
-### [TC-002] getHumanReadableSize()
+### [TC-002] isVideo()
+
+**분류:** Happy Path
+
+| 구분 | 내용 |
+|------|------|
+| **Given** | mimeType="video/mp4"인 Derivative |
+| **When** | isVideo() 호출 |
+| **Then** | true 반환 |
+
+### [TC-003] getHumanReadableSize()
 
 **분류:** Happy Path
 
@@ -100,6 +119,36 @@
 | **Given** | sizeBytes=51200인 Derivative |
 | **When** | getHumanReadableSize() 호출 |
 | **Then** | "50 KB" 반환 |
+
+### [TC-004] getResolutionLabel() - 4K
+
+**분류:** Happy Path
+
+| 구분 | 내용 |
+|------|------|
+| **Given** | width=3840, height=2160인 Derivative |
+| **When** | getResolutionLabel() 호출 |
+| **Then** | "4K" 반환 |
+
+### [TC-005] getResolutionLabel() - Full HD
+
+**분류:** Happy Path
+
+| 구분 | 내용 |
+|------|------|
+| **Given** | width=1920, height=1080인 Derivative |
+| **When** | getResolutionLabel() 호출 |
+| **Then** | "Full HD" 반환 |
+
+### [TC-006] getResolutionLabel() - null
+
+**분류:** Edge Case
+
+| 구분 | 내용 |
+|------|------|
+| **Given** | width=null, height=null인 Derivative |
+| **When** | getResolutionLabel() 호출 |
+| **Then** | null 반환 |
 
 ## 상위 기획서
 
@@ -111,3 +160,4 @@
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
 | 2026-02-22 | 초기 생성 | orch-requirement |
+| 2026-02-23 | isImage, isVideo, getResolution, getResolutionLabel 메서드 추가 | entity-builder |

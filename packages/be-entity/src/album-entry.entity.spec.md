@@ -1,6 +1,7 @@
 # AlbumEntry Entity 기획서
 
 > 생성일: 2026-02-22
+> 수정일: 2026-02-23
 > 타입: entity
 > 위치: packages/be-entity/src/album-entry.entity.ts
 
@@ -34,9 +35,7 @@
 
 | 메서드 | 반환 | 설명 |
 |--------|------|------|
-| updateCaption(caption: string) | void | 캡션 업데이트 |
-| updatePosition(position: number) | void | 순서 변경 |
-| softDelete() | void | 소프트 삭제 수행 |
+| hasCaption() | boolean | 캡션이 있는지 확인 (null 및 빈 문자열 제외) |
 
 ## 비즈니스 규칙
 
@@ -47,10 +46,10 @@
 
 ## 구현 체크리스트
 
-- [ ] album-entry.entity.ts
-- [ ] AbstractEntity 상속
-- [ ] Prisma 타입 implements
-- [ ] index.ts export 추가
+- [x] album-entry.entity.ts
+- [x] AbstractEntity 상속
+- [x] Prisma 타입 implements
+- [x] index.ts export 추가
 - [ ] 단위 테스트 (Jest)
 
 ## 테스트 케이스
@@ -61,28 +60,37 @@
 
 | 도메인 메서드 | Happy Path | Error Path | Edge Case | 합계 |
 |-------------|:----------:|:----------:|:---------:|:----:|
-| updateCaption() | 1 | 0 | 1 | 2 |
-| updatePosition() | 1 | 0 | 0 | 1 |
+| hasCaption() | 1 | 0 | 2 | 3 |
 
-### [TC-001] updateCaption()
+### [TC-001] hasCaption() - 캡션 있음
 
 **분류:** Happy Path
 
 | 구분 | 내용 |
 |------|------|
-| **Given** | caption이 null인 AlbumEntry |
-| **When** | updateCaption("새 캡션") 호출 |
-| **Then** | caption이 "새 캡션"으로 설정됨 |
+| **Given** | caption="여행 사진"인 AlbumEntry |
+| **When** | hasCaption() 호출 |
+| **Then** | true 반환 |
 
-### [TC-002] updateCaption() - 빈 문자열
+### [TC-002] hasCaption() - null
 
 **분류:** Edge Case
 
 | 구분 | 내용 |
 |------|------|
-| **Given** | caption이 있는 AlbumEntry |
-| **When** | updateCaption("") 호출 |
-| **Then** | caption이 빈 문자열로 설정됨 |
+| **Given** | caption=null인 AlbumEntry |
+| **When** | hasCaption() 호출 |
+| **Then** | false 반환 |
+
+### [TC-003] hasCaption() - 빈 문자열
+
+**분류:** Edge Case
+
+| 구분 | 내용 |
+|------|------|
+| **Given** | caption=""인 AlbumEntry |
+| **When** | hasCaption() 호출 |
+| **Then** | false 반환 |
 
 ## 상위 기획서
 
@@ -94,3 +102,4 @@
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
 | 2026-02-22 | 초기 생성 | orch-requirement |
+| 2026-02-23 | hasCaption 메서드로 변경 (updateCaption, updatePosition, softDelete 제거) | entity-builder |

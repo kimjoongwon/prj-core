@@ -40,20 +40,28 @@
 | setSearchKeyword | keyword: string | 검색어 설정 |
 | setSelectedKind | kind: AssetKind \| null | 타입 필터 설정 |
 | toggleViewMode | - | 그리드/리스트 뷰 토글 |
+| setViewMode | mode: "grid" \| "list" | 뷰 모드 설정 |
 | selectAsset | assetId: string | 에셋 선택 (Picker 모드) |
 | deselectAsset | assetId: string | 에셋 선택 해제 |
 | toggleAssetSelection | assetId: string | 에셋 선택 토글 |
+| selectAllAssets | assetIds: string[] | 전체 선택 |
 | clearSelection | - | 선택 초기화 |
 | enterPickerMode | config: PickerConfig | Picker 모드 진입 |
 | exitPickerMode | - | Picker 모드 종료 |
+| confirmSelection | - | 선택 완료 (Picker에서 호출) |
+| cancelPicker | - | Picker 취소 |
 | setUploading | isUploading: boolean, progress?: number | 업로드 상태 설정 |
+| updateUploadProgress | progress: number | 업로드 진행률 업데이트 |
+| getSelectedAssetIds | - | 선택된 에셋 ID 목록 반환 |
 
 ## 비동기 액션 (Flow)
 
+> **주의**: Store는 상태만 관리하며 API 호출은 외부(Service Layer)에서 수행합니다.
+
 | 메서드 | 파라미터 | API 호출 | 성공 시 동작 |
 |--------|----------|----------|--------------|
-| deleteSelectedAssets | - | DELETE /api/v1/assets/{id} | 선택된 에셋 삭제, 캐시 무효화 |
-| moveAsset | assetId, targetFolderId | PATCH /api/v1/assets/{id} | 에셋 폴더 이동 |
+| deleteSelectedAssets | - | DELETE /api/v1/assets/{id} | 외부에서 호출 후 clearSelection() |
+| moveAsset | assetId, targetFolderId | PATCH /api/v1/assets/{id} | 외부에서 호출 |
 
 ## 의존 Store
 
@@ -68,8 +76,8 @@ interface PickerConfig {
   selectionMode: "single" | "multiple";
   allowedTypes?: AssetKind[];
   initialSelection?: string[];
-  onSelect: (assets: Asset[]) => void;
-  onClose: () => void;
+  onSelect?: (assetIds: string[]) => void;
+  onClose?: () => void;
 }
 ```
 
@@ -81,9 +89,10 @@ interface PickerConfig {
 
 ## 구현 체크리스트
 
-- [ ] assetStore.ts
-- [ ] RootStore에 등록
-- [ ] 타입 정의
+- [x] assetStore.ts
+- [x] RootStore에 등록
+- [x] useStore hook 추가 (useAssetStore)
+- [x] index.ts export 추가
 - [ ] 단위 테스트 (Vitest)
 
 ## 테스트 케이스
@@ -170,3 +179,4 @@ interface PickerConfig {
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
 | 2026-02-22 | 초기 생성 | orch-requirement |
+| 2026-02-23 | 구현 완료 - assetStore.ts, RootStore 등록, useAssetStore hook 추가 | fe-store-builder |
