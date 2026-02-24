@@ -14,12 +14,12 @@ import {
 	NotFoundException,
 } from "@nestjs/common";
 import { Transactional } from "@nestjs-cls/transactional";
-import { RedisService } from "./redis.service";
+import { RedisService } from "../redis/redis.service";
 import type {
 	CreateTranslationInput,
 	UpdateTranslationInput,
 	UpsertTranslationInput,
-} from "./input";
+} from "./input/index";
 
 
 /**

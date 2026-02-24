@@ -2,7 +2,7 @@ import { Space } from "@cocrepo/entity";
 import type { Prisma } from "@cocrepo/prisma";
 import { SpacesRepository } from "@cocrepo/repository";
 import { Injectable, Logger } from "@nestjs/common";
-import type { CreateSpaceInput } from "./input";
+import type { CreateSpaceInput } from "./input/index";
 
 @Injectable()
 export class SpacesService {

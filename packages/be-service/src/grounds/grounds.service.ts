@@ -8,7 +8,7 @@ import {
 	NotFoundException,
 } from "@nestjs/common";
 import { Transactional } from "@nestjs-cls/transactional";
-import { SpacesService } from "./spaces.service";
+import { SpacesService } from "../spaces/spaces.service";
 
 @Injectable()
 export class GroundsService {

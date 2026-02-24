@@ -8,7 +8,7 @@ import {
 } from "@nestjs/swagger";
 import cookieParser from "cookie-parser";
 import { Logger } from "nestjs-pino";
-import { AppModule } from "./module/app.module";
+import { AppModule } from "./modules/app.module";
 import { setNestApp } from "./setNestApp";
 
 /**

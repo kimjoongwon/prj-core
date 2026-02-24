@@ -2,7 +2,7 @@ import * as crypto from "node:crypto";
 import { AuthConfig } from "@cocrepo/type";
 import { Injectable, Logger } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
-import { RedisService } from "./redis.service";
+import { RedisService } from "../redis/redis.service";
 
 /**
  * Redis Key 접두사

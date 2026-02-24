@@ -274,7 +274,36 @@ export class OrdersService {
 ### 파일 위치
 
 ```
-packages/be-service/src/{entity}.service.ts
+packages/be-service/src/{entity}/
+├── {entity}.service.ts      # Service 클래스
+├── {entity}.service.spec.md # 기획서 (선택)
+└── input/                   # Input 타입 (선택)
+    ├── index.ts             # re-export
+    ├── create-{entity}.input.ts
+    └── update-{entity}.input.ts
+```
+
+#### Input 타입 규칙
+
+- Service 내부에서 사용하는 생성/수정용 파라미터 타입
+- 각 Input 타입은 별도 파일로 분리
+- `input/index.ts`에서 re-export
+- 루트 `index.ts`에서도 type export
+
+```typescript
+// input/create-user.input.ts
+export interface CreateUserInput {
+  name: string;
+  email: string;
+  // ...
+}
+
+// input/index.ts
+export * from "./create-user.input";
+export * from "./update-user.input";
+
+// users.service.ts
+import type { CreateUserInput, UpdateUserInput } from "./input/index";
 ```
 
 ### 네이밍 규칙 상세

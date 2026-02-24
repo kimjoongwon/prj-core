@@ -1,7 +1,7 @@
 import { INestApplication } from "@nestjs/common";
 import { Test, TestingModule } from "@nestjs/testing";
 import request from "supertest";
-import { AppModule } from "../../src/module/app.module";
+import { AppModule } from "../../src/modules/app.module";
 import { setNestApp } from "../../src/setNestApp";
 import { getTestAuth, TestJwtStrategy } from "../helpers/test-auth.helper";
 

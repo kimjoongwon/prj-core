@@ -13,6 +13,11 @@ import {
 	Logger,
 	NotFoundException,
 } from "@nestjs/common";
+import type {
+	CreateTemplateInput,
+	UpdateTemplateInput,
+	TemplateVariableInput,
+} from "./input/index";
 
 /**
  * 변수 치환 결과
@@ -24,31 +29,6 @@ interface SubstituteResult {
 	content: string;
 	/** 미치환 변수 목록 */
 	unresolvedVariables: string[];
-}
-
-interface TemplateVariableInput {
-	name: string;
-	description?: string;
-	defaultValue?: string;
-	isRequired?: boolean;
-}
-
-interface CreateTemplateInput {
-	code: string;
-	name: string;
-	type: TemplateType;
-	subject?: string | null;
-	content: string;
-	description?: string | null;
-	variables?: TemplateVariableInput[];
-}
-
-interface UpdateTemplateInput {
-	name?: string;
-	subject?: string | null;
-	content?: string;
-	description?: string | null;
-	variables?: TemplateVariableInput[];
 }
 
 /**

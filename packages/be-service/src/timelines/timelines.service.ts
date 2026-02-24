@@ -11,52 +11,14 @@ import {
 	Logger,
 	NotFoundException,
 } from "@nestjs/common";
-
-interface CreateTimelineInput {
-	name: string;
-	description?: string | null;
-}
-
-interface UpdateTimelineInput {
-	name?: string;
-	description?: string | null;
-}
-
-interface CreateSessionInput {
-	name: string;
-	type: string;
-	description?: string | null;
-	startDateTime?: Date | null;
-	endDateTime?: Date | null;
-	recurringDayOfWeek?: string | null;
-	repeatCycleType?: string | null;
-}
-
-interface UpdateSessionInput {
-	name?: string;
-	description?: string | null;
-	type?: string;
-	startDateTime?: Date | null;
-	endDateTime?: Date | null;
-	recurringDayOfWeek?: string | null;
-	repeatCycleType?: string | null;
-}
-
-interface CreateProgramInput {
-	name: string;
-	routineId: string;
-	instructorId: string;
-	capacity: number;
-	level?: string | null;
-}
-
-interface UpdateProgramInput {
-	name?: string;
-	routineId?: string;
-	instructorId?: string;
-	capacity?: number;
-	level?: string | null;
-}
+import type {
+	CreateTimelineInput,
+	UpdateTimelineInput,
+	CreateSessionInput,
+	UpdateSessionInput,
+	CreateProgramInput,
+	UpdateProgramInput,
+} from "./input/index";
 
 @Injectable()
 export class TimelinesService {
@@ -79,8 +41,8 @@ export class TimelinesService {
 	}) {
 		this.logger.debug(`타임라인 목록 조회: spaceId=${params.spaceId.slice(-8)}`);
 
-		const [timelines, total] = await this.repository.findManyTimelines(params);
-		return { timelines, total };
+		const { items, count } = await this.repository.findManyTimelines(params);
+		return { timelines: items, total: count };
 	}
 
 	/**
@@ -185,11 +147,11 @@ export class TimelinesService {
 	) {
 		this.logger.debug(`세션 목록 조회: timelineId=${timelineId.slice(-8)}`);
 
-		const [sessions, total] = await this.repository.findManySessions(
+		const { items, count } = await this.repository.findManySessions(
 			timelineId,
 			params,
 		);
-		return { sessions, total };
+		return { sessions: items, total: count };
 	}
 
 	/**
@@ -337,11 +299,11 @@ export class TimelinesService {
 	) {
 		this.logger.debug(`프로그램 목록 조회: sessionId=${sessionId.slice(-8)}`);
 
-		const [programs, total] = await this.repository.findManyPrograms(
+		const { items, count } = await this.repository.findManyPrograms(
 			sessionId,
 			params,
 		);
-		return { programs, total };
+		return { programs: items, total: count };
 	}
 
 	/**

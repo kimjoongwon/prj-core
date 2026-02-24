@@ -2,7 +2,7 @@ import { PRISMA_SERVICE_TOKEN } from "@cocrepo/constant";
 import { INestApplication, ValidationPipe } from "@nestjs/common";
 import { Test, TestingModule } from "@nestjs/testing";
 import request from "supertest";
-import { AppModule } from "../src/module/app.module";
+import { AppModule } from "../src/modules/app.module";
 import { getTestAuth, TestJwtStrategy } from "./helpers/test-auth.helper";
 
 /**

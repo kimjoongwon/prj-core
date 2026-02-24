@@ -1,5 +1,5 @@
 import { Injectable, Logger } from "@nestjs/common";
-import { RedisService } from "./redis.service";
+import { RedisService } from "../redis/redis.service";
 
 /** 인증 사용자 캐시 키 접두사 */
 const AUTH_USER_CACHE_PREFIX = "auth:user:";

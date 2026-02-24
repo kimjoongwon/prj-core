@@ -2,7 +2,7 @@ import type { UpdateSecurityPolicyDto } from "@cocrepo/dto";
 import type { SecurityPolicy } from "@cocrepo/entity";
 import { SecurityPoliciesRepository } from "@cocrepo/repository";
 import { Injectable, Logger, NotFoundException } from "@nestjs/common";
-import { RedisService } from "./redis.service";
+import { RedisService } from "../redis/redis.service";
 
 const CACHE_KEY = "security-policy:default";
 const CACHE_TTL_SEC = 300; // 5분

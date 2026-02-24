@@ -1,6 +1,4 @@
-import { SpaceContext } from "../context/space-context";
-import { USER_ERRORS } from "@cocrepo/constant";
-import { validatePasswordPolicy } from "@cocrepo/be-common";
+import { PASSWORD_RULES, USER_ERRORS } from "@cocrepo/constant";
 import type { QueryUsersDto } from "@cocrepo/dto";
 import type { Prisma } from "@cocrepo/prisma";
 import { UsersRepository } from "@cocrepo/repository";
@@ -13,23 +11,21 @@ import {
 	NotFoundException,
 } from "@nestjs/common";
 import { AuthCacheService } from "../auth-cache/auth-cache.service";
+import { SpaceContext } from "../context/space-context";
 import type {
+	CreateUserForSignUpInput,
 	CreateUserInput,
 	UpdateUserInput,
-	CreateUserForSignUpInput,
 } from "./input/index";
 
 /**
  * 사용자 목록 조회 결과
  */
 export interface GetUsersResult {
-	users: Awaited<
-		ReturnType<UsersRepository["findManyBySpaceIds"]>
-	>["users"];
+	users: Awaited<ReturnType<UsersRepository["findManyBySpaceIds"]>>["users"];
 	totalCount: number;
 	stats: UserStats;
 }
-
 
 @Injectable()
 export class UsersService {
@@ -62,7 +58,9 @@ export class UsersService {
 	 */
 	async getUsersBySpace(query: QueryUsersDto): Promise<GetUsersResult> {
 		const spaceIds = this.spaceCtx.spaceIds;
-		this.logger.debug(`접근 가능 Space 내 사용자 목록 조회: spaceIds=${spaceIds.length}개`);
+		this.logger.debug(
+			`접근 가능 Space 내 사용자 목록 조회: spaceIds=${spaceIds.length}개`,
+		);
 
 		const baseWhere: Partial<Prisma.UserWhereInput> = {
 			tenants: { some: { spaceId: { in: spaceIds }, removedAt: null } },
@@ -187,27 +185,21 @@ export class UsersService {
 		if (input.email && input.email !== existingUser.email) {
 			const emailExists = await this.repository.existsByEmail(input.email);
 			if (emailExists) {
-				throw new BadRequestException(
-					USER_ERRORS.EMAIL_ALREADY_EXISTS,
-				);
+				throw new BadRequestException(USER_ERRORS.EMAIL_ALREADY_EXISTS);
 			}
 		}
 
 		if (input.phone && input.phone !== existingUser.phone) {
 			const phoneExists = await this.repository.existsByPhone(input.phone);
 			if (phoneExists) {
-				throw new BadRequestException(
-					USER_ERRORS.PHONE_ALREADY_EXISTS,
-				);
+				throw new BadRequestException(USER_ERRORS.PHONE_ALREADY_EXISTS);
 			}
 		}
 
 		if (input.name && input.name !== existingUser.name) {
 			const nameExists = await this.repository.existsByName(input.name);
 			if (nameExists) {
-				throw new BadRequestException(
-					USER_ERRORS.NAME_ALREADY_EXISTS,
-				);
+				throw new BadRequestException(USER_ERRORS.NAME_ALREADY_EXISTS);
 			}
 		}
 
@@ -242,9 +234,7 @@ export class UsersService {
 
 		// 자기 자신 삭제 방지
 		if (userId === currentUserId) {
-			throw new BadRequestException(
-				USER_ERRORS.CANNOT_DELETE_SELF,
-			);
+			throw new BadRequestException(USER_ERRORS.CANNOT_DELETE_SELF);
 		}
 
 		// 사용자 존재 및 Space 접근 권한 확인
@@ -291,9 +281,12 @@ export class UsersService {
 		}
 
 		// 2. 비밀번호 정책 검증
-		const policyResult = validatePasswordPolicy(newPassword);
-		if (!policyResult.isValid) {
-			const failedRules = policyResult.rules
+		const passwordRuleResults = PASSWORD_RULES.map((rule) => ({
+			label: rule.label,
+			passed: rule.test(newPassword),
+		}));
+		if (passwordRuleResults.some((rule) => !rule.passed)) {
+			const failedRules = passwordRuleResults
 				.filter((r) => !r.passed)
 				.map((r) => r.label)
 				.join(", ");
@@ -352,7 +345,9 @@ export class UsersService {
 	 *
 	 * @returns 생성된 임시 비밀번호 (관리자 확인용)
 	 */
-	async forceResetPassword(userId: string): Promise<{ temporaryPassword: string; email: string }> {
+	async forceResetPassword(
+		userId: string,
+	): Promise<{ temporaryPassword: string; email: string }> {
 		this.logger.debug(`비밀번호 강제 재설정: userId=${userId.slice(-8)}`);
 
 		const securityInfo = await this.repository.findSecurityInfoById(userId);
@@ -406,21 +401,15 @@ export class UsersService {
 		]);
 
 		if (emailExists) {
-			throw new BadRequestException(
-				USER_ERRORS.EMAIL_ALREADY_EXISTS,
-			);
+			throw new BadRequestException(USER_ERRORS.EMAIL_ALREADY_EXISTS);
 		}
 
 		if (phoneExists) {
-			throw new BadRequestException(
-				USER_ERRORS.PHONE_ALREADY_EXISTS,
-			);
+			throw new BadRequestException(USER_ERRORS.PHONE_ALREADY_EXISTS);
 		}
 
 		if (nameExists) {
-			throw new BadRequestException(
-				USER_ERRORS.NAME_ALREADY_EXISTS,
-			);
+			throw new BadRequestException(USER_ERRORS.NAME_ALREADY_EXISTS);
 		}
 	}
 
@@ -447,7 +436,10 @@ export class UsersService {
 		}
 
 		// 셔플
-		return password.split("").sort(() => Math.random() - 0.5).join("");
+		return password
+			.split("")
+			.sort(() => Math.random() - 0.5)
+			.join("");
 	}
 
 	/**

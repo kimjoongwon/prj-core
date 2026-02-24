@@ -14,4 +14,9 @@ export class Timeline extends AbstractEntity implements TimelineEntity {
 	space?: Space;
 	creator?: User;
 	sessions?: Session[];
+
+	/** Prisma _count 결과 */
+	_count?: {
+		sessions: number;
+	};
 }

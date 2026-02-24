@@ -1,6 +1,6 @@
 import type { QueryOidcSessionDto } from "@cocrepo/dto";
 import { Injectable, Logger, NotFoundException } from "@nestjs/common";
-import { RedisService } from "./redis.service";
+import { RedisService } from "../redis/redis.service";
 
 const KEY_PREFIX = "oidc";
 

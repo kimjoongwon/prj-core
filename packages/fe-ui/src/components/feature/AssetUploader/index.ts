@@ -1,6 +1,2 @@
 export { AssetUploader } from "./AssetUploader";
-export type {
-  AssetUploaderProps,
-  AssetKind,
-  UploadError,
-} from "./AssetUploader";
+export type { AssetUploaderProps, UploadError } from "./AssetUploader";

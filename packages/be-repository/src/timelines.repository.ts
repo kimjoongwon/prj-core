@@ -1,42 +1,45 @@
+import { Session, Timeline } from "@cocrepo/entity";
 import { Prisma, PrismaClient } from "@cocrepo/prisma";
 import { Injectable, Logger } from "@nestjs/common";
 import { TransactionHost } from "@nestjs-cls/transactional";
 import { TransactionalAdapterPrisma } from "@nestjs-cls/transactional-adapter-prisma";
+import { plainToInstance } from "class-transformer";
 
 @Injectable()
 export class TimelinesRepository {
-	private readonly logger = new Logger(TimelinesRepository.name);
+	private readonly logger: Logger;
 
 	constructor(
 		private readonly txHost: TransactionHost<
 			TransactionalAdapterPrisma<PrismaClient>
 		>,
-	) {}
+	) {
+		this.logger = new Logger("TimelinesRepository");
+	}
 
 	// ============================================================================
-	// Timeline 쿼리
+	// Timeline 쿼리 메서드
 	// ============================================================================
 
 	/**
-	 * Space 기반 타임라인 목록 조회 (세션 수 포함)
+	 * 타임라인 목록 조회
 	 */
 	async findManyTimelines(params: {
 		spaceId: string;
 		skip: number;
 		take: number;
-		search?: string | null;
-	}) {
-		this.logger.debug(`타임라인 목록 조회: spaceId=${params.spaceId.slice(-8)}`);
+		search?: string;
+	}): Promise<{ items: Timeline[]; count: number }> {
+		const { spaceId, skip, take, search } = params;
+		this.logger.debug(`타임라인 목록 조회: spaceId=${spaceId.slice(-8)}`);
 
 		const where: Prisma.TimelineWhereInput = {
-			spaceId: params.spaceId,
+			spaceId,
 			removedAt: null,
-			...(params.search
-				? { name: { contains: params.search, mode: "insensitive" } }
-				: {}),
+			name: search ? { contains: search, mode: "insensitive" } : undefined,
 		};
 
-		const [timelines, total] = await Promise.all([
+		const [items, count] = await Promise.all([
 			this.txHost.tx.timeline.findMany({
 				where,
 				include: {
@@ -46,45 +49,59 @@ export class TimelinesRepository {
 					creator: { select: { id: true, name: true } },
 				},
 				orderBy: { createdAt: "desc" },
-				skip: params.skip,
-				take: params.take,
+				skip,
+				take,
 			}),
 			this.txHost.tx.timeline.count({ where }),
 		]);
 
-		return [timelines, total] as const;
+		return {
+			items: items.map((item) => plainToInstance(Timeline, item)),
+			count,
+		};
 	}
 
 	/**
-	 * ID와 spaceId로 타임라인 단건 조회 (creator, space, 세션 수 포함)
+	 * ID로 타임라인 조회
 	 */
-	async findTimelineById(timelineId: string, spaceId: string) {
-		this.logger.debug(`타임라인 상세 조회: ${timelineId.slice(-8)}`);
+	async findTimelineById(
+		timelineId: string,
+		spaceId: string,
+	): Promise<Timeline | null> {
+		this.logger.debug(`ID로 타임라인 조회: timelineId=${timelineId.slice(-8)}`);
 
-		return this.txHost.tx.timeline.findFirst({
+		const result = await this.txHost.tx.timeline.findFirst({
 			where: { id: timelineId, spaceId, removedAt: null },
 			include: {
 				creator: { select: { id: true, name: true } },
-				space: { select: { id: true } },
+				space: {
+					select: {
+						id: true,
+						ground: { select: { name: true } },
+					},
+				},
 				_count: {
 					select: { sessions: { where: { removedAt: null } } },
 				},
 			},
 		});
+
+		return result ? plainToInstance(Timeline, result) : null;
 	}
 
 	/**
 	 * 타임라인 생성
 	 */
-	async createTimeline(data: {
-		name: string;
-		description?: string | null;
-		spaceId: string;
-		creatorId: string;
-	}) {
-		this.logger.debug("타임라인 생성");
+	async createTimeline(
+		data: Prisma.TimelineUncheckedCreateInput,
+	): Promise<Timeline> {
+		this.logger.debug("타임라인 생성 중...");
 
-		return this.txHost.tx.timeline.create({ data });
+		const result = await this.txHost.tx.timeline.create({
+			data,
+		});
+
+		return plainToInstance(Timeline, result);
 	}
 
 	/**
@@ -92,68 +109,79 @@ export class TimelinesRepository {
 	 */
 	async updateTimeline(
 		timelineId: string,
-		data: { name?: string; description?: string | null },
-	) {
-		this.logger.debug(`타임라인 수정: ${timelineId.slice(-8)}`);
+		data: Prisma.TimelineUncheckedUpdateInput,
+	): Promise<Timeline> {
+		this.logger.debug(`타임라인 수정 중: ${timelineId.slice(-8)}`);
 
-		return this.txHost.tx.timeline.update({
+		const result = await this.txHost.tx.timeline.update({
 			where: { id: timelineId },
 			data,
 		});
+
+		return plainToInstance(Timeline, result);
 	}
 
 	/**
 	 * 타임라인 소프트 삭제
 	 */
-	async softDeleteTimeline(timelineId: string): Promise<void> {
-		this.logger.debug(`타임라인 소프트 삭제: ${timelineId.slice(-8)}`);
+	async removeTimelineById(timelineId: string): Promise<Timeline> {
+		this.logger.debug(`타임라인 소프트 삭제 중: ${timelineId.slice(-8)}`);
 
-		await this.txHost.tx.timeline.update({
+		const result = await this.txHost.tx.timeline.update({
 			where: { id: timelineId },
 			data: { removedAt: new Date() },
 		});
+
+		return plainToInstance(Timeline, result);
 	}
 
 	/**
-	 * Space 내 동일 이름 타임라인 수 조회 (이름 중복 확인용)
+	 * 타임라인 이름 중복 확인
 	 */
 	async countTimelinesWithName(
 		name: string,
 		spaceId: string,
 		excludeId?: string,
 	): Promise<number> {
+		this.logger.debug(
+			`타임라인 이름 중복 확인: name=${name}, spaceId=${spaceId.slice(-8)}`,
+		);
+
 		return this.txHost.tx.timeline.count({
 			where: {
 				name,
 				spaceId,
 				removedAt: null,
-				...(excludeId ? { id: { not: excludeId } } : {}),
+				...(excludeId && { NOT: { id: excludeId } }),
 			},
 		});
 	}
 
 	// ============================================================================
-	// Session 쿼리
+	// Session 쿼리 메서드
 	// ============================================================================
 
 	/**
-	 * 타임라인 기반 세션 목록 조회 (프로그램 수 포함)
+	 * 세션 목록 조회
 	 */
 	async findManySessions(
 		timelineId: string,
-		params: { skip: number; take: number; search?: string | null },
-	) {
+		params: {
+			skip: number;
+			take: number;
+			search?: string;
+		},
+	): Promise<{ items: Session[]; count: number }> {
+		const { skip, take, search } = params;
 		this.logger.debug(`세션 목록 조회: timelineId=${timelineId.slice(-8)}`);
 
 		const where: Prisma.SessionWhereInput = {
 			timelineId,
 			removedAt: null,
-			...(params.search
-				? { name: { contains: params.search, mode: "insensitive" } }
-				: {}),
+			name: search ? { contains: search, mode: "insensitive" } : undefined,
 		};
 
-		const [sessions, total] = await Promise.all([
+		const [items, count] = await Promise.all([
 			this.txHost.tx.session.findMany({
 				where,
 				include: {
@@ -162,22 +190,28 @@ export class TimelinesRepository {
 					},
 				},
 				orderBy: { createdAt: "desc" },
-				skip: params.skip,
-				take: params.take,
+				skip,
+				take,
 			}),
 			this.txHost.tx.session.count({ where }),
 		]);
 
-		return [sessions, total] as const;
+		return {
+			items: items.map((item) => plainToInstance(Session, item)),
+			count,
+		};
 	}
 
 	/**
-	 * timelineId + sessionId로 세션 단건 조회 (timeline 관계 포함)
+	 * ID로 세션 조회
 	 */
-	async findSessionById(timelineId: string, sessionId: string) {
-		this.logger.debug(`세션 상세 조회: ${sessionId.slice(-8)}`);
+	async findSessionById(
+		timelineId: string,
+		sessionId: string,
+	): Promise<Session | null> {
+		this.logger.debug(`ID로 세션 조회: sessionId=${sessionId.slice(-8)}`);
 
-		return this.txHost.tx.session.findFirst({
+		const result = await this.txHost.tx.session.findFirst({
 			where: { id: sessionId, timelineId, removedAt: null },
 			include: {
 				timeline: { select: { id: true, name: true } },
@@ -186,15 +220,23 @@ export class TimelinesRepository {
 				},
 			},
 		});
+
+		return result ? plainToInstance(Session, result) : null;
 	}
 
 	/**
 	 * 세션 생성
 	 */
-	async createSession(data: Prisma.SessionUncheckedCreateInput) {
-		this.logger.debug("세션 생성");
+	async createSession(
+		data: Prisma.SessionUncheckedCreateInput,
+	): Promise<Session> {
+		this.logger.debug("세션 생성 중...");
 
-		return this.txHost.tx.session.create({ data });
+		const result = await this.txHost.tx.session.create({
+			data,
+		});
+
+		return plainToInstance(Session, result);
 	}
 
 	/**
@@ -203,38 +245,43 @@ export class TimelinesRepository {
 	async updateSession(
 		sessionId: string,
 		data: Prisma.SessionUncheckedUpdateInput,
-	) {
-		this.logger.debug(`세션 수정: ${sessionId.slice(-8)}`);
+	): Promise<Session> {
+		this.logger.debug(`세션 수정 중: ${sessionId.slice(-8)}`);
 
-		return this.txHost.tx.session.update({
+		const result = await this.txHost.tx.session.update({
 			where: { id: sessionId },
 			data,
 		});
+
+		return plainToInstance(Session, result);
 	}
 
 	/**
 	 * 세션 소프트 삭제
 	 */
-	async softDeleteSession(sessionId: string): Promise<void> {
-		this.logger.debug(`세션 소프트 삭제: ${sessionId.slice(-8)}`);
+	async removeSessionById(sessionId: string): Promise<Session> {
+		this.logger.debug(`세션 소프트 삭제 중: ${sessionId.slice(-8)}`);
 
-		await this.txHost.tx.session.update({
+		const result = await this.txHost.tx.session.update({
 			where: { id: sessionId },
 			data: { removedAt: new Date() },
 		});
+
+		return plainToInstance(Session, result);
 	}
 
 	// ============================================================================
-	// Program 쿼리
+	// Program 쿼리 메서드
 	// ============================================================================
 
 	/**
-	 * 세션 기반 프로그램 목록 조회
+	 * 프로그램 목록 조회
 	 */
 	async findManyPrograms(
 		sessionId: string,
 		params: { skip: number; take: number },
-	) {
+	): Promise<{ items: any[]; count: number }> {
+		const { skip, take } = params;
 		this.logger.debug(`프로그램 목록 조회: sessionId=${sessionId.slice(-8)}`);
 
 		const where: Prisma.ProgramWhereInput = {
@@ -242,102 +289,110 @@ export class TimelinesRepository {
 			removedAt: null,
 		};
 
-		const [programs, total] = await Promise.all([
+		const [items, count] = await Promise.all([
 			this.txHost.tx.program.findMany({
 				where,
-				include: {
-					routine: { select: { id: true, name: true } },
-					session: { select: { id: true, name: true } },
-				},
 				orderBy: { createdAt: "desc" },
-				skip: params.skip,
-				take: params.take,
+				skip,
+				take,
 			}),
 			this.txHost.tx.program.count({ where }),
 		]);
 
-		return [programs, total] as const;
+		return { items, count };
 	}
 
 	/**
-	 * sessionId + programId로 프로그램 단건 조회 (routine, session 포함)
+	 * ID로 프로그램 조회
 	 */
-	async findProgramById(sessionId: string, programId: string) {
-		this.logger.debug(`프로그램 상세 조회: ${programId.slice(-8)}`);
+	async findProgramById(sessionId: string, programId: string): Promise<any | null> {
+		this.logger.debug(`ID로 프로그램 조회: programId=${programId.slice(-8)}`);
 
-		return this.txHost.tx.program.findFirst({
+		const result = await this.txHost.tx.program.findFirst({
 			where: { id: programId, sessionId, removedAt: null },
-			include: {
-				routine: { select: { id: true, name: true } },
-				session: { select: { id: true, name: true } },
-			},
 		});
+
+		return result;
 	}
 
 	/**
 	 * 프로그램 생성
 	 */
-	async createProgram(data: {
-		name: string;
-		routineId: string;
-		sessionId: string;
-		instructorId: string;
-		capacity: number;
-		level?: string | null;
-	}) {
-		this.logger.debug("프로그램 생성");
+	async createProgram(data: Prisma.ProgramUncheckedCreateInput): Promise<any> {
+		this.logger.debug("프로그램 생성 중...");
 
-		return this.txHost.tx.program.create({ data });
+		const result = await this.txHost.tx.program.create({
+			data,
+		});
+
+		return result;
 	}
 
 	/**
 	 * 프로그램 수정
 	 */
-	async updateProgram(
-		programId: string,
-		data: {
-			name?: string;
-			routineId?: string;
-			instructorId?: string;
-			capacity?: number;
-			level?: string | null;
-		},
-	) {
-		this.logger.debug(`프로그램 수정: ${programId.slice(-8)}`);
+	async updateProgram(programId: string, data: any): Promise<any> {
+		this.logger.debug(`프로그램 수정 중: ${programId.slice(-8)}`);
 
-		return this.txHost.tx.program.update({
+		const result = await this.txHost.tx.program.update({
 			where: { id: programId },
 			data,
 		});
+
+		return result;
 	}
 
 	/**
 	 * 프로그램 소프트 삭제
 	 */
-	async softDeleteProgram(programId: string): Promise<void> {
-		this.logger.debug(`프로그램 소프트 삭제: ${programId.slice(-8)}`);
+	async softDeleteProgram(programId: string): Promise<any> {
+		this.logger.debug(`프로그램 소프트 삭제 중: ${programId.slice(-8)}`);
 
-		await this.txHost.tx.program.update({
+		const result = await this.txHost.tx.program.update({
 			where: { id: programId },
 			data: { removedAt: new Date() },
 		});
+
+		return result;
 	}
 
 	/**
-	 * 세션 내 동일 루틴 프로그램 수 조회 (루틴 중복 확인용)
+	 * 세션 내 루틴 사용 프로그램 수 조회
 	 */
 	async countProgramsWithRoutine(
 		sessionId: string,
 		routineId: string,
 		excludeId?: string,
 	): Promise<number> {
+		this.logger.debug(
+			`루틴 사용 프로그램 수 조회: sessionId=${sessionId.slice(-8)}, routineId=${routineId.slice(-8)}`,
+		);
+
 		return this.txHost.tx.program.count({
 			where: {
 				sessionId,
 				routineId,
 				removedAt: null,
-				...(excludeId ? { id: { not: excludeId } } : {}),
+				...(excludeId && { NOT: { id: excludeId } }),
 			},
 		});
+	}
+
+	// ============================================================================
+	// Service 호환성을 위한 별칭 메서드
+	// ============================================================================
+
+	/**
+	 * softDeleteTimeline 별칭
+	 */
+	async softDeleteTimeline(timelineId: string): Promise<Timeline> {
+		return this.removeTimelineById(timelineId);
+	}
+
+	/**
+	 * softDeleteSession 별칭
+	 */
+	async softDeleteSession(sessionId: string): Promise<Session> {
+		return this.removeSessionById(sessionId);
 	}
 }

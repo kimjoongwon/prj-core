@@ -1,5 +1,5 @@
 import { Injectable, Logger } from "@nestjs/common";
-import { RedisService } from "./redis.service";
+import { RedisService } from "../redis/redis.service";
 
 // Redis OIDC 모델 키 프리픽스
 const OIDC_KEY_PREFIX = "oidc";

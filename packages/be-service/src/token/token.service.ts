@@ -9,7 +9,7 @@ import {
 import { ConfigService } from "@nestjs/config";
 import { Request, Response } from "express";
 import { ClsService } from "nestjs-cls";
-import { TokenStorageService } from "./token-storage.service";
+import { TokenStorageService } from "../token-storage/token-storage.service";
 
 /**
  * 토큰 관리 서비스

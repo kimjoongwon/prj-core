@@ -20,4 +20,9 @@ export class Session extends AbstractEntity implements SessionEntity {
 
 	programs?: Program[];
 	timeline?: Timeline;
+
+	/** Prisma _count 결과 */
+	_count?: {
+		programs: number;
+	};
 }

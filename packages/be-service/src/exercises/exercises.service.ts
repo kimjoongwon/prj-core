@@ -10,7 +10,7 @@ import {
 	Logger,
 	NotFoundException,
 } from "@nestjs/common";
-import { SpaceContext } from "./context/space-context";
+import { SpaceContext } from "../context/space-context";
 
 @Injectable()
 export class ExercisesService {
@@ -41,7 +41,7 @@ export class ExercisesService {
 				? this.spaceContext.spaceIds
 				: [spaceId];
 
-		const [exercises, total] =
+		const { items, count } =
 			await this.exercisesRepository.findManyExercises({
 				spaceIds,
 				skip,
@@ -49,7 +49,7 @@ export class ExercisesService {
 				search,
 			});
 
-		return { exercises, total };
+		return { exercises: items, total: count };
 	}
 
 	/**

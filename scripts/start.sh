@@ -8,14 +8,28 @@ BOLD='\033[1m'
 CYAN='\033[36m'
 GREEN='\033[32m'
 YELLOW='\033[33m'
+RED='\033[31m'
 DIM='\033[2m'
 RESET='\033[0m'
 
-# -- 인자 제거 (pnpm이 -- 를 전달할 수 있음)
+# --clean 플래그 확인 및 제거
+CLEAN_MODE="false"
 ARGS=()
 for arg in "$@"; do
-  [[ "$arg" != "--" ]] && ARGS+=("$arg")
+  if [[ "$arg" == "--clean" || "$arg" == "-c" ]]; then
+    CLEAN_MODE="true"
+  elif [[ "$arg" != "--" ]]; then
+    ARGS+=("$arg")
+  fi
 done
+
+# --clean 모드면 캐시 정리 후 종료
+if [[ "$CLEAN_MODE" == "true" && ${#ARGS[@]} -eq 0 ]]; then
+  echo -e "${YELLOW}🧹 tsbuildinfo 캐시 정리 중...${RESET}"
+  find packages apps -name '*.tsbuildinfo' -type f -delete 2>/dev/null || true
+  echo -e "${GREEN}✅ 캐시 정리 완료${RESET}"
+  exit 0
+fi
 
 if [[ ${#ARGS[@]} -gt 0 ]]; then
   # 커맨드라인 인자로 전달된 경우
@@ -167,6 +181,10 @@ cleanup() {
   echo -e "${GREEN}✅ 정리 완료${RESET}"
 }
 trap cleanup EXIT INT TERM
+
+# tsbuildinfo 캐시 정리 (증분 빌드 충돌 방지)
+echo -e "${DIM}🧹 tsbuildinfo 캐시 정리 중...${RESET}"
+find packages apps -name '*.tsbuildinfo' -type f -delete 2>/dev/null || true
 
 echo -e "\n${GREEN}▶${SERVICES} 시작${RESET}\n"
 

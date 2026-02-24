@@ -314,6 +314,7 @@ export * from './sessionTypes';
 export * from './spaceScope';
 export * from './taskDto';
 export * from './templateDto';
+export * from './templateVariableDto';
 export * from './templateType';
 export * from './timelineDto';
 export * from './toggleActiveOidcClient200AllOf';

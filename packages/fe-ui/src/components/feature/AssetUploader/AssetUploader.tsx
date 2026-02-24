@@ -5,8 +5,7 @@ import { observer } from "mobx-react-lite";
 import { UploadPanel } from "../../widget/UploadPanel";
 import type { UploadQueueItemData } from "../../widget/UploadQueue";
 import type { UploadStatus } from "../../ui/UploadQueueItem";
-
-export type AssetKind = "IMAGE" | "VIDEO" | "DOCUMENT";
+import type { AssetKind } from "../../ui/data-display/AssetKindBadge";
 
 export interface UploadError {
   file: File;
