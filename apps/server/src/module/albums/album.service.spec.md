@@ -26,14 +26,14 @@ Album, AlbumEntry
 | 메서드 | 파라미터 | 반환값 | 설명 |
 |--------|----------|--------|------|
 | findById | id: string | Album | 단일 앨범 조회 |
-| findBySpace | query: QueryDto | PaginatedResult<Album> | Space별 앨범 목록 |
-| search | keyword: string, query: QueryDto | PaginatedResult<Album> | 앨범 검색 |
-| create | createDto: CreateAlbumDto | Album | 앨범 생성 |
-| update | id: string, updateDto: UpdateAlbumDto | Album | 앨범 수정 |
+| findBySpace | query: AlbumQueryDto | GetAlbumsResult | Space별 앨범 목록 (페이지네이션) |
+| search | keyword: string, query: AlbumQueryDto | GetAlbumsResult | 앨범 검색 |
+| create | input: CreateInput | Album | 앨범 생성 |
+| update | id: string, input: UpdateInput | Album | 앨범 수정 |
 | setCover | id: string, assetId: string | Album | 커버 이미지 설정 |
 | clearCover | id: string | Album | 커버 이미지 제거 |
 | softDelete | id: string | void | 소프트 삭제 |
-| getEntries | albumId: string, query: QueryDto | PaginatedResult<AlbumEntry> | 앨범 엔트리 목록 |
+| getEntries | albumId: string, query: QueryDto | GetEntriesResult | 앨범 엔트리 목록 |
 | addAssets | albumId: string, assetIds: string[] | AlbumEntry[] | 에셋 추가 |
 | removeEntry | albumId: string, entryId: string | void | 엔트리 제거 |
 | reorderEntries | albumId: string, entryIds: string[] | void | 순서 변경 |
@@ -84,7 +84,8 @@ Album, AlbumEntry
 
 ## 구현 체크리스트
 
-- [ ] album.service.ts
+- [x] album.service.ts
+- [x] album.repository.ts
 - [ ] 단위 테스트 (Jest)
 - [ ] 통합 테스트 (Jest)
 
@@ -143,3 +144,4 @@ Album, AlbumEntry
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
 | 2026-02-22 | 초기 생성 | orch-requirement |
+| 2026-02-24 | Service 구현 완료 | service-builder |

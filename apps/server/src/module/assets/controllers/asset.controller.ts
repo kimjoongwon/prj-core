@@ -151,10 +151,7 @@ export class AssetController {
 	@ApiResponseEntity(AssetDto, HttpStatus.CREATED)
 	@ResponseMessage("에셋 생성 성공")
 	async createAsset(@Body() dto: CreateAssetDto): Promise<Asset> {
-		const spaceId = this.getSpaceId();
-
 		return this.assetService.createAsset({
-			spaceId,
 			folderId: dto.folderId,
 			kind: dto.kind,
 			status: dto.status,

@@ -8,8 +8,8 @@ import {
 	UUIDField,
 } from "@cocrepo/decorator";
 import {
-	RepeatCycleTypes as RepeatCycleTypeNames,
-	SessionTypes as SessionTypeNames,
+	RepeatCycleType as RepeatCycleTypeNames,
+	SessionType as SessionTypeNames,
 } from "@cocrepo/enum";
 import {
 	type RepeatCycleTypes as PrismaRepeatCycleTypes,

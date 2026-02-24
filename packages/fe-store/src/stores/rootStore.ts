@@ -1,13 +1,19 @@
 import { makeAutoObservable } from "mobx";
 import { AbilityStore } from "./abilityStore";
+import { AlbumStore } from "./albumStore";
 import { AssetStore } from "./assetStore";
 import { AuthStore } from "./authStore";
 import { BottomTabStore } from "./bottomTabStore";
 import { CookieStore } from "./cookieStore";
+import { ExerciseStore } from "./exerciseStore";
 import { FABStore } from "./fabStore";
+import { GroundStore } from "./groundStore";
 import { NavigationStore } from "./navigationStore";
 import type { Navigator } from "./navigator";
 import { PersistStore } from "./persistStore";
+import { ProgramStore } from "./programStore";
+import { ReservationStore } from "./reservationStore";
+import { TimelineStore } from "./timelineStore";
 import { TokenStore } from "./tokenStore";
 
 /**
@@ -32,6 +38,16 @@ import { TokenStore } from "./tokenStore";
  *
  * // Asset 관리
  * rootStore.assetStore = new AssetStore(rootStore);
+ *
+ * // Album 관리
+ * rootStore.albumStore = new AlbumStore(rootStore);
+ *
+ * // 도메인 Store들
+ * rootStore.timelineStore = new TimelineStore();
+ * rootStore.groundStore = new GroundStore();
+ * rootStore.exerciseStore = new ExerciseStore();
+ * rootStore.programStore = new ProgramStore();
+ * rootStore.reservationStore = new ReservationStore(rootStore);
  * ```
  *
  * Store Tree 구조 (앱에 따라 다름):
@@ -45,7 +61,13 @@ import { TokenStore } from "./tokenStore";
  * ├── abilityStore (AbilityStore) - 권한 관리
  * ├── fabStore (FABStore) - v7.0: FAB 상태 관리
  * ├── bottomTabStore (BottomTabStore) - v7.0: BottomTab 상태 관리
- * └── assetStore (AssetStore) - 에셋 관리 UI 상태
+ * ├── assetStore (AssetStore) - 에셋 관리 UI 상태
+ * ├── albumStore (AlbumStore) - 앨범 관리 UI 상태
+ * ├── timelineStore (TimelineStore) - 타임라인 목록 UI 상태
+ * ├── groundStore (GroundStore) - 시설 목록 UI 상태
+ * ├── exerciseStore (ExerciseStore) - 운동 종목 목록 UI 상태
+ * ├── programStore (ProgramStore) - 프로그램 관련 UI 상태
+ * └── reservationStore (ReservationStore) - 예약 관리 UI 상태
  */
 export class RootStore {
 	name: string = "PROTOTYPE";
@@ -64,6 +86,18 @@ export class RootStore {
 	bottomTabStore?: BottomTabStore;
 	/** 에셋 관리 UI 상태 */
 	assetStore?: AssetStore;
+	/** 앨범 관리 UI 상태 */
+	albumStore?: AlbumStore;
+	/** 타임라인 목록 UI 상태 */
+	timelineStore?: TimelineStore;
+	/** 시설 목록 UI 상태 */
+	groundStore?: GroundStore;
+	/** 운동 종목 목록 UI 상태 */
+	exerciseStore?: ExerciseStore;
+	/** 프로그램 관련 UI 상태 */
+	programStore?: ProgramStore;
+	/** 예약 관리 UI 상태 */
+	reservationStore?: ReservationStore;
 
 	constructor() {
 		makeAutoObservable(this);

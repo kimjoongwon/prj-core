@@ -23,13 +23,14 @@ Folder
 | 메서드 | 파라미터 | 반환값 | 설명 |
 |--------|----------|--------|------|
 | findById | id: string | Folder | 단일 폴더 조회 |
-| findBySpace | spaceId: string | Folder[] | Space별 전체 폴더 목록 |
-| getTree | spaceId: string | FolderNode[] | 트리 구조로 반환 |
+| findBySpace | query: FolderQueryDto | GetFoldersResult | Space별 전체 폴더 목록 (페이지네이션) |
+| getTree | spaceId: string | FolderTreeNode[] | 트리 구조로 반환 |
 | getChildren | parentFolderId: string | Folder[] | 하위 폴더 목록 |
-| create | createDto: CreateFolderDto | Folder | 폴더 생성 |
-| update | id: string, updateDto: UpdateFolderDto | Folder | 폴더 수정 |
+| create | dto: CreateFolderDto | Folder | 폴더 생성 |
+| update | id: string, dto: UpdateFolderDto | Folder | 폴더 수정 |
 | moveTo | id: string, targetParentId: string \| null | Folder | 상위 폴더 변경 |
-| softDelete | id: string | void | 소프트 삭제 |
+| softDelete | id: string | Folder | 소프트 삭제 |
+| restore | id: string | Folder | 폴더 복원 |
 | isDescendant | folderId: string, potentialAncestorId: string | boolean | 하위 폴더 여부 확인 |
 
 ## 비즈니스 규칙
@@ -73,7 +74,8 @@ Folder
 
 ## 구현 체크리스트
 
-- [ ] folder.service.ts
+- [x] folder.service.ts
+- [x] folder.repository.ts
 - [ ] 단위 테스트 (Jest)
 - [ ] 통합 테스트 (Jest)
 
@@ -131,3 +133,4 @@ Folder
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
 | 2026-02-22 | 초기 생성 | orch-requirement |
+| 2026-02-24 | Service 및 Repository 구현 완료 | service-builder |

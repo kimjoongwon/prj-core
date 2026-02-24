@@ -2,6 +2,7 @@ import { Space } from "@cocrepo/entity";
 import type { Prisma } from "@cocrepo/prisma";
 import { SpacesRepository } from "@cocrepo/repository";
 import { Injectable, Logger } from "@nestjs/common";
+import type { CreateSpaceInput } from "./input";
 
 @Injectable()
 export class SpacesService {
@@ -28,8 +29,10 @@ export class SpacesService {
 	/**
 	 * Space 생성 (옵션 포함)
 	 */
-	create(data?: Prisma.SpaceUncheckedCreateInput): Promise<Space> {
-		return this.repository.create(data);
+	create(input?: CreateSpaceInput): Promise<Space> {
+		return this.repository.create(
+			input as Prisma.SpaceUncheckedCreateInput | undefined,
+		);
 	}
 
 	/**

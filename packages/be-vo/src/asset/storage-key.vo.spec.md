@@ -1,7 +1,7 @@
 # StorageKey VO 기획서
 
 > 생성일: 2026-02-22
-> 수정일: 2026-02-22
+> 수정일: 2026-02-24
 > 타입: vo
 > 위치: packages/be-vo/src/asset/storage-key.vo.ts
 
@@ -89,10 +89,10 @@ rootKey.getFilename();    // "config.json"
 
 ## 구현 체크리스트
 
-- [ ] storage-key.vo.ts
-- [ ] ValueObject 상속
-- [ ] validate() 구현
-- [ ] index.ts export 추가
+- [x] storage-key.vo.ts
+- [x] ValueObject 상속
+- [x] validate() 구현
+- [x] index.ts export 추가
 - [ ] 단위 테스트 (Jest)
 
 ## 테스트 케이스
@@ -181,3 +181,4 @@ rootKey.getFilename();    // "config.json"
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
 | 2026-02-22 | 초기 생성 | be-vo-builder |
+| 2026-02-24 | VO 구현 완료 | vo-builder |

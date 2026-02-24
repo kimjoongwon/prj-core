@@ -1,8 +1,11 @@
 import { ABILITY_ERRORS } from "@cocrepo/constant";
-import { CreateAbilityInput } from "@cocrepo/dto";
 import { Ability } from "@cocrepo/entity";
-import { Prisma } from "@cocrepo/prisma";
-import { AbilitiesService, UsersService } from "@cocrepo/service";
+import {
+	AbilitiesService,
+	type CreateAbilityInput,
+	type UpdateAbilityInput,
+	UsersService,
+} from "@cocrepo/service";
 import {
 	BadRequestException,
 	Injectable,
@@ -121,9 +124,7 @@ export class AbilitiesFacade {
 	 * @param data - Ability 생성 데이터
 	 * @returns 생성된 Ability
 	 */
-	async createAbility(
-		data: Prisma.AbilityUncheckedCreateInput,
-	): Promise<Ability> {
+	async createAbility(data: CreateAbilityInput): Promise<Ability> {
 		this.logger.debug(
 			`권한 생성: subjectId=${data.subjectId}, actionId=${data.actionId}`,
 		);
@@ -141,7 +142,7 @@ export class AbilitiesFacade {
 	 */
 	async updateAbility(
 		id: string,
-		data: Prisma.AbilityUncheckedUpdateInput,
+		data: UpdateAbilityInput,
 	): Promise<Ability> {
 		this.logger.debug(`권한 수정: id=${id.slice(-8)}`);
 

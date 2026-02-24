@@ -3,6 +3,7 @@ import { Action } from "@cocrepo/entity";
 import type { Prisma } from "@cocrepo/prisma";
 import { ActionsRepository } from "@cocrepo/repository";
 import { Injectable, Logger, NotFoundException } from "@nestjs/common";
+import type { CreateActionInput, UpdateActionInput } from "./input/index";
 
 
 /**
@@ -109,31 +110,31 @@ export class ActionsService {
 	/**
 	 * Action 생성
 	 *
-	 * @param data - Action 생성 데이터
+	 * @param input - Action 생성 데이터
 	 * @returns 생성된 Action
 	 */
-	async createAction(data: Prisma.ActionUncheckedCreateInput): Promise<Action> {
-		this.logger.debug(`Action 생성: name=${data.name}`);
-		return this.repository.create(data);
+	async createAction(input: CreateActionInput): Promise<Action> {
+		this.logger.debug(`Action 생성: name=${input.name}`);
+		return this.repository.create(input as Prisma.ActionUncheckedCreateInput);
 	}
 
 	/**
 	 * Action 수정
 	 *
 	 * @param id - Action ID
-	 * @param data - 수정 데이터
+	 * @param input - 수정 데이터
 	 * @returns 수정된 Action
 	 */
-	async updateAction(
-		id: string,
-		data: Prisma.ActionUncheckedUpdateInput,
-	): Promise<Action> {
+	async updateAction(id: string, input: UpdateActionInput): Promise<Action> {
 		this.logger.debug(`Action 수정: id=${id.slice(-8)}`);
 
 		// 존재 여부 확인
 		await this.getActionById(id);
 
-		return this.repository.updateById(id, data);
+		return this.repository.updateById(
+			id,
+			input as Prisma.ActionUncheckedUpdateInput,
+		);
 	}
 
 	/**
@@ -154,13 +155,13 @@ export class ActionsService {
 	/**
 	 * 다중 Action 생성/업데이트 (upsert)
 	 *
-	 * @param actions - Action 데이터 배열
+	 * @param inputs - Action 데이터 배열
 	 * @returns 생성/업데이트된 Action 배열
 	 */
-	async upsertActions(
-		actions: Prisma.ActionUncheckedCreateInput[],
-	): Promise<Action[]> {
-		this.logger.debug(`다중 Action upsert: count=${actions.length}`);
-		return this.repository.upsertMany(actions);
+	async upsertActions(inputs: CreateActionInput[]): Promise<Action[]> {
+		this.logger.debug(`다중 Action upsert: count=${inputs.length}`);
+		return this.repository.upsertMany(
+			inputs as Prisma.ActionUncheckedCreateInput[],
+		);
 	}
 }

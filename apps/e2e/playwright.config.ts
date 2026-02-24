@@ -128,6 +128,22 @@ export default defineConfig({
     ? undefined
     : [
         {
+          // IDP 서버 (인증, port 3007)
+          command: "pnpm --filter=idp-server start:dev",
+          url: "http://localhost:3007/api",
+          reuseExistingServer: !process.env.CI,
+          timeout: 120000,
+          cwd: "../..",
+        },
+        {
+          // 백엔드 API 서버 (port 3006)
+          command: "pnpm --filter=server start:dev",
+          url: "http://localhost:3006/api",
+          reuseExistingServer: !process.env.CI,
+          timeout: 120000,
+          cwd: "../..",
+        },
+        {
           command: "pnpm --filter=admin dev",
           url: "http://localhost:3000/admin/auth/login",
           reuseExistingServer: !process.env.CI,

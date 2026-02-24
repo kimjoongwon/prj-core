@@ -59,3 +59,22 @@ export {
 	type IdpAccountInfo,
 	IdpAccountService,
 } from "./idp-account.service";
+
+// Input Types
+export {
+	type CreateAbilityInput,
+	type UpdateAbilityInput,
+} from "./input/abilities.input";
+export {
+	type CreateActionInput,
+	type UpdateActionInput,
+} from "./input/actions.input";
+export { type CreateSpaceInput } from "./input/spaces.input";
+export {
+	type CreateUserInput,
+	type UpdateUserInput,
+} from "./input/users.input";
+export {
+	type CreateTranslationInput,
+	type UpdateTranslationInput,
+} from "./input/translations.input";

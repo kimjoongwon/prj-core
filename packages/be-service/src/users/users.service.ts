@@ -1,4 +1,4 @@
-import { SpaceContext } from "./context/space-context";
+import { SpaceContext } from "../context/space-context";
 import { USER_ERRORS } from "@cocrepo/constant";
 import { validatePasswordPolicy } from "@cocrepo/be-common";
 import type { QueryUsersDto } from "@cocrepo/dto";
@@ -12,7 +12,12 @@ import {
 	Logger,
 	NotFoundException,
 } from "@nestjs/common";
-import { AuthCacheService } from "./auth-cache.service";
+import { AuthCacheService } from "../auth-cache/auth-cache.service";
+import type {
+	CreateUserInput,
+	UpdateUserInput,
+	CreateUserForSignUpInput,
+} from "./input/index";
 
 /**
  * 사용자 목록 조회 결과
@@ -109,54 +114,45 @@ export class UsersService {
 	 * 사용자 등록
 	 * 중복 검사 후 사용자를 생성합니다.
 	 */
-	async createUserForSpace(params: {
-		name: string;
-		email: string;
-		phone: string;
-		password: string;
-		spaceId: string;
-		roleId: string;
-		categoryId?: string;
-		groupIds?: string[];
-	}) {
-		this.logger.debug(`사용자 등록: email=${params.email}`);
+	async createUserForSpace(input: CreateUserInput) {
+		this.logger.debug(`사용자 등록: email=${input.email}`);
 
 		// 중복 검사
-		await this.validateUniqueness(params.email, params.phone, params.name);
+		await this.validateUniqueness(input.email, input.phone, input.name);
 
 		// 비밀번호 해싱
-		const plainPassword = PlainPassword.create(params.password);
+		const plainPassword = PlainPassword.create(input.password);
 		const hashedPassword = await HashedPassword.fromPlain(plainPassword);
 
 		// 사용자 생성 - Prisma.UserCreateInput 형태로 전달
 		const user = await this.repository.createWithRelations({
-			name: params.name,
-			email: params.email,
-			phone: params.phone,
+			name: input.name,
+			email: input.email,
+			phone: input.phone,
 			password: hashedPassword.value,
 			tenants: {
 				create: {
-					space: { connect: { id: params.spaceId } },
-					role: { connect: { id: params.roleId } },
+					space: { connect: { id: input.spaceId } },
+					role: { connect: { id: input.roleId } },
 				},
 			},
 			profiles: {
 				create: {
-					name: params.name,
-					nickname: params.name,
+					name: input.name,
+					nickname: input.name,
 				},
 			},
-			...(params.categoryId && {
+			...(input.categoryId && {
 				classification: {
 					create: {
-						category: { connect: { id: params.categoryId } },
+						category: { connect: { id: input.categoryId } },
 					},
 				},
 			}),
-			...(params.groupIds &&
-				params.groupIds.length > 0 && {
+			...(input.groupIds &&
+				input.groupIds.length > 0 && {
 					associations: {
-						create: params.groupIds.map((groupId) => ({
+						create: input.groupIds.map((groupId) => ({
 							group: { connect: { id: groupId } },
 						})),
 					},
@@ -173,13 +169,7 @@ export class UsersService {
 	async updateUserForSpace(
 		userId: string,
 		spaceId: string,
-		params: {
-			name?: string;
-			email?: string;
-			phone?: string;
-			categoryId?: string;
-			groupIds?: string[];
-		},
+		input: UpdateUserInput,
 	) {
 		this.logger.debug(`사용자 수정: userId=${userId}, spaceId=${spaceId}`);
 
@@ -194,8 +184,8 @@ export class UsersService {
 		}
 
 		// 중복 검사 (변경된 필드만)
-		if (params.email && params.email !== existingUser.email) {
-			const emailExists = await this.repository.existsByEmail(params.email);
+		if (input.email && input.email !== existingUser.email) {
+			const emailExists = await this.repository.existsByEmail(input.email);
 			if (emailExists) {
 				throw new BadRequestException(
 					USER_ERRORS.EMAIL_ALREADY_EXISTS,
@@ -203,8 +193,8 @@ export class UsersService {
 			}
 		}
 
-		if (params.phone && params.phone !== existingUser.phone) {
-			const phoneExists = await this.repository.existsByPhone(params.phone);
+		if (input.phone && input.phone !== existingUser.phone) {
+			const phoneExists = await this.repository.existsByPhone(input.phone);
 			if (phoneExists) {
 				throw new BadRequestException(
 					USER_ERRORS.PHONE_ALREADY_EXISTS,
@@ -212,8 +202,8 @@ export class UsersService {
 			}
 		}
 
-		if (params.name && params.name !== existingUser.name) {
-			const nameExists = await this.repository.existsByName(params.name);
+		if (input.name && input.name !== existingUser.name) {
+			const nameExists = await this.repository.existsByName(input.name);
 			if (nameExists) {
 				throw new BadRequestException(
 					USER_ERRORS.NAME_ALREADY_EXISTS,
@@ -225,13 +215,13 @@ export class UsersService {
 		const updatedUser = await this.repository.updateByIdWithRelations(
 			userId,
 			{
-				name: params.name,
-				email: params.email,
-				phone: params.phone,
+				name: input.name,
+				email: input.email,
+				phone: input.phone,
 			},
 			{
-				categoryId: params.categoryId,
-				groupIds: params.groupIds,
+				categoryId: input.categoryId,
+				groupIds: input.groupIds,
 			},
 		);
 
@@ -464,31 +454,23 @@ export class UsersService {
 	 * 회원가입용 사용자 생성 (Tenant, Profile 포함)
 	 * Facade에서 사용
 	 */
-	createUserForSignUp(params: {
-		name: string;
-		email: string;
-		phone: string;
-		password: string;
-		spaceId: string;
-		roleId: string;
-		nickname?: string;
-	}) {
-		this.logger.debug(`회원가입 사용자 생성: email=${params.email}`);
+	createUserForSignUp(input: CreateUserForSignUpInput) {
+		this.logger.debug(`회원가입 사용자 생성: email=${input.email}`);
 		return this.repository.createWithRelations({
-			name: params.name,
-			email: params.email,
-			phone: params.phone,
-			password: params.password,
+			name: input.name,
+			email: input.email,
+			phone: input.phone,
+			password: input.password,
 			tenants: {
 				create: {
-					space: { connect: { id: params.spaceId } },
-					role: { connect: { id: params.roleId } },
+					space: { connect: { id: input.spaceId } },
+					role: { connect: { id: input.roleId } },
 				},
 			},
 			profiles: {
 				create: {
-					name: params.name,
-					nickname: params.nickname || params.name,
+					name: input.name,
+					nickname: input.nickname || input.name,
 				},
 			},
 		});

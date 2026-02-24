@@ -1,7 +1,7 @@
 # ReservationList Feature 기획서
 
 > 생성일: 2026-02-18
-> 수정일: 2026-02-18
+> 수정일: 2026-02-24
 > 타입: feature
 > 위치: packages/fe-ui/src/components/feature/ReservationList/
 
@@ -64,6 +64,14 @@
 interface ReservationListProps {
   spaceId: string;
   initialPageSize?: number;
+  reservations?: Reservation[];
+  isLoading?: boolean;
+  totalCount?: number;
+  onSelect?: (reservationId: string) => void;
+  onRefresh?: () => void;
+  onFilterChange?: (filters: ReservationFilters) => void;
+  onPageChange?: (page: number) => void;
+  className?: string;
 }
 ```
 
@@ -71,32 +79,39 @@ interface ReservationListProps {
 
 | Store | 속성/메서드 | 사용 방식 |
 |-------|------------|----------|
-| ReservationStore | reservations | 읽기 (표시) |
-| ReservationStore | loading | 읽기 (로딩 표시) |
 | ReservationStore | filters | 읽기/쓰기 (필터 상태) |
-| ReservationStore | fetchReservations | 호출 (데이터 로드) |
+| ReservationStore | selectedId | 읽기/쓰기 (선택 상태) |
+| ReservationStore | setFilters | 호출 (필터 설정) |
+| ReservationStore | setSelectedId | 호출 (선택 설정) |
+| ReservationStore | clearSelection | 호출 (선택 해제) |
 
 ## 이벤트
 
 | 이벤트 | 발생 조건 | 부모 전달 |
 |--------|----------|----------|
 | onSelect | 행 클릭 | O (reservationId) |
-| onRefresh | 새로고침 버튼 | X |
-| onFilter | 필터 변경 | X |
+| onRefresh | 새로고침 버튼 | O |
+| onFilterChange | 필터 변경 | O |
+| onPageChange | 페이지 변경 | O |
 
 ## 하위 컴포넌트
 
 | 컴포넌트 | 타입 | 기획서 |
 |----------|------|--------|
-| ReservationFilter | widget | `../../widget/ReservationFilter/index.spec.md` |
-| ReservationRow | widget | `../../widget/ReservationRow/index.spec.md` |
-| DataTable | ui | `../../ui/DataTable/index.spec.md` |
+| Input | inputs | `../../inputs/Input/index.spec.md` |
+| Select | inputs | `../../inputs/Select/index.spec.md` |
+| Button | ui | `../../ui/Button/index.spec.md` |
+| Chip | ui | HeroUI |
+| VStack | ui | `../../ui/surfaces/VStack/index.spec.md` |
+| HStack | ui | `../../ui/surfaces/HStack/index.spec.md` |
 
 ## 구현 체크리스트
 
-- [ ] index.tsx
-- [ ] observer 적용
-- [ ] Store 주입
+- [x] ReservationList.tsx
+- [x] observer 적용
+- [x] Store 주입 (useReservationStore)
+- [x] Props 타입 정의
+- [x] index.ts export
 
 ## 상위 기획서
 
@@ -108,3 +123,4 @@ interface ReservationListProps {
 |------|------|--------|
 | 2026-02-18 | 초기 생성 | orch-requirement |
 | 2026-02-19 | 디자인 목업 섹션 추가 | req-reverse-engineer |
+| 2026-02-24 | 구현 완료, 체크리스트 업데이트 | fe-feature-builder |

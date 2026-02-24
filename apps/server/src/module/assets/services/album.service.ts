@@ -11,6 +11,7 @@ import {
 } from "@nestjs/common";
 import { ClsService } from "nestjs-cls";
 import { AlbumRepository } from "../repositories/album.repository";
+import type { CreateAlbumInput, UpdateAlbumInput } from "./input";
 
 /**
  * 앨범 목록 조회 결과
@@ -159,33 +160,34 @@ export class AlbumService {
 	/**
 	 * 앨범 생성
 	 */
-	async createAlbum(data: Prisma.AlbumUncheckedCreateInput): Promise<Album> {
+	async createAlbum(input: CreateAlbumInput): Promise<Album> {
 		const spaceId = this.getSpaceId();
 		this.logger.debug(`앨범 생성: spaceId=${spaceId}`);
 
 		// sortOrder가 없으면 마지막 순서 + 1로 설정
-		if (data.sortOrder === undefined) {
-			const count = await this.repository.countBySpaceId(spaceId);
-			data.sortOrder = count;
-		}
+		const sortOrder =
+			input.sortOrder ?? (await this.repository.countBySpaceId(spaceId));
 
 		return this.repository.create({
-			...data,
+			name: input.name,
+			description: input.description,
+			coverAssetId: input.coverAssetId,
+			sortOrder,
 			spaceId,
-		});
+		} as Prisma.AlbumUncheckedCreateInput);
 	}
 
 	/**
 	 * 앨범 수정
 	 */
-	async updateAlbum(
-		albumId: string,
-		data: Prisma.AlbumUncheckedUpdateInput,
-	): Promise<Album> {
+	async updateAlbum(albumId: string, input: UpdateAlbumInput): Promise<Album> {
 		this.logger.debug(`앨범 수정: albumId=${albumId}`);
 
 		await this.getAlbumWithAccessCheck(albumId);
-		return this.repository.updateById(albumId, data);
+		return this.repository.updateById(
+			albumId,
+			input as Prisma.AlbumUncheckedUpdateInput,
+		);
 	}
 
 	/**

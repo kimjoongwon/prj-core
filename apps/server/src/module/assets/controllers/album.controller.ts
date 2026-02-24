@@ -145,14 +145,11 @@ export class AlbumController {
 	@ApiResponseEntity(AlbumDto, HttpStatus.CREATED)
 	@ResponseMessage("앨범 생성 성공")
 	async createAlbum(@Body() dto: CreateAlbumDto): Promise<Album> {
-		const spaceId = this.getSpaceId();
 		return this.albumService.createAlbum({
-			spaceId,
 			name: dto.name,
 			description: dto.description ?? null,
 			sortOrder: dto.sortOrder,
 			coverAssetId: dto.coverAssetId ?? null,
-			creatorId: dto.creatorId ?? null,
 		});
 	}
 

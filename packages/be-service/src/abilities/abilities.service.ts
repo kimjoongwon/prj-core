@@ -1,5 +1,5 @@
 import { ABILITY_ERRORS } from "@cocrepo/constant";
-import { CreateAbilityInput } from "@cocrepo/dto";
+import { CreateAbilityInput as CreateAbilityDto } from "@cocrepo/dto";
 import { Ability } from "@cocrepo/entity";
 import type { Prisma } from "@cocrepo/prisma";
 import {
@@ -8,6 +8,7 @@ import {
 } from "@cocrepo/repository";
 import { BadRequestException, Injectable, Logger } from "@nestjs/common";
 import { Transactional } from "@nestjs-cls/transactional";
+import type { CreateAbilityInput, UpdateAbilityInput } from "./input/index";
 
 
 /**
@@ -152,38 +153,38 @@ export class AbilitiesService {
 	/**
 	 * 권한 정의 생성
 	 *
-	 * @param data - Ability 생성 데이터 (재사용 가능한 권한 정의)
+	 * @param input - Ability 생성 데이터 (재사용 가능한 권한 정의)
 	 * @returns 생성된 Ability
 	 * @description 권한 정의만 생성합니다. Role/User에 할당하려면 Grant를 생성하세요.
 	 */
-	async createAbility(
-		data: Prisma.AbilityUncheckedCreateInput,
-	): Promise<Ability> {
+	async createAbility(input: CreateAbilityInput): Promise<Ability> {
 		this.logger.debug(
-			`권한 정의 생성: name=${data.name}, subjectId=${data.subjectId}, actionId=${data.actionId}`,
+			`권한 정의 생성: name=${input.name}, subjectId=${input.subjectId}, actionId=${input.actionId}`,
 		);
 
 		// 유효성 검증
-		this.validateAbilityData(data);
+		this.validateAbilityData(input);
 
-		return this.abilitiesRepository.create(data);
+		return this.abilitiesRepository.create(
+			input as Prisma.AbilityUncheckedCreateInput,
+		);
 	}
 
 	/**
 	 * 권한 정의 수정
 	 *
 	 * @param id - Ability ID
-	 * @param data - 수정 데이터
+	 * @param input - 수정 데이터
 	 * @returns 수정된 Ability
 	 * @description Ability 정의만 수정합니다. Grant 메타데이터(isActive, priority)는 변경되지 않습니다.
 	 */
-	async updateAbility(
-		id: string,
-		data: Prisma.AbilityUncheckedUpdateInput,
-	): Promise<Ability> {
+	async updateAbility(id: string, input: UpdateAbilityInput): Promise<Ability> {
 		this.logger.debug(`권한 정의 수정: id=${id.slice(-8)}`);
 
-		return this.abilitiesRepository.updateById(id, data);
+		return this.abilitiesRepository.updateById(
+			id,
+			input as Prisma.AbilityUncheckedUpdateInput,
+		);
 	}
 
 	/**
@@ -211,9 +212,9 @@ export class AbilitiesService {
 	/**
 	 * Ability 데이터 유효성 검증
 	 */
-	private validateAbilityData(data: Prisma.AbilityUncheckedCreateInput): void {
+	private validateAbilityData(input: CreateAbilityInput): void {
 		// actionId, subjectId, name 필수
-		if (!data.actionId || !data.subjectId || !data.name) {
+		if (!input.actionId || !input.subjectId || !input.name) {
 			throw new BadRequestException(
 				ABILITY_ERRORS.INVALID_DATA,
 			);

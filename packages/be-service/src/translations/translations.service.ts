@@ -15,6 +15,11 @@ import {
 } from "@nestjs/common";
 import { Transactional } from "@nestjs-cls/transactional";
 import { RedisService } from "./redis.service";
+import type {
+	CreateTranslationInput,
+	UpdateTranslationInput,
+	UpsertTranslationInput,
+} from "./input";
 
 
 /**
@@ -110,18 +115,18 @@ export class TranslationsService {
 	/**
 	 * 번역 생성
 	 *
-	 * @param data - 번역 생성 데이터
+	 * @param input - 번역 생성 데이터
 	 * @returns 생성된 Translation
 	 * @throws BadRequestException - 중복된 키가 존재하는 경우
 	 */
 	@Transactional()
-	async createTranslation(data: CreateTranslationDto): Promise<Translation> {
-		this.logger.debug(`번역 생성: ${data.languageCode} - ${data.key}`);
+	async createTranslation(input: CreateTranslationInput): Promise<Translation> {
+		this.logger.debug(`번역 생성: ${input.languageCode} - ${input.key}`);
 
 		// 중복 체크
 		const existing = await this.translationsRepository.findByKey(
-			data.languageCode,
-			data.key,
+			input.languageCode,
+			input.key,
 		);
 
 		if (existing) {
@@ -132,14 +137,14 @@ export class TranslationsService {
 
 		// 생성
 		const translation = await this.translationsRepository.create(
-			data as Prisma.TranslationUncheckedCreateInput,
+			input as Prisma.TranslationUncheckedCreateInput,
 		);
 
 		// 캐시 무효화 (해당 언어의 모든 캐시)
-		await this.invalidateCache(data.languageCode);
+		await this.invalidateCache(input.languageCode);
 
 		this.logger.log(
-			`번역 생성 완료: ${data.languageCode} - ${data.key} (id=${translation.id.slice(-8)})`,
+			`번역 생성 완료: ${input.languageCode} - ${input.key} (id=${translation.id.slice(-8)})`,
 		);
 
 		return translation;
@@ -149,14 +154,14 @@ export class TranslationsService {
 	 * 번역 수정
 	 *
 	 * @param id - Translation ID
-	 * @param data - 수정 데이터
+	 * @param input - 수정 데이터
 	 * @returns 수정된 Translation
 	 * @throws NotFoundException - 번역을 찾을 수 없는 경우
 	 */
 	@Transactional()
 	async updateTranslation(
 		id: string,
-		data: UpdateTranslationDto,
+		input: UpdateTranslationInput,
 	): Promise<Translation> {
 		this.logger.debug(`번역 수정: id=${id.slice(-8)}`);
 
@@ -172,7 +177,7 @@ export class TranslationsService {
 		// 수정
 		const translation = await this.translationsRepository.updateById(
 			id,
-			data as Prisma.TranslationUncheckedUpdateInput,
+			input as Prisma.TranslationUncheckedUpdateInput,
 		);
 
 		// 캐시 무효화 (해당 언어의 모든 캐시)
@@ -221,26 +226,26 @@ export class TranslationsService {
 	/**
 	 * 번역 Upsert (생성 또는 수정)
 	 *
-	 * @param data - 번역 데이터
+	 * @param input - 번역 데이터
 	 * @returns Upsert된 Translation
 	 */
 	@Transactional()
-	async upsertTranslation(data: CreateTranslationDto): Promise<Translation> {
-		this.logger.debug(`번역 Upsert: ${data.languageCode} - ${data.key}`);
+	async upsertTranslation(input: UpsertTranslationInput): Promise<Translation> {
+		this.logger.debug(`번역 Upsert: ${input.languageCode} - ${input.key}`);
 
 		const translation = await this.translationsRepository.upsert({
-			languageCode: data.languageCode,
-			key: data.key,
-			text: data.text,
-			category: data.category,
-			isTranslated: data.isTranslated,
+			languageCode: input.languageCode,
+			key: input.key,
+			text: input.text,
+			category: input.category,
+			isTranslated: input.isTranslated,
 		});
 
 		// 캐시 무효화 (해당 언어의 모든 캐시)
-		await this.invalidateCache(data.languageCode);
+		await this.invalidateCache(input.languageCode);
 
 		this.logger.log(
-			`번역 Upsert 완료: ${data.languageCode} - ${data.key} (id=${translation.id.slice(-8)})`,
+			`번역 Upsert 완료: ${input.languageCode} - ${input.key} (id=${translation.id.slice(-8)})`,
 		);
 
 		return translation;

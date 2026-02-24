@@ -1,5 +1,6 @@
 // Feature 컴포넌트 - 비즈니스 로직을 포함하며 Layout 영역에 마운트됨
 export * from "./ability";
+export * from "./AlbumManager";
 export * from "./AssetBrowser";
 export * from "./AssetDetailHeader";
 export * from "./AssetManager";
@@ -7,14 +8,16 @@ export * from "./AssetPicker";
 export * from "./AssetUploader";
 export * from "./AssetViewer";
 export * from "./BottomTab";
-export * from "./FolderNavigator";
 export { CollapsibleSidebar } from "./CollapsibleSidebar/CollapsibleSidebarLayout";
+export * from "./FolderNavigator";
 export * from "./HeaderSpaceSelector";
 export * from "./idp";
 export * from "./Logo";
 export * from "./message-template";
 export * from "./MetaDataGrid";
 export * from "./Nav";
+export * from "./ReservationDetail";
+export * from "./ReservationList";
 export * from "./SideNav";
 export * from "./SpaceSelector";
 export * from "./SubMenuList";

@@ -12,6 +12,11 @@ import {
 } from "@nestjs/common";
 import { ClsService } from "nestjs-cls";
 import { AssetRepository } from "../repositories/asset.repository";
+import type {
+	CreateAssetInput,
+	UpdateAssetInput,
+	CreateAssetWithDetailsInput,
+} from "./input";
 
 /**
  * 에셋 목록 조회 결과
@@ -136,48 +141,58 @@ export class AssetService {
 	/**
 	 * 에셋 생성
 	 */
-	async createAsset(
-		data: Prisma.AssetUncheckedCreateInput,
-	): Promise<Asset> {
+	async createAsset(input: CreateAssetInput): Promise<Asset> {
 		const spaceId = this.getSpaceId();
 		this.logger.debug(`에셋 생성: spaceId=${spaceId}`);
 
 		return this.repository.create({
-			...data,
+			folderId: input.folderId,
+			kind: input.kind,
+			status: input.status ?? "UPLOADING",
+			originalName: input.originalName,
+			mimeType: input.mimeType,
+			sizeBytes: input.sizeBytes,
+			storageKey: input.storageKey,
+			checksum: input.checksum,
+			extension: input.extension,
+			metadata: input.metadata,
+			creatorId: input.creatorId,
 			spaceId,
-		});
+		} as Prisma.AssetUncheckedCreateInput);
 	}
 
 	/**
 	 * 에셋 생성 (상세 정보와 함께)
 	 */
-	async createAssetWithDetails(params: {
-		asset: Prisma.AssetUncheckedCreateInput;
-		image?: Prisma.ImageUncheckedCreateInput;
-		video?: Prisma.VideoUncheckedCreateInput;
-		document?: Prisma.DocumentUncheckedCreateInput;
-	}): Promise<Asset> {
+	async createAssetWithDetails(input: CreateAssetWithDetailsInput): Promise<Asset> {
 		const spaceId = this.getSpaceId();
 		this.logger.debug(`에셋 생성 (상세 포함): spaceId=${spaceId}`);
 
 		return this.repository.createWithDetails({
 			asset: {
-				...params.asset,
+				folderId: input.asset.folderId,
+				kind: input.asset.kind,
+				status: input.asset.status ?? "UPLOADING",
+				originalName: input.asset.originalName,
+				mimeType: input.asset.mimeType,
+				sizeBytes: input.asset.sizeBytes,
+				storageKey: input.asset.storageKey,
+				checksum: input.asset.checksum,
+				extension: input.asset.extension,
+				metadata: input.asset.metadata,
+				creatorId: input.asset.creatorId,
 				spaceId,
-			},
-			image: params.image,
-			video: params.video,
-			document: params.document,
+			} as Prisma.AssetUncheckedCreateInput,
+			image: input.image as Prisma.ImageUncheckedCreateInput | undefined,
+			video: input.video as Prisma.VideoUncheckedCreateInput | undefined,
+			document: input.document as Prisma.DocumentUncheckedCreateInput | undefined,
 		});
 	}
 
 	/**
 	 * 에셋 수정
 	 */
-	async updateAsset(
-		assetId: string,
-		data: Prisma.AssetUncheckedUpdateInput,
-	): Promise<Asset> {
+	async updateAsset(assetId: string, input: UpdateAssetInput): Promise<Asset> {
 		const spaceId = this.getSpaceId();
 		this.logger.debug(`에셋 수정: assetId=${assetId}, spaceId=${spaceId}`);
 
@@ -191,7 +206,10 @@ export class AssetService {
 			throw new NotFoundException("에셋을 찾을 수 없습니다.");
 		}
 
-		return this.repository.updateById(assetId, data);
+		return this.repository.updateById(
+			assetId,
+			input as Prisma.AssetUncheckedUpdateInput,
+		);
 	}
 
 	/**
