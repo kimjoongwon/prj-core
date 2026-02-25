@@ -5,7 +5,7 @@
   "types": "dist/index.d.ts",
   "scripts": {
     "build": "tsc --build",
-    "dev": "tsc --build --watch"
+    "start:dev": "tsc --build --watch"
   },
   "dependencies": {
     "@cocrepo/constant": "workspace:*",
