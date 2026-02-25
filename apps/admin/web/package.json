@@ -1,0 +1,52 @@
+{
+  "name": "admin-web",
+  "private": true,
+  "version": "0.0.0",
+  "scripts": {
+    "dev": "next dev --turbopack & sleep 2 && open http://localhost:3000/admin && wait",
+    "start:dev": "next dev --turbopack",
+    "build": "next build",
+    "analyze": "ANALYZE=true pnpm build",
+    "start": "next start",
+    "type-check": "tsc --noEmit",
+    "lint": "biome check .",
+    "lint:fix": "biome check --write .",
+    "format": "biome format --write .",
+    "clean": "rm -rf node_modules && rm -rf .next && rm -rf package-lock.json",
+    "clean:next": "rm -rf .next"
+  },
+  "dependencies": {
+    "@cocrepo/api": "workspace:^",
+    "@cocrepo/hook": "workspace:^",
+    "@cocrepo/schema": "workspace:^",
+    "@cocrepo/store": "workspace:^",
+    "@cocrepo/toolkit": "workspace:^1.3.0",
+    "@cocrepo/type": "workspace:^",
+    "@cocrepo/ui": "workspace:^1.5.0",
+    "@heroui/react": "catalog:",
+    "@heroui/use-theme": "catalog:",
+    "@tanstack/react-query": "catalog:",
+    "@tanstack/react-table": "^8.21.3",
+    "axios": "catalog:",
+    "class-variance-authority": "catalog:",
+    "dayjs": "catalog:",
+    "framer-motion": "catalog:",
+    "lucide-react": "catalog:",
+    "mobx": "catalog:",
+    "mobx-react-lite": "catalog:",
+    "next": "^16.1.0",
+    "react": "catalog:",
+    "react-cookie": "catalog:",
+    "react-dom": "catalog:",
+    "recharts": "^2.15.0"
+  },
+  "devDependencies": {
+    "@next/bundle-analyzer": "^16.1.6",
+    "@tailwindcss/postcss": "catalog:",
+    "@types/node": "catalog:",
+    "@types/react": "catalog:",
+    "@types/react-dom": "catalog:",
+    "tailwindcss": "catalog:",
+    "typescript": "catalog:"
+  }
+}

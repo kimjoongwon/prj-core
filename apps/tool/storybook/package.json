@@ -1,0 +1,54 @@
+{
+  "name": "tool-storybook",
+  "version": "1.0.0",
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "test": "vitest",
+    "test:ui": "vitest --ui",
+    "test:run": "vitest run",
+    "test:watch": "vitest watch",
+    "format": "biome format --write .",
+    "type-check": "tsc --noEmit",
+    "start:dev": "storybook dev -p 6006",
+    "build-storybook": "storybook build"
+  },
+  "license": "ISC",
+  "dependencies": {
+
+    "@heroui/react": "catalog:",
+    "@cocrepo/store": "workspace:^",
+    "@cocrepo/ui": "workspace:^",
+    "@tanstack/react-query": "catalog:",
+    "mobx": "catalog:",
+    "mobx-react-lite": "catalog:",
+    "nuqs": "catalog:",
+    "react": "catalog:",
+    "react-dom": "catalog:",
+    "react-router": "^7.7.1",
+    "react-router-dom": "^7.7.1"
+  },
+  "devDependencies": {
+    "@chromatic-com/storybook": "^4.0.1",
+    "@storybook/addon-a11y": "^9.0.18",
+    "@storybook/addon-docs": "catalog:",
+    "@storybook/addon-vitest": "^9.0.18",
+    "@storybook/react-vite": "catalog:",
+    "@tailwindcss/postcss": "catalog:",
+    "@tailwindcss/vite": "catalog:",
+    "@testing-library/jest-dom": "catalog:",
+    "@testing-library/react": "catalog:",
+    "@types/react": "catalog:",
+    "@types/react-dom": "catalog:",
+    "@vitejs/plugin-react-swc": "catalog:",
+    "@vitest/browser": "catalog:",
+    "@vitest/coverage-v8": "catalog:",
+    "jsdom": "catalog:",
+    "playwright": "^1.54.1",
+    "prop-types": "^15.8.1",
+    "storybook": "catalog:",
+    "tailwindcss": "catalog:",
+    "typescript": "catalog:",
+    "vitest": "catalog:"
+  }
+}

@@ -25,13 +25,12 @@ else
   echo ""
   echo -e "${BOLD}🚀 서비스 시작${RESET}"
   echo ""
-  echo -e "  ${CYAN}1${RESET})  server          ${DIM}백엔드 서버${RESET}"
-  echo -e "  ${CYAN}2${RESET})  admin           ${DIM}어드민 프론트엔드${RESET}"
-  echo -e "  ${CYAN}3${RESET})  idp-server      ${DIM}인증 서버 (백엔드)${RESET}"
-  echo -e "  ${CYAN}4${RESET})  idp-client      ${DIM}인증 서버 (프론트엔드)${RESET}"
-  echo -e "  ${CYAN}5${RESET})  storybook       ${DIM}스토리북${RESET}"
-  echo -e "  ${CYAN}6${RESET})  proposal        ${DIM}기획서${RESET}"
-  echo -e "  ${CYAN}7${RESET})  opencode-studio ${DIM}OpenCode Studio${RESET}"
+  echo -e "  ${CYAN}1${RESET})  core-api        ${DIM}백엔드 서버${RESET}"
+  echo -e "  ${CYAN}2${RESET})  admin-web       ${DIM}어드민 프론트엔드${RESET}"
+  echo -e "  ${CYAN}3${RESET})  idp-api         ${DIM}인증 서버 (백엔드)${RESET}"
+  echo -e "  ${CYAN}4${RESET})  idp-web         ${DIM}인증 서버 (프론트엔드)${RESET}"
+  echo -e "  ${CYAN}5${RESET})  tool-storybook  ${DIM}스토리북${RESET}"
+  echo -e "  ${CYAN}6${RESET})  proposal-web    ${DIM}기획서${RESET}"
   echo ""
   echo -e "  ${DIM}복수 선택 가능 (예: 1 2)${RESET}"
   echo ""
@@ -53,25 +52,23 @@ HAS_IDP="false"
 # 서비스별 포트 조회
 get_port() {
   case $1 in
-    server)          echo 3006 ;;
-    admin)           echo 3000 ;;
-    idp-server)      echo 3007 ;;
-    idp-client)      echo 3008 ;;
-    storybook)       echo 6006 ;;
-    proposal)        echo 3001 ;;
-    opencode-studio) echo 3010 ;;
+    core-api)        echo 3006 ;;
+    admin-web)       echo 3000 ;;
+    idp-api)         echo 3007 ;;
+    idp-web)         echo 3008 ;;
+    tool-storybook)  echo 6006 ;;
+    proposal-web)    echo 3001 ;;
   esac
 }
 
 for choice in $choices; do
   case $choice in
-    1) FILTERS="$FILTERS --filter=server..."; SERVICES="$SERVICES server"; HAS_BACKEND="true" ;;
-    2) FILTERS="$FILTERS --filter=admin"; SERVICES="$SERVICES admin"; HAS_FRONTEND="true" ;;
-    3) FILTERS="$FILTERS --filter=idp-server..."; SERVICES="$SERVICES idp-server"; HAS_IDP="true" ;;
-    4) FILTERS="$FILTERS --filter=idp-client"; SERVICES="$SERVICES idp-client"; HAS_FRONTEND="true" ;;
-    5) FILTERS="$FILTERS --filter=storybook"; SERVICES="$SERVICES storybook" ;;
-    6) FILTERS="$FILTERS --filter=proposal"; SERVICES="$SERVICES proposal"; HAS_FRONTEND="true" ;;
-    7) FILTERS="$FILTERS --filter=opencode-studio"; SERVICES="$SERVICES opencode-studio"; HAS_FRONTEND="true" ;;
+    1) FILTERS="$FILTERS --filter=core-api..."; SERVICES="$SERVICES core-api"; HAS_BACKEND="true" ;;
+    2) FILTERS="$FILTERS --filter=admin-web"; SERVICES="$SERVICES admin-web"; HAS_FRONTEND="true" ;;
+    3) FILTERS="$FILTERS --filter=idp-api..."; SERVICES="$SERVICES idp-api"; HAS_IDP="true" ;;
+    4) FILTERS="$FILTERS --filter=idp-web"; SERVICES="$SERVICES idp-web"; HAS_FRONTEND="true" ;;
+    5) FILTERS="$FILTERS --filter=tool-storybook"; SERVICES="$SERVICES tool-storybook" ;;
+    6) FILTERS="$FILTERS --filter=proposal-web"; SERVICES="$SERVICES proposal-web"; HAS_FRONTEND="true" ;;
     *) echo -e "${YELLOW}잘못된 번호: ${choice}${RESET}"; exit 1 ;;
   esac
 done
@@ -126,16 +123,16 @@ fi
 # local 선택 시: 필요한 서버가 없으면 자동 추가
 if [[ "$CODEGEN_ENV" == "local" ]]; then
   if [[ ("$CODEGEN_TARGET" == "all" || "$CODEGEN_TARGET" == "server") && "$HAS_BACKEND" != "true" ]]; then
-    FILTERS="$FILTERS --filter=server..."
-    SERVICES="$SERVICES server"
+    FILTERS="$FILTERS --filter=core-api..."
+    SERVICES="$SERVICES core-api"
     HAS_BACKEND="true"
-    echo -e "\n${YELLOW}⚠️  local 코드젠은 서버가 필요합니다. server를 자동으로 포함합니다.${RESET}"
+    echo -e "\n${YELLOW}⚠️  local 코드젠은 서버가 필요합니다. core-api를 자동으로 포함합니다.${RESET}"
   fi
   if [[ ("$CODEGEN_TARGET" == "all" || "$CODEGEN_TARGET" == "idp") && "$HAS_IDP" != "true" ]]; then
-    FILTERS="$FILTERS --filter=idp-server..."
-    SERVICES="$SERVICES idp-server"
+    FILTERS="$FILTERS --filter=idp-api..."
+    SERVICES="$SERVICES idp-api"
     HAS_IDP="true"
-    echo -e "${YELLOW}⚠️  local 코드젠은 IDP 서버가 필요합니다. idp-server를 자동으로 포함합니다.${RESET}"
+    echo -e "${YELLOW}⚠️  local 코드젠은 IDP 서버가 필요합니다. idp-api를 자동으로 포함합니다.${RESET}"
   fi
 fi
 

@@ -40,9 +40,9 @@ FROM base AS setup
 COPY . .
 
 # 🎯 Turbo를 사용해 서버 앱만을 위한 최소한의 종속성 트리 생성
-# - --scope=server: 서버 앱과 관련된 패키지만 추출
+# - --scope=core-api: 서버 앱과 관련된 패키지만 추출
 # - --docker: Docker 최적화된 출력 구조 생성
-RUN turbo prune --scope=server --docker
+RUN turbo prune --scope=core-api --docker
 
 # ============================================================================
 # 🏭 BUILDER STAGE: 애플리케이션 빌드

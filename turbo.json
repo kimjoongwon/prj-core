@@ -46,13 +46,13 @@
     },
 
     // === 앱 태스크 ===
-    "server#build": {
+    "core-api#build": {
       "dependsOn": ["^build"],
       "inputs": ["src/**", "tsconfig.json", "tsconfig.build.json", "package.json", "nest-cli.json"],
       "outputs": ["dist/**"],
       "cache": true
     },
-    "server#start:dev": {
+    "core-api#start:dev": {
       "dependsOn": ["^build"],
       "cache": false,
       "persistent": true

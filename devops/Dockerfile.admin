@@ -36,9 +36,9 @@ FROM base AS setup
 COPY . .
 
 # 🎯 Turbo를 사용해 관리자 앱만을 위한 최소한의 종속성 트리 생성
-# - --scope=admin: 관리자 앱과 관련된 패키지만 추출
+# - --scope=admin-web: 관리자 앱과 관련된 패키지만 추출
 # - --docker: Docker 최적화된 출력 구조 생성
-RUN turbo prune --scope=admin --docker
+RUN turbo prune --scope=admin-web --docker
 
 # ============================================================================
 # 🏭 BUILDER STAGE: Next.js 애플리케이션 빌드
@@ -78,14 +78,14 @@ RUN addgroup --system --gid 1001 nodejs && \
 
 # 📦 Next.js standalone 빌드 결과물 복사
 # - standalone: 최소화된 Node.js 서버
-COPY --from=builder --chown=nextjs:nodejs /app/apps/admin/.next/standalone ./
+COPY --from=builder --chown=nextjs:nodejs /app/apps/admin/web/.next/standalone ./
 
 # 📦 정적 파일 복사
 # - static: CSS, JS, 이미지 등 정적 자산
-COPY --from=builder --chown=nextjs:nodejs /app/apps/admin/.next/static ./apps/admin/.next/static
+COPY --from=builder --chown=nextjs:nodejs /app/apps/admin/web/.next/static ./apps/admin/web/.next/static
 
 # 📦 public 폴더 복사 (존재하는 경우)
-COPY --from=builder --chown=nextjs:nodejs /app/apps/admin/public ./apps/admin/public
+COPY --from=builder --chown=nextjs:nodejs /app/apps/admin/web/public ./apps/admin/web/public
 
 # 🔧 환경 변수 설정
 ENV NODE_ENV=production
@@ -99,4 +99,4 @@ USER nextjs
 EXPOSE 3000
 
 # 🎯 Next.js 서버 실행
-CMD ["node", "apps/admin/server.js"]
+CMD ["node", "apps/admin/web/server.js"]
