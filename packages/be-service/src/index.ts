@@ -1,5 +1,5 @@
-// Context
-export { SpaceContext } from "./context/space-context";
+// Context (be-context에서 재export)
+export { AuthContext, SpaceContext } from "@cocrepo/context";
 
 // I18n
 export { I18nModule, TranslationService } from "./i18n";

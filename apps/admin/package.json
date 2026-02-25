@@ -6,6 +6,7 @@
     "dev": "next dev --turbopack & sleep 2 && open http://localhost:3000/admin && wait",
     "start:dev": "next dev --turbopack",
     "build": "next build",
+    "analyze": "ANALYZE=true pnpm build",
     "start": "next start",
     "type-check": "tsc --noEmit",
     "lint": "biome check .",
@@ -16,7 +17,6 @@
   },
   "dependencies": {
     "@cocrepo/api": "workspace:^",
-
     "@cocrepo/hook": "workspace:^",
     "@cocrepo/schema": "workspace:^",
     "@cocrepo/store": "workspace:^",
@@ -41,6 +41,7 @@
     "recharts": "^2.15.0"
   },
   "devDependencies": {
+    "@next/bundle-analyzer": "^16.1.6",
     "@tailwindcss/postcss": "catalog:",
     "@types/node": "catalog:",
     "@types/react": "catalog:",

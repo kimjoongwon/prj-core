@@ -22,6 +22,8 @@
     "@cocrepo/prisma": "workspace:*",
     "@cocrepo/decorator": "workspace:*",
     "@cocrepo/type": "workspace:*",
+    "@cocrepo/dto": "workspace:*",
+    "@cocrepo/enum": "workspace:*",
     "class-transformer": "^0.5.1"
   },
   "peerDependencies": {

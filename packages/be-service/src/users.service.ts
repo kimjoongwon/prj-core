@@ -1,4 +1,4 @@
-import { SpaceContext } from "./context/space-context";
+import { SpaceContext } from "@cocrepo/context";
 import { USER_ERRORS } from "@cocrepo/constant";
 import { validatePasswordPolicy } from "@cocrepo/be-common";
 import type { QueryUsersDto } from "@cocrepo/dto";

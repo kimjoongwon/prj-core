@@ -23,6 +23,7 @@
   },
   "dependencies": {
     "@cocrepo/constant": "workspace:*",
+    "@cocrepo/context": "workspace:*",
     "@cocrepo/decorator": "workspace:*",
     "@cocrepo/dto": "workspace:*",
     "@cocrepo/entity": "workspace:*",

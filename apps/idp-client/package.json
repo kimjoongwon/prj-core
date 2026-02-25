@@ -6,6 +6,7 @@
     "dev": "next dev --turbopack --port 3008",
     "start:dev": "next dev --turbopack --port 3008",
     "build": "next build",
+    "analyze": "ANALYZE=true pnpm build",
     "start": "next start",
     "type-check": "tsc --noEmit",
     "lint": "biome check .",
@@ -18,9 +19,9 @@
     "@cocrepo/constant": "workspace:^",
     "@cocrepo/hook": "workspace:^",
     "@cocrepo/store": "workspace:^",
-    "@cocrepo/ui": "workspace:^",
     "@cocrepo/toolkit": "workspace:^",
     "@cocrepo/type": "workspace:^",
+    "@cocrepo/ui": "workspace:^",
     "@heroui/react": "catalog:",
     "@heroui/use-theme": "catalog:",
     "@tanstack/react-query": "catalog:",
@@ -36,6 +37,7 @@
     "react-dom": "catalog:"
   },
   "devDependencies": {
+    "@next/bundle-analyzer": "^16.1.6",
     "@tailwindcss/postcss": "catalog:",
     "@types/node": "catalog:",
     "@types/react": "catalog:",

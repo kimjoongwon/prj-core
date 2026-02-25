@@ -9,7 +9,7 @@ import {
 	Logger,
 	NotFoundException,
 } from "@nestjs/common";
-import { SpaceContext } from "./context/space-context";
+import { SpaceContext } from "@cocrepo/context";
 
 @Injectable()
 export class RoutinesService {

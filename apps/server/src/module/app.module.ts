@@ -13,6 +13,7 @@ import {
 } from "@cocrepo/be-common";
 import {
 	AuthCacheService,
+	AuthContext,
 	I18nModule,
 	SpaceContext,
 	TokenStorageService,
@@ -148,7 +149,8 @@ import { UsersModule } from "./users";
 		SpaceScopeInterceptor,
 		DtoTransformInterceptor,
 		ResponseEntityInterceptor,
-		// Space Context (Service에서 주입)
+		// Context (Service에서 주입)
+		AuthContext,
 		SpaceContext,
 		// Rate Limiting
 		{
