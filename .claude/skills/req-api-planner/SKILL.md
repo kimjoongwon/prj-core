@@ -148,7 +148,7 @@ X-Space-ID: <spaceId>
 
 ## 상위 기획서
 
-- `apps/admin/app/(admin)/app.spec.md`
+- `apps/admin/web/app/(admin)/app.spec.md`
 
 ## 변경 이력
 
@@ -245,10 +245,10 @@ fi
 모듈명: member
 
 페이지 기획서:
-- apps/admin/app/(admin)/users/page.spec.md
-- apps/admin/app/(admin)/users/[userId]/page.spec.md
-- apps/admin/app/(admin)/users/new/page.spec.md
-- apps/admin/app/(admin)/users/[userId]/edit/page.spec.md
+- apps/admin/web/app/(admin)/users/page.spec.md
+- apps/admin/web/app/(admin)/users/[userId]/page.spec.md
+- apps/admin/web/app/(admin)/users/new/page.spec.md
+- apps/admin/web/app/(admin)/users/[userId]/edit/page.spec.md
 ```
 
 ---

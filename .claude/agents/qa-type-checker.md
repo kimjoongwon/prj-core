@@ -55,7 +55,7 @@ tools: Read, Write, Grep, Bash
 3. 관련 타입 정의 추적
    ├── Orval 생성 타입 (packages/fe-api/src/model/)
    ├── 백엔드 DTO (packages/be-dto/src/)
-   └── 백엔드 컨트롤러 (apps/server/src/module/)
+   └── 백엔드 컨트롤러 (apps/core/api/src/module/)
    ↓
 4. 근본 원인 파악
    ├── 프론트엔드 사용 방식 오류?
@@ -80,7 +80,7 @@ packages/fe-api/src/model/*.ts (Orval 생성 타입)
   ↓ 원본
 packages/be-dto/src/**/*.dto.ts (백엔드 DTO)
   ↓ 사용
-apps/server/src/module/**/**.controller.ts (백엔드 컨트롤러)
+apps/core/api/src/module/**/**.controller.ts (백엔드 컨트롤러)
 ```
 
 ### 3.3 응답 래퍼 구조 이해

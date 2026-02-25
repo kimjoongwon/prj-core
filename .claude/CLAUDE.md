@@ -165,7 +165,7 @@ function UsersPage() {
 **모든 페이지는 반드시 서버 사이드 Prefetch 패턴을 사용해야 합니다.**
 
 ```
-apps/admin/app/[route]/
+apps/admin/web/app/[route]/
 ├── page.tsx          # 서버 컴포넌트 (Prefetch + HydrationBoundary)
 ├── _client.tsx       # 클라이언트 컴포넌트
 ├── _prefetch.ts      # Prefetch 설정
@@ -316,7 +316,7 @@ UserCard                      → UserMenu (AuthStore 연결)
 import { SideNav, UserMenu } from "@cocrepo/ui";
 
 // ❌ 금지 - apps 내부에 Feature 생성
-// apps/admin/src/components/features/HeaderSpaceSelector.tsx  ← 금지!
+// apps/admin/web/src/components/features/HeaderSpaceSelector.tsx  ← 금지!
 ```
 
 ### SSR/Hydration 관련 주의사항
@@ -458,7 +458,7 @@ export class PersistStore {
   constructor(config: { storageKey: string }) { }
 }
 
-// apps/admin/src/stores - 앱별 설정 주입
+// apps/admin/web/src/stores - 앱별 설정 주입
 rootStore.persistStore = new PersistStore({
   storageKey: "admin-persist",
 });
@@ -588,7 +588,7 @@ packages/be-vo/src/[domain]/
 ├── [name].vo.ts
 └── [name].vo.spec.md           # VO 기획서
 
-apps/server/src/[module]/
+apps/core/api/src/[module]/
 ├── [name].service.ts
 ├── [name].service.spec.md      # Service 기획서
 ├── repositories/
@@ -658,7 +658,7 @@ apps/server/src/[module]/
 ### DTO 위치 규칙
 
 - **DTO는 반드시 `packages/be-dto`에 위치**
-- ❌ `apps/server/src/module/**/dto/` 에 DTO 생성 금지
+- ❌ `apps/core/api/src/module/**/dto/` 에 DTO 생성 금지
 - ✅ `packages/be-dto/src/` 에 DTO 생성
 - Controller에서는 `@cocrepo/dto`에서 import
 
@@ -923,7 +923,7 @@ packages/fe-store/src/stores/
 ├── [StoreName].ts
 └── [StoreName].spec.md         # Store 기획서
 
-apps/server/src/[module]/
+apps/core/api/src/[module]/
 ├── [name].service.ts
 ├── [name].service.spec.md      # Service 기획서
 ├── repositories/

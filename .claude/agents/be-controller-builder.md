@@ -26,8 +26,8 @@ NestJS REST Controller를 생성하는 전문가
 
 ## What you produce
 
-| Controller 클래스 | `apps/server/src/shared/controller/resources/{entity}.controller.ts` |
-| | Module 파일 | `apps/server/src/module/{entity}.module.ts` |
+| Controller 클래스 | `apps/core/api/src/shared/controller/resources/{entity}.controller.ts` |
+| | Module 파일 | `apps/core/api/src/module/{entity}.module.ts` |
 | | app.module.ts 업데이트 | 라우팅 등록 |
 
 ## How to use

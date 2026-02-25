@@ -78,7 +78,7 @@ cat packages/be-prisma/schema/user.prisma
 cat packages/common-constant/src/routing/admin-menu.ts
 
 # 기존 라우트 파일 구조 확인
-ls apps/admin/app/
+ls apps/admin/web/app/
 ```
 
 ---

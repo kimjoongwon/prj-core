@@ -224,7 +224,7 @@ const MemberListFeature = observer(({ store }: Props) => {
 ### 입력
 
 ```
-화면 경로: apps/admin/app/(admin)/members/
+화면 경로: apps/admin/web/app/(admin)/members/
 도메인: Member
 화면: MemberList
 Store: MemberStore (members, searchQuery, setSearchQuery, fetchMembers)

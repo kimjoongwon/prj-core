@@ -54,7 +54,7 @@ apps/[app]/app/(admin)/
 packages/fe-store/src/stores/
 └── [domain]Store.spec.md              # Store 기획서 (코드 옆)
 
-apps/server/src/[module]/
+apps/core/api/src/[module]/
 ├── [name].service.spec.md             # Service 기획서 (코드 옆)
 ├── repositories/
 │   └── [name].repository.spec.md      # Repository 기획서 (코드 옆)
@@ -192,9 +192,9 @@ apps/[app]/app/(admin)/[도메인]/
 **BE/Store 기획 (Stage 1, Sidecar Spec):**
 ```
 packages/fe-store/src/stores/[domain]Store.spec.md
-apps/server/src/[module]/[name].service.spec.md
-apps/server/src/[module]/repositories/[name].repository.spec.md
-apps/server/src/[module]/controllers/[name].controller.spec.md
+apps/core/api/src/[module]/[name].service.spec.md
+apps/core/api/src/[module]/repositories/[name].repository.spec.md
+apps/core/api/src/[module]/controllers/[name].controller.spec.md
 ```
 
 **화면별 기획 (Stage 4):**
@@ -453,9 +453,9 @@ Task: orch-requirement
 - `apps/[app]/app/(admin)/app.spec.md` (앱 기획서 업데이트)
 - `apps/[app]/app/(admin)/[도메인]/page.spec.md` (각 페이지별)
 - `packages/fe-store/src/stores/[domain]Store.spec.md`
-- `apps/server/src/[module]/[name].service.spec.md`
-- `apps/server/src/[module]/repositories/[name].repository.spec.md`
-- `apps/server/src/[module]/controllers/[name].controller.spec.md`
+- `apps/core/api/src/[module]/[name].service.spec.md`
+- `apps/core/api/src/[module]/repositories/[name].repository.spec.md`
+- `apps/core/api/src/[module]/controllers/[name].controller.spec.md`
 
 **완료 후 출력:**
 ```
@@ -468,9 +468,9 @@ Task: orch-requirement
    - members/new/page.spec.md
    - members/[memberId]/edit/page.spec.md
    - packages/fe-store/src/stores/memberStore.spec.md
-   - apps/server/src/members/members.service.spec.md
-   - apps/server/src/members/repositories/members.repository.spec.md
-   - apps/server/src/members/controllers/members.controller.spec.md
+   - apps/core/api/src/members/members.service.spec.md
+   - apps/core/api/src/members/repositories/members.repository.spec.md
+   - apps/core/api/src/members/controllers/members.controller.spec.md
 
 📌 다음 단계: Stage 2 (스키마 구현)
 ```
@@ -570,7 +570,7 @@ Task: be-controller-builder
 📁 생성된 파일:
    - packages/be-repository/src/members.repository.ts
    - packages/be-service/src/members.service.ts
-   - apps/server/src/module/members/members.controller.ts
+   - apps/core/api/src/module/members/members.controller.ts
 
 🧪 테스트 결과:
    - 작성된 테스트: N개
@@ -602,7 +602,7 @@ Task: orch-screen-planner
 
 **산출물:**
 ```
-apps/admin/app/(admin)/members/page.spec.md              # API/이벤트 섹션 업데이트
+apps/admin/web/app/(admin)/members/page.spec.md              # API/이벤트 섹션 업데이트
 packages/fe-ui/src/components/ui/[UIName]/index.spec.md   # UI 컴포넌트 기획서
 packages/fe-ui/src/components/inputs/[InputName]/index.spec.md   # Input 기획서
 packages/fe-ui/src/components/ui/data-display/cells/[CellName]/index.spec.md   # Cell 기획서
@@ -610,7 +610,7 @@ packages/fe-ui/src/components/widget/[WidgetName]/index.spec.md  # Widget 기획
 packages/fe-ui/src/components/layout/[LayoutName]/index.spec.md  # Layout 기획서
 packages/fe-ui/src/components/feature/[FeatureName]/index.spec.md  # Feature 기획서
 packages/common-constant/src/routing/admin-menu.spec.md  # 메뉴 기획서
-apps/admin/src/app/**/hooks/index.spec.md  # API 연동 기획서
+apps/admin/web/src/app/**/hooks/index.spec.md  # API 연동 기획서
 ```
 
 **완료 후 출력:**
@@ -735,10 +735,10 @@ Skill: /fe-review
 
 📁 생성된 파일:
    - packages/fe-ui/src/components/page/MemberListPage/
-   - apps/admin/app/(admin)/members/page.tsx
-   - apps/admin/app/(admin)/members/_client.tsx
-   - apps/admin/app/(admin)/members/_prefetch.ts
-   - apps/admin/app/(admin)/members/hooks/index.ts (API 연동)
+   - apps/admin/web/app/(admin)/members/page.tsx
+   - apps/admin/web/app/(admin)/members/_client.tsx
+   - apps/admin/web/app/(admin)/members/_prefetch.ts
+   - apps/admin/web/app/(admin)/members/hooks/index.ts (API 연동)
 
 ✅ 규칙 검증: 모두 통과
 
@@ -778,8 +778,8 @@ Task: qa-fe-e2e-testing
 ✅ Stage 7 완료: E2E 검증
 
 📁 생성된 파일:
-   - apps/server/test/members.e2e-spec.ts
-   - apps/e2e/tests/admin/members.spec.ts
+   - apps/core/api/test/members.e2e-spec.ts
+   - apps/test/e2e/tests/admin/members.spec.ts
 
 🎉 Member 기능 개발 완료!
 ```
@@ -1330,7 +1330,7 @@ Stage 실행 시작
 │                                         │
 │  Stage 2-3:                             │
 │    - packages/be-entity/src/*.entity.spec.md │
-│    - apps/server/src/*/controllers/*.spec.md │
+│    - apps/core/api/src/*/controllers/*.spec.md │
 │                                         │
 │  Stage 4-6:                             │
 │    - apps/[app]/app/(admin)/[domain]/page.spec.md │
@@ -1358,7 +1358,7 @@ Stage 실행 시작
 | Stage | 기획서 분석 위치 | 병렬 판단 기준 |
 |-------|-----------------|---------------|
 | 2 | `packages/be-entity/src/*.entity.spec.md` | Entity 목록, 의존성 |
-| 3 | `apps/server/src/*/controllers/*.spec.md` | API 엔드포인트별 |
+| 3 | `apps/core/api/src/*/controllers/*.spec.md` | API 엔드포인트별 |
 | 4 | `apps/[app]/app/(admin)/[domain]/page.spec.md` | 페이지 목록 |
 | 5 | `packages/fe-ui/src/components/*/*.spec.md` | 컴포넌트 타입별 |
 | 6 | `apps/[app]/app/(admin)/[domain]/page.spec.md` | 페이지 목록 |
@@ -1415,7 +1415,7 @@ Stage 실행 시작
 
 **기획서 분석:**
 ```markdown
-# Asset 목록 페이지 기획서 (apps/admin/app/(admin)/assets/page.spec.md)
+# Asset 목록 페이지 기획서 (apps/admin/web/app/(admin)/assets/page.spec.md)
 
 ## 구현 대상
 
@@ -1441,7 +1441,7 @@ Stage 실행 시작
 **자동 판단 결과:**
 ```
 📊 기획서 분석 완료:
-   - 검색: apps/admin/app/(admin)/assets/page.spec.md
+   - 검색: apps/admin/web/app/(admin)/assets/page.spec.md
    - 발견: 6개 컴포넌트
 
 📊 실행 계획:

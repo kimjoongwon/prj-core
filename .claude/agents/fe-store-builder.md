@@ -395,7 +395,7 @@ Pure UI → Widget → Feature → Page
 
 ```
 ❌ 안티패턴
-apps/admin/app/(admin)/users/
+apps/admin/web/app/(admin)/users/
 ├── _stores/
 │   └── UserListStore.ts   ← 금지!
 └── page.tsx

@@ -150,7 +150,7 @@ done
 ## ✅ 프론트엔드 리뷰 완료
 
 ### 검증 대상
-- **경로:** apps/admin/app/(admin)/users/
+- **경로:** apps/admin/web/app/(admin)/users/
 - **유형:** Page
 - **파일 수:** 3개
 

@@ -377,5 +377,5 @@ export { {Domain}Facade } from "./{domain}.facade";
 ### 관련 파일
 
 - Service: `packages/be-service/src/{entity}.service.ts`
-- Controller: `apps/server/src/module/{domain}/{domain}.controller.ts`
+- Controller: `apps/core/api/src/module/{domain}/{domain}.controller.ts`
 - Repository: `packages/be-repository/src/{entity}.repository.ts`

@@ -179,7 +179,7 @@ Store 연동이 필요한가?
 ### 입력
 
 ```
-화면 경로: apps/admin/app/(admin)/members/
+화면 경로: apps/admin/web/app/(admin)/members/
 도메인: Member
 화면: MemberList
 ```

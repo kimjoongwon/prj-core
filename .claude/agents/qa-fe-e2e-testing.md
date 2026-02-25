@@ -51,7 +51,7 @@ Playwright 기반으로 프론트엔드 앱의 E2E 테스트 코드를 작성하
 - **Given-When-Then 패턴** 사용
 - **실제 서버 연동** (mock 없음)
 - 테스트 파일은 테스트 대상 `page.tsx` 옆에 `page.e2e.ts`로 위치 **(Sidecar)**
-- `apps/e2e/` 인프라 활용 (playwright.config.ts, 인증 헬퍼)
+- `apps/test/e2e/` 인프라 활용 (playwright.config.ts, 인증 헬퍼)
 - `test.skip`으로 인증이 필요한 테스트 표시
 - **접근성 기반 선택자** 우선 사용 (`getByRole`, `getByLabel`, `getByText`)
 - 충분한 `timeout` 설정 (네트워크 지연 고려)
@@ -103,16 +103,16 @@ Playwright 기반으로 프론트엔드 앱의 E2E 테스트 코드를 작성하
 
 ```bash
 # 특정 앱 테스트
-pnpm --filter=@cocrepo/e2e test:{app}
+pnpm --filter=test-e2e test:{app}
 
 # 모바일 테스트
-pnpm --filter=@cocrepo/e2e test:{app}:mobile
+pnpm --filter=test-e2e test:{app}:mobile
 
 # UI 모드
-pnpm --filter=@cocrepo/e2e test:ui
+pnpm --filter=test-e2e test:ui
 
 # 디버그 모드
-pnpm --filter=@cocrepo/e2e test:debug
+pnpm --filter=test-e2e test:debug
 ```
 
 ---
@@ -259,10 +259,10 @@ apps/{app}/src/app/(admin)/[domain]/
 └── page.e2e.ts      # E2E 테스트 ← sidecar
 ```
 
-**Playwright 설정 파일과 인증 헬퍼는 `apps/e2e/`에 유지합니다:**
+**Playwright 설정 파일과 인증 헬퍼는 `apps/test/e2e/`에 유지합니다:**
 
 ```
-apps/e2e/
+apps/test/e2e/
 ├── playwright.config.ts                 # Playwright 설정 (유지)
 └── tests/
     └── admin/
@@ -271,7 +271,7 @@ apps/e2e/
             ├── login.ts                 # Admin 로그인 헬퍼 (유지)
             └── .auth/admin.json         # 인증 상태 (유지)
 
-apps/idp-client/src/
+apps/idp/web/src/
 └── e2e/
     └── helpers/
         └── login.ts                     # IDP 로그인 헬퍼
@@ -281,28 +281,28 @@ apps/idp-client/src/
 
 ```bash
 # 전체 테스트
-pnpm --filter=@cocrepo/e2e test
+pnpm --filter=test-e2e test
 
 # 앱별 테스트
-pnpm --filter=@cocrepo/e2e test:admin
-pnpm --filter=@cocrepo/e2e test:idp
+pnpm --filter=test-e2e test:admin
+pnpm --filter=test-e2e test:idp
 
 # 모바일 테스트
-pnpm --filter=@cocrepo/e2e test:idp:mobile
+pnpm --filter=test-e2e test:idp:mobile
 
 # 코드 생성 (테스트 녹화)
-pnpm --filter=@cocrepo/e2e codegen:idp
+pnpm --filter=test-e2e codegen:idp
 
 # UI 모드
-pnpm --filter=@cocrepo/e2e test:ui
+pnpm --filter=test-e2e test:ui
 
 # 디버그 모드
-pnpm --filter=@cocrepo/e2e test:debug
+pnpm --filter=test-e2e test:debug
 ```
 
 ### Playwright 설정
 
-- 설정 파일: `apps/e2e/playwright.config.ts`
+- 설정 파일: `apps/test/e2e/playwright.config.ts`
 - 스크린샷: 실패 시만 (`only-on-failure`)
 - 비디오: 첫 재시도 시 (`on-first-retry`)
 - 트레이스: 첫 재시도 시 (`on-first-retry`)

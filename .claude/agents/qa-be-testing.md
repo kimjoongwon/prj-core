@@ -464,7 +464,7 @@ describe("에러 처리", () => {
 
 ```
 packages/{package}/src/__tests__/{file}.spec.ts
-apps/server/src/module/{module}/{file}.spec.ts
+apps/core/api/src/module/{module}/{file}.spec.ts
 ```
 
 ### 공용 테스트 유틸리티
@@ -536,4 +536,4 @@ pnpm --filter=server test:e2e
 
 - 테스트 유틸리티: `packages/be-common/src/test/test-utils.ts`
 - 테스트 설정: `packages/*/jest.config.js`
-- E2E 테스트: `apps/server/test/`
+- E2E 테스트: `apps/core/api/test/`

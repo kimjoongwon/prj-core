@@ -238,7 +238,7 @@ done
 
 앱명: admin
 도메인: Member
-app.spec.md 위치: apps/admin/app/(admin)/app.spec.md
+app.spec.md 위치: apps/admin/web/app/(admin)/app.spec.md
 
 필요한 페이지:
 - 목록 (/users)

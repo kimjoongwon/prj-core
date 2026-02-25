@@ -168,7 +168,7 @@ packages/fe-ui/src/components/widget/[WidgetName]/index.spec.md
 ### 입력
 
 ```
-화면 경로: apps/admin/app/(admin)/members/
+화면 경로: apps/admin/web/app/(admin)/members/
 도메인: Member
 화면: MemberList
 Entity: Member (id, email, name, role, status, createdAt)

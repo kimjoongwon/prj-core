@@ -23,9 +23,9 @@ tools: Task, Read, Write, Grep, Bash
 
 | 레벨 | 명칭 | 담당 에이전트 | 출력 위치 |
 |------|------|--------------|----------|
-| L6 | API/Controller | req-api-planner | `apps/server/src/[module]/controllers/[domain].controller.spec.md` |
+| L6 | API/Controller | req-api-planner | `apps/core/api/src/[module]/controllers/[domain].controller.spec.md` |
 | L7 | Entity | req-entity-planner | `packages/be-entity/src/{entity}.entity.spec.md` |
-| L9-L10 | Service/Repository 로직/테스트 | req-logic-planner | `apps/server/src/[module]/[domain].service.spec.md`, `apps/server/src/[module]/repositories/[domain].repository.spec.md` |
+| L9-L10 | Service/Repository 로직/테스트 | req-logic-planner | `apps/core/api/src/[module]/[domain].service.spec.md`, `apps/core/api/src/[module]/repositories/[domain].repository.spec.md` |
 | L11 | Store | req-store-planner | `packages/fe-store/src/stores/[domain]Store.spec.md` |
 
 ### 공용 패키지 기획 (Critical)
@@ -153,7 +153,7 @@ packages/fe-store/src/stores/
 packages/be-entity/src/
 └── [entity].entity.spec.md                     # Entity 스펙
 
-apps/server/src/[module]/
+apps/core/api/src/[module]/
 ├── [domain].service.spec.md                    # Service 스펙
 ├── repositories/
 │   └── [domain].repository.spec.md             # Repository 스펙
@@ -298,16 +298,16 @@ apps/server/src/[module]/
 ✅ 도메인 기획 완료
 
 📁 생성/수정된 파일:
-   - apps/admin/app/(admin)/app.spec.md (업데이트)
-   - apps/admin/app/(admin)/members/page.spec.md
-   - apps/admin/app/(admin)/members/[memberId]/page.spec.md
-   - apps/admin/app/(admin)/members/new/page.spec.md
-   - apps/admin/app/(admin)/members/[memberId]/edit/page.spec.md
+   - apps/admin/web/app/(admin)/app.spec.md (업데이트)
+   - apps/admin/web/app/(admin)/members/page.spec.md
+   - apps/admin/web/app/(admin)/members/[memberId]/page.spec.md
+   - apps/admin/web/app/(admin)/members/new/page.spec.md
+   - apps/admin/web/app/(admin)/members/[memberId]/edit/page.spec.md
    - packages/fe-store/src/stores/memberStore.spec.md
    - packages/be-entity/src/member.entity.spec.md
-   - apps/server/src/member/member.service.spec.md
-   - apps/server/src/member/repositories/member.repository.spec.md
-   - apps/server/src/member/controllers/member.controller.spec.md
+   - apps/core/api/src/member/member.service.spec.md
+   - apps/core/api/src/member/repositories/member.repository.spec.md
+   - apps/core/api/src/member/controllers/member.controller.spec.md
 
 📌 다음 단계:
    1. 화면별 기획:
@@ -321,7 +321,7 @@ apps/server/src/[module]/
 ## 6. 폴더 구조
 
 ```
-apps/admin/app/(admin)/
+apps/admin/web/app/(admin)/
 │
 ├── app.spec.md                           # 앱 기획서 (L0-L2, 도메인 목록)
 │
@@ -364,7 +364,7 @@ packages/be-vo/src/member/
 ├── member-email.vo.ts
 └── member-email.vo.spec.md               # VO 스펙 (필요시)
 
-apps/server/src/member/
+apps/core/api/src/member/
 ├── member.service.ts
 ├── member.service.spec.md                # Service 스펙
 ├── repositories/

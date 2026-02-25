@@ -30,16 +30,16 @@ tools: Read, Write, Grep, Bash
 
 | 항목 | 필수 | 경로 |
 |------|:----:|------|
-| Service 기획서 | ✅ | `apps/server/src/[module]/[domain].service.spec.md` |
-| Controller 기획서 | ✅ | `apps/server/src/[module]/controllers/[domain].controller.spec.md` |
+| Service 기획서 | ✅ | `apps/core/api/src/[module]/[domain].service.spec.md` |
+| Controller 기획서 | ✅ | `apps/core/api/src/[module]/controllers/[domain].controller.spec.md` |
 | 페이지 기획서 | ✅ | `apps/[app]/app/(admin)/[domain]/page.spec.md` |
-| Repository 기획서 | ❌ | `apps/server/src/[module]/repositories/[domain].repository.spec.md` |
+| Repository 기획서 | ❌ | `apps/core/api/src/[module]/repositories/[domain].repository.spec.md` |
 | Store 기획서 | ❌ | `packages/fe-store/src/stores/[domain]Store.spec.md` |
 
 ### 출력 (Sidecar Spec)
 
 ```
-apps/server/src/[module]/
+apps/core/api/src/[module]/
 ├── [domain].service.spec.md              # 비즈니스 규칙 섹션 추가 (L9)
 ├── repositories/
 │   └── [domain].repository.spec.md       # Repository 규칙 섹션 추가 (L9)
@@ -320,11 +320,11 @@ apps/server/src/[module]/
 
 ```
 읽기 대상 파일:
-- apps/server/src/user/user.service.spec.md
-- apps/server/src/user/controllers/user.controller.spec.md
-- apps/admin/app/(admin)/users/page.spec.md
-- apps/server/src/reservation/reservation.service.spec.md
-- apps/server/src/reservation/controllers/reservation.controller.spec.md
+- apps/core/api/src/user/user.service.spec.md
+- apps/core/api/src/user/controllers/user.controller.spec.md
+- apps/admin/web/app/(admin)/users/page.spec.md
+- apps/core/api/src/reservation/reservation.service.spec.md
+- apps/core/api/src/reservation/controllers/reservation.controller.spec.md
 ```
 
 파일 읽기 후, 각 기획서에서 다음을 추출합니다:
@@ -334,7 +334,7 @@ apps/server/src/[module]/
 
 ### 출력 (기존 .spec.md에 섹션 추가)
 
-**`apps/server/src/user/user.service.spec.md` 에 추가:**
+**`apps/core/api/src/user/user.service.spec.md` 에 추가:**
 
 ```markdown
 ## 비즈니스 규칙
@@ -379,7 +379,7 @@ apps/server/src/[module]/
 |          | message: "이미 등록된 이메일입니다" |
 ```
 
-**`apps/server/src/reservation/reservation.service.spec.md` 에 추가:**
+**`apps/core/api/src/reservation/reservation.service.spec.md` 에 추가:**
 
 ```markdown
 ## 비즈니스 규칙

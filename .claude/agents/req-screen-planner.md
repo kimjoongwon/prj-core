@@ -397,7 +397,7 @@ apps/[app]/app/(admin)/[도메인]/[entityId]/edit/page.spec.md (수정)
 
 ## 상위 기획서
 
-- `apps/admin/app/(admin)/app.spec.md`
+- `apps/admin/web/app/(admin)/app.spec.md`
 
 ## 변경 이력
 
@@ -477,7 +477,7 @@ apps/[app]/app/(admin)/[도메인]/[entityId]/edit/page.spec.md (수정)
 
 ## 상위 기획서
 
-- `apps/admin/app/(admin)/app.spec.md`
+- `apps/admin/web/app/(admin)/app.spec.md`
 
 ## 변경 이력
 
@@ -539,7 +539,7 @@ apps/[app]/app/(admin)/[도메인]/[entityId]/edit/page.spec.md (수정)
 
 ## 상위 기획서
 
-- `apps/admin/app/(admin)/app.spec.md`
+- `apps/admin/web/app/(admin)/app.spec.md`
 
 ## 변경 이력
 
@@ -603,7 +603,7 @@ apps/[app]/app/(admin)/[도메인]/[entityId]/edit/page.spec.md (수정)
 
 ## 상위 기획서
 
-- `apps/admin/app/(admin)/app.spec.md`
+- `apps/admin/web/app/(admin)/app.spec.md`
 
 ## 변경 이력
 

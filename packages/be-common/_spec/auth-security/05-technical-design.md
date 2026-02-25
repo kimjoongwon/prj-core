@@ -34,7 +34,7 @@ function validatePasswordPolicy(password: string): PasswordPolicyResult {
 
 ### 로그인 검증 로직 (InteractionService 강화)
 
-**위치**: `apps/idp-server/src/module/interaction/interaction.service.ts`
+**위치**: `apps/idp/api/src/module/interaction/interaction.service.ts`
 
 ```
 validateUser(email, password, ipAddress, userAgent, clientId):
@@ -120,7 +120,7 @@ logoutWithCookie(accessToken, res):
 
 ### 비밀번호 재설정 로직
 
-**위치**: `apps/idp-server/src/module/password-reset/password-reset.service.ts`
+**위치**: `apps/idp/api/src/module/password-reset/password-reset.service.ts`
 
 ```
 requestReset(email):
@@ -531,11 +531,11 @@ describe("SessionCard", () => {
 | 파일 | 변경 |
 |------|------|
 | `packages/be-prisma/schema/user.prisma` | User 확장 + AuthAuditLog 추가 |
-| `apps/idp-server/src/module/oidc/direct-user.repository.ts` | 잠금 관리 메서드 추가 |
-| `apps/idp-server/src/module/interaction/interaction.service.ts` | 로그인 검증 강화 |
-| `apps/idp-server/src/module/interaction/interaction.controller.ts` | 에러 응답 포맷 변경 |
+| `apps/idp/api/src/module/oidc/direct-user.repository.ts` | 잠금 관리 메서드 추가 |
+| `apps/idp/api/src/module/interaction/interaction.service.ts` | 로그인 검증 강화 |
+| `apps/idp/api/src/module/interaction/interaction.controller.ts` | 에러 응답 포맷 변경 |
 | `packages/be-facade/src/auth.facade.ts` | logoutWithCookie 강화 |
-| `apps/idp-client/src/app/interaction/[uid]/_components/LoginForm.tsx` | 잠금 UI, 남은 시도, 링크 |
+| `apps/idp/web/src/app/interaction/[uid]/_components/LoginForm.tsx` | 잠금 UI, 남은 시도, 링크 |
 
 ### Phase 2
 
@@ -544,20 +544,20 @@ describe("SessionCard", () => {
 | `packages/be-prisma/schema/user.prisma` | PasswordHistory 추가 |
 | `packages/be-common/src/utils/password-policy.ts` | 신규 |
 | `packages/be-service/src/email.service.ts` | 신규 |
-| `apps/idp-server/src/module/password-reset/` | 신규 모듈 |
-| `apps/idp-client/src/app/forgot-password/` | 신규 페이지 |
-| `apps/idp-client/src/app/reset-password/[token]/` | 신규 페이지 |
+| `apps/idp/api/src/module/password-reset/` | 신규 모듈 |
+| `apps/idp/web/src/app/forgot-password/` | 신규 페이지 |
+| `apps/idp/web/src/app/reset-password/[token]/` | 신규 페이지 |
 | `packages/fe-ui/src/components/widget/PasswordStrengthIndicator/` | 신규 |
-| `apps/admin/src/app/(admin)/my-account/change-password/` | 신규 페이지 |
+| `apps/admin/web/src/app/(admin)/my-account/change-password/` | 신규 페이지 |
 
 ### Phase 3
 
 | 파일 | 변경 |
 |------|------|
-| `apps/server/src/module/auth/auth.controller.ts` | 세션/감사로그/관리 API 추가 |
+| `apps/core/api/src/module/auth/auth.controller.ts` | 세션/감사로그/관리 API 추가 |
 | `packages/fe-ui/src/components/widget/SessionCard/` | 신규 |
 | `packages/fe-ui/src/components/widget/SecurityInfoPanel/` | 신규 |
 | `packages/fe-ui/src/components/cell/AuditResultBadge/` | 신규 |
 | `packages/fe-ui/src/components/cell/UserAgentCell/` | 신규 |
-| `apps/admin/src/app/(admin)/my-sessions/` | 신규 페이지 |
-| `apps/admin/src/app/(admin)/auth-audit-logs/` | 신규 페이지 |
+| `apps/admin/web/src/app/(admin)/my-sessions/` | 신규 페이지 |
+| `apps/admin/web/src/app/(admin)/auth-audit-logs/` | 신규 페이지 |

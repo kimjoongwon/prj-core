@@ -22,7 +22,7 @@ apps/[app]/app/(admin)/[도메인]/new/page.spec.md
 apps/[app]/app/(admin)/[도메인]/[entityId]/edit/page.spec.md
 
 # controller.spec.md 생성
-apps/server/src/[module]/controllers/[domain].controller.spec.md
+apps/core/api/src/[module]/controllers/[domain].controller.spec.md
 
 # dto.spec.md 생성/업데이트 (Request/Response 계약)
 packages/be-dto/src/[domain]/*.dto.spec.md
@@ -52,7 +52,7 @@ packages/be-dto/src/[domain]/*.dto.spec.md
 
 | 항목 | 필수 | 설명 |
 |------|:----:|------|
-| 화면 경로 | ✅ | 기획서를 생성할 화면 경로 (예: apps/admin/app/(admin)/members/) |
+| 화면 경로 | ✅ | 기획서를 생성할 화면 경로 (예: apps/admin/web/app/(admin)/members/) |
 | L3-L4 기획 결과 | ✅ | 각 페이지의 `page.spec.md` (기능과 화면 정의) |
 | app.spec.md | ❌ | 앱 전체 컨텍스트 (apps/[app]/app/(admin)/app.spec.md) |
 | API 규칙 | ❌ | 프로젝트의 API 네이밍 규칙 |
@@ -67,7 +67,7 @@ packages/be-dto/src/[domain]/*.dto.spec.md
 
 **2. controller.spec.md 생성:**
 ```
-apps/server/src/[module]/controllers/[domain].controller.spec.md
+apps/core/api/src/[module]/controllers/[domain].controller.spec.md
 ```
 
 **3. dto.spec.md 생성/업데이트:**
@@ -455,14 +455,14 @@ API 호출 (GET /api/[resource])
 ### 입력 (L3-L4 결과 - page.spec.md에서 추출)
 
 대상 화면:
-- `apps/admin/app/(admin)/users/page.spec.md` (목록)
-- `apps/admin/app/(admin)/users/[userId]/page.spec.md` (상세)
-- `apps/admin/app/(admin)/users/new/page.spec.md` (등록)
-- `apps/admin/app/(admin)/users/[userId]/edit/page.spec.md` (수정)
+- `apps/admin/web/app/(admin)/users/page.spec.md` (목록)
+- `apps/admin/web/app/(admin)/users/[userId]/page.spec.md` (상세)
+- `apps/admin/web/app/(admin)/users/new/page.spec.md` (등록)
+- `apps/admin/web/app/(admin)/users/[userId]/edit/page.spec.md` (수정)
 
 ### 출력 1: page.spec.md 업데이트 (목록 페이지 예시)
 
-`apps/admin/app/(admin)/users/page.spec.md`에 아래 섹션 추가:
+`apps/admin/web/app/(admin)/users/page.spec.md`에 아래 섹션 추가:
 
 ```markdown
 ## API 호출
@@ -498,7 +498,7 @@ API 호출 (GET /api/[resource])
 
 ### 출력 2: controller.spec.md 생성
 
-`apps/server/src/user/controllers/user.controller.spec.md`:
+`apps/core/api/src/user/controllers/user.controller.spec.md`:
 
 ```markdown
 # User Controller 기획서

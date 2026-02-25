@@ -176,7 +176,7 @@ apps/server/src/[module]/
 
 ```bash
 # 각 경로별 .spec.md 존재 여부 확인
-apps/admin/app/(admin)/users/page.spec.md
+apps/admin/web/app/(admin)/users/page.spec.md
 packages/fe-ui/src/components/feature/MemberList/index.spec.md
 ...
 ```
@@ -213,7 +213,7 @@ packages/fe-ui/src/components/feature/MemberList/index.spec.md
 /orch-requirement
 
 **모드:** reverse
-**대상:** apps/admin/app/(admin)/users/
+**대상:** apps/admin/web/app/(admin)/users/
 **설명:** 기존 회원 관리 코드 분석하여 기획서 생성
 ```
 

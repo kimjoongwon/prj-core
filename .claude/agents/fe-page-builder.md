@@ -68,7 +68,7 @@ tools: Read, Write, Grep, Bash
 ## 3. 폴더 구조 (Prefetch 필수)
 
 ```
-apps/admin/app/[route]/
+apps/admin/web/app/[route]/
 ├── page.tsx          # 서버 컴포넌트 (Prefetch + HydrationBoundary)
 ├── _client.tsx       # 클라이언트 컴포넌트
 ├── _prefetch.ts      # Prefetch 설정
@@ -162,7 +162,7 @@ export const LoginPage = observer(
 ### 4.3 통합 훅
 
 ```tsx
-// apps/admin/app/auth/login/hooks/useAuthLoginPage.ts
+// apps/admin/web/app/auth/login/hooks/useAuthLoginPage.ts
 import { useLogin } from "@cocrepo/api";
 import { useLocalObservable } from "mobx-react-lite";
 import { useRouter } from "next/navigation";
@@ -386,7 +386,7 @@ columnHelper.display({
 ### 6.3 목록 페이지 템플릿
 
 ```tsx
-// apps/admin/app/(admin)/[entities]/_client.tsx
+// apps/admin/web/app/(admin)/[entities]/_client.tsx
 "use client";
 
 import { useDeleteEntity, useGetEntities } from "@cocrepo/api";
@@ -698,8 +698,8 @@ Pure UI → Widget → Feature → Page
 
 | 유형 | 파일 경로 |
 |------|----------|
-| Simple Table 예시 | `apps/admin/app/(admin)/roles/page.tsx` |
-| Pagination 예시 | `apps/admin/app/(admin)/users/page.tsx` |
+| Simple Table 예시 | `apps/admin/web/app/(admin)/roles/page.tsx` |
+| Pagination 예시 | `apps/admin/web/app/(admin)/users/page.tsx` |
 | ConfirmModal | `packages/fe-ui/src/components/widgets/common/ConfirmModal` |
 | **Cell 컴포넌트 폴더** | `packages/fe-ui/src/components/ui/data-display/cells/` |
 
