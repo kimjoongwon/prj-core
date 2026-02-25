@@ -8,6 +8,9 @@ config({ path: resolve(__dirname, ".env.local") });
 import { PrismaPg } from "@prisma/adapter-pg";
 import { hash } from "bcrypt";
 import * as pg from "pg";
+
+/** System Space 고정 UUID (E2E 테스트와 일치해야 함) */
+const SYSTEM_SPACE_ID = "61ddca20-1752-466e-b4da-879ebdbe54e3";
 import {
 	abilitySeedData,
 	actionSeedData,
@@ -110,31 +113,36 @@ async function main() {
 		},
 	});
 
-	// System Space 생성 (SpaceCategory ROOT로 식별)
+	// System Space 생성 (고정 UUID 사용 - E2E 테스트와 일치)
 	// SpaceClassification을 통해 ROOT Category가 연결된 Space가 System Space
-	let systemSpace = await prisma.space.findFirst({
-		where: {
-			classification: {
-				category: { name: "루트" },
-			},
+	const systemSpace = await prisma.space.upsert({
+		where: { id: SYSTEM_SPACE_ID },
+		update: {},
+		create: {
+			id: SYSTEM_SPACE_ID,
 		},
 	});
 
-	if (!systemSpace) {
-		systemSpace = await prisma.space.create({
+	// System Space에 Tenant가 없으면 생성 (FULL_ACCESS 전용)
+	const existingTenant = await prisma.tenant.findFirst({
+		where: {
+			spaceId: systemSpace.id,
+			roleId: roles.FULL_ACCESS.id,
+		},
+	});
+
+	if (!existingTenant) {
+		await prisma.tenant.create({
 			data: {
-				tenants: {
-					create: {
-						userId: superAdminUser.id,
-						roleId: roles.FULL_ACCESS.id,
-					},
-				},
+				userId: superAdminUser.id,
+				spaceId: systemSpace.id,
+				roleId: roles.FULL_ACCESS.id,
 			},
 		});
-		console.log("System Space 생성 완료 (FULL_ACCESS 전용)");
-	} else {
-		console.log(`System Space 이미 존재 (id=${systemSpace.id})`);
+		console.log("System Space Tenant 생성 완료 (FULL_ACCESS 전용)");
 	}
+
+	console.log(`System Space 준비 완료 (id=${systemSpace.id})`);
 
 	// Space Category/Group 생성 및 System Space 연결
 	await createSpaceCategoriesAndClassifications(systemSpace.id);

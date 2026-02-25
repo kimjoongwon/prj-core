@@ -17,14 +17,16 @@ import { ClsService } from "nestjs-cls";
  * constructor(private readonly spaceCtx: SpaceContext) {}
  *
  * async getMembers(params) {
- *   const spaceIds = this.spaceCtx.spaceIds;
- *   return this.repository.findManyBySpaceIds({ ...params, spaceIds });
+ *   // spaceFilter: undefined면 전체 조회, 아니면 필터링
+ *   return this.repository.findMany({
+ *     where: { ...this.spaceCtx.spaceFilter, ...otherFilters }
+ *   });
  * }
  * ```
  */
 @Injectable()
 export class SpaceContext {
-	constructor(private readonly cls: ClsService) {}
+	constructor(private readonly cls: ClsService) { }
 
 	/** 현재 요청의 Space ID (X-Space-ID 헤더) */
 	get spaceId(): string | undefined {
@@ -38,28 +40,48 @@ export class SpaceContext {
 
 	/**
 	 * 쿼리 필터에 사용할 Space IDs
-	 * SpaceScopeInterceptor가 데코레이터 기반으로 계산한 값
+	 * SpaceScopeInterceptor가 계산한 값
+	 *
+	 * - undefined: 슈퍼매니저 (전체 조회)
+	 * - []: 접근 가능한 Space 없음
+	 * - [id1, id2, ...]: Tenant 기반 필터링
 	 */
-	get spaceIds(): string[] {
-		return this.cls.get<string[]>(CONTEXT_KEYS.EFFECTIVE_SPACE_IDS) ?? [];
+	get spaceIds(): string[] | undefined {
+		return this.cls.get<string[]>(CONTEXT_KEYS.EFFECTIVE_SPACE_IDS);
 	}
 
 	/** 특정 Space 접근 가능 여부 */
 	hasAccessTo(targetSpaceId: string): boolean {
-		return this.spaceIds.includes(targetSpaceId);
+		const ids = this.spaceIds;
+		// undefined (슈퍼매니저)면 모든 Space 접근 가능
+		if (ids === undefined) return true;
+		return ids.includes(targetSpaceId);
 	}
 
 	// === Prisma Where 헬퍼 ===
 
-	/** 직접 spaceId FK 모델용 (Ground, Category, Group 등) */
-	get spaceFilter(): { spaceId: { in: string[] } } {
-		return { spaceId: { in: this.spaceIds } };
+	/**
+	 * 직접 spaceId FK 모델용 (Ground, Category, Group 등)
+	 *
+	 * - undefined 반환 시: 전체 조회 (where 조건 없음)
+	 * - { spaceId: { in: [...] } } 반환 시: 필터링
+	 */
+	get spaceFilter(): { spaceId: { in: string[] } } | undefined {
+		const ids = this.spaceIds;
+		// undefined면 전체 조회 (필터 없음)
+		if (ids === undefined) return undefined;
+		return { spaceId: { in: ids } };
 	}
 
 	/** Tenant 관계 경유 모델용 (User) */
-	get tenantSpaceFilter() {
+	get tenantSpaceFilter():
+		| { tenants: { some: { spaceId: { in: string[] }; removedAt: null } } }
+		| undefined {
+		const ids = this.spaceIds;
+		// undefined면 전체 조회 (필터 없음)
+		if (ids === undefined) return undefined;
 		return {
-			tenants: { some: { spaceId: { in: this.spaceIds }, removedAt: null } },
+			tenants: { some: { spaceId: { in: ids }, removedAt: null } },
 		};
 	}
 

@@ -17,8 +17,6 @@ import {
 	SpaceContext,
 	TokenStorageService,
 } from "@cocrepo/service";
-import { SpacesRepository } from "@cocrepo/repository";
-import { SpacesService } from "@cocrepo/service";
 import {
 	Logger,
 	type MiddlewareConsumer,
@@ -142,15 +140,10 @@ import { UsersModule } from "./users";
 		// JWT 인증 (passport "jwt" 전략 등록)
 		JwtStrategy,
 		AuthCacheService,
-		// Space 도메인 (RequestContextMiddleware 의존)
-		SpacesRepository,
-		SpacesService,
 		// Token (setNestApp의 JwtAuthGuard 의존)
 		TokenStorageService,
 		// Guards (setNestApp에서 순서대로 등록됨)
 		SpaceAccessGuard,
-		// Middleware (DI 주입 필요)
-		RequestContextMiddleware,
 		// Interceptors (setNestApp에서 순서대로 등록됨)
 		SpaceScopeInterceptor,
 		DtoTransformInterceptor,

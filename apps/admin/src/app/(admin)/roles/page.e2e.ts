@@ -51,24 +51,9 @@ test.describe("역할 목록 페이지", () => {
 
 	test.describe("[E2E-002] 역할 등록 플로우", () => {
 		test("역할 등록 → 상세 → 수정 → 삭제 전체 플로우", async ({ page }) => {
-			// Cleanup: API를 직접 호출하여 기존 E2E_TEST_ROLE 삭제
-			try {
-				const rolesResp = await page.request.get(
-					"http://localhost:3006/api/v1/roles",
-				);
-				const rolesBody = await rolesResp.json();
-				const roles = rolesBody.data ?? rolesBody;
-				const existing = (roles as { id: string; name: string }[]).find(
-					(r) => r.name === "E2E_TEST_ROLE",
-				);
-				if (existing) {
-					await page.request.delete(
-						`http://localhost:3006/api/v1/roles/${existing.id}`,
-					);
-				}
-			} catch {
-				// cleanup 실패해도 계속 진행
-			}
+			// 고유한 역할 이름 사용 (타임스탬프로 충돌 방지)
+			const uniqueSuffix = `${Date.now()}`.slice(-6);
+			const TEST_ROLE_NAME = `E2E_TEST_ROLE_${uniqueSuffix}`;
 
 			// Given: 역할 등록 페이지로 이동
 			await page.goto("./roles/new");
@@ -77,24 +62,34 @@ test.describe("역할 목록 페이지", () => {
 			// When: 폼 입력
 			await page
 				.getByRole("textbox", { name: /역할 식별자/ })
-				.fill("E2E_TEST_ROLE");
+				.fill(TEST_ROLE_NAME);
 			await page.getByRole("textbox", { name: "표시명" }).fill("E2E 테스트");
 
-			// When: 역할 등록 버튼 클릭
+			// When: 역할 등록 버튼 클릭 (API 응답 대기)
+			const createResponse = page.waitForResponse(
+				(resp) =>
+					resp.url().includes("/api/v1/roles") &&
+					resp.request().method() === "POST",
+			);
 			await page.getByRole("button", { name: "역할 등록" }).click();
-			await page.waitForLoadState("networkidle");
+			const response = await createResponse;
+
+			// Then: 201 Created 응답 확인
+			expect(response.status()).toBe(201);
 
 			// Then: 등록 후 목록 페이지로 리다이렉트 확인
+			await page.waitForURL(/\/roles\/?$/, { timeout: 15000 });
+			await page.waitForLoadState("networkidle");
 			await expect(
 				page.getByRole("heading", { name: "역할 목록" }),
 			).toBeVisible({ timeout: 10000 });
 
 			// Then: 새로 등록된 역할이 목록에 표시됨
 			await expect(
-				page.getByText("E2E_TEST_ROLE", { exact: true }),
+				page.getByText(TEST_ROLE_NAME, { exact: true }),
 			).toBeVisible();
 
-			// When: E2E_TEST_ROLE 행의 상세 버튼 클릭 (마지막 행)
+			// When: 새로 등록된 역할 행의 상세 버튼 클릭 (마지막 행)
 			await page.getByRole("button", { name: "상세" }).last().click();
 			await page.waitForLoadState("networkidle");
 
@@ -102,7 +97,7 @@ test.describe("역할 목록 페이지", () => {
 			await expect(
 				page.getByRole("heading", { name: "역할 상세" }),
 			).toBeVisible({ timeout: 10000 });
-			await expect(page.getByText("E2E_TEST_ROLE")).toBeVisible();
+			await expect(page.getByText(TEST_ROLE_NAME)).toBeVisible();
 			await expect(
 				page.getByText("E2E 테스트", { exact: true }),
 			).toBeVisible();
@@ -163,7 +158,7 @@ test.describe("역할 목록 페이지", () => {
 				page.getByRole("heading", { name: "역할 목록" }),
 			).toBeVisible({ timeout: 10000 });
 			await expect(
-				page.getByText("E2E_TEST_ROLE", { exact: true }),
+				page.getByText(TEST_ROLE_NAME, { exact: true }),
 			).not.toBeVisible();
 		});
 	});
