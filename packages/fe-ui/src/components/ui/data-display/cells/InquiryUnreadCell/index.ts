@@ -1,0 +1,1 @@
+export { InquiryUnreadCell } from "./InquiryUnreadCell";

@@ -4,6 +4,9 @@ export { AuthContext, SpaceContext } from "@cocrepo/context";
 // I18n
 export { I18nModule, TranslationService } from "./i18n";
 
+// Strategy
+export { JwtStrategy } from "./strategy";
+
 // Services
 // 필요할 때 생성합니다. 가이드: .claude/agents/be-service-builder.md
 
@@ -59,3 +62,13 @@ export {
 	type IdpAccountInfo,
 	IdpAccountService,
 } from "./idp-account.service";
+
+// Inquiry Domain Services
+export {
+	InquiriesService,
+	type InquiryStats,
+	type AIDraftResult,
+	type SentimentAnalysisResult,
+} from "./inquiries.service";
+export { InquiryMessagesService } from "./inquiry-messages.service";
+export { InquiryParticipantsService } from "./inquiry-participants.service";

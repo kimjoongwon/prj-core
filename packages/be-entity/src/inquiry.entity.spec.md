@@ -1,12 +1,13 @@
 # Inquiry Entity 기획서
 
 > 생성일: 2026-02-25
+> 수정일: 2026-02-26
 > 타입: entity
 > 위치: packages/be-entity/src/inquiry.entity.ts
 
 ## 역할
 
-옴니채널 고객 문의를 관리하는 핵심 엔티티입니다. 문의 접수, 상태 관리, 담당자 배정, SLA 추적 등의 기능을 제공합니다. Space 기반 멀티테넌시를 지원합니다.
+옴니채널 고객 문의를 관리하는 핵심 엔티티입니다. 문의 접수, 상태 관리, 담당자 배정, SLA 추적, 실시간 채팅 지원 등의 기능을 제공합니다. Space 기반 멀티테넌시를 지원합니다.
 
 ## 필드
 
@@ -17,10 +18,10 @@
 | inquiryNumber | String | required, unique | - | 문의 번호 (예: INQ-2026-0225-001) |
 | title | String | required | - | 문의 제목 |
 | category | InquiryCategory | required | - | 문의 카테고리 |
-| channel | InquiryChannel | required | - | 접수 채널 |
+| channel | InquiryChannel | required | - | 접수 채널 (WEB, EMAIL, CHAT, SMS, PHONE, WALK_IN) |
+| source | InquirySource | required | ONLINE | 접수 유형 (ONLINE/OFFLINE) |
 | status | InquiryStatus | required | NEW | 문의 상태 |
 | priority | InquiryPriority | required | NORMAL | 우선순위 |
-| source | InquirySource | required | ONLINE | 접수 유형 (온라인/오프라인) |
 | customerId | UUID | FK, optional | - | 고객 User ID |
 | assigneeId | UUID | FK, optional | - | 담당자 User ID |
 | firstResponseAt | DateTime | optional | - | 첫 응답 일시 |
@@ -34,6 +35,9 @@
 | sentimentScore | Float | optional | - | 감정 분석 점수 (0~1) |
 | aiResolutionAttempted | Boolean | required | false | AI 자동 해결 시도 여부 |
 | aiResolved | Boolean | required | false | AI 자동 해결 여부 |
+| isRealtimeChat | Boolean | required | false | 실시간 채팅 활성화 여부 |
+| lastMessageAt | DateTime | optional | - | 마지막 메시지 일시 |
+| unreadCount | Integer | required | 0 | 읽지 않은 메시지 수 (고객 기준) |
 | metadata | Json | optional | - | 추가 메타데이터 (채널별 정보) |
 | createdAt | DateTime | required | now() | 생성 일시 |
 | updatedAt | DateTime | required | now() | 수정 일시 |
@@ -66,6 +70,13 @@
 | PHONE | 전화 |
 | WALK_IN | 방문 |
 
+### InquirySource
+
+| 값 | 설명 |
+|-----|------|
+| ONLINE | 온라인 (고객 직접 접수) |
+| OFFLINE | 오프라인 (상담원 대리 접수) |
+
 ### InquiryStatus
 
 | 값 | 설명 |
@@ -87,13 +98,6 @@
 | HIGH | 높음 |
 | URGENT | 긴급 |
 
-### InquirySource
-
-| 값 | 설명 |
-|-----|------|
-| ONLINE | 온라인 (고객 직접 접수) |
-| OFFLINE | 오프라인 (상담원 대리 접수) |
-
 ### SentimentType
 
 | 값 | 설명 |
@@ -110,6 +114,8 @@
 | belongsTo | User (customer) | N:0..1 | 고객 |
 | belongsTo | User (assignee) | N:0..1 | 담당자 |
 | hasMany | InquiryThread | 1:N | 문의 스레드 |
+| hasMany | InquiryMessage | 1:N | 문의 메시지 |
+| hasMany | InquiryParticipant | 1:N | 참여자 목록 |
 | hasMany | InquiryTag | 1:N | 문의 태그 |
 | hasOne | SentimentAnalysis | 1:0..1 | 감정 분석 결과 |
 
@@ -125,6 +131,7 @@
 | isEscalated() | boolean | 에스컬레이션 여부 확인 |
 | isAssigned() | boolean | 담당자 배정 여부 확인 |
 | isSlaBreached() | boolean | SLA 위반 여부 확인 |
+| isRealtimeChatEnabled() | boolean | 실시간 채팅 활성화 여부 |
 | canReopen() | boolean | 재오픈 가능 여부 확인 |
 | assignTo(userId) | void | 담당자 배정 |
 | startProgress() | void | 처리 시작 |
@@ -133,6 +140,10 @@
 | escalate() | void | 에스컬레이션 |
 | recordFirstResponse() | void | 첫 응답 기록 |
 | updateSlaStatus() | void | SLA 상태 업데이트 |
+| enableRealtimeChat() | void | 실시간 채팅 활성화 |
+| updateLastMessage() | void | 마지막 메시지 시간 업데이트 |
+| incrementUnreadCount() | void | 읽지 않은 메시지 수 증가 |
+| resetUnreadCount() | void | 읽지 않은 메시지 수 초기화 |
 
 ## 비즈니스 규칙
 
@@ -144,6 +155,8 @@
 - 해결 시 resolvedAt 자동 설정
 - SLA 위반 여부는 배치 또는 조회 시 실시간 계산
 - Space 격리: 모든 조회/수정에 spaceId 조건 포함
+- CHAT 채널은 자동으로 실시간 채팅 활성화 (isRealtimeChat=true)
+- 실시간 채팅 시 참여자 상태를 InquiryParticipant에서 관리
 
 ## 구현 대상 (orch-stage 자동 병렬 실행용)
 
@@ -154,12 +167,10 @@
 | Inquiry | CONCRETE | - | 0 (먼저) |
 | InquiryThread | CONCRETE | Inquiry | 1 (병렬) |
 | InquiryMessage | CONCRETE | InquiryThread | 2 |
+| InquiryParticipant | CONCRETE | Inquiry, User | 1 (병렬) |
 | InquiryAttachment | CONCRETE | InquiryMessage | 3 |
 | InquiryTag | MATERIALIZATION | Inquiry | 1 (병렬) |
 | SentimentAnalysis | MATERIALIZATION | Inquiry | 1 (병렬) |
-| KnowledgeBaseArticle | CONCRETE | - | 0 (병렬) |
-| SLATemplate | CONCRETE | - | 0 (병렬) |
-| ChannelConfig | CONCRETE | - | 0 (병렬) |
 | AIAgentLog | CONCRETE | Inquiry, InquiryMessage | 2 |
 
 ### Enum 목록
@@ -172,6 +183,8 @@
 | InquiryPriority | Inquiry, SLATemplate |
 | InquirySource | Inquiry |
 | SentimentType | Inquiry, SentimentAnalysis |
+| InquiryParticipantRole | InquiryParticipant |
+| SenderType | InquiryMessage |
 
 ### DTO 목록
 
@@ -188,9 +201,9 @@
 ### 병렬 실행 DAG
 
 ```
-Level 0: Inquiry, KnowledgeBaseArticle, SLATemplate, ChannelConfig (병렬)
+Level 0: Inquiry (먼저)
     │
-    ├── Level 1: InquiryThread, InquiryTag, SentimentAnalysis (병렬)
+    ├── Level 1: InquiryThread, InquiryParticipant, InquiryTag, SentimentAnalysis (병렬)
     │     │
     │     └── Level 2: InquiryMessage
     │           │
@@ -201,19 +214,17 @@ Level 0: Inquiry, KnowledgeBaseArticle, SLATemplate, ChannelConfig (병렬)
 
 ## 구현 체크리스트
 
-- [ ] inquiry.entity.ts
-- [ ] inquiry-thread.entity.ts
-- [ ] inquiry-message.entity.ts
-- [ ] inquiry-attachment.entity.ts
-- [ ] inquiry-tag.entity.ts
-- [ ] sentiment-analysis.entity.ts
-- [ ] knowledge-base-article.entity.ts
-- [ ] sla-template.entity.ts
-- [ ] channel-config.entity.ts
-- [ ] ai-agent-log.entity.ts
-- [ ] AbstractEntity 상속
-- [ ] Prisma 타입 implements
-- [ ] index.ts export 추가
+- [x] inquiry.entity.ts
+- [x] inquiry-thread.entity.ts
+- [x] inquiry-message.entity.ts
+- [x] inquiry-participant.entity.ts (신규 - 실시간 채팅용)
+- [x] inquiry-attachment.entity.ts
+- [x] inquiry-tag.entity.ts
+- [x] sentiment-analysis.entity.ts
+- [x] ai-agent-log.entity.ts
+- [x] AbstractEntity 상속
+- [x] Prisma 타입 implements
+- [x] index.ts export 추가
 - [ ] 단위 테스트 (Jest)
 
 ## 테스트 케이스
@@ -230,6 +241,7 @@ Level 0: Inquiry, KnowledgeBaseArticle, SLATemplate, ChannelConfig (병렬)
 | assignTo | 1 | 1 | 0 | 2 |
 | markResolved/markClosed | 2 | 1 | 0 | 3 |
 | isSlaBreached | 2 | 0 | 1 | 3 |
+| isRealtimeChatEnabled | 2 | 0 | 0 | 2 |
 
 ### [TC-001] isAssigned - 담당자 있음
 
@@ -271,12 +283,25 @@ Level 0: Inquiry, KnowledgeBaseArticle, SLATemplate, ChannelConfig (병렬)
 | **When** | markClosed() 호출 |
 | **Then** | 에러 발생 (RESOLVED 상태에서만 종료 가능) |
 
+### [TC-005] isRealtimeChatEnabled - 채팅 채널
+
+**분류:** Happy Path
+
+| 구분 | 내용 |
+|------|------|
+| **Given** | channel=CHAT인 Inquiry |
+| **When** | isRealtimeChatEnabled() 호출 |
+| **Then** | true 반환 |
+
 ## 상위 기획서
 
-- `apps/admin/src/app/(admin)/app.spec.md`
+- `apps/admin/web/src/app/(admin)/app.spec.md`
 
 ## 변경 이력
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
 | 2026-02-25 | 초기 생성 | orch-requirement |
+| 2026-02-26 | 실시간 채팅 지원 필드 추가 (isRealtimeChat, lastMessageAt, unreadCount) | orch-requirement |
+| 2026-02-26 | 관계에 InquiryParticipant 추가 | orch-requirement |
+| 2026-02-26 | Entity 클래스 구현 완료 | be-entity-builder |

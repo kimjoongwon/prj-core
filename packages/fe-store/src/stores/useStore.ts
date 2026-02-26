@@ -56,3 +56,27 @@ export const useAuthStore = () => {
 	}
 	return store.authStore;
 };
+
+/**
+ * AIFormTemplateStore를 가져오는 selector hook
+ * RootStore에서 aiFormTemplateStore만 선택하여 반환
+ */
+export const useAIFormTemplateStore = () => {
+	const store = useStore();
+	if (!store.aiFormTemplateStore) {
+		throw new Error("aiFormTemplateStore가 초기화되지 않았습니다.");
+	}
+	return store.aiFormTemplateStore;
+};
+
+/**
+ * InquiryStore를 가져오는 selector hook
+ * RootStore에서 inquiryStore만 선택하여 반환
+ */
+export const useInquiryStore = () => {
+	const store = useStore();
+	if (!store.inquiryStore) {
+		throw new Error("inquiryStore가 초기화되지 않았습니다.");
+	}
+	return store.inquiryStore;
+};

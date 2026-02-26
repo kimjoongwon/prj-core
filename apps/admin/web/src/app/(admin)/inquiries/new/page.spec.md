@@ -1,6 +1,7 @@
 # 문의 접수 페이지 기획서
 
 > 생성일: 2026-02-25
+> 수정일: 2026-02-26
 > 타입: page
 > 경로: /inquiries/new
 
@@ -21,10 +22,17 @@
 │ │ └─────────────────────────────────────────────────────────────────────────┘ │ │
 │ │                                                                             │ │
 │ │ 채널 *                     접수 유형                                        │ │
-│ │ [전화 ▼]                   [일반 문의 ▼]                                    │ │
+│ │ [전화 ▼]                   [오프라인 문의 ▼]                                │ │
 │ │                                                                             │ │
 │ │ 카테고리 *                 우선순위 *                                        │ │
 │ │ [배송 ▼]                   [보통 ▼]                                         │ │
+│ │                                                                             │ │
+│ │ ┌─────────────────────────────────────────────────────────────────────────┐ │ │
+│ │ │ 🤖 AI 분류 추천                                                          │ │ │
+│ │ │ 입력된 내용을 바탕으로 AI가 추천하는 설정입니다.                          │ │ │
+│ │ │ 카테고리: [배송 ✓]  우선순위: [높음 ✓]  예상 처리 시간: 2시간            │ │ │
+│ │ │ [추천 적용]                                                              │ │ │
+│ │ └─────────────────────────────────────────────────────────────────────────┘ │ │
 │ └─────────────────────────────────────────────────────────────────────────────┘ │
 │                                                                                 │
 │ ┌─────────────────────────────────────────────────────────────────────────────┐ │
@@ -81,9 +89,11 @@
 2. 기존 고객 검색 또는 신규 고객 정보를 입력한다
 3. 문의 제목, 카테고리, 우선순위 등 기본 정보를 입력한다
 4. 문의 내용을 상세히 작성한다
-5. 필요시 첨부 파일을 업로드한다
-6. 담당자를 배정하거나 태그를 추가한다
-7. "접수 완료" 버튼을 클릭하여 문의를 등록한다
+5. **AI가 입력 내용을 분석하여 카테고리, 우선순위를 자동 추천한다**
+6. **AI 추천이 표시되면 [추천 적용] 버튼으로 원클릭 적용할 수 있다**
+7. 필요시 첨부 파일을 업로드한다
+8. 담당자를 배정하거나 태그를 추가한다
+9. "접수 완료" 버튼을 클릭하여 문의를 등록한다
 
 ## 레이아웃 구성
 
@@ -91,6 +101,7 @@
 |------|----------|--------|
 | 헤더 | PageSurface | - |
 | 기본 정보 | InquiryBasicForm | `packages/fe-ui/src/components/widget/InquiryBasicForm/index.spec.md` |
+| AI 분류 추천 | AIClassificationSuggestion | `packages/fe-ui/src/components/widget/AIClassificationSuggestion/index.spec.md` |
 | 고객 정보 | CustomerSearchForm | `packages/fe-ui/src/components/feature/CustomerSearchForm/index.spec.md` |
 | 문의 내용 | InquiryContentForm | `packages/fe-ui/src/components/widget/InquiryContentForm/index.spec.md` |
 | 추가 설정 | InquirySettingsForm | `packages/fe-ui/src/components/widget/InquirySettingsForm/index.spec.md` |
@@ -104,6 +115,8 @@
 | 고객 검색 중 | 기존 고객 검색 | 검색 결과 드롭다운 |
 | 고객 선택됨 | 기존 고객 선택 | 고객 정보 자동 입력 |
 | 입력 중 | 폼 작성 중 | 입력값 실시간 검증 |
+| AI 분석 중 | AI 분류 추천 생성 중 | 로딩 인디케이터 |
+| AI 추천 표시 | AI 분석 완료 | 추천 카드 표시 |
 | 제출 중 | 접수 완료 API 호출 | 버튼 비활성화, 로딩 |
 | 완료 | 접수 성공 | 상세 페이지로 리다이렉트 |
 | 에러 | 유효성/API 에러 | 에러 메시지 표시 |
@@ -113,8 +126,37 @@
 | 시점 | API | 캐싱 |
 |------|-----|------|
 | 고객 검색 | GET /api/v1/users?search=xxx | staleTime: 1m |
+| AI 분류 추천 | POST /api/v1/inquiries/classify | no-cache |
 | 접수 완료 | POST /api/v1/inquiries | no-cache |
 | 파일 업로드 | POST /api/v1/uploads | no-cache |
+
+## AI 자동 분류 제안
+
+### 분석 트리거
+
+| 트리거 | 동작 |
+|--------|------|
+| 제목 입력 후 1초 | AI 분류 분석 시작 |
+| 문의 내용 50자 이상 입력 | AI 분류 분석 시작 |
+| 수동 [분석] 버튼 클릭 | AI 분류 분석 시작 |
+
+### 추천 항목
+
+| 항목 | 설명 | 신뢰도 표시 |
+|------|------|------------|
+| 카테고리 | 문의 내용 기반 분류 | 0~100% |
+| 우선순위 | 키워드/감정 기반 판단 | 0~100% |
+| 예상 처리 시간 | 카테고리별 평균 기반 | - |
+| 감정 분석 | 긍정/부정/중립 | 0~100% |
+
+### AI 추천 UI 동작
+
+1. 분석 중: 스켈레톤 로딩 + "AI 분석 중..." 메시지
+2. 분석 완료: 추천 카드 표시
+   - 추천 카테고리 [적용] 버튼
+   - 추천 우선순위 [적용] 버튼
+   - [전체 적용] 버튼
+3. 적용 후: 해당 필드 자동 채우기, 추천 카드 흐리게 표시
 
 ## 이벤트 핸들러
 
@@ -125,32 +167,119 @@
 | onSelectCustomer | 선택한 고객 정보로 폼 자동 채우기 |
 | onAddAttachment | 파일 선택 다이얼로그 열기 |
 | onRemoveAttachment | 첨부 파일 제거 |
+| onTriggerAIClassify | AI 분류 추천 API 호출 |
+| onApplyAISuggestion | AI 추천값 폼에 적용 |
 | onClickCancel | 확인 다이얼로그 후 목록으로 이동 |
 | onClickSaveDraft | 임시 저장 (localStorage) |
 | onSubmit | 문의 접수 API 호출 |
 
-## 구현 체크리스트
+## L5-L12 레이어 기획
 
-- [ ] page.tsx (서버 컴포넌트)
-- [ ] _client.tsx (클라이언트 컴포넌트)
-- [ ] hooks/useHandlers.ts
-- [ ] hooks/useInquiryForm.ts (폼 상태 관리)
-- [ ] E2E 테스트 (Playwright)
+### L5: 화면 구조 (레이아웃)
 
-## 테스트 케이스
+```
+PageSurface (title, description, actions)
+├── InquiryBasicForm
+│   ├── TitleInput
+│   ├── ChannelSelect
+│   ├── SourceSelect
+│   ├── CategorySelect
+│   ├── PrioritySelect
+│   └── AIClassificationSuggestion
+├── CustomerSearchForm
+│   ├── TabSwitcher (기존/신규)
+│   ├── CustomerSearchInput
+│   ├── CustomerInfoFields
+│   └── SelectedCustomerCard
+├── InquiryContentForm
+│   ├── ContentTextarea
+│   └── AttachmentUploader
+├── InquirySettingsForm
+│   ├── AssigneeSelect
+│   ├── TagInput
+│   └── NotesTextarea
+└── FormActions
+    ├── CancelButton
+    ├── SaveDraftButton
+    └── SubmitButton
+```
+
+### L6: 데이터 흐름 (API 호출)
+
+```
+1. SSR Prefetch
+   - 없음 (신규 등록 페이지)
+
+2. Client-side
+   - 고객 검색: 디바운스 300ms
+   - AI 분류: 제목/내용 변경 시 1초 후 자동 트리거
+   - 폼 제출: 유효성 검증 후 API 호출
+
+3. 임시 저장
+   - localStorage에 5분마다 자동 저장
+   - 페이지 새로고침 시 복원 프롬프트
+```
+
+### L7: 인터랙션 (이벤트)
+
+| 인터랙션 | 트리거 | 동작 |
+|----------|--------|------|
+| 고객 검색 | Input 입력 | 300ms 디바운스 + API 호출 |
+| 고객 선택 | List click | 폼 자동 채우기 |
+| AI 분류 | 자동/수동 | API 호출 + 추천 표시 |
+| 추천 적용 | Button click | 폼 필드 업데이트 |
+| 폼 제출 | Button click | 유효성 검증 + API 호출 |
+| 이탈 확인 | Browser back | 확인 다이얼로그 |
+
+### L8: Pure UI 컴포넌트
+
+| 컴포넌트 | 위치 | 설명 |
+|----------|------|------|
+| AIClassificationSuggestion | ui/ | AI 분류 추천 카드 |
+| CustomerSearchInput | ui/ | 고객 검색 입력 |
+| SelectedCustomerCard | ui/ | 선택된 고객 정보 카드 |
+| AttachmentUploader | ui/ | 파일 업로드 컴포넌트 |
+| TagInput | ui/inputs/ | 태그 입력 필드 |
+| NotesTextarea | ui/inputs/ | 비고 입력 필드 |
+
+### L9: Widget 컴포넌트
+
+| 컴포넌트 | 위치 | 설명 |
+|----------|------|------|
+| InquiryBasicForm | widget/ | 기본 정보 폼 섹션 |
+| InquiryContentForm | widget/ | 문의 내용 폼 섹션 |
+| InquirySettingsForm | widget/ | 추가 설정 폼 섹션 |
+
+### L10: Feature 컴포넌트
+
+| 컴포넌트 | 위치 | 설명 |
+|----------|------|------|
+| CustomerSearchForm | feature/ | 고객 검색/선택 기능 |
+| InquiryCreateForm | feature/ | 전체 폼 + Store 연결 |
+
+### L11: Store 연결
+
+| Store | 사용 필드/액션 |
+|-------|----------------|
+| InquiryStore | replyContent, setReplyContent, isGeneratingDraft |
+| FormStore (로컬) | formData, setFormData, validate, reset |
+
+### L12: 테스트 케이스
 
 > 구현 도구: Playwright (E2E)
 
-### 테스트 커버리지
+#### 테스트 커버리지
 
 | 시나리오 | Happy Path | Error Path | Edge Case | 합계 |
 |---------|:----------:|:----------:|:---------:|:----:|
 | 기본 접수 | 1 | 0 | 0 | 1 |
 | 기존 고객 선택 | 1 | 1 | 0 | 2 |
+| AI 분류 추천 | 2 | 1 | 0 | 3 |
 | 필수값 검증 | 0 | 1 | 0 | 1 |
 | 첨부 파일 | 1 | 1 | 1 | 3 |
+| 임시 저장 | 1 | 0 | 1 | 2 |
 
-### [TC-001] 문의 접수 성공
+#### [TC-001] 문의 접수 성공
 
 **분류:** Happy Path
 
@@ -160,7 +289,7 @@
 | **When** | 모든 필수값 입력 후 접수 완료 클릭 |
 | **Then** | 문의 등록 성공, 상세 페이지로 이동 |
 
-### [TC-002] 기존 고객 검색 및 선택
+#### [TC-002] 기존 고객 검색 및 선택
 
 **분류:** Happy Path
 
@@ -170,7 +299,27 @@
 | **When** | 고객명 검색 후 선택 |
 | **Then** | 고객 정보 자동 입력됨 |
 
-### [TC-003] 필수값 검증 실패
+#### [TC-003] AI 분류 추천 - 자동 트리거
+
+**분류:** Happy Path
+
+| 구분 | 내용 |
+|------|------|
+| **Given** | 문의 접수 페이지 로드됨 |
+| **When** | 제목과 내용 50자 이상 입력 |
+| **Then** | AI 분류 추천 카드 표시됨 |
+
+#### [TC-004] AI 분류 추천 - 적용
+
+**분류:** Happy Path
+
+| 구분 | 내용 |
+|------|------|
+| **Given** | AI 추천 카드 표시됨 |
+| **When** | [전체 적용] 버튼 클릭 |
+| **Then** | 카테고리, 우선순위 필드 자동 채워짐 |
+
+#### [TC-005] 필수값 검증 실패
 
 **분류:** Error Path
 
@@ -180,12 +329,45 @@
 | **When** | 필수값 없이 접수 완료 클릭 |
 | **Then** | 필수값 에러 메시지 표시 |
 
+#### [TC-006] AI 분류 추천 - 실패
+
+**분류:** Error Path
+
+| 구분 | 내용 |
+|------|------|
+| **Given** | 문의 접수 페이지 로드됨 |
+| **When** | AI 분류 API 실패 |
+| **Then** | 에러 메시지 표시, 수동 선택 가능 |
+
+#### [TC-007] 임시 저장 - 복원
+
+**분류:** Edge Case
+
+| 구분 | 내용 |
+|------|------|
+| **Given** | 이전에 임시 저장된 데이터 있음 |
+| **When** | 페이지 다시 로드 |
+| **Then** | 복원 확인 다이얼로그 표시 |
+
+## 구현 체크리스트
+
+- [ ] page.tsx (서버 컴포넌트)
+- [ ] _client.tsx (클라이언트 컴포넌트)
+- [ ] hooks/useHandlers.ts
+- [ ] hooks/useInquiryForm.ts (폼 상태 관리)
+- [ ] hooks/useAIClassification.ts (AI 분류 추천)
+- [ ] hooks/useAutoSave.ts (임시 저장)
+- [ ] E2E 테스트 (Playwright)
+
 ## 상위 기획서
 
-- `apps/admin/src/app/(admin)/app.spec.md`
+- `apps/admin/web/src/app/(admin)/app.spec.md`
 
 ## 변경 이력
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
 | 2026-02-25 | 초기 생성 | orch-requirement |
+| 2026-02-26 | AI 자동 분류 제안 기능 추가 | orch-screen-planner |
+| 2026-02-26 | L5-L12 레이어 기획 추가 | orch-screen-planner |
+| 2026-02-26 | 임시 저장 기능 추가 | orch-screen-planner |

@@ -5,6 +5,7 @@
 
 // ─── Server APIs (port 3006) ───
 export * from "./apis";
+export * from "./apis-assets";
 export {
 	AXIOS_INSTANCE,
 	customInstance,

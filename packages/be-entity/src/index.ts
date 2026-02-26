@@ -23,6 +23,18 @@ export * from "./grant.entity";
 export * from "./ground.entity";
 export * from "./group.entity";
 export * from "./image.entity";
+// AI Form Domain Entities
+export * from "./ai-form-template.entity";
+export * from "./ai-form-field.entity";
+export * from "./ai-template-execution.entity";
+// Inquiry Domain Entities
+export * from "./ai-agent-log.entity";
+export * from "./inquiry.entity";
+export * from "./inquiry-attachment.entity";
+export * from "./inquiry-message.entity";
+export * from "./inquiry-participant.entity";
+export * from "./inquiry-tag.entity";
+export * from "./inquiry-thread.entity";
 export * from "./oidc-client.entity";
 export * from "./oidc-model.entity";
 export * from "./password-history.entity";
@@ -35,6 +47,7 @@ export * from "./role-association.entity";
 export * from "./role-classification.entity";
 export * from "./routine.entity";
 export * from "./security-policy.entity";
+export * from "./sentiment-analysis.entity";
 export * from "./session.entity";
 export * from "./space.entity";
 export * from "./space-association.entity";

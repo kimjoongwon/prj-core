@@ -1,6 +1,7 @@
 # 문의 상세 페이지 기획서
 
 > 생성일: 2026-02-25
+> 수정일: 2026-02-26
 > 타입: page
 > 경로: /inquiries/[inquiryId]
 
@@ -16,27 +17,29 @@
 │ │                                       │ │                                   │ │
 │ │ 문의번호: INQ-2026-0225-001          │ │ 상태: [진행중 ▼]                  │ │
 │ │ 제목: 배송 일정 문의                  │ │ 우선순위: [높음 ▼]                │ │
-│ │ 채널: 📧 이메일                       │ │ 카테고리: [배송 ▼]                │ │
+│ │ 채널: 💬 채팅 (실시간)               │ │ 카테고리: [배송 ▼]                │ │
 │ │ 접수일: 2026.02.25 14:30             │ │ 담당자: [김상담 ▼]                │ │
 │ │                                       │ │ 태그: [+ 추가] #배송 #긴급        │ │
 │ │ 💡 감정 분석: 😐 중립 (신뢰도 85%)   │ │                                   │ │
+│ │ 🟢 온라인: 홍길동, 김상담            │ │                                   │ │
+│ └───────────────────────────────────────┘ └───────────────────────────────────┘ │
+│                                                                                 │
+│ ┌───────────────────────────────────────┐ ┌───────────────────────────────────┐ │
+│ │ 📞 고객 정보                          │ │ 👥 참여자 (3)                      │ │
+│ │                                       │ │                                   │ │
+│ │ 홍길동 (hong@example.com)            │ │ 🟢 홍길동 (고객) - 타이핑 중...   │ │
+│ │ 📱 010-1234-5678  |  📅 가입일: 2025   │ │ 🟢 김상담 (담당자)                │ │
+│ │ 📋 문의 이력: 5건                     │ │ ⚪ 이감독 (감독관)                 │ │
 │ └───────────────────────────────────────┘ └───────────────────────────────────┘ │
 │                                                                                 │
 │ ┌─────────────────────────────────────────────────────────────────────────────┐ │
-│ │ 📞 고객 정보                                                                 │ │
-│ │                                                                             │ │
-│ │ 홍길동 (hong@example.com)                                                  │ │
-│ │ 📱 010-1234-5678  |  📅 가입일: 2025.01.15  |  📋 문의 이력: 5건            │ │
-│ └─────────────────────────────────────────────────────────────────────────────┘ │
-│                                                                                 │
-│ ┌─────────────────────────────────────────────────────────────────────────────┐ │
-│ │ 💬 대화 스레드                                                               │ │
+│ │ 💬 실시간 채팅                                              🟢 연결됨      │ │
 │ │                                                                             │ │
 │ │ ┌─────────────────────────────────────────────────────────────────────────┐ │ │
 │ │ │ 👤 홍길동 (고객)                                    2026.02.25 14:30    │ │ │
 │ │ │ 안녕하세요, 2월 20일에 주문한 상품 배송 일정이 어떻게 되나요?          │ │ │
 │ │ │ 주문번호는 ORD-2026-0220-123입니다.                                    │ │ │
-│ │ │ 📎 첨부: 주문확인서.pdf                                                 │ │ │
+│ │ │ 📎 첨부: 주문확인서.pdf                                 ✓✓ 읽음        │ │ │
 │ │ └─────────────────────────────────────────────────────────────────────────┘ │ │
 │ │                                                                             │ │
 │ │ ┌─────────────────────────────────────────────────────────────────────────┐ │ │
@@ -44,12 +47,16 @@
 │ │ │ 안녕하세요, 고객님. 주문하신 상품은 현재 배송 준비 중입니다.            │ │ │
 │ │ │ 2월 27일 출고 예정이며, 2월 28~29일 수령 가능합니다.                    │ │ │
 │ │ │                                                                         │ │ │
-│ │ │ [AI 초안 사용됨 ✨]                                                      │ │ │
+│ │ │ [AI 초안 사용됨 ✨]                                       ✓✓ 읽음      │ │ │
 │ │ └─────────────────────────────────────────────────────────────────────────┘ │ │
 │ │                                                                             │ │
 │ │ ┌─────────────────────────────────────────────────────────────────────────┐ │ │
 │ │ │ 👤 홍길동 (고객)                                    2026.02.25 15:30    │ │ │
-│ │ │ 네, 확인 감사합니다. 혹시 배송지 변경이 가능할까요?                      │ │ │
+│ │ │ 네, 확인 감사합니다. 혹시 배송지 변경이 가능할까요?      ✓ 전달됨      │ │ │
+│ │ └─────────────────────────────────────────────────────────────────────────┘ │ │
+│ │                                                                             │ │
+│ │ ┌─────────────────────────────────────────────────────────────────────────┐ │ │
+│ │ │ 🔵 홍길동님이 타이핑 중입니다...                                        │ │ │
 │ │ └─────────────────────────────────────────────────────────────────────────┘ │ │
 │ │                                                                             │ │
 │ └─────────────────────────────────────────────────────────────────────────────┘ │
@@ -64,7 +71,7 @@
 │ │ │                                                                         │ │ │
 │ │ └─────────────────────────────────────────────────────────────────────────┘ │ │
 │ │                                                                             │ │
-│ │ [🤖 AI 초안 생성] [📚 지식베이스 참조]            [📎 첨부] [전송]         │ │
+│ │ [🤖 AI 초안 생성] [📚 지식베이스 참조]  [😊😊]   [📎 첨부]    [전송]       │ │
 │ └─────────────────────────────────────────────────────────────────────────────┘ │
 │                                                                                 │
 │ ┌─────────────────────────────────────────────────────────────────────────────┐ │
@@ -78,12 +85,15 @@
 ## 사용자 시나리오
 
 1. 관리자가 문의 상세 페이지에 접근하여 문의 내용과 대화 이력을 확인한다
-2. 문의 메타 정보(상태, 우선순위, 담당자 등)를 수정한다
-3. AI 초안 생성 버튼을 클릭하여 자동으로 답변 초안을 생성한다
-4. 지식베이스 참조를 통해 관련 문서를 검색하고 답변에 활용한다
-5. 답변을 작성하고 전송하여 고객에게 응답한다
-6. SLA 추적 정보를 확인하여 응답/해결 시간을 모니터링한다
-7. 파일을 첨부하여 답변에 필요한 자료를 함께 전송한다
+2. 실시간 채팅 연결 상태를 확인한다 (연결됨/끊김)
+3. 참여자 목록에서 온라인/오프라인 상태와 타이핑 중인 사용자를 확인한다
+4. 새 메시지가 실시간으로 화면에 표시된다
+5. 메시지 전달/읽음 상태를 확인한다 (✓ 전달됨, ✓✓ 읽음)
+6. AI 초안 생성 버튼을 클릭하여 자동으로 답변 초안을 생성한다
+7. 지식베이스 참조를 통해 관련 문서를 검색하고 답변에 활용한다
+8. 답변을 작성하고 전송하여 고객에게 실시간 응답한다
+9. 감정 분석 결과를 확인하여 고객 상태를 파악한다
+10. SLA 추적 정보를 확인하여 응답/해결 시간을 모니터링한다
 
 ## 레이아웃 구성
 
@@ -93,7 +103,8 @@
 | 문의 정보 카드 | InquiryInfoCard | `packages/fe-ui/src/components/widget/InquiryInfoCard/index.spec.md` |
 | 메타 정보 패널 | InquiryMetaPanel | `packages/fe-ui/src/components/widget/InquiryMetaPanel/index.spec.md` |
 | 고객 정보 카드 | CustomerInfoCard | `packages/fe-ui/src/components/widget/CustomerInfoCard/index.spec.md` |
-| 대화 스레드 | InquiryThread | `packages/fe-ui/src/components/feature/InquiryThread/index.spec.md` |
+| 참여자 목록 | ParticipantList | `packages/fe-ui/src/components/widget/ParticipantList/index.spec.md` |
+| 실시간 채팅 | RealtimeChatPanel | `packages/fe-ui/src/components/feature/RealtimeChatPanel/index.spec.md` |
 | 답변 작성 | InquiryReplyForm | `packages/fe-ui/src/components/feature/InquiryReplyForm/index.spec.md` |
 | SLA 추적 | SLATracker | `packages/fe-ui/src/components/widget/SLATracker/index.spec.md` |
 
@@ -103,8 +114,11 @@
 |------|------|-----|
 | 로딩 | 문의 데이터 로딩 중 | 스켈레톤 UI |
 | 조회 | 문의 상세 조회 완료 | 전체 UI 표시 |
+| WebSocket 연결 중 | 실시간 채팅 연결 중 | 연결 상태 인디케이터 |
+| WebSocket 연결됨 | 실시간 채팅 활성 | 🟢 연결됨 |
+| WebSocket 끊김 | 실시간 채팅 비활성 | 🔴 연결 끊김, 재연결 버튼 |
 | 메타 수정 중 | 상태/우선순위 등 수정 | 인라인 편집 |
-| 답변 작성 중 | 답변 입력 중 | 폼 활성화 |
+| 답변 작성 중 | 답변 입력 중 | 폼 활성화, 타이핑 브로드캐스트 |
 | AI 초안 생성 중 | AI 초안 생성 로딩 | 로딩 인디케이터 |
 | 전송 중 | 답변 전송 중 | 버튼 비활성화 |
 | 에러 | API 에러 발생 | 에러 메시지 |
@@ -115,11 +129,39 @@
 |------|-----|------|
 | 진입 시 | GET /api/v1/inquiries/[inquiryId] | staleTime: 0 |
 | 진입 시 | GET /api/v1/inquiries/[inquiryId]/messages | staleTime: 0 |
+| 진입 시 | GET /api/v1/inquiries/[inquiryId]/participants | staleTime: 0 |
 | 진입 시 | GET /api/v1/inquiries/[inquiryId]/customer | staleTime: 5m |
+| 진입 시 | GET /api/v1/inquiries/[inquiryId]/sentiment | staleTime: 1m |
 | 상태 변경 시 | PATCH /api/v1/inquiries/[inquiryId] | invalidate |
 | AI 초안 | POST /api/v1/inquiries/[inquiryId]/draft | no-cache |
-| 답변 전송 | POST /api/v1/inquiries/[inquiryId]/messages | invalidate |
-| 폴링 (10초) | GET /api/v1/inquiries/[inquiryId]/messages | refetchInterval |
+| 답변 전송 | POST /api/v1/inquiries/[inquiryId]/messages | WebSocket으로 실시간 |
+| 참여 | POST /api/v1/inquiries/[inquiryId]/participants/join | - |
+
+## WebSocket 연결
+
+### 연결 시점
+
+- 페이지 진입 시 자동 WebSocket 연결
+- `inquiry:join` 이벤트 전송
+
+### 연결 해제 시점
+
+- 페이지 이탈 시 `inquiry:leave` 이벤트 전송
+- WebSocket 연결 해제
+
+### 이벤트 핸들링
+
+| 이벤트 | 핸들러 | 동작 |
+|--------|--------|------|
+| `inquiry:message:new` | handleNewMessage | 메시지 목록에 추가, 스크롤 |
+| `inquiry:message:delivered` | handleDelivered | 전달 상태 업데이트 |
+| `inquiry:message:read` | handleRead | 읽음 상태 업데이트 |
+| `inquiry:typing` | handleTyping | 타이핑 표시 업데이트 |
+| `inquiry:participant:joined` | handleJoined | 참여자 목록 추가 |
+| `inquiry:participant:left` | handleLeft | 참여자 목록 제거 |
+| `inquiry:participant:online` | handleOnline | 온라인 상태로 변경 |
+| `inquiry:participant:offline` | handleOffline | 오프라인 상태로 변경 |
+| `inquiry:status:changed` | handleStatusChanged | 문의 상태 업데이트 |
 
 ## 이벤트 핸들러
 
@@ -132,34 +174,144 @@
 | onClickGenerateDraft | AI 초안 생성 API 호출, 결과를 답변 폼에 입력 |
 | onClickSearchKnowledge | 지식베이스 검색 모달 열기 |
 | onAttachFile | 파일 선택 다이얼로그 열기 |
-| onSubmitReply | 답변 전송 API 호출, 스레드 새로고침 |
+| onSubmitReply | WebSocket으로 메시지 전송 |
+| onTypingStart | `inquiry:typing:start` 이벤트 전송 |
+| onTypingStop | `inquiry:typing:stop` 이벤트 전송 |
 | onClickEdit | 문의 수정 페이지로 이동 |
 | onClickDelete | 삭제 확인 모달 표시 |
+| onReconnect | WebSocket 재연결 |
 
-## 구현 체크리스트
+## L5-L12 레이어 기획
 
-- [ ] page.tsx (서버 컴포넌트)
-- [ ] _client.tsx (클라이언트 컴포넌트)
-- [ ] _prefetch.ts (데이터 프리페치)
-- [ ] hooks/useHandlers.ts
-- [ ] hooks/useInquiryThread.ts (실시간 업데이트)
-- [ ] E2E 테스트 (Playwright)
+### L5: 화면 구조 (레이아웃)
 
-## 테스트 케이스
+```
+PageSurface (title, description, actions)
+├── TopSection (2-column grid)
+│   ├── InquiryInfoCard
+│   │   ├── InquiryNumber
+│   │   ├── Title
+│   │   ├── Channel
+│   │   ├── CreatedAt
+│   │   ├── SentimentBadge
+│   │   └── OnlineParticipants
+│   └── InquiryMetaPanel
+│       ├── StatusSelect
+│       ├── PrioritySelect
+│       ├── CategorySelect
+│       ├── AssigneeSelect
+│       └── TagInput
+├── MiddleSection (2-column grid)
+│   ├── CustomerInfoCard
+│   │   ├── CustomerName
+│   │   ├── ContactInfo
+│   │   └── InquiryHistory
+│   └── ParticipantList
+│       └── ParticipantItem[] (online status, typing)
+├── RealtimeChatPanel
+│   ├── ConnectionStatus
+│   ├── MessageList
+│   │   └── MessageItem[] (sender, content, timestamp, status)
+│   └── TypingIndicator
+├── InquiryReplyForm
+│   ├── ReplyTextarea
+│   ├── AIActions
+│   │   ├── GenerateDraftButton
+│   │   └── KnowledgeBaseButton
+│   ├── AttachmentButton
+│   └── SendButton
+└── SLATracker
+    ├── FirstResponseProgress
+    └── ResolutionProgress
+```
+
+### L6: 데이터 흐름 (API 호출)
+
+```
+1. SSR Prefetch
+   - GET /api/v1/inquiries/[inquiryId]
+   - GET /api/v1/inquiries/[inquiryId]/messages
+   - GET /api/v1/inquiries/[inquiryId]/participants
+   - GET /api/v1/inquiries/[inquiryId]/customer
+   - GET /api/v1/inquiries/[inquiryId]/sentiment
+
+2. Client-side
+   - React Query 캐시 관리
+   - WebSocket 실시간 메시지 수신
+   - 상태 변경 시 invalidate
+
+3. WebSocket Events
+   - inquiry:join (진입)
+   - inquiry:message:new (수신)
+   - inquiry:typing:start/stop (송신)
+   - inquiry:leave (이탈)
+```
+
+### L7: 인터랙션 (이벤트)
+
+| 인터랙션 | 트리거 | 동작 |
+|----------|--------|------|
+| 메시지 전송 | Button click | WebSocket 전송 + 화면 추가 |
+| AI 초안 생성 | Button click | API 호출 + 폼 채우기 |
+| 타이핑 시작 | Input focus | WebSocket 이벤트 전송 |
+| 타이핑 중지 | 3초 무입력 | WebSocket 이벤트 전송 |
+| 상태 변경 | Select change | API 호출 + invalidate |
+| 참여자 초대 | Button click | API 호출 |
+| 재연결 | Button click | WebSocket 재연결 |
+
+### L8: Pure UI 컴포넌트
+
+| 컴포넌트 | 위치 | 설명 |
+|----------|------|------|
+| ConnectionStatus | ui/ | WebSocket 연결 상태 (🟢🟡🔴) |
+| MessageItem | ui/ | 개별 메시지 버블 |
+| MessageStatus | ui/ | 전달/읽음 상태 표시 (✓, ✓✓) |
+| TypingIndicator | ui/ | 타이핑 중 표시 |
+| SentimentBadge | ui/ | 감정 분석 배지 |
+| ParticipantItem | ui/ | 참여자 상태 아이템 |
+| SLAProgressBar | ui/ | SLA 진행 바 |
+
+### L9: Widget 컴포넌트
+
+| 컴포넌트 | 위치 | 설명 |
+|----------|------|------|
+| InquiryInfoCard | widget/ | 문의 정보 카드 |
+| InquiryMetaPanel | widget/ | 메타 정보 편집 패널 |
+| CustomerInfoCard | widget/ | 고객 정보 카드 |
+| ParticipantList | widget/ | 참여자 목록 |
+| SLATracker | widget/ | SLA 추적 위젯 |
+
+### L10: Feature 컴포넌트
+
+| 컴포넌트 | 위치 | 설명 |
+|----------|------|------|
+| RealtimeChatPanel | feature/ | 실시간 채팅 + WebSocket 연결 |
+| InquiryReplyForm | feature/ | 답변 작성 + AI 기능 |
+
+### L11: Store 연결
+
+| Store | 사용 필드/액션 |
+|-------|----------------|
+| InquiryStore | currentInquiryId, messages, participants, isWebSocketConnected, isTyping, typingUsers, replyContent, isGeneratingDraft |
+| InquiryStore (액션) | setCurrentInquiry, addMessage, updateMessage, setParticipants, setTyping, setWebSocketConnected, openReplyForm, setReplyContent |
+
+### L12: 테스트 케이스
 
 > 구현 도구: Playwright (E2E)
 
-### 테스트 커버리지
+#### 테스트 커버리지
 
 | 시나리오 | Happy Path | Error Path | Edge Case | 합계 |
 |---------|:----------:|:----------:|:---------:|:----:|
 | 문의 조회 | 1 | 1 | 0 | 2 |
+| WebSocket 연결 | 2 | 1 | 1 | 4 |
+| 실시간 메시지 | 2 | 0 | 1 | 3 |
 | 상태 변경 | 2 | 1 | 0 | 3 |
 | AI 초안 | 1 | 1 | 0 | 2 |
 | 답변 작성 | 2 | 1 | 1 | 4 |
-| 첨부 파일 | 1 | 1 | 1 | 3 |
+| 타이핑 표시 | 2 | 0 | 0 | 2 |
 
-### [TC-001] 문의 상세 조회 성공
+#### [TC-001] 문의 상세 조회 성공
 
 **분류:** Happy Path
 
@@ -169,7 +321,47 @@
 | **When** | 페이지 로드 |
 | **Then** | 문의 정보, 스레드, SLA 정보 표시 |
 
-### [TC-002] AI 초안 생성
+#### [TC-002] WebSocket 연결 성공
+
+**분류:** Happy Path
+
+| 구분 | 내용 |
+|------|------|
+| **Given** | CHAT 채널 문의 상세 페이지 |
+| **When** | 페이지 로드 완료 |
+| **Then** | WebSocket 연결, 🟢 연결됨 표시 |
+
+#### [TC-003] 실시간 메시지 수신
+
+**분류:** Happy Path
+
+| 구분 | 내용 |
+|------|------|
+| **Given** | WebSocket 연결됨 |
+| **When** | 상대방이 메시지 전송 |
+| **Then** | 메시지가 실시간으로 화면에 추가됨 |
+
+#### [TC-004] 타이핑 표시
+
+**분류:** Happy Path
+
+| 구분 | 내용 |
+|------|------|
+| **Given** | WebSocket 연결됨 |
+| **When** | 상대방이 타이핑 시작 |
+| **Then** | "홍길동님이 타이핑 중입니다..." 표시 |
+
+#### [TC-005] 메시지 전송
+
+**분류:** Happy Path
+
+| 구분 | 내용 |
+|------|------|
+| **Given** | 답변 텍스트 입력됨, WebSocket 연결됨 |
+| **When** | 전송 버튼 클릭 |
+| **Then** | WebSocket으로 메시지 전송, 화면에 메시지 추가 |
+
+#### [TC-006] AI 초안 생성
 
 **분류:** Happy Path
 
@@ -179,17 +371,7 @@
 | **When** | AI 초안 생성 버튼 클릭 |
 | **Then** | 로딩 후 답변 폼에 초안 텍스트 입력됨 |
 
-### [TC-003] 답변 전송
-
-**분류:** Happy Path
-
-| 구분 | 내용 |
-|------|------|
-| **Given** | 답변 텍스트 입력됨 |
-| **When** | 전송 버튼 클릭 |
-| **Then** | 새 메시지가 스레드에 추가됨 |
-
-### [TC-004] 상태 변경 - 해결로 변경
+#### [TC-007] 상태 변경 - 해결로 변경
 
 **분류:** Happy Path
 
@@ -199,12 +381,58 @@
 | **When** | 상태를 해결로 변경 |
 | **Then** | 상태가 업데이트되고 SLA 추적 완료 |
 
+#### [TC-008] WebSocket 재연결
+
+**분류:** Edge Case
+
+| 구분 | 내용 |
+|------|------|
+| **Given** | WebSocket 연결 끊김 |
+| **When** | 재연결 버튼 클릭 |
+| **Then** | WebSocket 재연결, 메시지 동기화 |
+
+#### [TC-009] 메시지 읽음 상태
+
+**분류:** Happy Path
+
+| 구분 | 내용 |
+|------|------|
+| **Given** | 메시지 전송됨, 상대방이 읽음 |
+| **When** | 읽음 이벤트 수신 |
+| **Then** | ✓✓ 아이콘으로 변경 |
+
+#### [TC-010] 참여자 온라인 상태
+
+**분류:** Happy Path
+
+| 구분 | 내용 |
+|------|------|
+| **Given** | 참여자 목록 표시 중 |
+| **When** | 참여자가 접속/종료 |
+| **Then** | 온라인/오프라인 상태 업데이트 |
+
+## 구현 체크리스트
+
+- [ ] page.tsx (서버 컴포넌트)
+- [ ] _client.tsx (클라이언트 컴포넌트)
+- [ ] _prefetch.ts (데이터 프리페치)
+- [ ] hooks/useHandlers.ts
+- [ ] hooks/useInquiryWebSocket.ts (WebSocket 연결 관리)
+- [ ] hooks/useTypingIndicator.ts (타이핑 상태 관리)
+- [ ] hooks/useMessageStatus.ts (전달/읽음 상태)
+- [ ] E2E 테스트 (Playwright)
+
 ## 상위 기획서
 
-- `apps/admin/src/app/(admin)/app.spec.md`
+- `apps/admin/web/src/app/(admin)/app.spec.md`
 
 ## 변경 이력
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
 | 2026-02-25 | 초기 생성 | orch-requirement |
+| 2026-02-26 | 실시간 채팅 UI 추가 (WebSocket 연결 상태, 타이핑 표시, 참여자 목록) | orch-requirement |
+| 2026-02-26 | 메시지 전달/읽음 상태 표시 추가 | orch-requirement |
+| 2026-02-26 | WebSocket 이벤트 핸들링 추가 | orch-requirement |
+| 2026-02-26 | 감정 분석 표시 추가 | orch-requirement |
+| 2026-02-26 | L5-L12 레이어 기획 추가 | orch-screen-planner |

@@ -4,7 +4,6 @@
 import {
 	AuthMiddleware,
 	DtoTransformInterceptor,
-	JwtStrategy,
 	LoggerMiddleware,
 	RequestContextMiddleware,
 	ResponseEntityInterceptor,
@@ -15,6 +14,7 @@ import {
 	AuthCacheService,
 	AuthContext,
 	I18nModule,
+	JwtStrategy,
 	SpaceContext,
 	TokenStorageService,
 } from "@cocrepo/service";
@@ -29,6 +29,7 @@ import { ThrottlerGuard } from "@nestjs/throttler";
 import { AbilitiesModule } from "./ability";
 import { ActionsModule } from "./action";
 import { CategoriesModule } from "./category";
+import { InquiriesModule } from "./inquiries";
 import { ExercisesModule } from "./exercises";
 // Global modules
 import { globalModules } from "./global.module";
@@ -65,6 +66,7 @@ import { UsersModule } from "./users";
 		TimelinesModule,
 		ExercisesModule,
 		RoutinesModule,
+		InquiriesModule,
 		// Resource Modules는 필요할 때 추가합니다.
 		// 가이드: .claude/agents/be-controller-builder.md
 		RouterModule.register([
@@ -129,6 +131,10 @@ import { UsersModule } from "./users";
 							{
 								path: "routines",
 								module: RoutinesModule,
+							},
+							{
+								path: "inquiries",
+								module: InquiriesModule,
 							},
 							// 새로운 Resource 라우트는 여기에 추가
 						],

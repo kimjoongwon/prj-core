@@ -1,9 +1,11 @@
 import { makeAutoObservable } from "mobx";
 import { AbilityStore } from "./abilityStore";
+import { AIFormTemplateStore } from "./aiFormTemplateStore";
 import { AuthStore } from "./authStore";
 import { BottomTabStore } from "./bottomTabStore";
 import { CookieStore } from "./cookieStore";
 import { FABStore } from "./fabStore";
+import { InquiryStore } from "./inquiryStore";
 import { NavigationStore } from "./navigationStore";
 import type { Navigator } from "./navigator";
 import { PersistStore } from "./persistStore";
@@ -28,6 +30,12 @@ import { TokenStore } from "./tokenStore";
  * // v7.0 신규: 모바일 지원
  * rootStore.fabStore = new FABStore(FAB_CONFIG);
  * rootStore.bottomTabStore = new BottomTabStore(BOTTOM_TAB_CONFIG, { navigationStore: rootStore.navigationStore });
+ *
+ * // AI 폼 템플릿 지원
+ * rootStore.aiFormTemplateStore = new AIFormTemplateStore(rootStore);
+ *
+ * // 문의 관리 지원
+ * rootStore.inquiryStore = new InquiryStore(rootStore);
  * ```
  *
  * Store Tree 구조 (앱에 따라 다름):
@@ -38,8 +46,11 @@ import { TokenStore } from "./tokenStore";
  * ├── cookieStore (CookieStore) - 쿠키 관리
  * ├── authStore (AuthStore) - 인증 상태 관리
  * ├── persistStore (PersistStore) - 영속 저장 관리
+ * ├── abilityStore (AbilityStore) - 권한 관리
  * ├── fabStore (FABStore) - v7.0: FAB 상태 관리
- * └── bottomTabStore (BottomTabStore) - v7.0: BottomTab 상태 관리
+ * ├── bottomTabStore (BottomTabStore) - v7.0: BottomTab 상태 관리
+ * ├── aiFormTemplateStore (AIFormTemplateStore) - AI 폼 템플릿 관리
+ * └── inquiryStore (InquiryStore) - 문의 관리
  */
 export class RootStore {
 	name: string = "PROTOTYPE";
@@ -56,6 +67,10 @@ export class RootStore {
 	fabStore?: FABStore;
 	/** v7.0 신규: BottomTab 상태 관리 */
 	bottomTabStore?: BottomTabStore;
+	/** AI 폼 템플릿 관리 */
+	aiFormTemplateStore?: AIFormTemplateStore;
+	/** 문의 관리 */
+	inquiryStore?: InquiryStore;
 
 	constructor() {
 		makeAutoObservable(this);

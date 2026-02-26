@@ -1,0 +1,570 @@
+// ============================================================================
+// Inquiry Domain - 문의 도메인
+// ============================================================================
+//
+// 옴니채널 고객 문의 관리 시스템입니다.
+// 실시간 채팅, AI 자동화, 감정 분석 등의 기능을 지원합니다.
+//
+// 관계 구조:
+//   Inquiry (구체 엔티티)
+//     │
+//     ├─── InquiryThread (1:N) ─── InquiryMessage (1:N) ─── InquiryAttachment (1:N)
+//     │
+//     ├─── InquiryParticipant (1:N) - 실시간 채팅 참여자
+//     │
+//     ├─── InquiryTag (1:N) - 태그
+//     │
+//     ├─── SentimentAnalysis (1:0..1) - 감정 분석
+//     │
+//     └─── AIAgentLog (1:N) - AI 활동 로그
+//
+// 외부 관계:
+//   Inquiry ─── Space (N:1)
+//   Inquiry ─── User (customer, assignee)
+//   InquiryMessage ─── User (sender)
+//   InquiryParticipant ─── User
+//
+// ============================================================================
+
+// ----------------------------------------------------------------------------
+// Enums - 문의 도메인 열거형
+// ----------------------------------------------------------------------------
+
+/// @displayName 문의 카테고리
+enum InquiryCategory {
+  GENERAL     // 일반
+  DELIVERY    // 배송
+  PAYMENT     // 결제
+  REFUND      // 환불/취소
+  PRODUCT     // 상품
+  ACCOUNT     // 계정
+  TECHNICAL   // 기술 지원
+  COMPLAINT   // 불만/불편
+  OTHER       // 기타
+}
+
+/// @displayName 문의 채널
+enum InquiryChannel {
+  WEB      // 웹 폼
+  EMAIL    // 이메일
+  CHAT     // 실시간 채팅
+  SMS      // 문자 메시지
+  PHONE    // 전화
+  WALK_IN  // 방문
+}
+
+/// @displayName 문의 상태
+enum InquiryStatus {
+  NEW               // 신규 (미배정)
+  OPEN              // 열림 (배정됨)
+  IN_PROGRESS       // 처리 중
+  WAITING_CUSTOMER  // 고객 응답 대기
+  RESOLVED          // 해결됨
+  CLOSED            // 종료됨
+  ESCALATED         // 에스컬레이션
+}
+
+/// @displayName 문의 우선순위
+enum InquiryPriority {
+  LOW     // 낮음
+  NORMAL  // 보통
+  HIGH    // 높음
+  URGENT  // 긴급
+}
+
+/// @displayName 문의 접수 유형
+enum InquirySource {
+  ONLINE   // 온라인 (고객 직접 접수)
+  OFFLINE  // 오프라인 (상담원 대리 접수)
+}
+
+/// @displayName 문의 참여자 역할
+enum InquiryParticipantRole {
+  CUSTOMER    // 고객 (문의 작성자)
+  AGENT       // 상담원 (담당자)
+  SUPERVISOR  // 감독관 (모니터링)
+  VIEWER      // 조회자
+}
+
+/// @displayName 발신자 유형
+enum SenderType {
+  USER    // 일반 사용자 (고객/담당자)
+  AI      // AI 에이전트
+  SYSTEM  // 시스템 메시지
+}
+
+/// @displayName 감정 유형
+enum SentimentType {
+  POSITIVE  // 긍정
+  NEUTRAL   // 중립
+  NEGATIVE  // 부정
+}
+
+/// @displayName 스레드 상태
+enum ThreadStatus {
+  ACTIVE    // 활성
+  RESOLVED  // 해결됨
+  CLOSED    // 종료됨
+}
+
+/// @displayName 메시지 콘텐츠 유형
+enum MessageContentType {
+  TEXT      // 텍스트
+  HTML      // HTML 콘텐츠
+  MARKDOWN  // 마크다운
+  IMAGE     // 이미지
+  FILE      // 파일
+  SYSTEM    // 시스템 알림
+}
+
+/// @displayName 첨부파일 유형
+enum AttachmentFileType {
+  IMAGE     // 이미지 (jpg, png, gif, webp)
+  VIDEO     // 동영상 (mp4, webm)
+  AUDIO     // 오디오 (mp3, wav)
+  DOCUMENT  // 문서 (pdf, doc, docx, xls, xlsx)
+  ARCHIVE   // 압축파일 (zip, rar)
+  OTHER     // 기타
+}
+
+/// @displayName AI 작업 유형
+enum AIAgentAction {
+  DRAFT_GENERATION   // 답변 초안 생성
+  AUTO_CLASSIFICATION // 자동 카테고리 분류
+  SENTIMENT_ANALYSIS  // 감정 분석
+  AUTO_RESPONSE       // 자동 응답
+  KNOWLEDGE_SEARCH    // 지식베이스 검색
+  SUMMARIZATION       // 요약 생성
+  TRANSLATION         // 번역
+}
+
+// ----------------------------------------------------------------------------
+// Models - 문의 도메인 모델
+// ----------------------------------------------------------------------------
+
+// @schema-type: CONCRETE ENTITY
+// @description: 옴니채널 고객 문의를 관리하는 핵심 엔티티
+// @extended-by: InquiryThread, InquiryParticipant, InquiryTag, SentimentAnalysis
+/// @displayName 문의
+model Inquiry {
+  id                    String              @id @default(uuid())
+  /// @displayName 생성 일시
+  createdAt             DateTime            @default(now()) @map("created_at") @db.Timestamptz(6)
+  /// @displayName 수정 일시
+  updatedAt             DateTime?           @updatedAt @map("updated_at") @db.Timestamptz(6)
+  /// @displayName 삭제 일시
+  removedAt             DateTime?           @map("removed_at") @db.Timestamptz(6)
+
+  // 소속
+  /// @displayName 소속 공간 ID
+  spaceId               String              @map("space_id")
+
+  // 기본 정보
+  /// @displayName 문의 번호
+  inquiryNumber         String              @unique @map("inquiry_number")
+  /// @displayName 제목
+  title                 String
+  /// @displayName 카테고리
+  category              InquiryCategory
+  /// @displayName 채널
+  channel               InquiryChannel
+  /// @displayName 접수 유형
+  source                InquirySource       @default(ONLINE)
+  /// @displayName 상태
+  status                InquiryStatus       @default(NEW)
+  /// @displayName 우선순위
+  priority              InquiryPriority     @default(NORMAL)
+
+  // 관계자
+  /// @displayName 고객 ID
+  customerId            String?             @map("customer_id")
+  /// @displayName 담당자 ID
+  assigneeId            String?             @map("assignee_id")
+
+  // SLA
+  /// @displayName 첫 응답 일시
+  firstResponseAt       DateTime?           @map("first_response_at") @db.Timestamptz(6)
+  /// @displayName 해결 일시
+  resolvedAt            DateTime?           @map("resolved_at") @db.Timestamptz(6)
+  /// @displayName 종료 일시
+  closedAt              DateTime?           @map("closed_at") @db.Timestamptz(6)
+  /// @displayName SLA 응답 기한
+  slaResponseDue        DateTime?           @map("sla_response_due") @db.Timestamptz(6)
+  /// @displayName SLA 해결 기한
+  slaResolveDue         DateTime?           @map("sla_resolve_due") @db.Timestamptz(6)
+  /// @displayName SLA 응답 위반 여부
+  isSlaResponseBreached Boolean             @default(false) @map("is_sla_response_breached")
+  /// @displayName SLA 해결 위반 여부
+  isSlaResolveBreached  Boolean             @default(false) @map("is_sla_resolve_breached")
+
+  // 감정 분석
+  /// @displayName 감정 유형
+  sentiment             SentimentType?
+  /// @displayName 감정 점수
+  sentimentScore        Float?              @map("sentiment_score")
+
+  // AI
+  /// @displayName AI 자동 해결 시도 여부
+  aiResolutionAttempted Boolean             @default(false) @map("ai_resolution_attempted")
+  /// @displayName AI 자동 해결 여부
+  aiResolved            Boolean             @default(false) @map("ai_resolved")
+
+  // 실시간 채팅
+  /// @displayName 실시간 채팅 활성화 여부
+  isRealtimeChat        Boolean             @default(false) @map("is_realtime_chat")
+  /// @displayName 마지막 메시지 일시
+  lastMessageAt         DateTime?           @map("last_message_at") @db.Timestamptz(6)
+  /// @displayName 읽지 않은 메시지 수
+  unreadCount           Int                 @default(0) @map("unread_count")
+
+  // 메타데이터
+  /// @displayName 추가 메타데이터
+  metadata              Json?
+
+  // 관계
+  space                 Space               @relation(fields: [spaceId], references: [id])
+  customer              User?               @relation("InquiryCustomer", fields: [customerId], references: [id])
+  assignee              User?               @relation("InquiryAssignee", fields: [assigneeId], references: [id])
+  threads               InquiryThread[]
+  messages              InquiryMessage[]
+  participants          InquiryParticipant[]
+  tags                  InquiryTag[]
+  sentimentAnalysis     SentimentAnalysis?
+  aiAgentLogs           AIAgentLog[]
+
+  @@index([spaceId])
+  @@index([status])
+  @@index([assigneeId])
+  @@index([customerId])
+  @@index([spaceId, status])
+  @@map("inquiries")
+}
+
+// @schema-type: CONCRETE ENTITY
+// @description: 문의 내 대화 스레드 관리
+/// @displayName 문의 스레드
+model InquiryThread {
+  id                  String        @id @default(uuid())
+  /// @displayName 생성 일시
+  createdAt           DateTime      @default(now()) @map("created_at") @db.Timestamptz(6)
+  /// @displayName 수정 일시
+  updatedAt           DateTime?     @updatedAt @map("updated_at") @db.Timestamptz(6)
+  /// @displayName 종료 일시
+  closedAt            DateTime?     @map("closed_at") @db.Timestamptz(6)
+
+  // 소속
+  /// @displayName 소속 문의 ID
+  inquiryId           String        @map("inquiry_id")
+
+  // 기본 정보
+  /// @displayName 제목
+  title               String?
+  /// @displayName 상태
+  status              ThreadStatus  @default(ACTIVE)
+
+  // 생성자
+  /// @displayName 생성자 ID
+  createdBy           String        @map("created_by")
+
+  // 메시지 정보
+  /// @displayName 마지막 메시지 일시
+  lastMessageAt       DateTime?     @map("last_message_at") @db.Timestamptz(6)
+  /// @displayName 마지막 메시지 미리보기
+  lastMessagePreview  String?       @map("last_message_preview") @db.Char(100)
+  /// @displayName 메시지 수
+  messageCount        Int           @default(0) @map("message_count")
+
+  // 관계
+  inquiry             Inquiry       @relation(fields: [inquiryId], references: [id], onDelete: Cascade)
+  creator             User          @relation(fields: [createdBy], references: [id])
+  messages            InquiryMessage[]
+  participants        InquiryParticipant[]
+
+  @@index([inquiryId])
+  @@index([status])
+  @@map("inquiry_threads")
+}
+
+// @schema-type: CONCRETE ENTITY
+// @description: 스레드 내 개별 메시지 (실시간 채팅 지원)
+/// @displayName 문의 메시지
+model InquiryMessage {
+  id              String              @id @default(uuid())
+  /// @displayName 생성 일시
+  createdAt       DateTime            @default(now()) @map("created_at") @db.Timestamptz(6)
+
+  // 소속
+  /// @displayName 소속 스레드 ID
+  threadId        String              @map("thread_id")
+  /// @displayName 소속 문의 ID
+  inquiryId       String              @map("inquiry_id")
+
+  // 발신자
+  /// @displayName 발신자 ID
+  senderId        String?             @map("sender_id")
+  /// @displayName 발신자 유형
+  senderType      SenderType          @default(USER)
+
+  // 클라이언트 메시지 ID (중복 방지용)
+  /// @displayName 클라이언트 메시지 ID
+  clientMessageId String?             @map("client_message_id")
+
+  // 콘텐츠
+  /// @displayName 내용
+  content         String              @db.Text
+  /// @displayName 콘텐츠 유형
+  contentType     MessageContentType  @default(TEXT)
+
+  // 상태 추적 (실시간 채팅)
+  /// @displayName 전달 완료 시간
+  deliveredAt     DateTime?           @map("delivered_at") @db.Timestamptz(6)
+  /// @displayName 읽음 확인 시간
+  readAt          DateTime?           @map("read_at") @db.Timestamptz(6)
+
+  // 수정/삭제
+  /// @displayName 수정 일시
+  editedAt        DateTime?           @map("edited_at") @db.Timestamptz(6)
+  /// @displayName 수정 여부
+  isEdited        Boolean             @default(false) @map("is_edited")
+  /// @displayName 삭제 여부
+  isDeleted       Boolean             @default(false) @map("is_deleted")
+
+  // 메타데이터
+  /// @displayName 추가 메타데이터
+  metadata        Json?
+
+  // 관계
+  thread          InquiryThread       @relation(fields: [threadId], references: [id], onDelete: Cascade)
+  inquiry         Inquiry             @relation(fields: [inquiryId], references: [id], onDelete: Cascade)
+  sender          User?               @relation(fields: [senderId], references: [id])
+  attachments     InquiryAttachment[]
+  sentimentAnalysis SentimentAnalysis? @relation("SentimentAnalysisMessage")
+  aiAgentLog      AIAgentLog?
+
+  @@unique([threadId, clientMessageId])
+  @@index([threadId])
+  @@index([inquiryId])
+  @@index([senderId])
+  @@map("inquiry_messages")
+}
+
+// @schema-type: CONCRETE ENTITY
+// @description: 문의/스레드 참여자의 실시간 상태 관리
+/// @displayName 문의 참여자
+model InquiryParticipant {
+  id          String                  @id @default(uuid())
+  /// @displayName 참여 일시
+  joinedAt    DateTime                @default(now()) @map("joined_at") @db.Timestamptz(6)
+  /// @displayName 나간 일시
+  leftAt      DateTime?               @map("left_at") @db.Timestamptz(6)
+
+  // 소속
+  /// @displayName 소속 문의 ID
+  inquiryId   String                  @map("inquiry_id")
+  /// @displayName 소속 스레드 ID
+  threadId    String?                 @map("thread_id")
+  /// @displayName 참여자 ID
+  userId      String                  @map("user_id")
+
+  // 역할
+  /// @displayName 역할
+  role        InquiryParticipantRole  @default(VIEWER)
+
+  // 실시간 상태
+  /// @displayName 온라인 여부
+  isOnline    Boolean                 @default(false) @map("is_online")
+  /// @displayName 타이핑 중 여부
+  isTyping    Boolean                 @default(false) @map("is_typing")
+
+  // 접속 정보
+  /// @displayName 마지막 접속 시간
+  lastSeenAt  DateTime?               @map("last_seen_at") @db.Timestamptz(6)
+  /// @displayName 마지막 읽은 시간
+  lastReadAt  DateTime?               @map("last_read_at") @db.Timestamptz(6)
+
+  // 읽지 않은 메시지
+  /// @displayName 읽지 않은 메시지 수
+  unreadCount Int                     @default(0) @map("unread_count")
+
+  // 관계
+  inquiry     Inquiry                 @relation(fields: [inquiryId], references: [id], onDelete: Cascade)
+  thread      InquiryThread?          @relation(fields: [threadId], references: [id], onDelete: Cascade)
+  user        User                    @relation(fields: [userId], references: [id])
+
+  @@unique([inquiryId, threadId, userId])
+  @@index([inquiryId])
+  @@index([threadId])
+  @@index([userId])
+  @@map("inquiry_participants")
+}
+
+// @schema-type: CONCRETE ENTITY
+// @description: 메시지에 첨부된 파일 관리
+/// @displayName 문의 첨부파일
+model InquiryAttachment {
+  id            String              @id @default(uuid())
+  /// @displayName 생성 일시
+  createdAt     DateTime            @default(now()) @map("created_at") @db.Timestamptz(6)
+
+  // 소속
+  /// @displayName 소속 메시지 ID
+  messageId     String              @map("message_id")
+
+  // 파일 정보
+  /// @displayName 원본 파일명
+  fileName      String              @map("file_name")
+  /// @displayName 파일 크기
+  fileSize      BigInt              @map("file_size")
+  /// @displayName MIME 타입
+  mimeType      String              @map("mime_type")
+  /// @displayName 파일 유형
+  fileType      AttachmentFileType  @map("file_type")
+  /// @displayName 파일 URL
+  url           String
+
+  // 미디어 정보
+  /// @displayName 썸네일 URL
+  thumbnailUrl  String?             @map("thumbnail_url")
+  /// @displayName 너비
+  width         Int?
+  /// @displayName 높이
+  height        Int?
+  /// @displayName 재생 시간
+  duration      Int?
+
+  // 삭제
+  /// @displayName 삭제 여부
+  isDeleted     Boolean             @default(false) @map("is_deleted")
+
+  // 관계
+  message       InquiryMessage      @relation(fields: [messageId], references: [id], onDelete: Cascade)
+
+  @@index([messageId])
+  @@map("inquiry_attachments")
+}
+
+// @schema-type: MATERIALIZATION
+// @description: 문의 태그 (분류/검색용)
+// @materializes: Inquiry (N:1)
+/// @displayName 문의 태그
+model InquiryTag {
+  id        String    @id @default(uuid())
+  /// @displayName 생성 일시
+  createdAt DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
+  /// @displayName 수정 일시
+  updatedAt DateTime? @updatedAt @map("updated_at") @db.Timestamptz(6)
+  /// @displayName 삭제 일시
+  removedAt DateTime? @map("removed_at") @db.Timestamptz(6)
+
+  // 소속
+  /// @displayName 소속 문의 ID
+  inquiryId String    @map("inquiry_id")
+
+  // 태그 정보
+  /// @displayName 태그명
+  name      String
+  /// @displayName 색상
+  color     String?
+
+  // 관계
+  inquiry   Inquiry   @relation(fields: [inquiryId], references: [id], onDelete: Cascade)
+
+  @@unique([inquiryId, name])
+  @@index([inquiryId])
+  @@map("inquiry_tags")
+}
+
+// @schema-type: MATERIALIZATION
+// @description: 문의 감정 분석 결과 (AI 기반)
+// @materializes: Inquiry (1:1)
+/// @displayName 감정 분석
+model SentimentAnalysis {
+  id          String          @id @default(uuid())
+  /// @displayName 생성 일시
+  createdAt   DateTime        @default(now()) @map("created_at") @db.Timestamptz(6)
+  /// @displayName 수정 일시
+  updatedAt   DateTime?       @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  // 소속 (1:1)
+  /// @displayName 소속 문의 ID
+  inquiryId   String          @unique @map("inquiry_id")
+
+  // 분석 대상 (선택적)
+  /// @displayName 분석 대상 메시지 ID
+  messageId   String?         @unique @map("message_id")
+
+  // 분석 결과
+  /// @displayName 감정 유형
+  sentiment   SentimentType
+  /// @displayName 감정 점수
+  score       Float
+  /// @displayName 분석 신뢰도
+  confidence  Float
+
+  // 세부 분석
+  /// @displayName 세부 감정
+  emotions    Json?
+  /// @displayName 주요 키워드
+  keywords    Json?
+  /// @displayName 긴급도 점수
+  urgency     Float?
+
+  /// @displayName 분석 일시
+  analyzedAt  DateTime        @default(now()) @map("analyzed_at") @db.Timestamptz(6)
+
+  // 관계
+  inquiry     Inquiry         @relation(fields: [inquiryId], references: [id], onDelete: Cascade)
+  message     InquiryMessage? @relation("SentimentAnalysisMessage", fields: [messageId], references: [id], onDelete: SetNull)
+
+  @@index([inquiryId])
+  @@map("sentiment_analyses")
+}
+
+// @schema-type: CONCRETE ENTITY
+// @description: AI 에이전트 활동 로그 (감사용)
+/// @displayName AI 에이전트 로그
+model AIAgentLog {
+  id              String          @id @default(uuid())
+  /// @displayName 생성 일시
+  createdAt       DateTime        @default(now()) @map("created_at") @db.Timestamptz(6)
+
+  // 소속
+  /// @displayName 소속 문의 ID
+  inquiryId       String          @map("inquiry_id")
+  /// @displayName 관련 메시지 ID
+  messageId       String?         @unique @map("message_id")
+
+  // 작업 정보
+  /// @displayName AI 작업 유형
+  action          AIAgentAction
+  /// @displayName 입력 데이터
+  input           Json?
+  /// @displayName 출력 결과
+  output          Json?
+
+  // 성능 지표
+  /// @displayName AI 신뢰도
+  confidence      Float?
+  /// @displayName 사용자 수락 여부
+  wasAccepted     Boolean?
+  /// @displayName 사용자 수정 여부
+  wasModified     Boolean?
+  /// @displayName 응답 시간 (ms)
+  responseTimeMs  Int?            @map("response_time_ms")
+  /// @displayName 사용된 AI 모델
+  model           String?
+  /// @displayName 사용된 토큰 수
+  tokenCount      Int?            @map("token_count")
+
+  // 에러
+  /// @displayName 에러 메시지
+  errorMessage    String?         @map("error_message")
+
+  // 관계
+  inquiry         Inquiry         @relation(fields: [inquiryId], references: [id], onDelete: Cascade)
+  message         InquiryMessage? @relation(fields: [messageId], references: [id], onDelete: SetNull)
+
+  @@index([inquiryId])
+  @@index([action])
+  @@map("ai_agent_logs")
+}
