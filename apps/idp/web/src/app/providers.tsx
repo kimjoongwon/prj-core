@@ -1,6 +1,6 @@
 "use client";
 
-import { setLoginRedirectUrl } from "@cocrepo/api";
+import { setLoginRedirectUrl, setIdpLoginRedirectUrl } from "@cocrepo/api";
 import { DesignSystemProvider } from "@cocrepo/ui";
 import {
 	isServer,
@@ -16,8 +16,9 @@ interface ProvidersProps {
 	children: ReactNode;
 }
 
-// IDP 콘솔의 로그인 리다이렉트 URL 설정
+// IDP 콘솔의 로그인 리다이렉트 URL 설정 (admin용 + IDP용)
 setLoginRedirectUrl("/auth/login");
+setIdpLoginRedirectUrl("/auth/login");
 
 function makeQueryClient() {
 	return new QueryClient({

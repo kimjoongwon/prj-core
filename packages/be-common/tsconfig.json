@@ -11,7 +11,6 @@
     { "path": "../be-dto" },
     { "path": "../be-entity" },
     { "path": "../common-enum" },
-    { "path": "../be-facade" },
     { "path": "../be-prisma" },
     { "path": "../be-repository" },
     { "path": "../common-toolkit" }

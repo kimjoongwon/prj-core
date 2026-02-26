@@ -191,6 +191,9 @@ export type SpaceWhereInput = {
   albums?: Prisma.AlbumListRelationFilter
   albumEntries?: Prisma.AlbumEntryListRelationFilter
   derivatives?: Prisma.DerivativeListRelationFilter
+  inquiries?: Prisma.InquiryListRelationFilter
+  aiFormTemplates?: Prisma.AIFormTemplateListRelationFilter
+  aiTemplateExecutions?: Prisma.AITemplateExecutionListRelationFilter
 }
 
 export type SpaceOrderByWithRelationInput = {
@@ -215,6 +218,9 @@ export type SpaceOrderByWithRelationInput = {
   albums?: Prisma.AlbumOrderByRelationAggregateInput
   albumEntries?: Prisma.AlbumEntryOrderByRelationAggregateInput
   derivatives?: Prisma.DerivativeOrderByRelationAggregateInput
+  inquiries?: Prisma.InquiryOrderByRelationAggregateInput
+  aiFormTemplates?: Prisma.AIFormTemplateOrderByRelationAggregateInput
+  aiTemplateExecutions?: Prisma.AITemplateExecutionOrderByRelationAggregateInput
 }
 
 export type SpaceWhereUniqueInput = Prisma.AtLeast<{
@@ -242,6 +248,9 @@ export type SpaceWhereUniqueInput = Prisma.AtLeast<{
   albums?: Prisma.AlbumListRelationFilter
   albumEntries?: Prisma.AlbumEntryListRelationFilter
   derivatives?: Prisma.DerivativeListRelationFilter
+  inquiries?: Prisma.InquiryListRelationFilter
+  aiFormTemplates?: Prisma.AIFormTemplateListRelationFilter
+  aiTemplateExecutions?: Prisma.AITemplateExecutionListRelationFilter
 }, "id">
 
 export type SpaceOrderByWithAggregationInput = {
@@ -286,6 +295,9 @@ export type SpaceCreateInput = {
   albums?: Prisma.AlbumCreateNestedManyWithoutSpaceInput
   albumEntries?: Prisma.AlbumEntryCreateNestedManyWithoutSpaceInput
   derivatives?: Prisma.DerivativeCreateNestedManyWithoutSpaceInput
+  inquiries?: Prisma.InquiryCreateNestedManyWithoutSpaceInput
+  aiFormTemplates?: Prisma.AIFormTemplateCreateNestedManyWithoutSpaceInput
+  aiTemplateExecutions?: Prisma.AITemplateExecutionCreateNestedManyWithoutSpaceInput
 }
 
 export type SpaceUncheckedCreateInput = {
@@ -310,6 +322,9 @@ export type SpaceUncheckedCreateInput = {
   albums?: Prisma.AlbumUncheckedCreateNestedManyWithoutSpaceInput
   albumEntries?: Prisma.AlbumEntryUncheckedCreateNestedManyWithoutSpaceInput
   derivatives?: Prisma.DerivativeUncheckedCreateNestedManyWithoutSpaceInput
+  inquiries?: Prisma.InquiryUncheckedCreateNestedManyWithoutSpaceInput
+  aiFormTemplates?: Prisma.AIFormTemplateUncheckedCreateNestedManyWithoutSpaceInput
+  aiTemplateExecutions?: Prisma.AITemplateExecutionUncheckedCreateNestedManyWithoutSpaceInput
 }
 
 export type SpaceUpdateInput = {
@@ -334,6 +349,9 @@ export type SpaceUpdateInput = {
   albums?: Prisma.AlbumUpdateManyWithoutSpaceNestedInput
   albumEntries?: Prisma.AlbumEntryUpdateManyWithoutSpaceNestedInput
   derivatives?: Prisma.DerivativeUpdateManyWithoutSpaceNestedInput
+  inquiries?: Prisma.InquiryUpdateManyWithoutSpaceNestedInput
+  aiFormTemplates?: Prisma.AIFormTemplateUpdateManyWithoutSpaceNestedInput
+  aiTemplateExecutions?: Prisma.AITemplateExecutionUpdateManyWithoutSpaceNestedInput
 }
 
 export type SpaceUncheckedUpdateInput = {
@@ -358,6 +376,9 @@ export type SpaceUncheckedUpdateInput = {
   albums?: Prisma.AlbumUncheckedUpdateManyWithoutSpaceNestedInput
   albumEntries?: Prisma.AlbumEntryUncheckedUpdateManyWithoutSpaceNestedInput
   derivatives?: Prisma.DerivativeUncheckedUpdateManyWithoutSpaceNestedInput
+  inquiries?: Prisma.InquiryUncheckedUpdateManyWithoutSpaceNestedInput
+  aiFormTemplates?: Prisma.AIFormTemplateUncheckedUpdateManyWithoutSpaceNestedInput
+  aiTemplateExecutions?: Prisma.AITemplateExecutionUncheckedUpdateManyWithoutSpaceNestedInput
 }
 
 export type SpaceCreateManyInput = {
@@ -405,6 +426,34 @@ export type SpaceMinOrderByAggregateInput = {
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   removedAt?: Prisma.SortOrder
+}
+
+export type SpaceCreateNestedOneWithoutAiFormTemplatesInput = {
+  create?: Prisma.XOR<Prisma.SpaceCreateWithoutAiFormTemplatesInput, Prisma.SpaceUncheckedCreateWithoutAiFormTemplatesInput>
+  connectOrCreate?: Prisma.SpaceCreateOrConnectWithoutAiFormTemplatesInput
+  connect?: Prisma.SpaceWhereUniqueInput
+}
+
+export type SpaceUpdateOneRequiredWithoutAiFormTemplatesNestedInput = {
+  create?: Prisma.XOR<Prisma.SpaceCreateWithoutAiFormTemplatesInput, Prisma.SpaceUncheckedCreateWithoutAiFormTemplatesInput>
+  connectOrCreate?: Prisma.SpaceCreateOrConnectWithoutAiFormTemplatesInput
+  upsert?: Prisma.SpaceUpsertWithoutAiFormTemplatesInput
+  connect?: Prisma.SpaceWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.SpaceUpdateToOneWithWhereWithoutAiFormTemplatesInput, Prisma.SpaceUpdateWithoutAiFormTemplatesInput>, Prisma.SpaceUncheckedUpdateWithoutAiFormTemplatesInput>
+}
+
+export type SpaceCreateNestedOneWithoutAiTemplateExecutionsInput = {
+  create?: Prisma.XOR<Prisma.SpaceCreateWithoutAiTemplateExecutionsInput, Prisma.SpaceUncheckedCreateWithoutAiTemplateExecutionsInput>
+  connectOrCreate?: Prisma.SpaceCreateOrConnectWithoutAiTemplateExecutionsInput
+  connect?: Prisma.SpaceWhereUniqueInput
+}
+
+export type SpaceUpdateOneRequiredWithoutAiTemplateExecutionsNestedInput = {
+  create?: Prisma.XOR<Prisma.SpaceCreateWithoutAiTemplateExecutionsInput, Prisma.SpaceUncheckedCreateWithoutAiTemplateExecutionsInput>
+  connectOrCreate?: Prisma.SpaceCreateOrConnectWithoutAiTemplateExecutionsInput
+  upsert?: Prisma.SpaceUpsertWithoutAiTemplateExecutionsInput
+  connect?: Prisma.SpaceWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.SpaceUpdateToOneWithWhereWithoutAiTemplateExecutionsInput, Prisma.SpaceUpdateWithoutAiTemplateExecutionsInput>, Prisma.SpaceUncheckedUpdateWithoutAiTemplateExecutionsInput>
 }
 
 export type SpaceCreateNestedOneWithoutAssetsInput = {
@@ -547,6 +596,20 @@ export type SpaceUpdateOneRequiredWithoutFilesNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.SpaceUpdateToOneWithWhereWithoutFilesInput, Prisma.SpaceUpdateWithoutFilesInput>, Prisma.SpaceUncheckedUpdateWithoutFilesInput>
 }
 
+export type SpaceCreateNestedOneWithoutInquiriesInput = {
+  create?: Prisma.XOR<Prisma.SpaceCreateWithoutInquiriesInput, Prisma.SpaceUncheckedCreateWithoutInquiriesInput>
+  connectOrCreate?: Prisma.SpaceCreateOrConnectWithoutInquiriesInput
+  connect?: Prisma.SpaceWhereUniqueInput
+}
+
+export type SpaceUpdateOneRequiredWithoutInquiriesNestedInput = {
+  create?: Prisma.XOR<Prisma.SpaceCreateWithoutInquiriesInput, Prisma.SpaceUncheckedCreateWithoutInquiriesInput>
+  connectOrCreate?: Prisma.SpaceCreateOrConnectWithoutInquiriesInput
+  upsert?: Prisma.SpaceUpsertWithoutInquiriesInput
+  connect?: Prisma.SpaceWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.SpaceUpdateToOneWithWhereWithoutInquiriesInput, Prisma.SpaceUpdateWithoutInquiriesInput>, Prisma.SpaceUncheckedUpdateWithoutInquiriesInput>
+}
+
 export type SpaceCreateNestedOneWithoutSafeWalletsInput = {
   create?: Prisma.XOR<Prisma.SpaceCreateWithoutSafeWalletsInput, Prisma.SpaceUncheckedCreateWithoutSafeWalletsInput>
   connectOrCreate?: Prisma.SpaceCreateOrConnectWithoutSafeWalletsInput
@@ -645,6 +708,246 @@ export type SpaceUpdateOneRequiredWithoutTasksNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.SpaceUpdateToOneWithWhereWithoutTasksInput, Prisma.SpaceUpdateWithoutTasksInput>, Prisma.SpaceUncheckedUpdateWithoutTasksInput>
 }
 
+export type SpaceCreateWithoutAiFormTemplatesInput = {
+  id?: string
+  createdAt?: Date | string
+  updatedAt?: Date | string | null
+  removedAt?: Date | string | null
+  ground?: Prisma.GroundCreateNestedOneWithoutSpaceInput
+  associations?: Prisma.SpaceAssociationCreateNestedManyWithoutSpaceInput
+  classification?: Prisma.SpaceClassificationCreateNestedOneWithoutSpaceInput
+  tenants?: Prisma.TenantCreateNestedManyWithoutSpaceInput
+  categories?: Prisma.CategoryCreateNestedManyWithoutSpaceInput
+  groups?: Prisma.GroupCreateNestedManyWithoutSpaceInput
+  contents?: Prisma.ContentCreateNestedManyWithoutSpaceInput
+  files?: Prisma.FileCreateNestedManyWithoutSpaceInput
+  timelines?: Prisma.TimelineCreateNestedManyWithoutSpaceInput
+  tasks?: Prisma.TaskCreateNestedManyWithoutSpaceInput
+  safeWallets?: Prisma.SafeWalletCreateNestedManyWithoutSpaceInput
+  routines?: Prisma.RoutineCreateNestedManyWithoutSpaceInput
+  folders?: Prisma.FolderCreateNestedManyWithoutSpaceInput
+  assets?: Prisma.AssetCreateNestedManyWithoutSpaceInput
+  albums?: Prisma.AlbumCreateNestedManyWithoutSpaceInput
+  albumEntries?: Prisma.AlbumEntryCreateNestedManyWithoutSpaceInput
+  derivatives?: Prisma.DerivativeCreateNestedManyWithoutSpaceInput
+  inquiries?: Prisma.InquiryCreateNestedManyWithoutSpaceInput
+  aiTemplateExecutions?: Prisma.AITemplateExecutionCreateNestedManyWithoutSpaceInput
+}
+
+export type SpaceUncheckedCreateWithoutAiFormTemplatesInput = {
+  id?: string
+  createdAt?: Date | string
+  updatedAt?: Date | string | null
+  removedAt?: Date | string | null
+  ground?: Prisma.GroundUncheckedCreateNestedOneWithoutSpaceInput
+  associations?: Prisma.SpaceAssociationUncheckedCreateNestedManyWithoutSpaceInput
+  classification?: Prisma.SpaceClassificationUncheckedCreateNestedOneWithoutSpaceInput
+  tenants?: Prisma.TenantUncheckedCreateNestedManyWithoutSpaceInput
+  categories?: Prisma.CategoryUncheckedCreateNestedManyWithoutSpaceInput
+  groups?: Prisma.GroupUncheckedCreateNestedManyWithoutSpaceInput
+  contents?: Prisma.ContentUncheckedCreateNestedManyWithoutSpaceInput
+  files?: Prisma.FileUncheckedCreateNestedManyWithoutSpaceInput
+  timelines?: Prisma.TimelineUncheckedCreateNestedManyWithoutSpaceInput
+  tasks?: Prisma.TaskUncheckedCreateNestedManyWithoutSpaceInput
+  safeWallets?: Prisma.SafeWalletUncheckedCreateNestedManyWithoutSpaceInput
+  routines?: Prisma.RoutineUncheckedCreateNestedManyWithoutSpaceInput
+  folders?: Prisma.FolderUncheckedCreateNestedManyWithoutSpaceInput
+  assets?: Prisma.AssetUncheckedCreateNestedManyWithoutSpaceInput
+  albums?: Prisma.AlbumUncheckedCreateNestedManyWithoutSpaceInput
+  albumEntries?: Prisma.AlbumEntryUncheckedCreateNestedManyWithoutSpaceInput
+  derivatives?: Prisma.DerivativeUncheckedCreateNestedManyWithoutSpaceInput
+  inquiries?: Prisma.InquiryUncheckedCreateNestedManyWithoutSpaceInput
+  aiTemplateExecutions?: Prisma.AITemplateExecutionUncheckedCreateNestedManyWithoutSpaceInput
+}
+
+export type SpaceCreateOrConnectWithoutAiFormTemplatesInput = {
+  where: Prisma.SpaceWhereUniqueInput
+  create: Prisma.XOR<Prisma.SpaceCreateWithoutAiFormTemplatesInput, Prisma.SpaceUncheckedCreateWithoutAiFormTemplatesInput>
+}
+
+export type SpaceUpsertWithoutAiFormTemplatesInput = {
+  update: Prisma.XOR<Prisma.SpaceUpdateWithoutAiFormTemplatesInput, Prisma.SpaceUncheckedUpdateWithoutAiFormTemplatesInput>
+  create: Prisma.XOR<Prisma.SpaceCreateWithoutAiFormTemplatesInput, Prisma.SpaceUncheckedCreateWithoutAiFormTemplatesInput>
+  where?: Prisma.SpaceWhereInput
+}
+
+export type SpaceUpdateToOneWithWhereWithoutAiFormTemplatesInput = {
+  where?: Prisma.SpaceWhereInput
+  data: Prisma.XOR<Prisma.SpaceUpdateWithoutAiFormTemplatesInput, Prisma.SpaceUncheckedUpdateWithoutAiFormTemplatesInput>
+}
+
+export type SpaceUpdateWithoutAiFormTemplatesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  ground?: Prisma.GroundUpdateOneWithoutSpaceNestedInput
+  associations?: Prisma.SpaceAssociationUpdateManyWithoutSpaceNestedInput
+  classification?: Prisma.SpaceClassificationUpdateOneWithoutSpaceNestedInput
+  tenants?: Prisma.TenantUpdateManyWithoutSpaceNestedInput
+  categories?: Prisma.CategoryUpdateManyWithoutSpaceNestedInput
+  groups?: Prisma.GroupUpdateManyWithoutSpaceNestedInput
+  contents?: Prisma.ContentUpdateManyWithoutSpaceNestedInput
+  files?: Prisma.FileUpdateManyWithoutSpaceNestedInput
+  timelines?: Prisma.TimelineUpdateManyWithoutSpaceNestedInput
+  tasks?: Prisma.TaskUpdateManyWithoutSpaceNestedInput
+  safeWallets?: Prisma.SafeWalletUpdateManyWithoutSpaceNestedInput
+  routines?: Prisma.RoutineUpdateManyWithoutSpaceNestedInput
+  folders?: Prisma.FolderUpdateManyWithoutSpaceNestedInput
+  assets?: Prisma.AssetUpdateManyWithoutSpaceNestedInput
+  albums?: Prisma.AlbumUpdateManyWithoutSpaceNestedInput
+  albumEntries?: Prisma.AlbumEntryUpdateManyWithoutSpaceNestedInput
+  derivatives?: Prisma.DerivativeUpdateManyWithoutSpaceNestedInput
+  inquiries?: Prisma.InquiryUpdateManyWithoutSpaceNestedInput
+  aiTemplateExecutions?: Prisma.AITemplateExecutionUpdateManyWithoutSpaceNestedInput
+}
+
+export type SpaceUncheckedUpdateWithoutAiFormTemplatesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  ground?: Prisma.GroundUncheckedUpdateOneWithoutSpaceNestedInput
+  associations?: Prisma.SpaceAssociationUncheckedUpdateManyWithoutSpaceNestedInput
+  classification?: Prisma.SpaceClassificationUncheckedUpdateOneWithoutSpaceNestedInput
+  tenants?: Prisma.TenantUncheckedUpdateManyWithoutSpaceNestedInput
+  categories?: Prisma.CategoryUncheckedUpdateManyWithoutSpaceNestedInput
+  groups?: Prisma.GroupUncheckedUpdateManyWithoutSpaceNestedInput
+  contents?: Prisma.ContentUncheckedUpdateManyWithoutSpaceNestedInput
+  files?: Prisma.FileUncheckedUpdateManyWithoutSpaceNestedInput
+  timelines?: Prisma.TimelineUncheckedUpdateManyWithoutSpaceNestedInput
+  tasks?: Prisma.TaskUncheckedUpdateManyWithoutSpaceNestedInput
+  safeWallets?: Prisma.SafeWalletUncheckedUpdateManyWithoutSpaceNestedInput
+  routines?: Prisma.RoutineUncheckedUpdateManyWithoutSpaceNestedInput
+  folders?: Prisma.FolderUncheckedUpdateManyWithoutSpaceNestedInput
+  assets?: Prisma.AssetUncheckedUpdateManyWithoutSpaceNestedInput
+  albums?: Prisma.AlbumUncheckedUpdateManyWithoutSpaceNestedInput
+  albumEntries?: Prisma.AlbumEntryUncheckedUpdateManyWithoutSpaceNestedInput
+  derivatives?: Prisma.DerivativeUncheckedUpdateManyWithoutSpaceNestedInput
+  inquiries?: Prisma.InquiryUncheckedUpdateManyWithoutSpaceNestedInput
+  aiTemplateExecutions?: Prisma.AITemplateExecutionUncheckedUpdateManyWithoutSpaceNestedInput
+}
+
+export type SpaceCreateWithoutAiTemplateExecutionsInput = {
+  id?: string
+  createdAt?: Date | string
+  updatedAt?: Date | string | null
+  removedAt?: Date | string | null
+  ground?: Prisma.GroundCreateNestedOneWithoutSpaceInput
+  associations?: Prisma.SpaceAssociationCreateNestedManyWithoutSpaceInput
+  classification?: Prisma.SpaceClassificationCreateNestedOneWithoutSpaceInput
+  tenants?: Prisma.TenantCreateNestedManyWithoutSpaceInput
+  categories?: Prisma.CategoryCreateNestedManyWithoutSpaceInput
+  groups?: Prisma.GroupCreateNestedManyWithoutSpaceInput
+  contents?: Prisma.ContentCreateNestedManyWithoutSpaceInput
+  files?: Prisma.FileCreateNestedManyWithoutSpaceInput
+  timelines?: Prisma.TimelineCreateNestedManyWithoutSpaceInput
+  tasks?: Prisma.TaskCreateNestedManyWithoutSpaceInput
+  safeWallets?: Prisma.SafeWalletCreateNestedManyWithoutSpaceInput
+  routines?: Prisma.RoutineCreateNestedManyWithoutSpaceInput
+  folders?: Prisma.FolderCreateNestedManyWithoutSpaceInput
+  assets?: Prisma.AssetCreateNestedManyWithoutSpaceInput
+  albums?: Prisma.AlbumCreateNestedManyWithoutSpaceInput
+  albumEntries?: Prisma.AlbumEntryCreateNestedManyWithoutSpaceInput
+  derivatives?: Prisma.DerivativeCreateNestedManyWithoutSpaceInput
+  inquiries?: Prisma.InquiryCreateNestedManyWithoutSpaceInput
+  aiFormTemplates?: Prisma.AIFormTemplateCreateNestedManyWithoutSpaceInput
+}
+
+export type SpaceUncheckedCreateWithoutAiTemplateExecutionsInput = {
+  id?: string
+  createdAt?: Date | string
+  updatedAt?: Date | string | null
+  removedAt?: Date | string | null
+  ground?: Prisma.GroundUncheckedCreateNestedOneWithoutSpaceInput
+  associations?: Prisma.SpaceAssociationUncheckedCreateNestedManyWithoutSpaceInput
+  classification?: Prisma.SpaceClassificationUncheckedCreateNestedOneWithoutSpaceInput
+  tenants?: Prisma.TenantUncheckedCreateNestedManyWithoutSpaceInput
+  categories?: Prisma.CategoryUncheckedCreateNestedManyWithoutSpaceInput
+  groups?: Prisma.GroupUncheckedCreateNestedManyWithoutSpaceInput
+  contents?: Prisma.ContentUncheckedCreateNestedManyWithoutSpaceInput
+  files?: Prisma.FileUncheckedCreateNestedManyWithoutSpaceInput
+  timelines?: Prisma.TimelineUncheckedCreateNestedManyWithoutSpaceInput
+  tasks?: Prisma.TaskUncheckedCreateNestedManyWithoutSpaceInput
+  safeWallets?: Prisma.SafeWalletUncheckedCreateNestedManyWithoutSpaceInput
+  routines?: Prisma.RoutineUncheckedCreateNestedManyWithoutSpaceInput
+  folders?: Prisma.FolderUncheckedCreateNestedManyWithoutSpaceInput
+  assets?: Prisma.AssetUncheckedCreateNestedManyWithoutSpaceInput
+  albums?: Prisma.AlbumUncheckedCreateNestedManyWithoutSpaceInput
+  albumEntries?: Prisma.AlbumEntryUncheckedCreateNestedManyWithoutSpaceInput
+  derivatives?: Prisma.DerivativeUncheckedCreateNestedManyWithoutSpaceInput
+  inquiries?: Prisma.InquiryUncheckedCreateNestedManyWithoutSpaceInput
+  aiFormTemplates?: Prisma.AIFormTemplateUncheckedCreateNestedManyWithoutSpaceInput
+}
+
+export type SpaceCreateOrConnectWithoutAiTemplateExecutionsInput = {
+  where: Prisma.SpaceWhereUniqueInput
+  create: Prisma.XOR<Prisma.SpaceCreateWithoutAiTemplateExecutionsInput, Prisma.SpaceUncheckedCreateWithoutAiTemplateExecutionsInput>
+}
+
+export type SpaceUpsertWithoutAiTemplateExecutionsInput = {
+  update: Prisma.XOR<Prisma.SpaceUpdateWithoutAiTemplateExecutionsInput, Prisma.SpaceUncheckedUpdateWithoutAiTemplateExecutionsInput>
+  create: Prisma.XOR<Prisma.SpaceCreateWithoutAiTemplateExecutionsInput, Prisma.SpaceUncheckedCreateWithoutAiTemplateExecutionsInput>
+  where?: Prisma.SpaceWhereInput
+}
+
+export type SpaceUpdateToOneWithWhereWithoutAiTemplateExecutionsInput = {
+  where?: Prisma.SpaceWhereInput
+  data: Prisma.XOR<Prisma.SpaceUpdateWithoutAiTemplateExecutionsInput, Prisma.SpaceUncheckedUpdateWithoutAiTemplateExecutionsInput>
+}
+
+export type SpaceUpdateWithoutAiTemplateExecutionsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  ground?: Prisma.GroundUpdateOneWithoutSpaceNestedInput
+  associations?: Prisma.SpaceAssociationUpdateManyWithoutSpaceNestedInput
+  classification?: Prisma.SpaceClassificationUpdateOneWithoutSpaceNestedInput
+  tenants?: Prisma.TenantUpdateManyWithoutSpaceNestedInput
+  categories?: Prisma.CategoryUpdateManyWithoutSpaceNestedInput
+  groups?: Prisma.GroupUpdateManyWithoutSpaceNestedInput
+  contents?: Prisma.ContentUpdateManyWithoutSpaceNestedInput
+  files?: Prisma.FileUpdateManyWithoutSpaceNestedInput
+  timelines?: Prisma.TimelineUpdateManyWithoutSpaceNestedInput
+  tasks?: Prisma.TaskUpdateManyWithoutSpaceNestedInput
+  safeWallets?: Prisma.SafeWalletUpdateManyWithoutSpaceNestedInput
+  routines?: Prisma.RoutineUpdateManyWithoutSpaceNestedInput
+  folders?: Prisma.FolderUpdateManyWithoutSpaceNestedInput
+  assets?: Prisma.AssetUpdateManyWithoutSpaceNestedInput
+  albums?: Prisma.AlbumUpdateManyWithoutSpaceNestedInput
+  albumEntries?: Prisma.AlbumEntryUpdateManyWithoutSpaceNestedInput
+  derivatives?: Prisma.DerivativeUpdateManyWithoutSpaceNestedInput
+  inquiries?: Prisma.InquiryUpdateManyWithoutSpaceNestedInput
+  aiFormTemplates?: Prisma.AIFormTemplateUpdateManyWithoutSpaceNestedInput
+}
+
+export type SpaceUncheckedUpdateWithoutAiTemplateExecutionsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  ground?: Prisma.GroundUncheckedUpdateOneWithoutSpaceNestedInput
+  associations?: Prisma.SpaceAssociationUncheckedUpdateManyWithoutSpaceNestedInput
+  classification?: Prisma.SpaceClassificationUncheckedUpdateOneWithoutSpaceNestedInput
+  tenants?: Prisma.TenantUncheckedUpdateManyWithoutSpaceNestedInput
+  categories?: Prisma.CategoryUncheckedUpdateManyWithoutSpaceNestedInput
+  groups?: Prisma.GroupUncheckedUpdateManyWithoutSpaceNestedInput
+  contents?: Prisma.ContentUncheckedUpdateManyWithoutSpaceNestedInput
+  files?: Prisma.FileUncheckedUpdateManyWithoutSpaceNestedInput
+  timelines?: Prisma.TimelineUncheckedUpdateManyWithoutSpaceNestedInput
+  tasks?: Prisma.TaskUncheckedUpdateManyWithoutSpaceNestedInput
+  safeWallets?: Prisma.SafeWalletUncheckedUpdateManyWithoutSpaceNestedInput
+  routines?: Prisma.RoutineUncheckedUpdateManyWithoutSpaceNestedInput
+  folders?: Prisma.FolderUncheckedUpdateManyWithoutSpaceNestedInput
+  assets?: Prisma.AssetUncheckedUpdateManyWithoutSpaceNestedInput
+  albums?: Prisma.AlbumUncheckedUpdateManyWithoutSpaceNestedInput
+  albumEntries?: Prisma.AlbumEntryUncheckedUpdateManyWithoutSpaceNestedInput
+  derivatives?: Prisma.DerivativeUncheckedUpdateManyWithoutSpaceNestedInput
+  inquiries?: Prisma.InquiryUncheckedUpdateManyWithoutSpaceNestedInput
+  aiFormTemplates?: Prisma.AIFormTemplateUncheckedUpdateManyWithoutSpaceNestedInput
+}
+
 export type SpaceCreateWithoutAssetsInput = {
   id?: string
   createdAt?: Date | string
@@ -666,6 +969,9 @@ export type SpaceCreateWithoutAssetsInput = {
   albums?: Prisma.AlbumCreateNestedManyWithoutSpaceInput
   albumEntries?: Prisma.AlbumEntryCreateNestedManyWithoutSpaceInput
   derivatives?: Prisma.DerivativeCreateNestedManyWithoutSpaceInput
+  inquiries?: Prisma.InquiryCreateNestedManyWithoutSpaceInput
+  aiFormTemplates?: Prisma.AIFormTemplateCreateNestedManyWithoutSpaceInput
+  aiTemplateExecutions?: Prisma.AITemplateExecutionCreateNestedManyWithoutSpaceInput
 }
 
 export type SpaceUncheckedCreateWithoutAssetsInput = {
@@ -689,6 +995,9 @@ export type SpaceUncheckedCreateWithoutAssetsInput = {
   albums?: Prisma.AlbumUncheckedCreateNestedManyWithoutSpaceInput
   albumEntries?: Prisma.AlbumEntryUncheckedCreateNestedManyWithoutSpaceInput
   derivatives?: Prisma.DerivativeUncheckedCreateNestedManyWithoutSpaceInput
+  inquiries?: Prisma.InquiryUncheckedCreateNestedManyWithoutSpaceInput
+  aiFormTemplates?: Prisma.AIFormTemplateUncheckedCreateNestedManyWithoutSpaceInput
+  aiTemplateExecutions?: Prisma.AITemplateExecutionUncheckedCreateNestedManyWithoutSpaceInput
 }
 
 export type SpaceCreateOrConnectWithoutAssetsInput = {
@@ -728,6 +1037,9 @@ export type SpaceUpdateWithoutAssetsInput = {
   albums?: Prisma.AlbumUpdateManyWithoutSpaceNestedInput
   albumEntries?: Prisma.AlbumEntryUpdateManyWithoutSpaceNestedInput
   derivatives?: Prisma.DerivativeUpdateManyWithoutSpaceNestedInput
+  inquiries?: Prisma.InquiryUpdateManyWithoutSpaceNestedInput
+  aiFormTemplates?: Prisma.AIFormTemplateUpdateManyWithoutSpaceNestedInput
+  aiTemplateExecutions?: Prisma.AITemplateExecutionUpdateManyWithoutSpaceNestedInput
 }
 
 export type SpaceUncheckedUpdateWithoutAssetsInput = {
@@ -751,6 +1063,9 @@ export type SpaceUncheckedUpdateWithoutAssetsInput = {
   albums?: Prisma.AlbumUncheckedUpdateManyWithoutSpaceNestedInput
   albumEntries?: Prisma.AlbumEntryUncheckedUpdateManyWithoutSpaceNestedInput
   derivatives?: Prisma.DerivativeUncheckedUpdateManyWithoutSpaceNestedInput
+  inquiries?: Prisma.InquiryUncheckedUpdateManyWithoutSpaceNestedInput
+  aiFormTemplates?: Prisma.AIFormTemplateUncheckedUpdateManyWithoutSpaceNestedInput
+  aiTemplateExecutions?: Prisma.AITemplateExecutionUncheckedUpdateManyWithoutSpaceNestedInput
 }
 
 export type SpaceCreateWithoutFoldersInput = {
@@ -774,6 +1089,9 @@ export type SpaceCreateWithoutFoldersInput = {
   albums?: Prisma.AlbumCreateNestedManyWithoutSpaceInput
   albumEntries?: Prisma.AlbumEntryCreateNestedManyWithoutSpaceInput
   derivatives?: Prisma.DerivativeCreateNestedManyWithoutSpaceInput
+  inquiries?: Prisma.InquiryCreateNestedManyWithoutSpaceInput
+  aiFormTemplates?: Prisma.AIFormTemplateCreateNestedManyWithoutSpaceInput
+  aiTemplateExecutions?: Prisma.AITemplateExecutionCreateNestedManyWithoutSpaceInput
 }
 
 export type SpaceUncheckedCreateWithoutFoldersInput = {
@@ -797,6 +1115,9 @@ export type SpaceUncheckedCreateWithoutFoldersInput = {
   albums?: Prisma.AlbumUncheckedCreateNestedManyWithoutSpaceInput
   albumEntries?: Prisma.AlbumEntryUncheckedCreateNestedManyWithoutSpaceInput
   derivatives?: Prisma.DerivativeUncheckedCreateNestedManyWithoutSpaceInput
+  inquiries?: Prisma.InquiryUncheckedCreateNestedManyWithoutSpaceInput
+  aiFormTemplates?: Prisma.AIFormTemplateUncheckedCreateNestedManyWithoutSpaceInput
+  aiTemplateExecutions?: Prisma.AITemplateExecutionUncheckedCreateNestedManyWithoutSpaceInput
 }
 
 export type SpaceCreateOrConnectWithoutFoldersInput = {
@@ -836,6 +1157,9 @@ export type SpaceUpdateWithoutFoldersInput = {
   albums?: Prisma.AlbumUpdateManyWithoutSpaceNestedInput
   albumEntries?: Prisma.AlbumEntryUpdateManyWithoutSpaceNestedInput
   derivatives?: Prisma.DerivativeUpdateManyWithoutSpaceNestedInput
+  inquiries?: Prisma.InquiryUpdateManyWithoutSpaceNestedInput
+  aiFormTemplates?: Prisma.AIFormTemplateUpdateManyWithoutSpaceNestedInput
+  aiTemplateExecutions?: Prisma.AITemplateExecutionUpdateManyWithoutSpaceNestedInput
 }
 
 export type SpaceUncheckedUpdateWithoutFoldersInput = {
@@ -859,6 +1183,9 @@ export type SpaceUncheckedUpdateWithoutFoldersInput = {
   albums?: Prisma.AlbumUncheckedUpdateManyWithoutSpaceNestedInput
   albumEntries?: Prisma.AlbumEntryUncheckedUpdateManyWithoutSpaceNestedInput
   derivatives?: Prisma.DerivativeUncheckedUpdateManyWithoutSpaceNestedInput
+  inquiries?: Prisma.InquiryUncheckedUpdateManyWithoutSpaceNestedInput
+  aiFormTemplates?: Prisma.AIFormTemplateUncheckedUpdateManyWithoutSpaceNestedInput
+  aiTemplateExecutions?: Prisma.AITemplateExecutionUncheckedUpdateManyWithoutSpaceNestedInput
 }
 
 export type SpaceCreateWithoutAlbumsInput = {
@@ -882,6 +1209,9 @@ export type SpaceCreateWithoutAlbumsInput = {
   assets?: Prisma.AssetCreateNestedManyWithoutSpaceInput
   albumEntries?: Prisma.AlbumEntryCreateNestedManyWithoutSpaceInput
   derivatives?: Prisma.DerivativeCreateNestedManyWithoutSpaceInput
+  inquiries?: Prisma.InquiryCreateNestedManyWithoutSpaceInput
+  aiFormTemplates?: Prisma.AIFormTemplateCreateNestedManyWithoutSpaceInput
+  aiTemplateExecutions?: Prisma.AITemplateExecutionCreateNestedManyWithoutSpaceInput
 }
 
 export type SpaceUncheckedCreateWithoutAlbumsInput = {
@@ -905,6 +1235,9 @@ export type SpaceUncheckedCreateWithoutAlbumsInput = {
   assets?: Prisma.AssetUncheckedCreateNestedManyWithoutSpaceInput
   albumEntries?: Prisma.AlbumEntryUncheckedCreateNestedManyWithoutSpaceInput
   derivatives?: Prisma.DerivativeUncheckedCreateNestedManyWithoutSpaceInput
+  inquiries?: Prisma.InquiryUncheckedCreateNestedManyWithoutSpaceInput
+  aiFormTemplates?: Prisma.AIFormTemplateUncheckedCreateNestedManyWithoutSpaceInput
+  aiTemplateExecutions?: Prisma.AITemplateExecutionUncheckedCreateNestedManyWithoutSpaceInput
 }
 
 export type SpaceCreateOrConnectWithoutAlbumsInput = {
@@ -944,6 +1277,9 @@ export type SpaceUpdateWithoutAlbumsInput = {
   assets?: Prisma.AssetUpdateManyWithoutSpaceNestedInput
   albumEntries?: Prisma.AlbumEntryUpdateManyWithoutSpaceNestedInput
   derivatives?: Prisma.DerivativeUpdateManyWithoutSpaceNestedInput
+  inquiries?: Prisma.InquiryUpdateManyWithoutSpaceNestedInput
+  aiFormTemplates?: Prisma.AIFormTemplateUpdateManyWithoutSpaceNestedInput
+  aiTemplateExecutions?: Prisma.AITemplateExecutionUpdateManyWithoutSpaceNestedInput
 }
 
 export type SpaceUncheckedUpdateWithoutAlbumsInput = {
@@ -967,6 +1303,9 @@ export type SpaceUncheckedUpdateWithoutAlbumsInput = {
   assets?: Prisma.AssetUncheckedUpdateManyWithoutSpaceNestedInput
   albumEntries?: Prisma.AlbumEntryUncheckedUpdateManyWithoutSpaceNestedInput
   derivatives?: Prisma.DerivativeUncheckedUpdateManyWithoutSpaceNestedInput
+  inquiries?: Prisma.InquiryUncheckedUpdateManyWithoutSpaceNestedInput
+  aiFormTemplates?: Prisma.AIFormTemplateUncheckedUpdateManyWithoutSpaceNestedInput
+  aiTemplateExecutions?: Prisma.AITemplateExecutionUncheckedUpdateManyWithoutSpaceNestedInput
 }
 
 export type SpaceCreateWithoutAlbumEntriesInput = {
@@ -990,6 +1329,9 @@ export type SpaceCreateWithoutAlbumEntriesInput = {
   assets?: Prisma.AssetCreateNestedManyWithoutSpaceInput
   albums?: Prisma.AlbumCreateNestedManyWithoutSpaceInput
   derivatives?: Prisma.DerivativeCreateNestedManyWithoutSpaceInput
+  inquiries?: Prisma.InquiryCreateNestedManyWithoutSpaceInput
+  aiFormTemplates?: Prisma.AIFormTemplateCreateNestedManyWithoutSpaceInput
+  aiTemplateExecutions?: Prisma.AITemplateExecutionCreateNestedManyWithoutSpaceInput
 }
 
 export type SpaceUncheckedCreateWithoutAlbumEntriesInput = {
@@ -1013,6 +1355,9 @@ export type SpaceUncheckedCreateWithoutAlbumEntriesInput = {
   assets?: Prisma.AssetUncheckedCreateNestedManyWithoutSpaceInput
   albums?: Prisma.AlbumUncheckedCreateNestedManyWithoutSpaceInput
   derivatives?: Prisma.DerivativeUncheckedCreateNestedManyWithoutSpaceInput
+  inquiries?: Prisma.InquiryUncheckedCreateNestedManyWithoutSpaceInput
+  aiFormTemplates?: Prisma.AIFormTemplateUncheckedCreateNestedManyWithoutSpaceInput
+  aiTemplateExecutions?: Prisma.AITemplateExecutionUncheckedCreateNestedManyWithoutSpaceInput
 }
 
 export type SpaceCreateOrConnectWithoutAlbumEntriesInput = {
@@ -1052,6 +1397,9 @@ export type SpaceUpdateWithoutAlbumEntriesInput = {
   assets?: Prisma.AssetUpdateManyWithoutSpaceNestedInput
   albums?: Prisma.AlbumUpdateManyWithoutSpaceNestedInput
   derivatives?: Prisma.DerivativeUpdateManyWithoutSpaceNestedInput
+  inquiries?: Prisma.InquiryUpdateManyWithoutSpaceNestedInput
+  aiFormTemplates?: Prisma.AIFormTemplateUpdateManyWithoutSpaceNestedInput
+  aiTemplateExecutions?: Prisma.AITemplateExecutionUpdateManyWithoutSpaceNestedInput
 }
 
 export type SpaceUncheckedUpdateWithoutAlbumEntriesInput = {
@@ -1075,6 +1423,9 @@ export type SpaceUncheckedUpdateWithoutAlbumEntriesInput = {
   assets?: Prisma.AssetUncheckedUpdateManyWithoutSpaceNestedInput
   albums?: Prisma.AlbumUncheckedUpdateManyWithoutSpaceNestedInput
   derivatives?: Prisma.DerivativeUncheckedUpdateManyWithoutSpaceNestedInput
+  inquiries?: Prisma.InquiryUncheckedUpdateManyWithoutSpaceNestedInput
+  aiFormTemplates?: Prisma.AIFormTemplateUncheckedUpdateManyWithoutSpaceNestedInput
+  aiTemplateExecutions?: Prisma.AITemplateExecutionUncheckedUpdateManyWithoutSpaceNestedInput
 }
 
 export type SpaceCreateWithoutDerivativesInput = {
@@ -1098,6 +1449,9 @@ export type SpaceCreateWithoutDerivativesInput = {
   assets?: Prisma.AssetCreateNestedManyWithoutSpaceInput
   albums?: Prisma.AlbumCreateNestedManyWithoutSpaceInput
   albumEntries?: Prisma.AlbumEntryCreateNestedManyWithoutSpaceInput
+  inquiries?: Prisma.InquiryCreateNestedManyWithoutSpaceInput
+  aiFormTemplates?: Prisma.AIFormTemplateCreateNestedManyWithoutSpaceInput
+  aiTemplateExecutions?: Prisma.AITemplateExecutionCreateNestedManyWithoutSpaceInput
 }
 
 export type SpaceUncheckedCreateWithoutDerivativesInput = {
@@ -1121,6 +1475,9 @@ export type SpaceUncheckedCreateWithoutDerivativesInput = {
   assets?: Prisma.AssetUncheckedCreateNestedManyWithoutSpaceInput
   albums?: Prisma.AlbumUncheckedCreateNestedManyWithoutSpaceInput
   albumEntries?: Prisma.AlbumEntryUncheckedCreateNestedManyWithoutSpaceInput
+  inquiries?: Prisma.InquiryUncheckedCreateNestedManyWithoutSpaceInput
+  aiFormTemplates?: Prisma.AIFormTemplateUncheckedCreateNestedManyWithoutSpaceInput
+  aiTemplateExecutions?: Prisma.AITemplateExecutionUncheckedCreateNestedManyWithoutSpaceInput
 }
 
 export type SpaceCreateOrConnectWithoutDerivativesInput = {
@@ -1160,6 +1517,9 @@ export type SpaceUpdateWithoutDerivativesInput = {
   assets?: Prisma.AssetUpdateManyWithoutSpaceNestedInput
   albums?: Prisma.AlbumUpdateManyWithoutSpaceNestedInput
   albumEntries?: Prisma.AlbumEntryUpdateManyWithoutSpaceNestedInput
+  inquiries?: Prisma.InquiryUpdateManyWithoutSpaceNestedInput
+  aiFormTemplates?: Prisma.AIFormTemplateUpdateManyWithoutSpaceNestedInput
+  aiTemplateExecutions?: Prisma.AITemplateExecutionUpdateManyWithoutSpaceNestedInput
 }
 
 export type SpaceUncheckedUpdateWithoutDerivativesInput = {
@@ -1183,6 +1543,9 @@ export type SpaceUncheckedUpdateWithoutDerivativesInput = {
   assets?: Prisma.AssetUncheckedUpdateManyWithoutSpaceNestedInput
   albums?: Prisma.AlbumUncheckedUpdateManyWithoutSpaceNestedInput
   albumEntries?: Prisma.AlbumEntryUncheckedUpdateManyWithoutSpaceNestedInput
+  inquiries?: Prisma.InquiryUncheckedUpdateManyWithoutSpaceNestedInput
+  aiFormTemplates?: Prisma.AIFormTemplateUncheckedUpdateManyWithoutSpaceNestedInput
+  aiTemplateExecutions?: Prisma.AITemplateExecutionUncheckedUpdateManyWithoutSpaceNestedInput
 }
 
 export type SpaceCreateWithoutCategoriesInput = {
@@ -1206,6 +1569,9 @@ export type SpaceCreateWithoutCategoriesInput = {
   albums?: Prisma.AlbumCreateNestedManyWithoutSpaceInput
   albumEntries?: Prisma.AlbumEntryCreateNestedManyWithoutSpaceInput
   derivatives?: Prisma.DerivativeCreateNestedManyWithoutSpaceInput
+  inquiries?: Prisma.InquiryCreateNestedManyWithoutSpaceInput
+  aiFormTemplates?: Prisma.AIFormTemplateCreateNestedManyWithoutSpaceInput
+  aiTemplateExecutions?: Prisma.AITemplateExecutionCreateNestedManyWithoutSpaceInput
 }
 
 export type SpaceUncheckedCreateWithoutCategoriesInput = {
@@ -1229,6 +1595,9 @@ export type SpaceUncheckedCreateWithoutCategoriesInput = {
   albums?: Prisma.AlbumUncheckedCreateNestedManyWithoutSpaceInput
   albumEntries?: Prisma.AlbumEntryUncheckedCreateNestedManyWithoutSpaceInput
   derivatives?: Prisma.DerivativeUncheckedCreateNestedManyWithoutSpaceInput
+  inquiries?: Prisma.InquiryUncheckedCreateNestedManyWithoutSpaceInput
+  aiFormTemplates?: Prisma.AIFormTemplateUncheckedCreateNestedManyWithoutSpaceInput
+  aiTemplateExecutions?: Prisma.AITemplateExecutionUncheckedCreateNestedManyWithoutSpaceInput
 }
 
 export type SpaceCreateOrConnectWithoutCategoriesInput = {
@@ -1268,6 +1637,9 @@ export type SpaceUpdateWithoutCategoriesInput = {
   albums?: Prisma.AlbumUpdateManyWithoutSpaceNestedInput
   albumEntries?: Prisma.AlbumEntryUpdateManyWithoutSpaceNestedInput
   derivatives?: Prisma.DerivativeUpdateManyWithoutSpaceNestedInput
+  inquiries?: Prisma.InquiryUpdateManyWithoutSpaceNestedInput
+  aiFormTemplates?: Prisma.AIFormTemplateUpdateManyWithoutSpaceNestedInput
+  aiTemplateExecutions?: Prisma.AITemplateExecutionUpdateManyWithoutSpaceNestedInput
 }
 
 export type SpaceUncheckedUpdateWithoutCategoriesInput = {
@@ -1291,6 +1663,9 @@ export type SpaceUncheckedUpdateWithoutCategoriesInput = {
   albums?: Prisma.AlbumUncheckedUpdateManyWithoutSpaceNestedInput
   albumEntries?: Prisma.AlbumEntryUncheckedUpdateManyWithoutSpaceNestedInput
   derivatives?: Prisma.DerivativeUncheckedUpdateManyWithoutSpaceNestedInput
+  inquiries?: Prisma.InquiryUncheckedUpdateManyWithoutSpaceNestedInput
+  aiFormTemplates?: Prisma.AIFormTemplateUncheckedUpdateManyWithoutSpaceNestedInput
+  aiTemplateExecutions?: Prisma.AITemplateExecutionUncheckedUpdateManyWithoutSpaceNestedInput
 }
 
 export type SpaceCreateWithoutGroupsInput = {
@@ -1314,6 +1689,9 @@ export type SpaceCreateWithoutGroupsInput = {
   albums?: Prisma.AlbumCreateNestedManyWithoutSpaceInput
   albumEntries?: Prisma.AlbumEntryCreateNestedManyWithoutSpaceInput
   derivatives?: Prisma.DerivativeCreateNestedManyWithoutSpaceInput
+  inquiries?: Prisma.InquiryCreateNestedManyWithoutSpaceInput
+  aiFormTemplates?: Prisma.AIFormTemplateCreateNestedManyWithoutSpaceInput
+  aiTemplateExecutions?: Prisma.AITemplateExecutionCreateNestedManyWithoutSpaceInput
 }
 
 export type SpaceUncheckedCreateWithoutGroupsInput = {
@@ -1337,6 +1715,9 @@ export type SpaceUncheckedCreateWithoutGroupsInput = {
   albums?: Prisma.AlbumUncheckedCreateNestedManyWithoutSpaceInput
   albumEntries?: Prisma.AlbumEntryUncheckedCreateNestedManyWithoutSpaceInput
   derivatives?: Prisma.DerivativeUncheckedCreateNestedManyWithoutSpaceInput
+  inquiries?: Prisma.InquiryUncheckedCreateNestedManyWithoutSpaceInput
+  aiFormTemplates?: Prisma.AIFormTemplateUncheckedCreateNestedManyWithoutSpaceInput
+  aiTemplateExecutions?: Prisma.AITemplateExecutionUncheckedCreateNestedManyWithoutSpaceInput
 }
 
 export type SpaceCreateOrConnectWithoutGroupsInput = {
@@ -1376,6 +1757,9 @@ export type SpaceUpdateWithoutGroupsInput = {
   albums?: Prisma.AlbumUpdateManyWithoutSpaceNestedInput
   albumEntries?: Prisma.AlbumEntryUpdateManyWithoutSpaceNestedInput
   derivatives?: Prisma.DerivativeUpdateManyWithoutSpaceNestedInput
+  inquiries?: Prisma.InquiryUpdateManyWithoutSpaceNestedInput
+  aiFormTemplates?: Prisma.AIFormTemplateUpdateManyWithoutSpaceNestedInput
+  aiTemplateExecutions?: Prisma.AITemplateExecutionUpdateManyWithoutSpaceNestedInput
 }
 
 export type SpaceUncheckedUpdateWithoutGroupsInput = {
@@ -1399,6 +1783,9 @@ export type SpaceUncheckedUpdateWithoutGroupsInput = {
   albums?: Prisma.AlbumUncheckedUpdateManyWithoutSpaceNestedInput
   albumEntries?: Prisma.AlbumEntryUncheckedUpdateManyWithoutSpaceNestedInput
   derivatives?: Prisma.DerivativeUncheckedUpdateManyWithoutSpaceNestedInput
+  inquiries?: Prisma.InquiryUncheckedUpdateManyWithoutSpaceNestedInput
+  aiFormTemplates?: Prisma.AIFormTemplateUncheckedUpdateManyWithoutSpaceNestedInput
+  aiTemplateExecutions?: Prisma.AITemplateExecutionUncheckedUpdateManyWithoutSpaceNestedInput
 }
 
 export type SpaceCreateWithoutTenantsInput = {
@@ -1422,6 +1809,9 @@ export type SpaceCreateWithoutTenantsInput = {
   albums?: Prisma.AlbumCreateNestedManyWithoutSpaceInput
   albumEntries?: Prisma.AlbumEntryCreateNestedManyWithoutSpaceInput
   derivatives?: Prisma.DerivativeCreateNestedManyWithoutSpaceInput
+  inquiries?: Prisma.InquiryCreateNestedManyWithoutSpaceInput
+  aiFormTemplates?: Prisma.AIFormTemplateCreateNestedManyWithoutSpaceInput
+  aiTemplateExecutions?: Prisma.AITemplateExecutionCreateNestedManyWithoutSpaceInput
 }
 
 export type SpaceUncheckedCreateWithoutTenantsInput = {
@@ -1445,6 +1835,9 @@ export type SpaceUncheckedCreateWithoutTenantsInput = {
   albums?: Prisma.AlbumUncheckedCreateNestedManyWithoutSpaceInput
   albumEntries?: Prisma.AlbumEntryUncheckedCreateNestedManyWithoutSpaceInput
   derivatives?: Prisma.DerivativeUncheckedCreateNestedManyWithoutSpaceInput
+  inquiries?: Prisma.InquiryUncheckedCreateNestedManyWithoutSpaceInput
+  aiFormTemplates?: Prisma.AIFormTemplateUncheckedCreateNestedManyWithoutSpaceInput
+  aiTemplateExecutions?: Prisma.AITemplateExecutionUncheckedCreateNestedManyWithoutSpaceInput
 }
 
 export type SpaceCreateOrConnectWithoutTenantsInput = {
@@ -1484,6 +1877,9 @@ export type SpaceUpdateWithoutTenantsInput = {
   albums?: Prisma.AlbumUpdateManyWithoutSpaceNestedInput
   albumEntries?: Prisma.AlbumEntryUpdateManyWithoutSpaceNestedInput
   derivatives?: Prisma.DerivativeUpdateManyWithoutSpaceNestedInput
+  inquiries?: Prisma.InquiryUpdateManyWithoutSpaceNestedInput
+  aiFormTemplates?: Prisma.AIFormTemplateUpdateManyWithoutSpaceNestedInput
+  aiTemplateExecutions?: Prisma.AITemplateExecutionUpdateManyWithoutSpaceNestedInput
 }
 
 export type SpaceUncheckedUpdateWithoutTenantsInput = {
@@ -1507,6 +1903,9 @@ export type SpaceUncheckedUpdateWithoutTenantsInput = {
   albums?: Prisma.AlbumUncheckedUpdateManyWithoutSpaceNestedInput
   albumEntries?: Prisma.AlbumEntryUncheckedUpdateManyWithoutSpaceNestedInput
   derivatives?: Prisma.DerivativeUncheckedUpdateManyWithoutSpaceNestedInput
+  inquiries?: Prisma.InquiryUncheckedUpdateManyWithoutSpaceNestedInput
+  aiFormTemplates?: Prisma.AIFormTemplateUncheckedUpdateManyWithoutSpaceNestedInput
+  aiTemplateExecutions?: Prisma.AITemplateExecutionUncheckedUpdateManyWithoutSpaceNestedInput
 }
 
 export type SpaceCreateWithoutContentsInput = {
@@ -1530,6 +1929,9 @@ export type SpaceCreateWithoutContentsInput = {
   albums?: Prisma.AlbumCreateNestedManyWithoutSpaceInput
   albumEntries?: Prisma.AlbumEntryCreateNestedManyWithoutSpaceInput
   derivatives?: Prisma.DerivativeCreateNestedManyWithoutSpaceInput
+  inquiries?: Prisma.InquiryCreateNestedManyWithoutSpaceInput
+  aiFormTemplates?: Prisma.AIFormTemplateCreateNestedManyWithoutSpaceInput
+  aiTemplateExecutions?: Prisma.AITemplateExecutionCreateNestedManyWithoutSpaceInput
 }
 
 export type SpaceUncheckedCreateWithoutContentsInput = {
@@ -1553,6 +1955,9 @@ export type SpaceUncheckedCreateWithoutContentsInput = {
   albums?: Prisma.AlbumUncheckedCreateNestedManyWithoutSpaceInput
   albumEntries?: Prisma.AlbumEntryUncheckedCreateNestedManyWithoutSpaceInput
   derivatives?: Prisma.DerivativeUncheckedCreateNestedManyWithoutSpaceInput
+  inquiries?: Prisma.InquiryUncheckedCreateNestedManyWithoutSpaceInput
+  aiFormTemplates?: Prisma.AIFormTemplateUncheckedCreateNestedManyWithoutSpaceInput
+  aiTemplateExecutions?: Prisma.AITemplateExecutionUncheckedCreateNestedManyWithoutSpaceInput
 }
 
 export type SpaceCreateOrConnectWithoutContentsInput = {
@@ -1592,6 +1997,9 @@ export type SpaceUpdateWithoutContentsInput = {
   albums?: Prisma.AlbumUpdateManyWithoutSpaceNestedInput
   albumEntries?: Prisma.AlbumEntryUpdateManyWithoutSpaceNestedInput
   derivatives?: Prisma.DerivativeUpdateManyWithoutSpaceNestedInput
+  inquiries?: Prisma.InquiryUpdateManyWithoutSpaceNestedInput
+  aiFormTemplates?: Prisma.AIFormTemplateUpdateManyWithoutSpaceNestedInput
+  aiTemplateExecutions?: Prisma.AITemplateExecutionUpdateManyWithoutSpaceNestedInput
 }
 
 export type SpaceUncheckedUpdateWithoutContentsInput = {
@@ -1615,6 +2023,9 @@ export type SpaceUncheckedUpdateWithoutContentsInput = {
   albums?: Prisma.AlbumUncheckedUpdateManyWithoutSpaceNestedInput
   albumEntries?: Prisma.AlbumEntryUncheckedUpdateManyWithoutSpaceNestedInput
   derivatives?: Prisma.DerivativeUncheckedUpdateManyWithoutSpaceNestedInput
+  inquiries?: Prisma.InquiryUncheckedUpdateManyWithoutSpaceNestedInput
+  aiFormTemplates?: Prisma.AIFormTemplateUncheckedUpdateManyWithoutSpaceNestedInput
+  aiTemplateExecutions?: Prisma.AITemplateExecutionUncheckedUpdateManyWithoutSpaceNestedInput
 }
 
 export type SpaceCreateWithoutFilesInput = {
@@ -1638,6 +2049,9 @@ export type SpaceCreateWithoutFilesInput = {
   albums?: Prisma.AlbumCreateNestedManyWithoutSpaceInput
   albumEntries?: Prisma.AlbumEntryCreateNestedManyWithoutSpaceInput
   derivatives?: Prisma.DerivativeCreateNestedManyWithoutSpaceInput
+  inquiries?: Prisma.InquiryCreateNestedManyWithoutSpaceInput
+  aiFormTemplates?: Prisma.AIFormTemplateCreateNestedManyWithoutSpaceInput
+  aiTemplateExecutions?: Prisma.AITemplateExecutionCreateNestedManyWithoutSpaceInput
 }
 
 export type SpaceUncheckedCreateWithoutFilesInput = {
@@ -1661,6 +2075,9 @@ export type SpaceUncheckedCreateWithoutFilesInput = {
   albums?: Prisma.AlbumUncheckedCreateNestedManyWithoutSpaceInput
   albumEntries?: Prisma.AlbumEntryUncheckedCreateNestedManyWithoutSpaceInput
   derivatives?: Prisma.DerivativeUncheckedCreateNestedManyWithoutSpaceInput
+  inquiries?: Prisma.InquiryUncheckedCreateNestedManyWithoutSpaceInput
+  aiFormTemplates?: Prisma.AIFormTemplateUncheckedCreateNestedManyWithoutSpaceInput
+  aiTemplateExecutions?: Prisma.AITemplateExecutionUncheckedCreateNestedManyWithoutSpaceInput
 }
 
 export type SpaceCreateOrConnectWithoutFilesInput = {
@@ -1700,6 +2117,9 @@ export type SpaceUpdateWithoutFilesInput = {
   albums?: Prisma.AlbumUpdateManyWithoutSpaceNestedInput
   albumEntries?: Prisma.AlbumEntryUpdateManyWithoutSpaceNestedInput
   derivatives?: Prisma.DerivativeUpdateManyWithoutSpaceNestedInput
+  inquiries?: Prisma.InquiryUpdateManyWithoutSpaceNestedInput
+  aiFormTemplates?: Prisma.AIFormTemplateUpdateManyWithoutSpaceNestedInput
+  aiTemplateExecutions?: Prisma.AITemplateExecutionUpdateManyWithoutSpaceNestedInput
 }
 
 export type SpaceUncheckedUpdateWithoutFilesInput = {
@@ -1723,6 +2143,129 @@ export type SpaceUncheckedUpdateWithoutFilesInput = {
   albums?: Prisma.AlbumUncheckedUpdateManyWithoutSpaceNestedInput
   albumEntries?: Prisma.AlbumEntryUncheckedUpdateManyWithoutSpaceNestedInput
   derivatives?: Prisma.DerivativeUncheckedUpdateManyWithoutSpaceNestedInput
+  inquiries?: Prisma.InquiryUncheckedUpdateManyWithoutSpaceNestedInput
+  aiFormTemplates?: Prisma.AIFormTemplateUncheckedUpdateManyWithoutSpaceNestedInput
+  aiTemplateExecutions?: Prisma.AITemplateExecutionUncheckedUpdateManyWithoutSpaceNestedInput
+}
+
+export type SpaceCreateWithoutInquiriesInput = {
+  id?: string
+  createdAt?: Date | string
+  updatedAt?: Date | string | null
+  removedAt?: Date | string | null
+  ground?: Prisma.GroundCreateNestedOneWithoutSpaceInput
+  associations?: Prisma.SpaceAssociationCreateNestedManyWithoutSpaceInput
+  classification?: Prisma.SpaceClassificationCreateNestedOneWithoutSpaceInput
+  tenants?: Prisma.TenantCreateNestedManyWithoutSpaceInput
+  categories?: Prisma.CategoryCreateNestedManyWithoutSpaceInput
+  groups?: Prisma.GroupCreateNestedManyWithoutSpaceInput
+  contents?: Prisma.ContentCreateNestedManyWithoutSpaceInput
+  files?: Prisma.FileCreateNestedManyWithoutSpaceInput
+  timelines?: Prisma.TimelineCreateNestedManyWithoutSpaceInput
+  tasks?: Prisma.TaskCreateNestedManyWithoutSpaceInput
+  safeWallets?: Prisma.SafeWalletCreateNestedManyWithoutSpaceInput
+  routines?: Prisma.RoutineCreateNestedManyWithoutSpaceInput
+  folders?: Prisma.FolderCreateNestedManyWithoutSpaceInput
+  assets?: Prisma.AssetCreateNestedManyWithoutSpaceInput
+  albums?: Prisma.AlbumCreateNestedManyWithoutSpaceInput
+  albumEntries?: Prisma.AlbumEntryCreateNestedManyWithoutSpaceInput
+  derivatives?: Prisma.DerivativeCreateNestedManyWithoutSpaceInput
+  aiFormTemplates?: Prisma.AIFormTemplateCreateNestedManyWithoutSpaceInput
+  aiTemplateExecutions?: Prisma.AITemplateExecutionCreateNestedManyWithoutSpaceInput
+}
+
+export type SpaceUncheckedCreateWithoutInquiriesInput = {
+  id?: string
+  createdAt?: Date | string
+  updatedAt?: Date | string | null
+  removedAt?: Date | string | null
+  ground?: Prisma.GroundUncheckedCreateNestedOneWithoutSpaceInput
+  associations?: Prisma.SpaceAssociationUncheckedCreateNestedManyWithoutSpaceInput
+  classification?: Prisma.SpaceClassificationUncheckedCreateNestedOneWithoutSpaceInput
+  tenants?: Prisma.TenantUncheckedCreateNestedManyWithoutSpaceInput
+  categories?: Prisma.CategoryUncheckedCreateNestedManyWithoutSpaceInput
+  groups?: Prisma.GroupUncheckedCreateNestedManyWithoutSpaceInput
+  contents?: Prisma.ContentUncheckedCreateNestedManyWithoutSpaceInput
+  files?: Prisma.FileUncheckedCreateNestedManyWithoutSpaceInput
+  timelines?: Prisma.TimelineUncheckedCreateNestedManyWithoutSpaceInput
+  tasks?: Prisma.TaskUncheckedCreateNestedManyWithoutSpaceInput
+  safeWallets?: Prisma.SafeWalletUncheckedCreateNestedManyWithoutSpaceInput
+  routines?: Prisma.RoutineUncheckedCreateNestedManyWithoutSpaceInput
+  folders?: Prisma.FolderUncheckedCreateNestedManyWithoutSpaceInput
+  assets?: Prisma.AssetUncheckedCreateNestedManyWithoutSpaceInput
+  albums?: Prisma.AlbumUncheckedCreateNestedManyWithoutSpaceInput
+  albumEntries?: Prisma.AlbumEntryUncheckedCreateNestedManyWithoutSpaceInput
+  derivatives?: Prisma.DerivativeUncheckedCreateNestedManyWithoutSpaceInput
+  aiFormTemplates?: Prisma.AIFormTemplateUncheckedCreateNestedManyWithoutSpaceInput
+  aiTemplateExecutions?: Prisma.AITemplateExecutionUncheckedCreateNestedManyWithoutSpaceInput
+}
+
+export type SpaceCreateOrConnectWithoutInquiriesInput = {
+  where: Prisma.SpaceWhereUniqueInput
+  create: Prisma.XOR<Prisma.SpaceCreateWithoutInquiriesInput, Prisma.SpaceUncheckedCreateWithoutInquiriesInput>
+}
+
+export type SpaceUpsertWithoutInquiriesInput = {
+  update: Prisma.XOR<Prisma.SpaceUpdateWithoutInquiriesInput, Prisma.SpaceUncheckedUpdateWithoutInquiriesInput>
+  create: Prisma.XOR<Prisma.SpaceCreateWithoutInquiriesInput, Prisma.SpaceUncheckedCreateWithoutInquiriesInput>
+  where?: Prisma.SpaceWhereInput
+}
+
+export type SpaceUpdateToOneWithWhereWithoutInquiriesInput = {
+  where?: Prisma.SpaceWhereInput
+  data: Prisma.XOR<Prisma.SpaceUpdateWithoutInquiriesInput, Prisma.SpaceUncheckedUpdateWithoutInquiriesInput>
+}
+
+export type SpaceUpdateWithoutInquiriesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  ground?: Prisma.GroundUpdateOneWithoutSpaceNestedInput
+  associations?: Prisma.SpaceAssociationUpdateManyWithoutSpaceNestedInput
+  classification?: Prisma.SpaceClassificationUpdateOneWithoutSpaceNestedInput
+  tenants?: Prisma.TenantUpdateManyWithoutSpaceNestedInput
+  categories?: Prisma.CategoryUpdateManyWithoutSpaceNestedInput
+  groups?: Prisma.GroupUpdateManyWithoutSpaceNestedInput
+  contents?: Prisma.ContentUpdateManyWithoutSpaceNestedInput
+  files?: Prisma.FileUpdateManyWithoutSpaceNestedInput
+  timelines?: Prisma.TimelineUpdateManyWithoutSpaceNestedInput
+  tasks?: Prisma.TaskUpdateManyWithoutSpaceNestedInput
+  safeWallets?: Prisma.SafeWalletUpdateManyWithoutSpaceNestedInput
+  routines?: Prisma.RoutineUpdateManyWithoutSpaceNestedInput
+  folders?: Prisma.FolderUpdateManyWithoutSpaceNestedInput
+  assets?: Prisma.AssetUpdateManyWithoutSpaceNestedInput
+  albums?: Prisma.AlbumUpdateManyWithoutSpaceNestedInput
+  albumEntries?: Prisma.AlbumEntryUpdateManyWithoutSpaceNestedInput
+  derivatives?: Prisma.DerivativeUpdateManyWithoutSpaceNestedInput
+  aiFormTemplates?: Prisma.AIFormTemplateUpdateManyWithoutSpaceNestedInput
+  aiTemplateExecutions?: Prisma.AITemplateExecutionUpdateManyWithoutSpaceNestedInput
+}
+
+export type SpaceUncheckedUpdateWithoutInquiriesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  ground?: Prisma.GroundUncheckedUpdateOneWithoutSpaceNestedInput
+  associations?: Prisma.SpaceAssociationUncheckedUpdateManyWithoutSpaceNestedInput
+  classification?: Prisma.SpaceClassificationUncheckedUpdateOneWithoutSpaceNestedInput
+  tenants?: Prisma.TenantUncheckedUpdateManyWithoutSpaceNestedInput
+  categories?: Prisma.CategoryUncheckedUpdateManyWithoutSpaceNestedInput
+  groups?: Prisma.GroupUncheckedUpdateManyWithoutSpaceNestedInput
+  contents?: Prisma.ContentUncheckedUpdateManyWithoutSpaceNestedInput
+  files?: Prisma.FileUncheckedUpdateManyWithoutSpaceNestedInput
+  timelines?: Prisma.TimelineUncheckedUpdateManyWithoutSpaceNestedInput
+  tasks?: Prisma.TaskUncheckedUpdateManyWithoutSpaceNestedInput
+  safeWallets?: Prisma.SafeWalletUncheckedUpdateManyWithoutSpaceNestedInput
+  routines?: Prisma.RoutineUncheckedUpdateManyWithoutSpaceNestedInput
+  folders?: Prisma.FolderUncheckedUpdateManyWithoutSpaceNestedInput
+  assets?: Prisma.AssetUncheckedUpdateManyWithoutSpaceNestedInput
+  albums?: Prisma.AlbumUncheckedUpdateManyWithoutSpaceNestedInput
+  albumEntries?: Prisma.AlbumEntryUncheckedUpdateManyWithoutSpaceNestedInput
+  derivatives?: Prisma.DerivativeUncheckedUpdateManyWithoutSpaceNestedInput
+  aiFormTemplates?: Prisma.AIFormTemplateUncheckedUpdateManyWithoutSpaceNestedInput
+  aiTemplateExecutions?: Prisma.AITemplateExecutionUncheckedUpdateManyWithoutSpaceNestedInput
 }
 
 export type SpaceCreateWithoutSafeWalletsInput = {
@@ -1746,6 +2289,9 @@ export type SpaceCreateWithoutSafeWalletsInput = {
   albums?: Prisma.AlbumCreateNestedManyWithoutSpaceInput
   albumEntries?: Prisma.AlbumEntryCreateNestedManyWithoutSpaceInput
   derivatives?: Prisma.DerivativeCreateNestedManyWithoutSpaceInput
+  inquiries?: Prisma.InquiryCreateNestedManyWithoutSpaceInput
+  aiFormTemplates?: Prisma.AIFormTemplateCreateNestedManyWithoutSpaceInput
+  aiTemplateExecutions?: Prisma.AITemplateExecutionCreateNestedManyWithoutSpaceInput
 }
 
 export type SpaceUncheckedCreateWithoutSafeWalletsInput = {
@@ -1769,6 +2315,9 @@ export type SpaceUncheckedCreateWithoutSafeWalletsInput = {
   albums?: Prisma.AlbumUncheckedCreateNestedManyWithoutSpaceInput
   albumEntries?: Prisma.AlbumEntryUncheckedCreateNestedManyWithoutSpaceInput
   derivatives?: Prisma.DerivativeUncheckedCreateNestedManyWithoutSpaceInput
+  inquiries?: Prisma.InquiryUncheckedCreateNestedManyWithoutSpaceInput
+  aiFormTemplates?: Prisma.AIFormTemplateUncheckedCreateNestedManyWithoutSpaceInput
+  aiTemplateExecutions?: Prisma.AITemplateExecutionUncheckedCreateNestedManyWithoutSpaceInput
 }
 
 export type SpaceCreateOrConnectWithoutSafeWalletsInput = {
@@ -1808,6 +2357,9 @@ export type SpaceUpdateWithoutSafeWalletsInput = {
   albums?: Prisma.AlbumUpdateManyWithoutSpaceNestedInput
   albumEntries?: Prisma.AlbumEntryUpdateManyWithoutSpaceNestedInput
   derivatives?: Prisma.DerivativeUpdateManyWithoutSpaceNestedInput
+  inquiries?: Prisma.InquiryUpdateManyWithoutSpaceNestedInput
+  aiFormTemplates?: Prisma.AIFormTemplateUpdateManyWithoutSpaceNestedInput
+  aiTemplateExecutions?: Prisma.AITemplateExecutionUpdateManyWithoutSpaceNestedInput
 }
 
 export type SpaceUncheckedUpdateWithoutSafeWalletsInput = {
@@ -1831,6 +2383,9 @@ export type SpaceUncheckedUpdateWithoutSafeWalletsInput = {
   albums?: Prisma.AlbumUncheckedUpdateManyWithoutSpaceNestedInput
   albumEntries?: Prisma.AlbumEntryUncheckedUpdateManyWithoutSpaceNestedInput
   derivatives?: Prisma.DerivativeUncheckedUpdateManyWithoutSpaceNestedInput
+  inquiries?: Prisma.InquiryUncheckedUpdateManyWithoutSpaceNestedInput
+  aiFormTemplates?: Prisma.AIFormTemplateUncheckedUpdateManyWithoutSpaceNestedInput
+  aiTemplateExecutions?: Prisma.AITemplateExecutionUncheckedUpdateManyWithoutSpaceNestedInput
 }
 
 export type SpaceCreateWithoutClassificationInput = {
@@ -1854,6 +2409,9 @@ export type SpaceCreateWithoutClassificationInput = {
   albums?: Prisma.AlbumCreateNestedManyWithoutSpaceInput
   albumEntries?: Prisma.AlbumEntryCreateNestedManyWithoutSpaceInput
   derivatives?: Prisma.DerivativeCreateNestedManyWithoutSpaceInput
+  inquiries?: Prisma.InquiryCreateNestedManyWithoutSpaceInput
+  aiFormTemplates?: Prisma.AIFormTemplateCreateNestedManyWithoutSpaceInput
+  aiTemplateExecutions?: Prisma.AITemplateExecutionCreateNestedManyWithoutSpaceInput
 }
 
 export type SpaceUncheckedCreateWithoutClassificationInput = {
@@ -1877,6 +2435,9 @@ export type SpaceUncheckedCreateWithoutClassificationInput = {
   albums?: Prisma.AlbumUncheckedCreateNestedManyWithoutSpaceInput
   albumEntries?: Prisma.AlbumEntryUncheckedCreateNestedManyWithoutSpaceInput
   derivatives?: Prisma.DerivativeUncheckedCreateNestedManyWithoutSpaceInput
+  inquiries?: Prisma.InquiryUncheckedCreateNestedManyWithoutSpaceInput
+  aiFormTemplates?: Prisma.AIFormTemplateUncheckedCreateNestedManyWithoutSpaceInput
+  aiTemplateExecutions?: Prisma.AITemplateExecutionUncheckedCreateNestedManyWithoutSpaceInput
 }
 
 export type SpaceCreateOrConnectWithoutClassificationInput = {
@@ -1916,6 +2477,9 @@ export type SpaceUpdateWithoutClassificationInput = {
   albums?: Prisma.AlbumUpdateManyWithoutSpaceNestedInput
   albumEntries?: Prisma.AlbumEntryUpdateManyWithoutSpaceNestedInput
   derivatives?: Prisma.DerivativeUpdateManyWithoutSpaceNestedInput
+  inquiries?: Prisma.InquiryUpdateManyWithoutSpaceNestedInput
+  aiFormTemplates?: Prisma.AIFormTemplateUpdateManyWithoutSpaceNestedInput
+  aiTemplateExecutions?: Prisma.AITemplateExecutionUpdateManyWithoutSpaceNestedInput
 }
 
 export type SpaceUncheckedUpdateWithoutClassificationInput = {
@@ -1939,6 +2503,9 @@ export type SpaceUncheckedUpdateWithoutClassificationInput = {
   albums?: Prisma.AlbumUncheckedUpdateManyWithoutSpaceNestedInput
   albumEntries?: Prisma.AlbumEntryUncheckedUpdateManyWithoutSpaceNestedInput
   derivatives?: Prisma.DerivativeUncheckedUpdateManyWithoutSpaceNestedInput
+  inquiries?: Prisma.InquiryUncheckedUpdateManyWithoutSpaceNestedInput
+  aiFormTemplates?: Prisma.AIFormTemplateUncheckedUpdateManyWithoutSpaceNestedInput
+  aiTemplateExecutions?: Prisma.AITemplateExecutionUncheckedUpdateManyWithoutSpaceNestedInput
 }
 
 export type SpaceCreateWithoutAssociationsInput = {
@@ -1962,6 +2529,9 @@ export type SpaceCreateWithoutAssociationsInput = {
   albums?: Prisma.AlbumCreateNestedManyWithoutSpaceInput
   albumEntries?: Prisma.AlbumEntryCreateNestedManyWithoutSpaceInput
   derivatives?: Prisma.DerivativeCreateNestedManyWithoutSpaceInput
+  inquiries?: Prisma.InquiryCreateNestedManyWithoutSpaceInput
+  aiFormTemplates?: Prisma.AIFormTemplateCreateNestedManyWithoutSpaceInput
+  aiTemplateExecutions?: Prisma.AITemplateExecutionCreateNestedManyWithoutSpaceInput
 }
 
 export type SpaceUncheckedCreateWithoutAssociationsInput = {
@@ -1985,6 +2555,9 @@ export type SpaceUncheckedCreateWithoutAssociationsInput = {
   albums?: Prisma.AlbumUncheckedCreateNestedManyWithoutSpaceInput
   albumEntries?: Prisma.AlbumEntryUncheckedCreateNestedManyWithoutSpaceInput
   derivatives?: Prisma.DerivativeUncheckedCreateNestedManyWithoutSpaceInput
+  inquiries?: Prisma.InquiryUncheckedCreateNestedManyWithoutSpaceInput
+  aiFormTemplates?: Prisma.AIFormTemplateUncheckedCreateNestedManyWithoutSpaceInput
+  aiTemplateExecutions?: Prisma.AITemplateExecutionUncheckedCreateNestedManyWithoutSpaceInput
 }
 
 export type SpaceCreateOrConnectWithoutAssociationsInput = {
@@ -2024,6 +2597,9 @@ export type SpaceUpdateWithoutAssociationsInput = {
   albums?: Prisma.AlbumUpdateManyWithoutSpaceNestedInput
   albumEntries?: Prisma.AlbumEntryUpdateManyWithoutSpaceNestedInput
   derivatives?: Prisma.DerivativeUpdateManyWithoutSpaceNestedInput
+  inquiries?: Prisma.InquiryUpdateManyWithoutSpaceNestedInput
+  aiFormTemplates?: Prisma.AIFormTemplateUpdateManyWithoutSpaceNestedInput
+  aiTemplateExecutions?: Prisma.AITemplateExecutionUpdateManyWithoutSpaceNestedInput
 }
 
 export type SpaceUncheckedUpdateWithoutAssociationsInput = {
@@ -2047,6 +2623,9 @@ export type SpaceUncheckedUpdateWithoutAssociationsInput = {
   albums?: Prisma.AlbumUncheckedUpdateManyWithoutSpaceNestedInput
   albumEntries?: Prisma.AlbumEntryUncheckedUpdateManyWithoutSpaceNestedInput
   derivatives?: Prisma.DerivativeUncheckedUpdateManyWithoutSpaceNestedInput
+  inquiries?: Prisma.InquiryUncheckedUpdateManyWithoutSpaceNestedInput
+  aiFormTemplates?: Prisma.AIFormTemplateUncheckedUpdateManyWithoutSpaceNestedInput
+  aiTemplateExecutions?: Prisma.AITemplateExecutionUncheckedUpdateManyWithoutSpaceNestedInput
 }
 
 export type SpaceCreateWithoutGroundInput = {
@@ -2070,6 +2649,9 @@ export type SpaceCreateWithoutGroundInput = {
   albums?: Prisma.AlbumCreateNestedManyWithoutSpaceInput
   albumEntries?: Prisma.AlbumEntryCreateNestedManyWithoutSpaceInput
   derivatives?: Prisma.DerivativeCreateNestedManyWithoutSpaceInput
+  inquiries?: Prisma.InquiryCreateNestedManyWithoutSpaceInput
+  aiFormTemplates?: Prisma.AIFormTemplateCreateNestedManyWithoutSpaceInput
+  aiTemplateExecutions?: Prisma.AITemplateExecutionCreateNestedManyWithoutSpaceInput
 }
 
 export type SpaceUncheckedCreateWithoutGroundInput = {
@@ -2093,6 +2675,9 @@ export type SpaceUncheckedCreateWithoutGroundInput = {
   albums?: Prisma.AlbumUncheckedCreateNestedManyWithoutSpaceInput
   albumEntries?: Prisma.AlbumEntryUncheckedCreateNestedManyWithoutSpaceInput
   derivatives?: Prisma.DerivativeUncheckedCreateNestedManyWithoutSpaceInput
+  inquiries?: Prisma.InquiryUncheckedCreateNestedManyWithoutSpaceInput
+  aiFormTemplates?: Prisma.AIFormTemplateUncheckedCreateNestedManyWithoutSpaceInput
+  aiTemplateExecutions?: Prisma.AITemplateExecutionUncheckedCreateNestedManyWithoutSpaceInput
 }
 
 export type SpaceCreateOrConnectWithoutGroundInput = {
@@ -2132,6 +2717,9 @@ export type SpaceUpdateWithoutGroundInput = {
   albums?: Prisma.AlbumUpdateManyWithoutSpaceNestedInput
   albumEntries?: Prisma.AlbumEntryUpdateManyWithoutSpaceNestedInput
   derivatives?: Prisma.DerivativeUpdateManyWithoutSpaceNestedInput
+  inquiries?: Prisma.InquiryUpdateManyWithoutSpaceNestedInput
+  aiFormTemplates?: Prisma.AIFormTemplateUpdateManyWithoutSpaceNestedInput
+  aiTemplateExecutions?: Prisma.AITemplateExecutionUpdateManyWithoutSpaceNestedInput
 }
 
 export type SpaceUncheckedUpdateWithoutGroundInput = {
@@ -2155,6 +2743,9 @@ export type SpaceUncheckedUpdateWithoutGroundInput = {
   albums?: Prisma.AlbumUncheckedUpdateManyWithoutSpaceNestedInput
   albumEntries?: Prisma.AlbumEntryUncheckedUpdateManyWithoutSpaceNestedInput
   derivatives?: Prisma.DerivativeUncheckedUpdateManyWithoutSpaceNestedInput
+  inquiries?: Prisma.InquiryUncheckedUpdateManyWithoutSpaceNestedInput
+  aiFormTemplates?: Prisma.AIFormTemplateUncheckedUpdateManyWithoutSpaceNestedInput
+  aiTemplateExecutions?: Prisma.AITemplateExecutionUncheckedUpdateManyWithoutSpaceNestedInput
 }
 
 export type SpaceCreateWithoutTimelinesInput = {
@@ -2178,6 +2769,9 @@ export type SpaceCreateWithoutTimelinesInput = {
   albums?: Prisma.AlbumCreateNestedManyWithoutSpaceInput
   albumEntries?: Prisma.AlbumEntryCreateNestedManyWithoutSpaceInput
   derivatives?: Prisma.DerivativeCreateNestedManyWithoutSpaceInput
+  inquiries?: Prisma.InquiryCreateNestedManyWithoutSpaceInput
+  aiFormTemplates?: Prisma.AIFormTemplateCreateNestedManyWithoutSpaceInput
+  aiTemplateExecutions?: Prisma.AITemplateExecutionCreateNestedManyWithoutSpaceInput
 }
 
 export type SpaceUncheckedCreateWithoutTimelinesInput = {
@@ -2201,6 +2795,9 @@ export type SpaceUncheckedCreateWithoutTimelinesInput = {
   albums?: Prisma.AlbumUncheckedCreateNestedManyWithoutSpaceInput
   albumEntries?: Prisma.AlbumEntryUncheckedCreateNestedManyWithoutSpaceInput
   derivatives?: Prisma.DerivativeUncheckedCreateNestedManyWithoutSpaceInput
+  inquiries?: Prisma.InquiryUncheckedCreateNestedManyWithoutSpaceInput
+  aiFormTemplates?: Prisma.AIFormTemplateUncheckedCreateNestedManyWithoutSpaceInput
+  aiTemplateExecutions?: Prisma.AITemplateExecutionUncheckedCreateNestedManyWithoutSpaceInput
 }
 
 export type SpaceCreateOrConnectWithoutTimelinesInput = {
@@ -2240,6 +2837,9 @@ export type SpaceUpdateWithoutTimelinesInput = {
   albums?: Prisma.AlbumUpdateManyWithoutSpaceNestedInput
   albumEntries?: Prisma.AlbumEntryUpdateManyWithoutSpaceNestedInput
   derivatives?: Prisma.DerivativeUpdateManyWithoutSpaceNestedInput
+  inquiries?: Prisma.InquiryUpdateManyWithoutSpaceNestedInput
+  aiFormTemplates?: Prisma.AIFormTemplateUpdateManyWithoutSpaceNestedInput
+  aiTemplateExecutions?: Prisma.AITemplateExecutionUpdateManyWithoutSpaceNestedInput
 }
 
 export type SpaceUncheckedUpdateWithoutTimelinesInput = {
@@ -2263,6 +2863,9 @@ export type SpaceUncheckedUpdateWithoutTimelinesInput = {
   albums?: Prisma.AlbumUncheckedUpdateManyWithoutSpaceNestedInput
   albumEntries?: Prisma.AlbumEntryUncheckedUpdateManyWithoutSpaceNestedInput
   derivatives?: Prisma.DerivativeUncheckedUpdateManyWithoutSpaceNestedInput
+  inquiries?: Prisma.InquiryUncheckedUpdateManyWithoutSpaceNestedInput
+  aiFormTemplates?: Prisma.AIFormTemplateUncheckedUpdateManyWithoutSpaceNestedInput
+  aiTemplateExecutions?: Prisma.AITemplateExecutionUncheckedUpdateManyWithoutSpaceNestedInput
 }
 
 export type SpaceCreateWithoutRoutinesInput = {
@@ -2286,6 +2889,9 @@ export type SpaceCreateWithoutRoutinesInput = {
   albums?: Prisma.AlbumCreateNestedManyWithoutSpaceInput
   albumEntries?: Prisma.AlbumEntryCreateNestedManyWithoutSpaceInput
   derivatives?: Prisma.DerivativeCreateNestedManyWithoutSpaceInput
+  inquiries?: Prisma.InquiryCreateNestedManyWithoutSpaceInput
+  aiFormTemplates?: Prisma.AIFormTemplateCreateNestedManyWithoutSpaceInput
+  aiTemplateExecutions?: Prisma.AITemplateExecutionCreateNestedManyWithoutSpaceInput
 }
 
 export type SpaceUncheckedCreateWithoutRoutinesInput = {
@@ -2309,6 +2915,9 @@ export type SpaceUncheckedCreateWithoutRoutinesInput = {
   albums?: Prisma.AlbumUncheckedCreateNestedManyWithoutSpaceInput
   albumEntries?: Prisma.AlbumEntryUncheckedCreateNestedManyWithoutSpaceInput
   derivatives?: Prisma.DerivativeUncheckedCreateNestedManyWithoutSpaceInput
+  inquiries?: Prisma.InquiryUncheckedCreateNestedManyWithoutSpaceInput
+  aiFormTemplates?: Prisma.AIFormTemplateUncheckedCreateNestedManyWithoutSpaceInput
+  aiTemplateExecutions?: Prisma.AITemplateExecutionUncheckedCreateNestedManyWithoutSpaceInput
 }
 
 export type SpaceCreateOrConnectWithoutRoutinesInput = {
@@ -2348,6 +2957,9 @@ export type SpaceUpdateWithoutRoutinesInput = {
   albums?: Prisma.AlbumUpdateManyWithoutSpaceNestedInput
   albumEntries?: Prisma.AlbumEntryUpdateManyWithoutSpaceNestedInput
   derivatives?: Prisma.DerivativeUpdateManyWithoutSpaceNestedInput
+  inquiries?: Prisma.InquiryUpdateManyWithoutSpaceNestedInput
+  aiFormTemplates?: Prisma.AIFormTemplateUpdateManyWithoutSpaceNestedInput
+  aiTemplateExecutions?: Prisma.AITemplateExecutionUpdateManyWithoutSpaceNestedInput
 }
 
 export type SpaceUncheckedUpdateWithoutRoutinesInput = {
@@ -2371,6 +2983,9 @@ export type SpaceUncheckedUpdateWithoutRoutinesInput = {
   albums?: Prisma.AlbumUncheckedUpdateManyWithoutSpaceNestedInput
   albumEntries?: Prisma.AlbumEntryUncheckedUpdateManyWithoutSpaceNestedInput
   derivatives?: Prisma.DerivativeUncheckedUpdateManyWithoutSpaceNestedInput
+  inquiries?: Prisma.InquiryUncheckedUpdateManyWithoutSpaceNestedInput
+  aiFormTemplates?: Prisma.AIFormTemplateUncheckedUpdateManyWithoutSpaceNestedInput
+  aiTemplateExecutions?: Prisma.AITemplateExecutionUncheckedUpdateManyWithoutSpaceNestedInput
 }
 
 export type SpaceCreateWithoutTasksInput = {
@@ -2394,6 +3009,9 @@ export type SpaceCreateWithoutTasksInput = {
   albums?: Prisma.AlbumCreateNestedManyWithoutSpaceInput
   albumEntries?: Prisma.AlbumEntryCreateNestedManyWithoutSpaceInput
   derivatives?: Prisma.DerivativeCreateNestedManyWithoutSpaceInput
+  inquiries?: Prisma.InquiryCreateNestedManyWithoutSpaceInput
+  aiFormTemplates?: Prisma.AIFormTemplateCreateNestedManyWithoutSpaceInput
+  aiTemplateExecutions?: Prisma.AITemplateExecutionCreateNestedManyWithoutSpaceInput
 }
 
 export type SpaceUncheckedCreateWithoutTasksInput = {
@@ -2417,6 +3035,9 @@ export type SpaceUncheckedCreateWithoutTasksInput = {
   albums?: Prisma.AlbumUncheckedCreateNestedManyWithoutSpaceInput
   albumEntries?: Prisma.AlbumEntryUncheckedCreateNestedManyWithoutSpaceInput
   derivatives?: Prisma.DerivativeUncheckedCreateNestedManyWithoutSpaceInput
+  inquiries?: Prisma.InquiryUncheckedCreateNestedManyWithoutSpaceInput
+  aiFormTemplates?: Prisma.AIFormTemplateUncheckedCreateNestedManyWithoutSpaceInput
+  aiTemplateExecutions?: Prisma.AITemplateExecutionUncheckedCreateNestedManyWithoutSpaceInput
 }
 
 export type SpaceCreateOrConnectWithoutTasksInput = {
@@ -2456,6 +3077,9 @@ export type SpaceUpdateWithoutTasksInput = {
   albums?: Prisma.AlbumUpdateManyWithoutSpaceNestedInput
   albumEntries?: Prisma.AlbumEntryUpdateManyWithoutSpaceNestedInput
   derivatives?: Prisma.DerivativeUpdateManyWithoutSpaceNestedInput
+  inquiries?: Prisma.InquiryUpdateManyWithoutSpaceNestedInput
+  aiFormTemplates?: Prisma.AIFormTemplateUpdateManyWithoutSpaceNestedInput
+  aiTemplateExecutions?: Prisma.AITemplateExecutionUpdateManyWithoutSpaceNestedInput
 }
 
 export type SpaceUncheckedUpdateWithoutTasksInput = {
@@ -2479,6 +3103,9 @@ export type SpaceUncheckedUpdateWithoutTasksInput = {
   albums?: Prisma.AlbumUncheckedUpdateManyWithoutSpaceNestedInput
   albumEntries?: Prisma.AlbumEntryUncheckedUpdateManyWithoutSpaceNestedInput
   derivatives?: Prisma.DerivativeUncheckedUpdateManyWithoutSpaceNestedInput
+  inquiries?: Prisma.InquiryUncheckedUpdateManyWithoutSpaceNestedInput
+  aiFormTemplates?: Prisma.AIFormTemplateUncheckedUpdateManyWithoutSpaceNestedInput
+  aiTemplateExecutions?: Prisma.AITemplateExecutionUncheckedUpdateManyWithoutSpaceNestedInput
 }
 
 
@@ -2502,6 +3129,9 @@ export type SpaceCountOutputType = {
   albums: number
   albumEntries: number
   derivatives: number
+  inquiries: number
+  aiFormTemplates: number
+  aiTemplateExecutions: number
 }
 
 export type SpaceCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -2520,6 +3150,9 @@ export type SpaceCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.
   albums?: boolean | SpaceCountOutputTypeCountAlbumsArgs
   albumEntries?: boolean | SpaceCountOutputTypeCountAlbumEntriesArgs
   derivatives?: boolean | SpaceCountOutputTypeCountDerivativesArgs
+  inquiries?: boolean | SpaceCountOutputTypeCountInquiriesArgs
+  aiFormTemplates?: boolean | SpaceCountOutputTypeCountAiFormTemplatesArgs
+  aiTemplateExecutions?: boolean | SpaceCountOutputTypeCountAiTemplateExecutionsArgs
 }
 
 /**
@@ -2637,6 +3270,27 @@ export type SpaceCountOutputTypeCountDerivativesArgs<ExtArgs extends runtime.Typ
   where?: Prisma.DerivativeWhereInput
 }
 
+/**
+ * SpaceCountOutputType without action
+ */
+export type SpaceCountOutputTypeCountInquiriesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.InquiryWhereInput
+}
+
+/**
+ * SpaceCountOutputType without action
+ */
+export type SpaceCountOutputTypeCountAiFormTemplatesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.AIFormTemplateWhereInput
+}
+
+/**
+ * SpaceCountOutputType without action
+ */
+export type SpaceCountOutputTypeCountAiTemplateExecutionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.AITemplateExecutionWhereInput
+}
+
 
 export type SpaceSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -2660,6 +3314,9 @@ export type SpaceSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   albums?: boolean | Prisma.Space$albumsArgs<ExtArgs>
   albumEntries?: boolean | Prisma.Space$albumEntriesArgs<ExtArgs>
   derivatives?: boolean | Prisma.Space$derivativesArgs<ExtArgs>
+  inquiries?: boolean | Prisma.Space$inquiriesArgs<ExtArgs>
+  aiFormTemplates?: boolean | Prisma.Space$aiFormTemplatesArgs<ExtArgs>
+  aiTemplateExecutions?: boolean | Prisma.Space$aiTemplateExecutionsArgs<ExtArgs>
   _count?: boolean | Prisma.SpaceCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["space"]>
 
@@ -2703,6 +3360,9 @@ export type SpaceInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   albums?: boolean | Prisma.Space$albumsArgs<ExtArgs>
   albumEntries?: boolean | Prisma.Space$albumEntriesArgs<ExtArgs>
   derivatives?: boolean | Prisma.Space$derivativesArgs<ExtArgs>
+  inquiries?: boolean | Prisma.Space$inquiriesArgs<ExtArgs>
+  aiFormTemplates?: boolean | Prisma.Space$aiFormTemplatesArgs<ExtArgs>
+  aiTemplateExecutions?: boolean | Prisma.Space$aiTemplateExecutionsArgs<ExtArgs>
   _count?: boolean | Prisma.SpaceCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type SpaceIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
@@ -2728,6 +3388,9 @@ export type $SpacePayload<ExtArgs extends runtime.Types.Extensions.InternalArgs 
     albums: Prisma.$AlbumPayload<ExtArgs>[]
     albumEntries: Prisma.$AlbumEntryPayload<ExtArgs>[]
     derivatives: Prisma.$DerivativePayload<ExtArgs>[]
+    inquiries: Prisma.$InquiryPayload<ExtArgs>[]
+    aiFormTemplates: Prisma.$AIFormTemplatePayload<ExtArgs>[]
+    aiTemplateExecutions: Prisma.$AITemplateExecutionPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -3145,6 +3808,9 @@ export interface Prisma__SpaceClient<T, Null = never, ExtArgs extends runtime.Ty
   albums<T extends Prisma.Space$albumsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Space$albumsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AlbumPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   albumEntries<T extends Prisma.Space$albumEntriesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Space$albumEntriesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AlbumEntryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   derivatives<T extends Prisma.Space$derivativesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Space$derivativesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$DerivativePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  inquiries<T extends Prisma.Space$inquiriesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Space$inquiriesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$InquiryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  aiFormTemplates<T extends Prisma.Space$aiFormTemplatesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Space$aiFormTemplatesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AIFormTemplatePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  aiTemplateExecutions<T extends Prisma.Space$aiTemplateExecutionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Space$aiTemplateExecutionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AITemplateExecutionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -3961,6 +4627,78 @@ export type Space$derivativesArgs<ExtArgs extends runtime.Types.Extensions.Inter
   take?: number
   skip?: number
   distinct?: Prisma.DerivativeScalarFieldEnum | Prisma.DerivativeScalarFieldEnum[]
+}
+
+/**
+ * Space.inquiries
+ */
+export type Space$inquiriesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Inquiry
+   */
+  select?: Prisma.InquirySelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Inquiry
+   */
+  omit?: Prisma.InquiryOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.InquiryInclude<ExtArgs> | null
+  where?: Prisma.InquiryWhereInput
+  orderBy?: Prisma.InquiryOrderByWithRelationInput | Prisma.InquiryOrderByWithRelationInput[]
+  cursor?: Prisma.InquiryWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.InquiryScalarFieldEnum | Prisma.InquiryScalarFieldEnum[]
+}
+
+/**
+ * Space.aiFormTemplates
+ */
+export type Space$aiFormTemplatesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the AIFormTemplate
+   */
+  select?: Prisma.AIFormTemplateSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the AIFormTemplate
+   */
+  omit?: Prisma.AIFormTemplateOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.AIFormTemplateInclude<ExtArgs> | null
+  where?: Prisma.AIFormTemplateWhereInput
+  orderBy?: Prisma.AIFormTemplateOrderByWithRelationInput | Prisma.AIFormTemplateOrderByWithRelationInput[]
+  cursor?: Prisma.AIFormTemplateWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.AIFormTemplateScalarFieldEnum | Prisma.AIFormTemplateScalarFieldEnum[]
+}
+
+/**
+ * Space.aiTemplateExecutions
+ */
+export type Space$aiTemplateExecutionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the AITemplateExecution
+   */
+  select?: Prisma.AITemplateExecutionSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the AITemplateExecution
+   */
+  omit?: Prisma.AITemplateExecutionOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.AITemplateExecutionInclude<ExtArgs> | null
+  where?: Prisma.AITemplateExecutionWhereInput
+  orderBy?: Prisma.AITemplateExecutionOrderByWithRelationInput | Prisma.AITemplateExecutionOrderByWithRelationInput[]
+  cursor?: Prisma.AITemplateExecutionWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.AITemplateExecutionScalarFieldEnum | Prisma.AITemplateExecutionScalarFieldEnum[]
 }
 
 /**

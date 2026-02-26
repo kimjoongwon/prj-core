@@ -7,14 +7,38 @@ import {
 } from "@heroui/react";
 import type React from "react";
 
-export interface SelectProps
-	extends Omit<NextUISelectProps, "children" | "onChange" | "selectedKeys"> {
+// SelectProps 인터페이스를 독립적으로 정의 (NextUI 제네릭 제거)
+export interface SelectProps {
 	/** 선택 옵션 목록 */
 	options?: Option[];
 	/** 선택된 값 */
 	value?: string;
 	/** 값 변경 핸들러 */
 	onChange?: (value: string) => void;
+	/** 크기 */
+	size?: "sm" | "md" | "lg";
+	/** 변형 */
+	variant?: "flat" | "bordered" | "underlined" | "faded";
+	/** 라벨 */
+	label?: string;
+	/** 플레이스홀더 */
+	placeholder?: string;
+	/** 비활성화 여부 */
+	isDisabled?: boolean;
+	/** 에러 여부 */
+	isInvalid?: boolean;
+	/** 에러 메시지 */
+	errorMessage?: string;
+	/** 추가 클래스 */
+	className?: string;
+	/** 필수 여부 */
+	isRequired?: boolean;
+	/** 읽기 전용 */
+	isReadOnly?: boolean;
+	/** 선택된 키 */
+	selectedKeys?: string[];
+	/** 기타 NextUI props */
+	[key: string]: unknown;
 }
 
 /**
@@ -37,7 +61,22 @@ export interface SelectProps
  * ```
  */
 export const Select = (props: SelectProps) => {
-	const { options = [], value, onChange, ...rest } = props;
+	const {
+		options = [],
+		value,
+		onChange,
+		size,
+		variant = "bordered",
+		label,
+		placeholder,
+		isDisabled,
+		isInvalid,
+		errorMessage,
+		className,
+		isRequired,
+		isReadOnly,
+		...rest
+	} = props;
 
 	const _options = cloneDeep(options);
 
@@ -47,10 +86,19 @@ export const Select = (props: SelectProps) => {
 
 	return (
 		<NextSelect
-			variant="bordered"
-			{...rest}
+			size={size}
+			variant={variant}
+			label={label}
+			placeholder={placeholder}
+			isDisabled={isDisabled}
+			isInvalid={isInvalid}
+			errorMessage={errorMessage}
+			className={className}
+			isRequired={isRequired}
+			isReadOnly={isReadOnly}
 			onChange={handleChange}
 			selectedKeys={value ? [value] : undefined}
+			{...(rest as NextUISelectProps<object>)}
 		>
 			{_options.map((option) => {
 				return (

@@ -42,6 +42,11 @@ model Space {
   albums         Album[]
   albumEntries   AlbumEntry[]
   derivatives    Derivative[]
+  // Inquiry 도메인
+  inquiries      Inquiry[]
+  // AI Form 도메인
+  aiFormTemplates      AIFormTemplate[]
+  aiTemplateExecutions AITemplateExecution[]
 
   @@map("spaces")
 }

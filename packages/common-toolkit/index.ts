@@ -140,6 +140,13 @@ export const language = {
 	parseAcceptLanguage: LanguageModule.parseAcceptLanguage,
 } as const;
 
+// Password utilities
+export type {
+	PasswordPolicyResult,
+	PasswordPolicyRule,
+} from "./src/Password";
+export { validatePasswordPolicy } from "./src/Password";
+
 // es-toolkit utilities re-export for convenient access
 export {
 	// Additional utilities

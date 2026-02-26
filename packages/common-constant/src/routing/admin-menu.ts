@@ -85,6 +85,17 @@ export const ADMIN_PATHS = {
 	TEMPLATES_DETAIL: "/templates/[templateId]",
 	TEMPLATES_EDIT: "/templates/[templateId]/edit",
 
+	// AI 폼 템플릿 (AIFormTemplate 엔티티)
+	AI_FORM_TEMPLATES: "/ai-form-templates",
+	AI_FORM_TEMPLATES_NEW: "/ai-form-templates/new",
+	AI_FORM_TEMPLATES_DETAIL: "/ai-form-templates/[aiFormTemplateId]",
+	AI_FORM_TEMPLATES_EDIT: "/ai-form-templates/[aiFormTemplateId]/edit",
+
+	// 문의 (Inquiry 엔티티)
+	INQUIRIES: "/inquiries",
+	INQUIRIES_NEW: "/inquiries/new",
+	INQUIRIES_DETAIL: "/inquiries/[inquiryId]",
+
 	// 인증
 	AUTH_LOGIN: "/auth/login",
 } as const;
@@ -107,7 +118,9 @@ export const ADMIN_SUBJECTS = {
 	MENU_EXERCISES: "menu:exercises",
 	MENU_ROUTINES: "menu:routines",
 	MENU_TEMPLATES: "menu:templates",
+	MENU_AI_FORM_TEMPLATES: "menu:ai-form-templates",
 	MENU_ROLES: "menu:roles",
+	MENU_INQUIRIES: "menu:inquiries",
 
 	// 2depth - 회원
 	MENU_USERS_LIST: "menu:users:list",
@@ -125,6 +138,9 @@ export const ADMIN_SUBJECTS = {
 	// 2depth - 템플릿
 	MENU_TEMPLATES_LIST: "menu:templates:list",
 
+	// 2depth - AI 폼 템플릿
+	MENU_AI_FORM_TEMPLATES_LIST: "menu:ai-form-templates:list",
+
 	// 2depth - 권한 관리
 	MENU_ROLES_LIST: "menu:roles:list",
 	MENU_ROLE_GROUPS: "menu:role-groups",
@@ -137,6 +153,9 @@ export const ADMIN_SUBJECTS = {
 	MENU_ACTIONS_LIST: "menu:actions:list",
 	MENU_SUBJECTS: "menu:subjects",
 	MENU_SUBJECTS_LIST: "menu:subjects:list",
+
+	// 2depth - 문의 관리
+	MENU_INQUIRIES_LIST: "menu:inquiries:list",
 } as const;
 
 /**
@@ -239,7 +258,41 @@ export const ADMIN_NAV_ITEMS: NavItemConfig[] = [
 		],
 	},
 
-	// 7. 권한 관리
+	// 7. AI 폼 템플릿
+	{
+		id: "ai-form-templates",
+		label: "AI 폼 템플릿",
+		icon: "Sparkles",
+		path: ADMIN_PATHS.AI_FORM_TEMPLATES,
+		subject: ADMIN_SUBJECTS.MENU_AI_FORM_TEMPLATES,
+		children: [
+			{
+				id: "ai-form-templates-list",
+				label: "폼 템플릿 목록",
+				path: ADMIN_PATHS.AI_FORM_TEMPLATES,
+				subject: ADMIN_SUBJECTS.MENU_AI_FORM_TEMPLATES_LIST,
+			},
+		],
+	},
+
+	// 8. 문의 관리
+	{
+		id: "inquiries",
+		label: "문의 관리",
+		icon: "MessageCircleQuestion",
+		path: ADMIN_PATHS.INQUIRIES,
+		subject: ADMIN_SUBJECTS.MENU_INQUIRIES,
+		children: [
+			{
+				id: "inquiries-list",
+				label: "문의 목록",
+				path: ADMIN_PATHS.INQUIRIES,
+				subject: ADMIN_SUBJECTS.MENU_INQUIRIES_LIST,
+			},
+		],
+	},
+
+	// 9. 권한 관리
 	{
 		id: "roles",
 		label: "권한 관리",
@@ -297,6 +350,6 @@ export const ADMIN_FAB_ACTIONS: FABAction[] = [];
  * 순서대로 하단 탭에 표시됩니다.
  * 마지막 "more"는 특수 처리되어 나머지 메뉴를 표시합니다.
  */
-export const BOTTOM_TAB_IDS = ["dashboard", "users", "more"] as const;
+export const BOTTOM_TAB_IDS = ["dashboard", "users", "inquiries", "more"] as const;
 
 export type BottomTabId = (typeof BOTTOM_TAB_IDS)[number];

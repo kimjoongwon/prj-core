@@ -251,6 +251,31 @@ apps/admin/web/src/app/[route]/
 
 - ui 컴포넌트를 만들 때는 mobx를 사용합니다
 
+### 폼 스키마 패턴
+
+**@cocrepo/schema를 활용한 검증 규칙 재사용**
+
+```typescript
+// 1. 백엔드 DTO에서 스키마 상속
+import { LoginSchema } from "@cocrepo/schema";
+
+export class OidcLoginPayloadDto extends LoginSchema {
+  @IsBoolean()
+  @IsOptional()
+  remember?: boolean;  // 추가 필드만 정의
+}
+
+// 2. 프론트엔드에서 검증 메시지 활용
+import { VALIDATION_MESSAGES } from "@cocrepo/schema";
+
+const error = VALIDATION_MESSAGES.EMAIL_FORMAT;
+```
+
+**장점**:
+- 프론트엔드/백엔드 검증 규칙 일관성
+- 중복 코드 감소
+- 검증 메시지 통일
+
 ### observer 필수 규칙
 
 **`"use client"` 컴포넌트는 반드시 `observer`로 감싸야 합니다.**

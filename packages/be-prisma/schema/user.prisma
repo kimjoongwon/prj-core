@@ -75,6 +75,15 @@ model User {
   createdAssets       Asset[]
   createdFolders      Folder[]
   createdAlbums       Album[]
+  // Inquiry 도메인
+  customerInquiries   Inquiry[]           @relation("InquiryCustomer")
+  assignedInquiries   Inquiry[]           @relation("InquiryAssignee")
+  inquiryMessages     InquiryMessage[]
+  inquiryParticipants InquiryParticipant[]
+  createdThreads      InquiryThread[]
+  // AI Form 도메인
+  createdAIFormTemplates   AIFormTemplate[]      @relation("AIFormTemplateCreator")
+  aiTemplateExecutions     AITemplateExecution[] @relation("AITemplateExecutionUser")
 
   @@map("users")
 }

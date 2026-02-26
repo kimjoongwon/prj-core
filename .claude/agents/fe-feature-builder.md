@@ -343,6 +343,31 @@ Pure UI → Widget → Feature → Page
 | `NotificationBell` | 알림 벨 | 알림 조회 API, 읽음 처리, 알림 상세 이동 |
 | `SearchBar` | 검색 바 | 검색 API, 자동완성, 검색 결과 페이지 이동 |
 
+### 폼 검증 메시지 상수 활용
+
+폼 관련 Feature에서는 `@cocrepo/schema`의 검증 메시지 상수를 활용합니다。
+
+```typescript
+import { VALIDATION_MESSAGES } from "@cocrepo/schema";
+
+// 검증 메시지 상수
+VALIDATION_MESSAGES.EMAIL_FORMAT    // "유효한 이메일 형식이 아닙니다"
+VALIDATION_MESSAGES.REQUIRED        // "필수 항목입니다"
+VALIDATION_MESSAGES.MIN_LENGTH      // "최소 {min}자 이상 입력해주세요"
+```
+
+**폼 Feature에서 활용 예시:**
+```tsx
+import { VALIDATION_MESSAGES } from "@cocrepo/schema";
+
+const validateForm = (email: string, password: string): string | null => {
+  if (!email) return VALIDATION_MESSAGES.REQUIRED;
+  if (!email.includes("@")) return VALIDATION_MESSAGES.EMAIL_FORMAT;
+  if (password.length < 8) return VALIDATION_MESSAGES.MIN_LENGTH;
+  return null;
+};
+```
+
 ### 스타일링 규칙
 
 | 허용 | 금지 |

@@ -29,8 +29,8 @@ export * from "./enums.js"
  * @example
  * ```
  * const prisma = new PrismaClient()
- * // Fetch zero or more Assets
- * const assets = await prisma.asset.findMany()
+ * // Fetch zero or more AIFormTemplates
+ * const aIFormTemplates = await prisma.aIFormTemplate.findMany()
  * ```
  * 
  * Read more in our [docs](https://pris.ly/d/client).
@@ -39,6 +39,21 @@ export const PrismaClient = $Class.getPrismaClientClass()
 export type PrismaClient<LogOpts extends Prisma.LogLevel = never, OmitOpts extends Prisma.PrismaClientOptions["omit"] = Prisma.PrismaClientOptions["omit"], ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = $Class.PrismaClient<LogOpts, OmitOpts, ExtArgs>
 export { Prisma }
 
+/**
+ * Model AIFormTemplate
+ * @displayName AI 폼 템플릿
+ */
+export type AIFormTemplate = Prisma.AIFormTemplateModel
+/**
+ * Model AIFormField
+ * @displayName AI 폼 필드
+ */
+export type AIFormField = Prisma.AIFormFieldModel
+/**
+ * Model AITemplateExecution
+ * @displayName AI 템플릿 실행
+ */
+export type AITemplateExecution = Prisma.AITemplateExecutionModel
 /**
  * Model Asset
  * @displayName 에셋
@@ -164,6 +179,46 @@ export type Ability = Prisma.AbilityModel
  * @displayName 권한 부여
  */
 export type Grant = Prisma.GrantModel
+/**
+ * Model Inquiry
+ * @displayName 문의
+ */
+export type Inquiry = Prisma.InquiryModel
+/**
+ * Model InquiryThread
+ * @displayName 문의 스레드
+ */
+export type InquiryThread = Prisma.InquiryThreadModel
+/**
+ * Model InquiryMessage
+ * @displayName 문의 메시지
+ */
+export type InquiryMessage = Prisma.InquiryMessageModel
+/**
+ * Model InquiryParticipant
+ * @displayName 문의 참여자
+ */
+export type InquiryParticipant = Prisma.InquiryParticipantModel
+/**
+ * Model InquiryAttachment
+ * @displayName 문의 첨부파일
+ */
+export type InquiryAttachment = Prisma.InquiryAttachmentModel
+/**
+ * Model InquiryTag
+ * @displayName 문의 태그
+ */
+export type InquiryTag = Prisma.InquiryTagModel
+/**
+ * Model SentimentAnalysis
+ * @displayName 감정 분석
+ */
+export type SentimentAnalysis = Prisma.SentimentAnalysisModel
+/**
+ * Model AIAgentLog
+ * @displayName AI 에이전트 로그
+ */
+export type AIAgentLog = Prisma.AIAgentLogModel
 /**
  * Model OidcClient
  * @displayName OIDC 클라이언트

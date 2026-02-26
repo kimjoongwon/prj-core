@@ -128,7 +128,7 @@ export default defineConfig({
     ? undefined
     : [
         {
-          command: "pnpm --filter=admin-web dev",
+          command: "pnpm --filter=admin-web start:dev",
           url: "http://localhost:3000/admin/auth/login",
           reuseExistingServer: !process.env.CI,
           timeout: 120000,

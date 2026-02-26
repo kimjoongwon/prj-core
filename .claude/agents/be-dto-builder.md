@@ -106,6 +106,43 @@ export class UserListResponseDto {
 
 Query DTO가 필요하면 `be-query-dto-builder`를 호출하세요.
 
+### 스키마 상속 패턴 (공통 검증 규칙 재사용)
+
+@cocrepo/schema의 스키마를 상속받아 DTO를 작성할 수 있습니다.
+
+```typescript
+import { LoginSchema } from "@cocrepo/schema";
+import { ApiProperty } from "@nestjs/swagger";
+import { IsBoolean, IsOptional } from "class-validator";
+
+// LoginSchema의 검증 규칙(@Email, @Password)을 상속받음
+export class OidcLoginPayloadDto extends LoginSchema {
+  @ApiProperty({ description: "이메일" })
+  email: string;  // @Email() 검증 자동 적용
+
+  @ApiProperty({ description: "비밀번호" })
+  password: string;  // @Password() 검증 자동 적용
+
+  // 추가 필드만 정의
+  @ApiPropertyOptional({ default: false })
+  @IsBoolean()
+  @IsOptional()
+  remember?: boolean;
+}
+```
+
+**언제 사용하는가?**
+- 로그인/회원가입 등 인증 관련 DTO
+- 공통 검증 규칙이 이미 @cocrepo/schema에 정의된 경우
+- 여러 DTO가 동일한 필드 검증 규칙을 공유할 때
+
+**@cocrepo/schema 주요 스키마:**
+
+| 스키마 | 필드 | 검증 규칙 |
+|--------|------|----------|
+| LoginSchema | email, password | @Email(), @Password() |
+| SignUpSchema | email, password, name | @Email(), @Password(), @String() |
+
 ---
 
 ## 프로세스

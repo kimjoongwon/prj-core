@@ -51,6 +51,7 @@ Admin 앱은 플랫폼의 관리자 콘솔입니다. 회원, 예약, 알림, 콘
 | GOAL-021 | ACT-001, ACT-002 | SLA 정책을 설정하여 응답/해결 시간을 추적하고 위반 시 알림을 받는다 | 높음 |
 | GOAL-022 | ACT-001, ACT-002 | 문의 채널(웹, 이메일, 채팅, SMS)을 설정하여 옴니채널 지원을 관리한다 | 중간 |
 | GOAL-023 | ACT-001, ACT-002 | AI 기능(LLM 자동 해결, 응답 초안, 감정 분석)을 활용하여 상담 효율을 높인다 | 높음 |
+| GOAL-024 | ACT-001, ACT-002 | AI 폼 템플릿을 생성/관리하여 AI가 폼 필드를 자동으로 채우도록 설정한다 | 높음 |
 
 ## 도메인 목록
 
@@ -80,6 +81,9 @@ Admin 앱은 플랫폼의 관리자 콘솔입니다. 회원, 예약, 알림, 콘
 | 지식베이스 | `/knowledge-base` | FAQ, 가이드 문서 관리. AI 자동 해결 시 참조 | 기획 완료 |
 | SLA 설정 | `/inquiries/sla` | SLA 정책 관리 (응답/해결 시간, 우선순위별 정책) | 기획 완료 |
 | 채널 설정 | `/inquiries/channels` | 문의 채널 설정 (웹 폼, 이메일, 채팅 위젯, SMS) | 기획 완료 |
+| AI 폼 템플릿 | `/ai-form-templates` | AI가 폼 필드를 자동으로 채우기 위한 템플릿 관리. OpenAI/Anthropic 지원 | 기획 완료 |
+| AI 폼 템플릿 상세 | `/ai-form-templates/[templateId]` | 템플릿 상세 조회, 필드 설정, 프롬프트 관리, 미리보기 | 기획 완료 |
+| AI 폼 템플릿 등록 | `/ai-form-templates/new` | 새 템플릿 등록, 도메인 선택, 필드 설정 | 기획 완료 |
 
 ## Asset 도메인 맥락
 
@@ -225,6 +229,51 @@ NEW → OPEN → IN_PROGRESS → WAITING_CUSTOMER → RESOLVED → CLOSED
 | CLOSED | 문의 종료 (재오픈 불가) |
 | ESCALATED | 상위 레벨로 에스컬레이션 |
 
+## AI Form Template 도메인 맥락
+
+AI Form Template은 AI가 폼 필드를 자동으로 채우기 위한 템플릿을 관리하는 도메인입니다. 관리자가 특정 도메인(Member, Inquiry, Role 등)을 대상으로 AI가 채울 필드와 각 필드별 프롬프트를 설정할 수 있습니다.
+
+```
+Space
+  │
+  └─── AIFormTemplate (AI 폼 템플릿)
+        │
+        ├─── AIFormField (필드 설정)
+        │     - fieldName: 대상 필드명
+        │     - prompt: AI 프롬프트
+        │     - fieldType: TEXT, TEXTAREA, SELECT 등
+        │     - isRequired: 필수 여부
+        │     - options: 선택 옵션 (SELECT용)
+        │     - validationRegex: 유효성 검증 정규식
+        │
+        └─── AITemplateExecution (실행 이력)
+              - userInput: 사용자 추가 프롬프트
+              - result: AI 생성 결과
+              - status: SUCCESS, FAILED 등
+              - tokensUsed: 토큰 사용량
+```
+
+### 핵심 원칙
+
+1. **멀티 제공자 지원**: OpenAI(GPT-4, GPT-3.5)와 Anthropic(Claude) 지원
+2. **도메인별 템플릿**: 특정 Entity(Member, Inquiry, Role 등)를 대상으로 템플릿 생성
+3. **필드 단위 프롬프트**: 각 필드마다 개별 프롬프트 설정 가능
+4. **미리보기 지원**: 실제 적용 전 AI 생성 결과 미리보기
+5. **사용자 프롬프트**: 템플릿 선택 시 사용자가 추가 프롬프트 입력 가능
+
+### AI 제공자 설정
+
+| 제공자 | 지원 모델 | 특징 |
+|--------|----------|------|
+| OpenAI | gpt-4, gpt-4-turbo, gpt-3.5-turbo | 빠른 응답, 다양한 모델 |
+| Anthropic | claude-3-opus, claude-3-sonnet, claude-3-haiku | 긴 컨텍스트, 안전한 생성 |
+
+### 템플릿 사용 시나리오
+
+1. **회원 등록 폼**: 회원 기본 정보(이름, 연락처, 이메일 등)를 AI가 자동 생성
+2. **문의 응대**: 문의 내용 기반으로 적절한 응답 초안 생성
+3. **역할 설명**: 역할명 기반으로 역할 설명, 권한 추천 자동 생성
+
 ## 레이아웃 구조
 
 ```
@@ -262,3 +311,4 @@ AdminLayout
 | 2026-02-22 | 도메인 명칭 오기 정정: GOAL-014 및 도메인 목록을 Asset(`/assets`) 기준으로 수정 | OpenCode |
 | 2026-02-22 | Asset 도메인 전체 기획: GOAL-015/016/017 추가, Asset 도메인 맥락 섹션 추가, 폴더/앨범 도메인 항목 추가 | orch-requirement |
 | 2026-02-25 | Inquiry 도메인 추가 (GOAL-018~023, ACT-004 상담원 역할, Inquiry 도메인 맥락 섹션) | orch-requirement |
+| 2026-02-26 | AI Form Template 도메인 추가 (GOAL-024, AI Form Template 도메인 맥락 섹션) | orch-requirement |

@@ -1,6 +1,6 @@
 import { SpaceContext } from "@cocrepo/context";
 import { USER_ERRORS } from "@cocrepo/constant";
-import { validatePasswordPolicy } from "@cocrepo/be-common";
+import { validatePasswordPolicy } from "@cocrepo/toolkit";
 import type { QueryUsersDto } from "@cocrepo/dto";
 import type { Prisma } from "@cocrepo/prisma";
 import { UsersRepository } from "@cocrepo/repository";

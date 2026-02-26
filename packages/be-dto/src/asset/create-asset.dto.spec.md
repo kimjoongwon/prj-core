@@ -47,7 +47,7 @@
 const asset = new Asset();
 asset.folderId = dto.folderId;
 asset.kind = dto.kind;
-asset.status = AssetStatus.READY; // 업로드 완료 상태
+asset.status = AssetStatus.UPLOADING; // 기본 업로드 진행 상태
 asset.originalName = dto.originalName;
 asset.storageKey = dto.storageKey;
 asset.mimeType = dto.mimeType;
@@ -116,3 +116,4 @@ return asset;
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
 | 2026-02-22 | 초기 생성 | be-dto-builder |
+| 2026-02-26 | Stage 1 정합화: 기본 상태를 READY에서 UPLOADING으로 수정 | orch-requirement |

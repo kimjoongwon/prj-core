@@ -207,10 +207,11 @@ interface AssetTypeInfoProps {
 
 ## 상위 기획서
 
-- `apps/admin/src/app/(admin)/assets/[assetId]/page.spec.md`
+- `apps/admin/web/src/app/(admin)/assets/[assetId]/page.spec.md`
 
 ## 변경 이력
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
 | 2026-02-22 | 초기 생성 | req-widget-planner |
+| 2026-02-26 | Stage 5 정합화: assets 페이지-컴포넌트 스펙 경로/명칭 일치화 | orch-screen-planner |

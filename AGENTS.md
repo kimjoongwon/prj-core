@@ -883,6 +883,41 @@ Stage 6: 페이지 (페이지별)   → fe-page-builder → fe-api-integrator �
 Stage 7: E2E 검증 (선택)    → qa-be-e2e-testing → qa-fe-e2e-testing → [리뷰]
 ```
 
+#### Stage 3 Facade 판단 가이드
+
+- `be-facade-builder`는 모든 도메인에 항상 사용하지 않고, 아래 조건이 충족될 때만 사용합니다.
+- 다중 Service 조합이 필요하고, 순차 흐름/트랜잭션 경계/보상 처리가 핵심인 비즈니스 플로우는 `be-facade-builder` 대상입니다.
+
+- 판정 체크리스트
+  - 여러 Service 호출이 필수인가? `Yes/No`
+  - 호출 순서 및 분기 규칙이 있는가? `Yes/No`
+  - 실패 보상/트랜잭션 경계가 필요한가? `Yes/No`
+  - 여러 도메인 결과를 조합해 계산/검증해야 하나? `Yes/No`
+  - Controller가 비즈니스 조합을 담당할 정도로 복잡한가? `Yes/No`
+  - 동일 조합 흐름이 여러 API에서 반복되는가? `Yes/No`
+
+- 판정 규칙
+  - `Yes`가 3개 이상: `be-facade-builder` 적용
+  - `Yes`가 2개 이하: `be-service-builder` 위주로 진행
+
+- 기획서에 남길 기본 스니펫
+
+```md
+## Backend Layering
+
+### Facade 판정
+- 다중 Service 조합 필요: [Yes/No]
+- 호출 순서/분기 규칙 존재: [Yes/No]
+- 트랜잭션/보상 필요: [Yes/No]
+- 복합 도메인 조합 계산 필요: [Yes/No]
+- Controller 위임이 필요한 비즈니스 흐름: [Yes/No]
+- 재사용 가능한 조합 로직 존재: [Yes/No]
+
+### 판정 결과
+- [ ] be-service-only
+- [ ] be-facade-builder
+```
+
 > 화살표는 의존성 순서를 의미합니다. 동일 Stage 내부의 독립 작업은 `parallel=auto`에서 병렬 fan-out 가능합니다.
 
 #### 기획서 폴더 구조

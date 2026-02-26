@@ -3,7 +3,7 @@
 > 생성일: 2026-02-22
 > 타입: page
 > 경로: `/assets/[assetId]`
-> 파일: `apps/admin/src/app/(admin)/assets/[assetId]/page.tsx`
+> 파일: `apps/admin/web/src/app/(admin)/assets/[assetId]/page.tsx`
 
 ## L3: 기능 (Feature)
 
@@ -149,9 +149,30 @@ PageSurface (title="에셋 상세", backTo="/assets")
 | 시점 | API | 캐싱 |
 |------|-----|------|
 | 진입 | `GET /api/v1/assets/{assetId}` | React Query staleTime 30s |
-| 진입 | `GET /api/v1/assets/{assetId}/derivatives` | 30s |
-| 폴더 이동 | `PATCH /api/v1/assets/{assetId}` | 캐시 무효화 |
+| 폴더 이동 | `PATCH /api/v1/assets/{assetId}/move` | 캐시 무효화 |
 | 삭제 | `DELETE /api/v1/assets/{assetId}` | 캐시 무효화 |
+
+## 페이지 파일 구조 (Stage 4)
+
+```text
+apps/admin/web/src/app/(admin)/assets/[assetId]/
+├── page.tsx          # 서버 컴포넌트 (Prefetch + HydrationBoundary)
+├── _client.tsx       # 클라이언트 컴포넌트 (observer)
+├── _prefetch.ts      # prefetchGetAssetByIdQuery
+└── hooks/
+    └── useAssetDetailPage.ts
+```
+
+### 서버 사이드 Prefetch 범위
+
+- `GET /api/v1/assets/{assetId}`
+
+### 클라이언트 핸들러 네이밍
+
+- `onClickBackButton`
+- `onClickMoveAssetButton`
+- `onClickDeleteAssetButton`
+- `onClickDownloadAssetButton`
 
 ## 이벤트 핸들러
 
@@ -165,15 +186,15 @@ PageSurface (title="에셋 상세", backTo="/assets")
 
 ## 구현 체크리스트
 
-- [ ] page.tsx (서버 컴포넌트)
-- [ ] _client.tsx (클라이언트 컴포넌트)
-- [ ] _prefetch.ts (에셋 상세 + 파생 리소스)
+- [x] page.tsx (서버 컴포넌트)
+- [x] _client.tsx (클라이언트 컴포넌트)
+- [x] _prefetch.ts (에셋 상세 + 파생 리소스)
 - [ ] hooks/useAssetDetailHandlers.ts
 - [ ] AssetPreview Widget
 - [ ] AssetBasicInfo Widget
 - [ ] AssetTypeInfo Widget
 - [ ] DerivativeList Widget
-- [ ] E2E 테스트 (Playwright)
+- [x] E2E 테스트 (Playwright)
 
 ## 테스트 케이스
 
@@ -240,11 +261,15 @@ PageSurface (title="에셋 상세", backTo="/assets")
 
 ## 상위 기획서
 
-- `apps/admin/src/app/(admin)/app.spec.md`
-- `apps/admin/src/app/(admin)/assets/page.spec.md`
+- `apps/admin/web/src/app/(admin)/app.spec.md`
+- `apps/admin/web/src/app/(admin)/assets/page.spec.md`
 
 ## 변경 이력
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
 | 2026-02-22 | 초기 생성 | orch-requirement |
+| 2026-02-26 | Stage 1 정합화: 경로 메타데이터를 apps/admin/web 기준으로 수정 | orch-requirement |
+| 2026-02-26 | Stage 4 정합화: API 경로 및 SSR Prefetch 구조 보강 | orch-screen-planner |
+| 2026-02-26 | Stage 6 구현: Orval 인터페이스 기반 상세 페이지(page/_client/_prefetch) 구현 | fe-page-builder |
+| 2026-02-26 | Stage 7 구현: assets 상세 page.e2e.ts 추가 | qa-fe-e2e-testing |

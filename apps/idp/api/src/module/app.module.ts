@@ -8,7 +8,11 @@ import {
 	SpaceScopeInterceptor,
 } from "@cocrepo/be-common";
 import { SpacesRepository } from "@cocrepo/repository";
-import { I18nModule, SpaceContext, SpacesService } from "@cocrepo/service";
+import {
+	I18nModule,
+	SpaceContext,
+	SpacesService,
+} from "@cocrepo/service";
 import {
 	Logger,
 	type MiddlewareConsumer,
@@ -105,7 +109,7 @@ import { SecurityPolicyModule } from "./security-policy";
 		},
 	],
 })
-export class AppModule implements OnModuleInit {
+export class AppModule implements NestModule, OnModuleInit {
 	private readonly logger = new Logger(AppModule.name);
 
 	async onModuleInit() {

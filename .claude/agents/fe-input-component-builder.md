@@ -375,3 +375,24 @@ export const CoinDatePicker = observer(...);
 3. **타입 안전성** - Generic `<T>`를 활용한 타입 추론
 4. **onChange 시그니처** - 이벤트 객체가 아닌 값만 전달
 5. **재사용성** - Pure Input은 MobX 없이도 사용 가능해야 함
+
+### 검증 메시지 상수 활용
+
+@cocrepo/schema의 검증 메시지 상수를 활용하여 일관된 에러 메시지를 표시합니다。
+
+```typescript
+import { VALIDATION_MESSAGES } from "@cocrepo/schema";
+
+// 검증 메시지 상수
+VALIDATION_MESSAGES.EMAIL_FORMAT    // "유효한 이메일 형식이 아닙니다"
+VALIDATION_MESSAGES.REQUIRED        // "필수 항목입니다"
+VALIDATION_MESSAGES.MIN_LENGTH      // "최소 {min}자 이상 입력해주세요"
+VALIDATION_MESSAGES.MAX_LENGTH      // "최대 {max}자까지 입력 가능합니다"
+```
+
+**Stateful Input에서 활용 예시:**
+```typescript
+const getErrorMessage = (field: string, errorType: string): string => {
+  return VALIDATION_MESSAGES[errorType] ?? "잘못된 입력입니다";
+};
+```

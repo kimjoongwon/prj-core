@@ -69,11 +69,9 @@ export {
 } from "./pipe";
 // Providers
 export { GeneratorProvider } from "./provider";
-// Strategies
-export { JwtStrategy } from "./strategy";
+// Strategies - JwtStrategy는 be-service로 이동
+// export { JwtStrategy } from "./strategy";
 export type {
-	PasswordPolicyResult,
-	PasswordPolicyRule,
 	ResponseWrapOptions,
 	WrappedResponse,
 } from "./util";
@@ -84,6 +82,8 @@ export {
 	isRootSpaceCategory,
 	isWrappedResponse,
 	RESPONSE_WRAPPER_FLAG,
-	validatePasswordPolicy,
 	wrapResponse,
 } from "./util";
+// Password utilities moved to common-toolkit
+// export { validatePasswordPolicy } from "./util";
+// export type { PasswordPolicyResult, PasswordPolicyRule } from "./util";

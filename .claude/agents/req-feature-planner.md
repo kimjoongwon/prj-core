@@ -93,6 +93,29 @@ packages/fe-ui/src/components/feature/[FeatureName]/index.spec.md
 | 사이드바 | 네비게이션 + Store | SideNav |
 | 검색 바 | 검색 + Store | SearchBar |
 | 페이징 | 페이지 + Store | PaginationFeature |
+| 폼 | 입력 + 검증 + 제출 | LoginForm, SignUpForm |
+
+### 폼 Feature 검증 규칙 참조
+
+폼 Feature 기획 시 `@cocrepo/schema`의 기존 스키마를 참조합니다。
+
+**기획서 작성 예시:**
+```markdown
+## 검증 규칙
+- **이메일**: @cocrepo/schema LoginSchema.email 참조
+  - 형식: 이메일 형식
+  - 필수 여부: 필수
+- **비밀번호**: @cocrepo/schema LoginSchema.password 참조
+  - 최소 길이: 8자
+  - 필수 여부: 필수
+```
+
+**@cocrepo/schema 스키마 목록:**
+
+| 스키마 | 용도 | 필드 |
+|--------|------|------|
+| LoginSchema | 로그인 폼 | email, password |
+| SignUpSchema | 회원가입 폼 | email, password, name |
 
 ### Feature 명명 규칙
 

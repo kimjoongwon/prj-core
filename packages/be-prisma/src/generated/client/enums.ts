@@ -9,6 +9,54 @@
 * 🟢 You can import this file directly.
 */
 
+export const AIProvider = {
+  OPENAI: 'OPENAI',
+  ANTHROPIC: 'ANTHROPIC'
+} as const
+
+export type AIProvider = (typeof AIProvider)[keyof typeof AIProvider]
+
+
+export const AITemplateStatus = {
+  DRAFT: 'DRAFT',
+  ACTIVE: 'ACTIVE',
+  INACTIVE: 'INACTIVE',
+  ARCHIVED: 'ARCHIVED'
+} as const
+
+export type AITemplateStatus = (typeof AITemplateStatus)[keyof typeof AITemplateStatus]
+
+
+export const FormFieldType = {
+  TEXT: 'TEXT',
+  TEXTAREA: 'TEXTAREA',
+  NUMBER: 'NUMBER',
+  SELECT: 'SELECT',
+  MULTI_SELECT: 'MULTI_SELECT',
+  CHECKBOX: 'CHECKBOX',
+  RADIO: 'RADIO',
+  DATE: 'DATE',
+  DATETIME: 'DATETIME',
+  EMAIL: 'EMAIL',
+  PHONE: 'PHONE',
+  URL: 'URL'
+} as const
+
+export type FormFieldType = (typeof FormFieldType)[keyof typeof FormFieldType]
+
+
+export const ExecutionStatus = {
+  PENDING: 'PENDING',
+  RUNNING: 'RUNNING',
+  SUCCESS: 'SUCCESS',
+  FAILED: 'FAILED',
+  TIMEOUT: 'TIMEOUT',
+  CANCELLED: 'CANCELLED'
+} as const
+
+export type ExecutionStatus = (typeof ExecutionStatus)[keyof typeof ExecutionStatus]
+
+
 export const AssetKind = {
   IMAGE: 'IMAGE',
   VIDEO: 'VIDEO',
@@ -157,6 +205,138 @@ export const GroupTypes = {
 } as const
 
 export type GroupTypes = (typeof GroupTypes)[keyof typeof GroupTypes]
+
+
+export const InquiryCategory = {
+  GENERAL: 'GENERAL',
+  DELIVERY: 'DELIVERY',
+  PAYMENT: 'PAYMENT',
+  REFUND: 'REFUND',
+  PRODUCT: 'PRODUCT',
+  ACCOUNT: 'ACCOUNT',
+  TECHNICAL: 'TECHNICAL',
+  COMPLAINT: 'COMPLAINT',
+  OTHER: 'OTHER'
+} as const
+
+export type InquiryCategory = (typeof InquiryCategory)[keyof typeof InquiryCategory]
+
+
+export const InquiryChannel = {
+  WEB: 'WEB',
+  EMAIL: 'EMAIL',
+  CHAT: 'CHAT',
+  SMS: 'SMS',
+  PHONE: 'PHONE',
+  WALK_IN: 'WALK_IN'
+} as const
+
+export type InquiryChannel = (typeof InquiryChannel)[keyof typeof InquiryChannel]
+
+
+export const InquiryStatus = {
+  NEW: 'NEW',
+  OPEN: 'OPEN',
+  IN_PROGRESS: 'IN_PROGRESS',
+  WAITING_CUSTOMER: 'WAITING_CUSTOMER',
+  RESOLVED: 'RESOLVED',
+  CLOSED: 'CLOSED',
+  ESCALATED: 'ESCALATED'
+} as const
+
+export type InquiryStatus = (typeof InquiryStatus)[keyof typeof InquiryStatus]
+
+
+export const InquiryPriority = {
+  LOW: 'LOW',
+  NORMAL: 'NORMAL',
+  HIGH: 'HIGH',
+  URGENT: 'URGENT'
+} as const
+
+export type InquiryPriority = (typeof InquiryPriority)[keyof typeof InquiryPriority]
+
+
+export const InquirySource = {
+  ONLINE: 'ONLINE',
+  OFFLINE: 'OFFLINE'
+} as const
+
+export type InquirySource = (typeof InquirySource)[keyof typeof InquirySource]
+
+
+export const InquiryParticipantRole = {
+  CUSTOMER: 'CUSTOMER',
+  AGENT: 'AGENT',
+  SUPERVISOR: 'SUPERVISOR',
+  VIEWER: 'VIEWER'
+} as const
+
+export type InquiryParticipantRole = (typeof InquiryParticipantRole)[keyof typeof InquiryParticipantRole]
+
+
+export const SenderType = {
+  USER: 'USER',
+  AI: 'AI',
+  SYSTEM: 'SYSTEM'
+} as const
+
+export type SenderType = (typeof SenderType)[keyof typeof SenderType]
+
+
+export const SentimentType = {
+  POSITIVE: 'POSITIVE',
+  NEUTRAL: 'NEUTRAL',
+  NEGATIVE: 'NEGATIVE'
+} as const
+
+export type SentimentType = (typeof SentimentType)[keyof typeof SentimentType]
+
+
+export const ThreadStatus = {
+  ACTIVE: 'ACTIVE',
+  RESOLVED: 'RESOLVED',
+  CLOSED: 'CLOSED'
+} as const
+
+export type ThreadStatus = (typeof ThreadStatus)[keyof typeof ThreadStatus]
+
+
+export const MessageContentType = {
+  TEXT: 'TEXT',
+  HTML: 'HTML',
+  MARKDOWN: 'MARKDOWN',
+  IMAGE: 'IMAGE',
+  FILE: 'FILE',
+  SYSTEM: 'SYSTEM'
+} as const
+
+export type MessageContentType = (typeof MessageContentType)[keyof typeof MessageContentType]
+
+
+export const AttachmentFileType = {
+  IMAGE: 'IMAGE',
+  VIDEO: 'VIDEO',
+  AUDIO: 'AUDIO',
+  DOCUMENT: 'DOCUMENT',
+  ARCHIVE: 'ARCHIVE',
+  OTHER: 'OTHER'
+} as const
+
+export type AttachmentFileType = (typeof AttachmentFileType)[keyof typeof AttachmentFileType]
+
+
+export const AIAgentAction = {
+  DRAFT_GENERATION: 'DRAFT_GENERATION',
+  AUTO_CLASSIFICATION: 'AUTO_CLASSIFICATION',
+  SENTIMENT_ANALYSIS: 'SENTIMENT_ANALYSIS',
+  AUTO_RESPONSE: 'AUTO_RESPONSE',
+  KNOWLEDGE_SEARCH: 'KNOWLEDGE_SEARCH',
+  SUMMARIZATION: 'SUMMARIZATION',
+  TRANSLATION: 'TRANSLATION'
+} as const
+
+export type AIAgentAction = (typeof AIAgentAction)[keyof typeof AIAgentAction]
 
 
 export const TemplateType = {

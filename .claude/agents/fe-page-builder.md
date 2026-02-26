@@ -164,6 +164,7 @@ export const LoginPage = observer(
 ```tsx
 // apps/admin/web/app/auth/login/hooks/useAuthLoginPage.ts
 import { useLogin } from "@cocrepo/api";
+import { VALIDATION_MESSAGES } from "@cocrepo/schema";
 import { useLocalObservable } from "mobx-react-lite";
 import { useRouter } from "next/navigation";
 
@@ -203,6 +204,16 @@ export const useAuthLoginPage = () => {
     onChangePassword,
     isLoading: loginMutation.isPending,
   };
+};
+```
+
+**검증 메시지 상수 활용:**
+```tsx
+import { VALIDATION_MESSAGES } from "@cocrepo/schema";
+
+// 검증 에러 메시지 표시 시 상수 사용
+const getErrorMessage = (errorType: string): string => {
+  return VALIDATION_MESSAGES[errorType] ?? "알 수 없는 오류가 발생했습니다";
 };
 ```
 

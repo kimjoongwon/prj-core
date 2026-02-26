@@ -3,7 +3,7 @@
 > 생성일: 2026-02-22
 > 타입: page
 > 경로: `/assets`
-> 파일: `apps/admin/src/app/(admin)/assets/page.tsx`
+> 파일: `apps/admin/web/src/app/(admin)/assets/page.tsx`
 
 ## L3: 기능 (Feature)
 
@@ -96,7 +96,7 @@ PageSurface (title="에셋", actions=[업로드 버튼, 폴더 생성 버튼])
 └── SectionSurface
     ├── FolderTree (좌측 사이드바, 240px)
     │   └── TreeView (계층적 폴더 구조)
-    └── AssetExplorer (우측 메인)
+    └── AssetBrowser (우측 메인)
         ├── Toolbar
         │   ├── SearchInput
         │   ├── TypeFilter (Dropdown)
@@ -109,11 +109,11 @@ PageSurface (title="에셋", actions=[업로드 버튼, 폴더 생성 버튼])
 
 | 영역 | 컴포넌트 | 기획서 |
 |------|----------|--------|
-| 좌측 | FolderTree | `AssetFolderTree` Widget |
+| 좌측 | FolderTree | `FolderTree` Widget |
 | 우측 상단 | Toolbar | Search, Filter, ViewToggle |
-| 우측 메인 | AssetGrid | `AssetExplorer` Feature |
+| 우측 메인 | AssetGrid | `AssetBrowser` Feature |
 | 개별 카드 | AssetCard | `AssetCard` Widget |
-| 미리보기 | AssetPreviewModal | `AssetPreviewModal` Widget |
+| 미리보기 | PreviewModal | `PreviewModal` Widget |
 | 업로드 | AssetUploader | `AssetUploader` Feature |
 
 ### AssetGrid 아이템 정보
@@ -158,6 +158,30 @@ PageSurface (title="에셋", actions=[업로드 버튼, 폴더 생성 버튼])
 | 업로드 | `POST /api/v1/assets` | 캐시 무효화 |
 | 삭제 | `DELETE /api/v1/assets/{id}` | 캐시 무효화 |
 
+## 페이지 파일 구조 (Stage 4)
+
+```text
+apps/admin/web/src/app/(admin)/assets/
+├── page.tsx          # 서버 컴포넌트 (Prefetch + HydrationBoundary)
+├── _client.tsx       # 클라이언트 컴포넌트 (observer)
+├── _prefetch.ts      # prefetchGetAssetsQuery, prefetchGetFoldersQuery
+└── hooks/
+    └── useAssetsPage.ts
+```
+
+### 서버 사이드 Prefetch 범위
+
+- `GET /api/v1/assets?folderId={rootFolderId}`
+- `GET /api/v1/folders`
+
+### 클라이언트 핸들러 네이밍
+
+- `onClickUploadButton`
+- `onChangeSearchKeyword`
+- `onClickAssetCard`
+- `onClickDeleteAssetsButton`
+- `onClickCompletePickerButton`
+
 ## 이벤트 핸들러
 
 | 이벤트 | 동작 |
@@ -174,18 +198,18 @@ PageSurface (title="에셋", actions=[업로드 버튼, 폴더 생성 버튼])
 
 ## 구현 체크리스트
 
-- [ ] page.tsx (서버 컴포넌트)
-- [ ] _client.tsx (클라이언트 컴포넌트)
-- [ ] _prefetch.ts (폴더 트리 + 루트 폴더 에셋)
+- [x] page.tsx (서버 컴포넌트)
+- [x] _client.tsx (클라이언트 컴포넌트)
+- [x] _prefetch.ts (폴더 트리 + 루트 폴더 에셋)
 - [ ] hooks/useAssetHandlers.ts
-- [ ] AssetFolderTree Widget
+- [ ] FolderTree Widget
 - [ ] AssetCard Widget
 - [ ] AssetGrid Widget
-- [ ] AssetExplorer Feature
+- [ ] AssetBrowser Feature
 - [ ] AssetUploader Feature
-- [ ] AssetPreviewModal Widget
+- [ ] PreviewModal Widget
 - [ ] AssetPicker Feature (재사용 컴포넌트)
-- [ ] E2E 테스트 (Playwright)
+- [x] E2E 테스트 (Playwright)
 
 ## 테스트 케이스
 
@@ -244,10 +268,15 @@ PageSurface (title="에셋", actions=[업로드 버튼, 폴더 생성 버튼])
 
 ## 상위 기획서
 
-- `apps/admin/src/app/(admin)/app.spec.md`
+- `apps/admin/web/src/app/(admin)/app.spec.md`
 
 ## 변경 이력
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
 | 2026-02-22 | 초기 생성 | orch-requirement |
+| 2026-02-26 | Stage 1 정합화: 경로 메타데이터를 apps/admin/web 기준으로 수정 | orch-requirement |
+| 2026-02-26 | Stage 4 정합화: SSR Prefetch 구조와 핸들러 네이밍 규칙 보강 | orch-screen-planner |
+| 2026-02-26 | Stage 5 정합화: assets 페이지-컴포넌트 스펙 경로/명칭 일치화 | orch-screen-planner |
+| 2026-02-26 | Stage 6 구현: Orval 인터페이스 기반 목록 페이지(page/_client/_prefetch) 구현 | fe-page-builder |
+| 2026-02-26 | Stage 7 구현: assets 목록 page.e2e.ts 추가 | qa-fe-e2e-testing |

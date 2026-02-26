@@ -51,6 +51,9 @@ export const AnyNull = runtime.AnyNull
 
 
 export const ModelName = {
+  AIFormTemplate: 'AIFormTemplate',
+  AIFormField: 'AIFormField',
+  AITemplateExecution: 'AITemplateExecution',
   Asset: 'Asset',
   Image: 'Image',
   Video: 'Video',
@@ -76,6 +79,14 @@ export const ModelName = {
   Action: 'Action',
   Ability: 'Ability',
   Grant: 'Grant',
+  Inquiry: 'Inquiry',
+  InquiryThread: 'InquiryThread',
+  InquiryMessage: 'InquiryMessage',
+  InquiryParticipant: 'InquiryParticipant',
+  InquiryAttachment: 'InquiryAttachment',
+  InquiryTag: 'InquiryTag',
+  SentimentAnalysis: 'SentimentAnalysis',
+  AIAgentLog: 'AIAgentLog',
   OidcClient: 'OidcClient',
   OidcModel: 'OidcModel',
   Role: 'Role',
@@ -118,6 +129,77 @@ export const TransactionIsolationLevel = {
 } as const
 
 export type TransactionIsolationLevel = (typeof TransactionIsolationLevel)[keyof typeof TransactionIsolationLevel]
+
+
+export const AIFormTemplateScalarFieldEnum = {
+  id: 'id',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  removedAt: 'removedAt',
+  spaceId: 'spaceId',
+  name: 'name',
+  description: 'description',
+  targetDomain: 'targetDomain',
+  targetEntity: 'targetEntity',
+  aiProvider: 'aiProvider',
+  model: 'model',
+  systemPrompt: 'systemPrompt',
+  status: 'status',
+  priority: 'priority',
+  allowUserPrompt: 'allowUserPrompt',
+  maxTokens: 'maxTokens',
+  temperature: 'temperature',
+  metadata: 'metadata',
+  createdById: 'createdById'
+} as const
+
+export type AIFormTemplateScalarFieldEnum = (typeof AIFormTemplateScalarFieldEnum)[keyof typeof AIFormTemplateScalarFieldEnum]
+
+
+export const AIFormFieldScalarFieldEnum = {
+  id: 'id',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  templateId: 'templateId',
+  fieldName: 'fieldName',
+  fieldLabel: 'fieldLabel',
+  fieldType: 'fieldType',
+  prompt: 'prompt',
+  isRequired: 'isRequired',
+  defaultValue: 'defaultValue',
+  validationRegex: 'validationRegex',
+  validationMessage: 'validationMessage',
+  maxLength: 'maxLength',
+  options: 'options',
+  order: 'order',
+  groupId: 'groupId',
+  metadata: 'metadata'
+} as const
+
+export type AIFormFieldScalarFieldEnum = (typeof AIFormFieldScalarFieldEnum)[keyof typeof AIFormFieldScalarFieldEnum]
+
+
+export const AITemplateExecutionScalarFieldEnum = {
+  id: 'id',
+  createdAt: 'createdAt',
+  templateId: 'templateId',
+  userId: 'userId',
+  spaceId: 'spaceId',
+  userInput: 'userInput',
+  inputContext: 'inputContext',
+  result: 'result',
+  status: 'status',
+  errorMessage: 'errorMessage',
+  tokensUsed: 'tokensUsed',
+  executionTimeMs: 'executionTimeMs',
+  aiProvider: 'aiProvider',
+  model: 'model',
+  isApplied: 'isApplied',
+  appliedAt: 'appliedAt',
+  targetEntityId: 'targetEntityId'
+} as const
+
+export type AITemplateExecutionScalarFieldEnum = (typeof AITemplateExecutionScalarFieldEnum)[keyof typeof AITemplateExecutionScalarFieldEnum]
 
 
 export const AssetScalarFieldEnum = {
@@ -512,6 +594,167 @@ export const GrantScalarFieldEnum = {
 } as const
 
 export type GrantScalarFieldEnum = (typeof GrantScalarFieldEnum)[keyof typeof GrantScalarFieldEnum]
+
+
+export const InquiryScalarFieldEnum = {
+  id: 'id',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  removedAt: 'removedAt',
+  spaceId: 'spaceId',
+  inquiryNumber: 'inquiryNumber',
+  title: 'title',
+  category: 'category',
+  channel: 'channel',
+  source: 'source',
+  status: 'status',
+  priority: 'priority',
+  customerId: 'customerId',
+  assigneeId: 'assigneeId',
+  firstResponseAt: 'firstResponseAt',
+  resolvedAt: 'resolvedAt',
+  closedAt: 'closedAt',
+  slaResponseDue: 'slaResponseDue',
+  slaResolveDue: 'slaResolveDue',
+  isSlaResponseBreached: 'isSlaResponseBreached',
+  isSlaResolveBreached: 'isSlaResolveBreached',
+  sentiment: 'sentiment',
+  sentimentScore: 'sentimentScore',
+  aiResolutionAttempted: 'aiResolutionAttempted',
+  aiResolved: 'aiResolved',
+  isRealtimeChat: 'isRealtimeChat',
+  lastMessageAt: 'lastMessageAt',
+  unreadCount: 'unreadCount',
+  metadata: 'metadata'
+} as const
+
+export type InquiryScalarFieldEnum = (typeof InquiryScalarFieldEnum)[keyof typeof InquiryScalarFieldEnum]
+
+
+export const InquiryThreadScalarFieldEnum = {
+  id: 'id',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  closedAt: 'closedAt',
+  inquiryId: 'inquiryId',
+  title: 'title',
+  status: 'status',
+  createdBy: 'createdBy',
+  lastMessageAt: 'lastMessageAt',
+  lastMessagePreview: 'lastMessagePreview',
+  messageCount: 'messageCount'
+} as const
+
+export type InquiryThreadScalarFieldEnum = (typeof InquiryThreadScalarFieldEnum)[keyof typeof InquiryThreadScalarFieldEnum]
+
+
+export const InquiryMessageScalarFieldEnum = {
+  id: 'id',
+  createdAt: 'createdAt',
+  threadId: 'threadId',
+  inquiryId: 'inquiryId',
+  senderId: 'senderId',
+  senderType: 'senderType',
+  clientMessageId: 'clientMessageId',
+  content: 'content',
+  contentType: 'contentType',
+  deliveredAt: 'deliveredAt',
+  readAt: 'readAt',
+  editedAt: 'editedAt',
+  isEdited: 'isEdited',
+  isDeleted: 'isDeleted',
+  metadata: 'metadata'
+} as const
+
+export type InquiryMessageScalarFieldEnum = (typeof InquiryMessageScalarFieldEnum)[keyof typeof InquiryMessageScalarFieldEnum]
+
+
+export const InquiryParticipantScalarFieldEnum = {
+  id: 'id',
+  joinedAt: 'joinedAt',
+  leftAt: 'leftAt',
+  inquiryId: 'inquiryId',
+  threadId: 'threadId',
+  userId: 'userId',
+  role: 'role',
+  isOnline: 'isOnline',
+  isTyping: 'isTyping',
+  lastSeenAt: 'lastSeenAt',
+  lastReadAt: 'lastReadAt',
+  unreadCount: 'unreadCount'
+} as const
+
+export type InquiryParticipantScalarFieldEnum = (typeof InquiryParticipantScalarFieldEnum)[keyof typeof InquiryParticipantScalarFieldEnum]
+
+
+export const InquiryAttachmentScalarFieldEnum = {
+  id: 'id',
+  createdAt: 'createdAt',
+  messageId: 'messageId',
+  fileName: 'fileName',
+  fileSize: 'fileSize',
+  mimeType: 'mimeType',
+  fileType: 'fileType',
+  url: 'url',
+  thumbnailUrl: 'thumbnailUrl',
+  width: 'width',
+  height: 'height',
+  duration: 'duration',
+  isDeleted: 'isDeleted'
+} as const
+
+export type InquiryAttachmentScalarFieldEnum = (typeof InquiryAttachmentScalarFieldEnum)[keyof typeof InquiryAttachmentScalarFieldEnum]
+
+
+export const InquiryTagScalarFieldEnum = {
+  id: 'id',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  removedAt: 'removedAt',
+  inquiryId: 'inquiryId',
+  name: 'name',
+  color: 'color'
+} as const
+
+export type InquiryTagScalarFieldEnum = (typeof InquiryTagScalarFieldEnum)[keyof typeof InquiryTagScalarFieldEnum]
+
+
+export const SentimentAnalysisScalarFieldEnum = {
+  id: 'id',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  inquiryId: 'inquiryId',
+  messageId: 'messageId',
+  sentiment: 'sentiment',
+  score: 'score',
+  confidence: 'confidence',
+  emotions: 'emotions',
+  keywords: 'keywords',
+  urgency: 'urgency',
+  analyzedAt: 'analyzedAt'
+} as const
+
+export type SentimentAnalysisScalarFieldEnum = (typeof SentimentAnalysisScalarFieldEnum)[keyof typeof SentimentAnalysisScalarFieldEnum]
+
+
+export const AIAgentLogScalarFieldEnum = {
+  id: 'id',
+  createdAt: 'createdAt',
+  inquiryId: 'inquiryId',
+  messageId: 'messageId',
+  action: 'action',
+  input: 'input',
+  output: 'output',
+  confidence: 'confidence',
+  wasAccepted: 'wasAccepted',
+  wasModified: 'wasModified',
+  responseTimeMs: 'responseTimeMs',
+  model: 'model',
+  tokenCount: 'tokenCount',
+  errorMessage: 'errorMessage'
+} as const
+
+export type AIAgentLogScalarFieldEnum = (typeof AIAgentLogScalarFieldEnum)[keyof typeof AIAgentLogScalarFieldEnum]
 
 
 export const OidcClientScalarFieldEnum = {

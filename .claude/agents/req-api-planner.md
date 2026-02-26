@@ -144,6 +144,30 @@ packages/be-dto/src/[domain]/*.dto.spec.md
 | 삭제 | DELETE | /api/[resource]s/:id | 삭제 |
 | 특수 액션 | POST/PATCH | /api/[resource]s/:id/[action] | 상태 변경 등 |
 
+### DTO 스키마 상속 참조
+
+Request DTO 기획 시 `@cocrepo/schema`의 기존 스키마 상속을 고려합니다。
+
+**기획서 작성 예시:**
+```markdown
+## 요청 DTO
+- **OidcLoginPayloadDto**: @cocrepo/schema LoginSchema 상속
+  - 상속 필드: email (@Email 검증), password (@Password 검증)
+  - 추가 필드: remember (boolean, optional)
+```
+
+**@cocrepo/schema 주요 스키마:**
+
+| 스키마 | 필드 | 검증 규칙 |
+|--------|------|----------|
+| LoginSchema | email, password | @Email(), @Password() |
+| SignUpSchema | email, password, name | @Email(), @Password(), @String() |
+
+**상속 활용 시 장점:**
+- 백엔드/프론트엔드 검증 규칙 일관성 유지
+- 검증 메시지 통일
+- 중복 코드 감소
+
 **API 메타데이터 (필수):**
 
 | 필드 | 타입 | 필수 | 설명 |
