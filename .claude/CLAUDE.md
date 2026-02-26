@@ -20,6 +20,46 @@
 - **패키지 매니저**: pnpm
 - **런타임**: Node.js
 
+## 모노레포 구조
+
+### 앱 (apps/)
+
+| 앱 | 설명 | 포트 |
+|----|------|------|
+| `admin/web` | 관리자 프론트엔드 (Next.js) | 3000 |
+| `core/api` | 코어 API 서버 (NestJS) | 4000 |
+| `idp/api` | IDP API 서버 | 4008 |
+| `idp/web` | IDP 프론트엔드 | 3008 |
+| `idp-server` | OIDC 서버 (oidc-provider) | 4009 |
+| `server` | 메인 API 서버 (NestJS) | 4001 |
+| `proposal/web` | 제안서 프론트엔드 | 3001 |
+| `test/e2e` | E2E 테스트 (Playwright) | - |
+| `tool/storybook` | UI 컴포넌트 스토리북 | 6006 |
+
+### 패키지 (packages/)
+
+| 패키지 | npm명 | 설명 |
+|--------|-------|------|
+| `be-common` | `@cocrepo/be-common` | 백엔드 공통 유틸리티 |
+| `be-context` | `@cocrepo/be-context` | 백엔드 컨텍스트 |
+| `be-decorator` | `@cocrepo/decorator` | NestJS 데코레이터 |
+| `be-dto` | `@cocrepo/dto` | Request/Response DTO |
+| `be-entity` | `@cocrepo/entity` | 도메인 Entity |
+| `be-facade` | `@cocrepo/facade` | Facade 레이어 |
+| `be-prisma` | `@cocrepo/prisma` | Prisma 스키마 및 클라이언트 |
+| `be-repository` | `@cocrepo/repository` | Repository 레이어 |
+| `be-service` | `@cocrepo/service` | Service 레이어 |
+| `be-vo` | `@cocrepo/vo` | Value Object |
+| `common-constant` | `@cocrepo/constant` | 공통 상수 |
+| `common-enum` | `@cocrepo/enum` | 공통 Enum |
+| `common-schema` | `@cocrepo/schema` | 공통 스키마 |
+| `common-toolkit` | `@cocrepo/toolkit` | 공통 유틸리티 |
+| `common-type` | `@cocrepo/type` | 공통 타입 |
+| `fe-api` | `@cocrepo/api` | Orval 생성 API 클라이언트 |
+| `fe-hook` | `@cocrepo/hook` | React 커스텀 훅 |
+| `fe-store` | `@cocrepo/store` | MobX Store |
+| `fe-ui` | `@cocrepo/ui` | UI 컴포넌트 |
+
 ## Claude Code 버그 회피
 
 - **TodoWrite 도구의 content, activeForm은 영어로 작성** (한글 UTF-8 멀티바이트 문자열 처리 버그 회피)
@@ -165,7 +205,7 @@ function UsersPage() {
 **모든 페이지는 반드시 서버 사이드 Prefetch 패턴을 사용해야 합니다.**
 
 ```
-apps/admin/web/app/[route]/
+apps/admin/web/src/app/[route]/
 ├── page.tsx          # 서버 컴포넌트 (Prefetch + HydrationBoundary)
 ├── _client.tsx       # 클라이언트 컴포넌트
 ├── _prefetch.ts      # Prefetch 설정
@@ -205,7 +245,7 @@ apps/admin/web/app/[route]/
 
 **적용 위치:**
 - `packages/common-constant/src/routing/admin-menu.ts`의 모든 경로 정의
-- Next.js 파일 시스템 라우팅 폴더명 (`app/(admin)/users/[userId]/`)
+- Next.js 파일 시스템 라우팅 폴더명 (`src/app/(admin)/users/[userId]/`)
 
 ### 컴포넌트 작성
 
@@ -463,9 +503,9 @@ rootStore.persistStore = new PersistStore({
   storageKey: "admin-persist",
 });
 
-// apps/coin/src/stores - 다른 앱에서 재사용
+// apps/proposal/web/src/stores - 다른 앱에서 재사용
 rootStore.persistStore = new PersistStore({
-  storageKey: "coin-persist",
+  storageKey: "proposal-persist",
 });
 ```
 
@@ -505,7 +545,10 @@ packages/common-type/src/
 ├── navigation.ts     # 네비게이션 관련 (NavItemConfig, TabConfig, FABAction)
 ├── config.types.ts   # 설정 관련
 ├── json.ts           # JSON 관련
-└── page-meta.ts      # 페이지 메타 관련
+├── page-meta.ts      # 페이지 메타 관련
+├── table.ts          # 테이블 관련 타입
+├── action-config.ts  # 액션 설정 타입
+└── user-stats.ts     # 사용자 통계 타입
 ```
 
 ## 기획/설계 원칙
@@ -545,10 +588,10 @@ packages/common-type/src/
 #### 기획서 파일 구조
 
 ```
-apps/[app]/app/(admin)/
+apps/[app]/web/src/app/(admin)/
 ├── app.spec.md                 # 앱 기획서 (L0-L2: 컨텍스트, Actor, Goal)
 
-apps/[app]/app/(admin)/[도메인]/
+apps/[app]/web/src/app/(admin)/[도메인]/
 ├── page.tsx                    # 목록 페이지
 ├── page.spec.md                # 목록 페이지 기획서 ← 코드 옆에 위치
 ├── page.e2e.ts                 # E2E 테스트 ← sidecar
@@ -888,10 +931,10 @@ Stage 7: E2E 검증 (선택)    → qa-be-e2e-testing → qa-fe-e2e-testing → 
 #### 기획서 폴더 구조
 
 ```
-apps/[app]/app/(admin)/
+apps/[app]/web/src/app/(admin)/
 ├── app.spec.md                 # 앱 기획서 (L0-L2: 컨텍스트, Actor, Goal)
 
-apps/[app]/app/(admin)/[도메인]/
+apps/[app]/web/src/app/(admin)/[도메인]/
 ├── page.tsx                    # 목록 페이지
 ├── page.spec.md                # 목록 페이지 기획서
 ├── page.e2e.ts                 # E2E 테스트 (sidecar)
