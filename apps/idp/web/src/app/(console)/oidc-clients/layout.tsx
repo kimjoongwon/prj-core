@@ -5,6 +5,8 @@ import type { ReactNode } from "react";
  */
 export default function OidcClientsLayout({
 	children,
-}: { children: ReactNode }) {
+}: {
+	children: ReactNode;
+}) {
 	return <>{children}</>;
 }

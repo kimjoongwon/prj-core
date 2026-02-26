@@ -1,6 +1,6 @@
 "use client";
 
-import { useGetIdpAccounts, type IdpAccountDto } from "@cocrepo/api";
+import { type IdpAccountDto, useGetIdpAccounts } from "@cocrepo/api";
 import type { InputConfig, MetaDataGridColumnConfig } from "@cocrepo/type";
 import {
 	ActiveStatusCell,
@@ -111,9 +111,7 @@ const columns: MetaDataGridColumnConfig<IdpAccountDto>[] = [
 		label: "실패 횟수",
 		size: 80,
 		align: "center",
-		cell: ({ getValue }) => (
-			<FailedAttemptsCell count={getValue() as number} />
-		),
+		cell: ({ getValue }) => <FailedAttemptsCell count={getValue() as number} />,
 	},
 	{
 		field: "lastLoginAt",
@@ -157,8 +155,7 @@ const leftInputs: InputConfig[] = [
  * IDP 계정 관리 목록 페이지 - 클라이언트 컴포넌트
  */
 function AccountsPageClient() {
-	const [queryStates, setQueryStates] =
-		useMetaDataGridQueryStates(leftInputs);
+	const [queryStates, setQueryStates] = useMetaDataGridQueryStates(leftInputs);
 
 	const { data: response, isLoading } = useGetIdpAccounts({
 		take: queryStates.take,

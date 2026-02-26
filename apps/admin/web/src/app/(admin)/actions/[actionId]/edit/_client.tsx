@@ -1,9 +1,9 @@
 "use client";
 
 import {
+	type UpdateActionDto,
 	useGetActionById,
 	useUpdateAction,
-	type UpdateActionDto,
 } from "@cocrepo/api";
 import { PageSurface, SectionSurface, VStack } from "@cocrepo/ui";
 import { Button, Input, Select, SelectItem, Textarea } from "@heroui/react";
@@ -123,10 +123,7 @@ function ActionEditPageClient({ actionId }: ActionEditPageClientProps) {
 
 	if (!action) {
 		return (
-			<PageSurface
-				title="Action 수정"
-				description="Action을 찾을 수 없습니다."
-			>
+			<PageSurface title="Action 수정" description="Action을 찾을 수 없습니다.">
 				<div className="flex flex-col items-center justify-center gap-4 p-8">
 					<p className="text-default-500">Action을 찾을 수 없습니다.</p>
 					<Button variant="flat" onPress={onClickListButton}>

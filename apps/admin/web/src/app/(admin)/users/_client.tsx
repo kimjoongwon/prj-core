@@ -1,6 +1,6 @@
 "use client";
 
-import { useGetUsers, type UserDto } from "@cocrepo/api";
+import { type UserDto, useGetUsers } from "@cocrepo/api";
 import type { InputConfig, MetaDataGridColumnConfig } from "@cocrepo/type";
 import {
 	DateTimeCell,
@@ -10,8 +10,8 @@ import {
 	SectionSurface,
 	StatsCard,
 	StatusChipCell,
-	useMetaDataGridQueryStates,
 	UserRoleCell,
+	useMetaDataGridQueryStates,
 	VStack,
 } from "@cocrepo/ui";
 import { UserCheck, UserMinus, Users } from "lucide-react";

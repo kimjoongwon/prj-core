@@ -1,12 +1,10 @@
-import { test, expect } from "@playwright/test";
+import { expect, test } from "@playwright/test";
 
 test.describe("메시지 템플릿 상세 페이지", () => {
 	// ── E2E-001: 활성 상태 토글 ──
 
 	test.describe("[E2E-001] 활성 상태 토글", () => {
-		test("템플릿 상세에서 활성 상태 토글이 동작해야 한다", async ({
-			page,
-		}) => {
+		test("템플릿 상세에서 활성 상태 토글이 동작해야 한다", async ({ page }) => {
 			const TEST_CODE = "E2E_TOGGLE_TEMPLATE";
 			// 시드 데이터 기준 System Space ID (로그인 헬퍼와 동일)
 			const SYSTEM_SPACE_ID = "61ddca20-1752-466e-b4da-879ebdbe54e3";
@@ -20,9 +18,9 @@ test.describe("메시지 템플릿 상세 페이지", () => {
 				);
 				const body = await resp.json();
 				const templates = body.data ?? [];
-				const existing = (
-					templates as { id: string; code: string }[]
-				).find((t) => t.code === TEST_CODE);
+				const existing = (templates as { id: string; code: string }[]).find(
+					(t) => t.code === TEST_CODE,
+				);
 				if (existing) {
 					await page.request.delete(
 						`http://localhost:3000/api/v1/templates/${existing.id}`,

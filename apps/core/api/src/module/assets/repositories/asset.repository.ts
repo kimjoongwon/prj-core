@@ -63,7 +63,9 @@ export class AssetRepository {
 		take?: number;
 	}): Promise<{ items: Asset[]; count: number }> {
 		const { spaceId, where, orderBy, skip, take } = params;
-		this.logger.debug(`Space ID로 에셋 목록 조회: spaceId=${spaceId.slice(-8)}`);
+		this.logger.debug(
+			`Space ID로 에셋 목록 조회: spaceId=${spaceId.slice(-8)}`,
+		);
 
 		const baseWhere: Prisma.AssetWhereInput = {
 			spaceId,
@@ -98,7 +100,9 @@ export class AssetRepository {
 		take?: number;
 	}): Promise<{ items: Asset[]; count: number }> {
 		const { folderId, where, orderBy, skip, take } = params;
-		this.logger.debug(`Folder ID로 에셋 목록 조회: folderId=${folderId.slice(-8)}`);
+		this.logger.debug(
+			`Folder ID로 에셋 목록 조회: folderId=${folderId.slice(-8)}`,
+		);
 
 		const baseWhere: Prisma.AssetWhereInput = {
 			folderId,
@@ -272,7 +276,9 @@ export class AssetRepository {
 	 * Folder ID로 에셋 수 조회
 	 */
 	async countByFolderId(folderId: string): Promise<number> {
-		this.logger.debug(`Folder ID로 에셋 수 조회: folderId=${folderId.slice(-8)}`);
+		this.logger.debug(
+			`Folder ID로 에셋 수 조회: folderId=${folderId.slice(-8)}`,
+		);
 
 		return this.txHost.tx.asset.count({
 			where: {

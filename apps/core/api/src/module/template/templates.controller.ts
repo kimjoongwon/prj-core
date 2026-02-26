@@ -87,9 +87,7 @@ export class TemplatesController {
 	@ApiErrors(401, 403, 404, 500)
 	@ApiResponseEntity(TemplateDto, HttpStatus.OK)
 	@ResponseMessage("template.read.success")
-	async getTemplate(
-		@Param("templateId", ParseUUIDPipe) templateId: string,
-	) {
+	async getTemplate(@Param("templateId", ParseUUIDPipe) templateId: string) {
 		return this.templatesService.getTemplateById(templateId);
 	}
 
@@ -100,8 +98,7 @@ export class TemplatesController {
 	@ApiOperation({
 		operationId: "createTemplate",
 		summary: "템플릿 등록",
-		description:
-			"새로운 템플릿을 등록합니다. System Space 전용 API입니다.",
+		description: "새로운 템플릿을 등록합니다. System Space 전용 API입니다.",
 	})
 	@ApiAuth()
 	@ApiBody({
@@ -152,8 +149,7 @@ export class TemplatesController {
 	@ApiOperation({
 		operationId: "deleteTemplate",
 		summary: "템플릿 삭제",
-		description:
-			"템플릿을 삭제합니다. System Space 전용 API입니다.",
+		description: "템플릿을 삭제합니다. System Space 전용 API입니다.",
 	})
 	@ApiAuth()
 	@ApiParam({

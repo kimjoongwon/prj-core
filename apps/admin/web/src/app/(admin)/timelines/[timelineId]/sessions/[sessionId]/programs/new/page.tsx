@@ -19,19 +19,11 @@ export default async function ProgramNewPage({ params }: ProgramNewPageProps) {
 	const queryClient = new QueryClient();
 	const cookieStore = await cookies();
 
-	await prefetchProgramNewData(
-		queryClient,
-		cookieStore,
-		timelineId,
-		sessionId,
-	);
+	await prefetchProgramNewData(queryClient, cookieStore, timelineId, sessionId);
 
 	return (
 		<HydrationBoundary state={dehydrate(queryClient)}>
-			<ProgramNewPageClient
-				timelineId={timelineId}
-				sessionId={sessionId}
-			/>
+			<ProgramNewPageClient timelineId={timelineId} sessionId={sessionId} />
 		</HydrationBoundary>
 	);
 }

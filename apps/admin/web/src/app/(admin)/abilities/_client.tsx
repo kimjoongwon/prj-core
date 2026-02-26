@@ -1,14 +1,9 @@
 "use client";
 
-import { customInstance, useGetActions, useGetSubjects } from "@cocrepo/api";
 import type { AbilityResponseDto } from "@cocrepo/api";
+import { customInstance, useGetActions, useGetSubjects } from "@cocrepo/api";
 import type { MetaDataGridColumnConfig } from "@cocrepo/type";
-import {
-	DateTimeCell,
-	PageSurface,
-	SectionSurface,
-	VStack,
-} from "@cocrepo/ui";
+import { DateTimeCell, PageSurface, SectionSurface, VStack } from "@cocrepo/ui";
 import {
 	Button,
 	Chip,
@@ -20,8 +15,8 @@ import {
 import { useQuery } from "@tanstack/react-query";
 import { Key, Plus, Search } from "lucide-react";
 import { observer, useLocalObservable } from "mobx-react-lite";
-import Link from "next/link";
 import type { Route } from "next";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 
 /**
@@ -160,7 +155,10 @@ function AbilitiesPageClient() {
 		}
 
 		// Subject 필터
-		if (state.selectedSubjectId && ability.subjectId !== state.selectedSubjectId) {
+		if (
+			state.selectedSubjectId &&
+			ability.subjectId !== state.selectedSubjectId
+		) {
 			return false;
 		}
 
@@ -267,7 +265,9 @@ function AbilitiesPageClient() {
 
 						<Select
 							placeholder="유형 선택"
-							selectedKeys={state.selectedInverted ? [state.selectedInverted] : []}
+							selectedKeys={
+								state.selectedInverted ? [state.selectedInverted] : []
+							}
 							onSelectionChange={(keys) => {
 								const selected = Array.from(keys)[0] as string;
 								state.selectedInverted = selected || "";
@@ -331,7 +331,8 @@ function AbilitiesPageClient() {
 										>
 											{columns.map((col) => {
 												const cellFn = col.cell;
-												const value = ability[col.field as keyof AbilityResponseDto];
+												const value =
+													ability[col.field as keyof AbilityResponseDto];
 												return (
 													<td
 														key={col.field}

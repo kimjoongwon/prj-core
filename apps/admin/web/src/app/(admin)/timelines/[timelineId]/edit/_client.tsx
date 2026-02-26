@@ -6,7 +6,7 @@ import {
 	useUpdateTimeline,
 } from "@cocrepo/api";
 import { PageSurface, SectionSurface, VStack } from "@cocrepo/ui";
-import { Button, Input, Textarea, addToast } from "@heroui/react";
+import { addToast, Button, Input, Textarea } from "@heroui/react";
 import { useQueryClient } from "@tanstack/react-query";
 import { observer, useLocalObservable } from "mobx-react-lite";
 import type { Route } from "next";
@@ -99,8 +99,7 @@ function TimelineEditPageClient({ timelineId }: TimelineEditPageClientProps) {
 				onError: () => {
 					addToast({
 						title: "수정 실패",
-						description:
-							"타임라인 수정 중 오류가 발생했습니다.",
+						description: "타임라인 수정 중 오류가 발생했습니다.",
 						color: "danger",
 					});
 				},

@@ -1,4 +1,4 @@
-import { test, expect } from "@playwright/test";
+import { expect, test } from "@playwright/test";
 
 test.describe("권한 목록 페이지", () => {
 	// ── E2E-003: 목록 렌더링 ──
@@ -53,12 +53,8 @@ test.describe("권한 목록 페이지", () => {
 			).toBeVisible();
 
 			// Then: CASL 정보 섹션의 Subject/Action 드롭다운 확인
-			await expect(
-				page.getByRole("button", { name: /Subject/ }),
-			).toBeVisible();
-			await expect(
-				page.getByRole("button", { name: /Action/ }),
-			).toBeVisible();
+			await expect(page.getByRole("button", { name: /Subject/ })).toBeVisible();
+			await expect(page.getByRole("button", { name: /Action/ })).toBeVisible();
 		});
 	});
 

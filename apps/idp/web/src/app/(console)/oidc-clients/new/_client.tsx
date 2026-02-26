@@ -63,8 +63,7 @@ function OidcClientNewPageClient() {
 		}
 
 		if (!state.isPublic && !state.clientSecret.trim()) {
-			errors.clientSecret =
-				"Client Secret을 입력하거나 자동 생성해주세요.";
+			errors.clientSecret = "Client Secret을 입력하거나 자동 생성해주세요.";
 			isValid = false;
 		}
 
@@ -74,15 +73,13 @@ function OidcClientNewPageClient() {
 		}
 
 		if (state.responseTypes.length === 0) {
-			errors.responseTypes =
-				"최소 1개의 Response Type을 선택해주세요.";
+			errors.responseTypes = "최소 1개의 Response Type을 선택해주세요.";
 			isValid = false;
 		}
 
 		const validUris = state.redirectUris.filter((uri) => uri.trim());
 		if (validUris.length === 0) {
-			errors.redirectUris =
-				"최소 1개의 Redirect URI를 입력해주세요.";
+			errors.redirectUris = "최소 1개의 Redirect URI를 입력해주세요.";
 			isValid = false;
 		}
 
@@ -92,8 +89,7 @@ function OidcClientNewPageClient() {
 				!uri.startsWith("http://") &&
 				!uri.startsWith("https://")
 			) {
-				redirectUriErrors[index] =
-					"http:// 또는 https://로 시작해야 합니다.";
+				redirectUriErrors[index] = "http:// 또는 https://로 시작해야 합니다.";
 				isValid = false;
 			}
 		});
@@ -116,9 +112,7 @@ function OidcClientNewPageClient() {
 			data: {
 				clientId: state.clientId,
 				clientName: state.clientName,
-				clientSecret: state.isPublic
-					? undefined
-					: state.clientSecret,
+				clientSecret: state.isPublic ? undefined : state.clientSecret,
 				tokenEndpointAuthMethod: state.tokenEndpointAuthMethod,
 				grantTypes: state.grantTypes,
 				responseTypes: state.responseTypes,

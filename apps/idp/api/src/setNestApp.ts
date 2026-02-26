@@ -6,9 +6,7 @@ import {
 	SpaceAccessGuard,
 	SpaceScopeInterceptor,
 } from "@cocrepo/be-common";
-import { TranslationService } from "@cocrepo/service";
-import { TokenStorageService } from "@cocrepo/service";
-import { ClsService } from "nestjs-cls";
+import { TokenStorageService, TranslationService } from "@cocrepo/service";
 import {
 	type ArgumentsHost,
 	Catch,
@@ -19,6 +17,7 @@ import {
 	ValidationPipe,
 } from "@nestjs/common";
 import { BaseExceptionFilter, HttpAdapterHost, Reflector } from "@nestjs/core";
+import { ClsService } from "nestjs-cls";
 
 /**
  * IdP 전용 예외 필터
@@ -85,7 +84,11 @@ export function setNestApp<T extends INestApplication>(app: T): void {
 	// @Public() 데코레이터가 있는 OIDC/interaction/password-reset 경로는 스킵됨
 	// =================================================================
 	app.useGlobalGuards(
-		new JwtAuthGuard(app.get(Reflector), app.get(TokenStorageService), app.get(ClsService)),
+		new JwtAuthGuard(
+			app.get(Reflector),
+			app.get(TokenStorageService),
+			app.get(ClsService),
+		),
 		app.get(SpaceAccessGuard),
 	);
 

@@ -1,4 +1,4 @@
-import { test, expect } from "@playwright/test";
+import { expect, test } from "@playwright/test";
 
 test.describe("Admin 앱 기본 테스트", () => {
 	test("메인 페이지 로딩 확인", async ({ page }) => {

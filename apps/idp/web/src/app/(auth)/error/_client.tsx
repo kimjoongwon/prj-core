@@ -25,9 +25,7 @@ export function ErrorClient({ error, errorDescription }: ErrorClientProps) {
 				<div className="bg-danger/10 border border-danger/30 rounded-lg p-4">
 					<p className="text-sm text-danger font-medium">{error}</p>
 					{errorDescription && (
-						<p className="text-sm text-default-500 mt-2">
-							{errorDescription}
-						</p>
+						<p className="text-sm text-default-500 mt-2">{errorDescription}</p>
 					)}
 				</div>
 			</div>

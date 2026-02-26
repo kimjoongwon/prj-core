@@ -92,10 +92,15 @@ describe("AuthController", () => {
 			);
 
 			// When
-			await controller.login(undefined as unknown as string, mockResponse as unknown as never);
+			await controller.login(
+				undefined as unknown as string,
+				mockResponse as unknown as never,
+			);
 
 			// Then
-			expect(mockAuthFacade.getAuthorizationUrl).toHaveBeenCalledWith(undefined);
+			expect(mockAuthFacade.getAuthorizationUrl).toHaveBeenCalledWith(
+				undefined,
+			);
 			expect(mockResponse.redirect).toHaveBeenCalledWith(
 				"https://idp.example.com/oidc/auth?response_type=code&client_id=test",
 			);

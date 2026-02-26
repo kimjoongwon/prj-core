@@ -1,4 +1,4 @@
-import { test, expect } from "@playwright/test";
+import { expect, test } from "@playwright/test";
 import { loginToConsole } from "../../../e2e/helpers/login";
 
 test.describe("OIDC 클라이언트 목록 페이지", () => {

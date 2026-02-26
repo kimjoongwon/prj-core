@@ -27,9 +27,7 @@ export interface AuthUserData {
 export class DirectUserRepository {
 	private readonly logger = new Logger(DirectUserRepository.name);
 
-	constructor(
-		private readonly directPrismaProvider: DirectPrismaProvider,
-	) {}
+	constructor(private readonly directPrismaProvider: DirectPrismaProvider) {}
 
 	/**
 	 * 이메일로 인증용 조회 (보안 필드 포함)
@@ -78,10 +76,7 @@ export class DirectUserRepository {
 	/**
 	 * 로그인 성공 처리 (실패 횟수 리셋 + 마지막 로그인 정보 업데이트)
 	 */
-	async updateLoginSuccess(
-		userId: string,
-		ipAddress: string,
-	): Promise<void> {
+	async updateLoginSuccess(userId: string, ipAddress: string): Promise<void> {
 		const prisma = await this.directPrismaProvider.getClient();
 		await prisma.user.update({
 			where: { id: userId },

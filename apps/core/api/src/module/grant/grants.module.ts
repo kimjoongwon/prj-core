@@ -23,4 +23,4 @@ import { GrantsController } from "./grants.controller";
 	],
 	exports: [GrantsService],
 })
-export class GrantsModule { }
+export class GrantsModule {}

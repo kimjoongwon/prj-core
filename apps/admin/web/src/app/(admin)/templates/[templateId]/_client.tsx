@@ -8,6 +8,7 @@ import {
 	useSendTestTemplate,
 	useToggleTemplateStatus,
 } from "@cocrepo/api";
+import type { PreviewResult } from "@cocrepo/ui";
 import {
 	DateTimeCell,
 	PageSurface,
@@ -17,10 +18,11 @@ import {
 	TemplateActions,
 	TemplateContentViewer,
 	TemplateTypeBadge,
-	VStack,
 	VariableReadTable,
+	VStack,
 } from "@cocrepo/ui";
 import {
+	addToast,
 	Button,
 	Modal,
 	ModalBody,
@@ -29,15 +31,13 @@ import {
 	ModalHeader,
 	Spinner,
 	Switch,
-	addToast,
 	useDisclosure,
 } from "@heroui/react";
+import { useQueryClient } from "@tanstack/react-query";
 import { ArrowLeft } from "lucide-react";
 import { observer } from "mobx-react-lite";
 import type { Route } from "next";
 import { useRouter } from "next/navigation";
-import { useQueryClient } from "@tanstack/react-query";
-import type { PreviewResult } from "@cocrepo/ui";
 
 interface TemplateDetailPageClientProps {
 	templateId: string;
@@ -62,8 +62,7 @@ function TemplateDetailPageClient({
 	const template = response?.data;
 
 	// Mutation
-	const { mutate: deleteTemplate, isPending: isDeleting } =
-		useDeleteTemplate();
+	const { mutate: deleteTemplate, isPending: isDeleting } = useDeleteTemplate();
 	const { mutate: toggleStatus, isPending: isToggling } =
 		useToggleTemplateStatus();
 	const { mutateAsync: previewTemplate } = usePreviewTemplate();
@@ -102,8 +101,7 @@ function TemplateDetailPageClient({
 				onError: (error) => {
 					addToast({
 						title: "삭제 실패",
-						description:
-							error.message || "삭제 중 오류가 발생했습니다.",
+						description: error.message || "삭제 중 오류가 발생했습니다.",
 						color: "danger",
 					});
 				},
@@ -131,9 +129,7 @@ function TemplateDetailPageClient({
 				onError: (error) => {
 					addToast({
 						title: "상태 변경 실패",
-						description:
-							error.message ||
-							"상태 변경 중 오류가 발생했습니다.",
+						description: error.message || "상태 변경 중 오류가 발생했습니다.",
 						color: "danger",
 					});
 				},
@@ -186,14 +182,9 @@ function TemplateDetailPageClient({
 	// 데이터 없음
 	if (!template) {
 		return (
-			<PageSurface
-				title="템플릿 상세"
-				description="템플릿을 찾을 수 없습니다."
-			>
+			<PageSurface title="템플릿 상세" description="템플릿을 찾을 수 없습니다.">
 				<div className="flex flex-col items-center justify-center gap-4 p-8">
-					<p className="text-default-500">
-						템플릿을 찾을 수 없습니다.
-					</p>
+					<p className="text-default-500">템플릿을 찾을 수 없습니다.</p>
 					<Button
 						variant="flat"
 						startContent={<ArrowLeft className="size-4" />}
@@ -227,37 +218,25 @@ function TemplateDetailPageClient({
 				<SectionSurface title="기본 정보">
 					<div className="grid grid-cols-1 gap-4 md:grid-cols-2">
 						<div>
-							<label className="text-sm text-default-500">
-								코드
-							</label>
+							<label className="text-sm text-default-500">코드</label>
 							<p className="mt-1 font-mono">{template.code}</p>
 						</div>
 						<div>
-							<label className="text-sm text-default-500">
-								이름
-							</label>
+							<label className="text-sm text-default-500">이름</label>
 							<p className="mt-1">{template.name}</p>
 						</div>
 						<div>
-							<label className="text-sm text-default-500">
-								유형
-							</label>
+							<label className="text-sm text-default-500">유형</label>
 							<div className="mt-1">
 								<TemplateTypeBadge type={template.type} />
 							</div>
 						</div>
 						<div>
-							<label className="text-sm text-default-500">
-								설명
-							</label>
-							<p className="mt-1">
-								{template.description || "-"}
-							</p>
+							<label className="text-sm text-default-500">설명</label>
+							<p className="mt-1">{template.description || "-"}</p>
 						</div>
 						<div>
-							<label className="text-sm text-default-500">
-								활성 상태
-							</label>
+							<label className="text-sm text-default-500">활성 상태</label>
 							<div className="mt-1">
 								<Switch
 									isSelected={template.isActive}
@@ -265,28 +244,20 @@ function TemplateDetailPageClient({
 									isDisabled={isToggling}
 									size="sm"
 								>
-									{template.isActive
-										? "활성"
-										: "비활성"}
+									{template.isActive ? "활성" : "비활성"}
 								</Switch>
 							</div>
 						</div>
 						<div>
-							<label className="text-sm text-default-500">
-								생성일
-							</label>
+							<label className="text-sm text-default-500">생성일</label>
 							<div className="mt-1">
 								<DateTimeCell value={template.createdAt} />
 							</div>
 						</div>
 						<div>
-							<label className="text-sm text-default-500">
-								수정일
-							</label>
+							<label className="text-sm text-default-500">수정일</label>
 							<div className="mt-1">
-								<DateTimeCell
-									value={template.updatedAt || "-"}
-								/>
+								<DateTimeCell value={template.updatedAt || "-"} />
 							</div>
 						</div>
 					</div>
@@ -304,14 +275,10 @@ function TemplateDetailPageClient({
 				{/* 변수 목록 */}
 				<SectionSurface title="변수 목록" padding="none">
 					{(template.variables ?? []).length > 0 ? (
-						<VariableReadTable
-							variables={template.variables ?? []}
-						/>
+						<VariableReadTable variables={template.variables ?? []} />
 					) : (
 						<div className="p-6 text-center">
-							<p className="text-default-500">
-								등록된 변수가 없습니다.
-							</p>
+							<p className="text-default-500">등록된 변수가 없습니다.</p>
 						</div>
 					)}
 				</SectionSurface>
@@ -323,8 +290,7 @@ function TemplateDetailPageClient({
 					<ModalHeader>템플릿 삭제</ModalHeader>
 					<ModalBody>
 						<p>
-							<strong>{template.name}</strong> 템플릿을
-							삭제하시겠습니까?
+							<strong>{template.name}</strong> 템플릿을 삭제하시겠습니까?
 						</p>
 						<p className="mt-2 text-sm text-danger">
 							이 작업은 되돌릴 수 없습니다.

@@ -1,10 +1,7 @@
 "use client";
 
 import { useGetOidcClient, useUpdateOidcClient } from "@cocrepo/api";
-import {
-	OidcClientForm,
-	PageSurface,
-} from "@cocrepo/ui";
+import { OidcClientForm, PageSurface } from "@cocrepo/ui";
 import { Button } from "@heroui/react";
 import { ArrowLeft } from "lucide-react";
 import { observer, useLocalObservable } from "mobx-react-lite";
@@ -81,9 +78,7 @@ function OidcClientEditPageClient({
 			state.responseTypes = [...client.responseTypes];
 			state.scope = client.scope;
 			state.redirectUris =
-				client.redirectUris.length > 0
-					? [...client.redirectUris]
-					: [""];
+				client.redirectUris.length > 0 ? [...client.redirectUris] : [""];
 			state.logoUri = client.logoUri || "";
 			state.policyUri = client.policyUri || "";
 			state.tosUri = client.tosUri || "";
@@ -109,15 +104,13 @@ function OidcClientEditPageClient({
 		}
 
 		if (state.responseTypes.length === 0) {
-			errors.responseTypes =
-				"최소 1개의 Response Type을 선택해주세요.";
+			errors.responseTypes = "최소 1개의 Response Type을 선택해주세요.";
 			isValid = false;
 		}
 
 		const validUris = state.redirectUris.filter((uri) => uri.trim());
 		if (validUris.length === 0) {
-			errors.redirectUris =
-				"최소 1개의 Redirect URI를 입력해주세요.";
+			errors.redirectUris = "최소 1개의 Redirect URI를 입력해주세요.";
 			isValid = false;
 		}
 
@@ -127,8 +120,7 @@ function OidcClientEditPageClient({
 				!uri.startsWith("http://") &&
 				!uri.startsWith("https://")
 			) {
-				redirectUriErrors[index] =
-					"http:// 또는 https://로 시작해야 합니다.";
+				redirectUriErrors[index] = "http:// 또는 https://로 시작해야 합니다.";
 				isValid = false;
 			}
 		});
@@ -151,9 +143,7 @@ function OidcClientEditPageClient({
 			oidcClientId,
 			data: {
 				clientName: state.clientName,
-				clientSecret: isPublic
-					? undefined
-					: state.clientSecret || undefined,
+				clientSecret: isPublic ? undefined : state.clientSecret || undefined,
 				tokenEndpointAuthMethod: state.tokenEndpointAuthMethod,
 				grantTypes: state.grantTypes,
 				responseTypes: state.responseTypes,
@@ -168,10 +158,7 @@ function OidcClientEditPageClient({
 
 	if (isLoading) {
 		return (
-			<PageSurface
-				title="OIDC 클라이언트 수정"
-				description="로딩 중..."
-			>
+			<PageSurface title="OIDC 클라이언트 수정" description="로딩 중...">
 				<div className="flex items-center justify-center p-8">
 					<span className="text-default-500">로딩 중...</span>
 				</div>
@@ -186,14 +173,10 @@ function OidcClientEditPageClient({
 				description="클라이언트를 찾을 수 없습니다."
 			>
 				<div className="flex flex-col items-center justify-center gap-4 p-8">
-					<p className="text-default-500">
-						클라이언트를 찾을 수 없습니다.
-					</p>
+					<p className="text-default-500">클라이언트를 찾을 수 없습니다.</p>
 					<Button
 						variant="flat"
-						onPress={() =>
-							router.push("/oidc-clients" as Route)
-						}
+						onPress={() => router.push("/oidc-clients" as Route)}
 					>
 						목록으로
 					</Button>

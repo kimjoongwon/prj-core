@@ -1,4 +1,4 @@
-import { test, expect } from "@playwright/test";
+import { expect, test } from "@playwright/test";
 import { loginToConsole } from "../../../e2e/helpers/login";
 
 test.describe("IDP 대시보드", () => {
@@ -37,9 +37,7 @@ test.describe("IDP 대시보드", () => {
 	});
 
 	test.describe("루트 리다이렉트", () => {
-		test("/ 접속 시 /dashboard로 리다이렉트되어야 한다", async ({
-			page,
-		}) => {
+		test("/ 접속 시 /dashboard로 리다이렉트되어야 한다", async ({ page }) => {
 			// Given: 로그인 후
 			await loginToConsole(page);
 

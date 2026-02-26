@@ -1,8 +1,8 @@
 "use client";
 
 import {
-	type TimelineDto,
 	getGetTimelinesQueryKey,
+	type TimelineDto,
 	useDeleteTimeline,
 	useGetTimelines,
 } from "@cocrepo/api";
@@ -15,13 +15,13 @@ import {
 	useMetaDataGridQueryStates,
 } from "@cocrepo/ui";
 import {
+	addToast,
 	Button,
 	Modal,
 	ModalBody,
 	ModalContent,
 	ModalFooter,
 	ModalHeader,
-	addToast,
 	useDisclosure,
 } from "@heroui/react";
 import { useQueryClient } from "@tanstack/react-query";
@@ -51,8 +51,7 @@ function TimelinesPageClient() {
 	const router = useRouter();
 	const queryClient = useQueryClient();
 
-	const [queryStates, setQueryStates] =
-		useMetaDataGridQueryStates(leftInputs);
+	const [queryStates, setQueryStates] = useMetaDataGridQueryStates(leftInputs);
 
 	const state = useLocalObservable(() => ({
 		deleteTarget: null as TimelineDto | null,
@@ -68,8 +67,7 @@ function TimelinesPageClient() {
 	const meta = response?.meta;
 	const totalCount = meta?.total ?? 0;
 
-	const { mutate: deleteTimeline, isPending: isDeleting } =
-		useDeleteTimeline();
+	const { mutate: deleteTimeline, isPending: isDeleting } = useDeleteTimeline();
 
 	const deleteModal = useDisclosure();
 
@@ -123,9 +121,7 @@ function TimelinesPageClient() {
 				<button
 					type="button"
 					className="text-primary hover:underline cursor-pointer text-left"
-					onClick={() =>
-						onClickTimelineName(row.original as TimelineDto)
-					}
+					onClick={() => onClickTimelineName(row.original as TimelineDto)}
 				>
 					{getValue() as string}
 				</button>
@@ -145,9 +141,7 @@ function TimelinesPageClient() {
 			field: "createdAt",
 			label: "등록일",
 			size: 150,
-			cell: ({ getValue }) => (
-				<DateTimeCell value={getValue() as string} />
-			),
+			cell: ({ getValue }) => <DateTimeCell value={getValue() as string} />,
 		},
 		{
 			field: "id",
@@ -159,9 +153,7 @@ function TimelinesPageClient() {
 					size="sm"
 					color="danger"
 					variant="light"
-					onPress={() =>
-						onClickDeleteIcon(row.original as TimelineDto)
-					}
+					onPress={() => onClickDeleteIcon(row.original as TimelineDto)}
 				>
 					삭제
 				</Button>
@@ -205,8 +197,8 @@ function TimelinesPageClient() {
 					<ModalHeader>타임라인 삭제</ModalHeader>
 					<ModalBody>
 						<p>
-							<strong>{state.deleteTarget?.name}</strong>{" "}
-							타임라인을 삭제하시겠습니까?
+							<strong>{state.deleteTarget?.name}</strong> 타임라인을
+							삭제하시겠습니까?
 						</p>
 						<p className="mt-2 text-sm text-danger">
 							세션이 있는 타임라인은 삭제할 수 없습니다.

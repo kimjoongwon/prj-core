@@ -1,7 +1,7 @@
 import { ValidationUtil } from "@cocrepo/decorator";
+import type { CorsConfig } from "@cocrepo/type";
 import { registerAs } from "@nestjs/config";
 import { IsBoolean } from "class-validator";
-import type { CorsConfig } from "@cocrepo/type";
 
 class EnvironmentVariablesValidator {
 	@IsBoolean()

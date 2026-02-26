@@ -83,9 +83,7 @@ function RoleCategoryEditPageClient({
 		}
 	};
 	collectDescendants(categoryId);
-	const categoryOptions = allCategories.filter(
-		(c) => !descendantIds.has(c.id),
-	);
+	const categoryOptions = allCategories.filter((c) => !descendantIds.has(c.id));
 
 	// TODO: Orval codegen 후 useUpdateCategory 으로 교체
 	const { mutate: updateCategory, isPending } = useMutation({

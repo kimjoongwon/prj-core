@@ -1,12 +1,7 @@
 "use client";
 
 import { useGetInteraction } from "@cocrepo/api";
-import {
-	AuthCard,
-	AuthCardHeader,
-	IdpConsent,
-	IdpLogin,
-} from "@cocrepo/ui";
+import { AuthCard, AuthCardHeader, IdpConsent, IdpLogin } from "@cocrepo/ui";
 import { Spinner } from "@heroui/react";
 
 interface InteractionClientProps {
@@ -77,7 +72,5 @@ export function InteractionClient({ uid }: InteractionClientProps) {
 		);
 	}
 
-	return (
-		<IdpLogin uid={uid} client={data.client ?? null} isDev={data.isDev} />
-	);
+	return <IdpLogin uid={uid} client={data.client ?? null} isDev={data.isDev} />;
 }

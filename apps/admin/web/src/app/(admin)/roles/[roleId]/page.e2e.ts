@@ -1,4 +1,4 @@
-import { test, expect } from "@playwright/test";
+import { expect, test } from "@playwright/test";
 
 test.describe("역할 상세 페이지", () => {
 	// ── E2E-002: Grant 배치 할당 플로우 ──

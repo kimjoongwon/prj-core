@@ -1,5 +1,5 @@
 import { PRISMA_SERVICE_TOKEN } from "@cocrepo/constant";
-import { PrismaService, createPrismaClient } from "@cocrepo/service";
+import { createPrismaClient, PrismaService } from "@cocrepo/service";
 import { Global, Logger, Module, OnModuleInit } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
 

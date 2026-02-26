@@ -162,7 +162,10 @@ export class PasswordResetService {
 		if (passwordPolicy.requireNumber && !/[0-9]/.test(newPassword)) {
 			policyErrors.push("숫자 포함");
 		}
-		if (passwordPolicy.requireSpecial && !/[!@#$%^&*()_+\-=\[\]{}|;:,.<>?/~`"']/.test(newPassword)) {
+		if (
+			passwordPolicy.requireSpecial &&
+			!/[!@#$%^&*()_+\-=[\]{}|;:,.<>?/~`"']/.test(newPassword)
+		) {
 			policyErrors.push("특수문자 포함");
 		}
 
@@ -233,9 +236,7 @@ export class PasswordResetService {
 			select: { id: true },
 		});
 		if (allHistory.length > MAX_PASSWORD_HISTORY) {
-			const toDelete = allHistory
-				.slice(MAX_PASSWORD_HISTORY)
-				.map((h) => h.id);
+			const toDelete = allHistory.slice(MAX_PASSWORD_HISTORY).map((h) => h.id);
 			await prisma.passwordHistory.deleteMany({
 				where: { id: { in: toDelete } },
 			});

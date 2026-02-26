@@ -1,11 +1,15 @@
-import { SpaceContext } from "@cocrepo/service";
 import { AbilitiesFacade } from "@cocrepo/facade";
 import {
 	AbilitiesRepository,
 	GrantsRepository,
 	UsersRepository,
 } from "@cocrepo/repository";
-import { AbilitiesService, AuthCacheService, UsersService } from "@cocrepo/service";
+import {
+	AbilitiesService,
+	AuthCacheService,
+	SpaceContext,
+	UsersService,
+} from "@cocrepo/service";
 import { Module } from "@nestjs/common";
 import { AbilitiesController } from "./abilities.controller";
 

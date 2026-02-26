@@ -1,6 +1,6 @@
 "use client";
 
-import { useGetSubjects, type SubjectDto } from "@cocrepo/api";
+import { type SubjectDto, useGetSubjects } from "@cocrepo/api";
 import type { InputConfig, MetaDataGridColumnConfig } from "@cocrepo/type";
 import {
 	BooleanCell,
@@ -12,7 +12,7 @@ import {
 	useMetaDataGridQueryStates,
 	VStack,
 } from "@cocrepo/ui";
-import { Chip, Select, SelectItem } from "@heroui/react";
+import { Chip } from "@heroui/react";
 import { observer } from "mobx-react-lite";
 
 /**

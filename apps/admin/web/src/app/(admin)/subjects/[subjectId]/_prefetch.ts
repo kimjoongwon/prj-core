@@ -12,11 +12,7 @@ export async function prefetchSubjectDetailData(
 	cookies: ReadonlyRequestCookies,
 	subjectId: string,
 ) {
-	await prefetchGetSubjectByIdQuery(
-		queryClient,
-		subjectId,
-		{
-			request: withServerCookies(cookies),
-		},
-	);
+	await prefetchGetSubjectByIdQuery(queryClient, subjectId, {
+		request: withServerCookies(cookies),
+	});
 }

@@ -1,4 +1,4 @@
-import { TRANSLATION_ERRORS } from "@cocrepo/constant";
+import { LanguageCode, TRANSLATION_ERRORS } from "@cocrepo/constant";
 import {
 	ApiAuth,
 	ApiErrors,
@@ -25,7 +25,6 @@ import {
 	Query,
 } from "@nestjs/common";
 import { ApiBody, ApiOperation, ApiParam, ApiTags } from "@nestjs/swagger";
-
 
 @ApiTags("TRANSLATIONS")
 @Controller()
@@ -69,10 +68,7 @@ export class TranslationsController {
 		description: "Translation ID (CUID)",
 		type: String,
 	})
-	@ApiErrors(
-		{ status: 404, message: TRANSLATION_ERRORS.NOT_FOUND },
-		500,
-	)
+	@ApiErrors({ status: 404, message: TRANSLATION_ERRORS.NOT_FOUND }, 500)
 	@ApiResponseEntity(TranslationResponseDto, HttpStatus.OK)
 	@ResponseMessage("common.translation.detail.success")
 	async getTranslationById(@Param("id") id: string) {
@@ -91,10 +87,7 @@ export class TranslationsController {
 	})
 	@ApiAuth()
 	@ApiBody({ type: CreateTranslationDto })
-	@ApiErrors(
-		{ status: 400, message: TRANSLATION_ERRORS.DUPLICATE_KEY },
-		500,
-	)
+	@ApiErrors({ status: 400, message: TRANSLATION_ERRORS.DUPLICATE_KEY }, 500)
 	@ApiResponseEntity(TranslationResponseDto, HttpStatus.CREATED)
 	@ResponseMessage("common.translation.create.success")
 	async createTranslation(@Body() dto: CreateTranslationDto) {
@@ -118,10 +111,7 @@ export class TranslationsController {
 		type: String,
 	})
 	@ApiBody({ type: UpdateTranslationDto })
-	@ApiErrors(
-		{ status: 404, message: TRANSLATION_ERRORS.NOT_FOUND },
-		500,
-	)
+	@ApiErrors({ status: 404, message: TRANSLATION_ERRORS.NOT_FOUND }, 500)
 	@ApiResponseEntity(TranslationResponseDto, HttpStatus.OK)
 	@ResponseMessage("common.translation.update.success")
 	async updateTranslation(
@@ -148,10 +138,7 @@ export class TranslationsController {
 		description: "Translation ID (CUID)",
 		type: String,
 	})
-	@ApiErrors(
-		{ status: 404, message: TRANSLATION_ERRORS.NOT_FOUND },
-		500,
-	)
+	@ApiErrors({ status: 404, message: TRANSLATION_ERRORS.NOT_FOUND }, 500)
 	@ResponseMessage("common.translation.delete.success")
 	async deleteTranslation(@Param("id") id: string): Promise<void> {
 		await this.translationsFacade.deleteTranslation(id);
@@ -173,7 +160,7 @@ export class TranslationsController {
 	@ApiErrors(500)
 	@ResponseMessage("common.translation.cache.invalidated")
 	async invalidateAllCache(): Promise<void> {
-		await this.translationsFacade.invalidateCache(undefined as any);
+		await this.translationsFacade.invalidateCache();
 	}
 
 	@Delete("cache/:languageCode")
@@ -195,8 +182,6 @@ export class TranslationsController {
 	async invalidateCache(
 		@Param("languageCode") languageCode: string,
 	): Promise<void> {
-		await this.translationsFacade.invalidateCache(
-			languageCode as any,
-		);
+		await this.translationsFacade.invalidateCache(languageCode as LanguageCode);
 	}
 }

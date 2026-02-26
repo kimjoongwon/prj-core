@@ -17,6 +17,7 @@ import {
 	VStack,
 } from "@cocrepo/ui";
 import { Button, Chip, Divider, Switch } from "@heroui/react";
+import { useQueryClient } from "@tanstack/react-query";
 import {
 	ArrowLeft,
 	KeyRound,
@@ -28,7 +29,6 @@ import {
 import { observer, useLocalObservable } from "mobx-react-lite";
 import type { Route } from "next";
 import { useRouter } from "next/navigation";
-import { useQueryClient } from "@tanstack/react-query";
 
 /** 모달 액션 타입 */
 type ModalAction =
@@ -182,8 +182,7 @@ function AccountDetailPageClient({ userId }: AccountDetailPageClientProps) {
 			message: (
 				<>
 					<p>
-						<strong>{account?.name}</strong> 계정의 잠금을
-						해제하시겠습니까?
+						<strong>{account?.name}</strong> 계정의 잠금을 해제하시겠습니까?
 					</p>
 					<p className="text-sm text-default-400 mt-2">
 						잠금이 해제되면 다시 로그인할 수 있습니다.
@@ -251,10 +250,7 @@ function AccountDetailPageClient({ userId }: AccountDetailPageClientProps) {
 	// 데이터 없음
 	if (!account) {
 		return (
-			<PageSurface
-				title="계정 상세"
-				description="계정을 찾을 수 없습니다."
-			>
+			<PageSurface title="계정 상세" description="계정을 찾을 수 없습니다.">
 				<div className="flex flex-col items-center justify-center gap-4 p-8">
 					<p className="text-default-500">계정을 찾을 수 없습니다.</p>
 					<Button variant="flat" onPress={onClickBackButton}>
@@ -287,25 +283,19 @@ function AccountDetailPageClient({ userId }: AccountDetailPageClientProps) {
 						<dl className="grid grid-cols-1 md:grid-cols-2 gap-6">
 							{/* 이름 */}
 							<div>
-								<dt className="text-sm text-default-500 mb-1">
-									이름
-								</dt>
+								<dt className="text-sm text-default-500 mb-1">이름</dt>
 								<dd className="font-medium">{account.name}</dd>
 							</div>
 
 							{/* 이메일 */}
 							<div>
-								<dt className="text-sm text-default-500 mb-1">
-									이메일
-								</dt>
+								<dt className="text-sm text-default-500 mb-1">이메일</dt>
 								<dd className="font-medium">{account.email}</dd>
 							</div>
 
 							{/* 활성 상태 */}
 							<div>
-								<dt className="text-sm text-default-500 mb-1">
-									활성 상태
-								</dt>
+								<dt className="text-sm text-default-500 mb-1">활성 상태</dt>
 								<dd>
 									<div className="flex items-center gap-2">
 										<Switch
@@ -317,15 +307,9 @@ function AccountDetailPageClient({ userId }: AccountDetailPageClientProps) {
 										<Chip
 											size="sm"
 											variant="flat"
-											color={
-												account.isActive
-													? "success"
-													: "danger"
-											}
+											color={account.isActive ? "success" : "danger"}
 										>
-											{account.isActive
-												? "활성"
-												: "비활성"}
+											{account.isActive ? "활성" : "비활성"}
 										</Chip>
 									</div>
 								</dd>
@@ -333,9 +317,7 @@ function AccountDetailPageClient({ userId }: AccountDetailPageClientProps) {
 
 							{/* 잠금 상태 */}
 							<div>
-								<dt className="text-sm text-default-500 mb-1">
-									잠금 상태
-								</dt>
+								<dt className="text-sm text-default-500 mb-1">잠금 상태</dt>
 								<dd>
 									<div className="flex items-center gap-2">
 										<Chip
@@ -368,15 +350,11 @@ function AccountDetailPageClient({ userId }: AccountDetailPageClientProps) {
 											</Button>
 										)}
 									</div>
-									{account.lockedUntil &&
-										!account.isPermanentlyLocked && (
-											<p className="text-xs text-default-400 mt-1">
-												해제 예정:{" "}
-												<DateTimeCell
-													value={account.lockedUntil}
-												/>
-											</p>
-										)}
+									{account.lockedUntil && !account.isPermanentlyLocked && (
+										<p className="text-xs text-default-400 mt-1">
+											해제 예정: <DateTimeCell value={account.lockedUntil} />
+										</p>
+									)}
 								</dd>
 							</div>
 
@@ -396,13 +374,9 @@ function AccountDetailPageClient({ userId }: AccountDetailPageClientProps) {
 											<Button
 												size="sm"
 												variant="flat"
-												startContent={
-													<RotateCcw className="h-3 w-3" />
-												}
+												startContent={<RotateCcw className="h-3 w-3" />}
 												isLoading={isResetting}
-												onPress={
-													onClickResetFailedAttempts
-												}
+												onPress={onClickResetFailedAttempts}
 											>
 												초기화
 											</Button>
@@ -420,15 +394,9 @@ function AccountDetailPageClient({ userId }: AccountDetailPageClientProps) {
 									<Chip
 										size="sm"
 										variant="flat"
-										color={
-											account.mustChangePassword
-												? "warning"
-												: "default"
-										}
+										color={account.mustChangePassword ? "warning" : "default"}
 									>
-										{account.mustChangePassword
-											? "변경 필요"
-											: "불필요"}
+										{account.mustChangePassword ? "변경 필요" : "불필요"}
 									</Chip>
 								</dd>
 							</div>
@@ -440,13 +408,9 @@ function AccountDetailPageClient({ userId }: AccountDetailPageClientProps) {
 								</dt>
 								<dd>
 									{account.lastLoginAt ? (
-										<DateTimeCell
-											value={account.lastLoginAt}
-										/>
+										<DateTimeCell value={account.lastLoginAt} />
 									) : (
-										<span className="text-default-400">
-											-
-										</span>
+										<span className="text-default-400">-</span>
 									)}
 								</dd>
 							</div>
@@ -463,9 +427,7 @@ function AccountDetailPageClient({ userId }: AccountDetailPageClientProps) {
 
 							{/* 가입일 */}
 							<div>
-								<dt className="text-sm text-default-500 mb-1">
-									가입일
-								</dt>
+								<dt className="text-sm text-default-500 mb-1">가입일</dt>
 								<dd>
 									<DateTimeCell value={account.createdAt} />
 								</dd>
@@ -477,17 +439,13 @@ function AccountDetailPageClient({ userId }: AccountDetailPageClientProps) {
 				{/* 액션 버튼 영역 */}
 				<SectionSurface>
 					<div className="p-6">
-						<h3 className="text-lg font-semibold mb-4">
-							관리 액션
-						</h3>
+						<h3 className="text-lg font-semibold mb-4">관리 액션</h3>
 						<Divider className="mb-4" />
 						<div className="flex flex-wrap gap-3">
 							<Button
 								variant="flat"
 								color="primary"
-								startContent={
-									<LockOpen className="h-4 w-4" />
-								}
+								startContent={<LockOpen className="h-4 w-4" />}
 								isDisabled={!isLocked}
 								onPress={onClickOpenUnlockModal}
 							>
@@ -496,9 +454,7 @@ function AccountDetailPageClient({ userId }: AccountDetailPageClientProps) {
 							<Button
 								variant="flat"
 								color="warning"
-								startContent={
-									<KeyRound className="h-4 w-4" />
-								}
+								startContent={<KeyRound className="h-4 w-4" />}
 								onPress={onClickOpenForceResetPasswordModal}
 							>
 								비밀번호 강제 변경

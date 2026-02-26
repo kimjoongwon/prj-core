@@ -39,9 +39,7 @@ import { PasswordResetService } from "./password-reset.service";
 export class PasswordResetController {
 	private readonly logger = new Logger(PasswordResetController.name);
 
-	constructor(
-		private readonly passwordResetService: PasswordResetService,
-	) {}
+	constructor(private readonly passwordResetService: PasswordResetService) {}
 
 	@ApiOperation({
 		operationId: "getPasswordPolicy",
@@ -49,7 +47,11 @@ export class PasswordResetController {
 		description:
 			"비밀번호 정책(최소 길이, 대소문자/숫자/특수문자 필수 여부)을 반환합니다. 인증 불요.",
 	})
-	@ApiResponse({ status: 200, description: "비밀번호 정책 정보", type: PasswordPolicyDto })
+	@ApiResponse({
+		status: 200,
+		description: "비밀번호 정책 정보",
+		type: PasswordPolicyDto,
+	})
 	@Get("password-policy")
 	async getPasswordPolicy(@Res() res: Response) {
 		const policy = await this.passwordResetService.getPasswordPolicy();
@@ -78,10 +80,7 @@ export class PasswordResetController {
 	})
 	@HttpCode(HttpStatus.OK)
 	@Post("forgot-password")
-	async requestReset(
-		@Body("email") email: string,
-		@Res() res: Response,
-	) {
+	async requestReset(@Body("email") email: string, @Res() res: Response) {
 		try {
 			await this.passwordResetService.requestReset(email);
 			return res.json({
@@ -111,10 +110,7 @@ export class PasswordResetController {
 		type: TokenValidationDto,
 	})
 	@Get("reset-password/:token")
-	async validateToken(
-		@Param("token") token: string,
-		@Res() res: Response,
-	) {
+	async validateToken(@Param("token") token: string, @Res() res: Response) {
 		const result = await this.passwordResetService.validateToken(token);
 		return res.json(result);
 	}
@@ -139,8 +135,16 @@ export class PasswordResetController {
 			},
 		},
 	})
-	@ApiResponse({ status: 200, description: "비밀번호 변경 성공", type: ResetPasswordResultDto })
-	@ApiResponse({ status: 400, description: "토큰 만료, 정책 미달, 재사용 등", type: ResetPasswordErrorDto })
+	@ApiResponse({
+		status: 200,
+		description: "비밀번호 변경 성공",
+		type: ResetPasswordResultDto,
+	})
+	@ApiResponse({
+		status: 400,
+		description: "토큰 만료, 정책 미달, 재사용 등",
+		type: ResetPasswordErrorDto,
+	})
 	@HttpCode(HttpStatus.OK)
 	@Post("reset-password/:token")
 	async executeReset(

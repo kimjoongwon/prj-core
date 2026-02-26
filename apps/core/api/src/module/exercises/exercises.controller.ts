@@ -1,5 +1,5 @@
-import { wrapResponse } from "@cocrepo/be-common";
-import { CONTEXT_KEYS, EXERCISE_ERRORS } from "@cocrepo/constant";
+import { RolesGuard, wrapResponse } from "@cocrepo/be-common";
+import { CONTEXT_KEYS, EXERCISE_ERRORS, SYSTEM_ROLES } from "@cocrepo/constant";
 import {
 	ApiAuth,
 	ApiErrors,
@@ -15,10 +15,8 @@ import {
 	SpaceScope,
 	UpdateExerciseDto,
 } from "@cocrepo/dto";
-import { Exercise, Routine } from "@cocrepo/entity";
+import { Exercise, Routine, User } from "@cocrepo/entity";
 import { ExercisesService } from "@cocrepo/service";
-import { SYSTEM_ROLES } from "@cocrepo/constant";
-import { RolesGuard } from "@cocrepo/be-common";
 import {
 	Body,
 	Controller,
@@ -36,7 +34,6 @@ import {
 } from "@nestjs/common";
 import { ApiBody, ApiOperation, ApiParam, ApiTags } from "@nestjs/swagger";
 import { ClsService } from "nestjs-cls";
-import { User } from "@cocrepo/entity";
 
 @ApiTags("EXERCISES")
 @Controller()

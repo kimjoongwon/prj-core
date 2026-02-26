@@ -7,9 +7,8 @@ import {
 	SpaceAccessGuard,
 	SpaceScopeInterceptor,
 } from "@cocrepo/be-common";
-import { I18nModule, SpaceContext } from "@cocrepo/service";
 import { SpacesRepository } from "@cocrepo/repository";
-import { SpacesService } from "@cocrepo/service";
+import { I18nModule, SpaceContext, SpacesService } from "@cocrepo/service";
 import {
 	Logger,
 	type MiddlewareConsumer,

@@ -1,4 +1,5 @@
 import { wrapResponse } from "@cocrepo/be-common";
+import { SYSTEM_ROLES } from "@cocrepo/constant";
 import {
 	ApiAuth,
 	ApiErrors,
@@ -7,7 +8,6 @@ import {
 	Roles,
 	SkipSpaceCheck,
 } from "@cocrepo/decorator";
-import { SYSTEM_ROLES } from "@cocrepo/constant";
 import {
 	CreateOidcClientDto,
 	OidcClientDto,
@@ -120,7 +120,8 @@ export class OidcClientsController {
 	@ApiOperation({
 		operationId: "updateOidcClient",
 		summary: "OIDC 클라이언트 수정",
-		description: "OIDC 클라이언트 정보를 수정합니다. Client ID는 수정할 수 없습니다.",
+		description:
+			"OIDC 클라이언트 정보를 수정합니다. Client ID는 수정할 수 없습니다.",
 	})
 	@ApiAuth()
 	@ApiParam({

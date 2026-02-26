@@ -1,9 +1,9 @@
 "use client";
 
 import {
+	type ActionResponseDto,
 	useDeleteAction,
 	useGetActionById,
-	type ActionResponseDto,
 } from "@cocrepo/api";
 import { PageSurface, SectionSurface, VStack } from "@cocrepo/ui";
 import {
@@ -99,10 +99,7 @@ function ActionDetailPageClient({ actionId }: ActionDetailPageClientProps) {
 
 	if (!action) {
 		return (
-			<PageSurface
-				title="Action 상세"
-				description="Action을 찾을 수 없습니다."
-			>
+			<PageSurface title="Action 상세" description="Action을 찾을 수 없습니다.">
 				<div className="flex flex-col items-center justify-center gap-4 p-8">
 					<p className="text-default-500">Action을 찾을 수 없습니다.</p>
 					<Button variant="flat" onPress={onClickBackButton}>

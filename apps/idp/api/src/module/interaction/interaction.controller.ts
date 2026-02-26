@@ -45,8 +45,7 @@ import { InteractionService } from "./interaction.service";
 export class InteractionController {
 	private readonly logger = new Logger(InteractionController.name);
 	private readonly isDev =
-		process.env.NODE_ENV !== "production" &&
-		process.env.NODE_ENV !== "staging";
+		process.env.NODE_ENV !== "production" && process.env.NODE_ENV !== "staging";
 
 	constructor(
 		private readonly interactionService: InteractionService,
@@ -125,9 +124,7 @@ export class InteractionController {
 			});
 		} catch (error) {
 			this.logger.error(`Interaction error: ${error}`);
-			return res
-				.status(400)
-				.json({ error: "유효하지 않은 인터랙션입니다." });
+			return res.status(400).json({ error: "유효하지 않은 인터랙션입니다." });
 		}
 	}
 
@@ -151,7 +148,7 @@ export class InteractionController {
 	@HttpCode(HttpStatus.OK)
 	@Post(":uid/login")
 	async submitLogin(
-		@Param("uid") uid: string,
+		@Param("uid") _uid: string,
 		@Body() loginDto: OidcLoginPayloadDto,
 		@Req() req: Request,
 		@Res() res: Response,
@@ -208,8 +205,7 @@ export class InteractionController {
 	@ApiOperation({
 		operationId: "confirmConsent",
 		summary: "동의 처리",
-		description:
-			"사용자 동의를 처리하고 리다이렉트 URL을 반환합니다.",
+		description: "사용자 동의를 처리하고 리다이렉트 URL을 반환합니다.",
 	})
 	@ApiParam({ name: "uid", description: "Interaction 고유 ID" })
 	@ApiResponse({
@@ -219,7 +215,7 @@ export class InteractionController {
 	})
 	@HttpCode(HttpStatus.OK)
 	@Post(":uid/confirm")
-	async confirmConsent(@Param("uid") uid: string, @Res() res: Response) {
+	async confirmConsent(@Param("uid") _uid: string, @Res() res: Response) {
 		try {
 			const req = res.req as unknown as KoaLikeRequest;
 			const koaRes = res as unknown as KoaLikeResponse;
@@ -241,8 +237,7 @@ export class InteractionController {
 	@ApiOperation({
 		operationId: "abortInteraction",
 		summary: "인증 취소",
-		description:
-			"사용자가 인증을 거부하고 리다이렉트 URL을 반환합니다.",
+		description: "사용자가 인증을 거부하고 리다이렉트 URL을 반환합니다.",
 	})
 	@ApiParam({ name: "uid", description: "Interaction 고유 ID" })
 	@ApiResponse({

@@ -27,7 +27,7 @@ import { ApiBody, ApiOperation, ApiParam, ApiTags } from "@nestjs/swagger";
 @ApiTags("ROLES")
 @Controller()
 export class RolesController {
-	constructor(private readonly rolesService: RolesService) { }
+	constructor(private readonly rolesService: RolesService) {}
 
 	@Get()
 	@UseGuards(RolesGuard)

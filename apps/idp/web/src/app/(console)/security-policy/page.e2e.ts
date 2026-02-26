@@ -1,4 +1,4 @@
-import { test, expect } from "@playwright/test";
+import { expect, test } from "@playwright/test";
 import { loginToConsole } from "../../../e2e/helpers/login";
 
 test.describe("보안 정책", () => {
@@ -15,16 +15,12 @@ test.describe("보안 정책", () => {
 			await expect(
 				page.getByRole("heading", { name: "보안 정책" }),
 			).toBeVisible();
-			await expect(
-				page.getByText("인증 보안 정책을 관리합니다"),
-			).toBeVisible();
+			await expect(page.getByText("인증 보안 정책을 관리합니다")).toBeVisible();
 		});
 
 		test("저장 버튼이 표시되어야 한다", async ({ page }) => {
 			// Then: 저장 버튼 확인
-			await expect(
-				page.getByRole("button", { name: "저장" }),
-			).toBeVisible();
+			await expect(page.getByRole("button", { name: "저장" })).toBeVisible();
 		});
 
 		test("비밀번호 정책 섹션이 표시되어야 한다", async ({ page }) => {

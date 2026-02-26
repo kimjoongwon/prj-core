@@ -1,6 +1,6 @@
 "use client";
 
-import { useGetActions, type ActionDto } from "@cocrepo/api";
+import { type ActionDto, useGetActions } from "@cocrepo/api";
 import type { InputConfig, MetaDataGridColumnConfig } from "@cocrepo/type";
 import {
 	DateTimeCell,
@@ -11,7 +11,7 @@ import {
 	useMetaDataGridQueryStates,
 	VStack,
 } from "@cocrepo/ui";
-import { Button, Chip } from "@heroui/react";
+import { Chip } from "@heroui/react";
 import { Plus } from "lucide-react";
 import { observer } from "mobx-react-lite";
 import type { Route } from "next";
@@ -84,11 +84,7 @@ const columns: MetaDataGridColumnConfig<ActionDto>[] = [
 		cell: ({ getValue }) => {
 			const isSystem = getValue() as boolean;
 			return (
-				<Chip
-					size="sm"
-					color={isSystem ? "warning" : "default"}
-					variant="flat"
-				>
+				<Chip size="sm" color={isSystem ? "warning" : "default"} variant="flat">
 					{isSystem ? "시스템" : "사용자"}
 				</Chip>
 			);

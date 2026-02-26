@@ -1,4 +1,5 @@
 import { wrapResponse } from "@cocrepo/be-common";
+import { SYSTEM_ROLES } from "@cocrepo/constant";
 import {
 	ApiAuth,
 	ApiErrors,
@@ -7,12 +8,7 @@ import {
 	Roles,
 	SkipSpaceCheck,
 } from "@cocrepo/decorator";
-import { SYSTEM_ROLES } from "@cocrepo/constant";
-import {
-	IdpAccountDto,
-	PageMetaDto,
-	QueryIdpAccountDto,
-} from "@cocrepo/dto";
+import { IdpAccountDto, PageMetaDto, QueryIdpAccountDto } from "@cocrepo/dto";
 import { IdpAccountService } from "@cocrepo/service";
 import {
 	Controller,

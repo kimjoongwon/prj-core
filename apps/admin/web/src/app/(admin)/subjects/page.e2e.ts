@@ -1,4 +1,4 @@
-import { test, expect } from "@playwright/test";
+import { expect, test } from "@playwright/test";
 
 test.describe("Subject 목록 페이지", () => {
 	// ── 목록 페이지 렌더링 ──
@@ -63,9 +63,7 @@ test.describe("Subject 목록 페이지", () => {
 			await page.waitForLoadState("networkidle");
 
 			// Then: 분류 필터 버튼 확인
-			await expect(
-				page.getByRole("button", { name: /분류/ }),
-			).toBeVisible();
+			await expect(page.getByRole("button", { name: /분류/ })).toBeVisible();
 		});
 	});
 });

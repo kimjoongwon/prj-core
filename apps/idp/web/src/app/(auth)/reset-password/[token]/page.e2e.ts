@@ -1,4 +1,4 @@
-import { test, expect } from "@playwright/test";
+import { expect, test } from "@playwright/test";
 
 const VALID_TOKEN = "test-valid-token-for-e2e";
 const MOCK_EMAIL = "admin@plate.com";
@@ -107,9 +107,7 @@ test.describe("비밀번호 재설정", () => {
 			).toBeVisible();
 		});
 
-		test("정책 미충족 시 제출 버튼이 비활성화되어야 한다", async ({
-			page,
-		}) => {
+		test("정책 미충족 시 제출 버튼이 비활성화되어야 한다", async ({ page }) => {
 			// Given: 비밀번호 입력 폼
 			await mockValidToken(page);
 			await page.goto(`/reset-password/${VALID_TOKEN}`);
@@ -145,9 +143,9 @@ test.describe("비밀번호 재설정", () => {
 			await page.getByRole("button", { name: "비밀번호 변경" }).click();
 
 			// Then: 완료 화면 표시
-			await expect(
-				page.getByText("비밀번호가 변경되었습니다"),
-			).toBeVisible({ timeout: 10000 });
+			await expect(page.getByText("비밀번호가 변경되었습니다")).toBeVisible({
+				timeout: 10000,
+			});
 			await expect(
 				page.getByRole("button", { name: "로그인하기" }),
 			).toBeVisible();

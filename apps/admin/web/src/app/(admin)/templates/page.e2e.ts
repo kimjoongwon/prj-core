@@ -1,4 +1,4 @@
-import { test, expect } from "@playwright/test";
+import { expect, test } from "@playwright/test";
 
 test.describe("메시지 템플릿 목록 페이지", () => {
 	// ── E2E-001: 목록 렌더링 ──
@@ -35,9 +35,7 @@ test.describe("메시지 템플릿 목록 페이지", () => {
 			await page.waitForLoadState("networkidle");
 
 			// Then: 검색 필드 확인
-			await expect(
-				page.getByPlaceholder("이름, 코드로 검색..."),
-			).toBeVisible();
+			await expect(page.getByPlaceholder("이름, 코드로 검색...")).toBeVisible();
 		});
 	});
 
@@ -60,9 +58,9 @@ test.describe("메시지 템플릿 목록 페이지", () => {
 				);
 				const body = await resp.json();
 				const templates = body.data ?? [];
-				const existing = (
-					templates as { id: string; code: string }[]
-				).find((t) => t.code === TEST_CODE);
+				const existing = (templates as { id: string; code: string }[]).find(
+					(t) => t.code === TEST_CODE,
+				);
 				if (existing) {
 					await page.request.delete(
 						`http://localhost:3000/api/v1/templates/${existing.id}`,
@@ -115,12 +113,8 @@ test.describe("메시지 템플릿 목록 페이지", () => {
 			).toBeVisible({ timeout: 10000 });
 
 			// Then: 등록한 정보 확인
-			await expect(
-				page.getByText(TEST_CODE, { exact: true }),
-			).toBeVisible();
-			await expect(
-				page.getByText(TEST_NAME, { exact: true }),
-			).toBeVisible();
+			await expect(page.getByText(TEST_CODE, { exact: true })).toBeVisible();
+			await expect(page.getByText(TEST_NAME, { exact: true })).toBeVisible();
 
 			// ── 수정 플로우 ──
 

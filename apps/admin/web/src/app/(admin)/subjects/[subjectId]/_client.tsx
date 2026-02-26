@@ -2,9 +2,9 @@
 
 import {
 	getSubjectFields,
-	useGetSubjectById,
 	type SubjectDto,
 	type SubjectFieldDto,
+	useGetSubjectById,
 } from "@cocrepo/api";
 import {
 	BooleanCell,
@@ -89,7 +89,11 @@ function SubjectInfoSection({ subject }: { subject: SubjectDto }) {
 					<div className="mb-1 text-sm text-default-500">분류</div>
 					<div>
 						{subject.group ? (
-							<Chip color={getGroupColor(subject.group)} size="sm" variant="flat">
+							<Chip
+								color={getGroupColor(subject.group)}
+								size="sm"
+								variant="flat"
+							>
 								{subject.group}
 							</Chip>
 						) : (
@@ -187,10 +191,7 @@ function SubjectFieldsSection({
 					<TableColumn align="center">필수</TableColumn>
 					<TableColumn align="center">관계</TableColumn>
 				</TableHeader>
-				<TableBody
-					items={fieldList}
-					emptyContent="조회된 필드가 없습니다."
-				>
+				<TableBody items={fieldList} emptyContent="조회된 필드가 없습니다.">
 					{(field) => (
 						<TableRow key={field.name}>
 							<TableCell>{field.name}</TableCell>

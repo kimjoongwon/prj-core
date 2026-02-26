@@ -1,4 +1,4 @@
-import { test, expect } from "@playwright/test";
+import { expect, test } from "@playwright/test";
 import { loginToConsole } from "../../../../e2e/helpers/login";
 
 test.describe("IDP 계정 상세 페이지", () => {
@@ -9,10 +9,7 @@ test.describe("IDP 계정 상세 페이지", () => {
 		await page.waitForLoadState("networkidle");
 
 		// When: 첫 번째 계정의 "상세 보기" 클릭 (Button as={Link}이므로 role=button)
-		await page
-			.getByRole("button", { name: "상세 보기" })
-			.first()
-			.click();
+		await page.getByRole("button", { name: "상세 보기" }).first().click();
 
 		// Then: 상세 페이지로 이동하고 보안 정보가 표시됨
 		await expect(page).toHaveURL(/\/accounts\/.+/);
@@ -22,19 +19,14 @@ test.describe("IDP 계정 상세 페이지", () => {
 		await expect(page.getByText("보안 정보")).toBeVisible();
 	});
 
-	test("상세 페이지에서 액션 버튼이 표시되어야 한다", async ({
-		page,
-	}) => {
+	test("상세 페이지에서 액션 버튼이 표시되어야 한다", async ({ page }) => {
 		// Given: 로그인 후 계정 목록 → 상세 진입
 		await loginToConsole(page);
 		await page.goto("/accounts");
 		await page.waitForLoadState("networkidle");
 
 		// When: 첫 번째 계정 상세 진입
-		await page
-			.getByRole("button", { name: "상세 보기" })
-			.first()
-			.click();
+		await page.getByRole("button", { name: "상세 보기" }).first().click();
 		await page.waitForLoadState("networkidle");
 
 		// Then: 액션 버튼 확인 (잠금 해제, 실패 횟수 초기화, 세션 무효화 등)

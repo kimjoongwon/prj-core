@@ -1,6 +1,6 @@
 "use client";
 
-import { useGetOidcClients, type OidcClientDto } from "@cocrepo/api";
+import { type OidcClientDto, useGetOidcClients } from "@cocrepo/api";
 import type { InputConfig, MetaDataGridColumnConfig } from "@cocrepo/type";
 import {
 	ActiveStatusCell,
@@ -40,17 +40,13 @@ const columns: MetaDataGridColumnConfig<OidcClientDto>[] = [
 		field: "tokenEndpointAuthMethod",
 		label: "인증 방식",
 		size: 150,
-		cell: ({ getValue }) => (
-			<AuthMethodCell method={getValue() as string} />
-		),
+		cell: ({ getValue }) => <AuthMethodCell method={getValue() as string} />,
 	},
 	{
 		field: "grantTypes",
 		label: "Grant Types",
 		size: 200,
-		cell: ({ getValue }) => (
-			<GrantTypeCell types={getValue() as string[]} />
-		),
+		cell: ({ getValue }) => <GrantTypeCell types={getValue() as string[]} />,
 	},
 	{
 		field: "isActive",
@@ -65,9 +61,7 @@ const columns: MetaDataGridColumnConfig<OidcClientDto>[] = [
 		field: "createdAt",
 		label: "등록일",
 		size: 150,
-		cell: ({ getValue }) => (
-			<DateTimeCell value={getValue() as string} />
-		),
+		cell: ({ getValue }) => <DateTimeCell value={getValue() as string} />,
 	},
 	{
 		field: "actions",
@@ -103,8 +97,7 @@ const leftInputs: InputConfig[] = [
  * OIDC 클라이언트 목록 페이지 - 클라이언트 컴포넌트
  */
 function OidcClientsPageClient() {
-	const [queryStates, setQueryStates] =
-		useMetaDataGridQueryStates(leftInputs);
+	const [queryStates, setQueryStates] = useMetaDataGridQueryStates(leftInputs);
 
 	const { data: response, isLoading } = useGetOidcClients({
 		take: queryStates.take,

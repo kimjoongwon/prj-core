@@ -1,4 +1,4 @@
-import { wrapResponse } from "@cocrepo/be-common";
+import { RolesGuard, wrapResponse } from "@cocrepo/be-common";
 import { CONTEXT_KEYS, ROUTINE_ERRORS, SYSTEM_ROLES } from "@cocrepo/constant";
 import {
 	ApiAuth,
@@ -14,9 +14,8 @@ import {
 	SpaceScope,
 	UpdateRoutineDto,
 } from "@cocrepo/dto";
-import { Routine } from "@cocrepo/entity";
+import { Routine, User } from "@cocrepo/entity";
 import { RoutinesService } from "@cocrepo/service";
-import { RolesGuard } from "@cocrepo/be-common";
 import {
 	Body,
 	Controller,
@@ -34,7 +33,6 @@ import {
 } from "@nestjs/common";
 import { ApiBody, ApiOperation, ApiParam, ApiTags } from "@nestjs/swagger";
 import { ClsService } from "nestjs-cls";
-import { User } from "@cocrepo/entity";
 
 @ApiTags("ROUTINES")
 @Controller()

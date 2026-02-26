@@ -7,7 +7,7 @@ import {
 	type TemplateFormData,
 	type VariableEditItem,
 } from "@cocrepo/ui";
-import { Button, Spinner, addToast } from "@heroui/react";
+import { addToast, Button, Spinner } from "@heroui/react";
 import { observer, useLocalObservable } from "mobx-react-lite";
 import type { Route } from "next";
 import { useRouter } from "next/navigation";
@@ -78,8 +78,7 @@ function TemplateEditPageClient({ templateId }: TemplateEditPageClientProps) {
 			onError: (error) => {
 				addToast({
 					title: "템플릿 수정 실패",
-					description:
-						error.message || "템플릿 수정 중 오류가 발생했습니다.",
+					description: error.message || "템플릿 수정 중 오류가 발생했습니다.",
 					color: "danger",
 				});
 			},
@@ -185,14 +184,9 @@ function TemplateEditPageClient({ templateId }: TemplateEditPageClientProps) {
 	// 데이터 없음
 	if (!template) {
 		return (
-			<PageSurface
-				title="템플릿 수정"
-				description="템플릿을 찾을 수 없습니다."
-			>
+			<PageSurface title="템플릿 수정" description="템플릿을 찾을 수 없습니다.">
 				<div className="flex flex-col items-center justify-center gap-4 p-8">
-					<p className="text-default-500">
-						템플릿을 찾을 수 없습니다.
-					</p>
+					<p className="text-default-500">템플릿을 찾을 수 없습니다.</p>
 					<Button variant="flat" onPress={onClickCancelButton}>
 						목록으로
 					</Button>

@@ -30,10 +30,7 @@ export default async function SessionEditPage({
 
 	return (
 		<HydrationBoundary state={dehydrate(queryClient)}>
-			<SessionEditPageClient
-				timelineId={timelineId}
-				sessionId={sessionId}
-			/>
+			<SessionEditPageClient timelineId={timelineId} sessionId={sessionId} />
 		</HydrationBoundary>
 	);
 }

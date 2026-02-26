@@ -11,18 +11,12 @@ import {
 	ConfirmModal,
 	DateTimeCell,
 	PageSurface,
-	SectionSurface,
 	SecretField,
+	SectionSurface,
 	VStack,
 } from "@cocrepo/ui";
 import { Button, Chip, useDisclosure } from "@heroui/react";
-import {
-	ArrowLeft,
-	Edit,
-	Power,
-	PowerOff,
-	Trash2,
-} from "lucide-react";
+import { ArrowLeft, Edit, Power, PowerOff, Trash2 } from "lucide-react";
 import { observer } from "mobx-react-lite";
 import type { Route } from "next";
 import { useRouter } from "next/navigation";
@@ -43,15 +37,14 @@ function OidcClientDetailPageClient({
 	const { data: response, isLoading } = useGetOidcClient(oidcClientId);
 	const client = response?.data;
 
-	const { mutate: deleteClient, isPending: isDeleting } =
-		useDeleteOidcClient({
-			mutation: {
-				onSuccess: () => {
-					deleteModal.onClose();
-					router.push("/oidc-clients" as Route);
-				},
+	const { mutate: deleteClient, isPending: isDeleting } = useDeleteOidcClient({
+		mutation: {
+			onSuccess: () => {
+				deleteModal.onClose();
+				router.push("/oidc-clients" as Route);
 			},
-		});
+		},
+	});
 
 	const { mutate: toggleActive, isPending: isToggling } =
 		useToggleActiveOidcClient({
@@ -95,9 +88,7 @@ function OidcClientDetailPageClient({
 				description="클라이언트를 찾을 수 없습니다."
 			>
 				<div className="flex flex-col items-center justify-center gap-4 p-8">
-					<p className="text-default-500">
-						클라이언트를 찾을 수 없습니다.
-					</p>
+					<p className="text-default-500">클라이언트를 찾을 수 없습니다.</p>
 					<Button variant="flat" onPress={onClickBackButton}>
 						목록으로
 					</Button>
@@ -160,37 +151,27 @@ function OidcClientDetailPageClient({
 						<h3 className="text-lg font-semibold mb-4">기본 정보</h3>
 						<dl className="grid grid-cols-1 md:grid-cols-2 gap-4">
 							<div>
-								<dt className="text-sm text-default-500 mb-1">
-									Client ID
-								</dt>
+								<dt className="text-sm text-default-500 mb-1">Client ID</dt>
 								<dd className="font-mono">{client.clientId}</dd>
 							</div>
 							<div>
-								<dt className="text-sm text-default-500 mb-1">
-									Client Secret
-								</dt>
+								<dt className="text-sm text-default-500 mb-1">Client Secret</dt>
 								<dd>
 									<SecretField value={client.clientSecret} />
 								</dd>
 							</div>
 							<div>
-								<dt className="text-sm text-default-500 mb-1">
-									이름
-								</dt>
+								<dt className="text-sm text-default-500 mb-1">이름</dt>
 								<dd>{client.clientName}</dd>
 							</div>
 							<div>
-								<dt className="text-sm text-default-500 mb-1">
-									활성 상태
-								</dt>
+								<dt className="text-sm text-default-500 mb-1">활성 상태</dt>
 								<dd>
 									<ActiveStatusCell isActive={client.isActive} />
 								</dd>
 							</div>
 							<div>
-								<dt className="text-sm text-default-500 mb-1">
-									등록일
-								</dt>
+								<dt className="text-sm text-default-500 mb-1">등록일</dt>
 								<dd>
 									<DateTimeCell value={client.createdAt} />
 								</dd>
@@ -205,19 +186,13 @@ function OidcClientDetailPageClient({
 						<h3 className="text-lg font-semibold mb-4">인증 설정</h3>
 						<dl className="grid grid-cols-1 md:grid-cols-2 gap-4">
 							<div>
-								<dt className="text-sm text-default-500 mb-1">
-									인증 방식
-								</dt>
+								<dt className="text-sm text-default-500 mb-1">인증 방식</dt>
 								<dd>
-									<AuthMethodCell
-										method={client.tokenEndpointAuthMethod}
-									/>
+									<AuthMethodCell method={client.tokenEndpointAuthMethod} />
 								</dd>
 							</div>
 							<div>
-								<dt className="text-sm text-default-500 mb-1">
-									Grant Types
-								</dt>
+								<dt className="text-sm text-default-500 mb-1">Grant Types</dt>
 								<dd>
 									<div className="flex flex-wrap gap-1">
 										{client.grantTypes.map((type: string) => (
@@ -234,27 +209,17 @@ function OidcClientDetailPageClient({
 								</dt>
 								<dd>
 									<div className="flex flex-wrap gap-1">
-										{client.responseTypes.map(
-											(type: string) => (
-												<Chip
-													key={type}
-													size="sm"
-													variant="flat"
-												>
-													{type}
-												</Chip>
-											),
-										)}
+										{client.responseTypes.map((type: string) => (
+											<Chip key={type} size="sm" variant="flat">
+												{type}
+											</Chip>
+										))}
 									</div>
 								</dd>
 							</div>
 							<div>
-								<dt className="text-sm text-default-500 mb-1">
-									스코프
-								</dt>
-								<dd className="font-mono text-sm">
-									{client.scope}
-								</dd>
+								<dt className="text-sm text-default-500 mb-1">스코프</dt>
+								<dd className="font-mono text-sm">{client.scope}</dd>
 							</div>
 						</dl>
 					</div>
@@ -263,9 +228,7 @@ function OidcClientDetailPageClient({
 				{/* Redirect URIs */}
 				<SectionSurface>
 					<div className="p-6">
-						<h3 className="text-lg font-semibold mb-4">
-							Redirect URIs
-						</h3>
+						<h3 className="text-lg font-semibold mb-4">Redirect URIs</h3>
 						{client.redirectUris.length > 0 ? (
 							<div className="space-y-2">
 								{client.redirectUris.map((uri: string) => (
@@ -291,28 +254,16 @@ function OidcClientDetailPageClient({
 						<h3 className="text-lg font-semibold mb-4">추가 정보</h3>
 						<dl className="grid grid-cols-1 md:grid-cols-2 gap-4">
 							<div>
-								<dt className="text-sm text-default-500 mb-1">
-									로고 URI
-								</dt>
-								<dd className="text-sm">
-									{client.logoUri || "-"}
-								</dd>
+								<dt className="text-sm text-default-500 mb-1">로고 URI</dt>
+								<dd className="text-sm">{client.logoUri || "-"}</dd>
 							</div>
 							<div>
-								<dt className="text-sm text-default-500 mb-1">
-									정책 URI
-								</dt>
-								<dd className="text-sm">
-									{client.policyUri || "-"}
-								</dd>
+								<dt className="text-sm text-default-500 mb-1">정책 URI</dt>
+								<dd className="text-sm">{client.policyUri || "-"}</dd>
 							</div>
 							<div>
-								<dt className="text-sm text-default-500 mb-1">
-									약관 URI
-								</dt>
-								<dd className="text-sm">
-									{client.tosUri || "-"}
-								</dd>
+								<dt className="text-sm text-default-500 mb-1">약관 URI</dt>
+								<dd className="text-sm">{client.tosUri || "-"}</dd>
 							</div>
 						</dl>
 					</div>
@@ -328,12 +279,10 @@ function OidcClientDetailPageClient({
 				message={
 					<>
 						<p>
-							<strong>{client.clientId}</strong> 클라이언트를
-							삭제하시겠습니까?
+							<strong>{client.clientId}</strong> 클라이언트를 삭제하시겠습니까?
 						</p>
 						<p className="text-sm text-danger mt-2">
-							삭제된 클라이언트는 더 이상 인증에 사용할 수
-							없습니다.
+							삭제된 클라이언트는 더 이상 인증에 사용할 수 없습니다.
 						</p>
 					</>
 				}

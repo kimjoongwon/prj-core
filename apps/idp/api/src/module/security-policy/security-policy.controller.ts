@@ -1,3 +1,4 @@
+import { SYSTEM_ROLES } from "@cocrepo/constant";
 import {
 	ApiAuth,
 	ApiErrors,
@@ -6,19 +7,9 @@ import {
 	Roles,
 	SkipSpaceCheck,
 } from "@cocrepo/decorator";
-import { SYSTEM_ROLES } from "@cocrepo/constant";
-import {
-	SecurityPolicyDto,
-	UpdateSecurityPolicyDto,
-} from "@cocrepo/dto";
+import { SecurityPolicyDto, UpdateSecurityPolicyDto } from "@cocrepo/dto";
 import { SecurityPolicyService } from "@cocrepo/service";
-import {
-	Body,
-	Controller,
-	Get,
-	HttpStatus,
-	Patch,
-} from "@nestjs/common";
+import { Body, Controller, Get, HttpStatus, Patch } from "@nestjs/common";
 import { ApiBody, ApiOperation, ApiTags } from "@nestjs/swagger";
 
 @ApiTags("SECURITY_POLICY")
@@ -26,9 +17,7 @@ import { ApiBody, ApiOperation, ApiTags } from "@nestjs/swagger";
 @Roles([SYSTEM_ROLES.FULL_ACCESS])
 @SkipSpaceCheck()
 export class SecurityPolicyController {
-	constructor(
-		private readonly securityPolicyService: SecurityPolicyService,
-	) {}
+	constructor(private readonly securityPolicyService: SecurityPolicyService) {}
 
 	@Get()
 	@ApiOperation({
@@ -48,8 +37,7 @@ export class SecurityPolicyController {
 	@ApiOperation({
 		operationId: "updateSecurityPolicy",
 		summary: "보안 정책 수정",
-		description:
-			"시스템 보안 정책을 수정합니다. 변경할 필드만 전달합니다.",
+		description: "시스템 보안 정책을 수정합니다. 변경할 필드만 전달합니다.",
 	})
 	@ApiAuth()
 	@ApiBody({

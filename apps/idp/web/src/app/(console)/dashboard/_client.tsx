@@ -1,10 +1,10 @@
 "use client";
 
 import {
-	useGetIdpDashboardStats,
-	useGetIdpLoginTrend,
 	type DashboardStatsDto,
 	type LoginTrendItemDto,
+	useGetIdpDashboardStats,
+	useGetIdpLoginTrend,
 } from "@cocrepo/api";
 import { PageSurface, SectionSurface } from "@cocrepo/ui";
 import { Card, CardBody } from "@heroui/react";
@@ -164,7 +164,10 @@ function DashboardPageClient() {
 									{/* 막대 영역 */}
 									<div className="flex flex-1 items-end gap-1 w-full justify-center">
 										{/* 성공 막대 */}
-										<div className="flex flex-col items-center justify-end" style={{ height: "100%" }}>
+										<div
+											className="flex flex-col items-center justify-end"
+											style={{ height: "100%" }}
+										>
 											<span className="mb-1 text-xs text-default-400">
 												{item.successCount}
 											</span>
@@ -179,7 +182,10 @@ function DashboardPageClient() {
 											/>
 										</div>
 										{/* 실패 막대 */}
-										<div className="flex flex-col items-center justify-end" style={{ height: "100%" }}>
+										<div
+											className="flex flex-col items-center justify-end"
+											style={{ height: "100%" }}
+										>
 											<span className="mb-1 text-xs text-default-400">
 												{item.failureCount}
 											</span>

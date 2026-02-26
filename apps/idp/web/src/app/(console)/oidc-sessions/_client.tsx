@@ -1,12 +1,12 @@
 "use client";
 
 import {
-	useGetOidcSessions,
+	type OidcSessionDto,
 	useGetOidcSessionStats,
+	useGetOidcSessions,
+	useRevokeAllOidcSessions,
 	useRevokeOidcSession,
 	useRevokeOidcSessionsByGrant,
-	useRevokeAllOidcSessions,
-	type OidcSessionDto,
 } from "@cocrepo/api";
 import { MODEL_TYPE_OPTIONS } from "@cocrepo/constant";
 import type { InputConfig, MetaDataGridColumnConfig } from "@cocrepo/type";
@@ -22,9 +22,9 @@ import {
 	useMetaDataGridQueryStates,
 } from "@cocrepo/ui";
 import { Button, Card, CardBody, useDisclosure } from "@heroui/react";
+import { useQueryClient } from "@tanstack/react-query";
 import { Activity, Trash2 } from "lucide-react";
 import { observer, useLocalObservable } from "mobx-react-lite";
-import { useQueryClient } from "@tanstack/react-query";
 
 /**
  * 좌측 입력 정의 (모델 타입 필터 + accountId 검색)
@@ -63,8 +63,7 @@ function OidcSessionsPageClient() {
 		grantIdToRevoke: null as string | null,
 	}));
 
-	const [queryStates, setQueryStates] =
-		useMetaDataGridQueryStates(leftInputs);
+	const [queryStates, setQueryStates] = useMetaDataGridQueryStates(leftInputs);
 
 	const { data: response, isLoading } = useGetOidcSessions({
 		take: queryStates.take,
@@ -163,9 +162,7 @@ function OidcSessionsPageClient() {
 			field: "modelType",
 			label: "모델 타입",
 			size: 140,
-			cell: ({ getValue }) => (
-				<ModelTypeCell type={getValue() as string} />
-			),
+			cell: ({ getValue }) => <ModelTypeCell type={getValue() as string} />,
 		},
 		{
 			field: "accountId",
@@ -173,8 +170,7 @@ function OidcSessionsPageClient() {
 			size: 140,
 			cell: ({ getValue }) => {
 				const accountId = getValue() as string | null;
-				if (!accountId)
-					return <span className="text-default-400">-</span>;
+				if (!accountId) return <span className="text-default-400">-</span>;
 				return (
 					<span className="font-mono text-sm" title={accountId}>
 						{accountId.slice(0, 8)}...
@@ -188,8 +184,7 @@ function OidcSessionsPageClient() {
 			size: 140,
 			cell: ({ getValue }) => {
 				const grantId = getValue() as string | null;
-				if (!grantId)
-					return <span className="text-default-400">-</span>;
+				if (!grantId) return <span className="text-default-400">-</span>;
 				return (
 					<Button
 						size="sm"
@@ -215,9 +210,7 @@ function OidcSessionsPageClient() {
 			field: "createdAt",
 			label: "등록일",
 			size: 150,
-			cell: ({ getValue }) => (
-				<DateTimeCell value={getValue() as string} />
-			),
+			cell: ({ getValue }) => <DateTimeCell value={getValue() as string} />,
 		},
 		{
 			field: "actions",
@@ -257,9 +250,7 @@ function OidcSessionsPageClient() {
 							</div>
 							<div>
 								<p className="text-sm text-default-500">전체</p>
-								<p className="text-2xl font-bold">
-									{stats.totalCount ?? 0}
-								</p>
+								<p className="text-2xl font-bold">{stats.totalCount ?? 0}</p>
 							</div>
 						</CardBody>
 					</Card>
@@ -267,12 +258,8 @@ function OidcSessionsPageClient() {
 						<Card key={type} className="bg-content1">
 							<CardBody className="flex flex-row items-center gap-3 p-4">
 								<div>
-									<p className="text-sm text-default-500">
-										{type}
-									</p>
-									<p className="text-2xl font-bold">
-										{count}
-									</p>
+									<p className="text-sm text-default-500">{type}</p>
+									<p className="text-2xl font-bold">{count}</p>
 								</div>
 							</CardBody>
 						</Card>
@@ -304,10 +291,7 @@ function OidcSessionsPageClient() {
 				title="Grant 일괄 폐기"
 				message={
 					<>
-						<p>
-							이 Grant에 연결된 모든 세션 및 토큰을 일괄
-							폐기하시겠습니까?
-						</p>
+						<p>이 Grant에 연결된 모든 세션 및 토큰을 일괄 폐기하시겠습니까?</p>
 						{state.grantIdToRevoke && (
 							<p className="mt-2 rounded-lg bg-default-100 p-2 font-mono text-sm">
 								Grant ID: {state.grantIdToRevoke}
@@ -329,8 +313,8 @@ function OidcSessionsPageClient() {
 				title="전체 세션/토큰 폐기"
 				message={
 					<p>
-						모든 OIDC 세션 및 토큰({stats?.totalCount ?? 0}건)을
-						일괄 폐기하시겠습니까? 이 작업은 되돌릴 수 없습니다.
+						모든 OIDC 세션 및 토큰({stats?.totalCount ?? 0}건)을 일괄
+						폐기하시겠습니까? 이 작업은 되돌릴 수 없습니다.
 					</p>
 				}
 				confirmText="전체 폐기"

@@ -1,14 +1,15 @@
 "use client";
 
 import {
+	type UpdateAbilityDto,
 	useGetAbilityById,
 	useGetActions,
 	useGetSubjects,
 	useUpdateAbility,
-	type UpdateAbilityDto,
 } from "@cocrepo/api";
 import { PageSurface, SectionSurface, VStack } from "@cocrepo/ui";
 import {
+	addToast,
 	Button,
 	Input,
 	Select,
@@ -16,7 +17,6 @@ import {
 	Spinner,
 	Switch,
 	Textarea,
-	addToast,
 } from "@heroui/react";
 import { ArrowLeft, Save } from "lucide-react";
 import { observer, useLocalObservable } from "mobx-react-lite";
@@ -123,13 +123,11 @@ function AbilityEditPageClient({ abilityId }: AbilityEditPageClientProps) {
 			.filter((f) => f.length > 0);
 
 		// conditions 파싱 (JSON)
-		let conditionsObject:
-			| Record<string, string | number | boolean>
-			| undefined;
+		let conditionsObject: Record<string, string | number | boolean> | undefined;
 		if (state.conditions.trim()) {
 			try {
 				conditionsObject = JSON.parse(state.conditions);
-			} catch (error) {
+			} catch (_error) {
 				addToast({
 					title: "입력 오류",
 					description: "Conditions는 유효한 JSON 형식이어야 합니다.",

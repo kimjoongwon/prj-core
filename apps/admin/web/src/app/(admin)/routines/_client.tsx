@@ -1,8 +1,8 @@
 "use client";
 
 import {
-	type RoutineDto,
 	getGetRoutinesQueryKey,
+	type RoutineDto,
 	useDeleteRoutine,
 	useGetRoutines,
 } from "@cocrepo/api";
@@ -155,7 +155,9 @@ function RoutinesPageClient() {
 			label: "라벨",
 			size: 150,
 			cell: ({ getValue }) => (
-				<span className="text-default-600">{(getValue() as string) || "-"}</span>
+				<span className="text-default-600">
+					{(getValue() as string) || "-"}
+				</span>
 			),
 		},
 		{

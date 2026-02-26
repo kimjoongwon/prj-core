@@ -45,8 +45,7 @@ export const oidcConfig = registerAs("oidc", (): OidcConfig => {
 		jwksUri: process.env.OIDC_JWKS_URI || `${issuer}/oidc/jwks`,
 		clientId: process.env.OIDC_CLIENT_ID || "prj-core-admin",
 		clientSecret:
-			process.env.OIDC_CLIENT_SECRET ||
-			"admin-secret-change-in-production",
+			process.env.OIDC_CLIENT_SECRET || "admin-secret-change-in-production",
 		redirectUri:
 			process.env.OIDC_REDIRECT_URI ||
 			"http://localhost:3000/api/v1/auth/callback",

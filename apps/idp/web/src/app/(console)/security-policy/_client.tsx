@@ -1,15 +1,15 @@
 "use client";
 
 import {
+	getGetSecurityPolicyQueryKey,
 	useGetSecurityPolicy,
 	useUpdateSecurityPolicy,
-	getGetSecurityPolicyQueryKey,
 } from "@cocrepo/api";
 import { PageSurface, SectionSurface } from "@cocrepo/ui";
 import { Button, Input, Switch } from "@heroui/react";
+import { useQueryClient } from "@tanstack/react-query";
 import { Save } from "lucide-react";
 import { observer, useLocalObservable } from "mobx-react-lite";
-import { useQueryClient } from "@tanstack/react-query";
 import { useEffect } from "react";
 
 /** 숫자 필드 키 타입 */

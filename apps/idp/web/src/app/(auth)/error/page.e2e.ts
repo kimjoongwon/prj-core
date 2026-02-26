@@ -1,4 +1,4 @@
-import { test, expect } from "@playwright/test";
+import { expect, test } from "@playwright/test";
 
 test.describe("OIDC 에러 페이지", () => {
 	test.describe("에러 표시", () => {
@@ -28,10 +28,14 @@ test.describe("OIDC 에러 페이지", () => {
 	test.describe("네비게이션", () => {
 		test("돌아가기 버튼이 표시되어야 한다", async ({ page }) => {
 			// Given: 에러 페이지 진입
-			await page.goto("/error?error=server_error&error_description=Internal+error");
+			await page.goto(
+				"/error?error=server_error&error_description=Internal+error",
+			);
 
 			// Then: 돌아가기 버튼 존재
-			await expect(page.getByRole("button", { name: "돌아가기" })).toBeVisible();
+			await expect(
+				page.getByRole("button", { name: "돌아가기" }),
+			).toBeVisible();
 		});
 	});
 });

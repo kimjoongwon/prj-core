@@ -23,7 +23,14 @@ export const globalModules: (DynamicModule | Promise<DynamicModule>)[] = [
 	ConfigModule.forRoot({
 		isGlobal: true,
 		envFilePath: [".env.local", ".env"],
-		load: [oidcConfig, authConfig, redisConfig, appConfig, corsConfig, smtpConfig],
+		load: [
+			oidcConfig,
+			authConfig,
+			redisConfig,
+			appConfig,
+			corsConfig,
+			smtpConfig,
+		],
 	}),
 	ThrottlerModule.forRoot(
 		process.env.NODE_ENV === "production"

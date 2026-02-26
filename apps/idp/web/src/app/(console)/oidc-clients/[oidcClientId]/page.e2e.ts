@@ -1,4 +1,4 @@
-import { test, expect } from "@playwright/test";
+import { expect, test } from "@playwright/test";
 import { loginToConsole } from "../../../../e2e/helpers/login";
 
 test.describe("OIDC 클라이언트 상세 페이지", () => {
@@ -9,10 +9,7 @@ test.describe("OIDC 클라이언트 상세 페이지", () => {
 		await page.waitForLoadState("networkidle");
 
 		// When: 첫 번째 클라이언트의 "상세 보기" 클릭
-		await page
-			.getByRole("button", { name: "상세 보기" })
-			.first()
-			.click();
+		await page.getByRole("button", { name: "상세 보기" }).first().click();
 
 		// Then: 상세 페이지로 이동하고 정보가 표시됨
 		await expect(page).toHaveURL(/\/oidc-clients\/.+/);

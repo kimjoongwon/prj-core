@@ -1,4 +1,4 @@
-import { test, expect } from "@playwright/test";
+import { expect, test } from "@playwright/test";
 import { loginToConsole } from "../../../e2e/helpers/login";
 
 test.describe("IDP 계정 목록 페이지", () => {
@@ -44,9 +44,7 @@ test.describe("IDP 계정 목록 페이지", () => {
 			await page.waitForLoadState("networkidle");
 
 			// When: 이메일 검색
-			await page
-				.getByPlaceholder("이메일 또는 이름으로 검색...")
-				.fill("admin");
+			await page.getByPlaceholder("이메일 또는 이름으로 검색...").fill("admin");
 
 			// debounce 대기
 			await page.waitForTimeout(500);

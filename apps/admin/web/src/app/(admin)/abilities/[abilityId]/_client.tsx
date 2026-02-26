@@ -15,7 +15,6 @@ import {
 } from "@heroui/react";
 import { ArrowLeft, Edit, Key, Trash2 } from "lucide-react";
 import { observer } from "mobx-react-lite";
-import Link from "next/link";
 import type { Route } from "next";
 import { useRouter } from "next/navigation";
 
@@ -191,7 +190,9 @@ function AbilityDetailPageClient({ abilityId }: AbilityDetailPageClientProps) {
 						</div>
 						{ability.conditions && (
 							<div className="md:col-span-2">
-								<label className="text-sm text-default-500">Conditions (JSON)</label>
+								<label className="text-sm text-default-500">
+									Conditions (JSON)
+								</label>
 								<pre className="mt-1 p-4 rounded-lg bg-content2 text-xs overflow-x-auto">
 									{JSON.stringify(ability.conditions, null, 2)}
 								</pre>

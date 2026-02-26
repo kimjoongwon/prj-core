@@ -1,15 +1,15 @@
 "use client";
 
-import { useCreateSession, useGetTimelineById } from "@cocrepo/api";
 import type { CreateSessionDtoRecurringDayOfWeek } from "@cocrepo/api";
+import { useCreateSession, useGetTimelineById } from "@cocrepo/api";
 import { PageSurface, SectionSurface, VStack } from "@cocrepo/ui";
 import {
+	addToast,
 	Button,
 	Input,
 	Select,
 	SelectItem,
 	Textarea,
-	addToast,
 } from "@heroui/react";
 import { observer, useLocalObservable } from "mobx-react-lite";
 import type { Route } from "next";
@@ -133,15 +133,13 @@ function SessionNewPageClient({ timelineId }: SessionNewPageClientProps) {
 		if (state.type === "ONE_TIME_RANGE") {
 			if (!state.startDateTime)
 				errors.startDateTime = "시작 일시를 입력해주세요.";
-			if (!state.endDateTime)
-				errors.endDateTime = "종료 일시를 입력해주세요.";
+			if (!state.endDateTime) errors.endDateTime = "종료 일시를 입력해주세요.";
 			if (
 				state.startDateTime &&
 				state.endDateTime &&
 				state.startDateTime >= state.endDateTime
 			) {
-				errors.endDateTime =
-					"종료 일시는 시작 일시 이후여야 합니다.";
+				errors.endDateTime = "종료 일시는 시작 일시 이후여야 합니다.";
 			}
 		}
 
@@ -167,8 +165,7 @@ function SessionNewPageClient({ timelineId }: SessionNewPageClientProps) {
 					description: state.description.trim() || undefined,
 					startDateTime: state.startDateTime || undefined,
 					endDateTime: state.endDateTime || undefined,
-					recurringDayOfWeek:
-						state.recurringDayOfWeek || undefined,
+					recurringDayOfWeek: state.recurringDayOfWeek || undefined,
 					repeatCycleType: state.repeatCycleType || undefined,
 				},
 			},
@@ -181,9 +178,7 @@ function SessionNewPageClient({ timelineId }: SessionNewPageClientProps) {
 					});
 					const newId = response.data?.id;
 					if (newId) {
-						router.push(
-							`/timelines/${timelineId}/sessions/${newId}` as Route,
-						);
+						router.push(`/timelines/${timelineId}/sessions/${newId}` as Route);
 					} else {
 						router.push(`/timelines/${timelineId}` as Route);
 					}
@@ -234,9 +229,7 @@ function SessionNewPageClient({ timelineId }: SessionNewPageClientProps) {
 							isRequired
 						>
 							{SESSION_TYPE_OPTIONS.map((opt) => (
-								<SelectItem key={opt.value}>
-									{opt.label}
-								</SelectItem>
+								<SelectItem key={opt.value}>{opt.label}</SelectItem>
 							))}
 						</Select>
 						<p className="text-sm text-default-500">
@@ -302,58 +295,38 @@ function SessionNewPageClient({ timelineId }: SessionNewPageClientProps) {
 										label="반복 요일"
 										labelPlacement="outside"
 										selectedKeys={
-											state.recurringDayOfWeek
-												? [state.recurringDayOfWeek]
-												: []
+											state.recurringDayOfWeek ? [state.recurringDayOfWeek] : []
 										}
 										onSelectionChange={(keys) => {
-											const val = Array.from(
-												keys,
-											)[0] as string;
+											const val = Array.from(keys)[0] as string;
 											if (val) onChangeDayOfWeek(val);
 										}}
 										isRequired
-										isInvalid={
-											!!state.errors.recurringDayOfWeek
-										}
-										errorMessage={
-											state.errors.recurringDayOfWeek
-										}
+										isInvalid={!!state.errors.recurringDayOfWeek}
+										errorMessage={state.errors.recurringDayOfWeek}
 										className="flex-1"
 									>
 										{DAY_OF_WEEK_OPTIONS.map((opt) => (
-											<SelectItem key={opt.value ?? ""}>
-												{opt.label}
-											</SelectItem>
+											<SelectItem key={opt.value ?? ""}>{opt.label}</SelectItem>
 										))}
 									</Select>
 									<Select
 										label="반복 주기"
 										labelPlacement="outside"
 										selectedKeys={
-											state.repeatCycleType
-												? [state.repeatCycleType]
-												: []
+											state.repeatCycleType ? [state.repeatCycleType] : []
 										}
 										onSelectionChange={(keys) => {
-											const val = Array.from(
-												keys,
-											)[0] as string;
+											const val = Array.from(keys)[0] as string;
 											if (val) onChangeCycleType(val);
 										}}
 										isRequired
-										isInvalid={
-											!!state.errors.repeatCycleType
-										}
-										errorMessage={
-											state.errors.repeatCycleType
-										}
+										isInvalid={!!state.errors.repeatCycleType}
+										errorMessage={state.errors.repeatCycleType}
 										className="flex-1"
 									>
 										{CYCLE_TYPE_OPTIONS.map((opt) => (
-											<SelectItem key={opt.value}>
-												{opt.label}
-											</SelectItem>
+											<SelectItem key={opt.value}>{opt.label}</SelectItem>
 										))}
 									</Select>
 								</div>

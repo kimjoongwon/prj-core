@@ -1,4 +1,4 @@
-import { test, expect } from "@playwright/test";
+import { expect, test } from "@playwright/test";
 
 test.describe("이용자 목록 페이지", () => {
 	test.describe("페이지 렌더링", () => {
@@ -86,9 +86,7 @@ test.describe("이용자 목록 페이지", () => {
 			await expect(page).toHaveURL(/search=/);
 		});
 
-		test("이름으로 검색 시 해당 사용자만 표시되어야 한다", async ({
-			page,
-		}) => {
+		test("이름으로 검색 시 해당 사용자만 표시되어야 한다", async ({ page }) => {
 			// When: 이름으로 검색
 			await page
 				.getByPlaceholder("이름, 이메일, 전화번호로 검색...")
@@ -128,14 +126,10 @@ test.describe("이용자 목록 페이지", () => {
 			await page.waitForLoadState("networkidle");
 
 			// Then: 빈 상태 메시지 표시
-			await expect(
-				page.getByText("조회된 이용자가 없습니다."),
-			).toBeVisible();
+			await expect(page.getByText("조회된 이용자가 없습니다.")).toBeVisible();
 		});
 
-		test("검색어를 지우면 전체 목록으로 복원되어야 한다", async ({
-			page,
-		}) => {
+		test("검색어를 지우면 전체 목록으로 복원되어야 한다", async ({ page }) => {
 			// Given: 검색어 입력 상태
 			const searchInput = page.getByPlaceholder(
 				"이름, 이메일, 전화번호로 검색...",
@@ -199,9 +193,7 @@ test.describe("이용자 목록 페이지", () => {
 			await expect(page.getByText("010-5678-9012")).toBeVisible();
 		});
 
-		test("활성 사용자의 상태가 활성으로 표시되어야 한다", async ({
-			page,
-		}) => {
+		test("활성 사용자의 상태가 활성으로 표시되어야 한다", async ({ page }) => {
 			// Then: 활성 상태 칩이 표시됨
 			await expect(page.getByText("활성").first()).toBeVisible();
 		});

@@ -49,8 +49,7 @@ function TemplateNewPageClient() {
 			onError: (error) => {
 				addToast({
 					title: "템플릿 등록 실패",
-					description:
-						error.message || "템플릿 등록 중 오류가 발생했습니다.",
+					description: error.message || "템플릿 등록 중 오류가 발생했습니다.",
 					color: "danger",
 				});
 			},
@@ -93,8 +92,7 @@ function TemplateNewPageClient() {
 		if (!formData.code.trim()) {
 			errors.code = "코드를 입력해주세요.";
 		} else if (!/^[A-Z][A-Z0-9_]*$/.test(formData.code)) {
-			errors.code =
-				"영문 대문자와 언더스코어(_)만 사용 가능합니다.";
+			errors.code = "영문 대문자와 언더스코어(_)만 사용 가능합니다.";
 		}
 
 		// 이름 검증

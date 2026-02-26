@@ -1,4 +1,4 @@
-import { test, expect } from "@playwright/test";
+import { expect, test } from "@playwright/test";
 import { loginToConsole } from "../../../e2e/helpers/login";
 
 /** 세션 데이터 모킹용 응답 */
@@ -28,9 +28,7 @@ const MOCK_SESSIONS = {
  * 세션 API를 모킹하고 페이지를 로드합니다.
  * SSR prefetch를 우회하기 위해 route 설정 후 reload합니다.
  */
-async function setupMockedSessionsPage(
-	page: import("@playwright/test").Page,
-) {
+async function setupMockedSessionsPage(page: import("@playwright/test").Page) {
 	await loginToConsole(page);
 
 	// API 모킹 설정 (GET /api/v1/oidc-sessions)
@@ -53,7 +51,10 @@ async function setupMockedSessionsPage(
 	await page.waitForTimeout(2000);
 
 	// 여전히 빈 상태면 reload하여 모킹 데이터 적용
-	const hasData = await page.getByText("session-abc").isVisible().catch(() => false);
+	const hasData = await page
+		.getByText("session-abc")
+		.isVisible()
+		.catch(() => false);
 	if (!hasData) {
 		await page.reload();
 		await page.waitForLoadState("networkidle");
@@ -123,9 +124,7 @@ test.describe("OIDC 세션 관리", () => {
 
 			// Then: 일괄 폐기 확인 모달 표시
 			await expect(page.getByText("Grant 일괄 폐기")).toBeVisible();
-			await expect(
-				page.getByText("일괄 폐기하시겠습니까"),
-			).toBeVisible();
+			await expect(page.getByText("일괄 폐기하시겠습니까")).toBeVisible();
 		});
 	});
 });

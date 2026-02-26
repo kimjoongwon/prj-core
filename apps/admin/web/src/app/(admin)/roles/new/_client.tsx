@@ -1,6 +1,6 @@
 "use client";
 
-import { useCreateRole, type CreateRoleDto } from "@cocrepo/api";
+import { type CreateRoleDto, useCreateRole } from "@cocrepo/api";
 import { PageSurface, SectionSurface, VStack } from "@cocrepo/ui";
 import { Button, Input, Textarea } from "@heroui/react";
 import { ArrowLeft, Save } from "lucide-react";
@@ -122,8 +122,8 @@ function RoleNewPageClient() {
 				<div className="rounded-xl bg-primary-50 dark:bg-primary-900/20 p-4">
 					<p className="text-sm text-primary-700 dark:text-primary-400">
 						<strong>참고:</strong> 역할 식별자는 대문자로 시작하고,
-						대문자/숫자/밑줄만 사용할 수 있습니다. 등록 후에는 권한 설정 페이지에서
-						상세 권한을 관리할 수 있습니다.
+						대문자/숫자/밑줄만 사용할 수 있습니다. 등록 후에는 권한 설정
+						페이지에서 상세 권한을 관리할 수 있습니다.
 					</p>
 				</div>
 

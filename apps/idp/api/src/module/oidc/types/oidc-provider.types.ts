@@ -159,7 +159,10 @@ export interface ResourceServerInfo {
 export interface ResourceIndicatorsConfig {
 	enabled: boolean;
 	defaultResource: (ctx: unknown) => string | Promise<string>;
-	useGrantedResource: (ctx: unknown, model?: unknown) => boolean | Promise<boolean>;
+	useGrantedResource: (
+		ctx: unknown,
+		model?: unknown,
+	) => boolean | Promise<boolean>;
 	getResourceServerInfo: (
 		ctx: unknown,
 		resourceIndicator: string,

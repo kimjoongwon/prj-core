@@ -3,12 +3,7 @@
 // TODO: Orval codegen 후 아래 import로 교체
 // import { useGetGroups, type GroupDto } from "@cocrepo/api";
 import { customInstance } from "@cocrepo/api";
-import {
-	DateTimeCell,
-	PageSurface,
-	SectionSurface,
-	VStack,
-} from "@cocrepo/ui";
+import { DateTimeCell, PageSurface, SectionSurface, VStack } from "@cocrepo/ui";
 import { Button } from "@heroui/react";
 import { useQuery } from "@tanstack/react-query";
 import { Layers, Plus } from "lucide-react";
@@ -101,9 +96,7 @@ function RoleGroupsPageClient() {
 											className="border-b border-divider hover:bg-content2/50 transition-colors"
 										>
 											<td className="px-4 py-3">
-												<span className="font-mono text-sm">
-													{group.name}
-												</span>
+												<span className="font-mono text-sm">{group.name}</span>
 											</td>
 											<td className="px-4 py-3">
 												<span className="text-default-600">

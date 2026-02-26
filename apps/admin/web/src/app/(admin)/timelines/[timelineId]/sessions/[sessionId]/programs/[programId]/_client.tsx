@@ -1,20 +1,20 @@
 "use client";
 
 import {
-	type ProgramDto,
 	getGetProgramsQueryKey,
+	type ProgramDto,
 	useDeleteProgram,
 	useGetProgramById,
 } from "@cocrepo/api";
 import { DateTimeCell, PageSurface, SectionSurface } from "@cocrepo/ui";
 import {
+	addToast,
 	Button,
 	Modal,
 	ModalBody,
 	ModalContent,
 	ModalFooter,
 	ModalHeader,
-	addToast,
 	useDisclosure,
 } from "@heroui/react";
 import { useQueryClient } from "@tanstack/react-query";
@@ -70,10 +70,7 @@ function ProgramDetailPageClient({
 					});
 					deleteModal.onClose();
 					queryClient.invalidateQueries({
-						queryKey: getGetProgramsQueryKey(
-							timelineId,
-							sessionId,
-						),
+						queryKey: getGetProgramsQueryKey(timelineId, sessionId),
 					});
 					router.push(
 						`/timelines/${timelineId}/sessions/${sessionId}` as Route,
@@ -82,8 +79,7 @@ function ProgramDetailPageClient({
 				onError: () => {
 					addToast({
 						title: "삭제 실패",
-						description:
-							"프로그램 삭제 중 오류가 발생했습니다.",
+						description: "프로그램 삭제 중 오류가 발생했습니다.",
 						color: "danger",
 					});
 				},
@@ -125,21 +121,15 @@ function ProgramDetailPageClient({
 			<SectionSurface title="기본 정보">
 				<div className="grid grid-cols-1 gap-4 md:grid-cols-2">
 					<div>
-						<label className="text-sm text-default-500">
-							프로그램 이름
-						</label>
+						<label className="text-sm text-default-500">프로그램 이름</label>
 						<p className="mt-1">{program?.name ?? "-"}</p>
 					</div>
 					<div>
-						<label className="text-sm text-default-500">
-							루틴
-						</label>
+						<label className="text-sm text-default-500">루틴</label>
 						<div className="mt-1">
 							{program?.routine ? (
 								<Link
-									href={
-										`/routines/${program.routine.id}` as Route
-									}
+									href={`/routines/${program.routine.id}` as Route}
 									className="text-primary hover:underline"
 								>
 									{program.routine.name}
@@ -150,36 +140,24 @@ function ProgramDetailPageClient({
 						</div>
 					</div>
 					<div>
-						<label className="text-sm text-default-500">
-							강사
-						</label>
+						<label className="text-sm text-default-500">강사</label>
 						<p className="mt-1">{program?.instructorId ?? "-"}</p>
 					</div>
 					<div>
-						<label className="text-sm text-default-500">
-							정원
-						</label>
+						<label className="text-sm text-default-500">정원</label>
 						<p className="mt-1">
-							{program?.capacity != null
-								? `${program.capacity}명`
-								: "-"}
+							{program?.capacity != null ? `${program.capacity}명` : "-"}
 						</p>
 					</div>
 					<div>
-						<label className="text-sm text-default-500">
-							난이도
-						</label>
+						<label className="text-sm text-default-500">난이도</label>
 						<p className="mt-1">{program?.level ?? "-"}</p>
 					</div>
 					<div>
-						<label className="text-sm text-default-500">
-							세션
-						</label>
+						<label className="text-sm text-default-500">세션</label>
 						<div className="mt-1">
 							<Link
-								href={
-									`/timelines/${timelineId}/sessions/${sessionId}` as Route
-								}
+								href={`/timelines/${timelineId}/sessions/${sessionId}` as Route}
 								className="text-primary hover:underline"
 							>
 								{program?.session?.name ?? "-"}
@@ -187,9 +165,7 @@ function ProgramDetailPageClient({
 						</div>
 					</div>
 					<div>
-						<label className="text-sm text-default-500">
-							등록일
-						</label>
+						<label className="text-sm text-default-500">등록일</label>
 						<div className="mt-1">
 							{program?.createdAt ? (
 								<DateTimeCell value={program.createdAt} />
@@ -207,8 +183,7 @@ function ProgramDetailPageClient({
 					<ModalHeader>프로그램 삭제</ModalHeader>
 					<ModalBody>
 						<p>
-							<strong>{program?.name}</strong> 프로그램을
-							삭제하시겠습니까?
+							<strong>{program?.name}</strong> 프로그램을 삭제하시겠습니까?
 						</p>
 					</ModalBody>
 					<ModalFooter>

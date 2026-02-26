@@ -2,9 +2,9 @@
 
 import {
 	getGetTemplatesQueryKey,
+	type TemplateDto,
 	useGetTemplates,
 	useToggleTemplateStatus,
-	type TemplateDto,
 } from "@cocrepo/api";
 import type { InputConfig, MetaDataGridColumnConfig } from "@cocrepo/type";
 import {
@@ -16,7 +16,7 @@ import {
 	TemplateTypeChipCell,
 	useMetaDataGridQueryStates,
 } from "@cocrepo/ui";
-import { Button, addToast } from "@heroui/react";
+import { addToast, Button } from "@heroui/react";
 import { useQueryClient } from "@tanstack/react-query";
 import { Plus } from "lucide-react";
 import { observer } from "mobx-react-lite";
@@ -70,8 +70,7 @@ function TemplatesPageClient() {
 	const queryClient = useQueryClient();
 
 	// nuqs 기반 URL 상태 관리
-	const [queryStates, setQueryStates] =
-		useMetaDataGridQueryStates(leftInputs);
+	const [queryStates, setQueryStates] = useMetaDataGridQueryStates(leftInputs);
 
 	// API 조회 (prefetch로 초기 데이터 보장)
 	const { data: response, isLoading } = useGetTemplates({
@@ -134,9 +133,7 @@ function TemplatesPageClient() {
 				<button
 					type="button"
 					className="text-primary hover:underline cursor-pointer text-left"
-					onClick={() =>
-						onClickTemplateCode(row.original as TemplateDto)
-					}
+					onClick={() => onClickTemplateCode(row.original as TemplateDto)}
 				>
 					{getValue() as string}
 				</button>
@@ -153,9 +150,7 @@ function TemplatesPageClient() {
 			size: 100,
 			align: "center",
 			cell: ({ getValue }) => (
-				<TemplateTypeChipCell
-					type={getValue() as "EMAIL" | "SMS" | "PUSH"}
-				/>
+				<TemplateTypeChipCell type={getValue() as "EMAIL" | "SMS" | "PUSH"} />
 			),
 		},
 		{
@@ -185,9 +180,7 @@ function TemplatesPageClient() {
 			field: "createdAt",
 			label: "등록일",
 			size: 150,
-			cell: ({ getValue }) => (
-				<DateTimeCell value={getValue() as string} />
-			),
+			cell: ({ getValue }) => <DateTimeCell value={getValue() as string} />,
 		},
 	];
 

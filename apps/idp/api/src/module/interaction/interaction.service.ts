@@ -203,11 +203,21 @@ export class InteractionService {
 			const isValid = await hashedPassword.compare(plainPassword);
 
 			if (!isValid) {
-				return this.handleLoginFailure(user.id, email, user.failedLoginAttempts, auditBase);
+				return this.handleLoginFailure(
+					user.id,
+					email,
+					user.failedLoginAttempts,
+					auditBase,
+				);
 			}
 		} catch (error) {
 			this.logger.debug(`비밀번호 검증 오류: ${error}`);
-			return this.handleLoginFailure(user.id, email, user.failedLoginAttempts, auditBase);
+			return this.handleLoginFailure(
+				user.id,
+				email,
+				user.failedLoginAttempts,
+				auditBase,
+			);
 		}
 
 		// 6. 로그인 성공
@@ -232,14 +242,21 @@ export class InteractionService {
 	 */
 	private async handleLoginFailure(
 		userId: string,
-		email: string,
+		_email: string,
 		currentAttempts: number,
-		auditBase: { email: string; ipAddress: string; userAgent?: string; clientId?: string },
+		auditBase: {
+			email: string;
+			ipAddress: string;
+			userAgent?: string;
+			clientId?: string;
+		},
 	): Promise<LoginValidationResult> {
 		const policy = await this.getSecurityPolicy();
 		const newAttempts = currentAttempts + 1;
 
-		const temporaryLockDurationMin = Math.round(policy.temporaryLockDurationMs / 60000);
+		const temporaryLockDurationMin = Math.round(
+			policy.temporaryLockDurationMs / 60000,
+		);
 
 		// 영구 잠금 임계값 도달
 		if (newAttempts >= policy.permanentLockThreshold) {

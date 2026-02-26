@@ -1,4 +1,5 @@
 import { wrapResponse } from "@cocrepo/be-common";
+import { SYSTEM_ROLES } from "@cocrepo/constant";
 import {
 	ApiAuth,
 	ApiErrors,
@@ -7,8 +8,12 @@ import {
 	Roles,
 	SkipSpaceCheck,
 } from "@cocrepo/decorator";
-import { SYSTEM_ROLES } from "@cocrepo/constant";
-import { OidcSessionDto, OidcSessionStatsDto, PageMetaDto, QueryOidcSessionDto } from "@cocrepo/dto";
+import {
+	OidcSessionDto,
+	OidcSessionStatsDto,
+	PageMetaDto,
+	QueryOidcSessionDto,
+} from "@cocrepo/dto";
 import { OidcSessionsService } from "@cocrepo/service";
 import {
 	Controller,
@@ -43,8 +48,7 @@ export class OidcSessionsController {
 	})
 	@ResponseMessage("OIDC 세션 목록 조회 성공")
 	async getOidcSessions(@Query() query: QueryOidcSessionDto) {
-		const { data, totalCount } =
-			await this.oidcSessionsService.getMany(query);
+		const { data, totalCount } = await this.oidcSessionsService.getMany(query);
 
 		const skip = query.skip ?? 0;
 		const take = query.take ?? 20;
@@ -58,8 +62,7 @@ export class OidcSessionsController {
 	@ApiOperation({
 		operationId: "getOidcSessionStats",
 		summary: "OIDC 세션/토큰 통계 조회",
-		description:
-			"모델 타입별 세션/토큰 건수와 전체 건수를 조회합니다.",
+		description: "모델 타입별 세션/토큰 건수와 전체 건수를 조회합니다.",
 	})
 	@ApiAuth()
 	@ApiErrors(401, 500)
@@ -93,8 +96,7 @@ export class OidcSessionsController {
 	@ApiOperation({
 		operationId: "revokeAllOidcSessions",
 		summary: "전체 세션/토큰 일괄 폐기",
-		description:
-			"Redis에 저장된 모든 OIDC 세션 및 토큰을 일괄 폐기합니다.",
+		description: "Redis에 저장된 모든 OIDC 세션 및 토큰을 일괄 폐기합니다.",
 	})
 	@ApiAuth()
 	@ApiErrors(401, 500)
@@ -108,8 +110,7 @@ export class OidcSessionsController {
 	@ApiOperation({
 		operationId: "revokeOidcSessionsByGrant",
 		summary: "Grant 일괄 폐기",
-		description:
-			"특정 Grant에 연결된 모든 세션 및 토큰을 일괄 폐기합니다.",
+		description: "특정 Grant에 연결된 모든 세션 및 토큰을 일괄 폐기합니다.",
 	})
 	@ApiAuth()
 	@ApiParam({

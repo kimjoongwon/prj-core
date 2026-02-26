@@ -1,3 +1,4 @@
+import { SYSTEM_ROLES } from "@cocrepo/constant";
 import {
 	ApiAuth,
 	ApiErrors,
@@ -6,7 +7,6 @@ import {
 	Roles,
 	SkipSpaceCheck,
 } from "@cocrepo/decorator";
-import { SYSTEM_ROLES } from "@cocrepo/constant";
 import { DashboardStatsDto, LoginTrendItemDto } from "@cocrepo/dto";
 import { IdpDashboardService } from "@cocrepo/service";
 import { Controller, Get, HttpStatus } from "@nestjs/common";
@@ -17,9 +17,7 @@ import { ApiOperation, ApiTags } from "@nestjs/swagger";
 @Roles([SYSTEM_ROLES.FULL_ACCESS])
 @SkipSpaceCheck()
 export class IdpDashboardController {
-	constructor(
-		private readonly dashboardService: IdpDashboardService,
-	) {}
+	constructor(private readonly dashboardService: IdpDashboardService) {}
 
 	@Get("stats")
 	@ApiOperation({
@@ -40,8 +38,7 @@ export class IdpDashboardController {
 	@ApiOperation({
 		operationId: "getIdpLoginTrend",
 		summary: "로그인 추이 조회",
-		description:
-			"최근 7일간 일별 로그인 성공/실패 건수를 조회합니다.",
+		description: "최근 7일간 일별 로그인 성공/실패 건수를 조회합니다.",
 	})
 	@ApiAuth()
 	@ApiErrors(401, 500)

@@ -1,7 +1,7 @@
-import { test, expect } from "@playwright/test";
+import { expect, test } from "@playwright/test";
 import {
-	navigateToLoginForm,
 	navigateToConsentForm,
+	navigateToLoginForm,
 } from "../../../../e2e/helpers/login";
 
 /** 시드 데이터 기준 FULL_ACCESS 계정 */
@@ -15,14 +15,10 @@ test.describe("OIDC 로그인 인터랙션", () => {
 			await navigateToLoginForm(page);
 
 			// Then: 로그인 폼 요소가 표시됨
-			await expect(
-				page.getByRole("heading", { name: "로그인" }),
-			).toBeVisible();
+			await expect(page.getByRole("heading", { name: "로그인" })).toBeVisible();
 			await expect(page.getByLabel("이메일")).toBeVisible();
 			await expect(page.getByLabel("비밀번호")).toBeVisible();
-			await expect(
-				page.getByRole("button", { name: "로그인" }),
-			).toBeVisible();
+			await expect(page.getByRole("button", { name: "로그인" })).toBeVisible();
 		});
 
 		test("비밀번호를 잊으셨나요? 링크가 표시되어야 한다", async ({ page }) => {
@@ -53,9 +49,7 @@ test.describe("OIDC 로그인 인터랙션", () => {
 			await expect(page.getByText("DEV MODE")).toBeVisible();
 
 			// Then: 이메일/비밀번호가 자동 입력됨
-			await expect(page.getByLabel("이메일")).toHaveValue(
-				"admin@plate.com",
-			);
+			await expect(page.getByLabel("이메일")).toHaveValue("admin@plate.com");
 		});
 	});
 
@@ -105,9 +99,7 @@ test.describe("OIDC 로그인 플로우", () => {
 
 			// Then: 동의 화면 또는 콜백 리다이렉트 (이미 동의한 경우)
 			await expect(
-				page
-					.getByRole("button", { name: "허용" })
-					.or(page.locator("body")),
+				page.getByRole("button", { name: "허용" }).or(page.locator("body")),
 			).toBeVisible({ timeout: 30000 });
 
 			// URL이 로그인 폼이 아닌 다른 페이지로 이동함
@@ -137,9 +129,7 @@ test.describe("OIDC 로그인 플로우", () => {
 			const invalidCredentials = page.getByText(
 				"이메일 또는 비밀번호가 올바르지 않습니다.",
 			);
-			const serverError = page.getByText(
-				"로그인 처리 중 오류가 발생했습니다.",
-			);
+			const serverError = page.getByText("로그인 처리 중 오류가 발생했습니다.");
 
 			await expect(invalidCredentials.or(serverError)).toBeVisible({
 				timeout: 10000,
@@ -164,9 +154,9 @@ test.describe("OIDC 로그인 플로우", () => {
 			await page.getByRole("button", { name: "로그인" }).click();
 
 			// Then: 에러 발생 후 로그인 폼에 머물러야 함
-			await expect(
-				page.getByRole("heading", { name: "로그인" }),
-			).toBeVisible({ timeout: 10000 });
+			await expect(page.getByRole("heading", { name: "로그인" })).toBeVisible({
+				timeout: 10000,
+			});
 
 			// Then: 이메일 입력값 유지
 			await expect(emailInput).toHaveValue(ADMIN_EMAIL);
@@ -197,14 +187,10 @@ test.describe("OIDC 로그인 플로우", () => {
 			const invalidCredentials = page.getByText(
 				"이메일 또는 비밀번호가 올바르지 않습니다.",
 			);
-			const serverError = page.getByText(
-				"로그인 처리 중 오류가 발생했습니다.",
-			);
+			const serverError = page.getByText("로그인 처리 중 오류가 발생했습니다.");
 
 			await expect(async () => {
-				const hasError = await invalidCredentials
-					.or(serverError)
-					.isVisible();
+				const hasError = await invalidCredentials.or(serverError).isVisible();
 				const redirectedAway = !page.url().includes("/interaction/");
 				expect(hasError || redirectedAway).toBe(true);
 			}).toPass({ timeout: 10000 });
@@ -229,9 +215,7 @@ test.describe("OIDC 로그인 플로우", () => {
 			await page.getByRole("button", { name: "로그인" }).click();
 
 			// Then: 페이지가 로그인 폼에 그대로 머물러야 함 (브라우저 유효성 검증)
-			await expect(
-				page.getByRole("heading", { name: "로그인" }),
-			).toBeVisible();
+			await expect(page.getByRole("heading", { name: "로그인" })).toBeVisible();
 			// 서버 에러 배너가 표시되지 않음 (서버까지 요청이 가지 않았으므로)
 			await expect(
 				page.getByText("이메일 또는 비밀번호가 올바르지 않습니다."),
@@ -256,9 +240,7 @@ test.describe("OIDC 로그인 플로우", () => {
 			await page.getByRole("button", { name: "로그인" }).click();
 
 			// Then: 페이지가 로그인 폼에 그대로 머물러야 함
-			await expect(
-				page.getByRole("heading", { name: "로그인" }),
-			).toBeVisible();
+			await expect(page.getByRole("heading", { name: "로그인" })).toBeVisible();
 			await expect(
 				page.getByText("이메일 또는 비밀번호가 올바르지 않습니다."),
 			).not.toBeVisible();
@@ -285,9 +267,7 @@ test.describe("OIDC 로그인 플로우", () => {
 			const invalidCredentials = page.getByText(
 				"이메일 또는 비밀번호가 올바르지 않습니다.",
 			);
-			const serverError = page.getByText(
-				"로그인 처리 중 오류가 발생했습니다.",
-			);
+			const serverError = page.getByText("로그인 처리 중 오류가 발생했습니다.");
 			await expect(invalidCredentials.or(serverError)).toBeVisible({
 				timeout: 10000,
 			});
@@ -340,12 +320,8 @@ test.describe("OIDC 동의 화면", () => {
 			await navigateToConsentForm(page);
 
 			// Then: 허용/거부 버튼이 존재
-			await expect(
-				page.getByRole("button", { name: "허용" }),
-			).toBeVisible();
-			await expect(
-				page.getByRole("button", { name: "거부" }),
-			).toBeVisible();
+			await expect(page.getByRole("button", { name: "허용" })).toBeVisible();
+			await expect(page.getByRole("button", { name: "거부" })).toBeVisible();
 		});
 	});
 });

@@ -3,8 +3,8 @@
 import {
 	type AuthAuditLogDto,
 	type AuthAuditResult,
-	useGetAuthAuditLogs,
 	useGetAuthAuditLogStats,
+	useGetAuthAuditLogs,
 } from "@cocrepo/api";
 import type { InputConfig, MetaDataGridColumnConfig } from "@cocrepo/type";
 import {
@@ -102,8 +102,7 @@ function StatCard({
  * 감사 로그 목록 페이지 - 클라이언트 컴포넌트
  */
 function AuthAuditLogsClient() {
-	const [queryStates, setQueryStates] =
-		useMetaDataGridQueryStates(leftInputs);
+	const [queryStates, setQueryStates] = useMetaDataGridQueryStates(leftInputs);
 
 	const { data: response, isLoading } = useGetAuthAuditLogs({
 		take: queryStates.take,

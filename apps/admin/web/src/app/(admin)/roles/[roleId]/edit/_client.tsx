@@ -1,9 +1,9 @@
 "use client";
 
 import {
+	type UpdateRoleDto,
 	useGetRoleById,
 	useUpdateRole,
-	type UpdateRoleDto,
 } from "@cocrepo/api";
 import { PageSurface, SectionSurface, VStack } from "@cocrepo/ui";
 import { Button, Input, Textarea } from "@heroui/react";
@@ -144,9 +144,7 @@ function RoleEditPageClient({ roleId }: RoleEditPageClientProps) {
 				description="시스템 역할은 수정할 수 없습니다."
 			>
 				<div className="flex flex-col items-center justify-center gap-4 p-8">
-					<p className="text-default-500">
-						시스템 역할은 수정할 수 없습니다.
-					</p>
+					<p className="text-default-500">시스템 역할은 수정할 수 없습니다.</p>
 					<Button variant="flat" onPress={onClickBackButton}>
 						상세로 돌아가기
 					</Button>

@@ -1,6 +1,5 @@
-import { SpaceContext } from "@cocrepo/service";
 import { GroupsRepository } from "@cocrepo/repository";
-import { GroupsService } from "@cocrepo/service";
+import { GroupsService, SpaceContext } from "@cocrepo/service";
 import { Module } from "@nestjs/common";
 import { GroupsController } from "./groups.controller";
 

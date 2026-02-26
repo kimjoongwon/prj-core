@@ -1,4 +1,4 @@
-import { test, expect } from "@playwright/test";
+import { expect, test } from "@playwright/test";
 
 test.describe("역할 목록 페이지", () => {
 	// ── E2E-001: 목록 렌더링 ──
@@ -27,12 +27,8 @@ test.describe("역할 목록 페이지", () => {
 			await expect(
 				page.getByText("FULL_ACCESS", { exact: true }),
 			).toBeVisible();
-			await expect(
-				page.getByText("MANAGE", { exact: true }),
-			).toBeVisible();
-			await expect(
-				page.getByText("VIEW", { exact: true }),
-			).toBeVisible();
+			await expect(page.getByText("MANAGE", { exact: true })).toBeVisible();
+			await expect(page.getByText("VIEW", { exact: true })).toBeVisible();
 		});
 
 		test("역할 추가 버튼이 표시되어야 한다", async ({ page }) => {
@@ -98,9 +94,7 @@ test.describe("역할 목록 페이지", () => {
 				page.getByRole("heading", { name: "역할 상세" }),
 			).toBeVisible({ timeout: 10000 });
 			await expect(page.getByText(TEST_ROLE_NAME)).toBeVisible();
-			await expect(
-				page.getByText("E2E 테스트", { exact: true }),
-			).toBeVisible();
+			await expect(page.getByText("E2E 테스트", { exact: true })).toBeVisible();
 
 			// When: 수정 버튼 클릭 (client-side navigation)
 			await page.getByRole("button", { name: "수정" }).click();
@@ -140,16 +134,19 @@ test.describe("역할 목록 페이지", () => {
 			await page.waitForLoadState("networkidle");
 
 			// Then: 수정된 값 확인
-			await expect(
-				page.getByText("Modified", { exact: true }),
-			).toBeVisible({ timeout: 10000 });
+			await expect(page.getByText("Modified", { exact: true })).toBeVisible({
+				timeout: 10000,
+			});
 
 			// When: 삭제 버튼 클릭
 			await page.getByRole("button", { name: "삭제" }).click();
 
 			// When: 삭제 확인 모달에서 확인 클릭
 			await page.waitForTimeout(500);
-			await page.getByRole("button", { name: /확인|삭제/ }).last().click();
+			await page
+				.getByRole("button", { name: /확인|삭제/ })
+				.last()
+				.click();
 			await page.waitForURL(/\/roles\/?$/, { timeout: 15000 });
 			await page.waitForLoadState("networkidle");
 

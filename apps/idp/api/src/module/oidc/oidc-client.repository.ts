@@ -23,9 +23,7 @@ export interface OidcClientData {
 export class OidcClientRepository {
 	private readonly logger = new Logger(OidcClientRepository.name);
 
-	constructor(
-		private readonly directPrismaProvider: DirectPrismaProvider,
-	) {}
+	constructor(private readonly directPrismaProvider: DirectPrismaProvider) {}
 
 	async findActiveClients(): Promise<OidcClientData[]> {
 		this.logger.debug("활성 OIDC 클라이언트 조회 중...");

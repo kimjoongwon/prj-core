@@ -1,4 +1,4 @@
-import { test, expect } from "@playwright/test";
+import { expect, test } from "@playwright/test";
 
 test.describe("비밀번호 찾기", () => {
 	test.describe("페이지 렌더링", () => {
@@ -8,7 +8,9 @@ test.describe("비밀번호 찾기", () => {
 
 			// Then: 페이지 요소가 표시됨
 			await expect(page.getByText("비밀번호 찾기")).toBeVisible();
-			await expect(page.getByText("가입한 이메일 주소를 입력하세요")).toBeVisible();
+			await expect(
+				page.getByText("가입한 이메일 주소를 입력하세요"),
+			).toBeVisible();
 			await expect(page.getByLabel("이메일")).toBeVisible();
 			await expect(
 				page.getByRole("button", { name: "재설정 링크 보내기" }),
@@ -59,7 +61,9 @@ test.describe("비밀번호 찾기", () => {
 			).toBeVisible();
 		});
 
-		test("발송 완료 후 다시 보내기 버튼이 표시되어야 한다", async ({ page }) => {
+		test("발송 완료 후 다시 보내기 버튼이 표시되어야 한다", async ({
+			page,
+		}) => {
 			// Given: 이메일 발송 완료
 			await page.goto("/forgot-password");
 			await page.getByLabel("이메일").fill("test@example.com");

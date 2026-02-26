@@ -1,11 +1,11 @@
 "use client";
 
 import {
+	customInstance,
 	useDeleteRole,
 	useGetAbilitiesByRoleId,
 	useGetRoleById,
 } from "@cocrepo/api";
-import { customInstance } from "@cocrepo/api";
 import { PageSurface, SectionSurface, VStack } from "@cocrepo/ui";
 import {
 	Button,
@@ -79,10 +79,7 @@ function getAllAbilities() {
 /**
  * Role에 Grant 배치 할당 (Orval 재생성 전 임시)
  */
-function batchAssignGrantsToRole(
-	roleId: string,
-	grants: GrantItem[],
-) {
+function batchAssignGrantsToRole(roleId: string, grants: GrantItem[]) {
 	return customInstance<{ data: unknown[] }>({
 		url: `/api/v1/grants/roles/${roleId}`,
 		method: "PUT",
@@ -361,9 +358,7 @@ function RoleDetailPageClient({ roleId }: RoleDetailPageClientProps) {
 							</div>
 							<div className="md:col-span-2">
 								<dt className="text-sm text-default-500 mb-1">설명</dt>
-								<dd className="text-default-600">
-									{role.description || "-"}
-								</dd>
+								<dd className="text-default-600">{role.description || "-"}</dd>
 							</div>
 						</dl>
 					</div>
@@ -467,9 +462,7 @@ function RoleDetailPageClient({ roleId }: RoleDetailPageClientProps) {
 																size="sm"
 																color="danger"
 																variant="flat"
-																startContent={
-																	<ShieldX className="h-3 w-3" />
-																}
+																startContent={<ShieldX className="h-3 w-3" />}
 															>
 																거부
 															</Chip>
@@ -593,9 +586,7 @@ function RoleDetailPageClient({ roleId }: RoleDetailPageClientProps) {
 														size="sm"
 														color="success"
 														variant="flat"
-														startContent={
-															<ShieldCheck className="h-3 w-3" />
-														}
+														startContent={<ShieldCheck className="h-3 w-3" />}
 													>
 														허용
 													</Chip>
@@ -692,7 +683,9 @@ function RoleDetailPageClient({ roleId }: RoleDetailPageClientProps) {
 							</div>
 							<div className="flex items-center justify-between text-sm">
 								<span className="text-default-600">유지</span>
-								<Chip size="sm" variant="flat">{summary.kept}개</Chip>
+								<Chip size="sm" variant="flat">
+									{summary.kept}개
+								</Chip>
 							</div>
 						</div>
 					</ModalBody>

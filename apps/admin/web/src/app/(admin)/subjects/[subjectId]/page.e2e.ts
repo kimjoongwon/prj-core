@@ -1,4 +1,4 @@
-import { test, expect } from "@playwright/test";
+import { expect, test } from "@playwright/test";
 
 test.describe("Subject 상세 페이지", () => {
 	// ── E2E-008: Subject 필드 조회 (entity vs non-entity) ──
@@ -62,10 +62,7 @@ test.describe("Subject 상세 페이지", () => {
 			// Given: Subject ID 추출
 			await page.goto("./subjects");
 			await page.waitForLoadState("networkidle");
-			const menuDashboardId = await getSubjectIdByName(
-				page,
-				"menu:dashboard",
-			);
+			const menuDashboardId = await getSubjectIdByName(page, "menu:dashboard");
 
 			// When: Subject 상세 페이지로 직접 이동
 			await page.goto(`./subjects/${menuDashboardId}`);
