@@ -14,7 +14,7 @@ const nextConfig: NextConfig = {
   // Turbopack 모노레포 설정
   turbopack: {
     // 모노레포 루트 디렉토리 설정 (워크스페이스 패키지 해석용)
-    root: path.join(__dirname, "../.."),
+    root: path.join(__dirname, "../../.."),
   },
   transpilePackages: [
     "@cocrepo/api",

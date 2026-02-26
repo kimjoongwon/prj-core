@@ -15,8 +15,22 @@ storybook-static
 
 # Build outputs
 apps/*/dist
-packages/*/dist
+apps/*/*/dist
+packages/**/dist
 .env
+
+# Local tool/workspace outputs
+.opencode/node_modules/
+.opencode/package.json
+.opencode/bun.lock
+
+# Test/coverage outputs
+coverage
+
+# Build tool outputs
+.nyc_output
+
+.idea
 
 # Claude Code settings
 .claude/*.local.json

@@ -1,14 +1,28 @@
 import type {
 	Profile,
+	Tenant,
 	UserAssociation,
 	User as UserEntityType,
 } from "@cocrepo/prisma";
-import type { TenantDto } from "@cocrepo/dto";
 import { SpaceCategoryName } from "@cocrepo/enum";
 import type { Ability } from "./ability.entity";
 import { AbstractEntity } from "./abstract.entity";
 import type { AuthAuditLog } from "./auth-audit-log.entity";
 import type { PasswordHistory } from "./password-history.entity";
+
+/**
+ * Tenant with Space relations for User entity
+ * Prisma include로 가져온 관계 데이터를 위한 확장 타입
+ */
+type TenantWithSpace = Tenant & {
+	space?: {
+		spaceClassification?: {
+			category?: {
+				name: string;
+			} | null;
+		} | null;
+	} | null;
+};
 
 export class User extends AbstractEntity implements UserEntityType {
 	// ============================================================================
@@ -35,7 +49,7 @@ export class User extends AbstractEntity implements UserEntityType {
 	// 관계 필드 (선택적)
 	// ============================================================================
 	profiles?: Profile[];
-	tenants?: TenantDto[]; // Prisma Tenant 대신 TenantDto 사용
+	tenants?: TenantWithSpace[]; // Prisma include로 가져온 확장 타입
 	associations?: UserAssociation[];
 	passwordHistory?: PasswordHistory[];
 	authAuditLogs?: AuthAuditLog[];
@@ -83,7 +97,7 @@ export class User extends AbstractEntity implements UserEntityType {
 	/**
 	 * DTO로부터 Entity 생성 (팩토리)
 	 */
-	static fromDto<T extends { id: string; tenants?: TenantDto[] }>(
+	static fromDto<T extends { id: string; tenants?: TenantWithSpace[] }>(
 		dto: T,
 	): User {
 		const user = new User();
