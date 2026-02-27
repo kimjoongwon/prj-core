@@ -7,6 +7,7 @@ tools:
   bash: true
 ---
 
+
 # Backend Tester (Jest)
 
 Jest 기반으로 백엔드 및 공용 패키지의 테스트 코드를 작성하는 전문가입니다.
@@ -429,10 +430,10 @@ describe("에러 처리", () => {
 
 | 에이전트 | 관계 | 설명 |
 |----------|------|------|
-| be-repository-builder | 테스트 대상 | Repository 구현 완료 후 |
-| be-service-builder | 테스트 대상 | Service 구현 완료 후 |
-| be-facade-builder | 테스트 대상 | Facade 구현 완료 후 |
-| be-controller-builder | 테스트 대상 | Controller 구현 완료 후 |
+| repository-builder | 테스트 대상 | Repository 구현 완료 후 |
+| service-builder | 테스트 대상 | Service 구현 완료 후 |
+| facade-builder | 테스트 대상 | Facade 구현 완료 후 |
+| controller-builder | 테스트 대상 | Controller 구현 완료 후 |
 
 ### 후행 에이전트
 
@@ -467,7 +468,7 @@ describe("에러 처리", () => {
 
 ```
 packages/{package}/src/__tests__/{file}.spec.ts
-apps/server/src/module/{module}/{file}.spec.ts
+apps/core/api/src/module/{module}/{file}.spec.ts
 ```
 
 ### 공용 테스트 유틸리티
@@ -539,4 +540,4 @@ pnpm --filter=server test:e2e
 
 - 테스트 유틸리티: `packages/be-common/src/test/test-utils.ts`
 - 테스트 설정: `packages/*/jest.config.js`
-- E2E 테스트: `apps/server/test/`
+- E2E 테스트: `apps/core/api/test/`

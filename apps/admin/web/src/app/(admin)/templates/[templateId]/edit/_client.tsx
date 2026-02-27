@@ -1,6 +1,11 @@
 "use client";
 
-import { useGetTemplate, useUpdateTemplate } from "@cocrepo/api";
+import {
+	type CreateTemplateVariableItemDto,
+	type TemplateDto,
+	useGetTemplate,
+	useUpdateTemplate,
+} from "@cocrepo/api";
 import {
 	PageSurface,
 	TemplateForm,
@@ -16,6 +21,18 @@ import { useEffect } from "react";
 interface TemplateEditPageClientProps {
 	templateId: string;
 }
+
+interface TemplateVariableLike {
+	id: string;
+	name: string;
+	description?: string | null;
+	defaultValue?: string | null;
+	isRequired?: boolean;
+}
+
+type TemplateWithVariables = TemplateDto & {
+	variables?: TemplateVariableLike[];
+};
 
 /**
  * 템플릿 수정 페이지 - 클라이언트 컴포넌트
@@ -40,7 +57,7 @@ function TemplateEditPageClient({ templateId }: TemplateEditPageClientProps) {
 
 	// API 조회 (prefetch로 초기 데이터 보장)
 	const { data: response, isLoading } = useGetTemplate(templateId);
-	const template = response?.data;
+	const template = response?.data as TemplateWithVariables | undefined;
 
 	// 초기 데이터 로딩
 	useEffect(() => {
@@ -58,7 +75,7 @@ function TemplateEditPageClient({ templateId }: TemplateEditPageClientProps) {
 				name: v.name,
 				description: v.description || "",
 				defaultValue: v.defaultValue || "",
-				isRequired: v.isRequired,
+				isRequired: v.isRequired ?? false,
 			}));
 			state.isInitialized = true;
 		}
@@ -164,7 +181,7 @@ function TemplateEditPageClient({ templateId }: TemplateEditPageClientProps) {
 					description: v.description || undefined,
 					defaultValue: v.defaultValue || undefined,
 					isRequired: v.isRequired,
-				})),
+				})) as unknown as CreateTemplateVariableItemDto,
 			},
 		});
 	};

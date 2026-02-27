@@ -7,6 +7,7 @@ tools:
   bash: true
 ---
 
+
 # VO Builder
 
 Value Object 클래스를 생성하는 전문가입니다.
@@ -21,6 +22,19 @@ Value Object 클래스를 생성하는 전문가입니다.
 | 유효성 검증 필요 | 값 생성 시 검증 로직이 필요한 경우 |
 | 비즈니스 로직 포함 | 값과 관련된 연산/변환 로직 필요 |
 | 불변성 보장 | 한번 생성된 값이 변경되면 안 되는 경우 |
+
+### VO vs @cocrepo/schema 데코레이터
+
+| 구분 | VO (be-vo) | @cocrepo/schema 데코레이터 |
+|------|------------|---------------------------|
+| 위치 | packages/be-vo | packages/common-schema |
+| 용도 | 백엔드 도메인 로직 | DTO 검증 규칙 정의 |
+| 런타임 | 인스턴스 생성 필요 | 클래스 필드 데코레이터 |
+| 예시 | `Email.create(value)` | `@EmailField()` |
+
+**언제 무엇을 사용하는가?**
+- **VO**: 복잡한 도메인 로직, 불변성 보장, 값 연산 필요 시
+- **@cocrepo/schema 데코레이터**: DTO 검증, 스키마 상속, 프론트엔드/백엔드 검증 규칙 공유
 
 ---
 
@@ -125,7 +139,7 @@ Value Object 클래스를 생성하는 전문가입니다.
 
 ```
 0. 템플릿 파일 확인
-   Read `.opencode/templates/spec/vo.spec.md`
+   Read `.claude/templates/spec/vo.spec.md`
    → 해당 파일의 형식을 기준으로 vo.spec.md를 생성한다
    ↓
 1. 도메인 개념 분석
@@ -334,7 +348,7 @@ export class Cookie extends ValueObject<CookieProps> {
 
 ## 6-1. vo.spec.md 형식
 
-> 형식은 `.opencode/templates/spec/vo.spec.md` 참조
+> 형식은 `.claude/templates/spec/vo.spec.md` 참조
 
 ---
 
@@ -342,10 +356,10 @@ export class Cookie extends ValueObject<CookieProps> {
 
 | 구분 | 에이전트 | 설명 |
 |------|----------|------|
-| **선행** | req-entity-planner | 도메인 개념 정의 |
-| **후행** | be-entity-builder | Entity에서 VO 사용 |
-| | be-service-builder | Service에서 VO 활용 |
-| **관련** | be-dto-builder | DTO ↔ VO 변환 |
+| **선행** | technical-designer | 도메인 개념 정의 |
+| **후행** | entity-builder | Entity에서 VO 사용 |
+| | service-builder | Service에서 VO 활용 |
+| **관련** | dto-builder | DTO ↔ VO 변환 |
 
 ---
 

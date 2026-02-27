@@ -1,5 +1,6 @@
 import {
 	AuthCacheService,
+	EmailService,
 	RolesService,
 	SpacesService,
 	TokenService,
@@ -19,6 +20,7 @@ describe("AuthFacade", () => {
 	let mockTokenService: jest.Mocked<TokenService>;
 	let mockTokenStorageService: jest.Mocked<TokenStorageService>;
 	let mockAuthCacheService: jest.Mocked<AuthCacheService>;
+	let mockEmailService: jest.Mocked<EmailService>;
 	let mockClsService: jest.Mocked<ClsService>;
 
 	beforeEach(async () => {
@@ -55,6 +57,9 @@ describe("AuthFacade", () => {
 			set: jest.fn(),
 			invalidate: jest.fn(),
 		} as unknown as jest.Mocked<AuthCacheService>;
+		mockEmailService = {
+			sendEmail: jest.fn(),
+		} as unknown as jest.Mocked<EmailService>;
 
 		mockClsService = {
 			get: jest.fn(),
@@ -79,6 +84,7 @@ describe("AuthFacade", () => {
 				{ provide: TokenService, useValue: mockTokenService },
 				{ provide: TokenStorageService, useValue: mockTokenStorageService },
 				{ provide: AuthCacheService, useValue: mockAuthCacheService },
+				{ provide: EmailService, useValue: mockEmailService },
 				{ provide: ConfigService, useValue: mockConfigService },
 				{ provide: ClsService, useValue: mockClsService },
 			],

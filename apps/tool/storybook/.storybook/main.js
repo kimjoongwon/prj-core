@@ -26,11 +26,15 @@ const config = {
     options: {},
   },
   async viteFinal(config) {
-    const { default: tailwindcss } = await import("@tailwindcss/vite");
     const { default: react } = await import("@vitejs/plugin-react-swc");
 
     config.plugins = config.plugins || [];
-    config.plugins.push(tailwindcss());
+    try {
+      const { default: tailwindcss } = await import("@tailwindcss/vite/dist/index.mjs");
+      config.plugins.push(tailwindcss());
+    } catch {
+      // 테스트 환경에서는 @tailwindcss/vite 미설치일 수 있으므로 스킵
+    }
     config.plugins.push(
       react({
         jsxImportSource: "react",

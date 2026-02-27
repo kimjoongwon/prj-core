@@ -1,8 +1,9 @@
 ---
-name: 서비스-빌더
+name: be-service-builder
 description: NestJS Service 레이어를 생성하는 전문가
 tools: Read, Write, Grep, Bash
 ---
+
 
 # Service Builder
 

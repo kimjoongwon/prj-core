@@ -7,6 +7,7 @@ tools:
   bash: true
 ---
 
+
 # L10 Feature 기획자 (Feature Planner)
 
 특정 화면에 필요한 **Feature 컴포넌트(L10)** 레이어를 기획하는 전문가입니다.
@@ -96,6 +97,29 @@ packages/fe-ui/src/components/feature/[FeatureName]/index.spec.md
 | 사이드바 | 네비게이션 + Store | SideNav |
 | 검색 바 | 검색 + Store | SearchBar |
 | 페이징 | 페이지 + Store | PaginationFeature |
+| 폼 | 입력 + 검증 + 제출 | LoginForm, SignUpForm |
+
+### 폼 Feature 검증 규칙 참조
+
+폼 Feature 기획 시 `@cocrepo/schema`의 기존 스키마를 참조합니다。
+
+**기획서 작성 예시:**
+```markdown
+## 검증 규칙
+- **이메일**: @cocrepo/schema LoginSchema.email 참조
+  - 형식: 이메일 형식
+  - 필수 여부: 필수
+- **비밀번호**: @cocrepo/schema LoginSchema.password 참조
+  - 최소 길이: 8자
+  - 필수 여부: 필수
+```
+
+**@cocrepo/schema 스키마 목록:**
+
+| 스키마 | 용도 | 필드 |
+|--------|------|------|
+| LoginSchema | 로그인 폼 | email, password |
+| SignUpSchema | 회원가입 폼 | email, password, name |
 
 ### Feature 명명 규칙
 
@@ -115,7 +139,7 @@ packages/fe-ui/src/components/feature/[FeatureName]/index.spec.md
 
 ```
 0단계: 템플릿 파일 확인
-   Read `.opencode/templates/spec/feature.spec.md`
+   Read `.claude/templates/spec/feature.spec.md`
    → 해당 파일의 형식을 기준으로 index.spec.md를 생성한다
    ↓
 1단계: 화면 분석
@@ -227,7 +251,7 @@ const MemberListFeature = observer(({ store }: Props) => {
 ### 입력
 
 ```
-화면 경로: apps/admin/app/(admin)/members/
+화면 경로: apps/admin/web/app/(admin)/members/
 도메인: Member
 화면: MemberList
 Store: MemberStore (members, searchQuery, setSearchQuery, fetchMembers)

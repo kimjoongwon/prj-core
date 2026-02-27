@@ -1,8 +1,9 @@
 ---
-name: DMMF-파서-빌더
+name: be-dmmf-parser-builder
 description: Prisma DMMF 파싱 유틸리티를 생성하는 전문가
 tools: Read, Write, Grep, Bash
 ---
+
 
 # DMMF Parser Builder
 

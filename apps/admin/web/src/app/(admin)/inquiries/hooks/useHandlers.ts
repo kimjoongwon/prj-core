@@ -1,20 +1,20 @@
-import type { useRouter, useSearchParams } from "next/navigation";
 import type { InquiryStore } from "@cocrepo/store";
 import type { InquiryRow } from "@cocrepo/ui";
-import type { Observable } from "mobx";
+import type { Route } from "next";
+import type { useRouter, useSearchParams } from "next/navigation";
 
 // TODO: Orval 훅 생성 후 아래 import 추가
 // import { useGetInquiries, useGetInquiryStats } from "@cocrepo/api";
 // import type { InquiryDto, InquiryStatsDto } from "@cocrepo/api";
 
 interface UseHandlersProps {
-	state: Observable<{
+	state: {
 		page: number;
 		pageSize: number;
 		sortField: string;
 		sortDirection: "asc" | "desc";
 		isLoading: boolean;
-	}>;
+	};
 	inquiryStore: InquiryStore;
 	router: ReturnType<typeof useRouter>;
 	searchParams: ReturnType<typeof useSearchParams>;
@@ -53,7 +53,7 @@ export function useHandlers({
 	 * 새 문의 접수 버튼 클릭
 	 */
 	const onClickNewInquiry = () => {
-		router.push("/inquiries/new");
+		router.push("/inquiries/new" as Route);
 	};
 
 	/**
@@ -61,7 +61,7 @@ export function useHandlers({
 	 */
 	const onClickInquiryRow = (inquiry: InquiryRow) => {
 		inquiryStore.selectInquiry(inquiry.id);
-		router.push(`/inquiries/${inquiry.id}`);
+		router.push(`/inquiries/${inquiry.id}` as Route);
 	};
 
 	/**
@@ -141,7 +141,7 @@ export function useHandlers({
 		state.sortDirection = "desc";
 
 		// URL 쿼리 파라미터 초기화
-		router.push("/inquiries");
+		router.push("/inquiries" as Route);
 	};
 
 	/**

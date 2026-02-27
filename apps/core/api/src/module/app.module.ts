@@ -29,13 +29,13 @@ import { ThrottlerGuard } from "@nestjs/throttler";
 import { AbilitiesModule } from "./ability";
 import { ActionsModule } from "./action";
 import { CategoriesModule } from "./category";
-import { InquiriesModule } from "./inquiries";
 import { ExercisesModule } from "./exercises";
 // Global modules
 import { globalModules } from "./global.module";
 import { GrantsModule } from "./grant";
 import { GroundsModule } from "./grounds";
 import { GroupsModule } from "./group";
+import { InquiriesModule } from "./inquiries";
 import { PrismaModule } from "./prisma.module";
 import { RedisModule } from "./redis.module";
 import { RolesModule } from "./role";

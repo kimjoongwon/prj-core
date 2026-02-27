@@ -11,9 +11,9 @@
  */
 
 export type InvalidateUserSessions200AllOf = {
-  /** */
-  httpStatus?: number;
-  /** */
-  message?: string;
-  data?: boolean;
+	/** */
+	httpStatus?: number;
+	/** */
+	message?: string;
+	data?: boolean;
 };

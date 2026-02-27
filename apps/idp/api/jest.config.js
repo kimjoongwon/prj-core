@@ -2,8 +2,16 @@ module.exports = {
 	preset: "ts-jest",
 	testEnvironment: "node",
 	rootDir: ".",
-	testRegex: "\\.(spec|e2e-spec)\\.ts$",
+	testRegex: "\\.spec\\.ts$",
 	moduleFileExtensions: ["ts", "js", "json"],
+	setupFiles: ["reflect-metadata"],
+	moduleNameMapper: {
+		"^@cocrepo/be-common$": "<rootDir>/test/mocks/be-common.ts",
+		"^@cocrepo/dto$": "<rootDir>/test/mocks/dto.ts",
+		"^@cocrepo/facade$": "<rootDir>/test/mocks/facade.ts",
+		"^@cocrepo/service$": "<rootDir>/test/mocks/service.ts",
+		"^@cocrepo/prisma$": "<rootDir>/test/mocks/prisma.ts",
+	},
 	transform: {
 		"^.+\\.ts$": [
 			"ts-jest",

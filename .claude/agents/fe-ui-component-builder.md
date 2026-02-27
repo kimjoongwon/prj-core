@@ -1,8 +1,9 @@
 ---
-name: UI-컴포넌트-빌더
+name: fe-ui-component-builder
 description: Pure UI 컴포넌트를 packages/fe-ui/src/components/ui에 생성하는 전문가
 tools: Read, Write, Grep, Bash
 ---
+
 
 # UI 컴포넌트 빌더
 

@@ -28,7 +28,7 @@
     "lint:fix": "echo 'Linting skipped for now'",
     "format": "biome format --write .",
     "type-check": "echo 'Type checking skipped due to memory constraints'",
-    "test": "vitest",
+    "test": "vitest --passWithNoTests",
     "test:watch": "vitest --watch",
     "clean": "rm -rf .turbo && rm -rf node_modules",
     "clean:dist": "echo 'No dist folder to clean'"

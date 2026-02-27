@@ -1,8 +1,9 @@
 ---
-name: 셀 기획자
+name: req-cell-planner
 description: DataGrid/Table Cell sidecar spec을 기획하는 전문가
 tools: Read, Write, Grep, Bash
 ---
+
 
 # 셀 기획자 (Cell Planner)
 

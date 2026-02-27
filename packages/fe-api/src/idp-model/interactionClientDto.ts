@@ -13,10 +13,10 @@ OIDC 인증 및 IDP 관리 API를 제공합니다.
  */
 
 export interface InteractionClientDto {
-  /** 클라이언트 ID */
-  clientId: string;
-  /** 클라이언트 이름 */
-  clientName: string;
-  /** 로고 URI */
-  logoUri?: string;
+	/** 클라이언트 ID */
+	clientId: string;
+	/** 클라이언트 이름 */
+	clientName: string;
+	/** 로고 URI */
+	logoUri?: string;
 }

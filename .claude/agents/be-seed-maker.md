@@ -1,8 +1,9 @@
 ---
-name: 시드-메이커
+name: be-seed-maker
 description: 현실 세계와 연결된 시드 데이터를 생성하는 전문가
 tools: Read, Write, Grep, Bash
 ---
+
 
 # 시드 메이커 (Seed Maker)
 

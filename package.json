@@ -40,6 +40,8 @@
     "release:major": "pnpm version:major && pnpm build:packages && pnpm publish:packages && pnpm update:app-deps",
     "release:pkg": "node scripts/release-pkg.js",
     "agent:watch": "node .claude/scripts/watch-agents.js",
+    "agent:sync": "node .claude/scripts/sync-agents-from-codex.js --write --prune",
+    "agent:check": "node .claude/scripts/sync-agents-from-codex.js --check",
     "agent:viz": "node .claude/scripts/agent-viz-server.js"
   },
   "devDependencies": {

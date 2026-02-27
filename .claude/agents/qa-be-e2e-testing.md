@@ -1,8 +1,9 @@
 ---
-name: 백엔드-E2E-테스터
+name: qa-be-e2e-testing
 description: Jest + Supertest 기반 백엔드 E2E 테스트 코드를 작성하는 전문가
 tools: Read, Write, Grep, Bash
 ---
+
 
 # Backend E2E Tester (Jest + Supertest)
 

@@ -1,8 +1,9 @@
 ---
-name: 입력 기획자
+name: req-input-planner
 description: 입력 컴포넌트(Inputs) sidecar spec을 기획하는 전문가
 tools: Read, Write, Grep, Bash
 ---
+
 
 # 입력 기획자 (Input Planner)
 

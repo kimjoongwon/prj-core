@@ -7,6 +7,7 @@ tools:
   bash: true
 ---
 
+
 # L3-L4 기능/화면 기획자 (Feature/Screen Planner)
 
 도메인의 **L3(기능), L4(화면)** 레이어를 기획하는 전문가입니다.
@@ -67,7 +68,7 @@ apps/[app]/app/(admin)/[도메인]/[entityId]/edit/page.spec.md (수정)
 
 ```
 0단계: 템플릿 파일 확인
-   Read `.opencode/templates/spec/page.spec.md`
+   Read `.claude/templates/spec/page.spec.md`
    → 해당 파일의 형식을 기준으로 page.spec.md를 생성한다
    ↓
 1단계: 목표별 기능 도출 (L3)
@@ -144,7 +145,7 @@ apps/[app]/app/(admin)/[도메인]/[entityId]/edit/page.spec.md (수정)
 
 **각 화면(L4)에 대해 개별 `page.spec.md` 파일을 생성합니다.**
 
-**page.spec.md 템플릿** (`.opencode/templates/spec/page.spec.md` 참조):
+**page.spec.md 템플릿** (`.claude/templates/spec/page.spec.md` 참조):
 
 ```markdown
 # [화면명] 페이지 기획서
@@ -400,7 +401,7 @@ apps/[app]/app/(admin)/[도메인]/[entityId]/edit/page.spec.md (수정)
 
 ## 상위 기획서
 
-- `apps/admin/app/(admin)/app.spec.md`
+- `apps/admin/web/app/(admin)/app.spec.md`
 
 ## 변경 이력
 
@@ -480,7 +481,7 @@ apps/[app]/app/(admin)/[도메인]/[entityId]/edit/page.spec.md (수정)
 
 ## 상위 기획서
 
-- `apps/admin/app/(admin)/app.spec.md`
+- `apps/admin/web/app/(admin)/app.spec.md`
 
 ## 변경 이력
 
@@ -542,7 +543,7 @@ apps/[app]/app/(admin)/[도메인]/[entityId]/edit/page.spec.md (수정)
 
 ## 상위 기획서
 
-- `apps/admin/app/(admin)/app.spec.md`
+- `apps/admin/web/app/(admin)/app.spec.md`
 
 ## 변경 이력
 
@@ -606,7 +607,7 @@ apps/[app]/app/(admin)/[도메인]/[entityId]/edit/page.spec.md (수정)
 
 ## 상위 기획서
 
-- `apps/admin/app/(admin)/app.spec.md`
+- `apps/admin/web/app/(admin)/app.spec.md`
 
 ## 변경 이력
 

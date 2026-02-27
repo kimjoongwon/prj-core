@@ -1,10 +1,7 @@
+import { useCreateInquiry } from "@cocrepo/api";
 import { ADMIN_PATHS } from "@cocrepo/constant";
 import type { AIFormSuggestion, InquiryFormData } from "@cocrepo/ui";
-import type { Observable } from "mobx";
 import { useCallback } from "react";
-
-// TODO: Orval 훅 생성 후 아래 import 추가
-// import { useCreateInquiry, useGetUsers } from "@cocrepo/api";
 
 interface LocalState {
 	isSubmitting: boolean;
@@ -13,7 +10,7 @@ interface LocalState {
 }
 
 interface UseHandlersProps {
-	state: Observable<LocalState>;
+	state: LocalState;
 	router: {
 		push: (url: string) => void;
 	};
@@ -37,8 +34,7 @@ export function useHandlers({
 	state,
 	router,
 }: UseHandlersProps): UseHandlersReturn {
-	// TODO: Orval 훅 생성 후 아래 주석 해제
-	// const createInquiryMutation = useCreateInquiry();
+	const createInquiryMutation = useCreateInquiry();
 
 	/**
 	 * 취소 버튼 클릭 - 목록으로 이동
@@ -64,33 +60,46 @@ export function useHandlers({
 	 * router.push(`${ADMIN_PATHS.INQUIRIES_DETAIL.replace("[inquiryId]", response.id)}`);
 	 */
 	const onSubmit = useCallback(
-		async (_data: InquiryFormData) => {
+		async (data: InquiryFormData) => {
 			state.isSubmitting = true;
 
 			try {
-				// TODO: Orval 훅 생성 후 아래 주석 해제
-				// const response = await createInquiryMutation.mutateAsync({
-				// 	data: {
-				// 		customerId: data.customerId,
-				// 		title: data.title,
-				// 		content: data.content,
-				// 		category: data.category,
-				// 		channel: data.channel,
-				// 		priority: data.priority,
-				// 		assigneeId: data.assigneeId,
-				// 		attachmentUrls: data.attachmentUrls,
-				// 	},
-				// });
-				//
-				// // 성공 시 상세 페이지로 이동
-				// router.push(
-				// 	`${ADMIN_PATHS.INQUIRIES_DETAIL.replace("[inquiryId]", response.id)}`
-				// );
-
-				// Mock: 1초 대기 후 성공 처리 (삭제 필요)
-				await new Promise((resolve) => setTimeout(resolve, 1000));
-
-				// Mock: 목록으로 이동 (삭제 필요)
+				const response = await createInquiryMutation.mutateAsync({
+					data: {
+						customerId: data.customerId,
+						title: data.title,
+						content: data.content,
+						category: data.category as
+							| "GENERAL"
+							| "DELIVERY"
+							| "PAYMENT"
+							| "REFUND"
+							| "PRODUCT"
+							| "ACCOUNT"
+							| "TECHNICAL"
+							| "COMPLAINT"
+							| "OTHER",
+						channel: data.channel as
+							| "WEB"
+							| "EMAIL"
+							| "CHAT"
+							| "SMS"
+							| "PHONE"
+							| "WALK_IN",
+						priority: data.priority as "LOW" | "NORMAL" | "HIGH" | "URGENT",
+						assigneeId: data.assigneeId || undefined,
+					},
+				});
+				const createdInquiryId = response?.data?.id;
+				if (createdInquiryId) {
+					router.push(
+						ADMIN_PATHS.INQUIRIES_DETAIL.replace(
+							"[inquiryId]",
+							createdInquiryId,
+						),
+					);
+					return;
+				}
 				router.push(ADMIN_PATHS.INQUIRIES);
 			} catch (error) {
 				console.error("문의 접수 실패:", error);
@@ -99,7 +108,7 @@ export function useHandlers({
 				state.isSubmitting = false;
 			}
 		},
-		[state, router],
+		[state, router, createInquiryMutation],
 	);
 
 	/**

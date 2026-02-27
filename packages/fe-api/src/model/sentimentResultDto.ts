@@ -9,29 +9,29 @@
 2. Cookie - 브라우저에서 로그인 후 쿠키 자동 전송
  * OpenAPI spec version: 1.0.0
  */
-import type { SentimentType } from './sentimentType';
+import type { SentimentType } from "./sentimentType";
 
 export interface SentimentResultDto {
-  id: string;
-  createdAt: string;
-  updatedAt: string;
-  /** @nullable */
-  removedAt: string | null;
-  /** 소속 문의 ID */
-  inquiryId: string;
-  /** 분석 대상 메시지 ID */
-  messageId?: string;
-  /** 감정 유형 */
-  sentiment: SentimentType;
-  /** 감정 점수 (-1.0 ~ 1.0) */
-  score: number;
-  /** 분석 신뢰도 (0.0 ~ 1.0) */
-  confidence: number;
-  /**
-   * 긴급도 점수 (0.0 ~ 1.0)
-   * @nullable
-   */
-  urgency: number | null;
-  /** 분석 일시 */
-  analyzedAt: string;
+	id: string;
+	createdAt: string;
+	updatedAt: string;
+	/** @nullable */
+	removedAt: string | null;
+	/** 소속 문의 ID */
+	inquiryId: string;
+	/** 분석 대상 메시지 ID */
+	messageId?: string;
+	/** 감정 유형 */
+	sentiment: SentimentType;
+	/** 감정 점수 (-1.0 ~ 1.0) */
+	score: number;
+	/** 분석 신뢰도 (0.0 ~ 1.0) */
+	confidence: number;
+	/**
+	 * 긴급도 점수 (0.0 ~ 1.0)
+	 * @nullable
+	 */
+	urgency: number | null;
+	/** 분석 일시 */
+	analyzedAt: string;
 }

@@ -7,6 +7,7 @@ tools:
   bash: true
 ---
 
+
 # 메뉴 빌더
 
 Admin/Dashboard 앱의 **메뉴 시스템 컴포넌트**(Sidebar, BottomTab, FAB, Tabs)를 생성합니다.

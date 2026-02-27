@@ -5,9 +5,10 @@ module.exports = {
   testMatch: ["**/__tests__/**/*.spec.ts", "**/__tests__/**/*.test.ts"],
   moduleFileExtensions: ["ts", "js", "json"],
   moduleNameMapper: {
-    "^@cocrepo/entity$": "<rootDir>/../entity/dist",
+    "^@cocrepo/entity$": "<rootDir>/../be-entity/dist",
     "^@cocrepo/prisma$": "<rootDir>/../prisma/dist/src",
   },
+  setupFiles: ["reflect-metadata"],
   transform: {
     "^.+\\.ts$": [
       "ts-jest",

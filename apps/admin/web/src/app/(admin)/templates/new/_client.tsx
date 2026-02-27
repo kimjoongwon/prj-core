@@ -1,6 +1,9 @@
 "use client";
 
-import { useCreateTemplate } from "@cocrepo/api";
+import {
+	type CreateTemplateVariableItemDto,
+	useCreateTemplate,
+} from "@cocrepo/api";
 import {
 	PageSurface,
 	TemplateForm,
@@ -143,7 +146,7 @@ function TemplateNewPageClient() {
 					description: v.description || undefined,
 					defaultValue: v.defaultValue || undefined,
 					isRequired: v.isRequired,
-				})),
+				})) as unknown as CreateTemplateVariableItemDto,
 			},
 		});
 	};

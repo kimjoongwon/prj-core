@@ -50,14 +50,18 @@ test.describe("에셋 상세 페이지", () => {
 			await page.waitForLoadState("networkidle");
 
 			// Then: 기본 정보 섹션/파일명 확인
-			await expect(page.getByRole("heading", { name: TEST_NAME })).toBeVisible();
+			await expect(
+				page.getByRole("heading", { name: TEST_NAME }),
+			).toBeVisible();
 			await expect(page.getByText("기본 정보")).toBeVisible();
 			await expect(page.getByText("폴더 이동")).toBeVisible();
 		});
 	});
 
 	test.describe("[E2E-002] 삭제 액션", () => {
-		test("상세 페이지에서 삭제 버튼 클릭 시 목록 페이지로 이동해야 한다", async ({ page }) => {
+		test("상세 페이지에서 삭제 버튼 클릭 시 목록 페이지로 이동해야 한다", async ({
+			page,
+		}) => {
 			const MOCK_ASSET_ID = "33333333-3333-3333-3333-333333333333";
 			const TEST_NAME = "e2e-asset-detail-delete.mp4";
 
@@ -128,7 +132,9 @@ test.describe("에셋 상세 페이지", () => {
 			// Then: 삭제 성공 후 목록 이동
 			expect(deleteResp.status()).toBe(204);
 			await page.waitForURL(/\/assets\/?$/, { timeout: 15000 });
-			await expect(page.getByRole("heading", { name: "에셋 관리" })).toBeVisible();
+			await expect(
+				page.getByRole("heading", { name: "에셋 관리" }),
+			).toBeVisible();
 		});
 	});
 });

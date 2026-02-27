@@ -1,8 +1,12 @@
 "use client";
 
-import { useInquiryStore, type InquiryMessage, type InquiryParticipant } from "@cocrepo/store";
+import {
+	type InquiryMessage,
+	type InquiryParticipant,
+	useInquiryStore,
+} from "@cocrepo/store";
 import { createLogger } from "@cocrepo/toolkit";
-import { useEffect, useRef, useCallback, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 
 const logger = createLogger("[useInquiryWebSocket]");
 
@@ -14,7 +18,10 @@ export type WebSocketStatus = "connected" | "connecting" | "disconnected";
  */
 interface WebSocketEvents {
 	"inquiry:message:new": (message: InquiryMessage) => void;
-	"inquiry:message:delivered": (data: { messageId: string; deliveredAt: string }) => void;
+	"inquiry:message:delivered": (data: {
+		messageId: string;
+		deliveredAt: string;
+	}) => void;
 	"inquiry:message:read": (data: { messageId: string; readAt: string }) => void;
 	"inquiry:typing:start": (data: { userId: string }) => void;
 	"inquiry:typing:stop": (data: { userId: string }) => void;
@@ -187,13 +194,13 @@ export function useInquiryWebSocket(
 					}
 					case "inquiry:status:changed":
 						// TODO: 상태 변경 처리
-						logger.info("문의 상태 변경:", data);
+						logger.info("문의 상태 변경:", JSON.stringify(data));
 						break;
 					default:
 						logger.info("알 수 없는 WebSocket 이벤트:", type);
 				}
 			} catch (error) {
-				logger.error("WebSocket 메시지 파싱 에러:", error);
+				logger.error("WebSocket 메시지 파싱 에러:", String(error));
 			}
 		},
 		[store],
@@ -218,11 +225,19 @@ export function useInquiryWebSocket(
 			socket.onerror = handleError;
 			socket.onmessage = handleMessage;
 		} catch (error) {
-			logger.error("WebSocket 연결 실패:", error);
+			logger.error("WebSocket 연결 실패:", String(error));
 			setStatus("disconnected");
 			onError?.(error as Error);
 		}
-	}, [wsUrl, inquiryId, handleOpen, handleClose, handleError, handleMessage, onError]);
+	}, [
+		wsUrl,
+		inquiryId,
+		handleOpen,
+		handleClose,
+		handleError,
+		handleMessage,
+		onError,
+	]);
 
 	// WebSocket 연결 해제
 	const disconnect = useCallback(() => {

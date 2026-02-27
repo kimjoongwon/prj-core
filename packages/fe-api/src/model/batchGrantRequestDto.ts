@@ -9,9 +9,9 @@
 2. Cookie - 브라우저에서 로그인 후 쿠키 자동 전송
  * OpenAPI spec version: 1.0.0
  */
-import type { BatchGrantItemDto } from './batchGrantItemDto';
+import type { BatchGrantItemDto } from "./batchGrantItemDto";
 
 export interface BatchGrantRequestDto {
-  /** Grant 목록 (할당할 Ability 목록) */
-  grants: BatchGrantItemDto[];
+	/** Grant 목록 (할당할 Ability 목록) */
+	grants: BatchGrantItemDto[];
 }

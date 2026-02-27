@@ -2,13 +2,14 @@
 
 import {
 	getGetTemplateQueryKey,
+	type TemplateDto,
 	useDeleteTemplate,
 	useGetTemplate,
 	usePreviewTemplate,
 	useSendTestTemplate,
 	useToggleTemplateStatus,
 } from "@cocrepo/api";
-import type { PreviewResult } from "@cocrepo/ui";
+import type { PreviewResult, TemplateVariable } from "@cocrepo/ui";
 import {
 	DateTimeCell,
 	PageSurface,
@@ -43,6 +44,8 @@ interface TemplateDetailPageClientProps {
 	templateId: string;
 }
 
+type TemplateWithVariables = TemplateDto & { variables?: TemplateVariable[] };
+
 /**
  * 메시지 템플릿 상세 페이지 - 클라이언트 컴포넌트
  */
@@ -59,7 +62,7 @@ function TemplateDetailPageClient({
 
 	// 템플릿 상세 조회 (prefetch로 초기 데이터 보장)
 	const { data: response } = useGetTemplate(templateId);
-	const template = response?.data;
+	const template = response?.data as TemplateWithVariables | undefined;
 
 	// Mutation
 	const { mutate: deleteTemplate, isPending: isDeleting } = useDeleteTemplate();

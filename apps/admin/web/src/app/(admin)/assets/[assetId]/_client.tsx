@@ -1,16 +1,23 @@
 "use client";
 
 import {
-	getGetAssetsQueryKey,
 	type AssetDto,
 	type FolderDto,
+	getGetAssetsQueryKey,
 	useGetAssetById,
 	useGetFolders,
 	useMoveAsset,
 	useRemoveAsset,
 } from "@cocrepo/api";
 import { DateTimeCell, PageSurface, SectionSurface, VStack } from "@cocrepo/ui";
-import { addToast, Button, Input, Select, SelectItem, Spinner } from "@heroui/react";
+import {
+	addToast,
+	Button,
+	Input,
+	Select,
+	SelectItem,
+	Spinner,
+} from "@heroui/react";
 import { useQueryClient } from "@tanstack/react-query";
 import { ArrowLeft, FolderInput, Trash2 } from "lucide-react";
 import { observer } from "mobx-react-lite";
@@ -266,11 +273,7 @@ function AssetDetailPageClient({ assetId }: AssetDetailPageClientProps) {
 				<SectionSurface title="스토리지 정보">
 					<div className="grid grid-cols-1 gap-4 md:grid-cols-2">
 						<Input label="Storage Key" value={asset.storageKey} isReadOnly />
-						<Input
-							label="Checksum"
-							value={asset.checksum ?? "-"}
-							isReadOnly
-						/>
+						<Input label="Checksum" value={asset.checksum ?? "-"} isReadOnly />
 					</div>
 				</SectionSurface>
 			</VStack>

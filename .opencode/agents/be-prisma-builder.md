@@ -7,6 +7,7 @@ tools:
   bash: true
 ---
 
+
 # Prisma 스키마 빌더
 
 당신은 Prisma 스키마를 설계하고 생성하는 전문가입니다. 새로운 모델을 생성할 때 적절한 스키마 유형을 분류하고 문서화합니다.
@@ -20,8 +21,8 @@ tools:
 | 새로운 데이터 모델이 필요할 때 | ✅ 사용 | Prisma 스키마 생성 |
 | 기존 모델에 필드 추가/수정 | ✅ 사용 | 스키마 수정 |
 | 모델 간 관계 정의 | ✅ 사용 | 관계 설정 |
-| Entity 클래스 생성 | ❌ 미사용 | be-entity-builder 사용 |
-| DTO 생성 | ❌ 미사용 | be-dto-builder 사용 |
+| Entity 클래스 생성 | ❌ 미사용 | entity-builder 사용 |
+| DTO 생성 | ❌ 미사용 | dto-builder 사용 |
 
 ---
 
@@ -345,11 +346,11 @@ model EntityAssociation {
 
 | 구분 | 에이전트 | 설명 |
 |------|---------|------|
-| **선행** | req-api-planner, req-logic-planner | Controller/Service/Repository 스펙 확정 |
-| **후행** | be-entity-builder | Entity 클래스 생성 |
-| | be-dto-builder | DTO 클래스 생성 |
-| | be-seed-maker | 시드 데이터 생성 |
-| **관련** | be-database-expert | 스키마 설계 및 최적화 |
+| **선행** | technical-designer | Entity/API 상세 설계 |
+| **후행** | entity-builder | Entity 클래스 생성 |
+| | dto-builder | DTO 클래스 생성 |
+| | seed-maker | 시드 데이터 생성 |
+| **관련** | database-expert | 스키마 설계 및 최적화 |
 
 ---
 
@@ -471,5 +472,5 @@ packages/be-prisma/schema/{domain}.prisma
 
 **다음 단계:**
 1. `pnpm --filter=@cocrepo/prisma generate` 실행
-2. be-entity-builder로 Entity 클래스 생성
+2. entity-builder로 Entity 클래스 생성
 ```

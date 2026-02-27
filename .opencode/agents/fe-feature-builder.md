@@ -7,6 +7,7 @@ tools:
   bash: true
 ---
 
+
 # Feature 컴포넌트 빌더
 
 **비즈니스 로직, 상태, API 호출, 라우터 이동을 포함하는 기능 컴포넌트**를 `packages/fe-ui/src/components/feature`에 생성합니다.
@@ -330,7 +331,7 @@ Pure UI → Widget → Feature → Page
 
 | 에이전트 | 관계 |
 |----------|------|
-| be-controller-builder | Feature가 호출할 API 엔드포인트 생성 |
+| controller-builder | Feature가 호출할 API 엔드포인트 생성 |
 
 ---
 
@@ -345,6 +346,31 @@ Pure UI → Widget → Feature → Page
 | `UserProfile` | 사용자 프로필 | 프로필 조회/수정 API |
 | `NotificationBell` | 알림 벨 | 알림 조회 API, 읽음 처리, 알림 상세 이동 |
 | `SearchBar` | 검색 바 | 검색 API, 자동완성, 검색 결과 페이지 이동 |
+
+### 폼 검증 메시지 상수 활용
+
+폼 관련 Feature에서는 `@cocrepo/schema`의 검증 메시지 상수를 활용합니다。
+
+```typescript
+import { VALIDATION_MESSAGES } from "@cocrepo/schema";
+
+// 검증 메시지 상수
+VALIDATION_MESSAGES.EMAIL_FORMAT    // "유효한 이메일 형식이 아닙니다"
+VALIDATION_MESSAGES.REQUIRED        // "필수 항목입니다"
+VALIDATION_MESSAGES.MIN_LENGTH      // "최소 {min}자 이상 입력해주세요"
+```
+
+**폼 Feature에서 활용 예시:**
+```tsx
+import { VALIDATION_MESSAGES } from "@cocrepo/schema";
+
+const validateForm = (email: string, password: string): string | null => {
+  if (!email) return VALIDATION_MESSAGES.REQUIRED;
+  if (!email.includes("@")) return VALIDATION_MESSAGES.EMAIL_FORMAT;
+  if (password.length < 8) return VALIDATION_MESSAGES.MIN_LENGTH;
+  return null;
+};
+```
 
 ### 스타일링 규칙
 

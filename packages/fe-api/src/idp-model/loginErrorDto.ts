@@ -13,14 +13,14 @@ OIDC 인증 및 IDP 관리 API를 제공합니다.
  */
 
 export interface LoginErrorDto {
-  /** 에러 코드 */
-  error: string;
-  /** 남은 시도 횟수 */
-  remainingAttempts?: number;
-  /** 잠금 해제 시간 (ISO 8601) */
-  lockedUntil?: string;
-  /** 임시 잠금 임계값 */
-  temporaryLockThreshold?: number;
-  /** 임시 잠금 시간 (분) */
-  temporaryLockDurationMin?: number;
+	/** 에러 코드 */
+	error: string;
+	/** 남은 시도 횟수 */
+	remainingAttempts?: number;
+	/** 잠금 해제 시간 (ISO 8601) */
+	lockedUntil?: string;
+	/** 임시 잠금 임계값 */
+	temporaryLockThreshold?: number;
+	/** 임시 잠금 시간 (분) */
+	temporaryLockDurationMin?: number;
 }

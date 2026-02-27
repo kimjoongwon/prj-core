@@ -1,8 +1,9 @@
 ---
-name: 백엔드-테스터
+name: qa-be-testing
 description: Jest 기반 백엔드 및 공용 패키지 테스트 코드를 작성하는 전문가
 tools: Read, Write, Grep, Bash
 ---
+
 
 # Backend Tester (Jest)
 

@@ -1,8 +1,9 @@
 ---
-name: 메뉴 기획자
+name: req-menu-planner
 description: 메뉴 경로/권한 sidecar spec을 기획하는 전문가
 tools: Read, Write, Grep, Bash
 ---
+
 
 # 메뉴 기획자 (Menu Planner)
 

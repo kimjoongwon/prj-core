@@ -5,10 +5,6 @@ multi_agent = true
 max_threads = 8
 max_depth = 1
 
-[agents.be-backend-service-builder]
-description = "NestJS 기반 백엔드 서비스 레이어를 설계하고 구현하는 전문가"
-config_file = "agents/be-backend-service-builder.toml"
-
 [agents.be-bootstrap-integrator]
 description = "AppModule 부트스트랩에 서비스를 통합하는 전문가"
 config_file = "agents/be-bootstrap-integrator.toml"
@@ -216,4 +212,3 @@ config_file = "agents/req-ui-planner.toml"
 [agents.req-widget-planner]
 description = "화면별 Widget 컴포넌트를 기획하는 전문가"
 config_file = "agents/req-widget-planner.toml"
-

@@ -1,8 +1,9 @@
 ---
-name: 레이아웃 기획자
+name: req-layout-planner
 description: 페이지/섹션 Layout sidecar spec을 기획하는 전문가
 tools: Read, Write, Grep, Bash
 ---
+
 
 # 레이아웃 기획자 (Layout Planner)
 

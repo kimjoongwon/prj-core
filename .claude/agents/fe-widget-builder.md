@@ -1,8 +1,9 @@
 ---
-name: 위젯-컴포넌트-빌더
+name: fe-widget-builder
 description: 재사용 가능한 작은 UI 조각 Widget 컴포넌트를 생성하는 전문가
 tools: Read, Write, Grep, Bash
 ---
+
 
 # Widget 컴포넌트 빌더
 

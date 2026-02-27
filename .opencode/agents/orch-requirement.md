@@ -7,6 +7,7 @@ tools:
   bash: true
 ---
 
+
 # 요구사항 기획 오케스트레이터 (Requirement Orchestrator)
 
 도메인 기획 **L0-L4** 레이어와 **BE/Store 기획**을 의존성 기반으로 조율하는 오케스트레이터입니다. 선행 단계는 순차로 진행하고, 독립 레이어는 병렬 fan-out 실행을 지원합니다。
@@ -22,20 +23,56 @@ tools:
 | L0-L2 | 컨텍스트/사용자/목표 | req-context-planner | `apps/[app]/app/(admin)/app.spec.md` 업데이트 |
 | L3-L4 | 기능/화면 구조 | req-screen-planner | 각 `page.spec.md` 생성 |
 
-### BE/Store 기획 (L6-L11)
+### FE/BE 기획 (L6-L11)
 
 | 레벨 | 명칭 | 담당 에이전트 | 출력 위치 |
 |------|------|--------------|----------|
-| L6 | API/Controller | req-api-planner | `apps/server/src/[module]/controllers/[domain].controller.spec.md` |
+| L6 | API/Controller | req-api-planner | `apps/core/api/src/[module]/controllers/[domain].controller.spec.md` |
 | L7 | Entity | req-entity-planner | `packages/be-entity/src/{entity}.entity.spec.md` |
-| L9-L10 | Service/Repository 로직/테스트 | req-logic-planner | `apps/server/src/[module]/[domain].service.spec.md`, `apps/server/src/[module]/repositories/[domain].repository.spec.md` |
+| L9-L10 | Service/Repository 로직/테스트 | req-logic-planner | `apps/core/api/src/[module]/[domain].service.spec.md`, `apps/core/api/src/[module]/repositories/[domain].repository.spec.md` |
 | L11 | Store | req-store-planner | `packages/fe-store/src/stores/[domain]Store.spec.md` |
+
+### 공용 패키지 기획 (Critical)
+
+| 패키지 | 명칭 | 담당 에이전트 | 출력 위치 |
+|--------|------|--------------|----------|
+| Enum | Enum | req-entity-planner | `packages/common-enum/src/{name}.spec.md` |
+| DTO | Request/Response DTO | req-api-planner | `packages/be-dto/src/{domain}/{name}.dto.spec.md` |
+| VO | Value Object | req-entity-planner | `packages/be-vo/src/{domain}/{name}.vo.spec.md` |
 
 ### 화면별 기획 (L5-L12) → 별도 오케스트레이터
 
 화면별 상세 기획은 `orch-screen-planner`가 담당합니다。
 
 `orch-screen-planner`는 페이지별로 `req-page-planner`, `req-api-planner`, `req-ui-planner`, `req-input-planner`, `req-cell-planner`, `req-widget-planner`, `req-layout-planner`, `req-feature-planner`, `req-menu-planner`, `req-test-planner`, `req-api-integration-planner`를 조합해 실행합니다。
+
+---
+
+## 1.5. 필수 기획서 체크리스트 (Critical)
+
+**새 도메인 기획 시 반드시 아래 기획서들을 모두 생성해야 합니다:**
+
+### 페이지 기획서
+- [ ] `page.spec.md` - 각 화면별 (List, Detail, Create, Edit)
+
+### 백엔드 기획서
+- [ ] `{entity}.entity.spec.md` - 각 Entity별
+- [ ] `{domain}.service.spec.md` - Service 스펙
+- [ ] `{domain}.repository.spec.md` - Repository 스펙
+- [ ] `{domain}.controller.spec.md` - Controller 스펙
+
+### 공용 패키지 기획서 ⚠️ 자주 누락
+- [ ] `{EnumName}.spec.md` - 도메인 Enum (AssetKind, AssetStatus 등)
+- [ ] `{DtoName}.dto.spec.md` - Request/Response DTO
+- [ ] `{VoName}.vo.spec.md` - Value Object (필요시)
+
+### 프론트엔드 기획서 (자주 누락됨 ⚠️)
+- [ ] `{Domain}Store.spec.md` - Store 스펙
+- [ ] `widget/{Widget}/index.spec.md` - 페이지에서 참조하는 모든 Widget
+- [ ] `feature/{Feature}/index.spec.md` - 페이지에서 참조하는 모든 Feature
+
+### 검증 방법
+페이지 기획서의 "레이아웃 구성" 테이블에서 참조하는 컴포넌트들이 실제 `.spec.md`로 존재하는지 확인
 
 ---
 
@@ -120,10 +157,7 @@ packages/fe-store/src/stores/
 packages/be-entity/src/
 └── [entity].entity.spec.md                     # Entity 스펙
 
-packages/be-dto/src/[domain]/
-└── *.dto.spec.md                               # Request/Response DTO 스펙
-
-apps/server/src/[module]/
+apps/core/api/src/[module]/
 ├── [domain].service.spec.md                    # Service 스펙
 ├── repositories/
 │   └── [domain].repository.spec.md             # Repository 스펙
@@ -268,17 +302,16 @@ apps/server/src/[module]/
 ✅ 도메인 기획 완료
 
 📁 생성/수정된 파일:
-   - apps/admin/app/(admin)/app.spec.md (업데이트)
-   - apps/admin/app/(admin)/members/page.spec.md
-   - apps/admin/app/(admin)/members/[memberId]/page.spec.md
-   - apps/admin/app/(admin)/members/new/page.spec.md
-   - apps/admin/app/(admin)/members/[memberId]/edit/page.spec.md
+   - apps/admin/web/app/(admin)/app.spec.md (업데이트)
+   - apps/admin/web/app/(admin)/members/page.spec.md
+   - apps/admin/web/app/(admin)/members/[memberId]/page.spec.md
+   - apps/admin/web/app/(admin)/members/new/page.spec.md
+   - apps/admin/web/app/(admin)/members/[memberId]/edit/page.spec.md
    - packages/fe-store/src/stores/memberStore.spec.md
    - packages/be-entity/src/member.entity.spec.md
-   - packages/be-dto/src/member/*.dto.spec.md
-   - apps/server/src/member/member.service.spec.md
-   - apps/server/src/member/repositories/member.repository.spec.md
-   - apps/server/src/member/controllers/member.controller.spec.md
+   - apps/core/api/src/member/member.service.spec.md
+   - apps/core/api/src/member/repositories/member.repository.spec.md
+   - apps/core/api/src/member/controllers/member.controller.spec.md
 
 📌 다음 단계:
    1. 화면별 기획:
@@ -292,7 +325,7 @@ apps/server/src/[module]/
 ## 6. 폴더 구조
 
 ```
-apps/admin/app/(admin)/
+apps/admin/web/app/(admin)/
 │
 ├── app.spec.md                           # 앱 기획서 (L0-L2, 도메인 목록)
 │
@@ -319,7 +352,23 @@ packages/fe-store/src/stores/
 ├── memberStore.ts
 └── memberStore.spec.md                   # L11 Store 스펙
 
-apps/server/src/member/
+packages/common-enum/src/
+├── member-status.ts
+└── member-status.spec.md                 # Enum 스펙 ⚠️ 필수
+
+packages/be-dto/src/member/
+├── create-member.dto.ts
+├── create-member.dto.spec.md             # DTO 스펙 ⚠️ 필수
+├── update-member.dto.ts
+├── update-member.dto.spec.md
+├── member-response.dto.ts
+└── member-response.dto.spec.md
+
+packages/be-vo/src/member/
+├── member-email.vo.ts
+└── member-email.vo.spec.md               # VO 스펙 (필요시)
+
+apps/core/api/src/member/
 ├── member.service.ts
 ├── member.service.spec.md                # Service 스펙
 ├── repositories/
@@ -329,48 +378,6 @@ apps/server/src/member/
     ├── member.controller.ts
     └── member.controller.spec.md         # Controller 스펙
 ```
-
----
-
-## 7. 체크리스트
-
-### 실행 전 확인
-- [ ] 앱이 존재하는가?
-- [ ] 도메인명이 명확한가?
-- [ ] 요구사항이 구체적인가?
-
-### 각 단계 완료 시
-- [ ] 기획서 파일이 생성되었는가?
-- [ ] 내용이 일관성 있는가?
-
-### 전체 완료 시
-- [ ] app.spec.md에 도메인 엔트리 추가
-- [ ] 각 page.spec.md 생성
-- [ ] Entity 기획서 생성 (`packages/be-entity/src/*.entity.spec.md`)
-- [ ] Store 기획서 생성 (Sidecar)
-- [ ] Controller/DTO/Service/Repository 기획서 생성 (Sidecar)
-
----
-
-## 8. 연관 에이전트
-
-### 호출 에이전트
-
-| 에이전트 | 단계 | 출력 | 설명 |
-|----------|------|------|------|
-| req-context-planner | 1 | `app.spec.md` 업데이트 | 컨텍스트/사용자/목표 기획 |
-| req-screen-planner | 2 | 각 `page.spec.md` | 기능/화면 구조 기획 |
-| req-entity-planner | 3 | `[entity].entity.spec.md` | Entity 기획 |
-| req-store-planner | 4 | `[domain]Store.spec.md` | Store 기획 |
-| req-api-planner | 5 | `*.controller.spec.md`, `*.dto.spec.md` | API/Controller/DTO 스펙 기획 |
-| req-logic-planner | 6 | `*.service.spec.md`, `*.repository.spec.md` | Service/Repository 로직/테스트 기획 |
-
-### 후행 에이전트
-
-| 에이전트 | 관계 | 설명 |
-|----------|------|------|
-| orch-screen-planner | 화면 기획 | 화면별 상세 기획 (L5-L12) |
-| orch-stage | 개발 플로우 | 실제 개발 진행 |
 
 ---
 
@@ -423,7 +430,39 @@ Asset (Level 0)
 \`\`\`
 ```
 
-### 7.3 자동 병렬 판단 규칙
+### 7.3 Page 기획서 예시
+
+```markdown
+# Asset 목록 페이지 기획서
+
+## 구현 대상 (orch-stage 자동 병렬 실행용)
+
+### UI 컴포넌트
+| 컴포넌트 | 타입 | 위치 |
+|----------|------|------|
+| AssetPreview | Pure UI | packages/fe-ui/src/components/ui/ |
+| AssetTypeInfo | Pure UI | packages/fe-ui/src/components/ui/ |
+| DerivativeList | Pure UI | packages/fe-ui/src/components/ui/ |
+
+### Widget 컴포넌트
+| 컴포넌트 | 위치 |
+|----------|------|
+| AssetListPanel | packages/fe-ui/src/components/widget/ |
+| FolderTree | packages/fe-ui/src/components/widget/ |
+
+### Feature 컴포넌트
+| 컴포넌트 | Store 연결 |
+|----------|-----------|
+| AssetManager | AssetStore |
+| AssetUploader | AssetStore |
+
+### 병렬 실행 가능 항목
+- UI 컴포넌트: 병렬 생성 가능
+- Widget 컴포넌트: 병렬 생성 가능
+- Feature 컴포넌트: Store 완료 후 순차
+```
+
+### 7.4 자동 병렬 판단 규칙
 
 orch-stage는 기획서의 **구현 대상** 섹션을 분석하여:
 
@@ -432,3 +471,51 @@ orch-stage는 기획서의 **구현 대상** 섹션을 분석하여:
 | **동일 Level** | 같은 Level의 Entity/컴포넌트는 병렬 실행 |
 | **의존성 순서** | 부모 → 자식 순서 보장 |
 | **maxConcurrency** | 기본 3, 너무 많으면 분할 실행 |
+
+---
+
+## 8. 체크리스트
+
+### 실행 전 확인
+- [ ] 앱이 존재하는가?
+- [ ] 도메인명이 명확한가?
+- [ ] 요구사항이 구체적인가?
+
+### 각 단계 완료 시
+- [ ] 기획서 파일이 생성되었는가?
+- [ ] 내용이 일관성 있는가?
+- [ ] **구현 대상 섹션이 작성되었는가?** ⚠️ 필수
+
+### 전체 완료 시
+- [ ] app.spec.md에 도메인 엔트리 추가
+- [ ] 각 page.spec.md 생성
+- [ ] Entity 기획서 생성 (`packages/be-entity/src/*.entity.spec.md`)
+- [ ] Store 기획서 생성 (Sidecar)
+- [ ] Controller/Service/Repository 기획서 생성 (Sidecar)
+- [ ] **Enum 기획서 생성** (`packages/common-enum/src/*.spec.md`) ⚠️ 자주 누락
+- [ ] **DTO 기획서 생성** (`packages/be-dto/src/*/*.dto.spec.md`) ⚠️ 자주 누락
+- [ ] VO 기획서 생성 (필요시)
+- [ ] **검증**: 페이지 기획서에서 참조하는 컴포넌트가 실제 `.spec.md`로 존재하는지 확인
+- [ ] **구현 대상 섹션**: 모든 기획서에 병렬 실행 정보 포함
+
+---
+
+## 8. 연관 에이전트
+
+### 호출 에이전트
+
+| 에이전트 | 단계 | 출력 | 설명 |
+|----------|------|------|------|
+| req-context-planner | 1 | `app.spec.md` 업데이트 | 컨텍스트/사용자/목표 기획 |
+| req-screen-planner | 2 | 각 `page.spec.md` | 기능/화면 구조 기획 |
+| req-entity-planner | 3 | `[entity].entity.spec.md` | Entity 기획 |
+| req-store-planner | 4 | `[domain]Store.spec.md` | Store 기획 |
+| req-api-planner | 5 | `*.controller.spec.md`, `*.dto.spec.md` | API/Controller/DTO 스펙 기획 |
+| req-logic-planner | 6 | `*.service.spec.md`, `*.repository.spec.md` | Service/Repository 로직/테스트 기획 |
+
+### 후행 에이전트
+
+| 에이전트 | 관계 | 설명 |
+|----------|------|------|
+| orch-screen-planner | 화면 기획 | 화면별 상세 기획 (L5-L12) |
+| orch-stage | 개발 플로우 | 실제 개발 진행 |

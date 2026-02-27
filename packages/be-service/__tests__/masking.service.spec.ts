@@ -1,5 +1,6 @@
+import { MASKING_PRESETS } from "@cocrepo/constant";
 import { Test, TestingModule } from "@nestjs/testing";
-import { MaskingService, MASKING_PRESETS } from "../src/masking.service";
+import { MaskingService } from "../src/masking.service";
 import type { ActionConfig, ActionMaskingConfig } from "@cocrepo/type";
 
 describe("MaskingService", () => {

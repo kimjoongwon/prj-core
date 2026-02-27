@@ -9,20 +9,21 @@
 2. Cookie - 브라우저에서 로그인 후 쿠키 자동 전송
  * OpenAPI spec version: 1.0.0
  */
-import type { UserDto } from './userDto';
-import type { SpaceDto } from './spaceDto';
-import type { RoleDto } from './roleDto';
+
+import type { RoleDto } from "./roleDto";
+import type { SpaceDto } from "./spaceDto";
+import type { UserDto } from "./userDto";
 
 export interface TenantDto {
-  id: string;
-  createdAt: string;
-  updatedAt: string;
-  /** @nullable */
-  removedAt: string | null;
-  roleId: string;
-  userId: string;
-  spaceId: string;
-  user?: UserDto;
-  space?: SpaceDto;
-  role?: RoleDto;
+	id: string;
+	createdAt: string;
+	updatedAt: string;
+	/** @nullable */
+	removedAt: string | null;
+	roleId: string;
+	userId: string;
+	spaceId: string;
+	user?: UserDto;
+	space?: SpaceDto;
+	role?: RoleDto;
 }

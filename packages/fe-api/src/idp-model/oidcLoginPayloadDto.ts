@@ -13,10 +13,10 @@ OIDC 인증 및 IDP 관리 API를 제공합니다.
  */
 
 export interface OidcLoginPayloadDto {
-  /** 사용자 이메일 주소 */
-  email: string;
-  /** 사용자 비밀번호 */
-  password: string;
-  /** 로그인 상태 유지 여부 */
-  remember?: boolean;
+	/** 사용자 이메일 주소 */
+	email: string;
+	/** 사용자 비밀번호 */
+	password: string;
+	/** 로그인 상태 유지 여부 */
+	remember?: boolean;
 }

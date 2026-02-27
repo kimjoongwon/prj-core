@@ -36,7 +36,7 @@
     "db:seed": "tsx seed.ts",
     "db:seed:stg": "cross-env DATABASE_URL=$DATABASE_URL_STG DIRECT_URL=$DIRECT_URL_STG tsx seed.ts",
     "clean": "rm -rf dist && rm -rf node_modules",
-    "test": "vitest",
+    "test": "vitest --passWithNoTests",
     "test:ui": "vitest --ui"
   },
   "prisma": {

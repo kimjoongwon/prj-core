@@ -11,10 +11,10 @@
  */
 
 export interface BatchGrantItemDto {
-  /** Ability ID (부여할 권한) */
-  abilityId: string;
-  /** 활성화 여부 */
-  isActive?: boolean;
-  /** 우선순위 (높을수록 우선, 기본값: 0) */
-  priority?: number;
+	/** Ability ID (부여할 권한) */
+	abilityId: string;
+	/** 활성화 여부 */
+	isActive?: boolean;
+	/** 우선순위 (높을수록 우선, 기본값: 0) */
+	priority?: number;
 }

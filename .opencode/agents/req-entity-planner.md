@@ -7,6 +7,7 @@ tools:
   bash: true
 ---
 
+
 # L7 Entity 기획자 (Entity Planner)
 
 도메인별 **Entity(L7)** 레이어를 기획하는 전문가입니다.
@@ -40,7 +41,7 @@ tools:
 
 ### 출력 형식 (entity.spec.md)
 
-> 형식은 `.opencode/templates/spec/entity.spec.md` 참조
+> 형식은 `.claude/templates/spec/entity.spec.md` 참조
 
 ---
 
@@ -83,7 +84,7 @@ tools:
 
 ```
 0단계: 템플릿 파일 확인
-   Read `.opencode/templates/spec/entity.spec.md`
+   Read `.claude/templates/spec/entity.spec.md`
    → 해당 파일의 형식을 기준으로 entity.spec.md를 생성한다
    ↓
 1단계: 도메인 분석
@@ -190,6 +191,8 @@ model Reservation {
 
 ### 6.4 작성 예시
 
+#### CTI 패턴 (Class Table Inheritance)
+
 ```markdown
 ## 구현 대상 (orch-stage 자동 병렬 실행용)
 
@@ -208,6 +211,19 @@ model Reservation {
 |------|-------------|
 | AssetKind | Asset |
 | AssetStatus | Asset |
+| DerivativeType | AssetDerivative |
+
+### DTO 목록
+| DTO | 타입 | Entity |
+|-----|------|--------|
+| CreateAssetDto | Request | Asset |
+| UpdateAssetDto | Request | Asset |
+| AssetResponseDto | Response | Asset |
+| AssetListQueryDto | Query | Asset |
+| CreateAssetImageDto | Request | AssetImage |
+| AssetImageResponseDto | Response | AssetImage |
+| CreateAssetVideoDto | Request | AssetVideo |
+| AssetVideoResponseDto | Response | AssetVideo |
 
 ### 병렬 실행 DAG
 \`\`\`
@@ -226,6 +242,28 @@ AssetFolder (Level 0) ───────────────────�
 - Phase 2: Image, Video, Document, Derivative (4개 병렬, maxConcurrency=3 → 2+2)
 ```
 
+#### 단일 Entity
+
+```markdown
+## 구현 대상 (orch-stage 자동 병렬 실행용)
+
+### Entity 목록
+| Entity | 타입 | 의존성 | 병렬 그룹 |
+|--------|------|--------|----------|
+| Member | CONCRETE | - | 0 |
+
+### Enum 목록
+| Enum | 사용 Entity |
+|------|-------------|
+| MemberRole | Member |
+| MemberStatus | Member |
+
+### 병렬 실행 DAG
+\`\`\`
+Member (Level 0) → 단일 실행
+\`\`\`
+```
+
 ---
 
 ## 7. 품질 체크리스트
@@ -236,7 +274,6 @@ AssetFolder (Level 0) ───────────────────�
 - [ ] 관계가 명확히 정의되었는가?
 - [ ] 제약조건(unique, required)이 명시되었는가?
 - [ ] entity.spec.md가 생성되었는가?
-- [ ] **구현 대상 섹션이 작성되었는가?** ⚠️ 필수
 
 ---
 

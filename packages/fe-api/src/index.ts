@@ -6,17 +6,8 @@
 // ─── Server APIs (port 3006) ───
 export * from "./apis";
 export * from "./apis-assets";
-export {
-	AXIOS_INSTANCE,
-	customInstance,
-	setApiPersistStore,
-	setLoginRedirectUrl,
-} from "./libs/customAxios";
-export * from "./model";
-
 // ─── IDP APIs (port 3007) ───
 export * from "./idp-apis";
-
 // idp-model 고유 타입만 export (model과 중복되는 72개 타입 제외)
 export * from "./idp-model/abortResultDto";
 export * from "./idp-model/consentResultDto";
@@ -37,9 +28,16 @@ export * from "./idp-model/resetPasswordErrorDto";
 export * from "./idp-model/resetPasswordResultDto";
 export * from "./idp-model/tokenValidationDto";
 export {
-	IDP_AXIOS_INSTANCE,
+	AXIOS_INSTANCE,
+	customInstance,
+	setApiPersistStore,
+	setLoginRedirectUrl,
+} from "./libs/customAxios";
+export {
 	customIdpInstance,
+	IDP_AXIOS_INSTANCE,
 	setIdpBaseUrl,
 	setIdpLoginRedirectUrl,
 	setIdpPersistStore,
 } from "./libs/customIdpAxios";
+export * from "./model";

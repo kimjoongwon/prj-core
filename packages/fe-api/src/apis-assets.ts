@@ -9,8 +9,8 @@ import {
 	useMutation,
 	useQuery,
 } from "@tanstack/react-query";
-import { customInstance } from "./libs/customAxios";
 import type { BodyType, ErrorType } from "./libs/customAxios";
+import { customInstance } from "./libs/customAxios";
 
 type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
 
@@ -100,7 +100,9 @@ export const useGetAssets = <
 >(
 	params?: GetAssetsParams,
 	options?: {
-		query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getAssets>>, TError, TData>>;
+		query?: Partial<
+			UseQueryOptions<Awaited<ReturnType<typeof getAssets>>, TError, TData>
+		>;
 		request?: SecondParameter<typeof customInstance>;
 	},
 	queryClient?: QueryClient,
@@ -130,7 +132,9 @@ export const prefetchGetAssetsQuery = async <
 	queryClient: QueryClient,
 	params?: GetAssetsParams,
 	options?: {
-		query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getAssets>>, TError, TData>>;
+		query?: Partial<
+			UseQueryOptions<Awaited<ReturnType<typeof getAssets>>, TError, TData>
+		>;
 		request?: SecondParameter<typeof customInstance>;
 	},
 ): Promise<QueryClient> => {
@@ -170,7 +174,9 @@ export const useGetAssetById = <
 >(
 	assetId: string,
 	options?: {
-		query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getAssetById>>, TError, TData>>;
+		query?: Partial<
+			UseQueryOptions<Awaited<ReturnType<typeof getAssetById>>, TError, TData>
+		>;
 		request?: SecondParameter<typeof customInstance>;
 	},
 	queryClient?: QueryClient,
@@ -200,7 +206,9 @@ export const prefetchGetAssetByIdQuery = async <
 	queryClient: QueryClient,
 	assetId: string,
 	options?: {
-		query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getAssetById>>, TError, TData>>;
+		query?: Partial<
+			UseQueryOptions<Awaited<ReturnType<typeof getAssetById>>, TError, TData>
+		>;
 		request?: SecondParameter<typeof customInstance>;
 	},
 ): Promise<QueryClient> => {
@@ -361,7 +369,9 @@ export const useGetFolders = <
 	TError = ErrorType<void>,
 >(
 	options?: {
-		query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getFolders>>, TError, TData>>;
+		query?: Partial<
+			UseQueryOptions<Awaited<ReturnType<typeof getFolders>>, TError, TData>
+		>;
 		request?: SecondParameter<typeof customInstance>;
 	},
 	queryClient?: QueryClient,
@@ -390,7 +400,9 @@ export const prefetchGetFoldersQuery = async <
 >(
 	queryClient: QueryClient,
 	options?: {
-		query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getFolders>>, TError, TData>>;
+		query?: Partial<
+			UseQueryOptions<Awaited<ReturnType<typeof getFolders>>, TError, TData>
+		>;
 		request?: SecondParameter<typeof customInstance>;
 	},
 ): Promise<QueryClient> => {

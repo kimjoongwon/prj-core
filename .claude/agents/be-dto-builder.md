@@ -1,8 +1,9 @@
 ---
-name: DTO-빌더
+name: be-dto-builder
 description: Request/Response DTO 클래스를 생성하는 전문가
 tools: Read, Write, Grep, Bash
 ---
+
 
 # DTO Builder
 

@@ -1,8 +1,9 @@
 ---
-name: 스토어-빌더
+name: fe-store-builder
 description: MobX 기반 Store를 생성하는 전문가
 tools: Read, Write, Grep, Bash
 ---
+
 
 # Store Builder (MobX)
 

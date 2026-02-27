@@ -7,6 +7,7 @@ tools:
   bash: true
 ---
 
+
 # 역기획 에이전트 (Reverse Engineer)
 
 기존 코드베이스를 분석하여 **코드 옆 `.spec.md` 기획서(Sidecar Spec)를 역으로 생성**하는 전문가입니다.
@@ -58,7 +59,7 @@ apps/[app]/app/(admin)/[domain]/
 ├── new/page.spec.md                         # 등록 페이지 기획서
 └── [entityId]/edit/page.spec.md             # 수정 페이지 기획서
 
-apps/server/src/[module]/
+apps/core/api/src/[module]/
 ├── [domain].service.spec.md                 # Service 기획서 (L7, L9)
 ├── repositories/[domain].repository.spec.md # Repository 기획서
 └── controllers/[domain].controller.spec.md  # Controller 기획서 (L6)
@@ -119,7 +120,7 @@ packages/fe-ui/src/components/
 |--------|----------|------------|
 | L7 Entity | `packages/be-prisma/schema/*.prisma` | `grep -l "model {Domain}" packages/be-prisma/schema/` |
 | L7 Entity | `packages/be-entity/src/*.entity.ts` | `ls packages/be-entity/src/ \| grep -i {domain}` |
-| L6 API | `apps/server/src/module/**/*.controller.ts` | `find apps/server/src/module -name "*{domain}*.controller.ts"` |
+| L6 API | `apps/core/api/src/module/**/*.controller.ts` | `find apps/core/api/src/module -name "*{domain}*.controller.ts"` |
 | L6 DTO | `packages/be-dto/src/**/*.dto.ts` | `find packages/be-dto/src -name "*{domain}*.dto.ts"` |
 | L9 Guard | `packages/be-common/src/guard/*.guard.ts` | `ls packages/be-common/src/guard/` |
 | L4 Screen | `apps/*/app/**/*.tsx` | `find apps/{app}/app -name "page.tsx" \| xargs grep -l "{domain}"` |
@@ -132,12 +133,12 @@ packages/fe-ui/src/components/
   discovery: {
     prismaModels: ["packages/be-prisma/schema/role.prisma"],
     entities: ["packages/be-entity/src/role.entity.ts"],
-    controllers: ["apps/server/src/module/role/role.controller.ts"],
-    services: ["apps/server/src/module/role/role.service.ts"],
-    repositories: ["apps/server/src/module/role/repositories/role.repository.ts"],
+    controllers: ["apps/core/api/src/module/role/role.controller.ts"],
+    services: ["apps/core/api/src/module/role/role.service.ts"],
+    repositories: ["apps/core/api/src/module/role/repositories/role.repository.ts"],
     dtos: ["packages/be-dto/src/role/*.dto.ts"],
     guards: ["packages/be-common/src/guard/roles.guard.ts"],
-    pages: ["apps/admin/app/(admin)/roles/page.tsx"],
+    pages: ["apps/admin/web/app/(admin)/roles/page.tsx"],
     components: ["packages/fe-ui/src/components/feature/RoleList/index.tsx"],
     stores: ["packages/fe-store/src/stores/roleStore.ts"]
   }
@@ -247,7 +248,7 @@ export class CreateRoleDto {
 
 **페이지 분석 (L4):**
 ```typescript
-// apps/admin/app/(admin)/roles/page.tsx
+// apps/admin/web/app/(admin)/roles/page.tsx
 export default async function RolesPage() {
   return <RolesPageClient />;
 }
@@ -332,14 +333,14 @@ CRUD 작업별 Happy Path와 Error Path를 도출합니다.
 | 생성 파일 | 위치 | 참조 템플릿 |
 |----------|------|------------|
 | `app.spec.md` | `apps/[app]/app/(admin)/` | 없음 (L0-L2 직접 작성) |
-| `page.spec.md` | 각 페이지 폴더 옆 | `.opencode/templates/spec/page.spec.md` |
-| `controller.spec.md` | `apps/server/src/.../controllers/` | `.opencode/templates/spec/controller.spec.md` |
-| `service.spec.md` | `apps/server/src/.../` | `.opencode/templates/spec/service.spec.md` |
-| `repository.spec.md` | `apps/server/src/.../repositories/` | `.opencode/templates/spec/repository.spec.md` |
-| `store.spec.md` | `packages/fe-store/src/stores/` | `.opencode/templates/spec/store.spec.md` |
-| `index.spec.md` (feature) | `packages/fe-ui/src/components/feature/[Name]/` | `.opencode/templates/spec/feature.spec.md` |
-| `index.spec.md` (widget) | `packages/fe-ui/src/components/widget/[Name]/` | `.opencode/templates/spec/widget.spec.md` |
-| `index.spec.md` (ui) | `packages/fe-ui/src/components/ui/[Name]/` | `.opencode/templates/spec/ui.spec.md` |
+| `page.spec.md` | 각 페이지 폴더 옆 | `.claude/templates/spec/page.spec.md` |
+| `controller.spec.md` | `apps/core/api/src/.../controllers/` | `.claude/templates/spec/controller.spec.md` |
+| `service.spec.md` | `apps/core/api/src/.../` | `.claude/templates/spec/service.spec.md` |
+| `repository.spec.md` | `apps/core/api/src/.../repositories/` | `.claude/templates/spec/repository.spec.md` |
+| `store.spec.md` | `packages/fe-store/src/stores/` | `.claude/templates/spec/store.spec.md` |
+| `index.spec.md` (feature) | `packages/fe-ui/src/components/feature/[Name]/` | `.claude/templates/spec/feature.spec.md` |
+| `index.spec.md` (widget) | `packages/fe-ui/src/components/widget/[Name]/` | `.claude/templates/spec/widget.spec.md` |
+| `index.spec.md` (ui) | `packages/fe-ui/src/components/ui/[Name]/` | `.claude/templates/spec/ui.spec.md` |
 
 **이미 존재하는 .spec.md 처리:**
 - 이미 있으면 스킵 (새로 덮어쓰지 않음)
@@ -395,7 +396,7 @@ CRUD 작업별 Happy Path와 Error Path를 도출합니다.
 
 ### page.spec.md (페이지 기획서)
 
-`.opencode/templates/spec/page.spec.md` 템플릿을 기반으로 아래 섹션을 코드에서 채웁니다:
+`.claude/templates/spec/page.spec.md` 템플릿을 기반으로 아래 섹션을 코드에서 채웁니다:
 
 - **시나리오**: 페이지에서 가능한 흐름 (코드의 이벤트 핸들러에서 도출)
 - **레이아웃**: 렌더링되는 컴포넌트 구조 (JSX 분석)
@@ -404,7 +405,7 @@ CRUD 작업별 Happy Path와 Error Path를 도출합니다.
 
 ### controller.spec.md (Controller 기획서)
 
-`.opencode/templates/spec/controller.spec.md` 템플릿을 기반으로 아래 섹션을 채웁니다:
+`.claude/templates/spec/controller.spec.md` 템플릿을 기반으로 아래 섹션을 채웁니다:
 
 - **엔드포인트 목록**: 메서드/경로/설명/권한
 - **인증/인가**: `@Roles`, `@RoleCategories`, `@RoleGroups` 데코레이터
@@ -412,7 +413,7 @@ CRUD 작업별 Happy Path와 Error Path를 도출합니다.
 
 ### service.spec.md (Service 기획서)
 
-`.opencode/templates/spec/service.spec.md` 템플릿을 기반으로 아래 섹션을 채웁니다:
+`.claude/templates/spec/service.spec.md` 템플릿을 기반으로 아래 섹션을 채웁니다:
 
 - **메서드 목록**: 공개 메서드와 역할
 - **비즈니스 규칙**: 조건 분기, 검증 로직
@@ -421,7 +422,7 @@ CRUD 작업별 Happy Path와 Error Path를 도출합니다.
 
 ### repository.spec.md (Repository 기획서)
 
-`.opencode/templates/spec/repository.spec.md` 템플릿을 기반으로 아래 섹션을 채웁니다:
+`.claude/templates/spec/repository.spec.md` 템플릿을 기반으로 아래 섹션을 채웁니다:
 
 - **메서드 목록**: findMany, findById, create, update, delete 등
 - **Prisma 매핑**: `prisma.[model].[method]()` 호출 분석
@@ -429,7 +430,7 @@ CRUD 작업별 Happy Path와 Error Path를 도출합니다.
 
 ### store.spec.md (Store 기획서)
 
-`.opencode/templates/spec/store.spec.md` 템플릿을 기반으로 아래 섹션을 채웁니다:
+`.claude/templates/spec/store.spec.md` 템플릿을 기반으로 아래 섹션을 채웁니다:
 
 - **상태 (Observable)**: `@observable` 필드 목록
 - **계산값 (Computed)**: `@computed` 게터 목록
@@ -521,12 +522,12 @@ CRUD 작업별 Happy Path와 Error Path를 도출합니다.
 
 [1단계] 코드 탐색...
   - Prisma: packages/be-prisma/schema/role.prisma ✅
-  - Controller: apps/server/src/module/role/controllers/role.controller.ts ✅
-  - Service: apps/server/src/module/role/role.service.ts ✅
-  - Repository: apps/server/src/module/role/repositories/role.repository.ts ✅
+  - Controller: apps/core/api/src/module/role/controllers/role.controller.ts ✅
+  - Service: apps/core/api/src/module/role/role.service.ts ✅
+  - Repository: apps/core/api/src/module/role/repositories/role.repository.ts ✅
   - DTO: packages/be-dto/src/role/*.dto.ts ✅
   - Guard: packages/be-common/src/guard/roles.guard.ts ✅
-  - Pages: apps/admin/app/(admin)/roles/page.tsx ✅
+  - Pages: apps/admin/web/app/(admin)/roles/page.tsx ✅
   - Feature: packages/fe-ui/src/components/feature/RoleList/index.tsx ✅
   - Store: packages/fe-store/src/stores/roleStore.ts ✅
 
@@ -560,31 +561,31 @@ CRUD 작업별 Happy Path와 Error Path를 도출합니다.
 
 [8단계] .spec.md 기획서 생성
   - app.spec.md (이미 존재 → 스킵) ⏭
-  - apps/admin/app/(admin)/roles/page.spec.md ✅
-  - apps/admin/app/(admin)/roles/[roleId]/page.spec.md ✅
-  - apps/admin/app/(admin)/roles/new/page.spec.md ✅
-  - apps/admin/app/(admin)/roles/[roleId]/edit/page.spec.md ✅
-  - apps/server/src/module/role/controllers/role.controller.spec.md ✅
-  - apps/server/src/module/role/role.service.spec.md ✅
-  - apps/server/src/module/role/repositories/role.repository.spec.md ✅
+  - apps/admin/web/app/(admin)/roles/page.spec.md ✅
+  - apps/admin/web/app/(admin)/roles/[roleId]/page.spec.md ✅
+  - apps/admin/web/app/(admin)/roles/new/page.spec.md ✅
+  - apps/admin/web/app/(admin)/roles/[roleId]/edit/page.spec.md ✅
+  - apps/core/api/src/module/role/controllers/role.controller.spec.md ✅
+  - apps/core/api/src/module/role/role.service.spec.md ✅
+  - apps/core/api/src/module/role/repositories/role.repository.spec.md ✅
   - packages/fe-store/src/stores/roleStore.spec.md ✅
   - packages/fe-ui/src/components/feature/RoleList/index.spec.md ✅
   - packages/fe-ui/src/components/widget/RoleTable/index.spec.md ✅
 
 ✅ req-reverse-engineer 에이전트 완료
 📁 생성된 파일:
-   - apps/admin/app/(admin)/roles/page.spec.md
-   - apps/admin/app/(admin)/roles/[roleId]/page.spec.md
-   - apps/admin/app/(admin)/roles/new/page.spec.md
-   - apps/admin/app/(admin)/roles/[roleId]/edit/page.spec.md
-   - apps/server/src/module/role/controllers/role.controller.spec.md
-   - apps/server/src/module/role/role.service.spec.md
-   - apps/server/src/module/role/repositories/role.repository.spec.md
+   - apps/admin/web/app/(admin)/roles/page.spec.md
+   - apps/admin/web/app/(admin)/roles/[roleId]/page.spec.md
+   - apps/admin/web/app/(admin)/roles/new/page.spec.md
+   - apps/admin/web/app/(admin)/roles/[roleId]/edit/page.spec.md
+   - apps/core/api/src/module/role/controllers/role.controller.spec.md
+   - apps/core/api/src/module/role/role.service.spec.md
+   - apps/core/api/src/module/role/repositories/role.repository.spec.md
    - packages/fe-store/src/stores/roleStore.spec.md
    - packages/fe-ui/src/components/feature/RoleList/index.spec.md
    - packages/fe-ui/src/components/widget/RoleTable/index.spec.md
 📁 스킵된 파일 (이미 존재):
-   - apps/admin/app/(admin)/app.spec.md
+   - apps/admin/web/app/(admin)/app.spec.md
 ```
 
 ---

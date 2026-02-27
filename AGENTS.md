@@ -20,14 +20,54 @@
 - **패키지 매니저**: pnpm
 - **런타임**: Node.js
 
-## OpenCode 버그 회피
+## 모노레포 구조
+
+### 앱 (apps/)
+
+| 앱 | 설명 | 포트 |
+|----|------|------|
+| `admin/web` | 관리자 프론트엔드 (Next.js) | 3000 |
+| `core/api` | 코어 API 서버 (NestJS) | 4000 |
+| `idp/api` | IDP API 서버 | 4008 |
+| `idp/web` | IDP 프론트엔드 | 3008 |
+| `idp-server` | OIDC 서버 (oidc-provider) | 4009 |
+| `server` | 메인 API 서버 (NestJS) | 4001 |
+| `proposal/web` | 제안서 프론트엔드 | 3001 |
+| `test/e2e` | E2E 테스트 (Playwright) | - |
+| `tool/storybook` | UI 컴포넌트 스토리북 | 6006 |
+
+### 패키지 (packages/)
+
+| 패키지 | npm명 | 설명 |
+|--------|-------|------|
+| `be-common` | `@cocrepo/be-common` | 백엔드 공통 유틸리티 |
+| `be-context` | `@cocrepo/be-context` | 백엔드 컨텍스트 |
+| `be-decorator` | `@cocrepo/decorator` | NestJS 데코레이터 |
+| `be-dto` | `@cocrepo/dto` | Request/Response DTO |
+| `be-entity` | `@cocrepo/entity` | 도메인 Entity |
+| `be-facade` | `@cocrepo/facade` | Facade 레이어 |
+| `be-prisma` | `@cocrepo/prisma` | Prisma 스키마 및 클라이언트 |
+| `be-repository` | `@cocrepo/repository` | Repository 레이어 |
+| `be-service` | `@cocrepo/service` | Service 레이어 |
+| `be-vo` | `@cocrepo/vo` | Value Object |
+| `common-constant` | `@cocrepo/constant` | 공통 상수 |
+| `common-enum` | `@cocrepo/enum` | 공통 Enum |
+| `common-schema` | `@cocrepo/schema` | 공통 스키마 |
+| `common-toolkit` | `@cocrepo/toolkit` | 공통 유틸리티 |
+| `common-type` | `@cocrepo/type` | 공통 타입 |
+| `fe-api` | `@cocrepo/api` | Orval 생성 API 클라이언트 |
+| `fe-hook` | `@cocrepo/hook` | React 커스텀 훅 |
+| `fe-store` | `@cocrepo/store` | MobX Store |
+| `fe-ui` | `@cocrepo/ui` | UI 컴포넌트 |
+
+## Claude Code 버그 회피
 
 - **TodoWrite 도구의 content, activeForm은 영어로 작성** (한글 UTF-8 멀티바이트 문자열 처리 버그 회피)
 - Task 도구의 description도 영어로 작성
 
-## OpenCode 작업 원칙
+## Claude Code 작업 원칙
 
-- **Question 도구로 요구사항이나 선택지가 애매할 때 질문** - 추측하지 않고 사용자에게 확인
+- **AskUserQuestion 도구로 요구사항이나 선택지가 애매할 때 질문** - 추측하지 않고 사용자에게 확인
 - **Task 도구로 적절한 에이전트를 활용하여 작업 수행** - 단순 작업보다 전문 에이전트 활용 우선
 
 ## 프론트엔드 개발 규칙
@@ -165,7 +205,7 @@ function UsersPage() {
 **모든 페이지는 반드시 서버 사이드 Prefetch 패턴을 사용해야 합니다.**
 
 ```
-apps/admin/app/[route]/
+apps/admin/web/src/app/[route]/
 ├── page.tsx          # 서버 컴포넌트 (Prefetch + HydrationBoundary)
 ├── _client.tsx       # 클라이언트 컴포넌트
 ├── _prefetch.ts      # Prefetch 설정
@@ -205,11 +245,36 @@ apps/admin/app/[route]/
 
 **적용 위치:**
 - `packages/common-constant/src/routing/admin-menu.ts`의 모든 경로 정의
-- Next.js 파일 시스템 라우팅 폴더명 (`app/(admin)/users/[userId]/`)
+- Next.js 파일 시스템 라우팅 폴더명 (`src/app/(admin)/users/[userId]/`)
 
 ### 컴포넌트 작성
 
 - ui 컴포넌트를 만들 때는 mobx를 사용합니다
+
+### 폼 스키마 패턴
+
+**@cocrepo/schema를 활용한 검증 규칙 재사용**
+
+```typescript
+// 1. 백엔드 DTO에서 스키마 상속
+import { LoginSchema } from "@cocrepo/schema";
+
+export class OidcLoginPayloadDto extends LoginSchema {
+  @IsBoolean()
+  @IsOptional()
+  remember?: boolean;  // 추가 필드만 정의
+}
+
+// 2. 프론트엔드에서 검증 메시지 활용
+import { VALIDATION_MESSAGES } from "@cocrepo/schema";
+
+const error = VALIDATION_MESSAGES.EMAIL_FORMAT;
+```
+
+**장점**:
+- 프론트엔드/백엔드 검증 규칙 일관성
+- 중복 코드 감소
+- 검증 메시지 통일
 
 ### observer 필수 규칙
 
@@ -316,7 +381,7 @@ UserCard                      → UserMenu (AuthStore 연결)
 import { SideNav, UserMenu } from "@cocrepo/ui";
 
 // ❌ 금지 - apps 내부에 Feature 생성
-// apps/admin/src/components/features/HeaderSpaceSelector.tsx  ← 금지!
+// apps/admin/web/src/components/features/HeaderSpaceSelector.tsx  ← 금지!
 ```
 
 ### SSR/Hydration 관련 주의사항
@@ -458,14 +523,14 @@ export class PersistStore {
   constructor(config: { storageKey: string }) { }
 }
 
-// apps/admin/src/stores - 앱별 설정 주입
+// apps/admin/web/src/stores - 앱별 설정 주입
 rootStore.persistStore = new PersistStore({
   storageKey: "admin-persist",
 });
 
-// apps/coin/src/stores - 다른 앱에서 재사용
+// apps/proposal/web/src/stores - 다른 앱에서 재사용
 rootStore.persistStore = new PersistStore({
-  storageKey: "coin-persist",
+  storageKey: "proposal-persist",
 });
 ```
 
@@ -505,7 +570,10 @@ packages/common-type/src/
 ├── navigation.ts     # 네비게이션 관련 (NavItemConfig, TabConfig, FABAction)
 ├── config.types.ts   # 설정 관련
 ├── json.ts           # JSON 관련
-└── page-meta.ts      # 페이지 메타 관련
+├── page-meta.ts      # 페이지 메타 관련
+├── table.ts          # 테이블 관련 타입
+├── action-config.ts  # 액션 설정 타입
+└── user-stats.ts     # 사용자 통계 타입
 ```
 
 ## 기획/설계 원칙
@@ -545,10 +613,10 @@ packages/common-type/src/
 #### 기획서 파일 구조
 
 ```
-apps/[app]/app/(admin)/
+apps/[app]/web/src/app/(admin)/
 ├── app.spec.md                 # 앱 기획서 (L0-L2: 컨텍스트, Actor, Goal)
 
-apps/[app]/app/(admin)/[도메인]/
+apps/[app]/web/src/app/(admin)/[도메인]/
 ├── page.tsx                    # 목록 페이지
 ├── page.spec.md                # 목록 페이지 기획서 ← 코드 옆에 위치
 ├── page.e2e.ts                 # E2E 테스트 ← sidecar
@@ -588,7 +656,7 @@ packages/be-vo/src/[domain]/
 ├── [name].vo.ts
 └── [name].vo.spec.md           # VO 기획서
 
-apps/server/src/[module]/
+apps/core/api/src/[module]/
 ├── [name].service.ts
 ├── [name].service.spec.md      # Service 기획서
 ├── repositories/
@@ -618,7 +686,7 @@ apps/server/src/[module]/
 #### 기획서 템플릿 위치
 
 ```
-.opencode/templates/spec/
+.claude/templates/spec/
 ├── page.spec.md        # 페이지 기획서 템플릿
 ├── feature.spec.md     # Feature 기획서 템플릿
 ├── widget.spec.md      # Widget 기획서 템플릿
@@ -658,7 +726,7 @@ apps/server/src/[module]/
 ### DTO 위치 규칙
 
 - **DTO는 반드시 `packages/be-dto`에 위치**
-- ❌ `apps/server/src/module/**/dto/` 에 DTO 생성 금지
+- ❌ `apps/core/api/src/module/**/dto/` 에 DTO 생성 금지
 - ✅ `packages/be-dto/src/` 에 DTO 생성
 - Controller에서는 `@cocrepo/dto`에서 import
 
@@ -877,45 +945,22 @@ feat(coin): 멀티시그 지갑 서비스 초기 구현
 Stage 1: 도메인 기획        → orch-requirement (L0~L4 + BE/Store 스펙) → [리뷰]
 Stage 2: 스키마 구현        → schema → entity → dto → query-dto → seed → [리뷰]
 Stage 3: 백엔드 구현        → repository → service → controller → [리뷰]
-Stage 4: 화면 기획 (페이지별) → orch-screen-planner (L5~L12) → [리뷰] ← page 파라미터 권장 (미지정 시 자연어 추론, 불명확 시 확인)
+Stage 4: 화면 기획 (페이지별) → orch-screen-planner (L5~L12) → req-spec-tracker(spec-checklist 갱신: Spec exists) → [리뷰] ← page 파라미터 권장 (미지정 시 자연어 추론, 불명확 시 확인)
 Stage 5: 컴포넌트 (페이지별) → ui → input → cell → widget → layout → feature → store → menu → [리뷰] ← page 파라미터 권장 (미지정 시 자연어 추론, 불명확 시 확인)
-Stage 6: 페이지 (페이지별)   → fe-page-builder → fe-api-integrator → [리뷰] ← page 파라미터 권장 (미지정 시 자연어 추론, 불명확 시 확인)
-Stage 7: E2E 검증 (선택)    → qa-be-e2e-testing → qa-fe-e2e-testing → [리뷰]
+Stage 6: 페이지 (페이지별)   → fe-page-builder → fe-api-integrator → req-spec-tracker(spec-checklist 갱신: Code paired) → [리뷰] ← page 파라미터 권장 (미지정 시 자연어 추론, 불명확 시 확인)
+Stage 7: E2E 검증 (선택)    → qa-be-e2e-testing → qa-fe-e2e-testing → req-spec-tracker(spec-checklist 갱신: Verified) → [리뷰]
 ```
 
-#### Stage 3 Facade 판단 가이드
+#### Spec Checklist 규칙
 
-- `be-facade-builder`는 모든 도메인에 항상 사용하지 않고, 아래 조건이 충족될 때만 사용합니다.
-- 다중 Service 조합이 필요하고, 순차 흐름/트랜잭션 경계/보상 처리가 핵심인 비즈니스 플로우는 `be-facade-builder` 대상입니다.
+```
+도메인별 체크리스트 파일:
+apps/[app]/web/src/app/(admin)/[domain]/spec-checklist.md
 
-- 판정 체크리스트
-  - 여러 Service 호출이 필수인가? `Yes/No`
-  - 호출 순서 및 분기 규칙이 있는가? `Yes/No`
-  - 실패 보상/트랜잭션 경계가 필요한가? `Yes/No`
-  - 여러 도메인 결과를 조합해 계산/검증해야 하나? `Yes/No`
-  - Controller가 비즈니스 조합을 담당할 정도로 복잡한가? `Yes/No`
-  - 동일 조합 흐름이 여러 API에서 반복되는가? `Yes/No`
-
-- 판정 규칙
-  - `Yes`가 3개 이상: `be-facade-builder` 적용
-  - `Yes`가 2개 이하: `be-service-builder` 위주로 진행
-
-- 기획서에 남길 기본 스니펫
-
-```md
-## Backend Layering
-
-### Facade 판정
-- 다중 Service 조합 필요: [Yes/No]
-- 호출 순서/분기 규칙 존재: [Yes/No]
-- 트랜잭션/보상 필요: [Yes/No]
-- 복합 도메인 조합 계산 필요: [Yes/No]
-- Controller 위임이 필요한 비즈니스 흐름: [Yes/No]
-- 재사용 가능한 조합 로직 존재: [Yes/No]
-
-### 판정 결과
-- [ ] be-service-only
-- [ ] be-facade-builder
+운영 규칙:
+- Stage 4 완료 시: Spec exists 체크 갱신
+- Stage 6 완료 시: Code paired 체크 갱신
+- Stage 7(또는 검증 완료) 시: Verified 체크 갱신
 ```
 
 > 화살표는 의존성 순서를 의미합니다. 동일 Stage 내부의 독립 작업은 `parallel=auto`에서 병렬 fan-out 가능합니다.
@@ -923,10 +968,10 @@ Stage 7: E2E 검증 (선택)    → qa-be-e2e-testing → qa-fe-e2e-testing → 
 #### 기획서 폴더 구조
 
 ```
-apps/[app]/app/(admin)/
+apps/[app]/web/src/app/(admin)/
 ├── app.spec.md                 # 앱 기획서 (L0-L2: 컨텍스트, Actor, Goal)
 
-apps/[app]/app/(admin)/[도메인]/
+apps/[app]/web/src/app/(admin)/[도메인]/
 ├── page.tsx                    # 목록 페이지
 ├── page.spec.md                # 목록 페이지 기획서
 ├── page.e2e.ts                 # E2E 테스트 (sidecar)
@@ -958,7 +1003,7 @@ packages/fe-store/src/stores/
 ├── [StoreName].ts
 └── [StoreName].spec.md         # Store 기획서
 
-apps/server/src/[module]/
+apps/core/api/src/[module]/
 ├── [name].service.ts
 ├── [name].service.spec.md      # Service 기획서
 ├── repositories/
@@ -1064,6 +1109,7 @@ Stage 5: 컴포넌트 (페이지별)
 | req-store-planner | 도메인 Store 기획(L11) → `[domain]Store.spec.md` |
 | req-logic-planner | 비즈니스 로직/테스트 기획 → `service/repository.spec.md` + 테스트 케이스 |
 | req-test-planner | 테스트 케이스 기획(L12) → 기존 `.spec.md` 테스트 섹션 업데이트 |
+| req-spec-tracker | 도메인별 `spec-checklist.md` 생성/갱신 (Spec exists / Code paired / Verified) |
 | req-api-integration-planner | Orval API 연동 기획 → `hooks/index.spec.md` |
 | req-reverse-engineer | 기존 코드를 분석하여 `.spec.md` 역생성 |
 | /design-analyze (Skill) | Figma 디자인 분석 및 컴포넌트 매핑 (Figma 있을 때) |
@@ -1088,7 +1134,8 @@ Stage 5: 컴포넌트 (페이지별)
 
 | Agent | 역할 |
 |-------|------|
-| be-schema-builder | Prisma 스키마 생성 및 유형 분류 |
+| be-prisma-builder | Prisma 스키마 생성 및 유형 분류 |
+| common-schema-builder | 프론트엔드와 백엔드에서 공유하는 검증 스키마 생성 |
 | be-entity-builder | 도메인 Entity 클래스 생성 |
 | be-dto-builder | Create/Update/Response DTO 클래스 생성 |
 | be-query-dto-builder | PrismaQueryDto 기반 목록 조회용 Query DTO 생성 |
@@ -1132,7 +1179,7 @@ Stage 5: 컴포넌트 (페이지별)
 |-------|------|
 | dev-service-starter | 개발 서비스 시작 (admin, server, storybook 등) |
 
-각 Agent의 상세 역할은 `.opencode/agents/` 디렉토리를 참고하세요.
+각 Agent의 상세 역할은 `.claude/agents/` 디렉토리를 참고하세요.
 
 ### 에이전트 실행 규칙 (Critical)
 
@@ -1182,13 +1229,13 @@ Stage 5: 컴포넌트 (페이지별)
 #### 예시
 
 ```
-🚀 schema-builder 에이전트 시작
+🚀 be-prisma-builder 에이전트 시작
 📋 작업: User 모델 Prisma 스키마 생성
 📂 대상: packages/be-prisma/schema/user.prisma
 
 [... 에이전트 작업 ...]
 
-✅ schema-builder 에이전트 완료
+✅ be-prisma-builder 에이전트 완료
 📁 생성/수정된 파일:
    - packages/be-prisma/schema/user.prisma
    - packages/be-prisma/schema/enums.prisma

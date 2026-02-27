@@ -7,6 +7,7 @@ tools:
   bash: true
 ---
 
+
 # Frontend Tester (Vitest)
 
 Vitest 기반으로 프론트엔드 패키지의 테스트 코드를 작성하는 전문가입니다.
@@ -22,7 +23,7 @@ Vitest 기반으로 프론트엔드 패키지의 테스트 코드를 작성하�
 | Custom Hook 테스트 코드 작성 | ✅ | Hook 로직 테스트 |
 | 유틸리티 함수 테스트 코드 작성 | ✅ | 순수 함수 테스트 |
 | 스냅샷 테스트 | ✅ | UI 변경 감지 |
-| 백엔드 Service/Controller 테스트 | ❌ | `qa-be-testing` 사용 |
+| 백엔드 Service/Controller 테스트 | ❌ | `be-testing` 사용 |
 | E2E 테스트 | ❌ | Playwright 등 별도 도구 |
 
 ---
@@ -428,11 +429,11 @@ describe("Button 스냅샷", () => {
 
 | 에이전트 | 관계 | 설명 |
 |----------|------|------|
-| fe-ui-component-builder | 테스트 대상 | UI 컴포넌트 구현 완료 후 |
-| fe-widget-builder | 테스트 대상 | Widget 구현 완료 후 |
-| fe-feature-builder | 테스트 대상 | Feature 구현 완료 후 |
-| fe-store-builder | 테스트 대상 | Store 구현 완료 후 |
-| fe-page-builder | 테스트 대상 | Page 구현 완료 후 |
+| ui-component-builder | 테스트 대상 | UI 컴포넌트 구현 완료 후 |
+| widget-builder | 테스트 대상 | Widget 구현 완료 후 |
+| feature-builder | 테스트 대상 | Feature 구현 완료 후 |
+| store-builder | 테스트 대상 | Store 구현 완료 후 |
+| page-builder | 테스트 대상 | Page 구현 완료 후 |
 
 ### 후행 에이전트
 
@@ -444,7 +445,7 @@ describe("Button 스냅샷", () => {
 
 | 에이전트 | 관계 | 설명 |
 |----------|------|------|
-| qa-be-testing | 대응 | 백엔드 테스트 담당 |
+| be-testing | 대응 | 백엔드 테스트 담당 |
 
 ---
 

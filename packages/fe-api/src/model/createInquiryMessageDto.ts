@@ -9,22 +9,22 @@
 2. Cookie - 브라우저에서 로그인 후 쿠키 자동 전송
  * OpenAPI spec version: 1.0.0
  */
-import type { MessageContentType } from './messageContentType';
-import type { SenderType } from './senderType';
+import type { MessageContentType } from "./messageContentType";
+import type { SenderType } from "./senderType";
 
 export interface CreateInquiryMessageDto {
-  /** 스레드 ID (미지정 시 기본 스레드) */
-  threadId?: string;
-  /**
-   * 메시지 내용
-   * @minLength 1
-   * @maxLength 10000
-   */
-  content: string;
-  /** 콘텐츠 유형 (기본값: TEXT) */
-  contentType?: MessageContentType;
-  /** 발신자 유형 (기본값: USER) */
-  senderType?: SenderType;
-  /** 클라이언트 메시지 ID (중복 방지용) */
-  clientMessageId?: string;
+	/** 스레드 ID (미지정 시 기본 스레드) */
+	threadId?: string;
+	/**
+	 * 메시지 내용
+	 * @minLength 1
+	 * @maxLength 10000
+	 */
+	content: string;
+	/** 콘텐츠 유형 (기본값: TEXT) */
+	contentType?: MessageContentType;
+	/** 발신자 유형 (기본값: USER) */
+	senderType?: SenderType;
+	/** 클라이언트 메시지 ID (중복 방지용) */
+	clientMessageId?: string;
 }

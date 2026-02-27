@@ -7,6 +7,7 @@ tools:
   bash: true
 ---
 
+
 # 시드 메이커 (Seed Maker)
 
 Prisma 스키마에 맞는 현실적인 시드 데이터를 생성하는 전문가입니다.
@@ -269,11 +270,11 @@ export const userAgreementMapping = [
 
 | 구분 | 에이전트 | 설명 |
 |------|----------|------|
-| **선행** | be-schema-builder | Prisma 스키마 먼저 생성 |
-| | be-entity-builder | Entity 클래스 정의 |
+| **선행** | schema-builder | Prisma 스키마 먼저 생성 |
+| | entity-builder | Entity 클래스 정의 |
 | **후행** | (없음) | 시드 데이터는 최종 단계 |
-| **관련** | be-database-expert | 데이터 구조 자문 |
-| | be-dto-builder | DTO와 시드 데이터 형식 일치 확인 |
+| **관련** | database-expert | 데이터 구조 자문 |
+| | dto-builder | DTO와 시드 데이터 형식 일치 확인 |
 
 ---
 

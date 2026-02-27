@@ -7,6 +7,7 @@ tools:
   bash: true
 ---
 
+
 # 화면 기획 오케스트레이터 (Screen Planner Orchestrator)
 
 단일 화면의 **L5-L12 기획**을 의존성 기반으로 조율하는 오케스트레이터입니다. 선행 단계 이후 독립 작업은 병렬 fan-out 실행을 지원합니다.
@@ -42,7 +43,7 @@ tools:
 | 앱 | ✅ | 앱 식별자 | "admin" |
 | 도메인명 | ✅ | 도메인 이름 | "Member" |
 | 화면명 | ✅ | 화면 이름 | "List", "Detail", "Create", "Edit" |
-| 화면 경로 | ✅ | 화면 파일 경로 | "apps/admin/app/(admin)/members/" |
+| 화면 경로 | ✅ | 화면 파일 경로 | "apps/admin/web/app/(admin)/members/" |
 | `parallel` | △ | 병렬 모드 (`off`/`auto`/`force`), 기본 `auto` | `auto` |
 | `maxConcurrency` | △ | 동시 실행 상한 | `4` |
 
@@ -53,7 +54,7 @@ tools:
 apps/[app]/app/(admin)/[도메인]/**/page.spec.md
 
 # BE/공용 스펙
-apps/server/src/[module]/controllers/[domain].controller.spec.md
+apps/core/api/src/[module]/controllers/[domain].controller.spec.md
 packages/be-dto/src/[domain]/*.dto.spec.md
 
 # FE Sidecar
@@ -211,8 +212,8 @@ Task: req-api-integration-planner
 ❌ 전제조건 미충족
 
 다음 기획서가 필요합니다:
-- apps/admin/app/(admin)/app.spec.md (앱 기획서)
-- apps/admin/app/(admin)/members/page.spec.md (페이지 기획서)
+- apps/admin/web/app/(admin)/app.spec.md (앱 기획서)
+- apps/admin/web/app/(admin)/members/page.spec.md (페이지 기획서)
 - packages/be-entity/src/member.entity.spec.md (Entity 기획서)
 - packages/fe-store/src/stores/memberStore.spec.md (Store 기획서)
 
@@ -226,7 +227,7 @@ Task: req-api-integration-planner
 ⚠️ 기존 기획서가 존재합니다
 
 다음 파일이 이미 있습니다:
-- apps/admin/app/(admin)/members/page.spec.md (API/이벤트 섹션이 이미 존재)
+- apps/admin/web/app/(admin)/members/page.spec.md (API/이벤트 섹션이 이미 존재)
 
 덮어쓰시겠습니까? (y/n)
 ```

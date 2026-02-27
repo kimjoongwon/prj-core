@@ -1,8 +1,9 @@
 ---
-name: L8 UI 컴포넌트 기획자
+name: req-ui-planner
 description: 화면별 Pure UI 컴포넌트를 기획하는 전문가
 tools: Read, Write, Grep, Bash
 ---
+
 
 # L8 UI 컴포넌트 기획자 (UI Component Planner)
 

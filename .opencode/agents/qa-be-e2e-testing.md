@@ -7,6 +7,7 @@ tools:
   bash: true
 ---
 
+
 # Backend E2E Tester (Jest + Supertest)
 
 Jest + Supertest 기반으로 백엔드 앱의 E2E 테스트 코드를 작성하는 전문가입니다.
@@ -311,13 +312,13 @@ describe("인증/인가", () => {
 
 | 앱 | 테스트 위치 | 설정 파일 | 실행 명령 |
 |----|-----------|----------|----------|
-| server | `apps/server/test/` | `apps/server/test/jest-e2e.json` | `pnpm --filter=server test:e2e` |
+| server | `apps/core/api/test/` | `apps/core/api/test/jest-e2e.json` | `pnpm --filter=server test:e2e` |
 | idp-server | `apps/idp-server/test/` | `apps/idp-server/test/jest-e2e.json` | `pnpm --filter=idp-server test:e2e` |
 
 ### 기존 E2E 패턴 참조
 
 ```
-apps/server/test/
+apps/core/api/test/
 ├── setup-e2e.ts                   # 공통 셋업
 ├── app.e2e-spec.ts               # 앱 기본 테스트
 ├── guards.e2e-spec.ts            # Guard 통합 테스트

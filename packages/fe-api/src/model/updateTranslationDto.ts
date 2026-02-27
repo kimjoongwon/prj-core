@@ -11,10 +11,10 @@
  */
 
 export interface UpdateTranslationDto {
-  /** 번역된 텍스트 */
-  text?: string;
-  /** 카테고리 */
-  category?: string;
-  /** 번역 완료 여부 */
-  isTranslated?: boolean;
+	/** 번역된 텍스트 */
+	text?: string;
+	/** 카테고리 */
+	category?: string;
+	/** 번역 완료 여부 */
+	isTranslated?: boolean;
 }

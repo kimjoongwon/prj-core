@@ -11,9 +11,9 @@
  */
 
 export type ChangePassword200AllOf = {
-  /** */
-  httpStatus?: number;
-  /** */
-  message?: string;
-  data?: boolean;
+	/** */
+	httpStatus?: number;
+	/** */
+	message?: string;
+	data?: boolean;
 };

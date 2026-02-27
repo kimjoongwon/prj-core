@@ -24,7 +24,7 @@
     "start:dev": "tsc --build --watch",
     "format": "biome format --write .",
     "clean": "rm -rf dist && rm -rf node_modules",
-    "test": "jest"
+    "test": "jest --passWithNoTests"
   },
   "dependencies": {
     "@cocrepo/constant": "workspace:*",

@@ -7,6 +7,7 @@ tools:
   bash: true
 ---
 
+
 # Widget 컴포넌트 빌더
 
 **재사용 가능한 작은 UI 조각**을 `packages/fe-ui/src/components/widget`에 생성합니다.

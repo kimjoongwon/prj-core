@@ -1,8 +1,9 @@
 ---
-name: 메뉴-빌더
+name: fe-menu-builder
 description: 메뉴 시스템 컴포넌트를 생성하는 전문가
 tools: Read, Write, Grep, Bash
 ---
+
 
 # 메뉴 빌더
 

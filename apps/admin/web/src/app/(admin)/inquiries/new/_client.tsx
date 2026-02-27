@@ -1,17 +1,15 @@
 "use client";
 
+import { getUsers } from "@cocrepo/api";
 import type { AIFormSuggestion, CustomerInfo } from "@cocrepo/ui";
 import { InquiryForm, PageSurface, SectionSurface, VStack } from "@cocrepo/ui";
 import { Button } from "@heroui/react";
 import { ArrowLeft } from "lucide-react";
 import { observer, useLocalObservable } from "mobx-react-lite";
+import type { Route } from "next";
 import { useRouter } from "next/navigation";
 import { useAIClassification } from "./hooks/useAIClassification";
 import { useHandlers } from "./hooks/useHandlers";
-
-// TODO: Orval 훅 생성 후 아래 import 추가
-// import { useGetUsers } from "@cocrepo/api";
-// import type { UserDto } from "@cocrepo/api";
 
 /**
  * 문의 접수 페이지 - 클라이언트 컴포넌트
@@ -42,7 +40,14 @@ function InquiriesNewPageClient() {
 	});
 
 	// 핸들러
-	const handlers = useHandlers({ state, router });
+	const handlers = useHandlers({
+		state,
+		router: {
+			push: (url: string) => {
+				router.push(url as Route);
+			},
+		},
+	});
 
 	/**
 	 * 고객 검색 핸들러
@@ -56,38 +61,18 @@ function InquiriesNewPageClient() {
 	 *   phone: user.phone,
 	 * })) ?? [];
 	 */
-	const onSearchCustomer = async (keyword: string): Promise<CustomerInfo[]> => {
-		// TODO: Orval 훅 생성 후 실제 API 호출로 교체
-		// const { data } = await useGetUsers({ search: keyword, take: 10 });
-		// return data?.data?.map(user => ({
-		// 	id: user.id,
-		// 	name: user.name,
-		// 	email: user.email,
-		// 	phone: user.phone,
-		// })) ?? [];
-
-		// Mock 데이터 반환 (API 훅 생성 전까지)
+	const onSearchCustomer = async (
+		keyword: string,
+	): Promise<Array<CustomerInfo & { label: string }>> => {
 		if (keyword.length < 2) return [];
-
-		return [
-			{
-				id: "user-001",
-				name: "홍길동",
-				email: "hong@example.com",
-				phone: "010-1234-5678",
-			},
-			{
-				id: "user-002",
-				name: "이영희",
-				email: "lee@example.com",
-				phone: "010-2345-6789",
-			},
-		].filter(
-			(user) =>
-				user.name.includes(keyword) ||
-				user.email?.includes(keyword) ||
-				user.phone?.includes(keyword),
-		);
+		const response = await getUsers({ name: keyword, take: 10 });
+		return (response?.data ?? []).map((user) => ({
+			id: user.id,
+			name: user.name,
+			email: user.email,
+			phone: user.phone,
+			label: user.name,
+		}));
 	};
 
 	/**
@@ -136,7 +121,7 @@ function InquiriesNewPageClient() {
 					<InquiryForm
 						onSubmit={handlers.onSubmit}
 						onContentChange={onContentChange}
-						onSearchCustomer={onSearchCustomer as () => Promise<CustomerInfo[]>}
+						onSearchCustomer={onSearchCustomer}
 						isSubmitting={state.isSubmitting}
 						aiSuggestion={state.aiSuggestion}
 						isAiLoading={state.isAiLoading}

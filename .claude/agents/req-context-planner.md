@@ -1,8 +1,9 @@
 ---
-name: L0-L2 컨텍스트 기획자
+name: req-context-planner
 description: 시스템 컨텍스트, 사용자(Actor), 사용자 목표(Goal) 레이어를 기획하는 전문가
 tools: Read, Write, Grep, Bash
 ---
+
 
 # L0-L2 컨텍스트 기획자 (Context Planner)
 

@@ -9,14 +9,14 @@
 2. Cookie - 브라우저에서 로그인 후 쿠키 자동 전송
  * OpenAPI spec version: 1.0.0
  */
-import type { AuthSessionInfoDto } from './authSessionInfoDto';
-import type { GetMySessions200AllOfMeta } from './getMySessions200AllOfMeta';
+import type { AuthSessionInfoDto } from "./authSessionInfoDto";
+import type { GetMySessions200AllOfMeta } from "./getMySessions200AllOfMeta";
 
 export type GetMySessions200AllOf = {
-  /** */
-  httpStatus?: number;
-  /** */
-  message?: string;
-  data?: AuthSessionInfoDto[];
-  meta?: GetMySessions200AllOfMeta;
+	/** */
+	httpStatus?: number;
+	/** */
+	message?: string;
+	data?: AuthSessionInfoDto[];
+	meta?: GetMySessions200AllOfMeta;
 };

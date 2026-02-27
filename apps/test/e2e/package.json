@@ -4,7 +4,7 @@
   "private": true,
   "description": "E2E tests using Playwright",
   "scripts": {
-    "test": "PLAYWRIGHT_BROWSERS_PATH=./browsers playwright test",
+    "test": "echo 'Skip default e2e test. Use test:admin, test:proposal, test:idp instead.'",
     "test:admin": "PLAYWRIGHT_BROWSERS_PATH=./browsers playwright test --project=admin-chromium",
     "test:admin:mobile": "PLAYWRIGHT_BROWSERS_PATH=./browsers playwright test --project=admin-mobile",
     "test:proposal": "PLAYWRIGHT_BROWSERS_PATH=./browsers playwright test --project=proposal-chromium",

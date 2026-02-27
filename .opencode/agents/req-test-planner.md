@@ -7,6 +7,7 @@ tools:
   bash: true
 ---
 
+
 # L12 테스트 기획자 (Test Planner)
 
 특정 화면에 필요한 **테스트 케이스(L12)** 레이어를 기획하는 전문가입니다.
@@ -222,7 +223,7 @@ tools:
 ### 입력
 
 ```
-화면 경로: apps/admin/app/(admin)/members/
+화면 경로: apps/admin/web/app/(admin)/members/
 도메인: Member
 화면: MemberList
 API: GET /api/members, DELETE /api/members/:memberId

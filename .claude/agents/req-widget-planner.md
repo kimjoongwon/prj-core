@@ -1,8 +1,9 @@
 ---
-name: L9 Widget 기획자
+name: req-widget-planner
 description: 화면별 Widget 컴포넌트를 기획하는 전문가
 tools: Read, Write, Grep, Bash
 ---
+
 
 # L9 Widget 기획자 (Widget Planner)
 

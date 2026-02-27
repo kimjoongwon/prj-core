@@ -9,14 +9,15 @@
 2. Cookie - 브라우저에서 로그인 후 쿠키 자동 전송
  * OpenAPI spec version: 1.0.0
  */
-import type { TimelineDto } from './timelineDto';
-import type { GetTimelines200AllOfMeta } from './getTimelines200AllOfMeta';
+
+import type { GetTimelines200AllOfMeta } from "./getTimelines200AllOfMeta";
+import type { TimelineDto } from "./timelineDto";
 
 export type GetTimelines200AllOf = {
-  /** */
-  httpStatus?: number;
-  /** */
-  message?: string;
-  data?: TimelineDto[];
-  meta?: GetTimelines200AllOfMeta;
+	/** */
+	httpStatus?: number;
+	/** */
+	message?: string;
+	data?: TimelineDto[];
+	meta?: GetTimelines200AllOfMeta;
 };

@@ -11,5 +11,5 @@
  */
 
 export type LoginParams = {
-returnTo: string;
+	returnTo: string;
 };

@@ -1,6 +1,7 @@
 "use client";
 
 import {
+	type CreateRoutineActivityItemDto,
 	type ExerciseDto,
 	useCreateRoutine,
 	useGetExercises,
@@ -124,7 +125,7 @@ function RoutineNewPageClient() {
 					repetitions: toPositiveNumberOr(activity.repetitions, 1),
 					restTime: toNonNegativeNumberOr(activity.restTime, 0),
 					notes: activity.notes.trim() || undefined,
-				})),
+				})) as unknown as CreateRoutineActivityItemDto,
 			},
 		});
 	};

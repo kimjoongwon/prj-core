@@ -1121,7 +1121,8 @@ Stage 5: 컴포넌트 (페이지별)
 
 | Agent | 역할 |
 |-------|------|
-| be-schema-builder | Prisma 스키마 생성 및 유형 분류 |
+| be-prisma-builder | Prisma 스키마 생성 및 유형 분류 |
+| common-schema-builder | 프론트엔드와 백엔드에서 공유하는 검증 스키마 생성 |
 | be-entity-builder | 도메인 Entity 클래스 생성 |
 | be-dto-builder | Create/Update/Response DTO 클래스 생성 |
 | be-query-dto-builder | PrismaQueryDto 기반 목록 조회용 Query DTO 생성 |
@@ -1130,7 +1131,6 @@ Stage 5: 컴포넌트 (페이지별)
 | be-service-builder | NestJS Service 레이어 생성 |
 | be-facade-builder | NestJS Facade 레이어 생성 (여러 Service 조합) |
 | be-controller-builder | NestJS REST Controller 생성 |
-| be-backend-service-builder | 복합 백엔드 서비스 구현 |
 | be-database-expert | PostgreSQL/Prisma 데이터베이스 설계 및 최적화 |
 | be-seed-maker | 현실 세계와 연결된 시드 데이터 생성 |
 | be-bootstrap-integrator | AppModule 부트스트랩에 서비스를 통합 |
@@ -1216,13 +1216,13 @@ Stage 5: 컴포넌트 (페이지별)
 #### 예시
 
 ```
-🚀 schema-builder 에이전트 시작
+🚀 be-prisma-builder 에이전트 시작
 📋 작업: User 모델 Prisma 스키마 생성
 📂 대상: packages/be-prisma/schema/user.prisma
 
 [... 에이전트 작업 ...]
 
-✅ schema-builder 에이전트 완료
+✅ be-prisma-builder 에이전트 완료
 📁 생성/수정된 파일:
    - packages/be-prisma/schema/user.prisma
    - packages/be-prisma/schema/enums.prisma

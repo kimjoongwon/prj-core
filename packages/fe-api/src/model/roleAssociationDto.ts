@@ -11,11 +11,11 @@
  */
 
 export interface RoleAssociationDto {
-  id: string;
-  createdAt: string;
-  updatedAt: string;
-  /** @nullable */
-  removedAt: string | null;
-  roleId: string;
-  groupId: string;
+	id: string;
+	createdAt: string;
+	updatedAt: string;
+	/** @nullable */
+	removedAt: string | null;
+	roleId: string;
+	groupId: string;
 }

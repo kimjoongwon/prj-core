@@ -2,7 +2,7 @@ import { PrismaClient } from "@cocrepo/prisma";
 import {
 	HttpException,
 	HttpStatus,
-Injectable,
+	Injectable,
 	Logger,
 	OnModuleDestroy,
 	OnModuleInit,
@@ -32,16 +32,6 @@ export class PrismaService
 {
 	private readonly logger = new Logger(PrismaService.name);
 	private isConnected = false;
-
-	constructor() {
-		super({
-			datasources: {
-				db: {
-					url: process.env.DATABASE_URL,
-				},
-			},
-		});
-	}
 
 	async onModuleInit() {
 		try {

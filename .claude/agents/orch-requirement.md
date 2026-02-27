@@ -1,8 +1,9 @@
 ---
-name: 요구사항 기획 오케스트레이터
+name: orch-requirement
 description: 도메인 기획(L0-L4) + BE/Store 기획을 총괄 조율하는 오케스트레이터
-tools: Task, Read, Write, Grep, Bash
+tools: Read, Write, Grep, Bash
 ---
+
 
 # 요구사항 기획 오케스트레이터 (Requirement Orchestrator)
 

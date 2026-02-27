@@ -9,16 +9,31 @@ import { Reflector } from "@nestjs/core";
 import { lastValueFrom, of } from "rxjs";
 import { wrapResponse } from "../util/response.util";
 import { ResponseEntityInterceptor } from "./response-entity.interceptor";
+import type { TranslationService } from "@cocrepo/service";
+
+jest.mock("@cocrepo/service", () => {
+	class TranslationService {
+		translate = jest.fn(async (value: string) => value);
+	}
+	return {
+		__esModule: true,
+		TranslationService,
+	};
+});
 
 // Placeholder imports - will be implemented in corresponding modules
 
 describe("ResponseEntityInterceptor", () => {
 	let reflector: Reflector;
 	let interceptor: ResponseEntityInterceptor;
+	let mockTranslationService: jest.Mocked<TranslationService>;
 
 	beforeEach(() => {
 		reflector = new Reflector();
-		interceptor = new ResponseEntityInterceptor(reflector);
+		mockTranslationService = {
+			translate: jest.fn(async (value: string) => value),
+		} as unknown as jest.Mocked<TranslationService>;
+		interceptor = new ResponseEntityInterceptor(reflector, mockTranslationService);
 	});
 
 	const createExecutionContext = (
@@ -46,7 +61,7 @@ describe("ResponseEntityInterceptor", () => {
 
 		expect(result).toBeInstanceOf(ResponseEntity);
 		expect(result).toEqual(
-			new ResponseEntity(HttpStatus.OK, "성공", { id: "123" }),
+			new ResponseEntity(HttpStatus.OK, "common.success", { id: "123" }),
 		);
 	});
 

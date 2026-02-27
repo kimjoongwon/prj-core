@@ -1,8 +1,9 @@
 ---
-name: 리포지토리-빌더
+name: be-repository-builder
 description: Prisma 기반 Repository 레이어를 생성하는 전문가
 tools: Read, Write, Grep, Bash
 ---
+
 
 # Repository Builder
 

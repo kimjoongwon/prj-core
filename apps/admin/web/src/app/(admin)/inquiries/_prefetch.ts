@@ -1,10 +1,15 @@
+import {
+	prefetchGetInquiriesQuery,
+	prefetchGetInquiryStatsQuery,
+} from "@cocrepo/api";
+import { withServerCookies } from "@cocrepo/api/server";
 import type { QueryClient } from "@tanstack/react-query";
 import type { ReadonlyRequestCookies } from "next/dist/server/web/spec-extension/adapters/request-cookies";
 
 interface PrefetchInquiriesParams {
 	take?: number;
 	skip?: number;
-	status?: string;
+	inquiryStatus?: string;
 	category?: string;
 	channel?: string;
 	priority?: string;
@@ -31,31 +36,57 @@ export async function prefetchInquiriesData(
 	cookies: ReadonlyRequestCookies,
 	params: PrefetchInquiriesParams = {},
 ) {
-	const { take = 20, skip = 0, status, category, channel, priority, search } = params;
-
-	// 쿠키 헤더 생성 (Orval 훅 생성 후 사용)
-	const cookieHeader = cookies
-		.getAll()
-		.map((c) => `${c.name}=${c.value}`)
-		.join("; ");
-
-	// TODO: Orval 훅 생성 후 아래 주석 해제
-	// import { prefetchGetInquiriesQuery } from "@cocrepo/api";
-	// await prefetchGetInquiriesQuery(
-	// 	queryClient,
-	// 	{ take, skip, status, category, channel, priority, search },
-	// 	{ request: { headers: { Cookie: cookieHeader } } }
-	// );
-
-	// 현재는 API 훅이 생성되지 않아 로그만 출력
-	console.log("[prefetchInquiriesData] Prefetch params:", {
-		take,
-		skip,
-		status,
+	const {
+		take = 20,
+		skip = 0,
+		inquiryStatus,
 		category,
 		channel,
 		priority,
 		search,
-		cookieHeader: cookieHeader ? "present" : "empty",
-	});
+	} = params;
+
+	await Promise.all([
+		prefetchGetInquiriesQuery(
+			queryClient,
+			{
+				take,
+				skip,
+				inquiryStatus: inquiryStatus as
+					| "NEW"
+					| "OPEN"
+					| "IN_PROGRESS"
+					| "WAITING_CUSTOMER"
+					| "RESOLVED"
+					| "CLOSED"
+					| "ESCALATED"
+					| undefined,
+				category: category as
+					| "GENERAL"
+					| "DELIVERY"
+					| "PAYMENT"
+					| "REFUND"
+					| "PRODUCT"
+					| "ACCOUNT"
+					| "TECHNICAL"
+					| "COMPLAINT"
+					| "OTHER"
+					| undefined,
+				channel: channel as
+					| "WEB"
+					| "EMAIL"
+					| "CHAT"
+					| "SMS"
+					| "PHONE"
+					| "WALK_IN"
+					| undefined,
+				priority: priority as "LOW" | "NORMAL" | "HIGH" | "URGENT" | undefined,
+				search,
+			},
+			{ request: withServerCookies(cookies) },
+		),
+		prefetchGetInquiryStatsQuery(queryClient, {
+			request: withServerCookies(cookies),
+		}),
+	]);
 }

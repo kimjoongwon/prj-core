@@ -11,10 +11,10 @@
  */
 
 export interface VerifyTokenResponseDto {
-  /** 토큰 유효 여부 */
-  valid: boolean;
-  /** Access Token 만료 시간 (Unix timestamp, ms) */
-  accessTokenExpiresAt: number;
-  /** Refresh Token 만료 시간 (Unix timestamp, ms) */
-  refreshTokenExpiresAt: number;
+	/** 토큰 유효 여부 */
+	valid: boolean;
+	/** Access Token 만료 시간 (Unix timestamp, ms) */
+	accessTokenExpiresAt: number;
+	/** Refresh Token 만료 시간 (Unix timestamp, ms) */
+	refreshTokenExpiresAt: number;
 }

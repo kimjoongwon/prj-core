@@ -1,8 +1,9 @@
 ---
-name: Input-컴포넌트-빌더
+name: fe-input-component-builder
 description: 폼 입력 컴포넌트를 packages/fe-ui/src/components/inputs에 생성하는 전문가
 tools: Read, Write, Grep, Bash
 ---
+
 
 # Input 컴포넌트 빌더
 

@@ -7,6 +7,7 @@ tools:
   bash: true
 ---
 
+
 # 레이아웃 빌더
 
 **Layout 컴포넌트**(AppLayout, PageLayout, SectionLayout)를 설계하고 생성합니다. Layout은 **순수 위치(영역)만 정의**하고, Feature 컴포넌트는 해당 영역에 마운트됩니다.
@@ -469,7 +470,7 @@ AdminLayout (bg-background = flat, elevation 0)
 ### 올바른 패턴
 
 ```tsx
-// apps/admin/app/(admin)/users/layout.tsx
+// apps/admin/web/app/(admin)/users/layout.tsx
 "use client";
 
 import { PageSurface } from "@cocrepo/ui";
@@ -490,7 +491,7 @@ export default observer(UsersLayout);
 ```
 
 ```tsx
-// apps/admin/app/(admin)/users/page.tsx
+// apps/admin/web/app/(admin)/users/page.tsx
 "use client";
 
 import { SectionSurface } from "@cocrepo/ui";
@@ -576,7 +577,7 @@ function UsersLayout({ children }) {
 ### 올바른 패턴
 
 ```tsx
-// apps/admin/app/(admin)/roles/abilities/layout.tsx
+// apps/admin/web/app/(admin)/roles/abilities/layout.tsx
 "use client";
 
 import { PageSurface } from "@cocrepo/ui";
@@ -612,7 +613,7 @@ export default observer(AbilitiesLayout);
 ```
 
 ```tsx
-// apps/admin/app/(admin)/roles/abilities/roles/page.tsx
+// apps/admin/web/app/(admin)/roles/abilities/roles/page.tsx
 "use client";
 
 import { SectionSurface } from "@cocrepo/ui";

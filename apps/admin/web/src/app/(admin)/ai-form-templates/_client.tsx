@@ -1,58 +1,36 @@
 "use client";
 
-import { PageSurface, SectionSurface } from "@cocrepo/ui";
-import { Button } from "@cocrepo/ui";
+import { useGetTemplates } from "@cocrepo/api";
+import { Button, PageSurface, SectionSurface } from "@cocrepo/ui";
 import {
-	Table,
-	TableHeader,
-	TableColumn,
-	TableBody,
-	TableRow,
-	TableCell,
 	Chip,
 	Snippet,
+	Spinner,
+	Table,
+	TableBody,
+	TableCell,
+	TableColumn,
+	TableHeader,
+	TableRow,
 } from "@heroui/react";
 import { observer } from "mobx-react-lite";
+import type { Route } from "next";
 import { useRouter } from "next/navigation";
-import type { AIFormTemplate } from "@cocrepo/type";
 
-// 임시 더미 데이터
-const mockTemplates: AIFormTemplate[] = [
-	{
-		id: "1",
-		spaceId: "space-1",
-		name: "고객 문의 답변용",
-		description: "고객 문의에 대한 친절한 답변을 생성하는 템플릿",
-		targetDomain: "Inquiry",
-		targetEntity: "InquiryResponse",
-		aiProvider: "OPENAI",
-		model: "gpt-4o",
-		status: "ACTIVE",
-		priority: 1,
-		allowUserPrompt: true,
-		createdAt: new Date(),
-		updatedAt: null,
-		removedAt: null,
-	},
-	{
-		id: "2",
-		spaceId: "space-1",
-		name: "회원 정보 요약",
-		description: "회원 정보를 요약하여 정리하는 템플릿",
-		targetDomain: "Member",
-		targetEntity: "Member",
-		aiProvider: "ANTHROPIC",
-		model: "claude-3-5-sonnet-20241022",
-		status: "DRAFT",
-		priority: 2,
-		allowUserPrompt: true,
-		createdAt: new Date(),
-		updatedAt: null,
-		removedAt: null,
-	},
-];
+interface AIFormTemplateRow {
+	id: string;
+	name: string;
+	description?: string | null;
+	targetDomain: string;
+	aiProvider: "OPENAI" | "ANTHROPIC";
+	status: "ACTIVE" | "INACTIVE" | "DRAFT" | "ARCHIVED";
+	priority: number;
+}
 
-const statusColorMap: Record<string, "success" | "warning" | "danger" | "default"> = {
+const statusColorMap: Record<
+	string,
+	"success" | "warning" | "danger" | "default"
+> = {
 	ACTIVE: "success",
 	INACTIVE: "warning",
 	DRAFT: "default",
@@ -71,15 +49,38 @@ const providerColorMap: Record<string, "primary" | "secondary"> = {
 	ANTHROPIC: "secondary",
 };
 
+const toAIFormTemplateRows = (
+	templates: Array<{
+		id: string;
+		name: string;
+		description?: string | null;
+		code: string;
+		type: string;
+		isActive: boolean;
+	}>,
+): AIFormTemplateRow[] => {
+	return templates.map((template, index) => ({
+		id: template.id,
+		name: template.name,
+		description: template.description,
+		targetDomain: template.type,
+		aiProvider: template.code.startsWith("ANTHROPIC") ? "ANTHROPIC" : "OPENAI",
+		status: template.isActive ? "ACTIVE" : "INACTIVE",
+		priority: index + 1,
+	}));
+};
+
 export const AIFormTemplatesClient = observer(function AIFormTemplatesClient() {
 	const router = useRouter();
+	const { data: response, isLoading } = useGetTemplates({ take: 20, skip: 0 });
+	const templates = toAIFormTemplateRows(response?.data ?? []);
 
 	const onClickCreate = () => {
-		router.push("/ai-form-templates/new");
+		router.push("/ai-form-templates/new" as Route);
 	};
 
 	const onClickRow = (id: string) => {
-		router.push(\`/ai-form-templates/\${id}\`);
+		router.push(`/ai-form-templates/${id}` as Route);
 	};
 
 	return (
@@ -105,7 +106,12 @@ export const AIFormTemplatesClient = observer(function AIFormTemplatesClient() {
 						<TableColumn key="status">상태</TableColumn>
 						<TableColumn key="priority">우선순위</TableColumn>
 					</TableHeader>
-					<TableBody items={mockTemplates}>
+					<TableBody
+						items={templates}
+						isLoading={isLoading}
+						loadingContent={<Spinner size="sm" label="불러오는 중..." />}
+						emptyContent="등록된 템플릿이 없습니다."
+					>
 						{(item) => (
 							<TableRow key={item.id}>
 								<TableCell>
@@ -124,12 +130,20 @@ export const AIFormTemplatesClient = observer(function AIFormTemplatesClient() {
 									</Snippet>
 								</TableCell>
 								<TableCell>
-									<Chip size="sm" color={providerColorMap[item.aiProvider] || "default"} variant="flat">
+									<Chip
+										size="sm"
+										color={providerColorMap[item.aiProvider] || "default"}
+										variant="flat"
+									>
 										{item.aiProvider === "OPENAI" ? "OpenAI" : "Anthropic"}
 									</Chip>
 								</TableCell>
 								<TableCell>
-									<Chip size="sm" color={statusColorMap[item.status]} variant="flat">
+									<Chip
+										size="sm"
+										color={statusColorMap[item.status]}
+										variant="flat"
+									>
 										{statusLabelMap[item.status]}
 									</Chip>
 								</TableCell>

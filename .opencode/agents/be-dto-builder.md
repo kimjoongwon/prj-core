@@ -7,6 +7,7 @@ tools:
   bash: true
 ---
 
+
 # DTO Builder
 
 Request/Response DTO 클래스를 생성하는 전문가입니다.
@@ -19,9 +20,9 @@ Request/Response DTO 클래스를 생성하는 전문가입니다.
 |------|----------|------|
 | API 요청/응답 DTO 생성 | ✅ 사용 | Create, Update, Response DTO |
 | 유효성 검사 데코레이터 적용 | ✅ 사용 | @cocrepo/decorator 사용 |
-| **Query DTO 생성** | ❌ 미사용 | **be-query-dto-builder 사용** |
-| Entity 클래스 생성 | ❌ 미사용 | be-entity-builder 사용 |
-| Controller 생성 | ❌ 미사용 | be-controller-builder 사용 |
+| **Query DTO 생성** | ❌ 미사용 | **query-dto-builder 사용** |
+| Entity 클래스 생성 | ❌ 미사용 | entity-builder 사용 |
+| Controller 생성 | ❌ 미사용 | controller-builder 사용 |
 
 ---
 
@@ -99,7 +100,7 @@ export class UserListResponseDto {
 }
 ```
 
-### Query DTO → be-query-dto-builder 위임
+### Query DTO → query-dto-builder 위임
 
 **Query DTO(목록 조회용)는 `be-query-dto-builder` 에이전트가 전담합니다.**
 
@@ -108,6 +109,43 @@ export class UserListResponseDto {
 - 릴레이션 필터, 커스텀 매핑 패턴
 
 Query DTO가 필요하면 `be-query-dto-builder`를 호출하세요.
+
+### 스키마 상속 패턴 (공통 검증 규칙 재사용)
+
+@cocrepo/schema의 스키마를 상속받아 DTO를 작성할 수 있습니다.
+
+```typescript
+import { LoginSchema } from "@cocrepo/schema";
+import { ApiProperty } from "@nestjs/swagger";
+import { IsBoolean, IsOptional } from "class-validator";
+
+// LoginSchema의 검증 규칙(@Email, @Password)을 상속받음
+export class OidcLoginPayloadDto extends LoginSchema {
+  @ApiProperty({ description: "이메일" })
+  email: string;  // @Email() 검증 자동 적용
+
+  @ApiProperty({ description: "비밀번호" })
+  password: string;  // @Password() 검증 자동 적용
+
+  // 추가 필드만 정의
+  @ApiPropertyOptional({ default: false })
+  @IsBoolean()
+  @IsOptional()
+  remember?: boolean;
+}
+```
+
+**언제 사용하는가?**
+- 로그인/회원가입 등 인증 관련 DTO
+- 공통 검증 규칙이 이미 @cocrepo/schema에 정의된 경우
+- 여러 DTO가 동일한 필드 검증 규칙을 공유할 때
+
+**@cocrepo/schema 주요 스키마:**
+
+| 스키마 | 필드 | 검증 규칙 |
+|--------|------|----------|
+| LoginSchema | email, password | @Email(), @Password() |
+| SignUpSchema | email, password, name | @Email(), @Password(), @String() |
 
 ---
 
@@ -119,7 +157,7 @@ Query DTO가 필요하면 `be-query-dto-builder`를 호출하세요.
 |------|------|------|
 | Create | `packages/be-dto/src/create/` | 생성 요청 |
 | Update | `packages/be-dto/src/update/` | 수정 요청 |
-| Query | → **be-query-dto-builder 위임** | 조회 파라미터 |
+| Query | → **query-dto-builder 위임** | 조회 파라미터 |
 | Response | `packages/be-dto/src/{domain}/` | 응답 데이터 |
 | 도메인별 | `packages/be-dto/src/{domain}/` | 특정 도메인 전용 |
 
@@ -333,11 +371,11 @@ export class {Entity}DetailResponseDto {
 
 | 구분 | 에이전트 | 설명 |
 |------|---------|------|
-| **선행** | be-entity-builder | Entity 클래스 생성 |
-| | be-schema-builder | Prisma 스키마 생성 |
-| **동료** | be-query-dto-builder | Query DTO 전담 (목록 조회) |
-| **후행** | be-controller-builder | Controller 레이어 생성 |
-| **관련** | be-service-builder | Service 레이어 (DTO 사용 안 함) |
+| **선행** | entity-builder | Entity 클래스 생성 |
+| | schema-builder | Prisma 스키마 생성 |
+| **동료** | query-dto-builder | Query DTO 전담 (목록 조회) |
+| **후행** | controller-builder | Controller 레이어 생성 |
+| **관련** | service-builder | Service 레이어 (DTO 사용 안 함) |
 
 ---
 
@@ -391,12 +429,12 @@ packages/be-dto/src/
 │   └── create-{entity}.dto.ts
 ├── update/                    # 수정 DTO
 │   └── update-{entity}.dto.ts
-├── query/                     # 조회 DTO (→ be-query-dto-builder 전담)
+├── query/                     # 조회 DTO (→ query-dto-builder 전담)
 │   └── query-{entity}.dto.ts
 ├── {domain}/                  # 도메인별 DTO
 │   ├── {domain}-list-response.dto.ts
 │   ├── {domain}-detail-response.dto.ts
-│   └── query-{domain}s.dto.ts  # (→ be-query-dto-builder 전담)
+│   └── query-{domain}s.dto.ts  # (→ query-dto-builder 전담)
 └── index.ts
 ```
 

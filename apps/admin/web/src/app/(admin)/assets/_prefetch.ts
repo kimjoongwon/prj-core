@@ -1,7 +1,7 @@
 import {
+	type GetAssetsParams,
 	prefetchGetAssetsQuery,
 	prefetchGetFoldersQuery,
-	type GetAssetsParams,
 } from "@cocrepo/api";
 import { withServerCookies } from "@cocrepo/api/server";
 import type { QueryClient } from "@tanstack/react-query";

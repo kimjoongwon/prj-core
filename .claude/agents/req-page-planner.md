@@ -1,8 +1,9 @@
 ---
-name: 페이지 기획자
+name: req-page-planner
 description: 페이지 통합 관점에서 page.spec.md를 상세 기획하는 전문가
 tools: Read, Write, Grep, Bash
 ---
+
 
 # 페이지 기획자 (Page Planner)
 

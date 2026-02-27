@@ -7,6 +7,7 @@ tools:
   bash: true
 ---
 
+
 # L8 UI 컴포넌트 기획자 (UI Component Planner)
 
 특정 화면에 필요한 **Pure UI 컴포넌트(L8)** 레이어를 기획하는 전문가입니다.
@@ -123,7 +124,7 @@ Store 연동이 필요한가?
 
 ```
 0단계: 템플릿 파일 확인
-   Read `.opencode/templates/spec/ui.spec.md`
+   Read `.claude/templates/spec/ui.spec.md`
    → 해당 파일의 형식을 기준으로 index.spec.md를 생성한다
    ↓
 1단계: 화면 분석
@@ -182,7 +183,7 @@ Store 연동이 필요한가?
 ### 입력
 
 ```
-화면 경로: apps/admin/app/(admin)/members/
+화면 경로: apps/admin/web/app/(admin)/members/
 도메인: Member
 화면: MemberList
 ```

@@ -1,8 +1,9 @@
 ---
-name: 타입-체커
+name: qa-type-checker
 description: TypeScript 타입 에러를 근본 원인까지 추적하여 해결하는 전문가
 tools: Read, Write, Grep, Bash
 ---
+
 
 # 타입 체커
 

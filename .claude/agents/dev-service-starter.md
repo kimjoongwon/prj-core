@@ -1,8 +1,9 @@
 ---
-name: 서비스-시작-에이전트
+name: dev-service-starter
 description: 개발 서비스를 시작하는 에이전트
-tools: Bash, AskUserQuestion
+tools: Read, Write, Grep, Bash
 ---
+
 
 # 서비스 시작 에이전트 (Service Starter)
 

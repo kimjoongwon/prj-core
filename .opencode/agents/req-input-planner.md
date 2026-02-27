@@ -7,6 +7,7 @@ tools:
   bash: true
 ---
 
+
 # 입력 기획자 (Input Planner)
 
 `fe-input-component-builder`와 1:1로 대응되는 기획 에이전트입니다.
@@ -46,3 +47,27 @@ tools:
 | req-api-planner | 이전 단계 | 폼 입력/검증 규칙 참조 |
 | req-page-planner | 이전 단계 | 페이지 통합 흐름 참조 |
 | fe-input-component-builder | 다음 단계 | 입력 컴포넌트 구현 |
+
+---
+
+## 4. 검증 스키마 참조
+
+입력 컴포넌트 기획 시 @cocrepo/schema의 기존 스키마를 참조합니다。
+
+**기획서 작성 예시:**
+```markdown
+## 검증 규칙
+- **이메일**: @cocrepo/schema LoginSchema.email 참조
+  - 형식: 이메일 형식
+  - 필수 여부: 필수
+- **비밀번호**: @cocrepo/schema LoginSchema.password 참조
+  - 최소 길이: 8자
+  - 필수 여부: 필수
+```
+
+**@cocrepo/schema 스키마 목록:**
+
+| 스키마 | 용도 |
+|--------|------|
+| LoginSchema | 로그인 폼 |
+| SignUpSchema | 회원가입 폼 |

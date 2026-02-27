@@ -7,6 +7,7 @@ tools:
   bash: true
 ---
 
+
 # 페이지 빌더
 
 **페이지 컴포넌트**를 생성합니다. 일반 페이지는 `packages/fe-ui`에 Pure UI로, 목록 페이지는 `apps/*`에 직접 생성합니다.
@@ -71,7 +72,7 @@ tools:
 ## 3. 폴더 구조 (Prefetch 필수)
 
 ```
-apps/admin/app/[route]/
+apps/admin/web/app/[route]/
 ├── page.tsx          # 서버 컴포넌트 (Prefetch + HydrationBoundary)
 ├── _client.tsx       # 클라이언트 컴포넌트
 ├── _prefetch.ts      # Prefetch 설정
@@ -165,8 +166,9 @@ export const LoginPage = observer(
 ### 4.3 통합 훅
 
 ```tsx
-// apps/admin/app/auth/login/hooks/useAuthLoginPage.ts
+// apps/admin/web/app/auth/login/hooks/useAuthLoginPage.ts
 import { useLogin } from "@cocrepo/api";
+import { VALIDATION_MESSAGES } from "@cocrepo/schema";
 import { useLocalObservable } from "mobx-react-lite";
 import { useRouter } from "next/navigation";
 
@@ -206,6 +208,16 @@ export const useAuthLoginPage = () => {
     onChangePassword,
     isLoading: loginMutation.isPending,
   };
+};
+```
+
+**검증 메시지 상수 활용:**
+```tsx
+import { VALIDATION_MESSAGES } from "@cocrepo/schema";
+
+// 검증 에러 메시지 표시 시 상수 사용
+const getErrorMessage = (errorType: string): string => {
+  return VALIDATION_MESSAGES[errorType] ?? "알 수 없는 오류가 발생했습니다";
 };
 ```
 
@@ -389,7 +401,7 @@ columnHelper.display({
 ### 6.3 목록 페이지 템플릿
 
 ```tsx
-// apps/admin/app/(admin)/[entities]/_client.tsx
+// apps/admin/web/app/(admin)/[entities]/_client.tsx
 "use client";
 
 import { useDeleteEntity, useGetEntities } from "@cocrepo/api";
@@ -683,11 +695,11 @@ Pure UI → Widget → Feature → Page
 | 에이전트 | 관계 |
 |----------|------|
 | req-page-planner | page.spec.md 통합 기획 기반 구현 |
-| fe-ui-component-builder | Page가 사용할 Pure UI/Cell 컴포넌트 생성 |
-| fe-widget-builder | Page가 사용할 Widget 컴포넌트 생성 |
-| fe-feature-builder | Page가 사용할 Feature 컴포넌트 생성 |
-| fe-store-builder | 통합 훅에서 사용할 Store 생성 |
-| be-controller-builder | API 엔드포인트 생성 |
+| ui-component-builder | Page가 사용할 Pure UI/Cell 컴포넌트 생성 |
+| widget-builder | Page가 사용할 Widget 컴포넌트 생성 |
+| feature-builder | Page가 사용할 Feature 컴포넌트 생성 |
+| store-builder | 통합 훅에서 사용할 Store 생성 |
+| controller-builder | API 엔드포인트 생성 |
 
 ### 후행 에이전트
 
@@ -701,8 +713,8 @@ Pure UI → Widget → Feature → Page
 
 | 유형 | 파일 경로 |
 |------|----------|
-| Simple Table 예시 | `apps/admin/app/(admin)/roles/page.tsx` |
-| Pagination 예시 | `apps/admin/app/(admin)/users/page.tsx` |
+| Simple Table 예시 | `apps/admin/web/app/(admin)/roles/page.tsx` |
+| Pagination 예시 | `apps/admin/web/app/(admin)/users/page.tsx` |
 | ConfirmModal | `packages/fe-ui/src/components/widgets/common/ConfirmModal` |
 | **Cell 컴포넌트 폴더** | `packages/fe-ui/src/components/ui/data-display/cells/` |
 

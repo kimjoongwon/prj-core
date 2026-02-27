@@ -4,6 +4,7 @@ import {
 	QueryClient,
 } from "@tanstack/react-query";
 import { cookies } from "next/headers";
+import { prefetchAIFormTemplateDetailData } from "../../_prefetch";
 import AIFormTemplateEditPageClient from "./_client";
 
 interface AIFormTemplateEditPageProps {
@@ -22,12 +23,7 @@ export default async function AIFormTemplateEditPage({
 	const { templateId } = await params;
 	const queryClient = new QueryClient();
 	const cookieStore = await cookies();
-
-	// TODO: API 구현 후 실제 prefetch 호출로 교체
-	// await prefetchAIFormTemplateDetailData(queryClient, cookieStore, templateId);
-
-	void queryClient;
-	void cookieStore;
+	await prefetchAIFormTemplateDetailData(queryClient, cookieStore, templateId);
 
 	return (
 		<HydrationBoundary state={dehydrate(queryClient)}>

@@ -1,7 +1,15 @@
 "use client";
 
+import {
+	useAssignInquiry,
+	useGenerateInquiryDraft,
+	useUpdateInquiry,
+	useUpdateInquiryPriority,
+	useUpdateInquiryStatus,
+} from "@cocrepo/api";
 import { useInquiryStore } from "@cocrepo/store";
 import { createLogger } from "@cocrepo/toolkit";
+import type { Route } from "next";
 import { useRouter } from "next/navigation";
 import { useCallback } from "react";
 import type { UseInquiryWebSocketReturn } from "./useInquiryWebSocket";
@@ -95,18 +103,15 @@ export function useHandlers(options: UseHandlersOptions): UseHandlersReturn {
 	const router = useRouter();
 	const store = useInquiryStore();
 
-	// TODO: Orval 훅 생성 후 아래 주석 해제
-	// const updateStatusMutation = useUpdateInquiryStatus();
-	// const updatePriorityMutation = useUpdateInquiryPriority();
-	// const assignMutation = useAssignInquiry();
-	// const updateInquiryMutation = useUpdateInquiry();
-	// const deleteInquiryMutation = useDeleteInquiry();
-	// const sendMessageMutation = useSendInquiryMessage();
-	// const generateDraftMutation = useGenerateAIDraft();
+	const updateStatusMutation = useUpdateInquiryStatus();
+	const updatePriorityMutation = useUpdateInquiryPriority();
+	const assignMutation = useAssignInquiry();
+	const updateInquiryMutation = useUpdateInquiry();
+	const generateDraftMutation = useGenerateInquiryDraft();
 
 	// 목록으로 이동
 	const onClickBack = useCallback(() => {
-		router.push("/inquiries");
+		router.push("/inquiries" as Route);
 	}, [router]);
 
 	/**
@@ -118,16 +123,27 @@ export function useHandlers(options: UseHandlersOptions): UseHandlersReturn {
 	const onChangeStatus = useCallback(
 		async (status: string) => {
 			logger.info("상태 변경:", status);
-			// TODO: Orval 훅 생성 후 아래 주석 해제
-			// try {
-			// 	await updateStatusMutation.mutateAsync({ inquiryId, status });
-			// 	logger.info("상태 변경 성공");
-			// } catch (error) {
-			// 	logger.error("상태 변경 실패:", error);
-			// 	throw error;
-			// }
+			try {
+				await updateStatusMutation.mutateAsync({
+					inquiryId,
+					data: {
+						status: status as
+							| "NEW"
+							| "OPEN"
+							| "IN_PROGRESS"
+							| "WAITING_CUSTOMER"
+							| "RESOLVED"
+							| "CLOSED"
+							| "ESCALATED",
+					},
+				});
+				logger.info("상태 변경 성공");
+			} catch (error) {
+				logger.error("상태 변경 실패:", String(error));
+				throw error;
+			}
 		},
-		[inquiryId],
+		[inquiryId, updateStatusMutation],
 	);
 
 	/**
@@ -139,16 +155,18 @@ export function useHandlers(options: UseHandlersOptions): UseHandlersReturn {
 	const onChangePriority = useCallback(
 		async (priority: string) => {
 			logger.info("우선순위 변경:", priority);
-			// TODO: Orval 훅 생성 후 아래 주석 해제
-			// try {
-			// 	await updatePriorityMutation.mutateAsync({ inquiryId, priority });
-			// 	logger.info("우선순위 변경 성공");
-			// } catch (error) {
-			// 	logger.error("우선순위 변경 실패:", error);
-			// 	throw error;
-			// }
+			try {
+				await updatePriorityMutation.mutateAsync({
+					inquiryId,
+					data: { priority: priority as "LOW" | "NORMAL" | "HIGH" | "URGENT" },
+				});
+				logger.info("우선순위 변경 성공");
+			} catch (error) {
+				logger.error("우선순위 변경 실패:", String(error));
+				throw error;
+			}
 		},
-		[inquiryId],
+		[inquiryId, updatePriorityMutation],
 	);
 
 	/**
@@ -160,16 +178,29 @@ export function useHandlers(options: UseHandlersOptions): UseHandlersReturn {
 	const onChangeCategory = useCallback(
 		async (category: string) => {
 			logger.info("카테고리 변경:", category);
-			// TODO: Orval 훅 생성 후 아래 주석 해제
-			// try {
-			// 	await updateInquiryMutation.mutateAsync({ inquiryId, data: { category } });
-			// 	logger.info("카테고리 변경 성공");
-			// } catch (error) {
-			// 	logger.error("카테고리 변경 실패:", error);
-			// 	throw error;
-			// }
+			try {
+				await updateInquiryMutation.mutateAsync({
+					inquiryId,
+					data: {
+						category: category as
+							| "GENERAL"
+							| "DELIVERY"
+							| "PAYMENT"
+							| "REFUND"
+							| "PRODUCT"
+							| "ACCOUNT"
+							| "TECHNICAL"
+							| "COMPLAINT"
+							| "OTHER",
+					},
+				});
+				logger.info("카테고리 변경 성공");
+			} catch (error) {
+				logger.error("카테고리 변경 실패:", String(error));
+				throw error;
+			}
 		},
-		[inquiryId],
+		[inquiryId, updateInquiryMutation],
 	);
 
 	/**
@@ -181,16 +212,18 @@ export function useHandlers(options: UseHandlersOptions): UseHandlersReturn {
 	const onChangeAssignee = useCallback(
 		async (assigneeId: string) => {
 			logger.info("담당자 변경:", assigneeId);
-			// TODO: Orval 훅 생성 후 아래 주석 해제
-			// try {
-			// 	await assignMutation.mutateAsync({ inquiryId, assigneeId });
-			// 	logger.info("담당자 변경 성공");
-			// } catch (error) {
-			// 	logger.error("담당자 변경 실패:", error);
-			// 	throw error;
-			// }
+			try {
+				await assignMutation.mutateAsync({
+					inquiryId,
+					data: { assigneeId },
+				});
+				logger.info("담당자 변경 성공");
+			} catch (error) {
+				logger.error("담당자 변경 실패:", String(error));
+				throw error;
+			}
 		},
-		[inquiryId],
+		[inquiryId, assignMutation],
 	);
 
 	/**
@@ -267,20 +300,14 @@ export function useHandlers(options: UseHandlersOptions): UseHandlersReturn {
 		store.setGeneratingDraft(true);
 
 		try {
-			// TODO: Orval 훅 생성 후 아래 주석 해제
-			// const result = await generateDraftMutation.mutateAsync({ inquiryId });
-			// store.setReplyContent(result.content);
-
-			// 임시: 더미 초안
-			await new Promise((resolve) => setTimeout(resolve, 2000));
-			const dummyDraft = "안녕하세요, 문의해 주셔서 감사합니다.\n\n확인 후 답변 드리겠습니다.";
-			store.setReplyContent(dummyDraft);
+			const result = await generateDraftMutation.mutateAsync({ inquiryId });
+			store.setReplyContent(result?.data?.draftContent ?? "");
 		} catch (error) {
-			logger.error("AI 초안 생성 실패:", error);
+			logger.error("AI 초안 생성 실패:", String(error));
 		} finally {
 			store.setGeneratingDraft(false);
 		}
-	}, [inquiryId, store]);
+	}, [inquiryId, store, generateDraftMutation]);
 
 	// 지식베이스 검색 모달 열기
 	const onClickSearchKnowledge = useCallback(() => {
@@ -296,7 +323,7 @@ export function useHandlers(options: UseHandlersOptions): UseHandlersReturn {
 
 	// 수정 페이지 이동
 	const onClickEdit = useCallback(() => {
-		router.push(`/inquiries/${inquiryId}/edit`);
+		router.push(`/inquiries/${inquiryId}/edit` as Route);
 	}, [router, inquiryId]);
 
 	// 삭제 확인 모달 열기

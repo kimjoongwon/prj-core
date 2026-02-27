@@ -9,14 +9,15 @@
 2. Cookie - 브라우저에서 로그인 후 쿠키 자동 전송
  * OpenAPI spec version: 1.0.0
  */
-import type { GroundDto } from './groundDto';
-import type { GetGrounds200AllOfMeta } from './getGrounds200AllOfMeta';
+
+import type { GetGrounds200AllOfMeta } from "./getGrounds200AllOfMeta";
+import type { GroundDto } from "./groundDto";
 
 export type GetGrounds200AllOf = {
-  /** */
-  httpStatus?: number;
-  /** */
-  message?: string;
-  data?: GroundDto[];
-  meta?: GetGrounds200AllOfMeta;
+	/** */
+	httpStatus?: number;
+	/** */
+	message?: string;
+	data?: GroundDto[];
+	meta?: GetGrounds200AllOfMeta;
 };

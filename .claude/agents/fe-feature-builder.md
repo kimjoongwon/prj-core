@@ -1,8 +1,9 @@
 ---
-name: 기능-컴포넌트-빌더
+name: fe-feature-builder
 description: 비즈니스 기능을 담당하는 Feature 컴포넌트를 생성하는 전문가
 tools: Read, Write, Grep, Bash
 ---
+
 
 # Feature 컴포넌트 빌더
 

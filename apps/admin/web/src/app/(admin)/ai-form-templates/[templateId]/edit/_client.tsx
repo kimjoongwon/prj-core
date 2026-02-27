@@ -1,5 +1,7 @@
 "use client";
 
+import type { CreateTemplateVariableItemDto, TemplateDto } from "@cocrepo/api";
+import { useGetTemplate, useUpdateTemplate } from "@cocrepo/api";
 import { PageSurface, SectionSurface, VStack } from "@cocrepo/ui";
 import {
 	Button,
@@ -22,6 +24,18 @@ import { useEffect } from "react";
 interface AIFormTemplateEditPageClientProps {
 	templateId: string;
 }
+
+interface TemplateVariableLike {
+	id: string;
+	name: string;
+	description?: string | null;
+	defaultValue?: string | null;
+	isRequired?: boolean;
+}
+
+type TemplateWithVariables = TemplateDto & {
+	variables?: TemplateVariableLike[];
+};
 
 /**
  * 폼 필드 상태 인터페이스
@@ -139,87 +153,51 @@ function AIFormTemplateEditPageClient({
 		isLoading: true,
 	}));
 
-	// TODO: API 구현 후 데이터 조회
-	// const { data: response, isLoading } = useGetAIFormTemplateById(templateId);
-	// const template = response?.data;
+	const { data: response, isLoading } = useGetTemplate(templateId);
+	const template = response?.data as TemplateWithVariables | undefined;
 
-	// 임시: 샘플 데이터 로드 (API 구현 전)
 	useEffect(() => {
-		if (!state.isInitialized) {
-			// 샘플 데이터
-			const sampleData = {
-				name: "회원 정보 자동 생성 템플릿",
-				description:
-					"회원 가입 시 기본 정보를 AI가 자동으로 생성하는 템플릿입니다.",
-				targetDomain: "Member",
-				targetEntity: "Member",
-				aiProvider: "OPENAI" as const,
-				model: "gpt-4",
-				systemPrompt:
-					"당신은 회원 정보를 생성하는 AI 어시스턴트입니다.",
-				status: "ACTIVE" as const,
-				priority: 1,
-				allowUserPrompt: true,
-				maxTokens: 2000,
-				temperature: 0.7,
-				fields: [
-					{
-						id: "field_1",
-						fieldName: "bio",
-						fieldLabel: "자기소개",
-						prompt:
-							"사용자의 이름과 관심사를 바탕으로 자연스러운 자기소개를 작성하세요.",
-						isRequired: false,
-						order: 0,
-						defaultValue: "",
-						validationRegex: "",
-						validationMessage: "",
-						maxLength: 500,
-					},
-					{
-						id: "field_2",
-						fieldName: "nickname",
-						fieldLabel: "닉네임",
-						prompt: "사용자의 이름을 바탕으로 친근한 닉네임을 생성하세요.",
-						isRequired: true,
-						order: 1,
-						defaultValue: "",
-						validationRegex: "^[a-zA-Z0-9가-힣]+$",
-						validationMessage: "한글, 영문, 숫자만 사용 가능합니다.",
-						maxLength: 20,
-					},
-				],
-			};
-
-			// 샘플 데이터 적용
-			state.name = sampleData.name;
-			state.description = sampleData.description;
-			state.targetDomain = sampleData.targetDomain;
-			state.targetEntity = sampleData.targetEntity;
-			state.aiProvider = sampleData.aiProvider;
-			state.model = sampleData.model;
-			state.systemPrompt = sampleData.systemPrompt;
-			state.status = sampleData.status;
-			state.priority = sampleData.priority;
-			state.allowUserPrompt = sampleData.allowUserPrompt;
-			state.maxTokens = sampleData.maxTokens;
-			state.temperature = sampleData.temperature;
-			state.fields = sampleData.fields;
-			state.isInitialized = true;
-			state.isLoading = false;
+		if (!template || state.isInitialized) {
+			return;
 		}
-	}, [state, templateId]);
 
-	// TODO: API 구현 후 수정 Mutation
-	// const { mutate: updateTemplate, isPending } = useUpdateAIFormTemplate({
-	// 	mutation: {
-	// 		onSuccess: () => {
-	// 			router.push(`/ai-form-templates/${templateId}` as Route);
-	// 		},
-	// 	},
-	// });
+		state.name = template.name;
+		state.description = template.description ?? "";
+		state.targetDomain = template.type;
+		state.targetEntity = template.subject ?? "";
+		state.aiProvider = template.code.startsWith("ANTHROPIC")
+			? "ANTHROPIC"
+			: "OPENAI";
+		state.model = "";
+		state.systemPrompt = template.content;
+		state.status = template.isActive ? "ACTIVE" : "INACTIVE";
+		state.priority = 1;
+		state.allowUserPrompt = true;
+		state.maxTokens = null;
+		state.temperature = 0.7;
+		state.fields = (template.variables ?? []).map((variable, index) => ({
+			id: variable.id,
+			fieldName: variable.name,
+			fieldLabel: variable.name,
+			prompt: variable.description ?? "",
+			isRequired: variable.isRequired ?? false,
+			order: index,
+			defaultValue: variable.defaultValue ?? "",
+			validationRegex: "",
+			validationMessage: "",
+			maxLength: null,
+		}));
+		state.isInitialized = true;
+		state.isLoading = false;
+	}, [template, state]);
 
-	const isPending = false;
+	const { mutate: updateTemplate, isPending } = useUpdateTemplate({
+		mutation: {
+			onSuccess: () => {
+				router.push(`/ai-form-templates/${templateId}` as Route);
+			},
+		},
+	});
 
 	/**
 	 * 모델 옵션 반환
@@ -279,43 +257,21 @@ function AIFormTemplateEditPageClient({
 			return;
 		}
 
-		// TODO: API 구현 후 연결
-		// const data: UpdateAIFormTemplateDto = {
-		// 	name: state.name,
-		// 	description: state.description || undefined,
-		// 	targetDomain: state.targetDomain,
-		// 	targetEntity: state.targetEntity,
-		// 	aiProvider: state.aiProvider,
-		// 	model: state.model || undefined,
-		// 	systemPrompt: state.systemPrompt || undefined,
-		// 	status: state.status,
-		// 	priority: state.priority,
-		// 	allowUserPrompt: state.allowUserPrompt,
-		// 	maxTokens: state.maxTokens ?? undefined,
-		// 	temperature: state.temperature ?? undefined,
-		// };
-
-		// updateTemplate({ id: templateId, data });
-
-		// 임시: 콘솔에 데이터 출력 후 상세로 이동
-		console.log("수정 데이터:", {
-			id: templateId,
-			name: state.name,
-			description: state.description,
-			targetDomain: state.targetDomain,
-			targetEntity: state.targetEntity,
-			aiProvider: state.aiProvider,
-			model: state.model,
-			systemPrompt: state.systemPrompt,
-			status: state.status,
-			priority: state.priority,
-			allowUserPrompt: state.allowUserPrompt,
-			maxTokens: state.maxTokens,
-			temperature: state.temperature,
-			fields: state.fields,
+		updateTemplate({
+			templateId,
+			data: {
+				name: state.name,
+				description: state.description || undefined,
+				subject: state.targetEntity || undefined,
+				content: state.systemPrompt || "",
+				variables: state.fields.map((field) => ({
+					name: field.fieldName || field.fieldLabel,
+					description: field.prompt || undefined,
+					defaultValue: field.defaultValue || undefined,
+					isRequired: field.isRequired,
+				})) as unknown as CreateTemplateVariableItemDto,
+			},
 		});
-
-		router.push(`/ai-form-templates/${templateId}` as Route);
 	};
 
 	/**
@@ -351,7 +307,7 @@ function AIFormTemplateEditPageClient({
 	};
 
 	// 로딩 상태
-	if (state.isLoading) {
+	if (state.isLoading || isLoading) {
 		return (
 			<PageSurface title="AI 폼 템플릿 수정" description="로딩 중...">
 				<div className="flex items-center justify-center p-8">
@@ -377,11 +333,7 @@ function AIFormTemplateEditPageClient({
 		>
 			<VStack gap={4}>
 				{/* 탭 */}
-				<Tabs
-					aria-label="템플릿 설정 탭"
-					color="primary"
-					variant="underlined"
-				>
+				<Tabs aria-label="템플릿 설정 탭" color="primary" variant="underlined">
 					<Tab key="basic" title="기본 설정">
 						<SectionSurface>
 							<div className="space-y-6 p-6">
@@ -452,9 +404,9 @@ function AIFormTemplateEditPageClient({
 										placeholder="제공자 선택"
 										selectedKeys={[state.aiProvider]}
 										onSelectionChange={(keys) => {
-											state.aiProvider = Array.from(
-												keys,
-											)[0] as "OPENAI" | "ANTHROPIC";
+											state.aiProvider = Array.from(keys)[0] as
+												| "OPENAI"
+												| "ANTHROPIC";
 											state.model = ""; // 모델 초기화
 										}}
 										isRequired

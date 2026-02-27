@@ -1,8 +1,9 @@
 ---
-name: 레이아웃-빌더
+name: fe-layout-builder
 description: Layout 컴포넌트를 설계하고 생성하는 전문가
 tools: Read, Write, Grep, Bash
 ---
+
 
 # 레이아웃 빌더
 

@@ -7,6 +7,7 @@ tools:
   bash: true
 ---
 
+
 # DMMF Parser Builder
 
 Prisma DMMF(Data Model Meta Format)를 파싱하여 모델/필드 정보를 추출하는 유틸리티를 생성하는 전문가입니다.
@@ -263,11 +264,11 @@ export function getDmmfParser(): DmmfParser {
 
 | 구분 | 에이전트 | 설명 |
 |------|----------|------|
-| **선행** | be-prisma-annotator | 스키마에 @displayName 주석 추가 |
-| | be-schema-builder | Prisma 스키마 작성 |
-| **후행** | be-service-builder | DmmfParser를 사용하는 동기화 Service 생성 |
-| | be-bootstrap-integrator | 동기화 로직을 AppModule에 통합 |
-| **관련** | be-seed-maker | 스키마 기반 시드 데이터 생성 |
+| **선행** | prisma-annotator | 스키마에 @displayName 주석 추가 |
+| | schema-builder | Prisma 스키마 작성 |
+| **후행** | service-builder | DmmfParser를 사용하는 동기화 Service 생성 |
+| | bootstrap-integrator | 동기화 로직을 AppModule에 통합 |
+| **관련** | seed-maker | 스키마 기반 시드 데이터 생성 |
 
 ---
 

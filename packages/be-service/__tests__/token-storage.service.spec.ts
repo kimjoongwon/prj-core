@@ -18,6 +18,7 @@ describe("TokenStorageService", () => {
 			set: jest.fn(),
 			get: jest.fn(),
 			del: jest.fn(),
+			delByPattern: jest.fn(),
 			exists: jest.fn(),
 		} as unknown as jest.Mocked<RedisService>;
 
@@ -178,6 +179,9 @@ describe("TokenStorageService", () => {
 			await service.deleteRefreshToken(userId);
 
 			// Then
+			expect(mockRedisService.delByPattern).toHaveBeenCalledWith(
+				`session:${userId}:*`,
+			);
 			expect(mockRedisService.del).toHaveBeenCalledWith(`refresh:${userId}`);
 		});
 	});
@@ -253,6 +257,9 @@ describe("TokenStorageService", () => {
 			await service.invalidateAllUserTokens(userId);
 
 			// Then
+			expect(mockRedisService.delByPattern).toHaveBeenCalledWith(
+				`session:${userId}:*`,
+			);
 			expect(mockRedisService.del).toHaveBeenCalledWith(`refresh:${userId}`);
 		});
 	});

@@ -1,8 +1,9 @@
 ---
-name: Cell-빌더
+name: fe-cell-builder
 description: DataGrid/Table용 Cell 컴포넌트를 계층별로 생성하는 전문가
 tools: Read, Write, Grep, Bash
 ---
+
 
 # Cell 빌더
 

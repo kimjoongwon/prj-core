@@ -103,11 +103,22 @@ IDP_AXIOS_INSTANCE.interceptors.response.use(
 
 			try {
 				// auth 모듈이 idp-server에 있으므로 같은 인스턴스로 refresh 요청
-				const refreshResponse = await IDP_AXIOS_INSTANCE.post("/api/v1/auth/token/refresh");
-				const responseData = (refreshResponse.data as { data?: { accessTokenExpiresAt?: number; refreshTokenExpiresAt?: number } })?.data;
+				const refreshResponse = await IDP_AXIOS_INSTANCE.post(
+					"/api/v1/auth/token/refresh",
+				);
+				const responseData = (
+					refreshResponse.data as {
+						data?: {
+							accessTokenExpiresAt?: number;
+							refreshTokenExpiresAt?: number;
+						};
+					}
+				)?.data;
 				if (responseData?.accessTokenExpiresAt && persistStoreRef) {
-					persistStoreRef.accessTokenExpiresAt = responseData.accessTokenExpiresAt;
-					persistStoreRef.refreshTokenExpiresAt = responseData.refreshTokenExpiresAt;
+					persistStoreRef.accessTokenExpiresAt =
+						responseData.accessTokenExpiresAt;
+					persistStoreRef.refreshTokenExpiresAt =
+						responseData.refreshTokenExpiresAt;
 				}
 				processQueue(null);
 				return IDP_AXIOS_INSTANCE(originalRequest);

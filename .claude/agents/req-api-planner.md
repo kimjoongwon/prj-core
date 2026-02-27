@@ -1,8 +1,9 @@
 ---
-name: L5-L6 인터랙션/API 기획자
+name: req-api-planner
 description: 인터랙션(Action)과 API 레이어를 기획하는 전문가
 tools: Read, Write, Grep, Bash
 ---
+
 
 # L5-L6 인터랙션/API 기획자 (Interaction/API Planner)
 

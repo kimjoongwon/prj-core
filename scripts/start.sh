@@ -11,6 +11,17 @@ YELLOW='\033[33m'
 DIM='\033[2m'
 RESET='\033[0m'
 
+# Watcher 수가 많은 monorepo에서 EMFILE(too many open files) 방지
+CURRENT_NOFILE=$(ulimit -n 2>/dev/null || echo 0)
+if [[ "$CURRENT_NOFILE" -lt 65536 ]]; then
+  ulimit -n 65536 2>/dev/null || true
+fi
+
+# macOS/Node 환경에서 fs.watch 한도 초과(EMFILE) 방지
+export CHOKIDAR_USEPOLLING="${CHOKIDAR_USEPOLLING:-1}"
+export CHOKIDAR_INTERVAL="${CHOKIDAR_INTERVAL:-1000}"
+export WATCHPACK_POLLING="${WATCHPACK_POLLING:-true}"
+
 # -- 인자 제거 (pnpm이 -- 를 전달할 수 있음)
 ARGS=()
 for arg in "$@"; do
@@ -63,9 +74,9 @@ get_port() {
 
 for choice in $choices; do
   case $choice in
-    1) FILTERS="$FILTERS --filter=core-api..."; SERVICES="$SERVICES core-api"; HAS_BACKEND="true" ;;
+    1) FILTERS="$FILTERS --filter=core-api"; SERVICES="$SERVICES core-api"; HAS_BACKEND="true" ;;
     2) FILTERS="$FILTERS --filter=admin-web"; SERVICES="$SERVICES admin-web"; HAS_FRONTEND="true" ;;
-    3) FILTERS="$FILTERS --filter=idp-api..."; SERVICES="$SERVICES idp-api"; HAS_IDP="true" ;;
+    3) FILTERS="$FILTERS --filter=idp-api"; SERVICES="$SERVICES idp-api"; HAS_IDP="true" ;;
     4) FILTERS="$FILTERS --filter=idp-web"; SERVICES="$SERVICES idp-web"; HAS_FRONTEND="true" ;;
     5) FILTERS="$FILTERS --filter=tool-storybook"; SERVICES="$SERVICES tool-storybook" ;;
     6) FILTERS="$FILTERS --filter=proposal-web"; SERVICES="$SERVICES proposal-web"; HAS_FRONTEND="true" ;;
@@ -123,13 +134,13 @@ fi
 # local 선택 시: 필요한 서버가 없으면 자동 추가
 if [[ "$CODEGEN_ENV" == "local" ]]; then
   if [[ ("$CODEGEN_TARGET" == "all" || "$CODEGEN_TARGET" == "server") && "$HAS_BACKEND" != "true" ]]; then
-    FILTERS="$FILTERS --filter=core-api..."
+    FILTERS="$FILTERS --filter=core-api"
     SERVICES="$SERVICES core-api"
     HAS_BACKEND="true"
     echo -e "\n${YELLOW}⚠️  local 코드젠은 서버가 필요합니다. core-api를 자동으로 포함합니다.${RESET}"
   fi
   if [[ ("$CODEGEN_TARGET" == "all" || "$CODEGEN_TARGET" == "idp") && "$HAS_IDP" != "true" ]]; then
-    FILTERS="$FILTERS --filter=idp-api..."
+    FILTERS="$FILTERS --filter=idp-api"
     SERVICES="$SERVICES idp-api"
     HAS_IDP="true"
     echo -e "${YELLOW}⚠️  local 코드젠은 IDP 서버가 필요합니다. idp-api를 자동으로 포함합니다.${RESET}"
@@ -154,7 +165,7 @@ cleanup() {
   for svc in $SERVICES; do
     port=$(get_port "$svc")
     if [ -n "$port" ]; then
-      pids=$(lsof -ti :"$port" 2>/dev/null || true)
+      pids=$(lsof -nP -iTCP:"$port" -sTCP:LISTEN -t 2>/dev/null || true)
       if [ -n "$pids" ]; then
         echo -e "  ${DIM}포트 ${port} (${svc}) 프로세스 종료${RESET}"
         echo "$pids" | xargs kill -9 2>/dev/null || true
@@ -164,6 +175,66 @@ cleanup() {
   echo -e "${GREEN}✅ 정리 완료${RESET}"
 }
 trap cleanup EXIT INT TERM
+
+# 시작 전 선택된 서비스와 관련된 잔여 dev 프로세스 정리
+pre_cleanup_service_processes() {
+  echo -e "${YELLOW}🧼 시작 전 관련 프로세스 정리 중...${RESET}"
+  local cleaned="false"
+  for svc in $SERVICES; do
+    local pattern=""
+    case $svc in
+      core-api) pattern="turbo start:dev --filter=core-api|core-api@0.0.1 start:dev|/apps/core/api/dist/main.js" ;;
+      admin-web) pattern="turbo start:dev --filter=admin-web|apps/admin/web" ;;
+      idp-api) pattern="turbo start:dev --filter=idp-api|idp-api@0.0.1 start:dev|/apps/idp/api/dist/main.js" ;;
+      idp-web) pattern="turbo start:dev --filter=idp-web|apps/idp/web" ;;
+      tool-storybook) pattern="turbo start:dev --filter=tool-storybook|storybook" ;;
+      proposal-web) pattern="turbo start:dev --filter=proposal-web|apps/proposal/web" ;;
+    esac
+
+    if [[ -n "$pattern" ]]; then
+      pids=$(ps -ef | rg "$pattern" | rg -v "rg" | awk '{print $2}' | tr '\n' ' ' || true)
+      if [[ -n "$pids" ]]; then
+        cleaned="true"
+        echo -e "  ${DIM}${svc} 관련 프로세스 종료${RESET}"
+        kill -9 $pids 2>/dev/null || true
+      fi
+    fi
+  done
+
+  if [[ "$cleaned" == "false" ]]; then
+    echo -e "  ${DIM}정리할 관련 프로세스 없음${RESET}"
+  fi
+}
+
+# 시작 전 선택된 서비스 포트에 남아있는 잔여 프로세스 정리
+pre_cleanup_ports() {
+  echo -e "${YELLOW}🧹 시작 전 포트 정리 중...${RESET}"
+  local cleaned="false"
+  for svc in $SERVICES; do
+    port=$(get_port "$svc")
+    if [ -n "$port" ]; then
+      pids=$(lsof -nP -iTCP:"$port" -sTCP:LISTEN -t 2>/dev/null || true)
+      if [ -n "$pids" ]; then
+        cleaned="true"
+        echo -e "  ${DIM}포트 ${port} (${svc}) 기존 프로세스 종료${RESET}"
+        echo "$pids" | xargs kill -9 2>/dev/null || true
+        for _ in {1..10}; do
+          if ! lsof -nP -iTCP:"$port" -sTCP:LISTEN >/dev/null 2>&1; then
+            break
+          fi
+          sleep 0.2
+        done
+      fi
+    fi
+  done
+
+  if [[ "$cleaned" == "false" ]]; then
+    echo -e "  ${DIM}정리할 포트 없음${RESET}"
+  fi
+}
+
+pre_cleanup_service_processes
+pre_cleanup_ports
 
 echo -e "\n${GREEN}▶${SERVICES} 시작${RESET}\n"
 

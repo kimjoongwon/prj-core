@@ -9,33 +9,33 @@
 2. Cookie - 브라우저에서 로그인 후 쿠키 자동 전송
  * OpenAPI spec version: 1.0.0
  */
-import type { AbilityResponseDto } from './abilityResponseDto';
+import type { AbilityResponseDto } from "./abilityResponseDto";
 
 export interface GrantResponseDto {
-  /** Grant ID (UUID) */
-  id: string;
-  /** 권한 대상 유형 (Role 또는 User) */
-  granteeType: string;
-  /** 권한 대상 ID (Role ID 또는 User ID) */
-  granteeId: string;
-  /** Ability ID (부여된 권한) */
-  abilityId: string;
-  /** 활성화 여부 */
-  isActive: boolean;
-  /** 우선순위 (높을수록 우선) */
-  priority: number;
-  /** 생성 일시 */
-  createdAt: string;
-  /**
-   * 수정 일시
-   * @nullable
-   */
-  updatedAt?: string | null;
-  /**
-   * 삭제 일시 (Soft Delete)
-   * @nullable
-   */
-  removedAt?: string | null;
-  /** 할당된 권한 상세 정보 */
-  ability?: AbilityResponseDto;
+	/** Grant ID (UUID) */
+	id: string;
+	/** 권한 대상 유형 (Role 또는 User) */
+	granteeType: string;
+	/** 권한 대상 ID (Role ID 또는 User ID) */
+	granteeId: string;
+	/** Ability ID (부여된 권한) */
+	abilityId: string;
+	/** 활성화 여부 */
+	isActive: boolean;
+	/** 우선순위 (높을수록 우선) */
+	priority: number;
+	/** 생성 일시 */
+	createdAt: string;
+	/**
+	 * 수정 일시
+	 * @nullable
+	 */
+	updatedAt?: string | null;
+	/**
+	 * 삭제 일시 (Soft Delete)
+	 * @nullable
+	 */
+	removedAt?: string | null;
+	/** 할당된 권한 상세 정보 */
+	ability?: AbilityResponseDto;
 }

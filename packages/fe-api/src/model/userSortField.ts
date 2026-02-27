@@ -6,13 +6,12 @@
  * OpenAPI spec version: 1.0.0
  */
 
-export type UserSortField = typeof UserSortField[keyof typeof UserSortField];
-
+export type UserSortField = (typeof UserSortField)[keyof typeof UserSortField];
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export const UserSortField = {
-  createdAt: 'createdAt',
-  name: 'name',
-  email: 'email',
-  seq: 'seq',
+	createdAt: "createdAt",
+	name: "name",
+	email: "email",
+	seq: "seq",
 } as const;

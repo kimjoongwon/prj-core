@@ -7,6 +7,7 @@ tools:
   bash: true
 ---
 
+
 # Store Builder (MobX)
 
 MobX 기반의 Store를 생성하는 전문가입니다.
@@ -347,8 +348,8 @@ Pure UI → Widget → Feature → Page
 
 | 에이전트 | 관계 |
 |----------|------|
-| req-store-planner | Store 설계 정의 |
-| be-entity-builder | Domain Model 기반이 되는 Entity 정의 |
+| technical-designer | Store 설계 정의 |
+| entity-builder | Domain Model 기반이 되는 Entity 정의 |
 
 ### 후행 에이전트
 
@@ -398,7 +399,7 @@ Pure UI → Widget → Feature → Page
 
 ```
 ❌ 안티패턴
-apps/admin/app/(admin)/users/
+apps/admin/web/app/(admin)/users/
 ├── _stores/
 │   └── UserListStore.ts   ← 금지!
 └── page.tsx

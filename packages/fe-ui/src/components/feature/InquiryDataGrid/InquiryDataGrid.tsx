@@ -2,6 +2,7 @@
 
 import { Table, TableHeader, TableBody, TableColumn, TableRow, TableCell, SortDescriptor, Card, CardBody, Spinner } from "@heroui/react";
 import { observer } from "mobx-react-lite";
+import type { Route } from "next";
 import { useRouter } from "next/navigation";
 import { useInquiryStore } from "@cocrepo/store";
 import { ADMIN_PATHS } from "@cocrepo/constant";
@@ -158,14 +159,16 @@ export const InquiryDataGrid = observer(
 
 			if (onRowClick) {
 				onRowClick(inquiry);
-			} else if (detailPathTemplate) {
-				const path = detailPathTemplate.replace("[inquiryId]", inquiry.id);
-				router.push(path);
-			} else {
-				// 기본 경로 사용
-				router.push(ADMIN_PATHS.INQUIRIES_DETAIL.replace("[inquiryId]", inquiry.id));
-			}
-		};
+				} else if (detailPathTemplate) {
+					const path = detailPathTemplate.replace("[inquiryId]", inquiry.id);
+					router.push(path as Route);
+				} else {
+					// 기본 경로 사용
+					router.push(
+						ADMIN_PATHS.INQUIRIES_DETAIL.replace("[inquiryId]", inquiry.id) as Route,
+					);
+				}
+			};
 
 		// SortDescriptor 생성
 		const sortDescriptor: SortDescriptor | undefined = sortField

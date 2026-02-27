@@ -13,13 +13,13 @@
 /**
  * 참여자 역할 (기본값: VIEWER)
  */
-export type JoinInquiryBodyRole = typeof JoinInquiryBodyRole[keyof typeof JoinInquiryBodyRole];
-
+export type JoinInquiryBodyRole =
+	(typeof JoinInquiryBodyRole)[keyof typeof JoinInquiryBodyRole];
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export const JoinInquiryBodyRole = {
-  CUSTOMER: 'CUSTOMER',
-  AGENT: 'AGENT',
-  SUPERVISOR: 'SUPERVISOR',
-  VIEWER: 'VIEWER',
+	CUSTOMER: "CUSTOMER",
+	AGENT: "AGENT",
+	SUPERVISOR: "SUPERVISOR",
+	VIEWER: "VIEWER",
 } as const;

@@ -1,6 +1,6 @@
 "use client";
 
-import { setLoginRedirectUrl, setIdpLoginRedirectUrl } from "@cocrepo/api";
+import { setIdpLoginRedirectUrl, setLoginRedirectUrl } from "@cocrepo/api";
 import { DesignSystemProvider } from "@cocrepo/ui";
 import {
 	isServer,

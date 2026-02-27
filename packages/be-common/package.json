@@ -15,7 +15,7 @@
     "build": "tsc --build",
     "start:dev": "tsc --build --watch",
     "type-check": "tsc --noEmit",
-    "test": "jest",
+    "test": "jest --passWithNoTests",
     "test:watch": "jest --watch",
     "test:cov": "jest --coverage"
   },

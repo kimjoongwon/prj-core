@@ -1,8 +1,9 @@
 ---
-name: API-연동자
+name: fe-api-integrator
 description: Orval 생성 React Query 훅을 사용하여 더미 데이터를 실제 API 호출로 교체하는 전문가
 tools: Read, Write, Grep, Bash
 ---
+
 
 # API 연동자
 

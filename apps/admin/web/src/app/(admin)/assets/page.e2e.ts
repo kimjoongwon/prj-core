@@ -24,16 +24,22 @@ test.describe("에셋 목록 페이지", () => {
 			await page.waitForLoadState("networkidle");
 
 			// Then: 타이틀/설명/검색 필드 확인
-			await expect(page.getByRole("heading", { name: "에셋 관리" })).toBeVisible();
 			await expect(
-				page.getByText("업로드된 에셋을 조회, 검색, 필터링하고 삭제할 수 있습니다."),
+				page.getByRole("heading", { name: "에셋 관리" }),
+			).toBeVisible();
+			await expect(
+				page.getByText(
+					"업로드된 에셋을 조회, 검색, 필터링하고 삭제할 수 있습니다.",
+				),
 			).toBeVisible();
 			await expect(page.getByPlaceholder("파일명 검색...")).toBeVisible();
 		});
 	});
 
 	test.describe("[E2E-002] 목록 → 상세 이동", () => {
-		test("목록에서 에셋 클릭 시 상세 페이지로 이동할 수 있어야 한다", async ({ page }) => {
+		test("목록에서 에셋 클릭 시 상세 페이지로 이동할 수 있어야 한다", async ({
+			page,
+		}) => {
 			const MOCK_ASSET_ID = "11111111-1111-1111-1111-111111111111";
 			const TEST_NAME = "e2e-asset-list-to-detail.png";
 

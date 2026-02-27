@@ -9,35 +9,35 @@
 2. Cookie - 브라우저에서 로그인 후 쿠키 자동 전송
  * OpenAPI spec version: 1.0.0
  */
-import type { ThreadStatus } from './threadStatus';
+import type { ThreadStatus } from "./threadStatus";
 
 export interface InquiryThreadDto {
-  id: string;
-  createdAt: string;
-  updatedAt: string;
-  /** @nullable */
-  removedAt: string | null;
-  /** 소속 문의 ID */
-  inquiryId: string;
-  /**
-   * 스레드 제목
-   * @nullable
-   */
-  title: string | null;
-  /** 스레드 상태 */
-  status: ThreadStatus;
-  /** 생성자 ID */
-  createdBy: string;
-  /**
-   * 마지막 메시지 일시
-   * @nullable
-   */
-  lastMessageAt: string | null;
-  /**
-   * 마지막 메시지 미리보기
-   * @nullable
-   */
-  lastMessagePreview: string | null;
-  /** 메시지 수 */
-  messageCount: number;
+	id: string;
+	createdAt: string;
+	updatedAt: string;
+	/** @nullable */
+	removedAt: string | null;
+	/** 소속 문의 ID */
+	inquiryId: string;
+	/**
+	 * 스레드 제목
+	 * @nullable
+	 */
+	title: string | null;
+	/** 스레드 상태 */
+	status: ThreadStatus;
+	/** 생성자 ID */
+	createdBy: string;
+	/**
+	 * 마지막 메시지 일시
+	 * @nullable
+	 */
+	lastMessageAt: string | null;
+	/**
+	 * 마지막 메시지 미리보기
+	 * @nullable
+	 */
+	lastMessagePreview: string | null;
+	/** 메시지 수 */
+	messageCount: number;
 }

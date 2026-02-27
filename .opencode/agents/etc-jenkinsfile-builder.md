@@ -7,6 +7,7 @@ tools:
   bash: true
 ---
 
+
 # Jenkinsfile 빌더
 
 Jenkins 파이프라인 파일을 생성하는 전문가입니다. 프로젝트의 배포 파이프라인을 자동화합니다.
@@ -214,7 +215,7 @@ COPY packages/be-entity/package.json ./packages/be-entity/
 COPY packages/be-repository/package.json ./packages/be-repository/
 COPY packages/be-service/package.json ./packages/be-service/
 COPY packages/be-facade/package.json ./packages/be-facade/
-COPY apps/server/package.json ./apps/server/
+COPY apps/core/api/package.json ./apps/core/api/
 
 # 의존성 설치
 RUN pnpm install --frozen-lockfile
@@ -239,12 +240,12 @@ RUN npm install -g pnpm
 # 프로덕션 의존성만 설치
 COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
 COPY packages/be-prisma/package.json ./packages/be-prisma/
-COPY apps/server/package.json ./apps/server/
+COPY apps/core/api/package.json ./apps/core/api/
 
 RUN pnpm install --frozen-lockfile --prod
 
 # 빌드 결과물 복사
-COPY --from=builder /app/apps/server/dist ./apps/server/dist
+COPY --from=builder /app/apps/core/api/dist ./apps/core/api/dist
 COPY --from=builder /app/packages/be-prisma/generated ./packages/be-prisma/generated
 COPY --from=builder /app/packages/be-prisma/schema ./packages/be-prisma/schema
 
@@ -254,7 +255,7 @@ ENV PORT=3000
 
 EXPOSE 3000
 
-CMD ["node", "apps/server/dist/main.js"]
+CMD ["node", "apps/core/api/dist/main.js"]
 ```
 
 ### Dockerfile 템플릿 (Next.js 앱)

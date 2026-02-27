@@ -7,6 +7,7 @@ tools:
   bash: true
 ---
 
+
 # L11 Store 기획자 (Store Planner)
 
 도메인별 **MobX Store(L11)** 레이어를 기획하는 전문가입니다.
@@ -41,7 +42,7 @@ packages/fe-store/src/stores/[domain]Store.spec.md
 
 ### 출력 파일 형식
 
-> 형식은 `.opencode/templates/spec/store.spec.md` 참조
+> 형식은 `.claude/templates/spec/store.spec.md` 참조
 
 ---
 
@@ -83,7 +84,7 @@ packages/fe-store/src/stores/[domain]Store.spec.md
 
 ```
 0단계: 템플릿 파일 확인
-   Read `.opencode/templates/spec/store.spec.md`
+   Read `.claude/templates/spec/store.spec.md`
    → 해당 파일의 형식을 기준으로 store.spec.md를 생성한다
    ↓
 1단계: 도메인 분석

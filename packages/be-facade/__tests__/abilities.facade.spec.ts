@@ -1,4 +1,4 @@
-import { Ability } from "@cocrepo/entity";
+import type { Ability } from "@cocrepo/entity";
 import { AbilitiesService, UsersService } from "@cocrepo/service";
 import { BadRequestException, NotFoundException } from "@nestjs/common";
 import { Test, type TestingModule } from "@nestjs/testing";
@@ -25,18 +25,18 @@ describe("AbilitiesFacade", () => {
 
 	const mockAbility: Ability = {
 		id: "ability-test-id",
-		type: "CAN",
-		action: "READ",
-		roleId: "role-test-id",
+		name: "ability-read-subject",
+		fields: [],
+		inverted: false,
+		reason: null,
 		subjectId: "subject-test-id",
+		actionId: "action-test-id",
 		description: null,
 		conditions: null,
-		tenantId: "tenant-test-id",
-		isActive: true,
 		createdAt: new Date("2024-01-01"),
 		updatedAt: new Date("2024-01-01"),
 		removedAt: null,
-	} as Ability;
+	} as unknown as Ability;
 
 	beforeEach(async () => {
 		mockUsersService = mockDeep<UsersService>();
@@ -68,7 +68,7 @@ describe("AbilitiesFacade", () => {
 			const userId = "user-test-id";
 			const mockAbilities = [mockAbility];
 			mockUsersService.getByIdWithTenants.mockResolvedValue(mockUser as any);
-			mockAbilitiesService.getAbilitiesByRoleId.mockResolvedValue(
+			mockAbilitiesService.getMergedAbilities.mockResolvedValue(
 				mockAbilities,
 			);
 
@@ -77,8 +77,9 @@ describe("AbilitiesFacade", () => {
 
 			// Then
 			expect(mockUsersService.getByIdWithTenants).toHaveBeenCalledWith(userId);
-			expect(mockAbilitiesService.getAbilitiesByRoleId).toHaveBeenCalledWith(
-				mockUser.tenants[0].roleId,
+			expect(mockAbilitiesService.getMergedAbilities).toHaveBeenCalledWith(
+				[mockUser.tenants[0].roleId],
+				userId,
 			);
 			expect(result).toEqual(mockAbilities);
 		});
@@ -129,20 +130,20 @@ describe("AbilitiesFacade", () => {
 		});
 	});
 
-	describe("getAbilitiesByRoleId", () => {
+	describe("getRoleAbilities", () => {
 		it("Role ID로 권한 목록을 조회해야 한다", async () => {
 			// Given
 			const roleId = "role-test-id";
 			const mockAbilities = [mockAbility];
-			mockAbilitiesService.getAbilitiesByRoleId.mockResolvedValue(
+			mockAbilitiesService.getRoleAbilities.mockResolvedValue(
 				mockAbilities,
 			);
 
 			// When
-			const result = await facade.getAbilitiesByRoleId(roleId);
+			const result = await facade.getRoleAbilities(roleId);
 
 			// Then
-			expect(mockAbilitiesService.getAbilitiesByRoleId).toHaveBeenCalledWith(
+			expect(mockAbilitiesService.getRoleAbilities).toHaveBeenCalledWith(
 				roleId,
 			);
 			expect(result).toEqual(mockAbilities);
@@ -151,76 +152,12 @@ describe("AbilitiesFacade", () => {
 		it("권한이 없으면 빈 배열을 반환해야 한다", async () => {
 			// Given
 			const roleId = "role-without-abilities";
-			mockAbilitiesService.getAbilitiesByRoleId.mockResolvedValue([]);
+			mockAbilitiesService.getRoleAbilities.mockResolvedValue([]);
 
 			// When
-			const result = await facade.getAbilitiesByRoleId(roleId);
+			const result = await facade.getRoleAbilities(roleId);
 
 			// Then
-			expect(result).toEqual([]);
-		});
-	});
-
-	describe("updateRoleAbilities", () => {
-		it("Role의 권한을 일괄 업데이트해야 한다", async () => {
-			// Given
-			const roleId = "role-test-id";
-			const tenantId = "tenant-test-id";
-			const newAbilities = [
-				{
-					type: "CAN" as const,
-					action: "CREATE" as const,
-					roleId,
-					subjectId: "subject-1",
-					tenantId,
-				},
-				{
-					type: "CAN" as const,
-					action: "UPDATE" as const,
-					roleId,
-					subjectId: "subject-2",
-					tenantId,
-				},
-			];
-			const createdAbilities = [
-				{ ...mockAbility, action: "CREATE" },
-				{ ...mockAbility, action: "UPDATE" },
-			];
-			mockAbilitiesService.updateRoleAbilities.mockResolvedValue(
-				createdAbilities as any,
-			);
-
-			// When
-			const result = await facade.updateRoleAbilities(
-				roleId,
-				tenantId,
-				newAbilities,
-			);
-
-			// Then
-			expect(mockAbilitiesService.updateRoleAbilities).toHaveBeenCalledWith(
-				roleId,
-				tenantId,
-				newAbilities,
-			);
-			expect(result).toHaveLength(2);
-		});
-
-		it("빈 권한 배열로 업데이트하면 빈 배열을 반환해야 한다", async () => {
-			// Given
-			const roleId = "role-test-id";
-			const tenantId = "tenant-test-id";
-			mockAbilitiesService.updateRoleAbilities.mockResolvedValue([]);
-
-			// When
-			const result = await facade.updateRoleAbilities(roleId, tenantId, []);
-
-			// Then
-			expect(mockAbilitiesService.updateRoleAbilities).toHaveBeenCalledWith(
-				roleId,
-				tenantId,
-				[],
-			);
 			expect(result).toEqual([]);
 		});
 	});

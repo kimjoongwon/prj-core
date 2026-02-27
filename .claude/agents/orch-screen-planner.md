@@ -1,8 +1,9 @@
 ---
-name: 화면 기획 오케스트레이터
+name: orch-screen-planner
 description: 단일 화면 기획(L5-L12)을 조율하는 오케스트레이터
-tools: Task, Read, Write, Grep, Bash
+tools: Read, Write, Grep, Bash
 ---
+
 
 # 화면 기획 오케스트레이터 (Screen Planner Orchestrator)
 

@@ -99,7 +99,7 @@ describe("JwtAuthGuard", () => {
 	describe("canActivate", () => {
 		it("공개 라우트는 true를 반환해야 한다", async () => {
 			// Given
-			mockReflector.get.mockReturnValue(true);
+			mockReflector.getAllAndOverride.mockReturnValue(true);
 			const context = createMockExecutionContext();
 
 			// When
@@ -107,15 +107,15 @@ describe("JwtAuthGuard", () => {
 
 			// Then
 			expect(result).toBe(true);
-			expect(mockReflector.get).toHaveBeenCalledWith(
+			expect(mockReflector.getAllAndOverride).toHaveBeenCalledWith(
 				PUBLIC_ROUTE_KEY,
-				context.getHandler(),
+				[context.getHandler(), context.getClass()],
 			);
 		});
 
 		it("블랙리스트에 있는 토큰은 UnauthorizedException을 던져야 한다", async () => {
 			// Given
-			mockReflector.get.mockReturnValue(false);
+			mockReflector.getAllAndOverride.mockReturnValue(false);
 			mockClsService.get.mockReturnValue("blacklisted-token");
 			mockTokenStorageService.isBlacklisted.mockResolvedValue(true);
 			const context = createMockExecutionContext();
@@ -131,7 +131,7 @@ describe("JwtAuthGuard", () => {
 
 		it("Bearer 토큰도 블랙리스트 체크를 해야 한다", async () => {
 			// Given
-			mockReflector.get.mockReturnValue(false);
+			mockReflector.getAllAndOverride.mockReturnValue(false);
 			mockClsService.get.mockReturnValue("bearer-token");
 			mockTokenStorageService.isBlacklisted.mockResolvedValue(true);
 			const context = createMockExecutionContext({
@@ -150,7 +150,7 @@ describe("JwtAuthGuard", () => {
 
 		it("request.user가 있으면 true를 반환해야 한다", async () => {
 			// Given
-			mockReflector.get.mockReturnValue(false);
+			mockReflector.getAllAndOverride.mockReturnValue(false);
 			mockClsService.get.mockReturnValue("valid-token");
 			mockTokenStorageService.isBlacklisted.mockResolvedValue(false);
 			const user = { id: "user-1", email: "test@example.com" };
@@ -165,7 +165,7 @@ describe("JwtAuthGuard", () => {
 
 		it("request.user가 없으면 UnauthorizedException을 던져야 한다", async () => {
 			// Given
-			mockReflector.get.mockReturnValue(false);
+			mockReflector.getAllAndOverride.mockReturnValue(false);
 			mockClsService.get.mockReturnValue("valid-token");
 			mockTokenStorageService.isBlacklisted.mockResolvedValue(false);
 			const context = createMockExecutionContext({ user: undefined });
@@ -178,7 +178,7 @@ describe("JwtAuthGuard", () => {
 
 		it("CLS에 토큰이 없으면 블랙리스트 체크를 건너뛰어야 한다", async () => {
 			// Given
-			mockReflector.get.mockReturnValue(false);
+			mockReflector.getAllAndOverride.mockReturnValue(false);
 			mockClsService.get.mockReturnValue(undefined);
 			const user = { id: "user-1", email: "test@example.com" };
 			const context = createMockExecutionContext({ user });
@@ -193,7 +193,7 @@ describe("JwtAuthGuard", () => {
 
 		it("토큰이 블랙리스트에 없으면 다음 단계로 진행해야 한다", async () => {
 			// Given
-			mockReflector.get.mockReturnValue(false);
+			mockReflector.getAllAndOverride.mockReturnValue(false);
 			mockClsService.get.mockReturnValue("valid-token");
 			mockTokenStorageService.isBlacklisted.mockResolvedValue(false);
 			const user = { id: "user-1", email: "test@example.com" };

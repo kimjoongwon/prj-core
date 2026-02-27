@@ -9,11 +9,11 @@
 2. Cookie - 브라우저에서 로그인 후 쿠키 자동 전송
  * OpenAPI spec version: 1.0.0
  */
-import type { OidcSessionStatsDtoByModelType } from './oidcSessionStatsDtoByModelType';
+import type { OidcSessionStatsDtoByModelType } from "./oidcSessionStatsDtoByModelType";
 
 export interface OidcSessionStatsDto {
-  /** 전체 세션/토큰 수 */
-  totalCount: number;
-  /** 모델 타입별 건수 */
-  byModelType: OidcSessionStatsDtoByModelType;
+	/** 전체 세션/토큰 수 */
+	totalCount: number;
+	/** 모델 타입별 건수 */
+	byModelType: OidcSessionStatsDtoByModelType;
 }

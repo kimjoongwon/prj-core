@@ -1,10 +1,6 @@
 import { cloneDeep } from "@cocrepo/toolkit";
 import type { Option } from "@cocrepo/type";
-import {
-	Select as NextSelect,
-	type SelectProps as NextUISelectProps,
-	SelectItem,
-} from "@heroui/react";
+import { Select as NextSelect, SelectItem } from "@heroui/react";
 import type React from "react";
 
 // SelectProps 인터페이스를 독립적으로 정의 (NextUI 제네릭 제거)
@@ -95,10 +91,10 @@ export const Select = (props: SelectProps) => {
 			errorMessage={errorMessage}
 			className={className}
 			isRequired={isRequired}
-			isReadOnly={isReadOnly}
+			disallowEmptySelection={isReadOnly}
 			onChange={handleChange}
 			selectedKeys={value ? [value] : undefined}
-			{...(rest as NextUISelectProps<object>)}
+			{...rest}
 		>
 			{_options.map((option) => {
 				return (

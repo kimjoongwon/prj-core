@@ -1,8 +1,9 @@
 ---
-name: L9-L10 로직/테스트 기획자
+name: req-logic-planner
 description: 비즈니스 로직과 테스트 레이어를 기획하는 전문가
 tools: Read, Write, Grep, Bash
 ---
+
 
 # L9-L10 로직/테스트 기획자 (Logic/Test Planner)
 

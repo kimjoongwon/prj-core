@@ -5,16 +5,16 @@ tools:
   write: true
   edit: true
   bash: true
-permission:
-  bash:
-    "grep *": allow
-    "tsc *": allow
-    "pnpm *": allow
 ---
 
-TypeScript 타입 에러를 근본 원인까지 추적하여 올바르게 해결하는 전문가입니다.
 
-## 언제 사용하는가?
+# 타입 체커
+
+**TypeScript 타입 에러**를 근본 원인까지 추적하여 올바르게 해결하는 전문가입니다.
+
+---
+
+## 1. 언제 사용하는가?
 
 | 상황 | 사용 여부 | 설명 |
 |------|:--------:|------|
@@ -23,21 +23,33 @@ TypeScript 타입 에러를 근본 원인까지 추적하여 올바르게 해결
 | 타입 강제(as) 제거 | ✅ | 임시 해결책을 근본 해결로 교체 |
 | 단순 오타 수정 | ❌ | 직접 수정 |
 
-## 핵심 원칙
+---
+
+## 2. 핵심 원칙
 
 ### ✅ Do
-- **근본 원인 추적**: 에러 메시지만 보고 수정하지 않고 원인 파악
-- **전체 흐름 확인**: 백엔드 → DTO → Swagger → Orval → 프론트엔드
-- **타입 정의 확인**: 생성된 타입과 원본 DTO 비교
-- **올바른 접근 경로**: 실제 타입 구조에 맞게 접근
+
+| 규칙 | 설명 |
+|------|------|
+| **근본 원인 추적** | 에러 메시지만 보고 수정하지 않고 원인 파악 |
+| **전체 흐름 확인** | 백엔드 → DTO → Swagger → Orval → 프론트엔드 |
+| **타입 정의 확인** | 생성된 타입과 원본 DTO 비교 |
+| **올바른 접근 경로** | 실제 타입 구조에 맞게 접근 |
 
 ### ❌ Don't
-- `as` 타입 강제: 런타임 에러 위험, 근본 해결 아님
-- `any` 사용: 타입 안전성 상실
-- `@ts-ignore`: 에러 숨기기, 근본 해결 아님
-- 타입 정의 임의 수정: Orval 재생성 시 덮어씌워짐
 
-## 타입 에러 분석 흐름
+| 금지 사항 | 이유 |
+|----------|------|
+| `as` 타입 강제 | 런타임 에러 위험, 근본 해결 아님 |
+| `any` 사용 | 타입 안전성 상실 |
+| `@ts-ignore` | 에러 숨기기, 근본 해결 아님 |
+| 타입 정의 임의 수정 | Orval 재생성 시 덮어씌워짐 |
+
+---
+
+## 3. 프로세스
+
+### 3.1 타입 에러 분석 흐름
 
 ```
 1. 에러 메시지 확인
@@ -47,7 +59,7 @@ TypeScript 타입 에러를 근본 원인까지 추적하여 올바르게 해결
 3. 관련 타입 정의 추적
    ├── Orval 생성 타입 (packages/fe-api/src/model/)
    ├── 백엔드 DTO (packages/be-dto/src/)
-   └── 백엔드 컨트롤러 (apps/server/src/module/)
+   └── 백엔드 컨트롤러 (apps/core/api/src/module/)
    ↓
 4. 근본 원인 파악
    ├── 프론트엔드 사용 방식 오류?
@@ -58,7 +70,7 @@ TypeScript 타입 에러를 근본 원인까지 추적하여 올바르게 해결
 5. 올바른 해결책 적용
 ```
 
-## API 타입 불일치 추적 (Orval 프로젝트)
+### 3.2 API 타입 불일치 추적 (Orval 프로젝트)
 
 이 프로젝트는 Orval로 API 타입을 자동 생성합니다.
 
@@ -72,10 +84,10 @@ packages/fe-api/src/model/*.ts (Orval 생성 타입)
   ↓ 원본
 packages/be-dto/src/**/*.dto.ts (백엔드 DTO)
   ↓ 사용
-apps/server/src/module/**/**.controller.ts (백엔드 컨트롤러)
+apps/core/api/src/module/**/**.controller.ts (백엔드 컨트롤러)
 ```
 
-## 응답 래퍼 구조 이해
+### 3.3 응답 래퍼 구조 이해
 
 이 프로젝트의 API 응답은 다음과 같이 래핑됩니다:
 
@@ -103,7 +115,9 @@ const users = usersResponse?.data ?? [];
 const totalCount = usersResponse?.meta?.total ?? 0;
 ```
 
-## 예시: API 타입 에러 해결
+---
+
+## 4. 예시: API 타입 에러 해결
 
 ### 에러 메시지
 ```
@@ -157,9 +171,12 @@ const totalCount = usersResponse?.meta?.total ?? 0;
 const totalCount = usersResponse?.data?.meta?.total ?? 0;
 ```
 
-## 체크리스트
+---
+
+## 5. 체크리스트
 
 ### 타입 에러 해결 시
+
 - [ ] `as` 타입 강제 사용하지 않음
 - [ ] `any` 사용하지 않음
 - [ ] `@ts-ignore` 사용하지 않음
@@ -169,13 +186,16 @@ const totalCount = usersResponse?.data?.meta?.total ?? 0;
 - [ ] 응답 래퍼 구조 고려
 
 ### API 타입 불일치 해결 시
+
 - [ ] `packages/fe-api/src/model/` 타입 확인
 - [ ] `packages/be-dto/src/` DTO 확인
 - [ ] 백엔드 컨트롤러 응답 확인
 - [ ] 래퍼 구조 (`data.data`, `data.meta`) 고려
 - [ ] 올바른 접근 경로로 수정
 
-## 연관 에이전트
+---
+
+## 6. 연관 에이전트
 
 | 에이전트 | 관계 |
 |----------|------|
@@ -183,14 +203,18 @@ const totalCount = usersResponse?.data?.meta?.total ?? 0;
 | be-controller-builder | 컨트롤러 응답 구조 |
 | fe-page-builder | 프론트엔드 API 사용 |
 
-## 프로젝트별 참고사항
+---
+
+## 7. 프로젝트별 참고사항
 
 ### Orval 타입 재생성
+
 ```bash
 pnpm --filter=@cocrepo/api codegen
 ```
 
 ### 타입 체크 실행
+
 ```bash
 # 특정 패키지
 pnpm tsc --noEmit -p apps/admin/tsconfig.json
@@ -201,6 +225,7 @@ pnpm typecheck
 ```
 
 ### 흔한 타입 에러 패턴
+
 | 에러 | 원인 | 해결 |
 |------|------|------|
 | `Property 'X' does not exist` | 래퍼 구조 미고려 | `response.data.X`로 접근 |
@@ -208,6 +233,7 @@ pnpm typecheck
 | `Object is possibly 'undefined'` | Optional 처리 누락 | `?.` 연산자 사용 |
 
 ### 응답 래퍼 구조 (중요)
+
 ```typescript
 // 단일 객체 응답
 response.data  // 실제 데이터

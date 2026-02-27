@@ -13,36 +13,36 @@ OIDC 인증 및 IDP 관리 API를 제공합니다.
  */
 
 export interface CreateOidcClientDto {
-  /**
-   * 클라이언트 식별자
-   * @maxLength 64
-   * @pattern ^[a-z0-9-]+$
-   */
-  clientId: string;
-  /** 클라이언트 시크릿 */
-  clientSecret?: string;
-  /**
-   * 클라이언트 이름
-   * @maxLength 128
-   */
-  clientName: string;
-  /** 리다이렉트 URI 목록 */
-  redirectUris: string[];
-  /** 허용된 Grant 타입 */
-  grantTypes: string[];
-  /** 응답 타입 */
-  responseTypes: string[];
-  /**
-   * 토큰 엔드포인트 인증 방식
-   * @maxLength 50
-   */
-  tokenEndpointAuthMethod: string;
-  /** 허용된 스코프 */
-  scope: string;
-  /** 로고 URI */
-  logoUri?: string;
-  /** 정책 URI */
-  policyUri?: string;
-  /** 서비스 약관 URI */
-  tosUri?: string;
+	/**
+	 * 클라이언트 식별자
+	 * @maxLength 64
+	 * @pattern ^[a-z0-9-]+$
+	 */
+	clientId: string;
+	/** 클라이언트 시크릿 */
+	clientSecret?: string;
+	/**
+	 * 클라이언트 이름
+	 * @maxLength 128
+	 */
+	clientName: string;
+	/** 리다이렉트 URI 목록 */
+	redirectUris: string[];
+	/** 허용된 Grant 타입 */
+	grantTypes: string[];
+	/** 응답 타입 */
+	responseTypes: string[];
+	/**
+	 * 토큰 엔드포인트 인증 방식
+	 * @maxLength 50
+	 */
+	tokenEndpointAuthMethod: string;
+	/** 허용된 스코프 */
+	scope: string;
+	/** 로고 URI */
+	logoUri?: string;
+	/** 정책 URI */
+	policyUri?: string;
+	/** 서비스 약관 URI */
+	tosUri?: string;
 }

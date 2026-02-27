@@ -1,8 +1,9 @@
 ---
-name: 역기획 에이전트
+name: req-reverse-engineer
 description: 기존 코드를 분석하여 코드 옆 .spec.md 기획서를 역으로 생성하는 전문가
-tools: Read, Grep, Glob, Bash, Write
+tools: Read, Write, Grep, Bash
 ---
+
 
 # 역기획 에이전트 (Reverse Engineer)
 

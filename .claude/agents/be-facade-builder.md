@@ -1,8 +1,9 @@
 ---
-name: 파사드-빌더
+name: be-facade-builder
 description: NestJS Facade 레이어를 생성하는 전문가
 tools: Read, Write, Grep, Bash
 ---
+
 
 # Facade Builder
 

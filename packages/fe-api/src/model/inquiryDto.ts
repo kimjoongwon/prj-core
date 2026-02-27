@@ -9,78 +9,78 @@
 2. Cookie - 브라우저에서 로그인 후 쿠키 자동 전송
  * OpenAPI spec version: 1.0.0
  */
-import type { InquiryCategory } from './inquiryCategory';
-import type { InquiryChannel } from './inquiryChannel';
-import type { InquirySource } from './inquirySource';
-import type { InquiryStatus } from './inquiryStatus';
-import type { InquiryPriority } from './inquiryPriority';
-import type { InquiryDtoSentiment } from './inquiryDtoSentiment';
+import type { InquiryCategory } from "./inquiryCategory";
+import type { InquiryChannel } from "./inquiryChannel";
+import type { InquiryDtoSentiment } from "./inquiryDtoSentiment";
+import type { InquiryPriority } from "./inquiryPriority";
+import type { InquirySource } from "./inquirySource";
+import type { InquiryStatus } from "./inquiryStatus";
 
 export interface InquiryDto {
-  id: string;
-  createdAt: string;
-  updatedAt: string;
-  /** @nullable */
-  removedAt: string | null;
-  /** 문의 번호 */
-  inquiryNumber: string;
-  /** 문의 제목 */
-  title: string;
-  /** 문의 카테고리 */
-  category: InquiryCategory;
-  /** 문의 채널 */
-  channel: InquiryChannel;
-  /** 문의 접수 유형 */
-  source: InquirySource;
-  /** 문의 상태 */
-  status: InquiryStatus;
-  /** 문의 우선순위 */
-  priority: InquiryPriority;
-  /** 고객 ID */
-  customerId?: string;
-  /** 담당자 ID */
-  assigneeId?: string;
-  /** 실시간 채팅 활성화 여부 */
-  isRealtimeChat: boolean;
-  /** SLA 응답 위반 여부 */
-  isSlaResponseBreached: boolean;
-  /** SLA 해결 위반 여부 */
-  isSlaResolveBreached: boolean;
-  /**
-   * 감정 유형
-   * @nullable
-   */
-  sentiment: InquiryDtoSentiment;
-  /**
-   * 마지막 메시지 일시
-   * @nullable
-   */
-  lastMessageAt: string | null;
-  /** 읽지 않은 메시지 수 */
-  unreadCount: number;
-  /**
-   * 첫 응답 일시
-   * @nullable
-   */
-  firstResponseAt: string | null;
-  /**
-   * 해결 일시
-   * @nullable
-   */
-  resolvedAt: string | null;
-  /**
-   * 종료 일시
-   * @nullable
-   */
-  closedAt: string | null;
-  /**
-   * SLA 응답 기한
-   * @nullable
-   */
-  slaResponseDue: string | null;
-  /**
-   * SLA 해결 기한
-   * @nullable
-   */
-  slaResolveDue: string | null;
+	id: string;
+	createdAt: string;
+	updatedAt: string;
+	/** @nullable */
+	removedAt: string | null;
+	/** 문의 번호 */
+	inquiryNumber: string;
+	/** 문의 제목 */
+	title: string;
+	/** 문의 카테고리 */
+	category: InquiryCategory;
+	/** 문의 채널 */
+	channel: InquiryChannel;
+	/** 문의 접수 유형 */
+	source: InquirySource;
+	/** 문의 상태 */
+	status: InquiryStatus;
+	/** 문의 우선순위 */
+	priority: InquiryPriority;
+	/** 고객 ID */
+	customerId?: string;
+	/** 담당자 ID */
+	assigneeId?: string;
+	/** 실시간 채팅 활성화 여부 */
+	isRealtimeChat: boolean;
+	/** SLA 응답 위반 여부 */
+	isSlaResponseBreached: boolean;
+	/** SLA 해결 위반 여부 */
+	isSlaResolveBreached: boolean;
+	/**
+	 * 감정 유형
+	 * @nullable
+	 */
+	sentiment: InquiryDtoSentiment;
+	/**
+	 * 마지막 메시지 일시
+	 * @nullable
+	 */
+	lastMessageAt: string | null;
+	/** 읽지 않은 메시지 수 */
+	unreadCount: number;
+	/**
+	 * 첫 응답 일시
+	 * @nullable
+	 */
+	firstResponseAt: string | null;
+	/**
+	 * 해결 일시
+	 * @nullable
+	 */
+	resolvedAt: string | null;
+	/**
+	 * 종료 일시
+	 * @nullable
+	 */
+	closedAt: string | null;
+	/**
+	 * SLA 응답 기한
+	 * @nullable
+	 */
+	slaResponseDue: string | null;
+	/**
+	 * SLA 해결 기한
+	 * @nullable
+	 */
+	slaResolveDue: string | null;
 }

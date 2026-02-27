@@ -1,8 +1,9 @@
 ---
-name: L11 Store 기획자
+name: req-store-planner
 description: 도메인별 MobX Store를 기획하는 전문가
 tools: Read, Write, Grep, Bash
 ---
+
 
 # L11 Store 기획자 (Store Planner)
 

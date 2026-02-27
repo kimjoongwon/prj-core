@@ -28,6 +28,7 @@ developer_instructions = '''
 | | 도메인 설명 | 비즈니스 컨텍스트 |
 | | 필드 목록 | 필드명, 타입, 검증 규칙 |
 | **출력** | 스키마 클래스 파일 | `packages/common-schema/src/schemas/{domain}/{name}.schema.ts` |
+| | 스키마 기획서 파일 | `packages/common-schema/src/schemas/{domain}/{name}.schema.spec.md` |
 | | 인덱스 파일 업데이트 | `packages/common-schema/src/schemas/{domain}/index.ts` |
 
 ---
@@ -211,7 +212,31 @@ export class [SchemaName] {
 }
 ```
 
-### 4단계: 인덱스 업데이트
+### 4단계: Sidecar 기획서 작성
+
+```markdown
+<!-- packages/common-schema/src/schemas/[domain]/[name].schema.spec.md -->
+# [SchemaName] Schema Specification
+
+## 목적
+- 프론트엔드/백엔드 공용 검증 규칙 정의
+
+## 필드 규칙
+| 필드 | 타입 | 검증 규칙 |
+|------|------|----------|
+| email | string | @Email() |
+
+## 사용처
+- 프론트엔드 폼 검증
+- 백엔드 DTO 상속
+
+## 변경 이력
+| 일자 | 내용 | 작성자 |
+|------|------|--------|
+| 2026-02-27 | 초기 생성 | common-schema-builder |
+```
+
+### 5단계: 인덱스 업데이트
 
 ```typescript
 // packages/common-schema/src/schemas/[domain]/index.ts
@@ -426,6 +451,8 @@ export const VALIDATION_MESSAGES = {
 - [ ] 기존 데코레이터를 재사용했는가?
 - [ ] 검증 메시지 상수를 사용했는가?
 - [ ] JSDoc 주석이 추가되었는가?
+- [ ] `[name].schema.spec.md`가 코드 옆에 생성되었는가?
+- [ ] `.spec.md` 하단에 변경 이력이 기록되었는가?
 - [ ] 인덱스 파일이 업데이트되었는가?
 - [ ] 불필요한 중복 검증이 없는가?
 - [ ] DTO 확장이 가능한 구조인가?
@@ -483,6 +510,7 @@ packages/common-schema/src/schemas/{domain}/{name}.schema.ts
 
 **생성된 파일:**
 - `packages/common-schema/src/schemas/[domain]/[name].schema.ts`
+- `packages/common-schema/src/schemas/[domain]/[name].schema.spec.md`
 - `packages/common-schema/src/schemas/[domain]/index.ts` (업데이트)
 
 **필드:**

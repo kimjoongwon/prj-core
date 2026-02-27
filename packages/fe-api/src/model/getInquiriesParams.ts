@@ -9,64 +9,65 @@
 2. Cookie - 브라우저에서 로그인 후 쿠키 자동 전송
  * OpenAPI spec version: 1.0.0
  */
-import type { InquiryCategory } from './inquiryCategory';
-import type { InquiryChannel } from './inquiryChannel';
-import type { InquiryPriority } from './inquiryPriority';
-import type { InquiryStatus } from './inquiryStatus';
-import type { DeleteFilter } from './deleteFilter';
+
+import type { DeleteFilter } from "./deleteFilter";
+import type { InquiryCategory } from "./inquiryCategory";
+import type { InquiryChannel } from "./inquiryChannel";
+import type { InquiryPriority } from "./inquiryPriority";
+import type { InquiryStatus } from "./inquiryStatus";
 
 export type GetInquiriesParams = {
-/**
- * @minimum 1
- */
-skip?: number;
-/**
- * @minimum 1
- * @maximum 50
- */
-take?: number;
-/**
- * 검색어 (제목, 고객명)
- */
-search?: string;
-/**
- * 카테고리 필터 (GENERAL, DELIVERY, PAYMENT, REFUND, PRODUCT, ACCOUNT, TECHNICAL, COMPLAINT, OTHER)
- */
-category?: InquiryCategory;
-/**
- * 채널 필터 (WEB, EMAIL, CHAT, SMS, PHONE, WALK_IN)
- */
-channel?: InquiryChannel;
-/**
- * 우선순위 필터 (LOW, NORMAL, HIGH, URGENT)
- */
-priority?: InquiryPriority;
-/**
- * 문의 상태 필터 (NEW, OPEN, IN_PROGRESS, WAITING_CUSTOMER, RESOLVED, CLOSED, ESCALATED)
- */
-inquiryStatus?: InquiryStatus;
-/**
- * 삭제 상태 필터 (active: 활성, deleted: 삭제됨)
- */
-status?: DeleteFilter;
-/**
- * 담당자 ID
- */
-assigneeId?: string;
-/**
- * 고객 ID
- */
-customerId?: string;
-/**
- * 생성일 시작 (ISO8601)
- */
-startDate?: string;
-/**
- * 생성일 종료 (ISO8601)
- */
-endDate?: string;
-/**
- * 복합 정렬 (JSON:API 컨벤션). 부호 없음=ASC, -prefix=DESC. 허용 필드: createdAt, updatedAt, priority, status, lastMessageAt. 예: ?sort=-createdAt&sort=priority
- */
-sort?: string[];
+	/**
+	 * @minimum 1
+	 */
+	skip?: number;
+	/**
+	 * @minimum 1
+	 * @maximum 50
+	 */
+	take?: number;
+	/**
+	 * 검색어 (제목, 고객명)
+	 */
+	search?: string;
+	/**
+	 * 카테고리 필터 (GENERAL, DELIVERY, PAYMENT, REFUND, PRODUCT, ACCOUNT, TECHNICAL, COMPLAINT, OTHER)
+	 */
+	category?: InquiryCategory;
+	/**
+	 * 채널 필터 (WEB, EMAIL, CHAT, SMS, PHONE, WALK_IN)
+	 */
+	channel?: InquiryChannel;
+	/**
+	 * 우선순위 필터 (LOW, NORMAL, HIGH, URGENT)
+	 */
+	priority?: InquiryPriority;
+	/**
+	 * 문의 상태 필터 (NEW, OPEN, IN_PROGRESS, WAITING_CUSTOMER, RESOLVED, CLOSED, ESCALATED)
+	 */
+	inquiryStatus?: InquiryStatus;
+	/**
+	 * 삭제 상태 필터 (active: 활성, deleted: 삭제됨)
+	 */
+	status?: DeleteFilter;
+	/**
+	 * 담당자 ID
+	 */
+	assigneeId?: string;
+	/**
+	 * 고객 ID
+	 */
+	customerId?: string;
+	/**
+	 * 생성일 시작 (ISO8601)
+	 */
+	startDate?: string;
+	/**
+	 * 생성일 종료 (ISO8601)
+	 */
+	endDate?: string;
+	/**
+	 * 복합 정렬 (JSON:API 컨벤션). 부호 없음=ASC, -prefix=DESC. 허용 필드: createdAt, updatedAt, priority, status, lastMessageAt. 예: ?sort=-createdAt&sort=priority
+	 */
+	sort?: string[];
 };

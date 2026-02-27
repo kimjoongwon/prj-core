@@ -11,7 +11,7 @@ interface InquiriesPageProps {
 	searchParams: Promise<{
 		take?: string;
 		skip?: string;
-		status?: string;
+		inquiryStatus?: string;
 		category?: string;
 		channel?: string;
 		priority?: string;
@@ -23,7 +23,9 @@ interface InquiriesPageProps {
  * 문의 목록 페이지 - 서버 컴포넌트
  * SSR 시점에 데이터를 프리페칭하여 클라이언트에 전달합니다.
  */
-export default async function InquiriesPage({ searchParams }: InquiriesPageProps) {
+export default async function InquiriesPage({
+	searchParams,
+}: InquiriesPageProps) {
 	const queryClient = new QueryClient();
 	const cookieStore = await cookies();
 	const params = await searchParams;
@@ -34,7 +36,7 @@ export default async function InquiriesPage({ searchParams }: InquiriesPageProps
 	await prefetchInquiriesData(queryClient, cookieStore, {
 		take,
 		skip,
-		status: params.status,
+		inquiryStatus: params.inquiryStatus,
 		category: params.category,
 		channel: params.channel,
 		priority: params.priority,

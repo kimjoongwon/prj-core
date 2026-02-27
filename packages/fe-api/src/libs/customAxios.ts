@@ -101,12 +101,23 @@ AXIOS_INSTANCE.interceptors.response.use(
 			isRefreshing = true;
 
 			try {
-				const refreshResponse = await AXIOS_INSTANCE.post("/api/v1/auth/token/refresh");
+				const refreshResponse = await AXIOS_INSTANCE.post(
+					"/api/v1/auth/token/refresh",
+				);
 				// refresh 응답에서 만료 시간 추출하여 PersistStore 업데이트
-				const responseData = (refreshResponse.data as { data?: { accessTokenExpiresAt?: number; refreshTokenExpiresAt?: number } })?.data;
+				const responseData = (
+					refreshResponse.data as {
+						data?: {
+							accessTokenExpiresAt?: number;
+							refreshTokenExpiresAt?: number;
+						};
+					}
+				)?.data;
 				if (responseData?.accessTokenExpiresAt && persistStoreRef) {
-					persistStoreRef.accessTokenExpiresAt = responseData.accessTokenExpiresAt;
-					persistStoreRef.refreshTokenExpiresAt = responseData.refreshTokenExpiresAt;
+					persistStoreRef.accessTokenExpiresAt =
+						responseData.accessTokenExpiresAt;
+					persistStoreRef.refreshTokenExpiresAt =
+						responseData.refreshTokenExpiresAt;
 				}
 				processQueue(null);
 				// 갱신 성공 → 원래 요청 재시도 (새 쿠키 자동 적용)

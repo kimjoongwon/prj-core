@@ -7,6 +7,7 @@ tools:
   bash: true
 ---
 
+
 # 데이터베이스 전문가
 
 PostgreSQL과 Prisma ORM을 활용한 데이터 모델링과 쿼리 최적화를 전문으로 합니다.
@@ -245,11 +246,11 @@ const users = await prisma.user.findMany({
 
 | 구분 | 에이전트 | 설명 |
 |------|----------|------|
-| **선행** | req-api-planner, req-logic-planner | API/로직 스펙에서 스키마 방향 결정 |
-| **후행** | be-schema-builder | 설계된 스키마를 Prisma로 구현 |
-| | be-repository-builder | 최적화된 쿼리 구현 |
-| **관련** | be-seed-maker | 테스트 데이터 생성 |
-| | orch-requirement | 전체 백엔드 아키텍처 협의 |
+| **선행** | technical-designer | Entity/API 설계에서 스키마 방향 결정 |
+| **후행** | schema-builder | 설계된 스키마를 Prisma로 구현 |
+| | repository-builder | 최적화된 쿼리 구현 |
+| **관련** | seed-maker | 테스트 데이터 생성 |
+| | backend-architect | 전체 백엔드 아키텍처 협의 |
 
 ---
 

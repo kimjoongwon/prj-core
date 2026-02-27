@@ -1,10 +1,10 @@
+import type { AssetKind, AssetStatus } from "@cocrepo/api";
 import {
 	dehydrate,
 	HydrationBoundary,
 	QueryClient,
 } from "@tanstack/react-query";
 import { cookies } from "next/headers";
-import type { AssetKind, AssetStatus } from "@cocrepo/api";
 import AssetsPageClient from "./_client";
 import { prefetchAssetsData } from "./_prefetch";
 

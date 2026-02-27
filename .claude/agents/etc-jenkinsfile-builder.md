@@ -1,8 +1,9 @@
 ---
-name: 젠킨스파일-빌더
+name: etc-jenkinsfile-builder
 description: Jenkins CI/CD 파이프라인 파일을 생성하는 전문가
 tools: Read, Write, Grep, Bash
 ---
+
 
 # Jenkinsfile 빌더
 

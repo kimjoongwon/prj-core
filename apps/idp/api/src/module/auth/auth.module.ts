@@ -1,4 +1,3 @@
-import { JwtStrategy } from "@cocrepo/service";
 import { AuthFacade } from "@cocrepo/facade";
 import {
 	AuthAuditLogsRepository,
@@ -10,6 +9,7 @@ import {
 	AuthAuditLogService,
 	AuthCacheService,
 	EmailService,
+	JwtStrategy,
 	RedisService,
 	RolesService,
 	SpaceContext,

@@ -1,8 +1,9 @@
 ---
-name: 프론트엔드-테스터
+name: qa-fe-testing
 description: Vitest 기반 프론트엔드 패키지 테스트 코드를 작성하는 전문가
 tools: Read, Write, Grep, Bash
 ---
+
 
 # Frontend Tester (Vitest)
 

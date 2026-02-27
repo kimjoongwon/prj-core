@@ -1,8 +1,9 @@
 ---
-name: L7 Entity 기획자
+name: req-entity-planner
 description: 도메인별 Entity를 기획하는 전문가
 tools: Read, Write, Grep, Bash
 ---
+
 
 # L7 Entity 기획자 (Entity Planner)
 

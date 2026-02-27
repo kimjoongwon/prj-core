@@ -1,8 +1,9 @@
 ---
-name: L12 테스트 기획자
+name: req-test-planner
 description: 화면별 테스트 케이스를 기획하는 전문가
 tools: Read, Write, Grep, Bash
 ---
+
 
 # L12 테스트 기획자 (Test Planner)
 

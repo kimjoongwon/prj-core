@@ -11,16 +11,16 @@
  */
 
 export interface AuthSessionInfoDto {
-  /** 세션 ID */
-  sessionId: string;
-  /** User Agent */
-  userAgent: string;
-  /** IP 주소 */
-  ipAddress: string;
-  /** 세션 생성일 */
-  createdAt: string;
-  /** 마지막 활동 시간 */
-  lastActivityAt: string;
-  /** 현재 세션 여부 */
-  isCurrent: boolean;
+	/** 세션 ID */
+	sessionId: string;
+	/** User Agent */
+	userAgent: string;
+	/** IP 주소 */
+	ipAddress: string;
+	/** 세션 생성일 */
+	createdAt: string;
+	/** 마지막 활동 시간 */
+	lastActivityAt: string;
+	/** 현재 세션 여부 */
+	isCurrent: boolean;
 }

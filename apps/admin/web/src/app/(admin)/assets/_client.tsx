@@ -1,11 +1,11 @@
 "use client";
 
 import {
-	getGetAssetsQueryKey,
 	type AssetDto,
 	type AssetKind,
 	type AssetStatus,
 	type FolderDto,
+	getGetAssetsQueryKey,
 	useGetAssets,
 	useGetFolders,
 	useRemoveAsset,
@@ -22,6 +22,7 @@ import { addToast, Button, Chip } from "@heroui/react";
 import { useQueryClient } from "@tanstack/react-query";
 import { Trash2, Upload } from "lucide-react";
 import { observer } from "mobx-react-lite";
+import type { Route } from "next";
 import Link from "next/link";
 
 const leftInputs: InputConfig[] = [
@@ -196,7 +197,7 @@ function AssetsPageClient() {
 			isRequired: true,
 			cell: ({ row }) => (
 				<Link
-					href={`/assets/${(row.original as AssetDto).id}`}
+					href={`/assets/${(row.original as AssetDto).id}` as Route}
 					className="text-primary hover:underline"
 				>
 					{(row.original as AssetDto).originalName}
@@ -225,11 +226,7 @@ function AssetsPageClient() {
 			cell: ({ row }) => {
 				const statusValue = (row.original as AssetDto).status;
 				return (
-					<Chip
-						size="sm"
-						variant="flat"
-						color={getStatusColor(statusValue)}
-					>
+					<Chip size="sm" variant="flat" color={getStatusColor(statusValue)}>
 						{getStatusLabel(statusValue)}
 					</Chip>
 				);

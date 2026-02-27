@@ -1,8 +1,9 @@
 ---
-name: L3-L4 기능/화면 기획자
+name: req-screen-planner
 description: 기능(Feature)과 화면(Screen) 레이어를 기획하는 전문가
 tools: Read, Write, Grep, Bash
 ---
+
 
 # L3-L4 기능/화면 기획자 (Feature/Screen Planner)
 

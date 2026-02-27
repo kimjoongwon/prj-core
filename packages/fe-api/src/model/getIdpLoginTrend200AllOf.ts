@@ -9,14 +9,15 @@
 2. Cookie - 브라우저에서 로그인 후 쿠키 자동 전송
  * OpenAPI spec version: 1.0.0
  */
-import type { LoginTrendItemDto } from './loginTrendItemDto';
-import type { GetIdpLoginTrend200AllOfMeta } from './getIdpLoginTrend200AllOfMeta';
+
+import type { GetIdpLoginTrend200AllOfMeta } from "./getIdpLoginTrend200AllOfMeta";
+import type { LoginTrendItemDto } from "./loginTrendItemDto";
 
 export type GetIdpLoginTrend200AllOf = {
-  /** */
-  httpStatus?: number;
-  /** */
-  message?: string;
-  data?: LoginTrendItemDto[];
-  meta?: GetIdpLoginTrend200AllOfMeta;
+	/** */
+	httpStatus?: number;
+	/** */
+	message?: string;
+	data?: LoginTrendItemDto[];
+	meta?: GetIdpLoginTrend200AllOfMeta;
 };

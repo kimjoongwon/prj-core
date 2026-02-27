@@ -33,6 +33,14 @@ const mockSessionStorage = {
 	clear: vi.fn(),
 };
 
+const defineGlobal = (key: string, value: unknown) => {
+	Object.defineProperty(global, key, {
+		value,
+		configurable: true,
+		writable: true,
+	});
+};
+
 describe("BrowserUtil", () => {
 	beforeEach(() => {
 		// Reset mocks
@@ -42,11 +50,11 @@ describe("BrowserUtil", () => {
 		mockWindow.location.href = "https://example.com/path";
 
 		// Setup global mocks
-		global.document = mockDocument as any;
-		global.window = mockWindow as any;
-		global.navigator = mockNavigator as any;
-		global.localStorage = mockLocalStorage as any;
-		global.sessionStorage = mockSessionStorage as any;
+			defineGlobal("document", mockDocument);
+			defineGlobal("window", mockWindow);
+			defineGlobal("navigator", mockNavigator);
+			defineGlobal("localStorage", mockLocalStorage);
+			defineGlobal("sessionStorage", mockSessionStorage);
 	});
 
 	afterEach(() => {
@@ -161,10 +169,10 @@ describe("BrowserUtil", () => {
 		});
 
 		it("모바일 사용자 에이전트를 인식해야 한다", () => {
-			global.navigator = {
-				userAgent:
-					"Mozilla/5.0 (iPhone; CPU iPhone OS 14_0 like Mac OS X) AppleWebKit/605.1.15",
-			} as any;
+				defineGlobal("navigator", {
+					userAgent:
+						"Mozilla/5.0 (iPhone; CPU iPhone OS 14_0 like Mac OS X) AppleWebKit/605.1.15",
+				});
 
 			const result = getUserAgent();
 

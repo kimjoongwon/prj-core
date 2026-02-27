@@ -1,8 +1,9 @@
 ---
-name: Query-DTO-빌더
+name: be-query-dto-builder
 description: PrismaQueryDto 기반 목록 조회용 Query DTO를 생성하는 전문가
 tools: Read, Write, Grep, Bash
 ---
+
 
 # Query DTO Builder
 

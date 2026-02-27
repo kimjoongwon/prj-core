@@ -11,21 +11,21 @@
  */
 
 export type GetOidcClientsParams = {
-/**
- * @minimum 1
- */
-skip?: number;
-/**
- * @minimum 1
- * @maximum 50
- */
-take?: number;
-/**
- * Client ID 또는 이름 통합 검색
- */
-search?: string;
-/**
- * 활성 상태 필터
- */
-isActive?: boolean;
+	/**
+	 * @minimum 1
+	 */
+	skip?: number;
+	/**
+	 * @minimum 1
+	 * @maximum 50
+	 */
+	take?: number;
+	/**
+	 * Client ID 또는 이름 통합 검색
+	 */
+	search?: string;
+	/**
+	 * 활성 상태 필터
+	 */
+	isActive?: boolean;
 };

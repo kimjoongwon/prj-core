@@ -11,25 +11,25 @@
  */
 
 export type GetIdpAccountsParams = {
-/**
- * @minimum 1
- */
-skip?: number;
-/**
- * @minimum 1
- * @maximum 50
- */
-take?: number;
-/**
- * 이름 또는 이메일 검색
- */
-search?: string;
-/**
- * 활성 상태 필터
- */
-isActive?: boolean;
-/**
- * 잠금 상태 필터
- */
-isLocked?: boolean;
+	/**
+	 * @minimum 1
+	 */
+	skip?: number;
+	/**
+	 * @minimum 1
+	 * @maximum 50
+	 */
+	take?: number;
+	/**
+	 * 이름 또는 이메일 검색
+	 */
+	search?: string;
+	/**
+	 * 활성 상태 필터
+	 */
+	isActive?: boolean;
+	/**
+	 * 잠금 상태 필터
+	 */
+	isLocked?: boolean;
 };

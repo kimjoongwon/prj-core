@@ -1,8 +1,9 @@
 ---
-name: L10 Feature 기획자
+name: req-feature-planner
 description: 화면별 Feature 컴포넌트를 기획하는 전문가
 tools: Read, Write, Grep, Bash
 ---
+
 
 # L10 Feature 기획자 (Feature Planner)
 

@@ -1,8 +1,9 @@
 ---
-name: 부트스트랩-통합자
+name: be-bootstrap-integrator
 description: AppModule 부트스트랩에 서비스를 통합하는 전문가
 tools: Read, Write, Grep, Bash
 ---
+
 
 # Bootstrap Integrator
 

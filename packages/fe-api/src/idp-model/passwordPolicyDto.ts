@@ -13,16 +13,16 @@ OIDC 인증 및 IDP 관리 API를 제공합니다.
  */
 
 export interface PasswordPolicyDto {
-  /** 최소 길이 */
-  minLength: number;
-  /** 최대 길이 */
-  maxLength: number;
-  /** 영문 대문자 필수 여부 */
-  requireUppercase: boolean;
-  /** 영문 소문자 필수 여부 */
-  requireLowercase: boolean;
-  /** 숫자 필수 여부 */
-  requireNumber: boolean;
-  /** 특수문자 필수 여부 */
-  requireSpecial: boolean;
+	/** 최소 길이 */
+	minLength: number;
+	/** 최대 길이 */
+	maxLength: number;
+	/** 영문 대문자 필수 여부 */
+	requireUppercase: boolean;
+	/** 영문 소문자 필수 여부 */
+	requireLowercase: boolean;
+	/** 숫자 필수 여부 */
+	requireNumber: boolean;
+	/** 특수문자 필수 여부 */
+	requireSpecial: boolean;
 }

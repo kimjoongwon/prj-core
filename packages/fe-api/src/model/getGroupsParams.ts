@@ -9,20 +9,20 @@
 2. Cookie - 브라우저에서 로그인 후 쿠키 자동 전송
  * OpenAPI spec version: 1.0.0
  */
-import type { GroupTypes } from './groupTypes';
+import type { GroupTypes } from "./groupTypes";
 
 export type GetGroupsParams = {
-/**
- * @minimum 1
- */
-skip?: number;
-/**
- * @minimum 1
- * @maximum 50
- */
-take?: number;
-name?: string;
-label?: string;
-type?: GroupTypes;
-spaceId?: string;
+	/**
+	 * @minimum 1
+	 */
+	skip?: number;
+	/**
+	 * @minimum 1
+	 * @maximum 50
+	 */
+	take?: number;
+	name?: string;
+	label?: string;
+	type?: GroupTypes;
+	spaceId?: string;
 };

@@ -1,3 +1,9 @@
+import {
+	prefetchGetInquiryByIdQuery,
+	prefetchGetInquiryMessagesQuery,
+	prefetchGetInquiryParticipantsQuery,
+} from "@cocrepo/api";
+import { withServerCookies } from "@cocrepo/api/server";
 import type { QueryClient } from "@tanstack/react-query";
 import type { ReadonlyRequestCookies } from "next/dist/server/web/spec-extension/adapters/request-cookies";
 
@@ -24,30 +30,15 @@ export async function prefetchInquiryDetailData(
 	cookieStore: ReadonlyRequestCookies,
 	inquiryId: string,
 ) {
-	// 쿠키 헤더 생성
-	const cookieHeader = cookieStore
-		.getAll()
-		.map((c) => `${c.name}=${c.value}`)
-		.join("; ");
-
-	// TODO: Orval 훅 생성 후 아래 주석 해제
-	// import {
-	// 	prefetchGetInquiryByIdQuery,
-	// 	prefetchGetInquiryMessagesQuery,
-	// 	prefetchGetParticipantsQuery,
-	// } from "@cocrepo/api";
-	//
-	// await Promise.all([
-	// 	prefetchGetInquiryByIdQuery(queryClient, inquiryId, {
-	// 		request: { headers: { Cookie: cookieHeader } },
-	// 	}),
-	// 	prefetchGetInquiryMessagesQuery(queryClient, inquiryId, {
-	// 		request: { headers: { Cookie: cookieHeader } },
-	// 	}),
-	// 	prefetchGetParticipantsQuery(queryClient, inquiryId, {
-	// 		request: { headers: { Cookie: cookieHeader } },
-	// 	}),
-	// ]);
-
-	console.log("Prefetch inquiry detail:", inquiryId, "cookies:", !!cookieHeader);
+	await Promise.all([
+		prefetchGetInquiryByIdQuery(queryClient, inquiryId, {
+			request: withServerCookies(cookieStore),
+		}),
+		prefetchGetInquiryMessagesQuery(queryClient, inquiryId, {
+			request: withServerCookies(cookieStore),
+		}),
+		prefetchGetInquiryParticipantsQuery(queryClient, inquiryId, {
+			request: withServerCookies(cookieStore),
+		}),
+	]);
 }

@@ -8,15 +8,12 @@ import {
 	SpaceScopeInterceptor,
 } from "@cocrepo/be-common";
 import { SpacesRepository } from "@cocrepo/repository";
-import {
-	I18nModule,
-	SpaceContext,
-	SpacesService,
-} from "@cocrepo/service";
+import { I18nModule, SpaceContext, SpacesService } from "@cocrepo/service";
 import {
 	Logger,
 	type MiddlewareConsumer,
 	Module,
+	NestModule,
 	type OnModuleInit,
 } from "@nestjs/common";
 import { APP_GUARD, RouterModule } from "@nestjs/core";

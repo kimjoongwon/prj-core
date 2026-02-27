@@ -1,11 +1,15 @@
+import { SpaceContext } from "@cocrepo/context";
 import { UsersRepository } from "@cocrepo/repository";
 import { Test, type TestingModule } from "@nestjs/testing";
 import { type DeepMockProxy, mockDeep, mockReset } from "jest-mock-extended";
+import { AuthCacheService } from "../src/auth-cache.service";
 import { UsersService } from "../src/users.service";
 
 describe("UsersService", () => {
 	let service: UsersService;
 	let mockRepository: DeepMockProxy<UsersRepository>;
+	let mockSpaceContext: SpaceContext;
+	let mockAuthCacheService: jest.Mocked<AuthCacheService>;
 
 	const mockUser = {
 		id: "user-test-id",
@@ -34,6 +38,18 @@ describe("UsersService", () => {
 
 	beforeEach(async () => {
 		mockRepository = mockDeep<UsersRepository>();
+		mockSpaceContext = {
+			spaceIds: ["space-test-id"],
+			requireSpaceId: jest.fn(),
+			hasSpace: jest.fn(),
+			isSystemSpace: jest.fn(),
+		} as unknown as SpaceContext;
+		mockAuthCacheService = {
+			get: jest.fn(),
+			set: jest.fn(),
+			invalidate: jest.fn(),
+			invalidateByPattern: jest.fn(),
+		} as unknown as jest.Mocked<AuthCacheService>;
 
 		const module: TestingModule = await Test.createTestingModule({
 			providers: [
@@ -41,6 +57,14 @@ describe("UsersService", () => {
 				{
 					provide: UsersRepository,
 					useValue: mockRepository,
+				},
+				{
+					provide: SpaceContext,
+					useValue: mockSpaceContext,
+				},
+				{
+					provide: AuthCacheService,
+					useValue: mockAuthCacheService,
 				},
 			],
 		}).compile();

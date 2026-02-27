@@ -1,8 +1,9 @@
 ---
-name: API 연동 기획자
+name: req-api-integration-planner
 description: Orval 기반 API 연동 sidecar spec을 기획하는 전문가
 tools: Read, Write, Grep, Bash
 ---
+
 
 # API 연동 기획자 (API Integration Planner)
 

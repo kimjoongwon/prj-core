@@ -11,22 +11,22 @@
  */
 
 export interface AIDraftDto {
-  id: string;
-  createdAt: string;
-  updatedAt: string;
-  /** @nullable */
-  removedAt: string | null;
-  /** 소속 문의 ID */
-  inquiryId: string;
-  /** 생성된 초안 내용 */
-  draftContent: string;
-  /** 신뢰도 점수 (0.0 ~ 1.0) */
-  confidence: number;
-  /**
-   * 사용된 AI 모델
-   * @nullable
-   */
-  model: string | null;
-  /** 참조된 지식베이스 문서 ID 목록 */
-  referencedDocuments?: string[];
+	id: string;
+	createdAt: string;
+	updatedAt: string;
+	/** @nullable */
+	removedAt: string | null;
+	/** 소속 문의 ID */
+	inquiryId: string;
+	/** 생성된 초안 내용 */
+	draftContent: string;
+	/** 신뢰도 점수 (0.0 ~ 1.0) */
+	confidence: number;
+	/**
+	 * 사용된 AI 모델
+	 * @nullable
+	 */
+	model: string | null;
+	/** 참조된 지식베이스 문서 ID 목록 */
+	referencedDocuments?: string[];
 }

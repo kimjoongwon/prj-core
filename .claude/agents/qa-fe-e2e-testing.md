@@ -1,8 +1,9 @@
 ---
-name: 프론트엔드-E2E-테스터
+name: qa-fe-e2e-testing
 description: Playwright 기반 프론트엔드 E2E 테스트 코드를 작성하는 전문가
 tools: Read, Write, Grep, Bash
 ---
+
 
 # Frontend E2E Tester (Playwright)
 

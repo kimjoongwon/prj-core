@@ -1,5 +1,7 @@
 "use client";
 
+import type { CreateTemplateVariableItemDto } from "@cocrepo/api";
+import { useCreateTemplate } from "@cocrepo/api";
 import { PageSurface, SectionSurface, VStack } from "@cocrepo/ui";
 import {
 	Button,
@@ -95,13 +97,26 @@ const TEMPLATE_STATUS = [
 /**
  * 고유 ID 생성
  */
-const generateId = () => `field_${Date.now()}_${Math.random().toString(36).slice(2, 9)}`;
+const generateId = () =>
+	`field_${Date.now()}_${Math.random().toString(36).slice(2, 9)}`;
 
 /**
  * AI 폼 템플릿 등록 페이지 - 클라이언트 컴포넌트
  */
 function AIFormTemplateNewPageClient() {
 	const router = useRouter();
+	const { mutate: createTemplate, isPending } = useCreateTemplate({
+		mutation: {
+			onSuccess: (response) => {
+				const createdId = response?.data?.id;
+				if (createdId) {
+					router.push(`/ai-form-templates/${createdId}` as Route);
+					return;
+				}
+				router.push("/ai-form-templates" as Route);
+			},
+		},
+	});
 
 	// 폼 상태
 	const state = useLocalObservable<TemplateFormState>(() => ({
@@ -183,42 +198,28 @@ function AIFormTemplateNewPageClient() {
 			return;
 		}
 
-		// TODO: API 구현 후 연결
-		// const data: CreateAIFormTemplateDto = {
-		// 	name: state.name,
-		// 	description: state.description || undefined,
-		// 	targetDomain: state.targetDomain,
-		// 	targetEntity: state.targetEntity,
-		// 	aiProvider: state.aiProvider,
-		// 	model: state.model || undefined,
-		// 	systemPrompt: state.systemPrompt || undefined,
-		// 	status: state.status,
-		// 	priority: state.priority,
-		// 	allowUserPrompt: state.allowUserPrompt,
-		// 	maxTokens: state.maxTokens ?? undefined,
-		// 	temperature: state.temperature ?? undefined,
-		// };
+		const normalizedCode =
+			`${state.aiProvider}_${state.targetDomain}_${state.name}`
+				.replace(/[^A-Za-z0-9_]/g, "_")
+				.toUpperCase()
+				.slice(0, 60);
 
-		// createTemplate({ data });
-
-		// 임시: 콘솔에 데이터 출력 후 목록으로 이동
-		console.log("템플릿 데이터:", {
-			name: state.name,
-			description: state.description,
-			targetDomain: state.targetDomain,
-			targetEntity: state.targetEntity,
-			aiProvider: state.aiProvider,
-			model: state.model,
-			systemPrompt: state.systemPrompt,
-			status: state.status,
-			priority: state.priority,
-			allowUserPrompt: state.allowUserPrompt,
-			maxTokens: state.maxTokens,
-			temperature: state.temperature,
-			fields: state.fields,
+		createTemplate({
+			data: {
+				type: "EMAIL",
+				code: normalizedCode,
+				name: state.name,
+				description: state.description || undefined,
+				subject: state.targetEntity || undefined,
+				content: state.systemPrompt || "",
+				variables: state.fields.map((field) => ({
+					name: field.fieldName || field.fieldLabel,
+					description: field.prompt || undefined,
+					defaultValue: field.defaultValue || undefined,
+					isRequired: field.isRequired,
+				})) as unknown as CreateTemplateVariableItemDto,
+			},
 		});
-
-		router.push("/ai-form-templates" as Route);
 	};
 
 	/**
@@ -271,9 +272,9 @@ function AIFormTemplateNewPageClient() {
 				{/* 안내 메시지 */}
 				<div className="rounded-xl bg-primary-50 dark:bg-primary-900/20 p-4">
 					<p className="text-sm text-primary-700 dark:text-primary-400">
-						<strong>참고:</strong> AI 폼 템플릿은 특정 도메인의 폼 필드를 AI가 자동으로
-						채우기 위한 설정입니다. 시스템 프롬프트와 필드별 프롬프트를 설정하여 AI의
-						응답 품질을 최적화할 수 있습니다.
+						<strong>참고:</strong> AI 폼 템플릿은 특정 도메인의 폼 필드를 AI가
+						자동으로 채우기 위한 설정입니다. 시스템 프롬프트와 필드별 프롬프트를
+						설정하여 AI의 응답 품질을 최적화할 수 있습니다.
 					</p>
 				</div>
 
@@ -313,7 +314,9 @@ function AIFormTemplateNewPageClient() {
 									<Select
 										label="대상 도메인"
 										placeholder="도메인 선택"
-										selectedKeys={state.targetDomain ? [state.targetDomain] : []}
+										selectedKeys={
+											state.targetDomain ? [state.targetDomain] : []
+										}
 										onSelectionChange={(keys) => {
 											state.targetDomain = Array.from(keys)[0] as string;
 										}}
@@ -347,13 +350,17 @@ function AIFormTemplateNewPageClient() {
 										placeholder="제공자 선택"
 										selectedKeys={[state.aiProvider]}
 										onSelectionChange={(keys) => {
-											state.aiProvider = Array.from(keys)[0] as "OPENAI" | "ANTHROPIC";
+											state.aiProvider = Array.from(keys)[0] as
+												| "OPENAI"
+												| "ANTHROPIC";
 											state.model = ""; // 모델 초기화
 										}}
 										isRequired
 									>
 										{AI_PROVIDERS.map((provider) => (
-											<SelectItem key={provider.key}>{provider.label}</SelectItem>
+											<SelectItem key={provider.key}>
+												{provider.label}
+											</SelectItem>
 										))}
 									</Select>
 
@@ -484,7 +491,9 @@ function AIFormTemplateNewPageClient() {
 								{state.fields.length === 0 ? (
 									<div className="text-center py-8 text-default-400">
 										<p>등록된 필드가 없습니다.</p>
-										<p className="text-sm mt-1">필드 추가 버튼을 클릭하여 필드를 추가하세요.</p>
+										<p className="text-sm mt-1">
+											필드 추가 버튼을 클릭하여 필드를 추가하세요.
+										</p>
 									</div>
 								) : (
 									<VStack gap={3}>
@@ -608,6 +617,7 @@ function AIFormTemplateNewPageClient() {
 						color="primary"
 						startContent={<Save className="h-4 w-4" />}
 						onPress={onClickSubmitButton}
+						isLoading={isPending}
 					>
 						템플릿 등록
 					</Button>

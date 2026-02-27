@@ -23,28 +23,33 @@
  
  프로젝트 루트에서 Claude Code를 실행하면 자동으로 이 설정이 적용됩니다.
  
- ### 에이전트 동기화 (OpenCode ↔ Claude Code)
+### 에이전트/가이드 동기화 (Codex → OpenCode/Claude Code)
+
+에이전트의 단일 소스는 `.codex/agents/*.toml`이며, 가이드의 단일 소스는 `.claude/CLAUDE.md`입니다.
+동기화 시 에이전트와 가이드가 함께 반영됩니다:
+
+```bash
+# Codex 변경 감시 + 자동 동기화
+pnpm agent:watch
+
+# 수동 동기화 (파일 반영)
+pnpm agent:sync
+
+# 동기화 검증 (불일치 시 실패)
+pnpm agent:check
+```
  
- 에이전트 파일을 수정할 때마다 자동으로 Claude Code 형식으로 변환됩니다:
+**동기화 흐름:**
+1. `.codex/agents/*.toml` 또는 `.codex/config.toml` 수정
+2. 감시기/훅이 변경 감지
+3. `.claude/agents/*.md`, `.opencode/agents/*.md` 자동 생성
+4. `.claude/CLAUDE.md` 기준으로 `AGENTS.md` 동기화
+5. `pnpm agent:check`로 정합성 검증
  
- ```bash
- # 에이전트 파일 감시 시작
- pnpm agent:watch
- 
- # 또는 수동 변환
- CLAUDE_PROJECT_DIR=$(pwd) bash .claude/hooks/agent-sync.sh
- ```
- 
- **변환 흐름:**
- 1. OpenCode로 `.claude/agents/*.md` 파일 수정
- 2. 감시기가 파일 변경 감지
- 3. 자동으로 Claude Code 호환 형식으로 변환
- 4. OpenCode와 Claude Code 모두에서 사용 가능
- 
- **참고:**
- - `_TEMPLATE.md` 파일은 변환에서 제외
- - 1초 디바운스로 연속 변경 방지
- - Ctrl+C로 감시 중지
+**참고:**
+- `agent:sync`는 Codex 목록에 없는 타겟 에이전트를 제거합니다
+- 동기화된 파일은 수동 편집하지 말고 Codex 원본을 수정하세요
+- Ctrl+C로 감시 중지
 
 ## 📝 개발 가이드
 

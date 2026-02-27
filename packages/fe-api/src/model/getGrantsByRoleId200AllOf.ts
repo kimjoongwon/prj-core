@@ -9,14 +9,15 @@
 2. Cookie - 브라우저에서 로그인 후 쿠키 자동 전송
  * OpenAPI spec version: 1.0.0
  */
-import type { GrantResponseDto } from './grantResponseDto';
-import type { GetGrantsByRoleId200AllOfMeta } from './getGrantsByRoleId200AllOfMeta';
+
+import type { GetGrantsByRoleId200AllOfMeta } from "./getGrantsByRoleId200AllOfMeta";
+import type { GrantResponseDto } from "./grantResponseDto";
 
 export type GetGrantsByRoleId200AllOf = {
-  /** */
-  httpStatus?: number;
-  /** */
-  message?: string;
-  data?: GrantResponseDto[];
-  meta?: GetGrantsByRoleId200AllOfMeta;
+	/** */
+	httpStatus?: number;
+	/** */
+	message?: string;
+	data?: GrantResponseDto[];
+	meta?: GetGrantsByRoleId200AllOfMeta;
 };

@@ -1,8 +1,9 @@
 ---
-name: VO-빌더
+name: be-vo-builder
 description: Value Object 클래스를 생성하는 전문가
 tools: Read, Write, Grep, Bash
 ---
+
 
 # VO Builder
 

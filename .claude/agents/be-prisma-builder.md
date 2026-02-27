@@ -1,8 +1,9 @@
 ---
-name: 스키마-빌더
+name: be-prisma-builder
 description: Prisma 스키마를 생성하고 유형을 분류하는 전문가
 tools: Read, Write, Grep, Bash
 ---
+
 
 # Prisma 스키마 빌더
 

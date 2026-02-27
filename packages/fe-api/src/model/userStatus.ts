@@ -6,12 +6,11 @@
  * OpenAPI spec version: 1.0.0
  */
 
-export type UserStatus = typeof UserStatus[keyof typeof UserStatus];
-
+export type UserStatus = (typeof UserStatus)[keyof typeof UserStatus];
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export const UserStatus = {
-  active: 'active',
-  inactive: 'inactive',
-  removed: 'removed',
+	active: "active",
+	inactive: "inactive",
+	removed: "removed",
 } as const;

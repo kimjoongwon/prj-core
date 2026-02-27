@@ -9,23 +9,23 @@
 2. Cookie - 브라우저에서 로그인 후 쿠키 자동 전송
  * OpenAPI spec version: 1.0.0
  */
-import type { CreateTemplateVariableItemDto } from './createTemplateVariableItemDto';
+import type { CreateTemplateVariableItemDto } from "./createTemplateVariableItemDto";
 
 export interface UpdateTemplateDto {
-  /** 템플릿 이름 */
-  name?: string;
-  /**
-   * 제목
-   * @nullable
-   */
-  subject?: string | null;
-  /** 본문 */
-  content?: string;
-  /**
-   * 설명
-   * @nullable
-   */
-  description?: string | null;
-  /** 템플릿 변수 목록 */
-  variables?: CreateTemplateVariableItemDto;
+	/** 템플릿 이름 */
+	name?: string;
+	/**
+	 * 제목
+	 * @nullable
+	 */
+	subject?: string | null;
+	/** 본문 */
+	content?: string;
+	/**
+	 * 설명
+	 * @nullable
+	 */
+	description?: string | null;
+	/** 템플릿 변수 목록 */
+	variables?: CreateTemplateVariableItemDto;
 }

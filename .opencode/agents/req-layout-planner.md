@@ -7,6 +7,7 @@ tools:
   bash: true
 ---
 
+
 # 레이아웃 기획자 (Layout Planner)
 
 `fe-layout-builder`와 1:1로 대응되는 기획 에이전트입니다.

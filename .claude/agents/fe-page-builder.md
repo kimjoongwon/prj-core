@@ -1,8 +1,9 @@
 ---
-name: 페이지-빌더
+name: fe-page-builder
 description: Pure UI 페이지 컴포넌트를 생성하는 전문가
 tools: Read, Write, Grep, Bash
 ---
+
 
 # 페이지 빌더
 

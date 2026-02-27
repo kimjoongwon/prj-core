@@ -9,14 +9,14 @@
 2. Cookie - 브라우저에서 로그인 후 쿠키 자동 전송
  * OpenAPI spec version: 1.0.0
  */
-import type { ExerciseDto } from './exerciseDto';
-import type { GetExercises200AllOfMeta } from './getExercises200AllOfMeta';
+import type { ExerciseDto } from "./exerciseDto";
+import type { GetExercises200AllOfMeta } from "./getExercises200AllOfMeta";
 
 export type GetExercises200AllOf = {
-  /** */
-  httpStatus?: number;
-  /** */
-  message?: string;
-  data?: ExerciseDto[];
-  meta?: GetExercises200AllOfMeta;
+	/** */
+	httpStatus?: number;
+	/** */
+	message?: string;
+	data?: ExerciseDto[];
+	meta?: GetExercises200AllOfMeta;
 };

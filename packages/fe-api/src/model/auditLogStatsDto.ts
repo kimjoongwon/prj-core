@@ -11,12 +11,12 @@
  */
 
 export interface AuditLogStatsDto {
-  /** 오늘 성공 건수 */
-  todaySuccessCount: number;
-  /** 오늘 실패 건수 */
-  todayFailureCount: number;
-  /** 오늘 잠금 건수 */
-  todayLockedCount: number;
-  /** 전체 건수 */
-  totalCount: number;
+	/** 오늘 성공 건수 */
+	todaySuccessCount: number;
+	/** 오늘 실패 건수 */
+	todayFailureCount: number;
+	/** 오늘 잠금 건수 */
+	todayLockedCount: number;
+	/** 전체 건수 */
+	totalCount: number;
 }

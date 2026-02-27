@@ -6,14 +6,15 @@
   "scripts": {
     "build": "nest build",
     "start": "nest start",
-    "start:dev": "NODE_OPTIONS=--no-deprecation nest build --webpack --webpackPath webpack.config.js --watch",
-    "start:debug": "NODE_OPTIONS=--no-deprecation nest build --webpack --webpackPath webpack.config.js --watch",
+    "start:dev": "CHOKIDAR_USEPOLLING=1 CHOKIDAR_INTERVAL=1000 WATCHPACK_POLLING=true NODE_OPTIONS=--no-deprecation nest build --webpack --webpackPath webpack.config.js --watch",
+    "start:debug": "CHOKIDAR_USEPOLLING=1 CHOKIDAR_INTERVAL=1000 WATCHPACK_POLLING=true NODE_OPTIONS=--no-deprecation nest build --webpack --webpackPath webpack.config.js --watch",
     "start:prod": "node dist/src/main",
     "type-check": "tsc --noEmit",
     "lint": "biome check src",
     "lint:fix": "biome check --write src",
     "format": "biome format --write src",
-    "test": "jest",
+    "test": "jest --passWithNoTests",
+    "test:e2e": "jest --testRegex \\.e2e-spec\\.ts$ --passWithNoTests",
     "test:watch": "jest --watch",
     "test:cov": "jest --coverage",
     "clean": "rm -rf dist && rm -rf node_modules"

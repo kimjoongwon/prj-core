@@ -1,8 +1,9 @@
 ---
-name: 컨트롤러-빌더
+name: be-controller-builder
 description: NestJS REST Controller를 생성하는 전문가
 tools: Read, Write, Grep, Bash
 ---
+
 
 # 컨트롤러-빌더
 
@@ -58,4 +59,3 @@ NestJS REST Controller를 생성하는 전문가
 - [ ] RouterModule에 경로 등록
 
 ---
-

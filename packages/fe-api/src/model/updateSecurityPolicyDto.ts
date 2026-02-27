@@ -11,30 +11,30 @@
  */
 
 export interface UpdateSecurityPolicyDto {
-  /** 최소 비밀번호 길이 */
-  passwordMinLength?: number;
-  /** 대문자 필수 */
-  passwordRequireUppercase?: boolean;
-  /** 소문자 필수 */
-  passwordRequireLowercase?: boolean;
-  /** 숫자 필수 */
-  passwordRequireNumber?: boolean;
-  /** 특수문자 필수 */
-  passwordRequireSpecial?: boolean;
-  /** 비밀번호 만료 일수 (0=무제한) */
-  passwordExpirationDays?: number;
-  /** 비밀번호 재사용 제한 횟수 */
-  passwordReuseLimit?: number;
-  /** 일시 잠금 임계값 */
-  temporaryLockThreshold?: number;
-  /** 일시 잠금 시간 (분) */
-  temporaryLockDurationMin?: number;
-  /** 영구 잠금 임계값 */
-  permanentLockThreshold?: number;
-  /** Access Token TTL (초) */
-  accessTokenTtlSec?: number;
-  /** Refresh Token TTL (초) */
-  refreshTokenTtlSec?: number;
-  /** 세션 TTL (초) */
-  sessionTtlSec?: number;
+	/** 최소 비밀번호 길이 */
+	passwordMinLength?: number;
+	/** 대문자 필수 */
+	passwordRequireUppercase?: boolean;
+	/** 소문자 필수 */
+	passwordRequireLowercase?: boolean;
+	/** 숫자 필수 */
+	passwordRequireNumber?: boolean;
+	/** 특수문자 필수 */
+	passwordRequireSpecial?: boolean;
+	/** 비밀번호 만료 일수 (0=무제한) */
+	passwordExpirationDays?: number;
+	/** 비밀번호 재사용 제한 횟수 */
+	passwordReuseLimit?: number;
+	/** 일시 잠금 임계값 */
+	temporaryLockThreshold?: number;
+	/** 일시 잠금 시간 (분) */
+	temporaryLockDurationMin?: number;
+	/** 영구 잠금 임계값 */
+	permanentLockThreshold?: number;
+	/** Access Token TTL (초) */
+	accessTokenTtlSec?: number;
+	/** Refresh Token TTL (초) */
+	refreshTokenTtlSec?: number;
+	/** 세션 TTL (초) */
+	sessionTtlSec?: number;
 }

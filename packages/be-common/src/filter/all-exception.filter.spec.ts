@@ -9,6 +9,16 @@ import { BaseExceptionFilter, HttpAdapterHost } from "@nestjs/core";
 import { Test, TestingModule } from "@nestjs/testing";
 import { AllExceptionsFilter } from "./all-exception.filter";
 
+jest.mock("@cocrepo/service", () => {
+	class TranslationService {
+		translate = jest.fn(async (value: string) => value);
+	}
+	return {
+		__esModule: true,
+		TranslationService,
+	};
+});
+
 describe("AllExceptionsFilter", () => {
 	let filter: AllExceptionsFilter;
 	let mockHttpAdapterHost: HttpAdapterHost;
