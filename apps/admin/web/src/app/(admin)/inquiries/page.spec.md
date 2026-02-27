@@ -387,7 +387,7 @@ PageSurface (title, description, actions)
 - [x] _prefetch.ts (데이터 프리페치)
 - [x] hooks/useHandlers.ts
 - [ ] hooks/useInquiryListWebSocket.ts (WebSocket 연결)
-- [ ] E2E 테스트 (Playwright)
+- [x] E2E 테스트 (Playwright) - `page.e2e.ts`
 
 ## 상위 기획서
 
@@ -406,3 +406,4 @@ PageSurface (title, description, actions)
 | 2026-02-26 | 정렬 옵션 추가 (SLA 기한, 우선순위) | orch-screen-planner |
 | 2026-02-26 | L5-L12 레이어 기획 추가 | orch-screen-planner |
 | 2026-02-26 | 페이지 파일 생성 (page.tsx, _client.tsx, _prefetch.ts, hooks/useHandlers.ts) | fe-page-builder |
+| 2026-02-27 | 목록 페이지 E2E 테스트 추가 (`page.e2e.ts`) | codex |

@@ -12,18 +12,24 @@ export const useAuthLoginPage = () => {
 	const searchParams = useSearchParams();
 	const errorFromCallback = searchParams.get("error");
 
-	// IDP 콘솔 기본 페이지로 돌아가도록 returnTo 설정
-	const returnTo = `${window.location.origin}/oidc-clients`;
-	const loginUrl = `/api/v1/auth/login?returnTo=${encodeURIComponent(returnTo)}`;
+	const createLoginUrl = () => {
+		if (typeof window === "undefined") {
+			return "/api/v1/auth/login";
+		}
+
+		// IDP 콘솔 기본 페이지로 돌아가도록 returnTo 설정
+		const returnTo = `${window.location.origin}/oidc-clients`;
+		return `/api/v1/auth/login?returnTo=${encodeURIComponent(returnTo)}`;
+	};
 
 	useEffect(() => {
 		if (!errorFromCallback) {
-			window.location.href = loginUrl;
+			window.location.href = createLoginUrl();
 		}
-	}, [errorFromCallback, loginUrl]);
+	}, [errorFromCallback]);
 
 	const onClickRetry = () => {
-		window.location.href = loginUrl;
+		window.location.href = createLoginUrl();
 	};
 
 	return {

@@ -351,13 +351,13 @@ PageSurface (title, description, actions)
 
 ## 구현 체크리스트
 
-- [ ] page.tsx (서버 컴포넌트)
-- [ ] _client.tsx (클라이언트 컴포넌트)
-- [ ] hooks/useHandlers.ts
+- [x] page.tsx (서버 컴포넌트)
+- [x] _client.tsx (클라이언트 컴포넌트)
+- [x] hooks/useHandlers.ts
 - [ ] hooks/useInquiryForm.ts (폼 상태 관리)
 - [ ] hooks/useAIClassification.ts (AI 분류 추천)
 - [ ] hooks/useAutoSave.ts (임시 저장)
-- [ ] E2E 테스트 (Playwright)
+- [x] E2E 테스트 (Playwright) - `page.e2e.ts`
 
 ## 상위 기획서
 
@@ -371,3 +371,4 @@ PageSurface (title, description, actions)
 | 2026-02-26 | AI 자동 분류 제안 기능 추가 | orch-screen-planner |
 | 2026-02-26 | L5-L12 레이어 기획 추가 | orch-screen-planner |
 | 2026-02-26 | 임시 저장 기능 추가 | orch-screen-planner |
+| 2026-02-27 | 접수 페이지 E2E 테스트 추가 (`page.e2e.ts`) 및 구현 체크리스트 동기화 | codex |

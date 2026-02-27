@@ -15,6 +15,7 @@ import { AuthStore } from "../stores/authStore";
 import { BottomTabStore } from "../stores/bottomTabStore";
 import { CookieStore } from "../stores/cookieStore";
 import { FABStore } from "../stores/fabStore";
+import { InquiryStore } from "../stores/inquiryStore";
 import { NavigationStore } from "../stores/navigationStore";
 import { Navigator } from "../stores/navigator";
 import { PersistStore } from "../stores/persistStore";
@@ -111,6 +112,7 @@ export function createAppStoreProvider(
 		);
 
 		rootStore.fabStore = new FABStore({ actions: config.fabActions });
+		rootStore.inquiryStore = new InquiryStore(rootStore);
 
 		// API 인터셉터에 PersistStore 참조 주입 (x-space-id 헤더용)
 		setApiPersistStore(rootStore.persistStore);

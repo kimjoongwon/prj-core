@@ -413,14 +413,14 @@ PageSurface (title, description, actions)
 
 ## 구현 체크리스트
 
-- [ ] page.tsx (서버 컴포넌트)
-- [ ] _client.tsx (클라이언트 컴포넌트)
-- [ ] _prefetch.ts (데이터 프리페치)
-- [ ] hooks/useHandlers.ts
+- [x] page.tsx (서버 컴포넌트)
+- [x] _client.tsx (클라이언트 컴포넌트)
+- [x] _prefetch.ts (데이터 프리페치)
+- [x] hooks/useHandlers.ts
 - [ ] hooks/useInquiryWebSocket.ts (WebSocket 연결 관리)
 - [ ] hooks/useTypingIndicator.ts (타이핑 상태 관리)
 - [ ] hooks/useMessageStatus.ts (전달/읽음 상태)
-- [ ] E2E 테스트 (Playwright)
+- [x] E2E 테스트 (Playwright) - `page.e2e.ts`
 
 ## 상위 기획서
 
@@ -436,3 +436,4 @@ PageSurface (title, description, actions)
 | 2026-02-26 | WebSocket 이벤트 핸들링 추가 | orch-requirement |
 | 2026-02-26 | 감정 분석 표시 추가 | orch-requirement |
 | 2026-02-26 | L5-L12 레이어 기획 추가 | orch-screen-planner |
+| 2026-02-27 | 상세 페이지 E2E 테스트 추가 (`page.e2e.ts`) 및 구현 체크리스트 동기화 | codex |

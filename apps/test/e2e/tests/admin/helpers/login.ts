@@ -12,15 +12,33 @@ const SYSTEM_GROUND_NAME = "플랫폼 운영본부";
 /**
  * Admin 앱에 OIDC 로그인 플로우를 수행합니다.
  *
- * 1. /admin/auth/login → /api/v1/auth/login → IDP /interaction/[uid]
+ * 1. /api/v1/auth/login → IDP /interaction/[uid]
  * 2. 시드 데이터의 FULL_ACCESS 계정으로 로그인
  * 3. OIDC 동의 화면에서 "허용" 클릭
  * 4. Admin 대시보드로 리다이렉트
  * 5. localStorage에 Space 정보 설정 (X-Space-ID 헤더용)
  */
 export async function loginToAdmin(page: Page) {
-	// OIDC 로그인 플로우 시작 (admin의 auth/login은 자동 리다이렉트)
-	await page.goto("./auth/login");
+	// 서버 라우트로 직접 진입해 클라이언트 hydration 의존 없이 OIDC 플로우 시작
+	// 개발 환경에서 서버 부팅 타이밍 이슈가 있어 짧게 재시도합니다.
+	let lastError: unknown;
+	for (let attempt = 1; attempt <= 5; attempt++) {
+		try {
+			await page.goto("/api/v1/auth/login");
+			lastError = null;
+			break;
+		} catch (error) {
+			lastError = error;
+			if (attempt === 5) {
+				throw error;
+			}
+			await page.waitForTimeout(1000);
+		}
+	}
+
+	if (lastError) {
+		throw lastError;
+	}
 
 	// OIDC 리다이렉트 후 IDP 로그인 폼이 나타날 때까지 대기
 	const loginButton = page.getByRole("button", { name: "로그인" });
@@ -38,23 +56,26 @@ export async function loginToAdmin(page: Page) {
 	// 로그인 클릭
 	await loginButton.click();
 
-	// OIDC 동의 화면이 나타나면 "허용" 클릭
-	// 이미 동의한 경우에는 바로 리다이렉트되므로 조건부 처리
-	try {
-		const allowButton = page.getByRole("button", { name: "허용" });
-		await allowButton.waitFor({ state: "visible", timeout: 10000 });
+	const isAdminUrl = (url: URL) =>
+		url.pathname.startsWith("/admin") &&
+		!url.pathname.includes("/auth/login");
+	const allowButton = page.getByRole("button", { name: "허용" });
+
+	// 로그인 후 "동의 화면 노출" 또는 "바로 admin 리다이렉트"를 모두 허용
+	let redirectedToAdmin = false;
+	await Promise.race([
+		page.waitForURL(isAdminUrl, { timeout: 30000 }).then(() => {
+			redirectedToAdmin = true;
+		}),
+		allowButton.waitFor({ state: "visible", timeout: 30000 }),
+	]);
+
+	// 동의 화면이 나온 경우 허용 후 admin 리다이렉트 대기
+	if (!redirectedToAdmin) {
 		await allowButton.click();
-	} catch {
-		// 이미 동의한 경우 스킵
+		await page.waitForURL(isAdminUrl, { timeout: 30000 });
 	}
 
-	// Admin 페이지로 리다이렉트 대기 (로그인 페이지가 아닌 곳으로)
-	await page.waitForURL(
-		(url) =>
-			url.pathname.startsWith("/admin") &&
-			!url.pathname.includes("/auth/login"),
-		{ timeout: 30000 },
-	);
 	await page.waitForLoadState("networkidle");
 
 	// localStorage에 System Space를 최종 확정 (앱 동기화 이후 덮어쓰기)

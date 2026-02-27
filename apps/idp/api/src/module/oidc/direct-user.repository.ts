@@ -116,17 +116,23 @@ export class DirectUserRepository {
 		clientId?: string;
 	}): Promise<void> {
 		const prisma = await this.directPrismaProvider.getClient();
-		await prisma.authAuditLog.create({
-			data: {
-				email: data.email,
-				userId: data.userId ?? null,
-				result: data.result,
-				failureReason: data.failureReason ?? null,
-				ipAddress: data.ipAddress,
-				userAgent: data.userAgent ?? null,
-				clientId: data.clientId ?? null,
-			},
-		});
+		try {
+			await prisma.authAuditLog.create({
+				data: {
+					email: data.email,
+					userId: data.userId ?? null,
+					result: data.result,
+					failureReason: data.failureReason ?? null,
+					ipAddress: data.ipAddress,
+					userAgent: data.userAgent ?? null,
+					clientId: data.clientId ?? null,
+				},
+			});
+		} catch (error) {
+			this.logger.warn(
+				`auth_audit_logs 저장 실패로 스킵: ${error instanceof Error ? error.message : String(error)}`,
+			);
+		}
 	}
 
 	/**

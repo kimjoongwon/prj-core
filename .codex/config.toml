@@ -197,6 +197,10 @@ config_file = "agents/req-reverse-engineer.toml"
 description = "기능(Feature)과 화면(Screen) 레이어를 기획하는 전문가"
 config_file = "agents/req-screen-planner.toml"
 
+[agents.req-spec-tracker]
+description = "도메인별 spec-checklist를 생성/갱신하여 기획-구현-검증 상태를 추적하는 전문가"
+config_file = "agents/req-spec-tracker.toml"
+
 [agents.req-store-planner]
 description = "도메인별 MobX Store를 기획하는 전문가"
 config_file = "agents/req-store-planner.toml"
