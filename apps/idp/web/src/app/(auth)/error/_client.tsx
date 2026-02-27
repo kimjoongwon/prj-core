@@ -1,6 +1,7 @@
 "use client";
 
 import { AuthCard, AuthCardHeader } from "@cocrepo/ui";
+import { observer } from "mobx-react-lite";
 
 interface ErrorClientProps {
 	error: string;
@@ -10,7 +11,10 @@ interface ErrorClientProps {
 /**
  * OIDC 에러 표시 클라이언트 컴포넌트
  */
-export function ErrorClient({ error, errorDescription }: ErrorClientProps) {
+export const ErrorClient = observer(function ErrorClient({
+	error,
+	errorDescription,
+}: ErrorClientProps) {
 	return (
 		<AuthCard variant="danger">
 			<AuthCardHeader
@@ -42,4 +46,4 @@ export function ErrorClient({ error, errorDescription }: ErrorClientProps) {
 			</div>
 		</AuthCard>
 	);
-}
+});

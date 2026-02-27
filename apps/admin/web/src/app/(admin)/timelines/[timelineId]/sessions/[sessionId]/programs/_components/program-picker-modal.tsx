@@ -9,6 +9,7 @@ import {
 	ModalFooter,
 	ModalHeader,
 } from "@heroui/react";
+import { observer } from "mobx-react-lite";
 
 export interface ProgramPickerOption {
 	id: string;
@@ -29,7 +30,7 @@ interface ProgramPickerModalProps {
 	selectedId?: string;
 }
 
-export function ProgramPickerModal({
+export const ProgramPickerModal = observer(function ProgramPickerModal({
 	isOpen,
 	onClose,
 	title,
@@ -88,6 +89,6 @@ export function ProgramPickerModal({
 			</ModalContent>
 		</Modal>
 	);
-}
+});
 
 ProgramPickerModal.displayName = "ProgramPickerModal";

@@ -1,5 +1,6 @@
 "use client";
 
+import { observer } from "mobx-react-lite";
 import { Button } from "../inputs/Button/Button";
 import { Input } from "../inputs/Input";
 import { VStack } from "../ui/surfaces/VStack/VStack";
@@ -43,11 +44,11 @@ export interface PasswordInputPageProps {
  * />
  * ```
  */
-export const PasswordInputPage = ({
+export const PasswordInputPage = observer(function PasswordInputPage({
 	state,
 	onSubmit,
 	isLoading = false,
-}: PasswordInputPageProps) => {
+}: PasswordInputPageProps) {
 	return (
 		<VStack fullWidth gap={8} className="p-4">
 			<VStack fullWidth gap={2}>
@@ -93,4 +94,4 @@ export const PasswordInputPage = ({
 			</Button>
 		</VStack>
 	);
-};
+});

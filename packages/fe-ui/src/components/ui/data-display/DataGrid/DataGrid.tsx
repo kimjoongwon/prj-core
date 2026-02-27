@@ -8,6 +8,7 @@ import {
 	getExpandedRowModel,
 	useReactTable,
 } from "@tanstack/react-table";
+import { observer } from "mobx-react-lite";
 import { useState } from "react";
 import type {
 	MultiSortDescriptor,
@@ -80,7 +81,7 @@ export type DataGridProps<T> = Omit<
  * - Shift+클릭: 복합 정렬에 추가/토글
  * - Ctrl+클릭: 해당 컬럼 정렬 제거
  */
-export const DataGrid = <T extends object>(props: DataGridProps<T>) => {
+const DataGridComponent = <T extends object>(props: DataGridProps<T>) => {
 	const {
 		data,
 		columns,
@@ -140,3 +141,5 @@ export const DataGrid = <T extends object>(props: DataGridProps<T>) => {
 		</div>
 	);
 };
+
+export const DataGrid: typeof DataGridComponent = observer(DataGridComponent);

@@ -1,5 +1,6 @@
 "use client";
 
+import { observer } from "mobx-react-lite";
 import { createContext, type ReactNode, useContext } from "react";
 import { PlanSelectionStore } from "./planSelectionStore";
 
@@ -13,7 +14,7 @@ interface PlanSelectionProviderProps {
 /**
  * PlanSelectionStore Provider
  */
-export function PlanSelectionProvider({
+export const PlanSelectionProvider = observer(function PlanSelectionProvider({
 	children,
 	store,
 }: PlanSelectionProviderProps) {
@@ -22,7 +23,7 @@ export function PlanSelectionProvider({
 			{children}
 		</PlanSelectionContext.Provider>
 	);
-}
+});
 
 /**
  * PlanSelectionStore 훅

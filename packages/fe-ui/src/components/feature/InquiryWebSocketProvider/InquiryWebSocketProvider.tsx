@@ -1,7 +1,12 @@
 "use client";
 
-import { createContext, useContext, type ReactNode } from "react";
-import { useInquiryStore, type InquiryMessage, type InquiryParticipant } from "@cocrepo/store";
+import {
+	type InquiryMessage,
+	type InquiryParticipant,
+	useInquiryStore,
+} from "@cocrepo/store";
+import { observer } from "mobx-react-lite";
+import { createContext, type ReactNode, useContext } from "react";
 
 /**
  * WebSocket 연결 상태
@@ -15,7 +20,10 @@ export interface WebSocketEventHandlers {
 	/** 메시지 수신 핸들러 */
 	onMessageReceived?: (message: InquiryMessage) => void;
 	/** 메시지 수정 핸들러 */
-	onMessageUpdated?: (data: { messageId: string; updates: Partial<InquiryMessage> }) => void;
+	onMessageUpdated?: (data: {
+		messageId: string;
+		updates: Partial<InquiryMessage>;
+	}) => void;
 	/** 메시지 삭제 핸들러 */
 	onMessageDeleted?: (data: { messageId: string }) => void;
 	/** 참여자 입장 핸들러 */
@@ -23,7 +31,10 @@ export interface WebSocketEventHandlers {
 	/** 참여자 퇴장 핸들러 */
 	onParticipantLeft?: (data: { userId: string }) => void;
 	/** 참여자 상태 변경 핸들러 */
-	onParticipantStatusChanged?: (data: { userId: string; updates: Partial<InquiryParticipant> }) => void;
+	onParticipantStatusChanged?: (data: {
+		userId: string;
+		updates: Partial<InquiryParticipant>;
+	}) => void;
 	/** 타이핑 시작 핸들러 */
 	onTypingStart?: (data: { userId: string }) => void;
 	/** 타이핑 중지 핸들러 */
@@ -101,48 +112,50 @@ export const useInquiryWebSocket = () => {
  * pnpm add socket.io-client
  * ```
  */
-export const InquiryWebSocketProvider = ({
-	inquiryId,
-	status = "disconnected",
-	onConnect,
-	onDisconnect,
-	onError,
-	onReconnect,
-	sendMessage,
-	sendTypingStatus,
-	children,
-}: InquiryWebSocketProviderProps) => {
-	const store = useInquiryStore();
+export const InquiryWebSocketProvider = observer(
+	function InquiryWebSocketProvider({
+		inquiryId,
+		status = "disconnected",
+		onConnect,
+		onDisconnect,
+		onError,
+		onReconnect,
+		sendMessage,
+		sendTypingStatus,
+		children,
+	}: InquiryWebSocketProviderProps) {
+		const store = useInquiryStore();
 
-	// Store에 연결 상태 반영
-	const isConnected = status === "connected";
-	store.setWebSocketConnected(isConnected);
+		// Store에 연결 상태 반영
+		const isConnected = status === "connected";
+		store.setWebSocketConnected(isConnected);
 
-	const handleReconnect = () => {
-		onReconnect?.();
-	};
+		const handleReconnect = () => {
+			onReconnect?.();
+		};
 
-	const handleSendMessage = (content: string, attachments?: File[]) => {
-		sendMessage?.(content, attachments);
-	};
+		const handleSendMessage = (content: string, attachments?: File[]) => {
+			sendMessage?.(content, attachments);
+		};
 
-	const handleSendTypingStatus = (isTyping: boolean) => {
-		sendTypingStatus?.(isTyping);
-	};
+		const handleSendTypingStatus = (isTyping: boolean) => {
+			sendTypingStatus?.(isTyping);
+		};
 
-	const contextValue: WebSocketContextValue = {
-		status,
-		reconnect: handleReconnect,
-		sendMessage: sendMessage ? handleSendMessage : null,
-		sendTypingStatus: sendTypingStatus ? handleSendTypingStatus : null,
-	};
+		const contextValue: WebSocketContextValue = {
+			status,
+			reconnect: handleReconnect,
+			sendMessage: sendMessage ? handleSendMessage : null,
+			sendTypingStatus: sendTypingStatus ? handleSendTypingStatus : null,
+		};
 
-	return (
-		<WebSocketContext.Provider value={contextValue}>
-			{children}
-		</WebSocketContext.Provider>
-	);
-};
+		return (
+			<WebSocketContext.Provider value={contextValue}>
+				{children}
+			</WebSocketContext.Provider>
+		);
+	},
+);
 
 /**
  * Store에 메시지를 추가하는 유틸리티 함수

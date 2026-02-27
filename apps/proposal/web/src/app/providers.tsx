@@ -1,7 +1,8 @@
 "use client";
 
 import { DesignSystemProvider } from "@cocrepo/ui";
-import { type ReactNode, useMemo } from "react";
+import { observer } from "mobx-react-lite";
+import { type ReactNode, useRef } from "react";
 import { PlanSelectionProvider, PlanSelectionStore } from "../stores";
 
 interface ProvidersProps {
@@ -11,15 +12,19 @@ interface ProvidersProps {
 /**
  * Proposal 앱 최상위 Provider
  */
-export function Providers({ children }: ProvidersProps) {
-	// Store 인스턴스 생성 (클라이언트에서 한 번만)
-	const planSelectionStore = useMemo(() => new PlanSelectionStore(), []);
+export const Providers = observer(function Providers({
+	children,
+}: ProvidersProps) {
+	const planSelectionStoreRef = useRef<PlanSelectionStore | null>(null);
+	if (!planSelectionStoreRef.current) {
+		planSelectionStoreRef.current = new PlanSelectionStore();
+	}
 
 	return (
 		<DesignSystemProvider>
-			<PlanSelectionProvider store={planSelectionStore}>
+			<PlanSelectionProvider store={planSelectionStoreRef.current}>
 				{children}
 			</PlanSelectionProvider>
 		</DesignSystemProvider>
 	);
-}
+});

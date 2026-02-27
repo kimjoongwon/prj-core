@@ -14,9 +14,10 @@ import {
 	flexRender,
 	type Table as ReactTableProps,
 } from "@tanstack/react-table";
+import { observer } from "mobx-react-lite";
 import {
-	SortableColumnHeader,
 	type MultiSortDescriptor,
+	SortableColumnHeader,
 	type SortEvent,
 } from "./SortableColumnHeader";
 
@@ -56,7 +57,7 @@ export type TableProps<T> = {
  *
  * @see DataGrid 더 간편한 사용을 원한다면 DataGrid 컴포넌트를 권장합니다.
  */
-export const Table = <T extends object>({
+const TableComponent = <T extends object>({
 	tableInstance,
 	selectedKeys,
 	onSelectionChange,
@@ -115,3 +116,5 @@ export const Table = <T extends object>({
 		</HeroTable>
 	);
 };
+
+export const Table: typeof TableComponent = observer(TableComponent);

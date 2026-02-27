@@ -1,6 +1,7 @@
 "use client";
 
 import { SectionLayout } from "@cocrepo/ui";
+import { observer } from "mobx-react-lite";
 
 /**
  * 로그인 페이지 레이아웃
@@ -10,7 +11,7 @@ import { SectionLayout } from "@cocrepo/ui";
  *     - PageLayout (auth/layout.tsx)
  *         - SectionLayout (여기) - children만 (중앙 정렬)
  */
-export default function LoginLayoutRoute({
+const LoginLayoutRoute = observer(function LoginLayoutRoute({
 	children,
 }: {
 	children: React.ReactNode;
@@ -22,4 +23,6 @@ export default function LoginLayoutRoute({
 			</div>
 		</SectionLayout>
 	);
-}
+});
+
+export default LoginLayoutRoute;

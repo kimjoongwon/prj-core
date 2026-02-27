@@ -1,6 +1,7 @@
 "use client";
 
 import { Switch } from "@heroui/react";
+import { observer } from "mobx-react-lite";
 import { useState } from "react";
 
 interface TemplateActiveToggleCellProps {
@@ -19,42 +20,44 @@ interface TemplateActiveToggleCellProps {
  * - 실패 시 롤백 처리
  * - 토글 진행 중 Switch 비활성화
  */
-export const TemplateActiveToggleCell = ({
-	isActive,
-	templateId,
-	onToggle,
-}: TemplateActiveToggleCellProps) => {
-	const [optimisticActive, setOptimisticActive] = useState(isActive);
-	const [isLoading, setIsLoading] = useState(false);
+export const TemplateActiveToggleCell = observer(
+	function TemplateActiveToggleCell({
+		isActive,
+		templateId,
+		onToggle,
+	}: TemplateActiveToggleCellProps) {
+		const [optimisticActive, setOptimisticActive] = useState(isActive);
+		const [isLoading, setIsLoading] = useState(false);
 
-	const handleToggle = async () => {
-		if (isLoading) return;
+		const handleToggle = async () => {
+			if (isLoading) return;
 
-		const previousValue = optimisticActive;
-		setOptimisticActive(!previousValue);
-		setIsLoading(true);
+			const previousValue = optimisticActive;
+			setOptimisticActive(!previousValue);
+			setIsLoading(true);
 
-		try {
-			await onToggle(templateId);
-		} catch {
-			// 실패 시 롤백
-			setOptimisticActive(previousValue);
-		} finally {
-			setIsLoading(false);
-		}
-	};
+			try {
+				await onToggle(templateId);
+			} catch {
+				// 실패 시 롤백
+				setOptimisticActive(previousValue);
+			} finally {
+				setIsLoading(false);
+			}
+		};
 
-	return (
-		<div className="flex w-full justify-center">
-			<Switch
-				size="sm"
-				isSelected={optimisticActive}
-				isDisabled={isLoading}
-				onValueChange={handleToggle}
-				aria-label={optimisticActive ? "비활성화" : "활성화"}
-			/>
-		</div>
-	);
-};
+		return (
+			<div className="flex w-full justify-center">
+				<Switch
+					size="sm"
+					isSelected={optimisticActive}
+					isDisabled={isLoading}
+					onValueChange={handleToggle}
+					aria-label={optimisticActive ? "비활성화" : "활성화"}
+				/>
+			</div>
+		);
+	},
+);
 
 export type { TemplateActiveToggleCellProps };

@@ -1,7 +1,8 @@
 "use client";
 
 import { cn } from "@heroui/react";
-import { ChevronDown, ChevronUp, ChevronsUpDown } from "lucide-react";
+import { ChevronDown, ChevronsUpDown, ChevronUp } from "lucide-react";
+import { observer } from "mobx-react-lite";
 
 export type SortDirection = "asc" | "desc";
 
@@ -41,13 +42,13 @@ export interface SortableColumnHeaderProps {
  * - Shift+클릭: 복합 정렬에 추가/토글
  * - Ctrl+클릭: 해당 컬럼 정렬 제거
  */
-export const SortableColumnHeader = ({
+export const SortableColumnHeader = observer(function SortableColumnHeader({
 	columnId,
 	label,
 	sortDescriptor = [],
 	onSortChange,
 	sortable = true,
-}: SortableColumnHeaderProps) => {
+}: SortableColumnHeaderProps) {
 	const currentSort = sortDescriptor.find((s) => s.column === columnId);
 	const sortIndex = sortDescriptor.findIndex((s) => s.column === columnId);
 	const isMultiSort = sortDescriptor.length > 1;
@@ -96,4 +97,4 @@ export const SortableColumnHeader = ({
 			</span>
 		</button>
 	);
-};
+});

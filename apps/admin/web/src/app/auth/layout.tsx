@@ -1,6 +1,7 @@
 "use client";
 
 import { PageLayout } from "@cocrepo/ui";
+import { observer } from "mobx-react-lite";
 
 /**
  * 인증 페이지 레이아웃
@@ -13,10 +14,12 @@ import { PageLayout } from "@cocrepo/ui";
  *
  * 규칙: 하나의 layout.tsx에는 하나의 Layout만 선언
  */
-export default function AuthLayoutRoute({
+const AuthLayoutRoute = observer(function AuthLayoutRoute({
 	children,
 }: {
 	children: React.ReactNode;
 }) {
 	return <PageLayout>{children}</PageLayout>;
-}
+});
+
+export default AuthLayoutRoute;

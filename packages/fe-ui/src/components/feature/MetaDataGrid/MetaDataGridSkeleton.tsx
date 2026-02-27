@@ -1,11 +1,12 @@
 "use client";
 
 import { Skeleton } from "@heroui/react";
+import { observer } from "mobx-react-lite";
 
 /**
  * MetaDataGrid 로딩 스켈레톤
  */
-export const MetaDataGridSkeleton = () => {
+export const MetaDataGridSkeleton = observer(function MetaDataGridSkeleton() {
 	return (
 		<div className="space-y-3">
 			{/* 테이블 헤더 스켈레톤 */}
@@ -29,4 +30,4 @@ export const MetaDataGridSkeleton = () => {
 			))}
 		</div>
 	);
-};
+});

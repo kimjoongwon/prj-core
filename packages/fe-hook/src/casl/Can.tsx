@@ -1,5 +1,6 @@
 "use client";
 
+import { observer } from "mobx-react-lite";
 import type { ReactNode } from "react";
 import { useAbility } from "./AbilityContext";
 import type { AbilityActions } from "./types";
@@ -39,7 +40,7 @@ export interface CanProps {
  * </Can>
  * ```
  */
-export function Can({
+export const Can = observer(function Can({
 	I: action,
 	a: subject,
 	children,
@@ -52,13 +53,13 @@ export function Can({
 	const shouldRender = not ? !hasPermission : hasPermission;
 
 	return <>{shouldRender ? children : fallback}</>;
-}
+});
 
 /**
  * Cannot 컴포넌트
  * Can의 반대 - 권한이 없을 때만 렌더링합니다.
  */
-export function Cannot({
+export const Cannot = observer(function Cannot({
 	I: action,
 	a: subject,
 	children,
@@ -69,4 +70,4 @@ export function Cannot({
 			{children}
 		</Can>
 	);
-}
+});

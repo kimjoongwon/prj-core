@@ -7,6 +7,7 @@ import {
 	QueryClient,
 	QueryClientProvider,
 } from "@tanstack/react-query";
+import { observer } from "mobx-react-lite";
 import { useRouter } from "next/navigation";
 import { NuqsAdapter } from "nuqs/adapters/next/app";
 import type { ReactNode } from "react";
@@ -51,7 +52,9 @@ function getQueryClient() {
  *     └── AppStoreProvider (MobX Store)
  *         └── DesignSystemProvider (UI 시스템)
  */
-export function Providers({ children }: ProvidersProps) {
+export const Providers = observer(function Providers({
+	children,
+}: ProvidersProps) {
 	const router = useRouter();
 	const queryClient = getQueryClient();
 
@@ -70,4 +73,4 @@ export function Providers({ children }: ProvidersProps) {
 			</NuqsAdapter>
 		</QueryClientProvider>
 	);
-}
+});

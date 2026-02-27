@@ -1,5 +1,6 @@
 "use client";
 
+import { observer } from "mobx-react-lite";
 import { Button } from "../../inputs/Button/Button";
 import { Text } from "../../ui/data-display/Text/Text";
 
@@ -31,7 +32,7 @@ export interface SpaceAlertProps {
  * />
  * ```
  */
-export function SpaceAlert({
+export const SpaceAlert = observer(function SpaceAlert({
 	title = "Space 선택 필요",
 	message = "서비스 이용을 위해 Space를 선택해주세요.",
 	confirmText = "Space 선택하기",
@@ -82,4 +83,4 @@ export function SpaceAlert({
 			</div>
 		</div>
 	);
-}
+});

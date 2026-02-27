@@ -1,5 +1,6 @@
 "use client";
 
+import { observer } from "mobx-react-lite";
 import {
 	createContext,
 	type ReactNode,
@@ -100,7 +101,7 @@ export interface AbilityProviderProps {
  * };
  * <AbilityProvider fetchAbilities={fetchAbilities}>
  */
-export function AbilityProvider({
+export const AbilityProvider = observer(function AbilityProvider({
 	children,
 	rules,
 	fetchAbilities,
@@ -154,7 +155,7 @@ export function AbilityProvider({
 	return (
 		<AbilityContext.Provider value={value}>{children}</AbilityContext.Provider>
 	);
-}
+});
 
 /**
  * Ability 훅

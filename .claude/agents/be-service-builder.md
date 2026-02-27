@@ -131,14 +131,14 @@ export class {Entity}sService {
   }
 
   /**
-   * 생성 (Prisma 타입 사용 - DTO 금지)
+   * 생성 (DTO 금지)
    */
   create(data: Prisma.{Entity}UncheckedCreateInput): Promise<{Entity}> {
     return this.repository.create(data);
   }
 
   /**
-   * 업데이트 (Prisma 타입 사용 - DTO 금지)
+   * 업데이트 (DTO 금지)
    */
   updateById(
     id: string,
@@ -251,7 +251,6 @@ export class OrdersService {
 - [ ] **Prisma 쿼리 없음 확인**
 - [ ] **DTO 타입 사용 금지 확인**
   - [ ] `CreateXxxDto`, `UpdateXxxDto` 등 DTO import 없음
-  - [ ] 파라미터는 Entity 또는 Prisma 타입 사용
 - [ ] Repository 메서드 호출만 사용
 - [ ] 비즈니스 로직만 Service에 작성
 - [ ] 메서드명이 도메인 목적을 표현
