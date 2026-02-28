@@ -3,8 +3,8 @@
   "private": true,
   "version": "0.0.0",
   "scripts": {
-    "dev": "next dev --turbopack & sleep 2 && open http://localhost:3000/admin && wait",
-    "start:dev": "next dev --turbopack",
+    "dev": "PORT=${ADMIN_WEB_PORT:-3000}; next dev --turbopack -p \"$PORT\" & sleep 2 && open http://localhost:$PORT/admin && wait",
+    "start:dev": "next dev --turbopack -p ${ADMIN_WEB_PORT:-3000}",
     "build": "next build",
     "analyze": "ANALYZE=true pnpm build",
     "start": "next start",

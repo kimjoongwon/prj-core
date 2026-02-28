@@ -3,7 +3,7 @@
   "private": true,
   "version": "0.0.0",
   "scripts": {
-    "start:dev": "next dev --turbopack -p 3001",
+    "start:dev": "next dev --turbopack -p ${PROPOSAL_WEB_PORT:-3001}",
     "build": "next build",
     "start": "next start",
     "type-check": "tsc --noEmit",

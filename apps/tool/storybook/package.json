@@ -10,7 +10,7 @@
     "test:watch": "vitest watch",
     "format": "biome format --write .",
     "type-check": "tsc --noEmit",
-    "start:dev": "storybook dev -p 6006",
+    "start:dev": "storybook dev -p ${STORYBOOK_PORT:-6006}",
     "build-storybook": "storybook build"
   },
   "license": "ISC",

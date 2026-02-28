@@ -281,6 +281,7 @@ pnpm wt:rm CORE-123 --force    # force remove dirty worktree / unmerged branch
 - `new-run` requires both `tmux` and `codex` command availability.
 - `new-run` asks for a prompt interactively if `--prompt` is omitted.
 - `new-run` queues `pnpm wt:pr <ticket>` by default after Codex succeeds (`--no-pr` to skip).
+- `scripts/start.sh` auto-loads `.env.worktree` when present, and app `start:dev` scripts consume the generated `*_PORT` values.
 - `rm` is safe by default (`git worktree remove`, `git branch -d`). Use `--force` only when needed.
 - `directoryNameTemplate` supports `{{repo}}`, `{{ticket}}`, `{{branch}}`, `{{slot}}`.
 

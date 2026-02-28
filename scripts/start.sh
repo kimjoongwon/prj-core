@@ -22,6 +22,14 @@ export CHOKIDAR_USEPOLLING="${CHOKIDAR_USEPOLLING:-1}"
 export CHOKIDAR_INTERVAL="${CHOKIDAR_INTERVAL:-1000}"
 export WATCHPACK_POLLING="${WATCHPACK_POLLING:-true}"
 
+# worktree 환경 파일이 있으면 자동 로드
+if [[ -f ".env.worktree" ]]; then
+  set -a
+  # shellcheck disable=SC1091
+  source ./.env.worktree
+  set +a
+fi
+
 # -- 인자 제거 (pnpm이 -- 를 전달할 수 있음)
 ARGS=()
 for arg in "$@"; do
@@ -63,14 +71,17 @@ HAS_IDP="false"
 # 서비스별 포트 조회
 get_port() {
   case $1 in
-    core-api)        echo 3006 ;;
-    admin-web)       echo 3000 ;;
-    idp-api)         echo 3007 ;;
-    idp-web)         echo 3008 ;;
-    tool-storybook)  echo 6006 ;;
-    proposal-web)    echo 3001 ;;
+    core-api)        echo "${CORE_API_PORT:-3006}" ;;
+    admin-web)       echo "${ADMIN_WEB_PORT:-3000}" ;;
+    idp-api)         echo "${IDP_API_PORT:-3007}" ;;
+    idp-web)         echo "${IDP_WEB_PORT:-3008}" ;;
+    tool-storybook)  echo "${STORYBOOK_PORT:-6006}" ;;
+    proposal-web)    echo "${PROPOSAL_WEB_PORT:-3001}" ;;
   esac
 }
+
+CORE_API_PORT_VALUE=$(get_port core-api)
+IDP_API_PORT_VALUE=$(get_port idp-api)
 
 for choice in $choices; do
   case $choice in
@@ -97,8 +108,8 @@ if [[ "$HAS_FRONTEND" == "true" && "$INTERACTIVE" == "true" ]]; then
   echo ""
   echo -e "${BOLD}📦 API 코드젠 대상${RESET}"
   echo -e "  ${CYAN}1${RESET})  전체         ${DIM}Server + IDP${RESET}"
-  echo -e "  ${CYAN}2${RESET})  Server만     ${DIM}백엔드 서버 (port 3006)${RESET}"
-  echo -e "  ${CYAN}3${RESET})  IDP만        ${DIM}인증 서버 (port 3007)${RESET}"
+  echo -e "  ${CYAN}2${RESET})  Server만     ${DIM}백엔드 서버 (port ${CORE_API_PORT_VALUE})${RESET}"
+  echo -e "  ${CYAN}3${RESET})  IDP만        ${DIM}인증 서버 (port ${IDP_API_PORT_VALUE})${RESET}"
   echo -e "  ${CYAN}4${RESET})  건너뛰기     ${DIM}코드젠 실행 안 함${RESET}"
   echo ""
   echo -ne "${BOLD}번호 선택: ${RESET}"
@@ -245,8 +256,8 @@ if [[ "$CODEGEN_ENV" == "local" ]]; then
 
   # Server health check
   if [[ "$CODEGEN_TARGET" == "all" || "$CODEGEN_TARGET" == "server" ]]; then
-    echo -e "${DIM}Server(3006) 시작 대기 중...${RESET}"
-    until curl -s -o /dev/null -w "%{http_code}" http://localhost:3006/api-json 2>/dev/null | grep -q "200"; do
+    echo -e "${DIM}Server(${CORE_API_PORT_VALUE}) 시작 대기 중...${RESET}"
+    until curl -s -o /dev/null -w "%{http_code}" "http://localhost:${CORE_API_PORT_VALUE}/api-json" 2>/dev/null | grep -q "200"; do
       sleep 2
     done
     echo -e "${GREEN}✅ Server 준비 완료${RESET}"
@@ -254,8 +265,8 @@ if [[ "$CODEGEN_ENV" == "local" ]]; then
 
   # IDP health check
   if [[ "$CODEGEN_TARGET" == "all" || "$CODEGEN_TARGET" == "idp" ]]; then
-    echo -e "${DIM}IDP(3007) 시작 대기 중...${RESET}"
-    until curl -s -o /dev/null -w "%{http_code}" http://localhost:3007/api-json 2>/dev/null | grep -q "200"; do
+    echo -e "${DIM}IDP(${IDP_API_PORT_VALUE}) 시작 대기 중...${RESET}"
+    until curl -s -o /dev/null -w "%{http_code}" "http://localhost:${IDP_API_PORT_VALUE}/api-json" 2>/dev/null | grep -q "200"; do
       sleep 2
     done
     echo -e "${GREEN}✅ IDP 준비 완료${RESET}"

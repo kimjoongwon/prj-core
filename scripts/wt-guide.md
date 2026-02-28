@@ -215,7 +215,8 @@ pnpm start
 
 주의:
 
-- `.env.worktree`는 포트 값을 생성하지만, 각 앱이 해당 env를 읽도록 실행 스크립트가 연결되어 있어야 실제 반영됩니다.
+- `pnpm start`(`scripts/start.sh`)는 `.env.worktree`가 있으면 자동으로 로드합니다.
+- 앱 `start:dev` 스크립트는 `*_PORT` env가 있으면 해당 값으로 실행되고, 없으면 기본 포트를 사용합니다.
 
 ### 5.3 AI 통제 마무리
 
