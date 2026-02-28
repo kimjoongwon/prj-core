@@ -1,6 +1,5 @@
 import { makeAutoObservable } from "mobx";
 import { AbilityStore } from "./abilityStore";
-import { AIFormTemplateStore } from "./aiFormTemplateStore";
 import { AuthStore } from "./authStore";
 import { BottomTabStore } from "./bottomTabStore";
 import { CookieStore } from "./cookieStore";
@@ -31,9 +30,6 @@ import { TokenStore } from "./tokenStore";
  * rootStore.fabStore = new FABStore(FAB_CONFIG);
  * rootStore.bottomTabStore = new BottomTabStore(BOTTOM_TAB_CONFIG, { navigationStore: rootStore.navigationStore });
  *
- * // AI 폼 템플릿 지원
- * rootStore.aiFormTemplateStore = new AIFormTemplateStore(rootStore);
- *
  * // 문의 관리 지원
  * rootStore.inquiryStore = new InquiryStore(rootStore);
  * ```
@@ -49,7 +45,6 @@ import { TokenStore } from "./tokenStore";
  * ├── abilityStore (AbilityStore) - 권한 관리
  * ├── fabStore (FABStore) - v7.0: FAB 상태 관리
  * ├── bottomTabStore (BottomTabStore) - v7.0: BottomTab 상태 관리
- * ├── aiFormTemplateStore (AIFormTemplateStore) - AI 폼 템플릿 관리
  * └── inquiryStore (InquiryStore) - 문의 관리
  */
 export class RootStore {
@@ -67,8 +62,6 @@ export class RootStore {
 	fabStore?: FABStore;
 	/** v7.0 신규: BottomTab 상태 관리 */
 	bottomTabStore?: BottomTabStore;
-	/** AI 폼 템플릿 관리 */
-	aiFormTemplateStore?: AIFormTemplateStore;
 	/** 문의 관리 */
 	inquiryStore?: InquiryStore;
 

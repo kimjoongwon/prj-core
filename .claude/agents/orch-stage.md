@@ -214,11 +214,11 @@ packages/fe-ui/src/components/feature/[FeatureName]/index.spec.md
 |-------|------|----------|----------|----------|--------------|
 | 1 | 도메인 기획 | 도메인 전체 | L0-L4 기획 + BE/Store 스펙 | 선행 순차 + 일부 fan-out | orch-requirement |
 | 2 | 스키마 구현 | 도메인 전체 | Prisma/공용 스키마, Entity, DTO + 테스트 | `targets` fan-out + join | be-prisma-builder, common-schema-builder, be-entity-builder, be-dto-builder, be-query-dto-builder, be-seed-maker, req-test-planner, qa-be-testing |
-| 3 | 백엔드 구현 | 도메인 전체 | Repository, Service, Controller + 테스트 | `targets` fan-out + join | be-repository-builder, be-service-builder, be-facade-builder, be-controller-builder, req-test-planner, qa-be-testing |
-| 4 | 화면 기획 | **페이지별** | L5-L12 기획 | `pages` fan-out 가능 | orch-screen-planner |
+| 3 | 백엔드 구현 | 도메인 전체 | Repository, Service, Controller + 테스트 (Create/Update form bootstrap 계약 포함) | `targets` fan-out + join | be-repository-builder, be-service-builder, be-facade-builder, be-controller-builder, req-test-planner, qa-be-testing |
+| 4 | 화면 기획 | **페이지별** | L5-L12 기획 + spec 체크리스트 생성 | `pages` fan-out 가능 | orch-screen-planner, req-spec-tracker |
 | 5 | 컴포넌트 구현 | **페이지별** | UI/Input/Cell/Widget/Layout/Feature + 테스트 | `pages` fan-out + lock merge | fe-ui-component-builder, fe-input-component-builder, fe-cell-builder, fe-widget-builder, fe-layout-builder, fe-feature-builder, fe-store-builder, fe-menu-builder, req-test-planner, qa-fe-testing |
-| 6 | 페이지 통합 | **페이지별** | 페이지 컴포넌트 + API 연동 + 테스트 | `pages` fan-out + lock merge | fe-page-builder, fe-api-integrator, /fe-review, req-test-planner, qa-fe-testing |
-| 7 | E2E 검증 | 도메인 전체 | E2E 테스트 | BE/FE 병렬 + join | qa-be-e2e-testing, qa-fe-e2e-testing |
+| 6 | 페이지 통합 | **페이지별** | 페이지 컴포넌트 + API 연동 + 테스트 + spec 체크리스트 동기화 (Create/Update는 AiForm 상단 통합) | `pages` fan-out + lock merge | fe-page-builder, fe-api-integrator, /fe-review, req-test-planner, qa-fe-testing, req-spec-tracker |
+| 7 | E2E 검증 | 도메인 전체 | E2E 테스트 + 검증 상태 체크리스트 반영 | BE/FE 병렬 + join | qa-be-e2e-testing, qa-fe-e2e-testing, req-spec-tracker |
 
 ---
 
@@ -538,6 +538,13 @@ Task: be-seed-maker (필요시)
 
 **목표**: Repository, Service, Controller 구현 + 테스트
 
+**추가 계약 (Create/Update 화면):**
+- Controller는 form bootstrap 응답을 제공합니다:
+  - `defaultObject`, `options`
+  - `ui.readOnlyPaths`, `ui.hiddenPaths`, `ui.disabledPaths`
+  - `fieldMeta`, `aiSchemas`
+- 필요 시 `POST /form/ai-fill` endpoint를 함께 구현합니다.
+
 **에이전트 호출:**
 ```
 Task: be-repository-builder
@@ -602,11 +609,12 @@ Task: be-controller-builder
 **에이전트 호출:**
 ```
 Task: orch-screen-planner
+Task: req-spec-tracker
 ```
 
 **산출물:**
 ```
-apps/admin/web/app/(admin)/members/page.spec.md              # API/이벤트 섹션 업데이트
+apps/admin/web/src/app/(admin)/members/page.spec.md              # API/이벤트 섹션 업데이트
 packages/fe-ui/src/components/ui/[UIName]/index.spec.md   # UI 컴포넌트 기획서
 packages/fe-ui/src/components/inputs/[InputName]/index.spec.md   # Input 기획서
 packages/fe-ui/src/components/ui/data-display/cells/[CellName]/index.spec.md   # Cell 기획서
@@ -615,6 +623,7 @@ packages/fe-ui/src/components/layout/[LayoutName]/index.spec.md  # Layout 기획
 packages/fe-ui/src/components/feature/[FeatureName]/index.spec.md  # Feature 기획서
 packages/common-constant/src/routing/admin-menu.spec.md  # 메뉴 기획서
 apps/admin/web/src/app/**/hooks/index.spec.md  # API 연동 기획서
+apps/admin/web/src/app/(admin)/members/spec-checklist.md  # 도메인 체크리스트 (Spec exists 갱신)
 ```
 
 **완료 후 출력:**
@@ -626,6 +635,7 @@ apps/admin/web/src/app/**/hooks/index.spec.md  # API 연동 기획서
    - packages/fe-ui/src/components/ui/MemberStatusBadge/index.spec.md
    - packages/fe-ui/src/components/widget/MemberTable/index.spec.md
    - packages/fe-ui/src/components/feature/MemberFilterPanel/index.spec.md
+   - members/spec-checklist.md (Spec exists 갱신)
 
 📌 다음 단계: Stage 5 (컴포넌트 구현) page=List
 ```
@@ -699,6 +709,11 @@ Task: fe-menu-builder (목록 페이지만)
 
 **목표**: 페이지 컴포넌트 구현 + API 연동 + 규칙 검증 + 테스트
 
+**Create/Update 페이지 필수 규칙:**
+- 페이지 상단에 `AiForm` Feature를 배치합니다.
+- `AiForm`은 form bootstrap 메타를 입력으로 받아 스키마 선택/체크박스/채우기 버튼 UX를 제공합니다.
+- AI patch 적용 후 검증(schema)을 재실행합니다.
+
 **⚠️ 페이지별 실행**: `page` 파라미터 지정 권장 (미지정 시 자연어 추론, 불명확 시 확인)
 
 ```bash
@@ -710,6 +725,7 @@ Task: fe-menu-builder (목록 페이지만)
 Task: fe-page-builder
 Task: fe-api-integrator
 Skill: /fe-review
+Task: req-spec-tracker
 ```
 
 **병렬 전략:**
@@ -739,10 +755,10 @@ Skill: /fe-review
 
 📁 생성된 파일:
    - packages/fe-ui/src/components/page/MemberListPage/
-   - apps/admin/web/app/(admin)/members/page.tsx
-   - apps/admin/web/app/(admin)/members/_client.tsx
-   - apps/admin/web/app/(admin)/members/_prefetch.ts
-   - apps/admin/web/app/(admin)/members/hooks/index.ts (API 연동)
+   - apps/admin/web/src/app/(admin)/members/page.tsx
+   - apps/admin/web/src/app/(admin)/members/_client.tsx
+   - apps/admin/web/src/app/(admin)/members/_prefetch.ts
+   - apps/admin/web/src/app/(admin)/members/hooks/index.ts (API 연동)
 
 ✅ 규칙 검증: 모두 통과
 
@@ -775,6 +791,7 @@ Skill: /fe-review
 ```
 Task: qa-be-e2e-testing
 Task: qa-fe-e2e-testing
+Task: req-spec-tracker
 ```
 
 **완료 후 출력:**
@@ -784,6 +801,7 @@ Task: qa-fe-e2e-testing
 📁 생성된 파일:
    - apps/core/api/test/members.e2e-spec.ts
    - apps/test/e2e/tests/admin/members.spec.ts
+   - apps/admin/web/src/app/(admin)/members/spec-checklist.md (Verified 갱신)
 
 🎉 Member 기능 개발 완료!
 ```
@@ -799,10 +817,10 @@ Task: qa-fe-e2e-testing
 | 1 | app.spec.md 업데이트, page.spec.md 생성, BE/Store .spec.md 생성 |
 | 2 | Prisma/공용 스키마, Entity, DTO 생성, `*.schema.spec.md` 생성, migrate 성공, Entity 테스트 통과 |
 | 3 | Repository, Service, Controller 생성, 서버 시작 성공, BE 단위 테스트 통과 |
-| 4 | page.spec.md 통합/API 업데이트, UI/Input/Cell/Widget/Layout/Feature/Menu/API연동 .spec.md 생성 |
+| 4 | page.spec.md 통합/API 업데이트, UI/Input/Cell/Widget/Layout/Feature/Menu/API연동 .spec.md 생성, `spec-checklist.md`의 Spec exists 갱신 |
 | 5 | UI/Input/Cell/Widget/Layout/Feature/Store 구현, 컴포넌트 테스트 통과 |
-| 6 | 페이지 컴포넌트 + API 연동 구현, 규칙 검증 통과, 페이지 테스트 통과 |
-| 7 | E2E 테스트 통과 |
+| 6 | 페이지 컴포넌트 + API 연동 구현, 규칙 검증 통과, 페이지 테스트 통과, `spec-checklist.md`의 Code paired 갱신 |
+| 7 | E2E 테스트 통과, `spec-checklist.md`의 Verified 갱신 |
 
 ### 병렬 실행 추가 완료 조건
 
@@ -866,10 +884,10 @@ Task: qa-fe-e2e-testing
 | 1 | orch-requirement, req-context-planner, req-screen-planner, req-entity-planner, req-store-planner, req-api-planner, req-logic-planner |
 | 2 | be-prisma-builder, common-schema-builder, be-entity-builder, be-dto-builder, be-query-dto-builder, be-seed-maker, req-test-planner, qa-be-testing |
 | 3 | be-repository-builder, be-service-builder, be-facade-builder, be-controller-builder, req-test-planner, qa-be-testing |
-| 4 | orch-screen-planner |
+| 4 | orch-screen-planner, req-spec-tracker |
 | 5 | fe-ui-component-builder, fe-input-component-builder, fe-cell-builder, fe-widget-builder, fe-layout-builder, fe-feature-builder, fe-store-builder, fe-menu-builder, req-test-planner, qa-fe-testing |
-| 6 | fe-page-builder, fe-api-integrator, /fe-review (Skill), req-test-planner, qa-fe-testing |
-| 7 | qa-be-e2e-testing, qa-fe-e2e-testing |
+| 6 | fe-page-builder, fe-api-integrator, /fe-review (Skill), req-test-planner, qa-fe-testing, req-spec-tracker |
+| 7 | qa-be-e2e-testing, qa-fe-e2e-testing, req-spec-tracker |
 
 ---
 
@@ -1420,7 +1438,7 @@ Stage 실행 시작
 
 **기획서 분석:**
 ```markdown
-# Asset 목록 페이지 기획서 (apps/admin/web/app/(admin)/assets/page.spec.md)
+# Asset 목록 페이지 기획서 (apps/admin/web/src/app/(admin)/assets/page.spec.md)
 
 ## 구현 대상
 
@@ -1446,7 +1464,7 @@ Stage 실행 시작
 **자동 판단 결과:**
 ```
 📊 기획서 분석 완료:
-   - 검색: apps/admin/web/app/(admin)/assets/page.spec.md
+   - 검색: apps/admin/web/src/app/(admin)/assets/page.spec.md
    - 발견: 6개 컴포넌트
 
 📊 실행 계획:

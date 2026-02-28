@@ -61,6 +61,36 @@ developer_instructions = '''
 | Page 컴포넌트 | `on[Event][UI]` | `onClickLoginButton`, `onChangeEmail` |
 | 일반 컴포넌트 | `handle[Action]` | `handleSubmit`, `handleDelete` |
 
+### Create/Update + AiForm 통합 규칙 (Critical)
+
+- Create/Update 페이지는 `AiForm` Feature를 폼 상단에 배치합니다.
+- 페이지는 **컨테이너 역할**만 수행합니다:
+  - form bootstrap API 호출
+  - `defaultObject`를 상태로 주입
+  - `options`, `ui(readOnly/hidden/disabled)`, `fieldMeta`, `aiSchemas`를 `AiForm`에 전달
+- 어떤 필드를 AI로 채울지 최종 결정은 프론트(`AiForm`)가 수행합니다.
+- 스키마 선택 + 필드 체크박스 + `채우기` 버튼 흐름을 페이지 설계에 포함합니다.
+- AI patch 적용 후 반드시 폼 검증(schema)을 재실행합니다.
+
+```tsx
+// 페이지 조합 예시 (요약)
+<PageSurface ...>
+  <AiForm
+    formState={state.form}
+    fieldMeta={bootstrap.fieldMeta}
+    aiSchemas={bootstrap.aiSchemas}
+    ui={bootstrap.ui}
+    onFill={handlers.onClickAiFillButton}
+    applyPatch={handlers.applyAiPatches}
+  />
+  <FormRenderer
+    value={state.form}
+    options={bootstrap.options}
+    ui={bootstrap.ui}
+  />
+</PageSurface>
+```
+
 ---
 
 ## 3. 폴더 구조 (Prefetch 필수)

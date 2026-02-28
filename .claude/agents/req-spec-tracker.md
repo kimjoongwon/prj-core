@@ -1,10 +1,7 @@
 ---
+name: req-spec-tracker
 description: 도메인별 spec-checklist를 생성/갱신하여 기획-구현-검증 상태를 추적하는 전문가
-mode: subagent
-tools:
-  write: true
-  edit: true
-  bash: true
+tools: Read, Write, Grep, Bash
 ---
 
 

@@ -171,6 +171,20 @@ export type {
 	AIProviderStatus,
 } from "./ai-form-template";
 // ============================================
+// Create/Update AiForm 관련 타입
+// ============================================
+export type {
+	AiFormFieldAiMeta,
+	AiFormFieldMeta,
+	AiFormFillRequest,
+	AiFormFillResponse,
+	AiFormOptionItem,
+	AiFormPatch,
+	AiFormSchema,
+	AiFormUiPaths,
+	CreateUpdateFormBootstrap,
+} from "./ai-form";
+// ============================================
 // 테이블 관련 타입
 // ============================================
 export type {

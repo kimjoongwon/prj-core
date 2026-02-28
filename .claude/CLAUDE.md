@@ -276,6 +276,47 @@ const error = VALIDATION_MESSAGES.EMAIL_FORMAT;
 - 중복 코드 감소
 - 검증 메시지 통일
 
+### Create/Update Form Bootstrap + AiForm 패턴 (Critical)
+
+**`@cocrepo/schema`는 검증 전용이며, 폼 렌더링 데이터는 Controller가 제공합니다.**
+
+Create/Update 화면의 표준 응답 계약:
+
+```typescript
+{
+  data: {
+    mode: "CREATE" | "UPDATE",
+    defaultObject: Record<string, unknown>,
+    options: Record<string, Array<{ value: string; label: string }>>,
+    ui: {
+      readOnlyPaths: string[],
+      hiddenPaths: string[],
+      disabledPaths: string[],
+    },
+    fieldMeta: Record<string, {
+      ai?: {
+        fillable: boolean;
+        defaultChecked?: boolean;
+        reason?: string;
+      };
+    }>,
+    aiSchemas: Array<{
+      key: string;
+      label: string;
+      paths: string[];
+    }>,
+  }
+}
+```
+
+규칙:
+- 모든 키는 `state path` 기준으로 정의합니다.
+- `defaultObject[path]`와 `options[path].value`는 타입/값이 일치해야 합니다.
+- UI 우선순위는 `hidden > readOnly > disabled`입니다.
+- Create/Update 페이지 상단에 `AiForm` Feature를 배치합니다.
+- `AiForm`에서 스키마 선택 + 체크박스 선택 + `채우기` 버튼으로 AI 적용 대상을 프론트에서 최종 결정합니다.
+- AI patch 적용 후 검증(schema)을 재실행합니다.
+
 ### observer 필수 규칙
 
 **`"use client"` 컴포넌트는 반드시 `observer`로 감싸야 합니다.**

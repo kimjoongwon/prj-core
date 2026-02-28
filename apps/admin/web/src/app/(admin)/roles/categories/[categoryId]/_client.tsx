@@ -200,7 +200,7 @@ function RoleCategoryDetailPageClient({
 					<div className="p-6">
 						<h3 className="text-lg font-semibold mb-4">하위 카테고리</h3>
 						<CategoryChildrenSection
-							children={category.children ?? []}
+							items={category.children ?? []}
 							categoriesBasePath="/roles/categories"
 						/>
 					</div>
