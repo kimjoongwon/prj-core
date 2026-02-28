@@ -258,8 +258,14 @@ pnpm bundle:sizes
 ```bash
 pnpm wt:init                   # create .wt/config.json when missing
 pnpm wt:new CORE-123           # create branch + worktree + env + tmux
+pnpm wt:new-run CORE-123
+                               # create worktree, run Codex, then auto-create PR
 pnpm wt:go CORE-123            # attach tmux session or print cd path
 pnpm wt:list                   # show worktree registry/status table
+pnpm wt:plan-merge CORE-123    # analyze branch outputs and recommend merge strategy
+pnpm wt:pr CORE-123            # push branch + create/reuse PR
+pnpm wt:merge CORE-123         # merge PR with selected/recommended strategy
+pnpm wt:finish CORE-123        # rebase/push/PR/merge/cleanup in one flow
 pnpm wt:rm CORE-123            # remove worktree and delete local branch
 pnpm wt:rm CORE-123 --keep-branch
 pnpm wt:rm CORE-123 --force    # force remove dirty worktree / unmerged branch
@@ -269,8 +275,12 @@ pnpm wt:rm CORE-123 --force    # force remove dirty worktree / unmerged branch
 
 - Runtime registry is stored under the git common dir: `<git-common-dir>/wt-tool/registry.json`.
 - Default config path is `.wt/config.json`. Override with `--config <path>`.
+- `plan-merge`, `pr`, `merge`, `finish` commands require `gh` (GitHub CLI).
 - `new` writes an env file with per-slot port offsets (`offsetStep * slot`).
 - If tmux is enabled and available, `new` creates a session and configured windows.
+- `new-run` requires both `tmux` and `codex` command availability.
+- `new-run` asks for a prompt interactively if `--prompt` is omitted.
+- `new-run` queues `pnpm wt:pr <ticket>` by default after Codex succeeds (`--no-pr` to skip).
 - `rm` is safe by default (`git worktree remove`, `git branch -d`). Use `--force` only when needed.
 - `directoryNameTemplate` supports `{{repo}}`, `{{ticket}}`, `{{branch}}`, `{{slot}}`.
 
