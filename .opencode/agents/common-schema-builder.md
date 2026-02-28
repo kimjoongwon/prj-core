@@ -41,6 +41,16 @@ tools:
 
 ## 핵심 규칙
 
+### 🚨 역할 경계 (Critical)
+
+- `common-schema-builder`는 **검증 규칙(Validation)만** 설계합니다.
+- 아래 항목은 **절대** 이 에이전트의 출력 범위가 아닙니다:
+  - `defaultObject`
+  - `options`
+  - `readOnlyPaths` / `hiddenPaths` / `disabledPaths`
+  - `fieldMeta` / `aiSchemas`
+- 위 항목은 Create/Update 화면의 런타임 폼 메타이며, `be-controller-builder`가 응답으로 제공합니다.
+
 ### ✅ Do
 
 ```typescript
@@ -80,6 +90,11 @@ export class LoginSchema {
   @IsEmail()
   email: string;  // ❌ @Email() 데코레이터 사용 권장
 }
+```
+
+```markdown
+# 폼 렌더링 메타를 schema에서 정의하려고 시도 (금지)
+- defaultObject, options, uiPaths, aiSchemas
 ```
 
 ---

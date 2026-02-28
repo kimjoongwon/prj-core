@@ -148,6 +148,25 @@ packages/be-dto/src/[domain]/*.dto.spec.md
 | 삭제 | DELETE | /api/[resource]s/:id | 삭제 |
 | 특수 액션 | POST/PATCH | /api/[resource]s/:id/[action] | 상태 변경 등 |
 
+### Create/Update Form Bootstrap API 규칙 (Critical)
+
+Create/Update 화면은 폼 렌더링에 필요한 메타를 백엔드에서 받습니다.
+
+| 작업 | Method | Path | 설명 |
+|------|--------|------|------|
+| 등록 폼 초기화 | GET | /api/[resource]s/form/create | 기본값/옵션/경로 정책/AI 메타 반환 |
+| 수정 폼 초기화 | GET | /api/[resource]s/:id/form/update | 기존값 포함 폼 메타 반환 |
+| AI 채우기 | POST | /api/[resource]s/form/ai-fill | 선택된 path에 대한 patch 반환 |
+
+필수 응답 필드:
+- `defaultObject`
+- `options`
+- `ui.readOnlyPaths`
+- `ui.hiddenPaths`
+- `ui.disabledPaths`
+- `fieldMeta[path].ai.fillable`
+- `aiSchemas`
+
 ### DTO 스키마 상속 참조
 
 Request DTO 기획 시 `@cocrepo/schema`의 기존 스키마 상속을 고려합니다。

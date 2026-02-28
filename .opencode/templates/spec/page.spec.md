@@ -113,6 +113,29 @@
 | {{timing}} | {{api}} | {{caching}} |
 {{/each}}
 
+## Create/Update 폼 데이터 계약 (해당 시)
+
+> 등록/수정 페이지인 경우 아래 항목을 반드시 채웁니다.
+
+| 항목 | 설명 | 제공 주체 |
+|------|------|----------|
+| `defaultObject` | submit DTO와 동일 shape의 초기값 | Controller |
+| `options` | state path 기준 선택 옵션 | Controller |
+| `ui.readOnlyPaths` | 읽기 전용 경로 | Controller |
+| `ui.hiddenPaths` | 숨김 경로 | Controller |
+| `ui.disabledPaths` | 비활성 경로 | Controller |
+| `fieldMeta[path].ai.fillable` | AI 채움 가능 여부 | Controller |
+| `aiSchemas` | AI 채움 스키마 목록 | Controller |
+
+### AiForm 통합 규칙 (해당 시)
+
+- Create/Update 페이지는 폼 상단에 `AiForm` Feature를 배치합니다.
+- 최종 AI 적용 대상은 프론트에서 결정합니다.
+  - 스키마 선택
+  - 체크박스 선택
+  - 채우기 버튼 클릭
+- AI patch 적용 후 검증(schema)을 재실행합니다.
+
 ## 이벤트 핸들러
 
 | 이벤트 | 동작 |

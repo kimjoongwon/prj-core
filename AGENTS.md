@@ -276,6 +276,47 @@ const error = VALIDATION_MESSAGES.EMAIL_FORMAT;
 - 중복 코드 감소
 - 검증 메시지 통일
 
+### Create/Update Form Bootstrap + AiForm 패턴 (Critical)
+
+**`@cocrepo/schema`는 검증 전용이며, 폼 렌더링 데이터는 Controller가 제공합니다.**
+
+Create/Update 화면의 표준 응답 계약:
+
+```typescript
+{
+  data: {
+    mode: "CREATE" | "UPDATE",
+    defaultObject: Record<string, unknown>,
+    options: Record<string, Array<{ value: string; label: string }>>,
+    ui: {
+      readOnlyPaths: string[],
+      hiddenPaths: string[],
+      disabledPaths: string[],
+    },
+    fieldMeta: Record<string, {
+      ai?: {
+        fillable: boolean;
+        defaultChecked?: boolean;
+        reason?: string;
+      };
+    }>,
+    aiSchemas: Array<{
+      key: string;
+      label: string;
+      paths: string[];
+    }>,
+  }
+}
+```
+
+규칙:
+- 모든 키는 `state path` 기준으로 정의합니다.
+- `defaultObject[path]`와 `options[path].value`는 타입/값이 일치해야 합니다.
+- UI 우선순위는 `hidden > readOnly > disabled`입니다.
+- Create/Update 페이지 상단에 `AiForm` Feature를 배치합니다.
+- `AiForm`에서 스키마 선택 + 체크박스 선택 + `채우기` 버튼으로 AI 적용 대상을 프론트에서 최종 결정합니다.
+- AI patch 적용 후 검증(schema)을 재실행합니다.
+
 ### observer 필수 규칙
 
 **`"use client"` 컴포넌트는 반드시 `observer`로 감싸야 합니다.**
@@ -945,22 +986,10 @@ feat(coin): 멀티시그 지갑 서비스 초기 구현
 Stage 1: 도메인 기획        → orch-requirement (L0~L4 + BE/Store 스펙) → [리뷰]
 Stage 2: 스키마 구현        → schema → entity → dto → query-dto → seed → [리뷰]
 Stage 3: 백엔드 구현        → repository → service → controller → [리뷰]
-Stage 4: 화면 기획 (페이지별) → orch-screen-planner (L5~L12) → req-spec-tracker(spec-checklist 갱신: Spec exists) → [리뷰] ← page 파라미터 권장 (미지정 시 자연어 추론, 불명확 시 확인)
+Stage 4: 화면 기획 (페이지별) → orch-screen-planner (L5~L12) → [리뷰] ← page 파라미터 권장 (미지정 시 자연어 추론, 불명확 시 확인)
 Stage 5: 컴포넌트 (페이지별) → ui → input → cell → widget → layout → feature → store → menu → [리뷰] ← page 파라미터 권장 (미지정 시 자연어 추론, 불명확 시 확인)
-Stage 6: 페이지 (페이지별)   → fe-page-builder → fe-api-integrator → req-spec-tracker(spec-checklist 갱신: Code paired) → [리뷰] ← page 파라미터 권장 (미지정 시 자연어 추론, 불명확 시 확인)
-Stage 7: E2E 검증 (선택)    → qa-be-e2e-testing → qa-fe-e2e-testing → req-spec-tracker(spec-checklist 갱신: Verified) → [리뷰]
-```
-
-#### Spec Checklist 규칙
-
-```
-도메인별 체크리스트 파일:
-apps/[app]/web/src/app/(admin)/[domain]/spec-checklist.md
-
-운영 규칙:
-- Stage 4 완료 시: Spec exists 체크 갱신
-- Stage 6 완료 시: Code paired 체크 갱신
-- Stage 7(또는 검증 완료) 시: Verified 체크 갱신
+Stage 6: 페이지 (페이지별)   → fe-page-builder → fe-api-integrator → [리뷰] ← page 파라미터 권장 (미지정 시 자연어 추론, 불명확 시 확인)
+Stage 7: E2E 검증 (선택)    → qa-be-e2e-testing → qa-fe-e2e-testing → [리뷰]
 ```
 
 > 화살표는 의존성 순서를 의미합니다. 동일 Stage 내부의 독립 작업은 `parallel=auto`에서 병렬 fan-out 가능합니다.
@@ -1109,7 +1138,6 @@ Stage 5: 컴포넌트 (페이지별)
 | req-store-planner | 도메인 Store 기획(L11) → `[domain]Store.spec.md` |
 | req-logic-planner | 비즈니스 로직/테스트 기획 → `service/repository.spec.md` + 테스트 케이스 |
 | req-test-planner | 테스트 케이스 기획(L12) → 기존 `.spec.md` 테스트 섹션 업데이트 |
-| req-spec-tracker | 도메인별 `spec-checklist.md` 생성/갱신 (Spec exists / Code paired / Verified) |
 | req-api-integration-planner | Orval API 연동 기획 → `hooks/index.spec.md` |
 | req-reverse-engineer | 기존 코드를 분석하여 `.spec.md` 역생성 |
 | /design-analyze (Skill) | Figma 디자인 분석 및 컴포넌트 매핑 (Figma 있을 때) |

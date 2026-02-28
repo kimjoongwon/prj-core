@@ -21,6 +21,25 @@
 | {{method}} | {{path}} | {{dto}} | {{returnType}} | {{description}} |
 {{/each}}
 
+## Create/Update Form Bootstrap 계약 (해당 시)
+
+> 등록/수정 화면을 제공하는 도메인은 아래 응답 계약을 포함합니다.
+
+| 필드 | 설명 |
+|------|------|
+| `defaultObject` | submit DTO와 동일 shape의 기본값 |
+| `options` | state path 기준 옵션 맵 |
+| `ui.readOnlyPaths` | 읽기 전용 경로 |
+| `ui.hiddenPaths` | 숨김 경로 |
+| `ui.disabledPaths` | 비활성 경로 |
+| `fieldMeta[path].ai.fillable` | AI 채움 가능 여부 |
+| `aiSchemas` | 프론트가 선택할 AI 스키마 묶음 |
+
+권장 엔드포인트:
+- `GET /form/create`
+- `GET /:id/form/update`
+- `POST /form/ai-fill` (선택)
+
 ## 인증/인가
 
 | 엔드포인트 | 인증 필요 | 권한 |

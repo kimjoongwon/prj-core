@@ -111,6 +111,23 @@ interface {{componentName}}Props {
 }
 ```
 
+## AiForm 계약 (해당 시)
+
+> `componentName`이 `AiForm`이거나 Create/Update 폼 상단 Feature인 경우 아래를 명시합니다.
+
+| 항목 | 설명 |
+|------|------|
+| `fieldMeta[path].ai.fillable` | AI 채움 가능 경로 |
+| `aiSchemas` | 스키마 선택 목록 |
+| `uiPaths` | hidden/readOnly/disabled 경로 |
+| `onFill` | 선택 경로 기반 AI 채우기 실행 |
+| `applyPatch` | 허용 path에 한해 patch 적용 |
+
+동작 체크포인트:
+- 스키마 선택 + 체크박스 선택 + `채우기` 버튼
+- `fillable=false` 또는 `hidden/readOnly/disabled` path 제외
+- patch 적용 후 폼 검증 재실행
+
 ## Store 연결
 
 | Store | 속성/메서드 | 사용 방식 |

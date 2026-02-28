@@ -73,6 +73,35 @@ developer_instructions = '''
 
 > ⚠️ **Critical**: Feature 컴포넌트는 **절대로** `apps/admin/src/components/features/`, `apps/*/src/feature/` 등 앱 폴더에 생성하지 않습니다. 모든 Feature는 `packages/fe-ui/src/components/feature/`에서만 생성하여 재사용성을 보장합니다.
 
+### AiForm Feature 계약 (Critical)
+
+Create/Update 페이지에서 재사용할 표준 `AiForm` Feature를 우선 구현 대상으로 취급합니다.
+
+- 위치: `packages/fe-ui/src/components/feature/AiForm/`
+- 역할:
+  - 폼 상단에서 AI 채움 UX 제공
+  - 스키마 선택(`aiSchemas`)
+  - 필드 체크박스 선택(`fieldMeta[path].ai.fillable`)
+  - `채우기` 버튼으로 AI patch 요청
+- 입력 데이터:
+  - `formState`, `fieldMeta`, `aiSchemas`, `uiPaths`, `options`
+- 동작 규칙:
+  - `fillable=false`, `hidden/readOnly/disabled` 경로는 선택 불가
+  - 선택된 path만 AI 요청으로 전달
+  - 응답 patch는 허용 path만 적용
+  - 적용 후 검증(schema) 재실행
+
+```ts
+interface AiFormProps<TForm> {
+  formState: TForm;
+  fieldMeta: Record<string, { ai: { fillable: boolean; defaultChecked?: boolean; reason?: string } }>;
+  aiSchemas: Array<{ key: string; label: string; paths: string[] }>;
+  ui: { readOnlyPaths: string[]; hiddenPaths: string[]; disabledPaths: string[] };
+  onFill: (input: { schemaKey: string; selectedPaths: string[]; currentObject: TForm; userPrompt?: string }) => Promise<{ patches: Array<{ path: string; value: unknown }> }>;
+  applyPatch: (patches: Array<{ path: string; value: unknown }>) => void;
+}
+```
+
 ---
 
 ## 4. 프로세스

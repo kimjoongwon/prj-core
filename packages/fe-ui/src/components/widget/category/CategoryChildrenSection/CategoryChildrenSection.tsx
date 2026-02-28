@@ -22,7 +22,7 @@ export interface CategoryChildItem {
 
 export interface CategoryChildrenSectionProps {
 	/** 하위 카테고리 목록 */
-	children: CategoryChildItem[];
+	items: CategoryChildItem[];
 	/** 로딩 상태 */
 	isLoading?: boolean;
 	/** 카테고리 상세 링크 기본 경로 */
@@ -35,7 +35,7 @@ export interface CategoryChildrenSectionProps {
  */
 export const CategoryChildrenSection = observer(
 	({
-		children: childCategories,
+		items: childCategories,
 		isLoading = false,
 		categoriesBasePath = "/roles/categories",
 	}: CategoryChildrenSectionProps) => {

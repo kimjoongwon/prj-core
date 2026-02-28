@@ -217,10 +217,10 @@ packages/fe-ui/src/components/feature/[FeatureName]/index.spec.md
 |-------|------|----------|----------|----------|--------------|
 | 1 | 도메인 기획 | 도메인 전체 | L0-L4 기획 + BE/Store 스펙 | 선행 순차 + 일부 fan-out | orch-requirement |
 | 2 | 스키마 구현 | 도메인 전체 | Prisma/공용 스키마, Entity, DTO + 테스트 | `targets` fan-out + join | be-prisma-builder, common-schema-builder, be-entity-builder, be-dto-builder, be-query-dto-builder, be-seed-maker, req-test-planner, qa-be-testing |
-| 3 | 백엔드 구현 | 도메인 전체 | Repository, Service, Controller + 테스트 | `targets` fan-out + join | be-repository-builder, be-service-builder, be-facade-builder, be-controller-builder, req-test-planner, qa-be-testing |
+| 3 | 백엔드 구현 | 도메인 전체 | Repository, Service, Controller + 테스트 (Create/Update form bootstrap 계약 포함) | `targets` fan-out + join | be-repository-builder, be-service-builder, be-facade-builder, be-controller-builder, req-test-planner, qa-be-testing |
 | 4 | 화면 기획 | **페이지별** | L5-L12 기획 + spec 체크리스트 생성 | `pages` fan-out 가능 | orch-screen-planner, req-spec-tracker |
 | 5 | 컴포넌트 구현 | **페이지별** | UI/Input/Cell/Widget/Layout/Feature + 테스트 | `pages` fan-out + lock merge | fe-ui-component-builder, fe-input-component-builder, fe-cell-builder, fe-widget-builder, fe-layout-builder, fe-feature-builder, fe-store-builder, fe-menu-builder, req-test-planner, qa-fe-testing |
-| 6 | 페이지 통합 | **페이지별** | 페이지 컴포넌트 + API 연동 + 테스트 + spec 체크리스트 동기화 | `pages` fan-out + lock merge | fe-page-builder, fe-api-integrator, /fe-review, req-test-planner, qa-fe-testing, req-spec-tracker |
+| 6 | 페이지 통합 | **페이지별** | 페이지 컴포넌트 + API 연동 + 테스트 + spec 체크리스트 동기화 (Create/Update는 AiForm 상단 통합) | `pages` fan-out + lock merge | fe-page-builder, fe-api-integrator, /fe-review, req-test-planner, qa-fe-testing, req-spec-tracker |
 | 7 | E2E 검증 | 도메인 전체 | E2E 테스트 + 검증 상태 체크리스트 반영 | BE/FE 병렬 + join | qa-be-e2e-testing, qa-fe-e2e-testing, req-spec-tracker |
 
 ---
@@ -541,6 +541,13 @@ Task: be-seed-maker (필요시)
 
 **목표**: Repository, Service, Controller 구현 + 테스트
 
+**추가 계약 (Create/Update 화면):**
+- Controller는 form bootstrap 응답을 제공합니다:
+  - `defaultObject`, `options`
+  - `ui.readOnlyPaths`, `ui.hiddenPaths`, `ui.disabledPaths`
+  - `fieldMeta`, `aiSchemas`
+- 필요 시 `POST /form/ai-fill` endpoint를 함께 구현합니다.
+
 **에이전트 호출:**
 ```
 Task: be-repository-builder
@@ -704,6 +711,11 @@ Task: fe-menu-builder (목록 페이지만)
 ### Stage 6: 페이지 통합 (페이지별)
 
 **목표**: 페이지 컴포넌트 구현 + API 연동 + 규칙 검증 + 테스트
+
+**Create/Update 페이지 필수 규칙:**
+- 페이지 상단에 `AiForm` Feature를 배치합니다.
+- `AiForm`은 form bootstrap 메타를 입력으로 받아 스키마 선택/체크박스/채우기 버튼 UX를 제공합니다.
+- AI patch 적용 후 검증(schema)을 재실행합니다.
 
 **⚠️ 페이지별 실행**: `page` 파라미터 지정 권장 (미지정 시 자연어 추론, 불명확 시 확인)
 

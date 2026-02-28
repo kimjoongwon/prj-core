@@ -85,12 +85,6 @@ export const ADMIN_PATHS = {
 	TEMPLATES_DETAIL: "/templates/[templateId]",
 	TEMPLATES_EDIT: "/templates/[templateId]/edit",
 
-	// AI 폼 템플릿 (AIFormTemplate 엔티티)
-	AI_FORM_TEMPLATES: "/ai-form-templates",
-	AI_FORM_TEMPLATES_NEW: "/ai-form-templates/new",
-	AI_FORM_TEMPLATES_DETAIL: "/ai-form-templates/[aiFormTemplateId]",
-	AI_FORM_TEMPLATES_EDIT: "/ai-form-templates/[aiFormTemplateId]/edit",
-
 	// 문의 (Inquiry 엔티티)
 	INQUIRIES: "/inquiries",
 	INQUIRIES_NEW: "/inquiries/new",
@@ -118,7 +112,6 @@ export const ADMIN_SUBJECTS = {
 	MENU_EXERCISES: "menu:exercises",
 	MENU_ROUTINES: "menu:routines",
 	MENU_TEMPLATES: "menu:templates",
-	MENU_AI_FORM_TEMPLATES: "menu:ai-form-templates",
 	MENU_ROLES: "menu:roles",
 	MENU_INQUIRIES: "menu:inquiries",
 
@@ -137,9 +130,6 @@ export const ADMIN_SUBJECTS = {
 
 	// 2depth - 템플릿
 	MENU_TEMPLATES_LIST: "menu:templates:list",
-
-	// 2depth - AI 폼 템플릿
-	MENU_AI_FORM_TEMPLATES_LIST: "menu:ai-form-templates:list",
 
 	// 2depth - 권한 관리
 	MENU_ROLES_LIST: "menu:roles:list",
@@ -258,24 +248,7 @@ export const ADMIN_NAV_ITEMS: NavItemConfig[] = [
 		],
 	},
 
-	// 7. AI 폼 템플릿
-	{
-		id: "ai-form-templates",
-		label: "AI 폼 템플릿",
-		icon: "Sparkles",
-		path: ADMIN_PATHS.AI_FORM_TEMPLATES,
-		subject: ADMIN_SUBJECTS.MENU_AI_FORM_TEMPLATES,
-		children: [
-			{
-				id: "ai-form-templates-list",
-				label: "폼 템플릿 목록",
-				path: ADMIN_PATHS.AI_FORM_TEMPLATES,
-				subject: ADMIN_SUBJECTS.MENU_AI_FORM_TEMPLATES_LIST,
-			},
-		],
-	},
-
-	// 8. 문의 관리
+	// 7. 문의 관리
 	{
 		id: "inquiries",
 		label: "문의 관리",
@@ -292,7 +265,7 @@ export const ADMIN_NAV_ITEMS: NavItemConfig[] = [
 		],
 	},
 
-	// 9. 권한 관리
+	// 8. 권한 관리
 	{
 		id: "roles",
 		label: "권한 관리",

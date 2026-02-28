@@ -52,6 +52,12 @@ tools:
 - 핸들러 네이밍(`on[Event][UI]`) 및 바인딩 포인트
 - Orval 훅 연동 위치와 로딩/에러 처리 흐름
 - 페이지 테스트 관점(핵심 시나리오, 실패 케이스)
+- Create/Update 페이지에서 `AiForm` 상단 배치 여부
+- Form bootstrap 응답 계약 소비 계획:
+  - `defaultObject`, `options`
+  - `ui.readOnlyPaths`, `ui.hiddenPaths`, `ui.disabledPaths`
+  - `fieldMeta`, `aiSchemas`
+- `AiForm`의 스키마 선택/체크박스/채우기 버튼 인터랙션 설계
 
 ---
 

@@ -179,8 +179,12 @@ function AbilityDetailPageClient({ abilityId }: AbilityDetailPageClientProps) {
 									</Chip>
 								) : (
 									<div className="flex flex-wrap gap-2">
-										{ability.fields.map((field, index) => (
-											<Chip key={index} size="sm" variant="flat">
+										{ability.fields.map((field) => (
+											<Chip
+												key={`${ability.id}-${field}`}
+												size="sm"
+												variant="flat"
+											>
 												{field}
 											</Chip>
 										))}
