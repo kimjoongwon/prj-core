@@ -248,3 +248,32 @@ pnpm bundle:sizes
 - npm 로그인 상태 확인
 - 패키지 권한 확인
 - 네트워크 연결 확인
+
+## Git worktree + tmux automation (`wt.js`)
+
+`wt.js`는 `git worktree + tmux` 병렬 작업을 표준화하는 스크립트입니다.
+
+### Commands
+
+```bash
+pnpm wt:init                   # create .wt/config.json when missing
+pnpm wt:new CORE-123           # create branch + worktree + env + tmux
+pnpm wt:go CORE-123            # attach tmux session or print cd path
+pnpm wt:list                   # show worktree registry/status table
+pnpm wt:rm CORE-123            # remove worktree and delete local branch
+pnpm wt:rm CORE-123 --keep-branch
+pnpm wt:rm CORE-123 --force    # force remove dirty worktree / unmerged branch
+```
+
+### Notes
+
+- Runtime registry is stored under the git common dir: `<git-common-dir>/wt-tool/registry.json`.
+- Default config path is `.wt/config.json`. Override with `--config <path>`.
+- `new` writes an env file with per-slot port offsets (`offsetStep * slot`).
+- If tmux is enabled and available, `new` creates a session and configured windows.
+- `rm` is safe by default (`git worktree remove`, `git branch -d`). Use `--force` only when needed.
+- `directoryNameTemplate` supports `{{repo}}`, `{{ticket}}`, `{{branch}}`, `{{slot}}`.
+
+### Detailed guide
+
+- Full usage and workflow: [`scripts/wt-guide.md`](./wt-guide.md)

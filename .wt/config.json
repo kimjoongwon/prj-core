@@ -1,0 +1,36 @@
+{
+  "worktreeRoot": "../wt",
+  "directoryNameTemplate": "{{repo}}-{{ticket}}",
+  "branchPrefix": "feat",
+  "baseRef": "origin/main",
+  "envFileName": ".env.worktree",
+  "port": {
+    "offsetStep": 20,
+    "map": {
+      "ADMIN_WEB_PORT": 3000,
+      "PROPOSAL_WEB_PORT": 3001,
+      "CORE_API_PORT": 3006,
+      "IDP_API_PORT": 3007,
+      "IDP_WEB_PORT": 3008,
+      "STORYBOOK_PORT": 6006
+    }
+  },
+  "tmux": {
+    "enabled": true,
+    "sessionPrefix": "wt",
+    "windows": [
+      {
+        "name": "code"
+      },
+      {
+        "name": "web"
+      },
+      {
+        "name": "api"
+      },
+      {
+        "name": "test"
+      }
+    ]
+  }
+}
