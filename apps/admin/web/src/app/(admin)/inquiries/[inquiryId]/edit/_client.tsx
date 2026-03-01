@@ -151,34 +151,34 @@ function InquiryEditPageClient({ inquiryId }: Props) {
 			}
 		>
 			<VStack gap={4}>
+				{bootstrap && (
+					<AiForm
+						formState={state.toFormObject()}
+						fieldMeta={bootstrap.fieldMeta}
+						aiSchemas={bootstrap.aiSchemas}
+						ui={bootstrap.ui}
+						options={bootstrap.options}
+						onFill={async (input) => {
+							const result = await fillMutation.mutateAsync({
+								data: {
+									mode: "UPDATE",
+									schemaKey: input.schemaKey,
+									selectedPaths: input.selectedPaths,
+									currentObject: input.currentObject,
+									userPrompt: input.userPrompt,
+								},
+							});
+							return result?.data ?? { patches: [] };
+						}}
+						applyPatch={(patches) => {
+							state.applyPatch(patches);
+						}}
+						disabled={state.isSubmitting}
+					/>
+				)}
+
 				<SectionSurface>
 					<VStack gap={4}>
-						{bootstrap && (
-							<AiForm
-								formState={state.toFormObject()}
-								fieldMeta={bootstrap.fieldMeta}
-								aiSchemas={bootstrap.aiSchemas}
-								ui={bootstrap.ui}
-								options={bootstrap.options}
-								onFill={async (input) => {
-									const result = await fillMutation.mutateAsync({
-										data: {
-											mode: "UPDATE",
-											schemaKey: input.schemaKey,
-											selectedPaths: input.selectedPaths,
-											currentObject: input.currentObject,
-											userPrompt: input.userPrompt,
-										},
-									});
-									return result?.data ?? { patches: [] };
-								}}
-								applyPatch={(patches) => {
-									state.applyPatch(patches);
-								}}
-								disabled={state.isSubmitting}
-							/>
-						)}
-
 						<Input
 							label="문의 제목"
 							labelPlacement="outside"

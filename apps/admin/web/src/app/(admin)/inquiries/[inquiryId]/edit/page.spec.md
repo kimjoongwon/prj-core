@@ -59,3 +59,4 @@ Create/Update Form Bootstrap 계약을 사용해 초기 폼을 렌더링하며, 
 |------|------|--------|
 | 2026-03-01 | 초기 생성 (문의 수정 페이지 + AiForm UPDATE 흐름) | codex |
 | 2026-03-01 | 수정 폼 입력을 HeroUI Select 기반으로 정리해 Form-state 전용 입력 컴포넌트 의존 제거 | codex |
+| 2026-03-01 | AiForm을 수정 입력 폼과 동일 위계로 분리하고 바깥 SectionSurface 래퍼를 제거해 Card 단일 표면 구조로 정리 | codex |

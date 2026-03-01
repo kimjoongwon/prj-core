@@ -372,3 +372,4 @@ PageSurface (title, description, actions)
 | 2026-02-28 | InquiryStore 의존 제거, 페이지 로컬 state 기준으로 L10/L11 갱신 | codex |
 | 2026-03-01 | Create Form Bootstrap + AiForm(`POST /form/ai-fill`) 기반으로 페이지 구조 전환, `_prefetch.ts` 추가 | codex |
 | 2026-03-01 | 폼 입력 컴포넌트를 HeroUI(Input/Select/Textarea) 기반으로 정리하고 고객 검색을 페이지 로컬 결과 리스트 선택 방식으로 조정 | codex |
+| 2026-03-01 | AiForm을 실제 입력 폼과 동일 위계로 분리하고 바깥 SectionSurface 래퍼를 제거해 Card 단일 표면 구조로 정리 | codex |

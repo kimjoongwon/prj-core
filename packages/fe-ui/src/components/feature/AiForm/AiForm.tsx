@@ -4,16 +4,14 @@ import {
 	Button,
 	Card,
 	CardBody,
-	Checkbox,
-	CheckboxGroup,
 	Chip,
-	Divider,
 	Input,
 	Select,
 	SelectItem,
 	type SharedSelection,
 } from "@heroui/react";
-import { Sparkles } from "lucide-react";
+import { AnimatePresence, motion } from "framer-motion";
+import { ChevronDown, ChevronUp, Sparkles } from "lucide-react";
 import { observer } from "mobx-react-lite";
 import { useEffect, useState } from "react";
 import type {
@@ -106,6 +104,22 @@ function sanitizePatches(
 	});
 }
 
+function buildFieldStatus(item: FieldRuntimeMeta): string {
+	if (item.isHidden) {
+		return "숨김";
+	}
+	if (item.isReadOnly) {
+		return "읽기 전용";
+	}
+	if (item.isDisabled) {
+		return "비활성";
+	}
+	if (!item.fillable) {
+		return "AI 제외";
+	}
+	return "";
+}
+
 const AiFormComponent = <TForm extends Record<string, unknown>>({
 	formState,
 	fieldMeta,
@@ -123,6 +137,7 @@ const AiFormComponent = <TForm extends Record<string, unknown>>({
 	const [isLoading, setIsLoading] = useState(false);
 	const [errorMessage, setErrorMessage] = useState<string | null>(null);
 	const [lastAppliedCount, setLastAppliedCount] = useState(0);
+	const [isFieldPanelOpen, setIsFieldPanelOpen] = useState(false);
 
 	useEffect(() => {
 		if (aiSchemas.length === 0) {
@@ -194,12 +209,23 @@ const AiFormComponent = <TForm extends Record<string, unknown>>({
 		setErrorMessage(null);
 	};
 
-	const handlePathSelectionChange = (values: string[]) => {
-		const selectablePathSet = new Set(selectablePaths.map((path) => normalizePath(path)));
-		const nextSelected = values.filter((path) =>
-			selectablePathSet.has(normalizePath(path)),
-		);
-		setSelectedPaths(nextSelected);
+	const selectedPathSet = new Set(selectedPaths.map((path) => normalizePath(path)));
+
+	const handleFieldChipToggle = (path: string) => {
+		const field = fieldItems.find((item) => item.path === path);
+		if (!field || !field.selectable || disabled || isLoading) {
+			return;
+		}
+
+		const normalizedPath = normalizePath(path);
+		const alreadySelected = selectedPathSet.has(normalizedPath);
+		if (alreadySelected) {
+			setSelectedPaths(
+				selectedPaths.filter((itemPath) => normalizePath(itemPath) !== normalizedPath),
+			);
+		} else {
+			setSelectedPaths([...selectedPaths, path]);
+		}
 		setErrorMessage(null);
 	};
 
@@ -255,28 +281,26 @@ const AiFormComponent = <TForm extends Record<string, unknown>>({
 
 	return (
 		<Card shadow="sm" className="border border-divider bg-content1">
-			<CardBody className="gap-4 p-4">
-				<div className="flex flex-col gap-1">
-					<div className="flex items-center gap-2">
-						<Sparkles className="size-4 text-primary" />
-						<h3 className="text-sm font-semibold">AiForm</h3>
-						<Chip size="sm" variant="flat" color="primary">
-							선택 필드 {selectedPaths.length}개
-						</Chip>
+			<CardBody className="gap-2 p-2.5">
+				<div className="flex items-center justify-between">
+					<div className="flex items-center gap-1.5">
+						<Sparkles className="size-3.5 text-primary" />
+						<h3 className="text-xs font-semibold">지능형 채움</h3>
 					</div>
-					<p className="text-xs text-default-500">
-						스키마와 필드를 선택한 뒤 AI 채우기를 실행하세요.
-					</p>
+					<Chip size="sm" variant="flat" color="primary">
+						선택 {selectedPaths.length}
+					</Chip>
 				</div>
 
-				<div className="grid gap-3 md:grid-cols-2">
+				<div className="flex flex-col gap-2 md:flex-row md:items-center">
 					<Select
-						label="AI 스키마"
-						labelPlacement="outside"
-						placeholder="스키마를 선택하세요"
+						aria-label="AI 스키마"
+						size="sm"
+						placeholder="AI 스키마 선택"
 						selectedKeys={selectedSchemaKeys}
 						onSelectionChange={handleSchemaSelectionChange}
 						isDisabled={disabled || aiSchemas.length === 0}
+						className="flex-1"
 					>
 						{aiSchemas.map((schema) => (
 							<SelectItem key={schema.key} textValue={schema.label}>
@@ -285,90 +309,130 @@ const AiFormComponent = <TForm extends Record<string, unknown>>({
 						))}
 					</Select>
 
-					<Input
-						label="추가 요청사항"
-						labelPlacement="outside"
-						placeholder="선택 사항"
-						value={userPrompt}
-						onValueChange={setUserPrompt}
-						isDisabled={disabled || isLoading}
-					/>
+					<div className="flex items-center gap-1.5">
+						<Button
+							size="sm"
+							variant="light"
+							onPress={() => {
+								setIsFieldPanelOpen(!isFieldPanelOpen);
+							}}
+							endContent={
+								isFieldPanelOpen ? (
+									<ChevronUp className="size-4" />
+								) : (
+									<ChevronDown className="size-4" />
+								)
+							}
+							isDisabled={disabled || fieldItems.length === 0}
+						>
+							필드
+						</Button>
+						<Button
+							size="sm"
+							color="primary"
+							variant="flat"
+							onPress={handleFill}
+							isLoading={isLoading}
+							isDisabled={isFillDisabled}
+							startContent={!isLoading && <Sparkles className="size-3.5" />}
+						>
+							채우기
+						</Button>
+					</div>
 				</div>
 
-				<Divider />
-
-				<div className="max-h-56 overflow-y-auto rounded-lg border border-divider p-3">
-					{fieldItems.length === 0 ? (
-						<p className="text-sm text-default-500">
-							선택한 스키마에 표시할 필드가 없습니다.
-						</p>
-					) : (
-						<CheckboxGroup
-							value={selectedPaths}
-							onValueChange={handlePathSelectionChange}
-							classNames={{ wrapper: "gap-3" }}
+				<AnimatePresence initial={false}>
+					{isFieldPanelOpen && (
+						<motion.div
+							initial={{ opacity: 0, height: 0, y: -8 }}
+							animate={{ opacity: 1, height: "auto", y: 0 }}
+							exit={{ opacity: 0, height: 0, y: -8 }}
+							transition={{ duration: 0.22, ease: [0.22, 1, 0.36, 1] }}
+							className="overflow-hidden"
 						>
-							{fieldItems.map((item) => (
-								<div key={item.path} className="rounded-lg border border-divider p-3">
-									<Checkbox
-										value={item.path}
-										isDisabled={disabled || !item.selectable}
-									>
-										<span className="text-sm font-medium">{item.label}</span>
-									</Checkbox>
-									<div className="mt-2 flex flex-wrap gap-2">
-										{item.isHidden && (
-											<Chip size="sm" variant="flat" color="warning">
-												hidden
-											</Chip>
-										)}
-										{item.isReadOnly && (
-											<Chip size="sm" variant="flat" color="warning">
-												readOnly
-											</Chip>
-										)}
-										{item.isDisabled && (
-											<Chip size="sm" variant="flat" color="warning">
-												disabled
-											</Chip>
-										)}
-										{!item.fillable && (
-											<Chip size="sm" variant="flat" color="default">
-												ai-fillable=false
-											</Chip>
-										)}
-										{item.optionCount > 0 && (
-											<Chip size="sm" variant="flat" color="default">
-												options {item.optionCount}
-											</Chip>
-										)}
-									</div>
-									{item.reason && (
-										<p className="mt-2 text-xs text-default-500">{item.reason}</p>
+							<div className="rounded-md border border-divider p-2">
+								<Input
+									aria-label="추가 요청사항"
+									size="sm"
+									placeholder="추가 요청사항 (선택)"
+									value={userPrompt}
+									onValueChange={setUserPrompt}
+									isDisabled={disabled || isLoading}
+								/>
+								<div className="mt-2 max-h-32 overflow-y-auto rounded-md border border-divider p-2">
+									{fieldItems.length === 0 ? (
+										<p className="text-xs text-default-500">
+											선택 가능한 필드가 없습니다.
+										</p>
+									) : (
+										<div className="flex flex-wrap gap-1.5">
+											{fieldItems.map((item) => {
+												const statusText = buildFieldStatus(item);
+												const normalizedPath = normalizePath(item.path);
+												const isSelected = selectedPathSet.has(normalizedPath);
+												return (
+													<motion.div
+														key={item.path}
+														layout
+														initial={false}
+														animate={{ scale: isSelected ? 1 : 0.98 }}
+														whileTap={item.selectable ? { scale: 0.95 } : undefined}
+														transition={{ duration: 0.16 }}
+													>
+														<Chip
+															size="sm"
+															variant={isSelected ? "solid" : "flat"}
+															color={
+																isSelected
+																	? "primary"
+																	: item.selectable
+																		? "default"
+																		: "warning"
+															}
+															className={`max-w-[180px] cursor-pointer text-[11px] transition-all duration-200 ${
+																!item.selectable
+																	? "cursor-not-allowed opacity-60"
+																	: ""
+															}`}
+															title={[
+																item.label,
+																statusText ? `상태: ${statusText}` : "",
+																item.reason ? `사유: ${item.reason}` : "",
+															]
+																.filter(Boolean)
+																.join("\n")}
+															onClick={() => {
+																handleFieldChipToggle(item.path);
+															}}
+														>
+															<span className="truncate">
+																{item.label}
+																{item.optionCount > 0
+																	? ` (${item.optionCount})`
+																	: ""}
+															</span>
+														</Chip>
+													</motion.div>
+												);
+											})}
+										</div>
 									)}
 								</div>
-							))}
-						</CheckboxGroup>
+								<p className="mt-1 text-[11px] text-default-500">
+									선택 {selectedPaths.length}/{selectablePaths.length}
+								</p>
+							</div>
+						</motion.div>
 					)}
-				</div>
+				</AnimatePresence>
 
-				{errorMessage && <p className="text-sm text-danger">{errorMessage}</p>}
+				{errorMessage && <p className="text-xs text-danger">{errorMessage}</p>}
 
-				<div className="flex items-center justify-between">
-					<span className="text-xs text-default-500">
+				{lastAppliedCount > 0 && (
+					<p className="text-[11px] text-default-500">
 						적용 완료: {lastAppliedCount}개 필드
-					</span>
-					<Button
-						color="primary"
-						variant="flat"
-						onPress={handleFill}
-						isLoading={isLoading}
-						isDisabled={isFillDisabled}
-						startContent={!isLoading && <Sparkles className="size-4" />}
-					>
-						AI 채우기
-					</Button>
-				</div>
+					</p>
+				)}
 			</CardBody>
 		</Card>
 	);

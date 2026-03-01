@@ -550,33 +550,35 @@ function InquiryDetailPageClient({ inquiryId }: Props) {
 						</HStack>
 
 						{updateFormBootstrap && (
-							<SectionSurface>
-								<VStack gap={4}>
-									<AiForm
-										formState={metaState.toFormObject()}
-										fieldMeta={updateFormBootstrap.fieldMeta}
-										aiSchemas={updateFormBootstrap.aiSchemas}
-										ui={updateFormBootstrap.ui}
-										options={updateFormBootstrap.options}
-										onFill={async (input) => {
-											const result = await fillMetaMutation.mutateAsync({
-												data: {
-													mode: "UPDATE",
-													schemaKey: input.schemaKey,
-													selectedPaths: input.selectedPaths,
-													currentObject: input.currentObject,
-													userPrompt: input.userPrompt,
-												},
-											});
-											return result?.data ?? { patches: [] };
-										}}
-										applyPatch={(patches) => {
-											metaState.applyPatch(patches);
-										}}
-										disabled={
-											updateMetaMutation.isPending || fillMetaMutation.isPending
-										}
-									/>
+							<>
+								<AiForm
+									formState={metaState.toFormObject()}
+									fieldMeta={updateFormBootstrap.fieldMeta}
+									aiSchemas={updateFormBootstrap.aiSchemas}
+									ui={updateFormBootstrap.ui}
+									options={updateFormBootstrap.options}
+									onFill={async (input) => {
+										const result = await fillMetaMutation.mutateAsync({
+											data: {
+												mode: "UPDATE",
+												schemaKey: input.schemaKey,
+												selectedPaths: input.selectedPaths,
+												currentObject: input.currentObject,
+												userPrompt: input.userPrompt,
+											},
+										});
+										return result?.data ?? { patches: [] };
+									}}
+									applyPatch={(patches) => {
+										metaState.applyPatch(patches);
+									}}
+									disabled={
+										updateMetaMutation.isPending || fillMetaMutation.isPending
+									}
+								/>
+
+								<SectionSurface>
+									<VStack gap={4}>
 									<Input
 										label="문의 제목"
 										labelPlacement="outside"
@@ -628,8 +630,9 @@ function InquiryDetailPageClient({ inquiryId }: Props) {
 											메타 저장
 										</Button>
 									</div>
-								</VStack>
-							</SectionSurface>
+									</VStack>
+								</SectionSurface>
+							</>
 						)}
 
 						<SectionSurface>
