@@ -1,7 +1,7 @@
 # 문의 접수 페이지 기획서
 
 > 생성일: 2026-02-25
-> 수정일: 2026-02-26
+> 수정일: 2026-03-01
 > 타입: page
 > 경로: /inquiries/new
 
@@ -89,8 +89,8 @@
 2. 기존 고객 검색 또는 신규 고객 정보를 입력한다
 3. 문의 제목, 카테고리, 우선순위 등 기본 정보를 입력한다
 4. 문의 내용을 상세히 작성한다
-5. **AI가 입력 내용을 분석하여 카테고리, 우선순위를 자동 추천한다**
-6. **AI 추천이 표시되면 [추천 적용] 버튼으로 원클릭 적용할 수 있다**
+5. 상단 `AiForm`에서 스키마/필드를 선택하고 "채우기"를 실행한다
+6. 서버가 반환한 patch가 폼(title/category/priority/content)에 즉시 반영된다
 7. 필요시 첨부 파일을 업로드한다
 8. 담당자를 배정하거나 태그를 추가한다
 9. "접수 완료" 버튼을 클릭하여 문의를 등록한다
@@ -101,7 +101,7 @@
 |------|----------|--------|
 | 헤더 | PageSurface | - |
 | 기본 정보 | InquiryBasicForm | `packages/fe-ui/src/components/widget/InquiryBasicForm/index.spec.md` |
-| AI 분류 추천 | AIClassificationSuggestion | `packages/fe-ui/src/components/widget/AIClassificationSuggestion/index.spec.md` |
+| AI 폼 채움 | AiForm | `packages/fe-ui/src/components/feature/AiForm/index.spec.md` |
 | 고객 정보 | CustomerSearchForm | `packages/fe-ui/src/components/feature/CustomerSearchForm/index.spec.md` |
 | 문의 내용 | InquiryContentForm | `packages/fe-ui/src/components/widget/InquiryContentForm/index.spec.md` |
 | 추가 설정 | InquirySettingsForm | `packages/fe-ui/src/components/widget/InquirySettingsForm/index.spec.md` |
@@ -115,8 +115,8 @@
 | 고객 검색 중 | 기존 고객 검색 | 검색 결과 드롭다운 |
 | 고객 선택됨 | 기존 고객 선택 | 고객 정보 자동 입력 |
 | 입력 중 | 폼 작성 중 | 입력값 실시간 검증 |
-| AI 분석 중 | AI 분류 추천 생성 중 | 로딩 인디케이터 |
-| AI 추천 표시 | AI 분석 완료 | 추천 카드 표시 |
+| AI 채움 중 | AI patch 생성 중 | 로딩 인디케이터 |
+| AI 채움 완료 | patch 적용 완료 | 입력값 자동 반영 |
 | 제출 중 | 접수 완료 API 호출 | 버튼 비활성화, 로딩 |
 | 완료 | 접수 성공 | 상세 페이지로 리다이렉트 |
 | 에러 | 유효성/API 에러 | 에러 메시지 표시 |
@@ -125,38 +125,35 @@
 
 | 시점 | API | 캐싱 |
 |------|-----|------|
+| 진입 시 | GET /api/v1/inquiries/form/create | staleTime: 0 |
 | 고객 검색 | GET /api/v1/users?search=xxx | staleTime: 1m |
-| AI 분류 추천 | POST /api/v1/inquiries/classify | no-cache |
+| AI 폼 채움 | POST /api/v1/inquiries/form/ai-fill | no-cache |
 | 접수 완료 | POST /api/v1/inquiries | no-cache |
 | 파일 업로드 | POST /api/v1/uploads | no-cache |
 
-## AI 자동 분류 제안
+## AiForm 채움
 
-### 분석 트리거
+### 실행 트리거
 
 | 트리거 | 동작 |
 |--------|------|
-| 제목 입력 후 1초 | AI 분류 분석 시작 |
-| 문의 내용 50자 이상 입력 | AI 분류 분석 시작 |
-| 수동 [분석] 버튼 클릭 | AI 분류 분석 시작 |
+| AiForm 스키마 선택 | 선택한 paths 체크 상태 갱신 |
+| AiForm [채우기] 버튼 클릭 | 서버 `POST /form/ai-fill` 호출 |
 
-### 추천 항목
+### 적용 항목
 
 | 항목 | 설명 | 신뢰도 표시 |
 |------|------|------------|
-| 카테고리 | 문의 내용 기반 분류 | 0~100% |
-| 우선순위 | 키워드/감정 기반 판단 | 0~100% |
-| 예상 처리 시간 | 카테고리별 평균 기반 | - |
-| 감정 분석 | 긍정/부정/중립 | 0~100% |
+| title | 문의 제목 자동 보정 | - |
+| category | 문의 내용 기반 분류 | - |
+| priority | 키워드/감정 기반 판단 | - |
+| content | 문의 내용 보강 | - |
 
-### AI 추천 UI 동작
+### AiForm UI 동작
 
-1. 분석 중: 스켈레톤 로딩 + "AI 분석 중..." 메시지
-2. 분석 완료: 추천 카드 표시
-   - 추천 카테고리 [적용] 버튼
-   - 추천 우선순위 [적용] 버튼
-   - [전체 적용] 버튼
-3. 적용 후: 해당 필드 자동 채우기, 추천 카드 흐리게 표시
+1. 사용자가 스키마와 필드를 선택한다
+2. `onFill` 호출 후 서버 patch를 받는다
+3. `applyPatch`로 state를 즉시 갱신한다
 
 ## 이벤트 핸들러
 
@@ -167,8 +164,8 @@
 | onSelectCustomer | 선택한 고객 정보로 폼 자동 채우기 |
 | onAddAttachment | 파일 선택 다이얼로그 열기 |
 | onRemoveAttachment | 첨부 파일 제거 |
-| onTriggerAIClassify | AI 분류 추천 API 호출 |
-| onApplyAISuggestion | AI 추천값 폼에 적용 |
+| onFillAiForm | AiForm 채우기 API 호출 |
+| onApplyAiPatch | AiForm patch를 폼 state에 적용 |
 | onClickCancel | 확인 다이얼로그 후 목록으로 이동 |
 | onClickSaveDraft | 임시 저장 (localStorage) |
 | onSubmit | 문의 접수 API 호출 |
@@ -208,11 +205,11 @@ PageSurface (title, description, actions)
 
 ```
 1. SSR Prefetch
-   - 없음 (신규 등록 페이지)
+   - GET /api/v1/inquiries/form/create
 
 2. Client-side
    - 고객 검색: 디바운스 300ms
-   - AI 분류: 제목/내용 변경 시 1초 후 자동 트리거
+   - AI 채움: AiForm 채우기 버튼 클릭 시 호출
    - 폼 제출: 유효성 검증 후 API 호출
 
 3. 임시 저장
@@ -226,8 +223,7 @@ PageSurface (title, description, actions)
 |----------|--------|------|
 | 고객 검색 | Input 입력 | 300ms 디바운스 + API 호출 |
 | 고객 선택 | List click | 폼 자동 채우기 |
-| AI 분류 | 자동/수동 | API 호출 + 추천 표시 |
-| 추천 적용 | Button click | 폼 필드 업데이트 |
+| AiForm 채움 | Button click | API 호출 + patch 적용 |
 | 폼 제출 | Button click | 유효성 검증 + API 호출 |
 | 이탈 확인 | Browser back | 확인 다이얼로그 |
 
@@ -235,7 +231,7 @@ PageSurface (title, description, actions)
 
 | 컴포넌트 | 위치 | 설명 |
 |----------|------|------|
-| AIClassificationSuggestion | ui/ | AI 분류 추천 카드 |
+| AiForm | feature/ | 스키마 선택 + 패치 적용 UI |
 | CustomerSearchInput | ui/ | 고객 검색 입력 |
 | SelectedCustomerCard | ui/ | 선택된 고객 정보 카드 |
 | AttachmentUploader | ui/ | 파일 업로드 컴포넌트 |
@@ -255,13 +251,13 @@ PageSurface (title, description, actions)
 | 컴포넌트 | 위치 | 설명 |
 |----------|------|------|
 | CustomerSearchForm | feature/ | 고객 검색/선택 기능 |
-| InquiryCreateForm | feature/ | 전체 폼 + 페이지 로컬 state 연결 |
+| InquiryCreateForm | feature/ | 전체 폼 + 페이지 로컬 state + AiForm 연결 |
 
 ### L11: Store 연결
 
 | Store | 사용 필드/액션 |
 |-------|----------------|
-| Page Local State | isSubmitting, aiSuggestion, isAiLoading |
+| Page Local State | isSubmitting, formState, errors |
 | Form State (컴포넌트 내부) | formData, setFormData, validate, reset |
 
 ### L12: 테스트 케이스
@@ -352,10 +348,11 @@ PageSurface (title, description, actions)
 ## 구현 체크리스트
 
 - [x] page.tsx (서버 컴포넌트)
+- [x] _prefetch.ts (폼 bootstrap 프리페치)
 - [x] _client.tsx (클라이언트 컴포넌트)
-- [x] hooks/useHandlers.ts
+- [ ] hooks/useHandlers.ts (legacy)
 - [ ] hooks/useInquiryForm.ts (폼 상태 관리)
-- [ ] hooks/useAIClassification.ts (AI 분류 추천)
+- [ ] hooks/useAIClassification.ts (legacy)
 - [ ] hooks/useAutoSave.ts (임시 저장)
 - [x] E2E 테스트 (Playwright) - `page.e2e.ts`
 
@@ -373,3 +370,5 @@ PageSurface (title, description, actions)
 | 2026-02-26 | 임시 저장 기능 추가 | orch-screen-planner |
 | 2026-02-27 | 접수 페이지 E2E 테스트 추가 (`page.e2e.ts`) 및 구현 체크리스트 동기화 | codex |
 | 2026-02-28 | InquiryStore 의존 제거, 페이지 로컬 state 기준으로 L10/L11 갱신 | codex |
+| 2026-03-01 | Create Form Bootstrap + AiForm(`POST /form/ai-fill`) 기반으로 페이지 구조 전환, `_prefetch.ts` 추가 | codex |
+| 2026-03-01 | 폼 입력 컴포넌트를 HeroUI(Input/Select/Textarea) 기반으로 정리하고 고객 검색을 페이지 로컬 결과 리스트 선택 방식으로 조정 | codex |

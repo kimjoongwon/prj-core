@@ -90,6 +90,7 @@ Admin
 | 문의 | INQUIRIES | /inquiries | 문의 목록 |
 | 문의 | INQUIRIES_NEW | /inquiries/new | 문의 접수 |
 | 문의 | INQUIRIES_DETAIL | /inquiries/[inquiryId] | 문의 상세 |
+| 문의 | INQUIRIES_EDIT | /inquiries/[inquiryId]/edit | 문의 수정 |
 | 인증 | AUTH_LOGIN | /auth/login | 로그인 |
 
 ## Subject 정의 (ADMIN_SUBJECTS)
@@ -193,3 +194,4 @@ Admin
 | 2026-02-26 | 초기 생성 (기존 admin-menu.ts 역기획) | orch-screen-planner |
 | 2026-02-26 | 문의(Inquiry) 메뉴 추가 (INQUIRIES, INQUIRIES_NEW, INQUIRIES_DETAIL) | orch-screen-planner |
 | 2026-02-26 | 문의를 BottomTab에 추가 (users, inquiries 순서) | orch-screen-planner |
+| 2026-03-01 | 문의 수정 경로 `INQUIRIES_EDIT` 추가 | codex |

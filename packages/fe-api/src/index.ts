@@ -6,6 +6,7 @@
 // ─── Server APIs (port 3006) ───
 export * from "./apis";
 export * from "./apis-assets";
+export * from "./inquiry-form-apis";
 // ─── IDP APIs (port 3007) ───
 export * from "./idp-apis";
 // idp-model 고유 타입만 export (model과 중복되는 72개 타입 제외)

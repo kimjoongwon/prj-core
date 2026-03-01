@@ -7,11 +7,13 @@ import {
 	ResponseMessage,
 } from "@cocrepo/decorator";
 import {
-	AIDraftDto,
 	CreateInquiryDto,
 	CreateInquiryMessageDto,
+	FillInquiryFormRequestDto,
+	FillInquiryFormResponseDto,
 	InquiryDetailDto,
 	InquiryDto,
+	InquiryCreateUpdateFormBootstrapDto,
 	InquiryMessageDto,
 	InquiryMessagePaginationMetaDto,
 	InquiryPaginationMetaDto,
@@ -141,6 +143,80 @@ export class InquiriesController {
 		const spaceId = this.getSpaceId();
 		const stats = await this.inquiriesService.getStats(spaceId);
 		return stats;
+	}
+
+	@Get("form/create")
+	@ApiOperation({
+		operationId: "getCreateInquiryForm",
+		summary: "문의 생성 폼 bootstrap 조회",
+		description:
+			"문의 생성 화면의 초기 렌더링에 필요한 defaultObject/options/ui/fieldMeta/aiSchemas를 반환합니다.",
+	})
+	@ApiAuth()
+	@ApiErrors(
+		{ status: 401, message: USER_ERRORS.USER_NOT_FOUND },
+		{ status: 401, message: USER_ERRORS.SPACE_NOT_SELECTED },
+		500,
+	)
+	@ApiResponseEntity(InquiryCreateUpdateFormBootstrapDto, HttpStatus.OK)
+	@ResponseMessage("문의 생성 폼 bootstrap 조회 성공")
+	async getCreateInquiryForm(): Promise<InquiryCreateUpdateFormBootstrapDto> {
+		return this.inquiriesService.getCreateFormBootstrap();
+	}
+
+	@Get(":inquiryId/form/update")
+	@ApiOperation({
+		operationId: "getUpdateInquiryForm",
+		summary: "문의 수정 폼 bootstrap 조회",
+		description:
+			"문의 수정 화면의 초기 렌더링에 필요한 defaultObject/options/ui/fieldMeta/aiSchemas를 반환합니다.",
+	})
+	@ApiAuth()
+	@ApiParam({
+		name: "inquiryId",
+		description: "문의 ID (UUID)",
+		type: String,
+	})
+	@ApiErrors(
+		{ status: 401, message: USER_ERRORS.USER_NOT_FOUND },
+		{ status: 401, message: USER_ERRORS.SPACE_NOT_SELECTED },
+		{ status: 404, message: "문의를 찾을 수 없습니다" },
+		500,
+	)
+	@ApiResponseEntity(InquiryCreateUpdateFormBootstrapDto, HttpStatus.OK)
+	@ResponseMessage("문의 수정 폼 bootstrap 조회 성공")
+	async getUpdateInquiryForm(
+		@Param("inquiryId", ParseUUIDPipe) inquiryId: string,
+	): Promise<InquiryCreateUpdateFormBootstrapDto> {
+		return this.inquiriesService.getUpdateFormBootstrap(inquiryId);
+	}
+
+	@Post("form/ai-fill")
+	@HttpCode(HttpStatus.OK)
+	@ApiOperation({
+		operationId: "fillInquiryFormWithAi",
+		summary: "문의 폼 AI 채움",
+		description:
+			"선택한 aiSchemas/path와 현재 폼 상태를 기반으로 서버에서 patch를 생성하여 반환합니다.",
+	})
+	@ApiAuth()
+	@ApiBody({
+		type: FillInquiryFormRequestDto,
+		description: "문의 폼 AI 채움 요청",
+	})
+	@ApiErrors(
+		{ status: 400, message: "유효하지 않은 AI 스키마 키입니다" },
+		{ status: 400, message: "AI 채움이 허용되지 않은 path가 포함되어 있습니다" },
+		{ status: 401, message: USER_ERRORS.USER_NOT_FOUND },
+		{ status: 401, message: USER_ERRORS.SPACE_NOT_SELECTED },
+		500,
+	)
+	@ApiResponseEntity(FillInquiryFormResponseDto, HttpStatus.OK)
+	@ResponseMessage("문의 폼 AI 채움 성공")
+	async fillInquiryFormWithAi(
+		@Body() dto: FillInquiryFormRequestDto,
+	): Promise<FillInquiryFormResponseDto> {
+		return this.inquiriesService.fillFormWithAi(dto);
 	}
 
 	@Get(":inquiryId")
@@ -571,36 +647,4 @@ export class InquiriesController {
 		});
 	}
 
-	@Post(":inquiryId/draft")
-	@HttpCode(HttpStatus.OK)
-	@ApiOperation({
-		operationId: "generateInquiryDraft",
-		summary: "AI 초안 생성",
-		description: "문의에 대한 AI 답변 초안을 생성합니다.",
-	})
-	@ApiAuth()
-	@ApiParam({
-		name: "inquiryId",
-		description: "문의 ID (UUID)",
-		type: String,
-	})
-	@ApiErrors(
-		{ status: 400, message: "AI 초안 생성 기능이 아직 구현되지 않았습니다" },
-		{ status: 401, message: USER_ERRORS.USER_NOT_FOUND },
-		{ status: 401, message: USER_ERRORS.SPACE_NOT_SELECTED },
-		{ status: 404, message: "문의를 찾을 수 없습니다" },
-		500,
-	)
-	@ApiResponseEntity(AIDraftDto, HttpStatus.OK)
-	@ResponseMessage("AI 초안 생성 성공")
-	async generateDraft(
-		@Param("inquiryId", ParseUUIDPipe) inquiryId: string,
-	): Promise<{ inquiryId: string; draftContent: string; confidence: number }> {
-		const result = await this.inquiriesService.generateAIDraft(inquiryId);
-		return {
-			inquiryId: result.draftId,
-			draftContent: result.content,
-			confidence: result.confidence,
-		};
-	}
 }

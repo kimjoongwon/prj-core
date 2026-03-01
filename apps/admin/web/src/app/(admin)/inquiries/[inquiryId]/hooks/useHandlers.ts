@@ -2,11 +2,12 @@
 
 import {
 	useAssignInquiry,
-	useGenerateInquiryDraft,
+	useFillInquiryFormWithAi,
 	useUpdateInquiry,
 	useUpdateInquiryPriority,
 	useUpdateInquiryStatus,
 } from "@cocrepo/api";
+import { ADMIN_PATHS } from "@cocrepo/constant";
 import { createLogger } from "@cocrepo/toolkit";
 import type { Route } from "next";
 import { useRouter } from "next/navigation";
@@ -39,6 +40,7 @@ export interface UseHandlersOptions {
 	inquiryId: string;
 	/** 문의 상세 페이지 로컬 상태 */
 	inquiryState: {
+		replyContent: string;
 		setReplyContent: (content: string) => void;
 		startTyping: () => void;
 		stopTyping: () => void;
@@ -118,11 +120,11 @@ export function useHandlers(options: UseHandlersOptions): UseHandlersReturn {
 	const updatePriorityMutation = useUpdateInquiryPriority();
 	const assignMutation = useAssignInquiry();
 	const updateInquiryMutation = useUpdateInquiry();
-	const generateDraftMutation = useGenerateInquiryDraft();
+	const fillInquiryFormMutation = useFillInquiryFormWithAi();
 
 	// 목록으로 이동
 	const onClickBack = useCallback(() => {
-		router.push("/inquiries" as Route);
+		router.push(ADMIN_PATHS.INQUIRIES as Route);
 	}, [router]);
 
 	/**
@@ -300,25 +302,40 @@ export function useHandlers(options: UseHandlersOptions): UseHandlersReturn {
 	}, [ws, inquiryState]);
 
 	/**
-	 * AI 초안 생성
+	 * AI 내용 생성
 	 *
-	 * @requires Orval 훅 생성 후 아래와 같이 변경:
-	 * const result = await generateDraftMutation.mutateAsync({ inquiryId });
-	 * store.setReplyContent(result.content);
+	 * 문의 폼 ai-fill endpoint를 활용하여 content patch를 생성합니다.
 	 */
 	const onClickGenerateDraft = useCallback(async () => {
-		logger.info("AI 초안 생성 요청");
+		logger.info("AI 내용 생성 요청");
 		inquiryState.setGeneratingDraft(true);
 
 		try {
-			const result = await generateDraftMutation.mutateAsync({ inquiryId });
-			inquiryState.setReplyContent(result?.data?.draftContent ?? "");
+			const result = await fillInquiryFormMutation.mutateAsync({
+				data: {
+					mode: "CREATE",
+					schemaKey: "inquiry-intake-basic",
+					selectedPaths: ["content"],
+					currentObject: {
+						title: `문의 ${inquiryId}`,
+						content: inquiryState.replyContent,
+						category: "GENERAL",
+						priority: "NORMAL",
+					},
+				},
+			});
+
+			const patches = result?.data?.patches ?? [];
+			const contentPatch = patches.find((patch) => patch.path === "content");
+			if (typeof contentPatch?.value === "string") {
+				inquiryState.setReplyContent(contentPatch.value);
+			}
 		} catch (error) {
-			logger.error("AI 초안 생성 실패:", String(error));
+			logger.error("AI 내용 생성 실패:", String(error));
 		} finally {
 			inquiryState.setGeneratingDraft(false);
 		}
-	}, [inquiryId, inquiryState, generateDraftMutation]);
+	}, [inquiryId, inquiryState, fillInquiryFormMutation]);
 
 	// 지식베이스 검색 모달 열기
 	const onClickSearchKnowledge = useCallback(() => {
@@ -334,7 +351,9 @@ export function useHandlers(options: UseHandlersOptions): UseHandlersReturn {
 
 	// 수정 페이지 이동
 	const onClickEdit = useCallback(() => {
-		router.push(`/inquiries/${inquiryId}/edit` as Route);
+		router.push(
+			ADMIN_PATHS.INQUIRIES_EDIT.replace("[inquiryId]", inquiryId) as Route,
+		);
 	}, [router, inquiryId]);
 
 	// 삭제 확인 모달 열기

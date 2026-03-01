@@ -89,6 +89,7 @@ export const ADMIN_PATHS = {
 	INQUIRIES: "/inquiries",
 	INQUIRIES_NEW: "/inquiries/new",
 	INQUIRIES_DETAIL: "/inquiries/[inquiryId]",
+	INQUIRIES_EDIT: "/inquiries/[inquiryId]/edit",
 
 	// 인증
 	AUTH_LOGIN: "/auth/login",

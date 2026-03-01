@@ -1,7 +1,7 @@
 # 문의 상세 페이지 기획서
 
 > 생성일: 2026-02-25
-> 수정일: 2026-02-26
+> 수정일: 2026-03-01
 > 타입: page
 > 경로: /inquiries/[inquiryId]
 
@@ -89,7 +89,7 @@
 3. 참여자 목록에서 온라인/오프라인 상태와 타이핑 중인 사용자를 확인한다
 4. 새 메시지가 실시간으로 화면에 표시된다
 5. 메시지 전달/읽음 상태를 확인한다 (✓ 전달됨, ✓✓ 읽음)
-6. AI 초안 생성 버튼을 클릭하여 자동으로 답변 초안을 생성한다
+6. AI 채우기 버튼을 클릭하여 답변 content 초안을 생성한다
 7. 지식베이스 참조를 통해 관련 문서를 검색하고 답변에 활용한다
 8. 답변을 작성하고 전송하여 고객에게 실시간 응답한다
 9. 감정 분석 결과를 확인하여 고객 상태를 파악한다
@@ -102,6 +102,7 @@
 | 헤더 | PageSurface | - |
 | 문의 정보 카드 | InquiryInfoCard | `packages/fe-ui/src/components/widget/InquiryInfoCard/index.spec.md` |
 | 메타 정보 패널 | InquiryMetaPanel | `packages/fe-ui/src/components/widget/InquiryMetaPanel/index.spec.md` |
+| 빠른 수정 + AiForm | AiForm + title/category/priority 편집 | `packages/fe-ui/src/components/feature/AiForm/index.spec.md` |
 | 고객 정보 카드 | CustomerInfoCard | `packages/fe-ui/src/components/widget/CustomerInfoCard/index.spec.md` |
 | 참여자 목록 | ParticipantList | `packages/fe-ui/src/components/widget/ParticipantList/index.spec.md` |
 | 실시간 채팅 | RealtimeChatPanel | `packages/fe-ui/src/components/feature/RealtimeChatPanel/index.spec.md` |
@@ -114,6 +115,7 @@
 |------|------|-----|
 | 로딩 | 문의 데이터 로딩 중 | 스켈레톤 UI |
 | 조회 | 문의 상세 조회 완료 | 전체 UI 표시 |
+| 메타 편집 bootstrap 로딩 | 수정 폼 bootstrap 조회 중 | 빠른 수정 섹션 로딩 |
 | WebSocket 연결 중 | 실시간 채팅 연결 중 | 연결 상태 인디케이터 |
 | WebSocket 연결됨 | 실시간 채팅 활성 | 🟢 연결됨 |
 | WebSocket 끊김 | 실시간 채팅 비활성 | 🔴 연결 끊김, 재연결 버튼 |
@@ -127,13 +129,12 @@
 
 | 시점 | API | 캐싱 |
 |------|-----|------|
+| 진입 시 | GET /api/v1/inquiries/[inquiryId]/form/update | staleTime: 0 |
 | 진입 시 | GET /api/v1/inquiries/[inquiryId] | staleTime: 0 |
 | 진입 시 | GET /api/v1/inquiries/[inquiryId]/messages | staleTime: 0 |
 | 진입 시 | GET /api/v1/inquiries/[inquiryId]/participants | staleTime: 0 |
-| 진입 시 | GET /api/v1/inquiries/[inquiryId]/customer | staleTime: 5m |
-| 진입 시 | GET /api/v1/inquiries/[inquiryId]/sentiment | staleTime: 1m |
 | 상태 변경 시 | PATCH /api/v1/inquiries/[inquiryId] | invalidate |
-| AI 초안 | POST /api/v1/inquiries/[inquiryId]/draft | no-cache |
+| AI 폼 채움 | POST /api/v1/inquiries/form/ai-fill | no-cache |
 | 답변 전송 | POST /api/v1/inquiries/[inquiryId]/messages | WebSocket으로 실시간 |
 | 참여 | POST /api/v1/inquiries/[inquiryId]/participants/join | - |
 
@@ -171,7 +172,9 @@
 | onChangeStatus | 문의 상태 변경 API 호출 |
 | onChangePriority | 우선순위 변경 API 호출 |
 | onChangeAssignee | 담당자 변경 API 호출 |
-| onClickGenerateDraft | AI 초안 생성 API 호출, 결과를 답변 폼에 입력 |
+| onClickGenerateDraft | AI Fill API 호출(`selectedPaths=["content"]`), 결과를 답변 폼에 입력 |
+| onFillMetaWithAi | 상세 상단 빠른 수정 섹션에서 title/category/priority patch 생성 |
+| onSubmitMeta | 빠른 수정 필드를 PATCH로 저장 |
 | onClickSearchKnowledge | 지식베이스 검색 모달 열기 |
 | onAttachFile | 파일 선택 다이얼로그 열기 |
 | onSubmitReply | WebSocket으로 메시지 전송 |
@@ -201,6 +204,12 @@ PageSurface (title, description, actions)
 │       ├── CategorySelect
 │       ├── AssigneeSelect
 │       └── TagInput
+├── QuickEditSection
+│   ├── AiForm (mode=UPDATE)
+│   ├── TitleInput
+│   ├── CategorySelect
+│   ├── PrioritySelect
+│   └── SaveButton
 ├── MiddleSection (2-column grid)
 │   ├── CustomerInfoCard
 │   │   ├── CustomerName
@@ -229,11 +238,10 @@ PageSurface (title, description, actions)
 
 ```
 1. SSR Prefetch
+   - GET /api/v1/inquiries/[inquiryId]/form/update
    - GET /api/v1/inquiries/[inquiryId]
    - GET /api/v1/inquiries/[inquiryId]/messages
    - GET /api/v1/inquiries/[inquiryId]/participants
-   - GET /api/v1/inquiries/[inquiryId]/customer
-   - GET /api/v1/inquiries/[inquiryId]/sentiment
 
 2. Client-side
    - React Query 캐시 관리
@@ -252,7 +260,8 @@ PageSurface (title, description, actions)
 | 인터랙션 | 트리거 | 동작 |
 |----------|--------|------|
 | 메시지 전송 | Button click | WebSocket 전송 + 화면 추가 |
-| AI 초안 생성 | Button click | API 호출 + 폼 채우기 |
+| AI 채움(답변) | Button click | `/form/ai-fill` 호출 + content patch 적용 |
+| AI 채움(메타) | Button click | `/form/ai-fill` 호출 + title/category/priority patch 적용 |
 | 타이핑 시작 | Input focus | WebSocket 이벤트 전송 |
 | 타이핑 중지 | 3초 무입력 | WebSocket 이벤트 전송 |
 | 상태 변경 | Select change | API 호출 + invalidate |
@@ -438,3 +447,5 @@ PageSurface (title, description, actions)
 | 2026-02-26 | L5-L12 레이어 기획 추가 | orch-screen-planner |
 | 2026-02-27 | 상세 페이지 E2E 테스트 추가 (`page.e2e.ts`) 및 구현 체크리스트 동기화 | codex |
 | 2026-02-28 | InquiryStore 의존 제거, 페이지 로컬 state 기준으로 L10/L11 갱신 | codex |
+| 2026-03-01 | 상세 빠른 수정 섹션(AiForm + title/category/priority 저장) 추가, 답변 초안 생성 API를 `/form/ai-fill`로 전환 | codex |
+| 2026-03-01 | 빠른 수정 폼 입력을 HeroUI Select 기반으로 정리해 Form-state 전용 입력 컴포넌트 의존 제거 | codex |

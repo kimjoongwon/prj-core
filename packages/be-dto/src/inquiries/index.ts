@@ -11,5 +11,6 @@ export * from "./update-inquiry-participant.dto";
 export * from "./inquiry-response.dto";
 export * from "./inquiry-detail-response.dto";
 export * from "./inquiry-message-response.dto";
+export * from "./inquiry-form-bootstrap.dto";
 export * from "./ai-draft-response.dto";
 export * from "./sentiment-response.dto";

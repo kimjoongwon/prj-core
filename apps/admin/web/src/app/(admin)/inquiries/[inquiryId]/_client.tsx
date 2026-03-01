@@ -1,15 +1,21 @@
 "use client";
 
 import {
+	type InquiryCategory,
+	type InquiryPriority,
 	type InquiryMessageDto,
 	type InquiryParticipantDto,
 	useDeleteInquiry,
+	useFillInquiryFormWithAi,
 	useGetInquiryById,
 	useGetInquiryMessages,
 	useGetInquiryParticipants,
+	useGetInquiryUpdateForm,
+	useUpdateInquiry,
 } from "@cocrepo/api";
 import type { InquiryMessage, InquiryParticipant } from "@cocrepo/type";
 import {
+	AiForm,
 	Button,
 	ConfirmModal,
 	CustomerInfoCard,
@@ -24,6 +30,7 @@ import {
 	SLATracker,
 	VStack,
 } from "@cocrepo/ui";
+import { Input, Select, SelectItem, type Selection } from "@heroui/react";
 import { ArrowLeft, Pencil, Trash2 } from "lucide-react";
 import { observable } from "mobx";
 import { observer, useLocalObservable } from "mobx-react-lite";
@@ -122,6 +129,14 @@ const CHANNEL_LABELS: Record<string, string> = {
 	SMS: "SMS",
 	PHONE: "전화",
 	WALK_IN: "방문",
+};
+
+const getSelectedValue = (keys: Selection): string => {
+	if (keys === "all") {
+		return "";
+	}
+	const selectedKey = keys.values().next().value;
+	return selectedKey ? String(selectedKey) : "";
 };
 
 function InquiryDetailPageClient({ inquiryId }: Props) {
@@ -244,9 +259,25 @@ function InquiryDetailPageClient({ inquiryId }: Props) {
 	const { data: inquiryResponse } = useGetInquiryById(inquiryId);
 	const { data: messagesResponse } = useGetInquiryMessages(inquiryId);
 	const { data: participantsResponse } = useGetInquiryParticipants(inquiryId);
+	const { data: updateFormBootstrapResponse } = useGetInquiryUpdateForm(inquiryId);
 	const deleteInquiryMutation = useDeleteInquiry();
+	const fillMetaMutation = useFillInquiryFormWithAi();
+	const updateMetaMutation = useUpdateInquiry();
 
 	const inquiry = inquiryResponse?.data;
+	const updateFormBootstrap = updateFormBootstrapResponse?.data;
+	const editCategoryOptions = (updateFormBootstrap?.options.category ?? []).map(
+		(item) => ({
+			value: String(item.value ?? ""),
+			label: item.label,
+		}),
+	);
+	const editPriorityOptions = (updateFormBootstrap?.options.priority ?? []).map(
+		(item) => ({
+			value: String(item.value ?? ""),
+			label: item.label,
+		}),
+	);
 	const messages = (messagesResponse?.data ?? []).map(mapMessageToStore);
 	const participantRows =
 		(participantsResponse?.data as
@@ -257,6 +288,57 @@ function InquiryDetailPageClient({ inquiryId }: Props) {
 	const participants = participantRows.map((participant) =>
 		mapParticipantToStore(participant, inquiryId),
 	);
+	const metaState = useLocalObservable(() => ({
+		initialized: false,
+		title: "",
+		category: "GENERAL" as InquiryCategory,
+		priority: "NORMAL" as InquiryPriority,
+		error: "",
+		setFromBootstrap() {
+			if (!updateFormBootstrap || this.initialized) {
+				return;
+			}
+			this.title =
+				typeof updateFormBootstrap.defaultObject.title === "string"
+					? updateFormBootstrap.defaultObject.title
+					: (inquiry?.title ?? "");
+			this.category =
+				typeof updateFormBootstrap.defaultObject.category === "string"
+					? (updateFormBootstrap.defaultObject.category as InquiryCategory)
+					: ((inquiry?.category ?? "GENERAL") as InquiryCategory);
+			this.priority =
+				typeof updateFormBootstrap.defaultObject.priority === "string"
+					? (updateFormBootstrap.defaultObject.priority as InquiryPriority)
+					: ((inquiry?.priority ?? "NORMAL") as InquiryPriority);
+			this.initialized = true;
+		},
+		toFormObject() {
+			return {
+				title: this.title,
+				category: this.category,
+				priority: this.priority,
+			} satisfies Record<string, unknown>;
+		},
+		applyPatch(patches: Array<{ path: string; value: unknown }>) {
+			for (const patch of patches) {
+				switch (patch.path) {
+					case "title":
+						if (typeof patch.value === "string") this.title = patch.value;
+						break;
+					case "category":
+						if (typeof patch.value === "string")
+							this.category = patch.value as InquiryCategory;
+						break;
+					case "priority":
+						if (typeof patch.value === "string")
+							this.priority = patch.value as InquiryPriority;
+						break;
+					default:
+						break;
+				}
+			}
+		},
+	}));
 
 	const ws = useInquiryWebSocket({
 		inquiryId,
@@ -279,6 +361,10 @@ function InquiryDetailPageClient({ inquiryId }: Props) {
 			inquiryState.clear();
 		};
 	}, [inquiryId, messages, participants, inquiryState]);
+
+	useEffect(() => {
+		metaState.setFromBootstrap();
+	}, [metaState, inquiry, updateFormBootstrap]);
 
 	const handlers = useHandlers({
 		inquiryId,
@@ -340,6 +426,21 @@ function InquiryDetailPageClient({ inquiryId }: Props) {
 		isOnline: participant.isOnline,
 		isTyping: participant.isTyping,
 	}));
+	const onSubmitMeta = async () => {
+		if (!metaState.title.trim()) {
+			metaState.error = "문의 제목을 입력해주세요.";
+			return;
+		}
+		metaState.error = "";
+		await updateMetaMutation.mutateAsync({
+			inquiryId,
+			data: {
+				title: metaState.title.trim(),
+				category: metaState.category,
+				priority: metaState.priority,
+			},
+		});
+	};
 
 	return (
 		<InquiryWebSocketProvider
@@ -383,7 +484,7 @@ function InquiryDetailPageClient({ inquiryId }: Props) {
 				}
 			>
 				<VStack gap={6}>
-					<HStack gap={4} className="lg:flex-row flex-col">
+						<HStack gap={4} className="lg:flex-row flex-col">
 						<div className="lg:w-2/3 w-full">
 							<InquiryInfoCard
 								inquiryNumber={inquiry?.inquiryNumber ?? inquiryId}
@@ -446,9 +547,92 @@ function InquiryDetailPageClient({ inquiryId }: Props) {
 								}))}
 							/>
 						</div>
-					</HStack>
+						</HStack>
 
-					<SectionSurface>
+						{updateFormBootstrap && (
+							<SectionSurface>
+								<VStack gap={4}>
+									<AiForm
+										formState={metaState.toFormObject()}
+										fieldMeta={updateFormBootstrap.fieldMeta}
+										aiSchemas={updateFormBootstrap.aiSchemas}
+										ui={updateFormBootstrap.ui}
+										options={updateFormBootstrap.options}
+										onFill={async (input) => {
+											const result = await fillMetaMutation.mutateAsync({
+												data: {
+													mode: "UPDATE",
+													schemaKey: input.schemaKey,
+													selectedPaths: input.selectedPaths,
+													currentObject: input.currentObject,
+													userPrompt: input.userPrompt,
+												},
+											});
+											return result?.data ?? { patches: [] };
+										}}
+										applyPatch={(patches) => {
+											metaState.applyPatch(patches);
+										}}
+										disabled={
+											updateMetaMutation.isPending || fillMetaMutation.isPending
+										}
+									/>
+									<Input
+										label="문의 제목"
+										labelPlacement="outside"
+										value={metaState.title}
+										onValueChange={(value) => {
+											metaState.title = value;
+										}}
+										isInvalid={Boolean(metaState.error)}
+										errorMessage={metaState.error}
+									/>
+									<HStack gap={4} className="md:flex-row flex-col">
+										<Select
+											label="카테고리"
+											placeholder="카테고리 선택"
+											selectedKeys={metaState.category ? [metaState.category] : []}
+											onSelectionChange={(keys) => {
+												const selectedValue = getSelectedValue(keys);
+												if (selectedValue) {
+													metaState.category = selectedValue as InquiryCategory;
+												}
+											}}
+										>
+											{editCategoryOptions.map((option) => (
+												<SelectItem key={option.value}>{option.label}</SelectItem>
+											))}
+										</Select>
+										<Select
+											label="우선순위"
+											placeholder="우선순위 선택"
+											selectedKeys={metaState.priority ? [metaState.priority] : []}
+											onSelectionChange={(keys) => {
+												const selectedValue = getSelectedValue(keys);
+												if (selectedValue) {
+													metaState.priority = selectedValue as InquiryPriority;
+												}
+											}}
+										>
+											{editPriorityOptions.map((option) => (
+												<SelectItem key={option.value}>{option.label}</SelectItem>
+											))}
+										</Select>
+									</HStack>
+									<div className="flex justify-end">
+										<Button
+											color="primary"
+											onPress={onSubmitMeta}
+											isLoading={updateMetaMutation.isPending}
+										>
+											메타 저장
+										</Button>
+									</div>
+								</VStack>
+							</SectionSurface>
+						)}
+
+						<SectionSurface>
 						<RealtimeChatPanel
 							inquiryId={inquiryId}
 							messages={

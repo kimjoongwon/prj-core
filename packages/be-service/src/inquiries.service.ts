@@ -1,10 +1,12 @@
 import { Inquiry } from "@cocrepo/entity";
-import type {
+import {
 	InquiryCategory,
+	InquiryChannel,
 	InquiryPriority,
-	InquiryStatus,
-	Prisma,
-	SentimentType,
+	InquirySource,
+	type InquiryStatus,
+	type Prisma,
+	type SentimentType,
 } from "@cocrepo/prisma";
 import { InquiriesRepository } from "@cocrepo/repository";
 import {
@@ -49,14 +51,85 @@ export interface InquiryStats {
 }
 
 /**
- * AI 초안 생성 결과 (인터페이스)
+ * 문의 폼 옵션 아이템
  */
-export interface AIDraftResult {
-	draftId: string;
-	content: string;
-	confidence: number;
-	suggestedCategory?: InquiryCategory;
-	suggestedPriority?: InquiryPriority;
+export interface InquiryFormOptionItem {
+	value: string | number | boolean | null;
+	label: string;
+}
+
+/**
+ * 문의 폼 UI 경로 메타
+ */
+export interface InquiryFormUiPaths {
+	readOnlyPaths: string[];
+	hiddenPaths: string[];
+	disabledPaths: string[];
+}
+
+/**
+ * 문의 폼 필드 AI 메타
+ */
+export interface InquiryFormFieldAiMeta {
+	fillable: boolean;
+	defaultChecked?: boolean;
+	reason?: string;
+}
+
+/**
+ * 문의 폼 필드 메타
+ */
+export interface InquiryFormFieldMeta {
+	label?: string;
+	ai?: InquiryFormFieldAiMeta;
+}
+
+/**
+ * 문의 폼 AI 스키마
+ */
+export interface InquiryFormSchema {
+	key: string;
+	label: string;
+	paths: string[];
+	description?: string;
+}
+
+/**
+ * 문의 Create/Update bootstrap 계약
+ */
+export interface InquiryCreateUpdateFormBootstrap {
+	mode: "CREATE" | "UPDATE";
+	defaultObject: Record<string, unknown>;
+	options: Record<string, InquiryFormOptionItem[]>;
+	ui: InquiryFormUiPaths;
+	fieldMeta: Record<string, InquiryFormFieldMeta>;
+	aiSchemas: InquiryFormSchema[];
+}
+
+/**
+ * 문의 폼 AI Fill 요청
+ */
+export interface FillInquiryFormInput {
+	mode: "CREATE" | "UPDATE";
+	schemaKey: string;
+	selectedPaths: string[];
+	currentObject: Record<string, unknown>;
+	userPrompt?: string;
+}
+
+/**
+ * 문의 폼 AI Patch
+ */
+export interface InquiryFormPatch {
+	path: string;
+	value: unknown;
+}
+
+/**
+ * 문의 폼 AI Fill 응답
+ */
+export interface FillInquiryFormResult {
+	patches: InquiryFormPatch[];
 }
 
 /**
@@ -68,6 +141,39 @@ export interface SentimentAnalysisResult {
 	confidence: number;
 	keywords?: string[];
 }
+
+const INQUIRY_CATEGORY_LABELS: Record<InquiryCategory, string> = {
+	GENERAL: "일반",
+	DELIVERY: "배송",
+	PAYMENT: "결제",
+	REFUND: "환불",
+	PRODUCT: "상품",
+	ACCOUNT: "계정",
+	TECHNICAL: "기술",
+	COMPLAINT: "불만",
+	OTHER: "기타",
+};
+
+const INQUIRY_PRIORITY_LABELS: Record<InquiryPriority, string> = {
+	LOW: "낮음",
+	NORMAL: "보통",
+	HIGH: "높음",
+	URGENT: "긴급",
+};
+
+const INQUIRY_CHANNEL_LABELS: Record<InquiryChannel, string> = {
+	WEB: "웹",
+	EMAIL: "이메일",
+	CHAT: "채팅",
+	SMS: "문자",
+	PHONE: "전화",
+	WALK_IN: "방문",
+};
+
+const INQUIRY_SOURCE_LABELS: Record<InquirySource, string> = {
+	ONLINE: "온라인",
+	OFFLINE: "오프라인",
+};
 
 @Injectable()
 export class InquiriesService {
@@ -123,6 +229,134 @@ export class InquiriesService {
 		take?: number;
 	}): Promise<{ items: Inquiry[]; totalCount: number }> {
 		return this.repository.findMany(params);
+	}
+
+	// ============================================================================
+	// Create/Update Form Bootstrap + AI Fill
+	// ============================================================================
+
+	async getCreateFormBootstrap(): Promise<InquiryCreateUpdateFormBootstrap> {
+		return {
+			mode: "CREATE",
+			defaultObject: {
+				title: "",
+				category: InquiryCategory.GENERAL,
+				priority: InquiryPriority.NORMAL,
+				content: "",
+				channel: InquiryChannel.WEB,
+				source: InquirySource.ONLINE,
+			},
+			options: this.buildFormOptions(),
+			ui: this.buildUiPaths("CREATE"),
+			fieldMeta: this.buildFieldMeta("CREATE"),
+			aiSchemas: this.buildAiSchemas("CREATE"),
+		};
+	}
+
+	async getUpdateFormBootstrap(
+		inquiryId: string,
+	): Promise<InquiryCreateUpdateFormBootstrap> {
+		const inquiry = await this.findById(inquiryId);
+
+		return {
+			mode: "UPDATE",
+			defaultObject: {
+				title: inquiry.title,
+				category: inquiry.category,
+				priority: inquiry.priority,
+				content: "",
+				channel: inquiry.channel,
+				source: inquiry.source ?? InquirySource.ONLINE,
+			},
+			options: this.buildFormOptions(),
+			ui: this.buildUiPaths("UPDATE"),
+			fieldMeta: this.buildFieldMeta("UPDATE"),
+			aiSchemas: this.buildAiSchemas("UPDATE"),
+		};
+	}
+
+	fillFormWithAi(input: FillInquiryFormInput): FillInquiryFormResult {
+		const schemas = this.buildAiSchemas(input.mode);
+		const selectedSchema = schemas.find((schema) => schema.key === input.schemaKey);
+		if (!selectedSchema) {
+			throw new BadRequestException("유효하지 않은 AI 스키마 키입니다");
+		}
+
+		const uiPaths = this.buildUiPaths(input.mode);
+		const fieldMeta = this.buildFieldMeta(input.mode);
+		const blockedPaths = new Set([
+			...uiPaths.hiddenPaths,
+			...uiPaths.readOnlyPaths,
+			...uiPaths.disabledPaths,
+		]);
+		const requestedPaths = Array.from(new Set(input.selectedPaths));
+
+		if (requestedPaths.length === 0) {
+			throw new BadRequestException("selectedPaths는 최소 1개 이상이어야 합니다");
+		}
+
+		const fillablePaths = selectedSchema.paths.filter((path) => {
+			const aiMeta = fieldMeta[path]?.ai;
+			return Boolean(aiMeta?.fillable) && !blockedPaths.has(path);
+		});
+		const invalidPaths = requestedPaths.filter(
+			(path) => !fillablePaths.includes(path),
+		);
+
+		if (invalidPaths.length > 0) {
+			throw new BadRequestException(
+				`AI 채움이 허용되지 않은 path가 포함되어 있습니다: ${invalidPaths.join(", ")}`,
+			);
+		}
+
+		const currentTitle = this.getString(input.currentObject.title);
+		const currentContent = this.getString(input.currentObject.content);
+		const normalizedPrompt = this.normalizeText(
+			this.getString(input.userPrompt),
+		);
+		const normalizedText = this.normalizeText(
+			[normalizedPrompt, currentTitle, currentContent]
+				.filter((value) => value.length > 0)
+				.join("\n"),
+		);
+		const nextCategory =
+			this.detectCategory(normalizedText) ??
+			this.toInquiryCategory(input.currentObject.category) ??
+			InquiryCategory.GENERAL;
+		const nextPriority =
+			this.detectPriority(normalizedText) ??
+			this.toInquiryPriority(input.currentObject.priority) ??
+			InquiryPriority.NORMAL;
+		const nextTitle = this.suggestTitle({
+			currentTitle,
+			currentContent,
+			prompt: normalizedPrompt,
+			category: nextCategory,
+		});
+		const nextContent = this.suggestContent({
+			currentContent,
+			prompt: normalizedPrompt,
+			title: nextTitle,
+		});
+
+		const patches: InquiryFormPatch[] = [];
+		const maybePush = (path: string, value: unknown) => {
+			if (!requestedPaths.includes(path)) {
+				return;
+			}
+			const currentValue = input.currentObject[path];
+			if (this.isSameValue(currentValue, value)) {
+				return;
+			}
+			patches.push({ path, value });
+		};
+
+		maybePush("title", nextTitle);
+		maybePush("category", nextCategory);
+		maybePush("priority", nextPriority);
+		maybePush("content", nextContent);
+
+		return { patches };
 	}
 
 	// ============================================================================
@@ -272,24 +506,8 @@ export class InquiriesService {
 	}
 
 	// ============================================================================
-	// AI 기능 (인터페이스만 제공)
+	// AI 기능
 	// ============================================================================
-
-	/**
-	 * AI 초안 생성
-	 * 실제 구현은 별도 AI 서비스 또는 Facade에서 처리
-	 */
-	async generateAIDraft(inquiryId: string): Promise<AIDraftResult> {
-		this.logger.debug(`AI 초안 생성 요청: ${inquiryId.slice(-8)}`);
-
-		// 존재 확인
-		await this.findById(inquiryId);
-
-		// TODO: 실제 AI 서비스 연동
-		throw new BadRequestException(
-			"AI 초안 생성 기능이 아직 구현되지 않았습니다",
-		);
-	}
 
 	/**
 	 * 감정 분석
@@ -352,6 +570,265 @@ export class InquiriesService {
 	// ============================================================================
 	// Private 메서드
 	// ============================================================================
+
+	private buildFormOptions(): Record<string, InquiryFormOptionItem[]> {
+		return {
+			category: Object.values(InquiryCategory).map((value) => ({
+				value,
+				label: INQUIRY_CATEGORY_LABELS[value],
+			})),
+			priority: Object.values(InquiryPriority).map((value) => ({
+				value,
+				label: INQUIRY_PRIORITY_LABELS[value],
+			})),
+			channel: Object.values(InquiryChannel).map((value) => ({
+				value,
+				label: INQUIRY_CHANNEL_LABELS[value],
+			})),
+			source: Object.values(InquirySource).map((value) => ({
+				value,
+				label: INQUIRY_SOURCE_LABELS[value],
+			})),
+		};
+	}
+
+	private buildUiPaths(mode: "CREATE" | "UPDATE"): InquiryFormUiPaths {
+		if (mode === "UPDATE") {
+			return {
+				readOnlyPaths: ["channel", "source"],
+				hiddenPaths: ["content", "channel", "source"],
+				disabledPaths: [],
+			};
+		}
+		return {
+			readOnlyPaths: [],
+			hiddenPaths: [],
+			disabledPaths: [],
+		};
+	}
+
+	private buildFieldMeta(
+		mode: "CREATE" | "UPDATE",
+	): Record<string, InquiryFormFieldMeta> {
+		const isCreate = mode === "CREATE";
+
+		return {
+			title: {
+				label: "문의 제목",
+				ai: { fillable: true, defaultChecked: true },
+			},
+			category: {
+				label: "문의 카테고리",
+				ai: { fillable: true, defaultChecked: true },
+			},
+			priority: {
+				label: "우선순위",
+				ai: { fillable: true, defaultChecked: true },
+			},
+			content: {
+				label: "문의 내용",
+				ai: isCreate
+					? { fillable: true, defaultChecked: true }
+					: {
+							fillable: false,
+							reason: "UPDATE 모드에서는 content 수정이 비활성화됩니다.",
+						},
+			},
+			channel: {
+				label: "문의 채널",
+				ai: {
+					fillable: false,
+					reason: "채널은 운영 정책상 수동으로만 설정할 수 있습니다.",
+				},
+			},
+			source: {
+				label: "접수 유형",
+				ai: {
+					fillable: false,
+					reason: "접수 유형은 운영 정책상 수동으로만 설정할 수 있습니다.",
+				},
+			},
+		};
+	}
+
+	private buildAiSchemas(mode: "CREATE" | "UPDATE"): InquiryFormSchema[] {
+		if (mode === "UPDATE") {
+			return [
+				{
+					key: "inquiry-update-basic",
+					label: "문의 수정 기본 채움",
+					paths: ["title", "category", "priority"],
+					description: "문의 수정 시 핵심 메타 필드를 AI로 채웁니다.",
+				},
+			];
+		}
+
+		return [
+			{
+				key: "inquiry-intake-basic",
+				label: "문의 접수 기본 채움",
+				paths: ["title", "category", "priority", "content"],
+				description: "문의 접수 시 핵심 4개 필드를 AI로 채웁니다.",
+			},
+		];
+	}
+
+	private getString(value: unknown): string {
+		if (typeof value === "string") {
+			return value.trim();
+		}
+		return "";
+	}
+
+	private normalizeText(value: string): string {
+		return value.toLowerCase().replace(/\s+/g, " ").trim();
+	}
+
+	private toInquiryCategory(value: unknown): InquiryCategory | null {
+		if (typeof value !== "string") {
+			return null;
+		}
+		return Object.values(InquiryCategory).includes(value as InquiryCategory)
+			? (value as InquiryCategory)
+			: null;
+	}
+
+	private toInquiryPriority(value: unknown): InquiryPriority | null {
+		if (typeof value !== "string") {
+			return null;
+		}
+		return Object.values(InquiryPriority).includes(value as InquiryPriority)
+			? (value as InquiryPriority)
+			: null;
+	}
+
+	private detectCategory(text: string): InquiryCategory | null {
+		if (!text) {
+			return null;
+		}
+
+		if (
+			text.includes("배송") ||
+			text.includes("택배") ||
+			text.includes("delivery")
+		) {
+			return InquiryCategory.DELIVERY;
+		}
+		if (
+			text.includes("결제") ||
+			text.includes("payment") ||
+			text.includes("카드")
+		) {
+			return InquiryCategory.PAYMENT;
+		}
+		if (
+			text.includes("환불") ||
+			text.includes("취소") ||
+			text.includes("refund")
+		) {
+			return InquiryCategory.REFUND;
+		}
+		if (text.includes("상품") || text.includes("product")) {
+			return InquiryCategory.PRODUCT;
+		}
+		if (text.includes("계정") || text.includes("로그인") || text.includes("account")) {
+			return InquiryCategory.ACCOUNT;
+		}
+		if (text.includes("오류") || text.includes("버그") || text.includes("technical")) {
+			return InquiryCategory.TECHNICAL;
+		}
+		if (text.includes("불만") || text.includes("complaint")) {
+			return InquiryCategory.COMPLAINT;
+		}
+
+		return InquiryCategory.GENERAL;
+	}
+
+	private detectPriority(text: string): InquiryPriority | null {
+		if (!text) {
+			return null;
+		}
+
+		if (
+			text.includes("긴급") ||
+			text.includes("당장") ||
+			text.includes("즉시") ||
+			text.includes("critical") ||
+			text.includes("urgent")
+		) {
+			return InquiryPriority.URGENT;
+		}
+		if (
+			text.includes("불만") ||
+			text.includes("화남") ||
+			text.includes("빠르게") ||
+			text.includes("high priority")
+		) {
+			return InquiryPriority.HIGH;
+		}
+		if (text.includes("천천히") || text.includes("low priority")) {
+			return InquiryPriority.LOW;
+		}
+
+		return InquiryPriority.NORMAL;
+	}
+
+	private suggestTitle(params: {
+		currentTitle: string;
+		currentContent: string;
+		prompt: string;
+		category: InquiryCategory;
+	}): string {
+		const { currentTitle, currentContent, prompt, category } = params;
+
+		if (currentTitle.length >= 2) {
+			return currentTitle.slice(0, 200);
+		}
+
+		const sourceText = [prompt, currentContent].find(
+			(value) => value.length > 0,
+		);
+		if (!sourceText) {
+			return `${INQUIRY_CATEGORY_LABELS[category]} 문의`;
+		}
+
+		const firstLine = sourceText
+			.split(/\n|[.!?]/)
+			.map((segment) => segment.trim())
+			.find((segment) => segment.length > 0);
+
+		if (!firstLine) {
+			return `${INQUIRY_CATEGORY_LABELS[category]} 문의`;
+		}
+
+		return firstLine.slice(0, 200);
+	}
+
+	private suggestContent(params: {
+		currentContent: string;
+		prompt: string;
+		title: string;
+	}): string {
+		const { currentContent, prompt, title } = params;
+
+		if (currentContent.length >= 10) {
+			return currentContent;
+		}
+		if (prompt.length >= 10) {
+			return prompt;
+		}
+		if (title.length > 0) {
+			return `${title} 관련 문의입니다.`;
+		}
+		return "문의 내용을 입력해주세요.";
+	}
+
+	private isSameValue(left: unknown, right: unknown): boolean {
+		if (typeof left === "string" && typeof right === "string") {
+			return left.trim() === right.trim();
+		}
+		return left === right;
+	}
 
 	/**
 	 * 상태 전이 검증

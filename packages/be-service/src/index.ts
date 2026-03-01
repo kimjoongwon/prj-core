@@ -66,8 +66,10 @@ export {
 // Inquiry Domain Services
 export {
 	InquiriesService,
+	type FillInquiryFormInput,
+	type FillInquiryFormResult,
 	type InquiryStats,
-	type AIDraftResult,
+	type InquiryCreateUpdateFormBootstrap,
 	type SentimentAnalysisResult,
 } from "./inquiries.service";
 export { InquiryMessagesService } from "./inquiry-messages.service";
