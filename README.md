@@ -368,7 +368,7 @@ pnpm start:storybook   # Storybook (http://localhost:6006)
 
 ```env
 # Database
-DATABASE_URL=postgresql://user:password@localhost:5432/prj_core
+DATABASE_URL=postgresql://user:password@localhost:5432/plate
 
 # JWT
 JWT_SECRET=your-jwt-secret
