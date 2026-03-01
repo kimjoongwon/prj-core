@@ -72,7 +72,7 @@
 | -------------- | ---------------- | --------------------------------------------------------------------- |
 | 헤더           | PageSurface      | -                                                                     |
 | 필터 바        | InquiryFilterBar | `packages/fe-ui/src/components/widget/InquiryFilterBar/index.spec.md` |
-| 문의 목록      | InquiryDataGrid  | `packages/fe-ui/src/components/feature/InquiryDataGrid/index.spec.md` |
+| 문의 목록      | MetaDataGrid     | `packages/fe-ui/src/components/feature/MetaDataGrid/index.spec.md` |
 | 연결 상태      | ConnectionStatus | `packages/fe-ui/src/components/ui/ConnectionStatus/index.spec.md`     |
 | SLA 현황 카드  | SLAStatusCard    | `packages/fe-ui/src/components/widget/SLAStatusCard/index.spec.md`    |
 | 금일 현황 카드 | InquiryStatsCard | `packages/fe-ui/src/components/widget/InquiryStatsCard/index.spec.md` |
@@ -196,7 +196,7 @@ PageSurface (title, description, actions)
 │   ├── DateRangePicker
 │   ├── SearchInput
 │   └── ResetButton
-├── InquiryDataGrid (목록)
+├── MetaDataGrid (목록)
 │   ├── ConnectionStatus (WebSocket 상태)
 │   └── DataGrid
 └── StatsRow (통계 카드)
@@ -255,14 +255,14 @@ PageSurface (title, description, actions)
 
 | 컴포넌트 | 위치 | 설명 |
 |----------|------|------|
-| InquiryDataGrid | feature/ | 문의 목록 DataGrid + Store 연결 |
+| MetaDataGrid | feature/ | 공용 DataGrid + 문의 전용 컬럼/쿼리 상태 연동 |
 
 ### L11: Store 연결
 
 | Store | 사용 필드/액션 |
 |-------|----------------|
-| InquiryStore | filterStatus, filterChannel, filterCategory, filterPriority, filterAssigneeId, searchKeyword, page, pageSize, setFilterXxx, setSearchKeyword, clearAllFilters |
-| InquiryStore (실시간) | isWebSocketConnected, setWebSocketConnected |
+| Query State (nuqs) | inquiryStatus, search, take, skip |
+| Page Handler | onClickStatusFilter, onClickInquiryRow, onClickNewInquiry |
 
 ### L12: 테스트 케이스
 
@@ -407,3 +407,5 @@ PageSurface (title, description, actions)
 | 2026-02-26 | L5-L12 레이어 기획 추가 | orch-screen-planner |
 | 2026-02-26 | 페이지 파일 생성 (page.tsx, _client.tsx, _prefetch.ts, hooks/useHandlers.ts) | fe-page-builder |
 | 2026-02-27 | 목록 페이지 E2E 테스트 추가 (`page.e2e.ts`) | codex |
+| 2026-02-28 | InquiryStore 의존 제거, 페이지 로컬 state 기준으로 L10/L11 갱신 | codex |
+| 2026-03-01 | InquiryDataGrid 제거, MetaDataGrid 재사용 구조로 전환 | codex |

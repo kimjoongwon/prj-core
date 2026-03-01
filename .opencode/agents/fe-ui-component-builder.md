@@ -62,6 +62,13 @@ tools:
 | **CVA 스타일링**         | 타입 안전한 variant 관리                     |
 | **라이브러리 타입 기반** | HeroUI 래핑 시 기존 타입 상속/확장           |
 
+### ♻️ 기존 컴포넌트 우선 원칙 (Critical)
+
+1. HeroUI에 동일/유사 컴포넌트가 있으면 우선 사용합니다.
+2. `packages/fe-ui/src/components/ui`에 동일/유사 컴포넌트가 있으면 **신규 생성하지 않고 재사용**합니다.
+3. 기능이 부족하면 **기존 UI 컴포넌트를 업그레이드**합니다.
+4. 이름만 다른 중복 UI 컴포넌트 생성은 금지합니다.
+
 ### ❌ Don't
 
 | 금지 사항                                          | 이유                                                              |
@@ -69,6 +76,7 @@ tools:
 | `useState`, `useReducer` 사용                      | 상태 관리는 상위 계층에서                                         |
 | **Context API 사용 (createContext, useContext)**   | **packages/fe-ui에서 Context 사용 금지 - props drilling 사용**       |
 | **컴포넌트 폴더 내 hooks/, utils/ 하위 폴더 생성** | **패키지 레벨에서 관리 (hooks → src/hooks/, utils → src/utils/)** |
+| 기존 UI와 유사한 컴포넌트 신규 생성               | 중복 자산 증가 및 API/디자인 불일치 유발                          |
 | API 호출, Side Effect                              | Pure Component 원칙 위반                                          |
 | 비즈니스 로직 포함                                 | Feature 계층의 역할                                               |
 | 복잡한 이벤트 처리                                 | 콜백 호출만 허용                                                  |
@@ -256,6 +264,9 @@ export type { [ComponentName]Props } from "./[ComponentName]";
 ## 6. 체크리스트
 
 - [ ] HeroUI에 동일/비슷한 컴포넌트 없음 확인
+- [ ] 기존 UI 컴포넌트 검색 완료 (`rg --files packages/fe-ui/src/components/ui`)
+- [ ] 기존 컴포넌트 재사용 가능 여부 판단 및 결과 기록
+- [ ] 기능 부족 시 기존 UI 컴포넌트 업그레이드로 처리
 - [ ] `packages/fe-ui/src/components/ui/[Name]/` 에 생성
 - [ ] 내부 상태(useState 등) 없음
 - [ ] Side Effect 없음

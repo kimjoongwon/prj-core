@@ -5,7 +5,6 @@ import {
 import { DeleteFilter } from "@cocrepo/enum";
 import {
 	AIProvider,
-	AITemplateStatus,
 	type Prisma,
 } from "@cocrepo/prisma";
 import { Transform } from "class-transformer";
@@ -44,11 +43,6 @@ export class QueryAIFormTemplateDto extends PrismaQueryDto<Prisma.AIFormTemplate
 	// -------------------------------------------------------------------------
 	// 필터 - Enum
 	// -------------------------------------------------------------------------
-	@EnumFieldOptional(() => AITemplateStatus, {
-		description: "템플릿 상태 필터 (DRAFT, ACTIVE, INACTIVE, ARCHIVED)",
-	})
-	templateStatus?: AITemplateStatus;
-
 	@EnumFieldOptional(() => AIProvider, {
 		description: "AI 제공자 필터 (OPENAI, ANTHROPIC)",
 	})
@@ -79,11 +73,11 @@ export class QueryAIFormTemplateDto extends PrismaQueryDto<Prisma.AIFormTemplate
 	// 자동 매핑 제외 필드
 	// -------------------------------------------------------------------------
 	/**
-	 * 검색어(이름 검색), 삭제 상태(removedAt 변환), 템플릿 상태(templateStatus -> status 필드명 충돌)
+	 * 검색어(이름 검색), 삭제 상태(removedAt 변환)
 	 * 를 자동 매핑에서 제외
 	 */
 	protected excludeFromAutoMap(): string[] {
-		return ["search", "status", "templateStatus"];
+		return ["search", "status"];
 	}
 
 	// -------------------------------------------------------------------------
@@ -92,7 +86,7 @@ export class QueryAIFormTemplateDto extends PrismaQueryDto<Prisma.AIFormTemplate
 	/**
 	 * DTO 필드를 Prisma where 조건으로 변환합니다.
 	 * 자동 매핑: targetDomain, aiProvider
-	 * 커스텀: search, status, templateStatus
+	 * 커스텀: search, status
 	 */
 	toPrismaWhere(
 		baseWhere?: Partial<Prisma.AIFormTemplateWhereInput>,
@@ -107,11 +101,6 @@ export class QueryAIFormTemplateDto extends PrismaQueryDto<Prisma.AIFormTemplate
 		// 검색어 (템플릿 이름 검색)
 		if (this.search) {
 			where.name = this.containsFilter(this.search);
-		}
-
-		// 템플릿 상태 (templateStatus -> status 필드)
-		if (this.templateStatus) {
-			where.status = this.templateStatus;
 		}
 
 		return where;

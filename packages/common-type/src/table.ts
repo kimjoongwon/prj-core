@@ -46,6 +46,9 @@ export interface MetaDataGridConfig<T> {
 	/** 모바일 대응 설정 */
 	responsive?: ResponsiveConfig<T>;
 
+	/** 행 클릭 핸들러 */
+	onRowClick?: (row: T) => void;
+
 	/** 빈 상태 메시지 */
 	emptyMessage?: string;
 }

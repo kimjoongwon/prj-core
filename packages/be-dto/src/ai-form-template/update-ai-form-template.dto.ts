@@ -4,7 +4,7 @@ import {
 	NumberFieldOptional,
 	StringFieldOptional,
 } from "@cocrepo/decorator";
-import { AIProvider, AITemplateStatus } from "@cocrepo/prisma";
+import { AIProvider } from "@cocrepo/prisma";
 
 /**
  * AI 폼 템플릿 수정 DTO
@@ -52,11 +52,6 @@ export class UpdateAIFormTemplateDto {
 		description: "시스템 프롬프트",
 	})
 	systemPrompt?: string;
-
-	@EnumFieldOptional(() => AITemplateStatus, {
-		description: "템플릿 상태",
-	})
-	status?: AITemplateStatus;
 
 	@NumberFieldOptional({
 		minimum: 0,

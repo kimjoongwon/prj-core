@@ -73,13 +73,6 @@ export type EnumAIProviderFilter<$PrismaModel = never> = {
   not?: Prisma.NestedEnumAIProviderFilter<$PrismaModel> | $Enums.AIProvider
 }
 
-export type EnumAITemplateStatusFilter<$PrismaModel = never> = {
-  equals?: $Enums.AITemplateStatus | Prisma.EnumAITemplateStatusFieldRefInput<$PrismaModel>
-  in?: $Enums.AITemplateStatus[] | Prisma.ListEnumAITemplateStatusFieldRefInput<$PrismaModel>
-  notIn?: $Enums.AITemplateStatus[] | Prisma.ListEnumAITemplateStatusFieldRefInput<$PrismaModel>
-  not?: Prisma.NestedEnumAITemplateStatusFilter<$PrismaModel> | $Enums.AITemplateStatus
-}
-
 export type IntFilter<$PrismaModel = never> = {
   equals?: number | Prisma.IntFieldRefInput<$PrismaModel>
   in?: number[] | Prisma.ListIntFieldRefInput<$PrismaModel>
@@ -219,16 +212,6 @@ export type EnumAIProviderWithAggregatesFilter<$PrismaModel = never> = {
   _count?: Prisma.NestedIntFilter<$PrismaModel>
   _min?: Prisma.NestedEnumAIProviderFilter<$PrismaModel>
   _max?: Prisma.NestedEnumAIProviderFilter<$PrismaModel>
-}
-
-export type EnumAITemplateStatusWithAggregatesFilter<$PrismaModel = never> = {
-  equals?: $Enums.AITemplateStatus | Prisma.EnumAITemplateStatusFieldRefInput<$PrismaModel>
-  in?: $Enums.AITemplateStatus[] | Prisma.ListEnumAITemplateStatusFieldRefInput<$PrismaModel>
-  notIn?: $Enums.AITemplateStatus[] | Prisma.ListEnumAITemplateStatusFieldRefInput<$PrismaModel>
-  not?: Prisma.NestedEnumAITemplateStatusWithAggregatesFilter<$PrismaModel> | $Enums.AITemplateStatus
-  _count?: Prisma.NestedIntFilter<$PrismaModel>
-  _min?: Prisma.NestedEnumAITemplateStatusFilter<$PrismaModel>
-  _max?: Prisma.NestedEnumAITemplateStatusFilter<$PrismaModel>
 }
 
 export type IntWithAggregatesFilter<$PrismaModel = never> = {
@@ -965,13 +948,6 @@ export type NestedEnumAIProviderFilter<$PrismaModel = never> = {
   not?: Prisma.NestedEnumAIProviderFilter<$PrismaModel> | $Enums.AIProvider
 }
 
-export type NestedEnumAITemplateStatusFilter<$PrismaModel = never> = {
-  equals?: $Enums.AITemplateStatus | Prisma.EnumAITemplateStatusFieldRefInput<$PrismaModel>
-  in?: $Enums.AITemplateStatus[] | Prisma.ListEnumAITemplateStatusFieldRefInput<$PrismaModel>
-  notIn?: $Enums.AITemplateStatus[] | Prisma.ListEnumAITemplateStatusFieldRefInput<$PrismaModel>
-  not?: Prisma.NestedEnumAITemplateStatusFilter<$PrismaModel> | $Enums.AITemplateStatus
-}
-
 export type NestedIntFilter<$PrismaModel = never> = {
   equals?: number | Prisma.IntFieldRefInput<$PrismaModel>
   in?: number[] | Prisma.ListIntFieldRefInput<$PrismaModel>
@@ -1080,16 +1056,6 @@ export type NestedEnumAIProviderWithAggregatesFilter<$PrismaModel = never> = {
   _count?: Prisma.NestedIntFilter<$PrismaModel>
   _min?: Prisma.NestedEnumAIProviderFilter<$PrismaModel>
   _max?: Prisma.NestedEnumAIProviderFilter<$PrismaModel>
-}
-
-export type NestedEnumAITemplateStatusWithAggregatesFilter<$PrismaModel = never> = {
-  equals?: $Enums.AITemplateStatus | Prisma.EnumAITemplateStatusFieldRefInput<$PrismaModel>
-  in?: $Enums.AITemplateStatus[] | Prisma.ListEnumAITemplateStatusFieldRefInput<$PrismaModel>
-  notIn?: $Enums.AITemplateStatus[] | Prisma.ListEnumAITemplateStatusFieldRefInput<$PrismaModel>
-  not?: Prisma.NestedEnumAITemplateStatusWithAggregatesFilter<$PrismaModel> | $Enums.AITemplateStatus
-  _count?: Prisma.NestedIntFilter<$PrismaModel>
-  _min?: Prisma.NestedEnumAITemplateStatusFilter<$PrismaModel>
-  _max?: Prisma.NestedEnumAITemplateStatusFilter<$PrismaModel>
 }
 
 export type NestedIntWithAggregatesFilter<$PrismaModel = never> = {

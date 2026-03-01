@@ -5105,7 +5105,6 @@ export const AIFormTemplateScalarFieldEnum = {
   aiProvider: 'aiProvider',
   model: 'model',
   systemPrompt: 'systemPrompt',
-  status: 'status',
   priority: 'priority',
   allowUserPrompt: 'allowUserPrompt',
   maxTokens: 'maxTokens',
@@ -6204,20 +6203,6 @@ export type EnumAIProviderFieldRefInput<$PrismaModel> = FieldRefInputType<$Prism
  * Reference to a field of type 'AIProvider[]'
  */
 export type ListEnumAIProviderFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'AIProvider[]'>
-    
-
-
-/**
- * Reference to a field of type 'AITemplateStatus'
- */
-export type EnumAITemplateStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'AITemplateStatus'>
-    
-
-
-/**
- * Reference to a field of type 'AITemplateStatus[]'
- */
-export type ListEnumAITemplateStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'AITemplateStatus[]'>
     
 
 

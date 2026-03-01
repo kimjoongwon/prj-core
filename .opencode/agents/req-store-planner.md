@@ -10,7 +10,7 @@ tools:
 
 # L11 Store 기획자 (Store Planner)
 
-도메인별 **MobX Store(L11)** 레이어를 기획하는 전문가입니다.
+도메인별 **공용 MobX Store(L11)** 레이어를 기획하는 전문가입니다.
 
 ---
 
@@ -28,7 +28,7 @@ tools:
 
 | 항목 | 필수 | 설명 |
 |------|:----:|------|
-| 도메인명 | ✅ | Store를 생성할 도메인 |
+| 도메인명 | ✅ | Store 후보 도메인 |
 | L0-L4 기획 결과 | ✅ | 도메인 기획서 (`app.spec.md`, `page.spec.md`) |
 | L7 Entity 기획 결과 | ✅ | 엔티티 정의 |
 
@@ -39,6 +39,11 @@ packages/fe-store/src/stores/[domain]Store.spec.md
 ```
 
 예시: `packages/fe-store/src/stores/memberStore.spec.md`
+
+### 조건부 출력 (Critical)
+
+- **재사용 조건 충족**: `packages/fe-store/src/stores/[domain]Store.spec.md` 생성
+- **페이지 전용 상태**: Store spec 생성하지 않고 해당 `page.spec.md`의 L11을 "Page Local State"로 기획
 
 ### 출력 파일 형식
 
@@ -87,23 +92,27 @@ packages/fe-store/src/stores/[domain]Store.spec.md
    Read `.claude/templates/spec/store.spec.md`
    → 해당 파일의 형식을 기준으로 store.spec.md를 생성한다
    ↓
-1단계: 도메인 분석
+1단계: 재사용성 게이트 판별
+   - 상태가 2개 이상 페이지/도메인에서 재사용되는지 확인
+   - 단일 페이지 전용이면 Store 생성 중단, page.spec.md로 경로 전환
+   ↓
+2단계: 도메인 분석
    - app.spec.md, page.spec.md 기획서 확인
    - L7 Entity 정의 확인
    ↓
-2단계: 상태 식별
+3단계: 상태 식별
    - 도메인에서 관리할 상태 도출
    - 목록, 선택 항목, 필터 상태 등
    ↓
-3단계: 액션 정의
+4단계: 액션 정의
    - 상태 변경 액션 정의
    - CRUD 액션, 필터 액션 등
    ↓
-4단계: 계산값 정의 (필요시)
+5단계: 계산값 정의 (필요시)
    - 파생 상태 정의
    - 필터링, 집계 등
    ↓
-5단계: 기획서 작성
+6단계: 기획서 작성
    → packages/fe-store/src/stores/[domain]Store.spec.md
 ```
 
@@ -188,6 +197,7 @@ export class RootStore {
 ## 6. 품질 체크리스트
 
 - [ ] Store가 도메인 단위로 정의되었는가?
+- [ ] 2개 이상 페이지/도메인 재사용 근거가 있는가?
 - [ ] 상태가 최소화되었는가? (불필요한 상태 제거)
 - [ ] 액션이 상태 변경만 담당하는가? (API 호출 없음)
 - [ ] 계산값이 올바르게 정의되었는가?

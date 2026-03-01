@@ -19,7 +19,7 @@ MobX 기반의 Store를 생성하는 전문가입니다.
 | 앱 전체에서 접근해야 하는 설정 | ✅ | TokenStore, PersistStore |
 | 복잡한 상태 머신 | ✅ | 멀티스텝 프로세스 |
 | 도메인 모델 (데이터 구조) | ✅ | NavItem, User, Company |
-| 페이지 레벨 상태 | ❌ | URL 기반 상태 관리 사용 |
+| 페이지 레벨 상태 | ❌ | 페이지 로컬 state(`useState`/`useLocalObservable`) 사용 |
 | 컴포넌트 로컬 상태 | ❌ | useLocalObservable 사용 |
 | API 캐싱 | ❌ | React Query 사용 |
 
@@ -44,8 +44,9 @@ MobX 기반의 Store를 생성하는 전문가입니다.
 | Store 클래스 | `packages/fe-store/src/stores/[name]Store.ts` |
 | Domain Model | `packages/fe-store/src/stores/[name].ts` (필요시) |
 | useStore hook | `packages/fe-store/src/stores/useStore.ts` (추가) |
-| RootStore 등록 | `packages/fe-store/src/stores/Store.ts` (수정) |
+| RootStore 등록 | `packages/fe-store/src/stores/rootStore.ts` (수정) |
 | barrel export | `packages/fe-store/src/stores/index.ts` (추가) |
+| 페이지 전용 상태 | `apps/*/src/app/**/_client.tsx`, `apps/*/src/app/**/hooks/` (로컬 state로 구현) |
 
 ---
 
@@ -57,6 +58,7 @@ MobX 기반의 Store를 생성하는 전문가입니다.
 |------|------|
 | **makeAutoObservable 사용** | 생성자 마지막에 호출 |
 | **범용적 이름 사용** | 앱 종속 이름 금지 |
+| **재사용성 검증 선행** | 2개 이상 페이지/도메인 재사용이 없으면 Store 생성 금지 |
 | **rootStore 참조 패턴** | 다른 Store 접근 시 rootStore 통해 참조 |
 | **상태 변경만 담당** | API 호출은 외부에서 수행 후 결과 전달 |
 | **computed는 동기적** | getter는 순수 함수로 작성 |
@@ -65,7 +67,7 @@ MobX 기반의 Store를 생성하는 전문가입니다.
 
 | 금지 사항 | 이유 |
 |----------|------|
-| 페이지 레벨 Store 생성 | URL 기반 상태 관리 사용 |
+| 페이지 레벨 Store 생성 | 페이지 로컬 state가 원칙 |
 | Store에서 직접 API 호출 | 상태 관리와 데이터 페칭 분리 |
 | 앱 종속적 하드코딩 | 공용 패키지 재사용성 |
 | 비동기 computed | computed는 동기적이어야 함 |
@@ -89,6 +91,8 @@ MobX 기반의 Store를 생성하는 전문가입니다.
 | RootStore 주입형 | 다른 Store와 상호작용 필요 |
 | 독립형 Store | 다른 Store와 상호작용 불필요 |
 | 설정 주입형 Store | 앱별 설정이 필요한 경우 |
+
+> 생성 전 게이트: 단일 페이지에서만 쓰이는 상태라면 Store를 만들지 않고 페이지 로컬 state로 구현합니다.
 
 ### 4.3 파일 구조
 

@@ -103,6 +103,7 @@ const DataGridComponent = <T extends object>(props: DataGridProps<T>) => {
 		data,
 		columns,
 		getCoreRowModel: getCoreRowModel(),
+		getRowId: (row) => String((row as T & { id: Key }).id),
 		getSubRows: (row: T & { children?: T[] }) => row?.children || [],
 		getExpandedRowModel: getExpandedRowModel(),
 		onExpandedChange: setExpanded,

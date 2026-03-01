@@ -17,16 +17,6 @@ export const AIProvider = {
 export type AIProvider = (typeof AIProvider)[keyof typeof AIProvider]
 
 
-export const AITemplateStatus = {
-  DRAFT: 'DRAFT',
-  ACTIVE: 'ACTIVE',
-  INACTIVE: 'INACTIVE',
-  ARCHIVED: 'ARCHIVED'
-} as const
-
-export type AITemplateStatus = (typeof AITemplateStatus)[keyof typeof AITemplateStatus]
-
-
 export const FormFieldType = {
   TEXT: 'TEXT',
   TEXTAREA: 'TEXTAREA',

@@ -4,7 +4,7 @@ import {
 	type MongoAbility,
 } from "@casl/ability";
 import { makeAutoObservable } from "mobx";
-import type { Store } from "./Store";
+import type { RootStore } from "./rootStore";
 
 /**
  * CASL Action 타입
@@ -62,7 +62,7 @@ export class AbilityStore {
 	private _rules: AbilityRule[] = [];
 	private _isLoaded = false;
 
-	constructor(_plateStore: Store) {
+	constructor(_rootStore: RootStore) {
 		this._ability = this.createEmptyAbility();
 		makeAutoObservable(this);
 	}

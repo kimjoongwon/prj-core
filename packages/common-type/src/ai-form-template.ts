@@ -4,11 +4,6 @@
 export type AIProvider = "OPENAI" | "ANTHROPIC";
 
 /**
- * AI 템플릿 상태 타입
- */
-export type AITemplateStatus = "DRAFT" | "ACTIVE" | "INACTIVE" | "ARCHIVED";
-
-/**
  * 실행 상태 타입
  */
 export type ExecutionStatus =
@@ -76,7 +71,6 @@ export interface AIFormTemplate {
 	aiProvider: AIProvider;
 	model?: string;
 	systemPrompt?: string;
-	status: AITemplateStatus;
 	priority: number;
 	allowUserPrompt: boolean;
 	maxTokens?: number;
@@ -160,10 +154,6 @@ export interface AIFormPreviewResponse {
  */
 export interface AIFormTemplateStats {
 	total: number;
-	active: number;
-	inactive: number;
-	draft: number;
-	archived: number;
 }
 
 /**

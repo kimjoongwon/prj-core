@@ -62,6 +62,13 @@ tools: Read, Write, Grep, Bash
 | **에러/로딩 처리** | 로딩, 에러 상태를 UI로 표현 |
 | **displayName 설정** | 디버깅을 위해 필수 |
 
+### ♻️ 기존 컴포넌트 우선 원칙 (Critical)
+
+1. `packages/fe-ui/src/components/{feature,widget,ui}`에서 기존 컴포넌트를 먼저 검색합니다.
+2. 요구사항을 충족하면 **새 컴포넌트를 생성하지 않고 기존 컴포넌트를 재사용**합니다.
+3. 기능이 부족하면 **새 이름으로 복제하지 말고 기존 컴포넌트를 업그레이드**합니다.
+4. 기존 컴포넌트 업그레이드 시 호출부를 함께 마이그레이션하고 중복 컴포넌트는 제거합니다.
+
 ### ❌ Don't
 
 | 금지 사항 | 이유 |
@@ -69,6 +76,7 @@ tools: Read, Write, Grep, Bash
 | **apps/*/src에 feature 폴더 생성** | **Feature는 반드시 packages/fe-ui에만 존재** |
 | **Context API 사용 (createContext, useContext)** | **packages/fe-ui에서 Context 사용 금지 - props drilling 사용** |
 | **컴포넌트 폴더 내 hooks/, utils/, inputs/ 하위 폴더 생성** | **패키지 레벨에서 관리 (hooks → src/hooks/, utils → src/utils/, inputs → components/inputs/)** |
+| 기존 Feature와 유사한 컴포넌트 신규 생성 | 중복 자산 증가 및 유지보수 비용 상승 |
 | 커스텀 className 직접 사용 | UI/Input에서만 허용 |
 | 직접 axios/fetch 호출 | @cocrepo/api 사용 필수 |
 | Text를 Button/Chip children으로 | 테마 깨짐 발생 |
@@ -313,6 +321,9 @@ export type { CommentListProps } from "./CommentList";
 
 ## 6. 체크리스트
 
+- [ ] 기존 Feature/Widget/UI 컴포넌트 검색 완료 (`rg --files packages/fe-ui/src/components`)
+- [ ] 기존 컴포넌트 재사용 가능 여부 판단 및 결과 기록
+- [ ] 기능 부족 시 기존 컴포넌트 업그레이드로 처리 (신규 복제 금지)
 - [ ] `packages/fe-ui/src/components/feature/[Name]/` 에 생성
 - [ ] 필요한 Widget이 없으면 Widget Builder에게 요청
 - [ ] API 호출은 `@cocrepo/api` 사용

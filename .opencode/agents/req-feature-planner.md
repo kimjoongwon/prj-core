@@ -30,7 +30,7 @@ tools:
 |------|:----:|------|
 | 화면 경로 | ✅ | 기획서를 생성할 화면 경로 |
 | L9 Widget 기획 결과 | ✅ | Widget 컴포넌트 정의 |
-| L11 Store 기획 결과 | ✅ | Store 정의 |
+| L11 Store 기획 결과 | △ | 공용 Store가 필요한 화면에서만 필수 |
 | L5-L6 기획 결과 | ✅ | API/인터랙션 정의 |
 
 ### 출력 위치 (Sidecar Spec - 개별 파일)
@@ -234,7 +234,7 @@ const MemberListFeature = observer(({ store }: Props) => {
 | 에이전트 | 관계 | 설명 |
 |----------|------|------|
 | req-widget-planner | 이전 단계 | Widget 컴포넌트 |
-| req-store-planner | 이전 단계 | Store 정의 |
+| req-store-planner | 이전 단계(조건부) | 공용 Store 정의 |
 | orch-screen-planner | 상위 | 화면 기획 조율 |
 
 ### 후행 에이전트

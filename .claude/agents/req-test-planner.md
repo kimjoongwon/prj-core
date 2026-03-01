@@ -40,7 +40,7 @@ tools: Read, Write, Grep, Bash
 - `index.spec.md` (Widget) - Widget 컴포넌트 테스트 케이스
 - `[domain].service.spec.md` - Service 단위 테스트 케이스
 - `[domain].controller.spec.md` - Controller API 테스트 케이스
-- `[domain]Store.spec.md` - Store 단위 테스트 케이스
+- `[domain]Store.spec.md` - Store 단위 테스트 케이스 (공용 Store가 있는 경우)
 
 ### 추가할 섹션 형식
 
@@ -95,7 +95,7 @@ tools: Read, Write, Grep, Bash
 | widget/index.spec.md | 컴포넌트 | Props 기반 렌더링 |
 | service.spec.md | 단위 | 비즈니스 로직 + 유효성 |
 | controller.spec.md | API | 엔드포인트 + 인증/인가 |
-| store.spec.md | 단위 | 상태 변경 + 계산값 |
+| store.spec.md (조건부) | 단위 | 상태 변경 + 계산값 |
 
 ---
 

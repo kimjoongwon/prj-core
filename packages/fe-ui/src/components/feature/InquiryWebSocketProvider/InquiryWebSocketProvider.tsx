@@ -1,10 +1,6 @@
 "use client";
 
-import {
-	type InquiryMessage,
-	type InquiryParticipant,
-	useInquiryStore,
-} from "@cocrepo/store";
+import type { InquiryMessage, InquiryParticipant } from "@cocrepo/type";
 import { observer } from "mobx-react-lite";
 import { createContext, type ReactNode, useContext } from "react";
 
@@ -114,22 +110,12 @@ export const useInquiryWebSocket = () => {
  */
 export const InquiryWebSocketProvider = observer(
 	function InquiryWebSocketProvider({
-		inquiryId,
 		status = "disconnected",
-		onConnect,
-		onDisconnect,
-		onError,
 		onReconnect,
 		sendMessage,
 		sendTypingStatus,
 		children,
 	}: InquiryWebSocketProviderProps) {
-		const store = useInquiryStore();
-
-		// Store에 연결 상태 반영
-		const isConnected = status === "connected";
-		store.setWebSocketConnected(isConnected);
-
 		const handleReconnect = () => {
 			onReconnect?.();
 		};
@@ -156,76 +142,5 @@ export const InquiryWebSocketProvider = observer(
 		);
 	},
 );
-
-/**
- * Store에 메시지를 추가하는 유틸리티 함수
- * 외부에서 WebSocket 이벤트 수신 시 호출
- */
-export const dispatchMessageToStore = (
-	store: ReturnType<typeof useInquiryStore>,
-	message: InquiryMessage,
-) => {
-	store.addMessage(message);
-};
-
-/**
- * Store에서 메시지를 업데이트하는 유틸리티 함수
- */
-export const dispatchMessageUpdateToStore = (
-	store: ReturnType<typeof useInquiryStore>,
-	data: { messageId: string; updates: Partial<InquiryMessage> },
-) => {
-	store.updateMessage(data.messageId, data.updates);
-};
-
-/**
- * Store에서 메시지를 삭제하는 유틸리티 함수
- */
-export const dispatchMessageDeleteToStore = (
-	store: ReturnType<typeof useInquiryStore>,
-	data: { messageId: string },
-) => {
-	store.removeMessage(data.messageId);
-};
-
-/**
- * Store에 참여자를 추가하는 유틸리티 함수
- */
-export const dispatchParticipantJoinToStore = (
-	store: ReturnType<typeof useInquiryStore>,
-	participant: InquiryParticipant,
-) => {
-	store.addParticipant(participant);
-};
-
-/**
- * Store에서 참여자를 제거하는 유틸리티 함수
- */
-export const dispatchParticipantLeaveToStore = (
-	store: ReturnType<typeof useInquiryStore>,
-	data: { userId: string },
-) => {
-	store.removeParticipant(data.userId);
-};
-
-/**
- * Store에서 참여자 상태를 업데이트하는 유틸리티 함수
- */
-export const dispatchParticipantStatusChangeToStore = (
-	store: ReturnType<typeof useInquiryStore>,
-	data: { userId: string; updates: Partial<InquiryParticipant> },
-) => {
-	store.updateParticipant(data.userId, data.updates);
-};
-
-/**
- * Store에 타이핑 상태를 반영하는 유틸리티 함수
- */
-export const dispatchTypingStatusToStore = (
-	store: ReturnType<typeof useInquiryStore>,
-	data: { userId: string; isTyping: boolean },
-) => {
-	store.setTyping(data.userId, data.isTyping);
-};
 
 InquiryWebSocketProvider.displayName = "InquiryWebSocketProvider";

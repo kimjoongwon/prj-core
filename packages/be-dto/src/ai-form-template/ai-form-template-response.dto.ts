@@ -8,7 +8,7 @@ import {
 	UUIDField,
 } from "@cocrepo/decorator";
 import type { AIFormTemplate } from "@cocrepo/prisma";
-import { AIProvider, AITemplateStatus } from "@cocrepo/prisma";
+import { AIProvider } from "@cocrepo/prisma";
 import { AbstractDto } from "../abstract.dto";
 
 /**
@@ -77,9 +77,6 @@ export class AIFormTemplateDto
 	@StringField({ nullable: true, description: "시스템 프롬프트" })
 	systemPrompt!: string | null;
 
-	@EnumField(() => AITemplateStatus, { description: "템플릿 상태" })
-	status!: AITemplateStatus;
-
 	@NumberField({ description: "정렬 우선순위" })
 	priority!: number;
 
@@ -132,16 +129,4 @@ export class AIFormTemplatePaginationMetaDto {
 export class AIFormTemplateStatsDto {
 	@NumberField({ description: "전체 템플릿 수" })
 	total!: number;
-
-	@NumberField({ description: "활성 템플릿 수" })
-	active!: number;
-
-	@NumberField({ description: "비활성 템플릿 수" })
-	inactive!: number;
-
-	@NumberField({ description: "초안 템플릿 수" })
-	draft!: number;
-
-	@NumberField({ description: "보관된 템플릿 수" })
-	archived!: number;
 }

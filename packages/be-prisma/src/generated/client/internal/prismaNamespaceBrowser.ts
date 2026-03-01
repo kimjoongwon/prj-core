@@ -144,7 +144,6 @@ export const AIFormTemplateScalarFieldEnum = {
   aiProvider: 'aiProvider',
   model: 'model',
   systemPrompt: 'systemPrompt',
-  status: 'status',
   priority: 'priority',
   allowUserPrompt: 'allowUserPrompt',
   maxTokens: 'maxTokens',

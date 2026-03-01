@@ -3,7 +3,6 @@
 import { Button, Card, CardBody, Input, Divider, Spacer } from "@heroui/react";
 import { observer } from "mobx-react-lite";
 import { useState, useCallback } from "react";
-import { useInquiryStore } from "@cocrepo/store";
 import type { InquiryCategory, InquiryChannel, InquiryPriority } from "@cocrepo/enum";
 import { Textarea } from "../../inputs/Textarea/Textarea";
 import { InquiryCategorySelect } from "../../inputs/InquiryCategorySelect/InquiryCategorySelect";
@@ -114,8 +113,6 @@ export const InquiryForm = observer(
 		initialValues,
 		className = "",
 	}: InquiryFormProps) => {
-		const store = useInquiryStore();
-
 		// 폼 상태
 		const [customerId, setCustomerId] = useState(initialValues?.customerId ?? "");
 		const [customerInfo, setCustomerInfo] = useState<CustomerSearchResult | null>(null);

@@ -3,8 +3,7 @@
 import { Card, CardBody, CardHeader, ScrollShadow, Spacer } from "@heroui/react";
 import { observer } from "mobx-react-lite";
 import { useRef, useEffect } from "react";
-import { useInquiryStore } from "@cocrepo/store";
-import type { InquiryMessage, InquiryParticipant } from "@cocrepo/store";
+import type { InquiryMessage, InquiryParticipant } from "@cocrepo/type";
 import { TypingIndicator } from "../../ui/feedback/TypingIndicator/TypingIndicator";
 import { WebSocketConnectionStatus } from "../../ui/feedback/WebSocketConnectionStatus/WebSocketConnectionStatus";
 import { MessageStatus } from "../../ui/feedback/MessageStatus/MessageStatus";
@@ -13,10 +12,18 @@ import { InquiryReplyForm } from "../InquiryReplyForm";
 export interface RealtimeChatPanelProps {
 	/** 문의 ID */
 	inquiryId: string;
+	/** 메시지 목록 */
+	messages?: InquiryMessage[];
 	/** 초기 메시지 목록 (선택) */
 	initialMessages?: InquiryMessage[];
 	/** 참여자 목록 */
 	participants?: InquiryParticipant[];
+	/** 타이핑 사용자 목록 */
+	typingUserNames?: string[];
+	/** WebSocket 연결 여부 */
+	isWebSocketConnected?: boolean;
+	/** 현재 사용자 타이핑 여부 */
+	isTyping?: boolean;
 	/** 메시지 전송 핸들러 */
 	onSendMessage: (content: string, attachments?: File[]) => void;
 	/** 타이핑 시작 핸들러 */
@@ -123,9 +130,11 @@ const MessageBubble = observer(({ message, currentUserId }: MessageBubbleProps) 
  */
 export const RealtimeChatPanel = observer(
 	({
-		inquiryId,
+		messages,
 		initialMessages,
-		participants,
+		typingUserNames,
+		isWebSocketConnected = false,
+		isTyping = false,
 		onSendMessage,
 		onTypingStart,
 		onTypingStop,
@@ -136,34 +145,17 @@ export const RealtimeChatPanel = observer(
 		isGeneratingDraft = false,
 		className = "",
 	}: RealtimeChatPanelProps) => {
-		const store = useInquiryStore();
 		const scrollRef = useRef<HTMLDivElement>(null);
 
-		// Store에서 상태 가져오기
-		const messages = store.messages.length > 0 ? store.messages : (initialMessages ?? []);
-		const typingUserNames = store.typingUserNames;
-		const isConnected = store.isWebSocketConnected;
-		const isTyping = store.isTyping;
+		const currentMessages = messages ?? initialMessages ?? [];
+		const currentTypingUserNames = typingUserNames ?? [];
 
 		// 새 메시지 추가 시 자동 스크롤
 		useEffect(() => {
 			if (scrollRef.current) {
 				scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
 			}
-		}, [messages.length]);
-
-		// 문의 ID 설정
-		useEffect(() => {
-			store.setCurrentInquiry(inquiryId);
-			return () => store.setCurrentInquiry(null);
-		}, [inquiryId, store]);
-
-		// 참여자 목록 설정
-		useEffect(() => {
-			if (participants) {
-				store.setParticipants(participants);
-			}
-		}, [participants, store]);
+		}, [currentMessages.length]);
 
 		const handleSendMessage = (content: string, attachments?: File[]) => {
 			onSendMessage(content, attachments);
@@ -171,14 +163,12 @@ export const RealtimeChatPanel = observer(
 
 		const handleTypingStart = () => {
 			if (!isTyping) {
-				store.startTyping();
 				onTypingStart?.();
 			}
 		};
 
 		const handleTypingStop = () => {
 			if (isTyping) {
-				store.stopTyping();
 				onTypingStop?.();
 			}
 		};
@@ -189,7 +179,7 @@ export const RealtimeChatPanel = observer(
 				<CardHeader className="flex items-center justify-between px-4 py-2">
 					<span className="text-sm font-medium text-default-600">실시간 채팅</span>
 					<WebSocketConnectionStatus
-						status={isConnected ? "connected" : "disconnected"}
+						status={isWebSocketConnected ? "connected" : "disconnected"}
 						onReconnect={onReconnect}
 					/>
 				</CardHeader>
@@ -198,16 +188,16 @@ export const RealtimeChatPanel = observer(
 				<CardBody className="flex-1 overflow-hidden p-0">
 					<ScrollShadow ref={scrollRef} className="flex-1 px-4 py-2">
 						<div className="flex flex-col gap-3">
-							{messages.map((message) => (
+							{currentMessages.map((message) => (
 								<MessageBubble key={message.id} message={message} />
 							))}
 						</div>
 					</ScrollShadow>
 
 					{/* 타이핑 표시 */}
-					{typingUserNames.length > 0 && (
+					{currentTypingUserNames.length > 0 && (
 						<div className="px-4 pb-2">
-							<TypingIndicator userNames={typingUserNames} />
+							<TypingIndicator userNames={currentTypingUserNames} />
 						</div>
 					)}
 				</CardBody>

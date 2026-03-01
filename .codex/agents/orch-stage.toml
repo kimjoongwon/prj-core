@@ -50,7 +50,7 @@ apps/[app]/app/(admin)/
 
 ```
 packages/fe-store/src/stores/
-└── [domain]Store.spec.md              # Store 기획서 (코드 옆)
+└── [domain]Store.spec.md              # Store 기획서 (코드 옆, 조건부)
 
 apps/core/api/src/[module]/
 ├── [name].service.spec.md             # Service 기획서 (코드 옆)
@@ -189,7 +189,7 @@ apps/[app]/app/(admin)/[도메인]/
 
 **BE/Store 기획 (Stage 1, Sidecar Spec):**
 ```
-packages/fe-store/src/stores/[domain]Store.spec.md
+packages/fe-store/src/stores/[domain]Store.spec.md  # 공용 재사용 상태일 때만
 apps/core/api/src/[module]/[name].service.spec.md
 apps/core/api/src/[module]/repositories/[name].repository.spec.md
 apps/core/api/src/[module]/controllers/[name].controller.spec.md
@@ -209,7 +209,7 @@ packages/fe-ui/src/components/feature/[FeatureName]/index.spec.md
 
 | Stage | 이름 | 실행 단위 | 핵심 목표 | 실행 방식 | 주요 에이전트 |
 |-------|------|----------|----------|----------|--------------|
-| 1 | 도메인 기획 | 도메인 전체 | L0-L4 기획 + BE/Store 스펙 | 선행 순차 + 일부 fan-out | orch-requirement |
+| 1 | 도메인 기획 | 도메인 전체 | L0-L4 기획 + BE/Store 스펙(Store 조건부) | 선행 순차 + 일부 fan-out | orch-requirement |
 | 2 | 스키마 구현 | 도메인 전체 | Prisma/공용 스키마, Entity, DTO + 테스트 | `targets` fan-out + join | be-prisma-builder, common-schema-builder, be-entity-builder, be-dto-builder, be-query-dto-builder, be-seed-maker, req-test-planner, qa-be-testing |
 | 3 | 백엔드 구현 | 도메인 전체 | Repository, Service, Controller + 테스트 (Create/Update form bootstrap 계약 포함) | `targets` fan-out + join | be-repository-builder, be-service-builder, be-facade-builder, be-controller-builder, req-test-planner, qa-be-testing |
 | 4 | 화면 기획 | **페이지별** | L5-L12 기획 + spec 체크리스트 생성 | `pages` fan-out 가능 | orch-screen-planner, req-spec-tracker |
@@ -260,8 +260,8 @@ packages/fe-ui/src/components/feature/[FeatureName]/index.spec.md
 ```
 ┌─────────────────────────────────────────────────────────────┐
 │ Stage 1: 도메인 기획 (도메인 전체)                            │
-│ orch-requirement (L0~L4 + BE/Store 스펙) → [리뷰] ✓          │
-│ 산출물: app.spec.md + page.spec.md + BE/Store .spec.md       │
+│ orch-requirement (L0~L4 + BE/Store 스펙[Store 조건부]) → [리뷰] ✓ │
+│ 산출물: app.spec.md + page.spec.md + BE/.spec.md + Store.spec.md(조건부) │
 └─────────────────────────────────────────────────────────────┘
                               ↓ 사용자 승인
 ┌─────────────────────────────────────────────────────────────┐
@@ -440,7 +440,7 @@ packages/fe-ui/src/components/feature/[FeatureName]/index.spec.md
 
 ### Stage 1: 도메인 기획
 
-**목표**: L0-L4 기획 + BE/Store 스펙 작성
+**목표**: L0-L4 기획 + BE 스펙 작성 + Store 스펙(조건부)
 
 **에이전트 호출:**
 ```
@@ -450,7 +450,7 @@ Task: orch-requirement
 **산출물:**
 - `apps/[app]/app/(admin)/app.spec.md` (앱 기획서 업데이트)
 - `apps/[app]/app/(admin)/[도메인]/page.spec.md` (각 페이지별)
-- `packages/fe-store/src/stores/[domain]Store.spec.md`
+- `packages/fe-store/src/stores/[domain]Store.spec.md` (공용 재사용 상태일 때)
 - `apps/core/api/src/[module]/[name].service.spec.md`
 - `apps/core/api/src/[module]/repositories/[name].repository.spec.md`
 - `apps/core/api/src/[module]/controllers/[name].controller.spec.md`
@@ -465,7 +465,7 @@ Task: orch-requirement
    - members/[memberId]/page.spec.md
    - members/new/page.spec.md
    - members/[memberId]/edit/page.spec.md
-   - packages/fe-store/src/stores/memberStore.spec.md
+   - packages/fe-store/src/stores/memberStore.spec.md (조건부)
    - apps/core/api/src/members/members.service.spec.md
    - apps/core/api/src/members/repositories/members.repository.spec.md
    - apps/core/api/src/members/controllers/members.controller.spec.md
@@ -672,7 +672,7 @@ Task: fe-menu-builder (목록 페이지만)
 
 **테스트 프로세스:**
 ```
-1. req-test-planner 실행 → UI/Input/Cell/Widget/Layout/Feature/Store .spec.md에 테스트 케이스 섹션 추가
+1. req-test-planner 실행 → UI/Input/Cell/Widget/Layout/Feature/(Store 조건부) .spec.md에 테스트 케이스 섹션 추가
 2. qa-fe-testing 실행 → 컴포넌트 단위 테스트 코드 작성
 3. 테스트 실행
 4. 결과 확인:
@@ -811,11 +811,11 @@ Task: req-spec-tracker
 
 | Stage | 완료 조건 |
 |-------|----------|
-| 1 | app.spec.md 업데이트, page.spec.md 생성, BE/Store .spec.md 생성 |
+| 1 | app.spec.md 업데이트, page.spec.md 생성, BE .spec.md 생성 + Store .spec.md(조건부) |
 | 2 | Prisma/공용 스키마, Entity, DTO 생성, `*.schema.spec.md` 생성, migrate 성공, Entity 테스트 통과 |
 | 3 | Repository, Service, Controller 생성, 서버 시작 성공, BE 단위 테스트 통과 |
 | 4 | page.spec.md 통합/API 업데이트, UI/Input/Cell/Widget/Layout/Feature/Menu/API연동 .spec.md 생성, `spec-checklist.md`의 Spec exists 갱신 |
-| 5 | UI/Input/Cell/Widget/Layout/Feature/Store 구현, 컴포넌트 테스트 통과 |
+| 5 | UI/Input/Cell/Widget/Layout/Feature/(Store 조건부) 구현, 컴포넌트 테스트 통과 |
 | 6 | 페이지 컴포넌트 + API 연동 구현, 규칙 검증 통과, 페이지 테스트 통과, `spec-checklist.md`의 Code paired 갱신 |
 | 7 | E2E 테스트 통과, `spec-checklist.md`의 Verified 갱신 |
 
@@ -878,7 +878,7 @@ Task: req-spec-tracker
 
 | Stage | 호출 에이전트 |
 |-------|--------------|
-| 1 | orch-requirement, req-context-planner, req-screen-planner, req-entity-planner, req-store-planner, req-api-planner, req-logic-planner |
+| 1 | orch-requirement, req-context-planner, req-screen-planner, req-entity-planner, req-api-planner, req-logic-planner, req-store-planner(조건부) |
 | 2 | be-prisma-builder, common-schema-builder, be-entity-builder, be-dto-builder, be-query-dto-builder, be-seed-maker, req-test-planner, qa-be-testing |
 | 3 | be-repository-builder, be-service-builder, be-facade-builder, be-controller-builder, req-test-planner, qa-be-testing |
 | 4 | orch-screen-planner, req-spec-tracker |

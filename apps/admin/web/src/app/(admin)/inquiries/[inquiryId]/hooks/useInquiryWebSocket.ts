@@ -3,8 +3,7 @@
 import {
 	type InquiryMessage,
 	type InquiryParticipant,
-	useInquiryStore,
-} from "@cocrepo/store";
+} from "@cocrepo/type";
 import { createLogger } from "@cocrepo/toolkit";
 import { useCallback, useEffect, useRef, useState } from "react";
 
@@ -38,6 +37,22 @@ interface WebSocketEvents {
 export interface UseInquiryWebSocketOptions {
 	/** 문의 ID */
 	inquiryId: string;
+	/** 문의 상세 페이지 로컬 상태 */
+	state: {
+		setWebSocketConnected: (isConnected: boolean) => void;
+		addMessage: (message: InquiryMessage) => void;
+		updateMessage: (
+			messageId: string,
+			updates: Partial<InquiryMessage>,
+		) => void;
+		setTyping: (userId: string, isTyping: boolean) => void;
+		addParticipant: (participant: InquiryParticipant) => void;
+		removeParticipant: (userId: string) => void;
+		updateParticipant: (
+			userId: string,
+			updates: Partial<InquiryParticipant>,
+		) => void;
+	};
 	/** WebSocket 서버 URL */
 	wsUrl?: string;
 	/** 자동 연결 여부 */
@@ -85,6 +100,7 @@ export function useInquiryWebSocket(
 ): UseInquiryWebSocketReturn {
 	const {
 		inquiryId,
+		state,
 		wsUrl = process.env.NEXT_PUBLIC_WS_URL ?? "ws://localhost:4000",
 		autoConnect = true,
 		onConnect,
@@ -92,15 +108,14 @@ export function useInquiryWebSocket(
 		onError,
 	} = options;
 
-	const store = useInquiryStore();
 	const socketRef = useRef<WebSocket | null>(null);
 	const [status, setStatus] = useState<WebSocketStatus>("disconnected");
 	const reconnectTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
 	// Store에 연결 상태 반영
 	useEffect(() => {
-		store.setWebSocketConnected(status === "connected");
-	}, [status, store]);
+		state.setWebSocketConnected(status === "connected");
+	}, [status, state]);
 
 	// WebSocket 이벤트 핸들러
 	const handleOpen = useCallback(() => {
@@ -146,14 +161,14 @@ export function useInquiryWebSocket(
 
 				switch (type) {
 					case "inquiry:message:new":
-						store.addMessage(data as InquiryMessage);
+						state.addMessage(data as InquiryMessage);
 						break;
 					case "inquiry:message:delivered": {
 						const { messageId, deliveredAt } = data as {
 							messageId: string;
 							deliveredAt: string;
 						};
-						store.updateMessage(messageId, { deliveredAt });
+						state.updateMessage(messageId, { deliveredAt });
 						break;
 					}
 					case "inquiry:message:read": {
@@ -161,35 +176,35 @@ export function useInquiryWebSocket(
 							messageId: string;
 							readAt: string;
 						};
-						store.updateMessage(messageId, { readAt });
+						state.updateMessage(messageId, { readAt });
 						break;
 					}
 					case "inquiry:typing:start": {
 						const { userId } = data as { userId: string };
-						store.setTyping(userId, true);
+						state.setTyping(userId, true);
 						break;
 					}
 					case "inquiry:typing:stop": {
 						const { userId } = data as { userId: string };
-						store.setTyping(userId, false);
+						state.setTyping(userId, false);
 						break;
 					}
 					case "inquiry:participant:joined":
-						store.addParticipant(data as InquiryParticipant);
+						state.addParticipant(data as InquiryParticipant);
 						break;
 					case "inquiry:participant:left": {
 						const { userId } = data as { userId: string };
-						store.removeParticipant(userId);
+						state.removeParticipant(userId);
 						break;
 					}
 					case "inquiry:participant:online": {
 						const { userId } = data as { userId: string };
-						store.updateParticipant(userId, { isOnline: true });
+						state.updateParticipant(userId, { isOnline: true });
 						break;
 					}
 					case "inquiry:participant:offline": {
 						const { userId } = data as { userId: string };
-						store.updateParticipant(userId, { isOnline: false });
+						state.updateParticipant(userId, { isOnline: false });
 						break;
 					}
 					case "inquiry:status:changed":
@@ -203,7 +218,7 @@ export function useInquiryWebSocket(
 				logger.error("WebSocket 메시지 파싱 에러:", String(error));
 			}
 		},
-		[store],
+		[state],
 	);
 
 	// WebSocket 연결

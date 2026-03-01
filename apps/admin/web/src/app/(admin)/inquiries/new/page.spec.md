@@ -255,14 +255,14 @@ PageSurface (title, description, actions)
 | 컴포넌트 | 위치 | 설명 |
 |----------|------|------|
 | CustomerSearchForm | feature/ | 고객 검색/선택 기능 |
-| InquiryCreateForm | feature/ | 전체 폼 + Store 연결 |
+| InquiryCreateForm | feature/ | 전체 폼 + 페이지 로컬 state 연결 |
 
 ### L11: Store 연결
 
 | Store | 사용 필드/액션 |
 |-------|----------------|
-| InquiryStore | replyContent, setReplyContent, isGeneratingDraft |
-| FormStore (로컬) | formData, setFormData, validate, reset |
+| Page Local State | isSubmitting, aiSuggestion, isAiLoading |
+| Form State (컴포넌트 내부) | formData, setFormData, validate, reset |
 
 ### L12: 테스트 케이스
 
@@ -372,3 +372,4 @@ PageSurface (title, description, actions)
 | 2026-02-26 | L5-L12 레이어 기획 추가 | orch-screen-planner |
 | 2026-02-26 | 임시 저장 기능 추가 | orch-screen-planner |
 | 2026-02-27 | 접수 페이지 E2E 테스트 추가 (`page.e2e.ts`) 및 구현 체크리스트 동기화 | codex |
+| 2026-02-28 | InquiryStore 의존 제거, 페이지 로컬 state 기준으로 L10/L11 갱신 | codex |

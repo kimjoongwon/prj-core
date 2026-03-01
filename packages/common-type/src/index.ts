@@ -171,6 +171,17 @@ export type {
 	AIProviderStatus,
 } from "./ai-form-template";
 // ============================================
+// Inquiry 관련 타입
+// ============================================
+export type {
+	InquiryCategory,
+	InquiryChannel,
+	InquiryMessage,
+	InquiryParticipant,
+	InquiryPriority,
+	InquiryStatus,
+} from "./inquiry";
+// ============================================
 // Create/Update AiForm 관련 타입
 // ============================================
 export type {

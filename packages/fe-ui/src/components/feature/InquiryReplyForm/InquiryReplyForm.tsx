@@ -3,7 +3,6 @@
 import { Button, Textarea, Tooltip, Divider } from "@heroui/react";
 import { observer } from "mobx-react-lite";
 import { useState, useCallback, useRef } from "react";
-import { useInquiryStore } from "@cocrepo/store";
 import { Sparkles, BookOpen, Paperclip, Send, X, FileText } from "lucide-react";
 
 export interface Attachment {
@@ -81,7 +80,6 @@ export const InquiryReplyForm = observer(
 		onRemoveAttachment,
 		className = "",
 	}: InquiryReplyFormProps) => {
-		const store = useInquiryStore();
 		const [content, setContent] = useState(draftContent ?? "");
 		const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
 		const fileInputRef = useRef<HTMLInputElement>(null);

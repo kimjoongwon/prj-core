@@ -4,7 +4,7 @@ import { navigateTo } from "@cocrepo/toolkit";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { AuthStore } from "../authStore";
 import type { PersistStore } from "../persistStore";
-import type { RootStore } from "../Store";
+import type { RootStore } from "../rootStore";
 
 // 의존성 모킹
 vi.mock("@cocrepo/toolkit", () => ({

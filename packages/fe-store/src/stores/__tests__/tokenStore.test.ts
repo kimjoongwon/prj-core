@@ -1,7 +1,7 @@
 /// <reference types="vitest/globals" />
 
 import { beforeEach, describe, expect, it } from "vitest";
-import type { RootStore } from "../Store";
+import type { RootStore } from "../rootStore";
 import { TokenStore } from "../tokenStore";
 
 describe("TokenStore", () => {

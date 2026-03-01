@@ -77,13 +77,13 @@ apps/[app]/src/app/**/hooks/index.spec.md
 | 앱 기획서 (L0-L2) | `apps/[app]/app/(admin)/app.spec.md` | 파일 존재 확인 |
 | 페이지 기획서 (L3-L4) | `apps/[app]/app/(admin)/[도메인]/page.spec.md` | 파일 존재 확인 |
 | Entity 기획서 (L7) | `packages/be-entity/src/[entity].entity.spec.md` | 파일 존재 확인 |
-| Store 기획서 (L11) | `packages/fe-store/src/stores/[domain]Store.spec.md` | 파일 존재 확인 |
+| Store 기획서 (L11, 조건부) | `packages/fe-store/src/stores/[domain]Store.spec.md` | 공용 재사용 상태일 때만 확인 |
 
 ---
 
 ## 4. 실행 플로우
 
-1. 전제조건 확인 (`app.spec.md`, `page.spec.md`, Entity/Store spec)
+1. 전제조건 확인 (`app.spec.md`, `page.spec.md`, Entity spec, Store spec[조건부])
 2. 기반 단계(순차):
    - `req-page-planner` 실행 (페이지 통합 관점으로 `page.spec.md` 정리)
    - `req-api-planner` 실행 (`page.spec.md` API/이벤트 + `controller.spec.md`/`dto.spec.md`)
@@ -147,7 +147,7 @@ Task: req-api-integration-planner
 - [ ] 앱 기획서 (app.spec.md)가 존재하는가?
 - [ ] 페이지 기획서 (page.spec.md)가 존재하는가?
 - [ ] Entity 기획서가 존재하는가?
-- [ ] Store 기획서가 존재하는가?
+- [ ] 공용 재사용 상태가 필요한 화면인가? (필요 시 Store 기획서 존재 확인)
 
 ### 각 단계 완료 시
 - [ ] 기획서 파일이 생성/업데이트되었는가?
@@ -171,7 +171,7 @@ Task: req-api-integration-planner
 |----------|------|------|
 | orch-requirement | 상위 | 도메인 기획 (L0-L4) |
 | req-entity-planner | 선행 | Entity 기획 (L7) |
-| req-store-planner | 선행 | Store 기획 (L11) |
+| req-store-planner | 선행(조건부) | 공용 Store 기획 (L11) |
 
 ### 호출 에이전트
 

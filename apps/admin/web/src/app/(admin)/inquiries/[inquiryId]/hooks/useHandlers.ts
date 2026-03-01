@@ -7,7 +7,6 @@ import {
 	useUpdateInquiryPriority,
 	useUpdateInquiryStatus,
 } from "@cocrepo/api";
-import { useInquiryStore } from "@cocrepo/store";
 import { createLogger } from "@cocrepo/toolkit";
 import type { Route } from "next";
 import { useRouter } from "next/navigation";
@@ -38,6 +37,19 @@ const logger = createLogger("[useHandlers]");
 export interface UseHandlersOptions {
 	/** 문의 ID */
 	inquiryId: string;
+	/** 문의 상세 페이지 로컬 상태 */
+	inquiryState: {
+		setReplyContent: (content: string) => void;
+		startTyping: () => void;
+		stopTyping: () => void;
+		setGeneratingDraft: (isGenerating: boolean) => void;
+		openKnowledgeBaseModal: () => void;
+		closeKnowledgeBaseModal: () => void;
+		openMetaEditModal: () => void;
+		closeMetaEditModal: () => void;
+		isMetaEditModalOpen: boolean;
+		isKnowledgeBaseModalOpen: boolean;
+	};
 	/** WebSocket 훅 반환값 */
 	ws: Pick<UseInquiryWebSocketReturn, "sendMessage" | "sendTypingStatus">;
 }
@@ -99,9 +111,8 @@ export interface UseHandlersReturn {
  * 페이지에서 발생하는 모든 이벤트를 처리하는 핸들러들을 제공합니다.
  */
 export function useHandlers(options: UseHandlersOptions): UseHandlersReturn {
-	const { inquiryId, ws } = options;
+	const { inquiryId, inquiryState, ws } = options;
 	const router = useRouter();
-	const store = useInquiryStore();
 
 	const updateStatusMutation = useUpdateInquiryStatus();
 	const updatePriorityMutation = useUpdateInquiryPriority();
@@ -265,7 +276,7 @@ export function useHandlers(options: UseHandlersOptions): UseHandlersReturn {
 			const attachmentCount = attachments?.length ?? 0;
 			logger.info("메시지 전송:", { content, attachmentCount });
 			ws.sendMessage(content, attachments);
-			store.setReplyContent("");
+			inquiryState.setReplyContent("");
 			// TODO: Orval 훅 생성 후 REST API로도 전송
 			// try {
 			// 	await sendMessageMutation.mutateAsync({ inquiryId, content, attachments });
@@ -273,20 +284,20 @@ export function useHandlers(options: UseHandlersOptions): UseHandlersReturn {
 			// 	logger.error("메시지 전송 실패:", error);
 			// }
 		},
-		[ws, store],
+		[ws, inquiryState],
 	);
 
 	// 타이핑 시작
 	const onTypingStart = useCallback(() => {
-		store.startTyping();
+		inquiryState.startTyping();
 		ws.sendTypingStatus(true);
-	}, [ws, store]);
+	}, [ws, inquiryState]);
 
 	// 타이핑 중지
 	const onTypingStop = useCallback(() => {
-		store.stopTyping();
+		inquiryState.stopTyping();
 		ws.sendTypingStatus(false);
-	}, [ws, store]);
+	}, [ws, inquiryState]);
 
 	/**
 	 * AI 초안 생성
@@ -297,22 +308,22 @@ export function useHandlers(options: UseHandlersOptions): UseHandlersReturn {
 	 */
 	const onClickGenerateDraft = useCallback(async () => {
 		logger.info("AI 초안 생성 요청");
-		store.setGeneratingDraft(true);
+		inquiryState.setGeneratingDraft(true);
 
 		try {
 			const result = await generateDraftMutation.mutateAsync({ inquiryId });
-			store.setReplyContent(result?.data?.draftContent ?? "");
+			inquiryState.setReplyContent(result?.data?.draftContent ?? "");
 		} catch (error) {
 			logger.error("AI 초안 생성 실패:", String(error));
 		} finally {
-			store.setGeneratingDraft(false);
+			inquiryState.setGeneratingDraft(false);
 		}
-	}, [inquiryId, store, generateDraftMutation]);
+	}, [inquiryId, inquiryState, generateDraftMutation]);
 
 	// 지식베이스 검색 모달 열기
 	const onClickSearchKnowledge = useCallback(() => {
-		store.openKnowledgeBaseModal();
-	}, [store]);
+		inquiryState.openKnowledgeBaseModal();
+	}, [inquiryState]);
 
 	// 파일 첨부
 	const onAttachFile = useCallback((files: File[]) => {
@@ -328,8 +339,8 @@ export function useHandlers(options: UseHandlersOptions): UseHandlersReturn {
 
 	// 삭제 확인 모달 열기
 	const onClickDelete = useCallback(() => {
-		store.openMetaEditModal(); // TODO: 삭제 모달로 변경 필요
-	}, [store]);
+		inquiryState.openMetaEditModal(); // TODO: 삭제 모달로 변경 필요
+	}, [inquiryState]);
 
 	// WebSocket 재연결
 	const onClickReconnect = useCallback(() => {
@@ -374,15 +385,15 @@ export function useHandlers(options: UseHandlersOptions): UseHandlersReturn {
 		onClickDelete,
 		onClickReconnect,
 		deleteModal: {
-			isOpen: store.isMetaEditModalOpen, // TODO: 삭제 모달 상태로 변경
-			open: () => store.openMetaEditModal(),
-			close: () => store.closeMetaEditModal(),
+			isOpen: inquiryState.isMetaEditModalOpen, // TODO: 삭제 모달 상태로 변경
+			open: () => inquiryState.openMetaEditModal(),
+			close: () => inquiryState.closeMetaEditModal(),
 			confirm: onConfirmDelete,
 		},
 		knowledgeBaseModal: {
-			isOpen: store.isKnowledgeBaseModalOpen,
-			open: () => store.openKnowledgeBaseModal(),
-			close: () => store.closeKnowledgeBaseModal(),
+			isOpen: inquiryState.isKnowledgeBaseModalOpen,
+			open: () => inquiryState.openKnowledgeBaseModal(),
+			close: () => inquiryState.closeKnowledgeBaseModal(),
 		},
 	};
 }

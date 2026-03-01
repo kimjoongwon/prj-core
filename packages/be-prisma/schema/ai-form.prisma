@@ -39,14 +39,6 @@ enum AIProvider {
   ANTHROPIC  // Anthropic (Claude 시리즈)
 }
 
-/// @displayName AI 템플릿 상태
-enum AITemplateStatus {
-  DRAFT     // 초안
-  ACTIVE    // 활성화
-  INACTIVE  // 비활성화
-  ARCHIVED  // 보관됨
-}
-
 /// @displayName 폼 필드 타입
 enum FormFieldType {
   TEXT          // 단행 텍스트
@@ -112,9 +104,7 @@ model AIFormTemplate {
   /// @displayName 시스템 프롬프트
   systemPrompt      String?             @map("system_prompt") @db.Text
 
-  // 상태 및 우선순위
-  /// @displayName 템플릿 상태
-  status            AITemplateStatus    @default(DRAFT)
+  // 정렬 우선순위
   /// @displayName 정렬 우선순위
   priority          Int                 @default(0)
 
@@ -144,7 +134,6 @@ model AIFormTemplate {
 
   @@index([spaceId])
   @@index([targetDomain])
-  @@index([status])
   @@index([spaceId, targetDomain])
   @@map("ai_form_templates")
 }

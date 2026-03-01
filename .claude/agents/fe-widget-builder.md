@@ -57,6 +57,13 @@ tools: Read, Write, Grep, Bash
 | **라이브러리 타입 기반** | extends/Omit/Pick 활용 |
 | **레이아웃 컴포넌트 사용** | HStack, VStack 등으로 배치 |
 
+### ♻️ 기존 컴포넌트 우선 원칙 (Critical)
+
+1. `packages/fe-ui/src/components/widget`에서 동일/유사 Widget을 먼저 검색합니다.
+2. 요구사항 충족 시 **신규 Widget을 생성하지 않고 기존 Widget을 재사용**합니다.
+3. 기능이 부족하면 **기존 Widget을 업그레이드**합니다.
+4. UI 조합 수준 요구사항은 Widget에서 해결하고, 중복 Widget 복제를 금지합니다.
+
 ### ❌ Don't
 
 | 금지 사항 | 이유 |
@@ -64,6 +71,7 @@ tools: Read, Write, Grep, Bash
 | 커스텀 className 직접 사용 | UI/Input에서만 허용 |
 | **Context API 사용 (createContext, useContext)** | **packages/fe-ui에서 Context 사용 금지 - props drilling 사용** |
 | **컴포넌트 폴더 내 hooks/, utils/ 하위 폴더 생성** | **패키지 레벨에서 관리 (hooks → src/hooks/, utils → src/utils/)** |
+| 기존 Widget과 유사한 컴포넌트 신규 생성 | 중복 자산 증가 및 재사용성 저하 |
 | Store 접근 | Feature 계층의 역할 |
 | API 호출 | Feature 계층의 역할 |
 | Text를 Button/Chip children으로 | 테마 깨짐 발생 |
@@ -188,6 +196,9 @@ export type { StatusBadgeProps } from "./StatusBadge";
 
 ## 6. 체크리스트
 
+- [ ] 기존 Widget 컴포넌트 검색 완료 (`rg --files packages/fe-ui/src/components/widget`)
+- [ ] 기존 Widget 재사용 가능 여부 판단 및 결과 기록
+- [ ] 기능 부족 시 기존 Widget 업그레이드로 처리 (신규 복제 금지)
 - [ ] `packages/fe-ui/src/components/widget/[Name]/` 에 생성
 - [ ] 필요한 Pure UI가 없으면 UI Component Builder에게 요청
 - [ ] 단일 책임 원칙 확인

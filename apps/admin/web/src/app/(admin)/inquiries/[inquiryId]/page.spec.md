@@ -285,15 +285,15 @@ PageSurface (title, description, actions)
 
 | 컴포넌트 | 위치 | 설명 |
 |----------|------|------|
-| RealtimeChatPanel | feature/ | 실시간 채팅 + WebSocket 연결 |
-| InquiryReplyForm | feature/ | 답변 작성 + AI 기능 |
+| RealtimeChatPanel | feature/ | 실시간 채팅 + 페이지 로컬 state 연동 |
+| InquiryReplyForm | feature/ | 답변 작성 + AI 기능 (페이지 핸들러 주입) |
 
 ### L11: Store 연결
 
 | Store | 사용 필드/액션 |
 |-------|----------------|
-| InquiryStore | currentInquiryId, messages, participants, isWebSocketConnected, isTyping, typingUsers, replyContent, isGeneratingDraft |
-| InquiryStore (액션) | setCurrentInquiry, addMessage, updateMessage, setParticipants, setTyping, setWebSocketConnected, openReplyForm, setReplyContent |
+| Page Local State | currentInquiryId, messages, participants, isWebSocketConnected, isTyping, typingUsers, replyContent, isGeneratingDraft |
+| Page Local State (액션) | setCurrentInquiry, addMessage, updateMessage, setParticipants, setTyping, setWebSocketConnected, setReplyContent |
 
 ### L12: 테스트 케이스
 
@@ -437,3 +437,4 @@ PageSurface (title, description, actions)
 | 2026-02-26 | 감정 분석 표시 추가 | orch-requirement |
 | 2026-02-26 | L5-L12 레이어 기획 추가 | orch-screen-planner |
 | 2026-02-27 | 상세 페이지 E2E 테스트 추가 (`page.e2e.ts`) 및 구현 체크리스트 동기화 | codex |
+| 2026-02-28 | InquiryStore 의존 제거, 페이지 로컬 state 기준으로 L10/L11 갱신 | codex |

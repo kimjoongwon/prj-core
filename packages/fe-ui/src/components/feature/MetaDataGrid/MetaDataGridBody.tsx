@@ -18,10 +18,26 @@ export const MetaDataGridBody = observer(
 		// MetaDataGridColumnConfig를 ColumnDef로 변환
 		const columns = toColumnDefs(config.columns) as ColumnDef<T, unknown>[];
 
+		// 키 기반 행 맵 (onRowClick 매핑용)
+		const rowMap = new Map(
+			(config.data as (T & { id: Key })[]).map((row) => [String(row.id), row]),
+		);
+
 		// 선택된 키 목록
 		const selectedKeys = config.selection?.selectedKeys
 			? Array.from(config.selection.selectedKeys)
 			: null;
+
+		const handleRowAction = (key: string | number | bigint) => {
+			if (!config.onRowClick) {
+				return;
+			}
+
+			const selectedRow = rowMap.get(String(key));
+			if (selectedRow) {
+				config.onRowClick(selectedRow);
+			}
+		};
 
 		return (
 			<DataGrid
@@ -35,6 +51,14 @@ export const MetaDataGridBody = observer(
 							? "single"
 							: undefined
 				}
+				classNames={
+					config.onRowClick
+						? {
+								tr: "cursor-pointer hover:bg-content2",
+							}
+						: undefined
+				}
+				onRowAction={config.onRowClick ? handleRowAction : undefined}
 				isLoading={config.isLoading}
 			/>
 		);

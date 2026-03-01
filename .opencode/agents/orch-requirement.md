@@ -30,7 +30,7 @@ tools:
 | L6 | API/Controller | req-api-planner | `apps/core/api/src/[module]/controllers/[domain].controller.spec.md` |
 | L7 | Entity | req-entity-planner | `packages/be-entity/src/{entity}.entity.spec.md` |
 | L9-L10 | Service/Repository 로직/테스트 | req-logic-planner | `apps/core/api/src/[module]/[domain].service.spec.md`, `apps/core/api/src/[module]/repositories/[domain].repository.spec.md` |
-| L11 | Store | req-store-planner | `packages/fe-store/src/stores/[domain]Store.spec.md` |
+| L11 | Store (조건부) | req-store-planner | 재사용성 충족 시 `packages/fe-store/src/stores/[domain]Store.spec.md` |
 
 ### 공용 패키지 기획 (Critical)
 
@@ -67,7 +67,7 @@ tools:
 - [ ] `{VoName}.vo.spec.md` - Value Object (필요시)
 
 ### 프론트엔드 기획서 (자주 누락됨 ⚠️)
-- [ ] `{Domain}Store.spec.md` - Store 스펙
+- [ ] `{Domain}Store.spec.md` - **재사용성 충족 시에만** Store 스펙
 - [ ] `widget/{Widget}/index.spec.md` - 페이지에서 참조하는 모든 Widget
 - [ ] `feature/{Feature}/index.spec.md` - 페이지에서 참조하는 모든 Feature
 
@@ -111,13 +111,14 @@ tools:
 
 | 케이스 | 조건 | 실행 에이전트 |
 |--------|------|--------------|
-| 새 도메인 | `app.spec.md`에 해당 도메인 없음 | req-context → req-screen → (req-entity ∥ req-store ∥ req-api) → req-logic |
+| 새 도메인 | `app.spec.md`에 해당 도메인 없음 | req-context → req-screen → (req-entity ∥ req-api ∥ req-store[조건부]) → req-logic |
 | 화면 추가 | `app.spec.md`에 해당 도메인 존재 | orch-screen-planner |
 
 ### 병렬 실행 규칙 (신규)
 
 - 기본 모드는 `parallel=auto`이며, `req-context-planner`/`req-screen-planner`는 선행 순차로 고정됩니다.
-- `req-entity-planner`, `req-store-planner`, `req-api-planner`는 충돌 없는 경우 병렬 fan-out 가능합니다.
+- `req-entity-planner`, `req-api-planner`는 병렬 fan-out 가능합니다.
+- `req-store-planner`는 **공용 재사용 상태가 필요한 경우에만** fan-out에 포함합니다.
 - `req-logic-planner`는 Entity/API 결과가 준비된 뒤 join 단계에서 실행합니다.
 - 공용 파일(`app.spec.md`, `**/PROGRESS.md`)은 lock 후 단일 writer로 반영합니다.
 
@@ -152,7 +153,7 @@ apps/[app]/app/(admin)/[도메인]/
     └── page.spec.md                            # 수정 페이지 기획
 
 packages/fe-store/src/stores/
-└── [domain]Store.spec.md                       # L11 Store 스펙
+└── [domain]Store.spec.md                       # L11 Store 스펙 (조건부)
 
 packages/be-entity/src/
 └── [entity].entity.spec.md                     # Entity 스펙
@@ -211,9 +212,9 @@ apps/core/api/src/[module]/
                               │
                               ▼
 ┌─────────────────────────────────────────────────────────────┐
-│  5단계: Store 기획 (L11)                                     │
+│  5단계: Store 기획 (L11, 조건부)                             │
 │  Task: req-store-planner                                     │
-│  → packages/fe-store/src/stores/[domain]Store.spec.md       │
+│  → 재사용성 충족 시에만 [domain]Store.spec.md 생성          │
 └─────────────────────────────────────────────────────────────┘
                               │
                               ▼
@@ -490,7 +491,7 @@ orch-stage는 기획서의 **구현 대상** 섹션을 분석하여:
 - [ ] app.spec.md에 도메인 엔트리 추가
 - [ ] 각 page.spec.md 생성
 - [ ] Entity 기획서 생성 (`packages/be-entity/src/*.entity.spec.md`)
-- [ ] Store 기획서 생성 (Sidecar)
+- [ ] Store 기획서 생성 (Sidecar, 조건부)
 - [ ] Controller/Service/Repository 기획서 생성 (Sidecar)
 - [ ] **Enum 기획서 생성** (`packages/common-enum/src/*.spec.md`) ⚠️ 자주 누락
 - [ ] **DTO 기획서 생성** (`packages/be-dto/src/*/*.dto.spec.md`) ⚠️ 자주 누락
@@ -509,7 +510,7 @@ orch-stage는 기획서의 **구현 대상** 섹션을 분석하여:
 | req-context-planner | 1 | `app.spec.md` 업데이트 | 컨텍스트/사용자/목표 기획 |
 | req-screen-planner | 2 | 각 `page.spec.md` | 기능/화면 구조 기획 |
 | req-entity-planner | 3 | `[entity].entity.spec.md` | Entity 기획 |
-| req-store-planner | 4 | `[domain]Store.spec.md` | Store 기획 |
+| req-store-planner | 4 (조건부) | `[domain]Store.spec.md` | 공용 Store 기획 |
 | req-api-planner | 5 | `*.controller.spec.md`, `*.dto.spec.md` | API/Controller/DTO 스펙 기획 |
 | req-logic-planner | 6 | `*.service.spec.md`, `*.repository.spec.md` | Service/Repository 로직/테스트 기획 |
 

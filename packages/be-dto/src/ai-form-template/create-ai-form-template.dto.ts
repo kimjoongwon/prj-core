@@ -1,17 +1,12 @@
 import {
 	BooleanFieldOptional,
 	EnumField,
-	EnumFieldOptional,
 	NumberFieldOptional,
 	StringField,
 	StringFieldOptional,
 } from "@cocrepo/decorator";
 import type { Prisma } from "@cocrepo/prisma";
-import { AIProvider, AITemplateStatus } from "@cocrepo/prisma";
-
-// Prisma 타입 별칭
-type AIFormTemplateUncheckedCreateInput =
-	Prisma.AIFormTemplateUncheckedCreateInput;
+import { AIProvider } from "@cocrepo/prisma";
 
 /**
  * AI 폼 템플릿 생성 DTO
@@ -60,11 +55,6 @@ export class CreateAIFormTemplateDto {
 	})
 	systemPrompt?: string;
 
-	@EnumFieldOptional(() => AITemplateStatus, {
-		description: "템플릿 상태 (기본값: DRAFT)",
-	})
-	status?: AITemplateStatus;
-
 	@NumberFieldOptional({
 		minimum: 0,
 		description: "정렬 우선순위 (낮을수록 우선, 기본값: 0)",
@@ -102,7 +92,6 @@ export class CreateAIFormTemplateDto {
 			targetDomain: this.targetDomain,
 			targetEntity: this.targetEntity,
 			aiProvider: this.aiProvider,
-			status: this.status ?? AITemplateStatus.DRAFT,
 			priority: this.priority ?? 0,
 			allowUserPrompt: this.allowUserPrompt ?? true,
 			createdById,

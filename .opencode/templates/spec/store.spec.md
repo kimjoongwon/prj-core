@@ -9,6 +9,14 @@
 
 {{description}}
 
+## 재사용성 판정 (Critical)
+
+| 항목 | 내용 |
+|------|------|
+| 재사용 범위 | {{reusabilityScope}} |
+| 공용 Store 필요성 | {{whySharedStore}} |
+| 페이지 로컬 state 대체 불가 사유 | {{whyNotPageLocalState}} |
+
 ## 상태 (Observable)
 
 | 속성 | 타입 | 초기값 | 설명 |
@@ -57,6 +65,7 @@
 
 ## 구현 체크리스트
 
+- [ ] 공용 Store 재사용성 근거 확인 (2개 이상 페이지/도메인)
 - [ ] {{storeName}}.ts
 - [ ] RootStore에 등록
 - [ ] 타입 정의

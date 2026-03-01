@@ -5,7 +5,6 @@ export * from "./BottomTab";
 export * from "./idp";
 export { CollapsibleSidebar } from "./CollapsibleSidebar/CollapsibleSidebarLayout";
 export * from "./HeaderSpaceSelector";
-export * from "./InquiryDataGrid";
 export * from "./InquiryForm";
 export * from "./InquiryReplyForm";
 export * from "./InquiryWebSocketProvider";

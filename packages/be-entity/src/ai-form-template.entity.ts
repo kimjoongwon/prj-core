@@ -1,7 +1,6 @@
 import type {
 	AIFormTemplate as AIFormTemplateEntity,
 	AIProvider,
-	AITemplateStatus,
 	Prisma,
 } from "@cocrepo/prisma";
 import { AbstractEntity } from "./abstract.entity";
@@ -29,7 +28,6 @@ export class AIFormTemplate
 	targetDomain!: string;
 	targetEntity!: string;
 	aiProvider!: AIProvider;
-	status!: AITemplateStatus;
 	priority!: number;
 	allowUserPrompt!: boolean;
 	createdById!: string;
@@ -52,68 +50,11 @@ export class AIFormTemplate
 	fields?: AIFormField[];
 	executions?: AITemplateExecution[];
 
-	// ============================================================================
-	// 상태 확인 메서드
-	// ============================================================================
-
-	/**
-	 * 활성화된 템플릿인지 확인합니다
-	 */
-	isActiveTemplate(): boolean {
-		return this.status === "ACTIVE" && this.removedAt === null;
-	}
-
 	/**
 	 * 특정 AI 제공자를 사용할 수 있는지 확인합니다
 	 */
 	canUseProvider(provider: AIProvider): boolean {
 		return this.aiProvider === provider;
-	}
-
-	/**
-	 * 초안 상태인지 확인합니다
-	 */
-	isDraft(): boolean {
-		return this.status === "DRAFT";
-	}
-
-	/**
-	 * 비활성화 상태인지 확인합니다
-	 */
-	isInactive(): boolean {
-		return this.status === "INACTIVE";
-	}
-
-	/**
-	 * 보관된 상태인지 확인합니다
-	 */
-	isArchived(): boolean {
-		return this.status === "ARCHIVED";
-	}
-
-	// ============================================================================
-	// 상태 변경 메서드
-	// ============================================================================
-
-	/**
-	 * 템플릿을 활성화합니다
-	 */
-	activate(): void {
-		this.status = "ACTIVE";
-	}
-
-	/**
-	 * 템플릿을 비활성화합니다
-	 */
-	deactivate(): void {
-		this.status = "INACTIVE";
-	}
-
-	/**
-	 * 템플릿을 보관합니다
-	 */
-	archive(): void {
-		this.status = "ARCHIVED";
 	}
 
 	// ============================================================================
@@ -154,24 +95,6 @@ export class AIFormTemplate
 	// ============================================================================
 	// 유틸리티 메서드
 	// ============================================================================
-
-	/**
-	 * 템플릿의 현재 상태 라벨을 반환합니다
-	 */
-	getStatusLabel(): string {
-		switch (this.status) {
-			case "DRAFT":
-				return "초안";
-			case "ACTIVE":
-				return "활성화";
-			case "INACTIVE":
-				return "비활성화";
-			case "ARCHIVED":
-				return "보관됨";
-			default:
-				return "알 수 없음";
-		}
-	}
 
 	/**
 	 * AI 제공자 라벨을 반환합니다

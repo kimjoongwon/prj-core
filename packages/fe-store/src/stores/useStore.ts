@@ -56,15 +56,3 @@ export const useAuthStore = () => {
 	}
 	return store.authStore;
 };
-
-/**
- * InquiryStore를 가져오는 selector hook
- * RootStore에서 inquiryStore만 선택하여 반환
- */
-export const useInquiryStore = () => {
-	const store = useStore();
-	if (!store.inquiryStore) {
-		throw new Error("inquiryStore가 초기화되지 않았습니다.");
-	}
-	return store.inquiryStore;
-};

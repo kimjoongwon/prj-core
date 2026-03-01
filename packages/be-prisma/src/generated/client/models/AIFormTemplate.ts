@@ -51,7 +51,6 @@ export type AIFormTemplateMinAggregateOutputType = {
   aiProvider: $Enums.AIProvider | null
   model: string | null
   systemPrompt: string | null
-  status: $Enums.AITemplateStatus | null
   priority: number | null
   allowUserPrompt: boolean | null
   maxTokens: number | null
@@ -72,7 +71,6 @@ export type AIFormTemplateMaxAggregateOutputType = {
   aiProvider: $Enums.AIProvider | null
   model: string | null
   systemPrompt: string | null
-  status: $Enums.AITemplateStatus | null
   priority: number | null
   allowUserPrompt: boolean | null
   maxTokens: number | null
@@ -93,7 +91,6 @@ export type AIFormTemplateCountAggregateOutputType = {
   aiProvider: number
   model: number
   systemPrompt: number
-  status: number
   priority: number
   allowUserPrompt: number
   maxTokens: number
@@ -129,7 +126,6 @@ export type AIFormTemplateMinAggregateInputType = {
   aiProvider?: true
   model?: true
   systemPrompt?: true
-  status?: true
   priority?: true
   allowUserPrompt?: true
   maxTokens?: true
@@ -150,7 +146,6 @@ export type AIFormTemplateMaxAggregateInputType = {
   aiProvider?: true
   model?: true
   systemPrompt?: true
-  status?: true
   priority?: true
   allowUserPrompt?: true
   maxTokens?: true
@@ -171,7 +166,6 @@ export type AIFormTemplateCountAggregateInputType = {
   aiProvider?: true
   model?: true
   systemPrompt?: true
-  status?: true
   priority?: true
   allowUserPrompt?: true
   maxTokens?: true
@@ -280,7 +274,6 @@ export type AIFormTemplateGroupByOutputType = {
   aiProvider: $Enums.AIProvider
   model: string | null
   systemPrompt: string | null
-  status: $Enums.AITemplateStatus
   priority: number
   allowUserPrompt: boolean
   maxTokens: number | null
@@ -325,7 +318,6 @@ export type AIFormTemplateWhereInput = {
   aiProvider?: Prisma.EnumAIProviderFilter<"AIFormTemplate"> | $Enums.AIProvider
   model?: Prisma.StringNullableFilter<"AIFormTemplate"> | string | null
   systemPrompt?: Prisma.StringNullableFilter<"AIFormTemplate"> | string | null
-  status?: Prisma.EnumAITemplateStatusFilter<"AIFormTemplate"> | $Enums.AITemplateStatus
   priority?: Prisma.IntFilter<"AIFormTemplate"> | number
   allowUserPrompt?: Prisma.BoolFilter<"AIFormTemplate"> | boolean
   maxTokens?: Prisma.IntNullableFilter<"AIFormTemplate"> | number | null
@@ -351,7 +343,6 @@ export type AIFormTemplateOrderByWithRelationInput = {
   aiProvider?: Prisma.SortOrder
   model?: Prisma.SortOrderInput | Prisma.SortOrder
   systemPrompt?: Prisma.SortOrderInput | Prisma.SortOrder
-  status?: Prisma.SortOrder
   priority?: Prisma.SortOrder
   allowUserPrompt?: Prisma.SortOrder
   maxTokens?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -380,7 +371,6 @@ export type AIFormTemplateWhereUniqueInput = Prisma.AtLeast<{
   aiProvider?: Prisma.EnumAIProviderFilter<"AIFormTemplate"> | $Enums.AIProvider
   model?: Prisma.StringNullableFilter<"AIFormTemplate"> | string | null
   systemPrompt?: Prisma.StringNullableFilter<"AIFormTemplate"> | string | null
-  status?: Prisma.EnumAITemplateStatusFilter<"AIFormTemplate"> | $Enums.AITemplateStatus
   priority?: Prisma.IntFilter<"AIFormTemplate"> | number
   allowUserPrompt?: Prisma.BoolFilter<"AIFormTemplate"> | boolean
   maxTokens?: Prisma.IntNullableFilter<"AIFormTemplate"> | number | null
@@ -406,7 +396,6 @@ export type AIFormTemplateOrderByWithAggregationInput = {
   aiProvider?: Prisma.SortOrder
   model?: Prisma.SortOrderInput | Prisma.SortOrder
   systemPrompt?: Prisma.SortOrderInput | Prisma.SortOrder
-  status?: Prisma.SortOrder
   priority?: Prisma.SortOrder
   allowUserPrompt?: Prisma.SortOrder
   maxTokens?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -436,7 +425,6 @@ export type AIFormTemplateScalarWhereWithAggregatesInput = {
   aiProvider?: Prisma.EnumAIProviderWithAggregatesFilter<"AIFormTemplate"> | $Enums.AIProvider
   model?: Prisma.StringNullableWithAggregatesFilter<"AIFormTemplate"> | string | null
   systemPrompt?: Prisma.StringNullableWithAggregatesFilter<"AIFormTemplate"> | string | null
-  status?: Prisma.EnumAITemplateStatusWithAggregatesFilter<"AIFormTemplate"> | $Enums.AITemplateStatus
   priority?: Prisma.IntWithAggregatesFilter<"AIFormTemplate"> | number
   allowUserPrompt?: Prisma.BoolWithAggregatesFilter<"AIFormTemplate"> | boolean
   maxTokens?: Prisma.IntNullableWithAggregatesFilter<"AIFormTemplate"> | number | null
@@ -457,7 +445,6 @@ export type AIFormTemplateCreateInput = {
   aiProvider: $Enums.AIProvider
   model?: string | null
   systemPrompt?: string | null
-  status?: $Enums.AITemplateStatus
   priority?: number
   allowUserPrompt?: boolean
   maxTokens?: number | null
@@ -482,7 +469,6 @@ export type AIFormTemplateUncheckedCreateInput = {
   aiProvider: $Enums.AIProvider
   model?: string | null
   systemPrompt?: string | null
-  status?: $Enums.AITemplateStatus
   priority?: number
   allowUserPrompt?: boolean
   maxTokens?: number | null
@@ -505,7 +491,6 @@ export type AIFormTemplateUpdateInput = {
   aiProvider?: Prisma.EnumAIProviderFieldUpdateOperationsInput | $Enums.AIProvider
   model?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   systemPrompt?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  status?: Prisma.EnumAITemplateStatusFieldUpdateOperationsInput | $Enums.AITemplateStatus
   priority?: Prisma.IntFieldUpdateOperationsInput | number
   allowUserPrompt?: Prisma.BoolFieldUpdateOperationsInput | boolean
   maxTokens?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
@@ -530,7 +515,6 @@ export type AIFormTemplateUncheckedUpdateInput = {
   aiProvider?: Prisma.EnumAIProviderFieldUpdateOperationsInput | $Enums.AIProvider
   model?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   systemPrompt?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  status?: Prisma.EnumAITemplateStatusFieldUpdateOperationsInput | $Enums.AITemplateStatus
   priority?: Prisma.IntFieldUpdateOperationsInput | number
   allowUserPrompt?: Prisma.BoolFieldUpdateOperationsInput | boolean
   maxTokens?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
@@ -554,7 +538,6 @@ export type AIFormTemplateCreateManyInput = {
   aiProvider: $Enums.AIProvider
   model?: string | null
   systemPrompt?: string | null
-  status?: $Enums.AITemplateStatus
   priority?: number
   allowUserPrompt?: boolean
   maxTokens?: number | null
@@ -575,7 +558,6 @@ export type AIFormTemplateUpdateManyMutationInput = {
   aiProvider?: Prisma.EnumAIProviderFieldUpdateOperationsInput | $Enums.AIProvider
   model?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   systemPrompt?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  status?: Prisma.EnumAITemplateStatusFieldUpdateOperationsInput | $Enums.AITemplateStatus
   priority?: Prisma.IntFieldUpdateOperationsInput | number
   allowUserPrompt?: Prisma.BoolFieldUpdateOperationsInput | boolean
   maxTokens?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
@@ -596,7 +578,6 @@ export type AIFormTemplateUncheckedUpdateManyInput = {
   aiProvider?: Prisma.EnumAIProviderFieldUpdateOperationsInput | $Enums.AIProvider
   model?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   systemPrompt?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  status?: Prisma.EnumAITemplateStatusFieldUpdateOperationsInput | $Enums.AITemplateStatus
   priority?: Prisma.IntFieldUpdateOperationsInput | number
   allowUserPrompt?: Prisma.BoolFieldUpdateOperationsInput | boolean
   maxTokens?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
@@ -618,7 +599,6 @@ export type AIFormTemplateCountOrderByAggregateInput = {
   aiProvider?: Prisma.SortOrder
   model?: Prisma.SortOrder
   systemPrompt?: Prisma.SortOrder
-  status?: Prisma.SortOrder
   priority?: Prisma.SortOrder
   allowUserPrompt?: Prisma.SortOrder
   maxTokens?: Prisma.SortOrder
@@ -646,7 +626,6 @@ export type AIFormTemplateMaxOrderByAggregateInput = {
   aiProvider?: Prisma.SortOrder
   model?: Prisma.SortOrder
   systemPrompt?: Prisma.SortOrder
-  status?: Prisma.SortOrder
   priority?: Prisma.SortOrder
   allowUserPrompt?: Prisma.SortOrder
   maxTokens?: Prisma.SortOrder
@@ -667,7 +646,6 @@ export type AIFormTemplateMinOrderByAggregateInput = {
   aiProvider?: Prisma.SortOrder
   model?: Prisma.SortOrder
   systemPrompt?: Prisma.SortOrder
-  status?: Prisma.SortOrder
   priority?: Prisma.SortOrder
   allowUserPrompt?: Prisma.SortOrder
   maxTokens?: Prisma.SortOrder
@@ -714,10 +692,6 @@ export type NullableStringFieldUpdateOperationsInput = {
 
 export type EnumAIProviderFieldUpdateOperationsInput = {
   set?: $Enums.AIProvider
-}
-
-export type EnumAITemplateStatusFieldUpdateOperationsInput = {
-  set?: $Enums.AITemplateStatus
 }
 
 export type IntFieldUpdateOperationsInput = {
@@ -872,7 +846,6 @@ export type AIFormTemplateCreateWithoutFieldsInput = {
   aiProvider: $Enums.AIProvider
   model?: string | null
   systemPrompt?: string | null
-  status?: $Enums.AITemplateStatus
   priority?: number
   allowUserPrompt?: boolean
   maxTokens?: number | null
@@ -896,7 +869,6 @@ export type AIFormTemplateUncheckedCreateWithoutFieldsInput = {
   aiProvider: $Enums.AIProvider
   model?: string | null
   systemPrompt?: string | null
-  status?: $Enums.AITemplateStatus
   priority?: number
   allowUserPrompt?: boolean
   maxTokens?: number | null
@@ -934,7 +906,6 @@ export type AIFormTemplateUpdateWithoutFieldsInput = {
   aiProvider?: Prisma.EnumAIProviderFieldUpdateOperationsInput | $Enums.AIProvider
   model?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   systemPrompt?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  status?: Prisma.EnumAITemplateStatusFieldUpdateOperationsInput | $Enums.AITemplateStatus
   priority?: Prisma.IntFieldUpdateOperationsInput | number
   allowUserPrompt?: Prisma.BoolFieldUpdateOperationsInput | boolean
   maxTokens?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
@@ -958,7 +929,6 @@ export type AIFormTemplateUncheckedUpdateWithoutFieldsInput = {
   aiProvider?: Prisma.EnumAIProviderFieldUpdateOperationsInput | $Enums.AIProvider
   model?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   systemPrompt?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  status?: Prisma.EnumAITemplateStatusFieldUpdateOperationsInput | $Enums.AITemplateStatus
   priority?: Prisma.IntFieldUpdateOperationsInput | number
   allowUserPrompt?: Prisma.BoolFieldUpdateOperationsInput | boolean
   maxTokens?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
@@ -980,7 +950,6 @@ export type AIFormTemplateCreateWithoutExecutionsInput = {
   aiProvider: $Enums.AIProvider
   model?: string | null
   systemPrompt?: string | null
-  status?: $Enums.AITemplateStatus
   priority?: number
   allowUserPrompt?: boolean
   maxTokens?: number | null
@@ -1004,7 +973,6 @@ export type AIFormTemplateUncheckedCreateWithoutExecutionsInput = {
   aiProvider: $Enums.AIProvider
   model?: string | null
   systemPrompt?: string | null
-  status?: $Enums.AITemplateStatus
   priority?: number
   allowUserPrompt?: boolean
   maxTokens?: number | null
@@ -1042,7 +1010,6 @@ export type AIFormTemplateUpdateWithoutExecutionsInput = {
   aiProvider?: Prisma.EnumAIProviderFieldUpdateOperationsInput | $Enums.AIProvider
   model?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   systemPrompt?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  status?: Prisma.EnumAITemplateStatusFieldUpdateOperationsInput | $Enums.AITemplateStatus
   priority?: Prisma.IntFieldUpdateOperationsInput | number
   allowUserPrompt?: Prisma.BoolFieldUpdateOperationsInput | boolean
   maxTokens?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
@@ -1066,7 +1033,6 @@ export type AIFormTemplateUncheckedUpdateWithoutExecutionsInput = {
   aiProvider?: Prisma.EnumAIProviderFieldUpdateOperationsInput | $Enums.AIProvider
   model?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   systemPrompt?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  status?: Prisma.EnumAITemplateStatusFieldUpdateOperationsInput | $Enums.AITemplateStatus
   priority?: Prisma.IntFieldUpdateOperationsInput | number
   allowUserPrompt?: Prisma.BoolFieldUpdateOperationsInput | boolean
   maxTokens?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
@@ -1088,7 +1054,6 @@ export type AIFormTemplateCreateWithoutSpaceInput = {
   aiProvider: $Enums.AIProvider
   model?: string | null
   systemPrompt?: string | null
-  status?: $Enums.AITemplateStatus
   priority?: number
   allowUserPrompt?: boolean
   maxTokens?: number | null
@@ -1111,7 +1076,6 @@ export type AIFormTemplateUncheckedCreateWithoutSpaceInput = {
   aiProvider: $Enums.AIProvider
   model?: string | null
   systemPrompt?: string | null
-  status?: $Enums.AITemplateStatus
   priority?: number
   allowUserPrompt?: boolean
   maxTokens?: number | null
@@ -1164,7 +1128,6 @@ export type AIFormTemplateScalarWhereInput = {
   aiProvider?: Prisma.EnumAIProviderFilter<"AIFormTemplate"> | $Enums.AIProvider
   model?: Prisma.StringNullableFilter<"AIFormTemplate"> | string | null
   systemPrompt?: Prisma.StringNullableFilter<"AIFormTemplate"> | string | null
-  status?: Prisma.EnumAITemplateStatusFilter<"AIFormTemplate"> | $Enums.AITemplateStatus
   priority?: Prisma.IntFilter<"AIFormTemplate"> | number
   allowUserPrompt?: Prisma.BoolFilter<"AIFormTemplate"> | boolean
   maxTokens?: Prisma.IntNullableFilter<"AIFormTemplate"> | number | null
@@ -1185,7 +1148,6 @@ export type AIFormTemplateCreateWithoutCreatedByInput = {
   aiProvider: $Enums.AIProvider
   model?: string | null
   systemPrompt?: string | null
-  status?: $Enums.AITemplateStatus
   priority?: number
   allowUserPrompt?: boolean
   maxTokens?: number | null
@@ -1209,7 +1171,6 @@ export type AIFormTemplateUncheckedCreateWithoutCreatedByInput = {
   aiProvider: $Enums.AIProvider
   model?: string | null
   systemPrompt?: string | null
-  status?: $Enums.AITemplateStatus
   priority?: number
   allowUserPrompt?: boolean
   maxTokens?: number | null
@@ -1257,7 +1218,6 @@ export type AIFormTemplateCreateManySpaceInput = {
   aiProvider: $Enums.AIProvider
   model?: string | null
   systemPrompt?: string | null
-  status?: $Enums.AITemplateStatus
   priority?: number
   allowUserPrompt?: boolean
   maxTokens?: number | null
@@ -1278,7 +1238,6 @@ export type AIFormTemplateUpdateWithoutSpaceInput = {
   aiProvider?: Prisma.EnumAIProviderFieldUpdateOperationsInput | $Enums.AIProvider
   model?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   systemPrompt?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  status?: Prisma.EnumAITemplateStatusFieldUpdateOperationsInput | $Enums.AITemplateStatus
   priority?: Prisma.IntFieldUpdateOperationsInput | number
   allowUserPrompt?: Prisma.BoolFieldUpdateOperationsInput | boolean
   maxTokens?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
@@ -1301,7 +1260,6 @@ export type AIFormTemplateUncheckedUpdateWithoutSpaceInput = {
   aiProvider?: Prisma.EnumAIProviderFieldUpdateOperationsInput | $Enums.AIProvider
   model?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   systemPrompt?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  status?: Prisma.EnumAITemplateStatusFieldUpdateOperationsInput | $Enums.AITemplateStatus
   priority?: Prisma.IntFieldUpdateOperationsInput | number
   allowUserPrompt?: Prisma.BoolFieldUpdateOperationsInput | boolean
   maxTokens?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
@@ -1324,7 +1282,6 @@ export type AIFormTemplateUncheckedUpdateManyWithoutSpaceInput = {
   aiProvider?: Prisma.EnumAIProviderFieldUpdateOperationsInput | $Enums.AIProvider
   model?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   systemPrompt?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  status?: Prisma.EnumAITemplateStatusFieldUpdateOperationsInput | $Enums.AITemplateStatus
   priority?: Prisma.IntFieldUpdateOperationsInput | number
   allowUserPrompt?: Prisma.BoolFieldUpdateOperationsInput | boolean
   maxTokens?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
@@ -1346,7 +1303,6 @@ export type AIFormTemplateCreateManyCreatedByInput = {
   aiProvider: $Enums.AIProvider
   model?: string | null
   systemPrompt?: string | null
-  status?: $Enums.AITemplateStatus
   priority?: number
   allowUserPrompt?: boolean
   maxTokens?: number | null
@@ -1366,7 +1322,6 @@ export type AIFormTemplateUpdateWithoutCreatedByInput = {
   aiProvider?: Prisma.EnumAIProviderFieldUpdateOperationsInput | $Enums.AIProvider
   model?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   systemPrompt?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  status?: Prisma.EnumAITemplateStatusFieldUpdateOperationsInput | $Enums.AITemplateStatus
   priority?: Prisma.IntFieldUpdateOperationsInput | number
   allowUserPrompt?: Prisma.BoolFieldUpdateOperationsInput | boolean
   maxTokens?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
@@ -1390,7 +1345,6 @@ export type AIFormTemplateUncheckedUpdateWithoutCreatedByInput = {
   aiProvider?: Prisma.EnumAIProviderFieldUpdateOperationsInput | $Enums.AIProvider
   model?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   systemPrompt?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  status?: Prisma.EnumAITemplateStatusFieldUpdateOperationsInput | $Enums.AITemplateStatus
   priority?: Prisma.IntFieldUpdateOperationsInput | number
   allowUserPrompt?: Prisma.BoolFieldUpdateOperationsInput | boolean
   maxTokens?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
@@ -1413,7 +1367,6 @@ export type AIFormTemplateUncheckedUpdateManyWithoutCreatedByInput = {
   aiProvider?: Prisma.EnumAIProviderFieldUpdateOperationsInput | $Enums.AIProvider
   model?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   systemPrompt?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  status?: Prisma.EnumAITemplateStatusFieldUpdateOperationsInput | $Enums.AITemplateStatus
   priority?: Prisma.IntFieldUpdateOperationsInput | number
   allowUserPrompt?: Prisma.BoolFieldUpdateOperationsInput | boolean
   maxTokens?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
@@ -1474,7 +1427,6 @@ export type AIFormTemplateSelect<ExtArgs extends runtime.Types.Extensions.Intern
   aiProvider?: boolean
   model?: boolean
   systemPrompt?: boolean
-  status?: boolean
   priority?: boolean
   allowUserPrompt?: boolean
   maxTokens?: boolean
@@ -1501,7 +1453,6 @@ export type AIFormTemplateSelectCreateManyAndReturn<ExtArgs extends runtime.Type
   aiProvider?: boolean
   model?: boolean
   systemPrompt?: boolean
-  status?: boolean
   priority?: boolean
   allowUserPrompt?: boolean
   maxTokens?: boolean
@@ -1525,7 +1476,6 @@ export type AIFormTemplateSelectUpdateManyAndReturn<ExtArgs extends runtime.Type
   aiProvider?: boolean
   model?: boolean
   systemPrompt?: boolean
-  status?: boolean
   priority?: boolean
   allowUserPrompt?: boolean
   maxTokens?: boolean
@@ -1549,7 +1499,6 @@ export type AIFormTemplateSelectScalar = {
   aiProvider?: boolean
   model?: boolean
   systemPrompt?: boolean
-  status?: boolean
   priority?: boolean
   allowUserPrompt?: boolean
   maxTokens?: boolean
@@ -1558,7 +1507,7 @@ export type AIFormTemplateSelectScalar = {
   createdById?: boolean
 }
 
-export type AIFormTemplateOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "createdAt" | "updatedAt" | "removedAt" | "spaceId" | "name" | "description" | "targetDomain" | "targetEntity" | "aiProvider" | "model" | "systemPrompt" | "status" | "priority" | "allowUserPrompt" | "maxTokens" | "temperature" | "metadata" | "createdById", ExtArgs["result"]["aIFormTemplate"]>
+export type AIFormTemplateOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "createdAt" | "updatedAt" | "removedAt" | "spaceId" | "name" | "description" | "targetDomain" | "targetEntity" | "aiProvider" | "model" | "systemPrompt" | "priority" | "allowUserPrompt" | "maxTokens" | "temperature" | "metadata" | "createdById", ExtArgs["result"]["aIFormTemplate"]>
 export type AIFormTemplateInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   space?: boolean | Prisma.SpaceDefaultArgs<ExtArgs>
   createdBy?: boolean | Prisma.UserDefaultArgs<ExtArgs>
@@ -1629,10 +1578,6 @@ export type $AIFormTemplatePayload<ExtArgs extends runtime.Types.Extensions.Inte
      * @displayName 시스템 프롬프트
      */
     systemPrompt: string | null
-    /**
-     * @displayName 템플릿 상태
-     */
-    status: $Enums.AITemplateStatus
     /**
      * @displayName 정렬 우선순위
      */
@@ -2096,7 +2041,6 @@ export interface AIFormTemplateFieldRefs {
   readonly aiProvider: Prisma.FieldRef<"AIFormTemplate", 'AIProvider'>
   readonly model: Prisma.FieldRef<"AIFormTemplate", 'String'>
   readonly systemPrompt: Prisma.FieldRef<"AIFormTemplate", 'String'>
-  readonly status: Prisma.FieldRef<"AIFormTemplate", 'AITemplateStatus'>
   readonly priority: Prisma.FieldRef<"AIFormTemplate", 'Int'>
   readonly allowUserPrompt: Prisma.FieldRef<"AIFormTemplate", 'Boolean'>
   readonly maxTokens: Prisma.FieldRef<"AIFormTemplate", 'Int'>

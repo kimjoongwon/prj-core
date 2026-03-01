@@ -413,9 +413,14 @@ UserCard                      → UserMenu (AuthStore 연결)
 
 **앱(`apps/*`)에서 허용되는 것:**
 - `app/` - Next.js App Router 페이지
-- `stores/` - 앱별 Store 설정/주입
+- `stores/` - 앱별 Store 설정/주입 (공용 Store wiring 전용)
 - `hooks/` - 앱 전용 훅 (페이지 핸들러 등)
 - `providers/` - 앱 전용 Provider
+
+**페이지 단위 상태 규칙 (Critical):**
+- 단일 페이지/단일 라우트 도메인에서만 사용하는 상태는 `packages/fe-store`에 만들지 않습니다.
+- 이런 상태는 해당 페이지(`app/.../_client.tsx`, `hooks/`)의 로컬 state(`useState`/`useLocalObservable`)로 처리합니다.
+- `packages/fe-store`는 여러 도메인/여러 페이지에서 재사용되는 공용 상태만 포함합니다.
 
 ```typescript
 // ✅ 올바른 예시 - packages/fe-ui에서 import
@@ -557,6 +562,11 @@ export function useAdminNavigationStore() { }
 - 공용 패키지는 여러 앱(admin, coin 등)에서 재사용됩니다
 - 앱별 설정은 각 앱의 `stores/` 디렉토리에서 주입합니다
 
+**공용 Store 범위 규칙 (Critical):**
+- `@cocrepo/store`는 **교차 페이지/교차 도메인 재사용 상태**만 다룹니다.
+- 페이지 전용 상태(`inquiries` 상세 화면 상태, 단일 폼 임시 상태 등)는 공용 Store로 승격하지 않습니다.
+- 페이지 전용 상태가 필요하면 페이지 로컬 state로 구현하고, 필요한 UI에는 props로 주입합니다.
+
 **올바른 패턴:**
 ```typescript
 // packages/fe-store - 범용 Store 정의
@@ -648,8 +658,14 @@ packages/common-type/src/
 ```
 모든 코드 파일 옆에 .spec.md가 존재
 기획서와 코드가 같은 폴더에 있어 발견성/동기화 용이
-이미 있으면 스킵, 개선 필요하면 업데이트 + 변경 이력 기록
+기존 코드를 수정하면 대응되는 .spec.md를 반드시 함께 업데이트
+spec.md를 수정했다면 하단 "변경 이력"에 변경 내용을 반드시 추가
 ```
+
+**운영 규칙 (Mandatory):**
+- 기존 코드 파일(`*.ts`, `*.tsx`, `*.js` 등)을 수정하면 같은 위치의 `*.spec.md`를 반드시 함께 수정합니다.
+- `*.spec.md`를 수정한 경우 하단 `## 변경 이력` 표에 당일 변경 내용을 1줄 이상 추가합니다.
+- 코드만 변경하고 spec/변경 이력을 누락한 PR/커밋은 완료로 간주하지 않습니다.
 
 #### 기획서 파일 구조
 

@@ -8,11 +8,7 @@ import {
 	useGetInquiryMessages,
 	useGetInquiryParticipants,
 } from "@cocrepo/api";
-import {
-	type InquiryMessage,
-	type InquiryParticipant,
-	useInquiryStore,
-} from "@cocrepo/store";
+import type { InquiryMessage, InquiryParticipant } from "@cocrepo/type";
 import {
 	Button,
 	ConfirmModal,
@@ -29,6 +25,7 @@ import {
 	VStack,
 } from "@cocrepo/ui";
 import { ArrowLeft, Pencil, Trash2 } from "lucide-react";
+import { observable } from "mobx";
 import { observer, useLocalObservable } from "mobx-react-lite";
 import type { Route } from "next";
 import { useRouter } from "next/navigation";
@@ -129,12 +126,119 @@ const CHANNEL_LABELS: Record<string, string> = {
 
 function InquiryDetailPageClient({ inquiryId }: Props) {
 	const router = useRouter();
-	const store = useInquiryStore();
-
 	const state = useLocalObservable(() => ({
-		reconnectKey: 0,
 		deleteModalOpen: false,
-		knowledgeBaseModalOpen: false,
+	}));
+
+	const inquiryState = useLocalObservable(() => ({
+		currentInquiryId: null as string | null,
+		currentThreadId: null as string | null,
+		replyContent: "",
+		isGeneratingDraft: false,
+		isKnowledgeBaseModalOpen: false,
+		isMetaEditModalOpen: false,
+		messages: [] as InquiryMessage[],
+		participants: [] as InquiryParticipant[],
+		isWebSocketConnected: false,
+		isTyping: false,
+		typingUsers: observable.map<string, boolean>(),
+		get onlineParticipants() {
+			return this.participants.filter((participant) => participant.isOnline);
+		},
+		get typingUserNames() {
+			return Array.from(this.typingUsers.keys());
+		},
+		setCurrentInquiry(inquiryId: string | null) {
+			this.currentInquiryId = inquiryId;
+		},
+		setMessages(messages: InquiryMessage[]) {
+			this.messages = messages;
+		},
+		addMessage(message: InquiryMessage) {
+			this.messages.push(message);
+		},
+		updateMessage(messageId: string, updates: Partial<InquiryMessage>) {
+			const index = this.messages.findIndex((message) => message.id === messageId);
+			if (index < 0) {
+				return;
+			}
+			this.messages[index] = { ...this.messages[index], ...updates };
+		},
+		setParticipants(participants: InquiryParticipant[]) {
+			this.participants = participants;
+		},
+		addParticipant(participant: InquiryParticipant) {
+			const index = this.participants.findIndex(
+				(existing) => existing.userId === participant.userId,
+			);
+			if (index < 0) {
+				this.participants.push(participant);
+				return;
+			}
+			this.participants[index] = participant;
+		},
+		removeParticipant(userId: string) {
+			this.participants = this.participants.filter(
+				(participant) => participant.userId !== userId,
+			);
+			this.typingUsers.delete(userId);
+		},
+		updateParticipant(userId: string, updates: Partial<InquiryParticipant>) {
+			const index = this.participants.findIndex(
+				(participant) => participant.userId === userId,
+			);
+			if (index < 0) {
+				return;
+			}
+			this.participants[index] = { ...this.participants[index], ...updates };
+		},
+		setTyping(userId: string, isTyping: boolean) {
+			if (isTyping) {
+				this.typingUsers.set(userId, true);
+				return;
+			}
+			this.typingUsers.delete(userId);
+		},
+		startTyping() {
+			this.isTyping = true;
+		},
+		stopTyping() {
+			this.isTyping = false;
+		},
+		setWebSocketConnected(isConnected: boolean) {
+			this.isWebSocketConnected = isConnected;
+		},
+		setReplyContent(content: string) {
+			this.replyContent = content;
+		},
+		setGeneratingDraft(isGenerating: boolean) {
+			this.isGeneratingDraft = isGenerating;
+		},
+		openKnowledgeBaseModal() {
+			this.isKnowledgeBaseModalOpen = true;
+		},
+		closeKnowledgeBaseModal() {
+			this.isKnowledgeBaseModalOpen = false;
+		},
+		openMetaEditModal() {
+			this.isMetaEditModalOpen = true;
+		},
+		closeMetaEditModal() {
+			this.isMetaEditModalOpen = false;
+		},
+		clear() {
+			this.currentInquiryId = null;
+			this.currentThreadId = null;
+			this.replyContent = "";
+			this.isGeneratingDraft = false;
+			this.isKnowledgeBaseModalOpen = false;
+			this.isMetaEditModalOpen = false;
+			this.messages = [];
+			this.participants = [];
+			this.isWebSocketConnected = false;
+			this.isTyping = false;
+			this.typingUsers.clear();
+		},
 	}));
 
 	const { data: inquiryResponse } = useGetInquiryById(inquiryId);
@@ -156,6 +260,7 @@ function InquiryDetailPageClient({ inquiryId }: Props) {
 
 	const ws = useInquiryWebSocket({
 		inquiryId,
+		state: inquiryState,
 		autoConnect: true,
 		onConnect: () => {
 			console.log("WebSocket 연결됨");
@@ -166,22 +271,22 @@ function InquiryDetailPageClient({ inquiryId }: Props) {
 	});
 
 	useEffect(() => {
-		store.setCurrentInquiry(inquiryId);
-		store.setMessages(messages);
-		store.setParticipants(participants);
+		inquiryState.setCurrentInquiry(inquiryId);
+		inquiryState.setMessages(messages);
+		inquiryState.setParticipants(participants);
 
 		return () => {
-			store.clear();
+			inquiryState.clear();
 		};
-	}, [inquiryId, messages, participants, store]);
+	}, [inquiryId, messages, participants, inquiryState]);
 
 	const handlers = useHandlers({
 		inquiryId,
+		inquiryState,
 		ws,
 	});
 
 	const handleReconnect = () => {
-		state.reconnectKey += 1;
 		ws.reconnect();
 	};
 
@@ -189,7 +294,7 @@ function InquiryDetailPageClient({ inquiryId }: Props) {
 		ws.sendMessage(content, attachments);
 	};
 
-	const onlineParticipantNames = store.onlineParticipants.map(
+	const onlineParticipantNames = inquiryState.onlineParticipants.map(
 		(participant) => participant.userId,
 	);
 
@@ -336,7 +441,7 @@ function InquiryDetailPageClient({ inquiryId }: Props) {
 								participants={participantListItems.map((participant) => ({
 									...participant,
 									isTyping:
-										store.typingUsers.has(participant.id) ||
+										inquiryState.typingUsers.has(participant.name) ||
 										participant.isTyping,
 								}))}
 							/>
@@ -346,17 +451,21 @@ function InquiryDetailPageClient({ inquiryId }: Props) {
 					<SectionSurface>
 						<RealtimeChatPanel
 							inquiryId={inquiryId}
-							initialMessages={store.messages.length > 0 ? undefined : messages}
-							participants={store.participants}
+							messages={
+								inquiryState.messages.length > 0
+									? inquiryState.messages
+									: messages
+							}
+							typingUserNames={inquiryState.typingUserNames}
+							isWebSocketConnected={inquiryState.isWebSocketConnected}
+							isTyping={inquiryState.isTyping}
 							onSendMessage={handleSendMessage}
 							onTypingStart={handlers.onTypingStart}
 							onTypingStop={handlers.onTypingStop}
 							onReconnect={handleReconnect}
 							onGenerateDraft={handlers.onClickGenerateDraft}
-							onSearchKnowledge={() => {
-								state.knowledgeBaseModalOpen = true;
-							}}
-							isGeneratingDraft={store.isGeneratingDraft}
+							onSearchKnowledge={handlers.onClickSearchKnowledge}
+							isGeneratingDraft={inquiryState.isGeneratingDraft}
 						/>
 					</SectionSurface>
 

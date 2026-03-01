@@ -1,6 +1,5 @@
 export * from "./ActiveStatusCell/ActiveStatusCell";
 export * from "./AIProviderCell/AIProviderCell";
-export * from "./AITemplateStatusCell/AITemplateStatusCell";
 export * from "./AuditResultBadge";
 export * from "./AuthMethodCell/AuthMethodCell";
 export * from "./BooleanCell/BooleanCell";

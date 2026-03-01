@@ -1,6 +1,5 @@
 import { AIFormField, AIFormTemplate } from "@cocrepo/entity";
 import {
-	AITemplateStatus,
 	FormFieldType,
 	Prisma,
 	PrismaClient,
@@ -116,45 +115,6 @@ export class AIFormTemplatesRepository {
 
 		const where: Prisma.AIFormTemplateWhereInput = {
 			targetDomain,
-			removedAt: null,
-		};
-
-		if (params?.spaceId) {
-			where.spaceId = params.spaceId;
-		}
-
-		const [data, totalCount] = await Promise.all([
-			this.txHost.tx.aIFormTemplate.findMany({
-				where,
-				orderBy: [{ priority: "desc" }, { createdAt: "desc" }],
-				skip: params?.skip,
-				take: params?.take,
-			}),
-			this.txHost.tx.aIFormTemplate.count({ where }),
-		]);
-
-		return {
-			data: data.map((item) => plainToInstance(AIFormTemplate, item)),
-			totalCount,
-		};
-	}
-
-	/**
-	 * 도메인별 활성화된 템플릿 목록 조회
-	 */
-	async findActiveByTargetDomain(
-		targetDomain: string,
-		params?: {
-			spaceId?: string;
-			skip?: number;
-			take?: number;
-		},
-	): Promise<{ data: AIFormTemplate[]; totalCount: number }> {
-		this.logger.debug(`활성 템플릿 조회: ${targetDomain}`);
-
-		const where: Prisma.AIFormTemplateWhereInput = {
-			targetDomain,
-			status: AITemplateStatus.ACTIVE,
 			removedAt: null,
 		};
 

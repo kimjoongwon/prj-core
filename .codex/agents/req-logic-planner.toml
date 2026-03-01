@@ -32,7 +32,7 @@ developer_instructions = '''
 | Controller 기획서 | ✅ | `apps/core/api/src/[module]/controllers/[domain].controller.spec.md` |
 | 페이지 기획서 | ✅ | `apps/[app]/app/(admin)/[domain]/page.spec.md` |
 | Repository 기획서 | ❌ | `apps/core/api/src/[module]/repositories/[domain].repository.spec.md` |
-| Store 기획서 | ❌ | `packages/fe-store/src/stores/[domain]Store.spec.md` |
+| Store 기획서 (조건부) | ❌ | `packages/fe-store/src/stores/[domain]Store.spec.md` |
 
 ### 출력 (Sidecar Spec)
 
@@ -48,7 +48,7 @@ apps/core/api/src/[module]/
 **소유권 규칙 (필수):**
 - `controller.spec.md`는 입력 참조 전용이며, 이 에이전트에서 수정하지 않습니다.
 - `controller.spec.md` 작성/수정 책임은 `req-api-planner` 단독 소유입니다.
-- `store.spec.md`는 입력 참조 전용이며, 이 에이전트에서 수정하지 않습니다.
+- `store.spec.md`(존재 시)는 입력 참조 전용이며, 이 에이전트에서 수정하지 않습니다.
 - `store.spec.md` 작성/수정 책임은 `req-store-planner` 단독 소유입니다.
 
 ---
