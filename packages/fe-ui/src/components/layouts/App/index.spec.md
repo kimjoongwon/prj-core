@@ -1,8 +1,8 @@
-# AppShell Layout 컴포넌트 기획서
+# App 컴포넌트 기획서
 
 > 생성일: 2026-03-03
 > 타입: layout
-> 위치: packages/fe-ui/src/components/layouts/AppShell/
+> 위치: packages/fe-ui/src/components/layouts/App/
 
 ## 역할
 
@@ -12,7 +12,7 @@
 ## Props
 
 ```typescript
-interface AppShellProps {
+interface AppProps {
   children: ReactNode;
 }
 ```
@@ -26,4 +26,6 @@ interface AppShellProps {
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
-| 2026-03-03 | 루트 레이아웃 규칙에 맞춰 `AppShell` spec 신규 작성 | codex |
+| 2026-03-03 | 루트 레이아웃 규칙에 맞춰 `App` spec 신규 작성 | codex |
+| 2026-03-03 | Shell 접미사 제거에 맞춰 컴포넌트 명을 `App`으로 변경 | codex |
+| 2026-03-03 | 폴더명을 `App` 기준으로 정리하고 경로 표기 갱신 | codex |

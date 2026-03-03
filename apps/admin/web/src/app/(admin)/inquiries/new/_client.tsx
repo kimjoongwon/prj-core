@@ -10,7 +10,7 @@ import {
 	useGetInquiryCreateForm,
 } from "@cocrepo/api";
 import { ADMIN_PATHS } from "@cocrepo/constant";
-import { AiForm, Button, VStack } from "@cocrepo/ui";
+import { AiForm, Button, Page, PageHeader, Section, SectionHeader, VStack } from "@cocrepo/ui";
 import { Input, Select, SelectItem, type Selection, Textarea } from "@heroui/react";
 import { ArrowLeft } from "lucide-react";
 import { observer, useLocalObservable } from "mobx-react-lite";
@@ -202,167 +202,220 @@ function InquiriesNewPageClient() {
 	};
 
 	return (
-        <section><div className="flex items-start justify-between gap-4"><div><h1>{"문의 접수"}</h1><p>{"문의 생성 bootstrap과 AiForm을 이용해 문의를 등록합니다."}</p></div><div>{<Button
-                                    variant="flat"
-                                    startContent={<ArrowLeft className="size-4" />}
-                                    onPress={() => router.push(ADMIN_PATHS.INQUIRIES as Route)}
-                                    isDisabled={state.isSubmitting}>목록으로
-                                                    </Button>}</div></div>
-            <VStack gap={4}>
-                {bootstrap && (<AiForm
-                    formState={state.toFormObject()}
-                    fieldMeta={bootstrap.fieldMeta}
-                    aiSchemas={bootstrap.aiSchemas}
-                    ui={bootstrap.ui}
-                    options={bootstrap.options}
-                    onFill={async input => {
-                        const result = await fillMutation.mutateAsync({
-                            data: {
-                                mode: "CREATE",
-                                schemaKey: input.schemaKey,
-                                selectedPaths: input.selectedPaths,
-                                currentObject: input.currentObject,
-                                userPrompt: input.userPrompt,
-                            },
-                        });
-                        return result?.data ?? {
-                            patches: [],
-                        };
-                    }}
-                    applyPatch={patches => {
-                        state.applyPatch(patches);
-                    }}
-                    onRevalidate={() => {
-                        state.validate();
-                    }}
-                    disabled={state.isSubmitting} />)}
-                <section>
-                    <VStack gap={4}>
-                        {!isHidden("customerId") && (<div className="space-y-2">
-                            <Input
-                                label="고객"
-                                labelPlacement="outside"
-                                placeholder="고객명/이메일/전화번호 검색"
-                                value={state.customerKeyword}
-                                onValueChange={value => {
-                                    state.customerKeyword = value;
-                                    void onSearchCustomer(value);
-                                }}
-                                isRequired
-                                isInvalid={Boolean(state.errors.customerId)}
-                                errorMessage={state.errors.customerId} />
-                            {state.searchResults.length > 0 && (<div
-                                className="max-h-56 overflow-y-auto rounded-xl border border-divider p-2 space-y-1">
-                                {state.searchResults.map(customer => (<button
-                                    key={customer.id}
-                                    type="button"
-                                    onClick={() => {
-                                        onSelectCustomer(customer);
-                                    }}
-                                    className="w-full rounded-lg px-3 py-2 text-left hover:bg-default-100 transition-colors">
-                                    <div className="text-sm font-medium">{customer.label}</div>
-                                    <div className="text-xs text-default-500">
-                                        {customer.description || customer.id}
-                                    </div>
-                                </button>))}
-                            </div>)}
-                            {state.customerId && (<div className="text-xs text-default-500">선택된 고객 ID: {state.customerId}
-                            </div>)}
-                        </div>)}
-                        {!isHidden("title") && (<Input
-                            label="문의 제목"
-                            labelPlacement="outside"
-                            placeholder="문의 제목을 입력하세요"
-                            value={state.title}
-                            onValueChange={value => {
-                                state.title = value;
-                            }}
-                            isRequired
-                            isInvalid={Boolean(state.errors.title)}
-                            errorMessage={state.errors.title} />)}
-                        {!isHidden("content") && (<Textarea
-                            label="문의 내용"
-                            labelPlacement="outside"
-                            placeholder="문의 내용을 입력하세요"
-                            value={state.content}
-                            onValueChange={value => {
-                                state.content = value;
-                            }}
-                            minRows={6}
-                            isRequired
-                            isInvalid={Boolean(state.errors.content)}
-                            errorMessage={state.errors.content} />)}
-                        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                            {!isHidden("category") && (<div>
-                                <Select
-                                    label="카테고리"
-                                    placeholder="카테고리 선택"
-                                    selectedKeys={state.category ? [state.category] : []}
-                                    onSelectionChange={keys => {
-                                        const selectedValue = getSelectedValue(keys);
-                                        if (selectedValue) {
-                                            state.category = selectedValue as InquiryCategory;
-                                        }
-                                    }}
-                                    isRequired
-                                    isInvalid={Boolean(state.errors.category)}
-                                    errorMessage={state.errors.category}>
-                                    {categoryOptions.map(option => (<SelectItem key={option.value}>{option.text}</SelectItem>))}
-                                </Select>
-                            </div>)}
-                            {!isHidden("channel") && (<div>
-                                <Select
-                                    label="채널"
-                                    placeholder="채널 선택"
-                                    selectedKeys={state.channel ? [state.channel] : []}
-                                    onSelectionChange={keys => {
-                                        const selectedValue = getSelectedValue(keys);
-                                        if (selectedValue) {
-                                            state.channel = selectedValue as InquiryChannel;
-                                        }
-                                    }}
-                                    isRequired
-                                    isInvalid={Boolean(state.errors.channel)}
-                                    errorMessage={state.errors.channel}>
-                                    {channelOptions.map(option => (<SelectItem key={option.value}>{option.text}</SelectItem>))}
-                                </Select>
-                            </div>)}
-                            {!isHidden("priority") && (<div>
-                                <Select
-                                    label="우선순위"
-                                    placeholder="우선순위 선택"
-                                    selectedKeys={state.priority ? [state.priority] : []}
-                                    onSelectionChange={keys => {
-                                        const selectedValue = getSelectedValue(keys);
-                                        if (selectedValue) {
-                                            state.priority = selectedValue as InquiryPriority;
-                                        }
-                                    }}
-                                    isRequired
-                                    isInvalid={Boolean(state.errors.priority)}
-                                    errorMessage={state.errors.priority}>
-                                    {priorityOptions.map(option => (<SelectItem key={option.value}>{option.text}</SelectItem>))}
-                                </Select>
-                            </div>)}
-                        </div>
-                        <div className="flex justify-end gap-2">
-                            <Button
-                                variant="light"
-                                onPress={() => router.push(ADMIN_PATHS.INQUIRIES as Route)}
-                                isDisabled={state.isSubmitting}>취소
-                                                            </Button>
-                            <Button
-                                color="primary"
-                                onPress={onSubmit}
-                                isLoading={state.isSubmitting || createInquiryMutation.isPending}
-                                isDisabled={isLoading}>등록
-                                                            </Button>
-                        </div>
-                    </VStack>
-                </section>
-            </VStack>
-        </section>
-    );
+		<Page
+			mode="content"
+			top={
+				<PageHeader
+					title="문의 접수"
+					description="문의 생성 bootstrap과 AiForm을 이용해 문의를 등록합니다."
+					actions={
+						<Button
+							variant="flat"
+							startContent={<ArrowLeft className="size-4" />}
+							onPress={() => router.push(ADMIN_PATHS.INQUIRIES as Route)}
+							isDisabled={state.isSubmitting}
+						>
+							목록으로
+						</Button>
+					}
+				/>
+			}
+		>
+			<VStack gap={4}>
+				{bootstrap && (
+					<Section mode="content" top={<SectionHeader title="AI 폼 추천" />}>
+						<AiForm
+							formState={state.toFormObject()}
+							fieldMeta={bootstrap.fieldMeta}
+							aiSchemas={bootstrap.aiSchemas}
+							ui={bootstrap.ui}
+							options={bootstrap.options}
+							onFill={async (input) => {
+								const result = await fillMutation.mutateAsync({
+									data: {
+										mode: "CREATE",
+										schemaKey: input.schemaKey,
+										selectedPaths: input.selectedPaths,
+										currentObject: input.currentObject,
+										userPrompt: input.userPrompt,
+									},
+								});
+								return result?.data ?? {
+									patches: [],
+								};
+							}}
+							applyPatch={(patches) => {
+								state.applyPatch(patches);
+							}}
+							onRevalidate={() => {
+								state.validate();
+							}}
+							disabled={state.isSubmitting}
+						/>
+					</Section>
+				)}
+				<Section mode="content" top={<SectionHeader title="문의 입력" />}>
+					<VStack gap={4}>
+						{!isHidden("customerId") && (
+							<div className="space-y-2">
+								<Input
+									label="고객"
+									labelPlacement="outside"
+									placeholder="고객명/이메일/전화번호 검색"
+									value={state.customerKeyword}
+									onValueChange={(value) => {
+										state.customerKeyword = value;
+										void onSearchCustomer(value);
+									}}
+									isRequired
+									isInvalid={Boolean(state.errors.customerId)}
+									errorMessage={state.errors.customerId}
+								/>
+								{state.searchResults.length > 0 && (
+									<div className="max-h-56 space-y-1 overflow-y-auto rounded-xl border border-divider p-2">
+										{state.searchResults.map((customer) => (
+											<button
+												key={customer.id}
+												type="button"
+												onClick={() => {
+													onSelectCustomer(customer);
+												}}
+												className="w-full rounded-lg px-3 py-2 text-left transition-colors hover:bg-default-100"
+											>
+												<div className="text-sm font-medium">{customer.label}</div>
+												<div className="text-xs text-default-500">
+													{customer.description || customer.id}
+												</div>
+											</button>
+										))}
+									</div>
+								)}
+								{state.customerId && (
+									<div className="text-xs text-default-500">
+										선택된 고객 ID: {state.customerId}
+									</div>
+								)}
+							</div>
+						)}
+						{!isHidden("title") && (
+							<Input
+								label="문의 제목"
+								labelPlacement="outside"
+								placeholder="문의 제목을 입력하세요"
+								value={state.title}
+								onValueChange={(value) => {
+									state.title = value;
+								}}
+								isRequired
+								isInvalid={Boolean(state.errors.title)}
+								errorMessage={state.errors.title}
+							/>
+						)}
+						{!isHidden("content") && (
+							<Textarea
+								label="문의 내용"
+								labelPlacement="outside"
+								placeholder="문의 내용을 입력하세요"
+								value={state.content}
+								onValueChange={(value) => {
+									state.content = value;
+								}}
+								minRows={6}
+								isRequired
+								isInvalid={Boolean(state.errors.content)}
+								errorMessage={state.errors.content}
+							/>
+						)}
+						<div className="grid grid-cols-1 gap-4 md:grid-cols-3">
+							{!isHidden("category") && (
+								<div>
+									<Select
+										label="카테고리"
+										placeholder="카테고리 선택"
+										selectedKeys={state.category ? [state.category] : []}
+										onSelectionChange={(keys) => {
+											const selectedValue = getSelectedValue(keys);
+											if (selectedValue) {
+												state.category = selectedValue as InquiryCategory;
+											}
+										}}
+										isRequired
+										isInvalid={Boolean(state.errors.category)}
+										errorMessage={state.errors.category}
+									>
+										{categoryOptions.map((option) => (
+											<SelectItem key={option.value}>{option.text}</SelectItem>
+										))}
+									</Select>
+								</div>
+							)}
+							{!isHidden("channel") && (
+								<div>
+									<Select
+										label="채널"
+										placeholder="채널 선택"
+										selectedKeys={state.channel ? [state.channel] : []}
+										onSelectionChange={(keys) => {
+											const selectedValue = getSelectedValue(keys);
+											if (selectedValue) {
+												state.channel = selectedValue as InquiryChannel;
+											}
+										}}
+										isRequired
+										isInvalid={Boolean(state.errors.channel)}
+										errorMessage={state.errors.channel}
+									>
+										{channelOptions.map((option) => (
+											<SelectItem key={option.value}>{option.text}</SelectItem>
+										))}
+									</Select>
+								</div>
+							)}
+							{!isHidden("priority") && (
+								<div>
+									<Select
+										label="우선순위"
+										placeholder="우선순위 선택"
+										selectedKeys={state.priority ? [state.priority] : []}
+										onSelectionChange={(keys) => {
+											const selectedValue = getSelectedValue(keys);
+											if (selectedValue) {
+												state.priority = selectedValue as InquiryPriority;
+											}
+										}}
+										isRequired
+										isInvalid={Boolean(state.errors.priority)}
+										errorMessage={state.errors.priority}
+									>
+										{priorityOptions.map((option) => (
+											<SelectItem key={option.value}>{option.text}</SelectItem>
+										))}
+									</Select>
+								</div>
+							)}
+						</div>
+						<div className="flex justify-end gap-2">
+							<Button
+								variant="light"
+								onPress={() => router.push(ADMIN_PATHS.INQUIRIES as Route)}
+								isDisabled={state.isSubmitting}
+							>
+								취소
+							</Button>
+							<Button
+								color="primary"
+								onPress={onSubmit}
+								isLoading={state.isSubmitting || createInquiryMutation.isPending}
+								isDisabled={isLoading}
+							>
+								등록
+							</Button>
+						</div>
+					</VStack>
+				</Section>
+			</VStack>
+		</Page>
+	);
 }
 
 export default observer(InquiriesNewPageClient);

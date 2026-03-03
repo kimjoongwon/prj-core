@@ -8,9 +8,13 @@ import {
 } from "@cocrepo/api";
 import type { InputConfig, MetaDataGridColumnConfig } from "@cocrepo/type";
 import {
-    DateTimeCell,
-    InquiryAssigneeCell,
-    InquiryCategoryCell,
+	Page,
+	PageHeader,
+	Section,
+	SectionHeader,
+	DateTimeCell,
+	InquiryAssigneeCell,
+	InquiryCategoryCell,
     InquiryChannelCell,
     InquiryPriorityCell,
     InquirySentimentCell,
@@ -300,36 +304,51 @@ function InquiriesPageClient() {
 	};
 
 	return (
-        <section><div className="flex items-start justify-between gap-4"><div><h1>{"문의 관리"}</h1><p>{"고객 문의를 접수/처리/해결합니다."}</p></div><div>{<Button
-                                    color="primary"
-                                    startContent={<Plus className="size-4" />}
-                                    onPress={handlers.onClickNewInquiry}>문의 접수
-                                                    </Button>}</div></div>
-            <VStack gap={4}>
-                <section>
-                    <InquiryStatsCards
-                        stats={stats}
-                        activeStatus={activeStatus}
-                        onStatusClick={handlers.onClickStatusFilter} />
-                </section>
-                <section>
-                    <MetaDataGrid
-                        config={{
-                            entity: "Inquiry",
-                            data: inquiries,
-                            totalCount,
-                            isLoading,
-                            queryStates,
-                            setQueryStates,
-                            columns,
-                            leftInputs,
-                            onRowClick,
-                            emptyMessage: "표시할 문의가 없습니다.",
-                        }} />
-                </section>
-            </VStack>
-        </section>
-    );
+		<Page
+			mode="content"
+			top={
+				<PageHeader
+					title="문의 관리"
+					description="고객 문의를 접수/처리/해결합니다."
+					actions={
+						<Button
+							color="primary"
+							startContent={<Plus className="size-4" />}
+							onPress={handlers.onClickNewInquiry}
+						>
+							문의 접수
+						</Button>
+					}
+				/>
+			}
+		>
+			<VStack gap={4}>
+				<Section mode="content" top={<SectionHeader title="문의 현황" />}>
+					<InquiryStatsCards
+						stats={stats}
+						activeStatus={activeStatus}
+						onStatusClick={handlers.onClickStatusFilter}
+					/>
+				</Section>
+				<Section mode="content" top={<SectionHeader title="문의 목록" />}>
+					<MetaDataGrid
+						config={{
+							entity: "Inquiry",
+							data: inquiries,
+							totalCount,
+							isLoading,
+							queryStates,
+							setQueryStates,
+							columns,
+							leftInputs,
+							onRowClick,
+							emptyMessage: "표시할 문의가 없습니다.",
+						}}
+					/>
+				</Section>
+			</VStack>
+		</Page>
+	);
 }
 
 export default observer(InquiriesPageClient);

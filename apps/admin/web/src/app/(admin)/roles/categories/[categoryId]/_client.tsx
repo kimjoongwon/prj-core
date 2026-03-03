@@ -4,10 +4,12 @@
 // import { useGetCategoryById, useDeleteCategory } from "@cocrepo/api";
 import { customInstance } from "@cocrepo/api";
 import {
-    CategoryChildrenSection,
-    CategoryInfoSection,
-    CategoryRoleListSection,
-    VStack,
+	CategoryChildrenSection,
+	CategoryInfoSection,
+	CategoryRoleListSection,
+	Page,
+	PageHeader,
+	VStack,
 } from "@cocrepo/ui";
 import {
 	Button,
@@ -105,50 +107,79 @@ function RoleCategoryDetailPageClient({
 
 	if (isLoading) {
 		return (
-            <section><div className="flex items-start justify-between gap-4"><div><h1>{"역할 카테고리 상세"}</h1><p>{"로딩 중..."}</p></div></div>
-                <div className="flex items-center justify-center p-8">
-                    <span className="text-default-500">로딩 중...</span>
-                </div>
-            </section>
-        );
+			<Page
+				mode="content"
+				top={<PageHeader title="역할 카테고리 상세" description="로딩 중..." />}
+			>
+				<div className="flex items-center justify-center p-8">
+					<span className="text-default-500">로딩 중...</span>
+				</div>
+			</Page>
+		);
 	}
 
 	if (!category) {
 		return (
-            <section><div className="flex items-start justify-between gap-4"><div><h1>{"역할 카테고리 상세"}</h1><p>{"카테고리를 찾을 수 없습니다."}</p></div></div>
-                <div className="flex flex-col items-center justify-center gap-4 p-8">
-                    <p className="text-default-500">카테고리를 찾을 수 없습니다.</p>
-                    <Button variant="flat" onPress={onClickBackButton}>목록으로
-                                            </Button>
-                </div>
-            </section>
-        );
+			<Page
+				mode="content"
+				top={
+					<PageHeader
+						title="역할 카테고리 상세"
+						description="카테고리를 찾을 수 없습니다."
+					/>
+				}
+			>
+				<div className="flex flex-col items-center justify-center gap-4 p-8">
+					<p className="text-default-500">카테고리를 찾을 수 없습니다.</p>
+					<Button variant="flat" onPress={onClickBackButton}>
+						목록으로
+					</Button>
+				</div>
+			</Page>
+		);
 	}
 
 	const hasChildren = (category.children?.length ?? 0) > 0;
 
 	return (
-        <section><div className="flex items-start justify-between gap-4"><div><h1>{"역할 카테고리 상세"}</h1>{`${category.name} 카테고리의 상세 정보입니다.` && <p>{`${category.name} 카테고리의 상세 정보입니다.`}</p>}</div><div>{<div className="flex gap-2">
-                                    <Button
-                                        variant="light"
-                                        startContent={<ArrowLeft className="h-4 w-4" />}
-                                        onPress={onClickBackButton}>목록으로
-                                                            </Button>
-                                    <Button
-                                        variant="flat"
-                                        color="primary"
-                                        startContent={<Edit className="h-4 w-4" />}
-                                        onPress={onClickEditButton}>수정
-                                                            </Button>
-                                    <Button
-                                        variant="flat"
-                                        color="danger"
-                                        startContent={<Trash2 className="h-4 w-4" />}
-                                        onPress={deleteModal.onOpen}
-                                        isDisabled={hasChildren}>삭제
-                                                            </Button>
-                                </div>}</div></div>
-            <VStack gap={4}>
+		<Page
+			mode="content"
+			top={
+				<PageHeader
+					title="역할 카테고리 상세"
+					description={`${category.name} 카테고리의 상세 정보입니다.`}
+					actions={
+						<div className="flex gap-2">
+							<Button
+								variant="light"
+								startContent={<ArrowLeft className="h-4 w-4" />}
+								onPress={onClickBackButton}
+							>
+								목록으로
+							</Button>
+							<Button
+								variant="flat"
+								color="primary"
+								startContent={<Edit className="h-4 w-4" />}
+								onPress={onClickEditButton}
+							>
+								수정
+							</Button>
+							<Button
+								variant="flat"
+								color="danger"
+								startContent={<Trash2 className="h-4 w-4" />}
+								onPress={deleteModal.onOpen}
+								isDisabled={hasChildren}
+							>
+								삭제
+							</Button>
+						</div>
+					}
+				/>
+			}
+		>
+			<VStack gap={4}>
                 {hasChildren && (<div className="rounded-xl bg-warning-50 dark:bg-warning-900/20 p-4">
                     <p className="text-sm text-warning-700 dark:text-warning-400">
                         <strong>참고:</strong>하위 카테고리가 있어 삭제할 수 없습니다.
@@ -201,8 +232,8 @@ function RoleCategoryDetailPageClient({
                     </ModalFooter>
                 </ModalContent>
             </Modal>
-        </section>
-    );
+		</Page>
+	);
 }
 
 export default observer(RoleCategoryDetailPageClient);

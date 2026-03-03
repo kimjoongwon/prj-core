@@ -2,7 +2,15 @@
 
 import { type RoleDto, useGetRoles } from "@cocrepo/api";
 import type { MetaDataGridColumnConfig } from "@cocrepo/type";
-import { DateTimeCell, StatusChipCell, VStack } from "@cocrepo/ui";
+import {
+	DateTimeCell,
+	Page,
+	PageHeader,
+	Section,
+	SectionHeader,
+	StatusChipCell,
+	VStack,
+} from "@cocrepo/ui";
 import { Button, Chip } from "@heroui/react";
 import { Plus, Shield } from "lucide-react";
 import { observer } from "mobx-react-lite";
@@ -62,87 +70,118 @@ const columns: MetaDataGridColumnConfig<RoleDto>[] = [
  * 역할 목록 페이지 - 클라이언트 컴포넌트
  */
 function RolesPageClient() {
-	// API 조회
 	const { data: response, isLoading } = useGetRoles();
 
 	const roles = response?.data ?? [];
 	const totalCount = roles.length;
 
-	return (
-        <section><div className="flex items-start justify-between gap-4"><div><h1>{"역할 목록"}</h1><p>{"시스템에 등록된 역할을 관리합니다."}</p></div><div>{<Button
-                                    as={Link}
-                                    href="/roles/new"
-                                    color="primary"
-                                    startContent={<Plus className="h-4 w-4" />}>역할 추가
-                                                    </Button>}</div></div>
-            <VStack gap={4}>
-                <div className="rounded-xl bg-warning-50 dark:bg-warning-900/20 p-4">
-                    <p className="text-sm text-warning-700 dark:text-warning-400">
-                        <strong>참고:</strong>시스템 역할(FULL_ACCESS, MANAGE, VIEW)은
-                                                수정하거나 삭제할 수 없습니다. 권한 설정은 각 역할의 상세 페이지에서
-                                                관리할 수 있습니다.
-                                            </p>
-                </div>
-                <section>
-                    {isLoading ? (<div className="flex items-center justify-center p-8">
-                        <span className="text-default-500">로딩 중...</span>
-                    </div>) : roles.length === 0 ? (<div className="flex flex-col items-center justify-center gap-4 p-16">
-                        <div
-                            className="flex h-16 w-16 items-center justify-center rounded-full bg-primary/10">
-                            <Shield className="h-8 w-8 text-primary" />
-                        </div>
-                        <p className="text-default-500">등록된 역할이 없습니다.</p>
-                    </div>) : (<div className="overflow-x-auto">
-                        <table className="w-full text-sm">
-                            <thead>
-                                <tr className="border-b border-divider">
-                                    {columns.map(col => (<th
-                                        key={col.field}
-                                        className={`px-4 py-3 text-left font-medium text-default-500 ${col.align === "center" ? "text-center" : ""}`}
-                                        style={{
-                                            width: col.size,
-                                        }}>
-                                        {col.label}
-                                    </th>))}
-                                    <th className="px-4 py-3 text-center font-medium text-default-500 w-[100px]">액션
-                                                                                </th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {roles.map(role => (<tr
-                                    key={role.id}
-                                    className="border-b border-divider hover:bg-content2/50 transition-colors">
-                                    {columns.map(col => {
-                                        const cellFn = col.cell;
-                                        const value = role[col.field as keyof RoleDto];
-                                        return (
-                                            <td
-                                                key={col.field}
-                                                className={`px-4 py-3 ${col.align === "center" ? "text-center" : ""}`}>
-                                                {typeof cellFn === "function" ? cellFn({
-                                                    getValue: () => value,
+	const createRoleButton = (
+		<Button
+			as={Link}
+			href="/roles/new"
+			color="primary"
+			startContent={<Plus className="h-4 w-4" />}
+		>
+			역할 추가
+		</Button>
+	);
 
-                                                    row: {
-                                                        original: role,
-                                                    },
-                                                } as never) : String(value ?? "-")}
-                                            </td>
-                                        );
-                                    })}
-                                    <td className="px-4 py-3 text-center">
-                                        <Button as={Link} href={`/roles/${role.id}`} size="sm" variant="flat">상세
-                                                                                            </Button>
-                                    </td>
-                                </tr>))}
-                            </tbody>
-                        </table>
-                        <div className="px-4 py-3 text-sm text-default-500">총 {totalCount}건
-                                                        </div>
-                    </div>)}
-                </section>
-            </VStack>
-        </section>
-    );
+	return (
+		<Page
+			mode="content"
+			top={
+				<PageHeader
+					title="역할 목록"
+					description="시스템에 등록된 역할을 관리합니다."
+					actions={createRoleButton}
+				/>
+			}
+		>
+			<VStack gap={4}>
+				<div className="rounded-xl bg-warning-50 p-4 dark:bg-warning-900/20">
+					<p className="text-sm text-warning-700 dark:text-warning-400">
+						<strong>참고:</strong> 시스템 역할(FULL_ACCESS, MANAGE, VIEW)은
+						수정하거나 삭제할 수 없습니다. 권한 설정은 각 역할의 상세
+						페이지에서 관리할 수 있습니다.
+					</p>
+				</div>
+				<Section mode="content" top={<SectionHeader title="역할 목록 데이터" />}>
+					{isLoading ? (
+						<div className="flex items-center justify-center p-8">
+							<span className="text-default-500">로딩 중...</span>
+						</div>
+					) : roles.length === 0 ? (
+						<div className="flex flex-col items-center justify-center gap-4 p-16">
+							<div className="flex h-16 w-16 items-center justify-center rounded-full bg-primary/10">
+								<Shield className="h-8 w-8 text-primary" />
+							</div>
+							<p className="text-default-500">등록된 역할이 없습니다.</p>
+						</div>
+					) : (
+						<div className="overflow-x-auto">
+							<table className="w-full text-sm">
+								<thead>
+									<tr className="border-b border-divider">
+										{columns.map((column) => (
+											<th
+												key={column.field}
+												className={`px-4 py-3 text-left font-medium text-default-500 ${column.align === "center" ? "text-center" : ""}`}
+												style={{ width: column.size }}
+											>
+												{column.label}
+											</th>
+										))}
+										<th className="w-[100px] px-4 py-3 text-center font-medium text-default-500">
+											액션
+										</th>
+									</tr>
+								</thead>
+								<tbody>
+									{roles.map((role) => (
+										<tr
+											key={role.id}
+											className="border-b border-divider transition-colors hover:bg-content2/50"
+										>
+											{columns.map((column) => {
+												const cellFn = column.cell;
+												const value = role[column.field as keyof RoleDto];
+												return (
+													<td
+														key={column.field}
+														className={`px-4 py-3 ${column.align === "center" ? "text-center" : ""}`}
+													>
+														{typeof cellFn === "function"
+															? cellFn({
+																	getValue: () => value,
+																	row: { original: role },
+																} as never)
+															: String(value ?? "-")}
+													</td>
+												);
+											})}
+											<td className="px-4 py-3 text-center">
+												<Button
+													as={Link}
+													href={`/roles/${role.id}`}
+													size="sm"
+													variant="flat"
+												>
+													상세
+												</Button>
+											</td>
+										</tr>
+									))}
+								</tbody>
+							</table>
+							<div className="px-4 py-3 text-sm text-default-500">
+								총 {totalCount}건
+							</div>
+						</div>
+					)}
+				</Section>
+			</VStack>
+		</Page>
+	);
 }
 
 export default observer(RolesPageClient);

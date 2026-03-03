@@ -274,3 +274,4 @@ apps/admin/web/src/app/(admin)/assets/[assetId]/
 | 2026-02-26 | Stage 6 구현: Orval 인터페이스 기반 상세 페이지(page/_client/_prefetch) 구현 | fe-page-builder |
 | 2026-02-26 | Stage 7 구현: assets 상세 page.e2e.ts 추가 | qa-fe-e2e-testing |
 | 2026-03-03 | Scaffold 제거 및 페이지 헤더 영역/섹션 영역 용어 정리 | codex |
+| 2026-03-03 | PageHeader/SectionHeader 패턴 정리 반영 | codex |

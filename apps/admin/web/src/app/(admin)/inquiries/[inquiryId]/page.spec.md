@@ -1,7 +1,7 @@
 # 문의 상세 페이지 기획서
 
 > 생성일: 2026-02-25
-> 수정일: 2026-03-01
+> 수정일: 2026-03-03
 > 타입: page
 > 경로: /inquiries/[inquiryId]
 
@@ -99,7 +99,9 @@
 
 | 영역 | 컴포넌트 | 기획서 |
 |------|----------|--------|
-| 헤더 | 페이지 헤더 영역 | - |
+| 페이지 래퍼 | `Page(mode="content")` | - |
+| 헤더 | `PageHeader` | - |
+| 상단/중단 배치 | `VStack` + `HStack` | - |
 | 문의 정보 카드 | InquiryInfoCard | `packages/fe-ui/src/components/widget/InquiryInfoCard/index.spec.md` |
 | 메타 정보 패널 | InquiryMetaPanel | `packages/fe-ui/src/components/widget/InquiryMetaPanel/index.spec.md` |
 | 빠른 수정 + AiForm | AiForm + title/category/priority 편집 | `packages/fe-ui/src/components/feature/AiForm/index.spec.md` |
@@ -452,3 +454,4 @@
 | 2026-03-01 | 빠른 수정에서 AiForm을 메타 입력 폼과 동급 위계로 분리하고 바깥 섹션 영역 래퍼를 제거해 Card 단일 표면 구조로 정리 | codex |
 | 2026-03-03 | Scaffold 제거 및 페이지 헤더 영역/섹션 영역 용어 정리 | codex |
 | 2026-03-03 | 페이지 이벤트 핸들러 네이밍을 `on[Event][UI]` 규칙에 맞춰 정리 (`onSendInquiryMessage`, `onClickReconnectButton`) | codex |
+| 2026-03-03 | `_client.tsx` 헤더 반복 마크업을 `Page(mode="content") + PageHeader` 조합으로 정리 | codex |

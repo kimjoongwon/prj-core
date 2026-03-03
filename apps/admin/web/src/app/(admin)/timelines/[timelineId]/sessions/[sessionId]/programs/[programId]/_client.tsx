@@ -6,7 +6,7 @@ import {
 	useDeleteProgram,
 	useGetProgramById,
 } from "@cocrepo/api";
-import { DateTimeCell } from "@cocrepo/ui";
+import { DateTimeCell, Page, PageHeader, Section, SectionHeader } from "@cocrepo/ui";
 import {
 	addToast,
 	Button,
@@ -94,98 +94,124 @@ function ProgramDetailPageClient({
 		.filter(Boolean)
 		.join(" · ");
 
+	const pageTitle = program?.name ?? "프로그램 상세";
+	const pageActions = (
+		<div className="flex gap-2">
+			<Button
+				variant="flat"
+				startContent={<Pencil className="h-4 w-4" />}
+				onPress={onClickEditButton}
+			>
+				수정
+			</Button>
+			<Button
+				color="danger"
+				variant="flat"
+				startContent={<Trash2 className="h-4 w-4" />}
+				onPress={deleteModal.onOpen}
+			>
+				삭제
+			</Button>
+		</div>
+	);
+
 	return (
-        <section>{((program?.name ?? "프로그램 상세") || <div className="flex gap-2">
-                            <Button
-                                variant="flat"
-                                startContent={<Pencil className="h-4 w-4" />}
-                                onPress={onClickEditButton}>수정
-                                                    </Button>
-                            <Button
-                                color="danger"
-                                variant="flat"
-                                startContent={<Trash2 className="h-4 w-4" />}
-                                onPress={deleteModal.onOpen}>삭제
-                                                    </Button>
-                        </div>) && <div className="flex items-start justify-between gap-4"><div>{(program?.name ?? "프로그램 상세") && <h1>{program?.name ?? "프로그램 상세"}</h1>}{descriptionText && <p>{descriptionText}</p>}</div><div><div className="flex gap-2">
-                                    <Button
-                                        variant="flat"
-                                        startContent={<Pencil className="h-4 w-4" />}
-                                        onPress={onClickEditButton}>수정
-                                                            </Button>
-                                    <Button
-                                        color="danger"
-                                        variant="flat"
-                                        startContent={<Trash2 className="h-4 w-4" />}
-                                        onPress={deleteModal.onOpen}>삭제
-                                                            </Button>
-                                </div></div></div>}
-            <section><div className="flex items-start justify-between gap-3"><div className="flex items-start gap-2"><div><h2>{"기본 정보"}</h2></div></div></div>
-                <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-                    <div>
-                        <label className="text-sm text-default-500">프로그램 이름</label>
-                        <p className="mt-1">{program?.name ?? "-"}</p>
-                    </div>
-                    <div>
-                        <label className="text-sm text-default-500">루틴</label>
-                        <div className="mt-1">
-                            {program?.routine ? (<Link
-                                href={`/routines/${program.routine.id}` as Route}
-                                className="text-primary hover:underline">
-                                {program.routine.name}
-                            </Link>) : ("-")}
-                        </div>
-                    </div>
-                    <div>
-                        <label className="text-sm text-default-500">강사</label>
-                        <p className="mt-1">{program?.instructorId ?? "-"}</p>
-                    </div>
-                    <div>
-                        <label className="text-sm text-default-500">정원</label>
-                        <p className="mt-1">
-                            {program?.capacity != null ? `${program.capacity}명` : "-"}
-                        </p>
-                    </div>
-                    <div>
-                        <label className="text-sm text-default-500">난이도</label>
-                        <p className="mt-1">{program?.level ?? "-"}</p>
-                    </div>
-                    <div>
-                        <label className="text-sm text-default-500">세션</label>
-                        <div className="mt-1">
-                            <Link
-                                href={`/timelines/${timelineId}/sessions/${sessionId}` as Route}
-                                className="text-primary hover:underline">
-                                {program?.session?.name ?? "-"}
-                            </Link>
-                        </div>
-                    </div>
-                    <div>
-                        <label className="text-sm text-default-500">등록일</label>
-                        <div className="mt-1">
-                            {program?.createdAt ? (<DateTimeCell value={program.createdAt} />) : ("-")}
-                        </div>
-                    </div>
-                </div>
-            </section>
-            <Modal isOpen={deleteModal.isOpen} onClose={deleteModal.onClose}>
-                <ModalContent>
-                    <ModalHeader>프로그램 삭제</ModalHeader>
-                    <ModalBody>
-                        <p>
-                            <strong>{program?.name}</strong>프로그램을 삭제하시겠습니까?
-                                                    </p>
-                    </ModalBody>
-                    <ModalFooter>
-                        <Button variant="flat" onPress={deleteModal.onClose} isDisabled={isDeleting}>취소
-                                                    </Button>
-                        <Button color="danger" onPress={onClickDeleteConfirm} isLoading={isDeleting}>삭제
-                                                    </Button>
-                    </ModalFooter>
-                </ModalContent>
-            </Modal>
-        </section>
-    );
+		<Page
+			mode="content"
+			top={
+				<PageHeader
+					title={pageTitle}
+					description={descriptionText || undefined}
+					actions={pageActions}
+				/>
+			}
+		>
+			<Section mode="content" top={<SectionHeader title="기본 정보" />}>
+				<div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+					<div>
+						<label className="text-sm text-default-500">프로그램 이름</label>
+						<p className="mt-1">{program?.name ?? "-"}</p>
+					</div>
+					<div>
+						<label className="text-sm text-default-500">루틴</label>
+						<div className="mt-1">
+							{program?.routine ? (
+								<Link
+									href={`/routines/${program.routine.id}` as Route}
+									className="text-primary hover:underline"
+								>
+									{program.routine.name}
+								</Link>
+							) : (
+								"-"
+							)}
+						</div>
+					</div>
+					<div>
+						<label className="text-sm text-default-500">강사</label>
+						<p className="mt-1">{program?.instructorId ?? "-"}</p>
+					</div>
+					<div>
+						<label className="text-sm text-default-500">정원</label>
+						<p className="mt-1">
+							{program?.capacity != null ? `${program.capacity}명` : "-"}
+						</p>
+					</div>
+					<div>
+						<label className="text-sm text-default-500">난이도</label>
+						<p className="mt-1">{program?.level ?? "-"}</p>
+					</div>
+					<div>
+						<label className="text-sm text-default-500">세션</label>
+						<div className="mt-1">
+							<Link
+								href={`/timelines/${timelineId}/sessions/${sessionId}` as Route}
+								className="text-primary hover:underline"
+							>
+								{program?.session?.name ?? "-"}
+							</Link>
+						</div>
+					</div>
+					<div>
+						<label className="text-sm text-default-500">등록일</label>
+						<div className="mt-1">
+							{program?.createdAt ? (
+								<DateTimeCell value={program.createdAt} />
+							) : (
+								"-"
+							)}
+						</div>
+					</div>
+				</div>
+			</Section>
+			<Modal isOpen={deleteModal.isOpen} onClose={deleteModal.onClose}>
+				<ModalContent>
+					<ModalHeader>프로그램 삭제</ModalHeader>
+					<ModalBody>
+						<p>
+							<strong>{program?.name}</strong>프로그램을 삭제하시겠습니까?
+						</p>
+					</ModalBody>
+					<ModalFooter>
+						<Button
+							variant="flat"
+							onPress={deleteModal.onClose}
+							isDisabled={isDeleting}
+						>
+							취소
+						</Button>
+						<Button
+							color="danger"
+							onPress={onClickDeleteConfirm}
+							isLoading={isDeleting}
+						>
+							삭제
+						</Button>
+					</ModalFooter>
+				</ModalContent>
+			</Modal>
+		</Page>
+	);
 }
 
 export default observer(ProgramDetailPageClient);

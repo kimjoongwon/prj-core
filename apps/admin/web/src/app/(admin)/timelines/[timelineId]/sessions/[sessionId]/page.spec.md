@@ -134,3 +134,4 @@
 | 2026-02-19 | Program 섹션 추가 (목록, API, 이벤트 핸들러, 비즈니스 규칙) | orch-requirement |
 | 2026-02-19 | 디자인 목업 섹션 추가 | req-reverse-engineer |
 | 2026-03-03 | Scaffold 제거 및 페이지 헤더 영역/섹션 영역 용어 정리 | codex |
+| 2026-03-03 | PageHeader/SectionHeader 패턴 정리 반영 | codex |

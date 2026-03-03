@@ -1,20 +1,30 @@
 import type { ReactNode } from "react";
 
-export interface PageShellProps {
+export type PageMode = "shell" | "content";
+
+export interface PageProps {
+	/** 렌더링 모드 (shell: 앱 레이아웃, content: 페이지 콘텐츠) */
+	mode?: PageMode;
 	/** 상단 헤더 영역 */
 	header?: ReactNode;
+	/** 콘텐츠 모드 상단 슬롯 */
+	top?: ReactNode;
 	/** 좌측 사이드바 영역 */
 	leftAside?: ReactNode;
 	/** 우측 사이드바 영역 */
 	rightAside?: ReactNode;
 	/** 하단 푸터 영역 */
 	footer?: ReactNode;
+	/** 콘텐츠 모드 하단 슬롯 */
+	bottom?: ReactNode;
+	/** 추가 CSS 클래스 */
+	className?: string;
 	/** 메인 콘텐츠 영역 */
 	children: ReactNode;
 }
 
 /**
- * PageShell 컴포넌트
+ * Page 컴포넌트
  * 페이지 전체 구조를 정의하는 순수 레이아웃 컴포넌트 (HTML5 시맨틱)
  * app/(admin)/layout.tsx 등에서 사용
  *
@@ -30,31 +40,41 @@ export interface PageShellProps {
  * // app/(admin)/layout.tsx
  * export default function AdminLayout({ children }) {
  *   return (
- *     <PageShell
+ *     <Page
  *       header={
- *         <Header
- *           left={<Logo />}
- *           center={<Nav />}
- *           right={<UserMenu />}
- *         />
+ *         <div className="h-16">상단 헤더 슬롯</div>
  *       }
  *       leftAside={<SideMenu />}
  *     >
  *       {children}
- *     </PageShell>
+ *     </Page>
  *   );
  * }
  * ```
  */
-export const PageShell = ({
+export const Page = ({
+	mode = "shell",
 	header,
+	top,
 	leftAside,
 	rightAside,
 	footer,
+	bottom,
+	className,
 	children,
-}: PageShellProps) => {
+}: PageProps) => {
+	if (mode === "content") {
+		return (
+			<section className={`flex w-full flex-col gap-4${className ? ` ${className}` : ""}`}>
+				{top && <div>{top}</div>}
+				<div>{children}</div>
+				{bottom && <div>{bottom}</div>}
+			</section>
+		);
+	}
+
 	return (
-		<div className="flex h-screen flex-col bg-background">
+		<div className={`flex h-screen flex-col bg-background${className ? ` ${className}` : ""}`}>
 			{/* Header 영역 */}
 			{header && (
 				<header className="sticky top-0 z-40 flex-none">{header}</header>
@@ -78,4 +98,4 @@ export const PageShell = ({
 	);
 };
 
-PageShell.displayName = "PageShell";
+Page.displayName = "Page";

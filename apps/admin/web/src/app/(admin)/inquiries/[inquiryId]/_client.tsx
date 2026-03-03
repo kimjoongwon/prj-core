@@ -15,18 +15,20 @@ import {
 } from "@cocrepo/api";
 import type { InquiryMessage, InquiryParticipant } from "@cocrepo/type";
 import {
-    AiForm,
-    Button,
-    ConfirmModal,
-    CustomerInfoCard,
-    HStack,
-    InquiryInfoCard,
-    InquiryMetaPanel,
-    InquiryWebSocketProvider,
-    ParticipantList,
-    RealtimeChatPanel,
-    SLATracker,
-    VStack,
+	AiForm,
+	Button,
+	ConfirmModal,
+	CustomerInfoCard,
+	HStack,
+	InquiryInfoCard,
+	InquiryMetaPanel,
+	InquiryWebSocketProvider,
+	Page,
+	PageHeader,
+	ParticipantList,
+	RealtimeChatPanel,
+	SLATracker,
+	VStack,
 } from "@cocrepo/ui";
 import { Input, Select, SelectItem, type Selection } from "@heroui/react";
 import { ArrowLeft, Pencil, Trash2 } from "lucide-react";
@@ -448,27 +450,44 @@ function InquiryDetailPageClient({ inquiryId }: Props) {
 			sendMessage={onSendInquiryMessage}
 			sendTypingStatus={ws.sendTypingStatus}
 		>
-            <section><div className="flex items-start justify-between gap-4"><div><h1>{"문의 상세"}</h1><p>{"문의 상세 정보를 확인하고 답변을 작성합니다."}</p></div><div>{<HStack gap={2}>
-                            <Button
-                                variant="light"
-                                startContent={<ArrowLeft className="h-4 w-4" />}
-                                onPress={handlers.onClickBack}>목록으로
-                                                        </Button>
-                            <Button
-                                variant="flat"
-                                color="primary"
-                                startContent={<Pencil className="h-4 w-4" />}
-                                onPress={handlers.onClickEdit}>수정
-                                                        </Button>
-                            <Button
-                                variant="flat"
-                                color="danger"
-                                startContent={<Trash2 className="h-4 w-4" />}
-                                onPress={() => {
-                                    state.deleteModalOpen = true;
-                                }}>삭제
-                                                        </Button>
-                        </HStack>}</div></div>
+			<Page
+				mode="content"
+				top={
+					<PageHeader
+						title="문의 상세"
+						description="문의 상세 정보를 확인하고 답변을 작성합니다."
+						actions={
+							<HStack gap={2}>
+								<Button
+									variant="light"
+									startContent={<ArrowLeft className="h-4 w-4" />}
+									onPress={handlers.onClickBack}
+								>
+									목록으로
+								</Button>
+								<Button
+									variant="flat"
+									color="primary"
+									startContent={<Pencil className="h-4 w-4" />}
+									onPress={handlers.onClickEdit}
+								>
+									수정
+								</Button>
+								<Button
+									variant="flat"
+									color="danger"
+									startContent={<Trash2 className="h-4 w-4" />}
+									onPress={() => {
+										state.deleteModalOpen = true;
+									}}
+								>
+									삭제
+								</Button>
+							</HStack>
+						}
+					/>
+				}
+			>
                 <VStack gap={6}>
                     <HStack gap={4} className="lg:flex-row flex-col">
                         <div className="lg:w-2/3 w-full">
@@ -645,7 +664,7 @@ function InquiryDetailPageClient({ inquiryId }: Props) {
                     confirmText="삭제"
                     confirmColor="danger"
                     iconType="delete" />
-            </section>
+			</Page>
         </InquiryWebSocketProvider>
     );
 }

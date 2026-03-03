@@ -42,8 +42,9 @@
 
 | 영역 | 컴포넌트 | 설명 |
 |------|----------|------|
-| 페이지 헤더 | `페이지 헤더 영역` | title="루틴", description="운동 루틴(커리큘럼)을 관리합니다.", actions에 "루틴 등록" 버튼 |
-| 데이터 그리드 | `섹션 영역` > `MetaDataGrid` | 루틴 목록 표시, 검색/필터/페이지네이션 지원 |
+| 페이지 래퍼 | `Page(mode="content")` | 페이지 콘텐츠 구조 배치 |
+| 페이지 헤더 | `PageHeader` | title="루틴", description="운동 루틴(커리큘럼)을 관리합니다.", actions에 "루틴 등록" 버튼 |
+| 데이터 그리드 | `Section(mode="content")` > `MetaDataGrid` | 루틴 목록 표시, 검색/필터/페이지네이션 지원 |
 
 ## 컬럼 정의
 
@@ -109,3 +110,4 @@
 | 2026-02-19 | 초기 생성 | 직접 기획 |
 | 2026-02-19 | 디자인 목업 추가 | req-reverse-engineer |
 | 2026-03-03 | Scaffold 제거 및 페이지 헤더 영역/섹션 영역 용어 정리 | codex |
+| 2026-03-03 | `_client.tsx` 반복 헤더를 `Page(mode="content") + PageHeader` 패턴으로 정리 | codex |

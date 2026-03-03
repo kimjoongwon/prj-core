@@ -1,7 +1,7 @@
 "use client";
 
 import { useDeleteAbility, useGetAbilityById } from "@cocrepo/api";
-import { VStack } from "@cocrepo/ui";
+import { Page, PageHeader, VStack } from "@cocrepo/ui";
 import {
 	Button,
 	Chip,
@@ -66,46 +66,75 @@ function AbilityDetailPageClient({ abilityId }: AbilityDetailPageClientProps) {
 
 	if (isLoading) {
 		return (
-            <section><div className="flex items-start justify-between gap-4"><div><h1>{"권한 상세"}</h1><p>{"로딩 중..."}</p></div></div>
-                <div className="flex items-center justify-center p-8 gap-2">
-                    <Spinner size="sm" />
-                    <span className="text-default-500">로딩 중...</span>
-                </div>
-            </section>
-        );
+			<Page
+				mode="content"
+				top={<PageHeader title="권한 상세" description="로딩 중..." />}
+			>
+				<div className="flex items-center justify-center gap-2 p-8">
+					<Spinner size="sm" />
+					<span className="text-default-500">로딩 중...</span>
+				</div>
+			</Page>
+		);
 	}
 
 	if (!ability) {
 		return (
-            <section><div className="flex items-start justify-between gap-4"><div><h1>{"권한 상세"}</h1><p>{"권한을 찾을 수 없습니다."}</p></div></div>
-                <div className="flex flex-col items-center justify-center gap-4 p-8">
-                    <p className="text-default-500">권한을 찾을 수 없습니다.</p>
-                    <Button variant="flat" onPress={onClickBackButton}>목록으로
-                                            </Button>
-                </div>
-            </section>
-        );
+			<Page
+				mode="content"
+				top={
+					<PageHeader
+						title="권한 상세"
+						description="권한을 찾을 수 없습니다."
+					/>
+				}
+			>
+				<div className="flex flex-col items-center justify-center gap-4 p-8">
+					<p className="text-default-500">권한을 찾을 수 없습니다.</p>
+					<Button variant="flat" onPress={onClickBackButton}>
+						목록으로
+					</Button>
+				</div>
+			</Page>
+		);
 	}
 
 	return (
-        <section><div className="flex items-start justify-between gap-4"><div><h1>{"권한 상세"}</h1><p>{"권한 정보를 확인하고 수정하거나 삭제할 수 있습니다."}</p></div><div>{<div className="flex gap-2">
-                                    <Button
-                                        variant="flat"
-                                        startContent={<ArrowLeft className="h-4 w-4" />}
-                                        onPress={onClickBackButton}>목록으로
-                                                            </Button>
-                                    <Button
-                                        color="primary"
-                                        startContent={<Edit className="h-4 w-4" />}
-                                        onPress={onClickEditButton}>수정
-                                                            </Button>
-                                    <Button
-                                        color="danger"
-                                        startContent={<Trash2 className="h-4 w-4" />}
-                                        onPress={deleteModal.onOpen}>삭제
-                                                            </Button>
-                                </div>}</div></div>
-            <VStack gap={4}>
+		<Page
+			mode="content"
+			top={
+				<PageHeader
+					title="권한 상세"
+					description="권한 정보를 확인하고 수정하거나 삭제할 수 있습니다."
+					actions={
+						<div className="flex gap-2">
+							<Button
+								variant="flat"
+								startContent={<ArrowLeft className="h-4 w-4" />}
+								onPress={onClickBackButton}
+							>
+								목록으로
+							</Button>
+							<Button
+								color="primary"
+								startContent={<Edit className="h-4 w-4" />}
+								onPress={onClickEditButton}
+							>
+								수정
+							</Button>
+							<Button
+								color="danger"
+								startContent={<Trash2 className="h-4 w-4" />}
+								onPress={deleteModal.onOpen}
+							>
+								삭제
+							</Button>
+						</div>
+					}
+				/>
+			}
+		>
+			<VStack gap={4}>
                 <section>
                     <h3 className="text-lg font-semibold mb-4">기본 정보</h3>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -204,8 +233,8 @@ function AbilityDetailPageClient({ abilityId }: AbilityDetailPageClientProps) {
                     </ModalFooter>
                 </ModalContent>
             </Modal>
-        </section>
-    );
+		</Page>
+	);
 }
 
 export default observer(AbilityDetailPageClient);

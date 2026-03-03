@@ -40,9 +40,9 @@
 
 | 영역 | 컴포넌트 | 설명 |
 |------|----------|------|
-| 페이지 헤더 | 페이지 헤더 영역 | title="Subject 관리", description="권한의 대상(Subject)을 관리합니다." |
+| 페이지 헤더 | `Page(mode="content") + PageHeader` | title="Subject 관리", description="권한의 대상(Subject)을 관리합니다." |
 | 헤더 액션 | Button | "역할 상세로" 버튼, ArrowLeft 아이콘 |
-| 콘텐츠 | 섹션 영역 | 권한 ID 표시 + 미구현 안내 |
+| 콘텐츠 | `Section(mode="content") + SectionHeader` | 권한 ID 표시 + 미구현 안내 |
 
 ## 페이지 상태
 
@@ -75,3 +75,4 @@
 | 2026-02-18 | 초기 생성 (역기획) | req-reverse-engineer |
 | 2026-02-19 | 디자인 목업 섹션 추가 | req-reverse-engineer |
 | 2026-03-03 | Scaffold 제거 및 페이지 헤더 영역/섹션 영역 용어 정리 | codex |
+| 2026-03-03 | Page/PageHeader + Section/SectionHeader 적용 명시 | codex |

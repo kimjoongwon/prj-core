@@ -3,14 +3,17 @@
 import { type UserDto, useGetUsers } from "@cocrepo/api";
 import type { InputConfig, MetaDataGridColumnConfig } from "@cocrepo/type";
 import {
-    DateTimeCell,
-    MetaDataGrid,
-    PhoneCell,
-    StatsCard,
-    StatusChipCell,
-    UserRoleCell,
-    useMetaDataGridQueryStates,
-    VStack,
+	DateTimeCell,
+	MetaDataGrid,
+	Page,
+	PageHeader,
+	PhoneCell,
+	Section,
+	StatsCard,
+	StatusChipCell,
+	UserRoleCell,
+	useMetaDataGridQueryStates,
+	VStack,
 } from "@cocrepo/ui";
 import { UserCheck, UserMinus, Users } from "lucide-react";
 import { observer } from "mobx-react-lite";
@@ -92,44 +95,58 @@ function UsersPageClient() {
 	const totalCount = meta?.total ?? 0;
 
 	return (
-        <section><div className="flex items-start justify-between gap-4"><div><h1>{"이용자 목록"}</h1><p>{"시스템에 등록된 이용자를 조회합니다."}</p></div></div>
-            <VStack gap={4}>
-                {stats && <section>
-                    <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
-                        <StatsCard
-                            title="전체 이용자"
-                            value={stats.total ?? 0}
-                            icon={<Users className="size-5" />}
-                            color="primary" />
-                        <StatsCard
-                            title="활성 이용자"
-                            value={stats.active ?? 0}
-                            icon={<UserCheck className="size-5" />}
-                            color="success" />
-                        <StatsCard
-                            title="비활성 이용자"
-                            value={stats.inactive ?? 0}
-                            icon={<UserMinus className="size-5" />}
-                            color="default" />
-                    </div>
-                </section>}
-                <section>
-                    <MetaDataGrid
-                        config={{
-                            entity: "User",
-                            data: users,
-                            totalCount,
-                            isLoading,
-                            queryStates,
-                            setQueryStates,
-                            columns,
-                            leftInputs,
-                            emptyMessage: "조회된 이용자가 없습니다.",
-                        }} />
-                </section>
-            </VStack>
-        </section>
-    );
+		<Page
+			mode="content"
+			top={
+				<PageHeader
+					title="이용자 목록"
+					description="시스템에 등록된 이용자를 조회합니다."
+				/>
+			}
+		>
+			<VStack gap={4}>
+				{stats && (
+					<Section mode="content">
+						<div className="grid grid-cols-1 gap-4 md:grid-cols-3">
+							<StatsCard
+								title="전체 이용자"
+								value={stats.total ?? 0}
+								icon={<Users className="size-5" />}
+								color="primary"
+							/>
+							<StatsCard
+								title="활성 이용자"
+								value={stats.active ?? 0}
+								icon={<UserCheck className="size-5" />}
+								color="success"
+							/>
+							<StatsCard
+								title="비활성 이용자"
+								value={stats.inactive ?? 0}
+								icon={<UserMinus className="size-5" />}
+								color="default"
+							/>
+						</div>
+					</Section>
+				)}
+				<Section mode="content">
+					<MetaDataGrid
+						config={{
+							entity: "User",
+							data: users,
+							totalCount,
+							isLoading,
+							queryStates,
+							setQueryStates,
+							columns,
+							leftInputs,
+							emptyMessage: "조회된 이용자가 없습니다.",
+						}}
+					/>
+				</Section>
+			</VStack>
+		</Page>
+	);
 }
 
 export default observer(UsersPageClient);

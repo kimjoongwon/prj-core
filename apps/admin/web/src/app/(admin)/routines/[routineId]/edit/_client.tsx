@@ -1,4 +1,5 @@
 "use client";
+
 import {
 	type CreateRoutineActivityItemDto,
 	type ExerciseDto,
@@ -8,6 +9,7 @@ import {
 	useGetRoutine,
 	useUpdateRoutine,
 } from "@cocrepo/api";
+import { Page, PageHeader, Section, SectionHeader, VStack } from "@cocrepo/ui";
 import {
 	addToast,
 	Button,
@@ -62,7 +64,6 @@ function RoutineEditPageClient({ routineId }: RoutineEditPageClientProps) {
 	const queryClient = useQueryClient();
 	const emptyActivitiesWarningModal = useDisclosure();
 
-	// 로컬 상태
 	const state = useLocalObservable(() => ({
 		name: "",
 		label: "",
@@ -72,7 +73,6 @@ function RoutineEditPageClient({ routineId }: RoutineEditPageClientProps) {
 		isInitialized: false,
 	}));
 
-	// API 조회 (prefetch로 초기 데이터 보장)
 	const { data: response, isLoading } = useGetRoutine(routineId);
 	const routine = response?.data as RoutineDto | undefined;
 	const { data: exercisesResponse, isLoading: isExercisesLoading } =
@@ -84,7 +84,6 @@ function RoutineEditPageClient({ routineId }: RoutineEditPageClientProps) {
 		});
 	const candidateExercises = (exercisesResponse?.data ?? []) as ExerciseDto[];
 
-	// 초기 데이터 로딩
 	useEffect(() => {
 		if (routine && !state.isInitialized) {
 			state.name = routine.name;
@@ -101,7 +100,6 @@ function RoutineEditPageClient({ routineId }: RoutineEditPageClientProps) {
 		}
 	}, [routine, state]);
 
-	// 수정 Mutation
 	const { mutate: updateRoutine, isPending } = useUpdateRoutine({
 		mutation: {
 			onSuccess: () => {
@@ -125,24 +123,20 @@ function RoutineEditPageClient({ routineId }: RoutineEditPageClientProps) {
 		},
 	});
 
-	/** 취소 버튼 클릭 핸들러 - 상세 페이지로 이동 */
 	const onClickCancelButton = () => {
 		router.push(`/routines/${routineId}` as Route);
 	};
 
-	/** 루틴명 변경 핸들러 */
 	const onChangeName = (value: string) => {
 		state.name = value;
 		delete state.errors.name;
 	};
 
-	/** 라벨 변경 핸들러 */
 	const onChangeLabel = (value: string) => {
 		state.label = value;
 		delete state.errors.label;
 	};
 
-	/** 저장 버튼 클릭 핸들러 - 유효성 검증 후 API 호출 */
 	const submitRoutine = () => {
 		updateRoutine({
 			routineId,
@@ -229,156 +223,234 @@ function RoutineEditPageClient({ routineId }: RoutineEditPageClientProps) {
 		);
 	};
 
-	// 로딩 상태
 	if (isLoading) {
 		return (
-            <section><div className="flex items-start justify-between gap-4"><div><h1>{"루틴 수정"}</h1><p>{"로딩 중..."}</p></div></div>
-                <div className="flex items-center justify-center p-8 gap-2">
-                    <Spinner size="sm" />
-                    <span className="text-default-500">로딩 중...</span>
-                </div>
-            </section>
-        );
+			<Page
+				mode="content"
+				top={<PageHeader title="루틴 수정" description="로딩 중..." />}
+			>
+				<div className="flex items-center justify-center gap-2 p-8">
+					<Spinner size="sm" />
+					<span className="text-default-500">로딩 중...</span>
+				</div>
+			</Page>
+		);
 	}
 
-	// 데이터 없음
 	if (!routine) {
 		return (
-            <section><div className="flex items-start justify-between gap-4"><div><h1>{"루틴 수정"}</h1><p>{"루틴을 찾을 수 없습니다."}</p></div></div>
-                <div className="flex flex-col items-center justify-center gap-4 p-8">
-                    <p className="text-default-500">루틴을 찾을 수 없습니다.</p>
-                    <Button variant="flat" onPress={onClickCancelButton}>목록으로
-                                            </Button>
-                </div>
-            </section>
-        );
+			<Page
+				mode="content"
+				top={
+					<PageHeader title="루틴 수정" description="루틴을 찾을 수 없습니다." />
+				}
+			>
+				<div className="flex flex-col items-center justify-center gap-4 p-8">
+					<p className="text-default-500">루틴을 찾을 수 없습니다.</p>
+					<Button variant="flat" onPress={onClickCancelButton}>
+						목록으로
+					</Button>
+				</div>
+			</Page>
+		);
 	}
 
+	const pageActions = (
+		<div className="flex gap-2">
+			<Button variant="flat" onPress={onClickCancelButton} isDisabled={isPending}>
+				취소
+			</Button>
+			<Button color="primary" onPress={onClickSaveButton} isLoading={isPending}>
+				저장
+			</Button>
+		</div>
+	);
+
 	return (
-        <section><div className="flex items-start justify-between gap-4"><div><h1>{"루틴 수정"}</h1>{`${routine.name} 루틴을 수정합니다.` && <p>{`${routine.name} 루틴을 수정합니다.`}</p>}</div><div>{<div className="flex gap-2">
-                                    <Button variant="flat" onPress={onClickCancelButton} isDisabled={isPending}>취소
-                                                            </Button>
-                                    <Button color="primary" onPress={onClickSaveButton} isLoading={isPending}>저장
-                                                            </Button>
-                                </div>}</div></div>
-            <section><div className="flex items-start justify-between gap-3"><div className="flex items-start gap-2"><div><h2>{"기본 정보"}</h2></div></div></div>
-                <div className="flex flex-col gap-4">
-                    <Input
-                        label="루틴 이름"
-                        placeholder="예: 풀바디 루틴 A"
-                        value={state.name}
-                        onValueChange={onChangeName}
-                        isRequired
-                        isInvalid={!!state.errors.name}
-                        errorMessage={state.errors.name}
-                        maxLength={100} />
-                    <Input
-                        label="단축 라벨"
-                        placeholder="예: FULL-A"
-                        value={state.label}
-                        onValueChange={onChangeLabel}
-                        isRequired
-                        isInvalid={!!state.errors.label}
-                        errorMessage={state.errors.label}
-                        maxLength={50} />
-                </div>
-            </section>
-            <section><div className="flex items-start justify-between gap-3"><div className="flex items-start gap-2"><div><h2>{"활동 구성"}</h2></div></div></div>
-                <div className="flex flex-col gap-4">
-                    <Input
-                        label="운동 검색"
-                        placeholder="운동 이름으로 검색하세요."
-                        value={state.exerciseQuery}
-                        onValueChange={onChangeExerciseQuery}
-                        description="현재 Space + 상위 Space 운동이 조회됩니다." />
-                    <div className="rounded-lg border border-default-200 p-3">
-                        <div className="mb-2 text-sm text-default-500">후보 운동</div>
-                        {isExercisesLoading ? (<div className="flex items-center gap-2 text-sm text-default-500">
-                            <Spinner size="sm" />
-                            <span>운동 목록을 불러오는 중...</span>
-                        </div>) : candidateExercises.length === 0 ? (<p className="text-sm text-default-500">검색 결과가 없습니다.</p>) : (<div className="flex flex-col gap-2">
-                            {candidateExercises.map(exercise => (<div
-                                key={exercise.taskId}
-                                className="flex items-center justify-between rounded-md bg-content2 px-3 py-2">
-                                <div>
-                                    <p className="font-medium">{exercise.name}</p>
-                                    <p className="text-xs text-default-500">기본 반복 {exercise.count}회
-                                                                                    </p>
-                                </div>
-                                <Button size="sm" variant="flat" onPress={() => onClickAddActivity(exercise)}>추가
-                                                                            </Button>
-                            </div>))}
-                        </div>)}
-                    </div>
-                    <div className="rounded-lg border border-default-200 p-3">
-                        <div className="mb-2 text-sm text-default-500">추가된 활동</div>
-                        {state.activities.length === 0 ? (<p className="text-sm text-default-500">아직 추가된 활동이 없습니다.
-                                                        </p>) : (<div className="flex flex-col gap-3">
-                            {state.activities.map(
-                                (activity, index) => (<div key={activity.taskId} className="rounded-md bg-content2 p-3">
-                                    <div className="mb-3 flex items-center justify-between">
-                                        <p className="font-medium">
-                                            {index + 1}. {activity.exerciseName}
-                                        </p>
-                                        <Button
-                                            size="sm"
-                                            variant="flat"
-                                            color="danger"
-                                            onPress={() => onClickRemoveActivity(activity.taskId)}>제거
-                                                                                        </Button>
-                                    </div>
-                                    <div className="grid grid-cols-1 gap-3 md:grid-cols-3">
-                                        <Input
-                                            type="number"
-                                            label="반복 횟수"
-                                            value={activity.repetitions}
-                                            onValueChange={value => onChangeActivityField(activity.taskId, "repetitions", value)}
-                                            min={1} />
-                                        <Input
-                                            type="number"
-                                            label="휴식 시간(초)"
-                                            value={activity.restTime}
-                                            onValueChange={value => onChangeActivityField(activity.taskId, "restTime", value)}
-                                            min={0} />
-                                        <Input
-                                            label="메모"
-                                            value={activity.notes}
-                                            onValueChange={value => onChangeActivityField(activity.taskId, "notes", value)}
-                                            placeholder="필요 시 메모를 입력하세요." />
-                                    </div>
-                                </div>),
-                            )}
-                        </div>)}
-                    </div>
-                </div>
-            </section>
-            <Modal
-                isOpen={emptyActivitiesWarningModal.isOpen}
-                onClose={emptyActivitiesWarningModal.onClose}>
-                <ModalContent>
-                    <ModalHeader>활동 없이 저장</ModalHeader>
-                    <ModalBody>
-                        <p>활동이 0개인 루틴입니다. 이대로 저장하시겠습니까?</p>
-                    </ModalBody>
-                    <ModalFooter>
-                        <Button
-                            variant="flat"
-                            onPress={emptyActivitiesWarningModal.onClose}
-                            isDisabled={isPending}>취소
-                                                    </Button>
-                        <Button
-                            color="warning"
-                            onPress={() => {
-                                emptyActivitiesWarningModal.onClose();
-                                submitRoutine();
-                            }}
-                            isLoading={isPending}>저장 진행
-                                                    </Button>
-                    </ModalFooter>
-                </ModalContent>
-            </Modal>
-        </section>
-    );
+		<Page
+			mode="content"
+			top={
+				<PageHeader
+					title="루틴 수정"
+					description={`${routine.name} 루틴을 수정합니다.`}
+					actions={pageActions}
+				/>
+			}
+		>
+			<Section mode="content" top={<SectionHeader title="기본 정보" />}>
+				<div className="flex flex-col gap-4">
+					<Input
+						label="루틴 이름"
+						placeholder="예: 풀바디 루틴 A"
+						value={state.name}
+						onValueChange={onChangeName}
+						isRequired
+						isInvalid={!!state.errors.name}
+						errorMessage={state.errors.name}
+						maxLength={100}
+					/>
+					<Input
+						label="단축 라벨"
+						placeholder="예: FULL-A"
+						value={state.label}
+						onValueChange={onChangeLabel}
+						isRequired
+						isInvalid={!!state.errors.label}
+						errorMessage={state.errors.label}
+						maxLength={50}
+					/>
+				</div>
+			</Section>
+
+			<Section mode="content" top={<SectionHeader title="활동 구성" />}>
+				<div className="flex flex-col gap-4">
+					<Input
+						label="운동 검색"
+						placeholder="운동 이름으로 검색하세요."
+						value={state.exerciseQuery}
+						onValueChange={onChangeExerciseQuery}
+						description="현재 Space + 상위 Space 운동이 조회됩니다."
+					/>
+					<div className="rounded-lg border border-default-200 p-3">
+						<div className="mb-2 text-sm text-default-500">후보 운동</div>
+						{isExercisesLoading ? (
+							<div className="flex items-center gap-2 text-sm text-default-500">
+								<Spinner size="sm" />
+								<span>운동 목록을 불러오는 중...</span>
+							</div>
+						) : candidateExercises.length === 0 ? (
+							<p className="text-sm text-default-500">검색 결과가 없습니다.</p>
+						) : (
+							<div className="flex flex-col gap-2">
+								{candidateExercises.map((exercise) => (
+									<div
+										key={exercise.taskId}
+										className="flex items-center justify-between rounded-md bg-content2 px-3 py-2"
+									>
+										<div>
+											<p className="font-medium">{exercise.name}</p>
+											<p className="text-xs text-default-500">
+												기본 반복 {exercise.count}회
+											</p>
+										</div>
+										<Button
+											size="sm"
+											variant="flat"
+											onPress={() => onClickAddActivity(exercise)}
+										>
+											추가
+										</Button>
+									</div>
+								))}
+							</div>
+						)}
+					</div>
+					<div className="rounded-lg border border-default-200 p-3">
+						<div className="mb-2 text-sm text-default-500">추가된 활동</div>
+						{state.activities.length === 0 ? (
+							<p className="text-sm text-default-500">
+								아직 추가된 활동이 없습니다.
+							</p>
+						) : (
+							<div className="flex flex-col gap-3">
+								{state.activities.map((activity, index) => (
+									<div
+										key={activity.taskId}
+										className="rounded-md bg-content2 p-3"
+									>
+										<div className="mb-3 flex items-center justify-between">
+											<p className="font-medium">
+												{index + 1}. {activity.exerciseName}
+											</p>
+											<Button
+												size="sm"
+												variant="flat"
+												color="danger"
+												onPress={() => onClickRemoveActivity(activity.taskId)}
+											>
+												제거
+											</Button>
+										</div>
+										<div className="grid grid-cols-1 gap-3 md:grid-cols-3">
+											<Input
+												type="number"
+												label="반복 횟수"
+												value={activity.repetitions}
+												onValueChange={(value) =>
+													onChangeActivityField(
+														activity.taskId,
+														"repetitions",
+														value,
+													)
+												}
+												min={1}
+											/>
+											<Input
+												type="number"
+												label="휴식 시간(초)"
+												value={activity.restTime}
+												onValueChange={(value) =>
+													onChangeActivityField(
+														activity.taskId,
+														"restTime",
+														value,
+													)
+												}
+												min={0}
+											/>
+											<Input
+												label="메모"
+												value={activity.notes}
+												onValueChange={(value) =>
+													onChangeActivityField(
+														activity.taskId,
+														"notes",
+														value,
+													)
+												}
+												placeholder="필요 시 메모를 입력하세요."
+											/>
+										</div>
+									</div>
+								))}
+							</div>
+						)}
+					</div>
+				</div>
+			</Section>
+
+			<Modal
+				isOpen={emptyActivitiesWarningModal.isOpen}
+				onClose={emptyActivitiesWarningModal.onClose}
+			>
+				<ModalContent>
+					<ModalHeader>활동 없이 저장</ModalHeader>
+					<ModalBody>
+						<p>활동이 0개인 루틴입니다. 이대로 저장하시겠습니까?</p>
+					</ModalBody>
+					<ModalFooter>
+						<Button
+							variant="flat"
+							onPress={emptyActivitiesWarningModal.onClose}
+							isDisabled={isPending}
+						>
+							취소
+						</Button>
+						<Button
+							color="warning"
+							onPress={() => {
+								emptyActivitiesWarningModal.onClose();
+								submitRoutine();
+							}}
+							isLoading={isPending}
+						>
+							저장 진행
+						</Button>
+					</ModalFooter>
+				</ModalContent>
+			</Modal>
+		</Page>
+	);
 }
 
 export default observer(RoutineEditPageClient);

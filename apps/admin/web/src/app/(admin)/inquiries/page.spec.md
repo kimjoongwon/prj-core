@@ -68,14 +68,16 @@
 
 ## 레이아웃 구성
 
-| 영역           | 컴포넌트         | 기획서                                                                |
-| -------------- | ---------------- | --------------------------------------------------------------------- |
-| 헤더           | 페이지 헤더 영역      | -                                                                     |
-| 필터 바        | InquiryFilterBar | `packages/fe-ui/src/components/widget/InquiryFilterBar/index.spec.md` |
-| 문의 목록      | MetaDataGrid     | `packages/fe-ui/src/components/feature/MetaDataGrid/index.spec.md` |
-| 연결 상태      | ConnectionStatus | `packages/fe-ui/src/components/ui/ConnectionStatus/index.spec.md`     |
-| SLA 현황 카드  | SLAStatusCard    | `packages/fe-ui/src/components/widget/SLAStatusCard/index.spec.md`    |
-| 금일 현황 카드 | InquiryStatsCard | `packages/fe-ui/src/components/widget/InquiryStatsCard/index.spec.md` |
+| 영역           | 컴포넌트                               | 기획서                                                                |
+| -------------- | -------------------------------------- | --------------------------------------------------------------------- |
+| 헤더           | `Page(mode="content") + PageHeader`    | -                                                                     |
+| 필터 바        | InquiryFilterBar                       | `packages/fe-ui/src/components/widget/InquiryFilterBar/index.spec.md` |
+| 문의 목록      | MetaDataGrid                           | `packages/fe-ui/src/components/feature/MetaDataGrid/index.spec.md` |
+| 연결 상태      | ConnectionStatus                       | `packages/fe-ui/src/components/ui/ConnectionStatus/index.spec.md`     |
+| SLA 현황 카드  | SLAStatusCard                          | `packages/fe-ui/src/components/widget/SLAStatusCard/index.spec.md`    |
+| 금일 현황 카드 | InquiryStatsCard                       | `packages/fe-ui/src/components/widget/InquiryStatsCard/index.spec.md` |
+
+- 문의 현황 카드, 문의 목록 영역은 각각 `Section(mode="content") + SectionHeader` 표면 위에 배치한다.
 
 ## 페이지 상태
 
@@ -410,3 +412,4 @@
 | 2026-02-28 | InquiryStore 의존 제거, 페이지 로컬 state 기준으로 L10/L11 갱신 | codex |
 | 2026-03-01 | InquiryDataGrid 제거, MetaDataGrid 재사용 구조로 전환 | codex |
 | 2026-03-03 | Scaffold 제거 및 페이지 헤더 영역/섹션 영역 용어 정리 | codex |
+| 2026-03-03 | Page/PageHeader + Section/SectionHeader 적용 기준 명시 | codex |

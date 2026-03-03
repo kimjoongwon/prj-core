@@ -62,11 +62,12 @@
 
 | 영역 | 컴포넌트 | 설명 |
 |------|----------|------|
-| 페이지 래퍼 | `페이지 헤더 영역` | title="권한 상세", description="권한 정보를 확인하고 수정하거나 삭제할 수 있습니다." |
+| 페이지 래퍼 | `Page(mode="content")` | 페이지 콘텐츠 구조 배치 |
+| 페이지 헤더 | `PageHeader` | title="권한 상세", description="권한 정보를 확인하고 수정하거나 삭제할 수 있습니다." |
 | 액션 영역 | `Button` x3 | "목록으로" (ArrowLeft) + "수정" (Edit, primary) + "삭제" (Trash2, danger) |
-| 기본 정보 섹션 | `섹션 영역` | 2열 그리드: 이름(font-mono), 유형(Chip), 설명, 거부 사유 |
-| CASL 정보 섹션 | `섹션 영역` | 2열 그리드: Subject, Action, Fields(Chip 배열), Conditions(JSON pre) |
-| 메타 정보 섹션 | `섹션 영역` | 2열 그리드: 생성일, 수정일 |
+| 기본 정보 섹션 | `section` | 2열 그리드: 이름(font-mono), 유형(Chip), 설명, 거부 사유 |
+| CASL 정보 섹션 | `section` | 2열 그리드: Subject, Action, Fields(Chip 배열), Conditions(JSON pre) |
+| 메타 정보 섹션 | `section` | 2열 그리드: 생성일, 수정일 |
 | 삭제 모달 | `Modal` | Key 아이콘 + 권한명 표시 + 경고 메시지 + 취소/삭제 버튼 |
 
 ## 페이지 상태
@@ -110,3 +111,4 @@
 | 2026-02-18 | 초기 생성 (역기획) | req-reverse-engineer |
 | 2026-02-19 | 디자인 목업 섹션 추가 | req-reverse-engineer |
 | 2026-03-03 | Scaffold 제거 및 페이지 헤더 영역/섹션 영역 용어 정리 | codex |
+| 2026-03-03 | `_client.tsx` 로딩/빈 상태/정상 상태 헤더를 `PageHeader` 기반으로 통일 | codex |

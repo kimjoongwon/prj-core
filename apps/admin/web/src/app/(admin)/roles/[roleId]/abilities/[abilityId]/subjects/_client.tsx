@@ -1,4 +1,5 @@
 "use client";
+import { Page, PageHeader, Section, SectionHeader } from "@cocrepo/ui";
 import { Button } from "@heroui/react";
 import { ArrowLeft } from "lucide-react";
 import { observer } from "mobx-react-lite";
@@ -24,21 +25,36 @@ function AbilitySubjectsPageClient({
 	};
 
 	return (
-        <section><div className="flex items-start justify-between gap-4"><div><h1>{"Subject 관리"}</h1><p>{"권한의 대상(Subject)을 관리합니다."}</p></div><div>{<Button
-                                    variant="light"
-                                    startContent={<ArrowLeft className="h-4 w-4" />}
-                                    onPress={onClickBackButton}>역할 상세로
-                                                    </Button>}</div></div>
-            <section>
-                <div className="p-6">
-                    <p className="text-default-500">권한 ID: <code className="font-mono">{abilityId}</code>
-                    </p>
-                    <p className="text-default-400 mt-4">Subject 관리 기능은 추후 구현 예정입니다.
-                                            </p>
-                </div>
-            </section>
-        </section>
-    );
+		<Page
+			mode="content"
+			top={
+				<PageHeader
+					title="Subject 관리"
+					description="권한의 대상(Subject)을 관리합니다."
+					actions={
+						<Button
+							variant="light"
+							startContent={<ArrowLeft className="h-4 w-4" />}
+							onPress={onClickBackButton}
+						>
+							역할 상세로
+						</Button>
+					}
+				/>
+			}
+		>
+			<Section mode="content" top={<SectionHeader title="권한 정보" />}>
+				<div className="p-6">
+					<p className="text-default-500">
+						권한 ID: <code className="font-mono">{abilityId}</code>
+					</p>
+					<p className="mt-4 text-default-400">
+						Subject 관리 기능은 추후 구현 예정입니다.
+					</p>
+				</div>
+			</Section>
+		</Page>
+	);
 }
 
 export default observer(AbilitySubjectsPageClient);

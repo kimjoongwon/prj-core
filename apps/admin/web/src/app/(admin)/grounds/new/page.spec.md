@@ -54,6 +54,9 @@
     └── "등록" 버튼 (primary)
 ```
 
+- 페이지 헤더는 `Page(mode="content") + PageHeader` 조합으로 구현한다.
+- 각 입력 섹션은 `Section(mode="content") + SectionHeader`를 사용해 표면을 만든다.
+
 ### 입력 필드 정의
 
 | 필드 | 레이블 | 타입 | 필수 | 유효성 |
@@ -119,3 +122,4 @@ GroundNewPage (page.tsx - 서버)
 |------|------|--------|
 | 2026-02-19 | 초기 생성 | req-screen-planner |
 | 2026-03-03 | Scaffold 제거 및 페이지 헤더 영역/섹션 영역 용어 정리 | codex |
+| 2026-03-03 | Page/PageHeader + Section/SectionHeader 적용 규칙 명시 | codex |

@@ -7,7 +7,14 @@ import {
 	useGetTimelines,
 } from "@cocrepo/api";
 import type { InputConfig, MetaDataGridColumnConfig } from "@cocrepo/type";
-import { DateTimeCell, MetaDataGrid, useMetaDataGridQueryStates } from "@cocrepo/ui";
+import {
+	DateTimeCell,
+	MetaDataGrid,
+	Page,
+	PageHeader,
+	Section,
+	useMetaDataGridQueryStates,
+} from "@cocrepo/ui";
 import {
 	addToast,
 	Button,
@@ -156,47 +163,72 @@ function TimelinesPageClient() {
 	];
 
 	return (
-        <section><div className="flex items-start justify-between gap-4"><div><h1>{"타임라인"}</h1><p>{"학기/시즌 단위 타임라인을 관리합니다."}</p></div><div>{<Button
-                                    as={Link}
-                                    href="/timelines/new"
-                                    color="primary"
-                                    startContent={<Plus className="h-4 w-4" />}>타임라인 등록
-                                                    </Button>}</div></div>
-            <section>
-                <MetaDataGrid
-                    config={{
-                        entity: "Timeline",
-                        data: timelines,
-                        totalCount,
-                        isLoading,
-                        queryStates,
-                        setQueryStates,
-                        columns,
-                        leftInputs,
-                        emptyMessage: "등록된 타임라인이 없습니다.",
-                    }} />
-            </section>
-            <Modal isOpen={deleteModal.isOpen} onClose={deleteModal.onClose}>
-                <ModalContent>
-                    <ModalHeader>타임라인 삭제</ModalHeader>
-                    <ModalBody>
-                        <p>
-                            <strong>{state.deleteTarget?.name}</strong>타임라인을
-                                                        삭제하시겠습니까?
-                                                    </p>
-                        <p className="mt-2 text-sm text-danger">세션이 있는 타임라인은 삭제할 수 없습니다.
-                                                    </p>
-                    </ModalBody>
-                    <ModalFooter>
-                        <Button variant="flat" onPress={deleteModal.onClose} isDisabled={isDeleting}>취소
-                                                    </Button>
-                        <Button color="danger" onPress={onClickDeleteConfirm} isLoading={isDeleting}>삭제
-                                                    </Button>
-                    </ModalFooter>
-                </ModalContent>
-            </Modal>
-        </section>
-    );
+		<Page
+			mode="content"
+			top={
+				<PageHeader
+					title="타임라인"
+					description="학기/시즌 단위 타임라인을 관리합니다."
+					actions={
+						<Button
+							as={Link}
+							href="/timelines/new"
+							color="primary"
+							startContent={<Plus className="h-4 w-4" />}
+						>
+							타임라인 등록
+						</Button>
+					}
+				/>
+			}
+		>
+			<Section mode="content">
+				<MetaDataGrid
+					config={{
+						entity: "Timeline",
+						data: timelines,
+						totalCount,
+						isLoading,
+						queryStates,
+						setQueryStates,
+						columns,
+						leftInputs,
+						emptyMessage: "등록된 타임라인이 없습니다.",
+					}}
+				/>
+			</Section>
+			<Modal isOpen={deleteModal.isOpen} onClose={deleteModal.onClose}>
+				<ModalContent>
+					<ModalHeader>타임라인 삭제</ModalHeader>
+					<ModalBody>
+						<p>
+							<strong>{state.deleteTarget?.name}</strong> 타임라인을
+							삭제하시겠습니까?
+						</p>
+						<p className="mt-2 text-sm text-danger">
+							세션이 있는 타임라인은 삭제할 수 없습니다.
+						</p>
+					</ModalBody>
+					<ModalFooter>
+						<Button
+							variant="flat"
+							onPress={deleteModal.onClose}
+							isDisabled={isDeleting}
+						>
+							취소
+						</Button>
+						<Button
+							color="danger"
+							onPress={onClickDeleteConfirm}
+							isLoading={isDeleting}
+						>
+							삭제
+						</Button>
+					</ModalFooter>
+				</ModalContent>
+			</Modal>
+		</Page>
+	);
 }
 
 export default observer(TimelinesPageClient);

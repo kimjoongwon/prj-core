@@ -3,11 +3,13 @@
 import { type ActionDto, useGetActions } from "@cocrepo/api";
 import type { InputConfig, MetaDataGridColumnConfig } from "@cocrepo/type";
 import {
-    DateTimeCell,
-    MetaDataGrid,
-    StatusChipCell,
-    useMetaDataGridQueryStates,
-    VStack,
+	DateTimeCell,
+	MetaDataGrid,
+	Page,
+	PageHeader,
+	Section,
+	StatusChipCell,
+	useMetaDataGridQueryStates,
 } from "@cocrepo/ui";
 import { Chip } from "@heroui/react";
 import { Plus } from "lucide-react";
@@ -162,26 +164,33 @@ function ActionsPageClient() {
 	];
 
 	return (
-        <section><div className="flex items-start justify-between gap-4"><div><h1>{"Action 목록"}</h1><p>{"시스템에 등록된 Action을 조회합니다."}</p></div></div>
-            <VStack gap={4}>
-                <section>
-                    <MetaDataGrid
-                        config={{
-                            entity: "Action",
-                            data: actions,
-                            totalCount,
-                            isLoading,
-                            queryStates,
-                            setQueryStates,
-                            columns,
-                            leftInputs,
-                            rightInputs,
-                            emptyMessage: "조회된 Action이 없습니다.",
-                        }} />
-                </section>
-            </VStack>
-        </section>
-    );
+		<Page
+			mode="content"
+			top={
+				<PageHeader
+					title="Action 목록"
+					description="시스템에 등록된 Action을 조회합니다."
+				/>
+			}
+		>
+			<Section mode="content">
+				<MetaDataGrid
+					config={{
+						entity: "Action",
+						data: actions,
+						totalCount,
+						isLoading,
+						queryStates,
+						setQueryStates,
+						columns,
+						leftInputs,
+						rightInputs,
+						emptyMessage: "조회된 Action이 없습니다.",
+					}}
+				/>
+			</Section>
+		</Page>
+	);
 }
 
 export default observer(ActionsPageClient);

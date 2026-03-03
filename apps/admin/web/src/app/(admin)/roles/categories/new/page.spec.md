@@ -45,9 +45,10 @@
 
 | 영역 | 컴포넌트 | 설명 |
 |------|----------|------|
-| 페이지 헤더 | 페이지 헤더 영역 | title="역할 카테고리 등록", description="새로운 역할 카테고리를 등록합니다." |
+| 페이지 래퍼 | `Page(mode="content")` | 페이지 콘텐츠 구조 배치 |
+| 페이지 헤더 | `PageHeader` | title="역할 카테고리 등록", description="새로운 역할 카테고리를 등록합니다." |
 | 헤더 액션 | Button | "목록으로" 버튼, ArrowLeft 아이콘 |
-| 입력 폼 | 섹션 영역 | name, parentId 입력 필드 |
+| 입력 폼 | `Section(mode="content")` | name, parentId 입력 필드 |
 | 제출 영역 | Button | "카테고리 등록" 버튼, Save 아이콘 |
 
 ## 폼 필드 정의
@@ -106,3 +107,4 @@
 | 2026-02-18 | 초기 생성 (역기획) | req-reverse-engineer |
 | 2026-02-19 | 디자인 목업 섹션 추가 | req-reverse-engineer |
 | 2026-03-03 | Scaffold 제거 및 페이지 헤더 영역/섹션 영역 용어 정리 | codex |
+| 2026-03-03 | `_client.tsx` 반복 헤더 마크업을 `Page(mode=\"content\") + PageHeader`로 정리 | codex |

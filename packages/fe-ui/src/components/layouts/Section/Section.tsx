@@ -1,6 +1,10 @@
 import type { ReactNode } from "react";
 
-export interface SectionShellProps {
+export type SectionMode = "shell" | "content";
+
+export interface SectionProps {
+	/** 렌더링 모드 (shell: 레이아웃, content: 콘텐츠 구역) */
+	mode?: SectionMode;
 	/** 상단 영역 */
 	top?: ReactNode;
 	/** 하단 영역 */
@@ -11,10 +15,12 @@ export interface SectionShellProps {
 	right?: ReactNode;
 	/** 메인 콘텐츠 (left/right만 사용 시 생략 가능) */
 	children?: ReactNode;
+	/** 추가 CSS 클래스 */
+	className?: string;
 }
 
 /**
- * SectionShell 컴포넌트
+ * Section 컴포넌트
  * 페이지 내부 구역을 정의하는 순수 레이아웃 컴포넌트 (위치 속성)
  * app/(admin)/users/layout.tsx 등에서 사용
  *
@@ -30,22 +36,34 @@ export interface SectionShellProps {
  * // app/(admin)/users/layout.tsx
  * export default function UsersLayout({ children }) {
  *   return (
- *     <SectionShell top={<Tabs />} bottom={<Pagination />}>
+ *     <Section top={<Tabs />} bottom={<Pagination />}>
  *       {children}
- *     </SectionShell>
+ *     </Section>
  *   );
  * }
  * ```
  */
-export const SectionShell = ({
+export const Section = ({
+	mode = "shell",
 	top,
 	bottom,
 	left,
 	right,
 	children,
-}: SectionShellProps) => {
+	className,
+}: SectionProps) => {
+	if (mode === "content") {
+		return (
+			<section className={`flex w-full flex-col gap-4${className ? ` ${className}` : ""}`}>
+				{top && <div>{top}</div>}
+				{children && <div>{children}</div>}
+				{bottom && <div>{bottom}</div>}
+			</section>
+		);
+	}
+
 	return (
-		<div className="flex h-full flex-col">
+		<div className={`flex h-full flex-col${className ? ` ${className}` : ""}`}>
 			{top && <div className="flex-shrink-0">{top}</div>}
 			<div className="flex flex-1 overflow-hidden">
 				{left && <div className="flex-shrink-0">{left}</div>}
@@ -57,4 +75,4 @@ export const SectionShell = ({
 	);
 };
 
-SectionShell.displayName = "SectionShell";
+Section.displayName = "Section";

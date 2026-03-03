@@ -1,12 +1,12 @@
 import type { ReactNode } from "react";
 
-export interface AppShellProps {
-	/** 메인 콘텐츠 */
-	children: ReactNode;
+export interface AppProps {
+  /** 메인 콘텐츠 */
+  children: ReactNode;
 }
 
 /**
- * AppShell 컴포넌트
+ * App 컴포넌트
  * Next.js 최상위 layout.tsx에서만 사용하는 루트 body 래퍼
  * children만 받으며 순수하게 body를 감쌈니다.
  *
@@ -17,15 +17,15 @@ export interface AppShellProps {
  *   return (
  *     <html lang="ko">
  *       <body>
- *         <AppShell>{children}</AppShell>
+ *         <App>{children}</App>
  *       </body>
  *     </html>
  *   );
  * }
  * ```
  */
-export const AppShell = ({ children }: AppShellProps) => {
-	return <>{children}</>;
+export const App = ({ children }: AppProps) => {
+  return <>{children}</>;
 };
 
-AppShell.displayName = "AppShell";
+App.displayName = "App";

@@ -3,7 +3,7 @@
 // TODO: Orval codegen 후 아래 import로 교체
 // import { useCreateCategory, useGetCategories } from "@cocrepo/api";
 import { customInstance } from "@cocrepo/api";
-import { VStack } from "@cocrepo/ui";
+import { Page, PageHeader, Section, VStack } from "@cocrepo/ui";
 import { Button, Input, Select, SelectItem } from "@heroui/react";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { ArrowLeft, Save } from "lucide-react";
@@ -101,50 +101,69 @@ function RoleCategoryNewPageClient() {
 	};
 
 	return (
-        <section><div className="flex items-start justify-between gap-4"><div><h1>{"역할 카테고리 등록"}</h1><p>{"새로운 역할 카테고리를 등록합니다."}</p></div><div>{<Button
-                                    variant="light"
-                                    startContent={<ArrowLeft className="h-4 w-4" />}
-                                    onPress={onClickBackButton}>목록으로
-                                                    </Button>}</div></div>
-            <VStack gap={4}>
-                <section>
-                    <div className="space-y-6 p-6">
-                        <Input
-                            label="카테고리명"
-                            placeholder="PLATFORM"
-                            value={state.name}
-                            onValueChange={value => {
-                                state.name = value.toUpperCase();
-                            }}
-                            isInvalid={!!state.errors.name}
-                            errorMessage={state.errors.name}
-                            isRequired
-                            maxLength={50}
-                            description="대문자로 입력하는 것을 권장합니다. (예: PLATFORM, WORKSPACE)" />
-                        <Select
-                            label="상위 카테고리"
-                            placeholder="없음 (최상위)"
-                            selectedKeys={state.parentId ? [state.parentId] : []}
-                            onSelectionChange={keys => {
-                                const selected = Array.from(keys)[0] as string;
-                                state.parentId = selected || "";
-                            }}
-                            description="상위 카테고리를 선택합니다. 선택하지 않으면 최상위 카테고리로 등록됩니다.">
-                            {categoryOptions.map(option => (<SelectItem key={option.id}>{option.name}</SelectItem>))}
-                        </Select>
-                        <div className="flex justify-end pt-4">
-                            <Button
-                                color="primary"
-                                startContent={<Save className="h-4 w-4" />}
-                                onPress={onClickSubmitButton}
-                                isLoading={isPending}>카테고리 등록
-                                                            </Button>
-                        </div>
-                    </div>
-                </section>
-            </VStack>
-        </section>
-    );
+		<Page
+			mode="content"
+			top={
+				<PageHeader
+					title="역할 카테고리 등록"
+					description="새로운 역할 카테고리를 등록합니다."
+					actions={
+						<Button
+							variant="light"
+							startContent={<ArrowLeft className="h-4 w-4" />}
+							onPress={onClickBackButton}
+						>
+							목록으로
+						</Button>
+					}
+				/>
+			}
+		>
+			<VStack gap={4}>
+				<Section mode="content">
+					<div className="space-y-6 p-6">
+						<Input
+							label="카테고리명"
+							placeholder="PLATFORM"
+							value={state.name}
+							onValueChange={(value) => {
+								state.name = value.toUpperCase();
+							}}
+							isInvalid={!!state.errors.name}
+							errorMessage={state.errors.name}
+							isRequired
+							maxLength={50}
+							description="대문자로 입력하는 것을 권장합니다. (예: PLATFORM, WORKSPACE)"
+						/>
+						<Select
+							label="상위 카테고리"
+							placeholder="없음 (최상위)"
+							selectedKeys={state.parentId ? [state.parentId] : []}
+							onSelectionChange={(keys) => {
+								const selected = Array.from(keys)[0] as string;
+								state.parentId = selected || "";
+							}}
+							description="상위 카테고리를 선택합니다. 선택하지 않으면 최상위 카테고리로 등록됩니다."
+						>
+							{categoryOptions.map((option) => (
+								<SelectItem key={option.id}>{option.name}</SelectItem>
+							))}
+						</Select>
+						<div className="flex justify-end pt-4">
+							<Button
+								color="primary"
+								startContent={<Save className="h-4 w-4" />}
+								onPress={onClickSubmitButton}
+								isLoading={isPending}
+							>
+								카테고리 등록
+							</Button>
+						</div>
+					</div>
+				</Section>
+			</VStack>
+		</Page>
+	);
 }
 
 export default observer(RoleCategoryNewPageClient);
