@@ -117,7 +117,6 @@ function RoleGroupEditPageClient({ groupId }: RoleGroupEditPageClientProps) {
 	if (isLoading) {
 		return (
 			<Page
-				mode="content"
 				top={<PageHeader title="역할 그룹 수정" description="로딩 중..." />}
 			>
 				<div className="flex items-center justify-center p-8">
@@ -130,7 +129,6 @@ function RoleGroupEditPageClient({ groupId }: RoleGroupEditPageClientProps) {
 	if (!group) {
 		return (
 			<Page
-				mode="content"
 				top={<PageHeader title="역할 그룹 수정" description="그룹을 찾을 수 없습니다." />}
 			>
 				<div className="flex flex-col items-center justify-center gap-4 p-8">
@@ -145,7 +143,6 @@ function RoleGroupEditPageClient({ groupId }: RoleGroupEditPageClientProps) {
 
 	return (
 		<Page
-			mode="content"
 			top={
 				<PageHeader
 					title="역할 그룹 수정"
@@ -163,7 +160,7 @@ function RoleGroupEditPageClient({ groupId }: RoleGroupEditPageClientProps) {
 			}
 		>
 			<VStack gap={4}>
-				<Section mode="content">
+				<Section>
 					<div className="space-y-6 p-6">
 						<Input
 							label="그룹명"

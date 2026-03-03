@@ -104,10 +104,9 @@ function ExerciseDetailPageClient({
 	if (!response) {
 		return (
 			<Page
-				mode="content"
 				top={<PageHeader title="운동 종목 상세" description="로딩 중..." />}
 			>
-				<Section mode="content">
+				<Section>
 					<div className="flex items-center justify-center p-8">
 						<Spinner size="lg" />
 					</div>
@@ -125,7 +124,7 @@ function ExerciseDetailPageClient({
 		);
 
 		return (
-			<Page mode="content" top={pageHeader}>
+			<Page top={pageHeader}>
 				<div className="flex flex-col items-center justify-center gap-4 p-8">
 					<p className="text-default-500">운동 종목을 찾을 수 없습니다.</p>
 					<Button
@@ -168,9 +167,9 @@ function ExerciseDetailPageClient({
 	);
 
 	return (
-		<Page mode="content" top={pageHeader}>
+		<Page top={pageHeader}>
 			<VStack gap={4}>
-				<Section mode="content" top={<SectionHeader title="기본 정보" />}>
+				<Section top={<SectionHeader title="기본 정보" />}>
 					<div className="grid grid-cols-1 gap-4 md:grid-cols-2">
 						<div>
 							<label className="text-sm text-default-500">운동명</label>
@@ -203,7 +202,7 @@ function ExerciseDetailPageClient({
 					</div>
 				</Section>
 				{routines.length > 0 && (
-					<Section mode="content" top={<SectionHeader title="사용 중인 루틴" />}>
+					<Section top={<SectionHeader title="사용 중인 루틴" />}>
 						<div className="flex flex-col gap-2">
 							{routines.map(routine => (
 								<div

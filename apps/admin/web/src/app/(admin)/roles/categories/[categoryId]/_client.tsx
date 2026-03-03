@@ -108,7 +108,6 @@ function RoleCategoryDetailPageClient({
 	if (isLoading) {
 		return (
 			<Page
-				mode="content"
 				top={<PageHeader title="역할 카테고리 상세" description="로딩 중..." />}
 			>
 				<div className="flex items-center justify-center p-8">
@@ -121,7 +120,6 @@ function RoleCategoryDetailPageClient({
 	if (!category) {
 		return (
 			<Page
-				mode="content"
 				top={
 					<PageHeader
 						title="역할 카테고리 상세"
@@ -143,7 +141,6 @@ function RoleCategoryDetailPageClient({
 
 	return (
 		<Page
-			mode="content"
 			top={
 				<PageHeader
 					title="역할 카테고리 상세"

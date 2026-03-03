@@ -21,10 +21,7 @@ export class OidcConfigurationService {
 			client_id: "prj-core-admin",
 			client_secret: "admin-secret-change-in-production",
 			client_name: "PRJ Core Admin",
-			redirect_uris: [
-				"http://localhost:3000/api/v1/auth/callback",
-				"http://localhost:3001/api/v1/auth/callback",
-			],
+			redirect_uris: ["http://localhost:3000/api/v1/auth/callback"],
 			grant_types: ["authorization_code", "refresh_token"],
 			response_types: ["code"],
 			token_endpoint_auth_method: "client_secret_post",

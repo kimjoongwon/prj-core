@@ -115,7 +115,6 @@ function GroundsPageClient() {
 
 	return (
 		<Page
-			mode="content"
 			top={
 				<PageHeader
 					title="시설 목록"
@@ -133,7 +132,7 @@ function GroundsPageClient() {
 				/>
 			}
 		>
-			<Section mode="content">
+			<Section>
 				<MetaDataGrid
 					config={{
 						entity: "Ground",

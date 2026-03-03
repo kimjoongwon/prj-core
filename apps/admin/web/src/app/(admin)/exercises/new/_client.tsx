@@ -115,7 +115,6 @@ function ExerciseNewPageClient() {
 
 	return (
 		<Page
-			mode="content"
 			top={
 				<PageHeader
 					title="운동 등록"
@@ -141,7 +140,7 @@ function ExerciseNewPageClient() {
 				/>
 			}
 		>
-			<Section mode="content" top={<SectionHeader title="기본 정보" />}>
+			<Section top={<SectionHeader title="기본 정보" />}>
 				<div className="flex flex-col gap-4">
 					<Input
 						label="운동명"

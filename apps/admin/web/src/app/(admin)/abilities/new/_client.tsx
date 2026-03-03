@@ -154,7 +154,6 @@ function AbilityNewPageClient() {
 
 	return (
 		<Page
-			mode="content"
 			top={
 				<PageHeader
 					title="권한 등록"
@@ -182,7 +181,7 @@ function AbilityNewPageClient() {
 			}
 		>
 			<VStack gap={4}>
-				<Section mode="content" top={<SectionHeader title="기본 정보" />}>
+				<Section top={<SectionHeader title="기본 정보" />}>
 					<div className="grid grid-cols-1 gap-4">
 						<Input
 							label="권한 이름"
@@ -204,7 +203,7 @@ function AbilityNewPageClient() {
 						/>
 					</div>
 				</Section>
-				<Section mode="content" top={<SectionHeader title="CASL 정보" />}>
+				<Section top={<SectionHeader title="CASL 정보" />}>
 					<div className="grid grid-cols-1 gap-4">
 						<Select
 							label="Subject"

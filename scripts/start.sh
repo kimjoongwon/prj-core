@@ -49,7 +49,6 @@ else
   echo -e "  ${CYAN}3${RESET})  idp-api         ${DIM}인증 서버 (백엔드)${RESET}"
   echo -e "  ${CYAN}4${RESET})  idp-web         ${DIM}인증 서버 (프론트엔드)${RESET}"
   echo -e "  ${CYAN}5${RESET})  tool-storybook  ${DIM}스토리북${RESET}"
-  echo -e "  ${CYAN}6${RESET})  proposal-web    ${DIM}기획서${RESET}"
   echo ""
   echo -e "  ${DIM}복수 선택 가능 (예: 1 2)${RESET}"
   echo ""
@@ -76,7 +75,6 @@ get_port() {
     idp-api)         echo "${IDP_API_PORT:-3007}" ;;
     idp-web)         echo "${IDP_WEB_PORT:-3008}" ;;
     tool-storybook)  echo "${STORYBOOK_PORT:-6006}" ;;
-    proposal-web)    echo "${PROPOSAL_WEB_PORT:-3001}" ;;
   esac
 }
 
@@ -90,7 +88,6 @@ for choice in $choices; do
     3) FILTERS="$FILTERS --filter=idp-api"; SERVICES="$SERVICES idp-api"; HAS_IDP="true" ;;
     4) FILTERS="$FILTERS --filter=idp-web"; SERVICES="$SERVICES idp-web"; HAS_FRONTEND="true" ;;
     5) FILTERS="$FILTERS --filter=tool-storybook"; SERVICES="$SERVICES tool-storybook" ;;
-    6) FILTERS="$FILTERS --filter=proposal-web"; SERVICES="$SERVICES proposal-web"; HAS_FRONTEND="true" ;;
     *) echo -e "${YELLOW}잘못된 번호: ${choice}${RESET}"; exit 1 ;;
   esac
 done
@@ -101,7 +98,7 @@ if [[ ${#ARGS[@]} -gt 0 ]]; then
   INTERACTIVE="false"
 fi
 
-# 프론트엔드(admin/proposal) 선택 시 codegen 질문
+# 프론트엔드(admin/idp-web) 선택 시 codegen 질문
 CODEGEN_ENV=""
 CODEGEN_TARGET=""
 if [[ "$HAS_FRONTEND" == "true" && "$INTERACTIVE" == "true" ]]; then
@@ -199,7 +196,6 @@ pre_cleanup_service_processes() {
       idp-api) pattern="turbo start:dev --filter=idp-api|idp-api@0.0.1 start:dev|/apps/idp/api/dist/main.js" ;;
       idp-web) pattern="turbo start:dev --filter=idp-web|apps/idp/web" ;;
       tool-storybook) pattern="turbo start:dev --filter=tool-storybook|storybook" ;;
-      proposal-web) pattern="turbo start:dev --filter=proposal-web|apps/proposal/web" ;;
     esac
 
     if [[ -n "$pattern" ]]; then

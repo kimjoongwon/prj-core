@@ -32,7 +32,6 @@
 | `idp/web` | IDP 프론트엔드 | 3008 |
 | `idp-server` | OIDC 서버 (oidc-provider) | 4009 |
 | `server` | 메인 API 서버 (NestJS) | 4001 |
-| `proposal/web` | 제안서 프론트엔드 | 3001 |
 | `test/e2e` | E2E 테스트 (Playwright) | - |
 | `tool/storybook` | UI 컴포넌트 스토리북 | 6006 |
 
@@ -579,9 +578,9 @@ rootStore.persistStore = new PersistStore({
   storageKey: "admin-persist",
 });
 
-// apps/proposal/web/src/stores - 다른 앱에서 재사용
+// apps/idp/web/src/stores - 다른 앱에서 재사용
 rootStore.persistStore = new PersistStore({
-  storageKey: "proposal-persist",
+  storageKey: "idp-persist",
 });
 ```
 

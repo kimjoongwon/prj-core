@@ -114,7 +114,6 @@ function ActionNewPageClient() {
 
 	return (
 		<Page
-			mode="content"
 			top={
 				<PageHeader
 					title="Action 등록"
@@ -139,7 +138,7 @@ function ActionNewPageClient() {
 						read:masked:email)
 					</p>
 				</div>
-				<Section mode="content">
+				<Section>
 					<div className="space-y-6 p-6">
 						<Input
 							label="행위 식별자"

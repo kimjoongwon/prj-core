@@ -105,7 +105,6 @@ function RoleNewPageClient() {
 
 	return (
 		<Page
-			mode="content"
 			top={
 				<PageHeader
 					title="역할 등록"
@@ -130,7 +129,7 @@ function RoleNewPageClient() {
 						페이지에서 상세 권한을 관리할 수 있습니다.
 					</p>
 				</div>
-				<Section mode="content">
+				<Section>
 					<div className="space-y-6 p-6">
 						<Input
 							label="역할 식별자"

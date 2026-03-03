@@ -203,7 +203,6 @@ function InquiriesNewPageClient() {
 
 	return (
 		<Page
-			mode="content"
 			top={
 				<PageHeader
 					title="문의 접수"
@@ -223,7 +222,7 @@ function InquiriesNewPageClient() {
 		>
 			<VStack gap={4}>
 				{bootstrap && (
-					<Section mode="content" top={<SectionHeader title="AI 폼 추천" />}>
+					<Section top={<SectionHeader title="AI 폼 추천" />}>
 						<AiForm
 							formState={state.toFormObject()}
 							fieldMeta={bootstrap.fieldMeta}
@@ -254,7 +253,7 @@ function InquiriesNewPageClient() {
 						/>
 					</Section>
 				)}
-				<Section mode="content" top={<SectionHeader title="문의 입력" />}>
+				<Section top={<SectionHeader title="문의 입력" />}>
 					<VStack gap={4}>
 						{!isHidden("customerId") && (
 							<div className="space-y-2">

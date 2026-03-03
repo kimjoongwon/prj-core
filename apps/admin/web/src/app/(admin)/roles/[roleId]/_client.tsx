@@ -268,7 +268,6 @@ function RoleDetailPageClient({ roleId }: RoleDetailPageClientProps) {
 	if (isLoading) {
 		return (
 			<Page
-				mode="content"
 				top={<PageHeader title="역할 상세" description="로딩 중..." />}
 			>
 				<div className="flex items-center justify-center p-8">
@@ -281,7 +280,6 @@ function RoleDetailPageClient({ roleId }: RoleDetailPageClientProps) {
 	if (!role) {
 		return (
 			<Page
-				mode="content"
 				top={<PageHeader title="역할 상세" description="역할을 찾을 수 없습니다." />}
 			>
 				<div className="flex flex-col items-center justify-center gap-4 p-8">
@@ -329,7 +327,6 @@ function RoleDetailPageClient({ roleId }: RoleDetailPageClientProps) {
 
 	return (
 		<Page
-			mode="content"
 			top={
 				<PageHeader
 					title="역할 상세"
@@ -345,7 +342,7 @@ function RoleDetailPageClient({ roleId }: RoleDetailPageClientProps) {
                                                     역할로, 수정하거나 삭제할 수 없습니다.
                                                 </p>
                 </div>)}
-                <Section mode="content">
+                <Section>
                     <div className="p-6">
                         <h3 className="text-lg font-semibold mb-4">기본 정보</h3>
                         <dl className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -368,7 +365,7 @@ function RoleDetailPageClient({ roleId }: RoleDetailPageClientProps) {
                         </dl>
                     </div>
                 </Section>
-                <Section mode="content">
+                <Section>
                     <div className="p-6">
                         <div className="flex items-center justify-between mb-4">
                             <h3 className="text-lg font-semibold">권한 목록</h3>
@@ -508,7 +505,7 @@ function RoleDetailPageClient({ roleId }: RoleDetailPageClientProps) {
                         </Table>)}
                     </div>
                 </Section>
-                <Section mode="content">
+                <Section>
                     <div className="p-6">
                         <h3 className="text-lg font-semibold mb-4">추가 정보</h3>
                         <dl className="grid grid-cols-1 md:grid-cols-2 gap-4">

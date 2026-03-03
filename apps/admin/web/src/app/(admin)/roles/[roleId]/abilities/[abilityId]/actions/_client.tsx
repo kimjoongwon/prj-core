@@ -26,7 +26,6 @@ function AbilityActionsPageClient({
 
 	return (
 		<Page
-			mode="content"
 			top={
 				<PageHeader
 					title="Action 관리"
@@ -43,7 +42,7 @@ function AbilityActionsPageClient({
 				/>
 			}
 		>
-			<Section mode="content" top={<SectionHeader title="권한 정보" />}>
+			<Section top={<SectionHeader title="권한 정보" />}>
 				<div className="p-6">
 					<p className="text-default-500">
 						권한 ID: <code className="font-mono">{abilityId}</code>

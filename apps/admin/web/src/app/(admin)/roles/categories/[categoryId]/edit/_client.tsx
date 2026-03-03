@@ -151,7 +151,6 @@ function RoleCategoryEditPageClient({
 	if (isLoading) {
 		return (
 			<Page
-				mode="content"
 				top={<PageHeader title="역할 카테고리 수정" description="로딩 중..." />}
 			>
 				<div className="flex items-center justify-center p-8">
@@ -164,7 +163,6 @@ function RoleCategoryEditPageClient({
 	if (!category) {
 		return (
 			<Page
-				mode="content"
 				top={
 					<PageHeader
 						title="역할 카테고리 수정"
@@ -184,7 +182,6 @@ function RoleCategoryEditPageClient({
 
 	return (
 		<Page
-			mode="content"
 			top={
 				<PageHeader
 					title="역할 카테고리 수정"
@@ -202,7 +199,7 @@ function RoleCategoryEditPageClient({
 			}
 		>
 			<VStack gap={4}>
-				<Section mode="content">
+				<Section>
 					<div className="space-y-6 p-6">
 						<Input
 							label="카테고리명"

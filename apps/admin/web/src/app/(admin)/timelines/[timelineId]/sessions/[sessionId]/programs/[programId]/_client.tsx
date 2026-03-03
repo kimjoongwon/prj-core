@@ -117,7 +117,6 @@ function ProgramDetailPageClient({
 
 	return (
 		<Page
-			mode="content"
 			top={
 				<PageHeader
 					title={pageTitle}
@@ -126,7 +125,7 @@ function ProgramDetailPageClient({
 				/>
 			}
 		>
-			<Section mode="content" top={<SectionHeader title="기본 정보" />}>
+			<Section top={<SectionHeader title="기본 정보" />}>
 				<div className="grid grid-cols-1 gap-4 md:grid-cols-2">
 					<div>
 						<label className="text-sm text-default-500">프로그램 이름</label>

@@ -44,7 +44,6 @@ function RoleGroupsPageClient() {
 
 	return (
 		<Page
-			mode="content"
 			top={
 				<PageHeader
 					title="역할 그룹 목록"
@@ -63,7 +62,7 @@ function RoleGroupsPageClient() {
 			}
 		>
 			<VStack gap={4}>
-				<Section mode="content">
+				<Section>
 					{isLoading ? (
 						<div className="flex items-center justify-center p-8">
 							<span className="text-default-500">로딩 중...</span>

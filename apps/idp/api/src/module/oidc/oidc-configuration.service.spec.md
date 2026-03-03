@@ -1,7 +1,7 @@
 # OIDC Configuration Service 기획서
 
 > 생성일: 2026-02-19
-> 수정일: 2026-02-19
+> 수정일: 2026-03-03
 > 타입: service
 > 위치: apps/idp-server/src/module/oidc/oidc-configuration.service.ts
 
@@ -31,7 +31,7 @@ oidc-provider 인스턴스 초기화에 필요한 전체 설정 객체(`OidcConf
 
 - DB에서 `isActive = true`인 OIDC 클라이언트를 조회
 - DB 접근 실패(RLS 등) 시 정적 폴백 클라이언트 3개 사용:
-  - `prj-core-admin`: 어드민 웹 (client_secret_post, authorization_code + refresh_token)
+  - `prj-core-admin`: 어드민 웹 (client_secret_post, authorization_code + refresh_token, localhost:3000 callback)
   - `prj-core-mobile`: 모바일 앱 (PKCE 필수, none auth method)
   - `prj-core-swagger`: Swagger UI (authorization_code만)
 
@@ -84,3 +84,4 @@ oidc-provider 인스턴스 초기화에 필요한 전체 설정 객체(`OidcConf
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
 | 2026-02-19 | 초기 생성 (역기획) | req-reverse-engineer |
+| 2026-03-03 | 폐기된 웹 앱 제거에 따라 admin fallback redirect URI를 localhost:3000으로 단순화 | codex |

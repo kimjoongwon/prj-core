@@ -90,7 +90,6 @@ function ActionDetailPageClient({ actionId }: ActionDetailPageClientProps) {
 	if (isLoading) {
 		return (
 			<Page
-				mode="content"
 				top={<PageHeader title="Action 상세" description="로딩 중..." />}
 			>
 				<div className="flex items-center justify-center p-8">
@@ -103,7 +102,6 @@ function ActionDetailPageClient({ actionId }: ActionDetailPageClientProps) {
 	if (!action) {
 		return (
 			<Page
-				mode="content"
 				top={
 					<PageHeader
 						title="Action 상세"
@@ -123,7 +121,6 @@ function ActionDetailPageClient({ actionId }: ActionDetailPageClientProps) {
 
 	return (
 		<Page
-			mode="content"
 			top={
 				<PageHeader
 					title="Action 상세"

@@ -13,7 +13,6 @@ process.env.PLAYWRIGHT_BROWSERS_PATH = path.join(__dirname, "browsers");
  *
  * 앱별 테스트 실행:
  *   pnpm --filter=test-e2e test:admin
- *   pnpm --filter=test-e2e test:proposal
  *   pnpm --filter=test-e2e test:idp
  *
  * @see https://playwright.dev/docs/test-configuration
@@ -86,24 +85,6 @@ export default defineConfig({
       },
     },
 
-    // ── Proposal ──
-    {
-      name: "proposal-chromium",
-      testMatch: "**/apps/proposal/web/src/**/*.e2e.ts",
-      use: {
-        ...devices["Desktop Chrome"],
-        baseURL: "http://localhost:3001/",
-      },
-    },
-    {
-      name: "proposal-mobile",
-      testMatch: "**/apps/proposal/web/src/**/*.e2e.ts",
-      use: {
-        ...devices["Pixel 5"],
-        baseURL: "http://localhost:3001/",
-      },
-    },
-
     // ── IDP (Identity Provider) ──
     {
       name: "idp-chromium",
@@ -130,13 +111,6 @@ export default defineConfig({
         {
           command: "pnpm --filter=admin-web start:dev",
           url: "http://localhost:3000/admin/auth/login",
-          reuseExistingServer: !process.env.CI,
-          timeout: 120000,
-          cwd: "../../..",
-        },
-        {
-          command: "pnpm --filter=proposal-web start:dev",
-          url: "http://localhost:3001/",
           reuseExistingServer: !process.env.CI,
           timeout: 120000,
           cwd: "../../..",

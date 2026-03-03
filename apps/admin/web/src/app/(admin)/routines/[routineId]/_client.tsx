@@ -90,7 +90,6 @@ function RoutineDetailPageClient({ routineId }: RoutineDetailPageClientProps) {
 	if (!response) {
 		return (
 			<Page
-				mode="content"
 				top={<PageHeader title="루틴 상세" description="로딩 중..." />}
 			>
 				<div className="flex items-center justify-center p-8">
@@ -103,7 +102,6 @@ function RoutineDetailPageClient({ routineId }: RoutineDetailPageClientProps) {
 	if (!routine) {
 		return (
 			<Page
-				mode="content"
 				top={<PageHeader title="루틴 상세" description="루틴을 찾을 수 없습니다." />}
 			>
 				<div className="flex flex-col items-center justify-center gap-4 p-8">
@@ -156,7 +154,6 @@ function RoutineDetailPageClient({ routineId }: RoutineDetailPageClientProps) {
 
 	return (
 		<Page
-			mode="content"
 			top={
 				<PageHeader
 					title={routine.name || "루틴 상세"}
@@ -166,7 +163,7 @@ function RoutineDetailPageClient({ routineId }: RoutineDetailPageClientProps) {
 			}
 		>
 			<VStack gap={4}>
-				<Section mode="content" top={<SectionHeader title="기본 정보" />}>
+				<Section top={<SectionHeader title="기본 정보" />}>
 					<div className="grid grid-cols-1 gap-4 md:grid-cols-2">
 						<div>
 							<label className="text-sm text-default-500">루틴명</label>
@@ -213,7 +210,7 @@ function RoutineDetailPageClient({ routineId }: RoutineDetailPageClientProps) {
 					</div>
 				</Section>
 
-				<Section mode="content" top={<SectionHeader title="연결 요약" />}>
+				<Section top={<SectionHeader title="연결 요약" />}>
 					<div className="grid grid-cols-1 gap-3 md:grid-cols-3">
 						<div className="rounded-lg bg-content2 p-3">
 							<p className="text-xs text-default-500">전체 활동</p>
@@ -232,7 +229,7 @@ function RoutineDetailPageClient({ routineId }: RoutineDetailPageClientProps) {
 					</div>
 				</Section>
 
-				<Section mode="content" top={<SectionHeader title="운동 구성" />}>
+				<Section top={<SectionHeader title="운동 구성" />}>
 					{activities.length === 0 ? (
 						<p className="text-sm text-default-500">등록된 활동이 없습니다.</p>
 					) : (
@@ -276,7 +273,7 @@ function RoutineDetailPageClient({ routineId }: RoutineDetailPageClientProps) {
 					)}
 				</Section>
 
-				<Section mode="content" top={<SectionHeader title="사용 중인 프로그램" />}>
+				<Section top={<SectionHeader title="사용 중인 프로그램" />}>
 					{programs.length === 0 ? (
 						<p className="text-sm text-default-500">
 							현재 이 루틴을 사용하는 프로그램이 없습니다.

@@ -45,11 +45,11 @@
 
 | 영역 | 컴포넌트 | 설명 |
 |------|----------|------|
-| 페이지 래퍼 | `Page(mode="content")` | 페이지 콘텐츠 구조 배치 |
+| 페이지 래퍼 | `Page` | 페이지 콘텐츠 구조 배치 |
 | 페이지 헤더 | `PageHeader` | title="권한 목록", description="시스템에 등록된 CASL 권한을 관리합니다." |
 | 액션 영역 | `Button (Link)` | "권한 추가" 버튼, `/abilities/new`로 이동, Plus 아이콘 |
-| 필터 섹션 | `Section(mode="content") + SectionHeader("필터")` | 4열 그리드 필터 (검색, Subject, Action, 유형) + 필터 초기화 버튼 |
-| 목록 섹션 | `Section(mode="content") + SectionHeader("권한 목록")` | HTML 테이블 기반 목록 (커스텀 table, MetaDataGrid 미사용) |
+| 필터 섹션 | `Section + SectionHeader("필터")` | 4열 그리드 필터 (검색, Subject, Action, 유형) + 필터 초기화 버튼 |
+| 목록 섹션 | `Section + SectionHeader("권한 목록")` | HTML 테이블 기반 목록 (커스텀 table, MetaDataGrid 미사용) |
 
 ## 컬럼 정의
 
@@ -120,3 +120,4 @@
 | 2026-02-19 | 디자인 목업 섹션 추가 | req-reverse-engineer |
 | 2026-03-03 | Scaffold 제거 및 페이지 헤더 영역/섹션 영역 용어 정리 | codex |
 | 2026-03-03 | `_client.tsx` 반복 헤더를 `PageHeader/SectionHeader` 패턴으로 전환 | codex |
+| 2026-03-03 | Page/Section `mode` 제거 반영 (단일 구조 기준으로 문서 표현 정리) | codex |

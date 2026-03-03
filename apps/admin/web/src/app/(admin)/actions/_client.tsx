@@ -165,7 +165,6 @@ function ActionsPageClient() {
 
 	return (
 		<Page
-			mode="content"
 			top={
 				<PageHeader
 					title="Action 목록"
@@ -173,7 +172,7 @@ function ActionsPageClient() {
 				/>
 			}
 		>
-			<Section mode="content">
+			<Section>
 				<MetaDataGrid
 					config={{
 						entity: "Action",

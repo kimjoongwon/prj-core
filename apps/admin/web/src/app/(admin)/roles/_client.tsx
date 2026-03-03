@@ -88,7 +88,6 @@ function RolesPageClient() {
 
 	return (
 		<Page
-			mode="content"
 			top={
 				<PageHeader
 					title="역할 목록"
@@ -105,7 +104,7 @@ function RolesPageClient() {
 						페이지에서 관리할 수 있습니다.
 					</p>
 				</div>
-				<Section mode="content" top={<SectionHeader title="역할 목록 데이터" />}>
+				<Section top={<SectionHeader title="역할 목록 데이터" />}>
 					{isLoading ? (
 						<div className="flex items-center justify-center p-8">
 							<span className="text-default-500">로딩 중...</span>

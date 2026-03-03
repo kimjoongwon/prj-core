@@ -147,3 +147,4 @@ useEffect로 API 응답 데이터를 로컬 상태에 한 번만 채운다:
 | 2026-02-19 | 디자인 목업 추가 | req-reverse-engineer |
 | 2026-03-03 | Scaffold 제거 및 페이지 헤더 영역/섹션 영역 용어 정리 | codex |
 | 2026-03-03 | PageHeader/SectionHeader 패턴 정리 반영 | codex |
+| 2026-03-03 | Page/Section `mode` 제거 반영 (단일 구조 기준으로 문서 표현 정리) | codex |

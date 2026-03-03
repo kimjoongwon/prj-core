@@ -102,7 +102,6 @@ function RoleCategoryNewPageClient() {
 
 	return (
 		<Page
-			mode="content"
 			top={
 				<PageHeader
 					title="역할 카테고리 등록"
@@ -120,7 +119,7 @@ function RoleCategoryNewPageClient() {
 			}
 		>
 			<VStack gap={4}>
-				<Section mode="content">
+				<Section>
 					<div className="space-y-6 p-6">
 						<Input
 							label="카테고리명"

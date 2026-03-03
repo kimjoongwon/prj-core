@@ -193,7 +193,7 @@ function TemplateDetailPageClient({
 			/>
 		);
 		return (
-			<Page mode="content" top={pageHeader}>
+			<Page top={pageHeader}>
 				<div className="flex flex-col items-center justify-center gap-4 p-8">
 					<p className="text-default-500">템플릿을 찾을 수 없습니다.</p>
 					<Button
@@ -227,9 +227,9 @@ function TemplateDetailPageClient({
 	);
 
 	return (
-		<Page mode="content" top={pageHeader}>
+		<Page top={pageHeader}>
 			<VStack gap={4}>
-				<Section mode="content" top={<SectionHeader title="기본 정보" />}>
+				<Section top={<SectionHeader title="기본 정보" />}>
 					<div className="grid grid-cols-1 gap-4 md:grid-cols-2">
 						<div>
 							<label className="text-sm text-default-500">코드</label>
@@ -276,14 +276,14 @@ function TemplateDetailPageClient({
 						</div>
 					</div>
 				</Section>
-				<Section mode="content" top={<SectionHeader title="콘텐츠" />}>
+				<Section top={<SectionHeader title="콘텐츠" />}>
 					<TemplateContentViewer
 						type={template.type}
 						subject={template.subject ?? null}
 						content={template.content}
 					/>
 				</Section>
-				<Section mode="content" top={<SectionHeader title="변수 목록" />}>
+				<Section top={<SectionHeader title="변수 목록" />}>
 					{(template.variables ?? []).length > 0 ? (
 						<VariableReadTable variables={template.variables ?? []} />
 					) : (

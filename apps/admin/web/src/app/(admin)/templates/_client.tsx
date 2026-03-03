@@ -198,7 +198,6 @@ function TemplatesPageClient() {
 
 	return (
 		<Page
-			mode="content"
 			top={
 				<PageHeader
 					title="메시지 템플릿"
@@ -207,7 +206,7 @@ function TemplatesPageClient() {
 				/>
 			}
 		>
-			<Section mode="content">
+			<Section>
 				<MetaDataGrid
 					config={{
 						entity: "Template",

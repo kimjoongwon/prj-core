@@ -2619,10 +2619,7 @@ export const oidcClientSeedData: OidcClientSeedData[] = [
 		clientId: "prj-core-admin",
 		clientSecret: "admin-secret-change-in-production",
 		clientName: "PRJ Core Admin",
-		redirectUris: [
-			"http://localhost:3000/api/v1/auth/callback",
-			"http://localhost:3001/api/v1/auth/callback",
-		],
+		redirectUris: ["http://localhost:3000/api/v1/auth/callback"],
 		grantTypes: ["authorization_code", "refresh_token"],
 		responseTypes: ["code"],
 		tokenEndpointAuthMethod: "client_secret_post",

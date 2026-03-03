@@ -169,7 +169,6 @@ function SubjectsPageClient() {
 
 	return (
 		<Page
-			mode="content"
 			top={
 				<PageHeader
 					title="Subject 목록"
@@ -177,7 +176,7 @@ function SubjectsPageClient() {
 				/>
 			}
 		>
-			<Section mode="content">
+			<Section>
 				<MetaDataGrid
 					config={{
 						entity: "Subject",

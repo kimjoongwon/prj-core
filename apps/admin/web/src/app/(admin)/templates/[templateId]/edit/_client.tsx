@@ -192,12 +192,11 @@ function TemplateEditPageClient({ templateId }: TemplateEditPageClientProps) {
 	if (isLoading) {
 		return (
 			<Page
-				mode="content"
 				top={
 					<PageHeader title="템플릿 수정" description="로딩 중..." />
 				}
 			>
-				<Section mode="content">
+				<Section>
 					<div className="flex items-center justify-center gap-2 p-8">
 						<Spinner size="sm" />
 						<span className="text-default-500">로딩 중...</span>
@@ -211,7 +210,6 @@ function TemplateEditPageClient({ templateId }: TemplateEditPageClientProps) {
 	if (!template) {
 		return (
 			<Page
-				mode="content"
 				top={
 					<PageHeader
 						title="템플릿 수정"
@@ -219,7 +217,7 @@ function TemplateEditPageClient({ templateId }: TemplateEditPageClientProps) {
 					/>
 				}
 			>
-				<Section mode="content">
+				<Section>
 					<div className="flex flex-col items-center justify-center gap-4 p-8">
 						<p className="text-default-500">템플릿을 찾을 수 없습니다.</p>
 						<Button variant="flat" onPress={onClickCancelButton}>
@@ -233,7 +231,6 @@ function TemplateEditPageClient({ templateId }: TemplateEditPageClientProps) {
 
 	return (
 		<Page
-			mode="content"
 			top={
 				<PageHeader
 					title="템플릿 수정"
@@ -241,7 +238,7 @@ function TemplateEditPageClient({ templateId }: TemplateEditPageClientProps) {
 				/>
 			}
 		>
-			<Section mode="content">
+			<Section>
 				<TemplateForm
 					mode="edit"
 					formData={state.formData}

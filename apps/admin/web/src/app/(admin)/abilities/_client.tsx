@@ -206,7 +206,6 @@ function AbilitiesPageClient() {
 
 	return (
 		<Page
-			mode="content"
 			top={
 				<PageHeader
 					title="권한 목록"
@@ -225,7 +224,7 @@ function AbilitiesPageClient() {
 			}
 		>
 			<VStack gap={4}>
-				<Section mode="content" top={<SectionHeader title="필터" />}>
+				<Section top={<SectionHeader title="필터" />}>
 					<div className="grid grid-cols-1 gap-4 md:grid-cols-4">
 						<Input
 							placeholder="권한 이름 검색"
@@ -291,7 +290,7 @@ function AbilitiesPageClient() {
 						</Button>
 					</div>
 				</Section>
-				<Section mode="content" top={<SectionHeader title="권한 목록" />}>
+				<Section top={<SectionHeader title="권한 목록" />}>
 					{isLoading ? (
 						<div className="flex items-center justify-center gap-2 p-8">
 							<Spinner size="sm" />

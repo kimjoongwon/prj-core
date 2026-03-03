@@ -278,7 +278,6 @@ function AssetsPageClient() {
 
 	return (
 		<Page
-			mode="content"
 			top={
 				<PageHeader
 					title="에셋 관리"
@@ -296,7 +295,7 @@ function AssetsPageClient() {
 				/>
 			}
 		>
-			<Section mode="content">
+			<Section>
 				<MetaDataGrid
 					config={{
 						entity: "Asset",

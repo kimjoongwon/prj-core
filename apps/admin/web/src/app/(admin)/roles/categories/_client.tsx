@@ -53,7 +53,6 @@ function RoleCategoriesPageClient() {
 
 	return (
 		<Page
-			mode="content"
 			top={
 				<PageHeader
 					title="역할 카테고리 목록"
@@ -72,7 +71,7 @@ function RoleCategoriesPageClient() {
 			}
 		>
 			<VStack gap={4}>
-				<Section mode="content">
+				<Section>
 					{isLoading ? (
 						<div className="flex items-center justify-center p-8">
 							<span className="text-default-500">로딩 중...</span>

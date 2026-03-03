@@ -212,7 +212,6 @@ function ExercisesPageClient() {
 
 	return (
 		<Page
-			mode="content"
 			top={
 				<PageHeader
 					title="운동 종목"
@@ -230,7 +229,7 @@ function ExercisesPageClient() {
 				/>
 			}
 		>
-			<Section mode="content">
+			<Section>
 				<MetaDataGrid
 					config={{
 						entity: "Exercise",

@@ -96,7 +96,6 @@ function UsersPageClient() {
 
 	return (
 		<Page
-			mode="content"
 			top={
 				<PageHeader
 					title="이용자 목록"
@@ -106,7 +105,7 @@ function UsersPageClient() {
 		>
 			<VStack gap={4}>
 				{stats && (
-					<Section mode="content">
+					<Section>
 						<div className="grid grid-cols-1 gap-4 md:grid-cols-3">
 							<StatsCard
 								title="전체 이용자"
@@ -129,7 +128,7 @@ function UsersPageClient() {
 						</div>
 					</Section>
 				)}
-				<Section mode="content">
+				<Section>
 					<MetaDataGrid
 						config={{
 							entity: "User",

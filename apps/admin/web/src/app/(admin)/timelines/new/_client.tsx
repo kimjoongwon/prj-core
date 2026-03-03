@@ -87,7 +87,6 @@ function TimelineNewPageClient() {
 
 	return (
 		<Page
-			mode="content"
 			top={
 				<PageHeader
 					title="타임라인 등록"
@@ -100,7 +99,7 @@ function TimelineNewPageClient() {
 				/>
 			}
 		>
-			<Section mode="content">
+			<Section>
 				<VStack gap={4}>
 					<Input
 						label="타임라인명"

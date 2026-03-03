@@ -114,10 +114,9 @@ function ActionEditPageClient({ actionId }: ActionEditPageClientProps) {
 	if (isLoading) {
 		return (
 			<Page
-				mode="content"
 				top={<PageHeader title="Action 수정" description="로딩 중..." />}
 			>
-				<Section mode="content">
+				<Section>
 					<div className="flex items-center justify-center p-8">
 						<span className="text-default-500">로딩 중...</span>
 					</div>
@@ -135,7 +134,7 @@ function ActionEditPageClient({ actionId }: ActionEditPageClientProps) {
 		);
 
 		return (
-			<Page mode="content" top={pageHeader}>
+			<Page top={pageHeader}>
 				<div className="flex flex-col items-center justify-center gap-4 p-8">
 					<p className="text-default-500">Action을 찾을 수 없습니다.</p>
 					<Button variant="flat" onPress={onClickListButton}>
@@ -155,7 +154,7 @@ function ActionEditPageClient({ actionId }: ActionEditPageClientProps) {
 		);
 
 		return (
-			<Page mode="content" top={pageHeader}>
+			<Page top={pageHeader}>
 				<div className="flex flex-col items-center justify-center gap-4 p-8">
 					<p className="text-default-500">
 						시스템 Action은 수정할 수 없습니다.
@@ -185,9 +184,9 @@ function ActionEditPageClient({ actionId }: ActionEditPageClientProps) {
 	);
 
 	return (
-		<Page mode="content" top={pageHeader}>
+		<Page top={pageHeader}>
 			<VStack gap={4}>
-				<Section mode="content">
+				<Section>
 					<div className="space-y-6 p-6">
 						<Input
 							label="행위 식별자"

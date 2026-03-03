@@ -33,9 +33,9 @@
 ### 레이아웃
 
 ```
-Page(mode="content")
+Page
 └── PageHeader (title="시설 목록", actions=[시설 등록 버튼])
-└── Section(mode="content")
+└── Section
     └── DataGrid
         ├── 검색 바 (시설명 / 사업자등록번호)
         └── 테이블
@@ -89,7 +89,7 @@ GroundListPage (page.tsx - 서버)
 └── GroundListClient (_client.tsx - 클라이언트)
     ├── PageHeader
     │   └── actions: Button ("시설 등록", Building2 아이콘)
-    └── Section(mode="content")
+    └── Section
         └── GroundDataGrid (Feature)
             ├── 검색 Input
             └── DataGrid
@@ -108,4 +108,5 @@ GroundListPage (page.tsx - 서버)
 |------|------|--------|
 | 2026-02-19 | 초기 생성 | req-screen-planner |
 | 2026-03-03 | Scaffold 제거 및 페이지 헤더 영역/섹션 영역 용어 정리 | codex |
-| 2026-03-03 | `_client.tsx` 반복 헤더를 `Page(mode="content") + PageHeader` 패턴으로 정리 | codex |
+| 2026-03-03 | `_client.tsx` 반복 헤더를 `Page + PageHeader` 패턴으로 정리 | codex |
+| 2026-03-03 | Page/Section `mode` 제거 반영 (단일 구조 기준으로 문서 표현 정리) | codex |

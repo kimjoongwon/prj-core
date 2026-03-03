@@ -140,10 +140,9 @@ function ExerciseEditPageClient({ exerciseId }: ExerciseEditPageClientProps) {
 	if (isLoading) {
 		return (
 			<Page
-				mode="content"
 				top={<PageHeader title="운동 수정" description="로딩 중..." />}
 			>
-				<Section mode="content">
+				<Section>
 					<div className="flex items-center justify-center gap-2 p-8">
 						<Spinner size="sm" />
 						<span className="text-default-500">로딩 중...</span>
@@ -157,7 +156,6 @@ function ExerciseEditPageClient({ exerciseId }: ExerciseEditPageClientProps) {
 	if (!exercise) {
 		return (
 			<Page
-				mode="content"
 				top={
 					<PageHeader
 						title="운동 수정"
@@ -201,8 +199,8 @@ function ExerciseEditPageClient({ exerciseId }: ExerciseEditPageClientProps) {
 	);
 
 	return (
-		<Page mode="content" top={pageHeader}>
-			<Section mode="content" top={<SectionHeader title="기본 정보" />}>
+		<Page top={pageHeader}>
+			<Section top={<SectionHeader title="기본 정보" />}>
 				<div className="flex flex-col gap-4">
 					<Input
 						label="운동명"

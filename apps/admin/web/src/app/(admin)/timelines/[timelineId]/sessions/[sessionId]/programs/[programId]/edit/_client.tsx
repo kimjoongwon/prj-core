@@ -305,7 +305,6 @@ function ProgramEditPageClient({
 
 	return (
 		<Page
-			mode="content"
 			top={
 				<PageHeader
 					title="프로그램 수정"
@@ -315,7 +314,6 @@ function ProgramEditPageClient({
 			}
 		>
 			<Section
-				mode="content"
 				top={<SectionHeader title="기본 정보" />}
 			>
 				<VStack gap={4}>

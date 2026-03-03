@@ -19,7 +19,7 @@ function AuthLayoutRoute({
 }: {
   children: React.ReactNode;
 }) {
-  return <Page>{children}</Page>;
+  return <Page className="min-h-screen">{children}</Page>;
 }
 
 export default AuthLayoutRoute;

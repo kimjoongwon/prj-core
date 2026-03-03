@@ -287,11 +287,10 @@ function TimelineDetailPageClient({
 
 	return (
 		<Page
-			mode="content"
 			top={<PageHeader title={pageTitle} actions={pageActions} />}
 		>
 			<VStack gap={4}>
-				<Section mode="content" top={<SectionHeader title="기본 정보" />}>
+				<Section top={<SectionHeader title="기본 정보" />}>
 					<div className="grid grid-cols-1 gap-4 md:grid-cols-2">
 						<div>
 							<label className="text-sm text-default-500">타임라인명</label>
@@ -315,7 +314,6 @@ function TimelineDetailPageClient({
 				</Section>
 
 				<Section
-					mode="content"
 					top={
 						<SectionHeader
 							title="세션 목록"

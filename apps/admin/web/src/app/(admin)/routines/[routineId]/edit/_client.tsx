@@ -226,7 +226,6 @@ function RoutineEditPageClient({ routineId }: RoutineEditPageClientProps) {
 	if (isLoading) {
 		return (
 			<Page
-				mode="content"
 				top={<PageHeader title="루틴 수정" description="로딩 중..." />}
 			>
 				<div className="flex items-center justify-center gap-2 p-8">
@@ -240,7 +239,6 @@ function RoutineEditPageClient({ routineId }: RoutineEditPageClientProps) {
 	if (!routine) {
 		return (
 			<Page
-				mode="content"
 				top={
 					<PageHeader title="루틴 수정" description="루틴을 찾을 수 없습니다." />
 				}
@@ -268,7 +266,6 @@ function RoutineEditPageClient({ routineId }: RoutineEditPageClientProps) {
 
 	return (
 		<Page
-			mode="content"
 			top={
 				<PageHeader
 					title="루틴 수정"
@@ -277,7 +274,7 @@ function RoutineEditPageClient({ routineId }: RoutineEditPageClientProps) {
 				/>
 			}
 		>
-			<Section mode="content" top={<SectionHeader title="기본 정보" />}>
+			<Section top={<SectionHeader title="기본 정보" />}>
 				<div className="flex flex-col gap-4">
 					<Input
 						label="루틴 이름"
@@ -302,7 +299,7 @@ function RoutineEditPageClient({ routineId }: RoutineEditPageClientProps) {
 				</div>
 			</Section>
 
-			<Section mode="content" top={<SectionHeader title="활동 구성" />}>
+			<Section top={<SectionHeader title="활동 구성" />}>
 				<div className="flex flex-col gap-4">
 					<Input
 						label="운동 검색"

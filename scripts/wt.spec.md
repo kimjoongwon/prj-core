@@ -50,14 +50,14 @@
 
 ## Change History
 
-| Date | Change | Author |
-|------|--------|--------|
-| 2026-02-28 | Initial spec for reusable git worktree + tmux automation | codex |
-| 2026-02-28 | Align defaults to project workflow (`../wt`, `feat/*`, `origin/main`) and add safe `rm` behavior | codex |
-| 2026-02-28 | Add AI-controlled PR/merge lifecycle commands (`plan-merge`, `pr`, `merge`, `finish`) and JSON output mode | codex |
-| 2026-02-28 | Add `new-run` command for one-shot worktree creation and Codex task bootstrapping in tmux | codex |
-| 2026-02-28 | Replace `which`-based command detection with PATH executable lookup for pnpm compatibility | codex |
-| 2026-02-28 | Make `go` non-interactive-safe by printing attach hints when TTY is unavailable | codex |
-| 2026-02-28 | Simplify `new-run` to core flow (Codex exec + default auto-PR) and remove interactive mode option | codex |
-| 2026-02-28 | Improve ticket sanitization/branch normalization to support Korean tickets and avoid bare `feat` branch collisions | codex |
-| 2026-02-28 | Add hash suffix to tmux session naming to avoid collisions for non-ASCII branch names | codex |
+| Date       | Change                                                                                                             | Author |
+| ---------- | ------------------------------------------------------------------------------------------------------------------ | ------ |
+| 2026-02-28 | Initial spec for reusable git worktree + tmux automation                                                           | codex  |
+| 2026-02-28 | Align defaults to project workflow (`../wt`, `feat/*`, `origin/main`) and add safe `rm` behavior                   | codex  |
+| 2026-02-28 | Add AI-controlled PR/merge lifecycle commands (`plan-merge`, `pr`, `merge`, `finish`) and JSON output mode         | codex  |
+| 2026-02-28 | Add `new-run` command for one-shot worktree creation and Codex task bootstrapping in tmux                          | codex  |
+| 2026-02-28 | Replace `which`-based command detection with PATH executable lookup for pnpm compatibility                         | codex  |
+| 2026-02-28 | Make `go` non-interactive-safe by printing attach hints when TTY is unavailable                                    | codex  |
+| 2026-02-28 | Simplify `new-run` to core flow (Codex exec + default auto-PR) and remove interactive mode option                  | codex  |
+| 2026-02-28 | Improve ticket sanitization/branch normalization to support Korean tickets and avoid bare `feat` branch collisions | codex  |
+| 2026-02-28 | Add hash suffix to tmux session naming to avoid collisions for non-ASCII branch names                              | codex  |

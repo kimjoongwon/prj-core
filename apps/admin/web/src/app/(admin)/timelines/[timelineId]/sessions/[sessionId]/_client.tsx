@@ -281,7 +281,6 @@ function SessionDetailPageClient({
 
 	return (
 		<Page
-			mode="content"
 			top={
 				<PageHeader
 					title={pageTitle}
@@ -291,7 +290,7 @@ function SessionDetailPageClient({
 			}
 		>
 			<VStack gap={4}>
-				<Section mode="content" top={<SectionHeader title="기본 정보" />}>
+				<Section top={<SectionHeader title="기본 정보" />}>
 					<div className="grid grid-cols-1 gap-4 md:grid-cols-2">
 						<div>
 							<label className="text-sm text-default-500">세션명</label>
@@ -372,7 +371,6 @@ function SessionDetailPageClient({
 				</Section>
 
 				<Section
-					mode="content"
 					top={
 						<SectionHeader
 							title="프로그램 연결 허브"

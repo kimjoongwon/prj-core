@@ -15,7 +15,6 @@ const DEFAULT_CONFIG = {
     offsetStep: 20,
     map: {
       ADMIN_WEB_PORT: 3000,
-      PROPOSAL_WEB_PORT: 3001,
       CORE_API_PORT: 3006,
       IDP_API_PORT: 3007,
       IDP_WEB_PORT: 3008,

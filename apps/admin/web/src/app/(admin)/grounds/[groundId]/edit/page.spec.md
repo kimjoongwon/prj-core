@@ -129,3 +129,4 @@ GroundEditPage (page.tsx - 서버)
 | 2026-02-19 | 초기 생성 | req-screen-planner |
 | 2026-03-03 | Scaffold 제거 및 페이지 헤더 영역/섹션 영역 용어 정리 | codex |
 | 2026-03-03 | PageHeader/SectionHeader 패턴 정리 반영 | codex |
+| 2026-03-03 | Page/Section `mode` 제거 반영 (단일 구조 기준으로 문서 표현 정리) | codex |

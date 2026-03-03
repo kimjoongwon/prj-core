@@ -301,6 +301,7 @@ graph TD
 ```
 
 > **📝 참고**: 모노레포 아키텍처 개선으로 패키지가 재구성되었습니다.
+>
 > - `packages/schema` → `packages/prisma`로 변경
 > - `packages/type`, `packages/vo`, `packages/repository`, `packages/service` 신규 추가
 > - DTO, Entity, Enum, Decorator가 독립 패키지로 분리
@@ -322,13 +323,13 @@ git clone https://github.com/your-org/prj-core.git
 cd prj-core
 ```
 
-2. **의존성 설치**
+1. **의존성 설치**
 
 ```bash
 pnpm install
 ```
 
-3. **환경 변수 설정**
+1. **환경 변수 설정**
 
 개발 환경에서는 `.env` 파일을 생성합니다:
 
@@ -338,7 +339,7 @@ cp .env.example .env
 
 > **💡 참고**: 프로덕션 환경에서는 Kubernetes에 배포된 **OpenBao**를 통해 환경 변수를 안전하게 관리하며, 배포 시점에 자동으로 주입됩니다.
 
-4. **데이터베이스 마이그레이션**
+1. **데이터베이스 마이그레이션**
 
 ```bash
 cd packages/prisma
@@ -475,6 +476,7 @@ pnpm generate
   - 공유 코드는 `packages/`에 위치
 
 - **커밋 메시지**
+
   ```
   feat: 새로운 기능 추가
   fix: 버그 수정

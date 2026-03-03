@@ -164,7 +164,6 @@ function TimelinesPageClient() {
 
 	return (
 		<Page
-			mode="content"
 			top={
 				<PageHeader
 					title="타임라인"
@@ -182,7 +181,7 @@ function TimelinesPageClient() {
 				/>
 			}
 		>
-			<Section mode="content">
+			<Section>
 				<MetaDataGrid
 					config={{
 						entity: "Timeline",

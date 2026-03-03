@@ -305,7 +305,6 @@ function InquiriesPageClient() {
 
 	return (
 		<Page
-			mode="content"
 			top={
 				<PageHeader
 					title="문의 관리"
@@ -323,14 +322,14 @@ function InquiriesPageClient() {
 			}
 		>
 			<VStack gap={4}>
-				<Section mode="content" top={<SectionHeader title="문의 현황" />}>
+				<Section top={<SectionHeader title="문의 현황" />}>
 					<InquiryStatsCards
 						stats={stats}
 						activeStatus={activeStatus}
 						onStatusClick={handlers.onClickStatusFilter}
 					/>
 				</Section>
-				<Section mode="content" top={<SectionHeader title="문의 목록" />}>
+				<Section top={<SectionHeader title="문의 목록" />}>
 					<MetaDataGrid
 						config={{
 							entity: "Inquiry",

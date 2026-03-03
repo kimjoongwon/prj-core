@@ -159,7 +159,6 @@ function AbilityEditPageClient({ abilityId }: AbilityEditPageClientProps) {
 	if (isLoading) {
 		return (
 			<Page
-				mode="content"
 				top={<PageHeader title="권한 수정" description="로딩 중..." />}
 			>
 				<div className="flex items-center justify-center gap-2 p-8">
@@ -173,7 +172,6 @@ function AbilityEditPageClient({ abilityId }: AbilityEditPageClientProps) {
 	if (!ability) {
 		return (
 			<Page
-				mode="content"
 				top={<PageHeader title="권한 수정" description="권한을 찾을 수 없습니다." />}
 			>
 				<div className="flex flex-col items-center justify-center gap-4 p-8">
@@ -188,7 +186,6 @@ function AbilityEditPageClient({ abilityId }: AbilityEditPageClientProps) {
 
 	return (
 		<Page
-			mode="content"
 			top={
 				<PageHeader
 					title="권한 수정"
@@ -216,7 +213,7 @@ function AbilityEditPageClient({ abilityId }: AbilityEditPageClientProps) {
 			}
 		>
 			<VStack gap={4}>
-				<Section mode="content" top={<SectionHeader title="기본 정보" />}>
+				<Section top={<SectionHeader title="기본 정보" />}>
 					<div className="grid grid-cols-1 gap-4">
 						<Input
 							label="권한 이름"
@@ -235,7 +232,7 @@ function AbilityEditPageClient({ abilityId }: AbilityEditPageClientProps) {
 						/>
 					</div>
 				</Section>
-				<Section mode="content" top={<SectionHeader title="CASL 정보" />}>
+				<Section top={<SectionHeader title="CASL 정보" />}>
 					<div className="grid grid-cols-1 gap-4">
 						<Select
 							label="Subject"

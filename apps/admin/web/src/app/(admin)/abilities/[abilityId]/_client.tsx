@@ -67,7 +67,6 @@ function AbilityDetailPageClient({ abilityId }: AbilityDetailPageClientProps) {
 	if (isLoading) {
 		return (
 			<Page
-				mode="content"
 				top={<PageHeader title="권한 상세" description="로딩 중..." />}
 			>
 				<div className="flex items-center justify-center gap-2 p-8">
@@ -81,7 +80,6 @@ function AbilityDetailPageClient({ abilityId }: AbilityDetailPageClientProps) {
 	if (!ability) {
 		return (
 			<Page
-				mode="content"
 				top={
 					<PageHeader
 						title="권한 상세"
@@ -101,7 +99,6 @@ function AbilityDetailPageClient({ abilityId }: AbilityDetailPageClientProps) {
 
 	return (
 		<Page
-			mode="content"
 			top={
 				<PageHeader
 					title="권한 상세"

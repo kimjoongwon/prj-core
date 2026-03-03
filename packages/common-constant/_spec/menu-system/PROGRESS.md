@@ -21,7 +21,7 @@
   - 아키텍처 문서화 완료
 
 - [x] L0-L10 역기획서 작성 (2026-01-31)
-  - 생성: `apps/proposal/plans/prj-core/admin-web/2026-01-31-MenuSystem/PLAN.md`
+  - 생성: 내부 기획 경로에 PLAN.md 작성
 
 ---
 

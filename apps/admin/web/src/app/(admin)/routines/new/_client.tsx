@@ -220,7 +220,6 @@ function RoutineNewPageClient() {
 
 	return (
 		<Page
-			mode="content"
 			top={
 				<PageHeader
 					title="루틴 등록"
@@ -229,7 +228,7 @@ function RoutineNewPageClient() {
 				/>
 			}
 		>
-			<Section mode="content" top={<SectionHeader title="기본 정보" />}>
+			<Section top={<SectionHeader title="기본 정보" />}>
 				<div className="flex flex-col gap-4">
 					<Input
 						label="루틴 이름"
@@ -253,7 +252,7 @@ function RoutineNewPageClient() {
 					/>
 				</div>
 			</Section>
-			<Section mode="content" top={<SectionHeader title="활동 구성" />}>
+			<Section top={<SectionHeader title="활동 구성" />}>
 				<div className="flex flex-col gap-4">
 					<Input
 						label="운동 검색"

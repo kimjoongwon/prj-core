@@ -101,7 +101,6 @@ function RoleGroupDetailPageClient({
 	if (isLoading) {
 		return (
 			<Page
-				mode="content"
 				top={<PageHeader title="역할 그룹 상세" description="로딩 중..." />}
 			>
 				<div className="flex items-center justify-center p-8">
@@ -114,7 +113,6 @@ function RoleGroupDetailPageClient({
 	if (!group) {
 		return (
 			<Page
-				mode="content"
 				top={
 					<PageHeader
 						title="역할 그룹 상세"
@@ -134,7 +132,6 @@ function RoleGroupDetailPageClient({
 
 	return (
 		<Page
-			mode="content"
 			top={
 				<PageHeader
 					title="역할 그룹 상세"

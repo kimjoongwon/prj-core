@@ -84,13 +84,13 @@
 
 | 영역 | 컴포넌트 | 설명 |
 |------|----------|------|
-| 페이지 래퍼 | `Page(mode="content")` | 페이지 콘텐츠 구조 배치 |
+| 페이지 래퍼 | `Page` | 페이지 콘텐츠 구조 배치 |
 | 페이지 헤더 | `PageHeader` | title="역할 상세", description 동적 |
 | 헤더 액션 | Button (목록, 수정, 삭제) | 시스템 역할이 아닌 경우에만 수정/삭제 표시 |
 | 시스템 안내 | div (warning) | isSystem일 때만 표시 |
-| 기본 정보 | `Section(mode="content")` > dl | 식별자, 표시명, 설명 |
-| 권한 목록 | `Section(mode="content")` > Table | 조회/편집 2가지 모드 |
-| 추가 정보 | `Section(mode="content")` > dl | 상태, 생성일, 수정일 |
+| 기본 정보 | `Section` > dl | 식별자, 표시명, 설명 |
+| 권한 목록 | `Section` > Table | 조회/편집 2가지 모드 |
+| 추가 정보 | `Section` > dl | 상태, 생성일, 수정일 |
 | 삭제 모달 | Modal | 삭제 확인 |
 | 저장 모달 | Modal | Grant 배치 저장 확인 (변경사항 요약) |
 
@@ -172,4 +172,5 @@
 | 2026-02-19 | 디자인 목업 추가 | req-reverse-engineer |
 | 2026-03-03 | Scaffold 제거 및 페이지 헤더 영역/섹션 영역 용어 정리 | codex |
 | 2026-03-03 | 페이지 이벤트 핸들러를 `on[Event][UI]` 규칙으로 정규화 (`onToggleAbilityCheckbox` 등) | codex |
-| 2026-03-03 | 반복 헤더 마크업 제거를 위해 `Page(mode=\"content\") + PageHeader + Section(mode=\"content\")` 조합 적용 | codex |
+| 2026-03-03 | 반복 헤더 마크업 제거를 위해 `Page + PageHeader + Section` 조합 적용 | codex |
+| 2026-03-03 | Page/Section `mode` 제거 반영 (단일 구조 기준으로 문서 표현 정리) | codex |

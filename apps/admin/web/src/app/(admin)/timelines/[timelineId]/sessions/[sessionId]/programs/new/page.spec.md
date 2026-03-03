@@ -18,9 +18,9 @@
 
 | 영역 | 컴포넌트 | 설명 |
 |------|----------|------|
-| 페이지 래퍼 | `Page(mode="content")` | 페이지 콘텐츠 구조 배치 |
+| 페이지 래퍼 | `Page` | 페이지 콘텐츠 구조 배치 |
 | 페이지 헤더 | `PageHeader` | title="프로그램 등록", description="{세션명} · {타임라인명}", actions에 "취소" 버튼 |
-| 등록 폼 | `Section(mode="content") + SectionHeader(title="기본 정보")` | 프로그램 정보 입력 폼 |
+| 등록 폼 | `Section + SectionHeader(title="기본 정보")` | 프로그램 정보 입력 폼 |
 | 선택 모달 | `ProgramPickerModal` (feature) | 루틴/강사 검색 및 선택 |
 
 ## 입력 필드
@@ -80,3 +80,4 @@
 | 2026-03-03 | Scaffold 제거 및 페이지 헤더 영역/섹션 영역 용어 정리 | codex |
 | 2026-03-03 | 로컬 `_components` 의존 제거, `@cocrepo/ui`의 `ProgramPickerModal` feature 사용으로 정리 | codex |
 | 2026-03-03 | `_client.tsx` 헤더/섹션 반복 마크업을 `PageHeader`, `SectionHeader` 조합으로 통일 | codex |
+| 2026-03-03 | Page/Section `mode` 제거 반영 (단일 구조 기준으로 문서 표현 정리) | codex |

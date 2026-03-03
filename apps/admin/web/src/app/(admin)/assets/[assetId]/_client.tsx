@@ -163,12 +163,11 @@ function AssetDetailPageClient({ assetId }: AssetDetailPageClientProps) {
 	if (isLoading) {
 		return (
 			<Page
-				mode="content"
 				top={
 					<PageHeader title="에셋 상세" description="로딩 중..." />
 				}
 			>
-				<Section mode="content">
+				<Section>
 					<div className="flex items-center justify-center p-10">
 						<Spinner size="lg" />
 					</div>
@@ -186,7 +185,7 @@ function AssetDetailPageClient({ assetId }: AssetDetailPageClientProps) {
 		);
 
 		return (
-			<Page mode="content" top={pageHeader}>
+			<Page top={pageHeader}>
 				<div className="flex flex-col items-center justify-center gap-4 p-8">
 					<p className="text-default-500">에셋을 찾을 수 없습니다.</p>
 					<Button
@@ -230,9 +229,9 @@ function AssetDetailPageClient({ assetId }: AssetDetailPageClientProps) {
 	);
 
 	return (
-		<Page mode="content" top={pageHeader}>
+		<Page top={pageHeader}>
 			<VStack gap={4}>
-				<Section mode="content" top={<SectionHeader title="기본 정보" />}>
+				<Section top={<SectionHeader title="기본 정보" />}>
 					<div className="grid grid-cols-1 gap-4 md:grid-cols-2">
 						<div>
 							<p className="text-sm text-default-500">파일명</p>
@@ -270,7 +269,7 @@ function AssetDetailPageClient({ assetId }: AssetDetailPageClientProps) {
 						</div>
 					</div>
 				</Section>
-				<Section mode="content" top={<SectionHeader title="폴더 이동" />}>
+				<Section top={<SectionHeader title="폴더 이동" />}>
 					<div className="grid grid-cols-1 gap-4 md:grid-cols-[1fr_auto]">
 						<Select
 							label="이동 대상 폴더"
@@ -298,7 +297,7 @@ function AssetDetailPageClient({ assetId }: AssetDetailPageClientProps) {
 						</div>
 					</div>
 				</Section>
-				<Section mode="content" top={<SectionHeader title="스토리지 정보" />}>
+				<Section top={<SectionHeader title="스토리지 정보" />}>
 					<div className="grid grid-cols-1 gap-4 md:grid-cols-2">
 						<Input label="Storage Key" value={asset.storageKey} isReadOnly />
 						<Input label="Checksum" value={asset.checksum ?? "-"} isReadOnly />

@@ -18,7 +18,7 @@ const LoginLayoutRoute = observer(function LoginLayoutRoute({
 }) {
 	return (
 		<Section>
-			<div className="flex h-full items-center justify-center p-4 lg:p-8">
+			<div className="flex min-h-screen items-center justify-center p-4 lg:p-8">
 				<div className="w-full max-w-md">{children}</div>
 			</div>
 		</Section>

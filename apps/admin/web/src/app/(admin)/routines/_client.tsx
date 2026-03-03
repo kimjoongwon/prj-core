@@ -186,7 +186,6 @@ function RoutinesPageClient() {
 
 	return (
 		<Page
-			mode="content"
 			top={
 				<PageHeader
 					title="루틴"
@@ -204,7 +203,7 @@ function RoutinesPageClient() {
 				/>
 			}
 		>
-			<Section mode="content">
+			<Section>
 				<MetaDataGrid
 					config={{
 						entity: "Routine",

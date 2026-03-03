@@ -99,7 +99,7 @@
 
 | 영역 | 컴포넌트 | 기획서 |
 |------|----------|--------|
-| 페이지 래퍼 | `Page(mode="content")` | - |
+| 페이지 래퍼 | `Page` | - |
 | 헤더 | `PageHeader` | - |
 | 상단/중단 배치 | `VStack` + `HStack` | - |
 | 문의 정보 카드 | InquiryInfoCard | `packages/fe-ui/src/components/widget/InquiryInfoCard/index.spec.md` |
@@ -454,4 +454,5 @@
 | 2026-03-01 | 빠른 수정에서 AiForm을 메타 입력 폼과 동급 위계로 분리하고 바깥 섹션 영역 래퍼를 제거해 Card 단일 표면 구조로 정리 | codex |
 | 2026-03-03 | Scaffold 제거 및 페이지 헤더 영역/섹션 영역 용어 정리 | codex |
 | 2026-03-03 | 페이지 이벤트 핸들러 네이밍을 `on[Event][UI]` 규칙에 맞춰 정리 (`onSendInquiryMessage`, `onClickReconnectButton`) | codex |
-| 2026-03-03 | `_client.tsx` 헤더 반복 마크업을 `Page(mode="content") + PageHeader` 조합으로 정리 | codex |
+| 2026-03-03 | `_client.tsx` 헤더 반복 마크업을 `Page + PageHeader` 조합으로 정리 | codex |
+| 2026-03-03 | Page/Section `mode` 제거 반영 (단일 구조 기준으로 문서 표현 정리) | codex |

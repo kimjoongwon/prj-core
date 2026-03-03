@@ -47,11 +47,11 @@
 
 | 영역 | 컴포넌트 | 설명 |
 |------|----------|------|
-| 페이지 래퍼 | `Page(mode="content")` | 페이지 콘텐츠 구조 배치 |
+| 페이지 래퍼 | `Page` | 페이지 콘텐츠 구조 배치 |
 | 페이지 헤더 | `PageHeader` | title="역할 목록", description="시스템에 등록된 역할을 관리합니다." |
 | 헤더 액션 | Button (Link) | "역할 추가" 버튼, `/roles/new`로 이동, Plus 아이콘 |
 | 안내 메시지 | div (warning) | 시스템 역할 수정/삭제 불가 안내 |
-| 역할 테이블 | `Section(mode="content") + SectionHeader` > table | 컬럼: 역할 식별자, 표시명, 설명, 상태, 생성일, 액션 |
+| 역할 테이블 | `Section + SectionHeader` > table | 컬럼: 역할 식별자, 표시명, 설명, 상태, 생성일, 액션 |
 | 테이블 푸터 | div | 총 N건 표시 |
 
 ## 테이블 컬럼 정의
@@ -100,4 +100,5 @@
 | 2026-02-18 | 초기 생성 (역기획) | req-reverse-engineer |
 | 2026-02-19 | 디자인 목업 추가 | req-reverse-engineer |
 | 2026-03-03 | Scaffold 제거 및 페이지 헤더 영역/섹션 영역 용어 정리 | codex |
-| 2026-03-03 | `_client.tsx` 반복 헤더 패턴을 `Page(mode="content") + PageHeader + Section` 조합으로 정리 | codex |
+| 2026-03-03 | `_client.tsx` 반복 헤더 패턴을 `Page + PageHeader + Section` 조합으로 정리 | codex |
+| 2026-03-03 | Page/Section `mode` 제거 반영 (단일 구조 기준으로 문서 표현 정리) | codex |

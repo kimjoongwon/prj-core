@@ -154,7 +154,6 @@ function TemplateNewPageClient() {
 
 	return (
 		<Page
-			mode="content"
 			top={
 				<PageHeader
 					title="템플릿 등록"

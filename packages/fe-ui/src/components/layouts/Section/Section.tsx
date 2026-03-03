@@ -1,10 +1,6 @@
 import type { ReactNode } from "react";
 
-export type SectionMode = "shell" | "content";
-
 export interface SectionProps {
-	/** 렌더링 모드 (shell: 레이아웃, content: 콘텐츠 구역) */
-	mode?: SectionMode;
 	/** 상단 영역 */
 	top?: ReactNode;
 	/** 하단 영역 */
@@ -44,7 +40,6 @@ export interface SectionProps {
  * ```
  */
 export const Section = ({
-	mode = "shell",
 	top,
 	bottom,
 	left,
@@ -52,26 +47,16 @@ export const Section = ({
 	children,
 	className,
 }: SectionProps) => {
-	if (mode === "content") {
-		return (
-			<section className={`flex w-full flex-col gap-4${className ? ` ${className}` : ""}`}>
-				{top && <div>{top}</div>}
-				{children && <div>{children}</div>}
-				{bottom && <div>{bottom}</div>}
-			</section>
-		);
-	}
-
 	return (
-		<div className={`flex h-full flex-col${className ? ` ${className}` : ""}`}>
-			{top && <div className="flex-shrink-0">{top}</div>}
-			<div className="flex flex-1 overflow-hidden">
-				{left && <div className="flex-shrink-0">{left}</div>}
-				<div className="flex-1 overflow-auto">{children}</div>
-				{right && <div className="flex-shrink-0">{right}</div>}
+		<section className={`flex w-full flex-col gap-4${className ? ` ${className}` : ""}`}>
+			{top && <div>{top}</div>}
+			<div className="flex w-full gap-4">
+				{left && <div>{left}</div>}
+				{children && <div className="min-w-0 flex-1">{children}</div>}
+				{right && <div>{right}</div>}
 			</div>
-			{bottom && <div className="flex-shrink-0">{bottom}</div>}
-		</div>
+			{bottom && <div>{bottom}</div>}
+		</section>
 	);
 };
 

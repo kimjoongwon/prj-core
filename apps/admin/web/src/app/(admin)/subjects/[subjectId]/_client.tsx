@@ -63,7 +63,7 @@ function getGroupColor(
  */
 function SubjectInfoSection({ subject }: { subject: SubjectDto }) {
 	return (
-		<Section mode="content" top={<SectionHeader title="기본 정보" />}>
+		<Section top={<SectionHeader title="기본 정보" />}>
 			<div className="grid grid-cols-1 gap-4 md:grid-cols-2">
 				<div>
 					<div className="mb-1 text-sm text-default-500">식별자</div>
@@ -200,7 +200,7 @@ function SubjectFieldsSection({
 	}
 
 	return (
-		<Section mode="content" top={<SectionHeader title="필드 목록" />}>
+		<Section top={<SectionHeader title="필드 목록" />}>
 			{content}
 		</Section>
 	);
@@ -217,10 +217,9 @@ function SubjectDetailPageClient({ subjectId }: SubjectDetailPageClientProps) {
 	if (isLoading) {
 		return (
 			<Page
-				mode="content"
 				top={<PageHeader title="Subject 상세" description="로딩 중..." />}
 			>
-				<Section mode="content">
+				<Section>
 					<div className="flex items-center justify-center p-8">
 						<Spinner size="lg" />
 					</div>
@@ -238,7 +237,7 @@ function SubjectDetailPageClient({ subjectId }: SubjectDetailPageClientProps) {
 		);
 
 		return (
-			<Page mode="content" top={pageHeader}>
+			<Page top={pageHeader}>
 				<div className="flex flex-col items-center justify-center gap-4 p-8">
 					<p className="text-default-500">Subject를 찾을 수 없습니다.</p>
 					<Button
@@ -272,7 +271,7 @@ function SubjectDetailPageClient({ subjectId }: SubjectDetailPageClientProps) {
 	);
 
 	return (
-		<Page mode="content" top={pageHeader}>
+		<Page top={pageHeader}>
 			<VStack gap={4}>
 				<SubjectInfoSection subject={subject} />
 				<SubjectFieldsSection subjectId={subjectId} group={subject.group} />

@@ -451,7 +451,6 @@ function InquiryDetailPageClient({ inquiryId }: Props) {
 			sendTypingStatus={ws.sendTypingStatus}
 		>
 			<Page
-				mode="content"
 				top={
 					<PageHeader
 						title="문의 상세"

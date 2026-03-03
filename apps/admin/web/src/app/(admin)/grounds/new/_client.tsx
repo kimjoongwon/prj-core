@@ -139,7 +139,6 @@ function GroundNewPageClient() {
 
 	return (
 		<Page
-			mode="content"
 			top={
 				<PageHeader
 					title="시설 등록"
@@ -148,7 +147,7 @@ function GroundNewPageClient() {
 			}
 		>
 			<VStack gap={4}>
-				<Section mode="content" top={<SectionHeader title="기본 정보" />}>
+				<Section top={<SectionHeader title="기본 정보" />}>
 					<VStack gap={4}>
 						<Input
 							label="시설명"

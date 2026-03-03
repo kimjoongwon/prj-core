@@ -255,7 +255,6 @@ function SessionEditPageClient({
 
 	return (
 		<Page
-			mode="content"
 			top={
 				<PageHeader
 					title="세션 수정"
@@ -265,7 +264,7 @@ function SessionEditPageClient({
 			}
 		>
 			<VStack gap={4}>
-				<Section mode="content" top={<SectionHeader title="기본 정보" />}>
+				<Section top={<SectionHeader title="기본 정보" />}>
 					<VStack gap={4}>
 						<Input
 							label="세션명"
@@ -306,7 +305,7 @@ function SessionEditPageClient({
 					</VStack>
 				</Section>
 
-				<Section mode="content" top={<SectionHeader title="일정 설정" />}>
+				<Section top={<SectionHeader title="일정 설정" />}>
 					<VStack gap={4}>
 						{state.type === "ONE_TIME" && (
 							<Input

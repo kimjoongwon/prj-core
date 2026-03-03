@@ -121,7 +121,6 @@ function TimelineEditPageClient({ timelineId }: TimelineEditPageClientProps) {
 
 	return (
 		<Page
-			mode="content"
 			top={
 				<PageHeader
 					title="타임라인 수정"
@@ -130,7 +129,7 @@ function TimelineEditPageClient({ timelineId }: TimelineEditPageClientProps) {
 				/>
 			}
 		>
-			<Section mode="content">
+			<Section>
 				<VStack gap={4}>
 					<Input
 						label="타임라인명"
