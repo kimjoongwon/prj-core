@@ -17,7 +17,7 @@ export interface ProgramPickerOption {
 	subtitle?: string;
 }
 
-interface ProgramPickerModalProps {
+export interface ProgramPickerModalProps {
 	isOpen: boolean;
 	onClose: () => void;
 	title: string;

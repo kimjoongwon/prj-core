@@ -8,7 +8,7 @@ import {
 	useGetSessionById,
 	useGetUsers,
 } from "@cocrepo/api";
-import { VStack } from "@cocrepo/ui";
+import { ProgramPickerModal, VStack } from "@cocrepo/ui";
 import {
 	addToast,
 	Button,
@@ -20,8 +20,6 @@ import {
 import { observer, useLocalObservable } from "mobx-react-lite";
 import type { Route } from "next";
 import { useRouter } from "next/navigation";
-import { ProgramPickerModal } from "../_components/program-picker-modal";
-
 interface ProgramNewPageClientProps {
 	timelineId: string;
 	sessionId: string;

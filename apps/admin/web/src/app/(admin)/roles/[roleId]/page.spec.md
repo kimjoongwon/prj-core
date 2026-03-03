@@ -145,9 +145,9 @@
 | onClickDeleteConfirm | deleteRole 호출, 성공 시 `/roles`로 이동 |
 | onClickEditGrants | 편집 모드 진입, 현재 Grant를 초기 선택 상태로 설정 |
 | onClickCancelEditGrants | 편집 모드 취소 |
-| handleToggleAbility | Ability 선택/해제 토글 |
-| handleToggleIsActive | Grant isActive 토글 |
-| handleChangePriority | Grant priority 변경 |
+| onToggleAbilityCheckbox | Ability 선택/해제 토글 |
+| onToggleGrantActiveSwitch | Grant isActive 토글 |
+| onChangeGrantPriorityInput | Grant priority 변경 |
 | onClickSaveGrants | 저장 확인 모달 열기 |
 | onClickConfirmSaveGrants | batchAssignGrantsToRole 호출, 성공 시 편집 모드 해제 + 권한 목록 재조회 |
 
@@ -170,3 +170,4 @@
 | 2026-02-18 | 초기 생성 (역기획) | req-reverse-engineer |
 | 2026-02-19 | 디자인 목업 추가 | req-reverse-engineer |
 | 2026-03-03 | Scaffold 제거 및 페이지 헤더 영역/섹션 영역 용어 정리 | codex |
+| 2026-03-03 | 페이지 이벤트 핸들러를 `on[Event][UI]` 규칙으로 정규화 (`onToggleAbilityCheckbox` 등) | codex |

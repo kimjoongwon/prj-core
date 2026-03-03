@@ -141,7 +141,7 @@ function TemplateDetailPageClient({
 	/**
 	 * 미리보기 실행 핸들러
 	 */
-	const handlePreview = async (
+	const onSubmitPreviewTemplate = async (
 		tplId: string,
 		variables: Record<string, string>,
 	): Promise<PreviewResult> => {
@@ -155,7 +155,7 @@ function TemplateDetailPageClient({
 	/**
 	 * 발송 테스트 실행 핸들러
 	 */
-	const handleSendTest = async (
+	const onSubmitSendTestTemplate = async (
 		tplId: string,
 		recipient: string,
 		variables: Record<string, string>,
@@ -288,14 +288,14 @@ function TemplateDetailPageClient({
                 templateId={templateId}
                 type={template.type}
                 variables={template.variables ?? []}
-                onPreview={handlePreview} />
+                onPreview={onSubmitPreviewTemplate} />
             <SendTestModal
                 isOpen={sendTestModal.isOpen}
                 onClose={sendTestModal.onClose}
                 templateId={templateId}
                 type={template.type}
                 variables={template.variables ?? []}
-                onSendTest={handleSendTest} />
+                onSendTest={onSubmitSendTestTemplate} />
         </section>
     );
 }

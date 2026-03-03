@@ -196,7 +196,7 @@ function RoleDetailPageClient({ roleId }: RoleDetailPageClientProps) {
 	/**
 	 * Ability 선택/해제 토글
 	 */
-	const handleToggleAbility = (abilityId: string) => {
+	const onToggleAbilityCheckbox = (abilityId: string) => {
 		const next = new Map(selectedAbilities);
 		if (next.has(abilityId)) {
 			next.delete(abilityId);
@@ -214,7 +214,7 @@ function RoleDetailPageClient({ roleId }: RoleDetailPageClientProps) {
 	/**
 	 * Grant isActive 토글
 	 */
-	const handleToggleIsActive = (abilityId: string, isActive: boolean) => {
+	const onToggleGrantActiveSwitch = (abilityId: string, isActive: boolean) => {
 		const next = new Map(selectedAbilities);
 		const item = next.get(abilityId);
 		if (item) {
@@ -227,7 +227,7 @@ function RoleDetailPageClient({ roleId }: RoleDetailPageClientProps) {
 	/**
 	 * Grant priority 변경
 	 */
-	const handleChangePriority = (abilityId: string, priority: number) => {
+	const onChangeGrantPriorityInput = (abilityId: string, priority: number) => {
 		const next = new Map(selectedAbilities);
 		const item = next.get(abilityId);
 		if (item) {
@@ -385,7 +385,7 @@ function RoleDetailPageClient({ roleId }: RoleDetailPageClientProps) {
                                             <TableCell>
                                                 <Checkbox
                                                     isSelected={isSelected}
-                                                    onValueChange={() => handleToggleAbility(ability.id)} />
+													onValueChange={() => onToggleAbilityCheckbox(ability.id)} />
                                             </TableCell>
                                             <TableCell>
                                                 <span className="font-medium">
@@ -414,7 +414,7 @@ function RoleDetailPageClient({ roleId }: RoleDetailPageClientProps) {
                                                 {isSelected && (<Switch
                                                     size="sm"
                                                     isSelected={grantItem?.isActive ?? true}
-                                                    onValueChange={val => handleToggleIsActive(ability.id, val)} />)}
+													onValueChange={val => onToggleGrantActiveSwitch(ability.id, val)} />)}
                                             </TableCell>
                                             <TableCell>
                                                 {isSelected && (<Input
@@ -423,7 +423,7 @@ function RoleDetailPageClient({ roleId }: RoleDetailPageClientProps) {
                                                     min={0}
                                                     max={100}
                                                     value={String(grantItem?.priority ?? 0)}
-                                                    onValueChange={val => handleChangePriority(ability.id, Number(val) || 0)}
+													onValueChange={val => onChangeGrantPriorityInput(ability.id, Number(val) || 0)}
                                                     className="w-20" />)}
                                             </TableCell>
                                         </TableRow>

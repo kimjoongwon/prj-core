@@ -177,12 +177,12 @@
 | onSubmitMeta | 빠른 수정 필드를 PATCH로 저장 |
 | onClickSearchKnowledge | 지식베이스 검색 모달 열기 |
 | onAttachFile | 파일 선택 다이얼로그 열기 |
-| onSubmitReply | WebSocket으로 메시지 전송 |
+| onSendInquiryMessage | WebSocket으로 메시지 전송 |
 | onTypingStart | `inquiry:typing:start` 이벤트 전송 |
 | onTypingStop | `inquiry:typing:stop` 이벤트 전송 |
 | onClickEdit | 문의 수정 페이지로 이동 |
 | onClickDelete | 삭제 확인 모달 표시 |
-| onReconnect | WebSocket 재연결 |
+| onClickReconnectButton | WebSocket 재연결 |
 
 ## L5-L12 레이어 기획
 
@@ -451,3 +451,4 @@
 | 2026-03-01 | 빠른 수정 폼 입력을 HeroUI Select 기반으로 정리해 Form-state 전용 입력 컴포넌트 의존 제거 | codex |
 | 2026-03-01 | 빠른 수정에서 AiForm을 메타 입력 폼과 동급 위계로 분리하고 바깥 섹션 영역 래퍼를 제거해 Card 단일 표면 구조로 정리 | codex |
 | 2026-03-03 | Scaffold 제거 및 페이지 헤더 영역/섹션 영역 용어 정리 | codex |
+| 2026-03-03 | 페이지 이벤트 핸들러 네이밍을 `on[Event][UI]` 규칙에 맞춰 정리 (`onSendInquiryMessage`, `onClickReconnectButton`) | codex |

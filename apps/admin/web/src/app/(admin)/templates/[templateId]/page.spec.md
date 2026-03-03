@@ -119,8 +119,8 @@
 | onClickEditButton | `/templates/{templateId}/edit` 수정 페이지로 이동 |
 | onClickDeleteConfirm | DELETE API 호출 -> 성공 시 목록 이동 + 성공 토스트, 실패 시 에러 토스트 |
 | onClickToggleButton | PATCH toggle-status API 호출 -> 성공 시 캐시 무효화 + 성공 토스트 |
-| handlePreview | POST preview API 호출 -> PreviewResult 반환 |
-| handleSendTest | POST send-test API 호출 -> 결과 반환 |
+| onSubmitPreviewTemplate | POST preview API 호출 -> PreviewResult 반환 |
+| onSubmitSendTestTemplate | POST send-test API 호출 -> 결과 반환 |
 
 ## 모달 정의
 
@@ -157,3 +157,4 @@
 | 2026-02-18 | 초기 생성 (역기획) | req-reverse-engineer |
 | 2026-02-19 | 디자인 목업 추가 | req-reverse-engineer |
 | 2026-03-03 | Scaffold 제거 및 페이지 헤더 영역/섹션 영역 용어 정리 | codex |
+| 2026-03-03 | 페이지 이벤트 핸들러를 `on[Event][UI]` 규칙으로 정리 (`onSubmitPreviewTemplate`, `onSubmitSendTestTemplate`) | codex |

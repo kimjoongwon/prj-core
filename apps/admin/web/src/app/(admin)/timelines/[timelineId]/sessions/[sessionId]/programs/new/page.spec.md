@@ -20,6 +20,7 @@
 |------|----------|------|
 | 페이지 헤더 | `페이지 헤더 영역` | title="프로그램 등록", description="{세션명} · {타임라인명}", actions에 "취소", "등록" 버튼 |
 | 등록 폼 | `섹션 영역` | title="기본 정보" - 프로그램 정보 입력 폼 |
+| 선택 모달 | `ProgramPickerModal` (feature) | 루틴/강사 검색 및 선택 |
 
 ## 입력 필드
 
@@ -76,3 +77,4 @@
 |------|------|--------|
 | 2026-02-19 | 초기 생성 | orch-requirement |
 | 2026-03-03 | Scaffold 제거 및 페이지 헤더 영역/섹션 영역 용어 정리 | codex |
+| 2026-03-03 | 로컬 `_components` 의존 제거, `@cocrepo/ui`의 `ProgramPickerModal` feature 사용으로 정리 | codex |

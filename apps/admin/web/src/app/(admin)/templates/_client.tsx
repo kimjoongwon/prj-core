@@ -92,7 +92,7 @@ function TemplatesPageClient() {
 	const toggleMutation = useToggleTemplateStatus();
 
 	/** 활성/비활성 토글 핸들러 (Cell 컴포넌트에 전달) */
-	const handleToggleStatus = async (templateId: string) => {
+	const onToggleTemplateStatusSwitch = async (templateId: string) => {
 		try {
 			await toggleMutation.mutateAsync({ templateId });
 			queryClient.invalidateQueries({
@@ -160,7 +160,7 @@ function TemplatesPageClient() {
 				<TemplateActiveToggleCell
 					isActive={(row.original as TemplateDto).isActive}
 					templateId={(row.original as TemplateDto).id}
-					onToggle={handleToggleStatus}
+					onToggle={onToggleTemplateStatusSwitch}
 				/>
 			),
 		},

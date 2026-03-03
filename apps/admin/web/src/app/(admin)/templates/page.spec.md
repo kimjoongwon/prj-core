@@ -83,7 +83,7 @@
 |--------|------|
 | 코드 클릭 | `/templates/{templateId}` 상세 페이지로 이동 |
 | "템플릿 등록" 버튼 클릭 | `/templates/new` 등록 페이지로 이동 |
-| Switch 토글 | `toggleTemplateStatus` API 호출 후 목록 캐시 무효화, 성공/실패 토스트 |
+| onToggleTemplateStatusSwitch | `toggleTemplateStatus` API 호출 후 목록 캐시 무효화, 성공/실패 토스트 |
 | 검색/필터 변경 | URL 쿼리 파라미터 업데이트로 API 재호출 |
 
 ## 특이사항
@@ -106,3 +106,4 @@
 | 2026-02-18 | 초기 생성 (역기획) | req-reverse-engineer |
 | 2026-02-19 | 디자인 목업 추가 | req-reverse-engineer |
 | 2026-03-03 | Scaffold 제거 및 페이지 헤더 영역/섹션 영역 용어 정리 | codex |
+| 2026-03-03 | 페이지 이벤트 핸들러를 `on[Event][UI]` 규칙에 맞춰 정리 (`onToggleTemplateStatusSwitch`) | codex |

@@ -370,11 +370,11 @@ function InquiryDetailPageClient({ inquiryId }: Props) {
 		ws,
 	});
 
-	const handleReconnect = () => {
+	const onClickReconnectButton = () => {
 		ws.reconnect();
 	};
 
-	const handleSendMessage = (content: string, attachments?: File[]) => {
+	const onSendInquiryMessage = (content: string, attachments?: File[]) => {
 		ws.sendMessage(content, attachments);
 	};
 
@@ -444,8 +444,8 @@ function InquiryDetailPageClient({ inquiryId }: Props) {
         <InquiryWebSocketProvider
 			inquiryId={inquiryId}
 			status={ws.status}
-			onReconnect={handleReconnect}
-			sendMessage={ws.sendMessage}
+			onReconnect={onClickReconnectButton}
+			sendMessage={onSendInquiryMessage}
 			sendTypingStatus={ws.sendTypingStatus}
 		>
             <section><div className="flex items-start justify-between gap-4"><div><h1>{"문의 상세"}</h1><p>{"문의 상세 정보를 확인하고 답변을 작성합니다."}</p></div><div>{<HStack gap={2}>
@@ -600,10 +600,10 @@ function InquiryDetailPageClient({ inquiryId }: Props) {
                             typingUserNames={inquiryState.typingUserNames}
                             isWebSocketConnected={inquiryState.isWebSocketConnected}
                             isTyping={inquiryState.isTyping}
-                            onSendMessage={handleSendMessage}
+                            onSendMessage={onSendInquiryMessage}
                             onTypingStart={handlers.onTypingStart}
                             onTypingStop={handlers.onTypingStop}
-                            onReconnect={handleReconnect}
+                            onReconnect={onClickReconnectButton}
                             onGenerateDraft={handlers.onClickGenerateDraft}
                             onSearchKnowledge={handlers.onClickSearchKnowledge}
                             isGeneratingDraft={inquiryState.isGeneratingDraft} />
