@@ -4,13 +4,7 @@
 // import { useGetCategories, type CategoryDto } from "@cocrepo/api";
 import { customInstance } from "@cocrepo/api";
 import {
-	DateTimeCell,
-	Page,
-	PageHeader,
-	ParentCategoryCell,
-	Section,
-	VStack,
-} from "@cocrepo/ui";
+	DateTimeCell, Page, PageTitleBar, ParentCategoryCell, Section, VStack } from "@cocrepo/ui";
 import { Button } from "@heroui/react";
 import { useQuery } from "@tanstack/react-query";
 import { FolderTree, Plus } from "lucide-react";
@@ -54,7 +48,7 @@ function RoleCategoriesPageClient() {
 	return (
 		<Page
 			top={
-				<PageHeader
+				<PageTitleBar
 					title="역할 카테고리 목록"
 					description="역할을 카테고리로 분류하여 관리합니다."
 					actions={

@@ -1,16 +1,8 @@
 "use client";
 
+import { type CreateTemplateVariableItemDto, useCreateTemplate, } from "@cocrepo/api";
 import {
-	type CreateTemplateVariableItemDto,
-	useCreateTemplate,
-} from "@cocrepo/api";
-import {
-	Page,
-	PageHeader,
-	TemplateForm,
-	type TemplateFormData,
-	type VariableEditItem,
-} from "@cocrepo/ui";
+	Page, PageTitleBar, TemplateForm, type TemplateFormData, type VariableEditItem } from "@cocrepo/ui";
 import { addToast } from "@heroui/react";
 import { observer, useLocalObservable } from "mobx-react-lite";
 import type { Route } from "next";
@@ -155,7 +147,7 @@ function TemplateNewPageClient() {
 	return (
 		<Page
 			top={
-				<PageHeader
+				<PageTitleBar
 					title="템플릿 등록"
 					description="새로운 메시지 템플릿을 등록합니다."
 				/>

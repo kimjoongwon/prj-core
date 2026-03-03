@@ -1,11 +1,7 @@
 "use client";
 
-import {
-	type ActionResponseDto,
-	useDeleteAction,
-	useGetActionById,
-} from "@cocrepo/api";
-import { Page, PageHeader, VStack } from "@cocrepo/ui";
+import { type ActionResponseDto, useDeleteAction, useGetActionById, } from "@cocrepo/api";
+import { Page, PageTitleBar, VStack } from "@cocrepo/ui";
 import {
 	Button,
 	Chip,
@@ -90,7 +86,7 @@ function ActionDetailPageClient({ actionId }: ActionDetailPageClientProps) {
 	if (isLoading) {
 		return (
 			<Page
-				top={<PageHeader title="Action 상세" description="로딩 중..." />}
+				top={<PageTitleBar title="Action 상세" description="로딩 중..." />}
 			>
 				<div className="flex items-center justify-center p-8">
 					<span className="text-default-500">로딩 중...</span>
@@ -103,7 +99,7 @@ function ActionDetailPageClient({ actionId }: ActionDetailPageClientProps) {
 		return (
 			<Page
 				top={
-					<PageHeader
+					<PageTitleBar
 						title="Action 상세"
 						description="Action을 찾을 수 없습니다."
 					/>
@@ -122,7 +118,7 @@ function ActionDetailPageClient({ actionId }: ActionDetailPageClientProps) {
 	return (
 		<Page
 			top={
-				<PageHeader
+				<PageTitleBar
 					title="Action 상세"
 					description={`${action.displayName || action.name} Action의 상세 정보입니다.`}
 					actions={

@@ -1,18 +1,8 @@
 "use client";
 
+import { type CreateAbilityDto, useCreateAbility, useGetActions, useGetSubjects, } from "@cocrepo/api";
 import {
-	type CreateAbilityDto,
-	useCreateAbility,
-	useGetActions,
-	useGetSubjects,
-} from "@cocrepo/api";
-import {
-	Page,
-	PageHeader,
-	Section,
-	SectionHeader,
-	VStack,
-} from "@cocrepo/ui";
+	Page, PageTitleBar, Section, VStack } from "@cocrepo/ui";
 import {
 	addToast,
 	Button,
@@ -155,7 +145,7 @@ function AbilityNewPageClient() {
 	return (
 		<Page
 			top={
-				<PageHeader
+				<PageTitleBar
 					title="권한 등록"
 					description="새로운 CASL 권한을 등록합니다."
 					actions={
@@ -181,7 +171,7 @@ function AbilityNewPageClient() {
 			}
 		>
 			<VStack gap={4}>
-				<Section top={<SectionHeader title="기본 정보" />}>
+				<Section top={<PageTitleBar level={2} title="기본 정보" />}>
 					<div className="grid grid-cols-1 gap-4">
 						<Input
 							label="권한 이름"
@@ -203,7 +193,7 @@ function AbilityNewPageClient() {
 						/>
 					</div>
 				</Section>
-				<Section top={<SectionHeader title="CASL 정보" />}>
+				<Section top={<PageTitleBar level={2} title="CASL 정보" />}>
 					<div className="grid grid-cols-1 gap-4">
 						<Select
 							label="Subject"

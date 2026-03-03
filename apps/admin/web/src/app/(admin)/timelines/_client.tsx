@@ -1,20 +1,9 @@
 "use client";
 
-import {
-	getGetTimelinesQueryKey,
-	type TimelineDto,
-	useDeleteTimeline,
-	useGetTimelines,
-} from "@cocrepo/api";
+import { getGetTimelinesQueryKey, type TimelineDto, useDeleteTimeline, useGetTimelines, } from "@cocrepo/api";
 import type { InputConfig, MetaDataGridColumnConfig } from "@cocrepo/type";
 import {
-	DateTimeCell,
-	MetaDataGrid,
-	Page,
-	PageHeader,
-	Section,
-	useMetaDataGridQueryStates,
-} from "@cocrepo/ui";
+	DateTimeCell, MetaDataGrid, Page, PageTitleBar, Section, useMetaDataGridQueryStates } from "@cocrepo/ui";
 import {
 	addToast,
 	Button,
@@ -165,7 +154,7 @@ function TimelinesPageClient() {
 	return (
 		<Page
 			top={
-				<PageHeader
+				<PageTitleBar
 					title="타임라인"
 					description="학기/시즌 단위 타임라인을 관리합니다."
 					actions={

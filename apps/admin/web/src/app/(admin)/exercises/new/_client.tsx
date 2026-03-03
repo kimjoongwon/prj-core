@@ -1,6 +1,6 @@
 "use client";
 import { useCreateExercise } from "@cocrepo/api";
-import { Page, PageHeader, Section, SectionHeader } from "@cocrepo/ui";
+import { Page, PageTitleBar, Section } from "@cocrepo/ui";
 import { addToast, Button, Input, Textarea } from "@heroui/react";
 import { observer, useLocalObservable } from "mobx-react-lite";
 import type { Route } from "next";
@@ -116,7 +116,7 @@ function ExerciseNewPageClient() {
 	return (
 		<Page
 			top={
-				<PageHeader
+				<PageTitleBar
 					title="운동 등록"
 					description="새로운 운동 종목을 등록합니다."
 					actions={
@@ -140,7 +140,7 @@ function ExerciseNewPageClient() {
 				/>
 			}
 		>
-			<Section top={<SectionHeader title="기본 정보" />}>
+			<Section top={<PageTitleBar level={2} title="기본 정보" />}>
 				<div className="flex flex-col gap-4">
 					<Input
 						label="운동명"

@@ -1,14 +1,8 @@
 "use client";
 
-import {
-	type InquiryCategory,
-	type InquiryPriority,
-	useFillInquiryFormWithAi,
-	useGetInquiryUpdateForm,
-	useUpdateInquiry,
-} from "@cocrepo/api";
+import { type InquiryCategory, type InquiryPriority, useFillInquiryFormWithAi, useGetInquiryUpdateForm, useUpdateInquiry, } from "@cocrepo/api";
 import { ADMIN_PATHS } from "@cocrepo/constant";
-import { AiForm, Button, Page, PageHeader, Section, SectionHeader, VStack } from "@cocrepo/ui";
+import { AiForm, Button, Page, PageTitleBar, Section, VStack } from "@cocrepo/ui";
 import { Input, Select, SelectItem, type Selection } from "@heroui/react";
 import { ArrowLeft } from "lucide-react";
 import { observer, useLocalObservable } from "mobx-react-lite";
@@ -128,7 +122,7 @@ function InquiryEditPageClient({ inquiryId }: Props) {
 	return (
 		<Page
 			top={
-				<PageHeader
+				<PageTitleBar
 					title="문의 수정"
 					description="문의 메타 정보를 수정하고 AiForm으로 추천 값을 반영합니다."
 					actions={
@@ -150,7 +144,7 @@ function InquiryEditPageClient({ inquiryId }: Props) {
 		>
 			<VStack gap={4}>
 				{bootstrap && (
-					<Section top={<SectionHeader title="AI 폼 추천" />}>
+					<Section top={<PageTitleBar level={2} title="AI 폼 추천" />}>
 						<AiForm
 							formState={state.toFormObject()}
 							fieldMeta={bootstrap.fieldMeta}
@@ -178,7 +172,7 @@ function InquiryEditPageClient({ inquiryId }: Props) {
 						/>
 					</Section>
 				)}
-				<Section top={<SectionHeader title="문의 입력" />}>
+				<Section top={<PageTitleBar level={2} title="문의 입력" />}>
 					<VStack gap={4}>
 						<Input
 							label="문의 제목"

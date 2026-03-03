@@ -3,7 +3,7 @@
 // TODO: Orval codegen 후 아래 import로 교체
 // import { useCreateGroup } from "@cocrepo/api";
 import { customInstance } from "@cocrepo/api";
-import { Page, PageHeader, Section, VStack } from "@cocrepo/ui";
+import { Page, PageTitleBar, Section, VStack } from "@cocrepo/ui";
 import { Button, Input } from "@heroui/react";
 import { useMutation } from "@tanstack/react-query";
 import { ArrowLeft, Save } from "lucide-react";
@@ -78,7 +78,7 @@ function RoleGroupNewPageClient() {
 	return (
 		<Page
 			top={
-				<PageHeader
+				<PageTitleBar
 					title="역할 그룹 등록"
 					description="새로운 역할 그룹을 등록합니다."
 					actions={

@@ -3,14 +3,7 @@
 import { type ActionDto, useGetActions } from "@cocrepo/api";
 import type { InputConfig, MetaDataGridColumnConfig } from "@cocrepo/type";
 import {
-	DateTimeCell,
-	MetaDataGrid,
-	Page,
-	PageHeader,
-	Section,
-	StatusChipCell,
-	useMetaDataGridQueryStates,
-} from "@cocrepo/ui";
+	DateTimeCell, MetaDataGrid, Page, PageTitleBar, Section, StatusChipCell, useMetaDataGridQueryStates } from "@cocrepo/ui";
 import { Chip } from "@heroui/react";
 import { Plus } from "lucide-react";
 import { observer } from "mobx-react-lite";
@@ -166,7 +159,7 @@ function ActionsPageClient() {
 	return (
 		<Page
 			top={
-				<PageHeader
+				<PageTitleBar
 					title="Action 목록"
 					description="시스템에 등록된 Action을 조회합니다."
 				/>

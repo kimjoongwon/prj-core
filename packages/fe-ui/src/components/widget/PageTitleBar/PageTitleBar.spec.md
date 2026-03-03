@@ -1,8 +1,8 @@
-# SectionHeader widget 기획서
+# PageTitleBar widget 기획서
 
 > 생성일: 2026-03-03
 > 타입: widget
-> 위치: packages/fe-ui/src/components/widget/SectionHeader/SectionHeader.tsx
+> 위치: packages/fe-ui/src/components/widget/PageTitleBar/PageTitleBar.tsx
 
 ## 역할
 
@@ -13,15 +13,14 @@
 
 | 항목 | 설명 |
 |------|------|
-| SectionHeaderProps | 공개 계약 요소 |
-| SectionHeader | 공개 계약 요소 |
+| PageTitleBarProps | 공개 계약 요소 |
+| PageTitleBar | 공개 계약 요소 |
 
 ## 의존성
 
 | 모듈 | 용도 |
 |------|------|
 | react | 기능 구현 의존성 |
-| ../../ui/data-display/Text/Text | 기능 구현 의존성 |
 
 ## 동작 흐름
 
@@ -46,3 +45,4 @@
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
 | 2026-03-03 | 누락된 sidecar spec 신규 생성 | codex |
+| 2026-03-03 | `PageTitleBar` 단일 컴포넌트 통합 및 리네이밍 반영 | codex |

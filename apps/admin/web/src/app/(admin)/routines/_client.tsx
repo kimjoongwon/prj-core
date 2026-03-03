@@ -1,20 +1,9 @@
 "use client";
 
-import {
-	getGetRoutinesQueryKey,
-	type RoutineDto,
-	useDeleteRoutine,
-	useGetRoutines,
-} from "@cocrepo/api";
+import { getGetRoutinesQueryKey, type RoutineDto, useDeleteRoutine, useGetRoutines, } from "@cocrepo/api";
 import type { InputConfig, MetaDataGridColumnConfig } from "@cocrepo/type";
 import {
-	DateTimeCell,
-	MetaDataGrid,
-	Page,
-	PageHeader,
-	Section,
-	useMetaDataGridQueryStates,
-} from "@cocrepo/ui";
+	DateTimeCell, MetaDataGrid, Page, PageTitleBar, Section, useMetaDataGridQueryStates } from "@cocrepo/ui";
 import {
 	addToast,
 	Button,
@@ -187,7 +176,7 @@ function RoutinesPageClient() {
 	return (
 		<Page
 			top={
-				<PageHeader
+				<PageTitleBar
 					title="루틴"
 					description="운동 루틴(커리큘럼)을 관리합니다."
 					actions={

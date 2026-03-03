@@ -61,10 +61,10 @@
 | 영역 | 컴포넌트 | 설명 |
 |------|----------|------|
 | 페이지 래퍼 | `Page` | 페이지 콘텐츠 구조 배치 |
-| 페이지 헤더 | `PageHeader` | title="템플릿 상세", description=동적, actions에 `TemplateActions` |
-| 기본 정보 | `Section + SectionHeader(title="기본 정보")` | 2컬럼 Grid 레이아웃 |
-| 콘텐츠 | `Section + SectionHeader(title="콘텐츠")` | `TemplateContentViewer` |
-| 변수 목록 | `Section + SectionHeader(title="변수 목록")` | `VariableReadTable` 또는 빈 안내 |
+| 페이지 헤더 | `PageTitleBar` | title="템플릿 상세", description=동적, actions에 `TemplateActions` |
+| 기본 정보 | `Section + PageTitleBar(title="기본 정보")` | 2컬럼 Grid 레이아웃 |
+| 콘텐츠 | `Section + PageTitleBar(title="콘텐츠")` | `TemplateContentViewer` |
+| 변수 목록 | `Section + PageTitleBar(title="변수 목록")` | `VariableReadTable` 또는 빈 안내 |
 | 삭제 모달 | `Modal` | 삭제 확인 다이얼로그 |
 | 미리보기 모달 | `PreviewModal` | 변수 입력 + 미리보기 결과 |
 | 발송 테스트 모달 | `SendTestModal` | 수신자 + 변수 입력 + 발송 결과 |
@@ -159,5 +159,6 @@
 | 2026-02-19 | 디자인 목업 추가 | req-reverse-engineer |
 | 2026-03-03 | Scaffold 제거 및 페이지 헤더 영역/섹션 영역 용어 정리 | codex |
 | 2026-03-03 | 페이지 이벤트 핸들러를 `on[Event][UI]` 규칙으로 정리 (`onSubmitPreviewTemplate`, `onSubmitSendTestTemplate`) | codex |
-| 2026-03-03 | `_client.tsx` 반복 헤더 제거를 위해 `Page/Section + PageHeader/SectionHeader` 조합 적용 | codex |
+| 2026-03-03 | `_client.tsx` 반복 헤더 제거를 위해 `Page/Section + PageTitleBar(level=1/2)` 조합 적용 | codex |
 | 2026-03-03 | Page/Section `mode` 제거 반영 (단일 구조 기준으로 문서 표현 정리) | codex |
+| 2026-03-03 | `PageTitleBar` 단일 컴포넌트 통합 및 리네이밍 반영 | codex |

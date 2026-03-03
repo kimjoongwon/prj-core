@@ -63,10 +63,10 @@
 | 영역 | 컴포넌트 | 설명 |
 |------|----------|------|
 | 페이지 래퍼 | `Page` | 페이지 콘텐츠 구조 배치 |
-| 페이지 헤더 | `PageHeader` | title="권한 등록", description="새로운 CASL 권한을 등록합니다." |
+| 페이지 헤더 | `PageTitleBar` | title="권한 등록", description="새로운 CASL 권한을 등록합니다." |
 | 액션 영역 | `Button` x2 | "목록으로" (ArrowLeft) + "등록" (Save, primary) |
-| 기본 정보 섹션 | `Section + SectionHeader("기본 정보")` | 이름(Input, 필수), 설명(Textarea) |
-| CASL 정보 섹션 | `Section + SectionHeader("CASL 정보")` | Subject(Select, 필수), Action(Select, 필수), Fields(Textarea), Conditions(Textarea), 거부 토글(Switch), 거부 사유(Textarea) |
+| 기본 정보 섹션 | `Section + PageTitleBar("기본 정보")` | 이름(Input, 필수), 설명(Textarea) |
+| CASL 정보 섹션 | `Section + PageTitleBar("CASL 정보")` | Subject(Select, 필수), Action(Select, 필수), Fields(Textarea), Conditions(Textarea), 거부 토글(Switch), 거부 사유(Textarea) |
 
 ## 폼 필드
 
@@ -132,5 +132,6 @@
 | 2026-02-18 | 초기 생성 (역기획) | req-reverse-engineer |
 | 2026-02-19 | 디자인 목업 섹션 추가 | req-reverse-engineer |
 | 2026-03-03 | Scaffold 제거 및 페이지 헤더 영역/섹션 영역 용어 정리 | codex |
-| 2026-03-03 | `_client.tsx` 반복 헤더/섹션 타이틀 마크업을 `PageHeader/SectionHeader` 패턴으로 정리 | codex |
+| 2026-03-03 | `_client.tsx` 반복 헤더/섹션 타이틀 마크업을 `PageTitleBar(level=1/2)` 패턴으로 정리 | codex |
 | 2026-03-03 | Page/Section `mode` 제거 반영 (단일 구조 기준으로 문서 표현 정리) | codex |
+| 2026-03-03 | `PageTitleBar` 단일 컴포넌트 통합 및 리네이밍 반영 | codex |

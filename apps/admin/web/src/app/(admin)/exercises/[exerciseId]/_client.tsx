@@ -1,19 +1,8 @@
 "use client";
 
+import { type ExerciseDto, useDeleteExercise, useGetExercise, useGetExerciseRoutines, } from "@cocrepo/api";
 import {
-	type ExerciseDto,
-	useDeleteExercise,
-	useGetExercise,
-	useGetExerciseRoutines,
-} from "@cocrepo/api";
-import {
-	DateTimeCell,
-	Page,
-	PageHeader,
-	Section,
-	SectionHeader,
-	VStack,
-} from "@cocrepo/ui";
+	DateTimeCell, Page, PageTitleBar, Section, VStack } from "@cocrepo/ui";
 import {
 	addToast,
 	Button,
@@ -104,7 +93,7 @@ function ExerciseDetailPageClient({
 	if (!response) {
 		return (
 			<Page
-				top={<PageHeader title="운동 종목 상세" description="로딩 중..." />}
+				top={<PageTitleBar title="운동 종목 상세" description="로딩 중..." />}
 			>
 				<Section>
 					<div className="flex items-center justify-center p-8">
@@ -117,7 +106,7 @@ function ExerciseDetailPageClient({
 
 	if (!exercise) {
 		const pageHeader = (
-			<PageHeader
+			<PageTitleBar
 				title="운동 종목 상세"
 				description="운동 종목을 찾을 수 없습니다."
 			/>
@@ -140,7 +129,7 @@ function ExerciseDetailPageClient({
 	}
 
 	const pageHeader = (
-		<PageHeader
+		<PageTitleBar
 			title={exercise.name ?? "운동 종목 상세"}
 			description="운동 종목의 상세 정보입니다."
 			actions={
@@ -169,7 +158,7 @@ function ExerciseDetailPageClient({
 	return (
 		<Page top={pageHeader}>
 			<VStack gap={4}>
-				<Section top={<SectionHeader title="기본 정보" />}>
+				<Section top={<PageTitleBar level={2} title="기본 정보" />}>
 					<div className="grid grid-cols-1 gap-4 md:grid-cols-2">
 						<div>
 							<label className="text-sm text-default-500">운동명</label>
@@ -202,7 +191,7 @@ function ExerciseDetailPageClient({
 					</div>
 				</Section>
 				{routines.length > 0 && (
-					<Section top={<SectionHeader title="사용 중인 루틴" />}>
+					<Section top={<PageTitleBar level={2} title="사용 중인 루틴" />}>
 						<div className="flex flex-col gap-2">
 							{routines.map(routine => (
 								<div

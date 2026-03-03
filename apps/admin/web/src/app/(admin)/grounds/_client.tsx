@@ -3,13 +3,7 @@
 import { type GroundDto, useGetGrounds } from "@cocrepo/api";
 import type { InputConfig, MetaDataGridColumnConfig } from "@cocrepo/type";
 import {
-	DateTimeCell,
-	MetaDataGrid,
-	Page,
-	PageHeader,
-	Section,
-	useMetaDataGridQueryStates,
-} from "@cocrepo/ui";
+	DateTimeCell, MetaDataGrid, Page, PageTitleBar, Section, useMetaDataGridQueryStates } from "@cocrepo/ui";
 import { Badge, Button } from "@heroui/react";
 import { Building2 } from "lucide-react";
 import { observer } from "mobx-react-lite";
@@ -116,7 +110,7 @@ function GroundsPageClient() {
 	return (
 		<Page
 			top={
-				<PageHeader
+				<PageTitleBar
 					title="시설 목록"
 					description="시스템에 등록된 시설을 관리합니다."
 					actions={

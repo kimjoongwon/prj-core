@@ -1,22 +1,9 @@
 "use client";
 
-import {
-	getGetTemplatesQueryKey,
-	type TemplateDto,
-	useGetTemplates,
-	useToggleTemplateStatus,
-} from "@cocrepo/api";
+import { getGetTemplatesQueryKey, type TemplateDto, useGetTemplates, useToggleTemplateStatus, } from "@cocrepo/api";
 import type { InputConfig, MetaDataGridColumnConfig } from "@cocrepo/type";
 import {
-	DateTimeCell,
-	MetaDataGrid,
-	Page,
-	PageHeader,
-	Section,
-	TemplateActiveToggleCell,
-	TemplateTypeChipCell,
-	useMetaDataGridQueryStates,
-} from "@cocrepo/ui";
+	DateTimeCell, MetaDataGrid, Page, PageTitleBar, Section, TemplateActiveToggleCell, TemplateTypeChipCell, useMetaDataGridQueryStates } from "@cocrepo/ui";
 import { addToast, Button } from "@heroui/react";
 import { useQueryClient } from "@tanstack/react-query";
 import { Plus } from "lucide-react";
@@ -199,7 +186,7 @@ function TemplatesPageClient() {
 	return (
 		<Page
 			top={
-				<PageHeader
+				<PageTitleBar
 					title="메시지 템플릿"
 					description="시스템에 등록된 메시지 템플릿을 관리합니다."
 					actions={createTemplateButton}

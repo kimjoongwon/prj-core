@@ -4,12 +4,7 @@
 // import { useGetGroupById, useDeleteGroup } from "@cocrepo/api";
 import { customInstance } from "@cocrepo/api";
 import {
-	GroupInfoSection,
-	GroupRoleListSection,
-	Page,
-	PageHeader,
-	VStack,
-} from "@cocrepo/ui";
+	GroupInfoSection, GroupRoleListSection, Page, PageTitleBar, VStack } from "@cocrepo/ui";
 import {
 	Button,
 	Modal,
@@ -101,7 +96,7 @@ function RoleGroupDetailPageClient({
 	if (isLoading) {
 		return (
 			<Page
-				top={<PageHeader title="역할 그룹 상세" description="로딩 중..." />}
+				top={<PageTitleBar title="역할 그룹 상세" description="로딩 중..." />}
 			>
 				<div className="flex items-center justify-center p-8">
 					<span className="text-default-500">로딩 중...</span>
@@ -114,7 +109,7 @@ function RoleGroupDetailPageClient({
 		return (
 			<Page
 				top={
-					<PageHeader
+					<PageTitleBar
 						title="역할 그룹 상세"
 						description="그룹을 찾을 수 없습니다."
 					/>
@@ -133,7 +128,7 @@ function RoleGroupDetailPageClient({
 	return (
 		<Page
 			top={
-				<PageHeader
+				<PageTitleBar
 					title="역할 그룹 상세"
 					description={`${group.label || group.name} 그룹의 상세 정보입니다.`}
 					actions={

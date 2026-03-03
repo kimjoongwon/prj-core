@@ -1,21 +1,8 @@
 "use client";
 
+import { getSubjectFields, type SubjectDto, type SubjectFieldDto, useGetSubjectById, } from "@cocrepo/api";
 import {
-	getSubjectFields,
-	type SubjectDto,
-	type SubjectFieldDto,
-	useGetSubjectById,
-} from "@cocrepo/api";
-import {
-	BooleanCell,
-	DateTimeCell,
-	DefaultCell,
-	Page,
-	PageHeader,
-	Section,
-	SectionHeader,
-	VStack,
-} from "@cocrepo/ui";
+	BooleanCell, DateTimeCell, DefaultCell, Page, PageTitleBar, Section, VStack } from "@cocrepo/ui";
 import {
 	Button,
 	Chip,
@@ -63,7 +50,7 @@ function getGroupColor(
  */
 function SubjectInfoSection({ subject }: { subject: SubjectDto }) {
 	return (
-		<Section top={<SectionHeader title="기본 정보" />}>
+		<Section top={<PageTitleBar level={2} title="기본 정보" />}>
 			<div className="grid grid-cols-1 gap-4 md:grid-cols-2">
 				<div>
 					<div className="mb-1 text-sm text-default-500">식별자</div>
@@ -200,7 +187,7 @@ function SubjectFieldsSection({
 	}
 
 	return (
-		<Section top={<SectionHeader title="필드 목록" />}>
+		<Section top={<PageTitleBar level={2} title="필드 목록" />}>
 			{content}
 		</Section>
 	);
@@ -217,7 +204,7 @@ function SubjectDetailPageClient({ subjectId }: SubjectDetailPageClientProps) {
 	if (isLoading) {
 		return (
 			<Page
-				top={<PageHeader title="Subject 상세" description="로딩 중..." />}
+				top={<PageTitleBar title="Subject 상세" description="로딩 중..." />}
 			>
 				<Section>
 					<div className="flex items-center justify-center p-8">
@@ -230,7 +217,7 @@ function SubjectDetailPageClient({ subjectId }: SubjectDetailPageClientProps) {
 
 	if (!subject) {
 		const pageHeader = (
-			<PageHeader
+			<PageTitleBar
 				title="Subject 상세"
 				description="Subject를 찾을 수 없습니다."
 			/>
@@ -254,7 +241,7 @@ function SubjectDetailPageClient({ subjectId }: SubjectDetailPageClientProps) {
 	}
 
 	const pageHeader = (
-		<PageHeader
+		<PageTitleBar
 			title="Subject 상세"
 			description="Subject의 상세 정보를 조회합니다."
 			actions={

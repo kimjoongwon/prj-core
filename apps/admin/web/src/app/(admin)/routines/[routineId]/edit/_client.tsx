@@ -1,15 +1,7 @@
 "use client";
 
-import {
-	type CreateRoutineActivityItemDto,
-	type ExerciseDto,
-	getGetRoutineQueryKey,
-	type RoutineDto,
-	useGetExercises,
-	useGetRoutine,
-	useUpdateRoutine,
-} from "@cocrepo/api";
-import { Page, PageHeader, Section, SectionHeader, VStack } from "@cocrepo/ui";
+import { type CreateRoutineActivityItemDto, type ExerciseDto, getGetRoutineQueryKey, type RoutineDto, useGetExercises, useGetRoutine, useUpdateRoutine, } from "@cocrepo/api";
+import { Page, PageTitleBar, Section, VStack } from "@cocrepo/ui";
 import {
 	addToast,
 	Button,
@@ -226,7 +218,7 @@ function RoutineEditPageClient({ routineId }: RoutineEditPageClientProps) {
 	if (isLoading) {
 		return (
 			<Page
-				top={<PageHeader title="루틴 수정" description="로딩 중..." />}
+				top={<PageTitleBar title="루틴 수정" description="로딩 중..." />}
 			>
 				<div className="flex items-center justify-center gap-2 p-8">
 					<Spinner size="sm" />
@@ -240,7 +232,7 @@ function RoutineEditPageClient({ routineId }: RoutineEditPageClientProps) {
 		return (
 			<Page
 				top={
-					<PageHeader title="루틴 수정" description="루틴을 찾을 수 없습니다." />
+					<PageTitleBar title="루틴 수정" description="루틴을 찾을 수 없습니다." />
 				}
 			>
 				<div className="flex flex-col items-center justify-center gap-4 p-8">
@@ -267,14 +259,14 @@ function RoutineEditPageClient({ routineId }: RoutineEditPageClientProps) {
 	return (
 		<Page
 			top={
-				<PageHeader
+				<PageTitleBar
 					title="루틴 수정"
 					description={`${routine.name} 루틴을 수정합니다.`}
 					actions={pageActions}
 				/>
 			}
 		>
-			<Section top={<SectionHeader title="기본 정보" />}>
+			<Section top={<PageTitleBar level={2} title="기본 정보" />}>
 				<div className="flex flex-col gap-4">
 					<Input
 						label="루틴 이름"
@@ -299,7 +291,7 @@ function RoutineEditPageClient({ routineId }: RoutineEditPageClientProps) {
 				</div>
 			</Section>
 
-			<Section top={<SectionHeader title="활동 구성" />}>
+			<Section top={<PageTitleBar level={2} title="활동 구성" />}>
 				<div className="flex flex-col gap-4">
 					<Input
 						label="운동 검색"

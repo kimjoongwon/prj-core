@@ -2,13 +2,7 @@
 
 import { type GroundDto, useGetGround } from "@cocrepo/api";
 import {
-	DateTimeCell,
-	Page,
-	PageHeader,
-	Section,
-	SectionHeader,
-	VStack,
-} from "@cocrepo/ui";
+	DateTimeCell, Page, PageTitleBar, Section, VStack } from "@cocrepo/ui";
 import { Badge, Button, Spinner } from "@heroui/react";
 import { ArrowLeft, Pencil } from "lucide-react";
 import { observer } from "mobx-react-lite";
@@ -43,7 +37,7 @@ function GroundDetailPageClient({ groundId }: GroundDetailPageClientProps) {
 	if (!response) {
 		return (
 			<Page
-				top={<PageHeader title="시설 상세" description="로딩 중..." />}
+				top={<PageTitleBar title="시설 상세" description="로딩 중..." />}
 			>
 				<Section>
 					<div className="flex items-center justify-center p-8">
@@ -57,7 +51,7 @@ function GroundDetailPageClient({ groundId }: GroundDetailPageClientProps) {
 	// 데이터 없음
 	if (!ground) {
 		const pageHeader = (
-			<PageHeader
+			<PageTitleBar
 				title="시설 상세"
 				description="시설을 찾을 수 없습니다."
 			/>
@@ -80,7 +74,7 @@ function GroundDetailPageClient({ groundId }: GroundDetailPageClientProps) {
 	}
 
 	const pageHeader = (
-		<PageHeader
+		<PageTitleBar
 			title={ground.name ?? "시설 상세"}
 			description="시설 상세 정보입니다."
 			actions={
@@ -99,7 +93,7 @@ function GroundDetailPageClient({ groundId }: GroundDetailPageClientProps) {
 	return (
 		<Page top={pageHeader}>
 			<VStack gap={4}>
-				<Section top={<SectionHeader title="기본 정보" />}>
+				<Section top={<PageTitleBar level={2} title="기본 정보" />}>
 					<div className="grid grid-cols-1 gap-4 md:grid-cols-2">
 						<div>
 							<label className="text-sm text-default-500">시설명</label>
@@ -156,7 +150,7 @@ function GroundDetailPageClient({ groundId }: GroundDetailPageClientProps) {
 						</div>
 					</div>
 				</Section>
-				<Section top={<SectionHeader title="연결된 Space" />}>
+				<Section top={<PageTitleBar level={2} title="연결된 Space" />}>
 					<div>
 						<label className="text-sm text-default-500">Space ID</label>
 						<p className="mt-1 font-mono text-sm">{ground.spaceId}</p>

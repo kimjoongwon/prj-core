@@ -1,7 +1,7 @@
 "use client";
 
 import { type CreateRoleDto, useCreateRole } from "@cocrepo/api";
-import { Page, PageHeader, Section, VStack } from "@cocrepo/ui";
+import { Page, PageTitleBar, Section, VStack } from "@cocrepo/ui";
 import { Button, Input, Textarea } from "@heroui/react";
 import { ArrowLeft, Save } from "lucide-react";
 import { observer, useLocalObservable } from "mobx-react-lite";
@@ -106,7 +106,7 @@ function RoleNewPageClient() {
 	return (
 		<Page
 			top={
-				<PageHeader
+				<PageTitleBar
 					title="역할 등록"
 					description="새로운 역할을 등록합니다."
 					actions={

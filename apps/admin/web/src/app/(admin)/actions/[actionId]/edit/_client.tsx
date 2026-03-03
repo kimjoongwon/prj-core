@@ -1,11 +1,7 @@
 "use client";
 
-import {
-	type UpdateActionDto,
-	useGetActionById,
-	useUpdateAction,
-} from "@cocrepo/api";
-import { Page, PageHeader, Section, VStack } from "@cocrepo/ui";
+import { type UpdateActionDto, useGetActionById, useUpdateAction, } from "@cocrepo/api";
+import { Page, PageTitleBar, Section, VStack } from "@cocrepo/ui";
 import { Button, Input, Select, SelectItem, Textarea } from "@heroui/react";
 import { ArrowLeft, Save } from "lucide-react";
 import { observer, useLocalObservable } from "mobx-react-lite";
@@ -114,7 +110,7 @@ function ActionEditPageClient({ actionId }: ActionEditPageClientProps) {
 	if (isLoading) {
 		return (
 			<Page
-				top={<PageHeader title="Action 수정" description="로딩 중..." />}
+				top={<PageTitleBar title="Action 수정" description="로딩 중..." />}
 			>
 				<Section>
 					<div className="flex items-center justify-center p-8">
@@ -127,7 +123,7 @@ function ActionEditPageClient({ actionId }: ActionEditPageClientProps) {
 
 	if (!action) {
 		const pageHeader = (
-			<PageHeader
+			<PageTitleBar
 				title="Action 수정"
 				description="Action을 찾을 수 없습니다."
 			/>
@@ -147,7 +143,7 @@ function ActionEditPageClient({ actionId }: ActionEditPageClientProps) {
 
 	if (action.isSystem) {
 		const pageHeader = (
-			<PageHeader
+			<PageTitleBar
 				title="Action 수정"
 				description="시스템 Action은 수정할 수 없습니다."
 			/>
@@ -168,7 +164,7 @@ function ActionEditPageClient({ actionId }: ActionEditPageClientProps) {
 	}
 
 	const pageHeader = (
-		<PageHeader
+		<PageTitleBar
 			title="Action 수정"
 			description={`${action.displayName || action.name} Action을 수정합니다.`}
 			actions={

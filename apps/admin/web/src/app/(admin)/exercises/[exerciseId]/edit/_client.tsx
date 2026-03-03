@@ -1,10 +1,6 @@
 "use client";
-import {
-	type ExerciseDto,
-	useGetExercise,
-	useUpdateExercise,
-} from "@cocrepo/api";
-import { Page, PageHeader, Section, SectionHeader } from "@cocrepo/ui";
+import { type ExerciseDto, useGetExercise, useUpdateExercise, } from "@cocrepo/api";
+import { Page, PageTitleBar, Section } from "@cocrepo/ui";
 import { addToast, Button, Input, Spinner, Textarea } from "@heroui/react";
 import { observer, useLocalObservable } from "mobx-react-lite";
 import type { Route } from "next";
@@ -140,7 +136,7 @@ function ExerciseEditPageClient({ exerciseId }: ExerciseEditPageClientProps) {
 	if (isLoading) {
 		return (
 			<Page
-				top={<PageHeader title="운동 수정" description="로딩 중..." />}
+				top={<PageTitleBar title="운동 수정" description="로딩 중..." />}
 			>
 				<Section>
 					<div className="flex items-center justify-center gap-2 p-8">
@@ -157,7 +153,7 @@ function ExerciseEditPageClient({ exerciseId }: ExerciseEditPageClientProps) {
 		return (
 			<Page
 				top={
-					<PageHeader
+					<PageTitleBar
 						title="운동 수정"
 						description="운동 종목을 찾을 수 없습니다."
 					/>
@@ -174,7 +170,7 @@ function ExerciseEditPageClient({ exerciseId }: ExerciseEditPageClientProps) {
 	}
 
 	const pageHeader = (
-		<PageHeader
+		<PageTitleBar
 			title="운동 수정"
 			description={`${exercise.name} 운동을 수정합니다.`}
 			actions={
@@ -200,7 +196,7 @@ function ExerciseEditPageClient({ exerciseId }: ExerciseEditPageClientProps) {
 
 	return (
 		<Page top={pageHeader}>
-			<Section top={<SectionHeader title="기본 정보" />}>
+			<Section top={<PageTitleBar level={2} title="기본 정보" />}>
 				<div className="flex flex-col gap-4">
 					<Input
 						label="운동명"

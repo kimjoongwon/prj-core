@@ -1,7 +1,7 @@
 "use client";
 
 import { useCreateGround } from "@cocrepo/api";
-import { Page, PageHeader, Section, SectionHeader, VStack } from "@cocrepo/ui";
+import { Page, PageTitleBar, Section, VStack } from "@cocrepo/ui";
 import { addToast, Button, Input } from "@heroui/react";
 import { observer, useLocalObservable } from "mobx-react-lite";
 import type { Route } from "next";
@@ -140,14 +140,14 @@ function GroundNewPageClient() {
 	return (
 		<Page
 			top={
-				<PageHeader
+				<PageTitleBar
 					title="시설 등록"
 					description="새로운 시설을 등록합니다."
 				/>
 			}
 		>
 			<VStack gap={4}>
-				<Section top={<SectionHeader title="기본 정보" />}>
+				<Section top={<PageTitleBar level={2} title="기본 정보" />}>
 					<VStack gap={4}>
 						<Input
 							label="시설명"

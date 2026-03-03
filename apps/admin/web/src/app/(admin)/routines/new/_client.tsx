@@ -1,10 +1,5 @@
 "use client";
-import {
-	Page,
-	PageHeader,
-	Section,
-	SectionHeader,
-} from "@cocrepo/ui";
+import { Page, PageTitleBar, Section } from "@cocrepo/ui";
 import {
 	type CreateRoutineActivityItemDto,
 	type ExerciseDto,
@@ -221,14 +216,14 @@ function RoutineNewPageClient() {
 	return (
 		<Page
 			top={
-				<PageHeader
+				<PageTitleBar
 					title="루틴 등록"
 					description="새로운 운동 루틴을 등록합니다."
 					actions={pageActions}
 				/>
 			}
 		>
-			<Section top={<SectionHeader title="기본 정보" />}>
+			<Section top={<PageTitleBar level={2} title="기본 정보" />}>
 				<div className="flex flex-col gap-4">
 					<Input
 						label="루틴 이름"
@@ -252,7 +247,7 @@ function RoutineNewPageClient() {
 					/>
 				</div>
 			</Section>
-			<Section top={<SectionHeader title="활동 구성" />}>
+			<Section top={<PageTitleBar level={2} title="활동 구성" />}>
 				<div className="flex flex-col gap-4">
 					<Input
 						label="운동 검색"

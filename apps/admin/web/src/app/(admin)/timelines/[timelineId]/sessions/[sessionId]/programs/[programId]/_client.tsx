@@ -1,12 +1,7 @@
 "use client";
 
-import {
-	getGetProgramsQueryKey,
-	type ProgramDto,
-	useDeleteProgram,
-	useGetProgramById,
-} from "@cocrepo/api";
-import { DateTimeCell, Page, PageHeader, Section, SectionHeader } from "@cocrepo/ui";
+import { getGetProgramsQueryKey, type ProgramDto, useDeleteProgram, useGetProgramById, } from "@cocrepo/api";
+import { DateTimeCell, Page, PageTitleBar, Section } from "@cocrepo/ui";
 import {
 	addToast,
 	Button,
@@ -118,14 +113,14 @@ function ProgramDetailPageClient({
 	return (
 		<Page
 			top={
-				<PageHeader
+				<PageTitleBar
 					title={pageTitle}
 					description={descriptionText || undefined}
 					actions={pageActions}
 				/>
 			}
 		>
-			<Section top={<SectionHeader title="기본 정보" />}>
+			<Section top={<PageTitleBar level={2} title="기본 정보" />}>
 				<div className="grid grid-cols-1 gap-4 md:grid-cols-2">
 					<div>
 						<label className="text-sm text-default-500">프로그램 이름</label>

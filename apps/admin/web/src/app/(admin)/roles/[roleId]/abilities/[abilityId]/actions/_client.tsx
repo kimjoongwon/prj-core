@@ -1,5 +1,5 @@
 "use client";
-import { Page, PageHeader, Section, SectionHeader } from "@cocrepo/ui";
+import { Page, PageTitleBar, Section } from "@cocrepo/ui";
 import { Button } from "@heroui/react";
 import { ArrowLeft } from "lucide-react";
 import { observer } from "mobx-react-lite";
@@ -27,7 +27,7 @@ function AbilityActionsPageClient({
 	return (
 		<Page
 			top={
-				<PageHeader
+				<PageTitleBar
 					title="Action 관리"
 					description="권한의 액션(Action)을 관리합니다."
 					actions={
@@ -42,7 +42,7 @@ function AbilityActionsPageClient({
 				/>
 			}
 		>
-			<Section top={<SectionHeader title="권한 정보" />}>
+			<Section top={<PageTitleBar level={2} title="권한 정보" />}>
 				<div className="p-6">
 					<p className="text-default-500">
 						권한 ID: <code className="font-mono">{abilityId}</code>

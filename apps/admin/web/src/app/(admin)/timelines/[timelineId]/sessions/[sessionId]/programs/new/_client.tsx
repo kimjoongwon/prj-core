@@ -1,21 +1,8 @@
 "use client";
 
+import { type RoutineDto, type UserDto, useCreateProgram, useGetRoutines, useGetSessionById, useGetUsers, } from "@cocrepo/api";
 import {
-	type RoutineDto,
-	type UserDto,
-	useCreateProgram,
-	useGetRoutines,
-	useGetSessionById,
-	useGetUsers,
-} from "@cocrepo/api";
-import {
-	Page,
-	PageHeader,
-	ProgramPickerModal,
-	Section,
-	SectionHeader,
-	VStack,
-} from "@cocrepo/ui";
+	Page, PageTitleBar, ProgramPickerModal, Section, VStack } from "@cocrepo/ui";
 import {
 	addToast,
 	Button,
@@ -238,7 +225,7 @@ function ProgramNewPageClient({
 	return (
 		<Page
 			top={
-				<PageHeader
+				<PageTitleBar
 					title="프로그램 등록"
 					description={descriptionText}
 					actions={cancelButton}
@@ -246,7 +233,7 @@ function ProgramNewPageClient({
 			}
 		>
 			<Section
-				top={<SectionHeader title="기본 정보" />}
+				top={<PageTitleBar level={2} title="기본 정보" />}
 			>
 				<VStack gap={4}>
 					<Input

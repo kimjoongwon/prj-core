@@ -9,7 +9,9 @@ import {
 
 export interface SelectProps<T>
 	extends MobxProps<T>,
-		Omit<BaseSelectProps, "value" | "onChange"> {}
+		Omit<BaseSelectProps, "value" | "onChange" | "options"> {
+	options?: BaseSelectProps["options"];
+}
 
 export const Select = observer(<T extends object>(props: SelectProps<T>) => {
 	const { state, path, options = [], ...rest } = props;

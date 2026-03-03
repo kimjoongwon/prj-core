@@ -1,19 +1,8 @@
 "use client";
 
+import { type CreateTemplateVariableItemDto, type TemplateDto, useGetTemplate, useUpdateTemplate, } from "@cocrepo/api";
 import {
-	type CreateTemplateVariableItemDto,
-	type TemplateDto,
-	useGetTemplate,
-	useUpdateTemplate,
-} from "@cocrepo/api";
-import {
-	Page,
-	PageHeader,
-	Section,
-	TemplateForm,
-	type TemplateFormData,
-	type VariableEditItem,
-} from "@cocrepo/ui";
+	Page, PageTitleBar, Section, TemplateForm, type TemplateFormData, type VariableEditItem } from "@cocrepo/ui";
 import { addToast, Button, Spinner } from "@heroui/react";
 import { observer, useLocalObservable } from "mobx-react-lite";
 import type { Route } from "next";
@@ -193,7 +182,7 @@ function TemplateEditPageClient({ templateId }: TemplateEditPageClientProps) {
 		return (
 			<Page
 				top={
-					<PageHeader title="템플릿 수정" description="로딩 중..." />
+					<PageTitleBar title="템플릿 수정" description="로딩 중..." />
 				}
 			>
 				<Section>
@@ -211,7 +200,7 @@ function TemplateEditPageClient({ templateId }: TemplateEditPageClientProps) {
 		return (
 			<Page
 				top={
-					<PageHeader
+					<PageTitleBar
 						title="템플릿 수정"
 						description="템플릿을 찾을 수 없습니다."
 					/>
@@ -232,7 +221,7 @@ function TemplateEditPageClient({ templateId }: TemplateEditPageClientProps) {
 	return (
 		<Page
 			top={
-				<PageHeader
+				<PageTitleBar
 					title="템플릿 수정"
 					description={`${template.name} 템플릿을 수정합니다.`}
 				/>

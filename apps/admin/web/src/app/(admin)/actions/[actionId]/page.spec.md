@@ -74,7 +74,7 @@
 | 영역 | 컴포넌트 | 설명 |
 |------|----------|------|
 | 페이지 래퍼 | `Page` | 페이지 콘텐츠 구조 배치 |
-| 페이지 헤더 | `PageHeader` | title="Action 상세", description 동적 (표시명 또는 식별자 기반) |
+| 페이지 헤더 | `PageTitleBar` | title="Action 상세", description 동적 (표시명 또는 식별자 기반) |
 | 액션 영역 | `Button` x3 | "목록으로" (ArrowLeft) + "수정" (Edit, primary, 비시스템만) + "삭제" (Trash2, danger, 비시스템만) |
 | 시스템 안내 | `div` | warning 배경, 시스템 Action은 수정/삭제 불가 안내 (isSystem일 때만 표시) |
 | 기본 정보 섹션 | `section` | 2열 그리드: 식별자(font-mono + 시스템 Chip), 표시명, 분류(Chip), 순서, 설명 |
@@ -134,5 +134,6 @@
 | 2026-02-18 | 초기 생성 (역기획) | req-reverse-engineer |
 | 2026-02-19 | 디자인 목업 섹션 추가 | req-reverse-engineer |
 | 2026-03-03 | Scaffold 제거 및 페이지 헤더 영역/섹션 영역 용어 정리 | codex |
-| 2026-03-03 | `_client.tsx` 로딩/빈 상태/정상 상태 헤더를 `PageHeader` 기반으로 통일 | codex |
+| 2026-03-03 | `_client.tsx` 로딩/빈 상태/정상 상태 헤더를 `PageTitleBar` 기반으로 통일 | codex |
 | 2026-03-03 | Page/Section `mode` 제거 반영 (단일 구조 기준으로 문서 표현 정리) | codex |
+| 2026-03-03 | `PageTitleBar` 단일 컴포넌트 통합 및 리네이밍 반영 | codex |

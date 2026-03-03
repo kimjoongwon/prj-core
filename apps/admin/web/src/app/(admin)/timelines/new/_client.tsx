@@ -1,7 +1,7 @@
 "use client";
 
 import { useCreateTimeline } from "@cocrepo/api";
-import { Page, PageHeader, Section, VStack } from "@cocrepo/ui";
+import { Page, PageTitleBar, Section, VStack } from "@cocrepo/ui";
 import { addToast, Button, Input, Textarea } from "@heroui/react";
 import { observer, useLocalObservable } from "mobx-react-lite";
 import type { Route } from "next";
@@ -88,7 +88,7 @@ function TimelineNewPageClient() {
 	return (
 		<Page
 			top={
-				<PageHeader
+				<PageTitleBar
 					title="타임라인 등록"
 					description="새 타임라인을 등록합니다."
 					actions={

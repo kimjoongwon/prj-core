@@ -93,7 +93,7 @@
 
 ```
 Page
-└── PageHeader (title="에셋 관리", actions=[업로드 버튼])
+└── PageTitleBar (title="에셋 관리", actions=[업로드 버튼])
 └── Section
     ├── FolderTree (좌측 사이드바, 240px)
     │   └── TreeView (계층적 폴더 구조)
@@ -282,5 +282,6 @@ apps/admin/web/src/app/(admin)/assets/
 | 2026-02-26 | Stage 6 구현: Orval 인터페이스 기반 목록 페이지(page/_client/_prefetch) 구현 | fe-page-builder |
 | 2026-02-26 | Stage 7 구현: assets 목록 page.e2e.ts 추가 | qa-fe-e2e-testing |
 | 2026-03-03 | Scaffold 제거 및 페이지 헤더 영역/섹션 영역 용어 정리 | codex |
-| 2026-03-03 | `_client.tsx` 반복 헤더를 `Page + PageHeader` 패턴으로 정리 | codex |
+| 2026-03-03 | `_client.tsx` 반복 헤더를 `Page + PageTitleBar` 패턴으로 정리 | codex |
 | 2026-03-03 | Page/Section `mode` 제거 반영 (단일 구조 기준으로 문서 표현 정리) | codex |
+| 2026-03-03 | `PageTitleBar` 단일 컴포넌트 통합 및 리네이밍 반영 | codex |

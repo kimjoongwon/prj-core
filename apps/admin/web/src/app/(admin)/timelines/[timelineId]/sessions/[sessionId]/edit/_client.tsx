@@ -1,12 +1,8 @@
 "use client";
 
 import type { UpdateSessionDtoRecurringDayOfWeek } from "@cocrepo/api";
-import {
-	getGetSessionByIdQueryKey,
-	useGetSessionById,
-	useUpdateSession,
-} from "@cocrepo/api";
-import { Page, PageHeader, Section, SectionHeader, VStack } from "@cocrepo/ui";
+import { getGetSessionByIdQueryKey, useGetSessionById, useUpdateSession, } from "@cocrepo/api";
+import { Page, PageTitleBar, Section, VStack } from "@cocrepo/ui";
 import {
 	addToast,
 	Button,
@@ -256,7 +252,7 @@ function SessionEditPageClient({
 	return (
 		<Page
 			top={
-				<PageHeader
+				<PageTitleBar
 					title="세션 수정"
 					description={session?.name}
 					actions={pageActions}
@@ -264,7 +260,7 @@ function SessionEditPageClient({
 			}
 		>
 			<VStack gap={4}>
-				<Section top={<SectionHeader title="기본 정보" />}>
+				<Section top={<PageTitleBar level={2} title="기본 정보" />}>
 					<VStack gap={4}>
 						<Input
 							label="세션명"
@@ -305,7 +301,7 @@ function SessionEditPageClient({
 					</VStack>
 				</Section>
 
-				<Section top={<SectionHeader title="일정 설정" />}>
+				<Section top={<PageTitleBar level={2} title="일정 설정" />}>
 					<VStack gap={4}>
 						{state.type === "ONE_TIME" && (
 							<Input

@@ -1,39 +1,9 @@
 "use client";
 
-import {
-	type InquiryDto,
-	type InquiryStatus,
-	useGetInquiries,
-	useGetInquiryStats,
-} from "@cocrepo/api";
+import { type InquiryDto, type InquiryStatus, useGetInquiries, useGetInquiryStats, } from "@cocrepo/api";
 import type { InputConfig, MetaDataGridColumnConfig } from "@cocrepo/type";
 import {
-	Page,
-	PageHeader,
-	Section,
-	SectionHeader,
-	DateTimeCell,
-	InquiryAssigneeCell,
-	InquiryCategoryCell,
-    InquiryChannelCell,
-    InquiryPriorityCell,
-    InquirySentimentCell,
-    InquirySLACell,
-    InquiryStatsCards,
-    InquiryStatusCell,
-    InquiryUnreadCell,
-    MetaDataGrid,
-    ProfileAvatarCell,
-    VStack,
-    type InquiryCategoryCode,
-    type InquiryChannelCode,
-    type InquiryPriorityCode,
-    type InquiryStats,
-    type InquiryStatusCode,
-    type SLAStatus,
-    type SentimentTypeCode,
-    useMetaDataGridQueryStates,
-} from "@cocrepo/ui";
+	Page, PageTitleBar, Section, DateTimeCell, InquiryAssigneeCell, InquiryCategoryCell, InquiryChannelCell, InquiryPriorityCell, InquirySentimentCell, InquirySLACell, InquiryStatsCards, InquiryStatusCell, InquiryUnreadCell, MetaDataGrid, ProfileAvatarCell, VStack, type InquiryCategoryCode, type InquiryChannelCode, type InquiryPriorityCode, type InquiryStats, type InquiryStatusCode, type SLAStatus, type SentimentTypeCode, useMetaDataGridQueryStates } from "@cocrepo/ui";
 import { Button } from "@heroui/react";
 import { Plus } from "lucide-react";
 import { observer } from "mobx-react-lite";
@@ -306,7 +276,7 @@ function InquiriesPageClient() {
 	return (
 		<Page
 			top={
-				<PageHeader
+				<PageTitleBar
 					title="문의 관리"
 					description="고객 문의를 접수/처리/해결합니다."
 					actions={
@@ -322,14 +292,14 @@ function InquiriesPageClient() {
 			}
 		>
 			<VStack gap={4}>
-				<Section top={<SectionHeader title="문의 현황" />}>
+				<Section top={<PageTitleBar level={2} title="문의 현황" />}>
 					<InquiryStatsCards
 						stats={stats}
 						activeStatus={activeStatus}
 						onStatusClick={handlers.onClickStatusFilter}
 					/>
 				</Section>
-				<Section top={<SectionHeader title="문의 목록" />}>
+				<Section top={<PageTitleBar level={2} title="문의 목록" />}>
 					<MetaDataGrid
 						config={{
 							entity: "Inquiry",

@@ -85,7 +85,7 @@
 | 영역 | 컴포넌트 | 설명 |
 |------|----------|------|
 | 페이지 래퍼 | `Page` | 페이지 콘텐츠 구조 배치 |
-| 페이지 헤더 | `PageHeader` | title="역할 상세", description 동적 |
+| 페이지 헤더 | `PageTitleBar` | title="역할 상세", description 동적 |
 | 헤더 액션 | Button (목록, 수정, 삭제) | 시스템 역할이 아닌 경우에만 수정/삭제 표시 |
 | 시스템 안내 | div (warning) | isSystem일 때만 표시 |
 | 기본 정보 | `Section` > dl | 식별자, 표시명, 설명 |
@@ -172,5 +172,6 @@
 | 2026-02-19 | 디자인 목업 추가 | req-reverse-engineer |
 | 2026-03-03 | Scaffold 제거 및 페이지 헤더 영역/섹션 영역 용어 정리 | codex |
 | 2026-03-03 | 페이지 이벤트 핸들러를 `on[Event][UI]` 규칙으로 정규화 (`onToggleAbilityCheckbox` 등) | codex |
-| 2026-03-03 | 반복 헤더 마크업 제거를 위해 `Page + PageHeader + Section` 조합 적용 | codex |
+| 2026-03-03 | 반복 헤더 마크업 제거를 위해 `Page + PageTitleBar + Section` 조합 적용 | codex |
 | 2026-03-03 | Page/Section `mode` 제거 반영 (단일 구조 기준으로 문서 표현 정리) | codex |
+| 2026-03-03 | `PageTitleBar` 단일 컴포넌트 통합 및 리네이밍 반영 | codex |

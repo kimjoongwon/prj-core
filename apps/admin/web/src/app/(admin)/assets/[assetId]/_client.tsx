@@ -1,22 +1,8 @@
 "use client";
 
+import { type AssetDto, type FolderDto, getGetAssetsQueryKey, useGetAssetById, useGetFolders, useMoveAsset, useRemoveAsset, } from "@cocrepo/api";
 import {
-	type AssetDto,
-	type FolderDto,
-	getGetAssetsQueryKey,
-	useGetAssetById,
-	useGetFolders,
-	useMoveAsset,
-	useRemoveAsset,
-} from "@cocrepo/api";
-import {
-	DateTimeCell,
-	Page,
-	PageHeader,
-	Section,
-	SectionHeader,
-	VStack,
-} from "@cocrepo/ui";
+	DateTimeCell, Page, PageTitleBar, Section, VStack } from "@cocrepo/ui";
 import {
 	addToast,
 	Button,
@@ -164,7 +150,7 @@ function AssetDetailPageClient({ assetId }: AssetDetailPageClientProps) {
 		return (
 			<Page
 				top={
-					<PageHeader title="에셋 상세" description="로딩 중..." />
+					<PageTitleBar title="에셋 상세" description="로딩 중..." />
 				}
 			>
 				<Section>
@@ -178,7 +164,7 @@ function AssetDetailPageClient({ assetId }: AssetDetailPageClientProps) {
 
 	if (!asset) {
 		const pageHeader = (
-			<PageHeader
+			<PageTitleBar
 				title="에셋 상세"
 				description="에셋을 찾을 수 없습니다."
 			/>
@@ -221,7 +207,7 @@ function AssetDetailPageClient({ assetId }: AssetDetailPageClientProps) {
 	);
 
 	const pageHeader = (
-		<PageHeader
+		<PageTitleBar
 			title={asset.originalName ?? "에셋 상세"}
 			description="에셋 상세 정보"
 			actions={pageActions}
@@ -231,7 +217,7 @@ function AssetDetailPageClient({ assetId }: AssetDetailPageClientProps) {
 	return (
 		<Page top={pageHeader}>
 			<VStack gap={4}>
-				<Section top={<SectionHeader title="기본 정보" />}>
+				<Section top={<PageTitleBar level={2} title="기본 정보" />}>
 					<div className="grid grid-cols-1 gap-4 md:grid-cols-2">
 						<div>
 							<p className="text-sm text-default-500">파일명</p>
@@ -269,7 +255,7 @@ function AssetDetailPageClient({ assetId }: AssetDetailPageClientProps) {
 						</div>
 					</div>
 				</Section>
-				<Section top={<SectionHeader title="폴더 이동" />}>
+				<Section top={<PageTitleBar level={2} title="폴더 이동" />}>
 					<div className="grid grid-cols-1 gap-4 md:grid-cols-[1fr_auto]">
 						<Select
 							label="이동 대상 폴더"
@@ -297,7 +283,7 @@ function AssetDetailPageClient({ assetId }: AssetDetailPageClientProps) {
 						</div>
 					</div>
 				</Section>
-				<Section top={<SectionHeader title="스토리지 정보" />}>
+				<Section top={<PageTitleBar level={2} title="스토리지 정보" />}>
 					<div className="grid grid-cols-1 gap-4 md:grid-cols-2">
 						<Input label="Storage Key" value={asset.storageKey} isReadOnly />
 						<Input label="Checksum" value={asset.checksum ?? "-"} isReadOnly />

@@ -1,11 +1,7 @@
 "use client";
 
-import {
-	getGetTimelineByIdQueryKey,
-	useGetTimelineById,
-	useUpdateTimeline,
-} from "@cocrepo/api";
-import { Page, PageHeader, Section, VStack } from "@cocrepo/ui";
+import { getGetTimelineByIdQueryKey, useGetTimelineById, useUpdateTimeline, } from "@cocrepo/api";
+import { Page, PageTitleBar, Section, VStack } from "@cocrepo/ui";
 import { addToast, Button, Input, Textarea } from "@heroui/react";
 import { useQueryClient } from "@tanstack/react-query";
 import { observer, useLocalObservable } from "mobx-react-lite";
@@ -122,7 +118,7 @@ function TimelineEditPageClient({ timelineId }: TimelineEditPageClientProps) {
 	return (
 		<Page
 			top={
-				<PageHeader
+				<PageTitleBar
 					title="타임라인 수정"
 					description={timeline?.name}
 					actions={pageActions}

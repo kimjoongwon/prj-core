@@ -1,19 +1,8 @@
 "use client";
 
+import { type UpdateAbilityDto, useGetAbilityById, useGetActions, useGetSubjects, useUpdateAbility, } from "@cocrepo/api";
 import {
-	type UpdateAbilityDto,
-	useGetAbilityById,
-	useGetActions,
-	useGetSubjects,
-	useUpdateAbility,
-} from "@cocrepo/api";
-import {
-	Page,
-	PageHeader,
-	Section,
-	SectionHeader,
-	VStack,
-} from "@cocrepo/ui";
+	Page, PageTitleBar, Section, VStack } from "@cocrepo/ui";
 import {
 	addToast,
 	Button,
@@ -159,7 +148,7 @@ function AbilityEditPageClient({ abilityId }: AbilityEditPageClientProps) {
 	if (isLoading) {
 		return (
 			<Page
-				top={<PageHeader title="권한 수정" description="로딩 중..." />}
+				top={<PageTitleBar title="권한 수정" description="로딩 중..." />}
 			>
 				<div className="flex items-center justify-center gap-2 p-8">
 					<Spinner size="sm" />
@@ -172,7 +161,7 @@ function AbilityEditPageClient({ abilityId }: AbilityEditPageClientProps) {
 	if (!ability) {
 		return (
 			<Page
-				top={<PageHeader title="권한 수정" description="권한을 찾을 수 없습니다." />}
+				top={<PageTitleBar title="권한 수정" description="권한을 찾을 수 없습니다." />}
 			>
 				<div className="flex flex-col items-center justify-center gap-4 p-8">
 					<p className="text-default-500">권한을 찾을 수 없습니다.</p>
@@ -187,7 +176,7 @@ function AbilityEditPageClient({ abilityId }: AbilityEditPageClientProps) {
 	return (
 		<Page
 			top={
-				<PageHeader
+				<PageTitleBar
 					title="권한 수정"
 					description="권한 정보를 수정합니다."
 					actions={
@@ -213,7 +202,7 @@ function AbilityEditPageClient({ abilityId }: AbilityEditPageClientProps) {
 			}
 		>
 			<VStack gap={4}>
-				<Section top={<SectionHeader title="기본 정보" />}>
+				<Section top={<PageTitleBar level={2} title="기본 정보" />}>
 					<div className="grid grid-cols-1 gap-4">
 						<Input
 							label="권한 이름"
@@ -232,7 +221,7 @@ function AbilityEditPageClient({ abilityId }: AbilityEditPageClientProps) {
 						/>
 					</div>
 				</Section>
-				<Section top={<SectionHeader title="CASL 정보" />}>
+				<Section top={<PageTitleBar level={2} title="CASL 정보" />}>
 					<div className="grid grid-cols-1 gap-4">
 						<Select
 							label="Subject"

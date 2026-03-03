@@ -3,15 +3,7 @@
 import { type SubjectDto, useGetSubjects } from "@cocrepo/api";
 import type { InputConfig, MetaDataGridColumnConfig } from "@cocrepo/type";
 import {
-	BooleanCell,
-	DateTimeCell,
-	DefaultCell,
-	MetaDataGrid,
-	Page,
-	PageHeader,
-	Section,
-	useMetaDataGridQueryStates,
-} from "@cocrepo/ui";
+	BooleanCell, DateTimeCell, DefaultCell, MetaDataGrid, Page, PageTitleBar, Section, useMetaDataGridQueryStates } from "@cocrepo/ui";
 import { Chip } from "@heroui/react";
 import { observer } from "mobx-react-lite";
 
@@ -170,7 +162,7 @@ function SubjectsPageClient() {
 	return (
 		<Page
 			top={
-				<PageHeader
+				<PageTitleBar
 					title="Subject 목록"
 					description="시스템에 등록된 Subject를 조회합니다."
 				/>

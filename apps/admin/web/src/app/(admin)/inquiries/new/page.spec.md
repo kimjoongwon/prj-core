@@ -99,7 +99,7 @@
 
 | 영역 | 컴포넌트 | 기획서 |
 |------|----------|--------|
-| 헤더 | `Page + PageHeader` | - |
+| 헤더 | `Page + PageTitleBar` | - |
 | 기본 정보 | InquiryBasicForm | `packages/fe-ui/src/components/widget/InquiryBasicForm/index.spec.md` |
 | AI 폼 채움 | AiForm | `packages/fe-ui/src/components/feature/AiForm/index.spec.md` |
 | 고객 정보 | CustomerSearchForm | `packages/fe-ui/src/components/feature/CustomerSearchForm/index.spec.md` |
@@ -107,7 +107,7 @@
 | 추가 설정 | InquirySettingsForm | `packages/fe-ui/src/components/widget/InquirySettingsForm/index.spec.md` |
 | 버튼 영역 | FormActions | - |
 
-- AiForm과 각 입력 묶음은 `Section + SectionHeader` 표면을 사용해 서로 구분한다.
+- AiForm과 각 입력 묶음은 `Section + PageTitleBar` 표면을 사용해 서로 구분한다.
 
 ## 페이지 상태
 
@@ -376,5 +376,6 @@
 | 2026-03-01 | 폼 입력 컴포넌트를 HeroUI(Input/Select/Textarea) 기반으로 정리하고 고객 검색을 페이지 로컬 결과 리스트 선택 방식으로 조정 | codex |
 | 2026-03-01 | AiForm을 실제 입력 폼과 동일 위계로 분리하고 바깥 섹션 영역 래퍼를 제거해 Card 단일 표면 구조로 정리 | codex |
 | 2026-03-03 | Scaffold 제거 및 페이지 헤더 영역/섹션 영역 용어 정리 | codex |
-| 2026-03-03 | Page/PageHeader + Section/SectionHeader 기반 배치 명시 | codex |
+| 2026-03-03 | Page/PageTitleBar + Section/PageTitleBar 기반 배치 명시 | codex |
 | 2026-03-03 | Page/Section `mode` 제거 반영 (단일 구조 기준으로 문서 표현 정리) | codex |
+| 2026-03-03 | `PageTitleBar` 단일 컴포넌트 통합 및 리네이밍 반영 | codex |

@@ -1,11 +1,7 @@
 "use client";
 
-import {
-	type UpdateRoleDto,
-	useGetRoleById,
-	useUpdateRole,
-} from "@cocrepo/api";
-import { Page, PageHeader, Section, VStack } from "@cocrepo/ui";
+import { type UpdateRoleDto, useGetRoleById, useUpdateRole, } from "@cocrepo/api";
+import { Page, PageTitleBar, Section, VStack } from "@cocrepo/ui";
 import { Button, Input, Textarea } from "@heroui/react";
 import { ArrowLeft, Save } from "lucide-react";
 import { observer, useLocalObservable } from "mobx-react-lite";
@@ -117,7 +113,7 @@ function RoleEditPageClient({ roleId }: RoleEditPageClientProps) {
 	if (isLoading) {
 		return (
 			<Page
-				top={<PageHeader title="역할 수정" description="로딩 중..." />}
+				top={<PageTitleBar title="역할 수정" description="로딩 중..." />}
 			>
 				<Section>
 					<div className="flex items-center justify-center p-8">
@@ -130,7 +126,7 @@ function RoleEditPageClient({ roleId }: RoleEditPageClientProps) {
 
 	if (!role) {
 		const pageHeader = (
-			<PageHeader
+			<PageTitleBar
 				title="역할 수정"
 				description="역할을 찾을 수 없습니다."
 			/>
@@ -150,7 +146,7 @@ function RoleEditPageClient({ roleId }: RoleEditPageClientProps) {
 
 	if (role.isSystem) {
 		const pageHeader = (
-			<PageHeader
+			<PageTitleBar
 				title="역할 수정"
 				description="시스템 역할은 수정할 수 없습니다."
 			/>
@@ -169,7 +165,7 @@ function RoleEditPageClient({ roleId }: RoleEditPageClientProps) {
 	}
 
 	const pageHeader = (
-		<PageHeader
+		<PageTitleBar
 			title="역할 수정"
 			description={`${role.displayName || role.name} 역할을 수정합니다.`}
 			actions={

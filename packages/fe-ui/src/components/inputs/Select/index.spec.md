@@ -75,7 +75,9 @@ MobX state와 연동하는 드롭다운 선택 컴포넌트. `useFormField` 훅�
 
 ```typescript
 interface SelectProps<T> extends MobxProps<T>,
-  Omit<BaseSelectProps, "value" | "onChange"> {}
+  Omit<BaseSelectProps, "value" | "onChange" | "options"> {
+  options?: BaseSelectProps["options"];
+}
 ```
 
 - `state`: MobX observable 객체
@@ -102,3 +104,4 @@ interface SelectProps<T> extends MobxProps<T>,
 |------|------|--------|
 | 2026-02-18 | 초기 생성 (역기획) | req-reverse-engineer |
 | 2026-02-19 | 디자인 목업 추가 | req-reverse-engineer |
+| 2026-03-03 | `options` 타입을 `BaseSelectProps` 기반으로 명시해 `unknown` 추론 오류를 제거 | codex |

@@ -4,13 +4,7 @@ import type { AbilityResponseDto } from "@cocrepo/api";
 import { customInstance, useGetActions, useGetSubjects } from "@cocrepo/api";
 import type { MetaDataGridColumnConfig } from "@cocrepo/type";
 import {
-	DateTimeCell,
-	Page,
-	PageHeader,
-	Section,
-	SectionHeader,
-	VStack,
-} from "@cocrepo/ui";
+	DateTimeCell, Page, PageTitleBar, Section, VStack } from "@cocrepo/ui";
 import {
 	Button,
 	Chip,
@@ -207,7 +201,7 @@ function AbilitiesPageClient() {
 	return (
 		<Page
 			top={
-				<PageHeader
+				<PageTitleBar
 					title="권한 목록"
 					description="시스템에 등록된 CASL 권한을 관리합니다."
 					actions={
@@ -224,7 +218,7 @@ function AbilitiesPageClient() {
 			}
 		>
 			<VStack gap={4}>
-				<Section top={<SectionHeader title="필터" />}>
+				<Section top={<PageTitleBar level={2} title="필터" />}>
 					<div className="grid grid-cols-1 gap-4 md:grid-cols-4">
 						<Input
 							placeholder="권한 이름 검색"
@@ -290,7 +284,7 @@ function AbilitiesPageClient() {
 						</Button>
 					</div>
 				</Section>
-				<Section top={<SectionHeader title="권한 목록" />}>
+				<Section top={<PageTitleBar level={2} title="권한 목록" />}>
 					{isLoading ? (
 						<div className="flex items-center justify-center gap-2 p-8">
 							<Spinner size="sm" />

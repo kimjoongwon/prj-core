@@ -71,7 +71,7 @@
 | 영역 | 컴포넌트 | 설명 |
 |------|----------|------|
 | 페이지 래퍼 | `Page` | 페이지 콘텐츠 구조 배치 |
-| 페이지 헤더 | `PageHeader` | title="템플릿 등록", description="새로운 메시지 템플릿을 등록합니다." |
+| 페이지 헤더 | `PageTitleBar` | title="템플릿 등록", description="새로운 메시지 템플릿을 등록합니다." |
 | 폼 영역 | `TemplateForm` (mode="create") | 공통 템플릿 폼 컴포넌트 |
 
 ## 폼 필드
@@ -151,5 +151,6 @@
 | 2026-02-18 | 초기 생성 (역기획) | req-reverse-engineer |
 | 2026-02-19 | 디자인 목업 추가 | req-reverse-engineer |
 | 2026-03-03 | Scaffold 제거 및 페이지 헤더 영역/섹션 영역 용어 정리 | codex |
-| 2026-03-03 | `_client.tsx` 반복 헤더 마크업을 `Page + PageHeader`로 정리 | codex |
+| 2026-03-03 | `_client.tsx` 반복 헤더 마크업을 `Page + PageTitleBar`로 정리 | codex |
 | 2026-03-03 | Page/Section `mode` 제거 반영 (단일 구조 기준으로 문서 표현 정리) | codex |
+| 2026-03-03 | `PageTitleBar` 단일 컴포넌트 통합 및 리네이밍 반영 | codex |

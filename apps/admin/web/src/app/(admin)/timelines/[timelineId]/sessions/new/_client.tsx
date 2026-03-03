@@ -2,7 +2,7 @@
 
 import type { CreateSessionDtoRecurringDayOfWeek } from "@cocrepo/api";
 import { useCreateSession, useGetTimelineById } from "@cocrepo/api";
-import { Page, PageHeader, Section, SectionHeader, VStack } from "@cocrepo/ui";
+import { Page, PageTitleBar, Section, VStack } from "@cocrepo/ui";
 import {
 	addToast,
 	Button,
@@ -206,7 +206,7 @@ function SessionNewPageClient({ timelineId }: SessionNewPageClientProps) {
 	return (
 		<Page
 			top={
-				<PageHeader
+				<PageTitleBar
 					title="세션 등록"
 					description={pageDescription}
 					actions={pageActions}
@@ -214,7 +214,7 @@ function SessionNewPageClient({ timelineId }: SessionNewPageClientProps) {
 			}
 		>
 			<VStack gap={4}>
-				<Section top={<SectionHeader title="기본 정보" />}>
+				<Section top={<PageTitleBar level={2} title="기본 정보" />}>
 					<VStack gap={4}>
 						<Input
 							label="세션명"
@@ -255,7 +255,7 @@ function SessionNewPageClient({ timelineId }: SessionNewPageClientProps) {
 					</VStack>
 				</Section>
 
-				<Section top={<SectionHeader title="일정 설정" />}>
+				<Section top={<PageTitleBar level={2} title="일정 설정" />}>
 					<VStack gap={4}>
 						{state.type === "ONE_TIME" && (
 							<Input

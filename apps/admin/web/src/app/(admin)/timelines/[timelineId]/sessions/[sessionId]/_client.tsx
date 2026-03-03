@@ -1,25 +1,8 @@
 "use client";
 
+import { getGetProgramsQueryKey, getGetSessionsQueryKey, type ProgramDto, type SessionDto, type UserDto, useDeleteProgram, useDeleteSession, useGetPrograms, useGetSessionById, useGetUsers, } from "@cocrepo/api";
 import {
-	getGetProgramsQueryKey,
-	getGetSessionsQueryKey,
-	type ProgramDto,
-	type SessionDto,
-	type UserDto,
-	useDeleteProgram,
-	useDeleteSession,
-	useGetPrograms,
-	useGetSessionById,
-	useGetUsers,
-} from "@cocrepo/api";
-import {
-	DateTimeCell,
-	Page,
-	PageHeader,
-	Section,
-	SectionHeader,
-	VStack,
-} from "@cocrepo/ui";
+	DateTimeCell, Page, PageTitleBar, Section, VStack } from "@cocrepo/ui";
 import {
 	addToast,
 	Button,
@@ -282,7 +265,7 @@ function SessionDetailPageClient({
 	return (
 		<Page
 			top={
-				<PageHeader
+				<PageTitleBar
 					title={pageTitle}
 					description={pageDescription}
 					actions={pageActions}
@@ -290,7 +273,7 @@ function SessionDetailPageClient({
 			}
 		>
 			<VStack gap={4}>
-				<Section top={<SectionHeader title="기본 정보" />}>
+				<Section top={<PageTitleBar level={2} title="기본 정보" />}>
 					<div className="grid grid-cols-1 gap-4 md:grid-cols-2">
 						<div>
 							<label className="text-sm text-default-500">세션명</label>
@@ -372,7 +355,7 @@ function SessionDetailPageClient({
 
 				<Section
 					top={
-						<SectionHeader
+						<PageTitleBar level={2}
 							title="프로그램 연결 허브"
 							actions={programSectionActions}
 						/>

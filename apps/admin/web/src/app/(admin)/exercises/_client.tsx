@@ -1,20 +1,9 @@
 "use client";
 
-import {
-	type ExerciseDto,
-	getGetExercisesQueryKey,
-	useDeleteExercise,
-	useGetExercises,
-} from "@cocrepo/api";
+import { type ExerciseDto, getGetExercisesQueryKey, useDeleteExercise, useGetExercises, } from "@cocrepo/api";
 import type { InputConfig, MetaDataGridColumnConfig } from "@cocrepo/type";
 import {
-	DateTimeCell,
-	MetaDataGrid,
-	Page,
-	PageHeader,
-	Section,
-	useMetaDataGridQueryStates,
-} from "@cocrepo/ui";
+	DateTimeCell, MetaDataGrid, Page, PageTitleBar, Section, useMetaDataGridQueryStates } from "@cocrepo/ui";
 import {
 	addToast,
 	Button,
@@ -213,7 +202,7 @@ function ExercisesPageClient() {
 	return (
 		<Page
 			top={
-				<PageHeader
+				<PageTitleBar
 					title="운동 종목"
 					description="루틴에서 사용할 운동 콘텐츠를 관리합니다."
 					actions={

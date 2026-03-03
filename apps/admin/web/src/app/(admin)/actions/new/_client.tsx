@@ -1,7 +1,7 @@
 "use client";
 
 import { type CreateActionDto, useCreateAction } from "@cocrepo/api";
-import { Page, PageHeader, Section, VStack } from "@cocrepo/ui";
+import { Page, PageTitleBar, Section, VStack } from "@cocrepo/ui";
 import { Button, Input, Select, SelectItem, Textarea } from "@heroui/react";
 import { ArrowLeft, Save } from "lucide-react";
 import { observer, useLocalObservable } from "mobx-react-lite";
@@ -115,7 +115,7 @@ function ActionNewPageClient() {
 	return (
 		<Page
 			top={
-				<PageHeader
+				<PageTitleBar
 					title="Action 등록"
 					description="새로운 Action을 등록합니다."
 					actions={

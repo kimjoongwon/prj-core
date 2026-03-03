@@ -1,16 +1,8 @@
 "use client";
 
-import {
-	getUsers,
-	type InquiryCategory,
-	type InquiryChannel,
-	type InquiryPriority,
-	useCreateInquiry,
-	useFillInquiryFormWithAi,
-	useGetInquiryCreateForm,
-} from "@cocrepo/api";
+import { getUsers, type InquiryCategory, type InquiryChannel, type InquiryPriority, useCreateInquiry, useFillInquiryFormWithAi, useGetInquiryCreateForm, } from "@cocrepo/api";
 import { ADMIN_PATHS } from "@cocrepo/constant";
-import { AiForm, Button, Page, PageHeader, Section, SectionHeader, VStack } from "@cocrepo/ui";
+import { AiForm, Button, Page, PageTitleBar, Section, VStack } from "@cocrepo/ui";
 import { Input, Select, SelectItem, type Selection, Textarea } from "@heroui/react";
 import { ArrowLeft } from "lucide-react";
 import { observer, useLocalObservable } from "mobx-react-lite";
@@ -204,7 +196,7 @@ function InquiriesNewPageClient() {
 	return (
 		<Page
 			top={
-				<PageHeader
+				<PageTitleBar
 					title="문의 접수"
 					description="문의 생성 bootstrap과 AiForm을 이용해 문의를 등록합니다."
 					actions={
@@ -222,7 +214,7 @@ function InquiriesNewPageClient() {
 		>
 			<VStack gap={4}>
 				{bootstrap && (
-					<Section top={<SectionHeader title="AI 폼 추천" />}>
+					<Section top={<PageTitleBar level={2} title="AI 폼 추천" />}>
 						<AiForm
 							formState={state.toFormObject()}
 							fieldMeta={bootstrap.fieldMeta}
@@ -253,7 +245,7 @@ function InquiriesNewPageClient() {
 						/>
 					</Section>
 				)}
-				<Section top={<SectionHeader title="문의 입력" />}>
+				<Section top={<PageTitleBar level={2} title="문의 입력" />}>
 					<VStack gap={4}>
 						{!isHidden("customerId") && (
 							<div className="space-y-2">

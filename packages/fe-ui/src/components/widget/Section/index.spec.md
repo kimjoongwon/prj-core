@@ -68,3 +68,4 @@ interface SectionProps {
 | 2026-02-19 | 디자인 목업 섹션 추가 | req-reverse-engineer |
 | 2026-03-03 | `widget` 디렉터리 이동에 맞춰 위치/타입 문구 및 관련 설명 정리 | codex |
 | 2026-03-03 | Scaffold 제거 및 페이지 헤더 영역/섹션 영역 용어 정리 | codex |
+| 2026-03-03 | `PageTitleBar` 단일 컴포넌트 통합 및 리네이밍 반영 | codex |

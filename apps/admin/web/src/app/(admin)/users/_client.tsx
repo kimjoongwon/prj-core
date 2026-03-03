@@ -3,18 +3,7 @@
 import { type UserDto, useGetUsers } from "@cocrepo/api";
 import type { InputConfig, MetaDataGridColumnConfig } from "@cocrepo/type";
 import {
-	DateTimeCell,
-	MetaDataGrid,
-	Page,
-	PageHeader,
-	PhoneCell,
-	Section,
-	StatsCard,
-	StatusChipCell,
-	UserRoleCell,
-	useMetaDataGridQueryStates,
-	VStack,
-} from "@cocrepo/ui";
+	DateTimeCell, MetaDataGrid, Page, PageTitleBar, PhoneCell, Section, StatsCard, StatusChipCell, UserRoleCell, useMetaDataGridQueryStates, VStack } from "@cocrepo/ui";
 import { UserCheck, UserMinus, Users } from "lucide-react";
 import { observer } from "mobx-react-lite";
 
@@ -97,7 +86,7 @@ function UsersPageClient() {
 	return (
 		<Page
 			top={
-				<PageHeader
+				<PageTitleBar
 					title="이용자 목록"
 					description="시스템에 등록된 이용자를 조회합니다."
 				/>

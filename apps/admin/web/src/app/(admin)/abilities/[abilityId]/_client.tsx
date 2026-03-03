@@ -1,7 +1,7 @@
 "use client";
 
 import { useDeleteAbility, useGetAbilityById } from "@cocrepo/api";
-import { Page, PageHeader, VStack } from "@cocrepo/ui";
+import { Page, PageTitleBar, VStack } from "@cocrepo/ui";
 import {
 	Button,
 	Chip,
@@ -67,7 +67,7 @@ function AbilityDetailPageClient({ abilityId }: AbilityDetailPageClientProps) {
 	if (isLoading) {
 		return (
 			<Page
-				top={<PageHeader title="권한 상세" description="로딩 중..." />}
+				top={<PageTitleBar title="권한 상세" description="로딩 중..." />}
 			>
 				<div className="flex items-center justify-center gap-2 p-8">
 					<Spinner size="sm" />
@@ -81,7 +81,7 @@ function AbilityDetailPageClient({ abilityId }: AbilityDetailPageClientProps) {
 		return (
 			<Page
 				top={
-					<PageHeader
+					<PageTitleBar
 						title="권한 상세"
 						description="권한을 찾을 수 없습니다."
 					/>
@@ -100,7 +100,7 @@ function AbilityDetailPageClient({ abilityId }: AbilityDetailPageClientProps) {
 	return (
 		<Page
 			top={
-				<PageHeader
+				<PageTitleBar
 					title="권한 상세"
 					description="권한 정보를 확인하고 수정하거나 삭제할 수 있습니다."
 					actions={

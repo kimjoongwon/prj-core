@@ -3,7 +3,7 @@
 // TODO: Orval codegen 후 아래 import로 교체
 // import { useGetGroups, type GroupDto } from "@cocrepo/api";
 import { customInstance } from "@cocrepo/api";
-import { DateTimeCell, Page, PageHeader, Section, VStack } from "@cocrepo/ui";
+import { DateTimeCell, Page, PageTitleBar, Section, VStack } from "@cocrepo/ui";
 import { Button } from "@heroui/react";
 import { useQuery } from "@tanstack/react-query";
 import { Layers, Plus } from "lucide-react";
@@ -45,7 +45,7 @@ function RoleGroupsPageClient() {
 	return (
 		<Page
 			top={
-				<PageHeader
+				<PageTitleBar
 					title="역할 그룹 목록"
 					description="역할을 그룹으로 분류하여 관리합니다."
 					actions={

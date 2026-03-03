@@ -1,12 +1,7 @@
 "use client";
 
-import {
-	customInstance,
-	useDeleteRole,
-	useGetAbilitiesByRoleId,
-	useGetRoleById,
-} from "@cocrepo/api";
-import { Page, PageHeader, Section, VStack } from "@cocrepo/ui";
+import { customInstance, useDeleteRole, useGetAbilitiesByRoleId, useGetRoleById, } from "@cocrepo/api";
+import { Page, PageTitleBar, Section, VStack } from "@cocrepo/ui";
 import {
 	Button,
 	Checkbox,
@@ -268,7 +263,7 @@ function RoleDetailPageClient({ roleId }: RoleDetailPageClientProps) {
 	if (isLoading) {
 		return (
 			<Page
-				top={<PageHeader title="역할 상세" description="로딩 중..." />}
+				top={<PageTitleBar title="역할 상세" description="로딩 중..." />}
 			>
 				<div className="flex items-center justify-center p-8">
 					<span className="text-default-500">로딩 중...</span>
@@ -280,7 +275,7 @@ function RoleDetailPageClient({ roleId }: RoleDetailPageClientProps) {
 	if (!role) {
 		return (
 			<Page
-				top={<PageHeader title="역할 상세" description="역할을 찾을 수 없습니다." />}
+				top={<PageTitleBar title="역할 상세" description="역할을 찾을 수 없습니다." />}
 			>
 				<div className="flex flex-col items-center justify-center gap-4 p-8">
 					<p className="text-default-500">역할을 찾을 수 없습니다.</p>
@@ -328,7 +323,7 @@ function RoleDetailPageClient({ roleId }: RoleDetailPageClientProps) {
 	return (
 		<Page
 			top={
-				<PageHeader
+				<PageTitleBar
 					title="역할 상세"
 					description={`${role.displayName || role.name} 역할의 상세 정보입니다.`}
 					actions={pageActions}

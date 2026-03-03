@@ -1,29 +1,8 @@
 "use client";
 
-import {
-	getGetTemplateQueryKey,
-	type TemplateDto,
-	useDeleteTemplate,
-	useGetTemplate,
-	usePreviewTemplate,
-	useSendTestTemplate,
-	useToggleTemplateStatus,
-} from "@cocrepo/api";
+import { getGetTemplateQueryKey, type TemplateDto, useDeleteTemplate, useGetTemplate, usePreviewTemplate, useSendTestTemplate, useToggleTemplateStatus, } from "@cocrepo/api";
 import type { PreviewResult, TemplateVariable } from "@cocrepo/ui";
-import {
-	DateTimeCell,
-	Page,
-	PageHeader,
-	PreviewModal,
-	Section,
-	SectionHeader,
-	SendTestModal,
-	TemplateActions,
-	TemplateContentViewer,
-	TemplateTypeBadge,
-	VariableReadTable,
-	VStack,
-} from "@cocrepo/ui";
+import { DateTimeCell, Page, PageTitleBar, PreviewModal, Section, SendTestModal, TemplateActions, TemplateContentViewer, TemplateTypeBadge, VariableReadTable, VStack } from "@cocrepo/ui";
 import {
 	addToast,
 	Button,
@@ -187,7 +166,7 @@ function TemplateDetailPageClient({
 	// 데이터 없음
 	if (!template) {
 		const pageHeader = (
-			<PageHeader
+			<PageTitleBar
 				title="템플릿 상세"
 				description="템플릿을 찾을 수 없습니다."
 			/>
@@ -209,7 +188,7 @@ function TemplateDetailPageClient({
 	}
 
 	const pageHeader = (
-		<PageHeader
+		<PageTitleBar
 			title="템플릿 상세"
 			description={`${template.name} 템플릿의 상세 정보입니다.`}
 			actions={
@@ -229,7 +208,7 @@ function TemplateDetailPageClient({
 	return (
 		<Page top={pageHeader}>
 			<VStack gap={4}>
-				<Section top={<SectionHeader title="기본 정보" />}>
+				<Section top={<PageTitleBar level={2} title="기본 정보" />}>
 					<div className="grid grid-cols-1 gap-4 md:grid-cols-2">
 						<div>
 							<label className="text-sm text-default-500">코드</label>
@@ -276,14 +255,14 @@ function TemplateDetailPageClient({
 						</div>
 					</div>
 				</Section>
-				<Section top={<SectionHeader title="콘텐츠" />}>
+				<Section top={<PageTitleBar level={2} title="콘텐츠" />}>
 					<TemplateContentViewer
 						type={template.type}
 						subject={template.subject ?? null}
 						content={template.content}
 					/>
 				</Section>
-				<Section top={<SectionHeader title="변수 목록" />}>
+				<Section top={<PageTitleBar level={2} title="변수 목록" />}>
 					{(template.variables ?? []).length > 0 ? (
 						<VariableReadTable variables={template.variables ?? []} />
 					) : (

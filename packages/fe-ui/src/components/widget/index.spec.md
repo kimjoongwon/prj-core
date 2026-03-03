@@ -18,4 +18,5 @@
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
 | 2026-03-03 | layout `Section` 이름 충돌 방지를 위해 `Section` widget 배럴 export 제거 | codex |
-| 2026-03-03 | `_client.tsx` 페이지 헤더 표준화를 위해 `PageHeader` widget 배럴 export 추가 | codex |
+| 2026-03-03 | `_client.tsx` 페이지 헤더 표준화를 위해 `PageTitleBar` widget 배럴 export 추가 | codex |
+| 2026-03-03 | `PageTitleBar` 단일 컴포넌트 통합 및 리네이밍 반영 | codex |

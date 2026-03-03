@@ -1,20 +1,8 @@
 "use client";
 
+import { type ActivityDto, getGetRoutinesQueryKey, type RoutineDto, useDeleteRoutine, useGetRoutine, } from "@cocrepo/api";
 import {
-	type ActivityDto,
-	getGetRoutinesQueryKey,
-	type RoutineDto,
-	useDeleteRoutine,
-	useGetRoutine,
-} from "@cocrepo/api";
-import {
-	DateTimeCell,
-	Page,
-	PageHeader,
-	Section,
-	SectionHeader,
-	VStack,
-} from "@cocrepo/ui";
+	DateTimeCell, Page, PageTitleBar, Section, VStack } from "@cocrepo/ui";
 import {
 	addToast,
 	Button,
@@ -90,7 +78,7 @@ function RoutineDetailPageClient({ routineId }: RoutineDetailPageClientProps) {
 	if (!response) {
 		return (
 			<Page
-				top={<PageHeader title="루틴 상세" description="로딩 중..." />}
+				top={<PageTitleBar title="루틴 상세" description="로딩 중..." />}
 			>
 				<div className="flex items-center justify-center p-8">
 					<Spinner size="lg" />
@@ -102,7 +90,7 @@ function RoutineDetailPageClient({ routineId }: RoutineDetailPageClientProps) {
 	if (!routine) {
 		return (
 			<Page
-				top={<PageHeader title="루틴 상세" description="루틴을 찾을 수 없습니다." />}
+				top={<PageTitleBar title="루틴 상세" description="루틴을 찾을 수 없습니다." />}
 			>
 				<div className="flex flex-col items-center justify-center gap-4 p-8">
 					<p className="text-default-500">루틴을 찾을 수 없습니다.</p>
@@ -155,7 +143,7 @@ function RoutineDetailPageClient({ routineId }: RoutineDetailPageClientProps) {
 	return (
 		<Page
 			top={
-				<PageHeader
+				<PageTitleBar
 					title={routine.name || "루틴 상세"}
 					description="루틴의 상세 정보입니다."
 					actions={pageActions}
@@ -163,7 +151,7 @@ function RoutineDetailPageClient({ routineId }: RoutineDetailPageClientProps) {
 			}
 		>
 			<VStack gap={4}>
-				<Section top={<SectionHeader title="기본 정보" />}>
+				<Section top={<PageTitleBar level={2} title="기본 정보" />}>
 					<div className="grid grid-cols-1 gap-4 md:grid-cols-2">
 						<div>
 							<label className="text-sm text-default-500">루틴명</label>
@@ -210,7 +198,7 @@ function RoutineDetailPageClient({ routineId }: RoutineDetailPageClientProps) {
 					</div>
 				</Section>
 
-				<Section top={<SectionHeader title="연결 요약" />}>
+				<Section top={<PageTitleBar level={2} title="연결 요약" />}>
 					<div className="grid grid-cols-1 gap-3 md:grid-cols-3">
 						<div className="rounded-lg bg-content2 p-3">
 							<p className="text-xs text-default-500">전체 활동</p>
@@ -229,7 +217,7 @@ function RoutineDetailPageClient({ routineId }: RoutineDetailPageClientProps) {
 					</div>
 				</Section>
 
-				<Section top={<SectionHeader title="운동 구성" />}>
+				<Section top={<PageTitleBar level={2} title="운동 구성" />}>
 					{activities.length === 0 ? (
 						<p className="text-sm text-default-500">등록된 활동이 없습니다.</p>
 					) : (
@@ -273,7 +261,7 @@ function RoutineDetailPageClient({ routineId }: RoutineDetailPageClientProps) {
 					)}
 				</Section>
 
-				<Section top={<SectionHeader title="사용 중인 프로그램" />}>
+				<Section top={<PageTitleBar level={2} title="사용 중인 프로그램" />}>
 					{programs.length === 0 ? (
 						<p className="text-sm text-default-500">
 							현재 이 루틴을 사용하는 프로그램이 없습니다.

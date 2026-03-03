@@ -3,7 +3,7 @@
 // TODO: Orval codegen 후 아래 import로 교체
 // import { useGetGroupById, useUpdateGroup } from "@cocrepo/api";
 import { customInstance } from "@cocrepo/api";
-import { Page, PageHeader, Section, VStack } from "@cocrepo/ui";
+import { Page, PageTitleBar, Section, VStack } from "@cocrepo/ui";
 import { Button, Input } from "@heroui/react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { ArrowLeft, Save } from "lucide-react";
@@ -117,7 +117,7 @@ function RoleGroupEditPageClient({ groupId }: RoleGroupEditPageClientProps) {
 	if (isLoading) {
 		return (
 			<Page
-				top={<PageHeader title="역할 그룹 수정" description="로딩 중..." />}
+				top={<PageTitleBar title="역할 그룹 수정" description="로딩 중..." />}
 			>
 				<div className="flex items-center justify-center p-8">
 					<span className="text-default-500">로딩 중...</span>
@@ -129,7 +129,7 @@ function RoleGroupEditPageClient({ groupId }: RoleGroupEditPageClientProps) {
 	if (!group) {
 		return (
 			<Page
-				top={<PageHeader title="역할 그룹 수정" description="그룹을 찾을 수 없습니다." />}
+				top={<PageTitleBar title="역할 그룹 수정" description="그룹을 찾을 수 없습니다." />}
 			>
 				<div className="flex flex-col items-center justify-center gap-4 p-8">
 					<p className="text-default-500">그룹을 찾을 수 없습니다.</p>
@@ -144,7 +144,7 @@ function RoleGroupEditPageClient({ groupId }: RoleGroupEditPageClientProps) {
 	return (
 		<Page
 			top={
-				<PageHeader
+				<PageTitleBar
 					title="역할 그룹 수정"
 					description={`${group.label || group.name} 그룹을 수정합니다.`}
 					actions={

@@ -3,14 +3,7 @@
 import { type RoleDto, useGetRoles } from "@cocrepo/api";
 import type { MetaDataGridColumnConfig } from "@cocrepo/type";
 import {
-	DateTimeCell,
-	Page,
-	PageHeader,
-	Section,
-	SectionHeader,
-	StatusChipCell,
-	VStack,
-} from "@cocrepo/ui";
+	DateTimeCell, Page, PageTitleBar, Section, StatusChipCell, VStack } from "@cocrepo/ui";
 import { Button, Chip } from "@heroui/react";
 import { Plus, Shield } from "lucide-react";
 import { observer } from "mobx-react-lite";
@@ -89,7 +82,7 @@ function RolesPageClient() {
 	return (
 		<Page
 			top={
-				<PageHeader
+				<PageTitleBar
 					title="역할 목록"
 					description="시스템에 등록된 역할을 관리합니다."
 					actions={createRoleButton}
@@ -104,7 +97,7 @@ function RolesPageClient() {
 						페이지에서 관리할 수 있습니다.
 					</p>
 				</div>
-				<Section top={<SectionHeader title="역할 목록 데이터" />}>
+				<Section top={<PageTitleBar level={2} title="역할 목록 데이터" />}>
 					{isLoading ? (
 						<div className="flex items-center justify-center p-8">
 							<span className="text-default-500">로딩 중...</span>

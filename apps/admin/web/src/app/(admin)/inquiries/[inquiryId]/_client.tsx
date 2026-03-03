@@ -1,35 +1,9 @@
 "use client";
 
-import {
-	type InquiryCategory,
-	type InquiryPriority,
-	type InquiryMessageDto,
-	type InquiryParticipantDto,
-	useDeleteInquiry,
-	useFillInquiryFormWithAi,
-	useGetInquiryById,
-	useGetInquiryMessages,
-	useGetInquiryParticipants,
-	useGetInquiryUpdateForm,
-	useUpdateInquiry,
-} from "@cocrepo/api";
+import { type InquiryCategory, type InquiryPriority, type InquiryMessageDto, type InquiryParticipantDto, useDeleteInquiry, useFillInquiryFormWithAi, useGetInquiryById, useGetInquiryMessages, useGetInquiryParticipants, useGetInquiryUpdateForm, useUpdateInquiry, } from "@cocrepo/api";
 import type { InquiryMessage, InquiryParticipant } from "@cocrepo/type";
 import {
-	AiForm,
-	Button,
-	ConfirmModal,
-	CustomerInfoCard,
-	HStack,
-	InquiryInfoCard,
-	InquiryMetaPanel,
-	InquiryWebSocketProvider,
-	Page,
-	PageHeader,
-	ParticipantList,
-	RealtimeChatPanel,
-	SLATracker,
-	VStack,
-} from "@cocrepo/ui";
+	AiForm, Button, ConfirmModal, CustomerInfoCard, HStack, InquiryInfoCard, InquiryMetaPanel, InquiryWebSocketProvider, Page, PageTitleBar, ParticipantList, RealtimeChatPanel, SLATracker, VStack } from "@cocrepo/ui";
 import { Input, Select, SelectItem, type Selection } from "@heroui/react";
 import { ArrowLeft, Pencil, Trash2 } from "lucide-react";
 import { observable } from "mobx";
@@ -452,7 +426,7 @@ function InquiryDetailPageClient({ inquiryId }: Props) {
 		>
 			<Page
 				top={
-					<PageHeader
+					<PageTitleBar
 						title="문의 상세"
 						description="문의 상세 정보를 확인하고 답변을 작성합니다."
 						actions={

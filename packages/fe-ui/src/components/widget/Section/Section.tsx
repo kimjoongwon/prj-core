@@ -12,7 +12,7 @@ export interface SectionProps {
  * @example
  * ```tsx
  * <Section>
- *   <SectionHeader>기본 정보</SectionHeader>
+ *   <PageTitleBar level={2} title="기본 정보" />
  *   <Input label="이름" />
  *   <Input label="이메일" />
  * </Section>
