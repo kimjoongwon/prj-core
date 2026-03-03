@@ -1,8 +1,8 @@
 import { Card, CardBody } from "@heroui/react";
 import type { Meta, StoryObj } from "@storybook/react";
 import { Button } from "../../inputs/Button/Button";
-import { HStack } from "../../ui/surfaces/HStack/HStack";
-import { VStack } from "../../ui/surfaces/VStack/VStack";
+import { HStack } from "../../layouts/HStack/HStack";
+import { VStack } from "../../layouts/VStack/VStack";
 import { Main } from "./Main";
 
 const meta: Meta<typeof Main> = {

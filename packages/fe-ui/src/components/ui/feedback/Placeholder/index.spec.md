@@ -43,7 +43,7 @@
 ## 내부 의존성
 
 - `Text` (data-display/Text)
-- `VStack` (surfaces/VStack)
+- `VStack` (layouts/VStack)
 
 ## 관련 컴포넌트
 
@@ -59,3 +59,4 @@
 |------|------|--------|
 | 2026-02-18 | 초기 생성 (역기획) | req-reverse-engineer |
 | 2026-02-19 | 디자인 목업 섹션 추가 | req-reverse-engineer |
+| 2026-03-03 | 내부 의존성 경로 표기를 `layouts/VStack` 기준으로 정리 | codex |

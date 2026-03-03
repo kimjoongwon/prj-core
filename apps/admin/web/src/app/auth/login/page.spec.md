@@ -16,7 +16,7 @@
 │   [좌하단 blur orb: primary/30]  [우상단 blur orb: secondary/20] │
 │                                                              │
 │              ┌─────────────────────────────┐                 │
-│              │      SectionLayout          │                 │
+│              │      SectionShell          │                 │
 │              │      (max-w-md, 중앙정렬)   │                 │
 │              │                             │                 │
 │              │  ── 정상 진입 (리다이렉팅) ──  │                 │
@@ -50,7 +50,7 @@
 
 | 영역 | 컴포넌트 | 설명 |
 |------|----------|------|
-| 레이아웃 | `SectionLayout` > 중앙 정렬 (max-w-md) | 로그인 레이아웃 |
+| 레이아웃 | `SectionShell` > 중앙 정렬 (max-w-md) | 로그인 레이아웃 |
 | 리다이렉트 상태 | `Spinner` + "로그인 페이지로 이동 중..." | 정상 진입 시 |
 | 에러 상태 | 에러 제목 + 에러 메시지 + "다시 로그인" 버튼 | 콜백 에러 시 |
 
@@ -99,7 +99,7 @@
 
 - [x] page.tsx (클라이언트 컴포넌트, Suspense 래핑)
 - [x] hooks/useAuthLoginPage.tsx (OIDC 로그인 훅)
-- [x] layout.tsx (SectionLayout + 중앙 정렬)
+- [x] layout.tsx (SectionShell + 중앙 정렬)
 
 ## 변경 이력
 

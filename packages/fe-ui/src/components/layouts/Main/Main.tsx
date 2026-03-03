@@ -11,9 +11,9 @@ export interface MainProps {
  *
  * @example
  * ```tsx
- * <AppLayout header={<Header />}>
+ * <AppShell header={<Header />}>
  *   <Main>{children}</Main>
- * </AppLayout>
+ * </AppShell>
  * ```
  */
 export const Main = ({ children, className }: MainProps) => {

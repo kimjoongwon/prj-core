@@ -7,13 +7,7 @@ import {
 	useGetExercises,
 } from "@cocrepo/api";
 import type { InputConfig, MetaDataGridColumnConfig } from "@cocrepo/type";
-import {
-	DateTimeCell,
-	MetaDataGrid,
-	PageSurface,
-	SectionSurface,
-	useMetaDataGridQueryStates,
-} from "@cocrepo/ui";
+import { DateTimeCell, MetaDataGrid, useMetaDataGridQueryStates } from "@cocrepo/ui";
 import {
 	addToast,
 	Button,
@@ -210,69 +204,53 @@ function ExercisesPageClient() {
 	];
 
 	return (
-		<PageSurface
-			title="운동 종목"
-			description="루틴에서 사용할 운동 콘텐츠를 관리합니다."
-			actions={
-				<Button
-					as={Link}
-					href="/exercises/new"
-					color="primary"
-					startContent={<Plus className="h-4 w-4" />}
-				>
-					운동 등록
-				</Button>
-			}
-		>
-			<SectionSurface>
-				<MetaDataGrid
-					config={{
-						entity: "Exercise",
-						data: exercises,
-						totalCount,
-						isLoading,
-						queryStates,
-						setQueryStates,
-						columns,
-						leftInputs,
-						emptyMessage: "등록된 운동 종목이 없습니다.",
-					}}
-				/>
-			</SectionSurface>
-
-			{/* 삭제 확인 모달 */}
-			<Modal isOpen={deleteModal.isOpen} onClose={deleteModal.onClose}>
-				<ModalContent>
-					<ModalHeader>운동 종목 삭제</ModalHeader>
-					<ModalBody>
-						<p>
-							<strong>{state.deleteTarget?.name}</strong> 운동을
-							삭제하시겠습니까?
-						</p>
-						<p className="mt-2 text-sm text-danger">
-							루틴에서 사용 중인 운동은 삭제할 수 없습니다.
-						</p>
-					</ModalBody>
-					<ModalFooter>
-						<Button
-							variant="flat"
-							onPress={deleteModal.onClose}
-							isDisabled={deleteMutation.isPending}
-						>
-							취소
-						</Button>
-						<Button
-							color="danger"
-							onPress={onClickDeleteConfirm}
-							isLoading={deleteMutation.isPending}
-						>
-							삭제
-						</Button>
-					</ModalFooter>
-				</ModalContent>
-			</Modal>
-		</PageSurface>
-	);
+        <section><div className="flex items-start justify-between gap-4"><div><h1>{"운동 종목"}</h1><p>{"루틴에서 사용할 운동 콘텐츠를 관리합니다."}</p></div><div>{<Button
+                                    as={Link}
+                                    href="/exercises/new"
+                                    color="primary"
+                                    startContent={<Plus className="h-4 w-4" />}>운동 등록
+                                                    </Button>}</div></div>
+            <section>
+                <MetaDataGrid
+                    config={{
+                        entity: "Exercise",
+                        data: exercises,
+                        totalCount,
+                        isLoading,
+                        queryStates,
+                        setQueryStates,
+                        columns,
+                        leftInputs,
+                        emptyMessage: "등록된 운동 종목이 없습니다.",
+                    }} />
+            </section>
+            <Modal isOpen={deleteModal.isOpen} onClose={deleteModal.onClose}>
+                <ModalContent>
+                    <ModalHeader>운동 종목 삭제</ModalHeader>
+                    <ModalBody>
+                        <p>
+                            <strong>{state.deleteTarget?.name}</strong>운동을
+                                                        삭제하시겠습니까?
+                                                    </p>
+                        <p className="mt-2 text-sm text-danger">루틴에서 사용 중인 운동은 삭제할 수 없습니다.
+                                                    </p>
+                    </ModalBody>
+                    <ModalFooter>
+                        <Button
+                            variant="flat"
+                            onPress={deleteModal.onClose}
+                            isDisabled={deleteMutation.isPending}>취소
+                                                    </Button>
+                        <Button
+                            color="danger"
+                            onPress={onClickDeleteConfirm}
+                            isLoading={deleteMutation.isPending}>삭제
+                                                    </Button>
+                    </ModalFooter>
+                </ModalContent>
+            </Modal>
+        </section>
+    );
 }
 
 export default observer(ExercisesPageClient);

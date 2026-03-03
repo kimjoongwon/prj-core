@@ -11,13 +11,7 @@ import {
 	useRemoveAsset,
 } from "@cocrepo/api";
 import type { InputConfig, MetaDataGridColumnConfig } from "@cocrepo/type";
-import {
-	DateTimeCell,
-	MetaDataGrid,
-	PageSurface,
-	SectionSurface,
-	useMetaDataGridQueryStates,
-} from "@cocrepo/ui";
+import { DateTimeCell, MetaDataGrid, useMetaDataGridQueryStates } from "@cocrepo/ui";
 import { addToast, Button, Chip } from "@heroui/react";
 import { useQueryClient } from "@tanstack/react-query";
 import { Trash2, Upload } from "lucide-react";
@@ -276,37 +270,28 @@ function AssetsPageClient() {
 	];
 
 	return (
-		<PageSurface
-			title="에셋 관리"
-			description="업로드된 에셋을 조회, 검색, 필터링하고 삭제할 수 있습니다."
-			actions={
-				<Button
-					variant="flat"
-					color="primary"
-					startContent={<Upload className="h-4 w-4" />}
-					isDisabled
-				>
-					업로드 (준비 중)
-				</Button>
-			}
-		>
-			<SectionSurface>
-				<MetaDataGrid
-					config={{
-						entity: "Asset",
-						data: assets,
-						totalCount,
-						isLoading,
-						queryStates,
-						setQueryStates,
-						columns,
-						leftInputs: leftInputsWithFolders,
-						emptyMessage: "등록된 에셋이 없습니다.",
-					}}
-				/>
-			</SectionSurface>
-		</PageSurface>
-	);
+        <section><div className="flex items-start justify-between gap-4"><div><h1>{"에셋 관리"}</h1><p>{"업로드된 에셋을 조회, 검색, 필터링하고 삭제할 수 있습니다."}</p></div><div>{<Button
+                                    variant="flat"
+                                    color="primary"
+                                    startContent={<Upload className="h-4 w-4" />}
+                                    isDisabled>업로드 (준비 중)
+                                                    </Button>}</div></div>
+            <section>
+                <MetaDataGrid
+                    config={{
+                        entity: "Asset",
+                        data: assets,
+                        totalCount,
+                        isLoading,
+                        queryStates,
+                        setQueryStates,
+                        columns,
+                        leftInputs: leftInputsWithFolders,
+                        emptyMessage: "등록된 에셋이 없습니다.",
+                    }} />
+            </section>
+        </section>
+    );
 }
 
 export default observer(AssetsPageClient);

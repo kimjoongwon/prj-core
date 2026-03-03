@@ -9,7 +9,7 @@ import {
 	useMoveAsset,
 	useRemoveAsset,
 } from "@cocrepo/api";
-import { DateTimeCell, PageSurface, SectionSurface, VStack } from "@cocrepo/ui";
+import { DateTimeCell, VStack } from "@cocrepo/ui";
 import {
 	addToast,
 	Button,
@@ -155,130 +155,125 @@ function AssetDetailPageClient({ assetId }: AssetDetailPageClientProps) {
 
 	if (isLoading) {
 		return (
-			<PageSurface title="에셋 상세" description="로딩 중...">
-				<div className="flex items-center justify-center p-10">
-					<Spinner size="lg" />
-				</div>
-			</PageSurface>
-		);
+            <section><div className="flex items-start justify-between gap-4"><div><h1>{"에셋 상세"}</h1><p>{"로딩 중..."}</p></div></div>
+                <div className="flex items-center justify-center p-10">
+                    <Spinner size="lg" />
+                </div>
+            </section>
+        );
 	}
 
 	if (!asset) {
 		return (
-			<PageSurface title="에셋 상세" description="에셋을 찾을 수 없습니다.">
-				<div className="flex flex-col items-center justify-center gap-4 p-8">
-					<p className="text-default-500">에셋을 찾을 수 없습니다.</p>
-					<Button variant="flat" onPress={onClickBackButton}>
-						목록으로
-					</Button>
-				</div>
-			</PageSurface>
-		);
+            <section><div className="flex items-start justify-between gap-4"><div><h1>{"에셋 상세"}</h1><p>{"에셋을 찾을 수 없습니다."}</p></div></div>
+                <div className="flex flex-col items-center justify-center gap-4 p-8">
+                    <p className="text-default-500">에셋을 찾을 수 없습니다.</p>
+                    <Button variant="flat" onPress={onClickBackButton}>목록으로
+                                            </Button>
+                </div>
+            </section>
+        );
 	}
 
 	return (
-		<PageSurface
-			title={asset.originalName}
-			description="에셋 상세 정보"
-			actions={
-				<div className="flex gap-2">
-					<Button
-						variant="light"
-						startContent={<ArrowLeft className="h-4 w-4" />}
-						onPress={onClickBackButton}
-					>
-						목록으로
-					</Button>
-					<Button
-						variant="flat"
-						color="danger"
-						isLoading={isRemoving}
-						startContent={<Trash2 className="h-4 w-4" />}
-						onPress={onClickDeleteAssetButton}
-					>
-						삭제
-					</Button>
-				</div>
-			}
-		>
-			<VStack gap={4}>
-				<SectionSurface title="기본 정보">
-					<div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-						<div>
-							<p className="text-sm text-default-500">파일명</p>
-							<p className="mt-1 font-medium">{asset.originalName}</p>
-						</div>
-						<div>
-							<p className="text-sm text-default-500">에셋 ID</p>
-							<p className="mt-1 font-mono text-sm">{asset.id}</p>
-						</div>
-						<div>
-							<p className="text-sm text-default-500">타입</p>
-							<p className="mt-1">{getKindLabel(asset.kind)}</p>
-						</div>
-						<div>
-							<p className="text-sm text-default-500">상태</p>
-							<p className="mt-1">{getStatusLabel(asset.status)}</p>
-						</div>
-						<div>
-							<p className="text-sm text-default-500">MIME 타입</p>
-							<p className="mt-1 font-mono text-sm">{asset.mimeType}</p>
-						</div>
-						<div>
-							<p className="text-sm text-default-500">크기</p>
-							<p className="mt-1">{formatBytes(asset.sizeBytes)}</p>
-						</div>
-						<div>
-							<p className="text-sm text-default-500">현재 폴더 ID</p>
-							<p className="mt-1 font-mono text-sm">{asset.folderId}</p>
-						</div>
-						<div>
-							<p className="text-sm text-default-500">등록일</p>
-							<div className="mt-1">
-								<DateTimeCell value={asset.createdAt} />
-							</div>
-						</div>
-					</div>
-				</SectionSurface>
-
-				<SectionSurface title="폴더 이동">
-					<div className="grid grid-cols-1 gap-4 md:grid-cols-[1fr_auto]">
-						<Select
-							label="이동 대상 폴더"
-							placeholder="폴더를 선택하세요"
-							selectedKeys={targetFolderId ? [targetFolderId] : []}
-							onSelectionChange={(keys) => {
-								const firstKey = Array.from(keys)[0];
-								setTargetFolderId(firstKey ? String(firstKey) : "");
-							}}
-						>
-							{folders.map((folder) => (
-								<SelectItem key={folder.id}>{folder.name}</SelectItem>
-							))}
-						</Select>
-						<div className="flex items-end">
-							<Button
-								color="primary"
-								variant="flat"
-								isLoading={isMoving}
-								startContent={<FolderInput className="h-4 w-4" />}
-								onPress={onClickMoveAssetButton}
-							>
-								이동
-							</Button>
-						</div>
-					</div>
-				</SectionSurface>
-
-				<SectionSurface title="스토리지 정보">
-					<div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-						<Input label="Storage Key" value={asset.storageKey} isReadOnly />
-						<Input label="Checksum" value={asset.checksum ?? "-"} isReadOnly />
-					</div>
-				</SectionSurface>
-			</VStack>
-		</PageSurface>
-	);
+        <section>{(asset.originalName || <div className="flex gap-2">
+                            <Button
+                                variant="light"
+                                startContent={<ArrowLeft className="h-4 w-4" />}
+                                onPress={onClickBackButton}>목록으로
+                                                    </Button>
+                            <Button
+                                variant="flat"
+                                color="danger"
+                                isLoading={isRemoving}
+                                startContent={<Trash2 className="h-4 w-4" />}
+                                onPress={onClickDeleteAssetButton}>삭제
+                                                    </Button>
+                        </div>) && <div className="flex items-start justify-between gap-4"><div>{asset.originalName && <h1>{asset.originalName}</h1>}<p>{"에셋 상세 정보"}</p></div><div><div className="flex gap-2">
+                                    <Button
+                                        variant="light"
+                                        startContent={<ArrowLeft className="h-4 w-4" />}
+                                        onPress={onClickBackButton}>목록으로
+                                                            </Button>
+                                    <Button
+                                        variant="flat"
+                                        color="danger"
+                                        isLoading={isRemoving}
+                                        startContent={<Trash2 className="h-4 w-4" />}
+                                        onPress={onClickDeleteAssetButton}>삭제
+                                                            </Button>
+                                </div></div></div>}
+            <VStack gap={4}>
+                <section><div className="flex items-start justify-between gap-3"><div className="flex items-start gap-2"><div><h2>{"기본 정보"}</h2></div></div></div>
+                    <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+                        <div>
+                            <p className="text-sm text-default-500">파일명</p>
+                            <p className="mt-1 font-medium">{asset.originalName}</p>
+                        </div>
+                        <div>
+                            <p className="text-sm text-default-500">에셋 ID</p>
+                            <p className="mt-1 font-mono text-sm">{asset.id}</p>
+                        </div>
+                        <div>
+                            <p className="text-sm text-default-500">타입</p>
+                            <p className="mt-1">{getKindLabel(asset.kind)}</p>
+                        </div>
+                        <div>
+                            <p className="text-sm text-default-500">상태</p>
+                            <p className="mt-1">{getStatusLabel(asset.status)}</p>
+                        </div>
+                        <div>
+                            <p className="text-sm text-default-500">MIME 타입</p>
+                            <p className="mt-1 font-mono text-sm">{asset.mimeType}</p>
+                        </div>
+                        <div>
+                            <p className="text-sm text-default-500">크기</p>
+                            <p className="mt-1">{formatBytes(asset.sizeBytes)}</p>
+                        </div>
+                        <div>
+                            <p className="text-sm text-default-500">현재 폴더 ID</p>
+                            <p className="mt-1 font-mono text-sm">{asset.folderId}</p>
+                        </div>
+                        <div>
+                            <p className="text-sm text-default-500">등록일</p>
+                            <div className="mt-1">
+                                <DateTimeCell value={asset.createdAt} />
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                <section><div className="flex items-start justify-between gap-3"><div className="flex items-start gap-2"><div><h2>{"폴더 이동"}</h2></div></div></div>
+                    <div className="grid grid-cols-1 gap-4 md:grid-cols-[1fr_auto]">
+                        <Select
+                            label="이동 대상 폴더"
+                            placeholder="폴더를 선택하세요"
+                            selectedKeys={targetFolderId ? [targetFolderId] : []}
+                            onSelectionChange={keys => {
+                                const firstKey = Array.from(keys)[0];
+                                setTargetFolderId(firstKey ? String(firstKey) : "");
+                            }}>
+                            {folders.map(folder => (<SelectItem key={folder.id}>{folder.name}</SelectItem>))}
+                        </Select>
+                        <div className="flex items-end">
+                            <Button
+                                color="primary"
+                                variant="flat"
+                                isLoading={isMoving}
+                                startContent={<FolderInput className="h-4 w-4" />}
+                                onPress={onClickMoveAssetButton}>이동
+                                                            </Button>
+                        </div>
+                    </div>
+                </section>
+                <section><div className="flex items-start justify-between gap-3"><div className="flex items-start gap-2"><div><h2>{"스토리지 정보"}</h2></div></div></div>
+                    <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+                        <Input label="Storage Key" value={asset.storageKey} isReadOnly />
+                        <Input label="Checksum" value={asset.checksum ?? "-"} isReadOnly />
+                    </div>
+                </section>
+            </VStack>
+        </section>
+    );
 }
 
 export default observer(AssetDetailPageClient);

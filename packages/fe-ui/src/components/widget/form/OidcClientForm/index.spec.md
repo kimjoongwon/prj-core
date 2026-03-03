@@ -6,7 +6,7 @@
 
 ## 역할
 
-OIDC 클라이언트 등록/수정 폼입니다. 4개 SectionSurface로 구성됩니다: 기본 정보(Client ID, 이름, Secret, Public 여부), 인증 설정(인증 방식, Grant Types, Response Types, 스코프), Redirect URIs, 추가 정보(로고/정책/약관 URI).
+OIDC 클라이언트 등록/수정 폼입니다. 4개 섹션 영역로 구성됩니다: 기본 정보(Client ID, 이름, Secret, Public 여부), 인증 설정(인증 방식, Grant Types, Response Types, 스코프), Redirect URIs, 추가 정보(로고/정책/약관 URI).
 
 ## 디자인 목업
 
@@ -126,7 +126,7 @@ interface OidcClientFormState {
 
 | 컴포넌트 | 역할 |
 |----------|------|
-| SectionSurface | 4개 섹션 컨테이너 |
+| 섹션 영역 | 4개 섹션 컨테이너 |
 | HeroUI Input | Client ID, 이름, Secret, 스코프, URI 입력 |
 | HeroUI Select | 인증 방식 선택 |
 | HeroUI Checkbox + CheckboxGroup | Grant Types, Response Types, Public 여부 |
@@ -149,3 +149,4 @@ interface OidcClientFormState {
 |------|------|--------|
 | 2026-02-18 | 초기 생성 (역기획) | req-reverse-engineer |
 | 2026-02-19 | 디자인 목업 추가 | req-reverse-engineer |
+| 2026-03-03 | Scaffold 제거 및 페이지 헤더 영역/섹션 영역 용어 정리 | codex |

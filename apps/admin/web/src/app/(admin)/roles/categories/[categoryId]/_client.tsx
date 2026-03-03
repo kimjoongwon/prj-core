@@ -4,12 +4,10 @@
 // import { useGetCategoryById, useDeleteCategory } from "@cocrepo/api";
 import { customInstance } from "@cocrepo/api";
 import {
-	CategoryChildrenSection,
-	CategoryInfoSection,
-	CategoryRoleListSection,
-	PageSurface,
-	SectionSurface,
-	VStack,
+    CategoryChildrenSection,
+    CategoryInfoSection,
+    CategoryRoleListSection,
+    VStack,
 } from "@cocrepo/ui";
 import {
 	Button,
@@ -107,148 +105,104 @@ function RoleCategoryDetailPageClient({
 
 	if (isLoading) {
 		return (
-			<PageSurface title="역할 카테고리 상세" description="로딩 중...">
-				<div className="flex items-center justify-center p-8">
-					<span className="text-default-500">로딩 중...</span>
-				</div>
-			</PageSurface>
-		);
+            <section><div className="flex items-start justify-between gap-4"><div><h1>{"역할 카테고리 상세"}</h1><p>{"로딩 중..."}</p></div></div>
+                <div className="flex items-center justify-center p-8">
+                    <span className="text-default-500">로딩 중...</span>
+                </div>
+            </section>
+        );
 	}
 
 	if (!category) {
 		return (
-			<PageSurface
-				title="역할 카테고리 상세"
-				description="카테고리를 찾을 수 없습니다."
-			>
-				<div className="flex flex-col items-center justify-center gap-4 p-8">
-					<p className="text-default-500">카테고리를 찾을 수 없습니다.</p>
-					<Button variant="flat" onPress={onClickBackButton}>
-						목록으로
-					</Button>
-				</div>
-			</PageSurface>
-		);
+            <section><div className="flex items-start justify-between gap-4"><div><h1>{"역할 카테고리 상세"}</h1><p>{"카테고리를 찾을 수 없습니다."}</p></div></div>
+                <div className="flex flex-col items-center justify-center gap-4 p-8">
+                    <p className="text-default-500">카테고리를 찾을 수 없습니다.</p>
+                    <Button variant="flat" onPress={onClickBackButton}>목록으로
+                                            </Button>
+                </div>
+            </section>
+        );
 	}
 
 	const hasChildren = (category.children?.length ?? 0) > 0;
 
 	return (
-		<PageSurface
-			title="역할 카테고리 상세"
-			description={`${category.name} 카테고리의 상세 정보입니다.`}
-			actions={
-				<div className="flex gap-2">
-					<Button
-						variant="light"
-						startContent={<ArrowLeft className="h-4 w-4" />}
-						onPress={onClickBackButton}
-					>
-						목록으로
-					</Button>
-					<Button
-						variant="flat"
-						color="primary"
-						startContent={<Edit className="h-4 w-4" />}
-						onPress={onClickEditButton}
-					>
-						수정
-					</Button>
-					<Button
-						variant="flat"
-						color="danger"
-						startContent={<Trash2 className="h-4 w-4" />}
-						onPress={deleteModal.onOpen}
-						isDisabled={hasChildren}
-					>
-						삭제
-					</Button>
-				</div>
-			}
-		>
-			<VStack gap={4}>
-				{/* 하위 카테고리가 있어 삭제 불가한 경우 안내 */}
-				{hasChildren && (
-					<div className="rounded-xl bg-warning-50 dark:bg-warning-900/20 p-4">
-						<p className="text-sm text-warning-700 dark:text-warning-400">
-							<strong>참고:</strong> 하위 카테고리가 있어 삭제할 수 없습니다.
-							하위 카테고리를 먼저 삭제해주세요.
-						</p>
-					</div>
-				)}
-
-				{/* 기본 정보 */}
-				<SectionSurface>
-					<div className="p-6">
-						<h3 className="text-lg font-semibold mb-4">기본 정보</h3>
-						<CategoryInfoSection
-							category={{
-								name: category.name,
-								type: category.type,
-								parent: category.parent,
-								parentId: category.parent?.id,
-								createdAt: category.createdAt,
-								updatedAt: category.updatedAt,
-							}}
-							categoriesBasePath="/roles/categories"
-						/>
-					</div>
-				</SectionSurface>
-
-				{/* 하위 카테고리 */}
-				<SectionSurface>
-					<div className="p-6">
-						<h3 className="text-lg font-semibold mb-4">하위 카테고리</h3>
-						<CategoryChildrenSection
-							items={category.children ?? []}
-							categoriesBasePath="/roles/categories"
-						/>
-					</div>
-				</SectionSurface>
-
-				{/* 분류된 역할 */}
-				<SectionSurface>
-					<div className="p-6">
-						<h3 className="text-lg font-semibold mb-4">분류된 역할</h3>
-						<CategoryRoleListSection
-							roleClassifications={category.roleClassifications ?? []}
-						/>
-					</div>
-				</SectionSurface>
-			</VStack>
-
-			{/* 삭제 확인 모달 */}
-			<Modal isOpen={deleteModal.isOpen} onClose={deleteModal.onClose}>
-				<ModalContent>
-					<ModalHeader>역할 카테고리 삭제</ModalHeader>
-					<ModalBody>
-						<p>
-							<strong>{category.name}</strong> 카테고리를 삭제하시겠습니까?
-						</p>
-						<p className="text-sm text-danger mt-2">
-							이 작업은 되돌릴 수 없습니다. 연결된 역할 분류도 함께 삭제됩니다.
-						</p>
-					</ModalBody>
-					<ModalFooter>
-						<Button
-							variant="flat"
-							onPress={deleteModal.onClose}
-							isDisabled={isDeleting}
-						>
-							취소
-						</Button>
-						<Button
-							color="danger"
-							onPress={onClickDeleteConfirm}
-							isLoading={isDeleting}
-						>
-							삭제
-						</Button>
-					</ModalFooter>
-				</ModalContent>
-			</Modal>
-		</PageSurface>
-	);
+        <section><div className="flex items-start justify-between gap-4"><div><h1>{"역할 카테고리 상세"}</h1>{`${category.name} 카테고리의 상세 정보입니다.` && <p>{`${category.name} 카테고리의 상세 정보입니다.`}</p>}</div><div>{<div className="flex gap-2">
+                                    <Button
+                                        variant="light"
+                                        startContent={<ArrowLeft className="h-4 w-4" />}
+                                        onPress={onClickBackButton}>목록으로
+                                                            </Button>
+                                    <Button
+                                        variant="flat"
+                                        color="primary"
+                                        startContent={<Edit className="h-4 w-4" />}
+                                        onPress={onClickEditButton}>수정
+                                                            </Button>
+                                    <Button
+                                        variant="flat"
+                                        color="danger"
+                                        startContent={<Trash2 className="h-4 w-4" />}
+                                        onPress={deleteModal.onOpen}
+                                        isDisabled={hasChildren}>삭제
+                                                            </Button>
+                                </div>}</div></div>
+            <VStack gap={4}>
+                {hasChildren && (<div className="rounded-xl bg-warning-50 dark:bg-warning-900/20 p-4">
+                    <p className="text-sm text-warning-700 dark:text-warning-400">
+                        <strong>참고:</strong>하위 카테고리가 있어 삭제할 수 없습니다.
+                                                    하위 카테고리를 먼저 삭제해주세요.
+                                                </p>
+                </div>)}
+                <section>
+                    <div className="p-6">
+                        <h3 className="text-lg font-semibold mb-4">기본 정보</h3>
+                        <CategoryInfoSection
+                            category={{
+                                name: category.name,
+                                type: category.type,
+                                parent: category.parent,
+                                parentId: category.parent?.id,
+                                createdAt: category.createdAt,
+                                updatedAt: category.updatedAt,
+                            }}
+                            categoriesBasePath="/roles/categories" />
+                    </div>
+                </section>
+                <section>
+                    <div className="p-6">
+                        <h3 className="text-lg font-semibold mb-4">하위 카테고리</h3>
+                        <CategoryChildrenSection items={category.children ?? []} categoriesBasePath="/roles/categories" />
+                    </div>
+                </section>
+                <section>
+                    <div className="p-6">
+                        <h3 className="text-lg font-semibold mb-4">분류된 역할</h3>
+                        <CategoryRoleListSection roleClassifications={category.roleClassifications ?? []} />
+                    </div>
+                </section>
+            </VStack>
+            <Modal isOpen={deleteModal.isOpen} onClose={deleteModal.onClose}>
+                <ModalContent>
+                    <ModalHeader>역할 카테고리 삭제</ModalHeader>
+                    <ModalBody>
+                        <p>
+                            <strong>{category.name}</strong>카테고리를 삭제하시겠습니까?
+                                                    </p>
+                        <p className="text-sm text-danger mt-2">이 작업은 되돌릴 수 없습니다. 연결된 역할 분류도 함께 삭제됩니다.
+                                                    </p>
+                    </ModalBody>
+                    <ModalFooter>
+                        <Button variant="flat" onPress={deleteModal.onClose} isDisabled={isDeleting}>취소
+                                                    </Button>
+                        <Button color="danger" onPress={onClickDeleteConfirm} isLoading={isDeleting}>삭제
+                                                    </Button>
+                    </ModalFooter>
+                </ModalContent>
+            </Modal>
+        </section>
+    );
 }
 
 export default observer(RoleCategoryDetailPageClient);

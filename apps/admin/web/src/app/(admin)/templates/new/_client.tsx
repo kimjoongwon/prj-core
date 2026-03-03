@@ -4,12 +4,7 @@ import {
 	type CreateTemplateVariableItemDto,
 	useCreateTemplate,
 } from "@cocrepo/api";
-import {
-	PageSurface,
-	TemplateForm,
-	type TemplateFormData,
-	type VariableEditItem,
-} from "@cocrepo/ui";
+import { TemplateForm, type TemplateFormData, type VariableEditItem } from "@cocrepo/ui";
 import { addToast } from "@heroui/react";
 import { observer, useLocalObservable } from "mobx-react-lite";
 import type { Route } from "next";
@@ -152,23 +147,19 @@ function TemplateNewPageClient() {
 	};
 
 	return (
-		<PageSurface
-			title="템플릿 등록"
-			description="새로운 메시지 템플릿을 등록합니다."
-		>
-			<TemplateForm
-				mode="create"
-				formData={state.formData}
-				variables={state.variables}
-				onFormDataChange={onFormDataChange}
-				onVariablesChange={onVariablesChange}
-				onSubmit={onSubmitForm}
-				onCancel={onClickCancelButton}
-				isSubmitting={isPending}
-				errors={state.errors}
-			/>
-		</PageSurface>
-	);
+        <section><div className="flex items-start justify-between gap-4"><div><h1>{"템플릿 등록"}</h1><p>{"새로운 메시지 템플릿을 등록합니다."}</p></div></div>
+            <TemplateForm
+                mode="create"
+                formData={state.formData}
+                variables={state.variables}
+                onFormDataChange={onFormDataChange}
+                onVariablesChange={onVariablesChange}
+                onSubmit={onSubmitForm}
+                onCancel={onClickCancelButton}
+                isSubmitting={isPending}
+                errors={state.errors} />
+        </section>
+    );
 }
 
 export default observer(TemplateNewPageClient);

@@ -11,16 +11,14 @@ import {
 } from "@cocrepo/api";
 import type { PreviewResult, TemplateVariable } from "@cocrepo/ui";
 import {
-	DateTimeCell,
-	PageSurface,
-	PreviewModal,
-	SectionSurface,
-	SendTestModal,
-	TemplateActions,
-	TemplateContentViewer,
-	TemplateTypeBadge,
-	VariableReadTable,
-	VStack,
+    DateTimeCell,
+    PreviewModal,
+    SendTestModal,
+    TemplateActions,
+    TemplateContentViewer,
+    TemplateTypeBadge,
+    VariableReadTable,
+    VStack,
 } from "@cocrepo/ui";
 import {
 	addToast,
@@ -185,160 +183,121 @@ function TemplateDetailPageClient({
 	// 데이터 없음
 	if (!template) {
 		return (
-			<PageSurface title="템플릿 상세" description="템플릿을 찾을 수 없습니다.">
-				<div className="flex flex-col items-center justify-center gap-4 p-8">
-					<p className="text-default-500">템플릿을 찾을 수 없습니다.</p>
-					<Button
-						variant="flat"
-						startContent={<ArrowLeft className="size-4" />}
-						onPress={onClickBackButton}
-					>
-						목록으로
-					</Button>
-				</div>
-			</PageSurface>
-		);
+            <section><div className="flex items-start justify-between gap-4"><div><h1>{"템플릿 상세"}</h1><p>{"템플릿을 찾을 수 없습니다."}</p></div></div>
+                <div className="flex flex-col items-center justify-center gap-4 p-8">
+                    <p className="text-default-500">템플릿을 찾을 수 없습니다.</p>
+                    <Button
+                        variant="flat"
+                        startContent={<ArrowLeft className="size-4" />}
+                        onPress={onClickBackButton}>목록으로
+                                            </Button>
+                </div>
+            </section>
+        );
 	}
 
 	return (
-		<PageSurface
-			title="템플릿 상세"
-			description={`${template.name} 템플릿의 상세 정보입니다.`}
-			actions={
-				<TemplateActions
-					templateId={templateId}
-					isActive={template.isActive}
-					onEdit={onClickEditButton}
-					onDelete={deleteModal.onOpen}
-					onToggle={onClickToggleButton}
-					onPreview={previewModal.onOpen}
-					onSendTest={sendTestModal.onOpen}
-				/>
-			}
-		>
-			<VStack gap={4}>
-				{/* 기본 정보 */}
-				<SectionSurface title="기본 정보">
-					<div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-						<div>
-							<label className="text-sm text-default-500">코드</label>
-							<p className="mt-1 font-mono">{template.code}</p>
-						</div>
-						<div>
-							<label className="text-sm text-default-500">이름</label>
-							<p className="mt-1">{template.name}</p>
-						</div>
-						<div>
-							<label className="text-sm text-default-500">유형</label>
-							<div className="mt-1">
-								<TemplateTypeBadge type={template.type} />
-							</div>
-						</div>
-						<div>
-							<label className="text-sm text-default-500">설명</label>
-							<p className="mt-1">{template.description || "-"}</p>
-						</div>
-						<div>
-							<label className="text-sm text-default-500">활성 상태</label>
-							<div className="mt-1">
-								<Switch
-									isSelected={template.isActive}
-									onValueChange={onClickToggleButton}
-									isDisabled={isToggling}
-									size="sm"
-								>
-									{template.isActive ? "활성" : "비활성"}
-								</Switch>
-							</div>
-						</div>
-						<div>
-							<label className="text-sm text-default-500">생성일</label>
-							<div className="mt-1">
-								<DateTimeCell value={template.createdAt} />
-							</div>
-						</div>
-						<div>
-							<label className="text-sm text-default-500">수정일</label>
-							<div className="mt-1">
-								<DateTimeCell value={template.updatedAt || "-"} />
-							</div>
-						</div>
-					</div>
-				</SectionSurface>
-
-				{/* 콘텐츠 */}
-				<SectionSurface title="콘텐츠">
-					<TemplateContentViewer
-						type={template.type}
-						subject={template.subject ?? null}
-						content={template.content}
-					/>
-				</SectionSurface>
-
-				{/* 변수 목록 */}
-				<SectionSurface title="변수 목록" padding="none">
-					{(template.variables ?? []).length > 0 ? (
-						<VariableReadTable variables={template.variables ?? []} />
-					) : (
-						<div className="p-6 text-center">
-							<p className="text-default-500">등록된 변수가 없습니다.</p>
-						</div>
-					)}
-				</SectionSurface>
-			</VStack>
-
-			{/* 삭제 확인 모달 */}
-			<Modal isOpen={deleteModal.isOpen} onClose={deleteModal.onClose}>
-				<ModalContent>
-					<ModalHeader>템플릿 삭제</ModalHeader>
-					<ModalBody>
-						<p>
-							<strong>{template.name}</strong> 템플릿을 삭제하시겠습니까?
-						</p>
-						<p className="mt-2 text-sm text-danger">
-							이 작업은 되돌릴 수 없습니다.
-						</p>
-					</ModalBody>
-					<ModalFooter>
-						<Button
-							variant="flat"
-							onPress={deleteModal.onClose}
-							isDisabled={isDeleting}
-						>
-							취소
-						</Button>
-						<Button
-							color="danger"
-							onPress={onClickDeleteConfirm}
-							isLoading={isDeleting}
-						>
-							삭제
-						</Button>
-					</ModalFooter>
-				</ModalContent>
-			</Modal>
-
-			{/* 미리보기 모달 */}
-			<PreviewModal
-				isOpen={previewModal.isOpen}
-				onClose={previewModal.onClose}
-				templateId={templateId}
-				type={template.type}
-				variables={template.variables ?? []}
-				onPreview={handlePreview}
-			/>
-
-			{/* 발송 테스트 모달 */}
-			<SendTestModal
-				isOpen={sendTestModal.isOpen}
-				onClose={sendTestModal.onClose}
-				templateId={templateId}
-				type={template.type}
-				variables={template.variables ?? []}
-				onSendTest={handleSendTest}
-			/>
-		</PageSurface>
-	);
+        <section><div className="flex items-start justify-between gap-4"><div><h1>{"템플릿 상세"}</h1>{`${template.name} 템플릿의 상세 정보입니다.` && <p>{`${template.name} 템플릿의 상세 정보입니다.`}</p>}</div><div>{<TemplateActions
+                                    templateId={templateId}
+                                    isActive={template.isActive}
+                                    onEdit={onClickEditButton}
+                                    onDelete={deleteModal.onOpen}
+                                    onToggle={onClickToggleButton}
+                                    onPreview={previewModal.onOpen}
+                                    onSendTest={sendTestModal.onOpen} />}</div></div>
+            <VStack gap={4}>
+                <section><div className="flex items-start justify-between gap-3"><div className="flex items-start gap-2"><div><h2>{"기본 정보"}</h2></div></div></div>
+                    <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+                        <div>
+                            <label className="text-sm text-default-500">코드</label>
+                            <p className="mt-1 font-mono">{template.code}</p>
+                        </div>
+                        <div>
+                            <label className="text-sm text-default-500">이름</label>
+                            <p className="mt-1">{template.name}</p>
+                        </div>
+                        <div>
+                            <label className="text-sm text-default-500">유형</label>
+                            <div className="mt-1">
+                                <TemplateTypeBadge type={template.type} />
+                            </div>
+                        </div>
+                        <div>
+                            <label className="text-sm text-default-500">설명</label>
+                            <p className="mt-1">{template.description || "-"}</p>
+                        </div>
+                        <div>
+                            <label className="text-sm text-default-500">활성 상태</label>
+                            <div className="mt-1">
+                                <Switch
+                                    isSelected={template.isActive}
+                                    onValueChange={onClickToggleButton}
+                                    isDisabled={isToggling}
+                                    size="sm">
+                                    {template.isActive ? "활성" : "비활성"}
+                                </Switch>
+                            </div>
+                        </div>
+                        <div>
+                            <label className="text-sm text-default-500">생성일</label>
+                            <div className="mt-1">
+                                <DateTimeCell value={template.createdAt} />
+                            </div>
+                        </div>
+                        <div>
+                            <label className="text-sm text-default-500">수정일</label>
+                            <div className="mt-1">
+                                <DateTimeCell value={template.updatedAt || "-"} />
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                <section><div className="flex items-start justify-between gap-3"><div className="flex items-start gap-2"><div><h2>{"콘텐츠"}</h2></div></div></div>
+                    <TemplateContentViewer
+                        type={template.type}
+                        subject={template.subject ?? null}
+                        content={template.content} />
+                </section>
+                <section><div className="flex items-start justify-between gap-3"><div className="flex items-start gap-2"><div><h2>{"변수 목록"}</h2></div></div></div>
+                    {(template.variables ?? []).length > 0 ? (<VariableReadTable variables={template.variables ?? []} />) : (<div className="p-6 text-center">
+                        <p className="text-default-500">등록된 변수가 없습니다.</p>
+                    </div>)}
+                </section>
+            </VStack>
+            <Modal isOpen={deleteModal.isOpen} onClose={deleteModal.onClose}>
+                <ModalContent>
+                    <ModalHeader>템플릿 삭제</ModalHeader>
+                    <ModalBody>
+                        <p>
+                            <strong>{template.name}</strong>템플릿을 삭제하시겠습니까?
+                                                    </p>
+                        <p className="mt-2 text-sm text-danger">이 작업은 되돌릴 수 없습니다.
+                                                    </p>
+                    </ModalBody>
+                    <ModalFooter>
+                        <Button variant="flat" onPress={deleteModal.onClose} isDisabled={isDeleting}>취소
+                                                    </Button>
+                        <Button color="danger" onPress={onClickDeleteConfirm} isLoading={isDeleting}>삭제
+                                                    </Button>
+                    </ModalFooter>
+                </ModalContent>
+            </Modal>
+            <PreviewModal
+                isOpen={previewModal.isOpen}
+                onClose={previewModal.onClose}
+                templateId={templateId}
+                type={template.type}
+                variables={template.variables ?? []}
+                onPreview={handlePreview} />
+            <SendTestModal
+                isOpen={sendTestModal.isOpen}
+                onClose={sendTestModal.onClose}
+                templateId={templateId}
+                type={template.type}
+                variables={template.variables ?? []}
+                onSendTest={handleSendTest} />
+        </section>
+    );
 }
 
 export default observer(TemplateDetailPageClient);

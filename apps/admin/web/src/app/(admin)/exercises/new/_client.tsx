@@ -1,7 +1,5 @@
 "use client";
-
 import { useCreateExercise } from "@cocrepo/api";
-import { PageSurface, SectionSurface } from "@cocrepo/ui";
 import { addToast, Button, Input, Textarea } from "@heroui/react";
 import { observer, useLocalObservable } from "mobx-react-lite";
 import type { Route } from "next";
@@ -115,101 +113,70 @@ function ExerciseNewPageClient() {
 	};
 
 	return (
-		<PageSurface
-			title="운동 등록"
-			description="새로운 운동 종목을 등록합니다."
-			actions={
-				<div className="flex gap-2">
-					<Button
-						variant="flat"
-						onPress={onClickCancelButton}
-						isDisabled={isPending}
-					>
-						취소
-					</Button>
-					<Button
-						color="primary"
-						onPress={onClickSaveButton}
-						isLoading={isPending}
-					>
-						저장
-					</Button>
-				</div>
-			}
-		>
-			<SectionSurface title="기본 정보">
-				<div className="flex flex-col gap-4">
-					<Input
-						label="운동명"
-						placeholder="운동 이름을 입력하세요"
-						value={state.name}
-						onValueChange={onChangeName}
-						isRequired
-						isInvalid={!!state.errors.name}
-						errorMessage={state.errors.name}
-					/>
-
-					<div>
-						<label className="block text-sm font-medium text-default-700 mb-1">
-							지속시간 <span className="text-danger">*</span>
-						</label>
-						<div className="flex items-center gap-2">
-							<Input
-								type="number"
-								placeholder="분"
-								value={String(state.durationMin)}
-								onValueChange={onChangeDurationMin}
-								min={0}
-								endContent={
-									<span className="text-default-400 text-sm">분</span>
-								}
-								className="max-w-32"
-							/>
-							<Input
-								type="number"
-								placeholder="초"
-								value={String(state.durationSec)}
-								onValueChange={onChangeDurationSec}
-								min={0}
-								max={59}
-								endContent={
-									<span className="text-default-400 text-sm">초</span>
-								}
-								className="max-w-32"
-							/>
-						</div>
-						{state.errors.duration && (
-							<p className="mt-1 text-sm text-danger">
-								{state.errors.duration}
-							</p>
-						)}
-					</div>
-
-					<Input
-						label="반복횟수"
-						type="number"
-						placeholder="반복 횟수"
-						value={String(state.count)}
-						onValueChange={onChangeCount}
-						isRequired
-						min={1}
-						isInvalid={!!state.errors.count}
-						errorMessage={state.errors.count}
-						endContent={<span className="text-default-400 text-sm">회</span>}
-					/>
-
-					<Textarea
-						label="설명"
-						placeholder="운동 설명, 수행 방법 등을 입력하세요 (선택)"
-						value={state.description}
-						onValueChange={onChangeDescription}
-						maxLength={500}
-						minRows={3}
-					/>
-				</div>
-			</SectionSurface>
-		</PageSurface>
-	);
+        <section><div className="flex items-start justify-between gap-4"><div><h1>{"운동 등록"}</h1><p>{"새로운 운동 종목을 등록합니다."}</p></div><div>{<div className="flex gap-2">
+                                    <Button variant="flat" onPress={onClickCancelButton} isDisabled={isPending}>취소
+                                                            </Button>
+                                    <Button color="primary" onPress={onClickSaveButton} isLoading={isPending}>저장
+                                                            </Button>
+                                </div>}</div></div>
+            <section><div className="flex items-start justify-between gap-3"><div className="flex items-start gap-2"><div><h2>{"기본 정보"}</h2></div></div></div>
+                <div className="flex flex-col gap-4">
+                    <Input
+                        label="운동명"
+                        placeholder="운동 이름을 입력하세요"
+                        value={state.name}
+                        onValueChange={onChangeName}
+                        isRequired
+                        isInvalid={!!state.errors.name}
+                        errorMessage={state.errors.name} />
+                    <div>
+                        <label className="block text-sm font-medium text-default-700 mb-1">지속시간 <span className="text-danger">*</span>
+                        </label>
+                        <div className="flex items-center gap-2">
+                            <Input
+                                type="number"
+                                placeholder="분"
+                                value={String(state.durationMin)}
+                                onValueChange={onChangeDurationMin}
+                                min={0}
+                                endContent={<span className="text-default-400 text-sm">분</span>}
+                                className="max-w-32" />
+                            <Input
+                                type="number"
+                                placeholder="초"
+                                value={String(state.durationSec)}
+                                onValueChange={onChangeDurationSec}
+                                min={0}
+                                max={59}
+                                endContent={<span className="text-default-400 text-sm">초</span>}
+                                className="max-w-32" />
+                        </div>
+                        {state.errors.duration && (<p className="mt-1 text-sm text-danger">
+                            {state.errors.duration}
+                        </p>)}
+                    </div>
+                    <Input
+                        label="반복횟수"
+                        type="number"
+                        placeholder="반복 횟수"
+                        value={String(state.count)}
+                        onValueChange={onChangeCount}
+                        isRequired
+                        min={1}
+                        isInvalid={!!state.errors.count}
+                        errorMessage={state.errors.count}
+                        endContent={<span className="text-default-400 text-sm">회</span>} />
+                    <Textarea
+                        label="설명"
+                        placeholder="운동 설명, 수행 방법 등을 입력하세요 (선택)"
+                        value={state.description}
+                        onValueChange={onChangeDescription}
+                        maxLength={500}
+                        minRows={3} />
+                </div>
+            </section>
+        </section>
+    );
 }
 
 export default observer(ExerciseNewPageClient);

@@ -1,6 +1,6 @@
 import { Button } from "@heroui/react";
 import { renderLucideIcon } from "../../../utils/iconUtils";
-import { VStack } from "../../ui/surfaces/VStack/VStack";
+import { VStack } from "../../layouts/VStack/VStack";
 
 interface ParentMenuInfo {
 	name: string;

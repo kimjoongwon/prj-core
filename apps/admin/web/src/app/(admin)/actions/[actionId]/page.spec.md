@@ -73,12 +73,12 @@
 
 | 영역 | 컴포넌트 | 설명 |
 |------|----------|------|
-| 페이지 래퍼 | `PageSurface` | title="Action 상세", description 동적 (표시명 또는 식별자 기반) |
+| 페이지 래퍼 | `페이지 헤더 영역` | title="Action 상세", description 동적 (표시명 또는 식별자 기반) |
 | 액션 영역 | `Button` x3 | "목록으로" (ArrowLeft) + "수정" (Edit, primary, 비시스템만) + "삭제" (Trash2, danger, 비시스템만) |
 | 시스템 안내 | `div` | warning 배경, 시스템 Action은 수정/삭제 불가 안내 (isSystem일 때만 표시) |
-| 기본 정보 섹션 | `SectionSurface` | 2열 그리드: 식별자(font-mono + 시스템 Chip), 표시명, 분류(Chip), 순서, 설명 |
-| Config 섹션 | `SectionSurface` | JSON pre 포맷 (config가 있을 때만 표시) |
-| 추가 정보 섹션 | `SectionSurface` | 2열 그리드: 생성일, 수정일 |
+| 기본 정보 섹션 | `섹션 영역` | 2열 그리드: 식별자(font-mono + 시스템 Chip), 표시명, 분류(Chip), 순서, 설명 |
+| Config 섹션 | `섹션 영역` | JSON pre 포맷 (config가 있을 때만 표시) |
+| 추가 정보 섹션 | `섹션 영역` | 2열 그리드: 생성일, 수정일 |
 | 삭제 모달 | `Modal` | Action명 표시 + 경고 메시지 + 취소/삭제 버튼 |
 
 ## 페이지 상태
@@ -132,3 +132,4 @@
 |------|------|--------|
 | 2026-02-18 | 초기 생성 (역기획) | req-reverse-engineer |
 | 2026-02-19 | 디자인 목업 섹션 추가 | req-reverse-engineer |
+| 2026-03-03 | Scaffold 제거 및 페이지 헤더 영역/섹션 영역 용어 정리 | codex |

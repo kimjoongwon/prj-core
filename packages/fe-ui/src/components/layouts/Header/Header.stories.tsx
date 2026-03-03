@@ -1,7 +1,7 @@
 import { Avatar as HeroAvatar } from "@heroui/react";
 import type { Meta, StoryObj } from "@storybook/react";
 import { Button } from "../../inputs/Button/Button";
-import { HStack } from "../../ui/surfaces/HStack/HStack";
+import { HStack } from "../../layouts/HStack/HStack";
 import { Header } from "./Header";
 
 const meta: Meta<typeof Header> = {

@@ -202,8 +202,8 @@
 #### `/my-account/change-password` - 비밀번호 변경 (신규)
 
 ```
-PageSurface title="비밀번호 변경"
-└─ SectionSurface
+페이지 헤더 영역 title="비밀번호 변경"
+└─ 섹션 영역
    ├─ 현재 비밀번호 Input
    ├─ 새 비밀번호 Input
    ├─ 비밀번호 확인 Input
@@ -215,15 +215,15 @@ PageSurface title="비밀번호 변경"
 #### `/my-sessions` - 내 세션 관리 (신규)
 
 ```
-PageSurface title="내 세션 관리"
-├─ SectionSurface title="현재 세션"
+페이지 헤더 영역 title="내 세션 관리"
+├─ 섹션 영역 title="현재 세션"
 │  └─ SessionCard
 │     ├─ 🟢 이 기기
 │     ├─ Chrome 120 · macOS Sonoma
 │     ├─ IP: 192.168.1.100
 │     └─ 마지막 활동: 방금 전
 │
-├─ SectionSurface title="다른 세션 (2개)"
+├─ 섹션 영역 title="다른 세션 (2개)"
 │  ├─ SessionCard
 │  │  ├─ 📱 iPhone Safari
 │  │  ├─ IP: 1.2.3.4
@@ -242,13 +242,13 @@ PageSurface title="내 세션 관리"
 #### `/auth-audit-logs` - 로그인 감사 로그 (신규, FULL_ACCESS)
 
 ```
-PageSurface title="로그인 감사 로그"
+페이지 헤더 영역 title="로그인 감사 로그"
 ├─ 필터 영역
 │  ├─ DateRangePicker (기간)
 │  ├─ Select (결과: 전체/성공/실패/잠금)
 │  └─ Input (이메일 검색)
 │
-└─ SectionSurface padding="none"
+└─ 섹션 영역 padding="none"
    └─ DataGrid
       ├─ 시간 (DateTimeCell)
       ├─ 이메일
@@ -261,7 +261,7 @@ PageSurface title="로그인 감사 로그"
 #### `/users/[userId]` 보안 탭 - 사용자 보안 관리 (수정, FULL_ACCESS)
 
 ```
-SectionSurface title="보안 정보"
+섹션 영역 title="보안 정보"
 ├─ 정보 카드
 │  ├─ 마지막 로그인: 2026-02-13 10:30 (IP: 1.2.3.4)
 │  ├─ 로그인 실패 횟수: 3/5
@@ -274,7 +274,7 @@ SectionSurface title="보안 정보"
 │  ├─ [비밀번호 강제 재설정] → 임시 비밀번호 이메일 발송
 │  └─ [전체 세션 무효화] → 확인 다이얼로그 → 모든 세션 종료
 │
-└─ SectionSurface title="최근 로그인 기록 (10건)"
+└─ 섹션 영역 title="최근 로그인 기록 (10건)"
    └─ 간단 테이블: 시간, 결과, IP, UA
       └─ "전체 보기" → /auth-audit-logs?email={userEmail}
 ```

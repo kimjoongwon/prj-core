@@ -11,10 +11,10 @@ import { useState } from "react";
 import { AlertBanner } from "../../../ui/feedback/AlertBanner/AlertBanner";
 import {
 	AuthCard,
-} from "../../../ui/surfaces/AuthCard/AuthCard";
+} from "../../../widget/AuthCard/AuthCard";
 import {
 	AuthCardHeader,
-} from "../../../ui/surfaces/AuthCard/AuthCardHeader";
+} from "../../../widget/AuthCard/AuthCardHeader";
 
 export interface OidcConsentPanelProps {
 	/** 동의 확인 핸들러 */

@@ -8,10 +8,10 @@ import { AlertBanner } from "../../../ui/feedback/AlertBanner/AlertBanner";
 import { PasswordStrengthIndicator } from "../../../ui/feedback/PasswordStrengthIndicator/PasswordStrengthIndicator";
 import {
 	AuthCard,
-} from "../../../ui/surfaces/AuthCard/AuthCard";
+} from "../../../widget/AuthCard/AuthCard";
 import {
 	AuthCardHeader,
-} from "../../../ui/surfaces/AuthCard/AuthCardHeader";
+} from "../../../widget/AuthCard/AuthCardHeader";
 
 export type ResetPasswordStep =
 	| "validating"

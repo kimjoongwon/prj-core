@@ -13,8 +13,8 @@ Create/Update Form Bootstrap 계약을 사용해 초기 폼을 렌더링하며, 
 
 | 영역 | 컴포넌트 | 설명 |
 |------|----------|------|
-| 헤더 | PageSurface | 페이지 제목/상세 이동 액션 |
-| 폼 영역 | SectionSurface | 수정 폼 컨테이너 |
+| 헤더 | 페이지 헤더 영역 | 페이지 제목/상세 이동 액션 |
+| 폼 영역 | 섹션 영역 | 수정 폼 컨테이너 |
 | AI 채움 | AiForm | mode=UPDATE, 선택 필드 patch 생성 |
 | 수정 폼 | Input + Select | 제목/카테고리/우선순위 수정 |
 | 액션 | Button 그룹 | 취소/저장 |
@@ -59,4 +59,5 @@ Create/Update Form Bootstrap 계약을 사용해 초기 폼을 렌더링하며, 
 |------|------|--------|
 | 2026-03-01 | 초기 생성 (문의 수정 페이지 + AiForm UPDATE 흐름) | codex |
 | 2026-03-01 | 수정 폼 입력을 HeroUI Select 기반으로 정리해 Form-state 전용 입력 컴포넌트 의존 제거 | codex |
-| 2026-03-01 | AiForm을 수정 입력 폼과 동일 위계로 분리하고 바깥 SectionSurface 래퍼를 제거해 Card 단일 표면 구조로 정리 | codex |
+| 2026-03-01 | AiForm을 수정 입력 폼과 동일 위계로 분리하고 바깥 섹션 영역 래퍼를 제거해 Card 단일 표면 구조로 정리 | codex |
+| 2026-03-03 | Scaffold 제거 및 페이지 헤더 영역/섹션 영역 용어 정리 | codex |

@@ -1,5 +1,5 @@
-import { HStack } from "../../surfaces/HStack/HStack";
-import { VStack } from "../../surfaces/VStack/VStack";
+import { HStack } from "../../../layouts/HStack/HStack";
+import { VStack } from "../../../layouts/VStack/VStack";
 import { Text } from "../Text/Text";
 
 export interface FeeItem {

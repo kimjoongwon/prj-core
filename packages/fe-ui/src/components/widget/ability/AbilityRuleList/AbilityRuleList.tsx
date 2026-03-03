@@ -15,8 +15,8 @@ import {
 import { Edit2, Plus, Trash2 } from "lucide-react";
 import { observer } from "mobx-react-lite";
 import { Switch } from "../../../inputs/Switch/Switch";
-import { HStack } from "../../../ui/surfaces/HStack/HStack";
-import { VStack } from "../../../ui/surfaces/VStack/VStack";
+import { HStack } from "../../../layouts/HStack/HStack";
+import { VStack } from "../../../layouts/VStack/VStack";
 
 /**
  * Ability 규칙 타입

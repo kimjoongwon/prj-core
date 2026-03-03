@@ -96,10 +96,10 @@
 ### 레이아웃
 
 ```
-PageSurface (title="에셋 상세", backTo="/assets")
-├── SectionSurface (미리보기)
+페이지 헤더 영역 (title="에셋 상세", backTo="/assets")
+├── 섹션 영역 (미리보기)
 │   └── AssetPreview (이미지/비디오/문서 뷰어)
-└── SectionSurface (상세 정보)
+└── 섹션 영역 (상세 정보)
     ├── AssetBasicInfo (기본 정보 카드)
     ├── AssetTypeInfo (타입별 상세 정보)
     │   ├── ImageInfo (Image 타입)
@@ -273,3 +273,4 @@ apps/admin/web/src/app/(admin)/assets/[assetId]/
 | 2026-02-26 | Stage 4 정합화: API 경로 및 SSR Prefetch 구조 보강 | orch-screen-planner |
 | 2026-02-26 | Stage 6 구현: Orval 인터페이스 기반 상세 페이지(page/_client/_prefetch) 구현 | fe-page-builder |
 | 2026-02-26 | Stage 7 구현: assets 상세 page.e2e.ts 추가 | qa-fe-e2e-testing |
+| 2026-03-03 | Scaffold 제거 및 페이지 헤더 영역/섹션 영역 용어 정리 | codex |

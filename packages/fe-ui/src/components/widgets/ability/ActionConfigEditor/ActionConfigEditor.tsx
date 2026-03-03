@@ -10,8 +10,8 @@ import { Card, CardBody, cn } from "@heroui/react";
 import { observer } from "mobx-react-lite";
 import { Input } from "../../../inputs/Input/Input";
 import { Select } from "../../../inputs/Select/Select";
-import { HStack } from "../../../ui/surfaces/HStack/HStack";
-import { VStack } from "../../../ui/surfaces/VStack/VStack";
+import { HStack } from "../../../layouts/HStack/HStack";
+import { VStack } from "../../../layouts/VStack/VStack";
 
 /**
  * 마스킹 프리셋 옵션

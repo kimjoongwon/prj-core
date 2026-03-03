@@ -6,7 +6,7 @@
 
 ## 역할
 
-메시지 템플릿 상세 화면의 PageSurface actions 영역에 렌더링되는 액션 버튼 그룹 Feature 컴포넌트입니다.
+메시지 템플릿 상세 화면의 페이지 헤더 영역 actions 영역에 렌더링되는 액션 버튼 그룹 Feature 컴포넌트입니다.
 미리보기, 테스트 발송, 수정, 삭제 기능 버튼을 수평으로 배치합니다.
 Store에 직접 연결하지 않고 모든 핸들러를 props로 받는 Presentational Feature입니다.
 
@@ -15,7 +15,7 @@ Store에 직접 연결하지 않고 모든 핸들러를 props로 받는 Presenta
 > 컴포넌트의 시각적 구조와 변형(variant)별 모습을 ASCII로 표현합니다.
 
 ```
-[PageSurface actions 영역 - 우측 상단]
+[페이지 헤더 영역 actions 영역 - 우측 상단]
 
 ┌──────────────────────────────────────────────────┐
 │  메시지 템플릿 상세          [👁 미리보기] [✉ 테스트 발송] [✎ 수정] [🗑 삭제] │
@@ -106,3 +106,4 @@ interface TemplateActionsProps {
 |------|------|--------|
 | 2026-02-18 | 초기 생성 (역기획) | req-reverse-engineer |
 | 2026-02-19 | 디자인 목업 섹션 추가 | req-reverse-engineer |
+| 2026-03-03 | Scaffold 제거 및 페이지 헤더 영역/섹션 영역 용어 정리 | codex |

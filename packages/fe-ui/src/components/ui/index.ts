@@ -4,4 +4,3 @@ export * from "./data-display";
 export * from "./feedback";
 export * from "./layouts";
 export * from "./permission";
-export * from "./surfaces";

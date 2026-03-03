@@ -12,8 +12,8 @@ import {
 import { observer } from "mobx-react-lite";
 import { useEffect, useState } from "react";
 import { Input } from "../../../inputs/Input/Input";
-import { HStack } from "../../../ui/surfaces/HStack/HStack";
-import { VStack } from "../../../ui/surfaces/VStack/VStack";
+import { HStack } from "../../../layouts/HStack/HStack";
+import { VStack } from "../../../layouts/VStack/VStack";
 
 /**
  * 역할 폼 데이터 타입

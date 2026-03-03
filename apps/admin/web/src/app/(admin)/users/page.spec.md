@@ -50,9 +50,9 @@
 
 | 영역 | 컴포넌트 | 설명 |
 |------|----------|------|
-| 페이지 래퍼 | `PageSurface` | title="이용자 목록", description="시스템에 등록된 이용자를 조회합니다." |
-| 통계 영역 | `SectionSurface` > `StatsCard` x3 | 전체(Users)/활성(UserCheck)/비활성(UserMinus) 이용자 수 |
-| 목록 영역 | `SectionSurface` > `MetaDataGrid` | 이용자 목록 테이블 |
+| 페이지 래퍼 | `페이지 헤더 영역` | title="이용자 목록", description="시스템에 등록된 이용자를 조회합니다." |
+| 통계 영역 | `섹션 영역` > `StatsCard` x3 | 전체(Users)/활성(UserCheck)/비활성(UserMinus) 이용자 수 |
+| 목록 영역 | `섹션 영역` > `MetaDataGrid` | 이용자 목록 테이블 |
 
 ## 컬럼 정의
 
@@ -129,3 +129,4 @@
 |------|------|--------|
 | 2026-02-18 | 초기 생성 (역기획) | req-reverse-engineer |
 | 2026-02-19 | 디자인 목업 추가 | req-reverse-engineer |
+| 2026-03-03 | Scaffold 제거 및 페이지 헤더 영역/섹션 영역 용어 정리 | codex |

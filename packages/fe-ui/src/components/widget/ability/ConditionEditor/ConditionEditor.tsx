@@ -5,8 +5,8 @@ import { AlertCircle, Info } from "lucide-react";
 import { observer } from "mobx-react-lite";
 import { useEffect, useState } from "react";
 import { Textarea } from "../../../inputs/Textarea/Textarea";
-import { HStack } from "../../../ui/surfaces/HStack/HStack";
-import { VStack } from "../../../ui/surfaces/VStack/VStack";
+import { HStack } from "../../../layouts/HStack/HStack";
+import { VStack } from "../../../layouts/VStack/VStack";
 
 /**
  * 허용된 템플릿 변수 목록

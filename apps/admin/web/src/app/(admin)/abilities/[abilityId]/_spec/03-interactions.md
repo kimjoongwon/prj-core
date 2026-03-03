@@ -19,8 +19,8 @@
 
 | ID | 액션 | 트리거 | 결과 | 조건 |
 |----|------|--------|------|------|
-| ROL-L5-ACT-044 | 수정 버튼 클릭 | PageSurface actions 영역 버튼 클릭 | 수정 화면으로 이동 (`/abilities/[abilityId]/edit`) | `can('update', 'ability')` |
-| ROL-L5-ACT-045 | 삭제 버튼 클릭 | PageSurface actions 영역 버튼 클릭 | 삭제 확인 모달 표시 | `can('delete', 'ability')` |
+| ROL-L5-ACT-044 | 수정 버튼 클릭 | 페이지 헤더 영역 actions 영역 버튼 클릭 | 수정 화면으로 이동 (`/abilities/[abilityId]/edit`) | `can('update', 'ability')` |
+| ROL-L5-ACT-045 | 삭제 버튼 클릭 | 페이지 헤더 영역 actions 영역 버튼 클릭 | 삭제 확인 모달 표시 | `can('delete', 'ability')` |
 | ROL-L5-ACT-046 | 삭제 확인 | 모달에서 삭제 버튼 클릭 | DELETE /api/v1/abilities/:id 호출 | - |
 | ROL-L5-ACT-047 | 삭제 취소 | 모달에서 취소 버튼 클릭 | 모달 닫기 | - |
 | ROL-L5-ACT-048 | 할당된 Role 클릭 | 할당 현황 섹션에서 Role명 클릭 | 역할 상세 화면으로 이동 (`/roles/[roleId]`) | - |

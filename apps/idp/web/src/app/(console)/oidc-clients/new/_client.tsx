@@ -1,11 +1,7 @@
 "use client";
 
 import { useCreateOidcClient } from "@cocrepo/api";
-import {
-	OidcClientForm,
-	type OidcClientFormState,
-	PageSurface,
-} from "@cocrepo/ui";
+import { OidcClientForm, type OidcClientFormState } from "@cocrepo/ui";
 import { Button } from "@heroui/react";
 import { ArrowLeft } from "lucide-react";
 import { observer, useLocalObservable } from "mobx-react-lite";
@@ -126,28 +122,19 @@ function OidcClientNewPageClient() {
 	};
 
 	return (
-		<PageSurface
-			title="OIDC 클라이언트 등록"
-			description="새 OIDC 클라이언트를 등록합니다."
-			actions={
-				<Button
-					variant="light"
-					startContent={<ArrowLeft className="h-4 w-4" />}
-					onPress={onClickBackButton}
-				>
-					목록으로
-				</Button>
-			}
-		>
-			<OidcClientForm
-				mode="create"
-				state={state}
-				onSubmit={onClickSubmitButton}
-				onCancel={onClickBackButton}
-				isSubmitting={isPending}
-			/>
-		</PageSurface>
-	);
+        <section><div className="flex items-start justify-between gap-4"><div><h1>{"OIDC 클라이언트 등록"}</h1><p>{"새 OIDC 클라이언트를 등록합니다."}</p></div><div>{<Button
+                                    variant="light"
+                                    startContent={<ArrowLeft className="h-4 w-4" />}
+                                    onPress={onClickBackButton}>목록으로
+                                                    </Button>}</div></div>
+            <OidcClientForm
+                mode="create"
+                state={state}
+                onSubmit={onClickSubmitButton}
+                onCancel={onClickBackButton}
+                isSubmitting={isPending} />
+        </section>
+    );
 }
 
 export default observer(OidcClientNewPageClient);

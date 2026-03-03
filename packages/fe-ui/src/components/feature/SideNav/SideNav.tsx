@@ -23,9 +23,9 @@ export interface SideNavProps {
  *
  * @example
  * ```tsx
- * <PageLayout leftAside={<SideNav />}>
+ * <PageShell leftAside={<SideNav />}>
  *   {children}
- * </PageLayout>
+ * </PageShell>
  * ```
  */
 export const SideNav = observer(({ width = 240, className }: SideNavProps) => {

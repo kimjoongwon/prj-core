@@ -2,7 +2,7 @@ import { Card, CardBody, Chip, Progress } from "@heroui/react";
 import type React from "react";
 import { Logo } from "../../data-display/Logo/Logo";
 import { Text } from "../../data-display/Text/Text";
-import { VStack } from "../../surfaces/VStack/VStack";
+import { VStack } from "../../../layouts/VStack/VStack";
 
 export interface SplashScreenProps {
 	/** 메인 타이틀 @default "앱을 준비하고 있습니다" */

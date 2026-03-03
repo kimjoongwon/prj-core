@@ -7,7 +7,7 @@ import {
 	useDeleteRoutine,
 	useGetRoutine,
 } from "@cocrepo/api";
-import { DateTimeCell, PageSurface, SectionSurface, VStack } from "@cocrepo/ui";
+import { DateTimeCell, VStack } from "@cocrepo/ui";
 import {
 	addToast,
 	Button,
@@ -96,19 +96,17 @@ function RoutineDetailPageClient({ routineId }: RoutineDetailPageClientProps) {
 
 	if (!routine) {
 		return (
-			<PageSurface title="루틴 상세" description="루틴을 찾을 수 없습니다.">
-				<div className="flex flex-col items-center justify-center gap-4 p-8">
-					<p className="text-default-500">루틴을 찾을 수 없습니다.</p>
-					<Button
-						variant="flat"
-						startContent={<ArrowLeft className="size-4" />}
-						onPress={onClickBackButton}
-					>
-						목록으로
-					</Button>
-				</div>
-			</PageSurface>
-		);
+            <section><div className="flex items-start justify-between gap-4"><div><h1>{"루틴 상세"}</h1><p>{"루틴을 찾을 수 없습니다."}</p></div></div>
+                <div className="flex flex-col items-center justify-center gap-4 p-8">
+                    <p className="text-default-500">루틴을 찾을 수 없습니다.</p>
+                    <Button
+                        variant="flat"
+                        startContent={<ArrowLeft className="size-4" />}
+                        onPress={onClickBackButton}>목록으로
+                                            </Button>
+                </div>
+            </section>
+        );
 	}
 
 	const activities = (routine.activities ?? []) as ActivityDto[];
@@ -119,205 +117,153 @@ function RoutineDetailPageClient({ routineId }: RoutineDetailPageClientProps) {
 	const unresolvedActivities = activities.length - resolvedActivities;
 
 	return (
-		<PageSurface
-			title={routine.name}
-			description="루틴의 상세 정보입니다."
-			actions={
-				<div className="flex gap-2">
-					<Button
-						variant="flat"
-						startContent={<Pencil className="size-4" />}
-						onPress={onClickEditButton}
-					>
-						수정
-					</Button>
-					<Button
-						color="danger"
-						variant="flat"
-						startContent={<Trash2 className="size-4" />}
-						onPress={deleteModal.onOpen}
-					>
-						삭제
-					</Button>
-				</div>
-			}
-		>
-			<VStack gap={4}>
-				{/* 기본 정보 */}
-				<SectionSurface title="기본 정보">
-					<div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-						<div>
-							<label className="text-sm text-default-500">루틴명</label>
-							<p className="mt-1 font-medium">{routine.name}</p>
-						</div>
-						<div>
-							<label className="text-sm text-default-500">라벨</label>
-							<p className="mt-1">{routine.label}</p>
-						</div>
-						<div>
-							<label className="text-sm text-default-500">운동 수</label>
-							<p className="mt-1">{activities.length}개</p>
-						</div>
-						<div>
-							<label className="text-sm text-default-500">연결 상태</label>
-							<div className="mt-1">
-								{activities.length === 0 ? (
-									<Chip size="sm" variant="flat" color="warning">
-										활동 없음
-									</Chip>
-								) : unresolvedActivities > 0 ? (
-									<Chip size="sm" variant="flat" color="warning">
-										확인 필요
-									</Chip>
-								) : (
-									<Chip size="sm" variant="flat" color="success">
-										정상
-									</Chip>
-								)}
-							</div>
-						</div>
-						<div>
-							<label className="text-sm text-default-500">등록일</label>
-							<div className="mt-1">
-								<DateTimeCell value={routine.createdAt} />
-							</div>
-						</div>
-						<div>
-							<label className="text-sm text-default-500">수정일</label>
-							<div className="mt-1">
-								<DateTimeCell value={routine.updatedAt} />
-							</div>
-						</div>
-					</div>
-				</SectionSurface>
+        <section>{(routine.name || <div className="flex gap-2">
+                            <Button
+                                variant="flat"
+                                startContent={<Pencil className="size-4" />}
+                                onPress={onClickEditButton}>수정
+                                                    </Button>
+                            <Button
+                                color="danger"
+                                variant="flat"
+                                startContent={<Trash2 className="size-4" />}
+                                onPress={deleteModal.onOpen}>삭제
+                                                    </Button>
+                        </div>) && <div className="flex items-start justify-between gap-4"><div>{routine.name && <h1>{routine.name}</h1>}<p>{"루틴의 상세 정보입니다."}</p></div><div><div className="flex gap-2">
+                                    <Button
+                                        variant="flat"
+                                        startContent={<Pencil className="size-4" />}
+                                        onPress={onClickEditButton}>수정
+                                                            </Button>
+                                    <Button
+                                        color="danger"
+                                        variant="flat"
+                                        startContent={<Trash2 className="size-4" />}
+                                        onPress={deleteModal.onOpen}>삭제
+                                                            </Button>
+                                </div></div></div>}
+            <VStack gap={4}>
+                <section><div className="flex items-start justify-between gap-3"><div className="flex items-start gap-2"><div><h2>{"기본 정보"}</h2></div></div></div>
+                    <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+                        <div>
+                            <label className="text-sm text-default-500">루틴명</label>
+                            <p className="mt-1 font-medium">{routine.name}</p>
+                        </div>
+                        <div>
+                            <label className="text-sm text-default-500">라벨</label>
+                            <p className="mt-1">{routine.label}</p>
+                        </div>
+                        <div>
+                            <label className="text-sm text-default-500">운동 수</label>
+                            <p className="mt-1">{activities.length}개</p>
+                        </div>
+                        <div>
+                            <label className="text-sm text-default-500">연결 상태</label>
+                            <div className="mt-1">
+                                {activities.length === 0 ? (<Chip size="sm" variant="flat" color="warning">활동 없음
+                                                                        </Chip>) : unresolvedActivities > 0 ? (<Chip size="sm" variant="flat" color="warning">확인 필요
+                                                                        </Chip>) : (<Chip size="sm" variant="flat" color="success">정상
+                                                                        </Chip>)}
+                            </div>
+                        </div>
+                        <div>
+                            <label className="text-sm text-default-500">등록일</label>
+                            <div className="mt-1">
+                                <DateTimeCell value={routine.createdAt} />
+                            </div>
+                        </div>
+                        <div>
+                            <label className="text-sm text-default-500">수정일</label>
+                            <div className="mt-1">
+                                <DateTimeCell value={routine.updatedAt} />
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                <section><div className="flex items-start justify-between gap-3"><div className="flex items-start gap-2"><div><h2>{"연결 요약"}</h2></div></div></div>
+                    <div className="grid grid-cols-1 gap-3 md:grid-cols-3">
+                        <div className="rounded-lg bg-content2 p-3">
+                            <p className="text-xs text-default-500">전체 활동</p>
+                            <p className="mt-1 text-lg font-semibold">
+                                {activities.length}개
+                                                            </p>
+                        </div>
+                        <div className="rounded-lg bg-content2 p-3">
+                            <p className="text-xs text-default-500">연결 정상</p>
+                            <p className="mt-1 text-lg font-semibold text-success">
+                                {resolvedActivities}개
+                                                            </p>
+                        </div>
+                        <div className="rounded-lg bg-content2 p-3">
+                            <p className="text-xs text-default-500">사용 중 프로그램</p>
+                            <p className="mt-1 text-lg font-semibold">{programs.length}개</p>
+                        </div>
+                    </div>
+                </section>
+                <section><div className="flex items-start justify-between gap-3"><div className="flex items-start gap-2"><div><h2>{"운동 구성"}</h2></div></div></div>
+                    {activities.length === 0 ? (<p className="text-sm text-default-500">등록된 활동이 없습니다.</p>) : (<div className="flex flex-col gap-3">
+                        {activities.map((activity, index) => {
+                            const isResolved = Boolean(activity.task?.exercise?.name);
 
-				<SectionSurface title="연결 요약">
-					<div className="grid grid-cols-1 gap-3 md:grid-cols-3">
-						<div className="rounded-lg bg-content2 p-3">
-							<p className="text-xs text-default-500">전체 활동</p>
-							<p className="mt-1 text-lg font-semibold">
-								{activities.length}개
-							</p>
-						</div>
-						<div className="rounded-lg bg-content2 p-3">
-							<p className="text-xs text-default-500">연결 정상</p>
-							<p className="mt-1 text-lg font-semibold text-success">
-								{resolvedActivities}개
-							</p>
-						</div>
-						<div className="rounded-lg bg-content2 p-3">
-							<p className="text-xs text-default-500">사용 중 프로그램</p>
-							<p className="mt-1 text-lg font-semibold">{programs.length}개</p>
-						</div>
-					</div>
-				</SectionSurface>
-
-				{/* 운동 구성 */}
-				<SectionSurface title="운동 구성">
-					{activities.length === 0 ? (
-						<p className="text-sm text-default-500">등록된 활동이 없습니다.</p>
-					) : (
-						<div className="flex flex-col gap-3">
-							{activities.map((activity, index) => {
-								const isResolved = Boolean(activity.task?.exercise?.name);
-
-								return (
-									<div
-										key={activity.id}
-										className="flex flex-col gap-1 rounded-lg bg-content2 p-4"
-									>
-										<div className="flex items-center justify-between">
-											<p className="font-medium">
-												{index + 1}.{" "}
-												{activity.task?.exercise?.name ?? "알 수 없는 운동"}
-											</p>
-											<Chip
-												size="sm"
-												variant="flat"
-												color={isResolved ? "success" : "warning"}
-											>
-												{isResolved ? "정상" : "확인필요"}
-											</Chip>
-										</div>
-										<div className="flex gap-4 text-sm text-default-500">
-											<span>반복 횟수: {activity.repetitions}회</span>
-											<span>
-												휴식 시간:{" "}
-												{activity.restTime > 0
-													? `${activity.restTime}초`
-													: "없음"}
-											</span>
-										</div>
-										{activity.notes && (
-											<p className="mt-1 text-sm text-default-400">
-												메모: {activity.notes}
-											</p>
-										)}
-									</div>
-								);
-							})}
-						</div>
-					)}
-				</SectionSurface>
-
-				{/* 사용 중인 프로그램 */}
-				<SectionSurface title="사용 중인 프로그램">
-					{programs.length === 0 ? (
-						<p className="text-sm text-default-500">
-							현재 이 루틴을 사용하는 프로그램이 없습니다.
-						</p>
-					) : (
-						<div className="flex flex-col gap-2">
-							{programs.map((program) => (
-								<div
-									key={program.id}
-									className="flex items-center justify-between rounded-lg bg-content2 p-3"
-								>
-									<p className="font-medium">{program.name}</p>
-								</div>
-							))}
-						</div>
-					)}
-				</SectionSurface>
-			</VStack>
-
-			{/* 삭제 확인 모달 */}
-			<Modal isOpen={deleteModal.isOpen} onClose={deleteModal.onClose}>
-				<ModalContent>
-					<ModalHeader>루틴 삭제</ModalHeader>
-					<ModalBody>
-						<p>
-							<strong>{routine.name}</strong> 루틴을 삭제하시겠습니까?
-						</p>
-						{programs.length > 0 && (
-							<p className="mt-2 text-sm text-warning">
-								현재 {programs.length}개의 프로그램에서 사용 중입니다.
-							</p>
-						)}
-						<p className="mt-2 text-sm text-danger">
-							이 작업은 되돌릴 수 없습니다.
-						</p>
-					</ModalBody>
-					<ModalFooter>
-						<Button
-							variant="flat"
-							onPress={deleteModal.onClose}
-							isDisabled={isDeleting}
-						>
-							취소
-						</Button>
-						<Button
-							color="danger"
-							onPress={onClickDeleteConfirm}
-							isLoading={isDeleting}
-						>
-							삭제
-						</Button>
-					</ModalFooter>
-				</ModalContent>
-			</Modal>
-		</PageSurface>
-	);
+                            return (
+                                <div
+                                    key={activity.id}
+                                    className="flex flex-col gap-1 rounded-lg bg-content2 p-4">
+                                    <div className="flex items-center justify-between">
+                                        <p className="font-medium">
+                                            {index + 1}.{" "}
+                                            {activity.task?.exercise?.name ?? "알 수 없는 운동"}
+                                        </p>
+                                        <Chip size="sm" variant="flat" color={isResolved ? "success" : "warning"}>
+                                            {isResolved ? "정상" : "확인필요"}
+                                        </Chip>
+                                    </div>
+                                    <div className="flex gap-4 text-sm text-default-500">
+                                        <span>반복 횟수: {activity.repetitions}회</span>
+                                        <span>휴식 시간:{" "}
+                                            {activity.restTime > 0 ? `${activity.restTime}초` : "없음"}
+                                        </span>
+                                    </div>
+                                    {activity.notes && (<p className="mt-1 text-sm text-default-400">메모: {activity.notes}
+                                    </p>)}
+                                </div>
+                            );
+                        })}
+                    </div>)}
+                </section>
+                <section><div className="flex items-start justify-between gap-3"><div className="flex items-start gap-2"><div><h2>{"사용 중인 프로그램"}</h2></div></div></div>
+                    {programs.length === 0 ? (<p className="text-sm text-default-500">현재 이 루틴을 사용하는 프로그램이 없습니다.
+                                                </p>) : (<div className="flex flex-col gap-2">
+                        {programs.map(program => (<div
+                            key={program.id}
+                            className="flex items-center justify-between rounded-lg bg-content2 p-3">
+                            <p className="font-medium">{program.name}</p>
+                        </div>))}
+                    </div>)}
+                </section>
+            </VStack>
+            <Modal isOpen={deleteModal.isOpen} onClose={deleteModal.onClose}>
+                <ModalContent>
+                    <ModalHeader>루틴 삭제</ModalHeader>
+                    <ModalBody>
+                        <p>
+                            <strong>{routine.name}</strong>루틴을 삭제하시겠습니까?
+                                                    </p>
+                        {programs.length > 0 && (<p className="mt-2 text-sm text-warning">현재 {programs.length}개의 프로그램에서 사용 중입니다.
+                                                        </p>)}
+                        <p className="mt-2 text-sm text-danger">이 작업은 되돌릴 수 없습니다.
+                                                    </p>
+                    </ModalBody>
+                    <ModalFooter>
+                        <Button variant="flat" onPress={deleteModal.onClose} isDisabled={isDeleting}>취소
+                                                    </Button>
+                        <Button color="danger" onPress={onClickDeleteConfirm} isLoading={isDeleting}>삭제
+                                                    </Button>
+                    </ModalFooter>
+                </ModalContent>
+            </Modal>
+        </section>
+    );
 }
 
 export default observer(RoutineDetailPageClient);

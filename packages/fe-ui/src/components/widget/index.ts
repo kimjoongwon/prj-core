@@ -1,5 +1,6 @@
 export * from "./ability";
 export * from "./AIClassificationSuggestion";
+export * from "./AuthCard";
 export * from "./BackButton";
 export * from "./ByteCounter";
 export * from "./category";
@@ -30,6 +31,8 @@ export * from "./RedirectUriListInput";
 export * from "./SearchFilterBar";
 export * from "./SecretField";
 export * from "./SendTestModal";
+export * from "./Section/Section";
+export * from "./SectionHeader";
 export * from "./SLATracker";
 export * from "./SpaceAlert";
 export * from "./StatsCard";

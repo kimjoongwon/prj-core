@@ -19,8 +19,8 @@
 
 | ID | 액션 | 트리거 | 결과 | 조건 |
 |----|------|--------|------|------|
-| ROL-L5-ACT-008 | 수정 버튼 클릭 | PageSurface actions 영역 버튼 클릭 | 수정 화면으로 이동 (`/roles/[roleId]/edit`) | `can('update', 'role')`, isSystem=false |
-| ROL-L5-ACT-009 | 삭제 버튼 클릭 | PageSurface actions 영역 버튼 클릭 | 삭제 확인 모달 표시 | `can('delete', 'role')`, isSystem=false |
+| ROL-L5-ACT-008 | 수정 버튼 클릭 | 페이지 헤더 영역 actions 영역 버튼 클릭 | 수정 화면으로 이동 (`/roles/[roleId]/edit`) | `can('update', 'role')`, isSystem=false |
+| ROL-L5-ACT-009 | 삭제 버튼 클릭 | 페이지 헤더 영역 actions 영역 버튼 클릭 | 삭제 확인 모달 표시 | `can('delete', 'role')`, isSystem=false |
 | ROL-L5-ACT-010 | 삭제 확인 | 모달에서 삭제 버튼 클릭 | DELETE /api/v1/roles/:id 호출 | - |
 | ROL-L5-ACT-011 | 삭제 취소 | 모달에서 취소 버튼 클릭 | 모달 닫기 | - |
 | ROL-L5-ACT-012 | Grant 체크박스 토글 | Ability 할당 테이블에서 체크박스 클릭 | 해당 Ability의 할당/해제 상태 변경 (로컬) | `can('update', 'role')` |

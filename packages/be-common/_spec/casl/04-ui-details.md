@@ -166,8 +166,8 @@
 | TextInput | inputs | 이름, 설명 입력 |
 | Checkbox | inputs | inverted, isActive 토글 |
 | Badge | ui | 시스템 역할 표시 |
-| PageSurface | layouts | 페이지 래퍼 |
-| SectionSurface | layouts | 섹션 래퍼 |
+| 페이지 헤더 영역 | widget | 페이지 래퍼 |
+| 섹션 영역 | widget | 섹션 래퍼 |
 
 ---
 

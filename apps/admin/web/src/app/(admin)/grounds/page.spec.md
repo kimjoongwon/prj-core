@@ -33,8 +33,8 @@
 ### 레이아웃
 
 ```
-PageSurface (title="시설 목록", actions=[시설 등록 버튼])
-└── SectionSurface (padding="none")
+페이지 헤더 영역 (title="시설 목록", actions=[시설 등록 버튼])
+└── 섹션 영역 (padding="none")
     └── DataGrid
         ├── 검색 바 (시설명 / 사업자등록번호)
         └── 테이블
@@ -86,9 +86,9 @@ prefetchGetGroundsQuery()
 ```
 GroundListPage (page.tsx - 서버)
 └── GroundListClient (_client.tsx - 클라이언트)
-    ├── PageSurface
+    ├── 페이지 헤더 영역
     │   └── actions: Button ("시설 등록", Building2 아이콘)
-    └── SectionSurface (padding="none")
+    └── 섹션 영역 (padding="none")
         └── GroundDataGrid (Feature)
             ├── 검색 Input
             └── DataGrid
@@ -106,3 +106,4 @@ GroundListPage (page.tsx - 서버)
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
 | 2026-02-19 | 초기 생성 | req-screen-planner |
+| 2026-03-03 | Scaffold 제거 및 페이지 헤더 영역/섹션 영역 용어 정리 | codex |

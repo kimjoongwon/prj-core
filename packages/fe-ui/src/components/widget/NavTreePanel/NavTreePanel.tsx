@@ -11,7 +11,7 @@ import type { Selection } from "@react-types/shared";
 import { ChevronRight } from "lucide-react";
 import { observer } from "mobx-react-lite";
 import { renderLucideIcon } from "../../../utils/iconUtils";
-import { VStack } from "../../ui/surfaces/VStack/VStack";
+import { VStack } from "../../layouts/VStack/VStack";
 
 /**
  * Widget용 네비게이션 아이템 타입

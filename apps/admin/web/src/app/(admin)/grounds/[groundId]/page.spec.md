@@ -33,8 +33,8 @@
 ### 레이아웃
 
 ```
-PageSurface (title=시설명, actions=[수정 버튼])
-├── SectionSurface (title="기본 정보")
+페이지 헤더 영역 (title=시설명, actions=[수정 버튼])
+├── 섹션 영역 (title="기본 정보")
 │   ├── 시설명 (name)
 │   ├── 라벨 (label)
 │   ├── 주소 (address)
@@ -43,10 +43,10 @@ PageSurface (title=시설명, actions=[수정 버튼])
 │   ├── 사업자등록번호 (businessNo)
 │   ├── 등록일 (createdAt)
 │   └── 수정일 (updatedAt)
-├── SectionSurface (title="이미지") [이미지 있을 때만]
+├── 섹션 영역 (title="이미지") [이미지 있을 때만]
 │   ├── 로고 이미지 (logoImageFileId)
 │   └── 대표 이미지 (imageFileId)
-└── SectionSurface (title="연결된 Space")
+└── 섹션 영역 (title="연결된 Space")
     └── Space ID, Space 정보
 ```
 
@@ -92,12 +92,12 @@ prefetchGetGroundQuery(groundId)
 ```
 GroundDetailPage (page.tsx - 서버)
 └── GroundDetailClient (_client.tsx - 클라이언트)
-    └── PageSurface (title=name, actions=[수정 버튼])
-        ├── SectionSurface (title="기본 정보")
+    └── 페이지 헤더 영역 (title=name, actions=[수정 버튼])
+        ├── 섹션 영역 (title="기본 정보")
         │   └── GroundDetailInfo (Widget - 기본 정보 표시)
-        ├── SectionSurface (title="이미지") [조건부]
+        ├── 섹션 영역 (title="이미지") [조건부]
         │   └── GroundImageViewer (Widget - 이미지 미리보기)
-        └── SectionSurface (title="연결된 Space")
+        └── 섹션 영역 (title="연결된 Space")
             └── SpaceInfoPanel (Widget - Space 정보)
 ```
 
@@ -106,3 +106,4 @@ GroundDetailPage (page.tsx - 서버)
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
 | 2026-02-19 | 초기 생성 | req-screen-planner |
+| 2026-03-03 | Scaffold 제거 및 페이지 헤더 영역/섹션 영역 용어 정리 | codex |

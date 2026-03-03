@@ -5,7 +5,7 @@ import {
 	useGetTimelineById,
 	useUpdateTimeline,
 } from "@cocrepo/api";
-import { PageSurface, SectionSurface, VStack } from "@cocrepo/ui";
+import { VStack } from "@cocrepo/ui";
 import { addToast, Button, Input, Textarea } from "@heroui/react";
 import { useQueryClient } from "@tanstack/react-query";
 import { observer, useLocalObservable } from "mobx-react-lite";
@@ -114,52 +114,41 @@ function TimelineEditPageClient({ timelineId }: TimelineEditPageClientProps) {
 			state.description !== (timeline?.description ?? ""));
 
 	return (
-		<PageSurface
-			title="타임라인 수정"
-			description={timeline?.name}
-			actions={
-				<Button variant="flat" onPress={onClickCancelButton}>
-					취소
-				</Button>
-			}
-		>
-			<SectionSurface>
-				<VStack gap={4}>
-					<Input
-						label="타임라인명"
-						labelPlacement="outside"
-						placeholder="타임라인명을 입력하세요."
-						value={state.name}
-						onValueChange={onChangeName}
-						isRequired
-						isInvalid={!!state.errors.name}
-						errorMessage={state.errors.name}
-					/>
-					<Textarea
-						label="설명"
-						labelPlacement="outside"
-						placeholder="타임라인에 대한 부가 설명을 입력하세요."
-						value={state.description}
-						onValueChange={onChangeDescription}
-						maxLength={500}
-						description={`${state.description.length} / 500`}
-						isInvalid={!!state.errors.description}
-						errorMessage={state.errors.description}
-					/>
-					<div className="flex justify-end">
-						<Button
-							color="primary"
-							onPress={onClickSubmitButton}
-							isLoading={isPending}
-							isDisabled={!hasChanged || !state.name.trim()}
-						>
-							수정
-						</Button>
-					</div>
-				</VStack>
-			</SectionSurface>
-		</PageSurface>
-	);
+        <section><div className="flex items-start justify-between gap-4"><div><h1>{"타임라인 수정"}</h1>{timeline?.name && <p>{timeline?.name}</p>}</div><div>{<Button variant="flat" onPress={onClickCancelButton}>취소
+                                                    </Button>}</div></div>
+            <section>
+                <VStack gap={4}>
+                    <Input
+                        label="타임라인명"
+                        labelPlacement="outside"
+                        placeholder="타임라인명을 입력하세요."
+                        value={state.name}
+                        onValueChange={onChangeName}
+                        isRequired
+                        isInvalid={!!state.errors.name}
+                        errorMessage={state.errors.name} />
+                    <Textarea
+                        label="설명"
+                        labelPlacement="outside"
+                        placeholder="타임라인에 대한 부가 설명을 입력하세요."
+                        value={state.description}
+                        onValueChange={onChangeDescription}
+                        maxLength={500}
+                        description={`${state.description.length} / 500`}
+                        isInvalid={!!state.errors.description}
+                        errorMessage={state.errors.description} />
+                    <div className="flex justify-end">
+                        <Button
+                            color="primary"
+                            onPress={onClickSubmitButton}
+                            isLoading={isPending}
+                            isDisabled={!hasChanged || !state.name.trim()}>수정
+                                                    </Button>
+                    </div>
+                </VStack>
+            </section>
+        </section>
+    );
 }
 
 export default observer(TimelineEditPageClient);

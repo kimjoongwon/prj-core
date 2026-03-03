@@ -39,15 +39,15 @@
 ### 레이아웃
 
 ```
-PageSurface (title="시설 수정")
-├── SectionSurface (title="기본 정보")
+페이지 헤더 영역 (title="시설 수정")
+├── 섹션 영역 (title="기본 정보")
 │   ├── name (Input, 필수) - 기존값 채워짐
 │   ├── label (Input, 선택) - 기존값 채워짐
 │   ├── address (Input, 필수) - 기존값 채워짐
 │   ├── phone (Input, 필수) - 기존값 채워짐
 │   ├── email (Input, 필수) - 기존값 채워짐
 │   └── businessNo (Input, 읽기 전용) - 기존값 표시, 수정 불가
-├── SectionSurface (title="이미지")
+├── 섹션 영역 (title="이미지")
 │   ├── logoImageFileId (FileUpload, 선택) - 기존 이미지 미리보기
 │   └── imageFileId (FileUpload, 선택) - 기존 이미지 미리보기
 └── 하단 버튼 영역
@@ -112,10 +112,10 @@ prefetchGetGroundQuery(groundId)
 ```
 GroundEditPage (page.tsx - 서버)
 └── GroundEditClient (_client.tsx - 클라이언트)
-    └── PageSurface (title="시설 수정")
-        ├── SectionSurface (title="기본 정보")
+    └── 페이지 헤더 영역 (title="시설 수정")
+        ├── 섹션 영역 (title="기본 정보")
         │   └── GroundForm (Feature - 기본 정보 폼, defaultValues 주입)
-        ├── SectionSurface (title="이미지")
+        ├── 섹션 영역 (title="이미지")
         │   └── GroundImageForm (Feature - 이미지 업로드 폼, defaultValues 주입)
         └── 버튼 영역
             ├── Button ("취소")
@@ -127,3 +127,4 @@ GroundEditPage (page.tsx - 서버)
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
 | 2026-02-19 | 초기 생성 | req-screen-planner |
+| 2026-03-03 | Scaffold 제거 및 페이지 헤더 영역/섹션 영역 용어 정리 | codex |

@@ -2,13 +2,7 @@
 
 import { type GroundDto, useGetGrounds } from "@cocrepo/api";
 import type { InputConfig, MetaDataGridColumnConfig } from "@cocrepo/type";
-import {
-	DateTimeCell,
-	MetaDataGrid,
-	PageSurface,
-	SectionSurface,
-	useMetaDataGridQueryStates,
-} from "@cocrepo/ui";
+import { DateTimeCell, MetaDataGrid, useMetaDataGridQueryStates } from "@cocrepo/ui";
 import { Badge, Button } from "@heroui/react";
 import { Building2 } from "lucide-react";
 import { observer } from "mobx-react-lite";
@@ -113,37 +107,28 @@ function GroundsPageClient() {
 	];
 
 	return (
-		<PageSurface
-			title="시설 목록"
-			description="시스템에 등록된 시설을 관리합니다."
-			actions={
-				<Button
-					as={Link}
-					href="/grounds/new"
-					color="primary"
-					startContent={<Building2 className="h-4 w-4" />}
-				>
-					시설 등록
-				</Button>
-			}
-		>
-			<SectionSurface>
-				<MetaDataGrid
-					config={{
-						entity: "Ground",
-						data: grounds,
-						totalCount,
-						isLoading,
-						queryStates,
-						setQueryStates,
-						columns,
-						leftInputs,
-						emptyMessage: "등록된 시설이 없습니다.",
-					}}
-				/>
-			</SectionSurface>
-		</PageSurface>
-	);
+        <section><div className="flex items-start justify-between gap-4"><div><h1>{"시설 목록"}</h1><p>{"시스템에 등록된 시설을 관리합니다."}</p></div><div>{<Button
+                                    as={Link}
+                                    href="/grounds/new"
+                                    color="primary"
+                                    startContent={<Building2 className="h-4 w-4" />}>시설 등록
+                                                    </Button>}</div></div>
+            <section>
+                <MetaDataGrid
+                    config={{
+                        entity: "Ground",
+                        data: grounds,
+                        totalCount,
+                        isLoading,
+                        queryStates,
+                        setQueryStates,
+                        columns,
+                        leftInputs,
+                        emptyMessage: "등록된 시설이 없습니다.",
+                    }} />
+            </section>
+        </section>
+    );
 }
 
 export default observer(GroundsPageClient);

@@ -24,7 +24,7 @@
 | ROL-L5-ACT-037 | Action 필터 선택 | Action Select 변경 | 선택된 Action의 Ability만 필터링 | - |
 | ROL-L5-ACT-038 | 유형 필터 선택 | 허용/거부 Select 변경 | inverted 기준 필터링 | - |
 | ROL-L5-ACT-039 | Ability 행 클릭 | DataGrid 행 클릭 | Ability 상세 화면으로 이동 | - |
-| ROL-L5-ACT-040 | 권한 정의 등록 버튼 | PageSurface actions 영역 버튼 클릭 | 등록 화면으로 이동 (`/abilities/new`) | `can('create', 'ability')` |
+| ROL-L5-ACT-040 | 권한 정의 등록 버튼 | 페이지 헤더 영역 actions 영역 버튼 클릭 | 등록 화면으로 이동 (`/abilities/new`) | `can('create', 'ability')` |
 | ROL-L5-ACT-041 | 페이지 변경 | 페이지네이션 버튼 클릭 | 해당 페이지 데이터 로드 | - |
 | ROL-L5-ACT-042 | 페이지 크기 변경 | 페이지 크기 Select 변경 (10/20/50) | 페이지 크기 변경 후 1페이지로 이동 | - |
 | ROL-L5-ACT-043 | 컬럼 정렬 클릭 | DataGrid 헤더 클릭 | name, createdAt 기준 정렬 | - |

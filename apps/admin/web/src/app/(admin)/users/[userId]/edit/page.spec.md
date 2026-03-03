@@ -84,9 +84,9 @@
 
 | 영역 | 컴포넌트 | 설명 |
 |------|----------|------|
-| 페이지 래퍼 | `PageSurface` | title="이용자 수정" |
-| 기본 정보 섹션 | `SectionSurface` | 이름, 이메일, 전화번호 (기존 값으로 prefill) |
-| 분류 정보 섹션 | `SectionSurface` | 역할 (readonly), 분류 Select, 그룹 Multi-Select |
+| 페이지 래퍼 | `페이지 헤더 영역` | title="이용자 수정" |
+| 기본 정보 섹션 | `섹션 영역` | 이름, 이메일, 전화번호 (기존 값으로 prefill) |
+| 분류 정보 섹션 | `섹션 영역` | 역할 (readonly), 분류 Select, 그룹 Multi-Select |
 | 하단 액션 | 버튼 영역 | [취소] [저장] |
 
 ## 폼 필드 (기획)
@@ -147,3 +147,4 @@
 |------|------|--------|
 | 2026-02-18 | 초기 생성 (역기획) | req-reverse-engineer |
 | 2026-02-19 | 디자인 목업 추가 | req-reverse-engineer |
+| 2026-03-03 | Scaffold 제거 및 페이지 헤더 영역/섹션 영역 용어 정리 | codex |

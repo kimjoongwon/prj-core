@@ -3,7 +3,7 @@
 // TODO: Orval codegen 후 아래 import로 교체
 // import { useGetGroupById, useUpdateGroup } from "@cocrepo/api";
 import { customInstance } from "@cocrepo/api";
-import { PageSurface, SectionSurface, VStack } from "@cocrepo/ui";
+import { VStack } from "@cocrepo/ui";
 import { Button, Input } from "@heroui/react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { ArrowLeft, Save } from "lucide-react";
@@ -116,88 +116,69 @@ function RoleGroupEditPageClient({ groupId }: RoleGroupEditPageClientProps) {
 
 	if (isLoading) {
 		return (
-			<PageSurface title="역할 그룹 수정" description="로딩 중...">
-				<div className="flex items-center justify-center p-8">
-					<span className="text-default-500">로딩 중...</span>
-				</div>
-			</PageSurface>
-		);
+            <section><div className="flex items-start justify-between gap-4"><div><h1>{"역할 그룹 수정"}</h1><p>{"로딩 중..."}</p></div></div>
+                <div className="flex items-center justify-center p-8">
+                    <span className="text-default-500">로딩 중...</span>
+                </div>
+            </section>
+        );
 	}
 
 	if (!group) {
 		return (
-			<PageSurface
-				title="역할 그룹 수정"
-				description="그룹을 찾을 수 없습니다."
-			>
-				<div className="flex flex-col items-center justify-center gap-4 p-8">
-					<p className="text-default-500">그룹을 찾을 수 없습니다.</p>
-					<Button variant="flat" onPress={onClickListButton}>
-						목록으로
-					</Button>
-				</div>
-			</PageSurface>
-		);
+            <section><div className="flex items-start justify-between gap-4"><div><h1>{"역할 그룹 수정"}</h1><p>{"그룹을 찾을 수 없습니다."}</p></div></div>
+                <div className="flex flex-col items-center justify-center gap-4 p-8">
+                    <p className="text-default-500">그룹을 찾을 수 없습니다.</p>
+                    <Button variant="flat" onPress={onClickListButton}>목록으로
+                                            </Button>
+                </div>
+            </section>
+        );
 	}
 
 	return (
-		<PageSurface
-			title="역할 그룹 수정"
-			description={`${group.label || group.name} 그룹을 수정합니다.`}
-			actions={
-				<Button
-					variant="light"
-					startContent={<ArrowLeft className="h-4 w-4" />}
-					onPress={onClickBackButton}
-				>
-					상세로 돌아가기
-				</Button>
-			}
-		>
-			<VStack gap={4}>
-				<SectionSurface>
-					<div className="space-y-6 p-6">
-						<Input
-							label="그룹명"
-							value={state.name}
-							onValueChange={(value) => {
-								state.name = value.toUpperCase();
-							}}
-							isInvalid={!!state.errors.name}
-							errorMessage={state.errors.name}
-							isRequired
-							maxLength={50}
-						/>
-
-						<Input
-							label="라벨"
-							placeholder="표시 라벨"
-							value={state.label}
-							onValueChange={(value) => {
-								state.label = value;
-							}}
-							maxLength={100}
-							description="그룹의 표시 라벨입니다."
-						/>
-
-						<div className="flex justify-end gap-2 pt-4">
-							<Button variant="flat" onPress={onClickBackButton}>
-								취소
-							</Button>
-							<Button
-								color="primary"
-								startContent={<Save className="h-4 w-4" />}
-								onPress={onClickSubmitButton}
-								isLoading={isPending}
-							>
-								저장
-							</Button>
-						</div>
-					</div>
-				</SectionSurface>
-			</VStack>
-		</PageSurface>
-	);
+        <section><div className="flex items-start justify-between gap-4"><div><h1>{"역할 그룹 수정"}</h1>{`${group.label || group.name} 그룹을 수정합니다.` && <p>{`${group.label || group.name} 그룹을 수정합니다.`}</p>}</div><div>{<Button
+                                    variant="light"
+                                    startContent={<ArrowLeft className="h-4 w-4" />}
+                                    onPress={onClickBackButton}>상세로 돌아가기
+                                                    </Button>}</div></div>
+            <VStack gap={4}>
+                <section>
+                    <div className="space-y-6 p-6">
+                        <Input
+                            label="그룹명"
+                            value={state.name}
+                            onValueChange={value => {
+                                state.name = value.toUpperCase();
+                            }}
+                            isInvalid={!!state.errors.name}
+                            errorMessage={state.errors.name}
+                            isRequired
+                            maxLength={50} />
+                        <Input
+                            label="라벨"
+                            placeholder="표시 라벨"
+                            value={state.label}
+                            onValueChange={value => {
+                                state.label = value;
+                            }}
+                            maxLength={100}
+                            description="그룹의 표시 라벨입니다." />
+                        <div className="flex justify-end gap-2 pt-4">
+                            <Button variant="flat" onPress={onClickBackButton}>취소
+                                                            </Button>
+                            <Button
+                                color="primary"
+                                startContent={<Save className="h-4 w-4" />}
+                                onPress={onClickSubmitButton}
+                                isLoading={isPending}>저장
+                                                            </Button>
+                        </div>
+                    </div>
+                </section>
+            </VStack>
+        </section>
+    );
 }
 
 export default observer(RoleGroupEditPageClient);

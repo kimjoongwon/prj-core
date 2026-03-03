@@ -15,20 +15,18 @@ import {
 } from "@cocrepo/api";
 import type { InquiryMessage, InquiryParticipant } from "@cocrepo/type";
 import {
-	AiForm,
-	Button,
-	ConfirmModal,
-	CustomerInfoCard,
-	HStack,
-	InquiryInfoCard,
-	InquiryMetaPanel,
-	InquiryWebSocketProvider,
-	PageSurface,
-	ParticipantList,
-	RealtimeChatPanel,
-	SectionSurface,
-	SLATracker,
-	VStack,
+    AiForm,
+    Button,
+    ConfirmModal,
+    CustomerInfoCard,
+    HStack,
+    InquiryInfoCard,
+    InquiryMetaPanel,
+    InquiryWebSocketProvider,
+    ParticipantList,
+    RealtimeChatPanel,
+    SLATracker,
+    VStack,
 } from "@cocrepo/ui";
 import { Input, Select, SelectItem, type Selection } from "@heroui/react";
 import { ArrowLeft, Pencil, Trash2 } from "lucide-react";
@@ -443,263 +441,213 @@ function InquiryDetailPageClient({ inquiryId }: Props) {
 	};
 
 	return (
-		<InquiryWebSocketProvider
+        <InquiryWebSocketProvider
 			inquiryId={inquiryId}
 			status={ws.status}
 			onReconnect={handleReconnect}
 			sendMessage={ws.sendMessage}
 			sendTypingStatus={ws.sendTypingStatus}
 		>
-			<PageSurface
-				title="문의 상세"
-				description="문의 상세 정보를 확인하고 답변을 작성합니다."
-				actions={
-					<HStack gap={2}>
-						<Button
-							variant="light"
-							startContent={<ArrowLeft className="h-4 w-4" />}
-							onPress={handlers.onClickBack}
-						>
-							목록으로
-						</Button>
-						<Button
-							variant="flat"
-							color="primary"
-							startContent={<Pencil className="h-4 w-4" />}
-							onPress={handlers.onClickEdit}
-						>
-							수정
-						</Button>
-						<Button
-							variant="flat"
-							color="danger"
-							startContent={<Trash2 className="h-4 w-4" />}
-							onPress={() => {
-								state.deleteModalOpen = true;
-							}}
-						>
-							삭제
-						</Button>
-					</HStack>
-				}
-			>
-				<VStack gap={6}>
-						<HStack gap={4} className="lg:flex-row flex-col">
-						<div className="lg:w-2/3 w-full">
-							<InquiryInfoCard
-								inquiryNumber={inquiry?.inquiryNumber ?? inquiryId}
-								title={inquiry?.title ?? "문의 정보 로딩 중"}
-								channel={
-									CHANNEL_LABELS[inquiry?.channel ?? ""] ??
-									inquiry?.channel ??
-									"-"
-								}
-								createdAt={createdAt}
-								sentiment={{
-									type: sentimentType,
-									label: inquiry?.sentiment?.sentiment ?? "NEUTRAL",
-									confidence: Math.round(
-										(inquiry?.sentiment?.confidence ?? 0.7) * 100,
-									),
-								}}
-								onlineParticipants={onlineParticipantNames}
-							/>
-						</div>
-						<div className="lg:w-1/3 w-full">
-							<InquiryMetaPanel
-								status={inquiry?.status ?? "NEW"}
-								statusOptions={statusOptions}
-								onStatusChange={handlers.onChangeStatus}
-								priority={inquiry?.priority ?? "NORMAL"}
-								priorityOptions={priorityOptions}
-								onPriorityChange={handlers.onChangePriority}
-								category={inquiry?.category ?? "GENERAL"}
-								categoryOptions={categoryOptions}
-								onCategoryChange={handlers.onChangeCategory}
-								assigneeId={inquiry?.assigneeId}
-								assigneeName={inquiry?.assigneeId}
-								assigneeOptions={assigneeOptions}
-								onAssigneeChange={handlers.onChangeAssignee}
-								tags={[]}
-								onTagAdd={handlers.onTagAdd}
-								onTagRemove={handlers.onTagRemove}
-							/>
-						</div>
-					</HStack>
-
-					<HStack gap={4} className="lg:flex-row flex-col">
-						<div className="lg:w-1/2 w-full">
-							<CustomerInfoCard
-								name={inquiry?.customerId ?? "고객"}
-								email=""
-								phone=""
-								joinedAt={undefined}
-								inquiryCount={undefined}
-							/>
-						</div>
-						<div className="lg:w-1/2 w-full">
-							<ParticipantList
-								participants={participantListItems.map((participant) => ({
-									...participant,
-									isTyping:
-										inquiryState.typingUsers.has(participant.name) ||
-										participant.isTyping,
-								}))}
-							/>
-						</div>
-						</HStack>
-
-						{updateFormBootstrap && (
-							<>
-								<AiForm
-									formState={metaState.toFormObject()}
-									fieldMeta={updateFormBootstrap.fieldMeta}
-									aiSchemas={updateFormBootstrap.aiSchemas}
-									ui={updateFormBootstrap.ui}
-									options={updateFormBootstrap.options}
-									onFill={async (input) => {
-										const result = await fillMetaMutation.mutateAsync({
-											data: {
-												mode: "UPDATE",
-												schemaKey: input.schemaKey,
-												selectedPaths: input.selectedPaths,
-												currentObject: input.currentObject,
-												userPrompt: input.userPrompt,
-											},
-										});
-										return result?.data ?? { patches: [] };
-									}}
-									applyPatch={(patches) => {
-										metaState.applyPatch(patches);
-									}}
-									disabled={
-										updateMetaMutation.isPending || fillMetaMutation.isPending
-									}
-								/>
-
-								<SectionSurface>
-									<VStack gap={4}>
-									<Input
-										label="문의 제목"
-										labelPlacement="outside"
-										value={metaState.title}
-										onValueChange={(value) => {
-											metaState.title = value;
-										}}
-										isInvalid={Boolean(metaState.error)}
-										errorMessage={metaState.error}
-									/>
-									<HStack gap={4} className="md:flex-row flex-col">
-										<Select
-											label="카테고리"
-											placeholder="카테고리 선택"
-											selectedKeys={metaState.category ? [metaState.category] : []}
-											onSelectionChange={(keys) => {
-												const selectedValue = getSelectedValue(keys);
-												if (selectedValue) {
-													metaState.category = selectedValue as InquiryCategory;
-												}
-											}}
-										>
-											{editCategoryOptions.map((option) => (
-												<SelectItem key={option.value}>{option.label}</SelectItem>
-											))}
-										</Select>
-										<Select
-											label="우선순위"
-											placeholder="우선순위 선택"
-											selectedKeys={metaState.priority ? [metaState.priority] : []}
-											onSelectionChange={(keys) => {
-												const selectedValue = getSelectedValue(keys);
-												if (selectedValue) {
-													metaState.priority = selectedValue as InquiryPriority;
-												}
-											}}
-										>
-											{editPriorityOptions.map((option) => (
-												<SelectItem key={option.value}>{option.label}</SelectItem>
-											))}
-										</Select>
-									</HStack>
-									<div className="flex justify-end">
-										<Button
-											color="primary"
-											onPress={onSubmitMeta}
-											isLoading={updateMetaMutation.isPending}
-										>
-											메타 저장
-										</Button>
-									</div>
-									</VStack>
-								</SectionSurface>
-							</>
-						)}
-
-						<SectionSurface>
-						<RealtimeChatPanel
-							inquiryId={inquiryId}
-							messages={
-								inquiryState.messages.length > 0
-									? inquiryState.messages
-									: messages
-							}
-							typingUserNames={inquiryState.typingUserNames}
-							isWebSocketConnected={inquiryState.isWebSocketConnected}
-							isTyping={inquiryState.isTyping}
-							onSendMessage={handleSendMessage}
-							onTypingStart={handlers.onTypingStart}
-							onTypingStop={handlers.onTypingStop}
-							onReconnect={handleReconnect}
-							onGenerateDraft={handlers.onClickGenerateDraft}
-							onSearchKnowledge={handlers.onClickSearchKnowledge}
-							isGeneratingDraft={inquiryState.isGeneratingDraft}
-						/>
-					</SectionSurface>
-
-					<SLATracker
-						firstResponse={{
-							label: "첫 응답",
-							elapsedMinutes: toMinutes(createdAt, firstResponseEnd),
-							targetMinutes: firstResponseTargetMinutes,
-							isCompleted: Boolean(inquiry?.firstResponseAt),
-							isBreached: Boolean(inquiry?.isSlaResponseBreached),
-						}}
-						resolution={{
-							label: "해결",
-							elapsedMinutes: toMinutes(createdAt, resolutionEnd),
-							targetMinutes: resolutionTargetMinutes,
-							isCompleted: Boolean(inquiry?.resolvedAt),
-							isBreached: Boolean(inquiry?.isSlaResolveBreached),
-						}}
-					/>
-				</VStack>
-
-				<ConfirmModal
-					isOpen={state.deleteModalOpen}
-					onClose={() => {
-						state.deleteModalOpen = false;
-					}}
-					onConfirm={async () => {
-						await deleteInquiryMutation.mutateAsync({ inquiryId });
-						state.deleteModalOpen = false;
-						router.push("/inquiries" as Route);
-					}}
-					title="문의 삭제"
-					message={
-						<span>
-							<strong>{inquiry?.inquiryNumber ?? inquiryId}</strong> 문의를
-							삭제하시겠습니까?
-							<br />
-							삭제된 문의는 복구할 수 없습니다.
-						</span>
-					}
-					confirmText="삭제"
-					confirmColor="danger"
-					iconType="delete"
-				/>
-			</PageSurface>
-		</InquiryWebSocketProvider>
-	);
+            <section><div className="flex items-start justify-between gap-4"><div><h1>{"문의 상세"}</h1><p>{"문의 상세 정보를 확인하고 답변을 작성합니다."}</p></div><div>{<HStack gap={2}>
+                            <Button
+                                variant="light"
+                                startContent={<ArrowLeft className="h-4 w-4" />}
+                                onPress={handlers.onClickBack}>목록으로
+                                                        </Button>
+                            <Button
+                                variant="flat"
+                                color="primary"
+                                startContent={<Pencil className="h-4 w-4" />}
+                                onPress={handlers.onClickEdit}>수정
+                                                        </Button>
+                            <Button
+                                variant="flat"
+                                color="danger"
+                                startContent={<Trash2 className="h-4 w-4" />}
+                                onPress={() => {
+                                    state.deleteModalOpen = true;
+                                }}>삭제
+                                                        </Button>
+                        </HStack>}</div></div>
+                <VStack gap={6}>
+                    <HStack gap={4} className="lg:flex-row flex-col">
+                        <div className="lg:w-2/3 w-full">
+                            <InquiryInfoCard
+                                inquiryNumber={inquiry?.inquiryNumber ?? inquiryId}
+                                title={inquiry?.title ?? "문의 정보 로딩 중"}
+                                channel={CHANNEL_LABELS[inquiry?.channel ?? ""] ?? inquiry?.channel ?? "-"}
+                                createdAt={createdAt}
+                                sentiment={{
+                                    type: sentimentType,
+                                    label: inquiry?.sentiment?.sentiment ?? "NEUTRAL",
+                                    confidence: Math.round((inquiry?.sentiment?.confidence ?? 0.7) * 100),
+                                }}
+                                onlineParticipants={onlineParticipantNames} />
+                        </div>
+                        <div className="lg:w-1/3 w-full">
+                            <InquiryMetaPanel
+                                status={inquiry?.status ?? "NEW"}
+                                statusOptions={statusOptions}
+                                onStatusChange={handlers.onChangeStatus}
+                                priority={inquiry?.priority ?? "NORMAL"}
+                                priorityOptions={priorityOptions}
+                                onPriorityChange={handlers.onChangePriority}
+                                category={inquiry?.category ?? "GENERAL"}
+                                categoryOptions={categoryOptions}
+                                onCategoryChange={handlers.onChangeCategory}
+                                assigneeId={inquiry?.assigneeId}
+                                assigneeName={inquiry?.assigneeId}
+                                assigneeOptions={assigneeOptions}
+                                onAssigneeChange={handlers.onChangeAssignee}
+                                tags={[]}
+                                onTagAdd={handlers.onTagAdd}
+                                onTagRemove={handlers.onTagRemove} />
+                        </div>
+                    </HStack>
+                    <HStack gap={4} className="lg:flex-row flex-col">
+                        <div className="lg:w-1/2 w-full">
+                            <CustomerInfoCard
+                                name={inquiry?.customerId ?? "고객"}
+                                email=""
+                                phone=""
+                                joinedAt={undefined}
+                                inquiryCount={undefined} />
+                        </div>
+                        <div className="lg:w-1/2 w-full">
+                            <ParticipantList
+                                participants={participantListItems.map(participant => ({
+                                    ...participant,
+                                    isTyping: inquiryState.typingUsers.has(participant.name) || participant.isTyping,
+                                }))} />
+                        </div>
+                    </HStack>
+                    {updateFormBootstrap && (<>
+                        <AiForm
+                            formState={metaState.toFormObject()}
+                            fieldMeta={updateFormBootstrap.fieldMeta}
+                            aiSchemas={updateFormBootstrap.aiSchemas}
+                            ui={updateFormBootstrap.ui}
+                            options={updateFormBootstrap.options}
+                            onFill={async input => {
+                                const result = await fillMetaMutation.mutateAsync({
+                                    data: {
+                                        mode: "UPDATE",
+                                        schemaKey: input.schemaKey,
+                                        selectedPaths: input.selectedPaths,
+                                        currentObject: input.currentObject,
+                                        userPrompt: input.userPrompt,
+                                    },
+                                });
+                                return result?.data ?? {
+                                    patches: [],
+                                };
+                            }}
+                            applyPatch={patches => {
+                                metaState.applyPatch(patches);
+                            }}
+                            disabled={updateMetaMutation.isPending || fillMetaMutation.isPending} />
+                        <section>
+                            <VStack gap={4}>
+                                <Input
+                                    label="문의 제목"
+                                    labelPlacement="outside"
+                                    value={metaState.title}
+                                    onValueChange={value => {
+                                        metaState.title = value;
+                                    }}
+                                    isInvalid={Boolean(metaState.error)}
+                                    errorMessage={metaState.error} />
+                                <HStack gap={4} className="md:flex-row flex-col">
+                                    <Select
+                                        label="카테고리"
+                                        placeholder="카테고리 선택"
+                                        selectedKeys={metaState.category ? [metaState.category] : []}
+                                        onSelectionChange={keys => {
+                                            const selectedValue = getSelectedValue(keys);
+                                            if (selectedValue) {
+                                                metaState.category = selectedValue as InquiryCategory;
+                                            }
+                                        }}>
+                                        {editCategoryOptions.map(option => (<SelectItem key={option.value}>{option.label}</SelectItem>))}
+                                    </Select>
+                                    <Select
+                                        label="우선순위"
+                                        placeholder="우선순위 선택"
+                                        selectedKeys={metaState.priority ? [metaState.priority] : []}
+                                        onSelectionChange={keys => {
+                                            const selectedValue = getSelectedValue(keys);
+                                            if (selectedValue) {
+                                                metaState.priority = selectedValue as InquiryPriority;
+                                            }
+                                        }}>
+                                        {editPriorityOptions.map(option => (<SelectItem key={option.value}>{option.label}</SelectItem>))}
+                                    </Select>
+                                </HStack>
+                                <div className="flex justify-end">
+                                    <Button
+                                        color="primary"
+                                        onPress={onSubmitMeta}
+                                        isLoading={updateMetaMutation.isPending}>메타 저장
+                                                                                </Button>
+                                </div>
+                            </VStack>
+                        </section>
+                    </>)}
+                    <section>
+                        <RealtimeChatPanel
+                            inquiryId={inquiryId}
+                            messages={inquiryState.messages.length > 0 ? inquiryState.messages : messages}
+                            typingUserNames={inquiryState.typingUserNames}
+                            isWebSocketConnected={inquiryState.isWebSocketConnected}
+                            isTyping={inquiryState.isTyping}
+                            onSendMessage={handleSendMessage}
+                            onTypingStart={handlers.onTypingStart}
+                            onTypingStop={handlers.onTypingStop}
+                            onReconnect={handleReconnect}
+                            onGenerateDraft={handlers.onClickGenerateDraft}
+                            onSearchKnowledge={handlers.onClickSearchKnowledge}
+                            isGeneratingDraft={inquiryState.isGeneratingDraft} />
+                    </section>
+                    <SLATracker
+                        firstResponse={{
+                            label: "첫 응답",
+                            elapsedMinutes: toMinutes(createdAt, firstResponseEnd),
+                            targetMinutes: firstResponseTargetMinutes,
+                            isCompleted: Boolean(inquiry?.firstResponseAt),
+                            isBreached: Boolean(inquiry?.isSlaResponseBreached),
+                        }}
+                        resolution={{
+                            label: "해결",
+                            elapsedMinutes: toMinutes(createdAt, resolutionEnd),
+                            targetMinutes: resolutionTargetMinutes,
+                            isCompleted: Boolean(inquiry?.resolvedAt),
+                            isBreached: Boolean(inquiry?.isSlaResolveBreached),
+                        }} />
+                </VStack>
+                <ConfirmModal
+                    isOpen={state.deleteModalOpen}
+                    onClose={() => {
+                        state.deleteModalOpen = false;
+                    }}
+                    onConfirm={async () => {
+                        await deleteInquiryMutation.mutateAsync({
+                            inquiryId,
+                        });
+                        state.deleteModalOpen = false;
+                        router.push("/inquiries" as Route);
+                    }}
+                    title="문의 삭제"
+                    message={<span>
+                        <strong>{inquiry?.inquiryNumber ?? inquiryId}</strong>문의를
+                                                    삭제하시겠습니까?
+                                                    <br />삭제된 문의는 복구할 수 없습니다.
+                                                </span>}
+                    confirmText="삭제"
+                    confirmColor="danger"
+                    iconType="delete" />
+            </section>
+        </InquiryWebSocketProvider>
+    );
 }
 
 export default observer(InquiryDetailPageClient);

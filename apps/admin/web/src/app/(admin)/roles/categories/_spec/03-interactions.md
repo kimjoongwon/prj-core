@@ -22,7 +22,7 @@
 | RGC-L5-ACT-018 | 검색어 입력 | 검색창 입력 후 Enter 또는 디바운스 | 카테고리 목록 필터링 (클라이언트 사이드, name 기준) | - |
 | RGC-L5-ACT-019 | 상위 카테고리 필터 선택 | 상위 카테고리 Select 변경 | 선택된 상위 카테고리의 하위 카테고리만 필터링 | - |
 | RGC-L5-ACT-020 | 카테고리 행 클릭 | DataGrid 행 클릭 | 카테고리 상세 화면으로 이동 (`/roles/categories/[categoryId]`) | - |
-| RGC-L5-ACT-021 | 카테고리 등록 버튼 클릭 | PageSurface actions 영역 "카테고리 등록" 버튼 클릭 | 카테고리 등록 화면으로 이동 (`/roles/categories/new`) | `can('create', 'category')` |
+| RGC-L5-ACT-021 | 카테고리 등록 버튼 클릭 | 페이지 헤더 영역 actions 영역 "카테고리 등록" 버튼 클릭 | 카테고리 등록 화면으로 이동 (`/roles/categories/new`) | `can('create', 'category')` |
 | RGC-L5-ACT-022 | 컬럼 정렬 클릭 | DataGrid 헤더 클릭 | name, createdAt 기준 오름차순/내림차순 전환 | - |
 
 #### 시스템 반응

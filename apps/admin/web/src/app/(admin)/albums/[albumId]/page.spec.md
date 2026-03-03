@@ -98,10 +98,10 @@
 ### 레이아웃
 
 ```
-PageSurface (title=albumName, description=albumDescription, backTo="/albums", actions=[에셋 추가, 수정, 삭제])
-├── SectionSurface (앨범 정보)
+페이지 헤더 영역 (title=albumName, description=albumDescription, backTo="/albums", actions=[에셋 추가, 수정, 삭제])
+├── 섹션 영역 (앨범 정보)
 │   └── AlbumHeader (앨범명, 설명, 에셋 수, 생성일)
-└── SectionSurface (에셋 목록)
+└── 섹션 영역 (에셋 목록)
     ├── Toolbar
     │   ├── SearchInput
     │   └── ReorderButton
@@ -262,3 +262,4 @@ PageSurface (title=albumName, description=albumDescription, backTo="/albums", ac
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
 | 2026-02-22 | 초기 생성 | orch-requirement |
+| 2026-03-03 | Scaffold 제거 및 페이지 헤더 영역/섹션 영역 용어 정리 | codex |

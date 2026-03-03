@@ -24,7 +24,7 @@
 | ROL-L5-ACT-003 | 그룹 필터 선택 | 그룹 Select 변경 | 선택된 그룹의 역할만 필터링 | - |
 | ROL-L5-ACT-004 | 시스템 여부 필터 | 시스템 여부 Select 변경 | 시스템/커스텀 역할 필터링 | - |
 | ROL-L5-ACT-005 | 역할 행 클릭 | DataGrid 행 클릭 | 역할 상세 화면으로 이동 (`/roles/[roleId]`) | - |
-| ROL-L5-ACT-006 | 역할 등록 버튼 클릭 | PageSurface actions 영역 버튼 클릭 | 역할 등록 화면으로 이동 (`/roles/new`) | `can('create', 'role')` |
+| ROL-L5-ACT-006 | 역할 등록 버튼 클릭 | 페이지 헤더 영역 actions 영역 버튼 클릭 | 역할 등록 화면으로 이동 (`/roles/new`) | `can('create', 'role')` |
 | ROL-L5-ACT-007 | 컬럼 정렬 클릭 | DataGrid 헤더 클릭 | name, displayName, createdAt 기준 오름차순/내림차순 전환 | - |
 
 #### 시스템 반응

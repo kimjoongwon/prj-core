@@ -19,8 +19,8 @@
 
 | ID | 액션 | 트리거 | 결과 | 조건 |
 |----|------|--------|------|------|
-| RGC-L5-ACT-005 | 수정 버튼 클릭 | PageSurface actions 영역 "수정" 버튼 클릭 | 수정 화면으로 이동 (`/roles/groups/[groupId]/edit`) | `can('update', 'group')` |
-| RGC-L5-ACT-006 | 삭제 버튼 클릭 | PageSurface actions 영역 "삭제" 버튼 클릭 | 삭제 확인 모달 표시 | `can('delete', 'group')` |
+| RGC-L5-ACT-005 | 수정 버튼 클릭 | 페이지 헤더 영역 actions 영역 "수정" 버튼 클릭 | 수정 화면으로 이동 (`/roles/groups/[groupId]/edit`) | `can('update', 'group')` |
+| RGC-L5-ACT-006 | 삭제 버튼 클릭 | 페이지 헤더 영역 actions 영역 "삭제" 버튼 클릭 | 삭제 확인 모달 표시 | `can('delete', 'group')` |
 | RGC-L5-ACT-007 | 삭제 확인 | 모달에서 "삭제" 버튼 클릭 | DELETE /api/v1/groups/:id 호출 | - |
 | RGC-L5-ACT-008 | 삭제 취소 | 모달에서 "취소" 버튼 클릭 | 모달 닫기 | - |
 | RGC-L5-ACT-009 | 소속 역할 클릭 | 소속 역할 목록에서 역할명 클릭 | 역할 상세 화면으로 이동 (`/roles/[roleId]`) | - |

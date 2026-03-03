@@ -19,8 +19,8 @@
 
 | ID | 액션 | 트리거 | 결과 | 조건 |
 |----|------|--------|------|------|
-| ROL-L5-ACT-068 | 수정 버튼 클릭 | PageSurface actions 영역 버튼 클릭 | 수정 화면으로 이동 | isSystem=false, RoleCategoryGuard(WORKSPACE) |
-| ROL-L5-ACT-069 | 삭제 버튼 클릭 | PageSurface actions 영역 버튼 클릭 | 삭제 확인 모달 표시 | isSystem=false, RoleCategoryGuard(WORKSPACE) |
+| ROL-L5-ACT-068 | 수정 버튼 클릭 | 페이지 헤더 영역 actions 영역 버튼 클릭 | 수정 화면으로 이동 | isSystem=false, RoleCategoryGuard(WORKSPACE) |
+| ROL-L5-ACT-069 | 삭제 버튼 클릭 | 페이지 헤더 영역 actions 영역 버튼 클릭 | 삭제 확인 모달 표시 | isSystem=false, RoleCategoryGuard(WORKSPACE) |
 | ROL-L5-ACT-070 | 삭제 확인 | 모달에서 삭제 버튼 클릭 | DELETE /api/v1/actions/:id 호출 | - |
 | ROL-L5-ACT-071 | 삭제 취소 | 모달에서 취소 버튼 클릭 | 모달 닫기 | - |
 

@@ -21,7 +21,7 @@
 |----|------|--------|------|------|
 | RGC-L5-ACT-001 | 검색어 입력 | 검색창 입력 후 Enter 또는 디바운스 | 그룹 목록 필터링 (클라이언트 사이드, name/label 기준) | - |
 | RGC-L5-ACT-002 | 그룹 행 클릭 | DataGrid 행 클릭 | 그룹 상세 화면으로 이동 (`/roles/groups/[groupId]`) | - |
-| RGC-L5-ACT-003 | 그룹 등록 버튼 클릭 | PageSurface actions 영역 "그룹 등록" 버튼 클릭 | 그룹 등록 화면으로 이동 (`/roles/groups/new`) | `can('create', 'group')` |
+| RGC-L5-ACT-003 | 그룹 등록 버튼 클릭 | 페이지 헤더 영역 actions 영역 "그룹 등록" 버튼 클릭 | 그룹 등록 화면으로 이동 (`/roles/groups/new`) | `can('create', 'group')` |
 | RGC-L5-ACT-004 | 컬럼 정렬 클릭 | DataGrid 헤더 클릭 | name, label, createdAt 기준 오름차순/내림차순 전환 | - |
 
 #### 시스템 반응

@@ -3,7 +3,7 @@
 import { Button } from "@heroui/react";
 import { Eye, Pencil, Send, Trash2 } from "lucide-react";
 import { observer } from "mobx-react-lite";
-import { HStack } from "../../../ui/surfaces/HStack/HStack";
+import { HStack } from "../../../layouts/HStack/HStack";
 
 export interface TemplateActionsProps {
 	/** 템플릿 ID */
@@ -25,7 +25,7 @@ export interface TemplateActionsProps {
 /**
  * TemplateActions Feature 컴포넌트
  *
- * 메시지 템플릿 상세 화면의 PageSurface actions 영역에 렌더링되는 액션 버튼 그룹입니다.
+ * 메시지 템플릿 상세 화면의 페이지 헤더 actions 영역에 렌더링되는 액션 버튼 그룹입니다.
  * 미리보기, 테스트 발송, 수정, 삭제 기능을 제공합니다.
  *
  * @example

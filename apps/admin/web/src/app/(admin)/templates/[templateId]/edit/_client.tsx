@@ -6,12 +6,7 @@ import {
 	useGetTemplate,
 	useUpdateTemplate,
 } from "@cocrepo/api";
-import {
-	PageSurface,
-	TemplateForm,
-	type TemplateFormData,
-	type VariableEditItem,
-} from "@cocrepo/ui";
+import { TemplateForm, type TemplateFormData, type VariableEditItem } from "@cocrepo/ui";
 import { addToast, Button, Spinner } from "@heroui/react";
 import { observer, useLocalObservable } from "mobx-react-lite";
 import type { Route } from "next";
@@ -189,47 +184,42 @@ function TemplateEditPageClient({ templateId }: TemplateEditPageClientProps) {
 	// 로딩 상태
 	if (isLoading) {
 		return (
-			<PageSurface title="템플릿 수정" description="로딩 중...">
-				<div className="flex items-center justify-center p-8 gap-2">
-					<Spinner size="sm" />
-					<span className="text-default-500">로딩 중...</span>
-				</div>
-			</PageSurface>
-		);
+            <section><div className="flex items-start justify-between gap-4"><div><h1>{"템플릿 수정"}</h1><p>{"로딩 중..."}</p></div></div>
+                <div className="flex items-center justify-center p-8 gap-2">
+                    <Spinner size="sm" />
+                    <span className="text-default-500">로딩 중...</span>
+                </div>
+            </section>
+        );
 	}
 
 	// 데이터 없음
 	if (!template) {
 		return (
-			<PageSurface title="템플릿 수정" description="템플릿을 찾을 수 없습니다.">
-				<div className="flex flex-col items-center justify-center gap-4 p-8">
-					<p className="text-default-500">템플릿을 찾을 수 없습니다.</p>
-					<Button variant="flat" onPress={onClickCancelButton}>
-						목록으로
-					</Button>
-				</div>
-			</PageSurface>
-		);
+            <section><div className="flex items-start justify-between gap-4"><div><h1>{"템플릿 수정"}</h1><p>{"템플릿을 찾을 수 없습니다."}</p></div></div>
+                <div className="flex flex-col items-center justify-center gap-4 p-8">
+                    <p className="text-default-500">템플릿을 찾을 수 없습니다.</p>
+                    <Button variant="flat" onPress={onClickCancelButton}>목록으로
+                                            </Button>
+                </div>
+            </section>
+        );
 	}
 
 	return (
-		<PageSurface
-			title="템플릿 수정"
-			description={`${template.name} 템플릿을 수정합니다.`}
-		>
-			<TemplateForm
-				mode="edit"
-				formData={state.formData}
-				variables={state.variables}
-				onFormDataChange={onFormDataChange}
-				onVariablesChange={onVariablesChange}
-				onSubmit={onSubmitForm}
-				onCancel={onClickCancelButton}
-				isSubmitting={isPending}
-				errors={state.errors}
-			/>
-		</PageSurface>
-	);
+        <section><div className="flex items-start justify-between gap-4"><div><h1>{"템플릿 수정"}</h1>{`${template.name} 템플릿을 수정합니다.` && <p>{`${template.name} 템플릿을 수정합니다.`}</p>}</div></div>
+            <TemplateForm
+                mode="edit"
+                formData={state.formData}
+                variables={state.variables}
+                onFormDataChange={onFormDataChange}
+                onVariablesChange={onVariablesChange}
+                onSubmit={onSubmitForm}
+                onCancel={onClickCancelButton}
+                isSubmitting={isPending}
+                errors={state.errors} />
+        </section>
+    );
 }
 
 export default observer(TemplateEditPageClient);

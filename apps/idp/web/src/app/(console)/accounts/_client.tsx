@@ -3,13 +3,11 @@
 import { type IdpAccountDto, useGetIdpAccounts } from "@cocrepo/api";
 import type { InputConfig, MetaDataGridColumnConfig } from "@cocrepo/type";
 import {
-	ActiveStatusCell,
-	DateTimeCell,
-	MetaDataGrid,
-	PageSurface,
-	RowActionsCell,
-	SectionSurface,
-	useMetaDataGridQueryStates,
+    ActiveStatusCell,
+    DateTimeCell,
+    MetaDataGrid,
+    RowActionsCell,
+    useMetaDataGridQueryStates,
 } from "@cocrepo/ui";
 import { Chip } from "@heroui/react";
 import { observer } from "mobx-react-lite";
@@ -168,27 +166,23 @@ function AccountsPageClient() {
 	const totalCount = meta?.totalCount ?? 0;
 
 	return (
-		<PageSurface
-			title="계정 관리"
-			description="IDP 계정의 보안 상태를 관리합니다."
-		>
-			<SectionSurface>
-				<MetaDataGrid
-					config={{
-						entity: "IdpAccount",
-						data: accounts,
-						totalCount,
-						isLoading,
-						queryStates,
-						setQueryStates,
-						columns,
-						leftInputs,
-						emptyMessage: "등록된 계정이 없습니다.",
-					}}
-				/>
-			</SectionSurface>
-		</PageSurface>
-	);
+        <section><div className="flex items-start justify-between gap-4"><div><h1>{"계정 관리"}</h1><p>{"IDP 계정의 보안 상태를 관리합니다."}</p></div></div>
+            <section>
+                <MetaDataGrid
+                    config={{
+                        entity: "IdpAccount",
+                        data: accounts,
+                        totalCount,
+                        isLoading,
+                        queryStates,
+                        setQueryStates,
+                        columns,
+                        leftInputs,
+                        emptyMessage: "등록된 계정이 없습니다.",
+                    }} />
+            </section>
+        </section>
+    );
 }
 
 export default observer(AccountsPageClient);

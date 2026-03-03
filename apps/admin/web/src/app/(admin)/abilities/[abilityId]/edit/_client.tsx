@@ -7,7 +7,7 @@ import {
 	useGetSubjects,
 	useUpdateAbility,
 } from "@cocrepo/api";
-import { PageSurface, SectionSurface, VStack } from "@cocrepo/ui";
+import { VStack } from "@cocrepo/ui";
 import {
 	addToast,
 	Button,
@@ -152,166 +152,133 @@ function AbilityEditPageClient({ abilityId }: AbilityEditPageClientProps) {
 
 	if (isLoading) {
 		return (
-			<PageSurface title="권한 수정" description="로딩 중...">
-				<div className="flex items-center justify-center p-8 gap-2">
-					<Spinner size="sm" />
-					<span className="text-default-500">로딩 중...</span>
-				</div>
-			</PageSurface>
-		);
+            <section><div className="flex items-start justify-between gap-4"><div><h1>{"권한 수정"}</h1><p>{"로딩 중..."}</p></div></div>
+                <div className="flex items-center justify-center p-8 gap-2">
+                    <Spinner size="sm" />
+                    <span className="text-default-500">로딩 중...</span>
+                </div>
+            </section>
+        );
 	}
 
 	if (!ability) {
 		return (
-			<PageSurface title="권한 수정" description="권한을 찾을 수 없습니다.">
-				<div className="flex flex-col items-center justify-center gap-4 p-8">
-					<p className="text-default-500">권한을 찾을 수 없습니다.</p>
-					<Button variant="flat" onPress={onClickBackButton}>
-						목록으로
-					</Button>
-				</div>
-			</PageSurface>
-		);
+            <section><div className="flex items-start justify-between gap-4"><div><h1>{"권한 수정"}</h1><p>{"권한을 찾을 수 없습니다."}</p></div></div>
+                <div className="flex flex-col items-center justify-center gap-4 p-8">
+                    <p className="text-default-500">권한을 찾을 수 없습니다.</p>
+                    <Button variant="flat" onPress={onClickBackButton}>목록으로
+                                            </Button>
+                </div>
+            </section>
+        );
 	}
 
 	return (
-		<PageSurface
-			title="권한 수정"
-			description="권한 정보를 수정합니다."
-			actions={
-				<div className="flex gap-2">
-					<Button
-						variant="flat"
-						startContent={<ArrowLeft className="h-4 w-4" />}
-						onPress={onClickBackButton}
-					>
-						취소
-					</Button>
-					<Button
-						color="primary"
-						startContent={<Save className="h-4 w-4" />}
-						onPress={onClickSaveButton}
-						isLoading={isPending}
-					>
-						저장
-					</Button>
-				</div>
-			}
-		>
-			<VStack gap={4}>
-				{/* 기본 정보 섹션 */}
-				<SectionSurface>
-					<h3 className="text-lg font-semibold mb-4">기본 정보</h3>
-					<div className="grid grid-cols-1 gap-4">
-						<Input
-							label="권한 이름"
-							value={state.name}
-							isReadOnly
-							description="권한 이름은 수정할 수 없습니다."
-						/>
-						<Textarea
-							label="설명"
-							placeholder="권한에 대한 설명을 입력하세요"
-							value={state.description}
-							onValueChange={(value) => {
-								state.description = value;
-							}}
-							minRows={2}
-						/>
-					</div>
-				</SectionSurface>
-
-				{/* CASL 정보 섹션 */}
-				<SectionSurface>
-					<h3 className="text-lg font-semibold mb-4">CASL 정보</h3>
-					<div className="grid grid-cols-1 gap-4">
-						<Select
-							label="Subject"
-							placeholder="Subject를 선택하세요"
-							selectedKeys={state.subjectId ? [state.subjectId] : []}
-							onSelectionChange={(keys) => {
-								const selected = Array.from(keys)[0] as string;
-								state.subjectId = selected || "";
-							}}
-						>
-							{subjects.map((subject) => (
-								<SelectItem key={subject.id}>
-									{subject.displayName || subject.name}
-									{subject.group && ` (${subject.group})`}
-								</SelectItem>
-							))}
-						</Select>
-
-						<Select
-							label="Action"
-							placeholder="Action을 선택하세요"
-							selectedKeys={state.actionId ? [state.actionId] : []}
-							onSelectionChange={(keys) => {
-								const selected = Array.from(keys)[0] as string;
-								state.actionId = selected || "";
-							}}
-						>
-							{actions.map((action) => (
-								<SelectItem key={action.id}>
-									{action.displayName || action.name}
-									{action.group && ` (${action.group})`}
-								</SelectItem>
-							))}
-						</Select>
-
-						<Textarea
-							label="Fields"
-							placeholder="쉼표로 구분하여 필드를 입력하세요. 예: name, email, phone (빈 값 = 전체 필드)"
-							value={state.fields}
-							onValueChange={(value) => {
-								state.fields = value;
-							}}
-							minRows={2}
-							description="빈 값이면 전체 필드에 대한 권한입니다."
-						/>
-
-						<Textarea
-							label="Conditions (JSON)"
-							placeholder='{"userId": "{{ user.id }}"}'
-							value={state.conditions}
-							onValueChange={(value) => {
-								state.conditions = value;
-							}}
-							minRows={4}
-							description="ABAC 조건을 JSON 형식으로 입력하세요."
-						/>
-
-						<div className="flex items-center justify-between p-4 rounded-lg border border-divider">
-							<div>
-								<p className="font-medium">거부 권한 (cannot)</p>
-								<p className="text-sm text-default-500">
-									활성화 시 권한을 거부합니다.
-								</p>
-							</div>
-							<Switch
-								isSelected={state.inverted}
-								onValueChange={(value) => {
-									state.inverted = value;
-								}}
-							/>
-						</div>
-
-						{state.inverted && (
-							<Textarea
-								label="거부 사유"
-								placeholder="권한을 거부하는 이유를 입력하세요"
-								value={state.reason}
-								onValueChange={(value) => {
-									state.reason = value;
-								}}
-								minRows={2}
-							/>
-						)}
-					</div>
-				</SectionSurface>
-			</VStack>
-		</PageSurface>
-	);
+        <section><div className="flex items-start justify-between gap-4"><div><h1>{"권한 수정"}</h1><p>{"권한 정보를 수정합니다."}</p></div><div>{<div className="flex gap-2">
+                                    <Button
+                                        variant="flat"
+                                        startContent={<ArrowLeft className="h-4 w-4" />}
+                                        onPress={onClickBackButton}>취소
+                                                            </Button>
+                                    <Button
+                                        color="primary"
+                                        startContent={<Save className="h-4 w-4" />}
+                                        onPress={onClickSaveButton}
+                                        isLoading={isPending}>저장
+                                                            </Button>
+                                </div>}</div></div>
+            <VStack gap={4}>
+                <section>
+                    <h3 className="text-lg font-semibold mb-4">기본 정보</h3>
+                    <div className="grid grid-cols-1 gap-4">
+                        <Input
+                            label="권한 이름"
+                            value={state.name}
+                            isReadOnly
+                            description="권한 이름은 수정할 수 없습니다." />
+                        <Textarea
+                            label="설명"
+                            placeholder="권한에 대한 설명을 입력하세요"
+                            value={state.description}
+                            onValueChange={value => {
+                                state.description = value;
+                            }}
+                            minRows={2} />
+                    </div>
+                </section>
+                <section>
+                    <h3 className="text-lg font-semibold mb-4">CASL 정보</h3>
+                    <div className="grid grid-cols-1 gap-4">
+                        <Select
+                            label="Subject"
+                            placeholder="Subject를 선택하세요"
+                            selectedKeys={state.subjectId ? [state.subjectId] : []}
+                            onSelectionChange={keys => {
+                                const selected = Array.from(keys)[0] as string;
+                                state.subjectId = selected || "";
+                            }}>
+                            {subjects.map(subject => (<SelectItem key={subject.id}>
+                                {subject.displayName || subject.name}
+                                {subject.group && ` (${subject.group})`}
+                            </SelectItem>))}
+                        </Select>
+                        <Select
+                            label="Action"
+                            placeholder="Action을 선택하세요"
+                            selectedKeys={state.actionId ? [state.actionId] : []}
+                            onSelectionChange={keys => {
+                                const selected = Array.from(keys)[0] as string;
+                                state.actionId = selected || "";
+                            }}>
+                            {actions.map(action => (<SelectItem key={action.id}>
+                                {action.displayName || action.name}
+                                {action.group && ` (${action.group})`}
+                            </SelectItem>))}
+                        </Select>
+                        <Textarea
+                            label="Fields"
+                            placeholder="쉼표로 구분하여 필드를 입력하세요. 예: name, email, phone (빈 값 = 전체 필드)"
+                            value={state.fields}
+                            onValueChange={value => {
+                                state.fields = value;
+                            }}
+                            minRows={2}
+                            description="빈 값이면 전체 필드에 대한 권한입니다." />
+                        <Textarea
+                            label="Conditions (JSON)"
+                            placeholder='{"userId": "{{ user.id }}"}'
+                            value={state.conditions}
+                            onValueChange={value => {
+                                state.conditions = value;
+                            }}
+                            minRows={4}
+                            description="ABAC 조건을 JSON 형식으로 입력하세요." />
+                        <div
+                            className="flex items-center justify-between p-4 rounded-lg border border-divider">
+                            <div>
+                                <p className="font-medium">거부 권한 (cannot)</p>
+                                <p className="text-sm text-default-500">활성화 시 권한을 거부합니다.
+                                                                    </p>
+                            </div>
+                            <Switch
+                                isSelected={state.inverted}
+                                onValueChange={value => {
+                                    state.inverted = value;
+                                }} />
+                        </div>
+                        {state.inverted && (<Textarea
+                            label="거부 사유"
+                            placeholder="권한을 거부하는 이유를 입력하세요"
+                            value={state.reason}
+                            onValueChange={value => {
+                                state.reason = value;
+                            }}
+                            minRows={2} />)}
+                    </div>
+                </section>
+            </VStack>
+        </section>
+    );
 }
 
 export default observer(AbilityEditPageClient);

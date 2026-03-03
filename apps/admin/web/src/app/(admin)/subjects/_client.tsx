@@ -3,14 +3,12 @@
 import { type SubjectDto, useGetSubjects } from "@cocrepo/api";
 import type { InputConfig, MetaDataGridColumnConfig } from "@cocrepo/type";
 import {
-	BooleanCell,
-	DateTimeCell,
-	DefaultCell,
-	MetaDataGrid,
-	PageSurface,
-	SectionSurface,
-	useMetaDataGridQueryStates,
-	VStack,
+    BooleanCell,
+    DateTimeCell,
+    DefaultCell,
+    MetaDataGrid,
+    useMetaDataGridQueryStates,
+    VStack,
 } from "@cocrepo/ui";
 import { Chip } from "@heroui/react";
 import { observer } from "mobx-react-lite";
@@ -168,31 +166,26 @@ function SubjectsPageClient() {
 	const totalCount = filteredSubjects.length;
 
 	return (
-		<PageSurface
-			title="Subject 목록"
-			description="시스템에 등록된 Subject를 조회합니다."
-		>
-			<VStack gap={4}>
-				{/* MetaDataGrid */}
-				<SectionSurface>
-					<MetaDataGrid
-						config={{
-							entity: "Subject",
-							data: filteredSubjects,
-							totalCount,
-							isLoading,
-							queryStates,
-							setQueryStates,
-							columns,
-							leftInputs,
-							rightInputs,
-							emptyMessage: "조회된 Subject가 없습니다.",
-						}}
-					/>
-				</SectionSurface>
-			</VStack>
-		</PageSurface>
-	);
+        <section><div className="flex items-start justify-between gap-4"><div><h1>{"Subject 목록"}</h1><p>{"시스템에 등록된 Subject를 조회합니다."}</p></div></div>
+            <VStack gap={4}>
+                <section>
+                    <MetaDataGrid
+                        config={{
+                            entity: "Subject",
+                            data: filteredSubjects,
+                            totalCount,
+                            isLoading,
+                            queryStates,
+                            setQueryStates,
+                            columns,
+                            leftInputs,
+                            rightInputs,
+                            emptyMessage: "조회된 Subject가 없습니다.",
+                        }} />
+                </section>
+            </VStack>
+        </section>
+    );
 }
 
 export default observer(SubjectsPageClient);

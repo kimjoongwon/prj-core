@@ -12,8 +12,8 @@ import {
 import { Plus, Search, User } from "lucide-react";
 import { observer } from "mobx-react-lite";
 import { Text } from "../../../ui/data-display/Text/Text";
-import { HStack } from "../../../ui/surfaces/HStack/HStack";
-import { VStack } from "../../../ui/surfaces/VStack/VStack";
+import { HStack } from "../../../layouts/HStack/HStack";
+import { VStack } from "../../../layouts/VStack/VStack";
 import { AbilityFormModal } from "../../../widget/ability/AbilityFormModal";
 import { AbilityRuleList } from "../../../widget/ability/AbilityRuleList";
 import type { UserAbilityManagerProps } from "./types";

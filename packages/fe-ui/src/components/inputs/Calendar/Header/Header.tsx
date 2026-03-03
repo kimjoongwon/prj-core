@@ -1,4 +1,4 @@
-import { HStack } from "../../../ui/surfaces/HStack/HStack";
+import { HStack } from "../../../layouts/HStack/HStack";
 import { Button } from "../../Button/Button";
 
 interface HeaderProps {

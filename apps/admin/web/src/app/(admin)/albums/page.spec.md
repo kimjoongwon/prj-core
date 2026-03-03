@@ -94,8 +94,8 @@
 ### 레이아웃
 
 ```
-PageSurface (title="앨범", description="사용자 정의 에셋 컬렉션을 관리합니다.", actions=[앨범 생성 버튼])
-└── SectionSurface
+페이지 헤더 영역 (title="앨범", description="사용자 정의 에셋 컬렉션을 관리합니다.", actions=[앨범 생성 버튼])
+└── 섹션 영역
     ├── Toolbar
     │   └── SearchInput
     └── AlbumGrid
@@ -232,3 +232,4 @@ PageSurface (title="앨범", description="사용자 정의 에셋 컬렉션을 �
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
 | 2026-02-22 | 초기 생성 | orch-requirement |
+| 2026-03-03 | Scaffold 제거 및 페이지 헤더 영역/섹션 영역 용어 정리 | codex |

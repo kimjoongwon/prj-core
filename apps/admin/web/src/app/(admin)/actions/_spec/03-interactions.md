@@ -23,7 +23,7 @@
 | ROL-L5-ACT-063 | 그룹 필터 선택 | 그룹 Select 변경 (crud/visibility/workflow/bulk) | 그룹별 필터링 → GET /api/v1/actions?group=xxx 호출 | - |
 | ROL-L5-ACT-064 | 시스템 여부 필터 | 시스템 여부 Select 변경 | 시스템/커스텀 Action 필터링 (클라이언트 사이드) | - |
 | ROL-L5-ACT-065 | Action 행 클릭 | DataGrid 행 클릭 | Action 상세 화면으로 이동 | - |
-| ROL-L5-ACT-066 | 행위 등록 버튼 | PageSurface actions 영역 버튼 클릭 | 등록 화면으로 이동 (`/actions/new`) | RoleCategoryGuard(WORKSPACE) |
+| ROL-L5-ACT-066 | 행위 등록 버튼 | 페이지 헤더 영역 actions 영역 버튼 클릭 | 등록 화면으로 이동 (`/actions/new`) | RoleCategoryGuard(WORKSPACE) |
 | ROL-L5-ACT-067 | 컬럼 정렬 클릭 | DataGrid 헤더 클릭 | name, displayName, order 기준 정렬 | - |
 
 #### 시스템 반응

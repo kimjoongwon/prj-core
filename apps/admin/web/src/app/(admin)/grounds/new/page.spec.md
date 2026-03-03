@@ -38,15 +38,15 @@
 ### 레이아웃
 
 ```
-PageSurface (title="시설 등록")
-├── SectionSurface (title="기본 정보")
+페이지 헤더 영역 (title="시설 등록")
+├── 섹션 영역 (title="기본 정보")
 │   ├── name (Input, 필수)
 │   ├── label (Input, 선택)
 │   ├── address (Input, 필수)
 │   ├── phone (Input, 필수)
 │   ├── email (Input, 필수)
 │   └── businessNo (Input, 필수)
-├── SectionSurface (title="이미지")
+├── 섹션 영역 (title="이미지")
 │   ├── logoImageFileId (FileUpload, 선택)
 │   └── imageFileId (FileUpload, 선택)
 └── 하단 버튼 영역
@@ -103,10 +103,10 @@ PageSurface (title="시설 등록")
 ```
 GroundNewPage (page.tsx - 서버)
 └── GroundNewClient (_client.tsx - 클라이언트)
-    └── PageSurface (title="시설 등록")
-        ├── SectionSurface (title="기본 정보")
+    └── 페이지 헤더 영역 (title="시설 등록")
+        ├── 섹션 영역 (title="기본 정보")
         │   └── GroundForm (Feature - 기본 정보 폼)
-        ├── SectionSurface (title="이미지")
+        ├── 섹션 영역 (title="이미지")
         │   └── GroundImageForm (Feature - 이미지 업로드 폼)
         └── 버튼 영역
             ├── Button ("취소")
@@ -118,3 +118,4 @@ GroundNewPage (page.tsx - 서버)
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
 | 2026-02-19 | 초기 생성 | req-screen-planner |
+| 2026-03-03 | Scaffold 제거 및 페이지 헤더 영역/섹션 영역 용어 정리 | codex |

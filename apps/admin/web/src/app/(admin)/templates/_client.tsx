@@ -8,13 +8,11 @@ import {
 } from "@cocrepo/api";
 import type { InputConfig, MetaDataGridColumnConfig } from "@cocrepo/type";
 import {
-	DateTimeCell,
-	MetaDataGrid,
-	PageSurface,
-	SectionSurface,
-	TemplateActiveToggleCell,
-	TemplateTypeChipCell,
-	useMetaDataGridQueryStates,
+    DateTimeCell,
+    MetaDataGrid,
+    TemplateActiveToggleCell,
+    TemplateTypeChipCell,
+    useMetaDataGridQueryStates,
 } from "@cocrepo/ui";
 import { addToast, Button } from "@heroui/react";
 import { useQueryClient } from "@tanstack/react-query";
@@ -185,37 +183,28 @@ function TemplatesPageClient() {
 	];
 
 	return (
-		<PageSurface
-			title="메시지 템플릿"
-			description="시스템에 등록된 메시지 템플릿을 관리합니다."
-			actions={
-				<Button
-					as={Link}
-					href="/templates/new"
-					color="primary"
-					startContent={<Plus className="h-4 w-4" />}
-				>
-					템플릿 등록
-				</Button>
-			}
-		>
-			<SectionSurface>
-				<MetaDataGrid
-					config={{
-						entity: "Template",
-						data: templates,
-						totalCount,
-						isLoading,
-						queryStates,
-						setQueryStates,
-						columns,
-						leftInputs,
-						emptyMessage: "등록된 템플릿이 없습니다.",
-					}}
-				/>
-			</SectionSurface>
-		</PageSurface>
-	);
+        <section><div className="flex items-start justify-between gap-4"><div><h1>{"메시지 템플릿"}</h1><p>{"시스템에 등록된 메시지 템플릿을 관리합니다."}</p></div><div>{<Button
+                                    as={Link}
+                                    href="/templates/new"
+                                    color="primary"
+                                    startContent={<Plus className="h-4 w-4" />}>템플릿 등록
+                                                    </Button>}</div></div>
+            <section>
+                <MetaDataGrid
+                    config={{
+                        entity: "Template",
+                        data: templates,
+                        totalCount,
+                        isLoading,
+                        queryStates,
+                        setQueryStates,
+                        columns,
+                        leftInputs,
+                        emptyMessage: "등록된 템플릿이 없습니다.",
+                    }} />
+            </section>
+        </section>
+    );
 }
 
 export default observer(TemplatesPageClient);

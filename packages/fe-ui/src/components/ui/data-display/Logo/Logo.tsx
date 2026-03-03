@@ -1,6 +1,6 @@
 import { cn } from "@heroui/react";
 import { Button } from "../../../inputs/Button/Button";
-import { HStack } from "../../surfaces/HStack/HStack";
+import { HStack } from "../../../layouts/HStack/HStack";
 
 export interface LogoProps {
 	/** 클릭 핸들러 (보통 홈으로 이동) */

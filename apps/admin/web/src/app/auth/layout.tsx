@@ -1,6 +1,6 @@
 "use client";
 
-import { PageLayout } from "@cocrepo/ui";
+import { PageShell } from "@cocrepo/ui";
 import { observer } from "mobx-react-lite";
 
 /**
@@ -8,9 +8,9 @@ import { observer } from "mobx-react-lite";
  * 로그인, 회원가입 등 인증 관련 페이지에 적용되는 레이아웃입니다.
  *
  * 계층 구조:
- * - AppLayout (app/layout.tsx)
- *     - PageLayout (여기) - header/aside 없이 children만
- *         - SectionLayout (auth/login/layout.tsx 등)
+ * - AppShell (app/layout.tsx)
+ *     - PageShell (여기) - header/aside 없이 children만
+ *         - SectionShell (auth/login/layout.tsx 등)
  *
  * 규칙: 하나의 layout.tsx에는 하나의 Layout만 선언
  */
@@ -19,7 +19,7 @@ const AuthLayoutRoute = observer(function AuthLayoutRoute({
 }: {
 	children: React.ReactNode;
 }) {
-	return <PageLayout>{children}</PageLayout>;
+	return <PageShell>{children}</PageShell>;
 });
 
 export default AuthLayoutRoute;

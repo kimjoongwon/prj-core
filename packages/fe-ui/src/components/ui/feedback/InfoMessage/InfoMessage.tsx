@@ -1,7 +1,7 @@
 import { cva } from "class-variance-authority";
 import type { ReactNode } from "react";
 import { Text } from "../../data-display/Text/Text";
-import { HStack } from "../../surfaces/HStack/HStack";
+import { HStack } from "../../../layouts/HStack/HStack";
 
 export interface InfoMessageProps {
 	/** 메시지 본문 */

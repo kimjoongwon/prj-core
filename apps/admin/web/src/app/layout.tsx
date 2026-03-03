@@ -1,4 +1,4 @@
-import { AppLayout } from "@cocrepo/ui";
+import { AppShell } from "@cocrepo/ui";
 import type { Metadata } from "next";
 import { Providers } from "./providers";
 import "./globals.css";
@@ -10,12 +10,12 @@ export const metadata: Metadata = {
 
 /**
  * 루트 레이아웃
- * AppLayout은 children만 받으며 순수하게 body를 감쌉니다.
+ * AppShell은 children만 받으며 순수하게 body를 감쌉니다.
  *
  * 계층 구조:
- * - AppLayout (app/layout.tsx) - children만, body 래퍼
- *     - PageLayout (app/(admin)/layout.tsx) - header, leftAside, rightAside, footer
- *         - SectionLayout (하위 layout.tsx들) - top, left, right, bottom
+ * - AppShell (app/layout.tsx) - children만, body 래퍼
+ *     - PageShell (app/(admin)/layout.tsx) - header, leftAside, rightAside, footer
+ *         - SectionShell (하위 layout.tsx들) - top, left, right, bottom
  */
 export default function RootLayout({
 	children,
@@ -32,7 +32,7 @@ export default function RootLayout({
 			</head>
 			<body>
 				<Providers>
-					<AppLayout>{children}</AppLayout>
+					<AppShell>{children}</AppShell>
 				</Providers>
 			</body>
 		</html>

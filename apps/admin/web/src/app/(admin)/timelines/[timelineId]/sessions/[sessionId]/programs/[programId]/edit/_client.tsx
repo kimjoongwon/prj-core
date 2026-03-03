@@ -10,7 +10,7 @@ import {
 	useGetUsers,
 	useUpdateProgram,
 } from "@cocrepo/api";
-import { PageSurface, SectionSurface, VStack } from "@cocrepo/ui";
+import { VStack } from "@cocrepo/ui";
 import {
 	addToast,
 	Button,
@@ -293,136 +293,108 @@ function ProgramEditPageClient({
 	}));
 
 	return (
-		<PageSurface
-			title="프로그램 수정"
-			description={descriptionText}
-			actions={
-				<Button variant="flat" onPress={onClickCancelButton}>
-					취소
-				</Button>
-			}
-		>
-			<SectionSurface title="기본 정보">
-				<VStack gap={4}>
-					<Input
-						label="프로그램 이름"
-						labelPlacement="outside"
-						placeholder="프로그램 이름을 입력하세요."
-						value={state.name}
-						onValueChange={onChangeName}
-						isRequired
-						isInvalid={!!state.errors.name}
-						errorMessage={state.errors.name}
-					/>
-					<div className="grid grid-cols-1 gap-2 md:grid-cols-[1fr_auto] md:items-end">
-						<Input
-							label="루틴"
-							labelPlacement="outside"
-							value={selectedRoutine?.name ?? ""}
-							placeholder="루틴을 선택하세요"
-							isReadOnly
-							isRequired
-							isInvalid={!!state.errors.routineId}
-							errorMessage={state.errors.routineId}
-							description="모달에서 루틴을 선택하세요."
-						/>
-						<Button variant="flat" onPress={routinePickerModal.onOpen}>
-							루틴 선택
-						</Button>
-					</div>
-					<div className="grid grid-cols-1 gap-2 md:grid-cols-[1fr_auto] md:items-end">
-						<Input
-							label="강사"
-							labelPlacement="outside"
-							value={selectedInstructor?.name ?? ""}
-							placeholder="강사를 선택하세요"
-							isReadOnly
-							isRequired
-							isInvalid={!!state.errors.instructorId}
-							errorMessage={state.errors.instructorId}
-							description="모달에서 강사를 선택하세요."
-						/>
-						<Button variant="flat" onPress={instructorPickerModal.onOpen}>
-							강사 선택
-						</Button>
-					</div>
-					<div className="rounded-lg bg-content2 p-3 text-sm text-default-600">
-						<p className="font-medium text-default-700">연결 요약</p>
-						<p className="mt-1">루틴: {selectedRoutine?.name ?? "-"}</p>
-						<p>
-							강사: {selectedInstructor?.name ?? program?.instructorId ?? "-"}
-						</p>
-					</div>
-					<Input
-						label="정원"
-						labelPlacement="outside"
-						type="number"
-						placeholder="정원을 입력하세요."
-						value={state.capacity}
-						onValueChange={onChangeCapacity}
-						isRequired
-						isInvalid={!!state.errors.capacity}
-						errorMessage={state.errors.capacity}
-						min={1}
-					/>
-					<Select
-						label="난이도"
-						labelPlacement="outside"
-						selectedKeys={[state.level]}
-						onSelectionChange={(keys) => {
-							const val = Array.from(keys)[0] as string;
-							onChangeLevel(val ?? "");
-						}}
-					>
-						{LEVEL_OPTIONS.map((opt) => (
-							<SelectItem key={opt.value}>{opt.label}</SelectItem>
-						))}
-					</Select>
-					<div className="flex justify-end">
-						<Button
-							color="primary"
-							onPress={onClickSubmitButton}
-							isLoading={isPending}
-							isDisabled={
-								!hasChanged ||
-								!state.name.trim() ||
-								!state.routineId.trim() ||
-								!state.instructorId.trim() ||
-								!state.capacity
-							}
-						>
-							저장
-						</Button>
-					</div>
-				</VStack>
-			</SectionSurface>
-
-			<ProgramPickerModal
-				isOpen={routinePickerModal.isOpen}
-				onClose={routinePickerModal.onClose}
-				title="루틴 선택"
-				searchLabel="루틴 검색"
-				searchPlaceholder="루틴 이름으로 검색하세요."
-				searchValue={state.routineQuery}
-				onSearchValueChange={onChangeRoutineQuery}
-				options={routinePickerOptions}
-				onSelect={onChangeRoutineId}
-				selectedId={state.routineId}
-			/>
-			<ProgramPickerModal
-				isOpen={instructorPickerModal.isOpen}
-				onClose={instructorPickerModal.onClose}
-				title="강사 선택"
-				searchLabel="강사 검색"
-				searchPlaceholder="강사 이름으로 검색하세요."
-				searchValue={state.instructorQuery}
-				onSearchValueChange={onChangeInstructorQuery}
-				options={instructorPickerOptions}
-				onSelect={onChangeInstructorId}
-				selectedId={state.instructorId}
-			/>
-		</PageSurface>
-	);
+        <section><div className="flex items-start justify-between gap-4"><div><h1>{"프로그램 수정"}</h1>{descriptionText && <p>{descriptionText}</p>}</div><div>{<Button variant="flat" onPress={onClickCancelButton}>취소
+                                                    </Button>}</div></div>
+            <section><div className="flex items-start justify-between gap-3"><div className="flex items-start gap-2"><div><h2>{"기본 정보"}</h2></div></div></div>
+                <VStack gap={4}>
+                    <Input
+                        label="프로그램 이름"
+                        labelPlacement="outside"
+                        placeholder="프로그램 이름을 입력하세요."
+                        value={state.name}
+                        onValueChange={onChangeName}
+                        isRequired
+                        isInvalid={!!state.errors.name}
+                        errorMessage={state.errors.name} />
+                    <div className="grid grid-cols-1 gap-2 md:grid-cols-[1fr_auto] md:items-end">
+                        <Input
+                            label="루틴"
+                            labelPlacement="outside"
+                            value={selectedRoutine?.name ?? ""}
+                            placeholder="루틴을 선택하세요"
+                            isReadOnly
+                            isRequired
+                            isInvalid={!!state.errors.routineId}
+                            errorMessage={state.errors.routineId}
+                            description="모달에서 루틴을 선택하세요." />
+                        <Button variant="flat" onPress={routinePickerModal.onOpen}>루틴 선택
+                                                    </Button>
+                    </div>
+                    <div className="grid grid-cols-1 gap-2 md:grid-cols-[1fr_auto] md:items-end">
+                        <Input
+                            label="강사"
+                            labelPlacement="outside"
+                            value={selectedInstructor?.name ?? ""}
+                            placeholder="강사를 선택하세요"
+                            isReadOnly
+                            isRequired
+                            isInvalid={!!state.errors.instructorId}
+                            errorMessage={state.errors.instructorId}
+                            description="모달에서 강사를 선택하세요." />
+                        <Button variant="flat" onPress={instructorPickerModal.onOpen}>강사 선택
+                                                    </Button>
+                    </div>
+                    <div className="rounded-lg bg-content2 p-3 text-sm text-default-600">
+                        <p className="font-medium text-default-700">연결 요약</p>
+                        <p className="mt-1">루틴: {selectedRoutine?.name ?? "-"}</p>
+                        <p>강사: {selectedInstructor?.name ?? program?.instructorId ?? "-"}
+                        </p>
+                    </div>
+                    <Input
+                        label="정원"
+                        labelPlacement="outside"
+                        type="number"
+                        placeholder="정원을 입력하세요."
+                        value={state.capacity}
+                        onValueChange={onChangeCapacity}
+                        isRequired
+                        isInvalid={!!state.errors.capacity}
+                        errorMessage={state.errors.capacity}
+                        min={1} />
+                    <Select
+                        label="난이도"
+                        labelPlacement="outside"
+                        selectedKeys={[state.level]}
+                        onSelectionChange={keys => {
+                            const val = Array.from(keys)[0] as string;
+                            onChangeLevel(val ?? "");
+                        }}>
+                        {LEVEL_OPTIONS.map(opt => (<SelectItem key={opt.value}>{opt.label}</SelectItem>))}
+                    </Select>
+                    <div className="flex justify-end">
+                        <Button
+                            color="primary"
+                            onPress={onClickSubmitButton}
+                            isLoading={isPending}
+                            isDisabled={!hasChanged || !state.name.trim() || !state.routineId.trim() || !state.instructorId.trim() || !state.capacity}>저장
+                                                    </Button>
+                    </div>
+                </VStack>
+            </section>
+            <ProgramPickerModal
+                isOpen={routinePickerModal.isOpen}
+                onClose={routinePickerModal.onClose}
+                title="루틴 선택"
+                searchLabel="루틴 검색"
+                searchPlaceholder="루틴 이름으로 검색하세요."
+                searchValue={state.routineQuery}
+                onSearchValueChange={onChangeRoutineQuery}
+                options={routinePickerOptions}
+                onSelect={onChangeRoutineId}
+                selectedId={state.routineId} />
+            <ProgramPickerModal
+                isOpen={instructorPickerModal.isOpen}
+                onClose={instructorPickerModal.onClose}
+                title="강사 선택"
+                searchLabel="강사 검색"
+                searchPlaceholder="강사 이름으로 검색하세요."
+                searchValue={state.instructorQuery}
+                onSearchValueChange={onChangeInstructorQuery}
+                options={instructorPickerOptions}
+                onSelect={onChangeInstructorId}
+                selectedId={state.instructorId} />
+        </section>
+    );
 }
 
 export default observer(ProgramEditPageClient);

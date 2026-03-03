@@ -99,7 +99,7 @@
 
 | 영역 | 컴포넌트 | 기획서 |
 |------|----------|--------|
-| 헤더 | PageSurface | - |
+| 헤더 | 페이지 헤더 영역 | - |
 | 문의 정보 카드 | InquiryInfoCard | `packages/fe-ui/src/components/widget/InquiryInfoCard/index.spec.md` |
 | 메타 정보 패널 | InquiryMetaPanel | `packages/fe-ui/src/components/widget/InquiryMetaPanel/index.spec.md` |
 | 빠른 수정 + AiForm | AiForm + title/category/priority 편집 | `packages/fe-ui/src/components/feature/AiForm/index.spec.md` |
@@ -189,7 +189,7 @@
 ### L5: 화면 구조 (레이아웃)
 
 ```
-PageSurface (title, description, actions)
+페이지 헤더 영역 (title, description, actions)
 ├── TopSection (2-column grid)
 │   ├── InquiryInfoCard
 │   │   ├── InquiryNumber
@@ -449,4 +449,5 @@ PageSurface (title, description, actions)
 | 2026-02-28 | InquiryStore 의존 제거, 페이지 로컬 state 기준으로 L10/L11 갱신 | codex |
 | 2026-03-01 | 상세 빠른 수정 섹션(AiForm + title/category/priority 저장) 추가, 답변 초안 생성 API를 `/form/ai-fill`로 전환 | codex |
 | 2026-03-01 | 빠른 수정 폼 입력을 HeroUI Select 기반으로 정리해 Form-state 전용 입력 컴포넌트 의존 제거 | codex |
-| 2026-03-01 | 빠른 수정에서 AiForm을 메타 입력 폼과 동급 위계로 분리하고 바깥 SectionSurface 래퍼를 제거해 Card 단일 표면 구조로 정리 | codex |
+| 2026-03-01 | 빠른 수정에서 AiForm을 메타 입력 폼과 동급 위계로 분리하고 바깥 섹션 영역 래퍼를 제거해 Card 단일 표면 구조로 정리 | codex |
+| 2026-03-03 | Scaffold 제거 및 페이지 헤더 영역/섹션 영역 용어 정리 | codex |

@@ -1,7 +1,7 @@
 "use client";
 
 import { useGetOidcClient, useUpdateOidcClient } from "@cocrepo/api";
-import { OidcClientForm, PageSurface } from "@cocrepo/ui";
+import { OidcClientForm } from "@cocrepo/ui";
 import { Button } from "@heroui/react";
 import { ArrowLeft } from "lucide-react";
 import { observer, useLocalObservable } from "mobx-react-lite";
@@ -158,57 +158,41 @@ function OidcClientEditPageClient({
 
 	if (isLoading) {
 		return (
-			<PageSurface title="OIDC 클라이언트 수정" description="로딩 중...">
-				<div className="flex items-center justify-center p-8">
-					<span className="text-default-500">로딩 중...</span>
-				</div>
-			</PageSurface>
-		);
+            <section><div className="flex items-start justify-between gap-4"><div><h1>{"OIDC 클라이언트 수정"}</h1><p>{"로딩 중..."}</p></div></div>
+                <div className="flex items-center justify-center p-8">
+                    <span className="text-default-500">로딩 중...</span>
+                </div>
+            </section>
+        );
 	}
 
 	if (!client) {
 		return (
-			<PageSurface
-				title="OIDC 클라이언트 수정"
-				description="클라이언트를 찾을 수 없습니다."
-			>
-				<div className="flex flex-col items-center justify-center gap-4 p-8">
-					<p className="text-default-500">클라이언트를 찾을 수 없습니다.</p>
-					<Button
-						variant="flat"
-						onPress={() => router.push("/oidc-clients" as Route)}
-					>
-						목록으로
-					</Button>
-				</div>
-			</PageSurface>
-		);
+            <section><div className="flex items-start justify-between gap-4"><div><h1>{"OIDC 클라이언트 수정"}</h1><p>{"클라이언트를 찾을 수 없습니다."}</p></div></div>
+                <div className="flex flex-col items-center justify-center gap-4 p-8">
+                    <p className="text-default-500">클라이언트를 찾을 수 없습니다.</p>
+                    <Button variant="flat" onPress={() => router.push("/oidc-clients" as Route)}>목록으로
+                                            </Button>
+                </div>
+            </section>
+        );
 	}
 
 	return (
-		<PageSurface
-			title="OIDC 클라이언트 수정"
-			description={`${client.clientId} 클라이언트를 수정합니다.`}
-			actions={
-				<Button
-					variant="light"
-					startContent={<ArrowLeft className="h-4 w-4" />}
-					onPress={onClickBackButton}
-				>
-					상세로 돌아가기
-				</Button>
-			}
-		>
-			<OidcClientForm
-				mode="edit"
-				state={state}
-				onSubmit={onClickSubmitButton}
-				onCancel={onClickBackButton}
-				isSubmitting={isPending}
-				readonlyClientId={client.clientId}
-			/>
-		</PageSurface>
-	);
+        <section><div className="flex items-start justify-between gap-4"><div><h1>{"OIDC 클라이언트 수정"}</h1>{`${client.clientId} 클라이언트를 수정합니다.` && <p>{`${client.clientId} 클라이언트를 수정합니다.`}</p>}</div><div>{<Button
+                                    variant="light"
+                                    startContent={<ArrowLeft className="h-4 w-4" />}
+                                    onPress={onClickBackButton}>상세로 돌아가기
+                                                    </Button>}</div></div>
+            <OidcClientForm
+                mode="edit"
+                state={state}
+                onSubmit={onClickSubmitButton}
+                onCancel={onClickBackButton}
+                isSubmitting={isPending}
+                readonlyClientId={client.clientId} />
+        </section>
+    );
 }
 
 export default observer(OidcClientEditPageClient);

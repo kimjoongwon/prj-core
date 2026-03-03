@@ -1,5 +1,5 @@
 import { Text } from "../../data-display/Text/Text";
-import { VStack } from "../../surfaces/VStack/VStack";
+import { VStack } from "../../../layouts/VStack/VStack";
 
 /**
  * Placeholder 컴포넌트

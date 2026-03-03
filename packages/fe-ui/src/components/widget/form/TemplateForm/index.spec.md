@@ -114,7 +114,7 @@ interface TemplateFormData {
 
 | 컴포넌트 | 역할 |
 |----------|------|
-| SectionSurface | 3개 섹션 컨테이너 (기본 정보, 콘텐츠, 변수 관리) |
+| 섹션 영역 | 3개 섹션 컨테이너 (기본 정보, 콘텐츠, 변수 관리) |
 | TemplateTypeBadge | 수정 모드 유형 배지 |
 | TemplateContentEditor | 유형별 콘텐츠 편집기 |
 | VariableEditTable | 변수 인라인 편집 테이블 |
@@ -138,3 +138,4 @@ interface TemplateFormData {
 |------|------|--------|
 | 2026-02-18 | 초기 생성 (역기획) | req-reverse-engineer |
 | 2026-02-19 | 디자인 목업 추가 | req-reverse-engineer |
+| 2026-03-03 | Scaffold 제거 및 페이지 헤더 영역/섹션 영역 용어 정리 | codex |

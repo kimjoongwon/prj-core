@@ -6,10 +6,10 @@ import { useState } from "react";
 import { AlertBanner } from "../../../ui/feedback/AlertBanner/AlertBanner";
 import {
 	AuthCard,
-} from "../../../ui/surfaces/AuthCard/AuthCard";
+} from "../../../widget/AuthCard/AuthCard";
 import {
 	AuthCardHeader,
-} from "../../../ui/surfaces/AuthCard/AuthCardHeader";
+} from "../../../widget/AuthCard/AuthCardHeader";
 
 export interface ForgotPasswordFormProps {
 	/** 이메일 제출 핸들러. 에러 메시지 반환 시 에러 표시, null이면 성공 */

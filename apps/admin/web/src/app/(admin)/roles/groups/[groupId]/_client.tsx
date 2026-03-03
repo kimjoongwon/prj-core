@@ -3,13 +3,7 @@
 // TODO: Orval codegen 후 아래 import로 교체
 // import { useGetGroupById, useDeleteGroup } from "@cocrepo/api";
 import { customInstance } from "@cocrepo/api";
-import {
-	GroupInfoSection,
-	GroupRoleListSection,
-	PageSurface,
-	SectionSurface,
-	VStack,
-} from "@cocrepo/ui";
+import { GroupInfoSection, GroupRoleListSection, VStack } from "@cocrepo/ui";
 import {
 	Button,
 	Modal,
@@ -100,123 +94,88 @@ function RoleGroupDetailPageClient({
 
 	if (isLoading) {
 		return (
-			<PageSurface title="역할 그룹 상세" description="로딩 중...">
-				<div className="flex items-center justify-center p-8">
-					<span className="text-default-500">로딩 중...</span>
-				</div>
-			</PageSurface>
-		);
+            <section><div className="flex items-start justify-between gap-4"><div><h1>{"역할 그룹 상세"}</h1><p>{"로딩 중..."}</p></div></div>
+                <div className="flex items-center justify-center p-8">
+                    <span className="text-default-500">로딩 중...</span>
+                </div>
+            </section>
+        );
 	}
 
 	if (!group) {
 		return (
-			<PageSurface
-				title="역할 그룹 상세"
-				description="그룹을 찾을 수 없습니다."
-			>
-				<div className="flex flex-col items-center justify-center gap-4 p-8">
-					<p className="text-default-500">그룹을 찾을 수 없습니다.</p>
-					<Button variant="flat" onPress={onClickBackButton}>
-						목록으로
-					</Button>
-				</div>
-			</PageSurface>
-		);
+            <section><div className="flex items-start justify-between gap-4"><div><h1>{"역할 그룹 상세"}</h1><p>{"그룹을 찾을 수 없습니다."}</p></div></div>
+                <div className="flex flex-col items-center justify-center gap-4 p-8">
+                    <p className="text-default-500">그룹을 찾을 수 없습니다.</p>
+                    <Button variant="flat" onPress={onClickBackButton}>목록으로
+                                            </Button>
+                </div>
+            </section>
+        );
 	}
 
 	return (
-		<PageSurface
-			title="역할 그룹 상세"
-			description={`${group.label || group.name} 그룹의 상세 정보입니다.`}
-			actions={
-				<div className="flex gap-2">
-					<Button
-						variant="light"
-						startContent={<ArrowLeft className="h-4 w-4" />}
-						onPress={onClickBackButton}
-					>
-						목록으로
-					</Button>
-					<Button
-						variant="flat"
-						color="primary"
-						startContent={<Edit className="h-4 w-4" />}
-						onPress={onClickEditButton}
-					>
-						수정
-					</Button>
-					<Button
-						variant="flat"
-						color="danger"
-						startContent={<Trash2 className="h-4 w-4" />}
-						onPress={deleteModal.onOpen}
-					>
-						삭제
-					</Button>
-				</div>
-			}
-		>
-			<VStack gap={4}>
-				{/* 기본 정보 */}
-				<SectionSurface>
-					<div className="p-6">
-						<h3 className="text-lg font-semibold mb-4">기본 정보</h3>
-						<GroupInfoSection
-							group={{
-								name: group.name,
-								label: group.label,
-								type: group.type,
-								createdAt: group.createdAt,
-								updatedAt: group.updatedAt,
-							}}
-						/>
-					</div>
-				</SectionSurface>
-
-				{/* 연결된 역할 */}
-				<SectionSurface>
-					<div className="p-6">
-						<h3 className="text-lg font-semibold mb-4">연결된 역할</h3>
-						<GroupRoleListSection
-							roleAssociations={group.roleAssociations ?? []}
-						/>
-					</div>
-				</SectionSurface>
-			</VStack>
-
-			{/* 삭제 확인 모달 */}
-			<Modal isOpen={deleteModal.isOpen} onClose={deleteModal.onClose}>
-				<ModalContent>
-					<ModalHeader>역할 그룹 삭제</ModalHeader>
-					<ModalBody>
-						<p>
-							<strong>{group.label || group.name}</strong> 그룹을
-							삭제하시겠습니까?
-						</p>
-						<p className="text-sm text-danger mt-2">
-							이 작업은 되돌릴 수 없습니다. 연결된 역할 연관도 함께 삭제됩니다.
-						</p>
-					</ModalBody>
-					<ModalFooter>
-						<Button
-							variant="flat"
-							onPress={deleteModal.onClose}
-							isDisabled={isDeleting}
-						>
-							취소
-						</Button>
-						<Button
-							color="danger"
-							onPress={onClickDeleteConfirm}
-							isLoading={isDeleting}
-						>
-							삭제
-						</Button>
-					</ModalFooter>
-				</ModalContent>
-			</Modal>
-		</PageSurface>
-	);
+        <section><div className="flex items-start justify-between gap-4"><div><h1>{"역할 그룹 상세"}</h1>{`${group.label || group.name} 그룹의 상세 정보입니다.` && <p>{`${group.label || group.name} 그룹의 상세 정보입니다.`}</p>}</div><div>{<div className="flex gap-2">
+                                    <Button
+                                        variant="light"
+                                        startContent={<ArrowLeft className="h-4 w-4" />}
+                                        onPress={onClickBackButton}>목록으로
+                                                            </Button>
+                                    <Button
+                                        variant="flat"
+                                        color="primary"
+                                        startContent={<Edit className="h-4 w-4" />}
+                                        onPress={onClickEditButton}>수정
+                                                            </Button>
+                                    <Button
+                                        variant="flat"
+                                        color="danger"
+                                        startContent={<Trash2 className="h-4 w-4" />}
+                                        onPress={deleteModal.onOpen}>삭제
+                                                            </Button>
+                                </div>}</div></div>
+            <VStack gap={4}>
+                <section>
+                    <div className="p-6">
+                        <h3 className="text-lg font-semibold mb-4">기본 정보</h3>
+                        <GroupInfoSection
+                            group={{
+                                name: group.name,
+                                label: group.label,
+                                type: group.type,
+                                createdAt: group.createdAt,
+                                updatedAt: group.updatedAt,
+                            }} />
+                    </div>
+                </section>
+                <section>
+                    <div className="p-6">
+                        <h3 className="text-lg font-semibold mb-4">연결된 역할</h3>
+                        <GroupRoleListSection roleAssociations={group.roleAssociations ?? []} />
+                    </div>
+                </section>
+            </VStack>
+            <Modal isOpen={deleteModal.isOpen} onClose={deleteModal.onClose}>
+                <ModalContent>
+                    <ModalHeader>역할 그룹 삭제</ModalHeader>
+                    <ModalBody>
+                        <p>
+                            <strong>{group.label || group.name}</strong>그룹을
+                                                        삭제하시겠습니까?
+                                                    </p>
+                        <p className="text-sm text-danger mt-2">이 작업은 되돌릴 수 없습니다. 연결된 역할 연관도 함께 삭제됩니다.
+                                                    </p>
+                    </ModalBody>
+                    <ModalFooter>
+                        <Button variant="flat" onPress={deleteModal.onClose} isDisabled={isDeleting}>취소
+                                                    </Button>
+                        <Button color="danger" onPress={onClickDeleteConfirm} isLoading={isDeleting}>삭제
+                                                    </Button>
+                    </ModalFooter>
+                </ModalContent>
+            </Modal>
+        </section>
+    );
 }
 
 export default observer(RoleGroupDetailPageClient);
