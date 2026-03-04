@@ -59,15 +59,15 @@
 | `fe-store` | `@cocrepo/store` | MobX Store |
 | `fe-ui` | `@cocrepo/ui` | UI 컴포넌트 |
 
-## Claude Code 버그 회피
+## Codex 도구 사용 가이드
 
-- **TodoWrite 도구의 content, activeForm은 영어로 작성** (한글 UTF-8 멀티바이트 문자열 처리 버그 회피)
-- Task 도구의 description도 영어로 작성
+- **`request_user_input` 도구의 질문/선택지 문구는 영어로 작성** (도구 호환성 및 안정성 확보)
+- **`spawn_agent`/`send_input` 메시지의 핵심 작업 설명은 영어로 작성** (에이전트 해석 안정성 확보)
 
-## Claude Code 작업 원칙
+## Codex 작업 원칙
 
-- **AskUserQuestion 도구로 요구사항이나 선택지가 애매할 때 질문** - 추측하지 않고 사용자에게 확인
-- **Task 도구로 적절한 에이전트를 활용하여 작업 수행** - 단순 작업보다 전문 에이전트 활용 우선
+- **요구사항이나 선택지가 애매할 때 `request_user_input` 도구로 질문** - 추측하지 않고 사용자에게 확인
+- **`spawn_agent` 도구로 적절한 에이전트를 활용해 작업 수행** - 단순 작업보다 전문 에이전트 활용 우선
 
 ## 프론트엔드 개발 규칙
 
@@ -746,7 +746,7 @@ apps/core/api/src/[module]/
 #### 기획서 템플릿 위치
 
 ```
-.claude/templates/spec/
+.codex/templates/spec/
 ├── page.spec.md        # 페이지 기획서 템플릿
 ├── feature.spec.md     # Feature 기획서 템플릿
 ├── widget.spec.md      # Widget 기획서 템플릿
@@ -1226,7 +1226,7 @@ Stage 5: 컴포넌트 (페이지별)
 |-------|------|
 | dev-service-starter | 개발 서비스 시작 (admin, server, storybook 등) |
 
-각 Agent의 상세 역할은 `.claude/agents/` 디렉토리를 참고하세요.
+각 Agent의 상세 역할은 `.codex/agents/` 디렉토리를 참고하세요.
 
 ### 에이전트 실행 규칙 (Critical)
 

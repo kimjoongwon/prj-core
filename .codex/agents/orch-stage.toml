@@ -931,7 +931,7 @@ Task: req-spec-tracker
 
 ### 14.1 개요
 
-`targets` 또는 `pages` 파라미터 지정 시, **독립적인 작업 단위를 병렬 Task로 fan-out**하여 실행 시간을 단축합니다。
+`targets` 또는 `pages` 파라미터 지정 시, **독립적인 작업 단위를 병렬 subagent로 fan-out**하여 실행 시간을 단축합니다。
 
 ```
 ┌─────────────────────────────────────────────────────────────────┐
@@ -939,14 +939,14 @@ Task: req-spec-tracker
 │                                                                  │
 │  1. 의존성 분석 → DAG 구성                                        │
 │  2. 병렬 그룹 식별                                                │
-│  3. Task 도구로 subagent 병렬 실행                               │
+│  3. spawn_agent 도구로 subagent 병렬 실행                        │
 │  4. 결과 fan-in → 후속 작업 진행                                  │
 └─────────────────────────────────────────────────────────────────┘
                               │
           ┌───────────────────┼───────────────────┐
           ▼                   ▼                   ▼
     ┌──────────┐        ┌──────────┐        ┌──────────┐
-    │ Task 1   │        │ Task 2   │        │ Task 3   │
+    │ Agent 1  │        │ Agent 2  │        │ Agent 3  │
     │ (Asset)  │        │ (Video)  │        │ (Image)  │
     │ builder  │        │ builder  │        │ builder  │
     └──────────┘        └──────────┘        └──────────┘
@@ -964,7 +964,7 @@ Task: req-spec-tracker
 | 파라미터 | 기본값 | 설명 |
 |---------|--------|------|
 | `parallel` | `auto` | `off`(순차), `auto`(DAG 기반 병렬), `force`(강제 병렬) |
-| `maxConcurrency` | `3` | 동시 실행 Task 최대 개수 |
+| `maxConcurrency` | `3` | 동시 실행 subagent 최대 개수 |
 | `targets` | - | Stage 2-3의 작업 단위 목록 (예: `Asset,AssetVideo,AssetImage`) |
 | `pages` | - | Stage 4-6의 페이지 목록 (예: `List,Detail,Create`) |
 | `failPolicy` | `fail-fast` | `fail-fast`(첫 실패 시 중단), `continue`(실패 분리 후 계속) |
@@ -1119,25 +1119,24 @@ Level 1: [AssetVideo, AssetImage, AssetDocument] → 병렬 실행
 5. 이전 레벨 완료 후 다음 레벨 시작
 ```
 
-### 14.5 Task 도구 호출 패턴
+### 14.5 spawn_agent 도구 호출 패턴
 
 #### 병렬 실행 (fan-out)
 
-orch-stage는 **Task 도구를 여러 개 동시에 호출**하여 병렬 실행합니다:
+orch-stage는 **spawn_agent 도구를 여러 개 동시에 호출**하여 병렬 실행합니다:
 
 ```
-# 단일 메시지에서 여러 Task 호출
-[Task 도구 호출 1: be-entity-builder, target=AssetVideo]
-[Task 도구 호출 2: be-entity-builder, target=AssetImage]
-[Task 도구 호출 3: be-entity-builder, target=AssetDocument]
+# 단일 메시지에서 여러 spawn_agent 호출
+[spawn_agent 호출 1: be-entity-builder, target=AssetVideo]
+[spawn_agent 호출 2: be-entity-builder, target=AssetImage]
+[spawn_agent 호출 3: be-entity-builder, target=AssetDocument]
 ```
 
-**Task 호출 예시:**
+**spawn_agent 호출 예시:**
 ```markdown
-Task:
-  subagent_type: Entity-빌더
-  description: Build AssetVideo entity
-  prompt: |
+spawn_agent:
+  agent_type: be-entity-builder
+  message: |
     AssetVideo Entity를 생성하세요.
 
     **기획서:** packages/be-entity/src/asset-video.entity.spec.md
@@ -1154,14 +1153,14 @@ Task:
 
 ```
 # fan-in 완료 후 순차 실행
-[Task 도구 호출: be-seed-maker] → 모든 target 완료 후
-[Task 도구 호출: req-test-planner] → 테스트 케이스 생성
-[Task 도구 호출: qa-be-testing] → 테스트 코드 작성
+[spawn_agent 호출: be-seed-maker] → 모든 target 완료 후
+[spawn_agent 호출: req-test-planner] → 테스트 케이스 생성
+[spawn_agent 호출: qa-be-testing] → 테스트 코드 작성
 ```
 
 ### 14.6 공유 파일 Lock 규칙
 
-병렬 실행 중 여러 Task가 같은 파일을 수정하지 않도록 lock을 사용합니다:
+병렬 실행 중 여러 subagent가 같은 파일을 수정하지 않도록 lock을 사용합니다:
 
 | 파일 | Lock 대상 | 처리 방식 |
 |------|----------|----------|
