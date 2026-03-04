@@ -1,5 +1,5 @@
 import { expect, test } from "@playwright/test";
-import { loginToConsole } from "../../../e2e/helpers/login";
+import { loginToConsole } from "@cocrepo/ui/e2e";
 
 test.describe("감사 로그", () => {
 	test.describe("목록 페이지", () => {

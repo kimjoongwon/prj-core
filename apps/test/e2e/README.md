@@ -1,0 +1,60 @@
+# E2E 테스트 가이드
+
+Admin/IDP E2E 테스트는 Playwright 워크스페이스(`apps/test/e2e`)에서 공통으로 관리합니다.
+
+## 실행
+
+```bash
+# Admin 데스크톱
+pnpm --filter=test-e2e test:admin
+
+# Admin 모바일
+pnpm --filter=test-e2e test:admin:mobile
+
+# IDP 데스크톱
+pnpm --filter=test-e2e test:idp
+
+# IDP 모바일
+pnpm --filter=test-e2e test:idp:mobile
+```
+
+## 로그인 검증 공통 원칙
+
+- 로그인 플로우 공통 로직은 `@cocrepo/ui/e2e`에서 관리합니다.
+- 앱별 차이(리다이렉트 URL, storageState, localStorage 보정)는 테스트 래퍼에서만 처리합니다.
+- Admin 인증 상태 준비는 `admin-setup` 프로젝트에서 `storageState`를 생성해 재사용합니다.
+- IDP는 테스트 내에서 `loginToConsole`을 호출해 로그인 후 검증을 수행합니다.
+
+## 공통 헬퍼
+
+### `runOidcLoginFlow(page, options)`
+
+- 시작 경로 진입 (`startPath`)
+- IDP 로그인 폼 대기 및 계정 입력
+- 동의 화면 처리
+- 최종 URL 검증 (`finalUrl`)
+
+### `navigateToOidcLoginForm(page, options)`
+
+- 로그인 제출 없이 OIDC 로그인 폼 렌더링까지만 이동합니다.
+
+### `submitOidcCredentials(page, options)`
+
+- 로그인 폼에 계정을 입력하고 제출합니다.
+
+### `waitForOidcConsentForm(page, options)`
+
+- 동의 화면(`허용` 버튼) 표시까지 대기합니다.
+
+## 앱별 래퍼
+
+- Admin: `apps/test/e2e/tests/admin/helpers/login.ts`
+  - `loginToAdmin(page)`를 통해 로그인 + Space(localStorage) 보정을 수행합니다.
+- IDP:
+  - 페이지별 e2e 테스트에서 `@cocrepo/ui/e2e`를 직접 import해 사용합니다.
+
+## 환경 변수
+
+- `E2E_ADMIN_EMAIL`: 로그인 계정 이메일 (기본값 `admin@plate.com`)
+- `E2E_ADMIN_PASSWORD`: 로그인 계정 비밀번호 (기본값 `rkdmf12!@`)
+- `E2E_SYSTEM_SPACE_ID`: Admin 로그인 후 고정할 Space ID

@@ -2,7 +2,7 @@ import { expect, test } from "@playwright/test";
 import {
 	navigateToConsentForm,
 	navigateToLoginForm,
-} from "../../../../e2e/helpers/login";
+} from "@cocrepo/ui/e2e";
 
 /** 시드 데이터 기준 FULL_ACCESS 계정 */
 const ADMIN_EMAIL = "admin@plate.com";

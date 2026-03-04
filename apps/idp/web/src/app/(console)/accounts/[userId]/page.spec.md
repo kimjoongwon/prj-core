@@ -47,3 +47,5 @@
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
 | 2026-03-03 | 누락된 sidecar spec 신규 생성 | codex |
+| 2026-03-04 | IDP 로그인 헬퍼 import를 test-e2e 경로로 변경 | codex |
+| 2026-03-04 | 로그인 헬퍼 import를 @cocrepo/ui/e2e 패키지 경로로 전환 | codex |

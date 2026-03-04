@@ -24,6 +24,11 @@
       "import": "./hero.tsx",
       "default": "./hero.tsx"
     },
+    "./e2e": {
+      "types": "./src/e2e/index.ts",
+      "import": "./src/e2e/index.ts",
+      "default": "./src/e2e/index.ts"
+    },
     "./styles": "./src/styles/globals.css",
     "./styles/base": "./src/styles/base.css",
     "./package.json": "./package.json"

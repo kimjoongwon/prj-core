@@ -181,3 +181,9 @@ return <Button onClick={() => doSomething()}>클릭</Button>;
 - `@cocrepo/store` - 공유 상태 관리
 - `@cocrepo/hook` - 공유 훅
 - `@cocrepo/constant` - 공유 상수
+
+## E2E 로그인/검증 공통 가이드
+
+Admin E2E 로그인 및 로그인 이후 검증 규칙은 아래 문서를 단일 기준으로 사용합니다.
+
+- `apps/test/e2e/README.md`
