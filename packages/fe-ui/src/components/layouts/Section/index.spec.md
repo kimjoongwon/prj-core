@@ -8,6 +8,7 @@
 
 페이지 내부 구역을 `top`, `left`, `children`, `right`, `bottom` 슬롯으로 배치하는 레이아웃 컴포넌트입니다.
 도메인 위젯/피처를 어떤 위치에 놓을지 결정하는 구조 책임만 가집니다.
+`App > Layout > Page > Section` 위계에서 최하위 구조 레벨입니다.
 
 ## Props
 
@@ -40,3 +41,4 @@ interface SectionProps {
 | 2026-03-03 | 폴더명을 `Section` 기준으로 정리하고 경로 표기 갱신 | codex |
 | 2026-03-03 | `mode` prop을 제거하고 Content-First 단일 렌더 구조로 통합 | codex |
 | 2026-03-03 | Page/Section `mode` 제거 반영 (단일 구조 기준으로 문서 표현 정리) | codex |
+| 2026-03-04 | `App > Layout > Page > Section` 위계 기준으로 Section 레벨 책임 명시 | codex |

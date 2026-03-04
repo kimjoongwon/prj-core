@@ -5,7 +5,7 @@ import { Button } from "@heroui/react";
 import { ChevronDown } from "lucide-react";
 import { observer } from "mobx-react-lite";
 import { renderLucideIcon } from "../../../../utils/iconUtils";
-import type { AdminSidebarProps } from "./types";
+import type { SidePanelProps } from "./types";
 
 /**
  * 하위 메뉴 아이템 컴포넌트
@@ -131,7 +131,7 @@ const NavItemComponent = observer(function NavItemComponent({
 });
 
 /**
- * AdminSidebar - 데스크톱 사이드바 (v7.0)
+ * SidePanel - 데스크톱 사이드바 (v7.0)
  *
  * 기획서 참조: 01-desktop.md
  * - 2depth 메뉴 펼침/접힘 지원
@@ -139,7 +139,7 @@ const NavItemComponent = observer(function NavItemComponent({
  *
  * @example
  * ```tsx
- * <AdminSidebar
+ * <SidePanel
  *   navItems={navItems}
  *   selectedNavItem={selectedNavItem}
  *   selectedSubNavItem={selectedSubNavItem}
@@ -151,7 +151,7 @@ const NavItemComponent = observer(function NavItemComponent({
  * />
  * ```
  */
-export const AdminSidebar = observer(function AdminSidebar({
+export const SidePanel = observer(function SidePanel({
 	navItems,
 	selectedNavItem,
 	selectedSubNavItem,
@@ -160,7 +160,7 @@ export const AdminSidebar = observer(function AdminSidebar({
 	onSubNavItemClick,
 	onNavItemToggle,
 	logo,
-}: AdminSidebarProps) {
+}: SidePanelProps) {
 	return (
 		<aside className="flex h-full w-60 flex-col border-divider border-r bg-content1">
 			{/* 로고 영역 */}
@@ -191,4 +191,4 @@ export const AdminSidebar = observer(function AdminSidebar({
 	);
 });
 
-AdminSidebar.displayName = "AdminSidebar";
+SidePanel.displayName = "SidePanel";

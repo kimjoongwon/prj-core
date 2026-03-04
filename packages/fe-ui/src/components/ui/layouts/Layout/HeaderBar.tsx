@@ -11,10 +11,10 @@ import {
 } from "@heroui/react";
 import { observer } from "mobx-react-lite";
 import { renderLucideIcon } from "../../../../utils/iconUtils";
-import type { AdminHeaderProps } from "./types";
+import type { HeaderBarProps } from "./types";
 
 /**
- * AdminHeader - 관리자 레이아웃 헤더 (v7.0)
+ * HeaderBar - 관리자 레이아웃 헤더 (v7.0)
  *
  * 기획서 참조: 01-desktop.md, 02-mobile.md
  * - 데스크톱/모바일 공용 헤더
@@ -23,7 +23,7 @@ import type { AdminHeaderProps } from "./types";
  *
  * @example
  * ```tsx
- * <AdminHeader
+ * <HeaderBar
  *   userInfo={{ name: "홍길동", email: "hong@example.com", role: "관리자" }}
  *   onLogout={() => logout()}
  *   logo={<Logo />}
@@ -31,12 +31,12 @@ import type { AdminHeaderProps } from "./types";
  * />
  * ```
  */
-export const AdminHeader = observer(function AdminHeader({
+export const HeaderBar = observer(function HeaderBar({
 	userInfo,
 	actions,
 	onLogout,
 	logo,
-}: AdminHeaderProps) {
+}: HeaderBarProps) {
 	const handleLogout = () => {
 		onLogout?.();
 	};
@@ -132,4 +132,4 @@ export const AdminHeader = observer(function AdminHeader({
 	);
 });
 
-AdminHeader.displayName = "AdminHeader";
+HeaderBar.displayName = "HeaderBar";

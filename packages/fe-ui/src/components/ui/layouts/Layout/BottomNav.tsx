@@ -2,10 +2,10 @@
 
 import { observer } from "mobx-react-lite";
 import { renderLucideIcon } from "../../../../utils/iconUtils";
-import type { AdminBottomTabProps } from "./types";
+import type { BottomNavProps } from "./types";
 
 /**
- * AdminBottomTab - 모바일 하단 탭바 (v7.0 신규)
+ * BottomNav - 모바일 하단 탭바 (v7.0 신규)
  *
  * 기획서 참조: 02-mobile.md
  * - 5개 고정 탭: 대시보드, 예약, 회원, 알림, 더보기
@@ -13,7 +13,7 @@ import type { AdminBottomTabProps } from "./types";
  *
  * @example
  * ```tsx
- * <AdminBottomTab
+ * <BottomNav
  *   items={[
  *     { id: 'dashboard', label: '대시보드', icon: 'LayoutDashboard', hasSubMenu: false },
  *     { id: 'reservations', label: '예약', icon: 'CalendarCheck', hasSubMenu: true },
@@ -23,11 +23,11 @@ import type { AdminBottomTabProps } from "./types";
  * />
  * ```
  */
-export const AdminBottomTab = observer(function AdminBottomTab({
+export const BottomNav = observer(function BottomNav({
 	items,
 	activeTabId,
 	onTabClick,
-}: AdminBottomTabProps) {
+}: BottomNavProps) {
 	const handleTabClick = (tabId: string) => {
 		onTabClick(tabId);
 	};
@@ -73,4 +73,4 @@ export const AdminBottomTab = observer(function AdminBottomTab({
 	);
 });
 
-AdminBottomTab.displayName = "AdminBottomTab";
+BottomNav.displayName = "BottomNav";

@@ -3,10 +3,10 @@
 import { Button } from "@heroui/react";
 import { observer } from "mobx-react-lite";
 import { renderLucideIcon } from "../../../../utils/iconUtils";
-import type { AdminFABProps } from "./types";
+import type { ActionFabProps } from "./types";
 
 /**
- * AdminFAB - 모바일 Floating Action Button (v7.0 신규)
+ * ActionFab - 모바일 Floating Action Button (v7.0 신규)
  *
  * 기획서 참조: 02-mobile.md
  * - 클릭 시 팬 형태로 3개 액션 확장
@@ -14,7 +14,7 @@ import type { AdminFABProps } from "./types";
  *
  * @example
  * ```tsx
- * <AdminFAB
+ * <ActionFab
  *   isOpen={isFABOpen}
  *   actions={[
  *     { id: 'todayReservation', label: '오늘 예약', icon: 'CalendarCheck', subject: 'quickAction:todayReservation', href: '/reservations/today' },
@@ -25,12 +25,12 @@ import type { AdminFABProps } from "./types";
  * />
  * ```
  */
-export const AdminFAB = observer(function AdminFAB({
+export const ActionFab = observer(function ActionFab({
 	isOpen,
 	actions,
 	onToggle,
 	onActionClick,
-}: AdminFABProps) {
+}: ActionFabProps) {
 	const handleToggle = () => {
 		onToggle();
 	};
@@ -112,4 +112,4 @@ export const AdminFAB = observer(function AdminFAB({
 	);
 });
 
-AdminFAB.displayName = "AdminFAB";
+ActionFab.displayName = "ActionFab";

@@ -1,8 +1,8 @@
-# AdminHeader ui 기획서
+# OverlayMenu ui 기획서
 
 > 생성일: 2026-03-03
 > 타입: ui
-> 위치: packages/fe-ui/src/components/ui/layouts/Admin/AdminHeader.tsx
+> 위치: packages/fe-ui/src/components/ui/layouts/Layout/OverlayMenu.tsx
 
 ## 역할
 
@@ -12,10 +12,11 @@
 
 | 항목 | 설명 |
 |------|------|
-| AdminHeader | 공개 계약 요소 |
+| OverlayMenu | 공개 계약 요소 |
 
 ## 변경 이력
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
 | 2026-03-03 | 누락된 sidecar spec 신규 생성 | codex |
+| 2026-03-04 | AdminSubMenuList에서 OverlayMenu로 명칭 추상화 | codex |

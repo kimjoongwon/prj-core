@@ -8,6 +8,7 @@
 
 페이지 단위의 구조 배치를 정의하는 레이아웃 컴포넌트입니다.
 `top`, `leftAside`, `children`, `rightAside`, `bottom`, `footer` 슬롯을 조합해 페이지 콘텐츠 구조만 제공합니다.
+`App > Layout > Page > Section` 위계에서 `Layout` 하위, `Section` 상위 레벨입니다.
 
 ## Props
 
@@ -42,3 +43,4 @@ interface PageProps {
 | 2026-03-03 | 폴더명을 `Page` 기준으로 정리하고 경로 표기 갱신 | codex |
 | 2026-03-03 | `mode` prop을 제거하고 Content-First 단일 렌더 구조로 통합 | codex |
 | 2026-03-03 | Page/Section `mode` 제거 반영 (단일 구조 기준으로 문서 표현 정리) | codex |
+| 2026-03-04 | `App > Layout > Page > Section` 위계 기준으로 Page 레벨 책임 명시 | codex |

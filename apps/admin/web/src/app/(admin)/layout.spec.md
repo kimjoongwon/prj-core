@@ -20,6 +20,7 @@
 | 모듈 | 용도 |
 |------|------|
 | @cocrepo/api | 기능 구현 의존성 |
+| @cocrepo/hook | 기능 구현 의존성 |
 | @cocrepo/ui | 기능 구현 의존성 |
 | @heroui/react | 기능 구현 의존성 |
 | mobx-react-lite | 기능 구현 의존성 |
@@ -29,9 +30,10 @@
 
 ## 동작 흐름
 
-1. 입력(라우트/props/호출)을 수신합니다.
-2. 필요한 의존 모듈을 호출해 데이터를 조합합니다.
-3. 결과를 렌더링/반환/전파합니다.
+1. `useLayout`에 앱 Store selector hooks를 주입해 네비게이션/FAB/BottomTab 상태와 핸들러를 조회합니다.
+2. `HeaderBar`, `SidePanel`, `BottomNav`, `ActionFab`, `OverlayMenu`를 구성합니다.
+3. `Layout` 슬롯(`header`, `sidebar`, `mobileBottomNav`, `mobileFab`, `mobileOverlayMenu`)에 주입합니다.
+4. `children`을 Layout 메인 영역에 렌더링합니다.
 
 ## 실패 및 엣지 케이스
 
@@ -50,3 +52,5 @@
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
 | 2026-03-03 | 누락된 sidecar spec 신규 생성 | codex |
+| 2026-03-04 | AdminLayout 직접 사용을 Layout 슬롯 조합 구조로 마이그레이션 | codex |
+| 2026-03-04 | useAdminLayout 제거 후 @cocrepo/hook의 useLayout 직접 사용으로 전환 | codex |

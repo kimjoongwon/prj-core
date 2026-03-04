@@ -14,11 +14,11 @@
 |------|------|
 | UseLayoutOptions | 공개 계약 요소 |
 | UseLayoutReturn | 공개 계약 요소 |
-| useAdminLayout | 공개 계약 요소 |
-| createUseLayout | 공개 계약 요소 |
+| useLayout | 공개 계약 요소 |
 
 ## 변경 이력
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
 | 2026-03-03 | 누락된 sidecar spec 신규 생성 | codex |
+| 2026-03-04 | createUseLayout 팩토리를 제거하고 useLayout 직접 호출 방식으로 통합 | codex |

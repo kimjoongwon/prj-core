@@ -3,10 +3,10 @@
 import { Button } from "@heroui/react";
 import { observer } from "mobx-react-lite";
 import { renderLucideIcon } from "../../../../utils/iconUtils";
-import type { AdminSubMenuListProps } from "./types";
+import type { OverlayMenuProps } from "./types";
 
 /**
- * AdminSubMenuList - 모바일 서브메뉴 리스트 (v7.0 신규)
+ * OverlayMenu - 모바일 서브메뉴 리스트 (v7.0 신규)
  *
  * 기획서 참조: 02-mobile.md
  * - 전체 화면 모달 형태
@@ -15,7 +15,7 @@ import type { AdminSubMenuListProps } from "./types";
  *
  * @example
  * ```tsx
- * <AdminSubMenuList
+ * <OverlayMenu
  *   title="예약"
  *   items={subMenuItems}
  *   selectedItemId="reservations-today"
@@ -24,13 +24,13 @@ import type { AdminSubMenuListProps } from "./types";
  * />
  * ```
  */
-export const AdminSubMenuList = observer(function AdminSubMenuList({
+export const OverlayMenu = observer(function OverlayMenu({
 	title,
 	items,
 	selectedItemId,
 	onItemClick,
 	onClose,
-}: AdminSubMenuListProps) {
+}: OverlayMenuProps) {
 	const handleItemClick = (itemId: string) => {
 		onItemClick(itemId);
 	};
@@ -113,4 +113,4 @@ export const AdminSubMenuList = observer(function AdminSubMenuList({
 	);
 });
 
-AdminSubMenuList.displayName = "AdminSubMenuList";
+OverlayMenu.displayName = "OverlayMenu";

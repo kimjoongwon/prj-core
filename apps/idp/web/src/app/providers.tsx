@@ -1,6 +1,7 @@
 "use client";
 
 import { setIdpLoginRedirectUrl, setLoginRedirectUrl } from "@cocrepo/api";
+import { ConsoleAppStoreProvider } from "@cocrepo/store";
 import { DesignSystemProvider } from "@cocrepo/ui";
 import {
 	isServer,
@@ -11,7 +12,6 @@ import { observer } from "mobx-react-lite";
 import { useRouter } from "next/navigation";
 import { NuqsAdapter } from "nuqs/adapters/next/app";
 import type { ReactNode } from "react";
-import { AppStoreProvider } from "@/stores";
 
 interface ProvidersProps {
 	children: ReactNode;
@@ -49,7 +49,7 @@ function getQueryClient() {
  * Provider 계층 구조:
  * QueryClientProvider (React Query)
  * └── NuqsAdapter (URL State)
- *     └── AppStoreProvider (MobX Store)
+ *     └── ConsoleAppStoreProvider (MobX Store)
  *         └── DesignSystemProvider (UI 시스템)
  */
 export const Providers = observer(function Providers({
@@ -65,11 +65,11 @@ export const Providers = observer(function Providers({
 	return (
 		<QueryClientProvider client={queryClient}>
 			<NuqsAdapter>
-				<AppStoreProvider>
+				<ConsoleAppStoreProvider>
 					<DesignSystemProvider navigate={handleNavigate}>
 						{children}
 					</DesignSystemProvider>
-				</AppStoreProvider>
+				</ConsoleAppStoreProvider>
 			</NuqsAdapter>
 		</QueryClientProvider>
 	);

@@ -40,6 +40,7 @@
   },
   "dependencies": {
     "@casl/ability": "^6.7.3",
+    "@cocrepo/constant": "workspace:*",
     "@cocrepo/type": "workspace:*"
   },
   "devDependencies": {
