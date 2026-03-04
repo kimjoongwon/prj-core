@@ -22,13 +22,14 @@ developer_instructions = '''
 
 | 파일 | 동작 |
 |------|------|
-| `packages/fe-ui/src/components/layout/[LayoutName]/index.spec.md` | 생성/업데이트 |
+| `packages/fe-ui/src/components/layouts/[LayoutName]/index.spec.md` | 생성/업데이트 |
 
 ---
 
 ## 2. 핵심 원칙
 
-- App/Layout/Page 역할 분리(중복 타이틀 금지)
+- 위계는 `App(서비스별 단일) > Layout > Page > Section`을 기준으로 설계
+- App/Layout/Page/Section 역할 분리(중복 타이틀 금지)
 - `PageSurface > SectionSurface` 중첩 규칙 준수
 - 데스크톱/모바일 레이아웃 전환 기준 명시
 

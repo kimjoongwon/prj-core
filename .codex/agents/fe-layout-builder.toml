@@ -4,7 +4,7 @@ developer_instructions = '''
 
 # 레이아웃 빌더
 
-**Layout 컴포넌트**(App, Page, Section)를 설계하고 생성합니다. Layout은 **순수 위치(영역)만 정의**하고, Feature 컴포넌트는 해당 영역에 마운트됩니다.
+**Layout 컴포넌트**(App, Layout, Page, Section)를 설계하고 생성합니다. Layout은 **순수 위치(영역)만 정의**하고, Feature 컴포넌트는 해당 영역에 마운트됩니다.
 
 ---
 
@@ -12,7 +12,7 @@ developer_instructions = '''
 
 | 상황 | 사용 여부 | 설명 |
 |------|----------|------|
-| 새 Layout 컴포넌트 생성 | O | App, Page, Section 생성 |
+| 새 Layout 컴포넌트 생성 | O | App, Layout, Page, Section 생성 |
 | 기존 Layout 수정/확장 | O | 영역 추가/변경 |
 | Next.js layout.tsx 작성 | O | App Router 레이아웃 파일 생성 |
 | Feature 컴포넌트 생성 | X | `fe-feature-builder` 사용 |
@@ -27,7 +27,7 @@ developer_instructions = '''
 
 | 항목 | 필수 | 설명 |
 |------|------|------|
-| Layout 타입 | O | App, Page, Section |
+| Layout 타입 | O | App, Layout, Page, Section |
 | 필요한 영역 | O | header, leftAside, rightAside 등 |
 | 마운트될 Feature | △ | 각 영역에 마운트될 Feature 컴포넌트 |
 | 사용 위치 | O | app/layout.tsx, app/(admin)/layout.tsx 등 |
@@ -47,11 +47,13 @@ developer_instructions = '''
 ### Do
 
 - App은 body 래퍼로만 사용 (children만)
+- App은 서비스별 단일 인스턴스로 유지
+- Layout은 App과 Page 사이의 전역 배치 계층으로 사용
 - Page는 HTML5 시맨틱 태그 사용 (header, leftAside, rightAside, footer)
 - Section은 위치 속성 사용 (top, bottom, left, right)
 - 영역에는 Feature 컴포넌트 마운트
 - 파일당 1개 Layout만 선언
-- 위계 순서 준수: App → Page → Section
+- 위계 순서 준수: App → Layout → Page → Section
 
 ### Don't
 
@@ -69,9 +71,10 @@ developer_instructions = '''
 
 | 레이아웃 | 용도 | 영역 props | 사용 위치 | 경로당 개수 |
 |----------|------|------------|----------|--------------|
-| **App** | 루트 body 래퍼 | children | `app/layout.tsx` | **1개** |
-| **Page** | 페이지 전체 구조 | header, leftAside, rightAside, footer | `app/(admin)/layout.tsx` | **1개** |
-| **Section** | 페이지 내부 구역 | top, bottom, left, right | `app/(admin)/users/layout.tsx` | **복수 가능** |
+| **App** | 루트 body 래퍼 | children | `apps/{service}/src/app/layout.tsx` | **서비스당 1개** |
+| **Layout** | 서비스 전역 셸 구조 | header, sidebar, mobileBottomNav, mobileFab, mobileOverlayMenu, children | `apps/{service}/src/app/(group)/layout.tsx` | **서비스 컨텍스트당 1개** |
+| **Page** | 페이지 콘텐츠 구조 | header, top, leftAside, rightAside, bottom, footer, children | `apps/{service}/src/app/**/_client.tsx` | **페이지당 1개 권장** |
+| **Section** | 페이지 내부 구역 | top, bottom, left, right, children | `apps/{service}/src/app/**/_client.tsx` | **복수 가능** |
 
 ### 2단계: 영역 정의
 
@@ -80,6 +83,7 @@ developer_instructions = '''
 | 레이아웃 | 명칭 |
 |----------|------|
 | App | children |
+| Layout | header, sidebar, mobileBottomNav, mobileFab, mobileOverlayMenu, children |
 | Page | header, leftAside, rightAside, footer, children |
 | Section | top, bottom, left, right, children(center) |
 
@@ -97,6 +101,10 @@ packages/fe-ui/src/components/layouts/
 │   ├── Section.tsx
 │   └── index.ts
 └── index.ts
+
+packages/fe-ui/src/components/ui/layouts/Layout/
+├── Layout.tsx
+└── index.ts
 ```
 
 ### 4단계: Next.js layout.tsx 작성
@@ -105,17 +113,17 @@ packages/fe-ui/src/components/layouts/
 // app/(admin)/layout.tsx
 "use client";
 
-import { App, Page, SideNav } from "@cocrepo/ui";
+import { App, Layout, Page, SidePanel } from "@cocrepo/ui";
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
   return (
     <App>
-      <Page
+      <Layout
         header={<div className="h-16">Header Slot</div>}
-        leftAside={<SideNav />}
+        sidebar={<SidePanel ... />}
       >
-        {children}
-      </Page>
+        <Page>{children}</Page>
+      </Layout>
     </App>
   );
 }
@@ -170,13 +178,15 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
 
 ## 7. 레이아웃 계층 구조
 
-### 3단계 Layout 계층
+### 4단계 Layout 계층
 
 ```
 App (Next.js 최상위 layout.tsx)
+    ↓ children (Layout이 여기에 마운트됨)
+Layout (서비스 전역 셸: header, sidebar, mobile nav)
     ↓ children (Page가 여기에 마운트됨)
-Page (전체 페이지 구조: header, aside, footer)
-    ↓ children (Section 또는 페이지 콘텐츠)
+Page (화면 구조: header, aside, footer, top/bottom)
+    ↓ children (Section 또는 화면 콘텐츠)
 Section (페이지 내부 구역: top, left, right, bottom)
     ↓ children (페이지 콘텐츠)
 ```
@@ -188,7 +198,7 @@ Widget (순수 UI 조합)
     ↓ 사용됨
 Feature (비즈니스 로직 + Widget 조합)
     ↓ 마운트됨
-Layout 영역 (Page, Section)
+Layout 영역 (Layout, Page, Section)
 ```
 
 ### 레이아웃 계층도
@@ -226,12 +236,9 @@ Layout 영역 (Page, Section)
 ```tsx
 // Layout은 순수하게 영역만 정의
 <App>
-  <Page
-    header={<div className="h-16">Header Slot</div>}
-    leftAside={<SideNav />}
-  >
-    {children}
-  </Page>
+  <Layout header={<HeaderBar />} sidebar={<SidePanel ... />}>
+    <Page>{children}</Page>
+  </Layout>
 </App>
 
 // Feature 컴포넌트가 자체적으로 비즈니스 로직 처리
@@ -304,6 +311,32 @@ export const App = ({ children }: AppProps) => {
 };
 ```
 
+### Layout
+
+```tsx
+export interface LayoutProps {
+  header?: ReactNode;
+  sidebar?: ReactNode;
+  mobileBottomNav?: ReactNode;
+  mobileFab?: ReactNode;
+  mobileOverlayMenu?: ReactNode;
+  children: ReactNode;
+}
+
+export const Layout = ({ header, sidebar, mobileBottomNav, mobileFab, mobileOverlayMenu, children }: LayoutProps) => {
+  return (
+    <div>
+      {header}
+      {sidebar}
+      <main>{children}</main>
+      {mobileOverlayMenu}
+      {mobileFab}
+      {mobileBottomNav}
+    </div>
+  );
+};
+```
+
 ### Page
 
 ```tsx
@@ -373,6 +406,10 @@ packages/fe-ui/src/components/
 │   │   ├── Section.tsx
 │   │   └── index.ts
 │   └── index.ts
+├── ui/layouts/
+│   └── Layout/
+│       ├── Layout.tsx
+│       └── index.ts
 │
 └── feature/                       # Feature 컴포넌트 (비즈니스 로직 포함)
     ├── SideNav/
