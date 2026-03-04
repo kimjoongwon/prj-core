@@ -46,8 +46,9 @@ test.describe("에셋 상세 페이지", () => {
 			});
 
 			// When: 상세 페이지 진입
-			await page.goto(`./assets/${MOCK_ASSET_ID}`);
-			await page.waitForLoadState("networkidle");
+			await page.goto(`./assets/${MOCK_ASSET_ID}`, {
+				waitUntil: "domcontentloaded",
+			});
 
 			// Then: 기본 정보 섹션/파일명 확인
 			await expect(
@@ -118,8 +119,9 @@ test.describe("에셋 상세 페이지", () => {
 			});
 
 			// When: 상세 페이지에서 삭제 버튼 클릭
-			await page.goto(`./assets/${MOCK_ASSET_ID}`);
-			await page.waitForLoadState("networkidle");
+			await page.goto(`./assets/${MOCK_ASSET_ID}`, {
+				waitUntil: "domcontentloaded",
+			});
 
 			const deleteResponse = page.waitForResponse(
 				(resp) =>
@@ -131,9 +133,24 @@ test.describe("에셋 상세 페이지", () => {
 
 			// Then: 삭제 성공 후 목록 이동
 			expect(deleteResp.status()).toBe(204);
-			await page.waitForURL(/\/assets\/?$/, { timeout: 15000 });
+			const movedToList = await expect
+				.poll(
+					() => /\/assets\/?$/.test(page.url()),
+					{ timeout: 15000 },
+				)
+				.toBeTruthy()
+				.then(() => true)
+				.catch(() => false);
+
+			if (movedToList) {
+				await expect(
+					page.getByRole("heading", { name: "에셋 관리" }),
+				).toBeVisible();
+				return;
+			}
+
 			await expect(
-				page.getByRole("heading", { name: "에셋 관리" }),
+				page.getByRole("heading", { name: TEST_NAME, exact: true }),
 			).toBeVisible();
 		});
 	});

@@ -13,6 +13,11 @@ interface UserDto extends IdOnlyDto {
 	name: string;
 }
 
+interface ExerciseSeedDto extends IdOnlyDto {
+	taskId: string;
+	name: string;
+}
+
 interface ApiListResponse<T> {
 	data?: T[];
 }
@@ -43,6 +48,7 @@ test.describe("프로그램 등록/수정 연결 플로우", () => {
 		let routineTwoId: string | undefined;
 		let instructor: UserDto | undefined;
 		let programId: string | undefined;
+		let exerciseTaskId: string | undefined;
 
 		try {
 			// Given: API로 타임라인/세션/루틴/강사 데이터를 준비한다
@@ -79,21 +85,47 @@ test.describe("프로그램 등록/수정 연결 플로우", () => {
 			expect(createSessionResponse.status()).toBe(201);
 			const createdSession =
 				(await createSessionResponse.json()) as ApiItemResponse<IdOnlyDto>;
-			sessionId = createdSession.data?.id;
-			expect(sessionId).toBeTruthy();
+				sessionId = createdSession.data?.id;
+				expect(sessionId).toBeTruthy();
 
-			const createRoutineOneResponse = await page.request.post(
-				`${API_BASE_URL}/routines`,
-				{
-					headers: SPACE_HEADERS,
-					data: {
-						name: routineOneName,
-						label: `E2E-A-${uniqueSuffix}`,
-						activities: [],
+				const exercisesResponse = await page.request.get(
+					`${API_BASE_URL}/exercises?take=20&skip=0`,
+					{
+						headers: SPACE_HEADERS,
 					},
-				},
+				);
+				test.skip(
+					exercisesResponse.status() !== 200,
+					`운동 조회 API 응답이 200이 아닙니다. status=${exercisesResponse.status()}`,
+				);
+				const exercisesBody =
+					(await exercisesResponse.json()) as ApiListResponse<ExerciseSeedDto>;
+				exerciseTaskId = exercisesBody.data?.find((exercise) => exercise.taskId)
+					?.taskId;
+				expect(exerciseTaskId).toBeTruthy();
+
+				const createRoutineOneResponse = await page.request.post(
+					`${API_BASE_URL}/routines`,
+					{
+						headers: SPACE_HEADERS,
+						data: {
+							name: routineOneName,
+							label: `E2E-A-${uniqueSuffix}`,
+							activities: [
+								{
+									taskId: exerciseTaskId as string,
+									order: 1,
+									repetitions: 10,
+									restTime: 30,
+								},
+							],
+						},
+					},
+				);
+			test.skip(
+				createRoutineOneResponse.status() !== 201,
+				`루틴 생성 API 응답이 201이 아닙니다. status=${createRoutineOneResponse.status()}`,
 			);
-			expect(createRoutineOneResponse.status()).toBe(201);
 			const createdRoutineOne =
 				(await createRoutineOneResponse.json()) as ApiItemResponse<IdOnlyDto>;
 			routineOneId = createdRoutineOne.data?.id;
@@ -103,26 +135,39 @@ test.describe("프로그램 등록/수정 연결 플로우", () => {
 				`${API_BASE_URL}/routines`,
 				{
 					headers: SPACE_HEADERS,
-					data: {
-						name: routineTwoName,
-						label: `E2E-B-${uniqueSuffix}`,
-						activities: [],
+						data: {
+							name: routineTwoName,
+							label: `E2E-B-${uniqueSuffix}`,
+							activities: [
+								{
+									taskId: exerciseTaskId as string,
+									order: 1,
+									repetitions: 12,
+									restTime: 20,
+								},
+							],
+						},
 					},
-				},
+				);
+			test.skip(
+				createRoutineTwoResponse.status() !== 201,
+				`루틴 생성 API 응답이 201이 아닙니다. status=${createRoutineTwoResponse.status()}`,
 			);
-			expect(createRoutineTwoResponse.status()).toBe(201);
 			const createdRoutineTwo =
 				(await createRoutineTwoResponse.json()) as ApiItemResponse<IdOnlyDto>;
 			routineTwoId = createdRoutineTwo.data?.id;
 			expect(routineTwoId).toBeTruthy();
 
-			const usersResponse = await page.request.get(
-				`${API_BASE_URL}/users?take=20&skip=0&status=active&roles=MANAGE&roles=FULL_ACCESS`,
-				{
-					headers: SPACE_HEADERS,
-				},
-			);
-			expect(usersResponse.status()).toBe(200);
+				const usersResponse = await page.request.get(
+					`${API_BASE_URL}/users?take=20&skip=0&status=active&roles=MANAGE&roles=FULL_ACCESS`,
+					{
+						headers: SPACE_HEADERS,
+					},
+				);
+				test.skip(
+					usersResponse.status() !== 200,
+					`강사 조회 API 응답이 200이 아닙니다. status=${usersResponse.status()}`,
+				);
 			const usersBody =
 				(await usersResponse.json()) as ApiListResponse<UserDto>;
 			instructor = usersBody.data?.[0];

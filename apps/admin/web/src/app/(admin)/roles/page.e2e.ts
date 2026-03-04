@@ -11,7 +11,7 @@ test.describe("역할 목록 페이지", () => {
 
 			// Then: 타이틀과 설명 확인
 			await expect(
-				page.getByRole("heading", { name: "역할 목록" }),
+				page.getByRole("heading", { name: "역할 목록", exact: true }),
 			).toBeVisible();
 			await expect(
 				page.getByText("시스템에 등록된 역할을 관리합니다."),
@@ -77,7 +77,7 @@ test.describe("역할 목록 페이지", () => {
 			await page.waitForURL(/\/roles\/?$/, { timeout: 15000 });
 			await page.waitForLoadState("networkidle");
 			await expect(
-				page.getByRole("heading", { name: "역할 목록" }),
+				page.getByRole("heading", { name: "역할 목록", exact: true }),
 			).toBeVisible({ timeout: 10000 });
 
 			// Then: 새로 등록된 역할이 목록에 표시됨
@@ -152,7 +152,7 @@ test.describe("역할 목록 페이지", () => {
 
 			// Then: 역할 목록으로 이동, 삭제된 역할 없음 확인
 			await expect(
-				page.getByRole("heading", { name: "역할 목록" }),
+				page.getByRole("heading", { name: "역할 목록", exact: true }),
 			).toBeVisible({ timeout: 10000 });
 			await expect(
 				page.getByText(TEST_ROLE_NAME, { exact: true }),

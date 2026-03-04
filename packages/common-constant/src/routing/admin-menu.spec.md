@@ -24,6 +24,8 @@ Admin
 │   └── 루틴 (/routines)
 ├── 템플릿
 │   └── 템플릿 목록 (/templates)
+├── 에셋 (/assets)
+│   └── 에셋 목록 (/assets)
 ├── 문의 관리 (/inquiries)
 │   └── 문의 목록 (/inquiries)
 └── 권한 관리
@@ -87,6 +89,8 @@ Admin
 | 템플릿 | TEMPLATES_NEW | /templates/new | 템플릿 등록 |
 | 템플릿 | TEMPLATES_DETAIL | /templates/[templateId] | 템플릿 상세 |
 | 템플릿 | TEMPLATES_EDIT | /templates/[templateId]/edit | 템플릿 수정 |
+| 에셋 | ASSETS | /assets | 에셋 목록 |
+| 에셋 | ASSETS_DETAIL | /assets/[assetId] | 에셋 상세 |
 | 문의 | INQUIRIES | /inquiries | 문의 목록 |
 | 문의 | INQUIRIES_NEW | /inquiries/new | 문의 접수 |
 | 문의 | INQUIRIES_DETAIL | /inquiries/[inquiryId] | 문의 상세 |
@@ -106,6 +110,7 @@ Admin
 | MENU_EXERCISES | menu:exercises | 운동 관리 |
 | MENU_ROUTINES | menu:routines | 루틴 |
 | MENU_TEMPLATES | menu:templates | 템플릿 |
+| MENU_ASSETS | menu:assets | 에셋 |
 | MENU_INQUIRIES | menu:inquiries | 문의 관리 |
 | MENU_ROLES | menu:roles | 권한 관리 |
 
@@ -119,6 +124,7 @@ Admin
 | MENU_EXERCISES_LIST | menu:exercises:list | 운동 종목 |
 | MENU_ROUTINES_LIST | menu:routines:list | 루틴 |
 | MENU_TEMPLATES_LIST | menu:templates:list | 템플릿 목록 |
+| MENU_ASSETS_LIST | menu:assets:list | 에셋 |
 | MENU_INQUIRIES_LIST | menu:inquiries:list | 문의 목록 |
 | MENU_ROLES_LIST | menu:roles:list | 역할 |
 | MENU_ROLE_GROUPS | menu:role-groups | 역할 그룹 (1depth) |
@@ -142,6 +148,7 @@ Admin
 | timelines | 일정 관리 | CalendarDays | - | menu:timelines | 1 |
 | exercises | 운동 관리 | Dumbbell | - | menu:exercises | 2 |
 | templates | 템플릿 | Mail | - | menu:templates | 1 |
+| assets | 에셋 | Images | /assets | menu:assets | 1 |
 | inquiries | 문의 관리 | MessageCircleQuestion | /inquiries | menu:inquiries | 1 |
 | roles | 권한 관리 | Shield | - | menu:roles | 6 |
 
@@ -164,6 +171,7 @@ Admin
 | 일정 관리 | CalendarDays | 달력 |
 | 운동 관리 | Dumbbell | 덤벨 |
 | 템플릿 | Mail | 메일 |
+| 에셋 | Images | 겹쳐진 이미지 |
 | 문의 관리 | MessageCircleQuestion | 말풍선 + 물음표 |
 | 권한 관리 | Shield | 방패 |
 
@@ -181,6 +189,7 @@ Admin
 - [x] ADMIN_NAV_ITEMS 배열 정의
 - [x] BOTTOM_TAB_IDS 배열 정의
 - [x] 문의(Inquiry) 메뉴 추가
+- [x] 에셋 메뉴 추가 (경로/Subject/Sidebar)
 - [ ] TypeScript 타입 검증
 
 ## 상위 기획서
@@ -195,3 +204,4 @@ Admin
 | 2026-02-26 | 문의(Inquiry) 메뉴 추가 (INQUIRIES, INQUIRIES_NEW, INQUIRIES_DETAIL) | orch-screen-planner |
 | 2026-02-26 | 문의를 BottomTab에 추가 (users, inquiries 순서) | orch-screen-planner |
 | 2026-03-01 | 문의 수정 경로 `INQUIRIES_EDIT` 추가 | codex |
+| 2026-03-04 | 에셋 메뉴/경로/Subject 추가, Sidebar 노출 | fe-menu-builder |

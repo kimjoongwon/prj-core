@@ -11,7 +11,11 @@ test.describe("권한 목록 페이지", () => {
 
 			// Then: 타이틀 확인
 			await expect(
-				page.getByRole("heading", { name: "권한 목록" }),
+				page.getByRole("heading", {
+					name: "권한 목록",
+					exact: true,
+					level: 1,
+				}),
 			).toBeVisible();
 		});
 

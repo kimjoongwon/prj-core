@@ -85,6 +85,10 @@ export const ADMIN_PATHS = {
 	TEMPLATES_DETAIL: "/templates/[templateId]",
 	TEMPLATES_EDIT: "/templates/[templateId]/edit",
 
+	// 에셋 (Asset 엔티티)
+	ASSETS: "/assets",
+	ASSETS_DETAIL: "/assets/[assetId]",
+
 	// 문의 (Inquiry 엔티티)
 	INQUIRIES: "/inquiries",
 	INQUIRIES_NEW: "/inquiries/new",
@@ -113,6 +117,7 @@ export const ADMIN_SUBJECTS = {
 	MENU_EXERCISES: "menu:exercises",
 	MENU_ROUTINES: "menu:routines",
 	MENU_TEMPLATES: "menu:templates",
+	MENU_ASSETS: "menu:assets",
 	MENU_ROLES: "menu:roles",
 	MENU_INQUIRIES: "menu:inquiries",
 
@@ -131,6 +136,9 @@ export const ADMIN_SUBJECTS = {
 
 	// 2depth - 템플릿
 	MENU_TEMPLATES_LIST: "menu:templates:list",
+
+	// 2depth - 에셋
+	MENU_ASSETS_LIST: "menu:assets:list",
 
 	// 2depth - 권한 관리
 	MENU_ROLES_LIST: "menu:roles:list",
@@ -249,7 +257,24 @@ export const ADMIN_NAV_ITEMS: NavItemConfig[] = [
 		],
 	},
 
-	// 7. 문의 관리
+	// 7. 에셋
+	{
+		id: "assets",
+		label: "에셋",
+		icon: "Images",
+		path: ADMIN_PATHS.ASSETS,
+		subject: ADMIN_SUBJECTS.MENU_ASSETS,
+		children: [
+			{
+				id: "assets-list",
+				label: "에셋 목록",
+				path: ADMIN_PATHS.ASSETS,
+				subject: ADMIN_SUBJECTS.MENU_ASSETS_LIST,
+			},
+		],
+	},
+
+	// 8. 문의 관리
 	{
 		id: "inquiries",
 		label: "문의 관리",
@@ -266,7 +291,7 @@ export const ADMIN_NAV_ITEMS: NavItemConfig[] = [
 		],
 	},
 
-	// 8. 권한 관리
+	// 9. 권한 관리
 	{
 		id: "roles",
 		label: "권한 관리",

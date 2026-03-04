@@ -1,13 +1,13 @@
 import { CONTEXT_KEYS } from "@cocrepo/constant";
-import type { TenantDto } from "@cocrepo/dto";
+import type { TenantDto, UserDto } from "@cocrepo/dto";
+import { User } from "@cocrepo/entity";
 import { Injectable } from "@nestjs/common";
 import { ClsService } from "nestjs-cls";
-import { AuthContext } from "./auth-context";
 
 /**
  * Space 컨텍스트
  *
- * AuthContext와 연동하여 Space 관련 접근 권한을 제공합니다.
+ * CLS에 저장된 사용자/테넌트 정보를 기반으로 Space 관련 접근 권한을 제공합니다.
  *
  * @example
  * constructor(private readonly spaceCtx: SpaceContext) {}
@@ -20,10 +20,7 @@ import { AuthContext } from "./auth-context";
  */
 @Injectable()
 export class SpaceContext {
-	constructor(
-		private readonly cls: ClsService,
-		private readonly authCtx: AuthContext,
-	) {}
+	constructor(private readonly cls: ClsService) {}
 
 	/** 현재 요청의 Space ID (X-Space-ID 헤더) */
 	get spaceId(): string | undefined {
@@ -37,7 +34,7 @@ export class SpaceContext {
 
 	// ═══════════════════════════════════════════════════════════
 	// 쿼리 필터용 Space IDs
-	// AuthContext에서 가져옴 (중복 제거)
+	// CLS에서 직접 계산
 	// ═══════════════════════════════════════════════════════════
 
 	/**
@@ -46,7 +43,12 @@ export class SpaceContext {
 	 * - 일반: tenants의 spaceIds
 	 */
 	get spaceIds(): string[] | undefined {
-		return this.authCtx.accessibleSpaceIds;
+		const userDto = this.cls.get<UserDto>(CONTEXT_KEYS.AUTH_USER);
+		if (!userDto) {
+			return [];
+		}
+
+		return User.fromDto(userDto).accessibleSpaceIds;
 	}
 
 	/**
@@ -63,6 +65,7 @@ export class SpaceContext {
 	 * 특정 Space 접근 권한
 	 */
 	canAccessSpace(spaceId: string): boolean {
-		return this.authCtx.canAccessSpace(spaceId);
+		const ids = this.spaceIds;
+		return ids === undefined ? true : ids.includes(spaceId);
 	}
 }
