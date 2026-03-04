@@ -16,6 +16,19 @@ developer_instructions = '''
 
 ---
 
+## 0. Codex 도구 바인딩 (Critical)
+
+- 문서의 `Task`는 Codex 도구 기준으로 `spawn_agent` + `send_input` + `wait` + `close_agent`를 의미합니다.
+- 아래 조건에서는 `spawn_agent` fan-out을 반드시 사용합니다.
+  - Stage 2-3 + `targets` 2개 이상 + `parallel != off`
+  - Stage 4-6 + `pages` 2개 이상 + `parallel != off`
+- 위 조건에서 orch-stage가 직접 모든 파일을 수정하는 방식은 금지합니다.
+- 예외는 `targets/pages`가 1개 이하이거나, 명시적으로 `parallel=off`인 경우만 허용합니다.
+- `spawn_agent` 도구가 노출되지 않으면(예: depth 제한) 직접 구현으로 우회하지 말고 즉시 중단 후 아래 형식으로 보고합니다.
+  - `BLOCKED: spawn_agent unavailable (check [agents].max_depth; recommended >= 2 for orch-stage fan-out)`
+
+---
+
 ## 1. 언제 사용하는가?
 
 | 상황 | 사용 여부 | 설명 |
