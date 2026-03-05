@@ -13,7 +13,7 @@ const config = {
   stories: [
     "../stories/**/*.mdx",
     "../stories/**/*.stories.@(js|jsx|mjs|ts|tsx)",
-    "../../../packages/fe-ui/src/**/*.stories.@(js|jsx|mjs|ts|tsx)",
+    "../../../../packages/fe-ui/src/**/*.stories.@(js|jsx|mjs|ts|tsx)",
   ],
   addons: [
     getAbsolutePath("@chromatic-com/storybook"),
@@ -29,6 +29,19 @@ const config = {
     const { default: react } = await import("@vitejs/plugin-react-swc");
 
     config.plugins = config.plugins || [];
+    config.resolve = config.resolve || {};
+    config.resolve.alias = {
+      ...(config.resolve.alias || {}),
+      "@cocrepo/toolkit": join(process.cwd(), "../../../packages/common-toolkit/index.ts"),
+      "@cocrepo/constant": join(process.cwd(), "../../../packages/common-constant/src/index.ts"),
+      "@cocrepo/enum": join(process.cwd(), "../../../packages/common-enum/src/index.ts"),
+      "@cocrepo/type": join(process.cwd(), "../../../packages/common-type/index.ts"),
+      "@cocrepo/schema": join(process.cwd(), "../../../packages/common-schema/src/index.ts"),
+      "@cocrepo/hook": join(process.cwd(), "../../../packages/fe-hook/index.ts"),
+      "@cocrepo/store": join(process.cwd(), "../../../packages/fe-store/index.ts"),
+      "@cocrepo/ui": join(process.cwd(), "../../../packages/fe-ui/index.ts"),
+    };
+
     try {
       const { default: tailwindcss } = await import("@tailwindcss/vite/dist/index.mjs");
       config.plugins.push(tailwindcss());

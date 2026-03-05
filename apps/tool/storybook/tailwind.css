@@ -1,5 +1,5 @@
 @import "tailwindcss";
-@plugin '../../packages/fe-ui/hero.tsx';
-@source '../../node_modules/@heroui/theme/dist/**/*.{js,ts,jsx,tsx}';
-@source '../../packages/fe-ui/src/**/*.{js,ts,jsx,tsx}';
+@plugin '../../../packages/fe-ui/hero.tsx';
+@source '../../../node_modules/@heroui/theme/dist/**/*.{js,ts,jsx,tsx}';
+@source '../../../packages/fe-ui/src/**/*.{js,ts,jsx,tsx}';
 @custom-variant dark (&:is(.dark *));
