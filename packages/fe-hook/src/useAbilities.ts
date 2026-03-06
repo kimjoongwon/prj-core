@@ -17,7 +17,7 @@ interface UseAbilitiesOptions {
  * useAbilities Hook
  *
  * 서버에서 현재 사용자의 권한을 조회합니다.
- * AbilityProvider에서 사용됩니다.
+ * App Store Ability bootstrap 단계에서 사용됩니다.
  *
  * 주의: 지정된 경로(기본값: /auth)에서는 인증이 필요한 API 호출을 방지하기 위해 비활성화됩니다.
  *
@@ -26,9 +26,9 @@ interface UseAbilitiesOptions {
  *
  * @example
  * ```tsx
- * function AbilityProviderWrapper() {
+ * function AbilityStoreBootstrapper() {
  *   const { abilities } = useAbilities();
- *   return <AbilityProvider rules={abilities} />
+ *   // abilities를 @cocrepo/store의 convertApiToAbilityRules로 변환 후 updateRules
  * }
  *
  * // 커스텀 스킵 경로

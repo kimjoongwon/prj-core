@@ -1,11 +1,8 @@
 "use client";
 
 import type { AbilityResponseDto } from "@cocrepo/api";
-import {
-	type AbilityActions,
-	AbilityProvider,
-	type AbilityRule,
-} from "@cocrepo/hook";
+import { convertApiToAbilityRules, useAbility } from "@cocrepo/store";
+import type { AbilityApiResponse, AbilityRule } from "@cocrepo/type";
 import { DesignSystemProvider } from "@cocrepo/ui";
 import {
 	isServer,
@@ -15,7 +12,7 @@ import {
 import { observer } from "mobx-react-lite";
 import { useRouter } from "next/navigation";
 import { NuqsAdapter } from "nuqs/adapters/next/app";
-import type { ReactNode } from "react";
+import { type ReactNode, useEffect } from "react";
 import { useAbilities } from "@/hooks";
 import { AppStoreProvider } from "@/stores";
 
@@ -53,8 +50,8 @@ function getQueryClient() {
  *
  * Provider 계층 구조:
  * QueryClientProvider
- * └── AbilityProviderWrapper (서버에서 권한 로드)
- *     └── AppStoreProvider (RootStore + 주입된 Store들 통합 관리)
+ * └── AppStoreProvider (RootStore + 주입된 Store들 통합 관리)
+ *     └── AbilityStoreBootstrapper (서버 권한 -> AbilityStore 반영)
  *         └── DesignSystemProvider (UI 시스템)
  */
 export const Providers = observer(function Providers({
@@ -70,42 +67,53 @@ export const Providers = observer(function Providers({
 	return (
 		<QueryClientProvider client={queryClient}>
 			<NuqsAdapter>
-				<AbilityProviderWrapper>
-					<AppStoreProvider>
+				<AppStoreProvider>
+					<AbilityStoreBootstrapper>
 						<DesignSystemProvider navigate={handleNavigate}>
 							{children}
 						</DesignSystemProvider>
-					</AppStoreProvider>
-				</AbilityProviderWrapper>
+					</AbilityStoreBootstrapper>
+				</AppStoreProvider>
 			</NuqsAdapter>
 		</QueryClientProvider>
 	);
 });
 
 /**
- * AbilityProviderWrapper
- * 서버에서 권한을 로드하여 AbilityProvider에 전달합니다.
+ * AbilityStoreBootstrapper
+ * 서버에서 권한을 로드하여 AbilityStore 규칙으로 반영합니다.
  */
-function AbilityProviderWrapper({ children }: { children: ReactNode }) {
+const AbilityStoreBootstrapper = observer(function AbilityStoreBootstrapper({
+	children,
+}: {
+	children: ReactNode;
+}) {
 	const { abilities, isLoading, isError } = useAbilities();
+	const { updateRules } = useAbility();
 
-	// API 응답을 AbilityRule 형식으로 변환
-	// action.name을 대문자로 변환 (API: "manage" → 코드: "MANAGE")
-	const rules: AbilityRule[] | undefined = abilities?.map(
-		(ability: AbilityResponseDto) => ({
-			action: (
-				ability.action as { name?: string }
-			)?.name?.toUpperCase() as AbilityActions,
-			subject: ability.subject?.name ?? "",
-			conditions: ability.conditions as Record<string, unknown> | undefined,
-			inverted: ability.inverted,
-		}),
-	);
+	useEffect(() => {
+		const fallbackRules: AbilityRule[] = [{ action: "manage", subject: "all" }];
 
-	// API 로딩 중이거나 에러이거나 빈 배열일 때 기본 규칙 사용 (MANAGE all - 전체 권한)
-	// TODO: API 정상화 후 이 fallback 로직 제거
-	const effectiveRules =
-		isLoading || isError || !rules || rules.length === 0 ? undefined : rules;
+		if (isLoading || isError || !abilities || abilities.length === 0) {
+			updateRules(fallbackRules);
+			return;
+		}
 
-	return <AbilityProvider rules={effectiveRules}>{children}</AbilityProvider>;
-}
+		const apiResponses: AbilityApiResponse[] = abilities.map(
+			(ability: AbilityResponseDto) => ({
+				action: ability.action?.name,
+				subject: ability.subject?.name,
+				fields: ability.fields,
+				conditions:
+					(ability.conditions as Record<string, unknown> | null | undefined) ??
+					undefined,
+				inverted: ability.inverted,
+				reason: ability.reason ?? undefined,
+			}),
+		);
+
+		updateRules(convertApiToAbilityRules(apiResponses));
+	}, [abilities, isLoading, isError, updateRules]);
+
+	return children;
+});

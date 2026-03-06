@@ -1,32 +1,12 @@
-import type { FABAction } from "@cocrepo/type";
+import type {
+	FABAbilityChecker,
+	FABAction,
+	FABConfig,
+	FABStoreOptions,
+	ModalOpenHandler,
+	NavigatorLike,
+} from "@cocrepo/type";
 import { makeAutoObservable } from "mobx";
-import type { Navigator } from "./navigator";
-
-/**
- * FAB 액션 설정 인터페이스 (생성자 파라미터용)
- */
-export interface FABConfig {
-	actions: FABAction[];
-}
-
-/**
- * 권한 체크 함수 타입
- */
-export type FABAbilityChecker = (action: string, subject: string) => boolean;
-
-/**
- * 모달 열기 핸들러 타입
- */
-export type ModalOpenHandler = (modalId: string) => void;
-
-export interface FABStoreOptions {
-	/** Navigator 인스턴스 - 페이지 이동 담당 */
-	navigator?: Navigator;
-	/** 권한 체크 함수 */
-	abilityChecker?: FABAbilityChecker;
-	/** 모달 열기 핸들러 */
-	onModalOpen?: ModalOpenHandler;
-}
 
 /**
  * FABStore - 모바일 FAB(Floating Action Button) 상태 관리
@@ -54,7 +34,7 @@ export class FABStore {
 	private _isOpen: boolean = false;
 	private readonly _actions: FABAction[];
 	private _abilityChecker: FABAbilityChecker | null = null;
-	private _navigator: Navigator | null = null;
+	private _navigator: NavigatorLike | null = null;
 	private _onModalOpen: ModalOpenHandler | null = null;
 
 	constructor(config: FABConfig, options?: FABStoreOptions) {
@@ -69,7 +49,7 @@ export class FABStore {
 	/**
 	 * Navigator 설정
 	 */
-	setNavigator(navigator: Navigator): void {
+	setNavigator(navigator: NavigatorLike): void {
 		this._navigator = navigator;
 	}
 
@@ -110,7 +90,7 @@ export class FABStore {
 		}
 
 		return this._actions.filter((action) =>
-			this._abilityChecker!("ACCESS", action.subject),
+			this._abilityChecker!("view", action.subject),
 		);
 	}
 
@@ -144,10 +124,7 @@ export class FABStore {
 		if (!action) return;
 
 		// 권한 체크
-		if (
-			this._abilityChecker &&
-			!this._abilityChecker("ACCESS", action.subject)
-		) {
+		if (this._abilityChecker && !this._abilityChecker("view", action.subject)) {
 			return;
 		}
 

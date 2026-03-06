@@ -118,6 +118,30 @@ export type {
 	ActionTransformConfig,
 } from "./action-config";
 // ============================================
+// Store 계약 타입
+// ============================================
+export type {
+	AbilityChecker,
+	AppStoreConfig,
+	AppStoreProviderResult,
+	FABAbilityChecker,
+	FABConfig,
+	FABStoreOptions,
+	ModalOpenHandler,
+	NavigationStoreOptions,
+	NavigatorLike,
+} from "./store-contracts";
+// ============================================
+// CASL/Permission 관련 타입
+// ============================================
+export { APP_ACTIONS } from "./ability";
+export type {
+	AbilityApiResponse,
+	AbilityRule,
+	AppAction,
+	AppSubject,
+} from "./ability";
+// ============================================
 // Config 관련 타입
 // ============================================
 export type {
@@ -195,6 +219,22 @@ export type {
 	AiFormUiPaths,
 	CreateUpdateFormBootstrap,
 } from "./ai-form";
+// ============================================
+// Hook 계약 타입
+// ============================================
+export type {
+	SpaceGuardPersistStoreLike,
+	UseFormFieldMultiOptions,
+	UseFormFieldReturn,
+	UseFormFieldSingleOptions,
+	UseLayoutBottomTabStoreLike,
+	UseLayoutFABStoreLike,
+	UseLayoutNavigationStoreLike,
+	UseLayoutOptions,
+	UseLayoutReturn,
+	UseSpaceGuardOptions,
+	UseSpaceGuardReturn,
+} from "./hook-contracts";
 // ============================================
 // 테이블 관련 타입
 // ============================================

@@ -1,23 +1,11 @@
-import type { NavItemConfig } from "@cocrepo/type";
+import type {
+	AbilityChecker,
+	NavItemConfig,
+	NavigationStoreOptions,
+	NavigatorLike,
+} from "@cocrepo/type";
 import { makeAutoObservable } from "mobx";
 import { NavItem } from "./navItem";
-import type { Navigator } from "./navigator";
-
-/**
- * 권한 체크 함수 타입
- */
-export type AbilityChecker = (action: string, subject: string) => boolean;
-
-export interface NavigationStoreOptions {
-	/** Navigator 인스턴스 - 페이지 이동 담당 */
-	navigator?: Navigator;
-	/** 권한 체크 함수 */
-	abilityChecker?: AbilityChecker;
-	/**
-	 * @deprecated navigator 사용을 권장합니다
-	 */
-	onNavigate?: (path: string) => void;
-}
 
 /**
  * NavigationStore - 네비게이션 시스템을 관리하는 MobX 스토어
@@ -50,7 +38,7 @@ export class NavigationStore {
 	private _selectedNavItem: NavItem | null = null;
 	private _selectedSubNavItem: NavItem | null = null;
 	private _abilityChecker: AbilityChecker | null = null;
-	private _navigator: Navigator | null = null;
+	private _navigator: NavigatorLike | null = null;
 	private _onNavigate: ((path: string) => void) | null = null;
 	private _expandedNavItemIds: Set<string> = new Set();
 	private _currentPath: string = "";
@@ -72,7 +60,7 @@ export class NavigationStore {
 	/**
 	 * Navigator 설정
 	 */
-	setNavigator(navigator: Navigator): void {
+	setNavigator(navigator: NavigatorLike): void {
 		this._navigator = navigator;
 	}
 
@@ -106,10 +94,10 @@ export class NavigationStore {
 		}
 
 		return this._items
-			.filter((navItem) => this._abilityChecker!("ACCESS", navItem.subject))
+			.filter((navItem) => this._abilityChecker!("view", navItem.subject))
 			.map((navItem) => {
 				const filteredChildren = navItem.children.filter((child) =>
-					this._abilityChecker!("ACCESS", child.subject),
+					this._abilityChecker!("view", child.subject),
 				);
 
 				return {
@@ -147,7 +135,7 @@ export class NavigationStore {
 
 		if (this._abilityChecker) {
 			return this._selectedNavItem.children.filter((child) =>
-				this._abilityChecker!("ACCESS", child.subject),
+				this._abilityChecker!("view", child.subject),
 			);
 		}
 
@@ -228,7 +216,7 @@ export class NavigationStore {
 			// 경로 경계 체크: 정확히 일치하거나, 경로 + '/'로 시작해야 함
 			if (navItem.path) {
 				const isExactMatch = path === navItem.path;
-				const isPrefixMatch = path.startsWith(navItem.path + "/");
+				const isPrefixMatch = path.startsWith(`${navItem.path}/`);
 
 				if (isExactMatch || isPrefixMatch) {
 					navItem.setActive(true);

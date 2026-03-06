@@ -99,9 +99,11 @@ CASL 권한 확인을 위한 React Hook 모음. `AbilityStore`를 래핑하여 �
 
 - `useCallback`과 `useMemo`를 사용하고 있으나, 프로젝트 규칙상 이들은 불필요한 패턴으로 향후 제거 대상일 수 있음
 - 각 훅은 AbilityStore의 메서드를 Subject 패턴별로 분리하여 편의성을 제공
+- 권한 관련 타입(`AppAction`, `AppSubject`, `AbilityRule`)은 `@cocrepo/type` 공통 타입을 사용
 
 ## 변경 이력
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-03-06 | CASL 타입 import 기준을 abilityStore 내부 선언에서 @cocrepo/type 공통 타입으로 전환 | codex |
 | 2026-02-18 | 초기 생성 (역기획) | req-reverse-engineer |

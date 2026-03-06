@@ -24,9 +24,18 @@
 | PathTuple | 공개 계약 요소 |
 | ValueSplitter | 공개 계약 요소 |
 | ValueAggregator | 공개 계약 요소 |
+| AbilityChecker | 공개 계약 요소 |
+| NavigationStoreOptions | 공개 계약 요소 |
+| FABStoreOptions | 공개 계약 요소 |
+| AppStoreConfig | 공개 계약 요소 |
+| UseFormFieldSingleOptions | 공개 계약 요소 |
+| UseLayoutOptions | 공개 계약 요소 |
+| UseSpaceGuardOptions | 공개 계약 요소 |
 
 ## 변경 이력
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-03-06 | Store/Hook 계약 타입 export(AbilityChecker, AppStoreConfig, UseLayoutOptions 등) 추가 | codex |
+| 2026-03-06 | CASL 공용 타입(APP_ACTIONS/AppAction/AppSubject/AbilityRule/AbilityApiResponse) export 추가 | codex |
 | 2026-03-03 | 누락된 sidecar spec 신규 생성 | codex |

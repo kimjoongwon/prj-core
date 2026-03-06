@@ -1,32 +1,10 @@
 "use client";
 
 import type { PersistStore } from "@cocrepo/store";
+import type { UseSpaceGuardOptions, UseSpaceGuardReturn } from "@cocrepo/type";
 import { useEffect, useState } from "react";
 
-/**
- * useSpaceGuard 옵션 인터페이스
- */
-export interface UseSpaceGuardOptions {
-	usePersistStore: () => PersistStore;
-	/** Space 선택 페이지 경로 (기본값: "/select-space") */
-	selectSpacePath?: string;
-}
-
-/**
- * useSpaceGuard 반환 타입
- */
-export interface UseSpaceGuardReturn {
-	/** Alert 표시 여부 */
-	showAlert: boolean;
-	/** Alert 확인 버튼 핸들러 */
-	handleConfirm: () => void;
-	/** Alert 닫기 핸들러 */
-	handleDismiss: () => void;
-	/** Space가 선택되어 있는지 여부 */
-	hasSpace: boolean;
-	/** 현재 선택된 Ground 이름 */
-	groundName: string | null;
-}
+export type { UseSpaceGuardOptions, UseSpaceGuardReturn } from "@cocrepo/type";
 
 /**
  * createUseSpaceGuard - Space Guard 훅 팩토리
@@ -45,7 +23,9 @@ export interface UseSpaceGuardReturn {
  * });
  * ```
  */
-export function createUseSpaceGuard(options: UseSpaceGuardOptions) {
+export function createUseSpaceGuard(
+	options: UseSpaceGuardOptions<PersistStore>,
+) {
 	const {
 		usePersistStore,
 		selectSpacePath: _selectSpacePath = "/select-space",

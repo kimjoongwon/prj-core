@@ -2,6 +2,9 @@ import { tools } from "@cocrepo/toolkit";
 import type {
 	Paths,
 	PathTuple,
+	UseFormFieldMultiOptions,
+	UseFormFieldReturn,
+	UseFormFieldSingleOptions,
 	ValueAggregator,
 	ValueSplitter,
 } from "@cocrepo/type";
@@ -9,46 +12,15 @@ import { action, reaction } from "mobx";
 import { useLocalObservable } from "mobx-react-lite";
 import { useEffect, useMemo } from "react";
 
-// Base options
-interface UseFormFieldBaseOptions<TState extends object = any, TValue = any> {
-	value: TValue;
-	state: TState;
-}
-
-// Single-path options (discriminated with never types)
-export interface UseFormFieldSingleOptions<
-	TState extends object = any,
-	TValue = any,
-> extends UseFormFieldBaseOptions<TState, TValue> {
-	path: Paths<TState, 4>;
-	paths?: never;
-	valueSplitter?: never;
-	valueAggregator?: never;
-}
-
-// Multi-path options (discriminated with never types)
-export interface UseFormFieldMultiOptions<
-	TState extends object = any,
-	TValue = any,
-	TPaths extends PathTuple<TState> = PathTuple<TState>,
-> extends UseFormFieldBaseOptions<TState, TValue> {
-	path?: never;
-	paths: TPaths;
-	/** Splits a single UI value into multiple state path values (UI → State) */
-	valueSplitter: ValueSplitter<TValue, TPaths>;
-	/** Aggregates multiple state path values into a single UI value (State → UI) */
-	valueAggregator?: ValueAggregator<TValue, TPaths>;
-}
-
-// Return type
-export interface UseFormFieldReturn<TValue> {
-	state: { value: TValue };
-	setValue: (value: TValue) => void;
-}
+export type {
+	UseFormFieldMultiOptions,
+	UseFormFieldReturn,
+	UseFormFieldSingleOptions,
+} from "@cocrepo/type";
 
 // Single-path overload
 export function useFormField<TState extends object = any, TValue = any>(
-	options: UseFormFieldSingleOptions<TState, TValue>,
+	options: UseFormFieldSingleOptions<TState, TValue, Paths<TState, 4>>,
 ): UseFormFieldReturn<TValue>;
 
 // Multi-path overload
@@ -57,14 +29,20 @@ export function useFormField<
 	TValue = any,
 	TPaths extends PathTuple<TState> = PathTuple<TState>,
 >(
-	options: UseFormFieldMultiOptions<TState, TValue, TPaths>,
+	options: UseFormFieldMultiOptions<TState, TValue, TPaths> & {
+		valueSplitter: ValueSplitter<TValue, TPaths>;
+		valueAggregator?: ValueAggregator<TValue, TPaths>;
+	},
 ): UseFormFieldReturn<TValue>;
 
 // Implementation
 export function useFormField<TState extends object = any, TValue = any>(
 	options:
-		| UseFormFieldSingleOptions<TState, TValue>
-		| UseFormFieldMultiOptions<TState, TValue, any>,
+		| UseFormFieldSingleOptions<TState, TValue, Paths<TState, 4>>
+		| (UseFormFieldMultiOptions<TState, TValue, any> & {
+				valueSplitter: ValueSplitter<TValue, any>;
+				valueAggregator?: ValueAggregator<TValue, any>;
+		  }),
 ): UseFormFieldReturn<TValue> {
 	const isSinglePath = "path" in options;
 

@@ -587,7 +587,7 @@ rootStore.persistStore = new PersistStore({
 
 ### 공통 타입 선언 규칙
 
-**여러 패키지에서 공통으로 사용되는 타입은 반드시 `@cocrepo/type`에 선언합니다.**
+**AI 재사용률을 위해 타입/계약은 단일 위치에 고정합니다.**
 
 ```typescript
 // ✅ 올바른 예시 - @cocrepo/type에 타입 정의
@@ -609,10 +609,14 @@ export interface NavItemConfig { ... }  // 여기서 정의하면 안 됨
 export type { NavItemConfig } from "@cocrepo/store";  // re-export 금지
 ```
 
-**규칙:**
-- 2개 이상의 패키지에서 사용되는 타입 → `@cocrepo/type`에 선언
-- 단일 패키지 내부에서만 사용되는 타입 → 해당 패키지에 선언
-- 타입 re-export 금지 → 항상 원본 패키지에서 직접 import
+**규칙 (Critical):**
+- 패키지 내부 전용이라도 **명시적 타입 계약(예: `interface`, `type`, literal union, 권한 action/subject 타입)** 은 `@cocrepo/type`에 선언합니다.
+- 런타임 Enum이 필요한 값 집합은 `@cocrepo/enum`에 선언합니다.
+- `packages/fe-hook`, `packages/fe-ui`, `packages/fe-store` 등 기능 패키지에서 로컬 `types.ts`/`*.types.ts`로 계약 타입을 새로 정의하지 않습니다.
+- 단, **컴포넌트 렌더링 전용 `XxxProps`**(ReactNode, UI event handler, variant 등)는 컴포넌트 파일 옆에 코로케이션합니다.
+  - 동일 Props 계약이 여러 패키지로 확산되거나 도메인 계약 성격을 가지면 `@cocrepo/type`으로 승격합니다.
+- 타입 re-export 금지 → 항상 원본 패키지(`@cocrepo/type`, `@cocrepo/enum`)에서 직접 import
+- 예외: 함수 내부 임시 제네릭/추론 보조처럼 외부 계약이 아닌 구현 상세 타입은 허용
 
 **@cocrepo/type 패키지 구조:**
 ```

@@ -13,10 +13,10 @@
 
 | 타입명 | 종류 | 설명 |
 |--------|------|------|
-| `FABConfig` | interface | `actions: FABAction[]` - FAB 액션 설정 |
-| `FABAbilityChecker` | function type | `(action: string, subject: string) => boolean` - 권한 체크 함수 |
-| `ModalOpenHandler` | function type | `(modalId: string) => void` - 모달 열기 핸들러 |
-| `FABStoreOptions` | interface | `navigator?`, `abilityChecker?`, `onModalOpen?` 옵션 |
+| `FABConfig` | interface | `@cocrepo/type`의 FABStore 생성자 설정 계약 |
+| `FABAbilityChecker` | function type | `@cocrepo/type`의 FAB 권한 체크 함수 계약 |
+| `ModalOpenHandler` | function type | `@cocrepo/type`의 모달 열기 핸들러 계약 |
+| `FABStoreOptions` | interface | `@cocrepo/type`의 FABStore 생성 옵션 계약 |
 
 ## 상태 (Observable)
 
@@ -34,7 +34,7 @@
 |------|------|----------|
 | isOpen | `boolean` | `_isOpen` 반환 |
 | allActions | `FABAction[]` | `_actions` 전체 반환 (필터링 없음) |
-| visibleActions | `FABAction[]` | `_abilityChecker`가 있으면 `"ACCESS"` 액션으로 필터링, 없으면 전체 반환 |
+| visibleActions | `FABAction[]` | `_abilityChecker`가 있으면 `"view"` 액션으로 필터링, 없으면 전체 반환 |
 
 ## 액션 (Action)
 
@@ -69,13 +69,13 @@
 
 | 패키지 | 사용 |
 |--------|------|
-| `@cocrepo/type` | `FABAction` 타입 |
+| `@cocrepo/type` | `FABAction`, `FABConfig`, `FABStoreOptions`, `FABAbilityChecker`, `ModalOpenHandler`, `NavigatorLike` 타입 |
 
 ## 주요 동작 흐름
 
 ### 액션 실행 (executeAction)
 1. actionId로 액션 찾기
-2. 권한 체크 (`_abilityChecker`로 `"ACCESS"` 확인)
+2. 권한 체크 (`_abilityChecker`로 `"view"` 확인)
 3. `action.href`가 있고 Navigator가 있으면 -> `navigator.push(href)` 후 FAB 닫기
 4. `action.modal`이 있고 `_onModalOpen`이 있으면 -> `onModalOpen(modalId)` 후 FAB 닫기
 
@@ -97,4 +97,6 @@ fabStore.executeAction('todayReservation'); // 액션 실행
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-03-06 | FABConfig/FABStoreOptions/FABAbilityChecker/ModalOpenHandler를 @cocrepo/type 공용 계약 import로 전환 | codex |
+| 2026-03-06 | FAB 권한 체크 타입을 AppAction/AppSubject로 강화하고 체크 액션을 view(소문자)로 통일 | codex |
 | 2026-02-18 | 초기 생성 (역기획) | req-reverse-engineer |

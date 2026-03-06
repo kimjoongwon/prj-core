@@ -1,5 +1,5 @@
 import { useCallback, useMemo } from "react";
-import type { AbilityRule, AppAction, AppSubject } from "./abilityStore";
+import type { AbilityRule, AppAction, AppSubject } from "@cocrepo/type";
 import { useStore } from "./useStore";
 
 /**

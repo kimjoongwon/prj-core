@@ -1,4 +1,4 @@
-import type { AppAction, AppSubject } from "@cocrepo/store";
+import type { AppAction, AppSubject } from "@cocrepo/type";
 import { useCan } from "@cocrepo/store";
 import type { ReactNode } from "react";
 

@@ -21,4 +21,5 @@
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-03-06 | UseFormField 공개 타입 계약을 로컬 선언에서 @cocrepo/type import/re-export 구조로 전환 | codex |
 | 2026-03-03 | 누락된 sidecar spec 신규 생성 | codex |

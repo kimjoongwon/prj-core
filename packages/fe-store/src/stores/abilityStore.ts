@@ -3,33 +3,15 @@ import {
 	createMongoAbility,
 	type MongoAbility,
 } from "@casl/ability";
+import {
+	APP_ACTIONS,
+	type AbilityApiResponse,
+	type AbilityRule,
+	type AppAction,
+	type AppSubject,
+} from "@cocrepo/type";
 import { makeAutoObservable } from "mobx";
 import type { RootStore } from "./rootStore";
-
-/**
- * CASL Action 타입
- * CRUD + visibility + workflow 액션
- */
-export type AppAction =
-	| "create"
-	| "read"
-	| "update"
-	| "delete"
-	| "manage"
-	| "view"
-	| "view_masked"
-	| "view_partial"
-	| "view_hidden"
-	| "approve"
-	| "reject"
-	| "submit"
-	| "cancel";
-
-/**
- * CASL Subject 타입
- * entity:xxx, menu:xxx, feature:xxx, ui:xxx 패턴
- */
-export type AppSubject = string | "all";
 
 /**
  * CASL Ability 타입
@@ -37,15 +19,87 @@ export type AppSubject = string | "all";
 export type AppAbility = MongoAbility<[AppAction, AppSubject]>;
 
 /**
- * 서버에서 받아오는 Ability 데이터 형식
+ * Backend Action name -> Frontend AppAction 정규화
+ * - access -> view
+ * - read:full -> view
+ * - read:hidden -> view_hidden
+ * - read:masked:* -> view_masked
  */
-export interface AbilityRule {
-	action: AppAction | AppAction[];
-	subject: AppSubject | AppSubject[];
-	fields?: string[];
-	conditions?: Record<string, unknown>;
-	inverted?: boolean;
-	reason?: string;
+const ACTION_ALIAS_MAP: Readonly<Record<string, AppAction>> = {
+	access: "view",
+	read_full: "view",
+	read_hidden: "view_hidden",
+	read_partial: "view_partial",
+};
+
+const APP_ACTION_SET = new Set<string>(APP_ACTIONS);
+
+function normalizeActionName(rawActionName: string): AppAction | null {
+	const normalized = rawActionName.trim().toLowerCase().replace(/:/g, "_");
+	if (APP_ACTION_SET.has(normalized)) {
+		return normalized as AppAction;
+	}
+	if (normalized.startsWith("read_masked")) {
+		return "view_masked";
+	}
+	return ACTION_ALIAS_MAP[normalized] ?? null;
+}
+
+function extractName(
+	value: AbilityApiResponse["action"] | AbilityApiResponse["subject"],
+): string | null {
+	if (typeof value === "string") {
+		const normalizedValue = value.trim();
+		return normalizedValue.length > 0 ? normalizedValue : null;
+	}
+	if (
+		value &&
+		typeof value === "object" &&
+		"name" in value &&
+		typeof value.name === "string"
+	) {
+		const normalizedValue = value.name.trim();
+		return normalizedValue.length > 0 ? normalizedValue : null;
+	}
+	return null;
+}
+
+/**
+ * API 권한 응답 배열을 Store 규칙으로 변환
+ */
+export function convertApiToAbilityRules(
+	apiResponses: AbilityApiResponse[],
+): AbilityRule[] {
+	const rules: AbilityRule[] = [];
+
+	for (const apiResponse of apiResponses) {
+		if (apiResponse.isActive === false) {
+			continue;
+		}
+
+		const actionName = extractName(apiResponse.action);
+		const subjectName = extractName(apiResponse.subject);
+
+		if (!actionName || !subjectName) {
+			continue;
+		}
+
+		const normalizedAction = normalizeActionName(actionName);
+		if (!normalizedAction) {
+			continue;
+		}
+
+		rules.push({
+			action: normalizedAction,
+			subject: subjectName as AppSubject,
+			fields: apiResponse.fields ?? undefined,
+			conditions: apiResponse.conditions ?? undefined,
+			inverted: apiResponse.inverted,
+			reason: apiResponse.reason ?? undefined,
+		});
+	}
+
+	return rules;
 }
 
 /**
@@ -131,23 +185,7 @@ export class AbilityStore {
 	 * 특정 Subject에 대한 모든 허용된 Action 목록
 	 */
 	getAllowedActions(subject: AppSubject): AppAction[] {
-		const actions: AppAction[] = [
-			"create",
-			"read",
-			"update",
-			"delete",
-			"manage",
-			"view",
-			"view_masked",
-			"view_partial",
-			"view_hidden",
-			"approve",
-			"reject",
-			"submit",
-			"cancel",
-		];
-
-		return actions.filter((action) => this.can(action, subject));
+		return APP_ACTIONS.filter((action) => this.can(action, subject));
 	}
 
 	/**

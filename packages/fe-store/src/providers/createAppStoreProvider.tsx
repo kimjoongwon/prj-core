@@ -1,8 +1,7 @@
 "use client";
 
 import { setApiPersistStore } from "@cocrepo/api";
-import { type AbilityActions, useAbility } from "@cocrepo/hook";
-import type { FABAction, NavItemConfig } from "@cocrepo/type";
+import type { AppStoreConfig, AppStoreProviderResult } from "@cocrepo/type";
 import { usePathname, useRouter } from "next/navigation";
 import {
 	createContext,
@@ -11,6 +10,7 @@ import {
 	useEffect,
 	useRef,
 } from "react";
+import { AbilityStore } from "../stores/abilityStore";
 import { AuthStore } from "../stores/authStore";
 import { BottomTabStore } from "../stores/bottomTabStore";
 import { CookieStore } from "../stores/cookieStore";
@@ -20,36 +20,10 @@ import { Navigator } from "../stores/navigator";
 import { PersistStore } from "../stores/persistStore";
 import { RootStore } from "../stores/rootStore";
 import { TokenStore } from "../stores/tokenStore";
+import { useAbility } from "../stores/useAbility";
 import { RootStoreContext } from "../stores/useStore";
 
-/**
- * AppStore 설정 인터페이스
- */
-export interface AppStoreConfig {
-	/** 네비게이션 아이템 설정 */
-	navItems: NavItemConfig[];
-	/** BottomTab에 표시할 탭 ID 목록 */
-	bottomTabIds: readonly string[];
-	/** "더보기" 탭 ID */
-	moreTabId?: string;
-	/** FAB 액션 목록 */
-	fabActions: FABAction[];
-	/** PersistStore localStorage 키 */
-	persistStorageKey: string;
-}
-
-/**
- * createAppStoreProvider 반환 타입
- */
-export interface AppStoreProviderResult<TStore extends RootStore> {
-	AppStoreContext: React.Context<TStore | null>;
-	AppStoreProvider: React.FC<{ children: ReactNode }>;
-	useAppStore: () => TStore;
-	useNavigationStore: () => NavigationStore;
-	usePersistStore: () => PersistStore;
-	useBottomTabStore: () => BottomTabStore;
-	useFABStore: () => FABStore;
-}
+export type { AppStoreConfig, AppStoreProviderResult } from "@cocrepo/type";
 
 /**
  * createAppStoreProvider - 앱별 Store Provider 팩토리
@@ -82,7 +56,13 @@ export interface AppStoreProviderResult<TStore extends RootStore> {
  */
 export function createAppStoreProvider(
 	config: AppStoreConfig,
-): AppStoreProviderResult<RootStore> {
+): AppStoreProviderResult<
+	RootStore,
+	NavigationStore,
+	PersistStore,
+	BottomTabStore,
+	FABStore
+> {
 	const AppStoreContext = createContext<RootStore | null>(null);
 	AppStoreContext.displayName = "AppStoreContext";
 
@@ -96,6 +76,7 @@ export function createAppStoreProvider(
 		rootStore.tokenStore = new TokenStore(rootStore);
 		rootStore.cookieStore = new CookieStore();
 		rootStore.authStore = new AuthStore(rootStore);
+		rootStore.abilityStore = new AbilityStore(rootStore);
 		rootStore.navigationStore = new NavigationStore(config.navItems);
 		rootStore.persistStore = new PersistStore({
 			storageKey: config.persistStorageKey,
@@ -182,7 +163,7 @@ export function createAppStoreProvider(
 		const store = useAppStore();
 		const router = useRouter();
 		const pathname = usePathname();
-		const ability = useAbility();
+		const { can } = useAbility();
 
 		const navigationStore = store.navigationStore;
 		const bottomTabStore = store.bottomTabStore;
@@ -196,12 +177,10 @@ export function createAppStoreProvider(
 		// ability 변경 시 체커 업데이트
 		useEffect(() => {
 			navigationStore.setAbilityChecker((action, subject) =>
-				ability.can(action as AbilityActions, subject),
+				can(action, subject),
 			);
-			fabStore?.setAbilityChecker((action, subject) =>
-				ability.can(action as AbilityActions, subject),
-			);
-		}, [ability, navigationStore, fabStore]);
+			fabStore?.setAbilityChecker((action, subject) => can(action, subject));
+		}, [can, navigationStore, fabStore]);
 
 		// router 변경 시 Navigator 설정
 		useEffect(() => {

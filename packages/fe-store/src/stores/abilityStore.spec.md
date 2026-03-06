@@ -13,10 +13,11 @@ CASL 기반 권한(Ability) 상태를 관리하는 MobX Store. 서버에서 받�
 
 | 타입명 | 종류 | 설명 |
 |--------|------|------|
-| `AppAction` | union type | CASL 액션 (`create`, `read`, `update`, `delete`, `manage`, `view`, `view_masked`, `view_partial`, `view_hidden`, `approve`, `reject`, `submit`, `cancel`) |
+| `AppAction` | union type | CASL 액션 (`create`, `read`, `update`, `delete`, `manage`, `view`, `view_masked`, `view_partial`, `view_hidden`, `export`, `import`, `approve`, `reject`, `submit`, `cancel`) |
 | `AppSubject` | union type | CASL Subject (`string \| "all"`) - `entity:xxx`, `menu:xxx`, `feature:xxx`, `ui:xxx` 패턴 |
 | `AppAbility` | type alias | `MongoAbility<[AppAction, AppSubject]>` |
-| `AbilityRule` | interface | 서버에서 받아오는 권한 데이터 형식 (`action`, `subject`, `fields?`, `conditions?`, `inverted?`, `reason?`) |
+| `AbilityRule` | interface | Store 표준 권한 데이터 형식 (`action`, `subject`, `fields?`, `conditions?`, `inverted?`, `reason?`) |
+| `AbilityApiResponse` | interface | API 응답 변환 입력 타입 (`action`, `subject`, `isActive?` 등) |
 
 ## 상태 (Observable)
 
@@ -46,6 +47,12 @@ CASL 기반 권한(Ability) 상태를 관리하는 MobX Store. 서버에서 받�
 | `getAllowedSubjects` | `action: AppAction` | 특정 Action에 대해 허용된 모든 Subject 목록 반환 (규칙 기반 직접 필터링) |
 | `getAllowedMenus` | 없음 | `view` 액션에 대해 `menu:` 접두사를 가진 허용 Subject 목록 반환 |
 
+## 공개 유틸 함수
+
+| 함수 | 파라미터 | 동작 |
+|------|----------|------|
+| `convertApiToAbilityRules` | `apiResponses: AbilityApiResponse[]` | API 응답을 Store 표준 `AbilityRule[]`로 변환 (`access -> view`, `read:full -> view`, `read:hidden -> view_hidden`, `read:masked:* -> view_masked`) |
+
 ## 비동기 액션 (Flow)
 
 없음
@@ -67,6 +74,7 @@ CASL 기반 권한(Ability) 상태를 관리하는 MobX Store. 서버에서 받�
 | 패키지 | 사용 |
 |--------|------|
 | `@casl/ability` | `AbilityBuilder`, `createMongoAbility`, `MongoAbility` |
+| `@cocrepo/type` | `APP_ACTIONS`, `AppAction`, `AppSubject`, `AbilityRule`, `AbilityApiResponse` |
 
 ## 사용 예시
 
@@ -88,4 +96,5 @@ abilityStore.clearRules();
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-03-06 | CASL 공용 타입을 @cocrepo/type으로 이관하고 API->Rule 변환 유틸(convertApiToAbilityRules) 추가 | codex |
 | 2026-02-18 | 초기 생성 (역기획) | req-reverse-engineer |

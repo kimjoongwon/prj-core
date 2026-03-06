@@ -13,8 +13,8 @@
 
 | 타입명 | 종류 | 설명 |
 |--------|------|------|
-| `AbilityChecker` | function type | `(action: string, subject: string) => boolean` - 권한 체크 함수 |
-| `NavigationStoreOptions` | interface | `navigator?`, `abilityChecker?`, `onNavigate?` (deprecated) |
+| `AbilityChecker` | function type | `@cocrepo/type`의 공용 권한 체크 함수 계약 |
+| `NavigationStoreOptions` | interface | `@cocrepo/type`의 NavigationStore 생성 옵션 계약 |
 
 ## 상태 (Observable)
 
@@ -34,7 +34,7 @@
 | 속성 | 타입 | 계산 로직 |
 |------|------|----------|
 | allItems | `NavItem[]` | `_items` 전체 반환 (필터링 없음) |
-| items | `NavItem[]` | `_abilityChecker`가 있으면 `"ACCESS"` 액션으로 1depth/2depth 모두 필터링, 없으면 전체 반환 |
+| items | `NavItem[]` | `_abilityChecker`가 있으면 `"view"` 액션으로 1depth/2depth 모두 필터링, 없으면 전체 반환 |
 | selectedNavItem | `NavItem \| null` | `_selectedNavItem` 반환 |
 | selectedSubNavItem | `NavItem \| null` | `_selectedSubNavItem` 반환 |
 | subNavItems | `NavItem[]` | 선택된 주요 아이템의 children (권한 필터링 적용) |
@@ -81,7 +81,7 @@
 
 | 패키지 | 사용 |
 |--------|------|
-| `@cocrepo/type` | `NavItemConfig` 타입 |
+| `@cocrepo/type` | `NavItemConfig`, `AbilityChecker`, `NavigationStoreOptions`, `NavigatorLike` 타입 |
 
 ## 주요 동작 흐름
 
@@ -126,4 +126,6 @@ navigationStore.selectNavItem('members');
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-03-06 | AbilityChecker/NavigationStoreOptions를 로컬 선언에서 @cocrepo/type 공용 계약 import로 전환 | codex |
+| 2026-03-06 | AbilityChecker를 AppAction/AppSubject 기반으로 타입 강화하고 메뉴 필터 액션을 view(소문자)로 통일 | codex |
 | 2026-02-18 | 초기 생성 (역기획) | req-reverse-engineer |

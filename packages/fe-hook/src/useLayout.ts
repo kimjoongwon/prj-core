@@ -1,48 +1,9 @@
 "use client";
 
 import type { BottomTabStore, FABStore, NavigationStore } from "@cocrepo/store";
+import type { UseLayoutOptions, UseLayoutReturn } from "@cocrepo/type";
 
-/**
- * useLayout 옵션 인터페이스
- */
-export interface UseLayoutOptions {
-	useNavigationStore: () => NavigationStore;
-	useBottomTabStore: () => BottomTabStore;
-	useFABStore: () => FABStore;
-}
-
-/**
- * useLayout 반환 타입
- */
-export interface UseLayoutReturn {
-	// 네비게이션 데이터
-	navItems: NavigationStore["items"];
-	selectedNavItem: NavigationStore["selectedNavItem"];
-	selectedSubNavItem: NavigationStore["selectedSubNavItem"];
-	expandedNavItemIds: NavigationStore["expandedNavItemIds"];
-
-	// 모바일 - BottomTab
-	bottomTabItems: BottomTabStore["tabItems"];
-	activeBottomTabId: BottomTabStore["activeTabId"];
-
-	// 모바일 - SubMenuList
-	isSubMenuOpen: BottomTabStore["isSubMenuOpen"];
-	subMenuTitle: BottomTabStore["subMenuTitle"];
-	subMenuItems: BottomTabStore["subMenuItems"];
-
-	// 모바일 - FAB
-	isFABOpen: FABStore["isOpen"];
-	fabActions: FABStore["visibleActions"];
-
-	// 핸들러
-	onNavItemClick: (navItemId: string) => void;
-	onSubNavItemClick: (subNavItemId: string) => void;
-	onNavItemToggle: (navItemId: string) => void;
-	onBottomTabClick: (tabId: string) => void;
-	onSubMenuClose: () => void;
-	onFABToggle: () => void;
-	onFABActionClick: (actionId: string) => void;
-}
+export type { UseLayoutOptions, UseLayoutReturn } from "@cocrepo/type";
 
 /**
  * useLayout
@@ -62,7 +23,9 @@ export interface UseLayoutReturn {
  * });
  * ```
  */
-export function useLayout(options: UseLayoutOptions): UseLayoutReturn {
+export function useLayout(
+	options: UseLayoutOptions<NavigationStore, BottomTabStore, FABStore>,
+): UseLayoutReturn<NavigationStore, BottomTabStore, FABStore> {
 	const { useNavigationStore, useBottomTabStore, useFABStore } = options;
 
 	const navigationStore = useNavigationStore();
