@@ -2,7 +2,7 @@
 export {
 	useDebouncedCallback,
 	useMetaDataGridQueryStates,
-} from "../../hook";
+} from "@cocrepo/hook";
 // Components
 export { MetaDataGrid } from "./MetaDataGrid";
 export { MetaDataGridActionBar } from "./MetaDataGridActionBar";

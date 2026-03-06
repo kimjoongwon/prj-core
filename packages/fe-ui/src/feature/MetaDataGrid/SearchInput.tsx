@@ -5,7 +5,7 @@ import { Input } from "@heroui/react";
 import { Search } from "lucide-react";
 import { observer } from "mobx-react-lite";
 import { parseAsString, useQueryState } from "nuqs";
-import { useDebouncedCallback } from "../../hook";
+import { useDebouncedCallback } from "@cocrepo/hook";
 
 interface SearchInputProps {
 	config: InputConfig;

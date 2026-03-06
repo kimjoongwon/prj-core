@@ -1,8 +1,8 @@
-# index hook 기획서
+# useMetaDataGridQueryStates hook 기획서
 
 > 생성일: 2026-03-03
 > 타입: hook
-> 위치: packages/fe-ui/src/hook/index.ts
+> 위치: packages/fe-hook/src/useMetaDataGridQueryStates.ts
 
 ## 역할
 
@@ -12,14 +12,15 @@
 
 | 항목 | 설명 |
 |------|------|
-| export | 없음 |
+| useMetaDataGridQueryStates | 공개 계약 요소 |
 
 ## 의존성
 
 | 모듈 | 용도 |
 |------|------|
-| ./useDebouncedCallback | 기능 구현 의존성 |
-| ./useMetaDataGridQueryStates | 기능 구현 의존성 |
+| @cocrepo/type | 기능 구현 의존성 |
+| nuqs | 기능 구현 의존성 |
+| react | 기능 구현 의존성 |
 
 ## 구현 체크리스트
 
@@ -30,5 +31,6 @@
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-03-06 | 공통 훅 패키지(fe-hook/src)로 이관 | codex |
 | 2026-03-06 | 폴더 네이밍을 단수형(feature/input/layout/hook/style/type/util/widget/cell)으로 통일 | codex |
 | 2026-03-03 | 누락된 sidecar spec 신규 생성 | codex |
