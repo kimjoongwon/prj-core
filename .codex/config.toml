@@ -5,6 +5,46 @@ multi_agent = true
 max_threads = 8
 max_depth = 3
 
+[project]
+multilingual = true
+
+[i18n]
+enabled = true
+default_locale = "ko-KR"
+supported_locales = ["ko-KR", "en-US"]
+translation_schema = "packages/be-prisma/schema/translation.prisma"
+message_policy = "사용자 노출 텍스트는 하드코딩 대신 번역 키/리소스 기반으로 관리"
+
+[i18n.role_requirements]
+planning = [
+  "req-context-planner",
+  "req-screen-planner",
+  "req-page-planner",
+  "req-api-planner",
+  "req-feature-planner",
+  "req-widget-planner",
+  "req-primitive-planner",
+]
+implementation = [
+  "fe-page-builder",
+  "fe-feature-builder",
+  "fe-widget-builder",
+  "fe-primitive-component-builder",
+  "fe-input-component-builder",
+  "common-schema-builder",
+  "be-dto-builder",
+  "be-controller-builder",
+]
+data = [
+  "be-prisma-builder",
+  "be-prisma-annotator",
+]
+qa = [
+  "qa-fe-testing",
+  "qa-fe-e2e-testing",
+  "qa-be-testing",
+]
+
 [agents.be-bootstrap-integrator]
 description = "AppModule 부트스트랩에 서비스를 통합하는 전문가"
 config_file = "agents/be-bootstrap-integrator.toml"
@@ -22,7 +62,7 @@ description = "Prisma DMMF 파싱 유틸리티를 생성하는 전문가"
 config_file = "agents/be-dmmf-parser-builder.toml"
 
 [agents.be-dto-builder]
-description = "Request/Response DTO 클래스를 생성하는 전문가"
+description = "Request/Response DTO 클래스를 생성하는 전문가 (다국어 메시지/응답 계약 고려)"
 config_file = "agents/be-dto-builder.toml"
 
 [agents.be-entity-builder]
@@ -38,7 +78,7 @@ description = "Prisma 스키마에 @displayName 한글 주석을 추가하는 �
 config_file = "agents/be-prisma-annotator.toml"
 
 [agents.be-prisma-builder]
-description = "Prisma 스키마를 생성하고 유형을 분류하는 전문가"
+description = "Prisma 스키마를 생성하고 유형을 분류하는 전문가 (translation 도메인 포함)"
 config_file = "agents/be-prisma-builder.toml"
 
 [agents.be-query-dto-builder]
@@ -62,7 +102,7 @@ description = "Value Object 클래스를 생성하는 전문가"
 config_file = "agents/be-vo-builder.toml"
 
 [agents.common-schema-builder]
-description = "프론트엔드와 백엔드에서 공유하는 검증 스키마를 생성하는 전문가"
+description = "프론트엔드와 백엔드에서 공유하는 검증 스키마를 생성하는 전문가 (다국어 검증 메시지 포함)"
 config_file = "agents/common-schema-builder.toml"
 
 [agents.dev-service-starter]
@@ -102,7 +142,7 @@ description = "메뉴 시스템 컴포넌트를 생성하는 전문가"
 config_file = "agents/fe-menu-builder.toml"
 
 [agents.fe-page-builder]
-description = "Pure UI 페이지 컴포넌트를 생성하는 전문가"
+description = "Pure UI 페이지 컴포넌트를 생성하는 전문가 (다국어 렌더링/문구 키 적용 포함)"
 config_file = "agents/fe-page-builder.toml"
 
 [agents.fe-store-builder]
@@ -138,11 +178,11 @@ description = "Jest 기반 백엔드 및 공용 패키지 테스트 코드를 �
 config_file = "agents/qa-be-testing.toml"
 
 [agents.qa-fe-e2e-testing]
-description = "Playwright 기반 프론트엔드 E2E 테스트 코드를 작성하는 전문가"
+description = "Playwright 기반 프론트엔드 E2E 테스트 코드를 작성하는 전문가 (로케일/번역 회귀 포함)"
 config_file = "agents/qa-fe-e2e-testing.toml"
 
 [agents.qa-fe-testing]
-description = "Vitest 기반 프론트엔드 패키지 테스트 코드를 작성하는 전문가"
+description = "Vitest 기반 프론트엔드 패키지 테스트 코드를 작성하는 전문가 (다국어 UI 회귀 포함)"
 config_file = "agents/qa-fe-testing.toml"
 
 [agents.qa-type-checker]
@@ -154,7 +194,7 @@ description = "Orval 기반 API 연동 sidecar spec을 기획하는 전문가"
 config_file = "agents/req-api-integration-planner.toml"
 
 [agents.req-api-planner]
-description = "인터랙션(Action)과 API 레이어를 기획하는 전문가"
+description = "인터랙션(Action)과 API 레이어를 기획하는 전문가 (다국어 응답/메시지 정책 포함)"
 config_file = "agents/req-api-planner.toml"
 
 [agents.req-cell-planner]
@@ -190,7 +230,7 @@ description = "메뉴 경로/권한 sidecar spec을 기획하는 전문가"
 config_file = "agents/req-menu-planner.toml"
 
 [agents.req-page-planner]
-description = "페이지 통합 관점에서 page.spec.md를 상세 기획하는 전문가"
+description = "페이지 통합 관점에서 page.spec.md를 상세 기획하는 전문가 (다국어 키/리소스 정책 포함)"
 config_file = "agents/req-page-planner.toml"
 
 [agents.req-reverse-engineer]

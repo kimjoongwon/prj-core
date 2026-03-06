@@ -38,6 +38,7 @@ developer_instructions = '''
 | | 필드 목록 | 필드명, 타입, 설명 |
 | | 관계 정보 | 연결할 다른 모델 |
 | **출력** | Prisma 스키마 파일 | `packages/be-prisma/schema/{domain}.prisma` (flat 구조, 파일별 역할 분리) |
+| | Sidecar 기획서 | `packages/be-prisma/schema/{domain}.prisma.spec.md` (코드 옆 동기화) |
 | | 유형 분류 주석 | `@schema-type`, `@description`, 관계 태그, `/// @displayName` |
 
 ---
@@ -342,6 +343,8 @@ model EntityAssociation {
 - [ ] 부모 모델에 타입 전용 nullable 필드가 남아있지 않은가?
 - [ ] Prisma로 강제 불가한 무결성 규칙의 SQL 제약(체크/트리거) 계획이 명시되었는가?
 - [ ] 부모/상세 모델을 단일 트랜잭션으로 처리하는 전략이 명시되었는가?
+- [ ] 변경된 `schema/*.prisma`마다 대응 `*.prisma.spec.md`가 생성/수정되었는가?
+- [ ] `*.prisma.spec.md`의 `## 변경 이력`이 당일 기준으로 갱신되었는가?
 
 ---
 
@@ -393,6 +396,7 @@ model EntityAssociation {
 
 ```
 packages/be-prisma/schema/{domain}.prisma
+packages/be-prisma/schema/{domain}.prisma.spec.md
 ```
 
 기존 도메인 파일:
@@ -426,6 +430,7 @@ packages/be-prisma/schema/{domain}.prisma
 - model 상단 필수: `@schema-type`, `@description` (+ 필요 시 관계 태그)
 - 사용자 노출 필드/모델 명시: `/// @displayName`
 - 레거시 JSDoc(`@type 추상/자원/...`)만 사용하는 파일(`task.prisma`, `safe.prisma` 등)을 수정할 때는 위 표준 태그로 함께 정규화합니다.
+- 모든 `schema/*.prisma` 변경 시 대응 `*.prisma.spec.md`를 반드시 함께 생성/수정하고 `## 변경 이력`을 갱신합니다.
 
 ### 유형 선택 가이드
 
@@ -480,6 +485,7 @@ packages/be-prisma/schema/{domain}.prisma
 
 **생성된 파일:**
 - `packages/be-prisma/schema/[domain].prisma`
+- `packages/be-prisma/schema/[domain].prisma.spec.md`
 
 **관계 구조:**
 [Entity] ([유형])
