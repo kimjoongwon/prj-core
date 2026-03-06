@@ -19,5 +19,5 @@ Space 도메인의 공간 계층, 공간 구체화 모델(Ground 등), 공간 �
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-03-06 | 미사용 AI Form Template 관계(aiFormTemplates, aiTemplateExecutions) 제거 | codex |
 | 2026-03-06 | 누락된 sidecar spec 신규 생성 | codex |
-

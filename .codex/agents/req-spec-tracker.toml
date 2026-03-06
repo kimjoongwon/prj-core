@@ -35,7 +35,6 @@ apps/[app]/web/src/app/(admin)/[domain]/spec-checklist.md
 
 예시:
 - `apps/admin/web/src/app/(admin)/inquiries/spec-checklist.md`
-- `apps/admin/web/src/app/(admin)/ai-form-templates/spec-checklist.md`
 
 ---
 

@@ -9,44 +9,6 @@
 * 🟢 You can import this file directly.
 */
 
-export const AIProvider = {
-  OPENAI: 'OPENAI',
-  ANTHROPIC: 'ANTHROPIC'
-} as const
-
-export type AIProvider = (typeof AIProvider)[keyof typeof AIProvider]
-
-
-export const FormFieldType = {
-  TEXT: 'TEXT',
-  TEXTAREA: 'TEXTAREA',
-  NUMBER: 'NUMBER',
-  SELECT: 'SELECT',
-  MULTI_SELECT: 'MULTI_SELECT',
-  CHECKBOX: 'CHECKBOX',
-  RADIO: 'RADIO',
-  DATE: 'DATE',
-  DATETIME: 'DATETIME',
-  EMAIL: 'EMAIL',
-  PHONE: 'PHONE',
-  URL: 'URL'
-} as const
-
-export type FormFieldType = (typeof FormFieldType)[keyof typeof FormFieldType]
-
-
-export const ExecutionStatus = {
-  PENDING: 'PENDING',
-  RUNNING: 'RUNNING',
-  SUCCESS: 'SUCCESS',
-  FAILED: 'FAILED',
-  TIMEOUT: 'TIMEOUT',
-  CANCELLED: 'CANCELLED'
-} as const
-
-export type ExecutionStatus = (typeof ExecutionStatus)[keyof typeof ExecutionStatus]
-
-
 export const AssetKind = {
   IMAGE: 'IMAGE',
   VIDEO: 'VIDEO',

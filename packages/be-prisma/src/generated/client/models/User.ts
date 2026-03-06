@@ -325,8 +325,6 @@ export type UserWhereInput = {
   inquiryMessages?: Prisma.InquiryMessageListRelationFilter
   inquiryParticipants?: Prisma.InquiryParticipantListRelationFilter
   createdThreads?: Prisma.InquiryThreadListRelationFilter
-  createdAIFormTemplates?: Prisma.AIFormTemplateListRelationFilter
-  aiTemplateExecutions?: Prisma.AITemplateExecutionListRelationFilter
 }
 
 export type UserOrderByWithRelationInput = {
@@ -367,8 +365,6 @@ export type UserOrderByWithRelationInput = {
   inquiryMessages?: Prisma.InquiryMessageOrderByRelationAggregateInput
   inquiryParticipants?: Prisma.InquiryParticipantOrderByRelationAggregateInput
   createdThreads?: Prisma.InquiryThreadOrderByRelationAggregateInput
-  createdAIFormTemplates?: Prisma.AIFormTemplateOrderByRelationAggregateInput
-  aiTemplateExecutions?: Prisma.AITemplateExecutionOrderByRelationAggregateInput
 }
 
 export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -412,8 +408,6 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   inquiryMessages?: Prisma.InquiryMessageListRelationFilter
   inquiryParticipants?: Prisma.InquiryParticipantListRelationFilter
   createdThreads?: Prisma.InquiryThreadListRelationFilter
-  createdAIFormTemplates?: Prisma.AIFormTemplateListRelationFilter
-  aiTemplateExecutions?: Prisma.AITemplateExecutionListRelationFilter
 }, "id" | "phone" | "name" | "email">
 
 export type UserOrderByWithAggregationInput = {
@@ -500,8 +494,6 @@ export type UserCreateInput = {
   inquiryMessages?: Prisma.InquiryMessageCreateNestedManyWithoutSenderInput
   inquiryParticipants?: Prisma.InquiryParticipantCreateNestedManyWithoutUserInput
   createdThreads?: Prisma.InquiryThreadCreateNestedManyWithoutCreatorInput
-  createdAIFormTemplates?: Prisma.AIFormTemplateCreateNestedManyWithoutCreatedByInput
-  aiTemplateExecutions?: Prisma.AITemplateExecutionCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateInput = {
@@ -542,8 +534,6 @@ export type UserUncheckedCreateInput = {
   inquiryMessages?: Prisma.InquiryMessageUncheckedCreateNestedManyWithoutSenderInput
   inquiryParticipants?: Prisma.InquiryParticipantUncheckedCreateNestedManyWithoutUserInput
   createdThreads?: Prisma.InquiryThreadUncheckedCreateNestedManyWithoutCreatorInput
-  createdAIFormTemplates?: Prisma.AIFormTemplateUncheckedCreateNestedManyWithoutCreatedByInput
-  aiTemplateExecutions?: Prisma.AITemplateExecutionUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserUpdateInput = {
@@ -584,8 +574,6 @@ export type UserUpdateInput = {
   inquiryMessages?: Prisma.InquiryMessageUpdateManyWithoutSenderNestedInput
   inquiryParticipants?: Prisma.InquiryParticipantUpdateManyWithoutUserNestedInput
   createdThreads?: Prisma.InquiryThreadUpdateManyWithoutCreatorNestedInput
-  createdAIFormTemplates?: Prisma.AIFormTemplateUpdateManyWithoutCreatedByNestedInput
-  aiTemplateExecutions?: Prisma.AITemplateExecutionUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateInput = {
@@ -626,8 +614,6 @@ export type UserUncheckedUpdateInput = {
   inquiryMessages?: Prisma.InquiryMessageUncheckedUpdateManyWithoutSenderNestedInput
   inquiryParticipants?: Prisma.InquiryParticipantUncheckedUpdateManyWithoutUserNestedInput
   createdThreads?: Prisma.InquiryThreadUncheckedUpdateManyWithoutCreatorNestedInput
-  createdAIFormTemplates?: Prisma.AIFormTemplateUncheckedUpdateManyWithoutCreatedByNestedInput
-  aiTemplateExecutions?: Prisma.AITemplateExecutionUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateManyInput = {
@@ -687,14 +673,14 @@ export type UserUncheckedUpdateManyInput = {
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
 }
 
-export type UserScalarRelationFilter = {
-  is?: Prisma.UserWhereInput
-  isNot?: Prisma.UserWhereInput
-}
-
 export type UserNullableScalarRelationFilter = {
   is?: Prisma.UserWhereInput | null
   isNot?: Prisma.UserWhereInput | null
+}
+
+export type UserScalarRelationFilter = {
+  is?: Prisma.UserWhereInput
+  isNot?: Prisma.UserWhereInput
 }
 
 export type UserCountOrderByAggregateInput = {
@@ -760,34 +746,6 @@ export type UserMinOrderByAggregateInput = {
 
 export type UserSumOrderByAggregateInput = {
   failedLoginAttempts?: Prisma.SortOrder
-}
-
-export type UserCreateNestedOneWithoutCreatedAIFormTemplatesInput = {
-  create?: Prisma.XOR<Prisma.UserCreateWithoutCreatedAIFormTemplatesInput, Prisma.UserUncheckedCreateWithoutCreatedAIFormTemplatesInput>
-  connectOrCreate?: Prisma.UserCreateOrConnectWithoutCreatedAIFormTemplatesInput
-  connect?: Prisma.UserWhereUniqueInput
-}
-
-export type UserUpdateOneRequiredWithoutCreatedAIFormTemplatesNestedInput = {
-  create?: Prisma.XOR<Prisma.UserCreateWithoutCreatedAIFormTemplatesInput, Prisma.UserUncheckedCreateWithoutCreatedAIFormTemplatesInput>
-  connectOrCreate?: Prisma.UserCreateOrConnectWithoutCreatedAIFormTemplatesInput
-  upsert?: Prisma.UserUpsertWithoutCreatedAIFormTemplatesInput
-  connect?: Prisma.UserWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutCreatedAIFormTemplatesInput, Prisma.UserUpdateWithoutCreatedAIFormTemplatesInput>, Prisma.UserUncheckedUpdateWithoutCreatedAIFormTemplatesInput>
-}
-
-export type UserCreateNestedOneWithoutAiTemplateExecutionsInput = {
-  create?: Prisma.XOR<Prisma.UserCreateWithoutAiTemplateExecutionsInput, Prisma.UserUncheckedCreateWithoutAiTemplateExecutionsInput>
-  connectOrCreate?: Prisma.UserCreateOrConnectWithoutAiTemplateExecutionsInput
-  connect?: Prisma.UserWhereUniqueInput
-}
-
-export type UserUpdateOneRequiredWithoutAiTemplateExecutionsNestedInput = {
-  create?: Prisma.XOR<Prisma.UserCreateWithoutAiTemplateExecutionsInput, Prisma.UserUncheckedCreateWithoutAiTemplateExecutionsInput>
-  connectOrCreate?: Prisma.UserCreateOrConnectWithoutAiTemplateExecutionsInput
-  upsert?: Prisma.UserUpsertWithoutAiTemplateExecutionsInput
-  connect?: Prisma.UserWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutAiTemplateExecutionsInput, Prisma.UserUpdateWithoutAiTemplateExecutionsInput>, Prisma.UserUncheckedUpdateWithoutAiTemplateExecutionsInput>
 }
 
 export type UserCreateNestedOneWithoutCreatedAssetsInput = {
@@ -1112,366 +1070,6 @@ export type UserUpdateOneRequiredWithoutProfilesNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutProfilesInput, Prisma.UserUpdateWithoutProfilesInput>, Prisma.UserUncheckedUpdateWithoutProfilesInput>
 }
 
-export type UserCreateWithoutCreatedAIFormTemplatesInput = {
-  id?: string
-  updatedAt?: Date | string | null
-  createdAt?: Date | string
-  removedAt?: Date | string | null
-  phone: string
-  name: string
-  email: string
-  password: string
-  failedLoginAttempts?: number
-  lockedUntil?: Date | string | null
-  isPermanentlyLocked?: boolean
-  mustChangePassword?: boolean
-  passwordChangedAt?: Date | string | null
-  lastLoginAt?: Date | string | null
-  lastLoginIp?: string | null
-  isActive?: boolean
-  profiles?: Prisma.ProfileCreateNestedManyWithoutUserInput
-  tenants?: Prisma.TenantCreateNestedManyWithoutUserInput
-  classification?: Prisma.UserClassificationCreateNestedOneWithoutUserInput
-  associations?: Prisma.UserAssociationCreateNestedManyWithoutUserInput
-  passwordHistory?: Prisma.PasswordHistoryCreateNestedManyWithoutUserInput
-  authAuditLogs?: Prisma.AuthAuditLogCreateNestedManyWithoutUserInput
-  createdCategories?: Prisma.CategoryCreateNestedManyWithoutCreatorInput
-  createdGroups?: Prisma.GroupCreateNestedManyWithoutCreatorInput
-  createdContents?: Prisma.ContentCreateNestedManyWithoutCreatorInput
-  createdTimelines?: Prisma.TimelineCreateNestedManyWithoutCreatorInput
-  createdTasks?: Prisma.TaskCreateNestedManyWithoutCreatorInput
-  createdSafeWallets?: Prisma.SafeWalletCreateNestedManyWithoutCreatorInput
-  createdRoutines?: Prisma.RoutineCreateNestedManyWithoutCreatorInput
-  createdAssets?: Prisma.AssetCreateNestedManyWithoutCreatorInput
-  createdFolders?: Prisma.FolderCreateNestedManyWithoutCreatorInput
-  createdAlbums?: Prisma.AlbumCreateNestedManyWithoutCreatorInput
-  customerInquiries?: Prisma.InquiryCreateNestedManyWithoutCustomerInput
-  assignedInquiries?: Prisma.InquiryCreateNestedManyWithoutAssigneeInput
-  inquiryMessages?: Prisma.InquiryMessageCreateNestedManyWithoutSenderInput
-  inquiryParticipants?: Prisma.InquiryParticipantCreateNestedManyWithoutUserInput
-  createdThreads?: Prisma.InquiryThreadCreateNestedManyWithoutCreatorInput
-  aiTemplateExecutions?: Prisma.AITemplateExecutionCreateNestedManyWithoutUserInput
-}
-
-export type UserUncheckedCreateWithoutCreatedAIFormTemplatesInput = {
-  id?: string
-  updatedAt?: Date | string | null
-  createdAt?: Date | string
-  removedAt?: Date | string | null
-  phone: string
-  name: string
-  email: string
-  password: string
-  failedLoginAttempts?: number
-  lockedUntil?: Date | string | null
-  isPermanentlyLocked?: boolean
-  mustChangePassword?: boolean
-  passwordChangedAt?: Date | string | null
-  lastLoginAt?: Date | string | null
-  lastLoginIp?: string | null
-  isActive?: boolean
-  profiles?: Prisma.ProfileUncheckedCreateNestedManyWithoutUserInput
-  tenants?: Prisma.TenantUncheckedCreateNestedManyWithoutUserInput
-  classification?: Prisma.UserClassificationUncheckedCreateNestedOneWithoutUserInput
-  associations?: Prisma.UserAssociationUncheckedCreateNestedManyWithoutUserInput
-  passwordHistory?: Prisma.PasswordHistoryUncheckedCreateNestedManyWithoutUserInput
-  authAuditLogs?: Prisma.AuthAuditLogUncheckedCreateNestedManyWithoutUserInput
-  createdCategories?: Prisma.CategoryUncheckedCreateNestedManyWithoutCreatorInput
-  createdGroups?: Prisma.GroupUncheckedCreateNestedManyWithoutCreatorInput
-  createdContents?: Prisma.ContentUncheckedCreateNestedManyWithoutCreatorInput
-  createdTimelines?: Prisma.TimelineUncheckedCreateNestedManyWithoutCreatorInput
-  createdTasks?: Prisma.TaskUncheckedCreateNestedManyWithoutCreatorInput
-  createdSafeWallets?: Prisma.SafeWalletUncheckedCreateNestedManyWithoutCreatorInput
-  createdRoutines?: Prisma.RoutineUncheckedCreateNestedManyWithoutCreatorInput
-  createdAssets?: Prisma.AssetUncheckedCreateNestedManyWithoutCreatorInput
-  createdFolders?: Prisma.FolderUncheckedCreateNestedManyWithoutCreatorInput
-  createdAlbums?: Prisma.AlbumUncheckedCreateNestedManyWithoutCreatorInput
-  customerInquiries?: Prisma.InquiryUncheckedCreateNestedManyWithoutCustomerInput
-  assignedInquiries?: Prisma.InquiryUncheckedCreateNestedManyWithoutAssigneeInput
-  inquiryMessages?: Prisma.InquiryMessageUncheckedCreateNestedManyWithoutSenderInput
-  inquiryParticipants?: Prisma.InquiryParticipantUncheckedCreateNestedManyWithoutUserInput
-  createdThreads?: Prisma.InquiryThreadUncheckedCreateNestedManyWithoutCreatorInput
-  aiTemplateExecutions?: Prisma.AITemplateExecutionUncheckedCreateNestedManyWithoutUserInput
-}
-
-export type UserCreateOrConnectWithoutCreatedAIFormTemplatesInput = {
-  where: Prisma.UserWhereUniqueInput
-  create: Prisma.XOR<Prisma.UserCreateWithoutCreatedAIFormTemplatesInput, Prisma.UserUncheckedCreateWithoutCreatedAIFormTemplatesInput>
-}
-
-export type UserUpsertWithoutCreatedAIFormTemplatesInput = {
-  update: Prisma.XOR<Prisma.UserUpdateWithoutCreatedAIFormTemplatesInput, Prisma.UserUncheckedUpdateWithoutCreatedAIFormTemplatesInput>
-  create: Prisma.XOR<Prisma.UserCreateWithoutCreatedAIFormTemplatesInput, Prisma.UserUncheckedCreateWithoutCreatedAIFormTemplatesInput>
-  where?: Prisma.UserWhereInput
-}
-
-export type UserUpdateToOneWithWhereWithoutCreatedAIFormTemplatesInput = {
-  where?: Prisma.UserWhereInput
-  data: Prisma.XOR<Prisma.UserUpdateWithoutCreatedAIFormTemplatesInput, Prisma.UserUncheckedUpdateWithoutCreatedAIFormTemplatesInput>
-}
-
-export type UserUpdateWithoutCreatedAIFormTemplatesInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  phone?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.StringFieldUpdateOperationsInput | string
-  email?: Prisma.StringFieldUpdateOperationsInput | string
-  password?: Prisma.StringFieldUpdateOperationsInput | string
-  failedLoginAttempts?: Prisma.IntFieldUpdateOperationsInput | number
-  lockedUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  isPermanentlyLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  passwordChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  lastLoginIp?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  profiles?: Prisma.ProfileUpdateManyWithoutUserNestedInput
-  tenants?: Prisma.TenantUpdateManyWithoutUserNestedInput
-  classification?: Prisma.UserClassificationUpdateOneWithoutUserNestedInput
-  associations?: Prisma.UserAssociationUpdateManyWithoutUserNestedInput
-  passwordHistory?: Prisma.PasswordHistoryUpdateManyWithoutUserNestedInput
-  authAuditLogs?: Prisma.AuthAuditLogUpdateManyWithoutUserNestedInput
-  createdCategories?: Prisma.CategoryUpdateManyWithoutCreatorNestedInput
-  createdGroups?: Prisma.GroupUpdateManyWithoutCreatorNestedInput
-  createdContents?: Prisma.ContentUpdateManyWithoutCreatorNestedInput
-  createdTimelines?: Prisma.TimelineUpdateManyWithoutCreatorNestedInput
-  createdTasks?: Prisma.TaskUpdateManyWithoutCreatorNestedInput
-  createdSafeWallets?: Prisma.SafeWalletUpdateManyWithoutCreatorNestedInput
-  createdRoutines?: Prisma.RoutineUpdateManyWithoutCreatorNestedInput
-  createdAssets?: Prisma.AssetUpdateManyWithoutCreatorNestedInput
-  createdFolders?: Prisma.FolderUpdateManyWithoutCreatorNestedInput
-  createdAlbums?: Prisma.AlbumUpdateManyWithoutCreatorNestedInput
-  customerInquiries?: Prisma.InquiryUpdateManyWithoutCustomerNestedInput
-  assignedInquiries?: Prisma.InquiryUpdateManyWithoutAssigneeNestedInput
-  inquiryMessages?: Prisma.InquiryMessageUpdateManyWithoutSenderNestedInput
-  inquiryParticipants?: Prisma.InquiryParticipantUpdateManyWithoutUserNestedInput
-  createdThreads?: Prisma.InquiryThreadUpdateManyWithoutCreatorNestedInput
-  aiTemplateExecutions?: Prisma.AITemplateExecutionUpdateManyWithoutUserNestedInput
-}
-
-export type UserUncheckedUpdateWithoutCreatedAIFormTemplatesInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  phone?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.StringFieldUpdateOperationsInput | string
-  email?: Prisma.StringFieldUpdateOperationsInput | string
-  password?: Prisma.StringFieldUpdateOperationsInput | string
-  failedLoginAttempts?: Prisma.IntFieldUpdateOperationsInput | number
-  lockedUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  isPermanentlyLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  passwordChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  lastLoginIp?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  profiles?: Prisma.ProfileUncheckedUpdateManyWithoutUserNestedInput
-  tenants?: Prisma.TenantUncheckedUpdateManyWithoutUserNestedInput
-  classification?: Prisma.UserClassificationUncheckedUpdateOneWithoutUserNestedInput
-  associations?: Prisma.UserAssociationUncheckedUpdateManyWithoutUserNestedInput
-  passwordHistory?: Prisma.PasswordHistoryUncheckedUpdateManyWithoutUserNestedInput
-  authAuditLogs?: Prisma.AuthAuditLogUncheckedUpdateManyWithoutUserNestedInput
-  createdCategories?: Prisma.CategoryUncheckedUpdateManyWithoutCreatorNestedInput
-  createdGroups?: Prisma.GroupUncheckedUpdateManyWithoutCreatorNestedInput
-  createdContents?: Prisma.ContentUncheckedUpdateManyWithoutCreatorNestedInput
-  createdTimelines?: Prisma.TimelineUncheckedUpdateManyWithoutCreatorNestedInput
-  createdTasks?: Prisma.TaskUncheckedUpdateManyWithoutCreatorNestedInput
-  createdSafeWallets?: Prisma.SafeWalletUncheckedUpdateManyWithoutCreatorNestedInput
-  createdRoutines?: Prisma.RoutineUncheckedUpdateManyWithoutCreatorNestedInput
-  createdAssets?: Prisma.AssetUncheckedUpdateManyWithoutCreatorNestedInput
-  createdFolders?: Prisma.FolderUncheckedUpdateManyWithoutCreatorNestedInput
-  createdAlbums?: Prisma.AlbumUncheckedUpdateManyWithoutCreatorNestedInput
-  customerInquiries?: Prisma.InquiryUncheckedUpdateManyWithoutCustomerNestedInput
-  assignedInquiries?: Prisma.InquiryUncheckedUpdateManyWithoutAssigneeNestedInput
-  inquiryMessages?: Prisma.InquiryMessageUncheckedUpdateManyWithoutSenderNestedInput
-  inquiryParticipants?: Prisma.InquiryParticipantUncheckedUpdateManyWithoutUserNestedInput
-  createdThreads?: Prisma.InquiryThreadUncheckedUpdateManyWithoutCreatorNestedInput
-  aiTemplateExecutions?: Prisma.AITemplateExecutionUncheckedUpdateManyWithoutUserNestedInput
-}
-
-export type UserCreateWithoutAiTemplateExecutionsInput = {
-  id?: string
-  updatedAt?: Date | string | null
-  createdAt?: Date | string
-  removedAt?: Date | string | null
-  phone: string
-  name: string
-  email: string
-  password: string
-  failedLoginAttempts?: number
-  lockedUntil?: Date | string | null
-  isPermanentlyLocked?: boolean
-  mustChangePassword?: boolean
-  passwordChangedAt?: Date | string | null
-  lastLoginAt?: Date | string | null
-  lastLoginIp?: string | null
-  isActive?: boolean
-  profiles?: Prisma.ProfileCreateNestedManyWithoutUserInput
-  tenants?: Prisma.TenantCreateNestedManyWithoutUserInput
-  classification?: Prisma.UserClassificationCreateNestedOneWithoutUserInput
-  associations?: Prisma.UserAssociationCreateNestedManyWithoutUserInput
-  passwordHistory?: Prisma.PasswordHistoryCreateNestedManyWithoutUserInput
-  authAuditLogs?: Prisma.AuthAuditLogCreateNestedManyWithoutUserInput
-  createdCategories?: Prisma.CategoryCreateNestedManyWithoutCreatorInput
-  createdGroups?: Prisma.GroupCreateNestedManyWithoutCreatorInput
-  createdContents?: Prisma.ContentCreateNestedManyWithoutCreatorInput
-  createdTimelines?: Prisma.TimelineCreateNestedManyWithoutCreatorInput
-  createdTasks?: Prisma.TaskCreateNestedManyWithoutCreatorInput
-  createdSafeWallets?: Prisma.SafeWalletCreateNestedManyWithoutCreatorInput
-  createdRoutines?: Prisma.RoutineCreateNestedManyWithoutCreatorInput
-  createdAssets?: Prisma.AssetCreateNestedManyWithoutCreatorInput
-  createdFolders?: Prisma.FolderCreateNestedManyWithoutCreatorInput
-  createdAlbums?: Prisma.AlbumCreateNestedManyWithoutCreatorInput
-  customerInquiries?: Prisma.InquiryCreateNestedManyWithoutCustomerInput
-  assignedInquiries?: Prisma.InquiryCreateNestedManyWithoutAssigneeInput
-  inquiryMessages?: Prisma.InquiryMessageCreateNestedManyWithoutSenderInput
-  inquiryParticipants?: Prisma.InquiryParticipantCreateNestedManyWithoutUserInput
-  createdThreads?: Prisma.InquiryThreadCreateNestedManyWithoutCreatorInput
-  createdAIFormTemplates?: Prisma.AIFormTemplateCreateNestedManyWithoutCreatedByInput
-}
-
-export type UserUncheckedCreateWithoutAiTemplateExecutionsInput = {
-  id?: string
-  updatedAt?: Date | string | null
-  createdAt?: Date | string
-  removedAt?: Date | string | null
-  phone: string
-  name: string
-  email: string
-  password: string
-  failedLoginAttempts?: number
-  lockedUntil?: Date | string | null
-  isPermanentlyLocked?: boolean
-  mustChangePassword?: boolean
-  passwordChangedAt?: Date | string | null
-  lastLoginAt?: Date | string | null
-  lastLoginIp?: string | null
-  isActive?: boolean
-  profiles?: Prisma.ProfileUncheckedCreateNestedManyWithoutUserInput
-  tenants?: Prisma.TenantUncheckedCreateNestedManyWithoutUserInput
-  classification?: Prisma.UserClassificationUncheckedCreateNestedOneWithoutUserInput
-  associations?: Prisma.UserAssociationUncheckedCreateNestedManyWithoutUserInput
-  passwordHistory?: Prisma.PasswordHistoryUncheckedCreateNestedManyWithoutUserInput
-  authAuditLogs?: Prisma.AuthAuditLogUncheckedCreateNestedManyWithoutUserInput
-  createdCategories?: Prisma.CategoryUncheckedCreateNestedManyWithoutCreatorInput
-  createdGroups?: Prisma.GroupUncheckedCreateNestedManyWithoutCreatorInput
-  createdContents?: Prisma.ContentUncheckedCreateNestedManyWithoutCreatorInput
-  createdTimelines?: Prisma.TimelineUncheckedCreateNestedManyWithoutCreatorInput
-  createdTasks?: Prisma.TaskUncheckedCreateNestedManyWithoutCreatorInput
-  createdSafeWallets?: Prisma.SafeWalletUncheckedCreateNestedManyWithoutCreatorInput
-  createdRoutines?: Prisma.RoutineUncheckedCreateNestedManyWithoutCreatorInput
-  createdAssets?: Prisma.AssetUncheckedCreateNestedManyWithoutCreatorInput
-  createdFolders?: Prisma.FolderUncheckedCreateNestedManyWithoutCreatorInput
-  createdAlbums?: Prisma.AlbumUncheckedCreateNestedManyWithoutCreatorInput
-  customerInquiries?: Prisma.InquiryUncheckedCreateNestedManyWithoutCustomerInput
-  assignedInquiries?: Prisma.InquiryUncheckedCreateNestedManyWithoutAssigneeInput
-  inquiryMessages?: Prisma.InquiryMessageUncheckedCreateNestedManyWithoutSenderInput
-  inquiryParticipants?: Prisma.InquiryParticipantUncheckedCreateNestedManyWithoutUserInput
-  createdThreads?: Prisma.InquiryThreadUncheckedCreateNestedManyWithoutCreatorInput
-  createdAIFormTemplates?: Prisma.AIFormTemplateUncheckedCreateNestedManyWithoutCreatedByInput
-}
-
-export type UserCreateOrConnectWithoutAiTemplateExecutionsInput = {
-  where: Prisma.UserWhereUniqueInput
-  create: Prisma.XOR<Prisma.UserCreateWithoutAiTemplateExecutionsInput, Prisma.UserUncheckedCreateWithoutAiTemplateExecutionsInput>
-}
-
-export type UserUpsertWithoutAiTemplateExecutionsInput = {
-  update: Prisma.XOR<Prisma.UserUpdateWithoutAiTemplateExecutionsInput, Prisma.UserUncheckedUpdateWithoutAiTemplateExecutionsInput>
-  create: Prisma.XOR<Prisma.UserCreateWithoutAiTemplateExecutionsInput, Prisma.UserUncheckedCreateWithoutAiTemplateExecutionsInput>
-  where?: Prisma.UserWhereInput
-}
-
-export type UserUpdateToOneWithWhereWithoutAiTemplateExecutionsInput = {
-  where?: Prisma.UserWhereInput
-  data: Prisma.XOR<Prisma.UserUpdateWithoutAiTemplateExecutionsInput, Prisma.UserUncheckedUpdateWithoutAiTemplateExecutionsInput>
-}
-
-export type UserUpdateWithoutAiTemplateExecutionsInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  phone?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.StringFieldUpdateOperationsInput | string
-  email?: Prisma.StringFieldUpdateOperationsInput | string
-  password?: Prisma.StringFieldUpdateOperationsInput | string
-  failedLoginAttempts?: Prisma.IntFieldUpdateOperationsInput | number
-  lockedUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  isPermanentlyLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  passwordChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  lastLoginIp?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  profiles?: Prisma.ProfileUpdateManyWithoutUserNestedInput
-  tenants?: Prisma.TenantUpdateManyWithoutUserNestedInput
-  classification?: Prisma.UserClassificationUpdateOneWithoutUserNestedInput
-  associations?: Prisma.UserAssociationUpdateManyWithoutUserNestedInput
-  passwordHistory?: Prisma.PasswordHistoryUpdateManyWithoutUserNestedInput
-  authAuditLogs?: Prisma.AuthAuditLogUpdateManyWithoutUserNestedInput
-  createdCategories?: Prisma.CategoryUpdateManyWithoutCreatorNestedInput
-  createdGroups?: Prisma.GroupUpdateManyWithoutCreatorNestedInput
-  createdContents?: Prisma.ContentUpdateManyWithoutCreatorNestedInput
-  createdTimelines?: Prisma.TimelineUpdateManyWithoutCreatorNestedInput
-  createdTasks?: Prisma.TaskUpdateManyWithoutCreatorNestedInput
-  createdSafeWallets?: Prisma.SafeWalletUpdateManyWithoutCreatorNestedInput
-  createdRoutines?: Prisma.RoutineUpdateManyWithoutCreatorNestedInput
-  createdAssets?: Prisma.AssetUpdateManyWithoutCreatorNestedInput
-  createdFolders?: Prisma.FolderUpdateManyWithoutCreatorNestedInput
-  createdAlbums?: Prisma.AlbumUpdateManyWithoutCreatorNestedInput
-  customerInquiries?: Prisma.InquiryUpdateManyWithoutCustomerNestedInput
-  assignedInquiries?: Prisma.InquiryUpdateManyWithoutAssigneeNestedInput
-  inquiryMessages?: Prisma.InquiryMessageUpdateManyWithoutSenderNestedInput
-  inquiryParticipants?: Prisma.InquiryParticipantUpdateManyWithoutUserNestedInput
-  createdThreads?: Prisma.InquiryThreadUpdateManyWithoutCreatorNestedInput
-  createdAIFormTemplates?: Prisma.AIFormTemplateUpdateManyWithoutCreatedByNestedInput
-}
-
-export type UserUncheckedUpdateWithoutAiTemplateExecutionsInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  phone?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.StringFieldUpdateOperationsInput | string
-  email?: Prisma.StringFieldUpdateOperationsInput | string
-  password?: Prisma.StringFieldUpdateOperationsInput | string
-  failedLoginAttempts?: Prisma.IntFieldUpdateOperationsInput | number
-  lockedUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  isPermanentlyLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  passwordChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  lastLoginIp?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  profiles?: Prisma.ProfileUncheckedUpdateManyWithoutUserNestedInput
-  tenants?: Prisma.TenantUncheckedUpdateManyWithoutUserNestedInput
-  classification?: Prisma.UserClassificationUncheckedUpdateOneWithoutUserNestedInput
-  associations?: Prisma.UserAssociationUncheckedUpdateManyWithoutUserNestedInput
-  passwordHistory?: Prisma.PasswordHistoryUncheckedUpdateManyWithoutUserNestedInput
-  authAuditLogs?: Prisma.AuthAuditLogUncheckedUpdateManyWithoutUserNestedInput
-  createdCategories?: Prisma.CategoryUncheckedUpdateManyWithoutCreatorNestedInput
-  createdGroups?: Prisma.GroupUncheckedUpdateManyWithoutCreatorNestedInput
-  createdContents?: Prisma.ContentUncheckedUpdateManyWithoutCreatorNestedInput
-  createdTimelines?: Prisma.TimelineUncheckedUpdateManyWithoutCreatorNestedInput
-  createdTasks?: Prisma.TaskUncheckedUpdateManyWithoutCreatorNestedInput
-  createdSafeWallets?: Prisma.SafeWalletUncheckedUpdateManyWithoutCreatorNestedInput
-  createdRoutines?: Prisma.RoutineUncheckedUpdateManyWithoutCreatorNestedInput
-  createdAssets?: Prisma.AssetUncheckedUpdateManyWithoutCreatorNestedInput
-  createdFolders?: Prisma.FolderUncheckedUpdateManyWithoutCreatorNestedInput
-  createdAlbums?: Prisma.AlbumUncheckedUpdateManyWithoutCreatorNestedInput
-  customerInquiries?: Prisma.InquiryUncheckedUpdateManyWithoutCustomerNestedInput
-  assignedInquiries?: Prisma.InquiryUncheckedUpdateManyWithoutAssigneeNestedInput
-  inquiryMessages?: Prisma.InquiryMessageUncheckedUpdateManyWithoutSenderNestedInput
-  inquiryParticipants?: Prisma.InquiryParticipantUncheckedUpdateManyWithoutUserNestedInput
-  createdThreads?: Prisma.InquiryThreadUncheckedUpdateManyWithoutCreatorNestedInput
-  createdAIFormTemplates?: Prisma.AIFormTemplateUncheckedUpdateManyWithoutCreatedByNestedInput
-}
-
 export type UserCreateWithoutCreatedAssetsInput = {
   id?: string
   updatedAt?: Date | string | null
@@ -1509,8 +1107,6 @@ export type UserCreateWithoutCreatedAssetsInput = {
   inquiryMessages?: Prisma.InquiryMessageCreateNestedManyWithoutSenderInput
   inquiryParticipants?: Prisma.InquiryParticipantCreateNestedManyWithoutUserInput
   createdThreads?: Prisma.InquiryThreadCreateNestedManyWithoutCreatorInput
-  createdAIFormTemplates?: Prisma.AIFormTemplateCreateNestedManyWithoutCreatedByInput
-  aiTemplateExecutions?: Prisma.AITemplateExecutionCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutCreatedAssetsInput = {
@@ -1550,8 +1146,6 @@ export type UserUncheckedCreateWithoutCreatedAssetsInput = {
   inquiryMessages?: Prisma.InquiryMessageUncheckedCreateNestedManyWithoutSenderInput
   inquiryParticipants?: Prisma.InquiryParticipantUncheckedCreateNestedManyWithoutUserInput
   createdThreads?: Prisma.InquiryThreadUncheckedCreateNestedManyWithoutCreatorInput
-  createdAIFormTemplates?: Prisma.AIFormTemplateUncheckedCreateNestedManyWithoutCreatedByInput
-  aiTemplateExecutions?: Prisma.AITemplateExecutionUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutCreatedAssetsInput = {
@@ -1607,8 +1201,6 @@ export type UserUpdateWithoutCreatedAssetsInput = {
   inquiryMessages?: Prisma.InquiryMessageUpdateManyWithoutSenderNestedInput
   inquiryParticipants?: Prisma.InquiryParticipantUpdateManyWithoutUserNestedInput
   createdThreads?: Prisma.InquiryThreadUpdateManyWithoutCreatorNestedInput
-  createdAIFormTemplates?: Prisma.AIFormTemplateUpdateManyWithoutCreatedByNestedInput
-  aiTemplateExecutions?: Prisma.AITemplateExecutionUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutCreatedAssetsInput = {
@@ -1648,8 +1240,6 @@ export type UserUncheckedUpdateWithoutCreatedAssetsInput = {
   inquiryMessages?: Prisma.InquiryMessageUncheckedUpdateManyWithoutSenderNestedInput
   inquiryParticipants?: Prisma.InquiryParticipantUncheckedUpdateManyWithoutUserNestedInput
   createdThreads?: Prisma.InquiryThreadUncheckedUpdateManyWithoutCreatorNestedInput
-  createdAIFormTemplates?: Prisma.AIFormTemplateUncheckedUpdateManyWithoutCreatedByNestedInput
-  aiTemplateExecutions?: Prisma.AITemplateExecutionUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutCreatedFoldersInput = {
@@ -1689,8 +1279,6 @@ export type UserCreateWithoutCreatedFoldersInput = {
   inquiryMessages?: Prisma.InquiryMessageCreateNestedManyWithoutSenderInput
   inquiryParticipants?: Prisma.InquiryParticipantCreateNestedManyWithoutUserInput
   createdThreads?: Prisma.InquiryThreadCreateNestedManyWithoutCreatorInput
-  createdAIFormTemplates?: Prisma.AIFormTemplateCreateNestedManyWithoutCreatedByInput
-  aiTemplateExecutions?: Prisma.AITemplateExecutionCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutCreatedFoldersInput = {
@@ -1730,8 +1318,6 @@ export type UserUncheckedCreateWithoutCreatedFoldersInput = {
   inquiryMessages?: Prisma.InquiryMessageUncheckedCreateNestedManyWithoutSenderInput
   inquiryParticipants?: Prisma.InquiryParticipantUncheckedCreateNestedManyWithoutUserInput
   createdThreads?: Prisma.InquiryThreadUncheckedCreateNestedManyWithoutCreatorInput
-  createdAIFormTemplates?: Prisma.AIFormTemplateUncheckedCreateNestedManyWithoutCreatedByInput
-  aiTemplateExecutions?: Prisma.AITemplateExecutionUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutCreatedFoldersInput = {
@@ -1787,8 +1373,6 @@ export type UserUpdateWithoutCreatedFoldersInput = {
   inquiryMessages?: Prisma.InquiryMessageUpdateManyWithoutSenderNestedInput
   inquiryParticipants?: Prisma.InquiryParticipantUpdateManyWithoutUserNestedInput
   createdThreads?: Prisma.InquiryThreadUpdateManyWithoutCreatorNestedInput
-  createdAIFormTemplates?: Prisma.AIFormTemplateUpdateManyWithoutCreatedByNestedInput
-  aiTemplateExecutions?: Prisma.AITemplateExecutionUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutCreatedFoldersInput = {
@@ -1828,8 +1412,6 @@ export type UserUncheckedUpdateWithoutCreatedFoldersInput = {
   inquiryMessages?: Prisma.InquiryMessageUncheckedUpdateManyWithoutSenderNestedInput
   inquiryParticipants?: Prisma.InquiryParticipantUncheckedUpdateManyWithoutUserNestedInput
   createdThreads?: Prisma.InquiryThreadUncheckedUpdateManyWithoutCreatorNestedInput
-  createdAIFormTemplates?: Prisma.AIFormTemplateUncheckedUpdateManyWithoutCreatedByNestedInput
-  aiTemplateExecutions?: Prisma.AITemplateExecutionUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutCreatedAlbumsInput = {
@@ -1869,8 +1451,6 @@ export type UserCreateWithoutCreatedAlbumsInput = {
   inquiryMessages?: Prisma.InquiryMessageCreateNestedManyWithoutSenderInput
   inquiryParticipants?: Prisma.InquiryParticipantCreateNestedManyWithoutUserInput
   createdThreads?: Prisma.InquiryThreadCreateNestedManyWithoutCreatorInput
-  createdAIFormTemplates?: Prisma.AIFormTemplateCreateNestedManyWithoutCreatedByInput
-  aiTemplateExecutions?: Prisma.AITemplateExecutionCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutCreatedAlbumsInput = {
@@ -1910,8 +1490,6 @@ export type UserUncheckedCreateWithoutCreatedAlbumsInput = {
   inquiryMessages?: Prisma.InquiryMessageUncheckedCreateNestedManyWithoutSenderInput
   inquiryParticipants?: Prisma.InquiryParticipantUncheckedCreateNestedManyWithoutUserInput
   createdThreads?: Prisma.InquiryThreadUncheckedCreateNestedManyWithoutCreatorInput
-  createdAIFormTemplates?: Prisma.AIFormTemplateUncheckedCreateNestedManyWithoutCreatedByInput
-  aiTemplateExecutions?: Prisma.AITemplateExecutionUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutCreatedAlbumsInput = {
@@ -1967,8 +1545,6 @@ export type UserUpdateWithoutCreatedAlbumsInput = {
   inquiryMessages?: Prisma.InquiryMessageUpdateManyWithoutSenderNestedInput
   inquiryParticipants?: Prisma.InquiryParticipantUpdateManyWithoutUserNestedInput
   createdThreads?: Prisma.InquiryThreadUpdateManyWithoutCreatorNestedInput
-  createdAIFormTemplates?: Prisma.AIFormTemplateUpdateManyWithoutCreatedByNestedInput
-  aiTemplateExecutions?: Prisma.AITemplateExecutionUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutCreatedAlbumsInput = {
@@ -2008,8 +1584,6 @@ export type UserUncheckedUpdateWithoutCreatedAlbumsInput = {
   inquiryMessages?: Prisma.InquiryMessageUncheckedUpdateManyWithoutSenderNestedInput
   inquiryParticipants?: Prisma.InquiryParticipantUncheckedUpdateManyWithoutUserNestedInput
   createdThreads?: Prisma.InquiryThreadUncheckedUpdateManyWithoutCreatorNestedInput
-  createdAIFormTemplates?: Prisma.AIFormTemplateUncheckedUpdateManyWithoutCreatedByNestedInput
-  aiTemplateExecutions?: Prisma.AITemplateExecutionUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutAuthAuditLogsInput = {
@@ -2049,8 +1623,6 @@ export type UserCreateWithoutAuthAuditLogsInput = {
   inquiryMessages?: Prisma.InquiryMessageCreateNestedManyWithoutSenderInput
   inquiryParticipants?: Prisma.InquiryParticipantCreateNestedManyWithoutUserInput
   createdThreads?: Prisma.InquiryThreadCreateNestedManyWithoutCreatorInput
-  createdAIFormTemplates?: Prisma.AIFormTemplateCreateNestedManyWithoutCreatedByInput
-  aiTemplateExecutions?: Prisma.AITemplateExecutionCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutAuthAuditLogsInput = {
@@ -2090,8 +1662,6 @@ export type UserUncheckedCreateWithoutAuthAuditLogsInput = {
   inquiryMessages?: Prisma.InquiryMessageUncheckedCreateNestedManyWithoutSenderInput
   inquiryParticipants?: Prisma.InquiryParticipantUncheckedCreateNestedManyWithoutUserInput
   createdThreads?: Prisma.InquiryThreadUncheckedCreateNestedManyWithoutCreatorInput
-  createdAIFormTemplates?: Prisma.AIFormTemplateUncheckedCreateNestedManyWithoutCreatedByInput
-  aiTemplateExecutions?: Prisma.AITemplateExecutionUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutAuthAuditLogsInput = {
@@ -2147,8 +1717,6 @@ export type UserUpdateWithoutAuthAuditLogsInput = {
   inquiryMessages?: Prisma.InquiryMessageUpdateManyWithoutSenderNestedInput
   inquiryParticipants?: Prisma.InquiryParticipantUpdateManyWithoutUserNestedInput
   createdThreads?: Prisma.InquiryThreadUpdateManyWithoutCreatorNestedInput
-  createdAIFormTemplates?: Prisma.AIFormTemplateUpdateManyWithoutCreatedByNestedInput
-  aiTemplateExecutions?: Prisma.AITemplateExecutionUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutAuthAuditLogsInput = {
@@ -2188,8 +1756,6 @@ export type UserUncheckedUpdateWithoutAuthAuditLogsInput = {
   inquiryMessages?: Prisma.InquiryMessageUncheckedUpdateManyWithoutSenderNestedInput
   inquiryParticipants?: Prisma.InquiryParticipantUncheckedUpdateManyWithoutUserNestedInput
   createdThreads?: Prisma.InquiryThreadUncheckedUpdateManyWithoutCreatorNestedInput
-  createdAIFormTemplates?: Prisma.AIFormTemplateUncheckedUpdateManyWithoutCreatedByNestedInput
-  aiTemplateExecutions?: Prisma.AITemplateExecutionUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutPasswordHistoryInput = {
@@ -2229,8 +1795,6 @@ export type UserCreateWithoutPasswordHistoryInput = {
   inquiryMessages?: Prisma.InquiryMessageCreateNestedManyWithoutSenderInput
   inquiryParticipants?: Prisma.InquiryParticipantCreateNestedManyWithoutUserInput
   createdThreads?: Prisma.InquiryThreadCreateNestedManyWithoutCreatorInput
-  createdAIFormTemplates?: Prisma.AIFormTemplateCreateNestedManyWithoutCreatedByInput
-  aiTemplateExecutions?: Prisma.AITemplateExecutionCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutPasswordHistoryInput = {
@@ -2270,8 +1834,6 @@ export type UserUncheckedCreateWithoutPasswordHistoryInput = {
   inquiryMessages?: Prisma.InquiryMessageUncheckedCreateNestedManyWithoutSenderInput
   inquiryParticipants?: Prisma.InquiryParticipantUncheckedCreateNestedManyWithoutUserInput
   createdThreads?: Prisma.InquiryThreadUncheckedCreateNestedManyWithoutCreatorInput
-  createdAIFormTemplates?: Prisma.AIFormTemplateUncheckedCreateNestedManyWithoutCreatedByInput
-  aiTemplateExecutions?: Prisma.AITemplateExecutionUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutPasswordHistoryInput = {
@@ -2327,8 +1889,6 @@ export type UserUpdateWithoutPasswordHistoryInput = {
   inquiryMessages?: Prisma.InquiryMessageUpdateManyWithoutSenderNestedInput
   inquiryParticipants?: Prisma.InquiryParticipantUpdateManyWithoutUserNestedInput
   createdThreads?: Prisma.InquiryThreadUpdateManyWithoutCreatorNestedInput
-  createdAIFormTemplates?: Prisma.AIFormTemplateUpdateManyWithoutCreatedByNestedInput
-  aiTemplateExecutions?: Prisma.AITemplateExecutionUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutPasswordHistoryInput = {
@@ -2368,8 +1928,6 @@ export type UserUncheckedUpdateWithoutPasswordHistoryInput = {
   inquiryMessages?: Prisma.InquiryMessageUncheckedUpdateManyWithoutSenderNestedInput
   inquiryParticipants?: Prisma.InquiryParticipantUncheckedUpdateManyWithoutUserNestedInput
   createdThreads?: Prisma.InquiryThreadUncheckedUpdateManyWithoutCreatorNestedInput
-  createdAIFormTemplates?: Prisma.AIFormTemplateUncheckedUpdateManyWithoutCreatedByNestedInput
-  aiTemplateExecutions?: Prisma.AITemplateExecutionUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutCreatedCategoriesInput = {
@@ -2409,8 +1967,6 @@ export type UserCreateWithoutCreatedCategoriesInput = {
   inquiryMessages?: Prisma.InquiryMessageCreateNestedManyWithoutSenderInput
   inquiryParticipants?: Prisma.InquiryParticipantCreateNestedManyWithoutUserInput
   createdThreads?: Prisma.InquiryThreadCreateNestedManyWithoutCreatorInput
-  createdAIFormTemplates?: Prisma.AIFormTemplateCreateNestedManyWithoutCreatedByInput
-  aiTemplateExecutions?: Prisma.AITemplateExecutionCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutCreatedCategoriesInput = {
@@ -2450,8 +2006,6 @@ export type UserUncheckedCreateWithoutCreatedCategoriesInput = {
   inquiryMessages?: Prisma.InquiryMessageUncheckedCreateNestedManyWithoutSenderInput
   inquiryParticipants?: Prisma.InquiryParticipantUncheckedCreateNestedManyWithoutUserInput
   createdThreads?: Prisma.InquiryThreadUncheckedCreateNestedManyWithoutCreatorInput
-  createdAIFormTemplates?: Prisma.AIFormTemplateUncheckedCreateNestedManyWithoutCreatedByInput
-  aiTemplateExecutions?: Prisma.AITemplateExecutionUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutCreatedCategoriesInput = {
@@ -2507,8 +2061,6 @@ export type UserUpdateWithoutCreatedCategoriesInput = {
   inquiryMessages?: Prisma.InquiryMessageUpdateManyWithoutSenderNestedInput
   inquiryParticipants?: Prisma.InquiryParticipantUpdateManyWithoutUserNestedInput
   createdThreads?: Prisma.InquiryThreadUpdateManyWithoutCreatorNestedInput
-  createdAIFormTemplates?: Prisma.AIFormTemplateUpdateManyWithoutCreatedByNestedInput
-  aiTemplateExecutions?: Prisma.AITemplateExecutionUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutCreatedCategoriesInput = {
@@ -2548,8 +2100,6 @@ export type UserUncheckedUpdateWithoutCreatedCategoriesInput = {
   inquiryMessages?: Prisma.InquiryMessageUncheckedUpdateManyWithoutSenderNestedInput
   inquiryParticipants?: Prisma.InquiryParticipantUncheckedUpdateManyWithoutUserNestedInput
   createdThreads?: Prisma.InquiryThreadUncheckedUpdateManyWithoutCreatorNestedInput
-  createdAIFormTemplates?: Prisma.AIFormTemplateUncheckedUpdateManyWithoutCreatedByNestedInput
-  aiTemplateExecutions?: Prisma.AITemplateExecutionUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutCreatedGroupsInput = {
@@ -2589,8 +2139,6 @@ export type UserCreateWithoutCreatedGroupsInput = {
   inquiryMessages?: Prisma.InquiryMessageCreateNestedManyWithoutSenderInput
   inquiryParticipants?: Prisma.InquiryParticipantCreateNestedManyWithoutUserInput
   createdThreads?: Prisma.InquiryThreadCreateNestedManyWithoutCreatorInput
-  createdAIFormTemplates?: Prisma.AIFormTemplateCreateNestedManyWithoutCreatedByInput
-  aiTemplateExecutions?: Prisma.AITemplateExecutionCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutCreatedGroupsInput = {
@@ -2630,8 +2178,6 @@ export type UserUncheckedCreateWithoutCreatedGroupsInput = {
   inquiryMessages?: Prisma.InquiryMessageUncheckedCreateNestedManyWithoutSenderInput
   inquiryParticipants?: Prisma.InquiryParticipantUncheckedCreateNestedManyWithoutUserInput
   createdThreads?: Prisma.InquiryThreadUncheckedCreateNestedManyWithoutCreatorInput
-  createdAIFormTemplates?: Prisma.AIFormTemplateUncheckedCreateNestedManyWithoutCreatedByInput
-  aiTemplateExecutions?: Prisma.AITemplateExecutionUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutCreatedGroupsInput = {
@@ -2687,8 +2233,6 @@ export type UserUpdateWithoutCreatedGroupsInput = {
   inquiryMessages?: Prisma.InquiryMessageUpdateManyWithoutSenderNestedInput
   inquiryParticipants?: Prisma.InquiryParticipantUpdateManyWithoutUserNestedInput
   createdThreads?: Prisma.InquiryThreadUpdateManyWithoutCreatorNestedInput
-  createdAIFormTemplates?: Prisma.AIFormTemplateUpdateManyWithoutCreatedByNestedInput
-  aiTemplateExecutions?: Prisma.AITemplateExecutionUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutCreatedGroupsInput = {
@@ -2728,8 +2272,6 @@ export type UserUncheckedUpdateWithoutCreatedGroupsInput = {
   inquiryMessages?: Prisma.InquiryMessageUncheckedUpdateManyWithoutSenderNestedInput
   inquiryParticipants?: Prisma.InquiryParticipantUncheckedUpdateManyWithoutUserNestedInput
   createdThreads?: Prisma.InquiryThreadUncheckedUpdateManyWithoutCreatorNestedInput
-  createdAIFormTemplates?: Prisma.AIFormTemplateUncheckedUpdateManyWithoutCreatedByNestedInput
-  aiTemplateExecutions?: Prisma.AITemplateExecutionUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutTenantsInput = {
@@ -2769,8 +2311,6 @@ export type UserCreateWithoutTenantsInput = {
   inquiryMessages?: Prisma.InquiryMessageCreateNestedManyWithoutSenderInput
   inquiryParticipants?: Prisma.InquiryParticipantCreateNestedManyWithoutUserInput
   createdThreads?: Prisma.InquiryThreadCreateNestedManyWithoutCreatorInput
-  createdAIFormTemplates?: Prisma.AIFormTemplateCreateNestedManyWithoutCreatedByInput
-  aiTemplateExecutions?: Prisma.AITemplateExecutionCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutTenantsInput = {
@@ -2810,8 +2350,6 @@ export type UserUncheckedCreateWithoutTenantsInput = {
   inquiryMessages?: Prisma.InquiryMessageUncheckedCreateNestedManyWithoutSenderInput
   inquiryParticipants?: Prisma.InquiryParticipantUncheckedCreateNestedManyWithoutUserInput
   createdThreads?: Prisma.InquiryThreadUncheckedCreateNestedManyWithoutCreatorInput
-  createdAIFormTemplates?: Prisma.AIFormTemplateUncheckedCreateNestedManyWithoutCreatedByInput
-  aiTemplateExecutions?: Prisma.AITemplateExecutionUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutTenantsInput = {
@@ -2867,8 +2405,6 @@ export type UserUpdateWithoutTenantsInput = {
   inquiryMessages?: Prisma.InquiryMessageUpdateManyWithoutSenderNestedInput
   inquiryParticipants?: Prisma.InquiryParticipantUpdateManyWithoutUserNestedInput
   createdThreads?: Prisma.InquiryThreadUpdateManyWithoutCreatorNestedInput
-  createdAIFormTemplates?: Prisma.AIFormTemplateUpdateManyWithoutCreatedByNestedInput
-  aiTemplateExecutions?: Prisma.AITemplateExecutionUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutTenantsInput = {
@@ -2908,8 +2444,6 @@ export type UserUncheckedUpdateWithoutTenantsInput = {
   inquiryMessages?: Prisma.InquiryMessageUncheckedUpdateManyWithoutSenderNestedInput
   inquiryParticipants?: Prisma.InquiryParticipantUncheckedUpdateManyWithoutUserNestedInput
   createdThreads?: Prisma.InquiryThreadUncheckedUpdateManyWithoutCreatorNestedInput
-  createdAIFormTemplates?: Prisma.AIFormTemplateUncheckedUpdateManyWithoutCreatedByNestedInput
-  aiTemplateExecutions?: Prisma.AITemplateExecutionUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutCreatedContentsInput = {
@@ -2949,8 +2483,6 @@ export type UserCreateWithoutCreatedContentsInput = {
   inquiryMessages?: Prisma.InquiryMessageCreateNestedManyWithoutSenderInput
   inquiryParticipants?: Prisma.InquiryParticipantCreateNestedManyWithoutUserInput
   createdThreads?: Prisma.InquiryThreadCreateNestedManyWithoutCreatorInput
-  createdAIFormTemplates?: Prisma.AIFormTemplateCreateNestedManyWithoutCreatedByInput
-  aiTemplateExecutions?: Prisma.AITemplateExecutionCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutCreatedContentsInput = {
@@ -2990,8 +2522,6 @@ export type UserUncheckedCreateWithoutCreatedContentsInput = {
   inquiryMessages?: Prisma.InquiryMessageUncheckedCreateNestedManyWithoutSenderInput
   inquiryParticipants?: Prisma.InquiryParticipantUncheckedCreateNestedManyWithoutUserInput
   createdThreads?: Prisma.InquiryThreadUncheckedCreateNestedManyWithoutCreatorInput
-  createdAIFormTemplates?: Prisma.AIFormTemplateUncheckedCreateNestedManyWithoutCreatedByInput
-  aiTemplateExecutions?: Prisma.AITemplateExecutionUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutCreatedContentsInput = {
@@ -3047,8 +2577,6 @@ export type UserUpdateWithoutCreatedContentsInput = {
   inquiryMessages?: Prisma.InquiryMessageUpdateManyWithoutSenderNestedInput
   inquiryParticipants?: Prisma.InquiryParticipantUpdateManyWithoutUserNestedInput
   createdThreads?: Prisma.InquiryThreadUpdateManyWithoutCreatorNestedInput
-  createdAIFormTemplates?: Prisma.AIFormTemplateUpdateManyWithoutCreatedByNestedInput
-  aiTemplateExecutions?: Prisma.AITemplateExecutionUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutCreatedContentsInput = {
@@ -3088,8 +2616,6 @@ export type UserUncheckedUpdateWithoutCreatedContentsInput = {
   inquiryMessages?: Prisma.InquiryMessageUncheckedUpdateManyWithoutSenderNestedInput
   inquiryParticipants?: Prisma.InquiryParticipantUncheckedUpdateManyWithoutUserNestedInput
   createdThreads?: Prisma.InquiryThreadUncheckedUpdateManyWithoutCreatorNestedInput
-  createdAIFormTemplates?: Prisma.AIFormTemplateUncheckedUpdateManyWithoutCreatedByNestedInput
-  aiTemplateExecutions?: Prisma.AITemplateExecutionUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutCustomerInquiriesInput = {
@@ -3129,8 +2655,6 @@ export type UserCreateWithoutCustomerInquiriesInput = {
   inquiryMessages?: Prisma.InquiryMessageCreateNestedManyWithoutSenderInput
   inquiryParticipants?: Prisma.InquiryParticipantCreateNestedManyWithoutUserInput
   createdThreads?: Prisma.InquiryThreadCreateNestedManyWithoutCreatorInput
-  createdAIFormTemplates?: Prisma.AIFormTemplateCreateNestedManyWithoutCreatedByInput
-  aiTemplateExecutions?: Prisma.AITemplateExecutionCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutCustomerInquiriesInput = {
@@ -3170,8 +2694,6 @@ export type UserUncheckedCreateWithoutCustomerInquiriesInput = {
   inquiryMessages?: Prisma.InquiryMessageUncheckedCreateNestedManyWithoutSenderInput
   inquiryParticipants?: Prisma.InquiryParticipantUncheckedCreateNestedManyWithoutUserInput
   createdThreads?: Prisma.InquiryThreadUncheckedCreateNestedManyWithoutCreatorInput
-  createdAIFormTemplates?: Prisma.AIFormTemplateUncheckedCreateNestedManyWithoutCreatedByInput
-  aiTemplateExecutions?: Prisma.AITemplateExecutionUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutCustomerInquiriesInput = {
@@ -3216,8 +2738,6 @@ export type UserCreateWithoutAssignedInquiriesInput = {
   inquiryMessages?: Prisma.InquiryMessageCreateNestedManyWithoutSenderInput
   inquiryParticipants?: Prisma.InquiryParticipantCreateNestedManyWithoutUserInput
   createdThreads?: Prisma.InquiryThreadCreateNestedManyWithoutCreatorInput
-  createdAIFormTemplates?: Prisma.AIFormTemplateCreateNestedManyWithoutCreatedByInput
-  aiTemplateExecutions?: Prisma.AITemplateExecutionCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutAssignedInquiriesInput = {
@@ -3257,8 +2777,6 @@ export type UserUncheckedCreateWithoutAssignedInquiriesInput = {
   inquiryMessages?: Prisma.InquiryMessageUncheckedCreateNestedManyWithoutSenderInput
   inquiryParticipants?: Prisma.InquiryParticipantUncheckedCreateNestedManyWithoutUserInput
   createdThreads?: Prisma.InquiryThreadUncheckedCreateNestedManyWithoutCreatorInput
-  createdAIFormTemplates?: Prisma.AIFormTemplateUncheckedCreateNestedManyWithoutCreatedByInput
-  aiTemplateExecutions?: Prisma.AITemplateExecutionUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutAssignedInquiriesInput = {
@@ -3314,8 +2832,6 @@ export type UserUpdateWithoutCustomerInquiriesInput = {
   inquiryMessages?: Prisma.InquiryMessageUpdateManyWithoutSenderNestedInput
   inquiryParticipants?: Prisma.InquiryParticipantUpdateManyWithoutUserNestedInput
   createdThreads?: Prisma.InquiryThreadUpdateManyWithoutCreatorNestedInput
-  createdAIFormTemplates?: Prisma.AIFormTemplateUpdateManyWithoutCreatedByNestedInput
-  aiTemplateExecutions?: Prisma.AITemplateExecutionUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutCustomerInquiriesInput = {
@@ -3355,8 +2871,6 @@ export type UserUncheckedUpdateWithoutCustomerInquiriesInput = {
   inquiryMessages?: Prisma.InquiryMessageUncheckedUpdateManyWithoutSenderNestedInput
   inquiryParticipants?: Prisma.InquiryParticipantUncheckedUpdateManyWithoutUserNestedInput
   createdThreads?: Prisma.InquiryThreadUncheckedUpdateManyWithoutCreatorNestedInput
-  createdAIFormTemplates?: Prisma.AIFormTemplateUncheckedUpdateManyWithoutCreatedByNestedInput
-  aiTemplateExecutions?: Prisma.AITemplateExecutionUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserUpsertWithoutAssignedInquiriesInput = {
@@ -3407,8 +2921,6 @@ export type UserUpdateWithoutAssignedInquiriesInput = {
   inquiryMessages?: Prisma.InquiryMessageUpdateManyWithoutSenderNestedInput
   inquiryParticipants?: Prisma.InquiryParticipantUpdateManyWithoutUserNestedInput
   createdThreads?: Prisma.InquiryThreadUpdateManyWithoutCreatorNestedInput
-  createdAIFormTemplates?: Prisma.AIFormTemplateUpdateManyWithoutCreatedByNestedInput
-  aiTemplateExecutions?: Prisma.AITemplateExecutionUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutAssignedInquiriesInput = {
@@ -3448,8 +2960,6 @@ export type UserUncheckedUpdateWithoutAssignedInquiriesInput = {
   inquiryMessages?: Prisma.InquiryMessageUncheckedUpdateManyWithoutSenderNestedInput
   inquiryParticipants?: Prisma.InquiryParticipantUncheckedUpdateManyWithoutUserNestedInput
   createdThreads?: Prisma.InquiryThreadUncheckedUpdateManyWithoutCreatorNestedInput
-  createdAIFormTemplates?: Prisma.AIFormTemplateUncheckedUpdateManyWithoutCreatedByNestedInput
-  aiTemplateExecutions?: Prisma.AITemplateExecutionUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutCreatedThreadsInput = {
@@ -3489,8 +2999,6 @@ export type UserCreateWithoutCreatedThreadsInput = {
   assignedInquiries?: Prisma.InquiryCreateNestedManyWithoutAssigneeInput
   inquiryMessages?: Prisma.InquiryMessageCreateNestedManyWithoutSenderInput
   inquiryParticipants?: Prisma.InquiryParticipantCreateNestedManyWithoutUserInput
-  createdAIFormTemplates?: Prisma.AIFormTemplateCreateNestedManyWithoutCreatedByInput
-  aiTemplateExecutions?: Prisma.AITemplateExecutionCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutCreatedThreadsInput = {
@@ -3530,8 +3038,6 @@ export type UserUncheckedCreateWithoutCreatedThreadsInput = {
   assignedInquiries?: Prisma.InquiryUncheckedCreateNestedManyWithoutAssigneeInput
   inquiryMessages?: Prisma.InquiryMessageUncheckedCreateNestedManyWithoutSenderInput
   inquiryParticipants?: Prisma.InquiryParticipantUncheckedCreateNestedManyWithoutUserInput
-  createdAIFormTemplates?: Prisma.AIFormTemplateUncheckedCreateNestedManyWithoutCreatedByInput
-  aiTemplateExecutions?: Prisma.AITemplateExecutionUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutCreatedThreadsInput = {
@@ -3587,8 +3093,6 @@ export type UserUpdateWithoutCreatedThreadsInput = {
   assignedInquiries?: Prisma.InquiryUpdateManyWithoutAssigneeNestedInput
   inquiryMessages?: Prisma.InquiryMessageUpdateManyWithoutSenderNestedInput
   inquiryParticipants?: Prisma.InquiryParticipantUpdateManyWithoutUserNestedInput
-  createdAIFormTemplates?: Prisma.AIFormTemplateUpdateManyWithoutCreatedByNestedInput
-  aiTemplateExecutions?: Prisma.AITemplateExecutionUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutCreatedThreadsInput = {
@@ -3628,8 +3132,6 @@ export type UserUncheckedUpdateWithoutCreatedThreadsInput = {
   assignedInquiries?: Prisma.InquiryUncheckedUpdateManyWithoutAssigneeNestedInput
   inquiryMessages?: Prisma.InquiryMessageUncheckedUpdateManyWithoutSenderNestedInput
   inquiryParticipants?: Prisma.InquiryParticipantUncheckedUpdateManyWithoutUserNestedInput
-  createdAIFormTemplates?: Prisma.AIFormTemplateUncheckedUpdateManyWithoutCreatedByNestedInput
-  aiTemplateExecutions?: Prisma.AITemplateExecutionUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutInquiryMessagesInput = {
@@ -3669,8 +3171,6 @@ export type UserCreateWithoutInquiryMessagesInput = {
   assignedInquiries?: Prisma.InquiryCreateNestedManyWithoutAssigneeInput
   inquiryParticipants?: Prisma.InquiryParticipantCreateNestedManyWithoutUserInput
   createdThreads?: Prisma.InquiryThreadCreateNestedManyWithoutCreatorInput
-  createdAIFormTemplates?: Prisma.AIFormTemplateCreateNestedManyWithoutCreatedByInput
-  aiTemplateExecutions?: Prisma.AITemplateExecutionCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutInquiryMessagesInput = {
@@ -3710,8 +3210,6 @@ export type UserUncheckedCreateWithoutInquiryMessagesInput = {
   assignedInquiries?: Prisma.InquiryUncheckedCreateNestedManyWithoutAssigneeInput
   inquiryParticipants?: Prisma.InquiryParticipantUncheckedCreateNestedManyWithoutUserInput
   createdThreads?: Prisma.InquiryThreadUncheckedCreateNestedManyWithoutCreatorInput
-  createdAIFormTemplates?: Prisma.AIFormTemplateUncheckedCreateNestedManyWithoutCreatedByInput
-  aiTemplateExecutions?: Prisma.AITemplateExecutionUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutInquiryMessagesInput = {
@@ -3767,8 +3265,6 @@ export type UserUpdateWithoutInquiryMessagesInput = {
   assignedInquiries?: Prisma.InquiryUpdateManyWithoutAssigneeNestedInput
   inquiryParticipants?: Prisma.InquiryParticipantUpdateManyWithoutUserNestedInput
   createdThreads?: Prisma.InquiryThreadUpdateManyWithoutCreatorNestedInput
-  createdAIFormTemplates?: Prisma.AIFormTemplateUpdateManyWithoutCreatedByNestedInput
-  aiTemplateExecutions?: Prisma.AITemplateExecutionUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutInquiryMessagesInput = {
@@ -3808,8 +3304,6 @@ export type UserUncheckedUpdateWithoutInquiryMessagesInput = {
   assignedInquiries?: Prisma.InquiryUncheckedUpdateManyWithoutAssigneeNestedInput
   inquiryParticipants?: Prisma.InquiryParticipantUncheckedUpdateManyWithoutUserNestedInput
   createdThreads?: Prisma.InquiryThreadUncheckedUpdateManyWithoutCreatorNestedInput
-  createdAIFormTemplates?: Prisma.AIFormTemplateUncheckedUpdateManyWithoutCreatedByNestedInput
-  aiTemplateExecutions?: Prisma.AITemplateExecutionUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutInquiryParticipantsInput = {
@@ -3849,8 +3343,6 @@ export type UserCreateWithoutInquiryParticipantsInput = {
   assignedInquiries?: Prisma.InquiryCreateNestedManyWithoutAssigneeInput
   inquiryMessages?: Prisma.InquiryMessageCreateNestedManyWithoutSenderInput
   createdThreads?: Prisma.InquiryThreadCreateNestedManyWithoutCreatorInput
-  createdAIFormTemplates?: Prisma.AIFormTemplateCreateNestedManyWithoutCreatedByInput
-  aiTemplateExecutions?: Prisma.AITemplateExecutionCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutInquiryParticipantsInput = {
@@ -3890,8 +3382,6 @@ export type UserUncheckedCreateWithoutInquiryParticipantsInput = {
   assignedInquiries?: Prisma.InquiryUncheckedCreateNestedManyWithoutAssigneeInput
   inquiryMessages?: Prisma.InquiryMessageUncheckedCreateNestedManyWithoutSenderInput
   createdThreads?: Prisma.InquiryThreadUncheckedCreateNestedManyWithoutCreatorInput
-  createdAIFormTemplates?: Prisma.AIFormTemplateUncheckedCreateNestedManyWithoutCreatedByInput
-  aiTemplateExecutions?: Prisma.AITemplateExecutionUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutInquiryParticipantsInput = {
@@ -3947,8 +3437,6 @@ export type UserUpdateWithoutInquiryParticipantsInput = {
   assignedInquiries?: Prisma.InquiryUpdateManyWithoutAssigneeNestedInput
   inquiryMessages?: Prisma.InquiryMessageUpdateManyWithoutSenderNestedInput
   createdThreads?: Prisma.InquiryThreadUpdateManyWithoutCreatorNestedInput
-  createdAIFormTemplates?: Prisma.AIFormTemplateUpdateManyWithoutCreatedByNestedInput
-  aiTemplateExecutions?: Prisma.AITemplateExecutionUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutInquiryParticipantsInput = {
@@ -3988,8 +3476,6 @@ export type UserUncheckedUpdateWithoutInquiryParticipantsInput = {
   assignedInquiries?: Prisma.InquiryUncheckedUpdateManyWithoutAssigneeNestedInput
   inquiryMessages?: Prisma.InquiryMessageUncheckedUpdateManyWithoutSenderNestedInput
   createdThreads?: Prisma.InquiryThreadUncheckedUpdateManyWithoutCreatorNestedInput
-  createdAIFormTemplates?: Prisma.AIFormTemplateUncheckedUpdateManyWithoutCreatedByNestedInput
-  aiTemplateExecutions?: Prisma.AITemplateExecutionUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutCreatedSafeWalletsInput = {
@@ -4029,8 +3515,6 @@ export type UserCreateWithoutCreatedSafeWalletsInput = {
   inquiryMessages?: Prisma.InquiryMessageCreateNestedManyWithoutSenderInput
   inquiryParticipants?: Prisma.InquiryParticipantCreateNestedManyWithoutUserInput
   createdThreads?: Prisma.InquiryThreadCreateNestedManyWithoutCreatorInput
-  createdAIFormTemplates?: Prisma.AIFormTemplateCreateNestedManyWithoutCreatedByInput
-  aiTemplateExecutions?: Prisma.AITemplateExecutionCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutCreatedSafeWalletsInput = {
@@ -4070,8 +3554,6 @@ export type UserUncheckedCreateWithoutCreatedSafeWalletsInput = {
   inquiryMessages?: Prisma.InquiryMessageUncheckedCreateNestedManyWithoutSenderInput
   inquiryParticipants?: Prisma.InquiryParticipantUncheckedCreateNestedManyWithoutUserInput
   createdThreads?: Prisma.InquiryThreadUncheckedCreateNestedManyWithoutCreatorInput
-  createdAIFormTemplates?: Prisma.AIFormTemplateUncheckedCreateNestedManyWithoutCreatedByInput
-  aiTemplateExecutions?: Prisma.AITemplateExecutionUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutCreatedSafeWalletsInput = {
@@ -4127,8 +3609,6 @@ export type UserUpdateWithoutCreatedSafeWalletsInput = {
   inquiryMessages?: Prisma.InquiryMessageUpdateManyWithoutSenderNestedInput
   inquiryParticipants?: Prisma.InquiryParticipantUpdateManyWithoutUserNestedInput
   createdThreads?: Prisma.InquiryThreadUpdateManyWithoutCreatorNestedInput
-  createdAIFormTemplates?: Prisma.AIFormTemplateUpdateManyWithoutCreatedByNestedInput
-  aiTemplateExecutions?: Prisma.AITemplateExecutionUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutCreatedSafeWalletsInput = {
@@ -4168,8 +3648,6 @@ export type UserUncheckedUpdateWithoutCreatedSafeWalletsInput = {
   inquiryMessages?: Prisma.InquiryMessageUncheckedUpdateManyWithoutSenderNestedInput
   inquiryParticipants?: Prisma.InquiryParticipantUncheckedUpdateManyWithoutUserNestedInput
   createdThreads?: Prisma.InquiryThreadUncheckedUpdateManyWithoutCreatorNestedInput
-  createdAIFormTemplates?: Prisma.AIFormTemplateUncheckedUpdateManyWithoutCreatedByNestedInput
-  aiTemplateExecutions?: Prisma.AITemplateExecutionUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutCreatedTimelinesInput = {
@@ -4209,8 +3687,6 @@ export type UserCreateWithoutCreatedTimelinesInput = {
   inquiryMessages?: Prisma.InquiryMessageCreateNestedManyWithoutSenderInput
   inquiryParticipants?: Prisma.InquiryParticipantCreateNestedManyWithoutUserInput
   createdThreads?: Prisma.InquiryThreadCreateNestedManyWithoutCreatorInput
-  createdAIFormTemplates?: Prisma.AIFormTemplateCreateNestedManyWithoutCreatedByInput
-  aiTemplateExecutions?: Prisma.AITemplateExecutionCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutCreatedTimelinesInput = {
@@ -4250,8 +3726,6 @@ export type UserUncheckedCreateWithoutCreatedTimelinesInput = {
   inquiryMessages?: Prisma.InquiryMessageUncheckedCreateNestedManyWithoutSenderInput
   inquiryParticipants?: Prisma.InquiryParticipantUncheckedCreateNestedManyWithoutUserInput
   createdThreads?: Prisma.InquiryThreadUncheckedCreateNestedManyWithoutCreatorInput
-  createdAIFormTemplates?: Prisma.AIFormTemplateUncheckedCreateNestedManyWithoutCreatedByInput
-  aiTemplateExecutions?: Prisma.AITemplateExecutionUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutCreatedTimelinesInput = {
@@ -4307,8 +3781,6 @@ export type UserUpdateWithoutCreatedTimelinesInput = {
   inquiryMessages?: Prisma.InquiryMessageUpdateManyWithoutSenderNestedInput
   inquiryParticipants?: Prisma.InquiryParticipantUpdateManyWithoutUserNestedInput
   createdThreads?: Prisma.InquiryThreadUpdateManyWithoutCreatorNestedInput
-  createdAIFormTemplates?: Prisma.AIFormTemplateUpdateManyWithoutCreatedByNestedInput
-  aiTemplateExecutions?: Prisma.AITemplateExecutionUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutCreatedTimelinesInput = {
@@ -4348,8 +3820,6 @@ export type UserUncheckedUpdateWithoutCreatedTimelinesInput = {
   inquiryMessages?: Prisma.InquiryMessageUncheckedUpdateManyWithoutSenderNestedInput
   inquiryParticipants?: Prisma.InquiryParticipantUncheckedUpdateManyWithoutUserNestedInput
   createdThreads?: Prisma.InquiryThreadUncheckedUpdateManyWithoutCreatorNestedInput
-  createdAIFormTemplates?: Prisma.AIFormTemplateUncheckedUpdateManyWithoutCreatedByNestedInput
-  aiTemplateExecutions?: Prisma.AITemplateExecutionUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutCreatedRoutinesInput = {
@@ -4389,8 +3859,6 @@ export type UserCreateWithoutCreatedRoutinesInput = {
   inquiryMessages?: Prisma.InquiryMessageCreateNestedManyWithoutSenderInput
   inquiryParticipants?: Prisma.InquiryParticipantCreateNestedManyWithoutUserInput
   createdThreads?: Prisma.InquiryThreadCreateNestedManyWithoutCreatorInput
-  createdAIFormTemplates?: Prisma.AIFormTemplateCreateNestedManyWithoutCreatedByInput
-  aiTemplateExecutions?: Prisma.AITemplateExecutionCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutCreatedRoutinesInput = {
@@ -4430,8 +3898,6 @@ export type UserUncheckedCreateWithoutCreatedRoutinesInput = {
   inquiryMessages?: Prisma.InquiryMessageUncheckedCreateNestedManyWithoutSenderInput
   inquiryParticipants?: Prisma.InquiryParticipantUncheckedCreateNestedManyWithoutUserInput
   createdThreads?: Prisma.InquiryThreadUncheckedCreateNestedManyWithoutCreatorInput
-  createdAIFormTemplates?: Prisma.AIFormTemplateUncheckedCreateNestedManyWithoutCreatedByInput
-  aiTemplateExecutions?: Prisma.AITemplateExecutionUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutCreatedRoutinesInput = {
@@ -4487,8 +3953,6 @@ export type UserUpdateWithoutCreatedRoutinesInput = {
   inquiryMessages?: Prisma.InquiryMessageUpdateManyWithoutSenderNestedInput
   inquiryParticipants?: Prisma.InquiryParticipantUpdateManyWithoutUserNestedInput
   createdThreads?: Prisma.InquiryThreadUpdateManyWithoutCreatorNestedInput
-  createdAIFormTemplates?: Prisma.AIFormTemplateUpdateManyWithoutCreatedByNestedInput
-  aiTemplateExecutions?: Prisma.AITemplateExecutionUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutCreatedRoutinesInput = {
@@ -4528,8 +3992,6 @@ export type UserUncheckedUpdateWithoutCreatedRoutinesInput = {
   inquiryMessages?: Prisma.InquiryMessageUncheckedUpdateManyWithoutSenderNestedInput
   inquiryParticipants?: Prisma.InquiryParticipantUncheckedUpdateManyWithoutUserNestedInput
   createdThreads?: Prisma.InquiryThreadUncheckedUpdateManyWithoutCreatorNestedInput
-  createdAIFormTemplates?: Prisma.AIFormTemplateUncheckedUpdateManyWithoutCreatedByNestedInput
-  aiTemplateExecutions?: Prisma.AITemplateExecutionUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutCreatedTasksInput = {
@@ -4569,8 +4031,6 @@ export type UserCreateWithoutCreatedTasksInput = {
   inquiryMessages?: Prisma.InquiryMessageCreateNestedManyWithoutSenderInput
   inquiryParticipants?: Prisma.InquiryParticipantCreateNestedManyWithoutUserInput
   createdThreads?: Prisma.InquiryThreadCreateNestedManyWithoutCreatorInput
-  createdAIFormTemplates?: Prisma.AIFormTemplateCreateNestedManyWithoutCreatedByInput
-  aiTemplateExecutions?: Prisma.AITemplateExecutionCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutCreatedTasksInput = {
@@ -4610,8 +4070,6 @@ export type UserUncheckedCreateWithoutCreatedTasksInput = {
   inquiryMessages?: Prisma.InquiryMessageUncheckedCreateNestedManyWithoutSenderInput
   inquiryParticipants?: Prisma.InquiryParticipantUncheckedCreateNestedManyWithoutUserInput
   createdThreads?: Prisma.InquiryThreadUncheckedCreateNestedManyWithoutCreatorInput
-  createdAIFormTemplates?: Prisma.AIFormTemplateUncheckedCreateNestedManyWithoutCreatedByInput
-  aiTemplateExecutions?: Prisma.AITemplateExecutionUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutCreatedTasksInput = {
@@ -4667,8 +4125,6 @@ export type UserUpdateWithoutCreatedTasksInput = {
   inquiryMessages?: Prisma.InquiryMessageUpdateManyWithoutSenderNestedInput
   inquiryParticipants?: Prisma.InquiryParticipantUpdateManyWithoutUserNestedInput
   createdThreads?: Prisma.InquiryThreadUpdateManyWithoutCreatorNestedInput
-  createdAIFormTemplates?: Prisma.AIFormTemplateUpdateManyWithoutCreatedByNestedInput
-  aiTemplateExecutions?: Prisma.AITemplateExecutionUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutCreatedTasksInput = {
@@ -4708,8 +4164,6 @@ export type UserUncheckedUpdateWithoutCreatedTasksInput = {
   inquiryMessages?: Prisma.InquiryMessageUncheckedUpdateManyWithoutSenderNestedInput
   inquiryParticipants?: Prisma.InquiryParticipantUncheckedUpdateManyWithoutUserNestedInput
   createdThreads?: Prisma.InquiryThreadUncheckedUpdateManyWithoutCreatorNestedInput
-  createdAIFormTemplates?: Prisma.AIFormTemplateUncheckedUpdateManyWithoutCreatedByNestedInput
-  aiTemplateExecutions?: Prisma.AITemplateExecutionUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutClassificationInput = {
@@ -4749,8 +4203,6 @@ export type UserCreateWithoutClassificationInput = {
   inquiryMessages?: Prisma.InquiryMessageCreateNestedManyWithoutSenderInput
   inquiryParticipants?: Prisma.InquiryParticipantCreateNestedManyWithoutUserInput
   createdThreads?: Prisma.InquiryThreadCreateNestedManyWithoutCreatorInput
-  createdAIFormTemplates?: Prisma.AIFormTemplateCreateNestedManyWithoutCreatedByInput
-  aiTemplateExecutions?: Prisma.AITemplateExecutionCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutClassificationInput = {
@@ -4790,8 +4242,6 @@ export type UserUncheckedCreateWithoutClassificationInput = {
   inquiryMessages?: Prisma.InquiryMessageUncheckedCreateNestedManyWithoutSenderInput
   inquiryParticipants?: Prisma.InquiryParticipantUncheckedCreateNestedManyWithoutUserInput
   createdThreads?: Prisma.InquiryThreadUncheckedCreateNestedManyWithoutCreatorInput
-  createdAIFormTemplates?: Prisma.AIFormTemplateUncheckedCreateNestedManyWithoutCreatedByInput
-  aiTemplateExecutions?: Prisma.AITemplateExecutionUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutClassificationInput = {
@@ -4847,8 +4297,6 @@ export type UserUpdateWithoutClassificationInput = {
   inquiryMessages?: Prisma.InquiryMessageUpdateManyWithoutSenderNestedInput
   inquiryParticipants?: Prisma.InquiryParticipantUpdateManyWithoutUserNestedInput
   createdThreads?: Prisma.InquiryThreadUpdateManyWithoutCreatorNestedInput
-  createdAIFormTemplates?: Prisma.AIFormTemplateUpdateManyWithoutCreatedByNestedInput
-  aiTemplateExecutions?: Prisma.AITemplateExecutionUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutClassificationInput = {
@@ -4888,8 +4336,6 @@ export type UserUncheckedUpdateWithoutClassificationInput = {
   inquiryMessages?: Prisma.InquiryMessageUncheckedUpdateManyWithoutSenderNestedInput
   inquiryParticipants?: Prisma.InquiryParticipantUncheckedUpdateManyWithoutUserNestedInput
   createdThreads?: Prisma.InquiryThreadUncheckedUpdateManyWithoutCreatorNestedInput
-  createdAIFormTemplates?: Prisma.AIFormTemplateUncheckedUpdateManyWithoutCreatedByNestedInput
-  aiTemplateExecutions?: Prisma.AITemplateExecutionUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutAssociationsInput = {
@@ -4929,8 +4375,6 @@ export type UserCreateWithoutAssociationsInput = {
   inquiryMessages?: Prisma.InquiryMessageCreateNestedManyWithoutSenderInput
   inquiryParticipants?: Prisma.InquiryParticipantCreateNestedManyWithoutUserInput
   createdThreads?: Prisma.InquiryThreadCreateNestedManyWithoutCreatorInput
-  createdAIFormTemplates?: Prisma.AIFormTemplateCreateNestedManyWithoutCreatedByInput
-  aiTemplateExecutions?: Prisma.AITemplateExecutionCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutAssociationsInput = {
@@ -4970,8 +4414,6 @@ export type UserUncheckedCreateWithoutAssociationsInput = {
   inquiryMessages?: Prisma.InquiryMessageUncheckedCreateNestedManyWithoutSenderInput
   inquiryParticipants?: Prisma.InquiryParticipantUncheckedCreateNestedManyWithoutUserInput
   createdThreads?: Prisma.InquiryThreadUncheckedCreateNestedManyWithoutCreatorInput
-  createdAIFormTemplates?: Prisma.AIFormTemplateUncheckedCreateNestedManyWithoutCreatedByInput
-  aiTemplateExecutions?: Prisma.AITemplateExecutionUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutAssociationsInput = {
@@ -5027,8 +4469,6 @@ export type UserUpdateWithoutAssociationsInput = {
   inquiryMessages?: Prisma.InquiryMessageUpdateManyWithoutSenderNestedInput
   inquiryParticipants?: Prisma.InquiryParticipantUpdateManyWithoutUserNestedInput
   createdThreads?: Prisma.InquiryThreadUpdateManyWithoutCreatorNestedInput
-  createdAIFormTemplates?: Prisma.AIFormTemplateUpdateManyWithoutCreatedByNestedInput
-  aiTemplateExecutions?: Prisma.AITemplateExecutionUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutAssociationsInput = {
@@ -5068,8 +4508,6 @@ export type UserUncheckedUpdateWithoutAssociationsInput = {
   inquiryMessages?: Prisma.InquiryMessageUncheckedUpdateManyWithoutSenderNestedInput
   inquiryParticipants?: Prisma.InquiryParticipantUncheckedUpdateManyWithoutUserNestedInput
   createdThreads?: Prisma.InquiryThreadUncheckedUpdateManyWithoutCreatorNestedInput
-  createdAIFormTemplates?: Prisma.AIFormTemplateUncheckedUpdateManyWithoutCreatedByNestedInput
-  aiTemplateExecutions?: Prisma.AITemplateExecutionUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutProfilesInput = {
@@ -5109,8 +4547,6 @@ export type UserCreateWithoutProfilesInput = {
   inquiryMessages?: Prisma.InquiryMessageCreateNestedManyWithoutSenderInput
   inquiryParticipants?: Prisma.InquiryParticipantCreateNestedManyWithoutUserInput
   createdThreads?: Prisma.InquiryThreadCreateNestedManyWithoutCreatorInput
-  createdAIFormTemplates?: Prisma.AIFormTemplateCreateNestedManyWithoutCreatedByInput
-  aiTemplateExecutions?: Prisma.AITemplateExecutionCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutProfilesInput = {
@@ -5150,8 +4586,6 @@ export type UserUncheckedCreateWithoutProfilesInput = {
   inquiryMessages?: Prisma.InquiryMessageUncheckedCreateNestedManyWithoutSenderInput
   inquiryParticipants?: Prisma.InquiryParticipantUncheckedCreateNestedManyWithoutUserInput
   createdThreads?: Prisma.InquiryThreadUncheckedCreateNestedManyWithoutCreatorInput
-  createdAIFormTemplates?: Prisma.AIFormTemplateUncheckedCreateNestedManyWithoutCreatedByInput
-  aiTemplateExecutions?: Prisma.AITemplateExecutionUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutProfilesInput = {
@@ -5207,8 +4641,6 @@ export type UserUpdateWithoutProfilesInput = {
   inquiryMessages?: Prisma.InquiryMessageUpdateManyWithoutSenderNestedInput
   inquiryParticipants?: Prisma.InquiryParticipantUpdateManyWithoutUserNestedInput
   createdThreads?: Prisma.InquiryThreadUpdateManyWithoutCreatorNestedInput
-  createdAIFormTemplates?: Prisma.AIFormTemplateUpdateManyWithoutCreatedByNestedInput
-  aiTemplateExecutions?: Prisma.AITemplateExecutionUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutProfilesInput = {
@@ -5248,8 +4680,6 @@ export type UserUncheckedUpdateWithoutProfilesInput = {
   inquiryMessages?: Prisma.InquiryMessageUncheckedUpdateManyWithoutSenderNestedInput
   inquiryParticipants?: Prisma.InquiryParticipantUncheckedUpdateManyWithoutUserNestedInput
   createdThreads?: Prisma.InquiryThreadUncheckedUpdateManyWithoutCreatorNestedInput
-  createdAIFormTemplates?: Prisma.AIFormTemplateUncheckedUpdateManyWithoutCreatedByNestedInput
-  aiTemplateExecutions?: Prisma.AITemplateExecutionUncheckedUpdateManyWithoutUserNestedInput
 }
 
 
@@ -5278,8 +4708,6 @@ export type UserCountOutputType = {
   inquiryMessages: number
   inquiryParticipants: number
   createdThreads: number
-  createdAIFormTemplates: number
-  aiTemplateExecutions: number
 }
 
 export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -5303,8 +4731,6 @@ export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.I
   inquiryMessages?: boolean | UserCountOutputTypeCountInquiryMessagesArgs
   inquiryParticipants?: boolean | UserCountOutputTypeCountInquiryParticipantsArgs
   createdThreads?: boolean | UserCountOutputTypeCountCreatedThreadsArgs
-  createdAIFormTemplates?: boolean | UserCountOutputTypeCountCreatedAIFormTemplatesArgs
-  aiTemplateExecutions?: boolean | UserCountOutputTypeCountAiTemplateExecutionsArgs
 }
 
 /**
@@ -5457,20 +4883,6 @@ export type UserCountOutputTypeCountCreatedThreadsArgs<ExtArgs extends runtime.T
   where?: Prisma.InquiryThreadWhereInput
 }
 
-/**
- * UserCountOutputType without action
- */
-export type UserCountOutputTypeCountCreatedAIFormTemplatesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.AIFormTemplateWhereInput
-}
-
-/**
- * UserCountOutputType without action
- */
-export type UserCountOutputTypeCountAiTemplateExecutionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.AITemplateExecutionWhereInput
-}
-
 
 export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -5510,8 +4922,6 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   inquiryMessages?: boolean | Prisma.User$inquiryMessagesArgs<ExtArgs>
   inquiryParticipants?: boolean | Prisma.User$inquiryParticipantsArgs<ExtArgs>
   createdThreads?: boolean | Prisma.User$createdThreadsArgs<ExtArgs>
-  createdAIFormTemplates?: boolean | Prisma.User$createdAIFormTemplatesArgs<ExtArgs>
-  aiTemplateExecutions?: boolean | Prisma.User$aiTemplateExecutionsArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["user"]>
 
@@ -5595,8 +5005,6 @@ export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   inquiryMessages?: boolean | Prisma.User$inquiryMessagesArgs<ExtArgs>
   inquiryParticipants?: boolean | Prisma.User$inquiryParticipantsArgs<ExtArgs>
   createdThreads?: boolean | Prisma.User$createdThreadsArgs<ExtArgs>
-  createdAIFormTemplates?: boolean | Prisma.User$createdAIFormTemplatesArgs<ExtArgs>
-  aiTemplateExecutions?: boolean | Prisma.User$aiTemplateExecutionsArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type UserIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
@@ -5626,8 +5034,6 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     inquiryMessages: Prisma.$InquiryMessagePayload<ExtArgs>[]
     inquiryParticipants: Prisma.$InquiryParticipantPayload<ExtArgs>[]
     createdThreads: Prisma.$InquiryThreadPayload<ExtArgs>[]
-    createdAIFormTemplates: Prisma.$AIFormTemplatePayload<ExtArgs>[]
-    aiTemplateExecutions: Prisma.$AITemplateExecutionPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -6097,8 +5503,6 @@ export interface Prisma__UserClient<T, Null = never, ExtArgs extends runtime.Typ
   inquiryMessages<T extends Prisma.User$inquiryMessagesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$inquiryMessagesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$InquiryMessagePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   inquiryParticipants<T extends Prisma.User$inquiryParticipantsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$inquiryParticipantsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$InquiryParticipantPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   createdThreads<T extends Prisma.User$createdThreadsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$createdThreadsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$InquiryThreadPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-  createdAIFormTemplates<T extends Prisma.User$createdAIFormTemplatesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$createdAIFormTemplatesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AIFormTemplatePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-  aiTemplateExecutions<T extends Prisma.User$aiTemplateExecutionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$aiTemplateExecutionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AITemplateExecutionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -7028,54 +6432,6 @@ export type User$createdThreadsArgs<ExtArgs extends runtime.Types.Extensions.Int
   take?: number
   skip?: number
   distinct?: Prisma.InquiryThreadScalarFieldEnum | Prisma.InquiryThreadScalarFieldEnum[]
-}
-
-/**
- * User.createdAIFormTemplates
- */
-export type User$createdAIFormTemplatesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  /**
-   * Select specific fields to fetch from the AIFormTemplate
-   */
-  select?: Prisma.AIFormTemplateSelect<ExtArgs> | null
-  /**
-   * Omit specific fields from the AIFormTemplate
-   */
-  omit?: Prisma.AIFormTemplateOmit<ExtArgs> | null
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.AIFormTemplateInclude<ExtArgs> | null
-  where?: Prisma.AIFormTemplateWhereInput
-  orderBy?: Prisma.AIFormTemplateOrderByWithRelationInput | Prisma.AIFormTemplateOrderByWithRelationInput[]
-  cursor?: Prisma.AIFormTemplateWhereUniqueInput
-  take?: number
-  skip?: number
-  distinct?: Prisma.AIFormTemplateScalarFieldEnum | Prisma.AIFormTemplateScalarFieldEnum[]
-}
-
-/**
- * User.aiTemplateExecutions
- */
-export type User$aiTemplateExecutionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  /**
-   * Select specific fields to fetch from the AITemplateExecution
-   */
-  select?: Prisma.AITemplateExecutionSelect<ExtArgs> | null
-  /**
-   * Omit specific fields from the AITemplateExecution
-   */
-  omit?: Prisma.AITemplateExecutionOmit<ExtArgs> | null
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.AITemplateExecutionInclude<ExtArgs> | null
-  where?: Prisma.AITemplateExecutionWhereInput
-  orderBy?: Prisma.AITemplateExecutionOrderByWithRelationInput | Prisma.AITemplateExecutionOrderByWithRelationInput[]
-  cursor?: Prisma.AITemplateExecutionWhereUniqueInput
-  take?: number
-  skip?: number
-  distinct?: Prisma.AITemplateExecutionScalarFieldEnum | Prisma.AITemplateExecutionScalarFieldEnum[]
 }
 
 /**

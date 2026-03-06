@@ -19,9 +19,6 @@
 | AnyNull | 공개 계약 요소 |
 | ModelName | 공개 계약 요소 |
 | TransactionIsolationLevel | 공개 계약 요소 |
-| AIFormTemplateScalarFieldEnum | 공개 계약 요소 |
-| AIFormFieldScalarFieldEnum | 공개 계약 요소 |
-| AITemplateExecutionScalarFieldEnum | 공개 계약 요소 |
 | AssetScalarFieldEnum | 공개 계약 요소 |
 | ImageScalarFieldEnum | 공개 계약 요소 |
 
@@ -29,4 +26,5 @@
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-03-06 | ai-form 스키마 제거에 맞춰 AIForm* ScalarFieldEnum 계약 항목 삭제 | codex |
 | 2026-03-03 | 누락된 sidecar spec 신규 생성 | codex |

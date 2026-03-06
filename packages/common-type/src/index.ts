@@ -177,24 +177,6 @@ export type { IPageMeta } from "./page-meta";
 // ============================================
 export type { UserStats } from "./user-stats";
 // ============================================
-// AI 폼 템플릿 관련 타입
-// ============================================
-export type {
-	AIFormExecuteRequest,
-	AIFormExecuteResponse,
-	AIFormExecutionContext,
-	AIFormFieldConfig,
-	AIFormFieldOption,
-	AIFormFieldResult,
-	AIFormPreviewRequest,
-	AIFormPreviewResponse,
-	AIFormTemplate,
-	AIFormTemplatePaginationMeta,
-	AIFormTemplateStats,
-	AIModelInfo,
-	AIProviderStatus,
-} from "./ai-form-template";
-// ============================================
 // Inquiry 관련 타입
 // ============================================
 export type {

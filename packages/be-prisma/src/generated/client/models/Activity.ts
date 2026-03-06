@@ -14,10 +14,7 @@ import type * as Prisma from "../internal/prismaNamespace.js"
 
 /**
  * Model Activity
- * *
- *  * @description 활동은 루틴 내에서 특정 Task를 어떻게 수행할지 정의합니다. 실행 순서, 반복 횟수, 휴식 시간 등의 메타 정보를 포함합니다.
- *  * Activity는 도메인 독립적이며, Task를 통해 여러 도메인(운동, 헤어샵 등)의 작업을 참조할 수 있습니다.
- *  * @type 자원 (도메인 독립적 - 연결 역할)
+ * @displayName 활동
  */
 export type ActivityModel = runtime.Types.Result.DefaultSelection<Prisma.$ActivityPayload>
 

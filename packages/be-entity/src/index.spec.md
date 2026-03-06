@@ -18,5 +18,6 @@
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-03-06 | 미사용 AI Form Template 엔티티 export 제거 | codex |
 | 2026-03-06 | File* 엔티티 제거에 맞춰 배럴 export 정리 | codex |
 | 2026-03-03 | 누락된 sidecar spec 신규 생성 | codex |

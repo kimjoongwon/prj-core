@@ -566,6 +566,14 @@ export type VideoUncheckedUpdateOneWithoutAssetNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.VideoUpdateToOneWithWhereWithoutAssetInput, Prisma.VideoUpdateWithoutAssetInput>, Prisma.VideoUncheckedUpdateWithoutAssetInput>
 }
 
+export type NullableFloatFieldUpdateOperationsInput = {
+  set?: number | null
+  increment?: number
+  decrement?: number
+  multiply?: number
+  divide?: number
+}
+
 export type VideoCreateWithoutAssetInput = {
   id?: string
   createdAt?: Date | string

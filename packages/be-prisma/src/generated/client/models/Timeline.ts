@@ -14,10 +14,7 @@ import type * as Prisma from "../internal/prismaNamespace.js"
 
 /**
  * Model Timeline
- * *
- *  * @description 타임라인은 세션들을 논리적으로 그룹화하는 컨테이너입니다.
- *  * 예: "2025년 10월", "가을 시즌", "특별 이벤트" 등 세션들을 의미있는 단위로 묶어 관리합니다.
- *  * @type 추상
+ * @displayName 타임라인
  */
 export type TimelineModel = runtime.Types.Result.DefaultSelection<Prisma.$TimelinePayload>
 

@@ -29,8 +29,8 @@ export * from "./enums.js"
  * @example
  * ```
  * const prisma = new PrismaClient()
- * // Fetch zero or more AIFormTemplates
- * const aIFormTemplates = await prisma.aIFormTemplate.findMany()
+ * // Fetch zero or more Assets
+ * const assets = await prisma.asset.findMany()
  * ```
  * 
  * Read more in our [docs](https://pris.ly/d/client).
@@ -39,21 +39,6 @@ export const PrismaClient = $Class.getPrismaClientClass()
 export type PrismaClient<LogOpts extends Prisma.LogLevel = never, OmitOpts extends Prisma.PrismaClientOptions["omit"] = Prisma.PrismaClientOptions["omit"], ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = $Class.PrismaClient<LogOpts, OmitOpts, ExtArgs>
 export { Prisma }
 
-/**
- * Model AIFormTemplate
- * @displayName AI 폼 템플릿
- */
-export type AIFormTemplate = Prisma.AIFormTemplateModel
-/**
- * Model AIFormField
- * @displayName AI 폼 필드
- */
-export type AIFormField = Prisma.AIFormFieldModel
-/**
- * Model AITemplateExecution
- * @displayName AI 템플릿 실행
- */
-export type AITemplateExecution = Prisma.AITemplateExecutionModel
 /**
  * Model Asset
  * @displayName 에셋
@@ -231,17 +216,17 @@ export type RoleAssociation = Prisma.RoleAssociationModel
 export type RoleClassification = Prisma.RoleClassificationModel
 /**
  * Model SafeWallet
- * 
+ * @displayName Safe 지갑
  */
 export type SafeWallet = Prisma.SafeWalletModel
 /**
  * Model SafeTransaction
- * 
+ * @displayName Safe 트랜잭션
  */
 export type SafeTransaction = Prisma.SafeTransactionModel
 /**
  * Model SafeConfirmation
- * 
+ * @displayName Safe 트랜잭션 서명
  */
 export type SafeConfirmation = Prisma.SafeConfirmationModel
 /**
@@ -266,57 +251,37 @@ export type SpaceAssociation = Prisma.SpaceAssociationModel
 export type Ground = Prisma.GroundModel
 /**
  * Model Timeline
- * *
- *  * @description 타임라인은 세션들을 논리적으로 그룹화하는 컨테이너입니다.
- *  * 예: "2025년 10월", "가을 시즌", "특별 이벤트" 등 세션들을 의미있는 단위로 묶어 관리합니다.
- *  * @type 추상
+ * @displayName 타임라인
  */
 export type Timeline = Prisma.TimelineModel
 /**
  * Model Session
- * *
- *  * @description 세션은 타임라인 내에서 일회성 또는 반복적으로 발생하는 시간 단위 이벤트입니다. 프로그램 실행의 시간적 단위를 나타냅니다.
- *  * @type 자원
+ * @displayName 세션
  */
 export type Session = Prisma.SessionModel
 /**
  * Model Program
- * *
- *  * @description 프로그램은 특정 세션에서 실행되는 루틴을 나타냅니다. 강사가 진행하는 정원이 정해진 활동 단위입니다.
- *  * @type 자원
+ * @displayName 프로그램
  */
 export type Program = Prisma.ProgramModel
 /**
  * Model Routine
- * *
- *  * @description 루틴은 반복적으로 수행되는 일련의 활동들의 조합입니다. 여러 Activity를 순서대로 묶어서 하나의 프로그램으로 만듭니다.
- *  * 상위 Space의 루틴은 하위 Space에서 사용할 수 있습니다 (Space 계층 기반 공유).
- *  * @type 자원
+ * @displayName 루틴
  */
 export type Routine = Prisma.RoutineModel
 /**
  * Model Activity
- * *
- *  * @description 활동은 루틴 내에서 특정 Task를 어떻게 수행할지 정의합니다. 실행 순서, 반복 횟수, 휴식 시간 등의 메타 정보를 포함합니다.
- *  * Activity는 도메인 독립적이며, Task를 통해 여러 도메인(운동, 헤어샵 등)의 작업을 참조할 수 있습니다.
- *  * @type 자원 (도메인 독립적 - 연결 역할)
+ * @displayName 활동
  */
 export type Activity = Prisma.ActivityModel
 /**
  * Model Task
- * *
- *  * @description 태스크는 도메인 독립적인 작업의 추상 계층입니다. 분류 및 그룹핑 역할만 수행하며, 구체적인 도메인 정보는 포함하지 않습니다.
- *  * Task는 Exercise(운동), Treatment(헤어샵) 등 다양한 도메인 모델에 의해 확장됩니다.
- *  * 하나의 Task는 여러 Activity에서 재사용될 수 있습니다 (예: "플랭크" 운동이 여러 루틴에서 사용됨).
- *  * @type 추상 (도메인 브릿지 계층)
+ * @displayName 태스크
  */
 export type Task = Prisma.TaskModel
 /**
  * Model Exercise
- * *
- *  * @description 운동은 Task를 확장하여 운동 도메인의 모든 정보를 담당합니다. 운동 이름, 설명, 수행 시간, 횟수, 이미지, 영상 등 운동 관련 모든 데이터를 포함합니다.
- *  * Exercise는 Task와 1:1 관계이며, Task를 통해 Activity에서 참조됩니다.
- *  * @type 도메인 (운동 전용)
+ * @displayName 운동
  */
 export type Exercise = Prisma.ExerciseModel
 /**

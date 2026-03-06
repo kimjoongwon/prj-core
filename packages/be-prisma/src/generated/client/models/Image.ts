@@ -510,6 +510,26 @@ export type ImageUncheckedUpdateOneWithoutAssetNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.ImageUpdateToOneWithWhereWithoutAssetInput, Prisma.ImageUpdateWithoutAssetInput>, Prisma.ImageUncheckedUpdateWithoutAssetInput>
 }
 
+export type IntFieldUpdateOperationsInput = {
+  set?: number
+  increment?: number
+  decrement?: number
+  multiply?: number
+  divide?: number
+}
+
+export type NullableIntFieldUpdateOperationsInput = {
+  set?: number | null
+  increment?: number
+  decrement?: number
+  multiply?: number
+  divide?: number
+}
+
+export type BoolFieldUpdateOperationsInput = {
+  set?: boolean
+}
+
 export type ImageCreateWithoutAssetInput = {
   id?: string
   createdAt?: Date | string

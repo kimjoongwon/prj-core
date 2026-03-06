@@ -18,4 +18,5 @@
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-03-06 | 미사용 AI Form Template Repository export 제거 | codex |
 | 2026-03-03 | 누락된 sidecar spec 신규 생성 | codex |

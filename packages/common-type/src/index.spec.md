@@ -36,6 +36,7 @@
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-03-06 | 미사용 템플릿 타입 export 블록 제거 | codex |
 | 2026-03-06 | Store/Hook 계약 타입 export(AbilityChecker, AppStoreConfig, UseLayoutOptions 등) 추가 | codex |
 | 2026-03-06 | CASL 공용 타입(APP_ACTIONS/AppAction/AppSubject/AbilityRule/AbilityApiResponse) export 추가 | codex |
 | 2026-03-03 | 누락된 sidecar spec 신규 생성 | codex |

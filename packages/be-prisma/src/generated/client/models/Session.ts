@@ -14,9 +14,7 @@ import type * as Prisma from "../internal/prismaNamespace.js"
 
 /**
  * Model Session
- * *
- *  * @description 세션은 타임라인 내에서 일회성 또는 반복적으로 발생하는 시간 단위 이벤트입니다. 프로그램 실행의 시간적 단위를 나타냅니다.
- *  * @type 자원
+ * @displayName 세션
  */
 export type SessionModel = runtime.Types.Result.DefaultSelection<Prisma.$SessionPayload>
 

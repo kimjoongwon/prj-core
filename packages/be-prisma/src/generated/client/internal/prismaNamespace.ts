@@ -384,9 +384,6 @@ type FieldRefInputType<Model, FieldType> = Model extends never ? never : FieldRe
 
 
 export const ModelName = {
-  AIFormTemplate: 'AIFormTemplate',
-  AIFormField: 'AIFormField',
-  AITemplateExecution: 'AITemplateExecution',
   Asset: 'Asset',
   Image: 'Image',
   Video: 'Video',
@@ -458,232 +455,10 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "aIFormTemplate" | "aIFormField" | "aITemplateExecution" | "asset" | "image" | "video" | "document" | "folder" | "album" | "albumEntry" | "derivative" | "securityPolicy" | "whitelistEntry" | "authAuditLog" | "passwordHistory" | "category" | "group" | "tenant" | "assignment" | "post" | "content" | "subject" | "action" | "ability" | "grant" | "inquiry" | "inquiryThread" | "inquiryMessage" | "inquiryParticipant" | "inquiryAttachment" | "inquiryTag" | "sentimentAnalysis" | "aIAgentLog" | "oidcClient" | "oidcModel" | "role" | "roleAssociation" | "roleClassification" | "safeWallet" | "safeTransaction" | "safeConfirmation" | "space" | "spaceClassification" | "spaceAssociation" | "ground" | "timeline" | "session" | "program" | "routine" | "activity" | "task" | "exercise" | "template" | "templateVariable" | "translation" | "user" | "userClassification" | "userAssociation" | "profile"
+    modelProps: "asset" | "image" | "video" | "document" | "folder" | "album" | "albumEntry" | "derivative" | "securityPolicy" | "whitelistEntry" | "authAuditLog" | "passwordHistory" | "category" | "group" | "tenant" | "assignment" | "post" | "content" | "subject" | "action" | "ability" | "grant" | "inquiry" | "inquiryThread" | "inquiryMessage" | "inquiryParticipant" | "inquiryAttachment" | "inquiryTag" | "sentimentAnalysis" | "aIAgentLog" | "oidcClient" | "oidcModel" | "role" | "roleAssociation" | "roleClassification" | "safeWallet" | "safeTransaction" | "safeConfirmation" | "space" | "spaceClassification" | "spaceAssociation" | "ground" | "timeline" | "session" | "program" | "routine" | "activity" | "task" | "exercise" | "template" | "templateVariable" | "translation" | "user" | "userClassification" | "userAssociation" | "profile"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
-    AIFormTemplate: {
-      payload: Prisma.$AIFormTemplatePayload<ExtArgs>
-      fields: Prisma.AIFormTemplateFieldRefs
-      operations: {
-        findUnique: {
-          args: Prisma.AIFormTemplateFindUniqueArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$AIFormTemplatePayload> | null
-        }
-        findUniqueOrThrow: {
-          args: Prisma.AIFormTemplateFindUniqueOrThrowArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$AIFormTemplatePayload>
-        }
-        findFirst: {
-          args: Prisma.AIFormTemplateFindFirstArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$AIFormTemplatePayload> | null
-        }
-        findFirstOrThrow: {
-          args: Prisma.AIFormTemplateFindFirstOrThrowArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$AIFormTemplatePayload>
-        }
-        findMany: {
-          args: Prisma.AIFormTemplateFindManyArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$AIFormTemplatePayload>[]
-        }
-        create: {
-          args: Prisma.AIFormTemplateCreateArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$AIFormTemplatePayload>
-        }
-        createMany: {
-          args: Prisma.AIFormTemplateCreateManyArgs<ExtArgs>
-          result: BatchPayload
-        }
-        createManyAndReturn: {
-          args: Prisma.AIFormTemplateCreateManyAndReturnArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$AIFormTemplatePayload>[]
-        }
-        delete: {
-          args: Prisma.AIFormTemplateDeleteArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$AIFormTemplatePayload>
-        }
-        update: {
-          args: Prisma.AIFormTemplateUpdateArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$AIFormTemplatePayload>
-        }
-        deleteMany: {
-          args: Prisma.AIFormTemplateDeleteManyArgs<ExtArgs>
-          result: BatchPayload
-        }
-        updateMany: {
-          args: Prisma.AIFormTemplateUpdateManyArgs<ExtArgs>
-          result: BatchPayload
-        }
-        updateManyAndReturn: {
-          args: Prisma.AIFormTemplateUpdateManyAndReturnArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$AIFormTemplatePayload>[]
-        }
-        upsert: {
-          args: Prisma.AIFormTemplateUpsertArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$AIFormTemplatePayload>
-        }
-        aggregate: {
-          args: Prisma.AIFormTemplateAggregateArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.AggregateAIFormTemplate>
-        }
-        groupBy: {
-          args: Prisma.AIFormTemplateGroupByArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.AIFormTemplateGroupByOutputType>[]
-        }
-        count: {
-          args: Prisma.AIFormTemplateCountArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.AIFormTemplateCountAggregateOutputType> | number
-        }
-      }
-    }
-    AIFormField: {
-      payload: Prisma.$AIFormFieldPayload<ExtArgs>
-      fields: Prisma.AIFormFieldFieldRefs
-      operations: {
-        findUnique: {
-          args: Prisma.AIFormFieldFindUniqueArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$AIFormFieldPayload> | null
-        }
-        findUniqueOrThrow: {
-          args: Prisma.AIFormFieldFindUniqueOrThrowArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$AIFormFieldPayload>
-        }
-        findFirst: {
-          args: Prisma.AIFormFieldFindFirstArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$AIFormFieldPayload> | null
-        }
-        findFirstOrThrow: {
-          args: Prisma.AIFormFieldFindFirstOrThrowArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$AIFormFieldPayload>
-        }
-        findMany: {
-          args: Prisma.AIFormFieldFindManyArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$AIFormFieldPayload>[]
-        }
-        create: {
-          args: Prisma.AIFormFieldCreateArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$AIFormFieldPayload>
-        }
-        createMany: {
-          args: Prisma.AIFormFieldCreateManyArgs<ExtArgs>
-          result: BatchPayload
-        }
-        createManyAndReturn: {
-          args: Prisma.AIFormFieldCreateManyAndReturnArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$AIFormFieldPayload>[]
-        }
-        delete: {
-          args: Prisma.AIFormFieldDeleteArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$AIFormFieldPayload>
-        }
-        update: {
-          args: Prisma.AIFormFieldUpdateArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$AIFormFieldPayload>
-        }
-        deleteMany: {
-          args: Prisma.AIFormFieldDeleteManyArgs<ExtArgs>
-          result: BatchPayload
-        }
-        updateMany: {
-          args: Prisma.AIFormFieldUpdateManyArgs<ExtArgs>
-          result: BatchPayload
-        }
-        updateManyAndReturn: {
-          args: Prisma.AIFormFieldUpdateManyAndReturnArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$AIFormFieldPayload>[]
-        }
-        upsert: {
-          args: Prisma.AIFormFieldUpsertArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$AIFormFieldPayload>
-        }
-        aggregate: {
-          args: Prisma.AIFormFieldAggregateArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.AggregateAIFormField>
-        }
-        groupBy: {
-          args: Prisma.AIFormFieldGroupByArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.AIFormFieldGroupByOutputType>[]
-        }
-        count: {
-          args: Prisma.AIFormFieldCountArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.AIFormFieldCountAggregateOutputType> | number
-        }
-      }
-    }
-    AITemplateExecution: {
-      payload: Prisma.$AITemplateExecutionPayload<ExtArgs>
-      fields: Prisma.AITemplateExecutionFieldRefs
-      operations: {
-        findUnique: {
-          args: Prisma.AITemplateExecutionFindUniqueArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$AITemplateExecutionPayload> | null
-        }
-        findUniqueOrThrow: {
-          args: Prisma.AITemplateExecutionFindUniqueOrThrowArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$AITemplateExecutionPayload>
-        }
-        findFirst: {
-          args: Prisma.AITemplateExecutionFindFirstArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$AITemplateExecutionPayload> | null
-        }
-        findFirstOrThrow: {
-          args: Prisma.AITemplateExecutionFindFirstOrThrowArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$AITemplateExecutionPayload>
-        }
-        findMany: {
-          args: Prisma.AITemplateExecutionFindManyArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$AITemplateExecutionPayload>[]
-        }
-        create: {
-          args: Prisma.AITemplateExecutionCreateArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$AITemplateExecutionPayload>
-        }
-        createMany: {
-          args: Prisma.AITemplateExecutionCreateManyArgs<ExtArgs>
-          result: BatchPayload
-        }
-        createManyAndReturn: {
-          args: Prisma.AITemplateExecutionCreateManyAndReturnArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$AITemplateExecutionPayload>[]
-        }
-        delete: {
-          args: Prisma.AITemplateExecutionDeleteArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$AITemplateExecutionPayload>
-        }
-        update: {
-          args: Prisma.AITemplateExecutionUpdateArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$AITemplateExecutionPayload>
-        }
-        deleteMany: {
-          args: Prisma.AITemplateExecutionDeleteManyArgs<ExtArgs>
-          result: BatchPayload
-        }
-        updateMany: {
-          args: Prisma.AITemplateExecutionUpdateManyArgs<ExtArgs>
-          result: BatchPayload
-        }
-        updateManyAndReturn: {
-          args: Prisma.AITemplateExecutionUpdateManyAndReturnArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$AITemplateExecutionPayload>[]
-        }
-        upsert: {
-          args: Prisma.AITemplateExecutionUpsertArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$AITemplateExecutionPayload>
-        }
-        aggregate: {
-          args: Prisma.AITemplateExecutionAggregateArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.AggregateAITemplateExecution>
-        }
-        groupBy: {
-          args: Prisma.AITemplateExecutionGroupByArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.AITemplateExecutionGroupByOutputType>[]
-        }
-        count: {
-          args: Prisma.AITemplateExecutionCountArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.AITemplateExecutionCountAggregateOutputType> | number
-        }
-      }
-    }
     Asset: {
       payload: Prisma.$AssetPayload<ExtArgs>
       fields: Prisma.AssetFieldRefs
@@ -4867,76 +4642,6 @@ export const TransactionIsolationLevel = runtime.makeStrictEnum({
 export type TransactionIsolationLevel = (typeof TransactionIsolationLevel)[keyof typeof TransactionIsolationLevel]
 
 
-export const AIFormTemplateScalarFieldEnum = {
-  id: 'id',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt',
-  removedAt: 'removedAt',
-  spaceId: 'spaceId',
-  name: 'name',
-  description: 'description',
-  targetDomain: 'targetDomain',
-  targetEntity: 'targetEntity',
-  aiProvider: 'aiProvider',
-  model: 'model',
-  systemPrompt: 'systemPrompt',
-  priority: 'priority',
-  allowUserPrompt: 'allowUserPrompt',
-  maxTokens: 'maxTokens',
-  temperature: 'temperature',
-  metadata: 'metadata',
-  createdById: 'createdById'
-} as const
-
-export type AIFormTemplateScalarFieldEnum = (typeof AIFormTemplateScalarFieldEnum)[keyof typeof AIFormTemplateScalarFieldEnum]
-
-
-export const AIFormFieldScalarFieldEnum = {
-  id: 'id',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt',
-  templateId: 'templateId',
-  fieldName: 'fieldName',
-  fieldLabel: 'fieldLabel',
-  fieldType: 'fieldType',
-  prompt: 'prompt',
-  isRequired: 'isRequired',
-  defaultValue: 'defaultValue',
-  validationRegex: 'validationRegex',
-  validationMessage: 'validationMessage',
-  maxLength: 'maxLength',
-  options: 'options',
-  order: 'order',
-  groupId: 'groupId',
-  metadata: 'metadata'
-} as const
-
-export type AIFormFieldScalarFieldEnum = (typeof AIFormFieldScalarFieldEnum)[keyof typeof AIFormFieldScalarFieldEnum]
-
-
-export const AITemplateExecutionScalarFieldEnum = {
-  id: 'id',
-  createdAt: 'createdAt',
-  templateId: 'templateId',
-  userId: 'userId',
-  spaceId: 'spaceId',
-  userInput: 'userInput',
-  inputContext: 'inputContext',
-  result: 'result',
-  status: 'status',
-  errorMessage: 'errorMessage',
-  tokensUsed: 'tokensUsed',
-  executionTimeMs: 'executionTimeMs',
-  aiProvider: 'aiProvider',
-  model: 'model',
-  isApplied: 'isApplied',
-  appliedAt: 'appliedAt',
-  targetEntityId: 'targetEntityId'
-} as const
-
-export type AITemplateExecutionScalarFieldEnum = (typeof AITemplateExecutionScalarFieldEnum)[keyof typeof AITemplateExecutionScalarFieldEnum]
-
-
 export const AssetScalarFieldEnum = {
   id: 'id',
   createdAt: 'createdAt',
@@ -5927,97 +5632,6 @@ export type ListDateTimeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaM
 
 
 /**
- * Reference to a field of type 'AIProvider'
- */
-export type EnumAIProviderFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'AIProvider'>
-    
-
-
-/**
- * Reference to a field of type 'AIProvider[]'
- */
-export type ListEnumAIProviderFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'AIProvider[]'>
-    
-
-
-/**
- * Reference to a field of type 'Int'
- */
-export type IntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int'>
-    
-
-
-/**
- * Reference to a field of type 'Int[]'
- */
-export type ListIntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int[]'>
-    
-
-
-/**
- * Reference to a field of type 'Boolean'
- */
-export type BooleanFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Boolean'>
-    
-
-
-/**
- * Reference to a field of type 'Float'
- */
-export type FloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float'>
-    
-
-
-/**
- * Reference to a field of type 'Float[]'
- */
-export type ListFloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float[]'>
-    
-
-
-/**
- * Reference to a field of type 'Json'
- */
-export type JsonFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Json'>
-    
-
-
-/**
- * Reference to a field of type 'QueryMode'
- */
-export type EnumQueryModeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'QueryMode'>
-    
-
-
-/**
- * Reference to a field of type 'FormFieldType'
- */
-export type EnumFormFieldTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'FormFieldType'>
-    
-
-
-/**
- * Reference to a field of type 'FormFieldType[]'
- */
-export type ListEnumFormFieldTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'FormFieldType[]'>
-    
-
-
-/**
- * Reference to a field of type 'ExecutionStatus'
- */
-export type EnumExecutionStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ExecutionStatus'>
-    
-
-
-/**
- * Reference to a field of type 'ExecutionStatus[]'
- */
-export type ListEnumExecutionStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ExecutionStatus[]'>
-    
-
-
-/**
  * Reference to a field of type 'AssetKind'
  */
 export type EnumAssetKindFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'AssetKind'>
@@ -6056,6 +5670,55 @@ export type BigIntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 
  * Reference to a field of type 'BigInt[]'
  */
 export type ListBigIntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'BigInt[]'>
+    
+
+
+/**
+ * Reference to a field of type 'Json'
+ */
+export type JsonFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Json'>
+    
+
+
+/**
+ * Reference to a field of type 'QueryMode'
+ */
+export type EnumQueryModeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'QueryMode'>
+    
+
+
+/**
+ * Reference to a field of type 'Int'
+ */
+export type IntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int'>
+    
+
+
+/**
+ * Reference to a field of type 'Int[]'
+ */
+export type ListIntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int[]'>
+    
+
+
+/**
+ * Reference to a field of type 'Boolean'
+ */
+export type BooleanFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Boolean'>
+    
+
+
+/**
+ * Reference to a field of type 'Float'
+ */
+export type FloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float'>
+    
+
+
+/**
+ * Reference to a field of type 'Float[]'
+ */
+export type ListFloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float[]'>
     
 
 
@@ -6475,9 +6138,6 @@ export type PrismaClientOptions = ({
   comments?: runtime.SqlCommenterPlugin[]
 }
 export type GlobalOmitConfig = {
-  aIFormTemplate?: Prisma.AIFormTemplateOmit
-  aIFormField?: Prisma.AIFormFieldOmit
-  aITemplateExecution?: Prisma.AITemplateExecutionOmit
   asset?: Prisma.AssetOmit
   image?: Prisma.ImageOmit
   video?: Prisma.VideoOmit

@@ -8,9 +8,6 @@
  *
  * 🟢 You can import this file directly.
  */
-export type * from './models/AIFormTemplate.js'
-export type * from './models/AIFormField.js'
-export type * from './models/AITemplateExecution.js'
 export type * from './models/Asset.js'
 export type * from './models/Image.js'
 export type * from './models/Video.js'

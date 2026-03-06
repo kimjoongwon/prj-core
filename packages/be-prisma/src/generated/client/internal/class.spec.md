@@ -21,4 +21,5 @@
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-03-06 | ai-form 스키마 제거로 PrismaClient delegate 계약 재생성 반영 | codex |
 | 2026-03-03 | 누락된 sidecar spec 신규 생성 | codex |

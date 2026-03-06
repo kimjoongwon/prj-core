@@ -14,11 +14,7 @@ import type * as Prisma from "../internal/prismaNamespace.js"
 
 /**
  * Model Task
- * *
- *  * @description 태스크는 도메인 독립적인 작업의 추상 계층입니다. 분류 및 그룹핑 역할만 수행하며, 구체적인 도메인 정보는 포함하지 않습니다.
- *  * Task는 Exercise(운동), Treatment(헤어샵) 등 다양한 도메인 모델에 의해 확장됩니다.
- *  * 하나의 Task는 여러 Activity에서 재사용될 수 있습니다 (예: "플랭크" 운동이 여러 루틴에서 사용됨).
- *  * @type 추상 (도메인 브릿지 계층)
+ * @displayName 태스크
  */
 export type TaskModel = runtime.Types.Result.DefaultSelection<Prisma.$TaskPayload>
 

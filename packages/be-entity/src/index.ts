@@ -20,10 +20,6 @@ export * from "./grant.entity";
 export * from "./ground.entity";
 export * from "./group.entity";
 export * from "./image.entity";
-// AI Form Domain Entities
-export * from "./ai-form-template.entity";
-export * from "./ai-form-field.entity";
-export * from "./ai-template-execution.entity";
 // Inquiry Domain Entities
 export * from "./ai-agent-log.entity";
 export * from "./inquiry.entity";

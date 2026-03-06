@@ -14,7 +14,7 @@ import type * as Prisma from "../internal/prismaNamespace.js"
 
 /**
  * Model SafeWallet
- * 
+ * @displayName Safe 지갑
  */
 export type SafeWalletModel = runtime.Types.Result.DefaultSelection<Prisma.$SafeWalletPayload>
 

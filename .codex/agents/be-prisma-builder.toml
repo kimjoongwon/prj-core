@@ -412,7 +412,6 @@ packages/be-prisma/schema/{domain}.prisma.spec.md
 - `inquiry.prisma`: 문의 도메인
 - `template.prisma`: 템플릿 도메인
 - `translation.prisma`: 번역 도메인
-- `ai-form.prisma`: AI Form 도메인
 - `task.prisma`: 일정/루틴/태스크 도메인
 - `safe.prisma`: Safe Wallet 도메인
 

@@ -51,9 +51,6 @@ export const AnyNull = runtime.AnyNull
 
 
 export const ModelName = {
-  AIFormTemplate: 'AIFormTemplate',
-  AIFormField: 'AIFormField',
-  AITemplateExecution: 'AITemplateExecution',
   Asset: 'Asset',
   Image: 'Image',
   Video: 'Video',
@@ -126,76 +123,6 @@ export const TransactionIsolationLevel = {
 } as const
 
 export type TransactionIsolationLevel = (typeof TransactionIsolationLevel)[keyof typeof TransactionIsolationLevel]
-
-
-export const AIFormTemplateScalarFieldEnum = {
-  id: 'id',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt',
-  removedAt: 'removedAt',
-  spaceId: 'spaceId',
-  name: 'name',
-  description: 'description',
-  targetDomain: 'targetDomain',
-  targetEntity: 'targetEntity',
-  aiProvider: 'aiProvider',
-  model: 'model',
-  systemPrompt: 'systemPrompt',
-  priority: 'priority',
-  allowUserPrompt: 'allowUserPrompt',
-  maxTokens: 'maxTokens',
-  temperature: 'temperature',
-  metadata: 'metadata',
-  createdById: 'createdById'
-} as const
-
-export type AIFormTemplateScalarFieldEnum = (typeof AIFormTemplateScalarFieldEnum)[keyof typeof AIFormTemplateScalarFieldEnum]
-
-
-export const AIFormFieldScalarFieldEnum = {
-  id: 'id',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt',
-  templateId: 'templateId',
-  fieldName: 'fieldName',
-  fieldLabel: 'fieldLabel',
-  fieldType: 'fieldType',
-  prompt: 'prompt',
-  isRequired: 'isRequired',
-  defaultValue: 'defaultValue',
-  validationRegex: 'validationRegex',
-  validationMessage: 'validationMessage',
-  maxLength: 'maxLength',
-  options: 'options',
-  order: 'order',
-  groupId: 'groupId',
-  metadata: 'metadata'
-} as const
-
-export type AIFormFieldScalarFieldEnum = (typeof AIFormFieldScalarFieldEnum)[keyof typeof AIFormFieldScalarFieldEnum]
-
-
-export const AITemplateExecutionScalarFieldEnum = {
-  id: 'id',
-  createdAt: 'createdAt',
-  templateId: 'templateId',
-  userId: 'userId',
-  spaceId: 'spaceId',
-  userInput: 'userInput',
-  inputContext: 'inputContext',
-  result: 'result',
-  status: 'status',
-  errorMessage: 'errorMessage',
-  tokensUsed: 'tokensUsed',
-  executionTimeMs: 'executionTimeMs',
-  aiProvider: 'aiProvider',
-  model: 'model',
-  isApplied: 'isApplied',
-  appliedAt: 'appliedAt',
-  targetEntityId: 'targetEntityId'
-} as const
-
-export type AITemplateExecutionScalarFieldEnum = (typeof AITemplateExecutionScalarFieldEnum)[keyof typeof AITemplateExecutionScalarFieldEnum]
 
 
 export const AssetScalarFieldEnum = {

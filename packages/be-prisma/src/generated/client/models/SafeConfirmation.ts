@@ -14,7 +14,7 @@ import type * as Prisma from "../internal/prismaNamespace.js"
 
 /**
  * Model SafeConfirmation
- * 
+ * @displayName Safe 트랜잭션 서명
  */
 export type SafeConfirmationModel = runtime.Types.Result.DefaultSelection<Prisma.$SafeConfirmationPayload>
 

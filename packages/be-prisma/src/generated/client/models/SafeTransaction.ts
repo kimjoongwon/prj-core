@@ -14,7 +14,7 @@ import type * as Prisma from "../internal/prismaNamespace.js"
 
 /**
  * Model SafeTransaction
- * 
+ * @displayName Safe 트랜잭션
  */
 export type SafeTransactionModel = runtime.Types.Result.DefaultSelection<Prisma.$SafeTransactionPayload>
 

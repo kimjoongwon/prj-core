@@ -12,9 +12,6 @@
 
 | 항목 | 설명 |
 |------|------|
-| AIFormTemplate | 공개 계약 요소 |
-| AIFormField | 공개 계약 요소 |
-| AITemplateExecution | 공개 계약 요소 |
 | Asset | 공개 계약 요소 |
 | Image | 공개 계약 요소 |
 | Video | 공개 계약 요소 |
@@ -29,4 +26,5 @@
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-03-06 | ai-form 스키마 제거에 맞춰 브라우저 타입 계약(AIForm*) 항목 삭제 | codex |
 | 2026-03-03 | 누락된 sidecar spec 신규 생성 | codex |

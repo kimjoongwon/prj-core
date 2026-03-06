@@ -2,7 +2,6 @@ export * from "./abilities";
 export * from "./ability.dto";
 export * from "./abstract.dto";
 export * from "./action.dto";
-export * from "./ai-form-template";
 export * from "./album";
 export * from "./album-entry";
 export * from "./asset";

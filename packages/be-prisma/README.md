@@ -140,7 +140,6 @@ packages/be-prisma/
 │   ├── inquiry.prisma   # Inquiry domain
 │   ├── auth.prisma      # Auth/security domain
 │   ├── grant.prisma     # CASL grant domain
-│   ├── ai-form.prisma   # AI form domain
 │   ├── template.prisma  # Message template domain
 │   ├── translation.prisma
 │   ├── oidc.prisma
@@ -174,8 +173,8 @@ export default defineConfig({
 
 Current schema contains:
 
-- **62 models** across 15 domain files (`_base.prisma` excluded)
-- **33 enums** for type safety
+- **56 models** across 13 domain files (`_base.prisma` excluded)
+- **30 enums** for type safety
 - Automatic cross-file model referencing (no imports needed)
 
 ## Environment Variables

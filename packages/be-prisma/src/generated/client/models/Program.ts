@@ -14,9 +14,7 @@ import type * as Prisma from "../internal/prismaNamespace.js"
 
 /**
  * Model Program
- * *
- *  * @description 프로그램은 특정 세션에서 실행되는 루틴을 나타냅니다. 강사가 진행하는 정원이 정해진 활동 단위입니다.
- *  * @type 자원
+ * @displayName 프로그램
  */
 export type ProgramModel = runtime.Types.Result.DefaultSelection<Prisma.$ProgramPayload>
 

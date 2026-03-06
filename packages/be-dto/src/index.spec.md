@@ -22,7 +22,6 @@
 | ./ability.dto | 기능 구현 의존성 |
 | ./abstract.dto | 기능 구현 의존성 |
 | ./action.dto | 기능 구현 의존성 |
-| ./ai-form-template | 기능 구현 의존성 |
 | ./album | 기능 구현 의존성 |
 | ./album-entry | 기능 구현 의존성 |
 | ./asset | 기능 구현 의존성 |
@@ -40,5 +39,6 @@
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-03-06 | 미사용 템플릿 DTO 배럴 export 제거 반영 | codex |
 | 2026-03-06 | File 관련 DTO export 제거에 맞춰 배럴 계약 정리 | codex |
 | 2026-03-03 | 누락된 sidecar spec 신규 생성 | codex |

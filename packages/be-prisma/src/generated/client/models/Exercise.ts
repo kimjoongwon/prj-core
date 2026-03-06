@@ -14,10 +14,7 @@ import type * as Prisma from "../internal/prismaNamespace.js"
 
 /**
  * Model Exercise
- * *
- *  * @description 운동은 Task를 확장하여 운동 도메인의 모든 정보를 담당합니다. 운동 이름, 설명, 수행 시간, 횟수, 이미지, 영상 등 운동 관련 모든 데이터를 포함합니다.
- *  * Exercise는 Task와 1:1 관계이며, Task를 통해 Activity에서 참조됩니다.
- *  * @type 도메인 (운동 전용)
+ * @displayName 운동
  */
 export type ExerciseModel = runtime.Types.Result.DefaultSelection<Prisma.$ExercisePayload>
 
