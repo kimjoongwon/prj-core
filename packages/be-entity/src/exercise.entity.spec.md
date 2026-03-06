@@ -45,7 +45,7 @@
 
 - 하나의 태스크에는 하나의 Exercise만 연결됩니다 (OneToOne).
 - `duration`은 초 단위로 저장됩니다. UI에서는 분:초로 변환하여 표시합니다.
-- `imageFileId`와 `videoFileId`는 파일 시스템의 File 엔티티를 참조합니다.
+- `imageFileId`와 `videoFileId`는 Asset 도메인 리소스 식별자를 참조합니다.
 - 운동 콘텐츠 미디어(이미지, 동영상)는 선택 사항입니다.
 - Exercise 등록 시 서버에서 Task를 자동으로 함께 생성합니다.
 - Activity에서 사용 중인 Exercise는 삭제할 수 없습니다 (서버에서 409 에러 반환).
@@ -71,5 +71,6 @@
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-03-06 | File 도메인 제거에 맞춰 미디어 참조 설명을 Asset 기준으로 수정 | codex |
 | 2026-02-19 | 초기 생성 (역기획) | req-reverse-engineer |
 | 2026-02-19 | 관리자 UI 기획 완료 반영 (비즈니스 규칙 보완, UI 연동 섹션 추가) | req-entity-planner |

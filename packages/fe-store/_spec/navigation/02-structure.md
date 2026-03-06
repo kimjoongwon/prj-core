@@ -166,7 +166,7 @@ AdminLayout (Layout)
 | Pure UI | AdminBottomTab | ui/layouts/Admin/ | 하단 탭 UI |
 | Pure UI | AdminSubMenuList | ui/layouts/Admin/ | 서브메뉴 UI |
 | Pure UI | AdminFAB | ui/layouts/Admin/ | FAB UI |
-| Widget | NavTreePanel | widget/NavTreePanel/ | 트리 형태 네비게이션 |
+| Widget | NavTreePanel | widgets/NavTreePanel/ | 트리 형태 네비게이션 |
 | Feature | SideNav | feature/SideNav/ | Store 연결 사이드바 |
 | Feature | Nav | feature/Nav/ | Header용 네비게이션 |
 | Feature | SubNav | feature/SubNav/ | 2depth 네비게이션 |

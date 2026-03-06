@@ -1,8 +1,27 @@
-/**
- * @description 타임라인은 세션들을 논리적으로 그룹화하는 컨테이너입니다.
- * 예: "2025년 10월", "가을 시즌", "특별 이벤트" 등 세션들을 의미있는 단위로 묶어 관리합니다.
- * @type 추상
- */
+// ============================================================================
+// Task Domain - 일정/루틴/태스크 도메인
+// ============================================================================
+//
+// 일정 관리와 루틴 실행을 위한 도메인 모델입니다.
+// Timeline/Session/Program/Routine/Activity/Task/Exercise를 포함합니다.
+//
+// 관계 구조:
+//   Timeline (CONCRETE ENTITY)
+//     └── Session (CONCRETE ENTITY)
+//           └── Program (BRIDGE: Session + Routine 연결)
+//
+//   Routine (CONCRETE ENTITY)
+//     └── Activity (BRIDGE: Routine + Task 연결)
+//
+//   Task (ABSTRACT ENTITY)
+//     └── Exercise (MATERIALIZATION: Task 1:1 구체화)
+//
+// ============================================================================
+
+// @schema-type: CONCRETE ENTITY
+// @description: 세션들을 논리적으로 그룹화하는 시간 단위 컨테이너
+// @extended-by: Session
+/// @displayName 타임라인
 model Timeline {
   id          String    @id @default(uuid()) /// 고유 식별자
   createdAt   DateTime  @default(now()) @map("created_at") @db.Timestamptz(6) /// 생성 일시
@@ -22,10 +41,11 @@ model Timeline {
   @@map("timelines")
 }
 
-/**
- * @description 세션은 타임라인 내에서 일회성 또는 반복적으로 발생하는 시간 단위 이벤트입니다. 프로그램 실행의 시간적 단위를 나타냅니다.
- * @type 자원
- */
+// @schema-type: CONCRETE ENTITY
+// @description: 타임라인 내에서 일회성/반복형으로 실행되는 시간 단위 이벤트
+// @extends: Timeline
+// @extended-by: Program
+/// @displayName 세션
 model Session {
   id                 String              @id @default(uuid()) /// 고유 식별자
   createdAt          DateTime            @default(now()) @map("created_at") @db.Timestamptz(6) /// 생성 일시
@@ -48,10 +68,10 @@ model Session {
   @@map("sessions")
 }
 
-/**
- * @description 프로그램은 특정 세션에서 실행되는 루틴을 나타냅니다. 강사가 진행하는 정원이 정해진 활동 단위입니다.
- * @type 자원
- */
+// @schema-type: BRIDGE
+// @description: Session과 Routine을 연결하는 실행 단위 (정원/강사 등 운영 정보 포함)
+// @connects: Session ─── Routine
+/// @displayName 프로그램
 model Program {
   id           String    @id @default(uuid()) /// 고유 식별자
   createdAt    DateTime  @default(now()) @map("created_at") @db.Timestamptz(6) /// 생성 일시
@@ -73,11 +93,10 @@ model Program {
   @@map("programs")
 }
 
-/**
- * @description 루틴은 반복적으로 수행되는 일련의 활동들의 조합입니다. 여러 Activity를 순서대로 묶어서 하나의 프로그램으로 만듭니다.
- * 상위 Space의 루틴은 하위 Space에서 사용할 수 있습니다 (Space 계층 기반 공유).
- * @type 자원
- */
+// @schema-type: CONCRETE ENTITY
+// @description: 반복 수행되는 활동 묶음을 정의하는 루틴
+// @extended-by: Activity, Program
+/// @displayName 루틴
 model Routine {
   id         String     @id @default(uuid()) /// 고유 식별자
   createdAt  DateTime   @default(now()) @map("created_at") @db.Timestamptz(6) /// 생성 일시
@@ -97,11 +116,10 @@ model Routine {
   @@map("routines")
 }
 
-/**
- * @description 활동은 루틴 내에서 특정 Task를 어떻게 수행할지 정의합니다. 실행 순서, 반복 횟수, 휴식 시간 등의 메타 정보를 포함합니다.
- * Activity는 도메인 독립적이며, Task를 통해 여러 도메인(운동, 헤어샵 등)의 작업을 참조할 수 있습니다.
- * @type 자원 (도메인 독립적 - 연결 역할)
- */
+// @schema-type: BRIDGE
+// @description: Routine과 Task를 연결하고 실행 메타데이터(순서/반복/휴식)를 보관
+// @connects: Routine ─── Task
+/// @displayName 활동
 model Activity {
   id          String    @id @default(uuid()) /// 고유 식별자
   createdAt   DateTime  @default(now()) @map("created_at") @db.Timestamptz(6) /// 생성 일시
@@ -121,12 +139,10 @@ model Activity {
   @@map("activities")
 }
 
-/**
- * @description 태스크는 도메인 독립적인 작업의 추상 계층입니다. 분류 및 그룹핑 역할만 수행하며, 구체적인 도메인 정보는 포함하지 않습니다.
- * Task는 Exercise(운동), Treatment(헤어샵) 등 다양한 도메인 모델에 의해 확장됩니다.
- * 하나의 Task는 여러 Activity에서 재사용될 수 있습니다 (예: "플랭크" 운동이 여러 루틴에서 사용됨).
- * @type 추상 (도메인 브릿지 계층)
- */
+// @schema-type: ABSTRACT ENTITY
+// @description: 도메인 독립 작업의 추상 계층 (여러 구체 모델이 1:1로 구체화 가능)
+// @materialized-by: Exercise
+/// @displayName 태스크
 model Task {
   id         String     @id @default(uuid()) /// 고유 식별자
   createdAt  DateTime   @default(now()) @map("created_at") @db.Timestamptz(6) /// 생성 일시
@@ -143,11 +159,11 @@ model Task {
   @@map("tasks")
 }
 
-/**
- * @description 운동은 Task를 확장하여 운동 도메인의 모든 정보를 담당합니다. 운동 이름, 설명, 수행 시간, 횟수, 이미지, 영상 등 운동 관련 모든 데이터를 포함합니다.
- * Exercise는 Task와 1:1 관계이며, Task를 통해 Activity에서 참조됩니다.
- * @type 도메인 (운동 전용)
- */
+// @schema-type: MATERIALIZATION
+// @description: Task를 운동 도메인으로 1:1 구체화한 모델
+// @materializes: Task
+// @business-fields: name, duration, count, description
+/// @displayName 운동
 model Exercise {
   id          String    @id @default(uuid()) /// 고유 식별자
   createdAt   DateTime  @default(now()) @map("created_at") @db.Timestamptz(6) /// 생성 일시

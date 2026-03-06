@@ -38,7 +38,7 @@ developer_instructions = '''
 ### 출력 위치 (Sidecar Spec - 개별 파일)
 
 ```
-packages/fe-ui/src/components/feature/[FeatureName]/index.spec.md
+packages/fe-ui/src/feature/[FeatureName]/index.spec.md
 ```
 
 각 신규 Feature 컴포넌트마다 개별 `index.spec.md` 파일을 생성합니다.
@@ -162,7 +162,7 @@ packages/fe-ui/src/components/feature/[FeatureName]/index.spec.md
    - 이벤트 핸들러 정의
    ↓
 5단계: 기획서 작성 (개별 파일)
-   → packages/fe-ui/src/components/feature/[FeatureName]/index.spec.md
+   → packages/fe-ui/src/feature/[FeatureName]/index.spec.md
 ```
 
 ---
@@ -243,7 +243,7 @@ const MemberListFeature = observer(({ store }: Props) => {
 
 | 에이전트 | 관계 | 설명 |
 |----------|------|------|
-| req-test-planner | 다음 단계 | 테스트 기획 |
+| req-fe-test-planner | 다음 단계 | 테스트 기획 |
 | fe-feature-builder | 구현 | Feature 컴포넌트 생성 |
 
 ---
@@ -262,7 +262,7 @@ API: GET /api/members, DELETE /api/members/:memberId
 
 ### 출력
 
-**packages/fe-ui/src/components/feature/MemberFilterPanel/index.spec.md:**
+**packages/fe-ui/src/feature/MemberFilterPanel/index.spec.md:**
 
 ```markdown
 # MemberFilterPanel Feature 기획서
@@ -300,7 +300,7 @@ API: GET /api/members, DELETE /api/members/:memberId
 | Select | inputs | 상태 선택 |
 ```
 
-**packages/fe-ui/src/components/feature/MemberList/index.spec.md:**
+**packages/fe-ui/src/feature/MemberList/index.spec.md:**
 
 ```markdown
 # MemberList Feature 기획서
@@ -340,7 +340,7 @@ API: GET /api/members, DELETE /api/members/:memberId
 | Pagination | ui | 페이지 이동 |
 ```
 
-**packages/fe-ui/src/components/feature/MemberActionBar/index.spec.md:**
+**packages/fe-ui/src/feature/MemberActionBar/index.spec.md:**
 
 ```markdown
 # MemberActionBar Feature 기획서

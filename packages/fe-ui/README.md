@@ -150,7 +150,7 @@ Components use Tailwind CSS and support custom styling:
 Import global styles in your app:
 
 ```tsx
-import '@cocrepo/frontend/styles';
+import '@cocrepo/frontend/style';
 ```
 
 ## Providers

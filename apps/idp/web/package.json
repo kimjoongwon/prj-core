@@ -37,6 +37,7 @@
     "react-dom": "catalog:"
   },
   "devDependencies": {
+    "@cocrepo/e2e": "workspace:^",
     "@next/bundle-analyzer": "^16.1.6",
     "@tailwindcss/postcss": "catalog:",
     "@types/node": "catalog:",

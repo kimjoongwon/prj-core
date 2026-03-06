@@ -66,7 +66,6 @@ model User {
   createdCategories   Category[]
   createdGroups       Group[]
   createdContents     Content[]
-  createdFiles        File[]
   createdTimelines    Timeline[]
   createdTasks        Task[]
   createdSafeWallets  SafeWallet[]

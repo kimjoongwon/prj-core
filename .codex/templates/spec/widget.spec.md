@@ -3,7 +3,7 @@
 > 생성일: {{createdDate}}
 > 수정일: {{modifiedDate}}
 > 타입: widget
-> 위치: packages/fe-ui/src/components/widget/{{componentName}}/
+> 위치: packages/fe-ui/src/widget/{{componentName}}/
 
 ## 역할
 

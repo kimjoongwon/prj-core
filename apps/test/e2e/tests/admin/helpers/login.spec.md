@@ -21,5 +21,6 @@ Admin E2E에서 재사용하는 로그인 래퍼입니다.
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-03-06 | 공통 로그인 헬퍼 import를 `@cocrepo/e2e`(fe-e2e 패키지)로 전환 | codex |
 | 2026-03-04 | 공통 OIDC 헬퍼 연동 구조로 리팩터링 및 sidecar spec 생성 | codex |
-| 2026-03-04 | 공통 OIDC 헬퍼 import를 `@cocrepo/ui/e2e`로 전환 | codex |
+| 2026-03-04 | 공통 OIDC 헬퍼 import를 `@cocrepo/e2e`로 전환 | codex |

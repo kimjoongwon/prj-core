@@ -1,5 +1,5 @@
 import { expect, test } from "@playwright/test";
-import { loginToConsole } from "@cocrepo/ui/e2e";
+import { loginToConsole } from "@cocrepo/e2e";
 
 test.describe("OIDC 클라이언트 목록 페이지", () => {
 	test.beforeEach(async ({ page }) => {

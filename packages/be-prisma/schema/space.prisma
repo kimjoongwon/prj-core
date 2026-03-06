@@ -31,7 +31,6 @@ model Space {
   categories     Category[]
   groups         Group[]
   contents       Content[]
-  files          File[]
   timelines      Timeline[]
   tasks          Task[]
   safeWallets    SafeWallet[]

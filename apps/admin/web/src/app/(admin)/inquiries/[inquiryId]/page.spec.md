@@ -102,14 +102,14 @@
 | 페이지 래퍼 | `Page` | - |
 | 헤더 | `PageTitleBar` | - |
 | 상단/중단 배치 | `VStack` + `HStack` | - |
-| 문의 정보 카드 | InquiryInfoCard | `packages/fe-ui/src/components/widget/InquiryInfoCard/index.spec.md` |
-| 메타 정보 패널 | InquiryMetaPanel | `packages/fe-ui/src/components/widget/InquiryMetaPanel/index.spec.md` |
-| 빠른 수정 + AiForm | AiForm + title/category/priority 편집 | `packages/fe-ui/src/components/feature/AiForm/index.spec.md` |
-| 고객 정보 카드 | CustomerInfoCard | `packages/fe-ui/src/components/widget/CustomerInfoCard/index.spec.md` |
-| 참여자 목록 | ParticipantList | `packages/fe-ui/src/components/widget/ParticipantList/index.spec.md` |
-| 실시간 채팅 | RealtimeChatPanel | `packages/fe-ui/src/components/feature/RealtimeChatPanel/index.spec.md` |
-| 답변 작성 | InquiryReplyForm | `packages/fe-ui/src/components/feature/InquiryReplyForm/index.spec.md` |
-| SLA 추적 | SLATracker | `packages/fe-ui/src/components/widget/SLATracker/index.spec.md` |
+| 문의 정보 카드 | InquiryInfoCard | `packages/fe-ui/src/widget/InquiryInfoCard/index.spec.md` |
+| 메타 정보 패널 | InquiryMetaPanel | `packages/fe-ui/src/widget/InquiryMetaPanel/index.spec.md` |
+| 빠른 수정 + AiForm | AiForm + title/category/priority 편집 | `packages/fe-ui/src/feature/AiForm/index.spec.md` |
+| 고객 정보 카드 | CustomerInfoCard | `packages/fe-ui/src/widget/CustomerInfoCard/index.spec.md` |
+| 참여자 목록 | ParticipantList | `packages/fe-ui/src/widget/ParticipantList/index.spec.md` |
+| 실시간 채팅 | RealtimeChatPanel | `packages/fe-ui/src/feature/RealtimeChatPanel/index.spec.md` |
+| 답변 작성 | InquiryReplyForm | `packages/fe-ui/src/feature/InquiryReplyForm/index.spec.md` |
+| SLA 추적 | SLATracker | `packages/fe-ui/src/widget/SLATracker/index.spec.md` |
 
 ## 페이지 상태
 
@@ -286,11 +286,11 @@
 
 | 컴포넌트 | 위치 | 설명 |
 |----------|------|------|
-| InquiryInfoCard | widget/ | 문의 정보 카드 |
-| InquiryMetaPanel | widget/ | 메타 정보 편집 패널 |
-| CustomerInfoCard | widget/ | 고객 정보 카드 |
-| ParticipantList | widget/ | 참여자 목록 |
-| SLATracker | widget/ | SLA 추적 위젯 |
+| InquiryInfoCard | widgets/ | 문의 정보 카드 |
+| InquiryMetaPanel | widgets/ | 메타 정보 편집 패널 |
+| CustomerInfoCard | widgets/ | 고객 정보 카드 |
+| ParticipantList | widgets/ | 참여자 목록 |
+| SLATracker | widgets/ | SLA 추적 위젯 |
 
 ### L10: Feature 컴포넌트
 
@@ -441,6 +441,7 @@
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-03-06 | feature 디렉토리를 features로 이관하고 경로 표기를 동기화 | codex |
 | 2026-02-25 | 초기 생성 | orch-requirement |
 | 2026-02-26 | 실시간 채팅 UI 추가 (WebSocket 연결 상태, 타이핑 표시, 참여자 목록) | orch-requirement |
 | 2026-02-26 | 메시지 전달/읽음 상태 표시 추가 | orch-requirement |
@@ -457,3 +458,4 @@
 | 2026-03-03 | `_client.tsx` 헤더 반복 마크업을 `Page + PageTitleBar` 조합으로 정리 | codex |
 | 2026-03-03 | Page/Section `mode` 제거 반영 (단일 구조 기준으로 문서 표현 정리) | codex |
 | 2026-03-03 | `PageTitleBar` 단일 컴포넌트 통합 및 리네이밍 반영 | codex |
+| 2026-03-06 | widget 경로 참조를 widgets 경로로 정리 | codex |

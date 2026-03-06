@@ -14,23 +14,18 @@
       "import": "./index.ts",
       "default": "./index.ts"
     },
-    "./widgets": {
-      "types": "./src/components/widgets/index.ts",
-      "import": "./src/components/widgets/index.ts",
-      "default": "./src/components/widgets/index.ts"
+    "./widget": {
+      "types": "./src/widget/index.ts",
+      "import": "./src/widget/index.ts",
+      "default": "./src/widget/index.ts"
     },
     "./hero": {
       "types": "./hero.tsx",
       "import": "./hero.tsx",
       "default": "./hero.tsx"
     },
-    "./e2e": {
-      "types": "./src/e2e/index.ts",
-      "import": "./src/e2e/index.ts",
-      "default": "./src/e2e/index.ts"
-    },
-    "./styles": "./src/styles/globals.css",
-    "./styles/base": "./src/styles/base.css",
+    "./style": "./src/style/globals.css",
+    "./style/base": "./src/style/base.css",
     "./package.json": "./package.json"
   },
   "main": "./index.ts",
@@ -118,6 +113,7 @@
     "vitest": "catalog:"
   },
   "dependencies": {
-    "@react-aria/ssr": "^3.9.10"
+    "@react-aria/ssr": "^3.9.10",
+    "mermaid": "^11.12.3"
   }
 }

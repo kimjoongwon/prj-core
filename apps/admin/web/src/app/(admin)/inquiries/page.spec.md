@@ -71,11 +71,11 @@
 | 영역           | 컴포넌트                               | 기획서                                                                |
 | -------------- | -------------------------------------- | --------------------------------------------------------------------- |
 | 헤더           | `Page + PageTitleBar`    | -                                                                     |
-| 필터 바        | InquiryFilterBar                       | `packages/fe-ui/src/components/widget/InquiryFilterBar/index.spec.md` |
-| 문의 목록      | MetaDataGrid                           | `packages/fe-ui/src/components/feature/MetaDataGrid/index.spec.md` |
-| 연결 상태      | ConnectionStatus                       | `packages/fe-ui/src/components/ui/ConnectionStatus/index.spec.md`     |
-| SLA 현황 카드  | SLAStatusCard                          | `packages/fe-ui/src/components/widget/SLAStatusCard/index.spec.md`    |
-| 금일 현황 카드 | InquiryStatsCard                       | `packages/fe-ui/src/components/widget/InquiryStatsCard/index.spec.md` |
+| 필터 바        | InquiryFilterBar                       | `packages/fe-ui/src/widget/InquiryFilterBar/index.spec.md` |
+| 문의 목록      | MetaDataGrid                           | `packages/fe-ui/src/feature/MetaDataGrid/index.spec.md` |
+| 연결 상태      | ConnectionStatus                       | `packages/fe-ui/src/primitive/ConnectionStatus/index.spec.md`     |
+| SLA 현황 카드  | SLAStatusCard                          | `packages/fe-ui/src/widget/SLAStatusCard/index.spec.md`    |
+| 금일 현황 카드 | InquiryStatsCard                       | `packages/fe-ui/src/widget/InquiryStatsCard/index.spec.md` |
 
 - 문의 현황 카드, 문의 목록 영역은 각각 `Section + PageTitleBar` 표면 위에 배치한다.
 
@@ -249,9 +249,9 @@
 
 | 컴포넌트 | 위치 | 설명 |
 |----------|------|------|
-| InquiryFilterBar | widget/ | 필터 바 통합 |
-| SLAStatusCard | widget/ | SLA 현황 카드 |
-| InquiryStatsCard | widget/ | 금일 통계 카드 |
+| InquiryFilterBar | widgets/ | 필터 바 통합 |
+| SLAStatusCard | widgets/ | SLA 현황 카드 |
+| InquiryStatsCard | widgets/ | 금일 통계 카드 |
 
 ### L10: Feature 컴포넌트
 
@@ -399,6 +399,7 @@
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-03-06 | feature 디렉토리를 features로 이관하고 경로 표기를 동기화 | codex |
 | 2026-02-25 | 초기 생성 | orch-requirement |
 | 2026-02-26 | 실시간 상태 컬럼 추가 (온라인, 메시지 수) | orch-requirement |
 | 2026-02-26 | 감정 분석 컬럼 및 통계 추가 | orch-requirement |
@@ -415,3 +416,4 @@
 | 2026-03-03 | Page/PageTitleBar + Section/PageTitleBar 적용 기준 명시 | codex |
 | 2026-03-03 | Page/Section `mode` 제거 반영 (단일 구조 기준으로 문서 표현 정리) | codex |
 | 2026-03-03 | `PageTitleBar` 단일 컴포넌트 통합 및 리네이밍 반영 | codex |
+| 2026-03-06 | widget 경로 참조를 widgets 경로로 정리 | codex |

@@ -49,7 +49,7 @@ Space 자체는 추상 컨테이너(id만 존재)이고, Ground가 실제 비즈
 - `businessNo`는 사업자등록번호로 전체 시스템에서 유일해야 합니다 (`businessNo` unique).
 - `businessNo`는 한 번 등록 후 변경 불가합니다. UpdateDto에서 제외합니다.
 - Ground 등록 시 서버에서 새 Space를 자동 생성하고 `spaceId`를 연결합니다.
-- `logoImageFileId`와 `imageFileId`는 File 엔티티를 참조합니다 (선택적).
+- `logoImageFileId`와 `imageFileId`는 Asset 도메인 리소스 식별자로 사용됩니다 (선택적).
 - `email`과 `phone`은 시설 공식 연락처입니다.
 - 소프트 삭제 방식으로 `removedAt`을 설정하여 논리 삭제합니다.
 
@@ -74,5 +74,6 @@ Space 자체는 추상 컨테이너(id만 존재)이고, Ground가 실제 비즈
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-03-06 | File 도메인 제거에 맞춰 이미지 참조 설명을 Asset 기준으로 정리 | codex |
 | 2026-02-19 | 초기 생성 (역기획) | req-reverse-engineer |
 | 2026-02-19 | CRUD 시나리오 추가, businessNo 불변 규칙 명시, Ground-Space 관계 설명 보강 | req-entity-planner |

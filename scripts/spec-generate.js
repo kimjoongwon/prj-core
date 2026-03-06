@@ -91,7 +91,7 @@ function detectKind(relPath) {
   if (/\.dto\.[tj]s$/.test(p) || p.startsWith('packages/be-dto/src/')) return 'dto';
 
   if (/\/stores\//.test(p)) return 'store';
-  if (/\/components\/feature\//.test(p)) return 'feature';
+  if (/\/components\/features\//.test(p)) return 'feature';
   if (/\/components\/widget\//.test(p) || /\/components\/widgets\//.test(p)) return 'widget';
   if (/\/components\/ui\//.test(p) || /\/components\/inputs\//.test(p)) return 'ui';
   if (/\/index\.[tj]sx?$/.test(p)) return 'index';

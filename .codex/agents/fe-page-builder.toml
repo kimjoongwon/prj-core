@@ -109,9 +109,9 @@ apps/<app>/src/app/<route>/
 
 페이지 간 재사용 가능성이 있거나 시각 요소인 경우:
 
-1. `packages/fe-ui/src/components/feature/<Name>/`로 이동
+1. `packages/fe-ui/src/feature/<Name>/`로 이동
 2. `index.ts` export 추가
-3. `packages/fe-ui/src/components/feature/index.ts` barrel 연결
+3. `packages/fe-ui/src/feature/index.ts` barrel 연결
 4. 페이지 import를 `@cocrepo/ui`로 교체
 
 ---

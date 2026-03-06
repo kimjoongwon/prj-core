@@ -431,9 +431,9 @@ Widget
 
 | 유형 | 위치 |
 |------|------|
-| Layout | `packages/fe-ui/src/components/ui/layouts/Admin/` |
-| Feature | `packages/fe-ui/src/components/feature/` |
-| Widget | `packages/fe-ui/src/components/widget/` |
+| Layout | `packages/fe-ui/src/primitive/layout/Admin/` |
+| Feature | `packages/fe-ui/src/feature/` |
+| Widget | `packages/fe-ui/src/widget/` |
 
 ---
 
@@ -663,12 +663,12 @@ describe('메뉴 시스템 통합', () => {
 
 | 파일 | 역할 |
 |------|------|
-| `packages/fe-ui/src/components/ui/layouts/Admin/AdminLayout.tsx` | 통합 레이아웃 |
-| `packages/fe-ui/src/components/ui/layouts/Admin/AdminSidebar.tsx` | 사이드바 |
-| `packages/fe-ui/src/components/ui/layouts/Admin/AdminBottomTab.tsx` | 하단 탭 |
-| `packages/fe-ui/src/components/ui/layouts/Admin/AdminFAB.tsx` | FAB |
-| `packages/fe-ui/src/components/widget/NavTreePanel/NavTreePanel.tsx` | 트리 패널 |
-| `packages/fe-ui/src/components/feature/SideNav/SideNav.tsx` | 사이드바 Feature |
+| `packages/fe-ui/src/primitive/layout/Admin/AdminLayout.tsx` | 통합 레이아웃 |
+| `packages/fe-ui/src/primitive/layout/Admin/AdminSidebar.tsx` | 사이드바 |
+| `packages/fe-ui/src/primitive/layout/Admin/AdminBottomTab.tsx` | 하단 탭 |
+| `packages/fe-ui/src/primitive/layout/Admin/AdminFAB.tsx` | FAB |
+| `packages/fe-ui/src/widget/NavTreePanel/NavTreePanel.tsx` | 트리 패널 |
+| `packages/fe-ui/src/feature/SideNav/SideNav.tsx` | 사이드바 Feature |
 
 ### 앱
 

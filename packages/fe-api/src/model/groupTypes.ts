@@ -16,6 +16,6 @@ export type GroupTypes = (typeof GroupTypes)[keyof typeof GroupTypes];
 export const GroupTypes = {
 	Role: "Role",
 	Space: "Space",
-	File: "File",
+	Asset: "Asset",
 	User: "User",
 } as const;

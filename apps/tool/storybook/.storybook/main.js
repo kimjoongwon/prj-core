@@ -13,7 +13,11 @@ const config = {
   stories: [
     "../stories/**/*.mdx",
     "../stories/**/*.stories.@(js|jsx|mjs|ts|tsx)",
-    "../../../../packages/fe-ui/src/**/*.stories.@(js|jsx|mjs|ts|tsx)",
+    {
+      directory: "../../../../packages/fe-ui/src",
+      titlePrefix: "",
+      files: "**/*.stories.@(js|jsx|mjs|ts|tsx)",
+    },
   ],
   addons: [
     getAbsolutePath("@chromatic-com/storybook"),

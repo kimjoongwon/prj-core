@@ -38,7 +38,7 @@ developer_instructions = '''
 ### 출력 위치 (Sidecar Spec - 개별 파일)
 
 ```
-packages/fe-ui/src/components/widget/[WidgetName]/index.spec.md
+packages/fe-ui/src/widget/[WidgetName]/index.spec.md
 ```
 
 각 신규 Widget 컴포넌트마다 개별 `index.spec.md` 파일을 생성합니다.
@@ -135,7 +135,7 @@ packages/fe-ui/src/components/widget/[WidgetName]/index.spec.md
    - 반응형 대응
    ↓
 5단계: 기획서 작성 (개별 파일)
-   → packages/fe-ui/src/components/widget/[WidgetName]/index.spec.md
+   → packages/fe-ui/src/widget/[WidgetName]/index.spec.md
 ```
 
 ---
@@ -156,7 +156,7 @@ packages/fe-ui/src/components/widget/[WidgetName]/index.spec.md
 
 | 에이전트 | 관계 | 설명 |
 |----------|------|------|
-| req-ui-planner | 이전 단계 | UI 컴포넌트 |
+| req-primitive-planner | 이전 단계 | UI 컴포넌트 |
 | req-entity-planner | 이전 단계 | Entity 정의 |
 | orch-screen-planner | 상위 | 화면 기획 조율 |
 
@@ -182,7 +182,7 @@ Entity: Member (id, email, name, role, status, createdAt)
 
 ### 출력
 
-**packages/fe-ui/src/components/widget/MemberTable/index.spec.md:**
+**packages/fe-ui/src/widget/MemberTable/index.spec.md:**
 
 ```markdown
 # MemberTable Widget 기획서
@@ -226,7 +226,7 @@ Entity: Member (id, email, name, role, status, createdAt)
 - Mobile: 카드 뷰로 전환 (MemberCard 사용)
 ```
 
-**packages/fe-ui/src/components/widget/MemberCard/index.spec.md:**
+**packages/fe-ui/src/widget/MemberCard/index.spec.md:**
 
 ```markdown
 # MemberCard Widget 기획서

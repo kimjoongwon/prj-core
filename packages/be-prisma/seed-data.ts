@@ -1087,7 +1087,7 @@ export const groundSeedData: GroundSeedData[] = [
 // Role 타입 카테고리 시드 데이터 (RoleCategoryName enum 활용)
 export interface CategorySeedData {
 	roleCategoryEnum: RoleCategoryName;
-	type: "Role" | "Space" | "File" | "User";
+	type: "Role" | "Space" | "Asset" | "User";
 	parentId?: string;
 }
 

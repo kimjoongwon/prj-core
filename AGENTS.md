@@ -55,6 +55,7 @@
 | `common-toolkit` | `@cocrepo/toolkit` | 공통 유틸리티 |
 | `common-type` | `@cocrepo/type` | 공통 타입 |
 | `fe-api` | `@cocrepo/api` | Orval 생성 API 클라이언트 |
+| `fe-e2e` | `@cocrepo/e2e` | Playwright E2E 공통 헬퍼 |
 | `fe-hook` | `@cocrepo/hook` | React 커스텀 훅 |
 | `fe-store` | `@cocrepo/store` | MobX Store |
 | `fe-ui` | `@cocrepo/ui` | UI 컴포넌트 |
@@ -364,12 +365,12 @@ const callback = () => doSomething(a);
 ### 컴포넌트 계층 구조와 개발 원칙 (Critical)
 
 ```
-Pure UI → Widget → Feature → Page
-(최소 단위)   (UI 조합)   (비즈니스 로직)   (화면)
+Primitive → Widget → Feature → Page
+(최소 단위)      (UI 조합)   (비즈니스 로직)   (화면)
 ```
 
 **개발 순서 원칙:**
-1. **항상 Pure UI부터 시작** - 재사용 가능한 최소 단위를 먼저 만들어 자원화
+1. **항상 Primitive부터 시작** - 재사용 가능한 최소 단위를 먼저 만들어 자원화
 2. **최대한 Widget으로 분리** - 순수 UI 조합은 Widget으로, Store 연결만 Feature에
 3. **Feature는 Widget + Store 연결** - Widget에 데이터/핸들러 주입하는 역할
 
@@ -377,7 +378,7 @@ Pure UI → Widget → Feature → Page
 
 | 유형 | 패턴 | 설명 | 예시 |
 |------|------|------|------|
-| **Pure UI** | `[역할/형태]` | 최소 단위 | Button, Card, Badge |
+| **Primitive** | `[역할/형태]` | 최소 단위 | Button, Card, Badge |
 | **Widget** | `[기능][UI형태]` | "무엇을 보여주는가" | NavTreePanel, TabBar, MenuList |
 | **Feature** | `[위치/역할][기능]` | "어디서 어떻게 사용되는가" | SideNav, BottomTab, UserMenu |
 
@@ -399,16 +400,16 @@ UserCard                      → UserMenu (AuthStore 연결)
 
 ### 컴포넌트 위치 규칙 (Critical)
 
-**UI 컴포넌트는 반드시 `packages/fe-ui`에만 생성합니다. `apps/*/src`에 생성 금지!**
+**Primitive 컴포넌트는 반드시 `packages/fe-ui`에만 생성합니다. `apps/*/src`에 생성 금지!**
 
 | 컴포넌트 유형 | 올바른 위치 | 금지 위치 |
 |--------------|-------------|-----------|
-| Pure UI | `packages/fe-ui/src/components/ui/` | ❌ `apps/*/src/components/ui/` |
-| Widget | `packages/fe-ui/src/components/widget/` | ❌ `apps/*/src/components/widget/` |
-| **Feature** | `packages/fe-ui/src/components/feature/` | ❌ `apps/*/src/components/features/` |
-| Input | `packages/fe-ui/src/components/inputs/` | ❌ `apps/*/src/components/inputs/` |
-| Layout | `packages/fe-ui/src/components/layout/` | ❌ `apps/*/src/components/layout/` |
-| Cell | `packages/fe-ui/src/components/cell/` | ❌ `apps/*/src/components/cell/` |
+| Primitive | `packages/fe-ui/src/primitive/` | ❌ `apps/*/src/primitive/` |
+| Widget | `packages/fe-ui/src/widget/` | ❌ `apps/*/src/widget/` |
+| **Feature** | `packages/fe-ui/src/feature/` | ❌ `apps/*/src/feature/` |
+| Input | `packages/fe-ui/src/input/` | ❌ `apps/*/src/input/` |
+| Layout | `packages/fe-ui/src/layout/` | ❌ `apps/*/src/layout/` |
+| Cell | `packages/fe-ui/src/primitive/data-display/cell/` | ❌ `apps/*/src/cell/` |
 
 **앱(`apps/*`)에서 허용되는 것:**
 - `app/` - Next.js App Router 페이지
@@ -426,7 +427,7 @@ UserCard                      → UserMenu (AuthStore 연결)
 import { SideNav, UserMenu } from "@cocrepo/ui";
 
 // ❌ 금지 - apps 내부에 Feature 생성
-// apps/admin/web/src/components/features/HeaderSpaceSelector.tsx  ← 금지!
+// apps/admin/web/src/feature/HeaderSpaceSelector.tsx  ← 금지!
 ```
 
 ### SSR/Hydration 관련 주의사항
@@ -693,16 +694,16 @@ apps/[app]/web/src/app/(admin)/[도메인]/
     ├── page.spec.md            # 수정 페이지 기획서
     └── page.e2e.ts             # E2E 테스트 ← sidecar
 
-packages/fe-ui/src/components/
+packages/fe-ui/src/
 ├── feature/[FeatureName]/
 │   ├── index.tsx
 │   └── index.spec.md           # Feature 기획서
 ├── widget/[WidgetName]/
 │   ├── index.tsx
 │   └── index.spec.md           # Widget 기획서
-└── ui/[UIName]/
+└── primitive/[PrimitiveName]/
     ├── index.tsx
-    └── index.spec.md           # UI 기획서
+    └── index.spec.md           # Primitive 기획서
 
 packages/fe-store/src/stores/
 ├── [StoreName].ts
@@ -750,7 +751,7 @@ apps/core/api/src/[module]/
 ├── page.spec.md        # 페이지 기획서 템플릿
 ├── feature.spec.md     # Feature 기획서 템플릿
 ├── widget.spec.md      # Widget 기획서 템플릿
-├── ui.spec.md          # UI 기획서 템플릿
+├── primitive.spec.md          # Primitive 기획서 템플릿
 ├── store.spec.md       # Store 기획서 템플릿
 ├── entity.spec.md      # Entity 기획서 템플릿
 ├── vo.spec.md          # VO 기획서 템플릿
@@ -1036,16 +1037,16 @@ apps/[app]/web/src/app/(admin)/[도메인]/
     ├── page.spec.md            # 수정 페이지 기획서
     └── page.e2e.ts             # E2E 테스트 (sidecar)
 
-packages/fe-ui/src/components/
+packages/fe-ui/src/
 ├── feature/[FeatureName]/
 │   ├── index.tsx
 │   └── index.spec.md           # Feature 기획서
 ├── widget/[WidgetName]/
 │   ├── index.tsx
 │   └── index.spec.md           # Widget 기획서
-└── ui/[UIName]/
+└── primitive/[PrimitiveName]/
     ├── index.tsx
-    └── index.spec.md           # UI 기획서
+    └── index.spec.md           # Primitive 기획서
 
 packages/fe-store/src/stores/
 ├── [StoreName].ts
@@ -1147,7 +1148,7 @@ Stage 5: 컴포넌트 (페이지별)
 | req-page-planner | 페이지 통합 기획(SSR/Prefetch/핸들러) → `page.spec.md` 통합 섹션 업데이트 |
 | req-api-planner | 인터랙션(Action)과 API 기획 → `controller.spec.md` + 페이지 API 섹션 |
 | req-entity-planner | Entity/Enum/VO 기획 → `entity.spec.md`, `enum.spec.md`, `vo.spec.md` |
-| req-ui-planner | 화면 UI 기획(L8) → `ui/index.spec.md` |
+| req-primitive-planner | 화면 UI 기획(L8) → `primitive/index.spec.md` |
 | req-input-planner | 입력 컴포넌트 기획 → `inputs/index.spec.md` |
 | req-cell-planner | DataGrid/Table Cell 기획 → `cells/index.spec.md` |
 | req-widget-planner | 화면 Widget 기획(L9) → `widget/index.spec.md` |
@@ -1166,9 +1167,9 @@ Stage 5: 컴포넌트 (페이지별)
 
 | Agent | 역할 |
 |-------|------|
-| fe-ui-component-builder | Pure UI 컴포넌트 생성 (packages/fe-ui/src/components/ui) |
+| fe-primitive-component-builder | Pure UI 컴포넌트 생성 (packages/fe-ui/src/primitive) |
 | fe-cell-builder | DataGrid/Table용 Cell 컴포넌트 생성 (계층별) |
-| fe-input-component-builder | Input 컴포넌트 생성 (packages/fe-ui/src/components/inputs) |
+| fe-input-component-builder | Input 컴포넌트 생성 (packages/fe-ui/src/input) |
 | fe-widget-builder | 재사용 가능한 작은 UI 조각 Widget 컴포넌트 생성 |
 | fe-feature-builder | 비즈니스 기능을 담당하는 Feature 컴포넌트 생성 |
 | fe-layout-builder | Layout 컴포넌트 설계 및 생성 |

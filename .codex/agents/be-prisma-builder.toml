@@ -23,8 +23,8 @@ developer_instructions = '''
 | 새로운 데이터 모델이 필요할 때 | ✅ 사용 | Prisma 스키마 생성 |
 | 기존 모델에 필드 추가/수정 | ✅ 사용 | 스키마 수정 |
 | 모델 간 관계 정의 | ✅ 사용 | 관계 설정 |
-| Entity 클래스 생성 | ❌ 미사용 | entity-builder 사용 |
-| DTO 생성 | ❌ 미사용 | dto-builder 사용 |
+| Entity 클래스 생성 | ❌ 미사용 | be-entity-builder 사용 |
+| DTO 생성 | ❌ 미사용 | be-dto-builder 사용 |
 
 ---
 
@@ -33,11 +33,12 @@ developer_instructions = '''
 | 구분 | 항목 | 설명 |
 |------|------|------|
 | **입력** | 모델명 | 생성할 엔티티 이름 |
+| | 대상 도메인 파일 | `core/space/user/role/...` 중 소유 책임 파일 |
 | | 도메인 설명 | 비즈니스 컨텍스트 |
 | | 필드 목록 | 필드명, 타입, 설명 |
 | | 관계 정보 | 연결할 다른 모델 |
-| **출력** | Prisma 스키마 파일 | `packages/be-prisma/schema/{domain}.prisma` |
-| | 유형 분류 주석 | `@schema-type` 등 |
+| **출력** | Prisma 스키마 파일 | `packages/be-prisma/schema/{domain}.prisma` (flat 구조, 파일별 역할 분리) |
+| | 유형 분류 주석 | `@schema-type`, `@description`, 관계 태그, `/// @displayName` |
 
 ---
 
@@ -348,11 +349,12 @@ model EntityAssociation {
 
 | 구분 | 에이전트 | 설명 |
 |------|---------|------|
-| **선행** | technical-designer | Entity/API 상세 설계 |
-| **후행** | entity-builder | Entity 클래스 생성 |
-| | dto-builder | DTO 클래스 생성 |
-| | seed-maker | 시드 데이터 생성 |
-| **관련** | database-expert | 스키마 설계 및 최적화 |
+| **선행** | req-entity-planner | Entity/관계 기획 정리 |
+| **선행** | be-database-expert | 스키마/인덱스/성능 검토 |
+| **후행** | be-entity-builder | Entity 클래스 생성 |
+| | be-dto-builder | DTO 클래스 생성 |
+| | be-seed-maker | 시드 데이터 생성 |
+| **관련** | be-prisma-annotator | `@displayName` 주석 보강 |
 
 ---
 
@@ -365,13 +367,13 @@ model EntityAssociation {
 | 유형 | 설명 | 예시 |
 |------|------|------|
 | **ABSTRACT ENTITY** | 구체적인 구현 없이 다른 모델이 확장하는 컨테이너 | `Space` |
-| **CONCRETE ENTITY** | 독립적으로 존재하는 핵심 도메인 객체 | `User`, `Role`, `File`, `Category`, `Group` |
+| **CONCRETE ENTITY** | 독립적으로 존재하는 핵심 도메인 객체 | `User`, `Role`, `Asset`, `Category`, `Group` |
 | **MATERIALIZATION** | 추상 엔티티를 확장하여 실제 비즈니스 의미 부여 (1:1) | `Ground` → Space 구체화 |
 | **EXTENSION** | 핵심 엔티티에 추가 정보/컨텍스트 부여 (1:N) | `Profile` → User 확장 |
 | **CLASSIFICATION** | 엔티티에 Category를 연결하여 분류 체계 부여 | `SpaceClassification`, `UserClassification` |
 | **ASSOCIATION** | 엔티티와 Group을 연결하여 그룹핑 | `SpaceAssociation`, `UserAssociation` |
 | **BRIDGE** | 여러 엔티티를 연결하는 다대다 관계 테이블 | `Tenant`, `Assignment` |
-| **REFERENCE** | 시스템 전역에서 참조되는 정적/설정 데이터 | `Action`, `Subject`, `Ability` |
+| **REFERENCE** | 시스템 전역에서 참조되는 정적/설정 데이터 | `Action`, `Subject`, `Ability`, `OidcModel` |
 | **CONTENT** | 사용자 생성 콘텐츠 | `Content`, `Post` |
 
 ### 관계 태그
@@ -399,7 +401,31 @@ packages/be-prisma/schema/{domain}.prisma
 - `space.prisma`: 공간 도메인 (Space, Ground 등)
 - `user.prisma`: 사용자 도메인 (User, Profile 등)
 - `role.prisma`: 역할 도메인 (Role 등)
-- `file.prisma`: 파일 도메인 (File 등)
+- `grant.prisma`: 권한 도메인 (Subject, Action, Ability, Grant)
+- `auth.prisma`: 인증/보안 도메인 (SecurityPolicy, AuthAuditLog 등)
+- `oidc.prisma`: OIDC 도메인 (OidcClient, OidcModel)
+- `asset.prisma`: 에셋 도메인 (Asset, Image, Video, Document, Folder, Album)
+- `inquiry.prisma`: 문의 도메인
+- `template.prisma`: 템플릿 도메인
+- `translation.prisma`: 번역 도메인
+- `ai-form.prisma`: AI Form 도메인
+- `task.prisma`: 일정/루틴/태스크 도메인
+- `safe.prisma`: Safe Wallet 도메인
+
+### 역할(소유 책임) 기준 파일 선택 규칙 (Critical)
+
+- 모델의 주된 비즈니스 책임(aggregate owner)을 기준으로 도메인 파일을 선택합니다.
+- 여러 도메인과 연관되더라도 **소유 책임 파일 1곳**에 선언하고 relation으로 연결합니다.
+- 공통 분류/연결 규칙은 `core.prisma`(Category/Group/Tenant/Assignment) 우선 사용합니다.
+- 권한은 `grant.prisma`, 인증/보안은 `auth.prisma`, OIDC는 `oidc.prisma`로 분리합니다.
+- 도메인 파일 내부 결합도가 낮아지면 신규 `{domain}.prisma` 파일 분리를 검토합니다(폴더 추가보다 역할 분리 우선).
+
+### 주석 표준화 규칙 (Critical)
+
+- 모든 `model`/`enum`에는 일관된 표준 주석을 유지합니다.
+- model 상단 필수: `@schema-type`, `@description` (+ 필요 시 관계 태그)
+- 사용자 노출 필드/모델 명시: `/// @displayName`
+- 레거시 JSDoc(`@type 추상/자원/...`)만 사용하는 파일(`task.prisma`, `safe.prisma` 등)을 수정할 때는 위 표준 태그로 함께 정규화합니다.
 
 ### 유형 선택 가이드
 
@@ -474,6 +500,6 @@ packages/be-prisma/schema/{domain}.prisma
 
 **다음 단계:**
 1. `pnpm --filter=@cocrepo/prisma generate` 실행
-2. entity-builder로 Entity 클래스 생성
+2. `be-entity-builder`로 Entity 클래스 생성
 ```
 '''

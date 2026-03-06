@@ -26,9 +26,6 @@
 | ./query-assignment.dto | 기능 구현 의존성 |
 | ./query-category.dto | 기능 구현 의존성 |
 | ./query-exercise.dto | 기능 구현 의존성 |
-| ./query-file.dto | 기능 구현 의존성 |
-| ./query-file-association.dto | 기능 구현 의존성 |
-| ./query-file-classification.dto | 기능 구현 의존성 |
 | ./query-ground.dto | 기능 구현 의존성 |
 
 ## 구현 체크리스트
@@ -40,4 +37,5 @@
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-03-06 | File 도메인 제거에 따라 query-file* export 의존성 제거 | codex |
 | 2026-03-03 | 누락된 sidecar spec 신규 생성 | codex |

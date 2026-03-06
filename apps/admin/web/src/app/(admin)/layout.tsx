@@ -11,10 +11,10 @@ import {
 	HeaderSpaceSelector,
 	Layout,
 	OverlayMenu,
-	renderLucideIcon,
 	SidePanel,
 } from "@cocrepo/ui";
 import { Button, Tooltip } from "@heroui/react";
+import { KeyRound } from "lucide-react";
 import { observer } from "mobx-react-lite";
 import { type ReactNode, useEffect } from "react";
 import { useSpaceGuard } from "@/hooks";
@@ -115,7 +115,7 @@ function AdminLayoutWrapper({ children }: AdminLayoutWrapperProps) {
 									aria-label="IDP 관리 콘솔 열기"
 									onPress={handleOpenIdpClient}
 								>
-									{renderLucideIcon("KeyRound", "w-5 h-5 text-default-500", 20)}
+									<KeyRound className="w-5 h-5 text-default-500" size={20} />
 								</Button>
 							</Tooltip>
 							<HeaderSpaceSelector

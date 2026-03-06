@@ -1,4 +1,20 @@
-// Safe Wallet Model
+// ============================================================================
+// Safe Domain - 멀티시그 지갑 도메인
+// ============================================================================
+//
+// Safe 지갑, 트랜잭션, 서명 확인 데이터를 관리합니다.
+//
+// 관계 구조:
+//   SafeWallet (CONCRETE ENTITY)
+//     └── SafeTransaction (EXTENSION)
+//           └── SafeConfirmation (EXTENSION)
+//
+// ============================================================================
+
+// @schema-type: CONCRETE ENTITY
+// @description: Space 단위로 운영되는 Safe 멀티시그 지갑
+// @extended-by: SafeTransaction
+/// @displayName Safe 지갑
 model SafeWallet {
   id           String            @id @default(uuid())
   createdAt    DateTime          @default(now()) @map("created_at") @db.Timestamptz(6)
@@ -19,7 +35,11 @@ model SafeWallet {
   @@map("safe_wallets")
 }
 
-// Safe Transaction Model
+// @schema-type: EXTENSION
+// @description: SafeWallet에 귀속되는 멀티시그 트랜잭션 실행 단위
+// @extends: SafeWallet
+// @extended-by: SafeConfirmation
+/// @displayName Safe 트랜잭션
 model SafeTransaction {
   id                    String             @id @default(uuid())
   createdAt             DateTime           @default(now()) @map("created_at") @db.Timestamptz(6)
@@ -45,7 +65,10 @@ model SafeTransaction {
   @@map("safe_transactions")
 }
 
-// Safe Confirmation Model (서명)
+// @schema-type: EXTENSION
+// @description: SafeTransaction에 대한 소유자 서명(확인) 데이터
+// @extends: SafeTransaction
+/// @displayName Safe 트랜잭션 서명
 model SafeConfirmation {
   id                String          @id @default(uuid())
   createdAt         DateTime        @default(now()) @map("created_at") @db.Timestamptz(6)

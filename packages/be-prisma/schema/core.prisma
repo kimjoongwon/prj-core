@@ -34,7 +34,6 @@ model Category {
   children             Category[]            @relation("CategoryToCategory")
   space                Space                 @relation(fields: [spaceId], references: [id])
   creator              User?                 @relation(fields: [creatorId], references: [id])
-  fileClassifications  FileClassification[]
   roleClassifications  RoleClassification[]
   spaceClassifications SpaceClassification[]
   userClassifications  UserClassification[]
@@ -62,7 +61,6 @@ model Group {
   creatorId         String?            @map("creator_id")
   space             Space              @relation(fields: [spaceId], references: [id])
   creator           User?              @relation(fields: [creatorId], references: [id])
-  fileAssociations  FileAssociation[]
   roleAssociations  RoleAssociation[]
   spaceAssociations SpaceAssociation[]
   userAssociations  UserAssociation[]
@@ -211,13 +209,13 @@ enum TextTypes {
 enum CategoryTypes {
   Role
   Space
-  File
+  Asset
   User
 }
 
 enum GroupTypes {
   Role
   Space
-  File
+  Asset
   User
 }

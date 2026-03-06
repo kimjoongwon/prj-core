@@ -7,7 +7,7 @@
 
 ## 역할
 
-계층 구조를 가진 범용 카테고리 엔티티입니다. 역할 분류(RoleClassification), 파일 분류(FileClassification), 공간 분류(SpaceClassification), 사용자 분류(UserClassification) 등 다양한 분류 시스템에서 활용됩니다. 트리 구조의 부모-자식 관계를 지원하며, Space 단위로 격리됩니다.
+계층 구조를 가진 범용 카테고리 엔티티입니다. 역할 분류(RoleClassification), 공간 분류(SpaceClassification), 사용자 분류(UserClassification), 에셋 분류(CategoryTypes.Asset) 등 다양한 분류 시스템에서 활용됩니다. 트리 구조의 부모-자식 관계를 지원하며, Space 단위로 격리됩니다.
 
 ## 필드
 
@@ -28,7 +28,7 @@
 
 | Enum명 | 값 | 설명 |
 |--------|-----|------|
-| CategoryTypes | (Prisma 정의) | 카테고리 유형 (role, file, space, user 등) |
+| CategoryTypes | (Prisma 정의) | 카테고리 유형 (role, asset, space, user 등) |
 
 ## 관계
 
@@ -50,7 +50,7 @@
 ## 비즈니스 규칙
 
 - `parentId=null`인 카테고리가 루트 카테고리입니다.
-- `CategoryTypes`에 따라 역할, 파일, 공간, 사용자 분류에 각각 활용됩니다.
+- `CategoryTypes`에 따라 역할, 에셋, 공간, 사용자 분류에 각각 활용됩니다.
 - `getAllParentNames()`는 `parent` 관계가 로드된 경우에만 완전한 결과를 반환합니다.
 - `getAllChildrenNames()`는 `children` 관계가 재귀적으로 로드된 경우에만 완전한 결과를 반환합니다.
 - Space 단위로 격리되어 같은 Space 내 카테고리만 참조 가능합니다.
@@ -66,4 +66,5 @@
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-03-06 | FileClassification 제거 및 CategoryTypes.Asset 전환 반영 | codex |
 | 2026-02-19 | 초기 생성 (역기획) | req-reverse-engineer |

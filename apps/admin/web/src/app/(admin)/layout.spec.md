@@ -23,6 +23,7 @@
 | @cocrepo/hook | 기능 구현 의존성 |
 | @cocrepo/ui | 기능 구현 의존성 |
 | @heroui/react | 기능 구현 의존성 |
+| lucide-react | 기능 구현 의존성 |
 | mobx-react-lite | 기능 구현 의존성 |
 | react | 기능 구현 의존성 |
 | @/hooks | 기능 구현 의존성 |
@@ -54,3 +55,4 @@
 | 2026-03-03 | 누락된 sidecar spec 신규 생성 | codex |
 | 2026-03-04 | AdminLayout 직접 사용을 Layout 슬롯 조합 구조로 마이그레이션 | codex |
 | 2026-03-04 | useAdminLayout 제거 후 @cocrepo/hook의 useLayout 직접 사용으로 전환 | codex |
+| 2026-03-06 | IDP 관리 버튼 아이콘을 @cocrepo/ui util export 대신 lucide-react 직접 사용으로 전환 | codex |

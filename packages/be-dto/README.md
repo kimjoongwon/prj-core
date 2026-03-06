@@ -115,13 +115,11 @@ getUsers(@Query() query: QueryUserDto) {
 | Session | `SessionDto` | `CreateSessionDto` | `UpdateSessionDto` | `QuerySessionDto` |
 | Ground | `GroundDto` | `CreateGroundDto` | `UpdateGroundDto` | `QueryGroundDto` |
 
-### 파일
+### 에셋
 
 | 엔티티 | 기본 | Create | Update | Query |
 |--------|------|--------|--------|-------|
-| File | `FileDto` | `CreateFileDto` | `UpdateFileDto` | `QueryFileDto` |
-| FileAssociation | `FileAssociationDto` | `CreateFileAssociationDto` | - | `QueryFileAssociationDto` |
-| FileClassification | `FileClassificationDto` | `CreateFileClassificationDto` | `UpdateFileClassificationDto` | `QueryFileClassificationDto` |
+| Asset | `AssetDto` | `CreateAssetDto` | `UpdateAssetDto` | `AssetQueryDto` |
 
 ### 연관/분류
 

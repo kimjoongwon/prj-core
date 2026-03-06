@@ -100,11 +100,11 @@
 | 영역 | 컴포넌트 | 기획서 |
 |------|----------|--------|
 | 헤더 | `Page + PageTitleBar` | - |
-| 기본 정보 | InquiryBasicForm | `packages/fe-ui/src/components/widget/InquiryBasicForm/index.spec.md` |
-| AI 폼 채움 | AiForm | `packages/fe-ui/src/components/feature/AiForm/index.spec.md` |
-| 고객 정보 | CustomerSearchForm | `packages/fe-ui/src/components/feature/CustomerSearchForm/index.spec.md` |
-| 문의 내용 | InquiryContentForm | `packages/fe-ui/src/components/widget/InquiryContentForm/index.spec.md` |
-| 추가 설정 | InquirySettingsForm | `packages/fe-ui/src/components/widget/InquirySettingsForm/index.spec.md` |
+| 기본 정보 | InquiryBasicForm | `packages/fe-ui/src/widget/InquiryBasicForm/index.spec.md` |
+| AI 폼 채움 | AiForm | `packages/fe-ui/src/feature/AiForm/index.spec.md` |
+| 고객 정보 | CustomerSearchForm | `packages/fe-ui/src/feature/CustomerSearchForm/index.spec.md` |
+| 문의 내용 | InquiryContentForm | `packages/fe-ui/src/widget/InquiryContentForm/index.spec.md` |
+| 추가 설정 | InquirySettingsForm | `packages/fe-ui/src/widget/InquirySettingsForm/index.spec.md` |
 | 버튼 영역 | FormActions | - |
 
 - AiForm과 각 입력 묶음은 `Section + PageTitleBar` 표면을 사용해 서로 구분한다.
@@ -244,9 +244,9 @@
 
 | 컴포넌트 | 위치 | 설명 |
 |----------|------|------|
-| InquiryBasicForm | widget/ | 기본 정보 폼 섹션 |
-| InquiryContentForm | widget/ | 문의 내용 폼 섹션 |
-| InquirySettingsForm | widget/ | 추가 설정 폼 섹션 |
+| InquiryBasicForm | widgets/ | 기본 정보 폼 섹션 |
+| InquiryContentForm | widgets/ | 문의 내용 폼 섹션 |
+| InquirySettingsForm | widgets/ | 추가 설정 폼 섹션 |
 
 ### L10: Feature 컴포넌트
 
@@ -366,6 +366,7 @@
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-03-06 | feature 디렉토리를 features로 이관하고 경로 표기를 동기화 | codex |
 | 2026-02-25 | 초기 생성 | orch-requirement |
 | 2026-02-26 | AI 자동 분류 제안 기능 추가 | orch-screen-planner |
 | 2026-02-26 | L5-L12 레이어 기획 추가 | orch-screen-planner |
@@ -379,3 +380,4 @@
 | 2026-03-03 | Page/PageTitleBar + Section/PageTitleBar 기반 배치 명시 | codex |
 | 2026-03-03 | Page/Section `mode` 제거 반영 (단일 구조 기준으로 문서 표현 정리) | codex |
 | 2026-03-03 | `PageTitleBar` 단일 컴포넌트 통합 및 리네이밍 반영 | codex |
+| 2026-03-06 | widget 경로 참조를 widgets 경로로 정리 | codex |

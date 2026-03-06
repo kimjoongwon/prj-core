@@ -42,13 +42,13 @@
 - `packages/fe-store/src/providers/createAppStoreProvider.tsx`
 
 ### UI 컴포넌트
-- `packages/fe-ui/src/components/ui/layouts/Admin/AdminLayout.tsx`
-- `packages/fe-ui/src/components/ui/layouts/Admin/AdminSidebar.tsx`
-- `packages/fe-ui/src/components/ui/layouts/Admin/AdminBottomTab.tsx`
-- `packages/fe-ui/src/components/ui/layouts/Admin/AdminFAB.tsx`
-- `packages/fe-ui/src/components/widget/NavTreePanel/NavTreePanel.tsx`
-- `packages/fe-ui/src/components/feature/SideNav/SideNav.tsx`
-- `packages/fe-ui/src/components/feature/SubNav/SubNav.tsx`
+- `packages/fe-ui/src/primitive/layout/Admin/AdminLayout.tsx`
+- `packages/fe-ui/src/primitive/layout/Admin/AdminSidebar.tsx`
+- `packages/fe-ui/src/primitive/layout/Admin/AdminBottomTab.tsx`
+- `packages/fe-ui/src/primitive/layout/Admin/AdminFAB.tsx`
+- `packages/fe-ui/src/widget/NavTreePanel/NavTreePanel.tsx`
+- `packages/fe-ui/src/feature/SideNav/SideNav.tsx`
+- `packages/fe-ui/src/feature/SubNav/SubNav.tsx`
 
 ### 앱
 - `apps/admin/src/stores/AppStoreProvider.tsx`

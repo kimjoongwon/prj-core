@@ -612,7 +612,7 @@
       "metadata": {
         "componentType": "ui",
         "existing": true,
-        "path": "packages/fe-ui/src/components/ui/Badge"
+        "path": "packages/fe-ui/src/ui/Badge"
       }
     },
     {

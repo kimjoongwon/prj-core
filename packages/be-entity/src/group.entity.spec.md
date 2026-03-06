@@ -7,7 +7,7 @@
 
 ## 역할
 
-사용자 그룹을 나타내는 엔티티입니다. 다양한 용도(역할 그룹, 공간 그룹, 사용자 그룹 등)에 맞게 `GroupTypes`로 유형을 구분합니다. Space 단위로 격리되며, UserAssociation을 통해 사용자와, FileAssociation을 통해 파일과, SpaceAssociation을 통해 공간과 연결됩니다.
+사용자 그룹을 나타내는 엔티티입니다. 다양한 용도(역할 그룹, 공간 그룹, 사용자 그룹, 에셋 그룹 등)에 맞게 `GroupTypes`로 유형을 구분합니다. Space 단위로 격리되며, UserAssociation/SpaceAssociation/RoleAssociation을 통해 연결됩니다.
 
 ## 필드
 
@@ -43,10 +43,10 @@
 
 ## 비즈니스 규칙
 
-- `GroupTypes`에 따라 역할 그룹, 공간 그룹, 사용자 그룹 등으로 활용됩니다.
+- `GroupTypes`에 따라 역할 그룹, 공간 그룹, 사용자 그룹, 에셋 그룹 등으로 활용됩니다.
 - Space 단위로 격리되어 같은 Space 내 그룹만 참조 가능합니다.
 - `creatorId`가 null인 경우 시스템 생성 그룹입니다.
-- RoleAssociation, SpaceAssociation, UserAssociation, FileAssociation 등에서 이 그룹을 참조합니다.
+- RoleAssociation, SpaceAssociation, UserAssociation 등에서 이 그룹을 참조합니다.
 
 ## 구현 체크리스트
 
@@ -59,4 +59,5 @@
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-03-06 | FileAssociation 제거에 맞춰 Group 연관 설명 정리 | codex |
 | 2026-02-19 | 초기 생성 (역기획) | req-reverse-engineer |

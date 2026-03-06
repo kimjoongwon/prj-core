@@ -547,7 +547,7 @@ describe("SessionCard", () => {
 | `apps/idp/api/src/module/password-reset/` | 신규 모듈 |
 | `apps/idp/web/src/app/forgot-password/` | 신규 페이지 |
 | `apps/idp/web/src/app/reset-password/[token]/` | 신규 페이지 |
-| `packages/fe-ui/src/components/widget/PasswordStrengthIndicator/` | 신규 |
+| `packages/fe-ui/src/widget/PasswordStrengthIndicator/` | 신규 |
 | `apps/admin/web/src/app/(admin)/my-account/change-password/` | 신규 페이지 |
 
 ### Phase 3
@@ -555,9 +555,9 @@ describe("SessionCard", () => {
 | 파일 | 변경 |
 |------|------|
 | `apps/core/api/src/module/auth/auth.controller.ts` | 세션/감사로그/관리 API 추가 |
-| `packages/fe-ui/src/components/widget/SessionCard/` | 신규 |
-| `packages/fe-ui/src/components/widget/SecurityInfoPanel/` | 신규 |
-| `packages/fe-ui/src/components/cell/AuditResultBadge/` | 신규 |
-| `packages/fe-ui/src/components/cell/UserAgentCell/` | 신규 |
+| `packages/fe-ui/src/widget/SessionCard/` | 신규 |
+| `packages/fe-ui/src/widget/SecurityInfoPanel/` | 신규 |
+| `packages/fe-ui/src/cell/AuditResultBadge/` | 신규 |
+| `packages/fe-ui/src/cell/UserAgentCell/` | 신규 |
 | `apps/admin/web/src/app/(admin)/my-sessions/` | 신규 페이지 |
 | `apps/admin/web/src/app/(admin)/auth-audit-logs/` | 신규 페이지 |

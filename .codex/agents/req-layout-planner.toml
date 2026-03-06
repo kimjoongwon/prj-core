@@ -30,7 +30,7 @@ developer_instructions = '''
 
 | 파일 | 동작 |
 |------|------|
-| `packages/fe-ui/src/components/layouts/[LayoutName]/index.spec.md` | 생성/업데이트 |
+| `packages/fe-ui/src/layout/[LayoutName]/index.spec.md` | 생성/업데이트 |
 
 ---
 

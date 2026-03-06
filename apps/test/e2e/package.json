@@ -19,7 +19,7 @@
     "install:browsers:all": "PLAYWRIGHT_BROWSERS_PATH=./browsers playwright install"
   },
   "devDependencies": {
-    "@cocrepo/ui": "workspace:^",
+    "@cocrepo/e2e": "workspace:^",
     "@playwright/test": "^1.57.0",
     "@types/node": "catalog:"
   }

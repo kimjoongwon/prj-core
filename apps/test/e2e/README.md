@@ -20,7 +20,7 @@ pnpm --filter=test-e2e test:idp:mobile
 
 ## 로그인 검증 공통 원칙
 
-- 로그인 플로우 공통 로직은 `@cocrepo/ui/e2e`에서 관리합니다.
+- 로그인 플로우 공통 로직은 `@cocrepo/e2e`에서 관리합니다.
 - 앱별 차이(리다이렉트 URL, storageState, localStorage 보정)는 테스트 래퍼에서만 처리합니다.
 - Admin 인증 상태 준비는 `admin-setup` 프로젝트에서 `storageState`를 생성해 재사용합니다.
 - IDP는 테스트 내에서 `loginToConsole`을 호출해 로그인 후 검증을 수행합니다.
@@ -51,7 +51,7 @@ pnpm --filter=test-e2e test:idp:mobile
 - Admin: `apps/test/e2e/tests/admin/helpers/login.ts`
   - `loginToAdmin(page)`를 통해 로그인 + Space(localStorage) 보정을 수행합니다.
 - IDP:
-  - 페이지별 e2e 테스트에서 `@cocrepo/ui/e2e`를 직접 import해 사용합니다.
+  - 페이지별 e2e 테스트에서 `@cocrepo/e2e`를 직접 import해 사용합니다.
 
 ## 환경 변수
 

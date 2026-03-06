@@ -1,5 +1,5 @@
 import type { Page } from "@playwright/test";
-import { runOidcLoginFlow } from "@cocrepo/ui/e2e";
+import { runOidcLoginFlow } from "@cocrepo/e2e";
 
 /** 시드 데이터 기준 System Space (플랫폼 운영본부) */
 const SYSTEM_SPACE_ID =

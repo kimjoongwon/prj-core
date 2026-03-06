@@ -46,7 +46,7 @@ developer_instructions = '''
 
 화면별 상세 기획은 `orch-screen-planner`가 담당합니다。
 
-`orch-screen-planner`는 페이지별로 `req-page-planner`, `req-api-planner`, `req-ui-planner`, `req-input-planner`, `req-cell-planner`, `req-widget-planner`, `req-layout-planner`, `req-feature-planner`, `req-menu-planner`, `req-test-planner`, `req-api-integration-planner`를 조합해 실행합니다。
+`orch-screen-planner`는 페이지별로 `req-page-planner`, `req-api-planner`, `req-primitive-planner`, `req-input-planner`, `req-cell-planner`, `req-widget-planner`, `req-layout-planner`, `req-feature-planner`, `req-menu-planner`, `req-fe-test-planner`, `req-api-integration-planner`를 조합해 실행합니다。
 
 ---
 
@@ -443,15 +443,15 @@ Asset (Level 0)
 ### UI 컴포넌트
 | 컴포넌트 | 타입 | 위치 |
 |----------|------|------|
-| AssetPreview | Pure UI | packages/fe-ui/src/components/ui/ |
-| AssetTypeInfo | Pure UI | packages/fe-ui/src/components/ui/ |
-| DerivativeList | Pure UI | packages/fe-ui/src/components/ui/ |
+| AssetPreview | Pure UI | packages/fe-ui/src/primitive/ |
+| AssetTypeInfo | Pure UI | packages/fe-ui/src/primitive/ |
+| DerivativeList | Pure UI | packages/fe-ui/src/primitive/ |
 
 ### Widget 컴포넌트
 | 컴포넌트 | 위치 |
 |----------|------|
-| AssetListPanel | packages/fe-ui/src/components/widget/ |
-| FolderTree | packages/fe-ui/src/components/widget/ |
+| AssetListPanel | packages/fe-ui/src/widget/ |
+| FolderTree | packages/fe-ui/src/widget/ |
 
 ### Feature 컴포넌트
 | 컴포넌트 | Store 연결 |

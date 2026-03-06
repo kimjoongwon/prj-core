@@ -113,7 +113,7 @@ model PasswordHistory {
 | 항목 | 내용 |
 |------|------|
 | **유형** | Widget |
-| **위치** | `packages/fe-ui/src/components/widget/PasswordStrengthIndicator/` |
+| **위치** | `packages/fe-ui/src/widget/PasswordStrengthIndicator/` |
 | **용도** | 비밀번호 정책 실시간 검증 표시 |
 | **사용 위치** | 비밀번호 재설정, 비밀번호 변경, 첫 로그인 변경 |
 
@@ -139,7 +139,7 @@ const rules = [
 | 항목 | 내용 |
 |------|------|
 | **유형** | Widget |
-| **위치** | `packages/fe-ui/src/components/widget/AuthAlertBanner/` |
+| **위치** | `packages/fe-ui/src/widget/AuthAlertBanner/` |
 | **용도** | 인증 관련 경고/에러 배너 |
 | **사용 위치** | 로그인 (잠금 메시지), 비밀번호 만료 경고 |
 
@@ -157,7 +157,7 @@ interface AuthAlertBannerProps {
 | 항목 | 내용 |
 |------|------|
 | **유형** | Widget |
-| **위치** | `packages/fe-ui/src/components/widget/SessionCard/` |
+| **위치** | `packages/fe-ui/src/widget/SessionCard/` |
 | **용도** | 세션 정보 카드 (기기, 브라우저, IP, 마지막 활동) |
 | **사용 위치** | 내 세션 관리 |
 
@@ -179,7 +179,7 @@ interface SessionCardProps {
 
 | 항목 | 내용 |
 |------|------|
-| **위치** | `packages/fe-ui/src/components/cell/AuditResultBadge/` |
+| **위치** | `packages/fe-ui/src/cell/AuditResultBadge/` |
 | **용도** | 감사 로그 결과 뱃지 |
 
 ```tsx
@@ -192,7 +192,7 @@ interface SessionCardProps {
 
 | 항목 | 내용 |
 |------|------|
-| **위치** | `packages/fe-ui/src/components/cell/UserAgentCell/` |
+| **위치** | `packages/fe-ui/src/cell/UserAgentCell/` |
 | **용도** | User Agent 파싱하여 브라우저/OS 표시 |
 
 ```tsx
@@ -235,7 +235,7 @@ interface SessionCardProps {
 
 | 항목 | 내용 |
 |------|------|
-| **위치** | `packages/fe-ui/src/components/feature/ChangePasswordForm/` |
+| **위치** | `packages/fe-ui/src/feature/ChangePasswordForm/` |
 | **용도** | 비밀번호 변경 폼 (현재/새/확인 + 정책 검증) |
 
 ```tsx
@@ -249,7 +249,7 @@ interface ChangePasswordFormProps {
 
 | 항목 | 내용 |
 |------|------|
-| **위치** | `packages/fe-ui/src/components/widget/SecurityInfoPanel/` |
+| **위치** | `packages/fe-ui/src/widget/SecurityInfoPanel/` |
 | **용도** | 사용자 보안 정보 표시 (관리자용) |
 
 ```tsx
@@ -267,7 +267,7 @@ interface SecurityInfoPanelProps {
 
 | 항목 | 내용 |
 |------|------|
-| **위치** | `packages/fe-ui/src/components/feature/UserSecurityActions/` |
+| **위치** | `packages/fe-ui/src/feature/UserSecurityActions/` |
 | **용도** | 관리자 보안 액션 버튼 그룹 |
 
 ```tsx

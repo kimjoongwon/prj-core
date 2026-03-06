@@ -218,7 +218,6 @@ export type CategoryWhereInput = {
   children?: Prisma.CategoryListRelationFilter
   space?: Prisma.XOR<Prisma.SpaceScalarRelationFilter, Prisma.SpaceWhereInput>
   creator?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
-  fileClassifications?: Prisma.FileClassificationListRelationFilter
   roleClassifications?: Prisma.RoleClassificationListRelationFilter
   spaceClassifications?: Prisma.SpaceClassificationListRelationFilter
   userClassifications?: Prisma.UserClassificationListRelationFilter
@@ -238,7 +237,6 @@ export type CategoryOrderByWithRelationInput = {
   children?: Prisma.CategoryOrderByRelationAggregateInput
   space?: Prisma.SpaceOrderByWithRelationInput
   creator?: Prisma.UserOrderByWithRelationInput
-  fileClassifications?: Prisma.FileClassificationOrderByRelationAggregateInput
   roleClassifications?: Prisma.RoleClassificationOrderByRelationAggregateInput
   spaceClassifications?: Prisma.SpaceClassificationOrderByRelationAggregateInput
   userClassifications?: Prisma.UserClassificationOrderByRelationAggregateInput
@@ -261,7 +259,6 @@ export type CategoryWhereUniqueInput = Prisma.AtLeast<{
   children?: Prisma.CategoryListRelationFilter
   space?: Prisma.XOR<Prisma.SpaceScalarRelationFilter, Prisma.SpaceWhereInput>
   creator?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
-  fileClassifications?: Prisma.FileClassificationListRelationFilter
   roleClassifications?: Prisma.RoleClassificationListRelationFilter
   spaceClassifications?: Prisma.SpaceClassificationListRelationFilter
   userClassifications?: Prisma.UserClassificationListRelationFilter
@@ -308,7 +305,6 @@ export type CategoryCreateInput = {
   children?: Prisma.CategoryCreateNestedManyWithoutParentInput
   space: Prisma.SpaceCreateNestedOneWithoutCategoriesInput
   creator?: Prisma.UserCreateNestedOneWithoutCreatedCategoriesInput
-  fileClassifications?: Prisma.FileClassificationCreateNestedManyWithoutCategoryInput
   roleClassifications?: Prisma.RoleClassificationCreateNestedManyWithoutCategoryInput
   spaceClassifications?: Prisma.SpaceClassificationCreateNestedManyWithoutCategoryInput
   userClassifications?: Prisma.UserClassificationCreateNestedManyWithoutCategoryInput
@@ -325,7 +321,6 @@ export type CategoryUncheckedCreateInput = {
   spaceId: string
   creatorId?: string | null
   children?: Prisma.CategoryUncheckedCreateNestedManyWithoutParentInput
-  fileClassifications?: Prisma.FileClassificationUncheckedCreateNestedManyWithoutCategoryInput
   roleClassifications?: Prisma.RoleClassificationUncheckedCreateNestedManyWithoutCategoryInput
   spaceClassifications?: Prisma.SpaceClassificationUncheckedCreateNestedManyWithoutCategoryInput
   userClassifications?: Prisma.UserClassificationUncheckedCreateNestedManyWithoutCategoryInput
@@ -342,7 +337,6 @@ export type CategoryUpdateInput = {
   children?: Prisma.CategoryUpdateManyWithoutParentNestedInput
   space?: Prisma.SpaceUpdateOneRequiredWithoutCategoriesNestedInput
   creator?: Prisma.UserUpdateOneWithoutCreatedCategoriesNestedInput
-  fileClassifications?: Prisma.FileClassificationUpdateManyWithoutCategoryNestedInput
   roleClassifications?: Prisma.RoleClassificationUpdateManyWithoutCategoryNestedInput
   spaceClassifications?: Prisma.SpaceClassificationUpdateManyWithoutCategoryNestedInput
   userClassifications?: Prisma.UserClassificationUpdateManyWithoutCategoryNestedInput
@@ -359,7 +353,6 @@ export type CategoryUncheckedUpdateInput = {
   spaceId?: Prisma.StringFieldUpdateOperationsInput | string
   creatorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   children?: Prisma.CategoryUncheckedUpdateManyWithoutParentNestedInput
-  fileClassifications?: Prisma.FileClassificationUncheckedUpdateManyWithoutCategoryNestedInput
   roleClassifications?: Prisma.RoleClassificationUncheckedUpdateManyWithoutCategoryNestedInput
   spaceClassifications?: Prisma.SpaceClassificationUncheckedUpdateManyWithoutCategoryNestedInput
   userClassifications?: Prisma.UserClassificationUncheckedUpdateManyWithoutCategoryNestedInput
@@ -516,20 +509,6 @@ export type CategoryUncheckedUpdateManyWithoutParentNestedInput = {
   deleteMany?: Prisma.CategoryScalarWhereInput | Prisma.CategoryScalarWhereInput[]
 }
 
-export type CategoryCreateNestedOneWithoutFileClassificationsInput = {
-  create?: Prisma.XOR<Prisma.CategoryCreateWithoutFileClassificationsInput, Prisma.CategoryUncheckedCreateWithoutFileClassificationsInput>
-  connectOrCreate?: Prisma.CategoryCreateOrConnectWithoutFileClassificationsInput
-  connect?: Prisma.CategoryWhereUniqueInput
-}
-
-export type CategoryUpdateOneRequiredWithoutFileClassificationsNestedInput = {
-  create?: Prisma.XOR<Prisma.CategoryCreateWithoutFileClassificationsInput, Prisma.CategoryUncheckedCreateWithoutFileClassificationsInput>
-  connectOrCreate?: Prisma.CategoryCreateOrConnectWithoutFileClassificationsInput
-  upsert?: Prisma.CategoryUpsertWithoutFileClassificationsInput
-  connect?: Prisma.CategoryWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.CategoryUpdateToOneWithWhereWithoutFileClassificationsInput, Prisma.CategoryUpdateWithoutFileClassificationsInput>, Prisma.CategoryUncheckedUpdateWithoutFileClassificationsInput>
-}
-
 export type CategoryCreateNestedOneWithoutRoleClassificationsInput = {
   create?: Prisma.XOR<Prisma.CategoryCreateWithoutRoleClassificationsInput, Prisma.CategoryUncheckedCreateWithoutRoleClassificationsInput>
   connectOrCreate?: Prisma.CategoryCreateOrConnectWithoutRoleClassificationsInput
@@ -666,7 +645,6 @@ export type CategoryCreateWithoutChildrenInput = {
   parent?: Prisma.CategoryCreateNestedOneWithoutChildrenInput
   space: Prisma.SpaceCreateNestedOneWithoutCategoriesInput
   creator?: Prisma.UserCreateNestedOneWithoutCreatedCategoriesInput
-  fileClassifications?: Prisma.FileClassificationCreateNestedManyWithoutCategoryInput
   roleClassifications?: Prisma.RoleClassificationCreateNestedManyWithoutCategoryInput
   spaceClassifications?: Prisma.SpaceClassificationCreateNestedManyWithoutCategoryInput
   userClassifications?: Prisma.UserClassificationCreateNestedManyWithoutCategoryInput
@@ -682,7 +660,6 @@ export type CategoryUncheckedCreateWithoutChildrenInput = {
   parentId?: string | null
   spaceId: string
   creatorId?: string | null
-  fileClassifications?: Prisma.FileClassificationUncheckedCreateNestedManyWithoutCategoryInput
   roleClassifications?: Prisma.RoleClassificationUncheckedCreateNestedManyWithoutCategoryInput
   spaceClassifications?: Prisma.SpaceClassificationUncheckedCreateNestedManyWithoutCategoryInput
   userClassifications?: Prisma.UserClassificationUncheckedCreateNestedManyWithoutCategoryInput
@@ -703,7 +680,6 @@ export type CategoryCreateWithoutParentInput = {
   children?: Prisma.CategoryCreateNestedManyWithoutParentInput
   space: Prisma.SpaceCreateNestedOneWithoutCategoriesInput
   creator?: Prisma.UserCreateNestedOneWithoutCreatedCategoriesInput
-  fileClassifications?: Prisma.FileClassificationCreateNestedManyWithoutCategoryInput
   roleClassifications?: Prisma.RoleClassificationCreateNestedManyWithoutCategoryInput
   spaceClassifications?: Prisma.SpaceClassificationCreateNestedManyWithoutCategoryInput
   userClassifications?: Prisma.UserClassificationCreateNestedManyWithoutCategoryInput
@@ -719,7 +695,6 @@ export type CategoryUncheckedCreateWithoutParentInput = {
   spaceId: string
   creatorId?: string | null
   children?: Prisma.CategoryUncheckedCreateNestedManyWithoutParentInput
-  fileClassifications?: Prisma.FileClassificationUncheckedCreateNestedManyWithoutCategoryInput
   roleClassifications?: Prisma.RoleClassificationUncheckedCreateNestedManyWithoutCategoryInput
   spaceClassifications?: Prisma.SpaceClassificationUncheckedCreateNestedManyWithoutCategoryInput
   userClassifications?: Prisma.UserClassificationUncheckedCreateNestedManyWithoutCategoryInput
@@ -756,7 +731,6 @@ export type CategoryUpdateWithoutChildrenInput = {
   parent?: Prisma.CategoryUpdateOneWithoutChildrenNestedInput
   space?: Prisma.SpaceUpdateOneRequiredWithoutCategoriesNestedInput
   creator?: Prisma.UserUpdateOneWithoutCreatedCategoriesNestedInput
-  fileClassifications?: Prisma.FileClassificationUpdateManyWithoutCategoryNestedInput
   roleClassifications?: Prisma.RoleClassificationUpdateManyWithoutCategoryNestedInput
   spaceClassifications?: Prisma.SpaceClassificationUpdateManyWithoutCategoryNestedInput
   userClassifications?: Prisma.UserClassificationUpdateManyWithoutCategoryNestedInput
@@ -772,7 +746,6 @@ export type CategoryUncheckedUpdateWithoutChildrenInput = {
   parentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   spaceId?: Prisma.StringFieldUpdateOperationsInput | string
   creatorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  fileClassifications?: Prisma.FileClassificationUncheckedUpdateManyWithoutCategoryNestedInput
   roleClassifications?: Prisma.RoleClassificationUncheckedUpdateManyWithoutCategoryNestedInput
   spaceClassifications?: Prisma.SpaceClassificationUncheckedUpdateManyWithoutCategoryNestedInput
   userClassifications?: Prisma.UserClassificationUncheckedUpdateManyWithoutCategoryNestedInput
@@ -809,86 +782,6 @@ export type CategoryScalarWhereInput = {
   creatorId?: Prisma.StringNullableFilter<"Category"> | string | null
 }
 
-export type CategoryCreateWithoutFileClassificationsInput = {
-  id?: string
-  createdAt?: Date | string
-  updatedAt?: Date | string | null
-  removedAt?: Date | string | null
-  name: string
-  type?: $Enums.CategoryTypes
-  parent?: Prisma.CategoryCreateNestedOneWithoutChildrenInput
-  children?: Prisma.CategoryCreateNestedManyWithoutParentInput
-  space: Prisma.SpaceCreateNestedOneWithoutCategoriesInput
-  creator?: Prisma.UserCreateNestedOneWithoutCreatedCategoriesInput
-  roleClassifications?: Prisma.RoleClassificationCreateNestedManyWithoutCategoryInput
-  spaceClassifications?: Prisma.SpaceClassificationCreateNestedManyWithoutCategoryInput
-  userClassifications?: Prisma.UserClassificationCreateNestedManyWithoutCategoryInput
-}
-
-export type CategoryUncheckedCreateWithoutFileClassificationsInput = {
-  id?: string
-  createdAt?: Date | string
-  updatedAt?: Date | string | null
-  removedAt?: Date | string | null
-  name: string
-  type?: $Enums.CategoryTypes
-  parentId?: string | null
-  spaceId: string
-  creatorId?: string | null
-  children?: Prisma.CategoryUncheckedCreateNestedManyWithoutParentInput
-  roleClassifications?: Prisma.RoleClassificationUncheckedCreateNestedManyWithoutCategoryInput
-  spaceClassifications?: Prisma.SpaceClassificationUncheckedCreateNestedManyWithoutCategoryInput
-  userClassifications?: Prisma.UserClassificationUncheckedCreateNestedManyWithoutCategoryInput
-}
-
-export type CategoryCreateOrConnectWithoutFileClassificationsInput = {
-  where: Prisma.CategoryWhereUniqueInput
-  create: Prisma.XOR<Prisma.CategoryCreateWithoutFileClassificationsInput, Prisma.CategoryUncheckedCreateWithoutFileClassificationsInput>
-}
-
-export type CategoryUpsertWithoutFileClassificationsInput = {
-  update: Prisma.XOR<Prisma.CategoryUpdateWithoutFileClassificationsInput, Prisma.CategoryUncheckedUpdateWithoutFileClassificationsInput>
-  create: Prisma.XOR<Prisma.CategoryCreateWithoutFileClassificationsInput, Prisma.CategoryUncheckedCreateWithoutFileClassificationsInput>
-  where?: Prisma.CategoryWhereInput
-}
-
-export type CategoryUpdateToOneWithWhereWithoutFileClassificationsInput = {
-  where?: Prisma.CategoryWhereInput
-  data: Prisma.XOR<Prisma.CategoryUpdateWithoutFileClassificationsInput, Prisma.CategoryUncheckedUpdateWithoutFileClassificationsInput>
-}
-
-export type CategoryUpdateWithoutFileClassificationsInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  name?: Prisma.StringFieldUpdateOperationsInput | string
-  type?: Prisma.EnumCategoryTypesFieldUpdateOperationsInput | $Enums.CategoryTypes
-  parent?: Prisma.CategoryUpdateOneWithoutChildrenNestedInput
-  children?: Prisma.CategoryUpdateManyWithoutParentNestedInput
-  space?: Prisma.SpaceUpdateOneRequiredWithoutCategoriesNestedInput
-  creator?: Prisma.UserUpdateOneWithoutCreatedCategoriesNestedInput
-  roleClassifications?: Prisma.RoleClassificationUpdateManyWithoutCategoryNestedInput
-  spaceClassifications?: Prisma.SpaceClassificationUpdateManyWithoutCategoryNestedInput
-  userClassifications?: Prisma.UserClassificationUpdateManyWithoutCategoryNestedInput
-}
-
-export type CategoryUncheckedUpdateWithoutFileClassificationsInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  name?: Prisma.StringFieldUpdateOperationsInput | string
-  type?: Prisma.EnumCategoryTypesFieldUpdateOperationsInput | $Enums.CategoryTypes
-  parentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  spaceId?: Prisma.StringFieldUpdateOperationsInput | string
-  creatorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  children?: Prisma.CategoryUncheckedUpdateManyWithoutParentNestedInput
-  roleClassifications?: Prisma.RoleClassificationUncheckedUpdateManyWithoutCategoryNestedInput
-  spaceClassifications?: Prisma.SpaceClassificationUncheckedUpdateManyWithoutCategoryNestedInput
-  userClassifications?: Prisma.UserClassificationUncheckedUpdateManyWithoutCategoryNestedInput
-}
-
 export type CategoryCreateWithoutRoleClassificationsInput = {
   id?: string
   createdAt?: Date | string
@@ -900,7 +793,6 @@ export type CategoryCreateWithoutRoleClassificationsInput = {
   children?: Prisma.CategoryCreateNestedManyWithoutParentInput
   space: Prisma.SpaceCreateNestedOneWithoutCategoriesInput
   creator?: Prisma.UserCreateNestedOneWithoutCreatedCategoriesInput
-  fileClassifications?: Prisma.FileClassificationCreateNestedManyWithoutCategoryInput
   spaceClassifications?: Prisma.SpaceClassificationCreateNestedManyWithoutCategoryInput
   userClassifications?: Prisma.UserClassificationCreateNestedManyWithoutCategoryInput
 }
@@ -916,7 +808,6 @@ export type CategoryUncheckedCreateWithoutRoleClassificationsInput = {
   spaceId: string
   creatorId?: string | null
   children?: Prisma.CategoryUncheckedCreateNestedManyWithoutParentInput
-  fileClassifications?: Prisma.FileClassificationUncheckedCreateNestedManyWithoutCategoryInput
   spaceClassifications?: Prisma.SpaceClassificationUncheckedCreateNestedManyWithoutCategoryInput
   userClassifications?: Prisma.UserClassificationUncheckedCreateNestedManyWithoutCategoryInput
 }
@@ -948,7 +839,6 @@ export type CategoryUpdateWithoutRoleClassificationsInput = {
   children?: Prisma.CategoryUpdateManyWithoutParentNestedInput
   space?: Prisma.SpaceUpdateOneRequiredWithoutCategoriesNestedInput
   creator?: Prisma.UserUpdateOneWithoutCreatedCategoriesNestedInput
-  fileClassifications?: Prisma.FileClassificationUpdateManyWithoutCategoryNestedInput
   spaceClassifications?: Prisma.SpaceClassificationUpdateManyWithoutCategoryNestedInput
   userClassifications?: Prisma.UserClassificationUpdateManyWithoutCategoryNestedInput
 }
@@ -964,7 +854,6 @@ export type CategoryUncheckedUpdateWithoutRoleClassificationsInput = {
   spaceId?: Prisma.StringFieldUpdateOperationsInput | string
   creatorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   children?: Prisma.CategoryUncheckedUpdateManyWithoutParentNestedInput
-  fileClassifications?: Prisma.FileClassificationUncheckedUpdateManyWithoutCategoryNestedInput
   spaceClassifications?: Prisma.SpaceClassificationUncheckedUpdateManyWithoutCategoryNestedInput
   userClassifications?: Prisma.UserClassificationUncheckedUpdateManyWithoutCategoryNestedInput
 }
@@ -979,7 +868,6 @@ export type CategoryCreateWithoutSpaceInput = {
   parent?: Prisma.CategoryCreateNestedOneWithoutChildrenInput
   children?: Prisma.CategoryCreateNestedManyWithoutParentInput
   creator?: Prisma.UserCreateNestedOneWithoutCreatedCategoriesInput
-  fileClassifications?: Prisma.FileClassificationCreateNestedManyWithoutCategoryInput
   roleClassifications?: Prisma.RoleClassificationCreateNestedManyWithoutCategoryInput
   spaceClassifications?: Prisma.SpaceClassificationCreateNestedManyWithoutCategoryInput
   userClassifications?: Prisma.UserClassificationCreateNestedManyWithoutCategoryInput
@@ -995,7 +883,6 @@ export type CategoryUncheckedCreateWithoutSpaceInput = {
   parentId?: string | null
   creatorId?: string | null
   children?: Prisma.CategoryUncheckedCreateNestedManyWithoutParentInput
-  fileClassifications?: Prisma.FileClassificationUncheckedCreateNestedManyWithoutCategoryInput
   roleClassifications?: Prisma.RoleClassificationUncheckedCreateNestedManyWithoutCategoryInput
   spaceClassifications?: Prisma.SpaceClassificationUncheckedCreateNestedManyWithoutCategoryInput
   userClassifications?: Prisma.UserClassificationUncheckedCreateNestedManyWithoutCategoryInput
@@ -1038,7 +925,6 @@ export type CategoryCreateWithoutSpaceClassificationsInput = {
   children?: Prisma.CategoryCreateNestedManyWithoutParentInput
   space: Prisma.SpaceCreateNestedOneWithoutCategoriesInput
   creator?: Prisma.UserCreateNestedOneWithoutCreatedCategoriesInput
-  fileClassifications?: Prisma.FileClassificationCreateNestedManyWithoutCategoryInput
   roleClassifications?: Prisma.RoleClassificationCreateNestedManyWithoutCategoryInput
   userClassifications?: Prisma.UserClassificationCreateNestedManyWithoutCategoryInput
 }
@@ -1054,7 +940,6 @@ export type CategoryUncheckedCreateWithoutSpaceClassificationsInput = {
   spaceId: string
   creatorId?: string | null
   children?: Prisma.CategoryUncheckedCreateNestedManyWithoutParentInput
-  fileClassifications?: Prisma.FileClassificationUncheckedCreateNestedManyWithoutCategoryInput
   roleClassifications?: Prisma.RoleClassificationUncheckedCreateNestedManyWithoutCategoryInput
   userClassifications?: Prisma.UserClassificationUncheckedCreateNestedManyWithoutCategoryInput
 }
@@ -1086,7 +971,6 @@ export type CategoryUpdateWithoutSpaceClassificationsInput = {
   children?: Prisma.CategoryUpdateManyWithoutParentNestedInput
   space?: Prisma.SpaceUpdateOneRequiredWithoutCategoriesNestedInput
   creator?: Prisma.UserUpdateOneWithoutCreatedCategoriesNestedInput
-  fileClassifications?: Prisma.FileClassificationUpdateManyWithoutCategoryNestedInput
   roleClassifications?: Prisma.RoleClassificationUpdateManyWithoutCategoryNestedInput
   userClassifications?: Prisma.UserClassificationUpdateManyWithoutCategoryNestedInput
 }
@@ -1102,7 +986,6 @@ export type CategoryUncheckedUpdateWithoutSpaceClassificationsInput = {
   spaceId?: Prisma.StringFieldUpdateOperationsInput | string
   creatorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   children?: Prisma.CategoryUncheckedUpdateManyWithoutParentNestedInput
-  fileClassifications?: Prisma.FileClassificationUncheckedUpdateManyWithoutCategoryNestedInput
   roleClassifications?: Prisma.RoleClassificationUncheckedUpdateManyWithoutCategoryNestedInput
   userClassifications?: Prisma.UserClassificationUncheckedUpdateManyWithoutCategoryNestedInput
 }
@@ -1117,7 +1000,6 @@ export type CategoryCreateWithoutCreatorInput = {
   parent?: Prisma.CategoryCreateNestedOneWithoutChildrenInput
   children?: Prisma.CategoryCreateNestedManyWithoutParentInput
   space: Prisma.SpaceCreateNestedOneWithoutCategoriesInput
-  fileClassifications?: Prisma.FileClassificationCreateNestedManyWithoutCategoryInput
   roleClassifications?: Prisma.RoleClassificationCreateNestedManyWithoutCategoryInput
   spaceClassifications?: Prisma.SpaceClassificationCreateNestedManyWithoutCategoryInput
   userClassifications?: Prisma.UserClassificationCreateNestedManyWithoutCategoryInput
@@ -1133,7 +1015,6 @@ export type CategoryUncheckedCreateWithoutCreatorInput = {
   parentId?: string | null
   spaceId: string
   children?: Prisma.CategoryUncheckedCreateNestedManyWithoutParentInput
-  fileClassifications?: Prisma.FileClassificationUncheckedCreateNestedManyWithoutCategoryInput
   roleClassifications?: Prisma.RoleClassificationUncheckedCreateNestedManyWithoutCategoryInput
   spaceClassifications?: Prisma.SpaceClassificationUncheckedCreateNestedManyWithoutCategoryInput
   userClassifications?: Prisma.UserClassificationUncheckedCreateNestedManyWithoutCategoryInput
@@ -1176,7 +1057,6 @@ export type CategoryCreateWithoutUserClassificationsInput = {
   children?: Prisma.CategoryCreateNestedManyWithoutParentInput
   space: Prisma.SpaceCreateNestedOneWithoutCategoriesInput
   creator?: Prisma.UserCreateNestedOneWithoutCreatedCategoriesInput
-  fileClassifications?: Prisma.FileClassificationCreateNestedManyWithoutCategoryInput
   roleClassifications?: Prisma.RoleClassificationCreateNestedManyWithoutCategoryInput
   spaceClassifications?: Prisma.SpaceClassificationCreateNestedManyWithoutCategoryInput
 }
@@ -1192,7 +1072,6 @@ export type CategoryUncheckedCreateWithoutUserClassificationsInput = {
   spaceId: string
   creatorId?: string | null
   children?: Prisma.CategoryUncheckedCreateNestedManyWithoutParentInput
-  fileClassifications?: Prisma.FileClassificationUncheckedCreateNestedManyWithoutCategoryInput
   roleClassifications?: Prisma.RoleClassificationUncheckedCreateNestedManyWithoutCategoryInput
   spaceClassifications?: Prisma.SpaceClassificationUncheckedCreateNestedManyWithoutCategoryInput
 }
@@ -1224,7 +1103,6 @@ export type CategoryUpdateWithoutUserClassificationsInput = {
   children?: Prisma.CategoryUpdateManyWithoutParentNestedInput
   space?: Prisma.SpaceUpdateOneRequiredWithoutCategoriesNestedInput
   creator?: Prisma.UserUpdateOneWithoutCreatedCategoriesNestedInput
-  fileClassifications?: Prisma.FileClassificationUpdateManyWithoutCategoryNestedInput
   roleClassifications?: Prisma.RoleClassificationUpdateManyWithoutCategoryNestedInput
   spaceClassifications?: Prisma.SpaceClassificationUpdateManyWithoutCategoryNestedInput
 }
@@ -1240,7 +1118,6 @@ export type CategoryUncheckedUpdateWithoutUserClassificationsInput = {
   spaceId?: Prisma.StringFieldUpdateOperationsInput | string
   creatorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   children?: Prisma.CategoryUncheckedUpdateManyWithoutParentNestedInput
-  fileClassifications?: Prisma.FileClassificationUncheckedUpdateManyWithoutCategoryNestedInput
   roleClassifications?: Prisma.RoleClassificationUncheckedUpdateManyWithoutCategoryNestedInput
   spaceClassifications?: Prisma.SpaceClassificationUncheckedUpdateManyWithoutCategoryNestedInput
 }
@@ -1266,7 +1143,6 @@ export type CategoryUpdateWithoutParentInput = {
   children?: Prisma.CategoryUpdateManyWithoutParentNestedInput
   space?: Prisma.SpaceUpdateOneRequiredWithoutCategoriesNestedInput
   creator?: Prisma.UserUpdateOneWithoutCreatedCategoriesNestedInput
-  fileClassifications?: Prisma.FileClassificationUpdateManyWithoutCategoryNestedInput
   roleClassifications?: Prisma.RoleClassificationUpdateManyWithoutCategoryNestedInput
   spaceClassifications?: Prisma.SpaceClassificationUpdateManyWithoutCategoryNestedInput
   userClassifications?: Prisma.UserClassificationUpdateManyWithoutCategoryNestedInput
@@ -1282,7 +1158,6 @@ export type CategoryUncheckedUpdateWithoutParentInput = {
   spaceId?: Prisma.StringFieldUpdateOperationsInput | string
   creatorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   children?: Prisma.CategoryUncheckedUpdateManyWithoutParentNestedInput
-  fileClassifications?: Prisma.FileClassificationUncheckedUpdateManyWithoutCategoryNestedInput
   roleClassifications?: Prisma.RoleClassificationUncheckedUpdateManyWithoutCategoryNestedInput
   spaceClassifications?: Prisma.SpaceClassificationUncheckedUpdateManyWithoutCategoryNestedInput
   userClassifications?: Prisma.UserClassificationUncheckedUpdateManyWithoutCategoryNestedInput
@@ -1320,7 +1195,6 @@ export type CategoryUpdateWithoutSpaceInput = {
   parent?: Prisma.CategoryUpdateOneWithoutChildrenNestedInput
   children?: Prisma.CategoryUpdateManyWithoutParentNestedInput
   creator?: Prisma.UserUpdateOneWithoutCreatedCategoriesNestedInput
-  fileClassifications?: Prisma.FileClassificationUpdateManyWithoutCategoryNestedInput
   roleClassifications?: Prisma.RoleClassificationUpdateManyWithoutCategoryNestedInput
   spaceClassifications?: Prisma.SpaceClassificationUpdateManyWithoutCategoryNestedInput
   userClassifications?: Prisma.UserClassificationUpdateManyWithoutCategoryNestedInput
@@ -1336,7 +1210,6 @@ export type CategoryUncheckedUpdateWithoutSpaceInput = {
   parentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   creatorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   children?: Prisma.CategoryUncheckedUpdateManyWithoutParentNestedInput
-  fileClassifications?: Prisma.FileClassificationUncheckedUpdateManyWithoutCategoryNestedInput
   roleClassifications?: Prisma.RoleClassificationUncheckedUpdateManyWithoutCategoryNestedInput
   spaceClassifications?: Prisma.SpaceClassificationUncheckedUpdateManyWithoutCategoryNestedInput
   userClassifications?: Prisma.UserClassificationUncheckedUpdateManyWithoutCategoryNestedInput
@@ -1374,7 +1247,6 @@ export type CategoryUpdateWithoutCreatorInput = {
   parent?: Prisma.CategoryUpdateOneWithoutChildrenNestedInput
   children?: Prisma.CategoryUpdateManyWithoutParentNestedInput
   space?: Prisma.SpaceUpdateOneRequiredWithoutCategoriesNestedInput
-  fileClassifications?: Prisma.FileClassificationUpdateManyWithoutCategoryNestedInput
   roleClassifications?: Prisma.RoleClassificationUpdateManyWithoutCategoryNestedInput
   spaceClassifications?: Prisma.SpaceClassificationUpdateManyWithoutCategoryNestedInput
   userClassifications?: Prisma.UserClassificationUpdateManyWithoutCategoryNestedInput
@@ -1390,7 +1262,6 @@ export type CategoryUncheckedUpdateWithoutCreatorInput = {
   parentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   spaceId?: Prisma.StringFieldUpdateOperationsInput | string
   children?: Prisma.CategoryUncheckedUpdateManyWithoutParentNestedInput
-  fileClassifications?: Prisma.FileClassificationUncheckedUpdateManyWithoutCategoryNestedInput
   roleClassifications?: Prisma.RoleClassificationUncheckedUpdateManyWithoutCategoryNestedInput
   spaceClassifications?: Prisma.SpaceClassificationUncheckedUpdateManyWithoutCategoryNestedInput
   userClassifications?: Prisma.UserClassificationUncheckedUpdateManyWithoutCategoryNestedInput
@@ -1414,7 +1285,6 @@ export type CategoryUncheckedUpdateManyWithoutCreatorInput = {
 
 export type CategoryCountOutputType = {
   children: number
-  fileClassifications: number
   roleClassifications: number
   spaceClassifications: number
   userClassifications: number
@@ -1422,7 +1292,6 @@ export type CategoryCountOutputType = {
 
 export type CategoryCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   children?: boolean | CategoryCountOutputTypeCountChildrenArgs
-  fileClassifications?: boolean | CategoryCountOutputTypeCountFileClassificationsArgs
   roleClassifications?: boolean | CategoryCountOutputTypeCountRoleClassificationsArgs
   spaceClassifications?: boolean | CategoryCountOutputTypeCountSpaceClassificationsArgs
   userClassifications?: boolean | CategoryCountOutputTypeCountUserClassificationsArgs
@@ -1443,13 +1312,6 @@ export type CategoryCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types.Ext
  */
 export type CategoryCountOutputTypeCountChildrenArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   where?: Prisma.CategoryWhereInput
-}
-
-/**
- * CategoryCountOutputType without action
- */
-export type CategoryCountOutputTypeCountFileClassificationsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.FileClassificationWhereInput
 }
 
 /**
@@ -1488,7 +1350,6 @@ export type CategorySelect<ExtArgs extends runtime.Types.Extensions.InternalArgs
   children?: boolean | Prisma.Category$childrenArgs<ExtArgs>
   space?: boolean | Prisma.SpaceDefaultArgs<ExtArgs>
   creator?: boolean | Prisma.Category$creatorArgs<ExtArgs>
-  fileClassifications?: boolean | Prisma.Category$fileClassificationsArgs<ExtArgs>
   roleClassifications?: boolean | Prisma.Category$roleClassificationsArgs<ExtArgs>
   spaceClassifications?: boolean | Prisma.Category$spaceClassificationsArgs<ExtArgs>
   userClassifications?: boolean | Prisma.Category$userClassificationsArgs<ExtArgs>
@@ -1543,7 +1404,6 @@ export type CategoryInclude<ExtArgs extends runtime.Types.Extensions.InternalArg
   children?: boolean | Prisma.Category$childrenArgs<ExtArgs>
   space?: boolean | Prisma.SpaceDefaultArgs<ExtArgs>
   creator?: boolean | Prisma.Category$creatorArgs<ExtArgs>
-  fileClassifications?: boolean | Prisma.Category$fileClassificationsArgs<ExtArgs>
   roleClassifications?: boolean | Prisma.Category$roleClassificationsArgs<ExtArgs>
   spaceClassifications?: boolean | Prisma.Category$spaceClassificationsArgs<ExtArgs>
   userClassifications?: boolean | Prisma.Category$userClassificationsArgs<ExtArgs>
@@ -1567,7 +1427,6 @@ export type $CategoryPayload<ExtArgs extends runtime.Types.Extensions.InternalAr
     children: Prisma.$CategoryPayload<ExtArgs>[]
     space: Prisma.$SpacePayload<ExtArgs>
     creator: Prisma.$UserPayload<ExtArgs> | null
-    fileClassifications: Prisma.$FileClassificationPayload<ExtArgs>[]
     roleClassifications: Prisma.$RoleClassificationPayload<ExtArgs>[]
     spaceClassifications: Prisma.$SpaceClassificationPayload<ExtArgs>[]
     userClassifications: Prisma.$UserClassificationPayload<ExtArgs>[]
@@ -1986,7 +1845,6 @@ export interface Prisma__CategoryClient<T, Null = never, ExtArgs extends runtime
   children<T extends Prisma.Category$childrenArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Category$childrenArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CategoryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   space<T extends Prisma.SpaceDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.SpaceDefaultArgs<ExtArgs>>): Prisma.Prisma__SpaceClient<runtime.Types.Result.GetResult<Prisma.$SpacePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   creator<T extends Prisma.Category$creatorArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Category$creatorArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
-  fileClassifications<T extends Prisma.Category$fileClassificationsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Category$fileClassificationsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$FileClassificationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   roleClassifications<T extends Prisma.Category$roleClassificationsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Category$roleClassificationsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$RoleClassificationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   spaceClassifications<T extends Prisma.Category$spaceClassificationsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Category$spaceClassificationsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$SpaceClassificationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   userClassifications<T extends Prisma.Category$userClassificationsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Category$userClassificationsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$UserClassificationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -2483,30 +2341,6 @@ export type Category$creatorArgs<ExtArgs extends runtime.Types.Extensions.Intern
    */
   include?: Prisma.UserInclude<ExtArgs> | null
   where?: Prisma.UserWhereInput
-}
-
-/**
- * Category.fileClassifications
- */
-export type Category$fileClassificationsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  /**
-   * Select specific fields to fetch from the FileClassification
-   */
-  select?: Prisma.FileClassificationSelect<ExtArgs> | null
-  /**
-   * Omit specific fields from the FileClassification
-   */
-  omit?: Prisma.FileClassificationOmit<ExtArgs> | null
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.FileClassificationInclude<ExtArgs> | null
-  where?: Prisma.FileClassificationWhereInput
-  orderBy?: Prisma.FileClassificationOrderByWithRelationInput | Prisma.FileClassificationOrderByWithRelationInput[]
-  cursor?: Prisma.FileClassificationWhereUniqueInput
-  take?: number
-  skip?: number
-  distinct?: Prisma.FileClassificationScalarFieldEnum | Prisma.FileClassificationScalarFieldEnum[]
 }
 
 /**

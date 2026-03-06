@@ -123,21 +123,6 @@ export type Post = Prisma.PostModel
  */
 export type Content = Prisma.ContentModel
 /**
- * Model File
- * 
- */
-export type File = Prisma.FileModel
-/**
- * Model FileClassification
- * 
- */
-export type FileClassification = Prisma.FileClassificationModel
-/**
- * Model FileAssociation
- * 
- */
-export type FileAssociation = Prisma.FileAssociationModel
-/**
  * Model Subject
  * @displayName Subject
  */

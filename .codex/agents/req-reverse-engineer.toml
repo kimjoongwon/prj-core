@@ -69,7 +69,7 @@ apps/core/api/src/[module]/
 packages/fe-store/src/stores/
 └── [domain]Store.spec.md                    # Store 기획서 (L9, L11)
 
-packages/fe-ui/src/components/
+packages/fe-ui/src/
 ├── feature/[FeatureName]/index.spec.md      # Feature 기획서 (L8)
 ├── widget/[WidgetName]/index.spec.md        # Widget 기획서 (L8)
 └── ui/[UIName]/index.spec.md                # UI 기획서 (L8)
@@ -86,7 +86,7 @@ packages/fe-ui/src/components/
 | Guard/Decorator | 권한 체계, 유효성 규칙 | `controller.spec.md`, `service.spec.md` |
 | Service | 비즈니스 로직, 규칙 | `service.spec.md` |
 | Page 파일 | 화면 구조, 데이터 흐름 | `page.spec.md` |
-| 컴포넌트 | Props, 이벤트, 상태 | `feature/widget/ui.spec.md` |
+| 컴포넌트 | Props, 이벤트, 상태 | `feature/widget/primitive.spec.md` |
 | Store | 상태, 액션 | `store.spec.md` |
 | 앱 전체 구조 | 컨텍스트, Actor, Goal | `app.spec.md` |
 
@@ -126,7 +126,7 @@ packages/fe-ui/src/components/
 | L6 DTO | `packages/be-dto/src/**/*.dto.ts` | `find packages/be-dto/src -name "*{domain}*.dto.ts"` |
 | L9 Guard | `packages/be-common/src/guard/*.guard.ts` | `ls packages/be-common/src/guard/` |
 | L4 Screen | `apps/*/app/**/*.tsx` | `find apps/{app}/app -name "page.tsx" \| xargs grep -l "{domain}"` |
-| L8 Component | `packages/fe-ui/src/components/**/*.tsx` | `grep -r "{Domain}" packages/fe-ui/src/components/` |
+| L8 Component | `packages/fe-ui/src/**/*.tsx` | `grep -r "{Domain}" packages/fe-ui/src/` |
 | Store | `packages/fe-store/src/stores/*.ts` | `find packages/fe-store/src/stores -name "*{domain}*"` |
 
 **탐색 결과 구조:**
@@ -141,7 +141,7 @@ packages/fe-ui/src/components/
     dtos: ["packages/be-dto/src/role/*.dto.ts"],
     guards: ["packages/be-common/src/guard/roles.guard.ts"],
     pages: ["apps/admin/web/app/(admin)/roles/page.tsx"],
-    components: ["packages/fe-ui/src/components/feature/RoleList/index.tsx"],
+    components: ["packages/fe-ui/src/feature/RoleList/index.tsx"],
     stores: ["packages/fe-store/src/stores/roleStore.ts"]
   }
 }
@@ -264,7 +264,7 @@ export default async function RolesPage() {
 
 **컴포넌트 분석 (L8):**
 ```typescript
-// packages/fe-ui/src/components/feature/RoleList/index.tsx
+// packages/fe-ui/src/feature/RoleList/index.tsx
 interface RoleListProps {
   onClickCreate: () => void;
 }
@@ -280,7 +280,7 @@ export const RoleList = observer(({ onClickCreate }: RoleListProps) => {
 - 이벤트 핸들러 패턴
 - Widget/Feature/UI 계층 위치
 
-**생성 대상:** `page.spec.md`, `feature/widget/ui.spec.md`
+**생성 대상:** `page.spec.md`, `feature/widget/primitive.spec.md`
 
 ### 6단계: 역추론 (Bottom-up)
 
@@ -340,9 +340,9 @@ CRUD 작업별 Happy Path와 Error Path를 도출합니다.
 | `service.spec.md` | `apps/core/api/src/.../` | `.codex/templates/spec/service.spec.md` |
 | `repository.spec.md` | `apps/core/api/src/.../repositories/` | `.codex/templates/spec/repository.spec.md` |
 | `store.spec.md` | `packages/fe-store/src/stores/` | `.codex/templates/spec/store.spec.md` |
-| `index.spec.md` (feature) | `packages/fe-ui/src/components/feature/[Name]/` | `.codex/templates/spec/feature.spec.md` |
-| `index.spec.md` (widget) | `packages/fe-ui/src/components/widget/[Name]/` | `.codex/templates/spec/widget.spec.md` |
-| `index.spec.md` (ui) | `packages/fe-ui/src/components/ui/[Name]/` | `.codex/templates/spec/ui.spec.md` |
+| `index.spec.md` (feature) | `packages/fe-ui/src/feature/[Name]/` | `.codex/templates/spec/feature.spec.md` |
+| `index.spec.md` (widget) | `packages/fe-ui/src/widget/[Name]/` | `.codex/templates/spec/widget.spec.md` |
+| `index.spec.md` (primitive) | `packages/fe-ui/src/primitive/[Name]/` | `.codex/templates/spec/primitive.spec.md` |
 
 **이미 존재하는 .spec.md 처리:**
 - 이미 있으면 스킵 (새로 덮어쓰지 않음)
@@ -495,7 +495,7 @@ CRUD 작업별 Happy Path와 Error Path를 도출합니다.
 | req-screen-planner | 보완 | L3-L4 레이어 상세화 → `page.spec.md` 업데이트 |
 | req-api-planner | 보완 | L5-L6 레이어 상세화 → `controller.spec.md` 업데이트 |
 | req-entity-planner | 보완 | L7 레이어 상세화 → `entity.spec.md` 업데이트 |
-| req-ui-planner | 보완 | L8 레이어 상세화 → `ui/index.spec.md` 업데이트 |
+| req-primitive-planner | 보완 | L8 레이어 상세화 → `primitive/index.spec.md` 업데이트 |
 | req-input-planner | 보완 | L8 레이어 상세화 → `inputs/index.spec.md` 업데이트 |
 | req-cell-planner | 보완 | L8 레이어 상세화 → `cell/index.spec.md` 업데이트 |
 | req-widget-planner | 보완 | L8 레이어 상세화 → `widget/index.spec.md` 업데이트 |
@@ -530,7 +530,7 @@ CRUD 작업별 Happy Path와 Error Path를 도출합니다.
   - DTO: packages/be-dto/src/role/*.dto.ts ✅
   - Guard: packages/be-common/src/guard/roles.guard.ts ✅
   - Pages: apps/admin/web/app/(admin)/roles/page.tsx ✅
-  - Feature: packages/fe-ui/src/components/feature/RoleList/index.tsx ✅
+  - Feature: packages/fe-ui/src/feature/RoleList/index.tsx ✅
   - Store: packages/fe-store/src/stores/roleStore.ts ✅
 
 [2단계] 스키마/엔티티 분석 → L7
@@ -571,8 +571,8 @@ CRUD 작업별 Happy Path와 Error Path를 도출합니다.
   - apps/core/api/src/module/role/role.service.spec.md ✅
   - apps/core/api/src/module/role/repositories/role.repository.spec.md ✅
   - packages/fe-store/src/stores/roleStore.spec.md ✅
-  - packages/fe-ui/src/components/feature/RoleList/index.spec.md ✅
-  - packages/fe-ui/src/components/widget/RoleTable/index.spec.md ✅
+  - packages/fe-ui/src/feature/RoleList/index.spec.md ✅
+  - packages/fe-ui/src/widget/RoleTable/index.spec.md ✅
 
 ✅ req-reverse-engineer 에이전트 완료
 📁 생성된 파일:
@@ -584,8 +584,8 @@ CRUD 작업별 Happy Path와 Error Path를 도출합니다.
    - apps/core/api/src/module/role/role.service.spec.md
    - apps/core/api/src/module/role/repositories/role.repository.spec.md
    - packages/fe-store/src/stores/roleStore.spec.md
-   - packages/fe-ui/src/components/feature/RoleList/index.spec.md
-   - packages/fe-ui/src/components/widget/RoleTable/index.spec.md
+   - packages/fe-ui/src/feature/RoleList/index.spec.md
+   - packages/fe-ui/src/widget/RoleTable/index.spec.md
 📁 스킵된 파일 (이미 존재):
    - apps/admin/web/app/(admin)/app.spec.md
 ```

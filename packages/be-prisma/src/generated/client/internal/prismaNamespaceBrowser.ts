@@ -72,9 +72,6 @@ export const ModelName = {
   Assignment: 'Assignment',
   Post: 'Post',
   Content: 'Content',
-  File: 'File',
-  FileClassification: 'FileClassification',
-  FileAssociation: 'FileAssociation',
   Subject: 'Subject',
   Action: 'Action',
   Ability: 'Ability',
@@ -486,47 +483,6 @@ export const ContentScalarFieldEnum = {
 } as const
 
 export type ContentScalarFieldEnum = (typeof ContentScalarFieldEnum)[keyof typeof ContentScalarFieldEnum]
-
-
-export const FileScalarFieldEnum = {
-  id: 'id',
-  name: 'name',
-  size: 'size',
-  parentId: 'parentId',
-  mimeType: 'mimeType',
-  url: 'url',
-  spaceId: 'spaceId',
-  creatorId: 'creatorId',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt',
-  removedAt: 'removedAt'
-} as const
-
-export type FileScalarFieldEnum = (typeof FileScalarFieldEnum)[keyof typeof FileScalarFieldEnum]
-
-
-export const FileClassificationScalarFieldEnum = {
-  id: 'id',
-  categoryId: 'categoryId',
-  fileId: 'fileId',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt',
-  removedAt: 'removedAt'
-} as const
-
-export type FileClassificationScalarFieldEnum = (typeof FileClassificationScalarFieldEnum)[keyof typeof FileClassificationScalarFieldEnum]
-
-
-export const FileAssociationScalarFieldEnum = {
-  id: 'id',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt',
-  removedAt: 'removedAt',
-  fileId: 'fileId',
-  groupId: 'groupId'
-} as const
-
-export type FileAssociationScalarFieldEnum = (typeof FileAssociationScalarFieldEnum)[keyof typeof FileAssociationScalarFieldEnum]
 
 
 export const SubjectScalarFieldEnum = {

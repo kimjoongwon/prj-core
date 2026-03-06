@@ -1,0 +1,34 @@
+# widgets 배럴 기획서
+
+> 생성일: 2026-03-03
+> 타입: widget
+> 위치: packages/fe-ui/src/widget/index.ts
+
+## 역할
+
+`@cocrepo/ui`의 Widget 계층 공개 export를 `widgets` 디렉토리 하나로 통합합니다.
+
+## 핵심 동작
+
+- 기존 `widget`과 `widgets`로 분산되어 있던 공개 컴포넌트를 `widgets`에서 단일 re-export 합니다.
+- 기존 보조 그룹(`ability`, `common`, `role`, `user`)과 일반 widget 컴포넌트를 함께 노출합니다.
+- layout의 `Section`과 이름이 충돌하는 `Section` widget은 배럴 export에서 계속 제외합니다.
+
+## 의존성
+
+| 모듈 | 용도 |
+|------|------|
+| `./ability` | 권한 관련 widget 묶음 |
+| `./common` | 공용 보조 widget 묶음 |
+| `./role` | 역할 관리 widget 묶음 |
+| `./user` | 사용자 관리 widget 묶음 |
+| 그 외 개별 widget 디렉토리 | 개별 widget 공개 export |
+
+## 변경 이력
+
+| 일자 | 내용 | 작성자 |
+|------|------|--------|
+| 2026-03-06 | 폴더 네이밍을 단수형(feature/input/layout/hook/style/type/util/widget/cell)으로 통일 | codex |
+| 2026-03-06 | src/components 레이어를 제거하고 경로를 src/* 기준으로 상향 | codex |
+| 2026-03-03 | 누락된 sidecar spec 신규 생성 | codex |
+| 2026-03-06 | `widget`/`widgets` 분리를 제거하고 `widgets` 단일 배럴로 병합 | codex |

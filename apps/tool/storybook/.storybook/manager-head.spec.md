@@ -2,13 +2,13 @@
 
 ## 목적
 - Storybook Manager 문서 헤더 메타를 정의합니다.
-- Plate 전용 favicon 및 소유권 설명 메타를 제공합니다.
+- Plate 전용 favicon 및 설명 메타를 제공합니다.
 - Storybook 문자열 흔적(타이틀/홍보 카드)을 제거합니다.
 
 ## 핵심 동작
 - `/plate-favicon.svg`를 favicon으로 설정합니다.
 - `theme-color`를 Plate 다크 배경 색상으로 고정합니다.
-- proprietary 설명 메타를 추가합니다.
+- Plate 설명 메타를 추가합니다.
 - 사이드바 하단 영역(`#sidebar-bottom-wrapper`)을 숨겨 Storybook 관련 하단 UI를 제거합니다.
 - 문서 제목에서 `Storybook` 문자열을 `PLATE`로 치환합니다.
 
@@ -20,3 +20,4 @@
 | 2026-03-05 | Storybook 문자열/홍보 카드 제거 스크립트·스타일 추가 | codex |
 | 2026-03-05 | title 정규화 시 변경분이 있을 때만 반영하도록 안정화 | codex |
 | 2026-03-05 | 사이드바 하단 Storybook 관련 영역 전체 숨김 처리 | codex |
+| 2026-03-06 | 설명 메타 문구 정리 | codex |

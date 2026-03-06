@@ -55,7 +55,9 @@
     "agent:viz": "node .claude/scripts/agent-viz-server.js",
     "spec:audit": "node scripts/spec-audit.js",
     "spec:audit:list": "node scripts/spec-audit.js --list",
-    "spec:audit:strict": "node scripts/spec-audit.js --fail-on-missing",
+    "spec:audit:strict": "node scripts/spec-audit.js --fail-on-drift",
+    "spec:audit:strict:missing": "node scripts/spec-audit.js --fail-on-missing",
+    "spec:audit:strict:orphan": "node scripts/spec-audit.js --fail-on-orphan",
     "spec:generate": "node scripts/spec-generate.js",
     "spec:generate:dry": "node scripts/spec-generate.js --dry-run"
   },

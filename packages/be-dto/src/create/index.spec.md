@@ -22,9 +22,6 @@
 | ./create-assignment.dto | 기능 구현 의존성 |
 | ./create-category.dto | 기능 구현 의존성 |
 | ./create-exercise.dto | 기능 구현 의존성 |
-| ./create-file.dto | 기능 구현 의존성 |
-| ./create-file-association.dto | 기능 구현 의존성 |
-| ./create-file-classification.dto | 기능 구현 의존성 |
 | ./create-ground.dto | 기능 구현 의존성 |
 | ./create-group.dto | 기능 구현 의존성 |
 | ./create-oidc-client.dto | 기능 구현 의존성 |
@@ -40,4 +37,5 @@
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-03-06 | File 도메인 제거에 따라 create-file* export 의존성 제거 | codex |
 | 2026-03-03 | 누락된 sidecar spec 신규 생성 | codex |

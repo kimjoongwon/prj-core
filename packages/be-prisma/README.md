@@ -128,24 +128,32 @@ pnpm db:seed:stg      # 스테이징 환경
 This project uses **Prisma's official multi-file schema support** (GA since Prisma 6.7.0) to organize models into separate domain files:
 
 ```
-prisma/
+packages/be-prisma/
 ├── schema/              # Multi-file schema directory
 │   ├── _base.prisma     # Generator and datasource configuration
-│   ├── core.prisma      # Core business models (Tenant, Category, etc.)
-│   ├── user.prisma      # User and authentication models
-│   ├── role.prisma      # Role-based access control models
-│   ├── space.prisma     # Space management models
-│   ├── file.prisma      # File management models
-│   └── task.prisma      # Task and timeline models
+│   ├── core.prisma      # Core shared models (Category, Group, Tenant, etc.)
+│   ├── user.prisma      # User domain
+│   ├── role.prisma      # Role domain
+│   ├── space.prisma     # Space domain
+│   ├── asset.prisma     # Asset/media domain (replaces file domain)
+│   ├── task.prisma      # Task/timeline domain
+│   ├── inquiry.prisma   # Inquiry domain
+│   ├── auth.prisma      # Auth/security domain
+│   ├── grant.prisma     # CASL grant domain
+│   ├── ai-form.prisma   # AI form domain
+│   ├── template.prisma  # Message template domain
+│   ├── translation.prisma
+│   ├── oidc.prisma
+│   └── safe.prisma
 ├── migrations/          # Database migrations
-└── seed.ts             # Database seeding script
+└── seed.ts              # Database seeding script
 ```
 
 ### How It Works
 
-Prisma automatically combines all `.prisma` files in the `prisma/schema/` directory:
+Prisma automatically combines all `.prisma` files in the `schema/` directory:
 
-1. **Edit any schema file**: Make changes to files in `prisma/schema/`
+1. **Edit any schema file**: Make changes to files in `schema/`
 2. **Generate client**: Run `pnpm generate`
 3. **Create migrations**: Run `pnpm db:migrate`
 
@@ -157,7 +165,7 @@ The multi-file schema is configured in `prisma.config.ts`:
 
 ```typescript
 export default defineConfig({
-  schema: "./prisma/schema", // Points to directory, not file
+  schema: "./schema", // Points to directory, not file
   // ...
 });
 ```
@@ -166,8 +174,8 @@ export default defineConfig({
 
 Current schema contains:
 
-- **30 models** across 6 domain files
-- **14 enums** for type safety
+- **62 models** across 15 domain files (`_base.prisma` excluded)
+- **33 enums** for type safety
 - Automatic cross-file model referencing (no imports needed)
 
 ## Environment Variables

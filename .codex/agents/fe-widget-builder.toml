@@ -12,7 +12,7 @@ developer_instructions = '''
 
 # Widget 컴포넌트 빌더
 
-**재사용 가능한 작은 UI 조각**을 `packages/fe-ui/src/components/widget`에 생성합니다.
+**재사용 가능한 작은 UI 조각**을 `packages/fe-ui/src/widget`에 생성합니다.
 
 ---
 
@@ -43,9 +43,9 @@ developer_instructions = '''
 
 | 항목 | 경로 |
 |------|------|
-| 메인 컴포넌트 | `packages/fe-ui/src/components/widget/[Name]/[Name].tsx` |
-| barrel export | `packages/fe-ui/src/components/widget/[Name]/index.ts` |
-| 상위 barrel | `packages/fe-ui/src/components/widget/index.ts` (추가) |
+| 메인 컴포넌트 | `packages/fe-ui/src/widget/[Name]/[Name].tsx` |
+| barrel export | `packages/fe-ui/src/widget/[Name]/index.ts` |
+| 상위 barrel | `packages/fe-ui/src/widget/index.ts` (추가) |
 
 ---
 
@@ -55,7 +55,7 @@ developer_instructions = '''
 
 | 규칙 | 설명 |
 |------|------|
-| **UI 컴포넌트만 조합** | `components/ui/` 폴더의 Pure UI만 사용 |
+| **UI 컴포넌트만 조합** | `src/primitive/` 폴더의 Pure UI만 사용 |
 | **단일 책임** | 하나의 명확한 역할만 수행 |
 | **Pure UI 유지** | 상태/API 호출 금지, props로만 동작 |
 | **displayName 설정** | 디버깅을 위해 필수 |
@@ -64,7 +64,7 @@ developer_instructions = '''
 
 ### ♻️ 기존 컴포넌트 우선 원칙 (Critical)
 
-1. `packages/fe-ui/src/components/widget`에서 동일/유사 Widget을 먼저 검색합니다.
+1. `packages/fe-ui/src/widget`에서 동일/유사 Widget을 먼저 검색합니다.
 2. 요구사항 충족 시 **신규 Widget을 생성하지 않고 기존 Widget을 재사용**합니다.
 3. 기능이 부족하면 **기존 Widget을 업그레이드**합니다.
 4. UI 조합 수준 요구사항은 Widget에서 해결하고, 중복 Widget 복제를 금지합니다.
@@ -105,19 +105,19 @@ Widget 개발 시 필요한 Pure UI가 없으면 **먼저 UI Component Builder�
 ### 4.3 파일 구조 생성
 
 ```
-packages/fe-ui/src/components/widget/[Name]/
+packages/fe-ui/src/widget/[Name]/
 ├── [Name].tsx     # 메인 컴포넌트
 └── index.ts       # barrel export
 
 # ⚠️ 컴포넌트 폴더 내 hooks/, utils/ 하위 폴더 생성 금지!
 # 재사용 가능한 훅/유틸은 패키지 레벨에서 관리:
-packages/fe-ui/src/hooks/use[Name].ts       # 재사용 가능한 훅
-packages/fe-ui/src/utils/[utilName].ts      # 재사용 가능한 유틸
+packages/fe-ui/src/hook/use[Name].ts       # 재사용 가능한 훅
+packages/fe-ui/src/util/[utilName].ts      # 재사용 가능한 유틸
 ```
 
 ### 4.4 barrel export 추가
 
-`packages/fe-ui/src/components/widget/index.ts`에 새 컴포넌트 export 추가
+`packages/fe-ui/src/widget/index.ts`에 새 컴포넌트 export 추가
 
 ---
 
@@ -126,7 +126,7 @@ packages/fe-ui/src/utils/[utilName].ts      # 재사용 가능한 유틸
 ### 5.1 기본 Widget
 
 ```tsx
-// packages/fe-ui/src/components/widget/StatusBadge/StatusBadge.tsx
+// packages/fe-ui/src/widget/StatusBadge/StatusBadge.tsx
 import { Chip } from "../../ui/data-display/Chip/Chip";
 
 type Status = "active" | "inactive" | "pending";
@@ -201,10 +201,10 @@ export type { StatusBadgeProps } from "./StatusBadge";
 
 ## 6. 체크리스트
 
-- [ ] 기존 Widget 컴포넌트 검색 완료 (`rg --files packages/fe-ui/src/components/widget`)
+- [ ] 기존 Widget 컴포넌트 검색 완료 (`rg --files packages/fe-ui/src/widget`)
 - [ ] 기존 Widget 재사용 가능 여부 판단 및 결과 기록
 - [ ] 기능 부족 시 기존 Widget 업그레이드로 처리 (신규 복제 금지)
-- [ ] `packages/fe-ui/src/components/widget/[Name]/` 에 생성
+- [ ] `packages/fe-ui/src/widget/[Name]/` 에 생성
 - [ ] 필요한 Pure UI가 없으면 UI Component Builder에게 요청
 - [ ] 단일 책임 원칙 확인
 - [ ] 커스텀 className 사용하지 않음 (HeroUI/레이아웃 컴포넌트만)
@@ -231,7 +231,7 @@ Pure UI → Widget → Feature → Page
 | 에이전트 | 관계 |
 |----------|------|
 | req-widget-planner | Widget 기획서(index.spec.md) 기반 구현 |
-| **fe-ui-component-builder** | Widget이 사용할 Pure UI 컴포넌트 생성 |
+| **fe-primitive-component-builder** | Widget이 사용할 Pure UI 컴포넌트 생성 |
 | fe-input-component-builder | Widget에서 사용할 Input 컴포넌트 생성 |
 
 ### 후행 에이전트
@@ -274,7 +274,7 @@ SpaceDropdown                 → SpaceSelector (PersistStore 연결)
 
 ### UI 컴포넌트 참조 가능 카테고리
 
-`components/ui/` 내의 다음 카테고리 컴포넌트를 조합:
+`src/primitive/` 내의 다음 카테고리 컴포넌트를 조합:
 
 - **data-display**: Avatar, Chip, Icon, Text, User 등
 - **inputs**: Button, Input, Checkbox, Select 등

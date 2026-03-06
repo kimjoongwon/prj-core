@@ -93,11 +93,11 @@ type AbilityChecker = (action: string, subject: string) => boolean;
 | Store | `packages/fe-store/src/stores/navigator.ts` | 라우터 래퍼 |
 | Store | `packages/fe-store/src/stores/bottomTabStore.ts` | 모바일 하단 탭 상태 |
 | Store | `packages/fe-store/src/stores/fabStore.ts` | FAB 상태 관리 |
-| Widget | `packages/fe-ui/src/components/widget/NavTreePanel/` | 트리 UI |
-| Feature | `packages/fe-ui/src/components/feature/SideNav/` | Sidebar 연결 |
-| Feature | `packages/fe-ui/src/components/feature/Nav/` | Header 네비게이션 |
-| Feature | `packages/fe-ui/src/components/feature/SubNav/` | 2depth 네비게이션 |
-| Feature | `packages/fe-ui/src/components/feature/BottomTab/` | 모바일 하단 탭 |
-| Feature | `packages/fe-ui/src/components/feature/SubMenuList/` | 모바일 서브메뉴 |
-| Layout | `packages/fe-ui/src/components/ui/layouts/Admin/` | 레이아웃 컴포넌트들 |
+| Widget | `packages/fe-ui/src/widget/NavTreePanel/` | 트리 UI |
+| Feature | `packages/fe-ui/src/feature/SideNav/` | Sidebar 연결 |
+| Feature | `packages/fe-ui/src/feature/Nav/` | Header 네비게이션 |
+| Feature | `packages/fe-ui/src/feature/SubNav/` | 2depth 네비게이션 |
+| Feature | `packages/fe-ui/src/feature/BottomTab/` | 모바일 하단 탭 |
+| Feature | `packages/fe-ui/src/feature/SubMenuList/` | 모바일 서브메뉴 |
+| Layout | `packages/fe-ui/src/primitive/layout/Admin/` | 레이아웃 컴포넌트들 |
 | 상수 | `packages/common-constant/src/routing/admin-menu.ts` | 메뉴 설정 데이터 |

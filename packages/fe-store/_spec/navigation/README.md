@@ -52,12 +52,12 @@ packages/
 │   ├── navigationStore.ts
 │   ├── bottomTabStore.ts
 │   └── fabStore.ts
-└── ui/src/components/
-    ├── widget/NavTreePanel/
-    ├── feature/SideNav/
-    ├── feature/Nav/
-    ├── feature/SubNav/
-    ├── feature/BottomTab/
-    ├── feature/SubMenuList/
+└── ui/src/
+    ├── widgets/NavTreePanel/
+    ├── features/SideNav/
+    ├── features/Nav/
+    ├── features/SubNav/
+    ├── features/BottomTab/
+    ├── features/SubMenuList/
     └── ui/layouts/Admin/
 ```

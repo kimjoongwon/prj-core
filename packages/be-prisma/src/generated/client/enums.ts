@@ -180,7 +180,7 @@ export type TextTypes = (typeof TextTypes)[keyof typeof TextTypes]
 export const CategoryTypes = {
   Role: 'Role',
   Space: 'Space',
-  File: 'File',
+  Asset: 'Asset',
   User: 'User'
 } as const
 
@@ -190,7 +190,7 @@ export type CategoryTypes = (typeof CategoryTypes)[keyof typeof CategoryTypes]
 export const GroupTypes = {
   Role: 'Role',
   Space: 'Space',
-  File: 'File',
+  Asset: 'Asset',
   User: 'User'
 } as const
 

@@ -3,7 +3,7 @@
 > 생성일: {{createdDate}}
 > 수정일: {{modifiedDate}}
 > 타입: feature
-> 위치: packages/fe-ui/src/components/feature/{{componentName}}/
+> 위치: packages/fe-ui/src/feature/{{componentName}}/
 
 ## 역할
 

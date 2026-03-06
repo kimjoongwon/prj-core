@@ -405,9 +405,6 @@ export const ModelName = {
   Assignment: 'Assignment',
   Post: 'Post',
   Content: 'Content',
-  File: 'File',
-  FileClassification: 'FileClassification',
-  FileAssociation: 'FileAssociation',
   Subject: 'Subject',
   Action: 'Action',
   Ability: 'Ability',
@@ -461,7 +458,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "aIFormTemplate" | "aIFormField" | "aITemplateExecution" | "asset" | "image" | "video" | "document" | "folder" | "album" | "albumEntry" | "derivative" | "securityPolicy" | "whitelistEntry" | "authAuditLog" | "passwordHistory" | "category" | "group" | "tenant" | "assignment" | "post" | "content" | "file" | "fileClassification" | "fileAssociation" | "subject" | "action" | "ability" | "grant" | "inquiry" | "inquiryThread" | "inquiryMessage" | "inquiryParticipant" | "inquiryAttachment" | "inquiryTag" | "sentimentAnalysis" | "aIAgentLog" | "oidcClient" | "oidcModel" | "role" | "roleAssociation" | "roleClassification" | "safeWallet" | "safeTransaction" | "safeConfirmation" | "space" | "spaceClassification" | "spaceAssociation" | "ground" | "timeline" | "session" | "program" | "routine" | "activity" | "task" | "exercise" | "template" | "templateVariable" | "translation" | "user" | "userClassification" | "userAssociation" | "profile"
+    modelProps: "aIFormTemplate" | "aIFormField" | "aITemplateExecution" | "asset" | "image" | "video" | "document" | "folder" | "album" | "albumEntry" | "derivative" | "securityPolicy" | "whitelistEntry" | "authAuditLog" | "passwordHistory" | "category" | "group" | "tenant" | "assignment" | "post" | "content" | "subject" | "action" | "ability" | "grant" | "inquiry" | "inquiryThread" | "inquiryMessage" | "inquiryParticipant" | "inquiryAttachment" | "inquiryTag" | "sentimentAnalysis" | "aIAgentLog" | "oidcClient" | "oidcModel" | "role" | "roleAssociation" | "roleClassification" | "safeWallet" | "safeTransaction" | "safeConfirmation" | "space" | "spaceClassification" | "spaceAssociation" | "ground" | "timeline" | "session" | "program" | "routine" | "activity" | "task" | "exercise" | "template" | "templateVariable" | "translation" | "user" | "userClassification" | "userAssociation" | "profile"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -2016,228 +2013,6 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         count: {
           args: Prisma.ContentCountArgs<ExtArgs>
           result: runtime.Types.Utils.Optional<Prisma.ContentCountAggregateOutputType> | number
-        }
-      }
-    }
-    File: {
-      payload: Prisma.$FilePayload<ExtArgs>
-      fields: Prisma.FileFieldRefs
-      operations: {
-        findUnique: {
-          args: Prisma.FileFindUniqueArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$FilePayload> | null
-        }
-        findUniqueOrThrow: {
-          args: Prisma.FileFindUniqueOrThrowArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$FilePayload>
-        }
-        findFirst: {
-          args: Prisma.FileFindFirstArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$FilePayload> | null
-        }
-        findFirstOrThrow: {
-          args: Prisma.FileFindFirstOrThrowArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$FilePayload>
-        }
-        findMany: {
-          args: Prisma.FileFindManyArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$FilePayload>[]
-        }
-        create: {
-          args: Prisma.FileCreateArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$FilePayload>
-        }
-        createMany: {
-          args: Prisma.FileCreateManyArgs<ExtArgs>
-          result: BatchPayload
-        }
-        createManyAndReturn: {
-          args: Prisma.FileCreateManyAndReturnArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$FilePayload>[]
-        }
-        delete: {
-          args: Prisma.FileDeleteArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$FilePayload>
-        }
-        update: {
-          args: Prisma.FileUpdateArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$FilePayload>
-        }
-        deleteMany: {
-          args: Prisma.FileDeleteManyArgs<ExtArgs>
-          result: BatchPayload
-        }
-        updateMany: {
-          args: Prisma.FileUpdateManyArgs<ExtArgs>
-          result: BatchPayload
-        }
-        updateManyAndReturn: {
-          args: Prisma.FileUpdateManyAndReturnArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$FilePayload>[]
-        }
-        upsert: {
-          args: Prisma.FileUpsertArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$FilePayload>
-        }
-        aggregate: {
-          args: Prisma.FileAggregateArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.AggregateFile>
-        }
-        groupBy: {
-          args: Prisma.FileGroupByArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.FileGroupByOutputType>[]
-        }
-        count: {
-          args: Prisma.FileCountArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.FileCountAggregateOutputType> | number
-        }
-      }
-    }
-    FileClassification: {
-      payload: Prisma.$FileClassificationPayload<ExtArgs>
-      fields: Prisma.FileClassificationFieldRefs
-      operations: {
-        findUnique: {
-          args: Prisma.FileClassificationFindUniqueArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$FileClassificationPayload> | null
-        }
-        findUniqueOrThrow: {
-          args: Prisma.FileClassificationFindUniqueOrThrowArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$FileClassificationPayload>
-        }
-        findFirst: {
-          args: Prisma.FileClassificationFindFirstArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$FileClassificationPayload> | null
-        }
-        findFirstOrThrow: {
-          args: Prisma.FileClassificationFindFirstOrThrowArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$FileClassificationPayload>
-        }
-        findMany: {
-          args: Prisma.FileClassificationFindManyArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$FileClassificationPayload>[]
-        }
-        create: {
-          args: Prisma.FileClassificationCreateArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$FileClassificationPayload>
-        }
-        createMany: {
-          args: Prisma.FileClassificationCreateManyArgs<ExtArgs>
-          result: BatchPayload
-        }
-        createManyAndReturn: {
-          args: Prisma.FileClassificationCreateManyAndReturnArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$FileClassificationPayload>[]
-        }
-        delete: {
-          args: Prisma.FileClassificationDeleteArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$FileClassificationPayload>
-        }
-        update: {
-          args: Prisma.FileClassificationUpdateArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$FileClassificationPayload>
-        }
-        deleteMany: {
-          args: Prisma.FileClassificationDeleteManyArgs<ExtArgs>
-          result: BatchPayload
-        }
-        updateMany: {
-          args: Prisma.FileClassificationUpdateManyArgs<ExtArgs>
-          result: BatchPayload
-        }
-        updateManyAndReturn: {
-          args: Prisma.FileClassificationUpdateManyAndReturnArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$FileClassificationPayload>[]
-        }
-        upsert: {
-          args: Prisma.FileClassificationUpsertArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$FileClassificationPayload>
-        }
-        aggregate: {
-          args: Prisma.FileClassificationAggregateArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.AggregateFileClassification>
-        }
-        groupBy: {
-          args: Prisma.FileClassificationGroupByArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.FileClassificationGroupByOutputType>[]
-        }
-        count: {
-          args: Prisma.FileClassificationCountArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.FileClassificationCountAggregateOutputType> | number
-        }
-      }
-    }
-    FileAssociation: {
-      payload: Prisma.$FileAssociationPayload<ExtArgs>
-      fields: Prisma.FileAssociationFieldRefs
-      operations: {
-        findUnique: {
-          args: Prisma.FileAssociationFindUniqueArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$FileAssociationPayload> | null
-        }
-        findUniqueOrThrow: {
-          args: Prisma.FileAssociationFindUniqueOrThrowArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$FileAssociationPayload>
-        }
-        findFirst: {
-          args: Prisma.FileAssociationFindFirstArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$FileAssociationPayload> | null
-        }
-        findFirstOrThrow: {
-          args: Prisma.FileAssociationFindFirstOrThrowArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$FileAssociationPayload>
-        }
-        findMany: {
-          args: Prisma.FileAssociationFindManyArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$FileAssociationPayload>[]
-        }
-        create: {
-          args: Prisma.FileAssociationCreateArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$FileAssociationPayload>
-        }
-        createMany: {
-          args: Prisma.FileAssociationCreateManyArgs<ExtArgs>
-          result: BatchPayload
-        }
-        createManyAndReturn: {
-          args: Prisma.FileAssociationCreateManyAndReturnArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$FileAssociationPayload>[]
-        }
-        delete: {
-          args: Prisma.FileAssociationDeleteArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$FileAssociationPayload>
-        }
-        update: {
-          args: Prisma.FileAssociationUpdateArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$FileAssociationPayload>
-        }
-        deleteMany: {
-          args: Prisma.FileAssociationDeleteManyArgs<ExtArgs>
-          result: BatchPayload
-        }
-        updateMany: {
-          args: Prisma.FileAssociationUpdateManyArgs<ExtArgs>
-          result: BatchPayload
-        }
-        updateManyAndReturn: {
-          args: Prisma.FileAssociationUpdateManyAndReturnArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$FileAssociationPayload>[]
-        }
-        upsert: {
-          args: Prisma.FileAssociationUpsertArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$FileAssociationPayload>
-        }
-        aggregate: {
-          args: Prisma.FileAssociationAggregateArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.AggregateFileAssociation>
-        }
-        groupBy: {
-          args: Prisma.FileAssociationGroupByArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.FileAssociationGroupByOutputType>[]
-        }
-        count: {
-          args: Prisma.FileAssociationCountArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.FileAssociationCountAggregateOutputType> | number
         }
       }
     }
@@ -5449,47 +5224,6 @@ export const ContentScalarFieldEnum = {
 export type ContentScalarFieldEnum = (typeof ContentScalarFieldEnum)[keyof typeof ContentScalarFieldEnum]
 
 
-export const FileScalarFieldEnum = {
-  id: 'id',
-  name: 'name',
-  size: 'size',
-  parentId: 'parentId',
-  mimeType: 'mimeType',
-  url: 'url',
-  spaceId: 'spaceId',
-  creatorId: 'creatorId',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt',
-  removedAt: 'removedAt'
-} as const
-
-export type FileScalarFieldEnum = (typeof FileScalarFieldEnum)[keyof typeof FileScalarFieldEnum]
-
-
-export const FileClassificationScalarFieldEnum = {
-  id: 'id',
-  categoryId: 'categoryId',
-  fileId: 'fileId',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt',
-  removedAt: 'removedAt'
-} as const
-
-export type FileClassificationScalarFieldEnum = (typeof FileClassificationScalarFieldEnum)[keyof typeof FileClassificationScalarFieldEnum]
-
-
-export const FileAssociationScalarFieldEnum = {
-  id: 'id',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt',
-  removedAt: 'removedAt',
-  fileId: 'fileId',
-  groupId: 'groupId'
-} as const
-
-export type FileAssociationScalarFieldEnum = (typeof FileAssociationScalarFieldEnum)[keyof typeof FileAssociationScalarFieldEnum]
-
-
 export const SubjectScalarFieldEnum = {
   id: 'id',
   createdAt: 'createdAt',
@@ -6762,9 +6496,6 @@ export type GlobalOmitConfig = {
   assignment?: Prisma.AssignmentOmit
   post?: Prisma.PostOmit
   content?: Prisma.ContentOmit
-  file?: Prisma.FileOmit
-  fileClassification?: Prisma.FileClassificationOmit
-  fileAssociation?: Prisma.FileAssociationOmit
   subject?: Prisma.SubjectOmit
   action?: Prisma.ActionOmit
   ability?: Prisma.AbilityOmit

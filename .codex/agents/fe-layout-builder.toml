@@ -44,7 +44,7 @@ developer_instructions = '''
 
 | 항목 | 경로 |
 |------|------|
-| Layout 컴포넌트 | `packages/fe-ui/src/components/layouts/{Name}/` |
+| Layout 컴포넌트 | `packages/fe-ui/src/layout/{Name}/` |
 | index.ts | export 파일 |
 | Next.js layout.tsx | `apps/{app}/app/.../layout.tsx` |
 
@@ -98,7 +98,7 @@ developer_instructions = '''
 ### 3단계: Layout 컴포넌트 생성
 
 ```
-packages/fe-ui/src/components/layouts/
+packages/fe-ui/src/layout/
 ├── App/
 │   ├── App.tsx
 │   └── index.ts
@@ -110,7 +110,7 @@ packages/fe-ui/src/components/layouts/
 │   └── index.ts
 └── index.ts
 
-packages/fe-ui/src/components/ui/layouts/Layout/
+packages/fe-ui/src/primitive/layout/Layout/
 ├── Layout.tsx
 └── index.ts
 ```
@@ -284,7 +284,7 @@ const { onClickMenu, onLogout } = useLayoutStore(); // ❌
 />
 
 // 4. Page 컴포넌트 내부에서 Layout 사용
-// packages/fe-ui/src/components/page/Login/LoginPage.tsx
+// packages/fe-ui/src/page/Login/LoginPage.tsx
 export const LoginPage = () => {
   return (
     <AuthLayout>       // ❌ Page 안에 Layout이 있으면 안 됨!
@@ -402,7 +402,7 @@ export const Section = ({ top, bottom, left, right, children }: SectionProps) =>
 ## 10. 폴더 구조
 
 ```
-packages/fe-ui/src/components/
+packages/fe-ui/src/
 ├── layouts/                       # Layout 컴포넌트 (순수 위치 정의)
 │   ├── App/
 │   │   ├── App.tsx
@@ -432,7 +432,7 @@ packages/fe-ui/src/components/
 
 **커스텀 className 사용 금지 - HeroUI와 기존 컴포넌트만 사용**
 
-> **예외**: `components/ui/`와 `components/inputs/`에서만 커스텀 className이 허용됩니다. Layout 컴포넌트에서는 금지입니다.
+> **예외**: `src/primitive/`와 `src/input/`에서만 커스텀 className이 허용됩니다. Layout 컴포넌트에서는 금지입니다.
 
 **Layout 컴포넌트 내부 스타일링 원칙:**
 

@@ -18,6 +18,6 @@ export type CategoryTypes = (typeof CategoryTypes)[keyof typeof CategoryTypes];
 export const CategoryTypes = {
 	Role: "Role",
 	Space: "Space",
-	File: "File",
+	Asset: "Asset",
 	User: "User",
 } as const;
