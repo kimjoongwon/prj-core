@@ -18,6 +18,7 @@
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-03-06 | 규칙 위반 정리: useMemo/useCallback/useIsMounted 제거 및 observer/이벤트 네이밍 규칙 반영 | codex |
 | 2026-03-03 | 인증 레이아웃 컴포넌트 네이밍을 `Page`로 통일 | codex |
 | 2026-03-03 | `Page` 단일 구조 전환에 맞춰 인증 레이아웃 최소 높이(`min-h-screen`)를 명시 | codex |
 | 2026-03-03 | Page/Section `mode` 제거 반영 (단일 구조 기준으로 문서 표현 정리) | codex |

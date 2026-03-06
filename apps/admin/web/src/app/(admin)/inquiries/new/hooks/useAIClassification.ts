@@ -1,5 +1,5 @@
 import type { AIFormSuggestion } from "@cocrepo/ui";
-import { useCallback, useRef } from "react";
+import { useRef } from "react";
 
 interface UseAIClassificationProps {
 	/** AI 분류 결과 콜백 */
@@ -130,94 +130,88 @@ export function useAIClassification({
 	/**
 	 * AI 분류 요청
 	 */
-	const classify = useCallback(
-		(content: string) => {
-			// 기존 타이머 취소
-			if (debounceTimerRef.current) {
-				clearTimeout(debounceTimerRef.current);
-			}
+	const classify = (content: string) => {
+		// 기존 타이머 취소
+		if (debounceTimerRef.current) {
+			clearTimeout(debounceTimerRef.current);
+		}
 
-			// 기존 요청 취소
-			if (abortControllerRef.current) {
-				abortControllerRef.current.abort();
-			}
+		// 기존 요청 취소
+		if (abortControllerRef.current) {
+			abortControllerRef.current.abort();
+		}
 
-			// 내용이 너무 짧으면 분류하지 않음
-			if (content.length < 50) {
-				return;
-			}
+		// 내용이 너무 짧으면 분류하지 않음
+		if (content.length < 50) {
+			return;
+		}
 
-			// 디바운스 적용
-			debounceTimerRef.current = setTimeout(async () => {
-				abortControllerRef.current = new AbortController();
+		// 디바운스 적용
+		debounceTimerRef.current = setTimeout(async () => {
+			abortControllerRef.current = new AbortController();
 
-				try {
-					// TODO: 실제 API 호출
-					// const response = await postInquiryDraft(
-					// 	{ content },
-					// 	{ signal: abortControllerRef.current.signal }
-					// );
-					// onResult(response);
+			try {
+				// TODO: 실제 API 호출
+				// const response = await postInquiryDraft(
+				// 	{ content },
+				// 	{ signal: abortControllerRef.current.signal }
+				// );
+				// onResult(response);
 
-					// Mock: 500ms 후 결과 반환
-					await new Promise((resolve) => setTimeout(resolve, 500));
+				// Mock: 500ms 후 결과 반환
+				await new Promise((resolve) => setTimeout(resolve, 500));
 
-					const result = generateMockAIClassification(content);
-					onResult(result);
-				} catch (error) {
-					if (error instanceof Error && error.name !== "AbortError") {
-						onError(error);
-					}
+				const result = generateMockAIClassification(content);
+				onResult(result);
+			} catch (error) {
+				if (error instanceof Error && error.name !== "AbortError") {
+					onError(error);
 				}
-			}, debounceMs);
-		},
-		[debounceMs, onResult, onError],
-	);
+			}
+		}, debounceMs);
+	};
 
 	/**
 	 * 수동 AI 분류 요청 (버튼 클릭용)
 	 */
-	const classifyManually = useCallback(
-		(title: string, content: string) => {
-			// 기존 요청 취소
-			if (debounceTimerRef.current) {
-				clearTimeout(debounceTimerRef.current);
-			}
-			if (abortControllerRef.current) {
-				abortControllerRef.current.abort();
-			}
+	const classifyManually = (title: string, content: string) => {
+		// 기존 요청 취소
+		if (debounceTimerRef.current) {
+			clearTimeout(debounceTimerRef.current);
+		}
+		if (abortControllerRef.current) {
+			abortControllerRef.current.abort();
+		}
 
-			abortControllerRef.current = new AbortController();
+		abortControllerRef.current = new AbortController();
 
-			(async () => {
-				try {
-					// TODO: 실제 API 호출
-					// const response = await postInquiryDraft(
-					// 	{ title, content },
-					// 	{ signal: abortControllerRef.current.signal }
-					// );
-					// onResult(response);
+		(async () => {
+			try {
+				// TODO: 실제 API 호출
+				// const response = await postInquiryDraft(
+				// 	{ title, content },
+				// 	{ signal: abortControllerRef.current.signal }
+				// );
+				// onResult(response);
 
-					// Mock: 500ms 후 결과 반환
-					await new Promise((resolve) => setTimeout(resolve, 500));
+				// Mock: 500ms 후 결과 반환
+				await new Promise((resolve) => setTimeout(resolve, 500));
 
-					const combinedContent = `${title}\n\n${content}`;
-					const result = generateMockAIClassification(combinedContent);
-					onResult(result);
-				} catch (error) {
-					if (error instanceof Error && error.name !== "AbortError") {
-						onError(error);
-					}
+				const combinedContent = `${title}\n\n${content}`;
+				const result = generateMockAIClassification(combinedContent);
+				onResult(result);
+			} catch (error) {
+				if (error instanceof Error && error.name !== "AbortError") {
+					onError(error);
 				}
-			})();
-		},
-		[onResult, onError],
-	);
+			}
+		})();
+	};
 
 	/**
 	 * 분류 취소
 	 */
-	const cancel = useCallback(() => {
+	const cancel = () => {
 		if (debounceTimerRef.current) {
 			clearTimeout(debounceTimerRef.current);
 			debounceTimerRef.current = null;
@@ -226,7 +220,7 @@ export function useAIClassification({
 			abortControllerRef.current.abort();
 			abortControllerRef.current = null;
 		}
-	}, []);
+	};
 
 	return {
 		classify,

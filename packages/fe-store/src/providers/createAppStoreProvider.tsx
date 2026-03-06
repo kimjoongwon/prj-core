@@ -2,6 +2,7 @@
 
 import { setApiPersistStore } from "@cocrepo/api";
 import type { AppStoreConfig, AppStoreProviderResult } from "@cocrepo/type";
+import { observer } from "mobx-react-lite";
 import { usePathname, useRouter } from "next/navigation";
 import {
 	createContext,
@@ -159,7 +160,11 @@ export function createAppStoreProvider(
 	/**
 	 * Store 초기화 컴포넌트
 	 */
-	function StoreInitializer({ children }: { children: ReactNode }) {
+	const StoreInitializer = observer(function StoreInitializer({
+		children,
+	}: {
+		children: ReactNode;
+	}) {
 		const store = useAppStore();
 		const router = useRouter();
 		const pathname = usePathname();
@@ -196,12 +201,16 @@ export function createAppStoreProvider(
 		}, [pathname, navigationStore, bottomTabStore]);
 
 		return children;
-	}
+	});
 
 	/**
 	 * RootStoreContext Bridge
 	 */
-	function RootStoreContextBridge({ children }: { children: ReactNode }) {
+	const RootStoreContextBridge = observer(function RootStoreContextBridge({
+		children,
+	}: {
+		children: ReactNode;
+	}) {
 		const store = useAppStore();
 
 		return (
@@ -209,12 +218,16 @@ export function createAppStoreProvider(
 				<StoreInitializer>{children}</StoreInitializer>
 			</RootStoreContext.Provider>
 		);
-	}
+	});
 
 	/**
 	 * App Store Provider
 	 */
-	function AppStoreProvider({ children }: { children: ReactNode }) {
+	const AppStoreProvider = observer(function AppStoreProvider({
+		children,
+	}: {
+		children: ReactNode;
+	}) {
 		const storeRef = useRef<RootStore | null>(null);
 		if (!storeRef.current) {
 			storeRef.current = createRootStore();
@@ -225,7 +238,7 @@ export function createAppStoreProvider(
 				<RootStoreContextBridge>{children}</RootStoreContextBridge>
 			</AppStoreContext.Provider>
 		);
-	}
+	});
 
 	return {
 		AppStoreContext,

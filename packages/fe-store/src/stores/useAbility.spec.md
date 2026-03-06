@@ -105,5 +105,6 @@ CASL 권한 확인을 위한 React Hook 모음. `AbilityStore`를 래핑하여 �
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-03-06 | 규칙 위반 정리: useMemo/useCallback/useIsMounted 제거 및 observer/이벤트 네이밍 규칙 반영 | codex |
 | 2026-03-06 | CASL 타입 import 기준을 abilityStore 내부 선언에서 @cocrepo/type 공통 타입으로 전환 | codex |
 | 2026-02-18 | 초기 생성 (역기획) | req-reverse-engineer |

@@ -140,6 +140,7 @@
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-03-06 | 규칙 위반 정리: useMemo/useCallback/useIsMounted 제거 및 observer/이벤트 네이밍 규칙 반영 | codex |
 | 2026-02-18 | 초기 생성 (역기획) | req-reverse-engineer |
 | 2026-02-19 | 디자인 목업 추가 | req-reverse-engineer |
 | 2026-03-03 | Scaffold 제거 및 페이지 헤더 영역/섹션 영역 용어 정리 | codex |

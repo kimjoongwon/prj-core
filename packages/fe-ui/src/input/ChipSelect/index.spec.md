@@ -80,6 +80,7 @@ interface ChipSelectProps<T> extends MobxProps<T>,
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-03-06 | 규칙 위반 정리: useMemo/useCallback/useIsMounted 제거 및 observer/이벤트 네이밍 규칙 반영 | codex |
 | 2026-03-06 | 폴더 네이밍을 단수형(feature/input/layout/hook/style/type/util/widget/cell)으로 통일 | codex |
 | 2026-03-06 | src/components 레이어를 제거하고 경로를 src/* 기준으로 상향 | codex |
 | 2026-02-18 | 초기 생성 (역기획) | req-reverse-engineer |

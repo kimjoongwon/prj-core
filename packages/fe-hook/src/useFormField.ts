@@ -10,7 +10,7 @@ import type {
 } from "@cocrepo/type";
 import { action, reaction } from "mobx";
 import { useLocalObservable } from "mobx-react-lite";
-import { useEffect, useMemo } from "react";
+import { useEffect } from "react";
 
 export type {
 	UseFormFieldMultiOptions,
@@ -96,15 +96,11 @@ export function useFormField<
 	}));
 
 	// setValue with action wrapper and debug name
-	const setValue = useMemo(
-		() =>
-			action((newValue: TValue) => {
-				localState.value = newValue;
-			}, `useFormField.setValue[${debugPath}]`) as unknown as (
-				value: TValue,
-			) => void,
-		[debugPath, localState],
-	);
+	const setValue = action((newValue: TValue) => {
+		localState.value = newValue;
+	}, `useFormField.setValue[${debugPath}]`) as unknown as (
+		value: TValue,
+	) => void;
 
 	useEffect(() => {
 		if (isSinglePath) {

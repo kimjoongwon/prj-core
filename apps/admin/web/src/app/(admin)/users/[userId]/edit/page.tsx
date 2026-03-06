@@ -11,7 +11,7 @@ import { useRouter } from "next/navigation";
 function UserEditPage() {
 	const router = useRouter();
 
-	const handleBack = () => {
+	const onClickBackButton = () => {
 		router.back();
 	};
 
@@ -20,7 +20,7 @@ function UserEditPage() {
 			<Button
 				variant="light"
 				startContent={<ArrowLeft className="h-4 w-4" />}
-				onPress={handleBack}
+				onPress={onClickBackButton}
 			>
 				뒤로
 			</Button>

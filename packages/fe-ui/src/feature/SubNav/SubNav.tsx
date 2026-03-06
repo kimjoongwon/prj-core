@@ -4,7 +4,6 @@ import { useNavigationStore } from "@cocrepo/store";
 import { cn } from "@heroui/react";
 import { icons, type LucideIcon } from "lucide-react";
 import { observer } from "mobx-react-lite";
-import { useSyncExternalStore } from "react";
 
 function renderLucideIcon(
 	iconName?: string,
@@ -26,18 +25,6 @@ function renderLucideIcon(
 }
 
 /**
- * 클라이언트 마운트 상태를 추적하는 훅
- * SSR과 클라이언트 초기 렌더링을 일관되게 유지
- */
-function useIsMounted(): boolean {
-	return useSyncExternalStore(
-		() => () => {},
-		() => true,
-		() => false,
-	);
-}
-
-/**
  * SubNav Feature 컴포넌트
  * Header의 bottom 영역에 사용
  * 현재 선택된 아이템의 하위 아이템을 표시합니다.
@@ -49,10 +36,7 @@ function useIsMounted(): boolean {
  */
 export const SubNav = observer(() => {
 	const navigationStore = useNavigationStore();
-	const isMounted = useIsMounted();
-
-	// 하위 아이템은 클라이언트 마운트 후에만 렌더링 (Hydration 오류 방지)
-	const subNavItems = isMounted ? navigationStore.subNavItems : [];
+	const subNavItems = navigationStore.subNavItems;
 
 	const handleClickSubNavItem = (navItemId: string) => {
 		navigationStore.selectSubNavItem(navItemId);

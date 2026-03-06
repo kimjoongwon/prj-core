@@ -1,9 +1,9 @@
 "use client";
 
-import { Button, Textarea, Tooltip, Divider } from "@heroui/react";
+import { Button, Divider, Textarea, Tooltip } from "@heroui/react";
+import { BookOpen, FileText, Paperclip, Send, Sparkles, X } from "lucide-react";
 import { observer } from "mobx-react-lite";
-import { useState, useCallback, useRef } from "react";
-import { Sparkles, BookOpen, Paperclip, Send, X, FileText } from "lucide-react";
+import { useRef, useState } from "react";
 
 export interface Attachment {
 	/** 파일 ID */
@@ -88,28 +88,28 @@ export const InquiryReplyForm = observer(
 		// 초안 내용이 변경되면 반영
 		const currentContent = draftContent ?? content;
 
-		const handleContentChange = useCallback(
-			(value: string) => {
-				setContent(value);
+		const handleContentChange = (value: string) => {
+			setContent(value);
 
-				// 타이핑 상태 관리
-				if (typingTimeoutRef.current) {
-					clearTimeout(typingTimeoutRef.current);
-				}
+			// 타이핑 상태 관리
+			if (typingTimeoutRef.current) {
+				clearTimeout(typingTimeoutRef.current);
+			}
 
-				onTypingStart?.();
+			onTypingStart?.();
 
-				typingTimeoutRef.current = setTimeout(() => {
-					onTypingStop?.();
-				}, TYPING_DELAY);
-			},
-			[onTypingStart, onTypingStop],
-		);
+			typingTimeoutRef.current = setTimeout(() => {
+				onTypingStop?.();
+			}, TYPING_DELAY);
+		};
 
-		const handleSubmit = useCallback(() => {
+		const handleSubmit = () => {
 			if (!currentContent.trim() && selectedFiles.length === 0) return;
 
-			onSubmit(currentContent, selectedFiles.length > 0 ? selectedFiles : undefined);
+			onSubmit(
+				currentContent,
+				selectedFiles.length > 0 ? selectedFiles : undefined,
+			);
 			setContent("");
 			setSelectedFiles([]);
 
@@ -118,44 +118,35 @@ export const InquiryReplyForm = observer(
 				clearTimeout(typingTimeoutRef.current);
 			}
 			onTypingStop?.();
-		}, [currentContent, selectedFiles, onSubmit, onTypingStop]);
+		};
 
-		const handleKeyDown = useCallback(
-			(e: React.KeyboardEvent) => {
-				// Ctrl/Cmd + Enter로 전송
-				if ((e.ctrlKey || e.metaKey) && e.key === "Enter") {
-					e.preventDefault();
-					handleSubmit();
-				}
-			},
-			[handleSubmit],
-		);
+		const handleKeyDown = (e: React.KeyboardEvent) => {
+			// Ctrl/Cmd + Enter로 전송
+			if ((e.ctrlKey || e.metaKey) && e.key === "Enter") {
+				e.preventDefault();
+				handleSubmit();
+			}
+		};
 
-		const handleFileSelect = useCallback(
-			(e: React.ChangeEvent<HTMLInputElement>) => {
-				const files = Array.from(e.target.files ?? []);
-				if (files.length > 0) {
-					setSelectedFiles((prev) => [...prev, ...files]);
-					onAttachFile?.(files);
-				}
-				// input 초기화
-				if (fileInputRef.current) {
-					fileInputRef.current.value = "";
-				}
-			},
-			[onAttachFile],
-		);
+		const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
+			const files = Array.from(e.target.files ?? []);
+			if (files.length > 0) {
+				setSelectedFiles((prev) => [...prev, ...files]);
+				onAttachFile?.(files);
+			}
+			// input 초기화
+			if (fileInputRef.current) {
+				fileInputRef.current.value = "";
+			}
+		};
 
-		const handleRemoveFile = useCallback((index: number) => {
+		const handleRemoveFile = (index: number) => {
 			setSelectedFiles((prev) => prev.filter((_, i) => i !== index));
-		}, []);
+		};
 
-		const handleRemoveAttachment = useCallback(
-			(attachmentId: string) => {
-				onRemoveAttachment?.(attachmentId);
-			},
-			[onRemoveAttachment],
-		);
+		const handleRemoveAttachment = (attachmentId: string) => {
+			onRemoveAttachment?.(attachmentId);
+		};
 
 		const formatFileSize = (bytes: number): string => {
 			if (bytes < 1024) return `${bytes}B`;
@@ -163,7 +154,8 @@ export const InquiryReplyForm = observer(
 			return `${(bytes / (1024 * 1024)).toFixed(1)}MB`;
 		};
 
-		const canSubmit = currentContent.trim().length > 0 || selectedFiles.length > 0;
+		const canSubmit =
+			currentContent.trim().length > 0 || selectedFiles.length > 0;
 		const isLoading = isSending || isGeneratingDraft;
 
 		return (
@@ -183,7 +175,8 @@ export const InquiryReplyForm = observer(
 				/>
 
 				{/* 첨부 파일 목록 */}
-				{(selectedFiles.length > 0 || (attachments && attachments.length > 0)) && (
+				{(selectedFiles.length > 0 ||
+					(attachments && attachments.length > 0)) && (
 					<div className="flex flex-wrap gap-2">
 						{/* 새로 선택한 파일 */}
 						{selectedFiles.map((file, index) => (
@@ -215,7 +208,9 @@ export const InquiryReplyForm = observer(
 								className="flex items-center gap-1 rounded-lg bg-content2 px-2 py-1"
 							>
 								<FileText className="size-4 text-default-500" />
-								<span className="text-xs text-default-700">{attachment.name}</span>
+								<span className="text-xs text-default-700">
+									{attachment.name}
+								</span>
 								<span className="text-xs text-default-400">
 									({formatFileSize(attachment.size)})
 								</span>

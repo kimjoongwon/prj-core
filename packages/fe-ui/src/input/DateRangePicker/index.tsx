@@ -4,7 +4,6 @@ import type { Paths, PathTuple } from "@cocrepo/type";
 import type { ZonedDateTime } from "@internationalized/date";
 import { parseAbsoluteToLocal } from "@internationalized/date";
 import { observer } from "mobx-react-lite";
-import { useMemo } from "react";
 
 import {
 	type DateRangePickerProps as BaseDateRangePickerProps,
@@ -26,17 +25,15 @@ export const DateRangePicker = observer(
 	<T extends object>(props: DateRangePickerProps<T>) => {
 		const { state, paths, ...rest } = props;
 
-		const initialValue = useMemo(() => {
-			const startDateTime =
-				(tools.get(state, paths[0]) as string) || new Date().toISOString();
-			const endDateTime =
-				(tools.get(state, paths[1]) as string) || new Date().toISOString();
+		const startDateTime =
+			(tools.get(state, paths[0]) as string) || new Date().toISOString();
+		const endDateTime =
+			(tools.get(state, paths[1]) as string) || new Date().toISOString();
 
-			return {
-				start: parseAbsoluteToLocal(startDateTime),
-				end: parseAbsoluteToLocal(endDateTime),
-			};
-		}, [state, paths]);
+		const initialValue = {
+			start: parseAbsoluteToLocal(startDateTime),
+			end: parseAbsoluteToLocal(endDateTime),
+		};
 
 		const formField = useFormField({
 			value: initialValue,
@@ -52,13 +49,13 @@ export const DateRangePicker = observer(
 			},
 			// Aggregate start/end date strings from state into DateRangeValue
 			valueAggregator: (
-				values: Record<string, any>,
+				values: Record<string, unknown>,
 				paths: PathTuple<T>,
 			): DateRangeValue => {
 				const [startPath, endPath] = paths as unknown as [string, string];
 				return {
-					start: parseAbsoluteToLocal(values[startPath]),
-					end: parseAbsoluteToLocal(values[endPath]),
+					start: parseAbsoluteToLocal(values[startPath] as string),
+					end: parseAbsoluteToLocal(values[endPath] as string),
 				};
 			},
 		});

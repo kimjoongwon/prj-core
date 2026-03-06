@@ -1,15 +1,25 @@
 "use client";
 
-import { Button, Card, CardBody, Input, Divider, Spacer } from "@heroui/react";
+import type {
+	InquiryCategory,
+	InquiryChannel,
+	InquiryPriority,
+} from "@cocrepo/enum";
+import { Button, Card, CardBody, Divider, Input, Spacer } from "@heroui/react";
 import { observer } from "mobx-react-lite";
-import { useState, useCallback } from "react";
-import type { InquiryCategory, InquiryChannel, InquiryPriority } from "@cocrepo/enum";
-import { Textarea } from "../../input/Textarea/Textarea";
+import { useState } from "react";
+import {
+	type Assignee,
+	AssigneeSelect,
+} from "../../input/AssigneeSelect/AssigneeSelect";
+import {
+	CustomerSearchInput,
+	type CustomerSearchResult,
+} from "../../input/CustomerSearchInput/CustomerSearchInput";
 import { InquiryCategorySelect } from "../../input/InquiryCategorySelect/InquiryCategorySelect";
 import { InquiryChannelSelect } from "../../input/InquiryChannelSelect/InquiryChannelSelect";
 import { InquiryPrioritySelect } from "../../input/InquiryPrioritySelect/InquiryPrioritySelect";
-import { CustomerSearchInput, type CustomerSearchResult } from "../../input/CustomerSearchInput/CustomerSearchInput";
-import { AssigneeSelect, type Assignee } from "../../input/AssigneeSelect/AssigneeSelect";
+import { Textarea } from "../../input/Textarea/Textarea";
 import { AIClassificationSuggestion } from "../../widget/AIClassificationSuggestion/AIClassificationSuggestion";
 
 export interface CustomerInfo {
@@ -114,22 +124,35 @@ export const InquiryForm = observer(
 		className = "",
 	}: InquiryFormProps) => {
 		// 폼 상태
-		const [customerId, setCustomerId] = useState(initialValues?.customerId ?? "");
-		const [customerInfo, setCustomerInfo] = useState<CustomerSearchResult | null>(null);
+		const [customerId, setCustomerId] = useState(
+			initialValues?.customerId ?? "",
+		);
+		const [_customerInfo, setCustomerInfo] =
+			useState<CustomerSearchResult | null>(null);
 		const [title, setTitle] = useState(initialValues?.title ?? "");
 		const [content, setContent] = useState(initialValues?.content ?? "");
-		const [category, setCategory] = useState<InquiryCategory | null>(initialValues?.category ?? null);
-		const [channel, setChannel] = useState<InquiryChannel | null>(initialValues?.channel ?? null);
-		const [priority, setPriority] = useState<InquiryPriority | null>(initialValues?.priority ?? null);
-		const [assigneeId, setAssigneeId] = useState(initialValues?.assigneeId ?? "");
+		const [category, setCategory] = useState<InquiryCategory | null>(
+			initialValues?.category ?? null,
+		);
+		const [channel, setChannel] = useState<InquiryChannel | null>(
+			initialValues?.channel ?? null,
+		);
+		const [priority, setPriority] = useState<InquiryPriority | null>(
+			initialValues?.priority ?? null,
+		);
+		const [assigneeId, setAssigneeId] = useState(
+			initialValues?.assigneeId ?? "",
+		);
 
 		// 검색 결과 상태
-		const [searchResults, setSearchResults] = useState<CustomerSearchResult[]>([]);
+		const [searchResults, setSearchResults] = useState<CustomerSearchResult[]>(
+			[],
+		);
 
 		// 에러 상태
 		const [errors, setErrors] = useState<Record<string, string>>({});
 
-		const validateForm = useCallback((): boolean => {
+		const validateForm = (): boolean => {
 			const newErrors: Record<string, string> = {};
 
 			if (!customerId) {
@@ -153,9 +176,9 @@ export const InquiryForm = observer(
 
 			setErrors(newErrors);
 			return Object.keys(newErrors).length === 0;
-		}, [customerId, title, content, category, channel, priority]);
+		};
 
-		const handleSubmit = useCallback(() => {
+		const handleSubmit = () => {
 			if (!validateForm()) return;
 
 			const formData: InquiryFormData = {
@@ -169,34 +192,28 @@ export const InquiryForm = observer(
 			};
 
 			onSubmit(formData);
-		}, [customerId, title, content, category, channel, priority, assigneeId, validateForm, onSubmit]);
+		};
 
-		const handleContentChange = useCallback(
-			(value: string) => {
-				setContent(value);
-				onContentChange?.(value);
-			},
-			[onContentChange],
-		);
+		const handleContentChange = (value: string) => {
+			setContent(value);
+			onContentChange?.(value);
+		};
 
-		const handleCustomerSearch = useCallback(
-			async (keyword: string) => {
-				if (onSearchCustomer) {
-					const results = await onSearchCustomer(keyword);
-					setSearchResults(results);
-				}
-			},
-			[onSearchCustomer],
-		);
+		const handleCustomerSearch = async (keyword: string) => {
+			if (onSearchCustomer) {
+				const results = await onSearchCustomer(keyword);
+				setSearchResults(results);
+			}
+		};
 
-		const handleCustomerSelect = useCallback((customer: CustomerSearchResult | null) => {
+		const handleCustomerSelect = (customer: CustomerSearchResult | null) => {
 			if (customer) {
 				setCustomerId(customer.id);
 				setCustomerInfo(customer);
 			}
-		}, []);
+		};
 
-		const handleApplyAiSuggestion = useCallback(() => {
+		const handleApplyAiSuggestion = () => {
 			if (aiSuggestion) {
 				if (aiSuggestion.category) {
 					setCategory(aiSuggestion.category);
@@ -206,9 +223,9 @@ export const InquiryForm = observer(
 				}
 			}
 			onApplyAiSuggestion?.();
-		}, [aiSuggestion, onApplyAiSuggestion]);
+		};
 
-		const handleReset = useCallback(() => {
+		const handleReset = () => {
 			setCustomerId("");
 			setCustomerInfo(null);
 			setTitle("");
@@ -218,7 +235,7 @@ export const InquiryForm = observer(
 			setPriority(null);
 			setAssigneeId("");
 			setErrors({});
-		}, []);
+		};
 
 		return (
 			<Card className={className} shadow="sm">

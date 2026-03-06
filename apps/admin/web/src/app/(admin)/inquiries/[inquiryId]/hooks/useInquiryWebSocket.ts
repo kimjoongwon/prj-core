@@ -1,11 +1,8 @@
 "use client";
 
-import {
-	type InquiryMessage,
-	type InquiryParticipant,
-} from "@cocrepo/type";
 import { createLogger } from "@cocrepo/toolkit";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { type InquiryMessage, type InquiryParticipant } from "@cocrepo/type";
+import { useEffect, useRef, useState } from "react";
 
 const logger = createLogger("[useInquiryWebSocket]");
 
@@ -111,128 +108,155 @@ export function useInquiryWebSocket(
 	const socketRef = useRef<WebSocket | null>(null);
 	const [status, setStatus] = useState<WebSocketStatus>("disconnected");
 	const reconnectTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+	const latestStateRef = useRef(state);
+	const latestOptionsRef = useRef({
+		inquiryId,
+		wsUrl,
+		onConnect,
+		onDisconnect,
+		onError,
+	});
+
+	latestStateRef.current = state;
+	latestOptionsRef.current = {
+		inquiryId,
+		wsUrl,
+		onConnect,
+		onDisconnect,
+		onError,
+	};
 
 	// Store에 연결 상태 반영
 	useEffect(() => {
-		state.setWebSocketConnected(status === "connected");
-	}, [status, state]);
+		latestStateRef.current.setWebSocketConnected(status === "connected");
+	}, [status]);
 
 	// WebSocket 이벤트 핸들러
-	const handleOpen = useCallback(() => {
+	const handleOpen = () => {
+		const { inquiryId: currentInquiryId, onConnect: currentOnConnect } =
+			latestOptionsRef.current;
+
 		logger.info("WebSocket 연결됨");
 		setStatus("connected");
-		onConnect?.();
+		currentOnConnect?.();
 
 		// 문의 방 참여 이벤트 전송
 		if (socketRef.current) {
 			socketRef.current.send(
 				JSON.stringify({
 					type: "inquiry:join",
-					data: { inquiryId },
+					data: { inquiryId: currentInquiryId },
 				}),
 			);
 		}
-	}, [inquiryId, onConnect]);
+	};
 
-	const handleClose = useCallback(() => {
+	const handleClose = () => {
+		const { onDisconnect: currentOnDisconnect } = latestOptionsRef.current;
 		logger.info("WebSocket 연결 해제됨");
 		setStatus("disconnected");
-		onDisconnect?.();
-	}, [onDisconnect]);
+		currentOnDisconnect?.();
+	};
 
-	const handleError = useCallback(
-		(event: Event) => {
-			logger.error("WebSocket 에러:", event.type);
-			setStatus("disconnected");
-			onError?.(new Error("WebSocket connection error"));
-		},
-		[onError],
-	);
+	const handleError = (event: Event) => {
+		const { onError: currentOnError } = latestOptionsRef.current;
+		logger.error("WebSocket 에러:", event.type);
+		setStatus("disconnected");
+		currentOnError?.(new Error("WebSocket connection error"));
+	};
 
-	const handleMessage = useCallback(
-		(event: MessageEvent) => {
-			try {
-				const { type, data } = JSON.parse(event.data) as {
-					type: keyof WebSocketEvents;
-					data: unknown;
-				};
+	const handleMessage = (event: MessageEvent) => {
+		const currentState = latestStateRef.current;
+		try {
+			const { type, data } = JSON.parse(event.data) as {
+				type: keyof WebSocketEvents;
+				data: unknown;
+			};
 
-				logger.debug("WebSocket 메시지 수신:", type);
+			logger.debug("WebSocket 메시지 수신:", type);
 
-				switch (type) {
-					case "inquiry:message:new":
-						state.addMessage(data as InquiryMessage);
-						break;
-					case "inquiry:message:delivered": {
-						const { messageId, deliveredAt } = data as {
-							messageId: string;
-							deliveredAt: string;
-						};
-						state.updateMessage(messageId, { deliveredAt });
-						break;
-					}
-					case "inquiry:message:read": {
-						const { messageId, readAt } = data as {
-							messageId: string;
-							readAt: string;
-						};
-						state.updateMessage(messageId, { readAt });
-						break;
-					}
-					case "inquiry:typing:start": {
-						const { userId } = data as { userId: string };
-						state.setTyping(userId, true);
-						break;
-					}
-					case "inquiry:typing:stop": {
-						const { userId } = data as { userId: string };
-						state.setTyping(userId, false);
-						break;
-					}
-					case "inquiry:participant:joined":
-						state.addParticipant(data as InquiryParticipant);
-						break;
-					case "inquiry:participant:left": {
-						const { userId } = data as { userId: string };
-						state.removeParticipant(userId);
-						break;
-					}
-					case "inquiry:participant:online": {
-						const { userId } = data as { userId: string };
-						state.updateParticipant(userId, { isOnline: true });
-						break;
-					}
-					case "inquiry:participant:offline": {
-						const { userId } = data as { userId: string };
-						state.updateParticipant(userId, { isOnline: false });
-						break;
-					}
-					case "inquiry:status:changed":
-						// TODO: 상태 변경 처리
-						logger.info("문의 상태 변경:", JSON.stringify(data));
-						break;
-					default:
-						logger.info("알 수 없는 WebSocket 이벤트:", type);
+			switch (type) {
+				case "inquiry:message:new":
+					currentState.addMessage(data as InquiryMessage);
+					break;
+				case "inquiry:message:delivered": {
+					const { messageId, deliveredAt } = data as {
+						messageId: string;
+						deliveredAt: string;
+					};
+					currentState.updateMessage(messageId, { deliveredAt });
+					break;
 				}
-			} catch (error) {
-				logger.error("WebSocket 메시지 파싱 에러:", String(error));
+				case "inquiry:message:read": {
+					const { messageId, readAt } = data as {
+						messageId: string;
+						readAt: string;
+					};
+					currentState.updateMessage(messageId, { readAt });
+					break;
+				}
+				case "inquiry:typing:start": {
+					const { userId } = data as { userId: string };
+					currentState.setTyping(userId, true);
+					break;
+				}
+				case "inquiry:typing:stop": {
+					const { userId } = data as { userId: string };
+					currentState.setTyping(userId, false);
+					break;
+				}
+				case "inquiry:participant:joined":
+					currentState.addParticipant(data as InquiryParticipant);
+					break;
+				case "inquiry:participant:left": {
+					const { userId } = data as { userId: string };
+					currentState.removeParticipant(userId);
+					break;
+				}
+				case "inquiry:participant:online": {
+					const { userId } = data as { userId: string };
+					currentState.updateParticipant(userId, { isOnline: true });
+					break;
+				}
+				case "inquiry:participant:offline": {
+					const { userId } = data as { userId: string };
+					currentState.updateParticipant(userId, { isOnline: false });
+					break;
+				}
+				case "inquiry:status:changed":
+					// TODO: 상태 변경 처리
+					logger.info("문의 상태 변경:", JSON.stringify(data));
+					break;
+				default:
+					logger.info("알 수 없는 WebSocket 이벤트:", type);
 			}
-		},
-		[state],
-	);
+		} catch (error) {
+			logger.error("WebSocket 메시지 파싱 에러:", String(error));
+		}
+	};
 
-	// WebSocket 연결
-	const connect = useCallback(() => {
+	const connectRef = useRef<() => void>(() => {});
+	const disconnectRef = useRef<() => void>(() => {});
+
+	connectRef.current = () => {
+		const {
+			inquiryId: currentInquiryId,
+			wsUrl: currentWsUrl,
+			onError: currentOnError,
+		} = latestOptionsRef.current;
+
 		if (socketRef.current?.readyState === WebSocket.OPEN) {
 			logger.info("이미 연결되어 있습니다.");
 			return;
 		}
 
-		logger.info("WebSocket 연결 시도:", wsUrl);
+		logger.info("WebSocket 연결 시도:", currentWsUrl);
 		setStatus("connecting");
 
 		try {
-			const socket = new WebSocket(`${wsUrl}/inquiries/${inquiryId}`);
+			const socket = new WebSocket(
+				`${currentWsUrl}/inquiries/${currentInquiryId}`,
+			);
 			socketRef.current = socket;
 
 			socket.onopen = handleOpen;
@@ -242,27 +266,19 @@ export function useInquiryWebSocket(
 		} catch (error) {
 			logger.error("WebSocket 연결 실패:", String(error));
 			setStatus("disconnected");
-			onError?.(error as Error);
+			currentOnError?.(error as Error);
 		}
-	}, [
-		wsUrl,
-		inquiryId,
-		handleOpen,
-		handleClose,
-		handleError,
-		handleMessage,
-		onError,
-	]);
+	};
 
-	// WebSocket 연결 해제
-	const disconnect = useCallback(() => {
+	disconnectRef.current = () => {
+		const { inquiryId: currentInquiryId } = latestOptionsRef.current;
 		if (socketRef.current) {
 			// 문의 방 퇴장 이벤트 전송
 			if (socketRef.current.readyState === WebSocket.OPEN) {
 				socketRef.current.send(
 					JSON.stringify({
 						type: "inquiry:leave",
-						data: { inquiryId },
+						data: { inquiryId: currentInquiryId },
 					}),
 				);
 			}
@@ -276,81 +292,82 @@ export function useInquiryWebSocket(
 		}
 
 		setStatus("disconnected");
-	}, [inquiryId]);
+	};
 
 	// 재연결
-	const reconnect = useCallback(() => {
+	const reconnect = () => {
 		logger.info("WebSocket 재연결 시도");
-		disconnect();
-		connect();
-	}, [disconnect, connect]);
+		disconnectRef.current();
+		connectRef.current();
+	};
+
+	// 연결 해제
+	const disconnect = () => {
+		disconnectRef.current();
+	};
 
 	// 메시지 전송
-	const sendMessage = useCallback(
-		(content: string, attachments?: File[]) => {
-			if (socketRef.current?.readyState !== WebSocket.OPEN) {
-				logger.info("WebSocket이 연결되지 않았습니다.");
-				return;
-			}
+	const sendMessage = (content: string, attachments?: File[]) => {
+		const { inquiryId: currentInquiryId } = latestOptionsRef.current;
+		if (socketRef.current?.readyState !== WebSocket.OPEN) {
+			logger.info("WebSocket이 연결되지 않았습니다.");
+			return;
+		}
 
-			const message = {
-				type: "inquiry:message:send",
-				data: {
-					inquiryId,
-					content,
-					attachments: attachments?.map((f) => ({
-						name: f.name,
-						size: f.size,
-						type: f.type,
-					})),
-				},
-			};
+		const message = {
+			type: "inquiry:message:send",
+			data: {
+				inquiryId: currentInquiryId,
+				content,
+				attachments: attachments?.map((f) => ({
+					name: f.name,
+					size: f.size,
+					type: f.type,
+				})),
+			},
+		};
 
-			socketRef.current.send(JSON.stringify(message));
-			logger.debug("메시지 전송");
-		},
-		[inquiryId],
-	);
+		socketRef.current.send(JSON.stringify(message));
+		logger.debug("메시지 전송");
+	};
 
 	// 타이핑 상태 전송
-	const sendTypingStatus = useCallback(
-		(isTyping: boolean) => {
-			if (socketRef.current?.readyState !== WebSocket.OPEN) {
-				return;
-			}
+	const sendTypingStatus = (isTyping: boolean) => {
+		const { inquiryId: currentInquiryId } = latestOptionsRef.current;
+		if (socketRef.current?.readyState !== WebSocket.OPEN) {
+			return;
+		}
 
-			socketRef.current.send(
-				JSON.stringify({
-					type: isTyping ? "inquiry:typing:start" : "inquiry:typing:stop",
-					data: { inquiryId },
-				}),
-			);
-		},
-		[inquiryId],
-	);
+		socketRef.current.send(
+			JSON.stringify({
+				type: isTyping ? "inquiry:typing:start" : "inquiry:typing:stop",
+				data: { inquiryId: currentInquiryId },
+			}),
+		);
+	};
 
 	// 자동 연결 및 정리
 	useEffect(() => {
 		if (autoConnect) {
-			connect();
+			connectRef.current();
 		}
 
 		return () => {
-			disconnect();
+			disconnectRef.current();
 		};
-	}, [autoConnect, connect, disconnect]);
+	}, [autoConnect, inquiryId, wsUrl]);
 
 	// 페이지 이탈 시 정리
 	useEffect(() => {
 		const handleBeforeUnload = () => {
-			disconnect();
+			disconnectRef.current();
 		};
 
 		window.addEventListener("beforeunload", handleBeforeUnload);
 		return () => {
 			window.removeEventListener("beforeunload", handleBeforeUnload);
 		};
-	}, [disconnect]);
+	}, []);
 
 	return {
 		status,

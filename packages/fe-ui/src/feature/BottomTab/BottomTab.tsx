@@ -4,7 +4,6 @@ import { useNavigationStore } from "@cocrepo/store";
 import { cn, Tab, Tabs } from "@heroui/react";
 import { icons, type LucideIcon } from "lucide-react";
 import { observer } from "mobx-react-lite";
-import { useMemo, useSyncExternalStore } from "react";
 
 function renderLucideIcon(
 	iconName?: string,
@@ -33,18 +32,6 @@ export interface BottomTabProps {
 }
 
 /**
- * 클라이언트 마운트 상태를 추적하는 훅
- * SSR과 클라이언트 초기 렌더링을 일관되게 유지
- */
-function useIsMounted(): boolean {
-	return useSyncExternalStore(
-		() => () => {},
-		() => true,
-		() => false,
-	);
-}
-
-/**
  * BottomTab Feature 컴포넌트
  * 모바일에서 1depth 아이템을 하단 탭으로 표시합니다.
  * NavigationStore를 사용하여 네비게이션 상태를 관리합니다.
@@ -57,10 +44,7 @@ function useIsMounted(): boolean {
 export const BottomTab = observer(
 	({ onSelectTab, className }: BottomTabProps) => {
 		const navigationStore = useNavigationStore();
-		const isMounted = useIsMounted();
-
-		// SSR 대응: 클라이언트 마운트 전에는 빈 배열
-		const navItems = isMounted ? navigationStore.items : [];
+		const navItems = navigationStore.items;
 
 		// 현재 선택된 아이템 ID
 		const selectedNavItemId = navigationStore.selectedNavItem?.id;
@@ -84,11 +68,9 @@ export const BottomTab = observer(
 		};
 
 		// 렌더링할 네비게이션 아이템 (최대 5개)
-		const displayItems = useMemo(() => {
-			return navItems.slice(0, 5);
-		}, [navItems]);
+		const displayItems = navItems.slice(0, 5);
 
-		if (!isMounted || displayItems.length === 0) {
+		if (displayItems.length === 0) {
 			return null;
 		}
 

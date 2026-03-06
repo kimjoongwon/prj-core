@@ -3,7 +3,6 @@
 import { useNavigationStore } from "@cocrepo/store";
 import { cn } from "@heroui/react";
 import { observer } from "mobx-react-lite";
-import { useSyncExternalStore } from "react";
 import { VStack } from "../../layout/VStack/VStack";
 
 export interface SubMenuListProps {
@@ -11,18 +10,6 @@ export interface SubMenuListProps {
 	onSelectSubNavItem?: (subNavItemId: string) => void;
 	/** 추가 CSS 클래스 */
 	className?: string;
-}
-
-/**
- * 클라이언트 마운트 상태를 추적하는 훅
- * SSR과 클라이언트 초기 렌더링을 일관되게 유지
- */
-function useIsMounted(): boolean {
-	return useSyncExternalStore(
-		() => () => {},
-		() => true,
-		() => false,
-	);
 }
 
 /**
@@ -38,10 +25,7 @@ function useIsMounted(): boolean {
 export const SubMenuList = observer(
 	({ onSelectSubNavItem, className }: SubMenuListProps) => {
 		const navigationStore = useNavigationStore();
-		const isMounted = useIsMounted();
-
-		// SSR 대응: 클라이언트 마운트 전에는 빈 배열
-		const subNavItems = isMounted ? navigationStore.subNavItems : [];
+		const subNavItems = navigationStore.subNavItems;
 
 		// 현재 선택된 아이템
 		const selectedNavItem = navigationStore.selectedNavItem;
@@ -52,7 +36,7 @@ export const SubMenuList = observer(
 			onSelectSubNavItem?.(subNavItemId);
 		};
 
-		if (!isMounted || !selectedNavItem || subNavItems.length === 0) {
+		if (!selectedNavItem || subNavItems.length === 0) {
 			return null;
 		}
 

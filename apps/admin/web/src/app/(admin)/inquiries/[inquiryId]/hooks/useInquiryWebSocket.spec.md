@@ -34,4 +34,5 @@
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-03-06 | 규칙 위반 정리: useMemo/useCallback/useIsMounted 제거 및 observer/이벤트 네이밍 규칙 반영 | codex |
 | 2026-03-03 | 누락된 sidecar spec 신규 생성 | codex |

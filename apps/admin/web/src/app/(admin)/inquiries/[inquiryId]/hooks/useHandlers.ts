@@ -11,7 +11,6 @@ import { ADMIN_PATHS } from "@cocrepo/constant";
 import { createLogger } from "@cocrepo/toolkit";
 import type { Route } from "next";
 import { useRouter } from "next/navigation";
-import { useCallback } from "react";
 import type { UseInquiryWebSocketReturn } from "./useInquiryWebSocket";
 
 // TODO: Orval 훅 생성 후 아래 import 추가
@@ -123,9 +122,9 @@ export function useHandlers(options: UseHandlersOptions): UseHandlersReturn {
 	const fillInquiryFormMutation = useFillInquiryFormWithAi();
 
 	// 목록으로 이동
-	const onClickBack = useCallback(() => {
+	const onClickBack = () => {
 		router.push(ADMIN_PATHS.INQUIRIES as Route);
-	}, [router]);
+	};
 
 	/**
 	 * 상태 변경
@@ -133,31 +132,28 @@ export function useHandlers(options: UseHandlersOptions): UseHandlersReturn {
 	 * @requires Orval 훅 생성 후 아래와 같이 변경:
 	 * await updateStatusMutation.mutateAsync({ inquiryId, status });
 	 */
-	const onChangeStatus = useCallback(
-		async (status: string) => {
-			logger.info("상태 변경:", status);
-			try {
-				await updateStatusMutation.mutateAsync({
-					inquiryId,
-					data: {
-						status: status as
-							| "NEW"
-							| "OPEN"
-							| "IN_PROGRESS"
-							| "WAITING_CUSTOMER"
-							| "RESOLVED"
-							| "CLOSED"
-							| "ESCALATED",
-					},
-				});
-				logger.info("상태 변경 성공");
-			} catch (error) {
-				logger.error("상태 변경 실패:", String(error));
-				throw error;
-			}
-		},
-		[inquiryId, updateStatusMutation],
-	);
+	const onChangeStatus = async (status: string) => {
+		logger.info("상태 변경:", status);
+		try {
+			await updateStatusMutation.mutateAsync({
+				inquiryId,
+				data: {
+					status: status as
+						| "NEW"
+						| "OPEN"
+						| "IN_PROGRESS"
+						| "WAITING_CUSTOMER"
+						| "RESOLVED"
+						| "CLOSED"
+						| "ESCALATED",
+				},
+			});
+			logger.info("상태 변경 성공");
+		} catch (error) {
+			logger.error("상태 변경 실패:", String(error));
+			throw error;
+		}
+	};
 
 	/**
 	 * 우선순위 변경
@@ -165,22 +161,19 @@ export function useHandlers(options: UseHandlersOptions): UseHandlersReturn {
 	 * @requires Orval 훅 생성 후 아래와 같이 변경:
 	 * await updatePriorityMutation.mutateAsync({ inquiryId, priority });
 	 */
-	const onChangePriority = useCallback(
-		async (priority: string) => {
-			logger.info("우선순위 변경:", priority);
-			try {
-				await updatePriorityMutation.mutateAsync({
-					inquiryId,
-					data: { priority: priority as "LOW" | "NORMAL" | "HIGH" | "URGENT" },
-				});
-				logger.info("우선순위 변경 성공");
-			} catch (error) {
-				logger.error("우선순위 변경 실패:", String(error));
-				throw error;
-			}
-		},
-		[inquiryId, updatePriorityMutation],
-	);
+	const onChangePriority = async (priority: string) => {
+		logger.info("우선순위 변경:", priority);
+		try {
+			await updatePriorityMutation.mutateAsync({
+				inquiryId,
+				data: { priority: priority as "LOW" | "NORMAL" | "HIGH" | "URGENT" },
+			});
+			logger.info("우선순위 변경 성공");
+		} catch (error) {
+			logger.error("우선순위 변경 실패:", String(error));
+			throw error;
+		}
+	};
 
 	/**
 	 * 카테고리 변경
@@ -188,33 +181,30 @@ export function useHandlers(options: UseHandlersOptions): UseHandlersReturn {
 	 * @requires Orval 훅 생성 후 아래와 같이 변경:
 	 * await updateInquiryMutation.mutateAsync({ inquiryId, category });
 	 */
-	const onChangeCategory = useCallback(
-		async (category: string) => {
-			logger.info("카테고리 변경:", category);
-			try {
-				await updateInquiryMutation.mutateAsync({
-					inquiryId,
-					data: {
-						category: category as
-							| "GENERAL"
-							| "DELIVERY"
-							| "PAYMENT"
-							| "REFUND"
-							| "PRODUCT"
-							| "ACCOUNT"
-							| "TECHNICAL"
-							| "COMPLAINT"
-							| "OTHER",
-					},
-				});
-				logger.info("카테고리 변경 성공");
-			} catch (error) {
-				logger.error("카테고리 변경 실패:", String(error));
-				throw error;
-			}
-		},
-		[inquiryId, updateInquiryMutation],
-	);
+	const onChangeCategory = async (category: string) => {
+		logger.info("카테고리 변경:", category);
+		try {
+			await updateInquiryMutation.mutateAsync({
+				inquiryId,
+				data: {
+					category: category as
+						| "GENERAL"
+						| "DELIVERY"
+						| "PAYMENT"
+						| "REFUND"
+						| "PRODUCT"
+						| "ACCOUNT"
+						| "TECHNICAL"
+						| "COMPLAINT"
+						| "OTHER",
+				},
+			});
+			logger.info("카테고리 변경 성공");
+		} catch (error) {
+			logger.error("카테고리 변경 실패:", String(error));
+			throw error;
+		}
+	};
 
 	/**
 	 * 담당자 변경
@@ -222,22 +212,19 @@ export function useHandlers(options: UseHandlersOptions): UseHandlersReturn {
 	 * @requires Orval 훅 생성 후 아래와 같이 변경:
 	 * await assignMutation.mutateAsync({ inquiryId, assigneeId });
 	 */
-	const onChangeAssignee = useCallback(
-		async (assigneeId: string) => {
-			logger.info("담당자 변경:", assigneeId);
-			try {
-				await assignMutation.mutateAsync({
-					inquiryId,
-					data: { assigneeId },
-				});
-				logger.info("담당자 변경 성공");
-			} catch (error) {
-				logger.error("담당자 변경 실패:", String(error));
-				throw error;
-			}
-		},
-		[inquiryId, assignMutation],
-	);
+	const onChangeAssignee = async (assigneeId: string) => {
+		logger.info("담당자 변경:", assigneeId);
+		try {
+			await assignMutation.mutateAsync({
+				inquiryId,
+				data: { assigneeId },
+			});
+			logger.info("담당자 변경 성공");
+		} catch (error) {
+			logger.error("담당자 변경 실패:", String(error));
+			throw error;
+		}
+	};
 
 	/**
 	 * 태그 추가
@@ -245,13 +232,10 @@ export function useHandlers(options: UseHandlersOptions): UseHandlersReturn {
 	 * @requires Orval 훅 생성 후 아래와 같이 변경:
 	 * await updateInquiryMutation.mutateAsync({ inquiryId, tags: [...currentTags, tag] });
 	 */
-	const onTagAdd = useCallback(
-		async (tag: string) => {
-			logger.info("태그 추가:", tag);
-			// TODO: Orval 훅 생성 후 아래 주석 해제
-		},
-		[inquiryId],
-	);
+	const onTagAdd = async (tag: string) => {
+		logger.info("태그 추가:", tag);
+		// TODO: Orval 훅 생성 후 아래 주석 해제
+	};
 
 	/**
 	 * 태그 삭제
@@ -259,13 +243,10 @@ export function useHandlers(options: UseHandlersOptions): UseHandlersReturn {
 	 * @requires Orval 훅 생성 후 아래와 같이 변경:
 	 * await updateInquiryMutation.mutateAsync({ inquiryId, tags: currentTags.filter(t => t !== tag) });
 	 */
-	const onTagRemove = useCallback(
-		async (tag: string) => {
-			logger.info("태그 삭제:", tag);
-			// TODO: Orval 훅 생성 후 아래 주석 해제
-		},
-		[inquiryId],
-	);
+	const onTagRemove = async (tag: string) => {
+		logger.info("태그 삭제:", tag);
+		// TODO: Orval 훅 생성 후 아래 주석 해제
+	};
 
 	/**
 	 * 메시지 전송
@@ -273,40 +254,37 @@ export function useHandlers(options: UseHandlersOptions): UseHandlersReturn {
 	 * @requires Orval 훅 생성 후 아래와 같이 변경:
 	 * await sendMessageMutation.mutateAsync({ inquiryId, content, attachments });
 	 */
-	const onSubmitReply = useCallback(
-		(content: string, attachments?: File[]) => {
-			const attachmentCount = attachments?.length ?? 0;
-			logger.info("메시지 전송:", { content, attachmentCount });
-			ws.sendMessage(content, attachments);
-			inquiryState.setReplyContent("");
-			// TODO: Orval 훅 생성 후 REST API로도 전송
-			// try {
-			// 	await sendMessageMutation.mutateAsync({ inquiryId, content, attachments });
-			// } catch (error) {
-			// 	logger.error("메시지 전송 실패:", error);
-			// }
-		},
-		[ws, inquiryState],
-	);
+	const onSubmitReply = (content: string, attachments?: File[]) => {
+		const attachmentCount = attachments?.length ?? 0;
+		logger.info("메시지 전송:", { content, attachmentCount });
+		ws.sendMessage(content, attachments);
+		inquiryState.setReplyContent("");
+		// TODO: Orval 훅 생성 후 REST API로도 전송
+		// try {
+		// 	await sendMessageMutation.mutateAsync({ inquiryId, content, attachments });
+		// } catch (error) {
+		// 	logger.error("메시지 전송 실패:", error);
+		// }
+	};
 
 	// 타이핑 시작
-	const onTypingStart = useCallback(() => {
+	const onTypingStart = () => {
 		inquiryState.startTyping();
 		ws.sendTypingStatus(true);
-	}, [ws, inquiryState]);
+	};
 
 	// 타이핑 중지
-	const onTypingStop = useCallback(() => {
+	const onTypingStop = () => {
 		inquiryState.stopTyping();
 		ws.sendTypingStatus(false);
-	}, [ws, inquiryState]);
+	};
 
 	/**
 	 * AI 내용 생성
 	 *
 	 * 문의 폼 ai-fill endpoint를 활용하여 content patch를 생성합니다.
 	 */
-	const onClickGenerateDraft = useCallback(async () => {
+	const onClickGenerateDraft = async () => {
 		logger.info("AI 내용 생성 요청");
 		inquiryState.setGeneratingDraft(true);
 
@@ -335,37 +313,37 @@ export function useHandlers(options: UseHandlersOptions): UseHandlersReturn {
 		} finally {
 			inquiryState.setGeneratingDraft(false);
 		}
-	}, [inquiryId, inquiryState, fillInquiryFormMutation]);
+	};
 
 	// 지식베이스 검색 모달 열기
-	const onClickSearchKnowledge = useCallback(() => {
+	const onClickSearchKnowledge = () => {
 		inquiryState.openKnowledgeBaseModal();
-	}, [inquiryState]);
+	};
 
 	// 파일 첨부
-	const onAttachFile = useCallback((files: File[]) => {
+	const onAttachFile = (files: File[]) => {
 		const fileNames = files.map((f) => f.name);
 		logger.info("파일 첨부:", fileNames.join(", "));
 		// TODO: 파일 업로드 API 연동
-	}, []);
+	};
 
 	// 수정 페이지 이동
-	const onClickEdit = useCallback(() => {
+	const onClickEdit = () => {
 		router.push(
 			ADMIN_PATHS.INQUIRIES_EDIT.replace("[inquiryId]", inquiryId) as Route,
 		);
-	}, [router, inquiryId]);
+	};
 
 	// 삭제 확인 모달 열기
-	const onClickDelete = useCallback(() => {
+	const onClickDelete = () => {
 		inquiryState.openMetaEditModal(); // TODO: 삭제 모달로 변경 필요
-	}, [inquiryState]);
+	};
 
 	// WebSocket 재연결
-	const onClickReconnect = useCallback(() => {
+	const onClickReconnect = () => {
 		logger.info("WebSocket 재연결 요청");
 		// 재연결은 _client.tsx에서 처리
-	}, []);
+	};
 
 	/**
 	 * 삭제 확인
@@ -374,7 +352,7 @@ export function useHandlers(options: UseHandlersOptions): UseHandlersReturn {
 	 * await deleteInquiryMutation.mutateAsync({ inquiryId });
 	 * router.push("/inquiries");
 	 */
-	const onConfirmDelete = useCallback(async () => {
+	const onConfirmDelete = async () => {
 		logger.info("문의 삭제:", inquiryId);
 		// TODO: Orval 훅 생성 후 아래 주석 해제
 		// try {
@@ -384,7 +362,7 @@ export function useHandlers(options: UseHandlersOptions): UseHandlersReturn {
 		// 	logger.error("문의 삭제 실패:", error);
 		// 	throw error;
 		// }
-	}, [inquiryId, router]);
+	};
 
 	return {
 		onClickBack,

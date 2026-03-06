@@ -1,4 +1,3 @@
-import { useCallback, useMemo } from "react";
 import type { AbilityRule, AppAction, AppSubject } from "@cocrepo/type";
 import { useStore } from "./useStore";
 
@@ -28,48 +27,33 @@ export function useAbility() {
 		);
 	}
 
-	const can = useCallback(
-		(action: AppAction, subject: AppSubject, field?: string) => {
-			return abilityStore.can(action, subject, field);
-		},
-		[abilityStore],
-	);
+	const can = (action: AppAction, subject: AppSubject, field?: string) => {
+		return abilityStore.can(action, subject, field);
+	};
 
-	const cannot = useCallback(
-		(action: AppAction, subject: AppSubject, field?: string) => {
-			return abilityStore.cannot(action, subject, field);
-		},
-		[abilityStore],
-	);
+	const cannot = (action: AppAction, subject: AppSubject, field?: string) => {
+		return abilityStore.cannot(action, subject, field);
+	};
 
-	const updateRules = useCallback(
-		(rules: AbilityRule[]) => {
-			abilityStore.updateRules(rules);
-		},
-		[abilityStore],
-	);
+	const updateRules = (rules: AbilityRule[]) => {
+		abilityStore.updateRules(rules);
+	};
 
-	const clearRules = useCallback(() => {
+	const clearRules = () => {
 		abilityStore.clearRules();
-	}, [abilityStore]);
+	};
 
-	const getAllowedActions = useCallback(
-		(subject: AppSubject) => {
-			return abilityStore.getAllowedActions(subject);
-		},
-		[abilityStore],
-	);
+	const getAllowedActions = (subject: AppSubject) => {
+		return abilityStore.getAllowedActions(subject);
+	};
 
-	const getAllowedSubjects = useCallback(
-		(action: AppAction) => {
-			return abilityStore.getAllowedSubjects(action);
-		},
-		[abilityStore],
-	);
+	const getAllowedSubjects = (action: AppAction) => {
+		return abilityStore.getAllowedSubjects(action);
+	};
 
-	const getAllowedMenus = useCallback(() => {
+	const getAllowedMenus = () => {
 		return abilityStore.getAllowedMenus();
-	}, [abilityStore]);
+	};
 
 	return {
 		ability: abilityStore.ability,
@@ -100,10 +84,7 @@ export function useCan(
 	field?: string,
 ): boolean {
 	const { can } = useAbility();
-	return useMemo(
-		() => can(action, subject, field),
-		[can, action, subject, field],
-	);
+	return can(action, subject, field);
 }
 
 /**
@@ -120,10 +101,7 @@ export function useCannot(
 	field?: string,
 ): boolean {
 	const { cannot } = useAbility();
-	return useMemo(
-		() => cannot(action, subject, field),
-		[cannot, action, subject, field],
-	);
+	return cannot(action, subject, field);
 }
 
 /**
@@ -137,7 +115,7 @@ export function useCannot(
  */
 export function useMenuPermission(menuPath: string): boolean {
 	const { can } = useAbility();
-	return useMemo(() => can("view", `menu:${menuPath}`), [can, menuPath]);
+	return can("view", `menu:${menuPath}`);
 }
 
 /**
@@ -151,10 +129,7 @@ export function useMenuPermission(menuPath: string): boolean {
  */
 export function useFeaturePermission(featureName: string): boolean {
 	const { can } = useAbility();
-	return useMemo(
-		() => can("view", `feature:${featureName}`),
-		[can, featureName],
-	);
+	return can("view", `feature:${featureName}`);
 }
 
 /**
@@ -172,16 +147,13 @@ export function useEntityPermission(entityName: string) {
 	const { can } = useAbility();
 	const subject = `entity:${entityName}`;
 
-	return useMemo(
-		() => ({
-			canCreate: can("create", subject),
-			canRead: can("read", subject),
-			canUpdate: can("update", subject),
-			canDelete: can("delete", subject),
-			canManage: can("manage", subject),
-		}),
-		[can, subject],
-	);
+	return {
+		canCreate: can("create", subject),
+		canRead: can("read", subject),
+		canUpdate: can("update", subject),
+		canDelete: can("delete", subject),
+		canManage: can("manage", subject),
+	};
 }
 
 /**
@@ -195,5 +167,5 @@ export function useEntityPermission(entityName: string) {
  */
 export function useUiPermission(uiElement: string): boolean {
 	const { can } = useAbility();
-	return useMemo(() => can("view", `ui:${uiElement}`), [can, uiElement]);
+	return can("view", `ui:${uiElement}`);
 }

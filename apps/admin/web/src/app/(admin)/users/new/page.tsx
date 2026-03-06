@@ -12,7 +12,7 @@ import { useRouter } from "next/navigation";
 function UserNewPage() {
 	const router = useRouter();
 
-	const handleBack = () => {
+	const onClickBackButton = () => {
 		router.push("/users" as Route);
 	};
 
@@ -21,7 +21,7 @@ function UserNewPage() {
 			<Button
 				variant="light"
 				startContent={<ArrowLeft className="h-4 w-4" />}
-				onPress={handleBack}
+				onPress={onClickBackButton}
 			>
 				목록으로
 			</Button>

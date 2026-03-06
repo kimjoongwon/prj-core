@@ -14,12 +14,8 @@ import { observer } from "mobx-react-lite";
  *
  * 규칙: 하나의 layout.tsx에는 하나의 Layout만 선언
  */
-function AuthLayoutRoute({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
-  return <Page className="min-h-screen">{children}</Page>;
+function AuthLayoutRoute({ children }: { children: React.ReactNode }) {
+	return <Page className="min-h-screen">{children}</Page>;
 }
 
-export default AuthLayoutRoute;
+export default observer(AuthLayoutRoute);

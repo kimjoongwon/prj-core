@@ -2,7 +2,6 @@ import { useFormField } from "@cocrepo/hook";
 import { tools } from "@cocrepo/toolkit";
 import type { MobxProps } from "@cocrepo/type";
 import { observer } from "mobx-react-lite";
-import { useMemo } from "react";
 import {
 	ChipSelect as BaseChipSelect,
 	type ChipSelectProps as BaseChipSelectProps,
@@ -16,13 +15,13 @@ export const ChipSelect = observer(
 	<T extends object>(props: ChipSelectProps<T>) => {
 		const { state, path, options = [], selectionMode = "multiple" } = props;
 
-		const value = useMemo(() => {
-			const currentValue = tools.get(state, path) as string | string[] | null;
-			if (selectionMode === "single") {
-				return currentValue;
-			}
-			return Array.isArray(currentValue) ? currentValue : [];
-		}, [state, path, selectionMode]);
+		const currentValue = tools.get(state, path) as string | string[] | null;
+		const value =
+			selectionMode === "single"
+				? currentValue
+				: Array.isArray(currentValue)
+					? currentValue
+					: [];
 
 		const formField = useFormField({ value, state, path });
 

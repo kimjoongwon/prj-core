@@ -1,5 +1,3 @@
-"use client";
-
 import {
 	ADMIN_FAB_ACTIONS,
 	ADMIN_NAV_ITEMS,

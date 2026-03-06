@@ -33,4 +33,5 @@ IDP 콘솔 내비게이션 구성을 공통 provider preset으로 제공하는 �
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-03-06 | 규칙 위반 정리: useMemo/useCallback/useIsMounted 제거 및 observer/이벤트 네이밍 규칙 반영 | codex |
 | 2026-03-04 | IDP 앱 로컬 AppStoreProvider 제거를 위한 공통 console preset 신규 추가 | codex |
