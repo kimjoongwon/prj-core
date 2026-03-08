@@ -350,13 +350,15 @@ pnpm prisma db seed
 ### 개발 서버 실행
 
 ```bash
-# 모든 애플리케이션 실행
-pnpm start:dev
+# 대화형 실행기
+pnpm start
 
 # 개별 실행
-pnpm start:server      # NestJS 서버 (http://localhost:3000)
-pnpm start:admin       # Admin 웹앱 (http://localhost:5173)
-pnpm start:storybook   # Storybook (http://localhost:6006)
+pnpm start:core-api        # Core API (http://localhost:3006)
+pnpm start:admin-web       # Admin 웹앱 (http://localhost:3000)
+pnpm start:idp-api         # IDP API (http://localhost:3007)
+pnpm start:idp-web         # IDP 웹앱 (http://localhost:3008)
+pnpm start:tool-storybook  # Storybook (http://localhost:6006)
 ```
 
 ## 🔧 환경 설정

@@ -83,11 +83,21 @@ IDP_API_PORT_VALUE=$(get_port idp-api)
 
 for choice in $choices; do
   case $choice in
-    1) FILTERS="$FILTERS --filter=core-api"; SERVICES="$SERVICES core-api"; HAS_BACKEND="true" ;;
-    2) FILTERS="$FILTERS --filter=admin-web"; SERVICES="$SERVICES admin-web"; HAS_FRONTEND="true" ;;
-    3) FILTERS="$FILTERS --filter=idp-api"; SERVICES="$SERVICES idp-api"; HAS_IDP="true" ;;
-    4) FILTERS="$FILTERS --filter=idp-web"; SERVICES="$SERVICES idp-web"; HAS_FRONTEND="true" ;;
-    5) FILTERS="$FILTERS --filter=tool-storybook"; SERVICES="$SERVICES tool-storybook" ;;
+    1|core-api|start:core-api)
+      FILTERS="$FILTERS --filter=core-api"; SERVICES="$SERVICES core-api"; HAS_BACKEND="true"
+      ;;
+    2|admin-web|start:admin-web)
+      FILTERS="$FILTERS --filter=admin-web"; SERVICES="$SERVICES admin-web"; HAS_FRONTEND="true"
+      ;;
+    3|idp-api|start:idp-api)
+      FILTERS="$FILTERS --filter=idp-api"; SERVICES="$SERVICES idp-api"; HAS_IDP="true"
+      ;;
+    4|idp-web|start:idp-web)
+      FILTERS="$FILTERS --filter=idp-web"; SERVICES="$SERVICES idp-web"; HAS_FRONTEND="true"
+      ;;
+    5|tool-storybook|start:tool-storybook)
+      FILTERS="$FILTERS --filter=tool-storybook"; SERVICES="$SERVICES tool-storybook"
+      ;;
     *) echo -e "${YELLOW}잘못된 번호: ${choice}${RESET}"; exit 1 ;;
   esac
 done
