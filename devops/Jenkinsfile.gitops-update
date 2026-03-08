@@ -1,0 +1,87 @@
+pipeline {
+    agent any
+
+    options {
+        disableConcurrentBuilds()
+    }
+
+    parameters {
+        choice(
+            name: 'APP_NAME',
+            choices: ['core-api', 'admin-web', 'idp-api', 'idp-web', 'spring-api'],
+            description: 'GitOps values-prod.yaml image.tag update target app'
+        )
+        string(
+            name: 'IMAGE_TAG',
+            defaultValue: '',
+            description: 'Target image tag (usually upstream build number)'
+        )
+        choice(
+            name: 'DEPLOY_ENV',
+            choices: ['prod'],
+            description: 'Deploy environment'
+        )
+        string(
+            name: 'SOURCE_BUILD_URL',
+            defaultValue: '',
+            description: 'Optional upstream build URL'
+        )
+        string(
+            name: 'SOURCE_COMMIT',
+            defaultValue: '',
+            description: 'Optional upstream source commit SHA'
+        )
+    }
+
+    environment {
+        GITOPS_REPO = 'https://github.com/kimjoongwon/prj-devops.git'
+        GITOPS_BRANCH = 'main'
+    }
+
+    stages {
+        stage('Checkout') {
+            steps {
+                checkout scm
+            }
+        }
+
+        stage('Update GitOps Tag') {
+            steps {
+                script {
+                    if (!params.IMAGE_TAG?.trim()) {
+                        error('IMAGE_TAG parameter is required.')
+                    }
+                }
+
+                withCredentials([
+                    string(credentialsId: 'github-token', variable: 'GITHUB_TOKEN')
+                ]) {
+                    sh '''
+                        set -euo pipefail
+                        set +x
+
+                        REPO_URL="https://${GITHUB_TOKEN}@github.com/kimjoongwon/prj-devops.git"
+
+                        bash ./scripts/update-gitops-image-tag.sh \
+                          --app "${APP_NAME}" \
+                          --tag "${IMAGE_TAG}" \
+                          --env "${DEPLOY_ENV}" \
+                          --repo-url "${REPO_URL}" \
+                          --branch "${GITOPS_BRANCH}" \
+                          --git-user-name "jenkins-bot" \
+                          --git-user-email "jenkins-bot@cocdev.co.kr" \
+                          --push-retries 3
+                    '''
+                }
+            }
+        }
+    }
+
+    post {
+        always {
+            echo "GitOps update summary: APP=${params.APP_NAME}, TAG=${params.IMAGE_TAG}, ENV=${params.DEPLOY_ENV}"
+            echo "Source build: ${params.SOURCE_BUILD_URL}"
+            echo "Source commit: ${params.SOURCE_COMMIT}"
+        }
+    }
+}
