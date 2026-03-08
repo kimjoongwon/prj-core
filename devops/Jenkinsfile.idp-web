@@ -93,7 +93,7 @@ podTemplate(
                               "https://\${GITHUB_APP}:\${GITHUB_TOKEN}@github.com/kimjoongwon/prj-devops.git" \\
                               prj-devops-gitops
 
-                            bash prj-devops-gitops/scripts/jenkins/update-gitops-image-tag.sh \\
+                            bash ./scripts/update-gitops-image-tag.sh \\
                               --app ${GITOPS_APP} \\
                               --tag ${env.BUILD_NUMBER} \\
                               --env prod \\
