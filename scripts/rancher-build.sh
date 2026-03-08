@@ -170,7 +170,7 @@ get_image_name() {
 get_health_port() {
   local target="$1"
   case "$target" in
-    core-api) echo "80" ;;
+    core-api) echo "3006" ;;
     admin-web) echo "3000" ;;
     idp-api) echo "3007" ;;
     idp-web) echo "3008" ;;

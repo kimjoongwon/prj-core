@@ -33,6 +33,7 @@ Turbo 기반 공통 빌드/검사 태스크와 앱별 명시적 별칭을 한곳
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-03-09 | 루트 `turbo` 버전을 `2.8.14` exact로 고정해 Docker 전역 설치 버전과 동일한 기준으로 재현성을 맞춤 | codex |
 | 2026-03-08 | `rancher:idp-web` 등 앱별 Rancher 별칭 스크립트를 추가해 `rancher:build -- <workspace>`를 직접 노출 | codex |
 | 2026-03-08 | 루트 `build:*`/`start:*` 스크립트를 workspace 이름 기준으로 정규화하고 기존 짧은 alias를 canonical alias로 연결 | codex |
 | 2026-03-08 | `build:server`, `start:admin` 같은 구식 alias를 제거하고 canonical workspace 이름만 유지 | codex |

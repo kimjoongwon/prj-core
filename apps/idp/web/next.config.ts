@@ -12,15 +12,9 @@ const idpApiInternalUrl =
 		? "http://localhost:3007"
 		: "http://idp-api-prod");
 
-const ignoreBuildErrors = process.env.NEXT_IGNORE_BUILD_ERRORS === "true";
-
 const nextConfig: NextConfig = {
 	// Docker 배포를 위한 standalone 출력 모드
 	output: "standalone",
-	// CI/Docker 빌드에서만 타입 오류를 무시하도록 토글
-	typescript: ignoreBuildErrors ? { ignoreBuildErrors: true } : undefined,
-	// QEMU 기반 amd64 크로스 빌드 시 worker 수를 낮춰 안정성 확보
-	experimental: ignoreBuildErrors ? { cpus: 1 } : undefined,
 	// Turbopack 모노레포 설정
 	turbopack: {
 		// 모노레포 루트 디렉토리 설정 (워크스페이스 패키지 해석용)
