@@ -88,7 +88,7 @@ podTemplate(
             stage('Update GitOps Tag') {
                 if (ENV_NAME == 'prod') {
                     withCredentials([
-                        string(credentialsId: 'github-token', variable: 'GITHUB_TOKEN')
+                        string(credentialsId: 'github-app-credential', variable: 'GITHUB_TOKEN')
                     ]) {
                         sh """
                             set -euo pipefail
