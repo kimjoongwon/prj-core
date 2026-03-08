@@ -18,9 +18,8 @@ podTemplate(
     node(POD_LABEL) {
         def ENV_NAME = env.BRANCH_NAME == 'main' ? 'prod' : 'stg'
         def IMAGE_PATH = "harbor.cocdev.co.kr/${ENV_NAME}/idp-api"
-        def GITOPS_REPO = 'https://github.com/kimjoongwon/prj-devops.git'
-        def GITOPS_BRANCH = 'main'
         def GITOPS_APP = 'idp-api'
+        def GITOPS_UPDATE_JOB = env.GITOPS_UPDATE_JOB ?: 'gitops-prod-image-bump'
 
         try {
             stage('Checkout') {
@@ -79,34 +78,25 @@ podTemplate(
                 }
             }
 
-            stage('Update GitOps Tag') {
+            stage('Trigger GitOps Update Job') {
                 if (ENV_NAME == 'prod') {
-                    withCredentials([
-                        usernamePassword(credentialsId: 'github-app-credential', usernameVariable: 'GITHUB_APP', passwordVariable: 'GITHUB_TOKEN')
-                    ]) {
-                        sh """
-                            set -euo pipefail
-                            set +x
-
-                            rm -rf prj-devops
-                            git clone --branch ${GITOPS_BRANCH} \\
-                              "https://\${GITHUB_APP}:\${GITHUB_TOKEN}@github.com/kimjoongwon/prj-devops.git" \\
-                              prj-devops
-
-                            bash ./scripts/update-gitops-image-tag.sh \\
-                              --app ${GITOPS_APP} \\
-                              --tag ${env.BUILD_NUMBER} \\
-                              --env prod \\
-                              --repo-url "${GITOPS_REPO}" \\
-                              --workdir "\${PWD}/prj-devops" \\
-                              --branch ${GITOPS_BRANCH} \\
-                              --git-user-name "jenkins-bot" \\
-                              --git-user-email "jenkins-bot@cocdev.co.kr" \\
-                              --push-retries 3
-                        """
+                    catchError(buildResult: 'SUCCESS', stageResult: 'UNSTABLE') {
+                        def gitCommit = env.GIT_COMMIT ?: ''
+                        build(
+                            job: GITOPS_UPDATE_JOB,
+                            wait: false,
+                            parameters: [
+                                string(name: 'APP_NAME', value: GITOPS_APP),
+                                string(name: 'IMAGE_TAG', value: env.BUILD_NUMBER),
+                                string(name: 'DEPLOY_ENV', value: 'prod'),
+                                string(name: 'SOURCE_BUILD_URL', value: env.BUILD_URL ?: ''),
+                                string(name: 'SOURCE_COMMIT', value: gitCommit),
+                            ]
+                        )
+                        echo "Triggered ${GITOPS_UPDATE_JOB} with APP_NAME=${GITOPS_APP}, IMAGE_TAG=${env.BUILD_NUMBER}"
                     }
                 } else {
-                    echo "Skip GitOps tag update for ENV=${ENV_NAME}"
+                    echo "Skip GitOps update trigger for ENV=${ENV_NAME}"
                 }
             }
 
