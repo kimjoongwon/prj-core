@@ -6,9 +6,21 @@ const withBundleAnalyzer = bundleAnalyzer({
 	enabled: process.env.ANALYZE === "true",
 });
 
+const idpApiInternalUrl =
+	process.env.IDP_API_INTERNAL_URL ??
+	(process.env.NODE_ENV === "development"
+		? "http://localhost:3007"
+		: "http://idp-api-prod");
+
+const ignoreBuildErrors = process.env.NEXT_IGNORE_BUILD_ERRORS === "true";
+
 const nextConfig: NextConfig = {
 	// Docker 배포를 위한 standalone 출력 모드
 	output: "standalone",
+	// CI/Docker 빌드에서만 타입 오류를 무시하도록 토글
+	typescript: ignoreBuildErrors ? { ignoreBuildErrors: true } : undefined,
+	// QEMU 기반 amd64 크로스 빌드 시 worker 수를 낮춰 안정성 확보
+	experimental: ignoreBuildErrors ? { cpus: 1 } : undefined,
 	// Turbopack 모노레포 설정
 	turbopack: {
 		// 모노레포 루트 디렉토리 설정 (워크스페이스 패키지 해석용)
@@ -30,24 +42,24 @@ const nextConfig: NextConfig = {
 				// IDP 서버 API 프록시 (인증 플로우)
 				{
 					source: "/api/interaction/:path*",
-					destination: "http://localhost:3007/api/interaction/:path*",
+					destination: `${idpApiInternalUrl}/api/interaction/:path*`,
 				},
 				{
 					source: "/api/forgot-password",
-					destination: "http://localhost:3007/api/forgot-password",
+					destination: `${idpApiInternalUrl}/api/forgot-password`,
 				},
 				{
 					source: "/api/password-policy",
-					destination: "http://localhost:3007/api/password-policy",
+					destination: `${idpApiInternalUrl}/api/password-policy`,
 				},
 				{
 					source: "/api/reset-password/:path*",
-					destination: "http://localhost:3007/api/reset-password/:path*",
+					destination: `${idpApiInternalUrl}/api/reset-password/:path*`,
 				},
 				// Main 서버 API 프록시 (관리 콘솔)
 				{
 					source: "/api/v1/:path*",
-					destination: "http://localhost:3007/api/v1/:path*",
+					destination: `${idpApiInternalUrl}/api/v1/:path*`,
 				},
 			],
 		};
