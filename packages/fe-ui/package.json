@@ -113,6 +113,8 @@
     "vitest": "catalog:"
   },
   "dependencies": {
+    "@cocrepo/constant": "workspace:*",
+    "@cocrepo/toolkit": "workspace:*",
     "@react-aria/ssr": "^3.9.10",
     "frappe-gantt": "^1.2.2",
     "mermaid": "^11.12.3"

@@ -40,12 +40,12 @@
   "dependencies": {
     "@casl/ability": "^6.7.3",
     "@cocrepo/constant": "workspace:*",
+    "@cocrepo/toolkit": "workspace:*",
     "@cocrepo/type": "workspace:*"
   },
   "devDependencies": {
     "@casl/ability": "^6.7.1",
     "@casl/react": "^4.0.0",
-    "@cocrepo/toolkit": "workspace:*",
     "@heroui/react": "catalog:",
     "@tanstack/react-query": "catalog:",
     "@testing-library/jest-dom": "catalog:",

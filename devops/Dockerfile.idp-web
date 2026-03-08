@@ -20,10 +20,13 @@ FROM base AS builder
 
 WORKDIR /app
 COPY --from=setup /app/out/json/ ./
-RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --store-dir /pnpm/store --frozen-lockfile --prefer-offline
+# turbo prune output can retain stale importer metadata for excluded workspaces,
+# so Docker installs in the pruned tree must allow lockfile re-resolution.
+RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --store-dir /pnpm/store --no-frozen-lockfile --prefer-offline
 COPY --from=setup /app/out/full/ ./
 COPY turbo.json turbo.json
 RUN find apps/idp/web/src -name '*.e2e.ts' -delete
+RUN pnpm --filter @cocrepo/constant build && pnpm --filter @cocrepo/toolkit build
 ENV NEXT_IGNORE_BUILD_ERRORS=true
 RUN NODE_OPTIONS=${IDP_WEB_NODE_OPTIONS} pnpm --filter idp-web exec next build
 
