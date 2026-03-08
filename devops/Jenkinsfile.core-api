@@ -94,17 +94,17 @@ podTemplate(
                             set -euo pipefail
                             set +x
 
-                            rm -rf prj-devops-gitops
+                            rm -rf prj-devops
                             git clone --branch ${GITOPS_BRANCH} \\
                               "https://\${GITHUB_APP}:\${GITHUB_TOKEN}@github.com/kimjoongwon/prj-devops.git" \\
-                              prj-devops-gitops
+                              prj-devops
 
                             bash ./scripts/update-gitops-image-tag.sh \\
                               --app ${GITOPS_APP} \\
                               --tag ${env.BUILD_NUMBER} \\
                               --env prod \\
                               --repo-url "${GITOPS_REPO}" \\
-                              --workdir "\${PWD}/prj-devops-gitops" \\
+                              --workdir "\${PWD}/prj-devops" \\
                               --branch ${GITOPS_BRANCH} \\
                               --git-user-name "jenkins-bot" \\
                               --git-user-email "jenkins-bot@cocdev.co.kr" \\
