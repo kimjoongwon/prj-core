@@ -46,9 +46,11 @@ class WatchPackagesPlugin {
 }
 
 module.exports = function (options, webpack) {
+  const isWatchMode = Boolean(options.watch);
+
   return {
     ...options,
-    entry: ["webpack/hot/poll?100", options.entry],
+    entry: isWatchMode ? ["webpack/hot/poll?100", options.entry] : options.entry,
     externals: [
       function ({ request }, callback) {
         // 번들에 포함: @cocrepo workspace 패키지, HMR 클라이언트
@@ -68,12 +70,16 @@ module.exports = function (options, webpack) {
     ],
     plugins: [
       ...options.plugins,
-      new webpack.HotModuleReplacementPlugin(),
-      new RunScriptWebpackPlugin({
-        name: options.output.filename,
-        autoRestart: false,
-      }),
-      new WatchPackagesPlugin(),
+      ...(isWatchMode
+        ? [
+            new webpack.HotModuleReplacementPlugin(),
+            new RunScriptWebpackPlugin({
+              name: options.output.filename,
+              autoRestart: false,
+            }),
+            new WatchPackagesPlugin(),
+          ]
+        : []),
     ],
   };
 };

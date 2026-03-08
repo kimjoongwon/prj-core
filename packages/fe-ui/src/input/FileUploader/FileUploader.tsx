@@ -1,7 +1,14 @@
-import type { FileDto } from "@cocrepo/dto";
 import { Button, Card } from "@heroui/react";
 import { X } from "lucide-react";
 import { v4 } from "uuid";
+
+export interface FileDto {
+	id: string;
+	name: string;
+	url: string;
+	mimeType: string;
+	size: number;
+}
 
 export interface FileUploaderProps {
 	/** 라벨 텍스트 */

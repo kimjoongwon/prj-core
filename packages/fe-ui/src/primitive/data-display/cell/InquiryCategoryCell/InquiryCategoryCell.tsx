@@ -1,8 +1,8 @@
 import {
 	AlertCircle,
 	CreditCard,
+	Ellipsis,
 	HelpCircle,
-	MoreHorizontal,
 	Package,
 	RotateCcw,
 	Truck,
@@ -43,7 +43,7 @@ const CATEGORY_CONFIG: Record<
 		label: "불만/불편",
 		icon: <AlertCircle className="h-3.5 w-3.5" />,
 	},
-	OTHER: { label: "기타", icon: <MoreHorizontal className="h-3.5 w-3.5" /> },
+	OTHER: { label: "기타", icon: <Ellipsis className="h-3.5 w-3.5" /> },
 };
 
 /**

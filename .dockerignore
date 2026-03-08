@@ -4,6 +4,15 @@ node_modules
 **/node_modules
 # 빌드 결과물 제외 - Docker에서 재빌드
 dist
+**/dist
+**/.next
+**/.turbo
+**/coverage
+**/*.tsbuildinfo
+# 로컬 임시 파일/로그 제외
+.tmp
+.tmp-java
+*.log
 # Git 히스토리 제외 - 보안 및 이미지 크기 최적화
 .git
 # .gitignore

@@ -50,13 +50,15 @@ WORKDIR /app
 
 # 📦 Setup 단계에서 최적화된 파일 구조 복사
 # - /app/out/full/: Turbo prune으로 생성된 최적화된 프로젝트 구조
-COPY --from=setup /app/out/full/ ./
+COPY --from=setup /app/out/json/ ./
 
 # 🚀 종속성 설치 (캐시 마운트로 성능 최적화)
 # - mount=type=cache: PNPM 스토어를 캐시로 마운트하여 재빌드 시 속도 향상
 # - id=pnpm: 캐시 식별자
 # - target=/pnpm/store: PNPM 캐시 저장소 경로
 RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install
+
+COPY --from=setup /app/out/full/ ./
 
 # 📋 Turbo 설정 파일 복사
 COPY turbo.json turbo.json

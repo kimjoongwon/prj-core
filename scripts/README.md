@@ -98,21 +98,23 @@ node scripts/version-pkg.js @cocrepo/toolkit minor
 node scripts/analyze-bundle-size.js @cocrepo/db
 ```
 
-### 5. `podman-build.sh` - Podman 이미지 빌드 (선택형)
+### 5. `rancher-build.sh` - Rancher Desktop 이미지 파이프라인 (선택형)
 
-빌드할 대상을 실행 시 선택해 Podman 이미지를 생성합니다.
+빌드할 대상을 선택해 Rancher Desktop 이미지 파이프라인을 수행합니다.
+기본 컨테이너 CLI는 `docker`이고, 없으면 `nerdctl`을 사용합니다. 둘 다 PATH에 없으면 Rancher Desktop 번들 CLI를 자동 탐색합니다.
+기본 흐름은 `빌드 → 실행 검증 → 정리`입니다.
 
 **사용법:**
 
 ```bash
 # 대화형 선택 모드
-pnpm podman:build
+pnpm rancher:build
 
 # CLI 인자 모드 (이름)
-bash scripts/podman-build.sh server admin
+bash scripts/rancher-build.sh core-api admin-web
 
 # CLI 인자 모드 (번호)
-bash scripts/podman-build.sh 1 2
+bash scripts/rancher-build.sh 1 2
 ```
 
 **기본값/환경 변수:**
@@ -120,6 +122,14 @@ bash scripts/podman-build.sh 1 2
 - `ENV_NAME`: 기본 `stg`
 - `TAG` 또는 `IMAGE_TAG`: 기본 `local-<timestamp>`
 - `REGISTRY` 또는 `IMAGE_REGISTRY` 또는 `HARBOR_REGISTRY`: 기본 `harbor.cocdev.co.kr`
+- `CACHE_TAG`: 기본 `buildcache`
+- `CONTAINER_CLI`: 기본 `docker`, 미설치 시 `nerdctl`, 둘 다 없으면 Rancher Desktop 번들 CLI 자동 선택
+- `RUN_CHECK`: 기본 `true` (실행 검증)
+- `PUSH`: 기본 `false` (푸시 안 함)
+- `PUSH_CACHE_TAG`: 기본 `true` (`PUSH=true`일 때만 `CACHE_TAG`까지 푸시)
+- `PULL_CACHE`: 기본 `true` (빌드 전 `CACHE_TAG` pull 시도)
+- `CLEANUP`: 기본 `true` (임시 산출물/오래된 로그 정리)
+- `PRUNE_DANGLING_IMAGES`: 기본 `true` (dangling 정리 + `latest/buildcache` 유지)
 
 ## 🔄 워크플로우
 

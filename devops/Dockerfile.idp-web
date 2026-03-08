@@ -19,9 +19,9 @@ RUN turbo prune --scope=idp-web --docker
 FROM base AS builder
 
 WORKDIR /app
-COPY --from=setup /app/out/pnpm-lock.yaml pnpm-lock.yaml
-COPY --from=setup /app/out/full/ ./
+COPY --from=setup /app/out/json/ ./
 RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --store-dir /pnpm/store --frozen-lockfile --prefer-offline
+COPY --from=setup /app/out/full/ ./
 COPY turbo.json turbo.json
 RUN find apps/idp/web/src -name '*.e2e.ts' -delete
 ENV NEXT_IGNORE_BUILD_ERRORS=true

@@ -100,7 +100,7 @@ export class BottomTabStore {
 				result.push({
 					id: this._moreTabId,
 					label: "더보기",
-					icon: "MoreHorizontal",
+					icon: "Ellipsis",
 					hasSubMenu: true,
 				});
 			} else {

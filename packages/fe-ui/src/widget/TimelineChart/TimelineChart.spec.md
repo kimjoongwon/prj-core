@@ -43,12 +43,13 @@
 
 - [ ] 코드와 spec이 동일한 책임 범위를 유지함
 - [ ] 공개 계약(Props/메서드/반환값) 변경 시 동기화함
-- [ ] 의존성 변경 시 spec의 의존성 표를 갱신함
+- [x] 의존성 변경 시 spec의 의존성 표를 갱신함
 
 ## 변경 이력
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-03-08 | `TimelineChart`의 런타임 import와 일치하도록 `frappe-gantt`를 `@cocrepo/ui` 패키지 의존성으로 명시 | codex |
 | 2026-03-06 | 폴더 네이밍을 단수형(feature/input/layout/hook/style/type/util/widget/cell)으로 통일 | codex |
 | 2026-03-06 | src/components 레이어를 제거하고 경로를 src/* 기준으로 상향 | codex |
 | 2026-03-03 | 누락된 sidecar spec 신규 생성 | codex |

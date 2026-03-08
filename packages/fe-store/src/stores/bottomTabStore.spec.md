@@ -1,7 +1,7 @@
 # BottomTabStore 기획서
 
 > 생성일: 2026-02-18
-> 수정일: 2026-02-18
+> 수정일: 2026-03-08
 > 타입: store
 > 위치: packages/fe-store/src/stores/bottomTabStore.ts
 
@@ -82,3 +82,4 @@ bottomTabStore.closeSubMenu();            // SubMenuList 닫기
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
 | 2026-02-18 | 초기 생성 (역기획) | req-reverse-engineer |
+| 2026-03-08 | `more` 탭 아이콘을 alias `MoreHorizontal` 대신 canonical `Ellipsis`로 교체 | codex |

@@ -19,9 +19,9 @@ FROM base AS builder
 
 COPY .gitignore .gitignore
 WORKDIR /app
-COPY --from=setup /app/out/pnpm-lock.yaml pnpm-lock.yaml
-COPY --from=setup /app/out/full/ ./
+COPY --from=setup /app/out/json/ ./
 RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --store-dir /pnpm/store --frozen-lockfile --prefer-offline
+COPY --from=setup /app/out/full/ ./
 COPY turbo.json turbo.json
 # idp-api는 nest webpack 설정에 RunScriptWebpackPlugin이 있어 build 단계에서 프로세스가 유지될 수 있음
 # 의존 워크스페이스만 turbo로 빌드하고, 앱 자체는 webpack 비활성 빌드로 종료 가능하게 처리

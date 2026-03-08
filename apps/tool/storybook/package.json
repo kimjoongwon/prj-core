@@ -4,6 +4,7 @@
   "type": "module",
   "main": "index.js",
   "scripts": {
+    "build": "storybook build",
     "test": "vitest --config vitest.config.js --passWithNoTests",
     "test:ui": "vitest --ui",
     "test:run": "vitest run",

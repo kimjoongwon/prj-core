@@ -278,7 +278,7 @@ export const ADMIN_NAV_ITEMS: NavItemConfig[] = [
 	{
 		id: "inquiries",
 		label: "문의 관리",
-		icon: "MessageCircleQuestion",
+		icon: "MessageCircleQuestionMark",
 		path: ADMIN_PATHS.INQUIRIES,
 		subject: ADMIN_SUBJECTS.MENU_INQUIRIES,
 		children: [

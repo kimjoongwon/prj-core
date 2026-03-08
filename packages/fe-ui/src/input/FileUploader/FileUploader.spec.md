@@ -22,3 +22,4 @@
 | 2026-03-06 | 폴더 네이밍을 단수형(feature/input/layout/hook/style/type/util/widget/cell)으로 통일 | codex |
 | 2026-03-06 | src/components 레이어를 제거하고 경로를 src/* 기준으로 상향 | codex |
 | 2026-03-03 | 누락된 sidecar spec 신규 생성 | codex |
+| 2026-03-08 | FileUploader.tsx의 `FileDto` 타입 참조를 @cocrepo/dto에서 로컬 타입으로 변경해 idp-web 빌드 타입 에러 해결 | codex |

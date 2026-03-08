@@ -149,7 +149,7 @@ Admin
 | exercises | 운동 관리 | Dumbbell | - | menu:exercises | 2 |
 | templates | 템플릿 | Mail | - | menu:templates | 1 |
 | assets | 에셋 | Images | /assets | menu:assets | 1 |
-| inquiries | 문의 관리 | MessageCircleQuestion | /inquiries | menu:inquiries | 1 |
+| inquiries | 문의 관리 | MessageCircleQuestionMark | /inquiries | menu:inquiries | 1 |
 | roles | 권한 관리 | Shield | - | menu:roles | 6 |
 
 ## BottomTab 구성 (BOTTOM_TAB_IDS)
@@ -172,7 +172,7 @@ Admin
 | 운동 관리 | Dumbbell | 덤벨 |
 | 템플릿 | Mail | 메일 |
 | 에셋 | Images | 겹쳐진 이미지 |
-| 문의 관리 | MessageCircleQuestion | 말풍선 + 물음표 |
+| 문의 관리 | MessageCircleQuestionMark | 말풍선 + 물음표 |
 | 권한 관리 | Shield | 방패 |
 
 ## 비즈니스 규칙
@@ -205,3 +205,4 @@ Admin
 | 2026-02-26 | 문의를 BottomTab에 추가 (users, inquiries 순서) | orch-screen-planner |
 | 2026-03-01 | 문의 수정 경로 `INQUIRIES_EDIT` 추가 | codex |
 | 2026-03-04 | 에셋 메뉴/경로/Subject 추가, Sidebar 노출 | fe-menu-builder |
+| 2026-03-08 | Lucide registry 경고 제거를 위해 문의 메뉴 아이콘명을 canonical 이름으로 교체 | codex |
