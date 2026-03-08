@@ -98,6 +98,29 @@ node scripts/version-pkg.js @cocrepo/toolkit minor
 node scripts/analyze-bundle-size.js @cocrepo/db
 ```
 
+### 5. `podman-build.sh` - Podman 이미지 빌드 (선택형)
+
+빌드할 대상을 실행 시 선택해 Podman 이미지를 생성합니다.
+
+**사용법:**
+
+```bash
+# 대화형 선택 모드
+pnpm podman:build
+
+# CLI 인자 모드 (이름)
+bash scripts/podman-build.sh server admin
+
+# CLI 인자 모드 (번호)
+bash scripts/podman-build.sh 1 2
+```
+
+**기본값/환경 변수:**
+
+- `ENV_NAME`: 기본 `stg`
+- `TAG` 또는 `IMAGE_TAG`: 기본 `local-<timestamp>`
+- `REGISTRY` 또는 `IMAGE_REGISTRY` 또는 `HARBOR_REGISTRY`: 기본 `harbor.cocdev.co.kr`
+
 ## 🔄 워크플로우
 
 ### 전체 패키지 릴리즈 워크플로우

@@ -14,6 +14,7 @@
     "clean:all": "node scripts/clean-all.js",
     "type-check": "turbo type-check",
     "start": "bash scripts/start.sh",
+    "podman:build": "bash scripts/podman-build.sh",
     "wt": "node scripts/wt.js",
     "wt:init": "node scripts/wt.js init",
     "wt:new": "node scripts/wt.js new",
