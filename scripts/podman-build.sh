@@ -45,8 +45,8 @@ add_target() {
 resolve_target() {
   local value="$1"
   case "$value" in
-    1|server|plate-server) echo "server" ;;
-    2|admin|plate-admin) echo "admin" ;;
+    1|core-api) echo "core-api" ;;
+    2|admin-web) echo "admin-web" ;;
     3|idp-api) echo "idp-api" ;;
     4|idp-web) echo "idp-web" ;;
     *) return 1 ;;
@@ -56,8 +56,8 @@ resolve_target() {
 get_dockerfile() {
   local target="$1"
   case "$target" in
-    server) echo "devops/Dockerfile.server" ;;
-    admin) echo "devops/Dockerfile.admin" ;;
+    core-api) echo "devops/Dockerfile.core-api" ;;
+    admin-web) echo "devops/Dockerfile.admin-web" ;;
     idp-api) echo "devops/Dockerfile.idp-api" ;;
     idp-web) echo "devops/Dockerfile.idp-web" ;;
     *) return 1 ;;
@@ -67,8 +67,8 @@ get_dockerfile() {
 get_image_name() {
   local target="$1"
   case "$target" in
-    server) echo "plate-server" ;;
-    admin) echo "plate-admin" ;;
+    core-api) echo "core-api" ;;
+    admin-web) echo "admin-web" ;;
     idp-api) echo "idp-api" ;;
     idp-web) echo "idp-web" ;;
     *) return 1 ;;
@@ -93,8 +93,8 @@ if [[ ${#ARGS[@]} -eq 0 ]]; then
   echo ""
   echo -e "${BOLD}📦 Podman 이미지 빌드${RESET}"
   echo ""
-  echo -e "  ${CYAN}1${RESET}) server    ${DIM}plate-server${RESET}"
-  echo -e "  ${CYAN}2${RESET}) admin     ${DIM}plate-admin${RESET}"
+  echo -e "  ${CYAN}1${RESET}) core-api  ${DIM}core-api${RESET}"
+  echo -e "  ${CYAN}2${RESET}) admin-web ${DIM}admin-web${RESET}"
   echo -e "  ${CYAN}3${RESET}) idp-api   ${DIM}idp-api${RESET}"
   echo -e "  ${CYAN}4${RESET}) idp-web   ${DIM}idp-web${RESET}"
   echo ""

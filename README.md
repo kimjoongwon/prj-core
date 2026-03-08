@@ -527,8 +527,8 @@ Tenant (최상위 조직)
 pnpm build
 
 # 도커 이미지 빌드
-docker build -t prj-core-server:latest -f devops/Dockerfile.server .
-docker build -t prj-core-admin:latest -f devops/Dockerfile.admin .
+docker build -t prj-core-core-api:latest -f devops/Dockerfile.core-api .
+docker build -t prj-core-admin-web:latest -f devops/Dockerfile.admin-web .
 ```
 
 ### Kubernetes 배포
