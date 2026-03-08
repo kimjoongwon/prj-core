@@ -4,13 +4,21 @@ import {
 	QueryResolver,
 	AcceptLanguageResolver,
 } from "nestjs-i18n";
+import { existsSync } from "node:fs";
 import { join, resolve } from "node:path";
 import { TranslationService } from "./translation.service";
 
-// webpack 번들 환경에서는 __dirname이 원본 소스 위치가 아닌 출력 파일 위치를 가리킴
-// process.cwd() 기반으로 패키지 경로를 해석하면 tsc/webpack 모두 호환
-// apps/core/api 또는 apps/idp/api에서 packages/be-service까지: ../../../packages/be-service
-const SERVICE_PKG_ROOT = resolve(process.cwd(), "../../../packages/be-service");
+// 실행 CWD가 워크스페이스 루트(/app) 또는 앱 경로(/app/apps/*/api)일 수 있어
+// 존재하는 경로를 우선 선택한다.
+const SERVICE_PKG_ROOT_CANDIDATES = [
+	resolve(process.cwd(), "packages/be-service"),
+	resolve(process.cwd(), "../../../packages/be-service"),
+];
+
+const SERVICE_PKG_ROOT =
+	SERVICE_PKG_ROOT_CANDIDATES.find((candidate) =>
+		existsSync(join(candidate, "src/i18n/locales")),
+	) ?? SERVICE_PKG_ROOT_CANDIDATES[0];
 
 @Module({
 	imports: [
