@@ -16,6 +16,10 @@ fail() {
   exit 1
 }
 
+sanitize_git_output() {
+  sed -E 's#https://[^:/@]+:[^@]+@github\.com#https://***:***@github.com#g'
+}
+
 while [[ $# -gt 0 ]]; do
   case "$1" in
     --app)
@@ -150,9 +154,28 @@ fi
 git -C "${REPO_DIR}" commit -m "chore(gitops): bump ${APP_NAME} image tag to ${IMAGE_TAG}" >/dev/null
 
 for attempt in $(seq 0 "${PUSH_RETRIES}"); do
-  if git -C "${REPO_DIR}" push origin "${TARGET_BRANCH}" >/dev/null 2>&1; then
+  if push_output="$(git -C "${REPO_DIR}" push origin "${TARGET_BRANCH}" 2>&1)"; then
     echo "[update-gitops-image-tag] Pushed ${APP_NAME}:${IMAGE_TAG} to ${TARGET_BRANCH}"
     exit 0
+  fi
+
+  safe_push_output="$(printf '%s\n' "${push_output}" | sanitize_git_output)"
+
+  if printf '%s\n' "${push_output}" | grep -Eiq "non-fast-forward|failed to push some refs|fetch first|stale info"; then
+    echo "[update-gitops-image-tag] Push rejected by remote update. Attempting rebase..." >&2
+    if ! git -C "${REPO_DIR}" fetch origin "${TARGET_BRANCH}" >/dev/null 2>&1; then
+      fail "Failed to fetch origin/${TARGET_BRANCH} before retry. Last push error: ${safe_push_output}"
+    fi
+
+    if ! rebase_output="$(git -C "${REPO_DIR}" rebase "origin/${TARGET_BRANCH}" 2>&1)"; then
+      safe_rebase_output="$(printf '%s\n' "${rebase_output}" | sanitize_git_output)"
+      git -C "${REPO_DIR}" rebase --abort >/dev/null 2>&1 || true
+      fail "Rebase failed while resolving push race. Rebase output: ${safe_rebase_output}"
+    fi
+  elif printf '%s\n' "${push_output}" | grep -Eiq "permission denied|access denied|not authorized|forbidden|403|GH006|protected branch|insufficient"; then
+    fail "Push denied by credentials or branch policy. Remote output: ${safe_push_output}"
+  else
+    echo "[update-gitops-image-tag] Push failed (attempt $((attempt + 1))/$((PUSH_RETRIES + 1))). Remote output: ${safe_push_output}" >&2
   fi
 
   if [[ "${attempt}" -lt "${PUSH_RETRIES}" ]]; then
