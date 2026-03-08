@@ -82,7 +82,7 @@ podTemplate(
             stage('Update GitOps Tag') {
                 if (ENV_NAME == 'prod') {
                     withCredentials([
-                        string(credentialsId: 'github-app-credential', variable: 'GITHUB_TOKEN')
+                        usernamePassword(credentialsId: 'github-app-credential', usernameVariable: 'GITHUB_APP', passwordVariable: 'GITHUB_TOKEN')
                     ]) {
                         sh """
                             set -euo pipefail
@@ -90,7 +90,7 @@ podTemplate(
 
                             rm -rf prj-devops-gitops
                             git clone --branch ${GITOPS_BRANCH} \\
-                              "https://\${GITHUB_TOKEN}@github.com/kimjoongwon/prj-devops.git" \\
+                              "https://\${GITHUB_APP}:\${GITHUB_TOKEN}@github.com/kimjoongwon/prj-devops.git" \\
                               prj-devops-gitops
 
                             bash prj-devops-gitops/scripts/jenkins/update-gitops-image-tag.sh \\
