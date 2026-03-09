@@ -104,8 +104,11 @@ VIEW (조회)
 
 | 레이어 | 파일 | 설명 |
 |--------|------|------|
-| Prisma | `packages/be-prisma/schema/grant.prisma` | Subject, Action, Ability, Grant 모델 |
-| Prisma | `packages/be-prisma/schema/role.prisma` | Role, RoleAssociation, RoleClassification |
+| Prisma | `packages/be-prisma/schema/access-control/subject.prisma` | Subject 모델 |
+| Prisma | `packages/be-prisma/schema/access-control/action.prisma` | Action 모델 |
+| Prisma | `packages/be-prisma/schema/access-control/ability.prisma` | Ability 모델 |
+| Prisma | `packages/be-prisma/schema/access-control/grant.prisma` | Grant 모델 |
+| Prisma | `packages/be-prisma/schema/access-control/role.prisma` | Role, RoleAssociation, RoleClassification |
 | Entity | `packages/be-entity/src/ability.entity.ts` | Ability 도메인 엔티티 |
 | Entity | `packages/be-entity/src/grant.entity.ts` | Grant 도메인 엔티티 |
 | Entity | `packages/be-entity/src/role.entity.ts` | Role 도메인 엔티티 |

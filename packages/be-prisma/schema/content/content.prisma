@@ -1,0 +1,57 @@
+// ============================================================================
+// Content Domain - 콘텐츠 도메인
+// ============================================================================
+
+// @schema-type: DETAIL
+// @description: Content에 발행 맥락을 부여하는 1:1 상세 모델
+// @relation-pattern: one-to-one
+// @ownership: dependent
+// @scope: space
+// @extends: Content
+/// @displayName 게시물
+model Post {
+  id        String    @id @default(uuid())
+  createdAt DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt DateTime? @updatedAt @map("updated_at") @db.Timestamptz(6)
+  removedAt DateTime? @map("removed_at") @db.Timestamptz(6)
+  contentId String    @unique @map("content_id")
+  content   Content   @relation(fields: [contentId], references: [id])
+
+  @@map("posts")
+}
+
+// @schema-type: ROOT
+// @aggregate-root: true
+// @description: 사용자 생성 콘텐츠
+// @ownership: independent
+// @scope: space
+/// @displayName 콘텐츠
+model Content {
+  id          String    @id @default(uuid())
+  createdAt   DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt   DateTime? @updatedAt @map("updated_at") @db.Timestamptz(6)
+  removedAt   DateTime? @map("removed_at") @db.Timestamptz(6)
+  /// @displayName 제목
+  title       String?
+  /// @displayName 설명
+  description String?
+  /// @displayName 유형
+  type        TextTypes @default(Editor)
+  /// @displayName 본문
+  text        String?   @db.VarChar(1000)
+  fileId      String?   @map("file_id")
+  spaceId     String    @map("space_id")
+  creatorId   String?   @map("creator_id")
+  space       Space     @relation(fields: [spaceId], references: [id])
+  creator     User?     @relation(fields: [creatorId], references: [id])
+  post        Post?
+
+  @@index([spaceId])
+  @@map("contents")
+}
+
+enum TextTypes {
+  Editor
+  Input
+  Textarea
+}

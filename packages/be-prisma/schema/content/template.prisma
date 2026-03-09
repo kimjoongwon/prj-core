@@ -1,0 +1,82 @@
+// ============================================================================
+// Template Domain - 메시지 템플릿 도메인
+// ============================================================================
+//
+// EMAIL, SMS, PUSH 등 다양한 채널의 메시지 템플릿을 관리합니다.
+// 템플릿은 변수(Variable)를 포함할 수 있으며, 발송 시 치환됩니다.
+//
+// 관계 구조:
+//   Template (ROOT)
+//     │
+//     └─── TemplateVariable (CHILD, 1:N)
+//
+// ============================================================================
+
+enum TemplateType {
+  EMAIL
+  SMS
+  PUSH
+}
+
+// @schema-type: ROOT
+// @aggregate-root: true
+// @description: 독립적으로 존재하는 메시지 템플릿 핵심 도메인 객체
+// @ownership: independent
+// @scope: global
+// @extended-by: TemplateVariable
+/// @displayName 메시지 템플릿
+model Template {
+  id          String             @id @default(uuid())
+  createdAt   DateTime           @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt   DateTime?          @updatedAt @map("updated_at") @db.Timestamptz(6)
+  removedAt   DateTime?          @map("removed_at") @db.Timestamptz(6)
+  /// @displayName 고유 코드
+  code        String
+  /// @displayName 템플릿 이름
+  name        String
+  /// @displayName 템플릿 유형
+  type        TemplateType
+  /// @displayName 제목
+  subject     String?
+  /// @displayName 본문
+  content     String
+  /// @displayName 설명
+  description String?
+  /// @displayName 활성 상태
+  isActive    Boolean            @default(true) @map("is_active")
+  /// @displayName 변수 목록
+  variables   TemplateVariable[]
+
+  @@index([code])
+  @@index([type])
+  @@map("templates")
+}
+
+// @schema-type: CHILD
+// @description: Template에 종속되어 치환 변수를 관리하는 1:N 하위 모델
+// @relation-pattern: one-to-many
+// @ownership: dependent
+// @scope: global
+// @extends: Template
+// @extension-fields: name, description, defaultValue, isRequired
+/// @displayName 템플릿 변수
+model TemplateVariable {
+  id           String    @id @default(uuid())
+  createdAt    DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt    DateTime? @updatedAt @map("updated_at") @db.Timestamptz(6)
+  /// @displayName 변수명
+  name         String
+  /// @displayName 변수 설명
+  description  String?
+  /// @displayName 기본값
+  defaultValue String?   @map("default_value")
+  /// @displayName 필수 여부
+  isRequired   Boolean   @default(false) @map("is_required")
+  /// @displayName 템플릿 ID
+  templateId   String    @map("template_id")
+  /// @displayName 템플릿
+  template     Template  @relation(fields: [templateId], references: [id], onDelete: Cascade)
+
+  @@unique([templateId, name])
+  @@map("template_variables")
+}

@@ -1,0 +1,155 @@
+// ============================================================================
+// User Domain - 사용자 도메인
+// ============================================================================
+//
+// User는 시스템의 핵심 사용자 엔티티입니다.
+// Profile을 통해 추가 정보가 확장되고, Tenant를 통해 Space와 Role에 연결됩니다.
+// Grant를 통해 사용자별 예외 권한(Ability)을 부여받을 수 있습니다.
+//
+// 관계 구조:
+//   User (ROOT)
+//     │
+//     ├─── Profile (CHILD: nickname, avatar 등)
+//     ├─── UserClassification ─── Category (분류)
+//     ├─── UserAssociation ─── Group (그룹핑)
+//     ├─── Grant ─── Ability (사용자별 예외 권한)
+//     ├─── Tenant (JOIN: User + Space + Role)
+//     ├─── PasswordHistory (비밀번호 재사용 방지)
+//     └─── AuthAuditLog (인증 감사 로그)
+//
+// 데이터 관계 개념:
+//   - Tenant: User가 접근 가능한 Space + Role 목록 (권한/자격)
+//   - 현재 작업 중인 Space는 클라이언트에서 관리 (x-space-id 헤더)
+//
+// ============================================================================
+
+// @schema-type: ROOT
+// @aggregate-root: true
+// @description: 독립적으로 존재하는 핵심 사용자 도메인 객체
+// @ownership: independent
+// @scope: tenant
+// @extended-by: Profile
+/// @displayName 사용자
+model User {
+  id                  String              @id @default(uuid())
+  updatedAt           DateTime?           @updatedAt @map("updated_at") @db.Timestamptz(6)
+  createdAt           DateTime            @default(now()) @map("created_at") @db.Timestamptz(6)
+  removedAt           DateTime?           @map("removed_at") @db.Timestamptz(6)
+  /// @displayName 전화번호
+  phone               String              @unique
+  /// @displayName 이름
+  name                String              @unique
+  /// @displayName 이메일
+  email               String              @unique
+  /// @displayName 비밀번호
+  password            String
+  /// @displayName 로그인 실패 횟수
+  failedLoginAttempts Int                 @default(0) @map("failed_login_attempts")
+  /// @displayName 잠금 해제 시각
+  lockedUntil         DateTime?           @map("locked_until") @db.Timestamptz(6)
+  /// @displayName 영구 잠금 여부
+  isPermanentlyLocked Boolean             @default(false) @map("is_permanently_locked")
+  /// @displayName 비밀번호 변경 필요
+  mustChangePassword  Boolean             @default(false) @map("must_change_password")
+  /// @displayName 비밀번호 변경일
+  passwordChangedAt   DateTime?           @map("password_changed_at") @db.Timestamptz(6)
+  /// @displayName 마지막 로그인 시각
+  lastLoginAt         DateTime?           @map("last_login_at") @db.Timestamptz(6)
+  /// @displayName 마지막 로그인 IP
+  lastLoginIp         String?             @map("last_login_ip")
+  /// @displayName 활성 상태
+  isActive            Boolean             @default(true) @map("is_active")
+  profiles            Profile[]
+  tenants             Tenant[]
+  classification      UserClassification?
+  associations        UserAssociation[]
+  passwordHistory     PasswordHistory[]
+  authAuditLogs       AuthAuditLog[]
+  // Creator 관계
+  createdCategories   Category[]
+  createdGroups       Group[]
+  createdContents     Content[]
+  createdTimelines    Timeline[]
+  createdTasks        Task[]
+  createdSafeWallets  SafeWallet[]
+  createdRoutines     Routine[]
+  // Asset 도메인 Creator 관계
+  createdAssets       Asset[]
+  createdFolders      Folder[]
+  createdAlbums       Album[]
+  // Inquiry 도메인
+  customerInquiries   Inquiry[]           @relation("InquiryCustomer")
+  assignedInquiries   Inquiry[]           @relation("InquiryAssignee")
+  inquiryMessages     InquiryMessage[]
+  inquiryParticipants InquiryParticipant[]
+  createdThreads      InquiryThread[]
+
+  @@map("users")
+}
+
+// @schema-type: JOIN
+// @description: User와 Category를 연결하는 분류 링크
+// @relation-pattern: one-to-many
+// @ownership: dependent
+// @scope: tenant
+// @join-role: simple-link
+// @connects: User ─── Category
+/// @displayName 사용자 분류
+model UserClassification {
+  id         String    @id @default(uuid())
+  categoryId String    @map("category_id")
+  userId     String    @unique @map("user_id")
+  createdAt  DateTime  @default(now()) @map("created_at")
+  updatedAt  DateTime? @updatedAt @map("updated_at") @db.Timestamptz(6)
+  removedAt  DateTime? @map("removed_at") @db.Timestamptz(6)
+  category   Category  @relation(fields: [categoryId], references: [id])
+  user       User      @relation(fields: [userId], references: [id])
+
+  @@unique([categoryId, userId])
+  @@map("user_classifications")
+}
+
+// @schema-type: JOIN
+// @description: User와 Group을 연결하는 그룹 링크
+// @relation-pattern: many-to-many
+// @ownership: dependent
+// @scope: tenant
+// @join-role: simple-link
+// @connects: User ─── Group
+/// @displayName 사용자 그룹
+model UserAssociation {
+  id        String    @id @default(uuid())
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime? @updatedAt @map("updated_at") @db.Timestamptz(6)
+  removedAt DateTime? @map("removed_at") @db.Timestamptz(6)
+  userId    String    @map("user_id")
+  groupId   String    @map("group_id")
+  group     Group     @relation(fields: [groupId], references: [id])
+  user      User      @relation(fields: [userId], references: [id])
+
+  @@map("user_associations")
+}
+
+// @schema-type: CHILD
+// @description: User에 종속되어 프로필 정보를 관리하는 1:N 하위 모델
+// @relation-pattern: one-to-many
+// @ownership: dependent
+// @scope: user
+// @extends: User
+// @extension-fields: name, nickname, avatarFileId
+/// @displayName 프로필
+model Profile {
+  id           String    @id @default(uuid())
+  createdAt    DateTime  @default(now()) @map("created_at")
+  updatedAt    DateTime? @updatedAt @map("updated_at") @db.Timestamptz(6)
+  removedAt    DateTime? @map("removed_at") @db.Timestamptz(6)
+  /// @displayName 이름
+  name         String
+  /// @displayName 닉네임
+  nickname     String    @unique
+  userId       String    @map("user_id")
+  avatarFileId String?   @map("avatar_file_id")
+  user         User      @relation(fields: [userId], references: [id])
+
+  @@map("profiles")
+}

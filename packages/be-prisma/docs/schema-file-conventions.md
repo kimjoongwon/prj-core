@@ -1,85 +1,102 @@
-# Prisma Schema File Conventions (Strict)
+# Prisma Schema File Conventions
 
 ## 목적
 
-`packages/be-prisma/schema` 분할 규칙을 Aggregate Root 기준으로 고정하고, 자동 검증으로 예외 없는 운영을 보장합니다.
+`packages/be-prisma/schema`를 도메인 폴더 기준으로 분할하고, 각 파일의 대표 모델과 선언 소유권을 자동 검증합니다.
 
 ## 절대 기준
 
-1. `_base.prisma`는 `generator`/`datasource`만 포함합니다.
-2. 모델/enum은 단일 파일에만 선언합니다.
-3. 각 파일은 Aggregate Root를 정확히 1개만 가집니다.
-4. 선언 소유권은 아래 매트릭스를 따릅니다.
-5. enum은 실제 사용처가 있어야 합니다(미사용 enum 금지).
-6. 주석 표준은 `@displayName`만 허용합니다(`@DisplayName`, `@displayname` 금지).
+1. `_base.prisma`는 루트에 두고 `generator`/`datasource` 및 공통 메타데이터 규칙만 정의합니다.
+2. 나머지 `.prisma` 파일은 도메인 폴더(`access-control/`, `identity/`, `asset/` 등) 아래에 둡니다.
+3. 모델/enum은 단일 파일에만 선언합니다.
+4. 각 파일은 `_base.prisma`를 제외하고 `@aggregate-root: true` 모델을 정확히 1개만 가집니다.
+5. `@aggregate-root: true`는 DDD 엄밀 의미보다 "해당 파일의 대표 소유 모델(anchor model)"을 나타내는 운영 태그입니다.
+6. 선언 소유권은 아래 매트릭스를 따릅니다.
+7. enum은 실제 사용처가 있어야 합니다(미사용 enum 금지).
+8. 주석 표준은 `@displayName`만 허용합니다(`@DisplayName`, `@displayname` 금지).
 
-## 파일별 Aggregate Root
+## 도메인 폴더 구조
 
-| 파일 | Aggregate Root |
-|------|----------------|
-| `category.prisma` | `Category` |
-| `group.prisma` | `Group` |
-| `tenancy.prisma` | `Tenant` |
-| `content.prisma` | `Content` |
-| `security-policy.prisma` | `SecurityPolicy` |
-| `whitelist-entry.prisma` | `WhitelistEntry` |
-| `auth-audit.prisma` | `AuthAuditLog` |
-| `password-history.prisma` | `PasswordHistory` |
-| `subject.prisma` | `Subject` |
-| `action.prisma` | `Action` |
-| `ability.prisma` | `Ability` |
-| `grant.prisma` | `Grant` |
-| `inquiry.prisma` | `Inquiry` |
-| `inquiry-thread.prisma` | `InquiryThread` |
-| `inquiry-ai.prisma` | `AIAgentLog` |
-| `oidc-client.prisma` | `OidcClient` |
-| `oidc-model.prisma` | `OidcModel` |
-| `role.prisma` | `Role` |
-| `safe.prisma` | `SafeWallet` |
-| `space.prisma` | `Space` |
-| `timeline.prisma` | `Timeline` |
-| `routine.prisma` | `Routine` |
-| `task.prisma` | `Task` |
-| `template.prisma` | `Template` |
-| `translation.prisma` | `Translation` |
-| `user.prisma` | `User` |
-| `asset.prisma` | `Asset` |
-| `folder.prisma` | `Folder` |
-| `album.prisma` | `Album` |
+| 도메인 폴더 | 설명 |
+|-------------|------|
+| `access-control/` | Subject/Action/Ability/Grant/Role |
+| `asset/` | Asset/Folder/Album |
+| `auth/` | 감사 로그, 비밀번호 이력, 정책, 화이트리스트 |
+| `content/` | Content/Template/Translation |
+| `identity/` | User/Space/Tenant |
+| `inquiry/` | Inquiry/Thread/AI 로그 |
+| `oidc/` | OIDC client/model |
+| `scheduling/` | Timeline/Routine/Task |
+| `taxonomy/` | Category/Group |
+| `wallet/` | SafeWallet |
+
+## 파일별 Aggregate Root Marker
+
+| 파일 | `@aggregate-root: true` 모델 |
+|------|------------------------------|
+| `access-control/ability.prisma` | `Ability` |
+| `access-control/action.prisma` | `Action` |
+| `access-control/grant.prisma` | `Grant` |
+| `access-control/role.prisma` | `Role` |
+| `access-control/subject.prisma` | `Subject` |
+| `asset/album.prisma` | `Album` |
+| `asset/asset.prisma` | `Asset` |
+| `asset/folder.prisma` | `Folder` |
+| `auth/auth-audit.prisma` | `AuthAuditLog` |
+| `auth/password-history.prisma` | `PasswordHistory` |
+| `auth/security-policy.prisma` | `SecurityPolicy` |
+| `auth/whitelist-entry.prisma` | `WhitelistEntry` |
+| `content/content.prisma` | `Content` |
+| `content/template.prisma` | `Template` |
+| `content/translation.prisma` | `Translation` |
+| `identity/space.prisma` | `Space` |
+| `identity/tenancy.prisma` | `Tenant` |
+| `identity/user.prisma` | `User` |
+| `inquiry/inquiry-ai.prisma` | `AIAgentLog` |
+| `inquiry/inquiry-thread.prisma` | `InquiryThread` |
+| `inquiry/inquiry.prisma` | `Inquiry` |
+| `oidc/oidc-client.prisma` | `OidcClient` |
+| `oidc/oidc-model.prisma` | `OidcModel` |
+| `scheduling/routine.prisma` | `Routine` |
+| `scheduling/task.prisma` | `Task` |
+| `scheduling/timeline.prisma` | `Timeline` |
+| `taxonomy/category.prisma` | `Category` |
+| `taxonomy/group.prisma` | `Group` |
+| `wallet/safe.prisma` | `SafeWallet` |
 
 ## 선언 소유권 매트릭스
 
 | 파일 | 소유 모델/enum |
 |------|----------------|
-| `category.prisma` | `Category`, `CategoryTypes` |
-| `group.prisma` | `Group`, `GroupTypes` |
-| `tenancy.prisma` | `Tenant`, `Assignment` |
-| `content.prisma` | `Post`, `Content`, `TextTypes` |
-| `security-policy.prisma` | `SecurityPolicy` |
-| `whitelist-entry.prisma` | `WhitelistType`, `WhitelistEntry` |
-| `auth-audit.prisma` | `AuthAuditLog`, `AuthAuditResult` |
-| `password-history.prisma` | `PasswordHistory` |
-| `subject.prisma` | `Subject` |
-| `action.prisma` | `Action` |
-| `ability.prisma` | `Ability` |
-| `grant.prisma` | `Grant` |
-| `inquiry.prisma` | `Inquiry`, `InquiryTag`, `SentimentAnalysis`, `InquiryCategory`, `InquiryChannel`, `InquiryStatus`, `InquiryPriority`, `InquirySource`, `SentimentType` |
-| `inquiry-thread.prisma` | `InquiryThread`, `InquiryMessage`, `InquiryParticipant`, `InquiryAttachment`, `InquiryParticipantRole`, `SenderType`, `ThreadStatus`, `MessageContentType`, `AttachmentFileType` |
-| `inquiry-ai.prisma` | `AIAgentLog`, `AIAgentAction` |
-| `oidc-client.prisma` | `OidcClient` |
-| `oidc-model.prisma` | `OidcModel` |
-| `role.prisma` | `Role`, `RoleAssociation`, `RoleClassification` |
-| `safe.prisma` | `SafeWallet`, `SafeTransaction`, `SafeConfirmation` |
-| `space.prisma` | `Space`, `SpaceClassification`, `SpaceAssociation`, `Ground` |
-| `timeline.prisma` | `Timeline`, `Session`, `Program`, `SessionTypes`, `RepeatCycleTypes`, `RecurringDayOfWeek` |
-| `routine.prisma` | `Routine`, `Activity` |
-| `task.prisma` | `Task`, `Exercise` |
-| `template.prisma` | `Template`, `TemplateVariable`, `TemplateType` |
-| `translation.prisma` | `Translation`, `LanguageCode` |
-| `user.prisma` | `User`, `UserClassification`, `UserAssociation`, `Profile` |
-| `asset.prisma` | `Asset`, `Image`, `Video`, `Document`, `Derivative`, `AssetKind`, `AssetStatus`, `DerivativeKind` |
-| `folder.prisma` | `Folder` |
-| `album.prisma` | `Album`, `AlbumEntry` |
+| `access-control/ability.prisma` | `Ability` |
+| `access-control/action.prisma` | `Action` |
+| `access-control/grant.prisma` | `Grant` |
+| `access-control/role.prisma` | `Role`, `RoleAssociation`, `RoleClassification` |
+| `access-control/subject.prisma` | `Subject` |
+| `asset/album.prisma` | `Album`, `AlbumEntry` |
+| `asset/asset.prisma` | `Asset`, `Image`, `Video`, `Document`, `Derivative`, `AssetKind`, `AssetStatus`, `DerivativeKind` |
+| `asset/folder.prisma` | `Folder` |
+| `auth/auth-audit.prisma` | `AuthAuditLog`, `AuthAuditResult` |
+| `auth/password-history.prisma` | `PasswordHistory` |
+| `auth/security-policy.prisma` | `SecurityPolicy` |
+| `auth/whitelist-entry.prisma` | `WhitelistType`, `WhitelistEntry` |
+| `content/content.prisma` | `Post`, `Content`, `TextTypes` |
+| `content/template.prisma` | `Template`, `TemplateVariable`, `TemplateType` |
+| `content/translation.prisma` | `Translation`, `LanguageCode` |
+| `identity/space.prisma` | `Space`, `SpaceClassification`, `SpaceAssociation`, `Ground` |
+| `identity/tenancy.prisma` | `Tenant`, `Assignment` |
+| `identity/user.prisma` | `User`, `UserClassification`, `UserAssociation`, `Profile` |
+| `inquiry/inquiry-ai.prisma` | `AIAgentLog`, `AIAgentAction` |
+| `inquiry/inquiry-thread.prisma` | `InquiryThread`, `InquiryMessage`, `InquiryParticipant`, `InquiryAttachment`, `InquiryParticipantRole`, `SenderType`, `ThreadStatus`, `MessageContentType`, `AttachmentFileType` |
+| `inquiry/inquiry.prisma` | `Inquiry`, `InquiryTag`, `SentimentAnalysis`, `InquiryCategory`, `InquiryChannel`, `InquiryStatus`, `InquiryPriority`, `InquirySource`, `SentimentType` |
+| `oidc/oidc-client.prisma` | `OidcClient` |
+| `oidc/oidc-model.prisma` | `OidcModel` |
+| `scheduling/routine.prisma` | `Routine`, `Activity` |
+| `scheduling/task.prisma` | `Task`, `Exercise` |
+| `scheduling/timeline.prisma` | `Timeline`, `Session`, `Program`, `SessionTypes`, `RepeatCycleTypes`, `RecurringDayOfWeek` |
+| `taxonomy/category.prisma` | `Category`, `CategoryTypes` |
+| `taxonomy/group.prisma` | `Group`, `GroupTypes` |
+| `wallet/safe.prisma` | `SafeWallet`, `SafeTransaction`, `SafeConfirmation` |
 
 ## 검증 명령
 

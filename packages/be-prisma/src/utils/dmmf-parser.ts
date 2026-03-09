@@ -85,9 +85,7 @@ export class DmmfParser {
 	 * 스키마 디렉토리의 모든 .prisma 파일을 읽어 하나의 문자열로 합칩니다.
 	 */
 	private readSchemaFiles(schemaDir: string): string {
-		const files = fs
-			.readdirSync(schemaDir)
-			.filter((f) => f.endsWith(".prisma"));
+		const files = this.listSchemaFiles(schemaDir);
 		const contents: string[] = [];
 
 		for (const file of files) {
@@ -96,6 +94,32 @@ export class DmmfParser {
 		}
 
 		return contents.join("\n\n");
+	}
+
+	private listSchemaFiles(schemaDir: string, rootDir: string = schemaDir): string[] {
+		const files: string[] = [];
+		const entries = fs.readdirSync(schemaDir, { withFileTypes: true });
+
+		for (const entry of entries) {
+			const fullPath = path.join(schemaDir, entry.name);
+			if (entry.isDirectory()) {
+				files.push(...this.listSchemaFiles(fullPath, rootDir));
+				continue;
+			}
+			if (entry.isFile() && entry.name.endsWith(".prisma")) {
+				files.push(path.relative(rootDir, fullPath));
+			}
+		}
+
+		return files.sort((left, right) => {
+			if (left === "_base.prisma") {
+				return -1;
+			}
+			if (right === "_base.prisma") {
+				return 1;
+			}
+			return left.localeCompare(right);
+		});
 	}
 
 	/**

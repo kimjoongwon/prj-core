@@ -62,8 +62,8 @@
 
 ## Codex 도구 사용 가이드
 
-- **`request_user_input` 도구의 질문/선택지 문구는 영어로 작성** (도구 호환성 및 안정성 확보)
-- **`spawn_agent`/`send_input` 메시지의 핵심 작업 설명은 영어로 작성** (에이전트 해석 안정성 확보)
+- **`request_user_input` 도구의 질문/선택지 문구는 기본적으로 한국어로 작성** (사용자 대화 언어 우선)
+- **`spawn_agent`/`send_input` 메시지의 핵심 작업 설명은 기본적으로 한국어로 작성** (필요 시에만 영어 보조 사용)
 
 ## Codex 작업 원칙
 
@@ -1283,12 +1283,12 @@ Stage 5: 컴포넌트 (페이지별)
 ```
 🚀 be-prisma-builder 에이전트 시작
 📋 작업: User 모델 Prisma 스키마 생성
-📂 대상: packages/be-prisma/schema/user.prisma
+📂 대상: packages/be-prisma/schema/identity/user.prisma
 
 [... 에이전트 작업 ...]
 
 ✅ be-prisma-builder 에이전트 완료
 📁 생성/수정된 파일:
-   - packages/be-prisma/schema/user.prisma
-   - packages/be-prisma/schema/enums.prisma
+   - packages/be-prisma/schema/identity/user.prisma
+   - packages/be-prisma/schema/identity/user.prisma.spec.md
 ```

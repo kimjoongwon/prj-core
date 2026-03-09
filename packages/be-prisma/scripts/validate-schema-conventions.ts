@@ -4,144 +4,174 @@ import path from "node:path";
 const schemaDir = path.resolve(__dirname, "../schema");
 const baseFile = "_base.prisma";
 
-const rootByFile: Record<string, string> = {
-	"category.prisma": "Category",
-	"group.prisma": "Group",
-	"tenancy.prisma": "Tenant",
-	"content.prisma": "Content",
-	"security-policy.prisma": "SecurityPolicy",
-	"whitelist-entry.prisma": "WhitelistEntry",
-	"auth-audit.prisma": "AuthAuditLog",
-	"password-history.prisma": "PasswordHistory",
-	"subject.prisma": "Subject",
-	"action.prisma": "Action",
-	"ability.prisma": "Ability",
-	"grant.prisma": "Grant",
-	"inquiry.prisma": "Inquiry",
-	"inquiry-thread.prisma": "InquiryThread",
-	"inquiry-ai.prisma": "AIAgentLog",
-	"oidc-client.prisma": "OidcClient",
-	"oidc-model.prisma": "OidcModel",
-	"role.prisma": "Role",
-	"safe.prisma": "SafeWallet",
-	"space.prisma": "Space",
-	"timeline.prisma": "Timeline",
-	"routine.prisma": "Routine",
-	"task.prisma": "Task",
-	"template.prisma": "Template",
-	"translation.prisma": "Translation",
-	"user.prisma": "User",
-	"asset.prisma": "Asset",
-	"folder.prisma": "Folder",
-	"album.prisma": "Album",
+const aggregateRootByFile: Record<string, string> = {
+	"access-control/ability.prisma": "Ability",
+	"access-control/action.prisma": "Action",
+	"access-control/grant.prisma": "Grant",
+	"access-control/role.prisma": "Role",
+	"access-control/subject.prisma": "Subject",
+	"asset/album.prisma": "Album",
+	"asset/asset.prisma": "Asset",
+	"asset/folder.prisma": "Folder",
+	"auth/auth-audit.prisma": "AuthAuditLog",
+	"auth/password-history.prisma": "PasswordHistory",
+	"auth/security-policy.prisma": "SecurityPolicy",
+	"auth/whitelist-entry.prisma": "WhitelistEntry",
+	"content/content.prisma": "Content",
+	"content/template.prisma": "Template",
+	"content/translation.prisma": "Translation",
+	"identity/space.prisma": "Space",
+	"identity/tenancy.prisma": "Tenant",
+	"identity/user.prisma": "User",
+	"inquiry/inquiry-ai.prisma": "AIAgentLog",
+	"inquiry/inquiry-thread.prisma": "InquiryThread",
+	"inquiry/inquiry.prisma": "Inquiry",
+	"oidc/oidc-client.prisma": "OidcClient",
+	"oidc/oidc-model.prisma": "OidcModel",
+	"scheduling/routine.prisma": "Routine",
+	"scheduling/task.prisma": "Task",
+	"scheduling/timeline.prisma": "Timeline",
+	"taxonomy/category.prisma": "Category",
+	"taxonomy/group.prisma": "Group",
+	"wallet/safe.prisma": "SafeWallet",
 };
 
 const expectedOwner: Record<string, string> = {
-	Category: "category.prisma",
-	CategoryTypes: "category.prisma",
-	Group: "group.prisma",
-	GroupTypes: "group.prisma",
+	Category: "taxonomy/category.prisma",
+	CategoryTypes: "taxonomy/category.prisma",
+	Group: "taxonomy/group.prisma",
+	GroupTypes: "taxonomy/group.prisma",
 
-	Tenant: "tenancy.prisma",
-	Assignment: "tenancy.prisma",
+	Tenant: "identity/tenancy.prisma",
+	Assignment: "identity/tenancy.prisma",
 
-	Post: "content.prisma",
-	Content: "content.prisma",
-	TextTypes: "content.prisma",
+	Post: "content/content.prisma",
+	Content: "content/content.prisma",
+	TextTypes: "content/content.prisma",
 
-	SecurityPolicy: "security-policy.prisma",
+	SecurityPolicy: "auth/security-policy.prisma",
 
-	WhitelistType: "whitelist-entry.prisma",
-	WhitelistEntry: "whitelist-entry.prisma",
+	WhitelistType: "auth/whitelist-entry.prisma",
+	WhitelistEntry: "auth/whitelist-entry.prisma",
 
-	AuthAuditLog: "auth-audit.prisma",
-	AuthAuditResult: "auth-audit.prisma",
+	AuthAuditLog: "auth/auth-audit.prisma",
+	AuthAuditResult: "auth/auth-audit.prisma",
 
-	PasswordHistory: "password-history.prisma",
+	PasswordHistory: "auth/password-history.prisma",
 
-	Subject: "subject.prisma",
-	Action: "action.prisma",
-	Ability: "ability.prisma",
-	Grant: "grant.prisma",
+	Subject: "access-control/subject.prisma",
+	Action: "access-control/action.prisma",
+	Ability: "access-control/ability.prisma",
+	Grant: "access-control/grant.prisma",
 
-	Inquiry: "inquiry.prisma",
-	InquiryTag: "inquiry.prisma",
-	SentimentAnalysis: "inquiry.prisma",
-	InquiryCategory: "inquiry.prisma",
-	InquiryChannel: "inquiry.prisma",
-	InquiryStatus: "inquiry.prisma",
-	InquiryPriority: "inquiry.prisma",
-	InquirySource: "inquiry.prisma",
-	SentimentType: "inquiry.prisma",
+	Inquiry: "inquiry/inquiry.prisma",
+	InquiryTag: "inquiry/inquiry.prisma",
+	SentimentAnalysis: "inquiry/inquiry.prisma",
+	InquiryCategory: "inquiry/inquiry.prisma",
+	InquiryChannel: "inquiry/inquiry.prisma",
+	InquiryStatus: "inquiry/inquiry.prisma",
+	InquiryPriority: "inquiry/inquiry.prisma",
+	InquirySource: "inquiry/inquiry.prisma",
+	SentimentType: "inquiry/inquiry.prisma",
 
-	InquiryThread: "inquiry-thread.prisma",
-	InquiryMessage: "inquiry-thread.prisma",
-	InquiryParticipant: "inquiry-thread.prisma",
-	InquiryAttachment: "inquiry-thread.prisma",
-	InquiryParticipantRole: "inquiry-thread.prisma",
-	SenderType: "inquiry-thread.prisma",
-	ThreadStatus: "inquiry-thread.prisma",
-	MessageContentType: "inquiry-thread.prisma",
-	AttachmentFileType: "inquiry-thread.prisma",
+	InquiryThread: "inquiry/inquiry-thread.prisma",
+	InquiryMessage: "inquiry/inquiry-thread.prisma",
+	InquiryParticipant: "inquiry/inquiry-thread.prisma",
+	InquiryAttachment: "inquiry/inquiry-thread.prisma",
+	InquiryParticipantRole: "inquiry/inquiry-thread.prisma",
+	SenderType: "inquiry/inquiry-thread.prisma",
+	ThreadStatus: "inquiry/inquiry-thread.prisma",
+	MessageContentType: "inquiry/inquiry-thread.prisma",
+	AttachmentFileType: "inquiry/inquiry-thread.prisma",
 
-	AIAgentLog: "inquiry-ai.prisma",
-	AIAgentAction: "inquiry-ai.prisma",
+	AIAgentLog: "inquiry/inquiry-ai.prisma",
+	AIAgentAction: "inquiry/inquiry-ai.prisma",
 
-	OidcClient: "oidc-client.prisma",
-	OidcModel: "oidc-model.prisma",
+	OidcClient: "oidc/oidc-client.prisma",
+	OidcModel: "oidc/oidc-model.prisma",
 
-	Role: "role.prisma",
-	RoleAssociation: "role.prisma",
-	RoleClassification: "role.prisma",
+	Role: "access-control/role.prisma",
+	RoleAssociation: "access-control/role.prisma",
+	RoleClassification: "access-control/role.prisma",
 
-	SafeWallet: "safe.prisma",
-	SafeTransaction: "safe.prisma",
-	SafeConfirmation: "safe.prisma",
+	SafeWallet: "wallet/safe.prisma",
+	SafeTransaction: "wallet/safe.prisma",
+	SafeConfirmation: "wallet/safe.prisma",
 
-	Space: "space.prisma",
-	SpaceClassification: "space.prisma",
-	SpaceAssociation: "space.prisma",
-	Ground: "space.prisma",
+	Space: "identity/space.prisma",
+	SpaceClassification: "identity/space.prisma",
+	SpaceAssociation: "identity/space.prisma",
+	Ground: "identity/space.prisma",
 
-	Timeline: "timeline.prisma",
-	Session: "timeline.prisma",
-	Program: "timeline.prisma",
-	SessionTypes: "timeline.prisma",
-	RepeatCycleTypes: "timeline.prisma",
-	RecurringDayOfWeek: "timeline.prisma",
+	Timeline: "scheduling/timeline.prisma",
+	Session: "scheduling/timeline.prisma",
+	Program: "scheduling/timeline.prisma",
+	SessionTypes: "scheduling/timeline.prisma",
+	RepeatCycleTypes: "scheduling/timeline.prisma",
+	RecurringDayOfWeek: "scheduling/timeline.prisma",
 
-	Routine: "routine.prisma",
-	Activity: "routine.prisma",
+	Routine: "scheduling/routine.prisma",
+	Activity: "scheduling/routine.prisma",
 
-	Task: "task.prisma",
-	Exercise: "task.prisma",
+	Task: "scheduling/task.prisma",
+	Exercise: "scheduling/task.prisma",
 
-	Template: "template.prisma",
-	TemplateVariable: "template.prisma",
-	TemplateType: "template.prisma",
+	Template: "content/template.prisma",
+	TemplateVariable: "content/template.prisma",
+	TemplateType: "content/template.prisma",
 
-	Translation: "translation.prisma",
-	LanguageCode: "translation.prisma",
+	Translation: "content/translation.prisma",
+	LanguageCode: "content/translation.prisma",
 
-	User: "user.prisma",
-	UserClassification: "user.prisma",
-	UserAssociation: "user.prisma",
-	Profile: "user.prisma",
+	User: "identity/user.prisma",
+	UserClassification: "identity/user.prisma",
+	UserAssociation: "identity/user.prisma",
+	Profile: "identity/user.prisma",
 
-	Asset: "asset.prisma",
-	Image: "asset.prisma",
-	Video: "asset.prisma",
-	Document: "asset.prisma",
-	Derivative: "asset.prisma",
-	AssetKind: "asset.prisma",
-	AssetStatus: "asset.prisma",
-	DerivativeKind: "asset.prisma",
+	Asset: "asset/asset.prisma",
+	Image: "asset/asset.prisma",
+	Video: "asset/asset.prisma",
+	Document: "asset/asset.prisma",
+	Derivative: "asset/asset.prisma",
+	AssetKind: "asset/asset.prisma",
+	AssetStatus: "asset/asset.prisma",
+	DerivativeKind: "asset/asset.prisma",
 
-	Folder: "folder.prisma",
+	Folder: "asset/folder.prisma",
 
-	Album: "album.prisma",
-	AlbumEntry: "album.prisma",
+	Album: "asset/album.prisma",
+	AlbumEntry: "asset/album.prisma",
 };
+
+function normalizeRelativePath(filePath: string): string {
+	return filePath.split(path.sep).join("/");
+}
+
+function listPrismaFiles(dir: string, rootDir: string = dir): string[] {
+	const results: string[] = [];
+	const entries = readdirSync(dir, { withFileTypes: true });
+
+	for (const entry of entries) {
+		const fullPath = path.join(dir, entry.name);
+		if (entry.isDirectory()) {
+			results.push(...listPrismaFiles(fullPath, rootDir));
+			continue;
+		}
+		if (entry.isFile() && entry.name.endsWith(".prisma")) {
+			results.push(normalizeRelativePath(path.relative(rootDir, fullPath)));
+		}
+	}
+
+	return results.sort((left, right) => {
+		if (left === baseFile) {
+			return -1;
+		}
+		if (right === baseFile) {
+			return 1;
+		}
+		return left.localeCompare(right);
+	});
+}
 
 function getNames(text: string, kind: "model" | "enum"): string[] {
 	const pattern =
@@ -159,6 +189,25 @@ function getNames(text: string, kind: "model" | "enum"): string[] {
 	return result;
 }
 
+function getAggregateRootModels(text: string): string[] {
+	const pattern = /((?:^\s*\/\/[^\n]*\n)+)\s*model\s+([A-Za-z_][A-Za-z0-9_]*)\s*\{/gm;
+	const result: string[] = [];
+
+	let match = pattern.exec(text);
+	while (match) {
+		const documentation = match[1];
+		const modelName = match[2];
+
+		if (/@aggregate-root:\s*true\b/.test(documentation)) {
+			result.push(modelName);
+		}
+
+		match = pattern.exec(text);
+	}
+
+	return result;
+}
+
 function countMatches(text: string, pattern: RegExp): number {
 	const matches = text.match(pattern);
 	return matches ? matches.length : 0;
@@ -170,9 +219,7 @@ function main(): void {
 		process.exit(1);
 	}
 
-	const files = readdirSync(schemaDir)
-		.filter((f) => f.endsWith(".prisma"))
-		.sort();
+	const files = listPrismaFiles(schemaDir);
 	const textsByFile = new Map<string, string>();
 	const declarations = new Map<string, { kind: "model" | "enum"; file: string }[]>();
 	const errors: string[] = [];
@@ -185,6 +232,8 @@ function main(): void {
 		const generatorCount = countMatches(text, /^\s*generator\s+[A-Za-z_][A-Za-z0-9_]*\s*\{/gm);
 		const datasourceCount = countMatches(text, /^\s*datasource\s+[A-Za-z_][A-Za-z0-9_]*\s*\{/gm);
 		const invalidDisplayNameCount = countMatches(text, /@DisplayName|@displayname/g);
+		const aggregateRootModels = getAggregateRootModels(text);
+		const expectedAggregateRoot = aggregateRootByFile[file];
 
 		if (file !== baseFile && (generatorCount > 0 || datasourceCount > 0)) {
 			errors.push(`[${file}] generator/datasource is only allowed in ${baseFile}`);
@@ -192,8 +241,26 @@ function main(): void {
 		if (invalidDisplayNameCount > 0) {
 			errors.push(`[${file}] contains invalid displayName tag casing (@DisplayName or @displayname)`);
 		}
-		if (file !== baseFile && !rootByFile[file]) {
-			errors.push(`[${file}] missing aggregate-root assignment in rootByFile`);
+		if (file !== baseFile && !expectedAggregateRoot) {
+			errors.push(`[${file}] missing aggregate-root assignment in aggregateRootByFile`);
+		}
+		if (file === baseFile && aggregateRootModels.length > 0) {
+			errors.push(`[${file}] must not declare @aggregate-root: true`);
+		}
+		if (file !== baseFile && aggregateRootModels.length !== 1) {
+			errors.push(
+				`[${file}] must contain exactly 1 @aggregate-root: true model, found ${aggregateRootModels.length}`,
+			);
+		}
+		if (
+			file !== baseFile &&
+			expectedAggregateRoot &&
+			aggregateRootModels.length === 1 &&
+			aggregateRootModels[0] !== expectedAggregateRoot
+		) {
+			errors.push(
+				`[${file}] aggregate root marker must be on ${expectedAggregateRoot} but found ${aggregateRootModels[0]}`,
+			);
 		}
 
 		for (const modelName of getNames(text, "model")) {
@@ -206,24 +273,6 @@ function main(): void {
 			const list = declarations.get(enumName) ?? [];
 			list.push({ kind: "enum", file });
 			declarations.set(enumName, list);
-		}
-	}
-
-	const rootNames = new Set(Object.values(rootByFile));
-	for (const [file, rootName] of Object.entries(rootByFile)) {
-		const text = textsByFile.get(file);
-		if (!text) {
-			errors.push(`[${file}] missing schema file for aggregate root ${rootName}`);
-			continue;
-		}
-		const models = getNames(text, "model");
-		const rootsInFile = models.filter((name) => rootNames.has(name));
-		if (rootsInFile.length !== 1) {
-			errors.push(`[${file}] must contain exactly 1 aggregate root, found ${rootsInFile.length}`);
-			continue;
-		}
-		if (rootsInFile[0] !== rootName) {
-			errors.push(`[${file}] aggregate root must be ${rootName} but found ${rootsInFile[0]}`);
 		}
 	}
 
@@ -243,7 +292,7 @@ function main(): void {
 
 	for (const [name, entries] of declarations.entries()) {
 		if (entries.length > 1) {
-			const filesWithDecl = entries.map((e) => e.file).join(", ");
+			const filesWithDecl = entries.map((entry) => entry.file).join(", ");
 			errors.push(`${name} is declared multiple times: ${filesWithDecl}`);
 			continue;
 		}
@@ -283,7 +332,7 @@ function main(): void {
 	}
 
 	console.log(
-		`[schema:check] OK (${files.length} files, ${declarations.size} declarations, aggregate-root ownership enforced)`,
+		`[schema:check] OK (${files.length} files, ${declarations.size} declarations, domain-folder ownership + aggregate-root markers enforced)`,
 	);
 }
 

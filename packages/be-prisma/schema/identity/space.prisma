@@ -1,0 +1,128 @@
+// ============================================================================
+// Space Domain - 공간 도메인
+// ============================================================================
+//
+// Space는 실제 부모 row를 가지는 공간 기반 모델입니다.
+// Ground를 통해 시설 정보가 1:1 상세로 부여됩니다.
+//
+// 관계 구조:
+//   Space (BASE) ◄─── Ground (DETAIL: name, address, phone, email, businessNo)
+//     │
+//     ├─── SpaceClassification ─── Category (분류)
+//     ├─── SpaceAssociation ─── Group (그룹핑)
+//     └─── Tenant (JOIN: User + Space + Role)
+//
+// ============================================================================
+
+// @schema-type: BASE
+// @aggregate-root: true
+// @description: Ground 등 1:1 상세 모델의 공통 identity와 소속 관계를 제공하는 공간 기반 모델
+// @ownership: independent
+// @scope: space
+// @materialized-by: Ground
+/// @displayName 공간
+model Space {
+  id             String               @id @default(uuid())
+  createdAt      DateTime             @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt      DateTime?            @updatedAt @map("updated_at") @db.Timestamptz(6)
+  removedAt      DateTime?            @map("removed_at") @db.Timestamptz(6)
+  ground         Ground?
+  associations   SpaceAssociation[]
+  classification SpaceClassification?
+  tenants        Tenant[]
+  // Space소속 리소스
+  categories     Category[]
+  groups         Group[]
+  contents       Content[]
+  timelines      Timeline[]
+  tasks          Task[]
+  safeWallets    SafeWallet[]
+  routines       Routine[]
+  // Asset 도메인
+  folders        Folder[]
+  assets         Asset[]
+  albums         Album[]
+  albumEntries   AlbumEntry[]
+  derivatives    Derivative[]
+  // Inquiry 도메인
+  inquiries      Inquiry[]
+
+  @@map("spaces")
+}
+
+// @schema-type: JOIN
+// @description: Space와 Category를 연결하는 분류 링크
+// @relation-pattern: one-to-many
+// @ownership: dependent
+// @scope: space
+// @join-role: simple-link
+// @connects: Space ─── Category
+/// @displayName 공간 분류
+model SpaceClassification {
+  id         String    @id @default(uuid())
+  categoryId String    @map("category_id")
+  spaceId    String    @unique @map("space_id")
+  createdAt  DateTime  @default(now()) @map("created_at")
+  updatedAt  DateTime? @updatedAt @map("updated_at") @db.Timestamptz(6)
+  removedAt  DateTime? @map("removed_at") @db.Timestamptz(6)
+  category   Category  @relation(fields: [categoryId], references: [id])
+  space      Space     @relation(fields: [spaceId], references: [id])
+
+  @@unique([categoryId, spaceId])
+  @@map("space_classifications")
+}
+
+// @schema-type: JOIN
+// @description: Space와 Group을 연결하는 그룹 링크
+// @relation-pattern: many-to-many
+// @ownership: dependent
+// @scope: space
+// @join-role: simple-link
+// @connects: Space ─── Group
+/// @displayName 공간 그룹
+model SpaceAssociation {
+  id        String    @id @default(uuid())
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime? @updatedAt @map("updated_at") @db.Timestamptz(6)
+  removedAt DateTime? @map("removed_at") @db.Timestamptz(6)
+  spaceId   String    @map("space_id")
+  groupId   String    @map("group_id")
+  group     Group     @relation(fields: [groupId], references: [id])
+  space     Space     @relation(fields: [spaceId], references: [id])
+
+  @@unique([spaceId, groupId])
+  @@map("space_associations")
+}
+
+// @schema-type: DETAIL
+// @description: Space에 시설 정보를 부여하는 1:1 상세 모델
+// @relation-pattern: one-to-one
+// @ownership: dependent
+// @scope: space
+// @materializes: Space (1:1)
+// @business-fields: name, label, address, phone, email, businessNo
+/// @displayName 시설
+model Ground {
+  id              String    @id @default(uuid())
+  createdAt       DateTime  @default(now()) @map("created_at")
+  updatedAt       DateTime? @updatedAt @map("updated_at") @db.Timestamptz(6)
+  removedAt       DateTime? @map("removed_at") @db.Timestamptz(6)
+  /// @displayName 이름
+  name            String
+  /// @displayName 라벨
+  label           String?
+  /// @displayName 주소
+  address         String
+  /// @displayName 전화번호
+  phone           String
+  /// @displayName 이메일
+  email           String
+  /// @displayName 사업자등록번호
+  businessNo      String    @unique @map("business_no")
+  spaceId         String    @unique @map("space_id")
+  logoImageFileId String?   @map("logo_image_file_id")
+  imageFileId     String?   @map("image_file_id")
+  space           Space     @relation(fields: [spaceId], references: [id])
+
+  @@map("grounds")
+}

@@ -1,0 +1,35 @@
+// ============================================================================
+// Subject Domain - 권한 대상 도메인
+// ============================================================================
+
+// @schema-type: CATALOG
+// @aggregate-root: true
+// @description: 권한 규칙이 참조하는 전역 리소스 주체 카탈로그
+// @ownership: independent
+// @scope: global
+/// @displayName Subject
+model Subject {
+  id        String    @id @default(uuid())
+  createdAt DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt DateTime? @updatedAt @map("updated_at") @db.Timestamptz(6)
+  removedAt DateTime? @map("removed_at") @db.Timestamptz(6)
+
+  /// @displayName 이름
+  name        String  @unique
+  /// @displayName 표시명
+  displayName String? @map("display_name")
+  /// @displayName 아이콘
+  icon        String?
+  /// @displayName 정렬 순서
+  order       Int     @default(0)
+  /// @displayName 시스템 여부
+  isSystem    Boolean @default(true) @map("is_system")
+  /// @displayName 그룹
+  group       String?
+
+  abilities Ability[]
+
+  @@index([group])
+  @@index([isSystem])
+  @@map("subjects")
+}
