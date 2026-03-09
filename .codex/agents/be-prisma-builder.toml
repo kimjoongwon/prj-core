@@ -33,7 +33,7 @@ developer_instructions = '''
 | 구분 | 항목 | 설명 |
 |------|------|------|
 | **입력** | 모델명 | 생성할 엔티티 이름 |
-| | 대상 도메인 파일 | `core/space/user/role/...` 중 소유 책임 파일 |
+| | 대상 도메인 파일 | `category/group/tenancy/content/security-policy/whitelist-entry/auth-audit/password-history/subject/action/ability/grant/inquiry/inquiry-thread/inquiry-ai/oidc-client/oidc-model/role/safe/space/timeline/routine/task/template/translation/user/asset/folder/album` 중 소유 책임 파일 |
 | | 도메인 설명 | 비즈니스 컨텍스트 |
 | | 필드 목록 | 필드명, 타입, 설명 |
 | | 관계 정보 | 연결할 다른 모델 |
@@ -76,6 +76,15 @@ model User { ... }
 // 외래키 camelCase
 userId String
 ```
+
+### ✅ Multi-file schema 엄격 규칙 (Critical)
+
+- `_base.prisma` 외 파일에 `generator`/`datasource` 선언 금지
+- `model`/`enum`은 저장소 전체에서 **단 한 번만** 선언
+- 각 `schema/*.prisma` 파일은 Aggregate Root를 **정확히 1개만** 포함
+- 선언 소유권은 `packages/be-prisma/scripts/validate-schema-conventions.ts`의 `expectedOwner`를 기준으로 준수
+- `/// @displayName`만 허용 (`@DisplayName`, `@displayname` 금지)
+- 모든 enum은 실제 사용처가 있어야 함 (미사용 enum 금지)
 
 ### ✅ CTI + 무결성 원칙 (Critical)
 
@@ -343,8 +352,17 @@ model EntityAssociation {
 - [ ] 부모 모델에 타입 전용 nullable 필드가 남아있지 않은가?
 - [ ] Prisma로 강제 불가한 무결성 규칙의 SQL 제약(체크/트리거) 계획이 명시되었는가?
 - [ ] 부모/상세 모델을 단일 트랜잭션으로 처리하는 전략이 명시되었는가?
+- [ ] `_base.prisma` 외 파일에 `generator`/`datasource`가 없는가?
+- [ ] 모델/enum 중복 선언이 없는가?
+- [ ] 파일당 Aggregate Root 1개 규칙을 지켰는가?
+- [ ] ownership 매트릭스 위반이 없는가?
+- [ ] `@displayName` 표기 케이스가 표준을 지키는가?
+- [ ] enum 미사용 항목이 없는가?
 - [ ] 변경된 `schema/*.prisma`마다 대응 `*.prisma.spec.md`가 생성/수정되었는가?
 - [ ] `*.prisma.spec.md`의 `## 변경 이력`이 당일 기준으로 갱신되었는가?
+- [ ] schema 변경 영향 시 `packages/be-prisma/seed-data.ts`와 `packages/be-prisma/seed.ts`가 함께 갱신되었는가?
+- [ ] `pnpm --filter=@cocrepo/prisma schema:check`가 통과했는가?
+- [ ] `pnpm --filter=@cocrepo/prisma exec prisma validate`가 통과했는가?
 
 ---
 
@@ -399,28 +417,47 @@ packages/be-prisma/schema/{domain}.prisma
 packages/be-prisma/schema/{domain}.prisma.spec.md
 ```
 
-기존 도메인 파일:
+현재 도메인 파일 (Strict ownership 기준):
 - `_base.prisma`: 설정 및 유형 분류 체계 문서
-- `core.prisma`: 핵심 공통 (Category, Group, Tenant 등)
+- `category.prisma`: 카테고리 도메인 (Category)
+- `group.prisma`: 그룹 도메인 (Group)
+- `tenancy.prisma`: 테넌시 도메인 (Tenant, Assignment)
+- `content.prisma`: 콘텐츠 도메인 (Content, Post)
+- `security-policy.prisma`: 보안 정책 도메인
+- `whitelist-entry.prisma`: 화이트리스트 도메인
+- `auth-audit.prisma`: 인증 감사 로그 도메인
+- `password-history.prisma`: 비밀번호 이력 도메인
+- `subject.prisma`: 권한 Subject 도메인
+- `action.prisma`: 권한 Action 도메인
+- `ability.prisma`: 권한 Ability 도메인
+- `grant.prisma`: 권한 부여 도메인
 - `space.prisma`: 공간 도메인 (Space, Ground 등)
 - `user.prisma`: 사용자 도메인 (User, Profile 등)
 - `role.prisma`: 역할 도메인 (Role 등)
-- `grant.prisma`: 권한 도메인 (Subject, Action, Ability, Grant)
-- `auth.prisma`: 인증/보안 도메인 (SecurityPolicy, AuthAuditLog 등)
-- `oidc.prisma`: OIDC 도메인 (OidcClient, OidcModel)
-- `asset.prisma`: 에셋 도메인 (Asset, Image, Video, Document, Folder, Album)
+- `oidc-client.prisma`: OIDC Client 도메인
+- `oidc-model.prisma`: OIDC Model 도메인
+- `asset.prisma`: 에셋 코어 도메인 (Asset, Image, Video, Document, Derivative)
+- `folder.prisma`: 폴더 도메인 (Folder)
+- `album.prisma`: 앨범 도메인 (Album, AlbumEntry)
 - `inquiry.prisma`: 문의 도메인
+- `inquiry-thread.prisma`: 문의 스레드 도메인
+- `inquiry-ai.prisma`: 문의 AI 로그 도메인
+- `timeline.prisma`: 타임라인 도메인
+- `routine.prisma`: 루틴 도메인
 - `template.prisma`: 템플릿 도메인
 - `translation.prisma`: 번역 도메인
-- `task.prisma`: 일정/루틴/태스크 도메인
+- `task.prisma`: 태스크 도메인
 - `safe.prisma`: Safe Wallet 도메인
 
 ### 역할(소유 책임) 기준 파일 선택 규칙 (Critical)
 
 - 모델의 주된 비즈니스 책임(aggregate owner)을 기준으로 도메인 파일을 선택합니다.
 - 여러 도메인과 연관되더라도 **소유 책임 파일 1곳**에 선언하고 relation으로 연결합니다.
-- 공통 분류/연결 규칙은 `core.prisma`(Category/Group/Tenant/Assignment) 우선 사용합니다.
-- 권한은 `grant.prisma`, 인증/보안은 `auth.prisma`, OIDC는 `oidc.prisma`로 분리합니다.
+- 공통 분류/연결 규칙은 `category.prisma`/`group.prisma`/`tenancy.prisma`로 분리하여 사용합니다.
+- 권한은 `subject.prisma`/`action.prisma`/`ability.prisma`/`grant.prisma`로 분리합니다.
+- 인증/보안은 `security-policy.prisma`/`whitelist-entry.prisma`/`auth-audit.prisma`/`password-history.prisma`로 분리합니다.
+- OIDC는 `oidc-client.prisma`/`oidc-model.prisma`로 분리합니다.
+- 에셋은 `asset.prisma`(코어) + `folder.prisma` + `album.prisma`로 분리합니다.
 - 도메인 파일 내부 결합도가 낮아지면 신규 `{domain}.prisma` 파일 분리를 검토합니다(폴더 추가보다 역할 분리 우선).
 
 ### 주석 표준화 규칙 (Critical)
@@ -430,6 +467,11 @@ packages/be-prisma/schema/{domain}.prisma.spec.md
 - 사용자 노출 필드/모델 명시: `/// @displayName`
 - 레거시 JSDoc(`@type 추상/자원/...`)만 사용하는 파일(`task.prisma`, `safe.prisma` 등)을 수정할 때는 위 표준 태그로 함께 정규화합니다.
 - 모든 `schema/*.prisma` 변경 시 대응 `*.prisma.spec.md`를 반드시 함께 생성/수정하고 `## 변경 이력`을 갱신합니다.
+
+### 검증 명령 (Mandatory)
+
+- `pnpm --filter=@cocrepo/prisma schema:check`
+- `pnpm --filter=@cocrepo/prisma exec prisma validate`
 
 ### 유형 선택 가이드
 
@@ -504,7 +546,10 @@ packages/be-prisma/schema/{domain}.prisma.spec.md
 - 트랜잭션: [부모+상세 동시 처리 전략]
 
 **다음 단계:**
-1. `pnpm --filter=@cocrepo/prisma generate` 실행
-2. `be-entity-builder`로 Entity 클래스 생성
+1. `pnpm --filter=@cocrepo/prisma schema:check` 실행
+2. `pnpm --filter=@cocrepo/prisma exec prisma validate` 실행
+3. `pnpm --filter=@cocrepo/prisma generate` 실행
+4. schema 변경 영향 시 `seed-data.ts`와 `seed.ts` 동기화
+5. `be-entity-builder`로 Entity 클래스 생성
 ```
 '''
