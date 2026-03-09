@@ -26,4 +26,6 @@
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-03-09 | strict aggregate-root 분할 적용: timeline/routine을 별도 파일로 분리하고 task.prisma는 Task/Exercise만 유지 | codex |
+| 2026-03-09 | 도메인 응집도 강화를 위해 Session 관련 enum(SessionTypes, RepeatCycleTypes, RecurringDayOfWeek)을 core.prisma에서 task.prisma로 이관 | codex |
 | 2026-03-06 | 모델 주석을 `@schema-type` 표준으로 정규화하고 역할 기준 분류를 명시 | codex |

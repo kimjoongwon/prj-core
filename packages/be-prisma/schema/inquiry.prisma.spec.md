@@ -19,5 +19,5 @@
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-03-09 | strict aggregate-root 분할 적용: 대화/AI 모델을 inquiry-thread.prisma, inquiry-ai.prisma로 분리하고 inquiry.prisma는 코어 모델 유지 | codex |
 | 2026-03-06 | 누락된 sidecar spec 신규 생성 | codex |
-

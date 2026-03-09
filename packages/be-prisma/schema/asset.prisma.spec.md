@@ -19,5 +19,6 @@ Asset 도메인의 핵심 모델(에셋 본체, 파생 타입, 폴더/앨범 등
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-03-09 | strict aggregate-root 분할 적용: Folder/Album 도메인을 별도 파일로 분리하고 asset.prisma는 Asset CTI 코어만 유지 | codex |
+| 2026-03-09 | 주석 표준 일관성 정렬: `@DisplayName` 표기를 `@displayName`으로 통일 | codex |
 | 2026-03-06 | 누락된 sidecar spec 신규 생성 | codex |
-

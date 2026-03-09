@@ -67,6 +67,7 @@ type UpdateUserInput = UpdateInput<User>;
 ### Development
 
 - `pnpm generate` - Generate Prisma client from multi-file schema
+- `pnpm schema:check` - Validate strict schema file ownership/conventions
 - `pnpm build` - Build the package
 - `pnpm start:dev` - Build in watch mode
 
@@ -131,18 +132,32 @@ This project uses **Prisma's official multi-file schema support** (GA since Pris
 packages/be-prisma/
 ├── schema/              # Multi-file schema directory
 │   ├── _base.prisma     # Generator and datasource configuration
-│   ├── core.prisma      # Core shared models (Category, Group, Tenant, etc.)
+│   ├── taxonomy.prisma  # Category/Group domain
+│   ├── tenancy.prisma   # Tenant/Assignment domain
+│   ├── content.prisma   # Content/Post domain
+│   ├── security-policy.prisma
+│   ├── auth-audit.prisma
+│   ├── password-history.prisma
+│   ├── subject.prisma
+│   ├── action.prisma
+│   ├── ability.prisma
+│   ├── grant.prisma
 │   ├── user.prisma      # User domain
 │   ├── role.prisma      # Role domain
 │   ├── space.prisma     # Space domain
-│   ├── asset.prisma     # Asset/media domain (replaces file domain)
-│   ├── task.prisma      # Task/timeline domain
-│   ├── inquiry.prisma   # Inquiry domain
-│   ├── auth.prisma      # Auth/security domain
-│   ├── grant.prisma     # CASL grant domain
+│   ├── asset.prisma
+│   ├── folder.prisma
+│   ├── album.prisma
+│   ├── timeline.prisma
+│   ├── routine.prisma
+│   ├── task.prisma
+│   ├── inquiry.prisma
+│   ├── inquiry-thread.prisma
+│   ├── inquiry-ai.prisma
 │   ├── template.prisma  # Message template domain
 │   ├── translation.prisma
-│   ├── oidc.prisma
+│   ├── oidc-client.prisma
+│   ├── oidc-model.prisma
 │   └── safe.prisma
 ├── migrations/          # Database migrations
 └── seed.ts              # Database seeding script
@@ -173,8 +188,8 @@ export default defineConfig({
 
 Current schema contains:
 
-- **56 models** across 13 domain files (`_base.prisma` excluded)
-- **30 enums** for type safety
+- **56 models** across 27 domain files (`_base.prisma` excluded)
+- **25 enums** for type safety
 - Automatic cross-file model referencing (no imports needed)
 
 ## Environment Variables

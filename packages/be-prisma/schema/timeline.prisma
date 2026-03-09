@@ -1,0 +1,102 @@
+// ============================================================================
+// Timeline Domain - 타임라인/세션 도메인
+// ============================================================================
+
+/// @displayName 세션 유형
+enum SessionTypes {
+  ONE_TIME
+  ONE_TIME_RANGE
+  RECURRING
+}
+
+/// @displayName 반복 주기 유형
+enum RepeatCycleTypes {
+  WEEKLY
+  MONTHLY
+}
+
+/// @displayName 반복 요일
+enum RecurringDayOfWeek {
+  MONDAY
+  TUESDAY
+  WEDNESDAY
+  THURSDAY
+  FRIDAY
+  SATURDAY
+  SUNDAY
+}
+
+// @schema-type: CONCRETE ENTITY
+// @description: 세션들을 논리적으로 그룹화하는 시간 단위 컨테이너
+// @extended-by: Session
+/// @displayName 타임라인
+model Timeline {
+  id          String    @id @default(uuid())
+  createdAt   DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt   DateTime? @updatedAt @map("updated_at") @db.Timestamptz(6)
+  removedAt   DateTime? @map("removed_at") @db.Timestamptz(6)
+  spaceId     String    @map("space_id")
+  creatorId   String?   @map("creator_id")
+  name        String
+  description String?
+  space       Space     @relation(fields: [spaceId], references: [id])
+  creator     User?     @relation(fields: [creatorId], references: [id])
+  sessions    Session[]
+
+  @@index([spaceId])
+  @@index([spaceId, createdAt])
+  @@index([name])
+  @@map("timelines")
+}
+
+// @schema-type: CONCRETE ENTITY
+// @description: 타임라인 내에서 일회성/반복형으로 실행되는 시간 단위 이벤트
+// @extends: Timeline
+// @extended-by: Program
+/// @displayName 세션
+model Session {
+  id                 String              @id @default(uuid())
+  createdAt          DateTime            @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt          DateTime?           @updatedAt @map("updated_at") @db.Timestamptz(6)
+  removedAt          DateTime?           @map("removed_at") @db.Timestamptz(6)
+  type               SessionTypes        @default(ONE_TIME)
+  repeatCycleType    RepeatCycleTypes?   @map("repeat_cycle_type")
+  startDateTime      DateTime?           @map("start_date_time") @db.Timestamptz(6)
+  endDateTime        DateTime?           @map("end_date_time") @db.Timestamptz(6)
+  recurringDayOfWeek RecurringDayOfWeek? @map("recurring_day_of_week")
+  timelineId         String              @map("timeline_id")
+  name               String
+  description        String?
+  programs           Program[]
+  timeline           Timeline            @relation(fields: [timelineId], references: [id])
+
+  @@index([timelineId, startDateTime])
+  @@index([startDateTime, endDateTime])
+  @@index([type, startDateTime])
+  @@map("sessions")
+}
+
+// @schema-type: BRIDGE
+// @description: Session과 Routine을 연결하는 실행 단위 (정원/강사 등 운영 정보 포함)
+// @connects: Session ─── Routine
+/// @displayName 프로그램
+model Program {
+  id           String    @id @default(uuid())
+  createdAt    DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt    DateTime? @updatedAt @map("updated_at") @db.Timestamptz(6)
+  removedAt    DateTime? @map("removed_at") @db.Timestamptz(6)
+  routineId    String    @map("routine_id")
+  sessionId    String    @map("session_id")
+  instructorId String    @map("instructor_id")
+  capacity     Int
+  name         String
+  level        String?
+  routine      Routine   @relation(fields: [routineId], references: [id])
+  session      Session   @relation(fields: [sessionId], references: [id])
+
+  @@unique([sessionId, routineId])
+  @@index([sessionId])
+  @@index([routineId])
+  @@index([instructorId])
+  @@map("programs")
+}

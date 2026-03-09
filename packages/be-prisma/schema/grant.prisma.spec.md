@@ -19,5 +19,5 @@
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-03-09 | strict aggregate-root 분할 적용: Subject/Action/Ability를 별도 파일로 분리하고 grant.prisma는 Grant만 유지 | codex |
 | 2026-03-06 | 누락된 sidecar spec 신규 생성 | codex |
-

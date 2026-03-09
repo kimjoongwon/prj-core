@@ -1,0 +1,34 @@
+// ============================================================================
+// Action Domain - 권한 행위 도메인
+// ============================================================================
+
+// @schema-type: REFERENCE
+// @description: CASL Action 정의 - 행위의 완전한 정의 (마스킹 설정 포함)
+/// @displayName 액션
+model Action {
+  id        String    @id @default(uuid())
+  createdAt DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt DateTime? @updatedAt @map("updated_at") @db.Timestamptz(6)
+  removedAt DateTime? @map("removed_at") @db.Timestamptz(6)
+
+  /// @displayName 이름
+  name        String  @unique
+  /// @displayName 표시명
+  displayName String? @map("display_name")
+  /// @displayName 설명
+  description String?
+  /// @displayName 그룹
+  group       String?
+  /// @displayName 정렬 순서
+  order       Int     @default(0)
+  /// @displayName 시스템 여부
+  isSystem    Boolean @default(true) @map("is_system")
+
+  /// @displayName 설정
+  config Json?
+
+  abilities Ability[]
+
+  @@index([group])
+  @@map("actions")
+}

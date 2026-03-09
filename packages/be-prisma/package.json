@@ -15,7 +15,8 @@
   "scripts": {
     "type-check": "tsc --noEmit",
     "generate": "prisma generate",
-    "build": "tsc --build",
+    "schema:check": "tsx ./scripts/validate-schema-conventions.ts",
+    "build": "pnpm run schema:check && tsc --build",
     "start:dev": "tsc --build --watch",
     "format": "biome format --write .",
     "db:pull": "prisma db pull",

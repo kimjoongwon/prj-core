@@ -1,45 +1,49 @@
 // ============================================================================
-// Task Domain - 태스크 추상 도메인
+// Routine Domain - 루틴/활동 도메인
 // ============================================================================
 
-// @schema-type: ABSTRACT ENTITY
-// @description: 도메인 독립 작업의 추상 계층 (여러 구체 모델이 1:1로 구체화 가능)
-// @materialized-by: Exercise
-/// @displayName 태스크
-model Task {
+// @schema-type: CONCRETE ENTITY
+// @description: 반복 수행되는 활동 묶음을 정의하는 루틴
+// @extended-by: Activity, Program
+/// @displayName 루틴
+model Routine {
   id         String     @id @default(uuid())
   createdAt  DateTime   @default(now()) @map("created_at") @db.Timestamptz(6)
   updatedAt  DateTime?  @updatedAt @map("updated_at") @db.Timestamptz(6)
   removedAt  DateTime?  @map("removed_at") @db.Timestamptz(6)
   spaceId    String     @map("space_id")
   creatorId  String?    @map("creator_id")
+  name       String
+  label      String
   space      Space      @relation(fields: [spaceId], references: [id])
   creator    User?      @relation(fields: [creatorId], references: [id])
   activities Activity[]
-  exercise   Exercise?
+  programs   Program[]
 
   @@index([spaceId])
-  @@map("tasks")
+  @@index([spaceId, name])
+  @@map("routines")
 }
 
-// @schema-type: MATERIALIZATION
-// @description: Task를 운동 도메인으로 1:1 구체화한 모델
-// @materializes: Task
-/// @displayName 운동
-model Exercise {
+// @schema-type: BRIDGE
+// @description: Routine과 Task를 연결하고 실행 메타데이터(순서/반복/휴식)를 보관
+// @connects: Routine ─── Task
+/// @displayName 활동
+model Activity {
   id          String    @id @default(uuid())
   createdAt   DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
   updatedAt   DateTime? @updatedAt @map("updated_at") @db.Timestamptz(6)
   removedAt   DateTime? @map("removed_at") @db.Timestamptz(6)
-  duration    Int
-  count       Int
-  taskId      String    @unique @map("task_id")
-  description String?
-  imageFileId String?   @map("image_file_id")
-  videoFileId String?   @map("video_file_id")
-  name        String
+  routineId   String    @map("routine_id")
+  taskId      String    @map("task_id")
+  order       Int
+  repetitions Int       @default(1)
+  restTime    Int       @default(0) @map("rest_time")
+  notes       String?
+  routine     Routine   @relation(fields: [routineId], references: [id])
   task        Task      @relation(fields: [taskId], references: [id])
 
-  @@index([name])
-  @@map("exercises")
+  @@unique([routineId, taskId])
+  @@index([routineId, order])
+  @@map("activities")
 }

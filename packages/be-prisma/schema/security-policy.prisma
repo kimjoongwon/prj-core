@@ -1,18 +1,5 @@
 // ============================================================================
-// Auth Security Domain - 인증 보안 도메인
-// ============================================================================
-//
-// 인증 보안 관련 모델들입니다.
-// 감사 로그, 비밀번호 히스토리, 보안 정책 등이 포함됩니다.
-//
-// 관계 구조:
-//   User (구체 엔티티)
-//     │
-//     ├─── AuthAuditLog (인증 감사 로그)
-//     └─── PasswordHistory (비밀번호 재사용 방지)
-//
-//   SecurityPolicy (싱글턴 - 시스템 전역 보안 정책)
-//
+// Security Policy Domain - 인증 정책 도메인
 // ============================================================================
 
 // @schema-type: REFERENCE
@@ -25,7 +12,6 @@ model SecurityPolicy {
   /// @displayName 정책 키
   key       String    @unique
 
-  // 비밀번호 정책
   /// @displayName 최소 비밀번호 길이
   passwordMinLength        Int     @default(8) @map("password_min_length")
   /// @displayName 대문자 필수
@@ -41,7 +27,6 @@ model SecurityPolicy {
   /// @displayName 비밀번호 재사용 제한 횟수
   passwordReuseLimit       Int     @default(3) @map("password_reuse_limit")
 
-  // 잠금 정책
   /// @displayName 일시 잠금 임계값
   temporaryLockThreshold   Int @default(5) @map("temporary_lock_threshold")
   /// @displayName 일시 잠금 시간 (분)
@@ -49,7 +34,6 @@ model SecurityPolicy {
   /// @displayName 영구 잠금 임계값
   permanentLockThreshold   Int @default(10) @map("permanent_lock_threshold")
 
-  // 세션 정책
   /// @displayName Access Token TTL (초)
   accessTokenTtlSec  Int @default(3600) @map("access_token_ttl_sec")
   /// @displayName Refresh Token TTL (초)
@@ -57,7 +41,6 @@ model SecurityPolicy {
   /// @displayName 세션 TTL (초)
   sessionTtlSec      Int @default(86400) @map("session_ttl_sec")
 
-  // 화이트리스트 정책 (비활성 시 모든 접근 허용)
   /// @displayName IP 화이트리스트 활성화
   ipWhitelistEnabled          Boolean @default(false) @map("ip_whitelist_enabled")
   /// @displayName 이메일 도메인 화이트리스트 활성화
@@ -94,58 +77,4 @@ model WhitelistEntry {
   @@unique([type, value])
   @@index([type])
   @@map("whitelist_entries")
-}
-
-// @schema-type: REFERENCE
-// @description: 로그인 시도 감사 로그
-/// @displayName 인증 감사 로그
-model AuthAuditLog {
-  id            String          @id @default(uuid())
-  createdAt     DateTime        @default(now()) @map("created_at") @db.Timestamptz(6)
-  /// @displayName 이메일
-  email         String
-  /// @displayName 사용자 ID
-  userId        String?         @map("user_id")
-  /// @displayName 결과
-  result        AuthAuditResult
-  /// @displayName 실패 사유
-  failureReason String?         @map("failure_reason")
-  /// @displayName IP 주소
-  ipAddress     String          @map("ip_address")
-  /// @displayName User Agent
-  userAgent     String?         @map("user_agent")
-  /// @displayName 클라이언트 ID
-  clientId      String?         @map("client_id")
-
-  user User? @relation(fields: [userId], references: [id])
-
-  @@index([email])
-  @@index([userId])
-  @@index([createdAt])
-  @@index([result])
-  @@map("auth_audit_logs")
-}
-
-/// @displayName 인증 감사 결과
-enum AuthAuditResult {
-  SUCCESS
-  FAILURE
-  LOCKED
-}
-
-// @schema-type: REFERENCE
-// @description: 이전 비밀번호 해시 저장 (재사용 방지)
-/// @displayName 비밀번호 히스토리
-model PasswordHistory {
-  id           String   @id @default(uuid())
-  createdAt    DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
-  /// @displayName 사용자 ID
-  userId       String   @map("user_id")
-  /// @displayName 비밀번호 해시
-  passwordHash String   @map("password_hash")
-
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-  @@index([userId])
-  @@map("password_histories")
 }

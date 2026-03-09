@@ -40,7 +40,16 @@
     // === 특수 빌드 패키지 ===
     "@cocrepo/prisma#build": {
       "dependsOn": ["^build"],
-      "inputs": ["src/**", "prisma/**", "tsconfig.json", "package.json", "tsup.config.*"],
+      "inputs": [
+        "src/**",
+        "schema/**",
+        "scripts/**",
+        "prisma.config.ts",
+        "seed.ts",
+        "seed-data.ts",
+        "tsconfig.json",
+        "package.json"
+      ],
       "outputs": ["dist/**"],
       "cache": true
     },

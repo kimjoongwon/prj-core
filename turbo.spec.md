@@ -29,4 +29,5 @@
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-03-09 | `@cocrepo/prisma#build` 입력을 `schema/**`, `scripts/**`, `prisma.config.ts`, seed 파일 기준으로 정정해 스키마 리팩토링 변경이 캐시에 반영되도록 수정 | codex |
 | 2026-03-08 | `tool-storybook#build` 전용 입력/출력 규칙을 추가해 Storybook을 표준 Turbo 빌드 그래프에 포함 | codex |
