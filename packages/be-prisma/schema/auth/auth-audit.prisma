@@ -3,7 +3,7 @@
 // ============================================================================
 
 // @schema-type: LOG
-// @aggregate-root: true
+// @schema-owner: true
 // @description: 로그인 시도와 결과를 기록하는 인증 감사 로그
 // @ownership: dependent
 // @scope: mixed

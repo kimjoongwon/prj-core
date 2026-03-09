@@ -10,6 +10,7 @@ enum GroupTypes {
   User
 }
 // @schema-type: ROOT
+// @schema-owner: true
 // @aggregate-root: true
 // @description: 사용자·공간·역할을 묶는 그룹 루트
 // @ownership: independent

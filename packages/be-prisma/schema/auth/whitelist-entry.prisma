@@ -9,6 +9,7 @@ enum WhitelistType {
   CORS_ORIGIN
 }
 // @schema-type: CATALOG
+// @schema-owner: true
 // @aggregate-root: true
 // @description: 인증 정책이 참조하는 화이트리스트 카탈로그
 // @ownership: independent

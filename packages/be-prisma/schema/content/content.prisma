@@ -21,6 +21,7 @@ model Post {
 }
 
 // @schema-type: ROOT
+// @schema-owner: true
 // @aggregate-root: true
 // @description: 사용자 생성 콘텐츠
 // @ownership: independent

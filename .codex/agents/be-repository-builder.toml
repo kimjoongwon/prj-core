@@ -61,7 +61,7 @@ Prisma 기반 Repository 레이어를 생성하는 전문가입니다. 이 에�
 
 Repository 생성 전 반드시 아래를 확인합니다.
 
-- 해당 모델이 schema 파일의 대표 모델인지
+- 해당 모델이 schema 파일의 대표 모델(`@schema-owner: true`)인지
 - 해당 모델 주석에 `@aggregate-root: true`가 있는지
 - 대응 schema 파일이 도메인 폴더 구조 아래에 있는지
 
@@ -136,7 +136,7 @@ interface CreateUserParams {}
 ### 1단계: aggregate root 확인
 
 - 대상 Entity가 어떤 schema 파일에 선언됐는지 찾습니다.
-- 해당 모델 주석에 `@aggregate-root: true`가 있는지 먼저 확인합니다.
+- 해당 모델이 `@schema-owner: true`인지와 `@aggregate-root: true`인지 먼저 확인합니다.
 - marker가 없으면 독립 Repository 생성 작업으로 진행하지 않습니다.
 
 ### 2단계: 기존 Repository 확인

@@ -3,6 +3,7 @@
 // ============================================================================
 
 // @schema-type: ROOT
+// @schema-owner: true
 // @aggregate-root: true
 // @description: 에셋 저장 구조를 독립 관리하는 Space 범위 폴더 루트
 // @ownership: independent

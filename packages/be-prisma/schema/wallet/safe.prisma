@@ -12,6 +12,7 @@
 // ============================================================================
 
 // @schema-type: ROOT
+// @schema-owner: true
 // @aggregate-root: true
 // @description: Space 단위로 운영되는 Safe 멀티시그 지갑
 // @ownership: independent

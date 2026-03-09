@@ -8,8 +8,9 @@
 //
 // 각 모델은 주 역할을 나타내는 `@schema-type` 하나와, 필요 시 보조 태그를 함께 가집니다.
 // schema 파일은 도메인 폴더(`access-control/`, `identity/`, `asset/` 등) 아래에 배치합니다.
-// 각 `.prisma` 파일은 대표 모델 1개를 가지며, 그 모델에는 `@aggregate-root: true`를 명시합니다.
-// 여기서 aggregate root는 DDD 엄밀 의미보다 "해당 파일의 대표 소유 모델(anchor model)"을 가리키는 운영 태그입니다.
+// 각 `.prisma` 파일은 대표 모델 1개를 가지며, 그 모델에는 `@schema-owner: true`를 명시합니다.
+// `@schema-owner: true`는 파일의 대표 소유 모델(anchor model)을 뜻합니다.
+// `@aggregate-root: true`는 그중에서도 독립적으로 관리되는 실제 aggregate root에만 선택적으로 부여합니다.
 //
 // ### Primary Types
 //
@@ -23,7 +24,8 @@
 //
 // ### Supporting Tags
 //
-// - @aggregate-root: true | 파일의 대표 소유 모델임을 명시
+// - @schema-owner: true | 파일의 대표 소유 모델임을 명시
+// - @aggregate-root: true | 독립적으로 관리되는 실제 aggregate root임을 명시
 // - @relation-pattern: one-to-one | one-to-many | many-to-many | polymorphic
 // - @ownership: independent | dependent
 // - @scope: global | space | user | tenant | mixed
@@ -68,18 +70,22 @@
 // - CHILD = 1:N 컬렉션형 종속
 // - JOIN = 연결 모델이며, 의미 차이는 @join-role로 보강
 // - CATALOG는 현재 단일 분류로 유지하되 필요 시 REFERENCE / POLICY / CONFIG로 분화 가능
-// - 각 schema 파일은 `_base.prisma`를 제외하고 정확히 하나의 `@aggregate-root: true` 모델을 가져야 함
+// - 각 schema 파일은 `_base.prisma`를 제외하고 정확히 하나의 `@schema-owner: true` 모델을 가져야 함
+// - `@aggregate-root: true`는 `@schema-owner: true` 모델 중 `@ownership: independent`인 경우에만 사용
 //
 // ### Example
 //
 //   Space
-//   ├── @aggregate-root: true   (@schema-type: BASE)
+//   ├── @schema-owner: true     (@schema-type: BASE)
+//   ├── @aggregate-root: true   (독립 aggregate root)
 //   ├── Ground                  (@schema-type: DETAIL, @materializes: Space)
 //   ├── SpaceClassification     (@schema-type: JOIN, @join-role: simple-link)
 //   ├── SpaceAssociation        (@schema-type: JOIN, @join-role: simple-link)
 //   └── Tenant                  (@schema-type: JOIN, @join-role: membership)
 //
-//   AuthAuditLog                (@schema-type: LOG)
+//   AuthAuditLog
+//   ├── @schema-owner: true     (@schema-type: LOG)
+//   └── (aggregate root 아님: 의존 로그)
 //
 // ============================================================================
 

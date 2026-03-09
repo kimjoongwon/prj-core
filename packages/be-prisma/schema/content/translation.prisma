@@ -5,6 +5,7 @@
 // 시스템 전역에서 사용되는 다국어 번역 데이터를 관리합니다.
 //
 // @schema-type: CATALOG
+// @schema-owner: true
 // @aggregate-root: true
 // @description: 다국어 리소스를 제공하는 전역 번역 카탈로그
 // @ownership: independent

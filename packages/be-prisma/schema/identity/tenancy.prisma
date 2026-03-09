@@ -3,6 +3,7 @@
 // ============================================================================
 
 // @schema-type: JOIN
+// @schema-owner: true
 // @aggregate-root: true
 // @description: User + Space + Role을 연결하는 멤버십 모델
 // @relation-pattern: many-to-many

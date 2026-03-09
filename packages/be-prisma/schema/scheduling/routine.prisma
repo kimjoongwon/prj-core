@@ -3,6 +3,7 @@
 // ============================================================================
 
 // @schema-type: ROOT
+// @schema-owner: true
 // @aggregate-root: true
 // @description: 반복 수행되는 활동 묶음을 정의하는 루틴
 // @ownership: independent

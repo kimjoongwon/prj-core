@@ -45,7 +45,7 @@ enum AttachmentFileType {
 }
 
 // @schema-type: CHILD
-// @aggregate-root: true
+// @schema-owner: true
 // @description: Inquiry에 종속되는 대화 스레드
 // @relation-pattern: one-to-many
 // @ownership: dependent

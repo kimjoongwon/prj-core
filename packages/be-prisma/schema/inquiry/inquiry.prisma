@@ -58,6 +58,7 @@ enum SentimentType {
 }
 
 // @schema-type: ROOT
+// @schema-owner: true
 // @aggregate-root: true
 // @description: 옴니채널 고객 문의를 관리하는 핵심 엔티티
 // @ownership: independent

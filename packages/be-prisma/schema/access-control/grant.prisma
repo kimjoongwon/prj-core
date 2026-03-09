@@ -3,6 +3,7 @@
 // ============================================================================
 
 // @schema-type: JOIN
+// @schema-owner: true
 // @aggregate-root: true
 // @description: Role 또는 User와 Ability를 연결하는 권한 정책 조인 모델
 // @relation-pattern: polymorphic

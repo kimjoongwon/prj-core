@@ -3,6 +3,7 @@
 // ============================================================================
 
 // @schema-type: CATALOG
+// @schema-owner: true
 // @aggregate-root: true
 // @description: 권한 판단에 사용하는 전역 능력 카탈로그
 // @ownership: independent

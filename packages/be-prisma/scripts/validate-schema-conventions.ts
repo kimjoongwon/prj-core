@@ -4,7 +4,7 @@ import path from "node:path";
 const schemaDir = path.resolve(__dirname, "../schema");
 const baseFile = "_base.prisma";
 
-const aggregateRootByFile: Record<string, string> = {
+const schemaOwnerByFile: Record<string, string> = {
 	"access-control/ability.prisma": "Ability",
 	"access-control/action.prisma": "Action",
 	"access-control/grant.prisma": "Grant",
@@ -25,6 +25,34 @@ const aggregateRootByFile: Record<string, string> = {
 	"identity/user.prisma": "User",
 	"inquiry/inquiry-ai.prisma": "AIAgentLog",
 	"inquiry/inquiry-thread.prisma": "InquiryThread",
+	"inquiry/inquiry.prisma": "Inquiry",
+	"oidc/oidc-client.prisma": "OidcClient",
+	"oidc/oidc-model.prisma": "OidcModel",
+	"scheduling/routine.prisma": "Routine",
+	"scheduling/task.prisma": "Task",
+	"scheduling/timeline.prisma": "Timeline",
+	"taxonomy/category.prisma": "Category",
+	"taxonomy/group.prisma": "Group",
+	"wallet/safe.prisma": "SafeWallet",
+};
+
+const aggregateRootByFile: Record<string, string> = {
+	"access-control/ability.prisma": "Ability",
+	"access-control/action.prisma": "Action",
+	"access-control/grant.prisma": "Grant",
+	"access-control/role.prisma": "Role",
+	"access-control/subject.prisma": "Subject",
+	"asset/album.prisma": "Album",
+	"asset/asset.prisma": "Asset",
+	"asset/folder.prisma": "Folder",
+	"auth/security-policy.prisma": "SecurityPolicy",
+	"auth/whitelist-entry.prisma": "WhitelistEntry",
+	"content/content.prisma": "Content",
+	"content/template.prisma": "Template",
+	"content/translation.prisma": "Translation",
+	"identity/space.prisma": "Space",
+	"identity/tenancy.prisma": "Tenant",
+	"identity/user.prisma": "User",
 	"inquiry/inquiry.prisma": "Inquiry",
 	"oidc/oidc-client.prisma": "OidcClient",
 	"oidc/oidc-model.prisma": "OidcModel",
@@ -189,7 +217,7 @@ function getNames(text: string, kind: "model" | "enum"): string[] {
 	return result;
 }
 
-function getAggregateRootModels(text: string): string[] {
+function getMarkedModels(text: string, marker: "schema-owner" | "aggregate-root"): string[] {
 	const pattern = /((?:^\s*\/\/[^\n]*\n)+)\s*model\s+([A-Za-z_][A-Za-z0-9_]*)\s*\{/gm;
 	const result: string[] = [];
 
@@ -198,7 +226,7 @@ function getAggregateRootModels(text: string): string[] {
 		const documentation = match[1];
 		const modelName = match[2];
 
-		if (/@aggregate-root:\s*true\b/.test(documentation)) {
+		if (new RegExp(`@${marker}:\\s*true\\b`).test(documentation)) {
 			result.push(modelName);
 		}
 
@@ -232,7 +260,9 @@ function main(): void {
 		const generatorCount = countMatches(text, /^\s*generator\s+[A-Za-z_][A-Za-z0-9_]*\s*\{/gm);
 		const datasourceCount = countMatches(text, /^\s*datasource\s+[A-Za-z_][A-Za-z0-9_]*\s*\{/gm);
 		const invalidDisplayNameCount = countMatches(text, /@DisplayName|@displayname/g);
-		const aggregateRootModels = getAggregateRootModels(text);
+		const schemaOwnerModels = getMarkedModels(text, "schema-owner");
+		const aggregateRootModels = getMarkedModels(text, "aggregate-root");
+		const expectedSchemaOwner = schemaOwnerByFile[file];
 		const expectedAggregateRoot = aggregateRootByFile[file];
 
 		if (file !== baseFile && (generatorCount > 0 || datasourceCount > 0)) {
@@ -241,13 +271,43 @@ function main(): void {
 		if (invalidDisplayNameCount > 0) {
 			errors.push(`[${file}] contains invalid displayName tag casing (@DisplayName or @displayname)`);
 		}
-		if (file !== baseFile && !expectedAggregateRoot) {
-			errors.push(`[${file}] missing aggregate-root assignment in aggregateRootByFile`);
+		if (file !== baseFile && !expectedSchemaOwner) {
+			errors.push(`[${file}] missing schema-owner assignment in schemaOwnerByFile`);
 		}
-		if (file === baseFile && aggregateRootModels.length > 0) {
+		if (
+			file === baseFile &&
+			(schemaOwnerModels.length > 0 || aggregateRootModels.length > 0)
+		) {
+			errors.push(`[${file}] must not declare @schema-owner: true or @aggregate-root: true`);
+		}
+		if (file !== baseFile && schemaOwnerModels.length !== 1) {
+			errors.push(
+				`[${file}] must contain exactly 1 @schema-owner: true model, found ${schemaOwnerModels.length}`,
+			);
+		}
+		if (
+			file !== baseFile &&
+			expectedSchemaOwner &&
+			schemaOwnerModels.length === 1 &&
+			schemaOwnerModels[0] !== expectedSchemaOwner
+		) {
+			errors.push(
+				`[${file}] schema-owner marker must be on ${expectedSchemaOwner} but found ${schemaOwnerModels[0]}`,
+			);
+		}
+		if (file !== baseFile && aggregateRootModels.length > 1) {
+			errors.push(
+				`[${file}] must contain at most 1 @aggregate-root: true model, found ${aggregateRootModels.length}`,
+			);
+		}
+		if (file !== baseFile && !expectedAggregateRoot && aggregateRootModels.length > 0) {
 			errors.push(`[${file}] must not declare @aggregate-root: true`);
 		}
-		if (file !== baseFile && aggregateRootModels.length !== 1) {
+		if (
+			file !== baseFile &&
+			expectedAggregateRoot &&
+			aggregateRootModels.length !== 1
+		) {
 			errors.push(
 				`[${file}] must contain exactly 1 @aggregate-root: true model, found ${aggregateRootModels.length}`,
 			);
@@ -259,7 +319,17 @@ function main(): void {
 			aggregateRootModels[0] !== expectedAggregateRoot
 		) {
 			errors.push(
-				`[${file}] aggregate root marker must be on ${expectedAggregateRoot} but found ${aggregateRootModels[0]}`,
+				`[${file}] aggregate-root marker must be on ${expectedAggregateRoot} but found ${aggregateRootModels[0]}`,
+			);
+		}
+		if (
+			file !== baseFile &&
+			schemaOwnerModels.length === 1 &&
+			aggregateRootModels.length === 1 &&
+			schemaOwnerModels[0] !== aggregateRootModels[0]
+		) {
+			errors.push(
+				`[${file}] @aggregate-root: true must also be the @schema-owner: true model`,
 			);
 		}
 
@@ -332,7 +402,7 @@ function main(): void {
 	}
 
 	console.log(
-		`[schema:check] OK (${files.length} files, ${declarations.size} declarations, domain-folder ownership + aggregate-root markers enforced)`,
+		`[schema:check] OK (${files.length} files, ${declarations.size} declarations, schema-owner + aggregate-root semantics enforced)`,
 	);
 }
 

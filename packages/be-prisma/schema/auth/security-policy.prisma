@@ -3,6 +3,7 @@
 // ============================================================================
 
 // @schema-type: CATALOG
+// @schema-owner: true
 // @aggregate-root: true
 // @description: 인증·세션 규칙을 제공하는 전역 보안 정책 카탈로그
 // @ownership: independent

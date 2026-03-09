@@ -3,6 +3,7 @@
 // ============================================================================
 
 // @schema-type: CATALOG
+// @schema-owner: true
 // @aggregate-root: true
 // @description: OIDC provider가 참조하는 전역 모델 저장 카탈로그
 // @ownership: independent

@@ -3,6 +3,7 @@
 // ============================================================================
 
 // @schema-type: ROOT
+// @schema-owner: true
 // @aggregate-root: true
 // @description: 사용자 정의 에셋 컬렉션
 // @ownership: independent

@@ -13,7 +13,7 @@ enum AIAgentAction {
   TRANSLATION
 }
 // @schema-type: LOG
-// @aggregate-root: true
+// @schema-owner: true
 // @description: AI 문의 처리 시도와 결과를 추적하는 실행 로그
 // @ownership: dependent
 // @scope: space
