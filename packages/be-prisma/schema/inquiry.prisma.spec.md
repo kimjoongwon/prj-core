@@ -6,7 +6,7 @@
 
 ## 역할
 
-문의 도메인의 본문, 참여자, 상태/우선순위, 메시지 이력 관련 모델을 정의합니다.
+문의 도메인의 상태/우선순위 코어 모델과 감정 분석(Materialization) 모델을 정의합니다.
 문의 처리 흐름에서 필요한 관계/상태 전이를 추적 가능한 형태로 유지합니다.
 
 ## 운영 규칙
@@ -20,4 +20,5 @@
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
 | 2026-03-09 | strict aggregate-root 분할 적용: 대화/AI 모델을 inquiry-thread.prisma, inquiry-ai.prisma로 분리하고 inquiry.prisma는 코어 모델 유지 | codex |
+| 2026-03-09 | SentimentAnalysis/SentimentType을 inquiry-ai.prisma에서 inquiry.prisma로 이동하여 Inquiry Aggregate 소유권으로 정렬 | codex |
 | 2026-03-06 | 누락된 sidecar spec 신규 생성 | codex |

@@ -6,7 +6,7 @@
 
 ## 역할
 
-보안 정책(SecurityPolicy)과 화이트리스트(WhitelistEntry) 규칙을 관리합니다.
+보안 정책 루트 엔티티(`SecurityPolicy`)를 관리합니다.
 
 ## 운영 규칙
 
@@ -18,4 +18,4 @@
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
 | 2026-03-09 | strict aggregate-root 분할 적용으로 auth.prisma에서 정책/화이트리스트 도메인 분리 | codex |
-
+| 2026-03-09 | WhitelistEntry/WhitelistType을 whitelist-entry.prisma로 분리하고 security-policy는 루트 모델만 유지 | codex |

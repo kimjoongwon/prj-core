@@ -4,11 +4,43 @@ import path from "node:path";
 const schemaDir = path.resolve(__dirname, "../schema");
 const baseFile = "_base.prisma";
 
+const rootByFile: Record<string, string> = {
+	"category.prisma": "Category",
+	"group.prisma": "Group",
+	"tenancy.prisma": "Tenant",
+	"content.prisma": "Content",
+	"security-policy.prisma": "SecurityPolicy",
+	"whitelist-entry.prisma": "WhitelistEntry",
+	"auth-audit.prisma": "AuthAuditLog",
+	"password-history.prisma": "PasswordHistory",
+	"subject.prisma": "Subject",
+	"action.prisma": "Action",
+	"ability.prisma": "Ability",
+	"grant.prisma": "Grant",
+	"inquiry.prisma": "Inquiry",
+	"inquiry-thread.prisma": "InquiryThread",
+	"inquiry-ai.prisma": "AIAgentLog",
+	"oidc-client.prisma": "OidcClient",
+	"oidc-model.prisma": "OidcModel",
+	"role.prisma": "Role",
+	"safe.prisma": "SafeWallet",
+	"space.prisma": "Space",
+	"timeline.prisma": "Timeline",
+	"routine.prisma": "Routine",
+	"task.prisma": "Task",
+	"template.prisma": "Template",
+	"translation.prisma": "Translation",
+	"user.prisma": "User",
+	"asset.prisma": "Asset",
+	"folder.prisma": "Folder",
+	"album.prisma": "Album",
+};
+
 const expectedOwner: Record<string, string> = {
-	Category: "taxonomy.prisma",
-	Group: "taxonomy.prisma",
-	CategoryTypes: "taxonomy.prisma",
-	GroupTypes: "taxonomy.prisma",
+	Category: "category.prisma",
+	CategoryTypes: "category.prisma",
+	Group: "group.prisma",
+	GroupTypes: "group.prisma",
 
 	Tenant: "tenancy.prisma",
 	Assignment: "tenancy.prisma",
@@ -18,8 +50,9 @@ const expectedOwner: Record<string, string> = {
 	TextTypes: "content.prisma",
 
 	SecurityPolicy: "security-policy.prisma",
-	WhitelistType: "security-policy.prisma",
-	WhitelistEntry: "security-policy.prisma",
+
+	WhitelistType: "whitelist-entry.prisma",
+	WhitelistEntry: "whitelist-entry.prisma",
 
 	AuthAuditLog: "auth-audit.prisma",
 	AuthAuditResult: "auth-audit.prisma",
@@ -33,11 +66,13 @@ const expectedOwner: Record<string, string> = {
 
 	Inquiry: "inquiry.prisma",
 	InquiryTag: "inquiry.prisma",
+	SentimentAnalysis: "inquiry.prisma",
 	InquiryCategory: "inquiry.prisma",
 	InquiryChannel: "inquiry.prisma",
 	InquiryStatus: "inquiry.prisma",
 	InquiryPriority: "inquiry.prisma",
 	InquirySource: "inquiry.prisma",
+	SentimentType: "inquiry.prisma",
 
 	InquiryThread: "inquiry-thread.prisma",
 	InquiryMessage: "inquiry-thread.prisma",
@@ -49,9 +84,7 @@ const expectedOwner: Record<string, string> = {
 	MessageContentType: "inquiry-thread.prisma",
 	AttachmentFileType: "inquiry-thread.prisma",
 
-	SentimentAnalysis: "inquiry-ai.prisma",
 	AIAgentLog: "inquiry-ai.prisma",
-	SentimentType: "inquiry-ai.prisma",
 	AIAgentAction: "inquiry-ai.prisma",
 
 	OidcClient: "oidc-client.prisma",
@@ -159,6 +192,9 @@ function main(): void {
 		if (invalidDisplayNameCount > 0) {
 			errors.push(`[${file}] contains invalid displayName tag casing (@DisplayName or @displayname)`);
 		}
+		if (file !== baseFile && !rootByFile[file]) {
+			errors.push(`[${file}] missing aggregate-root assignment in rootByFile`);
+		}
 
 		for (const modelName of getNames(text, "model")) {
 			const list = declarations.get(modelName) ?? [];
@@ -170,6 +206,24 @@ function main(): void {
 			const list = declarations.get(enumName) ?? [];
 			list.push({ kind: "enum", file });
 			declarations.set(enumName, list);
+		}
+	}
+
+	const rootNames = new Set(Object.values(rootByFile));
+	for (const [file, rootName] of Object.entries(rootByFile)) {
+		const text = textsByFile.get(file);
+		if (!text) {
+			errors.push(`[${file}] missing schema file for aggregate root ${rootName}`);
+			continue;
+		}
+		const models = getNames(text, "model");
+		const rootsInFile = models.filter((name) => rootNames.has(name));
+		if (rootsInFile.length !== 1) {
+			errors.push(`[${file}] must contain exactly 1 aggregate root, found ${rootsInFile.length}`);
+			continue;
+		}
+		if (rootsInFile[0] !== rootName) {
+			errors.push(`[${file}] aggregate root must be ${rootName} but found ${rootsInFile[0]}`);
 		}
 	}
 
@@ -229,7 +283,7 @@ function main(): void {
 	}
 
 	console.log(
-		`[schema:check] OK (${files.length} files, ${declarations.size} declarations, strict ownership enforced)`,
+		`[schema:check] OK (${files.length} files, ${declarations.size} declarations, aggregate-root ownership enforced)`,
 	);
 }
 

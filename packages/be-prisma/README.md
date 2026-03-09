@@ -132,10 +132,12 @@ This project uses **Prisma's official multi-file schema support** (GA since Pris
 packages/be-prisma/
 ├── schema/              # Multi-file schema directory
 │   ├── _base.prisma     # Generator and datasource configuration
-│   ├── taxonomy.prisma  # Category/Group domain
+│   ├── category.prisma  # Category domain
+│   ├── group.prisma     # Group domain
 │   ├── tenancy.prisma   # Tenant/Assignment domain
 │   ├── content.prisma   # Content/Post domain
 │   ├── security-policy.prisma
+│   ├── whitelist-entry.prisma
 │   ├── auth-audit.prisma
 │   ├── password-history.prisma
 │   ├── subject.prisma
@@ -188,7 +190,7 @@ export default defineConfig({
 
 Current schema contains:
 
-- **56 models** across 27 domain files (`_base.prisma` excluded)
+- **56 models** across 29 domain files (`_base.prisma` excluded)
 - **25 enums** for type safety
 - Automatic cross-file model referencing (no imports needed)
 
