@@ -51,7 +51,7 @@
 | `content/template.prisma` | `Template` |
 | `content/translation.prisma` | `Translation` |
 | `identity/space.prisma` | `Space` |
-| `identity/tenancy.prisma` | `Tenant` |
+| `identity/tenant.prisma` | `Tenant` |
 | `identity/user.prisma` | `User` |
 | `inquiry/inquiry-ai.prisma` | `AIAgentLog` |
 | `inquiry/inquiry-thread.prisma` | `InquiryThread` |
@@ -83,7 +83,7 @@
 | `content/template.prisma` | `Template` |
 | `content/translation.prisma` | `Translation` |
 | `identity/space.prisma` | `Space` |
-| `identity/tenancy.prisma` | `Tenant` |
+| `identity/tenant.prisma` | `Tenant` |
 | `identity/user.prisma` | `User` |
 | `inquiry/inquiry.prisma` | `Inquiry` |
 | `oidc/oidc-client.prisma` | `OidcClient` |
@@ -122,7 +122,7 @@
 | `content/template.prisma` | `Template`, `TemplateVariable`, `TemplateType` |
 | `content/translation.prisma` | `Translation`, `LanguageCode` |
 | `identity/space.prisma` | `Space`, `SpaceClassification`, `SpaceAssociation`, `Ground` |
-| `identity/tenancy.prisma` | `Tenant`, `Assignment` |
+| `identity/tenant.prisma` | `Tenant`, `Assignment` |
 | `identity/user.prisma` | `User`, `UserClassification`, `UserAssociation`, `Profile` |
 | `inquiry/inquiry-ai.prisma` | `AIAgentLog`, `AIAgentAction` |
 | `inquiry/inquiry-thread.prisma` | `InquiryThread`, `InquiryMessage`, `InquiryParticipant`, `InquiryAttachment`, `InquiryParticipantRole`, `SenderType`, `ThreadStatus`, `MessageContentType`, `AttachmentFileType` |

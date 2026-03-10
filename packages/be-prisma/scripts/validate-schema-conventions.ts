@@ -21,7 +21,7 @@ const schemaOwnerByFile: Record<string, string> = {
 	"content/template.prisma": "Template",
 	"content/translation.prisma": "Translation",
 	"identity/space.prisma": "Space",
-	"identity/tenancy.prisma": "Tenant",
+	"identity/tenant.prisma": "Tenant",
 	"identity/user.prisma": "User",
 	"inquiry/inquiry-ai.prisma": "AIAgentLog",
 	"inquiry/inquiry-thread.prisma": "InquiryThread",
@@ -51,7 +51,7 @@ const aggregateRootByFile: Record<string, string> = {
 	"content/template.prisma": "Template",
 	"content/translation.prisma": "Translation",
 	"identity/space.prisma": "Space",
-	"identity/tenancy.prisma": "Tenant",
+	"identity/tenant.prisma": "Tenant",
 	"identity/user.prisma": "User",
 	"inquiry/inquiry.prisma": "Inquiry",
 	"oidc/oidc-client.prisma": "OidcClient",
@@ -70,8 +70,8 @@ const expectedOwner: Record<string, string> = {
 	Group: "taxonomy/group.prisma",
 	GroupTypes: "taxonomy/group.prisma",
 
-	Tenant: "identity/tenancy.prisma",
-	Assignment: "identity/tenancy.prisma",
+	Tenant: "identity/tenant.prisma",
+	Assignment: "identity/tenant.prisma",
 
 	Post: "content/content.prisma",
 	Content: "content/content.prisma",

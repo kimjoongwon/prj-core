@@ -1,7 +1,6 @@
 "use client";
 
-import { customInstance } from "@cocrepo/api";
-import type { UserDto } from "@cocrepo/dto";
+import { customInstance, type UserDto } from "@cocrepo/api";
 import { DeleteFilter } from "@cocrepo/enum";
 
 /**

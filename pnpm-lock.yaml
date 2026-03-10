@@ -1741,12 +1741,6 @@ importers:
       '@cocrepo/api':
         specifier: workspace:*
         version: link:../fe-api
-      '@cocrepo/dto':
-        specifier: workspace:*
-        version: link:../be-dto
-      '@cocrepo/entity':
-        specifier: workspace:*
-        version: link:../be-entity
       '@cocrepo/enum':
         specifier: workspace:*
         version: link:../common-enum

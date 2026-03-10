@@ -1,7 +1,6 @@
-import type { FileDto } from "@cocrepo/dto";
 import type { Meta, StoryObj } from "@storybook/react";
 import { useState } from "react";
-import { FileUploader } from "./FileUploader";
+import { FileUploader, type FileDto } from "./FileUploader";
 
 const meta: Meta<typeof FileUploader> = {
 	title: "Inputs/FileUploader",

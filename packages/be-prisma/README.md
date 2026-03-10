@@ -132,35 +132,45 @@ This project uses **Prisma's official multi-file schema support** (GA since Pris
 packages/be-prisma/
 ├── schema/              # Multi-file schema directory
 │   ├── _base.prisma     # Generator and datasource configuration
-│   ├── category.prisma  # Category domain
-│   ├── group.prisma     # Group domain
-│   ├── tenancy.prisma   # Tenant/Assignment domain
-│   ├── content.prisma   # Content/Post domain
-│   ├── security-policy.prisma
-│   ├── whitelist-entry.prisma
-│   ├── auth-audit.prisma
-│   ├── password-history.prisma
-│   ├── subject.prisma
-│   ├── action.prisma
-│   ├── ability.prisma
-│   ├── grant.prisma
-│   ├── user.prisma      # User domain
-│   ├── role.prisma      # Role domain
-│   ├── space.prisma     # Space domain
-│   ├── asset.prisma
-│   ├── folder.prisma
-│   ├── album.prisma
-│   ├── timeline.prisma
-│   ├── routine.prisma
-│   ├── task.prisma
-│   ├── inquiry.prisma
-│   ├── inquiry-thread.prisma
-│   ├── inquiry-ai.prisma
-│   ├── template.prisma  # Message template domain
-│   ├── translation.prisma
-│   ├── oidc-client.prisma
-│   ├── oidc-model.prisma
-│   └── safe.prisma
+│   ├── access-control/
+│   │   ├── ability.prisma
+│   │   ├── action.prisma
+│   │   ├── grant.prisma
+│   │   ├── role.prisma
+│   │   └── subject.prisma
+│   ├── asset/
+│   │   ├── album.prisma
+│   │   ├── asset.prisma
+│   │   └── folder.prisma
+│   ├── auth/
+│   │   ├── auth-audit.prisma
+│   │   ├── password-history.prisma
+│   │   ├── security-policy.prisma
+│   │   └── whitelist-entry.prisma
+│   ├── content/
+│   │   ├── content.prisma
+│   │   ├── template.prisma
+│   │   └── translation.prisma
+│   ├── identity/
+│   │   ├── space.prisma
+│   │   ├── tenant.prisma
+│   │   └── user.prisma
+│   ├── inquiry/
+│   │   ├── inquiry-ai.prisma
+│   │   ├── inquiry-thread.prisma
+│   │   └── inquiry.prisma
+│   ├── oidc/
+│   │   ├── oidc-client.prisma
+│   │   └── oidc-model.prisma
+│   ├── scheduling/
+│   │   ├── routine.prisma
+│   │   ├── task.prisma
+│   │   └── timeline.prisma
+│   ├── taxonomy/
+│   │   ├── category.prisma
+│   │   └── group.prisma
+│   └── wallet/
+│       └── safe.prisma
 ├── migrations/          # Database migrations
 └── seed.ts              # Database seeding script
 ```

@@ -1,11 +1,6 @@
 "use client";
 
-import type {
-	ActionConfig,
-	ActionFormatConfig,
-	ActionMaskingConfig,
-	ActionTransformConfig,
-} from "@cocrepo/entity";
+import type { ActionConfigDto } from "@cocrepo/api";
 import { Card, CardBody, cn } from "@heroui/react";
 import { observer } from "mobx-react-lite";
 import { Input } from "../../../input/Input/Input";
@@ -46,13 +41,31 @@ const FORMAT_PATTERN_EXAMPLES = [
 	{ value: "#,###", text: "숫자 (#,###)" },
 ];
 
+type ActionConfigType = "masking" | "format" | "transform";
+type ActionMaskingField = "preset" | "pattern" | "replacement";
+type ActionMaskingConfig = ActionConfigDto & { type: "masking" };
+type ActionFormatConfig = ActionConfigDto & { type: "format" };
+type ActionTransformConfig = ActionConfigDto & { type: "transform" };
+
+const isMaskingConfig = (
+	config: ActionConfigDto | null,
+): config is ActionMaskingConfig => config?.type === "masking";
+
+const isFormatConfig = (
+	config: ActionConfigDto | null,
+): config is ActionFormatConfig => config?.type === "format";
+
+const isTransformConfig = (
+	config: ActionConfigDto | null,
+): config is ActionTransformConfig => config?.type === "transform";
+
 export interface ActionConfigEditorProps {
 	/** 설정 타입 */
-	configType: "masking" | "format" | "transform" | null;
+	configType: ActionConfigType | null;
 	/** 현재 설정 값 */
-	config: ActionConfig | null;
+	config: ActionConfigDto | null;
 	/** 설정 변경 핸들러 */
-	onChange: (config: ActionConfig | null) => void;
+	onChange: (config: ActionConfigDto | null) => void;
 	/** 미리보기용 샘플 값 */
 	previewValue?: string;
 }
@@ -81,13 +94,10 @@ export const ActionConfigEditor = observer(
 		/**
 		 * 마스킹 설정 변경 핸들러
 		 */
-		const handleMaskingChange = (
-			field: keyof ActionMaskingConfig,
-			value: string,
-		) => {
-			const currentConfig = (config as ActionMaskingConfig) || {
-				type: "masking" as const,
-			};
+		const handleMaskingChange = (field: ActionMaskingField, value: string) => {
+			const currentConfig: ActionMaskingConfig = isMaskingConfig(config)
+				? config
+				: { type: "masking" };
 
 			if (field === "preset") {
 				// 프리셋 선택 시 커스텀 패턴 초기화
@@ -132,7 +142,7 @@ export const ActionConfigEditor = observer(
 		const getMaskingPreview = (): string | null => {
 			if (!previewValue || configType !== "masking") return null;
 
-			const maskingConfig = config as ActionMaskingConfig | null;
+			const maskingConfig = isMaskingConfig(config) ? config : null;
 			if (!maskingConfig) return previewValue;
 
 			// 프리셋에 따른 마스킹 미리보기
@@ -199,7 +209,7 @@ export const ActionConfigEditor = observer(
 
 		// 마스킹 설정 UI
 		if (configType === "masking") {
-			const maskingConfig = config as ActionMaskingConfig | null;
+			const maskingConfig = isMaskingConfig(config) ? config : null;
 			const preview = getMaskingPreview();
 
 			return (
@@ -274,7 +284,7 @@ export const ActionConfigEditor = observer(
 
 		// 포맷 설정 UI
 		if (configType === "format") {
-			const formatConfig = config as ActionFormatConfig | null;
+			const formatConfig = isFormatConfig(config) ? config : null;
 
 			return (
 				<Card className="bg-content2">
@@ -331,7 +341,7 @@ export const ActionConfigEditor = observer(
 
 		// 변환 설정 UI
 		if (configType === "transform") {
-			const transformConfig = config as ActionTransformConfig | null;
+			const transformConfig = isTransformConfig(config) ? config : null;
 
 			/**
 			 * 변환 미리보기 결과

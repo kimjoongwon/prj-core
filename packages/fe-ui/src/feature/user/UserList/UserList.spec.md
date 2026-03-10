@@ -20,8 +20,7 @@
 
 | 모듈 | 용도 |
 |------|------|
-| @cocrepo/api | 기능 구현 의존성 |
-| @cocrepo/dto | 기능 구현 의존성 |
+| @cocrepo/api | 기능 구현 의존성 (`customInstance`, `UserDto`) |
 | @cocrepo/enum | 기능 구현 의존성 |
 | @heroui/react | 기능 구현 의존성 |
 | lucide-react | 기능 구현 의존성 |
@@ -52,6 +51,7 @@
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-03-10 | `UserDto` 타입 출처를 `@cocrepo/dto`에서 `@cocrepo/api` 모델로 변경 | codex |
 | 2026-03-06 | 폴더 네이밍을 단수형(feature/input/layout/hook/style/type/util/widget/cell)으로 통일 | codex |
 | 2026-03-06 | src/components 레이어를 제거하고 경로를 src/* 기준으로 상향 | codex |
 | 2026-03-06 | feature 디렉토리를 features로 이관하고 경로 표기를 동기화 | codex |
