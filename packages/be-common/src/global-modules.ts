@@ -1,6 +1,11 @@
 import { PRISMA_SERVICE_TOKEN } from "@cocrepo/constant";
+import type { AuthConfig } from "@cocrepo/type";
 import type { DynamicModule } from "@nestjs/common";
-import { ConfigModule, ConfigService, type ConfigFactory } from "@nestjs/config";
+import {
+	type ConfigFactory,
+	ConfigModule,
+	ConfigService,
+} from "@nestjs/config";
 import { JwtModule } from "@nestjs/jwt";
 import { ThrottlerModule } from "@nestjs/throttler";
 import { ClsPluginTransactional } from "@nestjs-cls/transactional";
@@ -9,7 +14,6 @@ import { MailerModule } from "@nestjs-modules/mailer";
 import type { SignOptions } from "jsonwebtoken";
 import { ClsModule } from "nestjs-cls";
 import { LoggerModule } from "nestjs-pino";
-import type { AuthConfig } from "@cocrepo/type";
 
 export type GlobalModuleConfigLoader = ConfigFactory;
 

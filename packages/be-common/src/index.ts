@@ -1,27 +1,12 @@
 // Context (Space 스코프)
-export {
-	AccessibleSpaces,
-	OnlyMySpace,
-	SPACE_SCOPE_KEY,
-	SpaceScope,
-	SpaceScopeInterceptor,
-} from "./context";
-// CASL (권한 시스템)
-export {
-	AccessApiPolicy,
-	AccessFeaturePolicy,
-	AccessMenuPolicy,
-	CaslAbilityFactory,
-	CustomPolicy,
-	ManageEntityPolicy,
-} from "./casl";
+
 export type {
 	AbilityCondition,
 	ActionConfig,
 	ActionFormatConfig,
 	ActionMaskingConfig,
-	ActionTransformConfig,
 	Actions,
+	ActionTransformConfig,
 	AppAbility,
 	AppAbilityBuilder,
 	AppAbilityClass,
@@ -31,8 +16,29 @@ export type {
 	PolicyHandlerCallback,
 	Subjects,
 } from "./casl";
+// CASL (권한 시스템)
+export {
+	AccessApiPolicy,
+	AccessFeaturePolicy,
+	AccessMenuPolicy,
+	CaslAbilityFactory,
+	CustomPolicy,
+	ManageEntityPolicy,
+} from "./casl";
+export {
+	AccessibleSpaces,
+	OnlyMySpace,
+	SPACE_SCOPE_KEY,
+	SpaceScope,
+	SpaceScopeInterceptor,
+} from "./context";
 // Filters
 export { AllExceptionsFilter } from "./filter";
+export {
+	type CreateGlobalModulesOptions,
+	createGlobalModules,
+	type GlobalModuleConfigLoader,
+} from "./global-modules";
 // Guards
 export {
 	CHECK_POLICIES_KEY,
@@ -69,11 +75,6 @@ export {
 } from "./pipe";
 // Providers
 export { GeneratorProvider } from "./provider";
-export {
-	type GlobalModuleConfigLoader,
-	type CreateGlobalModulesOptions,
-	createGlobalModules,
-} from "./global-modules";
 // Strategies - JwtStrategy는 be-service로 이동
 // export { JwtStrategy } from "./strategy";
 export type {
