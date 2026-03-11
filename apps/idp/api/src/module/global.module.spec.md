@@ -18,17 +18,7 @@
 
 | 모듈 | 용도 |
 |------|------|
-| @cocrepo/constant | 기능 구현 의존성 |
-| @nestjs/common | 기능 구현 의존성 |
-| @nestjs/config | 기능 구현 의존성 |
-| @nestjs/jwt | 기능 구현 의존성 |
-| @nestjs/throttler | 기능 구현 의존성 |
-| @nestjs-cls/transactional | 기능 구현 의존성 |
-| @nestjs-cls/transactional-adapter-prisma | 기능 구현 의존성 |
-| @nestjs-modules/mailer | 기능 구현 의존성 |
-| jsonwebtoken | 기능 구현 의존성 |
-| nestjs-cls | 기능 구현 의존성 |
-| nestjs-pino | 기능 구현 의존성 |
+| @cocrepo/be-common | 기능 구현 의존성 |
 | ../config | 기능 구현 의존성 |
 
 ## 구현 체크리스트
@@ -41,3 +31,4 @@
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
 | 2026-03-03 | 누락된 sidecar spec 신규 생성 | codex |
+| 2026-03-11 | `globalModules`를 공통 생성기 `createGlobalModules` 호출로 변경 | codex |

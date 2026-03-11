@@ -12,10 +12,13 @@
 
 | 항목 | 설명 |
 |------|------|
-| export | 없음 |
+| createGlobalModules | 공개 계약 요소 |
+| CreateGlobalModulesOptions | 공개 계약 요소 |
+| GlobalModuleConfigLoader | 공개 계약 요소 |
 
 ## 변경 이력
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
 | 2026-03-03 | 누락된 sidecar spec 신규 생성 | codex |
+| 2026-03-11 | `global-modules` 팩토리 export 추가 | codex |

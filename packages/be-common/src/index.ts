@@ -69,6 +69,11 @@ export {
 } from "./pipe";
 // Providers
 export { GeneratorProvider } from "./provider";
+export {
+	type GlobalModuleConfigLoader,
+	type CreateGlobalModulesOptions,
+	createGlobalModules,
+} from "./global-modules";
 // Strategies - JwtStrategy는 be-service로 이동
 // export { JwtStrategy } from "./strategy";
 export type {
