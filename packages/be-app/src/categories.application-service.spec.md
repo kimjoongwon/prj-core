@@ -1,0 +1,36 @@
+# Categories ApplicationService 기획서
+
+> 생성일: 2026-03-11
+> 타입: application-service
+> 위치: packages/be-app/src/categories.application-service.ts
+
+## 역할
+
+Category 컨트롤러에서 SpaceContext 의존성을 제거하고, 현재 Space 기준 생성 흐름을 ApplicationService에서 연결합니다.
+
+## 의존성
+
+| 의존성 | 역할 |
+|--------|------|
+| CategoriesService | Category CRUD 유즈케이스 수행 |
+| SpaceContext | 현재 요청의 spaceId 제공 |
+
+## 공개 메서드
+
+| 메서드 | 설명 |
+|--------|------|
+| getCategories | QueryCategoryDto 기반 목록 조회 |
+| getCategoryById | Category 상세 조회 |
+| createCategory | 현재 spaceId를 주입해 Category 생성 |
+| updateCategory | Category 수정 |
+| deleteCategory | Category 삭제 |
+
+## 비즈니스 규칙
+
+- Category 생성은 항상 현재 요청 Space 기준으로 수행됩니다.
+
+## 변경 이력
+
+| 일자 | 내용 | 작성자 |
+|------|------|--------|
+| 2026-03-11 | Categories 도메인 thin wrapper application service 신규 생성 | codex |

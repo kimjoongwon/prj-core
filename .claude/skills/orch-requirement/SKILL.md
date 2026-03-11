@@ -141,9 +141,10 @@ apps/server/src/[module]/
 | `/req-screen-planner` | 기능/화면 | page.spec.md |
 | `/req-page-planner` | 페이지 통합 | page.spec.md 통합 섹션 |
 | `/req-api-planner` | 인터랙션/API | controller.spec.md, dto.spec.md |
+| `/req-app-planner` | ApplicationService 유즈케이스 | application-service.spec.md |
 | `/req-entity-planner` | Entity/Enum/VO 설계 | entity.spec.md, enum.spec.md, vo.spec.md |
 | `/req-store-planner` | Store 설계 | [domain]Store.spec.md |
-| `/req-ui-planner` | UI 컴포넌트 기획 | ui/index.spec.md |
+| `/req-primitive-planner` | Pure UI 컴포넌트 기획 | primitive/index.spec.md |
 | `/req-input-planner` | Input 컴포넌트 기획 | inputs/index.spec.md |
 | `/req-cell-planner` | Cell 컴포넌트 기획 | cells/index.spec.md |
 | `/req-widget-planner` | Widget 기획 | widget/index.spec.md |
@@ -151,7 +152,8 @@ apps/server/src/[module]/
 | `/req-feature-planner` | Feature 기획 | feature/index.spec.md |
 | `/req-menu-planner` | 메뉴 기획 | admin-menu.spec.md |
 | `/req-logic-planner` | 로직/테스트 | service/repository.spec.md, 테스트 케이스 |
-| `/req-test-planner` | 테스트 케이스 기획 | 각 spec 테스트 섹션 |
+| `/req-be-test-planner` | 백엔드 테스트 케이스 기획 | Service/Controller/E2E 테스트 섹션 |
+| `/req-fe-test-planner` | 프론트엔드 테스트 케이스 기획 | Page/Feature/UI 테스트 섹션 |
 | `/req-api-integration-planner` | API 연동 기획 | hooks/index.spec.md |
 
 ---

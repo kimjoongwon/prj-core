@@ -6,9 +6,10 @@ module.exports = {
 	moduleFileExtensions: ["ts", "js", "json"],
 	setupFiles: ["reflect-metadata"],
 	moduleNameMapper: {
+		"^@cocrepo/app$": "<rootDir>/test/mocks/app.ts",
 		"^@cocrepo/be-common$": "<rootDir>/test/mocks/be-common.ts",
 		"^@cocrepo/dto$": "<rootDir>/test/mocks/dto.ts",
-		"^@cocrepo/facade$": "<rootDir>/test/mocks/facade.ts",
+		"^@cocrepo/integration$": "<rootDir>/test/mocks/integration.ts",
 		"^@cocrepo/service$": "<rootDir>/test/mocks/service.ts",
 		"^@cocrepo/prisma$": "<rootDir>/test/mocks/prisma.ts",
 	},

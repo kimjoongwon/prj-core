@@ -256,7 +256,7 @@ export class AppModule implements OnModuleInit {
 ### 대상 파일
 
 ```
-apps/server/src/module/app.module.ts
+apps/core/api/src/module/app.module.ts
 ```
 
 ### NestJS 라이프사이클

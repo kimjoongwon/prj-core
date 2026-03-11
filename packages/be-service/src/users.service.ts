@@ -462,7 +462,7 @@ export class UsersService {
 
 	/**
 	 * 회원가입용 사용자 생성 (Tenant, Profile 포함)
-	 * Facade에서 사용
+	 * ApplicationService에서 사용
 	 */
 	createUserForSignUp(params: {
 		name: string;

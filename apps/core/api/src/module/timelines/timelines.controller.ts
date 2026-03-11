@@ -1,5 +1,4 @@
-import { wrapResponse } from "@cocrepo/be-common";
-import { CONTEXT_KEYS, TIMELINE_ERRORS } from "@cocrepo/constant";
+import { TimelinesApplicationService } from "@cocrepo/app";
 import {
 	ApiAuth,
 	ApiErrors,
@@ -20,8 +19,6 @@ import {
 	UpdateSessionDto,
 	UpdateTimelineDto,
 } from "@cocrepo/dto";
-import { User } from "@cocrepo/entity";
-import { TimelinesService } from "@cocrepo/service";
 import {
 	Body,
 	Controller,
@@ -34,40 +31,15 @@ import {
 	Patch,
 	Post,
 	Query,
-	UnauthorizedException,
 } from "@nestjs/common";
 import { ApiBody, ApiOperation, ApiParam, ApiTags } from "@nestjs/swagger";
-import { ClsService } from "nestjs-cls";
 
 @ApiTags("TIMELINES")
 @Controller()
 export class TimelinesController {
 	constructor(
-		private readonly timelinesService: TimelinesService,
-		private readonly cls: ClsService,
+		private readonly timelinesApplicationService: TimelinesApplicationService,
 	) {}
-
-	/**
-	 * 현재 Space ID를 CLS 컨텍스트에서 가져옵니다.
-	 */
-	private getSpaceId(): string {
-		const spaceId = this.cls.get<string>(CONTEXT_KEYS.SPACE_ID);
-		if (!spaceId) {
-			throw new UnauthorizedException(TIMELINE_ERRORS.INVALID_DATA);
-		}
-		return spaceId;
-	}
-
-	/**
-	 * 현재 로그인한 사용자를 CLS 컨텍스트에서 가져옵니다.
-	 */
-	private getCurrentUser(): User {
-		const user = this.cls.get<User>(CONTEXT_KEYS.AUTH_USER);
-		if (!user?.id) {
-			throw new UnauthorizedException(TIMELINE_ERRORS.NOT_FOUND);
-		}
-		return user;
-	}
 
 	// ============================================================================
 	// Timeline 엔드포인트
@@ -90,28 +62,7 @@ export class TimelinesController {
 	@ApiResponseEntity(TimelineDto, HttpStatus.OK, { isArray: true })
 	@ResponseMessage("common.timeline.list.success")
 	async getTimelines(@Query() query: QueryTimelineDto) {
-		const spaceId = this.getSpaceId();
-		const skip = query.skip ?? 0;
-		const take = query.take ?? 10;
-
-		const { timelines, total } = await this.timelinesService.findTimelines({
-			spaceId,
-			skip,
-			take,
-			search: query.search ?? null,
-		});
-
-		return wrapResponse(timelines, {
-			meta: {
-				total,
-				skip,
-				take,
-				totalPages: take > 0 ? Math.ceil(total / take) : 1,
-			},
-			stats: {
-				total,
-			},
-		});
+		return this.timelinesApplicationService.getTimelines(query);
 	}
 
 	/**
@@ -137,8 +88,7 @@ export class TimelinesController {
 	async getTimelineById(
 		@Param("timelineId", ParseUUIDPipe) timelineId: string,
 	) {
-		const spaceId = this.getSpaceId();
-		return this.timelinesService.findTimelineForSpace(timelineId, spaceId);
+		return this.timelinesApplicationService.getTimelineById(timelineId);
 	}
 
 	/**
@@ -158,9 +108,7 @@ export class TimelinesController {
 	@ApiResponseEntity(TimelineDto, HttpStatus.CREATED)
 	@ResponseMessage("common.timeline.create.success")
 	async createTimeline(@Body() dto: CreateTimelineDto) {
-		const spaceId = this.getSpaceId();
-		const user = this.getCurrentUser();
-		return this.timelinesService.createTimeline(dto, spaceId, user.id);
+		return this.timelinesApplicationService.createTimeline(dto);
 	}
 
 	/**
@@ -188,12 +136,7 @@ export class TimelinesController {
 		@Param("timelineId", ParseUUIDPipe) timelineId: string,
 		@Body() dto: UpdateTimelineDto,
 	) {
-		const spaceId = this.getSpaceId();
-		return this.timelinesService.updateTimelineForSpace(
-			timelineId,
-			dto,
-			spaceId,
-		);
+		return this.timelinesApplicationService.updateTimeline(timelineId, dto);
 	}
 
 	/**
@@ -219,8 +162,7 @@ export class TimelinesController {
 	async deleteTimeline(
 		@Param("timelineId", ParseUUIDPipe) timelineId: string,
 	): Promise<void> {
-		const spaceId = this.getSpaceId();
-		await this.timelinesService.deleteTimelineFromSpace(timelineId, spaceId);
+		await this.timelinesApplicationService.deleteTimeline(timelineId);
 	}
 
 	// ============================================================================
@@ -251,23 +193,7 @@ export class TimelinesController {
 		@Param("timelineId", ParseUUIDPipe) timelineId: string,
 		@Query() query: QuerySessionDto,
 	) {
-		const skip = query.skip ?? 0;
-		const take = query.take ?? 10;
-
-		const { sessions, total } =
-			await this.timelinesService.findSessionsInTimeline(timelineId, {
-				skip,
-				take,
-			});
-
-		return wrapResponse(sessions, {
-			meta: {
-				total,
-				skip,
-				take,
-				totalPages: take > 0 ? Math.ceil(total / take) : 1,
-			},
-		});
+		return this.timelinesApplicationService.getSessions(timelineId, query);
 	}
 
 	/**
@@ -295,7 +221,10 @@ export class TimelinesController {
 		@Param("timelineId", ParseUUIDPipe) timelineId: string,
 		@Param("sessionId", ParseUUIDPipe) sessionId: string,
 	) {
-		return this.timelinesService.findSessionInTimeline(timelineId, sessionId);
+		return this.timelinesApplicationService.getSessionById(
+			timelineId,
+			sessionId,
+		);
 	}
 
 	/**
@@ -323,7 +252,7 @@ export class TimelinesController {
 		@Param("timelineId", ParseUUIDPipe) timelineId: string,
 		@Body() dto: CreateSessionDto,
 	) {
-		return this.timelinesService.createSessionInTimeline(timelineId, dto);
+		return this.timelinesApplicationService.createSession(timelineId, dto);
 	}
 
 	/**
@@ -354,7 +283,7 @@ export class TimelinesController {
 		@Param("sessionId", ParseUUIDPipe) sessionId: string,
 		@Body() dto: UpdateSessionDto,
 	) {
-		return this.timelinesService.updateSessionInTimeline(
+		return this.timelinesApplicationService.updateSession(
 			timelineId,
 			sessionId,
 			dto,
@@ -386,10 +315,7 @@ export class TimelinesController {
 		@Param("timelineId", ParseUUIDPipe) timelineId: string,
 		@Param("sessionId", ParseUUIDPipe) sessionId: string,
 	): Promise<void> {
-		await this.timelinesService.deleteSessionFromTimeline(
-			timelineId,
-			sessionId,
-		);
+		await this.timelinesApplicationService.deleteSession(timelineId, sessionId);
 	}
 
 	// ============================================================================
@@ -422,23 +348,7 @@ export class TimelinesController {
 		@Param("sessionId", ParseUUIDPipe) sessionId: string,
 		@Query() query: QueryProgramDto,
 	) {
-		const skip = query.skip ?? 0;
-		const take = query.take ?? 10;
-
-		const { programs, total } =
-			await this.timelinesService.findProgramsInSession(sessionId, {
-				skip,
-				take,
-			});
-
-		return wrapResponse(programs, {
-			meta: {
-				total,
-				skip,
-				take,
-				totalPages: take > 0 ? Math.ceil(total / take) : 1,
-			},
-		});
+		return this.timelinesApplicationService.getPrograms(sessionId, query);
 	}
 
 	/**
@@ -472,7 +382,10 @@ export class TimelinesController {
 		@Param("sessionId", ParseUUIDPipe) sessionId: string,
 		@Param("programId", ParseUUIDPipe) programId: string,
 	) {
-		return this.timelinesService.findProgramInSession(sessionId, programId);
+		return this.timelinesApplicationService.getProgramById(
+			sessionId,
+			programId,
+		);
 	}
 
 	/**
@@ -503,13 +416,7 @@ export class TimelinesController {
 		@Param("sessionId", ParseUUIDPipe) sessionId: string,
 		@Body() dto: CreateProgramDto,
 	) {
-		return this.timelinesService.createProgramInSession(sessionId, {
-			name: dto.name,
-			routineId: dto.routineId,
-			instructorId: dto.instructorId,
-			capacity: dto.capacity,
-			level: dto.level ?? null,
-		});
+		return this.timelinesApplicationService.createProgram(sessionId, dto);
 	}
 
 	/**
@@ -546,13 +453,11 @@ export class TimelinesController {
 		@Param("programId", ParseUUIDPipe) programId: string,
 		@Body() dto: UpdateProgramDto,
 	) {
-		return this.timelinesService.updateProgramInSession(sessionId, programId, {
-			name: dto.name,
-			routineId: dto.routineId,
-			instructorId: dto.instructorId,
-			capacity: dto.capacity,
-			level: dto.level,
-		});
+		return this.timelinesApplicationService.updateProgram(
+			sessionId,
+			programId,
+			dto,
+		);
 	}
 
 	/**
@@ -585,6 +490,6 @@ export class TimelinesController {
 		@Param("sessionId", ParseUUIDPipe) sessionId: string,
 		@Param("programId", ParseUUIDPipe) programId: string,
 	): Promise<void> {
-		await this.timelinesService.deleteProgramFromSession(sessionId, programId);
+		await this.timelinesApplicationService.deleteProgram(sessionId, programId);
 	}
 }

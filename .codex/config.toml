@@ -34,6 +34,7 @@ implementation = [
   "common-schema-builder",
   "be-dto-builder",
   "be-controller-builder",
+  "be-module-builder",
 ]
 data = [
   "be-prisma-builder",
@@ -50,8 +51,12 @@ description = "AppModule 부트스트랩에 서비스를 통합하는 전문가"
 config_file = "agents/be-bootstrap-integrator.toml"
 
 [agents.be-controller-builder]
-description = "NestJS REST Controller를 생성하는 전문가"
+description = "aggregate root Module과 @cocrepo/app 기준 NestJS REST Controller를 생성하는 전문가"
 config_file = "agents/be-controller-builder.toml"
+
+[agents.be-module-builder]
+description = "aggregate root 기준 NestJS Module과 Router wiring을 생성하는 전문가"
+config_file = "agents/be-module-builder.toml"
 
 [agents.be-database-expert]
 description = "PostgreSQL/Prisma 데이터베이스 설계 및 최적화 전문가"
@@ -69,9 +74,13 @@ config_file = "agents/be-dto-builder.toml"
 description = "도메인 Entity 클래스를 생성하는 전문가"
 config_file = "agents/be-entity-builder.toml"
 
-[agents.be-facade-builder]
-description = "NestJS Facade 레이어를 생성하는 전문가"
-config_file = "agents/be-facade-builder.toml"
+[agents.be-app-builder]
+description = "Controller 경계에서 사용하는 NestJS ApplicationService 레이어를 생성하는 전문가"
+config_file = "agents/be-app-builder.toml"
+
+[agents.be-integration-builder]
+description = "외부 시스템 Integration Facade 레이어를 생성하는 전문가"
+config_file = "agents/be-integration-builder.toml"
 
 [agents.be-prisma-annotator]
 description = "Prisma 스키마에 @displayName 한글 주석을 추가하는 전문가"
@@ -194,8 +203,12 @@ description = "Orval 기반 API 연동 sidecar spec을 기획하는 전문가"
 config_file = "agents/req-api-integration-planner.toml"
 
 [agents.req-api-planner]
-description = "인터랙션(Action)과 API 레이어를 기획하는 전문가 (다국어 응답/메시지 정책 포함)"
+description = "aggregate root 기준 API와 Action 계약을 기획하는 전문가 (다국어 응답/메시지 정책 포함)"
 config_file = "agents/req-api-planner.toml"
+
+[agents.req-app-planner]
+description = "Controller가 호출할 ApplicationService 유즈케이스를 기획하는 전문가"
+config_file = "agents/req-app-planner.toml"
 
 [agents.req-cell-planner]
 description = "DataGrid/Table Cell sidecar spec을 기획하는 전문가"

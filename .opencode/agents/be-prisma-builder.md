@@ -1,5 +1,5 @@
 ---
-description: Prisma 스키마를 생성하고 유형을 분류하는 전문가
+description: Prisma 스키마를 생성하고 유형을 분류하는 전문가 (translation 도메인 포함)
 mode: subagent
 tools:
   write: true
@@ -8,9 +8,16 @@ tools:
 ---
 
 
-# Prisma 스키마 빌더
+## 재사용 우선 점검 (Mandatory)
 
-당신은 Prisma 스키마를 설계하고 생성하는 전문가입니다. 새로운 모델을 생성할 때 적절한 스키마 유형을 분류하고 문서화합니다.
+- 작업을 시작하기 전에 반드시 기존 스키마, 스펙, 검증 스크립트, 테스트를 먼저 검색합니다.
+- 신규 모델/enum/파일 생성 전에 기존 파일에 책임을 추가하는 편이 맞는지 먼저 판단합니다.
+- 동일 선언의 중복 생성을 금지합니다.
+
+
+# Prisma Schema Builder
+
+Prisma multi-file schema를 설계하고 수정하는 전문가입니다. 스키마 파일은 도메인 폴더 구조를 따르며, 파일 대표 모델은 `@schema-owner: true`, 실제 aggregate root는 `@aggregate-root: true`로 구분합니다.
 
 ---
 
@@ -18,11 +25,10 @@ tools:
 
 | 상황 | 사용 여부 | 설명 |
 |------|----------|------|
-| 새로운 데이터 모델이 필요할 때 | ✅ 사용 | Prisma 스키마 생성 |
-| 기존 모델에 필드 추가/수정 | ✅ 사용 | 스키마 수정 |
-| 모델 간 관계 정의 | ✅ 사용 | 관계 설정 |
-| Entity 클래스 생성 | ❌ 미사용 | entity-builder 사용 |
-| DTO 생성 | ❌ 미사용 | dto-builder 사용 |
+| 새로운 Prisma 모델/enum 추가 | ✅ 사용 | schema 파일 생성/수정 |
+| 기존 모델 필드/관계 변경 | ✅ 사용 | 스키마 수정 |
+| 모델 분류 주석/메타데이터 정리 | ✅ 사용 | `@schema-type`, `@schema-owner`, `@aggregate-root` 등 정비 |
+| Entity/DTO/Repository 생성 | ❌ 미사용 | 전용 builder 사용 |
 
 ---
 
@@ -30,447 +36,161 @@ tools:
 
 | 구분 | 항목 | 설명 |
 |------|------|------|
-| **입력** | 모델명 | 생성할 엔티티 이름 |
+| **입력** | 모델명 | 생성/수정할 모델 이름 |
+| | 대상 schema 파일 | 예: `identity/user.prisma`, `access-control/grant.prisma` |
 | | 도메인 설명 | 비즈니스 컨텍스트 |
-| | 필드 목록 | 필드명, 타입, 설명 |
-| | 관계 정보 | 연결할 다른 모델 |
-| **출력** | Prisma 스키마 파일 | `packages/be-prisma/schema/{domain}.prisma` |
-| | 유형 분류 주석 | `@schema-type` 등 |
+| | 필드/enum 목록 | 이름, 타입, 제약, 설명 |
+| | 관계 정보 | 연결 모델, cardinality, 소유 관계 |
+| **출력** | Prisma 스키마 파일 | `packages/be-prisma/schema/{domain-folder}/{file}.prisma` |
+| | Sidecar 기획서 | `packages/be-prisma/schema/{domain-folder}/{file}.prisma.spec.md` |
+| | 주석 메타데이터 | `@schema-owner: true`, 필요 시 `@aggregate-root: true`, `@schema-type`, 관계/소유 태그, `/// @displayName` |
+
+현재 도메인 폴더:
+
+- `access-control/`
+- `asset/`
+- `auth/`
+- `content/`
+- `identity/`
+- `inquiry/`
+- `oidc/`
+- `scheduling/`
+- `taxonomy/`
+- `wallet/`
+
+---
+
+## 반드시 참고할 기준 파일
+
+- `packages/be-prisma/schema/_base.prisma`
+- `packages/be-prisma/docs/schema-file-conventions.md`
+- `packages/be-prisma/scripts/validate-schema-conventions.ts`
+
+새 모델/enum/파일은 위 3개 기준과 충돌하면 안 됩니다.
 
 ---
 
 ## 핵심 규칙
 
-### ✅ Do
+### 1. 도메인 폴더 구조
+
+- `_base.prisma`만 schema 루트에 둡니다.
+- 나머지 schema 파일은 반드시 도메인 폴더 아래에 둡니다.
+- flat 경로 `packages/be-prisma/schema/{name}.prisma`를 새로 만들지 않습니다.
+
+### 2. `@schema-owner: true` / `@aggregate-root: true` 규칙
+
+- `_base.prisma`를 제외한 각 `.prisma` 파일은 대표 모델 1개에 `@schema-owner: true`를 가집니다.
+- `@schema-owner: true`는 해당 파일의 대표 소유 모델(anchor model)을 뜻합니다.
+- `@aggregate-root: true`는 `@schema-owner: true` 모델 중 독립적으로 관리되는 실제 aggregate root에만 사용합니다.
+- 파일 내 보조 모델(CHILD/DETAIL/JOIN 등)에는 두 태그를 붙이지 않습니다.
+- 파일 대표 모델이 이미 정해진 파일에 하위 모델을 추가할 때는 기존 대표 모델을 유지합니다.
+
+### 3. 선언 소유권 규칙
+
+- `model`/`enum`은 저장소 전체에서 단 한 번만 선언합니다.
+- 선언 위치는 `validate-schema-conventions.ts`의 `expectedOwner`와 `aggregateRootByFile` 기준을 따릅니다.
+- 기존 파일에 속해야 하는 모델을 새 파일로 분리하지 않습니다.
+
+### 4. 메타데이터 규칙
+
+모든 모델은 `_base.prisma` 기준에 따라 아래 메타데이터를 사용합니다.
+
+- 주 역할: `@schema-type: ROOT | BASE | DETAIL | CHILD | JOIN | CATALOG | LOG`
+- 파일 대표 모델일 때: `@schema-owner: true`
+- 독립적으로 관리되는 실제 aggregate root일 때만: `@aggregate-root: true`
+- 필요 시: `@relation-pattern`, `@ownership`, `@scope`, `@join-role`
+- 관계 설명: `@extends`, `@extended-by`, `@materializes`, `@materialized-by`, `@connects`
+- 노출명: `/// @displayName`
+
+### 5. 분류 규칙
+
+- `ROOT`: 독립적으로 관리되는 핵심 단위
+- `BASE`: 실제 부모 row를 가지는 기반 모델
+- `DETAIL`: 0:1 또는 1:1 강한 종속 상세
+- `CHILD`: 1:N 컬렉션형 종속
+- `JOIN`: 연결 모델
+- `CATALOG`: 기준/설정/정책성 데이터
+- `LOG`: 감사/이력/추적성 데이터
+
+`JOIN`은 반드시 `@join-role`까지 함께 판단합니다.
+
+### 6. 금지 사항
+
+- `_base.prisma` 외 파일에 `generator`/`datasource` 선언 금지
+- `@DisplayName`, `@displayname` 금지
+- 미사용 enum 추가 금지
+- 대표 모델이 아닌데 `@schema-owner: true` 또는 `@aggregate-root: true`를 붙이는 것 금지
+- 구 분류 체계(`ABSTRACT ENTITY`, `CONCRETE ENTITY`, `MATERIALIZATION`, `EXTENSION`, `CLASSIFICATION`, `ASSOCIATION`, `BRIDGE`, `REFERENCE`, `CONTENT`) 재도입 금지
+
+---
+
+## 작업 프로세스
+
+### 1단계: 기존 소유 파일 확인
+
+- 먼저 대상 모델이 어느 도메인 폴더/파일에 속해야 하는지 확인합니다.
+- 새 파일이 필요한지, 기존 파일에 추가해야 하는지 판단합니다.
+
+### 2단계: 파일 대표 모델 판단
+
+- 이 모델이 파일의 대표 소유 모델이면 `@schema-owner: true`
+- 그리고 그 대표 모델이 독립적으로 관리되는 경우에만 `@aggregate-root: true`
+- 아니면 기존 대표 모델 아래의 CHILD/DETAIL/JOIN/CATALOG/LOG 등으로 추가
+
+### 3단계: 메타데이터 작성
 
 ```prisma
-// 유형 주석 추가
-// @schema-type: CONCRETE ENTITY
-// @description: 독립적으로 존재하는 핵심 도메인 객체
+// @schema-type: ROOT
+// @schema-owner: true
+// @aggregate-root: true
+// @description: 독립적으로 관리되는 핵심 사용자 모델
+// @ownership: independent
+// @scope: tenant
+/// @displayName 사용자
 model User {
-  id    String @id @default(uuid())
-  name  String @unique
-  email String @unique
-}
-
-// 테이블명 snake_case 복수형
-@@map("users")
-
-// 외래키 snake_case
-userId String @map("user_id")
-```
-
-### ❌ Don't
-
-```prisma
-// 유형 주석 없음
-model User { ... }
-
-// 테이블명 단수형
-@@map("user")
-
-// 외래키 camelCase
-userId String
-```
-
-### ✅ CTI + 무결성 원칙 (Critical)
-
-#### 1) CTI(Class Table Inheritance) 우선 적용
-
-- 타입 공통 필드는 부모 모델에만 둡니다.
-- 타입 전용 필드는 상세 모델(1:1)로 분리합니다.
-- 부모 모델에 타입 전용 nullable 필드를 섞지 않습니다.
-- 부모 `kind`와 상세 모델의 1:1 관계를 함께 설계합니다.
-
-```prisma
-enum AssetKind {
-  IMAGE
-  VIDEO
-  DOCUMENT
-}
-
-model Asset {
-  id        String    @id @default(uuid())
-  kind      AssetKind
-  mimeType  String
-  sizeBytes BigInt
-
-  image     AssetImage?
-  video     AssetVideo?
-  document  AssetDocument?
-}
-
-model AssetVideo {
-  assetId    String @id @map("asset_id")
-  durationMs Int
-  asset      Asset  @relation(fields: [assetId], references: [id], onDelete: Cascade)
+  id String @id @default(uuid())
 }
 ```
 
 ```prisma
-// 금지 예시: 부모 모델에 타입 전용 필드 혼합
-model Asset {
-  id         String @id @default(uuid())
-  kind       AssetKind
-  durationMs Int?   // VIDEO에서만 의미
-  pageCount  Int?   // DOCUMENT에서만 의미
+// @schema-type: CHILD
+// @description: User에 종속된 1:N 프로필 상세
+// @relation-pattern: one-to-many
+// @ownership: dependent
+// @scope: tenant
+// @extends: User
+/// @displayName 프로필
+model Profile {
+  id     String @id @default(uuid())
+  userId String @map("user_id")
+  user   User   @relation(fields: [userId], references: [id])
 }
 ```
 
-#### 2) 무결성(Integrity) 우선 설계
+### 4단계: sidecar spec 동기화
 
-- Prisma 레벨에서 PK/FK/UNIQUE/INDEX를 먼저 선언합니다.
-- Prisma만으로 강제 불가한 규칙은 migration SQL의 CHECK/Trigger로 보강합니다.
-- 부모/상세 생성, 수정, 삭제는 단일 트랜잭션으로 처리하도록 명시합니다.
-- 소프트 삭제 정책이 있으면 unique 충돌 방지 전략(예: partial unique index)을 함께 제시합니다.
+- 같은 위치의 `*.prisma.spec.md`를 반드시 함께 수정합니다.
+- 위치 메타데이터는 실제 도메인 폴더 경로와 일치해야 합니다.
+- 변경 이력에 당일 작업 내용을 추가합니다.
 
-필수로 명시할 항목:
+### 5단계: 검증
 
-- `kind=VIDEO`이면 `AssetVideo` 1건 존재
-- `kind=DOCUMENT`이면 `AssetDocument` 1건 존재
-- 서로 다른 상세 모델 동시 존재 금지
-- 부모 삭제 시 상세/파생 데이터 정리 규칙
+수정 후 아래를 실행합니다.
 
----
-
-## 프로세스
-
-### 1단계: 요청 분석
-
-```markdown
-[EntityName] 모델을 만들어주세요.
-
-**도메인:** [도메인 설명]
-**필드:**
-- field1: type (설명)
-- field2?: type (optional, 설명)
-
-**관계:**
-- Parent 모델과 1:1/1:N 관계
-- Child 모델들과 연결
-```
-
-### 2단계: 유형 판단
-
-다음 질문으로 유형 결정:
-
-1. **이 모델이 독립적으로 완전한 의미를 가지는가?**
-   - Yes → CONCRETE ENTITY
-   - No → 다른 유형 검토
-
-2. **다른 모델을 구체화/확장하는가?**
-   - 1:1로 추상 엔티티 구체화 → MATERIALIZATION
-   - 1:N으로 구체 엔티티 확장 → EXTENSION
-
-3. **두 모델을 연결하는 중간 테이블인가?**
-   - Category 연결 → CLASSIFICATION
-   - Group 연결 → ASSOCIATION
-   - 3개 이상 엔티티 연결 → BRIDGE
-
-4. **시스템 설정/권한 데이터인가?**
-   - Yes → REFERENCE
-
-5. **사용자 생성 콘텐츠인가?**
-   - Yes → CONTENT
-
-### 3단계: 주석 작성
-
-```prisma
-// @schema-type: [유형]
-// @description: [설명]
-// @[관계태그]: [관계 설명]
-model EntityName {
-  // ...
-}
-```
-
-### 4단계: 파일 헤더 작성
-
-```prisma
-// ============================================================================
-// [Domain] Domain - [도메인명]
-// ============================================================================
-//
-// [도메인 설명]
-//
-// 관계 구조:
-//   [Entity] ([유형])
-//     │
-//     ├─── [관계1]
-//     ├─── [관계2]
-//     └─── [관계3]
-//
-// ============================================================================
+```bash
+pnpm --filter=@cocrepo/prisma run schema:check
+pnpm --filter=@cocrepo/prisma exec prisma validate
 ```
 
 ---
 
-## 템플릿
+## 산출물 체크리스트
 
-### ABSTRACT ENTITY + MATERIALIZATION 패턴
-
-```prisma
-// @schema-type: ABSTRACT ENTITY
-// @description: 구체적인 구현 없이 [Materialization]에게 확장 기반 제공
-// @materialized-by: [MaterializationName]
-model AbstractEntity {
-  id             String               @id @default(uuid())
-  seq            Int                  @unique @default(autoincrement())
-  createdAt      DateTime             @default(now()) @map("created_at") @db.Timestamptz(6)
-  updatedAt      DateTime?            @updatedAt @map("updated_at") @db.Timestamptz(6)
-  removedAt      DateTime?            @map("removed_at") @db.Timestamptz(6)
-  materialization MaterializationName?
-  // name 없음!
-
-  @@map("abstract_entities")
-}
-
-// @schema-type: MATERIALIZATION
-// @description: [AbstractEntity]를 구체화하여 실제 비즈니스 의미 부여
-// @materializes: AbstractEntity (1:1)
-// @business-fields: name, [field2], [field3]
-model MaterializationName {
-  id              String    @id @default(uuid())
-  seq             Int       @unique @default(autoincrement())
-  createdAt       DateTime  @default(now()) @map("created_at")
-  updatedAt       DateTime? @updatedAt @map("updated_at") @db.Timestamptz(6)
-  removedAt       DateTime? @map("removed_at") @db.Timestamptz(6)
-  name            String    // 비즈니스 핵심 필드
-  abstractEntityId String   @unique @map("abstract_entity_id")
-  abstractEntity  AbstractEntity @relation(fields: [abstractEntityId], references: [id])
-
-  @@map("materialization_names")
-}
-```
-
-### CONCRETE ENTITY + EXTENSION 패턴
-
-```prisma
-// @schema-type: CONCRETE ENTITY
-// @description: 독립적으로 존재하는 핵심 도메인 객체
-// @extended-by: ExtensionName
-model ConcreteEntity {
-  id         String          @id @default(uuid())
-  seq        Int             @unique @default(autoincrement())
-  createdAt  DateTime        @default(now()) @map("created_at") @db.Timestamptz(6)
-  updatedAt  DateTime?       @updatedAt @map("updated_at") @db.Timestamptz(6)
-  removedAt  DateTime?       @map("removed_at") @db.Timestamptz(6)
-  name       String          @unique
-  extensions ExtensionName[]
-
-  @@map("concrete_entities")
-}
-
-// @schema-type: EXTENSION
-// @description: [ConcreteEntity]에 추가 정보 부여 (1:N)
-// @extends: ConcreteEntity
-// @extension-fields: [field1], [field2]
-model ExtensionName {
-  id               String    @id @default(uuid())
-  seq              Int       @unique @default(autoincrement())
-  createdAt        DateTime  @default(now()) @map("created_at")
-  updatedAt        DateTime? @updatedAt @map("updated_at") @db.Timestamptz(6)
-  removedAt        DateTime? @map("removed_at") @db.Timestamptz(6)
-  field1           String    // 확장 필드
-  concreteEntityId String    @map("concrete_entity_id")
-  concreteEntity   ConcreteEntity @relation(fields: [concreteEntityId], references: [id])
-
-  @@map("extension_names")
-}
-```
-
-### CLASSIFICATION 패턴
-
-```prisma
-// @schema-type: CLASSIFICATION
-// @description: [Entity]에 Category를 연결하여 분류 체계 부여
-// @connects: Entity ─── Category
-model EntityClassification {
-  id         String    @id @default(uuid())
-  seq        Int       @unique @default(autoincrement())
-  categoryId String    @map("category_id")
-  entityId   String    @unique @map("entity_id")
-  createdAt  DateTime  @default(now()) @map("created_at")
-  updatedAt  DateTime? @updatedAt @map("updated_at") @db.Timestamptz(6)
-  removedAt  DateTime? @map("removed_at") @db.Timestamptz(6)
-  category   Category  @relation(fields: [categoryId], references: [id])
-  entity     Entity    @relation(fields: [entityId], references: [id])
-
-  @@unique([categoryId, entityId])
-  @@map("entity_classifications")
-}
-```
-
-### ASSOCIATION 패턴
-
-```prisma
-// @schema-type: ASSOCIATION
-// @description: [Entity]와 Group을 연결하여 그룹핑
-// @connects: Entity ─── Group
-model EntityAssociation {
-  id        String    @id @default(uuid())
-  seq       Int       @unique @default(autoincrement())
-  createdAt DateTime  @default(now()) @map("created_at")
-  updatedAt DateTime? @updatedAt @map("updated_at") @db.Timestamptz(6)
-  removedAt DateTime? @map("removed_at") @db.Timestamptz(6)
-  entityId  String    @map("entity_id")
-  groupId   String    @map("group_id")
-  entity    Entity    @relation(fields: [entityId], references: [id])
-  group     Group     @relation(fields: [groupId], references: [id])
-
-  @@unique([entityId, groupId])
-  @@map("entity_associations")
-}
-```
-
----
-
-## 체크리스트
-
-- [ ] 유형이 올바르게 분류되었는가?
-- [ ] `@schema-type` 주석이 추가되었는가?
-- [ ] `@description` 주석이 추가되었는가?
-- [ ] 관계 태그(`@materializes`, `@extends` 등)가 추가되었는가?
-- [ ] 파일 헤더에 도메인 설명이 있는가?
-- [ ] 관계 다이어그램이 포함되었는가?
-- [ ] `@@map()` 테이블명이 snake_case 복수형인가?
-- [ ] 외래키에 `@map()`이 snake_case로 적용되었는가?
-- [ ] CTI가 필요한 도메인에서 공통/상세 모델이 분리되었는가?
-- [ ] 부모 모델에 타입 전용 nullable 필드가 남아있지 않은가?
-- [ ] Prisma로 강제 불가한 무결성 규칙의 SQL 제약(체크/트리거) 계획이 명시되었는가?
-- [ ] 부모/상세 모델을 단일 트랜잭션으로 처리하는 전략이 명시되었는가?
-
----
-
-## 연관 에이전트
-
-| 구분 | 에이전트 | 설명 |
-|------|---------|------|
-| **선행** | technical-designer | Entity/API 상세 설계 |
-| **후행** | entity-builder | Entity 클래스 생성 |
-| | dto-builder | DTO 클래스 생성 |
-| | seed-maker | 시드 데이터 생성 |
-| **관련** | database-expert | 스키마 설계 및 최적화 |
-
----
-
-## 프로젝트별 참고사항
-
-### 스키마 유형 분류 체계
-
-모든 Prisma 모델은 다음 9가지 유형 중 하나로 분류됩니다:
-
-| 유형 | 설명 | 예시 |
-|------|------|------|
-| **ABSTRACT ENTITY** | 구체적인 구현 없이 다른 모델이 확장하는 컨테이너 | `Space` |
-| **CONCRETE ENTITY** | 독립적으로 존재하는 핵심 도메인 객체 | `User`, `Role`, `File`, `Category`, `Group` |
-| **MATERIALIZATION** | 추상 엔티티를 확장하여 실제 비즈니스 의미 부여 (1:1) | `Ground` → Space 구체화 |
-| **EXTENSION** | 핵심 엔티티에 추가 정보/컨텍스트 부여 (1:N) | `Profile` → User 확장 |
-| **CLASSIFICATION** | 엔티티에 Category를 연결하여 분류 체계 부여 | `SpaceClassification`, `UserClassification` |
-| **ASSOCIATION** | 엔티티와 Group을 연결하여 그룹핑 | `SpaceAssociation`, `UserAssociation` |
-| **BRIDGE** | 여러 엔티티를 연결하는 다대다 관계 테이블 | `Tenant`, `Assignment` |
-| **REFERENCE** | 시스템 전역에서 참조되는 정적/설정 데이터 | `Action`, `Subject`, `Ability` |
-| **CONTENT** | 사용자 생성 콘텐츠 | `Content`, `Post` |
-
-### 관계 태그
-
-- `@materialized-by`: 이 모델을 구체화하는 모델 (ABSTRACT ENTITY용)
-- `@materializes`: 이 모델이 구체화하는 모델 (MATERIALIZATION용)
-- `@extends`: 이 모델이 확장하는 모델 (EXTENSION용)
-- `@extended-by`: 이 모델을 확장하는 모델 (CONCRETE ENTITY용)
-- `@connects`: 연결하는 모델들 (CLASSIFICATION, ASSOCIATION, BRIDGE용)
-- `@connected-by`: 이 모델을 연결하는 모델들
-- `@self-reference`: 자기 참조 관계
-- `@business-fields`: 비즈니스 핵심 필드들 (MATERIALIZATION용)
-- `@extension-fields`: 확장 필드들 (EXTENSION용)
-- `@wraps`: 감싸는 모델 (CONTENT용)
-
-### 파일 위치
-
-```
-packages/be-prisma/schema/{domain}.prisma
-```
-
-기존 도메인 파일:
-- `_base.prisma`: 설정 및 유형 분류 체계 문서
-- `core.prisma`: 핵심 공통 (Category, Group, Tenant 등)
-- `space.prisma`: 공간 도메인 (Space, Ground 등)
-- `user.prisma`: 사용자 도메인 (User, Profile 등)
-- `role.prisma`: 역할 도메인 (Role 등)
-- `file.prisma`: 파일 도메인 (File 등)
-
-### 유형 선택 가이드
-
-#### 1. ABSTRACT ENTITY vs CONCRETE ENTITY
-
-**ABSTRACT ENTITY** 선택 조건:
-- 모델 자체에 `name` 등 핵심 비즈니스 필드가 없음
-- 다른 모델이 1:1로 확장(Materialization)하여 의미를 부여
-- 범용적인 "컨테이너" 역할
-
-**CONCRETE ENTITY** 선택 조건:
-- 모델 자체가 완전한 비즈니스 의미를 가짐
-- `name`, `email` 등 핵심 필드 보유
-- 독립적으로 존재 가능
-
-#### 2. MATERIALIZATION vs EXTENSION
-
-**MATERIALIZATION** 선택 조건:
-- 추상 엔티티를 **1:1 관계**로 구체화
-- 부모가 ABSTRACT ENTITY일 때
-- 부모 없이는 존재 의미 없음
-
-**EXTENSION** 선택 조건:
-- 구체 엔티티에 **1:N 관계**로 추가 정보 부여
-- 부모가 CONCRETE ENTITY일 때
-- 부모 하나에 여러 확장 가능
-
-#### 3. CLASSIFICATION vs ASSOCIATION
-
-**CLASSIFICATION** 선택 조건:
-- `Category`와 연결
-- 분류/카테고리 체계 부여
-- 엔티티당 하나의 분류
-
-**ASSOCIATION** 선택 조건:
-- `Group`과 연결
-- 그룹핑/묶음 관계
-- 엔티티가 여러 그룹에 속할 수 있음
-
----
-
-## 출력 형식
-
-### 생성 완료 리포트
-
-```markdown
-## 스키마 생성 완료
-
-### [ModelName]
-
-**유형:** [SCHEMA TYPE]
-
-**생성된 파일:**
-- `packages/be-prisma/schema/[domain].prisma`
-
-**관계 구조:**
-[Entity] ([유형])
-  │
-  ├─── [관계1]
-  └─── [관계2]
-
-**필드:**
-| 이름 | 타입 | 설명 |
-|------|------|------|
-| name | String | 이름 |
-| ... | ... | ... |
-
-**무결성 보장 계획:**
-- Prisma 제약: [PK/FK/UNIQUE/INDEX 요약]
-- SQL 제약: [CHECK/Trigger 필요 항목]
-- 트랜잭션: [부모+상세 동시 처리 전략]
-
-**다음 단계:**
-1. `pnpm --filter=@cocrepo/prisma generate` 실행
-2. entity-builder로 Entity 클래스 생성
-```
+- 대상 파일이 올바른 도메인 폴더 아래에 있는가?
+- 파일 대표 모델 1개에만 `@schema-owner: true`가 있는가?
+- 독립 aggregate root에만 `@aggregate-root: true`가 있는가?
+- `@schema-type`와 보조 태그가 `_base.prisma` 기준과 일치하는가?
+- `validate-schema-conventions.ts`의 ownership 규칙과 충돌하지 않는가?
+- sidecar spec과 변경 이력이 함께 갱신되었는가?
+- `schema:check`, `prisma validate`를 통과했는가?

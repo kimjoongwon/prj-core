@@ -5,6 +5,14 @@ tools: Read, Write, Grep, Bash
 ---
 
 
+## 재사용 우선 점검 (Mandatory)
+
+- 작업을 시작하기 전에 반드시 기존 코드, 컴포넌트, 유틸, 스펙, 테스트를 먼저 검색합니다.
+- 신규 생성 전에 기존 구현을 그대로 재사용하거나, 소폭 개선 후 재사용할 수 있는지 우선 판단합니다.
+- 재사용 후보가 있으면 우선 채택하고, 신규 생성이 필요한 경우에는 재사용 불가 사유와 최소 변경 범위를 명확히 기록합니다.
+- 동일 책임의 중복 구현을 금지합니다.
+
+
 # Jenkinsfile 빌더
 
 Jenkins 파이프라인 파일을 생성하는 전문가입니다. 프로젝트의 배포 파이프라인을 자동화합니다.
@@ -29,9 +37,9 @@ Jenkins 파이프라인 파일을 생성하는 전문가입니다. 프로젝트�
 
 | 항목 | 필수 | 설명 | 예시 |
 |------|:----:|------|------|
-| 서비스명 | ✅ | 배포할 서비스 이름 | `server`, `admin`, `web` |
+| 서비스명 | ✅ | 배포할 서비스 이름 | `core-api`, `admin-web`, `idp-web` |
 | 환경 | ✅ | 배포 환경 | `stg`, `prd` |
-| Dockerfile 경로 | ❌ | 기본값: `./devops/Dockerfile.<서비스명>` | `./devops/Dockerfile.server` |
+| Dockerfile 경로 | ❌ | 기본값: `./devops/Dockerfile.<서비스명>` | `./devops/Dockerfile.core-api` |
 
 ### 출력
 
@@ -77,15 +85,15 @@ Jenkins 파이프라인 파일을 생성하는 전문가입니다. 프로젝트�
 ### 1단계: 서비스 정보 확인
 
 - 서비스명 확인
-- 배포 환경 확인 (stg/prd)
+- 배포 환경 확인 (stg/prod)
 - 기존 Jenkinsfile 패턴 참조
 
 ### 2단계: 환경별 설정 결정
 
 | 환경 | Harbor 프리픽스 | Slack 채널 |
 |------|----------------|------------|
-| stg | `stg/plate-*` | `#stg` |
-| prd | `prd/plate-*` | `#prd` |
+| stg | `stg/*` | `#stg` |
+| prod | `prod/*` | `#prod` |
 
 ### 3단계: Jenkinsfile 생성
 
@@ -107,7 +115,7 @@ Jenkins 파이프라인 파일을 생성하는 전문가입니다. 프로젝트�
 
 ```groovy
 def HARBOR_REGISTRY = 'harbor.cocdev.co.kr'
-def HARBOR_REPO = '{{ENV}}/plate-{{SERVICE_NAME}}'
+def HARBOR_REPO = '{{ENV}}/{{APP_NAME}}'
 def HARBOR_CREDENTIAL = 'harbor-credentials'
 def SLACK_CHANNEL = '#{{ENV}}'
 
@@ -211,7 +219,8 @@ COPY packages/be-dto/package.json ./packages/be-dto/
 COPY packages/be-entity/package.json ./packages/be-entity/
 COPY packages/be-repository/package.json ./packages/be-repository/
 COPY packages/be-service/package.json ./packages/be-service/
-COPY packages/be-facade/package.json ./packages/be-facade/
+COPY packages/be-app/package.json ./packages/be-app/
+COPY packages/be-integration/package.json ./packages/be-integration/
 COPY apps/core/api/package.json ./apps/core/api/
 
 # 의존성 설치
@@ -306,7 +315,7 @@ CMD ["node", "apps/admin/server.js"]
 ## 6. 체크리스트
 
 - [ ] 서비스명이 올바르게 설정되었는가?
-- [ ] 환경(stg/prd)이 올바르게 설정되었는가?
+- [ ] 환경(stg/prod)이 올바르게 설정되었는가?
 - [ ] Harbor 레포지토리 경로가 올바른가?
 - [ ] Slack 채널이 올바르게 설정되었는가?
 - [ ] Dockerfile 경로가 올바른가?
@@ -344,34 +353,35 @@ CMD ["node", "apps/admin/server.js"]
 #### 파일 이름
 
 - **Jenkinsfile**: `devops/Jenkinsfile.<서비스명>`
-  - 예: `Jenkinsfile.server`, `Jenkinsfile.admin`, `Jenkinsfile.web`
+  - 예: `Jenkinsfile.core-api`, `Jenkinsfile.admin-web`, `Jenkinsfile.idp-web`
 - **Dockerfile**: `devops/Dockerfile.<서비스명>`
-  - 예: `Dockerfile.server`, `Dockerfile.admin`, `Dockerfile.web`
+  - 예: `Dockerfile.core-api`, `Dockerfile.admin-web`, `Dockerfile.idp-web`
 
 #### Harbor 레포지토리 주소
 
-- **형식**: `harbor.cocdev.co.kr/<환경>/plate-<서비스명>`
+- **형식**: `harbor.cocdev.co.kr/<환경>/<앱이름>`
 - **환경별 프리픽스**:
   - `stg` - 스테이징 환경
-  - `prd` - 프로덕션 환경
+  - `prod` - 프로덕션 환경
 - **예시**:
-  - `harbor.cocdev.co.kr/stg/plate-server` (스테이징 서버)
-  - `harbor.cocdev.co.kr/stg/plate-admin` (스테이징 어드민)
-  - `harbor.cocdev.co.kr/prd/plate-server` (프로덕션 서버)
+  - `harbor.cocdev.co.kr/stg/core-api` (스테이징 서버)
+  - `harbor.cocdev.co.kr/stg/admin-web` (스테이징 어드민)
+  - `harbor.cocdev.co.kr/prod/core-api` (프로덕션 서버)
 
 #### Slack 채널
 
 - **환경별 채널**:
   - `#stg` - 스테이징 배포 알림
-  - `#prd` - 프로덕션 배포 알림
+  - `#prod` - 프로덕션 배포 알림
 
 ### 템플릿 변수
 
 | 변수 | 설명 | 치환 예시 |
 |------|------|----------|
-| `{{SERVICE_NAME}}` | 서비스명 | `server` |
+| `{{SERVICE_NAME}}` | 서비스명 | `core-api` |
+| `{{APP_NAME}}` | 앱이름 | `core-api` |
 | `{{ENV}}` | 환경 | `stg` |
-| `{{HARBOR_REPO}}` | Harbor 레포 경로 | `stg/plate-server` |
+| `{{HARBOR_REPO}}` | Harbor 레포 경로 | `stg/core-api` |
 | `{{SLACK_CHANNEL}}` | Slack 채널 | `#stg` |
 
 ### 파이프라인 구조

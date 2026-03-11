@@ -1,4 +1,4 @@
-import { Space } from "@cocrepo/entity";
+import { Ground, Space } from "@cocrepo/entity";
 import { Prisma, PrismaClient } from "@cocrepo/prisma";
 import { Injectable, Logger } from "@nestjs/common";
 import { TransactionHost } from "@nestjs-cls/transactional";
@@ -47,6 +47,62 @@ export class SpacesRepository {
 	}
 
 	/**
+	 * Ground를 포함한 Space 목록 조회
+	 */
+	async findManyWithGround(params?: {
+		spaceIds?: string[];
+		skip?: number;
+		take?: number;
+		search?: string;
+	}): Promise<[Space[], number]> {
+		const { spaceIds, skip, take, search } = params ?? {};
+		this.logger.debug(
+			`Ground 포함 Space 목록 조회: count=${spaceIds?.length ?? "all"}, search=${search ?? "없음"}`,
+		);
+
+		const where: Prisma.SpaceWhereInput = {
+			removedAt: null,
+			...(spaceIds ? { id: { in: spaceIds } } : {}),
+			ground: {
+				is: {
+					removedAt: null,
+					...(search
+						? {
+								OR: [
+									{ name: { contains: search, mode: "insensitive" } },
+									{
+										businessNo: {
+											contains: search,
+											mode: "insensitive",
+										},
+									},
+								],
+							}
+						: {}),
+				},
+			},
+		};
+
+		const [results, total] = await Promise.all([
+			this.txHost.tx.space.findMany({
+				where,
+				include: {
+					ground: true,
+				},
+				orderBy: { createdAt: "desc" },
+				skip,
+				take,
+			}),
+			this.txHost.tx.space.count({ where }),
+		]);
+
+		return [
+			results.map((result) => plainToInstance(Space, result)),
+			total,
+		];
+	}
+
+	/**
 	 * 전체 Space 목록 조회
 	 */
 	async findAll(): Promise<Space[]> {
@@ -61,6 +117,38 @@ export class SpacesRepository {
 	}
 
 	/**
+	 * Space에 종속된 Ground 조회
+	 */
+	async findGroundBySpaceId(spaceId: string): Promise<Ground | null> {
+		this.logger.debug(`Space의 Ground 조회: ${spaceId.slice(-8)}`);
+
+		const result = await this.txHost.tx.ground.findFirst({
+			where: {
+				spaceId,
+				removedAt: null,
+			},
+		});
+
+		return result ? plainToInstance(Ground, result) : null;
+	}
+
+	/**
+	 * 사업자등록번호로 Ground 조회
+	 */
+	async findGroundByBusinessNo(businessNo: string): Promise<Ground | null> {
+		this.logger.debug(`사업자등록번호로 Ground 조회: ${businessNo}`);
+
+		const result = await this.txHost.tx.ground.findFirst({
+			where: {
+				businessNo,
+				removedAt: null,
+			},
+		});
+
+		return result ? plainToInstance(Ground, result) : null;
+	}
+
+	/**
 	 * Space 생성
 	 */
 	async create(data?: Prisma.SpaceUncheckedCreateInput): Promise<Space> {
@@ -71,6 +159,30 @@ export class SpacesRepository {
 		});
 
 		return plainToInstance(Space, result);
+	}
+
+	/**
+	 * Space에 Ground detail 생성
+	 */
+	async createGroundBySpaceId(
+		spaceId: string,
+		data: Omit<Prisma.GroundUncheckedCreateInput, "spaceId">,
+	): Promise<Space> {
+		this.logger.debug(`Space에 Ground 생성: ${spaceId.slice(-8)}`);
+
+		await this.txHost.tx.ground.create({
+			data: {
+				...data,
+				spaceId,
+			},
+		});
+
+		const space = await this.findByIdWithGround(spaceId);
+		if (!space) {
+			throw new Error("GROUND_CREATE_FAILED");
+		}
+
+		return space;
 	}
 
 	/**
@@ -88,6 +200,28 @@ export class SpacesRepository {
 		});
 
 		return plainToInstance(Space, result);
+	}
+
+	/**
+	 * Space의 Ground detail 수정
+	 */
+	async updateGroundBySpaceId(
+		spaceId: string,
+		data: Prisma.GroundUncheckedUpdateInput,
+	): Promise<Space> {
+		this.logger.debug(`Space의 Ground 수정: ${spaceId.slice(-8)}`);
+
+		await this.txHost.tx.ground.update({
+			where: { spaceId },
+			data,
+		});
+
+		const space = await this.findByIdWithGround(spaceId);
+		if (!space) {
+			throw new Error("GROUND_UPDATE_FAILED");
+		}
+
+		return space;
 	}
 
 	/**
@@ -154,6 +288,14 @@ export class SpacesRepository {
 	 */
 	async removeById(id: string): Promise<Space> {
 		this.logger.debug(`Space 소프트 삭제: ${id.slice(-8)}`);
+
+		await this.txHost.tx.ground.updateMany({
+			where: {
+				spaceId: id,
+				removedAt: null,
+			},
+			data: { removedAt: new Date() },
+		});
 
 		const result = await this.txHost.tx.space.update({
 			where: { id },

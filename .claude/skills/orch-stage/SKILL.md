@@ -110,10 +110,10 @@ allowed-tools: Task, Read, Write, Grep, Bash
 
 ```
 Stage 1: 도메인 기획        → orch-requirement (L0~L4 + BE/Store 스펙) → [리뷰]
-Stage 2: 스키마 구현        → schema → entity → dto → query-dto → seed → [리뷰]
-Stage 3: 백엔드 구현        → repository → service → controller → [리뷰]
+Stage 2: 스키마 구현        → prisma → entity → dto → query-dto → seed → [리뷰]
+Stage 3: 백엔드 구현        → repository → service → application-service → controller → [리뷰]
 Stage 4: 화면 기획 (페이지별) → orch-screen-planner (L5~L12) → [리뷰]
-Stage 5: 컴포넌트 (페이지별) → ui → input → cell → widget → layout → feature → store → menu → [리뷰]
+Stage 5: 컴포넌트 (페이지별) → primitive → input → cell → widget → layout → feature → store → menu → [리뷰]
 Stage 6: 페이지 (페이지별)   → fe-page-builder → fe-api-integrator → [리뷰]
 Stage 7: E2E 검증 (선택)    → qa-be-e2e-testing → qa-fe-e2e-testing → [리뷰]
 ```
@@ -182,9 +182,9 @@ packages/fe-ui/src/components/{ui,widget,feature}/**/index.spec.md
 | Stage | 호출 에이전트 |
 |------|---------------|
 | 1 | orch-requirement |
-| 2 | be-schema-builder, be-entity-builder, be-dto-builder, be-query-dto-builder, be-seed-maker |
-| 3 | be-repository-builder, be-service-builder, be-facade-builder, be-controller-builder |
+| 2 | be-prisma-builder, be-entity-builder, be-dto-builder, be-query-dto-builder, be-seed-maker |
+| 3 | be-repository-builder, be-service-builder, be-app-builder, be-controller-builder |
 | 4 | orch-screen-planner |
-| 5 | fe-ui-component-builder, fe-input-component-builder, fe-cell-builder, fe-widget-builder, fe-layout-builder, fe-feature-builder, fe-store-builder, fe-menu-builder |
+| 5 | fe-primitive-component-builder, fe-input-component-builder, fe-cell-builder, fe-widget-builder, fe-layout-builder, fe-feature-builder, fe-store-builder, fe-menu-builder |
 | 6 | fe-page-builder, fe-api-integrator, /fe-review |
 | 7 | qa-be-e2e-testing, qa-fe-e2e-testing |

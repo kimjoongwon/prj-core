@@ -45,7 +45,8 @@
 | `be-decorator` | `@cocrepo/decorator` | NestJS 데코레이터 |
 | `be-dto` | `@cocrepo/dto` | Request/Response DTO |
 | `be-entity` | `@cocrepo/entity` | 도메인 Entity |
-| `be-facade` | `@cocrepo/facade` | Facade 레이어 |
+| `be-app` | `@cocrepo/app` | ApplicationService 레이어 |
+| `be-integration` | `@cocrepo/integration` | 외부 시스템 Integration Facade 레이어 |
 | `be-prisma` | `@cocrepo/prisma` | Prisma 스키마 및 클라이언트 |
 | `be-repository` | `@cocrepo/repository` | Repository 레이어 |
 | `be-service` | `@cocrepo/service` | Service 레이어 |
@@ -801,10 +802,20 @@ import { CreateAbilityDto, AbilityResponseDto } from "@cocrepo/dto";
 
 ### 레이어 분리 규칙
 
-- **Controller**: 라우팅, DTO 검증만 담당
-- **Facade**: 여러 Service 조합 (Prisma 직접 호출 금지)
-- **Service**: 단일 도메인 로직 (Repository를 통해서만 데이터 접근)
+- **Controller**: 라우팅, DTO 검증, 인증 컨텍스트 수집만 담당
+- **ApplicationService**: 여러 Service/Integration Facade를 조합하는 유즈케이스 계층 (Prisma 직접 호출 금지)
+- **Service**: 단일 Aggregate Root 또는 단일 도메인 로직 담당 (Repository를 통해서만 데이터 접근)
+- **Integration Facade**: 외부 시스템 또는 복잡한 기술 서브시스템을 단순화해서 노출하는 레이어
 - **Repository**: Prisma 쿼리 작성
+
+### Aggregate Root / Entity 규칙
+
+- 쓰기(command)는 Aggregate Root 기준으로 시작합니다.
+- Child 엔티티 변경은 Root 또는 Root를 다루는 Service를 통해 수행합니다.
+- Controller가 child service를 직접 호출해 Aggregate 내부 정합성을 우회하는 패턴은 금지합니다.
+- Prisma가 생성한 타입은 **persistence model/entity**로 취급합니다.
+- `packages/be-entity/src/*.entity.ts`는 **domain-facing entity**이며, 실제 Domain Entity 여부는 도메인 메서드/불변식 보유 여부로 판단합니다.
+- `extends PrismaUser` 같은 상속형 패턴은 지양하고, Prisma 타입 shape를 참고한 구현 또는 rehydrate/mapper 방식을 기본으로 합니다.
 
 ### 시드 데이터 관리 규칙
 
@@ -1147,8 +1158,9 @@ Stage 5: 컴포넌트 (페이지별)
 | req-screen-planner | 도메인 기능/화면 구조 기획 → 각 `page.spec.md` 초안 생성 |
 | req-page-planner | 페이지 통합 기획(SSR/Prefetch/핸들러) → `page.spec.md` 통합 섹션 업데이트 |
 | req-api-planner | 인터랙션(Action)과 API 기획 → `controller.spec.md` + 페이지 API 섹션 |
+| req-app-planner | ApplicationService 유즈케이스 기획 → `application-service.spec.md` |
 | req-entity-planner | Entity/Enum/VO 기획 → `entity.spec.md`, `enum.spec.md`, `vo.spec.md` |
-| req-ui-planner | 화면 UI 기획(L8) → `ui/index.spec.md` |
+| req-primitive-planner | Pure UI 컴포넌트 기획(L8) → `primitive/index.spec.md` |
 | req-input-planner | 입력 컴포넌트 기획 → `inputs/index.spec.md` |
 | req-cell-planner | DataGrid/Table Cell 기획 → `cells/index.spec.md` |
 | req-widget-planner | 화면 Widget 기획(L9) → `widget/index.spec.md` |
@@ -1157,7 +1169,8 @@ Stage 5: 컴포넌트 (페이지별)
 | req-menu-planner | 메뉴/경로/권한 기획 → `admin-menu.spec.md` |
 | req-store-planner | 도메인 Store 기획(L11) → `[domain]Store.spec.md` |
 | req-logic-planner | 비즈니스 로직/테스트 기획 → `service/repository.spec.md` + 테스트 케이스 |
-| req-test-planner | 테스트 케이스 기획(L12) → 기존 `.spec.md` 테스트 섹션 업데이트 |
+| req-be-test-planner | 백엔드 테스트 케이스 기획(L12) → Service/Controller/E2E 테스트 섹션 업데이트 |
+| req-fe-test-planner | 프론트엔드 테스트 케이스 기획(L12) → Page/Feature/UI 테스트 섹션 업데이트 |
 | req-api-integration-planner | Orval API 연동 기획 → `hooks/index.spec.md` |
 | req-reverse-engineer | 기존 코드를 분석하여 `.spec.md` 역생성 |
 | /design-analyze (Skill) | Figma 디자인 분석 및 컴포넌트 매핑 (Figma 있을 때) |
@@ -1167,7 +1180,7 @@ Stage 5: 컴포넌트 (페이지별)
 
 | Agent | 역할 |
 |-------|------|
-| fe-ui-component-builder | Pure UI 컴포넌트 생성 (packages/fe-ui/src/components/ui) |
+| fe-primitive-component-builder | Pure UI 컴포넌트 생성 (packages/fe-ui/src/primitive) |
 | fe-cell-builder | DataGrid/Table용 Cell 컴포넌트 생성 (계층별) |
 | fe-input-component-builder | Input 컴포넌트 생성 (packages/fe-ui/src/components/inputs) |
 | fe-widget-builder | 재사용 가능한 작은 UI 조각 Widget 컴포넌트 생성 |
@@ -1190,7 +1203,9 @@ Stage 5: 컴포넌트 (페이지별)
 | be-vo-builder | Value Object 클래스 생성 |
 | be-repository-builder | Prisma 기반 Repository 레이어 생성 |
 | be-service-builder | NestJS Service 레이어 생성 |
-| be-facade-builder | NestJS Facade 레이어 생성 (여러 Service 조합) |
+| be-app-builder | NestJS ApplicationService 레이어 생성 (여러 Service 조합) |
+| be-integration-builder | 외부 시스템 Integration Facade 레이어 생성 |
+| be-module-builder | aggregate root 기준 NestJS Module + Router wiring 생성 |
 | be-controller-builder | NestJS REST Controller 생성 |
 | be-database-expert | PostgreSQL/Prisma 데이터베이스 설계 및 최적화 |
 | be-seed-maker | 현실 세계와 연결된 시드 데이터 생성 |

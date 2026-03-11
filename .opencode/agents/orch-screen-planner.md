@@ -8,6 +8,14 @@ tools:
 ---
 
 
+## 재사용 우선 점검 (Mandatory)
+
+- 작업을 시작하기 전에 반드시 기존 코드, 컴포넌트, 유틸, 스펙, 테스트를 먼저 검색합니다.
+- 신규 생성 전에 기존 구현을 그대로 재사용하거나, 소폭 개선 후 재사용할 수 있는지 우선 판단합니다.
+- 재사용 후보가 있으면 우선 채택하고, 신규 생성이 필요한 경우에는 재사용 불가 사유와 최소 변경 범위를 명확히 기록합니다.
+- 동일 책임의 중복 구현을 금지합니다.
+
+
 # 화면 기획 오케스트레이터 (Screen Planner Orchestrator)
 
 단일 화면의 **L5-L12 기획**을 의존성 기반으로 조율하는 오케스트레이터입니다. 선행 단계 이후 독립 작업은 병렬 fan-out 실행을 지원합니다.
@@ -19,15 +27,15 @@ tools:
 | 레벨 | 명칭 | 담당 에이전트 | 출력 위치 |
 |------|------|--------------|----------|
 | L4+ | 페이지 통합 | req-page-planner | `page.spec.md` 통합 섹션 업데이트 |
-| L5-L6 | 인터랙션/API | req-api-planner | `page.spec.md` API/이벤트 + `controller.spec.md`/`dto.spec.md` |
-| L8 | UI | req-ui-planner | `packages/fe-ui/src/components/ui/[UIName]/index.spec.md` |
-| L8 | Input | req-input-planner | `packages/fe-ui/src/components/inputs/[InputName]/index.spec.md` |
-| L8 | Cell | req-cell-planner | `packages/fe-ui/src/components/ui/data-display/cells/[CellName]/index.spec.md` |
-| L9 | Widget | req-widget-planner | `packages/fe-ui/src/components/widget/[WidgetName]/index.spec.md` |
-| L10 | Layout | req-layout-planner | `packages/fe-ui/src/components/layout/[LayoutName]/index.spec.md` |
-| L10 | Feature | req-feature-planner | `packages/fe-ui/src/components/feature/[FeatureName]/index.spec.md` |
+| L5-L6 | 인터랙션/API | req-api-planner | `page.spec.md` API/이벤트 + `apps/core/api/src/module/*/*.controller.spec.md`/`dto.spec.md` |
+| L8 | UI | req-primitive-planner | `packages/fe-ui/src/primitive/[UIName]/index.spec.md` |
+| L8 | Input | req-input-planner | `packages/fe-ui/src/input/[InputName]/index.spec.md` |
+| L8 | Cell | req-cell-planner | `packages/fe-ui/src/primitive/data-display/cell/[CellName]/index.spec.md` |
+| L9 | Widget | req-widget-planner | `packages/fe-ui/src/widget/[WidgetName]/index.spec.md` |
+| L10 | Layout | req-layout-planner | `packages/fe-ui/src/layout/[LayoutName]/index.spec.md` |
+| L10 | Feature | req-feature-planner | `packages/fe-ui/src/feature/[FeatureName]/index.spec.md` |
 | L10+ | Menu | req-menu-planner | `packages/common-constant/src/routing/admin-menu.spec.md` |
-| L12 | 테스트 | req-test-planner | 각 기존 `.spec.md`에 "테스트 케이스" 섹션 추가 |
+| L12 | 테스트 | req-fe-test-planner | 각 기존 `.spec.md`에 "테스트 케이스" 섹션 추가 |
 | L12+ | API 연동 | req-api-integration-planner | `apps/[app]/src/app/**/hooks/index.spec.md` |
 
 > **참고:** L7(Entity), L11(Store)은 도메인 단위로 기획되므로 별도 처리
@@ -54,16 +62,16 @@ tools:
 apps/[app]/app/(admin)/[도메인]/**/page.spec.md
 
 # BE/공용 스펙
-apps/core/api/src/[module]/controllers/[domain].controller.spec.md
+apps/core/api/src/module/[module]/[domain].controller.spec.md
 packages/be-dto/src/[domain]/*.dto.spec.md
 
 # FE Sidecar
-packages/fe-ui/src/components/ui/[UIName]/index.spec.md
-packages/fe-ui/src/components/inputs/[InputName]/index.spec.md
-packages/fe-ui/src/components/ui/data-display/cells/[CellName]/index.spec.md
-packages/fe-ui/src/components/widget/[WidgetName]/index.spec.md
-packages/fe-ui/src/components/layout/[LayoutName]/index.spec.md
-packages/fe-ui/src/components/feature/[FeatureName]/index.spec.md
+packages/fe-ui/src/primitive/[UIName]/index.spec.md
+packages/fe-ui/src/input/[InputName]/index.spec.md
+packages/fe-ui/src/primitive/data-display/cell/[CellName]/index.spec.md
+packages/fe-ui/src/widget/[WidgetName]/index.spec.md
+packages/fe-ui/src/layout/[LayoutName]/index.spec.md
+packages/fe-ui/src/feature/[FeatureName]/index.spec.md
 
 # 메뉴/API 연동
 packages/common-constant/src/routing/admin-menu.spec.md
@@ -92,12 +100,12 @@ apps/[app]/src/app/**/hooks/index.spec.md
 1. 전제조건 확인 (`app.spec.md`, `page.spec.md`, Entity spec, Store spec[조건부])
 2. 기반 단계(순차):
    - `req-page-planner` 실행 (페이지 통합 관점으로 `page.spec.md` 정리)
-   - `req-api-planner` 실행 (`page.spec.md` API/이벤트 + `controller.spec.md`/`dto.spec.md`)
+   - `req-api-planner` 실행 (`page.spec.md` API/이벤트 + `apps/core/api/src/module/*/*.controller.spec.md`/`dto.spec.md`)
 3. 설계 단계(병렬 fan-out, `parallel=auto`):
-   - `req-ui-planner`, `req-input-planner`, `req-cell-planner`, `req-widget-planner`, `req-layout-planner`, `req-feature-planner`
+   - `req-primitive-planner`, `req-input-planner`, `req-cell-planner`, `req-widget-planner`, `req-layout-planner`, `req-feature-planner`
    - `req-menu-planner`(목록 화면), `req-api-integration-planner`
 4. join 단계:
-   - `req-test-planner` 실행 (기존 `.spec.md`에 테스트 케이스 섹션 추가)
+   - `req-fe-test-planner` 실행 (기존 `.spec.md`에 테스트 케이스 섹션 추가)
    - 공용 파일 lock 머지 (`admin-menu.spec.md`, `page.spec.md`, `**/PROGRESS.md`)
 
 ### 병렬 실행 규칙 (신규)
@@ -121,18 +129,18 @@ apps/[app]/src/app/**/hooks/index.spec.md
 ```text
 Task: req-page-planner
 Task: req-api-planner
-Task: req-ui-planner
+Task: req-primitive-planner
 Task: req-input-planner
 Task: req-cell-planner
 Task: req-widget-planner
 Task: req-layout-planner
 Task: req-feature-planner
 Task: req-menu-planner
-Task: req-test-planner
+Task: req-fe-test-planner
 Task: req-api-integration-planner
 ```
 
-`req-ui-planner`부터 `req-api-integration-planner`까지는 파일 충돌이 없으면 병렬 fan-out 가능합니다.
+`req-primitive-planner`부터 `req-api-integration-planner`까지는 파일 충돌이 없으면 병렬 fan-out 가능합니다.
 
 ---
 
@@ -161,7 +169,7 @@ Task: req-api-integration-planner
 
 ### 전체 완료 시
 - [ ] page.spec.md에 페이지 통합/API/이벤트 섹션이 반영되었는가?
-- [ ] controller.spec.md 및 dto.spec.md가 업데이트되었는가?
+- [ ] `apps/core/api/src/module/*/*.controller.spec.md` 및 dto.spec.md가 업데이트되었는가?
 - [ ] UI/Input/Cell/Widget/Layout/Feature의 index.spec.md가 모두 생성되었는가?
 - [ ] 목록 화면이면 admin-menu.spec.md가 생성/업데이트되었는가?
 - [ ] hooks/index.spec.md(또는 동등한 API 연동 스펙)가 반영되었는가?
@@ -185,14 +193,14 @@ Task: req-api-integration-planner
 |----------|------|------|
 | req-page-planner | 1 | 페이지 통합 기획 |
 | req-api-planner | 2 | 인터랙션/API 기획 |
-| req-ui-planner | 3 | UI 컴포넌트 기획 |
+| req-primitive-planner | 3 | UI 컴포넌트 기획 |
 | req-input-planner | 4 | Input 기획 |
 | req-cell-planner | 5 | Cell 기획 (목록 화면) |
 | req-widget-planner | 6 | Widget 기획 |
 | req-layout-planner | 7 | Layout 기획 |
 | req-feature-planner | 8 | Feature 기획 |
 | req-menu-planner | 9 | 메뉴 기획 (목록 화면) |
-| req-test-planner | 10 | 테스트 기획 |
+| req-fe-test-planner | 10 | 테스트 기획 |
 | req-api-integration-planner | 11 | API 연동 기획 |
 
 ### 후행 에이전트

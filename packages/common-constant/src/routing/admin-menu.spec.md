@@ -16,11 +16,11 @@ Admin
 ├── 회원 (/users)
 │   └── 회원 목록 (/users)
 ├── 시설 관리
-│   └── 시설 (/grounds)
+│   └── 시설 (/spaces)
 ├── 일정 관리
 │   └── 타임라인 (/timelines)
 ├── 운동 관리
-│   ├── 운동 종목 (/exercises)
+│   ├── 운동 종목 (/tasks)
 │   └── 루틴 (/routines)
 ├── 템플릿
 │   └── 템플릿 목록 (/templates)
@@ -73,14 +73,14 @@ Admin
 | 세션 | TIMELINE_SESSIONS_NEW | /timelines/[timelineId]/sessions/new | 세션 등록 |
 | 세션 | TIMELINE_SESSIONS_DETAIL | /timelines/[timelineId]/sessions/[sessionId] | 세션 상세 |
 | 세션 | TIMELINE_SESSIONS_EDIT | /timelines/[timelineId]/sessions/[sessionId]/edit | 세션 수정 |
-| 시설 | GROUNDS | /grounds | 시설 목록 |
-| 시설 | GROUNDS_NEW | /grounds/new | 시설 등록 |
-| 시설 | GROUNDS_DETAIL | /grounds/[groundId] | 시설 상세 |
-| 시설 | GROUNDS_EDIT | /grounds/[groundId]/edit | 시설 수정 |
-| 운동 종목 | EXERCISES | /exercises | 운동 종목 목록 |
-| 운동 종목 | EXERCISES_NEW | /exercises/new | 운동 종목 등록 |
-| 운동 종목 | EXERCISES_DETAIL | /exercises/[exerciseId] | 운동 종목 상세 |
-| 운동 종목 | EXERCISES_EDIT | /exercises/[exerciseId]/edit | 운동 종목 수정 |
+| 시설 | SPACES | /spaces | 시설 목록 |
+| 시설 | SPACES_NEW | /spaces/new | 시설 등록 |
+| 시설 | SPACES_DETAIL | /spaces/[spaceId]/ground | 시설 상세 |
+| 시설 | SPACES_EDIT | /spaces/[spaceId]/ground/edit | 시설 수정 |
+| 운동 종목 | TASKS | /tasks | 운동 종목 목록 |
+| 운동 종목 | TASKS_NEW | /tasks/new | 운동 종목 등록 |
+| 운동 종목 | TASKS_DETAIL | /tasks/[taskId]/exercise | 운동 종목 상세 |
+| 운동 종목 | TASKS_EDIT | /tasks/[taskId]/exercise/edit | 운동 종목 수정 |
 | 루틴 | ROUTINES | /routines | 루틴 목록 |
 | 루틴 | ROUTINES_NEW | /routines/new | 루틴 등록 |
 | 루틴 | ROUTINES_DETAIL | /routines/[routineId] | 루틴 상세 |
@@ -105,9 +105,9 @@ Admin
 |--------|------|------|
 | MENU_DASHBOARD | menu:dashboard | 대시보드 |
 | MENU_USERS | menu:users | 회원 |
-| MENU_GROUNDS | menu:grounds | 시설 관리 |
+| MENU_SPACES | menu:spaces | 시설 관리 |
 | MENU_TIMELINES | menu:timelines | 일정 관리 |
-| MENU_EXERCISES | menu:exercises | 운동 관리 |
+| MENU_TASKS | menu:tasks | 운동 관리 |
 | MENU_ROUTINES | menu:routines | 루틴 |
 | MENU_TEMPLATES | menu:templates | 템플릿 |
 | MENU_ASSETS | menu:assets | 에셋 |
@@ -119,9 +119,9 @@ Admin
 | 상수명 | 값 | 설명 |
 |--------|------|------|
 | MENU_USERS_LIST | menu:users:list | 회원 목록 |
-| MENU_GROUNDS_LIST | menu:grounds:list | 시설 |
+| MENU_SPACES_LIST | menu:spaces:list | 시설 |
 | MENU_TIMELINES_LIST | menu:timelines:list | 타임라인 |
-| MENU_EXERCISES_LIST | menu:exercises:list | 운동 종목 |
+| MENU_TASKS_LIST | menu:tasks:list | 운동 종목 |
 | MENU_ROUTINES_LIST | menu:routines:list | 루틴 |
 | MENU_TEMPLATES_LIST | menu:templates:list | 템플릿 목록 |
 | MENU_ASSETS_LIST | menu:assets:list | 에셋 |
@@ -144,9 +144,9 @@ Admin
 |----|------|--------|------|---------|---------|
 | dashboard | 대시보드 | LayoutDashboard | /dashboard | menu:dashboard | 0 |
 | users | 회원 | Users | /users | menu:users | 1 |
-| grounds | 시설 관리 | Building2 | - | menu:grounds | 1 |
+| spaces | 시설 관리 | Building2 | - | menu:spaces | 1 |
 | timelines | 일정 관리 | CalendarDays | - | menu:timelines | 1 |
-| exercises | 운동 관리 | Dumbbell | - | menu:exercises | 2 |
+| tasks | 운동 관리 | Dumbbell | - | menu:tasks | 2 |
 | templates | 템플릿 | Mail | - | menu:templates | 1 |
 | assets | 에셋 | Images | /assets | menu:assets | 1 |
 | inquiries | 문의 관리 | MessageCircleQuestionMark | /inquiries | menu:inquiries | 1 |
@@ -200,6 +200,7 @@ Admin
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-03-11 | aggregate root 기준 spaces/tasks 경로와 API 계약으로 전환 | codex |
 | 2026-02-26 | 초기 생성 (기존 admin-menu.ts 역기획) | orch-screen-planner |
 | 2026-02-26 | 문의(Inquiry) 메뉴 추가 (INQUIRIES, INQUIRIES_NEW, INQUIRIES_DETAIL) | orch-screen-planner |
 | 2026-02-26 | 문의를 BottomTab에 추가 (users, inquiries 순서) | orch-screen-planner |

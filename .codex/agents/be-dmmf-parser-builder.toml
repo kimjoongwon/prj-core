@@ -292,7 +292,8 @@ const parser = getDmmfParser();
 const models = parser.parseModels();
 // [
 //   { name: "User", displayName: "사용자" },
-//   { name: "Ground", displayName: null },
+//   { name: "Space", displayName: "공간" },
+//   { name: "Task", displayName: "과업" },
 // ]
 
 // 필드 정보 추출

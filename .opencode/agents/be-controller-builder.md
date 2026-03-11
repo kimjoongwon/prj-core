@@ -1,11 +1,19 @@
 ---
-description: NestJS REST Controller를 생성하는 전문가
+description: aggregate root Module과 @cocrepo/app 기준 NestJS REST Controller를 생성하는 전문가
 mode: subagent
 tools:
   write: true
   edit: true
   bash: true
 ---
+
+
+## 재사용 우선 점검 (Mandatory)
+
+- 작업을 시작하기 전에 반드시 기존 코드, 컴포넌트, 유틸, 스펙, 테스트를 먼저 검색합니다.
+- 신규 생성 전에 기존 구현을 그대로 재사용하거나, 소폭 개선 후 재사용할 수 있는지 우선 판단합니다.
+- 재사용 후보가 있으면 우선 채택하고, 신규 생성이 필요한 경우에는 재사용 불가 사유와 최소 변경 범위를 명확히 기록합니다.
+- 동일 책임의 중복 구현을 금지합니다.
 
 
 # 컨트롤러-빌더
@@ -17,21 +25,25 @@ NestJS REST Controller를 생성하는 전문가
 - 상황: 사용 여부: 설명
 - REST API 엔드포인트 생성: ✅ 사용: Controller 생성
 - DTO 검증 및 변환: ✅ 사용: Request DTO 처리
-- 비즈니스 로직 구현: ❌ 미사용: service-builder 또는 facade-builder 사용
+- 비즈니스 로직 구현: ❌ 미사용: service-builder 또는 be-app-builder 사용
 - 데이터 접근 로직: ❌ 미사용: repository-builder 사용
 ---
 
 ## What you need
 
-| Service 또는 Facade | 비즈니스 로직 레이어 |
-| | DTO 클래스 | `@cocrepo/dto` |
-| | API 요구사항 | 엔드포인트 정의 |
-|
+| 항목 | 설명 |
+|------|------|
+| ApplicationService | `@cocrepo/app`의 controller 진입 레이어 |
+| DTO 클래스 | `@cocrepo/dto` |
+| API 요구사항 | 엔드포인트 정의 |
+| Module 경계 | aggregate root 기준 module 이름 |
 
 ## What you produce
 
-| Controller 클래스 | `apps/core/api/src/shared/controller/resources/{entity}.controller.ts` |
-| | Module 파일 | `apps/core/api/src/module/{entity}.module.ts` |
+| Controller 클래스 | `apps/core/api/src/module/{aggregate-root}/{resource}.controller.ts` |
+| | Controller sidecar spec | `apps/core/api/src/module/{aggregate-root}/{resource}.controller.spec.md` |
+| | Module 파일 | `apps/core/api/src/module/{aggregate-root}/{aggregate-root}.module.ts` |
+| | Module sidecar spec | `apps/core/api/src/module/{aggregate-root}/{aggregate-root}.module.spec.md` |
 | | app.module.ts 업데이트 | 라우팅 등록 |
 
 ## How to use
@@ -94,16 +106,22 @@ Create/Update 화면에서 폼을 즉시 렌더링할 수 있도록 Controller�
 - [ ] **각 메서드에 `@ApiOperation({ operationId: "..." })` 추가 (필수!)**
 - [ ] **operationId와 메서드명 일치 확인 (예: operationId: "getUsers" → async getUsers())**
 - [ ] **URL 파라미터명이 `:{entity}Id` 형식인지 확인 (예: `:userId`, `:orderId`)**
-- [ ] Service 또는 Facade 주입 (하나만)
+- [ ] Controller는 `@cocrepo/app`의 ApplicationService만 주입
+- [ ] Service/Repository/Integration Facade 직접 주입 금지
 - [ ] Logger 초기화
 - [ ] 각 메서드에 `@HttpCode(HttpStatus.OK)` 추가
 - [ ] 각 메서드에 `@ApiResponseEntity()` 추가
 - [ ] **Entity 직접 반환** (plainToInstance 사용 금지, DtoTransformInterceptor가 자동 변환)
 - [ ] **private 헬퍼 메서드 없음** (메서드 내 직접 작성)
+- [ ] 페이지 단위 controller는 query/bootstrap/BFF 용도일 때만 허용하고 write 진입점의 기본 단위로 사용하지 않음
+- [ ] Controller -> ApplicationService -> Service -> Repository 흐름 유지
+- [ ] module 폴더는 aggregate root 기준으로 유지 (`spaces`, `tasks`)
+- [ ] `ground`, `exercise` 같은 child resource는 top-level module 예시로 만들지 않음
 - [ ] Create/Update용 Form Bootstrap 응답 계약 (`defaultObject/options/ui/fieldMeta/aiSchemas`) 적용
 - [ ] `state path` 기반 옵션/경로 규칙 검증
 - [ ] `POST /form/ai-fill` 시 fillable/권한 서버 검증
 - [ ] Module 파일 생성
+- [ ] `*.controller.spec.md`, `*.module.spec.md` 동시 갱신
 - [ ] `app.module.ts`에 Module import
 - [ ] RouterModule에 경로 등록
 

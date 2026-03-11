@@ -3,13 +3,13 @@
 > 생성일: {{createdDate}}
 > 수정일: {{modifiedDate}}
 > 타입: repository
-> 위치: apps/server/src/{{module}}/repositories/{{repositoryName}}.ts
+> 위치: packages/be-repository/src/{{repositoryName}}.ts
 
 ## 역할
 
 {{description}}
 
-## 담당 엔티티
+## 담당 aggregate root
 
 {{entity}}
 
@@ -56,7 +56,6 @@ model {{entity}} {
 ## 구현 체크리스트
 
 - [ ] {{repositoryName}}.ts
-- [ ] 인터페이스 정의
 - [ ] 단위 테스트 (Jest)
 
 ## 테스트 케이스

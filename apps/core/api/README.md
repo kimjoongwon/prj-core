@@ -16,9 +16,9 @@ src/
 │   │   │   └── auth.domain.ts         # 인증 비즈니스 로직
 │   │   │       └── auth.domain.spec.ts
 │   │   │
-│   │   ├── facade/           # 서비스 조합 계층 (Facade 패턴)
-│   │   │   ├── auth.facade.ts         # 인증 서비스 (domain + utils 조합)
-│   │   │   ├── auth.facade.spec.ts
+│   │   ├── application/      # 유즈케이스 조합 계층 (ApplicationService)
+│   │   │   ├── auth.application-service.ts
+│   │   │   ├── auth.application-service.spec.ts
 │   │   │   └── aws.service.ts
 │   │   │
 │   │   ├── utils/            # 기술 유틸리티 서비스
@@ -61,7 +61,7 @@ src/
 | 계층 | 목적 | 위치 | 예시 |
 |------|------|------|------|
 | **Controller** | HTTP 요청 처리 | `controller/` | 라우팅, 요청 검증 |
-| **Facade** | 서비스 조합 | `service/facade/` | AuthService (domain + util) |
+| **ApplicationService** | 유즈케이스 조합 | `service/application/` | AuthApplicationService |
 | **Domain** | 순수 비즈니스 로직 | `service/domain/` | AuthDomain (비즈니스 규칙) |
 | **Utils** | 기술 구현 | `service/utils/` | 암호화, 토큰, 컨텍스트 |
 | **Resources** | 데이터 접근 | `service/resources/` | 사용자, 테넌트 CRUD |
@@ -74,7 +74,7 @@ HTTP Request
     ↓
 Controller (auth.controller.ts)
     ↓
-Facade (auth.facade.ts - AuthService)
+ApplicationService (auth.application-service.ts - AuthApplicationService)
     ├── Domain 로직 위임 → auth.domain.ts
     │   ├── validateUser()
     │   ├── signUp()
@@ -108,9 +108,9 @@ Database
 - 테스트가 명확하고 용이함
 - 재사용성 높음
 
-### 2. Facade (서비스 조합 및 공개 인터페이스)
+### 2. ApplicationService (서비스 조합 및 공개 인터페이스)
 
-**파일**: `service/facade/auth.facade.ts`
+**파일**: `service/application/auth.application-service.ts`
 
 ```typescript
 // 1️⃣ 실제 조합 (2개 이상 서비스 조합)
@@ -133,11 +133,11 @@ Database
 **위임하는 이유**:
 
 1. **단일 인터페이스 (Single Interface)**
-   - Controller는 Facade만 알면 됨
+   - Controller는 ApplicationService만 알면 됨
    - Domain 변경이 Controller에 영향 없음
 
 2. **추후 확장성**
-   - Facade에서 비즈니스 로직 전후 처리 추가 가능
+   - ApplicationService에서 비즈니스 로직 전후 처리 추가 가능
 
    ```typescript
    async login(payload) {
@@ -155,19 +155,19 @@ Database
    ```
 
 3. **계층별 책임 명확화**
-   - Facade: 공개 인터페이스 + 크로스커팅 관심사
+   - ApplicationService: 공개 인터페이스 + 크로스커팅 관심사
    - Domain: 순수 비즈니스 로직
    - Controller: HTTP 처리
 
 4. **테스트 격리**
-   - Facade 테스트: Domain 모킹으로 조합만 검증
+   - ApplicationService 테스트: Domain 모킹으로 조합만 검증
    - Domain 테스트: 실제 비즈니스 로직만 검증
 
 **특징**:
 - Domain 로직을 통제된 방식으로 노출
 - 기술적 유틸리티 조합 (TokenService, PasswordService)
 - 컨트롤러의 공개 인터페이스 역할
-- Facade 패턴을 통한 관심사 분리
+- ApplicationService를 통한 유즈케이스 조합 분리
 
 ### 3. Utils (기술 유틸리티)
 
@@ -235,9 +235,9 @@ TenantsService
 - login() 테스트
 ```
 
-### Facade 테스트
+### ApplicationService 테스트
 
-**파일**: `service/facade/auth.facade.spec.ts`
+**파일**: `service/application/auth.application-service.spec.ts`
 
 ```typescript
 // 통합 테스트 (domain 위임 확인)
@@ -253,14 +253,14 @@ TenantsService
 ### 관심사 분리 (Separation of Concerns)
 
 - **Domain**: 순수 비즈니스 규칙만
-- **Facade**: 도메인 로직 노출 + 서비스 조합 + 크로스커팅 관심사
+- **ApplicationService**: 도메인 로직 노출 + 서비스 조합 + 크로스커팅 관심사
 - **Utils**: 기술 구현 (암호화, JWT, 컨텍스트)
 - **Resources**: 데이터 접근 (CRUD)
 
 ### 재사용성
 
 - Utils는 모든 계층에서 사용 가능
-- Domain은 순수하게 유지, Facade를 통해 노출
+- Domain은 순수하게 유지, ApplicationService를 통해 노출
 - Resources는 어디서든 필요한 곳에 주입 가능
 
 ### 테스트 용이성
@@ -271,7 +271,7 @@ TenantsService
   AuthDomain(mockUsers, mockPassword, mockToken, mockPrisma)
   ```
 
-- **Facade 테스트**: 서비스 조합 및 위임 검증
+- **ApplicationService 테스트**: 서비스 조합 및 위임 검증
   ```typescript
   // Domain 모킹으로 조합만 검증
   AuthService(mockDomain, mockUsers, mockJwt, mockToken)
@@ -311,7 +311,7 @@ async login(payload) {
 ```
 
 **장점**:
-- Controller 수정 없음 (Facade만 수정)
+- Controller 수정 없음 (ApplicationService만 수정)
 - Domain은 순수하게 유지
 - 기능 추가가 격리됨
 
@@ -320,7 +320,7 @@ async login(payload) {
 | 추가할 기능 | 추가 위치 | 수정 범위 |
 |----------|---------|---------|
 | 새 비즈니스 로직 | Domain | Domain + Domain 테스트 |
-| 감사/권한 처리 | Facade | Facade + Facade 테스트 |
+| 감사/권한 처리 | ApplicationService | ApplicationService + ApplicationService 테스트 |
 | 새 유틸 기능 | Utils | Utils 확장 |
 | 새 데이터 접근 | Resources | Resources + Repository |
 

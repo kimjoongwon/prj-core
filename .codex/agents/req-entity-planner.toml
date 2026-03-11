@@ -293,7 +293,7 @@ Member (Level 0) → 단일 실행
 
 | 에이전트 | 관계 | 설명 |
 |----------|------|------|
-| be-schema-builder | 구현 | Prisma 스키마 생성 |
+| be-prisma-builder | 구현 | Prisma 스키마 생성 |
 | be-entity-builder | 구현 | Entity 클래스 생성 |
 | req-store-planner | 다음 단계 | Store 기획 |
 

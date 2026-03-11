@@ -41,7 +41,7 @@ export class UsersModule {}
   - RedisService: Redis 연결 관리
   - AwsService: AWS S3 연동
 
-> **참고**: AuthFacade는 `@cocrepo/facade` 패키지로 분리되었습니다.
+> **참고**: 인증 유즈케이스 조합은 `@cocrepo/app` 패키지의 `AuthApplicationService`로 분리되었습니다.
 
 ## 의존성
 

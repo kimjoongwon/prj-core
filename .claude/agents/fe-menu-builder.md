@@ -5,6 +5,14 @@ tools: Read, Write, Grep, Bash
 ---
 
 
+## 재사용 우선 점검 (Mandatory)
+
+- 작업을 시작하기 전에 반드시 기존 코드, 컴포넌트, 유틸, 스펙, 테스트를 먼저 검색합니다.
+- 신규 생성 전에 기존 구현을 그대로 재사용하거나, 소폭 개선 후 재사용할 수 있는지 우선 판단합니다.
+- 재사용 후보가 있으면 우선 채택하고, 신규 생성이 필요한 경우에는 재사용 불가 사유와 최소 변경 범위를 명확히 기록합니다.
+- 동일 책임의 중복 구현을 금지합니다.
+
+
 # 메뉴 빌더
 
 Admin/Dashboard 앱의 **메뉴 시스템 컴포넌트**(Sidebar, BottomTab, FAB, Tabs)를 생성합니다.
@@ -633,72 +641,6 @@ const SideNav = observer(() => {
 - [ ] usePathname으로 활성 탭이 판단되는가?
 
 ---
-
----
-
-## 11. 어드민 메뉴 상수 업데이트 (Critical)
-
-새 메뉴를 만들어도 **상수 선언이 없으면 어드민 메뉴에 노출되지 않습니다.**
-
-메뉴 시스템 변경 시 아래 파일을 반드시 함께 수정합니다:
-
-`packages/common-constant/src/routing/admin-menu.ts`
-
-### 필수 상수 업데이트 순서
-
-1. `ADMIN_PATHS`에 경로 상수 추가
-2. `ADMIN_SUBJECTS`에 권한 Subject 상수 추가
-3. `ADMIN_NAV_ITEMS`에 사이드바 메뉴 아이템 추가
-4. 모바일 노출이 필요하면 `BOTTOM_TAB_IDS`에 ID 추가
-5. 빠른 액션이 필요하면 `ADMIN_FAB_ACTIONS`에 액션 추가
-
-### 상수별 규칙
-
-| 상수 | 역할 | 필수 여부 | 규칙 |
-|------|------|-----------|------|
-| `ADMIN_PATHS` | 라우팅 경로 소스 | 필수 | 동적 파라미터는 전체 엔티티명 사용 (`[userId]`, `[roleId]`) |
-| `ADMIN_SUBJECTS` | 메뉴 접근 권한 식별자 | 필수 | `menu:{entity}` / `menu:{entity}:{sub}` 패턴 |
-| `ADMIN_NAV_ITEMS` | Sidebar 트리 구조 | 필수 | `id`, `label`, `icon`, `subject`, `children/path` 일관성 유지 |
-| `BOTTOM_TAB_IDS` | 모바일 하단 탭 노출 순서 | 선택 | 최대 5개, 마지막 `more` 권장 |
-| `ADMIN_FAB_ACTIONS` | 모바일 FAB 액션 | 선택 | 권한 없는 액션은 숨김 처리 |
-
-### 최소 구현 예시
-
-```typescript
-// 1) 경로
-ADMIN_PATHS.MEMBERS = "/members";
-
-// 2) Subject
-ADMIN_SUBJECTS.MENU_MEMBERS = "menu:members";
-ADMIN_SUBJECTS.MENU_MEMBERS_LIST = "menu:members:list";
-
-// 3) 네비게이션 트리
-ADMIN_NAV_ITEMS.push({
-  id: "members",
-  label: "회원",
-  icon: "Users",
-  subject: ADMIN_SUBJECTS.MENU_MEMBERS,
-  children: [
-    {
-      id: "members-list",
-      label: "회원 목록",
-      path: ADMIN_PATHS.MEMBERS,
-      subject: ADMIN_SUBJECTS.MENU_MEMBERS_LIST,
-    },
-  ],
-});
-
-// 4) 모바일 탭 (필요 시)
-// BOTTOM_TAB_IDS: ["dashboard", "members", "more"]
-```
-
-### 누락 점검 체크리스트
-
-- [ ] `ADMIN_PATHS` 추가됨
-- [ ] `ADMIN_SUBJECTS` 추가됨
-- [ ] `ADMIN_NAV_ITEMS`에 메뉴가 연결됨
-- [ ] 모바일 요구사항이 있으면 `BOTTOM_TAB_IDS`/`ADMIN_FAB_ACTIONS` 반영됨
-- [ ] `packages/common-constant/src/routing/admin-menu.spec.md` 변경 이력 업데이트됨
 
 ---
 

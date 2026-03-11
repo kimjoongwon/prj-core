@@ -46,7 +46,7 @@
 │                                                                  │
 │  ※ Activity가 없을 때: "운동을 추가해주세요" 안내 표시          │
 │                                                                  │
-│  [Exercise 선택 모달]                                            │
+│  [Task/Exercise 선택 모달]                                            │
 │  ┌──────────────────────────────────────────────────────────┐   │
 │  │ 운동 검색: [                              🔍 ]           │   │
 │  │ ─────────────────────────────────────────────────────── │   │
@@ -61,7 +61,7 @@
 
 1. 관리자가 루틴 목록에서 "루틴 등록" 버튼을 클릭하여 이 페이지에 진입한다
 2. 루틴 기본 정보(이름, 라벨)를 입력한다
-3. "운동 추가" 버튼으로 운동 선택 모달을 열어 Exercise를 검색·선택한다
+3. "운동 추가" 버튼으로 운동 선택 모달을 열어 Task/Exercise를 검색·선택한다
 4. 선택된 Activity의 반복 횟수, 휴식 시간, 메모를 입력한다
 5. Activity 카드를 드래그하여 운동 순서를 조정한다
 6. "저장" 버튼을 클릭하여 루틴을 생성한다
@@ -89,7 +89,7 @@ Activity 카드 목록 (순서 변경 가능):
 
 | 필드 | 컴포넌트 | 유효성 | 설명 |
 |------|----------|--------|------|
-| taskId | - | 자동 (선택 시 설정) | 선택된 Exercise의 Task ID |
+| taskId | - | 자동 (선택 시 설정) | 선택된 선택된 Task ID |
 | exerciseName | 읽기 전용 | - | 선택된 운동명 표시 |
 | repetitions | NumberInput | 최소 1 | 반복 횟수 (세트 수), 기본 1 |
 | restTime | NumberInput | 최소 0 | 다음 운동까지 휴식 시간(초), 기본 0 |
@@ -99,7 +99,7 @@ Activity 카드 목록 (순서 변경 가능):
 - 드래그 핸들: 순서 변경 (drag & drop)
 - 삭제 버튼: 해당 Activity 제거
 
-## Exercise 선택 모달
+## Task/Exercise 선택 모달
 
 | 영역 | 설명 |
 |------|------|
@@ -107,7 +107,7 @@ Activity 카드 목록 (순서 변경 가능):
 | 목록 | Exercise 목록 (운동명, 지속 시간, 반복 횟수) |
 | 선택 | 항목 클릭 시 Activity 추가 후 모달 닫기 |
 
-**접근 규칙:** 현재 Space + 상위 Space의 Exercise 검색 가능
+**접근 규칙:** 현재 Space + 상위 Space의 Task/Exercise 검색 가능
 
 ## 페이지 상태
 
@@ -123,7 +123,7 @@ Activity 카드 목록 (순서 변경 가능):
 
 | 시점 | API | 설명 |
 |------|-----|------|
-| 운동 검색 | `useGetExercises({ search, spaceScope: INCLUDE_ANCESTORS })` | Exercise 선택 모달에서 호출 |
+| 운동 검색 | `useGetTasks({ search, spaceScope: INCLUDE_ANCESTORS })` | Task/Exercise 선택 모달에서 호출 |
 | 저장 | `useCreateRoutine()` | name, label, activities 배열 전송 |
 
 ### 요청 데이터 구조
@@ -133,7 +133,7 @@ Activity 카드 목록 (순서 변경 가능):
   name: string;          // 루틴 이름
   label: string;         // 라벨
   activities: {
-    taskId: string;      // Exercise.taskId
+    taskId: string;      // Task.id
     order: number;       // 1부터 순서대로
     repetitions: number; // 반복 횟수
     restTime: number;    // 휴식 시간 (초)
@@ -146,7 +146,7 @@ Activity 카드 목록 (순서 변경 가능):
 
 | 이벤트 | 동작 |
 |--------|------|
-| "운동 추가" 버튼 클릭 | Exercise 선택 모달 오픈 |
+| "운동 추가" 버튼 클릭 | Task/Exercise 선택 모달 오픈 |
 | Exercise 선택 | 모달 닫기 + Activity 카드 목록 끝에 추가 (order 자동 부여) |
 | Activity 드래그 완료 | order 값 전체 재정렬 |
 | Activity 삭제 | 해당 Activity 제거 + 나머지 order 재정렬 |
@@ -172,6 +172,7 @@ Activity 카드 목록 (순서 변경 가능):
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-03-11 | aggregate root 기준 spaces/tasks 경로와 API 계약으로 전환 | codex |
 | 2026-02-19 | 초기 생성 | 직접 기획 |
 | 2026-02-19 | 디자인 목업 섹션 추가 | req-reverse-engineer |
 | 2026-03-03 | Scaffold 제거 및 페이지 헤더 영역/섹션 영역 용어 정리 | codex |

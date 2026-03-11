@@ -212,4 +212,4 @@ return this.repository.findBySpaceId(spaceId);  // 일반: Space 필터링
 | UsersService | ✅ | 일부 | 목록은 SpaceContext, 상세/생성/수정/삭제는 파라미터 |
 | SpacesService | - | ✅ | Space 자체 관리라 SpaceContext 불필요 |
 | RolesService | - | ✅ | 시스템 수준 조회 |
-| GroundsService | - | ✅ | `/my` 엔드포인트만 Space 필터 |
+| SpacesService | - | ✅ | Space root는 파라미터 기반, Ground detail은 `/spaces/:spaceId/ground` nested route로 처리 |

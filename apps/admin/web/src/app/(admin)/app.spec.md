@@ -57,7 +57,7 @@ Admin 앱은 플랫폼의 관리자 콘솔입니다. 회원, 예약, 알림, 콘
 | 도메인 | 경로 | 설명 | 구현 상태 |
 |--------|------|------|-----------|
 | 대시보드 | `/dashboard` | 주요 지표 대시보드 | 폴더 존재 |
-| 시설 (Grounds) | `/grounds` | 시설(Ground) CRUD 관리. Space를 구체화하는 물리적 시설 (이름, 주소, 사업자번호 등) | 기획 중 |
+| 시설 (Spaces) | `/spaces` | 시설(Ground) CRUD 관리. Space를 구체화하는 물리적 시설 (이름, 주소, 사업자번호 등) | 기획 중 |
 | 회원 (Users) | `/users` | 회원 CRUD 관리 | 목록 구현 완료, 상세/등록/수정 TODO |
 | 역할 (Roles) | `/roles` | 역할 정의 및 관리 | 구현 중 |
 | 역할 그룹 | `/roles/groups` | 역할 그룹 관리 | 구현 중 |
@@ -67,7 +67,7 @@ Admin 앱은 플랫폼의 관리자 콘솔입니다. 회원, 예약, 알림, 콘
 | 대상 (Subjects) | `/subjects` | 대상 조회 관리 | 구현 중 |
 | 템플릿 (Templates) | `/templates` | 메시지 템플릿 관리 | 구현 완료 |
 | 루틴 (Routines) | `/routines` | 운동 루틴(커리큘럼) CRUD 관리 | 기획 완료, 구현 TODO |
-| 운동 종목 (Exercises) | `/exercises` | 운동 종목 CRUD 관리. Task와 1:1 연결 | 기획 완료, 구현 TODO |
+| 운동 종목 (Tasks) | `/tasks` | 운동 종목 CRUD 관리. Task와 1:1 연결 | 기획 완료, 구현 TODO |
 | 에셋 (Assets) | `/assets` | 업로드된 에셋(Image/Video/Document) 목록 조회/검색/필터링, 미리보기/다운로드, 삭제 및 일괄 삭제 관리 | 기획 완료, 구현 TODO |
 | 폴더 (Folders) | `/assets` (에셋 목록 내) | 계층적 폴더 구조 관리 (에셋 목록 페이지 내에서 트리 탐색) | 기획 완료, 구현 TODO |
 | 앨범 (Albums) | `/albums` | 앨범 CRUD 관리. 사용자 정의 에셋 컬렉션 | 기획 완료, 구현 TODO |
@@ -252,6 +252,7 @@ AdminLayout
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-03-11 | aggregate root 기준 spaces/tasks 경로와 API 계약으로 전환 | codex |
 | 2026-02-18 | 초기 생성 (역기획) | req-reverse-engineer |
 | 2026-02-19 | Timeline/Session 도메인 추가, GOAL-009/010 추가 | req-context-planner |
 | 2026-02-19 | Exercise 도메인 추가 (GOAL-011), 도메인 목록에 운동 종목 항목 추가 | req-context-planner |

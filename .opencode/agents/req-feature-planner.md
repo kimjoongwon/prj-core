@@ -8,6 +8,14 @@ tools:
 ---
 
 
+## 재사용 우선 점검 (Mandatory)
+
+- 작업을 시작하기 전에 반드시 기존 코드, 컴포넌트, 유틸, 스펙, 테스트를 먼저 검색합니다.
+- 신규 생성 전에 기존 구현을 그대로 재사용하거나, 소폭 개선 후 재사용할 수 있는지 우선 판단합니다.
+- 재사용 후보가 있으면 우선 채택하고, 신규 생성이 필요한 경우에는 재사용 불가 사유와 최소 변경 범위를 명확히 기록합니다.
+- 동일 책임의 중복 구현을 금지합니다.
+
+
 # L10 Feature 기획자 (Feature Planner)
 
 특정 화면에 필요한 **Feature 컴포넌트(L10)** 레이어를 기획하는 전문가입니다.
@@ -36,7 +44,7 @@ tools:
 ### 출력 위치 (Sidecar Spec - 개별 파일)
 
 ```
-packages/fe-ui/src/components/feature/[FeatureName]/index.spec.md
+packages/fe-ui/src/feature/[FeatureName]/index.spec.md
 ```
 
 각 신규 Feature 컴포넌트마다 개별 `index.spec.md` 파일을 생성합니다.
@@ -139,7 +147,7 @@ packages/fe-ui/src/components/feature/[FeatureName]/index.spec.md
 
 ```
 0단계: 템플릿 파일 확인
-   Read `.claude/templates/spec/feature.spec.md`
+   Read `.codex/templates/spec/feature.spec.md`
    → 해당 파일의 형식을 기준으로 index.spec.md를 생성한다
    ↓
 1단계: 화면 분석
@@ -160,7 +168,7 @@ packages/fe-ui/src/components/feature/[FeatureName]/index.spec.md
    - 이벤트 핸들러 정의
    ↓
 5단계: 기획서 작성 (개별 파일)
-   → packages/fe-ui/src/components/feature/[FeatureName]/index.spec.md
+   → packages/fe-ui/src/feature/[FeatureName]/index.spec.md
 ```
 
 ---
@@ -241,7 +249,7 @@ const MemberListFeature = observer(({ store }: Props) => {
 
 | 에이전트 | 관계 | 설명 |
 |----------|------|------|
-| req-test-planner | 다음 단계 | 테스트 기획 |
+| req-fe-test-planner | 다음 단계 | 테스트 기획 |
 | fe-feature-builder | 구현 | Feature 컴포넌트 생성 |
 
 ---
@@ -260,7 +268,7 @@ API: GET /api/members, DELETE /api/members/:memberId
 
 ### 출력
 
-**packages/fe-ui/src/components/feature/MemberFilterPanel/index.spec.md:**
+**packages/fe-ui/src/feature/MemberFilterPanel/index.spec.md:**
 
 ```markdown
 # MemberFilterPanel Feature 기획서
@@ -298,7 +306,7 @@ API: GET /api/members, DELETE /api/members/:memberId
 | Select | inputs | 상태 선택 |
 ```
 
-**packages/fe-ui/src/components/feature/MemberList/index.spec.md:**
+**packages/fe-ui/src/feature/MemberList/index.spec.md:**
 
 ```markdown
 # MemberList Feature 기획서
@@ -338,7 +346,7 @@ API: GET /api/members, DELETE /api/members/:memberId
 | Pagination | ui | 페이지 이동 |
 ```
 
-**packages/fe-ui/src/components/feature/MemberActionBar/index.spec.md:**
+**packages/fe-ui/src/feature/MemberActionBar/index.spec.md:**
 
 ```markdown
 # MemberActionBar Feature 기획서

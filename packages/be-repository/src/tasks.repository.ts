@@ -1,0 +1,204 @@
+import { Routine, Task } from "@cocrepo/entity";
+import { Prisma, PrismaClient } from "@cocrepo/prisma";
+import { Injectable, Logger } from "@nestjs/common";
+import { TransactionHost } from "@nestjs-cls/transactional";
+import { TransactionalAdapterPrisma } from "@nestjs-cls/transactional-adapter-prisma";
+import { plainToInstance } from "class-transformer";
+
+@Injectable()
+export class TasksRepository {
+	private readonly logger = new Logger(TasksRepository.name);
+
+	constructor(
+		private readonly txHost: TransactionHost<
+			TransactionalAdapterPrisma<PrismaClient>
+		>,
+	) {}
+
+	async findManyTasks(params: {
+		spaceIds: string[];
+		skip: number;
+		take: number;
+		search?: string;
+	}): Promise<[Task[], number]> {
+		const { spaceIds, skip, take, search } = params;
+		this.logger.debug(
+			`Task 목록 조회: spaceIds=${spaceIds.length}, search=${search ?? "없음"}`,
+		);
+
+		const where: Prisma.TaskWhereInput = {
+			removedAt: null,
+			spaceId: { in: spaceIds },
+			exercise: {
+				is: {
+					removedAt: null,
+					...(search
+						? { name: { contains: search, mode: "insensitive" } }
+						: {}),
+				},
+			},
+		};
+
+		const [items, total] = await Promise.all([
+			this.txHost.tx.task.findMany({
+				where,
+				include: {
+					exercise: true,
+					space: { select: { id: true } },
+					creator: { select: { id: true, name: true } },
+				},
+				orderBy: { createdAt: "desc" },
+				skip,
+				take,
+			}),
+			this.txHost.tx.task.count({ where }),
+		]);
+
+		return [items.map((item) => plainToInstance(Task, item)), total];
+	}
+
+	async findTaskById(taskId: string, spaceIds: string[]): Promise<Task | null> {
+		this.logger.debug(`Task 단건 조회: ${taskId.slice(-8)}`);
+
+		const result = await this.txHost.tx.task.findFirst({
+			where: {
+				id: taskId,
+				removedAt: null,
+				spaceId: { in: spaceIds },
+				exercise: {
+					is: {
+						removedAt: null,
+					},
+				},
+			},
+			include: {
+				exercise: true,
+				space: { select: { id: true } },
+				creator: { select: { id: true, name: true } },
+			},
+		});
+
+		return result ? plainToInstance(Task, result) : null;
+	}
+
+	async findTaskRoutines(taskId: string): Promise<Routine[]> {
+		this.logger.debug(`Task 연관 루틴 조회: ${taskId.slice(-8)}`);
+
+		const results = await this.txHost.tx.routine.findMany({
+			where: {
+				removedAt: null,
+				activities: {
+					some: {
+						removedAt: null,
+						taskId,
+					},
+				},
+			},
+			orderBy: { createdAt: "desc" },
+		});
+
+		return results.map((result) => plainToInstance(Routine, result));
+	}
+
+	async create(
+		data: Prisma.TaskUncheckedCreateInput,
+	): Promise<Task> {
+		this.logger.debug("Task 생성");
+
+		const result = await this.txHost.tx.task.create({
+			data,
+			include: {
+				exercise: true,
+				space: { select: { id: true } },
+				creator: { select: { id: true, name: true } },
+			},
+		});
+
+		return plainToInstance(Task, result);
+	}
+
+	async createExerciseByTaskId(
+		taskId: string,
+		data: Omit<Prisma.ExerciseUncheckedCreateInput, "taskId">,
+	): Promise<Task> {
+		this.logger.debug(`Task에 Exercise 생성: ${taskId.slice(-8)}`);
+
+		await this.txHost.tx.exercise.create({
+			data: {
+				...data,
+				taskId,
+			},
+		});
+
+		const task = await this.txHost.tx.task.findUnique({
+			where: { id: taskId },
+			include: {
+				exercise: true,
+				space: { select: { id: true } },
+				creator: { select: { id: true, name: true } },
+			},
+		});
+
+		if (!task) {
+			throw new Error("TASK_NOT_FOUND");
+		}
+
+		return plainToInstance(Task, task);
+	}
+
+	async updateExerciseByTaskId(
+		taskId: string,
+		data: Prisma.ExerciseUncheckedUpdateInput,
+	): Promise<Task> {
+		this.logger.debug(`Task의 Exercise 수정: ${taskId.slice(-8)}`);
+
+		await this.txHost.tx.exercise.update({
+			where: { taskId },
+			data,
+		});
+
+		const task = await this.txHost.tx.task.findUnique({
+			where: { id: taskId },
+			include: {
+				exercise: true,
+				space: { select: { id: true } },
+				creator: { select: { id: true, name: true } },
+			},
+		});
+
+		if (!task) {
+			throw new Error("TASK_NOT_FOUND");
+		}
+
+		return plainToInstance(Task, task);
+	}
+
+	async softDeleteTaskById(taskId: string): Promise<void> {
+		this.logger.debug(`Task 소프트 삭제: ${taskId.slice(-8)}`);
+
+		await this.txHost.tx.task.update({
+			where: { id: taskId },
+			data: { removedAt: new Date() },
+		});
+	}
+
+	async softDeleteExerciseByTaskId(taskId: string): Promise<void> {
+		this.logger.debug(`Exercise 소프트 삭제: ${taskId.slice(-8)}`);
+
+		await this.txHost.tx.exercise.update({
+			where: { taskId },
+			data: { removedAt: new Date() },
+		});
+	}
+
+	async countActivitiesUsingTask(taskId: string): Promise<number> {
+		this.logger.debug(`Task 사용 Activity 수 조회: ${taskId.slice(-8)}`);
+
+		return this.txHost.tx.activity.count({
+			where: {
+				taskId,
+				removedAt: null,
+			},
+		});
+	}
+}

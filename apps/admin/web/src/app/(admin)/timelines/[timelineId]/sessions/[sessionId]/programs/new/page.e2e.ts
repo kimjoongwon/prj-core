@@ -13,9 +13,10 @@ interface UserDto extends IdOnlyDto {
 	name: string;
 }
 
-interface ExerciseSeedDto extends IdOnlyDto {
-	taskId: string;
-	name: string;
+interface TaskSeedDto extends IdOnlyDto {
+	exercise?: {
+		name: string;
+	};
 }
 
 interface ApiListResponse<T> {
@@ -89,7 +90,7 @@ test.describe("프로그램 등록/수정 연결 플로우", () => {
 				expect(sessionId).toBeTruthy();
 
 				const exercisesResponse = await page.request.get(
-					`${API_BASE_URL}/exercises?take=20&skip=0`,
+					`${API_BASE_URL}/tasks?take=20&skip=0`,
 					{
 						headers: SPACE_HEADERS,
 					},
@@ -99,9 +100,8 @@ test.describe("프로그램 등록/수정 연결 플로우", () => {
 					`운동 조회 API 응답이 200이 아닙니다. status=${exercisesResponse.status()}`,
 				);
 				const exercisesBody =
-					(await exercisesResponse.json()) as ApiListResponse<ExerciseSeedDto>;
-				exerciseTaskId = exercisesBody.data?.find((exercise) => exercise.taskId)
-					?.taskId;
+					(await exercisesResponse.json()) as ApiListResponse<TaskSeedDto>;
+				exerciseTaskId = exercisesBody.data?.[0]?.id;
 				expect(exerciseTaskId).toBeTruthy();
 
 				const createRoutineOneResponse = await page.request.post(

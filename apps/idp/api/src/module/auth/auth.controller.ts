@@ -1,4 +1,5 @@
 import { wrapResponse } from "@cocrepo/be-common";
+import { AuthApplicationService } from "@cocrepo/app";
 import { AUTH_ERRORS, SYSTEM_ROLES, Token } from "@cocrepo/constant";
 import {
 	ApiAuth,
@@ -21,7 +22,6 @@ import {
 	TokenRefreshResponseDto,
 	VerifyTokenResponseDto,
 } from "@cocrepo/dto";
-import { AuthFacade } from "@cocrepo/facade";
 import { AuthAuditLogService } from "@cocrepo/service";
 import {
 	BadRequestException,
@@ -53,7 +53,7 @@ import { Request, Response } from "express";
 @Controller()
 export class AuthController {
 	constructor(
-		private readonly authFacade: AuthFacade,
+		private readonly authApplicationService: AuthApplicationService,
 		private readonly authAuditLogService: AuthAuditLogService,
 		private readonly configService: ConfigService,
 	) {}
@@ -68,7 +68,7 @@ export class AuthController {
 	})
 	async login(@Query("returnTo") returnTo: string, @Res() res: Response) {
 		const authorizationUrl =
-			await this.authFacade.getAuthorizationUrl(returnTo);
+			await this.authApplicationService.getAuthorizationUrl(returnTo);
 		return res.redirect(authorizationUrl);
 	}
 
@@ -99,7 +99,7 @@ export class AuthController {
 		}
 
 		try {
-			const returnTo = await this.authFacade.handleOidcCallback(
+			const returnTo = await this.authApplicationService.handleOidcCallback(
 				code,
 				state,
 				req,
@@ -132,7 +132,11 @@ export class AuthController {
 	) {
 		const refreshToken = req.cookies.refreshToken;
 		const sessionId = req.cookies?.sessionId;
-		return this.authFacade.refreshTokenWithIdp(refreshToken, sessionId, res);
+		return this.authApplicationService.refreshTokenWithIdp(
+			refreshToken,
+			sessionId,
+			res,
+		);
 	}
 
 	@Public()
@@ -154,7 +158,7 @@ export class AuthController {
 	)
 	@ResponseMessage("common.auth.register.success")
 	async signUp(@Body() signUpDto: SignUpPayloadDto) {
-		return this.authFacade.signUp(signUpDto);
+		return this.authApplicationService.signUp(signUpDto);
 	}
 
 	@HttpCode(HttpStatus.OK)
@@ -169,7 +173,7 @@ export class AuthController {
 	@ApiResponseEntity(VerifyTokenResponseDto, HttpStatus.OK)
 	@ResponseMessage("common.auth.validate.success")
 	async verifyToken() {
-		return this.authFacade.verifyToken();
+		return this.authApplicationService.verifyToken();
 	}
 
 	@SkipSpaceCheck()
@@ -187,7 +191,7 @@ export class AuthController {
 	@ApiResponseEntity(SpaceDto, HttpStatus.OK, { isArray: true })
 	@ResponseMessage("내 Space 목록 조회 성공")
 	async getMySpaces() {
-		return this.authFacade.getMySpaces();
+		return this.authApplicationService.getMySpaces();
 	}
 
 	@HttpCode(HttpStatus.OK)
@@ -208,7 +212,11 @@ export class AuthController {
 	async logout(@Req() req: Request, @Res({ passthrough: true }) res: Response) {
 		const accessToken = req.cookies?.accessToken;
 		const sessionId = req.cookies?.sessionId;
-		return this.authFacade.logoutWithCookie(accessToken, sessionId, res);
+		return this.authApplicationService.logoutWithCookie(
+			accessToken,
+			sessionId,
+			res,
+		);
 	}
 
 	@Roles([SYSTEM_ROLES.FULL_ACCESS])
@@ -281,7 +289,7 @@ export class AuthController {
 			throw new BadRequestException("PASSWORD_MISMATCH");
 		}
 
-		return this.authFacade.changePassword({
+		return this.authApplicationService.changePassword({
 			currentPassword: dto.currentPassword,
 			newPassword: dto.newPassword,
 			logoutOtherDevices: dto.logoutOtherDevices,
@@ -304,7 +312,7 @@ export class AuthController {
 	@ApiResponseEntity(Boolean, HttpStatus.OK)
 	@ResponseMessage("계정 잠금이 해제되었습니다.")
 	async unlockAccount(@Param("userId", ParseUUIDPipe) userId: string) {
-		return this.authFacade.unlockAccount(userId);
+		return this.authApplicationService.unlockAccount(userId);
 	}
 
 	@Roles([SYSTEM_ROLES.FULL_ACCESS])
@@ -323,7 +331,7 @@ export class AuthController {
 	@ApiResponseEntity(Boolean, HttpStatus.OK)
 	@ResponseMessage("임시 비밀번호가 이메일로 발송되었습니다.")
 	async forceResetPassword(@Param("userId", ParseUUIDPipe) userId: string) {
-		return this.authFacade.forceResetPassword(userId);
+		return this.authApplicationService.forceResetPassword(userId);
 	}
 
 	@Roles([SYSTEM_ROLES.FULL_ACCESS])
@@ -342,7 +350,7 @@ export class AuthController {
 	@ApiResponseEntity(Boolean, HttpStatus.OK)
 	@ResponseMessage("사용자의 모든 세션이 무효화되었습니다.")
 	async invalidateUserSessions(@Param("userId", ParseUUIDPipe) userId: string) {
-		return this.authFacade.invalidateUserSessions(userId);
+		return this.authApplicationService.invalidateUserSessions(userId);
 	}
 
 	// =========================================================================
@@ -364,7 +372,7 @@ export class AuthController {
 	@ResponseMessage("세션 목록 조회 성공")
 	async getMySessions(@Req() req: Request) {
 		const currentSessionId = req.cookies?.sessionId;
-		return this.authFacade.getMySessions(currentSessionId);
+		return this.authApplicationService.getMySessions(currentSessionId);
 	}
 
 	@SkipSpaceCheck()
@@ -382,7 +390,7 @@ export class AuthController {
 	@ApiResponseEntity(Boolean, HttpStatus.OK)
 	@ResponseMessage("세션이 종료되었습니다.")
 	async revokeSession(@Param("sessionId") sessionId: string) {
-		return this.authFacade.revokeSession(sessionId);
+		return this.authApplicationService.revokeSession(sessionId);
 	}
 
 	@SkipSpaceCheck()
@@ -402,7 +410,7 @@ export class AuthController {
 		if (!currentSessionId) {
 			throw new BadRequestException("세션 ID가 없습니다");
 		}
-		await this.authFacade.revokeOtherSessions(currentSessionId);
+		await this.authApplicationService.revokeOtherSessions(currentSessionId);
 		return true;
 	}
 }

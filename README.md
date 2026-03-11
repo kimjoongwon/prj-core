@@ -175,7 +175,7 @@ prj-core/
 │   │       └── repositories/    # 각 엔티티별 Repository
 │   ├── service/                  # 비즈니스 로직 & 서비스 레이어
 │   │   └── src/
-│   │       ├── facade/          # Facade 패턴 서비스
+│   │       ├── application/     # ApplicationService 계층
 │   │       ├── resources/       # 리소스별 서비스
 │   │       └── utils/           # 서비스 유틸리티
 │   ├── store/                    # 공유 상태 관리 (MobX)

@@ -24,7 +24,8 @@ NestJS `Test.createTestingModule({ imports: [AppModule] })` 패턴으로 실제 
 | REST API 엔드포인트 E2E 테스트 | ✅ | 실제 DB와 연동된 API 테스트 |
 | 인증/인가 플로우 E2E 테스트 | ✅ | JWT + Guard 통합 테스트 |
 | API 응답 구조 검증 | ✅ | ResponseEntity 래핑 검증 |
-| 다중 서비스 통합 시나리오 | ✅ | Facade 레벨 통합 테스트 |
+| 다중 서비스 통합 시나리오 | ✅ | ApplicationService 레벨 통합 테스트 |
+| 외부 시스템 wrapper가 포함된 엔드포인트 | ✅ | Integration Facade가 연결된 API 검증 |
 | 프론트엔드 E2E 테스트 | ❌ | `qa-fe-e2e-testing` 사용 |
 | 백엔드 단위 테스트 | ❌ | `qa-be-testing` 사용 |
 

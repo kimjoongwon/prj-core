@@ -8,6 +8,14 @@ tools:
 ---
 
 
+## 재사용 우선 점검 (Mandatory)
+
+- 작업을 시작하기 전에 반드시 기존 코드, 컴포넌트, 유틸, 스펙, 테스트를 먼저 검색합니다.
+- 신규 생성 전에 기존 구현을 그대로 재사용하거나, 소폭 개선 후 재사용할 수 있는지 우선 판단합니다.
+- 재사용 후보가 있으면 우선 채택하고, 신규 생성이 필요한 경우에는 재사용 불가 사유와 최소 변경 범위를 명확히 기록합니다.
+- 동일 책임의 중복 구현을 금지합니다.
+
+
 # L9 Widget 기획자 (Widget Planner)
 
 특정 화면에 필요한 **Widget 컴포넌트(L9)** 레이어를 기획하는 전문가입니다.
@@ -36,7 +44,7 @@ tools:
 ### 출력 위치 (Sidecar Spec - 개별 파일)
 
 ```
-packages/fe-ui/src/components/widget/[WidgetName]/index.spec.md
+packages/fe-ui/src/widget/[WidgetName]/index.spec.md
 ```
 
 각 신규 Widget 컴포넌트마다 개별 `index.spec.md` 파일을 생성합니다.
@@ -112,7 +120,7 @@ packages/fe-ui/src/components/widget/[WidgetName]/index.spec.md
 
 ```
 0단계: 템플릿 파일 확인
-   Read `.claude/templates/spec/widget.spec.md`
+   Read `.codex/templates/spec/widget.spec.md`
    → 해당 파일의 형식을 기준으로 index.spec.md를 생성한다
    ↓
 1단계: 화면 분석
@@ -133,7 +141,7 @@ packages/fe-ui/src/components/widget/[WidgetName]/index.spec.md
    - 반응형 대응
    ↓
 5단계: 기획서 작성 (개별 파일)
-   → packages/fe-ui/src/components/widget/[WidgetName]/index.spec.md
+   → packages/fe-ui/src/widget/[WidgetName]/index.spec.md
 ```
 
 ---
@@ -154,7 +162,7 @@ packages/fe-ui/src/components/widget/[WidgetName]/index.spec.md
 
 | 에이전트 | 관계 | 설명 |
 |----------|------|------|
-| req-ui-planner | 이전 단계 | UI 컴포넌트 |
+| req-primitive-planner | 이전 단계 | UI 컴포넌트 |
 | req-entity-planner | 이전 단계 | Entity 정의 |
 | orch-screen-planner | 상위 | 화면 기획 조율 |
 
@@ -180,7 +188,7 @@ Entity: Member (id, email, name, role, status, createdAt)
 
 ### 출력
 
-**packages/fe-ui/src/components/widget/MemberTable/index.spec.md:**
+**packages/fe-ui/src/widget/MemberTable/index.spec.md:**
 
 ```markdown
 # MemberTable Widget 기획서
@@ -224,7 +232,7 @@ Entity: Member (id, email, name, role, status, createdAt)
 - Mobile: 카드 뷰로 전환 (MemberCard 사용)
 ```
 
-**packages/fe-ui/src/components/widget/MemberCard/index.spec.md:**
+**packages/fe-ui/src/widget/MemberCard/index.spec.md:**
 
 ```markdown
 # MemberCard Widget 기획서

@@ -44,7 +44,7 @@
 │  │           └────────────────────────────────────────────┘ │   │
 │  └──────────────────────────────────────────────────────────┘   │
 │                                                                  │
-│  [Exercise 선택 모달 - 등록 페이지와 동일]                       │
+│  [Task/Exercise 선택 모달 - 등록 페이지와 동일]                       │
 └─────────────────────────────────────────────────────────────────┘
 ```
 
@@ -80,7 +80,7 @@
 
 | 필드 | 컴포넌트 | 유효성 | 설명 |
 |------|----------|--------|------|
-| taskId | - | 자동 | 선택된 Exercise의 Task ID |
+| taskId | - | 자동 | 선택된 선택된 Task ID |
 | exerciseName | 읽기 전용 | - | 선택된 운동명 |
 | repetitions | NumberInput | 최소 1 | 반복 횟수, 기존 값으로 초기화 |
 | restTime | NumberInput | 최소 0 | 휴식 시간(초), 기존 값으로 초기화 |
@@ -102,7 +102,7 @@
 | 시점 | API | 설명 |
 |------|-----|------|
 | SSR 프리페칭 | `prefetchGetRoutineQuery({ routineId })` | 기존 데이터 로드 |
-| 운동 검색 | `useGetExercises({ search, spaceScope: INCLUDE_ANCESTORS })` | Exercise 선택 모달에서 호출 |
+| 운동 검색 | `useGetTasks({ search, spaceScope: INCLUDE_ANCESTORS })` | Task/Exercise 선택 모달에서 호출 |
 | 저장 | `useUpdateRoutine({ routineId })` | name, label, activities 배열 전체 교체 |
 
 ### 요청 데이터 구조
@@ -130,7 +130,7 @@
 
 | 이벤트 | 동작 |
 |--------|------|
-| "운동 추가" 버튼 클릭 | Exercise 선택 모달 오픈 |
+| "운동 추가" 버튼 클릭 | Task/Exercise 선택 모달 오픈 |
 | Exercise 선택 | 모달 닫기 + Activity 카드 목록 끝에 추가 |
 | Activity 드래그 완료 | order 값 전체 재정렬 |
 | Activity 삭제 | 해당 Activity 제거 + 나머지 order 재정렬 |
@@ -156,6 +156,7 @@
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-03-11 | aggregate root 기준 spaces/tasks 경로와 API 계약으로 전환 | codex |
 | 2026-02-19 | 초기 생성 | 직접 기획 |
 | 2026-02-19 | 디자인 목업 섹션 추가 | req-reverse-engineer |
 | 2026-03-03 | Scaffold 제거 및 페이지 헤더 영역/섹션 영역 용어 정리 | codex |

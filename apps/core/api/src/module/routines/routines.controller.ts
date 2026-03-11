@@ -1,5 +1,6 @@
-import { RolesGuard, wrapResponse } from "@cocrepo/be-common";
-import { CONTEXT_KEYS, ROUTINE_ERRORS, SYSTEM_ROLES } from "@cocrepo/constant";
+import { RoutinesApplicationService } from "@cocrepo/app";
+import { RolesGuard } from "@cocrepo/be-common";
+import { ROUTINE_ERRORS, SYSTEM_ROLES } from "@cocrepo/constant";
 import {
 	ApiAuth,
 	ApiErrors,
@@ -11,11 +12,9 @@ import {
 	CreateRoutineDto,
 	GetRoutinesQueryDto,
 	RoutineDto,
-	SpaceScope,
 	UpdateRoutineDto,
 } from "@cocrepo/dto";
-import { Routine, User } from "@cocrepo/entity";
-import { RoutinesService } from "@cocrepo/service";
+import { Routine } from "@cocrepo/entity";
 import {
 	Body,
 	Controller,
@@ -28,30 +27,16 @@ import {
 	Patch,
 	Post,
 	Query,
-	UnauthorizedException,
 	UseGuards,
 } from "@nestjs/common";
 import { ApiBody, ApiOperation, ApiParam, ApiTags } from "@nestjs/swagger";
-import { ClsService } from "nestjs-cls";
 
 @ApiTags("ROUTINES")
 @Controller()
 export class RoutinesController {
 	constructor(
-		private readonly routinesService: RoutinesService,
-		private readonly cls: ClsService,
+		private readonly routinesApplicationService: RoutinesApplicationService,
 	) {}
-
-	/**
-	 * 현재 로그인한 사용자를 가져옵니다.
-	 */
-	private getCurrentUser(): User {
-		const user = this.cls.get<User>(CONTEXT_KEYS.AUTH_USER);
-		if (!user?.id) {
-			throw new UnauthorizedException("로그인이 필요합니다");
-		}
-		return user;
-	}
 
 	/**
 	 * 루틴 목록 조회
@@ -69,25 +54,7 @@ export class RoutinesController {
 	@ApiResponseEntity(RoutineDto, HttpStatus.OK, { isArray: true })
 	@ResponseMessage("루틴 목록 조회 성공")
 	async getRoutines(@Query() query: GetRoutinesQueryDto) {
-		const skip = query.skip ?? 0;
-		const take = query.take ?? 10;
-		const spaceScope = query.spaceScope ?? SpaceScope.INCLUDE_ANCESTORS;
-
-		const { routines, total } = await this.routinesService.findRoutines({
-			spaceScope,
-			skip,
-			take,
-			search: query.search,
-		});
-
-		return wrapResponse(routines, {
-			meta: {
-				total,
-				skip,
-				take,
-				totalPages: take > 0 ? Math.ceil(total / take) : 1,
-			},
-		});
+		return this.routinesApplicationService.getRoutines(query);
 	}
 
 	/**
@@ -117,10 +84,7 @@ export class RoutinesController {
 	async getRoutine(
 		@Param("routineId", ParseUUIDPipe) routineId: string,
 	): Promise<Routine> {
-		return this.routinesService.findRoutineById(
-			routineId,
-			SpaceScope.INCLUDE_ANCESTORS,
-		);
+		return this.routinesApplicationService.getRoutine(routineId);
 	}
 
 	/**
@@ -149,8 +113,7 @@ export class RoutinesController {
 	@ApiResponseEntity(RoutineDto, HttpStatus.CREATED)
 	@ResponseMessage("루틴 등록 성공")
 	async createRoutine(@Body() dto: CreateRoutineDto): Promise<Routine> {
-		const user = this.getCurrentUser();
-		return this.routinesService.createRoutine(dto, user.id);
+		return this.routinesApplicationService.createRoutine(dto);
 	}
 
 	/**
@@ -188,7 +151,7 @@ export class RoutinesController {
 		@Param("routineId", ParseUUIDPipe) routineId: string,
 		@Body() dto: UpdateRoutineDto,
 	): Promise<Routine> {
-		return this.routinesService.updateRoutine(routineId, dto);
+		return this.routinesApplicationService.updateRoutine(routineId, dto);
 	}
 
 	/**
@@ -222,6 +185,6 @@ export class RoutinesController {
 	async deleteRoutine(
 		@Param("routineId", ParseUUIDPipe) routineId: string,
 	): Promise<void> {
-		await this.routinesService.removeRoutine(routineId);
+		await this.routinesApplicationService.deleteRoutine(routineId);
 	}
 }

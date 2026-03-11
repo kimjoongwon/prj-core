@@ -1,5 +1,5 @@
-import { wrapResponse } from "@cocrepo/be-common";
-import { CONTEXT_KEYS, USER_ERRORS } from "@cocrepo/constant";
+import { UsersApplicationService } from "@cocrepo/app";
+import { USER_ERRORS } from "@cocrepo/constant";
 import {
 	ApiAuth,
 	ApiErrors,
@@ -15,8 +15,6 @@ import {
 	UserPaginationMetaDto,
 	UserStatsDto,
 } from "@cocrepo/dto";
-import { User } from "@cocrepo/entity";
-import { UsersService } from "@cocrepo/service";
 import {
 	Body,
 	Controller,
@@ -29,41 +27,15 @@ import {
 	Patch,
 	Post,
 	Query,
-	UnauthorizedException,
 } from "@nestjs/common";
 import { ApiBody, ApiOperation, ApiParam, ApiTags } from "@nestjs/swagger";
-import { ClsService } from "nestjs-cls";
 
 @ApiTags("USERS")
 @Controller()
 export class UsersController {
 	constructor(
-		private readonly usersService: UsersService,
-		private readonly cls: ClsService,
+		private readonly usersApplicationService: UsersApplicationService,
 	) {}
-
-	/**
-	 * 현재 요청의 Space ID를 가져옵니다.
-	 * X-Space-ID 헤더에서 추출됩니다.
-	 */
-	private getSpaceId(): string {
-		const spaceId = this.cls.get<string>(CONTEXT_KEYS.SPACE_ID);
-		if (!spaceId) {
-			throw new UnauthorizedException(USER_ERRORS.SPACE_NOT_SELECTED);
-		}
-		return spaceId;
-	}
-
-	/**
-	 * 현재 로그인한 사용자를 가져옵니다.
-	 */
-	private getCurrentUser(): User {
-		const user = this.cls.get<User>(CONTEXT_KEYS.AUTH_USER);
-		if (!user?.id) {
-			throw new UnauthorizedException(USER_ERRORS.USER_NOT_FOUND);
-		}
-		return user;
-	}
 
 	@Get()
 	@ApiOperation({
@@ -85,21 +57,7 @@ export class UsersController {
 	})
 	@ResponseMessage("common.user.list.success")
 	async getUsers(@Query() query: QueryUsersDto) {
-		const { users, totalCount, stats } =
-			await this.usersService.getUsersBySpace(query);
-
-		const skip = query.skip ?? 0;
-		const take = query.take ?? 10;
-
-		return wrapResponse(users, {
-			meta: {
-				total: totalCount,
-				skip,
-				take,
-				totalPages: take > 0 ? Math.ceil(totalCount / take) : 1,
-			},
-			stats,
-		});
+		return this.usersApplicationService.getUsers(query);
 	}
 
 	@Get(":id")
@@ -124,9 +82,7 @@ export class UsersController {
 	@ApiResponseEntity(UserDetailResponseDto, HttpStatus.OK)
 	@ResponseMessage("common.user.read.success")
 	async getUserById(@Param("id", ParseUUIDPipe) id: string) {
-		const spaceId = this.getSpaceId();
-
-		return this.usersService.getUserDetailForSpace(id, spaceId);
+		return this.usersApplicationService.getUserById(id);
 	}
 
 	@Post()
@@ -153,18 +109,7 @@ export class UsersController {
 	@ApiResponseEntity(UserDto, HttpStatus.CREATED)
 	@ResponseMessage("common.user.create.success")
 	async createUser(@Body() dto: CreateUserMemberDto) {
-		const spaceId = this.getSpaceId();
-
-		return this.usersService.createUserForSpace({
-			name: dto.name,
-			email: dto.email,
-			phone: dto.phone,
-			password: dto.password,
-			roleId: dto.roleId,
-			spaceId,
-			categoryId: dto.categoryId,
-			groupIds: dto.groupIds,
-		});
+		return this.usersApplicationService.createUser(dto);
 	}
 
 	@Patch(":id")
@@ -198,15 +143,7 @@ export class UsersController {
 		@Param("id", ParseUUIDPipe) id: string,
 		@Body() dto: UpdateUserMemberDto,
 	) {
-		const spaceId = this.getSpaceId();
-
-		return this.usersService.updateUserForSpace(id, spaceId, {
-			name: dto.name,
-			email: dto.email,
-			phone: dto.phone,
-			categoryId: dto.categoryId,
-			groupIds: dto.groupIds,
-		});
+		return this.usersApplicationService.updateUser(id, dto);
 	}
 
 	@Delete(":id")
@@ -232,9 +169,6 @@ export class UsersController {
 	)
 	@ResponseMessage("common.user.delete.success")
 	async deleteUser(@Param("id", ParseUUIDPipe) id: string): Promise<void> {
-		const spaceId = this.getSpaceId();
-		const currentUser = this.getCurrentUser();
-
-		await this.usersService.deleteUserForSpace(id, spaceId, currentUser.id);
+		await this.usersApplicationService.deleteUser(id);
 	}
 }

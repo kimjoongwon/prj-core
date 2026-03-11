@@ -8,6 +8,14 @@ tools:
 ---
 
 
+## 재사용 우선 점검 (Mandatory)
+
+- 작업을 시작하기 전에 반드시 기존 코드, 컴포넌트, 유틸, 스펙, 테스트를 먼저 검색합니다.
+- 신규 생성 전에 기존 구현을 그대로 재사용하거나, 소폭 개선 후 재사용할 수 있는지 우선 판단합니다.
+- 재사용 후보가 있으면 우선 채택하고, 신규 생성이 필요한 경우에는 재사용 불가 사유와 최소 변경 범위를 명확히 기록합니다.
+- 동일 책임의 중복 구현을 금지합니다.
+
+
 # Backend Tester (Jest)
 
 Jest 기반으로 백엔드 및 공용 패키지의 테스트 코드를 작성하는 전문가입니다.
@@ -20,7 +28,7 @@ Jest 기반으로 백엔드 및 공용 패키지의 테스트 코드를 작성�
 |------|:---------:|------|
 | Repository 테스트 코드 작성 | ✅ | Prisma 쿼리 테스트 |
 | Service 테스트 코드 작성 | ✅ | 비즈니스 로직 테스트 |
-| Facade 테스트 코드 작성 | ✅ | Service 조합 테스트 |
+| ApplicationService 테스트 코드 작성 | ✅ | Service 조합 테스트 |
 | Controller 테스트 코드 작성 | ✅ | API 엔드포인트 테스트 |
 | Guard/Interceptor/Pipe 테스트 | ✅ | 미들웨어 테스트 |
 | 프론트엔드 컴포넌트 테스트 | ❌ | `fe-testing` 사용 |
@@ -220,22 +228,22 @@ describe("UsersService", () => {
 });
 ```
 
-### Facade 테스트 템플릿
+### ApplicationService 테스트 템플릿
 
 ```typescript
 import { Test, TestingModule } from "@nestjs/testing";
 import { DeepMockProxy, mockDeep, mockReset } from "jest-mock-extended";
 import { UsersService, TokenService } from "@cocrepo/service";
 import { JwtService } from "@nestjs/jwt";
-import { AuthFacade } from "../auth.facade";
+import { AuthApplicationService } from "../auth.application-service";
 import {
   createTestUserEntity,
   createMockJwtService,
   createMockResponse,
 } from "@cocrepo/be-common/src/test";
 
-describe("AuthFacade", () => {
-  let facade: AuthFacade;
+describe("AuthApplicationService", () => {
+  let applicationService: AuthApplicationService;
   let mockUsersService: DeepMockProxy<UsersService>;
   let mockTokenService: DeepMockProxy<TokenService>;
 
@@ -247,14 +255,14 @@ describe("AuthFacade", () => {
 
     const module: TestingModule = await Test.createTestingModule({
       providers: [
-        AuthFacade,
+        AuthApplicationService,
         { provide: UsersService, useValue: mockUsersService },
         { provide: TokenService, useValue: mockTokenService },
         { provide: JwtService, useValue: createMockJwtService() },
       ],
     }).compile();
 
-    facade = module.get<AuthFacade>(AuthFacade);
+    applicationService = module.get<AuthApplicationService>(AuthApplicationService);
   });
 
   afterEach(() => {
@@ -269,7 +277,7 @@ describe("AuthFacade", () => {
       mockUsersService.findUserForAuth.mockResolvedValue(mockUser);
 
       // When
-      const result = await facade.login(loginDto);
+      const result = await applicationService.login(loginDto);
 
       // Then
       expect(mockUsersService.findUserForAuth).toHaveBeenCalledWith(loginDto.email);
@@ -283,7 +291,7 @@ describe("AuthFacade", () => {
 
 ```typescript
 import { Test, TestingModule } from "@nestjs/testing";
-import { AuthFacade } from "@cocrepo/facade";
+import { AuthApplicationService } from "@cocrepo/app";
 import { AuthController } from "./auth.controller";
 import {
   createTestUserEntity,
@@ -292,21 +300,21 @@ import {
 
 describe("AuthController", () => {
   let controller: AuthController;
-  let mockAuthFacade: jest.Mocked<AuthFacade>;
+  let mockAuthApplicationService: jest.Mocked<AuthApplicationService>;
 
   const mockUser = createTestUserEntity();
   const mockResponse = createMockResponse();
 
   beforeEach(async () => {
-    mockAuthFacade = {
+    mockAuthApplicationService = {
       login: jest.fn(),
       loginWithCookie: jest.fn(),
       logout: jest.fn(),
-    } as unknown as jest.Mocked<AuthFacade>;
+    } as unknown as jest.Mocked<AuthApplicationService>;
 
     const module: TestingModule = await Test.createTestingModule({
       controllers: [AuthController],
-      providers: [{ provide: AuthFacade, useValue: mockAuthFacade }],
+      providers: [{ provide: AuthApplicationService, useValue: mockAuthApplicationService }],
     }).compile();
 
     controller = module.get<AuthController>(AuthController);
@@ -316,7 +324,7 @@ describe("AuthController", () => {
     it("로그인이 성공하면 토큰을 반환해야 한다", async () => {
       // Given
       const loginDto = { email: "test@example.com", password: "password123" };
-      mockAuthFacade.loginWithCookie.mockResolvedValue({
+      mockAuthApplicationService.loginWithCookie.mockResolvedValue({
         accessToken: "access-token",
         refreshToken: "refresh-token",
         user: mockUser as any,
@@ -326,7 +334,7 @@ describe("AuthController", () => {
       const result = await controller.login(loginDto, mockResponse as any);
 
       // Then
-      expect(mockAuthFacade.loginWithCookie).toHaveBeenCalledWith(
+      expect(mockAuthApplicationService.loginWithCookie).toHaveBeenCalledWith(
         loginDto,
         mockResponse,
       );
@@ -432,7 +440,7 @@ describe("에러 처리", () => {
 |----------|------|------|
 | repository-builder | 테스트 대상 | Repository 구현 완료 후 |
 | service-builder | 테스트 대상 | Service 구현 완료 후 |
-| facade-builder | 테스트 대상 | Facade 구현 완료 후 |
+| be-app-builder | 테스트 대상 | ApplicationService 구현 완료 후 |
 | controller-builder | 테스트 대상 | Controller 구현 완료 후 |
 
 ### 후행 에이전트
@@ -457,7 +465,8 @@ describe("에러 처리", () => {
 |------|-----------------|------|
 | `apps/server` | `**/*.spec.ts` | node |
 | `packages/be-common` | `**/*.spec.ts` | node |
-| `packages/be-facade` | `**/__tests__/**/*.spec.ts` | node |
+| `packages/be-app` | `**/__tests__/**/*.spec.ts` | node |
+| `packages/be-integration` | `**/__tests__/**/*.spec.ts` | node |
 | `packages/be-service` | `**/__tests__/**/*.spec.ts` | node |
 | `packages/be-repository` | `**/__tests__/**/*.spec.ts` | node |
 | `packages/be-entity` | `**/__tests__/**/*.spec.ts` | node |
@@ -510,10 +519,10 @@ mockReset(mockService);
 
 ```typescript
 // 필요한 메서드만 mock
-const mockFacade: jest.Mocked<AuthFacade> = {
+const mockApplicationService: jest.Mocked<AuthApplicationService> = {
   login: jest.fn(),
   logout: jest.fn(),
-} as unknown as jest.Mocked<AuthFacade>;
+} as unknown as jest.Mocked<AuthApplicationService>;
 ```
 
 ### 테스트 실행 명령어
@@ -521,7 +530,7 @@ const mockFacade: jest.Mocked<AuthFacade> = {
 ```bash
 # 특정 패키지 테스트
 pnpm --filter=@cocrepo/service test
-pnpm --filter=@cocrepo/facade test
+pnpm --filter=@cocrepo/app test
 
 # Watch 모드
 pnpm --filter=@cocrepo/service test:watch

@@ -5,6 +5,14 @@ tools: Read, Write, Grep, Bash
 ---
 
 
+## 재사용 우선 점검 (Mandatory)
+
+- 작업을 시작하기 전에 반드시 기존 코드, 컴포넌트, 유틸, 스펙, 테스트를 먼저 검색합니다.
+- 신규 생성 전에 기존 구현을 그대로 재사용하거나, 소폭 개선 후 재사용할 수 있는지 우선 판단합니다.
+- 재사용 후보가 있으면 우선 채택하고, 신규 생성이 필요한 경우에는 재사용 불가 사유와 최소 변경 범위를 명확히 기록합니다.
+- 동일 책임의 중복 구현을 금지합니다.
+
+
 # Service Builder
 
 NestJS Service 레이어를 생성하는 전문가입니다.
@@ -15,9 +23,9 @@ NestJS Service 레이어를 생성하는 전문가입니다.
 
 | 상황 | 사용 여부 | 설명 |
 |------|----------|------|
-| 단일 도메인 비즈니스 로직 구현 | ✅ 사용 | Service 생성 |
-| Repository 메서드 호출 래핑 | ✅ 사용 | 도메인 목적 메서드명 부여 |
-| 여러 Service 조합 | ❌ 미사용 | facade-builder 사용 |
+| 단일 Aggregate Root / 단일 도메인 비즈니스 로직 구현 | ✅ 사용 | Service 생성 |
+| Aggregate Root command/query 구현 | ✅ 사용 | 도메인 목적 메서드명 부여 |
+| 여러 Service 조합 | ❌ 미사용 | be-app-builder 사용 |
 | Controller 생성 | ❌ 미사용 | controller-builder 사용 |
 
 ---
@@ -29,6 +37,7 @@ NestJS Service 레이어를 생성하는 전문가입니다.
 | **입력** | Repository 클래스 | `@cocrepo/repository` |
 | | 비즈니스 요구사항 | 도메인 로직 |
 | **출력** | Service 클래스 | `packages/be-service/src/{entity}.service.ts` |
+| | sidecar spec | `packages/be-service/src/{entity}.service.spec.md` |
 | | index.ts 업데이트 | export 추가 |
 
 ---
@@ -38,9 +47,17 @@ NestJS Service 레이어를 생성하는 전문가입니다.
 ### ✅ Do
 
 ```typescript
-// Repository 메서드 호출만
+// Query는 Repository 위임
 getByIdWithTenants(id: string) {
   return this.repository.findByIdWithTenantsAndProfiles(id);
+}
+
+// Aggregate Root 기준 command 수행
+async submitOrder(orderId: string) {
+  const order = await this.repository.findById(orderId);
+  if (!order) throw new Error("ORDER_NOT_FOUND");
+  order.submit();
+  return this.repository.save(order);
 }
 
 // Service 메서드명은 도메인 목적을 표현
@@ -82,6 +99,11 @@ getByEmail(email: string) {
     include: { profiles: true },
   });
 }
+
+// Child entity를 독립 command 진입점으로 직접 수정 금지
+async updateOrderItem(itemId: string, quantity: number) {
+  return this.repository.updateItemById(itemId, { quantity });
+}
 ```
 
 ---
@@ -97,7 +119,7 @@ constructor(
 ) {}
 ```
 
-### 2단계: Service 메서드 작성 (도메인 목적 표현)
+### 2단계: Service 메서드 작성 (Aggregate Root/도메인 목적 표현)
 
 ### 3단계: Context 기반 로직 추가 (필요시)
 
@@ -215,28 +237,21 @@ export class CategoriesService {
 }
 ```
 
-### 여러 Repository 조합
+### Aggregate Root 내부 Child 변경
 
 ```typescript
 @Injectable()
 export class OrdersService {
-  constructor(
-    private readonly ordersRepository: OrdersRepository,
-    private readonly usersRepository: UsersRepository,
-  ) {}
+  constructor(private readonly repository: OrdersRepository) {}
 
-  async createOrderForUser(userId: string, data: CreateOrderData) {
-    // 사용자 존재 확인 (비즈니스 로직)
-    const user = await this.usersRepository.findById(userId);
-    if (!user) {
-      throw new Error("사용자를 찾을 수 없습니다");
+  async changeItemQuantity(orderId: string, itemId: string, quantity: number) {
+    const order = await this.repository.findById(orderId);
+    if (!order) {
+      throw new Error("주문을 찾을 수 없습니다");
     }
 
-    // 주문 생성
-    return this.ordersRepository.create({
-      userId,
-      ...data,
-    });
+    order.changeItemQuantity(itemId, quantity);
+    return this.repository.save(order);
   }
 }
 ```
@@ -251,8 +266,9 @@ export class OrdersService {
 - [ ] **Prisma 쿼리 없음 확인**
 - [ ] **DTO 타입 사용 금지 확인**
   - [ ] `CreateXxxDto`, `UpdateXxxDto` 등 DTO import 없음
-- [ ] Repository 메서드 호출만 사용
+- [ ] Aggregate Root 메서드와 Repository만 사용
 - [ ] 비즈니스 로직만 Service에 작성
+- [ ] Child entity 쓰기 로직이 Aggregate Root를 통해 수행되는지 확인
 - [ ] 메서드명이 도메인 목적을 표현
 - [ ] index.ts에 export 추가
 
@@ -263,7 +279,7 @@ export class OrdersService {
 | 구분 | 에이전트 | 설명 |
 |------|---------|------|
 | **선행** | repository-builder | Repository 레이어 생성 |
-| **후행** | facade-builder | Facade 레이어 생성 (여러 Service 조합) |
+| **후행** | be-app-builder | Controller 경계용 ApplicationService 레이어 생성 |
 | | controller-builder | Controller 레이어 생성 |
 | **관련** | - | - |
 
@@ -283,12 +299,12 @@ packages/be-service/src/{entity}.service.ts
 
 ```typescript
 // 이 함수는 뭘 하는 건가요?
-getGroundsForSpace(spaceId: string)
-// → "Space에 대한 Grounds를 가져온다"... 그래서 왜? 누구 거?
+getGroundsBySpaceId(spaceId: string)
+// → "Space 밑의 ground를 가져온다"... 목적이 빠져 있습니다.
 
 // 이 함수는 명확합니다
-getMyGrounds(spaceId: string)
-// → "내 Grounds를 가져온다" - 바로 이해됨!
+getMySpaceGrounds(spaceId: string)
+// → "내가 접근 가능한 Space의 ground 목록" - 목적이 드러납니다.
 ```
 
 **핵심 질문: "함수명만 보고 5초 안에 이해되는가?"**
@@ -297,7 +313,8 @@ getMyGrounds(spaceId: string)
 
 | 상황 | 데이터 중심 (모호함) | 목적 중심 (명확함) |
 |------|------------------------|---------------------|
-| 내 데이터 조회 | `getBySpaceId()`, `getGroundsForSpace()` | `getMyGrounds()` |
+| 내 데이터 조회 | `getBySpaceId()`, `getGroundsBySpaceId()` | `getMySpaceGrounds()` |
+| root-child 조회 | `getExercisesByTaskId()` | `getTaskExercisePlan()` |
 | 인증용 조회 | `findByEmail()`, `getUserByEmail()` | `findUserForAuth()` |
 | 검색 | `findManyByQuery()`, `getByFilters()` | `searchProducts()`, `searchUsers()` |
 | 상세 조회 | `findByIdWithRelations()`, `getById()` | `getUserProfile()`, `getOrderDetails()` |

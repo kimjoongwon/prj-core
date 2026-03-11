@@ -61,17 +61,17 @@ export const ADMIN_PATHS = {
 	TIMELINE_SESSIONS_DETAIL: "/timelines/[timelineId]/sessions/[sessionId]",
 	TIMELINE_SESSIONS_EDIT: "/timelines/[timelineId]/sessions/[sessionId]/edit",
 
-	// 시설 (Ground 엔티티)
-	GROUNDS: "/grounds",
-	GROUNDS_NEW: "/grounds/new",
-	GROUNDS_DETAIL: "/grounds/[groundId]",
-	GROUNDS_EDIT: "/grounds/[groundId]/edit",
+	// 공간 (Space Aggregate Root, Ground는 1:1 detail child)
+	SPACES: "/spaces",
+	SPACES_NEW: "/spaces/new",
+	SPACES_DETAIL: "/spaces/[spaceId]/ground",
+	SPACES_EDIT: "/spaces/[spaceId]/ground/edit",
 
-	// 운동 종목 (Exercise 엔티티)
-	EXERCISES: "/exercises",
-	EXERCISES_NEW: "/exercises/new",
-	EXERCISES_DETAIL: "/exercises/[exerciseId]",
-	EXERCISES_EDIT: "/exercises/[exerciseId]/edit",
+	// 작업 (Task Aggregate Root, Exercise는 1:1 detail child)
+	TASKS: "/tasks",
+	TASKS_NEW: "/tasks/new",
+	TASKS_DETAIL: "/tasks/[taskId]/exercise",
+	TASKS_EDIT: "/tasks/[taskId]/exercise/edit",
 
 	// 루틴 (Routine 엔티티)
 	ROUTINES: "/routines",
@@ -112,9 +112,9 @@ export const ADMIN_SUBJECTS = {
 
 	// 1depth 메뉴
 	MENU_USERS: "menu:users",
-	MENU_GROUNDS: "menu:grounds",
+	MENU_SPACES: "menu:spaces",
 	MENU_TIMELINES: "menu:timelines",
-	MENU_EXERCISES: "menu:exercises",
+	MENU_TASKS: "menu:tasks",
 	MENU_ROUTINES: "menu:routines",
 	MENU_TEMPLATES: "menu:templates",
 	MENU_ASSETS: "menu:assets",
@@ -127,11 +127,11 @@ export const ADMIN_SUBJECTS = {
 	// 2depth - 일정 관리
 	MENU_TIMELINES_LIST: "menu:timelines:list",
 
-	// 2depth - 시설 관리
-	MENU_GROUNDS_LIST: "menu:grounds:list",
+		// 2depth - 공간 관리
+		MENU_SPACES_LIST: "menu:spaces:list",
 
-	// 2depth - 운동 관리
-	MENU_EXERCISES_LIST: "menu:exercises:list",
+		// 2depth - 태스크 관리
+		MENU_TASKS_LIST: "menu:tasks:list",
 	MENU_ROUTINES_LIST: "menu:routines:list",
 
 	// 2depth - 템플릿
@@ -187,18 +187,18 @@ export const ADMIN_NAV_ITEMS: NavItemConfig[] = [
 		],
 	},
 
-	// 3. 시설 관리
+	// 3. 공간 관리
 	{
-		id: "grounds",
-		label: "시설 관리",
+		id: "spaces",
+		label: "공간 관리",
 		icon: "Building2",
-		subject: ADMIN_SUBJECTS.MENU_GROUNDS,
+		subject: ADMIN_SUBJECTS.MENU_SPACES,
 		children: [
 			{
-				id: "grounds-list",
-				label: "시설",
-				path: ADMIN_PATHS.GROUNDS,
-				subject: ADMIN_SUBJECTS.MENU_GROUNDS_LIST,
+				id: "spaces-list",
+				label: "공간 목록",
+				path: ADMIN_PATHS.SPACES,
+				subject: ADMIN_SUBJECTS.MENU_SPACES_LIST,
 			},
 		],
 	},
@@ -219,18 +219,18 @@ export const ADMIN_NAV_ITEMS: NavItemConfig[] = [
 		],
 	},
 
-	// 5. 운동 관리
+	// 5. 태스크 관리
 	{
-		id: "exercises",
-		label: "운동 관리",
+		id: "tasks",
+		label: "태스크 관리",
 		icon: "Dumbbell",
-		subject: ADMIN_SUBJECTS.MENU_EXERCISES,
+		subject: ADMIN_SUBJECTS.MENU_TASKS,
 		children: [
 			{
-				id: "exercises-list",
-				label: "운동 종목",
-				path: ADMIN_PATHS.EXERCISES,
-				subject: ADMIN_SUBJECTS.MENU_EXERCISES_LIST,
+				id: "tasks-list",
+				label: "태스크 목록",
+				path: ADMIN_PATHS.TASKS,
+				subject: ADMIN_SUBJECTS.MENU_TASKS_LIST,
 			},
 			{
 				id: "routines-list",

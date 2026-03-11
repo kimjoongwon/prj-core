@@ -10,7 +10,7 @@ export interface OidcConfig {
 	cookieSecret: string;
 	cookieKeys: string[];
 	jwks?: JwksKeys;
-	// OIDC Client 설정 (AuthFacade에서 사용)
+	// OIDC Client 설정 (OidcFacade에서 사용)
 	jwksUri: string;
 	clientId: string;
 	clientSecret: string;
@@ -41,7 +41,7 @@ export const oidcConfig = registerAs("oidc", (): OidcConfig => {
 				"default-cookie-secret-change-in-production",
 		],
 		jwks,
-		// OIDC Client 설정 (AuthFacade에서 사용)
+		// OIDC Client 설정 (OidcFacade에서 사용)
 		jwksUri: process.env.OIDC_JWKS_URI || `${issuer}/oidc/jwks`,
 		clientId: process.env.OIDC_CLIENT_ID || "prj-core-admin",
 		clientSecret:

@@ -1,4 +1,4 @@
-# routines.controller controller 기획서
+# Routines Controller 기획서
 
 > 생성일: 2026-03-03
 > 타입: controller
@@ -6,49 +6,32 @@
 
 ## 역할
 
-이 파일은 controller 계층의 핵심 동작을 담당합니다.
-상위 레이어와 하위 레이어를 연결하며, 런타임에서 실제 사용자 흐름/비즈니스 흐름에 직접 관여합니다.
-
-## 공개 계약
-
-| 항목 | 설명 |
-|------|------|
-| RoutinesController | 공개 계약 요소 |
+Routine CRUD API를 노출하며, pagination 응답 계산과 현재 인증 사용자 해석은 `RoutinesApplicationService`에 위임합니다.
 
 ## 의존성
 
-| 모듈 | 용도 |
-|------|------|
-| @cocrepo/be-common | 기능 구현 의존성 |
-| @cocrepo/constant | 기능 구현 의존성 |
-| @cocrepo/decorator | 기능 구현 의존성 |
-| @cocrepo/dto | 기능 구현 의존성 |
-| @cocrepo/entity | 기능 구현 의존성 |
-| @cocrepo/service | 기능 구현 의존성 |
-| @nestjs/common | 기능 구현 의존성 |
-| @nestjs/swagger | 기능 구현 의존성 |
-| nestjs-cls | 기능 구현 의존성 |
+| 주입 대상 | 타입 | 설명 |
+|-----------|------|------|
+| routinesApplicationService | RoutinesApplicationService | Routine 목록/상세/생성/수정/삭제 유즈케이스 |
 
-## 동작 흐름
+## 엔드포인트
 
-1. 입력(라우트/props/호출)을 수신합니다.
-2. 필요한 의존 모듈을 호출해 데이터를 조합합니다.
-3. 결과를 렌더링/반환/전파합니다.
+| Method | 경로 | Operation ID | 설명 |
+|--------|------|-------------|------|
+| GET | `/` | `getRoutines` | 목록 조회 (`data + meta`) |
+| GET | `/:routineId` | `getRoutine` | 상세 조회 |
+| POST | `/` | `createRoutine` | 현재 인증 사용자 기준 루틴 생성 |
+| PATCH | `/:routineId` | `updateRoutine` | 루틴 수정 |
+| DELETE | `/:routineId` | `deleteRoutine` | 루틴 삭제 |
 
-## 실패 및 엣지 케이스
+## 비즈니스 메모
 
-- 의존 모듈 응답 누락 시 안전한 기본값으로 처리합니다.
-- 비정상 입력은 조기 반환 또는 예외 처리합니다.
-- 비동기 동작 실패 시 사용자 영향 범위를 최소화합니다.
-
-## 구현 체크리스트
-
-- [ ] 코드와 spec이 동일한 책임 범위를 유지함
-- [ ] 공개 계약(Props/메서드/반환값) 변경 시 동기화함
-- [ ] 의존성 변경 시 spec의 의존성 표를 갱신함
+- controller는 더 이상 `ClsService`나 private helper로 현재 사용자를 직접 읽지 않습니다.
+- 목록 응답의 pagination meta 계산은 ApplicationService가 담당합니다.
 
 ## 변경 이력
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
 | 2026-03-03 | 누락된 sidecar spec 신규 생성 | codex |
+| 2026-03-11 | Controller 의존성을 RoutinesApplicationService로 전환하고 CLS helper를 제거 | codex |

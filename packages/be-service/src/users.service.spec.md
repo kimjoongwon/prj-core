@@ -34,7 +34,7 @@ CLS SpaceContext를 통해 접근 가능한 Space 범위 내에서 사용자를 
 | `unlockAccount` | `userId` | `Promise<void>` | 계정 잠금 해제 (관리자) |
 | `forceResetPassword` | `userId` | `Promise<{temporaryPassword, email}>` | 비밀번호 강제 재설정 (관리자) |
 | `getSecurityInfo` | `userId` | 사용자 보안 정보 조회 |
-| `createUserForSignUp` | `params` | 회원가입용 사용자 생성 (Facade용) |
+| `createUserForSignUp` | `params` | 회원가입용 사용자 생성 (ApplicationService용) |
 
 ## 비즈니스 규칙
 
@@ -91,4 +91,5 @@ CLS SpaceContext를 통해 접근 가능한 Space 범위 내에서 사용자를 
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-03-11 | 회원가입 생성 메서드 설명을 ApplicationService 기준으로 갱신 | codex |
 | 2026-02-19 | 초기 생성 (역기획) | req-reverse-engineer |

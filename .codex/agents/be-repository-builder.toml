@@ -53,7 +53,9 @@ Prisma 기반 Repository 레이어를 생성하는 전문가입니다. 이 에�
 - `UserRepository`는 가능
 - `ProfileRepository`는 금지
 - `SpaceRepository`는 가능
-- `GroundRepository`는 금지
+- `GroundRepository`는 금지 (`Space` child는 부모 root Repository에서 처리)
+- `TaskRepository`는 가능
+- `ExerciseRepository`는 금지 (`Task` child는 부모 root Repository에서 처리)
 - `RoleRepository`는 가능
 - `RoleAssociationRepository`는 금지
 
@@ -73,11 +75,11 @@ Repository 생성 전 반드시 아래를 확인합니다.
 
 ### 3. 비대표 모델 요청 처리
 
-요청이 `Profile`, `Ground`, `RoleAssociation`, `InquiryMessage`처럼 비대표 모델을 대상으로 오면:
+요청이 `Profile`, `Ground`, `Exercise`, `RoleAssociation`, `InquiryMessage`처럼 비대표 모델을 대상으로 오면:
 
 - 독립 Repository를 만들지 않습니다.
 - 어느 aggregate root Repository에 메서드를 추가해야 하는지 판단합니다.
-- 예: `Profile` 조회 요구는 `UsersRepository` 메서드로 구현
+- 예: `Profile` 조회 요구는 `UsersRepository`, `ground` 조회 요구는 `SpacesRepository`, `exercise` 조회 요구는 `TasksRepository` 메서드로 구현
 
 ### 4. 메서드 네이밍 규칙
 

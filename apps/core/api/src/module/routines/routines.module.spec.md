@@ -1,4 +1,4 @@
-# routines.module module 기획서
+# Routines Module 기획서
 
 > 생성일: 2026-03-03
 > 타입: module
@@ -6,30 +6,27 @@
 
 ## 역할
 
-이 파일은 module 계층의 보조 동작(연결/조회/조합)을 담당합니다.
+`RoutinesController`가 ApplicationService와 Routine service/context/repository 조합을 주입받을 수 있도록 provider를 구성합니다.
 
-## 주요 계약
+## provider 구성
 
-| 항목 | 설명 |
-|------|------|
-| RoutinesModule | 공개 계약 요소 |
+| provider | 설명 |
+|----------|------|
+| RoutinesApplicationService | Controller 진입용 Routine 유즈케이스 |
+| RoutinesService | Routine 도메인 서비스 |
+| RoutinesRepository | Routine 영속성 접근 |
+| AuthContext | 현재 인증 사용자 제공 |
+| SpaceContext | 현재 요청 Space 및 접근 범위 제공 |
 
-## 의존성
+## exports
 
-| 모듈 | 용도 |
-|------|------|
-| @cocrepo/repository | 기능 구현 의존성 |
-| @cocrepo/service | 기능 구현 의존성 |
-| @nestjs/common | 기능 구현 의존성 |
-| ./routines.controller | 기능 구현 의존성 |
-
-## 구현 체크리스트
-
-- [ ] 핵심 입출력/반환 규약이 코드와 일치함
-- [ ] 호출 경로 변경 시 spec을 함께 갱신함
+| export | 설명 |
+|--------|------|
+| RoutinesApplicationService | 다른 모듈이 참조할 수 있는 Routine application 진입점 |
 
 ## 변경 이력
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
 | 2026-03-03 | 누락된 sidecar spec 신규 생성 | codex |
+| 2026-03-11 | RoutinesModule export를 RoutinesApplicationService 기준으로 정렬 | codex |

@@ -26,24 +26,24 @@ import {
 } from "@nestjs/common";
 import { APP_GUARD, RouterModule } from "@nestjs/core";
 import { ThrottlerGuard } from "@nestjs/throttler";
-import { AbilitiesModule } from "./ability";
-import { ActionsModule } from "./action";
-import { CategoriesModule } from "./category";
-import { ExercisesModule } from "./exercises";
+import { AbilitiesModule } from "./abilities";
+import { ActionsModule } from "./actions";
+import { CategoriesModule } from "./categories";
 // Global modules
 import { globalModules } from "./global.module";
-import { GrantsModule } from "./grant";
-import { GroundsModule } from "./grounds";
-import { GroupsModule } from "./group";
+import { GrantsModule } from "./grants";
+import { GroupsModule } from "./groups";
 import { InquiriesModule } from "./inquiries";
 import { PrismaModule } from "./prisma.module";
 import { RedisModule } from "./redis.module";
-import { RolesModule } from "./role";
+import { RolesModule } from "./roles";
 import { RoutinesModule } from "./routines";
-import { SubjectsModule } from "./subject";
-import { TemplatesModule } from "./template";
+import { SpacesModule } from "./spaces";
+import { SubjectsModule } from "./subjects";
+import { TasksModule } from "./tasks";
+import { TemplatesModule } from "./templates";
 import { TimelinesModule } from "./timelines";
-import { TranslationsModule } from "./translation";
+import { TranslationsModule } from "./translations";
 import { UsersModule } from "./users";
 
 @Module({
@@ -52,7 +52,7 @@ import { UsersModule } from "./users";
 		PrismaModule,
 		RedisModule,
 		I18nModule,
-		GroundsModule,
+		SpacesModule,
 		UsersModule,
 		ActionsModule,
 		SubjectsModule,
@@ -64,7 +64,7 @@ import { UsersModule } from "./users";
 		TranslationsModule,
 		TemplatesModule,
 		TimelinesModule,
-		ExercisesModule,
+		TasksModule,
 		RoutinesModule,
 		InquiriesModule,
 		// Resource Modules는 필요할 때 추가합니다.
@@ -77,8 +77,8 @@ import { UsersModule } from "./users";
 						path: "v1",
 						children: [
 							{
-								path: "grounds",
-								module: GroundsModule,
+								path: "spaces",
+								module: SpacesModule,
 							},
 							{
 								path: "users",
@@ -125,8 +125,8 @@ import { UsersModule } from "./users";
 								module: TimelinesModule,
 							},
 							{
-								path: "exercises",
-								module: ExercisesModule,
+								path: "tasks",
+								module: TasksModule,
 							},
 							{
 								path: "routines",

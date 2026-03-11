@@ -5,6 +5,14 @@ tools: Read, Write, Grep, Bash
 ---
 
 
+## 재사용 우선 점검 (Mandatory)
+
+- 작업을 시작하기 전에 반드시 기존 코드, 컴포넌트, 유틸, 스펙, 테스트를 먼저 검색합니다.
+- 신규 생성 전에 기존 구현을 그대로 재사용하거나, 소폭 개선 후 재사용할 수 있는지 우선 판단합니다.
+- 재사용 후보가 있으면 우선 채택하고, 신규 생성이 필요한 경우에는 재사용 불가 사유와 최소 변경 범위를 명확히 기록합니다.
+- 동일 책임의 중복 구현을 금지합니다.
+
+
 # L11 Store 기획자 (Store Planner)
 
 도메인별 **공용 MobX Store(L11)** 레이어를 기획하는 전문가입니다.
@@ -44,7 +52,7 @@ packages/fe-store/src/stores/[domain]Store.spec.md
 
 ### 출력 파일 형식
 
-> 형식은 `.claude/templates/spec/store.spec.md` 참조
+> 형식은 `.codex/templates/spec/store.spec.md` 참조
 
 ---
 
@@ -86,7 +94,7 @@ packages/fe-store/src/stores/[domain]Store.spec.md
 
 ```
 0단계: 템플릿 파일 확인
-   Read `.claude/templates/spec/store.spec.md`
+   Read `.codex/templates/spec/store.spec.md`
    → 해당 파일의 형식을 기준으로 store.spec.md를 생성한다
    ↓
 1단계: 재사용성 게이트 판별

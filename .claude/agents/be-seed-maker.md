@@ -5,6 +5,14 @@ tools: Read, Write, Grep, Bash
 ---
 
 
+## 재사용 우선 점검 (Mandatory)
+
+- 작업을 시작하기 전에 반드시 기존 코드, 컴포넌트, 유틸, 스펙, 테스트를 먼저 검색합니다.
+- 신규 생성 전에 기존 구현을 그대로 재사용하거나, 소폭 개선 후 재사용할 수 있는지 우선 판단합니다.
+- 재사용 후보가 있으면 우선 채택하고, 신규 생성이 필요한 경우에는 재사용 불가 사유와 최소 변경 범위를 명확히 기록합니다.
+- 동일 책임의 중복 구현을 금지합니다.
+
+
 # 시드 메이커 (Seed Maker)
 
 Prisma 스키마에 맞는 현실적인 시드 데이터를 생성하는 전문가입니다.
@@ -76,15 +84,16 @@ Prisma 스키마에 맞는 현실적인 시드 데이터를 생성하는 전문�
 2. **정합성 위반 금지**
    ```typescript
    // ❌ 존재하지 않는 관계 참조
-   { userEmail: "test@test.com", groundName: "없는지점" }
+   { userEmail: "test@test.com", spaceCode: "SPACE_UNKNOWN" }
 
    // ❌ 역할과 맞지 않는 권한
-   // USER가 ADMIN 전용 Ground에 접근
+   // USER가 소속되지 않은 Space의 ground에 직접 접근
    ```
 
 3. **고아 데이터 금지**
    - Agreement는 있는데 동의한 User가 없음
-   - Ground는 있는데 담당 ADMIN이 없음
+   - Space는 있는데 운영 ADMIN이 없음
+   - Task는 있는데 연결된 exercise가 없음
 
 ---
 
@@ -101,7 +110,7 @@ Prisma 스키마에 맞는 현실적인 시드 데이터를 생성하는 전문�
    └── 도메인에 맞는 실제 데이터 작성
    ↓
 4. 관계 매핑 정의
-   └── User-Ground, User-Agreement 등 매핑
+   └── User-Space, Space-Ground, Task-Exercise, User-Agreement 등 매핑
    ↓
 5. Export 확인
    └── seed-data.ts 하단에 export
@@ -117,13 +126,30 @@ Prisma 스키마에 맞는 현실적인 시드 데이터를 생성하는 전문�
 ### Interface 정의
 
 ```typescript
-export interface GroundSeedData {
+export interface SpaceSeedData {
+  code: string;
   name: string;
   label: string;
   address: string;
   phone: string;
   email: string;
   businessNo: string;
+  grounds: Array<{
+    code: string;
+    name: string;
+    label: string;
+  }>;
+}
+
+export interface TaskSeedData {
+  code: string;
+  name: string;
+  description: string;
+  exercises: Array<{
+    code: string;
+    name: string;
+    target: string;
+  }>;
 }
 
 export interface UserSeedData {
@@ -141,22 +167,51 @@ export interface UserSeedData {
 ### 시드 데이터 예시
 
 ```typescript
-export const groundSeedData: GroundSeedData[] = [
+export const spaceSeedData: SpaceSeedData[] = [
   {
-    name: "F45 광화문",
-    label: "본점",
+    code: "SPACE_GWANGHWAMUN",
+    name: "광화문 센터",
+    label: "서울 본점",
     address: "서울시 종로구 세종대로 175 광화문D타워 B1",
     phone: "02-1234-5678",
-    email: "gwanghwamun@f45training.co.kr",
+    email: "gwanghwamun@corefit.co.kr",
     businessNo: "123-45-67890",
+    grounds: [
+      { code: "GROUND_MAIN_FLOOR", name: "광화문 메인 플로어", label: "메인" },
+      { code: "GROUND_RECOVERY_ZONE", name: "광화문 리커버리 존", label: "회복" },
+    ],
   },
   {
-    name: "F45 강남1호",
-    label: "지점",
+    code: "SPACE_GANGNAM",
+    name: "강남 센터",
+    label: "강남 허브",
     address: "서울시 강남구 테헤란로 152 강남파이낸스센터 B2",
     phone: "02-2345-6789",
-    email: "gangnam1@f45training.co.kr",
+    email: "gangnam@corefit.co.kr",
     businessNo: "234-56-78901",
+    grounds: [
+      { code: "GROUND_STRENGTH_ARENA", name: "강남 스트렝스 아레나", label: "근력" },
+    ],
+  },
+];
+
+export const taskSeedData: TaskSeedData[] = [
+  {
+    code: "TASK_FATLOSS_STARTER",
+    name: "체지방 감량 스타터",
+    description: "입문 회원용 4주 프로그램",
+    exercises: [
+      { code: "EXERCISE_AIR_SQUAT", name: "에어 스쿼트", target: "하체" },
+      { code: "EXERCISE_PUSH_UP", name: "푸시업", target: "상체" },
+    ],
+  },
+  {
+    code: "TASK_MOBILITY_RESET",
+    name: "모빌리티 리셋",
+    description: "회복과 가동성 향상 프로그램",
+    exercises: [
+      { code: "EXERCISE_WORLD_GREATEST_STRETCH", name: "월드 그레이티스트 스트레치", target: "전신" },
+    ],
   },
 ];
 
@@ -191,10 +246,10 @@ export const userSeedData: UserSeedData[] = [
 ### 관계 매핑 데이터
 
 ```typescript
-export const userGroundMapping = [
-  { userEmail: "ceo@company.com", groundNames: ["F45 광화문", "F45 강남1호"] },
-  { userEmail: "manager.gwanghwamun@f45.kr", groundNames: ["F45 광화문"] },
-  { userEmail: "minsu.kim92@gmail.com", groundNames: ["F45 광화문"] },
+export const userSpaceMapping = [
+  { userEmail: "ceo@company.com", spaceCodes: ["SPACE_GWANGHWAMUN", "SPACE_GANGNAM"] },
+  { userEmail: "manager.gwanghwamun@f45.kr", spaceCodes: ["SPACE_GWANGHWAMUN"] },
+  { userEmail: "minsu.kim92@gmail.com", spaceCodes: ["SPACE_GWANGHWAMUN"] },
 ];
 
 export const userAgreementMapping = [
@@ -218,13 +273,17 @@ export const userAgreementMapping = [
 │                                                                 │
 │  SUPER_ADMIN (김대표)                                            │
 │       │                                                         │
-│       └── 모든 Ground 접근 가능                                   │
+│       └── 모든 Space / Task 접근 가능                            │
 │                                                                 │
-│  ADMIN (이점장) ──────── Ground (F45 광화문)                      │
-│  ADMIN (박매니저) ────── Ground (F45 강남1호)                      │
+│  ADMIN (이점장) ──────── Space (광화문 센터)                      │
+│                           ├── ground: 메인 플로어                │
+│                           └── ground: 리커버리 존                │
 │                                                                 │
-│  USER (김민수) ──┬────── Ground (F45 광화문) - 회원               │
-│                 └────── Agreement 동의 완료                       │
+│  TASK (체지방 감량 스타터) ─┬── exercise: 에어 스쿼트            │
+│                             └── exercise: 푸시업                 │
+│                                                                 │
+│  USER (김민수) ──┬────── Space (광화문 센터) - 회원              │
+│                 └────── Agreement 동의 완료                      │
 │                                                                 │
 └─────────────────────────────────────────────────────────────────┘
 ```
@@ -244,8 +303,10 @@ export const userAgreementMapping = [
 ### 정합성 검증
 - [ ] 모든 FK 관계가 연결되어 있는가?
 - [ ] 고아 데이터(Orphan)가 없는가?
-- [ ] ADMIN은 담당 Ground와 연결되어 있는가?
-- [ ] USER는 가입한 Ground와 연결되어 있는가?
+- [ ] ADMIN은 담당 Space와 연결되어 있는가?
+- [ ] USER는 가입한 Space와 연결되어 있는가?
+- [ ] Space 아래 ground가 root 없이 독립 데이터로 남아 있지 않은가?
+- [ ] Task 아래 exercise가 root 없이 독립 데이터로 남아 있지 않은가?
 - [ ] 필수 약관에 대한 동의 데이터가 있는가?
 - [ ] 역할(Role)과 권한이 일치하는가?
 
@@ -291,7 +352,8 @@ packages/be-prisma/seed.ts       - 시드 실행 로직
 | SUPER_ADMIN | 1명 | 시스템에 1명만 존재 |
 | ADMIN | 3명 | 각 브랜드별 1명 |
 | USER | 6명 | 다양한 시나리오 커버 |
-| Ground | 10개 | 여러 브랜드, 지역 커버 |
+| Space | 3-5개 | 여러 운영 단위/지역 커버 |
+| Task | 5-10개 | exercise 묶음 시나리오 커버 |
 | Agreement | 4-5개 | 필수/선택 약관 커버 |
 | Category | 필요한 만큼 | Enum 기반이면 Enum 수만큼 |
 
@@ -305,7 +367,7 @@ packages/be-prisma/seed.ts       - 시드 실행 로직
 | 목록 조회 | 페이지네이션 테스트용 3개 이상 |
 | 검색 테스트 | 검색 가능한 다양한 이름/키워드 |
 | 관계 테스트 | 1:N, N:M 관계가 있는 데이터 |
-| 엣지 케이스 | 선택 동의 없는 유저, 다중 지점 소속 유저 등 |
+| 엣지 케이스 | 선택 동의 없는 유저, 다중 Space 소속 유저 등 |
 
 ### 현실적인 이름 생성 패턴
 

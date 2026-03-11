@@ -18,10 +18,11 @@
 
 | 모듈 | 용도 |
 |------|------|
+| @cocrepo/app | Inquiry aggregate root application service wiring |
 | @cocrepo/repository | 기능 구현 의존성 |
 | @cocrepo/service | 기능 구현 의존성 |
 | @nestjs/common | 기능 구현 의존성 |
-| ./controllers/inquiries.controller | 기능 구현 의존성 |
+| ./inquiries.controller | 기능 구현 의존성 |
 | ./gateways/inquiries.gateway | 기능 구현 의존성 |
 
 ## 구현 체크리스트
@@ -34,3 +35,4 @@
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
 | 2026-03-03 | 누락된 sidecar spec 신규 생성 | codex |
+| 2026-03-11 | Inquiry module을 ApplicationService + root repository/service wiring 기준으로 갱신 | codex |

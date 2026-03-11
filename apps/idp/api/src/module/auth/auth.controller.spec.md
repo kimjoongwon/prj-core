@@ -3,11 +3,11 @@
 > 생성일: 2026-02-19
 > 수정일: 2026-02-19
 > 타입: controller
-> 위치: apps/idp-server/src/module/auth/auth.controller.ts
+> 위치: apps/idp/api/src/module/auth/auth.controller.ts
 
 ## 역할
 
-OIDC/OAuth2 기반 인증 흐름의 진입점을 담당합니다. 로그인 리다이렉트, 콜백 처리, 토큰 재발급, 회원가입, 로그아웃을 포함하며, 세션 관리 및 관리자용 감사 로그 조회 기능을 제공합니다. `AuthFacade`와 `AuthAuditLogService`에 비즈니스 로직을 위임합니다.
+OIDC/OAuth2 기반 인증 흐름의 진입점을 담당합니다. 로그인 리다이렉트, 콜백 처리, 토큰 재발급, 회원가입, 로그아웃을 포함하며, 세션 관리 및 관리자용 감사 로그 조회 기능을 제공합니다. `AuthApplicationService`와 `AuthAuditLogService`에 비즈니스 로직을 위임합니다.
 
 ## 엔드포인트
 
@@ -70,7 +70,7 @@ OIDC/OAuth2 기반 인증 흐름의 진입점을 담당합니다. 로그인 리�
 
 | 의존 서비스 | 역할 |
 |------------|------|
-| `AuthFacade` | 인증 흐름 전체 조율 (로그인, 토큰 교환, 세션 관리 등) |
+| `AuthApplicationService` | 인증 유즈케이스 조율 (로그인, 토큰 교환, 세션 관리 등) |
 | `AuthAuditLogService` | 감사 로그 조회 및 통계 |
 | `ConfigService` | 프론트엔드 도메인 URL 등 환경 설정 |
 
@@ -86,3 +86,4 @@ OIDC/OAuth2 기반 인증 흐름의 진입점을 담당합니다. 로그인 리�
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
 | 2026-02-19 | 초기 생성 (역기획) | req-reverse-engineer |
+| 2026-03-11 | AuthController 의존성을 AuthApplicationService로 전환 | codex |

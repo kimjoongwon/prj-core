@@ -1,8 +1,22 @@
 "use client";
 
-import { type InquiryCategory, type InquiryPriority, useFillInquiryFormWithAi, useGetInquiryUpdateForm, useUpdateInquiry, } from "@cocrepo/api";
+import {
+	type InquiryCategory,
+	type InquiryPriority,
+	useFillInquiryFormWithAi,
+	useGetUpdateInquiryForm,
+	useUpdateInquiry,
+} from "@cocrepo/api";
 import { ADMIN_PATHS } from "@cocrepo/constant";
-import { AiForm, Button, Page, PageTitleBar, Section, VStack } from "@cocrepo/ui";
+import type { AiFormOptionItem } from "@cocrepo/type";
+import {
+	AiForm,
+	Button,
+	Page,
+	PageTitleBar,
+	Section,
+	VStack,
+} from "@cocrepo/ui";
 import { Input, Select, SelectItem, type Selection } from "@heroui/react";
 import { ArrowLeft } from "lucide-react";
 import { observer, useLocalObservable } from "mobx-react-lite";
@@ -22,17 +36,46 @@ const getSelectedValue = (keys: Selection): string => {
 	return selectedKey ? String(selectedKey) : "";
 };
 
+const normalizeAiFormOptionValue = (
+	value: unknown,
+): AiFormOptionItem["value"] => {
+	if (
+		typeof value === "string" ||
+		typeof value === "number" ||
+		typeof value === "boolean"
+	) {
+		return value;
+	}
+
+	return null;
+};
+
+const normalizeAiFormOptions = (
+	options?: Record<string, Array<{ value: unknown; label: string }>>,
+): Record<string, AiFormOptionItem[]> => {
+	return Object.fromEntries(
+		Object.entries(options ?? {}).map(([path, items]) => [
+			path,
+			items.map((item) => ({
+				value: normalizeAiFormOptionValue(item.value),
+				label: item.label,
+			})),
+		]),
+	);
+};
+
 function InquiryEditPageClient({ inquiryId }: Props) {
 	const router = useRouter();
-	const { data: bootstrapResponse } = useGetInquiryUpdateForm(inquiryId);
+	const { data: bootstrapResponse } = useGetUpdateInquiryForm(inquiryId);
 	const updateMutation = useUpdateInquiry();
 	const fillMutation = useFillInquiryFormWithAi();
 	const bootstrap = bootstrapResponse?.data;
-	const categoryOptions = (bootstrap?.options.category ?? []).map((item) => ({
+	const bootstrapOptions = normalizeAiFormOptions(bootstrap?.options);
+	const categoryOptions = (bootstrapOptions.category ?? []).map((item) => ({
 		value: String(item.value ?? ""),
 		label: item.label,
 	}));
-	const priorityOptions = (bootstrap?.options.priority ?? []).map((item) => ({
+	const priorityOptions = (bootstrapOptions.priority ?? []).map((item) => ({
 		value: String(item.value ?? ""),
 		label: item.label,
 	}));
@@ -131,7 +174,10 @@ function InquiryEditPageClient({ inquiryId }: Props) {
 							startContent={<ArrowLeft className="size-4" />}
 							onPress={() => {
 								router.push(
-									ADMIN_PATHS.INQUIRIES_DETAIL.replace("[inquiryId]", inquiryId) as Route,
+									ADMIN_PATHS.INQUIRIES_DETAIL.replace(
+										"[inquiryId]",
+										inquiryId,
+									) as Route,
 								);
 							}}
 							isDisabled={state.isSubmitting}
@@ -150,7 +196,7 @@ function InquiryEditPageClient({ inquiryId }: Props) {
 							fieldMeta={bootstrap.fieldMeta}
 							aiSchemas={bootstrap.aiSchemas}
 							ui={bootstrap.ui}
-							options={bootstrap.options}
+							options={bootstrapOptions}
 							onFill={async (input) => {
 								const result = await fillMutation.mutateAsync({
 									data: {
@@ -161,9 +207,11 @@ function InquiryEditPageClient({ inquiryId }: Props) {
 										userPrompt: input.userPrompt,
 									},
 								});
-								return result?.data ?? {
-									patches: [],
-								};
+								return (
+									result?.data ?? {
+										patches: [],
+									}
+								);
 							}}
 							applyPatch={(patches) => {
 								state.applyPatch(patches);
@@ -221,7 +269,10 @@ function InquiryEditPageClient({ inquiryId }: Props) {
 								variant="light"
 								onPress={() => {
 									router.push(
-										ADMIN_PATHS.INQUIRIES_DETAIL.replace("[inquiryId]", inquiryId) as Route,
+										ADMIN_PATHS.INQUIRIES_DETAIL.replace(
+											"[inquiryId]",
+											inquiryId,
+										) as Route,
 									);
 								}}
 								isDisabled={state.isSubmitting}

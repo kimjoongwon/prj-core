@@ -5,9 +5,17 @@ tools: Read, Write, Grep, Bash
 ---
 
 
+## 재사용 우선 점검 (Mandatory)
+
+- 작업을 시작하기 전에 반드시 기존 코드, 컴포넌트, 유틸, 스펙, 테스트를 먼저 검색합니다.
+- 신규 생성 전에 기존 구현을 그대로 재사용하거나, 소폭 개선 후 재사용할 수 있는지 우선 판단합니다.
+- 재사용 후보가 있으면 우선 채택하고, 신규 생성이 필요한 경우에는 재사용 불가 사유와 최소 변경 범위를 명확히 기록합니다.
+- 동일 책임의 중복 구현을 금지합니다.
+
+
 # Feature 컴포넌트 빌더
 
-**비즈니스 로직, 상태, API 호출, 라우터 이동을 포함하는 기능 컴포넌트**를 `packages/fe-ui/src/components/feature`에 생성합니다.
+**비즈니스 로직, 상태, API 호출, 라우터 이동을 포함하는 기능 컴포넌트**를 `packages/fe-ui/src/feature`에 생성합니다.
 
 ---
 
@@ -40,11 +48,11 @@ tools: Read, Write, Grep, Bash
 
 | 항목 | 경로 |
 |------|------|
-| 메인 컴포넌트 | `packages/fe-ui/src/components/feature/[Name]/[Name].tsx` |
-| 커스텀 훅 | `packages/fe-ui/src/components/feature/[Name]/use[Name].ts` |
-| 타입 정의 | `packages/fe-ui/src/components/feature/[Name]/types.ts` |
-| barrel export | `packages/fe-ui/src/components/feature/[Name]/index.ts` |
-| 상위 barrel | `packages/fe-ui/src/components/feature/index.ts` (추가) |
+| 메인 컴포넌트 | `packages/fe-ui/src/feature/[Name]/[Name].tsx` |
+| 커스텀 훅 | `packages/fe-ui/src/feature/[Name]/use[Name].ts` |
+| 타입 정의 | `packages/fe-ui/src/feature/[Name]/types.ts` |
+| barrel export | `packages/fe-ui/src/feature/[Name]/index.ts` |
+| 상위 barrel | `packages/fe-ui/src/feature/index.ts` (추가) |
 
 ---
 
@@ -64,7 +72,7 @@ tools: Read, Write, Grep, Bash
 
 ### ♻️ 기존 컴포넌트 우선 원칙 (Critical)
 
-1. `packages/fe-ui/src/components/{feature,widget,ui}`에서 기존 컴포넌트를 먼저 검색합니다.
+1. `packages/fe-ui/src/{feature,widget,primitive}`에서 기존 컴포넌트를 먼저 검색합니다.
 2. 요구사항을 충족하면 **새 컴포넌트를 생성하지 않고 기존 컴포넌트를 재사용**합니다.
 3. 기능이 부족하면 **새 이름으로 복제하지 말고 기존 컴포넌트를 업그레이드**합니다.
 4. 기존 컴포넌트 업그레이드 시 호출부를 함께 마이그레이션하고 중복 컴포넌트는 제거합니다.
@@ -75,20 +83,20 @@ tools: Read, Write, Grep, Bash
 |----------|------|
 | **apps/*/src에 feature 폴더 생성** | **Feature는 반드시 packages/fe-ui에만 존재** |
 | **Context API 사용 (createContext, useContext)** | **packages/fe-ui에서 Context 사용 금지 - props drilling 사용** |
-| **컴포넌트 폴더 내 hooks/, utils/, inputs/ 하위 폴더 생성** | **패키지 레벨에서 관리 (hooks → src/hooks/, utils → src/utils/, inputs → components/inputs/)** |
+| **컴포넌트 폴더 내 hooks/, utils/, inputs/ 하위 폴더 생성** | **패키지 레벨에서 관리 (hooks → src/hook/, utils → src/utils/, inputs → src/input/)** |
 | 기존 Feature와 유사한 컴포넌트 신규 생성 | 중복 자산 증가 및 유지보수 비용 상승 |
 | 커스텀 className 직접 사용 | UI/Input에서만 허용 |
 | 직접 axios/fetch 호출 | @cocrepo/api 사용 필수 |
 | Text를 Button/Chip children으로 | 테마 깨짐 발생 |
 | inline style | Tailwind/HeroUI만 사용 |
 
-> ⚠️ **Critical**: Feature 컴포넌트는 **절대로** `apps/admin/src/components/features/`, `apps/*/src/feature/` 등 앱 폴더에 생성하지 않습니다. 모든 Feature는 `packages/fe-ui/src/components/feature/`에서만 생성하여 재사용성을 보장합니다.
+> ⚠️ **Critical**: Feature 컴포넌트는 **절대로** `apps/admin/src/feature/`, `apps/*/src/feature/` 등 앱 폴더에 생성하지 않습니다. 모든 Feature는 `packages/fe-ui/src/feature/`에서만 생성하여 재사용성을 보장합니다.
 
 ### AiForm Feature 계약 (Critical)
 
 Create/Update 페이지에서 재사용할 표준 `AiForm` Feature를 우선 구현 대상으로 취급합니다.
 
-- 위치: `packages/fe-ui/src/components/feature/AiForm/`
+- 위치: `packages/fe-ui/src/feature/AiForm/`
 - 역할:
   - 폼 상단에서 AI 채움 UX 제공
   - 스키마 선택(`aiSchemas`)
@@ -136,20 +144,20 @@ Feature 개발 시 필요한 Widget이 없으면 **먼저 Widget Builder에게 �
 ### 4.3 파일 구조 생성
 
 ```
-packages/fe-ui/src/components/feature/[Name]/
+packages/fe-ui/src/feature/[Name]/
 ├── [Name].tsx         # 메인 컴포넌트
 ├── types.ts           # 타입 정의 (해당 Feature 전용)
 └── index.ts           # export
 
 # ⚠️ 컴포넌트 폴더 내 hooks/, utils/, inputs/ 하위 폴더 생성 금지!
 # 재사용 가능한 훅/유틸은 패키지 레벨에서 관리:
-packages/fe-ui/src/hooks/use[Name].ts       # 재사용 가능한 훅
-packages/fe-ui/src/utils/[utilName].ts      # 재사용 가능한 유틸
+packages/fe-ui/src/hook/use[Name].ts       # 재사용 가능한 훅
+packages/fe-ui/src/util/[utilName].ts      # 재사용 가능한 유틸
 ```
 
 ### 4.4 barrel export 추가
 
-`packages/fe-ui/src/components/feature/index.ts`에 새 컴포넌트 export 추가
+`packages/fe-ui/src/feature/index.ts`에 새 컴포넌트 export 추가
 
 ---
 
@@ -158,7 +166,7 @@ packages/fe-ui/src/utils/[utilName].ts      # 재사용 가능한 유틸
 ### 5.1 메인 컴포넌트
 
 ```tsx
-// packages/fe-ui/src/components/feature/CommentList/CommentList.tsx
+// packages/fe-ui/src/feature/CommentList/CommentList.tsx
 import { observer } from "mobx-react-lite";
 import { useCommentList } from "./useCommentList";
 import { CommentItem } from "../../widget/CommentItem";
@@ -209,7 +217,7 @@ CommentList.displayName = "CommentList";
 ### 5.2 커스텀 훅 (로직 분리)
 
 ```tsx
-// packages/fe-ui/src/components/feature/CommentList/useCommentList.ts
+// packages/fe-ui/src/feature/CommentList/useCommentList.ts
 import { useState, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import { useGetComments, useDeleteComment } from "@cocrepo/api";
@@ -321,10 +329,10 @@ export type { CommentListProps } from "./CommentList";
 
 ## 6. 체크리스트
 
-- [ ] 기존 Feature/Widget/UI 컴포넌트 검색 완료 (`rg --files packages/fe-ui/src/components`)
+- [ ] 기존 Feature/Widget/UI 컴포넌트 검색 완료 (`rg --files packages/fe-ui/src`)
 - [ ] 기존 컴포넌트 재사용 가능 여부 판단 및 결과 기록
 - [ ] 기능 부족 시 기존 컴포넌트 업그레이드로 처리 (신규 복제 금지)
-- [ ] `packages/fe-ui/src/components/feature/[Name]/` 에 생성
+- [ ] `packages/fe-ui/src/feature/[Name]/` 에 생성
 - [ ] 필요한 Widget이 없으면 Widget Builder에게 요청
 - [ ] API 호출은 `@cocrepo/api` 사용
 - [ ] 라우터 이동은 `next/navigation`의 `useRouter` 사용
@@ -353,7 +361,7 @@ Pure UI → Widget → Feature → Page
 | 에이전트 | 관계 |
 |----------|------|
 | req-feature-planner | Feature 기획서(index.spec.md) 기반 구현 |
-| fe-ui-component-builder | Feature가 사용할 Pure UI 컴포넌트 생성 |
+| fe-primitive-component-builder | Feature가 사용할 Pure UI 컴포넌트 생성 |
 | **fe-widget-builder** | Feature가 사용할 Widget 컴포넌트 생성 |
 | **fe-store-builder** | Feature가 연결할 Store 생성 |
 

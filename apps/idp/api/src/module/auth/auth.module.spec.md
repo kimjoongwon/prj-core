@@ -18,7 +18,8 @@
 
 | 모듈 | 용도 |
 |------|------|
-| @cocrepo/facade | 기능 구현 의존성 |
+| @cocrepo/app | 인증 application service 의존성 |
+| @cocrepo/integration | OIDC integration facade 의존성 |
 | @cocrepo/repository | 기능 구현 의존성 |
 | @cocrepo/service | 기능 구현 의존성 |
 | @nestjs/common | 기능 구현 의존성 |
@@ -34,3 +35,4 @@
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
 | 2026-03-03 | 누락된 sidecar spec 신규 생성 | codex |
+| 2026-03-11 | AuthModule provider/export를 ApplicationService + OidcFacade 구조로 전환 | codex |

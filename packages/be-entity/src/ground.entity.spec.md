@@ -9,7 +9,7 @@
 
 물리적 시설(피트니스 센터, 체육관 등)을 나타내는 엔티티입니다. Space와 1:1로 연결되어 해당 공간의 실제 위치 정보(주소, 연락처, 사업자 번호 등)를 관리합니다. 로고 이미지와 대표 이미지를 파일로 참조할 수 있습니다.
 
-Space 자체는 추상 컨테이너(id만 존재)이고, Ground가 실제 비즈니스 의미를 부여합니다. Ground 등록 시 새 Space가 자동으로 함께 생성됩니다.
+Space 자체는 추상 컨테이너(id만 존재)이고, Ground가 실제 비즈니스 의미를 부여합니다. Ground는 독립 aggregate가 아니라 `Space`의 1:1 detail child이며, 생성/수정은 항상 Space root를 통해 처리됩니다.
 
 ## 필드
 
@@ -48,7 +48,7 @@ Space 자체는 추상 컨테이너(id만 존재)이고, Ground가 실제 비즈
 - 하나의 Space에 하나의 Ground만 연결됩니다 (`spaceId` unique).
 - `businessNo`는 사업자등록번호로 전체 시스템에서 유일해야 합니다 (`businessNo` unique).
 - `businessNo`는 한 번 등록 후 변경 불가합니다. UpdateDto에서 제외합니다.
-- Ground 등록 시 서버에서 새 Space를 자동 생성하고 `spaceId`를 연결합니다.
+- Ground 등록 시 서버에서 새 Space root를 자동 생성하고 `spaceId`를 연결합니다.
 - `logoImageFileId`와 `imageFileId`는 Asset 도메인 리소스 식별자로 사용됩니다 (선택적).
 - `email`과 `phone`은 시설 공식 연락처입니다.
 - 소프트 삭제 방식으로 `removedAt`을 설정하여 논리 삭제합니다.
@@ -57,11 +57,11 @@ Space 자체는 추상 컨테이너(id만 존재)이고, Ground가 실제 비즈
 
 | 작업 | 조건 | 비고 |
 |------|------|------|
-| 등록 (CREATE) | FULL_ACCESS 전용 | Space 자동 생성 포함 |
-| 목록 조회 (LIST) | 인증 필요 | 전체 또는 Space 기반 필터 |
-| 상세 조회 (GET) | 인증 필요 | groundId로 단건 조회 |
-| 수정 (UPDATE) | FULL_ACCESS 전용 | businessNo 수정 불가 |
-| 삭제 (DELETE) | FULL_ACCESS 전용 | 소프트 삭제 |
+| 등록 (CREATE) | FULL_ACCESS 전용 | `POST /spaces`에서 Space root와 함께 생성 |
+| 목록 조회 (LIST) | 인증 필요 | `/spaces` 목록에서 Ground detail 포함 조회 |
+| 상세 조회 (GET) | 인증 필요 | `/spaces/:spaceId/ground` nested detail 조회 |
+| 수정 (UPDATE) | FULL_ACCESS 전용 | `/spaces/:spaceId/ground`에서 businessNo 제외 수정 |
+| 삭제 (DELETE) | FULL_ACCESS 전용 | `DELETE /spaces/:spaceId`로 Space root와 함께 소프트 삭제 |
 
 ## 구현 체크리스트
 
@@ -77,3 +77,4 @@ Space 자체는 추상 컨테이너(id만 존재)이고, Ground가 실제 비즈
 | 2026-03-06 | File 도메인 제거에 맞춰 이미지 참조 설명을 Asset 기준으로 정리 | codex |
 | 2026-02-19 | 초기 생성 (역기획) | req-reverse-engineer |
 | 2026-02-19 | CRUD 시나리오 추가, businessNo 불변 규칙 명시, Ground-Space 관계 설명 보강 | req-entity-planner |
+| 2026-03-11 | Ground를 Space aggregate의 1:1 detail child로 재정의하고 nested route 시나리오로 갱신 | codex |

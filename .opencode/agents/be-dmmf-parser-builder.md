@@ -8,6 +8,14 @@ tools:
 ---
 
 
+## 재사용 우선 점검 (Mandatory)
+
+- 작업을 시작하기 전에 반드시 기존 코드, 컴포넌트, 유틸, 스펙, 테스트를 먼저 검색합니다.
+- 신규 생성 전에 기존 구현을 그대로 재사용하거나, 소폭 개선 후 재사용할 수 있는지 우선 판단합니다.
+- 재사용 후보가 있으면 우선 채택하고, 신규 생성이 필요한 경우에는 재사용 불가 사유와 최소 변경 범위를 명확히 기록합니다.
+- 동일 책임의 중복 구현을 금지합니다.
+
+
 # DMMF Parser Builder
 
 Prisma DMMF(Data Model Meta Format)를 파싱하여 모델/필드 정보를 추출하는 유틸리티를 생성하는 전문가입니다.
@@ -290,7 +298,8 @@ const parser = getDmmfParser();
 const models = parser.parseModels();
 // [
 //   { name: "User", displayName: "사용자" },
-//   { name: "Ground", displayName: null },
+//   { name: "Space", displayName: "공간" },
+//   { name: "Task", displayName: "과업" },
 // ]
 
 // 필드 정보 추출

@@ -32,6 +32,7 @@
 | `idp/web` | IDP 프론트엔드 | 3008 |
 | `idp-server` | OIDC 서버 (oidc-provider) | 4009 |
 | `server` | 메인 API 서버 (NestJS) | 4001 |
+| `proposal/web` | 제안서 프론트엔드 | 3001 |
 | `test/e2e` | E2E 테스트 (Playwright) | - |
 | `tool/storybook` | UI 컴포넌트 스토리북 | 6006 |
 
@@ -44,7 +45,8 @@
 | `be-decorator` | `@cocrepo/decorator` | NestJS 데코레이터 |
 | `be-dto` | `@cocrepo/dto` | Request/Response DTO |
 | `be-entity` | `@cocrepo/entity` | 도메인 Entity |
-| `be-facade` | `@cocrepo/facade` | Facade 레이어 |
+| `be-app` | `@cocrepo/app` | ApplicationService 레이어 |
+| `be-integration` | `@cocrepo/integration` | 외부 시스템 Integration Facade 레이어 |
 | `be-prisma` | `@cocrepo/prisma` | Prisma 스키마 및 클라이언트 |
 | `be-repository` | `@cocrepo/repository` | Repository 레이어 |
 | `be-service` | `@cocrepo/service` | Service 레이어 |
@@ -55,20 +57,19 @@
 | `common-toolkit` | `@cocrepo/toolkit` | 공통 유틸리티 |
 | `common-type` | `@cocrepo/type` | 공통 타입 |
 | `fe-api` | `@cocrepo/api` | Orval 생성 API 클라이언트 |
-| `fe-e2e` | `@cocrepo/e2e` | Playwright E2E 공통 헬퍼 |
 | `fe-hook` | `@cocrepo/hook` | React 커스텀 훅 |
 | `fe-store` | `@cocrepo/store` | MobX Store |
 | `fe-ui` | `@cocrepo/ui` | UI 컴포넌트 |
 
-## Codex 도구 사용 가이드
+## Claude Code 버그 회피
 
-- **`request_user_input` 도구의 질문/선택지 문구는 기본적으로 한국어로 작성** (사용자 대화 언어 우선)
-- **`spawn_agent`/`send_input` 메시지의 핵심 작업 설명은 기본적으로 한국어로 작성** (필요 시에만 영어 보조 사용)
+- **TodoWrite 도구의 content, activeForm은 영어로 작성** (한글 UTF-8 멀티바이트 문자열 처리 버그 회피)
+- Task 도구의 description도 영어로 작성
 
-## Codex 작업 원칙
+## Claude Code 작업 원칙
 
-- **요구사항이나 선택지가 애매할 때 `request_user_input` 도구로 질문** - 추측하지 않고 사용자에게 확인
-- **`spawn_agent` 도구로 적절한 에이전트를 활용해 작업 수행** - 단순 작업보다 전문 에이전트 활용 우선
+- **AskUserQuestion 도구로 요구사항이나 선택지가 애매할 때 질문** - 추측하지 않고 사용자에게 확인
+- **Task 도구로 적절한 에이전트를 활용하여 작업 수행** - 단순 작업보다 전문 에이전트 활용 우선
 
 ## 프론트엔드 개발 규칙
 
@@ -365,12 +366,12 @@ const callback = () => doSomething(a);
 ### 컴포넌트 계층 구조와 개발 원칙 (Critical)
 
 ```
-Primitive → Widget → Feature → Page
-(최소 단위)      (UI 조합)   (비즈니스 로직)   (화면)
+Pure UI → Widget → Feature → Page
+(최소 단위)   (UI 조합)   (비즈니스 로직)   (화면)
 ```
 
 **개발 순서 원칙:**
-1. **항상 Primitive부터 시작** - 재사용 가능한 최소 단위를 먼저 만들어 자원화
+1. **항상 Pure UI부터 시작** - 재사용 가능한 최소 단위를 먼저 만들어 자원화
 2. **최대한 Widget으로 분리** - 순수 UI 조합은 Widget으로, Store 연결만 Feature에
 3. **Feature는 Widget + Store 연결** - Widget에 데이터/핸들러 주입하는 역할
 
@@ -378,7 +379,7 @@ Primitive → Widget → Feature → Page
 
 | 유형 | 패턴 | 설명 | 예시 |
 |------|------|------|------|
-| **Primitive** | `[역할/형태]` | 최소 단위 | Button, Card, Badge |
+| **Pure UI** | `[역할/형태]` | 최소 단위 | Button, Card, Badge |
 | **Widget** | `[기능][UI형태]` | "무엇을 보여주는가" | NavTreePanel, TabBar, MenuList |
 | **Feature** | `[위치/역할][기능]` | "어디서 어떻게 사용되는가" | SideNav, BottomTab, UserMenu |
 
@@ -400,16 +401,16 @@ UserCard                      → UserMenu (AuthStore 연결)
 
 ### 컴포넌트 위치 규칙 (Critical)
 
-**Primitive 컴포넌트는 반드시 `packages/fe-ui`에만 생성합니다. `apps/*/src`에 생성 금지!**
+**UI 컴포넌트는 반드시 `packages/fe-ui`에만 생성합니다. `apps/*/src`에 생성 금지!**
 
 | 컴포넌트 유형 | 올바른 위치 | 금지 위치 |
 |--------------|-------------|-----------|
-| Primitive | `packages/fe-ui/src/primitive/` | ❌ `apps/*/src/primitive/` |
-| Widget | `packages/fe-ui/src/widget/` | ❌ `apps/*/src/widget/` |
-| **Feature** | `packages/fe-ui/src/feature/` | ❌ `apps/*/src/feature/` |
-| Input | `packages/fe-ui/src/input/` | ❌ `apps/*/src/input/` |
-| Layout | `packages/fe-ui/src/layout/` | ❌ `apps/*/src/layout/` |
-| Cell | `packages/fe-ui/src/primitive/data-display/cell/` | ❌ `apps/*/src/cell/` |
+| Pure UI | `packages/fe-ui/src/components/ui/` | ❌ `apps/*/src/components/ui/` |
+| Widget | `packages/fe-ui/src/components/widget/` | ❌ `apps/*/src/components/widget/` |
+| **Feature** | `packages/fe-ui/src/components/feature/` | ❌ `apps/*/src/components/features/` |
+| Input | `packages/fe-ui/src/components/inputs/` | ❌ `apps/*/src/components/inputs/` |
+| Layout | `packages/fe-ui/src/components/layout/` | ❌ `apps/*/src/components/layout/` |
+| Cell | `packages/fe-ui/src/components/cell/` | ❌ `apps/*/src/components/cell/` |
 
 **앱(`apps/*`)에서 허용되는 것:**
 - `app/` - Next.js App Router 페이지
@@ -427,7 +428,7 @@ UserCard                      → UserMenu (AuthStore 연결)
 import { SideNav, UserMenu } from "@cocrepo/ui";
 
 // ❌ 금지 - apps 내부에 Feature 생성
-// apps/admin/web/src/feature/HeaderSpaceSelector.tsx  ← 금지!
+// apps/admin/web/src/components/features/HeaderSpaceSelector.tsx  ← 금지!
 ```
 
 ### SSR/Hydration 관련 주의사항
@@ -579,15 +580,15 @@ rootStore.persistStore = new PersistStore({
   storageKey: "admin-persist",
 });
 
-// apps/idp/web/src/stores - 다른 앱에서 재사용
+// apps/proposal/web/src/stores - 다른 앱에서 재사용
 rootStore.persistStore = new PersistStore({
-  storageKey: "idp-persist",
+  storageKey: "proposal-persist",
 });
 ```
 
 ### 공통 타입 선언 규칙
 
-**AI 재사용률을 위해 타입/계약은 단일 위치에 고정합니다.**
+**여러 패키지에서 공통으로 사용되는 타입은 반드시 `@cocrepo/type`에 선언합니다.**
 
 ```typescript
 // ✅ 올바른 예시 - @cocrepo/type에 타입 정의
@@ -609,14 +610,10 @@ export interface NavItemConfig { ... }  // 여기서 정의하면 안 됨
 export type { NavItemConfig } from "@cocrepo/store";  // re-export 금지
 ```
 
-**규칙 (Critical):**
-- 패키지 내부 전용이라도 **명시적 타입 계약(예: `interface`, `type`, literal union, 권한 action/subject 타입)** 은 `@cocrepo/type`에 선언합니다.
-- 런타임 Enum이 필요한 값 집합은 `@cocrepo/enum`에 선언합니다.
-- `packages/fe-hook`, `packages/fe-ui`, `packages/fe-store` 등 기능 패키지에서 로컬 `types.ts`/`*.types.ts`로 계약 타입을 새로 정의하지 않습니다.
-- 단, **컴포넌트 렌더링 전용 `XxxProps`**(ReactNode, UI event handler, variant 등)는 컴포넌트 파일 옆에 코로케이션합니다.
-  - 동일 Props 계약이 여러 패키지로 확산되거나 도메인 계약 성격을 가지면 `@cocrepo/type`으로 승격합니다.
-- 타입 re-export 금지 → 항상 원본 패키지(`@cocrepo/type`, `@cocrepo/enum`)에서 직접 import
-- 예외: 함수 내부 임시 제네릭/추론 보조처럼 외부 계약이 아닌 구현 상세 타입은 허용
+**규칙:**
+- 2개 이상의 패키지에서 사용되는 타입 → `@cocrepo/type`에 선언
+- 단일 패키지 내부에서만 사용되는 타입 → 해당 패키지에 선언
+- 타입 re-export 금지 → 항상 원본 패키지에서 직접 import
 
 **@cocrepo/type 패키지 구조:**
 ```
@@ -698,16 +695,16 @@ apps/[app]/web/src/app/(admin)/[도메인]/
     ├── page.spec.md            # 수정 페이지 기획서
     └── page.e2e.ts             # E2E 테스트 ← sidecar
 
-packages/fe-ui/src/
+packages/fe-ui/src/components/
 ├── feature/[FeatureName]/
 │   ├── index.tsx
 │   └── index.spec.md           # Feature 기획서
 ├── widget/[WidgetName]/
 │   ├── index.tsx
 │   └── index.spec.md           # Widget 기획서
-└── primitive/[PrimitiveName]/
+└── ui/[UIName]/
     ├── index.tsx
-    └── index.spec.md           # Primitive 기획서
+    └── index.spec.md           # UI 기획서
 
 packages/fe-store/src/stores/
 ├── [StoreName].ts
@@ -751,11 +748,11 @@ apps/core/api/src/[module]/
 #### 기획서 템플릿 위치
 
 ```
-.codex/templates/spec/
+.claude/templates/spec/
 ├── page.spec.md        # 페이지 기획서 템플릿
 ├── feature.spec.md     # Feature 기획서 템플릿
 ├── widget.spec.md      # Widget 기획서 템플릿
-├── primitive.spec.md          # Primitive 기획서 템플릿
+├── ui.spec.md          # UI 기획서 템플릿
 ├── store.spec.md       # Store 기획서 템플릿
 ├── entity.spec.md      # Entity 기획서 템플릿
 ├── vo.spec.md          # VO 기획서 템플릿
@@ -805,10 +802,20 @@ import { CreateAbilityDto, AbilityResponseDto } from "@cocrepo/dto";
 
 ### 레이어 분리 규칙
 
-- **Controller**: 라우팅, DTO 검증만 담당
-- **Facade**: 여러 Service 조합 (Prisma 직접 호출 금지)
-- **Service**: 단일 도메인 로직 (Repository를 통해서만 데이터 접근)
+- **Controller**: 라우팅, DTO 검증, 인증 컨텍스트 수집만 담당
+- **ApplicationService**: 여러 Service/Integration Facade를 조합하는 유즈케이스 계층 (Prisma 직접 호출 금지)
+- **Service**: 단일 Aggregate Root 또는 단일 도메인 로직 담당 (Repository를 통해서만 데이터 접근)
+- **Integration Facade**: 외부 시스템 또는 복잡한 기술 서브시스템을 단순화해서 노출하는 레이어
 - **Repository**: Prisma 쿼리 작성
+
+### Aggregate Root / Entity 규칙
+
+- 쓰기(command)는 Aggregate Root 기준으로 시작합니다.
+- Child 엔티티 변경은 Root 또는 Root를 다루는 Service를 통해 수행합니다.
+- Controller가 child service를 직접 호출해 Aggregate 내부 정합성을 우회하는 패턴은 금지합니다.
+- Prisma가 생성한 타입은 **persistence model/entity**로 취급합니다.
+- `packages/be-entity/src/*.entity.ts`는 **domain-facing entity**이며, 실제 Domain Entity 여부는 도메인 메서드/불변식 보유 여부로 판단합니다.
+- `extends PrismaUser` 같은 상속형 패턴은 지양하고, Prisma 타입 shape를 참고한 구현 또는 rehydrate/mapper 방식을 기본으로 합니다.
 
 ### 시드 데이터 관리 규칙
 
@@ -1041,16 +1048,16 @@ apps/[app]/web/src/app/(admin)/[도메인]/
     ├── page.spec.md            # 수정 페이지 기획서
     └── page.e2e.ts             # E2E 테스트 (sidecar)
 
-packages/fe-ui/src/
+packages/fe-ui/src/components/
 ├── feature/[FeatureName]/
 │   ├── index.tsx
 │   └── index.spec.md           # Feature 기획서
 ├── widget/[WidgetName]/
 │   ├── index.tsx
 │   └── index.spec.md           # Widget 기획서
-└── primitive/[PrimitiveName]/
+└── ui/[UIName]/
     ├── index.tsx
-    └── index.spec.md           # Primitive 기획서
+    └── index.spec.md           # UI 기획서
 
 packages/fe-store/src/stores/
 ├── [StoreName].ts
@@ -1151,8 +1158,9 @@ Stage 5: 컴포넌트 (페이지별)
 | req-screen-planner | 도메인 기능/화면 구조 기획 → 각 `page.spec.md` 초안 생성 |
 | req-page-planner | 페이지 통합 기획(SSR/Prefetch/핸들러) → `page.spec.md` 통합 섹션 업데이트 |
 | req-api-planner | 인터랙션(Action)과 API 기획 → `controller.spec.md` + 페이지 API 섹션 |
+| req-app-planner | ApplicationService 유즈케이스 기획 → `application-service.spec.md` |
 | req-entity-planner | Entity/Enum/VO 기획 → `entity.spec.md`, `enum.spec.md`, `vo.spec.md` |
-| req-primitive-planner | 화면 UI 기획(L8) → `primitive/index.spec.md` |
+| req-primitive-planner | Pure UI 컴포넌트 기획(L8) → `primitive/index.spec.md` |
 | req-input-planner | 입력 컴포넌트 기획 → `inputs/index.spec.md` |
 | req-cell-planner | DataGrid/Table Cell 기획 → `cells/index.spec.md` |
 | req-widget-planner | 화면 Widget 기획(L9) → `widget/index.spec.md` |
@@ -1161,7 +1169,8 @@ Stage 5: 컴포넌트 (페이지별)
 | req-menu-planner | 메뉴/경로/권한 기획 → `admin-menu.spec.md` |
 | req-store-planner | 도메인 Store 기획(L11) → `[domain]Store.spec.md` |
 | req-logic-planner | 비즈니스 로직/테스트 기획 → `service/repository.spec.md` + 테스트 케이스 |
-| req-test-planner | 테스트 케이스 기획(L12) → 기존 `.spec.md` 테스트 섹션 업데이트 |
+| req-be-test-planner | 백엔드 테스트 케이스 기획(L12) → Service/Controller/E2E 테스트 섹션 업데이트 |
+| req-fe-test-planner | 프론트엔드 테스트 케이스 기획(L12) → Page/Feature/UI 테스트 섹션 업데이트 |
 | req-api-integration-planner | Orval API 연동 기획 → `hooks/index.spec.md` |
 | req-reverse-engineer | 기존 코드를 분석하여 `.spec.md` 역생성 |
 | /design-analyze (Skill) | Figma 디자인 분석 및 컴포넌트 매핑 (Figma 있을 때) |
@@ -1173,7 +1182,7 @@ Stage 5: 컴포넌트 (페이지별)
 |-------|------|
 | fe-primitive-component-builder | Pure UI 컴포넌트 생성 (packages/fe-ui/src/primitive) |
 | fe-cell-builder | DataGrid/Table용 Cell 컴포넌트 생성 (계층별) |
-| fe-input-component-builder | Input 컴포넌트 생성 (packages/fe-ui/src/input) |
+| fe-input-component-builder | Input 컴포넌트 생성 (packages/fe-ui/src/components/inputs) |
 | fe-widget-builder | 재사용 가능한 작은 UI 조각 Widget 컴포넌트 생성 |
 | fe-feature-builder | 비즈니스 기능을 담당하는 Feature 컴포넌트 생성 |
 | fe-layout-builder | Layout 컴포넌트 설계 및 생성 |
@@ -1194,7 +1203,9 @@ Stage 5: 컴포넌트 (페이지별)
 | be-vo-builder | Value Object 클래스 생성 |
 | be-repository-builder | Prisma 기반 Repository 레이어 생성 |
 | be-service-builder | NestJS Service 레이어 생성 |
-| be-facade-builder | NestJS Facade 레이어 생성 (여러 Service 조합) |
+| be-app-builder | NestJS ApplicationService 레이어 생성 (여러 Service 조합) |
+| be-integration-builder | 외부 시스템 Integration Facade 레이어 생성 |
+| be-module-builder | aggregate root 기준 NestJS Module + Router wiring 생성 |
 | be-controller-builder | NestJS REST Controller 생성 |
 | be-database-expert | PostgreSQL/Prisma 데이터베이스 설계 및 최적화 |
 | be-seed-maker | 현실 세계와 연결된 시드 데이터 생성 |
@@ -1231,7 +1242,7 @@ Stage 5: 컴포넌트 (페이지별)
 |-------|------|
 | dev-service-starter | 개발 서비스 시작 (admin, server, storybook 등) |
 
-각 Agent의 상세 역할은 `.codex/agents/` 디렉토리를 참고하세요.
+각 Agent의 상세 역할은 `.claude/agents/` 디렉토리를 참고하세요.
 
 ### 에이전트 실행 규칙 (Critical)
 
@@ -1283,12 +1294,12 @@ Stage 5: 컴포넌트 (페이지별)
 ```
 🚀 be-prisma-builder 에이전트 시작
 📋 작업: User 모델 Prisma 스키마 생성
-📂 대상: packages/be-prisma/schema/identity/user.prisma
+📂 대상: packages/be-prisma/schema/user.prisma
 
 [... 에이전트 작업 ...]
 
 ✅ be-prisma-builder 에이전트 완료
 📁 생성/수정된 파일:
-   - packages/be-prisma/schema/identity/user.prisma
-   - packages/be-prisma/schema/identity/user.prisma.spec.md
+   - packages/be-prisma/schema/user.prisma
+   - packages/be-prisma/schema/enums.prisma
 ```

@@ -74,7 +74,7 @@ sequenceDiagram
 | 단계 | 파일 | 핵심 로직 |
 |------|------|----------|
 | 로그인 시작 | `apps/admin/src/app/auth/login/hooks/useAuthLoginPage.tsx:28` | `window.location.href = "/api/v1/auth/login"` |
-| Authorization URL 생성 | `packages/be-facade/src/auth.facade.ts:79-91` | `getAuthorizationUrl()` - scope: `openid profile email roles` |
+| Authorization URL 생성 | `packages/be-app/src/auth.application-service.ts` | `getAuthorizationUrl()` - scope: `openid profile email roles` |
 | State 저장 (Redis) | `packages/be-service/src/token-storage.service.ts:140-143` | `saveOidcState()` - TTL 10분, 일회용 |
 | IDP 리다이렉트 | `apps/server/src/module/auth/auth.controller.ts:64-67` | `login()` - Authorization URL로 redirect |
 | Interaction 화면 | `apps/idp/src/module/interaction/interaction.controller.ts:58-93` | `getInteraction()` - prompt에 따라 login/consent 분기 |
@@ -85,8 +85,8 @@ sequenceDiagram
 | Claims 빌드 | `apps/idp/src/module/oidc/account.service.ts:107-140` | `buildFullClaims()` - 전체 claims 빌드 후 캐시 |
 | Claims 필터 | `apps/idp/src/module/oidc/account.service.ts:145-173` | `filterClaimsByScope()` - scope별 claims 필터링 |
 | Callback 처리 | `apps/server/src/module/auth/auth.controller.ts:78-100` | `handleCallback()` - 에러 처리 + 쿠키 설정 + 리다이렉트 |
-| State 검증 + 토큰 교환 | `packages/be-facade/src/auth.facade.ts:99-130` | `handleOidcCallback()` - state 검증 → code 교환 → 쿠키 설정 |
-| IDP 토큰 교환 | `packages/be-facade/src/auth.facade.ts:135-163` | `exchangeCodeForTokens()` - IDP token endpoint 호출 |
+| State 검증 + 토큰 교환 | `packages/be-app/src/auth.application-service.ts` | `handleOidcCallback()` - state 검증 → code 교환 → 쿠키 설정 |
+| IDP 토큰 교환 | `packages/be-integration/src/oidc.facade.ts` | `exchangeCodeForTokens()` - IDP token endpoint 호출 |
 
 ---
 
@@ -206,7 +206,7 @@ sequenceDiagram
 |-----------|------|----------|
 | 401 인터셉터 | `packages/fe-api/src/libs/customAxios.ts:63-124` | 토큰 갱신 + 큐 패턴 + PersistStore 업데이트 |
 | Refresh 엔드포인트 | `apps/server/src/module/auth/auth.controller.ts:102-124` | 쿠키에서 refreshToken 추출 |
-| IDP 토큰 갱신 | `packages/be-facade/src/auth.facade.ts:168-226` | `refreshTokenWithIdp()` |
+| IDP 토큰 갱신 | `packages/be-integration/src/oidc.facade.ts` | `refreshTokens()` |
 
 ---
 
@@ -246,8 +246,8 @@ sequenceDiagram
 |-----------|------|----------|
 | 프론트엔드 로그아웃 | `packages/fe-store/src/stores/authStore.ts:27-42` | `logout(logoutApi?)` - API 호출 후 리다이렉트 |
 | 로그아웃 컨트롤러 | `apps/server/src/module/auth/auth.controller.ts:163-184` | 쿠키에서 accessToken 추출 |
-| IDP 토큰 폐기 | `packages/be-facade/src/auth.facade.ts:251-271` | `revokeToken()` - revocation endpoint 호출 |
-| 쿠키 삭제 | `packages/be-facade/src/auth.facade.ts:231-246` | `logoutWithCookie()` |
+| IDP 토큰 폐기 | `packages/be-integration/src/oidc.facade.ts` | `revokeToken()` - revocation endpoint 호출 |
+| 쿠키 삭제 | `packages/be-app/src/auth.application-service.ts` | `logoutWithCookie()` |
 | 토큰 쿠키 관리 | `packages/be-service/src/token.service.ts:64-75` | `clearTokenCookies()` |
 
 ---
@@ -380,7 +380,7 @@ graph TB
 
     subgraph "API Server (NestJS)"
         AC[AuthController<br/>/api/v1/auth/*]
-        AF[AuthFacade]
+        AAS[AuthApplicationService]
         JG[JwtAuthGuard]
         JS[JwtStrategy<br/>JWKS RS256]
         TS[TokenService]
@@ -503,7 +503,7 @@ apps/idp/src/module/
 
 | 파일 | 역할 |
 |------|------|
-| `packages/be-facade/src/auth.facade.ts` | OIDC 인증 비즈니스 로직 (토큰 교환, 갱신, 폐기, 회원가입) |
+| `packages/be-app/src/auth.application-service.ts` | OIDC 인증 유즈케이스 로직 (회원가입, 세션, 쿠키, 내부 조합) |
 | `packages/be-service/src/token.service.ts` | 토큰 쿠키 관리 (설정/삭제), Cookie VO 활용 |
 | `packages/be-service/src/token-storage.service.ts` | Redis 기반 토큰 블랙리스트, OIDC State 관리 |
 | `packages/be-common/src/strategy/jwt.strategy.ts` | JWKS 기반 JWT 검증 전략 (Bearer → 쿠키 순서) |

@@ -16,7 +16,6 @@ module.exports = {
     "^@cocrepo/type$": "<rootDir>/../common-type/dist",
     "^@cocrepo/decorator$": "<rootDir>/../be-decorator/dist",
     "^@cocrepo/service$": "<rootDir>/../be-service/dist",
-    "^@cocrepo/facade$": "<rootDir>/../be-facade/dist",
   },
   transform: {
     "^.+\\.ts$": [

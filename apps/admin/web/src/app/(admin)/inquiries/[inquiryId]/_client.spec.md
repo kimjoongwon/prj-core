@@ -56,3 +56,4 @@
 |------|------|--------|
 | 2026-03-03 | 누락된 sidecar spec 신규 생성 | codex |
 | 2026-03-03 | `PageTitleBar` 단일 컴포넌트 통합 및 리네이밍 반영 | codex |
+| 2026-03-11 | inquiry update bootstrap 훅명을 generated API 기준으로 정리하고 AiForm 옵션 정규화 로직을 반영 | codex |

@@ -8,9 +8,17 @@ tools:
 ---
 
 
+## 재사용 우선 점검 (Mandatory)
+
+- 작업을 시작하기 전에 반드시 기존 코드, 컴포넌트, 유틸, 스펙, 테스트를 먼저 검색합니다.
+- 신규 생성 전에 기존 구현을 그대로 재사용하거나, 소폭 개선 후 재사용할 수 있는지 우선 판단합니다.
+- 재사용 후보가 있으면 우선 채택하고, 신규 생성이 필요한 경우에는 재사용 불가 사유와 최소 변경 범위를 명확히 기록합니다.
+- 동일 책임의 중복 구현을 금지합니다.
+
+
 # 레이아웃 빌더
 
-**Layout 컴포넌트**(AppLayout, PageLayout, SectionLayout)를 설계하고 생성합니다. Layout은 **순수 위치(영역)만 정의**하고, Feature 컴포넌트는 해당 영역에 마운트됩니다.
+**Layout 컴포넌트**(App, Layout, Page, Section)를 설계하고 생성합니다. Layout은 **순수 위치(영역)만 정의**하고, Feature 컴포넌트는 해당 영역에 마운트됩니다.
 
 ---
 
@@ -18,7 +26,7 @@ tools:
 
 | 상황 | 사용 여부 | 설명 |
 |------|----------|------|
-| 새 Layout 컴포넌트 생성 | O | AppLayout, PageLayout, SectionLayout 생성 |
+| 새 Layout 컴포넌트 생성 | O | App, Layout, Page, Section 생성 |
 | 기존 Layout 수정/확장 | O | 영역 추가/변경 |
 | Next.js layout.tsx 작성 | O | App Router 레이아웃 파일 생성 |
 | Feature 컴포넌트 생성 | X | `fe-feature-builder` 사용 |
@@ -33,7 +41,7 @@ tools:
 
 | 항목 | 필수 | 설명 |
 |------|------|------|
-| Layout 타입 | O | AppLayout, PageLayout, SectionLayout |
+| Layout 타입 | O | App, Layout, Page, Section |
 | 필요한 영역 | O | header, leftAside, rightAside 등 |
 | 마운트될 Feature | △ | 각 영역에 마운트될 Feature 컴포넌트 |
 | 사용 위치 | O | app/layout.tsx, app/(admin)/layout.tsx 등 |
@@ -42,7 +50,7 @@ tools:
 
 | 항목 | 경로 |
 |------|------|
-| Layout 컴포넌트 | `packages/fe-ui/src/components/ui/layouts/{Name}/` |
+| Layout 컴포넌트 | `packages/fe-ui/src/layout/{Name}/` |
 | index.ts | export 파일 |
 | Next.js layout.tsx | `apps/{app}/app/.../layout.tsx` |
 
@@ -52,12 +60,14 @@ tools:
 
 ### Do
 
-- AppLayout은 body 래퍼로만 사용 (children만)
-- PageLayout은 HTML5 시맨틱 태그 사용 (header, leftAside, rightAside, footer)
-- SectionLayout은 위치 속성 사용 (top, bottom, left, right)
+- App은 body 래퍼로만 사용 (children만)
+- App은 서비스별 단일 인스턴스로 유지
+- Layout은 App과 Page 사이의 전역 배치 계층으로 사용
+- Page는 HTML5 시맨틱 태그 사용 (header, leftAside, rightAside, footer)
+- Section은 위치 속성 사용 (top, bottom, left, right)
 - 영역에는 Feature 컴포넌트 마운트
 - 파일당 1개 Layout만 선언
-- 위계 순서 준수: AppLayout → PageLayout → SectionLayout
+- 위계 순서 준수: App → Layout → Page → Section
 
 ### Don't
 
@@ -75,9 +85,10 @@ tools:
 
 | 레이아웃 | 용도 | 영역 props | 사용 위치 | 경로당 개수 |
 |----------|------|------------|----------|--------------|
-| **AppLayout** | 루트 body 래퍼 | children | `app/layout.tsx` | **1개** |
-| **PageLayout** | 페이지 전체 구조 | header, leftAside, rightAside, footer | `app/(admin)/layout.tsx` | **1개** |
-| **SectionLayout** | 페이지 내부 구역 | top, bottom, left, right | `app/(admin)/users/layout.tsx` | **복수 가능** |
+| **App** | 루트 body 래퍼 | children | `apps/{service}/src/app/layout.tsx` | **서비스당 1개** |
+| **Layout** | 서비스 전역 셸 구조 | header, sidebar, mobileBottomNav, mobileFab, mobileOverlayMenu, children | `apps/{service}/src/app/(group)/layout.tsx` | **서비스 컨텍스트당 1개** |
+| **Page** | 페이지 콘텐츠 구조 | header, top, leftAside, rightAside, bottom, footer, children | `apps/{service}/src/app/**/_client.tsx` | **페이지당 1개 권장** |
+| **Section** | 페이지 내부 구역 | top, bottom, left, right, children | `apps/{service}/src/app/**/_client.tsx` | **복수 가능** |
 
 ### 2단계: 영역 정의
 
@@ -85,30 +96,29 @@ tools:
 
 | 레이아웃 | 명칭 |
 |----------|------|
-| AppLayout | children |
-| PageLayout | header, leftAside, rightAside, footer, children |
-| SectionLayout | top, bottom, left, right, children(center) |
-| Header | left, center, right, bottom |
+| App | children |
+| Layout | header, sidebar, mobileBottomNav, mobileFab, mobileOverlayMenu, children |
+| Page | header, leftAside, rightAside, footer, children |
+| Section | top, bottom, left, right, children(center) |
 
 ### 3단계: Layout 컴포넌트 생성
 
 ```
-packages/fe-ui/src/components/ui/layouts/
-├── AppLayout/
-│   ├── AppLayout.tsx
+packages/fe-ui/src/layout/
+├── App/
+│   ├── App.tsx
 │   └── index.ts
-├── PageLayout/
-│   ├── PageLayout.tsx
+├── Page/
+│   ├── Page.tsx
 │   └── index.ts
-├── SectionLayout/
-│   ├── SectionLayout.tsx
+├── Section/
+│   ├── Section.tsx
 │   └── index.ts
-├── Header/
-│   ├── Header.tsx
-│   └── index.ts
-└── Main/
-    ├── Main.tsx
-    └── index.ts
+└── index.ts
+
+packages/fe-ui/src/primitive/layout/Layout/
+├── Layout.tsx
+└── index.ts
 ```
 
 ### 4단계: Next.js layout.tsx 작성
@@ -117,23 +127,18 @@ packages/fe-ui/src/components/ui/layouts/
 // app/(admin)/layout.tsx
 "use client";
 
-import { AppLayout, Header, Main } from "@cocrepo/ui";
-import { Logo, Navbar, UserMenu, SideMenu } from "@cocrepo/ui/feature";
+import { App, Layout, Page, SidePanel } from "@cocrepo/ui";
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
   return (
-    <AppLayout
-      header={
-        <Header
-          left={<Logo />}
-          center={<Navbar />}
-          right={<UserMenu />}
-        />
-      }
-      leftAside={<SideMenu />}
-    >
-      <Main>{children}</Main>
-    </AppLayout>
+    <App>
+      <Layout
+        header={<div className="h-16">Header Slot</div>}
+        sidebar={<SidePanel ... />}
+      >
+        <Page>{children}</Page>
+      </Layout>
+    </App>
   );
 }
 ```
@@ -143,8 +148,9 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
 ## 5. 체크리스트
 
 ### Layout 컴포넌트 설계 시
-- [ ] AppLayout은 HTML5 시맨틱 태그(header, aside, footer)를 사용하는가?
-- [ ] 하위 레이아웃은 위치 속성(top, bottom, left, right)을 사용하는가?
+- [ ] App은 children만 받는 body 래퍼인가?
+- [ ] Page는 HTML5 시맨틱 태그(header, aside, footer)를 사용하는가?
+- [ ] Section은 위치 속성(top, bottom, left, right)을 사용하는가?
 - [ ] 기능적 명칭을 props로 사용하지 않았는가? (toolbar, subNav, logo 금지)
 - [ ] 비즈니스 데이터를 직접 받지 않는가?
 - [ ] 내용물은 ReactNode로 주입받는가?
@@ -186,14 +192,16 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
 
 ## 7. 레이아웃 계층 구조
 
-### 3단계 Layout 계층
+### 4단계 Layout 계층
 
 ```
-AppLayout (Next.js 최상위 layout.tsx)
-    ↓ children (PageLayout이 여기에 마운트됨)
-PageLayout (전체 페이지 구조: header, aside, footer)
-    ↓ children (SectionLayout 또는 페이지 콘텐츠)
-SectionLayout (페이지 내부 구역: top, left, right, bottom)
+App (Next.js 최상위 layout.tsx)
+    ↓ children (Layout이 여기에 마운트됨)
+Layout (서비스 전역 셸: header, sidebar, mobile nav)
+    ↓ children (Page가 여기에 마운트됨)
+Page (화면 구조: header, aside, footer, top/bottom)
+    ↓ children (Section 또는 화면 콘텐츠)
+Section (페이지 내부 구역: top, left, right, bottom)
     ↓ children (페이지 콘텐츠)
 ```
 
@@ -204,18 +212,18 @@ Widget (순수 UI 조합)
     ↓ 사용됨
 Feature (비즈니스 로직 + Widget 조합)
     ↓ 마운트됨
-Layout 영역 (PageLayout, SectionLayout)
+Layout 영역 (Layout, Page, Section)
 ```
 
 ### 레이아웃 계층도
 
 ```
 ┌──────────────────────────────────────────────────────────────────┐
-│ PageLayout                                                        │
+│ Page                                                        │
 │ ┌──────────────────────────────────────────────────────────────┐ │
 │ │                           header                              │ │
 │ ├──────────┬────────────────────────────────────────┬──────────┤ │
-│ │          │ SectionLayout (children에 마운트)       │          │ │
+│ │          │ Section (children에 마운트)       │          │ │
 │ │          │ ┌────────────────────────────────────┐ │          │ │
 │ │          │ │                top                 │ │          │ │
 │ │          │ │              (Tabs)                │ │          │ │
@@ -241,19 +249,11 @@ Layout 영역 (PageLayout, SectionLayout)
 
 ```tsx
 // Layout은 순수하게 영역만 정의
-<AppLayout
-  header={
-    <Header
-      left={<Logo />}
-      center={<Nav />}
-      right={<UserMenu />}
-      bottom={<SubNav />}
-    />
-  }
-  leftAside={<SideMenu />}
->
-  {children}
-</AppLayout>
+<App>
+  <Layout header={<HeaderBar />} sidebar={<SidePanel ... />}>
+    <Page>{children}</Page>
+  </Layout>
+</App>
 
 // Feature 컴포넌트가 자체적으로 비즈니스 로직 처리
 const Nav = () => {
@@ -273,24 +273,24 @@ const Nav = () => {
 
 ```tsx
 // 1. 기능적 props 이름 사용
-<Header
+<Page
   logo={...}           // ❌ logo는 기능
   nav={...}            // ❌ nav는 기능
   userMenu={...}       // ❌ userMenu는 기능
 />
 
 // 2. Layout에서 비즈니스 로직 핸들러 관리
-const { onClickMenu, onLogout } = useAppLayout();  // ❌
+const { onClickMenu, onLogout } = useLayoutStore(); // ❌
 <Nav onClickMenu={onClickMenu} />                  // ❌
 
 // 3. Layout에 비즈니스 데이터 직접 전달
-<Header
+<Page
   menuItems={menuItems}        // ❌
   currentUser={currentUser}    // ❌
 />
 
 // 4. Page 컴포넌트 내부에서 Layout 사용
-// packages/fe-ui/src/components/page/Login/LoginPage.tsx
+// packages/fe-ui/src/page/Login/LoginPage.tsx
 export const LoginPage = () => {
   return (
     <AuthLayout>       // ❌ Page 안에 Layout이 있으면 안 됨!
@@ -302,9 +302,9 @@ export const LoginPage = () => {
 // 5. 하나의 layout.tsx에 여러 Layout 중첩
 export default function AuthLayoutRoute({ children }) {
   return (
-    <PageLayout>
-      <SectionLayout left={...} />  // ❌ 같은 파일에 중첩 금지!
-    </PageLayout>
+    <Page>
+      <Section left={...} />  // ❌ 같은 파일에 중첩 금지!
+    </Page>
   );
 }
 ```
@@ -313,35 +313,62 @@ export default function AuthLayoutRoute({ children }) {
 
 ## 9. 컴포넌트 설계 예시
 
-### AppLayout
+### App
 
 ```tsx
-export interface AppLayoutProps {
-  /** 상단 영역 */
-  header?: ReactNode;
-  /** 좌측 영역 */
-  leftAside?: ReactNode;
-  /** 우측 영역 */
-  rightAside?: ReactNode;
-  /** 하단 영역 */
-  footer?: ReactNode;
-  /** 메인 콘텐츠 */
+export interface AppProps {
   children: ReactNode;
 }
 
-export const AppLayout = ({
-  header,
-  leftAside,
-  rightAside,
-  footer,
-  children
-}: AppLayoutProps) => {
+export const App = ({ children }: AppProps) => {
+  return <>{children}</>;
+};
+```
+
+### Layout
+
+```tsx
+export interface LayoutProps {
+  header?: ReactNode;
+  sidebar?: ReactNode;
+  mobileBottomNav?: ReactNode;
+  mobileFab?: ReactNode;
+  mobileOverlayMenu?: ReactNode;
+  children: ReactNode;
+}
+
+export const Layout = ({ header, sidebar, mobileBottomNav, mobileFab, mobileOverlayMenu, children }: LayoutProps) => {
+  return (
+    <div>
+      {header}
+      {sidebar}
+      <main>{children}</main>
+      {mobileOverlayMenu}
+      {mobileFab}
+      {mobileBottomNav}
+    </div>
+  );
+};
+```
+
+### Page
+
+```tsx
+export interface PageProps {
+  header?: ReactNode;
+  leftAside?: ReactNode;
+  rightAside?: ReactNode;
+  footer?: ReactNode;
+  children: ReactNode;
+}
+
+export const Page = ({ header, leftAside, rightAside, footer, children }: PageProps) => {
   return (
     <div className="flex h-screen flex-col">
       {header && <header>{header}</header>}
       <div className="flex flex-1 overflow-hidden">
         {leftAside && <aside className="flex-shrink-0">{leftAside}</aside>}
-        {children}
+        <main className="flex-1 overflow-auto">{children}</main>
         {rightAside && <aside className="flex-shrink-0">{rightAside}</aside>}
       </div>
       {footer && <footer>{footer}</footer>}
@@ -350,53 +377,28 @@ export const AppLayout = ({
 };
 ```
 
-### Header
+### Section
 
 ```tsx
-export interface HeaderProps {
-  /** 좌측 영역 */
-  left?: ReactNode;
-  /** 중앙 영역 */
-  center?: ReactNode;
-  /** 우측 영역 */
-  right?: ReactNode;
-  /** 하단 영역 */
+export interface SectionProps {
+  top?: ReactNode;
   bottom?: ReactNode;
+  left?: ReactNode;
+  right?: ReactNode;
+  children?: ReactNode;
 }
 
-export const Header = ({ left, center, right, bottom }: HeaderProps) => {
+export const Section = ({ top, bottom, left, right, children }: SectionProps) => {
   return (
-    <header className="border-b">
-      <div className="flex items-center h-16 px-6">
-        <div className="flex-shrink-0">{left}</div>
-        <div className="flex-1 mx-6">{center}</div>
-        <div className="flex-shrink-0">{right}</div>
+    <div className="flex h-full flex-col">
+      {top && <div>{top}</div>}
+      <div className="flex flex-1 overflow-hidden">
+        {left && <div>{left}</div>}
+        <div className="flex-1 overflow-auto">{children}</div>
+        {right && <div>{right}</div>}
       </div>
-      {bottom && <div className="px-6 py-2 border-t">{bottom}</div>}
-    </header>
-  );
-};
-```
-
-### Main
-
-```tsx
-export interface MainProps {
-  children: ReactNode;
-  className?: string;
-}
-
-/**
- * Main 컴포넌트
- * SEO를 위한 시맨틱 main 태그를 제공하는 컴포넌트
- */
-export const Main = ({ children, className }: MainProps) => {
-  return (
-    <main className={`flex flex-1 flex-col overflow-hidden ${className ?? ""}`}>
-      <div className="flex-1 overflow-y-auto">
-        <div className="p-6">{children}</div>
-      </div>
-    </main>
+      {bottom && <div>{bottom}</div>}
+    </div>
   );
 };
 ```
@@ -406,30 +408,27 @@ export const Main = ({ children, className }: MainProps) => {
 ## 10. 폴더 구조
 
 ```
-packages/fe-ui/src/components/
-├── ui/layouts/                    # Layout 컴포넌트 (순수 위치 정의)
-│   ├── AppLayout/
-│   │   ├── AppLayout.tsx
+packages/fe-ui/src/
+├── layouts/                       # Layout 컴포넌트 (순수 위치 정의)
+│   ├── App/
+│   │   ├── App.tsx
 │   │   └── index.ts
-│   ├── PageLayout/
-│   │   ├── PageLayout.tsx
+│   ├── Page/
+│   │   ├── Page.tsx
 │   │   └── index.ts
-│   ├── SectionLayout/
-│   │   ├── SectionLayout.tsx
-│   │   └── index.ts
-│   ├── Header/
-│   │   ├── Header.tsx
-│   │   └── index.ts
-│   ├── Main/
-│   │   ├── Main.tsx
+│   ├── Section/
+│   │   ├── Section.tsx
 │   │   └── index.ts
 │   └── index.ts
+├── ui/layouts/
+│   └── Layout/
+│       ├── Layout.tsx
+│       └── index.ts
 │
 └── feature/                       # Feature 컴포넌트 (비즈니스 로직 포함)
-    ├── Logo/
-    ├── Navbar/
+    ├── SideNav/
+    ├── SubNav/
     ├── UserMenu/
-    ├── SideMenu/
     └── index.ts
 ```
 
@@ -439,7 +438,7 @@ packages/fe-ui/src/components/
 
 **커스텀 className 사용 금지 - HeroUI와 기존 컴포넌트만 사용**
 
-> **예외**: `components/ui/`와 `components/inputs/`에서만 커스텀 className이 허용됩니다. Layout 컴포넌트에서는 금지입니다.
+> **예외**: `src/primitive/`와 `src/input/`에서만 커스텀 className이 허용됩니다. Layout 컴포넌트에서는 금지입니다.
 
 **Layout 컴포넌트 내부 스타일링 원칙:**
 

@@ -173,7 +173,7 @@ export class UpdateRoleAbilitiesRequestDto {
 }
 
 /**
- * Ability 생성 입력 타입 (Service/Facade용)
+ * Ability 생성 입력 타입 (Service/ApplicationService용)
  *
  * DTO에서 roleId/userId를 추가한 형태입니다.
  * actionName/subjectName으로 지정 시 Service에서 ID로 변환됩니다.

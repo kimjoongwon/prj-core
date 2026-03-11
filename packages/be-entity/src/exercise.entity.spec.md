@@ -9,7 +9,7 @@
 
 태스크(Task)에 연결된 운동 정보를 담는 엔티티입니다. 운동의 이름, 소요 시간, 횟수, 이미지/동영상 파일 등 운동 콘텐츠 세부 정보를 저장합니다. 하나의 태스크에는 하나의 Exercise가 연결됩니다.
 
-관리자 UI(`/exercises`)에서 CRUD를 제공하며, Routine 구성(Activity 추가)의 기반 데이터가 됩니다.
+관리자 UI에서는 `Task` aggregate root 아래의 1:1 detail로 노출되며, `/tasks` 목록과 `/tasks/[taskId]/exercise` 상세 경로를 통해 관리됩니다. Routine 구성(Activity 추가)의 기반 데이터가 됩니다.
 
 ## 필드
 
@@ -47,7 +47,7 @@
 - `duration`은 초 단위로 저장됩니다. UI에서는 분:초로 변환하여 표시합니다.
 - `imageFileId`와 `videoFileId`는 Asset 도메인 리소스 식별자를 참조합니다.
 - 운동 콘텐츠 미디어(이미지, 동영상)는 선택 사항입니다.
-- Exercise 등록 시 서버에서 Task를 자동으로 함께 생성합니다.
+- Exercise 등록 시 서버에서 Task root를 자동으로 함께 생성합니다.
 - Activity에서 사용 중인 Exercise는 삭제할 수 없습니다 (서버에서 409 에러 반환).
 - Space 계층 공유: 상위 Space의 Exercise를 하위 Space의 Routine에서 사용할 수 있습니다.
 
@@ -55,10 +55,10 @@
 
 | 화면 | 경로 | 설명 |
 |------|------|------|
-| 목록 | `/exercises` | 이름 검색, Space 범위 필터, 삭제 |
-| 등록 | `/exercises/new` | Task 자동 생성 포함 |
-| 상세 | `/exercises/[exerciseId]` | 사용 루틴 목록 표시 |
-| 수정 | `/exercises/[exerciseId]/edit` | 미디어 변경 포함 |
+| 목록 | `/tasks` | 이름 검색, Space 범위 필터, 삭제 |
+| 등록 | `/tasks/new` | Task root + Exercise detail 동시 생성 |
+| 상세 | `/tasks/[taskId]/exercise` | 사용 루틴 목록 표시 |
+| 수정 | `/tasks/[taskId]/exercise/edit` | 미디어 변경 포함 |
 
 ## 구현 체크리스트
 
@@ -74,3 +74,4 @@
 | 2026-03-06 | File 도메인 제거에 맞춰 미디어 참조 설명을 Asset 기준으로 수정 | codex |
 | 2026-02-19 | 초기 생성 (역기획) | req-reverse-engineer |
 | 2026-02-19 | 관리자 UI 기획 완료 반영 (비즈니스 규칙 보완, UI 연동 섹션 추가) | req-entity-planner |
+| 2026-03-11 | Exercise를 Task aggregate의 1:1 detail child로 재정의하고 `/tasks` 기반 UI 경로로 갱신 | codex |

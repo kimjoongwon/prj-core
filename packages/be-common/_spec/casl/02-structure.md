@@ -123,8 +123,8 @@ packages/
 │   ├── src/abilities.service.ts      # Ability 비즈니스 로직
 │   └── src/grants.service.ts         # Grant 비즈니스 로직
 │
-├── facade/
-│   └── src/abilities.facade.ts       # Ability + Grant 조합
+├── app/
+│   └── src/abilities.application-service.ts  # Ability + Grant 유즈케이스 조합
 │
 ├── repository/
 │   ├── src/roles.repository.ts

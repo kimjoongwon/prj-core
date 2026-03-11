@@ -261,7 +261,7 @@ fi
 | `/orch-requirement` | 상위 | 전체 기획 흐름 조율 |
 | `/req-entity-planner` | 다음 단계 | 데이터모델(Entity/VO) 기획 |
 | `/req-page-planner` | 다음 단계 | 페이지 통합 기획 |
-| `/req-ui-planner` | 다음 단계 | Pure UI 기획 |
+| `/req-primitive-planner` | 다음 단계 | Pure UI 기획 |
 | `/req-input-planner` | 다음 단계 | Input 컴포넌트 기획 |
 | `/req-cell-planner` | 다음 단계 | Cell 컴포넌트 기획 |
 | `/req-widget-planner` | 다음 단계 | Widget 컴포넌트 기획 |

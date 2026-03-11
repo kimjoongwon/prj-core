@@ -90,9 +90,9 @@ validateUser(email, password, ipAddress, userAgent, clientId):
         return { success: true, userId: user.id, mustChangePassword }
 ```
 
-### 로그아웃 완성 로직 (AuthFacade 강화)
+### 로그아웃 완성 로직 (AuthApplicationService 강화)
 
-**위치**: `packages/be-facade/src/auth.facade.ts`
+**위치**: `packages/be-app/src/auth.application-service.ts`
 
 ```
 logoutWithCookie(accessToken, res):
@@ -192,7 +192,7 @@ executeReset(rawToken, newPassword):
 
 ### 세션 조회 로직
 
-**위치**: `packages/be-facade/src/auth.facade.ts` 또는 새 서비스
+**위치**: `packages/be-app/src/auth.application-service.ts` 또는 `packages/be-integration/src/oidc.facade.ts`
 
 ```
 getMySession(userId, currentAccessToken):
@@ -309,7 +309,7 @@ describe("로그인 검증", () => {
 })
 ```
 
-#### 유닛 테스트: AuthFacade (로그아웃)
+#### 유닛 테스트: AuthApplicationService (로그아웃)
 
 ```
 describe("로그아웃", () => {
@@ -477,7 +477,7 @@ describe("SessionCard", () => {
 2. AuthAuditLog 모델 + Prisma migrate
 3. DirectUserRepository 확장 (잠금 관리 메서드)
 4. InteractionService 로그인 검증 강화 (실패 제한 + 잠금 + 감사 로그)
-5. AuthFacade 로그아웃 강화 (블랙리스트 + Refresh Token 삭제)
+5. AuthApplicationService 로그아웃 강화 (블랙리스트 + Refresh Token 삭제)
 6. LoginForm UI 수정 (남은 시도, 잠금 배너, 비밀번호 찾기 링크)
 7. Axios 인터셉터 세션 만료 메시지 개선
 ```
@@ -534,7 +534,7 @@ describe("SessionCard", () => {
 | `apps/idp/api/src/module/oidc/direct-user.repository.ts` | 잠금 관리 메서드 추가 |
 | `apps/idp/api/src/module/interaction/interaction.service.ts` | 로그인 검증 강화 |
 | `apps/idp/api/src/module/interaction/interaction.controller.ts` | 에러 응답 포맷 변경 |
-| `packages/be-facade/src/auth.facade.ts` | logoutWithCookie 강화 |
+| `packages/be-app/src/auth.application-service.ts` | logoutWithCookie 강화 |
 | `apps/idp/web/src/app/interaction/[uid]/_components/LoginForm.tsx` | 잠금 UI, 남은 시도, 링크 |
 
 ### Phase 2

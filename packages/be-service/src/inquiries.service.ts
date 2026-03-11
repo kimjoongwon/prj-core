@@ -1,14 +1,18 @@
-import { Inquiry } from "@cocrepo/entity";
+import { Inquiry, InquiryMessage, InquiryParticipant } from "@cocrepo/entity";
 import {
 	InquiryCategory,
 	InquiryChannel,
+	type InquiryParticipantRole,
 	InquiryPriority,
 	InquirySource,
 	type InquiryStatus,
+	type MessageContentType,
 	type Prisma,
+	type SenderType,
 	type SentimentType,
 } from "@cocrepo/prisma";
 import { InquiriesRepository } from "@cocrepo/repository";
+import { Transactional } from "@nestjs-cls/transactional";
 import {
 	BadRequestException,
 	Injectable,
@@ -366,18 +370,40 @@ export class InquiriesService {
 	/**
 	 * 문의 생성 (문의 번호 자동 생성)
 	 */
+	@Transactional()
 	async create(
 		data: Omit<Prisma.InquiryUncheckedCreateInput, "inquiryNumber">,
+		actorUserId: string,
+		initialContent?: string | null,
 	): Promise<Inquiry> {
 		this.logger.debug("문의 생성 중...");
 
 		// 문의 번호 자동 생성 (YYYYMMDD-NNNN 형식)
 		const inquiryNumber = this.generateInquiryNumber();
 
-		return this.repository.create({
+		const inquiry = await this.repository.create({
 			...data,
 			inquiryNumber,
 		});
+
+		const defaultThread = await this.repository.createThread({
+			inquiryId: inquiry.id,
+			createdBy: data.customerId ?? actorUserId,
+			title: inquiry.title,
+		});
+
+		if (initialContent && initialContent.trim().length > 0) {
+			await this.sendMessage({
+				inquiryId: inquiry.id,
+				actorUserId: data.customerId ?? actorUserId,
+				threadId: defaultThread.id,
+				content: initialContent,
+				contentType: "TEXT",
+				senderType: "USER",
+			});
+		}
+
+		return this.findByIdWithDetails(inquiry.id);
 	}
 
 	/**
@@ -405,6 +431,124 @@ export class InquiriesService {
 		await this.findById(id);
 
 		return this.repository.removeById(id);
+	}
+
+	// ============================================================================
+	// 메시지/참여자
+	// ============================================================================
+
+	async listMessages(params: {
+		inquiryId: string;
+		skip?: number;
+		take?: number;
+	}): Promise<{ items: InquiryMessage[]; totalCount: number }> {
+		await this.findById(params.inquiryId);
+		return this.repository.findMessagesByInquiryId(params);
+	}
+
+	async sendMessage(params: {
+		inquiryId: string;
+		actorUserId: string;
+		threadId?: string;
+		content: string;
+		contentType?: MessageContentType;
+		senderType?: SenderType;
+		clientMessageId?: string;
+	}): Promise<InquiryMessage> {
+		const inquiry = await this.findById(params.inquiryId);
+		if (inquiry.status === "CLOSED") {
+			throw new BadRequestException("종료된 문의에는 메시지를 전송할 수 없습니다");
+		}
+
+		const thread = params.threadId
+			? await this.repository.findThreadById(params.threadId)
+			: await this.repository.findDefaultThreadByInquiryId(params.inquiryId);
+
+		if (!thread || thread.inquiryId !== params.inquiryId) {
+			throw new NotFoundException("문의 스레드를 찾을 수 없습니다");
+		}
+
+		if (params.clientMessageId) {
+			const exists = await this.repository.existsMessageByClientMessageId(
+				thread.id,
+				params.clientMessageId,
+			);
+			if (exists) {
+				throw new BadRequestException(
+					"이미 처리된 메시지입니다 (중복 clientMessageId)",
+				);
+			}
+		}
+
+		const senderType = params.senderType ?? "USER";
+		const message = await this.repository.createMessage({
+			inquiryId: params.inquiryId,
+			threadId: thread.id,
+			senderId: params.actorUserId,
+			content: params.content,
+			contentType: params.contentType ?? "TEXT",
+			senderType,
+			clientMessageId: params.clientMessageId,
+		});
+
+		await Promise.all([
+			this.repository.touchThreadAfterMessage(thread.id, params.content),
+			this.repository.recordMessageActivityById(params.inquiryId),
+			this.repository.incrementParticipantUnreadByInquiryId(
+				params.inquiryId,
+				params.actorUserId,
+			),
+		]);
+
+		if (inquiry.customerId !== params.actorUserId) {
+			await this.repository.recordFirstResponseById(params.inquiryId);
+		}
+
+		return message;
+	}
+
+	async getParticipants(inquiryId: string): Promise<InquiryParticipant[]> {
+		await this.findById(inquiryId);
+		return this.repository.findParticipantsByInquiryId(inquiryId);
+	}
+
+	async joinParticipant(params: {
+		inquiryId: string;
+		userId: string;
+		threadId?: string;
+		role?: InquiryParticipantRole;
+	}): Promise<InquiryParticipant> {
+		await this.findById(params.inquiryId);
+
+		if (params.threadId) {
+			const thread = await this.repository.findThreadById(params.threadId);
+			if (!thread || thread.inquiryId !== params.inquiryId) {
+				throw new NotFoundException("문의 스레드를 찾을 수 없습니다");
+			}
+		}
+
+		const existing = await this.repository.findParticipantByInquiryIdAndUserId(
+			params.inquiryId,
+			params.userId,
+		);
+
+		if (existing) {
+			return this.repository.updateParticipantOnlineStatusById(
+				existing.id,
+				true,
+			);
+		}
+
+		return this.repository.createParticipant({
+			inquiryId: params.inquiryId,
+			userId: params.userId,
+			threadId: params.threadId ?? null,
+			role: params.role ?? "VIEWER",
+			isOnline: true,
+			isTyping: false,
+			unreadCount: 0,
+			joinedAt: new Date(),
+		});
 	}
 
 	// ============================================================================
@@ -511,7 +655,7 @@ export class InquiriesService {
 
 	/**
 	 * 감정 분석
-	 * 실제 구현은 별도 AI 서비스 또는 Facade에서 처리
+	 * 실제 구현은 별도 AI 서비스 또는 ApplicationService에서 처리
 	 */
 	async analyzeSentiment(inquiryId: string): Promise<SentimentAnalysisResult> {
 		this.logger.debug(`감정 분석 요청: ${inquiryId.slice(-8)}`);

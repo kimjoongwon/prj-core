@@ -3,11 +3,16 @@
 > 생성일: {{createdDate}}
 > 수정일: {{modifiedDate}}
 > 타입: controller
-> 위치: apps/server/src/{{module}}/controllers/{{controllerName}}.ts
+> 위치: apps/core/api/src/module/{{module}}/{{controllerName}}.ts
 
 ## 역할
 
 {{description}}
+
+## 계층 연결
+
+- Controller는 기본적으로 `@cocrepo/app`의 ApplicationService를 호출합니다.
+- `Controller -> ApplicationService -> Service -> Repository` 흐름을 유지합니다.
 
 ## 베이스 경로
 
@@ -104,6 +109,7 @@ Content-Type: application/json
 {{#if parentSpec}}
 - `{{parentSpec}}`
 {{/if}}
+- `apps/core/api/src/module/{{module}}/{{module}}.module.spec.md`
 
 ## 변경 이력
 

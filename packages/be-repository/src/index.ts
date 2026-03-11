@@ -7,17 +7,9 @@ export { AbilitiesRepository } from "./abilities.repository";
 export { ActionsRepository } from "./actions.repository";
 export { AuthAuditLogsRepository } from "./auth-audit-logs.repository";
 export { CategoriesRepository } from "./categories.repository";
-export { ExercisesRepository } from "./exercises.repository";
 export { GrantsRepository } from "./grants.repository";
 export { GroupsRepository } from "./groups.repository";
-export { GroundsRepository } from "./grounds.repository";
-// Inquiry Domain Repositories
-export {
-	InquiriesRepository,
-	InquiryMessagesRepository,
-	InquiryParticipantsRepository,
-	InquiryThreadsRepository,
-} from "./inquiries";
+export { InquiriesRepository } from "./inquiries.repository";
 export { OidcClientsRepository } from "./oidc-clients.repository";
 export { OidcModelsRepository } from "./oidc-models.repository";
 export { RolesRepository } from "./roles.repository";
@@ -25,6 +17,7 @@ export { RoutinesRepository } from "./routines.repository";
 export { SecurityPoliciesRepository } from "./security-policies.repository";
 export { SpacesRepository } from "./spaces.repository";
 export { SubjectsRepository } from "./subjects.repository";
+export { TasksRepository } from "./tasks.repository";
 export { TemplatesRepository } from "./templates.repository";
 export { TimelinesRepository } from "./timelines.repository";
 export { TranslationsRepository } from "./translations.repository";

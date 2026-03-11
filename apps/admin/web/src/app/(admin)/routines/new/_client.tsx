@@ -2,9 +2,9 @@
 import { Page, PageTitleBar, Section } from "@cocrepo/ui";
 import {
 	type CreateRoutineActivityItemDto,
-	type ExerciseDto,
+	type TaskDto,
 	useCreateRoutine,
-	useGetExercises,
+	useGetTasks,
 } from "@cocrepo/api";
 import {
 	addToast,
@@ -62,14 +62,13 @@ function RoutineNewPageClient() {
 		errors: {} as Record<string, string>,
 	}));
 
-	const { data: exercisesResponse, isLoading: isExercisesLoading } =
-		useGetExercises({
+	const { data: tasksResponse, isLoading: isTasksLoading } = useGetTasks({
 			take: 30,
 			skip: 0,
 			search: state.exerciseQuery.trim() || undefined,
 			spaceScope: "INCLUDE_ANCESTORS",
 		});
-	const candidateExercises = (exercisesResponse?.data ?? []) as ExerciseDto[];
+	const candidateTasks = (tasksResponse?.data ?? []) as TaskDto[];
 
 	// 등록 Mutation
 	const { mutate: createRoutine, isPending } = useCreateRoutine({
@@ -157,10 +156,9 @@ function RoutineNewPageClient() {
 		state.exerciseQuery = value;
 	};
 
-	const onClickAddActivity = (exercise: ExerciseDto) => {
-		if (
-			state.activities.some((activity) => activity.taskId === exercise.taskId)
-		) {
+	const onClickAddActivity = (task: TaskDto) => {
+		const exercise = task.exercise;
+		if (state.activities.some((activity) => activity.taskId === task.id)) {
 			addToast({
 				title: "중복 운동",
 				description: "이미 추가된 운동입니다.",
@@ -170,7 +168,7 @@ function RoutineNewPageClient() {
 		}
 
 		state.activities.push({
-			taskId: exercise.taskId,
+			taskId: task.id,
 			exerciseName: exercise.name,
 			repetitions: String(exercise.count || 1),
 			restTime: "0",
@@ -258,30 +256,30 @@ function RoutineNewPageClient() {
 					/>
 					<div className="rounded-lg border border-default-200 p-3">
 						<div className="mb-2 text-sm text-default-500">후보 운동</div>
-						{isExercisesLoading ? (
+						{isTasksLoading ? (
 							<div className="flex items-center gap-2 text-sm text-default-500">
 								<Spinner size="sm" />
 								<span>운동 목록을 불러오는 중...</span>
 							</div>
-						) : candidateExercises.length === 0 ? (
+						) : candidateTasks.length === 0 ? (
 							<p className="text-sm text-default-500">검색 결과가 없습니다.</p>
 						) : (
 							<div className="flex flex-col gap-2">
-								{candidateExercises.map((exercise) => (
+								{candidateTasks.map((task) => (
 									<div
-										key={exercise.taskId}
+										key={task.id}
 										className="flex items-center justify-between rounded-md bg-content2 px-3 py-2"
 									>
 										<div>
-											<p className="font-medium">{exercise.name}</p>
+											<p className="font-medium">{task.exercise.name}</p>
 											<p className="text-xs text-default-500">
-												기본 반복 {exercise.count}회
+												기본 반복 {task.exercise.count}회
 											</p>
 										</div>
 										<Button
 											size="sm"
 											variant="flat"
-											onPress={() => onClickAddActivity(exercise)}
+											onPress={() => onClickAddActivity(task)}
 										>
 											추가
 										</Button>

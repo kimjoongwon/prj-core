@@ -3,7 +3,7 @@
 > 생성일: {{createdDate}}
 > 수정일: {{modifiedDate}}
 > 타입: service
-> 위치: apps/server/src/{{module}}/{{serviceName}}.ts
+> 위치: packages/be-service/src/{{serviceName}}.ts
 
 ## 역할
 
@@ -82,9 +82,9 @@
 
 | 구분 | 내용 |
 |------|------|
-| **Given** | Mock Repository, 입력 DTO |
+| **Given** | Mock Repository, 도메인 입력값 |
 | **When** | 메서드 호출 |
-| **Then** | 반환 DTO, Repository 호출 횟수 |
+| **Then** | 반환 Entity/VO, Repository 호출 횟수 |
 
 ## 상위 기획서
 

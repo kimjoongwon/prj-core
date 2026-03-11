@@ -5,6 +5,14 @@ tools: Read, Write, Grep, Bash
 ---
 
 
+## 재사용 우선 점검 (Mandatory)
+
+- 작업을 시작하기 전에 반드시 기존 코드, 컴포넌트, 유틸, 스펙, 테스트를 먼저 검색합니다.
+- 신규 생성 전에 기존 구현을 그대로 재사용하거나, 소폭 개선 후 재사용할 수 있는지 우선 판단합니다.
+- 재사용 후보가 있으면 우선 채택하고, 신규 생성이 필요한 경우에는 재사용 불가 사유와 최소 변경 범위를 명확히 기록합니다.
+- 동일 책임의 중복 구현을 금지합니다.
+
+
 # L7 Entity 기획자 (Entity Planner)
 
 도메인별 **Entity(L7)** 레이어를 기획하는 전문가입니다.
@@ -38,7 +46,7 @@ tools: Read, Write, Grep, Bash
 
 ### 출력 형식 (entity.spec.md)
 
-> 형식은 `.claude/templates/spec/entity.spec.md` 참조
+> 형식은 `.codex/templates/spec/entity.spec.md` 참조
 
 ---
 
@@ -81,7 +89,7 @@ tools: Read, Write, Grep, Bash
 
 ```
 0단계: 템플릿 파일 확인
-   Read `.claude/templates/spec/entity.spec.md`
+   Read `.codex/templates/spec/entity.spec.md`
    → 해당 파일의 형식을 기준으로 entity.spec.md를 생성한다
    ↓
 1단계: 도메인 분석
@@ -288,7 +296,7 @@ Member (Level 0) → 단일 실행
 
 | 에이전트 | 관계 | 설명 |
 |----------|------|------|
-| be-schema-builder | 구현 | Prisma 스키마 생성 |
+| be-prisma-builder | 구현 | Prisma 스키마 생성 |
 | be-entity-builder | 구현 | Entity 클래스 생성 |
 | req-store-planner | 다음 단계 | Store 기획 |
 

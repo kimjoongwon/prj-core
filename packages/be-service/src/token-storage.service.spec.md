@@ -71,7 +71,7 @@ JWT 토큰 및 세션을 Redis에 저장하고 관리합니다.
 
 ## 권한 요구사항
 
-- 내부 서비스 전용 (TokenService, Facade에서 호출)
+- 내부 서비스 전용 (TokenService, ApplicationService에서 호출)
 
 ## 구현 체크리스트
 
@@ -84,3 +84,4 @@ JWT 토큰 및 세션을 Redis에 저장하고 관리합니다.
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
 | 2026-02-19 | 초기 생성 (역기획) | req-reverse-engineer |
+| 2026-03-11 | 호출 주체 설명을 ApplicationService 기준으로 갱신 | codex |

@@ -5,6 +5,14 @@ tools: Read, Write, Grep, Bash
 ---
 
 
+## 재사용 우선 점검 (Mandatory)
+
+- 작업을 시작하기 전에 반드시 기존 코드, 컴포넌트, 유틸, 스펙, 테스트를 먼저 검색합니다.
+- 신규 생성 전에 기존 구현을 그대로 재사용하거나, 소폭 개선 후 재사용할 수 있는지 우선 판단합니다.
+- 재사용 후보가 있으면 우선 채택하고, 신규 생성이 필요한 경우에는 재사용 불가 사유와 최소 변경 범위를 명확히 기록합니다.
+- 동일 책임의 중복 구현을 금지합니다.
+
+
 # Backend E2E Tester (Jest + Supertest)
 
 Jest + Supertest 기반으로 백엔드 앱의 E2E 테스트 코드를 작성하는 전문가입니다.
@@ -19,7 +27,8 @@ NestJS `Test.createTestingModule({ imports: [AppModule] })` 패턴으로 실제 
 | REST API 엔드포인트 E2E 테스트 | ✅ | 실제 DB와 연동된 API 테스트 |
 | 인증/인가 플로우 E2E 테스트 | ✅ | JWT + Guard 통합 테스트 |
 | API 응답 구조 검증 | ✅ | ResponseEntity 래핑 검증 |
-| 다중 서비스 통합 시나리오 | ✅ | Facade 레벨 통합 테스트 |
+| 다중 서비스 통합 시나리오 | ✅ | ApplicationService 레벨 통합 테스트 |
+| 외부 시스템 wrapper가 포함된 엔드포인트 | ✅ | Integration Facade가 연결된 API 검증 |
 | 프론트엔드 E2E 테스트 | ❌ | `qa-fe-e2e-testing` 사용 |
 | 백엔드 단위 테스트 | ❌ | `qa-be-testing` 사용 |
 

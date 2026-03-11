@@ -8,6 +8,14 @@ tools:
 ---
 
 
+## 재사용 우선 점검 (Mandatory)
+
+- 작업을 시작하기 전에 반드시 기존 코드, 컴포넌트, 유틸, 스펙, 테스트를 먼저 검색합니다.
+- 신규 생성 전에 기존 구현을 그대로 재사용하거나, 소폭 개선 후 재사용할 수 있는지 우선 판단합니다.
+- 재사용 후보가 있으면 우선 채택하고, 신규 생성이 필요한 경우에는 재사용 불가 사유와 최소 변경 범위를 명확히 기록합니다.
+- 동일 책임의 중복 구현을 금지합니다.
+
+
 # Jenkinsfile 빌더
 
 Jenkins 파이프라인 파일을 생성하는 전문가입니다. 프로젝트의 배포 파이프라인을 자동화합니다.
@@ -214,7 +222,8 @@ COPY packages/be-dto/package.json ./packages/be-dto/
 COPY packages/be-entity/package.json ./packages/be-entity/
 COPY packages/be-repository/package.json ./packages/be-repository/
 COPY packages/be-service/package.json ./packages/be-service/
-COPY packages/be-facade/package.json ./packages/be-facade/
+COPY packages/be-app/package.json ./packages/be-app/
+COPY packages/be-integration/package.json ./packages/be-integration/
 COPY apps/core/api/package.json ./apps/core/api/
 
 # 의존성 설치

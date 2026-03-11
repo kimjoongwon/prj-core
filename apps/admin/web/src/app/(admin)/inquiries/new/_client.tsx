@@ -1,9 +1,31 @@
 "use client";
 
-import { getUsers, type InquiryCategory, type InquiryChannel, type InquiryPriority, useCreateInquiry, useFillInquiryFormWithAi, useGetInquiryCreateForm, } from "@cocrepo/api";
+import {
+	getUsers,
+	type InquiryCategory,
+	type InquiryChannel,
+	type InquiryPriority,
+	useCreateInquiry,
+	useFillInquiryFormWithAi,
+	useGetCreateInquiryForm,
+} from "@cocrepo/api";
 import { ADMIN_PATHS } from "@cocrepo/constant";
-import { AiForm, Button, Page, PageTitleBar, Section, VStack } from "@cocrepo/ui";
-import { Input, Select, SelectItem, type Selection, Textarea } from "@heroui/react";
+import type { AiFormOptionItem } from "@cocrepo/type";
+import {
+	AiForm,
+	Button,
+	Page,
+	PageTitleBar,
+	Section,
+	VStack,
+} from "@cocrepo/ui";
+import {
+	Input,
+	Select,
+	SelectItem,
+	type Selection,
+	Textarea,
+} from "@heroui/react";
 import { ArrowLeft } from "lucide-react";
 import { observer, useLocalObservable } from "mobx-react-lite";
 import type { Route } from "next";
@@ -29,12 +51,41 @@ const getSelectedValue = (keys: Selection): string => {
 	return selectedKey ? String(selectedKey) : "";
 };
 
+const normalizeAiFormOptionValue = (
+	value: unknown,
+): AiFormOptionItem["value"] => {
+	if (
+		typeof value === "string" ||
+		typeof value === "number" ||
+		typeof value === "boolean"
+	) {
+		return value;
+	}
+
+	return null;
+};
+
+const normalizeAiFormOptions = (
+	options?: Record<string, Array<{ value: unknown; label: string }>>,
+): Record<string, AiFormOptionItem[]> => {
+	return Object.fromEntries(
+		Object.entries(options ?? {}).map(([path, items]) => [
+			path,
+			items.map((item) => ({
+				value: normalizeAiFormOptionValue(item.value),
+				label: item.label,
+			})),
+		]),
+	);
+};
+
 function InquiriesNewPageClient() {
 	const router = useRouter();
-	const { data: bootstrapResponse, isLoading } = useGetInquiryCreateForm();
+	const { data: bootstrapResponse, isLoading } = useGetCreateInquiryForm();
 	const createInquiryMutation = useCreateInquiry();
 	const fillMutation = useFillInquiryFormWithAi();
 	const bootstrap = bootstrapResponse?.data;
+	const bootstrapOptions = normalizeAiFormOptions(bootstrap?.options);
 
 	const state = useLocalObservable(() => ({
 		initialized: false,
@@ -126,15 +177,15 @@ function InquiriesNewPageClient() {
 	const hiddenPaths = bootstrap?.ui.hiddenPaths ?? [];
 	const isHidden = (path: string) => hiddenPaths.includes(path);
 
-	const categoryOptions = (bootstrap?.options.category ?? []).map((item) => ({
+	const categoryOptions = (bootstrapOptions.category ?? []).map((item) => ({
 		value: String(item.value ?? ""),
 		text: item.label,
 	}));
-	const channelOptions = (bootstrap?.options.channel ?? []).map((item) => ({
+	const channelOptions = (bootstrapOptions.channel ?? []).map((item) => ({
 		value: String(item.value ?? ""),
 		text: item.label,
 	}));
-	const priorityOptions = (bootstrap?.options.priority ?? []).map((item) => ({
+	const priorityOptions = (bootstrapOptions.priority ?? []).map((item) => ({
 		value: String(item.value ?? ""),
 		text: item.label,
 	}));
@@ -183,7 +234,10 @@ function InquiriesNewPageClient() {
 			const inquiryId = result?.data?.id;
 			if (inquiryId) {
 				router.push(
-					ADMIN_PATHS.INQUIRIES_DETAIL.replace("[inquiryId]", inquiryId) as Route,
+					ADMIN_PATHS.INQUIRIES_DETAIL.replace(
+						"[inquiryId]",
+						inquiryId,
+					) as Route,
 				);
 				return;
 			}
@@ -220,7 +274,7 @@ function InquiriesNewPageClient() {
 							fieldMeta={bootstrap.fieldMeta}
 							aiSchemas={bootstrap.aiSchemas}
 							ui={bootstrap.ui}
-							options={bootstrap.options}
+							options={bootstrapOptions}
 							onFill={async (input) => {
 								const result = await fillMutation.mutateAsync({
 									data: {
@@ -231,9 +285,11 @@ function InquiriesNewPageClient() {
 										userPrompt: input.userPrompt,
 									},
 								});
-								return result?.data ?? {
-									patches: [],
-								};
+								return (
+									result?.data ?? {
+										patches: [],
+									}
+								);
 							}}
 							applyPatch={(patches) => {
 								state.applyPatch(patches);
@@ -273,7 +329,9 @@ function InquiriesNewPageClient() {
 												}}
 												className="w-full rounded-lg px-3 py-2 text-left transition-colors hover:bg-default-100"
 											>
-												<div className="text-sm font-medium">{customer.label}</div>
+												<div className="text-sm font-medium">
+													{customer.label}
+												</div>
 												<div className="text-xs text-default-500">
 													{customer.description || customer.id}
 												</div>
@@ -396,7 +454,9 @@ function InquiriesNewPageClient() {
 							<Button
 								color="primary"
 								onPress={onSubmit}
-								isLoading={state.isSubmitting || createInquiryMutation.isPending}
+								isLoading={
+									state.isSubmitting || createInquiryMutation.isPending
+								}
 								isDisabled={isLoading}
 							>
 								등록

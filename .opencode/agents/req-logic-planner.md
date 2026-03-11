@@ -8,6 +8,14 @@ tools:
 ---
 
 
+## 재사용 우선 점검 (Mandatory)
+
+- 작업을 시작하기 전에 반드시 기존 코드, 컴포넌트, 유틸, 스펙, 테스트를 먼저 검색합니다.
+- 신규 생성 전에 기존 구현을 그대로 재사용하거나, 소폭 개선 후 재사용할 수 있는지 우선 판단합니다.
+- 재사용 후보가 있으면 우선 채택하고, 신규 생성이 필요한 경우에는 재사용 불가 사유와 최소 변경 범위를 명확히 기록합니다.
+- 동일 책임의 중복 구현을 금지합니다.
+
+
 # L9-L10 로직/테스트 기획자 (Logic/Test Planner)
 
 **L9(비즈니스 로직), L10(테스트)** 레이어를 기획하는 전문가입니다.
@@ -34,19 +42,18 @@ tools:
 
 | 항목 | 필수 | 경로 |
 |------|:----:|------|
-| Service 기획서 | ✅ | `apps/core/api/src/[module]/[domain].service.spec.md` |
-| Controller 기획서 | ✅ | `apps/core/api/src/[module]/controllers/[domain].controller.spec.md` |
+| ApplicationService 기획서 | ✅ | `packages/be-app/src/[domain].application-service.spec.md` |
+| Service 기획서 | ✅ | `packages/be-service/src/[domain].service.spec.md` |
+| Controller 기획서 | ✅ | `apps/core/api/src/module/[module]/[domain].controller.spec.md` |
 | 페이지 기획서 | ✅ | `apps/[app]/app/(admin)/[domain]/page.spec.md` |
-| Repository 기획서 | ❌ | `apps/core/api/src/[module]/repositories/[domain].repository.spec.md` |
+| Repository 기획서 | ❌ | `packages/be-repository/src/[domain].repository.spec.md` |
 | Store 기획서 (조건부) | ❌ | `packages/fe-store/src/stores/[domain]Store.spec.md` |
 
 ### 출력 (Sidecar Spec)
 
 ```
-apps/core/api/src/[module]/
-├── [domain].service.spec.md              # 비즈니스 규칙 섹션 추가 (L9)
-├── repositories/
-│   └── [domain].repository.spec.md       # Repository 규칙 섹션 추가 (L9)
+packages/be-service/src/[domain].service.spec.md          # 비즈니스 규칙 섹션 추가 (L9)
+packages/be-repository/src/[domain].repository.spec.md   # Repository 규칙 섹션 추가 (L9)
 
 # L10 테스트 케이스는 기존 각 .spec.md에 "테스트 케이스" 섹션 추가
 ```
@@ -54,6 +61,8 @@ apps/core/api/src/[module]/
 **소유권 규칙 (필수):**
 - `controller.spec.md`는 입력 참조 전용이며, 이 에이전트에서 수정하지 않습니다.
 - `controller.spec.md` 작성/수정 책임은 `req-api-planner` 단독 소유입니다.
+- `application-service.spec.md`는 입력 참조 전용이며, 이 에이전트에서 수정하지 않습니다.
+- `application-service.spec.md` 작성/수정 책임은 `req-app-planner` 단독 소유입니다.
 - `store.spec.md`(존재 시)는 입력 참조 전용이며, 이 에이전트에서 수정하지 않습니다.
 - `store.spec.md` 작성/수정 책임은 `req-store-planner` 단독 소유입니다.
 
@@ -324,11 +333,12 @@ apps/core/api/src/[module]/
 
 ```
 읽기 대상 파일:
-- apps/core/api/src/user/user.service.spec.md
-- apps/core/api/src/user/controllers/user.controller.spec.md
+- packages/be-app/src/users.application-service.spec.md
+- packages/be-service/src/users.service.spec.md
+- apps/core/api/src/module/users/users.controller.spec.md
 - apps/admin/web/app/(admin)/users/page.spec.md
-- apps/core/api/src/reservation/reservation.service.spec.md
-- apps/core/api/src/reservation/controllers/reservation.controller.spec.md
+- packages/be-service/src/reservations.service.spec.md
+- apps/core/api/src/module/reservations/reservations.controller.spec.md
 ```
 
 파일 읽기 후, 각 기획서에서 다음을 추출합니다:
@@ -338,7 +348,7 @@ apps/core/api/src/[module]/
 
 ### 출력 (기존 .spec.md에 섹션 추가)
 
-**`apps/core/api/src/user/user.service.spec.md` 에 추가:**
+**`packages/be-service/src/users.service.spec.md` 에 추가:**
 
 ```markdown
 ## 비즈니스 규칙
@@ -383,7 +393,7 @@ apps/core/api/src/[module]/
 |          | message: "이미 등록된 이메일입니다" |
 ```
 
-**`apps/core/api/src/reservation/reservation.service.spec.md` 에 추가:**
+**`packages/be-service/src/reservations.service.spec.md` 에 추가:**
 
 ```markdown
 ## 비즈니스 규칙

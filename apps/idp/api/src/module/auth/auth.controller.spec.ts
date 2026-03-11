@@ -1,5 +1,5 @@
 import type { SignUpPayloadDto } from "@cocrepo/dto";
-import { AuthFacade } from "@cocrepo/facade";
+import { AuthApplicationService } from "@cocrepo/app";
 import { AuthAuditLogService } from "@cocrepo/service";
 import { UnauthorizedException } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
@@ -8,7 +8,7 @@ import { AuthController } from "./auth.controller";
 
 describe("AuthController", () => {
 	let controller: AuthController;
-	let mockAuthFacade: jest.Mocked<AuthFacade>;
+	let mockAuthApplicationService: jest.Mocked<AuthApplicationService>;
 	let mockAuthAuditLogService: jest.Mocked<AuthAuditLogService>;
 	let mockConfigService: jest.Mocked<ConfigService>;
 
@@ -49,7 +49,7 @@ describe("AuthController", () => {
 	};
 
 	beforeEach(async () => {
-		mockAuthFacade = {
+		mockAuthApplicationService = {
 			getAuthorizationUrl: jest.fn(),
 			handleOidcCallback: jest.fn(),
 			refreshTokenWithIdp: jest.fn(),
@@ -58,7 +58,7 @@ describe("AuthController", () => {
 			logoutWithCookie: jest.fn(),
 			setTokenCookies: jest.fn(),
 			clearTokenCookies: jest.fn(),
-		} as unknown as jest.Mocked<AuthFacade>;
+		} as unknown as jest.Mocked<AuthApplicationService>;
 
 		mockAuthAuditLogService = {
 			getAuditLogs: jest.fn(),
@@ -71,7 +71,10 @@ describe("AuthController", () => {
 		const module: TestingModule = await Test.createTestingModule({
 			controllers: [AuthController],
 			providers: [
-				{ provide: AuthFacade, useValue: mockAuthFacade },
+				{
+					provide: AuthApplicationService,
+					useValue: mockAuthApplicationService,
+				},
 				{ provide: AuthAuditLogService, useValue: mockAuthAuditLogService },
 				{ provide: ConfigService, useValue: mockConfigService },
 			],
@@ -87,7 +90,7 @@ describe("AuthController", () => {
 	describe("login", () => {
 		it("OIDC Authorization URL로 리다이렉트해야 한다", async () => {
 			// Given
-			mockAuthFacade.getAuthorizationUrl.mockResolvedValue(
+			mockAuthApplicationService.getAuthorizationUrl.mockResolvedValue(
 				"https://idp.example.com/oidc/auth?response_type=code&client_id=test",
 			);
 
@@ -98,7 +101,9 @@ describe("AuthController", () => {
 			);
 
 			// Then
-			expect(mockAuthFacade.getAuthorizationUrl).toHaveBeenCalledWith(
+			expect(
+				mockAuthApplicationService.getAuthorizationUrl,
+			).toHaveBeenCalledWith(
 				undefined,
 			);
 			expect(mockResponse.redirect).toHaveBeenCalledWith(
@@ -110,7 +115,9 @@ describe("AuthController", () => {
 	describe("handleCallback", () => {
 		it("OIDC 콜백 성공 시 대시보드로 리다이렉트해야 한다", async () => {
 			// Given
-			mockAuthFacade.handleOidcCallback.mockResolvedValue(undefined);
+			mockAuthApplicationService.handleOidcCallback.mockResolvedValue(
+				undefined,
+			);
 
 			// When
 			await controller.handleCallback(
@@ -123,7 +130,9 @@ describe("AuthController", () => {
 			);
 
 			// Then
-			expect(mockAuthFacade.handleOidcCallback).toHaveBeenCalledWith(
+			expect(
+				mockAuthApplicationService.handleOidcCallback,
+			).toHaveBeenCalledWith(
 				"auth-code",
 				"state-value",
 				mockRequest,
@@ -146,7 +155,9 @@ describe("AuthController", () => {
 			);
 
 			// Then
-			expect(mockAuthFacade.handleOidcCallback).not.toHaveBeenCalled();
+			expect(
+				mockAuthApplicationService.handleOidcCallback,
+			).not.toHaveBeenCalled();
 			expect(mockResponse.redirect).toHaveBeenCalledWith(
 				expect.stringContaining("/admin/auth/login?error="),
 			);
@@ -154,7 +165,7 @@ describe("AuthController", () => {
 
 		it("콜백 처리 실패 시 에러와 함께 로그인 페이지로 리다이렉트해야 한다", async () => {
 			// Given
-			mockAuthFacade.handleOidcCallback.mockRejectedValue(
+			mockAuthApplicationService.handleOidcCallback.mockRejectedValue(
 				new UnauthorizedException("OIDC state 검증에 실패했습니다"),
 			);
 
@@ -178,7 +189,7 @@ describe("AuthController", () => {
 	describe("refreshToken", () => {
 		it("리프레시 토큰이 있으면 IDP에서 새 토큰을 발급해야 한다", async () => {
 			// Given
-			mockAuthFacade.refreshTokenWithIdp.mockResolvedValue({
+			mockAuthApplicationService.refreshTokenWithIdp.mockResolvedValue({
 				accessToken: "new-access-token",
 				refreshToken: "new-refresh-token",
 				accessTokenExpiresAt: mockTokenExpiryInfo.accessTokenExpiresAt,
@@ -193,7 +204,9 @@ describe("AuthController", () => {
 			);
 
 			// Then
-			expect(mockAuthFacade.refreshTokenWithIdp).toHaveBeenCalledWith(
+			expect(
+				mockAuthApplicationService.refreshTokenWithIdp,
+			).toHaveBeenCalledWith(
 				"test-refresh-token",
 				"test-session-id",
 				mockResponse,
@@ -210,7 +223,7 @@ describe("AuthController", () => {
 		it("리프레시 토큰이 없으면 UnauthorizedException을 던져야 한다", async () => {
 			// Given
 			const requestWithoutToken = { cookies: {} };
-			mockAuthFacade.refreshTokenWithIdp.mockRejectedValue(
+			mockAuthApplicationService.refreshTokenWithIdp.mockRejectedValue(
 				new UnauthorizedException("리프레시 토큰이 존재하지 않습니다"),
 			);
 
@@ -225,7 +238,7 @@ describe("AuthController", () => {
 
 		it("사용자를 찾을 수 없으면 UnauthorizedException을 던져야 한다", async () => {
 			// Given
-			mockAuthFacade.refreshTokenWithIdp.mockRejectedValue(
+			mockAuthApplicationService.refreshTokenWithIdp.mockRejectedValue(
 				new UnauthorizedException("사용자를 찾을 수 없습니다"),
 			);
 
@@ -251,13 +264,13 @@ describe("AuthController", () => {
 				userId: "user-test-id",
 				email: "new@example.com",
 			};
-			mockAuthFacade.signUp.mockResolvedValue(signUpResult as never);
+			mockAuthApplicationService.signUp.mockResolvedValue(signUpResult as never);
 
 			// When
 			const result = await controller.signUp(signUpDto);
 
 			// Then
-			expect(mockAuthFacade.signUp).toHaveBeenCalledWith(signUpDto);
+			expect(mockAuthApplicationService.signUp).toHaveBeenCalledWith(signUpDto);
 			expect(result).toEqual(signUpResult);
 		});
 	});
@@ -265,7 +278,7 @@ describe("AuthController", () => {
 	describe("verifyToken", () => {
 		it("유효한 토큰은 만료 시간 정보를 반환해야 한다", async () => {
 			// Given
-			mockAuthFacade.verifyToken.mockReturnValue({
+			mockAuthApplicationService.verifyToken.mockReturnValue({
 				valid: true,
 				accessTokenExpiresAt: mockTokenExpiryInfo.accessTokenExpiresAt,
 				refreshTokenExpiresAt: mockTokenExpiryInfo.refreshTokenExpiresAt,
@@ -279,7 +292,7 @@ describe("AuthController", () => {
 			};
 
 			// Then
-			expect(mockAuthFacade.verifyToken).toHaveBeenCalled();
+			expect(mockAuthApplicationService.verifyToken).toHaveBeenCalled();
 			expect(result.valid).toBe(true);
 			expect(result.accessTokenExpiresAt).toBe(
 				mockTokenExpiryInfo.accessTokenExpiresAt,
@@ -291,7 +304,7 @@ describe("AuthController", () => {
 
 		it("토큰이 없으면 UnauthorizedException을 던져야 한다", async () => {
 			// Given
-			mockAuthFacade.verifyToken.mockImplementation(() => {
+			mockAuthApplicationService.verifyToken.mockImplementation(() => {
 				throw new UnauthorizedException("토큰이 존재하지 않습니다");
 			});
 
@@ -305,7 +318,7 @@ describe("AuthController", () => {
 	describe("logout", () => {
 		it("액세스 토큰이 있으면 토큰을 무효화해야 한다", async () => {
 			// Given
-			mockAuthFacade.logoutWithCookie.mockResolvedValue(true);
+			mockAuthApplicationService.logoutWithCookie.mockResolvedValue(true);
 
 			// When
 			const result = await controller.logout(
@@ -314,7 +327,9 @@ describe("AuthController", () => {
 			);
 
 			// Then
-			expect(mockAuthFacade.logoutWithCookie).toHaveBeenCalledWith(
+			expect(
+				mockAuthApplicationService.logoutWithCookie,
+			).toHaveBeenCalledWith(
 				"test-access-token",
 				"test-session-id",
 				mockResponse,
@@ -328,7 +343,7 @@ describe("AuthController", () => {
 				cookies: {},
 				user: undefined,
 			};
-			mockAuthFacade.logoutWithCookie.mockResolvedValue(true);
+			mockAuthApplicationService.logoutWithCookie.mockResolvedValue(true);
 
 			// When
 			const result = await controller.logout(
@@ -337,7 +352,9 @@ describe("AuthController", () => {
 			);
 
 			// Then
-			expect(mockAuthFacade.logoutWithCookie).toHaveBeenCalledWith(
+			expect(
+				mockAuthApplicationService.logoutWithCookie,
+			).toHaveBeenCalledWith(
 				undefined,
 				undefined,
 				mockResponse,

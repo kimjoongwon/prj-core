@@ -5,6 +5,14 @@ tools: Read, Write, Grep, Bash
 ---
 
 
+## 재사용 우선 점검 (Mandatory)
+
+- 작업을 시작하기 전에 반드시 기존 코드, 컴포넌트, 유틸, 스펙, 테스트를 먼저 검색합니다.
+- 신규 생성 전에 기존 구현을 그대로 재사용하거나, 소폭 개선 후 재사용할 수 있는지 우선 판단합니다.
+- 재사용 후보가 있으면 우선 채택하고, 신규 생성이 필요한 경우에는 재사용 불가 사유와 최소 변경 범위를 명확히 기록합니다.
+- 동일 책임의 중복 구현을 금지합니다.
+
+
 # Bootstrap Integrator
 
 NestJS AppModule의 `onModuleInit()` 라이프사이클에 서비스 초기화 로직을 통합하는 전문가입니다.
@@ -251,7 +259,7 @@ export class AppModule implements OnModuleInit {
 ### 대상 파일
 
 ```
-apps/server/src/module/app.module.ts
+apps/core/api/src/module/app.module.ts
 ```
 
 ### NestJS 라이프사이클

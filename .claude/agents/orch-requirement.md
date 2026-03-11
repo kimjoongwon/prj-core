@@ -5,6 +5,14 @@ tools: Read, Write, Grep, Bash
 ---
 
 
+## 재사용 우선 점검 (Mandatory)
+
+- 작업을 시작하기 전에 반드시 기존 코드, 컴포넌트, 유틸, 스펙, 테스트를 먼저 검색합니다.
+- 신규 생성 전에 기존 구현을 그대로 재사용하거나, 소폭 개선 후 재사용할 수 있는지 우선 판단합니다.
+- 재사용 후보가 있으면 우선 채택하고, 신규 생성이 필요한 경우에는 재사용 불가 사유와 최소 변경 범위를 명확히 기록합니다.
+- 동일 책임의 중복 구현을 금지합니다.
+
+
 # 요구사항 기획 오케스트레이터 (Requirement Orchestrator)
 
 도메인 기획 **L0-L4** 레이어와 **BE/Store 기획**을 의존성 기반으로 조율하는 오케스트레이터입니다. 선행 단계는 순차로 진행하고, 독립 레이어는 병렬 fan-out 실행을 지원합니다。
@@ -24,9 +32,10 @@ tools: Read, Write, Grep, Bash
 
 | 레벨 | 명칭 | 담당 에이전트 | 출력 위치 |
 |------|------|--------------|----------|
-| L6 | API/Controller | req-api-planner | `apps/core/api/src/[module]/controllers/[domain].controller.spec.md` |
+| L6 | API/Controller | req-api-planner | `apps/core/api/src/module/[module]/[domain].controller.spec.md` |
 | L7 | Entity | req-entity-planner | `packages/be-entity/src/{entity}.entity.spec.md` |
-| L9-L10 | Service/Repository 로직/테스트 | req-logic-planner | `apps/core/api/src/[module]/[domain].service.spec.md`, `apps/core/api/src/[module]/repositories/[domain].repository.spec.md` |
+| L8 | ApplicationService | req-app-planner | `packages/be-app/src/[domain].application-service.spec.md` |
+| L9-L10 | Service/Repository 로직/테스트 | req-logic-planner | `packages/be-service/src/[domain].service.spec.md`, `packages/be-repository/src/[domain].repository.spec.md` |
 | L11 | Store (조건부) | req-store-planner | 재사용성 충족 시 `packages/fe-store/src/stores/[domain]Store.spec.md` |
 
 ### 공용 패키지 기획 (Critical)
@@ -41,7 +50,7 @@ tools: Read, Write, Grep, Bash
 
 화면별 상세 기획은 `orch-screen-planner`가 담당합니다。
 
-`orch-screen-planner`는 페이지별로 `req-page-planner`, `req-api-planner`, `req-ui-planner`, `req-input-planner`, `req-cell-planner`, `req-widget-planner`, `req-layout-planner`, `req-feature-planner`, `req-menu-planner`, `req-test-planner`, `req-api-integration-planner`를 조합해 실행합니다。
+`orch-screen-planner`는 페이지별로 `req-page-planner`, `req-api-planner`, `req-primitive-planner`, `req-input-planner`, `req-cell-planner`, `req-widget-planner`, `req-layout-planner`, `req-feature-planner`, `req-menu-planner`, `req-fe-test-planner`, `req-api-integration-planner`를 조합해 실행합니다。
 
 ---
 
@@ -54,9 +63,11 @@ tools: Read, Write, Grep, Bash
 
 ### 백엔드 기획서
 - [ ] `{entity}.entity.spec.md` - 각 Entity별
+- [ ] `{domain}.application-service.spec.md` - ApplicationService 스펙
 - [ ] `{domain}.service.spec.md` - Service 스펙
 - [ ] `{domain}.repository.spec.md` - Repository 스펙
 - [ ] `{domain}.controller.spec.md` - Controller 스펙
+- [ ] `{domain}.module.spec.md` - Module 스펙
 
 ### 공용 패키지 기획서 ⚠️ 자주 누락
 - [ ] `{EnumName}.spec.md` - 도메인 Enum (AssetKind, AssetStatus 등)
@@ -108,7 +119,7 @@ tools: Read, Write, Grep, Bash
 
 | 케이스 | 조건 | 실행 에이전트 |
 |--------|------|--------------|
-| 새 도메인 | `app.spec.md`에 해당 도메인 없음 | req-context → req-screen → (req-entity ∥ req-api ∥ req-store[조건부]) → req-logic |
+| 새 도메인 | `app.spec.md`에 해당 도메인 없음 | req-context → req-screen → (req-entity ∥ req-api ∥ req-store[조건부]) → req-app → req-logic |
 | 화면 추가 | `app.spec.md`에 해당 도메인 존재 | orch-screen-planner |
 
 ### 병렬 실행 규칙 (신규)
@@ -155,12 +166,18 @@ packages/fe-store/src/stores/
 packages/be-entity/src/
 └── [entity].entity.spec.md                     # Entity 스펙
 
-apps/core/api/src/[module]/
-├── [domain].service.spec.md                    # Service 스펙
-├── repositories/
-│   └── [domain].repository.spec.md             # Repository 스펙
-└── controllers/
-    └── [domain].controller.spec.md             # Controller 스펙
+packages/be-app/src/
+└── [domain].application-service.spec.md        # ApplicationService 스펙
+
+packages/be-service/src/
+└── [domain].service.spec.md                    # Service 스펙
+
+packages/be-repository/src/
+└── [domain].repository.spec.md                 # Repository 스펙
+
+apps/core/api/src/module/[module]/
+├── [domain].controller.spec.md                 # Controller 스펙
+└── [domain].module.spec.md                     # Module 스펙
 ```
 
 ---
@@ -223,7 +240,14 @@ apps/core/api/src/[module]/
                               │
                               ▼
 ┌─────────────────────────────────────────────────────────────┐
-│  7단계: Service/Repository 로직/테스트 기획 (L9-L10)          │
+│  7단계: ApplicationService 기획 (L8)                         │
+│  Task: req-app-planner                                      │
+│  → [domain].application-service.spec.md                     │
+└─────────────────────────────────────────────────────────────┘
+                              │
+                              ▼
+┌─────────────────────────────────────────────────────────────┐
+│  8단계: Service/Repository 로직/테스트 기획 (L9-L10)          │
 │  Task: req-logic-planner                                    │
 │  → [domain].service.spec.md                                 │
 │  → [domain].repository.spec.md                              │
@@ -293,7 +317,11 @@ apps/core/api/src/[module]/
   Task: req-api-planner
   → Controller 스펙 생성/업데이트 완료
 
-▶ 6단계: Service/Repository 로직/테스트 기획 (L9-L10)
+▶ 6단계: ApplicationService 기획 (L8)
+  Task: req-app-planner
+  → ApplicationService 스펙 생성/업데이트 완료
+
+▶ 7단계: Service/Repository 로직/테스트 기획 (L9-L10)
   Task: req-logic-planner
   → Service/Repository 스펙 생성/업데이트 완료
 
@@ -307,9 +335,11 @@ apps/core/api/src/[module]/
    - apps/admin/web/app/(admin)/members/[memberId]/edit/page.spec.md
    - packages/fe-store/src/stores/memberStore.spec.md
    - packages/be-entity/src/member.entity.spec.md
-   - apps/core/api/src/member/member.service.spec.md
-   - apps/core/api/src/member/repositories/member.repository.spec.md
-   - apps/core/api/src/member/controllers/member.controller.spec.md
+   - packages/be-app/src/members.application-service.spec.md
+   - packages/be-service/src/members.service.spec.md
+   - packages/be-repository/src/members.repository.spec.md
+   - apps/core/api/src/module/members/members.controller.spec.md
+   - apps/core/api/src/module/members/members.module.spec.md
 
 📌 다음 단계:
    1. 화면별 기획:
@@ -366,15 +396,23 @@ packages/be-vo/src/member/
 ├── member-email.vo.ts
 └── member-email.vo.spec.md               # VO 스펙 (필요시)
 
-apps/core/api/src/member/
-├── member.service.ts
-├── member.service.spec.md                # Service 스펙
-├── repositories/
-│   ├── member.repository.ts
-│   └── member.repository.spec.md         # Repository 스펙
-└── controllers/
-    ├── member.controller.ts
-    └── member.controller.spec.md         # Controller 스펙
+packages/be-app/src/
+├── members.application-service.ts
+└── members.application-service.spec.md   # ApplicationService 스펙
+
+packages/be-service/src/
+├── members.service.ts
+└── members.service.spec.md               # Service 스펙
+
+packages/be-repository/src/
+├── members.repository.ts
+└── members.repository.spec.md            # Repository 스펙
+
+apps/core/api/src/module/members/
+├── members.controller.ts
+├── members.controller.spec.md            # Controller 스펙
+├── members.module.ts
+└── members.module.spec.md                # Module 스펙
 ```
 
 ---
@@ -438,15 +476,15 @@ Asset (Level 0)
 ### UI 컴포넌트
 | 컴포넌트 | 타입 | 위치 |
 |----------|------|------|
-| AssetPreview | Pure UI | packages/fe-ui/src/components/ui/ |
-| AssetTypeInfo | Pure UI | packages/fe-ui/src/components/ui/ |
-| DerivativeList | Pure UI | packages/fe-ui/src/components/ui/ |
+| AssetPreview | Pure UI | packages/fe-ui/src/primitive/ |
+| AssetTypeInfo | Pure UI | packages/fe-ui/src/primitive/ |
+| DerivativeList | Pure UI | packages/fe-ui/src/primitive/ |
 
 ### Widget 컴포넌트
 | 컴포넌트 | 위치 |
 |----------|------|
-| AssetListPanel | packages/fe-ui/src/components/widget/ |
-| FolderTree | packages/fe-ui/src/components/widget/ |
+| AssetListPanel | packages/fe-ui/src/widget/ |
+| FolderTree | packages/fe-ui/src/widget/ |
 
 ### Feature 컴포넌트
 | 컴포넌트 | Store 연결 |
@@ -509,7 +547,8 @@ orch-stage는 기획서의 **구현 대상** 섹션을 분석하여:
 | req-entity-planner | 3 | `[entity].entity.spec.md` | Entity 기획 |
 | req-store-planner | 4 (조건부) | `[domain]Store.spec.md` | 공용 Store 기획 |
 | req-api-planner | 5 | `*.controller.spec.md`, `*.dto.spec.md` | API/Controller/DTO 스펙 기획 |
-| req-logic-planner | 6 | `*.service.spec.md`, `*.repository.spec.md` | Service/Repository 로직/테스트 기획 |
+| req-app-planner | 6 | `*.application-service.spec.md` | Controller 경계 ApplicationService 기획 |
+| req-logic-planner | 7 | `*.service.spec.md`, `*.repository.spec.md` | Service/Repository 로직/테스트 기획 |
 
 ### 후행 에이전트
 

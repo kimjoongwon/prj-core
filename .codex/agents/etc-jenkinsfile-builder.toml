@@ -216,7 +216,8 @@ COPY packages/be-dto/package.json ./packages/be-dto/
 COPY packages/be-entity/package.json ./packages/be-entity/
 COPY packages/be-repository/package.json ./packages/be-repository/
 COPY packages/be-service/package.json ./packages/be-service/
-COPY packages/be-facade/package.json ./packages/be-facade/
+COPY packages/be-app/package.json ./packages/be-app/
+COPY packages/be-integration/package.json ./packages/be-integration/
 COPY apps/core/api/package.json ./apps/core/api/
 
 # 의존성 설치

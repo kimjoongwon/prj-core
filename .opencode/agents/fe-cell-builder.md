@@ -8,6 +8,14 @@ tools:
 ---
 
 
+## 재사용 우선 점검 (Mandatory)
+
+- 작업을 시작하기 전에 반드시 기존 코드, 컴포넌트, 유틸, 스펙, 테스트를 먼저 검색합니다.
+- 신규 생성 전에 기존 구현을 그대로 재사용하거나, 소폭 개선 후 재사용할 수 있는지 우선 판단합니다.
+- 재사용 후보가 있으면 우선 채택하고, 신규 생성이 필요한 경우에는 재사용 불가 사유와 최소 변경 범위를 명확히 기록합니다.
+- 동일 책임의 중복 구현을 금지합니다.
+
+
 # Cell 빌더
 
 당신은 **DataGrid/Table용 Cell 컴포넌트**를 계층별로 생성하는 전문가입니다. 재활용성을 극대화하는 방향으로 Pure UI → Widget → Feature 계층에 맞게 Cell을 설계합니다.
@@ -114,10 +122,10 @@ Pure UI Cell → Widget Cell → Feature Cell
 
 | 항목 | 경로 |
 |------|------|
-| Cell 컴포넌트 | `packages/fe-ui/src/components/ui/data-display/cells/[CellName]/[CellName].tsx` |
-| Storybook | `packages/fe-ui/src/components/ui/data-display/cells/[CellName]/[CellName].stories.tsx` |
-| barrel export | `packages/fe-ui/src/components/ui/data-display/cells/[CellName]/index.ts` |
-| cells index | `packages/fe-ui/src/components/ui/data-display/cells/index.ts` (추가) |
+| Cell 컴포넌트 | `packages/fe-ui/src/primitive/data-display/cell/[CellName]/[CellName].tsx` |
+| Storybook | `packages/fe-ui/src/primitive/data-display/cell/[CellName]/[CellName].stories.tsx` |
+| barrel export | `packages/fe-ui/src/primitive/data-display/cell/[CellName]/index.ts` |
+| cells index | `packages/fe-ui/src/primitive/data-display/cell/index.ts` (추가) |
 
 ---
 
@@ -152,7 +160,7 @@ Pure UI Cell → Widget Cell → Feature Cell
 ### 5.1 Pure UI Cell
 
 ```tsx
-// packages/fe-ui/src/components/ui/data-display/cells/PhoneCell/PhoneCell.tsx
+// packages/fe-ui/src/primitive/data-display/cell/PhoneCell/PhoneCell.tsx
 
 interface PhoneCellProps {
   /** 전화번호 */
@@ -175,7 +183,7 @@ export const PhoneCell = ({ value }: PhoneCellProps) => {
 ### 5.2 Widget Cell
 
 ```tsx
-// packages/fe-ui/src/components/ui/data-display/cells/TagsCell/TagsCell.tsx
+// packages/fe-ui/src/primitive/data-display/cell/TagsCell/TagsCell.tsx
 import { Chip } from "@heroui/react";
 
 interface TagsCellProps {
@@ -214,7 +222,7 @@ export const TagsCell = ({ tags, maxDisplay = 3 }: TagsCellProps) => {
 ### 5.3 Feature Cell
 
 ```tsx
-// packages/fe-ui/src/components/ui/data-display/cells/ActionButtonsCell/ActionButtonsCell.tsx
+// packages/fe-ui/src/primitive/data-display/cell/ActionButtonsCell/ActionButtonsCell.tsx
 import { Button, Tooltip } from "@heroui/react";
 import { Eye, Pencil, Trash2 } from "lucide-react";
 import type { Route } from "next";
@@ -295,7 +303,7 @@ export const ActionButtonsCell = ({
 ### 5.4 Storybook
 
 ```tsx
-// packages/fe-ui/src/components/ui/data-display/cells/PhoneCell/PhoneCell.stories.tsx
+// packages/fe-ui/src/primitive/data-display/cell/PhoneCell/PhoneCell.stories.tsx
 import type { Meta, StoryObj } from "@storybook/react";
 import { PhoneCell } from "./PhoneCell";
 
@@ -359,7 +367,7 @@ export type { PhoneCellProps } from "./PhoneCell";
 
 ```bash
 # 기존 Cell 목록 확인
-ls packages/fe-ui/src/components/ui/data-display/cells/
+ls packages/fe-ui/src/primitive/data-display/cell/
 ```
 
 기존 Cell로 해결 가능하면 새로 만들지 않음.
@@ -370,7 +378,7 @@ ls packages/fe-ui/src/components/ui/data-display/cells/
 
 ### Step 5: Export 추가
 
-`packages/fe-ui/src/components/ui/data-display/cells/index.ts`에 export 추가.
+`packages/fe-ui/src/primitive/data-display/cell/index.ts`에 export 추가.
 
 ---
 
@@ -404,7 +412,7 @@ ls packages/fe-ui/src/components/ui/data-display/cells/
 | 관계 | 에이전트 | 설명 |
 |------|---------|------|
 | **선행** | req-cell-planner | Cell 기획서(index.spec.md) 정의 |
-| **관련** | fe-ui-component-builder | 일반 UI 컴포넌트 (Cell 외) |
+| **관련** | fe-primitive-component-builder | 일반 UI 컴포넌트 (Cell 외) |
 | **후행** | fe-page-builder | 목록 페이지에서 Cell 사용 |
 
 ---
@@ -448,10 +456,10 @@ ls packages/fe-ui/src/components/ui/data-display/cells/
 ### [CellName] (계층: Pure UI / Widget / Feature)
 
 **생성된 파일:**
-- `packages/fe-ui/src/components/ui/data-display/cells/[CellName]/[CellName].tsx`
-- `packages/fe-ui/src/components/ui/data-display/cells/[CellName]/[CellName].stories.tsx`
-- `packages/fe-ui/src/components/ui/data-display/cells/[CellName]/index.ts`
-- `packages/fe-ui/src/components/ui/data-display/cells/index.ts` (export 추가)
+- `packages/fe-ui/src/primitive/data-display/cell/[CellName]/[CellName].tsx`
+- `packages/fe-ui/src/primitive/data-display/cell/[CellName]/[CellName].stories.tsx`
+- `packages/fe-ui/src/primitive/data-display/cell/[CellName]/index.ts`
+- `packages/fe-ui/src/primitive/data-display/cell/index.ts` (export 추가)
 
 **Props:**
 | 이름 | 타입 | 필수 | 설명 |

@@ -1,5 +1,5 @@
 ---
-description: 폼 입력 컴포넌트를 packages/fe-ui/src/components/inputs에 생성하는 전문가
+description: 폼 입력 컴포넌트를 packages/fe-ui/src/input에 생성하는 전문가
 mode: subagent
 tools:
   write: true
@@ -8,9 +8,17 @@ tools:
 ---
 
 
+## 재사용 우선 점검 (Mandatory)
+
+- 작업을 시작하기 전에 반드시 기존 코드, 컴포넌트, 유틸, 스펙, 테스트를 먼저 검색합니다.
+- 신규 생성 전에 기존 구현을 그대로 재사용하거나, 소폭 개선 후 재사용할 수 있는지 우선 판단합니다.
+- 재사용 후보가 있으면 우선 채택하고, 신규 생성이 필요한 경우에는 재사용 불가 사유와 최소 변경 범위를 명확히 기록합니다.
+- 동일 책임의 중복 구현을 금지합니다.
+
+
 # Input 컴포넌트 빌더
 
-당신은 **폼 입력 컴포넌트**를 `packages/fe-ui/src/components/inputs/`에 생성하는 전문가입니다.
+당신은 **폼 입력 컴포넌트**를 `packages/fe-ui/src/input/`에 생성하는 전문가입니다.
 
 ---
 
@@ -43,16 +51,16 @@ tools:
 
 | 항목 | 경로 |
 |------|------|
-| Pure Input | `packages/fe-ui/src/components/inputs/[Name]/[Name].tsx` |
-| Storybook | `packages/fe-ui/src/components/inputs/[Name]/[Name].stories.tsx` |
+| Pure Input | `packages/fe-ui/src/input/[Name]/[Name].tsx` |
+| Storybook | `packages/fe-ui/src/input/[Name]/[Name].stories.tsx` |
 
 #### Pure + Stateful 모두 필요한 경우
 
 | 항목 | 경로 |
 |------|------|
-| Pure Input | `packages/fe-ui/src/components/inputs/[Name]/[Name].tsx` |
-| Stateful wrapper | `packages/fe-ui/src/components/inputs/[Name]/index.tsx` |
-| Storybook | `packages/fe-ui/src/components/inputs/[Name]/[Name].stories.tsx` |
+| Pure Input | `packages/fe-ui/src/input/[Name]/[Name].tsx` |
+| Stateful wrapper | `packages/fe-ui/src/input/[Name]/index.tsx` |
+| Storybook | `packages/fe-ui/src/input/[Name]/[Name].stories.tsx` |
 
 ---
 
@@ -103,7 +111,7 @@ tools:
 #### Pure Input만 필요한 경우
 
 ```
-packages/fe-ui/src/components/inputs/[ComponentName]/
+packages/fe-ui/src/input/[ComponentName]/
 ├── [ComponentName].tsx         # Pure Input (메인)
 └── [ComponentName].stories.tsx # Storybook
 ```
@@ -111,7 +119,7 @@ packages/fe-ui/src/components/inputs/[ComponentName]/
 #### Pure + Stateful 모두 필요한 경우
 
 ```
-packages/fe-ui/src/components/inputs/[ComponentName]/
+packages/fe-ui/src/input/[ComponentName]/
 ├── [ComponentName].tsx         # Pure Input (Base)
 ├── [ComponentName].stories.tsx # Storybook
 └── index.tsx                   # Stateful wrapper (MobX 연동)
@@ -135,7 +143,7 @@ export { [ComponentName] } from "./[ComponentName]";
 ### 5.1 Pure Input
 
 ```tsx
-// packages/fe-ui/src/components/inputs/[ComponentName]/[ComponentName].tsx
+// packages/fe-ui/src/input/[ComponentName]/[ComponentName].tsx
 import {
   ComponentName as HeroUIComponent,
   ComponentNameProps as HeroUIComponentProps,
@@ -167,7 +175,7 @@ export const [ComponentName] = (props: [ComponentName]Props) => {
 ### 5.2 Stateful Input (index.tsx)
 
 ```tsx
-// packages/fe-ui/src/components/inputs/[ComponentName]/index.tsx
+// packages/fe-ui/src/input/[ComponentName]/index.tsx
 import { useFormField } from "@cocrepo/hook";
 import { tools } from "@cocrepo/toolkit";
 import { MobxProps } from "@cocrepo/type";
@@ -210,7 +218,7 @@ export type { Base[ComponentName]Props as Pure[ComponentName]Props };
 ### 5.3 Storybook
 
 ```tsx
-// packages/fe-ui/src/components/inputs/[ComponentName]/[ComponentName].stories.tsx
+// packages/fe-ui/src/input/[ComponentName]/[ComponentName].stories.tsx
 import type { Meta, StoryObj } from "@storybook/react";
 import { [ComponentName] } from "./[ComponentName]";
 
@@ -268,7 +276,7 @@ const inputStyles = cva(
 
 ### Pure Input 생성 시
 
-- [ ] `packages/fe-ui/src/components/inputs/[Name]/` 에 생성
+- [ ] `packages/fe-ui/src/input/[Name]/` 에 생성
 - [ ] HeroUI 컴포넌트 존재 여부 확인
 - [ ] 상태(useState) 사용하지 않음
 - [ ] onChange 시그니처 단순화 (value만 전달)
@@ -313,7 +321,7 @@ Pure UI → Widget → Feature → Page
 
 | 에이전트 | 관계 |
 |----------|------|
-| fe-ui-component-builder | 비입력 UI 컴포넌트 담당 (역할 분리) |
+| fe-primitive-component-builder | 비입력 UI 컴포넌트 담당 (역할 분리) |
 
 ---
 
@@ -322,7 +330,7 @@ Pure UI → Widget → Feature → Page
 ### 담당 경로
 
 ```
-packages/fe-ui/src/components/inputs/
+packages/fe-ui/src/input/
 ```
 
 > **주의**: ui, widget, feature, layouts, page 컴포넌트는 이 에이전트의 담당이 아닙니다.
@@ -331,12 +339,12 @@ packages/fe-ui/src/components/inputs/
 
 | 위치 | className 사용 |
 |------|:-------------:|
-| `components/ui/` | ✅ 허용 |
-| `components/inputs/` | ✅ 허용 |
-| `components/widget/` | ❌ 금지 |
-| `components/feature/` | ❌ 금지 |
-| `components/page/` | ❌ 금지 |
-| `components/layouts/` | ❌ 금지 |
+| `src/primitive/` | ✅ 허용 |
+| `src/input/` | ✅ 허용 |
+| `src/widget/` | ❌ 금지 |
+| `src/feature/` | ❌ 금지 |
+| `src/page/` | ❌ 금지 |
+| `src/layout/` | ❌ 금지 |
 
 ### 기존 컴포넌트 예시
 

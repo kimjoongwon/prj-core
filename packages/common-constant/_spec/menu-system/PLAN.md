@@ -188,8 +188,8 @@ F-SIDE ←── F-SYNC ──→ F-BOTTOM ──→ F-SUBMENU
    ├── 타임라인 (/sessions/timelines)
    └── 세션 관리 (/sessions/manage)
 
-📁 시설 (grounds)
-   └── 시설 목록 (/grounds)
+📁 시설 (spaces)
+   └── 시설 목록 (/spaces)
 
 📁 관리자 (admins)
    └── 관리자 목록 (/admins)

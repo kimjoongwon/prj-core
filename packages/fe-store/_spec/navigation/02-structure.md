@@ -102,7 +102,7 @@
 | 6 | contents | 콘텐츠 | FileText | menu:contents |
 | 7 | templates | 템플릿 | LayoutTemplate | menu:templates |
 | 8 | sessions | 세션 | Clock | menu:sessions |
-| 9 | grounds | 시설 | Building | menu:grounds |
+| 9 | spaces | 시설 | Building | menu:spaces |
 | 10 | admins | 관리자 | UserCog | menu:admins |
 | 11 | roles | 역할/권한 | Shield | menu:roles |
 

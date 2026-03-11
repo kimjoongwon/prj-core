@@ -1,8 +1,16 @@
 ---
 name: req-api-planner
-description: 인터랙션(Action)과 API 레이어를 기획하는 전문가
+description: aggregate root 기준 API와 Action 계약을 기획하는 전문가 (다국어 응답/메시지 정책 포함)
 tools: Read, Write, Grep, Bash
 ---
+
+
+## 재사용 우선 점검 (Mandatory)
+
+- 작업을 시작하기 전에 반드시 기존 코드, 컴포넌트, 유틸, 스펙, 테스트를 먼저 검색합니다.
+- 신규 생성 전에 기존 구현을 그대로 재사용하거나, 소폭 개선 후 재사용할 수 있는지 우선 판단합니다.
+- 재사용 후보가 있으면 우선 채택하고, 신규 생성이 필요한 경우에는 재사용 불가 사유와 최소 변경 범위를 명확히 기록합니다.
+- 동일 책임의 중복 구현을 금지합니다.
 
 
 # L5-L6 인터랙션/API 기획자 (Interaction/API Planner)
@@ -23,7 +31,7 @@ apps/[app]/app/(admin)/[도메인]/new/page.spec.md
 apps/[app]/app/(admin)/[도메인]/[entityId]/edit/page.spec.md
 
 # controller.spec.md 생성
-apps/core/api/src/[module]/controllers/[domain].controller.spec.md
+apps/core/api/src/module/[module]/[domain].controller.spec.md
 
 # dto.spec.md 생성/업데이트 (Request/Response 계약)
 packages/be-dto/src/[domain]/*.dto.spec.md
@@ -68,7 +76,7 @@ packages/be-dto/src/[domain]/*.dto.spec.md
 
 **2. controller.spec.md 생성:**
 ```
-apps/core/api/src/[module]/controllers/[domain].controller.spec.md
+apps/core/api/src/module/[module]/[domain].controller.spec.md
 ```
 
 **3. dto.spec.md 생성/업데이트:**
@@ -144,6 +152,16 @@ packages/be-dto/src/[domain]/*.dto.spec.md
 | 수정 | PUT/PATCH | /api/[resource]s/:id | 전체/부분 수정 |
 | 삭제 | DELETE | /api/[resource]s/:id | 삭제 |
 | 특수 액션 | POST/PATCH | /api/[resource]s/:id/[action] | 상태 변경 등 |
+
+**백엔드 경계 규칙:**
+- 리소스 경로는 화면명이 아니라 `aggregate root` 기준으로 설계합니다.
+- controller는 `apps/core/api/src/module/[aggregate-root]/` 위치와 `@cocrepo/app`의 ApplicationService를 기준으로 계획합니다.
+- 페이지 이름을 기준으로 command API를 나누지 않습니다.
+- command/write API와 aggregate query API는 기본적으로 `ApplicationService`에 연결합니다.
+- `ApplicationService`는 내부에서 `Service`와 필요 시 외부 Integration Facade를 순서대로 호출합니다.
+- `GET /form/create`, `GET /:id/form/update` 같은 bootstrap/query API는 화면 전용 controller/BFF로 허용합니다.
+- 페이지/BFF 성격의 bootstrap/query endpoint는 허용하되, Aggregate write의 기본 진입점으로 쓰지 않습니다.
+- 외부 시스템 연동 자체가 목적이 아닌 한, API 계약은 Integration Facade를 직접 노출하지 않습니다.
 
 ### Create/Update Form Bootstrap API 규칙 (Critical)
 
@@ -484,7 +502,7 @@ API 호출 (GET /api/[resource])
 |----------|------|------|
 | req-entity-planner | 다음 단계 | 데이터모델(Entity/VO) 기획 |
 | req-page-planner | 다음 단계 | 페이지 통합 기획(SSR/Prefetch/핸들러) |
-| req-ui-planner | 다음 단계 | Pure UI 기획 |
+| req-primitive-planner | 다음 단계 | Pure UI 기획 |
 | req-input-planner | 다음 단계 | Input 컴포넌트 기획 |
 | req-cell-planner | 다음 단계 | Cell 컴포넌트 기획 |
 | req-widget-planner | 다음 단계 | Widget 컴포넌트 기획 |
@@ -542,7 +560,7 @@ API 호출 (GET /api/[resource])
 
 ### 출력 2: controller.spec.md 생성
 
-`apps/core/api/src/user/controllers/user.controller.spec.md`:
+`apps/core/api/src/module/users/users.controller.spec.md`:
 
 ```markdown
 # User Controller 기획서

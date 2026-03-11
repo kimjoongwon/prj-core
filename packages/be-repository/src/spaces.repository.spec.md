@@ -20,8 +20,13 @@ Space(논리적 테넌트 공간) 엔티티의 데이터 접근을 담당합니�
 |--------|----------|------|------|
 | `findById(id)` | string | `Promise<Space \| null>` | ID로 단건 조회 (기본 정보만) |
 | `findByIdWithGround(id)` | string | `Promise<Space \| null>` | ID로 조회 (Ground 포함) |
+| `findManyWithGround()` | - | `Promise<Space[]>` | Ground detail 포함 전체 Space 목록 조회 |
+| `findGroundBySpaceId(spaceId)` | string | `Promise<Ground \| null>` | Space의 1:1 Ground detail 조회 |
+| `findGroundByBusinessNo(businessNo)` | string | `Promise<Ground \| null>` | Ground 사업자번호 중복 확인 |
 | `findAll()` | - | `Promise<Space[]>` | 전체 Space 목록 조회 (삭제 제외) |
 | `create(data?)` | Prisma.SpaceUncheckedCreateInput? | `Promise<Space>` | Space 생성 (data 없으면 빈 객체로 생성) |
+| `createGroundBySpaceId(spaceId, data)` | string, Prisma.GroundUncheckedCreateInput | `Promise<Ground>` | Space root 아래 Ground detail 생성 |
+| `updateGroundBySpaceId(spaceId, data)` | string, Prisma.GroundUncheckedUpdateInput | `Promise<Ground>` | Space root 아래 Ground detail 수정 |
 | `updateById(id, data)` | string, Prisma.SpaceUncheckedUpdateInput | `Promise<Space>` | ID로 수정 |
 | `findSpaceIdsByCategoryHierarchy(spaceId)` | string | `Promise<string[]>` | SpaceCategory 위계 기반 접근 가능한 Space ID 배열 조회 |
 | `findByIdsWithGround(ids)` | string[] | `Promise<Space[]>` | 여러 ID로 조회 (Ground 포함) |
@@ -51,6 +56,7 @@ BRANCH Category → 자신만
 ## 삭제 정책
 
 - **소프트 삭제**: `removeById()` → `removedAt: new Date()` 설정
+- Ground detail도 함께 `removedAt` 처리한다.
 - 물리 삭제 메서드 없음
 
 ## 구현 체크리스트
@@ -65,3 +71,4 @@ BRANCH Category → 자신만
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
 | 2026-02-19 | 초기 생성 (역기획) | req-reverse-engineer |
+| 2026-03-11 | Space root 아래 Ground detail 조회/수정 메서드를 반영 | codex |

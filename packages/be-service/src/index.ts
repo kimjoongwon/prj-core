@@ -20,10 +20,8 @@ export { AbilitiesService } from "./abilities.service";
 export { ActionsService } from "./actions.service";
 export { CategoriesService } from "./categories.service";
 export { AwsService } from "./aws.service";
-export { ExercisesService } from "./exercises.service";
 export { GrantsService } from "./grants.service";
 export { GroupsService } from "./groups.service";
-export { GroundsService } from "./grounds.service";
 export { createPrismaClient } from "./prisma.factory";
 export { PrismaService } from "./prisma.service";
 export { RedisService } from "./redis.service";
@@ -35,6 +33,7 @@ export {
 	type SubjectInfo,
 	SubjectsService,
 } from "./subjects.service";
+export { TasksService } from "./tasks.service";
 export { TemplatesService } from "./templates.service";
 export { TimelinesService } from "./timelines.service";
 export { TokenService } from "./token.service";
@@ -72,5 +71,3 @@ export {
 	type InquiryCreateUpdateFormBootstrap,
 	type SentimentAnalysisResult,
 } from "./inquiries.service";
-export { InquiryMessagesService } from "./inquiry-messages.service";
-export { InquiryParticipantsService } from "./inquiry-participants.service";

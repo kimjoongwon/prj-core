@@ -1,4 +1,5 @@
-import { AuthFacade } from "@cocrepo/facade";
+import { AuthApplicationService } from "@cocrepo/app";
+import { OidcFacade } from "@cocrepo/integration";
 import {
 	AuthAuditLogsRepository,
 	RolesRepository,
@@ -23,7 +24,8 @@ import { AuthController } from "./auth.controller";
 
 @Module({
 	providers: [
-		AuthFacade,
+		AuthApplicationService,
+		OidcFacade,
 		TokenService,
 		TokenStorageService,
 		RedisService,
@@ -41,6 +43,6 @@ import { AuthController } from "./auth.controller";
 		EmailService,
 	],
 	controllers: [AuthController],
-	exports: [AuthFacade, TokenStorageService, RedisService],
+	exports: [AuthApplicationService, TokenStorageService, RedisService],
 })
 export class AuthModule {}

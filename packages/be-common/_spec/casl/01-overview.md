@@ -116,7 +116,7 @@ VIEW (조회)
 | Repository | `packages/be-repository/src/grants.repository.ts` | Grant 조회 (Role/User 기반) |
 | Service | `packages/be-service/src/abilities.service.ts` | Ability 비즈니스 로직 |
 | Service | `packages/be-service/src/grants.service.ts` | Grant 비즈니스 로직 |
-| Facade | `packages/be-facade/src/abilities.facade.ts` | Ability + Grant 조합 로직 |
+| ApplicationService | `packages/be-app/src/abilities.application-service.ts` | Ability + Grant 조합 로직 |
 | CASL | `packages/be-common/src/casl/casl-ability.factory.ts` | CASL Ability 생성 팩토리 (GrantsRepository 사용) |
 | Guard | `packages/be-common/src/guard/roles.guard.ts` | @Roles 데코레이터 Guard |
 | Guard | `packages/be-common/src/guard/role-category.guard.ts` | @RoleCategories 데코레이터 Guard |

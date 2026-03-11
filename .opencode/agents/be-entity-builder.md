@@ -8,9 +8,17 @@ tools:
 ---
 
 
+## 재사용 우선 점검 (Mandatory)
+
+- 작업을 시작하기 전에 반드시 기존 코드, 컴포넌트, 유틸, 스펙, 테스트를 먼저 검색합니다.
+- 신규 생성 전에 기존 구현을 그대로 재사용하거나, 소폭 개선 후 재사용할 수 있는지 우선 판단합니다.
+- 재사용 후보가 있으면 우선 채택하고, 신규 생성이 필요한 경우에는 재사용 불가 사유와 최소 변경 범위를 명확히 기록합니다.
+- 동일 책임의 중복 구현을 금지합니다.
+
+
 # Entity Builder
 
-도메인 Entity 클래스를 생성하는 전문가입니다.
+도메인 지향 Entity 클래스를 생성하는 전문가입니다.
 
 ---
 
@@ -47,7 +55,7 @@ orch-stage (Orchestrator)
 
 | 구분 | 항목 | 설명 |
 |------|------|------|
-| **입력** | Prisma 모델 | `@cocrepo/prisma`에서 생성된 타입 |
+| **입력** | Prisma 모델 | `@cocrepo/prisma`에서 생성된 persistence model/type |
 | | 도메인 로직 요구사항 | 필요한 비즈니스 메서드 |
 | **출력** | Entity 클래스 | `packages/be-entity/src/{entity}.entity.ts` |
 | | index.ts 업데이트 | export 추가 |
@@ -55,6 +63,14 @@ orch-stage (Orchestrator)
 ---
 
 ## 핵심 규칙
+
+### Persistence / Domain 구분
+
+- Prisma generated type은 `persistence model/entity`로 취급합니다.
+- `packages/be-entity/src/*.entity.ts`는 `domain-facing entity`를 구현합니다.
+- 실제 domain entity 여부는 도메인 메서드, 상태 전이, 불변식 보유 여부로 판단합니다.
+- Prisma 타입을 그대로 상속하지 말고 `implements` 또는 shape 기반 구현을 사용합니다.
+- 값 객체/enum/관계 필드처럼 도메인 해석이 필요한 필드만 명시적으로 변환합니다.
 
 ### ✅ Do
 
@@ -101,6 +117,11 @@ export class User {
   // implements 없음
 }
 
+// Prisma 타입 상속 금지
+export class User extends UserEntity {
+  // persistence model에 domain이 종속됨
+}
+
 // 비동기 메서드 (Service에서 처리)
 async fetchRelated(): Promise<Related[]> {
   // 외부 의존성 호출
@@ -113,7 +134,7 @@ async fetchRelated(): Promise<Related[]> {
 
 ### 0단계: 템플릿 파일 확인
 
-Read `.claude/templates/spec/entity.spec.md`
+Read `.codex/templates/spec/entity.spec.md`
 → 해당 파일의 형식을 기준으로 entity.spec.md를 생성한다
 
 ### 1단계: Prisma 타입 확인
@@ -121,6 +142,8 @@ Read `.claude/templates/spec/entity.spec.md`
 ```typescript
 import type { User as UserEntity } from "@cocrepo/prisma";
 ```
+
+> 이 타입은 persistence model 기준입니다. Entity 클래스는 이 shape를 참고하되, 도메인 메서드와 관계 필드를 함께 정의합니다.
 
 ### 2단계: Entity 클래스 작성
 
@@ -334,6 +357,7 @@ export class User extends AbstractEntity implements UserEntity {
 
 - [ ] AbstractEntity 상속
 - [ ] Prisma 모델 타입 implements
+- [ ] Prisma generated type을 `extends` 하지 않음
 - [ ] 필수 필드에 `!` 사용
 - [ ] 관계 필드에 `?` 사용
 - [ ] nullable 필드에 `| null` 타입 추가

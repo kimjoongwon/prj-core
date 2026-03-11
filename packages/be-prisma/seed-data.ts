@@ -232,7 +232,7 @@ export interface SubjectSeedData {
  *
  * v7.0 업데이트: Admin 메뉴 구조 변경
  * - menu:schedules → menu:sessions
- * - menu:settings → menu:grounds, menu:admins, menu:roles로 분리
+ * - menu:settings → menu:spaces, menu:admins, menu:roles로 분리
  * - 예약, 알림, 문의, 템플릿 메뉴 추가
  */
 export const subjectSeedData: SubjectSeedData[] = [
@@ -275,12 +275,12 @@ export const subjectSeedData: SubjectSeedData[] = [
 	{ name: "menu:contents", displayName: "콘텐츠", group: "menu", order: 150 },
 	{ name: "menu:templates", displayName: "템플릿", group: "menu", order: 160 },
 	{ name: "menu:sessions", displayName: "세션", group: "menu", order: 170 },
-	{ name: "menu:grounds", displayName: "시설", group: "menu", order: 180 },
+	{ name: "menu:spaces", displayName: "시설", group: "menu", order: 180 },
 	{ name: "menu:admins", displayName: "관리자", group: "menu", order: 190 },
 	{ name: "menu:roles", displayName: "역할/권한", group: "menu", order: 200 },
 	// 현재 admin-menu.ts 메뉴 구조에 맞는 추가 subjects
 	{
-		name: "menu:grounds:list",
+		name: "menu:spaces:list",
 		displayName: "시설 목록",
 		group: "menu",
 		order: 181,
@@ -298,13 +298,13 @@ export const subjectSeedData: SubjectSeedData[] = [
 		order: 211,
 	},
 	{
-		name: "menu:exercises",
+		name: "menu:tasks",
 		displayName: "운동 관리",
 		group: "menu",
 		order: 220,
 	},
 	{
-		name: "menu:exercises:list",
+		name: "menu:tasks:list",
 		displayName: "운동 종목 목록",
 		group: "menu",
 		order: 221,
@@ -566,19 +566,19 @@ export const subjectSeedData: SubjectSeedData[] = [
 	// v7.0 Admin 메뉴 (2depth - 시설)
 	// ============================================================================
 	{
-		name: "menu:grounds:info",
+		name: "menu:spaces:info",
 		displayName: "시설 정보",
 		group: "menu",
 		order: 181,
 	},
 	{
-		name: "menu:grounds:programs",
+		name: "menu:spaces:programs",
 		displayName: "프로그램 정의",
 		group: "menu",
 		order: 182,
 	},
 	{
-		name: "menu:grounds:equipment",
+		name: "menu:spaces:equipment",
 		displayName: "장비/시설물",
 		group: "menu",
 		order: 183,
@@ -712,7 +712,7 @@ export const subjectSeedData: SubjectSeedData[] = [
 		order: 951,
 	},
 	{
-		name: "menu:settings:grounds",
+		name: "menu:settings:spaces",
 		displayName: "시설 정보 (deprecated)",
 		group: "menu",
 		order: 960,
@@ -1546,7 +1546,7 @@ export const fullAccessAbilitySeedData: AbilitySeedData[] = [
 	},
 	{
 		roleName: "FULL_ACCESS",
-		subject: "menu:grounds",
+		subject: "menu:spaces",
 		actionName: "manage",
 		inverted: false,
 		description: "시설 관리 전체 권한",
@@ -1788,21 +1788,21 @@ export const fullAccessAbilitySeedData: AbilitySeedData[] = [
 	// ============================================================================
 	{
 		roleName: "FULL_ACCESS",
-		subject: "menu:grounds:info",
+		subject: "menu:spaces:info",
 		actionName: "manage",
 		inverted: false,
 		description: "시설 정보 전체 권한",
 	},
 	{
 		roleName: "FULL_ACCESS",
-		subject: "menu:grounds:programs",
+		subject: "menu:spaces:programs",
 		actionName: "manage",
 		inverted: false,
 		description: "프로그램 정의 전체 권한",
 	},
 	{
 		roleName: "FULL_ACCESS",
-		subject: "menu:grounds:equipment",
+		subject: "menu:spaces:equipment",
 		actionName: "manage",
 		inverted: false,
 		description: "장비/시설물 전체 권한",
@@ -1856,7 +1856,7 @@ export const fullAccessAbilitySeedData: AbilitySeedData[] = [
 	},
 	{
 		roleName: "FULL_ACCESS",
-		subject: "menu:exercises",
+		subject: "menu:tasks",
 		actionName: "manage",
 		inverted: false,
 		description: "운동 관리 전체 권한",
@@ -1873,7 +1873,7 @@ export const fullAccessAbilitySeedData: AbilitySeedData[] = [
 	// ============================================================================
 	{
 		roleName: "FULL_ACCESS",
-		subject: "menu:grounds:list",
+		subject: "menu:spaces:list",
 		actionName: "manage",
 		inverted: false,
 		description: "시설 목록 전체 권한",
@@ -1891,7 +1891,7 @@ export const fullAccessAbilitySeedData: AbilitySeedData[] = [
 	},
 	{
 		roleName: "FULL_ACCESS",
-		subject: "menu:exercises:list",
+		subject: "menu:tasks:list",
 		actionName: "manage",
 		inverted: false,
 		description: "운동 종목 목록 전체 권한",
@@ -2113,7 +2113,7 @@ export const fullAccessAbilitySeedData: AbilitySeedData[] = [
 	},
 	{
 		roleName: "FULL_ACCESS",
-		subject: "menu:settings:grounds",
+		subject: "menu:settings:spaces",
 		actionName: "manage",
 		inverted: false,
 		description: "시설 정보 전체 권한 (deprecated)",
@@ -2415,7 +2415,7 @@ export const manageAbilitySeedData: AbilitySeedData[] = [
 	},
 	{
 		roleName: "MANAGE",
-		subject: "menu:settings:grounds",
+		subject: "menu:settings:spaces",
 		actionName: "access",
 		inverted: false,
 		description: "시설 정보 접근 권한",
