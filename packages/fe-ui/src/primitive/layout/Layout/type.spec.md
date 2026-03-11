@@ -13,7 +13,7 @@
 | 항목 | 설명 |
 |------|------|
 | LayoutUserInfo | 공개 계약 요소 |
-| BottomNavItem | 공개 계약 요소 |
+| BottomNavItem | `icon`을 `AppIconName`으로 제한한 하단 네비게이션 계약 |
 | LayoutProps | 공개 계약 요소 |
 | SidePanelProps | 공개 계약 요소 |
 | HeaderBarProps | 공개 계약 요소 |
@@ -25,6 +25,7 @@
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-03-11 | Layout 하단 네비게이션 아이콘 계약을 `AppIconName` 기반으로 정리 | codex |
 | 2026-03-06 | 폴더 네이밍을 단수형(feature/input/layout/hook/style/type/util/widget/cell)으로 통일 | codex |
 | 2026-03-06 | src/components 레이어를 제거하고 경로를 src/* 기준으로 상향 | codex |
 | 2026-03-03 | 누락된 sidecar spec 신규 생성 | codex |

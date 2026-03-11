@@ -1,4 +1,4 @@
-import type { NavItemConfig, TabConfig } from "@cocrepo/type";
+import type { AppIconName, NavItemConfig, TabConfig } from "@cocrepo/type";
 import { makeAutoObservable } from "mobx";
 
 /**
@@ -38,7 +38,7 @@ export class NavItem {
 	readonly id: string;
 	readonly label: string;
 	readonly path: string | undefined;
-	readonly icon: string | undefined;
+	readonly icon: AppIconName | undefined;
 	readonly subject: string;
 	readonly children: NavItem[];
 	/** v7.0 신규: 3depth 탭 목록 */

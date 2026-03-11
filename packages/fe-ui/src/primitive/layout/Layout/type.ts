@@ -1,5 +1,5 @@
 import type { NavItem } from "@cocrepo/store";
-import type { FABAction } from "@cocrepo/type";
+import type { AppIconName, FABAction } from "@cocrepo/type";
 import type { ReactNode } from "react";
 
 /**
@@ -18,7 +18,7 @@ export interface LayoutUserInfo {
 export interface BottomNavItem {
 	id: string;
 	label: string;
-	icon: string;
+	icon: AppIconName;
 	/** OverlayMenu 표시 여부 (children이 있는 경우) */
 	hasSubMenu: boolean;
 }

@@ -165,6 +165,10 @@ export type {
 // ============================================
 export type { JsonArray, JsonObject, JsonValue } from "./json";
 // ============================================
+// 아이콘 관련 타입
+// ============================================
+export type { AppIconName } from "./icon";
+// ============================================
 // 네비게이션 관련 타입
 // ============================================
 export type { FABAction, NavItemConfig, TabConfig } from "./navigation";

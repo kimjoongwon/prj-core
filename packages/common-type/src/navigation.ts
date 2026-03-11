@@ -2,6 +2,8 @@
 // 네비게이션 관련 타입
 // ============================================
 
+import type { AppIconName } from "./icon";
+
 /**
  * 탭 설정 인터페이스 (v7.0 신규)
  * 페이지 내 3depth 탭 정보
@@ -19,7 +21,7 @@ export interface NavItemConfig {
 	id: string;
 	label: string;
 	path?: string;
-	icon?: string;
+	icon?: AppIconName;
 	subject: string;
 	children?: NavItemConfig[];
 	/** v7.0 신규: 3depth 탭 정보 */
@@ -33,7 +35,7 @@ export interface NavItemConfig {
 export interface FABAction {
 	id: string;
 	label: string;
-	icon: string;
+	icon: AppIconName;
 	/** 권한 체크용 subject */
 	subject: string;
 	/** 페이지 이동 경로 (href와 modal 중 하나만 사용) */

@@ -20,9 +20,10 @@
 
 | 모듈 | 용도 |
 |------|------|
+| @cocrepo/type | `AppLogoProps.icon`에 쓰는 `AppIconName` 계약 |
 | @cocrepo/store | 기능 구현 의존성 |
 | @heroui/react | 기능 구현 의존성 |
-| lucide-react | 기능 구현 의존성 |
+| ../../design-system/icon/AppIcon | 앱 전용 정적 아이콘 registry |
 | mobx-react-lite | 기능 구현 의존성 |
 
 ## 동작 흐름
@@ -47,6 +48,7 @@
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-03-11 | 로고 아이콘 기본값과 렌더링 경로를 `AppIconName` + `AppIcon` 조합으로 고정 | codex |
 | 2026-03-06 | 폴더 네이밍을 단수형(feature/input/layout/hook/style/type/util/widget/cell)으로 통일 | codex |
 | 2026-03-06 | Lucide 아이콘 렌더링을 파일 내부 helper로 내장하고 utils 의존을 제거 | codex |
 | 2026-03-06 | src 레이어 상향에 맞춰 util/hook 상대 import 깊이를 보정 | codex |

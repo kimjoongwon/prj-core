@@ -11,7 +11,7 @@ describe("NavItem", () => {
 		id: "nav-1",
 		label: "테스트 아이템",
 		path: "/test",
-		icon: "test-icon",
+		icon: "Home",
 		subject: "TestItem",
 		...overrides,
 	});
@@ -28,7 +28,7 @@ describe("NavItem", () => {
 			expect(navItem.id).toBe("nav-1");
 			expect(navItem.label).toBe("테스트 아이템");
 			expect(navItem.path).toBe("/test");
-			expect(navItem.icon).toBe("test-icon");
+			expect(navItem.icon).toBe("Home");
 			expect(navItem.subject).toBe("TestItem");
 		});
 

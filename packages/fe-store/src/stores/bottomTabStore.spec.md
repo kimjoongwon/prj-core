@@ -13,7 +13,7 @@
 
 | 타입명 | 종류 | 설명 |
 |--------|------|------|
-| `BottomTabItem` | interface | `id`, `label`, `icon`, `hasSubMenu` 속성을 가진 탭 아이템 |
+| `BottomTabItem` | interface | `id`, `label`, `icon(AppIconName)`, `hasSubMenu` 속성을 가진 탭 아이템 |
 | `BottomTabConfig` | interface | `tabIds: string[]` (표시할 메뉴 ID 목록), `moreTabId?: string` ("더보기" 탭 ID) |
 
 ## 상태 (Observable)
@@ -81,5 +81,6 @@ bottomTabStore.closeSubMenu();            // SubMenuList 닫기
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-03-11 | BottomTab 아이콘을 `AppIconName` 유한 집합으로 고정해 임의 문자열 사용을 차단 | codex |
 | 2026-02-18 | 초기 생성 (역기획) | req-reverse-engineer |
 | 2026-03-08 | `more` 탭 아이콘을 alias `MoreHorizontal` 대신 canonical `Ellipsis`로 교체 | codex |

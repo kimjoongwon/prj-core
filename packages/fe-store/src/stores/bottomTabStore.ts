@@ -1,3 +1,4 @@
+import type { AppIconName } from "@cocrepo/type";
 import { makeAutoObservable } from "mobx";
 import type { NavItem } from "./navItem";
 import type { NavigationStore } from "./navigationStore";
@@ -8,7 +9,7 @@ import type { NavigationStore } from "./navigationStore";
 export interface BottomTabItem {
 	id: string;
 	label: string;
-	icon: string;
+	icon: AppIconName;
 	/** SubMenuList 표시 여부 (children이 있는 경우) */
 	hasSubMenu: boolean;
 }

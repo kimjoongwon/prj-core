@@ -12,12 +12,14 @@
 
 | 항목 | 설명 |
 |------|------|
+| AppIconName | 네비게이션과 FAB에서 공통으로 쓰는 허용 아이콘 이름 계약 |
 | TabConfig | 공개 계약 요소 |
-| NavItemConfig | 공개 계약 요소 |
-| FABAction | 공개 계약 요소 |
+| NavItemConfig | `icon`을 자유 문자열이 아니라 `AppIconName`으로 제한한 네비게이션 계약 |
+| FABAction | `icon`을 `AppIconName`으로 제한한 FAB 계약 |
 
 ## 변경 이력
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-03-11 | 네비게이션/FAB 아이콘 계약을 자유 문자열에서 `AppIconName` 유한 집합으로 고정 | codex |
 | 2026-03-03 | 누락된 sidecar spec 신규 생성 | codex |

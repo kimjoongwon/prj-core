@@ -1,32 +1,14 @@
 "use client";
 
+import type { AppIconName } from "@cocrepo/type";
 import { useNavigationStore } from "@cocrepo/store";
 import { Button, cn } from "@heroui/react";
-import { icons, type LucideIcon } from "lucide-react";
 import { observer } from "mobx-react-lite";
-
-function renderLucideIcon(
-	iconName?: string,
-	className?: string,
-	size: number = 16,
-) {
-	if (!iconName) return null;
-
-	const IconComponent = icons[iconName as keyof typeof icons] as
-		| LucideIcon
-		| undefined;
-
-	if (!IconComponent) {
-		console.warn(`Icon "${iconName}" not found in lucide-react`);
-		return null;
-	}
-
-	return <IconComponent className={className} size={size} />;
-}
+import { AppIcon } from "../../design-system/icon/AppIcon";
 
 export interface AppLogoProps {
 	/** 로고 아이콘 (Lucide 아이콘 이름) */
-	icon?: string;
+	icon?: AppIconName;
 	/** 로고 텍스트 */
 	text?: string;
 	/** 추가 클래스명 */
@@ -64,7 +46,7 @@ export const AppLogo = observer(
 				)}
 				onPress={handleClickLogo}
 			>
-				{icon && renderLucideIcon(icon, "h-5 w-5", 20)}
+				{icon && <AppIcon name={icon} className="h-5 w-5" size={20} />}
 				<span>{text}</span>
 			</Button>
 		);

@@ -22,7 +22,7 @@
 |------|------|
 | @cocrepo/store | 기능 구현 의존성 |
 | @heroui/react | 기능 구현 의존성 |
-| lucide-react | 기능 구현 의존성 |
+| ../../design-system/icon/AppIcon | 앱 전용 정적 아이콘 registry |
 | mobx-react-lite | 기능 구현 의존성 |
 | react | 기능 구현 의존성 |
 
@@ -48,6 +48,7 @@
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-03-11 | BottomTab 아이콘 렌더링을 `AppIcon` registry로 교체해 `icons[...]` 네임스페이스 import를 제거 | codex |
 | 2026-03-06 | 규칙 위반 정리: useMemo/useCallback/useIsMounted 제거 및 observer/이벤트 네이밍 규칙 반영 | codex |
 | 2026-03-06 | 폴더 네이밍을 단수형(feature/input/layout/hook/style/type/util/widget/cell)으로 통일 | codex |
 | 2026-03-06 | Lucide 아이콘 렌더링을 파일 내부 helper로 내장하고 utils 의존을 제거 | codex |

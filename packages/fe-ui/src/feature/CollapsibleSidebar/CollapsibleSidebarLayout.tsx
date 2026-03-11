@@ -1,30 +1,13 @@
+import type { AppIconName } from "@cocrepo/type";
 import { Button } from "@heroui/react";
-import { icons, type LucideIcon } from "lucide-react";
+import { ChevronLeft, ChevronRight } from "lucide-react";
+import { AppIcon } from "../../design-system/icon/AppIcon";
 import { VStack } from "../../layout/VStack/VStack";
-
-function renderLucideIcon(
-	iconName?: string,
-	className?: string,
-	size: number = 16,
-) {
-	if (!iconName) return null;
-
-	const IconComponent = icons[iconName as keyof typeof icons] as
-		| LucideIcon
-		| undefined;
-
-	if (!IconComponent) {
-		console.warn(`Icon "${iconName}" not found in lucide-react`);
-		return null;
-	}
-
-	return <IconComponent className={className} size={size} />;
-}
 
 interface ParentMenuInfo {
 	name: string;
 	pathname: string;
-	icon?: string;
+	icon?: AppIconName;
 }
 
 export interface CollapsibleSidebarProps {
@@ -64,7 +47,6 @@ export const CollapsibleSidebar = (props: CollapsibleSidebarProps) => {
 				isCollapsed ? "w-20" : "w-72"
 			}`}
 		>
-			{/* Header with Parent Menu Info and Toggle */}
 			<div
 				className={`flex items-center bg-content2/50 p-3 ${
 					isCollapsed ? "justify-center" : "justify-between"
@@ -74,11 +56,11 @@ export const CollapsibleSidebar = (props: CollapsibleSidebarProps) => {
 					<div className="flex min-w-0 flex-1 items-center gap-2">
 						{parentMenuInfo.icon && (
 							<div className="flex-shrink-0">
-								{renderLucideIcon(
-									parentMenuInfo.icon,
-									"w-4 h-4 text-primary",
-									16,
-								)}
+								<AppIcon
+									name={parentMenuInfo.icon}
+									className="h-4 w-4 text-primary"
+									size={16}
+								/>
 							</div>
 						)}
 						<div className="min-w-0 flex-1">
@@ -97,22 +79,20 @@ export const CollapsibleSidebar = (props: CollapsibleSidebarProps) => {
 					className="flex-shrink-0 text-default-500 hover:text-default-700"
 					aria-label={isCollapsed ? "Expand sidebar" : "Collapse sidebar"}
 				>
-					{renderLucideIcon(
-						isCollapsed ? "ChevronRight" : "ChevronLeft",
-						"w-4 h-4",
-						16,
+					{isCollapsed ? (
+						<ChevronRight className="h-4 w-4" size={16} />
+					) : (
+						<ChevronLeft className="h-4 w-4" size={16} />
 					)}
 				</Button>
 			</div>
 
-			{/* Divider */}
 			{!isCollapsed && parentMenuInfo && (
 				<div className="px-3 py-2">
 					<div className="h-px w-full"></div>
 				</div>
 			)}
 
-			{/* Navigation Items */}
 			<div className="flex-1 overflow-y-auto p-3">
 				<VStack className="gap-1">{children}</VStack>
 			</div>

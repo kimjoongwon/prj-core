@@ -2,27 +2,8 @@
 
 import { useNavigationStore } from "@cocrepo/store";
 import { cn } from "@heroui/react";
-import { icons, type LucideIcon } from "lucide-react";
 import { observer } from "mobx-react-lite";
-
-function renderLucideIcon(
-	iconName?: string,
-	className?: string,
-	size: number = 16,
-) {
-	if (!iconName) return null;
-
-	const IconComponent = icons[iconName as keyof typeof icons] as
-		| LucideIcon
-		| undefined;
-
-	if (!IconComponent) {
-		console.warn(`Icon "${iconName}" not found in lucide-react`);
-		return null;
-	}
-
-	return <IconComponent className={className} size={size} />;
-}
+import { AppIcon } from "../../design-system/icon/AppIcon";
 
 /**
  * SubNav Feature 컴포넌트
@@ -61,7 +42,7 @@ export const SubNav = observer(() => {
 							: "text-foreground/60 hover:bg-default-100 hover:text-foreground",
 					)}
 				>
-					{item.icon && renderLucideIcon(item.icon, "h-4 w-4", 16)}
+					{item.icon && <AppIcon name={item.icon} className="h-4 w-4" size={16} />}
 					<span>{item.label}</span>
 				</button>
 			))}

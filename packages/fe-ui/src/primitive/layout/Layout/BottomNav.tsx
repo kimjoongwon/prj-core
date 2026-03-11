@@ -1,47 +1,9 @@
 "use client";
 
-import { icons, type LucideIcon } from "lucide-react";
 import { observer } from "mobx-react-lite";
+import { AppIcon } from "../../../design-system/icon/AppIcon";
 import type { BottomNavProps } from "./type";
 
-function renderLucideIcon(
-	iconName?: string,
-	className?: string,
-	size: number = 16,
-) {
-	if (!iconName) return null;
-
-	const IconComponent = icons[iconName as keyof typeof icons] as
-		| LucideIcon
-		| undefined;
-
-	if (!IconComponent) {
-		console.warn(`Icon "${iconName}" not found in lucide-react`);
-		return null;
-	}
-
-	return <IconComponent className={className} size={size} />;
-}
-
-/**
- * BottomNav - 모바일 하단 탭바 (v7.0 신규)
- *
- * 기획서 참조: 02-mobile.md
- * - 5개 고정 탭: 대시보드, 예약, 회원, 알림, 더보기
- * - 하위 메뉴가 있는 탭은 SubMenuList 표시
- *
- * @example
- * ```tsx
- * <BottomNav
- *   items={[
- *     { id: 'dashboard', label: '대시보드', icon: 'LayoutDashboard', hasSubMenu: false },
- *     { id: 'reservations', label: '예약', icon: 'CalendarCheck', hasSubMenu: true },
- *   ]}
- *   activeTabId="dashboard"
- *   onTabClick={(tabId) => handleTabClick(tabId)}
- * />
- * ```
- */
 export const BottomNav = observer(function BottomNav({
 	items,
 	activeTabId,
@@ -70,11 +32,11 @@ export const BottomNav = observer(function BottomNav({
 							aria-current={isActive ? "page" : undefined}
 						>
 							<span className="flex h-6 w-6 items-center justify-center">
-								{renderLucideIcon(
-									item.icon,
-									isActive ? "text-primary" : "text-default-500",
-									24,
-								)}
+								<AppIcon
+									name={item.icon}
+									className={isActive ? "text-primary" : "text-default-500"}
+									size={24}
+								/>
 							</span>
 							<span
 								className={`text-xs ${isActive ? "font-medium" : "font-normal"}`}
@@ -86,7 +48,6 @@ export const BottomNav = observer(function BottomNav({
 				})}
 			</div>
 
-			{/* iOS 홈 인디케이터 영역 safe area */}
 			<div className="h-safe-area-inset-bottom bg-content1" />
 		</nav>
 	);

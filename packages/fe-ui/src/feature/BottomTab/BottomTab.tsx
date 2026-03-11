@@ -2,27 +2,8 @@
 
 import { useNavigationStore } from "@cocrepo/store";
 import { cn, Tab, Tabs } from "@heroui/react";
-import { icons, type LucideIcon } from "lucide-react";
 import { observer } from "mobx-react-lite";
-
-function renderLucideIcon(
-	iconName?: string,
-	className?: string,
-	size: number = 16,
-) {
-	if (!iconName) return null;
-
-	const IconComponent = icons[iconName as keyof typeof icons] as
-		| LucideIcon
-		| undefined;
-
-	if (!IconComponent) {
-		console.warn(`Icon "${iconName}" not found in lucide-react`);
-		return null;
-	}
-
-	return <IconComponent className={className} size={size} />;
-}
+import { AppIcon } from "../../design-system/icon/AppIcon";
 
 export interface BottomTabProps {
 	/** 탭 선택 시 콜백 (SubMenuList 표시 여부 결정용) */
@@ -107,7 +88,7 @@ export const BottomTab = observer(
 												navItem.active ? "text-primary" : "text-foreground/60",
 											)}
 										>
-											{renderLucideIcon(navItem.icon, "h-6 w-6", 24)}
+											<AppIcon name={navItem.icon} className="h-6 w-6" size={24} />
 										</span>
 									)}
 									<span
