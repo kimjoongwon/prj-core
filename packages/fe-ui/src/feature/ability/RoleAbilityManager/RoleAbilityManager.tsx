@@ -4,9 +4,9 @@ import { Card, CardBody, CardHeader } from "@heroui/react";
 import { observer } from "mobx-react-lite";
 import { useEffect } from "react";
 import { Select } from "../../../input/Select/Select";
-import { Text } from "../../../primitive/data-display/Text/Text";
 import { HStack } from "../../../layout/HStack/HStack";
 import { VStack } from "../../../layout/VStack/VStack";
+import { Text } from "../../../primitive/data-display/Text/Text";
 import { AbilityFormModal } from "../../../widget/ability/AbilityFormModal";
 import { AbilityRuleList } from "../../../widget/ability/AbilityRuleList";
 import type { RoleAbilityManagerProps } from "./type";
@@ -55,7 +55,6 @@ export const RoleAbilityManager = observer(
 		const {
 			state,
 			loadAbilities,
-			loadSubjectFields,
 			handleSubmitAbility,
 			handleDeleteAbility,
 			handleToggleActive,
@@ -92,7 +91,7 @@ export const RoleAbilityManager = observer(
 		/**
 		 * Subject 변경 시 필드 로드 (모달에서 Subject 선택 시)
 		 */
-		const handleSubjectFieldsLoad = async (
+		const _handleSubjectFieldsLoad = async (
 			subjectName: string,
 		): Promise<string[]> => {
 			if (!onLoadSubjectFields) return [];

@@ -59,3 +59,4 @@
 | 2026-03-06 | feature 디렉토리를 features로 이관하고 경로 표기를 동기화 | codex |
 | 2026-03-03 | 누락된 sidecar spec 신규 생성 | codex |
 | 2026-03-06 | widget 경로를 widgets로 통합 | codex |
+| 2026-03-11 | lint 에러 대응을 위해 미사용 hook 변수 제거(`loadSubjectFields`) | codex |

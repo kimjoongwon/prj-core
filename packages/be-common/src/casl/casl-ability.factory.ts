@@ -5,16 +5,17 @@
  * 사용자의 Role에 따라 CASL Ability 객체를 생성합니다.
  * DB에 저장된 권한 정보를 기반으로 런타임에 권한을 구성합니다.
  */
-import { CONTEXT_KEYS } from "@cocrepo/constant";
-import { GrantsRepository } from "@cocrepo/repository";
-import { Injectable, Logger } from "@nestjs/common";
+
 import { Ability, AbilityBuilder } from "@casl/ability";
+import { CONTEXT_KEYS } from "@cocrepo/constant";
 import type { UserDto } from "@cocrepo/dto";
 import type {
 	Ability as PrismaAbility,
 	Action as PrismaAction,
 	Subject as PrismaSubject,
 } from "@cocrepo/prisma";
+import { GrantsRepository } from "@cocrepo/repository";
+import { Injectable, Logger } from "@nestjs/common";
 import { ClsService } from "nestjs-cls";
 import type { Actions, AppAbility, AppAbilityClass, Subjects } from "./types";
 
@@ -233,19 +234,18 @@ export class CaslAbilityFactory {
 
 		// 역할 그룹 이름 배열
 		const roleGroupNames =
-			(currentTenant.role as any)?.associations
-				?.map((ac: any) => ac.group?.name)
-				.filter(Boolean) ?? [];
+			currentTenant.role?.associations
+				?.map((association) => association.group?.name)
+				.filter((name): name is string => name !== undefined) ?? [];
 
 		// 이용자 카테고리
-		const userCategory =
-			(user as any).classification?.category?.name ?? "";
+		const userCategory = user.classification?.category?.name ?? "";
 
 		// 이용자 그룹 이름 배열
 		const userGroupNames =
-			(user as any).associations
-				?.map((a: any) => a.group?.name)
-				.filter(Boolean) ?? [];
+			user.associations
+				?.map((association) => association.group?.name)
+				.filter((name): name is string => name !== undefined) ?? [];
 
 		return {
 			user: {
@@ -287,16 +287,12 @@ export class CaslAbilityFactory {
 		) => void,
 	): void {
 		if (!ability.subject) {
-			this.logger.warn(
-				`Ability에 Subject가 없습니다: abilityId=${ability.id}`,
-			);
+			this.logger.warn(`Ability에 Subject가 없습니다: abilityId=${ability.id}`);
 			return;
 		}
 
 		if (!ability.action) {
-			this.logger.warn(
-				`Ability에 Action이 없습니다: abilityId=${ability.id}`,
-			);
+			this.logger.warn(`Ability에 Action이 없습니다: abilityId=${ability.id}`);
 			return;
 		}
 
@@ -373,32 +369,35 @@ export class CaslAbilityFactory {
 		template: string,
 		context: Record<string, unknown>,
 	): string {
-		return template.replace(TEMPLATE_VARIABLE_PATTERN, (match, path: string) => {
-			// 보안 검증: 허용된 변수인지 확인
-			if (
-				!ALLOWED_TEMPLATE_VARIABLES.includes(
-					path as (typeof ALLOWED_TEMPLATE_VARIABLES)[number],
-				)
-			) {
-				this.logger.warn(`허용되지 않은 템플릿 변수: ${path}`);
-				return '""'; // 빈 문자열로 치환 (JSON 호환)
-			}
+		return template.replace(
+			TEMPLATE_VARIABLE_PATTERN,
+			(_match, path: string) => {
+				// 보안 검증: 허용된 변수인지 확인
+				if (
+					!ALLOWED_TEMPLATE_VARIABLES.includes(
+						path as (typeof ALLOWED_TEMPLATE_VARIABLES)[number],
+					)
+				) {
+					this.logger.warn(`허용되지 않은 템플릿 변수: ${path}`);
+					return '""'; // 빈 문자열로 치환 (JSON 호환)
+				}
 
-			// 경로를 따라 값 추출 (예: user.id -> context.user.id)
-			const value = this.getValueByPath(context, path);
+				// 경로를 따라 값 추출 (예: user.id -> context.user.id)
+				const value = this.getValueByPath(context, path);
 
-			if (value === undefined || value === null) {
-				this.logger.warn(`템플릿 변수 값이 없습니다: ${path}`);
-				return '""';
-			}
+				if (value === undefined || value === null) {
+					this.logger.warn(`템플릿 변수 값이 없습니다: ${path}`);
+					return '""';
+				}
 
-			// 문자열이면 따옴표로 감싸서 반환 (JSON 호환)
-			if (typeof value === "string") {
-				return `"${value}"`;
-			}
+				// 문자열이면 따옴표로 감싸서 반환 (JSON 호환)
+				if (typeof value === "string") {
+					return `"${value}"`;
+				}
 
-			return String(value);
-		});
+				return String(value);
+			},
+		);
 	}
 
 	/**
@@ -408,10 +407,7 @@ export class CaslAbilityFactory {
 	 * @param path - 점으로 구분된 경로 (예: "user.id")
 	 * @returns 추출된 값 또는 undefined
 	 */
-	private getValueByPath(
-		obj: Record<string, unknown>,
-		path: string,
-	): unknown {
+	private getValueByPath(obj: Record<string, unknown>, path: string): unknown {
 		const keys = path.split(".");
 		let current: unknown = obj;
 

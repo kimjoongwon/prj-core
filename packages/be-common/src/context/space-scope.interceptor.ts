@@ -7,10 +7,10 @@ import {
 	type NestInterceptor,
 } from "@nestjs/common";
 import { Reflector } from "@nestjs/core";
-import type { Observable } from "rxjs";
 import { ClsService } from "nestjs-cls";
-import { SPACE_SCOPE_KEY, SpaceScope } from "./space-scope.decorator";
+import type { Observable } from "rxjs";
 import { canAccessAllSpaces } from "../util/permission.util";
+import { SPACE_SCOPE_KEY, SpaceScope } from "./space-scope.decorator";
 
 /**
  * Space 스코프 인터셉터
@@ -28,9 +28,9 @@ export class SpaceScopeInterceptor implements NestInterceptor {
 	constructor(
 		private readonly cls: ClsService,
 		private readonly reflector: Reflector,
-	) { }
+	) {}
 
-	intercept(context: ExecutionContext, next: CallHandler): Observable<any> {
+	intercept(context: ExecutionContext, next: CallHandler): Observable<unknown> {
 		const user = this.cls.get<UserDto>(CONTEXT_KEYS.AUTH_USER);
 		const tenant = this.cls.get<TenantDto>(CONTEXT_KEYS.TENANT);
 		const spaceId = this.cls.get<string>(CONTEXT_KEYS.SPACE_ID);
@@ -50,14 +50,10 @@ export class SpaceScopeInterceptor implements NestInterceptor {
 
 		if (scope === SpaceScope.CURRENT) {
 			// @OnlyMySpace: 현재 Space ID만
-			this.cls.set(
-				CONTEXT_KEYS.EFFECTIVE_SPACE_IDS,
-				spaceId ? [spaceId] : [],
-			);
+			this.cls.set(CONTEXT_KEYS.EFFECTIVE_SPACE_IDS, spaceId ? [spaceId] : []);
 		} else {
 			// 기본: 사용자의 Tenant spaceIds (user.tenants 기반)
-			const accessibleSpaceIds =
-				user?.tenants?.map((t) => t.spaceId) ?? [];
+			const accessibleSpaceIds = user?.tenants?.map((t) => t.spaceId) ?? [];
 			this.cls.set(CONTEXT_KEYS.EFFECTIVE_SPACE_IDS, accessibleSpaceIds);
 		}
 

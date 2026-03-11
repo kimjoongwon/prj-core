@@ -11,9 +11,9 @@ import {
 } from "@heroui/react";
 import { Plus, Search, User } from "lucide-react";
 import { observer } from "mobx-react-lite";
-import { Text } from "../../../primitive/data-display/Text/Text";
 import { HStack } from "../../../layout/HStack/HStack";
 import { VStack } from "../../../layout/VStack/VStack";
+import { Text } from "../../../primitive/data-display/Text/Text";
 import { AbilityFormModal } from "../../../widget/ability/AbilityFormModal";
 import { AbilityRuleList } from "../../../widget/ability/AbilityRuleList";
 import type { UserAbilityManagerProps } from "./type";
@@ -73,7 +73,6 @@ export const UserAbilityManager = observer(
 			// 상태
 			state,
 			// Subject 필드 로드
-			loadSubjectFields,
 			// 모달 핸들러
 			handleOpenAddModal,
 			handleOpenEditModal,
