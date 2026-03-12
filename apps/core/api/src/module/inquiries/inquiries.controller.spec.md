@@ -6,7 +6,7 @@
 
 ## 역할
 
-고객 문의(Inquiry) aggregate root의 REST 엔드포인트를 제공합니다. Controller는 인증 컨텍스트와 DTO만 수집하고, 모든 유즈케이스는 `InquiriesApplicationService`로 위임합니다.
+고객 문의(Inquiry) aggregate root의 REST 엔드포인트를 제공합니다. Controller는 인증 컨텍스트와 DTO만 수집하고, 모든 유즈케이스는 `InquiriesService`로 위임합니다.
 
 ## 베이스 경로
 
@@ -16,7 +16,7 @@
 
 | 서비스 | 역할 |
 |--------|------|
-| InquiriesApplicationService | Inquiry root 기준 CRUD, 메시지, 참여자, bootstrap, AI fill 유즈케이스 조합 |
+| InquiriesService | Inquiry root 기준 CRUD, 메시지, 참여자, bootstrap, AI fill 유즈케이스 조합 |
 | AuthContext | 현재 사용자 식별 |
 | SpaceContext | 현재 Space 식별 |
 
@@ -115,5 +115,7 @@
 |------|------|--------|
 | 2026-02-25 | 초기 생성 | orch-requirement |
 | 2026-03-01 | 문의 Form Bootstrap(`/form/create`, `/:inquiryId/form/update`) 및 AI Fill(`/form/ai-fill`) 반영, draft endpoint 제거 | codex |
-| 2026-03-11 | controller 경로와 의존성을 Inquiry root ApplicationService 기준으로 갱신 | codex |
+| 2026-03-11 | controller 경로와 의존성을 Inquiry root Service 기준으로 갱신 | codex |
 | 2026-03-11 | Form bootstrap/AI patch DTO의 Swagger extra model 등록을 반영 | codex |
+| 2026-03-12 | Controller-서비스 API 정합성 정리 (`createInquiry`/`sendInquiryMessage` 호출명 반영, Payload 구성 보강) | codex |
+| 2026-03-12 | 목록 조회 메타 계산을 InquiriesApplicationService로 이관 | codex |

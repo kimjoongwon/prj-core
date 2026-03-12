@@ -15,6 +15,18 @@ export class RoutinesApplicationService {
 		private readonly authContext: AuthContext,
 	) {}
 
+	findRoutines(query: GetRoutinesQueryDto): Promise<{
+		data: Routine[];
+		meta: {
+			total: number;
+			skip: number;
+			take: number;
+			totalPages: number;
+		};
+	}> {
+		return this.getRoutines(query);
+	}
+
 	async getRoutines(query: GetRoutinesQueryDto): Promise<{
 		data: Routine[];
 		meta: {
@@ -45,6 +57,13 @@ export class RoutinesApplicationService {
 		};
 	}
 
+	findRoutineById(
+		routineId: string,
+		_spaceScope?: SpaceScope,
+	): Promise<Routine> {
+		return this.getRoutine(routineId);
+	}
+
 	getRoutine(routineId: string): Promise<Routine> {
 		return this.routinesService.findRoutineById(
 			routineId,
@@ -63,6 +82,10 @@ export class RoutinesApplicationService {
 
 	updateRoutine(routineId: string, dto: UpdateRoutineDto): Promise<Routine> {
 		return this.routinesService.updateRoutine(routineId, dto);
+	}
+
+	removeRoutine(routineId: string): Promise<void> {
+		return this.deleteRoutine(routineId);
 	}
 
 	deleteRoutine(routineId: string): Promise<void> {

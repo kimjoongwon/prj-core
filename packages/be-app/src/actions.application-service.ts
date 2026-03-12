@@ -8,10 +8,18 @@ import { BadRequestException, Injectable } from "@nestjs/common";
 export class ActionsApplicationService {
 	constructor(private readonly actionsService: ActionsService) {}
 
+	getAllActions(): Promise<Action[]> {
+		return this.getActions();
+	}
+
 	getActions(group?: string): Promise<Action[]> {
 		return group
 			? this.actionsService.getActionsByGroup(group)
 			: this.actionsService.getAllActions();
+	}
+
+	getActionsByGroup(group: string): Promise<Action[]> {
+		return this.actionsService.getActionsByGroup(group);
 	}
 
 	getActionById(id: string): Promise<Action> {

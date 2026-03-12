@@ -13,14 +13,11 @@ import { GrantsController } from "./grants.controller";
 	controllers: [GrantsController],
 	providers: [
 		GrantsApplicationService,
-		// Services
 		GrantsService,
-		// Repositories
 		GrantsRepository,
 		RolesRepository,
 		UsersRepository,
 		AbilitiesRepository,
-		// Context
 		SpaceContext,
 	],
 	exports: [GrantsApplicationService],

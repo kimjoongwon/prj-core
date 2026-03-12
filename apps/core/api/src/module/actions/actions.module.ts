@@ -1,6 +1,6 @@
 import { ActionsApplicationService } from "@cocrepo/app";
-import { ActionsRepository } from "@cocrepo/repository";
 import { ActionsService } from "@cocrepo/service";
+import { ActionsRepository } from "@cocrepo/repository";
 import { Module } from "@nestjs/common";
 import { ActionsController } from "./actions.controller";
 

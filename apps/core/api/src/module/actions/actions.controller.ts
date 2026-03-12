@@ -42,7 +42,7 @@ import {
 @Controller()
 export class ActionsController {
 	constructor(
-		private readonly actionsApplicationService: ActionsApplicationService,
+		private readonly actionsService: ActionsApplicationService,
 	) {}
 
 	@Public()
@@ -64,7 +64,11 @@ export class ActionsController {
 	})
 	@ResponseMessage("common.action.list.success")
 	async getActions(@Query("group") group?: string) {
-		return this.actionsApplicationService.getActions(group);
+		if (group) {
+			return this.actionsService.getActionsByGroup(group);
+		}
+
+		return this.actionsService.getAllActions();
 	}
 
 	@Public()
@@ -83,7 +87,7 @@ export class ActionsController {
 	@ApiResponseEntity(ActionDto, HttpStatus.OK)
 	@ResponseMessage("common.action.read.success")
 	async getActionById(@Param("id", ParseUUIDPipe) id: string) {
-		return this.actionsApplicationService.getActionById(id);
+		return this.actionsService.getActionById(id);
 	}
 
 	@Post()
@@ -104,7 +108,7 @@ export class ActionsController {
 	@ApiResponseEntity(ActionDto, HttpStatus.CREATED)
 	@ResponseMessage("common.action.create.success")
 	async createAction(@Body() dto: CreateActionDto) {
-		return this.actionsApplicationService.createAction(dto);
+		return this.actionsService.createAction(dto);
 	}
 
 	@Patch(":id")
@@ -140,7 +144,7 @@ export class ActionsController {
 		@Param("id", ParseUUIDPipe) id: string,
 		@Body() dto: UpdateActionDto,
 	) {
-		return this.actionsApplicationService.updateAction(id, dto);
+		return this.actionsService.updateAction(id, dto);
 	}
 
 	@Delete(":id")
@@ -169,6 +173,6 @@ export class ActionsController {
 	@ApiResponseEntity(ActionDto, HttpStatus.OK)
 	@ResponseMessage("common.action.delete.success")
 	async deleteAction(@Param("id", ParseUUIDPipe) id: string) {
-		return this.actionsApplicationService.deleteAction(id);
+		return this.actionsService.deleteAction(id);
 	}
 }

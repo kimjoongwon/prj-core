@@ -1,4 +1,3 @@
-import { wrapResponse } from "@cocrepo/be-common";
 import { AuthApplicationService } from "@cocrepo/app";
 import { AUTH_ERRORS, SYSTEM_ROLES, Token } from "@cocrepo/constant";
 import {
@@ -22,7 +21,6 @@ import {
 	TokenRefreshResponseDto,
 	VerifyTokenResponseDto,
 } from "@cocrepo/dto";
-import { AuthAuditLogService } from "@cocrepo/service";
 import {
 	BadRequestException,
 	Body,
@@ -54,7 +52,6 @@ import { Request, Response } from "express";
 export class AuthController {
 	constructor(
 		private readonly authApplicationService: AuthApplicationService,
-		private readonly authAuditLogService: AuthAuditLogService,
 		private readonly configService: ConfigService,
 	) {}
 
@@ -237,15 +234,7 @@ export class AuthController {
 	})
 	@ResponseMessage("감사 로그 조회 성공")
 	async getAuthAuditLogs(@Query() query: QueryAuthAuditLogDto) {
-		const { logs, totalCount } =
-			await this.authAuditLogService.getAuditLogs(query);
-
-		const skip = query.skip ?? 0;
-		const take = query.take ?? 20;
-
-		return wrapResponse(logs, {
-			meta: new PageMetaDto(skip, take, totalCount),
-		});
+		return this.authApplicationService.getAuthAuditLogs(query);
 	}
 
 	@Roles([SYSTEM_ROLES.FULL_ACCESS])
@@ -262,7 +251,7 @@ export class AuthController {
 	@ApiResponseEntity(AuditLogStatsDto, HttpStatus.OK)
 	@ResponseMessage("감사 로그 통계 조회 성공")
 	async getAuthAuditLogStats() {
-		return this.authAuditLogService.getStats();
+		return this.authApplicationService.getAuthAuditLogStats();
 	}
 
 	@SkipSpaceCheck()

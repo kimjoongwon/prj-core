@@ -1,5 +1,5 @@
-import { TranslationsApplicationService } from "@cocrepo/app";
 import { TranslationsRepository } from "@cocrepo/repository";
+import { TranslationsApplicationService } from "@cocrepo/app";
 import { RedisService, TranslationsService } from "@cocrepo/service";
 import { Module } from "@nestjs/common";
 import { TranslationsController } from "./translations.controller";
@@ -8,8 +8,8 @@ import { TranslationsController } from "./translations.controller";
 	controllers: [TranslationsController],
 	providers: [
 		TranslationsRepository,
-		TranslationsService,
 		TranslationsApplicationService,
+		TranslationsService,
 		RedisService,
 	],
 	exports: [TranslationsApplicationService],

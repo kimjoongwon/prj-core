@@ -21,6 +21,7 @@
 | @nestjs/common | 기능 구현 의존성 |
 | ../oidc/oidc.module | 기능 구현 의존성 |
 | ./interaction.controller | 기능 구현 의존성 |
+| ./interaction.application-service | 기능 구현 의존성 |
 | ./interaction.service | 기능 구현 의존성 |
 
 ## 구현 체크리스트
@@ -33,3 +34,4 @@
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
 | 2026-03-03 | 누락된 sidecar spec 신규 생성 | codex |
+| 2026-03-12 | InteractionModule에 InteractionApplicationService를 providers로 추가 | codex |

@@ -1,11 +1,11 @@
 import { OidcClientsRepository } from "@cocrepo/repository";
-import { OidcClientsService } from "@cocrepo/service";
+import { OidcClientsApplicationService } from "@cocrepo/app";
 import { Module } from "@nestjs/common";
 import { OidcClientsController } from "./oidc-clients.controller";
 
 @Module({
 	controllers: [OidcClientsController],
-	providers: [OidcClientsService, OidcClientsRepository],
-	exports: [OidcClientsService],
+	providers: [OidcClientsApplicationService, OidcClientsRepository],
+	exports: [OidcClientsApplicationService],
 })
 export class OidcClientsModule {}

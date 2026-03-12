@@ -21,3 +21,5 @@
 |------|------|--------|
 | 2026-03-03 | 누락된 sidecar spec 신규 생성 | codex |
 | 2026-03-11 | 기존 인증 조합 레이어를 AuthApplicationService와 OidcFacade로 분리 | codex |
+| 2026-03-12 | 인증 감사 로그 조회/통계를 ApplicationService로 이관 | codex |
+| 2026-03-12 | 인증 감사 로그 목록 반환 시 페이지 메타 계산을 ApplicationService로 이관 | codex |

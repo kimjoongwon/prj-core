@@ -28,6 +28,7 @@ import {
 	Post,
 	Query,
 	UseGuards,
+	UnauthorizedException,
 } from "@nestjs/common";
 import { ApiBody, ApiOperation, ApiParam, ApiTags } from "@nestjs/swagger";
 
@@ -35,7 +36,7 @@ import { ApiBody, ApiOperation, ApiParam, ApiTags } from "@nestjs/swagger";
 @Controller()
 export class RoutinesController {
 	constructor(
-		private readonly routinesApplicationService: RoutinesApplicationService,
+		private readonly routinesService: RoutinesApplicationService,
 	) {}
 
 	/**
@@ -54,7 +55,12 @@ export class RoutinesController {
 	@ApiResponseEntity(RoutineDto, HttpStatus.OK, { isArray: true })
 	@ResponseMessage("루틴 목록 조회 성공")
 	async getRoutines(@Query() query: GetRoutinesQueryDto) {
-		return this.routinesApplicationService.getRoutines(query);
+		return this.routinesService.findRoutines({
+			spaceScope: query.spaceScope,
+			skip: query.skip,
+			take: query.take,
+			search: query.search,
+		});
 	}
 
 	/**
@@ -84,7 +90,7 @@ export class RoutinesController {
 	async getRoutine(
 		@Param("routineId", ParseUUIDPipe) routineId: string,
 	): Promise<Routine> {
-		return this.routinesApplicationService.getRoutine(routineId);
+		return this.routinesService.findRoutineById(routineId);
 	}
 
 	/**
@@ -113,7 +119,7 @@ export class RoutinesController {
 	@ApiResponseEntity(RoutineDto, HttpStatus.CREATED)
 	@ResponseMessage("루틴 등록 성공")
 	async createRoutine(@Body() dto: CreateRoutineDto): Promise<Routine> {
-		return this.routinesApplicationService.createRoutine(dto);
+		return this.routinesService.createRoutine(dto);
 	}
 
 	/**
@@ -151,7 +157,7 @@ export class RoutinesController {
 		@Param("routineId", ParseUUIDPipe) routineId: string,
 		@Body() dto: UpdateRoutineDto,
 	): Promise<Routine> {
-		return this.routinesApplicationService.updateRoutine(routineId, dto);
+		return this.routinesService.updateRoutine(routineId, dto);
 	}
 
 	/**
@@ -185,6 +191,6 @@ export class RoutinesController {
 	async deleteRoutine(
 		@Param("routineId", ParseUUIDPipe) routineId: string,
 	): Promise<void> {
-		await this.routinesApplicationService.deleteRoutine(routineId);
+		await this.routinesService.removeRoutine(routineId);
 	}
 }

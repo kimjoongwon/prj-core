@@ -30,7 +30,7 @@ import {
 import type { Request, Response } from "express";
 import type { OidcConfig } from "../../config/oidc.config";
 import type { KoaLikeRequest, KoaLikeResponse } from "../oidc/types";
-import { InteractionService } from "./interaction.service";
+import { InteractionApplicationService } from "./interaction.application-service";
 
 /**
  * OIDC Interaction Controller
@@ -48,7 +48,7 @@ export class InteractionController {
 		process.env.NODE_ENV !== "production" && process.env.NODE_ENV !== "staging";
 
 	constructor(
-		private readonly interactionService: InteractionService,
+		private readonly interactionApplicationService: InteractionApplicationService,
 		private readonly configService: ConfigService,
 	) {}
 
@@ -98,12 +98,12 @@ export class InteractionController {
 			const req = res.req as unknown as KoaLikeRequest;
 			const koaRes = res as unknown as KoaLikeResponse;
 
-			const interaction = await this.interactionService.getInteractionDetails(
+			const interaction = await this.interactionApplicationService.getInteractionDetails(
 				req,
 				koaRes,
 			);
 			const { prompt, params, session } = interaction;
-			const client = await this.interactionService.findClient(
+			const client = await this.interactionApplicationService.findClient(
 				params.client_id as string,
 			);
 
@@ -160,7 +160,7 @@ export class InteractionController {
 			const ipAddress = this.getClientIp(req);
 			const userAgent = req.headers["user-agent"];
 
-			const result = await this.interactionService.validateUser(
+			const result = await this.interactionApplicationService.validateUser(
 				loginDto.email,
 				loginDto.password,
 				ipAddress,
@@ -183,7 +183,7 @@ export class InteractionController {
 				});
 			}
 
-			const { redirectTo } = await this.interactionService.completeLogin(
+			const { redirectTo } = await this.interactionApplicationService.completeLogin(
 				koaReq,
 				koaRes,
 				result.userId!,
@@ -220,7 +220,7 @@ export class InteractionController {
 			const req = res.req as unknown as KoaLikeRequest;
 			const koaRes = res as unknown as KoaLikeResponse;
 
-			const { redirectTo } = await this.interactionService.processConsent(
+			const { redirectTo } = await this.interactionApplicationService.processConsent(
 				req,
 				koaRes,
 			);
@@ -252,7 +252,7 @@ export class InteractionController {
 			const req = res.req as unknown as KoaLikeRequest;
 			const koaRes = res as unknown as KoaLikeResponse;
 
-			const { redirectTo } = await this.interactionService.abortInteraction(
+			const { redirectTo } = await this.interactionApplicationService.abortInteraction(
 				req,
 				koaRes,
 			);

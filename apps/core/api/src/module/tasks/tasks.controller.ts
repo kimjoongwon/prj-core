@@ -1,5 +1,5 @@
 import { TasksApplicationService } from "@cocrepo/app";
-import { RolesGuard, wrapResponse } from "@cocrepo/be-common";
+import { RolesGuard } from "@cocrepo/be-common";
 import { SYSTEM_ROLES, USER_ERRORS } from "@cocrepo/constant";
 import {
 	ApiAuth,
@@ -40,7 +40,7 @@ import { ApiBody, ApiOperation, ApiParam, ApiTags } from "@nestjs/swagger";
 @Controller()
 export class TasksController {
 	constructor(
-		private readonly tasksApplicationService: TasksApplicationService,
+		private readonly tasksService: TasksApplicationService,
 		private readonly authContext: AuthContext,
 		private readonly spaceContext: SpaceContext,
 	) {}
@@ -60,26 +60,14 @@ export class TasksController {
 		if (!spaceId) {
 			throw new UnauthorizedException(USER_ERRORS.SPACE_NOT_SELECTED);
 		}
-
-		const skip = query.skip ?? 0;
-		const take = query.take ?? 10;
 		const spaceScope = query.spaceScope ?? SpaceScope.CURRENT;
 
-		const { tasks, total } = await this.tasksApplicationService.getTasks({
+		return this.tasksService.findTasks({
 			spaceId,
 			spaceScope,
-			skip,
-			take,
+			skip: query.skip,
+			take: query.take,
 			search: query.search,
-		});
-
-		return wrapResponse(tasks, {
-			meta: {
-				total,
-				skip,
-				take,
-				totalPages: take > 0 ? Math.ceil(total / take) : 1,
-			},
 		});
 	}
 
@@ -106,7 +94,7 @@ export class TasksController {
 			throw new UnauthorizedException(USER_ERRORS.SPACE_NOT_SELECTED);
 		}
 
-		return this.tasksApplicationService.getTaskById(taskId, spaceId);
+		return this.tasksService.findTaskById(taskId, spaceId);
 	}
 
 	@Get(":taskId/exercise")
@@ -130,7 +118,7 @@ export class TasksController {
 			throw new UnauthorizedException(USER_ERRORS.SPACE_NOT_SELECTED);
 		}
 
-		return this.tasksApplicationService.getTaskExercise(taskId, spaceId);
+		return this.tasksService.getExerciseByTaskId(taskId, spaceId);
 	}
 
 	@Get(":taskId/routines")
@@ -156,7 +144,7 @@ export class TasksController {
 			throw new UnauthorizedException(USER_ERRORS.SPACE_NOT_SELECTED);
 		}
 
-		return this.tasksApplicationService.getTaskRoutines(taskId, spaceId);
+		return this.tasksService.findTaskRoutines(taskId, spaceId);
 	}
 
 	@Post()
@@ -187,7 +175,7 @@ export class TasksController {
 			throw new UnauthorizedException(USER_ERRORS.USER_NOT_FOUND);
 		}
 
-		return this.tasksApplicationService.createTask(dto, spaceId, userId);
+		return this.tasksService.createTaskWithExercise(dto, spaceId, userId);
 	}
 
 	@Patch(":taskId/exercise")
@@ -220,7 +208,7 @@ export class TasksController {
 			throw new UnauthorizedException(USER_ERRORS.SPACE_NOT_SELECTED);
 		}
 
-		return this.tasksApplicationService.updateTaskExercise(
+		return this.tasksService.updateTaskExercise(
 			taskId,
 			dto,
 			spaceId,
@@ -252,6 +240,6 @@ export class TasksController {
 			throw new UnauthorizedException(USER_ERRORS.SPACE_NOT_SELECTED);
 		}
 
-		await this.tasksApplicationService.deleteTask(taskId, spaceId);
+		await this.tasksService.deleteTask(taskId, spaceId);
 	}
 }

@@ -8,11 +8,8 @@ import { RoutinesController } from "./routines.controller";
 	controllers: [RoutinesController],
 	providers: [
 		RoutinesApplicationService,
-		// Service
 		RoutinesService,
-		// Repository
 		RoutinesRepository,
-		// Context
 		AuthContext,
 		SpaceContext,
 	],

@@ -1,0 +1,40 @@
+{
+  "name": "introduction",
+  "private": true,
+  "version": "0.0.0",
+  "scripts": {
+    "dev": "next dev --turbopack --port ${INTRODUCTION_PORT:-3011}",
+    "start:dev": "next dev --turbopack --port ${INTRODUCTION_PORT:-3011}",
+    "build": "next build",
+    "analyze": "ANALYZE=true pnpm build",
+    "start": "next start",
+    "type-check": "tsc --noEmit",
+    "lint": "biome check .",
+    "lint:fix": "biome check --write .",
+    "format": "biome format --write .",
+    "clean": "rm -rf node_modules && rm -rf .next"
+  },
+  "dependencies": {
+    "@cocrepo/toolkit": "workspace:^",
+    "@cocrepo/type": "workspace:^",
+    "@cocrepo/ui": "workspace:^1.5.0",
+    "@heroui/react": "catalog:",
+    "@heroui/use-theme": "catalog:",
+    "framer-motion": "catalog:",
+    "lucide-react": "catalog:",
+    "mobx": "catalog:",
+    "mobx-react-lite": "catalog:",
+    "next": "^16.1.0",
+    "react": "catalog:",
+    "react-dom": "catalog:"
+  },
+  "devDependencies": {
+    "@next/bundle-analyzer": "^16.1.6",
+    "@tailwindcss/postcss": "catalog:",
+    "@types/node": "catalog:",
+    "@types/react": "catalog:",
+    "@types/react-dom": "catalog:",
+    "tailwindcss": "catalog:",
+    "typescript": "catalog:"
+  }
+}

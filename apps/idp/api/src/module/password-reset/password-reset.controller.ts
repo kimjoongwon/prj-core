@@ -25,7 +25,7 @@ import {
 	ApiTags,
 } from "@nestjs/swagger";
 import type { Response } from "express";
-import { PasswordResetService } from "./password-reset.service";
+import { PasswordResetApplicationService } from "./password-reset.application-service";
 
 /**
  * 비밀번호 재설정 Controller
@@ -39,7 +39,9 @@ import { PasswordResetService } from "./password-reset.service";
 export class PasswordResetController {
 	private readonly logger = new Logger(PasswordResetController.name);
 
-	constructor(private readonly passwordResetService: PasswordResetService) {}
+	constructor(
+		private readonly passwordResetApplicationService: PasswordResetApplicationService,
+	) {}
 
 	@ApiOperation({
 		operationId: "getPasswordPolicy",
@@ -54,7 +56,7 @@ export class PasswordResetController {
 	})
 	@Get("password-policy")
 	async getPasswordPolicy(@Res() res: Response) {
-		const policy = await this.passwordResetService.getPasswordPolicy();
+		const policy = await this.passwordResetApplicationService.getPasswordPolicy();
 		return res.json(policy);
 	}
 
@@ -82,7 +84,7 @@ export class PasswordResetController {
 	@Post("forgot-password")
 	async requestReset(@Body("email") email: string, @Res() res: Response) {
 		try {
-			await this.passwordResetService.requestReset(email);
+			await this.passwordResetApplicationService.requestReset(email);
 			return res.json({
 				message: "입력하신 이메일로 재설정 링크를 발송했습니다.",
 			});
@@ -111,7 +113,8 @@ export class PasswordResetController {
 	})
 	@Get("reset-password/:token")
 	async validateToken(@Param("token") token: string, @Res() res: Response) {
-		const result = await this.passwordResetService.validateToken(token);
+		const result =
+			await this.passwordResetApplicationService.validateToken(token);
 		return res.json(result);
 	}
 
@@ -158,7 +161,7 @@ export class PasswordResetController {
 		}
 
 		try {
-			await this.passwordResetService.executeReset(token, body.password);
+			await this.passwordResetApplicationService.executeReset(token, body.password);
 			return res.json({
 				message: "비밀번호가 변경되었습니다. 다시 로그인해주세요.",
 			});

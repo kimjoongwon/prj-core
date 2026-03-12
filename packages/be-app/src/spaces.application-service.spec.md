@@ -13,3 +13,4 @@ Space aggregate root 기준 유즈케이스를 조합합니다. Ground 1:1 detai
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
 | 2026-03-11 | Space root application service 신규 생성 | codex |
+| 2026-03-12 | 공간 목록 조회 시 메타 계산을 ApplicationService로 이관 | codex |

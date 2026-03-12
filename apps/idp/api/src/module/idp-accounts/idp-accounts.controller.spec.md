@@ -58,3 +58,6 @@ IDP(Identity Provider) 계정 관리 API를 제공합니다. 관리자가 IDP에
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
 | 2026-02-19 | 초기 생성 (역기획) | req-reverse-engineer |
+| 2026-03-12 | 컨트롤러 진입점을 `IdpAccountService`로 정렬 | codex |
+| 2026-03-12 | 순수성 기준으로 단일 전달형은 `@cocrepo/service` 직접 주입으로 정리 | codex |
+| 2026-03-12 | 목록 응답의 페이지 메타 조립을 ApplicationService로 이관 | codex |

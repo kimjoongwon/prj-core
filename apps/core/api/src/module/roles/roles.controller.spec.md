@@ -6,13 +6,13 @@
 
 ## 역할
 
-Role CRUD API를 노출하며, 실제 유즈케이스 실행은 `RolesApplicationService`에 위임합니다.
+Role CRUD API를 노출하며, 실제 유즈케이스 실행은 `RolesService`에 위임합니다.
 
 ## 의존성
 
 | 주입 대상 | 타입 | 설명 |
 |-----------|------|------|
-| rolesApplicationService | RolesApplicationService | Role 목록/상세/생성/수정/삭제 유즈케이스 |
+| rolesService | RolesService | Role 목록/상세/생성/수정/삭제 유즈케이스 |
 
 ## 엔드포인트
 
@@ -33,4 +33,4 @@ Role CRUD API를 노출하며, 실제 유즈케이스 실행은 `RolesApplicatio
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
 | 2026-02-18 | 초기 생성 (역기획) | req-reverse-engineer |
-| 2026-03-11 | Controller 의존성을 RolesApplicationService로 전환 | codex |
+| 2026-03-11 | Controller 의존성을 RolesService로 전환 | codex |

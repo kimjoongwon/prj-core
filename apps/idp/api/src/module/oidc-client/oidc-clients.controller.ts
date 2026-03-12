@@ -1,4 +1,3 @@
-import { wrapResponse } from "@cocrepo/be-common";
 import { SYSTEM_ROLES } from "@cocrepo/constant";
 import {
 	ApiAuth,
@@ -11,11 +10,10 @@ import {
 import {
 	CreateOidcClientDto,
 	OidcClientDto,
-	PageMetaDto,
 	QueryOidcClientDto,
 	UpdateOidcClientDto,
 } from "@cocrepo/dto";
-import { OidcClientsService } from "@cocrepo/service";
+import { OidcClientsApplicationService } from "@cocrepo/app";
 import {
 	Body,
 	Controller,
@@ -36,7 +34,9 @@ import { ApiBody, ApiOperation, ApiParam, ApiTags } from "@nestjs/swagger";
 @Roles([SYSTEM_ROLES.FULL_ACCESS])
 @SkipSpaceCheck()
 export class OidcClientsController {
-	constructor(private readonly oidcClientsService: OidcClientsService) {}
+	constructor(
+		private readonly oidcClientsService: OidcClientsApplicationService,
+	) {}
 
 	@Get()
 	@ApiOperation({
@@ -53,14 +53,7 @@ export class OidcClientsController {
 	})
 	@ResponseMessage("OIDC 클라이언트 목록 조회 성공")
 	async getOidcClients(@Query() query: QueryOidcClientDto) {
-		const { data, totalCount } = await this.oidcClientsService.getMany(query);
-
-		const skip = query.skip ?? 0;
-		const take = query.take ?? 20;
-
-		return wrapResponse(data, {
-			meta: new PageMetaDto(skip, take, totalCount),
-		});
+		return this.oidcClientsService.getMany(query);
 	}
 
 	@Get(":oidcClientId")

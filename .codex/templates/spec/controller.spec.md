@@ -13,6 +13,7 @@
 
 - Controller는 기본적으로 `@cocrepo/app`의 ApplicationService를 호출합니다.
 - `Controller -> ApplicationService -> Service -> Repository` 흐름을 유지합니다.
+- 예외: 단일 aggregate-root 전달형 유즈케이스만 동일 `Service` 직접 호출 예외를 허용합니다.
 
 ## 베이스 경로
 

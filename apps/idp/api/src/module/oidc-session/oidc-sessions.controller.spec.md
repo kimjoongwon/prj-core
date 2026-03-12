@@ -46,7 +46,7 @@ Redis에 저장된 OIDC 세션 및 토큰을 관리하는 관리자용 API를 �
 
 | 의존 서비스 | 역할 |
 |------------|------|
-| `OidcSessionsService` | Redis 기반 OIDC 세션/토큰 조회 및 폐기 로직 |
+| `OidcSessionsService` | Redis 기반 OIDC 세션/토큰 조회 및 폐기 유즈케이스 위임 |
 
 ## 구현 체크리스트
 
@@ -60,3 +60,6 @@ Redis에 저장된 OIDC 세션 및 토큰을 관리하는 관리자용 API를 �
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
 | 2026-02-19 | 초기 생성 (역기획) | req-reverse-engineer |
+| 2026-03-12 | 컨트롤러 진입점을 `OidcSessionsService`로 정렬 | codex |
+| 2026-03-12 | 순수성 기준으로 단일 전달형은 `@cocrepo/service` 직접 주입으로 정리 | codex |
+| 2026-03-12 | 목록 응답의 페이지 메타 조립을 ApplicationService로 이관 | codex |

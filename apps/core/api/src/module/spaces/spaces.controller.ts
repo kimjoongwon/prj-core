@@ -1,5 +1,4 @@
 import { SpacesApplicationService } from "@cocrepo/app";
-import { wrapResponse } from "@cocrepo/be-common";
 import {
 	ApiAuth,
 	ApiErrors,
@@ -32,7 +31,7 @@ import { ApiBody, ApiOperation, ApiParam, ApiTags } from "@nestjs/swagger";
 @Controller()
 export class SpacesController {
 	constructor(
-		private readonly spacesApplicationService: SpacesApplicationService,
+		private readonly spacesService: SpacesApplicationService,
 	) {}
 
 	@Public()
@@ -46,16 +45,7 @@ export class SpacesController {
 	@ApiResponseEntity(SpaceDto, HttpStatus.OK, { isArray: true })
 	@ResponseMessage("공간 목록 조회 성공")
 	async getSpaces() {
-		const { spaces, total } = await this.spacesApplicationService.getSpaces();
-
-		return wrapResponse(spaces, {
-			meta: {
-				total,
-				skip: 0,
-				take: spaces.length,
-				totalPages: 1,
-			},
-		});
+		return this.spacesService.listSpaces();
 	}
 
 	@Get(":spaceId")
@@ -76,7 +66,7 @@ export class SpacesController {
 	async getSpaceById(
 		@Param("spaceId", ParseUUIDPipe) spaceId: string,
 	): Promise<Space> {
-		return this.spacesApplicationService.getSpaceById(spaceId);
+		return this.spacesService.getByIdWithGround(spaceId);
 	}
 
 	@Get(":spaceId/ground")
@@ -97,7 +87,7 @@ export class SpacesController {
 	async getSpaceGround(
 		@Param("spaceId", ParseUUIDPipe) spaceId: string,
 	): Promise<Ground> {
-		return this.spacesApplicationService.getSpaceGround(spaceId);
+		return this.spacesService.getGroundBySpaceId(spaceId);
 	}
 
 	@Post()
@@ -116,7 +106,7 @@ export class SpacesController {
 	@ApiResponseEntity(SpaceDto, HttpStatus.CREATED)
 	@ResponseMessage("공간 생성 성공")
 	async createSpace(@Body() dto: CreateGroundDto): Promise<Space> {
-		return this.spacesApplicationService.createSpace(dto);
+		return this.spacesService.createSpaceWithGround(dto);
 	}
 
 	@Patch(":spaceId/ground")
@@ -142,7 +132,7 @@ export class SpacesController {
 		@Param("spaceId", ParseUUIDPipe) spaceId: string,
 		@Body() dto: UpdateGroundDto,
 	): Promise<Space> {
-		return this.spacesApplicationService.updateSpaceGround(spaceId, dto);
+		return this.spacesService.updateGroundBySpaceId(spaceId, dto);
 	}
 
 	@Delete(":spaceId")
@@ -163,6 +153,6 @@ export class SpacesController {
 	async deleteSpace(
 		@Param("spaceId", ParseUUIDPipe) spaceId: string,
 	): Promise<void> {
-		await this.spacesApplicationService.deleteSpace(spaceId);
+		await this.spacesService.removeSpace(spaceId);
 	}
 }

@@ -1,5 +1,5 @@
-import { InquiriesApplicationService } from "@cocrepo/app";
 import { InquiriesRepository } from "@cocrepo/repository";
+import { InquiriesApplicationService } from "@cocrepo/app";
 import { AuthContext, InquiriesService, SpaceContext } from "@cocrepo/service";
 import { Module } from "@nestjs/common";
 import { InquiriesGateway } from "./gateways/inquiries.gateway";

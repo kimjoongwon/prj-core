@@ -25,7 +25,7 @@ import { ApiBody, ApiOperation, ApiParam, ApiTags } from "@nestjs/swagger";
 @Controller()
 export class GrantsController {
 	constructor(
-		private readonly grantsApplicationService: GrantsApplicationService,
+		private readonly grantsService: GrantsApplicationService,
 	) {}
 
 	@Put("roles/:roleId")
@@ -47,7 +47,7 @@ export class GrantsController {
 		@Param("roleId", ParseUUIDPipe) roleId: string,
 		@Body() dto: BatchGrantRequestDto,
 	) {
-		return this.grantsApplicationService.batchAssignGrantsToRole(roleId, dto);
+		return this.grantsService.batchAssignToRole(roleId, dto.grants);
 	}
 
 	@Get("roles/:roleId")
@@ -64,6 +64,6 @@ export class GrantsController {
 	@ApiResponseEntity(GrantResponseDto, HttpStatus.OK, { isArray: true })
 	@ResponseMessage("common.grant.byRole.success")
 	async getGrantsByRoleId(@Param("roleId", ParseUUIDPipe) roleId: string) {
-		return this.grantsApplicationService.getGrantsByRoleId(roleId);
+		return this.grantsService.findByRoleIds([roleId]);
 	}
 }

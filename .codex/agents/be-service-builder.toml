@@ -41,6 +41,10 @@ NestJS Service 레이어를 생성하는 전문가입니다.
 
 ## 핵심 규칙
 
+- 서비스는 `@schema-owner: true` 모델(또는 그와 1:1 대응 aggregate root) 단위로 구성한다.
+- 동일 aggregate root 내부의 CHILD/DETAIL/JOIN 변경은 root aggregate service를 통해서만 수행한다.
+- Controller가 하나의 aggregate root에 대해 pass-through할 때도 service 책임 범위를 벗어나지 않는다.
+
 ### ✅ Do
 
 ```typescript
@@ -262,8 +266,9 @@ export class OrdersService {
 - [ ] ClsService 주입 (Context 필요시)
 - [ ] **Prisma 쿼리 없음 확인**
 - [ ] **DTO 타입 사용 금지 확인**
-  - [ ] `CreateXxxDto`, `UpdateXxxDto` 등 DTO import 없음
+- [ ] `CreateXxxDto`, `UpdateXxxDto` 등 DTO import 없음
 - [ ] Aggregate Root 메서드와 Repository만 사용
+- [ ] 서비스가 `@schema-owner`가 아닌 모델을 대상 도메인으로 갖지 않는지 확인
 - [ ] 비즈니스 로직만 Service에 작성
 - [ ] Child entity 쓰기 로직이 Aggregate Root를 통해 수행되는지 확인
 - [ ] 메서드명이 도메인 목적을 표현

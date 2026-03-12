@@ -22,3 +22,5 @@
 | 2026-03-11 | be-app 패키지 export를 ApplicationService 기준으로 재구성 | codex |
 | 2026-03-11 | Space/Task/Inquiry aggregate root application service export 추가 | codex |
 | 2026-03-11 | 단순 aggregate root 도메인 application service export 추가 | codex |
+| 2026-03-12 | IDP 모듈 유즈케이스를 @cocrepo/app ApplicationService로 정리 | codex |
+| 2026-03-12 | IDP 모듈 단일 유즈케이스를 `@cocrepo/service` 직접 주입으로 정렬하며 불필요한 app service 제거 | codex |

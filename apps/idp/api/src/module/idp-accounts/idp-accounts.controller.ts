@@ -1,4 +1,3 @@
-import { wrapResponse } from "@cocrepo/be-common";
 import { SYSTEM_ROLES } from "@cocrepo/constant";
 import {
 	ApiAuth,
@@ -9,7 +8,7 @@ import {
 	SkipSpaceCheck,
 } from "@cocrepo/decorator";
 import { IdpAccountDto, PageMetaDto, QueryIdpAccountDto } from "@cocrepo/dto";
-import { IdpAccountService } from "@cocrepo/service";
+import { IdpAccountApplicationService } from "@cocrepo/app";
 import {
 	Controller,
 	Get,
@@ -28,7 +27,9 @@ import { ApiOperation, ApiParam, ApiTags } from "@nestjs/swagger";
 @Roles([SYSTEM_ROLES.FULL_ACCESS])
 @SkipSpaceCheck()
 export class IdpAccountsController {
-	constructor(private readonly accountService: IdpAccountService) {}
+	constructor(
+		private readonly idpAccountService: IdpAccountApplicationService,
+	) {}
 
 	@Get()
 	@ApiOperation({
@@ -44,13 +45,7 @@ export class IdpAccountsController {
 	})
 	@ResponseMessage("계정 목록 조회 성공")
 	async getAccounts(@Query() query: QueryIdpAccountDto) {
-		const { data, totalCount } = await this.accountService.getMany(query);
-		const skip = query.skip ?? 0;
-		const take = query.take ?? 20;
-
-		return wrapResponse(data, {
-			meta: new PageMetaDto(skip, take, totalCount),
-		});
+		return this.idpAccountService.getMany(query);
 	}
 
 	@Get(":userId")
@@ -65,7 +60,7 @@ export class IdpAccountsController {
 	@ApiResponseEntity(IdpAccountDto, HttpStatus.OK)
 	@ResponseMessage("계정 상세 조회 성공")
 	async getAccount(@Param("userId", ParseUUIDPipe) userId: string) {
-		return this.accountService.getById(userId);
+		return this.idpAccountService.getById(userId);
 	}
 
 	@Patch(":userId/toggle-active")
@@ -80,7 +75,7 @@ export class IdpAccountsController {
 	@ApiResponseEntity(IdpAccountDto, HttpStatus.OK)
 	@ResponseMessage("계정 상태 변경 성공")
 	async toggleActive(@Param("userId", ParseUUIDPipe) userId: string) {
-		return this.accountService.toggleActive(userId);
+		return this.idpAccountService.toggleActive(userId);
 	}
 
 	@Post(":userId/reset-failed-attempts")
@@ -97,6 +92,6 @@ export class IdpAccountsController {
 	async resetFailedAttempts(
 		@Param("userId", ParseUUIDPipe) userId: string,
 	): Promise<void> {
-		await this.accountService.resetFailedAttempts(userId);
+		await this.idpAccountService.resetFailedAttempts(userId);
 	}
 }

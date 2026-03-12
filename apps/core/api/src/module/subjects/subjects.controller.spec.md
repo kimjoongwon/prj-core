@@ -6,13 +6,13 @@
 
 ## 역할
 
-Subject 읽기 전용 API를 노출하며, Subject ID 기반 필드 조회 보조 로직은 `SubjectsApplicationService`로 이동했습니다.
+Subject 읽기 전용 API를 노출하며, Subject ID 기반 필드 조회 보조 로직은 `SubjectsService`로 이동했습니다.
 
 ## 의존성
 
 | 주입 대상 | 타입 | 설명 |
 |-----------|------|------|
-| subjectsApplicationService | SubjectsApplicationService | Subject 목록/상세/필드 조회 유즈케이스 |
+| subjectsService | SubjectsService | Subject 목록/상세/필드 조회 유즈케이스 |
 
 ## 엔드포인트
 
@@ -32,4 +32,4 @@ Subject 읽기 전용 API를 노출하며, Subject ID 기반 필드 조회 보�
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
 | 2026-02-18 | 초기 생성 (역기획) | req-reverse-engineer |
-| 2026-03-11 | Controller 의존성을 SubjectsApplicationService로 전환 | codex |
+| 2026-03-11 | Controller 의존성을 SubjectsService로 전환 | codex |

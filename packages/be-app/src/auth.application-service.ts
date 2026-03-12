@@ -4,9 +4,13 @@ import {
 	TokenRefreshResponseDto,
 	UserDto,
 	VerifyTokenResponseDto,
+	PageMetaDto,
+	QueryAuthAuditLogDto,
 } from "@cocrepo/dto";
 import { OidcFacade } from "@cocrepo/integration";
 import {
+	AuthAuditLogService,
+	GetAuditLogsResult,
 	AuthCacheService,
 	EmailService,
 	RolesService,
@@ -47,6 +51,7 @@ export class AuthApplicationService {
 		private tokenService: TokenService,
 		private tokenStorageService: TokenStorageService,
 		private authCacheService: AuthCacheService,
+		private authAuditLogService: AuthAuditLogService,
 		private emailService: EmailService,
 		private oidcFacade: OidcFacade,
 		private cls: ClsService,
@@ -412,6 +417,34 @@ export class AuthApplicationService {
 	 */
 	async getUserSecurityInfo(userId: string) {
 		return this.usersService.getSecurityInfo(userId);
+	}
+
+	/**
+	 * 인증 감사 로그 목록 조회
+	 */
+	async getAuthAuditLogs(
+		query: QueryAuthAuditLogDto,
+	): Promise<{
+		logs: GetAuditLogsResult["logs"];
+		meta: PageMetaDto;
+	}> {
+		const skip = query.skip ?? 0;
+		const take = query.take ?? 20;
+		const { logs, totalCount } = await this.authAuditLogService.getAuditLogs(
+			query,
+		);
+
+		return {
+			logs,
+			meta: new PageMetaDto(skip, take, totalCount),
+		};
+	}
+
+	/**
+	 * 인증 감사 로그 통계 조회
+	 */
+	getAuthAuditLogStats() {
+		return this.authAuditLogService.getStats();
 	}
 
 	// =========================================================================

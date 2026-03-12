@@ -1,5 +1,4 @@
 import { InquiriesApplicationService } from "@cocrepo/app";
-import { wrapResponse } from "@cocrepo/be-common";
 import { USER_ERRORS } from "@cocrepo/constant";
 import {
 	ApiAuth,
@@ -69,7 +68,7 @@ import {
 @Controller()
 export class InquiriesController {
 	constructor(
-		private readonly inquiriesApplicationService: InquiriesApplicationService,
+		private readonly inquiriesService: InquiriesApplicationService,
 		private readonly authContext: AuthContext,
 		private readonly spaceContext: SpaceContext,
 	) {}
@@ -100,25 +99,11 @@ export class InquiriesController {
 
 		const where = query.toPrismaWhere({ spaceId });
 		const orderBy = query.toPrismaOrderBy();
-
-		const { items, totalCount } =
-			await this.inquiriesApplicationService.listInquiries({
-				where,
-				orderBy,
-				skip: query.skip,
-				take: query.take,
-			});
-
-		const skip = query.skip ?? 0;
-		const take = query.take ?? 10;
-
-		return wrapResponse(items, {
-			meta: {
-				total: totalCount,
-				skip,
-				take,
-				totalPages: take > 0 ? Math.ceil(totalCount / take) : 1,
-			},
+		return this.inquiriesService.listInquiries({
+			where,
+			orderBy,
+			skip: query.skip,
+			take: query.take,
 		});
 	}
 
@@ -143,8 +128,8 @@ export class InquiriesController {
 			throw new UnauthorizedException(USER_ERRORS.SPACE_NOT_SELECTED);
 		}
 
-		const stats =
-			await this.inquiriesApplicationService.getInquiryStats(spaceId);
+			const stats =
+			await this.inquiriesService.getInquiryStats(spaceId);
 		return stats;
 	}
 
@@ -164,7 +149,7 @@ export class InquiriesController {
 	@ApiResponseEntity(InquiryCreateUpdateFormBootstrapDto, HttpStatus.OK)
 	@ResponseMessage("문의 생성 폼 bootstrap 조회 성공")
 	async getCreateInquiryForm(): Promise<InquiryCreateUpdateFormBootstrapDto> {
-		return this.inquiriesApplicationService.getCreateFormBootstrap();
+		return this.inquiriesService.getCreateFormBootstrap();
 	}
 
 	@Get(":inquiryId/form/update")
@@ -191,7 +176,7 @@ export class InquiriesController {
 	async getUpdateInquiryForm(
 		@Param("inquiryId", ParseUUIDPipe) inquiryId: string,
 	): Promise<InquiryCreateUpdateFormBootstrapDto> {
-		return this.inquiriesApplicationService.getUpdateFormBootstrap(inquiryId);
+		return this.inquiriesService.getUpdateFormBootstrap(inquiryId);
 	}
 
 	@Post("form/ai-fill")
@@ -222,7 +207,7 @@ export class InquiriesController {
 	async fillInquiryFormWithAi(
 		@Body() dto: FillInquiryFormRequestDto,
 	): Promise<FillInquiryFormResponseDto> {
-		return this.inquiriesApplicationService.fillFormWithAi(dto);
+		return this.inquiriesService.fillFormWithAi(dto);
 	}
 
 	@Get(":inquiryId")
@@ -249,7 +234,7 @@ export class InquiriesController {
 	async getInquiryById(
 		@Param("inquiryId", ParseUUIDPipe) inquiryId: string,
 	): Promise<Inquiry> {
-		return this.inquiriesApplicationService.getInquiryById(inquiryId);
+		return this.inquiriesService.getInquiryById(inquiryId);
 	}
 
 	@Post()
@@ -282,10 +267,10 @@ export class InquiriesController {
 			throw new UnauthorizedException(USER_ERRORS.USER_NOT_FOUND);
 		}
 
-		return this.inquiriesApplicationService.createInquiry({
+		return this.inquiriesService.createInquiry({
 			dto,
-			spaceId,
 			actorUserId,
+			spaceId,
 		});
 	}
 
@@ -317,7 +302,7 @@ export class InquiriesController {
 		@Param("inquiryId", ParseUUIDPipe) inquiryId: string,
 		@Body() dto: UpdateInquiryDto,
 	): Promise<Inquiry> {
-		return this.inquiriesApplicationService.updateInquiry(inquiryId, dto);
+		return this.inquiriesService.updateInquiry(inquiryId, dto);
 	}
 
 	@Delete(":inquiryId")
@@ -343,7 +328,7 @@ export class InquiriesController {
 	async deleteInquiry(
 		@Param("inquiryId", ParseUUIDPipe) inquiryId: string,
 	): Promise<void> {
-		await this.inquiriesApplicationService.deleteInquiry(inquiryId);
+		await this.inquiriesService.deleteInquiry(inquiryId);
 	}
 
 	@Patch(":inquiryId/assign")
@@ -385,7 +370,7 @@ export class InquiriesController {
 		@Param("inquiryId", ParseUUIDPipe) inquiryId: string,
 		@Body() body: { assigneeId: string },
 	): Promise<Inquiry> {
-		return this.inquiriesApplicationService.assignInquiry(
+		return this.inquiriesService.assignInquiry(
 			inquiryId,
 			body.assigneeId,
 		);
@@ -438,7 +423,7 @@ export class InquiriesController {
 		@Param("inquiryId", ParseUUIDPipe) inquiryId: string,
 		@Body() body: { status: InquiryStatus },
 	): Promise<Inquiry> {
-		return this.inquiriesApplicationService.updateInquiryStatus(
+		return this.inquiriesService.updateInquiryStatus(
 			inquiryId,
 			body.status,
 		);
@@ -481,7 +466,7 @@ export class InquiriesController {
 		@Param("inquiryId", ParseUUIDPipe) inquiryId: string,
 		@Body() body: { priority: InquiryPriority },
 	): Promise<Inquiry> {
-		return this.inquiriesApplicationService.updateInquiryPriority(
+		return this.inquiriesService.updateInquiryPriority(
 			inquiryId,
 			body.priority,
 		);
@@ -514,23 +499,10 @@ export class InquiriesController {
 		@Param("inquiryId", ParseUUIDPipe) inquiryId: string,
 		@Query() query: { skip?: number; take?: number },
 	) {
-		const { items, totalCount } =
-			await this.inquiriesApplicationService.getInquiryMessages({
-				inquiryId,
-				skip: query.skip,
-				take: query.take,
-			});
-
-		const skip = query.skip ?? 0;
-		const take = query.take ?? 50;
-
-		return wrapResponse(items, {
-			meta: {
-				total: totalCount,
-				skip,
-				take,
-				totalPages: take > 0 ? Math.ceil(totalCount / take) : 1,
-			},
+		return this.inquiriesService.getInquiryMessages({
+			inquiryId,
+			skip: query.skip,
+			take: query.take,
 		});
 	}
 
@@ -569,7 +541,7 @@ export class InquiriesController {
 			throw new UnauthorizedException(USER_ERRORS.USER_NOT_FOUND);
 		}
 
-		return this.inquiriesApplicationService.sendInquiryMessage({
+		return this.inquiriesService.sendInquiryMessage({
 			inquiryId,
 			actorUserId,
 			threadId: dto.threadId,
@@ -603,7 +575,7 @@ export class InquiriesController {
 	async getParticipants(
 		@Param("inquiryId", ParseUUIDPipe) inquiryId: string,
 	): Promise<InquiryParticipant[]> {
-		return this.inquiriesApplicationService.getInquiryParticipants(inquiryId);
+		return this.inquiriesService.getInquiryParticipants(inquiryId);
 	}
 
 	@Post(":inquiryId/participants/join")
@@ -654,7 +626,7 @@ export class InquiriesController {
 			throw new UnauthorizedException(USER_ERRORS.USER_NOT_FOUND);
 		}
 
-		return this.inquiriesApplicationService.joinInquiry({
+		return this.inquiriesService.joinInquiry({
 			inquiryId,
 			userId: actorUserId,
 			threadId: body.threadId,

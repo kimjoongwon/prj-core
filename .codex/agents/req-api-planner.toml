@@ -152,9 +152,9 @@ packages/be-dto/src/[domain]/*.dto.spec.md
 
 **백엔드 경계 규칙:**
 - 리소스 경로는 화면명이 아니라 `aggregate root` 기준으로 설계합니다.
-- controller는 `apps/core/api/src/module/[aggregate-root]/` 위치와 `@cocrepo/app`의 ApplicationService를 기준으로 계획합니다.
+- controller는 `apps/core/api/src/module/[aggregate-root]/` 위치 기준으로 계획합니다.
 - 페이지 이름을 기준으로 command API를 나누지 않습니다.
-- command/write API와 aggregate query API는 기본적으로 `ApplicationService`에 연결합니다.
+- command/write API와 aggregate query API는 오케스트레이션이 필요한 경우에만 `ApplicationService`에 연결합니다.
 - `ApplicationService`는 내부에서 `Service`와 필요 시 외부 Integration Facade를 순서대로 호출합니다.
 - `GET /form/create`, `GET /:id/form/update` 같은 bootstrap/query API는 화면 전용 controller/BFF로 허용합니다.
 - 페이지/BFF 성격의 bootstrap/query endpoint는 허용하되, Aggregate write의 기본 진입점으로 쓰지 않습니다.

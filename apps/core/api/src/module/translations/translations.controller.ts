@@ -30,7 +30,7 @@ import { ApiBody, ApiOperation, ApiParam, ApiTags } from "@nestjs/swagger";
 @Controller()
 export class TranslationsController {
 	constructor(
-		private readonly translationsApplicationService: TranslationsApplicationService,
+		private readonly translationsService: TranslationsApplicationService,
 	) {}
 
 	/**
@@ -51,7 +51,7 @@ export class TranslationsController {
 	})
 	@ResponseMessage("common.translation.list.success")
 	async getTranslations(@Query() query: GetTranslationsDto) {
-		return this.translationsApplicationService.getTranslations(query);
+		return this.translationsService.getTranslations(query);
 	}
 
 	/**
@@ -74,7 +74,7 @@ export class TranslationsController {
 	@ApiResponseEntity(TranslationResponseDto, HttpStatus.OK)
 	@ResponseMessage("common.translation.detail.success")
 	async getTranslationById(@Param("id") id: string) {
-		return this.translationsApplicationService.getTranslationById(id);
+		return this.translationsService.getTranslationById(id);
 	}
 
 	/**
@@ -93,7 +93,7 @@ export class TranslationsController {
 	@ApiResponseEntity(TranslationResponseDto, HttpStatus.CREATED)
 	@ResponseMessage("common.translation.create.success")
 	async createTranslation(@Body() dto: CreateTranslationDto) {
-		return this.translationsApplicationService.createTranslation(dto);
+		return this.translationsService.createTranslation(dto);
 	}
 
 	/**
@@ -120,7 +120,7 @@ export class TranslationsController {
 		@Param("id") id: string,
 		@Body() dto: UpdateTranslationDto,
 	) {
-		return this.translationsApplicationService.updateTranslation(id, dto);
+		return this.translationsService.updateTranslation(id, dto);
 	}
 
 	/**
@@ -143,7 +143,7 @@ export class TranslationsController {
 	@ApiErrors({ status: 404, message: TRANSLATION_ERRORS.NOT_FOUND }, 500)
 	@ResponseMessage("common.translation.delete.success")
 	async deleteTranslation(@Param("id") id: string): Promise<void> {
-		await this.translationsApplicationService.deleteTranslation(id);
+		await this.translationsService.deleteTranslation(id);
 	}
 
 	/**
@@ -162,7 +162,7 @@ export class TranslationsController {
 	@ApiErrors(500)
 	@ResponseMessage("common.translation.cache.invalidated")
 	async invalidateAllCache(): Promise<void> {
-		await this.translationsApplicationService.invalidateCache();
+		await this.translationsService.invalidateCache();
 	}
 
 	@Delete("cache/:languageCode")
@@ -184,7 +184,7 @@ export class TranslationsController {
 	async invalidateCache(
 		@Param("languageCode") languageCode: string,
 	): Promise<void> {
-		await this.translationsApplicationService.invalidateCache(
+		await this.translationsService.invalidateCache(
 			languageCode as LanguageCode,
 		);
 	}

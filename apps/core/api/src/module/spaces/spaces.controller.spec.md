@@ -13,3 +13,4 @@ Space aggregate root API를 노출합니다. Ground detail은 `/spaces/:spaceId/
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
 | 2026-03-11 | Space root controller 신규 생성 | codex |
+| 2026-03-12 | 공간 목록 응답 메타 조립을 SpacesApplicationService로 이관 | codex |

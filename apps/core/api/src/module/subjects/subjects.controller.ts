@@ -13,7 +13,7 @@ import { ApiOperation, ApiParam, ApiQuery, ApiTags } from "@nestjs/swagger";
 @Controller()
 export class SubjectsController {
 	constructor(
-		private readonly subjectsApplicationService: SubjectsApplicationService,
+		private readonly subjectsService: SubjectsApplicationService,
 	) {}
 
 	@Public()
@@ -40,7 +40,11 @@ export class SubjectsController {
 		@Query("group") group?: string,
 		@Query("type") _type?: string,
 	) {
-		return this.subjectsApplicationService.getSubjects(group);
+		if (group) {
+			return this.subjectsService.getSubjectsByGroup(group);
+		}
+
+		return this.subjectsService.getSubjects();
 	}
 
 	@Public()
@@ -59,7 +63,7 @@ export class SubjectsController {
 	@ApiResponseEntity(SubjectFieldDto, HttpStatus.OK, { isArray: true })
 	@ResponseMessage("common.subject.fields.success")
 	async getSubjectFields(@Param("id") id: string) {
-		return this.subjectsApplicationService.getSubjectFields(id);
+		return this.subjectsService.getSubjectFields(id);
 	}
 
 	@Public()
@@ -77,6 +81,6 @@ export class SubjectsController {
 	@ApiResponseEntity(SubjectDto, HttpStatus.OK)
 	@ResponseMessage("common.subject.read.success")
 	async getSubjectById(@Param("id") id: string) {
-		return this.subjectsApplicationService.getSubjectById(id);
+		return this.subjectsService.getSubjectById(id);
 	}
 }

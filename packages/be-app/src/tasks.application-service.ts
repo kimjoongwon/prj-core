@@ -14,15 +14,62 @@ export class TasksApplicationService {
 
 	constructor(private readonly tasksService: TasksService) {}
 
+	findTasks(params: {
+		spaceId: string;
+		spaceScope: SpaceScope;
+		skip?: number;
+		take?: number;
+		search?: string;
+	}): Promise<{
+		data: Task[];
+		meta: {
+			total: number;
+			skip: number;
+			take: number;
+			totalPages: number;
+		};
+	}> {
+		return this.getTasks(params);
+	}
+
 	async getTasks(params: {
 		spaceId: string;
 		spaceScope: SpaceScope;
-		skip: number;
-		take: number;
+		skip?: number;
+		take?: number;
 		search?: string;
-	}): Promise<{ tasks: Task[]; total: number }> {
+	}): Promise<{
+		data: Task[];
+		meta: {
+			total: number;
+			skip: number;
+			take: number;
+			totalPages: number;
+		};
+	}> {
 		this.logger.debug("Task 목록 조회");
-		return this.tasksService.findTasks(params);
+		const skip = params.skip ?? 0;
+		const take = params.take ?? 10;
+
+		const { tasks, total } = await this.tasksService.findTasks({
+			...params,
+			skip,
+			take,
+		});
+
+		return {
+			data: tasks,
+			meta: {
+				total,
+				skip,
+				take,
+				totalPages: take > 0 ? Math.ceil(total / take) : 1,
+			},
+		};
+	}
+
+	findTaskById(taskId: string, spaceId: string): Promise<Task> {
+		return this.getTaskById(taskId, spaceId);
 	}
 
 	async getTaskById(
@@ -33,6 +80,10 @@ export class TasksApplicationService {
 		return this.tasksService.findTaskById(taskId, spaceId, spaceScope);
 	}
 
+	getExerciseByTaskId(taskId: string, spaceId: string): Promise<Exercise> {
+		return this.getTaskExercise(taskId, spaceId);
+	}
+
 	async getTaskExercise(
 		taskId: string,
 		spaceId: string,
@@ -41,8 +92,20 @@ export class TasksApplicationService {
 		return this.tasksService.getExerciseByTaskId(taskId, spaceId, spaceScope);
 	}
 
+	findTaskRoutines(taskId: string, spaceId: string): Promise<Routine[]> {
+		return this.getTaskRoutines(taskId, spaceId);
+	}
+
 	async getTaskRoutines(taskId: string, spaceId: string): Promise<Routine[]> {
 		return this.tasksService.findTaskRoutines(taskId, spaceId);
+	}
+
+	createTaskWithExercise(
+		dto: CreateExerciseDto,
+		spaceId: string,
+		creatorId: string,
+	): Promise<Task> {
+		return this.createTask(dto, spaceId, creatorId);
 	}
 
 	async createTask(

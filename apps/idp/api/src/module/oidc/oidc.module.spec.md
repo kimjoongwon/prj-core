@@ -25,6 +25,7 @@
 | ./oidc.adapter | 기능 구현 의존성 |
 | ./oidc.controller | 기능 구현 의존성 |
 | ./oidc-client.repository | 기능 구현 의존성 |
+| ./oidc.application-service | 기능 구현 의존성 |
 | ./oidc-configuration.service | 기능 구현 의존성 |
 | ./oidc-provider.service | 기능 구현 의존성 |
 
@@ -38,3 +39,4 @@
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
 | 2026-03-03 | 누락된 sidecar spec 신규 생성 | codex |
+| 2026-03-12 | OidcModule에 OidcApplicationService를 providers로 추가 | codex |

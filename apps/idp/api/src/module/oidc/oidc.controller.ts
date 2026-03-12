@@ -2,7 +2,7 @@ import { Public } from "@cocrepo/decorator";
 import { All, Controller, Req, Res } from "@nestjs/common";
 import { ApiExcludeController } from "@nestjs/swagger";
 import type { Request, Response } from "express";
-import { OidcProviderService } from "./oidc-provider.service";
+import { OidcApplicationService } from "./oidc.application-service";
 
 /**
  * OIDC Controller
@@ -32,21 +32,15 @@ import { OidcProviderService } from "./oidc-provider.service";
 @ApiExcludeController()
 @Controller("oidc")
 export class OidcController {
-	constructor(private readonly oidcProviderService: OidcProviderService) {}
+	constructor(
+		private readonly oidcApplicationService: OidcApplicationService,
+	) {}
 
 	/**
 	 * 모든 OIDC 엔드포인트를 oidc-provider에 위임
 	 */
 	@All("*path")
 	async handleOidc(@Req() req: Request, @Res() res: Response): Promise<void> {
-		const provider = this.oidcProviderService.getProvider();
-		const callback = provider.callback();
-
-		// oidc-provider는 Koa 기반이므로 Express 요청을 변환
-		// path를 /oidc prefix 없이 전달
-		req.url = req.url.replace(/^\/oidc/, "") || "/";
-
-		// callback은 (req, res) 형태의 http request handler
-		return callback(req, res);
+		return this.oidcApplicationService.handleOidc(req, res);
 	}
 }

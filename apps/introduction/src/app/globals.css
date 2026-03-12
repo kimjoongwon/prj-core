@@ -1,0 +1,50 @@
+@import "tailwindcss";
+@plugin '../../../../packages/fe-ui/hero.tsx';
+@source '../../../../node_modules/@heroui/theme/dist/**/*.{js,ts,jsx,tsx}';
+@source "../../../../packages/fe-ui/src/**/*.{js,ts,jsx,tsx}";
+@custom-variant dark (&:is(.dark *));
+
+:root {
+	color-scheme: dark;
+	--intro-border: rgba(255, 255, 255, 0.1);
+	--intro-surface: rgba(10, 10, 12, 0.72);
+}
+
+html {
+	scroll-behavior: smooth;
+}
+
+body {
+	font-family: "Pretendard", sans-serif;
+	min-height: 100vh;
+	background:
+		radial-gradient(circle at top left, rgba(59, 130, 246, 0.26), transparent 30%),
+		radial-gradient(circle at top right, rgba(244, 63, 94, 0.16), transparent 24%),
+		radial-gradient(circle at 50% 120%, rgba(14, 165, 233, 0.18), transparent 34%),
+		#05070b;
+	color: rgba(244, 244, 245, 0.96);
+	line-height: 1.6;
+}
+
+body::before {
+	content: "";
+	position: fixed;
+	inset: 0;
+	pointer-events: none;
+	background-image:
+		linear-gradient(rgba(255, 255, 255, 0.04) 1px, transparent 1px),
+		linear-gradient(90deg, rgba(255, 255, 255, 0.04) 1px, transparent 1px);
+	background-size: 88px 88px;
+	opacity: 0.18;
+	mask-image: radial-gradient(circle at center, black 32%, transparent 88%);
+}
+
+body::selection {
+	background: rgba(255, 255, 255, 0.18);
+	color: #ffffff;
+}
+
+.font-display {
+	font-family: "Pretendard", sans-serif;
+	letter-spacing: -0.03em;
+}

@@ -1,10 +1,10 @@
-import { OidcSessionsService } from "@cocrepo/service";
+import { OidcSessionsApplicationService } from "@cocrepo/app";
 import { Module } from "@nestjs/common";
 import { OidcSessionsController } from "./oidc-sessions.controller";
 
 @Module({
 	controllers: [OidcSessionsController],
-	providers: [OidcSessionsService],
-	exports: [OidcSessionsService],
+	providers: [OidcSessionsApplicationService],
+	exports: [OidcSessionsApplicationService],
 })
 export class OidcSessionsModule {}

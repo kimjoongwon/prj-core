@@ -30,7 +30,7 @@ import { ApiBody, ApiOperation, ApiParam, ApiTags } from "@nestjs/swagger";
 @Controller()
 export class AbilitiesController {
 	constructor(
-		private readonly abilitiesApplicationService: AbilitiesApplicationService,
+		private readonly abilitiesService: AbilitiesApplicationService,
 		private readonly authContext: AuthContext,
 	) {}
 
@@ -50,7 +50,7 @@ export class AbilitiesController {
 	@ApiResponseEntity(AbilityResponseDto, HttpStatus.OK, { isArray: true })
 	@ResponseMessage("common.ability.list.success")
 	async getAbilities(): Promise<Ability[]> {
-		return this.abilitiesApplicationService.getAllAbilities();
+		return this.abilitiesService.getAllAbilities();
 	}
 
 	/**
@@ -80,7 +80,7 @@ export class AbilitiesController {
 			throw new UnauthorizedException(ABILITY_ERRORS.USER_NOT_FOUND);
 		}
 
-		return this.abilitiesApplicationService.getMyAbilities(user.id);
+		return this.abilitiesService.getUserAbilities(user.id);
 	}
 
 	/**
@@ -105,7 +105,7 @@ export class AbilitiesController {
 	async getAbilitiesByRoleId(
 		@Param("roleId", ParseUUIDPipe) roleId: string,
 	): Promise<Ability[]> {
-		return this.abilitiesApplicationService.getRoleAbilities(roleId);
+		return this.abilitiesService.getRoleAbilities(roleId);
 	}
 
 	/**
@@ -130,7 +130,7 @@ export class AbilitiesController {
 	async getAbilitiesByUserId(
 		@Param("userId", ParseUUIDPipe) userId: string,
 	): Promise<Ability[]> {
-		return this.abilitiesApplicationService.getUserAbilities(userId);
+		return this.abilitiesService.getUserAbilities(userId);
 	}
 
 	/**
@@ -159,7 +159,7 @@ export class AbilitiesController {
 	async getAbilityById(
 		@Param("id", ParseUUIDPipe) id: string,
 	): Promise<Ability> {
-		return this.abilitiesApplicationService.getAbilityById(id);
+		return this.abilitiesService.getAbilityById(id);
 	}
 
 	/**
@@ -197,7 +197,7 @@ export class AbilitiesController {
 			description: dto.description ?? null,
 		};
 
-		return this.abilitiesApplicationService.createAbility(data);
+		return this.abilitiesService.createAbility(data);
 	}
 
 	/**
@@ -244,7 +244,7 @@ export class AbilitiesController {
 			...(dto.description !== undefined && { description: dto.description }),
 		};
 
-		return this.abilitiesApplicationService.updateAbility(id, data);
+		return this.abilitiesService.updateAbility(id, data);
 	}
 
 	/**
@@ -274,6 +274,6 @@ export class AbilitiesController {
 	async deleteAbility(
 		@Param("id", ParseUUIDPipe) id: string,
 	): Promise<Ability> {
-		return this.abilitiesApplicationService.deleteAbility(id);
+		return this.abilitiesService.deleteAbility(id);
 	}
 }

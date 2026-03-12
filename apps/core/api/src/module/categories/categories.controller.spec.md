@@ -6,13 +6,13 @@
 
 ## 역할
 
-Category CRUD API를 노출하며, 현재 Space 기준 생성 흐름을 포함한 실제 유즈케이스는 `CategoriesApplicationService`에 위임합니다.
+Category CRUD API를 노출하며, 현재 Space 기준 생성 흐름을 포함한 실제 유즈케이스는 `CategoriesService`에 위임합니다.
 
 ## 의존성
 
 | 주입 대상 | 타입 | 설명 |
 |-----------|------|------|
-| categoriesApplicationService | CategoriesApplicationService | Category 목록/상세/생성/수정/삭제 유즈케이스 |
+| categoriesService | CategoriesService | Category 목록/상세/생성/수정/삭제 유즈케이스 |
 
 ## 엔드포인트
 
@@ -34,4 +34,4 @@ Category CRUD API를 노출하며, 현재 Space 기준 생성 흐름을 포함�
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
 | 2026-02-18 | 초기 생성 (역기획) | req-reverse-engineer |
-| 2026-03-11 | Controller 의존성을 CategoriesApplicationService로 전환 | codex |
+| 2026-03-11 | Controller 의존성을 CategoriesService로 전환 | codex |

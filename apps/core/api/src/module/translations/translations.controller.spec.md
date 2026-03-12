@@ -40,7 +40,7 @@ Translation(번역) 관련 CRUD 및 캐시 관리 API를 제공합니다. 다국
 
 | 서비스 | 역할 |
 |--------|------|
-| `TranslationsApplicationService` | 번역 CRUD, 캐시 무효화 유즈케이스 조합 |
+| `TranslationsService` | 번역 CRUD, 캐시 무효화 유즈케이스 조합 |
 
 ## 응답 메시지
 
@@ -68,7 +68,7 @@ Translation(번역) 관련 CRUD 및 캐시 관리 API를 제공합니다. 다국
 
 ## 특이사항
 
-- ApplicationService 패턴 사용 (`TranslationsApplicationService`): TranslationsService + Redis cache invalidation 유즈케이스 조합
+- Service 패턴 사용 (`TranslationsService`): TranslationsService + Redis cache invalidation 유즈케이스 조합
 - Translation ID는 UUID가 아닌 CUID 사용
 - 에러 상수는 `TRANSLATION_ERRORS` (`@cocrepo/constant`)에서 관리
 - DELETE 엔드포인트는 `HttpStatus.NO_CONTENT` (204) 반환
@@ -81,4 +81,4 @@ Translation(번역) 관련 CRUD 및 캐시 관리 API를 제공합니다. 다국
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
 | 2026-02-18 | 초기 생성 (역기획) | req-reverse-engineer |
-| 2026-03-11 | Controller 의존성을 TranslationsApplicationService로 전환 | codex |
+| 2026-03-11 | Controller 의존성을 TranslationsService로 전환 | codex |

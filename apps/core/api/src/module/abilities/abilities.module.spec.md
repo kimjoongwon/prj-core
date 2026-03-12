@@ -18,7 +18,7 @@
 
 | 모듈 | 용도 |
 |------|------|
-| @cocrepo/app | Ability application service 의존성 |
+| @cocrepo/service | Ability application service 의존성 |
 | @cocrepo/repository | 기능 구현 의존성 |
 | @cocrepo/service | 기능 구현 의존성 |
 | @nestjs/common | 기능 구현 의존성 |
@@ -34,4 +34,4 @@
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
 | 2026-03-03 | 누락된 sidecar spec 신규 생성 | codex |
-| 2026-03-11 | AbilitiesModule export를 AbilitiesApplicationService 기준으로 정렬 | codex |
+| 2026-03-11 | AbilitiesModule export를 AbilitiesService 기준으로 정렬 | codex |

@@ -36,7 +36,7 @@ import { ApiBody, ApiOperation, ApiParam, ApiTags } from "@nestjs/swagger";
 @Controller()
 export class TemplatesController {
 	constructor(
-		private readonly templatesApplicationService: TemplatesApplicationService,
+		private readonly templatesService: TemplatesApplicationService,
 	) {}
 
 	@Get()
@@ -54,7 +54,7 @@ export class TemplatesController {
 	@ApiResponseEntity(TemplateDto, HttpStatus.OK, { isArray: true })
 	@ResponseMessage("template.list.success")
 	async getTemplates(@Query() query: QueryTemplateDto) {
-		return this.templatesApplicationService.getTemplates(query);
+		return this.templatesService.getTemplates(query);
 	}
 
 	@Get(":templateId")
@@ -77,7 +77,7 @@ export class TemplatesController {
 	@ApiResponseEntity(TemplateDto, HttpStatus.OK)
 	@ResponseMessage("template.read.success")
 	async getTemplate(@Param("templateId", ParseUUIDPipe) templateId: string) {
-		return this.templatesApplicationService.getTemplate(templateId);
+		return this.templatesService.getTemplateById(templateId);
 	}
 
 	@Post()
@@ -98,7 +98,7 @@ export class TemplatesController {
 	@ApiResponseEntity(TemplateDto, HttpStatus.CREATED)
 	@ResponseMessage("template.create.success")
 	async createTemplate(@Body() dto: CreateTemplateDto) {
-		return this.templatesApplicationService.createTemplate(dto);
+		return this.templatesService.create(dto);
 	}
 
 	@Patch(":templateId")
@@ -128,7 +128,7 @@ export class TemplatesController {
 		@Param("templateId", ParseUUIDPipe) templateId: string,
 		@Body() dto: UpdateTemplateDto,
 	) {
-		return this.templatesApplicationService.updateTemplate(templateId, dto);
+		return this.templatesService.update(templateId, dto);
 	}
 
 	@Delete(":templateId")
@@ -151,7 +151,7 @@ export class TemplatesController {
 	async deleteTemplate(
 		@Param("templateId", ParseUUIDPipe) templateId: string,
 	): Promise<void> {
-		await this.templatesApplicationService.deleteTemplate(templateId);
+		await this.templatesService.remove(templateId);
 	}
 
 	@Patch(":templateId/toggle-status")
@@ -176,7 +176,7 @@ export class TemplatesController {
 	async toggleTemplateStatus(
 		@Param("templateId", ParseUUIDPipe) templateId: string,
 	) {
-		return this.templatesApplicationService.toggleTemplateStatus(templateId);
+		return this.templatesService.toggleStatus(templateId);
 	}
 
 	@Post(":templateId/preview")
@@ -205,7 +205,7 @@ export class TemplatesController {
 		@Param("templateId", ParseUUIDPipe) templateId: string,
 		@Body() dto: PreviewTemplateDto,
 	) {
-		return this.templatesApplicationService.previewTemplate(templateId, dto);
+		return this.templatesService.preview(templateId, dto);
 	}
 
 	@Post(":templateId/send-test")
@@ -234,6 +234,6 @@ export class TemplatesController {
 		@Param("templateId", ParseUUIDPipe) templateId: string,
 		@Body() dto: SendTestTemplateDto,
 	) {
-		return this.templatesApplicationService.sendTestTemplate(templateId, dto);
+		return this.templatesService.sendTest(templateId, dto);
 	}
 }

@@ -15,6 +15,19 @@ export class UsersApplicationService {
 		private readonly spaceContext: SpaceContext,
 	) {}
 
+	getUsersBySpace(query: QueryUsersDto): Promise<{
+		data: Awaited<ReturnType<UsersService["getUsersBySpace"]>>["users"];
+		meta: {
+			total: number;
+			skip: number;
+			take: number;
+			totalPages: number;
+		};
+		stats: Awaited<ReturnType<UsersService["getUsersBySpace"]>>["stats"];
+	}> {
+		return this.getUsers(query);
+	}
+
 	async getUsers(query: QueryUsersDto): Promise<{
 		data: Awaited<ReturnType<UsersService["getUsersBySpace"]>>["users"];
 		meta: {
@@ -42,6 +55,10 @@ export class UsersApplicationService {
 		};
 	}
 
+	getUserDetailForSpace(userId: string, _spaceId: string) {
+		return this.getUserById(userId);
+	}
+
 	getUserById(userId: string) {
 		const spaceId = this.spaceContext.spaceId;
 		if (!spaceId) {
@@ -49,6 +66,10 @@ export class UsersApplicationService {
 		}
 
 		return this.usersService.getUserDetailForSpace(userId, spaceId);
+	}
+
+	createUserForSpace(input: Parameters<UsersService["createUserForSpace"]>[0]) {
+		return this.createUser(input as CreateUserMemberDto);
 	}
 
 	createUser(dto: CreateUserMemberDto) {
@@ -69,6 +90,17 @@ export class UsersApplicationService {
 		});
 	}
 
+	updateUserForSpace(
+		userId: string,
+		_spaceId: string,
+		dto: Parameters<UsersService["updateUserForSpace"]>[2],
+	) {
+		return this.updateUser(
+			userId,
+			dto as UpdateUserMemberDto,
+		);
+	}
+
 	updateUser(userId: string, dto: UpdateUserMemberDto) {
 		const spaceId = this.spaceContext.spaceId;
 		if (!spaceId) {
@@ -82,6 +114,10 @@ export class UsersApplicationService {
 			categoryId: dto.categoryId,
 			groupIds: dto.groupIds,
 		});
+	}
+
+	deleteUserForSpace(userId: string, _spaceId: string): Promise<void> {
+		return this.deleteUser(userId);
 	}
 
 	async deleteUser(userId: string): Promise<void> {

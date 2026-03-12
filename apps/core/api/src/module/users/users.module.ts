@@ -1,5 +1,5 @@
-import { UsersApplicationService } from "@cocrepo/app";
 import { UsersRepository } from "@cocrepo/repository";
+import { UsersApplicationService } from "@cocrepo/app";
 import {
 	AuthCacheService,
 	AuthContext,
@@ -19,6 +19,6 @@ import { UsersController } from "./users.controller";
 		AuthCacheService,
 	],
 	controllers: [UsersController],
-	exports: [UsersApplicationService, UsersService],
+	exports: [UsersApplicationService],
 })
 export class UsersModule {}

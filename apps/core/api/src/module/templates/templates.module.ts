@@ -1,6 +1,6 @@
 import { TemplatesApplicationService } from "@cocrepo/app";
-import { TemplatesRepository } from "@cocrepo/repository";
 import { TemplatesService } from "@cocrepo/service";
+import { TemplatesRepository } from "@cocrepo/repository";
 import { Module } from "@nestjs/common";
 import { TemplatesController } from "./templates.controller";
 
@@ -8,9 +8,7 @@ import { TemplatesController } from "./templates.controller";
 	controllers: [TemplatesController],
 	providers: [
 		TemplatesApplicationService,
-		// Services
 		TemplatesService,
-		// Repositories
 		TemplatesRepository,
 	],
 	exports: [TemplatesApplicationService],

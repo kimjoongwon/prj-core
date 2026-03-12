@@ -47,7 +47,7 @@ OIDC Authorization Code Flow에서 사용자와의 상호작용(로그인, 동�
 
 | 의존 서비스 | 역할 |
 |------------|------|
-| `InteractionService` | 사용자 인증, 인터랙션 조회, 로그인 완료, 동의 처리, 취소 처리 |
+| `InteractionApplicationService` | 사용자 인증, 인터랙션 조회, 로그인 완료, 동의 처리, 취소 처리 |
 | `ConfigService` | OIDC issuer URL, IDP 클라이언트 URL 설정 |
 
 ## 구현 체크리스트
@@ -62,3 +62,4 @@ OIDC Authorization Code Flow에서 사용자와의 상호작용(로그인, 동�
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
 | 2026-02-19 | 초기 생성 (역기획) | req-reverse-engineer |
+| 2026-03-12 | InteractionController가 InteractionService 대신 InteractionApplicationService 주입으로 변경 | codex |

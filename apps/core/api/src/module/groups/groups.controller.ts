@@ -1,6 +1,6 @@
-import { GroupsApplicationService } from "@cocrepo/app";
+import { GroupsApplicationService, SpaceContext } from "@cocrepo/app";
 import { RolesGuard } from "@cocrepo/be-common";
-import { SYSTEM_ROLES } from "@cocrepo/constant";
+import { SYSTEM_ROLES, USER_ERRORS } from "@cocrepo/constant";
 import {
 	ApiAuth,
 	ApiErrors,
@@ -27,6 +27,7 @@ import {
 	Post,
 	Query,
 	UseGuards,
+	UnauthorizedException,
 } from "@nestjs/common";
 import { ApiBody, ApiOperation, ApiParam, ApiTags } from "@nestjs/swagger";
 
@@ -34,7 +35,8 @@ import { ApiBody, ApiOperation, ApiParam, ApiTags } from "@nestjs/swagger";
 @Controller()
 export class GroupsController {
 	constructor(
-		private readonly groupsApplicationService: GroupsApplicationService,
+		private readonly groupsService: GroupsApplicationService,
+		private readonly spaceContext: SpaceContext,
 	) {}
 
 	@Get()
@@ -51,7 +53,7 @@ export class GroupsController {
 	@ApiResponseEntity(GroupDto, HttpStatus.OK, { isArray: true })
 	@ResponseMessage("그룹 목록 조회 성공")
 	async getGroups(@Query() query: QueryGroupDto) {
-		return this.groupsApplicationService.getGroups(query);
+		return this.groupsService.getAll(query);
 	}
 
 	@Get(":id")
@@ -69,7 +71,7 @@ export class GroupsController {
 	@ApiResponseEntity(GroupDto, HttpStatus.OK)
 	@ResponseMessage("그룹 상세 조회 성공")
 	async getGroupById(@Param("id", ParseUUIDPipe) id: string) {
-		return this.groupsApplicationService.getGroupById(id);
+		return this.groupsService.getById(id);
 	}
 
 	@Post()
@@ -87,7 +89,12 @@ export class GroupsController {
 	@ApiResponseEntity(GroupDto, HttpStatus.CREATED)
 	@ResponseMessage("그룹 생성 성공")
 	async createGroup(@Body() dto: CreateGroupDto) {
-		return this.groupsApplicationService.createGroup(dto);
+		const spaceId = this.spaceContext.spaceId;
+		if (!spaceId) {
+			throw new UnauthorizedException(USER_ERRORS.SPACE_NOT_SELECTED);
+		}
+
+		return this.groupsService.create(dto, spaceId);
 	}
 
 	@Patch(":id")
@@ -109,7 +116,7 @@ export class GroupsController {
 		@Param("id", ParseUUIDPipe) id: string,
 		@Body() dto: UpdateGroupDto,
 	) {
-		return this.groupsApplicationService.updateGroup(id, dto);
+		return this.groupsService.update(id, dto);
 	}
 
 	@Delete(":id")
@@ -128,6 +135,6 @@ export class GroupsController {
 	@ApiResponseEntity(GroupDto, HttpStatus.OK)
 	@ResponseMessage("그룹 삭제 성공")
 	async deleteGroup(@Param("id", ParseUUIDPipe) id: string) {
-		return this.groupsApplicationService.deleteGroup(id);
+		return this.groupsService.delete(id);
 	}
 }

@@ -54,7 +54,7 @@ oidc-provider 라이브러리의 모든 OIDC 표준 엔드포인트 요청을 Ne
 
 | 의존 서비스 | 역할 |
 |------------|------|
-| `OidcProviderService` | oidc-provider 인스턴스 관리 및 제공 |
+| `OidcApplicationService` | oidc-provider 위임 처리를 캡슐화 |
 
 ## 구현 체크리스트
 
@@ -68,3 +68,4 @@ oidc-provider 라이브러리의 모든 OIDC 표준 엔드포인트 요청을 Ne
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
 | 2026-02-19 | 초기 생성 (역기획) | req-reverse-engineer |
+| 2026-03-12 | OidcController가 OidcProviderService 직접 주입에서 OidcApplicationService로 전환 | codex |

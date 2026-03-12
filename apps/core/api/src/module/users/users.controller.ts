@@ -1,5 +1,6 @@
-import { UsersApplicationService } from "@cocrepo/app";
 import { USER_ERRORS } from "@cocrepo/constant";
+import { AuthContext, SpaceContext } from "@cocrepo/service";
+import { UsersApplicationService } from "@cocrepo/app";
 import {
 	ApiAuth,
 	ApiErrors,
@@ -27,6 +28,7 @@ import {
 	Patch,
 	Post,
 	Query,
+	UnauthorizedException,
 } from "@nestjs/common";
 import { ApiBody, ApiOperation, ApiParam, ApiTags } from "@nestjs/swagger";
 
@@ -34,7 +36,9 @@ import { ApiBody, ApiOperation, ApiParam, ApiTags } from "@nestjs/swagger";
 @Controller()
 export class UsersController {
 	constructor(
-		private readonly usersApplicationService: UsersApplicationService,
+		private readonly usersService: UsersApplicationService,
+		private readonly spaceContext: SpaceContext,
+		private readonly authContext: AuthContext,
 	) {}
 
 	@Get()
@@ -57,7 +61,12 @@ export class UsersController {
 	})
 	@ResponseMessage("common.user.list.success")
 	async getUsers(@Query() query: QueryUsersDto) {
-		return this.usersApplicationService.getUsers(query);
+		const spaceId = this.spaceContext.spaceId;
+		if (!spaceId) {
+			throw new UnauthorizedException(USER_ERRORS.SPACE_NOT_SELECTED);
+		}
+
+		return this.usersService.getUsersBySpace(query);
 	}
 
 	@Get(":id")
@@ -82,7 +91,12 @@ export class UsersController {
 	@ApiResponseEntity(UserDetailResponseDto, HttpStatus.OK)
 	@ResponseMessage("common.user.read.success")
 	async getUserById(@Param("id", ParseUUIDPipe) id: string) {
-		return this.usersApplicationService.getUserById(id);
+		const spaceId = this.spaceContext.spaceId;
+		if (!spaceId) {
+			throw new UnauthorizedException(USER_ERRORS.SPACE_NOT_SELECTED);
+		}
+
+		return this.usersService.getUserDetailForSpace(id, spaceId);
 	}
 
 	@Post()
@@ -109,7 +123,20 @@ export class UsersController {
 	@ApiResponseEntity(UserDto, HttpStatus.CREATED)
 	@ResponseMessage("common.user.create.success")
 	async createUser(@Body() dto: CreateUserMemberDto) {
-		return this.usersApplicationService.createUser(dto);
+		const spaceId = this.spaceContext.spaceId;
+		if (!spaceId) {
+			throw new UnauthorizedException(USER_ERRORS.SPACE_NOT_SELECTED);
+		}
+
+		const currentUserId = this.authContext.user?.id;
+		if (!currentUserId) {
+			throw new UnauthorizedException(USER_ERRORS.USER_NOT_FOUND);
+		}
+
+		return this.usersService.createUserForSpace({
+			...dto,
+			spaceId,
+		});
 	}
 
 	@Patch(":id")
@@ -143,7 +170,12 @@ export class UsersController {
 		@Param("id", ParseUUIDPipe) id: string,
 		@Body() dto: UpdateUserMemberDto,
 	) {
-		return this.usersApplicationService.updateUser(id, dto);
+		const spaceId = this.spaceContext.spaceId;
+		if (!spaceId) {
+			throw new UnauthorizedException(USER_ERRORS.SPACE_NOT_SELECTED);
+		}
+
+		return this.usersService.updateUserForSpace(id, spaceId, dto);
 	}
 
 	@Delete(":id")
@@ -169,6 +201,16 @@ export class UsersController {
 	)
 	@ResponseMessage("common.user.delete.success")
 	async deleteUser(@Param("id", ParseUUIDPipe) id: string): Promise<void> {
-		await this.usersApplicationService.deleteUser(id);
+		const spaceId = this.spaceContext.spaceId;
+		if (!spaceId) {
+			throw new UnauthorizedException(USER_ERRORS.SPACE_NOT_SELECTED);
+		}
+
+		const currentUserId = this.authContext.user?.id;
+		if (!currentUserId) {
+			throw new UnauthorizedException(USER_ERRORS.USER_NOT_FOUND);
+		}
+
+		await this.usersService.deleteUserForSpace(id, spaceId, currentUserId);
 	}
 }

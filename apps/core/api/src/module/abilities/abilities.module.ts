@@ -1,9 +1,9 @@
-import { AbilitiesApplicationService } from "@cocrepo/app";
 import {
 	AbilitiesRepository,
 	GrantsRepository,
 	UsersRepository,
 } from "@cocrepo/repository";
+import { AbilitiesApplicationService } from "@cocrepo/app";
 import {
 	AbilitiesService,
 	AuthCacheService,
@@ -18,15 +18,12 @@ import { AbilitiesController } from "./abilities.controller";
 	controllers: [AbilitiesController],
 	providers: [
 		AbilitiesApplicationService,
-		// Services
 		AbilitiesService,
 		UsersService,
 		AuthCacheService,
-		// Repositories
 		AbilitiesRepository,
 		GrantsRepository,
 		UsersRepository,
-		// Context
 		AuthContext,
 		SpaceContext,
 	],

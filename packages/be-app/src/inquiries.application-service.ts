@@ -27,9 +27,29 @@ export class InquiriesApplicationService {
 		orderBy: Parameters<InquiriesService["list"]>[0]["orderBy"];
 		skip?: number;
 		take?: number;
-	}) {
+	}): Promise<{
+		data: Inquiry[];
+		meta: {
+			total: number;
+			skip: number;
+			take: number;
+			totalPages: number;
+		};
+	}> {
 		this.logger.debug("문의 목록 조회");
-		return this.inquiriesService.list(params);
+		const skip = params.skip ?? 0;
+		const take = params.take ?? 10;
+		const { items, totalCount } = await this.inquiriesService.list(params);
+
+		return {
+			data: items,
+			meta: {
+				total: totalCount,
+				skip,
+				take,
+				totalPages: take > 0 ? Math.ceil(totalCount / take) : 1,
+			},
+		};
 	}
 
 	getInquiryStats(spaceId: string): Promise<InquiryStats> {
@@ -108,8 +128,28 @@ export class InquiriesApplicationService {
 		inquiryId: string;
 		skip?: number;
 		take?: number;
-	}) {
-		return this.inquiriesService.listMessages(params);
+	}): Promise<{
+		data: InquiryMessage[];
+		meta: {
+			total: number;
+			skip: number;
+			take: number;
+			totalPages: number;
+		};
+	}> {
+		const skip = params.skip ?? 0;
+		const take = params.take ?? 50;
+		const { items, totalCount } = await this.inquiriesService.listMessages(params);
+
+		return {
+			data: items,
+			meta: {
+				total: totalCount,
+				skip,
+				take,
+				totalPages: take > 0 ? Math.ceil(totalCount / take) : 1,
+			},
+		};
 	}
 
 	sendInquiryMessage(params: {

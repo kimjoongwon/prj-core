@@ -38,12 +38,24 @@ export class TemplatesApplicationService {
 		};
 	}
 
+	getTemplateById(templateId: string): Promise<Template> {
+		return this.getTemplate(templateId);
+	}
+
 	getTemplate(templateId: string): Promise<Template> {
 		return this.templatesService.getTemplateById(templateId);
 	}
 
+	create(dto: CreateTemplateDto): Promise<Template> {
+		return this.createTemplate(dto);
+	}
+
 	createTemplate(dto: CreateTemplateDto): Promise<Template> {
 		return this.templatesService.create(dto);
+	}
+
+	update(templateId: string, dto: UpdateTemplateDto): Promise<Template> {
+		return this.updateTemplate(templateId, dto);
 	}
 
 	updateTemplate(
@@ -53,16 +65,32 @@ export class TemplatesApplicationService {
 		return this.templatesService.update(templateId, dto);
 	}
 
+	remove(templateId: string): Promise<void> {
+		return this.deleteTemplate(templateId);
+	}
+
 	async deleteTemplate(templateId: string): Promise<void> {
 		await this.templatesService.remove(templateId);
+	}
+
+	toggleStatus(templateId: string): Promise<Template> {
+		return this.toggleTemplateStatus(templateId);
 	}
 
 	toggleTemplateStatus(templateId: string): Promise<Template> {
 		return this.templatesService.toggleStatus(templateId);
 	}
 
+	preview(templateId: string, dto: PreviewTemplateDto) {
+		return this.previewTemplate(templateId, dto);
+	}
+
 	previewTemplate(templateId: string, dto: PreviewTemplateDto) {
 		return this.templatesService.preview(templateId, dto);
+	}
+
+	sendTest(templateId: string, dto: SendTestTemplateDto) {
+		return this.sendTestTemplate(templateId, dto);
 	}
 
 	sendTestTemplate(templateId: string, dto: SendTestTemplateDto) {

@@ -28,7 +28,7 @@ import { ApiBody, ApiOperation, ApiParam, ApiTags } from "@nestjs/swagger";
 @Controller()
 export class RolesController {
 	constructor(
-		private readonly rolesApplicationService: RolesApplicationService,
+		private readonly rolesService: RolesApplicationService,
 	) {}
 
 	@Get()
@@ -44,7 +44,7 @@ export class RolesController {
 	@ApiResponseEntity(RoleDto, HttpStatus.OK, { isArray: true })
 	@ResponseMessage("common.role.list.success")
 	async getRoles() {
-		return this.rolesApplicationService.getRoles();
+		return this.rolesService.getAll();
 	}
 
 	@Get(":id")
@@ -65,7 +65,7 @@ export class RolesController {
 	@ApiResponseEntity(RoleDto, HttpStatus.OK)
 	@ResponseMessage("common.role.read.success")
 	async getRoleById(@Param("id", ParseUUIDPipe) id: string) {
-		return this.rolesApplicationService.getRoleById(id);
+		return this.rolesService.getById(id);
 	}
 
 	@Post()
@@ -87,7 +87,7 @@ export class RolesController {
 	@ApiResponseEntity(RoleDto, HttpStatus.CREATED)
 	@ResponseMessage("common.role.create.success")
 	async createRole(@Body() dto: CreateRoleDto) {
-		return this.rolesApplicationService.createRole(dto);
+		return this.rolesService.create(dto);
 	}
 
 	@Patch(":id")
@@ -117,7 +117,7 @@ export class RolesController {
 		@Param("id", ParseUUIDPipe) id: string,
 		@Body() dto: UpdateRoleDto,
 	) {
-		return this.rolesApplicationService.updateRole(id, dto);
+		return this.rolesService.update(id, dto);
 	}
 
 	@Delete(":id")
@@ -140,6 +140,6 @@ export class RolesController {
 	@ApiResponseEntity(RoleDto, HttpStatus.OK)
 	@ResponseMessage("common.role.delete.success")
 	async deleteRole(@Param("id", ParseUUIDPipe) id: string) {
-		return this.rolesApplicationService.deleteRole(id);
+		return this.rolesService.delete(id);
 	}
 }

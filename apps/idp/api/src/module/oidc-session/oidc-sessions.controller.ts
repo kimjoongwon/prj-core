@@ -1,4 +1,3 @@
-import { wrapResponse } from "@cocrepo/be-common";
 import { SYSTEM_ROLES } from "@cocrepo/constant";
 import {
 	ApiAuth,
@@ -11,10 +10,9 @@ import {
 import {
 	OidcSessionDto,
 	OidcSessionStatsDto,
-	PageMetaDto,
 	QueryOidcSessionDto,
 } from "@cocrepo/dto";
-import { OidcSessionsService } from "@cocrepo/service";
+import { OidcSessionsApplicationService } from "@cocrepo/app";
 import {
 	Controller,
 	Get,
@@ -31,7 +29,9 @@ import { ApiOperation, ApiParam, ApiTags } from "@nestjs/swagger";
 @Roles([SYSTEM_ROLES.FULL_ACCESS])
 @SkipSpaceCheck()
 export class OidcSessionsController {
-	constructor(private readonly oidcSessionsService: OidcSessionsService) {}
+	constructor(
+		private readonly oidcSessionsService: OidcSessionsApplicationService,
+	) {}
 
 	@Get()
 	@ApiOperation({
@@ -48,14 +48,7 @@ export class OidcSessionsController {
 	})
 	@ResponseMessage("OIDC 세션 목록 조회 성공")
 	async getOidcSessions(@Query() query: QueryOidcSessionDto) {
-		const { data, totalCount } = await this.oidcSessionsService.getMany(query);
-
-		const skip = query.skip ?? 0;
-		const take = query.take ?? 20;
-
-		return wrapResponse(data, {
-			meta: new PageMetaDto(skip, take, totalCount),
-		});
+		return this.oidcSessionsService.getMany(query);
 	}
 
 	@Get("stats")

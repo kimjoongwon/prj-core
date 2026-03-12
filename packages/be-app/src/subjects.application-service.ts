@@ -9,6 +9,10 @@ import { Injectable } from "@nestjs/common";
 export class SubjectsApplicationService {
 	constructor(private readonly subjectsService: SubjectsService) {}
 
+	getSubjectsByGroup(group: string): Promise<SubjectInfo[]> {
+		return this.subjectsService.getSubjectsByGroup(group);
+	}
+
 	getSubjects(group?: string): Promise<SubjectInfo[]> {
 		return group
 			? this.subjectsService.getSubjectsByGroup(group)

@@ -6,13 +6,13 @@
 
 ## 역할
 
-`GrantsController`가 ApplicationService와 Grant 관련 service/repository 묶음을 주입받을 수 있도록 provider를 구성합니다.
+`GrantsController`가 Service와 Grant 관련 service/repository 묶음을 주입받을 수 있도록 provider를 구성합니다.
 
 ## provider 구성
 
 | provider | 설명 |
 |----------|------|
-| GrantsApplicationService | Controller 진입용 Grant 유즈케이스 |
+| GrantsService | Controller 진입용 Grant 유즈케이스 |
 | GrantsService | Grant 도메인 서비스 |
 | GrantsRepository | Grant 영속성 접근 |
 | RolesRepository | Role 존재 검증 지원 |
@@ -24,11 +24,11 @@
 
 | export | 설명 |
 |--------|------|
-| GrantsApplicationService | 다른 모듈이 참조할 수 있는 Grant application 진입점 |
+| GrantsService | 다른 모듈이 참조할 수 있는 Grant application 진입점 |
 
 ## 변경 이력
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
 | 2026-03-03 | 누락된 sidecar spec 신규 생성 | codex |
-| 2026-03-11 | GrantsModule export를 GrantsApplicationService 기준으로 정렬 | codex |
+| 2026-03-11 | GrantsModule export를 GrantsService 기준으로 정렬 | codex |

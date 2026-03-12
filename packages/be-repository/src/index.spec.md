@@ -20,3 +20,5 @@
 |------|------|--------|
 | 2026-03-06 | 미사용 AI Form Template Repository export 제거 | codex |
 | 2026-03-03 | 누락된 sidecar spec 신규 생성 | codex |
+| 2026-03-11 | schema-owner 기준으로 누락된 10개 repository export 및 누락 레포 파일 생성 반영 | codex |
+| 2026-03-11 | schema-owner 기준 누락 WhitelistEntry 레포 추가 반영 | codex |

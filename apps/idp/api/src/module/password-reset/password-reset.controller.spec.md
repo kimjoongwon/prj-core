@@ -43,7 +43,7 @@
 
 | 의존 서비스 | 역할 |
 |------------|------|
-| `PasswordResetService` | 토큰 생성/검증, 이메일 발송, 비밀번호 변경 비즈니스 로직 |
+| `PasswordResetApplicationService` | 토큰 생성/검증, 이메일 발송, 비밀번호 변경 비즈니스 로직 |
 
 ## 구현 체크리스트
 
@@ -57,3 +57,4 @@
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
 | 2026-02-19 | 초기 생성 (역기획) | req-reverse-engineer |
+| 2026-03-12 | PasswordResetController가 PasswordResetService 직접 주입에서 PasswordResetApplicationService로 전환 | codex |
