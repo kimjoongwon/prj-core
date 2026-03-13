@@ -1,6 +1,6 @@
 "use client";
+import { useGetMySpaces, useLogout } from "@cocrepo/api/idp/auth";
 
-import { useGetMySpaces, useLogout } from "@cocrepo/api";
 import { useLayout } from "@cocrepo/hook";
 import type { SpaceInfo } from "@cocrepo/ui";
 import {

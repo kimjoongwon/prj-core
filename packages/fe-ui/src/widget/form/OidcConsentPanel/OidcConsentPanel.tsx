@@ -9,12 +9,8 @@ import { Button } from "@heroui/react";
 import { observer } from "mobx-react-lite";
 import { useState } from "react";
 import { AlertBanner } from "../../../primitive/feedback/AlertBanner/AlertBanner";
-import {
-	AuthCard,
-} from "../../../widget/AuthCard/AuthCard";
-import {
-	AuthCardHeader,
-} from "../../../widget/AuthCard/AuthCardHeader";
+import { AuthCard } from "../../../widget/AuthCard/AuthCard";
+import { AuthCardHeader } from "../../../widget/AuthCard/AuthCardHeader";
 
 export interface OidcConsentPanelProps {
 	/** 동의 확인 핸들러 */
@@ -37,12 +33,7 @@ export interface OidcConsentPanelProps {
  * 클라이언트가 요청하는 권한 목록을 표시하고, 허용/거부를 선택할 수 있습니다.
  */
 export const OidcConsentPanel = observer(
-	({
-		onConfirm,
-		onAbort,
-		client,
-		missingScopes,
-	}: OidcConsentPanelProps) => {
+	({ onConfirm, onAbort, client, missingScopes }: OidcConsentPanelProps) => {
 		const [error, setError] = useState<string | null>(null);
 		const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -93,10 +84,7 @@ export const OidcConsentPanel = observer(
 											strokeLinecap="round"
 											strokeLinejoin="round"
 											strokeWidth={2}
-											d={
-												SCOPE_ICONS[scope] ||
-												DEFAULT_SCOPE_ICON
-											}
+											d={SCOPE_ICONS[scope] || DEFAULT_SCOPE_ICON}
 										/>
 									</svg>
 								</div>

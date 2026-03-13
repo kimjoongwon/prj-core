@@ -43,8 +43,12 @@ test.describe("이용자 목록 페이지", () => {
 			const hasStats = await totalUsersCard.isVisible().catch(() => false);
 			if (hasStats) {
 				await expect(totalUsersCard).toBeVisible();
-				await expect(page.getByText("활성 이용자", { exact: true })).toBeVisible();
-				await expect(page.getByText("비활성 이용자", { exact: true })).toBeVisible();
+				await expect(
+					page.getByText("활성 이용자", { exact: true }),
+				).toBeVisible();
+				await expect(
+					page.getByText("비활성 이용자", { exact: true }),
+				).toBeVisible();
 				return;
 			}
 			await expect(page.getByText(/총 \d+건/)).toBeVisible();
@@ -156,12 +160,16 @@ test.describe("이용자 목록 페이지", () => {
 			page,
 		}) => {
 			// When: 존재하지 않는 검색어 입력
-			await page.getByPlaceholder(SEARCH_PLACEHOLDER).fill("존재하지않는사용자xyz");
+			await page
+				.getByPlaceholder(SEARCH_PLACEHOLDER)
+				.fill("존재하지않는사용자xyz");
 			await page.waitForTimeout(500);
 			await page.waitForLoadState("networkidle");
 
 			// Then: URL 반영 및 목록 영역 유지
-			await expect(page).toHaveURL(/search=%EC%A1%B4%EC%9E%AC%ED%95%98%EC%A7%80%EC%95%8A%EB%8A%94%EC%82%AC%EC%9A%A9%EC%9E%90xyz/);
+			await expect(page).toHaveURL(
+				/search=%EC%A1%B4%EC%9E%AC%ED%95%98%EC%A7%80%EC%95%8A%EB%8A%94%EC%82%AC%EC%9A%A9%EC%9E%90xyz/,
+			);
 			await expect(page.getByText(/총 \d+건/)).toBeVisible();
 		});
 
@@ -262,7 +270,9 @@ test.describe("이용자 목록 페이지", () => {
 				await expect(page.getByText(/총 \d+건/)).toBeVisible();
 				return;
 			}
-			await expect(page.getByText(/\d{2,3}-\d{3,4}-\d{4}/).first()).toBeVisible();
+			await expect(
+				page.getByText(/\d{2,3}-\d{3,4}-\d{4}/).first(),
+			).toBeVisible();
 		});
 
 		test("활성 사용자의 상태가 활성으로 표시되어야 한다", async ({ page }) => {

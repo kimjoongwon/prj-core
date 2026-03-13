@@ -1,5 +1,4 @@
 "use client";
-
 import {
 	type InquiryCategory,
 	type InquiryMessageDto,
@@ -12,7 +11,8 @@ import {
 	useGetInquiryParticipants,
 	useGetUpdateInquiryForm,
 	useUpdateInquiry,
-} from "@cocrepo/api";
+} from "@cocrepo/api/core/inquiries";
+
 import type {
 	AiFormOptionItem,
 	InquiryMessage,

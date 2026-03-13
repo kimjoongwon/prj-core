@@ -1,9 +1,20 @@
 "use client";
+import { useGetUsers, type UserDto } from "@cocrepo/api/core/users";
 
-import { type UserDto, useGetUsers } from "@cocrepo/api";
 import type { InputConfig, MetaDataGridColumnConfig } from "@cocrepo/type";
 import {
-	DateTimeCell, MetaDataGrid, Page, PageTitleBar, PhoneCell, Section, StatsCard, StatusChipCell, UserRoleCell, useMetaDataGridQueryStates, VStack } from "@cocrepo/ui";
+	DateTimeCell,
+	MetaDataGrid,
+	Page,
+	PageTitleBar,
+	PhoneCell,
+	Section,
+	StatsCard,
+	StatusChipCell,
+	UserRoleCell,
+	useMetaDataGridQueryStates,
+	VStack,
+} from "@cocrepo/ui";
 import { UserCheck, UserMinus, Users } from "lucide-react";
 import { observer } from "mobx-react-lite";
 

@@ -1,6 +1,6 @@
 "use client";
+import { type UserDto } from "@cocrepo/api/core/users";
 
-import type { UserDto } from "@cocrepo/api";
 import {
 	Avatar,
 	Button,

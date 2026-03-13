@@ -1,4 +1,5 @@
-import { prefetchGetTemplatesQuery } from "@cocrepo/api";
+import { prefetchGetTemplatesQuery } from "@cocrepo/api/core/templates";
+
 import { withServerCookies } from "@cocrepo/api/server";
 import type { QueryClient } from "@tanstack/react-query";
 import type { ReadonlyRequestCookies } from "next/dist/server/web/spec-extension/adapters/request-cookies";

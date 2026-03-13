@@ -84,9 +84,7 @@ export const AuthCardHeader = observer(
 				<h1 className={`text-2xl font-bold ${titleClassName ?? ""}`}>
 					{title}
 				</h1>
-				{subtitle && (
-					<p className="text-default-500 mt-2">{subtitle}</p>
-				)}
+				{subtitle && <p className="text-default-500 mt-2">{subtitle}</p>}
 			</div>
 		);
 	},

@@ -1,4 +1,5 @@
-import { prefetchGetOidcClientsQuery } from "@cocrepo/api";
+import { prefetchGetOidcClientsQuery } from "@cocrepo/api/idp/oidc-clients";
+
 import { withServerCookies } from "@cocrepo/api/server";
 import type { QueryClient } from "@tanstack/react-query";
 import type { ReadonlyRequestCookies } from "next/dist/server/web/spec-extension/adapters/request-cookies";

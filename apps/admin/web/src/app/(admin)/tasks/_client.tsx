@@ -1,6 +1,11 @@
 "use client";
+import {
+	getGetTasksQueryKey,
+	type TaskDto,
+	useDeleteTask,
+	useGetTasks,
+} from "@cocrepo/api/core/tasks";
 
-import { getGetTasksQueryKey, type TaskDto, useDeleteTask, useGetTasks } from "@cocrepo/api";
 import type { InputConfig, MetaDataGridColumnConfig } from "@cocrepo/type";
 import {
 	DateTimeCell,
@@ -167,7 +172,9 @@ function TasksPageClient() {
 			label: "지속시간",
 			size: 100,
 			align: "center",
-			cell: ({ getValue }) => <span>{formatDuration(getValue() as number)}</span>,
+			cell: ({ getValue }) => (
+				<span>{formatDuration(getValue() as number)}</span>
+			),
 		},
 		{
 			field: "count",
@@ -201,7 +208,9 @@ function TasksPageClient() {
 				<button
 					type="button"
 					className="cursor-pointer text-sm text-danger hover:text-danger-600"
-					onClick={() => onClickDeleteButton((row.original as TaskExerciseRow).id)}
+					onClick={() =>
+						onClickDeleteButton((row.original as TaskExerciseRow).id)
+					}
 				>
 					삭제
 				</button>
@@ -248,8 +257,8 @@ function TasksPageClient() {
 					<ModalHeader>태스크 삭제</ModalHeader>
 					<ModalBody>
 						<p>
-							<strong>{state.deleteTarget?.exercise.name}</strong> 운동
-							detail이 포함된 태스크를 삭제하시겠습니까?
+							<strong>{state.deleteTarget?.exercise.name}</strong> 운동 detail이
+							포함된 태스크를 삭제하시겠습니까?
 						</p>
 						<p className="mt-2 text-sm text-danger">
 							루틴에서 사용 중인 태스크는 삭제할 수 없습니다.

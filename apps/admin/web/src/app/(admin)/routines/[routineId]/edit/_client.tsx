@@ -1,14 +1,13 @@
 "use client";
-
 import {
 	type CreateRoutineActivityItemDto,
 	getGetRoutineQueryKey,
 	type RoutineDto,
-	type TaskDto,
 	useGetRoutine,
-	useGetTasks,
 	useUpdateRoutine,
-} from "@cocrepo/api";
+} from "@cocrepo/api/core/routines";
+import { type TaskDto, useGetTasks } from "@cocrepo/api/core/tasks";
+
 import { Page, PageTitleBar, Section, VStack } from "@cocrepo/ui";
 import {
 	addToast,
@@ -76,11 +75,11 @@ function RoutineEditPageClient({ routineId }: RoutineEditPageClientProps) {
 	const { data: response, isLoading } = useGetRoutine(routineId);
 	const routine = response?.data as RoutineDto | undefined;
 	const { data: tasksResponse, isLoading: isTasksLoading } = useGetTasks({
-			take: 30,
-			skip: 0,
-			search: state.exerciseQuery.trim() || undefined,
-			spaceScope: "INCLUDE_ANCESTORS",
-		});
+		take: 30,
+		skip: 0,
+		search: state.exerciseQuery.trim() || undefined,
+		spaceScope: "INCLUDE_ANCESTORS",
+	});
 	const candidateTasks = (tasksResponse?.data ?? []) as TaskDto[];
 
 	useEffect(() => {
@@ -223,9 +222,7 @@ function RoutineEditPageClient({ routineId }: RoutineEditPageClientProps) {
 
 	if (isLoading) {
 		return (
-			<Page
-				top={<PageTitleBar title="루틴 수정" description="로딩 중..." />}
-			>
+			<Page top={<PageTitleBar title="루틴 수정" description="로딩 중..." />}>
 				<div className="flex items-center justify-center gap-2 p-8">
 					<Spinner size="sm" />
 					<span className="text-default-500">로딩 중...</span>
@@ -238,7 +235,10 @@ function RoutineEditPageClient({ routineId }: RoutineEditPageClientProps) {
 		return (
 			<Page
 				top={
-					<PageTitleBar title="루틴 수정" description="루틴을 찾을 수 없습니다." />
+					<PageTitleBar
+						title="루틴 수정"
+						description="루틴을 찾을 수 없습니다."
+					/>
 				}
 			>
 				<div className="flex flex-col items-center justify-center gap-4 p-8">
@@ -253,7 +253,11 @@ function RoutineEditPageClient({ routineId }: RoutineEditPageClientProps) {
 
 	const pageActions = (
 		<div className="flex gap-2">
-			<Button variant="flat" onPress={onClickCancelButton} isDisabled={isPending}>
+			<Button
+				variant="flat"
+				onPress={onClickCancelButton}
+				isDisabled={isPending}
+			>
 				취소
 			</Button>
 			<Button color="primary" onPress={onClickSaveButton} isLoading={isPending}>
@@ -397,11 +401,7 @@ function RoutineEditPageClient({ routineId }: RoutineEditPageClientProps) {
 												label="메모"
 												value={activity.notes}
 												onValueChange={(value) =>
-													onChangeActivityField(
-														activity.taskId,
-														"notes",
-														value,
-													)
+													onChangeActivityField(activity.taskId, "notes", value)
 												}
 												placeholder="필요 시 메모를 입력하세요."
 											/>

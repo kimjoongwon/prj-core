@@ -88,7 +88,11 @@ export const BottomTab = observer(
 												navItem.active ? "text-primary" : "text-foreground/60",
 											)}
 										>
-											<AppIcon name={navItem.icon} className="h-6 w-6" size={24} />
+											<AppIcon
+												name={navItem.icon}
+												className="h-6 w-6"
+												size={24}
+											/>
 										</span>
 									)}
 									<span

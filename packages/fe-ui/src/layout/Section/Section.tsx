@@ -48,7 +48,9 @@ export const Section = ({
 	className,
 }: SectionProps) => {
 	return (
-		<section className={`flex w-full flex-col gap-4${className ? ` ${className}` : ""}`}>
+		<section
+			className={`flex w-full flex-col gap-4${className ? ` ${className}` : ""}`}
+		>
 			{top && <div>{top}</div>}
 			<div className="flex w-full gap-4">
 				{left && <div>{left}</div>}

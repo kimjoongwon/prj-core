@@ -1,8 +1,5 @@
 import { expect, test } from "@playwright/test";
-import {
-	navigateToConsentForm,
-	navigateToLoginForm,
-} from "@cocrepo/e2e";
+import { navigateToConsentForm, navigateToLoginForm } from "@cocrepo/e2e";
 
 /** 시드 데이터 기준 FULL_ACCESS 계정 */
 const ADMIN_EMAIL = "admin@plate.com";
@@ -25,9 +22,9 @@ const assertLoginFailureHandled = async (
 		const isLoginPage = await loginHeading.isVisible();
 		const isInteractionUrl = /interaction\/[^/]+/.test(page.url());
 		const isAuthLoginUrl = /\/auth\/login/.test(page.url());
-		expect(hasError || (isLoginPage && (isInteractionUrl || isAuthLoginUrl))).toBe(
-			true,
-		);
+		expect(
+			hasError || (isLoginPage && (isInteractionUrl || isAuthLoginUrl)),
+		).toBe(true);
 	}).toPass({ timeout: 10000 });
 };
 
@@ -144,13 +141,13 @@ test.describe("OIDC 로그인 플로우", () => {
 			await emailInput.clear();
 			await emailInput.fill(ADMIN_EMAIL);
 			await passwordInput.clear();
-				await passwordInput.fill("wrongPassword1!");
+			await passwordInput.fill("wrongPassword1!");
 
-				await page.getByRole("button", { name: "로그인" }).click();
+			await page.getByRole("button", { name: "로그인" }).click();
 
-				// Then: 실패 처리가 사용자에게 노출됨
-				await assertLoginFailureHandled(page);
-			});
+			// Then: 실패 처리가 사용자에게 노출됨
+			await assertLoginFailureHandled(page);
+		});
 
 		test("잘못된 비밀번호 입력 후에도 이메일 입력값이 유지되어야 한다", async ({
 			page,
@@ -276,11 +273,11 @@ test.describe("OIDC 로그인 플로우", () => {
 			await emailInput.clear();
 			await emailInput.fill(ADMIN_EMAIL);
 			await passwordInput.clear();
-				await passwordInput.fill("wrongPassword1!");
-				await page.getByRole("button", { name: "로그인" }).click();
+			await passwordInput.fill("wrongPassword1!");
+			await page.getByRole("button", { name: "로그인" }).click();
 
-				// 에러 처리가 사용자에게 노출됨
-				await assertLoginFailureHandled(page);
+			// 에러 처리가 사용자에게 노출됨
+			await assertLoginFailureHandled(page);
 
 			// When: 올바른 비밀번호로 재시도
 			await passwordInput.clear();

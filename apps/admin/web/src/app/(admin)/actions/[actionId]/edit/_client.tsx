@@ -1,6 +1,10 @@
 "use client";
+import {
+	type UpdateActionDto,
+	useGetActionById,
+	useUpdateAction,
+} from "@cocrepo/api/core/actions";
 
-import { type UpdateActionDto, useGetActionById, useUpdateAction, } from "@cocrepo/api";
 import { Page, PageTitleBar, Section, VStack } from "@cocrepo/ui";
 import { Button, Input, Select, SelectItem, Textarea } from "@heroui/react";
 import { ArrowLeft, Save } from "lucide-react";
@@ -109,9 +113,7 @@ function ActionEditPageClient({ actionId }: ActionEditPageClientProps) {
 
 	if (isLoading) {
 		return (
-			<Page
-				top={<PageTitleBar title="Action 수정" description="로딩 중..." />}
-			>
+			<Page top={<PageTitleBar title="Action 수정" description="로딩 중..." />}>
 				<Section>
 					<div className="flex items-center justify-center p-8">
 						<span className="text-default-500">로딩 중...</span>
@@ -195,7 +197,7 @@ function ActionEditPageClient({ actionId }: ActionEditPageClientProps) {
 							label="표시명"
 							placeholder="이메일 마스킹 읽기"
 							value={state.displayName}
-							onValueChange={value => {
+							onValueChange={(value) => {
 								state.displayName = value;
 							}}
 							maxLength={100}
@@ -205,7 +207,7 @@ function ActionEditPageClient({ actionId }: ActionEditPageClientProps) {
 							label="설명"
 							placeholder="Action에 대한 설명을 입력하세요."
 							value={state.description}
-							onValueChange={value => {
+							onValueChange={(value) => {
 								state.description = value;
 							}}
 							maxLength={200}
@@ -215,12 +217,12 @@ function ActionEditPageClient({ actionId }: ActionEditPageClientProps) {
 							label="분류"
 							placeholder="분류를 선택하세요"
 							selectedKeys={state.group ? [state.group] : []}
-							onSelectionChange={keys => {
+							onSelectionChange={(keys) => {
 								const selectedKey = Array.from(keys)[0];
 								state.group = selectedKey ? String(selectedKey) : "";
 							}}
 						>
-							{groupOptions.map(option => (
+							{groupOptions.map((option) => (
 								<SelectItem key={option.value}>{option.label}</SelectItem>
 							))}
 						</Select>
@@ -228,7 +230,7 @@ function ActionEditPageClient({ actionId }: ActionEditPageClientProps) {
 							label="정렬 순서"
 							type="number"
 							value={String(state.order)}
-							onValueChange={value => {
+							onValueChange={(value) => {
 								state.order = Number(value) || 0;
 							}}
 							description="낮은 숫자일수록 먼저 표시됩니다."

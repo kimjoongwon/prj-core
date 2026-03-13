@@ -18,7 +18,7 @@
 
 | 모듈 | 용도 |
 |------|------|
-| @cocrepo/api | 기능 구현 의존성 |
+| @cocrepo/api/core/routines | 기능 구현 의존성 |
 | @cocrepo/api/server | 기능 구현 의존성 |
 | @tanstack/react-query | 기능 구현 의존성 |
 | next/dist/server/web/spec-extension/adapters/request-cookies | 기능 구현 의존성 |
@@ -32,4 +32,5 @@
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-03-13 | `@cocrepo/api` root import를 split subpath import로 전환 | codex |
 | 2026-03-03 | 누락된 sidecar spec 신규 생성 | codex |

@@ -1,8 +1,12 @@
 "use client";
-
-import { type CreateAbilityDto, useCreateAbility, useGetActions, useGetSubjects, } from "@cocrepo/api";
 import {
-	Page, PageTitleBar, Section, VStack } from "@cocrepo/ui";
+	type CreateAbilityDto,
+	useCreateAbility,
+} from "@cocrepo/api/core/abilities";
+import { useGetActions } from "@cocrepo/api/core/actions";
+import { useGetSubjects } from "@cocrepo/api/core/subjects";
+
+import { Page, PageTitleBar, Section, VStack } from "@cocrepo/ui";
 import {
 	addToast,
 	Button,

@@ -1,10 +1,10 @@
 "use client";
-
 import {
 	type ExerciseDto,
 	useGetTaskExercise,
 	useUpdateTaskExercise,
-} from "@cocrepo/api";
+} from "@cocrepo/api/core/tasks";
+
 import { Page, PageTitleBar, Section } from "@cocrepo/ui";
 import { addToast, Button, Input, Spinner, Textarea } from "@heroui/react";
 import { observer, useLocalObservable } from "mobx-react-lite";
@@ -130,7 +130,9 @@ function TaskExerciseEditPageClient({
 
 	if (isLoading) {
 		return (
-			<Page top={<PageTitleBar title="운동 정보 수정" description="로딩 중..." />}>
+			<Page
+				top={<PageTitleBar title="운동 정보 수정" description="로딩 중..." />}
+			>
 				<Section>
 					<div className="flex items-center justify-center gap-2 p-8">
 						<Spinner size="sm" />
@@ -210,7 +212,9 @@ function TaskExerciseEditPageClient({
 								value={String(state.durationMin)}
 								onValueChange={onChangeDurationMin}
 								min={0}
-								endContent={<span className="text-sm text-default-400">분</span>}
+								endContent={
+									<span className="text-sm text-default-400">분</span>
+								}
 								className="max-w-32"
 							/>
 							<Input
@@ -220,12 +224,16 @@ function TaskExerciseEditPageClient({
 								onValueChange={onChangeDurationSec}
 								min={0}
 								max={59}
-								endContent={<span className="text-sm text-default-400">초</span>}
+								endContent={
+									<span className="text-sm text-default-400">초</span>
+								}
 								className="max-w-32"
 							/>
 						</div>
 						{state.errors.duration && (
-							<p className="mt-1 text-sm text-danger">{state.errors.duration}</p>
+							<p className="mt-1 text-sm text-danger">
+								{state.errors.duration}
+							</p>
 						)}
 					</div>
 					<Input

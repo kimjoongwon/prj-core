@@ -1,6 +1,6 @@
 "use client";
+import { useLogout } from "@cocrepo/api/idp/auth";
 
-import { useLogout } from "@cocrepo/api";
 import { useLayout } from "@cocrepo/hook";
 import {
 	useConsoleBottomTabStore,

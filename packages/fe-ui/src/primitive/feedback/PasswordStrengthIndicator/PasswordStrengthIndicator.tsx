@@ -57,11 +57,7 @@ export const PasswordStrengthIndicator = observer(
 								/>
 							</svg>
 						)}
-						<span
-							className={
-								r.passed ? "text-success" : "text-default-400"
-							}
-						>
+						<span className={r.passed ? "text-success" : "text-default-400"}>
 							{r.label}
 						</span>
 					</div>

@@ -34,13 +34,14 @@ export const VariableInputForm = observer(
 	({ variables, values, onChange }: VariableInputFormProps) => {
 		if (variables.length === 0) {
 			return (
-				<p className="text-sm text-default-400">
-					정의된 변수가 없습니다.
-				</p>
+				<p className="text-sm text-default-400">정의된 변수가 없습니다.</p>
 			);
 		}
 
-		const handleValueChange = (variableName: string, value: string | number) => {
+		const handleValueChange = (
+			variableName: string,
+			value: string | number,
+		) => {
 			onChange({
 				...values,
 				[variableName]: String(value),
@@ -51,9 +52,7 @@ export const VariableInputForm = observer(
 			<div className="flex flex-col gap-3">
 				{variables.map((variable) => {
 					const label = variable.description ?? variable.name;
-					const displayLabel = variable.isRequired
-						? `${label} *`
-						: label;
+					const displayLabel = variable.isRequired ? `${label} *` : label;
 
 					const placeholder = variable.defaultValue
 						? `(기본값: ${variable.defaultValue})`
@@ -65,9 +64,7 @@ export const VariableInputForm = observer(
 							label={displayLabel}
 							placeholder={placeholder}
 							value={values[variable.name] ?? ""}
-							onChange={(value) =>
-								handleValueChange(variable.name, value)
-							}
+							onChange={(value) => handleValueChange(variable.name, value)}
 							isRequired={variable.isRequired}
 							size="sm"
 						/>

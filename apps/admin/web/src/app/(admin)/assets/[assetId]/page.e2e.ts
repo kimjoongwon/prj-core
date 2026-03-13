@@ -134,10 +134,7 @@ test.describe("에셋 상세 페이지", () => {
 			// Then: 삭제 성공 후 목록 이동
 			expect(deleteResp.status()).toBe(204);
 			const movedToList = await expect
-				.poll(
-					() => /\/assets\/?$/.test(page.url()),
-					{ timeout: 15000 },
-				)
+				.poll(() => /\/assets\/?$/.test(page.url()), { timeout: 15000 })
 				.toBeTruthy()
 				.then(() => true)
 				.catch(() => false);

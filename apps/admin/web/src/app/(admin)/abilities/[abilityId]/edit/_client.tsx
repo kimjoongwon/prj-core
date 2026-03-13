@@ -1,8 +1,13 @@
 "use client";
-
-import { type UpdateAbilityDto, useGetAbilityById, useGetActions, useGetSubjects, useUpdateAbility, } from "@cocrepo/api";
 import {
-	Page, PageTitleBar, Section, VStack } from "@cocrepo/ui";
+	type UpdateAbilityDto,
+	useGetAbilityById,
+	useUpdateAbility,
+} from "@cocrepo/api/core/abilities";
+import { useGetActions } from "@cocrepo/api/core/actions";
+import { useGetSubjects } from "@cocrepo/api/core/subjects";
+
+import { Page, PageTitleBar, Section, VStack } from "@cocrepo/ui";
 import {
 	addToast,
 	Button,
@@ -147,9 +152,7 @@ function AbilityEditPageClient({ abilityId }: AbilityEditPageClientProps) {
 
 	if (isLoading) {
 		return (
-			<Page
-				top={<PageTitleBar title="권한 수정" description="로딩 중..." />}
-			>
+			<Page top={<PageTitleBar title="권한 수정" description="로딩 중..." />}>
 				<div className="flex items-center justify-center gap-2 p-8">
 					<Spinner size="sm" />
 					<span className="text-default-500">로딩 중...</span>
@@ -161,7 +164,12 @@ function AbilityEditPageClient({ abilityId }: AbilityEditPageClientProps) {
 	if (!ability) {
 		return (
 			<Page
-				top={<PageTitleBar title="권한 수정" description="권한을 찾을 수 없습니다." />}
+				top={
+					<PageTitleBar
+						title="권한 수정"
+						description="권한을 찾을 수 없습니다."
+					/>
+				}
 			>
 				<div className="flex flex-col items-center justify-center gap-4 p-8">
 					<p className="text-default-500">권한을 찾을 수 없습니다.</p>

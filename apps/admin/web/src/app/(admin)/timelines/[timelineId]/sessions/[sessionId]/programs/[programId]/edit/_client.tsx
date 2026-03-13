@@ -1,8 +1,23 @@
 "use client";
-
-import { getGetProgramByIdQueryKey, type RoutineDto, type UserDto, useGetProgramById, useGetRoutines, useGetUserById, useGetUsers, useUpdateProgram, } from "@cocrepo/api";
+import { type RoutineDto, useGetRoutines } from "@cocrepo/api/core/routines";
 import {
-	Page, PageTitleBar, ProgramPickerModal, Section, VStack } from "@cocrepo/ui";
+	getGetProgramByIdQueryKey,
+	useGetProgramById,
+	useUpdateProgram,
+} from "@cocrepo/api/core/timelines";
+import {
+	useGetUserById,
+	useGetUsers,
+	type UserDto,
+} from "@cocrepo/api/core/users";
+
+import {
+	Page,
+	PageTitleBar,
+	ProgramPickerModal,
+	Section,
+	VStack,
+} from "@cocrepo/ui";
 import {
 	addToast,
 	Button,
@@ -298,9 +313,7 @@ function ProgramEditPageClient({
 				/>
 			}
 		>
-			<Section
-				top={<PageTitleBar level={2} title="기본 정보" />}
-			>
+			<Section top={<PageTitleBar level={2} title="기본 정보" />}>
 				<VStack gap={4}>
 					<Input
 						label="프로그램 이름"
@@ -347,7 +360,9 @@ function ProgramEditPageClient({
 					<div className="rounded-lg bg-content2 p-3 text-sm text-default-600">
 						<p className="font-medium text-default-700">연결 요약</p>
 						<p className="mt-1">루틴: {selectedRoutine?.name ?? "-"}</p>
-						<p>강사: {selectedInstructor?.name ?? program?.instructorId ?? "-"}</p>
+						<p>
+							강사: {selectedInstructor?.name ?? program?.instructorId ?? "-"}
+						</p>
 					</div>
 					<Input
 						label="정원"

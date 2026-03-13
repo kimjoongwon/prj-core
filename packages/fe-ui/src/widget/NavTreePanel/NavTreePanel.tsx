@@ -83,7 +83,9 @@ export const NavTreePanel = observer(
 									: "text-foreground/70 hover:bg-default-100 hover:text-foreground",
 							)}
 						>
-							{item.icon && <AppIcon name={item.icon} className="h-5 w-5" size={20} />}
+							{item.icon && (
+								<AppIcon name={item.icon} className="h-5 w-5" size={20} />
+							)}
 							<span>{item.label}</span>
 						</button>
 					))}
@@ -149,7 +151,11 @@ export const NavTreePanel = observer(
 													item.active ? "text-primary" : "text-foreground/70",
 												)}
 											>
-												<AppIcon name={item.icon} className="h-5 w-5" size={20} />
+												<AppIcon
+													name={item.icon}
+													className="h-5 w-5"
+													size={20}
+												/>
 											</span>
 										)
 									}

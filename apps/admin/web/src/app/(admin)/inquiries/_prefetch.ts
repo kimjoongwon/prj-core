@@ -1,7 +1,8 @@
 import {
 	prefetchGetInquiriesQuery,
 	prefetchGetInquiryStatsQuery,
-} from "@cocrepo/api";
+} from "@cocrepo/api/core/inquiries";
+
 import { withServerCookies } from "@cocrepo/api/server";
 import type { QueryClient } from "@tanstack/react-query";
 import type { ReadonlyRequestCookies } from "next/dist/server/web/spec-extension/adapters/request-cookies";
@@ -19,17 +20,6 @@ interface PrefetchInquiriesParams {
 /**
  * Inquiries 데이터 프리페칭 함수
  * SSR 시점에 데이터를 미리 조회하여 클라이언트로 전달합니다.
- *
- * @requires Orval API 훅 생성 후 아래 import 추가 필요:
- * import { prefetchGetInquiriesQuery } from "@cocrepo/api";
- *
- * @example
- * // Orval 훅 생성 후 아래와 같이 변경:
- * await prefetchGetInquiriesQuery(
- *   queryClient,
- *   { take, skip, status, category, channel, priority, search },
- *   { request: { headers: { Cookie: cookieHeader } } }
- * );
  */
 export async function prefetchInquiriesData(
 	queryClient: QueryClient,

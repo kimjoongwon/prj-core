@@ -1,10 +1,15 @@
 "use client";
+import { type CategoryDto } from "@cocrepo/api/core/categories";
+import { customInstance } from "@cocrepo/api/core/client";
 
-// TODO: Orval codegen 후 아래 import로 교체
-// import { useGetCategories, type CategoryDto } from "@cocrepo/api";
-import { customInstance } from "@cocrepo/api";
 import {
-	DateTimeCell, Page, PageTitleBar, ParentCategoryCell, Section, VStack } from "@cocrepo/ui";
+	DateTimeCell,
+	Page,
+	PageTitleBar,
+	ParentCategoryCell,
+	Section,
+	VStack,
+} from "@cocrepo/ui";
 import { Button } from "@heroui/react";
 import { useQuery } from "@tanstack/react-query";
 import { FolderTree, Plus } from "lucide-react";
@@ -108,10 +113,14 @@ function RoleCategoriesPageClient() {
 											className="border-b border-divider transition-colors hover:bg-content2/50"
 										>
 											<td className="px-4 py-3">
-												<span className="font-mono text-sm">{category.name}</span>
+												<span className="font-mono text-sm">
+													{category.name}
+												</span>
 											</td>
 											<td className="px-4 py-3">
-												<ParentCategoryCell parentName={category.parent?.name} />
+												<ParentCategoryCell
+													parentName={category.parent?.name}
+												/>
 											</td>
 											<td className="px-4 py-3 text-center">
 												<span className="text-default-600">

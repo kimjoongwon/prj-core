@@ -1,7 +1,11 @@
 "use client";
+import {
+	getGetSessionByIdQueryKey,
+	UpdateSessionDtoRecurringDayOfWeek,
+	useGetSessionById,
+	useUpdateSession,
+} from "@cocrepo/api/core/timelines";
 
-import type { UpdateSessionDtoRecurringDayOfWeek } from "@cocrepo/api";
-import { getGetSessionByIdQueryKey, useGetSessionById, useUpdateSession, } from "@cocrepo/api";
 import { Page, PageTitleBar, Section, VStack } from "@cocrepo/ui";
 import {
 	addToast,
@@ -346,9 +350,7 @@ function SessionEditPageClient({
 										label="반복 요일"
 										labelPlacement="outside"
 										selectedKeys={
-											state.recurringDayOfWeek
-												? [state.recurringDayOfWeek]
-												: []
+											state.recurringDayOfWeek ? [state.recurringDayOfWeek] : []
 										}
 										onSelectionChange={(keys) => {
 											const val = Array.from(keys)[0] as string;
@@ -360,9 +362,7 @@ function SessionEditPageClient({
 										className="flex-1"
 									>
 										{DAY_OF_WEEK_OPTIONS.map((opt) => (
-											<SelectItem key={opt.value ?? ""}>
-												{opt.label}
-											</SelectItem>
+											<SelectItem key={opt.value ?? ""}>{opt.label}</SelectItem>
 										))}
 									</Select>
 									<Select

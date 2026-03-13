@@ -1,0 +1,1190 @@
+/**
+ * Generated from the current Orval monolith output.
+ * Do not edit manually. Update the upstream Orval output or rerun split-orval-output.mjs.
+ */
+import {
+  useMutation,
+  useQuery,
+  useSuspenseInfiniteQuery,
+  useSuspenseQuery
+} from '@tanstack/react-query';
+import type {
+  DataTag,
+  DefinedInitialDataOptions,
+  DefinedUseQueryResult,
+  InfiniteData,
+  MutationFunction,
+  QueryClient,
+  QueryFunction,
+  QueryKey,
+  UndefinedInitialDataOptions,
+  UseMutationOptions,
+  UseMutationResult,
+  UseQueryOptions,
+  UseQueryResult,
+  UseSuspenseInfiniteQueryOptions,
+  UseSuspenseInfiniteQueryResult,
+  UseSuspenseQueryOptions,
+  UseSuspenseQueryResult
+} from '@tanstack/react-query';
+
+import type { CreateExerciseDto } from "../../model/createExerciseDto";
+import type { CreateTask201AllOf } from "../../model/createTask201AllOf";
+import type { ExerciseDto } from "../../model/exerciseDto";
+import type { GetTaskById200AllOf } from "../../model/getTaskById200AllOf";
+import type { GetTaskExercise200AllOf } from "../../model/getTaskExercise200AllOf";
+import type { GetTaskRoutines200AllOf } from "../../model/getTaskRoutines200AllOf";
+import type { GetTasks200AllOf } from "../../model/getTasks200AllOf";
+import type { GetTasksParams } from "../../model/getTasksParams";
+import type { TaskDto } from "../../model/taskDto";
+import type { UpdateExerciseDto } from "../../model/updateExerciseDto";
+import type { UpdateTaskExercise200AllOf } from "../../model/updateTaskExercise200AllOf";
+export type { CreateExerciseDto };
+export type { CreateTask201AllOf };
+export type { ExerciseDto };
+export type { GetTaskById200AllOf };
+export type { GetTaskExercise200AllOf };
+export type { GetTaskRoutines200AllOf };
+export type { GetTasks200AllOf };
+export type { GetTasksParams };
+export type { TaskDto };
+export type { UpdateExerciseDto };
+export type { UpdateTaskExercise200AllOf };
+import type { BodyType, ErrorType } from "../../libs/customAxios";
+import { customInstance } from "../../libs/customAxios";
+
+type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
+
+/**
+ * Exercise detail이 있는 Task 목록을 조회합니다.
+ * @summary Task 목록 조회
+ */
+export const getTasks = (
+    params?: GetTasksParams,
+ options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
+) => {
+      
+      
+      return customInstance<GetTasks200AllOf>(
+      {url: `/api/v1/tasks`, method: 'GET',
+        params, signal
+    },
+      options);
+    }
+
+export const getGetTasksQueryKey = (params?: GetTasksParams,) => {
+    return [
+    `/api/v1/tasks`, ...(params ? [params]: [])
+    ] as const;
+    }
+
+export const getGetTasksInfiniteQueryKey = (params?: GetTasksParams,) => {
+    return [
+    'infinite', `/api/v1/tasks`, ...(params ? [params]: [])
+    ] as const;
+    }
+
+export const getGetTasksQueryOptions = <TData = Awaited<ReturnType<typeof getTasks>>, TError = ErrorType<void>>(params?: GetTasksParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getTasks>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetTasksQueryKey(params);
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getTasks>>> = ({ signal }) => getTasks(params, requestOptions, signal);
+
+      
+
+      
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getTasks>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetTasksQueryResult = NonNullable<Awaited<ReturnType<typeof getTasks>>>
+
+export type GetTasksQueryError = ErrorType<void>
+
+export function useGetTasks<TData = Awaited<ReturnType<typeof getTasks>>, TError = ErrorType<void>>(
+ params: undefined |  GetTasksParams, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getTasks>>, TError, TData>> & Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getTasks>>,
+          TError,
+          Awaited<ReturnType<typeof getTasks>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+
+export function useGetTasks<TData = Awaited<ReturnType<typeof getTasks>>, TError = ErrorType<void>>(
+ params?: GetTasksParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getTasks>>, TError, TData>> & Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getTasks>>,
+          TError,
+          Awaited<ReturnType<typeof getTasks>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+
+export function useGetTasks<TData = Awaited<ReturnType<typeof getTasks>>, TError = ErrorType<void>>(
+ params?: GetTasksParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getTasks>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+
+/**
+ * @summary Task 목록 조회
+ */
+
+export function useGetTasks<TData = Awaited<ReturnType<typeof getTasks>>, TError = ErrorType<void>>(
+ params?: GetTasksParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getTasks>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient 
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = getGetTasksQueryOptions(params,options)
+
+  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+/**
+ * @summary Task 목록 조회
+ */
+export const prefetchGetTasksQuery = async <TData = Awaited<ReturnType<typeof getTasks>>, TError = ErrorType<void>>(
+ queryClient: QueryClient, params?: GetTasksParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getTasks>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+
+  ): Promise<QueryClient> => {
+
+  const queryOptions = getGetTasksQueryOptions(params,options)
+
+  await queryClient.prefetchQuery(queryOptions);
+
+  return queryClient;
+}
+
+export const getGetTasksSuspenseQueryOptions = <TData = Awaited<ReturnType<typeof getTasks>>, TError = ErrorType<void>>(params?: GetTasksParams, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getTasks>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetTasksQueryKey(params);
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getTasks>>> = ({ signal }) => getTasks(params, requestOptions, signal);
+
+      
+
+      
+
+   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseQueryOptions<Awaited<ReturnType<typeof getTasks>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetTasksSuspenseQueryResult = NonNullable<Awaited<ReturnType<typeof getTasks>>>
+
+export type GetTasksSuspenseQueryError = ErrorType<void>
+
+export function useGetTasksSuspense<TData = Awaited<ReturnType<typeof getTasks>>, TError = ErrorType<void>>(
+ params: undefined |  GetTasksParams, options: { query:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getTasks>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+
+export function useGetTasksSuspense<TData = Awaited<ReturnType<typeof getTasks>>, TError = ErrorType<void>>(
+ params?: GetTasksParams, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getTasks>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+
+export function useGetTasksSuspense<TData = Awaited<ReturnType<typeof getTasks>>, TError = ErrorType<void>>(
+ params?: GetTasksParams, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getTasks>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+
+/**
+ * @summary Task 목록 조회
+ */
+
+export function useGetTasksSuspense<TData = Awaited<ReturnType<typeof getTasks>>, TError = ErrorType<void>>(
+ params?: GetTasksParams, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getTasks>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient 
+ ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = getGetTasksSuspenseQueryOptions(params,options)
+
+  const query = useSuspenseQuery(queryOptions, queryClient) as  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+export const getGetTasksSuspenseInfiniteQueryOptions = <TData = InfiniteData<Awaited<ReturnType<typeof getTasks>>>, TError = ErrorType<void>>(params?: GetTasksParams, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getTasks>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetTasksInfiniteQueryKey(params);
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getTasks>>> = ({ signal }) => getTasks(params, requestOptions, signal);
+
+      
+
+      
+
+   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getTasks>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetTasksSuspenseInfiniteQueryResult = NonNullable<Awaited<ReturnType<typeof getTasks>>>
+
+export type GetTasksSuspenseInfiniteQueryError = ErrorType<void>
+
+export function useGetTasksSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getTasks>>>, TError = ErrorType<void>>(
+ params: undefined |  GetTasksParams, options: { query:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getTasks>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+
+export function useGetTasksSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getTasks>>>, TError = ErrorType<void>>(
+ params?: GetTasksParams, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getTasks>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+
+export function useGetTasksSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getTasks>>>, TError = ErrorType<void>>(
+ params?: GetTasksParams, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getTasks>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+
+/**
+ * @summary Task 목록 조회
+ */
+
+export function useGetTasksSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getTasks>>>, TError = ErrorType<void>>(
+ params?: GetTasksParams, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getTasks>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient 
+ ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = getGetTasksSuspenseInfiniteQueryOptions(params,options)
+
+  const query = useSuspenseInfiniteQuery(queryOptions, queryClient) as  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+/**
+ * @summary Task 목록 조회
+ */
+export const prefetchGetTasksInfiniteQuery = async <TData = Awaited<ReturnType<typeof getTasks>>, TError = ErrorType<void>>(
+ queryClient: QueryClient, params?: GetTasksParams, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getTasks>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+
+  ): Promise<QueryClient> => {
+
+  const queryOptions = getGetTasksSuspenseInfiniteQueryOptions(params,options)
+
+  await queryClient.prefetchInfiniteQuery(queryOptions);
+
+  return queryClient;
+}
+
+/**
+ * Task root와 Exercise detail을 함께 생성합니다.
+ * @summary Task 생성
+ */
+export const createTask = (
+    createExerciseDto: BodyType<CreateExerciseDto>,
+ options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
+) => {
+      
+      
+      return customInstance<CreateTask201AllOf>(
+      {url: `/api/v1/tasks`, method: 'POST',
+      headers: {'Content-Type': 'application/json', },
+      data: createExerciseDto, signal
+    },
+      options);
+    }
+
+export const getCreateTaskMutationOptions = <TError = ErrorType<void>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createTask>>, TError,{data: BodyType<CreateExerciseDto>}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof createTask>>, TError,{data: BodyType<CreateExerciseDto>}, TContext> => {
+
+const mutationKey = ['createTask'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof createTask>>, {data: BodyType<CreateExerciseDto>}> = (props) => {
+          const {data} = props ?? {};
+
+          return  createTask(data,requestOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+export type CreateTaskMutationResult = NonNullable<Awaited<ReturnType<typeof createTask>>>
+
+export type CreateTaskMutationBody = BodyType<CreateExerciseDto>
+
+export type CreateTaskMutationError = ErrorType<void>
+
+/**
+ * @summary Task 생성
+ */
+export const useCreateTask = <TError = ErrorType<void>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createTask>>, TError,{data: BodyType<CreateExerciseDto>}, TContext>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof createTask>>,
+        TError,
+        {data: BodyType<CreateExerciseDto>},
+        TContext
+      > => {
+
+      const mutationOptions = getCreateTaskMutationOptions(options);
+
+      return useMutation(mutationOptions, queryClient);
+    }
+
+/**
+ * Exercise detail을 포함한 Task를 조회합니다.
+ * @summary Task 상세 조회
+ */
+export const getTaskById = (
+    taskId: string,
+ options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
+) => {
+      
+      
+      return customInstance<GetTaskById200AllOf>(
+      {url: `/api/v1/tasks/${taskId}`, method: 'GET', signal
+    },
+      options);
+    }
+
+export const getGetTaskByIdQueryKey = (taskId?: string,) => {
+    return [
+    `/api/v1/tasks/${taskId}`
+    ] as const;
+    }
+
+export const getGetTaskByIdInfiniteQueryKey = (taskId?: string,) => {
+    return [
+    'infinite', `/api/v1/tasks/${taskId}`
+    ] as const;
+    }
+
+export const getGetTaskByIdQueryOptions = <TData = Awaited<ReturnType<typeof getTaskById>>, TError = ErrorType<void>>(taskId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getTaskById>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetTaskByIdQueryKey(taskId);
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getTaskById>>> = ({ signal }) => getTaskById(taskId, requestOptions, signal);
+
+      
+
+      
+
+   return  { queryKey, queryFn, enabled: !!(taskId), ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getTaskById>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetTaskByIdQueryResult = NonNullable<Awaited<ReturnType<typeof getTaskById>>>
+
+export type GetTaskByIdQueryError = ErrorType<void>
+
+export function useGetTaskById<TData = Awaited<ReturnType<typeof getTaskById>>, TError = ErrorType<void>>(
+ taskId: string, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getTaskById>>, TError, TData>> & Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getTaskById>>,
+          TError,
+          Awaited<ReturnType<typeof getTaskById>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+
+export function useGetTaskById<TData = Awaited<ReturnType<typeof getTaskById>>, TError = ErrorType<void>>(
+ taskId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getTaskById>>, TError, TData>> & Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getTaskById>>,
+          TError,
+          Awaited<ReturnType<typeof getTaskById>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+
+export function useGetTaskById<TData = Awaited<ReturnType<typeof getTaskById>>, TError = ErrorType<void>>(
+ taskId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getTaskById>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+
+/**
+ * @summary Task 상세 조회
+ */
+
+export function useGetTaskById<TData = Awaited<ReturnType<typeof getTaskById>>, TError = ErrorType<void>>(
+ taskId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getTaskById>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient 
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = getGetTaskByIdQueryOptions(taskId,options)
+
+  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+/**
+ * @summary Task 상세 조회
+ */
+export const prefetchGetTaskByIdQuery = async <TData = Awaited<ReturnType<typeof getTaskById>>, TError = ErrorType<void>>(
+ queryClient: QueryClient, taskId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getTaskById>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+
+  ): Promise<QueryClient> => {
+
+  const queryOptions = getGetTaskByIdQueryOptions(taskId,options)
+
+  await queryClient.prefetchQuery(queryOptions);
+
+  return queryClient;
+}
+
+export const getGetTaskByIdSuspenseQueryOptions = <TData = Awaited<ReturnType<typeof getTaskById>>, TError = ErrorType<void>>(taskId: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getTaskById>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetTaskByIdQueryKey(taskId);
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getTaskById>>> = ({ signal }) => getTaskById(taskId, requestOptions, signal);
+
+      
+
+      
+
+   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseQueryOptions<Awaited<ReturnType<typeof getTaskById>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetTaskByIdSuspenseQueryResult = NonNullable<Awaited<ReturnType<typeof getTaskById>>>
+
+export type GetTaskByIdSuspenseQueryError = ErrorType<void>
+
+export function useGetTaskByIdSuspense<TData = Awaited<ReturnType<typeof getTaskById>>, TError = ErrorType<void>>(
+ taskId: string, options: { query:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getTaskById>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+
+export function useGetTaskByIdSuspense<TData = Awaited<ReturnType<typeof getTaskById>>, TError = ErrorType<void>>(
+ taskId: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getTaskById>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+
+export function useGetTaskByIdSuspense<TData = Awaited<ReturnType<typeof getTaskById>>, TError = ErrorType<void>>(
+ taskId: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getTaskById>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+
+/**
+ * @summary Task 상세 조회
+ */
+
+export function useGetTaskByIdSuspense<TData = Awaited<ReturnType<typeof getTaskById>>, TError = ErrorType<void>>(
+ taskId: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getTaskById>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient 
+ ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = getGetTaskByIdSuspenseQueryOptions(taskId,options)
+
+  const query = useSuspenseQuery(queryOptions, queryClient) as  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+export const getGetTaskByIdSuspenseInfiniteQueryOptions = <TData = InfiniteData<Awaited<ReturnType<typeof getTaskById>>>, TError = ErrorType<void>>(taskId: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getTaskById>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetTaskByIdInfiniteQueryKey(taskId);
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getTaskById>>> = ({ signal }) => getTaskById(taskId, requestOptions, signal);
+
+      
+
+      
+
+   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getTaskById>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetTaskByIdSuspenseInfiniteQueryResult = NonNullable<Awaited<ReturnType<typeof getTaskById>>>
+
+export type GetTaskByIdSuspenseInfiniteQueryError = ErrorType<void>
+
+export function useGetTaskByIdSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getTaskById>>>, TError = ErrorType<void>>(
+ taskId: string, options: { query:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getTaskById>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+
+export function useGetTaskByIdSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getTaskById>>>, TError = ErrorType<void>>(
+ taskId: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getTaskById>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+
+export function useGetTaskByIdSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getTaskById>>>, TError = ErrorType<void>>(
+ taskId: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getTaskById>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+
+/**
+ * @summary Task 상세 조회
+ */
+
+export function useGetTaskByIdSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getTaskById>>>, TError = ErrorType<void>>(
+ taskId: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getTaskById>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient 
+ ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = getGetTaskByIdSuspenseInfiniteQueryOptions(taskId,options)
+
+  const query = useSuspenseInfiniteQuery(queryOptions, queryClient) as  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+/**
+ * @summary Task 상세 조회
+ */
+export const prefetchGetTaskByIdInfiniteQuery = async <TData = Awaited<ReturnType<typeof getTaskById>>, TError = ErrorType<void>>(
+ queryClient: QueryClient, taskId: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getTaskById>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+
+  ): Promise<QueryClient> => {
+
+  const queryOptions = getGetTaskByIdSuspenseInfiniteQueryOptions(taskId,options)
+
+  await queryClient.prefetchInfiniteQuery(queryOptions);
+
+  return queryClient;
+}
+
+/**
+ * Task root와 Exercise detail을 함께 소프트 삭제합니다.
+ * @summary Task 삭제
+ */
+export const deleteTask = (
+    taskId: string,
+ options?: SecondParameter<typeof customInstance>,) => {
+      
+      
+      return customInstance<unknown>(
+      {url: `/api/v1/tasks/${taskId}`, method: 'DELETE'
+    },
+      options);
+    }
+
+export const getDeleteTaskMutationOptions = <TError = ErrorType<void>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteTask>>, TError,{taskId: string}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof deleteTask>>, TError,{taskId: string}, TContext> => {
+
+const mutationKey = ['deleteTask'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof deleteTask>>, {taskId: string}> = (props) => {
+          const {taskId} = props ?? {};
+
+          return  deleteTask(taskId,requestOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+export type DeleteTaskMutationResult = NonNullable<Awaited<ReturnType<typeof deleteTask>>>
+
+export type DeleteTaskMutationError = ErrorType<void>
+
+/**
+ * @summary Task 삭제
+ */
+export const useDeleteTask = <TError = ErrorType<void>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteTask>>, TError,{taskId: string}, TContext>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof deleteTask>>,
+        TError,
+        {taskId: string},
+        TContext
+      > => {
+
+      const mutationOptions = getDeleteTaskMutationOptions(options);
+
+      return useMutation(mutationOptions, queryClient);
+    }
+
+/**
+ * Task에 종속된 1:1 Exercise detail을 조회합니다.
+ * @summary Task의 Exercise detail 조회
+ */
+export const getTaskExercise = (
+    taskId: string,
+ options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
+) => {
+      
+      
+      return customInstance<GetTaskExercise200AllOf>(
+      {url: `/api/v1/tasks/${taskId}/exercise`, method: 'GET', signal
+    },
+      options);
+    }
+
+export const getGetTaskExerciseQueryKey = (taskId?: string,) => {
+    return [
+    `/api/v1/tasks/${taskId}/exercise`
+    ] as const;
+    }
+
+export const getGetTaskExerciseInfiniteQueryKey = (taskId?: string,) => {
+    return [
+    'infinite', `/api/v1/tasks/${taskId}/exercise`
+    ] as const;
+    }
+
+export const getGetTaskExerciseQueryOptions = <TData = Awaited<ReturnType<typeof getTaskExercise>>, TError = ErrorType<void>>(taskId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getTaskExercise>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetTaskExerciseQueryKey(taskId);
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getTaskExercise>>> = ({ signal }) => getTaskExercise(taskId, requestOptions, signal);
+
+      
+
+      
+
+   return  { queryKey, queryFn, enabled: !!(taskId), ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getTaskExercise>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetTaskExerciseQueryResult = NonNullable<Awaited<ReturnType<typeof getTaskExercise>>>
+
+export type GetTaskExerciseQueryError = ErrorType<void>
+
+export function useGetTaskExercise<TData = Awaited<ReturnType<typeof getTaskExercise>>, TError = ErrorType<void>>(
+ taskId: string, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getTaskExercise>>, TError, TData>> & Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getTaskExercise>>,
+          TError,
+          Awaited<ReturnType<typeof getTaskExercise>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+
+export function useGetTaskExercise<TData = Awaited<ReturnType<typeof getTaskExercise>>, TError = ErrorType<void>>(
+ taskId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getTaskExercise>>, TError, TData>> & Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getTaskExercise>>,
+          TError,
+          Awaited<ReturnType<typeof getTaskExercise>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+
+export function useGetTaskExercise<TData = Awaited<ReturnType<typeof getTaskExercise>>, TError = ErrorType<void>>(
+ taskId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getTaskExercise>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+
+/**
+ * @summary Task의 Exercise detail 조회
+ */
+
+export function useGetTaskExercise<TData = Awaited<ReturnType<typeof getTaskExercise>>, TError = ErrorType<void>>(
+ taskId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getTaskExercise>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient 
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = getGetTaskExerciseQueryOptions(taskId,options)
+
+  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+/**
+ * @summary Task의 Exercise detail 조회
+ */
+export const prefetchGetTaskExerciseQuery = async <TData = Awaited<ReturnType<typeof getTaskExercise>>, TError = ErrorType<void>>(
+ queryClient: QueryClient, taskId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getTaskExercise>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+
+  ): Promise<QueryClient> => {
+
+  const queryOptions = getGetTaskExerciseQueryOptions(taskId,options)
+
+  await queryClient.prefetchQuery(queryOptions);
+
+  return queryClient;
+}
+
+export const getGetTaskExerciseSuspenseQueryOptions = <TData = Awaited<ReturnType<typeof getTaskExercise>>, TError = ErrorType<void>>(taskId: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getTaskExercise>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetTaskExerciseQueryKey(taskId);
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getTaskExercise>>> = ({ signal }) => getTaskExercise(taskId, requestOptions, signal);
+
+      
+
+      
+
+   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseQueryOptions<Awaited<ReturnType<typeof getTaskExercise>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetTaskExerciseSuspenseQueryResult = NonNullable<Awaited<ReturnType<typeof getTaskExercise>>>
+
+export type GetTaskExerciseSuspenseQueryError = ErrorType<void>
+
+export function useGetTaskExerciseSuspense<TData = Awaited<ReturnType<typeof getTaskExercise>>, TError = ErrorType<void>>(
+ taskId: string, options: { query:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getTaskExercise>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+
+export function useGetTaskExerciseSuspense<TData = Awaited<ReturnType<typeof getTaskExercise>>, TError = ErrorType<void>>(
+ taskId: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getTaskExercise>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+
+export function useGetTaskExerciseSuspense<TData = Awaited<ReturnType<typeof getTaskExercise>>, TError = ErrorType<void>>(
+ taskId: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getTaskExercise>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+
+/**
+ * @summary Task의 Exercise detail 조회
+ */
+
+export function useGetTaskExerciseSuspense<TData = Awaited<ReturnType<typeof getTaskExercise>>, TError = ErrorType<void>>(
+ taskId: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getTaskExercise>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient 
+ ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = getGetTaskExerciseSuspenseQueryOptions(taskId,options)
+
+  const query = useSuspenseQuery(queryOptions, queryClient) as  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+export const getGetTaskExerciseSuspenseInfiniteQueryOptions = <TData = InfiniteData<Awaited<ReturnType<typeof getTaskExercise>>>, TError = ErrorType<void>>(taskId: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getTaskExercise>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetTaskExerciseInfiniteQueryKey(taskId);
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getTaskExercise>>> = ({ signal }) => getTaskExercise(taskId, requestOptions, signal);
+
+      
+
+      
+
+   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getTaskExercise>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetTaskExerciseSuspenseInfiniteQueryResult = NonNullable<Awaited<ReturnType<typeof getTaskExercise>>>
+
+export type GetTaskExerciseSuspenseInfiniteQueryError = ErrorType<void>
+
+export function useGetTaskExerciseSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getTaskExercise>>>, TError = ErrorType<void>>(
+ taskId: string, options: { query:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getTaskExercise>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+
+export function useGetTaskExerciseSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getTaskExercise>>>, TError = ErrorType<void>>(
+ taskId: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getTaskExercise>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+
+export function useGetTaskExerciseSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getTaskExercise>>>, TError = ErrorType<void>>(
+ taskId: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getTaskExercise>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+
+/**
+ * @summary Task의 Exercise detail 조회
+ */
+
+export function useGetTaskExerciseSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getTaskExercise>>>, TError = ErrorType<void>>(
+ taskId: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getTaskExercise>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient 
+ ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = getGetTaskExerciseSuspenseInfiniteQueryOptions(taskId,options)
+
+  const query = useSuspenseInfiniteQuery(queryOptions, queryClient) as  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+/**
+ * @summary Task의 Exercise detail 조회
+ */
+export const prefetchGetTaskExerciseInfiniteQuery = async <TData = Awaited<ReturnType<typeof getTaskExercise>>, TError = ErrorType<void>>(
+ queryClient: QueryClient, taskId: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getTaskExercise>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+
+  ): Promise<QueryClient> => {
+
+  const queryOptions = getGetTaskExerciseSuspenseInfiniteQueryOptions(taskId,options)
+
+  await queryClient.prefetchInfiniteQuery(queryOptions);
+
+  return queryClient;
+}
+
+/**
+ * Task root 아래의 Exercise detail을 수정합니다.
+ * @summary Task의 Exercise detail 수정
+ */
+export const updateTaskExercise = (
+    taskId: string,
+    updateExerciseDto: BodyType<UpdateExerciseDto>,
+ options?: SecondParameter<typeof customInstance>,) => {
+      
+      
+      return customInstance<UpdateTaskExercise200AllOf>(
+      {url: `/api/v1/tasks/${taskId}/exercise`, method: 'PATCH',
+      headers: {'Content-Type': 'application/json', },
+      data: updateExerciseDto
+    },
+      options);
+    }
+
+export const getUpdateTaskExerciseMutationOptions = <TError = ErrorType<void>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateTaskExercise>>, TError,{taskId: string;data: BodyType<UpdateExerciseDto>}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof updateTaskExercise>>, TError,{taskId: string;data: BodyType<UpdateExerciseDto>}, TContext> => {
+
+const mutationKey = ['updateTaskExercise'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof updateTaskExercise>>, {taskId: string;data: BodyType<UpdateExerciseDto>}> = (props) => {
+          const {taskId,data} = props ?? {};
+
+          return  updateTaskExercise(taskId,data,requestOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+export type UpdateTaskExerciseMutationResult = NonNullable<Awaited<ReturnType<typeof updateTaskExercise>>>
+
+export type UpdateTaskExerciseMutationBody = BodyType<UpdateExerciseDto>
+
+export type UpdateTaskExerciseMutationError = ErrorType<void>
+
+/**
+ * @summary Task의 Exercise detail 수정
+ */
+export const useUpdateTaskExercise = <TError = ErrorType<void>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateTaskExercise>>, TError,{taskId: string;data: BodyType<UpdateExerciseDto>}, TContext>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof updateTaskExercise>>,
+        TError,
+        {taskId: string;data: BodyType<UpdateExerciseDto>},
+        TContext
+      > => {
+
+      const mutationOptions = getUpdateTaskExerciseMutationOptions(options);
+
+      return useMutation(mutationOptions, queryClient);
+    }
+
+/**
+ * 특정 Task의 Exercise를 사용하는 루틴 목록을 조회합니다.
+ * @summary Task 연관 루틴 조회
+ */
+export const getTaskRoutines = (
+    taskId: string,
+ options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
+) => {
+      
+      
+      return customInstance<GetTaskRoutines200AllOf>(
+      {url: `/api/v1/tasks/${taskId}/routines`, method: 'GET', signal
+    },
+      options);
+    }
+
+export const getGetTaskRoutinesQueryKey = (taskId?: string,) => {
+    return [
+    `/api/v1/tasks/${taskId}/routines`
+    ] as const;
+    }
+
+export const getGetTaskRoutinesInfiniteQueryKey = (taskId?: string,) => {
+    return [
+    'infinite', `/api/v1/tasks/${taskId}/routines`
+    ] as const;
+    }
+
+export const getGetTaskRoutinesQueryOptions = <TData = Awaited<ReturnType<typeof getTaskRoutines>>, TError = ErrorType<void>>(taskId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getTaskRoutines>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetTaskRoutinesQueryKey(taskId);
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getTaskRoutines>>> = ({ signal }) => getTaskRoutines(taskId, requestOptions, signal);
+
+      
+
+      
+
+   return  { queryKey, queryFn, enabled: !!(taskId), ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getTaskRoutines>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetTaskRoutinesQueryResult = NonNullable<Awaited<ReturnType<typeof getTaskRoutines>>>
+
+export type GetTaskRoutinesQueryError = ErrorType<void>
+
+export function useGetTaskRoutines<TData = Awaited<ReturnType<typeof getTaskRoutines>>, TError = ErrorType<void>>(
+ taskId: string, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getTaskRoutines>>, TError, TData>> & Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getTaskRoutines>>,
+          TError,
+          Awaited<ReturnType<typeof getTaskRoutines>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+
+export function useGetTaskRoutines<TData = Awaited<ReturnType<typeof getTaskRoutines>>, TError = ErrorType<void>>(
+ taskId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getTaskRoutines>>, TError, TData>> & Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getTaskRoutines>>,
+          TError,
+          Awaited<ReturnType<typeof getTaskRoutines>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+
+export function useGetTaskRoutines<TData = Awaited<ReturnType<typeof getTaskRoutines>>, TError = ErrorType<void>>(
+ taskId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getTaskRoutines>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+
+/**
+ * @summary Task 연관 루틴 조회
+ */
+
+export function useGetTaskRoutines<TData = Awaited<ReturnType<typeof getTaskRoutines>>, TError = ErrorType<void>>(
+ taskId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getTaskRoutines>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient 
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = getGetTaskRoutinesQueryOptions(taskId,options)
+
+  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+/**
+ * @summary Task 연관 루틴 조회
+ */
+export const prefetchGetTaskRoutinesQuery = async <TData = Awaited<ReturnType<typeof getTaskRoutines>>, TError = ErrorType<void>>(
+ queryClient: QueryClient, taskId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getTaskRoutines>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+
+  ): Promise<QueryClient> => {
+
+  const queryOptions = getGetTaskRoutinesQueryOptions(taskId,options)
+
+  await queryClient.prefetchQuery(queryOptions);
+
+  return queryClient;
+}
+
+export const getGetTaskRoutinesSuspenseQueryOptions = <TData = Awaited<ReturnType<typeof getTaskRoutines>>, TError = ErrorType<void>>(taskId: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getTaskRoutines>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetTaskRoutinesQueryKey(taskId);
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getTaskRoutines>>> = ({ signal }) => getTaskRoutines(taskId, requestOptions, signal);
+
+      
+
+      
+
+   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseQueryOptions<Awaited<ReturnType<typeof getTaskRoutines>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetTaskRoutinesSuspenseQueryResult = NonNullable<Awaited<ReturnType<typeof getTaskRoutines>>>
+
+export type GetTaskRoutinesSuspenseQueryError = ErrorType<void>
+
+export function useGetTaskRoutinesSuspense<TData = Awaited<ReturnType<typeof getTaskRoutines>>, TError = ErrorType<void>>(
+ taskId: string, options: { query:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getTaskRoutines>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+
+export function useGetTaskRoutinesSuspense<TData = Awaited<ReturnType<typeof getTaskRoutines>>, TError = ErrorType<void>>(
+ taskId: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getTaskRoutines>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+
+export function useGetTaskRoutinesSuspense<TData = Awaited<ReturnType<typeof getTaskRoutines>>, TError = ErrorType<void>>(
+ taskId: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getTaskRoutines>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+
+/**
+ * @summary Task 연관 루틴 조회
+ */
+
+export function useGetTaskRoutinesSuspense<TData = Awaited<ReturnType<typeof getTaskRoutines>>, TError = ErrorType<void>>(
+ taskId: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getTaskRoutines>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient 
+ ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = getGetTaskRoutinesSuspenseQueryOptions(taskId,options)
+
+  const query = useSuspenseQuery(queryOptions, queryClient) as  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+export const getGetTaskRoutinesSuspenseInfiniteQueryOptions = <TData = InfiniteData<Awaited<ReturnType<typeof getTaskRoutines>>>, TError = ErrorType<void>>(taskId: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getTaskRoutines>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetTaskRoutinesInfiniteQueryKey(taskId);
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getTaskRoutines>>> = ({ signal }) => getTaskRoutines(taskId, requestOptions, signal);
+
+      
+
+      
+
+   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getTaskRoutines>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetTaskRoutinesSuspenseInfiniteQueryResult = NonNullable<Awaited<ReturnType<typeof getTaskRoutines>>>
+
+export type GetTaskRoutinesSuspenseInfiniteQueryError = ErrorType<void>
+
+export function useGetTaskRoutinesSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getTaskRoutines>>>, TError = ErrorType<void>>(
+ taskId: string, options: { query:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getTaskRoutines>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+
+export function useGetTaskRoutinesSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getTaskRoutines>>>, TError = ErrorType<void>>(
+ taskId: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getTaskRoutines>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+
+export function useGetTaskRoutinesSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getTaskRoutines>>>, TError = ErrorType<void>>(
+ taskId: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getTaskRoutines>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+
+/**
+ * @summary Task 연관 루틴 조회
+ */
+
+export function useGetTaskRoutinesSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getTaskRoutines>>>, TError = ErrorType<void>>(
+ taskId: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getTaskRoutines>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient 
+ ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = getGetTaskRoutinesSuspenseInfiniteQueryOptions(taskId,options)
+
+  const query = useSuspenseInfiniteQuery(queryOptions, queryClient) as  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+/**
+ * @summary Task 연관 루틴 조회
+ */
+export const prefetchGetTaskRoutinesInfiniteQuery = async <TData = Awaited<ReturnType<typeof getTaskRoutines>>, TError = ErrorType<void>>(
+ queryClient: QueryClient, taskId: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getTaskRoutines>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+
+  ): Promise<QueryClient> => {
+
+  const queryOptions = getGetTaskRoutinesSuspenseInfiniteQueryOptions(taskId,options)
+
+  await queryClient.prefetchInfiniteQuery(queryOptions);
+
+  return queryClient;
+}

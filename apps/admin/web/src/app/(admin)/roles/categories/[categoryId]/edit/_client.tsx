@@ -1,8 +1,6 @@
 "use client";
+import { customInstance } from "@cocrepo/api/core/client";
 
-// TODO: Orval codegen 후 아래 import로 교체
-// import { useGetCategoryById, useUpdateCategory, useGetCategories } from "@cocrepo/api";
-import { customInstance } from "@cocrepo/api";
 import { Page, PageTitleBar, Section, VStack } from "@cocrepo/ui";
 import { Button, Input, Select, SelectItem } from "@heroui/react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
@@ -151,7 +149,9 @@ function RoleCategoryEditPageClient({
 	if (isLoading) {
 		return (
 			<Page
-				top={<PageTitleBar title="역할 카테고리 수정" description="로딩 중..." />}
+				top={
+					<PageTitleBar title="역할 카테고리 수정" description="로딩 중..." />
+				}
 			>
 				<div className="flex items-center justify-center p-8">
 					<span className="text-default-500">로딩 중...</span>

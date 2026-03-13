@@ -44,7 +44,9 @@ test.describe("공간 목록 페이지", () => {
 	// ── E2E-002: 공간 CRUD 플로우 ──
 
 	test.describe("[E2E-002] 공간 CRUD 플로우", () => {
-		test("공간 등록 → 시설 detail 조회 → 수정 → 삭제 전체 플로우", async ({ page }) => {
+		test("공간 등록 → 시설 detail 조회 → 수정 → 삭제 전체 플로우", async ({
+			page,
+		}) => {
 			const uniqueSuffix = `${Date.now()}`;
 			const TEST_NAME = `E2E 테스트 공간 ${uniqueSuffix.slice(-6)}`;
 			const TEST_BUSINESS_NO = `${uniqueSuffix.slice(-10, -7)}-${uniqueSuffix.slice(-7, -5)}-${uniqueSuffix.slice(-5)}`;

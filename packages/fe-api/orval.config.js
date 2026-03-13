@@ -130,9 +130,6 @@ async function createConfig() {
   return {
     // ─── Server API (port 3006) ───
     store: {
-      // OpenAPI 태그별로 파일 분할하여 생성
-      mode: "tags-split",
-
       // 환경에 따른 OpenAPI 스펙 URL
       input: {
         target: apiUrl,
@@ -141,13 +138,16 @@ async function createConfig() {
 
       output: {
         // 생성된 API 클라이언트 코드의 출력 위치
-        target: "src/apis.ts",
+        target: "src/core/index.ts",
 
         // 타입 스키마 모델들의 출력 디렉토리
-        schemas: "src/model",
+        schemas: "src/core/model",
 
         // React Query를 사용한 클라이언트 생성
         client: "react-query",
+
+        // OpenAPI 태그별로 파일 분할하여 생성
+        mode: "tags-split",
 
         override: {
           // 커스텀 Axios 인스턴스 사용 설정
@@ -166,17 +166,16 @@ async function createConfig() {
 
     // ─── IDP API (port 3007) ───
     idp: {
-      mode: "tags-split",
-
       input: {
         target: idpApiUrl,
         validation: false,
       },
 
       output: {
-        target: "src/idp-apis.ts",
-        schemas: "src/idp-model",
+        target: "src/idp/index.ts",
+        schemas: "src/idp/model",
         client: "react-query",
+        mode: "tags-split",
 
         override: {
           mutator: {

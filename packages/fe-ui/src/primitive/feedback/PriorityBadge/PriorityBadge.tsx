@@ -52,9 +52,7 @@ export const PriorityBadge = ({
 			color={config.color}
 			variant="flat"
 			className={className}
-			startContent={
-				<span className="text-[10px] leading-none">{stars}</span>
-			}
+			startContent={<span className="text-[10px] leading-none">{stars}</span>}
 		>
 			{config.label}
 		</Chip>

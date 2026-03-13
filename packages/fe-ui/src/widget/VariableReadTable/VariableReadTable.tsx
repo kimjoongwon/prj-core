@@ -55,12 +55,12 @@ export const VariableReadTable = observer(
 						<span className="font-mono text-sm">{`{{${variable.name}}}`}</span>
 					);
 				case "description":
-					return variable.description ?? (
-						<span className="text-default-400">-</span>
+					return (
+						variable.description ?? <span className="text-default-400">-</span>
 					);
 				case "defaultValue":
-					return variable.defaultValue ?? (
-						<span className="text-default-400">-</span>
+					return (
+						variable.defaultValue ?? <span className="text-default-400">-</span>
 					);
 				case "isRequired":
 					return variable.isRequired ? (
@@ -78,20 +78,13 @@ export const VariableReadTable = observer(
 		};
 
 		return (
-			<Table
-				aria-label="변수 목록"
-				removeWrapper
-				isStriped
-			>
+			<Table aria-label="변수 목록" removeWrapper isStriped>
 				<TableHeader>
 					{COLUMNS.map((column) => (
 						<TableColumn key={column.key}>{column.label}</TableColumn>
 					))}
 				</TableHeader>
-				<TableBody
-					items={variables}
-					emptyContent="정의된 변수가 없습니다."
-				>
+				<TableBody items={variables} emptyContent="정의된 변수가 없습니다.">
 					{(variable) => (
 						<TableRow key={variable.id}>
 							{(columnKey) => (

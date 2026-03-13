@@ -1,8 +1,28 @@
 "use client";
+import {
+	getGetTemplateQueryKey,
+	type TemplateDto,
+	useDeleteTemplate,
+	useGetTemplate,
+	usePreviewTemplate,
+	useSendTestTemplate,
+	useToggleTemplateStatus,
+} from "@cocrepo/api/core/templates";
 
-import { getGetTemplateQueryKey, type TemplateDto, useDeleteTemplate, useGetTemplate, usePreviewTemplate, useSendTestTemplate, useToggleTemplateStatus, } from "@cocrepo/api";
 import type { PreviewResult, TemplateVariable } from "@cocrepo/ui";
-import { DateTimeCell, Page, PageTitleBar, PreviewModal, Section, SendTestModal, TemplateActions, TemplateContentViewer, TemplateTypeBadge, VariableReadTable, VStack } from "@cocrepo/ui";
+import {
+	DateTimeCell,
+	Page,
+	PageTitleBar,
+	PreviewModal,
+	Section,
+	SendTestModal,
+	TemplateActions,
+	TemplateContentViewer,
+	TemplateTypeBadge,
+	VariableReadTable,
+	VStack,
+} from "@cocrepo/ui";
 import {
 	addToast,
 	Button,
@@ -279,7 +299,9 @@ function TemplateDetailPageClient({
 						<p>
 							<strong>{template.name}</strong>템플릿을 삭제하시겠습니까?
 						</p>
-						<p className="mt-2 text-sm text-danger">이 작업은 되돌릴 수 없습니다.</p>
+						<p className="mt-2 text-sm text-danger">
+							이 작업은 되돌릴 수 없습니다.
+						</p>
 					</ModalBody>
 					<ModalFooter>
 						<Button

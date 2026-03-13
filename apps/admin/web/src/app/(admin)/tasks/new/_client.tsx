@@ -1,6 +1,6 @@
 "use client";
+import { useCreateTask } from "@cocrepo/api/core/tasks";
 
-import { useCreateTask } from "@cocrepo/api";
 import { Page, PageTitleBar, Section } from "@cocrepo/ui";
 import { addToast, Button, Input, Textarea } from "@heroui/react";
 import { observer, useLocalObservable } from "mobx-react-lite";
@@ -151,7 +151,9 @@ function TaskNewPageClient() {
 								value={String(state.durationMin)}
 								onValueChange={onChangeDurationMin}
 								min={0}
-								endContent={<span className="text-default-400 text-sm">분</span>}
+								endContent={
+									<span className="text-default-400 text-sm">분</span>
+								}
 								className="max-w-32"
 							/>
 							<Input
@@ -161,12 +163,16 @@ function TaskNewPageClient() {
 								onValueChange={onChangeDurationSec}
 								min={0}
 								max={59}
-								endContent={<span className="text-default-400 text-sm">초</span>}
+								endContent={
+									<span className="text-default-400 text-sm">초</span>
+								}
 								className="max-w-32"
 							/>
 						</div>
 						{state.errors.duration && (
-							<p className="mt-1 text-sm text-danger">{state.errors.duration}</p>
+							<p className="mt-1 text-sm text-danger">
+								{state.errors.duration}
+							</p>
 						)}
 					</div>
 					<Input

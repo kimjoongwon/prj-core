@@ -19,7 +19,8 @@
 
 | 모듈 | 용도 |
 |------|------|
-| @cocrepo/api | 기능 구현 의존성 |
+| @cocrepo/api/core/inquiries | 기능 구현 의존성 |
+| @cocrepo/api/core/users | 기능 구현 의존성 |
 | @cocrepo/constant | 기능 구현 의존성 |
 | @cocrepo/ui | 기능 구현 의존성 |
 | @heroui/react | 기능 구현 의존성 |
@@ -51,6 +52,7 @@
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-03-13 | `@cocrepo/api` root import를 split subpath import로 전환 | codex |
 | 2026-03-03 | 누락된 sidecar spec 신규 생성 | codex |
 | 2026-03-03 | `PageTitleBar` 단일 컴포넌트 통합 및 리네이밍 반영 | codex |
 | 2026-03-11 | AiForm 옵션을 generated bootstrap 계약에 맞춰 정규화하도록 반영 | codex |

@@ -1,9 +1,22 @@
 "use client";
+import {
+	getGetTemplatesQueryKey,
+	type TemplateDto,
+	useGetTemplates,
+	useToggleTemplateStatus,
+} from "@cocrepo/api/core/templates";
 
-import { getGetTemplatesQueryKey, type TemplateDto, useGetTemplates, useToggleTemplateStatus, } from "@cocrepo/api";
 import type { InputConfig, MetaDataGridColumnConfig } from "@cocrepo/type";
 import {
-	DateTimeCell, MetaDataGrid, Page, PageTitleBar, Section, TemplateActiveToggleCell, TemplateTypeChipCell, useMetaDataGridQueryStates } from "@cocrepo/ui";
+	DateTimeCell,
+	MetaDataGrid,
+	Page,
+	PageTitleBar,
+	Section,
+	TemplateActiveToggleCell,
+	TemplateTypeChipCell,
+	useMetaDataGridQueryStates,
+} from "@cocrepo/ui";
 import { addToast, Button } from "@heroui/react";
 import { useQueryClient } from "@tanstack/react-query";
 import { Plus } from "lucide-react";

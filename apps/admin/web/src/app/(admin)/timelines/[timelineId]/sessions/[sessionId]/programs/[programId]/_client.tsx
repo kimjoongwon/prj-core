@@ -1,6 +1,11 @@
 "use client";
+import {
+	getGetProgramsQueryKey,
+	type ProgramDto,
+	useDeleteProgram,
+	useGetProgramById,
+} from "@cocrepo/api/core/timelines";
 
-import { getGetProgramsQueryKey, type ProgramDto, useDeleteProgram, useGetProgramById, } from "@cocrepo/api";
 import { DateTimeCell, Page, PageTitleBar, Section } from "@cocrepo/ui";
 import {
 	addToast,

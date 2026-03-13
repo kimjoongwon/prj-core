@@ -1,0 +1,1290 @@
+/**
+ * Generated from the current Orval monolith output.
+ * Do not edit manually. Update the upstream Orval output or rerun split-orval-output.mjs.
+ */
+import type {
+  DataTag,
+  DefinedInitialDataOptions,
+  DefinedUseQueryResult,
+  InfiniteData,
+  MutationFunction,
+  QueryClient,
+  QueryFunction,
+  QueryKey,
+  UndefinedInitialDataOptions,
+  UseMutationOptions,
+  UseMutationResult,
+  UseQueryOptions,
+  UseQueryResult,
+  UseSuspenseInfiniteQueryOptions,
+  UseSuspenseInfiniteQueryResult,
+  UseSuspenseQueryOptions,
+  UseSuspenseQueryResult,
+} from "@tanstack/react-query";
+import {
+  useMutation,
+  useQuery,
+  useSuspenseInfiniteQuery,
+  useSuspenseQuery,
+} from "@tanstack/react-query";
+
+import type { GetOidcSessions200AllOf } from "../../idp-model/getOidcSessions200AllOf";
+import type { GetOidcSessionsParams } from "../../idp-model/getOidcSessionsParams";
+import type { GetOidcSessionStats200AllOf } from "../../idp-model/getOidcSessionStats200AllOf";
+import type { OidcSessionDto } from "../../idp-model/oidcSessionDto";
+export type { GetOidcSessions200AllOf };
+export type { GetOidcSessionsParams };
+export type { GetOidcSessionStats200AllOf };
+export type { OidcSessionDto };
+import type { BodyType, ErrorType } from "../../libs/customIdpAxios";
+import { customIdpInstance } from "../../libs/customIdpAxios";
+
+type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
+
+/**
+ * Redis에 저장된 OIDC 세션 및 토큰 목록을 조회합니다. 모델 타입 및 계정 ID로 필터링할 수 있습니다.
+ * @summary OIDC 세션/토큰 목록 조회
+ */
+export const getOidcSessions = (
+	params?: GetOidcSessionsParams,
+	options?: SecondParameter<typeof customIdpInstance>,
+	signal?: AbortSignal,
+) => {
+	return customIdpInstance<GetOidcSessions200AllOf>(
+		{ url: `/api/v1/oidc-sessions`, method: "GET", params, signal },
+		options,
+	);
+};
+
+export const getGetOidcSessionsQueryKey = (params?: GetOidcSessionsParams) => {
+	return [`/api/v1/oidc-sessions`, ...(params ? [params] : [])] as const;
+};
+
+export const getGetOidcSessionsInfiniteQueryKey = (
+	params?: GetOidcSessionsParams,
+) => {
+	return [
+		"infinite",
+		`/api/v1/oidc-sessions`,
+		...(params ? [params] : []),
+	] as const;
+};
+
+export const getGetOidcSessionsQueryOptions = <
+	TData = Awaited<ReturnType<typeof getOidcSessions>>,
+	TError = ErrorType<void>,
+>(
+	params?: GetOidcSessionsParams,
+	options?: {
+		query?: Partial<
+			UseQueryOptions<
+				Awaited<ReturnType<typeof getOidcSessions>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customIdpInstance>;
+	},
+) => {
+	const { query: queryOptions, request: requestOptions } = options ?? {};
+
+	const queryKey = queryOptions?.queryKey ?? getGetOidcSessionsQueryKey(params);
+
+	const queryFn: QueryFunction<Awaited<ReturnType<typeof getOidcSessions>>> = ({
+		signal,
+	}) => getOidcSessions(params, requestOptions, signal);
+
+	return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+		Awaited<ReturnType<typeof getOidcSessions>>,
+		TError,
+		TData
+	> & { queryKey: DataTag<QueryKey, TData, TError> };
+};
+
+export type GetOidcSessionsQueryResult = NonNullable<
+	Awaited<ReturnType<typeof getOidcSessions>>
+>;
+
+export type GetOidcSessionsQueryError = ErrorType<void>;
+
+export function useGetOidcSessions<
+	TData = Awaited<ReturnType<typeof getOidcSessions>>,
+	TError = ErrorType<void>,
+>(
+	params: undefined | GetOidcSessionsParams,
+	options: {
+		query: Partial<
+			UseQueryOptions<
+				Awaited<ReturnType<typeof getOidcSessions>>,
+				TError,
+				TData
+			>
+		> &
+			Pick<
+				DefinedInitialDataOptions<
+					Awaited<ReturnType<typeof getOidcSessions>>,
+					TError,
+					Awaited<ReturnType<typeof getOidcSessions>>
+				>,
+				"initialData"
+			>;
+		request?: SecondParameter<typeof customIdpInstance>;
+	},
+	queryClient?: QueryClient,
+): DefinedUseQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
+
+export function useGetOidcSessions<
+	TData = Awaited<ReturnType<typeof getOidcSessions>>,
+	TError = ErrorType<void>,
+>(
+	params?: GetOidcSessionsParams,
+	options?: {
+		query?: Partial<
+			UseQueryOptions<
+				Awaited<ReturnType<typeof getOidcSessions>>,
+				TError,
+				TData
+			>
+		> &
+			Pick<
+				UndefinedInitialDataOptions<
+					Awaited<ReturnType<typeof getOidcSessions>>,
+					TError,
+					Awaited<ReturnType<typeof getOidcSessions>>
+				>,
+				"initialData"
+			>;
+		request?: SecondParameter<typeof customIdpInstance>;
+	},
+	queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
+
+export function useGetOidcSessions<
+	TData = Awaited<ReturnType<typeof getOidcSessions>>,
+	TError = ErrorType<void>,
+>(
+	params?: GetOidcSessionsParams,
+	options?: {
+		query?: Partial<
+			UseQueryOptions<
+				Awaited<ReturnType<typeof getOidcSessions>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customIdpInstance>;
+	},
+	queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
+
+/**
+ * @summary OIDC 세션/토큰 목록 조회
+ */
+
+export function useGetOidcSessions<
+	TData = Awaited<ReturnType<typeof getOidcSessions>>,
+	TError = ErrorType<void>,
+>(
+	params?: GetOidcSessionsParams,
+	options?: {
+		query?: Partial<
+			UseQueryOptions<
+				Awaited<ReturnType<typeof getOidcSessions>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customIdpInstance>;
+	},
+	queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+} {
+	const queryOptions = getGetOidcSessionsQueryOptions(params, options);
+
+	const query = useQuery(queryOptions, queryClient) as UseQueryResult<
+		TData,
+		TError
+	> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+	query.queryKey = queryOptions.queryKey;
+
+	return query;
+}
+
+/**
+ * @summary OIDC 세션/토큰 목록 조회
+ */
+export const prefetchGetOidcSessionsQuery = async <
+	TData = Awaited<ReturnType<typeof getOidcSessions>>,
+	TError = ErrorType<void>,
+>(
+	queryClient: QueryClient,
+	params?: GetOidcSessionsParams,
+	options?: {
+		query?: Partial<
+			UseQueryOptions<
+				Awaited<ReturnType<typeof getOidcSessions>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customIdpInstance>;
+	},
+): Promise<QueryClient> => {
+	const queryOptions = getGetOidcSessionsQueryOptions(params, options);
+
+	await queryClient.prefetchQuery(queryOptions);
+
+	return queryClient;
+};
+
+export const getGetOidcSessionsSuspenseQueryOptions = <
+	TData = Awaited<ReturnType<typeof getOidcSessions>>,
+	TError = ErrorType<void>,
+>(
+	params?: GetOidcSessionsParams,
+	options?: {
+		query?: Partial<
+			UseSuspenseQueryOptions<
+				Awaited<ReturnType<typeof getOidcSessions>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customIdpInstance>;
+	},
+) => {
+	const { query: queryOptions, request: requestOptions } = options ?? {};
+
+	const queryKey = queryOptions?.queryKey ?? getGetOidcSessionsQueryKey(params);
+
+	const queryFn: QueryFunction<Awaited<ReturnType<typeof getOidcSessions>>> = ({
+		signal,
+	}) => getOidcSessions(params, requestOptions, signal);
+
+	return { queryKey, queryFn, ...queryOptions } as UseSuspenseQueryOptions<
+		Awaited<ReturnType<typeof getOidcSessions>>,
+		TError,
+		TData
+	> & { queryKey: DataTag<QueryKey, TData, TError> };
+};
+
+export type GetOidcSessionsSuspenseQueryResult = NonNullable<
+	Awaited<ReturnType<typeof getOidcSessions>>
+>;
+
+export type GetOidcSessionsSuspenseQueryError = ErrorType<void>;
+
+export function useGetOidcSessionsSuspense<
+	TData = Awaited<ReturnType<typeof getOidcSessions>>,
+	TError = ErrorType<void>,
+>(
+	params: undefined | GetOidcSessionsParams,
+	options: {
+		query: Partial<
+			UseSuspenseQueryOptions<
+				Awaited<ReturnType<typeof getOidcSessions>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customIdpInstance>;
+	},
+	queryClient?: QueryClient,
+): UseSuspenseQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
+
+export function useGetOidcSessionsSuspense<
+	TData = Awaited<ReturnType<typeof getOidcSessions>>,
+	TError = ErrorType<void>,
+>(
+	params?: GetOidcSessionsParams,
+	options?: {
+		query?: Partial<
+			UseSuspenseQueryOptions<
+				Awaited<ReturnType<typeof getOidcSessions>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customIdpInstance>;
+	},
+	queryClient?: QueryClient,
+): UseSuspenseQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
+
+export function useGetOidcSessionsSuspense<
+	TData = Awaited<ReturnType<typeof getOidcSessions>>,
+	TError = ErrorType<void>,
+>(
+	params?: GetOidcSessionsParams,
+	options?: {
+		query?: Partial<
+			UseSuspenseQueryOptions<
+				Awaited<ReturnType<typeof getOidcSessions>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customIdpInstance>;
+	},
+	queryClient?: QueryClient,
+): UseSuspenseQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
+
+/**
+ * @summary OIDC 세션/토큰 목록 조회
+ */
+
+export function useGetOidcSessionsSuspense<
+	TData = Awaited<ReturnType<typeof getOidcSessions>>,
+	TError = ErrorType<void>,
+>(
+	params?: GetOidcSessionsParams,
+	options?: {
+		query?: Partial<
+			UseSuspenseQueryOptions<
+				Awaited<ReturnType<typeof getOidcSessions>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customIdpInstance>;
+	},
+	queryClient?: QueryClient,
+): UseSuspenseQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+} {
+	const queryOptions = getGetOidcSessionsSuspenseQueryOptions(params, options);
+
+	const query = useSuspenseQuery(
+		queryOptions,
+		queryClient,
+	) as UseSuspenseQueryResult<TData, TError> & {
+		queryKey: DataTag<QueryKey, TData, TError>;
+	};
+
+	query.queryKey = queryOptions.queryKey;
+
+	return query;
+}
+
+export const getGetOidcSessionsSuspenseInfiniteQueryOptions = <
+	TData = InfiniteData<Awaited<ReturnType<typeof getOidcSessions>>>,
+	TError = ErrorType<void>,
+>(
+	params?: GetOidcSessionsParams,
+	options?: {
+		query?: Partial<
+			UseSuspenseInfiniteQueryOptions<
+				Awaited<ReturnType<typeof getOidcSessions>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customIdpInstance>;
+	},
+) => {
+	const { query: queryOptions, request: requestOptions } = options ?? {};
+
+	const queryKey =
+		queryOptions?.queryKey ?? getGetOidcSessionsInfiniteQueryKey(params);
+
+	const queryFn: QueryFunction<Awaited<ReturnType<typeof getOidcSessions>>> = ({
+		signal,
+	}) => getOidcSessions(params, requestOptions, signal);
+
+	return {
+		queryKey,
+		queryFn,
+		...queryOptions,
+	} as UseSuspenseInfiniteQueryOptions<
+		Awaited<ReturnType<typeof getOidcSessions>>,
+		TError,
+		TData
+	> & { queryKey: DataTag<QueryKey, TData, TError> };
+};
+
+export type GetOidcSessionsSuspenseInfiniteQueryResult = NonNullable<
+	Awaited<ReturnType<typeof getOidcSessions>>
+>;
+
+export type GetOidcSessionsSuspenseInfiniteQueryError = ErrorType<void>;
+
+export function useGetOidcSessionsSuspenseInfinite<
+	TData = InfiniteData<Awaited<ReturnType<typeof getOidcSessions>>>,
+	TError = ErrorType<void>,
+>(
+	params: undefined | GetOidcSessionsParams,
+	options: {
+		query: Partial<
+			UseSuspenseInfiniteQueryOptions<
+				Awaited<ReturnType<typeof getOidcSessions>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customIdpInstance>;
+	},
+	queryClient?: QueryClient,
+): UseSuspenseInfiniteQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
+
+export function useGetOidcSessionsSuspenseInfinite<
+	TData = InfiniteData<Awaited<ReturnType<typeof getOidcSessions>>>,
+	TError = ErrorType<void>,
+>(
+	params?: GetOidcSessionsParams,
+	options?: {
+		query?: Partial<
+			UseSuspenseInfiniteQueryOptions<
+				Awaited<ReturnType<typeof getOidcSessions>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customIdpInstance>;
+	},
+	queryClient?: QueryClient,
+): UseSuspenseInfiniteQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
+
+export function useGetOidcSessionsSuspenseInfinite<
+	TData = InfiniteData<Awaited<ReturnType<typeof getOidcSessions>>>,
+	TError = ErrorType<void>,
+>(
+	params?: GetOidcSessionsParams,
+	options?: {
+		query?: Partial<
+			UseSuspenseInfiniteQueryOptions<
+				Awaited<ReturnType<typeof getOidcSessions>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customIdpInstance>;
+	},
+	queryClient?: QueryClient,
+): UseSuspenseInfiniteQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
+
+/**
+ * @summary OIDC 세션/토큰 목록 조회
+ */
+
+export function useGetOidcSessionsSuspenseInfinite<
+	TData = InfiniteData<Awaited<ReturnType<typeof getOidcSessions>>>,
+	TError = ErrorType<void>,
+>(
+	params?: GetOidcSessionsParams,
+	options?: {
+		query?: Partial<
+			UseSuspenseInfiniteQueryOptions<
+				Awaited<ReturnType<typeof getOidcSessions>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customIdpInstance>;
+	},
+	queryClient?: QueryClient,
+): UseSuspenseInfiniteQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+} {
+	const queryOptions = getGetOidcSessionsSuspenseInfiniteQueryOptions(
+		params,
+		options,
+	);
+
+	const query = useSuspenseInfiniteQuery(
+		queryOptions,
+		queryClient,
+	) as UseSuspenseInfiniteQueryResult<TData, TError> & {
+		queryKey: DataTag<QueryKey, TData, TError>;
+	};
+
+	query.queryKey = queryOptions.queryKey;
+
+	return query;
+}
+
+/**
+ * @summary OIDC 세션/토큰 목록 조회
+ */
+export const prefetchGetOidcSessionsInfiniteQuery = async <
+	TData = Awaited<ReturnType<typeof getOidcSessions>>,
+	TError = ErrorType<void>,
+>(
+	queryClient: QueryClient,
+	params?: GetOidcSessionsParams,
+	options?: {
+		query?: Partial<
+			UseSuspenseInfiniteQueryOptions<
+				Awaited<ReturnType<typeof getOidcSessions>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customIdpInstance>;
+	},
+): Promise<QueryClient> => {
+	const queryOptions = getGetOidcSessionsSuspenseInfiniteQueryOptions(
+		params,
+		options,
+	);
+
+	await queryClient.prefetchInfiniteQuery(queryOptions);
+
+	return queryClient;
+};
+
+/**
+ * 모델 타입별 세션/토큰 건수와 전체 건수를 조회합니다.
+ * @summary OIDC 세션/토큰 통계 조회
+ */
+export const getOidcSessionStats = (
+	options?: SecondParameter<typeof customIdpInstance>,
+	signal?: AbortSignal,
+) => {
+	return customIdpInstance<GetOidcSessionStats200AllOf>(
+		{ url: `/api/v1/oidc-sessions/stats`, method: "GET", signal },
+		options,
+	);
+};
+
+export const getGetOidcSessionStatsQueryKey = () => {
+	return [`/api/v1/oidc-sessions/stats`] as const;
+};
+
+export const getGetOidcSessionStatsInfiniteQueryKey = () => {
+	return ["infinite", `/api/v1/oidc-sessions/stats`] as const;
+};
+
+export const getGetOidcSessionStatsQueryOptions = <
+	TData = Awaited<ReturnType<typeof getOidcSessionStats>>,
+	TError = ErrorType<void>,
+>(options?: {
+	query?: Partial<
+		UseQueryOptions<
+			Awaited<ReturnType<typeof getOidcSessionStats>>,
+			TError,
+			TData
+		>
+	>;
+	request?: SecondParameter<typeof customIdpInstance>;
+}) => {
+	const { query: queryOptions, request: requestOptions } = options ?? {};
+
+	const queryKey = queryOptions?.queryKey ?? getGetOidcSessionStatsQueryKey();
+
+	const queryFn: QueryFunction<
+		Awaited<ReturnType<typeof getOidcSessionStats>>
+	> = ({ signal }) => getOidcSessionStats(requestOptions, signal);
+
+	return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+		Awaited<ReturnType<typeof getOidcSessionStats>>,
+		TError,
+		TData
+	> & { queryKey: DataTag<QueryKey, TData, TError> };
+};
+
+export type GetOidcSessionStatsQueryResult = NonNullable<
+	Awaited<ReturnType<typeof getOidcSessionStats>>
+>;
+
+export type GetOidcSessionStatsQueryError = ErrorType<void>;
+
+export function useGetOidcSessionStats<
+	TData = Awaited<ReturnType<typeof getOidcSessionStats>>,
+	TError = ErrorType<void>,
+>(
+	options: {
+		query: Partial<
+			UseQueryOptions<
+				Awaited<ReturnType<typeof getOidcSessionStats>>,
+				TError,
+				TData
+			>
+		> &
+			Pick<
+				DefinedInitialDataOptions<
+					Awaited<ReturnType<typeof getOidcSessionStats>>,
+					TError,
+					Awaited<ReturnType<typeof getOidcSessionStats>>
+				>,
+				"initialData"
+			>;
+		request?: SecondParameter<typeof customIdpInstance>;
+	},
+	queryClient?: QueryClient,
+): DefinedUseQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
+
+export function useGetOidcSessionStats<
+	TData = Awaited<ReturnType<typeof getOidcSessionStats>>,
+	TError = ErrorType<void>,
+>(
+	options?: {
+		query?: Partial<
+			UseQueryOptions<
+				Awaited<ReturnType<typeof getOidcSessionStats>>,
+				TError,
+				TData
+			>
+		> &
+			Pick<
+				UndefinedInitialDataOptions<
+					Awaited<ReturnType<typeof getOidcSessionStats>>,
+					TError,
+					Awaited<ReturnType<typeof getOidcSessionStats>>
+				>,
+				"initialData"
+			>;
+		request?: SecondParameter<typeof customIdpInstance>;
+	},
+	queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
+
+export function useGetOidcSessionStats<
+	TData = Awaited<ReturnType<typeof getOidcSessionStats>>,
+	TError = ErrorType<void>,
+>(
+	options?: {
+		query?: Partial<
+			UseQueryOptions<
+				Awaited<ReturnType<typeof getOidcSessionStats>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customIdpInstance>;
+	},
+	queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
+
+/**
+ * @summary OIDC 세션/토큰 통계 조회
+ */
+
+export function useGetOidcSessionStats<
+	TData = Awaited<ReturnType<typeof getOidcSessionStats>>,
+	TError = ErrorType<void>,
+>(
+	options?: {
+		query?: Partial<
+			UseQueryOptions<
+				Awaited<ReturnType<typeof getOidcSessionStats>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customIdpInstance>;
+	},
+	queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+} {
+	const queryOptions = getGetOidcSessionStatsQueryOptions(options);
+
+	const query = useQuery(queryOptions, queryClient) as UseQueryResult<
+		TData,
+		TError
+	> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+	query.queryKey = queryOptions.queryKey;
+
+	return query;
+}
+
+/**
+ * @summary OIDC 세션/토큰 통계 조회
+ */
+export const prefetchGetOidcSessionStatsQuery = async <
+	TData = Awaited<ReturnType<typeof getOidcSessionStats>>,
+	TError = ErrorType<void>,
+>(
+	queryClient: QueryClient,
+	options?: {
+		query?: Partial<
+			UseQueryOptions<
+				Awaited<ReturnType<typeof getOidcSessionStats>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customIdpInstance>;
+	},
+): Promise<QueryClient> => {
+	const queryOptions = getGetOidcSessionStatsQueryOptions(options);
+
+	await queryClient.prefetchQuery(queryOptions);
+
+	return queryClient;
+};
+
+export const getGetOidcSessionStatsSuspenseQueryOptions = <
+	TData = Awaited<ReturnType<typeof getOidcSessionStats>>,
+	TError = ErrorType<void>,
+>(options?: {
+	query?: Partial<
+		UseSuspenseQueryOptions<
+			Awaited<ReturnType<typeof getOidcSessionStats>>,
+			TError,
+			TData
+		>
+	>;
+	request?: SecondParameter<typeof customIdpInstance>;
+}) => {
+	const { query: queryOptions, request: requestOptions } = options ?? {};
+
+	const queryKey = queryOptions?.queryKey ?? getGetOidcSessionStatsQueryKey();
+
+	const queryFn: QueryFunction<
+		Awaited<ReturnType<typeof getOidcSessionStats>>
+	> = ({ signal }) => getOidcSessionStats(requestOptions, signal);
+
+	return { queryKey, queryFn, ...queryOptions } as UseSuspenseQueryOptions<
+		Awaited<ReturnType<typeof getOidcSessionStats>>,
+		TError,
+		TData
+	> & { queryKey: DataTag<QueryKey, TData, TError> };
+};
+
+export type GetOidcSessionStatsSuspenseQueryResult = NonNullable<
+	Awaited<ReturnType<typeof getOidcSessionStats>>
+>;
+
+export type GetOidcSessionStatsSuspenseQueryError = ErrorType<void>;
+
+export function useGetOidcSessionStatsSuspense<
+	TData = Awaited<ReturnType<typeof getOidcSessionStats>>,
+	TError = ErrorType<void>,
+>(
+	options: {
+		query: Partial<
+			UseSuspenseQueryOptions<
+				Awaited<ReturnType<typeof getOidcSessionStats>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customIdpInstance>;
+	},
+	queryClient?: QueryClient,
+): UseSuspenseQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
+
+export function useGetOidcSessionStatsSuspense<
+	TData = Awaited<ReturnType<typeof getOidcSessionStats>>,
+	TError = ErrorType<void>,
+>(
+	options?: {
+		query?: Partial<
+			UseSuspenseQueryOptions<
+				Awaited<ReturnType<typeof getOidcSessionStats>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customIdpInstance>;
+	},
+	queryClient?: QueryClient,
+): UseSuspenseQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
+
+export function useGetOidcSessionStatsSuspense<
+	TData = Awaited<ReturnType<typeof getOidcSessionStats>>,
+	TError = ErrorType<void>,
+>(
+	options?: {
+		query?: Partial<
+			UseSuspenseQueryOptions<
+				Awaited<ReturnType<typeof getOidcSessionStats>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customIdpInstance>;
+	},
+	queryClient?: QueryClient,
+): UseSuspenseQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
+
+/**
+ * @summary OIDC 세션/토큰 통계 조회
+ */
+
+export function useGetOidcSessionStatsSuspense<
+	TData = Awaited<ReturnType<typeof getOidcSessionStats>>,
+	TError = ErrorType<void>,
+>(
+	options?: {
+		query?: Partial<
+			UseSuspenseQueryOptions<
+				Awaited<ReturnType<typeof getOidcSessionStats>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customIdpInstance>;
+	},
+	queryClient?: QueryClient,
+): UseSuspenseQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+} {
+	const queryOptions = getGetOidcSessionStatsSuspenseQueryOptions(options);
+
+	const query = useSuspenseQuery(
+		queryOptions,
+		queryClient,
+	) as UseSuspenseQueryResult<TData, TError> & {
+		queryKey: DataTag<QueryKey, TData, TError>;
+	};
+
+	query.queryKey = queryOptions.queryKey;
+
+	return query;
+}
+
+export const getGetOidcSessionStatsSuspenseInfiniteQueryOptions = <
+	TData = InfiniteData<Awaited<ReturnType<typeof getOidcSessionStats>>>,
+	TError = ErrorType<void>,
+>(options?: {
+	query?: Partial<
+		UseSuspenseInfiniteQueryOptions<
+			Awaited<ReturnType<typeof getOidcSessionStats>>,
+			TError,
+			TData
+		>
+	>;
+	request?: SecondParameter<typeof customIdpInstance>;
+}) => {
+	const { query: queryOptions, request: requestOptions } = options ?? {};
+
+	const queryKey =
+		queryOptions?.queryKey ?? getGetOidcSessionStatsInfiniteQueryKey();
+
+	const queryFn: QueryFunction<
+		Awaited<ReturnType<typeof getOidcSessionStats>>
+	> = ({ signal }) => getOidcSessionStats(requestOptions, signal);
+
+	return {
+		queryKey,
+		queryFn,
+		...queryOptions,
+	} as UseSuspenseInfiniteQueryOptions<
+		Awaited<ReturnType<typeof getOidcSessionStats>>,
+		TError,
+		TData
+	> & { queryKey: DataTag<QueryKey, TData, TError> };
+};
+
+export type GetOidcSessionStatsSuspenseInfiniteQueryResult = NonNullable<
+	Awaited<ReturnType<typeof getOidcSessionStats>>
+>;
+
+export type GetOidcSessionStatsSuspenseInfiniteQueryError = ErrorType<void>;
+
+export function useGetOidcSessionStatsSuspenseInfinite<
+	TData = InfiniteData<Awaited<ReturnType<typeof getOidcSessionStats>>>,
+	TError = ErrorType<void>,
+>(
+	options: {
+		query: Partial<
+			UseSuspenseInfiniteQueryOptions<
+				Awaited<ReturnType<typeof getOidcSessionStats>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customIdpInstance>;
+	},
+	queryClient?: QueryClient,
+): UseSuspenseInfiniteQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
+
+export function useGetOidcSessionStatsSuspenseInfinite<
+	TData = InfiniteData<Awaited<ReturnType<typeof getOidcSessionStats>>>,
+	TError = ErrorType<void>,
+>(
+	options?: {
+		query?: Partial<
+			UseSuspenseInfiniteQueryOptions<
+				Awaited<ReturnType<typeof getOidcSessionStats>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customIdpInstance>;
+	},
+	queryClient?: QueryClient,
+): UseSuspenseInfiniteQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
+
+export function useGetOidcSessionStatsSuspenseInfinite<
+	TData = InfiniteData<Awaited<ReturnType<typeof getOidcSessionStats>>>,
+	TError = ErrorType<void>,
+>(
+	options?: {
+		query?: Partial<
+			UseSuspenseInfiniteQueryOptions<
+				Awaited<ReturnType<typeof getOidcSessionStats>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customIdpInstance>;
+	},
+	queryClient?: QueryClient,
+): UseSuspenseInfiniteQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
+
+/**
+ * @summary OIDC 세션/토큰 통계 조회
+ */
+
+export function useGetOidcSessionStatsSuspenseInfinite<
+	TData = InfiniteData<Awaited<ReturnType<typeof getOidcSessionStats>>>,
+	TError = ErrorType<void>,
+>(
+	options?: {
+		query?: Partial<
+			UseSuspenseInfiniteQueryOptions<
+				Awaited<ReturnType<typeof getOidcSessionStats>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customIdpInstance>;
+	},
+	queryClient?: QueryClient,
+): UseSuspenseInfiniteQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+} {
+	const queryOptions =
+		getGetOidcSessionStatsSuspenseInfiniteQueryOptions(options);
+
+	const query = useSuspenseInfiniteQuery(
+		queryOptions,
+		queryClient,
+	) as UseSuspenseInfiniteQueryResult<TData, TError> & {
+		queryKey: DataTag<QueryKey, TData, TError>;
+	};
+
+	query.queryKey = queryOptions.queryKey;
+
+	return query;
+}
+
+/**
+ * @summary OIDC 세션/토큰 통계 조회
+ */
+export const prefetchGetOidcSessionStatsInfiniteQuery = async <
+	TData = Awaited<ReturnType<typeof getOidcSessionStats>>,
+	TError = ErrorType<void>,
+>(
+	queryClient: QueryClient,
+	options?: {
+		query?: Partial<
+			UseSuspenseInfiniteQueryOptions<
+				Awaited<ReturnType<typeof getOidcSessionStats>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customIdpInstance>;
+	},
+): Promise<QueryClient> => {
+	const queryOptions =
+		getGetOidcSessionStatsSuspenseInfiniteQueryOptions(options);
+
+	await queryClient.prefetchInfiniteQuery(queryOptions);
+
+	return queryClient;
+};
+
+/**
+ * 특정 세션 또는 토큰을 폐기합니다.
+ * @summary 단건 세션/토큰 폐기
+ */
+export const revokeOidcSession = (
+	key: string,
+	options?: SecondParameter<typeof customIdpInstance>,
+	signal?: AbortSignal,
+) => {
+	return customIdpInstance<unknown>(
+		{ url: `/api/v1/oidc-sessions/${key}/revoke`, method: "POST", signal },
+		options,
+	);
+};
+
+export const getRevokeOidcSessionMutationOptions = <
+	TError = ErrorType<void>,
+	TContext = unknown,
+>(options?: {
+	mutation?: UseMutationOptions<
+		Awaited<ReturnType<typeof revokeOidcSession>>,
+		TError,
+		{ key: string },
+		TContext
+	>;
+	request?: SecondParameter<typeof customIdpInstance>;
+}): UseMutationOptions<
+	Awaited<ReturnType<typeof revokeOidcSession>>,
+	TError,
+	{ key: string },
+	TContext
+> => {
+	const mutationKey = ["revokeOidcSession"];
+	const { mutation: mutationOptions, request: requestOptions } = options
+		? options.mutation &&
+			"mutationKey" in options.mutation &&
+			options.mutation.mutationKey
+			? options
+			: { ...options, mutation: { ...options.mutation, mutationKey } }
+		: { mutation: { mutationKey }, request: undefined };
+
+	const mutationFn: MutationFunction<
+		Awaited<ReturnType<typeof revokeOidcSession>>,
+		{ key: string }
+	> = (props) => {
+		const { key } = props ?? {};
+
+		return revokeOidcSession(key, requestOptions);
+	};
+
+	return { mutationFn, ...mutationOptions };
+};
+
+export type RevokeOidcSessionMutationResult = NonNullable<
+	Awaited<ReturnType<typeof revokeOidcSession>>
+>;
+
+export type RevokeOidcSessionMutationError = ErrorType<void>;
+
+/**
+ * @summary 단건 세션/토큰 폐기
+ */
+export const useRevokeOidcSession = <
+	TError = ErrorType<void>,
+	TContext = unknown,
+>(
+	options?: {
+		mutation?: UseMutationOptions<
+			Awaited<ReturnType<typeof revokeOidcSession>>,
+			TError,
+			{ key: string },
+			TContext
+		>;
+		request?: SecondParameter<typeof customIdpInstance>;
+	},
+	queryClient?: QueryClient,
+): UseMutationResult<
+	Awaited<ReturnType<typeof revokeOidcSession>>,
+	TError,
+	{ key: string },
+	TContext
+> => {
+	const mutationOptions = getRevokeOidcSessionMutationOptions(options);
+
+	return useMutation(mutationOptions, queryClient);
+};
+
+/**
+ * Redis에 저장된 모든 OIDC 세션 및 토큰을 일괄 폐기합니다.
+ * @summary 전체 세션/토큰 일괄 폐기
+ */
+export const revokeAllOidcSessions = (
+	options?: SecondParameter<typeof customIdpInstance>,
+	signal?: AbortSignal,
+) => {
+	return customIdpInstance<unknown>(
+		{ url: `/api/v1/oidc-sessions/revoke-all`, method: "POST", signal },
+		options,
+	);
+};
+
+export const getRevokeAllOidcSessionsMutationOptions = <
+	TError = ErrorType<void>,
+	TContext = unknown,
+>(options?: {
+	mutation?: UseMutationOptions<
+		Awaited<ReturnType<typeof revokeAllOidcSessions>>,
+		TError,
+		void,
+		TContext
+	>;
+	request?: SecondParameter<typeof customIdpInstance>;
+}): UseMutationOptions<
+	Awaited<ReturnType<typeof revokeAllOidcSessions>>,
+	TError,
+	void,
+	TContext
+> => {
+	const mutationKey = ["revokeAllOidcSessions"];
+	const { mutation: mutationOptions, request: requestOptions } = options
+		? options.mutation &&
+			"mutationKey" in options.mutation &&
+			options.mutation.mutationKey
+			? options
+			: { ...options, mutation: { ...options.mutation, mutationKey } }
+		: { mutation: { mutationKey }, request: undefined };
+
+	const mutationFn: MutationFunction<
+		Awaited<ReturnType<typeof revokeAllOidcSessions>>,
+		void
+	> = () => {
+		return revokeAllOidcSessions(requestOptions);
+	};
+
+	return { mutationFn, ...mutationOptions };
+};
+
+export type RevokeAllOidcSessionsMutationResult = NonNullable<
+	Awaited<ReturnType<typeof revokeAllOidcSessions>>
+>;
+
+export type RevokeAllOidcSessionsMutationError = ErrorType<void>;
+
+/**
+ * @summary 전체 세션/토큰 일괄 폐기
+ */
+export const useRevokeAllOidcSessions = <
+	TError = ErrorType<void>,
+	TContext = unknown,
+>(
+	options?: {
+		mutation?: UseMutationOptions<
+			Awaited<ReturnType<typeof revokeAllOidcSessions>>,
+			TError,
+			void,
+			TContext
+		>;
+		request?: SecondParameter<typeof customIdpInstance>;
+	},
+	queryClient?: QueryClient,
+): UseMutationResult<
+	Awaited<ReturnType<typeof revokeAllOidcSessions>>,
+	TError,
+	void,
+	TContext
+> => {
+	const mutationOptions = getRevokeAllOidcSessionsMutationOptions(options);
+
+	return useMutation(mutationOptions, queryClient);
+};
+
+/**
+ * 특정 Grant에 연결된 모든 세션 및 토큰을 일괄 폐기합니다.
+ * @summary Grant 일괄 폐기
+ */
+export const revokeOidcSessionsByGrant = (
+	grantId: string,
+	options?: SecondParameter<typeof customIdpInstance>,
+	signal?: AbortSignal,
+) => {
+	return customIdpInstance<unknown>(
+		{
+			url: `/api/v1/oidc-sessions/revoke-by-grant/${grantId}`,
+			method: "POST",
+			signal,
+		},
+		options,
+	);
+};
+
+export const getRevokeOidcSessionsByGrantMutationOptions = <
+	TError = ErrorType<void>,
+	TContext = unknown,
+>(options?: {
+	mutation?: UseMutationOptions<
+		Awaited<ReturnType<typeof revokeOidcSessionsByGrant>>,
+		TError,
+		{ grantId: string },
+		TContext
+	>;
+	request?: SecondParameter<typeof customIdpInstance>;
+}): UseMutationOptions<
+	Awaited<ReturnType<typeof revokeOidcSessionsByGrant>>,
+	TError,
+	{ grantId: string },
+	TContext
+> => {
+	const mutationKey = ["revokeOidcSessionsByGrant"];
+	const { mutation: mutationOptions, request: requestOptions } = options
+		? options.mutation &&
+			"mutationKey" in options.mutation &&
+			options.mutation.mutationKey
+			? options
+			: { ...options, mutation: { ...options.mutation, mutationKey } }
+		: { mutation: { mutationKey }, request: undefined };
+
+	const mutationFn: MutationFunction<
+		Awaited<ReturnType<typeof revokeOidcSessionsByGrant>>,
+		{ grantId: string }
+	> = (props) => {
+		const { grantId } = props ?? {};
+
+		return revokeOidcSessionsByGrant(grantId, requestOptions);
+	};
+
+	return { mutationFn, ...mutationOptions };
+};
+
+export type RevokeOidcSessionsByGrantMutationResult = NonNullable<
+	Awaited<ReturnType<typeof revokeOidcSessionsByGrant>>
+>;
+
+export type RevokeOidcSessionsByGrantMutationError = ErrorType<void>;
+
+/**
+ * @summary Grant 일괄 폐기
+ */
+export const useRevokeOidcSessionsByGrant = <
+	TError = ErrorType<void>,
+	TContext = unknown,
+>(
+	options?: {
+		mutation?: UseMutationOptions<
+			Awaited<ReturnType<typeof revokeOidcSessionsByGrant>>,
+			TError,
+			{ grantId: string },
+			TContext
+		>;
+		request?: SecondParameter<typeof customIdpInstance>;
+	},
+	queryClient?: QueryClient,
+): UseMutationResult<
+	Awaited<ReturnType<typeof revokeOidcSessionsByGrant>>,
+	TError,
+	{ grantId: string },
+	TContext
+> => {
+	const mutationOptions = getRevokeOidcSessionsByGrantMutationOptions(options);
+
+	return useMutation(mutationOptions, queryClient);
+};

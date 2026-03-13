@@ -1,8 +1,13 @@
 "use client";
-
-import { type ActivityDto, getGetRoutinesQueryKey, type RoutineDto, useDeleteRoutine, useGetRoutine, } from "@cocrepo/api";
 import {
-	DateTimeCell, Page, PageTitleBar, Section, VStack } from "@cocrepo/ui";
+	type ActivityDto,
+	getGetRoutinesQueryKey,
+	type RoutineDto,
+	useDeleteRoutine,
+	useGetRoutine,
+} from "@cocrepo/api/core/routines";
+
+import { DateTimeCell, Page, PageTitleBar, Section, VStack } from "@cocrepo/ui";
 import {
 	addToast,
 	Button,
@@ -77,9 +82,7 @@ function RoutineDetailPageClient({ routineId }: RoutineDetailPageClientProps) {
 
 	if (!response) {
 		return (
-			<Page
-				top={<PageTitleBar title="루틴 상세" description="로딩 중..." />}
-			>
+			<Page top={<PageTitleBar title="루틴 상세" description="로딩 중..." />}>
 				<div className="flex items-center justify-center p-8">
 					<Spinner size="lg" />
 				</div>
@@ -90,7 +93,12 @@ function RoutineDetailPageClient({ routineId }: RoutineDetailPageClientProps) {
 	if (!routine) {
 		return (
 			<Page
-				top={<PageTitleBar title="루틴 상세" description="루틴을 찾을 수 없습니다." />}
+				top={
+					<PageTitleBar
+						title="루틴 상세"
+						description="루틴을 찾을 수 없습니다."
+					/>
+				}
 			>
 				<div className="flex flex-col items-center justify-center gap-4 p-8">
 					<p className="text-default-500">루틴을 찾을 수 없습니다.</p>
@@ -202,7 +210,9 @@ function RoutineDetailPageClient({ routineId }: RoutineDetailPageClientProps) {
 					<div className="grid grid-cols-1 gap-3 md:grid-cols-3">
 						<div className="rounded-lg bg-content2 p-3">
 							<p className="text-xs text-default-500">전체 활동</p>
-							<p className="mt-1 text-lg font-semibold">{activities.length}개</p>
+							<p className="mt-1 text-lg font-semibold">
+								{activities.length}개
+							</p>
 						</div>
 						<div className="rounded-lg bg-content2 p-3">
 							<p className="text-xs text-default-500">연결 정상</p>
@@ -246,7 +256,9 @@ function RoutineDetailPageClient({ routineId }: RoutineDetailPageClientProps) {
 											<span>반복 횟수: {activity.repetitions}회</span>
 											<span>
 												휴식 시간:{" "}
-												{activity.restTime > 0 ? `${activity.restTime}초` : "없음"}
+												{activity.restTime > 0
+													? `${activity.restTime}초`
+													: "없음"}
 											</span>
 										</div>
 										{activity.notes && (

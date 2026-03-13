@@ -1,22 +1,22 @@
 import type { ReactNode } from "react";
 
 export interface PageProps {
-  /** 상단 헤더 영역 */
-  header?: ReactNode;
-  /** 페이지 상단 슬롯 */
-  top?: ReactNode;
-  /** 좌측 사이드바 영역 */
-  leftAside?: ReactNode;
-  /** 우측 사이드바 영역 */
-  rightAside?: ReactNode;
-  /** 페이지 하단 슬롯 */
-  bottom?: ReactNode;
-  /** 하단 푸터 영역 */
-  footer?: ReactNode;
-  /** 추가 CSS 클래스 */
-  className?: string;
-  /** 메인 콘텐츠 영역 */
-  children: ReactNode;
+	/** 상단 헤더 영역 */
+	header?: ReactNode;
+	/** 페이지 상단 슬롯 */
+	top?: ReactNode;
+	/** 좌측 사이드바 영역 */
+	leftAside?: ReactNode;
+	/** 우측 사이드바 영역 */
+	rightAside?: ReactNode;
+	/** 페이지 하단 슬롯 */
+	bottom?: ReactNode;
+	/** 하단 푸터 영역 */
+	footer?: ReactNode;
+	/** 추가 CSS 클래스 */
+	className?: string;
+	/** 메인 콘텐츠 영역 */
+	children: ReactNode;
 }
 
 /**
@@ -49,30 +49,30 @@ export interface PageProps {
  * ```
  */
 export const Page = ({
-  header,
-  top,
-  leftAside,
-  rightAside,
-  bottom,
-  footer,
-  className,
-  children,
+	header,
+	top,
+	leftAside,
+	rightAside,
+	bottom,
+	footer,
+	className,
+	children,
 }: PageProps) => {
-  return (
-    <section
-      className={`flex w-full flex-col gap-4${className ? ` ${className}` : ""}`}
-    >
-      {header && <header>{header}</header>}
-      {top && <div>{top}</div>}
-      <div className="flex w-full gap-4">
-        {leftAside && <aside>{leftAside}</aside>}
-        <div className="min-w-0 flex-1">{children}</div>
-        {rightAside && <aside>{rightAside}</aside>}
-      </div>
-      {bottom && <div>{bottom}</div>}
-      {footer && <footer>{footer}</footer>}
-    </section>
-  );
+	return (
+		<section
+			className={`flex w-full flex-col gap-4${className ? ` ${className}` : ""}`}
+		>
+			{header && <header>{header}</header>}
+			{top && <div>{top}</div>}
+			<div className="flex w-full gap-4">
+				{leftAside && <aside>{leftAside}</aside>}
+				<div className="min-w-0 flex-1">{children}</div>
+				{rightAside && <aside>{rightAside}</aside>}
+			</div>
+			{bottom && <div>{bottom}</div>}
+			{footer && <footer>{footer}</footer>}
+		</section>
+	);
 };
 
 Page.displayName = "Page";

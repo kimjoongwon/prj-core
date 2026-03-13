@@ -19,6 +19,6 @@ import { UsersController } from "./users.controller";
 		AuthCacheService,
 	],
 	controllers: [UsersController],
-	exports: [UserFacade],
+	exports: [UserFacade, UserService, AuthCacheService],
 })
 export class UsersModule {}

@@ -37,11 +37,6 @@ export const Pagination = (props: PaginationProps) => {
 	const total = Math.max(1, Math.ceil(totalCount / safeLimit));
 
 	return (
-		<HeroUIPagination
-			{...rest}
-			total={total}
-			page={page}
-			onChange={onChange}
-		/>
+		<HeroUIPagination {...rest} total={total} page={page} onChange={onChange} />
 	);
 };

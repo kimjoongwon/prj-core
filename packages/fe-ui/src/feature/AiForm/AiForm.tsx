@@ -54,7 +54,11 @@ function isBlockedPath(path: string, ui: AiFormUiPaths): boolean {
 	const hidden = toNormalizedSet(ui.hiddenPaths);
 	const readOnly = toNormalizedSet(ui.readOnlyPaths);
 	const disabled = toNormalizedSet(ui.disabledPaths);
-	return hidden.has(normalized) || readOnly.has(normalized) || disabled.has(normalized);
+	return (
+		hidden.has(normalized) ||
+		readOnly.has(normalized) ||
+		disabled.has(normalized)
+	);
 }
 
 function buildDefaultSelectedPaths(
@@ -83,7 +87,9 @@ function sanitizePatches(
 	fieldMeta: Record<string, AiFormFieldMeta>,
 	ui: AiFormUiPaths,
 ): AiFormPatch[] {
-	const selectedPathSet = new Set(selectedPaths.map((path) => normalizePath(path)));
+	const selectedPathSet = new Set(
+		selectedPaths.map((path) => normalizePath(path)),
+	);
 	return patches.filter((patch) => {
 		const normalizedPath = normalizePath(patch.path);
 		if (!selectedPathSet.has(normalizedPath)) {
@@ -146,7 +152,9 @@ const AiFormComponent = <TForm extends Record<string, unknown>>({
 			return;
 		}
 
-		const hasCurrent = aiSchemas.some((schema) => schema.key === selectedSchemaKey);
+		const hasCurrent = aiSchemas.some(
+			(schema) => schema.key === selectedSchemaKey,
+		);
 		if (hasCurrent) {
 			return;
 		}
@@ -156,7 +164,9 @@ const AiFormComponent = <TForm extends Record<string, unknown>>({
 		setSelectedPaths(buildDefaultSelectedPaths(firstSchema, fieldMeta, ui));
 	}, [aiSchemas, fieldMeta, selectedSchemaKey, ui]);
 
-	const selectedSchema = aiSchemas.find((schema) => schema.key === selectedSchemaKey);
+	const selectedSchema = aiSchemas.find(
+		(schema) => schema.key === selectedSchemaKey,
+	);
 	const hiddenPathSet = toNormalizedSet(ui.hiddenPaths);
 	const readOnlyPathSet = toNormalizedSet(ui.readOnlyPaths);
 	const disabledPathSet = toNormalizedSet(ui.disabledPaths);
@@ -176,7 +186,8 @@ const AiFormComponent = <TForm extends Record<string, unknown>>({
 			path,
 			label: meta?.label ?? path,
 			reason: meta?.ai?.reason,
-			optionCount: options[path]?.length ?? options[normalizedPath]?.length ?? 0,
+			optionCount:
+				options[path]?.length ?? options[normalizedPath]?.length ?? 0,
 			fillable,
 			isHidden,
 			isReadOnly,
@@ -209,7 +220,9 @@ const AiFormComponent = <TForm extends Record<string, unknown>>({
 		setErrorMessage(null);
 	};
 
-	const selectedPathSet = new Set(selectedPaths.map((path) => normalizePath(path)));
+	const selectedPathSet = new Set(
+		selectedPaths.map((path) => normalizePath(path)),
+	);
 
 	const handleFieldChipToggle = (path: string) => {
 		const field = fieldItems.find((item) => item.path === path);
@@ -221,7 +234,9 @@ const AiFormComponent = <TForm extends Record<string, unknown>>({
 		const alreadySelected = selectedPathSet.has(normalizedPath);
 		if (alreadySelected) {
 			setSelectedPaths(
-				selectedPaths.filter((itemPath) => normalizePath(itemPath) !== normalizedPath),
+				selectedPaths.filter(
+					(itemPath) => normalizePath(itemPath) !== normalizedPath,
+				),
 			);
 		} else {
 			setSelectedPaths([...selectedPaths, path]);
@@ -251,7 +266,12 @@ const AiFormComponent = <TForm extends Record<string, unknown>>({
 				userPrompt: userPrompt.trim() || undefined,
 			});
 
-			const safePatches = sanitizePatches(response.patches, selectedPaths, fieldMeta, ui);
+			const safePatches = sanitizePatches(
+				response.patches,
+				selectedPaths,
+				fieldMeta,
+				ui,
+			);
 			if (safePatches.length === 0) {
 				setErrorMessage("적용 가능한 AI 결과가 없습니다.");
 				setLastAppliedCount(0);
@@ -376,7 +396,9 @@ const AiFormComponent = <TForm extends Record<string, unknown>>({
 														layout
 														initial={false}
 														animate={{ scale: isSelected ? 1 : 0.98 }}
-														whileTap={item.selectable ? { scale: 0.95 } : undefined}
+														whileTap={
+															item.selectable ? { scale: 0.95 } : undefined
+														}
 														transition={{ duration: 0.16 }}
 													>
 														<Chip

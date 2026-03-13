@@ -7,9 +7,12 @@ export const sentimentBadgeVariants = cva(
 	{
 		variants: {
 			sentiment: {
-				POSITIVE: "bg-success-100 text-success-700 dark:bg-success-900/30 dark:text-success-400",
-				NEUTRAL: "bg-default-100 text-default-700 dark:bg-default-900/30 dark:text-default-400",
-				NEGATIVE: "bg-danger-100 text-danger-700 dark:bg-danger-900/30 dark:text-danger-400",
+				POSITIVE:
+					"bg-success-100 text-success-700 dark:bg-success-900/30 dark:text-success-400",
+				NEUTRAL:
+					"bg-default-100 text-default-700 dark:bg-default-900/30 dark:text-default-400",
+				NEGATIVE:
+					"bg-danger-100 text-danger-700 dark:bg-danger-900/30 dark:text-danger-400",
 			},
 		},
 		defaultVariants: {
@@ -18,7 +21,9 @@ export const sentimentBadgeVariants = cva(
 	},
 );
 
-export type SentimentBadgeProps = VariantProps<typeof sentimentBadgeVariants> & {
+export type SentimentBadgeProps = VariantProps<
+	typeof sentimentBadgeVariants
+> & {
 	/** 감정 타입 */
 	sentiment: SentimentTypeCode;
 	/** 감정 점수 (0.0 ~ 1.0) */
@@ -30,9 +35,21 @@ export type SentimentBadgeProps = VariantProps<typeof sentimentBadgeVariants> & 
 };
 
 const SENTIMENT_EMOJI: Record<SentimentTypeCode, ReactNode> = {
-	POSITIVE: <span role="img" aria-label="긍정">&#128522;</span>, // 😊
-	NEUTRAL: <span role="img" aria-label="중립">&#128528;</span>, // 😐
-	NEGATIVE: <span role="img" aria-label="부정">&#128544;</span>, // 😠
+	POSITIVE: (
+		<span role="img" aria-label="긍정">
+			&#128522;
+		</span>
+	), // 😊
+	NEUTRAL: (
+		<span role="img" aria-label="중립">
+			&#128528;
+		</span>
+	), // 😐
+	NEGATIVE: (
+		<span role="img" aria-label="부정">
+			&#128544;
+		</span>
+	), // 😠
 };
 
 const SENTIMENT_LABEL: Record<SentimentTypeCode, string> = {

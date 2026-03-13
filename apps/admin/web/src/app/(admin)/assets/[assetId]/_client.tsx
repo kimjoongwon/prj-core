@@ -1,8 +1,15 @@
 "use client";
-
-import { type AssetDto, type FolderDto, getGetAssetsQueryKey, useGetAssetById, useGetFolders, useMoveAsset, useRemoveAsset, } from "@cocrepo/api";
 import {
-	DateTimeCell, Page, PageTitleBar, Section, VStack } from "@cocrepo/ui";
+	type AssetDto,
+	type FolderDto,
+	getGetAssetsQueryKey,
+	useGetAssetById,
+	useGetFolders,
+	useMoveAsset,
+	useRemoveAsset,
+} from "@cocrepo/api/assets";
+
+import { DateTimeCell, Page, PageTitleBar, Section, VStack } from "@cocrepo/ui";
 import {
 	addToast,
 	Button,
@@ -148,11 +155,7 @@ function AssetDetailPageClient({ assetId }: AssetDetailPageClientProps) {
 
 	if (isLoading) {
 		return (
-			<Page
-				top={
-					<PageTitleBar title="에셋 상세" description="로딩 중..." />
-				}
-			>
+			<Page top={<PageTitleBar title="에셋 상세" description="로딩 중..." />}>
 				<Section>
 					<div className="flex items-center justify-center p-10">
 						<Spinner size="lg" />
@@ -164,20 +167,14 @@ function AssetDetailPageClient({ assetId }: AssetDetailPageClientProps) {
 
 	if (!asset) {
 		const pageHeader = (
-			<PageTitleBar
-				title="에셋 상세"
-				description="에셋을 찾을 수 없습니다."
-			/>
+			<PageTitleBar title="에셋 상세" description="에셋을 찾을 수 없습니다." />
 		);
 
 		return (
 			<Page top={pageHeader}>
 				<div className="flex flex-col items-center justify-center gap-4 p-8">
 					<p className="text-default-500">에셋을 찾을 수 없습니다.</p>
-					<Button
-						variant="flat"
-						onPress={onClickBackButton}
-					>
+					<Button variant="flat" onPress={onClickBackButton}>
 						목록으로
 					</Button>
 				</div>
@@ -261,12 +258,12 @@ function AssetDetailPageClient({ assetId }: AssetDetailPageClientProps) {
 							label="이동 대상 폴더"
 							placeholder="폴더를 선택하세요"
 							selectedKeys={targetFolderId ? [targetFolderId] : []}
-							onSelectionChange={keys => {
+							onSelectionChange={(keys) => {
 								const firstKey = Array.from(keys)[0];
 								setTargetFolderId(firstKey ? String(firstKey) : "");
 							}}
 						>
-							{folders.map(folder => (
+							{folders.map((folder) => (
 								<SelectItem key={folder.id}>{folder.name}</SelectItem>
 							))}
 						</Select>

@@ -73,19 +73,14 @@ export const CategoryRoleListSection = observer(
 						<TableRow key={item.id}>
 							<TableCell>
 								{item.role ? (
-									<Link
-										href={`${rolesBasePath}/${item.role.id}`}
-										size="sm"
-									>
+									<Link href={`${rolesBasePath}/${item.role.id}`} size="sm">
 										{item.role.name}
 									</Link>
 								) : (
 									<span className="text-default-400">-</span>
 								)}
 							</TableCell>
-							<TableCell>
-								{item.role?.displayName || "-"}
-							</TableCell>
+							<TableCell>{item.role?.displayName || "-"}</TableCell>
 							<TableCell>
 								<Chip
 									size="sm"

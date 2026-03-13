@@ -16,7 +16,8 @@ const typingIndicatorVariants = cva(
 	},
 );
 
-export interface TypingIndicatorProps extends VariantProps<typeof typingIndicatorVariants> {
+export interface TypingIndicatorProps
+	extends VariantProps<typeof typingIndicatorVariants> {
 	/** 타이핑 중인 사용자 이름 목록 */
 	userNames: string[];
 	/** 추가 클래스명 */

@@ -20,6 +20,7 @@
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-03-13 | `setApiPersistStore` 의존을 root barrel에서 `@cocrepo/api/core/client` subpath로 전환 | codex |
 | 2026-03-06 | 규칙 위반 정리: useMemo/useCallback/useIsMounted 제거 및 observer/이벤트 네이밍 규칙 반영 | codex |
 | 2026-03-06 | AppStoreConfig/AppStoreProviderResult 로컬 선언을 제거하고 @cocrepo/type 공용 계약 import + type re-export로 전환 | codex |
 | 2026-03-06 | @cocrepo/hook 의존 제거, RootStore에 AbilityStore 주입, 내부 useAbility(@cocrepo/store) 기반 권한 체커 연결로 전환 | codex |

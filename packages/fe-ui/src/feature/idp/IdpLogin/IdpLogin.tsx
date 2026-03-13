@@ -1,10 +1,10 @@
 "use client";
-
 import {
+	type LoginErrorDto,
 	useAbortInteraction,
 	useSubmitLogin,
-	type LoginErrorDto,
-} from "@cocrepo/api";
+} from "@cocrepo/api/idp/interaction";
+
 import type { AxiosError } from "axios";
 import { observer } from "mobx-react-lite";
 import {

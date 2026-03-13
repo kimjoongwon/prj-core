@@ -1,7 +1,7 @@
 "use client";
 
-import type { AbilityResponseDto } from "@cocrepo/api";
-import { customInstance } from "@cocrepo/api";
+import type { AbilityResponseDto } from "@cocrepo/api/core/abilities";
+import { customInstance } from "@cocrepo/api/core/client";
 import { useQuery } from "@tanstack/react-query";
 import { usePathname } from "next/navigation";
 

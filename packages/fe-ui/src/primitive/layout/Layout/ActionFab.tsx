@@ -50,7 +50,11 @@ export const ActionFab = observer(function ActionFab({
 							onPress={() => handleActionClick(action.id)}
 							aria-label={action.label}
 						>
-							<AppIcon name={action.icon} className="text-primary-foreground" size={20} />
+							<AppIcon
+								name={action.icon}
+								className="text-primary-foreground"
+								size={20}
+							/>
 						</Button>
 					</div>
 				))}

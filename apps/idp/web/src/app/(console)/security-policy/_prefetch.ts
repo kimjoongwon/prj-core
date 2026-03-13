@@ -1,4 +1,5 @@
-import { prefetchGetSecurityPolicyQuery } from "@cocrepo/api";
+import { prefetchGetSecurityPolicyQuery } from "@cocrepo/api/idp/security-policy";
+
 import { withServerCookies } from "@cocrepo/api/server";
 import type { QueryClient } from "@tanstack/react-query";
 import type { ReadonlyRequestCookies } from "next/dist/server/web/spec-extension/adapters/request-cookies";

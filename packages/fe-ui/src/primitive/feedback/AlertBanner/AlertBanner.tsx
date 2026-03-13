@@ -27,8 +27,7 @@ const STYLES: Record<
 		bg: "bg-danger/20",
 		border: "border-danger/50",
 		text: "text-danger",
-		iconPath:
-			"M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z",
+		iconPath: "M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z",
 	},
 	warning: {
 		bg: "bg-warning/20",
@@ -47,8 +46,7 @@ const STYLES: Record<
 		bg: "bg-primary/20",
 		border: "border-primary/50",
 		text: "text-primary",
-		iconPath:
-			"M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z",
+		iconPath: "M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z",
 	},
 };
 

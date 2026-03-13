@@ -64,7 +64,10 @@ export const AssigneeSelect = (props: AssigneeSelectProps) => {
 
 	// 미배정 옵션 추가
 	const options: Option[] = includeUnassigned
-		? [{ value: "", text: "미배정" }, ...assignees.map((a) => ({ value: a.id, text: a.name }))]
+		? [
+				{ value: "", text: "미배정" },
+				...assignees.map((a) => ({ value: a.id, text: a.name })),
+			]
 		: assignees.map((a) => ({ value: a.id, text: a.name }));
 
 	return (

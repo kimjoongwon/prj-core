@@ -1,8 +1,7 @@
 "use client";
+import { customInstance } from "@cocrepo/api/core/client";
+import { type GroupDto } from "@cocrepo/api/core/groups";
 
-// TODO: Orval codegen 후 아래 import로 교체
-// import { useGetGroups, type GroupDto } from "@cocrepo/api";
-import { customInstance } from "@cocrepo/api";
 import { DateTimeCell, Page, PageTitleBar, Section, VStack } from "@cocrepo/ui";
 import { Button } from "@heroui/react";
 import { useQuery } from "@tanstack/react-query";
@@ -103,7 +102,9 @@ function RoleGroupsPageClient() {
 												<span className="font-mono text-sm">{group.name}</span>
 											</td>
 											<td className="px-4 py-3">
-												<span className="text-default-600">{group.label || "-"}</span>
+												<span className="text-default-600">
+													{group.label || "-"}
+												</span>
 											</td>
 											<td className="px-4 py-3">
 												<DateTimeCell value={group.createdAt} />

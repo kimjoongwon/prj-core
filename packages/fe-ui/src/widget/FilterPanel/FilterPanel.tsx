@@ -145,7 +145,9 @@ export const FilterPanel = observer(
 				{/* 검색 */}
 				{showSearch && (
 					<div>
-						<h3 className="mb-2 text-sm font-semibold text-default-700">검색</h3>
+						<h3 className="mb-2 text-sm font-semibold text-default-700">
+							검색
+						</h3>
 						<Input
 							placeholder={searchPlaceholder}
 							size="sm"

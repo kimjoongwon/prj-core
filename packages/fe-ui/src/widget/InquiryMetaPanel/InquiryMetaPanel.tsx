@@ -52,7 +52,10 @@ export interface InquiryMetaPanelProps {
 	className?: string;
 }
 
-const priorityColors: Record<string, "danger" | "warning" | "primary" | "default"> = {
+const priorityColors: Record<
+	string,
+	"danger" | "warning" | "primary" | "default"
+> = {
 	URGENT: "danger",
 	HIGH: "warning",
 	NORMAL: "primary",

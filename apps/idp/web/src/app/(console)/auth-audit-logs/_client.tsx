@@ -1,13 +1,18 @@
 "use client";
-
 import {
 	type AuthAuditLogDto,
 	type AuthAuditResult,
-	useGetAuthAuditLogStats,
 	useGetAuthAuditLogs,
-} from "@cocrepo/api";
+	useGetAuthAuditLogStats,
+} from "@cocrepo/api/idp/auth";
+
 import type { InputConfig, MetaDataGridColumnConfig } from "@cocrepo/type";
-import { AuditResultBadge, DateTimeCell, MetaDataGrid, useMetaDataGridQueryStates } from "@cocrepo/ui";
+import {
+	AuditResultBadge,
+	DateTimeCell,
+	MetaDataGrid,
+	useMetaDataGridQueryStates,
+} from "@cocrepo/ui";
 import { Card, CardBody } from "@heroui/react";
 import { CheckCircle, Lock, XCircle } from "lucide-react";
 import { observer } from "mobx-react-lite";
@@ -112,40 +117,52 @@ function AuthAuditLogsClient() {
 	const stats = statsResponse?.data;
 
 	return (
-        <section><div className="flex items-start justify-between gap-4"><div><h1>{"로그인 감사 로그"}</h1><p>{"로그인 시도에 대한 감사 로그를 조회합니다."}</p></div></div>
-            {stats && (<div className="grid grid-cols-3 gap-4">
-                <StatCard
-                    icon={CheckCircle}
-                    label="오늘 성공"
-                    value={stats.todaySuccessCount ?? 0}
-                    color="bg-success" />
-                <StatCard
-                    icon={XCircle}
-                    label="오늘 실패"
-                    value={stats.todayFailureCount ?? 0}
-                    color="bg-danger" />
-                <StatCard
-                    icon={Lock}
-                    label="오늘 잠금"
-                    value={stats.todayLockedCount ?? 0}
-                    color="bg-warning" />
-            </div>)}
-            <section>
-                <MetaDataGrid
-                    config={{
-                        entity: "AuthAuditLog",
-                        data: logs,
-                        totalCount,
-                        isLoading,
-                        queryStates,
-                        setQueryStates,
-                        columns,
-                        leftInputs,
-                        emptyMessage: "조회된 감사 로그가 없습니다.",
-                    }} />
-            </section>
-        </section>
-    );
+		<section>
+			<div className="flex items-start justify-between gap-4">
+				<div>
+					<h1>{"로그인 감사 로그"}</h1>
+					<p>{"로그인 시도에 대한 감사 로그를 조회합니다."}</p>
+				</div>
+			</div>
+			{stats && (
+				<div className="grid grid-cols-3 gap-4">
+					<StatCard
+						icon={CheckCircle}
+						label="오늘 성공"
+						value={stats.todaySuccessCount ?? 0}
+						color="bg-success"
+					/>
+					<StatCard
+						icon={XCircle}
+						label="오늘 실패"
+						value={stats.todayFailureCount ?? 0}
+						color="bg-danger"
+					/>
+					<StatCard
+						icon={Lock}
+						label="오늘 잠금"
+						value={stats.todayLockedCount ?? 0}
+						color="bg-warning"
+					/>
+				</div>
+			)}
+			<section>
+				<MetaDataGrid
+					config={{
+						entity: "AuthAuditLog",
+						data: logs,
+						totalCount,
+						isLoading,
+						queryStates,
+						setQueryStates,
+						columns,
+						leftInputs,
+						emptyMessage: "조회된 감사 로그가 없습니다.",
+					}}
+				/>
+			</section>
+		</section>
+	);
 }
 
 export default observer(AuthAuditLogsClient);

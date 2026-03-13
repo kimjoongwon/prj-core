@@ -313,9 +313,7 @@ const SmsPreviewResult = observer(({ content }: SmsPreviewResultProps) => {
 				<ByteCounter text={content} />
 			</HStack>
 			<div className="rounded-lg border border-divider bg-content2 p-4">
-				<p className="text-sm text-foreground whitespace-pre-wrap">
-					{content}
-				</p>
+				<p className="text-sm text-foreground whitespace-pre-wrap">{content}</p>
 			</div>
 		</VStack>
 	);

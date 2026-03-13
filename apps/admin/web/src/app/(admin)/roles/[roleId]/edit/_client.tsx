@@ -1,6 +1,10 @@
 "use client";
+import {
+	type UpdateRoleDto,
+	useGetRoleById,
+	useUpdateRole,
+} from "@cocrepo/api/core/roles";
 
-import { type UpdateRoleDto, useGetRoleById, useUpdateRole, } from "@cocrepo/api";
 import { Page, PageTitleBar, Section, VStack } from "@cocrepo/ui";
 import { Button, Input, Textarea } from "@heroui/react";
 import { ArrowLeft, Save } from "lucide-react";
@@ -112,9 +116,7 @@ function RoleEditPageClient({ roleId }: RoleEditPageClientProps) {
 
 	if (isLoading) {
 		return (
-			<Page
-				top={<PageTitleBar title="역할 수정" description="로딩 중..." />}
-			>
+			<Page top={<PageTitleBar title="역할 수정" description="로딩 중..." />}>
 				<Section>
 					<div className="flex items-center justify-center p-8">
 						<span className="text-default-500">로딩 중...</span>
@@ -126,10 +128,7 @@ function RoleEditPageClient({ roleId }: RoleEditPageClientProps) {
 
 	if (!role) {
 		const pageHeader = (
-			<PageTitleBar
-				title="역할 수정"
-				description="역할을 찾을 수 없습니다."
-			/>
+			<PageTitleBar title="역할 수정" description="역할을 찾을 수 없습니다." />
 		);
 
 		return (
@@ -196,7 +195,7 @@ function RoleEditPageClient({ roleId }: RoleEditPageClientProps) {
 							label="표시명"
 							placeholder="사용자 정의 역할"
 							value={state.displayName}
-							onValueChange={value => {
+							onValueChange={(value) => {
 								state.displayName = value;
 							}}
 							isInvalid={!!state.errors.displayName}
@@ -208,7 +207,7 @@ function RoleEditPageClient({ roleId }: RoleEditPageClientProps) {
 							label="설명"
 							placeholder="역할에 대한 설명을 입력하세요."
 							value={state.description}
-							onValueChange={value => {
+							onValueChange={(value) => {
 								state.description = value;
 							}}
 							maxLength={200}

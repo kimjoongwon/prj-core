@@ -12,7 +12,16 @@ export interface StatusBadgeProps {
 
 const STATUS_CONFIG: Record<
 	InquiryStatusCode,
-	{ label: string; color: "primary" | "success" | "warning" | "danger" | "secondary" | "default" }
+	{
+		label: string;
+		color:
+			| "primary"
+			| "success"
+			| "warning"
+			| "danger"
+			| "secondary"
+			| "default";
+	}
 > = {
 	NEW: { label: "신규", color: "primary" },
 	OPEN: { label: "열림", color: "success" },

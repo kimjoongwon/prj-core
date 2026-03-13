@@ -37,10 +37,7 @@ export const CategoryInfoSection = observer(
 			{
 				label: "상위 카테고리",
 				value: category.parent ? (
-					<Link
-						href={`${categoriesBasePath}/${category.parent.id}`}
-						size="sm"
-					>
+					<Link href={`${categoriesBasePath}/${category.parent.id}`} size="sm">
 						{category.parent.name}
 					</Link>
 				) : (

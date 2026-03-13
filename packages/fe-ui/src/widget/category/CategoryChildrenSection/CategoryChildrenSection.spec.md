@@ -50,3 +50,4 @@
 | 2026-03-06 | src/components 레이어를 제거하고 경로를 src/* 기준으로 상향 | codex |
 | 2026-03-03 | 누락된 sidecar spec 신규 생성 | codex |
 | 2026-03-06 | widget 디렉토리를 widgets로 통합하며 위치 경로를 정리 | codex |
+| 2026-03-13 | API 의존을 root barrel에서 split subpath import로 전환 | codex |

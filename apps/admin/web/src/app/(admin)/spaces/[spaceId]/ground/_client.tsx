@@ -1,8 +1,7 @@
 "use client";
+import { type GroundDto, useGetSpaceGround } from "@cocrepo/api/core/spaces";
 
-import { type GroundDto, useGetSpaceGround } from "@cocrepo/api";
-import {
-	DateTimeCell, Page, PageTitleBar, Section, VStack } from "@cocrepo/ui";
+import { DateTimeCell, Page, PageTitleBar, Section, VStack } from "@cocrepo/ui";
 import { Badge, Button, Spinner } from "@heroui/react";
 import { ArrowLeft, Pencil } from "lucide-react";
 import { observer } from "mobx-react-lite";
@@ -36,9 +35,7 @@ function GroundDetailPageClient({ spaceId }: GroundDetailPageClientProps) {
 	// 로딩 상태
 	if (isLoading && !response) {
 		return (
-			<Page
-				top={<PageTitleBar title="시설 정보" description="로딩 중..." />}
-			>
+			<Page top={<PageTitleBar title="시설 정보" description="로딩 중..." />}>
 				<Section>
 					<div className="flex items-center justify-center p-8">
 						<Spinner size="lg" />
@@ -131,9 +128,7 @@ function GroundDetailPageClient({ spaceId }: GroundDetailPageClientProps) {
 							</div>
 						</div>
 						<div>
-							<label className="text-sm text-default-500">
-								사업자등록번호
-							</label>
+							<label className="text-sm text-default-500">사업자등록번호</label>
 							<p className="mt-1 font-mono">{ground.businessNo}</p>
 						</div>
 						<div>

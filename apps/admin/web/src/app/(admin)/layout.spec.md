@@ -19,7 +19,7 @@
 
 | 모듈 | 용도 |
 |------|------|
-| @cocrepo/api | 기능 구현 의존성 |
+| @cocrepo/api/idp/auth | 기능 구현 의존성 |
 | @cocrepo/hook | 기능 구현 의존성 |
 | @cocrepo/ui | 기능 구현 의존성 |
 | @heroui/react | 기능 구현 의존성 |
@@ -52,6 +52,7 @@
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-03-13 | `@cocrepo/api` root import를 split subpath import로 전환 | codex |
 | 2026-03-03 | 누락된 sidecar spec 신규 생성 | codex |
 | 2026-03-04 | AdminLayout 직접 사용을 Layout 슬롯 조합 구조로 마이그레이션 | codex |
 | 2026-03-04 | useAdminLayout 제거 후 @cocrepo/hook의 useLayout 직접 사용으로 전환 | codex |

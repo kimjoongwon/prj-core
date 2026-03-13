@@ -1,6 +1,10 @@
 "use client";
+import {
+	getGetTimelineByIdQueryKey,
+	useGetTimelineById,
+	useUpdateTimeline,
+} from "@cocrepo/api/core/timelines";
 
-import { getGetTimelineByIdQueryKey, useGetTimelineById, useUpdateTimeline, } from "@cocrepo/api";
 import { Page, PageTitleBar, Section, VStack } from "@cocrepo/ui";
 import { addToast, Button, Input, Textarea } from "@heroui/react";
 import { useQueryClient } from "@tanstack/react-query";

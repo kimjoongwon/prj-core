@@ -1,6 +1,6 @@
 "use client";
+import { type CreateRoleDto, useCreateRole } from "@cocrepo/api/core/roles";
 
-import { type CreateRoleDto, useCreateRole } from "@cocrepo/api";
 import { Page, PageTitleBar, Section, VStack } from "@cocrepo/ui";
 import { Button, Input, Textarea } from "@heroui/react";
 import { ArrowLeft, Save } from "lucide-react";

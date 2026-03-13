@@ -1,6 +1,6 @@
 "use client";
+import { useRequestPasswordReset } from "@cocrepo/api/idp/password-reset";
 
-import { useRequestPasswordReset } from "@cocrepo/api";
 import { observer } from "mobx-react-lite";
 import { ForgotPasswordForm } from "../../../widget/form/ForgotPasswordForm/ForgotPasswordForm";
 

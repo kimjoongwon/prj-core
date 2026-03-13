@@ -46,9 +46,7 @@ export const ExpiryCell = ({ expiresAt }: ExpiryCellProps) => {
 	return (
 		<div className="flex flex-col gap-0.5">
 			<span className="text-sm">{formatDateTime(expiresAt as string)}</span>
-			<span
-				className={`text-xs ${isExpired ? "text-danger" : "text-success"}`}
-			>
+			<span className={`text-xs ${isExpired ? "text-danger" : "text-success"}`}>
 				{relativeTime}
 			</span>
 		</div>

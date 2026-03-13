@@ -1,9 +1,15 @@
 "use client";
+import { type SpaceDto, useGetSpaces } from "@cocrepo/api/core/spaces";
 
-import { type SpaceDto, useGetSpaces } from "@cocrepo/api";
 import type { InputConfig, MetaDataGridColumnConfig } from "@cocrepo/type";
 import {
-	DateTimeCell, MetaDataGrid, Page, PageTitleBar, Section, useMetaDataGridQueryStates } from "@cocrepo/ui";
+	DateTimeCell,
+	MetaDataGrid,
+	Page,
+	PageTitleBar,
+	Section,
+	useMetaDataGridQueryStates,
+} from "@cocrepo/ui";
 import { Badge, Button } from "@heroui/react";
 import { Building2 } from "lucide-react";
 import { observer } from "mobx-react-lite";
@@ -79,7 +85,9 @@ function SpacesPageClient() {
 						.some((value) => value.toLowerCase().includes(searchKeyword)),
 				);
 	const totalCount =
-		searchKeyword.length > 0 ? filteredRows.length : (meta?.total ?? rows.length);
+		searchKeyword.length > 0
+			? filteredRows.length
+			: (meta?.total ?? rows.length);
 
 	/** 시설명 클릭 시 child detail 페이지 이동 */
 	const onClickSpaceGroundName = (spaceId: string) => {

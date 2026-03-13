@@ -66,10 +66,7 @@ export const CategoryChildrenSection = observer(
 					{childCategories.map((child) => (
 						<TableRow key={child.id}>
 							<TableCell>
-								<Link
-									href={`${categoriesBasePath}/${child.id}`}
-									size="sm"
-								>
+								<Link href={`${categoriesBasePath}/${child.id}`} size="sm">
 									{child.name}
 								</Link>
 							</TableCell>

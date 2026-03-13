@@ -1,9 +1,38 @@
 "use client";
+import {
+	type InquiryDto,
+	type InquiryStatus,
+	useGetInquiries,
+	useGetInquiryStats,
+} from "@cocrepo/api/core/inquiries";
 
-import { type InquiryDto, type InquiryStatus, useGetInquiries, useGetInquiryStats, } from "@cocrepo/api";
 import type { InputConfig, MetaDataGridColumnConfig } from "@cocrepo/type";
 import {
-	Page, PageTitleBar, Section, DateTimeCell, InquiryAssigneeCell, InquiryCategoryCell, InquiryChannelCell, InquiryPriorityCell, InquirySentimentCell, InquirySLACell, InquiryStatsCards, InquiryStatusCell, InquiryUnreadCell, MetaDataGrid, ProfileAvatarCell, VStack, type InquiryCategoryCode, type InquiryChannelCode, type InquiryPriorityCode, type InquiryStats, type InquiryStatusCode, type SLAStatus, type SentimentTypeCode, useMetaDataGridQueryStates } from "@cocrepo/ui";
+	Page,
+	PageTitleBar,
+	Section,
+	DateTimeCell,
+	InquiryAssigneeCell,
+	InquiryCategoryCell,
+	InquiryChannelCell,
+	InquiryPriorityCell,
+	InquirySentimentCell,
+	InquirySLACell,
+	InquiryStatsCards,
+	InquiryStatusCell,
+	InquiryUnreadCell,
+	MetaDataGrid,
+	ProfileAvatarCell,
+	VStack,
+	type InquiryCategoryCode,
+	type InquiryChannelCode,
+	type InquiryPriorityCode,
+	type InquiryStats,
+	type InquiryStatusCode,
+	type SLAStatus,
+	type SentimentTypeCode,
+	useMetaDataGridQueryStates,
+} from "@cocrepo/ui";
 import { Button } from "@heroui/react";
 import { Plus } from "lucide-react";
 import { observer } from "mobx-react-lite";
@@ -81,14 +110,18 @@ const columns: MetaDataGridColumnConfig<InquiryRow>[] = [
 		label: "제목",
 		size: 260,
 		isRequired: true,
-		cell: ({ getValue }) => <span className="line-clamp-2">{getValue() as string}</span>,
+		cell: ({ getValue }) => (
+			<span className="line-clamp-2">{getValue() as string}</span>
+		),
 	},
 	{
 		field: "status",
 		label: "상태",
 		size: 130,
 		align: "center",
-		cell: ({ getValue }) => <InquiryStatusCell value={getValue() as InquiryStatusCode} />,
+		cell: ({ getValue }) => (
+			<InquiryStatusCell value={getValue() as InquiryStatusCode} />
+		),
 	},
 	{
 		field: "category",
@@ -104,7 +137,9 @@ const columns: MetaDataGridColumnConfig<InquiryRow>[] = [
 		label: "채널",
 		size: 120,
 		align: "center",
-		cell: ({ getValue }) => <InquiryChannelCell value={getValue() as InquiryChannelCode} />,
+		cell: ({ getValue }) => (
+			<InquiryChannelCell value={getValue() as InquiryChannelCode} />
+		),
 	},
 	{
 		field: "priority",
@@ -128,7 +163,9 @@ const columns: MetaDataGridColumnConfig<InquiryRow>[] = [
 		size: 100,
 		align: "center",
 		cell: ({ getValue }) => (
-			<InquirySentimentCell value={getValue() as SentimentTypeCode | undefined} />
+			<InquirySentimentCell
+				value={getValue() as SentimentTypeCode | undefined}
+			/>
 		),
 	},
 	{
@@ -247,9 +284,10 @@ function InquiriesPageClient() {
 	const skip = getNumberQueryValue(queryStates.skip, 0);
 	const search = getSearchQueryValue(queryStates.search);
 	const inquiryStatus = getInquiryStatusFilter(queryStates.inquiryStatus);
-	const activeStatus = typeof queryStates.inquiryStatus === "string"
-		? queryStates.inquiryStatus
-		: undefined;
+	const activeStatus =
+		typeof queryStates.inquiryStatus === "string"
+			? queryStates.inquiryStatus
+			: undefined;
 
 	const { data: inquiriesResponse, isLoading } = useGetInquiries({
 		take,

@@ -6,18 +6,10 @@ import { observer } from "mobx-react-lite";
 import { useState } from "react";
 import { AlertBanner } from "../../../primitive/feedback/AlertBanner/AlertBanner";
 import { PasswordStrengthIndicator } from "../../../primitive/feedback/PasswordStrengthIndicator/PasswordStrengthIndicator";
-import {
-	AuthCard,
-} from "../../../widget/AuthCard/AuthCard";
-import {
-	AuthCardHeader,
-} from "../../../widget/AuthCard/AuthCardHeader";
+import { AuthCard } from "../../../widget/AuthCard/AuthCard";
+import { AuthCardHeader } from "../../../widget/AuthCard/AuthCardHeader";
 
-export type ResetPasswordStep =
-	| "validating"
-	| "invalid"
-	| "form"
-	| "complete";
+export type ResetPasswordStep = "validating" | "invalid" | "form" | "complete";
 
 export interface ResetPasswordFormProps {
 	/** 현재 단계 */
@@ -56,9 +48,7 @@ export const ResetPasswordForm = observer(
 		const [submitError, setSubmitError] = useState<string | null>(null);
 		const [isComplete, setIsComplete] = useState(false);
 
-		const isPasswordValid = passwordRules.every((r) =>
-			r.test(password),
-		);
+		const isPasswordValid = passwordRules.every((r) => r.test(password));
 		const isPasswordMatch =
 			password === confirmPassword && confirmPassword.length > 0;
 
@@ -84,9 +74,7 @@ export const ResetPasswordForm = observer(
 				{step === "validating" && (
 					<div className="text-center py-8">
 						<div className="w-8 h-8 border-2 border-primary border-t-transparent rounded-full animate-spin mx-auto mb-4" />
-						<p className="text-default-500">
-							링크를 확인하고 있습니다...
-						</p>
+						<p className="text-default-500">링크를 확인하고 있습니다...</p>
 					</div>
 				)}
 
@@ -112,8 +100,7 @@ export const ResetPasswordForm = observer(
 							{tokenError || "링크가 만료되었습니다"}
 						</h2>
 						<p className="text-default-500 text-sm mb-6">
-							비밀번호 재설정 링크는 30분간 유효하며, 1회만 사용할
-							수 있습니다.
+							비밀번호 재설정 링크는 30분간 유효하며, 1회만 사용할 수 있습니다.
 						</p>
 						<Link href="/forgot-password">
 							<Button
@@ -150,8 +137,7 @@ export const ResetPasswordForm = observer(
 						</h2>
 						<p className="text-default-500 text-sm mb-6">
 							보안을 위해 모든 기기에서 로그아웃되었습니다.
-							<br />
-							새 비밀번호로 다시 로그인해주세요.
+							<br />새 비밀번호로 다시 로그인해주세요.
 						</p>
 						<Link href="/">
 							<Button
@@ -174,12 +160,7 @@ export const ResetPasswordForm = observer(
 							subtitle={tokenEmail || undefined}
 						/>
 
-						{submitError && (
-							<AlertBanner
-								type="danger"
-								message={submitError}
-							/>
-						)}
+						{submitError && <AlertBanner type="danger" message={submitError} />}
 
 						<form
 							className="space-y-5"
@@ -215,13 +196,9 @@ export const ResetPasswordForm = observer(
 								isRequired
 								autoComplete="new-password"
 								variant="bordered"
-								isInvalid={
-									confirmPassword.length > 0 &&
-									!isPasswordMatch
-								}
+								isInvalid={confirmPassword.length > 0 && !isPasswordMatch}
 								errorMessage={
-									confirmPassword.length > 0 &&
-									!isPasswordMatch
+									confirmPassword.length > 0 && !isPasswordMatch
 										? "비밀번호가 일치하지 않습니다"
 										: undefined
 								}

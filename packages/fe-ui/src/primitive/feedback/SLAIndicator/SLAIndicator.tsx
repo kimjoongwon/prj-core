@@ -1,25 +1,23 @@
 import { Chip } from "@heroui/react";
 import { cva, type VariantProps } from "class-variance-authority";
 
-const slaIndicatorVariants = cva(
-	"inline-flex items-center gap-1.5",
-	{
-		variants: {
-			status: {
-				normal: "text-success-600",
-				warning: "text-warning-600",
-				breach: "text-danger-600",
-			},
-		},
-		defaultVariants: {
-			status: "normal",
+const slaIndicatorVariants = cva("inline-flex items-center gap-1.5", {
+	variants: {
+		status: {
+			normal: "text-success-600",
+			warning: "text-warning-600",
+			breach: "text-danger-600",
 		},
 	},
-);
+	defaultVariants: {
+		status: "normal",
+	},
+});
 
 export type SLAStatusValue = "normal" | "warning" | "breach";
 
-export interface SLAIndicatorProps extends VariantProps<typeof slaIndicatorVariants> {
+export interface SLAIndicatorProps
+	extends VariantProps<typeof slaIndicatorVariants> {
 	/** 응답 기한 */
 	responseDue?: Date | string | null;
 	/** 해결 기한 */
@@ -89,7 +87,10 @@ const formatRemaining = (ms: number): string => {
 	return `${days}일 ${hours % 24}시간 남음`;
 };
 
-const STATUS_CHIP_COLOR: Record<SLAStatusValue, "success" | "warning" | "danger"> = {
+const STATUS_CHIP_COLOR: Record<
+	SLAStatusValue,
+	"success" | "warning" | "danger"
+> = {
 	normal: "success",
 	warning: "warning",
 	breach: "danger",

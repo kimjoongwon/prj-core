@@ -97,7 +97,9 @@ export const InquiryFilterPanel = observer(
 			};
 		};
 
-		const handleDateChange = (dateValue: { start: string; end: string } | undefined) => {
+		const handleDateChange = (
+			dateValue: { start: string; end: string } | undefined,
+		) => {
 			handleFieldChange("dateRange", dateValue);
 		};
 

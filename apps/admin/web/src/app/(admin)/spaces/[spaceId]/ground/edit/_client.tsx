@@ -1,6 +1,10 @@
 "use client";
+import {
+	type GroundDto,
+	useGetSpaceGround,
+	useUpdateSpaceGround,
+} from "@cocrepo/api/core/spaces";
 
-import { type GroundDto, useGetSpaceGround, useUpdateSpaceGround } from "@cocrepo/api";
 import { Page, PageTitleBar, Section, VStack } from "@cocrepo/ui";
 import { addToast, Button, Input, Spinner } from "@heroui/react";
 import { observer, useLocalObservable } from "mobx-react-lite";
@@ -61,7 +65,8 @@ function GroundEditPageClient({ spaceId }: GroundEditPageClientProps) {
 			onError: (error) => {
 				addToast({
 					title: "시설 정보 수정 실패",
-					description: error.message || "시설 detail 수정 중 오류가 발생했습니다.",
+					description:
+						error.message || "시설 detail 수정 중 오류가 발생했습니다.",
 					color: "danger",
 				});
 			},

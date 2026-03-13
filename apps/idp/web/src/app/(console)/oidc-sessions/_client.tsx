@@ -1,23 +1,23 @@
 "use client";
-
 import {
 	type OidcSessionDto,
-	useGetOidcSessionStats,
 	useGetOidcSessions,
+	useGetOidcSessionStats,
 	useRevokeAllOidcSessions,
 	useRevokeOidcSession,
 	useRevokeOidcSessionsByGrant,
-} from "@cocrepo/api";
+} from "@cocrepo/api/idp/oidc-sessions";
+
 import { MODEL_TYPE_OPTIONS } from "@cocrepo/constant";
 import type { InputConfig, MetaDataGridColumnConfig } from "@cocrepo/type";
 import {
-    ConfirmModal,
-    DateTimeCell,
-    ExpiryCell,
-    MetaDataGrid,
-    ModelTypeCell,
-    RevokeButtonCell,
-    useMetaDataGridQueryStates,
+	ConfirmModal,
+	DateTimeCell,
+	ExpiryCell,
+	MetaDataGrid,
+	ModelTypeCell,
+	RevokeButtonCell,
+	useMetaDataGridQueryStates,
 } from "@cocrepo/ui";
 import { Button, Card, CardBody, useDisclosure } from "@heroui/react";
 import { useQueryClient } from "@tanstack/react-query";
@@ -223,76 +223,104 @@ function OidcSessionsPageClient() {
 	];
 
 	return (
-        <section><div className="flex items-start justify-between gap-4"><div><h1>{"OIDC 세션/토큰"}</h1><p>{"OIDC 세션 및 토큰을 조회하고 관리합니다."}</p></div><div>{<Button
-                                    color="danger"
-                                    variant="flat"
-                                    startContent={<Trash2 className="h-4 w-4" />}
-                                    onPress={revokeAllModal.onOpen}
-                                    isDisabled={totalCount === 0}>전체 폐기
-                                                    </Button>}</div></div>
-            {stats && (<div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
-                <Card className="bg-content1">
-                    <CardBody className="flex flex-row items-center gap-3 p-4">
-                        <div className="rounded-lg bg-primary p-2">
-                            <Activity className="h-5 w-5 text-white" />
-                        </div>
-                        <div>
-                            <p className="text-sm text-default-500">전체</p>
-                            <p className="text-2xl font-bold">{stats.totalCount ?? 0}</p>
-                        </div>
-                    </CardBody>
-                </Card>
-                {Object.entries(byModelType).map(([type, count]) => (<Card key={type} className="bg-content1">
-                    <CardBody className="flex flex-row items-center gap-3 p-4">
-                        <div>
-                            <p className="text-sm text-default-500">{type}</p>
-                            <p className="text-2xl font-bold">{count}</p>
-                        </div>
-                    </CardBody>
-                </Card>))}
-            </div>)}
-            <section>
-                <MetaDataGrid
-                    config={{
-                        entity: "OidcSession",
-                        data: sessions,
-                        totalCount,
-                        isLoading,
-                        queryStates,
-                        setQueryStates,
-                        columns,
-                        leftInputs,
-                        emptyMessage: "등록된 OIDC 세션/토큰이 없습니다.",
-                    }} />
-            </section>
-            <ConfirmModal
-                isOpen={revokeModal.isOpen}
-                onClose={revokeModal.onClose}
-                onConfirm={onClickConfirmRevokeByGrant}
-                title="Grant 일괄 폐기"
-                message={<>
-                    <p>이 Grant에 연결된 모든 세션 및 토큰을 일괄 폐기하시겠습니까?</p>
-                    {state.grantIdToRevoke && (<p className="mt-2 rounded-lg bg-default-100 p-2 font-mono text-sm">Grant ID: {state.grantIdToRevoke}
-                    </p>)}
-                </>}
-                confirmText="일괄 폐기"
-                confirmColor="danger"
-                iconType="warning"
-                loading={isRevokingByGrant} />
-            <ConfirmModal
-                isOpen={revokeAllModal.isOpen}
-                onClose={revokeAllModal.onClose}
-                onConfirm={onClickConfirmRevokeAll}
-                title="전체 세션/토큰 폐기"
-                message={<p>모든 OIDC 세션 및 토큰({stats?.totalCount ?? 0}건)을 일괄
-                                            폐기하시겠습니까? 이 작업은 되돌릴 수 없습니다.
-                                        </p>}
-                confirmText="전체 폐기"
-                confirmColor="danger"
-                iconType="warning"
-                loading={isRevokingAll} />
-        </section>
-    );
+		<section>
+			<div className="flex items-start justify-between gap-4">
+				<div>
+					<h1>{"OIDC 세션/토큰"}</h1>
+					<p>{"OIDC 세션 및 토큰을 조회하고 관리합니다."}</p>
+				</div>
+				<div>
+					{
+						<Button
+							color="danger"
+							variant="flat"
+							startContent={<Trash2 className="h-4 w-4" />}
+							onPress={revokeAllModal.onOpen}
+							isDisabled={totalCount === 0}
+						>
+							전체 폐기
+						</Button>
+					}
+				</div>
+			</div>
+			{stats && (
+				<div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
+					<Card className="bg-content1">
+						<CardBody className="flex flex-row items-center gap-3 p-4">
+							<div className="rounded-lg bg-primary p-2">
+								<Activity className="h-5 w-5 text-white" />
+							</div>
+							<div>
+								<p className="text-sm text-default-500">전체</p>
+								<p className="text-2xl font-bold">{stats.totalCount ?? 0}</p>
+							</div>
+						</CardBody>
+					</Card>
+					{Object.entries(byModelType).map(([type, count]) => (
+						<Card key={type} className="bg-content1">
+							<CardBody className="flex flex-row items-center gap-3 p-4">
+								<div>
+									<p className="text-sm text-default-500">{type}</p>
+									<p className="text-2xl font-bold">{count}</p>
+								</div>
+							</CardBody>
+						</Card>
+					))}
+				</div>
+			)}
+			<section>
+				<MetaDataGrid
+					config={{
+						entity: "OidcSession",
+						data: sessions,
+						totalCount,
+						isLoading,
+						queryStates,
+						setQueryStates,
+						columns,
+						leftInputs,
+						emptyMessage: "등록된 OIDC 세션/토큰이 없습니다.",
+					}}
+				/>
+			</section>
+			<ConfirmModal
+				isOpen={revokeModal.isOpen}
+				onClose={revokeModal.onClose}
+				onConfirm={onClickConfirmRevokeByGrant}
+				title="Grant 일괄 폐기"
+				message={
+					<>
+						<p>이 Grant에 연결된 모든 세션 및 토큰을 일괄 폐기하시겠습니까?</p>
+						{state.grantIdToRevoke && (
+							<p className="mt-2 rounded-lg bg-default-100 p-2 font-mono text-sm">
+								Grant ID: {state.grantIdToRevoke}
+							</p>
+						)}
+					</>
+				}
+				confirmText="일괄 폐기"
+				confirmColor="danger"
+				iconType="warning"
+				loading={isRevokingByGrant}
+			/>
+			<ConfirmModal
+				isOpen={revokeAllModal.isOpen}
+				onClose={revokeAllModal.onClose}
+				onConfirm={onClickConfirmRevokeAll}
+				title="전체 세션/토큰 폐기"
+				message={
+					<p>
+						모든 OIDC 세션 및 토큰({stats?.totalCount ?? 0}건)을 일괄
+						폐기하시겠습니까? 이 작업은 되돌릴 수 없습니다.
+					</p>
+				}
+				confirmText="전체 폐기"
+				confirmColor="danger"
+				iconType="warning"
+				loading={isRevokingAll}
+			/>
+		</section>
+	);
 }
 
 export default observer(OidcSessionsPageClient);

@@ -75,7 +75,9 @@ export const CategoryFormSection = observer(
 				<Select
 					label="상위 카테고리"
 					placeholder="상위 카테고리 선택"
-					selectedKeys={values.parentId ? new Set([values.parentId]) : new Set()}
+					selectedKeys={
+						values.parentId ? new Set([values.parentId]) : new Set()
+					}
 					onSelectionChange={handleChangeParentId}
 					isInvalid={!!errors?.parentId}
 					errorMessage={errors?.parentId}

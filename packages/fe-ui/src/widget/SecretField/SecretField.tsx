@@ -18,11 +18,7 @@ export interface SecretFieldProps {
  * 비밀 값을 마스킹/표시/복사할 수 있는 위젯
  */
 export const SecretField = observer(
-	({
-		value,
-		maskChar = "\u2022",
-		maskLength = 16,
-	}: SecretFieldProps) => {
+	({ value, maskChar = "\u2022", maskLength = 16 }: SecretFieldProps) => {
 		const [isVisible, setIsVisible] = useState(false);
 
 		if (!value) {

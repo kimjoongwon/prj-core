@@ -1,6 +1,9 @@
 "use client";
+import {
+	type CreateActionDto,
+	useCreateAction,
+} from "@cocrepo/api/core/actions";
 
-import { type CreateActionDto, useCreateAction } from "@cocrepo/api";
 import { Page, PageTitleBar, Section, VStack } from "@cocrepo/ui";
 import { Button, Input, Select, SelectItem, Textarea } from "@heroui/react";
 import { ArrowLeft, Save } from "lucide-react";
@@ -134,8 +137,7 @@ function ActionNewPageClient() {
 				<div className="rounded-xl bg-primary-50 p-4 dark:bg-primary-900/20">
 					<p className="text-sm text-primary-700 dark:text-primary-400">
 						<strong>참고:</strong> 행위 식별자는 소문자로 시작하고,
-						소문자/숫자/콜론/밑줄만 사용할 수 있습니다. (예:
-						read:masked:email)
+						소문자/숫자/콜론/밑줄만 사용할 수 있습니다. (예: read:masked:email)
 					</p>
 				</div>
 				<Section>

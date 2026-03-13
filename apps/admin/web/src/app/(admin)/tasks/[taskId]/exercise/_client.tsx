@@ -1,11 +1,11 @@
 "use client";
-
 import {
 	type ExerciseDto,
 	useDeleteTask,
 	useGetTaskExercise,
 	useGetTaskRoutines,
-} from "@cocrepo/api";
+} from "@cocrepo/api/core/tasks";
+
 import { DateTimeCell, Page, PageTitleBar, Section, VStack } from "@cocrepo/ui";
 import {
 	addToast,

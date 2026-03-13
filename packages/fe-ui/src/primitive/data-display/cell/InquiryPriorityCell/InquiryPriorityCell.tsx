@@ -14,7 +14,11 @@ interface InquiryPriorityCellProps {
 /** 우선순위별 설정 */
 const PRIORITY_CONFIG: Record<
 	InquiryPriorityCode,
-	{ label: string; color: "success" | "primary" | "warning" | "danger"; stars: number }
+	{
+		label: string;
+		color: "success" | "primary" | "warning" | "danger";
+		stars: number;
+	}
 > = {
 	LOW: { label: "낮음", color: "success", stars: 1 },
 	NORMAL: { label: "보통", color: "primary", stars: 2 },
@@ -45,7 +49,10 @@ const getPriorityIcon = (priority: InquiryPriorityCode) => {
  * <InquiryPriorityCell value="HIGH" showStars />
  * ```
  */
-export const InquiryPriorityCell = ({ value, showStars }: InquiryPriorityCellProps) => {
+export const InquiryPriorityCell = ({
+	value,
+	showStars,
+}: InquiryPriorityCellProps) => {
 	if (!value) {
 		return <span className="text-default-400">-</span>;
 	}

@@ -1,28 +1,17 @@
 "use client";
-
 import {
 	useAssignInquiry,
 	useFillInquiryFormWithAi,
 	useUpdateInquiry,
 	useUpdateInquiryPriority,
 	useUpdateInquiryStatus,
-} from "@cocrepo/api";
+} from "@cocrepo/api/core/inquiries";
+
 import { ADMIN_PATHS } from "@cocrepo/constant";
 import { createLogger } from "@cocrepo/toolkit";
 import type { Route } from "next";
 import { useRouter } from "next/navigation";
 import type { UseInquiryWebSocketReturn } from "./useInquiryWebSocket";
-
-// TODO: Orval 훅 생성 후 아래 import 추가
-// import {
-// 	useUpdateInquiry,
-// 	useUpdateInquiryStatus,
-// 	useUpdateInquiryPriority,
-// 	useAssignInquiry,
-// 	useSendInquiryMessage,
-// 	useGenerateAIDraft,
-// 	useDeleteInquiry,
-// } from "@cocrepo/api";
 
 const logger = createLogger("[useHandlers]");
 

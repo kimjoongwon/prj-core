@@ -1,6 +1,6 @@
 "use client";
+import { useCreateSpace } from "@cocrepo/api/core/spaces";
 
-import { useCreateSpace } from "@cocrepo/api";
 import { Page, PageTitleBar, Section, VStack } from "@cocrepo/ui";
 import { addToast, Button, Input } from "@heroui/react";
 import { observer, useLocalObservable } from "mobx-react-lite";
@@ -140,10 +140,10 @@ function SpaceNewPageClient() {
 	return (
 		<Page
 			top={
-					<PageTitleBar
-						title="공간 등록"
-						description="새로운 공간과 시설 detail을 등록합니다."
-					/>
+				<PageTitleBar
+					title="공간 등록"
+					description="새로운 공간과 시설 detail을 등록합니다."
+				/>
 			}
 		>
 			<VStack gap={4}>

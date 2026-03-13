@@ -153,15 +153,9 @@ export const SendTestModal = observer(
 		};
 
 		return (
-			<Modal
-				isOpen={isOpen}
-				onOpenChange={handleOpenChange}
-				size="2xl"
-			>
+			<Modal isOpen={isOpen} onOpenChange={handleOpenChange} size="2xl">
 				<ModalContent>
-					<ModalHeader className="flex flex-col gap-1">
-						테스트 발송
-					</ModalHeader>
+					<ModalHeader className="flex flex-col gap-1">테스트 발송</ModalHeader>
 
 					<ModalBody>
 						<div className="flex flex-col gap-4">
@@ -211,8 +205,7 @@ export const SendTestModal = observer(
 													발송 성공
 												</span>
 												<span className="text-xs text-default-500">
-													발송 시각:{" "}
-													{formatSentAt(result.sentAt)}
+													발송 시각: {formatSentAt(result.sentAt)}
 												</span>
 											</>
 										) : (
@@ -240,9 +233,7 @@ export const SendTestModal = observer(
 							isLoading={status === "loading"}
 							isDisabled={isSendDisabled}
 							startContent={
-								status !== "loading" ? (
-									<Send className="h-4 w-4" />
-								) : undefined
+								status !== "loading" ? <Send className="h-4 w-4" /> : undefined
 							}
 						>
 							발송

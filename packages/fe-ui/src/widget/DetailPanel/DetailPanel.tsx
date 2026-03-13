@@ -108,7 +108,9 @@ export const DetailPanel = observer(
 		}
 
 		return (
-			<div className={`flex h-full flex-col gap-4 overflow-y-auto ${className}`}>
+			<div
+				className={`flex h-full flex-col gap-4 overflow-y-auto ${className}`}
+			>
 				{/* 헤더 */}
 				<div
 					className="rounded-lg p-3"
@@ -164,7 +166,9 @@ export const DetailPanel = observer(
 				{/* 설명 */}
 				{item.description && (
 					<div>
-						<h4 className="mb-1 text-xs font-semibold text-default-500">설명</h4>
+						<h4 className="mb-1 text-xs font-semibold text-default-500">
+							설명
+						</h4>
 						<p className="text-sm text-default-700">{item.description}</p>
 					</div>
 				)}

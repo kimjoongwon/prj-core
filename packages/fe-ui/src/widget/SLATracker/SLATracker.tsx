@@ -55,20 +55,14 @@ export const SLATracker = observer(
 			<Card className={`bg-content1 ${className}`} shadow="sm">
 				<CardBody className="gap-4 p-4">
 					{/* 헤더 */}
-					<h3 className="text-sm font-semibold text-default-500">
-						⏱️ SLA 추적
-					</h3>
+					<h3 className="text-sm font-semibold text-default-500">⏱️ SLA 추적</h3>
 
 					<div className="flex flex-col gap-4">
 						{/* 첫 응답 */}
-						{firstResponse && (
-							<SLAMetricItem metric={firstResponse} />
-						)}
+						{firstResponse && <SLAMetricItem metric={firstResponse} />}
 
 						{/* 해결 */}
-						{resolution && (
-							<SLAMetricItem metric={resolution} />
-						)}
+						{resolution && <SLAMetricItem metric={resolution} />}
 					</div>
 				</CardBody>
 			</Card>
@@ -99,9 +93,7 @@ const SLAMetricItem = observer(({ metric }: SLAMetricItemProps) => {
 					{icon}
 					<span className="text-sm text-default-700">{metric.label}</span>
 				</div>
-				<span className={`text-xs font-medium ${color}`}>
-					{status}
-				</span>
+				<span className={`text-xs font-medium ${color}`}>{status}</span>
 			</div>
 
 			{/* 시간 표시 */}
@@ -114,7 +106,13 @@ const SLAMetricItem = observer(({ metric }: SLAMetricItemProps) => {
 			<Progress
 				aria-label={`${metric.label} 진행률`}
 				value={progress}
-				color={metric.isBreached ? "danger" : metric.isCompleted ? "success" : "primary"}
+				color={
+					metric.isBreached
+						? "danger"
+						: metric.isCompleted
+							? "success"
+							: "primary"
+				}
 				size="sm"
 				className="h-2"
 			/>

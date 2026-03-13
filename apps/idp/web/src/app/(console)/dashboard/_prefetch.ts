@@ -1,7 +1,8 @@
 import {
 	prefetchGetIdpDashboardStatsQuery,
 	prefetchGetIdpLoginTrendQuery,
-} from "@cocrepo/api";
+} from "@cocrepo/api/idp/idp-dashboard";
+
 import { withServerCookies } from "@cocrepo/api/server";
 import type { QueryClient } from "@tanstack/react-query";
 import type { ReadonlyRequestCookies } from "next/dist/server/web/spec-extension/adapters/request-cookies";

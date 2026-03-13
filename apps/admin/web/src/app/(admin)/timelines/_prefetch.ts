@@ -1,4 +1,5 @@
-import { prefetchGetTimelinesQuery } from "@cocrepo/api";
+import { prefetchGetTimelinesQuery } from "@cocrepo/api/core/timelines";
+
 import { withServerCookies } from "@cocrepo/api/server";
 import type { QueryClient } from "@tanstack/react-query";
 import type { ReadonlyRequestCookies } from "next/dist/server/web/spec-extension/adapters/request-cookies";

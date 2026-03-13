@@ -13,6 +13,13 @@
   "types": "./src/index.ts",
   "exports": {
     ".": "./src/index.ts",
+    "./assets": "./src/assets/index.ts",
+    "./core/*": "./src/core/*/index.ts",
+    "./core/client": "./src/core/client.ts",
+    "./idp/*": "./src/idp/*/index.ts",
+    "./idp/client": "./src/idp/client.ts",
+    "./idp-model/*": "./src/idp-model/*.ts",
+    "./model/*": "./src/model/*.ts",
     "./server": "./src/server/index.ts"
   },
   "sideEffects": false,
@@ -32,6 +39,7 @@
     "codegen:prod": "ORVAL_ENV=prod orval --config orval.config.js",
     "lint": "biome lint",
     "format": "biome format --write .",
+    "split:generated": "node scripts/split-orval-output.mjs",
     "type-check": "tsc --noEmit",
     "clean": "rm -rf .turbo && rm -rf node_modules && rm -rf dist"
   },

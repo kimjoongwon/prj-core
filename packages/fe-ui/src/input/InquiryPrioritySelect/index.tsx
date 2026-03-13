@@ -38,5 +38,7 @@ export const InquiryPrioritySelect = observer(
 	},
 );
 
-export type { BaseInquiryPrioritySelectProps as PureInquiryPrioritySelectProps };
+export type {
+	BaseInquiryPrioritySelectProps as PureInquiryPrioritySelectProps,
+};
 export { InquiryPrioritySelect as PureInquiryPrioritySelect } from "./InquiryPrioritySelect";

@@ -4,12 +4,8 @@ import { Button, Checkbox, Input, Link } from "@heroui/react";
 import { observer } from "mobx-react-lite";
 import { useState } from "react";
 import { AlertBanner } from "../../../primitive/feedback/AlertBanner/AlertBanner";
-import {
-	AuthCard,
-} from "../../../widget/AuthCard/AuthCard";
-import {
-	AuthCardHeader,
-} from "../../../widget/AuthCard/AuthCardHeader";
+import { AuthCard } from "../../../widget/AuthCard/AuthCard";
+import { AuthCardHeader } from "../../../widget/AuthCard/AuthCardHeader";
 
 /** 로그인 API 에러 응답 */
 export interface LoginErrorResponse {
@@ -123,10 +119,7 @@ export const OidcLoginForm = observer(
 						title="계정 일시 잠금"
 						message={`로그인 실패 횟수 초과로 계정이 일시 잠겼습니다. ${error?.temporaryLockDurationMin ?? 15}분 후 다시 시도하거나, 비밀번호를 재설정하세요.`}
 						actions={
-							<Link
-								href="/forgot-password"
-								className="text-sm text-primary"
-							>
+							<Link href="/forgot-password" className="text-sm text-primary">
 								비밀번호 재설정하기
 							</Link>
 						}
@@ -140,10 +133,7 @@ export const OidcLoginForm = observer(
 						title="계정 잠금"
 						message="보안을 위해 계정이 잠겼습니다. 비밀번호를 재설정하거나 관리자에게 문의하세요."
 						actions={
-							<Link
-								href="/forgot-password"
-								className="text-sm text-primary"
-							>
+							<Link href="/forgot-password" className="text-sm text-primary">
 								비밀번호 재설정
 							</Link>
 						}
@@ -152,10 +142,7 @@ export const OidcLoginForm = observer(
 
 				{/* 일반 에러 메시지 */}
 				{error && !isTemporaryLock && !isPermanentLock && (
-					<AlertBanner
-						type="danger"
-						message={getErrorMessage(error)}
-					/>
+					<AlertBanner type="danger" message={getErrorMessage(error)} />
 				)}
 
 				{/* 로그인 폼 */}

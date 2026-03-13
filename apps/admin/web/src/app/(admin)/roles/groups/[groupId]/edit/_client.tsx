@@ -1,8 +1,6 @@
 "use client";
+import { customInstance } from "@cocrepo/api/core/client";
 
-// TODO: Orval codegen 후 아래 import로 교체
-// import { useGetGroupById, useUpdateGroup } from "@cocrepo/api";
-import { customInstance } from "@cocrepo/api";
 import { Page, PageTitleBar, Section, VStack } from "@cocrepo/ui";
 import { Button, Input } from "@heroui/react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
@@ -129,7 +127,12 @@ function RoleGroupEditPageClient({ groupId }: RoleGroupEditPageClientProps) {
 	if (!group) {
 		return (
 			<Page
-				top={<PageTitleBar title="역할 그룹 수정" description="그룹을 찾을 수 없습니다." />}
+				top={
+					<PageTitleBar
+						title="역할 그룹 수정"
+						description="그룹을 찾을 수 없습니다."
+					/>
+				}
 			>
 				<div className="flex flex-col items-center justify-center gap-4 p-8">
 					<p className="text-default-500">그룹을 찾을 수 없습니다.</p>

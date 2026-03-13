@@ -1,6 +1,7 @@
 "use client";
+import { customInstance } from "@cocrepo/api/core/client";
+import { type UserDto } from "@cocrepo/api/core/users";
 
-import { customInstance, type UserDto } from "@cocrepo/api";
 import { DeleteFilter } from "@cocrepo/enum";
 
 /**
@@ -19,6 +20,7 @@ interface UserListResponse {
 		newThisMonth: number;
 	};
 }
+
 import { Button, Pagination } from "@heroui/react";
 import { Plus } from "lucide-react";
 import { observer, useLocalObservable } from "mobx-react-lite";

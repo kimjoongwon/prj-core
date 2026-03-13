@@ -1,14 +1,14 @@
 "use client";
-
 import {
-	getUsers,
 	type InquiryCategory,
 	type InquiryChannel,
 	type InquiryPriority,
 	useCreateInquiry,
 	useFillInquiryFormWithAi,
 	useGetCreateInquiryForm,
-} from "@cocrepo/api";
+} from "@cocrepo/api/core/inquiries";
+import { getUsers } from "@cocrepo/api/core/users";
+
 import { ADMIN_PATHS } from "@cocrepo/constant";
 import type { AiFormOptionItem } from "@cocrepo/type";
 import {

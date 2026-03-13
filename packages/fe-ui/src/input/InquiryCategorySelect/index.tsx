@@ -1,5 +1,8 @@
 import { useFormField } from "@cocrepo/hook";
-import { InquiryCategory, type InquiryCategory as InquiryCategoryType } from "@cocrepo/enum";
+import {
+	InquiryCategory,
+	type InquiryCategory as InquiryCategoryType,
+} from "@cocrepo/enum";
 import { tools } from "@cocrepo/toolkit";
 import type { MobxProps } from "@cocrepo/type";
 import { observer } from "mobx-react-lite";
@@ -38,5 +41,7 @@ export const InquiryCategorySelect = observer(
 	},
 );
 
-export type { BaseInquiryCategorySelectProps as PureInquiryCategorySelectProps };
+export type {
+	BaseInquiryCategorySelectProps as PureInquiryCategorySelectProps,
+};
 export { InquiryCategorySelect as PureInquiryCategorySelect } from "./InquiryCategorySelect";

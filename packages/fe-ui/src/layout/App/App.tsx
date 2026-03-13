@@ -1,8 +1,8 @@
 import type { ReactNode } from "react";
 
 export interface AppProps {
-  /** 메인 콘텐츠 */
-  children: ReactNode;
+	/** 메인 콘텐츠 */
+	children: ReactNode;
 }
 
 /**
@@ -25,7 +25,7 @@ export interface AppProps {
  * ```
  */
 export const App = ({ children }: AppProps) => {
-  return <>{children}</>;
+	return <>{children}</>;
 };
 
 App.displayName = "App";

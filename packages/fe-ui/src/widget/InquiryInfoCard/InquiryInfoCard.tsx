@@ -62,9 +62,7 @@ export const InquiryInfoCard = observer(
 		onlineParticipants = [],
 		className = "",
 	}: InquiryInfoCardProps) => {
-		const sentimentInfo = sentiment
-			? sentimentConfig[sentiment.type]
-			: null;
+		const sentimentInfo = sentiment ? sentimentConfig[sentiment.type] : null;
 
 		return (
 			<Card className={`bg-content1 ${className}`} shadow="sm">
@@ -93,7 +91,9 @@ export const InquiryInfoCard = observer(
 
 					{/* 채널 */}
 					<div className="flex items-center gap-2">
-						{channelIcon || <MessageSquare className="size-4 text-default-400" />}
+						{channelIcon || (
+							<MessageSquare className="size-4 text-default-400" />
+						)}
 						<span className="text-sm text-default-600">채널:</span>
 						<span className="text-sm text-default-800">{channel}</span>
 					</div>

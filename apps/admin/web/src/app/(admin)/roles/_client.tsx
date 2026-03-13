@@ -1,9 +1,15 @@
 "use client";
+import { type RoleDto, useGetRoles } from "@cocrepo/api/core/roles";
 
-import { type RoleDto, useGetRoles } from "@cocrepo/api";
 import type { MetaDataGridColumnConfig } from "@cocrepo/type";
 import {
-	DateTimeCell, Page, PageTitleBar, Section, StatusChipCell, VStack } from "@cocrepo/ui";
+	DateTimeCell,
+	Page,
+	PageTitleBar,
+	Section,
+	StatusChipCell,
+	VStack,
+} from "@cocrepo/ui";
 import { Button, Chip } from "@heroui/react";
 import { Plus, Shield } from "lucide-react";
 import { observer } from "mobx-react-lite";
@@ -93,8 +99,8 @@ function RolesPageClient() {
 				<div className="rounded-xl bg-warning-50 p-4 dark:bg-warning-900/20">
 					<p className="text-sm text-warning-700 dark:text-warning-400">
 						<strong>참고:</strong> 시스템 역할(FULL_ACCESS, MANAGE, VIEW)은
-						수정하거나 삭제할 수 없습니다. 권한 설정은 각 역할의 상세
-						페이지에서 관리할 수 있습니다.
+						수정하거나 삭제할 수 없습니다. 권한 설정은 각 역할의 상세 페이지에서
+						관리할 수 있습니다.
 					</p>
 				</div>
 				<Section top={<PageTitleBar level={2} title="역할 목록 데이터" />}>

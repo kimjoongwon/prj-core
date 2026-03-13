@@ -1,4 +1,5 @@
-import { prefetchGetRoutineQuery } from "@cocrepo/api";
+import { prefetchGetRoutineQuery } from "@cocrepo/api/core/routines";
+
 import { withServerCookies } from "@cocrepo/api/server";
 import type { QueryClient } from "@tanstack/react-query";
 import type { ReadonlyRequestCookies } from "next/dist/server/web/spec-extension/adapters/request-cookies";

@@ -162,10 +162,7 @@ export const VariableEditTable = observer(
 
 		return (
 			<VStack gap={3}>
-				<Table
-					aria-label="변수 편집 테이블"
-					removeWrapper
-				>
+				<Table aria-label="변수 편집 테이블" removeWrapper>
 					<TableHeader>
 						{COLUMNS.map((column) => (
 							<TableColumn key={column.key} width={column.width}>
@@ -173,9 +170,7 @@ export const VariableEditTable = observer(
 							</TableColumn>
 						))}
 					</TableHeader>
-					<TableBody
-						emptyContent="정의된 변수가 없습니다. 아래 버튼으로 추가하세요."
-					>
+					<TableBody emptyContent="정의된 변수가 없습니다. 아래 버튼으로 추가하세요.">
 						{variables.map((variable, index) => {
 							const nameError = getError(index, "name");
 							const descriptionError = getError(index, "description");
@@ -229,9 +224,7 @@ export const VariableEditTable = observer(
 											}
 										/>
 									</TableCell>
-									<TableCell>
-										{renderDeleteButton(variable, index)}
-									</TableCell>
+									<TableCell>{renderDeleteButton(variable, index)}</TableCell>
 								</TableRow>
 							);
 						})}

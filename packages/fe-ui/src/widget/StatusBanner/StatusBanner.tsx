@@ -197,11 +197,7 @@ export const StatusBanner = observer(
 						{/* 추가 상태 정보 */}
 						{statusInfos.map((info) => (
 							<Tooltip key={info.label} content={info.tooltip || info.label}>
-								<Chip
-									size="sm"
-									variant="flat"
-									startContent={info.icon}
-								>
+								<Chip size="sm" variant="flat" startContent={info.icon}>
 									{info.label}: {info.value}
 								</Chip>
 							</Tooltip>

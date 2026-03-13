@@ -46,17 +46,29 @@ const SENTIMENT_CONFIG: Record<
  * <InquirySentimentCell value="NEGATIVE" score={0.2} />
  * ```
  */
-export const InquirySentimentCell = ({ value, score }: InquirySentimentCellProps) => {
+export const InquirySentimentCell = ({
+	value,
+	score,
+}: InquirySentimentCellProps) => {
 	if (!value) {
 		return <span className="text-default-400">-</span>;
 	}
 
 	const config = SENTIMENT_CONFIG[value];
-	const displayScore = score !== null && score !== undefined ? Math.round(score * 100) : null;
+	const displayScore =
+		score !== null && score !== undefined ? Math.round(score * 100) : null;
 
 	return (
 		<div className="flex w-full items-center justify-center gap-1.5">
-			<span className={value === "NEGATIVE" ? "text-danger" : value === "POSITIVE" ? "text-success" : "text-default-500"}>
+			<span
+				className={
+					value === "NEGATIVE"
+						? "text-danger"
+						: value === "POSITIVE"
+							? "text-success"
+							: "text-default-500"
+				}
+			>
 				{config.icon}
 			</span>
 			{displayScore !== null && (

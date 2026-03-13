@@ -103,108 +103,139 @@ export const TemplateForm = observer(
 		};
 
 		return (
-            <VStack gap={4}>
-                {/* 기본 정보 섹션 */}
-                <section><div className="flex items-start justify-between gap-3"><div className="flex items-start gap-2"><div><h2>{"기본 정보"}</h2></div></div></div>
-                    <div className="space-y-6">
-                        {isEdit ? (<div className="flex flex-col gap-1.5">
-                            <span className="text-sm text-default-500">유형
-                                                                </span>
-                            <TemplateTypeBadge type={formData.type} />
-                        </div>) : (<RadioGroup
-                            label="유형"
-                            orientation="horizontal"
-                            value={formData.type}
-                            onValueChange={value => onFormDataChange({
-                                type: value as TemplateFormData["type"],
-                            })}
-                            isRequired
-                            isInvalid={!!errors?.type}
-                            errorMessage={errors?.type}>
-                            <Radio value="EMAIL">이메일</Radio>
-                            <Radio value="SMS">SMS</Radio>
-                            <Radio value="PUSH">푸시</Radio>
-                        </RadioGroup>)}
-                        {isEdit ? (<div className="flex flex-col gap-1.5">
-                            <span className="text-sm text-default-500">코드
-                                                                </span>
-                            <p className="text-foreground">
-                                {formData.code}
-                            </p>
-                        </div>) : (<Input
-                            label="코드"
-                            placeholder="WELCOME_EMAIL"
-                            value={formData.code}
-                            onValueChange={value => onFormDataChange({
-                                code: value,
-                            })}
-                            isRequired
-                            isInvalid={!!errors?.code}
-                            errorMessage={errors?.code}
-                            pattern={CODE_PATTERN.source}
-                            description="영문 대문자와 언더스코어(_)만 사용 가능합니다. 예: WELCOME_EMAIL" />)}
-                        <Input
-                            label="이름"
-                            placeholder="템플릿 이름을 입력하세요"
-                            value={formData.name}
-                            onValueChange={value => onFormDataChange({
-                                name: value,
-                            })}
-                            isRequired
-                            isInvalid={!!errors?.name}
-                            errorMessage={errors?.name} />
-                        <Textarea
-                            label="설명"
-                            placeholder="템플릿 용도를 설명해주세요"
-                            value={formData.description}
-                            onValueChange={value => onFormDataChange({
-                                description: value,
-                            })}
-                            minRows={2}
-                            isInvalid={!!errors?.description}
-                            errorMessage={errors?.description} />
-                    </div>
-                </section>
-                {/* 콘텐츠 섹션 */}
-                <section><div className="flex items-start justify-between gap-3"><div className="flex items-start gap-2"><div><h2>{"콘텐츠"}</h2></div></div></div>
-                    <TemplateContentEditor
-                        type={formData.type}
-                        subject={formData.subject}
-                        content={formData.content}
-                        onSubjectChange={handleSubjectChange}
-                        onContentChange={handleContentChange}
-                        errors={{
-                            subject: errors?.subject,
-                            content: errors?.content,
-                        }} />
-                </section>
-                {/* 변수 관리 섹션 */}
-                <section><div className="flex items-start justify-between gap-3"><div className="flex items-start gap-2"><div><h2>{"변수 관리"}</h2></div></div></div>
-                    <VariableEditTable
-                        variables={variables}
-                        onChange={onVariablesChange}
-                        contentText={formData.content}
-                        errors={variableErrors} />
-                </section>
-                {/* 버튼 영역 */}
-                <div className="mt-4 flex justify-end gap-2">
-					<Button
-						variant="flat"
-						onPress={onCancel}
-						isDisabled={isSubmitting}
-					>
+			<VStack gap={4}>
+				{/* 기본 정보 섹션 */}
+				<section>
+					<div className="flex items-start justify-between gap-3">
+						<div className="flex items-start gap-2">
+							<div>
+								<h2>{"기본 정보"}</h2>
+							</div>
+						</div>
+					</div>
+					<div className="space-y-6">
+						{isEdit ? (
+							<div className="flex flex-col gap-1.5">
+								<span className="text-sm text-default-500">유형</span>
+								<TemplateTypeBadge type={formData.type} />
+							</div>
+						) : (
+							<RadioGroup
+								label="유형"
+								orientation="horizontal"
+								value={formData.type}
+								onValueChange={(value) =>
+									onFormDataChange({
+										type: value as TemplateFormData["type"],
+									})
+								}
+								isRequired
+								isInvalid={!!errors?.type}
+								errorMessage={errors?.type}
+							>
+								<Radio value="EMAIL">이메일</Radio>
+								<Radio value="SMS">SMS</Radio>
+								<Radio value="PUSH">푸시</Radio>
+							</RadioGroup>
+						)}
+						{isEdit ? (
+							<div className="flex flex-col gap-1.5">
+								<span className="text-sm text-default-500">코드</span>
+								<p className="text-foreground">{formData.code}</p>
+							</div>
+						) : (
+							<Input
+								label="코드"
+								placeholder="WELCOME_EMAIL"
+								value={formData.code}
+								onValueChange={(value) =>
+									onFormDataChange({
+										code: value,
+									})
+								}
+								isRequired
+								isInvalid={!!errors?.code}
+								errorMessage={errors?.code}
+								pattern={CODE_PATTERN.source}
+								description="영문 대문자와 언더스코어(_)만 사용 가능합니다. 예: WELCOME_EMAIL"
+							/>
+						)}
+						<Input
+							label="이름"
+							placeholder="템플릿 이름을 입력하세요"
+							value={formData.name}
+							onValueChange={(value) =>
+								onFormDataChange({
+									name: value,
+								})
+							}
+							isRequired
+							isInvalid={!!errors?.name}
+							errorMessage={errors?.name}
+						/>
+						<Textarea
+							label="설명"
+							placeholder="템플릿 용도를 설명해주세요"
+							value={formData.description}
+							onValueChange={(value) =>
+								onFormDataChange({
+									description: value,
+								})
+							}
+							minRows={2}
+							isInvalid={!!errors?.description}
+							errorMessage={errors?.description}
+						/>
+					</div>
+				</section>
+				{/* 콘텐츠 섹션 */}
+				<section>
+					<div className="flex items-start justify-between gap-3">
+						<div className="flex items-start gap-2">
+							<div>
+								<h2>{"콘텐츠"}</h2>
+							</div>
+						</div>
+					</div>
+					<TemplateContentEditor
+						type={formData.type}
+						subject={formData.subject}
+						content={formData.content}
+						onSubjectChange={handleSubjectChange}
+						onContentChange={handleContentChange}
+						errors={{
+							subject: errors?.subject,
+							content: errors?.content,
+						}}
+					/>
+				</section>
+				{/* 변수 관리 섹션 */}
+				<section>
+					<div className="flex items-start justify-between gap-3">
+						<div className="flex items-start gap-2">
+							<div>
+								<h2>{"변수 관리"}</h2>
+							</div>
+						</div>
+					</div>
+					<VariableEditTable
+						variables={variables}
+						onChange={onVariablesChange}
+						contentText={formData.content}
+						errors={variableErrors}
+					/>
+				</section>
+				{/* 버튼 영역 */}
+				<div className="mt-4 flex justify-end gap-2">
+					<Button variant="flat" onPress={onCancel} isDisabled={isSubmitting}>
 						취소
 					</Button>
-					<Button
-						color="primary"
-						onPress={onSubmit}
-						isLoading={isSubmitting}
-					>
+					<Button color="primary" onPress={onSubmit} isLoading={isSubmitting}>
 						{isEdit ? "저장" : "등록"}
 					</Button>
 				</div>
-            </VStack>
-        );
+			</VStack>
+		);
 	},
 );
 

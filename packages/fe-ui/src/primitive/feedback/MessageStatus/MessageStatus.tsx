@@ -15,7 +15,8 @@ const messageStatusVariants = cva("inline-flex items-center text-[10px]", {
 
 export type MessageStatusValue = "sent" | "delivered" | "read";
 
-export interface MessageStatusProps extends VariantProps<typeof messageStatusVariants> {
+export interface MessageStatusProps
+	extends VariantProps<typeof messageStatusVariants> {
 	/** 메시지 전달 시간 */
 	deliveredAt?: Date | string | null;
 	/** 메시지 읽음 시간 */
@@ -39,21 +40,35 @@ export const MessageStatus = ({
 	readAt,
 	className,
 }: MessageStatusProps) => {
-	const status: MessageStatusValue = readAt ? "read" : deliveredAt ? "delivered" : "sent";
+	const status: MessageStatusValue = readAt
+		? "read"
+		: deliveredAt
+			? "delivered"
+			: "sent";
 
 	return (
 		<span className={messageStatusVariants({ status, className })}>
 			{status === "read" ? (
-				<span title={`읽음: ${readAt ? new Date(readAt).toLocaleTimeString() : ""}`}>
-					<span role="img" aria-label="읽음">&#10003;&#10003;</span>
+				<span
+					title={`읽음: ${readAt ? new Date(readAt).toLocaleTimeString() : ""}`}
+				>
+					<span role="img" aria-label="읽음">
+						&#10003;&#10003;
+					</span>
 				</span>
 			) : status === "delivered" ? (
-				<span title={`전달됨: ${deliveredAt ? new Date(deliveredAt).toLocaleTimeString() : ""}`}>
-					<span role="img" aria-label="전달됨">&#10003;</span>
+				<span
+					title={`전달됨: ${deliveredAt ? new Date(deliveredAt).toLocaleTimeString() : ""}`}
+				>
+					<span role="img" aria-label="전달됨">
+						&#10003;
+					</span>
 				</span>
 			) : (
 				<span title="전송 중...">
-					<span role="img" aria-label="전송 중">&#10003;</span>
+					<span role="img" aria-label="전송 중">
+						&#10003;
+					</span>
 				</span>
 			)}
 		</span>

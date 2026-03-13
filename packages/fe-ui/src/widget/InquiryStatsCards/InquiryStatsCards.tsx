@@ -1,7 +1,14 @@
 "use client";
 
 import { observer } from "mobx-react-lite";
-import { AlertTriangle, CheckCircle, Clock, Inbox, Loader2, XCircle } from "lucide-react";
+import {
+	AlertTriangle,
+	CheckCircle,
+	Clock,
+	Inbox,
+	Loader2,
+	XCircle,
+} from "lucide-react";
 import { StatsCard } from "../StatsCard";
 
 export interface InquiryStats {
@@ -109,9 +116,7 @@ export const InquiryStatsCards = observer(
 						color={card.color}
 						onPress={() => onStatusClick?.(card.status)}
 						className={`cursor-pointer transition-all ${
-							activeStatus === card.status
-								? "ring-2 ring-primary"
-								: ""
+							activeStatus === card.status ? "ring-2 ring-primary" : ""
 						}`}
 					/>
 				))}

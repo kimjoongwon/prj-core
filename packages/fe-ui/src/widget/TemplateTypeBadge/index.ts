@@ -1,1 +1,4 @@
-export { TemplateTypeBadge, type TemplateTypeBadgeProps } from "./TemplateTypeBadge";
+export {
+	TemplateTypeBadge,
+	type TemplateTypeBadgeProps,
+} from "./TemplateTypeBadge";

@@ -1,6 +1,9 @@
 "use client";
+import {
+	useAbortInteraction,
+	useConfirmConsent,
+} from "@cocrepo/api/idp/interaction";
 
-import { useAbortInteraction, useConfirmConsent } from "@cocrepo/api";
 import { observer } from "mobx-react-lite";
 import { OidcConsentPanel } from "../../../widget/form/OidcConsentPanel/OidcConsentPanel";
 

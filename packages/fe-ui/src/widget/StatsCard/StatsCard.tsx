@@ -100,9 +100,7 @@ export const StatsCard = observer(
 							{change && (
 								<span
 									className={`text-xs ${
-										change.type === "increase"
-											? "text-success"
-											: "text-danger"
+										change.type === "increase" ? "text-success" : "text-danger"
 									}`}
 								>
 									{change.type === "increase" ? "+" : "-"}

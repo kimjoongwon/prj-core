@@ -42,7 +42,9 @@ test.describe("태스크 목록 페이지", () => {
 	// ── E2E-002: 태스크 CRUD 플로우 ──
 
 	test.describe("[E2E-002] 태스크 CRUD 플로우", () => {
-		test("태스크 등록 → 운동 detail 조회 → 수정 → 삭제 전체 플로우", async ({ page }) => {
+		test("태스크 등록 → 운동 detail 조회 → 수정 → 삭제 전체 플로우", async ({
+			page,
+		}) => {
 			const TEST_NAME = "E2E 테스트 태스크";
 			const UPDATED_NAME = "E2E 수정된 태스크";
 			// 시드 데이터 기준 System Space ID (로그인 헬퍼와 동일)
@@ -57,7 +59,9 @@ test.describe("태스크 목록 페이지", () => {
 				);
 				const body = await resp.json();
 				const tasks = body.data ?? [];
-				const existing = (tasks as { id: string; exercise?: { name: string } }[]).find(
+				const existing = (
+					tasks as { id: string; exercise?: { name: string } }[]
+				).find(
 					(task) =>
 						task.exercise?.name === TEST_NAME ||
 						task.exercise?.name === UPDATED_NAME,
@@ -160,7 +164,9 @@ test.describe("태스크 목록 페이지", () => {
 			await page.reload();
 			await page.waitForLoadState("networkidle");
 
-			await expect(page.getByText(UPDATED_NAME)).toBeVisible({ timeout: 30000 });
+			await expect(page.getByText(UPDATED_NAME)).toBeVisible({
+				timeout: 30000,
+			});
 
 			// ── 삭제 플로우 ──
 

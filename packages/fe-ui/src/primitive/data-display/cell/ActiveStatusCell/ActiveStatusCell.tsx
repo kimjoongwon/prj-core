@@ -11,11 +11,7 @@ interface ActiveStatusCellProps {
 export const ActiveStatusCell = ({ isActive }: ActiveStatusCellProps) => {
 	return (
 		<div className="flex w-full justify-center">
-			<Chip
-				size="sm"
-				color={isActive ? "success" : "default"}
-				variant="flat"
-			>
+			<Chip size="sm" color={isActive ? "success" : "default"} variant="flat">
 				{isActive ? "활성" : "비활성"}
 			</Chip>
 		</div>

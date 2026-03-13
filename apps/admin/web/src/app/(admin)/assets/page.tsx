@@ -1,4 +1,5 @@
-import type { AssetKind, AssetStatus } from "@cocrepo/api";
+import { AssetKind, AssetStatus } from "@cocrepo/api/assets";
+
 import {
 	dehydrate,
 	HydrationBoundary,

@@ -1,8 +1,16 @@
 "use client";
-
-import { type CreateTemplateVariableItemDto, useCreateTemplate, } from "@cocrepo/api";
 import {
-	Page, PageTitleBar, TemplateForm, type TemplateFormData, type VariableEditItem } from "@cocrepo/ui";
+	type CreateTemplateVariableItemDto,
+	useCreateTemplate,
+} from "@cocrepo/api/core/templates";
+
+import {
+	Page,
+	PageTitleBar,
+	TemplateForm,
+	type TemplateFormData,
+	type VariableEditItem,
+} from "@cocrepo/ui";
 import { addToast } from "@heroui/react";
 import { observer, useLocalObservable } from "mobx-react-lite";
 import type { Route } from "next";

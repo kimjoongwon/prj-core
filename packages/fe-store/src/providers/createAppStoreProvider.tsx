@@ -1,6 +1,6 @@
 "use client";
 
-import { setApiPersistStore } from "@cocrepo/api";
+import { setApiPersistStore } from "@cocrepo/api/core/client";
 import type { AppStoreConfig, AppStoreProviderResult } from "@cocrepo/type";
 import { observer } from "mobx-react-lite";
 import { usePathname, useRouter } from "next/navigation";

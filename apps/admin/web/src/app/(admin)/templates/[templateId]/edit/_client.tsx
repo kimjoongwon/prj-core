@@ -1,8 +1,19 @@
 "use client";
-
-import { type CreateTemplateVariableItemDto, type TemplateDto, useGetTemplate, useUpdateTemplate, } from "@cocrepo/api";
 import {
-	Page, PageTitleBar, Section, TemplateForm, type TemplateFormData, type VariableEditItem } from "@cocrepo/ui";
+	type CreateTemplateVariableItemDto,
+	type TemplateDto,
+	useGetTemplate,
+	useUpdateTemplate,
+} from "@cocrepo/api/core/templates";
+
+import {
+	Page,
+	PageTitleBar,
+	Section,
+	TemplateForm,
+	type TemplateFormData,
+	type VariableEditItem,
+} from "@cocrepo/ui";
 import { addToast, Button, Spinner } from "@heroui/react";
 import { observer, useLocalObservable } from "mobx-react-lite";
 import type { Route } from "next";
@@ -180,11 +191,7 @@ function TemplateEditPageClient({ templateId }: TemplateEditPageClientProps) {
 	// 로딩 상태
 	if (isLoading) {
 		return (
-			<Page
-				top={
-					<PageTitleBar title="템플릿 수정" description="로딩 중..." />
-				}
-			>
+			<Page top={<PageTitleBar title="템플릿 수정" description="로딩 중..." />}>
 				<Section>
 					<div className="flex items-center justify-center gap-2 p-8">
 						<Spinner size="sm" />

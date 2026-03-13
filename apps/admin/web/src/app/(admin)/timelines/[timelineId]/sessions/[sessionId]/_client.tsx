@@ -1,8 +1,17 @@
 "use client";
-
-import { getGetProgramsQueryKey, getGetSessionsQueryKey, type ProgramDto, type SessionDto, type UserDto, useDeleteProgram, useDeleteSession, useGetPrograms, useGetSessionById, useGetUsers, } from "@cocrepo/api";
 import {
-	DateTimeCell, Page, PageTitleBar, Section, VStack } from "@cocrepo/ui";
+	getGetProgramsQueryKey,
+	getGetSessionsQueryKey,
+	type ProgramDto,
+	type SessionDto,
+	useDeleteProgram,
+	useDeleteSession,
+	useGetPrograms,
+	useGetSessionById,
+} from "@cocrepo/api/core/timelines";
+import { useGetUsers, type UserDto } from "@cocrepo/api/core/users";
+
+import { DateTimeCell, Page, PageTitleBar, Section, VStack } from "@cocrepo/ui";
 import {
 	addToast,
 	Button,
@@ -355,7 +364,8 @@ function SessionDetailPageClient({
 
 				<Section
 					top={
-						<PageTitleBar level={2}
+						<PageTitleBar
+							level={2}
 							title="프로그램 연결 허브"
 							actions={programSectionActions}
 						/>

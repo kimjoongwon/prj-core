@@ -56,7 +56,10 @@ test.describe("헤더 IDP 관리 버튼", () => {
 			})
 			.then(() => true)
 			.catch(() => false);
-		test.skip(!navigated, "대시보드 진입이 타임아웃되어 본 케이스를 건너뜁니다.");
+		test.skip(
+			!navigated,
+			"대시보드 진입이 타임아웃되어 본 케이스를 건너뜁니다.",
+		);
 	});
 
 	test("IDP 관리 버튼이 헤더에 표시되어야 한다", async ({ page }) => {

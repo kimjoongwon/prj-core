@@ -1,4 +1,5 @@
-import { prefetchGetRoleByIdQuery } from "@cocrepo/api";
+import { prefetchGetRoleByIdQuery } from "@cocrepo/api/core/roles";
+
 import type { QueryClient } from "@tanstack/react-query";
 import type { ReadonlyRequestCookies } from "next/dist/server/web/spec-extension/adapters/request-cookies";
 

@@ -4,12 +4,8 @@ import { Button, Input, Link } from "@heroui/react";
 import { observer } from "mobx-react-lite";
 import { useState } from "react";
 import { AlertBanner } from "../../../primitive/feedback/AlertBanner/AlertBanner";
-import {
-	AuthCard,
-} from "../../../widget/AuthCard/AuthCard";
-import {
-	AuthCardHeader,
-} from "../../../widget/AuthCard/AuthCardHeader";
+import { AuthCard } from "../../../widget/AuthCard/AuthCard";
+import { AuthCardHeader } from "../../../widget/AuthCard/AuthCardHeader";
 
 export interface ForgotPasswordFormProps {
 	/** 이메일 제출 핸들러. 에러 메시지 반환 시 에러 표시, null이면 성공 */
@@ -75,13 +71,9 @@ export const ForgotPasswordForm = observer(
 								/>
 							</svg>
 						</div>
-						<h2 className="text-lg font-semibold mb-2">
-							이메일을 확인하세요
-						</h2>
+						<h2 className="text-lg font-semibold mb-2">이메일을 확인하세요</h2>
 						<p className="text-default-500 text-sm mb-6">
-							<span className="font-medium text-foreground">
-								{email}
-							</span>
+							<span className="font-medium text-foreground">{email}</span>
 							으로 비밀번호 재설정 링크를 발송했습니다.
 							<br />
 							이메일이 도착하지 않았다면 스팸 폴더를 확인해주세요.
@@ -99,9 +91,7 @@ export const ForgotPasswordForm = observer(
 				) : (
 					/* 이메일 입력 폼 */
 					<>
-						{error && (
-							<AlertBanner type="danger" message={error} />
-						)}
+						{error && <AlertBanner type="danger" message={error} />}
 
 						<form
 							className="space-y-5"

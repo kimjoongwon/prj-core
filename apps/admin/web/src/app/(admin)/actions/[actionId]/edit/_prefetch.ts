@@ -1,4 +1,5 @@
-import { prefetchGetActionByIdQuery } from "@cocrepo/api";
+import { prefetchGetActionByIdQuery } from "@cocrepo/api/core/actions";
+
 import { withServerCookies } from "@cocrepo/api/server";
 import type { QueryClient } from "@tanstack/react-query";
 import type { ReadonlyRequestCookies } from "next/dist/server/web/spec-extension/adapters/request-cookies";

@@ -1,8 +1,16 @@
 "use client";
-
-import { getGetSessionsQueryKey, getGetTimelinesQueryKey, type SessionDto, type TimelineDto, useDeleteSession, useDeleteTimeline, useGetSessions, useGetTimelineById, } from "@cocrepo/api";
 import {
-	DateTimeCell, Page, PageTitleBar, Section, VStack } from "@cocrepo/ui";
+	getGetSessionsQueryKey,
+	getGetTimelinesQueryKey,
+	type SessionDto,
+	type TimelineDto,
+	useDeleteSession,
+	useDeleteTimeline,
+	useGetSessions,
+	useGetTimelineById,
+} from "@cocrepo/api/core/timelines";
+
+import { DateTimeCell, Page, PageTitleBar, Section, VStack } from "@cocrepo/ui";
 import {
 	addToast,
 	Button,
@@ -271,9 +279,7 @@ function TimelineDetailPageClient({
 	);
 
 	return (
-		<Page
-			top={<PageTitleBar title={pageTitle} actions={pageActions} />}
-		>
+		<Page top={<PageTitleBar title={pageTitle} actions={pageActions} />}>
 			<VStack gap={4}>
 				<Section top={<PageTitleBar level={2} title="기본 정보" />}>
 					<div className="grid grid-cols-1 gap-4 md:grid-cols-2">
@@ -300,7 +306,8 @@ function TimelineDetailPageClient({
 
 				<Section
 					top={
-						<PageTitleBar level={2}
+						<PageTitleBar
+							level={2}
 							title="세션 목록"
 							actions={sessionSectionActions}
 						/>

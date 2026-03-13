@@ -18,7 +18,8 @@
 
 | 모듈 | 용도 |
 |------|------|
-| @cocrepo/api | 기능 구현 의존성 |
+| @cocrepo/api/core/client | 기능 구현 의존성 |
+| @cocrepo/api/idp/client | 기능 구현 의존성 |
 | @cocrepo/store | ConsoleAppStoreProvider 사용 |
 | @cocrepo/ui | 기능 구현 의존성 |
 | @tanstack/react-query | 기능 구현 의존성 |
@@ -33,3 +34,4 @@
 |------|------|--------|
 | 2026-03-03 | 누락된 sidecar spec 신규 생성 | codex |
 | 2026-03-04 | 앱 로컬 stores 대신 @cocrepo/store의 ConsoleAppStoreProvider 직접 사용으로 전환 | codex |
+| 2026-03-13 | @cocrepo/api root import를 split subpath import로 전환 | codex |

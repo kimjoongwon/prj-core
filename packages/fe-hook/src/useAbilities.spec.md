@@ -18,5 +18,6 @@
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-03-13 | `AbilityResponseDto`, `customInstance` 의존을 root barrel에서 `@cocrepo/api/core/*` subpath로 전환 | codex |
 | 2026-03-06 | AbilityProvider 기준 설명을 제거하고 App Store Ability bootstrap 기준으로 문서화 정정 | codex |
 | 2026-03-03 | 누락된 sidecar spec 신규 생성 | codex |

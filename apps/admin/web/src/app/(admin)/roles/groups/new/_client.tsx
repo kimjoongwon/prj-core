@@ -1,8 +1,6 @@
 "use client";
+import { customInstance } from "@cocrepo/api/core/client";
 
-// TODO: Orval codegen 후 아래 import로 교체
-// import { useCreateGroup } from "@cocrepo/api";
-import { customInstance } from "@cocrepo/api";
 import { Page, PageTitleBar, Section, VStack } from "@cocrepo/ui";
 import { Button, Input } from "@heroui/react";
 import { useMutation } from "@tanstack/react-query";

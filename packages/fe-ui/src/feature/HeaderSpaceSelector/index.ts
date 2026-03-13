@@ -1,2 +1,5 @@
 export { HeaderSpaceSelector } from "./HeaderSpaceSelector";
-export type { HeaderSpaceSelectorProps, HeaderSpaceSelectorSpace } from "./type";
+export type {
+	HeaderSpaceSelectorProps,
+	HeaderSpaceSelectorSpace,
+} from "./type";

@@ -1,6 +1,6 @@
 "use client";
+import { useGetInteraction } from "@cocrepo/api/idp/interaction";
 
-import { useGetInteraction } from "@cocrepo/api";
 import { AuthCard, AuthCardHeader, IdpConsent, IdpLogin } from "@cocrepo/ui";
 import { Spinner } from "@heroui/react";
 import { observer } from "mobx-react-lite";

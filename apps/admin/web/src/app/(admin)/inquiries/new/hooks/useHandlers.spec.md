@@ -18,7 +18,7 @@
 
 | 모듈 | 용도 |
 |------|------|
-| @cocrepo/api | 기능 구현 의존성 |
+| @cocrepo/api/core/inquiries | 기능 구현 의존성 |
 | @cocrepo/constant | 기능 구현 의존성 |
 | @cocrepo/ui | 기능 구현 의존성 |
 | react | 기능 구현 의존성 |
@@ -32,5 +32,6 @@
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-03-13 | `@cocrepo/api` root import를 split subpath import로 전환 | codex |
 | 2026-03-06 | 규칙 위반 정리: useMemo/useCallback/useIsMounted 제거 및 observer/이벤트 네이밍 규칙 반영 | codex |
 | 2026-03-03 | 누락된 sidecar spec 신규 생성 | codex |

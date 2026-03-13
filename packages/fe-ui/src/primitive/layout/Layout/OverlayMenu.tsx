@@ -56,7 +56,9 @@ export const OverlayMenu = observer(function OverlayMenu({
 										<span className="flex h-6 w-6 flex-shrink-0 items-center justify-center">
 											<AppIcon
 												name={item.icon}
-												className={isSelected ? "text-primary" : "text-default-500"}
+												className={
+													isSelected ? "text-primary" : "text-default-500"
+												}
 												size={20}
 											/>
 										</span>

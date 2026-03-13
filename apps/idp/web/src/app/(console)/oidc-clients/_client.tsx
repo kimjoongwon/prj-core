@@ -1,15 +1,18 @@
 "use client";
+import {
+	type OidcClientDto,
+	useGetOidcClients,
+} from "@cocrepo/api/idp/oidc-clients";
 
-import { type OidcClientDto, useGetOidcClients } from "@cocrepo/api";
 import type { InputConfig, MetaDataGridColumnConfig } from "@cocrepo/type";
 import {
-    ActiveStatusCell,
-    AuthMethodCell,
-    DateTimeCell,
-    GrantTypeCell,
-    MetaDataGrid,
-    RowActionsCell,
-    useMetaDataGridQueryStates,
+	ActiveStatusCell,
+	AuthMethodCell,
+	DateTimeCell,
+	GrantTypeCell,
+	MetaDataGrid,
+	RowActionsCell,
+	useMetaDataGridQueryStates,
 } from "@cocrepo/ui";
 import { Button } from "@heroui/react";
 import { Plus } from "lucide-react";
@@ -108,28 +111,42 @@ function OidcClientsPageClient() {
 	const totalCount = meta?.totalCount ?? 0;
 
 	return (
-        <section><div className="flex items-start justify-between gap-4"><div><h1>{"OIDC 클라이언트"}</h1><p>{"시스템에 등록된 OIDC 클라이언트를 관리합니다."}</p></div><div>{<Button
-                                    as={Link}
-                                    href="/oidc-clients/new"
-                                    color="primary"
-                                    startContent={<Plus className="h-4 w-4" />}>클라이언트 등록
-                                                    </Button>}</div></div>
-            <section>
-                <MetaDataGrid
-                    config={{
-                        entity: "OidcClient",
-                        data: oidcClients,
-                        totalCount,
-                        isLoading,
-                        queryStates,
-                        setQueryStates,
-                        columns,
-                        leftInputs,
-                        emptyMessage: "등록된 OIDC 클라이언트가 없습니다.",
-                    }} />
-            </section>
-        </section>
-    );
+		<section>
+			<div className="flex items-start justify-between gap-4">
+				<div>
+					<h1>{"OIDC 클라이언트"}</h1>
+					<p>{"시스템에 등록된 OIDC 클라이언트를 관리합니다."}</p>
+				</div>
+				<div>
+					{
+						<Button
+							as={Link}
+							href="/oidc-clients/new"
+							color="primary"
+							startContent={<Plus className="h-4 w-4" />}
+						>
+							클라이언트 등록
+						</Button>
+					}
+				</div>
+			</div>
+			<section>
+				<MetaDataGrid
+					config={{
+						entity: "OidcClient",
+						data: oidcClients,
+						totalCount,
+						isLoading,
+						queryStates,
+						setQueryStates,
+						columns,
+						leftInputs,
+						emptyMessage: "등록된 OIDC 클라이언트가 없습니다.",
+					}}
+				/>
+			</section>
+		</section>
+	);
 }
 
 export default observer(OidcClientsPageClient);

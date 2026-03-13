@@ -1,8 +1,20 @@
 "use client";
-
-import { getSubjectFields, type SubjectDto, type SubjectFieldDto, useGetSubjectById, } from "@cocrepo/api";
 import {
-	BooleanCell, DateTimeCell, DefaultCell, Page, PageTitleBar, Section, VStack } from "@cocrepo/ui";
+	getSubjectFields,
+	type SubjectDto,
+	type SubjectFieldDto,
+	useGetSubjectById,
+} from "@cocrepo/api/core/subjects";
+
+import {
+	BooleanCell,
+	DateTimeCell,
+	DefaultCell,
+	Page,
+	PageTitleBar,
+	Section,
+	VStack,
+} from "@cocrepo/ui";
 import {
 	Button,
 	Chip,
@@ -160,7 +172,7 @@ function SubjectFieldsSection({
 					<TableColumn align="center">관계</TableColumn>
 				</TableHeader>
 				<TableBody items={fieldList} emptyContent="조회된 필드가 없습니다.">
-					{field => (
+					{(field) => (
 						<TableRow key={field.name}>
 							<TableCell>{field.name}</TableCell>
 							<TableCell>

@@ -101,3 +101,4 @@ interface HeaderSpaceSelectorProps {
 | 2026-03-06 | feature 디렉토리를 features로 이관하고 경로 표기를 동기화 | codex |
 | 2026-02-18 | 초기 생성 (역기획) | req-reverse-engineer |
 | 2026-02-19 | 디자인 목업 섹션 추가 | req-reverse-engineer |
+| 2026-03-13 | API 의존을 root barrel에서 split subpath import로 전환 | codex |

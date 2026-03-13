@@ -1,10 +1,13 @@
 "use client";
+import { customInstance } from "@cocrepo/api/core/client";
 
-// TODO: Orval codegen 후 아래 import로 교체
-// import { useGetGroupById, useDeleteGroup } from "@cocrepo/api";
-import { customInstance } from "@cocrepo/api";
 import {
-	GroupInfoSection, GroupRoleListSection, Page, PageTitleBar, VStack } from "@cocrepo/ui";
+	GroupInfoSection,
+	GroupRoleListSection,
+	Page,
+	PageTitleBar,
+	VStack,
+} from "@cocrepo/ui";
 import {
 	Button,
 	Modal,
@@ -162,45 +165,59 @@ function RoleGroupDetailPageClient({
 			}
 		>
 			<VStack gap={4}>
-                <section>
-                    <div className="p-6">
-                        <h3 className="text-lg font-semibold mb-4">기본 정보</h3>
-                        <GroupInfoSection
-                            group={{
-                                name: group.name,
-                                label: group.label,
-                                type: group.type,
-                                createdAt: group.createdAt,
-                                updatedAt: group.updatedAt,
-                            }} />
-                    </div>
-                </section>
-                <section>
-                    <div className="p-6">
-                        <h3 className="text-lg font-semibold mb-4">연결된 역할</h3>
-                        <GroupRoleListSection roleAssociations={group.roleAssociations ?? []} />
-                    </div>
-                </section>
-            </VStack>
-            <Modal isOpen={deleteModal.isOpen} onClose={deleteModal.onClose}>
-                <ModalContent>
-                    <ModalHeader>역할 그룹 삭제</ModalHeader>
-                    <ModalBody>
-                        <p>
-                            <strong>{group.label || group.name}</strong>그룹을
-                                                        삭제하시겠습니까?
-                                                    </p>
-                        <p className="text-sm text-danger mt-2">이 작업은 되돌릴 수 없습니다. 연결된 역할 연관도 함께 삭제됩니다.
-                                                    </p>
-                    </ModalBody>
-                    <ModalFooter>
-                        <Button variant="flat" onPress={deleteModal.onClose} isDisabled={isDeleting}>취소
-                                                    </Button>
-                        <Button color="danger" onPress={onClickDeleteConfirm} isLoading={isDeleting}>삭제
-                                                    </Button>
-                    </ModalFooter>
-                </ModalContent>
-            </Modal>
+				<section>
+					<div className="p-6">
+						<h3 className="text-lg font-semibold mb-4">기본 정보</h3>
+						<GroupInfoSection
+							group={{
+								name: group.name,
+								label: group.label,
+								type: group.type,
+								createdAt: group.createdAt,
+								updatedAt: group.updatedAt,
+							}}
+						/>
+					</div>
+				</section>
+				<section>
+					<div className="p-6">
+						<h3 className="text-lg font-semibold mb-4">연결된 역할</h3>
+						<GroupRoleListSection
+							roleAssociations={group.roleAssociations ?? []}
+						/>
+					</div>
+				</section>
+			</VStack>
+			<Modal isOpen={deleteModal.isOpen} onClose={deleteModal.onClose}>
+				<ModalContent>
+					<ModalHeader>역할 그룹 삭제</ModalHeader>
+					<ModalBody>
+						<p>
+							<strong>{group.label || group.name}</strong>그룹을
+							삭제하시겠습니까?
+						</p>
+						<p className="text-sm text-danger mt-2">
+							이 작업은 되돌릴 수 없습니다. 연결된 역할 연관도 함께 삭제됩니다.
+						</p>
+					</ModalBody>
+					<ModalFooter>
+						<Button
+							variant="flat"
+							onPress={deleteModal.onClose}
+							isDisabled={isDeleting}
+						>
+							취소
+						</Button>
+						<Button
+							color="danger"
+							onPress={onClickDeleteConfirm}
+							isLoading={isDeleting}
+						>
+							삭제
+						</Button>
+					</ModalFooter>
+				</ModalContent>
+			</Modal>
 		</Page>
 	);
 }

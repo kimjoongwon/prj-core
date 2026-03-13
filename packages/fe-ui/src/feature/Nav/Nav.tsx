@@ -36,7 +36,9 @@ export const Nav = observer(() => {
 								: "text-foreground/70 hover:bg-default-100 hover:text-foreground",
 						)}
 					>
-						{item.icon && <AppIcon name={item.icon} className="h-4 w-4" size={16} />}
+						{item.icon && (
+							<AppIcon name={item.icon} className="h-4 w-4" size={16} />
+						)}
 						<span>{item.label}</span>
 					</button>
 				</NavbarItem>

@@ -1,6 +1,6 @@
 "use client";
+import { useCreateTimeline } from "@cocrepo/api/core/timelines";
 
-import { useCreateTimeline } from "@cocrepo/api";
 import { Page, PageTitleBar, Section, VStack } from "@cocrepo/ui";
 import { addToast, Button, Input, Textarea } from "@heroui/react";
 import { observer, useLocalObservable } from "mobx-react-lite";

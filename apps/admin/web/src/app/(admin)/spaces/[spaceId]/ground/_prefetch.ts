@@ -1,4 +1,5 @@
-import { prefetchGetSpaceGroundQuery } from "@cocrepo/api";
+import { prefetchGetSpaceGroundQuery } from "@cocrepo/api/core/spaces";
+
 import { withServerCookies } from "@cocrepo/api/server";
 import type { QueryClient } from "@tanstack/react-query";
 import type { ReadonlyRequestCookies } from "next/dist/server/web/spec-extension/adapters/request-cookies";

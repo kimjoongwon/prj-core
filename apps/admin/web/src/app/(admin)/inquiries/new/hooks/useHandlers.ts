@@ -1,4 +1,5 @@
-import { useCreateInquiry } from "@cocrepo/api";
+import { useCreateInquiry } from "@cocrepo/api/core/inquiries";
+
 import { ADMIN_PATHS } from "@cocrepo/constant";
 import type { AIFormSuggestion, InquiryFormData } from "@cocrepo/ui";
 

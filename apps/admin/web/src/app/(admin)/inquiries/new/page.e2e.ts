@@ -11,7 +11,9 @@ test.describe("문의 접수 페이지", () => {
 				page.getByRole("heading", { name: "문의 접수" }),
 			).toBeVisible();
 			await expect(
-				page.getByText("문의 생성 bootstrap과 AiForm을 이용해 문의를 등록합니다."),
+				page.getByText(
+					"문의 생성 bootstrap과 AiForm을 이용해 문의를 등록합니다.",
+				),
 			).toBeVisible();
 			await expect(
 				page.getByPlaceholder("고객명/이메일/전화번호 검색"),
@@ -22,9 +24,7 @@ test.describe("문의 접수 페이지", () => {
 			await expect(
 				page.getByPlaceholder("문의 내용을 입력하세요"),
 			).toBeVisible();
-			await expect(
-				page.getByRole("button", { name: "등록" }),
-			).toBeVisible();
+			await expect(page.getByRole("button", { name: "등록" })).toBeVisible();
 		});
 	});
 

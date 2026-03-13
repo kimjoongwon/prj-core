@@ -95,7 +95,9 @@ test.describe("루틴 목록 페이지", () => {
 			await page.getByLabel("단축 라벨").fill(TEST_LABEL);
 
 			// When: 후보 운동 1개를 활동으로 추가 (서버 검증: 최소 1개 활동 필요)
-			const addExerciseButton = page.getByRole("button", { name: "추가" }).first();
+			const addExerciseButton = page
+				.getByRole("button", { name: "추가" })
+				.first();
 			const hasCandidateExercise = await addExerciseButton
 				.isVisible()
 				.catch(() => false);

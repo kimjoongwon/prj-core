@@ -243,7 +243,9 @@ export const FloatingChatPanel = observer(
 							<Bot className="size-4 text-white" />
 						</div>
 						<div>
-							<h3 className="text-sm font-semibold text-default-800">{title}</h3>
+							<h3 className="text-sm font-semibold text-default-800">
+								{title}
+							</h3>
 							{panelSize !== "minimized" && (
 								<p className="text-xs text-default-500">{subtitle}</p>
 							)}

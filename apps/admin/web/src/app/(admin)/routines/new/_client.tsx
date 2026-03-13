@@ -2,10 +2,10 @@
 import { Page, PageTitleBar, Section } from "@cocrepo/ui";
 import {
 	type CreateRoutineActivityItemDto,
-	type TaskDto,
 	useCreateRoutine,
-	useGetTasks,
-} from "@cocrepo/api";
+} from "@cocrepo/api/core/routines";
+import { type TaskDto, useGetTasks } from "@cocrepo/api/core/tasks";
+
 import {
 	addToast,
 	Button,
@@ -63,11 +63,11 @@ function RoutineNewPageClient() {
 	}));
 
 	const { data: tasksResponse, isLoading: isTasksLoading } = useGetTasks({
-			take: 30,
-			skip: 0,
-			search: state.exerciseQuery.trim() || undefined,
-			spaceScope: "INCLUDE_ANCESTORS",
-		});
+		take: 30,
+		skip: 0,
+		search: state.exerciseQuery.trim() || undefined,
+		spaceScope: "INCLUDE_ANCESTORS",
+	});
 	const candidateTasks = (tasksResponse?.data ?? []) as TaskDto[];
 
 	// 등록 Mutation
@@ -297,7 +297,10 @@ function RoutineNewPageClient() {
 						) : (
 							<div className="flex flex-col gap-3">
 								{state.activities.map((activity, index) => (
-									<div key={activity.taskId} className="rounded-md bg-content2 p-3">
+									<div
+										key={activity.taskId}
+										className="rounded-md bg-content2 p-3"
+									>
 										<div className="mb-3 flex items-center justify-between">
 											<p className="font-medium">
 												{index + 1}. {activity.exerciseName}

@@ -271,10 +271,19 @@ apps/admin/web/src/app/(admin)/assets/
 
 - `apps/admin/web/src/app/(admin)/app.spec.md`
 
+## 의존성
+
+| 모듈 | 용도 |
+|------|------|
+| @cocrepo/api/assets | AssetKind, AssetStatus 타입 사용 |
+| @tanstack/react-query | QueryClient, HydrationBoundary 사용 |
+| next/headers | cookies 조회 |
+
 ## 변경 이력
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-03-13 | `@cocrepo/api` root import를 split subpath import로 전환 | codex |
 | 2026-02-22 | 초기 생성 | orch-requirement |
 | 2026-02-26 | Stage 1 정합화: 경로 메타데이터를 apps/admin/web 기준으로 수정 | orch-requirement |
 | 2026-02-26 | Stage 4 정합화: SSR Prefetch 구조와 핸들러 네이밍 규칙 보강 | orch-screen-planner |

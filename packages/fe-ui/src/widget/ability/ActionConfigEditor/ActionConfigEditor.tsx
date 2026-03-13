@@ -1,6 +1,6 @@
 "use client";
+import { type ActionConfigDto } from "@cocrepo/api/core/actions";
 
-import type { ActionConfigDto } from "@cocrepo/api";
 import { Card, CardBody, cn } from "@heroui/react";
 import { observer } from "mobx-react-lite";
 import { Input } from "../../../input/Input/Input";
