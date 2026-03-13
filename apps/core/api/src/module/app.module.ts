@@ -43,7 +43,6 @@ import { SubjectsModule } from "./subjects";
 import { TasksModule } from "./tasks";
 import { TemplatesModule } from "./templates";
 import { TimelinesModule } from "./timelines";
-import { TranslationsModule } from "./translations";
 import { UsersModule } from "./users";
 
 @Module({
@@ -61,7 +60,6 @@ import { UsersModule } from "./users";
 		GroupsModule,
 		CategoriesModule,
 		GrantsModule,
-		TranslationsModule,
 		TemplatesModule,
 		TimelinesModule,
 		TasksModule,
@@ -111,10 +109,6 @@ import { UsersModule } from "./users";
 							{
 								path: "grants",
 								module: GrantsModule,
-							},
-							{
-								path: "translations",
-								module: TranslationsModule,
 							},
 							{
 								path: "templates",

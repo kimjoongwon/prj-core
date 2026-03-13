@@ -1,11 +1,8 @@
 import type { CreateInquiryDto } from "@cocrepo/dto";
 import { Inquiry, InquiryMessage, InquiryParticipant } from "@cocrepo/entity";
 import type {
-	InquiryParticipantRole,
 	InquiryPriority,
 	InquiryStatus,
-	MessageContentType,
-	SenderType,
 } from "@cocrepo/prisma";
 import {
 	type FillInquiryFormInput,
@@ -152,28 +149,7 @@ export class InquiryFacade {
 		};
 	}
 
-	sendInquiryMessage(params: {
-		inquiryId: string;
-		actorUserId: string;
-		threadId?: string;
-		content: string;
-		contentType?: MessageContentType;
-		senderType?: SenderType;
-		clientMessageId?: string;
-	}): Promise<InquiryMessage> {
-		return this.inquiryService.sendMessage(params);
-	}
-
 	getInquiryParticipants(inquiryId: string): Promise<InquiryParticipant[]> {
 		return this.inquiryService.getParticipants(inquiryId);
-	}
-
-	joinInquiry(params: {
-		inquiryId: string;
-		userId: string;
-		threadId?: string;
-		role?: InquiryParticipantRole;
-	}): Promise<InquiryParticipant> {
-		return this.inquiryService.joinParticipant(params);
 	}
 }

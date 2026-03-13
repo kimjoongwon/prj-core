@@ -8,16 +8,13 @@ import {
 	ResponseMessage,
 } from "@cocrepo/decorator";
 import {
-	CreateUserMemberDto,
 	QueryUsersDto,
-	UpdateUserMemberDto,
 	UserDetailResponseDto,
 	UserDto,
 	UserPaginationMetaDto,
 	UserStatsDto,
 } from "@cocrepo/dto";
 import {
-	Body,
 	Controller,
 	Delete,
 	Get,
@@ -25,12 +22,10 @@ import {
 	HttpStatus,
 	Param,
 	ParseUUIDPipe,
-	Patch,
-	Post,
 	Query,
 	UnauthorizedException,
 } from "@nestjs/common";
-import { ApiBody, ApiOperation, ApiParam, ApiTags } from "@nestjs/swagger";
+import { ApiOperation, ApiParam, ApiTags } from "@nestjs/swagger";
 
 @ApiTags("USERS")
 @Controller()
@@ -97,85 +92,6 @@ export class UsersController {
 		}
 
 		return this.usersService.getUserDetailForSpace(id, spaceId);
-	}
-
-	@Post()
-	@HttpCode(HttpStatus.CREATED)
-	@ApiOperation({
-		operationId: "createUser",
-		summary: "사용자 등록",
-		description:
-			"새로운 사용자를 등록합니다. 이메일, 전화번호, 이름은 중복될 수 없습니다.",
-	})
-	@ApiAuth()
-	@ApiBody({
-		type: CreateUserMemberDto,
-		description: "사용자 등록 정보",
-	})
-	@ApiErrors(
-		{ status: 400, message: USER_ERRORS.EMAIL_ALREADY_EXISTS },
-		{ status: 400, message: USER_ERRORS.PHONE_ALREADY_EXISTS },
-		{ status: 400, message: USER_ERRORS.NAME_ALREADY_EXISTS },
-		{ status: 401, message: USER_ERRORS.USER_NOT_FOUND },
-		{ status: 401, message: USER_ERRORS.SPACE_NOT_SELECTED },
-		500,
-	)
-	@ApiResponseEntity(UserDto, HttpStatus.CREATED)
-	@ResponseMessage("common.user.create.success")
-	async createUser(@Body() dto: CreateUserMemberDto) {
-		const spaceId = this.spaceContext.spaceId;
-		if (!spaceId) {
-			throw new UnauthorizedException(USER_ERRORS.SPACE_NOT_SELECTED);
-		}
-
-		const currentUserId = this.authContext.user?.id;
-		if (!currentUserId) {
-			throw new UnauthorizedException(USER_ERRORS.USER_NOT_FOUND);
-		}
-
-		return this.usersService.createUserForSpace({
-			...dto,
-			spaceId,
-		});
-	}
-
-	@Patch(":id")
-	@ApiOperation({
-		operationId: "updateUser",
-		summary: "사용자 수정",
-		description: "사용자 정보를 수정합니다. 변경하려는 필드만 전송하면 됩니다.",
-	})
-	@ApiAuth()
-	@ApiParam({
-		name: "id",
-		description: "사용자 ID (UUID)",
-		type: String,
-	})
-	@ApiBody({
-		type: UpdateUserMemberDto,
-		description: "사용자 수정 정보",
-	})
-	@ApiErrors(
-		{ status: 400, message: USER_ERRORS.EMAIL_ALREADY_EXISTS },
-		{ status: 400, message: USER_ERRORS.PHONE_ALREADY_EXISTS },
-		{ status: 400, message: USER_ERRORS.NAME_ALREADY_EXISTS },
-		{ status: 401, message: USER_ERRORS.USER_NOT_FOUND },
-		{ status: 401, message: USER_ERRORS.SPACE_NOT_SELECTED },
-		{ status: 404, message: USER_ERRORS.USER_NOT_FOUND },
-		500,
-	)
-	@ApiResponseEntity(UserDto, HttpStatus.OK)
-	@ResponseMessage("common.user.update.success")
-	async updateUser(
-		@Param("id", ParseUUIDPipe) id: string,
-		@Body() dto: UpdateUserMemberDto,
-	) {
-		const spaceId = this.spaceContext.spaceId;
-		if (!spaceId) {
-			throw new UnauthorizedException(USER_ERRORS.SPACE_NOT_SELECTED);
-		}
-
-		return this.usersService.updateUserForSpace(id, spaceId, dto);
 	}
 
 	@Delete(":id")

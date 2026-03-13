@@ -20,8 +20,6 @@ User CRUD API를 노출하며, Space/Auth 컨텍스트 해석과 응답 조립�
 |--------|------|-------------|------|
 | GET | `/` | `getUsers` | 사용자 목록 조회 (`data + meta + stats`) |
 | GET | `/:id` | `getUserById` | 현재 Space 기준 사용자 상세 조회 |
-| POST | `/` | `createUser` | 현재 Space 기준 사용자 등록 |
-| PATCH | `/:id` | `updateUser` | 현재 Space 기준 사용자 수정 |
 | DELETE | `/:id` | `deleteUser` | 현재 Space 기준 사용자 삭제 |
 
 ## 비즈니스 메모
@@ -38,3 +36,4 @@ User CRUD API를 노출하며, Space/Auth 컨텍스트 해석과 응답 조립�
 | 2026-03-12 | UsersController에서 Space/Auth 컨텍스트를 주입해 Space 스코프 조회/수정/삭제 API로 정비 | codex |
 | 2026-03-13 | 컨트롤러 경계 의존성을 `UserFacade` 기준으로 갱신 | codex |
 | 2026-03-13 | UsersController 삭제 흐름을 UserFacade 시그니처와 일치하도록 정리 | codex |
+| 2026-03-13 | admin/idp/web 및 fe-ui 런타임 미사용 `createUser`/`updateUser` endpoint를 제거 | codex |

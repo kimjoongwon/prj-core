@@ -68,18 +68,6 @@ export class TaskFacade {
 		};
 	}
 
-	findTaskById(taskId: string, spaceId: string): Promise<Task> {
-		return this.getTaskById(taskId, spaceId);
-	}
-
-	getTaskById(
-		taskId: string,
-		spaceId: string,
-		spaceScope: SpaceScope = SpaceScopeEnum.INCLUDE_ANCESTORS,
-	): Promise<Task> {
-		return this.taskService.findTaskById(taskId, spaceId, spaceScope);
-	}
-
 	getExerciseByTaskId(taskId: string, spaceId: string): Promise<Exercise> {
 		return this.getTaskExercise(taskId, spaceId);
 	}

@@ -56,14 +56,6 @@ export class SpaceFacade {
 		};
 	}
 
-	getByIdWithGround(spaceId: string): Promise<Space> {
-		return this.getSpaceById(spaceId);
-	}
-
-	getSpaceById(spaceId: string): Promise<Space> {
-		return this.spaceService.getByIdWithGround(spaceId);
-	}
-
 	getGroundBySpaceId(spaceId: string): Promise<Ground> {
 		return this.getSpaceGround(spaceId);
 	}
@@ -86,13 +78,5 @@ export class SpaceFacade {
 
 	updateSpaceGround(spaceId: string, dto: UpdateGroundDto): Promise<Space> {
 		return this.spaceService.updateGroundBySpaceId(spaceId, dto);
-	}
-
-	removeSpace(spaceId: string): Promise<void> {
-		return this.deleteSpace(spaceId);
-	}
-
-	async deleteSpace(spaceId: string): Promise<void> {
-		await this.spaceService.removeSpace(spaceId);
 	}
 }

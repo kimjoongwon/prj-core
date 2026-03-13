@@ -8,6 +8,11 @@
 
 Space aggregate root API를 노출합니다. Ground detail은 `/spaces/:spaceId/ground` nested route로 처리합니다.
 
+## 공개 경로 메모
+
+- 유지: `GET /`, `GET /:spaceId/ground`, `POST /`, `PATCH /:spaceId/ground`
+- 제거: frontend 런타임 미사용 `GET /:spaceId`, `DELETE /:spaceId`
+
 ## 변경 이력
 
 | 일자 | 내용 | 작성자 |
@@ -15,3 +20,4 @@ Space aggregate root API를 노출합니다. Ground detail은 `/spaces/:spaceId/
 | 2026-03-11 | Space root controller 신규 생성 | codex |
 | 2026-03-12 | 공간 목록 응답 메타 조립을 SpaceFacade로 이관 | codex |
 | 2026-03-13 | controller boundary 조합을 `SpaceFacade`로 이관 | codex |
+| 2026-03-13 | admin/idp/web 및 fe-ui 런타임 미사용 상세/삭제 endpoint를 제거 | codex |

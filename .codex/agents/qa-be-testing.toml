@@ -283,6 +283,12 @@ describe("AuthApplicationService", () => {
 
 ### Controller 테스트 템플릿
 
+Controller 테스트는 실제 primary entrypoint만 mock합니다.
+- workflow endpoint: `ApplicationService` mock
+- boundary composition endpoint: `Facade` mock
+- single aggregate-root pass-through endpoint: `Service` mock
+- 같은 endpoint에서 `Facade`와 `ApplicationService`를 동시에 mock하는 기본 템플릿은 만들지 않습니다.
+
 ```typescript
 import { Test, TestingModule } from "@nestjs/testing";
 import { AuthApplicationService } from "@cocrepo/app";
@@ -334,6 +340,32 @@ describe("AuthController", () => {
       );
       expect(result.accessToken).toBe("access-token");
     });
+  });
+});
+```
+
+### Controller 테스트 템플릿 (Facade 예시)
+
+```typescript
+import { Test, TestingModule } from "@nestjs/testing";
+import { UserFacade } from "@cocrepo/facade";
+import { UsersController } from "./users.controller";
+
+describe("UsersController", () => {
+  let controller: UsersController;
+  let mockUserFacade: jest.Mocked<UserFacade>;
+
+  beforeEach(async () => {
+    mockUserFacade = {
+      getUsersBySpace: jest.fn(),
+    } as unknown as jest.Mocked<UserFacade>;
+
+    const module: TestingModule = await Test.createTestingModule({
+      controllers: [UsersController],
+      providers: [{ provide: UserFacade, useValue: mockUserFacade }],
+    }).compile();
+
+    controller = module.get<UsersController>(UsersController);
   });
 });
 ```

@@ -8,7 +8,7 @@
 ## 역할
 
 사용자 계정 관리의 핵심 비즈니스 로직을 담당합니다.
-Space 기반 사용자 목록/상세 조회, 등록/수정/삭제, 비밀번호 변경, 계정 잠금 해제, 임시 비밀번호 발급 등을 처리합니다.
+Space 기반 사용자 목록/상세 조회와 삭제, 비밀번호 변경, 계정 잠금 해제, 임시 비밀번호 발급, 회원가입용 생성 등을 처리합니다.
 CLS SpaceContext를 통해 접근 가능한 Space 범위 내에서 사용자를 관리합니다.
 
 ## 의존성
@@ -27,8 +27,6 @@ CLS SpaceContext를 통해 접근 가능한 Space 범위 내에서 사용자를 
 | `findUserForAuth` | `email: string` | 인증용 경량 사용자 조회 (이메일, 비밀번호만) |
 | `getUsersBySpace` | `query: QueryUsersDto` | `Promise<GetUsersResult>` | 접근 가능한 Space 내 사용자 목록 조회 |
 | `getUserDetailForSpace` | `userId, spaceId` | Space 내 사용자 상세 조회 |
-| `createUserForSpace` | `params` | 사용자 등록 (Tenant, Profile, Category, Group 포함) |
-| `updateUserForSpace` | `userId, spaceId, params` | 사용자 수정 + 캐시 무효화 |
 | `deleteUserForSpace` | `userId, spaceId, currentUserId` | 사용자 소프트 삭제 + 캐시 무효화 |
 | `changePassword` | `userId, currentPassword, newPassword` | `Promise<void>` | 비밀번호 변경 |
 | `unlockAccount` | `userId` | `Promise<void>` | 계정 잠금 해제 (관리자) |
@@ -95,3 +93,4 @@ CLS SpaceContext를 통해 접근 가능한 Space 범위 내에서 사용자를 
 | 2026-02-19 | 초기 생성 (역기획) | req-reverse-engineer |
 | 2026-03-13 | `user.service.ts`와 sidecar spec을 폴더형 `index.ts`/`index.spec.md` 구조로 재배치 | codex |
 | 2026-03-13 | 폴더형 `index.ts` 구조에 맞게 `AuthCacheService` 상대 import 경로를 `../auth-cache.service`로 보정 | codex |
+| 2026-03-13 | frontend 런타임 미사용 Space 기준 생성/수정 메서드를 제거 | codex |

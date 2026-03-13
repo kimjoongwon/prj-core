@@ -54,6 +54,7 @@
 - CLOSED 문의에는 메시지를 보낼 수 없다.
 - `clientMessageId`가 중복되면 메시지 생성이 거부된다.
 - 첫 응답 시각은 `senderType` 문자열이 아니라 `actorUserId !== inquiry.customerId` 기준으로 기록한다.
+- frontend 런타임 공개 API에서는 참여자 join write를 노출하지 않는다.
 
 ## 변경 이력
 
@@ -63,3 +64,4 @@
 | 2026-03-11 | AI 처리 책임 설명을 ApplicationService 기준으로 갱신 | codex |
 | 2026-03-11 | root 기준 메시지/참여자 처리 규칙을 추가 | codex |
 | 2026-03-13 | `inquiry.service.ts`와 sidecar spec을 폴더형 `index.ts`/`index.spec.md` 구조로 재배치 | codex |
+| 2026-03-13 | frontend 런타임 미사용 참여자 join write 메서드를 제거 | codex |

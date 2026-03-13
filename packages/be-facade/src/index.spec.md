@@ -12,7 +12,7 @@
 
 | 항목 | 설명 |
 |------|------|
-| export | `ActionFacade`, `CategoryFacade`, `GrantFacade`, `GroupFacade`, `IdpAccountFacade`, `IdpDashboardFacade`, `InquiryFacade`, `OidcClientFacade`, `OidcSessionFacade`, `RoleFacade`, `RoutineFacade`, `SecurityPolicyFacade`, `SpaceFacade`, `SubjectFacade`, `TaskFacade`, `TemplateFacade`, `TimelineFacade`, `TranslationFacade`, `UserFacade` |
+| export | `ActionFacade`, `CategoryFacade`, `GrantFacade`, `GroupFacade`, `IdpAccountFacade`, `IdpDashboardFacade`, `InquiryFacade`, `OidcClientFacade`, `OidcSessionFacade`, `RoleFacade`, `RoutineFacade`, `SecurityPolicyFacade`, `SpaceFacade`, `SubjectFacade`, `TaskFacade`, `TemplateFacade`, `TimelineFacade`, `UserFacade` |
 
 ## 변경 이력
 
@@ -22,3 +22,4 @@
 | 2026-03-13 | IDP 계정/OIDC Client/OIDC Session facade export 추가 | codex |
 | 2026-03-13 | Space/Task/Template/Inquiry facade export 추가 | codex |
 | 2026-03-13 | Action/Category/Grant/Group/Role/Routine/Subject/Timeline/Translation/User/IDP Dashboard/Security Policy facade export 추가 | codex |
+| 2026-03-13 | frontend 런타임 미사용 translation facade export를 제거 | codex |

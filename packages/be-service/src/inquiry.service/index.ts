@@ -2,7 +2,6 @@ import { Inquiry, InquiryMessage, InquiryParticipant } from "@cocrepo/entity";
 import {
 	InquiryCategory,
 	InquiryChannel,
-	type InquiryParticipantRole,
 	InquiryPriority,
 	InquirySource,
 	type InquiryStatus,
@@ -510,45 +509,6 @@ export class InquiryService {
 	async getParticipants(inquiryId: string): Promise<InquiryParticipant[]> {
 		await this.findById(inquiryId);
 		return this.repository.findParticipantsByInquiryId(inquiryId);
-	}
-
-	async joinParticipant(params: {
-		inquiryId: string;
-		userId: string;
-		threadId?: string;
-		role?: InquiryParticipantRole;
-	}): Promise<InquiryParticipant> {
-		await this.findById(params.inquiryId);
-
-		if (params.threadId) {
-			const thread = await this.repository.findThreadById(params.threadId);
-			if (!thread || thread.inquiryId !== params.inquiryId) {
-				throw new NotFoundException("문의 스레드를 찾을 수 없습니다");
-			}
-		}
-
-		const existing = await this.repository.findParticipantByInquiryIdAndUserId(
-			params.inquiryId,
-			params.userId,
-		);
-
-		if (existing) {
-			return this.repository.updateParticipantOnlineStatusById(
-				existing.id,
-				true,
-			);
-		}
-
-		return this.repository.createParticipant({
-			inquiryId: params.inquiryId,
-			userId: params.userId,
-			threadId: params.threadId ?? null,
-			role: params.role ?? "VIEWER",
-			isOnline: true,
-			isTyping: false,
-			unreadCount: 0,
-			joinedAt: new Date(),
-		});
 	}
 
 	// ============================================================================

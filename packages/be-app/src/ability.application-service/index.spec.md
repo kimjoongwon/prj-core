@@ -6,13 +6,13 @@
 
 ## 역할
 
-Ability 유즈케이스를 조합하는 application service를 정의합니다.
+Ability 정의 조회/CRUD 유즈케이스를 조합하는 application service를 정의합니다.
 
 ## 구성 요소
 
 | 항목 | 설명 |
 |------|------|
-| AbilityApplicationService | User/Ability 조합 유즈케이스 공개 계약 |
+| AbilityApplicationService | Ability 정의 조회/CRUD 유즈케이스 공개 계약 |
 
 ## 변경 이력
 
@@ -21,3 +21,4 @@ Ability 유즈케이스를 조합하는 application service를 정의합니다.
 | 2026-03-03 | 누락된 sidecar spec 신규 생성 | codex |
 | 2026-03-11 | Facade를 ApplicationService로 전환하고 책임을 재정의 | codex |
 | 2026-03-13 | `ability.application-service.ts`와 sidecar spec을 폴더형 `index.ts`/`index.spec.md` 구조로 재배치 | codex |
+| 2026-03-13 | frontend 런타임 미사용 `getMyAbilities` 유즈케이스와 UserService 의존을 제거 | codex |

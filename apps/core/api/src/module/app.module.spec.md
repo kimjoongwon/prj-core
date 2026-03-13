@@ -37,7 +37,6 @@
 | ./tasks | aggregate root module |
 | ./templates | aggregate root module |
 | ./timelines | aggregate root module |
-| ./translations | aggregate root module |
 | ./users | aggregate root module |
 
 ## 구현 체크리스트
@@ -53,3 +52,4 @@
 |------|------|--------|
 | 2026-03-03 | 누락된 sidecar spec 신규 생성 | codex |
 | 2026-03-11 | AppModule 의존성과 라우트 등록 기준을 aggregate root plural 구조로 갱신 | codex |
+| 2026-03-13 | frontend 런타임 미사용 `translations` aggregate root module 등록을 제거 | codex |

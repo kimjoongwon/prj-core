@@ -15,5 +15,4 @@ export { SubjectFacade } from "./subject.facade";
 export { TaskFacade } from "./task.facade";
 export { TemplateFacade } from "./template.facade";
 export { TimelineFacade } from "./timeline.facade";
-export { TranslationFacade } from "./translation.facade";
 export { UserFacade } from "./user.facade";

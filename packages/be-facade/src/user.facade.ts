@@ -1,8 +1,6 @@
 import { USER_ERRORS } from "@cocrepo/constant";
 import {
-	CreateUserMemberDto,
 	QueryUsersDto,
-	UpdateUserMemberDto,
 } from "@cocrepo/dto";
 import { AuthContext, SpaceContext, UserService } from "@cocrepo/service";
 import { Injectable, UnauthorizedException } from "@nestjs/common";
@@ -66,51 +64,6 @@ export class UserFacade {
 		}
 
 		return this.usersService.getUserDetailForSpace(userId, spaceId);
-	}
-
-	createUserForSpace(input: Parameters<UserService["createUserForSpace"]>[0]) {
-		return this.usersService.createUserForSpace(input);
-	}
-
-	createUser(dto: CreateUserMemberDto) {
-		const spaceId = this.spaceContext.spaceId;
-		if (!spaceId) {
-			throw new UnauthorizedException(USER_ERRORS.SPACE_NOT_SELECTED);
-		}
-
-		return this.usersService.createUserForSpace({
-			name: dto.name,
-			email: dto.email,
-			phone: dto.phone,
-			password: dto.password,
-			roleId: dto.roleId,
-			spaceId,
-			categoryId: dto.categoryId,
-			groupIds: dto.groupIds,
-		});
-	}
-
-	updateUserForSpace(
-		userId: string,
-		spaceId: string,
-		dto: Parameters<UserService["updateUserForSpace"]>[2],
-	) {
-		return this.usersService.updateUserForSpace(userId, spaceId, dto);
-	}
-
-	updateUser(userId: string, dto: UpdateUserMemberDto) {
-		const spaceId = this.spaceContext.spaceId;
-		if (!spaceId) {
-			throw new UnauthorizedException(USER_ERRORS.SPACE_NOT_SELECTED);
-		}
-
-		return this.usersService.updateUserForSpace(userId, spaceId, {
-			name: dto.name,
-			email: dto.email,
-			phone: dto.phone,
-			categoryId: dto.categoryId,
-			groupIds: dto.groupIds,
-		});
 	}
 
 	async deleteUserForSpace(userId: string, spaceId: string): Promise<void> {

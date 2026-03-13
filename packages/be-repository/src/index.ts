@@ -30,5 +30,4 @@ export { SubjectsRepository } from "./subjects.repository";
 export { TasksRepository } from "./tasks.repository";
 export { TemplatesRepository } from "./templates.repository";
 export { TimelinesRepository } from "./timelines.repository";
-export { TranslationsRepository } from "./translations.repository";
 export { UsersRepository } from "./users.repository";

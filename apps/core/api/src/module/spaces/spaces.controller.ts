@@ -16,7 +16,6 @@ import { Ground, Space } from "@cocrepo/entity";
 import {
 	Body,
 	Controller,
-	Delete,
 	Get,
 	HttpCode,
 	HttpStatus,
@@ -46,27 +45,6 @@ export class SpacesController {
 	@ResponseMessage("공간 목록 조회 성공")
 	async getSpaces() {
 		return this.spacesService.listSpaces();
-	}
-
-	@Get(":spaceId")
-	@ApiOperation({
-		operationId: "getSpaceById",
-		summary: "공간 상세 조회",
-		description: "Ground detail을 포함한 Space를 조회합니다.",
-	})
-	@ApiAuth()
-	@ApiParam({
-		name: "spaceId",
-		description: "Space ID (UUID)",
-		type: String,
-	})
-	@ApiErrors(401, 404, 500)
-	@ApiResponseEntity(SpaceDto, HttpStatus.OK)
-	@ResponseMessage("공간 상세 조회 성공")
-	async getSpaceById(
-		@Param("spaceId", ParseUUIDPipe) spaceId: string,
-	): Promise<Space> {
-		return this.spacesService.getByIdWithGround(spaceId);
 	}
 
 	@Get(":spaceId/ground")
@@ -133,26 +111,5 @@ export class SpacesController {
 		@Body() dto: UpdateGroundDto,
 	): Promise<Space> {
 		return this.spacesService.updateGroundBySpaceId(spaceId, dto);
-	}
-
-	@Delete(":spaceId")
-	@HttpCode(HttpStatus.NO_CONTENT)
-	@ApiOperation({
-		operationId: "deleteSpace",
-		summary: "공간 삭제",
-		description: "Space root와 종속 Ground detail을 소프트 삭제합니다.",
-	})
-	@ApiAuth()
-	@ApiParam({
-		name: "spaceId",
-		description: "Space ID (UUID)",
-		type: String,
-	})
-	@ApiErrors(401, 404, 500)
-	@ResponseMessage("공간 삭제 성공")
-	async deleteSpace(
-		@Param("spaceId", ParseUUIDPipe) spaceId: string,
-	): Promise<void> {
-		await this.spacesService.removeSpace(spaceId);
 	}
 }

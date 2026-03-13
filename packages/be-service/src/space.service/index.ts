@@ -24,18 +24,6 @@ export class SpaceService {
 	}
 
 	/**
-	 * Ground detail을 포함한 Space 조회
-	 */
-	async getByIdWithGround(id: string): Promise<Space> {
-		const space = await this.repository.findByIdWithGround(id);
-		if (!space) {
-			throw new NotFoundException("공간을 찾을 수 없습니다");
-		}
-
-		return space;
-	}
-
-	/**
 	 * Ground detail이 있는 Space 목록 조회
 	 */
 	async listSpaces(params?: {
@@ -147,13 +135,5 @@ export class SpaceService {
 	 */
 	removeById(id: string): Promise<Space> {
 		return this.repository.removeById(id);
-	}
-
-	/**
-	 * Space 삭제 전 존재 확인
-	 */
-	async removeSpace(id: string): Promise<void> {
-		await this.getByIdWithGround(id);
-		await this.repository.removeById(id);
 	}
 }

@@ -22,3 +22,4 @@
 | 2026-03-03 | 누락된 sidecar spec 신규 생성 | codex |
 | 2026-03-11 | schema-owner 기준으로 누락된 10개 repository export 및 누락 레포 파일 생성 반영 | codex |
 | 2026-03-11 | schema-owner 기준 누락 WhitelistEntry 레포 추가 반영 | codex |
+| 2026-03-13 | frontend 런타임 미사용 translation repository export를 제거 | codex |

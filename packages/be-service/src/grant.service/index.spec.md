@@ -28,7 +28,6 @@ Grantee(Role/User) 존재 확인, Ability 검증, 기본 우선순위 설정을 
 | `createMany` | `dtos: CreateGrantDto[]` | `Promise<Grant[]>` | Grant 다중 생성 (트랜잭션) |
 | `update` | `id: string, dto: UpdateGrantDto` | `Promise<Grant>` | Grant 수정 |
 | `delete` | `id: string` | `Promise<void>` | Grant 삭제 (소프트 삭제) |
-| `findByRoleIds` | `roleIds: string[]` | `Promise<Grant[]>` | Role ID 목록으로 Grant 조회 |
 | `findByUserId` | `userId: string` | `Promise<Grant[]>` | User ID로 Grant 조회 |
 | `findByAbilityId` | `abilityId: string` | `Promise<Grant[]>` | Ability ID로 Grant 조회 |
 | `batchAssignToRole` | `roleId: string, items: {...}[]` | `Promise<Grant[]>` | Role에 Ability 배치 할당 (전체 동기화) |
@@ -66,3 +65,4 @@ Grantee(Role/User) 존재 확인, Ability 검증, 기본 우선순위 설정을 
 |------|------|--------|
 | 2026-02-19 | 초기 생성 (역기획) | req-reverse-engineer |
 | 2026-03-13 | `grant.service.ts`와 sidecar spec을 폴더형 `index.ts`/`index.spec.md` 구조로 재배치 | codex |
+| 2026-03-13 | frontend 런타임 미사용 Role 목록 조회 메서드를 제거 | codex |

@@ -20,12 +20,4 @@ export class GrantFacade {
 	): Promise<Grant[]> {
 		return this.grantsService.batchAssignToRole(roleId, dto.grants);
 	}
-
-	findByRoleIds(roleIds: string[]): Promise<Grant[]> {
-		return this.grantsService.findByRoleIds(roleIds);
-	}
-
-	getGrantsByRoleId(roleId: string): Promise<Grant[]> {
-		return this.grantsService.findByRoleIds([roleId]);
-	}
 }

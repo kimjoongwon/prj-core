@@ -12,7 +12,6 @@ import {
 	UpdateAbilityDto,
 } from "@cocrepo/dto";
 import { Ability } from "@cocrepo/entity";
-import { AuthContext } from "@cocrepo/service";
 import {
 	Body,
 	Controller,
@@ -23,16 +22,12 @@ import {
 	ParseUUIDPipe,
 	Patch,
 	Post,
-	UnauthorizedException,
 } from "@nestjs/common";
 import { ApiBody, ApiOperation, ApiParam, ApiTags } from "@nestjs/swagger";
 @ApiTags("ABILITIES")
 @Controller()
 export class AbilitiesController {
-	constructor(
-		private readonly abilitiesService: AbilityApplicationService,
-		private readonly authContext: AuthContext,
-	) {}
+	constructor(private readonly abilitiesService: AbilityApplicationService) {}
 
 	/**
 	 * 전체 권한 정의 목록 조회
@@ -51,36 +46,6 @@ export class AbilitiesController {
 	@ResponseMessage("common.ability.list.success")
 	async getAbilities(): Promise<Ability[]> {
 		return this.abilitiesService.getAllAbilities();
-	}
-
-	/**
-	 * 내 권한 조회 (로그인 필수)
-	 * GET /api/v1/abilities/my
-	 *
-	 * 참고: /my는 /:id 보다 먼저 정의되어야 라우팅 우선순위가 올바르게 동작합니다.
-	 */
-	@Get("my")
-	@ApiOperation({
-		operationId: "getMyAbilities",
-		summary: "내 권한 조회",
-		description:
-			"현재 로그인한 사용자의 Role 권한과 예외 권한을 병합하여 조회합니다.",
-	})
-	@ApiAuth()
-	@ApiErrors(
-		{ status: 401, message: ABILITY_ERRORS.USER_NOT_FOUND },
-		{ status: 400, message: ABILITY_ERRORS.ROLE_NOT_FOUND },
-		500,
-	)
-	@ApiResponseEntity(AbilityResponseDto, HttpStatus.OK, { isArray: true })
-	@ResponseMessage("common.ability.my.success")
-	async getMyAbilities(): Promise<Ability[]> {
-		const user = this.authContext.user;
-		if (!user?.id) {
-			throw new UnauthorizedException(ABILITY_ERRORS.USER_NOT_FOUND);
-		}
-
-		return this.abilitiesService.getUserAbilities(user.id);
 	}
 
 	/**
@@ -106,31 +71,6 @@ export class AbilitiesController {
 		@Param("roleId", ParseUUIDPipe) roleId: string,
 	): Promise<Ability[]> {
 		return this.abilitiesService.getRoleAbilities(roleId);
-	}
-
-	/**
-	 * User별 예외 권한 조회
-	 * GET /api/v1/abilities/users/:userId
-	 */
-	@Get("users/:userId")
-	@ApiOperation({
-		operationId: "getAbilitiesByUserId",
-		summary: "User별 예외 권한 조회",
-		description: "특정 User에게 할당된 예외 권한 목록을 조회합니다.",
-	})
-	@ApiAuth()
-	@ApiParam({
-		name: "userId",
-		description: "User ID (UUID)",
-		type: String,
-	})
-	@ApiErrors({ status: 401, message: ABILITY_ERRORS.USER_NOT_FOUND }, 500)
-	@ApiResponseEntity(AbilityResponseDto, HttpStatus.OK, { isArray: true })
-	@ResponseMessage("common.ability.byUser.success")
-	async getAbilitiesByUserId(
-		@Param("userId", ParseUUIDPipe) userId: string,
-	): Promise<Ability[]> {
-		return this.abilitiesService.getUserAbilities(userId);
 	}
 
 	/**

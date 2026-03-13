@@ -28,6 +28,7 @@ NestJS Facade 레이어를 생성하는 전문가입니다.
 - 클래스명은 `XxxFacade`
 - 파일명은 `xxx.facade.ts`
 - Facade는 Controller 입출력 관점 조정, read model shaping, 다중 호출 결과 조합 담당
+- boundary composition endpoint의 주 진입점으로 사용하며, Controller가 같은 endpoint에서 `Facade`와 `ApplicationService`를 함께 직접 조합하는 기본 패턴을 만들지 않음
 - Prisma/Repository 직접 호출 금지
 - Service를 통해 비즈니스 규칙 호출
 - ApplicationService의 workflow 자체를 대체하지 않음

@@ -2,7 +2,7 @@ import { ABILITY_ERRORS } from "@cocrepo/constant";
 import { CreateAbilityInput } from "@cocrepo/dto";
 import { Ability } from "@cocrepo/entity";
 import { Prisma } from "@cocrepo/prisma";
-import { AbilityService, UserService } from "@cocrepo/service";
+import { AbilityService } from "@cocrepo/service";
 import {
 	BadRequestException,
 	Injectable,
@@ -22,45 +22,7 @@ import {
 export class AbilityApplicationService {
 	private readonly logger = new Logger(AbilityApplicationService.name);
 
-	constructor(
-		private readonly usersService: UserService,
-		private readonly abilitiesService: AbilityService,
-	) {}
-
-	/**
-	 * 내 권한 목록 조회 (Role + User 예외 권한 병합)
-	 * 사용자의 Role 권한과 예외 권한을 병합하여 반환합니다.
-	 *
-	 * @param userId - 사용자 ID
-	 * @returns 병합된 Ability 배열
-	 * @throws NotFoundException - 사용자를 찾을 수 없는 경우
-	 * @throws BadRequestException - 사용자에게 Role이 할당되지 않은 경우
-	 */
-	async getMyAbilities(userId: string): Promise<Ability[]> {
-		this.logger.debug(`내 권한 조회: userId=${userId.slice(-8)}`);
-
-		// 1. 사용자 조회 (UserService 통해)
-		const user = await this.usersService.getByIdWithTenants(userId);
-
-		if (!user) {
-			throw new NotFoundException(ABILITY_ERRORS.USER_NOT_FOUND);
-		}
-
-		// 2. 사용자의 모든 Tenant에서 Role ID 추출
-		if (!user.tenants || user.tenants.length === 0) {
-			this.logger.warn(
-				`사용자에게 Tenant가 할당되지 않았습니다: userId=${userId.slice(-8)}`,
-			);
-			throw new BadRequestException(
-				ABILITY_ERRORS.ROLE_NOT_FOUND,
-			);
-		}
-
-		const roleIds = user.tenants.map((tenant) => tenant.roleId);
-
-		// 3. Role + User 권한 병합 조회 (AbilityService 통해)
-		return this.abilitiesService.getMergedAbilities(roleIds, userId);
-	}
+	constructor(private readonly abilitiesService: AbilityService) {}
 
 	/**
 	 * ID로 Ability 조회
@@ -176,5 +138,4 @@ export class AbilityApplicationService {
 
 		return this.abilitiesService.deleteAbility(id);
 	}
-
 }

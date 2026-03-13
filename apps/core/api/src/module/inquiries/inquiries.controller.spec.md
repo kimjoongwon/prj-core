@@ -39,7 +39,6 @@
 | Method | 경로 | Operation ID | DTO (요청) | 반환값 | HTTP Status | 설명 |
 |--------|------|-------------|------------|--------|-------------|------|
 | GET | `/:inquiryId/messages` | getInquiryMessages | PaginationDto | InquiryMessageDto[] + meta | 200 | 문의 메시지 목록 |
-| POST | `/:inquiryId/messages` | sendInquiryMessage | CreateInquiryMessageDto | InquiryMessageDto | 201 | 메시지 전송 |
 
 ### AI 기능
 
@@ -71,7 +70,6 @@
 | PATCH `/:inquiryId` | O | RolesGuard | MANAGE, FULL_ACCESS, AGENT |
 | DELETE `/:inquiryId` | O | RolesGuard | FULL_ACCESS |
 | GET `/:inquiryId/messages` | O | RolesGuard | MANAGE, FULL_ACCESS, AGENT |
-| POST `/:inquiryId/messages` | O | RolesGuard | MANAGE, FULL_ACCESS, AGENT |
 | POST `/form/ai-fill` | O | RolesGuard | MANAGE, FULL_ACCESS, AGENT |
 | GET `/stats` | O | RolesGuard | MANAGE, FULL_ACCESS |
 
@@ -86,7 +84,6 @@
 | POST `/` | 400, 401, 403, 500 |
 | PATCH `/:inquiryId` | 400, 401, 403, 404, 409, 500 |
 | DELETE `/:inquiryId` | 400, 401, 403, 404, 500 |
-| POST `/:inquiryId/messages` | 400, 401, 403, 404, 500 |
 | POST `/form/ai-fill` | 400, 401, 403, 500 |
 
 ## 데코레이터 사용
@@ -120,3 +117,4 @@
 | 2026-03-12 | Controller-서비스 API 정합성 정리 (`createInquiry`/`sendInquiryMessage` 호출명 반영, Payload 구성 보강) | codex |
 | 2026-03-12 | 목록 조회 메타 계산을 InquiryFacade로 이관 | codex |
 | 2026-03-13 | controller boundary 조합을 `InquiryFacade`로 이관 | codex |
+| 2026-03-13 | admin/idp/web 및 fe-ui 런타임 미사용 `sendInquiryMessage` endpoint를 제거해 메시지 API를 조회 전용으로 정리 | codex |

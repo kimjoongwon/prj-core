@@ -49,3 +49,4 @@ Inquiry aggregate root의 Prisma 접근을 담당합니다. Inquiry 조회/저�
 |------|------|--------|
 | 2026-03-03 | 누락된 sidecar spec 신규 생성 | codex |
 | 2026-03-11 | root-only inquiry repository로 이동하고 위치/역할 설명을 갱신 | codex |
+| 2026-03-13 | frontend 런타임 미사용 참여자 join write 보조 메서드를 제거 | codex |

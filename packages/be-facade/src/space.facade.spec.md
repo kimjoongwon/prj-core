@@ -9,9 +9,15 @@
 Space aggregate root API의 controller boundary를 담당합니다.
 Ground 1:1 detail lifecycle은 Space root 아래에서 처리하며 목록 응답 메타를 조립합니다.
 
+## 공개 메서드 메모
+
+- 유지: 목록 조회, Ground 조회, 생성, Ground 수정
+- 제거: frontend 런타임 미사용 상세 조회/삭제 wrapper
+
 ## 변경 이력
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
 | 2026-03-11 | Space root facade 신규 생성 | codex |
 | 2026-03-13 | `@cocrepo/app`에서 `@cocrepo/facade`로 이관 | codex |
+| 2026-03-13 | frontend 런타임 미사용 상세 조회/삭제 wrapper를 제거 | codex |

@@ -185,18 +185,6 @@ export class GrantService {
 	}
 
 	/**
-	 * Role ID 목록으로 Grant 조회
-	 *
-	 * @param roleIds - Role ID 배열
-	 * @returns Grant 배열 (Ability 포함)
-	 */
-	async findByRoleIds(roleIds: string[]): Promise<Grant[]> {
-		this.logger.debug(`Role ID로 Grant 조회: roleIds.length=${roleIds.length}`);
-
-		return this.grantsRepository.findActiveByRoleIds(roleIds);
-	}
-
-	/**
 	 * User ID로 Grant 조회
 	 *
 	 * @param userId - User ID

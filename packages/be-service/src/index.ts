@@ -42,7 +42,6 @@ export {
 	type SessionInfo,
 	type SessionMetadata,
 } from "./token-storage.service";
-export { TranslationService } from "./translation.service";
 export { UserService } from "./user.service";
 export { MaskingService } from "./masking.service";
 export { MASKING_PRESETS, type MaskingPreset } from "@cocrepo/constant";

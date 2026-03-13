@@ -306,47 +306,6 @@ export class InquiriesRepository {
 		return results.map((result) => plainToInstance(InquiryParticipant, result));
 	}
 
-	async findParticipantByInquiryIdAndUserId(
-		inquiryId: string,
-		userId: string,
-	): Promise<InquiryParticipant | null> {
-		const result = await this.txHost.tx.inquiryParticipant.findFirst({
-			where: {
-				inquiryId,
-				userId,
-				leftAt: null,
-			},
-		});
-
-		return result ? plainToInstance(InquiryParticipant, result) : null;
-	}
-
-	async createParticipant(
-		data: Prisma.InquiryParticipantUncheckedCreateInput,
-	): Promise<InquiryParticipant> {
-		const result = await this.txHost.tx.inquiryParticipant.create({
-			data,
-		});
-
-		return plainToInstance(InquiryParticipant, result);
-	}
-
-	async updateParticipantOnlineStatusById(
-		id: string,
-		isOnline: boolean,
-	): Promise<InquiryParticipant> {
-		const result = await this.txHost.tx.inquiryParticipant.update({
-			where: { id },
-			data: {
-				isOnline,
-				lastSeenAt: new Date(),
-				...(isOnline === false && { isTyping: false }),
-			},
-		});
-
-		return plainToInstance(InquiryParticipant, result);
-	}
-
 	async incrementParticipantUnreadByInquiryId(
 		inquiryId: string,
 		excludeUserId?: string,

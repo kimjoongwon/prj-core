@@ -19,3 +19,4 @@
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
 | 2026-03-03 | 누락된 sidecar spec 신규 생성 | codex |
+| 2026-03-13 | frontend 런타임 미사용 translation CRUD service export를 제거 | codex |

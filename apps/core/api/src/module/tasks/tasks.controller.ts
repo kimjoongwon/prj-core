@@ -71,32 +71,6 @@ export class TasksController {
 		});
 	}
 
-	@Get(":taskId")
-	@ApiOperation({
-		operationId: "getTaskById",
-		summary: "Task 상세 조회",
-		description: "Exercise detail을 포함한 Task를 조회합니다.",
-	})
-	@ApiAuth()
-	@ApiParam({
-		name: "taskId",
-		description: "Task ID (UUID)",
-		type: String,
-	})
-	@ApiErrors(401, 404, 500)
-	@ApiResponseEntity(TaskDto, HttpStatus.OK)
-	@ResponseMessage("Task 상세 조회 성공")
-	async getTaskById(
-		@Param("taskId", ParseUUIDPipe) taskId: string,
-	): Promise<Task> {
-		const spaceId = this.spaceContext.spaceId;
-		if (!spaceId) {
-			throw new UnauthorizedException(USER_ERRORS.SPACE_NOT_SELECTED);
-		}
-
-		return this.tasksService.findTaskById(taskId, spaceId);
-	}
-
 	@Get(":taskId/exercise")
 	@ApiOperation({
 		operationId: "getTaskExercise",

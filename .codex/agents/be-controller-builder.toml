@@ -46,6 +46,8 @@ NestJS REST Controller를 생성하는 전문가
 ### Core Rules
 
 - 기본 원칙: Controller는 workflow 유즈케이스면 `ApplicationService`, boundary composition이면 `Facade`를 진입점으로 사용한다.
+- 각 endpoint는 기본적으로 `ApplicationService` 또는 `Facade` 또는 단일 pass-through `Service` 중 하나를 주 진입점으로 사용한다.
+- Controller가 같은 endpoint에서 `Facade`와 `ApplicationService`를 직접 연쇄 호출해 workflow를 만드는 패턴은 기본값으로 사용하지 않는다.
 - 단일 aggregate-root 전달형 API만 `Service` 직접 호출 허용.
 - 유즈케이스 workflow orchestration(다수 서비스 조합, 조건 분기, 외부 연동 포함)은 `ApplicationService`로 이동.
 - 응답 조립/read model/protocol composition은 `Facade`로 이동.
@@ -109,6 +111,8 @@ Create/Update 화면에서 폼을 즉시 렌더링할 수 있도록 Controller�
 - [ ] workflow 유즈케이스는 `@cocrepo/app`의 ApplicationService를 주입
 - [ ] boundary composition 유즈케이스는 `@cocrepo/facade`의 Facade를 주입
 - [ ] Service/Repository/Integration Facade 직접 주입은 **동일 aggregate root에서 단일 전달형일 때만** 허용
+- [ ] 각 endpoint의 primary entrypoint가 하나인지 확인 (`ApplicationService` / `Facade` / 단일 `Service`)
+- [ ] 같은 endpoint에서 Controller가 `Facade`와 `ApplicationService`를 모두 호출하지 않는지 확인
 - [ ] pass-through 허용 시에도 주입 대상을 하나의 `Service`로 제한
 - [ ] Logger 초기화
 - [ ] 각 메서드에 `@HttpCode(HttpStatus.OK)` 추가
@@ -118,6 +122,7 @@ Create/Update 화면에서 폼을 즉시 렌더링할 수 있도록 Controller�
 - [ ] 페이지 단위 controller는 query/bootstrap/BFF 용도일 때만 허용하고 write 진입점의 기본 단위로 사용하지 않음
 - [ ] workflow 경로에서는 Controller -> ApplicationService -> Service -> Repository 흐름 유지
 - [ ] boundary composition 경로에서는 Controller -> Facade -> Service -> Repository 흐름 유지
+- [ ] 한 controller 클래스에서 `Facade`와 `ApplicationService`를 함께 주입해야 한다면 메서드 책임 분리가 명확한지 확인
 - [ ] module 폴더는 aggregate root 기준으로 유지 (`spaces`, `tasks`)
 - [ ] `ground`, `exercise` 같은 child resource는 top-level module 예시로 만들지 않음
 - [ ] Create/Update용 Form Bootstrap 응답 계약 (`defaultObject/options/ui/fieldMeta/aiSchemas`) 적용

@@ -12,7 +12,6 @@ import { BatchGrantRequestDto, GrantResponseDto } from "@cocrepo/dto";
 import {
 	Body,
 	Controller,
-	Get,
 	HttpStatus,
 	Param,
 	ParseUUIDPipe,
@@ -48,22 +47,5 @@ export class GrantsController {
 		@Body() dto: BatchGrantRequestDto,
 	) {
 		return this.grantsService.batchAssignToRole(roleId, dto.grants);
-	}
-
-	@Get("roles/:roleId")
-	@UseGuards(RolesGuard)
-	@Roles([SYSTEM_ROLES.MANAGE, SYSTEM_ROLES.FULL_ACCESS])
-	@ApiOperation({
-		operationId: "getGrantsByRoleId",
-		summary: "역할별 권한 조회",
-		description: "특정 Role에 할당된 Grant 목록을 조회합니다.",
-	})
-	@ApiAuth()
-	@ApiParam({ name: "roleId", description: "역할 ID (UUID)", type: String })
-	@ApiErrors(401, 403, 500)
-	@ApiResponseEntity(GrantResponseDto, HttpStatus.OK, { isArray: true })
-	@ResponseMessage("common.grant.byRole.success")
-	async getGrantsByRoleId(@Param("roleId", ParseUUIDPipe) roleId: string) {
-		return this.grantsService.findByRoleIds([roleId]);
 	}
 }

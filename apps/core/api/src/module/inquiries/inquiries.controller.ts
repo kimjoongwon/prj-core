@@ -8,7 +8,6 @@ import {
 } from "@cocrepo/decorator";
 import {
 	CreateInquiryDto,
-	CreateInquiryMessageDto,
 	FillInquiryFormRequestDto,
 	FillInquiryFormResponseDto,
 	InquiryAiFormPatchDto,
@@ -27,12 +26,8 @@ import {
 	QueryInquiryDto,
 	UpdateInquiryDto,
 } from "@cocrepo/dto";
-import { Inquiry, InquiryMessage, InquiryParticipant } from "@cocrepo/entity";
-import type {
-	InquiryParticipantRole,
-	InquiryPriority,
-	InquiryStatus,
-} from "@cocrepo/prisma";
+import { Inquiry, InquiryParticipant } from "@cocrepo/entity";
+import type { InquiryPriority, InquiryStatus } from "@cocrepo/prisma";
 import { AuthContext, SpaceContext } from "@cocrepo/service";
 import {
 	Body,
@@ -506,52 +501,6 @@ export class InquiriesController {
 		});
 	}
 
-	@Post(":inquiryId/messages")
-	@HttpCode(HttpStatus.CREATED)
-	@ApiOperation({
-		operationId: "sendInquiryMessage",
-		summary: "메시지 전송",
-		description: "문의에 메시지를 전송합니다.",
-	})
-	@ApiAuth()
-	@ApiParam({
-		name: "inquiryId",
-		description: "문의 ID (UUID)",
-		type: String,
-	})
-	@ApiBody({
-		type: CreateInquiryMessageDto,
-		description: "메시지 정보",
-	})
-	@ApiErrors(
-		{ status: 400, message: "이미 처리된 메시지입니다 (중복 clientMessageId)" },
-		{ status: 401, message: USER_ERRORS.USER_NOT_FOUND },
-		{ status: 401, message: USER_ERRORS.SPACE_NOT_SELECTED },
-		{ status: 404, message: "문의를 찾을 수 없습니다" },
-		500,
-	)
-	@ApiResponseEntity(InquiryMessageDto, HttpStatus.CREATED)
-	@ResponseMessage("메시지 전송 성공")
-	async sendMessage(
-		@Param("inquiryId", ParseUUIDPipe) inquiryId: string,
-		@Body() dto: CreateInquiryMessageDto,
-	): Promise<InquiryMessage> {
-		const actorUserId = this.authContext.user?.id;
-		if (!actorUserId) {
-			throw new UnauthorizedException(USER_ERRORS.USER_NOT_FOUND);
-		}
-
-		return this.inquiriesService.sendInquiryMessage({
-			inquiryId,
-			actorUserId,
-			threadId: dto.threadId,
-			content: dto.content,
-			contentType: dto.contentType ?? "TEXT",
-			senderType: dto.senderType ?? "USER",
-			clientMessageId: dto.clientMessageId,
-		});
-	}
-
 	@Get(":inquiryId/participants")
 	@ApiOperation({
 		operationId: "getInquiryParticipants",
@@ -576,61 +525,5 @@ export class InquiriesController {
 		@Param("inquiryId", ParseUUIDPipe) inquiryId: string,
 	): Promise<InquiryParticipant[]> {
 		return this.inquiriesService.getInquiryParticipants(inquiryId);
-	}
-
-	@Post(":inquiryId/participants/join")
-	@HttpCode(HttpStatus.OK)
-	@ApiOperation({
-		operationId: "joinInquiry",
-		summary: "문의 참여",
-		description:
-			"문의에 참여합니다. 이미 참여 중이면 온라인 상태로 변경됩니다.",
-	})
-	@ApiAuth()
-	@ApiParam({
-		name: "inquiryId",
-		description: "문의 ID (UUID)",
-		type: String,
-	})
-	@ApiBody({
-		schema: {
-			type: "object",
-			properties: {
-				threadId: {
-					type: "string",
-					format: "uuid",
-					description: "스레드 ID (선택)",
-				},
-				role: {
-					type: "string",
-					enum: ["CUSTOMER", "AGENT", "SUPERVISOR", "VIEWER"],
-					description: "참여자 역할 (기본값: VIEWER)",
-				},
-			},
-		},
-	})
-	@ApiErrors(
-		{ status: 401, message: USER_ERRORS.USER_NOT_FOUND },
-		{ status: 401, message: USER_ERRORS.SPACE_NOT_SELECTED },
-		{ status: 404, message: "문의를 찾을 수 없습니다" },
-		500,
-	)
-	@ApiResponseEntity(InquiryParticipant, HttpStatus.OK)
-	@ResponseMessage("문의 참여 성공")
-	async joinInquiry(
-		@Param("inquiryId", ParseUUIDPipe) inquiryId: string,
-		@Body() body: { threadId?: string; role?: InquiryParticipantRole },
-	): Promise<InquiryParticipant> {
-		const actorUserId = this.authContext.user?.id;
-		if (!actorUserId) {
-			throw new UnauthorizedException(USER_ERRORS.USER_NOT_FOUND);
-		}
-
-		return this.inquiriesService.joinInquiry({
-			inquiryId,
-			userId: actorUserId,
-			threadId: body.threadId,
-			role: body.role,
-		});
 	}
 }

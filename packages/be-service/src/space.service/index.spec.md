@@ -20,7 +20,6 @@ Space aggregate root를 관리합니다. Ground 1:1 detail lifecycle과 SpaceCat
 | 메서드 | 파라미터 | 반환 | 설명 |
 |--------|----------|------|------|
 | `getById` | `id: string` | `Promise<Space \| null>` | ID로 Space 조회 |
-| `getByIdWithGround` | `id: string` | `Promise<Space \| null>` | Ground detail 포함 Space 조회 |
 | `listSpaces` | - | `Promise<{ spaces: Space[]; total: number }>` | Ground 포함 Space 목록 조회 |
 | `getGroundBySpaceId` | `spaceId: string` | `Promise<Ground>` | Space의 1:1 Ground detail 조회 |
 | `createPersonalSpace` | - | `Promise<Space>` | 개인 Space 생성 (회원가입 시) |
@@ -29,7 +28,7 @@ Space aggregate root를 관리합니다. Ground 1:1 detail lifecycle과 SpaceCat
 | `updateGroundBySpaceId` | `spaceId: string, dto: UpdateGroundDto` | `Promise<Space>` | Space root 아래 Ground detail 수정 |
 | `getAccessibleSpaceIds` | `spaceId: string` | `Promise<string[]>` | SpaceCategory 계층 기반 접근 가능한 Space ID 배열 조회 |
 | `findByIdsWithGround` | `ids: string[]` | `Promise<Space[]>` | 여러 ID로 Space 조회 (Ground 포함) |
-| `removeSpace` | `id: string` | `Promise<Space>` | Space root와 Ground detail 소프트 삭제 |
+| `removeById` | `id: string` | `Promise<Space>` | Space 소프트 삭제 |
 
 ## 비즈니스 규칙
 
@@ -60,3 +59,4 @@ Space aggregate root를 관리합니다. Ground 1:1 detail lifecycle과 SpaceCat
 | 2026-03-11 | 호출 주체 설명을 ApplicationService 기준으로 갱신 | codex |
 | 2026-03-11 | Ground 1:1 detail 메서드와 root 책임 설명을 반영 | codex |
 | 2026-03-13 | `space.service.ts`와 sidecar spec을 폴더형 `index.ts`/`index.spec.md` 구조로 재배치 | codex |
+| 2026-03-13 | frontend 런타임 미사용 상세 조회/삭제 보조 메서드를 제거 | codex |

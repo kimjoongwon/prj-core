@@ -15,3 +15,4 @@ Inquiry aggregate root API의 controller boundary를 담당합니다.
 |------|------|--------|
 | 2026-03-11 | Inquiry root facade 신규 생성 | codex |
 | 2026-03-13 | `@cocrepo/app`에서 `@cocrepo/facade`로 이관 | codex |
+| 2026-03-13 | frontend 런타임 미사용 메시지 전송/참여 join boundary 메서드를 제거 | codex |

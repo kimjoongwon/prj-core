@@ -154,9 +154,11 @@ packages/be-dto/src/[domain]/*.dto.spec.md
 - 리소스 경로는 화면명이 아니라 `aggregate root` 기준으로 설계합니다.
 - controller는 `apps/core/api/src/module/[aggregate-root]/` 위치 기준으로 계획합니다.
 - 페이지 이름을 기준으로 command API를 나누지 않습니다.
+- 각 엔드포인트는 기본적으로 하나의 primary entrypoint를 선택합니다: workflow면 `ApplicationService`, boundary composition이면 `Facade`, 단일 aggregate-root 전달형이면 `Service`.
 - command/write API와 aggregate query API는 오케스트레이션이 필요한 경우에만 `ApplicationService`에 연결합니다.
 - `ApplicationService`는 내부에서 `Service`와 필요 시 외부 Integration Facade를 순서대로 호출합니다.
 - controller 경계에서 read model shaping/응답 조립/protocol composition이 필요하면 `Facade`를 별도 경계로 둡니다.
+- Controller가 같은 endpoint에서 `Facade`와 `ApplicationService`를 직접 연쇄 호출하는 계약은 기본 패턴으로 설계하지 않습니다.
 - `GET /form/create`, `GET /:id/form/update` 같은 bootstrap/query API는 화면 전용 controller/BFF로 허용합니다.
 - 페이지/BFF 성격의 bootstrap/query endpoint는 허용하되, Aggregate write의 기본 진입점으로 쓰지 않습니다.
 - 외부 시스템 연동 자체가 목적이 아닌 한, API 계약은 Integration Facade를 직접 노출하지 않습니다.
