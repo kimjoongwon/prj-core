@@ -10,9 +10,10 @@ import {
 import {
 	OidcSessionDto,
 	OidcSessionStatsDto,
+	PageMetaDto,
 	QueryOidcSessionDto,
 } from "@cocrepo/dto";
-import { OidcSessionsApplicationService } from "@cocrepo/app";
+import { OidcSessionFacade } from "@cocrepo/facade";
 import {
 	Controller,
 	Get,
@@ -30,7 +31,7 @@ import { ApiOperation, ApiParam, ApiTags } from "@nestjs/swagger";
 @SkipSpaceCheck()
 export class OidcSessionsController {
 	constructor(
-		private readonly oidcSessionsService: OidcSessionsApplicationService,
+		private readonly oidcSessionFacade: OidcSessionFacade,
 	) {}
 
 	@Get()
@@ -48,7 +49,7 @@ export class OidcSessionsController {
 	})
 	@ResponseMessage("OIDC 세션 목록 조회 성공")
 	async getOidcSessions(@Query() query: QueryOidcSessionDto) {
-		return this.oidcSessionsService.getMany(query);
+		return this.oidcSessionFacade.getMany(query);
 	}
 
 	@Get("stats")
@@ -62,7 +63,7 @@ export class OidcSessionsController {
 	@ApiResponseEntity(OidcSessionStatsDto, HttpStatus.OK)
 	@ResponseMessage("OIDC 세션 통계 조회 성공")
 	async getOidcSessionStats() {
-		return this.oidcSessionsService.getStats();
+		return this.oidcSessionFacade.getStats();
 	}
 
 	@Post(":key/revoke")
@@ -81,7 +82,7 @@ export class OidcSessionsController {
 	@ApiErrors(401, 404, 500)
 	@ResponseMessage("세션/토큰 폐기 성공")
 	async revokeOidcSession(@Param("key") key: string): Promise<void> {
-		await this.oidcSessionsService.revokeByKey(key);
+		await this.oidcSessionFacade.revokeByKey(key);
 	}
 
 	@Post("revoke-all")
@@ -95,7 +96,7 @@ export class OidcSessionsController {
 	@ApiErrors(401, 500)
 	@ResponseMessage("전체 세션/토큰 일괄 폐기 성공")
 	async revokeAllOidcSessions(): Promise<void> {
-		await this.oidcSessionsService.revokeAll();
+		await this.oidcSessionFacade.revokeAll();
 	}
 
 	@Post("revoke-by-grant/:grantId")
@@ -116,6 +117,6 @@ export class OidcSessionsController {
 	async revokeOidcSessionsByGrant(
 		@Param("grantId") grantId: string,
 	): Promise<void> {
-		await this.oidcSessionsService.revokeByGrantId(grantId);
+		await this.oidcSessionFacade.revokeByGrantId(grantId);
 	}
 }

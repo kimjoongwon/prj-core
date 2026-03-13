@@ -1,4 +1,4 @@
-import { RoutinesApplicationService } from "@cocrepo/app";
+import { RoutineFacade } from "@cocrepo/facade";
 import { RolesGuard } from "@cocrepo/be-common";
 import { ROUTINE_ERRORS, SYSTEM_ROLES } from "@cocrepo/constant";
 import {
@@ -36,7 +36,7 @@ import { ApiBody, ApiOperation, ApiParam, ApiTags } from "@nestjs/swagger";
 @Controller()
 export class RoutinesController {
 	constructor(
-		private readonly routinesService: RoutinesApplicationService,
+		private readonly routinesService: RoutineFacade,
 	) {}
 
 	/**
@@ -55,12 +55,7 @@ export class RoutinesController {
 	@ApiResponseEntity(RoutineDto, HttpStatus.OK, { isArray: true })
 	@ResponseMessage("루틴 목록 조회 성공")
 	async getRoutines(@Query() query: GetRoutinesQueryDto) {
-		return this.routinesService.findRoutines({
-			spaceScope: query.spaceScope,
-			skip: query.skip,
-			take: query.take,
-			search: query.search,
-		});
+		return this.routinesService.findRoutines(query);
 	}
 
 	/**

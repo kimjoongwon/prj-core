@@ -1,9 +1,9 @@
 # OIDC Controller 기획서
 
 > 생성일: 2026-02-19
-> 수정일: 2026-02-19
+> 수정일: 2026-03-13
 > 타입: controller
-> 위치: apps/idp-server/src/module/oidc/oidc.controller.ts
+> 위치: apps/idp/api/src/module/oidc/oidc.controller.ts
 
 ## 역할
 
@@ -54,7 +54,7 @@ oidc-provider 라이브러리의 모든 OIDC 표준 엔드포인트 요청을 Ne
 
 | 의존 서비스 | 역할 |
 |------------|------|
-| `OidcApplicationService` | oidc-provider 위임 처리를 캡슐화 |
+| `OidcFacade` | oidc-provider 위임 처리를 캡슐화 |
 
 ## 구현 체크리스트
 
@@ -68,4 +68,4 @@ oidc-provider 라이브러리의 모든 OIDC 표준 엔드포인트 요청을 Ne
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
 | 2026-02-19 | 초기 생성 (역기획) | req-reverse-engineer |
-| 2026-03-12 | OidcController가 OidcProviderService 직접 주입에서 OidcApplicationService로 전환 | codex |
+| 2026-03-13 | OidcController가 OidcProviderService 직접 주입에서 OidcFacade로 전환 | codex |

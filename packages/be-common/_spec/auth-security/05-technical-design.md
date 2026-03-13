@@ -92,7 +92,7 @@ validateUser(email, password, ipAddress, userAgent, clientId):
 
 ### 로그아웃 완성 로직 (AuthApplicationService 강화)
 
-**위치**: `packages/be-app/src/auth.application-service.ts`
+**위치**: `packages/be-app/src/auth.application-service/index.ts`
 
 ```
 logoutWithCookie(accessToken, res):
@@ -192,7 +192,7 @@ executeReset(rawToken, newPassword):
 
 ### 세션 조회 로직
 
-**위치**: `packages/be-app/src/auth.application-service.ts` 또는 `packages/be-integration/src/oidc.facade.ts`
+**위치**: `packages/be-app/src/auth.application-service/index.ts` 또는 `packages/be-integration/src/oidc.facade.ts`
 
 ```
 getMySession(userId, currentAccessToken):
@@ -213,7 +213,7 @@ getMySession(userId, currentAccessToken):
 
 ### 이메일 서비스
 
-**위치**: `packages/be-service/src/email.service.ts`
+**위치**: `packages/be-service/src/email.service/index.ts`
 
 ```typescript
 @Injectable()
@@ -534,7 +534,7 @@ describe("SessionCard", () => {
 | `apps/idp/api/src/module/oidc/direct-user.repository.ts` | 잠금 관리 메서드 추가 |
 | `apps/idp/api/src/module/interaction/interaction.service.ts` | 로그인 검증 강화 |
 | `apps/idp/api/src/module/interaction/interaction.controller.ts` | 에러 응답 포맷 변경 |
-| `packages/be-app/src/auth.application-service.ts` | logoutWithCookie 강화 |
+| `packages/be-app/src/auth.application-service/index.ts` | logoutWithCookie 강화 |
 | `apps/idp/web/src/app/interaction/[uid]/_components/LoginForm.tsx` | 잠금 UI, 남은 시도, 링크 |
 
 ### Phase 2
@@ -543,7 +543,7 @@ describe("SessionCard", () => {
 |------|------|
 | `packages/be-prisma/schema/identity/user.prisma` | PasswordHistory 추가 |
 | `packages/be-common/src/utils/password-policy.ts` | 신규 |
-| `packages/be-service/src/email.service.ts` | 신규 |
+| `packages/be-service/src/email.service/index.ts` | 신규 |
 | `apps/idp/api/src/module/password-reset/` | 신규 모듈 |
 | `apps/idp/web/src/app/forgot-password/` | 신규 페이지 |
 | `apps/idp/web/src/app/reset-password/[token]/` | 신규 페이지 |

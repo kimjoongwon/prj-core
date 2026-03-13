@@ -25,7 +25,7 @@ import {
 	ApiTags,
 } from "@nestjs/swagger";
 import type { Response } from "express";
-import { PasswordResetApplicationService } from "./password-reset.application-service";
+import { PasswordResetFacade } from "./password-reset.facade";
 
 /**
  * 비밀번호 재설정 Controller
@@ -40,7 +40,7 @@ export class PasswordResetController {
 	private readonly logger = new Logger(PasswordResetController.name);
 
 	constructor(
-		private readonly passwordResetApplicationService: PasswordResetApplicationService,
+		private readonly passwordResetApplicationService: PasswordResetFacade,
 	) {}
 
 	@ApiOperation({

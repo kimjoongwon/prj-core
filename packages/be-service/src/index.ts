@@ -2,7 +2,7 @@
 export { AuthContext, SpaceContext } from "@cocrepo/context";
 
 // I18n
-export { I18nModule, TranslationService } from "./i18n";
+export { I18nModule, I18nTranslationService } from "./i18n";
 
 // Strategy
 export { JwtStrategy } from "./strategy";
@@ -16,42 +16,42 @@ export {
 } from "./auth-audit-log.service";
 export { AuthCacheService } from "./auth-cache.service";
 export { EmailService } from "./email.service";
-export { AbilitiesService } from "./abilities.service";
-export { ActionsService } from "./actions.service";
-export { CategoriesService } from "./categories.service";
+export { AbilityService } from "./ability.service";
+export { ActionService } from "./action.service";
+export { CategoryService } from "./category.service";
 export { AwsService } from "./aws.service";
-export { GrantsService } from "./grants.service";
-export { GroupsService } from "./groups.service";
+export { GrantService } from "./grant.service";
+export { GroupService } from "./group.service";
 export { createPrismaClient } from "./prisma.factory";
 export { PrismaService } from "./prisma.service";
 export { RedisService } from "./redis.service";
-export { RolesService } from "./roles.service";
-export { RoutinesService } from "./routines.service";
-export { SpacesService } from "./spaces.service";
+export { RoleService } from "./role.service";
+export { RoutineService } from "./routine.service";
+export { SpaceService } from "./space.service";
 export {
 	type SubjectFieldInfo,
 	type SubjectInfo,
-	SubjectsService,
-} from "./subjects.service";
-export { TasksService } from "./tasks.service";
-export { TemplatesService } from "./templates.service";
-export { TimelinesService } from "./timelines.service";
+	SubjectService,
+} from "./subject.service";
+export { TaskService } from "./task.service";
+export { TemplateService } from "./template.service";
+export { TimelineService } from "./timeline.service";
 export { TokenService } from "./token.service";
 export {
 	TokenStorageService,
 	type SessionInfo,
 	type SessionMetadata,
 } from "./token-storage.service";
-export { TranslationsService } from "./translations.service";
-export { UsersService } from "./users.service";
+export { TranslationService } from "./translation.service";
+export { UserService } from "./user.service";
 export { MaskingService } from "./masking.service";
 export { MASKING_PRESETS, type MaskingPreset } from "@cocrepo/constant";
-export { OidcClientsService } from "./oidc-clients.service";
+export { OidcClientService } from "./oidc-client.service";
 export { SecurityPolicyService } from "./security-policy.service";
 export {
-	OidcSessionsService,
+	OidcSessionService,
 	type OidcRedisSession,
-} from "./oidc-sessions.service";
+} from "./oidc-session.service";
 export {
 	type DashboardStats,
 	type LoginTrendItem,
@@ -64,10 +64,10 @@ export {
 
 // Inquiry Domain Services
 export {
-	InquiriesService,
+	InquiryService,
 	type FillInquiryFormInput,
 	type FillInquiryFormResult,
 	type InquiryStats,
 	type InquiryCreateUpdateFormBootstrap,
 	type SentimentAnalysisResult,
-} from "./inquiries.service";
+} from "./inquiry.service";

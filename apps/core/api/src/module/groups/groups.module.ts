@@ -1,17 +1,17 @@
-import { GroupsApplicationService } from "@cocrepo/app";
+import { GroupFacade } from "@cocrepo/facade";
 import { GroupsRepository } from "@cocrepo/repository";
-import { GroupsService, SpaceContext } from "@cocrepo/service";
+import { GroupService, SpaceContext } from "@cocrepo/service";
 import { Module } from "@nestjs/common";
 import { GroupsController } from "./groups.controller";
 
 @Module({
 	controllers: [GroupsController],
 	providers: [
-		GroupsApplicationService,
-		GroupsService,
+		GroupFacade,
+		GroupService,
 		GroupsRepository,
 		SpaceContext,
 	],
-	exports: [GroupsApplicationService],
+	exports: [GroupFacade],
 })
 export class GroupsModule {}

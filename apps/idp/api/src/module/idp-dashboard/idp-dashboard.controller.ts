@@ -8,7 +8,7 @@ import {
 	SkipSpaceCheck,
 } from "@cocrepo/decorator";
 import { DashboardStatsDto, LoginTrendItemDto } from "@cocrepo/dto";
-import { IdpDashboardApplicationService } from "@cocrepo/app";
+import { IdpDashboardFacade } from "@cocrepo/facade";
 import { Controller, Get, HttpStatus } from "@nestjs/common";
 import { ApiOperation, ApiTags } from "@nestjs/swagger";
 
@@ -18,7 +18,7 @@ import { ApiOperation, ApiTags } from "@nestjs/swagger";
 	@SkipSpaceCheck()
 export class IdpDashboardController {
 	constructor(
-		private readonly idpDashboardService: IdpDashboardApplicationService,
+		private readonly idpDashboardService: IdpDashboardFacade,
 	) {}
 
 	@Get("stats")

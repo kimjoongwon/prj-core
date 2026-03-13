@@ -1,4 +1,4 @@
-import { TasksApplicationService } from "@cocrepo/app";
+import { TaskFacade } from "@cocrepo/facade";
 import { RolesGuard } from "@cocrepo/be-common";
 import { SYSTEM_ROLES, USER_ERRORS } from "@cocrepo/constant";
 import {
@@ -40,7 +40,7 @@ import { ApiBody, ApiOperation, ApiParam, ApiTags } from "@nestjs/swagger";
 @Controller()
 export class TasksController {
 	constructor(
-		private readonly tasksService: TasksApplicationService,
+		private readonly tasksService: TaskFacade,
 		private readonly authContext: AuthContext,
 		private readonly spaceContext: SpaceContext,
 	) {}

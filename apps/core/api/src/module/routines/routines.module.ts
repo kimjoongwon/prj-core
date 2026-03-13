@@ -1,18 +1,18 @@
-import { RoutinesApplicationService } from "@cocrepo/app";
+import { RoutineFacade } from "@cocrepo/facade";
 import { RoutinesRepository } from "@cocrepo/repository";
-import { AuthContext, RoutinesService, SpaceContext } from "@cocrepo/service";
+import { AuthContext, RoutineService, SpaceContext } from "@cocrepo/service";
 import { Module } from "@nestjs/common";
 import { RoutinesController } from "./routines.controller";
 
 @Module({
 	controllers: [RoutinesController],
 	providers: [
-		RoutinesApplicationService,
-		RoutinesService,
+		RoutineFacade,
+		RoutineService,
 		RoutinesRepository,
 		AuthContext,
 		SpaceContext,
 	],
-	exports: [RoutinesApplicationService],
+	exports: [RoutineFacade],
 })
 export class RoutinesModule {}

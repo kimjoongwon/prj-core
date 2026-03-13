@@ -1,24 +1,24 @@
 import { UsersRepository } from "@cocrepo/repository";
-import { UsersApplicationService } from "@cocrepo/app";
+import { UserFacade } from "@cocrepo/facade";
 import {
 	AuthCacheService,
 	AuthContext,
 	SpaceContext,
-	UsersService,
+	UserService,
 } from "@cocrepo/service";
 import { Module } from "@nestjs/common";
 import { UsersController } from "./users.controller";
 
 @Module({
 	providers: [
-		UsersApplicationService,
-		UsersService,
+		UserFacade,
+		UserService,
 		UsersRepository,
 		AuthContext,
 		SpaceContext,
 		AuthCacheService,
 	],
 	controllers: [UsersController],
-	exports: [UsersApplicationService],
+	exports: [UserFacade],
 })
 export class UsersModule {}

@@ -1,16 +1,16 @@
-import { SubjectsService } from "@cocrepo/service";
-import { SubjectsApplicationService } from "@cocrepo/app";
+import { SubjectService } from "@cocrepo/service";
+import { SubjectFacade } from "@cocrepo/facade";
 import { SubjectsRepository } from "@cocrepo/repository";
 import { Module } from "@nestjs/common";
 import { SubjectsController } from "./subjects.controller";
 
 @Module({
 	providers: [
-		SubjectsApplicationService,
-		SubjectsService,
+		SubjectFacade,
+		SubjectService,
 		SubjectsRepository,
 	],
 	controllers: [SubjectsController],
-	exports: [SubjectsApplicationService],
+	exports: [SubjectFacade],
 })
 export class SubjectsModule {}

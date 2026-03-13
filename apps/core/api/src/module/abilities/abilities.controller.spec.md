@@ -6,7 +6,7 @@
 
 ## 역할
 
-CASL 기반 권한 정의(Ability)의 CRUD 및 조회 API를 제공하는 컨트롤러. AbilitiesService를 통해 비즈니스 로직을 실행하며, 현재 사용자 조회는 `AuthContext`를 통해 수행한다.
+CASL 기반 권한 정의(Ability)의 CRUD 및 조회 API를 제공하는 컨트롤러. AbilityService를 통해 비즈니스 로직을 실행하며, 현재 사용자 조회는 `AuthContext`를 통해 수행한다.
 
 ## 베이스 경로
 
@@ -16,7 +16,7 @@ CASL 기반 권한 정의(Ability)의 CRUD 및 조회 API를 제공하는 컨트
 
 | 주입 대상 | 타입 | 설명 |
 |-----------|------|------|
-| abilitiesService | AbilitiesService | Ability 유즈케이스 조합 로직 |
+| abilitiesService | AbilityService | Ability 유즈케이스 조합 로직 |
 | authContext | AuthContext | 현재 인증 사용자 컨텍스트 |
 
 ## 엔드포인트
@@ -94,5 +94,5 @@ undefined가 아닌 필드만 선택적으로 포함하는 스프레드 패턴 �
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
 | 2026-02-18 | 초기 생성 (역기획) | req-reverse-engineer |
-| 2026-03-11 | Controller 의존성을 AbilitiesService로 전환 | codex |
+| 2026-03-11 | Controller 의존성을 AbilityService로 전환 | codex |
 | 2026-03-11 | 내 권한 조회 시 인증 사용자 소스를 AuthContext로 정리 | codex |

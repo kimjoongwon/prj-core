@@ -1,6 +1,6 @@
 import { InquiriesRepository } from "@cocrepo/repository";
-import { InquiriesApplicationService } from "@cocrepo/app";
-import { AuthContext, InquiriesService, SpaceContext } from "@cocrepo/service";
+import { InquiryFacade } from "@cocrepo/facade";
+import { AuthContext, InquiryService, SpaceContext } from "@cocrepo/service";
 import { Module } from "@nestjs/common";
 import { InquiriesGateway } from "./gateways/inquiries.gateway";
 import { InquiriesController } from "./inquiries.controller";
@@ -9,13 +9,13 @@ import { InquiriesController } from "./inquiries.controller";
 	imports: [],
 	controllers: [InquiriesController],
 	providers: [
-		InquiriesApplicationService,
-		InquiriesService,
+		InquiryFacade,
+		InquiryService,
 		InquiriesRepository,
 		AuthContext,
 		SpaceContext,
 		InquiriesGateway,
 	],
-	exports: [InquiriesApplicationService],
+	exports: [InquiryFacade],
 })
 export class InquiriesModule {}

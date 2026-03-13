@@ -3,7 +3,7 @@
 > 생성일: 2026-02-19
 > 수정일: 2026-02-19
 > 타입: controller
-> 위치: apps/idp-server/src/module/idp-accounts/idp-accounts.controller.ts
+> 위치: apps/idp/api/src/module/idp-accounts/idp-accounts.controller.ts
 
 ## 역할
 
@@ -44,7 +44,7 @@ IDP(Identity Provider) 계정 관리 API를 제공합니다. 관리자가 IDP에
 
 | 의존 서비스 | 역할 |
 |------------|------|
-| `IdpAccountService` | 계정 조회, 상태 변경, 실패 횟수 초기화 비즈니스 로직 |
+| `IdpAccountFacade` | 목록 메타 조립 및 계정 관리 controller boundary |
 
 ## 구현 체크리스트
 
@@ -61,3 +61,4 @@ IDP(Identity Provider) 계정 관리 API를 제공합니다. 관리자가 IDP에
 | 2026-03-12 | 컨트롤러 진입점을 `IdpAccountService`로 정렬 | codex |
 | 2026-03-12 | 순수성 기준으로 단일 전달형은 `@cocrepo/service` 직접 주입으로 정리 | codex |
 | 2026-03-12 | 목록 응답의 페이지 메타 조립을 ApplicationService로 이관 | codex |
+| 2026-03-13 | controller boundary 조합을 `IdpAccountFacade`로 이관 | codex |

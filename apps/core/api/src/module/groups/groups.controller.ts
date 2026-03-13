@@ -1,4 +1,5 @@
-import { GroupsApplicationService, SpaceContext } from "@cocrepo/app";
+import { GroupFacade } from "@cocrepo/facade";
+import { SpaceContext } from "@cocrepo/service";
 import { RolesGuard } from "@cocrepo/be-common";
 import { SYSTEM_ROLES, USER_ERRORS } from "@cocrepo/constant";
 import {
@@ -35,7 +36,7 @@ import { ApiBody, ApiOperation, ApiParam, ApiTags } from "@nestjs/swagger";
 @Controller()
 export class GroupsController {
 	constructor(
-		private readonly groupsService: GroupsApplicationService,
+		private readonly groupsService: GroupFacade,
 		private readonly spaceContext: SpaceContext,
 	) {}
 
@@ -94,7 +95,7 @@ export class GroupsController {
 			throw new UnauthorizedException(USER_ERRORS.SPACE_NOT_SELECTED);
 		}
 
-		return this.groupsService.create(dto, spaceId);
+		return this.groupsService.create(dto);
 	}
 
 	@Patch(":id")

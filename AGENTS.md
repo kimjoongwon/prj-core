@@ -46,6 +46,7 @@
 | `be-dto` | `@cocrepo/dto` | Request/Response DTO |
 | `be-entity` | `@cocrepo/entity` | 도메인 Entity |
 | `be-app` | `@cocrepo/app` | ApplicationService 레이어 |
+| `be-facade` | `@cocrepo/facade` | Controller 경계 조정 레이어 (응답 조립, read model, protocol composition) |
 | `be-integration` | `@cocrepo/integration` | 외부 시스템 Integration Facade 레이어 |
 | `be-prisma` | `@cocrepo/prisma` | Prisma 스키마 및 클라이언트 |
 | `be-repository` | `@cocrepo/repository` | Repository 레이어 |
@@ -803,7 +804,8 @@ import { CreateAbilityDto, AbilityResponseDto } from "@cocrepo/dto";
 ### 레이어 분리 규칙
 
 - **Controller**: 라우팅, DTO 검증, 인증 컨텍스트 수집만 담당
-- **ApplicationService**: 여러 Service/Integration Facade를 조합하는 유즈케이스 계층 (Prisma 직접 호출 금지)
+- **ApplicationService**: 사용자 과업 중심의 usecase workflow를 조율하는 계층 (Prisma 직접 호출 금지)
+- **Facade**: Controller 경계에서 응답 조립, read model shaping, protocol composition을 담당하는 계층
 - **Service**: 단일 Aggregate Root 또는 단일 도메인 로직 담당 (Repository를 통해서만 데이터 접근)
 - **Integration Facade**: 외부 시스템 또는 복잡한 기술 서브시스템을 단순화해서 노출하는 레이어
 - **Repository**: Prisma 쿼리 작성
@@ -1204,6 +1206,7 @@ Stage 5: 컴포넌트 (페이지별)
 | be-repository-builder | Prisma 기반 Repository 레이어 생성 |
 | be-service-builder | NestJS Service 레이어 생성 |
 | be-app-builder | NestJS ApplicationService 레이어 생성 (여러 Service 조합) |
+| be-facade-builder | NestJS Facade 레이어 생성 (Controller 경계 응답 조립 / protocol composition) |
 | be-integration-builder | 외부 시스템 Integration Facade 레이어 생성 |
 | be-module-builder | aggregate root 기준 NestJS Module + Router wiring 생성 |
 | be-controller-builder | NestJS REST Controller 생성 |

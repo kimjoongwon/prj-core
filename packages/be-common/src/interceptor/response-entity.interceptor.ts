@@ -12,13 +12,13 @@ import { Reflector } from "@nestjs/core";
 import { Observable, from } from "rxjs";
 import { map, switchMap } from "rxjs/operators";
 import { isWrappedResponse } from "../util/response.util";
-import { TranslationService } from "@cocrepo/service";
+import { I18nTranslationService } from "@cocrepo/service";
 
 @Injectable()
 export class ResponseEntityInterceptor implements NestInterceptor {
 	constructor(
 		private readonly reflector: Reflector,
-		private readonly translationService: TranslationService,
+		private readonly translationService: I18nTranslationService,
 	) {}
 
 	intercept(context: ExecutionContext, next: CallHandler): Observable<unknown> {

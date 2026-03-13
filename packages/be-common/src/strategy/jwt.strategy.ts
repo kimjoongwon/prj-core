@@ -1,6 +1,6 @@
 import { CONTEXT_KEYS } from "@cocrepo/constant";
 import { User } from "@cocrepo/entity";
-import { AuthCacheService, UsersService } from "@cocrepo/service";
+import { AuthCacheService, UserService } from "@cocrepo/service";
 import {
 	Global,
 	Injectable,
@@ -29,7 +29,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
 
 	constructor(
 		readonly config: ConfigService,
-		readonly usersService: UsersService,
+		readonly usersService: UserService,
 		private readonly cls: ClsService,
 		private readonly authCacheService: AuthCacheService,
 	) {

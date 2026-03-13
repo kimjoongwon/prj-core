@@ -1,18 +1,18 @@
-import { TasksApplicationService } from "@cocrepo/app";
+import { TaskFacade } from "@cocrepo/facade";
 import { TasksRepository } from "@cocrepo/repository";
-import { AuthContext, SpaceContext, TasksService } from "@cocrepo/service";
+import { AuthContext, SpaceContext, TaskService } from "@cocrepo/service";
 import { Module } from "@nestjs/common";
 import { TasksController } from "./tasks.controller";
 
 @Module({
 	controllers: [TasksController],
 	providers: [
-		TasksApplicationService,
-		TasksService,
+		TaskFacade,
+		TaskService,
 		TasksRepository,
 		AuthContext,
 		SpaceContext,
 	],
-	exports: [TasksApplicationService],
+	exports: [TaskFacade],
 })
 export class TasksModule {}

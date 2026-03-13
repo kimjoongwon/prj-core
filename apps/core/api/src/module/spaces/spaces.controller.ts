@@ -1,4 +1,4 @@
-import { SpacesApplicationService } from "@cocrepo/app";
+import { SpaceFacade } from "@cocrepo/facade";
 import {
 	ApiAuth,
 	ApiErrors,
@@ -31,7 +31,7 @@ import { ApiBody, ApiOperation, ApiParam, ApiTags } from "@nestjs/swagger";
 @Controller()
 export class SpacesController {
 	constructor(
-		private readonly spacesService: SpacesApplicationService,
+		private readonly spacesService: SpaceFacade,
 	) {}
 
 	@Public()

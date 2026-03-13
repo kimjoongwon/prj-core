@@ -1,4 +1,4 @@
-# translations.module module 기획서
+# Translations Module 기획서
 
 > 생성일: 2026-03-03
 > 타입: module
@@ -6,32 +6,26 @@
 
 ## 역할
 
-이 파일은 module 계층의 보조 동작(연결/조회/조합)을 담당합니다.
+`TranslationsController`가 `TranslationFacade`를 주입받도록 facade/service/repository provider를 구성합니다.
 
-## 주요 계약
+## provider 구성
 
-| 항목 | 설명 |
-|------|------|
-| TranslationsModule | 공개 계약 요소 |
+| provider | 설명 |
+|----------|------|
+| TranslationFacade | Controller boundary 유즈케이스 및 캐시 무효화 응답 조립 |
+| TranslationService | 번역 도메인 규칙 및 캐시 무효화 처리 |
+| Translation repository provider | 번역 영속성 접근 |
 
-## 의존성
+## exports
 
-| 모듈 | 용도 |
-|------|------|
-| @cocrepo/service | Translation application service 의존성 |
-| @cocrepo/repository | 기능 구현 의존성 |
-| @cocrepo/service | 기능 구현 의존성 |
-| @nestjs/common | 기능 구현 의존성 |
-| ./translations.controller | 기능 구현 의존성 |
-
-## 구현 체크리스트
-
-- [ ] 핵심 입출력/반환 규약이 코드와 일치함
-- [ ] 호출 경로 변경 시 spec을 함께 갱신함
+| export | 설명 |
+|--------|------|
+| TranslationFacade | 다른 모듈이 참조할 수 있는 Translation boundary 진입점 |
 
 ## 변경 이력
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
 | 2026-03-03 | 누락된 sidecar spec 신규 생성 | codex |
-| 2026-03-11 | TranslationsModule export를 TranslationsService 단일 진입점으로 정렬 | codex |
+| 2026-03-11 | TranslationsModule export를 TranslationService 단일 진입점으로 정렬 | codex |
+| 2026-03-13 | TranslationsModule boundary provider/export를 `TranslationFacade` 기준으로 갱신 | codex |

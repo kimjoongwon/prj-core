@@ -6,13 +6,13 @@
 
 ## 역할
 
-이 파일은 index 성격의 경량 구성/배럴 책임을 가집니다.
+이 파일은 workflow 성격의 ApplicationService export만 노출합니다.
 
 ## 구성 요소
 
 | 항목 | 설명 |
 |------|------|
-| export | `ActionsApplicationService`, `AbilitiesApplicationService`, `AuthApplicationService`, `CategoriesApplicationService`, `GrantsApplicationService`, `GroupsApplicationService`, `InquiriesApplicationService`, `RolesApplicationService`, `RoutinesApplicationService`, `SpacesApplicationService`, `SubjectsApplicationService`, `TasksApplicationService`, `TemplatesApplicationService`, `TimelinesApplicationService`, `TranslationsApplicationService`, `UsersApplicationService` |
+| export | `AbilityApplicationService`, `AuthApplicationService` |
 
 ## 변경 이력
 
@@ -24,3 +24,6 @@
 | 2026-03-11 | 단순 aggregate root 도메인 application service export 추가 | codex |
 | 2026-03-12 | IDP 모듈 유즈케이스를 @cocrepo/app ApplicationService로 정리 | codex |
 | 2026-03-12 | IDP 모듈 단일 유즈케이스를 `@cocrepo/service` 직접 주입으로 정렬하며 불필요한 app service 제거 | codex |
+| 2026-03-13 | IDP 계정/OIDC Client/OIDC Session boundary 조합을 `@cocrepo/facade`로 이관 | codex |
+| 2026-03-13 | Space/Task/Template/Inquiry boundary 조합을 `@cocrepo/facade`로 이관 | codex |
+| 2026-03-13 | 단일 aggregate root boundary 조합을 `@cocrepo/facade`로 이관하고 workflow만 be-app에 유지 | codex |

@@ -114,9 +114,9 @@ VIEW (조회)
 | Entity | `packages/be-entity/src/role.entity.ts` | Role 도메인 엔티티 |
 | Repository | `packages/be-repository/src/abilities.repository.ts` | Ability CRUD |
 | Repository | `packages/be-repository/src/grants.repository.ts` | Grant 조회 (Role/User 기반) |
-| Service | `packages/be-service/src/abilities.service.ts` | Ability 비즈니스 로직 |
-| Service | `packages/be-service/src/grants.service.ts` | Grant 비즈니스 로직 |
-| ApplicationService | `packages/be-app/src/abilities.application-service.ts` | Ability + Grant 조합 로직 |
+| Service | `packages/be-service/src/ability.service/index.ts` | Ability 비즈니스 로직 |
+| Service | `packages/be-service/src/grant.service/index.ts` | Grant 비즈니스 로직 |
+| ApplicationService | `packages/be-app/src/ability.application-service/index.ts` | Ability + Grant 조합 로직 |
 | CASL | `packages/be-common/src/casl/casl-ability.factory.ts` | CASL Ability 생성 팩토리 (GrantsRepository 사용) |
 | Guard | `packages/be-common/src/guard/roles.guard.ts` | @Roles 데코레이터 Guard |
 | Guard | `packages/be-common/src/guard/role-category.guard.ts` | @RoleCategories 데코레이터 Guard |

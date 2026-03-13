@@ -1,4 +1,4 @@
-import { RolesApplicationService } from "@cocrepo/app";
+import { RoleFacade } from "@cocrepo/facade";
 import { RolesGuard } from "@cocrepo/be-common";
 import { SYSTEM_ROLES } from "@cocrepo/constant";
 import {
@@ -28,7 +28,7 @@ import { ApiBody, ApiOperation, ApiParam, ApiTags } from "@nestjs/swagger";
 @Controller()
 export class RolesController {
 	constructor(
-		private readonly rolesService: RolesApplicationService,
+		private readonly rolesService: RoleFacade,
 	) {}
 
 	@Get()

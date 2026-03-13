@@ -30,7 +30,7 @@ import {
 import type { Request, Response } from "express";
 import type { OidcConfig } from "../../config/oidc.config";
 import type { KoaLikeRequest, KoaLikeResponse } from "../oidc/types";
-import { InteractionApplicationService } from "./interaction.application-service";
+import { InteractionFacade } from "./interaction.facade";
 
 /**
  * OIDC Interaction Controller
@@ -48,7 +48,7 @@ export class InteractionController {
 		process.env.NODE_ENV !== "production" && process.env.NODE_ENV !== "staging";
 
 	constructor(
-		private readonly interactionApplicationService: InteractionApplicationService,
+		private readonly interactionApplicationService: InteractionFacade,
 		private readonly configService: ConfigService,
 	) {}
 

@@ -1,4 +1,4 @@
-import { SubjectsApplicationService } from "@cocrepo/app";
+import { SubjectFacade } from "@cocrepo/facade";
 import {
 	ApiErrors,
 	ApiResponseEntity,
@@ -13,7 +13,7 @@ import { ApiOperation, ApiParam, ApiQuery, ApiTags } from "@nestjs/swagger";
 @Controller()
 export class SubjectsController {
 	constructor(
-		private readonly subjectsService: SubjectsApplicationService,
+		private readonly subjectsService: SubjectFacade,
 	) {}
 
 	@Public()

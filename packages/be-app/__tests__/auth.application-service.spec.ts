@@ -2,11 +2,11 @@ import { OidcFacade } from "@cocrepo/integration";
 import {
 	AuthCacheService,
 	EmailService,
-	RolesService,
-	SpacesService,
+	RoleService,
+	SpaceService,
 	TokenService,
 	TokenStorageService,
-	UsersService,
+	UserService,
 } from "@cocrepo/service";
 import { Test, type TestingModule } from "@nestjs/testing";
 import { ClsService } from "nestjs-cls";
@@ -14,9 +14,9 @@ import { AuthApplicationService } from "../src/auth.application-service";
 
 describe("AuthApplicationService", () => {
 	let applicationService: AuthApplicationService;
-	let mockUsersService: jest.Mocked<UsersService>;
-	let mockRolesService: jest.Mocked<RolesService>;
-	let mockSpacesService: jest.Mocked<SpacesService>;
+	let mockUsersService: jest.Mocked<UserService>;
+	let mockRolesService: jest.Mocked<RoleService>;
+	let mockSpacesService: jest.Mocked<SpaceService>;
 	let mockTokenService: jest.Mocked<TokenService>;
 	let mockTokenStorageService: jest.Mocked<TokenStorageService>;
 	let mockAuthCacheService: jest.Mocked<AuthCacheService>;
@@ -29,15 +29,15 @@ describe("AuthApplicationService", () => {
 			getByIdWithTenants: jest.fn(),
 			findUserForAuth: jest.fn(),
 			createUserForSignUp: jest.fn(),
-		} as unknown as jest.Mocked<UsersService>;
+		} as unknown as jest.Mocked<UserService>;
 
 		mockRolesService = {
 			getDefaultUserRole: jest.fn(),
-		} as unknown as jest.Mocked<RolesService>;
+		} as unknown as jest.Mocked<RoleService>;
 
 		mockSpacesService = {
 			createPersonalSpace: jest.fn(),
-		} as unknown as jest.Mocked<SpacesService>;
+		} as unknown as jest.Mocked<SpaceService>;
 
 		mockTokenService = {
 			setAccessTokenCookie: jest.fn(),
@@ -81,9 +81,9 @@ describe("AuthApplicationService", () => {
 		const module: TestingModule = await Test.createTestingModule({
 			providers: [
 				AuthApplicationService,
-				{ provide: UsersService, useValue: mockUsersService },
-				{ provide: RolesService, useValue: mockRolesService },
-				{ provide: SpacesService, useValue: mockSpacesService },
+				{ provide: UserService, useValue: mockUsersService },
+				{ provide: RoleService, useValue: mockRolesService },
+				{ provide: SpaceService, useValue: mockSpacesService },
 				{ provide: TokenService, useValue: mockTokenService },
 				{ provide: TokenStorageService, useValue: mockTokenStorageService },
 				{ provide: AuthCacheService, useValue: mockAuthCacheService },

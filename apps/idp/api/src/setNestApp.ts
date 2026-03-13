@@ -6,7 +6,7 @@ import {
 	SpaceAccessGuard,
 	SpaceScopeInterceptor,
 } from "@cocrepo/be-common";
-import { TokenStorageService, TranslationService } from "@cocrepo/service";
+import { TokenStorageService, I18nTranslationService } from "@cocrepo/service";
 import {
 	type ArgumentsHost,
 	Catch,
@@ -54,7 +54,7 @@ class IdpAllExceptionsFilter extends BaseExceptionFilter {
 
 export function setNestApp<T extends INestApplication>(app: T): void {
 	const { httpAdapter } = app.get(HttpAdapterHost);
-	const translationService = app.get(TranslationService);
+	const translationService = app.get(I18nTranslationService);
 
 	// =================================================================
 	// Global Exception Filters

@@ -8,7 +8,7 @@ import {
 	SkipSpaceCheck,
 } from "@cocrepo/decorator";
 import { IdpAccountDto, PageMetaDto, QueryIdpAccountDto } from "@cocrepo/dto";
-import { IdpAccountApplicationService } from "@cocrepo/app";
+import { IdpAccountFacade } from "@cocrepo/facade";
 import {
 	Controller,
 	Get,
@@ -28,7 +28,7 @@ import { ApiOperation, ApiParam, ApiTags } from "@nestjs/swagger";
 @SkipSpaceCheck()
 export class IdpAccountsController {
 	constructor(
-		private readonly idpAccountService: IdpAccountApplicationService,
+		private readonly idpAccountFacade: IdpAccountFacade,
 	) {}
 
 	@Get()
@@ -45,7 +45,7 @@ export class IdpAccountsController {
 	})
 	@ResponseMessage("계정 목록 조회 성공")
 	async getAccounts(@Query() query: QueryIdpAccountDto) {
-		return this.idpAccountService.getMany(query);
+		return this.idpAccountFacade.getMany(query);
 	}
 
 	@Get(":userId")
@@ -60,7 +60,7 @@ export class IdpAccountsController {
 	@ApiResponseEntity(IdpAccountDto, HttpStatus.OK)
 	@ResponseMessage("계정 상세 조회 성공")
 	async getAccount(@Param("userId", ParseUUIDPipe) userId: string) {
-		return this.idpAccountService.getById(userId);
+		return this.idpAccountFacade.getById(userId);
 	}
 
 	@Patch(":userId/toggle-active")
@@ -75,7 +75,7 @@ export class IdpAccountsController {
 	@ApiResponseEntity(IdpAccountDto, HttpStatus.OK)
 	@ResponseMessage("계정 상태 변경 성공")
 	async toggleActive(@Param("userId", ParseUUIDPipe) userId: string) {
-		return this.idpAccountService.toggleActive(userId);
+		return this.idpAccountFacade.toggleActive(userId);
 	}
 
 	@Post(":userId/reset-failed-attempts")
@@ -92,6 +92,6 @@ export class IdpAccountsController {
 	async resetFailedAttempts(
 		@Param("userId", ParseUUIDPipe) userId: string,
 	): Promise<void> {
-		await this.idpAccountService.resetFailedAttempts(userId);
+		await this.idpAccountFacade.resetFailedAttempts(userId);
 	}
 }

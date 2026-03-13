@@ -10,10 +10,11 @@ import {
 import {
 	CreateOidcClientDto,
 	OidcClientDto,
+	PageMetaDto,
 	QueryOidcClientDto,
 	UpdateOidcClientDto,
 } from "@cocrepo/dto";
-import { OidcClientsApplicationService } from "@cocrepo/app";
+import { OidcClientFacade } from "@cocrepo/facade";
 import {
 	Body,
 	Controller,
@@ -35,7 +36,7 @@ import { ApiBody, ApiOperation, ApiParam, ApiTags } from "@nestjs/swagger";
 @SkipSpaceCheck()
 export class OidcClientsController {
 	constructor(
-		private readonly oidcClientsService: OidcClientsApplicationService,
+		private readonly oidcClientFacade: OidcClientFacade,
 	) {}
 
 	@Get()
@@ -53,7 +54,7 @@ export class OidcClientsController {
 	})
 	@ResponseMessage("OIDC 클라이언트 목록 조회 성공")
 	async getOidcClients(@Query() query: QueryOidcClientDto) {
-		return this.oidcClientsService.getMany(query);
+		return this.oidcClientFacade.getMany(query);
 	}
 
 	@Get(":oidcClientId")
@@ -74,7 +75,7 @@ export class OidcClientsController {
 	async getOidcClient(
 		@Param("oidcClientId", ParseUUIDPipe) oidcClientId: string,
 	) {
-		return this.oidcClientsService.getById(oidcClientId);
+		return this.oidcClientFacade.getById(oidcClientId);
 	}
 
 	@Post()
@@ -94,19 +95,7 @@ export class OidcClientsController {
 	@ApiResponseEntity(OidcClientDto, HttpStatus.CREATED)
 	@ResponseMessage("OIDC 클라이언트 등록 성공")
 	async createOidcClient(@Body() dto: CreateOidcClientDto) {
-		return this.oidcClientsService.create({
-			clientId: dto.clientId,
-			clientSecret: dto.clientSecret,
-			clientName: dto.clientName,
-			redirectUris: dto.redirectUris,
-			grantTypes: dto.grantTypes,
-			responseTypes: dto.responseTypes,
-			tokenEndpointAuthMethod: dto.tokenEndpointAuthMethod,
-			scope: dto.scope,
-			logoUri: dto.logoUri,
-			policyUri: dto.policyUri,
-			tosUri: dto.tosUri,
-		});
+		return this.oidcClientFacade.create(dto);
 	}
 
 	@Patch(":oidcClientId")
@@ -133,7 +122,7 @@ export class OidcClientsController {
 		@Param("oidcClientId", ParseUUIDPipe) oidcClientId: string,
 		@Body() dto: UpdateOidcClientDto,
 	) {
-		return this.oidcClientsService.update(oidcClientId, dto);
+		return this.oidcClientFacade.update(oidcClientId, dto);
 	}
 
 	@Delete(":oidcClientId")
@@ -154,7 +143,7 @@ export class OidcClientsController {
 	async deleteOidcClient(
 		@Param("oidcClientId", ParseUUIDPipe) oidcClientId: string,
 	): Promise<void> {
-		await this.oidcClientsService.remove(oidcClientId);
+		await this.oidcClientFacade.remove(oidcClientId);
 	}
 
 	@Patch(":oidcClientId/toggle-active")
@@ -175,6 +164,6 @@ export class OidcClientsController {
 	async toggleActiveOidcClient(
 		@Param("oidcClientId", ParseUUIDPipe) oidcClientId: string,
 	) {
-		return this.oidcClientsService.toggleActive(oidcClientId);
+		return this.oidcClientFacade.toggleActive(oidcClientId);
 	}
 }

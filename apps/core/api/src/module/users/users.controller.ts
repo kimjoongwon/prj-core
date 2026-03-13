@@ -1,6 +1,6 @@
 import { USER_ERRORS } from "@cocrepo/constant";
 import { AuthContext, SpaceContext } from "@cocrepo/service";
-import { UsersApplicationService } from "@cocrepo/app";
+import { UserFacade } from "@cocrepo/facade";
 import {
 	ApiAuth,
 	ApiErrors,
@@ -36,7 +36,7 @@ import { ApiBody, ApiOperation, ApiParam, ApiTags } from "@nestjs/swagger";
 @Controller()
 export class UsersController {
 	constructor(
-		private readonly usersService: UsersApplicationService,
+		private readonly usersService: UserFacade,
 		private readonly spaceContext: SpaceContext,
 		private readonly authContext: AuthContext,
 	) {}
@@ -211,6 +211,6 @@ export class UsersController {
 			throw new UnauthorizedException(USER_ERRORS.USER_NOT_FOUND);
 		}
 
-		await this.usersService.deleteUserForSpace(id, spaceId, currentUserId);
+		await this.usersService.deleteUserForSpace(id, spaceId);
 	}
 }

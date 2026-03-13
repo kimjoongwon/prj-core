@@ -12,10 +12,11 @@
 
 | 항목 | 설명 |
 |------|------|
-| ResponseEntityInterceptor | 공개 계약 요소 |
+| ResponseEntityInterceptor | `I18nTranslationService` 기반 응답 메시지 래핑 인터셉터 |
 
 ## 변경 이력
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
 | 2026-03-03 | 누락된 sidecar spec 신규 생성 | codex |
+| 2026-03-13 | i18n 번역 의존성을 `I18nTranslationService`로 명시 | codex |

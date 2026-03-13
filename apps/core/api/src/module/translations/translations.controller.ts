@@ -1,5 +1,5 @@
 import { LanguageCode, TRANSLATION_ERRORS } from "@cocrepo/constant";
-import { TranslationsApplicationService } from "@cocrepo/app";
+import { TranslationFacade } from "@cocrepo/facade";
 import {
 	ApiAuth,
 	ApiErrors,
@@ -30,7 +30,7 @@ import { ApiBody, ApiOperation, ApiParam, ApiTags } from "@nestjs/swagger";
 @Controller()
 export class TranslationsController {
 	constructor(
-		private readonly translationsService: TranslationsApplicationService,
+		private readonly translationsService: TranslationFacade,
 	) {}
 
 	/**

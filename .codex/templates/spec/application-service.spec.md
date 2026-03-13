@@ -3,7 +3,7 @@
 > 생성일: {{createdDate}}
 > 수정일: {{modifiedDate}}
 > 타입: application-service
-> 위치: packages/be-app/src/{{name}}.application-service.ts
+> 위치: packages/be-app/src/{{name}}.application-service/index.ts
 
 ## 역할
 

@@ -14,17 +14,17 @@ pnpm install
 
 ### Service Import
 ```typescript
-import { UsersService, TokenService, PrismaService } from '@cocrepo/service';
+import { UserService, TokenService, PrismaService } from '@cocrepo/service';
 ```
 
 ### NestJS 모듈에서 사용
 ```typescript
 import { Module } from '@nestjs/common';
-import { UsersService } from '@cocrepo/service';
+import { UserService } from '@cocrepo/service';
 import { UsersRepository } from '@cocrepo/repository';
 
 @Module({
-  providers: [UsersService, UsersRepository],
+  providers: [UserService, UsersRepository],
 })
 export class UsersModule {}
 ```
@@ -32,7 +32,7 @@ export class UsersModule {}
 ## 구조
 
 - **service/**: 리소스별 비즈니스 서비스
-  - UsersService: 사용자 관리
+  - UserService: 사용자 관리
 - **infra/**: 인프라 서비스
   - PrismaService: Prisma 클라이언트 래퍼
   - createPrismaClient: Prisma 클라이언트 팩토리
@@ -41,7 +41,7 @@ export class UsersModule {}
   - RedisService: Redis 연결 관리
   - AwsService: AWS S3 연동
 
-> **참고**: 인증 유즈케이스 조합은 `@cocrepo/app` 패키지의 `AuthApplicationService`로 분리되었습니다.
+> **참고**: 사용자 과업 중심 workflow 조합은 `@cocrepo/app`, Controller 경계의 응답 조립/protocol composition은 `@cocrepo/facade`로 분리합니다.
 
 ## 의존성
 

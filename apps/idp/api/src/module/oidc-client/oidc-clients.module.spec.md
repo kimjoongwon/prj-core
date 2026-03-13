@@ -18,6 +18,7 @@
 
 | 모듈 | 용도 |
 |------|------|
+| @cocrepo/facade | 기능 구현 의존성 |
 | @cocrepo/repository | 기능 구현 의존성 |
 | @cocrepo/service | 기능 구현 의존성 |
 | @nestjs/common | 기능 구현 의존성 |
@@ -27,7 +28,7 @@
 
 - [ ] 핵심 입출력/반환 규약이 코드와 일치함
 - [ ] 호출 경로 변경 시 spec을 함께 갱신함
-- [x] controller에서 `@cocrepo/service` 직접 주입 사용
+- [x] controller에서 `@cocrepo/facade` 주입 사용
 - [x] controller의 `@cocrepo/app` 직접 주입 제거
 
 ## 변경 이력
@@ -35,5 +36,6 @@
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
 | 2026-03-03 | 누락된 sidecar spec 신규 생성 | codex |
-| 2026-03-12 | 컨트롤러를 `OidcClientsService` 기반으로 변경 | codex |
+| 2026-03-12 | 컨트롤러를 `OidcClientService` 기반으로 변경 | codex |
 | 2026-03-12 | `module` 체크리스트를 `@cocrepo/service` 직접 주입 정합성 기준으로 갱신 | codex |
+| 2026-03-13 | `OidcClientFacade` provider로 controller boundary 조합을 분리 | codex |

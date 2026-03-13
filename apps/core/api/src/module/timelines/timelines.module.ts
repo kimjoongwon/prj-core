@@ -1,18 +1,18 @@
 import { TimelinesRepository } from "@cocrepo/repository";
-import { TimelinesApplicationService } from "@cocrepo/app";
-import { AuthContext, SpaceContext, TimelinesService } from "@cocrepo/service";
+import { TimelineFacade } from "@cocrepo/facade";
+import { AuthContext, SpaceContext, TimelineService } from "@cocrepo/service";
 import { Module } from "@nestjs/common";
 import { TimelinesController } from "./timelines.controller";
 
 @Module({
 	controllers: [TimelinesController],
 	providers: [
-		TimelinesApplicationService,
-		TimelinesService,
+		TimelineFacade,
+		TimelineService,
 		TimelinesRepository,
 		AuthContext,
 		SpaceContext,
 	],
-	exports: [TimelinesApplicationService],
+	exports: [TimelineFacade],
 })
 export class TimelinesModule {}

@@ -22,7 +22,7 @@
 | @nestjs/common | 기능 구현 의존성 |
 | ../oidc/oidc.module | 기능 구현 의존성 |
 | ./password-reset.controller | 기능 구현 의존성 |
-| ./password-reset.application-service | 기능 구현 의존성 |
+| ./password-reset.facade | 기능 구현 의존성 |
 | ./password-reset.service | 기능 구현 의존성 |
 
 ## 구현 체크리스트
@@ -35,4 +35,4 @@
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
 | 2026-03-03 | 누락된 sidecar spec 신규 생성 | codex |
-| 2026-03-12 | PasswordResetModule에 PasswordResetApplicationService를 providers로 추가 | codex |
+| 2026-03-13 | PasswordResetModule의 provider/export 참조를 PasswordResetFacade 기준으로 정리 | codex |

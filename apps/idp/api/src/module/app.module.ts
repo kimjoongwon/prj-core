@@ -8,7 +8,7 @@ import {
 	SpaceScopeInterceptor,
 } from "@cocrepo/be-common";
 import { SpacesRepository } from "@cocrepo/repository";
-import { I18nModule, SpaceContext, SpacesService } from "@cocrepo/service";
+import { I18nModule, SpaceContext, SpaceService } from "@cocrepo/service";
 import {
 	Logger,
 	type MiddlewareConsumer,
@@ -88,7 +88,7 @@ import { SecurityPolicyModule } from "./security-policy";
 	providers: [
 		// Space 도메인 (RequestContextMiddleware 의존)
 		SpacesRepository,
-		SpacesService,
+		SpaceService,
 		// Guards (setNestApp에서 순서대로 등록됨)
 		SpaceAccessGuard,
 		// Middleware (DI 주입 필요)

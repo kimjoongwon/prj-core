@@ -12,10 +12,11 @@
 
 | 항목 | 설명 |
 |------|------|
-| setNestApp | 공개 계약 요소 |
+| setNestApp | `I18nTranslationService`를 global filter/interceptor에 연결하는 앱 초기화 유틸 |
 
 ## 변경 이력
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
 | 2026-03-03 | 누락된 sidecar spec 신규 생성 | codex |
+| 2026-03-13 | 전역 i18n 번역기 주입 대상을 `I18nTranslationService`로 명시 | codex |

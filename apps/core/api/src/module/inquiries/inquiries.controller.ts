@@ -1,4 +1,4 @@
-import { InquiriesApplicationService } from "@cocrepo/app";
+import { InquiryFacade } from "@cocrepo/facade";
 import { USER_ERRORS } from "@cocrepo/constant";
 import {
 	ApiAuth,
@@ -68,7 +68,7 @@ import {
 @Controller()
 export class InquiriesController {
 	constructor(
-		private readonly inquiriesService: InquiriesApplicationService,
+		private readonly inquiriesService: InquiryFacade,
 		private readonly authContext: AuthContext,
 		private readonly spaceContext: SpaceContext,
 	) {}

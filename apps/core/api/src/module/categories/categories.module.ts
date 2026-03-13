@@ -1,17 +1,17 @@
-import { CategoriesApplicationService } from "@cocrepo/app";
+import { CategoryFacade } from "@cocrepo/facade";
 import { CategoriesRepository } from "@cocrepo/repository";
-import { CategoriesService, SpaceContext } from "@cocrepo/service";
+import { CategoryService, SpaceContext } from "@cocrepo/service";
 import { Module } from "@nestjs/common";
 import { CategoriesController } from "./categories.controller";
 
 @Module({
 	controllers: [CategoriesController],
 	providers: [
-		CategoriesApplicationService,
-		CategoriesService,
+		CategoryFacade,
+		CategoryService,
 		CategoriesRepository,
 		SpaceContext,
 	],
-	exports: [CategoriesApplicationService],
+	exports: [CategoryFacade],
 })
 export class CategoriesModule {}

@@ -1,6 +1,6 @@
 import { ApiAuth, ApiErrors, ApiResponseEntity, ResponseMessage } from "@cocrepo/decorator";
 import { SpaceContext } from "@cocrepo/service";
-import { TimelinesApplicationService } from "@cocrepo/app";
+import { TimelineFacade } from "@cocrepo/facade";
 import { USER_ERRORS } from "@cocrepo/constant";
 import {
 	CreateProgramDto,
@@ -36,7 +36,7 @@ import { ApiBody, ApiOperation, ApiParam, ApiTags } from "@nestjs/swagger";
 @Controller()
 export class TimelinesController {
 	constructor(
-		private readonly timelinesService: TimelinesApplicationService,
+		private readonly timelinesService: TimelineFacade,
 		private readonly spaceContext: SpaceContext,
 	) {}
 

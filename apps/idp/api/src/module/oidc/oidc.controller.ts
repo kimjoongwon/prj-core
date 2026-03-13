@@ -2,7 +2,7 @@ import { Public } from "@cocrepo/decorator";
 import { All, Controller, Req, Res } from "@nestjs/common";
 import { ApiExcludeController } from "@nestjs/swagger";
 import type { Request, Response } from "express";
-import { OidcApplicationService } from "./oidc.application-service";
+import { OidcFacade } from "./oidc.facade";
 
 /**
  * OIDC Controller
@@ -33,7 +33,7 @@ import { OidcApplicationService } from "./oidc.application-service";
 @Controller("oidc")
 export class OidcController {
 	constructor(
-		private readonly oidcApplicationService: OidcApplicationService,
+		private readonly oidcApplicationService: OidcFacade,
 	) {}
 
 	/**

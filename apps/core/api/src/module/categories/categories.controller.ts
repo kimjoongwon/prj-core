@@ -1,4 +1,5 @@
-import { CategoriesApplicationService, SpaceContext } from "@cocrepo/app";
+import { CategoryFacade } from "@cocrepo/facade";
+import { SpaceContext } from "@cocrepo/service";
 import { RolesGuard } from "@cocrepo/be-common";
 import { SYSTEM_ROLES, USER_ERRORS } from "@cocrepo/constant";
 import {
@@ -35,7 +36,7 @@ import { ApiBody, ApiOperation, ApiParam, ApiTags } from "@nestjs/swagger";
 @Controller()
 export class CategoriesController {
 	constructor(
-		private readonly categoriesService: CategoriesApplicationService,
+		private readonly categoriesService: CategoryFacade,
 		private readonly spaceContext: SpaceContext,
 	) {}
 
@@ -102,7 +103,7 @@ export class CategoriesController {
 			throw new UnauthorizedException(USER_ERRORS.SPACE_NOT_SELECTED);
 		}
 
-		return this.categoriesService.create(dto, spaceId);
+		return this.categoriesService.create(dto);
 	}
 
 	@Patch(":id")

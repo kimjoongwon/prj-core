@@ -1,11 +1,11 @@
 import { SecurityPoliciesRepository } from "@cocrepo/repository";
-import { SecurityPolicyApplicationService } from "@cocrepo/app";
+import { SecurityPolicyFacade } from "@cocrepo/facade";
 import { Module } from "@nestjs/common";
 import { SecurityPolicyController } from "./security-policy.controller";
 
 @Module({
 	controllers: [SecurityPolicyController],
-	providers: [SecurityPolicyApplicationService, SecurityPoliciesRepository],
-	exports: [SecurityPolicyApplicationService],
+	providers: [SecurityPolicyFacade, SecurityPoliciesRepository],
+	exports: [SecurityPolicyFacade],
 })
 export class SecurityPolicyModule {}

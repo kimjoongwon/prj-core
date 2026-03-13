@@ -12,7 +12,7 @@ multilingual = true
 repository_scope = "schema-owner"
 repository_generation = "one repository per @schema-owner true model"
 service_scope = "schema-owner (aggregate root 단위)"
-application_service_scope = "orchestration + multi-service 유즈케이스"
+application_service_scope = "usecase workflow orchestration"
 
 [rules.repository]
 owner_required = true
@@ -23,17 +23,31 @@ guard = "No repository should be missing for a @schema-owner model"
 scope = "schema-owner aggregate root 단위로 service를 구성"
 child_mutation = "child entity 수정은 반드시 root aggregate service 경유"
 prisma_direct_call = false
+folder_layout = "packages/be-service/src/{name}.service/"
+code_file = "packages/be-service/src/{name}.service/index.ts"
+sidecar_spec_file = "packages/be-service/src/{name}.service/index.spec.md"
+barrel_export_file = "packages/be-service/src/index.ts"
 guard = "Service는 @cocrepo/repository를 통한 영속성 접근만 수행하고, @schema-owner가 아닌 모델 별도 service를 만들지 않는다"
 
 [rules.application_service]
 required_for_orchestration = true
 required_for_multi_step = true
 required_for_role_or_permission_or_external_integration = true
+folder_layout = "packages/be-app/src/{name}.application-service/"
+code_file = "packages/be-app/src/{name}.application-service/index.ts"
+sidecar_spec_file = "packages/be-app/src/{name}.application-service/index.spec.md"
+barrel_export_file = "packages/be-app/src/index.ts"
+
+[rules.facade]
+scope = "controller boundary composition + read model shaping + protocol composition"
+required_for_multi_service = false
+guard = "Facade는 Controller 경계의 조정/조합만 수행하고 Repository 직접 호출을 금지한다"
 
 [rules.controller]
-app_layer_required = true
+app_layer_required = false
+facade_layer_allowed = true
 single_root_passthrough_allowed = true
-guard = "Controller는 기본적으로 @cocrepo/app ApplicationService를 호출하고, 단일 aggregate root 전달형 유즈케이스에서만 동일 aggregate root Service로 pass-through 허용"
+guard = "Controller는 유즈케이스 workflow면 @cocrepo/app ApplicationService를, 경계 조합/응답 composition이면 @cocrepo/facade Facade를, 단일 aggregate root 전달형이면 동일 aggregate root Service pass-through를 사용한다"
 
 [i18n]
 enabled = true
@@ -104,6 +118,10 @@ config_file = "agents/be-entity-builder.toml"
 [agents.be-app-builder]
 description = "Controller 경계에서 사용하는 NestJS ApplicationService 레이어를 생성하는 전문가"
 config_file = "agents/be-app-builder.toml"
+
+[agents.be-facade-builder]
+description = "Controller 경계 응답 조립과 protocol composition을 위한 NestJS Facade 레이어를 생성하는 전문가"
+config_file = "agents/be-facade-builder.toml"
 
 [agents.be-integration-builder]
 description = "외부 시스템 Integration Facade 레이어를 생성하는 전문가"

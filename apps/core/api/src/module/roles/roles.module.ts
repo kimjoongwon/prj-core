@@ -1,16 +1,16 @@
 import { RolesRepository } from "@cocrepo/repository";
-import { RolesApplicationService } from "@cocrepo/app";
-import { RolesService } from "@cocrepo/service";
+import { RoleFacade } from "@cocrepo/facade";
+import { RoleService } from "@cocrepo/service";
 import { Module } from "@nestjs/common";
 import { RolesController } from "./roles.controller";
 
 @Module({
 	controllers: [RolesController],
 	providers: [
-		RolesApplicationService,
-		RolesService,
+		RoleFacade,
+		RoleService,
 		RolesRepository,
 	],
-	exports: [RolesApplicationService],
+	exports: [RoleFacade],
 })
 export class RolesModule {}

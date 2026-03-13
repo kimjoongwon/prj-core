@@ -29,6 +29,7 @@
     "@cocrepo/dto": "workspace:^0.1.0",
     "@cocrepo/entity": "workspace:*",
     "@cocrepo/enum": "workspace:*",
+    "@cocrepo/facade": "workspace:*",
     "@cocrepo/prisma": "workspace:^1.0.0",
     "@cocrepo/repository": "workspace:*",
     "@cocrepo/service": "workspace:*",

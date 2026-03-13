@@ -6,25 +6,26 @@
 
 ## 역할
 
-`SubjectsController`가 Service와 Subject service/repository 조합을 주입받을 수 있도록 provider를 구성합니다.
+`SubjectsController`가 `SubjectFacade`를 주입받도록 facade/service/repository provider를 구성합니다.
 
 ## provider 구성
 
 | provider | 설명 |
 |----------|------|
-| SubjectsService | Controller 진입용 Subject 유즈케이스 |
-| SubjectsService | Subject 도메인 서비스 |
+| SubjectFacade | Controller boundary 유즈케이스 및 응답 조립 |
+| SubjectService | Subject 조회 규칙 및 필드 조회 처리 |
 | SubjectsRepository | Subject 영속성 접근 |
 
 ## exports
 
 | export | 설명 |
 |--------|------|
-| SubjectsService | 다른 모듈이 참조할 수 있는 Subject application 진입점 |
+| SubjectFacade | 다른 모듈이 참조할 수 있는 Subject boundary 진입점 |
 
 ## 변경 이력
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
 | 2026-03-03 | 누락된 sidecar spec 신규 생성 | codex |
-| 2026-03-11 | SubjectsModule export를 SubjectsService 기준으로 정렬 | codex |
+| 2026-03-11 | SubjectsModule export를 SubjectService 기준으로 정렬 | codex |
+| 2026-03-13 | SubjectsModule boundary provider/export를 `SubjectFacade` 기준으로 갱신 | codex |

@@ -17,7 +17,7 @@ import { ExtractJwt, Strategy } from "passport-jwt";
  * 실제 JwtStrategy는 RS256 + JWKS (IDP 서버 필요)를 사용하지만,
  * 테스트에서는 HS256 + AUTH_JWT_SECRET으로 간단히 검증합니다.
  *
- * UsersService 대신 PrismaService(@Global)를 직접 사용하여
+ * UserService 대신 PrismaService(@Global)를 직접 사용하여
  * 테스트 모듈의 DI 스코프 제한을 우회합니다.
  */
 @Injectable()

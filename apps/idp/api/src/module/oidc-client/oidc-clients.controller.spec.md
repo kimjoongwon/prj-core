@@ -3,7 +3,7 @@
 > 생성일: 2026-02-19
 > 수정일: 2026-02-19
 > 타입: controller
-> 위치: apps/idp-server/src/module/oidc-client/oidc-clients.controller.ts
+> 위치: apps/idp/api/src/module/oidc-client/oidc-clients.controller.ts
 
 ## 역할
 
@@ -49,7 +49,7 @@ OIDC 클라이언트(OAuth2 앱) 관리 CRUD API를 제공합니다. 관리자�
 
 | 의존 서비스 | 역할 |
 |------------|------|
-| `OidcClientsService` | OIDC 클라이언트 CRUD 및 상태 관리 유즈케이스 위임 |
+| `OidcClientFacade` | 목록 메타 조립 및 OIDC 클라이언트 controller boundary |
 
 ## 구현 체크리스트
 
@@ -63,6 +63,7 @@ OIDC 클라이언트(OAuth2 앱) 관리 CRUD API를 제공합니다. 관리자�
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
 | 2026-02-19 | 초기 생성 (역기획) | req-reverse-engineer |
-| 2026-03-12 | 컨트롤러 진입점을 `OidcClientsService`로 정렬 | codex |
+| 2026-03-12 | 컨트롤러 진입점을 `OidcClientService`로 정렬 | codex |
 | 2026-03-12 | 순수성 기준으로 단일 전달형은 `@cocrepo/service` 직접 주입으로 정리 | codex |
 | 2026-03-12 | 목록 응답의 페이지 메타 조립을 ApplicationService로 이관 | codex |
+| 2026-03-13 | controller boundary 조합을 `OidcClientFacade`로 이관 | codex |

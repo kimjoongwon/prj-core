@@ -1,4 +1,4 @@
-import { AbilitiesApplicationService } from "@cocrepo/app";
+import { AbilityApplicationService } from "@cocrepo/app";
 import { ABILITY_ERRORS } from "@cocrepo/constant";
 import {
 	ApiAuth,
@@ -30,7 +30,7 @@ import { ApiBody, ApiOperation, ApiParam, ApiTags } from "@nestjs/swagger";
 @Controller()
 export class AbilitiesController {
 	constructor(
-		private readonly abilitiesService: AbilitiesApplicationService,
+		private readonly abilitiesService: AbilityApplicationService,
 		private readonly authContext: AuthContext,
 	) {}
 

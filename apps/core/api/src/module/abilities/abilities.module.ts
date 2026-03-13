@@ -3,13 +3,13 @@ import {
 	GrantsRepository,
 	UsersRepository,
 } from "@cocrepo/repository";
-import { AbilitiesApplicationService } from "@cocrepo/app";
+import { AbilityApplicationService } from "@cocrepo/app";
 import {
-	AbilitiesService,
+	AbilityService,
 	AuthCacheService,
 	AuthContext,
 	SpaceContext,
-	UsersService,
+	UserService,
 } from "@cocrepo/service";
 import { Module } from "@nestjs/common";
 import { AbilitiesController } from "./abilities.controller";
@@ -17,9 +17,9 @@ import { AbilitiesController } from "./abilities.controller";
 @Module({
 	controllers: [AbilitiesController],
 	providers: [
-		AbilitiesApplicationService,
-		AbilitiesService,
-		UsersService,
+		AbilityApplicationService,
+		AbilityService,
+		UserService,
 		AuthCacheService,
 		AbilitiesRepository,
 		GrantsRepository,
@@ -27,6 +27,6 @@ import { AbilitiesController } from "./abilities.controller";
 		AuthContext,
 		SpaceContext,
 	],
-	exports: [AbilitiesApplicationService],
+	exports: [AbilityApplicationService],
 })
 export class AbilitiesModule {}

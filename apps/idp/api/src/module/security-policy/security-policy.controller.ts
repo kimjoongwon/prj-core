@@ -8,7 +8,7 @@ import {
 	SkipSpaceCheck,
 } from "@cocrepo/decorator";
 import { SecurityPolicyDto, UpdateSecurityPolicyDto } from "@cocrepo/dto";
-import { SecurityPolicyApplicationService } from "@cocrepo/app";
+import { SecurityPolicyFacade } from "@cocrepo/facade";
 import { Body, Controller, Get, HttpStatus, Patch } from "@nestjs/common";
 import { ApiBody, ApiOperation, ApiTags } from "@nestjs/swagger";
 
@@ -18,7 +18,7 @@ import { ApiBody, ApiOperation, ApiTags } from "@nestjs/swagger";
 @SkipSpaceCheck()
 export class SecurityPolicyController {
 	constructor(
-		private readonly securityPolicyService: SecurityPolicyApplicationService,
+		private readonly securityPolicyService: SecurityPolicyFacade,
 	) {}
 
 	@Get()

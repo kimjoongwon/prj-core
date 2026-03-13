@@ -16,10 +16,14 @@ src/
 │   │   │   └── auth.domain.ts         # 인증 비즈니스 로직
 │   │   │       └── auth.domain.spec.ts
 │   │   │
-│   │   ├── application/      # 유즈케이스 조합 계층 (ApplicationService)
+│   │   ├── application/      # workflow 계층 (ApplicationService)
 │   │   │   ├── auth.application-service.ts
 │   │   │   ├── auth.application-service.spec.ts
 │   │   │   └── aws.service.ts
+│   │   │
+│   │   ├── facade/           # boundary composition 계층 (Facade)
+│   │   │   ├── user.facade.ts
+│   │   │   └── inquiry.facade.ts
 │   │   │
 │   │   ├── utils/            # 기술 유틸리티 서비스
 │   │   │   ├── password.service.ts    # 암호화 관련 유틸
@@ -61,7 +65,8 @@ src/
 | 계층 | 목적 | 위치 | 예시 |
 |------|------|------|------|
 | **Controller** | HTTP 요청 처리 | `controller/` | 라우팅, 요청 검증 |
-| **ApplicationService** | 유즈케이스 조합 | `service/application/` | AuthApplicationService |
+| **ApplicationService** | 유즈케이스 workflow 조합 | `service/application/` | AuthApplicationService |
+| **Facade** | 경계 응답 조립 / protocol composition | `service/facade/` | UserFacade |
 | **Domain** | 순수 비즈니스 로직 | `service/domain/` | AuthDomain (비즈니스 규칙) |
 | **Utils** | 기술 구현 | `service/utils/` | 암호화, 토큰, 컨텍스트 |
 | **Resources** | 데이터 접근 | `service/resources/` | 사용자, 테넌트 CRUD |
@@ -72,17 +77,14 @@ src/
 ```
 HTTP Request
     ↓
-Controller (auth.controller.ts)
+Controller (users.controller.ts)
     ↓
-ApplicationService (auth.application-service.ts - AuthApplicationService)
-    ├── Domain 로직 위임 → auth.domain.ts
-    │   ├── validateUser()
-    │   ├── signUp()
-    │   └── login()
-    └── Util 조합
-        ├── PasswordService
-        ├── TokenService
-        └── UsersService
+Facade (user.facade.ts - UserFacade)
+    ├── 응답/meta/protocol composition
+    ├── Space/Auth context 해석
+    └── 필요 시 workflow 위임
+        ↓
+ApplicationService / Service / Integration Facade
     ↓
 Repository (Prisma)
     ↓
@@ -108,7 +110,7 @@ Database
 - 테스트가 명확하고 용이함
 - 재사용성 높음
 
-### 2. ApplicationService (서비스 조합 및 공개 인터페이스)
+### 2. ApplicationService (workflow 조합)
 
 **파일**: `service/application/auth.application-service.ts`
 
@@ -123,18 +125,18 @@ Database
 - login(email, password)            // domain.login() 위임
 ```
 
-**이중 역할**:
+**역할**:
 
 | 역할 | 메서드 | 목적 |
 |------|--------|------|
-| 조합 | getCurrentUser, getNewToken | Utils + Domain 조합 |
-| 위임 | validateUser, signUp, login | Domain 비즈니스 로직 호출 |
+| workflow 조합 | getCurrentUser, getNewToken | 여러 서비스/외부 연동을 유즈케이스 단위로 조합 |
+| 업무 흐름 제어 | validateUser, signUp, login | 인증 유즈케이스의 전후 처리와 분기 관리 |
 
 **위임하는 이유**:
 
-1. **단일 인터페이스 (Single Interface)**
-   - Controller는 ApplicationService만 알면 됨
-   - Domain 변경이 Controller에 영향 없음
+1. **유즈케이스 경계 고정**
+   - Facade 또는 상위 진입점은 ApplicationService의 workflow 계약만 알면 됨
+   - 세부 Service 변경이 상위 계층에 직접 전파되지 않음
 
 2. **추후 확장성**
    - ApplicationService에서 비즈니스 로직 전후 처리 추가 가능
@@ -155,7 +157,8 @@ Database
    ```
 
 3. **계층별 책임 명확화**
-   - ApplicationService: 공개 인터페이스 + 크로스커팅 관심사
+   - ApplicationService: workflow 유즈케이스 조합
+   - Facade: boundary 응답/프로토콜 composition
    - Domain: 순수 비즈니스 로직
    - Controller: HTTP 처리
 
@@ -164,10 +167,24 @@ Database
    - Domain 테스트: 실제 비즈니스 로직만 검증
 
 **특징**:
-- Domain 로직을 통제된 방식으로 노출
+- 여러 서비스/외부 연동을 workflow 단위로 조합
 - 기술적 유틸리티 조합 (TokenService, PasswordService)
-- 컨트롤러의 공개 인터페이스 역할
-- ApplicationService를 통한 유즈케이스 조합 분리
+- controller boundary와 분리된 유즈케이스 orchestration 담당
+
+### 2.5 Facade (경계 조합 및 응답/protocol 정리)
+
+**파일**: `service/facade/user.facade.ts`
+
+```typescript
+// boundary composition
+- listUsers(query)                  // data + meta + stats 조립
+- getUserById(userId)               // 컨텍스트 해석 후 service/app 호출
+```
+
+**특징**:
+- Controller가 직접 수행하던 응답 meta 계산, DTO/protocol 정리, 컨텍스트 해석을 수용
+- workflow가 필요하면 ApplicationService를 호출하고, 단순 aggregate root면 Service를 직접 호출 가능
+- Controller에는 HTTP 관심사만 남기고 boundary 조립 책임을 분리
 
 ### 3. Utils (기술 유틸리티)
 
@@ -205,7 +222,7 @@ ContextService
 **파일**: `service/resources/`
 
 ```typescript
-UsersService
+UserService
 - getByEmail(email)
 - getByIdWithTenants(userId)
 - create(data)
@@ -253,14 +270,15 @@ TenantsService
 ### 관심사 분리 (Separation of Concerns)
 
 - **Domain**: 순수 비즈니스 규칙만
-- **ApplicationService**: 도메인 로직 노출 + 서비스 조합 + 크로스커팅 관심사
+- **ApplicationService**: workflow 유즈케이스 조합
+- **Facade**: boundary 응답 조립 + protocol composition + 컨텍스트 해석
 - **Utils**: 기술 구현 (암호화, JWT, 컨텍스트)
 - **Resources**: 데이터 접근 (CRUD)
 
 ### 재사용성
 
 - Utils는 모든 계층에서 사용 가능
-- Domain은 순수하게 유지, ApplicationService를 통해 노출
+- Domain은 순수하게 유지, Facade/ApplicationService를 통해 상위 계층에 노출
 - Resources는 어디서든 필요한 곳에 주입 가능
 
 ### 테스트 용이성
@@ -271,7 +289,8 @@ TenantsService
   AuthDomain(mockUsers, mockPassword, mockToken, mockPrisma)
   ```
 
-- **ApplicationService 테스트**: 서비스 조합 및 위임 검증
+- **ApplicationService 테스트**: workflow 조합 및 분기 검증
+- **Facade 테스트**: boundary 계약, meta/stats 조립, protocol 위임 검증
   ```typescript
   // Domain 모킹으로 조합만 검증
   AuthService(mockDomain, mockUsers, mockJwt, mockToken)
@@ -311,7 +330,7 @@ async login(payload) {
 ```
 
 **장점**:
-- Controller 수정 없음 (ApplicationService만 수정)
+- Controller 수정 없음 (Facade 또는 ApplicationService만 수정)
 - Domain은 순수하게 유지
 - 기능 추가가 격리됨
 
@@ -321,6 +340,7 @@ async login(payload) {
 |----------|---------|---------|
 | 새 비즈니스 로직 | Domain | Domain + Domain 테스트 |
 | 감사/권한 처리 | ApplicationService | ApplicationService + ApplicationService 테스트 |
+| 응답 meta/protocol 조립 | Facade | Facade + Facade 테스트 |
 | 새 유틸 기능 | Utils | Utils 확장 |
 | 새 데이터 접근 | Resources | Resources + Repository |
 

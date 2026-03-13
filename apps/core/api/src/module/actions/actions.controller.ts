@@ -1,4 +1,4 @@
-import { ActionsApplicationService } from "@cocrepo/app";
+import { ActionFacade } from "@cocrepo/facade";
 import { RoleCategoryGuard } from "@cocrepo/be-common";
 import { ACTION_ERRORS } from "@cocrepo/constant";
 import {
@@ -42,7 +42,7 @@ import {
 @Controller()
 export class ActionsController {
 	constructor(
-		private readonly actionsService: ActionsApplicationService,
+		private readonly actionsService: ActionFacade,
 	) {}
 
 	@Public()

@@ -5,7 +5,7 @@ import { DirectUserRepository } from "./direct-user.repository";
 import { RedisOidcAdapterFactory } from "./oidc.adapter";
 import { OidcController } from "./oidc.controller";
 import { OidcClientRepository } from "./oidc-client.repository";
-import { OidcApplicationService } from "./oidc.application-service";
+import { OidcFacade } from "./oidc.facade";
 import { OidcConfigurationService } from "./oidc-configuration.service";
 import { OidcProviderService } from "./oidc-provider.service";
 
@@ -16,7 +16,7 @@ import { OidcProviderService } from "./oidc-provider.service";
 		OidcProviderService,
 		OidcConfigurationService,
 		AccountService,
-		OidcApplicationService,
+		OidcFacade,
 
 		// Data Access (DirectPrismaProvider로 CLS 프록시 우회 - onModuleInit에서도 안전하게 동작)
 		DirectPrismaProvider,

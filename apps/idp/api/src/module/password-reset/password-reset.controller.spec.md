@@ -1,9 +1,9 @@
 # Password Reset Controller 기획서
 
 > 생성일: 2026-02-19
-> 수정일: 2026-02-19
+> 수정일: 2026-03-13
 > 타입: controller
-> 위치: apps/idp-server/src/module/password-reset/password-reset.controller.ts
+> 위치: apps/idp/api/src/module/password-reset/password-reset.controller.ts
 
 ## 역할
 
@@ -43,7 +43,7 @@
 
 | 의존 서비스 | 역할 |
 |------------|------|
-| `PasswordResetApplicationService` | 토큰 생성/검증, 이메일 발송, 비밀번호 변경 비즈니스 로직 |
+| `PasswordResetFacade` | 토큰 생성/검증, 이메일 발송, 비밀번호 변경 비즈니스 로직 |
 
 ## 구현 체크리스트
 
@@ -57,4 +57,4 @@
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
 | 2026-02-19 | 초기 생성 (역기획) | req-reverse-engineer |
-| 2026-03-12 | PasswordResetController가 PasswordResetService 직접 주입에서 PasswordResetApplicationService로 전환 | codex |
+| 2026-03-13 | PasswordResetController가 PasswordResetService 직접 주입에서 PasswordResetFacade로 전환 | codex |

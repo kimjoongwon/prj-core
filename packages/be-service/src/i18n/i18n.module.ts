@@ -6,7 +6,7 @@ import {
 } from "nestjs-i18n";
 import { existsSync } from "node:fs";
 import { join, resolve } from "node:path";
-import { TranslationService } from "./translation.service";
+import { I18nTranslationService } from "./translation.service";
 
 // 실행 CWD가 워크스페이스 루트(/app) 또는 앱 경로(/app/apps/*/api)일 수 있어
 // 존재하는 경로를 우선 선택한다.
@@ -35,7 +35,7 @@ const SERVICE_PKG_ROOT =
 			typesOutputPath: join(SERVICE_PKG_ROOT, "src/i18n/generated/i18n.generated.ts"),
 		}),
 	],
-	providers: [TranslationService],
-	exports: [NestI18nModule, TranslationService],
+	providers: [I18nTranslationService],
+	exports: [NestI18nModule, I18nTranslationService],
 })
 export class I18nModule {}

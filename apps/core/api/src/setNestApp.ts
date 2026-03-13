@@ -6,7 +6,7 @@ import {
 	SpaceAccessGuard,
 	SpaceScopeInterceptor,
 } from "@cocrepo/be-common";
-import { TranslationService } from "@cocrepo/service";
+import { I18nTranslationService } from "@cocrepo/service";
 import { TokenStorageService } from "@cocrepo/service";
 import { ClsService } from "nestjs-cls";
 import {
@@ -18,7 +18,7 @@ import { HttpAdapterHost, Reflector } from "@nestjs/core";
 
 export function setNestApp<T extends INestApplication>(app: T): void {
 	const { httpAdapter } = app.get(HttpAdapterHost);
-	const translationService = app.get(TranslationService);
+	const translationService = app.get(I18nTranslationService);
 
 	// =================================================================
 	// Global Exception Filters (모든 예외를 일관되게 처리)

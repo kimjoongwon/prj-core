@@ -1,4 +1,4 @@
-# idp-dashboard.module module 기획서
+# IDP Dashboard Module 기획서
 
 > 생성일: 2026-03-03
 > 타입: module
@@ -6,28 +6,20 @@
 
 ## 역할
 
-이 파일은 module 계층의 보조 동작(연결/조회/조합)을 담당합니다.
+`IdpDashboardController`가 `IdpDashboardFacade`를 주입받도록 facade/service provider를 조합합니다.
 
-## 주요 계약
+## provider 구성
 
-| 항목 | 설명 |
-|------|------|
-| IdpDashboardModule | 공개 계약 요소 |
+| provider | 설명 |
+|----------|------|
+| IdpDashboardFacade | Controller boundary 유즈케이스 및 응답 조립 |
+| IdpDashboardService | 대시보드 통계 집계 로직 |
 
-## 의존성
+## exports
 
-| 모듈 | 용도 |
-|------|------|
-| @cocrepo/service | 기능 구현 의존성 |
-| @nestjs/common | 기능 구현 의존성 |
-| ./idp-dashboard.controller | 기능 구현 의존성 |
-
-## 구현 체크리스트
-
-- [ ] 핵심 입출력/반환 규약이 코드와 일치함
-- [ ] 호출 경로 변경 시 spec을 함께 갱신함
-- [x] controller에서 `@cocrepo/service` 직접 주입 사용
-- [x] controller의 `@cocrepo/app` 직접 주입 제거
+| export | 설명 |
+|--------|------|
+| IdpDashboardFacade | 다른 모듈이 참조할 수 있는 IDP dashboard boundary 진입점 |
 
 ## 변경 이력
 
@@ -36,3 +28,4 @@
 | 2026-03-03 | 누락된 sidecar spec 신규 생성 | codex |
 | 2026-03-12 | 컨트롤러를 `IdpDashboardService` 기반으로 변경 | codex |
 | 2026-03-12 | `module` 체크리스트를 `@cocrepo/service` 직접 주입 정합성 기준으로 갱신 | codex |
+| 2026-03-13 | IdpDashboardModule boundary provider/export를 `IdpDashboardFacade` 기준으로 갱신 | codex |

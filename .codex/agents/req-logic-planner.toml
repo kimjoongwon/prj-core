@@ -36,8 +36,8 @@ developer_instructions = '''
 
 | 항목 | 필수 | 경로 |
 |------|:----:|------|
-| ApplicationService 기획서 | ✅ | `packages/be-app/src/[domain].application-service.spec.md` |
-| Service 기획서 | ✅ | `packages/be-service/src/[domain].service.spec.md` |
+| ApplicationService 기획서 | ✅ | `packages/be-app/src/[name].application-service/index.spec.md` |
+| Service 기획서 | ✅ | `packages/be-service/src/[name].service/index.spec.md` |
 | Controller 기획서 | ✅ | `apps/core/api/src/module/[module]/[domain].controller.spec.md` |
 | 페이지 기획서 | ✅ | `apps/[app]/app/(admin)/[domain]/page.spec.md` |
 | Repository 기획서 | ❌ | `packages/be-repository/src/[domain].repository.spec.md` |
@@ -46,7 +46,7 @@ developer_instructions = '''
 ### 출력 (Sidecar Spec)
 
 ```
-packages/be-service/src/[domain].service.spec.md          # 비즈니스 규칙 섹션 추가 (L9)
+packages/be-service/src/[name].service/index.spec.md     # 비즈니스 규칙 섹션 추가 (L9)
 packages/be-repository/src/[domain].repository.spec.md   # Repository 규칙 섹션 추가 (L9)
 
 # L10 테스트 케이스는 기존 각 .spec.md에 "테스트 케이스" 섹션 추가
@@ -55,7 +55,7 @@ packages/be-repository/src/[domain].repository.spec.md   # Repository 규칙 섹
 **소유권 규칙 (필수):**
 - `controller.spec.md`는 입력 참조 전용이며, 이 에이전트에서 수정하지 않습니다.
 - `controller.spec.md` 작성/수정 책임은 `req-api-planner` 단독 소유입니다.
-- `application-service.spec.md`는 입력 참조 전용이며, 이 에이전트에서 수정하지 않습니다.
+- `packages/be-app/src/[name].application-service/index.spec.md`는 입력 참조 전용이며, 이 에이전트에서 수정하지 않습니다.
 - `application-service.spec.md` 작성/수정 책임은 `req-app-planner` 단독 소유입니다.
 - `store.spec.md`(존재 시)는 입력 참조 전용이며, 이 에이전트에서 수정하지 않습니다.
 - `store.spec.md` 작성/수정 책임은 `req-store-planner` 단독 소유입니다.
@@ -154,7 +154,7 @@ packages/be-repository/src/[domain].repository.spec.md   # Repository 규칙 섹
 
 각 Sidecar Spec 파일을 읽은 후, 아래 섹션을 추가하거나 업데이트합니다:
 
-- `[domain].service.spec.md` → `## 비즈니스 규칙` 섹션 추가
+- `[name].service/index.spec.md` → `## 비즈니스 규칙` 섹션 추가
 - `[domain].repository.spec.md` → `## 쿼리 규칙` 섹션 추가
 - 각 `.spec.md` → `## 테스트 케이스` 섹션 추가
 
@@ -327,11 +327,11 @@ packages/be-repository/src/[domain].repository.spec.md   # Repository 규칙 섹
 
 ```
 읽기 대상 파일:
-- packages/be-app/src/users.application-service.spec.md
-- packages/be-service/src/users.service.spec.md
+- packages/be-app/src/users.application-service/index.spec.md
+- packages/be-service/src/users.service/index.spec.md
 - apps/core/api/src/module/users/users.controller.spec.md
 - apps/admin/web/app/(admin)/users/page.spec.md
-- packages/be-service/src/reservations.service.spec.md
+- packages/be-service/src/reservations.service/index.spec.md
 - apps/core/api/src/module/reservations/reservations.controller.spec.md
 ```
 
@@ -342,7 +342,7 @@ packages/be-repository/src/[domain].repository.spec.md   # Repository 규칙 섹
 
 ### 출력 (기존 .spec.md에 섹션 추가)
 
-**`packages/be-service/src/users.service.spec.md` 에 추가:**
+**`packages/be-service/src/users.service/index.spec.md` 에 추가:**
 
 ```markdown
 ## 비즈니스 규칙
@@ -387,7 +387,7 @@ packages/be-repository/src/[domain].repository.spec.md   # Repository 규칙 섹
 |          | message: "이미 등록된 이메일입니다" |
 ```
 
-**`packages/be-service/src/reservations.service.spec.md` 에 추가:**
+**`packages/be-service/src/reservations.service/index.spec.md` 에 추가:**
 
 ```markdown
 ## 비즈니스 규칙

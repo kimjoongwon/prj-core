@@ -22,7 +22,7 @@ NestJS Service 레이어를 생성하는 전문가입니다.
 |------|----------|------|
 | 단일 Aggregate Root / 단일 도메인 비즈니스 로직 구현 | ✅ 사용 | Service 생성 |
 | Aggregate Root command/query 구현 | ✅ 사용 | 도메인 목적 메서드명 부여 |
-| 여러 Service 조합 | ❌ 미사용 | be-app-builder 사용 |
+| 여러 Service 조합 | ❌ 미사용 | workflow면 `be-app-builder`, boundary composition이면 `be-facade-builder` 사용 |
 | Controller 생성 | ❌ 미사용 | controller-builder 사용 |
 
 ---
@@ -33,8 +33,8 @@ NestJS Service 레이어를 생성하는 전문가입니다.
 |------|------|------|
 | **입력** | Repository 클래스 | `@cocrepo/repository` |
 | | 비즈니스 요구사항 | 도메인 로직 |
-| **출력** | Service 클래스 | `packages/be-service/src/{entity}.service.ts` |
-| | sidecar spec | `packages/be-service/src/{entity}.service.spec.md` |
+| **출력** | Service 클래스 | `packages/be-service/src/{name}.service/index.ts` |
+| | sidecar spec | `packages/be-service/src/{name}.service/index.spec.md` |
 | | index.ts 업데이트 | export 추가 |
 
 ---
@@ -126,6 +126,13 @@ constructor(
 
 ### 4단계: index.ts 등록
 
+### 파일 배치 규칙
+
+- 폴더명은 `xxx.service`
+- 구현 파일은 `index.ts`
+- sidecar spec 파일은 `index.spec.md`
+- 배럴 export는 `packages/be-service/src/index.ts`에서 유지
+
 ---
 
 ## 템플릿
@@ -139,8 +146,8 @@ import { {Entity}sRepository } from "@cocrepo/repository";
 import { Injectable, Logger } from "@nestjs/common";
 
 @Injectable()
-export class {Entity}sService {
-  private readonly logger = new Logger({Entity}sService.name);
+export class {Entity}Service {
+  private readonly logger = new Logger({Entity}Service.name);
 
   constructor(
     private readonly repository: {Entity}sRepository,
@@ -190,7 +197,7 @@ export class {Entity}sService {
 
 ```typescript
 @Injectable()
-export class UsersService {
+export class UserService {
   constructor(private readonly repository: UsersRepository) {}
 
   // Service: 도메인 목적 (getByIdWithTenants)
@@ -215,7 +222,7 @@ import { Tenant } from "@cocrepo/prisma";
 import { ClsService } from "nestjs-cls";
 
 @Injectable()
-export class CategoriesService {
+export class CategoryService {
   constructor(
     private readonly repository: CategoriesRepository,
     private readonly cls: ClsService,
@@ -242,7 +249,7 @@ export class CategoriesService {
 
 ```typescript
 @Injectable()
-export class OrdersService {
+export class OrderService {
   constructor(private readonly repository: OrdersRepository) {}
 
   async changeItemQuantity(orderId: string, itemId: string, quantity: number) {
@@ -292,7 +299,7 @@ export class OrdersService {
 ### 파일 위치
 
 ```
-packages/be-service/src/{entity}.service.ts
+packages/be-service/src/{entity}.service/index.ts
 ```
 
 ### 네이밍 규칙 상세

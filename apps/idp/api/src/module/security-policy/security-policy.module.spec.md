@@ -1,4 +1,4 @@
-# security-policy.module module 기획서
+# Security Policy Module 기획서
 
 > 생성일: 2026-03-03
 > 타입: module
@@ -6,29 +6,21 @@
 
 ## 역할
 
-이 파일은 module 계층의 보조 동작(연결/조회/조합)을 담당합니다.
+`SecurityPolicyController`가 `SecurityPolicyFacade`를 주입받도록 facade/service/repository provider를 조합합니다.
 
-## 주요 계약
+## provider 구성
 
-| 항목 | 설명 |
-|------|------|
-| SecurityPolicyModule | 공개 계약 요소 |
+| provider | 설명 |
+|----------|------|
+| SecurityPolicyFacade | Controller boundary 유즈케이스 및 응답 조립 |
+| SecurityPolicyService | 보안 정책 도메인 규칙 및 변경 처리 |
+| Security policy repository provider | 보안 정책 영속성 접근 |
 
-## 의존성
+## exports
 
-| 모듈 | 용도 |
-|------|------|
-| @cocrepo/repository | 기능 구현 의존성 |
-| @cocrepo/service | 기능 구현 의존성 |
-| @nestjs/common | 기능 구현 의존성 |
-| ./security-policy.controller | 기능 구현 의존성 |
-
-## 구현 체크리스트
-
-- [ ] 핵심 입출력/반환 규약이 코드와 일치함
-- [ ] 호출 경로 변경 시 spec을 함께 갱신함
-- [x] controller에서 `@cocrepo/service` 직접 주입 사용
-- [x] controller의 `@cocrepo/app` 직접 주입 제거
+| export | 설명 |
+|--------|------|
+| SecurityPolicyFacade | 다른 모듈이 참조할 수 있는 Security Policy boundary 진입점 |
 
 ## 변경 이력
 
@@ -37,3 +29,4 @@
 | 2026-03-03 | 누락된 sidecar spec 신규 생성 | codex |
 | 2026-03-12 | 컨트롤러를 `SecurityPolicyService` 기반으로 변경 | codex |
 | 2026-03-12 | `module` 체크리스트를 `@cocrepo/service` 직접 주입 정합성 기준으로 갱신 | codex |
+| 2026-03-13 | SecurityPolicyModule boundary provider/export를 `SecurityPolicyFacade` 기준으로 갱신 | codex |

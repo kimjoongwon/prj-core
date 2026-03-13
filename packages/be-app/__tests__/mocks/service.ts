@@ -1,10 +1,10 @@
-export class UsersService {
+export class UserService {
 	getByIdWithTenants() {}
 	findUserForAuth() {}
 	createUserForSignUp() {}
 }
 
-export class AbilitiesService {
+export class AbilityService {
 	getMergedAbilities() {}
 	getAbilityById() {}
 	getAllAbilities() {}
@@ -15,11 +15,11 @@ export class AbilitiesService {
 	deleteAbility() {}
 }
 
-export class RolesService {
+export class RoleService {
 	getDefaultUserRole() {}
 }
 
-export class SpacesService {
+export class SpaceService {
 	createPersonalSpace() {}
 }
 
