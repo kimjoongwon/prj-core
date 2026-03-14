@@ -18,4 +18,5 @@
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-03-14 | Nest DI가 `ClsService`를 주입할 수 있도록 패키지 빌드가 decorator metadata를 유지해야 한다는 런타임 전제를 명시 | codex |
 | 2026-03-03 | 누락된 sidecar spec 신규 생성 | codex |

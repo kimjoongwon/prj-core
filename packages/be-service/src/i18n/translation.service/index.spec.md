@@ -44,6 +44,7 @@ CLS(Continuation Local Storage)를 통해 현재 요청의 언어 코드를 가�
 
 - 번역 없는 경우: 키 자체 반환 (에러 없음)
 - `getTranslation`: 번역 없는 경우 `null` 반환
+- DB 번역 조회 실패 시: 예외를 다시 던지지 않고 JSON 번역/기본 언어/키 자체 반환으로 폴백
 
 ## 권한 요구사항
 
@@ -63,3 +64,4 @@ CLS(Continuation Local Storage)를 통해 현재 요청의 언어 코드를 가�
 | 2026-03-13 | 도메인 TranslationService와 충돌하지 않도록 `I18nTranslationService`로 명명 | codex |
 | 2026-03-13 | `translation.service.ts`와 sidecar spec을 폴더형 `index.ts`/`index.spec.md` 구조로 재배치 | codex |
 | 2026-03-13 | 중첩 폴더 구조에 맞게 `PrismaService` 상대 import 경로를 `../../prisma.service`로 보정 | codex |
+| 2026-03-14 | DB 번역 조회 실패 시 JSON/i18n 폴백으로 계속 동작하도록 예외 흡수 규칙 추가 | codex |

@@ -31,6 +31,7 @@ User CRUD API를 노출하며, Space/Auth 컨텍스트 해석과 응답 조립�
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-03-14 | Biome lint organizeImports/format cleanup reflected | codex |
 | 2026-02-18 | 초기 생성 (역기획) | req-reverse-engineer |
 | 2026-03-11 | Controller 의존성을 UserService로 전환하고 CLS helper를 제거 | codex |
 | 2026-03-12 | UsersController에서 Space/Auth 컨텍스트를 주입해 Space 스코프 조회/수정/삭제 API로 정비 | codex |

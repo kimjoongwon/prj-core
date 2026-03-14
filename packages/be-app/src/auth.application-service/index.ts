@@ -425,7 +425,7 @@ export class AuthApplicationService {
 	async getAuthAuditLogs(
 		query: QueryAuthAuditLogDto,
 	): Promise<{
-		logs: GetAuditLogsResult["logs"];
+		data: GetAuditLogsResult["logs"];
 		meta: PageMetaDto;
 	}> {
 		const skip = query.skip ?? 0;
@@ -435,7 +435,7 @@ export class AuthApplicationService {
 		);
 
 		return {
-			logs,
+			data: logs,
 			meta: new PageMetaDto(skip, take, totalCount),
 		};
 	}

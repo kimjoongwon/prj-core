@@ -50,6 +50,7 @@ test.describe("프로그램 등록/수정 연결 플로우", () => {
 		let instructor: UserDto | undefined;
 		let programId: string | undefined;
 		let exerciseTaskId: string | undefined;
+		let createdExerciseTaskId: string | undefined;
 
 		try {
 			// Given: API로 타임라인/세션/루틴/강사 데이터를 준비한다
@@ -102,6 +103,29 @@ test.describe("프로그램 등록/수정 연결 플로우", () => {
 			const exercisesBody =
 				(await exercisesResponse.json()) as ApiListResponse<TaskSeedDto>;
 			exerciseTaskId = exercisesBody.data?.[0]?.id;
+
+			if (!exerciseTaskId) {
+				const createTaskResponse = await page.request.post(
+					`${API_BASE_URL}/tasks`,
+					{
+						headers: SPACE_HEADERS,
+						data: {
+							name: `E2E 프로그램 운동 ${uniqueSuffix}`,
+							duration: 60,
+							count: 10,
+						},
+					},
+				);
+				test.skip(
+					createTaskResponse.status() !== 201,
+					`운동 생성 API 응답이 201이 아닙니다. status=${createTaskResponse.status()}`,
+				);
+				const createdTask =
+					(await createTaskResponse.json()) as ApiItemResponse<IdOnlyDto>;
+				exerciseTaskId = createdTask.data?.id;
+				createdExerciseTaskId = exerciseTaskId;
+			}
+
 			expect(exerciseTaskId).toBeTruthy();
 
 			const createRoutineOneResponse = await page.request.post(
@@ -345,6 +369,13 @@ test.describe("프로그램 등록/수정 연결 플로우", () => {
 				await page.request.delete(`${API_BASE_URL}/routines/${routineTwoId}`, {
 					headers: SPACE_HEADERS,
 				});
+			}
+
+			if (createdExerciseTaskId) {
+				await page.request.delete(
+					`${API_BASE_URL}/tasks/${createdExerciseTaskId}`,
+					{ headers: SPACE_HEADERS },
+				);
 			}
 		}
 	});

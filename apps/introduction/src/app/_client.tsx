@@ -179,7 +179,9 @@ function LandingSection({
 	);
 }
 
-function renderNavigationButton(item: IntroductionPageData["navigation"][number]) {
+function renderNavigationButton(
+	item: IntroductionPageData["navigation"][number],
+) {
 	return (
 		<Button
 			key={item.id}
@@ -246,7 +248,12 @@ function renderProcessCard(step: IntroductionProcessStep) {
 			<Card className="h-full border border-white/10 bg-white/[0.03] shadow-none">
 				<CardHeader className="items-start justify-between gap-4">
 					<div className="space-y-3">
-						<Chip radius="full" variant="flat" color="primary" className="text-[11px] uppercase tracking-[0.24em]">
+						<Chip
+							radius="full"
+							variant="flat"
+							color="primary"
+							className="text-[11px] uppercase tracking-[0.24em]"
+						>
 							Step {step.step}
 						</Chip>
 						<h3 className="text-lg font-semibold text-white">{step.title}</h3>
@@ -257,9 +264,7 @@ function renderProcessCard(step: IntroductionProcessStep) {
 				</CardHeader>
 				<CardBody className="gap-6 text-sm leading-7 text-white/64">
 					<p>{step.description}</p>
-					<ul className="space-y-2">
-						{step.outputs.map(renderProcessOutput)}
-					</ul>
+					<ul className="space-y-2">{step.outputs.map(renderProcessOutput)}</ul>
 				</CardBody>
 			</Card>
 		</motion.div>
@@ -268,7 +273,10 @@ function renderProcessCard(step: IntroductionProcessStep) {
 
 function renderCostLine(item: string) {
 	return (
-		<li key={item} className="flex items-start gap-3 text-sm leading-7 text-white/64">
+		<li
+			key={item}
+			className="flex items-start gap-3 text-sm leading-7 text-white/64"
+		>
 			<BadgeCheck className="mt-1 h-4 w-4 shrink-0 text-primary" />
 			<span>{item}</span>
 		</li>
@@ -298,7 +306,9 @@ function renderStackCard(group: IntroductionStackGroup) {
 					</Chip>
 					<div className="space-y-2">
 						<h3 className="text-lg font-semibold text-white">{group.title}</h3>
-						<p className="text-sm leading-7 text-white/62">{group.description}</p>
+						<p className="text-sm leading-7 text-white/62">
+							{group.description}
+						</p>
 					</div>
 				</CardHeader>
 				<CardBody className="flex flex-row flex-wrap gap-2 pt-0">
@@ -311,7 +321,10 @@ function renderStackCard(group: IntroductionStackGroup) {
 
 function renderClosingBullet(bullet: string) {
 	return (
-		<li key={bullet} className="flex items-center gap-3 text-sm font-medium text-white/82">
+		<li
+			key={bullet}
+			className="flex items-center gap-3 text-sm font-medium text-white/82"
+		>
 			<BadgeCheck className="h-4 w-4 text-primary" />
 			<span>{bullet}</span>
 		</li>
@@ -332,20 +345,27 @@ function TopNavigation({
 							J
 						</div>
 						<div>
-							<p className="font-display text-lg font-semibold text-white">자자</p>
+							<p className="font-display text-lg font-semibold text-white">
+								자자
+							</p>
 							<p className="text-xs uppercase tracking-[0.22em] text-white/46">
 								AI-centered delivery studio
 							</p>
 						</div>
 					</div>
-					<div className="flex flex-wrap gap-2">{navigation.map(renderNavigationButton)}</div>
+					<div className="flex flex-wrap gap-2">
+						{navigation.map(renderNavigationButton)}
+					</div>
 				</div>
 			</div>
 		</div>
 	);
 }
 
-function HeroSection({ hero, process }: Pick<IntroductionPageData, "hero" | "process">) {
+function HeroSection({
+	hero,
+	process,
+}: Pick<IntroductionPageData, "hero" | "process">) {
 	const primaryAction = SECTION_ACTIONS[hero.primaryAction.target];
 	const secondaryAction = SECTION_ACTIONS[hero.secondaryAction.target];
 	const previewSteps = process.slice(0, 3);
@@ -358,7 +378,12 @@ function HeroSection({ hero, process }: Pick<IntroductionPageData, "hero" | "pro
 			className="grid gap-10 md:grid-cols-[minmax(0,1.2fr)_minmax(320px,0.8fr)] md:items-start md:gap-12"
 		>
 			<div className="space-y-10">
-				<Chip radius="full" variant="flat" color="primary" className="border border-primary/20 bg-primary/10 px-3 py-5 text-[11px] font-semibold tracking-[0.32em] text-primary-200">
+				<Chip
+					radius="full"
+					variant="flat"
+					color="primary"
+					className="border border-primary/20 bg-primary/10 px-3 py-5 text-[11px] font-semibold tracking-[0.32em] text-primary-200"
+				>
 					{hero.eyebrow}
 				</Chip>
 				<div className="space-y-6">
@@ -399,11 +424,7 @@ function HeroSection({ hero, process }: Pick<IntroductionPageData, "hero" | "pro
 					{hero.metrics.map(renderMetricCard)}
 				</motion.div>
 			</div>
-			<motion.div
-				initial="hidden"
-				animate="show"
-				variants={GRID_VARIANTS}
-			>
+			<motion.div initial="hidden" animate="show" variants={GRID_VARIANTS}>
 				<Card className="overflow-hidden border border-white/10 bg-[linear-gradient(160deg,rgba(255,255,255,0.09),rgba(255,255,255,0.02))] shadow-[0_40px_120px_rgba(0,0,0,0.34)]">
 					<CardHeader className="flex-col items-start gap-3 border-b border-white/10 bg-black/18">
 						<Chip radius="full" variant="flat" color="secondary">
@@ -414,11 +435,12 @@ function HeroSection({ hero, process }: Pick<IntroductionPageData, "hero" | "pro
 								기획에서 코드까지 같은 리듬으로 움직입니다
 							</h2>
 							<p className="text-sm leading-7 text-white/62">
-								화면, 스펙, 구현이 서로를 기다리지 않도록 실행 레이어를 촘촘하게 맞춥니다.
+								화면, 스펙, 구현이 서로를 기다리지 않도록 실행 레이어를 촘촘하게
+								맞춥니다.
 							</p>
 						</div>
 					</CardHeader>
-						<CardBody className="gap-5 p-6 md:p-7">
+					<CardBody className="gap-5 p-6 md:p-7">
 						{previewSteps.map(renderProcessCard)}
 					</CardBody>
 				</Card>
@@ -431,7 +453,10 @@ export default observer(function IntroductionPageClient({
 	pageData,
 }: IntroductionPageClientProps) {
 	return (
-		<Page top={<TopNavigation navigation={pageData.navigation} />} className="gap-0">
+		<Page
+			top={<TopNavigation navigation={pageData.navigation} />}
+			className="gap-0"
+		>
 			<main className="relative mx-auto w-full max-w-[90rem] px-5 pb-16 pt-6 md:px-8 md:pb-24 md:pt-8">
 				<div className="pointer-events-none fixed bottom-0 left-0 h-[500px] w-[500px] -translate-x-1/2 translate-y-1/2 rounded-full bg-primary/25 blur-3xl" />
 				<div className="pointer-events-none fixed right-0 top-0 h-[420px] w-[420px] translate-x-1/2 -translate-y-1/2 rounded-full bg-secondary/20 blur-3xl opacity-80" />
@@ -507,10 +532,14 @@ export default observer(function IntroductionPageClient({
 										<Chip radius="full" variant="flat" color="danger">
 											줄이는 비용
 										</Chip>
-										<h3 className="text-xl font-semibold text-white">없애도 되는 레이어</h3>
+										<h3 className="text-xl font-semibold text-white">
+											없애도 되는 레이어
+										</h3>
 									</CardHeader>
 									<CardBody>
-										<ul className="space-y-3">{pageData.costModel.removed.map(renderCostLine)}</ul>
+										<ul className="space-y-3">
+											{pageData.costModel.removed.map(renderCostLine)}
+										</ul>
 									</CardBody>
 								</Card>
 								<Card className="border border-success/20 bg-success/5 shadow-none">
@@ -518,10 +547,14 @@ export default observer(function IntroductionPageClient({
 										<Chip radius="full" variant="flat" color="success">
 											남겨야 하는 비용
 										</Chip>
-										<h3 className="text-xl font-semibold text-white">사람이 붙잡아야 하는 레이어</h3>
+										<h3 className="text-xl font-semibold text-white">
+											사람이 붙잡아야 하는 레이어
+										</h3>
 									</CardHeader>
 									<CardBody>
-										<ul className="space-y-3">{pageData.costModel.focused.map(renderCostLine)}</ul>
+										<ul className="space-y-3">
+											{pageData.costModel.focused.map(renderCostLine)}
+										</ul>
 									</CardBody>
 								</Card>
 							</div>
@@ -570,7 +603,9 @@ export default observer(function IntroductionPageClient({
 											{pageData.closing.description}
 										</p>
 									</div>
-									<ul className="grid gap-3 md:grid-cols-3">{pageData.closing.bullets.map(renderClosingBullet)}</ul>
+									<ul className="grid gap-3 md:grid-cols-3">
+										{pageData.closing.bullets.map(renderClosingBullet)}
+									</ul>
 								</CardBody>
 							</Card>
 						</LandingSection>

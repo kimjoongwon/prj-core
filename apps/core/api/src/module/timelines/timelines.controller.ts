@@ -1,7 +1,10 @@
-import { ApiAuth, ApiErrors, ApiResponseEntity, ResponseMessage } from "@cocrepo/decorator";
-import { SpaceContext } from "@cocrepo/service";
-import { TimelineFacade } from "@cocrepo/facade";
 import { USER_ERRORS } from "@cocrepo/constant";
+import {
+	ApiAuth,
+	ApiErrors,
+	ApiResponseEntity,
+	ResponseMessage,
+} from "@cocrepo/decorator";
 import {
 	CreateProgramDto,
 	CreateSessionDto,
@@ -16,6 +19,8 @@ import {
 	UpdateSessionDto,
 	UpdateTimelineDto,
 } from "@cocrepo/dto";
+import { TimelineFacade } from "@cocrepo/facade";
+import { SpaceContext } from "@cocrepo/service";
 import {
 	Body,
 	Controller,

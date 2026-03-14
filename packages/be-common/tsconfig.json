@@ -13,6 +13,7 @@
     { "path": "../common-enum" },
     { "path": "../be-prisma" },
     { "path": "../be-repository" },
+    { "path": "../be-service" },
     { "path": "../common-toolkit" }
   ],
   "include": ["src/**/*.ts"],

@@ -45,8 +45,8 @@ test.describe("태스크 목록 페이지", () => {
 		test("태스크 등록 → 운동 detail 조회 → 수정 → 삭제 전체 플로우", async ({
 			page,
 		}) => {
-			const TEST_NAME = "E2E 테스트 태스크";
-			const UPDATED_NAME = "E2E 수정된 태스크";
+			const TEST_NAME = "E2E Task Alpha";
+			const UPDATED_NAME = "E2E Task Beta";
 			// 시드 데이터 기준 System Space ID (로그인 헬퍼와 동일)
 			const SYSTEM_SPACE_ID = "61ddca20-1752-466e-b4da-879ebdbe54e3";
 			const spaceHeaders = { "x-space-id": SYSTEM_SPACE_ID };
@@ -83,23 +83,35 @@ test.describe("태스크 목록 페이지", () => {
 			await expect(
 				page.getByRole("heading", { name: "태스크 등록" }),
 			).toBeVisible();
+			await page.waitForTimeout(2000);
 
 			// When: 운동명 입력
-			await page.getByLabel("운동명").fill(TEST_NAME);
+			const nameInput = page.getByRole("textbox", { name: /^운동명/ });
+			await nameInput.fill(TEST_NAME);
+			await expect(nameInput).toHaveValue(TEST_NAME);
 
 			// When: 지속시간 입력 (분 필드에 0, 초 필드에 30)
-			const durationInputs = page.locator('input[type="number"]');
-			await durationInputs.first().fill("0");
-			await durationInputs.nth(1).fill("30");
+			const minuteInput = page.getByRole("spinbutton", { name: "분" });
+			const secondInput = page.getByRole("spinbutton", { name: "초" });
+			await minuteInput.fill("0");
+			await secondInput.click();
+			await secondInput.press("Meta+a");
+			await secondInput.type("30");
+			await expect(secondInput).toHaveValue("30");
 
 			// When: 반복횟수 입력
-			await page.getByLabel("반복횟수").fill("5");
+			const countInput = page.getByRole("spinbutton", { name: /^반복횟수/ });
+			await countInput.click();
+			await countInput.press("Meta+a");
+			await countInput.type("5");
+			await expect(countInput).toHaveValue("5");
 
 			// When: 저장 버튼 클릭
 			const createResponse = page.waitForResponse(
 				(resp) =>
 					resp.url().includes("/api/v1/tasks") &&
 					resp.request().method() === "POST",
+				{ timeout: 15000 },
 			);
 			await page.getByRole("button", { name: "저장" }).click();
 			const response = await createResponse;
@@ -123,7 +135,9 @@ test.describe("태스크 목록 페이지", () => {
 				"운동 detail API 응답 지연/오류로 CRUD 후속 플로우를 진행할 수 없습니다.",
 			);
 			await expect(editButton).toBeVisible();
-			await expect(page.getByText(TEST_NAME)).toBeVisible({ timeout: 30000 });
+			await expect(
+				page.getByRole("heading", { name: TEST_NAME }),
+			).toBeVisible({ timeout: 30000 });
 
 			// ── 수정 플로우 ──
 
@@ -138,10 +152,10 @@ test.describe("태스크 목록 페이지", () => {
 			).toBeVisible({ timeout: 10000 });
 
 			// When: 운동명 수정
-			const nameInput = page.getByLabel("운동명");
-			await nameInput.click();
-			await nameInput.press("Meta+a");
-			await nameInput.pressSequentially(UPDATED_NAME, { delay: 30 });
+			const editNameInput = page.getByRole("textbox", { name: /^운동명/ });
+			await editNameInput.click();
+			await editNameInput.press("Meta+a");
+			await editNameInput.pressSequentially(UPDATED_NAME, { delay: 30 });
 			await page.waitForTimeout(300);
 
 			// When: 저장 버튼 클릭 (PATCH 응답 대기)
@@ -164,9 +178,9 @@ test.describe("태스크 목록 페이지", () => {
 			await page.reload();
 			await page.waitForLoadState("networkidle");
 
-			await expect(page.getByText(UPDATED_NAME)).toBeVisible({
-				timeout: 30000,
-			});
+			await expect(
+				page.getByRole("heading", { name: UPDATED_NAME }),
+			).toBeVisible({ timeout: 30000 });
 
 			// ── 삭제 플로우 ──
 

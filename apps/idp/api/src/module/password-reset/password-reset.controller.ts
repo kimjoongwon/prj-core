@@ -56,7 +56,8 @@ export class PasswordResetController {
 	})
 	@Get("password-policy")
 	async getPasswordPolicy(@Res() res: Response) {
-		const policy = await this.passwordResetApplicationService.getPasswordPolicy();
+		const policy =
+			await this.passwordResetApplicationService.getPasswordPolicy();
 		return res.json(policy);
 	}
 
@@ -161,7 +162,10 @@ export class PasswordResetController {
 		}
 
 		try {
-			await this.passwordResetApplicationService.executeReset(token, body.password);
+			await this.passwordResetApplicationService.executeReset(
+				token,
+				body.password,
+			);
 			return res.json({
 				message: "비밀번호가 변경되었습니다. 다시 로그인해주세요.",
 			});

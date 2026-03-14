@@ -28,8 +28,8 @@ import {
 import { useQueryClient } from "@tanstack/react-query";
 import { Plus } from "lucide-react";
 import { observer, useLocalObservable } from "mobx-react-lite";
-import Link from "next/link";
 import type { Route } from "next";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 
 const formatDuration = (seconds: number) => {

@@ -20,6 +20,7 @@
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-03-14 | `StoreInitializer`가 매 render 새 `can` 함수를 effect dependency로 물어 MobX 반응 루프를 만들지 않도록 `abilityStore` 직접 참조 방식으로 안정화 | codex |
 | 2026-03-13 | `setApiPersistStore` 의존을 root barrel에서 `@cocrepo/api/core/client` subpath로 전환 | codex |
 | 2026-03-06 | 규칙 위반 정리: useMemo/useCallback/useIsMounted 제거 및 observer/이벤트 네이밍 규칙 반영 | codex |
 | 2026-03-06 | AppStoreConfig/AppStoreProviderResult 로컬 선언을 제거하고 @cocrepo/type 공용 계약 import + type re-export로 전환 | codex |

@@ -1,5 +1,3 @@
-import { CategoryFacade } from "@cocrepo/facade";
-import { SpaceContext } from "@cocrepo/service";
 import { RolesGuard } from "@cocrepo/be-common";
 import { SYSTEM_ROLES, USER_ERRORS } from "@cocrepo/constant";
 import {
@@ -15,6 +13,8 @@ import {
 	QueryCategoryDto,
 	UpdateCategoryDto,
 } from "@cocrepo/dto";
+import { CategoryFacade } from "@cocrepo/facade";
+import { SpaceContext } from "@cocrepo/service";
 import {
 	Body,
 	Controller,
@@ -27,8 +27,8 @@ import {
 	Patch,
 	Post,
 	Query,
-	UseGuards,
 	UnauthorizedException,
+	UseGuards,
 } from "@nestjs/common";
 import { ApiBody, ApiOperation, ApiParam, ApiTags } from "@nestjs/swagger";
 

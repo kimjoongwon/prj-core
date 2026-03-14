@@ -36,6 +36,7 @@ IDP 관리 대시보드 통계 API를 제공하며, 컨트롤러 경계의 응�
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-03-14 | Biome lint organizeImports/format cleanup reflected | codex |
 | 2026-02-19 | 초기 생성 (역기획) | req-reverse-engineer |
 | 2026-03-12 | 컨트롤러 진입점을 `IdpDashboardService`로 정렬 | codex |
 | 2026-03-12 | 순수성 기준으로 단일 전달형은 `@cocrepo/service` 직접 주입으로 정리 | codex |

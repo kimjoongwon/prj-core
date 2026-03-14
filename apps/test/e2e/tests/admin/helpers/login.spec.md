@@ -15,12 +15,13 @@ Admin E2E에서 재사용하는 로그인 래퍼입니다.
 
 | 항목 | 설명 |
 |------|------|
-| `loginToAdmin(page)` | Admin 로그인 + Space 보정 + 네트워크 안정화 대기 |
+| `loginToAdmin(page)` | Admin 로그인 + Space 보정 + 즉시 readback 검증 |
 
 ## 변경 이력
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-03-14 | Admin setup flaky 원인인 `networkidle`/polling 대기를 제거하고 DOM 준비 + 즉시 readback 검증으로 단순화 | codex |
 | 2026-03-06 | 공통 로그인 헬퍼 import를 `@cocrepo/e2e`(fe-e2e 패키지)로 전환 | codex |
 | 2026-03-04 | 공통 OIDC 헬퍼 연동 구조로 리팩터링 및 sidecar spec 생성 | codex |
 | 2026-03-04 | 공통 OIDC 헬퍼 import를 `@cocrepo/e2e`로 전환 | codex |

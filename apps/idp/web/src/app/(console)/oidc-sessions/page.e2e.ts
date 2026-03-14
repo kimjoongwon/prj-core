@@ -1,5 +1,5 @@
-import { expect, test } from "@playwright/test";
 import { loginToConsole } from "@cocrepo/e2e";
+import { expect, test } from "@playwright/test";
 
 /** 세션 데이터 모킹용 응답 */
 const MOCK_SESSIONS = {

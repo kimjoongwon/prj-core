@@ -31,6 +31,7 @@ Subject 읽기 전용 API를 노출하며, 보조 조회와 응답 조립은 `Su
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-03-14 | Biome lint organizeImports/format cleanup reflected | codex |
 | 2026-02-18 | 초기 생성 (역기획) | req-reverse-engineer |
 | 2026-03-11 | Controller 의존성을 SubjectService로 전환 | codex |
 | 2026-03-13 | 컨트롤러 경계 의존성을 `SubjectFacade` 기준으로 갱신 | codex |

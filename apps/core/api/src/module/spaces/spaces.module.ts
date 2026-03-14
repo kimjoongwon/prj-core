@@ -1,6 +1,6 @@
 import { SpaceFacade } from "@cocrepo/facade";
-import { SpaceService } from "@cocrepo/service";
 import { SpacesRepository } from "@cocrepo/repository";
+import { SpaceService } from "@cocrepo/service";
 import { Module } from "@nestjs/common";
 import { SpacesController } from "./spaces.controller";
 

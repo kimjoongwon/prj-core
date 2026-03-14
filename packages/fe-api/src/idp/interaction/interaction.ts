@@ -13,15 +13,12 @@ OIDC 인증 및 IDP 관리 API를 제공합니다.
  */
 import {
   useMutation,
-  useQuery,
-  useSuspenseInfiniteQuery,
-  useSuspenseQuery
+  useQuery
 } from '@tanstack/react-query';
 import type {
   DataTag,
   DefinedInitialDataOptions,
   DefinedUseQueryResult,
-  InfiniteData,
   MutationFunction,
   QueryClient,
   QueryFunction,
@@ -30,11 +27,7 @@ import type {
   UseMutationOptions,
   UseMutationResult,
   UseQueryOptions,
-  UseQueryResult,
-  UseSuspenseInfiniteQueryOptions,
-  UseSuspenseInfiniteQueryResult,
-  UseSuspenseQueryOptions,
-  UseSuspenseQueryResult
+  UseQueryResult
 } from '@tanstack/react-query';
 
 import type {
@@ -76,12 +69,6 @@ export const getInteraction = (
 export const getGetInteractionQueryKey = (uid?: string,) => {
     return [
     `/api/interaction/${uid}`
-    ] as const;
-    }
-
-export const getGetInteractionInfiniteQueryKey = (uid?: string,) => {
-    return [
-    'infinite', `/api/interaction/${uid}`
     ] as const;
     }
 
@@ -161,130 +148,6 @@ export const prefetchGetInteractionQuery = async <TData = Awaited<ReturnType<typ
   const queryOptions = getGetInteractionQueryOptions(uid,options)
 
   await queryClient.prefetchQuery(queryOptions);
-
-  return queryClient;
-}
-
-
-
-export const getGetInteractionSuspenseQueryOptions = <TData = Awaited<ReturnType<typeof getInteraction>>, TError = ErrorType<unknown>>(uid: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getInteraction>>, TError, TData>>, request?: SecondParameter<typeof customIdpInstance>}
-) => {
-
-const {query: queryOptions, request: requestOptions} = options ?? {};
-
-  const queryKey =  queryOptions?.queryKey ?? getGetInteractionQueryKey(uid);
-
-  
-
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getInteraction>>> = ({ signal }) => getInteraction(uid, requestOptions, signal);
-
-      
-
-      
-
-   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseQueryOptions<Awaited<ReturnType<typeof getInteraction>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
-}
-
-export type GetInteractionSuspenseQueryResult = NonNullable<Awaited<ReturnType<typeof getInteraction>>>
-export type GetInteractionSuspenseQueryError = ErrorType<unknown>
-
-
-export function useGetInteractionSuspense<TData = Awaited<ReturnType<typeof getInteraction>>, TError = ErrorType<unknown>>(
- uid: string, options: { query:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getInteraction>>, TError, TData>>, request?: SecondParameter<typeof customIdpInstance>}
- , queryClient?: QueryClient
-  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetInteractionSuspense<TData = Awaited<ReturnType<typeof getInteraction>>, TError = ErrorType<unknown>>(
- uid: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getInteraction>>, TError, TData>>, request?: SecondParameter<typeof customIdpInstance>}
- , queryClient?: QueryClient
-  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetInteractionSuspense<TData = Awaited<ReturnType<typeof getInteraction>>, TError = ErrorType<unknown>>(
- uid: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getInteraction>>, TError, TData>>, request?: SecondParameter<typeof customIdpInstance>}
- , queryClient?: QueryClient
-  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-/**
- * @summary 인증 상호작용 데이터 조회
- */
-
-export function useGetInteractionSuspense<TData = Awaited<ReturnType<typeof getInteraction>>, TError = ErrorType<unknown>>(
- uid: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getInteraction>>, TError, TData>>, request?: SecondParameter<typeof customIdpInstance>}
- , queryClient?: QueryClient 
- ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
-
-  const queryOptions = getGetInteractionSuspenseQueryOptions(uid,options)
-
-  const query = useSuspenseQuery(queryOptions, queryClient) as  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
-
-  query.queryKey = queryOptions.queryKey ;
-
-  return query;
-}
-
-
-
-
-export const getGetInteractionSuspenseInfiniteQueryOptions = <TData = InfiniteData<Awaited<ReturnType<typeof getInteraction>>>, TError = ErrorType<unknown>>(uid: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getInteraction>>, TError, TData>>, request?: SecondParameter<typeof customIdpInstance>}
-) => {
-
-const {query: queryOptions, request: requestOptions} = options ?? {};
-
-  const queryKey =  queryOptions?.queryKey ?? getGetInteractionInfiniteQueryKey(uid);
-
-  
-
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getInteraction>>> = ({ signal }) => getInteraction(uid, requestOptions, signal);
-
-      
-
-      
-
-   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getInteraction>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
-}
-
-export type GetInteractionSuspenseInfiniteQueryResult = NonNullable<Awaited<ReturnType<typeof getInteraction>>>
-export type GetInteractionSuspenseInfiniteQueryError = ErrorType<unknown>
-
-
-export function useGetInteractionSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getInteraction>>>, TError = ErrorType<unknown>>(
- uid: string, options: { query:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getInteraction>>, TError, TData>>, request?: SecondParameter<typeof customIdpInstance>}
- , queryClient?: QueryClient
-  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetInteractionSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getInteraction>>>, TError = ErrorType<unknown>>(
- uid: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getInteraction>>, TError, TData>>, request?: SecondParameter<typeof customIdpInstance>}
- , queryClient?: QueryClient
-  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetInteractionSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getInteraction>>>, TError = ErrorType<unknown>>(
- uid: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getInteraction>>, TError, TData>>, request?: SecondParameter<typeof customIdpInstance>}
- , queryClient?: QueryClient
-  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-/**
- * @summary 인증 상호작용 데이터 조회
- */
-
-export function useGetInteractionSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getInteraction>>>, TError = ErrorType<unknown>>(
- uid: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getInteraction>>, TError, TData>>, request?: SecondParameter<typeof customIdpInstance>}
- , queryClient?: QueryClient 
- ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
-
-  const queryOptions = getGetInteractionSuspenseInfiniteQueryOptions(uid,options)
-
-  const query = useSuspenseInfiniteQuery(queryOptions, queryClient) as  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
-
-  query.queryKey = queryOptions.queryKey ;
-
-  return query;
-}
-
-/**
- * @summary 인증 상호작용 데이터 조회
- */
-export const prefetchGetInteractionInfiniteQuery = async <TData = Awaited<ReturnType<typeof getInteraction>>, TError = ErrorType<unknown>>(
- queryClient: QueryClient, uid: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getInteraction>>, TError, TData>>, request?: SecondParameter<typeof customIdpInstance>}
-
-  ): Promise<QueryClient> => {
-
-  const queryOptions = getGetInteractionSuspenseInfiniteQueryOptions(uid,options)
-
-  await queryClient.prefetchInfiniteQuery(queryOptions);
 
   return queryClient;
 }

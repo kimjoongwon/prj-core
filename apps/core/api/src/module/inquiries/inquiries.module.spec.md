@@ -34,6 +34,7 @@
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-03-14 | Biome lint organizeImports/format cleanup reflected | codex |
 | 2026-03-03 | 누락된 sidecar spec 신규 생성 | codex |
 | 2026-03-11 | Inquiry module을 Service + root repository/service wiring 기준으로 갱신 | codex |
 | 2026-03-13 | `InquiryFacade` provider/export로 controller boundary 조합을 분리 | codex |

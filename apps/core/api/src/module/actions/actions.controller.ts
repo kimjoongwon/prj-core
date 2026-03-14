@@ -1,4 +1,3 @@
-import { ActionFacade } from "@cocrepo/facade";
 import { RoleCategoryGuard } from "@cocrepo/be-common";
 import { ACTION_ERRORS } from "@cocrepo/constant";
 import {
@@ -16,6 +15,7 @@ import {
 	UpdateActionDto,
 } from "@cocrepo/dto";
 import { RoleCategoryName } from "@cocrepo/enum";
+import { ActionFacade } from "@cocrepo/facade";
 import {
 	Body,
 	Controller,
@@ -41,9 +41,7 @@ import {
 @ApiTags("ACTIONS")
 @Controller()
 export class ActionsController {
-	constructor(
-		private readonly actionsService: ActionFacade,
-	) {}
+	constructor(private readonly actionsService: ActionFacade) {}
 
 	@Public()
 	@Get()

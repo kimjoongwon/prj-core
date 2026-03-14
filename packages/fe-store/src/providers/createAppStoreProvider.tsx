@@ -21,7 +21,6 @@ import { Navigator } from "../stores/navigator";
 import { PersistStore } from "../stores/persistStore";
 import { RootStore } from "../stores/rootStore";
 import { TokenStore } from "../stores/tokenStore";
-import { useAbility } from "../stores/useAbility";
 import { RootStoreContext } from "../stores/useStore";
 
 export type { AppStoreConfig, AppStoreProviderResult } from "@cocrepo/type";
@@ -168,11 +167,11 @@ export function createAppStoreProvider(
 		const store = useAppStore();
 		const router = useRouter();
 		const pathname = usePathname();
-		const { can } = useAbility();
 
 		const navigationStore = store.navigationStore;
 		const bottomTabStore = store.bottomTabStore;
 		const fabStore = store.fabStore;
+		const abilityStore = store.abilityStore;
 
 		// navigationStore가 없으면 초기화 중이므로 렌더링하지 않음
 		if (!navigationStore) {
@@ -181,11 +180,17 @@ export function createAppStoreProvider(
 
 		// ability 변경 시 체커 업데이트
 		useEffect(() => {
+			if (!abilityStore) {
+				return;
+			}
+
 			navigationStore.setAbilityChecker((action, subject) =>
-				can(action, subject),
+				abilityStore.can(action, subject),
 			);
-			fabStore?.setAbilityChecker((action, subject) => can(action, subject));
-		}, [can, navigationStore, fabStore]);
+			fabStore?.setAbilityChecker((action, subject) =>
+				abilityStore.can(action, subject),
+			);
+		}, [abilityStore, navigationStore, fabStore]);
 
 		// router 변경 시 Navigator 설정
 		useEffect(() => {

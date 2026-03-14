@@ -98,10 +98,11 @@ export class InteractionController {
 			const req = res.req as unknown as KoaLikeRequest;
 			const koaRes = res as unknown as KoaLikeResponse;
 
-			const interaction = await this.interactionApplicationService.getInteractionDetails(
-				req,
-				koaRes,
-			);
+			const interaction =
+				await this.interactionApplicationService.getInteractionDetails(
+					req,
+					koaRes,
+				);
 			const { prompt, params, session } = interaction;
 			const client = await this.interactionApplicationService.findClient(
 				params.client_id as string,
@@ -183,12 +184,13 @@ export class InteractionController {
 				});
 			}
 
-			const { redirectTo } = await this.interactionApplicationService.completeLogin(
-				koaReq,
-				koaRes,
-				result.userId!,
-				loginDto.remember || false,
-			);
+			const { redirectTo } =
+				await this.interactionApplicationService.completeLogin(
+					koaReq,
+					koaRes,
+					result.userId!,
+					loginDto.remember || false,
+				);
 
 			return res.json({
 				redirectTo: this.toAbsoluteUrl(redirectTo),
@@ -220,10 +222,8 @@ export class InteractionController {
 			const req = res.req as unknown as KoaLikeRequest;
 			const koaRes = res as unknown as KoaLikeResponse;
 
-			const { redirectTo } = await this.interactionApplicationService.processConsent(
-				req,
-				koaRes,
-			);
+			const { redirectTo } =
+				await this.interactionApplicationService.processConsent(req, koaRes);
 
 			return res.json({ redirectTo: this.toAbsoluteUrl(redirectTo) });
 		} catch (error) {
@@ -252,10 +252,8 @@ export class InteractionController {
 			const req = res.req as unknown as KoaLikeRequest;
 			const koaRes = res as unknown as KoaLikeResponse;
 
-			const { redirectTo } = await this.interactionApplicationService.abortInteraction(
-				req,
-				koaRes,
-			);
+			const { redirectTo } =
+				await this.interactionApplicationService.abortInteraction(req, koaRes);
 
 			return res.json({ redirectTo: this.toAbsoluteUrl(redirectTo) });
 		} catch (error) {

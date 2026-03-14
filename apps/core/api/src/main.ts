@@ -164,11 +164,16 @@ const SWAGGER_SPACE_SELECTOR_JS = `
 declare const module: any;
 
 async function bootstrap() {
+  const enableNestDevtools =
+    process.env.ENABLE_NEST_DEVTOOLS === "true" &&
+    process.env.NODE_ENV !== "production";
+
   // =================================================================
   // 1. 애플리케이션 생성 및 기본 설정
   // =================================================================
   const app = await NestFactory.create<NestExpressApplication>(AppModule, {
     bufferLogs: true, // 로거 설정 전까지 로그 버퍼링
+    snapshot: enableNestDevtools,
   });
 
   // 로거 설정 (가장 먼저 설정하여 모든 로그 캐치)
@@ -268,6 +273,12 @@ async function bootstrap() {
   logger.log(`📱 환경: ${process.env.NODE_ENV}`);
   logger.log(`🐳 Docker: ${process.env.DOCKER_ENV === "true" ? "Yes" : "No"}`);
   logger.log(`📊 API 문서: http://localhost:${port}/api`);
+  if (enableNestDevtools) {
+    const devtoolsPort =
+      Number.parseInt(process.env.CORE_API_NEST_DEVTOOLS_PORT ?? "8000", 10) ||
+      8000;
+    logger.log(`🕸️ Nest Devtools: http://localhost:${devtoolsPort}`);
+  }
 
   return app;
 }

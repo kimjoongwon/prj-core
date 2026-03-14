@@ -28,6 +28,7 @@
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-03-14 | Biome lint organizeImports/format cleanup reflected | codex |
 | 2026-03-03 | 누락된 sidecar spec 신규 생성 | codex |
 | 2026-03-11 | TimelinesModule export를 TimelineService 기준으로 정렬 | codex |
 | 2026-03-13 | TimelinesModule boundary provider/export를 `TimelineFacade` 기준으로 갱신 | codex |

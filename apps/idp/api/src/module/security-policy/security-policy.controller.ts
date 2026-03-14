@@ -17,9 +17,7 @@ import { ApiBody, ApiOperation, ApiTags } from "@nestjs/swagger";
 @Roles([SYSTEM_ROLES.FULL_ACCESS])
 @SkipSpaceCheck()
 export class SecurityPolicyController {
-	constructor(
-		private readonly securityPolicyService: SecurityPolicyFacade,
-	) {}
+	constructor(private readonly securityPolicyService: SecurityPolicyFacade) {}
 
 	@Get()
 	@ApiOperation({

@@ -1,4 +1,3 @@
-import { SpaceFacade } from "@cocrepo/facade";
 import {
 	ApiAuth,
 	ApiErrors,
@@ -13,9 +12,11 @@ import {
 	UpdateGroundDto,
 } from "@cocrepo/dto";
 import { Ground, Space } from "@cocrepo/entity";
+import { SpaceFacade } from "@cocrepo/facade";
 import {
 	Body,
 	Controller,
+	Delete,
 	Get,
 	HttpCode,
 	HttpStatus,
@@ -29,9 +30,7 @@ import { ApiBody, ApiOperation, ApiParam, ApiTags } from "@nestjs/swagger";
 @ApiTags("SPACES")
 @Controller()
 export class SpacesController {
-	constructor(
-		private readonly spacesService: SpaceFacade,
-	) {}
+	constructor(private readonly spacesService: SpaceFacade) {}
 
 	@Public()
 	@Get()
@@ -111,5 +110,27 @@ export class SpacesController {
 		@Body() dto: UpdateGroundDto,
 	): Promise<Space> {
 		return this.spacesService.updateGroundBySpaceId(spaceId, dto);
+	}
+
+	@Delete(":spaceId")
+	@HttpCode(HttpStatus.OK)
+	@ApiOperation({
+		operationId: "deleteSpace",
+		summary: "공간 삭제",
+		description: "Space root와 종속 Ground detail을 소프트 삭제합니다.",
+	})
+	@ApiAuth()
+	@ApiParam({
+		name: "spaceId",
+		description: "Space ID (UUID)",
+		type: String,
+	})
+	@ApiErrors(401, 404, 500)
+	@ApiResponseEntity(SpaceDto, HttpStatus.OK)
+	@ResponseMessage("공간 삭제 성공")
+	async deleteSpace(
+		@Param("spaceId", ParseUUIDPipe) spaceId: string,
+	): Promise<Space> {
+		return this.spacesService.deleteSpace(spaceId);
 	}
 }

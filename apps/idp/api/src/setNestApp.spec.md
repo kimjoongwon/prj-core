@@ -18,5 +18,6 @@
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-03-14 | Biome lint organizeImports/format cleanup reflected | codex |
 | 2026-03-03 | 누락된 sidecar spec 신규 생성 | codex |
 | 2026-03-13 | 전역 i18n 번역기 주입 대상을 `I18nTranslationService`로 명시 | codex |

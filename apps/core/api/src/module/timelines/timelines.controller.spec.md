@@ -53,6 +53,7 @@ Timeline, Session, Program 중첩 리소스 API를 노출하며, Space/Auth 컨�
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-03-14 | Biome lint organizeImports/format cleanup reflected | codex |
 | 2026-02-19 | 초기 생성 | req-api-planner |
 | 2026-02-19 | Programs 중첩 리소스 엔드포인트 추가 | orch-requirement |
 | 2026-03-11 | Controller 의존성을 TimelineService로 전환하고 CLS helper를 제거 | codex |

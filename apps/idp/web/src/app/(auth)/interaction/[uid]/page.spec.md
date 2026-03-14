@@ -43,6 +43,9 @@
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-03-14 | 존재하지 않는 계정 로그인 실패 시나리오를 공통 실패 처리 계약(에러 배너 또는 로그인 폼 재표시) 기준으로 정렬 | codex |
+| 2026-03-14 | Biome lint organizeImports/format cleanup reflected | codex |
+| 2026-03-14 | Biome import 정렬 규칙 반영에 맞춰 E2E 시나리오 lint 기준을 동기화 | codex |
 | 2026-03-06 | 공통 로그인 헬퍼 import를 `@cocrepo/e2e`(fe-e2e 패키지)로 전환 | codex |
 | 2026-03-03 | 누락된 sidecar spec 신규 생성 | codex |
 | 2026-03-04 | IDP 로그인 헬퍼 import를 test-e2e 경로로 변경 | codex |

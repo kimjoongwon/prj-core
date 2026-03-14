@@ -110,6 +110,7 @@
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-03-14 | Biome lint organizeImports/format cleanup reflected | codex |
 | 2026-02-25 | 초기 생성 | orch-requirement |
 | 2026-03-01 | 문의 Form Bootstrap(`/form/create`, `/:inquiryId/form/update`) 및 AI Fill(`/form/ai-fill`) 반영, draft endpoint 제거 | codex |
 | 2026-03-11 | controller 경로와 의존성을 Inquiry root Service 기준으로 갱신 | codex |

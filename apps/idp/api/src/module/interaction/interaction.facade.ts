@@ -1,17 +1,24 @@
 import { Injectable } from "@nestjs/common";
-import type { KoaLikeRequest, KoaLikeResponse, OidcClientInfo } from "../oidc/types";
+import type {
+	Interaction,
+	KoaLikeRequest,
+	KoaLikeResponse,
+	OidcClientInfo,
+} from "../oidc/types";
 import {
-	InteractionService,
 	type InteractionResult,
+	InteractionService,
 	type LoginValidationResult,
 } from "./interaction.service";
-import type { Interaction } from "../oidc/types";
 
 @Injectable()
 export class InteractionFacade {
 	constructor(private readonly interactionService: InteractionService) {}
 
-	getInteractionDetails(req: KoaLikeRequest, res: KoaLikeResponse): Promise<Interaction> {
+	getInteractionDetails(
+		req: KoaLikeRequest,
+		res: KoaLikeResponse,
+	): Promise<Interaction> {
 		return this.interactionService.getInteractionDetails(req, res);
 	}
 

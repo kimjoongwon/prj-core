@@ -1,4 +1,3 @@
-import { GrantFacade } from "@cocrepo/facade";
 import { RolesGuard } from "@cocrepo/be-common";
 import { SYSTEM_ROLES } from "@cocrepo/constant";
 import {
@@ -9,6 +8,7 @@ import {
 	Roles,
 } from "@cocrepo/decorator";
 import { BatchGrantRequestDto, GrantResponseDto } from "@cocrepo/dto";
+import { GrantFacade } from "@cocrepo/facade";
 import {
 	Body,
 	Controller,
@@ -23,9 +23,7 @@ import { ApiBody, ApiOperation, ApiParam, ApiTags } from "@nestjs/swagger";
 @ApiTags("GRANTS")
 @Controller()
 export class GrantsController {
-	constructor(
-		private readonly grantsService: GrantFacade,
-	) {}
+	constructor(private readonly grantsService: GrantFacade) {}
 
 	@Put("roles/:roleId")
 	@UseGuards(RolesGuard)

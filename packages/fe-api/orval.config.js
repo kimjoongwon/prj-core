@@ -106,11 +106,11 @@ const queryOptions = {
   // 무한 스크롤용 useInfiniteQuery 비활성화
   useInfinite: false,
 
-  // Suspense 지원 useQuery 훅 생성 활성화
-  useSuspenseQuery: true,
+  // Suspense 전용 훅은 현재 소비처가 없어 생성 비활성화
+  useSuspenseQuery: false,
 
-  // Suspense 지원 무한 쿼리 훅 생성 활성화
-  useSuspenseInfiniteQuery: true,
+  // Suspense 전용 무한 쿼리 훅도 비활성화
+  useSuspenseInfiniteQuery: false,
 
   // 서버 컴포넌트용 prefetch 함수 생성 활성화
   usePrefetch: true,
@@ -146,7 +146,8 @@ async function createConfig() {
         // React Query를 사용한 클라이언트 생성
         client: "react-query",
 
-        // OpenAPI 태그별로 파일 분할하여 생성
+        // OpenAPI 태그별로 파일 분할하여 직접 생성
+        // 후처리 스크립트 없이 생성 결과를 그대로 사용합니다.
         mode: "tags-split",
 
         override: {
@@ -175,6 +176,8 @@ async function createConfig() {
         target: "src/idp/index.ts",
         schemas: "src/idp/model",
         client: "react-query",
+        // OpenAPI 태그별로 파일 분할하여 직접 생성
+        // 후처리 스크립트 없이 생성 결과를 그대로 사용합니다.
         mode: "tags-split",
 
         override: {

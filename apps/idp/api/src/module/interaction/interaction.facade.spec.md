@@ -31,5 +31,6 @@ InteractionController와 OIDC interaction 도메인 비즈니스 로직 사이�
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-03-14 | Biome lint organizeImports/format cleanup reflected | codex |
 | 2026-03-13 | InteractionController 직접 주입 규칙 정리에 맞춰 app-local boundary를 InteractionFacade로 재정의 | codex |
 | 2026-03-13 | InteractionFacade spec의 Interaction 타입 import 경로 설명을 oidc/types 기준으로 정리 | codex |

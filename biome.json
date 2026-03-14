@@ -13,6 +13,9 @@
 			"./apps/idp/api/src/**/*.ts",
 			"./apps/idp/web/**/*.ts",
 			"./apps/idp/web/**/*.tsx",
+			"./apps/introduction/**/*.ts",
+			"./apps/introduction/**/*.tsx",
+			"./apps/introduction/**/*.css",
 			"./apps/core/api/src/module/**/*.ts",
 			"./apps/tool/storybook/**/*.ts",
 			"./apps/tool/storybook/**/*.tsx",
@@ -87,6 +90,11 @@
 		},
 		"parser": {
 			"unsafeParameterDecoratorsEnabled": true
+		}
+	},
+	"css": {
+		"parser": {
+			"tailwindDirectives": true
 		}
 	}
 }

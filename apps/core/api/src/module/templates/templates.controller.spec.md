@@ -36,6 +36,7 @@ Template CRUD 및 특수 액션 API를 노출하며, 목록 메타 계산과 con
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-03-14 | Biome lint organizeImports/format cleanup reflected | codex |
 | 2026-02-18 | 초기 생성 (역기획) | req-reverse-engineer |
 | 2026-03-11 | Controller 의존성을 TemplateService로 전환 | codex |
 | 2026-03-12 | 템플릿 Controller 메서드 매핑 정합성 정리 (`getTemplateById`/`create`/`update`/`remove`/`toggleStatus`/`preview`/`sendTest`) | codex |

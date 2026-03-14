@@ -1,4 +1,3 @@
-import { TemplateFacade } from "@cocrepo/facade";
 import { RolesGuard } from "@cocrepo/be-common";
 import { SYSTEM_ROLES } from "@cocrepo/constant";
 import {
@@ -16,6 +15,7 @@ import {
 	TemplateDto,
 	UpdateTemplateDto,
 } from "@cocrepo/dto";
+import { TemplateFacade } from "@cocrepo/facade";
 import {
 	Body,
 	Controller,
@@ -35,9 +35,7 @@ import { ApiBody, ApiOperation, ApiParam, ApiTags } from "@nestjs/swagger";
 @ApiTags("TEMPLATES")
 @Controller()
 export class TemplatesController {
-	constructor(
-		private readonly templatesService: TemplateFacade,
-	) {}
+	constructor(private readonly templatesService: TemplateFacade) {}
 
 	@Get()
 	@HttpCode(HttpStatus.OK)

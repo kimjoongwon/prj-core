@@ -21,11 +21,16 @@ type HmrModule = {
 declare const module: HmrModule;
 
 async function bootstrap() {
+	const enableNestDevtools =
+		process.env.ENABLE_NEST_DEVTOOLS === "true" &&
+		process.env.NODE_ENV !== "production";
+
 	// =================================================================
 	// 1. 애플리케이션 생성 및 기본 설정
 	// =================================================================
 	const app = await NestFactory.create<NestExpressApplication>(AppModule, {
 		bufferLogs: true,
+		snapshot: enableNestDevtools,
 	});
 
 	// 로거 설정
@@ -124,6 +129,12 @@ async function bootstrap() {
 	logger.log(
 		`🔑 OIDC Discovery: http://localhost:${port}/oidc/.well-known/openid-configuration`,
 	);
+	if (enableNestDevtools) {
+		const devtoolsPort =
+			Number.parseInt(process.env.IDP_API_NEST_DEVTOOLS_PORT ?? "8001", 10) ||
+			8001;
+		logger.log(`🕸️ Nest Devtools: http://localhost:${devtoolsPort}`);
+	}
 
 	return app;
 }

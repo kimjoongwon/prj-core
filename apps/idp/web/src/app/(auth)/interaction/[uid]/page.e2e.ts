@@ -1,5 +1,5 @@
-import { expect, test } from "@playwright/test";
 import { navigateToConsentForm, navigateToLoginForm } from "@cocrepo/e2e";
+import { expect, test } from "@playwright/test";
 
 /** 시드 데이터 기준 FULL_ACCESS 계정 */
 const ADMIN_EMAIL = "admin@plate.com";
@@ -194,19 +194,9 @@ test.describe("OIDC 로그인 플로우", () => {
 
 			await page.getByRole("button", { name: "로그인" }).click();
 
-			// Then: 로그인 실패 확인 - 에러 메시지 표시 또는 로그인 페이지로 리다이렉트
-			// Note: 서버는 이메일 열거 공격 방지를 위해 동일한 INVALID_CREDENTIALS(401) 응답을 반환합니다.
-			//       Axios 401 인터셉터가 이를 가로채 토큰 갱신을 시도하고 실패 시 로그인 페이지로 리다이렉트합니다.
-			const invalidCredentials = page.getByText(
-				"이메일 또는 비밀번호가 올바르지 않습니다.",
-			);
-			const serverError = page.getByText("로그인 처리 중 오류가 발생했습니다.");
-
-			await expect(async () => {
-				const hasError = await invalidCredentials.or(serverError).isVisible();
-				const redirectedAway = !page.url().includes("/interaction/");
-				expect(hasError || redirectedAway).toBe(true);
-			}).toPass({ timeout: 10000 });
+			// Then: 존재하지 않는 계정도 잘못된 비밀번호와 동일한 실패 처리 경로를 따라야 함
+			// Note: DEV 자동 입력/재마운트로 에러 배너 대신 로그인 폼 재표시가 먼저 관찰될 수 있습니다.
+			await assertLoginFailureHandled(page);
 		});
 	});
 

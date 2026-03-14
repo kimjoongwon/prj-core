@@ -1,8 +1,8 @@
 "use client";
 import {
 	type OidcSessionDto,
-	useGetOidcSessions,
 	useGetOidcSessionStats,
+	useGetOidcSessions,
 	useRevokeAllOidcSessions,
 	useRevokeOidcSession,
 	useRevokeOidcSessionsByGrant,

@@ -4,8 +4,8 @@ import { DirectPrismaProvider } from "./direct-prisma.provider";
 import { DirectUserRepository } from "./direct-user.repository";
 import { RedisOidcAdapterFactory } from "./oidc.adapter";
 import { OidcController } from "./oidc.controller";
-import { OidcClientRepository } from "./oidc-client.repository";
 import { OidcFacade } from "./oidc.facade";
+import { OidcClientRepository } from "./oidc-client.repository";
 import { OidcConfigurationService } from "./oidc-configuration.service";
 import { OidcProviderService } from "./oidc-provider.service";
 

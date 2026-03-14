@@ -88,6 +88,13 @@ UI에서는 Exercise 정보만 노출합니다.
 | 삭제 아이콘 클릭 | 확인 모달 표시 → 확인 시 `deleteTask` 호출, 성공 시 목록 캐시 무효화 |
 | 검색/필터 변경 | URL 쿼리 파라미터 업데이트로 API 재호출 |
 
+## E2E 메모
+
+- CRUD sidecar E2E는 HeroUI 접근성 이름 기준(`운동명*`, `분`, `초`, `반복횟수*`) selector를 사용합니다.
+- 운동명 fixture는 브라우저 입력 안정성을 위해 ASCII 문자열을 사용합니다.
+- 등록 폼 상호작용 전에는 hydration 재생성 안정화를 위해 짧은 대기 후 입력합니다.
+- 상세 화면 이름 검증은 중복 텍스트 strict mode를 피하기 위해 heading locator를 우선 사용합니다.
+
 ## 비즈니스 규칙
 
 - **Space 계층 공유**: `spaceScope=INCLUDE_ANCESTORS` 시 현재 Space + 모든 상위 Space의 운동 조회
@@ -106,6 +113,8 @@ UI에서는 Exercise 정보만 노출합니다.
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-03-14 | Task CRUD E2E 상세 화면 이름 검증을 heading locator 기준으로 안정화 | codex |
+| 2026-03-14 | CRUD sidecar E2E 입력 selector, ASCII fixture, hydration 안정화 대기 계약을 HeroUI 기준으로 명시 | codex |
 | 2026-03-11 | aggregate root 기준 spaces/tasks 경로와 API 계약으로 전환 | codex |
 | 2026-02-19 | 초기 생성 | req-screen-planner |
 | 2026-03-03 | Scaffold 제거 및 페이지 헤더 영역/섹션 영역 용어 정리 | codex |

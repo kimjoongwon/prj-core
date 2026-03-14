@@ -85,6 +85,7 @@ OIDC/OAuth2 기반 인증 흐름의 진입점을 담당합니다. 로그인 리�
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-03-14 | Biome lint organizeImports/format cleanup reflected | codex |
 | 2026-02-19 | 초기 생성 (역기획) | req-reverse-engineer |
 | 2026-03-11 | AuthController 의존성을 AuthApplicationService로 전환 | codex |
 | 2026-03-12 | 감사 로그 조회/통계를 `AuthApplicationService`로 위임 정리 | codex |

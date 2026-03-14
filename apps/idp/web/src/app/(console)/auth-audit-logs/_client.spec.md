@@ -48,5 +48,7 @@
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-03-14 | Biome lint organizeImports/format cleanup reflected | codex |
+| 2026-03-14 | Biome import 정렬 규칙 반영에 맞춰 클라이언트 컴포넌트 lint 기준을 동기화 | codex |
 | 2026-03-03 | 누락된 sidecar spec 신규 생성 | codex |
 | 2026-03-13 | @cocrepo/api root import를 split subpath import로 전환 | codex |

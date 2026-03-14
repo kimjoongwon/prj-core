@@ -19,7 +19,7 @@
 | 모듈 | 용도 |
 |------|------|
 | @cocrepo/api/core/abilities | 기능 구현 의존성 |
-| @cocrepo/store | AppStoreProvider, useAbility 사용 |
+| @cocrepo/store | AppStoreProvider, useStore 사용 |
 | @cocrepo/type | AbilityApiResponse, AbilityRule 타입 사용 |
 | @cocrepo/ui | DesignSystemProvider 사용 |
 | @tanstack/react-query | QueryClientProvider 사용 |
@@ -32,6 +32,7 @@
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-03-14 | AbilityStore bootstrap effect가 매 렌더 새 함수에 반응하지 않도록 `useStore` 기반의 안정적 store 참조로 변경 | codex |
 | 2026-03-13 | `@cocrepo/api` root import를 split subpath import로 전환 | codex |
 | 2026-03-06 | AbilityProvider(@cocrepo/hook) 의존을 제거하고 AppStore AbilityStore bootstrap 방식으로 전환 | codex |
 | 2026-03-03 | 누락된 sidecar spec 신규 생성 | codex |

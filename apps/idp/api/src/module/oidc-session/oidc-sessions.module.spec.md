@@ -34,6 +34,7 @@
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-03-14 | `OidcSessionFacade`가 사용하는 `OidcSessionService` provider를 module wiring에 복구 | codex |
 | 2026-03-03 | 누락된 sidecar spec 신규 생성 | codex |
 | 2026-03-12 | 컨트롤러를 `OidcSessionService` 기반으로 변경 | codex |
 | 2026-03-12 | `module` 체크리스트를 `@cocrepo/service` 직접 주입 정합성 기준으로 갱신 | codex |

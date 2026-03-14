@@ -13,15 +13,12 @@ OIDC 인증 및 IDP 관리 API를 제공합니다.
  */
 import {
   useMutation,
-  useQuery,
-  useSuspenseInfiniteQuery,
-  useSuspenseQuery
+  useQuery
 } from '@tanstack/react-query';
 import type {
   DataTag,
   DefinedInitialDataOptions,
   DefinedUseQueryResult,
-  InfiniteData,
   MutationFunction,
   QueryClient,
   QueryFunction,
@@ -30,11 +27,7 @@ import type {
   UseMutationOptions,
   UseMutationResult,
   UseQueryOptions,
-  UseQueryResult,
-  UseSuspenseInfiniteQueryOptions,
-  UseSuspenseInfiniteQueryResult,
-  UseSuspenseQueryOptions,
-  UseSuspenseQueryResult
+  UseQueryResult
 } from '@tanstack/react-query';
 
 import type {
@@ -75,12 +68,6 @@ export const getIdpAccounts = (
 export const getGetIdpAccountsQueryKey = (params?: GetIdpAccountsParams,) => {
     return [
     `/api/v1/idp/accounts`, ...(params ? [params]: [])
-    ] as const;
-    }
-
-export const getGetIdpAccountsInfiniteQueryKey = (params?: GetIdpAccountsParams,) => {
-    return [
-    'infinite', `/api/v1/idp/accounts`, ...(params ? [params]: [])
     ] as const;
     }
 
@@ -166,130 +153,6 @@ export const prefetchGetIdpAccountsQuery = async <TData = Awaited<ReturnType<typ
 
 
 
-export const getGetIdpAccountsSuspenseQueryOptions = <TData = Awaited<ReturnType<typeof getIdpAccounts>>, TError = ErrorType<void>>(params?: GetIdpAccountsParams, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getIdpAccounts>>, TError, TData>>, request?: SecondParameter<typeof customIdpInstance>}
-) => {
-
-const {query: queryOptions, request: requestOptions} = options ?? {};
-
-  const queryKey =  queryOptions?.queryKey ?? getGetIdpAccountsQueryKey(params);
-
-  
-
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getIdpAccounts>>> = ({ signal }) => getIdpAccounts(params, requestOptions, signal);
-
-      
-
-      
-
-   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseQueryOptions<Awaited<ReturnType<typeof getIdpAccounts>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
-}
-
-export type GetIdpAccountsSuspenseQueryResult = NonNullable<Awaited<ReturnType<typeof getIdpAccounts>>>
-export type GetIdpAccountsSuspenseQueryError = ErrorType<void>
-
-
-export function useGetIdpAccountsSuspense<TData = Awaited<ReturnType<typeof getIdpAccounts>>, TError = ErrorType<void>>(
- params: undefined |  GetIdpAccountsParams, options: { query:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getIdpAccounts>>, TError, TData>>, request?: SecondParameter<typeof customIdpInstance>}
- , queryClient?: QueryClient
-  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetIdpAccountsSuspense<TData = Awaited<ReturnType<typeof getIdpAccounts>>, TError = ErrorType<void>>(
- params?: GetIdpAccountsParams, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getIdpAccounts>>, TError, TData>>, request?: SecondParameter<typeof customIdpInstance>}
- , queryClient?: QueryClient
-  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetIdpAccountsSuspense<TData = Awaited<ReturnType<typeof getIdpAccounts>>, TError = ErrorType<void>>(
- params?: GetIdpAccountsParams, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getIdpAccounts>>, TError, TData>>, request?: SecondParameter<typeof customIdpInstance>}
- , queryClient?: QueryClient
-  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-/**
- * @summary IDP 계정 목록 조회
- */
-
-export function useGetIdpAccountsSuspense<TData = Awaited<ReturnType<typeof getIdpAccounts>>, TError = ErrorType<void>>(
- params?: GetIdpAccountsParams, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getIdpAccounts>>, TError, TData>>, request?: SecondParameter<typeof customIdpInstance>}
- , queryClient?: QueryClient 
- ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
-
-  const queryOptions = getGetIdpAccountsSuspenseQueryOptions(params,options)
-
-  const query = useSuspenseQuery(queryOptions, queryClient) as  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
-
-  query.queryKey = queryOptions.queryKey ;
-
-  return query;
-}
-
-
-
-
-export const getGetIdpAccountsSuspenseInfiniteQueryOptions = <TData = InfiniteData<Awaited<ReturnType<typeof getIdpAccounts>>>, TError = ErrorType<void>>(params?: GetIdpAccountsParams, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getIdpAccounts>>, TError, TData>>, request?: SecondParameter<typeof customIdpInstance>}
-) => {
-
-const {query: queryOptions, request: requestOptions} = options ?? {};
-
-  const queryKey =  queryOptions?.queryKey ?? getGetIdpAccountsInfiniteQueryKey(params);
-
-  
-
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getIdpAccounts>>> = ({ signal }) => getIdpAccounts(params, requestOptions, signal);
-
-      
-
-      
-
-   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getIdpAccounts>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
-}
-
-export type GetIdpAccountsSuspenseInfiniteQueryResult = NonNullable<Awaited<ReturnType<typeof getIdpAccounts>>>
-export type GetIdpAccountsSuspenseInfiniteQueryError = ErrorType<void>
-
-
-export function useGetIdpAccountsSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getIdpAccounts>>>, TError = ErrorType<void>>(
- params: undefined |  GetIdpAccountsParams, options: { query:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getIdpAccounts>>, TError, TData>>, request?: SecondParameter<typeof customIdpInstance>}
- , queryClient?: QueryClient
-  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetIdpAccountsSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getIdpAccounts>>>, TError = ErrorType<void>>(
- params?: GetIdpAccountsParams, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getIdpAccounts>>, TError, TData>>, request?: SecondParameter<typeof customIdpInstance>}
- , queryClient?: QueryClient
-  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetIdpAccountsSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getIdpAccounts>>>, TError = ErrorType<void>>(
- params?: GetIdpAccountsParams, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getIdpAccounts>>, TError, TData>>, request?: SecondParameter<typeof customIdpInstance>}
- , queryClient?: QueryClient
-  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-/**
- * @summary IDP 계정 목록 조회
- */
-
-export function useGetIdpAccountsSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getIdpAccounts>>>, TError = ErrorType<void>>(
- params?: GetIdpAccountsParams, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getIdpAccounts>>, TError, TData>>, request?: SecondParameter<typeof customIdpInstance>}
- , queryClient?: QueryClient 
- ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
-
-  const queryOptions = getGetIdpAccountsSuspenseInfiniteQueryOptions(params,options)
-
-  const query = useSuspenseInfiniteQuery(queryOptions, queryClient) as  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
-
-  query.queryKey = queryOptions.queryKey ;
-
-  return query;
-}
-
-/**
- * @summary IDP 계정 목록 조회
- */
-export const prefetchGetIdpAccountsInfiniteQuery = async <TData = Awaited<ReturnType<typeof getIdpAccounts>>, TError = ErrorType<void>>(
- queryClient: QueryClient, params?: GetIdpAccountsParams, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getIdpAccounts>>, TError, TData>>, request?: SecondParameter<typeof customIdpInstance>}
-
-  ): Promise<QueryClient> => {
-
-  const queryOptions = getGetIdpAccountsSuspenseInfiniteQueryOptions(params,options)
-
-  await queryClient.prefetchInfiniteQuery(queryOptions);
-
-  return queryClient;
-}
-
-
-
 /**
  * 계정의 보안 정보와 최근 감사 로그를 함께 조회합니다.
  * @summary IDP 계정 상세 조회
@@ -312,12 +175,6 @@ export const getIdpAccount = (
 export const getGetIdpAccountQueryKey = (userId?: string,) => {
     return [
     `/api/v1/idp/accounts/${userId}`
-    ] as const;
-    }
-
-export const getGetIdpAccountInfiniteQueryKey = (userId?: string,) => {
-    return [
-    'infinite', `/api/v1/idp/accounts/${userId}`
     ] as const;
     }
 
@@ -397,130 +254,6 @@ export const prefetchGetIdpAccountQuery = async <TData = Awaited<ReturnType<type
   const queryOptions = getGetIdpAccountQueryOptions(userId,options)
 
   await queryClient.prefetchQuery(queryOptions);
-
-  return queryClient;
-}
-
-
-
-export const getGetIdpAccountSuspenseQueryOptions = <TData = Awaited<ReturnType<typeof getIdpAccount>>, TError = ErrorType<void>>(userId: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getIdpAccount>>, TError, TData>>, request?: SecondParameter<typeof customIdpInstance>}
-) => {
-
-const {query: queryOptions, request: requestOptions} = options ?? {};
-
-  const queryKey =  queryOptions?.queryKey ?? getGetIdpAccountQueryKey(userId);
-
-  
-
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getIdpAccount>>> = ({ signal }) => getIdpAccount(userId, requestOptions, signal);
-
-      
-
-      
-
-   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseQueryOptions<Awaited<ReturnType<typeof getIdpAccount>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
-}
-
-export type GetIdpAccountSuspenseQueryResult = NonNullable<Awaited<ReturnType<typeof getIdpAccount>>>
-export type GetIdpAccountSuspenseQueryError = ErrorType<void>
-
-
-export function useGetIdpAccountSuspense<TData = Awaited<ReturnType<typeof getIdpAccount>>, TError = ErrorType<void>>(
- userId: string, options: { query:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getIdpAccount>>, TError, TData>>, request?: SecondParameter<typeof customIdpInstance>}
- , queryClient?: QueryClient
-  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetIdpAccountSuspense<TData = Awaited<ReturnType<typeof getIdpAccount>>, TError = ErrorType<void>>(
- userId: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getIdpAccount>>, TError, TData>>, request?: SecondParameter<typeof customIdpInstance>}
- , queryClient?: QueryClient
-  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetIdpAccountSuspense<TData = Awaited<ReturnType<typeof getIdpAccount>>, TError = ErrorType<void>>(
- userId: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getIdpAccount>>, TError, TData>>, request?: SecondParameter<typeof customIdpInstance>}
- , queryClient?: QueryClient
-  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-/**
- * @summary IDP 계정 상세 조회
- */
-
-export function useGetIdpAccountSuspense<TData = Awaited<ReturnType<typeof getIdpAccount>>, TError = ErrorType<void>>(
- userId: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getIdpAccount>>, TError, TData>>, request?: SecondParameter<typeof customIdpInstance>}
- , queryClient?: QueryClient 
- ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
-
-  const queryOptions = getGetIdpAccountSuspenseQueryOptions(userId,options)
-
-  const query = useSuspenseQuery(queryOptions, queryClient) as  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
-
-  query.queryKey = queryOptions.queryKey ;
-
-  return query;
-}
-
-
-
-
-export const getGetIdpAccountSuspenseInfiniteQueryOptions = <TData = InfiniteData<Awaited<ReturnType<typeof getIdpAccount>>>, TError = ErrorType<void>>(userId: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getIdpAccount>>, TError, TData>>, request?: SecondParameter<typeof customIdpInstance>}
-) => {
-
-const {query: queryOptions, request: requestOptions} = options ?? {};
-
-  const queryKey =  queryOptions?.queryKey ?? getGetIdpAccountInfiniteQueryKey(userId);
-
-  
-
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getIdpAccount>>> = ({ signal }) => getIdpAccount(userId, requestOptions, signal);
-
-      
-
-      
-
-   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getIdpAccount>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
-}
-
-export type GetIdpAccountSuspenseInfiniteQueryResult = NonNullable<Awaited<ReturnType<typeof getIdpAccount>>>
-export type GetIdpAccountSuspenseInfiniteQueryError = ErrorType<void>
-
-
-export function useGetIdpAccountSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getIdpAccount>>>, TError = ErrorType<void>>(
- userId: string, options: { query:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getIdpAccount>>, TError, TData>>, request?: SecondParameter<typeof customIdpInstance>}
- , queryClient?: QueryClient
-  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetIdpAccountSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getIdpAccount>>>, TError = ErrorType<void>>(
- userId: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getIdpAccount>>, TError, TData>>, request?: SecondParameter<typeof customIdpInstance>}
- , queryClient?: QueryClient
-  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetIdpAccountSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getIdpAccount>>>, TError = ErrorType<void>>(
- userId: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getIdpAccount>>, TError, TData>>, request?: SecondParameter<typeof customIdpInstance>}
- , queryClient?: QueryClient
-  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-/**
- * @summary IDP 계정 상세 조회
- */
-
-export function useGetIdpAccountSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getIdpAccount>>>, TError = ErrorType<void>>(
- userId: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getIdpAccount>>, TError, TData>>, request?: SecondParameter<typeof customIdpInstance>}
- , queryClient?: QueryClient 
- ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
-
-  const queryOptions = getGetIdpAccountSuspenseInfiniteQueryOptions(userId,options)
-
-  const query = useSuspenseInfiniteQuery(queryOptions, queryClient) as  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
-
-  query.queryKey = queryOptions.queryKey ;
-
-  return query;
-}
-
-/**
- * @summary IDP 계정 상세 조회
- */
-export const prefetchGetIdpAccountInfiniteQuery = async <TData = Awaited<ReturnType<typeof getIdpAccount>>, TError = ErrorType<void>>(
- queryClient: QueryClient, userId: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getIdpAccount>>, TError, TData>>, request?: SecondParameter<typeof customIdpInstance>}
-
-  ): Promise<QueryClient> => {
-
-  const queryOptions = getGetIdpAccountSuspenseInfiniteQueryOptions(userId,options)
-
-  await queryClient.prefetchInfiniteQuery(queryOptions);
 
   return queryClient;
 }

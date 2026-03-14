@@ -117,7 +117,8 @@ const INTRODUCTION_PAGE_DATA = {
 			},
 			{
 				label: "Code to Storybook",
-				description: "정적 시안보다 코드와 상태를 Storybook에서 바로 검토하는 흐름을 우선합니다.",
+				description:
+					"정적 시안보다 코드와 상태를 Storybook에서 바로 검토하는 흐름을 우선합니다.",
 			},
 			{
 				label: "반복 작업 자동화",
@@ -125,7 +126,8 @@ const INTRODUCTION_PAGE_DATA = {
 			},
 			{
 				label: "2년 유지보수 보장",
-				description: "출시 후에도 끝까지 책임지는 구조를 전제로 설계하고 인수인계합니다.",
+				description:
+					"출시 후에도 끝까지 책임지는 구조를 전제로 설계하고 인수인계합니다.",
 			},
 		],
 	},
@@ -143,7 +145,8 @@ const INTRODUCTION_PAGE_DATA = {
 			iconKey: "palette",
 		},
 		{
-			title: "정적인 시안보다 실행 가능한 Code와 Storybook이 기준이 되는 구조가 필요합니다",
+			title:
+				"정적인 시안보다 실행 가능한 Code와 Storybook이 기준이 되는 구조가 필요합니다",
 			description:
 				"정적인 시안 파일이 기준이 되면 다시 구현으로 번역해야 합니다. 이제는 Code가 Design System의 기준이 되고, Storybook이 그 변형과 상태를 검토하는 공유면이 되어야 더 빠르고 정확합니다.",
 			iconKey: "layers",
@@ -263,7 +266,8 @@ const INTRODUCTION_PAGE_DATA = {
 		},
 		{
 			title: "Experience Layer",
-			description: "화면 조립과 상태 관리를 빠르게 검증할 수 있는 프론트 레이어입니다.",
+			description:
+				"화면 조립과 상태 관리를 빠르게 검증할 수 있는 프론트 레이어입니다.",
 			tools: [
 				"Next.js App Router",
 				"MobX",
@@ -317,7 +321,8 @@ const INTRODUCTION_PAGE_DATA = {
 		},
 	],
 	closing: {
-		title: "AI 시대에 필요한 것은 더 많은 중간 단계가 아니라, 더 정확한 판단 구조입니다",
+		title:
+			"AI 시대에 필요한 것은 더 많은 중간 단계가 아니라, 더 정확한 판단 구조입니다",
 		description:
 			"자자는 외주를 인력 수 경쟁으로 보지 않습니다. 고급으로 수주하고 저연차로 제작하는 구조, 그리고 AI로 이미 빨라진 80% 초안 영역 위에 또 다른 병목 계층을 쌓는 구조를 줄입니다. 우리는 Figma 산출물 중심 전달보다 Code-first design과 Storybook 기반 검토가 더 정확하다고 봅니다. 같은 예산에서 더 높은 실행 밀도를 만들고, 출시 후 2년 유지보수까지 책임지는 것이 우리의 방식입니다.",
 		bullets: [

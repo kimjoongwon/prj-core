@@ -15,10 +15,15 @@
 | AuthApplicationService | 인증 유즈케이스 공개 계약 |
 | OidcFacade | 외부 OIDC 연동 dependency |
 
+## 구현 메모
+
+- `getAuthAuditLogs()`는 표준 API 응답 계약에 맞춰 목록을 `data`, 페이지네이션을 `meta`로 반환합니다.
+
 ## 변경 이력
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-03-14 | 인증 감사 로그 목록 반환 키를 `logs`에서 표준 `data`로 정렬해 Orval/React Query 소비 shape를 수정 | codex |
 | 2026-03-03 | 누락된 sidecar spec 신규 생성 | codex |
 | 2026-03-11 | 기존 인증 조합 레이어를 AuthApplicationService와 OidcFacade로 분리 | codex |
 | 2026-03-12 | 인증 감사 로그 조회/통계를 ApplicationService로 이관 | codex |

@@ -33,6 +33,8 @@ Routine CRUD API를 노출하며, 인증 사용자/Space 해석과 pagination �
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-03-14 | Biome lint organizeImports/format cleanup reflected | codex |
+| 2026-03-14 | Biome lint 기준에 맞춰 미사용 import를 제거해 컨트롤러 정적 검사를 정리 | codex |
 | 2026-03-03 | 누락된 sidecar spec 신규 생성 | codex |
 | 2026-03-11 | Controller 의존성을 RoutineService로 전환하고 CLS helper를 제거 | codex |
 | 2026-03-13 | 컨트롤러 경계 의존성을 `RoutineFacade` 기준으로 갱신 | codex |

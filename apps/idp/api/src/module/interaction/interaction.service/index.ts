@@ -367,11 +367,11 @@ export class InteractionService {
 
 		// 누락된 resource scope 추가
 		if (details.missingResourceScopes) {
-			const missingResourceScopes =
-				details.missingResourceScopes as Record<string, string[]>;
-			for (const [indicator, scopes] of Object.entries(
-				missingResourceScopes,
-			)) {
+			const missingResourceScopes = details.missingResourceScopes as Record<
+				string,
+				string[]
+			>;
+			for (const [indicator, scopes] of Object.entries(missingResourceScopes)) {
 				grant.addResourceScope(indicator, scopes.join(" "));
 			}
 		}

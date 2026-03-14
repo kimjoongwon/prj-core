@@ -1,4 +1,3 @@
-import { RoutineFacade } from "@cocrepo/facade";
 import { RolesGuard } from "@cocrepo/be-common";
 import { ROUTINE_ERRORS, SYSTEM_ROLES } from "@cocrepo/constant";
 import {
@@ -15,6 +14,7 @@ import {
 	UpdateRoutineDto,
 } from "@cocrepo/dto";
 import { Routine } from "@cocrepo/entity";
+import { RoutineFacade } from "@cocrepo/facade";
 import {
 	Body,
 	Controller,
@@ -28,16 +28,13 @@ import {
 	Post,
 	Query,
 	UseGuards,
-	UnauthorizedException,
 } from "@nestjs/common";
 import { ApiBody, ApiOperation, ApiParam, ApiTags } from "@nestjs/swagger";
 
 @ApiTags("ROUTINES")
 @Controller()
 export class RoutinesController {
-	constructor(
-		private readonly routinesService: RoutineFacade,
-	) {}
+	constructor(private readonly routinesService: RoutineFacade) {}
 
 	/**
 	 * 루틴 목록 조회

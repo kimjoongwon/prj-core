@@ -1,5 +1,5 @@
 "use client";
-import { useGetUsers, type UserDto } from "@cocrepo/api/core/users";
+import { type UserDto, useGetUsers } from "@cocrepo/api/core/users";
 
 import type { InputConfig, MetaDataGridColumnConfig } from "@cocrepo/type";
 import {

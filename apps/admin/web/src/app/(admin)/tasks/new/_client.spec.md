@@ -37,6 +37,7 @@
 - 의존 모듈 응답 누락 시 안전한 기본값으로 처리합니다.
 - 비정상 입력은 조기 반환 또는 예외 처리합니다.
 - 비동기 동작 실패 시 사용자 영향 범위를 최소화합니다.
+- Task 생성 payload는 `spaceId` body 필드를 보내지 않고 `X-Space-ID` 헤더 기반 공간 컨텍스트를 사용합니다.
 
 ## 구현 체크리스트
 
@@ -48,6 +49,7 @@
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-03-14 | Task 생성 payload에서 더미 `spaceId`를 제거하고 헤더 기반 공간 컨텍스트 계약으로 정리 | codex |
 | 2026-03-13 | `@cocrepo/api` root import를 split subpath import로 전환 | codex |
 | 2026-03-11 | aggregate root 기준 spaces/tasks 경로와 API 계약으로 전환 | codex |
 | 2026-03-03 | 누락된 sidecar spec 신규 생성 | codex |

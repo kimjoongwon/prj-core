@@ -28,10 +28,11 @@ export async function loginToAdmin(page: Page) {
 		allowDirectRedirect: true,
 	});
 
-	await page.waitForLoadState("networkidle");
+	// Next.js 앱은 후속 fetch로 networkidle이 길게 유지될 수 있어 DOM 준비만 대기합니다.
+	await page.waitForLoadState("domcontentloaded");
 
 	// localStorage에 System Space를 최종 확정 (앱 동기화 이후 덮어쓰기)
-	await page.evaluate(
+	const persistedSpaceId = await page.evaluate(
 		({ spaceId, groundName }) => {
 			const raw = localStorage.getItem("admin-persist");
 			const parsed = raw ? JSON.parse(raw) : {};
@@ -56,18 +57,14 @@ export async function loginToAdmin(page: Page) {
 					spaces: nextSpaces,
 				}),
 			);
+
+			const updated = localStorage.getItem("admin-persist");
+			return updated ? JSON.parse(updated)?.spaceId ?? null : null;
 		},
 		{ spaceId: SYSTEM_SPACE_ID, groundName: SYSTEM_GROUND_NAME },
 	);
 
-	await page.waitForFunction(
-		(expectedSpaceId) => {
-			const raw = localStorage.getItem("admin-persist");
-			if (!raw) return false;
-			const parsed = JSON.parse(raw);
-			return parsed?.spaceId === expectedSpaceId;
-		},
-		SYSTEM_SPACE_ID,
-		{ timeout: 10000 },
-	);
+	if (persistedSpaceId !== SYSTEM_SPACE_ID) {
+		throw new Error("admin-persist spaceId 동기화에 실패했습니다.");
+	}
 }

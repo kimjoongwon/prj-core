@@ -9,7 +9,7 @@ import {
 	useGetPrograms,
 	useGetSessionById,
 } from "@cocrepo/api/core/timelines";
-import { useGetUsers, type UserDto } from "@cocrepo/api/core/users";
+import { type UserDto, useGetUsers } from "@cocrepo/api/core/users";
 
 import { DateTimeCell, Page, PageTitleBar, Section, VStack } from "@cocrepo/ui";
 import {

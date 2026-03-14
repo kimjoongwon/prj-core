@@ -98,6 +98,20 @@ export class DtoTransformInterceptor implements NestInterceptor {
 			};
 		}
 
+		// plain { data, meta } 응답도 data 필드만 DTO 변환해 보존합니다.
+		if (
+			value &&
+			typeof value === "object" &&
+			!Array.isArray(value) &&
+			"data" in (value as Record<string, unknown>)
+		) {
+			const record = value as Record<string, unknown>;
+			return {
+				...record,
+				data: this.transformData(record.data, dtoClass, isArray, excludeFields),
+			};
+		}
+
 		// 직접 데이터 변환
 		return this.transformData(value, dtoClass, isArray, excludeFields);
 	}

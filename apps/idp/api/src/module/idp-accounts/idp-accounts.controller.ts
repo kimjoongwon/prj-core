@@ -27,9 +27,7 @@ import { ApiOperation, ApiParam, ApiTags } from "@nestjs/swagger";
 @Roles([SYSTEM_ROLES.FULL_ACCESS])
 @SkipSpaceCheck()
 export class IdpAccountsController {
-	constructor(
-		private readonly idpAccountFacade: IdpAccountFacade,
-	) {}
+	constructor(private readonly idpAccountFacade: IdpAccountFacade) {}
 
 	@Get()
 	@ApiOperation({

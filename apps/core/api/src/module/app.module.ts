@@ -25,6 +25,7 @@ import {
 	type OnModuleInit,
 } from "@nestjs/common";
 import { APP_GUARD, RouterModule } from "@nestjs/core";
+import { DevtoolsModule } from "@nestjs/devtools-integration";
 import { ThrottlerGuard } from "@nestjs/throttler";
 import { AbilitiesModule } from "./abilities";
 import { ActionsModule } from "./actions";
@@ -45,9 +46,21 @@ import { TemplatesModule } from "./templates";
 import { TimelinesModule } from "./timelines";
 import { UsersModule } from "./users";
 
+const enableNestDevtools =
+	process.env.ENABLE_NEST_DEVTOOLS === "true" &&
+	process.env.NODE_ENV !== "production";
+
 @Module({
 	imports: [
 		...globalModules,
+		DevtoolsModule.register({
+			http: enableNestDevtools,
+			port:
+				Number.parseInt(
+					process.env.CORE_API_NEST_DEVTOOLS_PORT ?? "8000",
+					10,
+				) || 8000,
+		}),
 		PrismaModule,
 		RedisModule,
 		I18nModule,

@@ -32,9 +32,7 @@ import { OidcFacade } from "./oidc.facade";
 @ApiExcludeController()
 @Controller("oidc")
 export class OidcController {
-	constructor(
-		private readonly oidcApplicationService: OidcFacade,
-	) {}
+	constructor(private readonly oidcApplicationService: OidcFacade) {}
 
 	/**
 	 * 모든 OIDC 엔드포인트를 oidc-provider에 위임

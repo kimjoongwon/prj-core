@@ -65,6 +65,7 @@ HeroUI 컴포넌트, `@cocrepo/ui` 레이아웃, `framer-motion` 애니메이션
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-03-14 | introduction 랜딩 클라이언트의 Biome 포맷 정렬을 반영해 lint 기준과 코드 가독성을 맞춤 | codex |
 | 2026-03-12 | introduction 랜딩 클라이언트 렌더러 신규 생성 | codex |
 | 2026-03-12 | 외주 업계 현실과 AI 시대 병목 구조를 드러내는 카피 톤으로 조정 | codex |
 | 2026-03-12 | Code-first design system과 2년 유지보수 책임 메시지를 반영하는 카피 정책 추가 | codex |

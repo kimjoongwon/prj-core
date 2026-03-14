@@ -8,6 +8,8 @@
     "declarationMap": true,
     "composite": true,
     "tsBuildInfoFile": "dist/.tsbuildinfo",
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
     "target": "ES2022",
     "module": "NodeNext",
     "moduleResolution": "NodeNext",

@@ -33,6 +33,7 @@
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-03-14 | Biome lint organizeImports/format cleanup reflected | codex |
 | 2026-03-03 | 누락된 sidecar spec 신규 생성 | codex |
 | 2026-03-11 | AbilitiesModule export를 AbilityService 기준으로 정렬 | codex |
 | 2026-03-13 | `getMyAbilities` 제거에 맞춰 User/Auth 관련 미사용 provider를 정리 | codex |

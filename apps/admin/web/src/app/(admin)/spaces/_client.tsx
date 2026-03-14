@@ -13,8 +13,8 @@ import {
 import { Badge, Button } from "@heroui/react";
 import { Building2 } from "lucide-react";
 import { observer } from "mobx-react-lite";
-import Link from "next/link";
 import type { Route } from "next";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 
 /**

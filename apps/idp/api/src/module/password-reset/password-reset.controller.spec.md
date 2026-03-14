@@ -56,5 +56,6 @@
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-03-14 | Biome lint organizeImports/format cleanup reflected | codex |
 | 2026-02-19 | 초기 생성 (역기획) | req-reverse-engineer |
 | 2026-03-13 | PasswordResetController가 PasswordResetService 직접 주입에서 PasswordResetFacade로 전환 | codex |

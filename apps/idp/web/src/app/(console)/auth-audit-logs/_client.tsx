@@ -2,8 +2,8 @@
 import {
 	type AuthAuditLogDto,
 	type AuthAuditResult,
-	useGetAuthAuditLogs,
 	useGetAuthAuditLogStats,
+	useGetAuthAuditLogs,
 } from "@cocrepo/api/idp/auth";
 
 import type { InputConfig, MetaDataGridColumnConfig } from "@cocrepo/type";

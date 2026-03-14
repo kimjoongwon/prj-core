@@ -111,6 +111,7 @@
 - Subject 필드 조회는 `group === "entity"` 조건에서만 `enabled: true`로 실행
 - 필드 조회는 Orval 생성 훅이 아닌 `getSubjectFields` 함수를 `useQuery`에 직접 구성하여 사용
 - Subject는 조회 전용 (수정/삭제 기능 없음)
+- sidecar E2E는 브라우저 현재 origin 대신 admin APIRequestContext로 Subject 목록을 조회해 대상 ID를 선택한다
 
 ## 구현 체크리스트
 
@@ -122,6 +123,7 @@
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-03-14 | sidecar E2E seed Subject 조회를 admin APIRequestContext 기준으로 고정 | codex |
 | 2026-02-18 | 초기 생성 (역기획) | req-reverse-engineer |
 | 2026-02-19 | 디자인 목업 추가 | req-reverse-engineer |
 | 2026-03-03 | Scaffold 제거 및 페이지 헤더 영역/섹션 영역 용어 정리 | codex |

@@ -1,7 +1,8 @@
+import path from "node:path";
 import { test as setup } from "@playwright/test";
 import { loginToAdmin } from "./login";
 
-const AUTH_FILE = "tests/admin/helpers/.auth/admin.json";
+const AUTH_FILE = path.join(__dirname, ".auth", "admin.json");
 
 setup("Admin OIDC 로그인", async ({ page }) => {
 	await loginToAdmin(page);

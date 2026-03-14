@@ -27,6 +27,7 @@
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-03-14 | Biome lint organizeImports/format cleanup reflected | codex |
 | 2026-03-03 | 누락된 sidecar spec 신규 생성 | codex |
 | 2026-03-11 | GroupsModule export를 GroupService 기준으로 정렬 | codex |
 | 2026-03-13 | GroupsModule boundary provider/export를 `GroupFacade` 기준으로 갱신 | codex |

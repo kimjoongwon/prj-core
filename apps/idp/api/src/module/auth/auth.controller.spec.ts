@@ -1,5 +1,5 @@
-import type { SignUpPayloadDto } from "@cocrepo/dto";
 import { AuthApplicationService } from "@cocrepo/app";
+import type { SignUpPayloadDto } from "@cocrepo/dto";
 import { AuthAuditLogService } from "@cocrepo/service";
 import { UnauthorizedException } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
@@ -103,9 +103,7 @@ describe("AuthController", () => {
 			// Then
 			expect(
 				mockAuthApplicationService.getAuthorizationUrl,
-			).toHaveBeenCalledWith(
-				undefined,
-			);
+			).toHaveBeenCalledWith(undefined);
 			expect(mockResponse.redirect).toHaveBeenCalledWith(
 				"https://idp.example.com/oidc/auth?response_type=code&client_id=test",
 			);
@@ -264,7 +262,9 @@ describe("AuthController", () => {
 				userId: "user-test-id",
 				email: "new@example.com",
 			};
-			mockAuthApplicationService.signUp.mockResolvedValue(signUpResult as never);
+			mockAuthApplicationService.signUp.mockResolvedValue(
+				signUpResult as never,
+			);
 
 			// When
 			const result = await controller.signUp(signUpDto);
@@ -327,9 +327,7 @@ describe("AuthController", () => {
 			);
 
 			// Then
-			expect(
-				mockAuthApplicationService.logoutWithCookie,
-			).toHaveBeenCalledWith(
+			expect(mockAuthApplicationService.logoutWithCookie).toHaveBeenCalledWith(
 				"test-access-token",
 				"test-session-id",
 				mockResponse,
@@ -352,9 +350,7 @@ describe("AuthController", () => {
 			);
 
 			// Then
-			expect(
-				mockAuthApplicationService.logoutWithCookie,
-			).toHaveBeenCalledWith(
+			expect(mockAuthApplicationService.logoutWithCookie).toHaveBeenCalledWith(
 				undefined,
 				undefined,
 				mockResponse,

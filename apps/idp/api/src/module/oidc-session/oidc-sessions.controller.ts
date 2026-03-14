@@ -30,9 +30,7 @@ import { ApiOperation, ApiParam, ApiTags } from "@nestjs/swagger";
 @Roles([SYSTEM_ROLES.FULL_ACCESS])
 @SkipSpaceCheck()
 export class OidcSessionsController {
-	constructor(
-		private readonly oidcSessionFacade: OidcSessionFacade,
-	) {}
+	constructor(private readonly oidcSessionFacade: OidcSessionFacade) {}
 
 	@Get()
 	@ApiOperation({

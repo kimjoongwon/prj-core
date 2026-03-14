@@ -14,12 +14,10 @@ import { ApiOperation, ApiTags } from "@nestjs/swagger";
 
 @ApiTags("IDP_DASHBOARD")
 @Controller()
-	@Roles([SYSTEM_ROLES.FULL_ACCESS])
-	@SkipSpaceCheck()
+@Roles([SYSTEM_ROLES.FULL_ACCESS])
+@SkipSpaceCheck()
 export class IdpDashboardController {
-	constructor(
-		private readonly idpDashboardService: IdpDashboardFacade,
-	) {}
+	constructor(private readonly idpDashboardService: IdpDashboardFacade) {}
 
 	@Get("stats")
 	@ApiOperation({

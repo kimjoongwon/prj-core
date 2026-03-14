@@ -61,5 +61,6 @@ OIDC Authorization Code Flow에서 사용자와의 상호작용(로그인, 동�
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-03-14 | Biome lint organizeImports/format cleanup reflected | codex |
 | 2026-02-19 | 초기 생성 (역기획) | req-reverse-engineer |
 | 2026-03-13 | InteractionController가 InteractionService 대신 InteractionFacade 주입으로 변경 | codex |

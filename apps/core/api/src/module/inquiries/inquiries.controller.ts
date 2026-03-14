@@ -1,4 +1,3 @@
-import { InquiryFacade } from "@cocrepo/facade";
 import { USER_ERRORS } from "@cocrepo/constant";
 import {
 	ApiAuth,
@@ -27,6 +26,7 @@ import {
 	UpdateInquiryDto,
 } from "@cocrepo/dto";
 import { Inquiry, InquiryParticipant } from "@cocrepo/entity";
+import { InquiryFacade } from "@cocrepo/facade";
 import type { InquiryPriority, InquiryStatus } from "@cocrepo/prisma";
 import { AuthContext, SpaceContext } from "@cocrepo/service";
 import {
@@ -123,8 +123,7 @@ export class InquiriesController {
 			throw new UnauthorizedException(USER_ERRORS.SPACE_NOT_SELECTED);
 		}
 
-			const stats =
-			await this.inquiriesService.getInquiryStats(spaceId);
+		const stats = await this.inquiriesService.getInquiryStats(spaceId);
 		return stats;
 	}
 
@@ -365,10 +364,7 @@ export class InquiriesController {
 		@Param("inquiryId", ParseUUIDPipe) inquiryId: string,
 		@Body() body: { assigneeId: string },
 	): Promise<Inquiry> {
-		return this.inquiriesService.assignInquiry(
-			inquiryId,
-			body.assigneeId,
-		);
+		return this.inquiriesService.assignInquiry(inquiryId, body.assigneeId);
 	}
 
 	@Patch(":inquiryId/status")
@@ -418,10 +414,7 @@ export class InquiriesController {
 		@Param("inquiryId", ParseUUIDPipe) inquiryId: string,
 		@Body() body: { status: InquiryStatus },
 	): Promise<Inquiry> {
-		return this.inquiriesService.updateInquiryStatus(
-			inquiryId,
-			body.status,
-		);
+		return this.inquiriesService.updateInquiryStatus(inquiryId, body.status);
 	}
 
 	@Patch(":inquiryId/priority")

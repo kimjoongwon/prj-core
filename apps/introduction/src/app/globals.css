@@ -1,6 +1,6 @@
 @import "tailwindcss";
-@plugin '../../../../packages/fe-ui/hero.tsx';
-@source '../../../../node_modules/@heroui/theme/dist/**/*.{js,ts,jsx,tsx}';
+@plugin "../../../../packages/fe-ui/hero.tsx";
+@source "../../../../node_modules/@heroui/theme/dist/**/*.{js,ts,jsx,tsx}";
 @source "../../../../packages/fe-ui/src/**/*.{js,ts,jsx,tsx}";
 @custom-variant dark (&:is(.dark *));
 
@@ -18,10 +18,21 @@ body {
 	font-family: "Pretendard", sans-serif;
 	min-height: 100vh;
 	background:
-		radial-gradient(circle at top left, rgba(59, 130, 246, 0.26), transparent 30%),
-		radial-gradient(circle at top right, rgba(244, 63, 94, 0.16), transparent 24%),
-		radial-gradient(circle at 50% 120%, rgba(14, 165, 233, 0.18), transparent 34%),
-		#05070b;
+		radial-gradient(
+			circle at top left,
+			rgba(59, 130, 246, 0.26),
+			transparent 30%
+		),
+		radial-gradient(
+			circle at top right,
+			rgba(244, 63, 94, 0.16),
+			transparent 24%
+		),
+		radial-gradient(
+			circle at 50% 120%,
+			rgba(14, 165, 233, 0.18),
+			transparent 34%
+		), #05070b;
 	color: rgba(244, 244, 245, 0.96);
 	line-height: 1.6;
 }

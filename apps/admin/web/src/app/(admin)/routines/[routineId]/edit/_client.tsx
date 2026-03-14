@@ -8,7 +8,7 @@ import {
 } from "@cocrepo/api/core/routines";
 import { type TaskDto, useGetTasks } from "@cocrepo/api/core/tasks";
 
-import { Page, PageTitleBar, Section, VStack } from "@cocrepo/ui";
+import { Page, PageTitleBar, Section } from "@cocrepo/ui";
 import {
 	addToast,
 	Button,

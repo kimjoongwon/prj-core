@@ -79,4 +79,8 @@ export class SpaceFacade {
 	updateSpaceGround(spaceId: string, dto: UpdateGroundDto): Promise<Space> {
 		return this.spaceService.updateGroundBySpaceId(spaceId, dto);
 	}
+
+	deleteSpace(spaceId: string): Promise<Space> {
+		return this.spaceService.removeById(spaceId);
+	}
 }

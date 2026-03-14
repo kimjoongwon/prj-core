@@ -90,14 +90,12 @@ function TaskNewPageClient() {
 			return;
 		}
 
-		// OpenAPI 계약상 spaceId 필드가 남아 있어 빈 문자열을 전달합니다.
 		createTask({
 			data: {
 				name: state.name.trim(),
 				duration,
 				count: state.count,
 				description: state.description.trim() || undefined,
-				spaceId: "",
 			},
 		});
 	};

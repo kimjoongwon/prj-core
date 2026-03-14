@@ -1,4 +1,3 @@
-import { RoleFacade } from "@cocrepo/facade";
 import { RolesGuard } from "@cocrepo/be-common";
 import { SYSTEM_ROLES } from "@cocrepo/constant";
 import {
@@ -9,6 +8,7 @@ import {
 	Roles,
 } from "@cocrepo/decorator";
 import { CreateRoleDto, RoleDto, UpdateRoleDto } from "@cocrepo/dto";
+import { RoleFacade } from "@cocrepo/facade";
 import {
 	Body,
 	Controller,
@@ -27,9 +27,7 @@ import { ApiBody, ApiOperation, ApiParam, ApiTags } from "@nestjs/swagger";
 @ApiTags("ROLES")
 @Controller()
 export class RolesController {
-	constructor(
-		private readonly rolesService: RoleFacade,
-	) {}
+	constructor(private readonly rolesService: RoleFacade) {}
 
 	@Get()
 	@UseGuards(RolesGuard)

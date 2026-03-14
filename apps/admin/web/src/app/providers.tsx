@@ -1,7 +1,7 @@
 "use client";
 import { type AbilityResponseDto } from "@cocrepo/api/core/abilities";
 
-import { convertApiToAbilityRules, useAbility } from "@cocrepo/store";
+import { convertApiToAbilityRules, useStore } from "@cocrepo/store";
 import type { AbilityApiResponse, AbilityRule } from "@cocrepo/type";
 import { DesignSystemProvider } from "@cocrepo/ui";
 import {
@@ -89,13 +89,18 @@ const AbilityStoreBootstrapper = observer(function AbilityStoreBootstrapper({
 	children: ReactNode;
 }) {
 	const { abilities, isLoading, isError } = useAbilities();
-	const { updateRules } = useAbility();
+	const store = useStore();
+	const abilityStore = store.abilityStore;
 
 	useEffect(() => {
 		const fallbackRules: AbilityRule[] = [{ action: "manage", subject: "all" }];
 
+		if (!abilityStore) {
+			return;
+		}
+
 		if (isLoading || isError || !abilities || abilities.length === 0) {
-			updateRules(fallbackRules);
+			abilityStore.updateRules(fallbackRules);
 			return;
 		}
 
@@ -112,8 +117,8 @@ const AbilityStoreBootstrapper = observer(function AbilityStoreBootstrapper({
 			}),
 		);
 
-		updateRules(convertApiToAbilityRules(apiResponses));
-	}, [abilities, isLoading, isError, updateRules]);
+		abilityStore.updateRules(convertApiToAbilityRules(apiResponses));
+	}, [abilityStore, abilities, isLoading, isError]);
 
 	return children;
 });

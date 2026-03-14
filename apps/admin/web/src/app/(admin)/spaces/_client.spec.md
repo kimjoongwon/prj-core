@@ -50,6 +50,7 @@
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-03-14 | Biome lint 통과를 위해 import 정렬과 unused import 정리를 반영 | codex |
 | 2026-03-13 | `@cocrepo/api` root import를 split subpath import로 전환 | codex |
 | 2026-03-11 | aggregate root 기준 spaces/tasks 경로와 API 계약으로 전환 | codex |
 | 2026-03-03 | 누락된 sidecar spec 신규 생성 | codex |

@@ -1,5 +1,5 @@
-import { UsersRepository } from "@cocrepo/repository";
 import { UserFacade } from "@cocrepo/facade";
+import { UsersRepository } from "@cocrepo/repository";
 import {
 	AuthCacheService,
 	AuthContext,

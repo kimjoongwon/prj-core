@@ -6,7 +6,7 @@ import {
 	SpaceAccessGuard,
 	SpaceScopeInterceptor,
 } from "@cocrepo/be-common";
-import { TokenStorageService, I18nTranslationService } from "@cocrepo/service";
+import { I18nTranslationService, TokenStorageService } from "@cocrepo/service";
 import {
 	type ArgumentsHost,
 	Catch,

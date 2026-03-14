@@ -1,5 +1,4 @@
 "use client";
-import { type CategoryDto } from "@cocrepo/api/core/categories";
 import { customInstance } from "@cocrepo/api/core/client";
 
 import {

@@ -76,6 +76,7 @@
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-03-14 | 프로그램 등록/수정 E2E가 seed task 부재 시 테스트 전용 task를 생성하고 cleanup하도록 안정화 | codex |
 | 2026-02-19 | 초기 생성 | orch-requirement |
 | 2026-03-03 | Scaffold 제거 및 페이지 헤더 영역/섹션 영역 용어 정리 | codex |
 | 2026-03-03 | 로컬 `_components` 의존 제거, `@cocrepo/ui`의 `ProgramPickerModal` feature 사용으로 정리 | codex |

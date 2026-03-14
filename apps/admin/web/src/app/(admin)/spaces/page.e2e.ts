@@ -187,8 +187,8 @@ test.describe("공간 목록 페이지", () => {
 					{ headers: spaceHeaders },
 				);
 
-				// Then: 204 No Content 응답 확인
-				expect(deleteResp.status()).toBe(204);
+				// Then: 200 OK 응답 확인
+				expect(deleteResp.status()).toBe(200);
 			}
 
 			// Then: 목록 페이지로 이동하여 삭제 확인

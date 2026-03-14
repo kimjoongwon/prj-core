@@ -1,4 +1,3 @@
-import { TaskFacade } from "@cocrepo/facade";
 import { RolesGuard } from "@cocrepo/be-common";
 import { SYSTEM_ROLES, USER_ERRORS } from "@cocrepo/constant";
 import {
@@ -18,6 +17,7 @@ import {
 	UpdateExerciseDto,
 } from "@cocrepo/dto";
 import { Routine, Task } from "@cocrepo/entity";
+import { TaskFacade } from "@cocrepo/facade";
 import { AuthContext, SpaceContext } from "@cocrepo/service";
 import {
 	Body,
@@ -182,11 +182,7 @@ export class TasksController {
 			throw new UnauthorizedException(USER_ERRORS.SPACE_NOT_SELECTED);
 		}
 
-		return this.tasksService.updateTaskExercise(
-			taskId,
-			dto,
-			spaceId,
-		);
+		return this.tasksService.updateTaskExercise(taskId, dto, spaceId);
 	}
 
 	@Delete(":taskId")

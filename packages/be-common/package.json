@@ -28,6 +28,7 @@
     "@cocrepo/enum": "workspace:*",
     "@cocrepo/prisma": "workspace:*",
     "@cocrepo/repository": "workspace:*",
+    "@cocrepo/service": "workspace:*",
     "@cocrepo/toolkit": "workspace:*",
     "@cocrepo/type": "workspace:*",
     "jwks-rsa": "^3.2.2",

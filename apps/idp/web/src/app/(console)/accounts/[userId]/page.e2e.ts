@@ -1,5 +1,5 @@
-import { expect, test } from "@playwright/test";
 import { loginToConsole } from "@cocrepo/e2e";
+import { expect, test } from "@playwright/test";
 
 interface IdpAccountListItem {
 	id: string;

@@ -12,23 +12,21 @@ test.describe("Subject 상세 페이지", () => {
 
 		/**
 		 * Subject 목록 API를 직접 호출하여 조건에 맞는 Subject를 반환합니다.
-		 * SSR prefetch로 인해 브라우저에서 API 호출이 발생하지 않으므로
-		 * page.evaluate(fetch)를 사용합니다. (Subject API는 @Public)
+		 * 브라우저 origin에 영향받지 않도록 admin APIRequestContext를 직접 사용합니다.
 		 */
 		async function getSubjectByGroup(
 			page: import("@playwright/test").Page,
 			condition: "entity" | "non-entity",
 		): Promise<SubjectListItem> {
-			const subject = await page.evaluate(async (targetCondition) => {
-				const resp = await fetch("/api/v1/subjects");
-				const body = await resp.json();
-				const subjects = (body.data ?? body) as SubjectListItem[];
-
-				if (targetCondition === "entity") {
-					return subjects.find((item) => item.group === "entity") ?? null;
-				}
-				return subjects.find((item) => item.group !== "entity") ?? null;
-			}, condition);
+			const resp = await page.request.get("http://localhost:3000/api/v1/subjects");
+			const body = (await resp.json()) as {
+				data?: SubjectListItem[];
+			};
+			const subjects = body.data ?? [];
+			const subject =
+				condition === "entity"
+					? subjects.find((item) => item.group === "entity") ?? null
+					: subjects.find((item) => item.group !== "entity") ?? null;
 
 			if (!subject) {
 				throw new Error(`Subject for condition "${condition}" not found`);
@@ -40,8 +38,6 @@ test.describe("Subject 상세 페이지", () => {
 			page,
 		}) => {
 			// Given: entity Subject 추출
-			await page.goto("./subjects");
-			await page.waitForLoadState("networkidle");
 			const entitySubject = await getSubjectByGroup(page, "entity");
 
 			// When: Subject 상세 페이지로 직접 이동
@@ -67,8 +63,6 @@ test.describe("Subject 상세 페이지", () => {
 			page,
 		}) => {
 			// Given: non-entity Subject 추출
-			await page.goto("./subjects");
-			await page.waitForLoadState("networkidle");
 			const nonEntitySubject = await getSubjectByGroup(page, "non-entity");
 
 			// When: Subject 상세 페이지로 직접 이동
@@ -88,8 +82,6 @@ test.describe("Subject 상세 페이지", () => {
 			page,
 		}) => {
 			// Given: entity Subject 추출
-			await page.goto("./subjects");
-			await page.waitForLoadState("networkidle");
 			const entitySubject = await getSubjectByGroup(page, "entity");
 
 			// Given: Subject 상세 페이지

@@ -1,4 +1,3 @@
-import { SubjectFacade } from "@cocrepo/facade";
 import {
 	ApiErrors,
 	ApiResponseEntity,
@@ -6,15 +5,14 @@ import {
 	ResponseMessage,
 } from "@cocrepo/decorator";
 import { SubjectDto, SubjectFieldDto } from "@cocrepo/dto";
+import { SubjectFacade } from "@cocrepo/facade";
 import { Controller, Get, HttpStatus, Param, Query } from "@nestjs/common";
 import { ApiOperation, ApiParam, ApiQuery, ApiTags } from "@nestjs/swagger";
 
 @ApiTags("SUBJECTS")
 @Controller()
 export class SubjectsController {
-	constructor(
-		private readonly subjectsService: SubjectFacade,
-	) {}
+	constructor(private readonly subjectsService: SubjectFacade) {}
 
 	@Public()
 	@Get()

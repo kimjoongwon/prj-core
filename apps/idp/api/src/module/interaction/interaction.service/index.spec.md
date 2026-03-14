@@ -91,6 +91,7 @@ OIDC Interaction 흐름(로그인, 동의, 취소)의 비즈니스 로직을 담
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-03-14 | Biome lint organizeImports/format cleanup reflected | codex |
 | 2026-02-19 | 초기 생성 (역기획) | req-reverse-engineer |
 | 2026-03-13 | `interaction.service.ts`와 sidecar spec을 폴더형 `index.ts`/`index.spec.md` 구조로 재배치 | codex |
 | 2026-03-13 | 중첩 폴더 구조에 맞게 OIDC 의존성 상대 import를 `../../oidc/*`로 보정하고 resource scope 순회 타입을 명시 | codex |

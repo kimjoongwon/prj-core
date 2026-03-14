@@ -33,6 +33,7 @@ Category CRUD API를 노출하며, 현재 Space 기준 생성 흐름과 경계 �
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-03-14 | Biome lint organizeImports/format cleanup reflected | codex |
 | 2026-02-18 | 초기 생성 (역기획) | req-reverse-engineer |
 | 2026-03-11 | Controller 의존성을 CategoryService로 전환 | codex |
 | 2026-03-13 | 컨트롤러 경계 의존성을 `CategoryFacade` 기준으로 갱신 | codex |

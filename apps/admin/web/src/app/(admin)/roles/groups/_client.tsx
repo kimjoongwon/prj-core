@@ -1,6 +1,5 @@
 "use client";
 import { customInstance } from "@cocrepo/api/core/client";
-import { type GroupDto } from "@cocrepo/api/core/groups";
 
 import { DateTimeCell, Page, PageTitleBar, Section, VStack } from "@cocrepo/ui";
 import { Button } from "@heroui/react";

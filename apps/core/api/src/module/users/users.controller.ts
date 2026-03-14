@@ -1,6 +1,4 @@
 import { USER_ERRORS } from "@cocrepo/constant";
-import { AuthContext, SpaceContext } from "@cocrepo/service";
-import { UserFacade } from "@cocrepo/facade";
 import {
 	ApiAuth,
 	ApiErrors,
@@ -14,6 +12,8 @@ import {
 	UserPaginationMetaDto,
 	UserStatsDto,
 } from "@cocrepo/dto";
+import { UserFacade } from "@cocrepo/facade";
+import { AuthContext, SpaceContext } from "@cocrepo/service";
 import {
 	Controller,
 	Delete,

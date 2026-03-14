@@ -1,4 +1,4 @@
-import { Injectable } from "@nestjs/common";
+import { Injectable, Logger } from "@nestjs/common";
 import { I18nService } from "nestjs-i18n";
 import { ClsService } from "nestjs-cls";
 import {
@@ -20,11 +20,33 @@ import { PrismaService } from "../../prisma.service";
  */
 @Injectable()
 export class I18nTranslationService {
+	private readonly logger = new Logger(I18nTranslationService.name);
+
 	constructor(
 		private readonly i18n: I18nService,
 		private readonly cls: ClsService,
 		private readonly prisma: PrismaService,
 	) {}
+
+	private async findDbTranslation(
+		languageCode: LanguageCode,
+		key: string,
+	): Promise<string | null> {
+		try {
+			const dbTranslation = await (
+				this.prisma as unknown as PrismaClient
+			).translation.findUnique({
+				where: { languageCode_key: { languageCode, key } },
+			});
+
+			return dbTranslation?.text ?? null;
+		} catch (error) {
+			this.logger.warn(
+				`DB 번역 조회 실패 (${languageCode}:${key}) - ${error instanceof Error ? error.message : String(error)}`,
+			);
+			return null;
+		}
+	}
 
 	/**
 	 * 번역 키를 현재 언어로 번역합니다
@@ -34,14 +56,9 @@ export class I18nTranslationService {
 			this.cls.get<LanguageCode>(CONTEXT_KEYS.LANGUAGE) ?? DEFAULT_LANGUAGE;
 
 		// 1. 데이터베이스 확인
-		const dbTranslation = await (
-			this.prisma as unknown as PrismaClient
-		).translation.findUnique({
-			where: { languageCode_key: { languageCode: language, key } },
-		});
-
-		if (dbTranslation?.text) {
-			return dbTranslation.text;
+		const dbTranslation = await this.findDbTranslation(language, key);
+		if (dbTranslation) {
+			return dbTranslation;
 		}
 
 		// 2. JSON 파일 확인 (nestjs-i18n)
@@ -69,14 +86,9 @@ export class I18nTranslationService {
 		languageCode: LanguageCode,
 		key: string,
 	): Promise<string | null> {
-		const dbTranslation = await (
-			this.prisma as unknown as PrismaClient
-		).translation.findUnique({
-			where: { languageCode_key: { languageCode, key } },
-		});
-
-		if (dbTranslation?.text) {
-			return dbTranslation.text;
+		const dbTranslation = await this.findDbTranslation(languageCode, key);
+		if (dbTranslation) {
+			return dbTranslation;
 		}
 
 		const translation = this.i18n.translate(key, {

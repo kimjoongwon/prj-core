@@ -21,6 +21,7 @@
 | @cocrepo/be-common | 기능 구현 의존성 |
 | @cocrepo/service | 기능 구현 의존성 |
 | @nestjs/common | 기능 구현 의존성 |
+| @nestjs/devtools-integration | dev 전용 Nest dependency graph 시각화 |
 | @nestjs/core | 기능 구현 의존성 |
 | @nestjs/throttler | 기능 구현 의존성 |
 | ./abilities | aggregate root module |
@@ -45,11 +46,13 @@
 - [ ] 호출 경로 변경 시 spec을 함께 갱신함
 - [ ] top-level route/module은 aggregate root plural 기준으로만 등록함
 - [ ] child resource는 parent root nested route로만 노출함
+- [ ] Nest Devtools는 `ENABLE_NEST_DEVTOOLS=true` 이고 non-production일 때만 HTTP를 노출함
 
 ## 변경 이력
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-03-14 | Core API AppModule에 dev 전용 Nest Devtools 모듈 등록과 기본 포트 규약을 추가 | codex |
 | 2026-03-03 | 누락된 sidecar spec 신규 생성 | codex |
 | 2026-03-11 | AppModule 의존성과 라우트 등록 기준을 aggregate root plural 구조로 갱신 | codex |
 | 2026-03-13 | frontend 런타임 미사용 `translations` aggregate root module 등록을 제거 | codex |

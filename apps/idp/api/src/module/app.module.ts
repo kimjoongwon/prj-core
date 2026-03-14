@@ -17,6 +17,7 @@ import {
 	type OnModuleInit,
 } from "@nestjs/common";
 import { APP_GUARD, RouterModule } from "@nestjs/core";
+import { DevtoolsModule } from "@nestjs/devtools-integration";
 import { ThrottlerGuard } from "@nestjs/throttler";
 import { AuthModule } from "./auth";
 import { globalModules } from "./global.module";
@@ -31,9 +32,19 @@ import { PrismaModule } from "./prisma.module";
 import { RedisModule } from "./redis.module";
 import { SecurityPolicyModule } from "./security-policy";
 
+const enableNestDevtools =
+	process.env.ENABLE_NEST_DEVTOOLS === "true" &&
+	process.env.NODE_ENV !== "production";
+
 @Module({
 	imports: [
 		...globalModules,
+		DevtoolsModule.register({
+			http: enableNestDevtools,
+			port:
+				Number.parseInt(process.env.IDP_API_NEST_DEVTOOLS_PORT ?? "8001", 10) ||
+				8001,
+		}),
 		PrismaModule,
 		RedisModule,
 		I18nModule,
