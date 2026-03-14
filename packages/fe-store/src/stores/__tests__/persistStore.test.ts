@@ -36,9 +36,10 @@ describe("PersistStore", () => {
 			expect(persistStore.spaces).toEqual([]);
 			expect(persistStore.accessTokenExpiresAt).toBeNull();
 			expect(persistStore.refreshTokenExpiresAt).toBeNull();
+			expect(persistStore.isHydrated).toBe(false);
 		});
 
-		it("localStorage에서 저장된 데이터를 복원해야 한다", () => {
+		it("localStorage에서 저장된 데이터를 hydrateFromStorage로 복원해야 한다", () => {
 			// Given
 			const storedData = {
 				spaceId: "space-123",
@@ -51,22 +52,48 @@ describe("PersistStore", () => {
 
 			// When
 			const store = new PersistStore({ storageKey: STORAGE_KEY });
+			store.hydrateFromStorage();
 
 			// Then
 			expect(store.spaceId).toBe("space-123");
 			expect(store.groundName).toBe("Test Ground");
 			expect(store.spaces).toHaveLength(1);
+			expect(store.isHydrated).toBe(true);
 		});
 
-		it("잘못된 JSON 형식이면 무시해야 한다", () => {
+		it("constructor에서는 localStorage를 읽지 않아야 한다", () => {
+			// When
+			const store = new PersistStore({ storageKey: STORAGE_KEY });
+
+			// Then
+			expect(mockLocalStorage.getItem).not.toHaveBeenCalled();
+			expect(store.isHydrated).toBe(false);
+		});
+
+		it("잘못된 JSON 형식이면 무시하고 hydrate 완료 상태가 되어야 한다", () => {
 			// Given
 			mockLocalStorage.getItem.mockReturnValue("invalid-json");
 
 			// When
 			const store = new PersistStore({ storageKey: STORAGE_KEY });
+			store.hydrateFromStorage();
 
 			// Then - 에러 없이 기본값 유지
 			expect(store.spaceId).toBeNull();
+			expect(store.isHydrated).toBe(true);
+		});
+
+		it("hydrateFromStorage는 한 번만 실행해야 한다", () => {
+			// Given
+			mockLocalStorage.getItem.mockReturnValue(null);
+
+			// When
+			const store = new PersistStore({ storageKey: STORAGE_KEY });
+			store.hydrateFromStorage();
+			store.hydrateFromStorage();
+
+			// Then
+			expect(mockLocalStorage.getItem).toHaveBeenCalledTimes(1);
 		});
 	});
 

@@ -98,3 +98,31 @@ test.describe("헤더 IDP 관리 버튼", () => {
 		await expect(page).toHaveURL(/dashboard/);
 	});
 });
+
+test.describe("SSR hydration 회귀", () => {
+	test("로그인 후 대시보드 진입 시 hydration recoverable error가 없어야 한다", async ({
+		page,
+	}) => {
+		const consoleErrors: string[] = [];
+
+		page.on("console", (message) => {
+			if (message.type() !== "error") {
+				return;
+			}
+
+			consoleErrors.push(message.text());
+		});
+
+		await page.goto("/dashboard", { waitUntil: "domcontentloaded" });
+		await expect(page.locator("body")).toBeVisible();
+		await page.waitForTimeout(1500);
+
+		const hydrationErrors = consoleErrors.filter(
+			(message) =>
+				message.includes("Recoverable Error") ||
+				message.includes("Hydration failed because the server rendered HTML didn't match the client"),
+		);
+
+		expect(hydrationErrors).toEqual([]);
+	});
+});

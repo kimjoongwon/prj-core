@@ -84,6 +84,9 @@ apps/<app>/src/app/<route>/
 - 페이지 상단 헤더는 `PageHeader` 사용
 - 섹션 상단 헤더는 `SectionHeader` 사용
 - 페이지 파일에서 `h1/h2` 기반 헤더 레이아웃을 직접 재구현하지 않음
+- 첫 렌더 구조를 `localStorage`, `window`, `Date.now()`, `Math.random()` 같은 브라우저 전용 값으로 결정하지 않음
+- 브라우저 전용 상태는 Store constructor/render 중 hydrate하지 않고 `useEffect` 이후 반영
+- 순수 브라우저 위젯은 필요 시 `dynamic(..., { ssr: false })` 분리 검토
 
 ### 2.4 `_prefetch.ts`
 

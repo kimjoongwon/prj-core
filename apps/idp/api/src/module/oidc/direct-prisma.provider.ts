@@ -4,6 +4,15 @@ import { ConfigService } from "@nestjs/config";
 import { PrismaPg } from "@prisma/adapter-pg";
 import pg from "pg";
 
+function getConnectionTarget(connectionString: string): string {
+	try {
+		const url = new URL(connectionString);
+		return `${url.hostname}:${url.port || "5432"}`;
+	} catch {
+		return "unknown";
+	}
+}
+
 /**
  * OIDC용 Direct Prisma Provider
  *
@@ -35,6 +44,9 @@ export class DirectPrismaProvider implements OnModuleDestroy {
 		this.logger.debug(
 			`OIDC Direct Prisma 클라이언트 생성 (directUrl: ${directUrl ? "사용" : "미사용"})`,
 		);
+		this.logger.log(
+			`OIDC Direct Prisma 연결 대상 확인 (${getConnectionTarget(connectionUrl)})`,
+		);
 
 		this.pool = new pg.Pool({
 			connectionString: connectionUrl,
@@ -44,9 +56,19 @@ export class DirectPrismaProvider implements OnModuleDestroy {
 
 		const adapter = new PrismaPg(this.pool);
 
-		this.prisma = new PrismaClient({ adapter });
-
-		return this.prisma;
+		try {
+			this.prisma = new PrismaClient({ adapter });
+			await this.prisma.$connect();
+			return this.prisma;
+		} catch (error) {
+			this.prisma = null;
+			if (this.pool) {
+				await this.pool.end().catch(() => undefined);
+				this.pool = null;
+			}
+			this.logger.error("OIDC Direct Prisma 연결 실패", error);
+			throw error;
+		}
 	}
 
 	async onModuleDestroy() {

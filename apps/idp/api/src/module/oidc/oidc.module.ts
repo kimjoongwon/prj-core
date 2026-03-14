@@ -27,9 +27,13 @@ import { OidcProviderService } from "./oidc-provider.service";
 	exports: [OidcProviderService, DirectPrismaProvider, DirectUserRepository],
 })
 export class OidcModule implements OnModuleInit {
-	constructor(private readonly oidcProviderService: OidcProviderService) {}
+	constructor(
+		private readonly oidcProviderService: OidcProviderService,
+		private readonly directPrismaProvider: DirectPrismaProvider,
+	) {}
 
 	async onModuleInit() {
+		await this.directPrismaProvider.getClient();
 		await this.oidcProviderService.initialize();
 	}
 }

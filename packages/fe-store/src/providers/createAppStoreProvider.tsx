@@ -172,11 +172,18 @@ export function createAppStoreProvider(
 		const bottomTabStore = store.bottomTabStore;
 		const fabStore = store.fabStore;
 		const abilityStore = store.abilityStore;
+		const persistStore = store.persistStore;
 
 		// navigationStore가 없으면 초기화 중이므로 렌더링하지 않음
 		if (!navigationStore) {
 			return null;
 		}
+
+		// PersistStore hydrate는 첫 클라이언트 렌더 이후에만 수행하여
+		// SSR/CSR 첫 렌더 트리를 동일하게 유지합니다.
+		useEffect(() => {
+			persistStore?.hydrateFromStorage();
+		}, [persistStore]);
 
 		// ability 변경 시 체커 업데이트
 		useEffect(() => {

@@ -141,6 +141,7 @@ export interface UseLayoutReturn<
 export interface SpaceGuardPersistStoreLike {
 	spaceId?: string | null;
 	groundName?: string | null;
+	isHydrated?: boolean;
 }
 
 /**

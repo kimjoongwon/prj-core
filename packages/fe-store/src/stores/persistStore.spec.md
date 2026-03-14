@@ -33,6 +33,7 @@
 | spaces | `SpaceInfo[]` | `[]` (hydrate로 복원 가능) | 선택 가능한 Space 목록 |
 | accessTokenExpiresAt | `number \| null` | `null` (hydrate로 복원 가능) | Access Token 만료 시간 (Unix timestamp) |
 | refreshTokenExpiresAt | `number \| null` | `null` (hydrate로 복원 가능) | Refresh Token 만료 시간 (Unix timestamp) |
+| isHydrated | `boolean` | `false` | 브라우저 저장소 hydrate 완료 여부 |
 
 ## 계산된 값 (Computed)
 
@@ -47,11 +48,12 @@
 
 | 메서드 | 파라미터 | 동작 |
 |--------|----------|------|
+| `hydrateFromStorage` | 없음 | localStorage에서 상태를 한 번만 복원하고 `isHydrated=true`로 전환 |
 | `setSpace` | `spaceId: string, groundName: string` | Space 및 Ground 정보 설정 |
 | `clearSpace` | 없음 | Space 정보 초기화 (null) |
 | `setSpaces` | `spaces: SpaceInfo[]` | 선택 가능한 Space 목록 설정 |
 | `setTokenExpiries` | `accessExpiresAt: number, refreshExpiresAt: number` | 토큰 만료 시간 설정 (로그인 성공 시 호출) |
-| `clear` | 없음 | 모든 상태 초기화 + localStorage 항목 삭제 (로그아웃 시) |
+| `clear` | 없음 | 모든 상태 초기화 + localStorage 항목 삭제 (로그아웃 시, `isHydrated=true` 유지) |
 
 ## 비동기 액션 (Flow)
 
@@ -69,11 +71,14 @@
 
 ## 내부 메커니즘
 
-### hydrate (private)
-- 생성자에서 호출
+### hydrateFromStorage (public)
+- 생성자에서 호출하지 않음
+- Provider/effect에서 명시적으로 호출
+- 이미 hydrate 완료면 재실행하지 않음
 - `typeof window === "undefined"` 체크 (SSR 안전)
 - localStorage에서 `config.storageKey`로 데이터 읽기
 - JSON 파싱하여 각 속성에 복원
+- 완료 후 `isHydrated=true`
 
 ### setupAutoSave (private)
 - 생성자에서 호출
@@ -85,6 +90,7 @@
 
 ```typescript
 const persistStore = new PersistStore({ storageKey: "admin-persist" });
+persistStore.hydrateFromStorage();
 
 // Space 설정
 persistStore.setSpace("space-123", "Ground Name");
@@ -106,4 +112,5 @@ persistStore.clear();
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-03-14 | constructor hydrate를 제거하고 `hydrateFromStorage` + `isHydrated` 기반 SSR 안전 계약으로 전환 | codex |
 | 2026-02-18 | 초기 생성 (역기획) | req-reverse-engineer |

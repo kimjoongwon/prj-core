@@ -11,7 +11,6 @@ import {
 } from "@heroui/react";
 import { Building2, Check, ChevronDown } from "lucide-react";
 import { observer } from "mobx-react-lite";
-import { useEffect, useState } from "react";
 
 export interface SpaceSelectorProps {
 	/** Space 변경 시 콜백 (API 호출 등) */
@@ -31,12 +30,6 @@ export interface SpaceSelectorProps {
 export const SpaceSelector = observer(
 	({ onChangeSpace }: SpaceSelectorProps) => {
 		const persistStore = usePersistStore();
-
-		// Hydration 완료 체크 (서버/클라이언트 불일치 방지)
-		const [isHydrated, setIsHydrated] = useState(false);
-		useEffect(() => {
-			setIsHydrated(true);
-		}, []);
 
 		// 현재 Space 정보
 		const currentSpace =
@@ -59,7 +52,7 @@ export const SpaceSelector = observer(
 		};
 
 		// Hydration 완료 전에는 렌더링하지 않음 (SSR/CSR 불일치 방지)
-		if (!isHydrated || !currentSpace) {
+		if (!persistStore.isHydrated || !currentSpace) {
 			return null;
 		}
 

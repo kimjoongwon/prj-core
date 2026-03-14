@@ -29,4 +29,5 @@ Hook 구현은 `@cocrepo/hook`에 유지하고, 재사용 가능한 공개 타�
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-03-14 | `SpaceGuardPersistStoreLike`에 `isHydrated`를 추가해 hydration 완료 후 guard 판단 계약을 명시 | codex |
 | 2026-03-06 | fe-hook 로컬 공개 타입을 common-type으로 승격하기 위해 신규 생성 | codex |

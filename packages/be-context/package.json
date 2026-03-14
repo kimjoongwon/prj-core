@@ -12,8 +12,12 @@
     "@cocrepo/dto": "workspace:*",
     "@cocrepo/entity": "workspace:*"
   },
+  "peerDependencies": {
+    "@nestjs/common": "^11.1.3",
+    "nestjs-cls": "^6.1.0"
+  },
   "devDependencies": {
-    "@nestjs/common": "^10.0.0",
-    "nestjs-cls": "^4.0.0"
+    "@nestjs/common": "^11.1.3",
+    "nestjs-cls": "^6.1.0"
   }
 }

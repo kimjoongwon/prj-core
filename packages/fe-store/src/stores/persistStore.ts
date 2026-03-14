@@ -64,20 +64,25 @@ export class PersistStore {
 	accessTokenExpiresAt: number | null = null;
 	refreshTokenExpiresAt: number | null = null;
 
+	// 브라우저 저장소 hydrate 완료 여부
+	isHydrated = false;
+
 	constructor(private config: PersistStoreConfig) {
 		makeAutoObservable<this, "config">(this, {
 			config: false,
 		});
 
-		this.hydrate();
 		this.setupAutoSave();
 	}
 
 	/**
 	 * localStorage에서 상태 복원
+	 *
+	 * SSR/첫 클라이언트 렌더의 구조를 안정적으로 유지하기 위해
+	 * constructor가 아니라 provider/hook의 effect에서 호출합니다.
 	 */
-	private hydrate(): void {
-		if (typeof window === "undefined") return;
+	hydrateFromStorage(): void {
+		if (this.isHydrated || typeof window === "undefined") return;
 
 		const stored = localStorage.getItem(this.config.storageKey);
 		if (stored) {
@@ -92,6 +97,8 @@ export class PersistStore {
 				// 파싱 실패 시 무시
 			}
 		}
+
+		this.isHydrated = true;
 	}
 
 	/**
@@ -192,6 +199,7 @@ export class PersistStore {
 		this.spaces = [];
 		this.accessTokenExpiresAt = null;
 		this.refreshTokenExpiresAt = null;
+		this.isHydrated = true;
 		if (typeof window !== "undefined") {
 			localStorage.removeItem(this.config.storageKey);
 		}

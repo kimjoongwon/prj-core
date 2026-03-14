@@ -71,6 +71,13 @@ developer_instructions = '''
 - 커스텀 className 직접 작성 금지 (HeroUI/레이아웃 컴포넌트 사용)
 - 하나의 layout.tsx에 여러 Layout 중첩 금지
 
+### SSR / Hydration 규칙
+
+- `layout.tsx`와 Layout 슬롯은 첫 렌더 구조를 브라우저 전용 상태로 결정하지 않습니다.
+- `localStorage`, `window`, `Date.now()`, `Math.random()` 결과로 header/sidebar/action 영역의 존재 여부를 바꾸지 않습니다.
+- 서버가 모르는 상태가 필요하면 provider/effect에서 hydration 후 반영하거나, 정말 순수 브라우저 위젯이면 `ssr: false` 분리를 검토합니다.
+- React Aria/HeroUI `id` mismatch는 Layout 슬롯 순서가 서버/클라이언트에서 달라졌는지 먼저 확인합니다.
+
 ---
 
 ## 4. 프로세스

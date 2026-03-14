@@ -445,6 +445,15 @@ import { SideNav, UserMenu } from "@cocrepo/ui";
 
 ### SSR/Hydration 관련 주의사항
 
+**`"use client"` 컴포넌트도 서버에서 한 번 렌더되므로, 첫 클라이언트 렌더 결과는 서버 HTML과 같아야 합니다.**
+
+- 첫 렌더 구조를 `localStorage`/`sessionStorage`, `window`/`document`, `Date.now()`, `Math.random()`, locale 기반 포맷팅 결과로 결정하지 않습니다.
+- 서버가 알아야 하는 초기값은 cookie, headers, SSR prefetch data로 내려보냅니다.
+- 브라우저 전용 상태는 render 중이나 Store constructor에서 hydrate하지 않고 `useEffect` 이후에 반영합니다.
+- `PersistStore` 같은 공용 Store는 constructor를 순수하게 유지하고, localStorage hydrate는 Provider/effect에서 수행합니다.
+- React Aria/HeroUI의 `id` mismatch는 대개 원인이 아니라 서버/클라이언트 트리 순서가 달라진 결과로 간주합니다.
+- SSR 이점이 없고 첫 렌더 구조를 안정적으로 맞추기 어려운 순수 브라우저 위젯은 `dynamic(..., { ssr: false })` 또는 hydration 후 렌더링을 검토합니다.
+
 **`isMounted` 패턴이 필요한 경우와 불필요한 경우를 명확히 구분해야 합니다.**
 
 ```typescript
@@ -461,12 +470,13 @@ const items = store.items;
 **isMounted 패턴이 필요한 경우 (드뭄):**
 - `localStorage`/`sessionStorage` 직접 접근
 - `window`/`document` 객체 의존
+- 서버가 모르는 브라우저 전용 스냅샷을 hydration 이후에만 읽어야 하는 경우
 
 **불필요한 경우 (대부분):**
-- MobX + Context Provider 패턴 (프로젝트 표준)
+- 서버/클라이언트가 동일한 초기 스냅샷을 공유하는 MobX + Context Provider 패턴
 - useState/React Query
 
-**이유:** `"use client"` 컴포넌트도 서버에서 SSR됩니다. 하지만 Context Provider로 주입되는 store는 서버/클라이언트 모두 동일한 초기값을 가지므로 Hydration mismatch가 발생하지 않습니다.
+**이유:** `"use client"` 컴포넌트도 서버에서 SSR됩니다. Store/provider가 render 중 브라우저 전용 값을 읽지 않으면 서버/클라이언트 첫 렌더가 동일해지고 Hydration mismatch를 피할 수 있습니다.
 - **이벤트 핸들러 네이밍 규칙**:
   - **일반 컴포넌트**: `handle` 접두어 사용 (예: `handleClick`, `handleChange`)
   - **Page 컴포넌트**: `on[Event][UI]` 형태로 직관적 표현 (예: `onClickLoginButton`, `onChangeEmail`)

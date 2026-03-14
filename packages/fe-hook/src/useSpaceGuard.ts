@@ -38,13 +38,18 @@ export function createUseSpaceGuard(
 		const [showAlert, setShowAlert] = useState(false);
 
 		useEffect(() => {
+			if (!persistStore?.isHydrated) {
+				setShowAlert(false);
+				return;
+			}
+
 			// spaceId가 없으면 Alert 표시
 			if (!persistStore?.spaceId) {
 				setShowAlert(true);
 			} else {
 				setShowAlert(false);
 			}
-		}, [persistStore?.spaceId]);
+		}, [persistStore?.isHydrated, persistStore?.spaceId]);
 
 		const handleConfirm = () => {
 			setShowAlert(false);

@@ -5,12 +5,22 @@ import { PrismaPg } from "@prisma/adapter-pg";
 import pg from "pg";
 import { PrismaService } from "./prisma.service";
 
+function getConnectionTarget(connectionString: string): string {
+	try {
+		const url = new URL(connectionString);
+		return `${url.hostname}:${url.port || "5432"}`;
+	} catch {
+		return "unknown";
+	}
+}
+
 export function createPrismaClient(
 	configService: ConfigService,
-): PrismaService {
+): Promise<PrismaService> {
 	const logger = new Logger("PrismaFactory");
 
-	try {
+	return (async () => {
+		try {
 		logger.log("PrismaClient 생성 시작...");
 
 		const databaseUrl = configService.get<string>("DATABASE_URL");
@@ -24,7 +34,9 @@ export function createPrismaClient(
 			throw error;
 		}
 
-		logger.log("PostgreSQL connection pool 생성 중...");
+			const connectionTarget = getConnectionTarget(databaseUrl);
+
+			logger.log(`PostgreSQL connection pool 생성 중... (${connectionTarget})`);
 		// PostgreSQL connection pool 생성
 		const pool = new pg.Pool({
 			connectionString: databaseUrl,
@@ -47,10 +59,14 @@ export function createPrismaClient(
 					: ["error"],
 		}) as PrismaService;
 
-		logger.log("PrismaClient 생성 완료!");
-		return prismaClient;
-	} catch (error) {
-		logger.error("PrismaClient 생성 중 에러 발생:", error);
-		throw error;
-	}
+			logger.log("PrismaClient 연결 확인 중...");
+			await prismaClient.$connect();
+			logger.log("PrismaClient 생성 및 연결 완료!");
+
+			return prismaClient;
+		} catch (error) {
+			logger.error("PrismaClient 생성 중 에러 발생:", error);
+			throw error;
+		}
+	})();
 }

@@ -26,8 +26,7 @@
 ## 동작 흐름
 
 1. 입력(라우트/props/호출)을 수신합니다.
-2. 필요한 의존 모듈을 호출해 데이터를 조합합니다.
-3. 결과를 렌더링/반환/전파합니다.
+2. `SpaceSelectorDropdown`으로 props를 그대로 전달합니다.
 
 ## 실패 및 엣지 케이스
 
@@ -45,6 +44,7 @@
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-03-14 | hydration 제어 책임을 PersistStore/provider로 이동하고 HeaderSpaceSelector는 순수 props passthrough로 복귀 | codex |
 | 2026-03-06 | 폴더 네이밍을 단수형(feature/input/layout/hook/style/type/util/widget/cell)으로 통일 | codex |
 | 2026-03-06 | src/components 레이어를 제거하고 경로를 src/* 기준으로 상향 | codex |
 | 2026-03-06 | feature 디렉토리를 features로 이관하고 경로 표기를 동기화 | codex |

@@ -34,10 +34,16 @@
 - [ ] 핵심 입출력/반환 규약이 코드와 일치함
 - [ ] 호출 경로 변경 시 spec을 함께 갱신함
 
+## 부팅 규칙
+
+- OIDC provider 초기화 전에 `DirectPrismaProvider` 연결을 먼저 검증한다.
+- DB 포트/자격 증명 오류는 로그인 요청 시점이 아니라 모듈 초기화 시점에 드러나야 한다.
+
 ## 변경 이력
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-03-14 | OIDC provider 초기화 전에 Direct Prisma 연결을 fail-fast로 검증하도록 반영 | codex |
 | 2026-03-14 | Biome lint organizeImports/format cleanup reflected | codex |
 | 2026-03-03 | 누락된 sidecar spec 신규 생성 | codex |
 | 2026-03-13 | OidcModule의 provider/export 참조를 OidcFacade 기준으로 정리 | codex |
