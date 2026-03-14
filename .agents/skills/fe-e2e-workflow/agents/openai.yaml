@@ -1,0 +1,7 @@
+interface:
+  display_name: "FE E2E Workflow"
+  short_description: "Repo Playwright E2E run/fix workflow"
+  default_prompt: "Use $fe-e2e-workflow to run or stabilize frontend Playwright E2E in this repository."
+
+policy:
+  allow_implicit_invocation: true
