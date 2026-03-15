@@ -32,5 +32,6 @@
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-03-15 | `OmitType` 대상에서 존재하지 않는 `spaceId`를 제거해 `CreateExerciseDto` 선언 타입이 빈 객체로 붕괴되는 문제를 수정 | codex |
 | 2026-03-14 | Task 생성 payload에서 `spaceId`를 제거하고 `X-Space-ID` 헤더 기준 계약으로 정리 | codex |
 | 2026-03-03 | 누락된 sidecar spec 신규 생성 | codex |

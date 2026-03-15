@@ -13,7 +13,7 @@ Space aggregate root 목록을 조회하고, 각 Space에 연결된 `ground` 1:1
 
 | ID | 기능 | 설명 |
 |----|------|------|
-| F-001 | 공간 목록 조회 | `GET /api/v1/spaces`로 Space + Ground detail 목록 조회 |
+| F-001 | 공간 목록 조회 | `GET /api/v1/spaces`를 CSR + Suspense로 조회 |
 | F-002 | 검색 | 시설명/사업자등록번호/주소 기준 클라이언트 필터링 |
 | F-003 | 등록 이동 | "공간 등록" 버튼 클릭 시 `/spaces/new` 이동 |
 | F-004 | child detail 이동 | 행 클릭 시 `/spaces/[spaceId]/ground` 이동 |
@@ -33,16 +33,22 @@ Page
 
 | 메서드 | 엔드포인트 | Orval 훅 |
 |--------|-----------|----------|
-| GET | `/api/v1/spaces` | `useGetSpaces()` |
+| GET | `/api/v1/spaces` | `useGetSpacesSuspense()` |
 
 ## E2E 메모
 
 - CRUD E2E cleanup은 `DELETE /api/v1/spaces/:spaceId` 소프트 삭제 응답 `200 OK` 계약을 사용합니다.
 
+## 구현 메모
+
+- `page.tsx` 단일 클라이언트 컴포넌트에서 `Suspense` fallback과 `MetaDataGrid`를 직접 구성합니다.
+- `_client.tsx`, `_prefetch.ts`는 CSR 기본 패턴으로 전환하며 제거합니다.
+
 ## 변경 이력
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-03-15 | 공간 목록을 CSR + Suspense 단일 `page.tsx` 패턴으로 전환하고 `_client.tsx`, `_prefetch.ts`를 제거 | codex |
 | 2026-03-14 | 공간 CRUD E2E가 사용하는 삭제 cleanup 계약(`DELETE /api/v1/spaces/:spaceId`, 200 OK)을 반영 | codex |
 | 2026-02-19 | 초기 생성 | req-screen-planner |
 | 2026-03-03 | PageTitleBar/Section 패턴 정리 반영 | codex |

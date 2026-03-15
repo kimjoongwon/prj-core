@@ -66,7 +66,7 @@
 
 | 상태 | 설명 | UI |
 |------|------|-----|
-| 로딩 | API 조회 중 | MetaDataGrid 로딩 상태 |
+| 로딩 | suspense 재조회 중 | `Suspense` fallback에서 MetaDataGrid 로딩 상태 |
 | 데이터 표시 | 목록 로드 완료 | 페이지네이션 포함 템플릿 목록 |
 | 빈 데이터 | 조회 결과 없음 | "등록된 템플릿이 없습니다." |
 
@@ -74,8 +74,7 @@
 
 | 시점 | API | 설명 |
 |------|-----|------|
-| SSR 프리페칭 | `prefetchGetTemplatesQuery({ take, skip })` | 서버 사이드에서 첫 페이지 프리페칭 |
-| 클라이언트 | `useGetTemplates({ take, skip, search, type, isActive })` | 서버 사이드 필터링+페이지네이션 |
+| 클라이언트 | `useGetTemplatesSuspense({ take, skip, search, type, isActive })` | CSR + Suspense 기반 목록 조회 |
 | 토글 시 | `useToggleTemplateStatus({ templateId })` | 활성/비활성 상태 토글 |
 
 ## 이벤트 핸들러
@@ -89,6 +88,7 @@
 
 ## 특이사항
 
+- CSR + Suspense 기본 패턴을 사용하며 `_client.tsx`, `_prefetch.ts` 없이 `page.tsx` 단일 파일로 구성
 - 서버 사이드 페이지네이션 사용 (meta.total, meta.skip, meta.take, meta.totalPages)
 - nuqs 기반 URL 상태 관리
 - 인라인 활성 토글 시 목록 캐시 무효화 (`getGetTemplatesQueryKey`)
@@ -96,14 +96,15 @@
 
 ## 구현 체크리스트
 
-- [x] page.tsx (서버 컴포넌트, Prefetch + HydrationBoundary)
-- [x] _client.tsx (클라이언트 컴포넌트, observer 래핑)
-- [x] _prefetch.ts (prefetchGetTemplatesQuery 호출)
+- [x] page.tsx (클라이언트 컴포넌트, `Suspense` + `useGetTemplatesSuspense`)
+- [x] `_client.tsx` 없음 (CSR 기본 패턴)
+- [x] `_prefetch.ts` 없음 (SSR 예외 아님)
 
 ## 변경 이력
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-03-15 | `templates` 목록을 CSR + Suspense 기본 패턴으로 전환하고 `_client.tsx`, `_prefetch.ts` 계층을 제거 | codex |
 | 2026-02-18 | 초기 생성 (역기획) | req-reverse-engineer |
 | 2026-02-19 | 디자인 목업 추가 | req-reverse-engineer |
 | 2026-03-03 | Scaffold 제거 및 페이지 헤더 영역/섹션 영역 용어 정리 | codex |

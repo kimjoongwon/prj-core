@@ -78,7 +78,7 @@
 
 | 상태 | 설명 | UI |
 |------|------|-----|
-| 로딩 중 | API 응답 대기 | MetaDataGrid 로딩 상태 |
+| 로딩 중 | suspense 응답 대기 | MetaDataGrid 로딩 상태 |
 | 빈 목록 | 조회된 Action 없음 | "조회된 Action이 없습니다." 메시지 |
 | 데이터 있음 | 정상 표시 | MetaDataGrid 테이블 |
 
@@ -86,8 +86,8 @@
 
 | 시점 | API | 설명 |
 |------|-----|------|
-| SSR Prefetch | `GET /api/v1/actions` (prefetchActionsData) | group 파라미터 포함 프리페치 |
-| 클라이언트 | `GET /api/v1/actions` (useGetActions) | group 쿼리 파라미터로 필터링 |
+| 클라이언트 | `GET /api/v1/actions` (`useGetActionsSuspense`) | group 쿼리 파라미터 기반 CSR + Suspense 조회 |
+| 클라이언트 필터 | 검색어 | `name`, `displayName` 기준 클라이언트 필터링 |
 
 ## 이벤트 핸들러
 
@@ -99,17 +99,19 @@
 
 - `useMetaDataGridQueryStates`로 URL 쿼리 파라미터와 동기화
 - `group` 파라미터를 API 호출에 전달
+- `search` 파라미터는 클라이언트 필터링에 사용
 
 ## 구현 체크리스트
 
-- [x] page.tsx (서버 컴포넌트)
-- [x] _client.tsx (클라이언트 컴포넌트)
-- [x] _prefetch.ts (데이터 프리페치)
+- [x] page.tsx (클라이언트 컴포넌트, `Suspense` + `useGetActionsSuspense`)
+- [x] `_client.tsx` 없음 (CSR 기본 패턴)
+- [x] `_prefetch.ts` 없음 (SSR 예외 아님)
 
 ## 변경 이력
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-03-15 | Action 목록을 CSR + Suspense 단일 `page.tsx` 패턴으로 전환하고 검색을 클라이언트 필터로 정리 | codex |
 | 2026-02-18 | 초기 생성 (역기획) | req-reverse-engineer |
 | 2026-02-19 | 디자인 목업 섹션 추가 | req-reverse-engineer |
 | 2026-03-03 | Scaffold 제거 및 페이지 헤더 영역/섹션 영역 용어 정리 | codex |

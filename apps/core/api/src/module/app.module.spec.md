@@ -26,7 +26,9 @@
 | @nestjs/throttler | 기능 구현 의존성 |
 | ./abilities | aggregate root module |
 | ./actions | aggregate root module |
+| ./assets | aggregate root module |
 | ./categories | aggregate root module |
+| ./folders | aggregate root module |
 | ./global.module | 기능 구현 의존성 |
 | ./grants | aggregate root module |
 | ./groups | aggregate root module |
@@ -56,3 +58,4 @@
 | 2026-03-03 | 누락된 sidecar spec 신규 생성 | codex |
 | 2026-03-11 | AppModule 의존성과 라우트 등록 기준을 aggregate root plural 구조로 갱신 | codex |
 | 2026-03-13 | frontend 런타임 미사용 `translations` aggregate root module 등록을 제거 | codex |
+| 2026-03-15 | admin assets 복구를 위해 `assets`/`folders` aggregate root module과 라우트를 추가 | codex |

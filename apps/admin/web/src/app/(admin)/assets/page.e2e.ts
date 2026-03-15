@@ -1,20 +1,42 @@
-import { expect, test } from "@playwright/test";
+import { expect, type Page, type Route, test } from "@playwright/test";
+
+function capturePageErrors(page: Page) {
+	const pageErrors: string[] = [];
+	page.on("pageerror", (error) => {
+		pageErrors.push(error.message);
+	});
+
+	return pageErrors;
+}
+
+const SYSTEM_SPACE_ID = (process.env.E2E_SYSTEM_SPACE_ID ??
+	"61ddca20-1752-466e-b4da-879ebdbe54e3").toLowerCase();
+
+const expectSpaceHeader = (route: Route) => {
+	const header = route.request().headers()["x-space-id"];
+	expect(header, "X-Space-ID 헤더가 누락되었습니다").toBeTruthy();
+	expect(header?.toLowerCase()).toBe(SYSTEM_SPACE_ID);
+};
 
 test.describe("에셋 목록 페이지", () => {
 	test.describe("[E2E-001] 목록 렌더링", () => {
 		test("에셋 목록 페이지가 정상 렌더링되어야 한다", async ({ page }) => {
+			const pageErrors = capturePageErrors(page);
+
 			// Given: 에셋 목록/폴더 API 모킹
-			await page.route("**/api/v1/assets**", async (route) => {
-				await route.fulfill({
-					status: 200,
-					contentType: "application/json",
-					body: JSON.stringify({ data: [], meta: { total: 0 } }),
-				});
+		await page.route("**/api/v1/assets**", async (route) => {
+			expectSpaceHeader(route);
+			await route.fulfill({
+				status: 200,
+				contentType: "application/json",
+				body: JSON.stringify({ data: [], meta: { total: 0 } }),
 			});
-			await page.route("**/api/v1/folders**", async (route) => {
-				await route.fulfill({
-					status: 200,
-					contentType: "application/json",
+		});
+		await page.route("**/api/v1/folders**", async (route) => {
+			expectSpaceHeader(route);
+			await route.fulfill({
+				status: 200,
+				contentType: "application/json",
 					body: JSON.stringify({ data: [] }),
 				});
 			});
@@ -32,6 +54,7 @@ test.describe("에셋 목록 페이지", () => {
 				),
 			).toBeVisible();
 			await expect(page.getByPlaceholder("파일명 검색...")).toBeVisible();
+			expect(pageErrors).toEqual([]);
 		});
 	});
 
@@ -39,13 +62,15 @@ test.describe("에셋 목록 페이지", () => {
 		test("목록에서 에셋 클릭 시 상세 페이지로 이동할 수 있어야 한다", async ({
 			page,
 		}) => {
+			const pageErrors = capturePageErrors(page);
 			const MOCK_ASSET_ID = "11111111-1111-1111-1111-111111111111";
 			const TEST_NAME = "e2e-asset-list-to-detail.png";
 
 			// Given: 목록/상세/폴더 API 모킹
-			await page.route("**/api/v1/assets**", async (route) => {
-				const url = route.request().url();
-				if (url.endsWith(`/api/v1/assets/${MOCK_ASSET_ID}`)) {
+		await page.route("**/api/v1/assets**", async (route) => {
+			expectSpaceHeader(route);
+			const url = route.request().url();
+			if (url.endsWith(`/api/v1/assets/${MOCK_ASSET_ID}`)) {
 					await route.fulfill({
 						status: 200,
 						contentType: "application/json",
@@ -100,8 +125,9 @@ test.describe("에셋 목록 페이지", () => {
 				});
 			});
 
-			await page.route("**/api/v1/folders**", async (route) => {
-				await route.fulfill({
+		await page.route("**/api/v1/folders**", async (route) => {
+			expectSpaceHeader(route);
+			await route.fulfill({
 					status: 200,
 					contentType: "application/json",
 					body: JSON.stringify({
@@ -130,11 +156,13 @@ test.describe("에셋 목록 페이지", () => {
 				await expect(
 					page.getByRole("heading", { name: TEST_NAME, exact: true }),
 				).toBeVisible();
+				expect(pageErrors).toEqual([]);
 				return;
 			}
 
 			await expect(page).toHaveURL(/\/assets\/?$/);
 			await expect(assetLink).toBeVisible();
+			expect(pageErrors).toEqual([]);
 		});
 	});
 });

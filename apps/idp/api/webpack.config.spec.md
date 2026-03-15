@@ -1,28 +1,38 @@
-# webpack.config.js Spec
+# webpack.config.js 기획서
 
-## 목적
+> 생성일: 2026-03-15
+> 타입: config
+> 위치: apps/idp/api/webpack.config.js
 
-- `idp-api`의 Nest Webpack 빌드 동작을 정의한다.
-- 개발 감시 모드에서는 HMR과 번들 결과 실행을 허용한다.
-- 일반 빌드 모드에서는 산출물 생성만 수행하고 서버 프로세스를 실행하지 않는다.
+## 역할
 
-## 동작 규칙
+IDP API의 Nest webpack watch/HMR 실행 방식을 정의한다.
 
-- `options.watch === true`일 때만 `webpack/hot/poll?100` 엔트리를 추가한다.
-- `options.watch === true`일 때만 `HotModuleReplacementPlugin`을 등록한다.
-- `options.watch === true`일 때만 `RunScriptWebpackPlugin`으로 번들 결과를 실행한다.
-- `options.watch === true`일 때만 workspace 패키지 `dist` 감시 플러그인을 등록한다.
-- watch 모드가 아니면 externals 규칙만 유지한 순수 서버 번들 빌드를 수행한다.
-- `@cocrepo/prisma`는 Prisma generated client 런타임을 보존하기 위해 watch/build 여부와 무관하게 external 처리한다.
+## 주요 계약
 
-## 기대 효과
+| 항목 | 설명 |
+|------|------|
+| RunScriptWebpackPlugin | watch 빌드 후 번들 엔트리 실행을 담당한다. |
+| `cwd: __dirname` | child process가 앱 디렉터리 기준으로 실행되어 `.env` 탐색이 깨지지 않도록 보장한다. |
+| WatchPackagesPlugin | workspace 패키지의 `dist` 변경을 watch 대상으로 추가한다. |
 
-- `pnpm build:idp-api`는 `dist` 생성만 수행하고 포트를 점유하지 않는다.
-- `pnpm start:idp-api`는 기존과 동일하게 watch + HMR 개발 루프를 유지한다.
+## 의존성
+
+| 모듈 | 용도 |
+|------|------|
+| path | workspace 패키지 경로 계산 |
+| fs | watch 대상 디렉터리 존재 여부 확인 |
+| run-script-webpack-plugin | watch 빌드 후 서버 프로세스 실행 |
+
+## 구현 체크리스트
+
+- [ ] watch 모드에서 번들 산출물 실행이 유지된다.
+- [ ] child process가 앱 디렉터리 기준 env 파일을 읽는다.
+- [ ] workspace 패키지 dist 변경이 rebuild를 유발한다.
 
 ## 변경 이력
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
-| 2026-03-14 | Prisma generated client가 webpack 번들 안에서 깨지지 않도록 `@cocrepo/prisma`를 external 처리 | codex |
-| 2026-03-08 | 일반 build에서 서버가 실행되지 않도록 watch 모드에서만 HMR/RunScript 플러그인을 활성화하는 규칙 추가 | Codex |
+| 2026-03-15 | 이 설정 파일이 `start:dev` 전용이라는 전제에 맞춰 HMR/RunScript 플러그인을 항상 활성화해 watch child process가 실제 서버를 띄우도록 수정 | codex |
+| 2026-03-15 | `RunScriptWebpackPlugin` child process에 `cwd: __dirname`를 지정해 루트 `pnpm start`에서도 `.env`를 올바르게 읽도록 수정 | codex |

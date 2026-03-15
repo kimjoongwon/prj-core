@@ -41,7 +41,7 @@
 
 ## 사용자 시나리오
 
-1. 관리자가 `/users` 경로에 진입하면 CSR + Suspense로 이용자 목록을 조회한다.
+1. 관리자가 `/users` 경로에 진입하면 CSR로 이용자 목록을 조회한다.
 2. 상단에 통계 카드(전체/활성/비활성 이용자 수)가 표시된다.
 3. 검색창에서 이름, 이메일, 전화번호로 통합 검색할 수 있다 (300ms 디바운스).
 4. 테이블에서 이용자 목록을 확인하고 페이지네이션으로 이동할 수 있다.
@@ -76,7 +76,7 @@
 
 | 상태 | 설명 | UI |
 |------|------|-----|
-| 로딩 | suspense 조회 중 | 통계 카드 + MetaDataGrid 로딩 상태 |
+| 로딩 | 초기 조회 중 | `PageSurface` 내부 중앙 로딩 스피너 |
 | 데이터 표시 | 이용자 목록 표시 | 통계 카드 + 테이블 |
 | 빈 목록 | 조회 결과 없음 | "조회된 이용자가 없습니다." 메시지 |
 | 검색 결과 없음 | 검색 후 결과 없음 | 빈 목록 메시지 |
@@ -85,7 +85,7 @@
 
 | 시점 | API | 설명 |
 |------|-----|------|
-| 클라이언트 렌더 | `useGetUsersSuspense({ take, skip, name })` | nuqs URL 상태 기반 CSR + Suspense 조회 |
+| 클라이언트 렌더 | `useGetUsers({ take, skip, name })` | nuqs URL 상태 기반 CSR 조회 |
 
 ## 응답 데이터 구조
 
@@ -127,6 +127,8 @@
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-03-15 | `UsersPageContent` 분리를 제거하고 단일 `UsersPage`에서 `useGetUsers`와 초기 로딩 스피너를 직접 처리하도록 단순화 | codex |
+| 2026-03-15 | `Suspense` fallback에서 최종 화면 복제를 제거하고 최소 중앙 로딩 스피너만 렌더링하도록 단순화 | codex |
 | 2026-03-15 | 이용자 목록 화면에 `Page + PageTitleBar` 구조는 유지하고 `PageSurface/SectionSurface` 표현 레이어를 추가 | codex |
 | 2026-03-15 | 이용자 목록을 CSR + Suspense 단일 `page.tsx` 패턴으로 전환하고 `_client.tsx`, `_prefetch.ts`를 제거 | codex |
 | 2026-02-18 | 초기 생성 (역기획) | req-reverse-engineer |

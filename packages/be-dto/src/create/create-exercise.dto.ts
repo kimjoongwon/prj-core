@@ -4,7 +4,6 @@ import { ExerciseDto } from "../exercise.dto";
 
 export class CreateExerciseDto extends OmitType(ExerciseDto, [
 	...COMMON_ENTITY_FIELDS,
-	"spaceId" as keyof ExerciseDto,
 	"taskId",
 	"task",
 ]) {}

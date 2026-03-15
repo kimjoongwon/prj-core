@@ -6,8 +6,11 @@ import {
 	type UseMutationResult,
 	type UseQueryOptions,
 	type UseQueryResult,
+	type UseSuspenseQueryOptions,
+	type UseSuspenseQueryResult,
 	useMutation,
 	useQuery,
+	useSuspenseQuery,
 } from "@tanstack/react-query";
 import type { BodyType, ErrorType } from "./libs/customAxios";
 import { customInstance } from "./libs/customAxios";
@@ -150,6 +153,62 @@ export const prefetchGetAssetsQuery = async <
 	return queryClient;
 };
 
+export const getGetAssetsSuspenseQueryOptions = <
+	TData = Awaited<ReturnType<typeof getAssets>>,
+	TError = ErrorType<void>,
+>(
+	params?: GetAssetsParams,
+	options?: {
+		query?: Partial<
+			UseSuspenseQueryOptions<
+				Awaited<ReturnType<typeof getAssets>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customInstance>;
+	},
+): UseSuspenseQueryOptions<
+	Awaited<ReturnType<typeof getAssets>>,
+	TError,
+	TData
+> => {
+	const queryOptions = options?.query;
+	const requestOptions = options?.request;
+	const queryKey = queryOptions?.queryKey ?? getGetAssetsQueryKey(params);
+
+	const queryFn: QueryFunction<Awaited<ReturnType<typeof getAssets>>> = ({
+		signal,
+	}) => getAssets(params, requestOptions, signal);
+
+	return {
+		queryKey,
+		queryFn,
+		...queryOptions,
+	};
+};
+
+export const useGetAssetsSuspense = <
+	TData = Awaited<ReturnType<typeof getAssets>>,
+	TError = ErrorType<void>,
+>(
+	params?: GetAssetsParams,
+	options?: {
+		query?: Partial<
+			UseSuspenseQueryOptions<
+				Awaited<ReturnType<typeof getAssets>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customInstance>;
+	},
+	queryClient?: QueryClient,
+): UseSuspenseQueryResult<TData, TError> => {
+	const queryOptions = getGetAssetsSuspenseQueryOptions(params, options);
+	return useSuspenseQuery(queryOptions, queryClient);
+};
+
 export const getAssetById = (
 	assetId: string,
 	options?: SecondParameter<typeof customInstance>,
@@ -222,6 +281,62 @@ export const prefetchGetAssetByIdQuery = async <
 	});
 
 	return queryClient;
+};
+
+export const getGetAssetByIdSuspenseQueryOptions = <
+	TData = Awaited<ReturnType<typeof getAssetById>>,
+	TError = ErrorType<void>,
+>(
+	assetId: string,
+	options?: {
+		query?: Partial<
+			UseSuspenseQueryOptions<
+				Awaited<ReturnType<typeof getAssetById>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customInstance>;
+	},
+): UseSuspenseQueryOptions<
+	Awaited<ReturnType<typeof getAssetById>>,
+	TError,
+	TData
+> => {
+	const queryOptions = options?.query;
+	const requestOptions = options?.request;
+	const queryKey = queryOptions?.queryKey ?? getGetAssetByIdQueryKey(assetId);
+
+	const queryFn: QueryFunction<Awaited<ReturnType<typeof getAssetById>>> = ({
+		signal,
+	}) => getAssetById(assetId, requestOptions, signal);
+
+	return {
+		queryKey,
+		queryFn,
+		...queryOptions,
+	};
+};
+
+export const useGetAssetByIdSuspense = <
+	TData = Awaited<ReturnType<typeof getAssetById>>,
+	TError = ErrorType<void>,
+>(
+	assetId: string,
+	options?: {
+		query?: Partial<
+			UseSuspenseQueryOptions<
+				Awaited<ReturnType<typeof getAssetById>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customInstance>;
+	},
+	queryClient?: QueryClient,
+): UseSuspenseQueryResult<TData, TError> => {
+	const queryOptions = getGetAssetByIdSuspenseQueryOptions(assetId, options);
+	return useSuspenseQuery(queryOptions, queryClient);
 };
 
 export const removeAsset = (
@@ -416,4 +531,58 @@ export const prefetchGetFoldersQuery = async <
 	});
 
 	return queryClient;
+};
+
+export const getGetFoldersSuspenseQueryOptions = <
+	TData = Awaited<ReturnType<typeof getFolders>>,
+	TError = ErrorType<void>,
+>(
+	options?: {
+		query?: Partial<
+			UseSuspenseQueryOptions<
+				Awaited<ReturnType<typeof getFolders>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customInstance>;
+	},
+): UseSuspenseQueryOptions<
+	Awaited<ReturnType<typeof getFolders>>,
+	TError,
+	TData
+> => {
+	const queryOptions = options?.query;
+	const requestOptions = options?.request;
+	const queryKey = queryOptions?.queryKey ?? getGetFoldersQueryKey();
+
+	const queryFn: QueryFunction<Awaited<ReturnType<typeof getFolders>>> = ({
+		signal,
+	}) => getFolders(requestOptions, signal);
+
+	return {
+		queryKey,
+		queryFn,
+		...queryOptions,
+	};
+};
+
+export const useGetFoldersSuspense = <
+	TData = Awaited<ReturnType<typeof getFolders>>,
+	TError = ErrorType<void>,
+>(
+	options?: {
+		query?: Partial<
+			UseSuspenseQueryOptions<
+				Awaited<ReturnType<typeof getFolders>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customInstance>;
+	},
+	queryClient?: QueryClient,
+): UseSuspenseQueryResult<TData, TError> => {
+	const queryOptions = getGetFoldersSuspenseQueryOptions(options);
+	return useSuspenseQuery(queryOptions, queryClient);
 };

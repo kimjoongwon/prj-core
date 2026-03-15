@@ -2,7 +2,13 @@ import path from "node:path";
 import { defineConfig, devices } from "@playwright/test";
 
 // 항상 절대 경로로 browsers 경로 설정 (상대 경로는 CWD에 따라 달라질 수 있음)
-process.env.PLAYWRIGHT_BROWSERS_PATH = path.join(__dirname, "browsers");
+process.env.PLAYWRIGHT_BROWSERS_PATH =
+	process.env.PLAYWRIGHT_BROWSERS_PATH ?? path.join(__dirname, "browsers");
+
+const skipAdminSetup = process.env.SKIP_ADMIN_SETUP === "1";
+const chromiumLaunchOptions = {
+	args: ["--disable-crash-reporter"],
+};
 
 /**
  * Playwright E2E 테스트 설정 (멀티앱, Sidecar 방식)
@@ -46,24 +52,30 @@ export default defineConfig({
   // 앱별 프로젝트 설정
   projects: [
     // ── Admin Auth Setup ──
-    {
-      name: "admin-setup",
-      // setup 파일은 apps/test/e2e에 계속 존재
-      testMatch: "**/apps/test/e2e/tests/admin/helpers/*.setup.ts",
-      use: {
-        ...devices["Desktop Chrome"],
-        baseURL: "http://localhost:3000/admin/",
-      },
-    },
+    ...(!skipAdminSetup
+      ? [
+          {
+            name: "admin-setup",
+            // setup 파일은 apps/test/e2e에 계속 존재
+            testMatch: "**/apps/test/e2e/tests/admin/helpers/*.setup.ts",
+            use: {
+              ...devices["Desktop Chrome"],
+              baseURL: "http://localhost:3000/admin/",
+              launchOptions: chromiumLaunchOptions,
+            },
+          },
+        ]
+      : []),
 
     // ── Admin ──
     {
       name: "admin-chromium",
       testMatch: "**/apps/admin/web/src/**/*.e2e.ts",
-      dependencies: ["admin-setup"],
+      dependencies: skipAdminSetup ? [] : ["admin-setup"],
       use: {
         ...devices["Desktop Chrome"],
         baseURL: "http://localhost:3000/admin/",
+        launchOptions: chromiumLaunchOptions,
         // testDir 변경으로 절대 경로 사용
         storageState: path.join(
           __dirname,
@@ -74,10 +86,11 @@ export default defineConfig({
     {
       name: "admin-mobile",
       testMatch: "**/apps/admin/web/src/**/*.e2e.ts",
-      dependencies: ["admin-setup"],
+      dependencies: skipAdminSetup ? [] : ["admin-setup"],
       use: {
         ...devices["Pixel 5"],
         baseURL: "http://localhost:3000/admin/",
+        launchOptions: chromiumLaunchOptions,
         storageState: path.join(
           __dirname,
           "tests/admin/helpers/.auth/admin.json",

@@ -66,7 +66,7 @@
 
 | 상태 | 설명 | UI |
 |------|------|-----|
-| 로딩 | API 조회 중 | MetaDataGrid 로딩 상태 |
+| 로딩 | suspense 조회 중 | MetaDataGrid 로딩 상태 |
 | 데이터 표시 | 목록 로드 완료 | 필터링된 Subject 목록 표시 |
 | 빈 데이터 | 조회 결과 없음 | "조회된 Subject가 없습니다." |
 
@@ -74,8 +74,7 @@
 
 | 시점 | API | 설명 |
 |------|-----|------|
-| SSR 프리페칭 | `prefetchGetSubjectsQuery` | 서버 사이드에서 전체 Subject 목록 프리페칭 |
-| 클라이언트 | `useGetSubjects()` | 전체 Subject 목록 조회 (클라이언트 사이드 필터링) |
+| 클라이언트 | `useGetSubjectsSuspense()` | 전체 Subject 목록 조회 (CSR + Suspense) |
 
 ## 이벤트 핸들러
 
@@ -88,19 +87,21 @@
 ## 특이사항
 
 - 서버 사이드 페이지네이션 없이 전체 데이터를 한 번에 가져와 클라이언트 사이드 필터링 수행
+- `page.tsx` 단일 클라이언트 컴포넌트에서 `Suspense` fallback과 목록 렌더링을 직접 구성
 - nuqs 기반 URL 상태 관리 (`useMetaDataGridQueryStates`)
 - Subject는 조회 전용 (등록/수정/삭제 없음)
 
 ## 구현 체크리스트
 
-- [x] page.tsx (서버 컴포넌트, Prefetch + HydrationBoundary)
-- [x] _client.tsx (클라이언트 컴포넌트, observer 래핑)
-- [x] _prefetch.ts (prefetchGetSubjectsQuery 호출)
+- [x] page.tsx (클라이언트 컴포넌트, `Suspense` + `useGetSubjectsSuspense`)
+- [x] `_client.tsx` 없음 (CSR 기본 패턴)
+- [x] `_prefetch.ts` 없음 (SSR 예외 아님)
 
 ## 변경 이력
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-03-15 | Subject 목록을 CSR + Suspense 단일 `page.tsx` 패턴으로 전환하고 `_client.tsx`, `_prefetch.ts`를 제거 | codex |
 | 2026-02-18 | 초기 생성 (역기획) | req-reverse-engineer |
 | 2026-02-19 | 디자인 목업 추가 | req-reverse-engineer |
 | 2026-03-03 | Scaffold 제거 및 페이지 헤더 영역/섹션 영역 용어 정리 | codex |

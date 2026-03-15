@@ -57,10 +57,8 @@
 |------|------|------|------|-------------|
 | name | 타임라인명 | 200 | - | 링크 스타일 (클릭 시 상세 이동) |
 | description | 설명 | 300 | - | 기본 (없으면 "-") |
-| sessionsCount | 세션 수 | 100 | center | 숫자 (클릭 시 상세로 이동) |
-| creatorName | 등록자 | 150 | - | 기본 |
 | createdAt | 등록일 | 150 | - | `DateTimeCell` |
-| actions | 액션 | 80 | center | 삭제 아이콘 |
+| actions | 액션 | 80 | center | 삭제 버튼 |
 
 ## 필터/검색 정의
 
@@ -72,16 +70,15 @@
 
 | 상태 | 설명 | UI |
 |------|------|-----|
-| 로딩 | API 조회 중 | MetaDataGrid 로딩 상태 |
+| 로딩 | suspense 재조회 중 | `Suspense` fallback에서 MetaDataGrid 로딩 상태 |
 | 데이터 표시 | 목록 로드 완료 | 페이지네이션 포함 타임라인 목록 |
-| 빈 데이터 | 조회 결과 없음 | "등록된 타임라인이 없습니다." + "타임라인 등록" 버튼 |
+| 빈 데이터 | 조회 결과 없음 | "등록된 타임라인이 없습니다." |
 
 ## API 호출
 
 | 시점 | API | 설명 |
 |------|-----|------|
-| SSR 프리페칭 | `prefetchGetTimelinesQuery({ take, skip })` | 서버 사이드에서 첫 페이지 프리페칭 |
-| 클라이언트 | `useGetTimelines({ take, skip, search })` | 타임라인 목록 조회 (현재 Space 기준) |
+| 클라이언트 | `useGetTimelinesSuspense({ take, skip, search })` | CSR + Suspense 기반 타임라인 목록 조회 (현재 Space 기준) |
 | 삭제 시 | `useDeleteTimeline({ timelineId })` | 타임라인 삭제 |
 
 ## 이벤트 핸들러
@@ -89,9 +86,8 @@
 | 이벤트 | 동작 |
 |--------|------|
 | 타임라인명 클릭 | `/timelines/{timelineId}` 상세 페이지로 이동 |
-| 세션 수 클릭 | `/timelines/{timelineId}` 상세 페이지로 이동 |
 | "타임라인 등록" 버튼 클릭 | `/timelines/new` 등록 페이지로 이동 |
-| 삭제 아이콘 클릭 | 확인 모달 표시 → 확인 시 `deleteTimeline` 호출, 성공 시 목록 캐시 무효화 |
+| 삭제 버튼 클릭 | 확인 모달 표시 → 확인 시 `deleteTimeline` 호출, 성공 시 목록 캐시 무효화 |
 | 검색 변경 | URL 쿼리 파라미터 업데이트로 API 재호출 |
 
 ## 비즈니스 규칙
@@ -100,17 +96,25 @@
 - **삭제 제약**: 세션이 있는 타임라인은 삭제 불가 (`sessionsCount > 0` 경고)
 - **소프트 삭제**: 삭제 시 `removedAt` 기록 (실제 데이터는 보존)
 
+## 특이사항
+
+- CSR + Suspense 기본 패턴을 사용하며 `_client.tsx`, `_prefetch.ts` 없이 `page.tsx` 단일 파일로 구성
+- `useMetaDataGridQueryStates`로 검색어와 페이지네이션 상태를 URL 쿼리와 동기화
+- 삭제 확인 모달은 페이지 로컬 observable state(`deleteTarget`)로 관리
+- 삭제 성공 시 `getGetTimelinesQueryKey()` 기준으로 목록 캐시를 무효화
+
 ## 구현 체크리스트
 
-- [ ] page.tsx (서버 컴포넌트, Prefetch + HydrationBoundary)
-- [ ] _client.tsx (클라이언트 컴포넌트, observer 래핑)
-- [ ] _prefetch.ts (prefetchGetTimelinesQuery 호출)
-- [ ] hooks/useHandlers.ts (삭제 핸들러)
+- [x] page.tsx (클라이언트 컴포넌트, `Suspense` + `useGetTimelinesSuspense`)
+- [x] `_client.tsx` 없음 (CSR 기본 패턴)
+- [x] `_prefetch.ts` 없음 (SSR 예외 아님)
+- [x] 삭제 확인 모달과 캐시 무효화는 `page.tsx`에서 직접 처리
 
 ## 변경 이력
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-03-15 | 타임라인 목록을 CSR + Suspense 단일 `page.tsx` 패턴으로 전환하고 `_client.tsx`, `_prefetch.ts`를 제거 | codex |
 | 2026-02-19 | 초기 생성 | req-screen-planner |
 | 2026-02-19 | 디자인 목업 섹션 추가 | req-reverse-engineer |
 | 2026-03-03 | Scaffold 제거 및 페이지 헤더 영역/섹션 영역 용어 정리 | codex |

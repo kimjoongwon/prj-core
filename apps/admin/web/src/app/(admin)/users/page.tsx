@@ -1,7 +1,8 @@
 "use client";
 
-import { type UserDto, useGetUsersSuspense } from "@cocrepo/api/core/users";
+import { type UserDto, useGetUsers } from "@cocrepo/api/core/users";
 import type { InputConfig, MetaDataGridColumnConfig } from "@cocrepo/type";
+import { Spinner } from "@heroui/react";
 import {
 	DateTimeCell,
 	MetaDataGrid,
@@ -18,7 +19,6 @@ import {
 } from "@cocrepo/ui";
 import { UserCheck, UserMinus, Users } from "lucide-react";
 import { observer } from "mobx-react-lite";
-import { Suspense } from "react";
 
 const columns: MetaDataGridColumnConfig<UserDto>[] = [
 	{
@@ -72,7 +72,6 @@ const leftInputs: InputConfig[] = [
 ];
 
 type UsersQueryStates = ReturnType<typeof useMetaDataGridQueryStates>[0];
-type SetUsersQueryStates = ReturnType<typeof useMetaDataGridQueryStates>[1];
 
 function getUsersParams(queryStates: UsersQueryStates) {
 	return {
@@ -82,67 +81,16 @@ function getUsersParams(queryStates: UsersQueryStates) {
 	};
 }
 
-const UsersPageContent = observer(function UsersPageContent({
-	queryStates,
-	setQueryStates,
-}: {
-	queryStates: UsersQueryStates;
-	setQueryStates: SetUsersQueryStates;
-}) {
-	const { data: response } = useGetUsersSuspense(getUsersParams(queryStates));
+const UsersPage = observer(function UsersPage() {
+	const [queryStates, setQueryStates] = useMetaDataGridQueryStates(leftInputs);
+	const { data: response, isLoading } = useGetUsers(getUsersParams(queryStates), {
+		query: {
+			placeholderData: (previousData) => previousData,
+		},
+	});
 	const users = response?.data ?? [];
 	const totalCount = response?.meta?.total ?? 0;
 	const stats = response?.stats;
-
-	return (
-		<PageSurface>
-			<VStack gap={4}>
-				{stats && (
-					<SectionSurface>
-						<div className="grid grid-cols-1 gap-4 md:grid-cols-3">
-							<StatsCard
-								title="전체 이용자"
-								value={stats.total ?? 0}
-								icon={<Users className="size-5" />}
-								color="primary"
-							/>
-							<StatsCard
-								title="활성 이용자"
-								value={stats.active ?? 0}
-								icon={<UserCheck className="size-5" />}
-								color="success"
-							/>
-							<StatsCard
-								title="비활성 이용자"
-								value={stats.inactive ?? 0}
-								icon={<UserMinus className="size-5" />}
-								color="default"
-							/>
-						</div>
-					</SectionSurface>
-				)}
-				<SectionSurface padding="none">
-					<MetaDataGrid
-						config={{
-							entity: "User",
-							data: users,
-							totalCount,
-							isLoading: false,
-							queryStates,
-							setQueryStates,
-							columns,
-							leftInputs,
-							emptyMessage: "조회된 이용자가 없습니다.",
-						}}
-					/>
-				</SectionSurface>
-			</VStack>
-		</PageSurface>
-	);
-});
-
-const UsersPage = observer(function UsersPage() {
-	const [queryStates, setQueryStates] = useMetaDataGridQueryStates(leftInputs);
 
 	return (
 		<Page
@@ -153,56 +101,55 @@ const UsersPage = observer(function UsersPage() {
 				/>
 			}
 		>
-			<Suspense
-				fallback={
-					<PageSurface>
-						<VStack gap={4}>
+			<PageSurface>
+				{isLoading && !response ? (
+					<div className="flex min-h-80 items-center justify-center">
+						<Spinner size="lg" />
+					</div>
+				) : (
+					<VStack gap={4}>
+						{stats && (
 							<SectionSurface>
 								<div className="grid grid-cols-1 gap-4 md:grid-cols-3">
 									<StatsCard
 										title="전체 이용자"
-										value={0}
+										value={stats.total ?? 0}
 										icon={<Users className="size-5" />}
 										color="primary"
 									/>
 									<StatsCard
 										title="활성 이용자"
-										value={0}
+										value={stats.active ?? 0}
 										icon={<UserCheck className="size-5" />}
 										color="success"
 									/>
 									<StatsCard
 										title="비활성 이용자"
-										value={0}
+										value={stats.inactive ?? 0}
 										icon={<UserMinus className="size-5" />}
 										color="default"
 									/>
 								</div>
 							</SectionSurface>
-							<SectionSurface padding="none">
-								<MetaDataGrid
-									config={{
-										entity: "User",
-										data: [],
-										totalCount: 0,
-										isLoading: true,
-										queryStates,
-										setQueryStates,
-										columns,
-										leftInputs,
-										emptyMessage: "조회된 이용자가 없습니다.",
-									}}
-								/>
-							</SectionSurface>
-						</VStack>
-					</PageSurface>
-				}
-			>
-				<UsersPageContent
-					queryStates={queryStates}
-					setQueryStates={setQueryStates}
-				/>
-			</Suspense>
+						)}
+						<SectionSurface padding="none">
+							<MetaDataGrid
+								config={{
+									entity: "User",
+									data: users,
+									totalCount,
+									isLoading,
+									queryStates,
+									setQueryStates,
+									columns,
+									leftInputs,
+									emptyMessage: "조회된 이용자가 없습니다.",
+								}}
+							/>
+						</SectionSurface>
+					</VStack>
+				)}
+			</PageSurface>
 		</Page>
 	);
 });

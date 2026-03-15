@@ -11,12 +11,15 @@
  */
 import {
   useMutation,
-  useQuery
+  useQuery,
+  useSuspenseInfiniteQuery,
+  useSuspenseQuery
 } from '@tanstack/react-query';
 import type {
   DataTag,
   DefinedInitialDataOptions,
   DefinedUseQueryResult,
+  InfiniteData,
   MutationFunction,
   QueryClient,
   QueryFunction,
@@ -25,7 +28,11 @@ import type {
   UseMutationOptions,
   UseMutationResult,
   UseQueryOptions,
-  UseQueryResult
+  UseQueryResult,
+  UseSuspenseInfiniteQueryOptions,
+  UseSuspenseInfiniteQueryResult,
+  UseSuspenseQueryOptions,
+  UseSuspenseQueryResult
 } from '@tanstack/react-query';
 
 import type {
@@ -72,6 +79,12 @@ export const getTemplates = (
 export const getGetTemplatesQueryKey = (params?: GetTemplatesParams,) => {
     return [
     `/api/v1/templates`, ...(params ? [params]: [])
+    ] as const;
+    }
+
+export const getGetTemplatesInfiniteQueryKey = (params?: GetTemplatesParams,) => {
+    return [
+    'infinite', `/api/v1/templates`, ...(params ? [params]: [])
     ] as const;
     }
 
@@ -151,6 +164,130 @@ export const prefetchGetTemplatesQuery = async <TData = Awaited<ReturnType<typeo
   const queryOptions = getGetTemplatesQueryOptions(params,options)
 
   await queryClient.prefetchQuery(queryOptions);
+
+  return queryClient;
+}
+
+
+
+export const getGetTemplatesSuspenseQueryOptions = <TData = Awaited<ReturnType<typeof getTemplates>>, TError = ErrorType<void>>(params?: GetTemplatesParams, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getTemplates>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetTemplatesQueryKey(params);
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getTemplates>>> = ({ signal }) => getTemplates(params, requestOptions, signal);
+
+      
+
+      
+
+   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseQueryOptions<Awaited<ReturnType<typeof getTemplates>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetTemplatesSuspenseQueryResult = NonNullable<Awaited<ReturnType<typeof getTemplates>>>
+export type GetTemplatesSuspenseQueryError = ErrorType<void>
+
+
+export function useGetTemplatesSuspense<TData = Awaited<ReturnType<typeof getTemplates>>, TError = ErrorType<void>>(
+ params: undefined |  GetTemplatesParams, options: { query:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getTemplates>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetTemplatesSuspense<TData = Awaited<ReturnType<typeof getTemplates>>, TError = ErrorType<void>>(
+ params?: GetTemplatesParams, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getTemplates>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetTemplatesSuspense<TData = Awaited<ReturnType<typeof getTemplates>>, TError = ErrorType<void>>(
+ params?: GetTemplatesParams, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getTemplates>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+/**
+ * @summary 템플릿 목록 조회
+ */
+
+export function useGetTemplatesSuspense<TData = Awaited<ReturnType<typeof getTemplates>>, TError = ErrorType<void>>(
+ params?: GetTemplatesParams, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getTemplates>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient 
+ ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = getGetTemplatesSuspenseQueryOptions(params,options)
+
+  const query = useSuspenseQuery(queryOptions, queryClient) as  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+
+
+
+export const getGetTemplatesSuspenseInfiniteQueryOptions = <TData = InfiniteData<Awaited<ReturnType<typeof getTemplates>>>, TError = ErrorType<void>>(params?: GetTemplatesParams, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getTemplates>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetTemplatesInfiniteQueryKey(params);
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getTemplates>>> = ({ signal }) => getTemplates(params, requestOptions, signal);
+
+      
+
+      
+
+   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getTemplates>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetTemplatesSuspenseInfiniteQueryResult = NonNullable<Awaited<ReturnType<typeof getTemplates>>>
+export type GetTemplatesSuspenseInfiniteQueryError = ErrorType<void>
+
+
+export function useGetTemplatesSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getTemplates>>>, TError = ErrorType<void>>(
+ params: undefined |  GetTemplatesParams, options: { query:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getTemplates>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetTemplatesSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getTemplates>>>, TError = ErrorType<void>>(
+ params?: GetTemplatesParams, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getTemplates>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetTemplatesSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getTemplates>>>, TError = ErrorType<void>>(
+ params?: GetTemplatesParams, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getTemplates>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+/**
+ * @summary 템플릿 목록 조회
+ */
+
+export function useGetTemplatesSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getTemplates>>>, TError = ErrorType<void>>(
+ params?: GetTemplatesParams, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getTemplates>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient 
+ ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = getGetTemplatesSuspenseInfiniteQueryOptions(params,options)
+
+  const query = useSuspenseInfiniteQuery(queryOptions, queryClient) as  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+/**
+ * @summary 템플릿 목록 조회
+ */
+export const prefetchGetTemplatesInfiniteQuery = async <TData = Awaited<ReturnType<typeof getTemplates>>, TError = ErrorType<void>>(
+ queryClient: QueryClient, params?: GetTemplatesParams, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getTemplates>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+
+  ): Promise<QueryClient> => {
+
+  const queryOptions = getGetTemplatesSuspenseInfiniteQueryOptions(params,options)
+
+  await queryClient.prefetchInfiniteQuery(queryOptions);
 
   return queryClient;
 }
@@ -247,6 +384,12 @@ export const getGetTemplateQueryKey = (templateId?: string,) => {
     ] as const;
     }
 
+export const getGetTemplateInfiniteQueryKey = (templateId?: string,) => {
+    return [
+    'infinite', `/api/v1/templates/${templateId}`
+    ] as const;
+    }
+
     
 export const getGetTemplateQueryOptions = <TData = Awaited<ReturnType<typeof getTemplate>>, TError = ErrorType<void>>(templateId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getTemplate>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 ) => {
@@ -323,6 +466,130 @@ export const prefetchGetTemplateQuery = async <TData = Awaited<ReturnType<typeof
   const queryOptions = getGetTemplateQueryOptions(templateId,options)
 
   await queryClient.prefetchQuery(queryOptions);
+
+  return queryClient;
+}
+
+
+
+export const getGetTemplateSuspenseQueryOptions = <TData = Awaited<ReturnType<typeof getTemplate>>, TError = ErrorType<void>>(templateId: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getTemplate>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetTemplateQueryKey(templateId);
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getTemplate>>> = ({ signal }) => getTemplate(templateId, requestOptions, signal);
+
+      
+
+      
+
+   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseQueryOptions<Awaited<ReturnType<typeof getTemplate>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetTemplateSuspenseQueryResult = NonNullable<Awaited<ReturnType<typeof getTemplate>>>
+export type GetTemplateSuspenseQueryError = ErrorType<void>
+
+
+export function useGetTemplateSuspense<TData = Awaited<ReturnType<typeof getTemplate>>, TError = ErrorType<void>>(
+ templateId: string, options: { query:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getTemplate>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetTemplateSuspense<TData = Awaited<ReturnType<typeof getTemplate>>, TError = ErrorType<void>>(
+ templateId: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getTemplate>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetTemplateSuspense<TData = Awaited<ReturnType<typeof getTemplate>>, TError = ErrorType<void>>(
+ templateId: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getTemplate>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+/**
+ * @summary 템플릿 상세 조회
+ */
+
+export function useGetTemplateSuspense<TData = Awaited<ReturnType<typeof getTemplate>>, TError = ErrorType<void>>(
+ templateId: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getTemplate>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient 
+ ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = getGetTemplateSuspenseQueryOptions(templateId,options)
+
+  const query = useSuspenseQuery(queryOptions, queryClient) as  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+
+
+
+export const getGetTemplateSuspenseInfiniteQueryOptions = <TData = InfiniteData<Awaited<ReturnType<typeof getTemplate>>>, TError = ErrorType<void>>(templateId: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getTemplate>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetTemplateInfiniteQueryKey(templateId);
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getTemplate>>> = ({ signal }) => getTemplate(templateId, requestOptions, signal);
+
+      
+
+      
+
+   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getTemplate>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetTemplateSuspenseInfiniteQueryResult = NonNullable<Awaited<ReturnType<typeof getTemplate>>>
+export type GetTemplateSuspenseInfiniteQueryError = ErrorType<void>
+
+
+export function useGetTemplateSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getTemplate>>>, TError = ErrorType<void>>(
+ templateId: string, options: { query:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getTemplate>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetTemplateSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getTemplate>>>, TError = ErrorType<void>>(
+ templateId: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getTemplate>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetTemplateSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getTemplate>>>, TError = ErrorType<void>>(
+ templateId: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getTemplate>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+/**
+ * @summary 템플릿 상세 조회
+ */
+
+export function useGetTemplateSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getTemplate>>>, TError = ErrorType<void>>(
+ templateId: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getTemplate>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient 
+ ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = getGetTemplateSuspenseInfiniteQueryOptions(templateId,options)
+
+  const query = useSuspenseInfiniteQuery(queryOptions, queryClient) as  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+/**
+ * @summary 템플릿 상세 조회
+ */
+export const prefetchGetTemplateInfiniteQuery = async <TData = Awaited<ReturnType<typeof getTemplate>>, TError = ErrorType<void>>(
+ queryClient: QueryClient, templateId: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getTemplate>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+
+  ): Promise<QueryClient> => {
+
+  const queryOptions = getGetTemplateSuspenseInfiniteQueryOptions(templateId,options)
+
+  await queryClient.prefetchInfiniteQuery(queryOptions);
 
   return queryClient;
 }

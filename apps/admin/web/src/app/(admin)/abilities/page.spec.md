@@ -67,7 +67,7 @@
 
 | 상태 | 설명 | UI |
 |------|------|-----|
-| 로딩 중 | API 응답 대기 | Spinner + "로딩 중..." 텍스트 |
+| 로딩 중 | suspense 응답 대기 | `Suspense` fallback에서 Spinner + "로딩 중..." 텍스트 |
 | 빈 목록 | 등록된 권한 없음 | Key 아이콘 + "등록된 권한이 없습니다." |
 | 필터 결과 없음 | 검색 조건 불일치 | Key 아이콘 + "검색 조건에 맞는 권한이 없습니다." |
 | 데이터 있음 | 정상 표시 | 테이블 + 총 N건 표시 |
@@ -76,9 +76,9 @@
 
 | 시점 | API | 설명 |
 |------|-----|------|
-| 페이지 진입 | `GET /api/v1/abilities` (useQuery 커스텀 훅) | 전체 권한 목록 조회 |
-| 페이지 진입 | `GET /api/v1/subjects` (useGetSubjects) | Subject 필터 옵션 로드 |
-| 페이지 진입 | `GET /api/v1/actions` (useGetActions) | Action 필터 옵션 로드 |
+| 페이지 진입 | `useGetAbilitiesSuspense()` | 전체 권한 목록 조회 |
+| 페이지 진입 | `useGetSubjectsSuspense()` | Subject 필터 옵션 로드 |
+| 페이지 진입 | `useGetActionsSuspense()` | Action 필터 옵션 로드 |
 
 ## 이벤트 핸들러
 
@@ -102,20 +102,21 @@
 
 ## 참고사항
 
-- Orval 생성 훅 대신 `customInstance`를 사용한 임시 `useGetAllAbilities` 커스텀 훅 사용 중
+- Orval generated suspense 훅(`useGetAbilitiesSuspense`)을 사용하며 임시 `customInstance` 직접 호출은 제거됨
 - 필터링은 모두 클라이언트 사이드에서 처리
-- `_prefetch.ts` 파일 없음 (prefetch 없이 진행)
+- CSR + Suspense 기본 패턴을 사용하며 `_client.tsx`, `_prefetch.ts` 없이 `page.tsx` 단일 파일로 구성
 
 ## 구현 체크리스트
 
-- [x] page.tsx (서버 컴포넌트)
-- [x] _client.tsx (클라이언트 컴포넌트)
-- [ ] _prefetch.ts (데이터 프리페치) - 미구현
+- [x] page.tsx (클라이언트 컴포넌트, `Suspense` + `useGetAbilitiesSuspense`)
+- [x] `_client.tsx` 없음 (CSR 기본 패턴)
+- [x] `_prefetch.ts` 없음 (SSR 예외 아님)
 
 ## 변경 이력
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-03-15 | abilities 목록을 generated suspense 훅 기반 CSR 단일 `page.tsx` 패턴으로 전환하고 `_client.tsx`를 제거 | codex |
 | 2026-03-14 | Playwright E2E가 `networkidle` 대신 heading/대상 요소 가시성을 기준으로 페이지 준비를 판정하도록 안정화 | codex |
 | 2026-02-18 | 초기 생성 (역기획) | req-reverse-engineer |
 | 2026-02-19 | 디자인 목업 섹션 추가 | req-reverse-engineer |

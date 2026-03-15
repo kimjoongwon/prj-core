@@ -83,24 +83,18 @@
 
 | 상태      | 설명                | UI                        |
 | --------- | ------------------- | ------------------------- |
-| 로딩      | 초기 데이터 로딩 중 | 스켈레톤 UI               |
+| 로딩      | suspense 응답 대기 | `InquiryStatsCards` 기본값 + `MetaDataGrid` 로딩 상태 |
 | 빈 목록   | 문의가 없음         | 빈 상태 안내 메시지       |
 | 목록 표시 | 문의 목록 표시      | DataGrid + 통계 카드      |
-| 필터링 중 | 필터 적용 중        | 로딩 인디케이터           |
-| WebSocket 연결 중 | 실시간 연결 시도 중 | 🟡 연결 중 인디케이터 |
-| WebSocket 연결됨 | 실시간 업데이트 활성 | 🟢 연결됨 |
-| WebSocket 끊김 | 실시간 업데이트 비활성 | 🔴 연결 끊김, 재연결 버튼 |
 | 에러      | API 에러 발생       | 에러 메시지 + 재시도 버튼 |
 
 ## API 호출
 
 | 시점         | API                         | 캐싱                   |
 | ------------ | --------------------------- | ---------------------- |
-| 진입 시      | GET /api/v1/inquiries       | staleTime: 30s         |
-| 진입 시      | GET /api/v1/inquiries/stats | staleTime: 60s         |
-| 필터 변경 시 | GET /api/v1/inquiries       | staleTime: 30s         |
-| 폴링 (30초)  | GET /api/v1/inquiries       | refetchInterval: 30000 |
-| WebSocket 수신 | - (실시간 업데이트)       | -                      |
+| 클라이언트 진입 시 | `useGetInquiriesSuspense({ take, skip, search, inquiryStatus })` | React Query 캐시 사용 |
+| 클라이언트 진입 시 | `useGetInquiryStatsSuspense()` | React Query 캐시 사용 |
+| 필터 변경 시 | `useGetInquiriesSuspense(...)` 재호출 | URL 상태 기반 재조회 |
 
 ## WebSocket 연결
 
@@ -209,17 +203,15 @@
 ### L6: 데이터 흐름 (API 호출)
 
 ```
-1. SSR Prefetch
-   - GET /api/v1/inquiries (초기 목록)
-   - GET /api/v1/inquiries/stats (통계)
+1. CSR + Suspense
+   - `page.tsx`에서 `Suspense` fallback 렌더
+   - `useGetInquiriesSuspense`로 목록 조회
+   - `useGetInquiryStatsSuspense`로 통계 조회
 
 2. Client-side
    - React Query 캐시 관리
-   - WebSocket 실시간 업데이트
-   - 필터/정렬 변경 시 refetch
-
-3. Polling (WebSocket 끊김 시)
-   - 30초 간격 자동 새로고침
+   - `useMetaDataGridQueryStates` 기반 URL 상태 관리
+   - 필터 변경 시 refetch
 ```
 
 ### L7: 인터랙션 (이벤트)
@@ -384,9 +376,9 @@
 
 ## 구현 체크리스트
 
-- [x] page.tsx (서버 컴포넌트)
-- [x] _client.tsx (클라이언트 컴포넌트)
-- [x] _prefetch.ts (데이터 프리페치)
+- [x] page.tsx (클라이언트 컴포넌트, `Suspense` + `useGetInquiriesSuspense`)
+- [x] `_client.tsx` 없음 (CSR 기본 패턴)
+- [x] `_prefetch.ts` 없음 (SSR 예외 아님)
 - [x] hooks/useHandlers.ts
 - [ ] hooks/useInquiryListWebSocket.ts (WebSocket 연결)
 - [x] E2E 테스트 (Playwright) - `page.e2e.ts`
@@ -399,6 +391,7 @@
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-03-15 | 문의 목록을 CSR + Suspense 단일 `page.tsx` 패턴으로 전환하고 `_client.tsx`, `_prefetch.ts`를 제거 | codex |
 | 2026-03-06 | feature 디렉토리를 features로 이관하고 경로 표기를 동기화 | codex |
 | 2026-02-25 | 초기 생성 | orch-requirement |
 | 2026-02-26 | 실시간 상태 컬럼 추가 (온라인, 메시지 수) | orch-requirement |

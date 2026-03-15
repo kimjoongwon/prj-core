@@ -5,7 +5,7 @@ OpenAPI 스펙으로부터 자동 생성되는 API 클라이언트 패키지입�
 ## 🚀 기능
 
 - **OpenAPI → TypeScript**: OpenAPI 스펙으로부터 타입 안전한 API 클라이언트 자동 생성
-- **React Query 통합**: `useQuery`, `useMutation` 등 React Query 훅 자동 생성
+- **React Query 통합**: `useQuery`, `useSuspenseQuery`, `useMutation` 등 React Query 훅 자동 생성
 - **환경별 설정**: 개발/스테이징/프로덕션 환경별 API 엔드포인트 자동 선택
 
 ## 📁 구조
@@ -54,13 +54,13 @@ pnpm codegen:prod       # 프로덕션 환경
 ### 생성된 API 사용 예시
 
 ```typescript
-import { useGetUsers, useCreateUser } from "@cocrepo/api/core/users";
+import { Suspense } from "react";
+import { useCreateUser, useGetUsersSuspense } from "@cocrepo/api/core/users";
 
-function UserList() {
-  const { data: response, isLoading } = useGetUsers();
-
-  const createUser = useCreateUser();
+function UserListContent() {
+  const { data: response } = useGetUsersSuspense();
   const users = response?.data ?? [];
+  const createUser = useCreateUser();
 
   const handleCreateUser = (userData: CreateUserDto) => {
     createUser.mutate(userData, {
@@ -70,14 +70,20 @@ function UserList() {
     });
   };
 
-  if (isLoading) return <div>로딩 중...</div>;
-
   return (
     <div>
       {users?.map(user => (
         <div key={user.id}>{user.name}</div>
       ))}
     </div>
+  );
+}
+
+function UserList() {
+  return (
+    <Suspense fallback={<div>로딩 중...</div>}>
+      <UserListContent />
+    </Suspense>
   );
 }
 ```
@@ -97,11 +103,11 @@ function UserList() {
 
 ### 생성되는 React Query 훅
 
-- ✅ `useQuery` - 기본 쿼리 훅
+- ✅ `useQuery` - 조건부 `enabled`, 점진 로딩, 기존 페이지 호환용
 - ❌ `useInfiniteQuery` - 무한 스크롤 (비활성화)
-- ❌ `useSuspenseQuery` - 현재 소비처 없음으로 비활성화
-- ❌ `useSuspenseInfiniteQuery` - 현재 소비처 없음으로 비활성화
-- ✅ `prefetchQuery`용 helper - 서버 prefetch/HydrationBoundary 패턴 지원
+- ✅ `useSuspenseQuery` - 신규 admin/idp 페이지의 기본 표준
+- ✅ `useSuspenseInfiniteQuery` - 필요 시 사용할 수 있는 suspense 기반 무한 쿼리
+- ✅ `prefetchQuery`용 helper - SSR 예외 페이지 지원
 
 ## 🔧 개발
 
@@ -134,7 +140,9 @@ pnpm clean
 - 커스텀 Axios 설정이 필요한 경우 `src/libs/customAxios.ts`를 수정하세요
 - DTO/enum이 태그 배럴에 없으면 `@cocrepo/api/model/*`, `@cocrepo/api/idp-model/*`에서 직접 import 하세요
 - 환경 변수 `ORVAL_ENV`가 설정되지 않으면 localhost를 먼저 확인하고, 없으면 staging으로 fallback 합니다
-- Suspense 기반 화면이 필요하면 generated suspense 훅 대신 일반 query 옵션과 React Suspense 경계를 조합해 사용하세요
+- 신규 admin/idp 페이지는 `useGetXxxSuspense`를 우선 사용하세요
+- 일반 `useGetXxx`는 `enabled`, 조건부 호출, 점진 로딩이 필요한 경우에만 사용하세요
+- SSR prefetch helper는 예외 페이지에서만 사용하고, admin 기본 패턴은 CSR + Suspense입니다
 - 지원되지 않는 환경을 설정하면 콘솔에 에러 메시지와 함께 지원 가능한 환경 목록이 표시됩니다
 
 ## 🚨 트러블슈팅

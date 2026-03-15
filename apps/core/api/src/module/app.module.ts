@@ -29,8 +29,10 @@ import { DevtoolsModule } from "@nestjs/devtools-integration";
 import { ThrottlerGuard } from "@nestjs/throttler";
 import { AbilitiesModule } from "./abilities";
 import { ActionsModule } from "./actions";
+import { AssetsModule } from "./assets";
 import { CategoriesModule } from "./categories";
 // Global modules
+import { FoldersModule } from "./folders";
 import { globalModules } from "./global.module";
 import { GrantsModule } from "./grants";
 import { GroupsModule } from "./groups";
@@ -67,12 +69,14 @@ const enableNestDevtools =
 		SpacesModule,
 		UsersModule,
 		ActionsModule,
+		AssetsModule,
 		SubjectsModule,
 		AbilitiesModule,
 		RolesModule,
 		GroupsModule,
 		CategoriesModule,
 		GrantsModule,
+		FoldersModule,
 		TemplatesModule,
 		TimelinesModule,
 		TasksModule,
@@ -100,6 +104,10 @@ const enableNestDevtools =
 								module: ActionsModule,
 							},
 							{
+								path: "assets",
+								module: AssetsModule,
+							},
+							{
 								path: "subjects",
 								module: SubjectsModule,
 							},
@@ -122,6 +130,10 @@ const enableNestDevtools =
 							{
 								path: "grants",
 								module: GrantsModule,
+							},
+							{
+								path: "folders",
+								module: FoldersModule,
 							},
 							{
 								path: "templates",

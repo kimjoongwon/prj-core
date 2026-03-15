@@ -106,13 +106,13 @@ const queryOptions = {
   // 무한 스크롤용 useInfiniteQuery 비활성화
   useInfinite: false,
 
-  // Suspense 전용 훅은 현재 소비처가 없어 생성 비활성화
-  useSuspenseQuery: false,
+  // admin/idp web의 CSR-first 페이지에서 기본으로 사용할 suspense 훅 생성
+  useSuspenseQuery: true,
 
-  // Suspense 전용 무한 쿼리 훅도 비활성화
-  useSuspenseInfiniteQuery: false,
+  // 무한 스크롤은 현재 사용하지 않지만 suspense 표준과 일관되게 생성 허용
+  useSuspenseInfiniteQuery: true,
 
-  // 서버 컴포넌트용 prefetch 함수 생성 활성화
+  // SSR 예외 페이지를 위해 prefetch 함수는 유지
   usePrefetch: true,
 };
 

@@ -11,12 +11,15 @@
  */
 import {
   useMutation,
-  useQuery
+  useQuery,
+  useSuspenseInfiniteQuery,
+  useSuspenseQuery
 } from '@tanstack/react-query';
 import type {
   DataTag,
   DefinedInitialDataOptions,
   DefinedUseQueryResult,
+  InfiniteData,
   MutationFunction,
   QueryClient,
   QueryFunction,
@@ -25,7 +28,11 @@ import type {
   UseMutationOptions,
   UseMutationResult,
   UseQueryOptions,
-  UseQueryResult
+  UseQueryResult,
+  UseSuspenseInfiniteQueryOptions,
+  UseSuspenseInfiniteQueryResult,
+  UseSuspenseQueryOptions,
+  UseSuspenseQueryResult
 } from '@tanstack/react-query';
 
 import type {
@@ -68,6 +75,12 @@ export const getSpaces = (
 export const getGetSpacesQueryKey = () => {
     return [
     `/api/v1/spaces`
+    ] as const;
+    }
+
+export const getGetSpacesInfiniteQueryKey = () => {
+    return [
+    'infinite', `/api/v1/spaces`
     ] as const;
     }
 
@@ -147,6 +160,130 @@ export const prefetchGetSpacesQuery = async <TData = Awaited<ReturnType<typeof g
   const queryOptions = getGetSpacesQueryOptions(options)
 
   await queryClient.prefetchQuery(queryOptions);
+
+  return queryClient;
+}
+
+
+
+export const getGetSpacesSuspenseQueryOptions = <TData = Awaited<ReturnType<typeof getSpaces>>, TError = ErrorType<void>>( options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getSpaces>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetSpacesQueryKey();
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getSpaces>>> = ({ signal }) => getSpaces(requestOptions, signal);
+
+      
+
+      
+
+   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseQueryOptions<Awaited<ReturnType<typeof getSpaces>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetSpacesSuspenseQueryResult = NonNullable<Awaited<ReturnType<typeof getSpaces>>>
+export type GetSpacesSuspenseQueryError = ErrorType<void>
+
+
+export function useGetSpacesSuspense<TData = Awaited<ReturnType<typeof getSpaces>>, TError = ErrorType<void>>(
+  options: { query:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getSpaces>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetSpacesSuspense<TData = Awaited<ReturnType<typeof getSpaces>>, TError = ErrorType<void>>(
+  options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getSpaces>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetSpacesSuspense<TData = Awaited<ReturnType<typeof getSpaces>>, TError = ErrorType<void>>(
+  options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getSpaces>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+/**
+ * @summary 공간 목록 조회
+ */
+
+export function useGetSpacesSuspense<TData = Awaited<ReturnType<typeof getSpaces>>, TError = ErrorType<void>>(
+  options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getSpaces>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient 
+ ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = getGetSpacesSuspenseQueryOptions(options)
+
+  const query = useSuspenseQuery(queryOptions, queryClient) as  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+
+
+
+export const getGetSpacesSuspenseInfiniteQueryOptions = <TData = InfiniteData<Awaited<ReturnType<typeof getSpaces>>>, TError = ErrorType<void>>( options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getSpaces>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetSpacesInfiniteQueryKey();
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getSpaces>>> = ({ signal }) => getSpaces(requestOptions, signal);
+
+      
+
+      
+
+   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getSpaces>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetSpacesSuspenseInfiniteQueryResult = NonNullable<Awaited<ReturnType<typeof getSpaces>>>
+export type GetSpacesSuspenseInfiniteQueryError = ErrorType<void>
+
+
+export function useGetSpacesSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getSpaces>>>, TError = ErrorType<void>>(
+  options: { query:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getSpaces>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetSpacesSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getSpaces>>>, TError = ErrorType<void>>(
+  options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getSpaces>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetSpacesSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getSpaces>>>, TError = ErrorType<void>>(
+  options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getSpaces>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+/**
+ * @summary 공간 목록 조회
+ */
+
+export function useGetSpacesSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getSpaces>>>, TError = ErrorType<void>>(
+  options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getSpaces>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient 
+ ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = getGetSpacesSuspenseInfiniteQueryOptions(options)
+
+  const query = useSuspenseInfiniteQuery(queryOptions, queryClient) as  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+/**
+ * @summary 공간 목록 조회
+ */
+export const prefetchGetSpacesInfiniteQuery = async <TData = Awaited<ReturnType<typeof getSpaces>>, TError = ErrorType<void>>(
+ queryClient: QueryClient,  options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getSpaces>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+
+  ): Promise<QueryClient> => {
+
+  const queryOptions = getGetSpacesSuspenseInfiniteQueryOptions(options)
+
+  await queryClient.prefetchInfiniteQuery(queryOptions);
 
   return queryClient;
 }
@@ -243,6 +380,12 @@ export const getGetSpaceGroundQueryKey = (spaceId?: string,) => {
     ] as const;
     }
 
+export const getGetSpaceGroundInfiniteQueryKey = (spaceId?: string,) => {
+    return [
+    'infinite', `/api/v1/spaces/${spaceId}/ground`
+    ] as const;
+    }
+
     
 export const getGetSpaceGroundQueryOptions = <TData = Awaited<ReturnType<typeof getSpaceGround>>, TError = ErrorType<void>>(spaceId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getSpaceGround>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 ) => {
@@ -319,6 +462,130 @@ export const prefetchGetSpaceGroundQuery = async <TData = Awaited<ReturnType<typ
   const queryOptions = getGetSpaceGroundQueryOptions(spaceId,options)
 
   await queryClient.prefetchQuery(queryOptions);
+
+  return queryClient;
+}
+
+
+
+export const getGetSpaceGroundSuspenseQueryOptions = <TData = Awaited<ReturnType<typeof getSpaceGround>>, TError = ErrorType<void>>(spaceId: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getSpaceGround>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetSpaceGroundQueryKey(spaceId);
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getSpaceGround>>> = ({ signal }) => getSpaceGround(spaceId, requestOptions, signal);
+
+      
+
+      
+
+   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseQueryOptions<Awaited<ReturnType<typeof getSpaceGround>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetSpaceGroundSuspenseQueryResult = NonNullable<Awaited<ReturnType<typeof getSpaceGround>>>
+export type GetSpaceGroundSuspenseQueryError = ErrorType<void>
+
+
+export function useGetSpaceGroundSuspense<TData = Awaited<ReturnType<typeof getSpaceGround>>, TError = ErrorType<void>>(
+ spaceId: string, options: { query:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getSpaceGround>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetSpaceGroundSuspense<TData = Awaited<ReturnType<typeof getSpaceGround>>, TError = ErrorType<void>>(
+ spaceId: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getSpaceGround>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetSpaceGroundSuspense<TData = Awaited<ReturnType<typeof getSpaceGround>>, TError = ErrorType<void>>(
+ spaceId: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getSpaceGround>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+/**
+ * @summary 공간의 시설 detail 조회
+ */
+
+export function useGetSpaceGroundSuspense<TData = Awaited<ReturnType<typeof getSpaceGround>>, TError = ErrorType<void>>(
+ spaceId: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getSpaceGround>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient 
+ ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = getGetSpaceGroundSuspenseQueryOptions(spaceId,options)
+
+  const query = useSuspenseQuery(queryOptions, queryClient) as  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+
+
+
+export const getGetSpaceGroundSuspenseInfiniteQueryOptions = <TData = InfiniteData<Awaited<ReturnType<typeof getSpaceGround>>>, TError = ErrorType<void>>(spaceId: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getSpaceGround>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetSpaceGroundInfiniteQueryKey(spaceId);
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getSpaceGround>>> = ({ signal }) => getSpaceGround(spaceId, requestOptions, signal);
+
+      
+
+      
+
+   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getSpaceGround>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetSpaceGroundSuspenseInfiniteQueryResult = NonNullable<Awaited<ReturnType<typeof getSpaceGround>>>
+export type GetSpaceGroundSuspenseInfiniteQueryError = ErrorType<void>
+
+
+export function useGetSpaceGroundSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getSpaceGround>>>, TError = ErrorType<void>>(
+ spaceId: string, options: { query:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getSpaceGround>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetSpaceGroundSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getSpaceGround>>>, TError = ErrorType<void>>(
+ spaceId: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getSpaceGround>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetSpaceGroundSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getSpaceGround>>>, TError = ErrorType<void>>(
+ spaceId: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getSpaceGround>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+/**
+ * @summary 공간의 시설 detail 조회
+ */
+
+export function useGetSpaceGroundSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getSpaceGround>>>, TError = ErrorType<void>>(
+ spaceId: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getSpaceGround>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient 
+ ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = getGetSpaceGroundSuspenseInfiniteQueryOptions(spaceId,options)
+
+  const query = useSuspenseInfiniteQuery(queryOptions, queryClient) as  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+/**
+ * @summary 공간의 시설 detail 조회
+ */
+export const prefetchGetSpaceGroundInfiniteQuery = async <TData = Awaited<ReturnType<typeof getSpaceGround>>, TError = ErrorType<void>>(
+ queryClient: QueryClient, spaceId: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getSpaceGround>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+
+  ): Promise<QueryClient> => {
+
+  const queryOptions = getGetSpaceGroundSuspenseInfiniteQueryOptions(spaceId,options)
+
+  await queryClient.prefetchInfiniteQuery(queryOptions);
 
   return queryClient;
 }

@@ -69,7 +69,7 @@
 
 | 상태 | 설명 | UI |
 |------|------|-----|
-| 로딩 | API 호출 중 | "로딩 중..." 텍스트 |
+| 로딩 | suspense 응답 대기 | 섹션 내부 "로딩 중..." 텍스트 |
 | 빈 목록 | roles.length === 0 | Shield 아이콘 + "등록된 역할이 없습니다." |
 | 데이터 표시 | 역할 목록 존재 | 테이블 + 총 건수 |
 
@@ -77,8 +77,7 @@
 
 | 시점 | API | 설명 |
 |------|-----|------|
-| SSR Prefetch | `prefetchGetRolesQuery` | 역할 목록 프리페치 |
-| 클라이언트 | `useGetRoles()` | 역할 목록 조회 (GET /api/v1/roles) |
+| 클라이언트 | `useGetRolesSuspense()` | CSR + Suspense 기반 역할 목록 조회 (GET /api/v1/roles) |
 
 ## 이벤트 핸들러
 
@@ -87,16 +86,24 @@
 | "역할 추가" 버튼 클릭 | `/roles/new`로 Link 이동 |
 | "상세" 버튼 클릭 | `/roles/${role.id}`로 Link 이동 |
 
+## 특이사항
+
+- CSR + Suspense 기본 패턴을 사용하며 `_client.tsx`, `_prefetch.ts` 없이 `page.tsx` 단일 파일로 구성
+- `MetaDataGrid` 대신 커스텀 table 마크업으로 역할 목록을 렌더링
+- 안내 배너를 통해 시스템 역할(FULL_ACCESS, MANAGE, VIEW) 수정/삭제 제약을 먼저 노출
+- `Section` 상단에 보조 `PageTitleBar(level={2})`를 사용해 목록 영역 제목을 분리
+
 ## 구현 체크리스트
 
-- [x] page.tsx (서버 컴포넌트, SSR Prefetch + HydrationBoundary)
-- [x] _client.tsx (클라이언트 컴포넌트, observer)
-- [x] _prefetch.ts (prefetchGetRolesQuery)
+- [x] page.tsx (클라이언트 컴포넌트, `Suspense` + `useGetRolesSuspense`)
+- [x] `_client.tsx` 없음 (CSR 기본 패턴)
+- [x] `_prefetch.ts` 없음 (SSR 예외 아님)
 
 ## 변경 이력
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-03-15 | 역할 목록을 CSR + Suspense 단일 `page.tsx` 패턴으로 전환하고 `_client.tsx`, `_prefetch.ts`를 제거 | codex |
 | 2026-02-18 | 초기 생성 (역기획) | req-reverse-engineer |
 | 2026-02-19 | 디자인 목업 추가 | req-reverse-engineer |
 | 2026-03-03 | Scaffold 제거 및 페이지 헤더 영역/섹션 영역 용어 정리 | codex |

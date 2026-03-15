@@ -13,12 +13,15 @@ OIDC 인증 및 IDP 관리 API를 제공합니다.
  */
 import {
   useMutation,
-  useQuery
+  useQuery,
+  useSuspenseInfiniteQuery,
+  useSuspenseQuery
 } from '@tanstack/react-query';
 import type {
   DataTag,
   DefinedInitialDataOptions,
   DefinedUseQueryResult,
+  InfiniteData,
   MutationFunction,
   QueryClient,
   QueryFunction,
@@ -27,7 +30,11 @@ import type {
   UseMutationOptions,
   UseMutationResult,
   UseQueryOptions,
-  UseQueryResult
+  UseQueryResult,
+  UseSuspenseInfiniteQueryOptions,
+  UseSuspenseInfiniteQueryResult,
+  UseSuspenseQueryOptions,
+  UseSuspenseQueryResult
 } from '@tanstack/react-query';
 
 import type {
@@ -70,6 +77,12 @@ export const getPasswordPolicy = (
 export const getGetPasswordPolicyQueryKey = () => {
     return [
     `/api/password-policy`
+    ] as const;
+    }
+
+export const getGetPasswordPolicyInfiniteQueryKey = () => {
+    return [
+    'infinite', `/api/password-policy`
     ] as const;
     }
 
@@ -149,6 +162,130 @@ export const prefetchGetPasswordPolicyQuery = async <TData = Awaited<ReturnType<
   const queryOptions = getGetPasswordPolicyQueryOptions(options)
 
   await queryClient.prefetchQuery(queryOptions);
+
+  return queryClient;
+}
+
+
+
+export const getGetPasswordPolicySuspenseQueryOptions = <TData = Awaited<ReturnType<typeof getPasswordPolicy>>, TError = ErrorType<unknown>>( options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getPasswordPolicy>>, TError, TData>>, request?: SecondParameter<typeof customIdpInstance>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetPasswordPolicyQueryKey();
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getPasswordPolicy>>> = ({ signal }) => getPasswordPolicy(requestOptions, signal);
+
+      
+
+      
+
+   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseQueryOptions<Awaited<ReturnType<typeof getPasswordPolicy>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetPasswordPolicySuspenseQueryResult = NonNullable<Awaited<ReturnType<typeof getPasswordPolicy>>>
+export type GetPasswordPolicySuspenseQueryError = ErrorType<unknown>
+
+
+export function useGetPasswordPolicySuspense<TData = Awaited<ReturnType<typeof getPasswordPolicy>>, TError = ErrorType<unknown>>(
+  options: { query:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getPasswordPolicy>>, TError, TData>>, request?: SecondParameter<typeof customIdpInstance>}
+ , queryClient?: QueryClient
+  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetPasswordPolicySuspense<TData = Awaited<ReturnType<typeof getPasswordPolicy>>, TError = ErrorType<unknown>>(
+  options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getPasswordPolicy>>, TError, TData>>, request?: SecondParameter<typeof customIdpInstance>}
+ , queryClient?: QueryClient
+  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetPasswordPolicySuspense<TData = Awaited<ReturnType<typeof getPasswordPolicy>>, TError = ErrorType<unknown>>(
+  options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getPasswordPolicy>>, TError, TData>>, request?: SecondParameter<typeof customIdpInstance>}
+ , queryClient?: QueryClient
+  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+/**
+ * @summary 비밀번호 정책 조회
+ */
+
+export function useGetPasswordPolicySuspense<TData = Awaited<ReturnType<typeof getPasswordPolicy>>, TError = ErrorType<unknown>>(
+  options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getPasswordPolicy>>, TError, TData>>, request?: SecondParameter<typeof customIdpInstance>}
+ , queryClient?: QueryClient 
+ ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = getGetPasswordPolicySuspenseQueryOptions(options)
+
+  const query = useSuspenseQuery(queryOptions, queryClient) as  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+
+
+
+export const getGetPasswordPolicySuspenseInfiniteQueryOptions = <TData = InfiniteData<Awaited<ReturnType<typeof getPasswordPolicy>>>, TError = ErrorType<unknown>>( options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getPasswordPolicy>>, TError, TData>>, request?: SecondParameter<typeof customIdpInstance>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetPasswordPolicyInfiniteQueryKey();
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getPasswordPolicy>>> = ({ signal }) => getPasswordPolicy(requestOptions, signal);
+
+      
+
+      
+
+   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getPasswordPolicy>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetPasswordPolicySuspenseInfiniteQueryResult = NonNullable<Awaited<ReturnType<typeof getPasswordPolicy>>>
+export type GetPasswordPolicySuspenseInfiniteQueryError = ErrorType<unknown>
+
+
+export function useGetPasswordPolicySuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getPasswordPolicy>>>, TError = ErrorType<unknown>>(
+  options: { query:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getPasswordPolicy>>, TError, TData>>, request?: SecondParameter<typeof customIdpInstance>}
+ , queryClient?: QueryClient
+  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetPasswordPolicySuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getPasswordPolicy>>>, TError = ErrorType<unknown>>(
+  options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getPasswordPolicy>>, TError, TData>>, request?: SecondParameter<typeof customIdpInstance>}
+ , queryClient?: QueryClient
+  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetPasswordPolicySuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getPasswordPolicy>>>, TError = ErrorType<unknown>>(
+  options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getPasswordPolicy>>, TError, TData>>, request?: SecondParameter<typeof customIdpInstance>}
+ , queryClient?: QueryClient
+  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+/**
+ * @summary 비밀번호 정책 조회
+ */
+
+export function useGetPasswordPolicySuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getPasswordPolicy>>>, TError = ErrorType<unknown>>(
+  options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getPasswordPolicy>>, TError, TData>>, request?: SecondParameter<typeof customIdpInstance>}
+ , queryClient?: QueryClient 
+ ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = getGetPasswordPolicySuspenseInfiniteQueryOptions(options)
+
+  const query = useSuspenseInfiniteQuery(queryOptions, queryClient) as  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+/**
+ * @summary 비밀번호 정책 조회
+ */
+export const prefetchGetPasswordPolicyInfiniteQuery = async <TData = Awaited<ReturnType<typeof getPasswordPolicy>>, TError = ErrorType<unknown>>(
+ queryClient: QueryClient,  options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getPasswordPolicy>>, TError, TData>>, request?: SecondParameter<typeof customIdpInstance>}
+
+  ): Promise<QueryClient> => {
+
+  const queryOptions = getGetPasswordPolicySuspenseInfiniteQueryOptions(options)
+
+  await queryClient.prefetchInfiniteQuery(queryOptions);
 
   return queryClient;
 }
@@ -245,6 +382,12 @@ export const getValidateResetTokenQueryKey = (token?: string,) => {
     ] as const;
     }
 
+export const getValidateResetTokenInfiniteQueryKey = (token?: string,) => {
+    return [
+    'infinite', `/api/reset-password/${token}`
+    ] as const;
+    }
+
     
 export const getValidateResetTokenQueryOptions = <TData = Awaited<ReturnType<typeof validateResetToken>>, TError = ErrorType<unknown>>(token: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof validateResetToken>>, TError, TData>>, request?: SecondParameter<typeof customIdpInstance>}
 ) => {
@@ -321,6 +464,130 @@ export const prefetchValidateResetTokenQuery = async <TData = Awaited<ReturnType
   const queryOptions = getValidateResetTokenQueryOptions(token,options)
 
   await queryClient.prefetchQuery(queryOptions);
+
+  return queryClient;
+}
+
+
+
+export const getValidateResetTokenSuspenseQueryOptions = <TData = Awaited<ReturnType<typeof validateResetToken>>, TError = ErrorType<unknown>>(token: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof validateResetToken>>, TError, TData>>, request?: SecondParameter<typeof customIdpInstance>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getValidateResetTokenQueryKey(token);
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof validateResetToken>>> = ({ signal }) => validateResetToken(token, requestOptions, signal);
+
+      
+
+      
+
+   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseQueryOptions<Awaited<ReturnType<typeof validateResetToken>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type ValidateResetTokenSuspenseQueryResult = NonNullable<Awaited<ReturnType<typeof validateResetToken>>>
+export type ValidateResetTokenSuspenseQueryError = ErrorType<unknown>
+
+
+export function useValidateResetTokenSuspense<TData = Awaited<ReturnType<typeof validateResetToken>>, TError = ErrorType<unknown>>(
+ token: string, options: { query:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof validateResetToken>>, TError, TData>>, request?: SecondParameter<typeof customIdpInstance>}
+ , queryClient?: QueryClient
+  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useValidateResetTokenSuspense<TData = Awaited<ReturnType<typeof validateResetToken>>, TError = ErrorType<unknown>>(
+ token: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof validateResetToken>>, TError, TData>>, request?: SecondParameter<typeof customIdpInstance>}
+ , queryClient?: QueryClient
+  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useValidateResetTokenSuspense<TData = Awaited<ReturnType<typeof validateResetToken>>, TError = ErrorType<unknown>>(
+ token: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof validateResetToken>>, TError, TData>>, request?: SecondParameter<typeof customIdpInstance>}
+ , queryClient?: QueryClient
+  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+/**
+ * @summary 재설정 토큰 검증
+ */
+
+export function useValidateResetTokenSuspense<TData = Awaited<ReturnType<typeof validateResetToken>>, TError = ErrorType<unknown>>(
+ token: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof validateResetToken>>, TError, TData>>, request?: SecondParameter<typeof customIdpInstance>}
+ , queryClient?: QueryClient 
+ ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = getValidateResetTokenSuspenseQueryOptions(token,options)
+
+  const query = useSuspenseQuery(queryOptions, queryClient) as  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+
+
+
+export const getValidateResetTokenSuspenseInfiniteQueryOptions = <TData = InfiniteData<Awaited<ReturnType<typeof validateResetToken>>>, TError = ErrorType<unknown>>(token: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof validateResetToken>>, TError, TData>>, request?: SecondParameter<typeof customIdpInstance>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getValidateResetTokenInfiniteQueryKey(token);
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof validateResetToken>>> = ({ signal }) => validateResetToken(token, requestOptions, signal);
+
+      
+
+      
+
+   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof validateResetToken>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type ValidateResetTokenSuspenseInfiniteQueryResult = NonNullable<Awaited<ReturnType<typeof validateResetToken>>>
+export type ValidateResetTokenSuspenseInfiniteQueryError = ErrorType<unknown>
+
+
+export function useValidateResetTokenSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof validateResetToken>>>, TError = ErrorType<unknown>>(
+ token: string, options: { query:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof validateResetToken>>, TError, TData>>, request?: SecondParameter<typeof customIdpInstance>}
+ , queryClient?: QueryClient
+  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useValidateResetTokenSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof validateResetToken>>>, TError = ErrorType<unknown>>(
+ token: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof validateResetToken>>, TError, TData>>, request?: SecondParameter<typeof customIdpInstance>}
+ , queryClient?: QueryClient
+  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useValidateResetTokenSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof validateResetToken>>>, TError = ErrorType<unknown>>(
+ token: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof validateResetToken>>, TError, TData>>, request?: SecondParameter<typeof customIdpInstance>}
+ , queryClient?: QueryClient
+  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+/**
+ * @summary 재설정 토큰 검증
+ */
+
+export function useValidateResetTokenSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof validateResetToken>>>, TError = ErrorType<unknown>>(
+ token: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof validateResetToken>>, TError, TData>>, request?: SecondParameter<typeof customIdpInstance>}
+ , queryClient?: QueryClient 
+ ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = getValidateResetTokenSuspenseInfiniteQueryOptions(token,options)
+
+  const query = useSuspenseInfiniteQuery(queryOptions, queryClient) as  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+/**
+ * @summary 재설정 토큰 검증
+ */
+export const prefetchValidateResetTokenInfiniteQuery = async <TData = Awaited<ReturnType<typeof validateResetToken>>, TError = ErrorType<unknown>>(
+ queryClient: QueryClient, token: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof validateResetToken>>, TError, TData>>, request?: SecondParameter<typeof customIdpInstance>}
+
+  ): Promise<QueryClient> => {
+
+  const queryOptions = getValidateResetTokenSuspenseInfiniteQueryOptions(token,options)
+
+  await queryClient.prefetchInfiniteQuery(queryOptions);
 
   return queryClient;
 }

@@ -215,9 +215,15 @@ function UsersPage() {
 
 ### 페이지 개발 규칙 (Critical)
 
-**모든 페이지는 반드시 서버 사이드 Prefetch 패턴을 사용해야 합니다.**
+**admin web 페이지는 CSR + Suspense를 기본으로 사용하고, SSR prefetch는 예외적으로만 사용합니다.**
 
 ```
+기본 CSR 패턴
+apps/admin/web/src/app/[route]/
+├── page.tsx          # 클라이언트 컴포넌트 ("use client" + Suspense)
+└── hooks/            # 통합 훅 (필요 시)
+
+SSR 예외 패턴
 apps/admin/web/src/app/[route]/
 ├── page.tsx          # 서버 컴포넌트 (Prefetch + HydrationBoundary)
 ├── _client.tsx       # 클라이언트 컴포넌트
@@ -227,11 +233,16 @@ apps/admin/web/src/app/[route]/
 
 | 파일 | 역할 |
 |------|------|
-| `page.tsx` | 서버 컴포넌트 - `"use client"` 없음, Prefetch 실행 |
-| `_client.tsx` | 클라이언트 컴포넌트 - `"use client"` 선언, UI 렌더링 |
-| `_prefetch.ts` | Orval 생성 `prefetchGetXXXQuery` 함수 사용 |
+| `page.tsx` | 기본값은 클라이언트 컴포넌트이며 `Suspense`와 Orval suspense 훅으로 UI를 렌더링 |
+| `_client.tsx` | SSR 예외 페이지 또는 복잡한 분리 시에만 사용 |
+| `_prefetch.ts` | SSR 예외 페이지에서만 Orval 생성 `prefetchGetXXXQuery` 함수 사용 |
 
-**상세 템플릿은 `fe-page-builder` 에이전트의 섹션 9를 참고하세요.**
+**판별 기준**
+- 기본값은 CSR입니다.
+- 목록/검색/필터/페이지네이션/탭 전환 중심 페이지는 CSR을 유지합니다.
+- 서버 쿠키/권한/space bootstrap 없이는 첫 렌더 구조를 결정할 수 없는 경우에만 SSR prefetch를 허용합니다.
+
+**상세 템플릿은 `fe-page-builder` role 지시문을 참고하세요.**
 
 ### 라우팅 규칙 (Critical)
 
