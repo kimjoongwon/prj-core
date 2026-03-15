@@ -3,7 +3,14 @@ import { useGetAbilitiesByRoleId } from "@cocrepo/api/core/abilities";
 import { customInstance } from "@cocrepo/api/core/client";
 import { useDeleteRole, useGetRoleById } from "@cocrepo/api/core/roles";
 
-import { Page, PageTitleBar, Section, VStack } from "@cocrepo/ui";
+import {
+	Page,
+	PageSurface,
+	PageTitleBar,
+	Section,
+	SectionSurface,
+	VStack,
+} from "@cocrepo/ui";
 import {
 	Button,
 	Checkbox,
@@ -265,9 +272,13 @@ function RoleDetailPageClient({ roleId }: RoleDetailPageClientProps) {
 	if (isLoading) {
 		return (
 			<Page top={<PageTitleBar title="역할 상세" description="로딩 중..." />}>
-				<div className="flex items-center justify-center p-8">
-					<span className="text-default-500">로딩 중...</span>
-				</div>
+				<PageSurface>
+					<SectionSurface>
+						<div className="flex items-center justify-center p-8">
+							<span className="text-default-500">로딩 중...</span>
+						</div>
+					</SectionSurface>
+				</PageSurface>
 			</Page>
 		);
 	}
@@ -282,12 +293,16 @@ function RoleDetailPageClient({ roleId }: RoleDetailPageClientProps) {
 					/>
 				}
 			>
-				<div className="flex flex-col items-center justify-center gap-4 p-8">
-					<p className="text-default-500">역할을 찾을 수 없습니다.</p>
-					<Button variant="flat" onPress={onClickBackButton}>
-						목록으로
-					</Button>
-				</div>
+				<PageSurface>
+					<SectionSurface>
+						<div className="flex flex-col items-center justify-center gap-4 p-8">
+							<p className="text-default-500">역할을 찾을 수 없습니다.</p>
+							<Button variant="flat" onPress={onClickBackButton}>
+								목록으로
+							</Button>
+						</div>
+					</SectionSurface>
+				</PageSurface>
 			</Page>
 		);
 	}
@@ -335,300 +350,304 @@ function RoleDetailPageClient({ roleId }: RoleDetailPageClientProps) {
 				/>
 			}
 		>
-			<VStack gap={4}>
-				{role.isSystem && (
-					<div className="rounded-xl bg-warning-50 dark:bg-warning-900/20 p-4">
-						<p className="text-sm text-warning-700 dark:text-warning-400">
-							<strong>시스템 역할:</strong>이 역할은 시스템에서 기본 제공하는
-							역할로, 수정하거나 삭제할 수 없습니다.
-						</p>
-					</div>
-				)}
-				<Section>
-					<div className="p-6">
-						<h3 className="text-lg font-semibold mb-4">기본 정보</h3>
-						<dl className="grid grid-cols-1 md:grid-cols-2 gap-4">
-							<div>
-								<dt className="text-sm text-default-500 mb-1">역할 식별자</dt>
-								<dd className="flex items-center gap-2">
-									<span className="font-mono">{role.name}</span>
-									{role.isSystem && (
-										<Chip size="sm" color="warning" variant="flat">
-											시스템
-										</Chip>
-									)}
-								</dd>
-							</div>
-							<div>
-								<dt className="text-sm text-default-500 mb-1">표시명</dt>
-								<dd>{role.displayName || "-"}</dd>
-							</div>
-							<div className="md:col-span-2">
-								<dt className="text-sm text-default-500 mb-1">설명</dt>
-								<dd className="text-default-600">{role.description || "-"}</dd>
-							</div>
-						</dl>
-					</div>
-				</Section>
-				<Section>
-					<div className="p-6">
-						<div className="flex items-center justify-between mb-4">
-							<h3 className="text-lg font-semibold">권한 목록</h3>
-							{!isEditingGrants ? (
-								<Button
-									size="sm"
-									variant="flat"
-									color="primary"
-									startContent={<Edit className="h-3.5 w-3.5" />}
-									onPress={onClickEditGrants}
-								>
-									권한 편집
-								</Button>
-							) : (
-								<div className="flex gap-2">
+			<PageSurface>
+				<VStack gap={4}>
+					{role.isSystem && (
+						<div className="rounded-xl bg-warning-50 p-4 dark:bg-warning-900/20">
+							<p className="text-sm text-warning-700 dark:text-warning-400">
+								<strong>시스템 역할:</strong>이 역할은 시스템에서 기본 제공하는
+								역할로, 수정하거나 삭제할 수 없습니다.
+							</p>
+						</div>
+					)}
+					<SectionSurface>
+						<Section>
+							<h3 className="text-lg font-semibold mb-4">기본 정보</h3>
+							<dl className="grid grid-cols-1 md:grid-cols-2 gap-4">
+								<div>
+									<dt className="text-sm text-default-500 mb-1">역할 식별자</dt>
+									<dd className="flex items-center gap-2">
+										<span className="font-mono">{role.name}</span>
+										{role.isSystem && (
+											<Chip size="sm" color="warning" variant="flat">
+												시스템
+											</Chip>
+										)}
+									</dd>
+								</div>
+								<div>
+									<dt className="text-sm text-default-500 mb-1">표시명</dt>
+									<dd>{role.displayName || "-"}</dd>
+								</div>
+								<div className="md:col-span-2">
+									<dt className="text-sm text-default-500 mb-1">설명</dt>
+									<dd className="text-default-600">
+										{role.description || "-"}
+									</dd>
+								</div>
+							</dl>
+						</Section>
+					</SectionSurface>
+					<SectionSurface>
+						<Section>
+							<div className="flex items-center justify-between mb-4">
+								<h3 className="text-lg font-semibold">권한 목록</h3>
+								{!isEditingGrants ? (
 									<Button
 										size="sm"
 										variant="flat"
-										onPress={onClickCancelEditGrants}
-									>
-										취소
-									</Button>
-									<Button
-										size="sm"
 										color="primary"
-										startContent={<Save className="h-3.5 w-3.5" />}
-										isDisabled={!hasChanges}
-										onPress={onClickSaveGrants}
+										startContent={<Edit className="h-3.5 w-3.5" />}
+										onPress={onClickEditGrants}
 									>
-										저장
+										권한 편집
 									</Button>
-								</div>
-							)}
-						</div>
-						{isEditingGrants ? (
-							isLoadingAllAbilities ? (
+								) : (
+									<div className="flex gap-2">
+										<Button
+											size="sm"
+											variant="flat"
+											onPress={onClickCancelEditGrants}
+										>
+											취소
+										</Button>
+										<Button
+											size="sm"
+											color="primary"
+											startContent={<Save className="h-3.5 w-3.5" />}
+											isDisabled={!hasChanges}
+											onPress={onClickSaveGrants}
+										>
+											저장
+										</Button>
+									</div>
+								)}
+							</div>
+							{isEditingGrants ? (
+								isLoadingAllAbilities ? (
+									<div className="flex items-center justify-center p-8">
+										<Spinner size="sm" />
+										<span className="ml-2 text-default-500">
+											전체 권한 로딩 중...
+										</span>
+									</div>
+								) : allAbilities.length === 0 ? (
+									<div className="text-center text-default-500 py-8">
+										등록된 권한 정의가 없습니다.
+									</div>
+								) : (
+									<Table aria-label="권한 배치 할당" removeWrapper>
+										<TableHeader>
+											<TableColumn width={50}>선택</TableColumn>
+											<TableColumn>대상 (Subject)</TableColumn>
+											<TableColumn>액션 (Action)</TableColumn>
+											<TableColumn>유형</TableColumn>
+											<TableColumn width={80}>활성</TableColumn>
+											<TableColumn width={100}>우선순위</TableColumn>
+										</TableHeader>
+										<TableBody>
+											{allAbilities.map((ability) => {
+												const isSelected = selectedAbilities.has(ability.id);
+												const grantItem = selectedAbilities.get(ability.id);
+												return (
+													<TableRow key={ability.id}>
+														<TableCell>
+															<Checkbox
+																isSelected={isSelected}
+																onValueChange={() =>
+																	onToggleAbilityCheckbox(ability.id)
+																}
+															/>
+														</TableCell>
+														<TableCell>
+															<span className="font-medium">
+																{String(
+																	ability.subject?.displayName ||
+																		ability.subject?.name ||
+																		ability.subjectId,
+																)}
+															</span>
+														</TableCell>
+														<TableCell>
+															<span className="font-mono text-sm">
+																{String(
+																	ability.action?.displayName ||
+																		ability.action?.name ||
+																		ability.actionId,
+																)}
+															</span>
+														</TableCell>
+														<TableCell>
+															{ability.inverted ? (
+																<Chip
+																	size="sm"
+																	color="danger"
+																	variant="flat"
+																	startContent={<ShieldX className="h-3 w-3" />}
+																>
+																	거부
+																</Chip>
+															) : (
+																<Chip
+																	size="sm"
+																	color="success"
+																	variant="flat"
+																	startContent={
+																		<ShieldCheck className="h-3 w-3" />
+																	}
+																>
+																	허용
+																</Chip>
+															)}
+														</TableCell>
+														<TableCell>
+															{isSelected && (
+																<Switch
+																	size="sm"
+																	isSelected={grantItem?.isActive ?? true}
+																	onValueChange={(val) =>
+																		onToggleGrantActiveSwitch(ability.id, val)
+																	}
+																/>
+															)}
+														</TableCell>
+														<TableCell>
+															{isSelected && (
+																<Input
+																	type="number"
+																	size="sm"
+																	min={0}
+																	max={100}
+																	value={String(grantItem?.priority ?? 0)}
+																	onValueChange={(val) =>
+																		onChangeGrantPriorityInput(
+																			ability.id,
+																			Number(val) || 0,
+																		)
+																	}
+																	className="w-20"
+																/>
+															)}
+														</TableCell>
+													</TableRow>
+												);
+											})}
+										</TableBody>
+									</Table>
+								)
+							) : isLoadingAbilities ? (
 								<div className="flex items-center justify-center p-8">
 									<Spinner size="sm" />
-									<span className="ml-2 text-default-500">
-										전체 권한 로딩 중...
-									</span>
+									<span className="ml-2 text-default-500">권한 로딩 중...</span>
 								</div>
-							) : allAbilities.length === 0 ? (
+							) : grantedAbilities.length === 0 ? (
 								<div className="text-center text-default-500 py-8">
-									등록된 권한 정의가 없습니다.
+									등록된 권한이 없습니다.
 								</div>
 							) : (
-								<Table aria-label="권한 배치 할당" removeWrapper>
+								<Table aria-label="역할 권한 목록" removeWrapper>
 									<TableHeader>
-										<TableColumn width={50}>선택</TableColumn>
 										<TableColumn>대상 (Subject)</TableColumn>
 										<TableColumn>액션 (Action)</TableColumn>
+										<TableColumn>필드</TableColumn>
 										<TableColumn>유형</TableColumn>
-										<TableColumn width={80}>활성</TableColumn>
-										<TableColumn width={100}>우선순위</TableColumn>
 									</TableHeader>
 									<TableBody>
-										{allAbilities.map((ability) => {
-											const isSelected = selectedAbilities.has(ability.id);
-											const grantItem = selectedAbilities.get(ability.id);
-											return (
-												<TableRow key={ability.id}>
-													<TableCell>
-														<Checkbox
-															isSelected={isSelected}
-															onValueChange={() =>
-																onToggleAbilityCheckbox(ability.id)
-															}
-														/>
-													</TableCell>
-													<TableCell>
-														<span className="font-medium">
-															{String(
-																ability.subject?.displayName ||
-																	ability.subject?.name ||
-																	ability.subjectId,
+										{grantedAbilities.map((ability) => (
+											<TableRow key={ability.id}>
+												<TableCell>
+													<span className="font-medium">
+														{String(
+															ability.subject?.displayName ||
+																ability.subject?.name ||
+																ability.subjectId,
+														)}
+													</span>
+												</TableCell>
+												<TableCell>
+													<span className="font-mono text-sm">
+														{String(
+															ability.action?.displayName ||
+																ability.action?.name ||
+																ability.actionId,
+														)}
+													</span>
+												</TableCell>
+												<TableCell>
+													{ability.fields.length > 0 ? (
+														<div className="flex flex-wrap gap-1">
+															{ability.fields.slice(0, 3).map((field) => (
+																<Chip key={field} size="sm" variant="flat">
+																	{field}
+																</Chip>
+															))}
+															{ability.fields.length > 3 && (
+																<Chip size="sm" variant="flat" color="default">
+																	+{ability.fields.length - 3}
+																</Chip>
 															)}
-														</span>
-													</TableCell>
-													<TableCell>
-														<span className="font-mono text-sm">
-															{String(
-																ability.action?.displayName ||
-																	ability.action?.name ||
-																	ability.actionId,
-															)}
-														</span>
-													</TableCell>
-													<TableCell>
-														{ability.inverted ? (
-															<Chip
-																size="sm"
-																color="danger"
-																variant="flat"
-																startContent={<ShieldX className="h-3 w-3" />}
-															>
-																거부
-															</Chip>
-														) : (
-															<Chip
-																size="sm"
-																color="success"
-																variant="flat"
-																startContent={
-																	<ShieldCheck className="h-3 w-3" />
-																}
-															>
-																허용
-															</Chip>
-														)}
-													</TableCell>
-													<TableCell>
-														{isSelected && (
-															<Switch
-																size="sm"
-																isSelected={grantItem?.isActive ?? true}
-																onValueChange={(val) =>
-																	onToggleGrantActiveSwitch(ability.id, val)
-																}
-															/>
-														)}
-													</TableCell>
-													<TableCell>
-														{isSelected && (
-															<Input
-																type="number"
-																size="sm"
-																min={0}
-																max={100}
-																value={String(grantItem?.priority ?? 0)}
-																onValueChange={(val) =>
-																	onChangeGrantPriorityInput(
-																		ability.id,
-																		Number(val) || 0,
-																	)
-																}
-																className="w-20"
-															/>
-														)}
-													</TableCell>
-												</TableRow>
-											);
-										})}
+														</div>
+													) : (
+														<span className="text-default-400">전체</span>
+													)}
+												</TableCell>
+												<TableCell>
+													{ability.inverted ? (
+														<Chip
+															size="sm"
+															color="danger"
+															variant="flat"
+															startContent={<ShieldX className="h-3 w-3" />}
+														>
+															거부
+														</Chip>
+													) : (
+														<Chip
+															size="sm"
+															color="success"
+															variant="flat"
+															startContent={<ShieldCheck className="h-3 w-3" />}
+														>
+															허용
+														</Chip>
+													)}
+												</TableCell>
+											</TableRow>
+										))}
 									</TableBody>
 								</Table>
-							)
-						) : isLoadingAbilities ? (
-							<div className="flex items-center justify-center p-8">
-								<Spinner size="sm" />
-								<span className="ml-2 text-default-500">권한 로딩 중...</span>
-							</div>
-						) : grantedAbilities.length === 0 ? (
-							<div className="text-center text-default-500 py-8">
-								등록된 권한이 없습니다.
-							</div>
-						) : (
-							<Table aria-label="역할 권한 목록" removeWrapper>
-								<TableHeader>
-									<TableColumn>대상 (Subject)</TableColumn>
-									<TableColumn>액션 (Action)</TableColumn>
-									<TableColumn>필드</TableColumn>
-									<TableColumn>유형</TableColumn>
-								</TableHeader>
-								<TableBody>
-									{grantedAbilities.map((ability) => (
-										<TableRow key={ability.id}>
-											<TableCell>
-												<span className="font-medium">
-													{String(
-														ability.subject?.displayName ||
-															ability.subject?.name ||
-															ability.subjectId,
-													)}
-												</span>
-											</TableCell>
-											<TableCell>
-												<span className="font-mono text-sm">
-													{String(
-														ability.action?.displayName ||
-															ability.action?.name ||
-															ability.actionId,
-													)}
-												</span>
-											</TableCell>
-											<TableCell>
-												{ability.fields.length > 0 ? (
-													<div className="flex flex-wrap gap-1">
-														{ability.fields.slice(0, 3).map((field) => (
-															<Chip key={field} size="sm" variant="flat">
-																{field}
-															</Chip>
-														))}
-														{ability.fields.length > 3 && (
-															<Chip size="sm" variant="flat" color="default">
-																+{ability.fields.length - 3}
-															</Chip>
-														)}
-													</div>
-												) : (
-													<span className="text-default-400">전체</span>
-												)}
-											</TableCell>
-											<TableCell>
-												{ability.inverted ? (
-													<Chip
-														size="sm"
-														color="danger"
-														variant="flat"
-														startContent={<ShieldX className="h-3 w-3" />}
-													>
-														거부
-													</Chip>
-												) : (
-													<Chip
-														size="sm"
-														color="success"
-														variant="flat"
-														startContent={<ShieldCheck className="h-3 w-3" />}
-													>
-														허용
-													</Chip>
-												)}
-											</TableCell>
-										</TableRow>
-									))}
-								</TableBody>
-							</Table>
-						)}
-					</div>
-				</Section>
-				<Section>
-					<div className="p-6">
-						<h3 className="text-lg font-semibold mb-4">추가 정보</h3>
-						<dl className="grid grid-cols-1 md:grid-cols-2 gap-4">
-							<div>
-								<dt className="text-sm text-default-500 mb-1">상태</dt>
-								<dd>
-									<Chip
-										size="sm"
-										color={role.removedAt ? "danger" : "success"}
-										variant="flat"
-									>
-										{role.removedAt ? "삭제됨" : "활성"}
-									</Chip>
-								</dd>
-							</div>
-							<div>
-								<dt className="text-sm text-default-500 mb-1">생성일</dt>
-								<dd>{new Date(role.createdAt).toLocaleString("ko-KR")}</dd>
-							</div>
-							<div>
-								<dt className="text-sm text-default-500 mb-1">수정일</dt>
-								<dd>{new Date(role.updatedAt).toLocaleString("ko-KR")}</dd>
-							</div>
-						</dl>
-					</div>
-				</Section>
-			</VStack>
+							)}
+						</Section>
+					</SectionSurface>
+					<SectionSurface>
+						<Section>
+							<h3 className="text-lg font-semibold mb-4">추가 정보</h3>
+							<dl className="grid grid-cols-1 md:grid-cols-2 gap-4">
+								<div>
+									<dt className="text-sm text-default-500 mb-1">상태</dt>
+									<dd>
+										<Chip
+											size="sm"
+											color={role.removedAt ? "danger" : "success"}
+											variant="flat"
+										>
+											{role.removedAt ? "삭제됨" : "활성"}
+										</Chip>
+									</dd>
+								</div>
+								<div>
+									<dt className="text-sm text-default-500 mb-1">생성일</dt>
+									<dd>{new Date(role.createdAt).toLocaleString("ko-KR")}</dd>
+								</div>
+								<div>
+									<dt className="text-sm text-default-500 mb-1">수정일</dt>
+									<dd>{new Date(role.updatedAt).toLocaleString("ko-KR")}</dd>
+								</div>
+							</dl>
+						</Section>
+					</SectionSurface>
+				</VStack>
+			</PageSurface>
 			<Modal isOpen={deleteModal.isOpen} onClose={deleteModal.onClose}>
 				<ModalContent>
 					<ModalHeader>역할 삭제</ModalHeader>

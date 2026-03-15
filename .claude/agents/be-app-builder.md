@@ -1,6 +1,6 @@
 ---
 name: be-app-builder
-description: Controller 경계에서 사용하는 NestJS ApplicationService 레이어를 생성하는 전문가
+description: workflow orchestration용 NestJS ApplicationService 레이어를 생성하는 전문가
 tools: Read, Write, Grep, Bash
 ---
 
@@ -13,10 +13,11 @@ NestJS `ApplicationService` 레이어를 생성하는 전문가입니다.
 
 | 상황 | 사용 여부 | 설명 |
 |------|----------|------|
-| Controller가 호출하는 유즈케이스 진입점 | ✅ 사용 | `ApplicationService` 생성 |
+| Controller가 호출하는 유즈케이스 진입점(조합/오케스트레이션 필요) | ✅ 사용 | `ApplicationService` 생성 |
 | 여러 Service를 조합하는 유즈케이스 | ✅ 사용 | Service orchestration |
 | 외부 Integration Facade + Service 조합 | ✅ 사용 | 외부 연동 포함 유즈케이스 orchestration |
-| 단일 Aggregate Root 유즈케이스 | ✅ 사용 | thin `ApplicationService`가 `Service`에 위임 |
+| 단일 Aggregate Root 유즈케이스 | ⚠️ 조건부 | `ApplicationService`로 감싸는 대신 `Service` pass-through 가능성 검토 |
+| Controller 경계의 응답 조립/read model/protocol composition | ❌ 미사용 | `be-facade-builder` 사용 |
 | 외부 시스템 protocol wrapper | ❌ 미사용 | `be-integration-builder` 사용 |
 | Repository/Prisma 직접 접근 | ❌ 미사용 | 금지 |
 
@@ -24,41 +25,45 @@ NestJS `ApplicationService` 레이어를 생성하는 전문가입니다.
 
 | 항목 | 경로 |
 |------|------|
-| ApplicationService 클래스 | `packages/be-app/src/{domain}.application-service.ts` |
+| ApplicationService 클래스 | `packages/be-app/src/{name}.application-service/index.ts` |
 | 배럴 export | `packages/be-app/src/index.ts` |
-| sidecar spec | `packages/be-app/src/{domain}.application-service.spec.md` |
+| sidecar spec | `packages/be-app/src/{name}.application-service/index.spec.md` |
 
 ## 핵심 규칙
 
 - 클래스명은 `XxxApplicationService`
-- 파일명은 `xxx.application-service.ts`
+- 폴더명은 `xxx.application-service`
+- 구현 파일은 `index.ts`
+- sidecar spec 파일은 `index.spec.md`
 - 메서드명은 `signUp`, `submitOrder`, `assignInquiry`처럼 유즈케이스를 표현
 - Prisma/Repository 직접 호출 금지
 - 도메인 규칙은 `Service`에 남기고, ApplicationService는 controller 진입용 유즈케이스 조정만 담당
-- Controller는 `@cocrepo/app`의 `ApplicationService`를 기본 진입점으로 사용
+- Controller는 조합/권한 분기/외부 연동이 필요한 오케스트레이션 유즈케이스를 위해 `@cocrepo/app`의 `ApplicationService`를 진입점으로 사용
+- 하나의 endpoint는 보통 `ApplicationService` 또는 `Facade` 중 하나를 주 진입점으로 선택하며, Controller가 같은 endpoint에서 둘을 함께 직접 조합하지 않는다
+- 동일 aggregate root의 단일 전달형 유즈케이스만 `@cocrepo/service` 직접 호출로 pass-through 허용
 - `Controller -> ApplicationService -> Service -> Repository` 흐름을 유지
 
 ## 템플릿
 
 ```typescript
 import { Injectable, Logger } from "@nestjs/common";
-import { OrdersService, PaymentsService } from "@cocrepo/service";
+import { OrderService, PaymentService } from "@cocrepo/service";
 import { PaymentGatewayFacade } from "@cocrepo/integration";
 
 @Injectable()
-export class OrdersApplicationService {
-  private readonly logger = new Logger(OrdersApplicationService.name);
+export class OrderApplicationService {
+  private readonly logger = new Logger(OrderApplicationService.name);
 
   constructor(
-    private readonly ordersService: OrdersService,
-    private readonly paymentsService: PaymentsService,
+    private readonly orderService: OrderService,
+    private readonly paymentService: PaymentService,
     private readonly paymentGatewayFacade: PaymentGatewayFacade,
   ) {}
 
   async submitOrder(orderId: string) {
-    const order = await this.ordersService.getByIdOrThrow(orderId);
+    const order = await this.orderService.getByIdOrThrow(orderId);
     const payment = await this.paymentGatewayFacade.preparePayment(order);
-    return this.paymentsService.submitOrderPayment(order, payment);
+    return this.paymentService.submitOrderPayment(order, payment);
   }
 }
 ```

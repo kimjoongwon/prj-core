@@ -5,7 +5,13 @@ import {
 	useUpdateRole,
 } from "@cocrepo/api/core/roles";
 
-import { Page, PageTitleBar, Section, VStack } from "@cocrepo/ui";
+import {
+	Page,
+	PageSurface,
+	PageTitleBar,
+	SectionSurface,
+	VStack,
+} from "@cocrepo/ui";
 import { Button, Input, Textarea } from "@heroui/react";
 import { ArrowLeft, Save } from "lucide-react";
 import { observer, useLocalObservable } from "mobx-react-lite";
@@ -117,11 +123,13 @@ function RoleEditPageClient({ roleId }: RoleEditPageClientProps) {
 	if (isLoading) {
 		return (
 			<Page top={<PageTitleBar title="역할 수정" description="로딩 중..." />}>
-				<Section>
-					<div className="flex items-center justify-center p-8">
-						<span className="text-default-500">로딩 중...</span>
-					</div>
-				</Section>
+				<PageSurface>
+					<SectionSurface>
+						<div className="flex items-center justify-center p-8">
+							<span className="text-default-500">로딩 중...</span>
+						</div>
+					</SectionSurface>
+				</PageSurface>
 			</Page>
 		);
 	}
@@ -133,12 +141,16 @@ function RoleEditPageClient({ roleId }: RoleEditPageClientProps) {
 
 		return (
 			<Page top={pageHeader}>
-				<div className="flex flex-col items-center justify-center gap-4 p-8">
-					<p className="text-default-500">역할을 찾을 수 없습니다.</p>
-					<Button variant="flat" onPress={onClickListButton}>
-						목록으로
-					</Button>
-				</div>
+				<PageSurface>
+					<SectionSurface>
+						<div className="flex flex-col items-center justify-center gap-4 p-8">
+							<p className="text-default-500">역할을 찾을 수 없습니다.</p>
+							<Button variant="flat" onPress={onClickListButton}>
+								목록으로
+							</Button>
+						</div>
+					</SectionSurface>
+				</PageSurface>
 			</Page>
 		);
 	}
@@ -153,12 +165,18 @@ function RoleEditPageClient({ roleId }: RoleEditPageClientProps) {
 
 		return (
 			<Page top={pageHeader}>
-				<div className="flex flex-col items-center justify-center gap-4 p-8">
-					<p className="text-default-500">시스템 역할은 수정할 수 없습니다.</p>
-					<Button variant="flat" onPress={onClickBackButton}>
-						상세로 돌아가기
-					</Button>
-				</div>
+				<PageSurface>
+					<SectionSurface>
+						<div className="flex flex-col items-center justify-center gap-4 p-8">
+							<p className="text-default-500">
+								시스템 역할은 수정할 수 없습니다.
+							</p>
+							<Button variant="flat" onPress={onClickBackButton}>
+								상세로 돌아가기
+							</Button>
+						</div>
+					</SectionSurface>
+				</PageSurface>
 			</Page>
 		);
 	}
@@ -181,54 +199,56 @@ function RoleEditPageClient({ roleId }: RoleEditPageClientProps) {
 
 	return (
 		<Page top={pageHeader}>
-			<VStack gap={4}>
-				<Section>
-					<div className="space-y-6 p-6">
-						<Input
-							label="역할 식별자"
-							value={role.name}
-							isReadOnly
-							isDisabled
-							description="역할 식별자는 수정할 수 없습니다."
-						/>
-						<Input
-							label="표시명"
-							placeholder="사용자 정의 역할"
-							value={state.displayName}
-							onValueChange={(value) => {
-								state.displayName = value;
-							}}
-							isInvalid={!!state.errors.displayName}
-							errorMessage={state.errors.displayName}
-							maxLength={50}
-							description="사용자에게 보여질 역할 이름입니다."
-						/>
-						<Textarea
-							label="설명"
-							placeholder="역할에 대한 설명을 입력하세요."
-							value={state.description}
-							onValueChange={(value) => {
-								state.description = value;
-							}}
-							maxLength={200}
-							minRows={3}
-						/>
-						<div className="flex justify-end gap-2 pt-4">
-							<Button variant="flat" onPress={onClickBackButton}>
-								취소
-							</Button>
-							<Button
-								color="primary"
-								startContent={<Save className="h-4 w-4" />}
-								onPress={onClickSubmitButton}
-								isLoading={isPending}
-							>
-								저장
-							</Button>
+			<PageSurface>
+				<VStack gap={4}>
+					<SectionSurface>
+						<div className="space-y-6">
+							<Input
+								label="역할 식별자"
+								value={role.name}
+								isReadOnly
+								isDisabled
+								description="역할 식별자는 수정할 수 없습니다."
+							/>
+							<Input
+								label="표시명"
+								placeholder="사용자 정의 역할"
+								value={state.displayName}
+								onValueChange={(value) => {
+									state.displayName = value;
+								}}
+								isInvalid={!!state.errors.displayName}
+								errorMessage={state.errors.displayName}
+								maxLength={50}
+								description="사용자에게 보여질 역할 이름입니다."
+							/>
+							<Textarea
+								label="설명"
+								placeholder="역할에 대한 설명을 입력하세요."
+								value={state.description}
+								onValueChange={(value) => {
+									state.description = value;
+								}}
+								maxLength={200}
+								minRows={3}
+							/>
+							<div className="flex justify-end gap-2 pt-4">
+								<Button variant="flat" onPress={onClickBackButton}>
+									취소
+								</Button>
+								<Button
+									color="primary"
+									startContent={<Save className="h-4 w-4" />}
+									onPress={onClickSubmitButton}
+									isLoading={isPending}
+								>
+									저장
+								</Button>
+							</div>
 						</div>
-					</div>
-				</Section>
-			</VStack>
+					</SectionSurface>
+				</VStack>
+			</PageSurface>
 		</Page>
 	);
 }

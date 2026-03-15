@@ -11,13 +11,13 @@ tools:
 ## 재사용 우선 점검 (Mandatory)
 
 - 작업을 시작하기 전에 반드시 기존 Repository, Entity, Prisma schema, spec, 테스트를 먼저 검색합니다.
-- 신규 Repository 생성 전에 기존 aggregate root Repository에 메서드를 추가하는 편이 맞는지 먼저 판단합니다.
+- 신규 Repository 생성 전에 기존 schema-owner Repository에 메서드를 추가하는 편이 맞는지 먼저 판단합니다.
 - 동일 책임의 중복 Repository를 금지합니다.
 
 
 # Repository Builder
 
-Prisma 기반 Repository 레이어를 생성하는 전문가입니다. 이 에이전트는 **`@aggregate-root: true`가 붙은 대표 모델에 대해서만** Repository를 생성합니다.
+Prisma 기반 Repository 레이어를 생성하는 전문가입니다. 이 에이전트는 **`@schema-owner: true`가 붙은 대표 모델에 대해서만** Repository를 생성합니다.
 
 ---
 
@@ -25,9 +25,9 @@ Prisma 기반 Repository 레이어를 생성하는 전문가입니다. 이 에�
 
 | 상황 | 사용 여부 | 설명 |
 |------|----------|------|
-| aggregate root 모델의 데이터 접근 레이어 필요 | ✅ 사용 | Repository 생성 |
-| aggregate root Repository에 조회/집계 메서드 추가 | ✅ 사용 | 쿼리 메서드 추가 |
-| CHILD/DETAIL/JOIN 모델 전용 독립 Repository 생성 | ❌ 미사용 | 부모 aggregate root Repository에 포함 |
+| schema-owner 모델의 데이터 접근 레이어 필요 | ✅ 사용 | Repository 생성 |
+| 기존 schema-owner Repository에 조회/집계 메서드 추가 | ✅ 사용 | 쿼리 메서드 추가 |
+| CHILD/DETAIL/JOIN 모델 전용 독립 Repository 생성 | ❌ 미사용 | 부모 schema-owner Repository에 포함 |
 | 비즈니스 로직 추가 | ❌ 미사용 | service-builder 사용 |
 | Controller 생성 | ❌ 미사용 | controller-builder 사용 |
 
@@ -38,39 +38,40 @@ Prisma 기반 Repository 레이어를 생성하는 전문가입니다. 이 에�
 | 구분 | 항목 | 설명 |
 |------|------|------|
 | **입력** | Entity 클래스 | `@cocrepo/entity`의 대표 모델 |
-| | Prisma schema 모델 | `@aggregate-root: true`가 붙은 모델 |
+| | Prisma schema 모델 | `@schema-owner: true`가 붙은 모델 |
 | | 필요한 쿼리 패턴 | CRUD, include 조회, 집계, exists 등 |
-| **출력** | Repository 클래스 | `packages/be-repository/src/{aggregate-root}.repository.ts` |
-| | Sidecar 기획서 | `packages/be-repository/src/{aggregate-root}.repository.spec.md` |
+| **출력** | Repository 클래스 | `packages/be-repository/src/{schema-owner}.repository.ts` |
+| | Sidecar 기획서 | `packages/be-repository/src/{schema-owner}.repository.spec.md` |
 | | index.ts 업데이트 | export 추가 |
 
 ---
 
 ## 가장 중요한 규칙
 
-### 1. Repository는 aggregate root만 만든다
+### 1. Repository는 schema-owner만 만든다
 
-- 스키마 주석에 `@aggregate-root: true`가 붙은 모델만 독립 Repository 생성 대상입니다.
+- 스키마 주석에 `@schema-owner: true`가 붙은 모델만 독립 Repository 생성 대상입니다.
 - `CHILD`, `DETAIL`, `JOIN` 모델이더라도 별도 marker가 없으면 독립 Repository를 만들지 않습니다.
-- 하위 모델 접근은 부모 aggregate root Repository 안의 include/where/query 메서드로 처리합니다.
+- 하위 모델 접근은 부모 schema-owner Repository 안의 include/where/query 메서드로 처리합니다.
 
 예시:
 
 - `UserRepository`는 가능
 - `ProfileRepository`는 금지
-- `SpaceRepository`는 가능
-- `GroundRepository`는 금지 (`Space` child는 부모 root Repository에서 처리)
+- `SpacesRepository`는 가능
+- `FoldersRepository`는 가능
+- `GroundRepository`는 금지 (`Space` child는 부모 repository에서 처리)
 - `TaskRepository`는 가능
-- `ExerciseRepository`는 금지 (`Task` child는 부모 root Repository에서 처리)
-- `RoleRepository`는 가능
-- `RoleAssociationRepository`는 금지
+- `ExerciseRepository`는 금지 (`Task` child는 부모 repository에서 처리)
+- `RolesRepository`는 가능
+- `RoleAssociationsRepository`는 금지
 
 ### 2. 대상 모델 확인 절차
 
 Repository 생성 전 반드시 아래를 확인합니다.
 
 - 해당 모델이 schema 파일의 대표 모델(`@schema-owner: true`)인지
-- 해당 모델 주석에 `@aggregate-root: true`가 있는지
+- 해당 모델 주석에 `@schema-owner: true`가 있는지
 - 대응 schema 파일이 도메인 폴더 구조 아래에 있는지
 
 확인 대상 예시:
@@ -84,7 +85,7 @@ Repository 생성 전 반드시 아래를 확인합니다.
 요청이 `Profile`, `Ground`, `Exercise`, `RoleAssociation`, `InquiryMessage`처럼 비대표 모델을 대상으로 오면:
 
 - 독립 Repository를 만들지 않습니다.
-- 어느 aggregate root Repository에 메서드를 추가해야 하는지 판단합니다.
+- 어느 schema-owner Repository에 메서드를 추가해야 하는지 판단합니다.
 - 예: `Profile` 조회 요구는 `UsersRepository`, `ground` 조회 요구는 `SpacesRepository`, `exercise` 조회 요구는 `TasksRepository` 메서드로 구현
 
 ### 4. 메서드 네이밍 규칙
@@ -127,6 +128,9 @@ return result ? plainToInstance(User, result) : null;
 // 비대표 모델 독립 Repository 금지
 export class ProfilesRepository {}
 
+// 대표 모델과 다른 aggregate child만을 위한 repository 생성 금지
+export class TaskExerciseRepository {}
+
 // 범용 Prisma Args 전달 금지
 findUnique(args: Prisma.UserFindUniqueArgs)
 
@@ -141,15 +145,15 @@ interface CreateUserParams {}
 
 ## 작업 프로세스
 
-### 1단계: aggregate root 확인
+### 1단계: schema-owner 확인
 
 - 대상 Entity가 어떤 schema 파일에 선언됐는지 찾습니다.
-- 해당 모델이 `@schema-owner: true`인지와 `@aggregate-root: true`인지 먼저 확인합니다.
+- 해당 모델이 `@schema-owner: true`인지 먼저 확인합니다.
 - marker가 없으면 독립 Repository 생성 작업으로 진행하지 않습니다.
 
 ### 2단계: 기존 Repository 확인
 
-- 기존 `{AggregateRoot}sRepository`가 있으면 우선 그 파일에 메서드를 추가합니다.
+- 기존 `{SchemaOwner}sRepository`가 있으면 우선 그 파일에 메서드를 추가합니다.
 - 없으면 새 Repository와 sidecar spec을 생성합니다.
 
 ### 3단계: 하위 모델 접근 설계
@@ -191,7 +195,7 @@ export class UsersRepository {
 
 ## 산출물 체크리스트
 
-- 대상 모델에 `@aggregate-root: true`가 있는가?
+- 대상 모델에 `@schema-owner: true`가 있는가?
 - 비대표 모델 독립 Repository를 만들지 않았는가?
 - 메서드명이 데이터 설명 중심인가?
 - Prisma 타입을 직접 사용했는가?

@@ -48,43 +48,53 @@
 
 ## 레이아웃 구성
 
-| 영역 | 컴포넌트 | 설명 |
-|------|----------|------|
-| 페이지 구조 | `Page` + `PageTitleBar` | 페이지 콘텐츠 구조와 제목/설명 배치 |
-| 페이지 표면 | `PageSurface` | 본문 전체를 감싸는 raised 표현 레이어 |
-| 통계 영역 | `SectionSurface` > `StatsCard` x3 | 전체(Users)/활성(UserCheck)/비활성(UserMinus) 이용자 수 |
-| 목록 영역 | `SectionSurface` > `MetaDataGrid` | 이용자 목록 테이블 (`padding="none"`) |
+| 영역        | 컴포넌트                          | 설명                                                    |
+| ----------- | --------------------------------- | ------------------------------------------------------- |
+| 페이지 구조 | `Page` + `PageTitleBar`           | 페이지 콘텐츠 구조와 제목/설명 배치                     |
+| 페이지 표면 | `PageSurface`                     | 본문 전체를 감싸는 raised 표현 레이어                   |
+| 통계 영역   | `SectionSurface` > `StatsCard` x3 | 전체(Users)/활성(UserCheck)/비활성(UserMinus) 이용자 수 |
+| 목록 영역   | `SectionSurface` > `MetaDataGrid` | 이용자 목록 테이블 (`padding="none"`)                   |
+
+## Surface / Elevation
+
+| 항목                   | 결정                                                                                             |
+| ---------------------- | ------------------------------------------------------------------------------------------------ |
+| PageSurface owner      | `apps/admin/web/src/app/(admin)/users/page.tsx`                                                  |
+| PageSurface 역할       | 통계 카드와 목록 그리드를 하나의 raised 본문으로 묶음                                            |
+| SectionSurface 대상    | 통계 카드 묶음, 이용자 목록 `MetaDataGrid`                                                       |
+| SectionSurface padding | 통계 영역은 기본 패딩, 목록 영역은 `padding="none"`                                              |
+| 예외                   | 없음. 검색 입력과 그리드 툴바는 `MetaDataGrid` 슬롯이지만 surface는 `users/page.tsx`가 직접 소유 |
 
 ## 컬럼 정의
 
-| 필드 | 라벨 | 너비 | Cell 컴포넌트 | 비고 |
-|------|------|------|---------------|------|
-| name | 이름 | 150 | 기본 텍스트 | isRequired |
-| email | 이메일 | 200 | 기본 텍스트 | |
-| phone | 전화번호 | 150 | `PhoneCell` | 포맷팅 표시 |
-| role | 역할 | 120 | `UserRoleCell` | tenants 기반, 중앙 정렬 |
-| status | 상태 | 100 | `StatusChipCell` | removedAt 기반, 중앙 정렬 |
-| createdAt | 가입일 | 150 | `DateTimeCell` | |
+| 필드      | 라벨     | 너비 | Cell 컴포넌트    | 비고                      |
+| --------- | -------- | ---- | ---------------- | ------------------------- |
+| name      | 이름     | 150  | 기본 텍스트      | isRequired                |
+| email     | 이메일   | 200  | 기본 텍스트      |                           |
+| phone     | 전화번호 | 150  | `PhoneCell`      | 포맷팅 표시               |
+| role      | 역할     | 120  | `UserRoleCell`   | tenants 기반, 중앙 정렬   |
+| status    | 상태     | 100  | `StatusChipCell` | removedAt 기반, 중앙 정렬 |
+| createdAt | 가입일   | 150  | `DateTimeCell`   |                           |
 
 ## 검색 설정
 
-| ID | 타입 | placeholder | 옵션 |
-|----|------|-------------|------|
+| ID     | 타입   | placeholder                        | 옵션            |
+| ------ | ------ | ---------------------------------- | --------------- |
 | search | search | "이름, 이메일, 전화번호로 검색..." | debounceMs: 300 |
 
 ## 페이지 상태
 
-| 상태 | 설명 | UI |
-|------|------|-----|
-| 로딩 | 초기 조회 중 | `PageSurface` 내부 중앙 로딩 스피너 |
-| 데이터 표시 | 이용자 목록 표시 | 통계 카드 + 테이블 |
-| 빈 목록 | 조회 결과 없음 | "조회된 이용자가 없습니다." 메시지 |
-| 검색 결과 없음 | 검색 후 결과 없음 | 빈 목록 메시지 |
+| 상태           | 설명              | UI                                  |
+| -------------- | ----------------- | ----------------------------------- |
+| 로딩           | 초기 조회 중      | `PageSurface` 내부 중앙 로딩 스피너 |
+| 데이터 표시    | 이용자 목록 표시  | 통계 카드 + 테이블                  |
+| 빈 목록        | 조회 결과 없음    | "조회된 이용자가 없습니다." 메시지  |
+| 검색 결과 없음 | 검색 후 결과 없음 | 빈 목록 메시지                      |
 
 ## API 호출
 
-| 시점 | API | 설명 |
-|------|-----|------|
+| 시점            | API                                 | 설명                        |
+| --------------- | ----------------------------------- | --------------------------- |
 | 클라이언트 렌더 | `useGetUsers({ take, skip, name })` | nuqs URL 상태 기반 CSR 조회 |
 
 ## 응답 데이터 구조
@@ -97,25 +107,27 @@
 
 ## 이벤트 핸들러
 
-| 이벤트 | 동작 |
-|--------|------|
-| 검색어 입력 | `queryStates.search` 업데이트 (300ms 디바운스) → API 재호출 |
-| 페이지 변경 | `queryStates.skip` 업데이트 → API 재호출 |
-| 페이지 크기 변경 | `queryStates.take` 업데이트 → API 재호출 |
+| 이벤트           | 동작                                                        |
+| ---------------- | ----------------------------------------------------------- |
+| 검색어 입력      | `queryStates.search` 업데이트 (300ms 디바운스) → API 재호출 |
+| 페이지 변경      | `queryStates.skip` 업데이트 → API 재호출                    |
+| 페이지 크기 변경 | `queryStates.take` 업데이트 → API 재호출                    |
 
 ## URL 상태 관리
 
 `useMetaDataGridQueryStates` 훅을 사용하여 nuqs 기반으로 URL 쿼리 파라미터를 관리합니다.
 
-| 파라미터 | 타입 | 기본값 | 설명 |
-|---------|------|--------|------|
-| take | number | 20 | 페이지당 항목 수 |
-| skip | number | 0 | 건너뛸 항목 수 |
-| search | string | - | 검색어 (name 파라미터로 API에 전달) |
+- Next.js App Router build 요구에 맞춰 `page.tsx`는 browser-only no-SSR boundary를 제공하고 내부 페이지 컴포넌트에서 훅을 실행합니다.
+
+| 파라미터 | 타입   | 기본값 | 설명                                |
+| -------- | ------ | ------ | ----------------------------------- |
+| take     | number | 20     | 페이지당 항목 수                    |
+| skip     | number | 0      | 건너뛸 항목 수                      |
+| search   | string | -      | 검색어 (name 파라미터로 API에 전달) |
 
 ## 구현 체크리스트
 
-- [x] page.tsx (클라이언트 컴포넌트, `Suspense` + MetaDataGrid + StatsCard)
+- [x] page.tsx (browser-only no-SSR boundary + 내부 페이지 컴포넌트에서 `useMetaDataGridQueryStates`, `useGetUsers`, `MetaDataGrid`, `StatsCard` 실행)
 - [x] `_client.tsx` 없음 (CSR 기본 패턴)
 - [x] `_prefetch.ts` 없음 (SSR 예외 아님)
 
@@ -125,15 +137,18 @@
 
 ## 변경 이력
 
-| 일자 | 내용 | 작성자 |
-|------|------|--------|
-| 2026-03-15 | `UsersPageContent` 분리를 제거하고 단일 `UsersPage`에서 `useGetUsers`와 초기 로딩 스피너를 직접 처리하도록 단순화 | codex |
-| 2026-03-15 | `Suspense` fallback에서 최종 화면 복제를 제거하고 최소 중앙 로딩 스피너만 렌더링하도록 단순화 | codex |
-| 2026-03-15 | 이용자 목록 화면에 `Page + PageTitleBar` 구조는 유지하고 `PageSurface/SectionSurface` 표현 레이어를 추가 | codex |
-| 2026-03-15 | 이용자 목록을 CSR + Suspense 단일 `page.tsx` 패턴으로 전환하고 `_client.tsx`, `_prefetch.ts`를 제거 | codex |
-| 2026-02-18 | 초기 생성 (역기획) | req-reverse-engineer |
-| 2026-02-19 | 디자인 목업 추가 | req-reverse-engineer |
-| 2026-03-03 | Scaffold 제거 및 페이지 헤더 영역/섹션 영역 용어 정리 | codex |
-| 2026-03-03 | `_client.tsx` 반복 헤더를 `Page + PageTitleBar` 패턴으로 정리 | codex |
-| 2026-03-03 | Page/Section `mode` 제거 반영 (단일 구조 기준으로 문서 표현 정리) | codex |
-| 2026-03-03 | `PageTitleBar` 단일 컴포넌트 통합 및 리네이밍 반영 | codex |
+| 일자       | 내용                                                                                                              | 작성자               |
+| ---------- | ----------------------------------------------------------------------------------------------------------------- | -------------------- |
+| 2026-03-15 | 상대 `/api` 호출의 prerender 오류를 피하기 위해 users 목록 `page.tsx`를 browser-only no-SSR boundary로 전환       | codex                |
+| 2026-03-15 | Next.js build 요구에 맞춰 `useMetaDataGridQueryStates` 실행을 page-level `Suspense` boundary 안쪽으로 이동        | codex                |
+| 2026-03-15 | users 목록 spec에 `PageSurface`/`SectionSurface` ownership과 elevation 결정을 명시                                | codex                |
+| 2026-03-15 | `UsersPageContent` 분리를 제거하고 단일 `UsersPage`에서 `useGetUsers`와 초기 로딩 스피너를 직접 처리하도록 단순화 | codex                |
+| 2026-03-15 | `Suspense` fallback에서 최종 화면 복제를 제거하고 최소 중앙 로딩 스피너만 렌더링하도록 단순화                     | codex                |
+| 2026-03-15 | 이용자 목록 화면에 `Page + PageTitleBar` 구조는 유지하고 `PageSurface/SectionSurface` 표현 레이어를 추가          | codex                |
+| 2026-03-15 | 이용자 목록을 CSR + Suspense 단일 `page.tsx` 패턴으로 전환하고 `_client.tsx`, `_prefetch.ts`를 제거               | codex                |
+| 2026-02-18 | 초기 생성 (역기획)                                                                                                | req-reverse-engineer |
+| 2026-02-19 | 디자인 목업 추가                                                                                                  | req-reverse-engineer |
+| 2026-03-03 | Scaffold 제거 및 페이지 헤더 영역/섹션 영역 용어 정리                                                             | codex                |
+| 2026-03-03 | `_client.tsx` 반복 헤더를 `Page + PageTitleBar` 패턴으로 정리                                                     | codex                |
+| 2026-03-03 | Page/Section `mode` 제거 반영 (단일 구조 기준으로 문서 표현 정리)                                                 | codex                |
+| 2026-03-03 | `PageTitleBar` 단일 컴포넌트 통합 및 리네이밍 반영                                                                | codex                |

@@ -13,9 +13,11 @@ import type { PreviewResult, TemplateVariable } from "@cocrepo/ui";
 import {
 	DateTimeCell,
 	Page,
+	PageSurface,
 	PageTitleBar,
 	PreviewModal,
 	Section,
+	SectionSurface,
 	SendTestModal,
 	TemplateActions,
 	TemplateContentViewer,
@@ -177,9 +179,15 @@ function TemplateDetailPageClient({
 	// 로딩 상태
 	if (!response) {
 		return (
-			<div className="flex items-center justify-center p-8">
-				<Spinner size="lg" />
-			</div>
+			<Page top={<PageTitleBar title="템플릿 상세" description="로딩 중..." />}>
+				<PageSurface>
+					<SectionSurface>
+						<div className="flex items-center justify-center p-8">
+							<Spinner size="lg" />
+						</div>
+					</SectionSurface>
+				</PageSurface>
+			</Page>
 		);
 	}
 
@@ -193,16 +201,20 @@ function TemplateDetailPageClient({
 		);
 		return (
 			<Page top={pageHeader}>
-				<div className="flex flex-col items-center justify-center gap-4 p-8">
-					<p className="text-default-500">템플릿을 찾을 수 없습니다.</p>
-					<Button
-						variant="flat"
-						startContent={<ArrowLeft className="size-4" />}
-						onPress={onClickBackButton}
-					>
-						목록으로
-					</Button>
-				</div>
+				<PageSurface>
+					<SectionSurface>
+						<div className="flex flex-col items-center justify-center gap-4 p-8">
+							<p className="text-default-500">템플릿을 찾을 수 없습니다.</p>
+							<Button
+								variant="flat"
+								startContent={<ArrowLeft className="size-4" />}
+								onPress={onClickBackButton}
+							>
+								목록으로
+							</Button>
+						</div>
+					</SectionSurface>
+				</PageSurface>
 			</Page>
 		);
 	}
@@ -227,71 +239,79 @@ function TemplateDetailPageClient({
 
 	return (
 		<Page top={pageHeader}>
-			<VStack gap={4}>
-				<Section top={<PageTitleBar level={2} title="기본 정보" />}>
-					<div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-						<div>
-							<label className="text-sm text-default-500">코드</label>
-							<p className="mt-1 font-mono">{template.code}</p>
-						</div>
-						<div>
-							<label className="text-sm text-default-500">이름</label>
-							<p className="mt-1">{template.name}</p>
-						</div>
-						<div>
-							<label className="text-sm text-default-500">유형</label>
-							<div className="mt-1">
-								<TemplateTypeBadge type={template.type} />
+			<PageSurface>
+				<VStack gap={4}>
+					<SectionSurface>
+						<Section top={<PageTitleBar level={2} title="기본 정보" />}>
+							<div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+								<div>
+									<label className="text-sm text-default-500">코드</label>
+									<p className="mt-1 font-mono">{template.code}</p>
+								</div>
+								<div>
+									<label className="text-sm text-default-500">이름</label>
+									<p className="mt-1">{template.name}</p>
+								</div>
+								<div>
+									<label className="text-sm text-default-500">유형</label>
+									<div className="mt-1">
+										<TemplateTypeBadge type={template.type} />
+									</div>
+								</div>
+								<div>
+									<label className="text-sm text-default-500">설명</label>
+									<p className="mt-1">{template.description || "-"}</p>
+								</div>
+								<div>
+									<label className="text-sm text-default-500">활성 상태</label>
+									<div className="mt-1">
+										<Switch
+											isSelected={template.isActive}
+											onValueChange={onClickToggleButton}
+											isDisabled={isToggling}
+											size="sm"
+										>
+											{template.isActive ? "활성" : "비활성"}
+										</Switch>
+									</div>
+								</div>
+								<div>
+									<label className="text-sm text-default-500">생성일</label>
+									<div className="mt-1">
+										<DateTimeCell value={template.createdAt} />
+									</div>
+								</div>
+								<div>
+									<label className="text-sm text-default-500">수정일</label>
+									<div className="mt-1">
+										<DateTimeCell value={template.updatedAt || "-"} />
+									</div>
+								</div>
 							</div>
-						</div>
-						<div>
-							<label className="text-sm text-default-500">설명</label>
-							<p className="mt-1">{template.description || "-"}</p>
-						</div>
-						<div>
-							<label className="text-sm text-default-500">활성 상태</label>
-							<div className="mt-1">
-								<Switch
-									isSelected={template.isActive}
-									onValueChange={onClickToggleButton}
-									isDisabled={isToggling}
-									size="sm"
-								>
-									{template.isActive ? "활성" : "비활성"}
-								</Switch>
-							</div>
-						</div>
-						<div>
-							<label className="text-sm text-default-500">생성일</label>
-							<div className="mt-1">
-								<DateTimeCell value={template.createdAt} />
-							</div>
-						</div>
-						<div>
-							<label className="text-sm text-default-500">수정일</label>
-							<div className="mt-1">
-								<DateTimeCell value={template.updatedAt || "-"} />
-							</div>
-						</div>
-					</div>
-				</Section>
-				<Section top={<PageTitleBar level={2} title="콘텐츠" />}>
-					<TemplateContentViewer
-						type={template.type}
-						subject={template.subject ?? null}
-						content={template.content}
-					/>
-				</Section>
-				<Section top={<PageTitleBar level={2} title="변수 목록" />}>
-					{(template.variables ?? []).length > 0 ? (
-						<VariableReadTable variables={template.variables ?? []} />
-					) : (
-						<div className="p-6 text-center">
-							<p className="text-default-500">등록된 변수가 없습니다.</p>
-						</div>
-					)}
-				</Section>
-			</VStack>
+						</Section>
+					</SectionSurface>
+					<SectionSurface>
+						<Section top={<PageTitleBar level={2} title="콘텐츠" />}>
+							<TemplateContentViewer
+								type={template.type}
+								subject={template.subject ?? null}
+								content={template.content}
+							/>
+						</Section>
+					</SectionSurface>
+					<SectionSurface>
+						<Section top={<PageTitleBar level={2} title="변수 목록" />}>
+							{(template.variables ?? []).length > 0 ? (
+								<VariableReadTable variables={template.variables ?? []} />
+							) : (
+								<div className="p-6 text-center">
+									<p className="text-default-500">등록된 변수가 없습니다.</p>
+								</div>
+							)}
+						</Section>
+					</SectionSurface>
+				</VStack>
+			</PageSurface>
 			<Modal isOpen={deleteModal.isOpen} onClose={deleteModal.onClose}>
 				<ModalContent>
 					<ModalHeader>템플릿 삭제</ModalHeader>

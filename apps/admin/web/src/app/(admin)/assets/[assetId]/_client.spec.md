@@ -34,6 +34,12 @@
 2. 로딩/없음/정상 상태를 `Page + PageTitleBar` 구조로 분기합니다.
 3. 정상 상태에서는 본문을 `PageSurface`로 감싸고, 각 상세 블록을 `SectionSurface + Section(top=PageTitleBar)`로 렌더링합니다.
 
+## Surface ownership
+
+- 이 파일은 `Page` boundary 안에서 에셋 상세 surface owner를 직접 소유합니다.
+- 로딩 상태와 not-found 상태도 `PageSurface > SectionSurface`를 사용해 빈 배경 노출을 막습니다.
+- 정상 상태에서는 `PageSurface`가 상세 본문을 감싸고, 정보/이동/스토리지 블록은 각각 `SectionSurface`로 분리합니다.
+
 ## 실패 및 엣지 케이스
 
 - 의존 모듈 응답 누락 시 안전한 기본값으로 처리합니다.
@@ -50,6 +56,8 @@
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-03-15 | Surface ownership과 상태 분기 표면 정책을 문서화 | codex |
+| 2026-03-15 | assets 상세 클라이언트 spec에 `PageSurface`/`SectionSurface` ownership을 명시 | codex |
 | 2026-03-15 | assets 상세 클라이언트 화면에 `Page + PageTitleBar` 구조는 유지하고 본문에 `PageSurface/SectionSurface`를 적용 | codex |
 | 2026-03-13 | `@cocrepo/api` root import를 split subpath import로 전환 | codex |
 | 2026-03-03 | 누락된 sidecar spec 신규 생성 | codex |

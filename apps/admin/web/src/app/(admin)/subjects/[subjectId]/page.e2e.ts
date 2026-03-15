@@ -18,15 +18,17 @@ test.describe("Subject 상세 페이지", () => {
 			page: import("@playwright/test").Page,
 			condition: "entity" | "non-entity",
 		): Promise<SubjectListItem> {
-			const resp = await page.request.get("http://localhost:3000/api/v1/subjects");
+			const resp = await page.request.get(
+				"http://localhost:3000/api/v1/subjects",
+			);
 			const body = (await resp.json()) as {
 				data?: SubjectListItem[];
 			};
 			const subjects = body.data ?? [];
 			const subject =
 				condition === "entity"
-					? subjects.find((item) => item.group === "entity") ?? null
-					: subjects.find((item) => item.group !== "entity") ?? null;
+					? (subjects.find((item) => item.group === "entity") ?? null)
+					: (subjects.find((item) => item.group !== "entity") ?? null);
 
 			if (!subject) {
 				throw new Error(`Subject for condition "${condition}" not found`);

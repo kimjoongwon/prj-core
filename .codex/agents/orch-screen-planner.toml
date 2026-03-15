@@ -28,6 +28,7 @@ developer_instructions = '''
 | L9 | Widget | req-widget-planner | `packages/fe-ui/src/widget/[WidgetName]/index.spec.md` |
 | L10 | Layout | req-layout-planner | `packages/fe-ui/src/layout/[LayoutName]/index.spec.md` |
 | L10 | Feature | req-feature-planner | `packages/fe-ui/src/feature/[FeatureName]/index.spec.md` |
+| L10+ | Surface | req-surface-planner | `page.spec.md` Surface/Elevation 섹션 + 관련 layout/feature spec 보강 |
 | L10+ | Menu | req-menu-planner | `packages/common-constant/src/routing/admin-menu.spec.md` |
 | L12 | 테스트 | req-fe-test-planner | 각 기존 `.spec.md`에 "테스트 케이스" 섹션 추가 |
 | L12+ | API 연동 | req-api-integration-planner | `apps/[app]/src/app/**/hooks/index.spec.md` |
@@ -99,6 +100,7 @@ apps/[app]/src/app/**/hooks/index.spec.md
    - `req-primitive-planner`, `req-input-planner`, `req-cell-planner`, `req-widget-planner`, `req-layout-planner`, `req-feature-planner`
    - `req-menu-planner`(목록 화면), `req-api-integration-planner`
 4. join 단계:
+   - `req-surface-planner` 실행 (Surface ownership, elevation, flat 예외 확정)
    - `req-fe-test-planner` 실행 (기존 `.spec.md`에 테스트 케이스 섹션 추가)
    - 공용 파일 lock 머지 (`admin-menu.spec.md`, `page.spec.md`, `**/PROGRESS.md`)
 
@@ -106,6 +108,7 @@ apps/[app]/src/app/**/hooks/index.spec.md
 
 - 기본 모드는 `parallel=auto`, 필요 시 `maxConcurrency`로 fan-out 개수를 제한합니다.
 - `req-page-planner`/`req-api-planner`는 선행 순차 고정입니다.
+- `req-surface-planner`는 구조 planner 결과를 모은 뒤 join 단계에서 단일 실행합니다.
 - 동일 파일을 수정하는 작업은 동시에 실행하지 않습니다.
 - 충돌 가능 파일은 lock 후 단일 writer가 최종 반영합니다.
 
@@ -130,11 +133,13 @@ Task: req-widget-planner
 Task: req-layout-planner
 Task: req-feature-planner
 Task: req-menu-planner
+Task: req-surface-planner
 Task: req-fe-test-planner
 Task: req-api-integration-planner
 ```
 
 `req-primitive-planner`부터 `req-api-integration-planner`까지는 파일 충돌이 없으면 병렬 fan-out 가능합니다.
+`req-surface-planner`는 위 결과를 모은 뒤 단일 writer로 실행합니다.
 
 ---
 
@@ -167,6 +172,7 @@ Task: req-api-integration-planner
 - [ ] UI/Input/Cell/Widget/Layout/Feature의 index.spec.md가 모두 생성되었는가?
 - [ ] 목록 화면이면 admin-menu.spec.md가 생성/업데이트되었는가?
 - [ ] hooks/index.spec.md(또는 동등한 API 연동 스펙)가 반영되었는가?
+- [ ] page.spec.md에 Surface owner, elevation, flat 예외 근거가 반영되었는가?
 - [ ] 각 .spec.md에 "테스트 케이스" 섹션이 추가되었는가?
 
 ---
@@ -194,8 +200,9 @@ Task: req-api-integration-planner
 | req-layout-planner | 7 | Layout 기획 |
 | req-feature-planner | 8 | Feature 기획 |
 | req-menu-planner | 9 | 메뉴 기획 (목록 화면) |
-| req-fe-test-planner | 10 | 테스트 기획 |
-| req-api-integration-planner | 11 | API 연동 기획 |
+| req-surface-planner | 10 | Surface ownership / elevation 기획 |
+| req-fe-test-planner | 11 | 테스트 기획 |
+| req-api-integration-planner | 12 | API 연동 기획 |
 
 ### 후행 에이전트
 

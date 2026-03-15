@@ -185,11 +185,11 @@ describe("UsersRepository", () => {
 import { Test, TestingModule } from "@nestjs/testing";
 import { DeepMockProxy, mockDeep, mockReset } from "jest-mock-extended";
 import { UsersRepository } from "@cocrepo/repository";
-import { UsersService } from "../users.service";
+import { UserService } from "../user.service";
 import { createTestUserEntity } from "@cocrepo/be-common/src/test";
 
-describe("UsersService", () => {
-  let service: UsersService;
+describe("UserService", () => {
+  let service: UserService;
   let mockRepository: DeepMockProxy<UsersRepository>;
 
   const mockUser = createTestUserEntity();
@@ -199,12 +199,12 @@ describe("UsersService", () => {
 
     const module: TestingModule = await Test.createTestingModule({
       providers: [
-        UsersService,
+        UserService,
         { provide: UsersRepository, useValue: mockRepository },
       ],
     }).compile();
 
-    service = module.get<UsersService>(UsersService);
+    service = module.get<UserService>(UserService);
   });
 
   afterEach(() => {
@@ -233,7 +233,7 @@ describe("UsersService", () => {
 ```typescript
 import { Test, TestingModule } from "@nestjs/testing";
 import { DeepMockProxy, mockDeep, mockReset } from "jest-mock-extended";
-import { UsersService, TokenService } from "@cocrepo/service";
+import { UserService, TokenService } from "@cocrepo/service";
 import { JwtService } from "@nestjs/jwt";
 import { AuthApplicationService } from "../auth.application-service";
 import {
@@ -244,19 +244,19 @@ import {
 
 describe("AuthApplicationService", () => {
   let applicationService: AuthApplicationService;
-  let mockUsersService: DeepMockProxy<UsersService>;
+  let mockUserService: DeepMockProxy<UserService>;
   let mockTokenService: DeepMockProxy<TokenService>;
 
   const mockUser = createTestUserEntity();
 
   beforeEach(async () => {
-    mockUsersService = mockDeep<UsersService>();
+    mockUserService = mockDeep<UserService>();
     mockTokenService = mockDeep<TokenService>();
 
     const module: TestingModule = await Test.createTestingModule({
       providers: [
         AuthApplicationService,
-        { provide: UsersService, useValue: mockUsersService },
+        { provide: UserService, useValue: mockUserService },
         { provide: TokenService, useValue: mockTokenService },
         { provide: JwtService, useValue: createMockJwtService() },
       ],
@@ -266,7 +266,7 @@ describe("AuthApplicationService", () => {
   });
 
   afterEach(() => {
-    mockReset(mockUsersService);
+    mockReset(mockUserService);
     mockReset(mockTokenService);
   });
 
@@ -274,13 +274,13 @@ describe("AuthApplicationService", () => {
     it("유효한 자격증명으로 로그인해야 한다", async () => {
       // Given
       const loginDto = { email: "test@example.com", password: "password123" };
-      mockUsersService.findUserForAuth.mockResolvedValue(mockUser);
+      mockUserService.findUserForAuth.mockResolvedValue(mockUser);
 
       // When
       const result = await applicationService.login(loginDto);
 
       // Then
-      expect(mockUsersService.findUserForAuth).toHaveBeenCalledWith(loginDto.email);
+      expect(mockUserService.findUserForAuth).toHaveBeenCalledWith(loginDto.email);
       expect(result).toHaveProperty("accessToken");
     });
   });
@@ -288,6 +288,12 @@ describe("AuthApplicationService", () => {
 ```
 
 ### Controller 테스트 템플릿
+
+Controller 테스트는 실제 primary entrypoint만 mock합니다.
+- workflow endpoint: `ApplicationService` mock
+- boundary composition endpoint: `Facade` mock
+- single aggregate-root pass-through endpoint: `Service` mock
+- 같은 endpoint에서 `Facade`와 `ApplicationService`를 동시에 mock하는 기본 템플릿은 만들지 않습니다.
 
 ```typescript
 import { Test, TestingModule } from "@nestjs/testing";
@@ -340,6 +346,32 @@ describe("AuthController", () => {
       );
       expect(result.accessToken).toBe("access-token");
     });
+  });
+});
+```
+
+### Controller 테스트 템플릿 (Facade 예시)
+
+```typescript
+import { Test, TestingModule } from "@nestjs/testing";
+import { UserFacade } from "@cocrepo/facade";
+import { UsersController } from "./users.controller";
+
+describe("UsersController", () => {
+  let controller: UsersController;
+  let mockUserFacade: jest.Mocked<UserFacade>;
+
+  beforeEach(async () => {
+    mockUserFacade = {
+      getUsersBySpace: jest.fn(),
+    } as unknown as jest.Mocked<UserFacade>;
+
+    const module: TestingModule = await Test.createTestingModule({
+      controllers: [UsersController],
+      providers: [{ provide: UserFacade, useValue: mockUserFacade }],
+    }).compile();
+
+    controller = module.get<UsersController>(UsersController);
   });
 });
 ```
@@ -505,7 +537,7 @@ import {
 import { DeepMockProxy, mockDeep, mockReset } from "jest-mock-extended";
 
 // 타입 안전한 전체 mock
-const mockService: DeepMockProxy<UsersService> = mockDeep<UsersService>();
+const mockService: DeepMockProxy<UserService> = mockDeep<UserService>();
 
 // 메서드 mock 설정
 mockService.findById.mockResolvedValue(mockUser);

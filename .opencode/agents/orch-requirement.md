@@ -37,8 +37,8 @@ tools:
 |------|------|--------------|----------|
 | L6 | API/Controller | req-api-planner | `apps/core/api/src/module/[module]/[domain].controller.spec.md` |
 | L7 | Entity | req-entity-planner | `packages/be-entity/src/{entity}.entity.spec.md` |
-| L8 | ApplicationService | req-app-planner | `packages/be-app/src/[domain].application-service.spec.md` |
-| L9-L10 | Service/Repository 로직/테스트 | req-logic-planner | `packages/be-service/src/[domain].service.spec.md`, `packages/be-repository/src/[domain].repository.spec.md` |
+| L8 | ApplicationService | req-app-planner | `packages/be-app/src/[name].application-service/index.spec.md` |
+| L9-L10 | Service/Repository 로직/테스트 | req-logic-planner | `packages/be-service/src/[name].service/index.spec.md`, `packages/be-repository/src/[domain].repository.spec.md` |
 | L11 | Store (조건부) | req-store-planner | 재사용성 충족 시 `packages/fe-store/src/stores/[domain]Store.spec.md` |
 
 ### 공용 패키지 기획 (Critical)
@@ -66,8 +66,8 @@ tools:
 
 ### 백엔드 기획서
 - [ ] `{entity}.entity.spec.md` - 각 Entity별
-- [ ] `{domain}.application-service.spec.md` - ApplicationService 스펙
-- [ ] `{domain}.service.spec.md` - Service 스펙
+- [ ] `{name}.application-service/index.spec.md` - ApplicationService 스펙
+- [ ] `{name}.service/index.spec.md` - Service 스펙
 - [ ] `{domain}.repository.spec.md` - Repository 스펙
 - [ ] `{domain}.controller.spec.md` - Controller 스펙
 - [ ] `{domain}.module.spec.md` - Module 스펙
@@ -170,10 +170,12 @@ packages/be-entity/src/
 └── [entity].entity.spec.md                     # Entity 스펙
 
 packages/be-app/src/
-└── [domain].application-service.spec.md        # ApplicationService 스펙
+└── [name].application-service/
+    └── index.spec.md                           # ApplicationService 스펙
 
 packages/be-service/src/
-└── [domain].service.spec.md                    # Service 스펙
+└── [name].service/
+    └── index.spec.md                           # Service 스펙
 
 packages/be-repository/src/
 └── [domain].repository.spec.md                 # Repository 스펙
@@ -245,14 +247,14 @@ apps/core/api/src/module/[module]/
 ┌─────────────────────────────────────────────────────────────┐
 │  7단계: ApplicationService 기획 (L8)                         │
 │  Task: req-app-planner                                      │
-│  → [domain].application-service.spec.md                     │
+│  → [name].application-service/index.spec.md                 │
 └─────────────────────────────────────────────────────────────┘
                               │
                               ▼
 ┌─────────────────────────────────────────────────────────────┐
 │  8단계: Service/Repository 로직/테스트 기획 (L9-L10)          │
 │  Task: req-logic-planner                                    │
-│  → [domain].service.spec.md                                 │
+│  → [name].service/index.spec.md                             │
 │  → [domain].repository.spec.md                              │
 └─────────────────────────────────────────────────────────────┘
                               │
@@ -338,8 +340,8 @@ apps/core/api/src/module/[module]/
    - apps/admin/web/app/(admin)/members/[memberId]/edit/page.spec.md
    - packages/fe-store/src/stores/memberStore.spec.md
    - packages/be-entity/src/member.entity.spec.md
-   - packages/be-app/src/members.application-service.spec.md
-   - packages/be-service/src/members.service.spec.md
+   - packages/be-app/src/members.application-service/index.spec.md
+   - packages/be-service/src/members.service/index.spec.md
    - packages/be-repository/src/members.repository.spec.md
    - apps/core/api/src/module/members/members.controller.spec.md
    - apps/core/api/src/module/members/members.module.spec.md

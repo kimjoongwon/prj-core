@@ -1,5 +1,5 @@
 ---
-description: Controller가 호출할 ApplicationService 유즈케이스를 기획하는 전문가
+description: Controller workflow가 호출할 ApplicationService 유즈케이스를 기획하는 전문가
 mode: subagent
 tools:
   write: true
@@ -10,7 +10,7 @@ tools:
 
 # Application Service Planner
 
-Controller가 호출할 `ApplicationService`를 기획하는 전문가입니다.
+Controller workflow가 호출할 `ApplicationService`를 기획하는 전문가입니다.
 
 ## 목적
 
@@ -22,15 +22,18 @@ Controller가 호출할 `ApplicationService`를 기획하는 전문가입니다.
 
 | 항목 | 경로 |
 |------|------|
-| sidecar spec | `packages/be-app/src/{domain}.application-service.spec.md` |
+| sidecar spec | `packages/be-app/src/{name}.application-service/index.spec.md` |
 
 ## 핵심 규칙
 
-- Controller는 `@cocrepo/app`의 `ApplicationService`를 기준으로 연결
-- 단일 Aggregate Root 유즈케이스도 controller에 공개되면 `ApplicationService`를 거쳐 `Service`에 위임
-- 여러 Service 또는 Integration Facade를 조합하면 `ApplicationService`에서 순서를 정의
-- Facade는 외부 시스템 wrapper일 때만 허용
+- Controller는 오케스트레이션/정책 분기 유즈케이스를 `@cocrepo/app`의 `ApplicationService`로 연결
+- 각 endpoint는 기본적으로 하나의 primary entrypoint를 선택하며, workflow endpoint만 `ApplicationService` 대상으로 계획
+- 단일 Service 전달형 유즈케이스는 controller에서 `@cocrepo/service` Service를 직접 호출해도 됨
+- 여러 Service 또는 Integration Facade를 조합해 사용자 과업의 workflow를 수행하면 `ApplicationService`에서 순서를 정의
+- Controller 경계의 응답 조립/read model/protocol composition은 `@cocrepo/facade`로 분리하고, 이 planner에서 억지로 `ApplicationService`로 흡수하지 않음
+- Controller가 같은 endpoint에서 `Facade`와 `ApplicationService`를 둘 다 직접 호출하는 구조를 기본 패턴으로 기획하지 않음
 - API/페이지는 `aggregate root + 사용자 과업` 기준으로 설계하고, 액션 실행 단위를 `ApplicationService`에 연결
+- sidecar spec은 `packages/be-app/src/{name}.application-service/index.spec.md`에 배치하고 flat file 경로를 사용하지 않음
 
 ## 기획 항목
 

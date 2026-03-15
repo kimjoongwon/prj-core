@@ -5,7 +5,13 @@ import {
 	useGetActionById,
 } from "@cocrepo/api/core/actions";
 
-import { Page, PageTitleBar, VStack } from "@cocrepo/ui";
+import {
+	Page,
+	PageSurface,
+	PageTitleBar,
+	SectionSurface,
+	VStack,
+} from "@cocrepo/ui";
 import {
 	Button,
 	Chip,
@@ -90,9 +96,13 @@ function ActionDetailPageClient({ actionId }: ActionDetailPageClientProps) {
 	if (isLoading) {
 		return (
 			<Page top={<PageTitleBar title="Action 상세" description="로딩 중..." />}>
-				<div className="flex items-center justify-center p-8">
-					<span className="text-default-500">로딩 중...</span>
-				</div>
+				<PageSurface>
+					<SectionSurface>
+						<div className="flex items-center justify-center p-8">
+							<span className="text-default-500">로딩 중...</span>
+						</div>
+					</SectionSurface>
+				</PageSurface>
 			</Page>
 		);
 	}
@@ -107,12 +117,16 @@ function ActionDetailPageClient({ actionId }: ActionDetailPageClientProps) {
 					/>
 				}
 			>
-				<div className="flex flex-col items-center justify-center gap-4 p-8">
-					<p className="text-default-500">Action을 찾을 수 없습니다.</p>
-					<Button variant="flat" onPress={onClickBackButton}>
-						목록으로
-					</Button>
-				</div>
+				<PageSurface>
+					<SectionSurface>
+						<div className="flex flex-col items-center justify-center gap-4 p-8">
+							<p className="text-default-500">Action을 찾을 수 없습니다.</p>
+							<Button variant="flat" onPress={onClickBackButton}>
+								목록으로
+							</Button>
+						</div>
+					</SectionSurface>
+				</PageSurface>
 			</Page>
 		);
 	}
@@ -157,17 +171,17 @@ function ActionDetailPageClient({ actionId }: ActionDetailPageClientProps) {
 				/>
 			}
 		>
-			<VStack gap={4}>
-				{action.isSystem && (
-					<div className="rounded-xl bg-warning-50 dark:bg-warning-900/20 p-4">
-						<p className="text-sm text-warning-700 dark:text-warning-400">
-							<strong>시스템 Action:</strong>이 Action은 시스템에서 기본
-							제공하는 Action으로, 수정하거나 삭제할 수 없습니다.
-						</p>
-					</div>
-				)}
-				<section>
-					<div className="p-6">
+			<PageSurface>
+				<VStack gap={4}>
+					{action.isSystem && (
+						<div className="rounded-xl bg-warning-50 p-4 dark:bg-warning-900/20">
+							<p className="text-sm text-warning-700 dark:text-warning-400">
+								<strong>시스템 Action:</strong>이 Action은 시스템에서 기본
+								제공하는 Action으로, 수정하거나 삭제할 수 없습니다.
+							</p>
+						</div>
+					)}
+					<SectionSurface>
 						<h3 className="text-lg font-semibold mb-4">기본 정보</h3>
 						<dl className="grid grid-cols-1 md:grid-cols-2 gap-4">
 							<div>
@@ -212,20 +226,16 @@ function ActionDetailPageClient({ actionId }: ActionDetailPageClientProps) {
 								</dd>
 							</div>
 						</dl>
-					</div>
-				</section>
-				{action.config && (
-					<section>
-						<div className="p-6">
+					</SectionSurface>
+					{action.config && (
+						<SectionSurface>
 							<h3 className="text-lg font-semibold mb-4">설정 (Config)</h3>
 							<pre className="bg-default-100 dark:bg-default-50/5 rounded-lg p-4 overflow-x-auto text-sm">
 								{JSON.stringify(action.config, null, 2)}
 							</pre>
-						</div>
-					</section>
-				)}
-				<section>
-					<div className="p-6">
+						</SectionSurface>
+					)}
+					<SectionSurface>
 						<h3 className="text-lg font-semibold mb-4">추가 정보</h3>
 						<dl className="grid grid-cols-1 md:grid-cols-2 gap-4">
 							<div>
@@ -239,9 +249,9 @@ function ActionDetailPageClient({ actionId }: ActionDetailPageClientProps) {
 								</div>
 							)}
 						</dl>
-					</div>
-				</section>
-			</VStack>
+					</SectionSurface>
+				</VStack>
+			</PageSurface>
 			<Modal isOpen={deleteModal.isOpen} onClose={deleteModal.onClose}>
 				<ModalContent>
 					<ModalHeader>Action 삭제</ModalHeader>

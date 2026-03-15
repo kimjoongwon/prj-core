@@ -39,6 +39,11 @@
 - 비동기 동작 실패 시 사용자 영향 범위를 최소화합니다.
 - Task 생성 payload는 `spaceId` body 필드를 보내지 않고 `X-Space-ID` 헤더 기반 공간 컨텍스트를 사용합니다.
 
+## Surface ownership
+
+- 이 파일은 `PageSurface`, `SectionSurface` ownership과 상태 분기 표면 정책을 문서화합니다.
+- 하위 컴포넌트는 surface를 자동 생성하지 않으므로 호출부가 elevation을 명시합니다.
+
 ## 구현 체크리스트
 
 - [ ] 코드와 spec이 동일한 책임 범위를 유지함
@@ -49,6 +54,8 @@
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-03-15 | Surface ownership과 SectionSurface 책임을 문서화 | codex |
+| 2026-03-15 | Surface ownership과 상태 분기 표면 정책을 문서화 | codex |
 | 2026-03-14 | Task 생성 payload에서 더미 `spaceId`를 제거하고 헤더 기반 공간 컨텍스트 계약으로 정리 | codex |
 | 2026-03-13 | `@cocrepo/api` root import를 split subpath import로 전환 | codex |
 | 2026-03-11 | aggregate root 기준 spaces/tasks 경로와 API 계약으로 전환 | codex |

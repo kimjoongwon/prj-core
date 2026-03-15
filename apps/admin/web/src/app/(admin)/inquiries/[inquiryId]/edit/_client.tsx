@@ -13,8 +13,10 @@ import {
 	AiForm,
 	Button,
 	Page,
+	PageSurface,
 	PageTitleBar,
 	Section,
+	SectionSurface,
 	VStack,
 } from "@cocrepo/ui";
 import { Input, Select, SelectItem, type Selection } from "@heroui/react";
@@ -188,108 +190,114 @@ function InquiryEditPageClient({ inquiryId }: Props) {
 				/>
 			}
 		>
-			<VStack gap={4}>
-				{bootstrap && (
-					<Section top={<PageTitleBar level={2} title="AI 폼 추천" />}>
-						<AiForm
-							formState={state.toFormObject()}
-							fieldMeta={bootstrap.fieldMeta}
-							aiSchemas={bootstrap.aiSchemas}
-							ui={bootstrap.ui}
-							options={bootstrapOptions}
-							onFill={async (input) => {
-								const result = await fillMutation.mutateAsync({
-									data: {
-										mode: "UPDATE",
-										schemaKey: input.schemaKey,
-										selectedPaths: input.selectedPaths,
-										currentObject: input.currentObject,
-										userPrompt: input.userPrompt,
-									},
-								});
-								return (
-									result?.data ?? {
-										patches: [],
-									}
-								);
-							}}
-							applyPatch={(patches) => {
-								state.applyPatch(patches);
-							}}
-							disabled={state.isSubmitting}
-						/>
-					</Section>
-				)}
-				<Section top={<PageTitleBar level={2} title="문의 입력" />}>
-					<VStack gap={4}>
-						<Input
-							label="문의 제목"
-							labelPlacement="outside"
-							value={state.title}
-							onValueChange={(value) => {
-								state.title = value;
-							}}
-							isInvalid={Boolean(state.error)}
-							errorMessage={state.error}
-						/>
-						<div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-							<Select
-								label="카테고리"
-								placeholder="카테고리 선택"
-								selectedKeys={state.category ? [state.category] : []}
-								onSelectionChange={(keys) => {
-									const selectedValue = getSelectedValue(keys);
-									if (selectedValue) {
-										state.category = selectedValue as InquiryCategory;
-									}
-								}}
-							>
-								{categoryOptions.map((option) => (
-									<SelectItem key={option.value}>{option.label}</SelectItem>
-								))}
-							</Select>
-							<Select
-								label="우선순위"
-								placeholder="우선순위 선택"
-								selectedKeys={state.priority ? [state.priority] : []}
-								onSelectionChange={(keys) => {
-									const selectedValue = getSelectedValue(keys);
-									if (selectedValue) {
-										state.priority = selectedValue as InquiryPriority;
-									}
-								}}
-							>
-								{priorityOptions.map((option) => (
-									<SelectItem key={option.value}>{option.label}</SelectItem>
-								))}
-							</Select>
-						</div>
-						<div className="flex justify-end gap-2">
-							<Button
-								variant="light"
-								onPress={() => {
-									router.push(
-										ADMIN_PATHS.INQUIRIES_DETAIL.replace(
-											"[inquiryId]",
-											inquiryId,
-										) as Route,
-									);
-								}}
-								isDisabled={state.isSubmitting}
-							>
-								취소
-							</Button>
-							<Button
-								color="primary"
-								onPress={onSubmit}
-								isLoading={state.isSubmitting || updateMutation.isPending}
-							>
-								저장
-							</Button>
-						</div>
-					</VStack>
-				</Section>
-			</VStack>
+			<PageSurface>
+				<VStack gap={4}>
+					{bootstrap && (
+						<SectionSurface>
+							<Section top={<PageTitleBar level={2} title="AI 폼 추천" />}>
+								<AiForm
+									formState={state.toFormObject()}
+									fieldMeta={bootstrap.fieldMeta}
+									aiSchemas={bootstrap.aiSchemas}
+									ui={bootstrap.ui}
+									options={bootstrapOptions}
+									onFill={async (input) => {
+										const result = await fillMutation.mutateAsync({
+											data: {
+												mode: "UPDATE",
+												schemaKey: input.schemaKey,
+												selectedPaths: input.selectedPaths,
+												currentObject: input.currentObject,
+												userPrompt: input.userPrompt,
+											},
+										});
+										return (
+											result?.data ?? {
+												patches: [],
+											}
+										);
+									}}
+									applyPatch={(patches) => {
+										state.applyPatch(patches);
+									}}
+									disabled={state.isSubmitting}
+								/>
+							</Section>
+						</SectionSurface>
+					)}
+					<SectionSurface>
+						<Section top={<PageTitleBar level={2} title="문의 입력" />}>
+							<VStack gap={4}>
+								<Input
+									label="문의 제목"
+									labelPlacement="outside"
+									value={state.title}
+									onValueChange={(value) => {
+										state.title = value;
+									}}
+									isInvalid={Boolean(state.error)}
+									errorMessage={state.error}
+								/>
+								<div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+									<Select
+										label="카테고리"
+										placeholder="카테고리 선택"
+										selectedKeys={state.category ? [state.category] : []}
+										onSelectionChange={(keys) => {
+											const selectedValue = getSelectedValue(keys);
+											if (selectedValue) {
+												state.category = selectedValue as InquiryCategory;
+											}
+										}}
+									>
+										{categoryOptions.map((option) => (
+											<SelectItem key={option.value}>{option.label}</SelectItem>
+										))}
+									</Select>
+									<Select
+										label="우선순위"
+										placeholder="우선순위 선택"
+										selectedKeys={state.priority ? [state.priority] : []}
+										onSelectionChange={(keys) => {
+											const selectedValue = getSelectedValue(keys);
+											if (selectedValue) {
+												state.priority = selectedValue as InquiryPriority;
+											}
+										}}
+									>
+										{priorityOptions.map((option) => (
+											<SelectItem key={option.value}>{option.label}</SelectItem>
+										))}
+									</Select>
+								</div>
+								<div className="flex justify-end gap-2">
+									<Button
+										variant="light"
+										onPress={() => {
+											router.push(
+												ADMIN_PATHS.INQUIRIES_DETAIL.replace(
+													"[inquiryId]",
+													inquiryId,
+												) as Route,
+											);
+										}}
+										isDisabled={state.isSubmitting}
+									>
+										취소
+									</Button>
+									<Button
+										color="primary"
+										onPress={onSubmit}
+										isLoading={state.isSubmitting || updateMutation.isPending}
+									>
+										저장
+									</Button>
+								</div>
+							</VStack>
+						</Section>
+					</SectionSurface>
+				</VStack>
+			</PageSurface>
 		</Page>
 	);
 }

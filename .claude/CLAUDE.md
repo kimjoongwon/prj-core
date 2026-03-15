@@ -46,6 +46,7 @@
 | `be-dto` | `@cocrepo/dto` | Request/Response DTO |
 | `be-entity` | `@cocrepo/entity` | 도메인 Entity |
 | `be-app` | `@cocrepo/app` | ApplicationService 레이어 |
+| `be-facade` | `@cocrepo/facade` | Controller 경계 조정 레이어 (응답 조립, read model, protocol composition) |
 | `be-integration` | `@cocrepo/integration` | 외부 시스템 Integration Facade 레이어 |
 | `be-prisma` | `@cocrepo/prisma` | Prisma 스키마 및 클라이언트 |
 | `be-repository` | `@cocrepo/repository` | Repository 레이어 |
@@ -70,6 +71,17 @@
 
 - **AskUserQuestion 도구로 요구사항이나 선택지가 애매할 때 질문** - 추측하지 않고 사용자에게 확인
 - **Task 도구로 적절한 에이전트를 활용하여 작업 수행** - 단순 작업보다 전문 에이전트 활용 우선
+- **프론트엔드 E2E 테스트 작성/수정/안정화 요청은 기본적으로 `qa-fe-e2e-testing` role의 `agent`를 우선 사용**
+- **기존 프론트엔드 E2E 테스트를 단순 실행만 하는 요청은 메인 Codex가 직접 실행할 수 있음**
+- **브라우저를 띄운 headed 실행 요청도 단순 실행 범주로 간주하되, 테스트 수정이 필요해지면 `qa-fe-e2e-testing` role의 `agent`로 전환**
+
+## Codex 용어 규칙
+
+- **`.codex/config.toml`에 정의된 항목은 `role`로 부릅니다**
+- **에이전트 생성 도구로 생성되는 실행 주체는 `agent`로 부릅니다**
+- **에이전트 생성 도구 호출 시 사용하는 파라미터명은 `agent_type`으로 표기합니다**
+- **`subagent`, `서브에이전트` 같은 비공식 용어는 사용하지 않습니다**
+- **설명 시에는 `role`, `agent`, `agent_type`을 구분해서 사용합니다**
 
 ## 프론트엔드 개발 규칙
 
@@ -145,18 +157,25 @@ HeroUI 공식 문서(https://heroui.com) 스타일을 따릅니다.
 #### 사용 예시
 
 ```tsx
-import { PageSurface, SectionSurface } from "@cocrepo/ui";
+import { Button } from "@heroui/react";
+import { Page, PageSurface, PageTitleBar, SectionSurface } from "@cocrepo/ui";
 
 // 목록 페이지
-<PageSurface
-  title="회원 목록"
-  description="시스템에 등록된 회원을 관리합니다."
-  actions={<Button>회원 등록</Button>}
+<Page
+  top={
+    <PageTitleBar
+      title="회원 목록"
+      description="시스템에 등록된 회원을 관리합니다."
+      actions={<Button>회원 등록</Button>}
+    />
+  }
 >
-  <SectionSurface padding="none">
-    <DataGrid ... />
-  </SectionSurface>
-</PageSurface>
+  <PageSurface>
+    <SectionSurface padding="none">
+      <DataGrid ... />
+    </SectionSurface>
+  </PageSurface>
+</Page>
 ```
 
 #### 중첩 규칙
@@ -168,6 +187,8 @@ import { PageSurface, SectionSurface } from "@cocrepo/ui";
 #### PageSurface 사용 위치 규칙
 
 **PageSurface는 Page 컴포넌트에서만 사용합니다. Layout에서 사용 금지!**
+
+**중요:** `Layout`, `Page`, `Section`, `MetaDataGrid`의 슬롯에 검색/필터/액션 컴포넌트를 배치해도 배경이나 elevation은 자동 생성되지 않습니다. 화면에서 시각적 묶음이 필요하면 호출부에서 `PageSurface`, `SectionSurface` owner를 명시해야 합니다.
 
 ```typescript
 // ❌ 금지 - Layout에서 PageSurface 사용
@@ -184,13 +205,19 @@ function UsersLayout({ children }) {
 // users/page.tsx (또는 _client.tsx)
 function UsersPage() {
   return (
-    <PageSurface
-      title="회원 목록"
-      description="시스템에 등록된 회원을 관리합니다."
-      actions={<Button>회원 등록</Button>}
+    <Page
+      top={
+        <PageTitleBar
+          title="회원 목록"
+          description="시스템에 등록된 회원을 관리합니다."
+          actions={<Button>회원 등록</Button>}
+        />
+      }
     >
-      <SectionSurface>...</SectionSurface>
-    </PageSurface>
+      <PageSurface>
+        <SectionSurface>...</SectionSurface>
+      </PageSurface>
+    </Page>
   );
 }
 ```
@@ -203,9 +230,15 @@ function UsersPage() {
 
 ### 페이지 개발 규칙 (Critical)
 
-**모든 페이지는 반드시 서버 사이드 Prefetch 패턴을 사용해야 합니다.**
+**admin web 페이지는 CSR + Suspense를 기본으로 사용하고, SSR prefetch는 예외적으로만 사용합니다.**
 
 ```
+기본 CSR 패턴
+apps/admin/web/src/app/[route]/
+├── page.tsx          # 클라이언트 컴포넌트 ("use client" + Suspense)
+└── hooks/            # 통합 훅 (필요 시)
+
+SSR 예외 패턴
 apps/admin/web/src/app/[route]/
 ├── page.tsx          # 서버 컴포넌트 (Prefetch + HydrationBoundary)
 ├── _client.tsx       # 클라이언트 컴포넌트
@@ -215,11 +248,16 @@ apps/admin/web/src/app/[route]/
 
 | 파일 | 역할 |
 |------|------|
-| `page.tsx` | 서버 컴포넌트 - `"use client"` 없음, Prefetch 실행 |
-| `_client.tsx` | 클라이언트 컴포넌트 - `"use client"` 선언, UI 렌더링 |
-| `_prefetch.ts` | Orval 생성 `prefetchGetXXXQuery` 함수 사용 |
+| `page.tsx` | 기본값은 클라이언트 컴포넌트이며 `Suspense`와 Orval suspense 훅으로 UI를 렌더링 |
+| `_client.tsx` | SSR 예외 페이지 또는 복잡한 분리 시에만 사용 |
+| `_prefetch.ts` | SSR 예외 페이지에서만 Orval 생성 `prefetchGetXXXQuery` 함수 사용 |
 
-**상세 템플릿은 `fe-page-builder` 에이전트의 섹션 9를 참고하세요.**
+**판별 기준**
+- 기본값은 CSR입니다.
+- 목록/검색/필터/페이지네이션/탭 전환 중심 페이지는 CSR을 유지합니다.
+- 서버 쿠키/권한/space bootstrap 없이는 첫 렌더 구조를 결정할 수 없는 경우에만 SSR prefetch를 허용합니다.
+
+**상세 템플릿은 `fe-page-builder` role 지시문을 참고하세요.**
 
 ### 라우팅 규칙 (Critical)
 
@@ -433,6 +471,15 @@ import { SideNav, UserMenu } from "@cocrepo/ui";
 
 ### SSR/Hydration 관련 주의사항
 
+**`"use client"` 컴포넌트도 서버에서 한 번 렌더되므로, 첫 클라이언트 렌더 결과는 서버 HTML과 같아야 합니다.**
+
+- 첫 렌더 구조를 `localStorage`/`sessionStorage`, `window`/`document`, `Date.now()`, `Math.random()`, locale 기반 포맷팅 결과로 결정하지 않습니다.
+- 서버가 알아야 하는 초기값은 cookie, headers, SSR prefetch data로 내려보냅니다.
+- 브라우저 전용 상태는 render 중이나 Store constructor에서 hydrate하지 않고 `useEffect` 이후에 반영합니다.
+- `PersistStore` 같은 공용 Store는 constructor를 순수하게 유지하고, localStorage hydrate는 Provider/effect에서 수행합니다.
+- React Aria/HeroUI의 `id` mismatch는 대개 원인이 아니라 서버/클라이언트 트리 순서가 달라진 결과로 간주합니다.
+- SSR 이점이 없고 첫 렌더 구조를 안정적으로 맞추기 어려운 순수 브라우저 위젯은 `dynamic(..., { ssr: false })` 또는 hydration 후 렌더링을 검토합니다.
+
 **`isMounted` 패턴이 필요한 경우와 불필요한 경우를 명확히 구분해야 합니다.**
 
 ```typescript
@@ -449,12 +496,13 @@ const items = store.items;
 **isMounted 패턴이 필요한 경우 (드뭄):**
 - `localStorage`/`sessionStorage` 직접 접근
 - `window`/`document` 객체 의존
+- 서버가 모르는 브라우저 전용 스냅샷을 hydration 이후에만 읽어야 하는 경우
 
 **불필요한 경우 (대부분):**
-- MobX + Context Provider 패턴 (프로젝트 표준)
+- 서버/클라이언트가 동일한 초기 스냅샷을 공유하는 MobX + Context Provider 패턴
 - useState/React Query
 
-**이유:** `"use client"` 컴포넌트도 서버에서 SSR됩니다. 하지만 Context Provider로 주입되는 store는 서버/클라이언트 모두 동일한 초기값을 가지므로 Hydration mismatch가 발생하지 않습니다.
+**이유:** `"use client"` 컴포넌트도 서버에서 SSR됩니다. Store/provider가 render 중 브라우저 전용 값을 읽지 않으면 서버/클라이언트 첫 렌더가 동일해지고 Hydration mismatch를 피할 수 있습니다.
 - **이벤트 핸들러 네이밍 규칙**:
   - **일반 컴포넌트**: `handle` 접두어 사용 (예: `handleClick`, `handleChange`)
   - **Page 컴포넌트**: `on[Event][UI]` 형태로 직관적 표현 (예: `onClickLoginButton`, `onChangeEmail`)
@@ -803,7 +851,8 @@ import { CreateAbilityDto, AbilityResponseDto } from "@cocrepo/dto";
 ### 레이어 분리 규칙
 
 - **Controller**: 라우팅, DTO 검증, 인증 컨텍스트 수집만 담당
-- **ApplicationService**: 여러 Service/Integration Facade를 조합하는 유즈케이스 계층 (Prisma 직접 호출 금지)
+- **ApplicationService**: 사용자 과업 중심의 usecase workflow를 조율하는 계층 (Prisma 직접 호출 금지)
+- **Facade**: Controller 경계에서 응답 조립, read model shaping, protocol composition을 담당하는 계층
 - **Service**: 단일 Aggregate Root 또는 단일 도메인 로직 담당 (Repository를 통해서만 데이터 접근)
 - **Integration Facade**: 외부 시스템 또는 복잡한 기술 서브시스템을 단순화해서 노출하는 레이어
 - **Repository**: Prisma 쿼리 작성
@@ -1204,6 +1253,7 @@ Stage 5: 컴포넌트 (페이지별)
 | be-repository-builder | Prisma 기반 Repository 레이어 생성 |
 | be-service-builder | NestJS Service 레이어 생성 |
 | be-app-builder | NestJS ApplicationService 레이어 생성 (여러 Service 조합) |
+| be-facade-builder | NestJS Facade 레이어 생성 (Controller 경계 응답 조립 / protocol composition) |
 | be-integration-builder | 외부 시스템 Integration Facade 레이어 생성 |
 | be-module-builder | aggregate root 기준 NestJS Module + Router wiring 생성 |
 | be-controller-builder | NestJS REST Controller 생성 |

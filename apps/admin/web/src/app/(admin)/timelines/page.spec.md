@@ -45,50 +45,60 @@
 
 ## 레이아웃 구성
 
-| 영역 | 컴포넌트 | 설명 |
-|------|----------|------|
-| 페이지 래퍼 | `Page` | 페이지 콘텐츠 구조 배치 |
-| 페이지 헤더 | `PageTitleBar` | title="타임라인", description="학기/시즌 단위 타임라인을 관리합니다.", actions에 "타임라인 등록" 버튼 |
-| 데이터 그리드 | `Section` > `MetaDataGrid` | 타임라인 목록 표시, 검색/페이지네이션 지원 |
+| 영역          | 컴포넌트                   | 설명                                                                                                  |
+| ------------- | -------------------------- | ----------------------------------------------------------------------------------------------------- |
+| 페이지 래퍼   | `Page`                     | 페이지 콘텐츠 구조 배치                                                                               |
+| 페이지 헤더   | `PageTitleBar`             | title="타임라인", description="학기/시즌 단위 타임라인을 관리합니다.", actions에 "타임라인 등록" 버튼 |
+| 데이터 그리드 | `Section` > `MetaDataGrid` | 타임라인 목록 표시, 검색/페이지네이션 지원                                                            |
+
+## Surface / Elevation
+
+| 항목                   | 결정                                                                                            |
+| ---------------------- | ----------------------------------------------------------------------------------------------- |
+| PageSurface owner      | `apps/admin/web/src/app/(admin)/timelines/page.tsx`                                             |
+| PageSurface 역할       | 타임라인 검색/등록 헤더와 목록 전체를 raised 본문으로 묶음                                      |
+| SectionSurface 대상    | 타임라인 `MetaDataGrid`                                                                         |
+| SectionSurface padding | `padding="none"`                                                                                |
+| 예외                   | 없음. `MetaDataGrid` 슬롯의 검색 입력은 surface를 자동 생성하지 않으므로 `page.tsx`가 직접 소유 |
 
 ## 컬럼 정의
 
-| 필드 | 라벨 | 크기 | 정렬 | 셀 컴포넌트 |
-|------|------|------|------|-------------|
-| name | 타임라인명 | 200 | - | 링크 스타일 (클릭 시 상세 이동) |
-| description | 설명 | 300 | - | 기본 (없으면 "-") |
-| createdAt | 등록일 | 150 | - | `DateTimeCell` |
-| actions | 액션 | 80 | center | 삭제 버튼 |
+| 필드        | 라벨       | 크기 | 정렬   | 셀 컴포넌트                     |
+| ----------- | ---------- | ---- | ------ | ------------------------------- |
+| name        | 타임라인명 | 200  | -      | 링크 스타일 (클릭 시 상세 이동) |
+| description | 설명       | 300  | -      | 기본 (없으면 "-")               |
+| createdAt   | 등록일     | 150  | -      | `DateTimeCell`                  |
+| actions     | 액션       | 80   | center | 삭제 버튼                       |
 
 ## 필터/검색 정의
 
-| 위치 | 타입 | ID | 설명 |
-|------|------|-----|------|
+| 위치 | 타입   | ID     | 설명                                    |
+| ---- | ------ | ------ | --------------------------------------- |
 | 좌측 | search | search | 타임라인 이름으로 검색 (debounce 300ms) |
 
 ## 페이지 상태
 
-| 상태 | 설명 | UI |
-|------|------|-----|
-| 로딩 | suspense 재조회 중 | `Suspense` fallback에서 MetaDataGrid 로딩 상태 |
-| 데이터 표시 | 목록 로드 완료 | 페이지네이션 포함 타임라인 목록 |
-| 빈 데이터 | 조회 결과 없음 | "등록된 타임라인이 없습니다." |
+| 상태        | 설명               | UI                                             |
+| ----------- | ------------------ | ---------------------------------------------- |
+| 로딩        | suspense 재조회 중 | `Suspense` fallback에서 MetaDataGrid 로딩 상태 |
+| 데이터 표시 | 목록 로드 완료     | 페이지네이션 포함 타임라인 목록                |
+| 빈 데이터   | 조회 결과 없음     | "등록된 타임라인이 없습니다."                  |
 
 ## API 호출
 
-| 시점 | API | 설명 |
-|------|-----|------|
+| 시점       | API                                               | 설명                                                     |
+| ---------- | ------------------------------------------------- | -------------------------------------------------------- |
 | 클라이언트 | `useGetTimelinesSuspense({ take, skip, search })` | CSR + Suspense 기반 타임라인 목록 조회 (현재 Space 기준) |
-| 삭제 시 | `useDeleteTimeline({ timelineId })` | 타임라인 삭제 |
+| 삭제 시    | `useDeleteTimeline({ timelineId })`               | 타임라인 삭제                                            |
 
 ## 이벤트 핸들러
 
-| 이벤트 | 동작 |
-|--------|------|
-| 타임라인명 클릭 | `/timelines/{timelineId}` 상세 페이지로 이동 |
-| "타임라인 등록" 버튼 클릭 | `/timelines/new` 등록 페이지로 이동 |
-| 삭제 버튼 클릭 | 확인 모달 표시 → 확인 시 `deleteTimeline` 호출, 성공 시 목록 캐시 무효화 |
-| 검색 변경 | URL 쿼리 파라미터 업데이트로 API 재호출 |
+| 이벤트                    | 동작                                                                     |
+| ------------------------- | ------------------------------------------------------------------------ |
+| 타임라인명 클릭           | `/timelines/{timelineId}` 상세 페이지로 이동                             |
+| "타임라인 등록" 버튼 클릭 | `/timelines/new` 등록 페이지로 이동                                      |
+| 삭제 버튼 클릭            | 확인 모달 표시 → 확인 시 `deleteTimeline` 호출, 성공 시 목록 캐시 무효화 |
+| 검색 변경                 | URL 쿼리 파라미터 업데이트로 API 재호출                                  |
 
 ## 비즈니스 규칙
 
@@ -98,26 +108,30 @@
 
 ## 특이사항
 
-- CSR + Suspense 기본 패턴을 사용하며 `_client.tsx`, `_prefetch.ts` 없이 `page.tsx` 단일 파일로 구성
+- CSR + Suspense 기본 패턴을 유지하되, 상대 `/api` 호출의 prerender 오류를 피하기 위해 `page.tsx`가 browser-only no-SSR boundary를 제공합니다.
 - `useMetaDataGridQueryStates`로 검색어와 페이지네이션 상태를 URL 쿼리와 동기화
 - 삭제 확인 모달은 페이지 로컬 observable state(`deleteTarget`)로 관리
 - 삭제 성공 시 `getGetTimelinesQueryKey()` 기준으로 목록 캐시를 무효화
 
 ## 구현 체크리스트
 
-- [x] page.tsx (클라이언트 컴포넌트, `Suspense` + `useGetTimelinesSuspense`)
+- [x] page.tsx (browser-only no-SSR boundary + 내부 페이지 컴포넌트에서 `useMetaDataGridQueryStates`, `useGetTimelinesSuspense` 실행)
 - [x] `_client.tsx` 없음 (CSR 기본 패턴)
 - [x] `_prefetch.ts` 없음 (SSR 예외 아님)
 - [x] 삭제 확인 모달과 캐시 무효화는 `page.tsx`에서 직접 처리
 
 ## 변경 이력
 
-| 일자 | 내용 | 작성자 |
-|------|------|--------|
-| 2026-03-15 | 타임라인 목록을 CSR + Suspense 단일 `page.tsx` 패턴으로 전환하고 `_client.tsx`, `_prefetch.ts`를 제거 | codex |
-| 2026-02-19 | 초기 생성 | req-screen-planner |
-| 2026-02-19 | 디자인 목업 섹션 추가 | req-reverse-engineer |
-| 2026-03-03 | Scaffold 제거 및 페이지 헤더 영역/섹션 영역 용어 정리 | codex |
-| 2026-03-03 | `_client.tsx` 반복 헤더를 `Page + PageTitleBar` 패턴으로 정리 | codex |
-| 2026-03-03 | Page/Section `mode` 제거 반영 (단일 구조 기준으로 문서 표현 정리) | codex |
-| 2026-03-03 | `PageTitleBar` 단일 컴포넌트 통합 및 리네이밍 반영 | codex |
+| 일자       | 내용                                                                                                           | 작성자               |
+| ---------- | -------------------------------------------------------------------------------------------------------------- | -------------------- |
+| 2026-03-15 | 상대 `/api` 호출의 prerender 오류를 피하기 위해 타임라인 목록 `page.tsx`를 browser-only no-SSR boundary로 전환 | codex                |
+| 2026-03-15 | Next.js build 요구에 맞춰 `useMetaDataGridQueryStates` 실행을 page-level `Suspense` boundary 안쪽으로 이동     | codex                |
+| 2026-03-15 | Surface owner와 elevation 규칙을 문서화                                                                        | codex                |
+| 2026-03-15 | 타임라인 목록 본문에 `PageSurface > SectionSurface(padding="none")` ownership을 추가                           | codex                |
+| 2026-03-15 | 타임라인 목록을 CSR + Suspense 단일 `page.tsx` 패턴으로 전환하고 `_client.tsx`, `_prefetch.ts`를 제거          | codex                |
+| 2026-02-19 | 초기 생성                                                                                                      | req-screen-planner   |
+| 2026-02-19 | 디자인 목업 섹션 추가                                                                                          | req-reverse-engineer |
+| 2026-03-03 | Scaffold 제거 및 페이지 헤더 영역/섹션 영역 용어 정리                                                          | codex                |
+| 2026-03-03 | `_client.tsx` 반복 헤더를 `Page + PageTitleBar` 패턴으로 정리                                                  | codex                |
+| 2026-03-03 | Page/Section `mode` 제거 반영 (단일 구조 기준으로 문서 표현 정리)                                              | codex                |
+| 2026-03-03 | `PageTitleBar` 단일 컴포넌트 통합 및 리네이밍 반영                                                             | codex                |

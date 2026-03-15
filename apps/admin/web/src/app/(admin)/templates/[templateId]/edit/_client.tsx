@@ -8,8 +8,9 @@ import {
 
 import {
 	Page,
+	PageSurface,
 	PageTitleBar,
-	Section,
+	SectionSurface,
 	TemplateForm,
 	type TemplateFormData,
 	type VariableEditItem,
@@ -192,12 +193,14 @@ function TemplateEditPageClient({ templateId }: TemplateEditPageClientProps) {
 	if (isLoading) {
 		return (
 			<Page top={<PageTitleBar title="템플릿 수정" description="로딩 중..." />}>
-				<Section>
-					<div className="flex items-center justify-center gap-2 p-8">
-						<Spinner size="sm" />
-						<span className="text-default-500">로딩 중...</span>
-					</div>
-				</Section>
+				<PageSurface>
+					<SectionSurface>
+						<div className="flex items-center justify-center gap-2 p-8">
+							<Spinner size="sm" />
+							<span className="text-default-500">로딩 중...</span>
+						</div>
+					</SectionSurface>
+				</PageSurface>
 			</Page>
 		);
 	}
@@ -213,14 +216,16 @@ function TemplateEditPageClient({ templateId }: TemplateEditPageClientProps) {
 					/>
 				}
 			>
-				<Section>
-					<div className="flex flex-col items-center justify-center gap-4 p-8">
-						<p className="text-default-500">템플릿을 찾을 수 없습니다.</p>
-						<Button variant="flat" onPress={onClickCancelButton}>
-							목록으로
-						</Button>
-					</div>
-				</Section>
+				<PageSurface>
+					<SectionSurface>
+						<div className="flex flex-col items-center justify-center gap-4 p-8">
+							<p className="text-default-500">템플릿을 찾을 수 없습니다.</p>
+							<Button variant="flat" onPress={onClickCancelButton}>
+								목록으로
+							</Button>
+						</div>
+					</SectionSurface>
+				</PageSurface>
 			</Page>
 		);
 	}
@@ -234,19 +239,21 @@ function TemplateEditPageClient({ templateId }: TemplateEditPageClientProps) {
 				/>
 			}
 		>
-			<Section>
-				<TemplateForm
-					mode="edit"
-					formData={state.formData}
-					variables={state.variables}
-					onFormDataChange={onFormDataChange}
-					onVariablesChange={onVariablesChange}
-					onSubmit={onSubmitForm}
-					onCancel={onClickCancelButton}
-					isSubmitting={isPending}
-					errors={state.errors}
-				/>
-			</Section>
+			<PageSurface>
+				<SectionSurface>
+					<TemplateForm
+						mode="edit"
+						formData={state.formData}
+						variables={state.variables}
+						onFormDataChange={onFormDataChange}
+						onVariablesChange={onVariablesChange}
+						onSubmit={onSubmitForm}
+						onCancel={onClickCancelButton}
+						isSubmitting={isPending}
+						errors={state.errors}
+					/>
+				</SectionSurface>
+			</PageSurface>
 		</Page>
 	);
 }

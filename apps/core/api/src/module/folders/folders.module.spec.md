@@ -15,6 +15,7 @@
 | FolderFacade | Folder controller boundary 조합 |
 | FolderService | Folder 목록 조회 규칙 |
 | FoldersRepository | Folder 영속성 접근 |
+| AuthContext | 현재 요청 사용자 제공 |
 | SpaceContext | 현재 요청 Space 제공 |
 
 ## exports
@@ -27,4 +28,5 @@
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-03-15 | FoldersController constructor 의존성 충족을 위해 `AuthContext` provider를 module wiring에 추가 | codex |
 | 2026-03-15 | admin assets 폴더 API 라우트 복구를 위한 FoldersModule 신규 추가 | codex |

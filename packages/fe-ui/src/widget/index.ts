@@ -10,6 +10,7 @@ export * from "./DetailPanel";
 export * from "./FilterPanel";
 export * from "./FloatingActionButton";
 export * from "./FloatingChatPanel";
+export * from "./FolderTree";
 export * from "./form";
 export * from "./group";
 export * from "./HistoryPanel";

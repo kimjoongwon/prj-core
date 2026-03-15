@@ -1,4 +1,4 @@
-import { expect, test, type Page } from "@playwright/test";
+import { expect, type Page, test } from "@playwright/test";
 
 function getAbilitiesHeading(page: Page) {
 	return page.getByRole("heading", {
@@ -14,9 +14,7 @@ async function gotoAbilitiesPage(page: Page) {
 }
 
 test.describe("권한 상세 페이지", () => {
-	test("목록 행 클릭 시 상세 페이지로 이동해야 한다", async ({
-		page,
-	}) => {
+	test("목록 행 클릭 시 상세 페이지로 이동해야 한다", async ({ page }) => {
 		// Given: 권한 목록 페이지
 		await gotoAbilitiesPage(page);
 
@@ -30,6 +28,8 @@ test.describe("권한 상세 페이지", () => {
 
 		// Then: 상세 페이지 URL 확인
 		await expect(page).toHaveURL(/\/abilities\//);
-		await expect(page.getByRole("heading", { name: "권한 상세" })).toBeVisible();
+		await expect(
+			page.getByRole("heading", { name: "권한 상세" }),
+		).toBeVisible();
 	});
 });

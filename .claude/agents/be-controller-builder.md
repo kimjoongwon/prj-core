@@ -1,6 +1,6 @@
 ---
 name: be-controller-builder
-description: aggregate root Module과 @cocrepo/app 기준 NestJS REST Controller를 생성하는 전문가
+description: aggregate root Module과 @cocrepo/facade/@cocrepo/app 기준 NestJS REST Controller를 생성하는 전문가
 tools: Read, Write, Grep, Bash
 ---
 
@@ -22,7 +22,7 @@ NestJS REST Controller를 생성하는 전문가
 - 상황: 사용 여부: 설명
 - REST API 엔드포인트 생성: ✅ 사용: Controller 생성
 - DTO 검증 및 변환: ✅ 사용: Request DTO 처리
-- 비즈니스 로직 구현: ❌ 미사용: service-builder 또는 be-app-builder 사용
+- 비즈니스 로직 구현: ❌ 미사용: service-builder, be-app-builder, be-facade-builder 사용
 - 데이터 접근 로직: ❌ 미사용: repository-builder 사용
 ---
 
@@ -30,7 +30,8 @@ NestJS REST Controller를 생성하는 전문가
 
 | 항목 | 설명 |
 |------|------|
-| ApplicationService | `@cocrepo/app`의 controller 진입 레이어 |
+| ApplicationService | `@cocrepo/app`의 workflow 진입 레이어 |
+| Facade | `@cocrepo/facade`의 boundary composition 레이어 |
 | DTO 클래스 | `@cocrepo/dto` |
 | API 요구사항 | 엔드포인트 정의 |
 | Module 경계 | aggregate root 기준 module 이름 |
@@ -46,6 +47,13 @@ NestJS REST Controller를 생성하는 전문가
 ## How to use
 
 ### Core Rules
+
+- 기본 원칙: Controller는 workflow 유즈케이스면 `ApplicationService`, boundary composition이면 `Facade`를 진입점으로 사용한다.
+- 각 endpoint는 기본적으로 `ApplicationService` 또는 `Facade` 또는 단일 pass-through `Service` 중 하나를 주 진입점으로 사용한다.
+- Controller가 같은 endpoint에서 `Facade`와 `ApplicationService`를 직접 연쇄 호출해 workflow를 만드는 패턴은 기본값으로 사용하지 않는다.
+- 단일 aggregate-root 전달형 API만 `Service` 직접 호출 허용.
+- 유즈케이스 workflow orchestration(다수 서비스 조합, 조건 분기, 외부 연동 포함)은 `ApplicationService`로 이동.
+- 응답 조립/read model/protocol composition은 `Facade`로 이동.
 
 ### Create/Update Form Bootstrap 응답 계약 (Critical)
 
@@ -103,15 +111,21 @@ Create/Update 화면에서 폼을 즉시 렌더링할 수 있도록 Controller�
 - [ ] **각 메서드에 `@ApiOperation({ operationId: "..." })` 추가 (필수!)**
 - [ ] **operationId와 메서드명 일치 확인 (예: operationId: "getUsers" → async getUsers())**
 - [ ] **URL 파라미터명이 `:{entity}Id` 형식인지 확인 (예: `:userId`, `:orderId`)**
-- [ ] Controller는 `@cocrepo/app`의 ApplicationService만 주입
-- [ ] Service/Repository/Integration Facade 직접 주입 금지
+- [ ] workflow 유즈케이스는 `@cocrepo/app`의 ApplicationService를 주입
+- [ ] boundary composition 유즈케이스는 `@cocrepo/facade`의 Facade를 주입
+- [ ] Service/Repository/Integration Facade 직접 주입은 **동일 aggregate root에서 단일 전달형일 때만** 허용
+- [ ] 각 endpoint의 primary entrypoint가 하나인지 확인 (`ApplicationService` / `Facade` / 단일 `Service`)
+- [ ] 같은 endpoint에서 Controller가 `Facade`와 `ApplicationService`를 모두 호출하지 않는지 확인
+- [ ] pass-through 허용 시에도 주입 대상을 하나의 `Service`로 제한
 - [ ] Logger 초기화
 - [ ] 각 메서드에 `@HttpCode(HttpStatus.OK)` 추가
 - [ ] 각 메서드에 `@ApiResponseEntity()` 추가
 - [ ] **Entity 직접 반환** (plainToInstance 사용 금지, DtoTransformInterceptor가 자동 변환)
 - [ ] **private 헬퍼 메서드 없음** (메서드 내 직접 작성)
 - [ ] 페이지 단위 controller는 query/bootstrap/BFF 용도일 때만 허용하고 write 진입점의 기본 단위로 사용하지 않음
-- [ ] Controller -> ApplicationService -> Service -> Repository 흐름 유지
+- [ ] workflow 경로에서는 Controller -> ApplicationService -> Service -> Repository 흐름 유지
+- [ ] boundary composition 경로에서는 Controller -> Facade -> Service -> Repository 흐름 유지
+- [ ] 한 controller 클래스에서 `Facade`와 `ApplicationService`를 함께 주입해야 한다면 메서드 책임 분리가 명확한지 확인
 - [ ] module 폴더는 aggregate root 기준으로 유지 (`spaces`, `tasks`)
 - [ ] `ground`, `exercise` 같은 child resource는 top-level module 예시로 만들지 않음
 - [ ] Create/Update용 Form Bootstrap 응답 계약 (`defaultObject/options/ui/fieldMeta/aiSchemas`) 적용

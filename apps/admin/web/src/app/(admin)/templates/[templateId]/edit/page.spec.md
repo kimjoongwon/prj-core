@@ -14,7 +14,10 @@
 │ 템플릿 수정                                                       │
 │ WELCOME_EMAIL · 회원가입 환영 이메일                              │
 ├─────────────────────────────────────────────────────────────────┤
-│ TemplateForm (mode="edit")                                        │
+│ PageSurface                                                        │
+│ ┌───────────────────────────────────────────────────────────────┐ │
+│ │ SectionSurface                                                │ │
+│ │ TemplateForm (mode="edit")                                    │ │
 │                                                                   │
 │  유형 (읽기 전용)                                                 │
 │  ● EMAIL   ○ SMS   ○ PUSH  (비활성화)                            │
@@ -51,7 +54,8 @@
 │  │ name     │ 사용자 이름  │ 사용자       │  ●   │[삭제]│        │
 │  └──────────┴──────────────┴──────────────┴──────┴──────┘        │
 │                                                                   │
-│                                        [취소]  [저장]            │
+│                                        [취소]  [저장]            │ │
+│ └───────────────────────────────────────────────────────────────┘ │
 └─────────────────────────────────────────────────────────────────┘
 ```
 
@@ -68,8 +72,19 @@
 
 | 영역 | 컴포넌트 | 설명 |
 |------|----------|------|
-| 페이지 헤더 | `페이지 헤더 영역` | title="템플릿 수정", description=동적 |
-| 폼 영역 | `TemplateForm` (mode="edit") | 공통 템플릿 폼 컴포넌트 |
+| 페이지 래퍼 | `Page` | 페이지 콘텐츠 구조 배치 |
+| 페이지 헤더 | `PageTitleBar` | title="템플릿 수정", description=동적 |
+| 본문 표면 | `PageSurface` | 수정 폼 전체를 layout 배경에서 분리하는 raised 표면 |
+| 폼 블록 | `SectionSurface` > `TemplateForm` (mode="edit") | 수정 폼을 elevated 표면 위에서 렌더링 |
+
+## Surface / Elevation
+
+| 항목 | 결정 |
+|------|------|
+| `PageSurface` owner | `apps/admin/web/src/app/(admin)/templates/[templateId]/edit/_client.tsx` 본문과 상태 분기 |
+| `SectionSurface` 대상 블록 | `TemplateForm` 전체, 로딩 상태, 데이터 없음 상태 |
+| `padding="none"` 적용 위치 | 적용하지 않음. 수정 폼 외곽 기본 패딩 유지 |
+| flat 예외 여부와 근거 | flat 예외 없음. 수정 화면은 단일 편집 블록이므로 명시적 표면이 필요 |
 
 ## 폼 필드
 
@@ -138,6 +153,7 @@
 - 변수 업데이트는 전체 교체 방식 (Set semantics): id 있으면 수정, 없으면 생성, 요청에 없으면 삭제
 - 로컬 상태 관리: `useLocalObservable` (MobX)
 - FULL_ACCESS 권한 필요
+- `TemplateForm`은 입력 블록만 렌더링하며 Surface는 페이지가 `PageSurface`, `SectionSurface`로 제공
 
 ## 구현 체크리스트
 
@@ -149,6 +165,7 @@
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-03-15 | 수정 페이지 본문과 상태 분기를 `PageSurface > SectionSurface` 기준으로 정리 | codex |
 | 2026-02-18 | 초기 생성 (역기획) | req-reverse-engineer |
 | 2026-02-19 | 디자인 목업 추가 | req-reverse-engineer |
 | 2026-03-03 | Scaffold 제거 및 페이지 헤더 영역/섹션 영역 용어 정리 | codex |

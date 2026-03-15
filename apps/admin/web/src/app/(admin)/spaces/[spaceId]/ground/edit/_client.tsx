@@ -5,7 +5,14 @@ import {
 	useUpdateSpaceGround,
 } from "@cocrepo/api/core/spaces";
 
-import { Page, PageTitleBar, Section, VStack } from "@cocrepo/ui";
+import {
+	Page,
+	PageSurface,
+	PageTitleBar,
+	Section,
+	SectionSurface,
+	VStack,
+} from "@cocrepo/ui";
 import { addToast, Button, Input, Spinner } from "@heroui/react";
 import { observer, useLocalObservable } from "mobx-react-lite";
 import type { Route } from "next";
@@ -152,12 +159,14 @@ function GroundEditPageClient({ spaceId }: GroundEditPageClientProps) {
 			<Page
 				top={<PageTitleBar title="시설 정보 수정" description="로딩 중..." />}
 			>
-				<Section>
-					<div className="flex items-center justify-center gap-2 p-8">
-						<Spinner size="sm" />
-						<span className="text-default-500">로딩 중...</span>
-					</div>
-				</Section>
+				<PageSurface>
+					<SectionSurface>
+						<div className="flex items-center justify-center gap-2 p-8">
+							<Spinner size="sm" />
+							<span className="text-default-500">로딩 중...</span>
+						</div>
+					</SectionSurface>
+				</PageSurface>
 			</Page>
 		);
 	}
@@ -173,12 +182,18 @@ function GroundEditPageClient({ spaceId }: GroundEditPageClientProps) {
 					/>
 				}
 			>
-				<div className="flex flex-col items-center justify-center gap-4 p-8">
-					<p className="text-default-500">시설 detail을 찾을 수 없습니다.</p>
-					<Button variant="flat" onPress={onClickCancelButton}>
-						목록으로
-					</Button>
-				</div>
+				<PageSurface>
+					<SectionSurface>
+						<div className="flex flex-col items-center justify-center gap-4 p-8">
+							<p className="text-default-500">
+								시설 detail을 찾을 수 없습니다.
+							</p>
+							<Button variant="flat" onPress={onClickCancelButton}>
+								목록으로
+							</Button>
+						</div>
+					</SectionSurface>
+				</PageSurface>
 			</Page>
 		);
 	}
@@ -192,76 +207,80 @@ function GroundEditPageClient({ spaceId }: GroundEditPageClientProps) {
 
 	return (
 		<Page top={pageHeader}>
-			<Section top={<PageTitleBar level={2} title="기본 정보" />}>
-				<VStack gap={4}>
-					<Input
-						label="시설명"
-						placeholder="시설명을 입력하세요"
-						value={state.name}
-						onChange={onChangeName}
-						isRequired
-						isInvalid={!!state.errors.name}
-						errorMessage={state.errors.name}
-					/>
-					<Input
-						label="라벨"
-						placeholder="단축 라벨을 입력하세요 (선택)"
-						value={state.label}
-						onChange={onChangeLabel}
-					/>
-					<Input
-						label="주소"
-						placeholder="주소를 입력하세요"
-						value={state.address}
-						onChange={onChangeAddress}
-						isRequired
-						isInvalid={!!state.errors.address}
-						errorMessage={state.errors.address}
-					/>
-					<Input
-						label="전화번호"
-						placeholder="전화번호를 입력하세요"
-						type="tel"
-						value={state.phone}
-						onChange={onChangePhone}
-						isRequired
-						isInvalid={!!state.errors.phone}
-						errorMessage={state.errors.phone}
-					/>
-					<Input
-						label="이메일"
-						placeholder="이메일을 입력하세요"
-						type="email"
-						value={state.email}
-						onChange={onChangeEmail}
-						isRequired
-						isInvalid={!!state.errors.email}
-						errorMessage={state.errors.email}
-					/>
-					<Input
-						label="사업자등록번호"
-						value={state.businessNo}
-						isDisabled
-						description="사업자등록번호는 수정할 수 없습니다."
-					/>
-					<div className="mt-4 flex justify-end gap-2">
-						<Button
-							variant="flat"
-							onPress={onClickCancelButton}
-							isDisabled={isPending}
-						>
-							취소
-						</Button>
-						<Button
-							color="primary"
-							onPress={onClickSaveButton}
-							isLoading={isPending}
-						>
-							저장
-						</Button>
-					</div>
-				</VStack>
-			</Section>
+			<PageSurface>
+				<SectionSurface>
+					<Section top={<PageTitleBar level={2} title="기본 정보" />}>
+						<VStack gap={4}>
+							<Input
+								label="시설명"
+								placeholder="시설명을 입력하세요"
+								value={state.name}
+								onChange={onChangeName}
+								isRequired
+								isInvalid={!!state.errors.name}
+								errorMessage={state.errors.name}
+							/>
+							<Input
+								label="라벨"
+								placeholder="단축 라벨을 입력하세요 (선택)"
+								value={state.label}
+								onChange={onChangeLabel}
+							/>
+							<Input
+								label="주소"
+								placeholder="주소를 입력하세요"
+								value={state.address}
+								onChange={onChangeAddress}
+								isRequired
+								isInvalid={!!state.errors.address}
+								errorMessage={state.errors.address}
+							/>
+							<Input
+								label="전화번호"
+								placeholder="전화번호를 입력하세요"
+								type="tel"
+								value={state.phone}
+								onChange={onChangePhone}
+								isRequired
+								isInvalid={!!state.errors.phone}
+								errorMessage={state.errors.phone}
+							/>
+							<Input
+								label="이메일"
+								placeholder="이메일을 입력하세요"
+								type="email"
+								value={state.email}
+								onChange={onChangeEmail}
+								isRequired
+								isInvalid={!!state.errors.email}
+								errorMessage={state.errors.email}
+							/>
+							<Input
+								label="사업자등록번호"
+								value={state.businessNo}
+								isDisabled
+								description="사업자등록번호는 수정할 수 없습니다."
+							/>
+							<div className="mt-4 flex justify-end gap-2">
+								<Button
+									variant="flat"
+									onPress={onClickCancelButton}
+									isDisabled={isPending}
+								>
+									취소
+								</Button>
+								<Button
+									color="primary"
+									onPress={onClickSaveButton}
+									isLoading={isPending}
+								>
+									저장
+								</Button>
+							</div>
+						</VStack>
+					</Section>
+				</SectionSurface>
+			</PageSurface>
 		</Page>
 	);
 }

@@ -64,14 +64,17 @@ find packages/fe-ui/src/components -type d \( -name "hooks" -o -name "utils" -o 
 # 핸들러 네이밍 (handle -> on[Event][UI] 필요)
 grep -rEn "handle[A-Z]" [Page경로] --include="*.tsx"
 
-# PageSurface 필수
+# Page-owned Surface 필수
 grep -L "PageSurface" [Page경로]/**/page.tsx [Page경로]/**/_client.tsx 2>/dev/null
 
-# Prefetch 구조 확인 (page.tsx가 서버 컴포넌트인지)
-grep -l "use client" [Page경로]/page.tsx  # 있으면 위반
+# layout이 페이지 고유 Surface/PageTitleBar를 소유하면 위반
+grep -rEn "PageSurface|PageTitleBar" [Page경로]/**/layout.tsx 2>/dev/null
 
-# _client.tsx, _prefetch.ts 존재 확인
-ls [Page경로]/_client.tsx [Page경로]/_prefetch.ts 2>/dev/null
+# page.spec.md에 Surface / Elevation 기록이 없으면 위반
+grep -n "^## Surface / Elevation$|PageSurface owner|flat 예외 여부와 근거" [Page경로]/page.spec.md
+
+# MetaDataGrid/폼 블록이 있는데 SectionSurface가 없으면 검토 필요
+grep -rEn "MetaDataGrid|TemplateForm|DataGrid" [Page경로] --include="*.tsx"
 ```
 
 #### Widget 컴포넌트
@@ -131,8 +134,10 @@ done
 ### Page 전용
 
 - [ ] 핸들러 네이밍 (`on[Event][UI]` 형태)
-- [ ] PageSurface 필수
-- [ ] Prefetch 구조 (page.tsx + _client.tsx + _prefetch.ts)
+- [ ] Page가 `PageSurface`를 직접 소유
+- [ ] layout이 `PageSurface`/`PageTitleBar`를 소유하지 않음
+- [ ] `page.spec.md`에 `Surface / Elevation` 결정이 기록됨
+- [ ] CSR 기본, SSR 예외 구조가 화면 성격에 맞음
 - [ ] Cell 컴포넌트 재사용
 
 ### Widget/Feature/Layout 전용
@@ -160,11 +165,13 @@ done
 |------|------|------|
 | 메모이제이션 금지 | ✅ 통과 | useCallback/useMemo 없음 |
 | 핸들러 네이밍 | ✅ 통과 | on[Event][UI] 형태 준수 |
-| PageSurface 사용 | ✅ 통과 | PageSurface 적용됨 |
+| Page-owned Surface | ✅ 통과 | page/_client가 PageSurface를 소유함 |
+| layout Surface 비소유 | ✅ 통과 | layout.tsx에 PageSurface/PageTitleBar 없음 |
+| Surface 문서화 | ✅ 통과 | page.spec.md에 Surface / Elevation 섹션 반영 |
 | API 사용 | ✅ 통과 | @cocrepo/api 사용 |
 | MobX observer | ✅ 통과 | observer 적용됨 |
 | 스타일링 규칙 | ✅ 통과 | 커스텀 className 없음 |
-| Prefetch 구조 | ✅ 통과 | page.tsx + _client.tsx + _prefetch.ts |
+| 페이지 구조 | ✅ 통과 | CSR 기본 또는 문서화된 SSR 예외 패턴 사용 |
 
 ### 품질 점수: 100/100
 ```

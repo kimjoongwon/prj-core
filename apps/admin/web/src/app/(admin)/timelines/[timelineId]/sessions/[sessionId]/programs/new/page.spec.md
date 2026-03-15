@@ -72,10 +72,25 @@
 - [ ] _prefetch.ts (prefetchGetSessionQuery 호출)
 - [ ] hooks/useHandlers.ts (등록 핸들러)
 
+
+## Surface / Elevation
+
+| 항목 | 결정 |
+|------|------|
+| PageSurface owner | `apps/admin/web/src/app/(admin)/timelines/[timelineId]/sessions/[sessionId]/programs/new/_client.tsx` |
+|------|------|
+| PageSurface 역할 | 페이지 헤더 아래 본문 전체를 raised surface로 묶습니다. |
+| SectionSurface 대상 | 본문 섹션, 폼, 표, 로딩/빈 상태 블록 |
+| SectionSurface padding | DataGrid/테이블은 필요 시 `padding="none"`, 그 외 기본 패딩 |
+| 예외 | 없음. `Layout`/`Page`/`Section` 슬롯 배치만으로는 surface가 생기지 않으므로 page 또는 `_client.tsx`가 owner를 명시합니다. |
+
 ## 변경 이력
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-03-15 | Surface ownership과 elevation 결정을 문서화 | codex |
+| 2026-03-15 | Surface ownership/elevation 규칙과 PageSurface/SectionSurface 적용 기준을 문서화 | codex |
+| 2026-03-15 | Surface owner와 elevation 규칙을 문서화 | codex |
 | 2026-03-14 | 프로그램 등록/수정 E2E가 seed task 부재 시 테스트 전용 task를 생성하고 cleanup하도록 안정화 | codex |
 | 2026-02-19 | 초기 생성 | orch-requirement |
 | 2026-03-03 | Scaffold 제거 및 페이지 헤더 영역/섹션 영역 용어 정리 | codex |

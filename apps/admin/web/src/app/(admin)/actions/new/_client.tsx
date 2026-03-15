@@ -4,7 +4,13 @@ import {
 	useCreateAction,
 } from "@cocrepo/api/core/actions";
 
-import { Page, PageTitleBar, Section, VStack } from "@cocrepo/ui";
+import {
+	Page,
+	PageSurface,
+	PageTitleBar,
+	SectionSurface,
+	VStack,
+} from "@cocrepo/ui";
 import { Button, Input, Select, SelectItem, Textarea } from "@heroui/react";
 import { ArrowLeft, Save } from "lucide-react";
 import { observer, useLocalObservable } from "mobx-react-lite";
@@ -133,82 +139,85 @@ function ActionNewPageClient() {
 				/>
 			}
 		>
-			<VStack gap={4}>
-				<div className="rounded-xl bg-primary-50 p-4 dark:bg-primary-900/20">
-					<p className="text-sm text-primary-700 dark:text-primary-400">
-						<strong>참고:</strong> 행위 식별자는 소문자로 시작하고,
-						소문자/숫자/콜론/밑줄만 사용할 수 있습니다. (예: read:masked:email)
-					</p>
-				</div>
-				<Section>
-					<div className="space-y-6 p-6">
-						<Input
-							label="행위 식별자"
-							placeholder="read:masked:email"
-							value={state.name}
-							onValueChange={(value) => {
-								state.name = value.toLowerCase();
-							}}
-							isInvalid={!!state.errors.name}
-							errorMessage={state.errors.name}
-							isRequired
-							description="소문자로 시작하고, 소문자/숫자/콜론/밑줄만 사용 가능합니다."
-						/>
-						<Input
-							label="표시명"
-							placeholder="이메일 마스킹 읽기"
-							value={state.displayName}
-							onValueChange={(value) => {
-								state.displayName = value;
-							}}
-							maxLength={100}
-							description="사용자에게 보여질 Action 이름입니다."
-						/>
-						<Textarea
-							label="설명"
-							placeholder="Action에 대한 설명을 입력하세요."
-							value={state.description}
-							onValueChange={(value) => {
-								state.description = value;
-							}}
-							maxLength={200}
-							minRows={3}
-						/>
-						<Select
-							label="분류"
-							placeholder="분류를 선택하세요"
-							selectedKeys={state.group ? [state.group] : []}
-							onSelectionChange={(keys) => {
-								const selectedKey = Array.from(keys)[0];
-								state.group = selectedKey ? String(selectedKey) : "";
-							}}
-						>
-							{groupOptions.map((option) => (
-								<SelectItem key={option.value}>{option.label}</SelectItem>
-							))}
-						</Select>
-						<Input
-							label="정렬 순서"
-							type="number"
-							value={String(state.order)}
-							onValueChange={(value) => {
-								state.order = Number(value) || 0;
-							}}
-							description="낮은 숫자일수록 먼저 표시됩니다."
-						/>
-						<div className="flex justify-end pt-4">
-							<Button
-								color="primary"
-								startContent={<Save className="h-4 w-4" />}
-								onPress={onClickSubmitButton}
-								isLoading={isPending}
-							>
-								Action 등록
-							</Button>
-						</div>
+			<PageSurface>
+				<VStack gap={4}>
+					<div className="rounded-xl bg-primary-50 p-4 dark:bg-primary-900/20">
+						<p className="text-sm text-primary-700 dark:text-primary-400">
+							<strong>참고:</strong> 행위 식별자는 소문자로 시작하고,
+							소문자/숫자/콜론/밑줄만 사용할 수 있습니다. (예:
+							read:masked:email)
+						</p>
 					</div>
-				</Section>
-			</VStack>
+					<SectionSurface>
+						<div className="space-y-6">
+							<Input
+								label="행위 식별자"
+								placeholder="read:masked:email"
+								value={state.name}
+								onValueChange={(value) => {
+									state.name = value.toLowerCase();
+								}}
+								isInvalid={!!state.errors.name}
+								errorMessage={state.errors.name}
+								isRequired
+								description="소문자로 시작하고, 소문자/숫자/콜론/밑줄만 사용 가능합니다."
+							/>
+							<Input
+								label="표시명"
+								placeholder="이메일 마스킹 읽기"
+								value={state.displayName}
+								onValueChange={(value) => {
+									state.displayName = value;
+								}}
+								maxLength={100}
+								description="사용자에게 보여질 Action 이름입니다."
+							/>
+							<Textarea
+								label="설명"
+								placeholder="Action에 대한 설명을 입력하세요."
+								value={state.description}
+								onValueChange={(value) => {
+									state.description = value;
+								}}
+								maxLength={200}
+								minRows={3}
+							/>
+							<Select
+								label="분류"
+								placeholder="분류를 선택하세요"
+								selectedKeys={state.group ? [state.group] : []}
+								onSelectionChange={(keys) => {
+									const selectedKey = Array.from(keys)[0];
+									state.group = selectedKey ? String(selectedKey) : "";
+								}}
+							>
+								{groupOptions.map((option) => (
+									<SelectItem key={option.value}>{option.label}</SelectItem>
+								))}
+							</Select>
+							<Input
+								label="정렬 순서"
+								type="number"
+								value={String(state.order)}
+								onValueChange={(value) => {
+									state.order = Number(value) || 0;
+								}}
+								description="낮은 숫자일수록 먼저 표시됩니다."
+							/>
+							<div className="flex justify-end pt-4">
+								<Button
+									color="primary"
+									startContent={<Save className="h-4 w-4" />}
+									onPress={onClickSubmitButton}
+									isLoading={isPending}
+								>
+									Action 등록
+								</Button>
+							</div>
+						</div>
+					</SectionSurface>
+				</VStack>
+			</PageSurface>
 		</Page>
 	);
 }

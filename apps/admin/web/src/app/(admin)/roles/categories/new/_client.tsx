@@ -1,7 +1,13 @@
 "use client";
 import { customInstance } from "@cocrepo/api/core/client";
 
-import { Page, PageTitleBar, Section, VStack } from "@cocrepo/ui";
+import {
+	Page,
+	PageSurface,
+	PageTitleBar,
+	SectionSurface,
+	VStack,
+} from "@cocrepo/ui";
 import { Button, Input, Select, SelectItem } from "@heroui/react";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { ArrowLeft, Save } from "lucide-react";
@@ -116,49 +122,51 @@ function RoleCategoryNewPageClient() {
 				/>
 			}
 		>
-			<VStack gap={4}>
-				<Section>
-					<div className="space-y-6 p-6">
-						<Input
-							label="카테고리명"
-							placeholder="PLATFORM"
-							value={state.name}
-							onValueChange={(value) => {
-								state.name = value.toUpperCase();
-							}}
-							isInvalid={!!state.errors.name}
-							errorMessage={state.errors.name}
-							isRequired
-							maxLength={50}
-							description="대문자로 입력하는 것을 권장합니다. (예: PLATFORM, WORKSPACE)"
-						/>
-						<Select
-							label="상위 카테고리"
-							placeholder="없음 (최상위)"
-							selectedKeys={state.parentId ? [state.parentId] : []}
-							onSelectionChange={(keys) => {
-								const selected = Array.from(keys)[0] as string;
-								state.parentId = selected || "";
-							}}
-							description="상위 카테고리를 선택합니다. 선택하지 않으면 최상위 카테고리로 등록됩니다."
-						>
-							{categoryOptions.map((option) => (
-								<SelectItem key={option.id}>{option.name}</SelectItem>
-							))}
-						</Select>
-						<div className="flex justify-end pt-4">
-							<Button
-								color="primary"
-								startContent={<Save className="h-4 w-4" />}
-								onPress={onClickSubmitButton}
-								isLoading={isPending}
+			<PageSurface>
+				<VStack gap={4}>
+					<SectionSurface>
+						<div className="space-y-6">
+							<Input
+								label="카테고리명"
+								placeholder="PLATFORM"
+								value={state.name}
+								onValueChange={(value) => {
+									state.name = value.toUpperCase();
+								}}
+								isInvalid={!!state.errors.name}
+								errorMessage={state.errors.name}
+								isRequired
+								maxLength={50}
+								description="대문자로 입력하는 것을 권장합니다. (예: PLATFORM, WORKSPACE)"
+							/>
+							<Select
+								label="상위 카테고리"
+								placeholder="없음 (최상위)"
+								selectedKeys={state.parentId ? [state.parentId] : []}
+								onSelectionChange={(keys) => {
+									const selected = Array.from(keys)[0] as string;
+									state.parentId = selected || "";
+								}}
+								description="상위 카테고리를 선택합니다. 선택하지 않으면 최상위 카테고리로 등록됩니다."
 							>
-								카테고리 등록
-							</Button>
+								{categoryOptions.map((option) => (
+									<SelectItem key={option.id}>{option.name}</SelectItem>
+								))}
+							</Select>
+							<div className="flex justify-end pt-4">
+								<Button
+									color="primary"
+									startContent={<Save className="h-4 w-4" />}
+									onPress={onClickSubmitButton}
+									isLoading={isPending}
+								>
+									카테고리 등록
+								</Button>
+							</div>
 						</div>
-					</div>
-				</Section>
-			</VStack>
+					</SectionSurface>
+				</VStack>
+			</PageSurface>
 		</Page>
 	);
 }

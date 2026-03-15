@@ -68,101 +68,113 @@
 
 ## 레이아웃 구성
 
-| 영역           | 컴포넌트                               | 기획서                                                                |
-| -------------- | -------------------------------------- | --------------------------------------------------------------------- |
-| 헤더           | `Page + PageTitleBar`    | -                                                                     |
-| 필터 바        | InquiryFilterBar                       | `packages/fe-ui/src/widget/InquiryFilterBar/index.spec.md` |
-| 문의 목록      | MetaDataGrid                           | `packages/fe-ui/src/feature/MetaDataGrid/index.spec.md` |
-| 연결 상태      | ConnectionStatus                       | `packages/fe-ui/src/primitive/ConnectionStatus/index.spec.md`     |
-| SLA 현황 카드  | SLAStatusCard                          | `packages/fe-ui/src/widget/SLAStatusCard/index.spec.md`    |
-| 금일 현황 카드 | InquiryStatsCard                       | `packages/fe-ui/src/widget/InquiryStatsCard/index.spec.md` |
+| 영역           | 컴포넌트              | 기획서                                                        |
+| -------------- | --------------------- | ------------------------------------------------------------- |
+| 헤더           | `Page + PageTitleBar` | -                                                             |
+| 필터 바        | InquiryFilterBar      | `packages/fe-ui/src/widget/InquiryFilterBar/index.spec.md`    |
+| 문의 목록      | MetaDataGrid          | `packages/fe-ui/src/feature/MetaDataGrid/index.spec.md`       |
+| 연결 상태      | ConnectionStatus      | `packages/fe-ui/src/primitive/ConnectionStatus/index.spec.md` |
+| SLA 현황 카드  | SLAStatusCard         | `packages/fe-ui/src/widget/SLAStatusCard/index.spec.md`       |
+| 금일 현황 카드 | InquiryStatsCard      | `packages/fe-ui/src/widget/InquiryStatsCard/index.spec.md`    |
 
-- 문의 현황 카드, 문의 목록 영역은 각각 `Section + PageTitleBar` 표면 위에 배치한다.
+- 문의 현황 카드와 문의 목록은 `PageSurface` 안에서 각각 `SectionSurface`를 소유한다.
+
+## Surface / Elevation
+
+| 항목                   | 결정                                                                            |
+| ---------------------- | ------------------------------------------------------------------------------- |
+| PageSurface owner      | `apps/admin/web/src/app/(admin)/inquiries/page.tsx`                             |
+| PageSurface 역할       | 통계 카드와 문의 목록 전체를 하나의 raised 본문으로 묶음                        |
+| SectionSurface 대상    | 문의 현황 카드 블록, 문의 목록 `MetaDataGrid` 블록                              |
+| SectionSurface padding | 현황 카드는 기본 패딩, 문의 목록은 `padding="none"`                             |
+| 예외                   | 없음. 필터/액션이 `MetaDataGrid` 슬롯에 있어도 surface는 `page.tsx`가 직접 소유 |
 
 ## 페이지 상태
 
-| 상태      | 설명                | UI                        |
-| --------- | ------------------- | ------------------------- |
+| 상태      | 설명               | UI                                                    |
+| --------- | ------------------ | ----------------------------------------------------- |
 | 로딩      | suspense 응답 대기 | `InquiryStatsCards` 기본값 + `MetaDataGrid` 로딩 상태 |
-| 빈 목록   | 문의가 없음         | 빈 상태 안내 메시지       |
-| 목록 표시 | 문의 목록 표시      | DataGrid + 통계 카드      |
-| 에러      | API 에러 발생       | 에러 메시지 + 재시도 버튼 |
+| 빈 목록   | 문의가 없음        | 빈 상태 안내 메시지                                   |
+| 목록 표시 | 문의 목록 표시     | DataGrid + 통계 카드                                  |
+| 에러      | API 에러 발생      | 에러 메시지 + 재시도 버튼                             |
 
 ## API 호출
 
-| 시점         | API                         | 캐싱                   |
-| ------------ | --------------------------- | ---------------------- |
+| 시점               | API                                                              | 캐싱                  |
+| ------------------ | ---------------------------------------------------------------- | --------------------- |
 | 클라이언트 진입 시 | `useGetInquiriesSuspense({ take, skip, search, inquiryStatus })` | React Query 캐시 사용 |
-| 클라이언트 진입 시 | `useGetInquiryStatsSuspense()` | React Query 캐시 사용 |
-| 필터 변경 시 | `useGetInquiriesSuspense(...)` 재호출 | URL 상태 기반 재조회 |
+| 클라이언트 진입 시 | `useGetInquiryStatsSuspense()`                                   | React Query 캐시 사용 |
+| 필터 변경 시       | `useGetInquiriesSuspense(...)` 재호출                            | URL 상태 기반 재조회  |
 
 ## WebSocket 연결
 
 ### 연결 시점
+
 - 페이지 진입 시 자동 WebSocket 연결
 - `inquiries:subscribe` 이벤트 전송 (목록 구독)
 
 ### 연결 해제 시점
+
 - 페이지 이탈 시 `inquiries:unsubscribe` 이벤트 전송
 - WebSocket 연결 해제
 
 ### 수신 이벤트
 
-| 이벤트 | 동작 |
-|--------|------|
-| `inquiries:updated` | 목록 새로고침 (새 문의, 상태 변경 등) |
-| `inquiries:stats:updated` | 통계 카드 업데이트 |
-| `inquiries:sla:breach` | SLA 위반 알림, 해당 행 하이라이트 |
-| `inquiries:new:message` | 새 메시지 배지 업데이트 |
-| `inquiries:participant:changed` | 온라인 참여자 수 업데이트 |
+| 이벤트                          | 동작                                  |
+| ------------------------------- | ------------------------------------- |
+| `inquiries:updated`             | 목록 새로고침 (새 문의, 상태 변경 등) |
+| `inquiries:stats:updated`       | 통계 카드 업데이트                    |
+| `inquiries:sla:breach`          | SLA 위반 알림, 해당 행 하이라이트     |
+| `inquiries:new:message`         | 새 메시지 배지 업데이트               |
+| `inquiries:participant:changed` | 온라인 참여자 수 업데이트             |
 
 ## DataGrid 컬럼
 
-| 컬럼 | 필드 | 설명 | Cell 컴포넌트 | 정렬 |
-|------|------|------|---------------|------|
-| 제목 | title | 문의 제목 + SLA 위반 표시 | InquiryTitleCell | O |
-| 고객 | customerName | 고객 이름 + 이메일 | UserCell | O |
-| 채널 | channel | 채널 아이콘 + 텍스트 | ChannelCell | - |
-| 상태 | status | 상태 배지 + 신규 표시 | InquiryStatusCell | O |
-| 우선순위 | priority | 우선순위 별 + 텍스트 | PriorityCell | O |
-| 담당자 | assignee | 담당자 이름 + 온라인 수 | AssigneeCell | O |
-| 접수일 | createdAt | 날짜 + 시간 | DateTimeCell | O |
-| 메시지 | unreadCount | 새 메시지 수 (채팅만) | MessageCountCell | - |
-| 감정 | sentiment | 감정 이모지 + 점수 | SentimentCell | - |
+| 컬럼     | 필드         | 설명                      | Cell 컴포넌트     | 정렬 |
+| -------- | ------------ | ------------------------- | ----------------- | ---- |
+| 제목     | title        | 문의 제목 + SLA 위반 표시 | InquiryTitleCell  | O    |
+| 고객     | customerName | 고객 이름 + 이메일        | UserCell          | O    |
+| 채널     | channel      | 채널 아이콘 + 텍스트      | ChannelCell       | -    |
+| 상태     | status       | 상태 배지 + 신규 표시     | InquiryStatusCell | O    |
+| 우선순위 | priority     | 우선순위 별 + 텍스트      | PriorityCell      | O    |
+| 담당자   | assignee     | 담당자 이름 + 온라인 수   | AssigneeCell      | O    |
+| 접수일   | createdAt    | 날짜 + 시간               | DateTimeCell      | O    |
+| 메시지   | unreadCount  | 새 메시지 수 (채팅만)     | MessageCountCell  | -    |
+| 감정     | sentiment    | 감정 이모지 + 점수        | SentimentCell     | -    |
 
 ### 컬럼별 특수 표시
 
-| 조건 | 표시 |
-|------|------|
-| SLA 응답/해결 위반 | 행 배경 빨간색 (#FFEBEE), 앞에 ⚠️ 아이콘 |
-| 신규 문의 (NEW) | 상태 배지 파란색, 🆕 아이콘 |
-| 채팅 채널 + 온라인 참여자 있음 | 담당자 옆에 🟢(N) 표시 |
-| 읽지 않은 메시지 있음 | 💬 N 배지 (파란색) |
-| 부정 감정 | 😠 아이콘 (빨간색) |
-| 중립 감정 | 😐 아이콘 (회색) |
-| 긍정 감정 | 😊 아이콘 (초록색) |
+| 조건                           | 표시                                     |
+| ------------------------------ | ---------------------------------------- |
+| SLA 응답/해결 위반             | 행 배경 빨간색 (#FFEBEE), 앞에 ⚠️ 아이콘 |
+| 신규 문의 (NEW)                | 상태 배지 파란색, 🆕 아이콘              |
+| 채팅 채널 + 온라인 참여자 있음 | 담당자 옆에 🟢(N) 표시                   |
+| 읽지 않은 메시지 있음          | 💬 N 배지 (파란색)                       |
+| 부정 감정                      | 😠 아이콘 (빨간색)                       |
+| 중립 감정                      | 😐 아이콘 (회색)                         |
+| 긍정 감정                      | 😊 아이콘 (초록색)                       |
 
 ## 필터 구성
 
-| 필터 | 필드 | 옵션 |
-|------|------|------|
-| 카테고리 | category | 전체, 일반, 배송, 결제, 환불, 상품, 계정, 기술, 불만, 기타 |
-| 채널 | channel | 전체 채널, 웹, 이메일, 채팅, SMS, 전화, 방문 |
-| 상태 | status | 전체 상태, 신규, 열림, 처리중, 고객대기, 해결됨, 종료됨, 에스컬레이션 |
-| 우선순위 | priority | 전체 우선순위, 긴급, 높음, 보통, 낮음 |
-| 담당자 | assigneeId | 전체 담당자, 미배정, [담당자 목록...] |
-| 기간 | dateRange | 오늘, 7일, 30일, 90일, 직접 선택 |
-| 검색 | search | 제목, 고객명, 문의번호 |
+| 필터     | 필드       | 옵션                                                                  |
+| -------- | ---------- | --------------------------------------------------------------------- |
+| 카테고리 | category   | 전체, 일반, 배송, 결제, 환불, 상품, 계정, 기술, 불만, 기타            |
+| 채널     | channel    | 전체 채널, 웹, 이메일, 채팅, SMS, 전화, 방문                          |
+| 상태     | status     | 전체 상태, 신규, 열림, 처리중, 고객대기, 해결됨, 종료됨, 에스컬레이션 |
+| 우선순위 | priority   | 전체 우선순위, 긴급, 높음, 보통, 낮음                                 |
+| 담당자   | assigneeId | 전체 담당자, 미배정, [담당자 목록...]                                 |
+| 기간     | dateRange  | 오늘, 7일, 30일, 90일, 직접 선택                                      |
+| 검색     | search     | 제목, 고객명, 문의번호                                                |
 
 ## 정렬 옵션
 
-| 정렬 기준 | 기본값 |
-|-----------|--------|
-| 최신순 (createdAt DESC) | ✅ |
-| 우선순위순 (priority DESC) | - |
-| SLA 응답 기한순 (slaResponseDue ASC) | - |
-| SLA 해결 기한순 (slaResolveDue ASC) | - |
-| 마지막 메시지순 (lastMessageAt DESC) | - |
+| 정렬 기준                            | 기본값 |
+| ------------------------------------ | ------ |
+| 최신순 (createdAt DESC)              | ✅     |
+| 우선순위순 (priority DESC)           | -      |
+| SLA 응답 기한순 (slaResponseDue ASC) | -      |
+| SLA 해결 기한순 (slaResolveDue ASC)  | -      |
+| 마지막 메시지순 (lastMessageAt DESC) | -      |
 
 ## 이벤트 핸들러
 
@@ -216,47 +228,47 @@
 
 ### L7: 인터랙션 (이벤트)
 
-| 인터랙션 | 트리거 | 동작 |
-|----------|--------|------|
+| 인터랙션  | 트리거           | 동작                                  |
+| --------- | ---------------- | ------------------------------------- |
 | 필터 변경 | Select/Date 변경 | URL 쿼리 파라미터 업데이트 + API 호출 |
-| 검색 | Input 입력 | 300ms 디바운스 + API 호출 |
-| 행 클릭 | Row click | 상세 페이지 이동 |
-| 새 문의 | Button click | 접수 페이지 이동 |
-| 재연결 | Button click | WebSocket 재연결 |
+| 검색      | Input 입력       | 300ms 디바운스 + API 호출             |
+| 행 클릭   | Row click        | 상세 페이지 이동                      |
+| 새 문의   | Button click     | 접수 페이지 이동                      |
+| 재연결    | Button click     | WebSocket 재연결                      |
 
 ### L8: Pure UI 컴포넌트
 
-| 컴포넌트 | 위치 | 설명 |
-|----------|------|------|
-| ConnectionStatus | ui/ | WebSocket 연결 상태 표시 (🟢🟡🔴) |
-| InquiryTitleCell | ui/data-display/cells/ | 제목 + SLA 위반 표시 |
-| InquiryStatusCell | ui/data-display/cells/ | 상태 배지 + 신규 표시 |
-| ChannelCell | ui/data-display/cells/ | 채널 아이콘 + 텍스트 |
-| AssigneeCell | ui/data-display/cells/ | 담당자 + 온라인 수 |
-| MessageCountCell | ui/data-display/cells/ | 읽지 않은 메시지 배지 |
-| SentimentCell | ui/data-display/cells/ | 감정 분석 아이콘 |
-| PriorityCell | ui/data-display/cells/ | 우선순위 표시 |
+| 컴포넌트          | 위치                   | 설명                              |
+| ----------------- | ---------------------- | --------------------------------- |
+| ConnectionStatus  | ui/                    | WebSocket 연결 상태 표시 (🟢🟡🔴) |
+| InquiryTitleCell  | ui/data-display/cells/ | 제목 + SLA 위반 표시              |
+| InquiryStatusCell | ui/data-display/cells/ | 상태 배지 + 신규 표시             |
+| ChannelCell       | ui/data-display/cells/ | 채널 아이콘 + 텍스트              |
+| AssigneeCell      | ui/data-display/cells/ | 담당자 + 온라인 수                |
+| MessageCountCell  | ui/data-display/cells/ | 읽지 않은 메시지 배지             |
+| SentimentCell     | ui/data-display/cells/ | 감정 분석 아이콘                  |
+| PriorityCell      | ui/data-display/cells/ | 우선순위 표시                     |
 
 ### L9: Widget 컴포넌트
 
-| 컴포넌트 | 위치 | 설명 |
-|----------|------|------|
-| InquiryFilterBar | widgets/ | 필터 바 통합 |
-| SLAStatusCard | widgets/ | SLA 현황 카드 |
+| 컴포넌트         | 위치     | 설명           |
+| ---------------- | -------- | -------------- |
+| InquiryFilterBar | widgets/ | 필터 바 통합   |
+| SLAStatusCard    | widgets/ | SLA 현황 카드  |
 | InquiryStatsCard | widgets/ | 금일 통계 카드 |
 
 ### L10: Feature 컴포넌트
 
-| 컴포넌트 | 위치 | 설명 |
-|----------|------|------|
+| 컴포넌트     | 위치     | 설명                                          |
+| ------------ | -------- | --------------------------------------------- |
 | MetaDataGrid | feature/ | 공용 DataGrid + 문의 전용 컬럼/쿼리 상태 연동 |
 
 ### L11: Store 연결
 
-| Store | 사용 필드/액션 |
-|-------|----------------|
-| Query State (nuqs) | inquiryStatus, search, take, skip |
-| Page Handler | onClickStatusFilter, onClickInquiryRow, onClickNewInquiry |
+| Store              | 사용 필드/액션                                            |
+| ------------------ | --------------------------------------------------------- |
+| Query State (nuqs) | inquiryStatus, search, take, skip                         |
+| Page Handler       | onClickStatusFilter, onClickInquiryRow, onClickNewInquiry |
 
 ### L12: 테스트 케이스
 
@@ -298,11 +310,11 @@
 
 **분류:** Happy Path
 
-| 구분      | 내용                              |
-| --------- | --------------------------------- |
-| **Given** | SLA 위반 문의 존재                |
-| **When**  | SLA 위반 필터 선택 (있는 경우)    |
-| **Then**  | SLA 위반 문의만 표시, 빨간 배경   |
+| 구분      | 내용                            |
+| --------- | ------------------------------- |
+| **Given** | SLA 위반 문의 존재              |
+| **When**  | SLA 위반 필터 선택 (있는 경우)  |
+| **Then**  | SLA 위반 문의만 표시, 빨간 배경 |
 
 #### [TC-004] 검색 - 고객명 검색
 
@@ -328,55 +340,55 @@
 
 **분류:** Happy Path
 
-| 구분      | 내용                        |
-| --------- | --------------------------- |
-| **Given** | 문의 목록 페이지 접근       |
-| **When**  | WebSocket 연결 완료         |
-| **Then**  | 🟢 연결됨 표시              |
+| 구분      | 내용                  |
+| --------- | --------------------- |
+| **Given** | 문의 목록 페이지 접근 |
+| **When**  | WebSocket 연결 완료   |
+| **Then**  | 🟢 연결됨 표시        |
 
 #### [TC-007] 실시간 상태 표시 - 온라인 참여자
 
 **분류:** Happy Path
 
-| 구분      | 내용                        |
-| --------- | --------------------------- |
-| **Given** | 채팅 채널 문의 존재         |
-| **When**  | 목록 로드                   |
+| 구분      | 내용                       |
+| --------- | -------------------------- |
+| **Given** | 채팅 채널 문의 존재        |
+| **When**  | 목록 로드                  |
 | **Then**  | 온라인 참여자 수(🟢N) 표시 |
 
 #### [TC-008] SLA 위반 하이라이트
 
 **분류:** Happy Path
 
-| 구분      | 내용                          |
-| --------- | ----------------------------- |
-| **Given** | SLA 위반 문의 존재            |
-| **When**  | 목록 로드                     |
-| **Then**  | SLA 위반 행 빨간색 배경 표시  |
+| 구분      | 내용                         |
+| --------- | ---------------------------- |
+| **Given** | SLA 위반 문의 존재           |
+| **When**  | 목록 로드                    |
+| **Then**  | SLA 위반 행 빨간색 배경 표시 |
 
 #### [TC-009] 감정 분석 표시
 
 **분류:** Happy Path
 
-| 구분      | 내용                          |
-| --------- | ----------------------------- |
-| **Given** | 감정 분석된 문의 존재         |
-| **When**  | 목록 로드                     |
+| 구분      | 내용                         |
+| --------- | ---------------------------- |
+| **Given** | 감정 분석된 문의 존재        |
+| **When**  | 목록 로드                    |
 | **Then**  | 감정 이모지(😠/😐/😊) 표시됨 |
 
 #### [TC-010] WebSocket 재연결
 
 **분류:** Edge Case
 
-| 구분      | 내용                        |
-| --------- | --------------------------- |
-| **Given** | WebSocket 연결 끊김         |
-| **When**  | 재연결 버튼 클릭            |
-| **Then**  | WebSocket 재연결 시도       |
+| 구분      | 내용                  |
+| --------- | --------------------- |
+| **Given** | WebSocket 연결 끊김   |
+| **When**  | 재연결 버튼 클릭      |
+| **Then**  | WebSocket 재연결 시도 |
 
 ## 구현 체크리스트
 
-- [x] page.tsx (클라이언트 컴포넌트, `Suspense` + `useGetInquiriesSuspense`)
+- [x] page.tsx (browser-only no-SSR boundary + 내부 페이지 컴포넌트에서 `useMetaDataGridQueryStates`, `useGetInquiriesSuspense` 실행)
 - [x] `_client.tsx` 없음 (CSR 기본 패턴)
 - [x] `_prefetch.ts` 없음 (SSR 예외 아님)
 - [x] hooks/useHandlers.ts
@@ -389,24 +401,28 @@
 
 ## 변경 이력
 
-| 일자 | 내용 | 작성자 |
-|------|------|--------|
-| 2026-03-15 | 문의 목록을 CSR + Suspense 단일 `page.tsx` 패턴으로 전환하고 `_client.tsx`, `_prefetch.ts`를 제거 | codex |
-| 2026-03-06 | feature 디렉토리를 features로 이관하고 경로 표기를 동기화 | codex |
-| 2026-02-25 | 초기 생성 | orch-requirement |
-| 2026-02-26 | 실시간 상태 컬럼 추가 (온라인, 메시지 수) | orch-requirement |
-| 2026-02-26 | 감정 분석 컬럼 및 통계 추가 | orch-requirement |
-| 2026-02-26 | WebSocket 연결 상태 표시 추가 | orch-screen-planner |
-| 2026-02-26 | SLA 위반 하이라이트 추가 | orch-screen-planner |
-| 2026-02-26 | 담당자/기간 필터 추가 | orch-screen-planner |
-| 2026-02-26 | 정렬 옵션 추가 (SLA 기한, 우선순위) | orch-screen-planner |
-| 2026-02-26 | L5-L12 레이어 기획 추가 | orch-screen-planner |
-| 2026-02-26 | 페이지 파일 생성 (page.tsx, _client.tsx, _prefetch.ts, hooks/useHandlers.ts) | fe-page-builder |
-| 2026-02-27 | 목록 페이지 E2E 테스트 추가 (`page.e2e.ts`) | codex |
-| 2026-02-28 | InquiryStore 의존 제거, 페이지 로컬 state 기준으로 L10/L11 갱신 | codex |
-| 2026-03-01 | InquiryDataGrid 제거, MetaDataGrid 재사용 구조로 전환 | codex |
-| 2026-03-03 | Scaffold 제거 및 페이지 헤더 영역/섹션 영역 용어 정리 | codex |
-| 2026-03-03 | Page/PageTitleBar + Section/PageTitleBar 적용 기준 명시 | codex |
-| 2026-03-03 | Page/Section `mode` 제거 반영 (단일 구조 기준으로 문서 표현 정리) | codex |
-| 2026-03-03 | `PageTitleBar` 단일 컴포넌트 통합 및 리네이밍 반영 | codex |
-| 2026-03-06 | widget 경로 참조를 widgets 경로로 정리 | codex |
+| 일자       | 내용                                                                                                       | 작성자              |
+| ---------- | ---------------------------------------------------------------------------------------------------------- | ------------------- |
+| 2026-03-15 | 상대 `/api` 호출의 prerender 오류를 피하기 위해 문의 목록 `page.tsx`를 browser-only no-SSR boundary로 전환 | codex               |
+| 2026-03-15 | Next.js build 요구에 맞춰 `useMetaDataGridQueryStates` 실행을 page-level `Suspense` boundary 안쪽으로 이동 | codex               |
+| 2026-03-15 | Surface owner와 elevation 규칙을 문서화                                                                    | codex               |
+| 2026-03-15 | 문의 목록 spec에 `PageSurface`/`SectionSurface` ownership과 elevation 결정을 명시                          | codex               |
+| 2026-03-15 | 문의 목록을 CSR + Suspense 단일 `page.tsx` 패턴으로 전환하고 `_client.tsx`, `_prefetch.ts`를 제거          | codex               |
+| 2026-03-06 | feature 디렉토리를 features로 이관하고 경로 표기를 동기화                                                  | codex               |
+| 2026-02-25 | 초기 생성                                                                                                  | orch-requirement    |
+| 2026-02-26 | 실시간 상태 컬럼 추가 (온라인, 메시지 수)                                                                  | orch-requirement    |
+| 2026-02-26 | 감정 분석 컬럼 및 통계 추가                                                                                | orch-requirement    |
+| 2026-02-26 | WebSocket 연결 상태 표시 추가                                                                              | orch-screen-planner |
+| 2026-02-26 | SLA 위반 하이라이트 추가                                                                                   | orch-screen-planner |
+| 2026-02-26 | 담당자/기간 필터 추가                                                                                      | orch-screen-planner |
+| 2026-02-26 | 정렬 옵션 추가 (SLA 기한, 우선순위)                                                                        | orch-screen-planner |
+| 2026-02-26 | L5-L12 레이어 기획 추가                                                                                    | orch-screen-planner |
+| 2026-02-26 | 페이지 파일 생성 (page.tsx, \_client.tsx, \_prefetch.ts, hooks/useHandlers.ts)                             | fe-page-builder     |
+| 2026-02-27 | 목록 페이지 E2E 테스트 추가 (`page.e2e.ts`)                                                                | codex               |
+| 2026-02-28 | InquiryStore 의존 제거, 페이지 로컬 state 기준으로 L10/L11 갱신                                            | codex               |
+| 2026-03-01 | InquiryDataGrid 제거, MetaDataGrid 재사용 구조로 전환                                                      | codex               |
+| 2026-03-03 | Scaffold 제거 및 페이지 헤더 영역/섹션 영역 용어 정리                                                      | codex               |
+| 2026-03-03 | Page/PageTitleBar + Section/PageTitleBar 적용 기준 명시                                                    | codex               |
+| 2026-03-03 | Page/Section `mode` 제거 반영 (단일 구조 기준으로 문서 표현 정리)                                          | codex               |
+| 2026-03-03 | `PageTitleBar` 단일 컴포넌트 통합 및 리네이밍 반영                                                         | codex               |
+| 2026-03-06 | widget 경로 참조를 widgets 경로로 정리                                                                     | codex               |

@@ -135,9 +135,9 @@ test.describe("태스크 목록 페이지", () => {
 				"운동 detail API 응답 지연/오류로 CRUD 후속 플로우를 진행할 수 없습니다.",
 			);
 			await expect(editButton).toBeVisible();
-			await expect(
-				page.getByRole("heading", { name: TEST_NAME }),
-			).toBeVisible({ timeout: 30000 });
+			await expect(page.getByRole("heading", { name: TEST_NAME })).toBeVisible({
+				timeout: 30000,
+			});
 
 			// ── 수정 플로우 ──
 

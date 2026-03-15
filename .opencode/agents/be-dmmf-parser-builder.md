@@ -329,4 +329,4 @@ model User {
 ### 관련 파일
 
 - Prisma 스키마: `packages/be-prisma/schema/*.prisma`
-- SubjectSyncService: `packages/be-service/src/subject-sync.service.ts`
+- SubjectSyncService: `packages/be-service/src/subject-sync.service/index.ts`

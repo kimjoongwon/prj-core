@@ -40,6 +40,11 @@
 - 비정상 입력은 조기 반환 또는 예외 처리합니다.
 - 비동기 동작 실패 시 사용자 영향 범위를 최소화합니다.
 
+## Surface ownership
+
+- `TemplateForm`은 `PageSurface`, `SectionSurface`를 렌더링하지 않습니다.
+- 등록/수정 페이지가 외부에서 표면을 제공해야 하며, 이 파일은 내부 입력/섹션 UI만 책임집니다.
+
 ## 구현 체크리스트
 
 - [ ] 코드와 spec이 동일한 책임 범위를 유지함
@@ -50,6 +55,7 @@
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-03-15 | `TemplateForm`의 Surface 비소유 책임을 명시 | codex |
 | 2026-03-06 | 폴더 네이밍을 단수형(feature/input/layout/hook/style/type/util/widget/cell)으로 통일 | codex |
 | 2026-03-06 | src/components 레이어를 제거하고 경로를 src/* 기준으로 상향 | codex |
 | 2026-03-03 | 누락된 sidecar spec 신규 생성 | codex |

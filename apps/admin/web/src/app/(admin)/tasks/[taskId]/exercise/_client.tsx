@@ -6,7 +6,15 @@ import {
 	useGetTaskRoutines,
 } from "@cocrepo/api/core/tasks";
 
-import { DateTimeCell, Page, PageTitleBar, Section, VStack } from "@cocrepo/ui";
+import {
+	DateTimeCell,
+	Page,
+	PageSurface,
+	PageTitleBar,
+	Section,
+	SectionSurface,
+	VStack,
+} from "@cocrepo/ui";
 import {
 	addToast,
 	Button,
@@ -85,11 +93,13 @@ function TaskExerciseDetailPageClient({
 	if (isLoading && !response) {
 		return (
 			<Page top={<PageTitleBar title="운동 정보" description="로딩 중..." />}>
-				<Section>
-					<div className="flex items-center justify-center p-8">
-						<Spinner size="lg" />
-					</div>
-				</Section>
+				<PageSurface>
+					<SectionSurface>
+						<div className="flex items-center justify-center p-8">
+							<Spinner size="lg" />
+						</div>
+					</SectionSurface>
+				</PageSurface>
 			</Page>
 		);
 	}
@@ -104,16 +114,22 @@ function TaskExerciseDetailPageClient({
 					/>
 				}
 			>
-				<div className="flex flex-col items-center justify-center gap-4 p-8">
-					<p className="text-default-500">운동 detail을 찾을 수 없습니다.</p>
-					<Button
-						variant="flat"
-						startContent={<ArrowLeft className="size-4" />}
-						onPress={onClickBackButton}
-					>
-						목록으로
-					</Button>
-				</div>
+				<PageSurface>
+					<SectionSurface>
+						<div className="flex flex-col items-center justify-center gap-4 p-8">
+							<p className="text-default-500">
+								운동 detail을 찾을 수 없습니다.
+							</p>
+							<Button
+								variant="flat"
+								startContent={<ArrowLeft className="size-4" />}
+								onPress={onClickBackButton}
+							>
+								목록으로
+							</Button>
+						</div>
+					</SectionSurface>
+				</PageSurface>
 			</Page>
 		);
 	}
@@ -147,76 +163,84 @@ function TaskExerciseDetailPageClient({
 				/>
 			}
 		>
-			<VStack gap={4}>
-				<Section top={<PageTitleBar level={2} title="기본 정보" />}>
-					<div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-						<div>
-							<label className="text-sm text-default-500">운동명</label>
-							<p className="mt-1 font-medium">{exercise.name}</p>
-						</div>
-						<div>
-							<label className="text-sm text-default-500">지속시간</label>
-							<p className="mt-1">{formatDuration(exercise.duration)}</p>
-						</div>
-						<div>
-							<label className="text-sm text-default-500">반복횟수</label>
-							<p className="mt-1">{exercise.count}회</p>
-						</div>
-						<div>
-							<label className="text-sm text-default-500">설명</label>
-							<p className="mt-1">{exercise.description || "-"}</p>
-						</div>
-						<div>
-							<label className="text-sm text-default-500">등록일</label>
-							<div className="mt-1">
-								<DateTimeCell value={exercise.createdAt} />
-							</div>
-						</div>
-						<div>
-							<label className="text-sm text-default-500">수정일</label>
-							<div className="mt-1">
-								<DateTimeCell value={exercise.updatedAt} />
-							</div>
-						</div>
-					</div>
-				</Section>
-				<Section top={<PageTitleBar level={2} title="태스크 정보" />}>
-					<div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-						<div>
-							<label className="text-sm text-default-500">Task ID</label>
-							<p className="mt-1 font-mono text-sm">{taskId}</p>
-						</div>
-						<div>
-							<label className="text-sm text-default-500">Space ID</label>
-							<p className="mt-1 font-mono text-sm">
-								{exercise.task?.spaceId ?? "-"}
-							</p>
-						</div>
-					</div>
-				</Section>
-				{routines.length > 0 && (
-					<Section top={<PageTitleBar level={2} title="연관 루틴" />}>
-						<div className="flex flex-col gap-2">
-							{routines.map((routine) => (
-								<div
-									key={routine.id}
-									className="flex items-center justify-between rounded-lg bg-content2 p-3"
-								>
-									<div>
-										<p className="font-medium">{routine.name}</p>
-										<p className="text-sm text-default-500">
-											{routine.label || "-"}
-										</p>
-									</div>
-									<div className="text-sm text-default-400">
-										<DateTimeCell value={routine.createdAt} />
+			<PageSurface>
+				<VStack gap={4}>
+					<SectionSurface>
+						<Section top={<PageTitleBar level={2} title="기본 정보" />}>
+							<div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+								<div>
+									<label className="text-sm text-default-500">운동명</label>
+									<p className="mt-1 font-medium">{exercise.name}</p>
+								</div>
+								<div>
+									<label className="text-sm text-default-500">지속시간</label>
+									<p className="mt-1">{formatDuration(exercise.duration)}</p>
+								</div>
+								<div>
+									<label className="text-sm text-default-500">반복횟수</label>
+									<p className="mt-1">{exercise.count}회</p>
+								</div>
+								<div>
+									<label className="text-sm text-default-500">설명</label>
+									<p className="mt-1">{exercise.description || "-"}</p>
+								</div>
+								<div>
+									<label className="text-sm text-default-500">등록일</label>
+									<div className="mt-1">
+										<DateTimeCell value={exercise.createdAt} />
 									</div>
 								</div>
-							))}
-						</div>
-					</Section>
-				)}
-			</VStack>
+								<div>
+									<label className="text-sm text-default-500">수정일</label>
+									<div className="mt-1">
+										<DateTimeCell value={exercise.updatedAt} />
+									</div>
+								</div>
+							</div>
+						</Section>
+					</SectionSurface>
+					<SectionSurface>
+						<Section top={<PageTitleBar level={2} title="태스크 정보" />}>
+							<div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+								<div>
+									<label className="text-sm text-default-500">Task ID</label>
+									<p className="mt-1 font-mono text-sm">{taskId}</p>
+								</div>
+								<div>
+									<label className="text-sm text-default-500">Space ID</label>
+									<p className="mt-1 font-mono text-sm">
+										{exercise.task?.spaceId ?? "-"}
+									</p>
+								</div>
+							</div>
+						</Section>
+					</SectionSurface>
+					{routines.length > 0 && (
+						<SectionSurface>
+							<Section top={<PageTitleBar level={2} title="연관 루틴" />}>
+								<div className="flex flex-col gap-2">
+									{routines.map((routine) => (
+										<div
+											key={routine.id}
+											className="flex items-center justify-between rounded-lg bg-content2 p-3"
+										>
+											<div>
+												<p className="font-medium">{routine.name}</p>
+												<p className="text-sm text-default-500">
+													{routine.label || "-"}
+												</p>
+											</div>
+											<div className="text-sm text-default-400">
+												<DateTimeCell value={routine.createdAt} />
+											</div>
+										</div>
+									))}
+								</div>
+							</Section>
+						</SectionSurface>
+					)}
+				</VStack>
+			</PageSurface>
 			<Modal isOpen={deleteModal.isOpen} onClose={deleteModal.onClose}>
 				<ModalContent>
 					<ModalHeader>태스크 삭제</ModalHeader>

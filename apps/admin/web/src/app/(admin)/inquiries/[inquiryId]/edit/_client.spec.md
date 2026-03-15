@@ -41,6 +41,12 @@
 - 비정상 입력은 조기 반환 또는 예외 처리합니다.
 - 비동기 동작 실패 시 사용자 영향 범위를 최소화합니다.
 
+## Surface ownership
+
+- 이 파일은 문의 수정 페이지에서 본문 surface owner를 직접 소유합니다.
+- `PageSurface`는 수정 페이지 본문 전체를 감싸고, AI 추천 블록과 수정 입력 블록은 각각 `SectionSurface`로 분리합니다.
+- `Page + PageTitleBar`는 헤더만 제공하고, 실제 배경/elevation은 `_client.tsx`가 명시합니다.
+
 ## 구현 체크리스트
 
 - [ ] 코드와 spec이 동일한 책임 범위를 유지함
@@ -51,6 +57,8 @@
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-03-15 | Surface ownership과 상태 분기 표면 정책을 문서화 | codex |
+| 2026-03-15 | 문의 수정 `_client` spec에 `PageSurface`/`SectionSurface` ownership을 명시 | codex |
 | 2026-03-13 | `@cocrepo/api` root import를 split subpath import로 전환 | codex |
 | 2026-03-03 | 누락된 sidecar spec 신규 생성 | codex |
 | 2026-03-03 | `PageTitleBar` 단일 컴포넌트 통합 및 리네이밍 반영 | codex |

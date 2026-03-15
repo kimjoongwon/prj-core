@@ -7,6 +7,7 @@
 ## 역할
 
 메시지 템플릿 등록/수정 공용 폼입니다. 4개 섹션으로 구성됩니다: 기본 정보(유형, 코드, 이름, 설명), 콘텐츠(TemplateContentEditor), 변수 관리(VariableEditTable), 버튼 영역. 수정 모드에서 유형과 코드는 읽기 전용입니다.
+이 widget은 입력 블록만 렌더링하며 `PageSurface`, `SectionSurface` 같은 Surface는 소유하지 않습니다.
 
 ## 디자인 목업
 
@@ -128,6 +129,11 @@ interface TemplateFormData {
 
 **없음** (외부에서 formData, variables 상태를 관리)
 
+## Surface ownership
+
+- Surface owner는 항상 호출 페이지입니다.
+- `TemplateForm`은 내부 섹션 제목과 입력 컴포넌트만 렌더링하고 background/elevation은 만들지 않습니다.
+
 ## 슬롯
 
 없음
@@ -136,6 +142,7 @@ interface TemplateFormData {
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-03-15 | `TemplateForm`이 Surface를 소유하지 않고 페이지가 외부에서 표면을 제공한다는 규칙을 추가 | codex |
 | 2026-03-06 | 폴더 네이밍을 단수형(feature/input/layout/hook/style/type/util/widget/cell)으로 통일 | codex |
 | 2026-03-06 | src/components 레이어를 제거하고 경로를 src/* 기준으로 상향 | codex |
 | 2026-02-18 | 초기 생성 (역기획) | req-reverse-engineer |

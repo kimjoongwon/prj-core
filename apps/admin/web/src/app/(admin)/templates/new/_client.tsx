@@ -6,7 +6,9 @@ import {
 
 import {
 	Page,
+	PageSurface,
 	PageTitleBar,
+	SectionSurface,
 	TemplateForm,
 	type TemplateFormData,
 	type VariableEditItem,
@@ -161,17 +163,21 @@ function TemplateNewPageClient() {
 				/>
 			}
 		>
-			<TemplateForm
-				mode="create"
-				formData={state.formData}
-				variables={state.variables}
-				onFormDataChange={onFormDataChange}
-				onVariablesChange={onVariablesChange}
-				onSubmit={onSubmitForm}
-				onCancel={onClickCancelButton}
-				isSubmitting={isPending}
-				errors={state.errors}
-			/>
+			<PageSurface>
+				<SectionSurface>
+					<TemplateForm
+						mode="create"
+						formData={state.formData}
+						variables={state.variables}
+						onFormDataChange={onFormDataChange}
+						onVariablesChange={onVariablesChange}
+						onSubmit={onSubmitForm}
+						onCancel={onClickCancelButton}
+						isSubmitting={isPending}
+						errors={state.errors}
+					/>
+				</SectionSurface>
+			</PageSurface>
 		</Page>
 	);
 }

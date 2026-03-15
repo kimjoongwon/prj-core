@@ -301,4 +301,4 @@ packages/be-prisma/schema/*.prisma
 ### 관련 파일
 
 - DmmfParser: `packages/be-prisma/src/utils/dmmf-parser.ts`
-- SubjectSyncService: `packages/be-service/src/subject-sync.service.ts`
+- SubjectSyncService: `packages/be-service/src/subject-sync.service/index.ts`

@@ -204,8 +204,9 @@ Store 연동이 필요한가?
 | Pagination | ui/Pagination | 페이지 이동 |
 | TextInput | inputs/TextInput | 검색어 입력 |
 | Select | inputs/Select | 역할 필터 |
-| PageSurface | layouts/PageSurface | 페이지 래퍼 |
-| SectionSurface | layouts/SectionSurface | 섹션 래퍼 |
+| Page | layout/Page | 페이지 래퍼 |
+| Section | layout/Section | 섹션 래퍼 |
+| PageTitleBar | widget/PageTitleBar | 페이지/섹션 헤더 |
 
 **신규 컴포넌트 (packages/fe-ui/src/primitive/MemberStatusBadge/index.spec.md):**
 

@@ -227,9 +227,18 @@
 
 - `apps/admin/src/app/(admin)/app.spec.md`
 
+
+## Surface / Elevation
+
+- PageSurface owner: `page.tsx` 또는 `_client.tsx`가 페이지 본문 Surface를 직접 소유합니다.
+- SectionSurface target: 목록, 폼, 상세의 주요 본문 블록은 `SectionSurface`로 감싸며 layout/section slot 배치만으로 배경을 만들지 않습니다.
+- State handling: 로딩, empty, not-found 상태도 가능하면 동일한 `PageSurface > SectionSurface` 계층에서 렌더링합니다.
+- Exception policy: flat 예외는 명시 사유가 있을 때만 허용하며, 이 화면은 별도 예외를 두지 않습니다.
+
 ## 변경 이력
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-03-15 | Surface ownership/elevation 규칙과 PageSurface/SectionSurface 적용 기준을 문서화 | codex |
 | 2026-02-22 | 초기 생성 | orch-requirement |
 | 2026-03-03 | Scaffold 제거 및 페이지 헤더 영역/섹션 영역 용어 정리 | codex |

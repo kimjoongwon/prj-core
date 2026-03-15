@@ -542,11 +542,11 @@ export default function UsersLayout({ children }) {
 // page.tsx (또는 _client.tsx)
 export default function UsersPage() {
   return (
-    <PageSurface title="회원 목록" description="...">
-      <SectionSurface>
+    <Page top={<PageTitleBar title="회원 목록" description="..." />}>
+      <Section>
         {/* 페이지 콘텐츠 */}
-      </SectionSurface>
-    </PageSurface>
+      </Section>
+    </Page>
   );
 }
 ```
@@ -557,17 +557,17 @@ export default function UsersPage() {
 2. **항상 표시**: `/users`, `/users/active` 등 모든 탭 페이지에서 동일한 탭 UI 유지
 3. **Layout의 역할**: 구조적 네비게이션 요소 제공
 
-### PageSurface와의 차이
+### PageTitleBar와의 차이
 
 | 요소 | 위치 | 이유 |
 |------|------|------|
 | **PageTabs** | Layout | 하위 경로 간 공유되는 네비게이션 |
-| **PageSurface** | Page | 페이지별 고유한 title, description, actions |
+| **PageTitleBar** | Page | 페이지별 고유한 title, description, actions |
 
 ### CLAUDE.md 원칙과의 관계
 
-**"PageSurface는 Page에서만 사용"** 원칙은 여전히 유효합니다:
-- ❌ Layout에서 PageSurface 사용 금지 (타이틀 중복 방지)
+**"PageTitleBar는 Page에서만 사용"** 원칙은 여전히 유효합니다:
+- ❌ Layout에서 PageTitleBar 사용 금지 (타이틀 중복 방지)
 - ✅ Layout에서 PageTabs 사용 가능 (공유 네비게이션)
 
 ---

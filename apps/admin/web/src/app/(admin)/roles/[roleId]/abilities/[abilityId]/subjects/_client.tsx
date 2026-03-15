@@ -1,5 +1,5 @@
 "use client";
-import { Page, PageTitleBar, Section } from "@cocrepo/ui";
+import { Page, PageSurface, PageTitleBar, SectionSurface } from "@cocrepo/ui";
 import { Button } from "@heroui/react";
 import { ArrowLeft } from "lucide-react";
 import { observer } from "mobx-react-lite";
@@ -42,16 +42,16 @@ function AbilitySubjectsPageClient({
 				/>
 			}
 		>
-			<Section top={<PageTitleBar level={2} title="권한 정보" />}>
-				<div className="p-6">
+			<PageSurface>
+				<SectionSurface>
 					<p className="text-default-500">
 						권한 ID: <code className="font-mono">{abilityId}</code>
 					</p>
 					<p className="mt-4 text-default-400">
 						Subject 관리 기능은 추후 구현 예정입니다.
 					</p>
-				</div>
-			</Section>
+				</SectionSurface>
+			</PageSurface>
 		</Page>
 	);
 }

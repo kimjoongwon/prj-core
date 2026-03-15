@@ -20,7 +20,6 @@ export { AbilityService } from "./ability.service";
 export { ActionService } from "./action.service";
 export { AssetService } from "./asset.service";
 export { CategoryService } from "./category.service";
-export { AwsService } from "./aws.service";
 export { FolderService } from "./folder.service";
 export { GrantService } from "./grant.service";
 export { GroupService } from "./group.service";
@@ -62,6 +61,12 @@ export {
 	type IdpAccountInfo,
 	IdpAccountService,
 } from "./idp-account.service";
+export {
+	ObjectStorageService,
+	S3CompatibleStorageService,
+	type PutObjectInput,
+	type PutObjectResult,
+} from "./object-storage.service";
 
 // Inquiry Domain Services
 export {

@@ -6,6 +6,9 @@ import {
 } from "../../design-system/theme/tokens";
 
 export type SurfacePadding = "none" | "sm" | "md" | "lg";
+export const DEFAULT_SURFACE_PADDING: SurfacePadding = "md";
+
+const DEFAULT_SURFACE_ELEVATION: ElevationLevel = "elevated";
 
 export interface SurfaceProps {
 	/** 표면 내부 콘텐츠 */
@@ -38,8 +41,8 @@ const surfaceVariants = cva("w-full rounded-xl", {
 		},
 	},
 	defaultVariants: {
-		elevation: "elevated",
-		padding: "md",
+		elevation: DEFAULT_SURFACE_ELEVATION,
+		padding: DEFAULT_SURFACE_PADDING,
 	},
 });
 
@@ -50,8 +53,8 @@ const surfaceVariants = cva("w-full rounded-xl", {
 export const Surface = ({
 	children,
 	className,
-	elevation,
-	padding,
+	elevation = DEFAULT_SURFACE_ELEVATION,
+	padding = DEFAULT_SURFACE_PADDING,
 }: SurfaceProps) => {
 	return (
 		<div className={surfaceVariants({ elevation, padding, className })}>

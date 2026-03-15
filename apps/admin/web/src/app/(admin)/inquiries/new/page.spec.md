@@ -109,6 +109,16 @@
 
 - AiForm과 각 입력 묶음은 `Section + PageTitleBar` 표면을 사용해 서로 구분한다.
 
+## Surface / Elevation
+
+| 항목 | 결정 |
+|------|------|
+| PageSurface owner | `apps/admin/web/src/app/(admin)/inquiries/new/_client.tsx` |
+| PageSurface 역할 | 문의 접수 본문 전체를 raised 레이어로 묶음 |
+| SectionSurface 대상 | `AiForm` 추천 블록, 문의 입력 블록 |
+| SectionSurface padding | 기본 패딩 유지 |
+| 예외 | 없음. bootstrap 기반 입력 섹션이라도 surface는 `_client.tsx`가 직접 소유 |
+
 ## 페이지 상태
 
 | 상태 | 설명 | UI |
@@ -366,6 +376,8 @@
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-03-15 | Surface owner와 elevation 규칙을 문서화 | codex |
+| 2026-03-15 | 문의 접수 spec에 `PageSurface`/`SectionSurface` ownership과 elevation 결정을 명시 | codex |
 | 2026-03-06 | feature 디렉토리를 features로 이관하고 경로 표기를 동기화 | codex |
 | 2026-02-25 | 초기 생성 | orch-requirement |
 | 2026-02-26 | AI 자동 분류 제안 기능 추가 | orch-screen-planner |

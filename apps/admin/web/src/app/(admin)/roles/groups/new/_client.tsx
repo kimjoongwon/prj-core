@@ -1,7 +1,13 @@
 "use client";
 import { customInstance } from "@cocrepo/api/core/client";
 
-import { Page, PageTitleBar, Section, VStack } from "@cocrepo/ui";
+import {
+	Page,
+	PageSurface,
+	PageTitleBar,
+	SectionSurface,
+	VStack,
+} from "@cocrepo/ui";
 import { Button, Input } from "@heroui/react";
 import { useMutation } from "@tanstack/react-query";
 import { ArrowLeft, Save } from "lucide-react";
@@ -91,45 +97,47 @@ function RoleGroupNewPageClient() {
 				/>
 			}
 		>
-			<VStack gap={4}>
-				<Section>
-					<div className="space-y-6 p-6">
-						<Input
-							label="그룹명"
-							placeholder="TRUSTED"
-							value={state.name}
-							onValueChange={(value) => {
-								state.name = value.toUpperCase();
-							}}
-							isInvalid={!!state.errors.name}
-							errorMessage={state.errors.name}
-							isRequired
-							maxLength={50}
-							description="대문자로 입력하는 것을 권장합니다. (예: TRUSTED, STANDARD)"
-						/>
-						<Input
-							label="라벨"
-							placeholder="신뢰"
-							value={state.label}
-							onValueChange={(value) => {
-								state.label = value;
-							}}
-							maxLength={100}
-							description="그룹의 표시 라벨입니다."
-						/>
-						<div className="flex justify-end pt-4">
-							<Button
-								color="primary"
-								startContent={<Save className="h-4 w-4" />}
-								onPress={onClickSubmitButton}
-								isLoading={isPending}
-							>
-								그룹 등록
-							</Button>
+			<PageSurface>
+				<VStack gap={4}>
+					<SectionSurface>
+						<div className="space-y-6">
+							<Input
+								label="그룹명"
+								placeholder="TRUSTED"
+								value={state.name}
+								onValueChange={(value) => {
+									state.name = value.toUpperCase();
+								}}
+								isInvalid={!!state.errors.name}
+								errorMessage={state.errors.name}
+								isRequired
+								maxLength={50}
+								description="대문자로 입력하는 것을 권장합니다. (예: TRUSTED, STANDARD)"
+							/>
+							<Input
+								label="라벨"
+								placeholder="신뢰"
+								value={state.label}
+								onValueChange={(value) => {
+									state.label = value;
+								}}
+								maxLength={100}
+								description="그룹의 표시 라벨입니다."
+							/>
+							<div className="flex justify-end pt-4">
+								<Button
+									color="primary"
+									startContent={<Save className="h-4 w-4" />}
+									onPress={onClickSubmitButton}
+									isLoading={isPending}
+								>
+									그룹 등록
+								</Button>
+							</div>
 						</div>
-					</div>
-				</Section>
-			</VStack>
+					</SectionSurface>
+				</VStack>
+			</PageSurface>
 		</Page>
 	);
 }

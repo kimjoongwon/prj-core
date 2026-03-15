@@ -10,21 +10,22 @@
 
 ## 주요 계약
 
-| 항목 | 설명 |
-|------|------|
+| 항목   | 설명 |
+| ------ | ---- |
 | export | 없음 |
 
 ## 의존성
 
-| 모듈 | 용도 |
-|------|------|
-| ./asset.dto | 기능 구현 의존성 |
-| ./asset-query.dto | 기능 구현 의존성 |
+| 모듈                      | 용도             |
+| ------------------------- | ---------------- |
+| ./asset.dto               | 기능 구현 의존성 |
+| ./asset-query.dto         | 기능 구현 의존성 |
 | ./batch-delete-assets.dto | 기능 구현 의존성 |
-| ./create-asset.dto | 기능 구현 의존성 |
-| ./update-asset.dto | 기능 구현 의존성 |
-| ./move-asset.dto | 기능 구현 의존성 |
-| ./asset-response.dto | 기능 구현 의존성 |
+| ./create-asset.dto        | 기능 구현 의존성 |
+| ./update-asset.dto        | 기능 구현 의존성 |
+| ./move-asset.dto          | 기능 구현 의존성 |
+| ./upload-asset.dto        | 기능 구현 의존성 |
+| ./asset-response.dto      | 기능 구현 의존성 |
 
 ## 구현 체크리스트
 
@@ -33,6 +34,7 @@
 
 ## 변경 이력
 
-| 일자 | 내용 | 작성자 |
-|------|------|--------|
-| 2026-03-03 | 누락된 sidecar spec 신규 생성 | codex |
+| 일자       | 내용                                                                 | 작성자 |
+| ---------- | -------------------------------------------------------------------- | ------ |
+| 2026-03-15 | multipart assets upload 경로를 위해 `upload-asset.dto` export를 추가 | codex  |
+| 2026-03-03 | 누락된 sidecar spec 신규 생성                                        | codex  |

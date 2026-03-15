@@ -65,10 +65,12 @@ apps/[app]/app/(admin)/[domain]/
 └── [entityId]/edit/page.spec.md             # 수정 페이지 기획서
 
 packages/be-app/src/
-└── [domain].application-service.spec.md     # ApplicationService 기획서 (L8)
+└── [name].application-service/
+    └── index.spec.md                        # ApplicationService 기획서 (L8)
 
 packages/be-service/src/
-└── [domain].service.spec.md                 # Service 기획서 (L7, L9)
+└── [name].service/
+    └── index.spec.md                        # Service 기획서 (L7, L9)
 
 packages/be-repository/src/
 └── [domain].repository.spec.md              # Repository 기획서
@@ -137,8 +139,8 @@ packages/fe-ui/src/
 | L6 API | `apps/core/api/src/module/**/*.controller.ts` | `find apps/core/api/src/module -name "*{domain}*.controller.ts"` |
 | L6 Module | `apps/core/api/src/module/**/*.module.ts` | `find apps/core/api/src/module -name "*{domain}*.module.ts"` |
 | L6 DTO | `packages/be-dto/src/**/*.dto.ts` | `find packages/be-dto/src -name "*{domain}*.dto.ts"` |
-| L8 AppService | `packages/be-app/src/*.application-service.ts` | `find packages/be-app/src -name "*{domain}*.application-service.ts"` |
-| L9 Service | `packages/be-service/src/*.service.ts` | `find packages/be-service/src -name "*{domain}*.service.ts"` |
+| L8 AppService | `packages/be-app/src/*/index.ts` | `find packages/be-app/src -path "*{domain}*.application-service/index.ts"` |
+| L9 Service | `packages/be-service/src/*/index.ts` | `find packages/be-service/src -path "*{domain}*.service/index.ts"` |
 | L9 Repository | `packages/be-repository/src/**/*.repository.ts` | `find packages/be-repository/src -name "*{domain}*.repository.ts"` |
 | L9 Guard | `packages/be-common/src/guard/*.guard.ts` | `ls packages/be-common/src/guard/` |
 | L4 Screen | `apps/*/app/**/*.tsx` | `find apps/{app}/app -name "page.tsx" \| xargs grep -l "{domain}"` |
@@ -153,8 +155,8 @@ packages/fe-ui/src/
     entities: ["packages/be-entity/src/role.entity.ts"],
     controllers: ["apps/core/api/src/module/roles/roles.controller.ts"],
     modules: ["apps/core/api/src/module/roles/roles.module.ts"],
-    applicationServices: ["packages/be-app/src/roles.application-service.ts"],
-    services: ["packages/be-service/src/roles.service.ts"],
+    applicationServices: ["packages/be-app/src/roles.application-service/index.ts"],
+    services: ["packages/be-service/src/roles.service/index.ts"],
     repositories: ["packages/be-repository/src/roles.repository.ts"],
     dtos: ["packages/be-dto/src/role/*.dto.ts"],
     guards: ["packages/be-common/src/guard/roles.guard.ts"],
@@ -546,8 +548,8 @@ CRUD 작업별 Happy Path와 Error Path를 도출합니다.
   - Prisma: packages/be-prisma/schema/role.prisma ✅
   - Controller: apps/core/api/src/module/roles/roles.controller.ts ✅
   - Module: apps/core/api/src/module/roles/roles.module.ts ✅
-  - ApplicationService: packages/be-app/src/roles.application-service.ts ✅
-  - Service: packages/be-service/src/roles.service.ts ✅
+  - ApplicationService: packages/be-app/src/roles.application-service/index.ts ✅
+  - Service: packages/be-service/src/roles.service/index.ts ✅
   - Repository: packages/be-repository/src/roles.repository.ts ✅
   - DTO: packages/be-dto/src/role/*.dto.ts ✅
   - Guard: packages/be-common/src/guard/roles.guard.ts ✅
@@ -591,8 +593,8 @@ CRUD 작업별 Happy Path와 Error Path를 도출합니다.
   - apps/admin/web/app/(admin)/roles/[roleId]/edit/page.spec.md ✅
   - apps/core/api/src/module/roles/roles.controller.spec.md ✅
   - apps/core/api/src/module/roles/roles.module.spec.md ✅
-  - packages/be-app/src/roles.application-service.spec.md ✅
-  - packages/be-service/src/roles.service.spec.md ✅
+  - packages/be-app/src/roles.application-service/index.spec.md ✅
+  - packages/be-service/src/roles.service/index.spec.md ✅
   - packages/be-repository/src/roles.repository.spec.md ✅
   - packages/fe-store/src/stores/roleStore.spec.md ✅
   - packages/fe-ui/src/feature/RoleList/index.spec.md ✅
@@ -606,8 +608,8 @@ CRUD 작업별 Happy Path와 Error Path를 도출합니다.
    - apps/admin/web/app/(admin)/roles/[roleId]/edit/page.spec.md
    - apps/core/api/src/module/roles/roles.controller.spec.md
    - apps/core/api/src/module/roles/roles.module.spec.md
-   - packages/be-app/src/roles.application-service.spec.md
-   - packages/be-service/src/roles.service.spec.md
+   - packages/be-app/src/roles.application-service/index.spec.md
+   - packages/be-service/src/roles.service/index.spec.md
    - packages/be-repository/src/roles.repository.spec.md
    - packages/fe-store/src/stores/roleStore.spec.md
    - packages/fe-ui/src/feature/RoleList/index.spec.md

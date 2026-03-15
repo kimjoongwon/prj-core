@@ -5,7 +5,9 @@ import {
 	GroupInfoSection,
 	GroupRoleListSection,
 	Page,
+	PageSurface,
 	PageTitleBar,
+	SectionSurface,
 	VStack,
 } from "@cocrepo/ui";
 import {
@@ -101,9 +103,13 @@ function RoleGroupDetailPageClient({
 			<Page
 				top={<PageTitleBar title="역할 그룹 상세" description="로딩 중..." />}
 			>
-				<div className="flex items-center justify-center p-8">
-					<span className="text-default-500">로딩 중...</span>
-				</div>
+				<PageSurface>
+					<SectionSurface>
+						<div className="flex items-center justify-center p-8">
+							<span className="text-default-500">로딩 중...</span>
+						</div>
+					</SectionSurface>
+				</PageSurface>
 			</Page>
 		);
 	}
@@ -118,12 +124,16 @@ function RoleGroupDetailPageClient({
 					/>
 				}
 			>
-				<div className="flex flex-col items-center justify-center gap-4 p-8">
-					<p className="text-default-500">그룹을 찾을 수 없습니다.</p>
-					<Button variant="flat" onPress={onClickBackButton}>
-						목록으로
-					</Button>
-				</div>
+				<PageSurface>
+					<SectionSurface>
+						<div className="flex flex-col items-center justify-center gap-4 p-8">
+							<p className="text-default-500">그룹을 찾을 수 없습니다.</p>
+							<Button variant="flat" onPress={onClickBackButton}>
+								목록으로
+							</Button>
+						</div>
+					</SectionSurface>
+				</PageSurface>
 			</Page>
 		);
 	}
@@ -164,9 +174,9 @@ function RoleGroupDetailPageClient({
 				/>
 			}
 		>
-			<VStack gap={4}>
-				<section>
-					<div className="p-6">
+			<PageSurface>
+				<VStack gap={4}>
+					<SectionSurface>
 						<h3 className="text-lg font-semibold mb-4">기본 정보</h3>
 						<GroupInfoSection
 							group={{
@@ -177,17 +187,15 @@ function RoleGroupDetailPageClient({
 								updatedAt: group.updatedAt,
 							}}
 						/>
-					</div>
-				</section>
-				<section>
-					<div className="p-6">
+					</SectionSurface>
+					<SectionSurface>
 						<h3 className="text-lg font-semibold mb-4">연결된 역할</h3>
 						<GroupRoleListSection
 							roleAssociations={group.roleAssociations ?? []}
 						/>
-					</div>
-				</section>
-			</VStack>
+					</SectionSurface>
+				</VStack>
+			</PageSurface>
 			<Modal isOpen={deleteModal.isOpen} onClose={deleteModal.onClose}>
 				<ModalContent>
 					<ModalHeader>역할 그룹 삭제</ModalHeader>

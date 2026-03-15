@@ -19,6 +19,16 @@ Create/Update Form Bootstrap 계약을 사용해 초기 폼을 렌더링하며, 
 | 수정 폼 | Input + Select | 제목/카테고리/우선순위 수정 |
 | 액션 | Button 그룹 | 취소/저장 |
 
+## Surface / Elevation
+
+| 항목 | 결정 |
+|------|------|
+| PageSurface owner | `apps/admin/web/src/app/(admin)/inquiries/[inquiryId]/edit/_client.tsx` |
+| PageSurface 역할 | 수정 페이지 본문 전체를 raised 레이어로 묶음 |
+| SectionSurface 대상 | AI 추천 블록, 수정 입력 블록 |
+| SectionSurface padding | 기본 패딩 유지 |
+| 예외 | 없음. AiForm과 입력 폼이 별도 섹션으로 나뉘어도 surface owner는 `_client.tsx`가 직접 소유 |
+
 ## 데이터 흐름
 
 | 시점 | API | 설명 |
@@ -57,6 +67,8 @@ Create/Update Form Bootstrap 계약을 사용해 초기 폼을 렌더링하며, 
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-03-15 | Surface owner와 elevation 규칙을 문서화 | codex |
+| 2026-03-15 | 문의 수정 spec에 `PageSurface`/`SectionSurface` ownership과 elevation 결정을 명시 | codex |
 | 2026-03-01 | 초기 생성 (문의 수정 페이지 + AiForm UPDATE 흐름) | codex |
 | 2026-03-01 | 수정 폼 입력을 HeroUI Select 기반으로 정리해 Form-state 전용 입력 컴포넌트 의존 제거 | codex |
 | 2026-03-01 | AiForm을 수정 입력 폼과 동일 위계로 분리하고 바깥 섹션 영역 래퍼를 제거해 Card 단일 표면 구조로 정리 | codex |

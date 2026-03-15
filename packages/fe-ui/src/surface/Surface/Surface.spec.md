@@ -25,12 +25,13 @@ interface SurfaceProps {
 ## 동작
 
 - `tokens.elevation` 값을 사용해 background/shadow/border를 조합합니다.
-- 기본 엘리베이션은 `elevated`입니다.
-- 기본 패딩은 `md (p-6)`입니다.
+- 기본 엘리베이션은 `elevated`이며 컴포넌트 props 기본값으로도 명시합니다.
+- 기본 패딩은 `DEFAULT_SURFACE_PADDING` 상수의 `md (p-6)`이며 `cva` 기본값과 props 기본값에 동일하게 적용합니다.
 - shape는 `rounded-xl`로 고정합니다.
 
 ## 변경 이력
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-03-15 | 기본 패딩 `md (p-6)`를 명시적 상수와 props 기본값으로 고정 | codex |
 | 2026-03-15 | Surface 기본 표면 컴포넌트 신규 생성 | codex |

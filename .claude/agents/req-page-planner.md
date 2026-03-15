@@ -53,7 +53,9 @@ tools: Read, Write, Grep, Bash
 ## 3. 필수 기획 항목
 
 - 페이지 구성(서버 `page.tsx` / 클라이언트 `_client.tsx` / `_prefetch.ts`)
-- `PageSurface`/`SectionSurface` 사용 위치
+- `Page`, `Section`, `PageTitleBar` 배치 위치
+- `PageSurface`, `SectionSurface` 사용 여부와 배치 범위
+- Surface owner가 page인지, flat 예외인지와 그 근거
 - 핸들러 네이밍(`on[Event][UI]`) 및 바인딩 포인트
 - Orval 훅 연동 위치와 로딩/에러 처리 흐름
 - 페이지 테스트 관점(핵심 시나리오, 실패 케이스)
@@ -73,4 +75,5 @@ tools: Read, Write, Grep, Bash
 | req-screen-planner | 이전 단계 | 화면 구조 정의 |
 | req-api-planner | 이전 단계 | API/이벤트 정의 |
 | req-feature-planner | 이전 단계 | Feature 조합 정의 |
+| req-surface-planner | 협업 단계 | Surface ownership / elevation 결정 |
 | fe-page-builder | 다음 단계 | 실제 페이지 코드 구현 |

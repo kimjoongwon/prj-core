@@ -97,6 +97,17 @@
 | {{area}} | {{component}} | `{{specPath}}` |
 {{/each}}
 
+## Surface / Elevation
+
+> 아래 항목은 반드시 직접 채웁니다. 구조 컴포넌트(`Page`, `Section`)와 표현 컴포넌트(`PageSurface`, `SectionSurface`)의 소유권을 분리해서 기록합니다.
+
+| 항목 | 결정 |
+|------|------|
+| `PageSurface` owner | |
+| `SectionSurface` 대상 블록 | |
+| `padding="none"` 적용 위치 | |
+| flat 예외 여부와 근거 | |
+
 ## 페이지 상태
 
 | 상태 | 설명 | UI |

@@ -120,7 +120,9 @@ test.describe("SSR hydration 회귀", () => {
 		const hydrationErrors = consoleErrors.filter(
 			(message) =>
 				message.includes("Recoverable Error") ||
-				message.includes("Hydration failed because the server rendered HTML didn't match the client"),
+				message.includes(
+					"Hydration failed because the server rendered HTML didn't match the client",
+				),
 		);
 
 		expect(hydrationErrors).toEqual([]);

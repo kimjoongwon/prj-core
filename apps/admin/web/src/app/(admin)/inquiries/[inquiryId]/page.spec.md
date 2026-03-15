@@ -111,6 +111,16 @@
 | 답변 작성 | InquiryReplyForm | `packages/fe-ui/src/feature/InquiryReplyForm/index.spec.md` |
 | SLA 추적 | SLATracker | `packages/fe-ui/src/widget/SLATracker/index.spec.md` |
 
+## Surface / Elevation
+
+| 항목 | 결정 |
+|------|------|
+| PageSurface owner | `apps/admin/web/src/app/(admin)/inquiries/[inquiryId]/_client.tsx` |
+| PageSurface 역할 | 문의 상세 본문 전체를 raised 레이어로 묶고 실시간 채팅/메타 편집 블록을 동일 배경 위에 정렬 |
+| SectionSurface 대상 | 상단 정보 블록, 고객/참여자 블록, AI 메타 추천, 메타 수정, 실시간 채팅, SLA 추적 |
+| SectionSurface padding | 기본 패딩 유지 |
+| 예외 | 없음. 카드형 widget을 조합해도 페이지 차원의 surface owner는 `_client.tsx`가 유지 |
+
 ## 페이지 상태
 
 | 상태 | 설명 | UI |
@@ -441,6 +451,8 @@
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-03-15 | Surface owner와 elevation 규칙을 문서화 | codex |
+| 2026-03-15 | 문의 상세 spec에 `PageSurface`/`SectionSurface` ownership과 elevation 결정을 명시 | codex |
 | 2026-03-06 | feature 디렉토리를 features로 이관하고 경로 표기를 동기화 | codex |
 | 2026-02-25 | 초기 생성 | orch-requirement |
 | 2026-02-26 | 실시간 채팅 UI 추가 (WebSocket 연결 상태, 타이핑 표시, 참여자 목록) | orch-requirement |

@@ -1,7 +1,13 @@
 "use client";
 import { type CreateRoleDto, useCreateRole } from "@cocrepo/api/core/roles";
 
-import { Page, PageTitleBar, Section, VStack } from "@cocrepo/ui";
+import {
+	Page,
+	PageSurface,
+	PageTitleBar,
+	SectionSurface,
+	VStack,
+} from "@cocrepo/ui";
 import { Button, Input, Textarea } from "@heroui/react";
 import { ArrowLeft, Save } from "lucide-react";
 import { observer, useLocalObservable } from "mobx-react-lite";
@@ -121,64 +127,66 @@ function RoleNewPageClient() {
 				/>
 			}
 		>
-			<VStack gap={4}>
-				<div className="rounded-xl bg-primary-50 p-4 dark:bg-primary-900/20">
-					<p className="text-sm text-primary-700 dark:text-primary-400">
-						<strong>참고:</strong> 역할 식별자는 대문자로 시작하고,
-						대문자/숫자/밑줄만 사용할 수 있습니다. 등록 후에는 권한 설정
-						페이지에서 상세 권한을 관리할 수 있습니다.
-					</p>
-				</div>
-				<Section>
-					<div className="space-y-6 p-6">
-						<Input
-							label="역할 식별자"
-							placeholder="CUSTOM_ROLE"
-							value={state.name}
-							onValueChange={(value) => {
-								state.name = value.toUpperCase();
-							}}
-							isInvalid={!!state.errors.name}
-							errorMessage={state.errors.name}
-							isRequired
-							maxLength={50}
-							description="대문자로 시작하고, 대문자/숫자/밑줄만 사용 가능합니다."
-						/>
-						<Input
-							label="표시명"
-							placeholder="사용자 정의 역할"
-							value={state.displayName}
-							onValueChange={(value) => {
-								state.displayName = value;
-							}}
-							isInvalid={!!state.errors.displayName}
-							errorMessage={state.errors.displayName}
-							maxLength={50}
-							description="사용자에게 보여질 역할 이름입니다."
-						/>
-						<Textarea
-							label="설명"
-							placeholder="역할에 대한 설명을 입력하세요."
-							value={state.description}
-							onValueChange={(value) => {
-								state.description = value;
-							}}
-							maxLength={200}
-							minRows={3}
-						/>
-						<div className="flex justify-end pt-4">
-							<Button
-								color="primary"
-								startContent={<Save className="h-4 w-4" />}
-								onPress={onClickSubmitButton}
-								isLoading={isPending}
-							>
-								역할 등록
-							</Button>
-						</div>
+			<PageSurface>
+				<VStack gap={4}>
+					<div className="rounded-xl bg-primary-50 p-4 dark:bg-primary-900/20">
+						<p className="text-sm text-primary-700 dark:text-primary-400">
+							<strong>참고:</strong> 역할 식별자는 대문자로 시작하고,
+							대문자/숫자/밑줄만 사용할 수 있습니다. 등록 후에는 권한 설정
+							페이지에서 상세 권한을 관리할 수 있습니다.
+						</p>
 					</div>
-				</Section>
-			</VStack>
+					<SectionSurface>
+						<div className="space-y-6">
+							<Input
+								label="역할 식별자"
+								placeholder="CUSTOM_ROLE"
+								value={state.name}
+								onValueChange={(value) => {
+									state.name = value.toUpperCase();
+								}}
+								isInvalid={!!state.errors.name}
+								errorMessage={state.errors.name}
+								isRequired
+								maxLength={50}
+								description="대문자로 시작하고, 대문자/숫자/밑줄만 사용 가능합니다."
+							/>
+							<Input
+								label="표시명"
+								placeholder="사용자 정의 역할"
+								value={state.displayName}
+								onValueChange={(value) => {
+									state.displayName = value;
+								}}
+								isInvalid={!!state.errors.displayName}
+								errorMessage={state.errors.displayName}
+								maxLength={50}
+								description="사용자에게 보여질 역할 이름입니다."
+							/>
+							<Textarea
+								label="설명"
+								placeholder="역할에 대한 설명을 입력하세요."
+								value={state.description}
+								onValueChange={(value) => {
+									state.description = value;
+								}}
+								maxLength={200}
+								minRows={3}
+							/>
+							<div className="flex justify-end pt-4">
+								<Button
+									color="primary"
+									startContent={<Save className="h-4 w-4" />}
+									onPress={onClickSubmitButton}
+									isLoading={isPending}
+								>
+									역할 등록
+								</Button>
+							</div>
+						</div>
+					</SectionSurface>
+				</VStack>
+			</PageSurface>
 		</Page>
 	);
 }

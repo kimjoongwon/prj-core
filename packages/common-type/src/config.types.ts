@@ -11,11 +11,21 @@ export type AppConfig = {
 	headerLanguage: string;
 };
 
-export type AwsConfig = {
+export type ObjectStorageProvider =
+	| "aws-s3"
+	| "backblaze-b2"
+	| "cloudflare-r2";
+
+export type ObjectStorageConfig = {
+	provider: ObjectStorageProvider;
 	accessKeyId: string;
 	secretAccessKey: string;
+	apiToken?: string;
 	region: string;
-	s3BucketName: string;
+	bucket: string;
+	endpoint?: string;
+	publicBaseUrl?: string;
+	forcePathStyle?: boolean;
 };
 
 export type SMTPConfig = {
@@ -105,6 +115,7 @@ export type AllConfigType = {
 	app: AppConfig;
 	apple: AppleConfig;
 	auth: AuthConfig;
+	objectStorage: ObjectStorageConfig;
 	database: DatabaseConfig;
 	facebook: FacebookConfig;
 	file: FileConfig;

@@ -40,6 +40,11 @@
 - 비정상 입력은 조기 반환 또는 예외 처리합니다.
 - 비동기 동작 실패 시 사용자 영향 범위를 최소화합니다.
 
+## Surface ownership
+
+- 이 파일은 상세 본문과 로딩/데이터 없음 상태에서 `PageSurface`, `SectionSurface`를 직접 소유합니다.
+- `TemplateContentViewer`, `VariableReadTable` 같은 하위 widget은 Surface를 만들지 않으므로 호출부가 elevation을 결정합니다.
+
 ## 구현 체크리스트
 
 - [ ] 코드와 spec이 동일한 책임 범위를 유지함
@@ -50,6 +55,7 @@
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-03-15 | 상세 페이지의 Surface ownership과 상태 분기 표면 정책을 문서화 | codex |
 | 2026-03-13 | `@cocrepo/api` root import를 split subpath import로 전환 | codex |
 | 2026-03-03 | 누락된 sidecar spec 신규 생성 | codex |
 | 2026-03-03 | `PageTitleBar` 단일 컴포넌트 통합 및 리네이밍 반영 | codex |

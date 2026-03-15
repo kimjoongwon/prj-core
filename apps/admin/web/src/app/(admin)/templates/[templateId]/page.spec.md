@@ -14,7 +14,9 @@
 │ 템플릿 상세                                                       │
 │ WELCOME_EMAIL · 회원가입 환영 이메일                              │
 ├─────────────────────────────────────────────────────────────────┤
-│ 섹션 영역  기본 정보                                         │
+│ PageSurface                                                    │
+│ ┌─────────────────────────────────────────────────────────────┐ │
+│ │ SectionSurface  기본 정보                                  │ │
 │                                                                   │
 │  코드                       이름                                  │
 │  WELCOME_EMAIL              회원가입 환영 이메일                  │
@@ -27,8 +29,8 @@
 │                                                                   │
 │  생성일                     수정일                                │
 │  2026-01-01 09:00           2026-02-10 14:30                     │
-├─────────────────────────────────────────────────────────────────┤
-│ 섹션 영역  콘텐츠                                            │
+├───────────────────────────────────────────────────────────────┤ │
+│ │ SectionSurface  콘텐츠                                      │ │
 │                                                                   │
 │  제목                                                             │
 │  {{name}}님, 가입을 환영합니다!                                   │
@@ -38,13 +40,14 @@
 │  │ 안녕하세요, {{name}}님.                                  │     │
 │  │ 저희 서비스에 가입해 주셔서 감사합니다.                  │     │
 │  └─────────────────────────────────────────────────────────┘     │
-├─────────────────────────────────────────────────────────────────┤
-│ 섹션 영역  변수 목록                                         │
+├───────────────────────────────────────────────────────────────┤ │
+│ │ SectionSurface  변수 목록                                   │ │
 │ ┌──────────┬──────────────┬──────────────┬──────┐               │
 │ │ 변수명   │ 설명         │ 기본값       │ 필수 │               │
 │ ├──────────┼──────────────┼──────────────┼──────┤               │
 │ │ name     │ 사용자 이름  │ 사용자       │  ●   │               │
 │ └──────────┴──────────────┴──────────────┴──────┘               │
+│ └─────────────────────────────────────────────────────────────┘ │
 └─────────────────────────────────────────────────────────────────┘
 ```
 
@@ -62,12 +65,22 @@
 |------|----------|------|
 | 페이지 래퍼 | `Page` | 페이지 콘텐츠 구조 배치 |
 | 페이지 헤더 | `PageTitleBar` | title="템플릿 상세", description=동적, actions에 `TemplateActions` |
-| 기본 정보 | `Section + PageTitleBar(title="기본 정보")` | 2컬럼 Grid 레이아웃 |
-| 콘텐츠 | `Section + PageTitleBar(title="콘텐츠")` | `TemplateContentViewer` |
-| 변수 목록 | `Section + PageTitleBar(title="변수 목록")` | `VariableReadTable` 또는 빈 안내 |
+| 본문 표면 | `PageSurface` | 상세 본문 전체를 raised 표면으로 감싸고 모달과 분리 |
+| 기본 정보 | `SectionSurface` > `Section + PageTitleBar(title="기본 정보")` | 2컬럼 Grid 레이아웃 |
+| 콘텐츠 | `SectionSurface` > `Section + PageTitleBar(title="콘텐츠")` | `TemplateContentViewer` |
+| 변수 목록 | `SectionSurface` > `Section + PageTitleBar(title="변수 목록")` | `VariableReadTable` 또는 빈 안내 |
 | 삭제 모달 | `Modal` | 삭제 확인 다이얼로그 |
 | 미리보기 모달 | `PreviewModal` | 변수 입력 + 미리보기 결과 |
 | 발송 테스트 모달 | `SendTestModal` | 수신자 + 변수 입력 + 발송 결과 |
+
+## Surface / Elevation
+
+| 항목 | 결정 |
+|------|------|
+| `PageSurface` owner | `apps/admin/web/src/app/(admin)/templates/[templateId]/_client.tsx` 본문과 상태 분기 |
+| `SectionSurface` 대상 블록 | 기본 정보, 콘텐츠, 변수 목록, 로딩/데이터 없음 상태 |
+| `padding="none"` 적용 위치 | 적용하지 않음. 각 상세 블록에 기본 패딩을 유지 |
+| flat 예외 여부와 근거 | flat 예외 없음. 상세 정보는 독립된 읽기 블록으로 elevation 위계가 필요 |
 
 ## 기본 정보 표시 필드
 
@@ -144,6 +157,7 @@
 - `useDisclosure`로 3개 모달 상태 관리 (deleteModal, previewModal, sendTestModal)
 - 캐시 무효화: `getGetTemplateQueryKey(templateId)` 사용
 - FULL_ACCESS 권한 필요
+- `TemplateContentViewer`, `VariableReadTable`는 내용만 렌더링하며 Surface는 페이지가 `PageSurface`, `SectionSurface`로 제공
 
 ## 구현 체크리스트
 
@@ -155,6 +169,7 @@
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-03-15 | 상세 본문과 상태 분기를 `PageSurface` 및 `SectionSurface` ownership 기준으로 정리 | codex |
 | 2026-02-18 | 초기 생성 (역기획) | req-reverse-engineer |
 | 2026-02-19 | 디자인 목업 추가 | req-reverse-engineer |
 | 2026-03-03 | Scaffold 제거 및 페이지 헤더 영역/섹션 영역 용어 정리 | codex |

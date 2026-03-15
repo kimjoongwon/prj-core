@@ -72,6 +72,7 @@ tools:
 | **next/navigation 사용** | useRouter로 페이지 이동 처리 |
 | **에러/로딩 처리** | 로딩, 에러 상태를 UI로 표현 |
 | **displayName 설정** | 디버깅을 위해 필수 |
+| **첫 렌더 안정성 유지** | SSR 시점과 첫 클라이언트 렌더의 DOM 구조를 동일하게 유지 |
 
 ### ♻️ 기존 컴포넌트 우선 원칙 (Critical)
 
@@ -92,8 +93,15 @@ tools:
 | 직접 axios/fetch 호출 | @cocrepo/api 사용 필수 |
 | Text를 Button/Chip children으로 | 테마 깨짐 발생 |
 | inline style | Tailwind/HeroUI만 사용 |
+| render/constructor에서 localStorage hydrate | hydration mismatch 유발 |
 
 > ⚠️ **Critical**: Feature 컴포넌트는 **절대로** `apps/admin/src/feature/`, `apps/*/src/feature/` 등 앱 폴더에 생성하지 않습니다. 모든 Feature는 `packages/fe-ui/src/feature/`에서만 생성하여 재사용성을 보장합니다.
+
+### SSR / Hydration 규칙
+
+- Feature는 첫 렌더 구조를 `localStorage`, `window`, `Date.now()`, `Math.random()` 결과에 의존해 바꾸지 않습니다.
+- 브라우저 전용 상태는 상위 provider/effect에서 hydrate한 뒤 observer로 반영합니다.
+- React Aria/HeroUI `id` mismatch가 보이면 해당 Feature 자체보다 앞선 형제 슬롯의 서버/클라이언트 조건 분기를 먼저 확인합니다.
 
 ### AiForm Feature 계약 (Critical)
 

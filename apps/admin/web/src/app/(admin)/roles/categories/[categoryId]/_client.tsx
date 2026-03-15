@@ -6,7 +6,9 @@ import {
 	CategoryInfoSection,
 	CategoryRoleListSection,
 	Page,
+	PageSurface,
 	PageTitleBar,
+	SectionSurface,
 	VStack,
 } from "@cocrepo/ui";
 import {
@@ -110,9 +112,13 @@ function RoleCategoryDetailPageClient({
 					<PageTitleBar title="역할 카테고리 상세" description="로딩 중..." />
 				}
 			>
-				<div className="flex items-center justify-center p-8">
-					<span className="text-default-500">로딩 중...</span>
-				</div>
+				<PageSurface>
+					<SectionSurface>
+						<div className="flex items-center justify-center p-8">
+							<span className="text-default-500">로딩 중...</span>
+						</div>
+					</SectionSurface>
+				</PageSurface>
 			</Page>
 		);
 	}
@@ -127,12 +133,16 @@ function RoleCategoryDetailPageClient({
 					/>
 				}
 			>
-				<div className="flex flex-col items-center justify-center gap-4 p-8">
-					<p className="text-default-500">카테고리를 찾을 수 없습니다.</p>
-					<Button variant="flat" onPress={onClickBackButton}>
-						목록으로
-					</Button>
-				</div>
+				<PageSurface>
+					<SectionSurface>
+						<div className="flex flex-col items-center justify-center gap-4 p-8">
+							<p className="text-default-500">카테고리를 찾을 수 없습니다.</p>
+							<Button variant="flat" onPress={onClickBackButton}>
+								목록으로
+							</Button>
+						</div>
+					</SectionSurface>
+				</PageSurface>
 			</Page>
 		);
 	}
@@ -176,17 +186,17 @@ function RoleCategoryDetailPageClient({
 				/>
 			}
 		>
-			<VStack gap={4}>
-				{hasChildren && (
-					<div className="rounded-xl bg-warning-50 dark:bg-warning-900/20 p-4">
-						<p className="text-sm text-warning-700 dark:text-warning-400">
-							<strong>참고:</strong>하위 카테고리가 있어 삭제할 수 없습니다.
-							하위 카테고리를 먼저 삭제해주세요.
-						</p>
-					</div>
-				)}
-				<section>
-					<div className="p-6">
+			<PageSurface>
+				<VStack gap={4}>
+					{hasChildren && (
+						<div className="rounded-xl bg-warning-50 p-4 dark:bg-warning-900/20">
+							<p className="text-sm text-warning-700 dark:text-warning-400">
+								<strong>참고:</strong>하위 카테고리가 있어 삭제할 수 없습니다.
+								하위 카테고리를 먼저 삭제해주세요.
+							</p>
+						</div>
+					)}
+					<SectionSurface>
 						<h3 className="text-lg font-semibold mb-4">기본 정보</h3>
 						<CategoryInfoSection
 							category={{
@@ -199,26 +209,22 @@ function RoleCategoryDetailPageClient({
 							}}
 							categoriesBasePath="/roles/categories"
 						/>
-					</div>
-				</section>
-				<section>
-					<div className="p-6">
+					</SectionSurface>
+					<SectionSurface>
 						<h3 className="text-lg font-semibold mb-4">하위 카테고리</h3>
 						<CategoryChildrenSection
 							items={category.children ?? []}
 							categoriesBasePath="/roles/categories"
 						/>
-					</div>
-				</section>
-				<section>
-					<div className="p-6">
+					</SectionSurface>
+					<SectionSurface>
 						<h3 className="text-lg font-semibold mb-4">분류된 역할</h3>
 						<CategoryRoleListSection
 							roleClassifications={category.roleClassifications ?? []}
 						/>
-					</div>
-				</section>
-			</VStack>
+					</SectionSurface>
+				</VStack>
+			</PageSurface>
 			<Modal isOpen={deleteModal.isOpen} onClose={deleteModal.onClose}>
 				<ModalContent>
 					<ModalHeader>역할 카테고리 삭제</ModalHeader>

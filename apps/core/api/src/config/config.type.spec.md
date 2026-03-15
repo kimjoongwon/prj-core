@@ -12,10 +12,11 @@
 
 | 항목 | 설명 |
 |------|------|
-| export | 없음 |
+| `@cocrepo/type` re-export | core-api config 타입 재노출 |
 
 ## 변경 이력
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-03-15 | `AwsConfig` re-export를 `ObjectStorageConfig`/`ObjectStorageProvider`로 교체 | codex |
 | 2026-03-03 | 누락된 sidecar spec 신규 생성 | codex |

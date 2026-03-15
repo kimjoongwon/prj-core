@@ -60,6 +60,7 @@ tools: Read, Write, Grep, Bash
 - App은 body 래퍼로만 사용 (children만)
 - App은 서비스별 단일 인스턴스로 유지
 - Layout은 App과 Page 사이의 전역 배치 계층으로 사용
+- `page.spec.md`의 `Surface / Elevation` 결정을 먼저 확인하고 layout은 그 소유권을 침범하지 않음
 - Page는 HTML5 시맨틱 태그 사용 (header, leftAside, rightAside, footer)
 - Section은 위치 속성 사용 (top, bottom, left, right)
 - 영역에는 Feature 컴포넌트 마운트
@@ -73,6 +74,14 @@ tools: Read, Write, Grep, Bash
 - Page 컴포넌트 내부에서 Layout 사용 금지
 - 커스텀 className 직접 작성 금지 (HeroUI/레이아웃 컴포넌트 사용)
 - 하나의 layout.tsx에 여러 Layout 중첩 금지
+- Layout 슬롯에 검색/필터/액션 컴포넌트를 올렸다고 background/elevation이 자동 생성된다고 가정 금지
+
+### SSR / Hydration 규칙
+
+- `layout.tsx`와 Layout 슬롯은 첫 렌더 구조를 브라우저 전용 상태로 결정하지 않습니다.
+- `localStorage`, `window`, `Date.now()`, `Math.random()` 결과로 header/sidebar/action 영역의 존재 여부를 바꾸지 않습니다.
+- 서버가 모르는 상태가 필요하면 provider/effect에서 hydration 후 반영하거나, 정말 순수 브라우저 위젯이면 `ssr: false` 분리를 검토합니다.
+- React Aria/HeroUI `id` mismatch는 Layout 슬롯 순서가 서버/클라이언트에서 달라졌는지 먼저 확인합니다.
 
 ---
 
@@ -95,27 +104,32 @@ tools: Read, Write, Grep, Bash
 |----------|------|
 | App | children |
 | Layout | header, sidebar, mobileBottomNav, mobileFab, mobileOverlayMenu, children |
-| Page | header, leftAside, rightAside, footer, children |
+| Page | header, top, leftAside, rightAside, bottom, footer, children |
 | Section | top, bottom, left, right, children(center) |
 
 ### 3단계: Layout 컴포넌트 생성
 
 ```
-packages/fe-ui/src/layout/
-├── App/
-│   ├── App.tsx
+packages/fe-ui/src/
+├── layout/
+│   ├── App/
+│   │   ├── App.tsx
+│   │   └── index.ts
+│   ├── Page/
+│   │   ├── Page.tsx
+│   │   └── index.ts
+│   ├── Section/
+│   │   ├── Section.tsx
+│   │   └── index.ts
 │   └── index.ts
-├── Page/
-│   ├── Page.tsx
-│   └── index.ts
-├── Section/
-│   ├── Section.tsx
-│   └── index.ts
-└── index.ts
-
-packages/fe-ui/src/primitive/layout/Layout/
-├── Layout.tsx
-└── index.ts
+├── primitive/layout/
+│   └── Layout/
+│       ├── Layout.tsx
+│       └── index.ts
+└── widget/
+    └── PageTitleBar/
+        ├── PageTitleBar.tsx
+        └── index.tsx
 ```
 
 ### 4단계: Next.js layout.tsx 작성
@@ -124,16 +138,20 @@ packages/fe-ui/src/primitive/layout/Layout/
 // app/(admin)/layout.tsx
 "use client";
 
-import { App, Layout, Page, SidePanel } from "@cocrepo/ui";
+import { App, Layout, SidePanel } from "@cocrepo/ui";
 
-export default function AdminLayout({ children }: { children: React.ReactNode }) {
+export default function AdminLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   return (
     <App>
       <Layout
         header={<div className="h-16">Header Slot</div>}
         sidebar={<SidePanel ... />}
       >
-        <Page>{children}</Page>
+        {children}
       </Layout>
     </App>
   );
@@ -171,6 +189,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
 |---------|------|
 | `req-layout-planner` | 레이아웃 설계 정보 제공 |
 | `req-page-planner` | 페이지 통합 구조 정보 제공 |
+| `req-surface-planner` | Surface ownership / elevation 결정 제공 |
 | `/design-analyze (Skill)` | Figma에서 레이아웃 구조 분석 |
 
 ### 후행 에이전트
@@ -248,9 +267,16 @@ Layout 영역 (Layout, Page, Section)
 // Layout은 순수하게 영역만 정의
 <App>
   <Layout header={<HeaderBar />} sidebar={<SidePanel ... />}>
-    <Page>{children}</Page>
+    {children}
   </Layout>
 </App>
+
+// page.tsx 또는 _client.tsx에서 Page / Section / PageTitleBar 조합
+<Page top={<PageTitleBar title="회원 목록" description="..." />}>
+  <Section>
+    <DataGrid ... />
+  </Section>
+</Page>
 
 // Feature 컴포넌트가 자체적으로 비즈니스 로직 처리
 const Nav = () => {
@@ -406,21 +432,19 @@ export const Section = ({ top, bottom, left, right, children }: SectionProps) =>
 
 ```
 packages/fe-ui/src/
-├── layouts/                       # Layout 컴포넌트 (순수 위치 정의)
+├── layout/                        # Layout 컴포넌트 (순수 위치 정의)
 │   ├── App/
-│   │   ├── App.tsx
-│   │   └── index.ts
 │   ├── Page/
-│   │   ├── Page.tsx
-│   │   └── index.ts
 │   ├── Section/
-│   │   ├── Section.tsx
-│   │   └── index.ts
 │   └── index.ts
-├── ui/layouts/
+├── primitive/layout/
 │   └── Layout/
 │       ├── Layout.tsx
 │       └── index.ts
+├── widget/
+│   └── PageTitleBar/
+│       ├── PageTitleBar.tsx
+│       └── index.tsx
 │
 └── feature/                       # Feature 컴포넌트 (비즈니스 로직 포함)
     ├── SideNav/
@@ -447,58 +471,87 @@ packages/fe-ui/src/
 
 ---
 
-## 12. Surface 시스템과 Layout 통합 (Critical)
+## 12. Page / Section / Surface 역할 분리 (Critical)
 
-**Layout에서 PageSurface를 사용하여 콘텐츠 영역에 시각적 계층을 부여합니다.**
+**페이지 구조는 `Page`, `Section`, `PageTitleBar`가 담당하고, `PageSurface`/`SectionSurface`는 그 안에 놓이는 표현 레이어만 담당합니다. Layout은 공유 네비게이션/영역만 담당하고, 페이지 고유한 title/description/actions는 각 `page.tsx` 또는 `_client.tsx`에서 소유합니다.**
+
+**중요:** `Layout`, `Page`, `Section` 슬롯에 검색/필터/액션 컴포넌트를 배치해도 background/elevation은 자동 생성되지 않습니다. 시각적 묶음이 필요하면 `page.spec.md`의 `Surface / Elevation` 결정을 따라 `PageSurface`, `SectionSurface` owner를 페이지가 명시해야 합니다.
 
 ### 계층 구조
 
 ```
-AdminLayout (bg-background = flat, elevation 0)
+AdminLayout (서비스 전역 셸)
 └── 특정 섹션 layout.tsx
-    └── PageSurface (raised, elevation 1) ← 콘텐츠 전체 감싸기
-        ├── 제목/설명
-        ├── 탭 네비게이션 (있다면)
-        └── children (각 page.tsx)
-            └── SectionSurface (elevated, elevation 2) ← DataGrid 등
+    ├── 공유 탭/서브 네비게이션 (있다면)
+    └── children (각 page.tsx / _client.tsx)
+        └── Page
+            ├── top = <PageTitleBar />
+            └── children
+                └── PageSurface
+                    └── SectionSurface
+                        └── Section
 ```
 
 ### 올바른 패턴
 
 ```tsx
-// apps/admin/web/app/(admin)/users/layout.tsx
+// apps/admin/web/app/(admin)/roles/abilities/layout.tsx
 "use client";
 
-import { PageSurface } from "@cocrepo/ui";
+import { Tab, Tabs } from "@heroui/react";
 import { observer } from "mobx-react-lite";
 
-function UsersLayout({ children }: { children: React.ReactNode }) {
+const TAB_ITEMS = [
+  { key: "roles", title: "Role 권한" },
+  { key: "users", title: "User 예외 권한" },
+];
+
+function AbilitiesLayout({ children }: { children: React.ReactNode }) {
   return (
-    <PageSurface
-      title="회원 목록"
-      description="시스템에 등록된 회원을 관리합니다."
-    >
+    <>
+      <Tabs selectedKey={activeKey} onSelectionChange={onChangeTab}>
+        {TAB_ITEMS.map((tab) => (
+          <Tab key={tab.key} title={tab.title} />
+        ))}
+      </Tabs>
       {children}
-    </PageSurface>
+    </>
   );
 }
 
-export default observer(UsersLayout);
+export default observer(AbilitiesLayout);
 ```
 
 ```tsx
-// apps/admin/web/app/(admin)/users/page.tsx
+// apps/admin/web/app/(admin)/users/_client.tsx
 "use client";
 
-import { SectionSurface } from "@cocrepo/ui";
+import {
+  Page,
+  PageSurface,
+  PageTitleBar,
+  Section,
+  SectionSurface,
+} from "@cocrepo/ui";
 
 function UsersPage() {
   return (
-    <div className="space-y-4">
-      <SectionSurface padding="none">
-        <DataGrid ... />
-      </SectionSurface>
-    </div>
+    <Page
+      top={
+        <PageTitleBar
+          title="회원 목록"
+          description="시스템에 등록된 회원을 관리합니다."
+        />
+      }
+    >
+      <PageSurface>
+        <SectionSurface>
+          <Section>
+            <DataGrid ... />
+          </Section>
+        </SectionSurface>
+      </PageSurface>
+    </Page>
   );
 }
 ```
@@ -506,50 +559,57 @@ function UsersPage() {
 ### 금지 패턴
 
 ```tsx
-// ❌ 금지 - 각 page.tsx에서 PageSurface 사용
-// layout.tsx에서 이미 PageSurface로 감쌌다면 page에서 또 사용하면 안 됨
+// ❌ 금지 - Layout에서 페이지 고유 헤딩 소유
+function UsersLayout({ children }) {
+  return (
+    <>
+      <PageTitleBar title="회원 목록" />
+      {children}
+    </>
+  );
+}
+
+// ❌ 금지 - Page를 PageSurface로 대체
 function UsersPage() {
   return (
-    <PageSurface title="회원 목록">  {/* ← 중복! */}
-      <DataGrid ... />
+    <PageSurface>
+      <SectionSurface>
+        <DataGrid ... />
+      </SectionSurface>
     </PageSurface>
   );
 }
 
-// ❌ 금지 - Surface 없이 직접 렌더링
-function UsersLayout({ children }) {
+// ❌ 금지 - 인라인 헤더 마크업 반복
+function UsersPage() {
   return (
-    <div className="space-y-6">  {/* ← 계층감 없음 */}
-      <h1>회원 목록</h1>
-      {children}
-    </div>
+    <Page
+      top={
+        <div className="flex items-start justify-between">
+          <h1>회원 목록</h1>
+        </div>
+      }
+    >
+      ...
+    </Page>
   );
 }
 ```
 
-### Surface 사용 위치 결정
+### 구조 사용 위치 결정
 
-| 상황 | Surface 위치 | 설명 |
-|------|-------------|------|
-| 단일 페이지 (탭 없음) | layout.tsx에서 PageSurface | 제목 + 콘텐츠 전체 감싸기 |
-| 탭이 있는 페이지 그룹 | layout.tsx에서 PageSurface | 제목 + 탭 + children 전체 감싸기 |
-| 상세/수정/등록 페이지 | page.tsx에서 PageSurface | 별도 레이아웃 필요 시 |
-
-### 엘리베이션 레벨 참고
-
-| 레벨 | 이름 | 용도 |
+| 위치 | 담당 | 설명 |
 |------|------|------|
-| 0 | flat | 페이지 배경 (AdminLayout) |
-| 1 | raised | PageSurface 기본값 |
-| 2 | elevated | SectionSurface, 카드, DataGrid |
-| 3 | floating | 드롭다운, 팝오버 |
-| 4 | overlay | 모달, 다이얼로그 |
+| `layout.tsx` | 공유 네비게이션/전역 배치 | 탭, 사이드바, 공통 provider |
+| `page.tsx`, `_client.tsx` | `Page + PageTitleBar` | 페이지 고유 title, description, actions |
+| `Page` 내부 | `PageSurface` | 페이지 본문 시각 표면 |
+| `PageSurface` 내부 | `SectionSurface + Section` | 섹션 표면과 내부 배치 |
 
 ---
 
 ## 13. 메뉴 계층과 페이지 헤딩 관계 (Critical)
 
-**상위 메뉴명은 layout.tsx의 PageSurface title로, 하위 탭/페이지는 탭 네비게이션으로 표현합니다.**
+**상위 메뉴는 `layout.tsx`의 공유 네비게이션으로 표현하고, 각 페이지의 제목은 `page.tsx` 또는 `_client.tsx`의 `PageTitleBar`로 표현합니다.**
 
 ### 계층 구조 원칙
 
@@ -563,12 +623,12 @@ function UsersLayout({ children }) {
 
 **URL 구조와 헤딩 매핑:**
 
-| URL 경로 | 상위 헤딩 (layout) | 탭/콘텐츠 |
-|---------|-------------------|----------|
-| `/roles/abilities/roles` | "역할/권한" | Role 권한 탭 선택 |
-| `/roles/abilities/users` | "역할/권한" | User 예외 권한 탭 선택 |
-| `/users` | "회원" | 회원 목록 |
-| `/users/[id]` | "회원" | 회원 상세 |
+| URL 경로 | layout.tsx | page title | 콘텐츠 |
+|---------|-----------|------------|--------|
+| `/roles/abilities/roles` | 권한 탭 네비게이션 | "Role 권한" | Role 권한 콘텐츠 |
+| `/roles/abilities/users` | 권한 탭 네비게이션 | "User 예외 권한" | User 예외 권한 콘텐츠 |
+| `/users` | 공유 네비게이션 없음 | "회원 목록" | 회원 목록 |
+| `/users/[userId]` | 공유 네비게이션 없음 | "회원 상세" | 회원 상세 |
 
 ### 올바른 패턴
 
@@ -576,7 +636,6 @@ function UsersLayout({ children }) {
 // apps/admin/web/app/(admin)/roles/abilities/layout.tsx
 "use client";
 
-import { PageSurface } from "@cocrepo/ui";
 import { Tab, Tabs } from "@heroui/react";
 import { observer } from "mobx-react-lite";
 
@@ -588,20 +647,14 @@ const TAB_ITEMS = [
 
 function AbilitiesLayout({ children }: { children: React.ReactNode }) {
   return (
-    <PageSurface
-      title="역할/권한"                    // ← 상위 메뉴명
-      description="역할별 권한을 관리합니다."
-    >
-      {/* 탭 네비게이션 */}
+    <>
       <Tabs selectedKey={activeKey} onSelectionChange={onChangeTab}>
         {TAB_ITEMS.map((tab) => (
           <Tab key={tab.key} title={tab.title} />
         ))}
       </Tabs>
-
-      {/* 탭 콘텐츠 - 각 page.tsx */}
       {children}
-    </PageSurface>
+    </>
   );
 }
 
@@ -612,16 +665,16 @@ export default observer(AbilitiesLayout);
 // apps/admin/web/app/(admin)/roles/abilities/roles/page.tsx
 "use client";
 
-import { SectionSurface } from "@cocrepo/ui";
+import { Page, PageTitleBar, Section } from "@cocrepo/ui";
 import { observer } from "mobx-react-lite";
 
 function RolesAbilitiesPage() {
-  // ❌ PageSurface 사용 금지 - layout에서 이미 사용
-  // ✅ SectionSurface만 사용
   return (
-    <SectionSurface>
-      {/* 콘텐츠 */}
-    </SectionSurface>
+    <Page top={<PageTitleBar title="Role 권한" description="역할별 권한을 관리합니다." />}>
+      <Section>
+        {/* 콘텐츠 */}
+      </Section>
+    </Page>
   );
 }
 
@@ -631,33 +684,29 @@ export default observer(RolesAbilitiesPage);
 ### 금지 패턴
 
 ```tsx
-// ❌ 금지 - 각 탭 페이지에서 PageSurface 사용
-// roles/abilities/roles/page.tsx
-function RolesAbilitiesPage() {
-  return (
-    <PageSurface title="Role 권한">  {/* ← 중복! layout에서 이미 처리 */}
-      ...
-    </PageSurface>
-  );
-}
-
-// ❌ 금지 - layout에 상위 메뉴명 없음
+// ❌ 금지 - layout에서 페이지 고유 title 처리
 // roles/abilities/layout.tsx
 function AbilitiesLayout({ children }) {
   return (
     <div>
-      <Tabs>...</Tabs>    {/* ← 상위 헤딩 없이 탭만 있음 */}
+      <PageTitleBar title="역할/권한" />
+      <Tabs>...</Tabs>
       {children}
     </div>
   );
+}
+
+// ❌ 금지 - 탭 페이지에 Page / PageTitleBar 없음
+function RolesAbilitiesPage() {
+  return <Section>{/* 콘텐츠 */}</Section>;
 }
 ```
 
 ### 헤딩 레벨 결정 규칙
 
-| 상황 | PageSurface 위치 | title 값 |
-|------|-----------------|----------|
-| 1depth 메뉴 페이지 | 해당 layout.tsx | 메뉴명 ("회원", "예약") |
-| 탭이 있는 2depth 섹션 | 상위 layout.tsx | 1depth 메뉴명 ("역할/권한") |
-| 탭 없는 하위 페이지 | page.tsx | 페이지 제목 ("회원 상세") |
+| 상황 | layout.tsx | page title |
+|------|-----------|------------|
+| 1depth 메뉴 페이지 | 공유 네비게이션 없음 또는 최소 배치만 | 메뉴명/페이지명 ("회원 목록") |
+| 탭이 있는 2depth 섹션 | 탭/서브 네비게이션 렌더 | 활성 탭/페이지명 ("Role 권한") |
+| 탭 없는 하위 페이지 | 공통 배치만 유지 | 페이지 제목 ("회원 상세") |
 | 모달/Drawer 콘텐츠 | 사용 안 함 | 모달 자체 title 사용 |

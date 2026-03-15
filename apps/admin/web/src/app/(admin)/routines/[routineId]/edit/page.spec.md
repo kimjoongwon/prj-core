@@ -152,10 +152,25 @@
 - [ ] ExerciseSelectModal (Widget: 운동 선택 모달 - 등록 페이지와 공유)
 - [ ] ActivityEditorCard (Widget: 개별 Activity 편집 카드 - 등록 페이지와 공유)
 
+
+## Surface / Elevation
+
+| 항목 | 결정 |
+|------|------|
+| PageSurface owner | `apps/admin/web/src/app/(admin)/routines/[routineId]/edit/_client.tsx` |
+|------|------|
+| PageSurface 역할 | 페이지 헤더 아래 본문 전체를 raised surface로 묶습니다. |
+| SectionSurface 대상 | 본문 섹션, 폼, 표, 로딩/빈 상태 블록 |
+| SectionSurface padding | DataGrid/테이블은 필요 시 `padding="none"`, 그 외 기본 패딩 |
+| 예외 | 없음. `Layout`/`Page`/`Section` 슬롯 배치만으로는 surface가 생기지 않으므로 page 또는 `_client.tsx`가 owner를 명시합니다. |
+
 ## 변경 이력
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-03-15 | Surface ownership과 elevation 결정을 문서화 | codex |
+| 2026-03-15 | Surface ownership/elevation 규칙과 PageSurface/SectionSurface 적용 기준을 문서화 | codex |
+| 2026-03-15 | Surface owner와 elevation 규칙을 문서화 | codex |
 | 2026-03-11 | aggregate root 기준 spaces/tasks 경로와 API 계약으로 전환 | codex |
 | 2026-02-19 | 초기 생성 | 직접 기획 |
 | 2026-02-19 | 디자인 목업 섹션 추가 | req-reverse-engineer |

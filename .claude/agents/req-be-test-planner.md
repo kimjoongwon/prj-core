@@ -43,8 +43,8 @@ tools: Read, Write, Grep, Bash
 
 - 기존 backend sidecar spec 파일에 `테스트 케이스` 섹션 갱신
 - 대상 예시:
-  - `packages/be-app/src/*.application-service.spec.md`
-  - `packages/be-service/src/*.service.spec.md`
+  - `packages/be-app/src/*.application-service/index.spec.md`
+  - `packages/be-service/src/*.service/index.spec.md`
   - `packages/be-repository/src/*.repository.spec.md`
   - `apps/core/api/src/module/*/*.controller.spec.md`
   - `apps/core/api/src/module/*/*.module.spec.md` (module wiring 검증이 필요한 경우)

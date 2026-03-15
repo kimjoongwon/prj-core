@@ -7,7 +7,15 @@ import {
 	useGetRoutine,
 } from "@cocrepo/api/core/routines";
 
-import { DateTimeCell, Page, PageTitleBar, Section, VStack } from "@cocrepo/ui";
+import {
+	DateTimeCell,
+	Page,
+	PageSurface,
+	PageTitleBar,
+	Section,
+	SectionSurface,
+	VStack,
+} from "@cocrepo/ui";
 import {
 	addToast,
 	Button,
@@ -83,9 +91,13 @@ function RoutineDetailPageClient({ routineId }: RoutineDetailPageClientProps) {
 	if (!response) {
 		return (
 			<Page top={<PageTitleBar title="루틴 상세" description="로딩 중..." />}>
-				<div className="flex items-center justify-center p-8">
-					<Spinner size="lg" />
-				</div>
+				<PageSurface>
+					<SectionSurface>
+						<div className="flex items-center justify-center p-8">
+							<Spinner size="lg" />
+						</div>
+					</SectionSurface>
+				</PageSurface>
 			</Page>
 		);
 	}
@@ -100,16 +112,20 @@ function RoutineDetailPageClient({ routineId }: RoutineDetailPageClientProps) {
 					/>
 				}
 			>
-				<div className="flex flex-col items-center justify-center gap-4 p-8">
-					<p className="text-default-500">루틴을 찾을 수 없습니다.</p>
-					<Button
-						variant="flat"
-						startContent={<ArrowLeft className="size-4" />}
-						onPress={onClickBackButton}
-					>
-						목록으로
-					</Button>
-				</div>
+				<PageSurface>
+					<SectionSurface>
+						<div className="flex flex-col items-center justify-center gap-4 p-8">
+							<p className="text-default-500">루틴을 찾을 수 없습니다.</p>
+							<Button
+								variant="flat"
+								startContent={<ArrowLeft className="size-4" />}
+								onPress={onClickBackButton}
+							>
+								목록으로
+							</Button>
+						</div>
+					</SectionSurface>
+				</PageSurface>
 			</Page>
 		);
 	}
@@ -158,141 +174,156 @@ function RoutineDetailPageClient({ routineId }: RoutineDetailPageClientProps) {
 				/>
 			}
 		>
-			<VStack gap={4}>
-				<Section top={<PageTitleBar level={2} title="기본 정보" />}>
-					<div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-						<div>
-							<label className="text-sm text-default-500">루틴명</label>
-							<p className="mt-1 font-medium">{routine.name}</p>
-						</div>
-						<div>
-							<label className="text-sm text-default-500">라벨</label>
-							<p className="mt-1">{routine.label}</p>
-						</div>
-						<div>
-							<label className="text-sm text-default-500">운동 수</label>
-							<p className="mt-1">{activities.length}개</p>
-						</div>
-						<div>
-							<label className="text-sm text-default-500">연결 상태</label>
-							<div className="mt-1">
-								{activities.length === 0 ? (
-									<Chip size="sm" variant="flat" color="warning">
-										활동 없음
-									</Chip>
-								) : unresolvedActivities > 0 ? (
-									<Chip size="sm" variant="flat" color="warning">
-										확인 필요
-									</Chip>
-								) : (
-									<Chip size="sm" variant="flat" color="success">
-										정상
-									</Chip>
-								)}
-							</div>
-						</div>
-						<div>
-							<label className="text-sm text-default-500">등록일</label>
-							<div className="mt-1">
-								<DateTimeCell value={routine.createdAt} />
-							</div>
-						</div>
-						<div>
-							<label className="text-sm text-default-500">수정일</label>
-							<div className="mt-1">
-								<DateTimeCell value={routine.updatedAt} />
-							</div>
-						</div>
-					</div>
-				</Section>
-
-				<Section top={<PageTitleBar level={2} title="연결 요약" />}>
-					<div className="grid grid-cols-1 gap-3 md:grid-cols-3">
-						<div className="rounded-lg bg-content2 p-3">
-							<p className="text-xs text-default-500">전체 활동</p>
-							<p className="mt-1 text-lg font-semibold">
-								{activities.length}개
-							</p>
-						</div>
-						<div className="rounded-lg bg-content2 p-3">
-							<p className="text-xs text-default-500">연결 정상</p>
-							<p className="mt-1 text-lg font-semibold text-success">
-								{resolvedActivities}개
-							</p>
-						</div>
-						<div className="rounded-lg bg-content2 p-3">
-							<p className="text-xs text-default-500">사용 중 프로그램</p>
-							<p className="mt-1 text-lg font-semibold">{programs.length}개</p>
-						</div>
-					</div>
-				</Section>
-
-				<Section top={<PageTitleBar level={2} title="운동 구성" />}>
-					{activities.length === 0 ? (
-						<p className="text-sm text-default-500">등록된 활동이 없습니다.</p>
-					) : (
-						<div className="flex flex-col gap-3">
-							{activities.map((activity, index) => {
-								const isResolved = Boolean(activity.task?.exercise?.name);
-								return (
-									<div
-										key={activity.id}
-										className="flex flex-col gap-1 rounded-lg bg-content2 p-4"
-									>
-										<div className="flex items-center justify-between">
-											<p className="font-medium">
-												{index + 1}.{" "}
-												{activity.task?.exercise?.name ?? "알 수 없는 운동"}
-											</p>
-											<Chip
-												size="sm"
-												variant="flat"
-												color={isResolved ? "success" : "warning"}
-											>
-												{isResolved ? "정상" : "확인필요"}
+			<PageSurface>
+				<VStack gap={4}>
+					<SectionSurface>
+						<Section top={<PageTitleBar level={2} title="기본 정보" />}>
+							<div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+								<div>
+									<label className="text-sm text-default-500">루틴명</label>
+									<p className="mt-1 font-medium">{routine.name}</p>
+								</div>
+								<div>
+									<label className="text-sm text-default-500">라벨</label>
+									<p className="mt-1">{routine.label}</p>
+								</div>
+								<div>
+									<label className="text-sm text-default-500">운동 수</label>
+									<p className="mt-1">{activities.length}개</p>
+								</div>
+								<div>
+									<label className="text-sm text-default-500">연결 상태</label>
+									<div className="mt-1">
+										{activities.length === 0 ? (
+											<Chip size="sm" variant="flat" color="warning">
+												활동 없음
 											</Chip>
-										</div>
-										<div className="flex gap-4 text-sm text-default-500">
-											<span>반복 횟수: {activity.repetitions}회</span>
-											<span>
-												휴식 시간:{" "}
-												{activity.restTime > 0
-													? `${activity.restTime}초`
-													: "없음"}
-											</span>
-										</div>
-										{activity.notes && (
-											<p className="mt-1 text-sm text-default-400">
-												메모: {activity.notes}
-											</p>
+										) : unresolvedActivities > 0 ? (
+											<Chip size="sm" variant="flat" color="warning">
+												확인 필요
+											</Chip>
+										) : (
+											<Chip size="sm" variant="flat" color="success">
+												정상
+											</Chip>
 										)}
 									</div>
-								);
-							})}
-						</div>
-					)}
-				</Section>
-
-				<Section top={<PageTitleBar level={2} title="사용 중인 프로그램" />}>
-					{programs.length === 0 ? (
-						<p className="text-sm text-default-500">
-							현재 이 루틴을 사용하는 프로그램이 없습니다.
-						</p>
-					) : (
-						<div className="flex flex-col gap-2">
-							{programs.map((program) => (
-								<div
-									key={program.id}
-									className="flex items-center justify-between rounded-lg bg-content2 p-3"
-								>
-									<p className="font-medium">{program.name}</p>
 								</div>
-							))}
-						</div>
-					)}
-				</Section>
-			</VStack>
+								<div>
+									<label className="text-sm text-default-500">등록일</label>
+									<div className="mt-1">
+										<DateTimeCell value={routine.createdAt} />
+									</div>
+								</div>
+								<div>
+									<label className="text-sm text-default-500">수정일</label>
+									<div className="mt-1">
+										<DateTimeCell value={routine.updatedAt} />
+									</div>
+								</div>
+							</div>
+						</Section>
+					</SectionSurface>
 
+					<SectionSurface>
+						<Section top={<PageTitleBar level={2} title="연결 요약" />}>
+							<div className="grid grid-cols-1 gap-3 md:grid-cols-3">
+								<div className="rounded-lg bg-content2 p-3">
+									<p className="text-xs text-default-500">전체 활동</p>
+									<p className="mt-1 text-lg font-semibold">
+										{activities.length}개
+									</p>
+								</div>
+								<div className="rounded-lg bg-content2 p-3">
+									<p className="text-xs text-default-500">연결 정상</p>
+									<p className="mt-1 text-lg font-semibold text-success">
+										{resolvedActivities}개
+									</p>
+								</div>
+								<div className="rounded-lg bg-content2 p-3">
+									<p className="text-xs text-default-500">사용 중 프로그램</p>
+									<p className="mt-1 text-lg font-semibold">
+										{programs.length}개
+									</p>
+								</div>
+							</div>
+						</Section>
+					</SectionSurface>
+
+					<SectionSurface>
+						<Section top={<PageTitleBar level={2} title="운동 구성" />}>
+							{activities.length === 0 ? (
+								<p className="text-sm text-default-500">
+									등록된 활동이 없습니다.
+								</p>
+							) : (
+								<div className="flex flex-col gap-3">
+									{activities.map((activity, index) => {
+										const isResolved = Boolean(activity.task?.exercise?.name);
+										return (
+											<div
+												key={activity.id}
+												className="flex flex-col gap-1 rounded-lg bg-content2 p-4"
+											>
+												<div className="flex items-center justify-between">
+													<p className="font-medium">
+														{index + 1}.{" "}
+														{activity.task?.exercise?.name ?? "알 수 없는 운동"}
+													</p>
+													<Chip
+														size="sm"
+														variant="flat"
+														color={isResolved ? "success" : "warning"}
+													>
+														{isResolved ? "정상" : "확인필요"}
+													</Chip>
+												</div>
+												<div className="flex gap-4 text-sm text-default-500">
+													<span>반복 횟수: {activity.repetitions}회</span>
+													<span>
+														휴식 시간:{" "}
+														{activity.restTime > 0
+															? `${activity.restTime}초`
+															: "없음"}
+													</span>
+												</div>
+												{activity.notes && (
+													<p className="mt-1 text-sm text-default-400">
+														메모: {activity.notes}
+													</p>
+												)}
+											</div>
+										);
+									})}
+								</div>
+							)}
+						</Section>
+					</SectionSurface>
+
+					<SectionSurface>
+						<Section
+							top={<PageTitleBar level={2} title="사용 중인 프로그램" />}
+						>
+							{programs.length === 0 ? (
+								<p className="text-sm text-default-500">
+									현재 이 루틴을 사용하는 프로그램이 없습니다.
+								</p>
+							) : (
+								<div className="flex flex-col gap-2">
+									{programs.map((program) => (
+										<div
+											key={program.id}
+											className="flex items-center justify-between rounded-lg bg-content2 p-3"
+										>
+											<p className="font-medium">{program.name}</p>
+										</div>
+									))}
+								</div>
+							)}
+						</Section>
+					</SectionSurface>
+				</VStack>
+			</PageSurface>
 			<Modal isOpen={deleteModal.isOpen} onClose={deleteModal.onClose}>
 				<ModalContent>
 					<ModalHeader>루틴 삭제</ModalHeader>

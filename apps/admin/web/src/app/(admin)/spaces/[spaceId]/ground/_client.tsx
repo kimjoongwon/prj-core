@@ -1,7 +1,15 @@
 "use client";
 import { type GroundDto, useGetSpaceGround } from "@cocrepo/api/core/spaces";
 
-import { DateTimeCell, Page, PageTitleBar, Section, VStack } from "@cocrepo/ui";
+import {
+	DateTimeCell,
+	Page,
+	PageSurface,
+	PageTitleBar,
+	Section,
+	SectionSurface,
+	VStack,
+} from "@cocrepo/ui";
 import { Badge, Button, Spinner } from "@heroui/react";
 import { ArrowLeft, Pencil } from "lucide-react";
 import { observer } from "mobx-react-lite";
@@ -36,11 +44,13 @@ function GroundDetailPageClient({ spaceId }: GroundDetailPageClientProps) {
 	if (isLoading && !response) {
 		return (
 			<Page top={<PageTitleBar title="시설 정보" description="로딩 중..." />}>
-				<Section>
-					<div className="flex items-center justify-center p-8">
-						<Spinner size="lg" />
-					</div>
-				</Section>
+				<PageSurface>
+					<SectionSurface>
+						<div className="flex items-center justify-center p-8">
+							<Spinner size="lg" />
+						</div>
+					</SectionSurface>
+				</PageSurface>
 			</Page>
 		);
 	}
@@ -56,16 +66,22 @@ function GroundDetailPageClient({ spaceId }: GroundDetailPageClientProps) {
 
 		return (
 			<Page top={pageHeader}>
-				<div className="flex flex-col items-center justify-center gap-4 p-8">
-					<p className="text-default-500">시설 detail을 찾을 수 없습니다.</p>
-					<Button
-						variant="flat"
-						startContent={<ArrowLeft className="size-4" />}
-						onPress={onClickBackButton}
-					>
-						목록으로
-					</Button>
-				</div>
+				<PageSurface>
+					<SectionSurface>
+						<div className="flex flex-col items-center justify-center gap-4 p-8">
+							<p className="text-default-500">
+								시설 detail을 찾을 수 없습니다.
+							</p>
+							<Button
+								variant="flat"
+								startContent={<ArrowLeft className="size-4" />}
+								onPress={onClickBackButton}
+							>
+								목록으로
+							</Button>
+						</div>
+					</SectionSurface>
+				</PageSurface>
 			</Page>
 		);
 	}
@@ -89,69 +105,77 @@ function GroundDetailPageClient({ spaceId }: GroundDetailPageClientProps) {
 
 	return (
 		<Page top={pageHeader}>
-			<VStack gap={4}>
-				<Section top={<PageTitleBar level={2} title="기본 정보" />}>
-					<div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-						<div>
-							<label className="text-sm text-default-500">시설명</label>
-							<p className="mt-1 font-medium">{ground.name}</p>
-						</div>
-						<div>
-							<label className="text-sm text-default-500">라벨</label>
-							<div className="mt-1">
-								{ground.label ? (
-									<Badge color="secondary" variant="flat">
-										{ground.label}
-									</Badge>
-								) : (
-									<span className="text-default-400">-</span>
-								)}
+			<PageSurface>
+				<VStack gap={4}>
+					<SectionSurface>
+						<Section top={<PageTitleBar level={2} title="기본 정보" />}>
+							<div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+								<div>
+									<label className="text-sm text-default-500">시설명</label>
+									<p className="mt-1 font-medium">{ground.name}</p>
+								</div>
+								<div>
+									<label className="text-sm text-default-500">라벨</label>
+									<div className="mt-1">
+										{ground.label ? (
+											<Badge color="secondary" variant="flat">
+												{ground.label}
+											</Badge>
+										) : (
+											<span className="text-default-400">-</span>
+										)}
+									</div>
+								</div>
+								<div>
+									<label className="text-sm text-default-500">주소</label>
+									<p className="mt-1">{ground.address}</p>
+								</div>
+								<div>
+									<label className="text-sm text-default-500">전화번호</label>
+									<p className="mt-1">{ground.phone}</p>
+								</div>
+								<div>
+									<label className="text-sm text-default-500">이메일</label>
+									<div className="mt-1">
+										<a
+											href={`mailto:${ground.email}`}
+											className="text-primary hover:underline"
+										>
+											{ground.email}
+										</a>
+									</div>
+								</div>
+								<div>
+									<label className="text-sm text-default-500">
+										사업자등록번호
+									</label>
+									<p className="mt-1 font-mono">{ground.businessNo}</p>
+								</div>
+								<div>
+									<label className="text-sm text-default-500">등록일</label>
+									<div className="mt-1">
+										<DateTimeCell value={ground.createdAt} />
+									</div>
+								</div>
+								<div>
+									<label className="text-sm text-default-500">수정일</label>
+									<div className="mt-1">
+										<DateTimeCell value={ground.updatedAt} />
+									</div>
+								</div>
 							</div>
-						</div>
-						<div>
-							<label className="text-sm text-default-500">주소</label>
-							<p className="mt-1">{ground.address}</p>
-						</div>
-						<div>
-							<label className="text-sm text-default-500">전화번호</label>
-							<p className="mt-1">{ground.phone}</p>
-						</div>
-						<div>
-							<label className="text-sm text-default-500">이메일</label>
-							<div className="mt-1">
-								<a
-									href={`mailto:${ground.email}`}
-									className="text-primary hover:underline"
-								>
-									{ground.email}
-								</a>
+						</Section>
+					</SectionSurface>
+					<SectionSurface>
+						<Section top={<PageTitleBar level={2} title="연결된 Space" />}>
+							<div>
+								<label className="text-sm text-default-500">Space ID</label>
+								<p className="mt-1 font-mono text-sm">{spaceId}</p>
 							</div>
-						</div>
-						<div>
-							<label className="text-sm text-default-500">사업자등록번호</label>
-							<p className="mt-1 font-mono">{ground.businessNo}</p>
-						</div>
-						<div>
-							<label className="text-sm text-default-500">등록일</label>
-							<div className="mt-1">
-								<DateTimeCell value={ground.createdAt} />
-							</div>
-						</div>
-						<div>
-							<label className="text-sm text-default-500">수정일</label>
-							<div className="mt-1">
-								<DateTimeCell value={ground.updatedAt} />
-							</div>
-						</div>
-					</div>
-				</Section>
-				<Section top={<PageTitleBar level={2} title="연결된 Space" />}>
-					<div>
-						<label className="text-sm text-default-500">Space ID</label>
-						<p className="mt-1 font-mono text-sm">{spaceId}</p>
-					</div>
-				</Section>
-			</VStack>
+						</Section>
+					</SectionSurface>
+				</VStack>
+			</PageSurface>
 		</Page>
 	);
 }

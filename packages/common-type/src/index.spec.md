@@ -37,6 +37,7 @@
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-03-15 | 루트 타입 배럴에서 `ObjectStorageConfig`/`ObjectStorageProvider` export를 추가 | codex |
 | 2026-03-11 | `AppIconName` 공개 export를 추가해 UI 아이콘 계약을 루트 타입 배럴에서 직접 import 가능하게 정리 | codex |
 | 2026-03-06 | 미사용 템플릿 타입 export 블록 제거 | codex |
 | 2026-03-06 | Store/Hook 계약 타입 export(AbilityChecker, AppStoreConfig, UseLayoutOptions 등) 추가 | codex |

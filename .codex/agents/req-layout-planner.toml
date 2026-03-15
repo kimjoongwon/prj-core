@@ -39,6 +39,7 @@ developer_instructions = '''
 - 위계는 `App(서비스별 단일) > Layout > Page > Section`을 기준으로 설계
 - App/Layout/Page/Section 역할 분리(중복 타이틀 금지)
 - `Page + PageTitleBar` 구조를 유지하고 필요 시 `PageSurface`, `SectionSurface` 표현 레이어를 추가
+- layout은 공유 네비게이션/탭만 담당하고 페이지 고유 `PageTitleBar`, `PageSurface`는 소유하지 않음
 - 데스크톱/모바일 레이아웃 전환 기준 명시
 
 ---
@@ -48,6 +49,7 @@ developer_instructions = '''
 | 에이전트 | 관계 | 설명 |
 |----------|------|------|
 | req-page-planner | 이전 단계 | 페이지 전체 구조 참조 |
+| req-surface-planner | 협업 단계 | Surface ownership 경계 검토 |
 | req-feature-planner | 이전 단계 | 배치 대상 Feature 참조 |
 | fe-layout-builder | 다음 단계 | Layout 구현 |
 '''

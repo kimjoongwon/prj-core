@@ -157,18 +157,25 @@ HeroUI 공식 문서(https://heroui.com) 스타일을 따릅니다.
 #### 사용 예시
 
 ```tsx
-import { PageSurface, SectionSurface } from "@cocrepo/ui";
+import { Button } from "@heroui/react";
+import { Page, PageSurface, PageTitleBar, SectionSurface } from "@cocrepo/ui";
 
 // 목록 페이지
-<PageSurface
-  title="회원 목록"
-  description="시스템에 등록된 회원을 관리합니다."
-  actions={<Button>회원 등록</Button>}
+<Page
+  top={
+    <PageTitleBar
+      title="회원 목록"
+      description="시스템에 등록된 회원을 관리합니다."
+      actions={<Button>회원 등록</Button>}
+    />
+  }
 >
-  <SectionSurface padding="none">
-    <DataGrid ... />
-  </SectionSurface>
-</PageSurface>
+  <PageSurface>
+    <SectionSurface padding="none">
+      <DataGrid ... />
+    </SectionSurface>
+  </PageSurface>
+</Page>
 ```
 
 #### 중첩 규칙
@@ -180,6 +187,8 @@ import { PageSurface, SectionSurface } from "@cocrepo/ui";
 #### PageSurface 사용 위치 규칙
 
 **PageSurface는 Page 컴포넌트에서만 사용합니다. Layout에서 사용 금지!**
+
+**중요:** `Layout`, `Page`, `Section`, `MetaDataGrid`의 슬롯에 검색/필터/액션 컴포넌트를 배치해도 배경이나 elevation은 자동 생성되지 않습니다. 화면에서 시각적 묶음이 필요하면 호출부에서 `PageSurface`, `SectionSurface` owner를 명시해야 합니다.
 
 ```typescript
 // ❌ 금지 - Layout에서 PageSurface 사용
@@ -196,13 +205,19 @@ function UsersLayout({ children }) {
 // users/page.tsx (또는 _client.tsx)
 function UsersPage() {
   return (
-    <PageSurface
-      title="회원 목록"
-      description="시스템에 등록된 회원을 관리합니다."
-      actions={<Button>회원 등록</Button>}
+    <Page
+      top={
+        <PageTitleBar
+          title="회원 목록"
+          description="시스템에 등록된 회원을 관리합니다."
+          actions={<Button>회원 등록</Button>}
+        />
+      }
     >
-      <SectionSurface>...</SectionSurface>
-    </PageSurface>
+      <PageSurface>
+        <SectionSurface>...</SectionSurface>
+      </PageSurface>
+    </Page>
   );
 }
 ```

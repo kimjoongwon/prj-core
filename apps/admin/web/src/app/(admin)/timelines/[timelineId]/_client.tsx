@@ -10,7 +10,15 @@ import {
 	useGetTimelineById,
 } from "@cocrepo/api/core/timelines";
 
-import { DateTimeCell, Page, PageTitleBar, Section, VStack } from "@cocrepo/ui";
+import {
+	DateTimeCell,
+	Page,
+	PageSurface,
+	PageTitleBar,
+	Section,
+	SectionSurface,
+	VStack,
+} from "@cocrepo/ui";
 import {
 	addToast,
 	Button,
@@ -280,144 +288,155 @@ function TimelineDetailPageClient({
 
 	return (
 		<Page top={<PageTitleBar title={pageTitle} actions={pageActions} />}>
-			<VStack gap={4}>
-				<Section top={<PageTitleBar level={2} title="기본 정보" />}>
-					<div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-						<div>
-							<label className="text-sm text-default-500">타임라인명</label>
-							<p className="mt-1">{timeline?.name ?? "-"}</p>
-						</div>
-						<div>
-							<label className="text-sm text-default-500">설명</label>
-							<p className="mt-1">{timeline?.description || "-"}</p>
-						</div>
-						<div>
-							<label className="text-sm text-default-500">등록일</label>
-							<div className="mt-1">
-								{timeline?.createdAt ? (
-									<DateTimeCell value={timeline.createdAt} />
-								) : (
-									"-"
-								)}
-							</div>
-						</div>
-					</div>
-				</Section>
-
-				<Section
-					top={
-						<PageTitleBar
-							level={2}
-							title="세션 목록"
-							actions={sessionSectionActions}
-						/>
-					}
-				>
-					<div className="grid grid-cols-1 gap-2 px-4 py-3 md:grid-cols-3">
-						<div className="rounded-lg bg-content2 p-3">
-							<p className="text-xs text-default-500">전체 세션</p>
-							<p className="mt-1 text-lg font-semibold">{totalSessions}개</p>
-						</div>
-						<div className="rounded-lg bg-content2 p-3">
-							<p className="text-xs text-default-500">연결된 세션</p>
-							<p className="mt-1 text-lg font-semibold text-success">
-								{connectedSessions}개
-							</p>
-						</div>
-						<div className="rounded-lg bg-content2 p-3">
-							<p className="text-xs text-default-500">미연결 세션</p>
-							<p className="mt-1 text-lg font-semibold text-warning">
-								{unconnectedSessions}개
-							</p>
-						</div>
-					</div>
-					<Table aria-label="세션 목록">
-						<TableHeader>
-							<TableColumn>세션명</TableColumn>
-							<TableColumn align="center">유형</TableColumn>
-							<TableColumn align="center">프로그램</TableColumn>
-							<TableColumn align="center">연결 상태</TableColumn>
-							<TableColumn>시작 일시</TableColumn>
-							<TableColumn align="center">반복 요일</TableColumn>
-							<TableColumn align="center">반복 주기</TableColumn>
-							<TableColumn>등록일</TableColumn>
-							<TableColumn align="center">액션</TableColumn>
-						</TableHeader>
-						<TableBody items={sessions} emptyContent="등록된 세션이 없습니다.">
-							{(session) => (
-								<TableRow key={session.id}>
-									<TableCell>
-										<button
-											type="button"
-											className="text-left text-primary hover:underline"
-											onClick={() => onClickSessionName(session)}
-										>
-											{session.name}
-										</button>
-									</TableCell>
-									<TableCell>
-										<Chip
-											color={getSessionTypeColor(session.type)}
-											variant="flat"
-											size="sm"
-										>
-											{getSessionTypeLabel(session.type)}
-										</Chip>
-									</TableCell>
-									<TableCell>{getProgramCount(session)}개</TableCell>
-									<TableCell>
-										{getProgramCount(session) > 0 ? (
-											<Chip color="success" variant="flat" size="sm">
-												연결됨
-											</Chip>
-										) : (
-											<Chip color="warning" variant="flat" size="sm">
-												미연결
-											</Chip>
-										)}
-									</TableCell>
-									<TableCell>
-										{session.startDateTime ? (
-											<DateTimeCell value={session.startDateTime} />
+			<PageSurface>
+				<VStack gap={4}>
+					<SectionSurface>
+						<Section top={<PageTitleBar level={2} title="기본 정보" />}>
+							<div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+								<div>
+									<label className="text-sm text-default-500">타임라인명</label>
+									<p className="mt-1">{timeline?.name ?? "-"}</p>
+								</div>
+								<div>
+									<label className="text-sm text-default-500">설명</label>
+									<p className="mt-1">{timeline?.description || "-"}</p>
+								</div>
+								<div>
+									<label className="text-sm text-default-500">등록일</label>
+									<div className="mt-1">
+										{timeline?.createdAt ? (
+											<DateTimeCell value={timeline.createdAt} />
 										) : (
 											"-"
 										)}
-									</TableCell>
-									<TableCell>
-										{getDayLabel(session.recurringDayOfWeek ?? undefined)}
-									</TableCell>
-									<TableCell>
-										{getCycleLabel(session.repeatCycleType ?? undefined)}
-									</TableCell>
-									<TableCell>
-										<DateTimeCell value={session.createdAt} />
-									</TableCell>
-									<TableCell>
-										<div className="flex justify-center gap-1">
-											<Button
-												size="sm"
-												variant="light"
-												onPress={() => onClickCreateProgram(session)}
-											>
-												프로그램 등록
-											</Button>
-											<Button
-												size="sm"
-												color="danger"
-												variant="light"
-												isIconOnly
-												onPress={() => onClickDeleteSessionIcon(session)}
-											>
-												<Trash2 className="h-4 w-4" />
-											</Button>
-										</div>
-									</TableCell>
-								</TableRow>
-							)}
-						</TableBody>
-					</Table>
-				</Section>
-			</VStack>
+									</div>
+								</div>
+							</div>
+						</Section>
+					</SectionSurface>
+
+					<SectionSurface>
+						<Section
+							top={
+								<PageTitleBar
+									level={2}
+									title="세션 목록"
+									actions={sessionSectionActions}
+								/>
+							}
+						>
+							<div className="grid grid-cols-1 gap-2 px-4 py-3 md:grid-cols-3">
+								<div className="rounded-lg bg-content2 p-3">
+									<p className="text-xs text-default-500">전체 세션</p>
+									<p className="mt-1 text-lg font-semibold">
+										{totalSessions}개
+									</p>
+								</div>
+								<div className="rounded-lg bg-content2 p-3">
+									<p className="text-xs text-default-500">연결된 세션</p>
+									<p className="mt-1 text-lg font-semibold text-success">
+										{connectedSessions}개
+									</p>
+								</div>
+								<div className="rounded-lg bg-content2 p-3">
+									<p className="text-xs text-default-500">미연결 세션</p>
+									<p className="mt-1 text-lg font-semibold text-warning">
+										{unconnectedSessions}개
+									</p>
+								</div>
+							</div>
+							<Table aria-label="세션 목록">
+								<TableHeader>
+									<TableColumn>세션명</TableColumn>
+									<TableColumn align="center">유형</TableColumn>
+									<TableColumn align="center">프로그램</TableColumn>
+									<TableColumn align="center">연결 상태</TableColumn>
+									<TableColumn>시작 일시</TableColumn>
+									<TableColumn align="center">반복 요일</TableColumn>
+									<TableColumn align="center">반복 주기</TableColumn>
+									<TableColumn>등록일</TableColumn>
+									<TableColumn align="center">액션</TableColumn>
+								</TableHeader>
+								<TableBody
+									items={sessions}
+									emptyContent="등록된 세션이 없습니다."
+								>
+									{(session) => (
+										<TableRow key={session.id}>
+											<TableCell>
+												<button
+													type="button"
+													className="text-left text-primary hover:underline"
+													onClick={() => onClickSessionName(session)}
+												>
+													{session.name}
+												</button>
+											</TableCell>
+											<TableCell>
+												<Chip
+													color={getSessionTypeColor(session.type)}
+													variant="flat"
+													size="sm"
+												>
+													{getSessionTypeLabel(session.type)}
+												</Chip>
+											</TableCell>
+											<TableCell>{getProgramCount(session)}개</TableCell>
+											<TableCell>
+												{getProgramCount(session) > 0 ? (
+													<Chip color="success" variant="flat" size="sm">
+														연결됨
+													</Chip>
+												) : (
+													<Chip color="warning" variant="flat" size="sm">
+														미연결
+													</Chip>
+												)}
+											</TableCell>
+											<TableCell>
+												{session.startDateTime ? (
+													<DateTimeCell value={session.startDateTime} />
+												) : (
+													"-"
+												)}
+											</TableCell>
+											<TableCell>
+												{getDayLabel(session.recurringDayOfWeek ?? undefined)}
+											</TableCell>
+											<TableCell>
+												{getCycleLabel(session.repeatCycleType ?? undefined)}
+											</TableCell>
+											<TableCell>
+												<DateTimeCell value={session.createdAt} />
+											</TableCell>
+											<TableCell>
+												<div className="flex justify-center gap-1">
+													<Button
+														size="sm"
+														variant="light"
+														onPress={() => onClickCreateProgram(session)}
+													>
+														프로그램 등록
+													</Button>
+													<Button
+														size="sm"
+														color="danger"
+														variant="light"
+														isIconOnly
+														onPress={() => onClickDeleteSessionIcon(session)}
+													>
+														<Trash2 className="h-4 w-4" />
+													</Button>
+												</div>
+											</TableCell>
+										</TableRow>
+									)}
+								</TableBody>
+							</Table>
+						</Section>
+					</SectionSurface>
+				</VStack>
+			</PageSurface>
 			<Modal
 				isOpen={deleteTimelineModal.isOpen}
 				onClose={deleteTimelineModal.onClose}

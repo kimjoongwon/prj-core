@@ -305,7 +305,11 @@ function AssetDetailPageClient({ assetId }: AssetDetailPageClientProps) {
 					<SectionSurface>
 						<Section top={<PageTitleBar level={2} title="스토리지 정보" />}>
 							<div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-								<Input label="Storage Key" value={asset.storageKey} isReadOnly />
+								<Input
+									label="Storage Key"
+									value={asset.storageKey}
+									isReadOnly
+								/>
 								<Input
 									label="Checksum"
 									value={asset.checksum ?? "-"}

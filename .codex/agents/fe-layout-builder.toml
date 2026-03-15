@@ -57,6 +57,7 @@ developer_instructions = '''
 - App은 body 래퍼로만 사용 (children만)
 - App은 서비스별 단일 인스턴스로 유지
 - Layout은 App과 Page 사이의 전역 배치 계층으로 사용
+- `page.spec.md`의 `Surface / Elevation` 결정을 먼저 확인하고 layout은 그 소유권을 침범하지 않음
 - Page는 HTML5 시맨틱 태그 사용 (header, leftAside, rightAside, footer)
 - Section은 위치 속성 사용 (top, bottom, left, right)
 - 영역에는 Feature 컴포넌트 마운트
@@ -70,6 +71,7 @@ developer_instructions = '''
 - Page 컴포넌트 내부에서 Layout 사용 금지
 - 커스텀 className 직접 작성 금지 (HeroUI/레이아웃 컴포넌트 사용)
 - 하나의 layout.tsx에 여러 Layout 중첩 금지
+- Layout 슬롯에 검색/필터/액션 컴포넌트를 올렸다고 background/elevation이 자동 생성된다고 가정 금지
 
 ### SSR / Hydration 규칙
 
@@ -184,6 +186,7 @@ export default function AdminLayout({
 |---------|------|
 | `req-layout-planner` | 레이아웃 설계 정보 제공 |
 | `req-page-planner` | 페이지 통합 구조 정보 제공 |
+| `req-surface-planner` | Surface ownership / elevation 결정 제공 |
 | `/design-analyze (Skill)` | Figma에서 레이아웃 구조 분석 |
 
 ### 후행 에이전트
@@ -468,6 +471,8 @@ packages/fe-ui/src/
 ## 12. Page / Section / Surface 역할 분리 (Critical)
 
 **페이지 구조는 `Page`, `Section`, `PageTitleBar`가 담당하고, `PageSurface`/`SectionSurface`는 그 안에 놓이는 표현 레이어만 담당합니다. Layout은 공유 네비게이션/영역만 담당하고, 페이지 고유한 title/description/actions는 각 `page.tsx` 또는 `_client.tsx`에서 소유합니다.**
+
+**중요:** `Layout`, `Page`, `Section` 슬롯에 검색/필터/액션 컴포넌트를 배치해도 background/elevation은 자동 생성되지 않습니다. 시각적 묶음이 필요하면 `page.spec.md`의 `Surface / Elevation` 결정을 따라 `PageSurface`, `SectionSurface` owner를 페이지가 명시해야 합니다.
 
 ### 계층 구조
 

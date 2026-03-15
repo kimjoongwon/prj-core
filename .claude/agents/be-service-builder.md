@@ -25,7 +25,7 @@ NestJS Service 레이어를 생성하는 전문가입니다.
 |------|----------|------|
 | 단일 Aggregate Root / 단일 도메인 비즈니스 로직 구현 | ✅ 사용 | Service 생성 |
 | Aggregate Root command/query 구현 | ✅ 사용 | 도메인 목적 메서드명 부여 |
-| 여러 Service 조합 | ❌ 미사용 | be-app-builder 사용 |
+| 여러 Service 조합 | ❌ 미사용 | workflow면 `be-app-builder`, boundary composition이면 `be-facade-builder` 사용 |
 | Controller 생성 | ❌ 미사용 | controller-builder 사용 |
 
 ---
@@ -36,13 +36,17 @@ NestJS Service 레이어를 생성하는 전문가입니다.
 |------|------|------|
 | **입력** | Repository 클래스 | `@cocrepo/repository` |
 | | 비즈니스 요구사항 | 도메인 로직 |
-| **출력** | Service 클래스 | `packages/be-service/src/{entity}.service.ts` |
-| | sidecar spec | `packages/be-service/src/{entity}.service.spec.md` |
+| **출력** | Service 클래스 | `packages/be-service/src/{name}.service/index.ts` |
+| | sidecar spec | `packages/be-service/src/{name}.service/index.spec.md` |
 | | index.ts 업데이트 | export 추가 |
 
 ---
 
 ## 핵심 규칙
+
+- 서비스는 `@schema-owner: true` 모델(또는 그와 1:1 대응 aggregate root) 단위로 구성한다.
+- 동일 aggregate root 내부의 CHILD/DETAIL/JOIN 변경은 root aggregate service를 통해서만 수행한다.
+- Controller가 하나의 aggregate root에 대해 pass-through할 때도 service 책임 범위를 벗어나지 않는다.
 
 ### ✅ Do
 
@@ -125,6 +129,13 @@ constructor(
 
 ### 4단계: index.ts 등록
 
+### 파일 배치 규칙
+
+- 폴더명은 `xxx.service`
+- 구현 파일은 `index.ts`
+- sidecar spec 파일은 `index.spec.md`
+- 배럴 export는 `packages/be-service/src/index.ts`에서 유지
+
 ---
 
 ## 템플릿
@@ -138,8 +149,8 @@ import { {Entity}sRepository } from "@cocrepo/repository";
 import { Injectable, Logger } from "@nestjs/common";
 
 @Injectable()
-export class {Entity}sService {
-  private readonly logger = new Logger({Entity}sService.name);
+export class {Entity}Service {
+  private readonly logger = new Logger({Entity}Service.name);
 
   constructor(
     private readonly repository: {Entity}sRepository,
@@ -189,7 +200,7 @@ export class {Entity}sService {
 
 ```typescript
 @Injectable()
-export class UsersService {
+export class UserService {
   constructor(private readonly repository: UsersRepository) {}
 
   // Service: 도메인 목적 (getByIdWithTenants)
@@ -214,7 +225,7 @@ import { Tenant } from "@cocrepo/prisma";
 import { ClsService } from "nestjs-cls";
 
 @Injectable()
-export class CategoriesService {
+export class CategoryService {
   constructor(
     private readonly repository: CategoriesRepository,
     private readonly cls: ClsService,
@@ -241,7 +252,7 @@ export class CategoriesService {
 
 ```typescript
 @Injectable()
-export class OrdersService {
+export class OrderService {
   constructor(private readonly repository: OrdersRepository) {}
 
   async changeItemQuantity(orderId: string, itemId: string, quantity: number) {
@@ -265,8 +276,9 @@ export class OrdersService {
 - [ ] ClsService 주입 (Context 필요시)
 - [ ] **Prisma 쿼리 없음 확인**
 - [ ] **DTO 타입 사용 금지 확인**
-  - [ ] `CreateXxxDto`, `UpdateXxxDto` 등 DTO import 없음
+- [ ] `CreateXxxDto`, `UpdateXxxDto` 등 DTO import 없음
 - [ ] Aggregate Root 메서드와 Repository만 사용
+- [ ] 서비스가 `@schema-owner`가 아닌 모델을 대상 도메인으로 갖지 않는지 확인
 - [ ] 비즈니스 로직만 Service에 작성
 - [ ] Child entity 쓰기 로직이 Aggregate Root를 통해 수행되는지 확인
 - [ ] 메서드명이 도메인 목적을 표현
@@ -290,7 +302,7 @@ export class OrdersService {
 ### 파일 위치
 
 ```
-packages/be-service/src/{entity}.service.ts
+packages/be-service/src/{entity}.service/index.ts
 ```
 
 ### 네이밍 규칙 상세

@@ -6,7 +6,14 @@ import {
 	useGetProgramById,
 } from "@cocrepo/api/core/timelines";
 
-import { DateTimeCell, Page, PageTitleBar, Section } from "@cocrepo/ui";
+import {
+	DateTimeCell,
+	Page,
+	PageSurface,
+	PageTitleBar,
+	Section,
+	SectionSurface,
+} from "@cocrepo/ui";
 import {
 	addToast,
 	Button,
@@ -125,64 +132,72 @@ function ProgramDetailPageClient({
 				/>
 			}
 		>
-			<Section top={<PageTitleBar level={2} title="기본 정보" />}>
-				<div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-					<div>
-						<label className="text-sm text-default-500">프로그램 이름</label>
-						<p className="mt-1">{program?.name ?? "-"}</p>
-					</div>
-					<div>
-						<label className="text-sm text-default-500">루틴</label>
-						<div className="mt-1">
-							{program?.routine ? (
-								<Link
-									href={`/routines/${program.routine.id}` as Route}
-									className="text-primary hover:underline"
-								>
-									{program.routine.name}
-								</Link>
-							) : (
-								"-"
-							)}
+			<PageSurface>
+				<SectionSurface>
+					<Section top={<PageTitleBar level={2} title="기본 정보" />}>
+						<div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+							<div>
+								<label className="text-sm text-default-500">
+									프로그램 이름
+								</label>
+								<p className="mt-1">{program?.name ?? "-"}</p>
+							</div>
+							<div>
+								<label className="text-sm text-default-500">루틴</label>
+								<div className="mt-1">
+									{program?.routine ? (
+										<Link
+											href={`/routines/${program.routine.id}` as Route}
+											className="text-primary hover:underline"
+										>
+											{program.routine.name}
+										</Link>
+									) : (
+										"-"
+									)}
+								</div>
+							</div>
+							<div>
+								<label className="text-sm text-default-500">강사</label>
+								<p className="mt-1">{program?.instructorId ?? "-"}</p>
+							</div>
+							<div>
+								<label className="text-sm text-default-500">정원</label>
+								<p className="mt-1">
+									{program?.capacity != null ? `${program.capacity}명` : "-"}
+								</p>
+							</div>
+							<div>
+								<label className="text-sm text-default-500">난이도</label>
+								<p className="mt-1">{program?.level ?? "-"}</p>
+							</div>
+							<div>
+								<label className="text-sm text-default-500">세션</label>
+								<div className="mt-1">
+									<Link
+										href={
+											`/timelines/${timelineId}/sessions/${sessionId}` as Route
+										}
+										className="text-primary hover:underline"
+									>
+										{program?.session?.name ?? "-"}
+									</Link>
+								</div>
+							</div>
+							<div>
+								<label className="text-sm text-default-500">등록일</label>
+								<div className="mt-1">
+									{program?.createdAt ? (
+										<DateTimeCell value={program.createdAt} />
+									) : (
+										"-"
+									)}
+								</div>
+							</div>
 						</div>
-					</div>
-					<div>
-						<label className="text-sm text-default-500">강사</label>
-						<p className="mt-1">{program?.instructorId ?? "-"}</p>
-					</div>
-					<div>
-						<label className="text-sm text-default-500">정원</label>
-						<p className="mt-1">
-							{program?.capacity != null ? `${program.capacity}명` : "-"}
-						</p>
-					</div>
-					<div>
-						<label className="text-sm text-default-500">난이도</label>
-						<p className="mt-1">{program?.level ?? "-"}</p>
-					</div>
-					<div>
-						<label className="text-sm text-default-500">세션</label>
-						<div className="mt-1">
-							<Link
-								href={`/timelines/${timelineId}/sessions/${sessionId}` as Route}
-								className="text-primary hover:underline"
-							>
-								{program?.session?.name ?? "-"}
-							</Link>
-						</div>
-					</div>
-					<div>
-						<label className="text-sm text-default-500">등록일</label>
-						<div className="mt-1">
-							{program?.createdAt ? (
-								<DateTimeCell value={program.createdAt} />
-							) : (
-								"-"
-							)}
-						</div>
-					</div>
-				</div>
-			</Section>
+					</Section>
+				</SectionSurface>
+			</PageSurface>
 			<Modal isOpen={deleteModal.isOpen} onClose={deleteModal.onClose}>
 				<ModalContent>
 					<ModalHeader>프로그램 삭제</ModalHeader>

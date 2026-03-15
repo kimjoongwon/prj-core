@@ -11,8 +11,10 @@ import {
 	DateTimeCell,
 	DefaultCell,
 	Page,
+	PageSurface,
 	PageTitleBar,
 	Section,
+	SectionSurface,
 	VStack,
 } from "@cocrepo/ui";
 import {
@@ -62,64 +64,66 @@ function getGroupColor(
  */
 function SubjectInfoSection({ subject }: { subject: SubjectDto }) {
 	return (
-		<Section top={<PageTitleBar level={2} title="기본 정보" />}>
-			<div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-				<div>
-					<div className="mb-1 text-sm text-default-500">식별자</div>
-					<div className="font-medium">{subject.name}</div>
-				</div>
-				<div>
-					<div className="mb-1 text-sm text-default-500">표시명</div>
-					<div className="font-medium">
-						<DefaultCell value={subject.displayName || "-"} />
-					</div>
-				</div>
-				<div>
-					<div className="mb-1 text-sm text-default-500">아이콘</div>
-					<div className="font-medium">
-						<DefaultCell value={subject.icon || "-"} />
-					</div>
-				</div>
-				<div>
-					<div className="mb-1 text-sm text-default-500">분류</div>
+		<SectionSurface>
+			<Section top={<PageTitleBar level={2} title="기본 정보" />}>
+				<div className="grid grid-cols-1 gap-4 md:grid-cols-2">
 					<div>
-						{subject.group ? (
-							<Chip
-								color={getGroupColor(subject.group)}
-								size="sm"
-								variant="flat"
-							>
-								{subject.group}
-							</Chip>
-						) : (
-							<DefaultCell value="-" />
-						)}
+						<div className="mb-1 text-sm text-default-500">식별자</div>
+						<div className="font-medium">{subject.name}</div>
 					</div>
-				</div>
-				<div>
-					<div className="mb-1 text-sm text-default-500">정렬 순서</div>
-					<div className="font-medium">{subject.order}</div>
-				</div>
-				<div>
-					<div className="mb-1 text-sm text-default-500">시스템</div>
 					<div>
-						<BooleanCell value={subject.isSystem} />
+						<div className="mb-1 text-sm text-default-500">표시명</div>
+						<div className="font-medium">
+							<DefaultCell value={subject.displayName || "-"} />
+						</div>
+					</div>
+					<div>
+						<div className="mb-1 text-sm text-default-500">아이콘</div>
+						<div className="font-medium">
+							<DefaultCell value={subject.icon || "-"} />
+						</div>
+					</div>
+					<div>
+						<div className="mb-1 text-sm text-default-500">분류</div>
+						<div>
+							{subject.group ? (
+								<Chip
+									color={getGroupColor(subject.group)}
+									size="sm"
+									variant="flat"
+								>
+									{subject.group}
+								</Chip>
+							) : (
+								<DefaultCell value="-" />
+							)}
+						</div>
+					</div>
+					<div>
+						<div className="mb-1 text-sm text-default-500">정렬 순서</div>
+						<div className="font-medium">{subject.order}</div>
+					</div>
+					<div>
+						<div className="mb-1 text-sm text-default-500">시스템</div>
+						<div>
+							<BooleanCell value={subject.isSystem} />
+						</div>
+					</div>
+					<div>
+						<div className="mb-1 text-sm text-default-500">생성일</div>
+						<div className="font-medium">
+							<DateTimeCell value={subject.createdAt} />
+						</div>
+					</div>
+					<div>
+						<div className="mb-1 text-sm text-default-500">수정일</div>
+						<div className="font-medium">
+							<DateTimeCell value={subject.updatedAt || "-"} />
+						</div>
 					</div>
 				</div>
-				<div>
-					<div className="mb-1 text-sm text-default-500">생성일</div>
-					<div className="font-medium">
-						<DateTimeCell value={subject.createdAt} />
-					</div>
-				</div>
-				<div>
-					<div className="mb-1 text-sm text-default-500">수정일</div>
-					<div className="font-medium">
-						<DateTimeCell value={subject.updatedAt || "-"} />
-					</div>
-				</div>
-			</div>
-		</Section>
+			</Section>
+		</SectionSurface>
 	);
 }
 
@@ -199,9 +203,11 @@ function SubjectFieldsSection({
 	}
 
 	return (
-		<Section top={<PageTitleBar level={2} title="필드 목록" />}>
-			{content}
-		</Section>
+		<SectionSurface>
+			<Section top={<PageTitleBar level={2} title="필드 목록" />}>
+				{content}
+			</Section>
+		</SectionSurface>
 	);
 }
 
@@ -218,11 +224,13 @@ function SubjectDetailPageClient({ subjectId }: SubjectDetailPageClientProps) {
 			<Page
 				top={<PageTitleBar title="Subject 상세" description="로딩 중..." />}
 			>
-				<Section>
-					<div className="flex items-center justify-center p-8">
-						<Spinner size="lg" />
-					</div>
-				</Section>
+				<PageSurface>
+					<SectionSurface>
+						<div className="flex items-center justify-center p-8">
+							<Spinner size="lg" />
+						</div>
+					</SectionSurface>
+				</PageSurface>
 			</Page>
 		);
 	}
@@ -237,17 +245,21 @@ function SubjectDetailPageClient({ subjectId }: SubjectDetailPageClientProps) {
 
 		return (
 			<Page top={pageHeader}>
-				<div className="flex flex-col items-center justify-center gap-4 p-8">
-					<p className="text-default-500">Subject를 찾을 수 없습니다.</p>
-					<Button
-						as={Link}
-						href={"/subjects" as Route}
-						variant="flat"
-						startContent={<ArrowLeft className="size-4" />}
-					>
-						목록으로
-					</Button>
-				</div>
+				<PageSurface>
+					<SectionSurface>
+						<div className="flex flex-col items-center justify-center gap-4 p-8">
+							<p className="text-default-500">Subject를 찾을 수 없습니다.</p>
+							<Button
+								as={Link}
+								href={"/subjects" as Route}
+								variant="flat"
+								startContent={<ArrowLeft className="size-4" />}
+							>
+								목록으로
+							</Button>
+						</div>
+					</SectionSurface>
+				</PageSurface>
 			</Page>
 		);
 	}
@@ -271,10 +283,12 @@ function SubjectDetailPageClient({ subjectId }: SubjectDetailPageClientProps) {
 
 	return (
 		<Page top={pageHeader}>
-			<VStack gap={4}>
-				<SubjectInfoSection subject={subject} />
-				<SubjectFieldsSection subjectId={subjectId} group={subject.group} />
-			</VStack>
+			<PageSurface>
+				<VStack gap={4}>
+					<SubjectInfoSection subject={subject} />
+					<SubjectFieldsSection subjectId={subjectId} group={subject.group} />
+				</VStack>
+			</PageSurface>
 		</Page>
 	);
 }

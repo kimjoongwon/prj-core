@@ -6,7 +6,14 @@ import {
 	useUpdateSession,
 } from "@cocrepo/api/core/timelines";
 
-import { Page, PageTitleBar, Section, VStack } from "@cocrepo/ui";
+import {
+	Page,
+	PageSurface,
+	PageTitleBar,
+	Section,
+	SectionSurface,
+	VStack,
+} from "@cocrepo/ui";
 import {
 	addToast,
 	Button,
@@ -263,158 +270,168 @@ function SessionEditPageClient({
 				/>
 			}
 		>
-			<VStack gap={4}>
-				<Section top={<PageTitleBar level={2} title="기본 정보" />}>
-					<VStack gap={4}>
-						<Input
-							label="세션명"
-							labelPlacement="outside"
-							placeholder="세션명을 입력하세요."
-							value={state.name}
-							onValueChange={onChangeName}
-							isRequired
-							isInvalid={!!state.errors.name}
-							errorMessage={state.errors.name}
-						/>
-						<Select
-							label="세션 유형"
-							labelPlacement="outside"
-							selectedKeys={[state.type]}
-							onSelectionChange={(keys) => {
-								const val = Array.from(keys)[0] as string;
-								if (val) onChangeType(val);
-							}}
-							isRequired
+			<PageSurface>
+				<VStack gap={4}>
+					<SectionSurface>
+						<Section top={<PageTitleBar level={2} title="기본 정보" />}>
+							<VStack gap={4}>
+								<Input
+									label="세션명"
+									labelPlacement="outside"
+									placeholder="세션명을 입력하세요."
+									value={state.name}
+									onValueChange={onChangeName}
+									isRequired
+									isInvalid={!!state.errors.name}
+									errorMessage={state.errors.name}
+								/>
+								<Select
+									label="세션 유형"
+									labelPlacement="outside"
+									selectedKeys={[state.type]}
+									onSelectionChange={(keys) => {
+										const val = Array.from(keys)[0] as string;
+										if (val) onChangeType(val);
+									}}
+									isRequired
+								>
+									{SESSION_TYPE_OPTIONS.map((opt) => (
+										<SelectItem key={opt.value}>{opt.label}</SelectItem>
+									))}
+								</Select>
+								<p className="text-sm text-default-500">
+									{SESSION_TYPE_DESCRIPTIONS[state.type]}
+								</p>
+								<Textarea
+									label="설명"
+									labelPlacement="outside"
+									placeholder="세션에 대한 부가 설명을 입력하세요."
+									value={state.description}
+									onValueChange={onChangeDescription}
+									maxLength={500}
+									description={`${state.description.length} / 500`}
+								/>
+							</VStack>
+						</Section>
+					</SectionSurface>
+
+					<SectionSurface>
+						<Section top={<PageTitleBar level={2} title="일정 설정" />}>
+							<VStack gap={4}>
+								{state.type === "ONE_TIME" && (
+									<Input
+										label="일시"
+										labelPlacement="outside"
+										type="datetime-local"
+										value={state.startDateTime}
+										onValueChange={onChangeStartDateTime}
+										isRequired
+										isInvalid={!!state.errors.startDateTime}
+										errorMessage={state.errors.startDateTime}
+									/>
+								)}
+								{state.type === "ONE_TIME_RANGE" && (
+									<>
+										<Input
+											label="시작 일시"
+											labelPlacement="outside"
+											type="datetime-local"
+											value={state.startDateTime}
+											onValueChange={onChangeStartDateTime}
+											isRequired
+											isInvalid={!!state.errors.startDateTime}
+											errorMessage={state.errors.startDateTime}
+										/>
+										<Input
+											label="종료 일시"
+											labelPlacement="outside"
+											type="datetime-local"
+											value={state.endDateTime}
+											onValueChange={onChangeEndDateTime}
+											isRequired
+											isInvalid={!!state.errors.endDateTime}
+											errorMessage={state.errors.endDateTime}
+										/>
+									</>
+								)}
+								{state.type === "RECURRING" && (
+									<>
+										<div className="flex gap-4">
+											<Select
+												label="반복 요일"
+												labelPlacement="outside"
+												selectedKeys={
+													state.recurringDayOfWeek
+														? [state.recurringDayOfWeek]
+														: []
+												}
+												onSelectionChange={(keys) => {
+													const val = Array.from(keys)[0] as string;
+													if (val) onChangeDayOfWeek(val);
+												}}
+												isRequired
+												isInvalid={!!state.errors.recurringDayOfWeek}
+												errorMessage={state.errors.recurringDayOfWeek}
+												className="flex-1"
+											>
+												{DAY_OF_WEEK_OPTIONS.map((opt) => (
+													<SelectItem key={opt.value ?? ""}>
+														{opt.label}
+													</SelectItem>
+												))}
+											</Select>
+											<Select
+												label="반복 주기"
+												labelPlacement="outside"
+												selectedKeys={
+													state.repeatCycleType ? [state.repeatCycleType] : []
+												}
+												onSelectionChange={(keys) => {
+													const val = Array.from(keys)[0] as string;
+													if (val) onChangeCycleType(val);
+												}}
+												isRequired
+												isInvalid={!!state.errors.repeatCycleType}
+												errorMessage={state.errors.repeatCycleType}
+												className="flex-1"
+											>
+												{CYCLE_TYPE_OPTIONS.map((opt) => (
+													<SelectItem key={opt.value}>{opt.label}</SelectItem>
+												))}
+											</Select>
+										</div>
+										<Input
+											label="시작 일시 (선택)"
+											labelPlacement="outside"
+											type="datetime-local"
+											value={state.startDateTime}
+											onValueChange={onChangeStartDateTime}
+										/>
+										<Input
+											label="종료 일시 (선택)"
+											labelPlacement="outside"
+											type="datetime-local"
+											value={state.endDateTime}
+											onValueChange={onChangeEndDateTime}
+										/>
+									</>
+								)}
+							</VStack>
+						</Section>
+					</SectionSurface>
+
+					<div className="flex justify-end">
+						<Button
+							color="primary"
+							onPress={onClickSubmitButton}
+							isLoading={isPending}
+							isDisabled={!hasChanged || !state.name.trim()}
 						>
-							{SESSION_TYPE_OPTIONS.map((opt) => (
-								<SelectItem key={opt.value}>{opt.label}</SelectItem>
-							))}
-						</Select>
-						<p className="text-sm text-default-500">
-							{SESSION_TYPE_DESCRIPTIONS[state.type]}
-						</p>
-						<Textarea
-							label="설명"
-							labelPlacement="outside"
-							placeholder="세션에 대한 부가 설명을 입력하세요."
-							value={state.description}
-							onValueChange={onChangeDescription}
-							maxLength={500}
-							description={`${state.description.length} / 500`}
-						/>
-					</VStack>
-				</Section>
-
-				<Section top={<PageTitleBar level={2} title="일정 설정" />}>
-					<VStack gap={4}>
-						{state.type === "ONE_TIME" && (
-							<Input
-								label="일시"
-								labelPlacement="outside"
-								type="datetime-local"
-								value={state.startDateTime}
-								onValueChange={onChangeStartDateTime}
-								isRequired
-								isInvalid={!!state.errors.startDateTime}
-								errorMessage={state.errors.startDateTime}
-							/>
-						)}
-						{state.type === "ONE_TIME_RANGE" && (
-							<>
-								<Input
-									label="시작 일시"
-									labelPlacement="outside"
-									type="datetime-local"
-									value={state.startDateTime}
-									onValueChange={onChangeStartDateTime}
-									isRequired
-									isInvalid={!!state.errors.startDateTime}
-									errorMessage={state.errors.startDateTime}
-								/>
-								<Input
-									label="종료 일시"
-									labelPlacement="outside"
-									type="datetime-local"
-									value={state.endDateTime}
-									onValueChange={onChangeEndDateTime}
-									isRequired
-									isInvalid={!!state.errors.endDateTime}
-									errorMessage={state.errors.endDateTime}
-								/>
-							</>
-						)}
-						{state.type === "RECURRING" && (
-							<>
-								<div className="flex gap-4">
-									<Select
-										label="반복 요일"
-										labelPlacement="outside"
-										selectedKeys={
-											state.recurringDayOfWeek ? [state.recurringDayOfWeek] : []
-										}
-										onSelectionChange={(keys) => {
-											const val = Array.from(keys)[0] as string;
-											if (val) onChangeDayOfWeek(val);
-										}}
-										isRequired
-										isInvalid={!!state.errors.recurringDayOfWeek}
-										errorMessage={state.errors.recurringDayOfWeek}
-										className="flex-1"
-									>
-										{DAY_OF_WEEK_OPTIONS.map((opt) => (
-											<SelectItem key={opt.value ?? ""}>{opt.label}</SelectItem>
-										))}
-									</Select>
-									<Select
-										label="반복 주기"
-										labelPlacement="outside"
-										selectedKeys={
-											state.repeatCycleType ? [state.repeatCycleType] : []
-										}
-										onSelectionChange={(keys) => {
-											const val = Array.from(keys)[0] as string;
-											if (val) onChangeCycleType(val);
-										}}
-										isRequired
-										isInvalid={!!state.errors.repeatCycleType}
-										errorMessage={state.errors.repeatCycleType}
-										className="flex-1"
-									>
-										{CYCLE_TYPE_OPTIONS.map((opt) => (
-											<SelectItem key={opt.value}>{opt.label}</SelectItem>
-										))}
-									</Select>
-								</div>
-								<Input
-									label="시작 일시 (선택)"
-									labelPlacement="outside"
-									type="datetime-local"
-									value={state.startDateTime}
-									onValueChange={onChangeStartDateTime}
-								/>
-								<Input
-									label="종료 일시 (선택)"
-									labelPlacement="outside"
-									type="datetime-local"
-									value={state.endDateTime}
-									onValueChange={onChangeEndDateTime}
-								/>
-							</>
-						)}
-					</VStack>
-				</Section>
-
-				<div className="flex justify-end">
-					<Button
-						color="primary"
-						onPress={onClickSubmitButton}
-						isLoading={isPending}
-						isDisabled={!hasChanged || !state.name.trim()}
-					>
-						수정
-					</Button>
-				</div>
-			</VStack>
+							수정
+						</Button>
+					</div>
+				</VStack>
+			</PageSurface>
 		</Page>
 	);
 }

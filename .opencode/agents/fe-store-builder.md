@@ -224,6 +224,7 @@ interface PersistedData {
 export class PersistStore {
   spaceId: string | null = null;
   accessTokenExpiresAt: number | null = null;
+  isHydrated = false;
 
   constructor(private config: PersistStoreConfig) {
     // config는 observable에서 제외
@@ -231,11 +232,11 @@ export class PersistStore {
       config: false,
     });
 
-    this.hydrate();
     this.setupAutoSave();
   }
 
-  private hydrate(): void {
+  hydrateFromStorage(): void {
+    if (this.isHydrated) return;
     if (typeof window === "undefined") return;
 
     const stored = localStorage.getItem(this.config.storageKey);
@@ -248,6 +249,8 @@ export class PersistStore {
         // 파싱 실패 시 무시
       }
     }
+
+    this.isHydrated = true;
   }
 
   private setupAutoSave(): void {
@@ -273,6 +276,13 @@ export class PersistStore {
   }
 }
 ```
+
+### 5.3.1 SSR / Hydration 하드 규칙
+
+- Store constructor는 순수해야 하며 `localStorage`, `sessionStorage`, `window`, `document`를 읽지 않습니다.
+- 브라우저 저장소 hydrate는 Provider 또는 Hook의 `useEffect`에서 명시적으로 호출합니다.
+- `isHydrated` 같은 플래그로 guard가 hydration 완료 후에만 동작하도록 설계합니다.
+- 첫 렌더 구조를 바꾸는 상태는 서버가 아는 snapshot이 아니면 render 단계에서 사용하지 않습니다.
 
 ### 5.4 Domain Model (접미사 없음)
 

@@ -106,6 +106,16 @@ Page + PageTitleBar
         └── Section(top = PageTitleBar level=2 "스토리지 정보")
 ```
 
+## Surface / Elevation
+
+| 항목 | 결정 |
+|------|------|
+| PageSurface owner | `apps/admin/web/src/app/(admin)/assets/[assetId]/_client.tsx` |
+| PageSurface 역할 | 상세 본문 전체를 raised 레이어로 묶고 상태 분기(loading/notFound/ready)를 동일한 배경 위에서 유지 |
+| SectionSurface 대상 | 기본 정보, 폴더 이동, 스토리지 정보 등 상세 블록 |
+| SectionSurface padding | 기본 패딩 유지. 각 `Section` 본문이 카드형 블록으로 구분되어야 함 |
+| 예외 | 없음. 상세 블록 제목은 `Section(top=PageTitleBar)`가 담당하지만 배경/elevation은 `SectionSurface`가 소유 |
+
 ### 컴포넌트 구성
 
 | 영역 | 컴포넌트 | 기획서 |
@@ -266,6 +276,8 @@ apps/admin/web/src/app/(admin)/assets/[assetId]/
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-03-15 | Surface owner와 elevation 규칙을 문서화 | codex |
+| 2026-03-15 | assets 상세 spec에 `PageSurface`/`SectionSurface` ownership과 elevation 결정을 명시 | codex |
 | 2026-03-15 | assets 상세를 no-SSR boundary로 전환해 server prefetch 단계의 URL/Space 헤더 오류를 제거 | codex |
 | 2026-02-22 | 초기 생성 | orch-requirement |
 | 2026-02-26 | Stage 1 정합화: 경로 메타데이터를 apps/admin/web 기준으로 수정 | orch-requirement |

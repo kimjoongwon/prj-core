@@ -9,8 +9,9 @@ function capturePageErrors(page: Page) {
 	return pageErrors;
 }
 
-const SYSTEM_SPACE_ID = (process.env.E2E_SYSTEM_SPACE_ID ??
-	"61ddca20-1752-466e-b4da-879ebdbe54e3").toLowerCase();
+const SYSTEM_SPACE_ID = (
+	process.env.E2E_SYSTEM_SPACE_ID ?? "61ddca20-1752-466e-b4da-879ebdbe54e3"
+).toLowerCase();
 
 const expectSpaceHeader = (route: Route) => {
 	const header = route.request().headers()["x-space-id"];
@@ -24,19 +25,19 @@ test.describe("에셋 목록 페이지", () => {
 			const pageErrors = capturePageErrors(page);
 
 			// Given: 에셋 목록/폴더 API 모킹
-		await page.route("**/api/v1/assets**", async (route) => {
-			expectSpaceHeader(route);
-			await route.fulfill({
-				status: 200,
-				contentType: "application/json",
-				body: JSON.stringify({ data: [], meta: { total: 0 } }),
+			await page.route("**/api/v1/assets**", async (route) => {
+				expectSpaceHeader(route);
+				await route.fulfill({
+					status: 200,
+					contentType: "application/json",
+					body: JSON.stringify({ data: [], meta: { total: 0 } }),
+				});
 			});
-		});
-		await page.route("**/api/v1/folders**", async (route) => {
-			expectSpaceHeader(route);
-			await route.fulfill({
-				status: 200,
-				contentType: "application/json",
+			await page.route("**/api/v1/folders**", async (route) => {
+				expectSpaceHeader(route);
+				await route.fulfill({
+					status: 200,
+					contentType: "application/json",
 					body: JSON.stringify({ data: [] }),
 				});
 			});
@@ -67,10 +68,10 @@ test.describe("에셋 목록 페이지", () => {
 			const TEST_NAME = "e2e-asset-list-to-detail.png";
 
 			// Given: 목록/상세/폴더 API 모킹
-		await page.route("**/api/v1/assets**", async (route) => {
-			expectSpaceHeader(route);
-			const url = route.request().url();
-			if (url.endsWith(`/api/v1/assets/${MOCK_ASSET_ID}`)) {
+			await page.route("**/api/v1/assets**", async (route) => {
+				expectSpaceHeader(route);
+				const url = route.request().url();
+				if (url.endsWith(`/api/v1/assets/${MOCK_ASSET_ID}`)) {
 					await route.fulfill({
 						status: 200,
 						contentType: "application/json",
@@ -125,9 +126,9 @@ test.describe("에셋 목록 페이지", () => {
 				});
 			});
 
-		await page.route("**/api/v1/folders**", async (route) => {
-			expectSpaceHeader(route);
-			await route.fulfill({
+			await page.route("**/api/v1/folders**", async (route) => {
+				expectSpaceHeader(route);
+				await route.fulfill({
 					status: 200,
 					contentType: "application/json",
 					body: JSON.stringify({

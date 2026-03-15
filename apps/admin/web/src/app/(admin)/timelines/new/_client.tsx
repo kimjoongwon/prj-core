@@ -1,7 +1,14 @@
 "use client";
 import { useCreateTimeline } from "@cocrepo/api/core/timelines";
 
-import { Page, PageTitleBar, Section, VStack } from "@cocrepo/ui";
+import {
+	Page,
+	PageSurface,
+	PageTitleBar,
+	Section,
+	SectionSurface,
+	VStack,
+} from "@cocrepo/ui";
 import { addToast, Button, Input, Textarea } from "@heroui/react";
 import { observer, useLocalObservable } from "mobx-react-lite";
 import type { Route } from "next";
@@ -99,41 +106,45 @@ function TimelineNewPageClient() {
 				/>
 			}
 		>
-			<Section>
-				<VStack gap={4}>
-					<Input
-						label="타임라인명"
-						labelPlacement="outside"
-						placeholder="예: 2025년 가을 시즌, 10월 1주차"
-						value={state.name}
-						onValueChange={onChangeName}
-						isRequired
-						isInvalid={!!state.errors.name}
-						errorMessage={state.errors.name}
-					/>
-					<Textarea
-						label="설명"
-						labelPlacement="outside"
-						placeholder="타임라인에 대한 부가 설명을 입력하세요."
-						value={state.description}
-						onValueChange={onChangeDescription}
-						maxLength={500}
-						description={`${state.description.length} / 500`}
-						isInvalid={!!state.errors.description}
-						errorMessage={state.errors.description}
-					/>
-					<div className="flex justify-end">
-						<Button
-							color="primary"
-							onPress={onClickSubmitButton}
-							isLoading={isPending}
-							isDisabled={!state.name.trim()}
-						>
-							등록
-						</Button>
-					</div>
-				</VStack>
-			</Section>
+			<PageSurface>
+				<SectionSurface>
+					<Section>
+						<VStack gap={4}>
+							<Input
+								label="타임라인명"
+								labelPlacement="outside"
+								placeholder="예: 2025년 가을 시즌, 10월 1주차"
+								value={state.name}
+								onValueChange={onChangeName}
+								isRequired
+								isInvalid={!!state.errors.name}
+								errorMessage={state.errors.name}
+							/>
+							<Textarea
+								label="설명"
+								labelPlacement="outside"
+								placeholder="타임라인에 대한 부가 설명을 입력하세요."
+								value={state.description}
+								onValueChange={onChangeDescription}
+								maxLength={500}
+								description={`${state.description.length} / 500`}
+								isInvalid={!!state.errors.description}
+								errorMessage={state.errors.description}
+							/>
+							<div className="flex justify-end">
+								<Button
+									color="primary"
+									onPress={onClickSubmitButton}
+									isLoading={isPending}
+									isDisabled={!state.name.trim()}
+								>
+									등록
+								</Button>
+							</div>
+						</VStack>
+					</Section>
+				</SectionSurface>
+			</PageSurface>
 		</Page>
 	);
 }

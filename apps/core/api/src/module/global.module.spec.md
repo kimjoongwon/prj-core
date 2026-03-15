@@ -30,5 +30,6 @@
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-03-15 | 전역 config loader를 `aws` 대신 `objectStorage` namespace 기준으로 교체 | codex |
 | 2026-03-03 | 누락된 sidecar spec 신규 생성 | codex |
 | 2026-03-11 | `globalModules`를 공통 생성기 `createGlobalModules` 호출로 변경 | codex |

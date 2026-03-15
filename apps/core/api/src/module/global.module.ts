@@ -2,8 +2,8 @@ import { createGlobalModules } from "@cocrepo/be-common";
 import {
 	appConfig,
 	authConfig,
-	awsConfig,
 	corsConfig,
+	objectStorageConfig,
 	redisConfig,
 	smtpConfig,
 } from "../config";
@@ -15,7 +15,7 @@ export const globalModules = createGlobalModules({
 		appConfig,
 		corsConfig,
 		smtpConfig,
-		awsConfig,
+		objectStorageConfig,
 		redisConfig,
 	],
 	developmentLoggerMessageFormat: "🕒 {time} {level} - {msg}",

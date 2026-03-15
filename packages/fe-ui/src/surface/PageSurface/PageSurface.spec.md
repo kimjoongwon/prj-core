@@ -23,6 +23,7 @@ interface PageSurfaceProps {
 ## 동작
 
 - 이 컴포넌트는 `Surface`에 페이지용 기본 엘리베이션(`raised`)만 부여합니다.
+- 기본 패딩은 `Surface`의 공통 기본값 `md (p-6)`를 그대로 사용합니다.
 - `Page`의 `top`, `leftAside`, `rightAside`, `footer` 같은 구조 슬롯은 소유하지 않습니다.
 - 페이지 제목/설명/액션은 `Page`의 `top` 슬롯에서 `PageTitleBar`로 계속 표현합니다.
 
@@ -30,5 +31,6 @@ interface PageSurfaceProps {
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-03-15 | 공통 Surface 기본 패딩 `md (p-6)`를 명시적으로 공유하도록 정리 | codex |
 | 2026-03-15 | layout 책임을 제거하고 raised 표면 프리셋 전용 래퍼로 단순화 | codex |
 | 2026-03-15 | PageSurface 신규 생성 | codex |

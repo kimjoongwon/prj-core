@@ -1,15 +1,15 @@
 import appConfig from "./app.config";
 import authConfig from "./auth.config";
-import awsConfig from "./aws.config";
 import corsConfig from "./cors.config";
+import objectStorageConfig from "./object-storage.config";
 import redisConfig from "./redis.config";
 import smtpConfig from "./smtp.config";
 
 export {
-	awsConfig,
 	appConfig,
 	authConfig,
 	corsConfig,
+	objectStorageConfig,
 	redisConfig,
 	smtpConfig,
 };
@@ -18,13 +18,14 @@ export type {
 	AppConfig,
 	AppleConfig,
 	AuthConfig,
-	AwsConfig,
 	CorsConfig,
 	DatabaseConfig,
 	FacebookConfig,
 	FileConfig,
 	GoogleConfig,
 	MailConfig,
+	ObjectStorageConfig,
+	ObjectStorageProvider,
 	RedisConfig,
 	SMTPConfig,
 	TwitterConfig,

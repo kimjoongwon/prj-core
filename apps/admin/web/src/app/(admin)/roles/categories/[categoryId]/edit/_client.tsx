@@ -1,7 +1,13 @@
 "use client";
 import { customInstance } from "@cocrepo/api/core/client";
 
-import { Page, PageTitleBar, Section, VStack } from "@cocrepo/ui";
+import {
+	Page,
+	PageSurface,
+	PageTitleBar,
+	SectionSurface,
+	VStack,
+} from "@cocrepo/ui";
 import { Button, Input, Select, SelectItem } from "@heroui/react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { ArrowLeft, Save } from "lucide-react";
@@ -153,9 +159,13 @@ function RoleCategoryEditPageClient({
 					<PageTitleBar title="역할 카테고리 수정" description="로딩 중..." />
 				}
 			>
-				<div className="flex items-center justify-center p-8">
-					<span className="text-default-500">로딩 중...</span>
-				</div>
+				<PageSurface>
+					<SectionSurface>
+						<div className="flex items-center justify-center p-8">
+							<span className="text-default-500">로딩 중...</span>
+						</div>
+					</SectionSurface>
+				</PageSurface>
 			</Page>
 		);
 	}
@@ -170,12 +180,16 @@ function RoleCategoryEditPageClient({
 					/>
 				}
 			>
-				<div className="flex flex-col items-center justify-center gap-4 p-8">
-					<p className="text-default-500">카테고리를 찾을 수 없습니다.</p>
-					<Button variant="flat" onPress={onClickListButton}>
-						목록으로
-					</Button>
-				</div>
+				<PageSurface>
+					<SectionSurface>
+						<div className="flex flex-col items-center justify-center gap-4 p-8">
+							<p className="text-default-500">카테고리를 찾을 수 없습니다.</p>
+							<Button variant="flat" onPress={onClickListButton}>
+								목록으로
+							</Button>
+						</div>
+					</SectionSurface>
+				</PageSurface>
 			</Page>
 		);
 	}
@@ -198,50 +212,52 @@ function RoleCategoryEditPageClient({
 				/>
 			}
 		>
-			<VStack gap={4}>
-				<Section>
-					<div className="space-y-6 p-6">
-						<Input
-							label="카테고리명"
-							value={state.name}
-							onValueChange={(value) => {
-								state.name = value.toUpperCase();
-							}}
-							isInvalid={!!state.errors.name}
-							errorMessage={state.errors.name}
-							isRequired
-							maxLength={50}
-						/>
-						<Select
-							label="상위 카테고리"
-							placeholder="없음 (최상위)"
-							selectedKeys={state.parentId ? [state.parentId] : []}
-							onSelectionChange={(keys) => {
-								const selected = Array.from(keys)[0] as string;
-								state.parentId = selected || "";
-							}}
-							description="상위 카테고리를 변경합니다. 순환 참조는 서버에서 검증됩니다."
-						>
-							{categoryOptions.map((option) => (
-								<SelectItem key={option.id}>{option.name}</SelectItem>
-							))}
-						</Select>
-						<div className="flex justify-end gap-2 pt-4">
-							<Button variant="flat" onPress={onClickBackButton}>
-								취소
-							</Button>
-							<Button
-								color="primary"
-								startContent={<Save className="h-4 w-4" />}
-								onPress={onClickSubmitButton}
-								isLoading={isPending}
+			<PageSurface>
+				<VStack gap={4}>
+					<SectionSurface>
+						<div className="space-y-6">
+							<Input
+								label="카테고리명"
+								value={state.name}
+								onValueChange={(value) => {
+									state.name = value.toUpperCase();
+								}}
+								isInvalid={!!state.errors.name}
+								errorMessage={state.errors.name}
+								isRequired
+								maxLength={50}
+							/>
+							<Select
+								label="상위 카테고리"
+								placeholder="없음 (최상위)"
+								selectedKeys={state.parentId ? [state.parentId] : []}
+								onSelectionChange={(keys) => {
+									const selected = Array.from(keys)[0] as string;
+									state.parentId = selected || "";
+								}}
+								description="상위 카테고리를 변경합니다. 순환 참조는 서버에서 검증됩니다."
 							>
-								저장
-							</Button>
+								{categoryOptions.map((option) => (
+									<SelectItem key={option.id}>{option.name}</SelectItem>
+								))}
+							</Select>
+							<div className="flex justify-end gap-2 pt-4">
+								<Button variant="flat" onPress={onClickBackButton}>
+									취소
+								</Button>
+								<Button
+									color="primary"
+									startContent={<Save className="h-4 w-4" />}
+									onPress={onClickSubmitButton}
+									isLoading={isPending}
+								>
+									저장
+								</Button>
+							</div>
 						</div>
-					</div>
-				</Section>
-			</VStack>
+					</SectionSurface>
+				</VStack>
+			</PageSurface>
 		</Page>
 	);
 }

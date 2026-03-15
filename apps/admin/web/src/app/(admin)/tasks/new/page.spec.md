@@ -135,10 +135,25 @@ UI에서는 Exercise 폼 입력만 필요합니다.
 - [ ] _client.tsx (클라이언트 컴포넌트, observer 래핑)
 - [ ] hooks/useHandlers.ts (저장, 파일업로드 핸들러)
 
+
+## Surface / Elevation
+
+| 항목 | 결정 |
+|------|------|
+| PageSurface owner | `apps/admin/web/src/app/(admin)/tasks/new/_client.tsx` |
+|------|------|
+| PageSurface 역할 | 페이지 헤더 아래 본문 전체를 raised surface로 묶습니다. |
+| SectionSurface 대상 | 본문 섹션, 폼, 표, 로딩/빈 상태 블록 |
+| SectionSurface padding | DataGrid/테이블은 필요 시 `padding="none"`, 그 외 기본 패딩 |
+| 예외 | 없음. `Layout`/`Page`/`Section` 슬롯 배치만으로는 surface가 생기지 않으므로 page 또는 `_client.tsx`가 owner를 명시합니다. |
+
 ## 변경 이력
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-03-15 | Surface ownership과 elevation 결정을 문서화 | codex |
+| 2026-03-15 | Surface ownership/elevation 규칙과 PageSurface/SectionSurface 적용 기준을 문서화 | codex |
+| 2026-03-15 | Surface owner와 elevation 규칙을 문서화 | codex |
 | 2026-03-11 | aggregate root 기준 spaces/tasks 경로와 API 계약으로 전환 | codex |
 | 2026-02-19 | 초기 생성 | req-screen-planner |
 | 2026-03-03 | Scaffold 제거 및 페이지 헤더 영역/섹션 영역 용어 정리 | codex |

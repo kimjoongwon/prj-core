@@ -14,7 +14,10 @@
 │ 템플릿 등록                                                       │
 │ 새로운 메시지 템플릿을 등록합니다.                                 │
 ├─────────────────────────────────────────────────────────────────┤
-│ TemplateForm (mode="create")                                      │
+│ PageSurface                                                        │
+│ ┌───────────────────────────────────────────────────────────────┐ │
+│ │ SectionSurface                                                │ │
+│ │ TemplateForm (mode="create")                                  │ │
 │                                                                   │
 │  유형                                                             │
 │  ● EMAIL   ○ SMS   ○ PUSH                                        │
@@ -53,7 +56,8 @@
 │  │ name     │ 사용자 이름  │ 사용자       │  ●   │ [삭제]│       │
 │  └──────────┴──────────────┴──────────────┴──────┴──────┘        │
 │                                                                   │
-│                                        [취소]  [등록]            │
+│                                        [취소]  [등록]            │ │
+│ └───────────────────────────────────────────────────────────────┘ │
 └─────────────────────────────────────────────────────────────────┘
 ```
 
@@ -72,7 +76,17 @@
 |------|----------|------|
 | 페이지 래퍼 | `Page` | 페이지 콘텐츠 구조 배치 |
 | 페이지 헤더 | `PageTitleBar` | title="템플릿 등록", description="새로운 메시지 템플릿을 등록합니다." |
-| 폼 영역 | `TemplateForm` (mode="create") | 공통 템플릿 폼 컴포넌트 |
+| 본문 표면 | `PageSurface` | 등록 폼 전체를 layout 배경에서 분리하는 raised 표면 |
+| 폼 블록 | `SectionSurface` > `TemplateForm` (mode="create") | 등록 폼을 elevated 표면 위에서 렌더링 |
+
+## Surface / Elevation
+
+| 항목 | 결정 |
+|------|------|
+| `PageSurface` owner | `apps/admin/web/src/app/(admin)/templates/new/_client.tsx` 본문 |
+| `SectionSurface` 대상 블록 | `TemplateForm` 전체 |
+| `padding="none"` 적용 위치 | 적용하지 않음. `TemplateForm` 외곽에 기본 패딩을 유지 |
+| flat 예외 여부와 근거 | flat 예외 없음. 등록 폼은 단일 작업 블록이므로 page 배경과 분리된 표면이 필요 |
 
 ## 폼 필드
 
@@ -138,6 +152,7 @@
 - 프리페칭 없음 (등록은 데이터 로드 불필요)
 - 성공 시 응답의 `response.data.id`로 상세 페이지 이동
 - `TemplateForm`은 `@cocrepo/ui` 공통 컴포넌트 (등록/수정 공유)
+- `TemplateForm`은 입력 블록을 렌더링하지만 Surface를 소유하지 않으므로 페이지에서 `PageSurface`, `SectionSurface`를 제공
 
 ## 구현 체크리스트
 
@@ -148,6 +163,7 @@
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-03-15 | 등록 페이지 본문을 `PageSurface > SectionSurface`로 감싸 폼 Surface ownership을 명시 | codex |
 | 2026-02-18 | 초기 생성 (역기획) | req-reverse-engineer |
 | 2026-02-19 | 디자인 목업 추가 | req-reverse-engineer |
 | 2026-03-03 | Scaffold 제거 및 페이지 헤더 영역/섹션 영역 용어 정리 | codex |

@@ -18,6 +18,7 @@
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-03-15 | `AwsService` export를 제거하고 `ObjectStorageService`/`S3CompatibleStorageService` export를 추가 | codex |
 | 2026-03-03 | 누락된 sidecar spec 신규 생성 | codex |
 | 2026-03-13 | frontend 런타임 미사용 translation CRUD service export를 제거 | codex |
 | 2026-03-15 | admin assets 복구를 위해 AssetService/FolderService export를 추가 | codex |

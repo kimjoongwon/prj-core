@@ -13,7 +13,8 @@
 | 항목 | 설명 |
 |------|------|
 | AppConfig | 공개 계약 요소 |
-| AwsConfig | 공개 계약 요소 |
+| ObjectStorageProvider | 공개 계약 요소 |
+| ObjectStorageConfig | 공개 계약 요소 |
 | SMTPConfig | 공개 계약 요소 |
 | CorsConfig | 공개 계약 요소 |
 | AppleConfig | 공개 계약 요소 |
@@ -29,4 +30,6 @@
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-03-15 | object storage 설정 타입에 선택 필드 `apiToken`을 추가하고 env 키 규약을 access/secret key 기준으로 정리 | codex |
+| 2026-03-15 | AWS 전용 설정 타입을 S3-compatible `ObjectStorageConfig`/`ObjectStorageProvider`로 교체 | codex |
 | 2026-03-03 | 누락된 sidecar spec 신규 생성 | codex |

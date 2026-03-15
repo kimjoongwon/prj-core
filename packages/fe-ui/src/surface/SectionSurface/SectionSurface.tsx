@@ -1,5 +1,10 @@
 import type { ElevationLevel } from "../../design-system/theme/tokens";
-import { Surface, type SurfacePadding, type SurfaceProps } from "../Surface";
+import {
+	DEFAULT_SURFACE_PADDING,
+	Surface,
+	type SurfacePadding,
+	type SurfaceProps,
+} from "../Surface/Surface";
 
 export interface SectionSurfaceProps
 	extends Pick<SurfaceProps, "children" | "className"> {
@@ -18,7 +23,7 @@ export const SectionSurface = ({
 	children,
 	className,
 	elevation = "elevated",
-	padding = "md",
+	padding = DEFAULT_SURFACE_PADDING,
 }: SectionSurfaceProps) => {
 	return (
 		<Surface className={className} elevation={elevation} padding={padding}>

@@ -32,6 +32,8 @@ developer_instructions = '''
    - 금지 예: `flex items-start justify-between ...` + `<h1>/<h2>` 조합을 페이지 파일에 직접 작성
    - 필수 패턴: `Page + PageTitleBar`, `Section`
    - 표현 레이어가 필요하면 `PageSurface`, `SectionSurface`를 내부 wrapper로만 사용
+8. `Layout`, `Page`, `Section`, `MetaDataGrid` 슬롯에 컴포넌트를 배치했다고 Surface가 자동 생성된다고 가정 금지
+   - `page.spec.md`의 `Surface / Elevation` 결정을 구현하고, `PageSurface` owner는 반드시 `page.tsx` 또는 `_client.tsx`에 둔다
 
 ---
 
@@ -114,6 +116,13 @@ apps/<app>/src/app/<route>/
   - 상세/생성/수정이지만 skeleton 허용 가능
   - 초기 옵션/목록 데이터를 클라이언트에서 조회 가능
 
+### 2.7 Surface / Elevation 구현 규칙
+
+- `page.spec.md`의 `Surface / Elevation` 섹션을 페이지 구현의 입력 계약으로 사용합니다.
+- 검색/필터/DataGrid/폼/카드처럼 시각적으로 묶이는 블록은 spec에 정의된 `PageSurface`, `SectionSurface`, `padding` 결정을 그대로 반영합니다.
+- `Layout`, `Page`, `Section`, `MetaDataGrid`는 구조 슬롯만 제공하며, background/elevation을 자동 생성하지 않습니다.
+- flat 예외는 spec에 근거가 있을 때만 허용합니다. 근거가 없으면 누락으로 간주하고 Surface를 복구합니다.
+
 ---
 
 ## 3. import / 위치 규칙
@@ -164,12 +173,13 @@ apps/<app>/src/app/<route>/
 ## 5. 구현 절차 (반드시 순서 준수)
 
 1. 대상 페이지와 import 경로를 스캔
-2. CSR 기본 적용 여부와 SSR 예외 필요 여부를 먼저 판별
-3. 규칙 위반 목록을 파일/라인으로 확정
-4. 코드 수정
-5. 대응 `.spec.md` 수정 + 변경 이력 추가
-6. 정적 검증/타입체크
-7. 결과를 규칙별로 보고
+2. `page.spec.md`의 `Surface / Elevation` 결정과 flat 예외 근거를 먼저 확인
+3. CSR 기본 적용 여부와 SSR 예외 필요 여부를 먼저 판별
+4. 규칙 위반 목록을 파일/라인으로 확정
+5. 코드 수정
+6. 대응 `.spec.md` 수정 + 변경 이력 추가
+7. 정적 검증/타입체크
+8. 결과를 규칙별로 보고
 
 ---
 
@@ -178,6 +188,9 @@ apps/<app>/src/app/<route>/
 아래 결과가 모두 0건이어야 완료 가능:
 
 ```bash
+# 0) page spec에 Surface / Elevation 기록 존재
+rg -n '^## Surface / Elevation$|PageSurface owner|flat 예외 여부와 근거' [Page경로]/page.spec.md
+
 # 1) client/page 파일에서 useMemo/useCallback 금지
 CLIENT_FILES=$(rg --files | rg '(^|/)_client\\.tsx$|(^|/)client\\.tsx$|(^|/)page\\.tsx$')
 echo "$CLIENT_FILES" | xargs rg -n '\\buseMemo\\b|\\buseCallback\\b'
@@ -205,9 +218,10 @@ echo "$CLIENT_FILES" | xargs rg -n 'flex items-start justify-between gap-(3|4)'
 작업 결과에는 반드시 아래를 포함한다.
 
 1. 수정 파일 목록
-2. 규칙별 위반 해결 내역
-3. 실행한 검증 명령과 결과
-4. 남은 리스크(없으면 없음 명시)
+2. Surface / Elevation 결정 반영 내역
+3. 규칙별 위반 해결 내역
+4. 실행한 검증 명령과 결과
+5. 남은 리스크(없으면 없음 명시)
 
 ---
 
@@ -247,9 +261,13 @@ const PageContent = observer(() => {
 
 return (
   <Page top={<PageTitleBar title="..." description="..." actions={...} />}>
-    <Suspense fallback={<...Skeleton />}>
-      <PageContent />
-    </Suspense>
+    <PageSurface>
+      <SectionSurface>
+        <Suspense fallback={<...Skeleton />}>
+          <PageContent />
+        </Suspense>
+      </SectionSurface>
+    </PageSurface>
   </Page>
 );
 ```

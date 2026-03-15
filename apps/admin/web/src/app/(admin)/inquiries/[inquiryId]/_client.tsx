@@ -28,9 +28,11 @@ import {
 	InquiryMetaPanel,
 	InquiryWebSocketProvider,
 	Page,
+	PageSurface,
 	PageTitleBar,
 	ParticipantList,
 	RealtimeChatPanel,
+	SectionSurface,
 	SLATracker,
 	VStack,
 } from "@cocrepo/ui";
@@ -525,203 +527,220 @@ function InquiryDetailPageClient({ inquiryId }: Props) {
 					/>
 				}
 			>
-				<VStack gap={6}>
-					<HStack gap={4} className="lg:flex-row flex-col">
-						<div className="lg:w-2/3 w-full">
-							<InquiryInfoCard
-								inquiryNumber={inquiry?.inquiryNumber ?? inquiryId}
-								title={inquiry?.title ?? "문의 정보 로딩 중"}
-								channel={
-									CHANNEL_LABELS[inquiry?.channel ?? ""] ??
-									inquiry?.channel ??
-									"-"
-								}
-								createdAt={createdAt}
-								sentiment={{
-									type: sentimentType,
-									label: inquiry?.sentiment?.sentiment ?? "NEUTRAL",
-									confidence: Math.round(
-										(inquiry?.sentiment?.confidence ?? 0.7) * 100,
-									),
-								}}
-								onlineParticipants={onlineParticipantNames}
-							/>
-						</div>
-						<div className="lg:w-1/3 w-full">
-							<InquiryMetaPanel
-								status={inquiry?.status ?? "NEW"}
-								statusOptions={statusOptions}
-								onStatusChange={handlers.onChangeStatus}
-								priority={inquiry?.priority ?? "NORMAL"}
-								priorityOptions={priorityOptions}
-								onPriorityChange={handlers.onChangePriority}
-								category={inquiry?.category ?? "GENERAL"}
-								categoryOptions={categoryOptions}
-								onCategoryChange={handlers.onChangeCategory}
-								assigneeId={inquiry?.assigneeId}
-								assigneeName={inquiry?.assigneeId}
-								assigneeOptions={assigneeOptions}
-								onAssigneeChange={handlers.onChangeAssignee}
-								tags={[]}
-								onTagAdd={handlers.onTagAdd}
-								onTagRemove={handlers.onTagRemove}
-							/>
-						</div>
-					</HStack>
-					<HStack gap={4} className="lg:flex-row flex-col">
-						<div className="lg:w-1/2 w-full">
-							<CustomerInfoCard
-								name={inquiry?.customerId ?? "고객"}
-								email=""
-								phone=""
-								joinedAt={undefined}
-								inquiryCount={undefined}
-							/>
-						</div>
-						<div className="lg:w-1/2 w-full">
-							<ParticipantList
-								participants={participantListItems.map((participant) => ({
-									...participant,
-									isTyping:
-										inquiryState.typingUsers.has(participant.name) ||
-										participant.isTyping,
-								}))}
-							/>
-						</div>
-					</HStack>
-					{updateFormBootstrap && (
-						<>
-							<AiForm
-								formState={metaState.toFormObject()}
-								fieldMeta={updateFormBootstrap.fieldMeta}
-								aiSchemas={updateFormBootstrap.aiSchemas}
-								ui={updateFormBootstrap.ui}
-								options={updateFormOptions}
-								onFill={async (input) => {
-									const result = await fillMetaMutation.mutateAsync({
-										data: {
-											mode: "UPDATE",
-											schemaKey: input.schemaKey,
-											selectedPaths: input.selectedPaths,
-											currentObject: input.currentObject,
-											userPrompt: input.userPrompt,
-										},
-									});
-									return (
-										result?.data ?? {
-											patches: [],
+				<PageSurface>
+					<VStack gap={4}>
+						<SectionSurface>
+							<HStack gap={4} className="flex-col lg:flex-row">
+								<div className="w-full lg:w-2/3">
+									<InquiryInfoCard
+										inquiryNumber={inquiry?.inquiryNumber ?? inquiryId}
+										title={inquiry?.title ?? "문의 정보 로딩 중"}
+										channel={
+											CHANNEL_LABELS[inquiry?.channel ?? ""] ??
+											inquiry?.channel ??
+											"-"
 										}
-									);
-								}}
-								applyPatch={(patches) => {
-									metaState.applyPatch(patches);
-								}}
-								disabled={
-									updateMetaMutation.isPending || fillMetaMutation.isPending
-								}
-							/>
-							<section>
-								<VStack gap={4}>
-									<Input
-										label="문의 제목"
-										labelPlacement="outside"
-										value={metaState.title}
-										onValueChange={(value) => {
-											metaState.title = value;
+										createdAt={createdAt}
+										sentiment={{
+											type: sentimentType,
+											label: inquiry?.sentiment?.sentiment ?? "NEUTRAL",
+											confidence: Math.round(
+												(inquiry?.sentiment?.confidence ?? 0.7) * 100,
+											),
 										}}
-										isInvalid={Boolean(metaState.error)}
-										errorMessage={metaState.error}
+										onlineParticipants={onlineParticipantNames}
 									/>
-									<HStack gap={4} className="md:flex-row flex-col">
-										<Select
-											label="카테고리"
-											placeholder="카테고리 선택"
-											selectedKeys={
-												metaState.category ? [metaState.category] : []
-											}
-											onSelectionChange={(keys) => {
-												const selectedValue = getSelectedValue(keys);
-												if (selectedValue) {
-													metaState.category = selectedValue as InquiryCategory;
-												}
+								</div>
+								<div className="w-full lg:w-1/3">
+									<InquiryMetaPanel
+										status={inquiry?.status ?? "NEW"}
+										statusOptions={statusOptions}
+										onStatusChange={handlers.onChangeStatus}
+										priority={inquiry?.priority ?? "NORMAL"}
+										priorityOptions={priorityOptions}
+										onPriorityChange={handlers.onChangePriority}
+										category={inquiry?.category ?? "GENERAL"}
+										categoryOptions={categoryOptions}
+										onCategoryChange={handlers.onChangeCategory}
+										assigneeId={inquiry?.assigneeId}
+										assigneeName={inquiry?.assigneeId}
+										assigneeOptions={assigneeOptions}
+										onAssigneeChange={handlers.onChangeAssignee}
+										tags={[]}
+										onTagAdd={handlers.onTagAdd}
+										onTagRemove={handlers.onTagRemove}
+									/>
+								</div>
+							</HStack>
+						</SectionSurface>
+						<SectionSurface>
+							<HStack gap={4} className="flex-col lg:flex-row">
+								<div className="w-full lg:w-1/2">
+									<CustomerInfoCard
+										name={inquiry?.customerId ?? "고객"}
+										email=""
+										phone=""
+										joinedAt={undefined}
+										inquiryCount={undefined}
+									/>
+								</div>
+								<div className="w-full lg:w-1/2">
+									<ParticipantList
+										participants={participantListItems.map((participant) => ({
+											...participant,
+											isTyping:
+												inquiryState.typingUsers.has(participant.name) ||
+												participant.isTyping,
+										}))}
+									/>
+								</div>
+							</HStack>
+						</SectionSurface>
+						{updateFormBootstrap && (
+							<>
+								<SectionSurface>
+									<VStack gap={4}>
+										<PageTitleBar level={2} title="AI 메타 추천" />
+										<AiForm
+											formState={metaState.toFormObject()}
+											fieldMeta={updateFormBootstrap.fieldMeta}
+											aiSchemas={updateFormBootstrap.aiSchemas}
+											ui={updateFormBootstrap.ui}
+											options={updateFormOptions}
+											onFill={async (input) => {
+												const result = await fillMetaMutation.mutateAsync({
+													data: {
+														mode: "UPDATE",
+														schemaKey: input.schemaKey,
+														selectedPaths: input.selectedPaths,
+														currentObject: input.currentObject,
+														userPrompt: input.userPrompt,
+													},
+												});
+												return (
+													result?.data ?? {
+														patches: [],
+													}
+												);
 											}}
-										>
-											{editCategoryOptions.map((option) => (
-												<SelectItem key={option.value}>
-													{option.label}
-												</SelectItem>
-											))}
-										</Select>
-										<Select
-											label="우선순위"
-											placeholder="우선순위 선택"
-											selectedKeys={
-												metaState.priority ? [metaState.priority] : []
-											}
-											onSelectionChange={(keys) => {
-												const selectedValue = getSelectedValue(keys);
-												if (selectedValue) {
-													metaState.priority = selectedValue as InquiryPriority;
-												}
+											applyPatch={(patches) => {
+												metaState.applyPatch(patches);
 											}}
-										>
-											{editPriorityOptions.map((option) => (
-												<SelectItem key={option.value}>
-													{option.label}
-												</SelectItem>
-											))}
-										</Select>
-									</HStack>
-									<div className="flex justify-end">
-										<Button
-											color="primary"
-											onPress={onSubmitMeta}
-											isLoading={updateMetaMutation.isPending}
-										>
-											메타 저장
-										</Button>
-									</div>
-								</VStack>
-							</section>
-						</>
-					)}
-					<section>
-						<RealtimeChatPanel
-							inquiryId={inquiryId}
-							messages={
-								inquiryState.messages.length > 0
-									? inquiryState.messages
-									: messages
-							}
-							typingUserNames={inquiryState.typingUserNames}
-							isWebSocketConnected={inquiryState.isWebSocketConnected}
-							isTyping={inquiryState.isTyping}
-							onSendMessage={onSendInquiryMessage}
-							onTypingStart={handlers.onTypingStart}
-							onTypingStop={handlers.onTypingStop}
-							onReconnect={onClickReconnectButton}
-							onGenerateDraft={handlers.onClickGenerateDraft}
-							onSearchKnowledge={handlers.onClickSearchKnowledge}
-							isGeneratingDraft={inquiryState.isGeneratingDraft}
-						/>
-					</section>
-					<SLATracker
-						firstResponse={{
-							label: "첫 응답",
-							elapsedMinutes: toMinutes(createdAt, firstResponseEnd),
-							targetMinutes: firstResponseTargetMinutes,
-							isCompleted: Boolean(inquiry?.firstResponseAt),
-							isBreached: Boolean(inquiry?.isSlaResponseBreached),
-						}}
-						resolution={{
-							label: "해결",
-							elapsedMinutes: toMinutes(createdAt, resolutionEnd),
-							targetMinutes: resolutionTargetMinutes,
-							isCompleted: Boolean(inquiry?.resolvedAt),
-							isBreached: Boolean(inquiry?.isSlaResolveBreached),
-						}}
-					/>
-				</VStack>
+											disabled={
+												updateMetaMutation.isPending ||
+												fillMetaMutation.isPending
+											}
+										/>
+									</VStack>
+								</SectionSurface>
+								<SectionSurface>
+									<VStack gap={4}>
+										<PageTitleBar level={2} title="메타 수정" />
+										<Input
+											label="문의 제목"
+											labelPlacement="outside"
+											value={metaState.title}
+											onValueChange={(value) => {
+												metaState.title = value;
+											}}
+											isInvalid={Boolean(metaState.error)}
+											errorMessage={metaState.error}
+										/>
+										<HStack gap={4} className="flex-col md:flex-row">
+											<Select
+												label="카테고리"
+												placeholder="카테고리 선택"
+												selectedKeys={
+													metaState.category ? [metaState.category] : []
+												}
+												onSelectionChange={(keys) => {
+													const selectedValue = getSelectedValue(keys);
+													if (selectedValue) {
+														metaState.category =
+															selectedValue as InquiryCategory;
+													}
+												}}
+											>
+												{editCategoryOptions.map((option) => (
+													<SelectItem key={option.value}>
+														{option.label}
+													</SelectItem>
+												))}
+											</Select>
+											<Select
+												label="우선순위"
+												placeholder="우선순위 선택"
+												selectedKeys={
+													metaState.priority ? [metaState.priority] : []
+												}
+												onSelectionChange={(keys) => {
+													const selectedValue = getSelectedValue(keys);
+													if (selectedValue) {
+														metaState.priority =
+															selectedValue as InquiryPriority;
+													}
+												}}
+											>
+												{editPriorityOptions.map((option) => (
+													<SelectItem key={option.value}>
+														{option.label}
+													</SelectItem>
+												))}
+											</Select>
+										</HStack>
+										<div className="flex justify-end">
+											<Button
+												color="primary"
+												onPress={onSubmitMeta}
+												isLoading={updateMetaMutation.isPending}
+											>
+												메타 저장
+											</Button>
+										</div>
+									</VStack>
+								</SectionSurface>
+							</>
+						)}
+						<SectionSurface>
+							<RealtimeChatPanel
+								inquiryId={inquiryId}
+								messages={
+									inquiryState.messages.length > 0
+										? inquiryState.messages
+										: messages
+								}
+								typingUserNames={inquiryState.typingUserNames}
+								isWebSocketConnected={inquiryState.isWebSocketConnected}
+								isTyping={inquiryState.isTyping}
+								onSendMessage={onSendInquiryMessage}
+								onTypingStart={handlers.onTypingStart}
+								onTypingStop={handlers.onTypingStop}
+								onReconnect={onClickReconnectButton}
+								onGenerateDraft={handlers.onClickGenerateDraft}
+								onSearchKnowledge={handlers.onClickSearchKnowledge}
+								isGeneratingDraft={inquiryState.isGeneratingDraft}
+							/>
+						</SectionSurface>
+						<SectionSurface>
+							<SLATracker
+								firstResponse={{
+									label: "첫 응답",
+									elapsedMinutes: toMinutes(createdAt, firstResponseEnd),
+									targetMinutes: firstResponseTargetMinutes,
+									isCompleted: Boolean(inquiry?.firstResponseAt),
+									isBreached: Boolean(inquiry?.isSlaResponseBreached),
+								}}
+								resolution={{
+									label: "해결",
+									elapsedMinutes: toMinutes(createdAt, resolutionEnd),
+									targetMinutes: resolutionTargetMinutes,
+									isCompleted: Boolean(inquiry?.resolvedAt),
+									isBreached: Boolean(inquiry?.isSlaResolveBreached),
+								}}
+							/>
+						</SectionSurface>
+					</VStack>
+				</PageSurface>
 				<ConfirmModal
 					isOpen={state.deleteModalOpen}
 					onClose={() => {
