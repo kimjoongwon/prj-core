@@ -11,7 +11,7 @@ const Placeholder = () => (
 );
 
 const meta: Meta<typeof Placeholder> = {
-	title: "Auto/Widget/VariableInputForm/VariableInputForm",
+	title: "Widget/VariableInputForm",
 	component: Placeholder,
 	parameters: {
 		layout: "padded",

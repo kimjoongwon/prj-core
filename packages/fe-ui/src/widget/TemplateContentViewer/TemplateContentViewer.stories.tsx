@@ -11,7 +11,7 @@ const Placeholder = () => (
 );
 
 const meta: Meta<typeof Placeholder> = {
-	title: "Auto/Widget/TemplateContentViewer/TemplateContentViewer",
+	title: "Widget/TemplateContentViewer",
 	component: Placeholder,
 	parameters: {
 		layout: "padded",

@@ -12,7 +12,7 @@ const Placeholder = () => (
 );
 
 const meta: Meta<typeof Placeholder> = {
-	title: "Auto/Ui/feedback/WebSocketConnectionStatus/WebSocketConnectionStatus",
+	title: "Ui/feedback/WebSocketConnectionStatus",
 	component: Placeholder,
 	parameters: {
 		layout: "padded",

@@ -11,7 +11,7 @@ const Placeholder = () => (
 );
 
 const meta: Meta<typeof Placeholder> = {
-	title: "Auto/Widget/AuthCard/AuthCardHeader",
+	title: "Widget/AuthCard/AuthCardHeader",
 	component: Placeholder,
 	parameters: {
 		layout: "padded",

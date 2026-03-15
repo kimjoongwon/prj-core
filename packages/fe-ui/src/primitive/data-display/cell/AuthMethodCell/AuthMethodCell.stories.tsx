@@ -11,7 +11,7 @@ const Placeholder = () => (
 );
 
 const meta: Meta<typeof Placeholder> = {
-	title: "Auto/Ui/data-display/cell/AuthMethodCell/AuthMethodCell",
+	title: "Ui/data-display/cell/AuthMethodCell",
 	component: Placeholder,
 	parameters: {
 		layout: "padded",

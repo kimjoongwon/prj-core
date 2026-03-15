@@ -11,7 +11,7 @@ const Placeholder = () => (
 );
 
 const meta: Meta<typeof Placeholder> = {
-	title: "Auto/Widget/ability/AbilityMatrixView/AbilityMatrixView",
+	title: "Widget/ability/AbilityMatrixView",
 	component: Placeholder,
 	parameters: {
 		layout: "padded",

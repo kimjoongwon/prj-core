@@ -12,7 +12,7 @@
 
 - 기존 `widget`과 `widgets`로 분산되어 있던 공개 컴포넌트를 `widgets`에서 단일 re-export 합니다.
 - 기존 보조 그룹(`ability`, `common`, `role`, `user`)과 일반 widget 컴포넌트를 함께 노출합니다.
-- layout의 `Section`과 이름이 충돌하는 `Section` widget은 배럴 export에서 계속 제외합니다.
+- 표현 전용 섹션 래퍼는 widget이 아니라 `surface/SectionSurface`에서 관리합니다.
 - `DiagramViewer`, `MarkdownEditor`, `TimelineChart`처럼 번들이 무거운 widget은 이 배럴에서 제외하고 `widget-heavy` 서브패스로 분리합니다.
 
 ## 의존성
@@ -29,6 +29,7 @@
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-03-15 | 시각 섹션 래퍼 책임을 `surface/SectionSurface`로 이관하고 `widget/Section` 설명을 제거 | codex |
 | 2026-03-11 | `DiagramViewer`/`MarkdownEditor`/`TimelineChart`를 루트 widget 배럴에서 제거하고 `widget-heavy`로 분리 | codex |
 | 2026-03-06 | 폴더 네이밍을 단수형(feature/input/layout/hook/style/type/util/widget/cell)으로 통일 | codex |
 | 2026-03-06 | src/components 레이어를 제거하고 경로를 src/* 기준으로 상향 | codex |

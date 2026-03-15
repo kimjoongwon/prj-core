@@ -11,7 +11,7 @@ const Placeholder = () => (
 );
 
 const meta: Meta<typeof Placeholder> = {
-	title: "Auto/Features/idp/IdpConsent/IdpConsent",
+	title: "Features/idp/IdpConsent",
 	component: Placeholder,
 	parameters: {
 		layout: "padded",

@@ -11,7 +11,7 @@ const Placeholder = () => (
 );
 
 const meta: Meta<typeof Placeholder> = {
-	title: "Auto/Ui/feedback/StatusBadge/StatusBadge",
+	title: "Ui/feedback/StatusBadge",
 	component: Placeholder,
 	parameters: {
 		layout: "padded",

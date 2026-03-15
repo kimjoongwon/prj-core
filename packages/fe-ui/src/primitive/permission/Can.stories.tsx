@@ -9,7 +9,7 @@ const Placeholder = () => (
 );
 
 const meta: Meta<typeof Placeholder> = {
-	title: "Auto/Ui/permission/Can",
+	title: "Ui/permission/Can",
 	component: Placeholder,
 	parameters: {
 		layout: "padded",

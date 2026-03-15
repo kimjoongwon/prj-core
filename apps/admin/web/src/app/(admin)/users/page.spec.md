@@ -41,7 +41,7 @@
 
 ## 사용자 시나리오
 
-1. 관리자가 `/users` 경로에 진입하면 SSR Prefetch를 통해 이용자 목록이 미리 로드된다.
+1. 관리자가 `/users` 경로에 진입하면 CSR + Suspense로 이용자 목록을 조회한다.
 2. 상단에 통계 카드(전체/활성/비활성 이용자 수)가 표시된다.
 3. 검색창에서 이름, 이메일, 전화번호로 통합 검색할 수 있다 (300ms 디바운스).
 4. 테이블에서 이용자 목록을 확인하고 페이지네이션으로 이동할 수 있다.
@@ -50,10 +50,10 @@
 
 | 영역 | 컴포넌트 | 설명 |
 |------|----------|------|
-| 페이지 래퍼 | `Page` | 페이지 콘텐츠 구조 배치 |
-| 페이지 헤더 | `PageTitleBar` | title="이용자 목록", description="시스템에 등록된 이용자를 조회합니다." |
-| 통계 영역 | `Section` > `StatsCard` x3 | 전체(Users)/활성(UserCheck)/비활성(UserMinus) 이용자 수 |
-| 목록 영역 | `Section` > `MetaDataGrid` | 이용자 목록 테이블 |
+| 페이지 구조 | `Page` + `PageTitleBar` | 페이지 콘텐츠 구조와 제목/설명 배치 |
+| 페이지 표면 | `PageSurface` | 본문 전체를 감싸는 raised 표현 레이어 |
+| 통계 영역 | `SectionSurface` > `StatsCard` x3 | 전체(Users)/활성(UserCheck)/비활성(UserMinus) 이용자 수 |
+| 목록 영역 | `SectionSurface` > `MetaDataGrid` | 이용자 목록 테이블 (`padding="none"`) |
 
 ## 컬럼 정의
 
@@ -76,7 +76,7 @@
 
 | 상태 | 설명 | UI |
 |------|------|-----|
-| 로딩 | 데이터 조회 중 | MetaDataGrid 스켈레톤 |
+| 로딩 | suspense 조회 중 | 통계 카드 + MetaDataGrid 로딩 상태 |
 | 데이터 표시 | 이용자 목록 표시 | 통계 카드 + 테이블 |
 | 빈 목록 | 조회 결과 없음 | "조회된 이용자가 없습니다." 메시지 |
 | 검색 결과 없음 | 검색 후 결과 없음 | 빈 목록 메시지 |
@@ -85,8 +85,7 @@
 
 | 시점 | API | 설명 |
 |------|-----|------|
-| SSR Prefetch | `prefetchGetUsersQuery({ take: 20, skip: 0 })` | 서버 사이드 프리페칭 (쿠키 포워딩) |
-| 클라이언트 렌더 | `useGetUsers({ take, skip, name })` | nuqs URL 상태 기반 조회 |
+| 클라이언트 렌더 | `useGetUsersSuspense({ take, skip, name })` | nuqs URL 상태 기반 CSR + Suspense 조회 |
 
 ## 응답 데이터 구조
 
@@ -116,9 +115,9 @@
 
 ## 구현 체크리스트
 
-- [x] page.tsx (서버 컴포넌트, Prefetch + HydrationBoundary)
-- [x] _client.tsx (클라이언트 컴포넌트, MetaDataGrid + StatsCard)
-- [x] _prefetch.ts (prefetchGetUsersQuery)
+- [x] page.tsx (클라이언트 컴포넌트, `Suspense` + MetaDataGrid + StatsCard)
+- [x] `_client.tsx` 없음 (CSR 기본 패턴)
+- [x] `_prefetch.ts` 없음 (SSR 예외 아님)
 
 ## 상위 기획서
 
@@ -128,6 +127,8 @@
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-03-15 | 이용자 목록 화면에 `Page + PageTitleBar` 구조는 유지하고 `PageSurface/SectionSurface` 표현 레이어를 추가 | codex |
+| 2026-03-15 | 이용자 목록을 CSR + Suspense 단일 `page.tsx` 패턴으로 전환하고 `_client.tsx`, `_prefetch.ts`를 제거 | codex |
 | 2026-02-18 | 초기 생성 (역기획) | req-reverse-engineer |
 | 2026-02-19 | 디자인 목업 추가 | req-reverse-engineer |
 | 2026-03-03 | Scaffold 제거 및 페이지 헤더 영역/섹션 영역 용어 정리 | codex |

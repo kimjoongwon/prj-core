@@ -12,7 +12,7 @@ const Placeholder = () => (
 );
 
 const meta: Meta<typeof Placeholder> = {
-	title: "Auto/Widget/group/GroupRoleListSection/GroupRoleListSection",
+	title: "Widget/group/GroupRoleListSection",
 	component: Placeholder,
 	parameters: {
 		layout: "padded",

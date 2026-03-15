@@ -1,31 +1,23 @@
-import {
-	dehydrate,
-	HydrationBoundary,
-	QueryClient,
-} from "@tanstack/react-query";
-import { cookies } from "next/headers";
-import AssetDetailPageClient from "./_client";
-import { prefetchAssetDetailData } from "./_prefetch";
+"use client";
 
-interface AssetDetailPageProps {
-	params: Promise<{ assetId: string }>;
-}
+import { Page, PageSurface, PageTitleBar, SectionSurface } from "@cocrepo/ui";
+import dynamic from "next/dynamic";
+import { useParams } from "next/navigation";
 
-/**
- * 에셋 상세 페이지 - 서버 컴포넌트
- */
-export default async function AssetDetailPage({
-	params,
-}: AssetDetailPageProps) {
-	const { assetId } = await params;
-	const queryClient = new QueryClient();
-	const cookieStore = await cookies();
+const AssetDetailPageClient = dynamic(() => import("./_client"), {
+	ssr: false,
+	loading: () => (
+		<Page top={<PageTitleBar title="에셋 상세" description="로딩 중..." />}>
+			<PageSurface>
+				<SectionSurface>
+					<div className="h-32" />
+				</SectionSurface>
+			</PageSurface>
+		</Page>
+	),
+});
 
-	await prefetchAssetDetailData(queryClient, cookieStore, assetId);
-
-	return (
-		<HydrationBoundary state={dehydrate(queryClient)}>
-			<AssetDetailPageClient assetId={assetId} />
-		</HydrationBoundary>
-	);
+export default function AssetDetailPage() {
+	const params = useParams<{ assetId: string }>();
+	return <AssetDetailPageClient assetId={params.assetId} />;
 }

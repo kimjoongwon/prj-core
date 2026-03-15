@@ -1,22 +1,24 @@
 "use client";
+
 import {
 	type AssetDto,
 	type AssetKind,
 	type AssetStatus,
 	type FolderDto,
 	getGetAssetsQueryKey,
-	useGetAssets,
-	useGetFolders,
+	useGetAssetsSuspense,
+	useGetFoldersSuspense,
 	useRemoveAsset,
 } from "@cocrepo/api/assets";
-
 import type { InputConfig, MetaDataGridColumnConfig } from "@cocrepo/type";
 import {
 	DateTimeCell,
+	EmptyState,
 	MetaDataGrid,
 	Page,
+	PageSurface,
 	PageTitleBar,
-	Section,
+	SectionSurface,
 	useMetaDataGridQueryStates,
 } from "@cocrepo/ui";
 import { addToast, Button, Chip } from "@heroui/react";
@@ -25,6 +27,8 @@ import { Trash2, Upload } from "lucide-react";
 import { observer } from "mobx-react-lite";
 import type { Route } from "next";
 import Link from "next/link";
+import { Suspense } from "react";
+import { usePersistStore } from "@/stores/AppStoreProvider";
 
 const leftInputs: InputConfig[] = [
 	{
@@ -115,82 +119,32 @@ const formatBytes = (bytes: number) => {
 	return `${value.toFixed(exponent === 0 ? 0 : 1)} ${units[exponent]}`;
 };
 
-/**
- * 에셋 목록 페이지 - 클라이언트 컴포넌트
- */
-function AssetsPageClient() {
-	const queryClient = useQueryClient();
-	const [queryStates, setQueryStates] = useMetaDataGridQueryStates(leftInputs);
-
-	const take = queryStates.take;
-	const skip = queryStates.skip;
-	const search = queryStates.search || undefined;
-	const kind = (queryStates.kind || undefined) as AssetKind | undefined;
-	const status = (queryStates.status || undefined) as AssetStatus | undefined;
-	const folderId = queryStates.folderId || undefined;
-
-	const { data: response, isLoading } = useGetAssets({
-		take,
-		skip,
-		search,
-		kind,
-		status,
-		folderId,
-	});
-
-	const { data: folderResponse } = useGetFolders();
-
-	const { mutate: removeAsset, isPending: isRemoving } = useRemoveAsset({
-		mutation: {
-			onSuccess: () => {
-				queryClient.invalidateQueries({
-					queryKey: getGetAssetsQueryKey(),
-				});
-				addToast({
-					title: "삭제 완료",
-					description: "에셋이 삭제되었습니다.",
-					color: "success",
-				});
-			},
-			onError: () => {
-				addToast({
-					title: "삭제 실패",
-					description: "에셋 삭제 중 오류가 발생했습니다.",
-					color: "danger",
-				});
-			},
+const buildLeftInputsWithFolders = (folders: FolderDto[]): InputConfig[] => [
+	...leftInputs,
+	{
+		type: "select",
+		id: "folderId",
+		placeholder: "폴더",
+		props: {
+			options: [
+				{ label: "전체 폴더", value: "" },
+				...folders.map((folder) => ({
+					label: folder.name,
+					value: folder.id,
+				})),
+			],
 		},
-	});
+	},
+];
 
-	const assets = (response?.data ?? []) as AssetDto[];
-	const totalCount = response?.meta?.total ?? 0;
-	const folders = (folderResponse?.data ?? []) as FolderDto[];
-
-	const folderOptions = [
-		{ label: "전체 폴더", value: "" },
-		...folders.map((folder) => ({
-			label: folder.name,
-			value: folder.id,
-		})),
-	];
-
-	const leftInputsWithFolders: InputConfig[] = [
-		...leftInputs,
-		{
-			type: "select",
-			id: "folderId",
-			placeholder: "폴더",
-			props: {
-				options: folderOptions,
-			},
-		},
-	];
-
-	const onClickDeleteAssetButton = (assetId: string) => {
-		removeAsset({ assetId });
-	};
-
-	const columns: MetaDataGridColumnConfig<AssetDto>[] = [
+function buildAssetColumns({
+	isRemoving,
+	onClickDeleteAssetButton,
+}: {
+	isRemoving: boolean;
+	onClickDeleteAssetButton: (assetId: string) => void;
+}): MetaDataGridColumnConfig<AssetDto>[] {
+	return [
 		{
 			field: "originalName",
 			label: "파일명",
@@ -275,6 +229,128 @@ function AssetsPageClient() {
 			),
 		},
 	];
+}
+
+const AssetsPageContent = observer(function AssetsPageContent({
+	queryStates,
+	setQueryStates,
+	isRemoving,
+	onClickDeleteAssetButton,
+}: {
+	queryStates: ReturnType<typeof useMetaDataGridQueryStates>[0];
+	setQueryStates: ReturnType<typeof useMetaDataGridQueryStates>[1];
+	isRemoving: boolean;
+	onClickDeleteAssetButton: (assetId: string) => void;
+}) {
+	const take = queryStates.take;
+	const skip = queryStates.skip;
+	const search = queryStates.search || undefined;
+	const kind = (queryStates.kind || undefined) as AssetKind | undefined;
+	const status = (queryStates.status || undefined) as AssetStatus | undefined;
+	const folderId = queryStates.folderId || undefined;
+
+	const { data: response } = useGetAssetsSuspense({
+		take,
+		skip,
+		search,
+		kind,
+		status,
+		folderId,
+	});
+	const { data: folderResponse } = useGetFoldersSuspense();
+
+	const assets = (response?.data ?? []) as AssetDto[];
+	const totalCount = response?.meta?.total ?? 0;
+	const folders = (folderResponse?.data ?? []) as FolderDto[];
+	const columns = buildAssetColumns({
+		isRemoving,
+		onClickDeleteAssetButton,
+	});
+
+	return (
+		<SectionSurface padding="none">
+			<MetaDataGrid
+				config={{
+					entity: "Asset",
+					data: assets,
+					totalCount,
+					isLoading: false,
+					queryStates,
+					setQueryStates,
+					columns,
+					leftInputs: buildLeftInputsWithFolders(folders),
+					emptyMessage: "등록된 에셋이 없습니다.",
+				}}
+			/>
+		</SectionSurface>
+	);
+});
+
+const AssetsPageClient = observer(function AssetsPageClient() {
+	const queryClient = useQueryClient();
+	const [queryStates, setQueryStates] = useMetaDataGridQueryStates(leftInputs);
+	const persistStore = usePersistStore();
+	const isPersistStoreHydrated = persistStore?.isHydrated ?? false;
+	const hasSelectedSpace = Boolean(persistStore?.spaceId);
+
+	const { mutate: removeAsset, isPending: isRemoving } = useRemoveAsset({
+		mutation: {
+			onSuccess: () => {
+				queryClient.invalidateQueries({
+					queryKey: getGetAssetsQueryKey(),
+				});
+				addToast({
+					title: "삭제 완료",
+					description: "에셋이 삭제되었습니다.",
+					color: "success",
+				});
+			},
+			onError: () => {
+				addToast({
+					title: "삭제 실패",
+					description: "에셋 삭제 중 오류가 발생했습니다.",
+					color: "danger",
+				});
+			},
+		},
+	});
+
+	const onClickDeleteAssetButton = (assetId: string) => {
+		removeAsset({ assetId });
+	};
+
+	const columns = buildAssetColumns({
+		isRemoving,
+		onClickDeleteAssetButton,
+	});
+
+	const renderGridSkeleton = () => (
+		<SectionSurface padding="none">
+			<MetaDataGrid
+				config={{
+					entity: "Asset",
+					data: [],
+					totalCount: 0,
+					isLoading: true,
+					queryStates,
+					setQueryStates,
+					columns,
+					leftInputs: buildLeftInputsWithFolders([]),
+					emptyMessage: "등록된 에셋이 없습니다.",
+				}}
+			/>
+		</SectionSurface>
+	);
+
+	const renderSpaceEmptyState = () => (
+		<SectionSurface>
+			<EmptyState
+				title="Space를 선택하면 에셋을 조회할 수 있습니다"
+				description="상단 Space 선택기를 통해 관리하려는 공간을 먼저 선택해주세요."
+				statusLabel="Space 미선택"
+			/>
+		</SectionSurface>
+	);
 
 	return (
 		<Page
@@ -295,23 +371,24 @@ function AssetsPageClient() {
 				/>
 			}
 		>
-			<Section>
-				<MetaDataGrid
-					config={{
-						entity: "Asset",
-						data: assets,
-						totalCount,
-						isLoading,
-						queryStates,
-						setQueryStates,
-						columns,
-						leftInputs: leftInputsWithFolders,
-						emptyMessage: "등록된 에셋이 없습니다.",
-					}}
-				/>
-			</Section>
+			{!isPersistStoreHydrated
+				? <PageSurface>{renderGridSkeleton()}</PageSurface>
+				: !hasSelectedSpace
+					? <PageSurface>{renderSpaceEmptyState()}</PageSurface>
+					: (
+						<PageSurface>
+							<Suspense fallback={renderGridSkeleton()}>
+								<AssetsPageContent
+									queryStates={queryStates}
+									setQueryStates={setQueryStates}
+									isRemoving={isRemoving}
+									onClickDeleteAssetButton={onClickDeleteAssetButton}
+								/>
+							</Suspense>
+						</PageSurface>
+					)}
 		</Page>
 	);
-}
+});
 
-export default observer(AssetsPageClient);
+export default AssetsPageClient;

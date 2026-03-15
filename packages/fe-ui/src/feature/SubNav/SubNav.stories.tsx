@@ -9,7 +9,7 @@ const Placeholder = () => (
 );
 
 const meta: Meta<typeof Placeholder> = {
-	title: "Auto/Features/SubNav/SubNav",
+	title: "Features/SubNav",
 	component: Placeholder,
 	parameters: {
 		layout: "padded",

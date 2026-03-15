@@ -12,7 +12,7 @@ const Placeholder = () => (
 );
 
 const meta: Meta<typeof Placeholder> = {
-	title: "Auto/Ui/data-display/cell/InquiryCategoryCell/InquiryCategoryCell",
+	title: "Ui/data-display/cell/InquiryCategoryCell",
 	component: Placeholder,
 	parameters: {
 		layout: "padded",

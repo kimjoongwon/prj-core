@@ -12,8 +12,7 @@ const Placeholder = () => (
 );
 
 const meta: Meta<typeof Placeholder> = {
-	title:
-		"Auto/Ui/data-display/cell/TemplateActiveToggleCell/TemplateActiveToggleCell",
+	title: "Ui/data-display/cell/TemplateActiveToggleCell",
 	component: Placeholder,
 	parameters: {
 		layout: "padded",

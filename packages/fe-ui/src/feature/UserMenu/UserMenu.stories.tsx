@@ -11,7 +11,7 @@ const Placeholder = () => (
 );
 
 const meta: Meta<typeof Placeholder> = {
-	title: "Auto/Features/UserMenu/UserMenu",
+	title: "Features/UserMenu",
 	component: Placeholder,
 	parameters: {
 		layout: "padded",

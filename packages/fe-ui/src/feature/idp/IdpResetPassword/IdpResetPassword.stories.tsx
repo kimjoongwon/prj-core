@@ -11,7 +11,7 @@ const Placeholder = () => (
 );
 
 const meta: Meta<typeof Placeholder> = {
-	title: "Auto/Features/idp/IdpResetPassword/IdpResetPassword",
+	title: "Features/idp/IdpResetPassword",
 	component: Placeholder,
 	parameters: {
 		layout: "padded",

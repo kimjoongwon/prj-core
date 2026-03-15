@@ -11,7 +11,7 @@ const Placeholder = () => (
 );
 
 const meta: Meta<typeof Placeholder> = {
-	title: "Auto/Inputs/Calendar/Calendar",
+	title: "Inputs/Calendar",
 	component: Placeholder,
 	parameters: {
 		layout: "padded",

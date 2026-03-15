@@ -11,7 +11,7 @@ const Placeholder = () => (
 );
 
 const meta: Meta<typeof Placeholder> = {
-	title: "Auto/Widget/BackButton/BackButton",
+	title: "Widget/BackButton",
 	component: Placeholder,
 	parameters: {
 		layout: "padded",

@@ -11,7 +11,7 @@ const Placeholder = () => (
 );
 
 const meta: Meta<typeof Placeholder> = {
-	title: "Auto/Widget/ability/ConditionEditor/ConditionEditor",
+	title: "Widget/ability/ConditionEditor",
 	component: Placeholder,
 	parameters: {
 		layout: "padded",

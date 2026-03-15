@@ -11,7 +11,7 @@ const Placeholder = () => (
 );
 
 const meta: Meta<typeof Placeholder> = {
-	title: "Auto/Ui/feedback/SLAIndicator/SLAIndicator",
+	title: "Ui/feedback/SLAIndicator",
 	component: Placeholder,
 	parameters: {
 		layout: "padded",

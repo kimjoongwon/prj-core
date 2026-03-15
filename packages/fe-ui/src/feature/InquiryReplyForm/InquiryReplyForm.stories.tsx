@@ -11,7 +11,7 @@ const Placeholder = () => (
 );
 
 const meta: Meta<typeof Placeholder> = {
-	title: "Auto/Features/InquiryReplyForm/InquiryReplyForm",
+	title: "Features/InquiryReplyForm",
 	component: Placeholder,
 	parameters: {
 		layout: "padded",

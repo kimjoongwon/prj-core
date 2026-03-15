@@ -11,7 +11,7 @@ const Placeholder = () => (
 );
 
 const meta: Meta<typeof Placeholder> = {
-	title: "Auto/Features/ProgramPickerModal/ProgramPickerModal",
+	title: "Features/ProgramPickerModal",
 	component: Placeholder,
 	parameters: {
 		layout: "padded",

@@ -11,7 +11,7 @@ const Placeholder = () => (
 );
 
 const meta: Meta<typeof Placeholder> = {
-	title: "Auto/Ui/data-display/Table/SortableColumnHeader",
+	title: "Ui/data-display/Table/SortableColumnHeader",
 	component: Placeholder,
 	parameters: {
 		layout: "padded",

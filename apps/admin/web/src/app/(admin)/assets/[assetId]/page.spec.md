@@ -96,16 +96,14 @@
 ### 레이아웃
 
 ```
-페이지 헤더 영역 (title="에셋 상세", backTo="/assets")
-├── 섹션 영역 (미리보기)
-│   └── AssetPreview (이미지/비디오/문서 뷰어)
-└── 섹션 영역 (상세 정보)
-    ├── AssetBasicInfo (기본 정보 카드)
-    ├── AssetTypeInfo (타입별 상세 정보)
-    │   ├── ImageInfo (Image 타입)
-    │   ├── VideoInfo (Video 타입)
-    │   └── DocumentInfo (Document 타입)
-    └── DerivativeList (파생 리소스 목록)
+Page + PageTitleBar
+└── PageSurface
+    ├── SectionSurface
+    │   └── Section(top = PageTitleBar level=2 "기본 정보")
+    ├── SectionSurface
+    │   └── Section(top = PageTitleBar level=2 "폴더 이동")
+    └── SectionSurface
+        └── Section(top = PageTitleBar level=2 "스토리지 정보")
 ```
 
 ### 컴포넌트 구성
@@ -156,16 +154,16 @@
 
 ```text
 apps/admin/web/src/app/(admin)/assets/[assetId]/
-├── page.tsx          # 서버 컴포넌트 (Prefetch + HydrationBoundary)
-├── _client.tsx       # 클라이언트 컴포넌트 (observer)
-├── _prefetch.ts      # prefetchGetAssetByIdQuery
+├── page.tsx          # 클라이언트 boundary (`dynamic(..., { ssr: false })`)
+├── _client.tsx       # 브라우저 전용 상세 렌더링 (observer)
 └── hooks/
     └── useAssetDetailPage.ts
 ```
 
-### 서버 사이드 Prefetch 범위
+### Browser-only 렌더링 특이사항
 
-- `GET /api/v1/assets/{assetId}`
+- 선택 Space 헤더가 브라우저 PersistStore에 의존하므로 상세 API 호출은 `_client.tsx`에서만 수행합니다.
+- `page.tsx`는 `dynamic(..., { ssr: false })`로 서버 렌더 단계의 상대 URL/Space 헤더 누락 오류를 차단합니다.
 
 ### 클라이언트 핸들러 네이밍
 
@@ -186,9 +184,9 @@ apps/admin/web/src/app/(admin)/assets/[assetId]/
 
 ## 구현 체크리스트
 
-- [x] page.tsx (서버 컴포넌트)
+- [x] page.tsx (브라우저 전용 렌더 boundary)
 - [x] _client.tsx (클라이언트 컴포넌트)
-- [x] _prefetch.ts (에셋 상세 + 파생 리소스)
+- [ ] _prefetch.ts 없음 (Space 헤더 브라우저 의존)
 - [ ] hooks/useAssetDetailHandlers.ts
 - [ ] AssetPreview Widget
 - [ ] AssetBasicInfo Widget
@@ -268,11 +266,13 @@ apps/admin/web/src/app/(admin)/assets/[assetId]/
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-03-15 | assets 상세를 no-SSR boundary로 전환해 server prefetch 단계의 URL/Space 헤더 오류를 제거 | codex |
 | 2026-02-22 | 초기 생성 | orch-requirement |
 | 2026-02-26 | Stage 1 정합화: 경로 메타데이터를 apps/admin/web 기준으로 수정 | orch-requirement |
 | 2026-02-26 | Stage 4 정합화: API 경로 및 SSR Prefetch 구조 보강 | orch-screen-planner |
 | 2026-02-26 | Stage 6 구현: Orval 인터페이스 기반 상세 페이지(page/_client/_prefetch) 구현 | fe-page-builder |
 | 2026-02-26 | Stage 7 구현: assets 상세 page.e2e.ts 추가 | qa-fe-e2e-testing |
+| 2026-03-15 | 에셋 상세는 `Page + PageTitleBar` 구조를 유지하고 본문에 `PageSurface/SectionSurface` 표현 레이어를 적용 | codex |
 | 2026-03-03 | Scaffold 제거 및 페이지 헤더 영역/섹션 영역 용어 정리 | codex |
 | 2026-03-03 | PageTitleBar(level=1/2) 패턴 정리 반영 | codex |
 | 2026-03-03 | Page/Section `mode` 제거 반영 (단일 구조 기준으로 문서 표현 정리) | codex |

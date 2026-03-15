@@ -92,18 +92,18 @@
 ### 레이아웃
 
 ```
-Page
-└── PageTitleBar (title="에셋 관리", actions=[업로드 버튼])
-└── Section
-    ├── FolderTree (좌측 사이드바, 240px)
-    │   └── TreeView (계층적 폴더 구조)
-    └── AssetBrowser (우측 메인)
-        ├── Toolbar
-        │   ├── SearchInput
-        │   ├── TypeFilter (Dropdown)
-        │   └── ViewToggle (Grid/List)
-        └── AssetGrid / AssetList
-            └── AssetCard / AssetRow
+Page + PageTitleBar
+└── PageSurface
+    └── SectionSurface
+        ├── FolderTree (좌측 사이드바, 240px)
+        │   └── TreeView (계층적 폴더 구조)
+        └── AssetBrowser (우측 메인)
+            ├── Toolbar
+            │   ├── SearchInput
+            │   ├── TypeFilter (Dropdown)
+            │   └── ViewToggle (Grid/List)
+            └── AssetGrid / AssetList
+                └── AssetCard / AssetRow
 ```
 
 ### 컴포넌트 구성
@@ -142,7 +142,9 @@ Page
 
 | 상태 | 설명 | UI |
 |------|------|-----|
-| `loading` | 초기 로딩 중 | Skeleton |
+| `loading` | suspense 응답 대기 | `Suspense` fallback에서 `MetaDataGrid` 로딩 상태 |
+| `spaceLoading` | PersistStore가 hydrate되기 전 | `MetaDataGrid` 스켈레톤 (Space 선택 전에 API 호출 지연) |
+| `spaceNotSelected` | Space 미선택 상태 | EmptyState("Space를 선택하면 에셋을 조회할 수 있습니다") |
 | `empty` | 폴더에 에셋 없음 | EmptyState ("업로드된 에셋이 없습니다") |
 | `hasData` | 에셋 존재 | AssetGrid/AssetList |
 | `uploading` | 업로드 진행 중 | Progress 표시 |
@@ -152,10 +154,8 @@ Page
 
 | 시점 | API | 캐싱 |
 |------|-----|------|
-| 진입 | `GET /api/v1/assets?folderId={id}` | React Query staleTime 30s |
-| 검색 | `GET /api/v1/assets?search={keyword}` | 30s |
-| 타입 필터 | `GET /api/v1/assets?kind={kind}` | 30s |
-| 폴더 목록 | `GET /api/v1/folders` | 1min |
+| 진입 | `useGetAssetsSuspense({ take, skip, search, kind, status, folderId })` | React Query 캐시 사용 |
+| 진입 | `useGetFoldersSuspense()` | React Query 캐시 사용 |
 | 업로드 | `POST /api/v1/assets` | 캐시 무효화 |
 | 삭제 | `DELETE /api/v1/assets/{id}` | 캐시 무효화 |
 
@@ -163,17 +163,18 @@ Page
 
 ```text
 apps/admin/web/src/app/(admin)/assets/
-├── page.tsx          # 서버 컴포넌트 (Prefetch + HydrationBoundary)
-├── _client.tsx       # 클라이언트 컴포넌트 (observer)
-├── _prefetch.ts      # prefetchGetAssetsQuery, prefetchGetFoldersQuery
-└── hooks/
-    └── useAssetsPage.ts
+├── page.tsx          # 클라이언트 boundary (`dynamic(..., { ssr: false })`)
+├── _client.tsx       # 브라우저 전용 목록 렌더링 (`Suspense` + assets suspense hooks)
+└── page.e2e.ts
 ```
 
-### 서버 사이드 Prefetch 범위
+### Browser-only 렌더링 특이사항
 
-- `GET /api/v1/assets?folderId={rootFolderId}`
-- `GET /api/v1/folders`
+- Swagger에 assets/folders 엔드포인트가 아직 노출되지 않아 `@cocrepo/api/assets`는 수동 client surface를 유지합니다.
+- 수동 client에도 generated client와 같은 `useGetAssetsSuspense`, `useGetFoldersSuspense` 표면을 제공합니다.
+- 선택 Space 헤더가 브라우저 PersistStore에 의존하므로 실제 데이터 호출은 `_client.tsx`에서만 수행합니다.
+- `page.tsx`는 `dynamic(..., { ssr: false })`로 서버 렌더 단계의 `Invalid URL` 오류를 차단합니다.
+- PersistStore hydrate 완료 + Space 선택 여부가 확인될 때까지 API 호출을 지연하고, 미선택 시 EmptyState로 안내합니다.
 
 ### 클라이언트 핸들러 네이밍
 
@@ -199,9 +200,9 @@ apps/admin/web/src/app/(admin)/assets/
 
 ## 구현 체크리스트
 
-- [x] page.tsx (서버 컴포넌트)
-- [x] _client.tsx (클라이언트 컴포넌트)
-- [x] _prefetch.ts (폴더 트리 + 루트 폴더 에셋)
+- [x] page.tsx (브라우저 전용 렌더 boundary)
+- [x] _client.tsx (클라이언트 컴포넌트, `Suspense` + assets suspense hooks)
+- [x] `_prefetch.ts` 없음 (SSR 예외 아님)
 - [ ] hooks/useAssetHandlers.ts
 - [ ] FolderTree Widget
 - [ ] AssetCard Widget
@@ -211,6 +212,7 @@ apps/admin/web/src/app/(admin)/assets/
 - [ ] PreviewModal Widget
 - [ ] AssetPicker Feature (재사용 컴포넌트)
 - [x] E2E 테스트 (Playwright)
+- [x] PersistStore hydrate + Space 선택 여부 확인 후 데이터 요청 게이트 (Space 미선택 시 EmptyState)
 
 ## 테스트 케이스
 
@@ -275,14 +277,16 @@ apps/admin/web/src/app/(admin)/assets/
 
 | 모듈 | 용도 |
 |------|------|
-| @cocrepo/api/assets | AssetKind, AssetStatus 타입 사용 |
-| @tanstack/react-query | QueryClient, HydrationBoundary 사용 |
-| next/headers | cookies 조회 |
+| @cocrepo/api/assets | assets manual suspense hook과 mutation surface 사용 |
+| @tanstack/react-query | query invalidation 사용 |
 
 ## 변경 이력
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-03-15 | PersistStore hydrate 상태/Space 선택을 확인하여 API 호출을 지연하고 미선택 시 EmptyState로 안내, 테스트에서 X-Space-ID 헤더 검증 추가 | codex |
+| 2026-03-15 | `x-space-id` 브라우저 의존성을 반영해 `page.tsx`를 no-SSR boundary로 분리하고 `_client.tsx`를 복구 | codex |
+| 2026-03-15 | assets 목록을 CSR + Suspense 단일 `page.tsx` 패턴으로 전환하고 `_client.tsx`, `_prefetch.ts`를 제거 | codex |
 | 2026-03-13 | `@cocrepo/api` root import를 split subpath import로 전환 | codex |
 | 2026-02-22 | 초기 생성 | orch-requirement |
 | 2026-02-26 | Stage 1 정합화: 경로 메타데이터를 apps/admin/web 기준으로 수정 | orch-requirement |
@@ -290,6 +294,7 @@ apps/admin/web/src/app/(admin)/assets/
 | 2026-02-26 | Stage 5 정합화: assets 페이지-컴포넌트 스펙 경로/명칭 일치화 | orch-screen-planner |
 | 2026-02-26 | Stage 6 구현: Orval 인터페이스 기반 목록 페이지(page/_client/_prefetch) 구현 | fe-page-builder |
 | 2026-02-26 | Stage 7 구현: assets 목록 page.e2e.ts 추가 | qa-fe-e2e-testing |
+| 2026-03-15 | 에셋 목록 페이지는 `Page + PageTitleBar` 구조를 유지하고 본문에 `PageSurface/SectionSurface` 표현 레이어를 적용 | codex |
 | 2026-03-03 | Scaffold 제거 및 페이지 헤더 영역/섹션 영역 용어 정리 | codex |
 | 2026-03-03 | `_client.tsx` 반복 헤더를 `Page + PageTitleBar` 패턴으로 정리 | codex |
 | 2026-03-03 | Page/Section `mode` 제거 반영 (단일 구조 기준으로 문서 표현 정리) | codex |

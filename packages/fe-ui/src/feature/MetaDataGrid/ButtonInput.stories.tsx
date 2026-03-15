@@ -11,7 +11,7 @@ const Placeholder = () => (
 );
 
 const meta: Meta<typeof Placeholder> = {
-	title: "Auto/Features/MetaDataGrid/ButtonInput",
+	title: "Features/MetaDataGrid/ButtonInput",
 	component: Placeholder,
 	parameters: {
 		layout: "padded",

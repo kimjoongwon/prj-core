@@ -50,7 +50,8 @@ developer_instructions = '''
 ## 3. 필수 기획 항목
 
 - 페이지 구성(서버 `page.tsx` / 클라이언트 `_client.tsx` / `_prefetch.ts`)
-- `PageSurface`/`SectionSurface` 사용 위치
+- `Page`, `Section`, `PageTitleBar` 배치 위치
+- `PageSurface`, `SectionSurface` 사용 여부와 배치 범위
 - 핸들러 네이밍(`on[Event][UI]`) 및 바인딩 포인트
 - Orval 훅 연동 위치와 로딩/에러 처리 흐름
 - 페이지 테스트 관점(핵심 시나리오, 실패 케이스)

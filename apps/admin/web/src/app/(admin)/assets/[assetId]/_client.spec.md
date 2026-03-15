@@ -6,8 +6,8 @@
 
 ## 역할
 
-이 파일은 client 계층의 핵심 동작을 담당합니다.
-상위 레이어와 하위 레이어를 연결하며, 런타임에서 실제 사용자 흐름/비즈니스 흐름에 직접 관여합니다.
+브라우저에서만 에셋 상세 API를 호출하고,
+`Page + PageTitleBar` 구조를 유지한 채 본문을 `PageSurface`와 `SectionSurface`로 표현합니다.
 
 ## 공개 계약
 
@@ -19,21 +19,20 @@
 
 | 모듈 | 용도 |
 |------|------|
-| @cocrepo/api/assets | 기능 구현 의존성 |
-| @cocrepo/ui | 기능 구현 의존성 |
-| @heroui/react | 기능 구현 의존성 |
-| @tanstack/react-query | 기능 구현 의존성 |
-| lucide-react | 기능 구현 의존성 |
-| mobx-react-lite | 기능 구현 의존성 |
-| next | 기능 구현 의존성 |
-| next/navigation | 기능 구현 의존성 |
-| react | 기능 구현 의존성 |
+| `@cocrepo/api/assets` | 기능 구현 의존성 |
+| `@cocrepo/ui` | `PageSurface`, `SectionSurface`, `DateTimeCell`, `VStack` |
+| `@heroui/react` | 버튼/입력/토스트/로딩 UI |
+| `@tanstack/react-query` | 캐시 무효화 |
+| `lucide-react` | 액션 아이콘 |
+| `mobx-react-lite` | observer 래핑 |
+| `next/navigation` | 라우팅 이동 |
+| `react` | 상태 관리 |
 
 ## 동작 흐름
 
-1. 입력(라우트/props/호출)을 수신합니다.
-2. 필요한 의존 모듈을 호출해 데이터를 조합합니다.
-3. 결과를 렌더링/반환/전파합니다.
+1. `assetId`를 입력받아 에셋 상세와 폴더 목록을 조회합니다.
+2. 로딩/없음/정상 상태를 `Page + PageTitleBar` 구조로 분기합니다.
+3. 정상 상태에서는 본문을 `PageSurface`로 감싸고, 각 상세 블록을 `SectionSurface + Section(top=PageTitleBar)`로 렌더링합니다.
 
 ## 실패 및 엣지 케이스
 
@@ -51,6 +50,7 @@
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-03-15 | assets 상세 클라이언트 화면에 `Page + PageTitleBar` 구조는 유지하고 본문에 `PageSurface/SectionSurface`를 적용 | codex |
 | 2026-03-13 | `@cocrepo/api` root import를 split subpath import로 전환 | codex |
 | 2026-03-03 | 누락된 sidecar spec 신규 생성 | codex |
 | 2026-03-03 | `PageTitleBar` 단일 컴포넌트 통합 및 리네이밍 반영 | codex |

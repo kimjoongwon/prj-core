@@ -11,7 +11,7 @@ const Placeholder = () => (
 );
 
 const meta: Meta<typeof Placeholder> = {
-	title: "Auto/Widget/FloatingActionButton/FloatingActionButton",
+	title: "Widget/FloatingActionButton",
 	component: Placeholder,
 	parameters: {
 		layout: "padded",

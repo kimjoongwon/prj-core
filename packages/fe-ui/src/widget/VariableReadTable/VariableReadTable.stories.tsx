@@ -11,7 +11,7 @@ const Placeholder = () => (
 );
 
 const meta: Meta<typeof Placeholder> = {
-	title: "Auto/Widget/VariableReadTable/VariableReadTable",
+	title: "Widget/VariableReadTable",
 	component: Placeholder,
 	parameters: {
 		layout: "padded",

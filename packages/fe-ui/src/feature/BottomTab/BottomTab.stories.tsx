@@ -11,7 +11,7 @@ const Placeholder = () => (
 );
 
 const meta: Meta<typeof Placeholder> = {
-	title: "Auto/Features/BottomTab/BottomTab",
+	title: "Features/BottomTab",
 	component: Placeholder,
 	parameters: {
 		layout: "padded",

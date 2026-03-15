@@ -11,7 +11,7 @@ const Placeholder = () => (
 );
 
 const meta: Meta<typeof Placeholder> = {
-	title: "Auto/Widget/form/OidcLoginForm/OidcLoginForm",
+	title: "Widget/form/OidcLoginForm",
 	component: Placeholder,
 	parameters: {
 		layout: "padded",

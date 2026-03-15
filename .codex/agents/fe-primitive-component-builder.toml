@@ -441,49 +441,46 @@ export function useAdminLayout() {}
 
 - `packages/fe-ui/src/primitive/Button/Button.tsx`
 - `packages/fe-ui/src/primitive/Text/Text.tsx`
-- `packages/fe-ui/src/primitive/surfaces/VStack/VStack.tsx`
+- `packages/fe-ui/src/layout/VStack/VStack.tsx`
+- `packages/fe-ui/src/layout/HStack/HStack.tsx`
+- `packages/fe-ui/src/layout/Page/Page.tsx`
+- `packages/fe-ui/src/layout/Section/Section.tsx`
+- `packages/fe-ui/src/widget/PageTitleBar/PageTitleBar.tsx`
 - `packages/fe-ui/src/primitive/data-display/Avatar/Avatar.tsx`
 
-### Surface/엘리베이션 시스템
+### 페이지 구조 재사용 기준
 
-**시각적 계층감을 위한 Surface 컴포넌트가 존재합니다.**
+**페이지 셸과 헤더는 `Page`, `Section`, `PageTitleBar`를 재사용하고, 표현 레이어가 필요하면 기존 `surface/PageSurface`, `surface/SectionSurface`를 사용합니다. Surface는 `Page`/`Section`을 대체하지 않습니다.**
 
 #### 컴포넌트 위치
 
 ```
-packages/fe-ui/src/primitive/surfaces/
-├── Surface/         # 기본 Surface (elevation prop)
-├── PageSurface/     # 페이지 래퍼 (title, description, actions)
-├── SectionSurface/  # 섹션 래퍼 (title, collapsible)
-├── VStack/          # 수직 스택
-├── HStack/          # 수평 스택
-└── ...
+packages/fe-ui/src/
+├── layout/
+│   ├── Page/
+│   ├── Section/
+│   ├── VStack/
+│   ├── HStack/
+│   └── Spacer/
+├── surface/
+│   ├── PageSurface/
+│   └── SectionSurface/
+├── primitive/layout/
+│   └── Layout/
+└── widget/
+    └── PageTitleBar/
 ```
 
-#### 엘리베이션 레벨
+#### 역할 구분
 
-| 레벨 | 이름       | Shadow | Background           | 용도           |
-| ---- | ---------- | ------ | -------------------- | -------------- |
-| 0    | `flat`     | none   | bg-background        | 페이지 배경    |
-| 1    | `raised`   | sm     | bg-content1          | 페이지 섹션    |
-| 2    | `elevated` | md     | bg-content1 + border | 카드, DataGrid |
-| 3    | `floating` | lg     | bg-content2          | 드롭다운       |
-| 4    | `overlay`  | xl     | bg-content2          | 모달           |
+| 컴포넌트 | 역할 |
+|----------|------|
+| `Page` | 페이지 shell 슬롯 (`top`, `leftAside`, `rightAside`, `bottom`) |
+| `Section` | 페이지 내부 구역 분할 |
+| `PageTitleBar` | title, description, actions 헤더 |
+| `VStack`, `HStack`, `Spacer` | 정렬/간격 레이아웃 primitive |
 
-#### Surface Props
-
-```tsx
-interface SurfaceProps {
-  elevation?: "flat" | "raised" | "elevated" | "floating" | "overlay";
-  padding?: "none" | "sm" | "md" | "lg";
-  radius?: "none" | "sm" | "md" | "lg" | "xl";
-  as?: ElementType;
-  children?: ReactNode;
-  className?: string;
-}
-```
-
-> **Note**: 새로운 카드/패널 컴포넌트 생성 시 Surface를 기반으로 확장하세요.
+> **Note**: 새로운 primitive는 페이지 래퍼나 헤더 패널을 다시 발명하지 말고 위 컴포넌트와 함께 조합되도록 설계하세요.
 
 ### 출력 형식
 

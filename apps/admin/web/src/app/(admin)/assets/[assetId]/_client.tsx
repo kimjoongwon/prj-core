@@ -9,7 +9,15 @@ import {
 	useRemoveAsset,
 } from "@cocrepo/api/assets";
 
-import { DateTimeCell, Page, PageTitleBar, Section, VStack } from "@cocrepo/ui";
+import {
+	DateTimeCell,
+	Page,
+	PageSurface,
+	PageTitleBar,
+	Section,
+	SectionSurface,
+	VStack,
+} from "@cocrepo/ui";
 import {
 	addToast,
 	Button,
@@ -156,28 +164,37 @@ function AssetDetailPageClient({ assetId }: AssetDetailPageClientProps) {
 	if (isLoading) {
 		return (
 			<Page top={<PageTitleBar title="에셋 상세" description="로딩 중..." />}>
-				<Section>
-					<div className="flex items-center justify-center p-10">
-						<Spinner size="lg" />
-					</div>
-				</Section>
+				<PageSurface>
+					<SectionSurface>
+						<div className="flex items-center justify-center p-10">
+							<Spinner size="lg" />
+						</div>
+					</SectionSurface>
+				</PageSurface>
 			</Page>
 		);
 	}
 
 	if (!asset) {
-		const pageHeader = (
-			<PageTitleBar title="에셋 상세" description="에셋을 찾을 수 없습니다." />
-		);
-
 		return (
-			<Page top={pageHeader}>
-				<div className="flex flex-col items-center justify-center gap-4 p-8">
-					<p className="text-default-500">에셋을 찾을 수 없습니다.</p>
-					<Button variant="flat" onPress={onClickBackButton}>
-						목록으로
-					</Button>
-				</div>
+			<Page
+				top={
+					<PageTitleBar
+						title="에셋 상세"
+						description="에셋을 찾을 수 없습니다."
+					/>
+				}
+			>
+				<PageSurface>
+					<SectionSurface>
+						<div className="flex flex-col items-center justify-center gap-4 p-8">
+							<p className="text-default-500">에셋을 찾을 수 없습니다.</p>
+							<Button variant="flat" onPress={onClickBackButton}>
+								목록으로
+							</Button>
+						</div>
+					</SectionSurface>
+				</PageSurface>
 			</Page>
 		);
 	}
@@ -203,90 +220,102 @@ function AssetDetailPageClient({ assetId }: AssetDetailPageClientProps) {
 		</div>
 	);
 
-	const pageHeader = (
-		<PageTitleBar
-			title={asset.originalName ?? "에셋 상세"}
-			description="에셋 상세 정보"
-			actions={pageActions}
-		/>
-	);
-
 	return (
-		<Page top={pageHeader}>
-			<VStack gap={4}>
-				<Section top={<PageTitleBar level={2} title="기본 정보" />}>
-					<div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-						<div>
-							<p className="text-sm text-default-500">파일명</p>
-							<p className="mt-1 font-medium">{asset.originalName}</p>
-						</div>
-						<div>
-							<p className="text-sm text-default-500">에셋 ID</p>
-							<p className="mt-1 font-mono text-sm">{asset.id}</p>
-						</div>
-						<div>
-							<p className="text-sm text-default-500">타입</p>
-							<p className="mt-1">{getKindLabel(asset.kind)}</p>
-						</div>
-						<div>
-							<p className="text-sm text-default-500">상태</p>
-							<p className="mt-1">{getStatusLabel(asset.status)}</p>
-						</div>
-						<div>
-							<p className="text-sm text-default-500">MIME 타입</p>
-							<p className="mt-1 font-mono text-sm">{asset.mimeType}</p>
-						</div>
-						<div>
-							<p className="text-sm text-default-500">크기</p>
-							<p className="mt-1">{formatBytes(asset.sizeBytes)}</p>
-						</div>
-						<div>
-							<p className="text-sm text-default-500">현재 폴더 ID</p>
-							<p className="mt-1 font-mono text-sm">{asset.folderId}</p>
-						</div>
-						<div>
-							<p className="text-sm text-default-500">등록일</p>
-							<div className="mt-1">
-								<DateTimeCell value={asset.createdAt} />
+		<Page
+			top={
+				<PageTitleBar
+					title={asset.originalName ?? "에셋 상세"}
+					description="에셋 상세 정보"
+					actions={pageActions}
+				/>
+			}
+		>
+			<PageSurface>
+				<VStack gap={4}>
+					<SectionSurface>
+						<Section top={<PageTitleBar level={2} title="기본 정보" />}>
+							<div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+								<div>
+									<p className="text-sm text-default-500">파일명</p>
+									<p className="mt-1 font-medium">{asset.originalName}</p>
+								</div>
+								<div>
+									<p className="text-sm text-default-500">에셋 ID</p>
+									<p className="mt-1 font-mono text-sm">{asset.id}</p>
+								</div>
+								<div>
+									<p className="text-sm text-default-500">타입</p>
+									<p className="mt-1">{getKindLabel(asset.kind)}</p>
+								</div>
+								<div>
+									<p className="text-sm text-default-500">상태</p>
+									<p className="mt-1">{getStatusLabel(asset.status)}</p>
+								</div>
+								<div>
+									<p className="text-sm text-default-500">MIME 타입</p>
+									<p className="mt-1 font-mono text-sm">{asset.mimeType}</p>
+								</div>
+								<div>
+									<p className="text-sm text-default-500">크기</p>
+									<p className="mt-1">{formatBytes(asset.sizeBytes)}</p>
+								</div>
+								<div>
+									<p className="text-sm text-default-500">현재 폴더 ID</p>
+									<p className="mt-1 font-mono text-sm">{asset.folderId}</p>
+								</div>
+								<div>
+									<p className="text-sm text-default-500">등록일</p>
+									<div className="mt-1">
+										<DateTimeCell value={asset.createdAt} />
+									</div>
+								</div>
 							</div>
-						</div>
-					</div>
-				</Section>
-				<Section top={<PageTitleBar level={2} title="폴더 이동" />}>
-					<div className="grid grid-cols-1 gap-4 md:grid-cols-[1fr_auto]">
-						<Select
-							label="이동 대상 폴더"
-							placeholder="폴더를 선택하세요"
-							selectedKeys={targetFolderId ? [targetFolderId] : []}
-							onSelectionChange={(keys) => {
-								const firstKey = Array.from(keys)[0];
-								setTargetFolderId(firstKey ? String(firstKey) : "");
-							}}
-						>
-							{folders.map((folder) => (
-								<SelectItem key={folder.id}>{folder.name}</SelectItem>
-							))}
-						</Select>
-						<div className="flex items-end">
-							<Button
-								color="primary"
-								variant="flat"
-								isLoading={isMoving}
-								startContent={<FolderInput className="h-4 w-4" />}
-								onPress={onClickMoveAssetButton}
-							>
-								이동
-							</Button>
-						</div>
-					</div>
-				</Section>
-				<Section top={<PageTitleBar level={2} title="스토리지 정보" />}>
-					<div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-						<Input label="Storage Key" value={asset.storageKey} isReadOnly />
-						<Input label="Checksum" value={asset.checksum ?? "-"} isReadOnly />
-					</div>
-				</Section>
-			</VStack>
+						</Section>
+					</SectionSurface>
+					<SectionSurface>
+						<Section top={<PageTitleBar level={2} title="폴더 이동" />}>
+							<div className="grid grid-cols-1 gap-4 md:grid-cols-[1fr_auto]">
+								<Select
+									label="이동 대상 폴더"
+									placeholder="폴더를 선택하세요"
+									selectedKeys={targetFolderId ? [targetFolderId] : []}
+									onSelectionChange={(keys) => {
+										const firstKey = Array.from(keys)[0];
+										setTargetFolderId(firstKey ? String(firstKey) : "");
+									}}
+								>
+									{folders.map((folder) => (
+										<SelectItem key={folder.id}>{folder.name}</SelectItem>
+									))}
+								</Select>
+								<div className="flex items-end">
+									<Button
+										color="primary"
+										variant="flat"
+										isLoading={isMoving}
+										startContent={<FolderInput className="h-4 w-4" />}
+										onPress={onClickMoveAssetButton}
+									>
+										이동
+									</Button>
+								</div>
+							</div>
+						</Section>
+					</SectionSurface>
+					<SectionSurface>
+						<Section top={<PageTitleBar level={2} title="스토리지 정보" />}>
+							<div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+								<Input label="Storage Key" value={asset.storageKey} isReadOnly />
+								<Input
+									label="Checksum"
+									value={asset.checksum ?? "-"}
+									isReadOnly
+								/>
+							</div>
+						</Section>
+					</SectionSurface>
+				</VStack>
+			</PageSurface>
 		</Page>
 	);
 }

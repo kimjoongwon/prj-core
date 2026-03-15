@@ -11,7 +11,7 @@ const Placeholder = () => (
 );
 
 const meta: Meta<typeof Placeholder> = {
-	title: "Auto/Widget/ProgressPanel/ProgressPanel",
+	title: "Widget/ProgressPanel",
 	component: Placeholder,
 	parameters: {
 		layout: "padded",

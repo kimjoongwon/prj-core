@@ -12,7 +12,7 @@ const Placeholder = () => (
 );
 
 const meta: Meta<typeof Placeholder> = {
-	title: "Auto/Features/message-template/TemplateActions/TemplateActions",
+	title: "Features/message-template/TemplateActions",
 	component: Placeholder,
 	parameters: {
 		layout: "padded",

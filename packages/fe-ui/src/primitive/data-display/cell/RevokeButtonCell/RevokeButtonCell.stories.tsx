@@ -12,7 +12,7 @@ const Placeholder = () => (
 );
 
 const meta: Meta<typeof Placeholder> = {
-	title: "Auto/Ui/data-display/cell/RevokeButtonCell/RevokeButtonCell",
+	title: "Ui/data-display/cell/RevokeButtonCell",
 	component: Placeholder,
 	parameters: {
 		layout: "padded",

@@ -11,7 +11,7 @@ const Placeholder = () => (
 );
 
 const meta: Meta<typeof Placeholder> = {
-	title: "Auto/Widgets/user/UserFormWidget/UserFormWidget",
+	title: "Widget/user/UserFormWidget",
 	component: Placeholder,
 	parameters: {
 		layout: "padded",

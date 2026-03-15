@@ -11,7 +11,7 @@ const Placeholder = () => (
 );
 
 const meta: Meta<typeof Placeholder> = {
-	title: "Auto/Widget/RedirectUriListInput/RedirectUriListInput",
+	title: "Widget/RedirectUriListInput",
 	component: Placeholder,
 	parameters: {
 		layout: "padded",

@@ -11,7 +11,7 @@ const Placeholder = () => (
 );
 
 const meta: Meta<typeof Placeholder> = {
-	title: "Auto/Ui/data-display/Icon/InfoIcon",
+	title: "Ui/data-display/Icon/InfoIcon",
 	component: Placeholder,
 	parameters: {
 		layout: "padded",

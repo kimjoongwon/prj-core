@@ -12,7 +12,7 @@ const Placeholder = () => (
 );
 
 const meta: Meta<typeof Placeholder> = {
-	title: "Auto/Ui/feedback/PasswordStrengthIndicator/PasswordStrengthIndicator",
+	title: "Ui/feedback/PasswordStrengthIndicator",
 	component: Placeholder,
 	parameters: {
 		layout: "padded",

@@ -12,7 +12,7 @@ const Placeholder = () => (
 );
 
 const meta: Meta<typeof Placeholder> = {
-	title: "Auto/Widget/UnsavedChangesIndicator/UnsavedChangesIndicator",
+	title: "Widget/UnsavedChangesIndicator",
 	component: Placeholder,
 	parameters: {
 		layout: "padded",

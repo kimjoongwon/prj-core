@@ -38,7 +38,7 @@ developer_instructions = '''
 
 - 위계는 `App(서비스별 단일) > Layout > Page > Section`을 기준으로 설계
 - App/Layout/Page/Section 역할 분리(중복 타이틀 금지)
-- `PageSurface > SectionSurface` 중첩 규칙 준수
+- `Page + PageTitleBar` 구조를 유지하고 필요 시 `PageSurface`, `SectionSurface` 표현 레이어를 추가
 - 데스크톱/모바일 레이아웃 전환 기준 명시
 
 ---

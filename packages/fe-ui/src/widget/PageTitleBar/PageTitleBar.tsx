@@ -1,4 +1,5 @@
 import type { ReactNode } from "react";
+import { Text } from "../../primitive/data-display/Text/Text";
 
 export interface PageTitleBarProps {
 	/** 제목 */
@@ -24,17 +25,29 @@ export function PageTitleBar({
 	level = 1,
 	className,
 }: PageTitleBarProps) {
-	const HeadingTag = level === 2 ? "h2" : "h1";
+	const headingTag = level === 2 ? "h2" : "h1";
+	const headingVariant = level === 2 ? "h4" : "h2";
+	const descriptionVariant = level === 2 ? "subtitle2" : "subtitle1";
 
 	return (
 		<div
 			className={`flex items-start justify-between gap-4${className ? ` ${className}` : ""}`}
 		>
-			<div>
-				<HeadingTag>{title}</HeadingTag>
-				{description && <p>{description}</p>}
+			<div className="min-w-0 flex-1">
+				<Text
+					as={headingTag}
+					className={level === 2 ? "font-semibold" : undefined}
+					variant={headingVariant}
+				>
+					{title}
+				</Text>
+				{description && (
+					<Text as="p" className="mt-1" variant={descriptionVariant}>
+						{description}
+					</Text>
+				)}
 			</div>
-			{actions && <div>{actions}</div>}
+			{actions && <div className="shrink-0">{actions}</div>}
 		</div>
 	);
 }

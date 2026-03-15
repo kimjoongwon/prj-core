@@ -11,7 +11,7 @@ const Placeholder = () => (
 );
 
 const meta: Meta<typeof Placeholder> = {
-	title: "Auto/Widget/form/OidcConsentPanel/OidcConsentPanel",
+	title: "Widget/form/OidcConsentPanel",
 	component: Placeholder,
 	parameters: {
 		layout: "padded",

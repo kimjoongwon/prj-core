@@ -12,7 +12,7 @@ const Placeholder = () => (
 );
 
 const meta: Meta<typeof Placeholder> = {
-	title: "Auto/Widgets/ability/ActionConfigEditor/ActionConfigEditor",
+	title: "Widget/ability/ActionConfigEditor",
 	component: Placeholder,
 	parameters: {
 		layout: "padded",

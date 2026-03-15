@@ -11,7 +11,7 @@ const Placeholder = () => (
 );
 
 const meta: Meta<typeof Placeholder> = {
-	title: "Auto/Widgets/common/ConfirmModal/ConfirmModal",
+	title: "Widget/common/ConfirmModal",
 	component: Placeholder,
 	parameters: {
 		layout: "padded",

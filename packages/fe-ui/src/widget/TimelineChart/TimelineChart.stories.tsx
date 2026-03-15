@@ -11,7 +11,7 @@ const Placeholder = () => (
 );
 
 const meta: Meta<typeof Placeholder> = {
-	title: "Auto/Widget/TimelineChart/TimelineChart",
+	title: "Widget/TimelineChart",
 	component: Placeholder,
 	parameters: {
 		layout: "padded",

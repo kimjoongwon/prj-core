@@ -11,7 +11,7 @@ const Placeholder = () => (
 );
 
 const meta: Meta<typeof Placeholder> = {
-	title: "Auto/Page/AddressEmailVerifyPage",
+	title: "Page/AddressEmailVerifyPage",
 	component: Placeholder,
 	parameters: {
 		layout: "padded",
