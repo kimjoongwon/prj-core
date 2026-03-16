@@ -5,6 +5,7 @@ node_modules
 # 빌드 결과물 제외 - Docker에서 재빌드
 dist
 **/dist
+out
 **/.next
 **/.turbo
 **/coverage
