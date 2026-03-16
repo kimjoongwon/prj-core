@@ -16,11 +16,18 @@ Admin E2E에서 재사용하는 로그인 래퍼입니다.
 | 항목 | 설명 |
 |------|------|
 | `loginToAdmin(page)` | Admin 로그인 + Space 보정 + 즉시 readback 검증 |
+| `prewarmAdminRoutes(page)` | 주요 admin route를 순차 방문해 dev on-demand compile을 setup 단계에서 흡수 |
+
+## 비즈니스 메모
+
+- route prewarm은 login 이후 동일한 인증 컨텍스트에서 수행되어 storageState와 localStorage를 그대로 재사용합니다.
+- prewarm은 개별 route 실패를 무시하고 계속 진행해 setup 전체를 막지 않습니다.
 
 ## 변경 이력
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-03-16 | 로그인 helper에 주요 admin route prewarm을 추가해 첫 route 진입 compile race를 setup 단계로 이동 | codex |
 | 2026-03-14 | Admin setup flaky 원인인 `networkidle`/polling 대기를 제거하고 DOM 준비 + 즉시 readback 검증으로 단순화 | codex |
 | 2026-03-06 | 공통 로그인 헬퍼 import를 `@cocrepo/e2e`(fe-e2e 패키지)로 전환 | codex |
 | 2026-03-04 | 공통 OIDC 헬퍼 연동 구조로 리팩터링 및 sidecar spec 생성 | codex |

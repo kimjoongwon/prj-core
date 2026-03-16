@@ -52,7 +52,7 @@
 
 | 항목                   | 결정                                                                                                 |
 | ---------------------- | ---------------------------------------------------------------------------------------------------- |
-| PageSurface owner      | `apps/admin/web/src/app/(admin)/actions/page.tsx`                                                    |
+| PageSurface owner      | `apps/admin/web/src/app/(admin)/actions/_client.tsx`                                                 |
 | PageSurface 역할       | Action 검색/등록 헤더와 목록 전체를 raised 본문으로 묶음                                             |
 | SectionSurface 대상    | Action `MetaDataGrid`                                                                                |
 | SectionSurface padding | `padding="none"`                                                                                     |
@@ -113,8 +113,8 @@
 
 ## 구현 체크리스트
 
-- [x] page.tsx (browser-only no-SSR boundary + 내부 페이지 컴포넌트에서 `useMetaDataGridQueryStates`, `useGetActionsSuspense` 실행)
-- [x] `_client.tsx` 없음 (CSR 기본 패턴)
+- [x] page.tsx (`dynamic(() => import("./_client"), { ssr: false })` no-SSR wrapper)
+- [x] `_client.tsx` (브라우저 전용 `useMetaDataGridQueryStates`, `useGetActionsSuspense`, `PageSurface` owner)
 - [x] `_prefetch.ts` 없음 (SSR 예외 아님)
 
 ## 변경 이력
@@ -126,6 +126,7 @@
 | 2026-03-15 | Surface owner와 elevation 규칙을 문서화                                                                          | codex                |
 | 2026-03-15 | Action 목록 본문에 `PageSurface > SectionSurface(padding="none")` ownership을 추가해 검색/목록 background를 명시 | codex                |
 | 2026-03-15 | Action 목록을 CSR + Suspense 단일 `page.tsx` 패턴으로 전환하고 검색을 클라이언트 필터로 정리                     | codex                |
+| 2026-03-16 | `dynamic(Promise.resolve(...))` no-SSR 경계를 `_client.tsx` 실제 모듈 import wrapper로 교체해 dev route blank 렌더를 방지 | codex |
 | 2026-02-18 | 초기 생성 (역기획)                                                                                               | req-reverse-engineer |
 | 2026-02-19 | 디자인 목업 섹션 추가                                                                                            | req-reverse-engineer |
 | 2026-03-03 | Scaffold 제거 및 페이지 헤더 영역/섹션 영역 용어 정리                                                            | codex                |

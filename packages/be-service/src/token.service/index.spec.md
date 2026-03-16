@@ -57,6 +57,7 @@ TokenStorageService와 협력하여 토큰 생명주기를 관리합니다.
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-03-16 | `TokenStorageService` import를 `../token-storage.service/index`로 고정해 폴더형 서비스의 stale dist class mismatch를 방지 | codex |
 | 2026-02-19 | 초기 생성 (역기획) | req-reverse-engineer |
 | 2026-03-13 | `token.service.ts`와 sidecar spec을 폴더형 `index.ts`/`index.spec.md` 구조로 재배치 | codex |
 | 2026-03-13 | 폴더형 `index.ts` 구조에 맞게 `TokenStorageService` 상대 import 경로를 `../token-storage.service`로 보정 | codex |

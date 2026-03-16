@@ -37,12 +37,13 @@ export {
 export { TaskService } from "./task.service";
 export { TemplateService } from "./template.service";
 export { TimelineService } from "./timeline.service";
-export { TokenService } from "./token.service";
+export { TokenService } from "./token.service/index";
 export {
 	TokenStorageService,
 	type SessionInfo,
 	type SessionMetadata,
-} from "./token-storage.service";
+	type OidcStatePayload,
+} from "./token-storage.service/index";
 export { UserService } from "./user.service";
 export { MaskingService } from "./masking.service";
 export { MASKING_PRESETS, type MaskingPreset } from "@cocrepo/constant";

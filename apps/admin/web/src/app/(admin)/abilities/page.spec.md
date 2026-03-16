@@ -55,11 +55,11 @@
 
 | 항목                   | 결정                                                                                             |
 | ---------------------- | ------------------------------------------------------------------------------------------------ |
-| PageSurface owner      | `apps/admin/web/src/app/(admin)/abilities/page.tsx`                                              |
+| PageSurface owner      | `apps/admin/web/src/app/(admin)/abilities/_client.tsx`                                           |
 | PageSurface 역할       | 필터 섹션과 권한 목록 섹션을 하나의 raised 본문으로 묶음                                         |
 | SectionSurface 대상    | 필터 블록, 권한 목록 테이블 블록                                                                 |
 | SectionSurface padding | 필터는 기본 패딩, 목록은 `padding="none"`                                                        |
-| 예외                   | 없음. 필터/테이블을 `Section`에 배치해도 surface는 자동 생성되지 않으므로 `page.tsx`가 직접 소유 |
+| 예외                   | 없음. 필터/테이블을 `Section`에 배치해도 surface는 자동 생성되지 않으므로 `_client.tsx`가 직접 소유 |
 
 ## 컬럼 정의
 
@@ -114,12 +114,12 @@
 
 - Orval generated suspense 훅(`useGetAbilitiesSuspense`)을 사용하며 임시 `customInstance` 직접 호출은 제거됨
 - 필터링은 모두 클라이언트 사이드에서 처리
-- CSR + Suspense 기본 패턴을 유지하되, 상대 `/api` 호출의 prerender 오류를 피하기 위해 `page.tsx`가 browser-only no-SSR boundary를 제공합니다.
+- CSR + Suspense 기본 패턴을 유지하되, 상대 `/api` 호출의 prerender 오류를 피하기 위해 `page.tsx`는 browser-only no-SSR wrapper만 제공하고 실제 목록 렌더링은 `_client.tsx`가 담당합니다.
 
 ## 구현 체크리스트
 
-- [x] page.tsx (browser-only no-SSR boundary + 내부 페이지 컴포넌트에서 `Suspense`, `useGetAbilitiesSuspense` 실행)
-- [x] `_client.tsx` 없음 (CSR 기본 패턴)
+- [x] page.tsx (`dynamic(() => import("./_client"), { ssr: false })` browser-only wrapper)
+- [x] `_client.tsx` (`Suspense`, `useGetAbilitiesSuspense`, 필터/목록 surface owner 담당)
 - [x] `_prefetch.ts` 없음 (SSR 예외 아님)
 
 ## 변경 이력
@@ -130,6 +130,7 @@
 | 2026-03-15 | Surface owner와 elevation 규칙을 문서화                                                                         | codex                |
 | 2026-03-15 | abilities 목록에 `PageSurface`와 섹션별 `SectionSurface` ownership을 추가해 필터/목록 엘리베이션을 명시         | codex                |
 | 2026-03-15 | abilities 목록을 generated suspense 훅 기반 CSR 단일 `page.tsx` 패턴으로 전환하고 `_client.tsx`를 제거          | codex                |
+| 2026-03-16 | `dynamic(Promise.resolve(...))` no-SSR 경계를 `_client.tsx` 실제 모듈 import wrapper로 교체해 dev blank 렌더를 방지 | codex |
 | 2026-03-14 | Playwright E2E가 `networkidle` 대신 heading/대상 요소 가시성을 기준으로 페이지 준비를 판정하도록 안정화         | codex                |
 | 2026-02-18 | 초기 생성 (역기획)                                                                                              | req-reverse-engineer |
 | 2026-02-19 | 디자인 목업 섹션 추가                                                                                           | req-reverse-engineer |

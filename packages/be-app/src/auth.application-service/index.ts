@@ -7,7 +7,7 @@ import {
 	PageMetaDto,
 	QueryAuthAuditLogDto,
 } from "@cocrepo/dto";
-import { OidcFacade } from "@cocrepo/integration";
+import { OidcFacade, type OidcRpClientKey } from "@cocrepo/integration";
 import {
 	AuthAuditLogService,
 	GetAuditLogsResult,
@@ -31,6 +31,15 @@ import { plainToInstance } from "class-transformer";
 import { Cookie } from "@cocrepo/vo";
 import { Request, Response } from "express";
 import { ClsService } from "nestjs-cls";
+
+const DEFAULT_OIDC_CLIENT_KEY: OidcRpClientKey = "admin";
+const OIDC_STATE_CONTEXT_PREFIX = "__oidc_ctx__:";
+const SESSION_ID_SEPARATOR = ".";
+
+interface OidcStateContext {
+	clientKey: OidcRpClientKey;
+	returnTo?: string;
+}
 
 /**
  * 인증 Application Service
@@ -62,12 +71,21 @@ export class AuthApplicationService {
 	 * state(CSRF 방지) + PKCE(code_verifier/code_challenge) 적용
 	 * @param returnTo 인증 완료 후 리다이렉트할 프론트엔드 경로 (예: /admin/dashboard)
 	 */
-	async getAuthorizationUrl(returnTo?: string): Promise<string> {
+	async getAuthorizationUrl(
+		returnTo?: string,
+		clientKey: OidcRpClientKey = DEFAULT_OIDC_CLIENT_KEY,
+	): Promise<string> {
 		const { state, codeVerifier, authorizationUrl } =
-			this.oidcFacade.createAuthorizationRequest(returnTo);
+			this.oidcFacade.createAuthorizationRequest(clientKey, returnTo);
 
-		// state와 code_verifier, returnTo를 함께 Redis에 저장
-		await this.tokenStorageService.saveOidcState(state, codeVerifier, 600, returnTo);
+		// state와 code_verifier, returnTo/clientKey 컨텍스트를 함께 Redis에 저장
+		await this.tokenStorageService.saveOidcState(
+			state,
+			codeVerifier,
+			600,
+			returnTo,
+			clientKey,
+		);
 		return authorizationUrl;
 	}
 
@@ -92,12 +110,20 @@ export class AuthApplicationService {
 			);
 		}
 
-		const { codeVerifier, returnTo } = stateData;
+		const { codeVerifier, returnTo: storedReturnTo, clientKey: storedClientKey } =
+			stateData;
+		const { clientKey: legacyClientKey, returnTo: legacyReturnTo } =
+			this.decodeOidcStateContext(storedReturnTo);
+		const clientKey = this.isOidcClientKey(storedClientKey)
+			? storedClientKey
+			: legacyClientKey;
+		const returnTo = legacyReturnTo ?? storedReturnTo;
 
 		// IDP token endpoint에 code + code_verifier 교환
 		const tokenResponse = await this.oidcFacade.exchangeCodeForTokens(
 			code,
 			codeVerifier,
+			clientKey,
 		);
 
 		// access_token에서 사용자 정보 추출 (sub, exp claim)
@@ -120,7 +146,10 @@ export class AuthApplicationService {
 		}
 
 		// 세션 생성 및 저장 (멀티 디바이스 지원)
-		const sessionId = this.tokenStorageService.generateSessionId();
+		const sessionId = this.buildSessionId(
+			clientKey,
+			this.tokenStorageService.generateSessionId(),
+		);
 		if (tokenResponse.refresh_token) {
 			await this.tokenStorageService.saveSession(
 				payload.sub,
@@ -129,6 +158,7 @@ export class AuthApplicationService {
 				{
 					userAgent: req.headers["user-agent"] || "unknown",
 					ipAddress: req.ip || req.socket.remoteAddress || "unknown",
+					clientKey,
 				},
 			);
 		}
@@ -153,7 +183,11 @@ export class AuthApplicationService {
 			throw new UnauthorizedException("리프레시 토큰이 존재하지 않습니다");
 		}
 
-		const tokenResponse = await this.oidcFacade.refreshTokens(refreshToken);
+		const clientKey = this.resolveClientKeyFromSessionId(sessionId);
+		const tokenResponse = await this.oidcFacade.refreshTokens(
+			refreshToken,
+			clientKey,
+		);
 
 		// 사용자 정보 조회
 		const payload = this.decodeAccessToken(tokenResponse.access_token);
@@ -201,8 +235,10 @@ export class AuthApplicationService {
 		res: Response,
 	): Promise<boolean> {
 		if (accessToken) {
+			const clientKey = this.resolveClientKeyFromSessionId(sessionId);
+
 			// 1. IDP에 토큰 무효화 요청 (best-effort)
-			await this.oidcFacade.revokeToken(accessToken);
+			await this.oidcFacade.revokeToken(accessToken, clientKey);
 
 			try {
 				// 2. Access Token 블랙리스트 등록 (JwtAuthGuard에서 차단)
@@ -481,7 +517,13 @@ export class AuthApplicationService {
 			sessionId,
 		);
 		if (session?.refreshToken) {
-			await this.oidcFacade.revokeToken(session.refreshToken);
+			const clientKey = this.isOidcClientKey(session.clientKey)
+				? session.clientKey
+				: this.resolveClientKeyFromSessionId(sessionId);
+			await this.oidcFacade.revokeToken(
+				session.refreshToken,
+				clientKey,
+			);
 		}
 
 		await this.tokenStorageService.deleteSession(userId, sessionId);
@@ -510,7 +552,13 @@ export class AuthApplicationService {
 						session.sessionId,
 					);
 				if (sessionData?.refreshToken) {
-					await this.oidcFacade.revokeToken(sessionData.refreshToken);
+					const clientKey = this.isOidcClientKey(sessionData.clientKey)
+						? sessionData.clientKey
+						: this.resolveClientKeyFromSessionId(session.sessionId);
+					await this.oidcFacade.revokeToken(
+						sessionData.refreshToken,
+						clientKey,
+					);
 				}
 			}
 		}
@@ -524,6 +572,69 @@ export class AuthApplicationService {
 	// =========================================================================
 	// 쿠키 관리
 	// =========================================================================
+
+	private decodeOidcStateContext(
+		serializedReturnTo?: string,
+	): OidcStateContext {
+		if (!serializedReturnTo) {
+			return { clientKey: DEFAULT_OIDC_CLIENT_KEY };
+		}
+
+		if (!serializedReturnTo.startsWith(OIDC_STATE_CONTEXT_PREFIX)) {
+			return {
+				clientKey: DEFAULT_OIDC_CLIENT_KEY,
+				returnTo: serializedReturnTo,
+			};
+		}
+
+		try {
+			const payload = JSON.parse(
+				Buffer.from(
+					serializedReturnTo.slice(OIDC_STATE_CONTEXT_PREFIX.length),
+					"base64url",
+				).toString("utf-8"),
+			) as Partial<OidcStateContext>;
+
+			return {
+				clientKey: this.isOidcClientKey(payload.clientKey)
+					? payload.clientKey
+					: DEFAULT_OIDC_CLIENT_KEY,
+				returnTo:
+					typeof payload.returnTo === "string" ? payload.returnTo : undefined,
+			};
+		} catch {
+			return { clientKey: DEFAULT_OIDC_CLIENT_KEY };
+		}
+	}
+
+	private buildSessionId(
+		clientKey: OidcRpClientKey,
+		sessionId: string,
+	): string {
+		return `${clientKey}${SESSION_ID_SEPARATOR}${sessionId}`;
+	}
+
+	private resolveClientKeyFromSessionId(
+		sessionId?: string,
+	): OidcRpClientKey {
+		if (!sessionId) {
+			return DEFAULT_OIDC_CLIENT_KEY;
+		}
+
+		const separatorIndex = sessionId.indexOf(SESSION_ID_SEPARATOR);
+		if (separatorIndex <= 0) {
+			return DEFAULT_OIDC_CLIENT_KEY;
+		}
+
+		const candidate = sessionId.slice(0, separatorIndex);
+		return this.isOidcClientKey(candidate)
+			? candidate
+			: DEFAULT_OIDC_CLIENT_KEY;
+	}
+
+	private isOidcClientKey(value: unknown): value is OidcRpClientKey {
+		return value === "admin" || value === "storybook";
+	}
 
 	/**
 	 * 토큰 쿠키 설정

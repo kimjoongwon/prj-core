@@ -1,19 +1,10 @@
 import "../tailwind.css";
-import { ToastProvider } from "@heroui/react";
-import { NuqsAdapter } from "nuqs/adapters/react";
+import { withStorybookRuntime } from "../src/runtime/StorybookRuntimeProvider";
 
 /** @type { import('@storybook/react-vite').Preview } */
 const preview = {
   decorators: [
-    (Story) => {
-      return (
-        // @ts-expect-error - NuqsAdapter React 19 type compatibility issue
-        <NuqsAdapter>
-          <ToastProvider placement="bottom-center" />
-          <Story />
-        </NuqsAdapter>
-      );
-    },
+    withStorybookRuntime,
   ],
   parameters: {
     options: {
@@ -43,6 +34,10 @@ const preview = {
       // 'error' - fail CI on a11y violations
       // 'off' - skip a11y checks entirely
       test: "todo",
+    },
+    storybookRuntime: {
+      realm: "none",
+      requiresSpace: false,
     },
   },
 };

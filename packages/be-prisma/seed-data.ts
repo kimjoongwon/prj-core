@@ -2630,6 +2630,20 @@ export const oidcClientSeedData: OidcClientSeedData[] = [
 		tosUri: null,
 	},
 	{
+		clientId: "storybook",
+		clientSecret: "storybook-secret-change-in-production",
+		clientName: "PRJ Core Storybook",
+		redirectUris: ["http://localhost:6006/api/v1/auth/storybook/callback"],
+		grantTypes: ["authorization_code", "refresh_token"],
+		responseTypes: ["code"],
+		tokenEndpointAuthMethod: "client_secret_post",
+		scope: "openid profile email roles",
+		isActive: true,
+		logoUri: null,
+		policyUri: null,
+		tosUri: null,
+	},
+	{
 		clientId: "prj-core-mobile",
 		clientSecret: null, // Public client (PKCE required)
 		clientName: "PRJ Core Mobile App",

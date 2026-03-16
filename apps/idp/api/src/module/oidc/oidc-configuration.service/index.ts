@@ -28,6 +28,16 @@ export class OidcConfigurationService {
 			scope: "openid profile email roles",
 		},
 		{
+			client_id: "storybook",
+			client_secret: "storybook-secret-change-in-production",
+			client_name: "PRJ Core Storybook",
+			redirect_uris: ["http://localhost:6006/api/v1/auth/storybook/callback"],
+			grant_types: ["authorization_code", "refresh_token"],
+			response_types: ["code"],
+			token_endpoint_auth_method: "client_secret_post",
+			scope: "openid profile email roles",
+		},
+		{
 			client_id: "prj-core-mobile",
 			client_name: "PRJ Core Mobile App",
 			redirect_uris: [
@@ -161,7 +171,7 @@ export class OidcConfigurationService {
 
 			if (clients.length > 0) {
 				this.logger.log(`DB에서 ${clients.length}개의 OIDC 클라이언트 로드됨`);
-				return clients.map((client) => ({
+				const mappedClients = clients.map((client) => ({
 					client_id: client.clientId,
 					client_secret: client.clientSecret || undefined,
 					client_name: client.clientName,
@@ -171,6 +181,7 @@ export class OidcConfigurationService {
 					token_endpoint_auth_method: client.tokenEndpointAuthMethod,
 					scope: client.scope,
 				}));
+				return this.mergeWithFallbackClients(mappedClients);
 			}
 		} catch {
 			this.logger.debug(
@@ -178,6 +189,54 @@ export class OidcConfigurationService {
 			);
 		}
 
-		return OidcConfigurationService.FALLBACK_CLIENTS;
+		return this.mergeWithFallbackClients([]);
+	}
+
+	private mergeWithFallbackClients(
+		clients: OidcClientConfig[],
+	): OidcClientConfig[] {
+		const mergedClients = new Map<string, OidcClientConfig>();
+
+		for (const fallbackClient of OidcConfigurationService.FALLBACK_CLIENTS) {
+			mergedClients.set(fallbackClient.client_id, fallbackClient);
+		}
+
+		for (const client of clients) {
+			const fallbackClient = mergedClients.get(client.client_id);
+			mergedClients.set(
+				client.client_id,
+				fallbackClient
+					? this.mergeClientConfig(fallbackClient, client)
+					: client,
+			);
+		}
+
+		return Array.from(mergedClients.values());
+	}
+
+	private mergeClientConfig(
+		fallbackClient: OidcClientConfig,
+		client: OidcClientConfig,
+	): OidcClientConfig {
+		return {
+			...fallbackClient,
+			...client,
+			redirect_uris: this.mergeStringArrays(
+				fallbackClient.redirect_uris,
+				client.redirect_uris,
+			),
+			grant_types: this.mergeStringArrays(
+				fallbackClient.grant_types,
+				client.grant_types,
+			),
+			response_types: this.mergeStringArrays(
+				fallbackClient.response_types,
+				client.response_types,
+			),
+		};
+	}
+
+	private mergeStringArrays(...values: Array<string[] | undefined>): string[] {
+		return Array.from(new Set(values.flatMap((value) => value ?? [])));
 	}
 }

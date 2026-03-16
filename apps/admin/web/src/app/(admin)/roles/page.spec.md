@@ -58,11 +58,11 @@
 
 | 항목                   | 결정                                                                                                       |
 | ---------------------- | ---------------------------------------------------------------------------------------------------------- |
-| PageSurface owner      | `apps/admin/web/src/app/(admin)/roles/page.tsx`                                                            |
+| PageSurface owner      | `apps/admin/web/src/app/(admin)/roles/_client.tsx`                                                         |
 | PageSurface 역할       | 안내 배너와 역할 테이블을 하나의 raised 본문으로 묶음                                                      |
 | SectionSurface 대상    | 역할 목록 커스텀 table 블록                                                                                |
 | SectionSurface padding | `padding="none"`                                                                                           |
-| 예외                   | 없음. 경고 배너는 PageSurface 내부에서 별도 surface 없이 표현하고, 테이블 surface는 `page.tsx`가 직접 소유 |
+| 예외                   | 없음. 경고 배너는 PageSurface 내부에서 별도 surface 없이 표현하고, 테이블 surface는 `_client.tsx`가 직접 소유 |
 
 ## 테이블 컬럼 정의
 
@@ -98,15 +98,15 @@
 
 ## 특이사항
 
-- CSR + Suspense 기본 패턴을 유지하되, 상대 `/api` 호출의 prerender 오류를 피하기 위해 `page.tsx`가 browser-only no-SSR boundary를 제공합니다.
+- CSR + Suspense 기본 패턴을 유지하되, 상대 `/api` 호출의 prerender 오류를 피하기 위해 `page.tsx`는 browser-only no-SSR wrapper만 제공하고 실제 목록 렌더링은 `_client.tsx`가 담당합니다.
 - `MetaDataGrid` 대신 커스텀 table 마크업으로 역할 목록을 렌더링
 - 안내 배너를 통해 시스템 역할(FULL_ACCESS, MANAGE, VIEW) 수정/삭제 제약을 먼저 노출
 - `Section` 상단에 보조 `PageTitleBar(level={2})`를 사용해 목록 영역 제목을 분리
 
 ## 구현 체크리스트
 
-- [x] page.tsx (browser-only no-SSR boundary + 내부 페이지 컴포넌트에서 `Suspense`, `useGetRolesSuspense` 실행)
-- [x] `_client.tsx` 없음 (CSR 기본 패턴)
+- [x] page.tsx (`dynamic(() => import("./_client"), { ssr: false })` browser-only wrapper)
+- [x] `_client.tsx` (`Suspense`, `useGetRolesSuspense`, warning/banner 및 table surface owner 담당)
 - [x] `_prefetch.ts` 없음 (SSR 예외 아님)
 
 ## 변경 이력
@@ -117,6 +117,7 @@
 | 2026-03-15 | Surface owner와 elevation 규칙을 문서화                                                                    | codex                |
 | 2026-03-15 | 역할 목록 본문에 `PageSurface`와 테이블 `SectionSurface(padding="none")` ownership을 추가                  | codex                |
 | 2026-03-15 | 역할 목록을 CSR + Suspense 단일 `page.tsx` 패턴으로 전환하고 `_client.tsx`, `_prefetch.ts`를 제거          | codex                |
+| 2026-03-16 | `dynamic(Promise.resolve(...))` no-SSR 경계를 `_client.tsx` 실제 모듈 import wrapper로 교체해 dev blank 렌더를 방지 | codex |
 | 2026-02-18 | 초기 생성 (역기획)                                                                                         | req-reverse-engineer |
 | 2026-02-19 | 디자인 목업 추가                                                                                           | req-reverse-engineer |
 | 2026-03-03 | Scaffold 제거 및 페이지 헤더 영역/섹션 영역 용어 정리                                                      | codex                |

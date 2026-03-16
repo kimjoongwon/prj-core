@@ -26,6 +26,11 @@
 - `SKIP_ADMIN_SETUP=1`: admin-setup 프로젝트 및 의존성 생략, 기존 storageState 파일 사용
 - `PLAYWRIGHT_BROWSERS_PATH`: 기본값은 `apps/test/e2e/browsers`, 외부 값 설정 시 우선
 
+## 안정화 메모
+
+- 로컬 기본 worker 수는 `3`으로 제한하여 Next dev on-demand compile과 초기 route fan-out 충돌을 줄입니다.
+- `admin-setup`은 로그인 직후 주요 admin route를 한 번 순차 방문해 사전 컴파일한 뒤 storageState를 저장합니다.
+
 ## 런치 옵션
 
 - 모든 Admin용 Chromium 프로젝트는 `--disable-crash-reporter` 플래그를 강제하여 Crashpad 권한 오류를 회피합니다.
@@ -34,4 +39,5 @@
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-03-16 | 로컬 기본 worker 수를 3으로 제한하고 admin setup의 route prewarm 전략을 문서화해 dev on-demand compile race를 완화 | codex |
 | 2026-03-15 | `SKIP_ADMIN_SETUP` 토글 및 Crashpad 비활성화를 추가하여 CI 외 환경에서 테스트 실행을 안정화 | qa-fe-e2e-testing |

@@ -59,11 +59,11 @@
 
 | 항목                   | 결정                                                                                             |
 | ---------------------- | ------------------------------------------------------------------------------------------------ |
-| PageSurface owner      | `apps/admin/web/src/app/(admin)/users/page.tsx`                                                  |
+| PageSurface owner      | `apps/admin/web/src/app/(admin)/users/_client.tsx`                                               |
 | PageSurface 역할       | 통계 카드와 목록 그리드를 하나의 raised 본문으로 묶음                                            |
 | SectionSurface 대상    | 통계 카드 묶음, 이용자 목록 `MetaDataGrid`                                                       |
 | SectionSurface padding | 통계 영역은 기본 패딩, 목록 영역은 `padding="none"`                                              |
-| 예외                   | 없음. 검색 입력과 그리드 툴바는 `MetaDataGrid` 슬롯이지만 surface는 `users/page.tsx`가 직접 소유 |
+| 예외                   | 없음. 검색 입력과 그리드 툴바는 `MetaDataGrid` 슬롯이지만 surface는 `users/_client.tsx`가 직접 소유 |
 
 ## 컬럼 정의
 
@@ -117,7 +117,7 @@
 
 `useMetaDataGridQueryStates` 훅을 사용하여 nuqs 기반으로 URL 쿼리 파라미터를 관리합니다.
 
-- Next.js App Router build 요구에 맞춰 `page.tsx`는 browser-only no-SSR boundary를 제공하고 내부 페이지 컴포넌트에서 훅을 실행합니다.
+- Next.js App Router build 요구에 맞춰 `page.tsx`는 browser-only no-SSR wrapper만 제공하고 실제 훅 실행과 목록 렌더링은 `_client.tsx`가 담당합니다.
 
 | 파라미터 | 타입   | 기본값 | 설명                                |
 | -------- | ------ | ------ | ----------------------------------- |
@@ -127,8 +127,8 @@
 
 ## 구현 체크리스트
 
-- [x] page.tsx (browser-only no-SSR boundary + 내부 페이지 컴포넌트에서 `useMetaDataGridQueryStates`, `useGetUsers`, `MetaDataGrid`, `StatsCard` 실행)
-- [x] `_client.tsx` 없음 (CSR 기본 패턴)
+- [x] page.tsx (`dynamic(() => import("./_client"), { ssr: false })` browser-only wrapper)
+- [x] `_client.tsx` (`useMetaDataGridQueryStates`, `useGetUsers`, `MetaDataGrid`, `StatsCard` 실행)
 - [x] `_prefetch.ts` 없음 (SSR 예외 아님)
 
 ## 상위 기획서
@@ -146,6 +146,7 @@
 | 2026-03-15 | `Suspense` fallback에서 최종 화면 복제를 제거하고 최소 중앙 로딩 스피너만 렌더링하도록 단순화                     | codex                |
 | 2026-03-15 | 이용자 목록 화면에 `Page + PageTitleBar` 구조는 유지하고 `PageSurface/SectionSurface` 표현 레이어를 추가          | codex                |
 | 2026-03-15 | 이용자 목록을 CSR + Suspense 단일 `page.tsx` 패턴으로 전환하고 `_client.tsx`, `_prefetch.ts`를 제거               | codex                |
+| 2026-03-16 | `dynamic(Promise.resolve(...))` no-SSR 경계를 `_client.tsx` 실제 모듈 import wrapper로 교체해 dev blank 렌더를 방지 | codex |
 | 2026-02-18 | 초기 생성 (역기획)                                                                                                | req-reverse-engineer |
 | 2026-02-19 | 디자인 목업 추가                                                                                                  | req-reverse-engineer |
 | 2026-03-03 | Scaffold 제거 및 페이지 헤더 영역/섹션 영역 용어 정리                                                             | codex                |

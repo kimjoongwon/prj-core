@@ -45,6 +45,12 @@ export class AuthCacheService {
 	invalidate() {}
 }
 
+export class AuthAuditLogService {
+	getAuditLogs() {}
+	getStats() {}
+}
+
 export class EmailService {
 	sendEmail() {}
+	sendTemporaryPasswordEmail() {}
 }

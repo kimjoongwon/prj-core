@@ -11,12 +11,11 @@
     "test:watch": "vitest watch",
     "format": "biome format --write .",
     "type-check": "tsc --noEmit",
-    "start:dev": "storybook dev -p ${STORYBOOK_PORT:-6006}",
+    "start:dev": "STORYBOOK_REQUIRE_AUTH=true storybook dev -p ${STORYBOOK_PORT:-6006}",
     "build-storybook": "storybook build"
   },
   "license": "ISC",
   "dependencies": {
-
     "@heroui/react": "catalog:",
     "@cocrepo/store": "workspace:^",
     "@cocrepo/ui": "workspace:^",

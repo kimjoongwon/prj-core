@@ -51,7 +51,7 @@
 
 | 항목                       | 결정                                                                                         |
 | -------------------------- | -------------------------------------------------------------------------------------------- |
-| `PageSurface` owner        | `apps/admin/web/src/app/(admin)/templates/page.tsx` 본문                                     |
+| `PageSurface` owner        | `apps/admin/web/src/app/(admin)/templates/_client.tsx` 본문                                  |
 | `SectionSurface` 대상 블록 | `MetaDataGrid`의 검색/필터 헤더, 테이블, 페이지네이션                                        |
 | `padding="none"` 적용 위치 | `SectionSurface`에서 적용하여 DataGrid 내부 간격과 중복되지 않게 유지                        |
 | flat 예외 여부와 근거      | flat 예외 없음. 검색/필터와 그리드를 layout 배경에서 분리해 하나의 시각 블록으로 보여줘야 함 |
@@ -110,14 +110,20 @@
 
 ## 구현 체크리스트
 
-- [x] page.tsx (browser-only no-SSR boundary + 내부 페이지 컴포넌트에서 `useMetaDataGridQueryStates`, `useGetTemplatesSuspense` 실행)
-- [x] `_client.tsx` 없음 (CSR 기본 패턴)
+- [x] page.tsx (`dynamic(() => import("./_client"), { ssr: false })` no-SSR wrapper)
+- [x] `_client.tsx` (브라우저 전용 목록 렌더링과 본문 surface owner)
 - [x] `_prefetch.ts` 없음 (SSR 예외 아님)
+
+## Browser-only Boundary
+
+- `page.tsx`는 `dynamic(() => import("./_client"), { ssr: false })` wrapper로 유지합니다.
+- `_client.tsx`가 브라우저 전용 데이터 조회와 `PageSurface` ownership을 담당합니다.
 
 ## 변경 이력
 
 | 일자       | 내용                                                                                                             | 작성자               |
 | ---------- | ---------------------------------------------------------------------------------------------------------------- | -------------------- |
+| 2026-03-16 | `dynamic(Promise.resolve(...))` no-SSR 경계를 `_client.tsx` 실제 모듈 import wrapper로 교체해 dev blank page를 방지 | codex |
 | 2026-03-15 | 상대 `/api` 호출의 prerender 오류를 피하기 위해 templates 목록 `page.tsx`를 browser-only no-SSR boundary로 전환  | codex                |
 | 2026-03-15 | Next.js build 요구에 맞춰 `useMetaDataGridQueryStates` 실행을 page-level `Suspense` boundary 안쪽으로 이동       | codex                |
 | 2026-03-15 | 목록 페이지 본문을 `PageSurface > SectionSurface(padding="none")`로 감싸 검색/필터와 그리드의 시각적 표면을 복구 | codex                |

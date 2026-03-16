@@ -23,6 +23,7 @@ export interface SessionMetadata {
 	ipAddress: string;
 	createdAt: string;
 	lastActivityAt: string;
+	clientKey?: string;
 }
 
 /**
@@ -35,6 +36,15 @@ export interface SessionInfo {
 	createdAt: string;
 	lastActivityAt: string;
 	isCurrent: boolean;
+}
+
+/**
+ * OIDC state payload
+ */
+export interface OidcStatePayload {
+	codeVerifier: string;
+	returnTo?: string;
+	clientKey?: string;
 }
 
 /**
@@ -86,7 +96,7 @@ export class TokenStorageService {
 		userId: string,
 		sessionId: string,
 		refreshToken: string,
-		metadata: { userAgent: string; ipAddress: string },
+		metadata: { userAgent: string; ipAddress: string; clientKey?: string },
 	): Promise<void> {
 		const authConfig = this.configService.get<AuthConfig>("auth");
 		const ttl = parseExpiresInToSeconds(authConfig?.refresh || "7d");
@@ -99,6 +109,7 @@ export class TokenStorageService {
 			ipAddress: metadata.ipAddress,
 			createdAt: now,
 			lastActivityAt: now,
+			clientKey: metadata.clientKey,
 		};
 
 		await this.redisService.set(key, JSON.stringify(sessionData), ttl);
@@ -370,9 +381,10 @@ export class TokenStorageService {
 		codeVerifier: string,
 		ttlSeconds = 600,
 		returnTo?: string,
+		clientKey?: string,
 	): Promise<void> {
 		const key = `${REDIS_KEYS.OIDC_STATE}${state}`;
-		const value = JSON.stringify({ codeVerifier, returnTo });
+		const value = JSON.stringify({ codeVerifier, returnTo, clientKey });
 		await this.redisService.set(key, value, ttlSeconds);
 		this.logger.debug(`OIDC state + PKCE 저장: ttl=${ttlSeconds}s`);
 	}
@@ -384,7 +396,7 @@ export class TokenStorageService {
 	 */
 	async validateAndConsumeOidcState(
 		state: string,
-	): Promise<{ codeVerifier: string; returnTo?: string } | null> {
+	): Promise<OidcStatePayload | null> {
 		const key = `${REDIS_KEYS.OIDC_STATE}${state}`;
 		const raw = await this.redisService.get(key);
 		if (!raw) return null;
@@ -393,7 +405,15 @@ export class TokenStorageService {
 
 		// 하위호환: 기존 저장된 plain string(codeVerifier만)도 처리
 		try {
-			return JSON.parse(raw);
+			const parsed = JSON.parse(raw) as Partial<OidcStatePayload>;
+			if (typeof parsed.codeVerifier !== "string" || parsed.codeVerifier.length === 0) {
+				return null;
+			}
+			return {
+				codeVerifier: parsed.codeVerifier,
+				returnTo: parsed.returnTo,
+				clientKey: parsed.clientKey,
+			};
 		} catch {
 			return { codeVerifier: raw };
 		}

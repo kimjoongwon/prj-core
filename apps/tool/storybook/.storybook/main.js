@@ -1,4 +1,8 @@
 import { dirname, join } from "node:path";
+import {
+  createStorybookAuthPlugin,
+  createStorybookProxyConfig,
+} from "./storybookAuthDevServer.js";
 
 /**
  * This function is used to resolve the absolute path of a package.
@@ -31,11 +35,22 @@ const config = {
   },
   async viteFinal(config) {
     const { default: react } = await import("@vitejs/plugin-react-swc");
+    const authConfig = {
+      requireAuth: process.env.STORYBOOK_REQUIRE_AUTH === "true",
+      coreApiTarget: process.env.STORYBOOK_CORE_API_TARGET || "http://localhost:3006",
+      idpApiTarget: process.env.STORYBOOK_IDP_API_TARGET || "http://localhost:3007",
+    };
 
     config.plugins = config.plugins || [];
     config.resolve = config.resolve || {};
+    config.server = config.server || {};
+    config.server.proxy = {
+      ...(config.server.proxy || {}),
+      ...createStorybookProxyConfig(authConfig),
+    };
     config.resolve.alias = {
       ...(config.resolve.alias || {}),
+      "@cocrepo/api": join(process.cwd(), "../../../packages/fe-api/src"),
       "@cocrepo/toolkit": join(process.cwd(), "../../../packages/common-toolkit/index.ts"),
       "@cocrepo/constant": join(process.cwd(), "../../../packages/common-constant/src/index.ts"),
       "@cocrepo/enum": join(process.cwd(), "../../../packages/common-enum/src/index.ts"),
@@ -44,6 +59,11 @@ const config = {
       "@cocrepo/hook": join(process.cwd(), "../../../packages/fe-hook/index.ts"),
       "@cocrepo/store": join(process.cwd(), "../../../packages/fe-store/index.ts"),
       "@cocrepo/ui": join(process.cwd(), "../../../packages/fe-ui/index.ts"),
+      "next/navigation": join(process.cwd(), "src/runtime/nextNavigationMock.ts"),
+    };
+    config.define = {
+      ...(config.define || {}),
+      __STORYBOOK_REQUIRE_AUTH__: JSON.stringify(authConfig.requireAuth),
     };
 
     try {
@@ -57,6 +77,8 @@ const config = {
         jsxImportSource: "react",
       })
     );
+
+    config.plugins.push(createStorybookAuthPlugin(authConfig));
 
     return config;
   },

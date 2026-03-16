@@ -10,9 +10,23 @@ describe("OidcFacade", () => {
 			get: jest.fn().mockReturnValue({
 				issuer: "http://localhost:3007",
 				jwksUri: "http://localhost:3007/oidc/jwks",
-				clientId: "test-client",
-				clientSecret: "test-secret",
-				redirectUri: "http://localhost:3000/api/v1/auth/callback",
+				clients: {
+					admin: {
+						clientId: "test-admin-client",
+						clientSecret: "test-admin-secret",
+						redirectUri: "http://localhost:3000/api/v1/auth/callback",
+						loginUrl: "http://localhost:3000/admin/auth/login",
+						defaultReturnTo: "http://localhost:3000/admin/dashboard",
+					},
+					storybook: {
+						clientId: "test-storybook-client",
+						clientSecret: "test-storybook-secret",
+						redirectUri:
+							"http://localhost:6006/api/v1/auth/storybook/callback",
+						loginUrl: "http://localhost:6006/__storybook_auth/login",
+						defaultReturnTo: "http://localhost:6006/",
+					},
+				},
 			}),
 		};
 
@@ -27,13 +41,32 @@ describe("OidcFacade", () => {
 	});
 
 	it("authorization request를 생성해야 한다", () => {
-		const result = facade.createAuthorizationRequest("/admin/dashboard");
+		const result = facade.createAuthorizationRequest(
+			"admin",
+			"/admin/dashboard",
+		);
 
 		expect(result.state).toBeTruthy();
 		expect(result.codeVerifier).toBeTruthy();
 		expect(result.returnTo).toBe("/admin/dashboard");
 		expect(result.authorizationUrl).toContain("/oidc/auth?");
-		expect(result.authorizationUrl).toContain("client_id=test-client");
+		expect(result.authorizationUrl).toContain("client_id=test-admin-client");
 		expect(result.authorizationUrl).toContain("code_challenge=");
+	});
+
+	it("storybook RP 설정으로 authorization request를 생성해야 한다", () => {
+		const result = facade.createAuthorizationRequest(
+			"storybook",
+			"http://localhost:6006/?path=/story/example",
+		);
+
+		expect(result.authorizationUrl).toContain(
+			"client_id=test-storybook-client",
+		);
+		expect(result.authorizationUrl).toContain(
+			encodeURIComponent(
+				"http://localhost:6006/api/v1/auth/storybook/callback",
+			),
+		);
 	});
 });

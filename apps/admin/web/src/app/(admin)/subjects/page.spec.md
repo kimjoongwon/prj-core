@@ -48,11 +48,11 @@
 
 | 항목                   | 결정                                                                            |
 | ---------------------- | ------------------------------------------------------------------------------- |
-| PageSurface owner      | `apps/admin/web/src/app/(admin)/subjects/page.tsx`                              |
+| PageSurface owner      | `apps/admin/web/src/app/(admin)/subjects/_client.tsx`                           |
 | PageSurface 역할       | Subject 검색/필터와 목록 전체를 raised 본문으로 묶음                            |
 | SectionSurface 대상    | Subject `MetaDataGrid`                                                          |
 | SectionSurface padding | `padding="none"`                                                                |
-| 예외                   | 없음. 검색/필터가 `MetaDataGrid` 슬롯에 있어도 surface는 `page.tsx`가 직접 소유 |
+| 예외                   | 없음. 검색/필터가 `MetaDataGrid` 슬롯에 있어도 surface는 `_client.tsx`가 직접 소유 |
 
 ## 컬럼 정의
 
@@ -97,14 +97,14 @@
 ## 특이사항
 
 - 서버 사이드 페이지네이션 없이 전체 데이터를 한 번에 가져와 클라이언트 사이드 필터링 수행
-- `page.tsx`는 browser-only no-SSR boundary를 제공하고 내부 페이지 컴포넌트에서 `Suspense` fallback과 목록 렌더링을 직접 구성
+- `page.tsx`는 browser-only no-SSR wrapper를 제공하고 실제 `Suspense` fallback과 목록 렌더링은 `_client.tsx`가 직접 구성
 - nuqs 기반 URL 상태 관리 (`useMetaDataGridQueryStates`)
 - Subject는 조회 전용 (등록/수정/삭제 없음)
 
 ## 구현 체크리스트
 
-- [x] page.tsx (browser-only no-SSR boundary + 내부 페이지 컴포넌트에서 `useMetaDataGridQueryStates`, `useGetSubjectsSuspense` 실행)
-- [x] `_client.tsx` 없음 (CSR 기본 패턴)
+- [x] page.tsx (`dynamic(() => import("./_client"), { ssr: false })` browser-only wrapper)
+- [x] `_client.tsx` (`useMetaDataGridQueryStates`, `useGetSubjectsSuspense`, surface owner 담당)
 - [x] `_prefetch.ts` 없음 (SSR 예외 아님)
 
 ## 변경 이력
@@ -116,6 +116,7 @@
 | 2026-03-15 | Surface owner와 elevation 규칙을 문서화                                                                       | codex                |
 | 2026-03-15 | Subject 목록 본문에 `PageSurface > SectionSurface(padding="none")` ownership을 추가                           | codex                |
 | 2026-03-15 | Subject 목록을 CSR + Suspense 단일 `page.tsx` 패턴으로 전환하고 `_client.tsx`, `_prefetch.ts`를 제거          | codex                |
+| 2026-03-16 | `dynamic(Promise.resolve(...))` no-SSR 경계를 `_client.tsx` 실제 모듈 import wrapper로 교체해 dev blank 렌더를 방지 | codex |
 | 2026-02-18 | 초기 생성 (역기획)                                                                                            | req-reverse-engineer |
 | 2026-02-19 | 디자인 목업 추가                                                                                              | req-reverse-engineer |
 | 2026-03-03 | Scaffold 제거 및 페이지 헤더 영역/섹션 영역 용어 정리                                                         | codex                |

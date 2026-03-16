@@ -48,7 +48,7 @@ UI에서는 Exercise 정보만 노출합니다.
 
 | 항목                   | 결정                                                                   |
 | ---------------------- | ---------------------------------------------------------------------- |
-| PageSurface owner      | `apps/admin/web/src/app/(admin)/tasks/page.tsx`                        |
+| PageSurface owner      | `apps/admin/web/src/app/(admin)/tasks/_client.tsx`                        |
 | PageSurface 역할       | 태스크 검색/필터와 목록 전체를 raised 본문으로 묶음                    |
 | SectionSurface 대상    | 태스크 `MetaDataGrid`                                                  |
 | SectionSurface padding | `padding="none"`                                                       |
@@ -118,8 +118,8 @@ UI에서는 Exercise 정보만 노출합니다.
 
 ## 구현 체크리스트
 
-- [x] page.tsx (browser-only no-SSR boundary + 내부 페이지 컴포넌트에서 `useMetaDataGridQueryStates`, `useGetTasksSuspense` 실행)
-- [x] `_client.tsx` 없음 (CSR 기본 패턴)
+- [x] page.tsx (`dynamic(() => import("./_client"), { ssr: false })` no-SSR wrapper)
+- [x] `_client.tsx` (브라우저 전용 목록 렌더링과 본문 surface owner)
 - [x] `_prefetch.ts` 없음 (SSR 예외 아님)
 - [x] 삭제 확인 모달과 캐시 무효화는 `page.tsx`에서 직접 처리
 
@@ -127,17 +127,23 @@ UI에서는 Exercise 정보만 노출합니다.
 
 | 항목                   | 결정                                                                                                                      |
 | ---------------------- | ------------------------------------------------------------------------------------------------------------------------- |
-| PageSurface owner      | `apps/admin/web/src/app/(admin)/tasks/page.tsx`                                                                           |
+| PageSurface owner      | `apps/admin/web/src/app/(admin)/tasks/_client.tsx`                                                                           |
 | ------                 | ------                                                                                                                    |
 | PageSurface 역할       | 페이지 헤더 아래 본문 전체를 raised surface로 묶습니다.                                                                   |
 | SectionSurface 대상    | 본문 섹션, 폼, 표, 로딩/빈 상태 블록                                                                                      |
 | SectionSurface padding | DataGrid/테이블은 필요 시 `padding="none"`, 그 외 기본 패딩                                                               |
 | 예외                   | 없음. `Layout`/`Page`/`Section` 슬롯 배치만으로는 surface가 생기지 않으므로 page 또는 `_client.tsx`가 owner를 명시합니다. |
 
+## Browser-only Boundary
+
+- `page.tsx`는 `dynamic(() => import("./_client"), { ssr: false })` wrapper로 유지합니다.
+- `_client.tsx`가 브라우저 전용 데이터 조회와 `PageSurface` ownership을 담당합니다.
+
 ## 변경 이력
 
 | 일자       | 내용                                                                                                         | 작성자             |
 | ---------- | ------------------------------------------------------------------------------------------------------------ | ------------------ |
+| 2026-03-16 | `dynamic(Promise.resolve(...))` no-SSR 경계를 `_client.tsx` 실제 모듈 import wrapper로 교체해 dev blank page를 방지 | codex |
 | 2026-03-15 | 상대 `/api` 호출의 prerender 오류를 피하기 위해 태스크 목록 `page.tsx`를 browser-only no-SSR boundary로 전환 | codex              |
 | 2026-03-15 | Next.js build 요구에 맞춰 `useMetaDataGridQueryStates` 실행을 page-level `Suspense` boundary 안쪽으로 이동   | codex              |
 | 2026-03-15 | Surface ownership과 elevation 결정을 문서화                                                                  | codex              |

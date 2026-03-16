@@ -13,12 +13,6 @@ interface UserDto extends IdOnlyDto {
 	name: string;
 }
 
-interface TaskSeedDto extends IdOnlyDto {
-	exercise?: {
-		name: string;
-	};
-}
-
 interface ApiListResponse<T> {
 	data?: T[];
 }
@@ -40,6 +34,7 @@ test.describe("프로그램 등록/수정 연결 플로우", () => {
 		const routineOneName = `E2E 루틴 A ${uniqueSuffix}`;
 		const routineTwoName = `E2E 루틴 B ${uniqueSuffix}`;
 		const programName = `E2E 프로그램 ${uniqueSuffix}`;
+		const exerciseTaskName = `E2E 프로그램 운동 ${uniqueSuffix}`;
 		const initialCapacity = "12";
 		const updatedCapacity = "18";
 
@@ -90,41 +85,25 @@ test.describe("프로그램 등록/수정 연결 플로우", () => {
 			sessionId = createdSession.data?.id;
 			expect(sessionId).toBeTruthy();
 
-			const exercisesResponse = await page.request.get(
-				`${API_BASE_URL}/tasks?take=20&skip=0`,
+			const createTaskResponse = await page.request.post(
+				`${API_BASE_URL}/tasks`,
 				{
 					headers: SPACE_HEADERS,
+					data: {
+						name: exerciseTaskName,
+						duration: 60,
+						count: 10,
+					},
 				},
 			);
 			test.skip(
-				exercisesResponse.status() !== 200,
-				`운동 조회 API 응답이 200이 아닙니다. status=${exercisesResponse.status()}`,
+				createTaskResponse.status() !== 201,
+				`운동 생성 API 응답이 201이 아닙니다. status=${createTaskResponse.status()}`,
 			);
-			const exercisesBody =
-				(await exercisesResponse.json()) as ApiListResponse<TaskSeedDto>;
-			exerciseTaskId = exercisesBody.data?.[0]?.id;
-
-			if (!exerciseTaskId) {
-				const createTaskResponse = await page.request.post(
-					`${API_BASE_URL}/tasks`,
-					{
-						headers: SPACE_HEADERS,
-						data: {
-							name: `E2E 프로그램 운동 ${uniqueSuffix}`,
-							duration: 60,
-							count: 10,
-						},
-					},
-				);
-				test.skip(
-					createTaskResponse.status() !== 201,
-					`운동 생성 API 응답이 201이 아닙니다. status=${createTaskResponse.status()}`,
-				);
-				const createdTask =
-					(await createTaskResponse.json()) as ApiItemResponse<IdOnlyDto>;
-				exerciseTaskId = createdTask.data?.id;
-				createdExerciseTaskId = exerciseTaskId;
-			}
+			const createdTask =
+				(await createTaskResponse.json()) as ApiItemResponse<IdOnlyDto>;
+			exerciseTaskId = createdTask.data?.id;
+			createdExerciseTaskId = exerciseTaskId;
 
 			expect(exerciseTaskId).toBeTruthy();
 

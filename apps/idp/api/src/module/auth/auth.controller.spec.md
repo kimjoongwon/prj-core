@@ -14,10 +14,12 @@ OIDC/OAuth2 기반 인증 흐름의 진입점을 담당합니다. 로그인 리�
 | 메서드 | 경로 | 설명 | 인증 |
 |--------|------|------|------|
 | GET | /login | OIDC Authorization 엔드포인트로 리다이렉트 | Public |
+| GET | /storybook/login | Storybook 전용 RP로 OIDC Authorization 엔드포인트에 리다이렉트 | Public |
 | GET | /callback | OIDC 인증 완료 후 Authorization Code 수신 및 토큰 교환 | Public |
+| GET | /storybook/callback | Storybook 전용 RP의 OIDC 콜백 처리 | Public |
 | POST | /token/refresh | 리프레시 토큰으로 새 토큰 재발급 | Public (쿠키 기반) |
 | POST | /sign-up | 신규 사용자 계정 생성 | Public |
-| GET | /verify-token | 액세스 토큰 유효성 검증 | JWT 인증 필요 |
+| GET | /verify-token | 액세스 토큰 유효성 검증 | JWT 인증 필요, SkipSpaceCheck |
 | GET | /my-spaces | 현재 사용자가 접근 가능한 Space 목록 조회 | JWT 인증 필요, SkipSpaceCheck |
 | POST | /logout | 로그아웃 및 토큰 무효화 | JWT 인증 필요 |
 | GET | /audit-logs | 인증 감사 로그 목록 조회 | FULL_ACCESS, SkipSpaceCheck |
@@ -33,7 +35,7 @@ OIDC/OAuth2 기반 인증 흐름의 진입점을 담당합니다. 로그인 리�
 ## 인증/인가
 
 - `@Public()`: 인증 없이 접근 가능한 엔드포인트에 적용 (login, callback, token/refresh, sign-up)
-- `@SkipSpaceCheck()`: X-Space-ID 헤더 없이 접근 가능 (my-spaces, change-password, 세션 관리, 관리자 기능)
+- `@SkipSpaceCheck()`: X-Space-ID 헤더 없이 접근 가능 (verify-token, my-spaces, change-password, 세션 관리, 관리자 기능)
 - `@Roles([SYSTEM_ROLES.FULL_ACCESS])`: 최고 관리자만 접근 가능 (audit-logs, unlock, force-reset, invalidate-sessions)
 - `@ApiAuth()`: Bearer Token 또는 Cookie 기반 인증 필요
 - 쿠키: `accessToken`, `refreshToken`, `sessionId` 쿠키를 사용하여 세션 관리
@@ -43,7 +45,9 @@ OIDC/OAuth2 기반 인증 흐름의 진입점을 담당합니다. 로그인 리�
 | 엔드포인트 | 요청 DTO | 응답 DTO |
 |-----------|----------|----------|
 | GET /login | Query: `returnTo` (string) | 302 리다이렉트 |
+| GET /storybook/login | Query: `returnTo` (string) | 302 리다이렉트 |
 | GET /callback | Query: `code`, `state`, `error`, `error_description` | 302 리다이렉트 |
+| GET /storybook/callback | Query: `code`, `state`, `error`, `error_description` | 302 리다이렉트 |
 | POST /token/refresh | 쿠키: `refreshToken`, `sessionId` | `TokenRefreshResponseDto` |
 | POST /sign-up | `SignUpPayloadDto` | - |
 | GET /verify-token | - | `VerifyTokenResponseDto` |
@@ -61,7 +65,9 @@ OIDC/OAuth2 기반 인증 흐름의 진입점을 담당합니다. 로그인 리�
 
 ## 비즈니스 규칙
 
-- 콜백 에러 발생 시 `/admin/auth/login?error=...`으로 리다이렉트
+- admin 콜백 에러 발생 시 `/admin/auth/login?error=...`으로 리다이렉트
+- storybook 콜백 에러 발생 시 `http://localhost:6006/__storybook_auth/login?error=...`으로 리다이렉트
+- 성공 시에는 `AuthApplicationService.handleOidcCallback()`이 돌려준 `returnTo`를 우선 사용하고, 없으면 RP별 `defaultReturnTo`를 사용합니다.
 - 비밀번호 변경 시 `newPassword !== confirmPassword` 이면 `PASSWORD_MISMATCH` 예외 발생
 - 감사 로그 조회는 페이지네이션 지원 (기본 skip=0, take=20)
 - 세션은 쿠키 기반으로 관리되며, 로그아웃 시 IDP 측 토큰도 무효화
@@ -85,6 +91,9 @@ OIDC/OAuth2 기반 인증 흐름의 진입점을 담당합니다. 로그인 리�
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-03-16 | Storybook RP clientKey 명을 `storybook`으로 단순화해 login/callback redirect 계약 표현을 정리 | codex |
+| 2026-03-16 | Storybook 세션 검증을 위해 `GET /verify-token`에도 `SkipSpaceCheck`를 적용하고 문서 반영 | codex |
+| 2026-03-16 | storybook 전용 login/callback 엔드포인트와 RP별 에러/성공 redirect 규칙을 추가 | codex |
 | 2026-03-14 | Biome lint organizeImports/format cleanup reflected | codex |
 | 2026-02-19 | 초기 생성 (역기획) | req-reverse-engineer |
 | 2026-03-11 | AuthController 의존성을 AuthApplicationService로 전환 | codex |
