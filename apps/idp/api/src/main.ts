@@ -61,6 +61,7 @@ async function bootstrap() {
 	// 5. API 문서 설정 (Swagger)
 	// =================================================================
 	const oidcIssuer = process.env.OIDC_ISSUER || "http://localhost:3007";
+	const swaggerBaseUrl = process.env.IDP_CLIENT_URL || oidcIssuer;
 
 	const config = new DocumentBuilder()
 		.setTitle("OIDC Identity Provider")
@@ -108,7 +109,7 @@ async function bootstrap() {
 	SwaggerModule.setup("api", app, document, {
 		swaggerOptions: {
 			persistAuthorization: true,
-			oauth2RedirectUrl: `http://localhost:${port}/api/oauth2-redirect.html`,
+			oauth2RedirectUrl: `${swaggerBaseUrl}/api/oauth2-redirect.html`,
 			initOAuth: {
 				clientId: "prj-core-swagger",
 				scopes: ["openid", "profile", "email", "roles"],

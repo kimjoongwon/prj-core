@@ -6,6 +6,11 @@ import { RedisOidcAdapterFactory } from "../oidc.adapter";
 import { OidcClientRepository } from "../oidc-client.repository";
 import type { OidcClientConfig, OidcConfiguration } from "../types";
 
+function resolveUrl(baseUrl: string, pathname: string): string {
+	const normalizedBaseUrl = baseUrl.endsWith("/") ? baseUrl : `${baseUrl}/`;
+	return new URL(pathname, normalizedBaseUrl).toString();
+}
+
 /**
  * OIDC Configuration Service
  *
@@ -16,50 +21,6 @@ import type { OidcClientConfig, OidcConfiguration } from "../types";
 export class OidcConfigurationService {
 	private readonly logger = new Logger(OidcConfigurationService.name);
 
-	private static readonly FALLBACK_CLIENTS: OidcClientConfig[] = [
-		{
-			client_id: "prj-core-admin",
-			client_secret: "admin-secret-change-in-production",
-			client_name: "PRJ Core Admin",
-			redirect_uris: ["http://localhost:3000/api/v1/auth/callback"],
-			grant_types: ["authorization_code", "refresh_token"],
-			response_types: ["code"],
-			token_endpoint_auth_method: "client_secret_post",
-			scope: "openid profile email roles",
-		},
-		{
-			client_id: "storybook",
-			client_secret: "storybook-secret-change-in-production",
-			client_name: "PRJ Core Storybook",
-			redirect_uris: ["http://localhost:6006/api/v1/auth/storybook/callback"],
-			grant_types: ["authorization_code", "refresh_token"],
-			response_types: ["code"],
-			token_endpoint_auth_method: "client_secret_post",
-			scope: "openid profile email roles",
-		},
-		{
-			client_id: "prj-core-mobile",
-			client_name: "PRJ Core Mobile App",
-			redirect_uris: [
-				"com.prjcore.app://callback",
-				"http://localhost:19006/callback",
-			],
-			grant_types: ["authorization_code", "refresh_token"],
-			response_types: ["code"],
-			token_endpoint_auth_method: "none",
-			scope: "openid profile email offline_access",
-		},
-		{
-			client_id: "prj-core-swagger",
-			client_name: "PRJ Core Swagger UI",
-			redirect_uris: ["http://localhost:3006/api/oauth2-redirect.html"],
-			grant_types: ["authorization_code"],
-			response_types: ["code"],
-			token_endpoint_auth_method: "none",
-			scope: "openid profile email roles",
-		},
-	];
-
 	constructor(
 		private readonly configService: ConfigService,
 		private readonly accountService: AccountService,
@@ -69,12 +30,13 @@ export class OidcConfigurationService {
 
 	async buildConfiguration(): Promise<OidcConfiguration> {
 		const oidcConfig = this.configService.get<OidcConfig>("oidc");
-		const clients = await this.loadClients();
-
 		const issuer = oidcConfig?.issuer || "http://localhost:3007";
 		const idpClientUrl =
 			this.configService.get<string>("IDP_CLIENT_URL") ||
 			"http://localhost:3008";
+		const clients = await this.loadClients(
+			this.buildFallbackClients(oidcConfig, issuer, idpClientUrl),
+		);
 
 		return {
 			adapter: this.adapterFactory.getAdapterFactory(),
@@ -165,7 +127,9 @@ export class OidcConfigurationService {
 	 * DB에서 OIDC 클라이언트 로드
 	 * DB 접근 실패 시 폴백 클라이언트를 사용합니다.
 	 */
-	private async loadClients(): Promise<OidcClientConfig[]> {
+	private async loadClients(
+		fallbackClients: OidcClientConfig[],
+	): Promise<OidcClientConfig[]> {
 		try {
 			const clients = await this.oidcClientRepository.findActiveClients();
 
@@ -180,24 +144,26 @@ export class OidcConfigurationService {
 					response_types: client.responseTypes,
 					token_endpoint_auth_method: client.tokenEndpointAuthMethod,
 					scope: client.scope,
-				}));
-				return this.mergeWithFallbackClients(mappedClients);
+					}));
+				return this.mergeWithFallbackClients(mappedClients, fallbackClients);
 			}
-		} catch {
-			this.logger.debug(
-				"DB에서 클라이언트 로드 실패 (RLS) - 기본 클라이언트 사용",
+		} catch (error) {
+			this.logger.warn(
+				"DB에서 클라이언트 로드 실패 - 환경 기반 폴백 클라이언트를 사용합니다.",
 			);
+			this.logger.debug(String(error));
 		}
 
-		return this.mergeWithFallbackClients([]);
+		return this.mergeWithFallbackClients([], fallbackClients);
 	}
 
 	private mergeWithFallbackClients(
 		clients: OidcClientConfig[],
+		fallbackClients: OidcClientConfig[],
 	): OidcClientConfig[] {
 		const mergedClients = new Map<string, OidcClientConfig>();
 
-		for (const fallbackClient of OidcConfigurationService.FALLBACK_CLIENTS) {
+		for (const fallbackClient of fallbackClients) {
 			mergedClients.set(fallbackClient.client_id, fallbackClient);
 		}
 
@@ -238,5 +204,85 @@ export class OidcConfigurationService {
 
 	private mergeStringArrays(...values: Array<string[] | undefined>): string[] {
 		return Array.from(new Set(values.flatMap((value) => value ?? [])));
+	}
+
+	private buildFallbackClients(
+		oidcConfig: OidcConfig | undefined,
+		issuer: string,
+		idpClientUrl: string,
+	): OidcClientConfig[] {
+		const adminClient = oidcConfig?.clients.admin;
+		const storybookClient = oidcConfig?.clients.storybook;
+		const swaggerRedirectUri =
+			process.env.OIDC_SWAGGER_REDIRECT_URI ||
+			resolveUrl(idpClientUrl || issuer, "/api/oauth2-redirect.html");
+		const idpConsoleRedirectUri =
+			process.env.OIDC_IDP_CONSOLE_REDIRECT_URI ||
+			resolveUrl(idpClientUrl, "/api/v1/auth/callback");
+
+		return [
+			{
+				client_id: adminClient?.clientId || "prj-core-admin",
+				client_secret:
+					adminClient?.clientSecret || "admin-secret-change-in-production",
+				client_name: "PRJ Core Admin",
+				redirect_uris: [
+					adminClient?.redirectUri || "http://localhost:3000/api/v1/auth/callback",
+				],
+				grant_types: ["authorization_code", "refresh_token"],
+				response_types: ["code"],
+				token_endpoint_auth_method: "client_secret_post",
+				scope: "openid profile email roles",
+			},
+			{
+				client_id: storybookClient?.clientId || "storybook",
+				client_secret:
+					storybookClient?.clientSecret ||
+					"storybook-secret-change-in-production",
+				client_name: "PRJ Core Storybook",
+				redirect_uris: [
+					storybookClient?.redirectUri ||
+						"http://localhost:6006/api/v1/auth/storybook/callback",
+				],
+				grant_types: ["authorization_code", "refresh_token"],
+				response_types: ["code"],
+				token_endpoint_auth_method: "client_secret_post",
+				scope: "openid profile email roles",
+			},
+			{
+				client_id:
+					process.env.OIDC_IDP_CONSOLE_CLIENT_ID || "prj-core-idp-console",
+				client_secret:
+					process.env.OIDC_IDP_CONSOLE_CLIENT_SECRET ||
+					"idp-console-secret-change-in-production",
+				client_name: "PRJ Core IDP Console",
+				redirect_uris: [idpConsoleRedirectUri],
+				grant_types: ["authorization_code", "refresh_token"],
+				response_types: ["code"],
+				token_endpoint_auth_method: "client_secret_post",
+				scope: "openid profile email roles",
+			},
+			{
+				client_id: "prj-core-mobile",
+				client_name: "PRJ Core Mobile App",
+				redirect_uris: [
+					"com.prjcore.app://callback",
+					"http://localhost:19006/callback",
+				],
+				grant_types: ["authorization_code", "refresh_token"],
+				response_types: ["code"],
+				token_endpoint_auth_method: "none",
+				scope: "openid profile email offline_access",
+			},
+			{
+				client_id: process.env.OIDC_SWAGGER_CLIENT_ID || "prj-core-swagger",
+				client_name: "PRJ Core Swagger UI",
+				redirect_uris: [swaggerRedirectUri],
+				grant_types: ["authorization_code"],
+				response_types: ["code"],
+				token_endpoint_auth_method: "none",
+				scope: "openid profile email roles",
+			},
+		];
 	}
 }

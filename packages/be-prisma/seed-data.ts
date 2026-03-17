@@ -2610,6 +2610,28 @@ export interface OidcClientSeedData {
 	tosUri?: string | null;
 }
 
+function resolveOidcSeedUrl(baseUrl: string, pathname: string): string {
+	const normalizedBaseUrl = baseUrl.endsWith("/") ? baseUrl : `${baseUrl}/`;
+	return new URL(pathname, normalizedBaseUrl).toString();
+}
+
+const oidcAdminRedirectUri =
+	process.env.OIDC_ADMIN_REDIRECT_URI ||
+	process.env.OIDC_REDIRECT_URI ||
+	"http://localhost:3000/api/v1/auth/callback";
+const oidcStorybookBaseUrl = process.env.STORYBOOK_URL || "http://localhost:6006";
+const oidcStorybookRedirectUri =
+	process.env.OIDC_STORYBOOK_REDIRECT_URI ||
+	resolveOidcSeedUrl(oidcStorybookBaseUrl, "/api/v1/auth/storybook/callback");
+const oidcIdpClientUrl = process.env.IDP_CLIENT_URL || "http://localhost:3008";
+const oidcIdpConsoleRedirectUri =
+	process.env.OIDC_IDP_CONSOLE_REDIRECT_URI ||
+	resolveOidcSeedUrl(oidcIdpClientUrl, "/api/v1/auth/callback");
+const oidcIssuer = process.env.OIDC_ISSUER || oidcIdpClientUrl || "http://localhost:3007";
+const oidcSwaggerRedirectUri =
+	process.env.OIDC_SWAGGER_REDIRECT_URI ||
+	resolveOidcSeedUrl(oidcIssuer, "/api/oauth2-redirect.html");
+
 /**
  * OIDC Client 시드 데이터
  * 기본 클라이언트 애플리케이션 정의
@@ -2619,7 +2641,7 @@ export const oidcClientSeedData: OidcClientSeedData[] = [
 		clientId: "prj-core-admin",
 		clientSecret: "admin-secret-change-in-production",
 		clientName: "PRJ Core Admin",
-		redirectUris: ["http://localhost:3000/api/v1/auth/callback"],
+		redirectUris: [oidcAdminRedirectUri],
 		grantTypes: ["authorization_code", "refresh_token"],
 		responseTypes: ["code"],
 		tokenEndpointAuthMethod: "client_secret_post",
@@ -2633,7 +2655,7 @@ export const oidcClientSeedData: OidcClientSeedData[] = [
 		clientId: "storybook",
 		clientSecret: "storybook-secret-change-in-production",
 		clientName: "PRJ Core Storybook",
-		redirectUris: ["http://localhost:6006/api/v1/auth/storybook/callback"],
+		redirectUris: [oidcStorybookRedirectUri],
 		grantTypes: ["authorization_code", "refresh_token"],
 		responseTypes: ["code"],
 		tokenEndpointAuthMethod: "client_secret_post",
@@ -2664,7 +2686,7 @@ export const oidcClientSeedData: OidcClientSeedData[] = [
 		clientId: "prj-core-idp-console",
 		clientSecret: "idp-console-secret-change-in-production",
 		clientName: "PRJ Core IDP 관리 콘솔",
-		redirectUris: ["http://localhost:3008/api/v1/auth/callback"],
+		redirectUris: [oidcIdpConsoleRedirectUri],
 		grantTypes: ["authorization_code", "refresh_token"],
 		responseTypes: ["code"],
 		tokenEndpointAuthMethod: "client_secret_post",
@@ -2678,7 +2700,7 @@ export const oidcClientSeedData: OidcClientSeedData[] = [
 		clientId: "prj-core-swagger",
 		clientSecret: null,
 		clientName: "PRJ Core Swagger UI",
-		redirectUris: ["http://localhost:3006/api/oauth2-redirect.html"],
+		redirectUris: [oidcSwaggerRedirectUri],
 		grantTypes: ["authorization_code"],
 		responseTypes: ["code"],
 		tokenEndpointAuthMethod: "none",
