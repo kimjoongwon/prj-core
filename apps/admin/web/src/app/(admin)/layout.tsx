@@ -18,6 +18,7 @@ import { KeyRound } from "lucide-react";
 import { observer } from "mobx-react-lite";
 import { type ReactNode, useEffect } from "react";
 import { useSpaceGuard } from "@/hooks";
+import { resolveIdpClientUrl } from "@/runtime-urls";
 import {
 	useBottomTabStore,
 	useFABStore,
@@ -92,7 +93,7 @@ function AdminLayoutWrapper({ children }: AdminLayoutWrapperProps) {
 	};
 
 	const handleOpenIdpClient = () => {
-		const idpClientUrl = process.env.NEXT_PUBLIC_IDP_CLIENT_URL;
+		const idpClientUrl = resolveIdpClientUrl();
 		if (idpClientUrl) {
 			window.open(idpClientUrl, "_blank");
 		}

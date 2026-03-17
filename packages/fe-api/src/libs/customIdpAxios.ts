@@ -4,6 +4,17 @@ import Axios, {
 	type InternalAxiosRequestConfig,
 } from "axios";
 
+const DEFAULT_IDP_API_SERVER_BASE_URL =
+	process.env.IDP_API_INTERNAL_URL ?? "http://localhost:3007";
+
+function resolveServerBaseUrl(url?: string) {
+	if (typeof window !== "undefined" || !url?.startsWith("/")) {
+		return undefined;
+	}
+
+	return DEFAULT_IDP_API_SERVER_BASE_URL;
+}
+
 // IDP용 Axios 인스턴스
 export const IDP_AXIOS_INSTANCE = Axios.create({
 	timeout: 10000,
@@ -76,11 +87,13 @@ const processQueue = (error: unknown) => {
 IDP_AXIOS_INSTANCE.interceptors.response.use(
 	(response) => response,
 	async (error: AxiosError) => {
+		const isBrowser = typeof window !== "undefined";
 		const originalRequest = error.config as InternalAxiosRequestConfig & {
 			_retry?: boolean;
 		};
 
 		if (
+			isBrowser &&
 			error.response?.status === 401 &&
 			originalRequest &&
 			!originalRequest._retry
@@ -144,10 +157,13 @@ export const customIdpInstance = <T>(
 		...config.headers,
 		...options?.headers,
 	};
+	const baseURL =
+		options?.baseURL ?? config.baseURL ?? resolveServerBaseUrl(config.url);
 	const promise = IDP_AXIOS_INSTANCE({
 		...config,
 		...options,
 		headers,
+		...(baseURL ? { baseURL } : {}),
 		cancelToken: source.token,
 	}).then(({ data }) => data);
 

@@ -15,8 +15,8 @@ const serverEnvironments = {
 const idpEnvironments = {
   development: "http://localhost:3007/api-json",
   local: "http://localhost:3007/api-json",
-  stg: "https://stg-idp.cocdev.co.kr/api-json",
-  staging: "https://stg-idp.cocdev.co.kr/api-json",
+  stg: "https://idp-stg.cocdev.co.kr/api-json",
+  staging: "https://idp-stg.cocdev.co.kr/api-json",
   prod: "https://idp.cocdev.co.kr/api-json",
   production: "https://idp.cocdev.co.kr/api-json",
 };

@@ -3,6 +3,7 @@ import {
 	appConfig,
 	authConfig,
 	corsConfig,
+	oidcConfig,
 	objectStorageConfig,
 	redisConfig,
 	smtpConfig,
@@ -11,6 +12,7 @@ import {
 export const globalModules = createGlobalModules({
 	envFilePath: ".env",
 	configLoaders: [
+		oidcConfig,
 		authConfig,
 		appConfig,
 		corsConfig,

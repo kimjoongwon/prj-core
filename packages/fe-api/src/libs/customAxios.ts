@@ -4,12 +4,23 @@ import Axios, {
 	type InternalAxiosRequestConfig,
 } from "axios";
 
-// Orval이 완전한 URL을 생성하므로 baseURL 불필요
+const DEFAULT_CORE_API_SERVER_BASE_URL =
+	process.env.CORE_API_INTERNAL_URL ?? "http://localhost:3006";
+
+function resolveServerBaseUrl(url?: string) {
+	if (typeof window !== "undefined" || !url?.startsWith("/")) {
+		return undefined;
+	}
+
+	return DEFAULT_CORE_API_SERVER_BASE_URL;
+}
+
+// 브라우저에서는 같은 origin 상대경로를 사용하고,
+// 서버 컴포넌트/SSR에서는 runtime env 기반 internal URL을 사용합니다.
 export const AXIOS_INSTANCE = Axios.create({
-	// baseURL 제거 - Orval 생성 코드가 완전한 URL 사용
 	timeout: 10000, // 10초 타임아웃
 	withCredentials: true, // 쿠키/인증 정보 포함
-}); // Orval 생성 코드가 환경별 완전한 URL을 제공
+});
 
 // PersistStore 참조 (앱 초기화 시 설정)
 interface PersistStoreRef {
@@ -74,12 +85,15 @@ const processQueue = (error: unknown) => {
 AXIOS_INSTANCE.interceptors.response.use(
 	(response) => response,
 	async (error: AxiosError) => {
+		const isBrowser = typeof window !== "undefined";
 		const originalRequest = error.config as InternalAxiosRequestConfig & {
 			_retry?: boolean;
 		};
 
-		// 401 토큰 만료 시 갱신 시도
+		// 브라우저에서만 401 토큰 갱신 및 리다이렉트를 처리합니다.
+		// 서버 컴포넌트에서는 현재 요청만 실패시키고 페이지 레벨에서 처리합니다.
 		if (
+			isBrowser &&
 			error.response?.status === 401 &&
 			originalRequest &&
 			!originalRequest._retry
@@ -155,10 +169,13 @@ export const customInstance = <T>(
 		...config.headers,
 		...options?.headers,
 	};
+	const baseURL =
+		options?.baseURL ?? config.baseURL ?? resolveServerBaseUrl(config.url);
 	const promise = AXIOS_INSTANCE({
 		...config,
 		...options,
 		headers,
+		...(baseURL ? { baseURL } : {}),
 		cancelToken: source.token,
 	}).then(({ data }) => data);
 

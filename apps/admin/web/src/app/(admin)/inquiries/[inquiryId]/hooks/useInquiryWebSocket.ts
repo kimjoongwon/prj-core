@@ -3,6 +3,7 @@
 import { createLogger } from "@cocrepo/toolkit";
 import { type InquiryMessage, type InquiryParticipant } from "@cocrepo/type";
 import { useEffect, useRef, useState } from "react";
+import { resolveWebSocketBaseUrl } from "@/runtime-urls";
 
 const logger = createLogger("[useInquiryWebSocket]");
 
@@ -98,7 +99,7 @@ export function useInquiryWebSocket(
 	const {
 		inquiryId,
 		state,
-		wsUrl = process.env.NEXT_PUBLIC_WS_URL ?? "ws://localhost:4000",
+		wsUrl = resolveWebSocketBaseUrl() ?? "ws://localhost:4000",
 		autoConnect = true,
 		onConnect,
 		onDisconnect,
