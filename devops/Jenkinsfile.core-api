@@ -18,7 +18,17 @@ podTemplate(
     node(POD_LABEL) {
         // 브랜치에 따른 환경 설정
         def ENV_NAME = env.BRANCH_NAME == 'main' ? 'prod' : 'stg'
+        def IMAGE_TAG = env.BUILD_NUMBER
+        def PUSH_LATEST = ENV_NAME != 'prod'
         def IMAGE_PATH = "harbor.cocdev.co.kr/${ENV_NAME}/core-api"
+        def IMAGE_TAG_ARGS = ["-t ${IMAGE_PATH}:${IMAGE_TAG}"]
+        if (PUSH_LATEST) {
+            IMAGE_TAG_ARGS << "-t ${IMAGE_PATH}:latest"
+        }
+        def CLEANUP_IMAGES = ["${IMAGE_PATH}:${IMAGE_TAG}"]
+        if (PUSH_LATEST) {
+            CLEANUP_IMAGES << "${IMAGE_PATH}:latest"
+        }
         def GITOPS_APP = 'core-api'
         def GITOPS_UPDATE_JOB = env.GITOPS_UPDATE_JOB ?: 'gitops-prod-image-bump'
 
@@ -54,8 +64,7 @@ podTemplate(
                                 --format=docker \\
                                 --layers \\
                                 -f ./devops/Dockerfile.core-api \\
-                                -t ${IMAGE_PATH}:${env.BUILD_NUMBER} \\
-                                -t ${IMAGE_PATH}:latest \\
+                                ${IMAGE_TAG_ARGS.join(' \\\\\n                                ')} \\
                                 .
                         """
 
@@ -64,21 +73,22 @@ podTemplate(
                             podman push \\
                                 --compression-format=gzip \\
                                 --compression-level=9 \\
-                                ${IMAGE_PATH}:${env.BUILD_NUMBER}
+                                ${IMAGE_PATH}:${IMAGE_TAG}
                         """
 
-                        sh """
-                            podman push \\
-                                --compression-format=gzip \\
-                                --compression-level=9 \\
-                                ${IMAGE_PATH}:latest
-                        """
+                        if (PUSH_LATEST) {
+                            sh """
+                                podman push \\
+                                    --compression-format=gzip \\
+                                    --compression-level=9 \\
+                                    ${IMAGE_PATH}:latest
+                            """
+                        }
 
                         // 로컬 이미지 정리 (디스크 공간 절약)
                         sh """
                             podman rmi \\
-                                ${IMAGE_PATH}:${env.BUILD_NUMBER} \\
-                                ${IMAGE_PATH}:latest || true
+                                ${CLEANUP_IMAGES.join(' \\\\\n                                ')} || true
                         """
                     }
                 }
@@ -93,13 +103,13 @@ podTemplate(
                             wait: false,
                             parameters: [
                                 string(name: 'APP_NAME', value: GITOPS_APP),
-                                string(name: 'IMAGE_TAG', value: env.BUILD_NUMBER),
+                                string(name: 'IMAGE_TAG', value: IMAGE_TAG),
                                 string(name: 'DEPLOY_ENV', value: 'prod'),
                                 string(name: 'SOURCE_BUILD_URL', value: env.BUILD_URL ?: ''),
                                 string(name: 'SOURCE_COMMIT', value: gitCommit),
                             ]
                         )
-                        echo "Triggered ${GITOPS_UPDATE_JOB} with APP_NAME=${GITOPS_APP}, IMAGE_TAG=${env.BUILD_NUMBER}"
+                        echo "Triggered ${GITOPS_UPDATE_JOB} with APP_NAME=${GITOPS_APP}, IMAGE_TAG=${IMAGE_TAG}"
                     }
                 } else {
                     echo "Skip GitOps update trigger for ENV=${ENV_NAME}"
