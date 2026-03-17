@@ -35,40 +35,60 @@ export class DirectPrismaProvider implements OnModuleDestroy {
 
 		const directUrl = this.configService.get<string>("DIRECT_URL");
 		const databaseUrl = this.configService.get<string>("DATABASE_URL");
-		const connectionUrl = directUrl || databaseUrl;
+		const connectionUrls = Array.from(
+			new Set([directUrl, databaseUrl].filter(Boolean)),
+		) as string[];
 
-		if (!connectionUrl) {
+		if (connectionUrls.length === 0) {
 			throw new Error("DATABASE_URL or DIRECT_URL is not defined");
 		}
 
 		this.logger.debug(
-			`OIDC Direct Prisma 클라이언트 생성 (directUrl: ${directUrl ? "사용" : "미사용"})`,
-		);
-		this.logger.log(
-			`OIDC Direct Prisma 연결 대상 확인 (${getConnectionTarget(connectionUrl)})`,
+			`OIDC Direct Prisma 클라이언트 생성 (directUrl: ${directUrl ? "사용" : "미사용"}, fallback: ${databaseUrl ? "사용" : "미사용"})`,
 		);
 
-		this.pool = new pg.Pool({
-			connectionString: connectionUrl,
-			max: 10,
-			idleTimeoutMillis: 30000,
-		});
+		const connectionErrors: unknown[] = [];
 
-		const adapter = new PrismaPg(this.pool);
+		for (const [index, connectionUrl] of connectionUrls.entries()) {
+			this.logger.log(
+				`OIDC Direct Prisma 연결 대상 확인 (${getConnectionTarget(connectionUrl)})`,
+			);
 
-		try {
-			this.prisma = new PrismaClient({ adapter });
-			await this.prisma.$connect();
-			return this.prisma;
-		} catch (error) {
-			this.prisma = null;
-			if (this.pool) {
-				await this.pool.end().catch(() => undefined);
-				this.pool = null;
+			this.pool = new pg.Pool({
+				connectionString: connectionUrl,
+				max: 10,
+				idleTimeoutMillis: 30000,
+			});
+
+			const adapter = new PrismaPg(this.pool);
+
+			try {
+				this.prisma = new PrismaClient({ adapter });
+				await this.prisma.$connect();
+
+				if (index > 0) {
+					this.logger.warn(
+						"OIDC Direct Prisma가 fallback DATABASE_URL로 연결되었습니다.",
+					);
+				}
+
+				return this.prisma;
+			} catch (error) {
+				connectionErrors.push(error);
+				this.logger.warn(
+					`OIDC Direct Prisma 연결 실패, 다음 연결 문자열로 재시도합니다. (${getConnectionTarget(connectionUrl)})`,
+				);
+				this.prisma = null;
+				if (this.pool) {
+					await this.pool.end().catch(() => undefined);
+					this.pool = null;
+				}
 			}
-			this.logger.error("OIDC Direct Prisma 연결 실패", error);
-			throw error;
 		}
+
+		const finalError = connectionErrors.at(-1);
+		this.logger.error("OIDC Direct Prisma 연결 실패", finalError);
+		throw finalError;
 	}
 
 	async onModuleDestroy() {
