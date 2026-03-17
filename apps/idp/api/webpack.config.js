@@ -50,9 +50,13 @@ class WatchPackagesPlugin {
 }
 
 module.exports = function (options, webpack) {
+  const isWatchMode = Boolean(
+    options.watch ?? process.argv.includes("--watch"),
+  );
+
   return {
     ...options,
-    entry: ["webpack/hot/poll?100", options.entry],
+    entry: isWatchMode ? ["webpack/hot/poll?100", options.entry] : options.entry,
     externals: [
       function ({ request }, callback) {
         if (request === "@cocrepo/prisma") {
@@ -73,15 +77,17 @@ module.exports = function (options, webpack) {
         return callback(null, "commonjs " + request);
       },
     ],
-    plugins: [
-      ...options.plugins,
-      new webpack.HotModuleReplacementPlugin(),
-      new RunScriptWebpackPlugin({
-        name: options.output.filename,
-        autoRestart: false,
-        cwd: __dirname,
-      }),
-      new WatchPackagesPlugin(),
-    ],
+    plugins: isWatchMode
+      ? [
+          ...options.plugins,
+          new webpack.HotModuleReplacementPlugin(),
+          new RunScriptWebpackPlugin({
+            name: options.output.filename,
+            autoRestart: false,
+            cwd: __dirname,
+          }),
+          new WatchPackagesPlugin(),
+        ]
+      : options.plugins,
   };
 };

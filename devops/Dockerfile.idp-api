@@ -25,7 +25,8 @@ RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --store-dir /pnpm
 COPY --from=setup /app/out/full/ ./
 RUN --mount=type=cache,id=pnpm,target=/pnpm/store \
     --mount=type=cache,id=turbo,target=/app/.turbo \
-    pnpm exec turbo build
+    pnpm exec turbo build --filter=idp-api^... --concurrency=1 && \
+    pnpm --filter idp-api run build
 
 FROM node:24-alpine AS runner
 
