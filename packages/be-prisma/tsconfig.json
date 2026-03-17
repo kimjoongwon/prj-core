@@ -21,6 +21,11 @@
   },
   "include": [
     "src/**/*.ts",
+    "bootstrap/**/*.ts",
+    "demo-data/**/*.ts",
+    "reference-data/**/*.ts",
+    "seed.ts",
+    "data-migrate.ts",
     "seed-data.ts",
     "asset-seed-data.ts",
     "translation-seed-data.ts",

@@ -13,6 +13,11 @@
 - schema 변경 시 운영 반영을 어떤 순서와 원칙으로 가져가야 하는지
 - 앞으로의 파일 구조와 배포 흐름을 어떻게 잡아야 하는지
 
+함께 읽을 문서:
+
+- [schema-file-conventions.md](./schema-file-conventions.md)
+- [schema-change-playbook.md](./schema-change-playbook.md)
+
 ## 한 줄 요약
 
 현재 방식은 `seed-data.ts`에 적힌 기본 데이터를 `seed.ts`가 한 번에 넣는 구조라서 개발/스테이징 초기화에는 편하지만,
@@ -221,6 +226,9 @@ prod에서 자동으로 돌아가는 것은 `reference data`만 허용합니다.
 
 이 순서를 깨면 schema는 바뀌었는데 필요한 기준 데이터가 없는 상태가 생길 수 있습니다.
 
+실제 필드 추가 / backfill / reference-data 변경 절차는
+[schema-change-playbook.md](./schema-change-playbook.md)를 따릅니다.
+
 ### 원칙 4. 식별자는 Immutable Key를 사용
 
 reference data는 아래 같은 변경 가능한 표시명이 아니라
@@ -357,6 +365,9 @@ pnpm db:data:migrate:prod # prod reference-data migration
 3. 샘플/데모/테스트 목적이 있는가?
 4. key가 안정적인가?
 5. 자동 반영 시 덮어쓰기 위험이 있는가?
+
+필드 추가나 스키마 변경이 실제로 들어오면
+[schema-change-playbook.md](./schema-change-playbook.md)의 시나리오별 절차로 바로 연결합니다.
 
 판정 규칙:
 

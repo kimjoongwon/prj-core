@@ -9,32 +9,14 @@ import { PrismaPg } from "@prisma/adapter-pg";
 import { hash } from "bcrypt";
 import * as pg from "pg";
 
-/** System Space 고정 UUID (E2E 테스트와 일치해야 함) */
-const SYSTEM_SPACE_ID = "61ddca20-1752-466e-b4da-879ebdbe54e3";
+import { ensureSecurityPolicyDefaults } from "./src/bootstrap/defaults";
+import { ensureBootstrapTemplates } from "./src/bootstrap/templates";
 import {
-	abilitySeedData,
-	actionSeedData,
 	exerciseCatalogSeedData,
 	groundSeedData,
-	oidcClientSeedData,
-	roleAssociationSeedData,
-	roleCategorySeedData,
-	roleClassificationSeedData,
-	roleGroupSeedData,
-	roleSeedData,
-	securityPolicySeedData,
 	sessionLoadProfileSeedData,
 	sessionTemplateSeedData,
-	spaceCategorySeedData,
-	spaceGroupSeedData,
-	subjectSeedData,
-	templateSeedData,
 	timelineSeedData,
-	translationSeedData,
-	userGroundMapping,
-	userSeedData,
-
-	// Asset Domain
 	albumSeedData,
 	albumEntrySeedData,
 	assetSeedData,
@@ -43,29 +25,20 @@ import {
 	folderSeedData,
 	imageDetailSeedData,
 	videoDetailSeedData,
-
-	// Inquiry Domain
 	inquiryMessageSeedData,
 	inquiryParticipantSeedData,
 	inquirySeedData,
 	inquiryTagMasterData,
 	inquiryThreadSeedData,
 	sentimentAnalysisSeedData,
-} from "./seed-data";
-import type {
-	Action,
-	Ground,
-	Group,
-	Role,
-	Subject,
-} from "./src/generated/client/client";
+	userGroundMapping,
+	userSeedData,
+} from "./demo-data";
+import type { Ground, Role } from "./src/generated/client/client";
 import { Prisma, PrismaClient } from "./src/generated/client/client";
-import {
-	CategoryTypes,
-	RecurringDayOfWeek,
-	RepeatCycleTypes,
-	SessionTypes,
-} from "./src/generated/client/enums";
+import { RecurringDayOfWeek, RepeatCycleTypes, SessionTypes } from "./src/generated/client/enums";
+import { SYSTEM_SPACE_ID } from "./src/reference-data/constants";
+import { syncReferenceData } from "./src/reference-data/sync-reference-data";
 
 // Prisma 7: Adapter 패턴으로 PrismaClient 생성
 const pool = new pg.Pool({
@@ -73,35 +46,33 @@ const pool = new pg.Pool({
 });
 const adapter = new PrismaPg(pool);
 const prisma = new PrismaClient({ adapter });
+
+function getRequiredRole(
+	roles: Record<string, Role>,
+	roleName: string,
+): Role {
+	const role = roles[roleName];
+	if (!role) {
+		throw new Error(`Required seeded role is missing: ${roleName}`);
+	}
+
+	return role;
+}
+
 async function main() {
-	// Super Admin 데이터를 seed-data에서 가져오기
+	const { roles } = await syncReferenceData(prisma);
+	const fullAccessRole = getRequiredRole(roles, "FULL_ACCESS");
+	const manageRole = getRequiredRole(roles, "MANAGE");
+	const viewRole = getRequiredRole(roles, "VIEW");
+
+	// Super Admin 데이터를 demo-data에서 가져오기
 	const superAdminData = userSeedData.find((u) => u.role === "FULL_ACCESS");
 	if (!superAdminData)
-		throw new Error("FULL_ACCESS 유저 데이터가 seed-data에 없습니다.");
+		throw new Error("FULL_ACCESS 유저 데이터가 demo-data에 없습니다.");
 
 	const hashedPassword = await hash(superAdminData.password, 10);
 
-	// Role들을 seed-data.ts 기반으로 생성
-	const roles: Record<string, Role> = {};
-	for (const roleData of roleSeedData) {
-		roles[roleData.name] = await prisma.role.upsert({
-			where: { name: roleData.name },
-			update: {
-				displayName: roleData.displayName,
-				description: roleData.description,
-				isSystem: roleData.isSystem,
-			},
-			create: {
-				name: roleData.name,
-				displayName: roleData.displayName,
-				description: roleData.description,
-				isSystem: roleData.isSystem,
-			},
-		});
-		console.log(`Role 생성 완료: ${roleData.name}`);
-	}
-
-	// Super Admin 유저 생성 (seed-data 기반)
+	// Super Admin 유저 생성 (demo-data 기반)
 	const superAdminUser = await prisma.user.upsert({
 		where: {
 			phone: superAdminData.phone,
@@ -121,21 +92,11 @@ async function main() {
 		},
 	});
 
-	// System Space 생성 (고정 UUID 사용 - E2E 테스트와 일치)
-	// SpaceClassification을 통해 ROOT Category가 연결된 Space가 System Space
-	const systemSpace = await prisma.space.upsert({
-		where: { id: SYSTEM_SPACE_ID },
-		update: {},
-		create: {
-			id: SYSTEM_SPACE_ID,
-		},
-	});
-
 	// System Space에 Tenant가 없으면 생성 (FULL_ACCESS 전용)
 	const existingTenant = await prisma.tenant.findFirst({
 		where: {
-			spaceId: systemSpace.id,
-			roleId: roles.FULL_ACCESS.id,
+			spaceId: SYSTEM_SPACE_ID,
+			roleId: fullAccessRole.id,
 		},
 	});
 
@@ -143,20 +104,16 @@ async function main() {
 		await prisma.tenant.create({
 			data: {
 				userId: superAdminUser.id,
-				spaceId: systemSpace.id,
-				roleId: roles.FULL_ACCESS.id,
+				spaceId: SYSTEM_SPACE_ID,
+				roleId: fullAccessRole.id,
 			},
 		});
 		console.log("System Space Tenant 생성 완료 (FULL_ACCESS 전용)");
 	}
 
-	console.log(`System Space 준비 완료 (id=${systemSpace.id})`);
+	console.log(`System Space 준비 완료 (id=${SYSTEM_SPACE_ID})`);
 
-	// Space Category/Group 생성 및 System Space 연결
-	await createSpaceCategoriesAndClassifications(systemSpace.id);
-	await createSpaceGroupsAndAssociations(systemSpace.id);
-
-	// System Space Ground 생성 (seed-data 기반)
+	// System Space Ground 생성 (demo-data 기반)
 	const systemGroundData = groundSeedData.find((g) => g.isSystem);
 	if (systemGroundData) {
 		await prisma.ground.upsert({
@@ -175,7 +132,7 @@ async function main() {
 				phone: systemGroundData.phone,
 				email: systemGroundData.email,
 				businessNo: systemGroundData.businessNo,
-				spaceId: systemSpace.id,
+				spaceId: SYSTEM_SPACE_ID,
 			},
 		});
 		console.log(`System Ground 생성 완료: ${systemGroundData.name}`);
@@ -183,7 +140,7 @@ async function main() {
 
 	// Group 생성을 위한 tenant 조회 (System Space의 첫 번째 tenant)
 	const firstTenant = await prisma.tenant.findFirst({
-		where: { spaceId: systemSpace.id },
+		where: { spaceId: SYSTEM_SPACE_ID },
 	});
 
 	if (firstTenant) {
@@ -214,44 +171,26 @@ async function main() {
 		);
 	}
 
-	// Role 타입 카테고리 생성
-	await createRoleCategories(systemSpace.id);
-
-	// Role과 Category 연결 (RoleClassification)
-	await createRoleClassifications(roles);
-
-	// Role 관련 Group 생성 및 RoleAssociation 연결
-	await createRoleGroupsAndAssociations(roles, systemSpace.id);
-
 	// 일반 유저들과 그라운드 생성
-	await createRegularUsersAndGrounds(roles.MANAGE, roles.VIEW);
+	await createRegularUsersAndGrounds(manageRole, viewRole);
 
 	// Ground Space에 BRANCH SpaceClassification 할당
-	await classifyGroundSpacesAsBranch(systemSpace.id);
+	await classifyGroundSpacesAsBranch(SYSTEM_SPACE_ID);
 
 	// 상위 SpaceCategory(ROOT) tenant → 하위 SpaceCategory(BRANCH) Space에 tenant 생성
-	await createHierarchicalTenants(systemSpace.id);
+	await createHierarchicalTenants(SYSTEM_SPACE_ID);
 
 	// Timeline / Session / Exercise 도메인 데이터 생성
 	await createTimelineSessionExerciseDomainData();
 
-	// Subject 생성 (CASL Subject 정의)
-	const subjects = await createSubjects();
-
-	// Action 생성 (CASL Action 정의)
-	const actions = await createActions();
-
-	// Ability 생성 (Role별 권한) - CASL ABAC 기반
-	await createAbilities(roles, subjects, actions);
-
-	// OIDC Client 생성
-	await createOidcClients();
+	// Bootstrap 전용 기본값 생성
+	await ensureSecurityPolicyDefaults(prisma);
 
 	// Asset Domain 데이터 생성
 	await createAssetDomainData();
 
 	// Template 생성
-	await createTemplates();
+	await ensureBootstrapTemplates(prisma);
 
 	// Inquiry Domain 데이터 생성
 	await createInquiryDomainData();
@@ -262,7 +201,7 @@ async function main() {
 async function createRegularUsersAndGrounds(adminRole: Role, _userRole: Role) {
 	console.log("일반 유저들과 그라운드 생성 시작...");
 
-	// 모든 Role 조회 (seed-data의 role 필드 사용을 위해)
+	// 모든 Role 조회 (demo-data의 role 필드 사용을 위해)
 	const allRoles = await prisma.role.findMany();
 	const roleMap: Record<string, Role> = {};
 	for (const role of allRoles) {
@@ -467,457 +406,6 @@ async function createRegularUsersAndGrounds(adminRole: Role, _userRole: Role) {
 	}
 
 	console.log("일반 유저들과 그라운드 생성 완료!");
-}
-
-async function createRoleCategories(systemSpaceId: string) {
-	console.log("Role 카테고리 생성 시작...");
-
-	// System Space의 tenant 조회
-	const tenant = await prisma.tenant.findFirst({
-		where: { spaceId: systemSpaceId },
-	});
-
-	if (!tenant) {
-		console.error("System Space의 tenant를 찾을 수 없습니다.");
-		return;
-	}
-
-	// seed-data.ts의 roleCategorySeedData 기반으로 카테고리 생성
-	for (const categoryData of roleCategorySeedData) {
-		const roleCategoryEnum = categoryData.roleCategoryEnum;
-
-		const _category = await prisma.category.upsert({
-			where: { name: roleCategoryEnum.name },
-			update: {},
-			create: {
-				name: roleCategoryEnum.name, // enum의 name 속성 사용
-				type: categoryData.type as CategoryTypes,
-				spaceId: tenant.spaceId,
-			},
-		});
-		console.log(
-			`카테고리 생성 완료: ${roleCategoryEnum.code} - ${roleCategoryEnum.name}`,
-		);
-	}
-
-	console.log("Role 카테고리 생성 완료!");
-}
-
-async function createRoleClassifications(roles: Record<string, Role>) {
-	console.log("Role과 Category 연결 (RoleClassification) 시작...");
-
-	for (const classificationData of roleClassificationSeedData) {
-		// 해당 Role 찾기
-		const role = roles[classificationData.roleName];
-		if (!role) {
-			console.error(`Role을 찾을 수 없습니다: ${classificationData.roleName}`);
-			continue;
-		}
-
-		// 해당 Category 찾기 (name unique 기반)
-		const roleCategoryEnum = classificationData.roleCategoryEnum;
-		const category = await prisma.category.findUnique({
-			where: {
-				name: roleCategoryEnum.name,
-			},
-		});
-
-		if (!category) {
-			console.error(
-				`Category를 찾을 수 없습니다: ${roleCategoryEnum.code} - ${roleCategoryEnum.name}`,
-			);
-			continue;
-		}
-
-		// RoleClassification 생성 (중복 확인)
-		const existingRoleClassification =
-			await prisma.roleClassification.findFirst({
-				where: {
-					roleId: role.id,
-					categoryId: category.id,
-				},
-			});
-
-		if (!existingRoleClassification) {
-			await prisma.roleClassification.create({
-				data: {
-					roleId: role.id,
-					categoryId: category.id,
-				},
-			});
-			console.log(
-				`RoleClassification 생성: ${classificationData.roleName} ↔ ${roleCategoryEnum.code}`,
-			);
-		} else {
-			console.log(
-				`RoleClassification 이미 존재: ${classificationData.roleName} ↔ ${roleCategoryEnum.code}`,
-			);
-		}
-	}
-
-	console.log("Role과 Category 연결 완료!");
-}
-
-async function createRoleGroupsAndAssociations(
-	roles: Record<string, Role>,
-	systemSpaceId: string,
-) {
-	console.log("Role 관련 Group 생성 및 RoleAssociation 연결 시작...");
-
-	// System Space의 tenant 조회 (Group 생성에 필요)
-	const tenant = await prisma.tenant.findFirst({
-		where: { spaceId: systemSpaceId },
-	});
-
-	if (!tenant) {
-		console.error("System Space의 tenant를 찾을 수 없습니다.");
-		return;
-	}
-
-	// Role용 Group들 생성 (RoleGroupSeedData 기반)
-	const groups: Record<string, Group> = {};
-	for (const groupData of roleGroupSeedData) {
-		const roleGroupEnum = groupData.roleGroupEnum;
-
-		// 기존 Group이 있는지 확인
-		let group = await prisma.group.findFirst({
-			where: {
-				name: roleGroupEnum.name, // enum의 name 속성 사용
-				type: "Role",
-				spaceId: tenant.spaceId,
-			},
-		});
-
-		if (!group) {
-			group = await prisma.group.create({
-				data: {
-					name: roleGroupEnum.name, // enum의 name 속성 사용
-					type: "Role", // GroupTypes.Role
-					spaceId: tenant.spaceId,
-				},
-			});
-			console.log(
-				`Role Group 생성 완료: ${roleGroupEnum.code} - ${roleGroupEnum.name}`,
-			);
-		} else {
-			console.log(
-				`Role Group 이미 존재: ${roleGroupEnum.code} - ${roleGroupEnum.name}`,
-			);
-		}
-
-		groups[roleGroupEnum.code] = group; // enum의 code로 키 설정
-	}
-
-	// RoleAssociation 생성 (Role과 Group 연결)
-	for (const associationData of roleAssociationSeedData) {
-		const role = roles[associationData.roleName];
-		const group = groups[associationData.roleGroupEnum.code]; // enum의 code 사용
-
-		if (!role) {
-			console.error(`Role을 찾을 수 없습니다: ${associationData.roleName}`);
-			continue;
-		}
-
-		if (!group) {
-			console.error(
-				`Group을 찾을 수 없습니다: ${associationData.roleGroupEnum.code}`,
-			);
-			continue;
-		}
-
-		// RoleAssociation 생성 (upsert 사용 - roleId에 @unique 제약)
-		await prisma.roleAssociation.upsert({
-			where: { roleId: role.id },
-			create: {
-				roleId: role.id,
-				groupId: group.id,
-			},
-			update: {
-				groupId: group.id,
-			},
-		});
-		console.log(
-			`RoleAssociation 생성/업데이트: ${associationData.roleName} ↔ ${associationData.roleGroupEnum.code}`,
-		);
-	}
-
-	console.log("Role 관련 Group 생성 및 RoleAssociation 연결 완료!");
-}
-
-async function createSubjects(): Promise<Record<string, Subject>> {
-	console.log("Subject 생성 시작...");
-
-	const subjects: Record<string, Subject> = {};
-	let createdCount = 0;
-	let skippedCount = 0;
-
-	for (const subjectData of subjectSeedData) {
-		const existing = await prisma.subject.findUnique({
-			where: { name: subjectData.name },
-		});
-
-		if (!existing) {
-			const subject = await prisma.subject.create({
-				data: {
-					name: subjectData.name,
-					displayName: subjectData.displayName,
-					group: subjectData.group,
-					order: subjectData.order ?? 0,
-					isSystem: subjectData.isSystem ?? false,
-				},
-			});
-			subjects[subjectData.name] = subject;
-			createdCount++;
-			console.log(
-				`  - Subject 생성: ${subjectData.name} (${subjectData.displayName})`,
-			);
-		} else {
-			subjects[subjectData.name] = existing;
-			skippedCount++;
-		}
-	}
-
-	console.log(
-		`Subject 생성 완료! (생성: ${createdCount}개, 스킵: ${skippedCount}개)`,
-	);
-	return subjects;
-}
-
-async function createActions(): Promise<Record<string, Action>> {
-	console.log("Action 생성 시작...");
-
-	const actions: Record<string, Action> = {};
-	let createdCount = 0;
-	let skippedCount = 0;
-
-	for (const actionData of actionSeedData) {
-		const existing = await prisma.action.findUnique({
-			where: { name: actionData.name },
-		});
-
-		if (!existing) {
-			const action = await prisma.action.create({
-				data: {
-					name: actionData.name,
-					displayName: actionData.displayName,
-					description: actionData.description,
-					group: actionData.group,
-					order: actionData.order ?? 0,
-					isSystem: actionData.isSystem ?? true,
-					config: actionData.config
-						? (actionData.config as unknown as Prisma.InputJsonObject)
-						: undefined,
-				},
-			});
-			actions[actionData.name] = action;
-			createdCount++;
-			console.log(
-				`  - Action 생성: ${actionData.name} (${actionData.displayName})`,
-			);
-		} else {
-			actions[actionData.name] = existing;
-			skippedCount++;
-		}
-	}
-
-	console.log(
-		`Action 생성 완료! (생성: ${createdCount}개, 스킵: ${skippedCount}개)`,
-	);
-	return actions;
-}
-
-async function createAbilities(
-	roles: Record<string, Role>,
-	subjects: Record<string, Subject>,
-	actions: Record<string, Action>,
-) {
-	console.log("Ability & Grant 생성 시작 (Grant 기반 CASL ABAC)...");
-
-	let abilityCreatedCount = 0;
-	let abilitySkippedCount = 0;
-	let grantCreatedCount = 0;
-	let grantSkippedCount = 0;
-	let errorCount = 0;
-
-	// 1단계: 고유한 Ability 정의 생성 (중복 제거)
-	console.log("  [1/2] Ability 정의 생성 중...");
-	const abilityMap: Record<string, string> = {}; // Key: subject+action+inverted → Value: abilityId
-
-	for (const abilityData of abilitySeedData) {
-		// Subject 찾기
-		const subject = subjects[abilityData.subject];
-		if (!subject) {
-			console.error(`  - Subject를 찾을 수 없음: ${abilityData.subject}`);
-			errorCount++;
-			continue;
-		}
-
-		// Action 찾기
-		const action = actions[abilityData.actionName];
-		if (!action) {
-			console.error(`  - Action을 찾을 수 없음: ${abilityData.actionName}`);
-			errorCount++;
-			continue;
-		}
-
-		// Ability 고유 키 생성 (subject + action + inverted + conditions)
-		const abilityKey = `${subject.id}:${action.id}:${abilityData.inverted}:${JSON.stringify(abilityData.conditions ?? null)}`;
-
-		// 이미 생성된 Ability인지 확인
-		if (abilityMap[abilityKey]) {
-			continue; // 이미 생성됨
-		}
-
-		// Ability name 생성 (예: "Read User Email Masked")
-		const abilityName =
-			abilityData.name ??
-			`${abilityData.inverted ? "Cannot" : "Can"} ${action.displayName} ${subject.displayName}`;
-
-		// Ability 생성 (name 기반 중복 확인)
-		let ability = await prisma.ability.findUnique({
-			where: { name: abilityName },
-		});
-
-		if (!ability) {
-			ability = await prisma.ability.create({
-				data: {
-					name: abilityName,
-					description: abilityData.description,
-					subjectId: subject.id,
-					actionId: action.id,
-					fields: [], // 기본값: 빈 배열 (전체 필드)
-					conditions: abilityData.conditions
-						? (abilityData.conditions as unknown as Prisma.InputJsonObject)
-						: Prisma.JsonNull,
-					inverted: abilityData.inverted,
-					reason: abilityData.reason ?? null,
-				},
-			});
-			abilityCreatedCount++;
-			console.log(`    - Ability 생성: ${abilityName}`);
-		} else {
-			abilitySkippedCount++;
-		}
-
-		abilityMap[abilityKey] = ability.id;
-	}
-
-	console.log(
-		`  [1/2] Ability 정의 완료! (생성: ${abilityCreatedCount}개, 스킵: ${abilitySkippedCount}개)`,
-	);
-
-	// 2단계: Grant 생성 (Role ↔ Ability 연결)
-	console.log("  [2/2] Grant 생성 중 (Role ↔ Ability)...");
-
-	for (const abilityData of abilitySeedData) {
-		// Role 찾기
-		const role = roles[abilityData.roleName];
-		if (!role) {
-			console.error(`  - Role을 찾을 수 없음: ${abilityData.roleName}`);
-			errorCount++;
-			continue;
-		}
-
-		// Subject, Action 찾기
-		const subject = subjects[abilityData.subject];
-		const action = actions[abilityData.actionName];
-		if (!subject || !action) {
-			continue; // 이미 1단계에서 에러 출력됨
-		}
-
-		// Ability 찾기
-		const abilityKey = `${subject.id}:${action.id}:${abilityData.inverted}:${JSON.stringify(abilityData.conditions ?? null)}`;
-		const abilityId = abilityMap[abilityKey];
-		if (!abilityId) {
-			console.error(`  - Ability를 찾을 수 없음: ${abilityKey}`);
-			errorCount++;
-			continue;
-		}
-
-		// Grant 중복 확인
-		const existing = await prisma.grant.findFirst({
-			where: {
-				granteeType: "Role",
-				granteeId: role.id,
-				abilityId: abilityId,
-			},
-		});
-
-		if (!existing) {
-			await prisma.grant.create({
-				data: {
-					granteeType: "Role",
-					granteeId: role.id,
-					abilityId: abilityId,
-					isActive: abilityData.isActive ?? true,
-					priority: abilityData.priority ?? 0, // Role 권한은 보통 0-9
-				},
-			});
-			grantCreatedCount++;
-			console.log(
-				`    - Grant 생성: ${abilityData.roleName} → ${abilityData.inverted ? "cannot" : "can"} ${abilityData.actionName} ${abilityData.subject}`,
-			);
-		} else {
-			grantSkippedCount++;
-		}
-	}
-
-	console.log(
-		`  [2/2] Grant 생성 완료! (생성: ${grantCreatedCount}개, 스킵: ${grantSkippedCount}개)`,
-	);
-	console.log(
-		`\n✅ Ability & Grant 전체 완료! (Ability: ${abilityCreatedCount}개, Grant: ${grantCreatedCount}개, 오류: ${errorCount}개)`,
-	);
-
-	// ========================================
-	// 7. Translation 시드 데이터 삽입
-	// ========================================
-	console.log("\n========================================");
-	console.log("7. Translation (번역) 시드 데이터 삽입 중...");
-	console.log("========================================");
-
-	let translationCreatedCount = 0;
-	let translationSkippedCount = 0;
-
-	for (const translation of translationSeedData) {
-		const existing = await prisma.translation.findUnique({
-			where: {
-				languageCode_key: {
-					languageCode: translation.languageCode,
-					key: translation.key,
-				},
-			},
-		});
-
-		if (!existing) {
-			await prisma.translation.create({
-				data: translation,
-			});
-			translationCreatedCount++;
-		} else {
-			translationSkippedCount++;
-		}
-	}
-
-	console.log(
-		`✅ Translation 시드 완료! (생성: ${translationCreatedCount}개, 스킵: ${translationSkippedCount}개)`,
-	);
-
-	// ============================================================================
-	// Security Policy 시드
-	// ============================================================================
-	const existingPolicy = await prisma.securityPolicy.findUnique({
-		where: { key: securityPolicySeedData.key },
-	});
-
-	if (!existingPolicy) {
-		await prisma.securityPolicy.create({
-			data: securityPolicySeedData,
-		});
-		console.log("✅ SecurityPolicy 기본 정책 생성 완료!");
-	} else {
-		console.log("⏭️ SecurityPolicy 기본 정책 이미 존재 (스킵)");
-	}
 }
 
 function stableUuid(seedKey: string): string {
@@ -1502,223 +990,6 @@ main()
 		await prisma.$disconnect();
 		process.exit(1);
 	});
-
-async function createOidcClients() {
-	console.log("\n========================================");
-	console.log("OIDC Client 시드 데이터 삽입 중...");
-	console.log("========================================");
-
-	let createdCount = 0;
-	let skippedCount = 0;
-
-	for (const clientData of oidcClientSeedData) {
-		const existing = await prisma.oidcClient.findUnique({
-			where: { clientId: clientData.clientId },
-		});
-
-		if (!existing) {
-			await prisma.oidcClient.create({
-				data: {
-					clientId: clientData.clientId,
-					clientSecret: clientData.clientSecret,
-					clientName: clientData.clientName,
-					redirectUris: clientData.redirectUris,
-					grantTypes: clientData.grantTypes,
-					responseTypes: clientData.responseTypes,
-					tokenEndpointAuthMethod: clientData.tokenEndpointAuthMethod,
-					scope: clientData.scope,
-					isActive: clientData.isActive,
-					logoUri: clientData.logoUri ?? null,
-					policyUri: clientData.policyUri ?? null,
-					tosUri: clientData.tosUri ?? null,
-				},
-			});
-			createdCount++;
-			console.log(
-				`  - OIDC Client 생성: ${clientData.clientId} (${clientData.clientName})`,
-			);
-		} else {
-			skippedCount++;
-			console.log(`  - OIDC Client 이미 존재: ${clientData.clientId}`);
-		}
-	}
-
-	console.log(
-		`✅ OIDC Client 시드 완료! (생성: ${createdCount}개, 스킵: ${skippedCount}개)`,
-	);
-}
-
-async function createTemplates() {
-	console.log("\n========================================");
-	console.log("Template 시드 데이터 삽입 중...");
-	console.log("========================================");
-
-	let createdCount = 0;
-	let skippedCount = 0;
-
-	for (const templateData of templateSeedData) {
-		const existing = await prisma.template.findFirst({
-			where: {
-				code: templateData.code,
-				type: templateData.type,
-			},
-		});
-
-		if (!existing) {
-			await prisma.template.create({
-				data: {
-					code: templateData.code,
-					name: templateData.name,
-					type: templateData.type,
-					subject: templateData.subject ?? null,
-					content: templateData.content,
-					description: templateData.description ?? null,
-					isActive: templateData.isActive,
-					variables: {
-						create: templateData.variables.map((v) => ({
-							name: v.name,
-							description: v.description ?? null,
-							defaultValue: v.defaultValue ?? null,
-							isRequired: v.isRequired,
-						})),
-					},
-				},
-			});
-			createdCount++;
-			console.log(
-				`  - Template 생성: ${templateData.code} (${templateData.name})`,
-			);
-		} else {
-			skippedCount++;
-			console.log(`  - Template 이미 존재: ${templateData.code}`);
-		}
-	}
-
-	console.log(
-		`✅ Template 시드 완료! (생성: ${createdCount}개, 스킵: ${skippedCount}개)`,
-	);
-}
-
-async function createSpaceCategoriesAndClassifications(systemSpaceId: string) {
-	console.log("Space Category 및 SpaceClassification 생성 시작...");
-
-	// 생성된 Category를 code로 추적 (parentId 연결용)
-	const categoryMap: Record<string, { id: string }> = {};
-
-	for (const categoryData of spaceCategorySeedData) {
-		const spaceCategoryEnum = categoryData.spaceCategoryEnum;
-
-		// parentId 결정
-		let parentId: string | undefined;
-		if (categoryData.parentCategoryCode) {
-			const parentCategory = categoryMap[categoryData.parentCategoryCode];
-			if (parentCategory) {
-				parentId = parentCategory.id;
-			}
-		}
-
-		// Category 생성 (type="Space")
-		const category = await prisma.category.upsert({
-			where: { name: spaceCategoryEnum.name },
-			update: { parentId: parentId ?? null },
-			create: {
-				name: spaceCategoryEnum.name,
-				type: categoryData.type as CategoryTypes,
-				spaceId: systemSpaceId,
-				parentId: parentId,
-			},
-		});
-		categoryMap[spaceCategoryEnum.code] = { id: category.id };
-		console.log(
-			`Space Category 생성 완료: ${spaceCategoryEnum.code} - ${spaceCategoryEnum.name}`,
-		);
-	}
-
-	// SpaceClassification 생성: System Space ↔ ROOT Category 연결
-	const rootCategory = categoryMap.ROOT;
-	if (rootCategory) {
-		const existingClassification = await prisma.spaceClassification.findFirst({
-			where: {
-				spaceId: systemSpaceId,
-				categoryId: rootCategory.id,
-			},
-		});
-
-		if (!existingClassification) {
-			await prisma.spaceClassification.create({
-				data: {
-					spaceId: systemSpaceId,
-					categoryId: rootCategory.id,
-				},
-			});
-			console.log("SpaceClassification 생성: System Space ↔ ROOT");
-		} else {
-			console.log("SpaceClassification 이미 존재: System Space ↔ ROOT");
-		}
-	}
-
-	console.log("Space Category 및 SpaceClassification 생성 완료!");
-}
-
-async function createSpaceGroupsAndAssociations(systemSpaceId: string) {
-	console.log("Space Group 및 SpaceAssociation 생성 시작...");
-
-	for (const groupData of spaceGroupSeedData) {
-		const spaceGroupEnum = groupData.spaceGroupEnum;
-
-		// Group 생성 (type="Space")
-		let group = await prisma.group.findFirst({
-			where: {
-				name: spaceGroupEnum.name,
-				type: "Space",
-				spaceId: systemSpaceId,
-			},
-		});
-
-		if (!group) {
-			group = await prisma.group.create({
-				data: {
-					name: spaceGroupEnum.name,
-					type: "Space",
-					spaceId: systemSpaceId,
-				},
-			});
-			console.log(
-				`Space Group 생성 완료: ${spaceGroupEnum.code} - ${spaceGroupEnum.name}`,
-			);
-		} else {
-			console.log(
-				`Space Group 이미 존재: ${spaceGroupEnum.code} - ${spaceGroupEnum.name}`,
-			);
-		}
-
-		// SpaceAssociation 생성: System Space ↔ SUPER Group 연결
-		const existingAssociation = await prisma.spaceAssociation.findFirst({
-			where: {
-				spaceId: systemSpaceId,
-				groupId: group.id,
-			},
-		});
-
-		if (!existingAssociation) {
-			await prisma.spaceAssociation.create({
-				data: {
-					spaceId: systemSpaceId,
-					groupId: group.id,
-				},
-			});
-			console.log(
-				`SpaceAssociation 생성: System Space ↔ ${spaceGroupEnum.code}`,
-			);
-		} else {
-			console.log(
-				`SpaceAssociation 이미 존재: System Space ↔ ${spaceGroupEnum.code}`,
-			);
-		}
-	}
-
-	console.log("Space Group 및 SpaceAssociation 생성 완료!");
-}
 
 async function classifyGroundSpacesAsBranch(systemSpaceId: string) {
 	console.log("Ground Space에 BRANCH SpaceClassification 할당 시작...");

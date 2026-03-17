@@ -13,7 +13,7 @@ import {
 	spaceGroupSeedData,
 	subjectSeedData,
 	translationSeedData,
-} from "../../seed-data";
+} from "../../reference-data";
 import { Prisma } from "../generated/client/client";
 import type {
 	Action,
@@ -26,6 +26,10 @@ import { CategoryTypes } from "../generated/client/enums";
 import { SYSTEM_SPACE_ID } from "./constants";
 
 type DbClient = PrismaClient | Prisma.TransactionClient;
+
+export interface ReferenceDataSyncResult {
+	roles: Record<string, Role>;
+}
 
 async function ensureSystemSpace(db: DbClient): Promise<void> {
 	await db.space.upsert({
@@ -501,7 +505,9 @@ async function syncOidcClients(db: DbClient): Promise<void> {
 	}
 }
 
-export async function syncReferenceData(db: DbClient): Promise<void> {
+export async function syncReferenceData(
+	db: DbClient,
+): Promise<ReferenceDataSyncResult> {
 	console.log("Reference data sync 시작...");
 
 	await ensureSystemSpace(db);
@@ -521,4 +527,5 @@ export async function syncReferenceData(db: DbClient): Promise<void> {
 	await syncOidcClients(db);
 
 	console.log("Reference data sync 완료!");
+	return { roles };
 }

@@ -127,6 +127,7 @@ pnpm db:seed:stg      # 스테이징 bootstrap alias
 관련 운영 원칙 문서:
 
 - `docs/seed-data-governance.md` - seed/reference/bootstrap/demo 분류 기준과 운영 반영 전략
+- `docs/schema-change-playbook.md` - 운영 중 필드 추가, schema migration, reference-data migration, backfill 실무 절차
 
 #### DB Bootstrap (초기 데이터)
 
