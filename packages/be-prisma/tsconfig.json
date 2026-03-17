@@ -19,6 +19,12 @@
     "forceConsistentCasingInFileNames": true,
     "skipLibCheck": true
   },
-  "include": ["src/**/*.ts"],
+  "include": [
+    "src/**/*.ts",
+    "seed-data.ts",
+    "asset-seed-data.ts",
+    "translation-seed-data.ts",
+    "inquiry-seed-data.ts"
+  ],
   "exclude": ["node_modules", "dist", "generated"]
 }

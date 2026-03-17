@@ -29,7 +29,7 @@ podTemplate(
             CLEANUP_IMAGES << "${IMAGE_PATH}:latest"
         }
         def GITOPS_APP = 'idp-api'
-        def GITOPS_UPDATE_JOB = env.GITOPS_UPDATE_JOB ?: 'gitops-prod-image-bump'
+        def GITOPS_UPDATE_JOB = env.GITOPS_UPDATE_JOB ?: '/gitops-prod-image-bump'
 
         try {
             stage('Checkout') {

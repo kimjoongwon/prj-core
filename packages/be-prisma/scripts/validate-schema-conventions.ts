@@ -28,6 +28,7 @@ const schemaOwnerByFile: Record<string, string> = {
 	"inquiry/inquiry.prisma": "Inquiry",
 	"oidc/oidc-client.prisma": "OidcClient",
 	"oidc/oidc-model.prisma": "OidcModel",
+	"platform/reference-data-migration.prisma": "ReferenceDataMigrationHistory",
 	"scheduling/routine.prisma": "Routine",
 	"scheduling/task.prisma": "Task",
 	"scheduling/timeline.prisma": "Timeline",
@@ -56,6 +57,7 @@ const aggregateRootByFile: Record<string, string> = {
 	"inquiry/inquiry.prisma": "Inquiry",
 	"oidc/oidc-client.prisma": "OidcClient",
 	"oidc/oidc-model.prisma": "OidcModel",
+	"platform/reference-data-migration.prisma": "ReferenceDataMigrationHistory",
 	"scheduling/routine.prisma": "Routine",
 	"scheduling/task.prisma": "Task",
 	"scheduling/timeline.prisma": "Timeline",
@@ -117,6 +119,7 @@ const expectedOwner: Record<string, string> = {
 
 	OidcClient: "oidc/oidc-client.prisma",
 	OidcModel: "oidc/oidc-model.prisma",
+	ReferenceDataMigrationHistory: "platform/reference-data-migration.prisma",
 
 	Role: "access-control/role.prisma",
 	RoleAssociation: "access-control/role.prisma",

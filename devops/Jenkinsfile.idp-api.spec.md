@@ -16,7 +16,7 @@
 | 빌드 대상 | `idp-api` |
 | 이미지 경로 | `harbor.cocdev.co.kr/{prod|stg}/idp-api` |
 | 실행 Stage | `Checkout` → `Build and Push Image` → `Trigger GitOps Update Job` |
-| GitOps 트리거 | `GITOPS_UPDATE_JOB` 환경변수(기본 `gitops-prod-image-bump`) |
+| GitOps 트리거 | `GITOPS_UPDATE_JOB` 환경변수(기본 `/gitops-prod-image-bump`) |
 | 트리거 파라미터 | `APP_NAME`, `IMAGE_TAG`, `DEPLOY_ENV`, `SOURCE_BUILD_URL`, `SOURCE_COMMIT` |
 | 실패 전파 정책 | GitOps 트리거 실패 시 stage만 `UNSTABLE`, 빌드 결과는 `SUCCESS` 유지 |
 

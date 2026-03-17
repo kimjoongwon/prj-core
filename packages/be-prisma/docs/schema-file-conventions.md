@@ -27,6 +27,7 @@
 | `identity/` | User/Space/Tenant |
 | `inquiry/` | Inquiry/Thread/AI 로그 |
 | `oidc/` | OIDC client/model |
+| `platform/` | 운영 메타데이터 및 배포 이력 |
 | `scheduling/` | Timeline/Routine/Task |
 | `taxonomy/` | Category/Group |
 | `wallet/` | SafeWallet |
@@ -58,6 +59,7 @@
 | `inquiry/inquiry.prisma` | `Inquiry` |
 | `oidc/oidc-client.prisma` | `OidcClient` |
 | `oidc/oidc-model.prisma` | `OidcModel` |
+| `platform/reference-data-migration.prisma` | `ReferenceDataMigrationHistory` |
 | `scheduling/routine.prisma` | `Routine` |
 | `scheduling/task.prisma` | `Task` |
 | `scheduling/timeline.prisma` | `Timeline` |
@@ -88,6 +90,7 @@
 | `inquiry/inquiry.prisma` | `Inquiry` |
 | `oidc/oidc-client.prisma` | `OidcClient` |
 | `oidc/oidc-model.prisma` | `OidcModel` |
+| `platform/reference-data-migration.prisma` | `ReferenceDataMigrationHistory` |
 | `scheduling/routine.prisma` | `Routine` |
 | `scheduling/task.prisma` | `Task` |
 | `scheduling/timeline.prisma` | `Timeline` |
@@ -129,6 +132,7 @@
 | `inquiry/inquiry.prisma` | `Inquiry`, `InquiryTag`, `SentimentAnalysis`, `InquiryCategory`, `InquiryChannel`, `InquiryStatus`, `InquiryPriority`, `InquirySource`, `SentimentType` |
 | `oidc/oidc-client.prisma` | `OidcClient` |
 | `oidc/oidc-model.prisma` | `OidcModel` |
+| `platform/reference-data-migration.prisma` | `ReferenceDataMigrationHistory` |
 | `scheduling/routine.prisma` | `Routine`, `Activity` |
 | `scheduling/task.prisma` | `Task`, `Exercise` |
 | `scheduling/timeline.prisma` | `Timeline`, `Session`, `Program`, `SessionTypes`, `RepeatCycleTypes`, `RecurringDayOfWeek` |

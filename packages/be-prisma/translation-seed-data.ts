@@ -1,4 +1,4 @@
-import type { LanguageCode } from "@cocrepo/constant";
+import type { LanguageCode } from "./src/generated/client/enums";
 
 /**
  * Translation 시드 데이터 인터페이스

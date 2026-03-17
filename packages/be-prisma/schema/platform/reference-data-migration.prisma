@@ -1,0 +1,19 @@
+// ============================================================================
+// Reference Data Migration Domain - 운영 기준 데이터 반영 이력
+// ============================================================================
+
+// @schema-type: CATALOG
+// @schema-owner: true
+// @aggregate-root: true
+// @description: 운영 기준 데이터 migration 실행 이력을 기록하는 전역 카탈로그
+// @ownership: independent
+// @scope: global
+/// @displayName 기준 데이터 migration 이력
+model ReferenceDataMigrationHistory {
+  id          String    @id
+  checksum    String
+  description String
+  appliedAt   DateTime  @default(now()) @map("applied_at") @db.Timestamptz(6)
+
+  @@map("reference_data_migration_history")
+}

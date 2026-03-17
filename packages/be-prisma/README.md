@@ -119,9 +119,28 @@ pnpm db:reset:stg     # 스테이징 환경
 #### DB Seed (시드 데이터)
 
 ```bash
-pnpm db:seed          # 개발 환경 (기본값)
-pnpm db:seed:stg      # 스테이징 환경
+pnpm db:seed          # 개발 환경 bootstrap alias
+pnpm db:seed:stg      # 스테이징 bootstrap alias
 # ⚠️ prod는 시드하지 않음
+```
+
+관련 운영 원칙 문서:
+
+- `docs/seed-data-governance.md` - seed/reference/bootstrap/demo 분류 기준과 운영 반영 전략
+
+#### DB Bootstrap (초기 데이터)
+
+```bash
+pnpm db:bootstrap      # 개발 환경 bootstrap
+pnpm db:bootstrap:stg  # 스테이징 bootstrap
+```
+
+#### DB Data Migrate (운영 기준 데이터)
+
+```bash
+pnpm db:data:migrate       # 개발 환경 reference data migration
+pnpm db:data:migrate:stg   # 스테이징 environment reference data migration
+pnpm db:data:migrate:prod  # 프로덕션 environment reference data migration
 ```
 
 ## Multi-File Schema Architecture (Prisma Official)
