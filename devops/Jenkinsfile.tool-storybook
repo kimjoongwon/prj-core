@@ -19,6 +19,8 @@ podTemplate(
         def ENV_NAME = 'prod'
         def IMAGE_TAG = env.BUILD_NUMBER
         def IMAGE_PATH = "harbor.cocdev.co.kr/${ENV_NAME}/tool-storybook"
+        def NODE_BASE_IMAGE = 'docker.io/library/node:24-alpine'
+        def NGINX_BASE_IMAGE = 'docker.io/library/nginx:1.27-alpine'
         def IMAGE_TAG_ARGS = ["-t ${IMAGE_PATH}:${IMAGE_TAG}"]
         def CLEANUP_IMAGES = ["${IMAGE_PATH}:${IMAGE_TAG}"]
         def GITOPS_APP = 'tool-storybook'
@@ -58,6 +60,9 @@ podTemplate(
                             podman build \\
                                 --format=docker \\
                                 --layers \\
+                                --pull=always \\
+                                --build-arg NODE_BASE_IMAGE=${NODE_BASE_IMAGE} \\
+                                --build-arg NGINX_BASE_IMAGE=${NGINX_BASE_IMAGE} \\
                                 -f ./devops/Dockerfile.tool-storybook \\
                                 ${IMAGE_TAG_ARGS.join(' \\\\\n                                ')} \\
                                 .
