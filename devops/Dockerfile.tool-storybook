@@ -21,13 +21,17 @@ RUN turbo prune --scope=tool-storybook --docker
 
 FROM base AS builder
 
+ARG STORYBOOK_DISABLE_CHROMATIC=true
+ARG STORYBOOK_BUILD_NOFILE=65536
+
 WORKDIR /app
 COPY --from=setup /app/out/json/ ./
 RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --store-dir /pnpm/store --no-frozen-lockfile --prefer-offline
 COPY --from=setup /app/out/full/ ./
 RUN --mount=type=cache,id=pnpm,target=/pnpm/store \
     --mount=type=cache,id=turbo,target=/app/.turbo \
-    pnpm exec turbo build --filter=tool-storybook...
+    { ulimit -n "${STORYBOOK_BUILD_NOFILE}" 2>/dev/null || ulimit -n 16384 2>/dev/null || true; } && \
+    STORYBOOK_DISABLE_CHROMATIC="${STORYBOOK_DISABLE_CHROMATIC}" pnpm exec turbo build --filter=tool-storybook...
 
 FROM ${NGINX_BASE_IMAGE} AS runner
 

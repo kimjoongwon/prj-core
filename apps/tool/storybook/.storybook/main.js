@@ -13,6 +13,8 @@ function getAbsolutePath(value) {
 }
 
 /** @type { import('@storybook/react-vite').StorybookConfig } */
+const chromaticAddonDisabled = process.env.STORYBOOK_DISABLE_CHROMATIC === "true";
+
 const config = {
   stories: [
     "../stories/**/*.mdx",
@@ -24,7 +26,7 @@ const config = {
     },
   ],
   addons: [
-    getAbsolutePath("@chromatic-com/storybook"),
+    ...(chromaticAddonDisabled ? [] : [getAbsolutePath("@chromatic-com/storybook")]),
     getAbsolutePath("@storybook/addon-docs"),
     getAbsolutePath("@storybook/addon-a11y"),
     getAbsolutePath("@storybook/addon-vitest"),
