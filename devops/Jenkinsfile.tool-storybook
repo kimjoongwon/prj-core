@@ -1,4 +1,8 @@
 podTemplate(
+    workspaceVolume: persistentVolumeClaimWorkspaceVolume(
+        claimName: 'container-builder-pvc',
+        readOnly: false
+    ),
     volumes: [
         persistentVolumeClaim(
             claimName: 'container-builder-pvc',
@@ -10,6 +14,8 @@ podTemplate(
             name: 'podman',
             image: 'quay.io/podman/stable:v4.8.2',
             privileged: true,
+            resourceRequestEphemeralStorage: '2Gi',
+            resourceLimitEphemeralStorage: '6Gi',
             ttyEnabled: true,
             command: 'cat',
         )
@@ -36,12 +42,20 @@ podTemplate(
             }
 
             stage('Checkout') {
+                deleteDir()
                 checkout scm
             }
 
             stage('Build and Push Image') {
                 container('podman') {
-                    sh 'podman info || echo "Podman initializing..."'
+                    sh '''
+                        mkdir -p /var/lib/containers/tmp /var/lib/containers/run /var/lib/containers/home
+                        chmod 700 /var/lib/containers/run
+                        export TMPDIR=/var/lib/containers/tmp
+                        export XDG_RUNTIME_DIR=/var/lib/containers/run
+                        export HOME=/var/lib/containers/home
+                        podman info || echo "Podman initializing..."
+                    '''
 
                     withCredentials([
                         usernamePassword(
@@ -51,6 +65,9 @@ podTemplate(
                         )
                     ]) {
                         sh """
+                            export TMPDIR=/var/lib/containers/tmp
+                            export XDG_RUNTIME_DIR=/var/lib/containers/run
+                            export HOME=/var/lib/containers/home
                             echo \$HARBOR_PASSWORD | podman login \\
                                 -u \$HARBOR_USERNAME \\
                                 --password-stdin \\
@@ -59,6 +76,9 @@ podTemplate(
                         """
 
                         sh """
+                            export TMPDIR=/var/lib/containers/tmp
+                            export XDG_RUNTIME_DIR=/var/lib/containers/run
+                            export HOME=/var/lib/containers/home
                             podman build \\
                                 --format=docker \\
                                 --layers \\
@@ -74,6 +94,9 @@ podTemplate(
                         """
 
                         sh """
+                            export TMPDIR=/var/lib/containers/tmp
+                            export XDG_RUNTIME_DIR=/var/lib/containers/run
+                            export HOME=/var/lib/containers/home
                             podman push \\
                                 --compression-format=gzip \\
                                 --compression-level=9 \\
@@ -81,6 +104,9 @@ podTemplate(
                         """
 
                         sh """
+                            export TMPDIR=/var/lib/containers/tmp
+                            export XDG_RUNTIME_DIR=/var/lib/containers/run
+                            export HOME=/var/lib/containers/home
                             podman rmi \\
                                 ${CLEANUP_IMAGES.join(' \\\\\n                                ')} || true
                         """

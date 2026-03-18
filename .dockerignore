@@ -14,6 +14,16 @@ out
 .tmp
 .tmp-java
 *.log
+.agents
+.claude
+.codex
+.opencode
+.qoder
+.vscode
+.wt
+browsers
+storybook-static
+**/storybook-static
 # Git 히스토리 제외 - 보안 및 이미지 크기 최적화
 .git
 # .gitignore
