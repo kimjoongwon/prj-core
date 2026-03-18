@@ -33,107 +33,126 @@ podTemplate(
         def CLEANUP_IMAGES = ["${IMAGE_PATH}:${IMAGE_TAG}"]
         def GITOPS_APP = 'tool-storybook'
         def GITOPS_UPDATE_JOB = env.GITOPS_UPDATE_JOB ?: '/gitops-prod-image-bump'
+        def SAFE_JOB_NAME = (env.JOB_NAME ?: 'tool-storybook').replaceAll('[^A-Za-z0-9_.-]+', '-')
+        def BUILD_ROOT = "/var/lib/containers/jenkins/${SAFE_JOB_NAME}-${IMAGE_TAG}"
+        def WORKSPACE_DIR = "${BUILD_ROOT}/workspace"
+        def PODMAN_ROOT = "${BUILD_ROOT}/storage"
+        def PODMAN_RUNROOT = "${BUILD_ROOT}/runroot"
+        def PODMAN_TMPDIR = "${BUILD_ROOT}/tmp"
+        def PODMAN_HOME = "${BUILD_ROOT}/home"
+        def PODMAN_GLOBAL_ARGS = "--root ${PODMAN_ROOT} --runroot ${PODMAN_RUNROOT} --tmpdir ${PODMAN_TMPDIR}"
 
-        try {
-            stage('Validate Branch') {
-                if (env.BRANCH_NAME && env.BRANCH_NAME != 'main') {
-                    error("tool-storybook only supports main branch because GitOps deployment exists only for prod.")
+        stage('Validate Branch') {
+            if (env.BRANCH_NAME && env.BRANCH_NAME != 'main') {
+                error("tool-storybook only supports main branch because GitOps deployment exists only for prod.")
+            }
+        }
+
+        ws(WORKSPACE_DIR) {
+            try {
+                stage('Checkout') {
+                    deleteDir()
+                    checkout scm
                 }
-            }
 
-            stage('Checkout') {
-                deleteDir()
-                checkout scm
-            }
-
-            stage('Build and Push Image') {
-                container('podman') {
-                    sh '''
-                        mkdir -p /var/lib/containers/tmp /var/lib/containers/run /var/lib/containers/home
-                        chmod 700 /var/lib/containers/run
-                        export TMPDIR=/var/lib/containers/tmp
-                        export XDG_RUNTIME_DIR=/var/lib/containers/run
-                        export HOME=/var/lib/containers/home
-                        podman info || echo "Podman initializing..."
-                    '''
-
-                    withCredentials([
-                        usernamePassword(
-                            credentialsId: 'harbor',
-                            usernameVariable: 'HARBOR_USERNAME',
-                            passwordVariable: 'HARBOR_PASSWORD'
-                        )
-                    ]) {
+                stage('Build and Push Image') {
+                    container('podman') {
                         sh """
-                            export TMPDIR=/var/lib/containers/tmp
-                            export XDG_RUNTIME_DIR=/var/lib/containers/run
-                            export HOME=/var/lib/containers/home
-                            echo \$HARBOR_PASSWORD | podman login \\
-                                -u \$HARBOR_USERNAME \\
-                                --password-stdin \\
-                                --tls-verify=true \\
-                                harbor.cocdev.co.kr
+                            mkdir -p /var/lib/containers/jenkins
+                            find /var/lib/containers/jenkins -mindepth 1 -maxdepth 1 -type d -mtime +2 -exec rm -rf {} + || true
+                            rm -rf ${PODMAN_ROOT} ${PODMAN_RUNROOT} ${PODMAN_TMPDIR} ${PODMAN_HOME}
+                            mkdir -p ${WORKSPACE_DIR} ${PODMAN_ROOT} ${PODMAN_RUNROOT} ${PODMAN_TMPDIR} ${PODMAN_HOME}
+                            chmod 700 ${PODMAN_RUNROOT}
+                            export TMPDIR=${PODMAN_TMPDIR}
+                            export XDG_RUNTIME_DIR=${PODMAN_RUNROOT}
+                            export HOME=${PODMAN_HOME}
+                            export REGISTRY_AUTH_FILE=${PODMAN_HOME}/auth.json
+                            podman ${PODMAN_GLOBAL_ARGS} info || echo "Podman initializing..."
                         """
 
-                        sh """
-                            export TMPDIR=/var/lib/containers/tmp
-                            export XDG_RUNTIME_DIR=/var/lib/containers/run
-                            export HOME=/var/lib/containers/home
-                            podman build \\
-                                --format=docker \\
-                                --layers \\
-                                --pull=always \\
-                                --ulimit nofile=${STORYBOOK_BUILD_NOFILE}:${STORYBOOK_BUILD_NOFILE} \\
-                                --build-arg NODE_BASE_IMAGE=${NODE_BASE_IMAGE} \\
-                                --build-arg NGINX_BASE_IMAGE=${NGINX_BASE_IMAGE} \\
-                                --build-arg STORYBOOK_DISABLE_CHROMATIC=${STORYBOOK_DISABLE_CHROMATIC} \\
-                                --build-arg STORYBOOK_BUILD_NOFILE=${STORYBOOK_BUILD_NOFILE} \\
-                                -f ./devops/Dockerfile.tool-storybook \\
-                                ${IMAGE_TAG_ARGS.join(' \\\\\n                                ')} \\
-                                .
-                        """
+                        withCredentials([
+                            usernamePassword(
+                                credentialsId: 'harbor',
+                                usernameVariable: 'HARBOR_USERNAME',
+                                passwordVariable: 'HARBOR_PASSWORD'
+                            )
+                        ]) {
+                            sh """
+                                export TMPDIR=${PODMAN_TMPDIR}
+                                export XDG_RUNTIME_DIR=${PODMAN_RUNROOT}
+                                export HOME=${PODMAN_HOME}
+                                export REGISTRY_AUTH_FILE=${PODMAN_HOME}/auth.json
+                                echo \$HARBOR_PASSWORD | podman ${PODMAN_GLOBAL_ARGS} login \\
+                                    -u \$HARBOR_USERNAME \\
+                                    --password-stdin \\
+                                    --tls-verify=true \\
+                                    harbor.cocdev.co.kr
+                            """
 
-                        sh """
-                            export TMPDIR=/var/lib/containers/tmp
-                            export XDG_RUNTIME_DIR=/var/lib/containers/run
-                            export HOME=/var/lib/containers/home
-                            podman push \\
-                                --compression-format=gzip \\
-                                --compression-level=9 \\
-                                ${IMAGE_PATH}:${IMAGE_TAG}
-                        """
+                            sh """
+                                export TMPDIR=${PODMAN_TMPDIR}
+                                export XDG_RUNTIME_DIR=${PODMAN_RUNROOT}
+                                export HOME=${PODMAN_HOME}
+                                export REGISTRY_AUTH_FILE=${PODMAN_HOME}/auth.json
+                                podman ${PODMAN_GLOBAL_ARGS} build \\
+                                    --format=docker \\
+                                    --layers \\
+                                    --pull=always \\
+                                    --ulimit nofile=${STORYBOOK_BUILD_NOFILE}:${STORYBOOK_BUILD_NOFILE} \\
+                                    --build-arg NODE_BASE_IMAGE=${NODE_BASE_IMAGE} \\
+                                    --build-arg NGINX_BASE_IMAGE=${NGINX_BASE_IMAGE} \\
+                                    --build-arg STORYBOOK_DISABLE_CHROMATIC=${STORYBOOK_DISABLE_CHROMATIC} \\
+                                    --build-arg STORYBOOK_BUILD_NOFILE=${STORYBOOK_BUILD_NOFILE} \\
+                                    -f ./devops/Dockerfile.tool-storybook \\
+                                    ${IMAGE_TAG_ARGS.join(' \\\\\n                                    ')} \\
+                                    .
+                            """
 
-                        sh """
-                            export TMPDIR=/var/lib/containers/tmp
-                            export XDG_RUNTIME_DIR=/var/lib/containers/run
-                            export HOME=/var/lib/containers/home
-                            podman rmi \\
-                                ${CLEANUP_IMAGES.join(' \\\\\n                                ')} || true
-                        """
+                            sh """
+                                export TMPDIR=${PODMAN_TMPDIR}
+                                export XDG_RUNTIME_DIR=${PODMAN_RUNROOT}
+                                export HOME=${PODMAN_HOME}
+                                export REGISTRY_AUTH_FILE=${PODMAN_HOME}/auth.json
+                                podman ${PODMAN_GLOBAL_ARGS} push \\
+                                    --compression-format=gzip \\
+                                    --compression-level=9 \\
+                                    ${IMAGE_PATH}:${IMAGE_TAG}
+                            """
+
+                            sh """
+                                export TMPDIR=${PODMAN_TMPDIR}
+                                export XDG_RUNTIME_DIR=${PODMAN_RUNROOT}
+                                export HOME=${PODMAN_HOME}
+                                export REGISTRY_AUTH_FILE=${PODMAN_HOME}/auth.json
+                                podman ${PODMAN_GLOBAL_ARGS} rmi \\
+                                    ${CLEANUP_IMAGES.join(' \\\\\n                                    ')} || true
+                                rm -rf ${PODMAN_ROOT} ${PODMAN_RUNROOT} ${PODMAN_TMPDIR} ${PODMAN_HOME}
+                            """
+                        }
                     }
                 }
-            }
 
-            stage('Trigger GitOps Update Job') {
-                catchError(buildResult: 'SUCCESS', stageResult: 'UNSTABLE') {
-                    def gitCommit = env.GIT_COMMIT ?: ''
-                    build(
-                        job: GITOPS_UPDATE_JOB,
-                        wait: false,
-                        parameters: [
-                            string(name: 'APP_NAME', value: GITOPS_APP),
-                            string(name: 'IMAGE_TAG', value: IMAGE_TAG),
-                            string(name: 'DEPLOY_ENV', value: 'prod'),
-                            string(name: 'SOURCE_BUILD_URL', value: env.BUILD_URL ?: ''),
-                            string(name: 'SOURCE_COMMIT', value: gitCommit),
-                        ]
-                    )
-                    echo "Triggered ${GITOPS_UPDATE_JOB} with APP_NAME=${GITOPS_APP}, IMAGE_TAG=${IMAGE_TAG}"
+                stage('Trigger GitOps Update Job') {
+                    catchError(buildResult: 'SUCCESS', stageResult: 'UNSTABLE') {
+                        def gitCommit = env.GIT_COMMIT ?: ''
+                        build(
+                            job: GITOPS_UPDATE_JOB,
+                            wait: false,
+                            parameters: [
+                                string(name: 'APP_NAME', value: GITOPS_APP),
+                                string(name: 'IMAGE_TAG', value: IMAGE_TAG),
+                                string(name: 'DEPLOY_ENV', value: 'prod'),
+                                string(name: 'SOURCE_BUILD_URL', value: env.BUILD_URL ?: ''),
+                                string(name: 'SOURCE_COMMIT', value: gitCommit),
+                            ]
+                        )
+                        echo "Triggered ${GITOPS_UPDATE_JOB} with APP_NAME=${GITOPS_APP}, IMAGE_TAG=${IMAGE_TAG}"
+                    }
                 }
-            }
 
-        } catch (Exception e) {
-            throw e
+            } catch (Exception e) {
+                throw e
+            }
         }
     }
 }

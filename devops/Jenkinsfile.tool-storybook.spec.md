@@ -21,6 +21,7 @@
 | 빌드 리밋 | `podman build --ulimit nofile=<value>:<value>`로 RUN 컨테이너의 파일 디스크립터 한계를 상향 |
 | 워크스페이스 볼륨 | `persistentVolumeClaimWorkspaceVolume(claimName: container-builder-pvc)`로 Jenkins workspace 자체도 PVC에 배치 |
 | 임시 디렉터리 | `TMPDIR`, `XDG_RUNTIME_DIR`, `HOME`을 `/var/lib/containers/*` 아래로 고정해 Podman 임시 파일을 PVC로 유도 |
+| 빌드별 경로 | workspace/Podman storage를 `/var/lib/containers/jenkins/<job>-<build>/...` 아래의 빌드별 디렉터리로 분리 |
 | GitOps 트리거 | `GITOPS_UPDATE_JOB` 환경변수(기본 `/gitops-prod-image-bump`) |
 | 트리거 파라미터 | `APP_NAME`, `IMAGE_TAG`, `DEPLOY_ENV`, `SOURCE_BUILD_URL`, `SOURCE_COMMIT` |
 | 실패 전파 정책 | GitOps 트리거 실패 시 stage만 `UNSTABLE`, 빌드 결과는 `SUCCESS` 유지 |
@@ -37,11 +38,13 @@
 - [x] `podman build --ulimit`로 builder RUN 컨테이너 hard/soft nofile 한계를 직접 상향함
 - [x] Podman 컨테이너의 `ephemeral-storage` request/limit를 명시해 low-storage 노드 배치를 피함
 - [x] workspace 및 Podman 임시 디렉터리를 PVC로 유도해 emptyDir 기반 ephemeral storage 사용량을 줄임
+- [x] `ws(...)`와 Podman `--root/--runroot/--tmpdir`를 빌드별 PVC 경로로 고정해 overlay/tmp/workspace가 노드 ephemeral storage를 쓰지 않도록 함
 
 ## 변경 이력
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-03-18 | `ws(/var/lib/containers/jenkins/...)`와 Podman `--root/--runroot/--tmpdir` 빌드별 PVC 경로를 적용해 workspace 및 libpod 저장소가 노드 ephemeral storage를 쓰지 않도록 조정 | codex |
 | 2026-03-18 | `persistentVolumeClaimWorkspaceVolume`, Podman `ephemeral-storage` request/limit, PVC 기반 임시 디렉터리 설정으로 Jenkins agent eviction을 완화 | codex |
 | 2026-03-18 | `podman build --ulimit nofile=...`를 추가해 Dockerfile 내부 `ulimit`만으로 올릴 수 없는 builder hard limit도 함께 상향 | codex |
 | 2026-03-18 | Storybook 정적 이미지 빌드에 `STORYBOOK_DISABLE_CHROMATIC` 및 `STORYBOOK_BUILD_NOFILE` 인자를 추가해 `EMFILE` 실패를 완화 | codex |
