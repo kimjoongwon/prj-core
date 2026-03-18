@@ -5,7 +5,16 @@
     "pnpm-workspace.yaml",
     "pnpm-lock.yaml"
   ],
-  "globalEnv": ["NODE_ENV", "REDIS_HOST", "REDIS_PORT", "REDIS_PASSWORD"],
+  "globalEnv": [
+    "NODE_ENV",
+    "REDIS_HOST",
+    "REDIS_PORT",
+    "REDIS_PASSWORD",
+    "STORYBOOK_DISABLE_CHROMATIC",
+    "STORYBOOK_REQUIRE_AUTH",
+    "STORYBOOK_CORE_API_TARGET",
+    "STORYBOOK_IDP_API_TARGET"
+  ],
   "tasks": {
     // === 기본 태스크 ===
     "build": {

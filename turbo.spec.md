@@ -24,10 +24,12 @@
 - [x] NestJS 앱은 `dist/**`를 출력으로 사용
 - [x] source-only 패키지는 빈 출력으로 캐시 일관성만 유지
 - [x] `tool-storybook#build`는 Storybook 전용 입력과 `storybook-static/**` 출력을 사용
+- [x] Storybook 관련 환경 변수는 Turbo strict env 모드에서도 태스크로 전달된다
 
 ## 변경 이력
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-03-18 | Storybook 정적/개발 빌드에 필요한 `STORYBOOK_*` 환경 변수를 `globalEnv`에 추가해 Turbo 실행에서도 전달되도록 수정 | codex |
 | 2026-03-09 | `@cocrepo/prisma#build` 입력을 `schema/**`, `scripts/**`, `prisma.config.ts`, seed 파일 기준으로 정정해 스키마 리팩토링 변경이 캐시에 반영되도록 수정 | codex |
 | 2026-03-08 | `tool-storybook#build` 전용 입력/출력 규칙을 추가해 Storybook을 표준 Turbo 빌드 그래프에 포함 | codex |

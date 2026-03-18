@@ -63,6 +63,7 @@ podTemplate(
                                 --format=docker \\
                                 --layers \\
                                 --pull=always \\
+                                --ulimit nofile=${STORYBOOK_BUILD_NOFILE}:${STORYBOOK_BUILD_NOFILE} \\
                                 --build-arg NODE_BASE_IMAGE=${NODE_BASE_IMAGE} \\
                                 --build-arg NGINX_BASE_IMAGE=${NGINX_BASE_IMAGE} \\
                                 --build-arg STORYBOOK_DISABLE_CHROMATIC=${STORYBOOK_DISABLE_CHROMATIC} \\
