@@ -1,3 +1,6 @@
+def PODMAN_EPHEMERAL_REQUEST = '8Gi'
+def PODMAN_EPHEMERAL_LIMIT = '20Gi'
+
 podTemplate(
     workspaceVolume: persistentVolumeClaimWorkspaceVolume(
         claimName: 'container-builder-pvc',
@@ -14,8 +17,8 @@ podTemplate(
             name: 'podman',
             image: 'quay.io/podman/stable:v4.8.2',
             privileged: true,
-            resourceRequestEphemeralStorage: '2Gi',
-            resourceLimitEphemeralStorage: '6Gi',
+            resourceRequestEphemeralStorage: PODMAN_EPHEMERAL_REQUEST,
+            resourceLimitEphemeralStorage: PODMAN_EPHEMERAL_LIMIT,
             ttyEnabled: true,
             command: 'cat',
         )
