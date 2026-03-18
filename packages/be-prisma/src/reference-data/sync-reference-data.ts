@@ -1,8 +1,16 @@
-import "../load-local-env";
-
+import type {
+	Action,
+	Group,
+	PrismaClient,
+	Role,
+	Subject,
+} from "../generated/client/client";
+import { Prisma } from "../generated/client/client";
+import { CategoryTypes } from "../generated/client/enums";
+import { SYSTEM_SPACE_ID } from "./constants";
 import {
-	actionSeedData,
 	abilitySeedData,
+	actionSeedData,
 	oidcClientSeedData,
 	roleAssociationSeedData,
 	roleCategorySeedData,
@@ -13,17 +21,7 @@ import {
 	spaceGroupSeedData,
 	subjectSeedData,
 	translationSeedData,
-} from "../../reference-data";
-import { Prisma } from "../generated/client/client";
-import type {
-	Action,
-	Group,
-	PrismaClient,
-	Role,
-	Subject,
-} from "../generated/client/client";
-import { CategoryTypes } from "../generated/client/enums";
-import { SYSTEM_SPACE_ID } from "./constants";
+} from "./definitions";
 
 type DbClient = PrismaClient | Prisma.TransactionClient;
 
@@ -31,7 +29,15 @@ export interface ReferenceDataSyncResult {
 	roles: Record<string, Role>;
 }
 
+/**
+ * reference-data가 의존하는 고정 system space row를 보장합니다.
+ *
+ * taxonomy/group/role 분류가 모두 이 space를 기준으로 매달리므로,
+ * 실제 동기화는 항상 이 row 존재를 전제로 시작합니다.
+ */
 async function ensureSystemSpace(db: DbClient): Promise<void> {
+	// Reference data owns the canonical system space row because other catalogs
+	// (taxonomy, groups, roles) hang from it.
 	await db.space.upsert({
 		where: { id: SYSTEM_SPACE_ID },
 		update: {
@@ -46,10 +52,12 @@ async function ensureSystemSpace(db: DbClient): Promise<void> {
 async function syncSpaceCategories(db: DbClient): Promise<void> {
 	const categoryMap = new Map<string, { id: string }>();
 
+	// Parent-child category links are resolved in memory as we upsert categories
+	// in seed order, so later entries can refer to earlier category ids.
 	for (const categoryData of spaceCategorySeedData) {
 		const spaceCategoryEnum = categoryData.spaceCategoryEnum;
 		const parentId = categoryData.parentCategoryCode
-			? categoryMap.get(categoryData.parentCategoryCode)?.id ?? null
+			? (categoryMap.get(categoryData.parentCategoryCode)?.id ?? null)
 			: null;
 
 		const category = await db.category.upsert({
@@ -90,6 +98,8 @@ async function syncSpaceCategories(db: DbClient): Promise<void> {
 }
 
 async function syncSpaceGroups(db: DbClient): Promise<void> {
+	// Group rows do not have a single natural unique key for this lookup shape,
+	// so we restore/create them and then ensure the space association exists.
 	for (const groupData of spaceGroupSeedData) {
 		const spaceGroupEnum = groupData.spaceGroupEnum;
 		let group = await db.group.findFirst({
@@ -215,9 +225,7 @@ async function syncRoleClassifications(
 	}
 }
 
-async function syncRoleGroups(
-	db: DbClient,
-): Promise<Record<string, Group>> {
+async function syncRoleGroups(db: DbClient): Promise<Record<string, Group>> {
 	const groups: Record<string, Group> = {};
 
 	for (const groupData of roleGroupSeedData) {
@@ -345,6 +353,12 @@ async function syncActions(db: DbClient): Promise<Record<string, Action>> {
 	return actions;
 }
 
+/**
+ * ability의 표시 이름을 결정합니다.
+ *
+ * seed에 명시적 `name`이 없으면 action/subject 조합에서 사람이 읽을 수 있는
+ * 기본 이름을 만들어 unique key처럼 사용합니다.
+ */
 function getAbilityName(
 	abilityData: (typeof abilitySeedData)[number],
 	action: Action,
@@ -364,6 +378,8 @@ async function syncAbilitiesAndGrants(
 ): Promise<void> {
 	const abilityMap = new Map<string, { id: string }>();
 
+	// Phase 1: materialize unique ability records. Multiple roles may point to
+	// the same subject/action/condition combination.
 	for (const abilityData of abilitySeedData) {
 		const subject = subjects[abilityData.subject];
 		const action = actions[abilityData.actionName];
@@ -408,6 +424,7 @@ async function syncAbilitiesAndGrants(
 		}
 	}
 
+	// Phase 2: connect roles to those shared abilities through grant rows.
 	for (const abilityData of abilitySeedData) {
 		const role = roles[abilityData.roleName];
 		const subject = subjects[abilityData.subject];
@@ -505,11 +522,19 @@ async function syncOidcClients(db: DbClient): Promise<void> {
 	}
 }
 
+/**
+ * 운영 기준 데이터를 한 번에 동기화합니다.
+ *
+ * 이 함수는 "처음 세팅"뿐 아니라 재실행도 전제로 합니다. 대부분의 row는 upsert 또는
+ * soft-delete 복구 방식으로 처리되며, 실행 순서는 id 참조 관계를 반영해 고정합니다.
+ */
 export async function syncReferenceData(
 	db: DbClient,
 ): Promise<ReferenceDataSyncResult> {
 	console.log("Reference data sync 시작...");
 
+	// Execution order matters because later catalogs depend on ids created by
+	// earlier ones, especially system space -> taxonomy -> roles -> grants.
 	await ensureSystemSpace(db);
 	await syncSpaceCategories(db);
 	await syncSpaceGroups(db);

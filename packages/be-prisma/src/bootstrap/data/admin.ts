@@ -1,6 +1,9 @@
-// ============================================================
-// Agreement (약관) 시드 데이터
-// ============================================================
+/**
+ * bootstrap 단계에서 사용하는 약관/동의 정의입니다.
+ *
+ * reference-data처럼 전역 기준값을 버전드 migration으로 강제 반영하는 성격보다는,
+ * 초기 환경을 세울 때 기본 약관 묶음을 넣는 목적에 가깝습니다.
+ */
 
 export type AgreementType =
 	| "TERMS_OF_SERVICE"
@@ -17,6 +20,7 @@ export interface AgreementSeedData {
 	content: string;
 }
 
+// `type + version`이 약관 문서의 의미상 식별자 역할을 합니다.
 export const agreementSeedData: AgreementSeedData[] = [
 	{
 		title: "서비스 이용약관",
@@ -90,14 +94,13 @@ export const agreementSeedData: AgreementSeedData[] = [
 	},
 ];
 
-// 유저-약관동의 매핑 인터페이스
+// userEmail은 bootstrap에서 만든 계정과 연결하는 참조 키입니다.
 export interface UserAgreementMappingData {
 	userEmail: string;
 	agreements: AgreementType[];
 }
 
-// 유저와 약관 동의 매핑 (정합성 보장)
-// FULL_ACCESS(admin@plate.com)은 별도로 약관 동의하지 않음 (시스템 관리자)
+// FULL_ACCESS(admin@plate.com)은 시스템 관리자이므로 일반 회원 약관 흐름에서 제외합니다.
 export const userAgreementMapping: UserAgreementMappingData[] = [
 	// MANAGE들 - 필수 + 마케팅 동의
 	{

@@ -21,9 +21,11 @@ OIDC provider/client 설정 계약을 정의하며, `OidcFacade`와 `AuthControl
 ## 비즈니스 규칙
 
 - `oidc.clients.admin`과 `oidc.clients.storybook`을 동시에 제공하여 다중 RP 구성을 지원합니다.
-- admin RP는 `http://localhost:3000/api/v1/auth/callback`, storybook RP는 `http://localhost:6006/api/v1/auth/storybook/callback`을 기본 redirect URI로 사용합니다.
-- storybook RP의 에러 복귀 URL은 `http://localhost:6006/__storybook_auth/login`을 기본값으로 사용합니다.
-- admin RP는 기존 `OIDC_CLIENT_ID`, `OIDC_CLIENT_SECRET`, `OIDC_REDIRECT_URI` 환경변수를 하위 입력값으로 받아 기존 로컬 환경을 깨지지 않게 흡수합니다.
+- admin RP는 `OIDC_ADMIN_BASE_URL`에서 redirect/login/default return URL을 조합하고, storybook RP는 `OIDC_STORYBOOK_BASE_URL`에서 같은 성격의 URL을 조합합니다.
+- admin RP의 기본 redirect URI는 `http://localhost:3000/api/v1/auth/callback`, 기본 login URL은 `http://localhost:3000/admin/auth/login`, 기본 return URL은 `http://localhost:3000/admin/dashboard`입니다.
+- storybook RP의 기본 redirect URI는 `http://localhost:6006/api/v1/auth/storybook/callback`, 기본 login URL은 `http://localhost:6006/__storybook_auth/login`, 기본 return URL은 `http://localhost:6006/`입니다.
+- 개별 override(`OIDC_ADMIN_REDIRECT_URI`, `OIDC_ADMIN_LOGIN_URL`, `OIDC_ADMIN_DEFAULT_RETURN_TO`, `OIDC_STORYBOOK_REDIRECT_URI`, `OIDC_STORYBOOK_LOGIN_URL`, `OIDC_STORYBOOK_DEFAULT_RETURN_TO`)는 base URL 조합보다 우선합니다.
+- OIDC 환경변수는 `OIDC_ADMIN_*`, `OIDC_STORYBOOK_*` 정식 키만 사용합니다.
 
 ## 변경 이력
 

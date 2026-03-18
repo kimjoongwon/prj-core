@@ -1,5 +1,12 @@
 import { RoleCategoryName, RoleGroupName } from "@cocrepo/enum";
 
+/**
+ * 역할 기준 데이터입니다.
+ *
+ * 카테고리, 그룹, 역할, 분류, 연결이 여러 배열로 나뉘어 있지만 결국 하나의 권한 모델을
+ * 구성합니다. runtime sync는 각 배열의 business key를 기준으로 upsert/연결합니다.
+ */
+
 // Role 타입 카테고리 시드 데이터 (RoleCategoryName enum 활용)
 export interface CategorySeedData {
 	roleCategoryEnum: RoleCategoryName;
@@ -7,6 +14,7 @@ export interface CategorySeedData {
 	parentId?: string;
 }
 
+// 카테고리 enum은 UI 분류와 권한 정책 양쪽에서 공통으로 쓰이는 고정 키입니다.
 export const roleCategorySeedData: CategorySeedData[] = [
 	{
 		roleCategoryEnum: RoleCategoryName.PLATFORM,
@@ -38,6 +46,7 @@ export interface RoleSeedData {
 	isSystem: boolean;
 }
 
+// Role의 실제 식별자는 `name`이며, displayName/description은 운영 중 보정 가능한 표현값입니다.
 export const roleSeedData: RoleSeedData[] = [
 	{
 		name: "FULL_ACCESS",
@@ -59,14 +68,14 @@ export const roleSeedData: RoleSeedData[] = [
 	},
 ];
 
-// RoleClassification 시드 데이터 (Role과 Category type="Role" 연결)
-// role.prisma의 RoleClassification 모델: categoryId, roleId로 연결
+// RoleClassification은 "역할 자체"와 "역할이 속한 카테고리"를 매핑하는 기준 테이블 정의입니다.
 
 export interface RoleClassificationSeedData {
 	roleName: string;
 	roleCategoryEnum: RoleCategoryName; // RoleCategoryName enum 사용
 }
 
+// roleName + roleCategoryEnum 조합이 연결의 의미를 결정합니다.
 export const roleClassificationSeedData: RoleClassificationSeedData[] = [
 	{
 		roleName: "FULL_ACCESS",
@@ -82,12 +91,11 @@ export const roleClassificationSeedData: RoleClassificationSeedData[] = [
 	},
 ];
 
-// Role Group 시드 데이터 (RoleGroupName enum 활용)
-
 export interface RoleGroupSeedData {
 	roleGroupEnum: RoleGroupName;
 }
 
+// Group은 멤버십/패키징 같은 상위 개념으로 Role을 묶을 때 쓰는 분류 축입니다.
 export const roleGroupSeedData: RoleGroupSeedData[] = [
 	{
 		roleGroupEnum: RoleGroupName.TRUSTED,
@@ -100,12 +108,13 @@ export const roleGroupSeedData: RoleGroupSeedData[] = [
 	},
 ];
 
-// Role과 Group 연결 (RoleAssociation) 시드 데이터
+// RoleAssociation은 역할과 그룹 사이의 연결 정의입니다.
 export interface RoleAssociationSeedData {
 	roleName: string;
 	roleGroupEnum: RoleGroupName;
 }
 
+// 이 연결은 권한 자체를 만들지는 않고, 역할을 어떤 상품/플랜 축에 올릴지 결정합니다.
 export const roleAssociationSeedData: RoleAssociationSeedData[] = [
 	// FULL_ACCESS는 TRUSTED 그룹
 	{

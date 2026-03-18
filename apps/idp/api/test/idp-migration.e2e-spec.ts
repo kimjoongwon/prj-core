@@ -42,7 +42,7 @@ describe("IDP 모듈 마이그레이션 E2E 테스트", () => {
 		it("GET /oidc/auth - OIDC 인증 요청 (303 리다이렉트)", async () => {
 			const params = new URLSearchParams({
 				response_type: "code",
-				client_id: "prj-core-admin",
+				client_id: "admin-web",
 				redirect_uri: "http://localhost:3000/api/v1/auth/callback",
 				scope: "openid profile email roles",
 				state: "test-state-" + Date.now(),
@@ -127,7 +127,7 @@ describe("IDP 모듈 마이그레이션 E2E 테스트", () => {
 			const location = res.headers.get("location");
 			expect(location).toBeDefined();
 			expect(location).toContain("/oidc/auth");
-			expect(location).toContain("client_id=prj-core-admin");
+			expect(location).toContain("client_id=admin-web");
 			expect(location).toContain("redirect_uri=");
 			expect(location).toContain("response_type=code");
 		});

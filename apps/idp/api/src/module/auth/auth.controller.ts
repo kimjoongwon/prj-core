@@ -72,7 +72,7 @@ export class AuthController {
 	constructor(
 		private readonly authApplicationService: AuthApplicationService,
 		private readonly configService: ConfigService,
-	) {}
+	) { }
 
 	@Public()
 	@Get("login")

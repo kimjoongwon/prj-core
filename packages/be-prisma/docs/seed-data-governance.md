@@ -20,12 +20,12 @@
 
 ## 한 줄 요약
 
-현재 방식은 `seed-data.ts`에 적힌 기본 데이터를 `seed.ts`가 한 번에 넣는 구조라서 개발/스테이징 초기화에는 편하지만,
+현재 방식은 seed 정의와 bootstrap 실행이 같은 패키지 안에 묶여 있어 개발/스테이징 초기화에는 편하지만,
 운영(prod)에서는 "이번 변경만 안전하게 반영"하는 전략이 아니라 "기본 세트를 다시 넣는" 구조에 가깝습니다.
 
-운영은 앞으로 `seed`가 아니라 `versioned reference-data migration`으로 다뤄야 합니다.
+운영은 `전체 seed 재실행`이 아니라 `versioned reference-data migration`으로 다뤄야 합니다.
 
-현재 코드에는 그 첫 단계로 아래가 추가되었습니다.
+현재 코드에는 아래가 이미 구현되어 있습니다.
 
 - `data-migrate.ts`
 - `src/reference-data/**`
@@ -34,31 +34,59 @@
 
 ## 현재 구조
 
+### 용어 정리
+
+- `reference-data`: 운영에서도 코드가 기준이어야 하는 카탈로그/계약 데이터
+- `bootstrap default`: 초기 환경에 넣는 기본값. 보통 create-only
+- `demo/test data`: dev/stg 샘플 데이터
+- `bootstrap runtime`: `src/bootstrap/**`가 수행하는 초기 적재 로직
+- `reference-data migration`: `data-migrate.ts`가 실행하는 versioned data migration
+
 ### 현재 실행 흐름
 
 ```text
-seed-data.ts / asset-seed-data.ts / inquiry-seed-data.ts / translation-seed-data.ts
-                                |
-                                v
-                             seed.ts
-                                |
-               +----------------+----------------+
-               |                                 |
-               v                                 v
-         pnpm db:seed                      pnpm db:seed:stg
-        (dev 기본값)                        (stg 기본값)
+reference-data path
+  src/reference-data/definitions/*
+           +
+  src/reference-data/migrations/*
+           |
+           v
+     data-migrate.ts
+           |
+           v
+  pnpm db:data:migrate[:env]
+           |
+           v
+reference_data_migration_history
 
-prod용 공식 seed 경로는 없음
+bootstrap path
+  src/bootstrap/data/*
+  src/demo-data/*
+           |
+           v
+     src/bootstrap/*
+           |
+           v
+         seed.ts
+           |
+   +------------+-------------+
+   |                          |
+   v                          v
+pnpm db:bootstrap       pnpm db:bootstrap:stg
+   (= db:seed)
 ```
 
 ### 현재 구조의 특징
 
-- 데이터 정의와 실행 로직이 `seed-data.ts`와 `seed.ts`에 집중되어 있습니다.
+- 데이터 정의는 `src/reference-data/definitions/**`,
+  `src/bootstrap/data/**`, `src/demo-data/**`에,
+  실행 로직은 `src/bootstrap/**`에 나뉘어 있습니다.
 - 역할, 권한, OIDC client 같은 기준 데이터와
-  샘플 유저, 샘플 ground, timeline, inquiry, asset 같은 데이터가 함께 들어 있습니다.
+  샘플 유저, 샘플 ground, timeline, inquiry, asset 같은 데이터가 여전히 같은 패키지 안에 공존합니다.
 - 스키마가 바뀌면 사람 손으로 seed 정의와 실행 로직을 같이 맞춰야 합니다.
-- 어떤 seed 변경이 운영에 언제 반영되었는지 저장하는 이력이 없습니다.
-- prod에 "자동으로, 안전하게, 이번 변경만" 반영하는 별도 경로가 없습니다.
+- reference-data는 `reference_data_migration_history`로 이력이 남지만,
+  bootstrap/demo는 언제 어떤 값이 다시 적재됐는지 별도 이력이 없습니다.
+- prod에 "자동으로, 안전하게, 이번 변경만" 반영하는 경로는 reference-data에 한해 존재합니다.
 
 ## 왜 운영에서는 위험한가
 
@@ -67,7 +95,7 @@ prod용 공식 seed 경로는 없음
 
 1. 운영 기준 데이터와 샘플 데이터가 섞여 있습니다.
 2. 어떤 데이터가 코드 소유인지, 운영자 소유인지 경계가 모호합니다.
-3. 실행 이력이 없어 "언제 무엇이 반영됐는지" 추적하기 어렵습니다.
+3. bootstrap/demo는 실행 이력이 없어 "언제 무엇이 반영됐는지" 추적하기 어렵습니다.
 4. schema migration과 data 반영이 분리되어 있지 않아 변경 누락이 생기기 쉽습니다.
 5. 특정 앱 배포에 묶어 처리하면 공유 Prisma schema를 쓰는 다른 앱과 타이밍이 어긋날 수 있습니다.
 
@@ -170,7 +198,7 @@ prod용 공식 seed 경로는 없음
 | `SYSTEM_SPACE_ID` + system space 생성 | bootstrap | 최초 시스템 구조 초기화 |
 | system tenant 생성 | bootstrap | 최초 연결 관계 초기화 |
 | `groundSeedData` 중 system ground | bootstrap | 시스템 공간 기본 시설 |
-| `createSpaceGroupsAndAssociations` | bootstrap | 실제 system space 내부 구조 초기화 |
+| `ensureSystemBootstrap` 내부 system group 준비 | bootstrap | 실제 system space 내부 구조 초기화 |
 | `classifyGroundSpacesAsBranch` | bootstrap | 생성된 bootstrap 공간의 후속 정리 |
 | `createHierarchicalTenants` | bootstrap | 초기 tenant 계층 연결 |
 | `securityPolicySeedData` | bootstrap default | 운영자가 바꿀 가능성이 높고 현재도 create-only |
@@ -245,54 +273,39 @@ reference data는 아래 같은 변경 가능한 표시명이 아니라
 운영 데이터 삭제는 위험하므로 기본 동작은 create/update로 제한합니다.
 삭제가 정말 필요하면 별도 명시 migration으로만 처리합니다.
 
-## 목표 구조
+## 권장 구조(현재 구현 기준)
 
-### 추천 파일 구조
+### 파일 구조
 
 ```text
 packages/be-prisma/
+├── schema/                         # Prisma schema source
+├── migrations/                     # Prisma schema migration SQL
 ├── seed.ts                         # dev/stg bootstrap 엔트리
-├── seed-data.ts                    # 남아 있는 bootstrap/demo 정의 또는 호환 레이어
-├── reference-data/
-│   ├── access-control.ts
-│   ├── identity.ts
-│   ├── oidc.ts
-│   └── translation.ts
-├── bootstrap/
-│   ├── admin.ts
-│   ├── system-space.ts
-│   ├── defaults.ts
-│   └── templates.ts
-├── demo-data/
-│   ├── grounds.ts
-│   ├── timeline.ts
-│   ├── asset.ts
-│   └── inquiry.ts
-└── data-migrations/
-    ├── 202603170900__init-reference-data.ts
-    ├── 202603171100__add-new-role.ts
-    └── 202603171300__backfill-oidc-client-field.ts
+├── data-migrate.ts                 # reference-data migration 엔트리
+├── src/
+│   ├── reference-data/
+│   │   ├── definitions/
+│   │   └── migrations/
+│   ├── bootstrap/
+│   │   ├── data/
+│   │   └── *.ts
+│   └── demo-data/
+└── schema/platform/reference-data-migration.prisma
 ```
 
-### 목표 실행 구조
+### 실행 구조
 
 ```text
-                    +------------------------------+
-                    |  reference-data modules      |
-                    +---------------+--------------+
-                                    |
-                                    v
-                       data-migrations/*.ts
-                                    |
-                                    v
-                        db:data:migrate[:env]
-                                    |
-                                    v
-                     ReferenceDataMigrationHistory
+data-migrate.ts
+  -> src/reference-data/migrations/*
+  -> src/reference-data/sync-reference-data.ts
+  -> reference_data_migration_history
 
-
-seed.ts -> bootstrap/* + demo-data/*
-       -> dev / stg 전용
+seed.ts
+  -> src/bootstrap/run-bootstrap.ts
+  -> reference/system bootstrap + bootstrap default + demo data
+  -> dev / stg 전용
 ```
 
 ## 현재 배포 연결 방식 (v1)
@@ -375,13 +388,11 @@ pnpm db:data:migrate:prod # prod reference-data migration
 - "초기 기본값이다" -> bootstrap
 - "예시/화면/테스트용이다" -> demo/test
 
-## 현재 상태에서의 즉시 액션
+## 남아 있는 액션
 
-1. `reference`, `bootstrap`, `demo/test` 분류를 문서 기준으로 고정합니다.
-2. `agreementSeedData`처럼 미사용 seed를 정리합니다.
-3. `seed.ts`에서 reference 부분과 bootstrap/demo 부분을 분리합니다.
-4. reference-data migration runner와 이력 테이블을 추가합니다.
-5. GitOps 배포에 공유 DB migrator Job을 추가합니다.
+1. `agreementSeedData`처럼 미사용 seed를 정리합니다.
+2. bootstrap default 중 운영 계약으로 굳는 항목이 생기면 reference-data 승격 기준을 적용합니다.
+3. GitOps 배포에서 shared DB용 단일 migrator를 둘지, 앱별 PreSync Job 중복 실행을 유지할지 결정합니다.
 
 ## 기본 결정 사항
 
@@ -394,5 +405,5 @@ pnpm db:data:migrate:prod # prod reference-data migration
 
 ## 비고
 
-현재 `seed-data.spec.md`는 기존 seed 데이터의 역할과 일부 계약을 설명합니다.
+현재 `seed-data.spec.md`는 seed 정의 구조의 역할과 일부 계약을 설명합니다.
 이 문서는 그보다 상위 개념인 "운영 관점의 seed governance"를 정의합니다.

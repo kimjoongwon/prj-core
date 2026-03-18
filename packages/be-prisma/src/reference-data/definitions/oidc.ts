@@ -1,6 +1,9 @@
-// ============================================================================
-// OIDC Client 시드 데이터
-// ============================================================================
+/**
+ * OIDC 클라이언트 기준 데이터입니다.
+ *
+ * 운영 환경마다 redirect URI가 달라질 수 있으므로, business key는 `clientId`로 유지하고
+ * URL 계열 값만 env override로 풀어내는 구조입니다.
+ */
 
 /**
  * OIDC Client 시드 데이터 인터페이스
@@ -22,35 +25,40 @@ export interface OidcClientSeedData {
 
 function resolveOidcSeedUrl(baseUrl: string, pathname: string): string {
 	const normalizedBaseUrl = baseUrl.endsWith("/") ? baseUrl : `${baseUrl}/`;
-	return new URL(pathname, normalizedBaseUrl).toString();
+	const normalizedPathname = pathname.replace(/^\/+/, "");
+	return new URL(normalizedPathname, normalizedBaseUrl).toString();
 }
 
+// 개별 override가 있으면 그것을 우선하고, 없으면 더 일반적인 base URL에서 redirect URI를 조합합니다.
+const oidcAdminBaseUrl =
+	process.env.OIDC_ADMIN_BASE_URL || "http://localhost:3000";
 const oidcAdminRedirectUri =
 	process.env.OIDC_ADMIN_REDIRECT_URI ||
-	process.env.OIDC_REDIRECT_URI ||
-	"http://localhost:3000/api/v1/auth/callback";
-const oidcStorybookBaseUrl = process.env.STORYBOOK_URL || "http://localhost:6006";
+	resolveOidcSeedUrl(oidcAdminBaseUrl, "/api/v1/auth/callback");
+const oidcStorybookBaseUrl =
+	process.env.OIDC_STORYBOOK_BASE_URL || "http://localhost:6006";
 const oidcStorybookRedirectUri =
 	process.env.OIDC_STORYBOOK_REDIRECT_URI ||
 	resolveOidcSeedUrl(oidcStorybookBaseUrl, "/api/v1/auth/storybook/callback");
 const oidcIdpClientUrl = process.env.IDP_CLIENT_URL || "http://localhost:3008";
-const oidcIdpConsoleRedirectUri =
-	process.env.OIDC_IDP_CONSOLE_REDIRECT_URI ||
+const oidcIdpWebRedirectUri =
+	process.env.OIDC_IDP_WEB_REDIRECT_URI ||
 	resolveOidcSeedUrl(oidcIdpClientUrl, "/api/v1/auth/callback");
-const oidcIssuer = process.env.OIDC_ISSUER || oidcIdpClientUrl || "http://localhost:3007";
+const oidcIssuer =
+	process.env.OIDC_ISSUER || oidcIdpClientUrl || "http://localhost:3007";
 const oidcSwaggerRedirectUri =
 	process.env.OIDC_SWAGGER_REDIRECT_URI ||
 	resolveOidcSeedUrl(oidcIssuer, "/api/oauth2-redirect.html");
 
 /**
  * OIDC Client 시드 데이터
- * 기본 클라이언트 애플리케이션 정의
+ * 운영/개발 환경에서 공통으로 유지해야 하는 기본 클라이언트 애플리케이션 정의입니다.
  */
 export const oidcClientSeedData: OidcClientSeedData[] = [
 	{
-		clientId: "prj-core-admin",
+		clientId: "admin-web",
 		clientSecret: "admin-secret-change-in-production",
-		clientName: "PRJ Core Admin",
+		clientName: "Admin Web",
 		redirectUris: [oidcAdminRedirectUri],
 		grantTypes: ["authorization_code", "refresh_token"],
 		responseTypes: ["code"],
@@ -93,10 +101,10 @@ export const oidcClientSeedData: OidcClientSeedData[] = [
 		tosUri: null,
 	},
 	{
-		clientId: "prj-core-idp-console",
-		clientSecret: "idp-console-secret-change-in-production",
-		clientName: "PRJ Core IDP 관리 콘솔",
-		redirectUris: [oidcIdpConsoleRedirectUri],
+		clientId: "idp-web",
+		clientSecret: "idp-web-secret-change-in-production",
+		clientName: "IDP Web",
+		redirectUris: [oidcIdpWebRedirectUri],
 		grantTypes: ["authorization_code", "refresh_token"],
 		responseTypes: ["code"],
 		tokenEndpointAuthMethod: "client_secret_post",

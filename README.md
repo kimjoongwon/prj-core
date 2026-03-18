@@ -331,20 +331,24 @@ pnpm install
 
 1. **환경 변수 설정**
 
-개발 환경에서는 `.env` 파일을 생성합니다:
+로컬 개발에서는 각 앱/패키지 디렉터리의 `.env.example`을 `.env`로 복사합니다.
+`.env.local`과 `.env.development.local`은 사용하지 않습니다.
 
 ```bash
-cp .env.example .env
+cp apps/core/api/.env.example apps/core/api/.env
+cp apps/idp/api/.env.example apps/idp/api/.env
+cp packages/be-prisma/.env.example packages/be-prisma/.env
 ```
 
-> **💡 참고**: 프로덕션 환경에서는 Kubernetes에 배포된 **OpenBao**를 통해 환경 변수를 안전하게 관리하며, 배포 시점에 자동으로 주입됩니다.
+> **💡 참고**: `.env.example`는 커밋되는 템플릿이고, 실제 로컬 실행은 각 디렉터리의 `.env`만 사용합니다.
+> 배포 환경 변수는 `prj-devops`의 OpenBao를 통해 주입됩니다.
 
 1. **데이터베이스 마이그레이션**
 
 ```bash
-cd packages/prisma
-pnpm prisma migrate dev
-pnpm prisma db seed
+cd packages/be-prisma
+pnpm db:migrate
+pnpm db:seed
 ```
 
 ### 개발 서버 실행
@@ -365,36 +369,19 @@ pnpm start:tool-storybook  # Storybook (http://localhost:6006)
 
 ### 환경 변수 관리
 
-이 프로젝트는 **Kubernetes에 배포된 OpenBao**를 통해 환경 변수를 안전하게 관리합니다. 배포 시점에 OpenBao에서 환경 변수를 자동으로 주입하여 보안성을 강화하고 설정을 중앙에서 관리합니다.
+이 프로젝트의 환경 변수 규칙은 다음과 같습니다.
 
-### 필수 환경 변수
+- 로컬 실행은 각 앱/패키지 디렉터리의 `.env`만 사용합니다.
+- `.env.example`는 커밋되는 템플릿이며 런타임에서 직접 읽지 않습니다.
+- `.env.local`, `.env.development.local`은 사용하지 않습니다.
+- 배포 환경 변수는 `prj-devops`에서 관리하는 OpenBao를 통해 주입됩니다.
 
-```env
-# Database
-DATABASE_URL=postgresql://user:password@localhost:5432/plate
+### 예제 파일
 
-# JWT
-JWT_SECRET=your-jwt-secret
-JWT_EXPIRES_IN=7d
-JWT_REFRESH_EXPIRES_IN=30d
-
-# AWS S3
-AWS_ACCESS_KEY_ID=your-aws-access-key
-AWS_SECRET_ACCESS_KEY=your-aws-secret-key
-AWS_REGION=ap-northeast-2
-AWS_S3_BUCKET=your-bucket-name
-
-# Email (선택사항)
-MAIL_HOST=smtp.gmail.com
-MAIL_PORT=587
-MAIL_USER=your-email@gmail.com
-MAIL_PASSWORD=your-app-password
-
-# Application
-NODE_ENV=development
-PORT=3000
-CORS_ORIGIN=http://localhost:5173
-```
+- `apps/core/api/.env.example`
+- `apps/idp/api/.env.example`
+- `packages/be-prisma/.env.example`
+- 프로젝트별 env 키 표: [docs/env-reference.md](./docs/env-reference.md)
 
 ## 💻 개발 가이드
 
@@ -535,9 +522,8 @@ docker build -t prj-core-admin-web:latest -f devops/Dockerfile.admin-web .
 
 ### Kubernetes 배포
 
-Kubernetes 환경에서는 OpenBao를 통해 환경 변수가 자동으로 주입됩니다:
-
-```
+Kubernetes 배포에서는 런타임 `.env` 파일을 사용하지 않습니다.
+환경 변수는 `prj-devops`의 OpenBao 연동을 통해 주입됩니다.
 
 ## 📚 추가 문서
 

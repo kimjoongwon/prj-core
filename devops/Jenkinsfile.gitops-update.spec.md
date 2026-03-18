@@ -14,6 +14,7 @@
 | 항목 | 설명 |
 |------|------|
 | 필수 파라미터 | `APP_NAME`, `IMAGE_TAG`, `DEPLOY_ENV` |
+| 지원 앱 | `core-api`, `admin-web`, `idp-api`, `idp-web`, `spring-api`, `tool-storybook` |
 | 추적 파라미터 | `SOURCE_BUILD_URL`, `SOURCE_COMMIT` |
 | 인증 | Jenkins `github-app-credential` (Username/Password 바인딩, `prj-devops` push 권한 필요) |
 | 대상 브랜치 | `main` (`GITOPS_BRANCH`) |
@@ -32,4 +33,5 @@
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-03-18 | `tool-storybook` prod 이미지 태그 bump를 지원하도록 대상 앱 목록 확장 | codex |
 | 2026-03-08 | Build Job과 분리된 GitOps 전용 Jenkins pipeline 신규 추가 | codex |

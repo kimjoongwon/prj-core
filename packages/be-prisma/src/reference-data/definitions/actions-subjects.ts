@@ -1,5 +1,8 @@
 /**
  * Action 설정 타입 (config JSON 필드)
+ *
+ * 마스킹/포맷팅 같은 후처리 규칙도 Action 자체의 정의에 포함시켜,
+ * ability가 action 이름만 참조해도 의미가 보존되도록 합니다.
  */
 export interface ActionConfigSeedData {
 	type: "masking" | "format" | "transform";
@@ -217,6 +220,8 @@ export interface SubjectSeedData {
  * Subject 시드 데이터
  * - Prisma 모델 기반 Subject는 DMMF에서 자동 동기화됨
  * - 이 배열은 커스텀 Subject만 정의 (메뉴, 기능 등)
+ *
+ * 즉, 여기의 역할은 "DB 모델 외부의 권한 대상"을 보충하는 것입니다.
  *
  * v7.0 업데이트: Admin 메뉴 구조 변경
  * - menu:schedules → menu:sessions

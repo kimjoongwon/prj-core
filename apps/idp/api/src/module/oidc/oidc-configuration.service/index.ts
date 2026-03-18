@@ -216,16 +216,16 @@ export class OidcConfigurationService {
 		const swaggerRedirectUri =
 			process.env.OIDC_SWAGGER_REDIRECT_URI ||
 			resolveUrl(idpClientUrl || issuer, "/api/oauth2-redirect.html");
-		const idpConsoleRedirectUri =
-			process.env.OIDC_IDP_CONSOLE_REDIRECT_URI ||
+		const idpWebRedirectUri =
+			process.env.OIDC_IDP_WEB_REDIRECT_URI ||
 			resolveUrl(idpClientUrl, "/api/v1/auth/callback");
 
 		return [
 			{
-				client_id: adminClient?.clientId || "prj-core-admin",
+				client_id: adminClient?.clientId || "admin-web",
 				client_secret:
 					adminClient?.clientSecret || "admin-secret-change-in-production",
-				client_name: "PRJ Core Admin",
+				client_name: "Admin Web",
 				redirect_uris: [
 					adminClient?.redirectUri || "http://localhost:3000/api/v1/auth/callback",
 				],
@@ -250,13 +250,12 @@ export class OidcConfigurationService {
 				scope: "openid profile email roles",
 			},
 			{
-				client_id:
-					process.env.OIDC_IDP_CONSOLE_CLIENT_ID || "prj-core-idp-console",
+				client_id: process.env.OIDC_IDP_WEB_CLIENT_ID || "idp-web",
 				client_secret:
-					process.env.OIDC_IDP_CONSOLE_CLIENT_SECRET ||
-					"idp-console-secret-change-in-production",
-				client_name: "PRJ Core IDP Console",
-				redirect_uris: [idpConsoleRedirectUri],
+					process.env.OIDC_IDP_WEB_CLIENT_SECRET ||
+					"idp-web-secret-change-in-production",
+				client_name: "IDP Web",
+				redirect_uris: [idpWebRedirectUri],
 				grant_types: ["authorization_code", "refresh_token"],
 				response_types: ["code"],
 				token_endpoint_auth_method: "client_secret_post",

@@ -15,7 +15,7 @@
 
 | 클라이언트 | `client_id` | Auth Method | PKCE |
 |-----------|-------------|-------------|------|
-| Admin Web | `prj-core-admin` | `client_secret_basic` | 선택적 |
+| Admin Web | `admin-web` | `client_secret_basic` | 선택적 |
 | Mobile App | `prj-core-mobile` | `none` (Public) | **필수** |
 | Swagger UI | `prj-core-swagger` | `none` (Public) | **필수** |
 

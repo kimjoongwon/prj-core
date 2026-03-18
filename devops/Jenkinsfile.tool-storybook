@@ -1,0 +1,103 @@
+podTemplate(
+    volumes: [
+        persistentVolumeClaim(
+            claimName: 'container-builder-pvc',
+            mountPath: '/var/lib/containers'
+        )
+    ],
+    containers: [
+        containerTemplate(
+            name: 'podman',
+            image: 'quay.io/podman/stable:v4.8.2',
+            privileged: true,
+            ttyEnabled: true,
+            command: 'cat',
+        )
+    ]
+) {
+    node(POD_LABEL) {
+        def ENV_NAME = 'prod'
+        def IMAGE_TAG = env.BUILD_NUMBER
+        def IMAGE_PATH = "harbor.cocdev.co.kr/${ENV_NAME}/tool-storybook"
+        def IMAGE_TAG_ARGS = ["-t ${IMAGE_PATH}:${IMAGE_TAG}"]
+        def CLEANUP_IMAGES = ["${IMAGE_PATH}:${IMAGE_TAG}"]
+        def GITOPS_APP = 'tool-storybook'
+        def GITOPS_UPDATE_JOB = env.GITOPS_UPDATE_JOB ?: '/gitops-prod-image-bump'
+
+        try {
+            stage('Validate Branch') {
+                if (env.BRANCH_NAME && env.BRANCH_NAME != 'main') {
+                    error("tool-storybook only supports main branch because GitOps deployment exists only for prod.")
+                }
+            }
+
+            stage('Checkout') {
+                checkout scm
+            }
+
+            stage('Build and Push Image') {
+                container('podman') {
+                    sh 'podman info || echo "Podman initializing..."'
+
+                    withCredentials([
+                        usernamePassword(
+                            credentialsId: 'harbor',
+                            usernameVariable: 'HARBOR_USERNAME',
+                            passwordVariable: 'HARBOR_PASSWORD'
+                        )
+                    ]) {
+                        sh """
+                            echo \$HARBOR_PASSWORD | podman login \\
+                                -u \$HARBOR_USERNAME \\
+                                --password-stdin \\
+                                --tls-verify=true \\
+                                harbor.cocdev.co.kr
+                        """
+
+                        sh """
+                            podman build \\
+                                --format=docker \\
+                                --layers \\
+                                -f ./devops/Dockerfile.tool-storybook \\
+                                ${IMAGE_TAG_ARGS.join(' \\\\\n                                ')} \\
+                                .
+                        """
+
+                        sh """
+                            podman push \\
+                                --compression-format=gzip \\
+                                --compression-level=9 \\
+                                ${IMAGE_PATH}:${IMAGE_TAG}
+                        """
+
+                        sh """
+                            podman rmi \\
+                                ${CLEANUP_IMAGES.join(' \\\\\n                                ')} || true
+                        """
+                    }
+                }
+            }
+
+            stage('Trigger GitOps Update Job') {
+                catchError(buildResult: 'SUCCESS', stageResult: 'UNSTABLE') {
+                    def gitCommit = env.GIT_COMMIT ?: ''
+                    build(
+                        job: GITOPS_UPDATE_JOB,
+                        wait: false,
+                        parameters: [
+                            string(name: 'APP_NAME', value: GITOPS_APP),
+                            string(name: 'IMAGE_TAG', value: IMAGE_TAG),
+                            string(name: 'DEPLOY_ENV', value: 'prod'),
+                            string(name: 'SOURCE_BUILD_URL', value: env.BUILD_URL ?: ''),
+                            string(name: 'SOURCE_COMMIT', value: gitCommit),
+                        ]
+                    )
+                    echo "Triggered ${GITOPS_UPDATE_JOB} with APP_NAME=${GITOPS_APP}, IMAGE_TAG=${IMAGE_TAG}"
+                }
+            }
+
+        } catch (Exception e) {
+            throw e
+        }
+    }
+}

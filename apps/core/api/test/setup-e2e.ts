@@ -2,8 +2,8 @@ import "reflect-metadata";
 import * as path from "node:path";
 import * as dotenv from "dotenv";
 
-// .env.local 파일에서 환경 변수 로드
-dotenv.config({ path: path.resolve(__dirname, "../.env.local") });
+// 로컬 테스트는 앱 디렉터리의 .env만 사용합니다.
+dotenv.config({ path: path.resolve(__dirname, "../.env") });
 
 // Jest global setup for E2E tests
 beforeAll(() => {

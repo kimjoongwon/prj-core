@@ -6,7 +6,7 @@
 - Storybook 문자열 흔적(타이틀/홍보 카드)을 제거합니다.
 
 ## 핵심 동작
-- `/plate-favicon.svg`를 favicon으로 설정합니다.
+- `./plate-favicon.svg`를 favicon으로 설정해 `/storybook` 같은 하위 경로 배포에서도 아이콘 로딩을 유지합니다.
 - `theme-color`를 Plate 다크 배경 색상으로 고정합니다.
 - Plate 설명 메타를 추가합니다.
 - 사이드바 하단 영역(`#sidebar-bottom-wrapper`)을 숨겨 Storybook 관련 하단 UI를 제거합니다.
@@ -18,6 +18,7 @@
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-03-18 | favicon 경로를 상대 경로로 바꿔 하위 prefix 배포(`/storybook`)에서도 동일하게 동작하도록 조정 | codex |
 | 2026-03-16 | manager 진입 전 auth gate 스크립트와 login alias 흡수 규칙 추가 | codex |
 | 2026-03-05 | Plate favicon/meta 설정 파일 신규 추가 | codex |
 | 2026-03-05 | Storybook 문자열/홍보 카드 제거 스크립트·스타일 추가 | codex |

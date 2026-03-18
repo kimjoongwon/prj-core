@@ -16,14 +16,26 @@
 
 - `schema/**`: Prisma schema source of truth
 - `migrations/**`: schema migration SQL
+- `src/reference-data/definitions/**`: 운영 기준 데이터 정의
+- `src/bootstrap/data/**`, `src/demo-data/**`: bootstrap default/demo definition source
+- `src/bootstrap/**`: dev/stg bootstrap orchestration
 - `src/reference-data/**`: 운영 기준 데이터용 migration runner / sync 로직
-- `seed.ts`, `seed-data.ts`: dev/stg bootstrap 및 일부 초기 데이터 경로
+- `data-migrate.ts`: reference-data migration CLI entrypoint
+- `seed.ts`: dev/stg bootstrap CLI entrypoint
 
 중요한 점:
 
-- 문서상 목표 구조처럼 `reference-data/`, `bootstrap/`, `demo-data/`, `data-migrations/`가 완전히 루트로 분리된 상태는 아닙니다.
-- 현재는 `seed.ts`에도 일부 reference 성격 로직이 남아 있습니다.
+- 현재 정의 파일은 `src/**` 아래로 수렴했습니다.
+- `seed.ts`는 얇은 CLI 엔트리이고 실제 bootstrap 로직은 `src/bootstrap/**`에 있습니다.
 - 따라서 실무 판단은 "목표 구조"보다 "현재 실제 실행 경로"를 기준으로 해야 합니다.
+
+### 용어 정리
+
+- `reference-data definition`: `src/reference-data/definitions/**`에 있는 코드 소유 기준 데이터
+- `reference-data migration`: `src/reference-data/migrations/**`에 등록된 versioned 변경 이력
+- `bootstrap default`: `src/bootstrap/data/**`에 있는 create-only 성격의 초기값
+- `demo data`: `src/demo-data/**`에 있는 dev/stg용 샘플 데이터
+- `bootstrap runtime`: `src/bootstrap/**`에 있는 실제 적재 orchestration
 
 ### 현재 `db:data:migrate`가 자동 반영하는 범위
 
@@ -98,11 +110,13 @@ DB에 저장되지만, 운영에서도 코드가 기준이어야 하는 기준�
 - 일부 system 초기 연결값
 - `SecurityPolicy`
 - `Template`
-- `seed.ts`에서만 다루는 1회성 초기 데이터
+- bootstrap runtime에서만 다루는 1회성 초기 데이터
 
 중심 파일:
 
-- `packages/be-prisma/seed-data.ts`
+- `packages/be-prisma/src/bootstrap/data/**`
+- `packages/be-prisma/src/demo-data/**`
+- `packages/be-prisma/src/bootstrap/**`
 - `packages/be-prisma/seed.ts`
 
 ## 3. 개발 초기에는 Bootstrap이 자주 바뀔 수 있음
@@ -111,7 +125,7 @@ DB에 저장되지만, 운영에서도 코드가 기준이어야 하는 기준�
 
 핵심은 환경 단계입니다.
 
-- `dev 초기`: `seed.ts`를 자주 바꾸고 `db reset -> bootstrap`을 반복해도 됨
+- `dev 초기`: `src/bootstrap/**`와 `src/demo-data/**`를 자주 바꾸고 `db reset -> db:bootstrap`을 반복해도 됨
 - `shared dev / stg`: bootstrap 재실행이 점점 위험해지므로 기준 데이터와 초기화 데이터를 분리해야 함
 - `prod`: bootstrap 자동 재실행 금지, reference data만 자동 반영
 
@@ -178,18 +192,18 @@ Reference Data는 기존 운영 row도 코드 기준으로 맞춰야 하기 때�
 `OidcClient`의 경우 현재 구조상 다음이 모두 맞아야 합니다.
 
 - Prisma schema
-- seed source
-- bootstrap 경로
-- reference-data sync 경로
+- `src/reference-data/definitions/**`
+- `src/reference-data/sync-reference-data.ts`
+- 필요한 경우 그 값을 읽는 bootstrap/runtime consumer
 - reference-data migration 이력
 
 ### 절차
 
 1. 모델 파일을 수정합니다.
 2. `generate`와 `db:migrate`를 수행합니다.
-3. seed source 데이터 정의에 새 필드를 추가합니다.
-4. `seed.ts`의 bootstrap create 경로를 반영합니다.
-5. `src/reference-data/sync-reference-data.ts`의 `create`와 `update` 둘 다 반영합니다.
+3. `src/reference-data/definitions/**` 데이터 정의에 새 필드를 추가합니다.
+4. `src/reference-data/sync-reference-data.ts`의 `create`와 `update` 둘 다 반영합니다.
+5. bootstrap/runtime이 그 필드를 읽는 경우에만 관련 consumer를 수정합니다.
 6. 기존 reference-data migration 파일은 수정하지 않습니다.
 7. 새 migration 파일을 `src/reference-data/migrations/`에 추가합니다.
 8. `src/reference-data/migrations/index.ts`에 등록합니다.
@@ -213,8 +227,8 @@ Reference Data는 기존 운영 row도 코드 기준으로 맞춰야 하기 때�
 
 ### dev 초기
 
-- `seed.ts` 중심으로 빠르게 반복 가능
-- `db reset -> bootstrap` 방식 허용
+- `src/bootstrap/**`, `src/bootstrap/data/**`, `src/demo-data/**` 중심으로 빠르게 반복 가능
+- `db reset -> db:bootstrap` 방식 허용
 - 아직 운영 배포 경로를 강제할 필요는 없음
 
 ### shared env 이후
@@ -232,14 +246,14 @@ Reference Data는 기존 운영 row도 코드 기준으로 맞춰야 하기 때�
 
 ### 주의
 
-운영 backfill을 `seed.ts` 재실행으로 해결하지 않습니다.
+운영 backfill을 bootstrap 재실행으로 해결하지 않습니다.
 
 현재 구조에서 특히 아래는 bootstrap/default 경로로 보는 편이 맞습니다.
 
 - `SecurityPolicy`
 - `Template`
 
-특히 `seed.ts`에만 있는 데이터가 prod 기존 row 보정을 필요로 하면:
+특히 bootstrap 경로에만 있는 데이터가 prod 기존 row 보정을 필요로 하면:
 
 - 단순값이면 migration SQL
 - 복잡한 계산이면 배치성 backfill
@@ -329,9 +343,9 @@ Reference Data는 기존 운영 row도 코드 기준으로 맞춰야 하기 때�
 1. schema 수정
 2. `generate`
 3. `db:migrate`
-4. seed source 반영
-5. bootstrap 경로 반영
-6. `sync-reference-data.ts` 반영
+4. `src/reference-data/definitions/**` 반영
+5. `sync-reference-data.ts` 반영
+6. 필요 시 bootstrap/runtime consumer 반영
 7. 새 reference-data migration 추가
 8. `db:migrate:deploy`
 9. `db:data:migrate`
@@ -340,6 +354,6 @@ Reference Data는 기존 운영 row도 코드 기준으로 맞춰야 하기 때�
 ### Bootstrap 필드 추가
 
 1. dev 초기인지, 운영 반영 대상인지 먼저 판단
-2. dev 초기면 `seed.ts` 중심으로 빠르게 진행
+2. dev 초기면 `src/bootstrap/**`와 `src/demo-data/**` 중심으로 빠르게 진행
 3. 운영 row update가 필요해지는 순간 bootstrap만으로 해결하지 않음
 4. 필요 시 reference data 승격 또는 별도 backfill 전략 선택

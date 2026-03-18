@@ -33,9 +33,10 @@ oidc-provider 인스턴스 초기화에 필요한 전체 설정 객체(`OidcConf
 - DB 조회 결과가 있더라도 기본 로컬 RP(admin/storybook/mobile/swagger)는 누락 시 폴백 목록으로 병합합니다.
 - DB에 같은 `client_id`가 있으면 폴백과 DB 설정을 병합하며, 기본 redirect/grant/response 계약은 유지한 채 DB 확장 값을 추가합니다.
 - DB 조회 실패/빈 결과 시에도 동일한 병합 함수를 거친 고유 `client_id` 목록만 반환하여 정적 폴백 중복으로 인한 oidc-provider 초기화 실패를 방지합니다.
-- DB 접근 실패(RLS 등) 시 정적 폴백 클라이언트 4개 사용:
-  - `prj-core-admin`: 어드민 웹 (client_secret_post, authorization_code + refresh_token, localhost:3000 callback)
+- DB 접근 실패(RLS 등) 시 정적 폴백 클라이언트 5개 사용:
+  - `admin-web`: 어드민 웹 (client_secret_post, authorization_code + refresh_token, localhost:3000 callback)
   - `storybook`: Storybook RP (client_secret_post, authorization_code + refresh_token, localhost:6006 storybook callback)
+  - `idp-web`: IDP 웹 (client_secret_post, authorization_code + refresh_token, localhost:3008 callback)
   - `prj-core-mobile`: 모바일 앱 (PKCE 필수, none auth method)
   - `prj-core-swagger`: Swagger UI (authorization_code만)
 
@@ -92,6 +93,7 @@ oidc-provider 인스턴스 초기화에 필요한 전체 설정 객체(`OidcConf
 | 2026-03-16 | DB의 기존 Storybook client가 남아 있어도 fallback redirect URI/grant/response 계약을 함께 병합하도록 보강 | codex |
 | 2026-03-16 | storybook fallback client 중복을 제거하고 DB 실패 시에도 dedupe된 fallback 목록만 반환하도록 보강 | codex |
 | 2026-03-16 | DB 결과에 fallback client를 병합하고 `storybook` localhost:6006 callback을 추가 | codex |
+| 2026-03-18 | `idp-web` client env 키를 `OIDC_IDP_WEB_*` 정식 이름으로 정리하고 sidecar 설명을 보강 | codex |
 | 2026-02-19 | 초기 생성 (역기획) | req-reverse-engineer |
 | 2026-03-03 | 폐기된 웹 앱 제거에 따라 admin fallback redirect URI를 localhost:3000으로 단순화 | codex |
 | 2026-03-13 | `oidc-configuration.service.ts`와 sidecar spec을 폴더형 `index.ts`/`index.spec.md` 구조로 재배치 | codex |

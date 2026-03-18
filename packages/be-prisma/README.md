@@ -116,12 +116,12 @@ pnpm db:reset:stg     # 스테이징 환경
 # ⚠️ prod는 위험하므로 제공하지 않음
 ```
 
-#### DB Seed (시드 데이터)
+#### DB Seed (레거시 alias)
 
 ```bash
 pnpm db:seed          # 개발 환경 bootstrap alias
 pnpm db:seed:stg      # 스테이징 bootstrap alias
-# ⚠️ prod는 시드하지 않음
+# ⚠️ prod alias는 제공하지 않음
 ```
 
 관련 운영 원칙 문서:
@@ -129,12 +129,14 @@ pnpm db:seed:stg      # 스테이징 bootstrap alias
 - `docs/seed-data-governance.md` - seed/reference/bootstrap/demo 분류 기준과 운영 반영 전략
 - `docs/schema-change-playbook.md` - 운영 중 필드 추가, schema migration, reference-data migration, backfill 실무 절차
 
-#### DB Bootstrap (초기 데이터)
+#### DB Bootstrap (초기 구조 + 기본값 + 샘플 데이터)
 
 ```bash
 pnpm db:bootstrap      # 개발 환경 bootstrap
 pnpm db:bootstrap:stg  # 스테이징 bootstrap
 ```
+
+`db:seed`는 `db:bootstrap`의 별칭입니다. 실제 bootstrap orchestration은 `seed.ts`가 아니라 `src/bootstrap/run-bootstrap.ts`에 있습니다.
 
 #### DB Data Migrate (운영 기준 데이터)
 
@@ -144,56 +146,38 @@ pnpm db:data:migrate:stg   # 스테이징 environment reference data migration
 pnpm db:data:migrate:prod  # 프로덕션 environment reference data migration
 ```
 
+운영 자동 반영 경로는 `db:data:migrate[:env]`입니다. 이 경로는 code-owned reference data만 이력과 함께 반영합니다.
+
 ## Multi-File Schema Architecture (Prisma Official)
 
 This project uses **Prisma's official multi-file schema support** (GA since Prisma 6.7.0) to organize models into separate domain files:
 
-```
+```text
 packages/be-prisma/
-├── schema/              # Multi-file schema directory
-│   ├── _base.prisma     # Generator and datasource configuration
-│   ├── access-control/
-│   │   ├── ability.prisma
-│   │   ├── action.prisma
-│   │   ├── grant.prisma
-│   │   ├── role.prisma
-│   │   └── subject.prisma
-│   ├── asset/
-│   │   ├── album.prisma
-│   │   ├── asset.prisma
-│   │   └── folder.prisma
-│   ├── auth/
-│   │   ├── auth-audit.prisma
-│   │   ├── password-history.prisma
-│   │   ├── security-policy.prisma
-│   │   └── whitelist-entry.prisma
-│   ├── content/
-│   │   ├── content.prisma
-│   │   ├── template.prisma
-│   │   └── translation.prisma
-│   ├── identity/
-│   │   ├── space.prisma
-│   │   ├── tenant.prisma
-│   │   └── user.prisma
-│   ├── inquiry/
-│   │   ├── inquiry-ai.prisma
-│   │   ├── inquiry-thread.prisma
-│   │   └── inquiry.prisma
-│   ├── oidc/
-│   │   ├── oidc-client.prisma
-│   │   └── oidc-model.prisma
-│   ├── scheduling/
-│   │   ├── routine.prisma
-│   │   ├── task.prisma
-│   │   └── timeline.prisma
-│   ├── taxonomy/
-│   │   ├── category.prisma
-│   │   └── group.prisma
-│   └── wallet/
-│       └── safe.prisma
-├── migrations/          # Database migrations
-└── seed.ts              # Database seeding script
+├── schema/                 # Prisma multi-file schema source
+├── migrations/             # Prisma schema migration SQL
+├── src/
+│   ├── bootstrap/
+│   │   ├── data/           # Bootstrap default definitions
+│   │   └── *.ts            # Bootstrap runtime orchestration
+│   ├── demo-data/          # Dev/stg demo definitions
+│   ├── generated/          # Generated Prisma client
+│   ├── reference-data/
+│   │   ├── definitions/    # Code-owned reference-data definitions
+│   │   ├── migrations/     # Versioned reference-data migrations
+│   │   └── *.ts            # Reference-data sync / runner
+│   └── prisma-client.ts    # Shared Prisma client factory
+├── data-migrate.ts         # Reference-data migration CLI entrypoint
+└── seed.ts                 # Bootstrap CLI entrypoint
 ```
+
+### Terminology
+
+- `reference-data`: 운영에서도 코드가 기준이어야 하는 카탈로그/계약 row
+- `bootstrap default`: 처음 환경을 세울 때 넣는 기본값. 보통 create-only
+- `demo data`: dev/stg 화면 확인과 샘플 시나리오용 데이터
+- `seed.ts`: bootstrap CLI 진입점
+- `data-migrate.ts`: reference-data migration CLI 진입점
 
 ### How It Works
 
@@ -228,7 +212,7 @@ Current schema contains:
 
 ### 환경 설정
 
-환경별로 데이터베이스에 연결하려면 `.env.local` 파일을 생성하고 다음 변수들을 설정하세요.
+환경별로 데이터베이스에 연결하려면 `.env` 파일을 생성하고 다음 변수들을 설정하세요.
 
 #### 필수 환경 변수
 
@@ -248,14 +232,14 @@ DIRECT_URL_PROD="postgresql://user:password@prod-host:5432/dbname?schema=public"
 
 #### 환경 파일 설정
 
-1. `.env.example` 파일을 `.env.local`로 복사:
+1. `.env.example` 파일을 `.env`로 복사:
    ```bash
-   cp .env.example .env.local
+   cp .env.example .env
    ```
 
-2. `.env.local` 파일의 값을 실제 데이터베이스 정보로 변경
+2. `.env` 파일의 값을 실제 데이터베이스 정보로 변경
 
-3. ⚠️ **절대 `.env.local` 파일을 커밋하지 마세요!**
+3. ⚠️ **절대 `.env` 파일을 커밋하지 마세요!**
 
 #### 동작 방식
 

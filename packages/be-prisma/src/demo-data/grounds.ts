@@ -1,3 +1,10 @@
+/**
+ * dev/stg에서 쓰는 사용자/지점 데모 데이터입니다.
+ *
+ * 이 파일의 핵심 참조 키는 `email`, `ground name`입니다. bootstrap 로직은 이 문자열을 기준으로
+ * user, ground, membership 관계를 이어 붙이므로 값 변경 시 후속 매핑도 함께 봐야 합니다.
+ */
+
 // 시드 데이터를 위한 메타데이터
 export interface UserSeedData {
 	email: string;
@@ -225,7 +232,7 @@ export const groundSeedData: GroundSeedData[] = [
 	},
 ];
 
-// 유저-그라운드 매핑 인터페이스
+// userEmail/groundNames는 앞선 배열의 business key를 참조하는 연결 정의입니다.
 export interface UserGroundMappingData {
 	userEmail: string;
 	groundNames: string[];

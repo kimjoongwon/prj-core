@@ -8,7 +8,7 @@ pipeline {
     parameters {
         choice(
             name: 'APP_NAME',
-            choices: ['core-api', 'admin-web', 'idp-api', 'idp-web', 'spring-api'],
+            choices: ['core-api', 'admin-web', 'idp-api', 'idp-web', 'spring-api', 'tool-storybook'],
             description: 'GitOps values-prod.yaml image.tag update target app'
         )
         string(

@@ -1327,8 +1327,11 @@ function buildMergePlan({ repoRoot, branch, baseRef, baseBranch }) {
     (file) =>
       file.includes("schema.prisma") ||
       file.includes("/migrations/") ||
+      file.includes("/src/reference-data/definitions/") ||
+      file.includes("/src/bootstrap/data/") ||
+      file.includes("/src/demo-data/") ||
       file.endsWith("/seed.ts") ||
-      file.endsWith("/seed-data.ts")
+      file.endsWith("/data-migrate.ts")
   );
 
   const metrics = {

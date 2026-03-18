@@ -154,6 +154,7 @@ export interface AssetSeedData {
 	creatorEmail?: string;
 }
 
+// `storageKey`는 에셋 자체의 안정적인 식별자로, 폴더 이동/앨범 연결보다 우선하는 참조 키입니다.
 /**
  * IMAGE 에셋 시드 데이터
  */
@@ -355,7 +356,8 @@ export const documentAssetSeedData: AssetSeedData[] = [
 		originalName: "운동 프로그램 가이드.docx",
 		storageKey: "assets/documents/guide/workout-program-guide-2024.docx",
 		kind: "DOCUMENT",
-		mimeType: "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+		mimeType:
+			"application/vnd.openxmlformats-officedocument.wordprocessingml.document",
 		extension: "docx",
 		sizeBytes: 2450000,
 		folderPath: "/에셋 라이브러리/문서/가이드",

@@ -9,7 +9,7 @@ import {
 } from "../config";
 
 export const globalModules = createGlobalModules({
-	envFilePath: [".env.local", ".env"],
+	envFilePath: ".env",
 	configLoaders: [
 		oidcConfig,
 		authConfig,

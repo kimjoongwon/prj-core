@@ -22,14 +22,6 @@ interface OidcServerConfig {
 	clients: Record<OidcRpClientKey, OidcRpClientConfig>;
 }
 
-interface LegacyOidcServerConfig {
-	issuer: string;
-	jwksUri: string;
-	clientId: string;
-	clientSecret: string;
-	redirectUri: string;
-}
-
 export interface OidcTokenResponse {
 	access_token: string;
 	refresh_token?: string;
@@ -44,7 +36,7 @@ const DEFAULT_OIDC_CONFIG: OidcServerConfig = {
 	jwksUri: "http://localhost:3007/oidc/jwks",
 	clients: {
 		admin: {
-			clientId: "prj-core-admin",
+			clientId: "admin-web",
 			clientSecret: "admin-secret-change-in-production",
 			redirectUri: "http://localhost:3000/api/v1/auth/callback",
 			loginUrl: "http://localhost:3000/admin/auth/login",
@@ -66,9 +58,8 @@ export class OidcFacade {
 	private readonly oidcConfig: OidcServerConfig;
 
 	constructor(private readonly configService: ConfigService) {
-		const rawConfig =
-			this.configService.get<OidcServerConfig | LegacyOidcServerConfig>("oidc");
-		this.oidcConfig = this.normalizeConfig(rawConfig);
+		const rawConfig = this.configService.get<OidcServerConfig>("oidc");
+		this.oidcConfig = this.resolveConfig(rawConfig);
 	}
 
 	createAuthorizationRequest(
@@ -199,49 +190,23 @@ export class OidcFacade {
 		return this.oidcConfig.clients[clientKey] || this.oidcConfig.clients.admin;
 	}
 
-	private normalizeConfig(
-		rawConfig?: OidcServerConfig | LegacyOidcServerConfig,
-	): OidcServerConfig {
+	private resolveConfig(rawConfig?: OidcServerConfig): OidcServerConfig {
 		if (!rawConfig) {
 			return DEFAULT_OIDC_CONFIG;
 		}
 
-		const rawClients = (rawConfig as OidcServerConfig).clients;
-		if (rawClients) {
-			return {
-				issuer: rawConfig.issuer || DEFAULT_OIDC_CONFIG.issuer,
-				jwksUri: rawConfig.jwksUri || DEFAULT_OIDC_CONFIG.jwksUri,
-				clients: {
-					admin: {
-						...DEFAULT_OIDC_CONFIG.clients.admin,
-						...rawClients.admin,
-					},
-					storybook: {
-						...DEFAULT_OIDC_CONFIG.clients.storybook,
-						...rawClients.storybook,
-					},
-				},
-			};
-		}
-
-		const legacyConfig = rawConfig as LegacyOidcServerConfig;
 		return {
-			issuer: legacyConfig.issuer || DEFAULT_OIDC_CONFIG.issuer,
-			jwksUri: legacyConfig.jwksUri || DEFAULT_OIDC_CONFIG.jwksUri,
+			issuer: rawConfig.issuer || DEFAULT_OIDC_CONFIG.issuer,
+			jwksUri: rawConfig.jwksUri || DEFAULT_OIDC_CONFIG.jwksUri,
 			clients: {
 				admin: {
 					...DEFAULT_OIDC_CONFIG.clients.admin,
-					clientId:
-						legacyConfig.clientId ||
-						DEFAULT_OIDC_CONFIG.clients.admin.clientId,
-					clientSecret:
-						legacyConfig.clientSecret ||
-						DEFAULT_OIDC_CONFIG.clients.admin.clientSecret,
-					redirectUri:
-						legacyConfig.redirectUri ||
-						DEFAULT_OIDC_CONFIG.clients.admin.redirectUri,
+					...rawConfig.clients?.admin,
 				},
-				storybook: DEFAULT_OIDC_CONFIG.clients.storybook,
+				storybook: {
+					...DEFAULT_OIDC_CONFIG.clients.storybook,
+					...rawConfig.clients?.storybook,
+				},
 			},
 		};
 	}

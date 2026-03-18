@@ -1,6 +1,9 @@
-// ============================================================================
-// Timeline / Session / Exercise 시드 데이터
-// ============================================================================
+/**
+ * Timeline / Session / Exercise 데모 정의입니다.
+ *
+ * timeline id와 exercise code는 seed 재실행 시 같은 데이터를 다시 찾기 위한 안정 키입니다.
+ * `seasonTag`는 bootstrap runtime이 최근/중간/과거 데이터를 섞어 날짜를 생성할 때 쓰는 힌트입니다.
+ */
 
 export interface TimelineSeedData {
 	id: string;
@@ -11,6 +14,7 @@ export interface TimelineSeedData {
 	seasonTag: "recent" | "mid" | "archive";
 }
 
+// 타임라인 이름은 사람이 읽는 값이고, 실제 재실행 안정성은 고정 UUID인 `id`가 담당합니다.
 export const timelineSeedData: TimelineSeedData[] = [
 	{
 		id: "6f3d4a4c-b130-43a9-9dd6-3ba76ef7f001",
