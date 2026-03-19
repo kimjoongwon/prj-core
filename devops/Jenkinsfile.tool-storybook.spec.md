@@ -19,7 +19,7 @@
 | 실행 Stage | `Validate Branch` → `Checkout` → `Build and Push Image` → `Trigger GitOps Update Job` |
 | 빌드 인자 | `NODE_BASE_IMAGE`, `NGINX_BASE_IMAGE`, `STORYBOOK_DISABLE_CHROMATIC`, `STORYBOOK_BUILD_NOFILE` |
 | 빌드 리밋 | `podman build --ulimit nofile=<value>:<value>`로 RUN 컨테이너의 파일 디스크립터 한계를 상향 |
-| 워크스페이스 볼륨 | `persistentVolumeClaimWorkspaceVolume(claimName: container-builder-pvc)`로 Jenkins workspace 자체도 PVC에 배치 |
+| 워크스페이스 위치 | `ws(/var/lib/containers/jenkins/<job>-<build>/workspace)`로 Jenkins workspace를 PVC 마운트 하위 경로에 고정 |
 | 임시 디렉터리 | `TMPDIR`, `XDG_RUNTIME_DIR`, `HOME`을 `/var/lib/containers/*` 아래로 고정해 Podman 임시 파일을 PVC로 유도 |
 | 빌드별 경로 | workspace/Podman storage를 `/var/lib/containers/jenkins/<job>-<build>/...` 아래의 빌드별 디렉터리로 분리 |
 | Ephemeral Storage | `podman` 컨테이너에 `request=8Gi`, `limit=20Gi`를 요청 |
@@ -48,7 +48,8 @@
 |------|------|--------|
 | 2026-03-18 | `podman` 컨테이너의 `ephemeral-storage` request/limit를 `8Gi/20Gi`로 상향 | codex |
 | 2026-03-18 | `ws(/var/lib/containers/jenkins/...)`와 Podman `--root/--runroot/--tmpdir` 빌드별 PVC 경로를 적용해 workspace 및 libpod 저장소가 노드 ephemeral storage를 쓰지 않도록 조정 | codex |
-| 2026-03-18 | `persistentVolumeClaimWorkspaceVolume`, Podman `ephemeral-storage` request/limit, PVC 기반 임시 디렉터리 설정으로 Jenkins agent eviction을 완화 | codex |
+| 2026-03-19 | 중복 PVC volume 참조로 agent pod mount가 멈추는 문제를 피하도록 `persistentVolumeClaimWorkspaceVolume` 제거 | codex |
+| 2026-03-18 | Podman `ephemeral-storage` request/limit, PVC 기반 임시 디렉터리 설정으로 Jenkins agent eviction을 완화 | codex |
 | 2026-03-18 | `podman build --ulimit nofile=...`를 추가해 Dockerfile 내부 `ulimit`만으로 올릴 수 없는 builder hard limit도 함께 상향 | codex |
 | 2026-03-18 | Storybook 정적 이미지 빌드에 `STORYBOOK_DISABLE_CHROMATIC` 및 `STORYBOOK_BUILD_NOFILE` 인자를 추가해 `EMFILE` 실패를 완화 | codex |
 | 2026-03-18 | Podman 비대화형 빌드에서 short-name resolution 오류를 피하도록 fully qualified base image build arg와 `--pull=always`를 추가 | codex |
