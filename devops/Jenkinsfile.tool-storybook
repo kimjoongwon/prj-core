@@ -32,11 +32,12 @@ podTemplate(
         def CLEANUP_IMAGES = ["${IMAGE_PATH}:${IMAGE_TAG}"]
         def GITOPS_APP = 'tool-storybook'
         def GITOPS_UPDATE_JOB = env.GITOPS_UPDATE_JOB ?: '/gitops-prod-image-bump'
-        def SAFE_JOB_NAME = (env.JOB_NAME ?: 'tool-storybook').replaceAll('[^A-Za-z0-9_.-]+', '-')
-        def BUILD_ROOT = "/var/lib/containers/jenkins/${SAFE_JOB_NAME}-${IMAGE_TAG}"
-        def WORKSPACE_DIR = "${BUILD_ROOT}/workspace"
-        def PODMAN_ROOT = "${BUILD_ROOT}/storage"
-        def PODMAN_RUNROOT = "${BUILD_ROOT}/runroot"
+        def PODMAN_BASE_DIR = '/var/lib/containers/tsb'
+        def BUILD_KEY = "b${env.BUILD_NUMBER ?: '0'}"
+        def BUILD_ROOT = "${PODMAN_BASE_DIR}/${BUILD_KEY}"
+        def WORKSPACE_DIR = "${BUILD_ROOT}/ws"
+        def PODMAN_ROOT = "${BUILD_ROOT}/root"
+        def PODMAN_RUNROOT = "${BUILD_ROOT}/run"
         def PODMAN_TMPDIR = "${BUILD_ROOT}/tmp"
         def PODMAN_HOME = "${BUILD_ROOT}/home"
         def PODMAN_GLOBAL_ARGS = "--root ${PODMAN_ROOT} --runroot ${PODMAN_RUNROOT} --tmpdir ${PODMAN_TMPDIR}"
@@ -57,8 +58,8 @@ podTemplate(
                 stage('Build and Push Image') {
                     container('podman') {
                         sh """
-                            mkdir -p /var/lib/containers/jenkins
-                            find /var/lib/containers/jenkins -mindepth 1 -maxdepth 1 -type d -mtime +2 -exec rm -rf {} + || true
+                            mkdir -p ${PODMAN_BASE_DIR}
+                            find ${PODMAN_BASE_DIR} -mindepth 1 -maxdepth 1 -type d -mtime +2 -exec rm -rf {} + || true
                             rm -rf ${PODMAN_ROOT} ${PODMAN_RUNROOT} ${PODMAN_TMPDIR} ${PODMAN_HOME}
                             mkdir -p ${WORKSPACE_DIR} ${PODMAN_ROOT} ${PODMAN_RUNROOT} ${PODMAN_TMPDIR} ${PODMAN_HOME}
                             chmod 700 ${PODMAN_RUNROOT}
@@ -66,7 +67,7 @@ podTemplate(
                             export XDG_RUNTIME_DIR=${PODMAN_RUNROOT}
                             export HOME=${PODMAN_HOME}
                             export REGISTRY_AUTH_FILE=${PODMAN_HOME}/auth.json
-                            podman ${PODMAN_GLOBAL_ARGS} info || echo "Podman initializing..."
+                            podman ${PODMAN_GLOBAL_ARGS} info
                         """
 
                         withCredentials([
