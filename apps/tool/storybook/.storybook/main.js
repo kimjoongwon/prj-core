@@ -1,4 +1,6 @@
-import { dirname, join } from "node:path";
+import { readdirSync, readFileSync } from "node:fs";
+import { dirname, join, relative, sep } from "node:path";
+import { fileURLToPath } from "node:url";
 import {
   createStorybookAuthPlugin,
   createStorybookProxyConfig,
@@ -14,28 +16,64 @@ function getAbsolutePath(value) {
 
 /** @type { import('@storybook/react-vite').StorybookConfig } */
 const chromaticAddonDisabled = process.env.STORYBOOK_DISABLE_CHROMATIC === "true";
+const vitestAddonDisabled = process.env.STORYBOOK_DISABLE_VITEST_ADDON === "true";
+const includePlaceholderStories = process.env.STORYBOOK_INCLUDE_PLACEHOLDER === "true";
+const configDir = fileURLToPath(new URL(".", import.meta.url));
+const feUiStoryRoot = join(configDir, "../../../../packages/fe-ui/src");
+
+function isStoryFile(name) {
+  return /\.stories\.(js|jsx|mjs|ts|tsx)$/.test(name);
+}
+
+function isPlaceholderStory(filePath) {
+  const source = readFileSync(filePath, "utf8");
+  return (
+    source.includes("Story Placeholder") &&
+    source.includes("Baseline story generated for coverage.")
+  );
+}
+
+function toStorybookPath(filePath) {
+  return relative(configDir, filePath).split(sep).join("/");
+}
+
+function collectFeUiStories(directory) {
+  return readdirSync(directory, { withFileTypes: true })
+    .flatMap((entry) => {
+      const entryPath = join(directory, entry.name);
+      if (entry.isDirectory()) {
+        return collectFeUiStories(entryPath);
+      }
+      if (!isStoryFile(entry.name)) {
+        return [];
+      }
+      if (!includePlaceholderStories && isPlaceholderStory(entryPath)) {
+        return [];
+      }
+      return [toStorybookPath(entryPath)];
+    })
+    .sort((left, right) => left.localeCompare(right));
+}
+
+const feUiStories = collectFeUiStories(feUiStoryRoot);
 
 const config = {
   stories: [
     "../stories/**/*.mdx",
     "../stories/**/*.stories.@(js|jsx|mjs|ts|tsx)",
-    {
-      directory: "../../../../packages/fe-ui/src",
-      titlePrefix: "",
-      files: "**/*.stories.@(js|jsx|mjs|ts|tsx)",
-    },
+    ...feUiStories,
   ],
   addons: [
     ...(chromaticAddonDisabled ? [] : [getAbsolutePath("@chromatic-com/storybook")]),
     getAbsolutePath("@storybook/addon-docs"),
     getAbsolutePath("@storybook/addon-a11y"),
-    getAbsolutePath("@storybook/addon-vitest"),
+    ...(vitestAddonDisabled ? [] : [getAbsolutePath("@storybook/addon-vitest")]),
   ],
   framework: {
     name: getAbsolutePath("@storybook/react-vite"),
     options: {},
   },
-  async viteFinal(config) {
+  async viteFinal(config, { configType }) {
     const { default: react } = await import("@vitejs/plugin-react-swc");
     const authConfig = {
       requireAuth: process.env.STORYBOOK_REQUIRE_AUTH === "true",
@@ -46,6 +84,9 @@ const config = {
     config.plugins = config.plugins || [];
     config.resolve = config.resolve || {};
     config.server = config.server || {};
+    if (configType === "PRODUCTION") {
+      config.base = "./";
+    }
     config.server.proxy = {
       ...(config.server.proxy || {}),
       ...createStorybookProxyConfig(authConfig),
