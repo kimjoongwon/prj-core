@@ -9,7 +9,7 @@ const withBundleAnalyzer = bundleAnalyzer({
 const nextConfig: NextConfig = {
 	output: "standalone",
 	turbopack: {
-		root: path.join(__dirname, "../.."),
+		root: path.join(__dirname, "../../.."),
 	},
 	transpilePackages: ["@cocrepo/ui", "@cocrepo/toolkit", "@cocrepo/type"],
 };

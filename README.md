@@ -360,6 +360,7 @@ pnpm start
 # 개별 실행
 pnpm start:core-api        # Core API (http://localhost:3006)
 pnpm start:admin-web       # Admin 웹앱 (http://localhost:3000)
+pnpm start:proposal-web    # Proposal 웹앱 (http://localhost:3011)
 pnpm start:idp-api         # IDP API (http://localhost:3007)
 pnpm start:idp-web         # IDP 웹앱 (http://localhost:3008)
 pnpm start:tool-storybook  # Storybook (http://localhost:6006)

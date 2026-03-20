@@ -33,17 +33,17 @@ import {
 } from "lucide-react";
 import { observer } from "mobx-react-lite";
 import type {
-	IntroductionIconKey,
-	IntroductionMetric,
-	IntroductionNarrativeCard,
-	IntroductionPageData,
-	IntroductionProcessStep,
-	IntroductionStackGroup,
+	ProposalIconKey,
+	ProposalMetric,
+	ProposalNarrativeCard,
+	ProposalPageData,
+	ProposalProcessStep,
+	ProposalStackGroup,
 	SectionId,
 } from "./_prefetch";
 
-interface IntroductionPageClientProps {
-	pageData: IntroductionPageData;
+interface ProposalPageClientProps {
+	pageData: ProposalPageData;
 }
 
 interface SectionHeadingProps {
@@ -93,7 +93,7 @@ const ITEM_VARIANTS = {
 	},
 } as const;
 
-const ICONS: Record<IntroductionIconKey, LucideIcon> = {
+const ICONS: Record<ProposalIconKey, LucideIcon> = {
 	workflow: Workflow,
 	palette: Palette,
 	files: Files,
@@ -179,9 +179,7 @@ function LandingSection({
 	);
 }
 
-function renderNavigationButton(
-	item: IntroductionPageData["navigation"][number],
-) {
+function renderNavigationButton(item: ProposalPageData["navigation"][number]) {
 	return (
 		<Button
 			key={item.id}
@@ -196,7 +194,7 @@ function renderNavigationButton(
 	);
 }
 
-function renderMetricCard(item: IntroductionMetric) {
+function renderMetricCard(item: ProposalMetric) {
 	return (
 		<motion.div key={item.label} variants={ITEM_VARIANTS}>
 			<Card className="h-full border border-white/10 bg-white/[0.04] shadow-none">
@@ -209,7 +207,7 @@ function renderMetricCard(item: IntroductionMetric) {
 	);
 }
 
-function renderNarrativeCard(item: IntroductionNarrativeCard) {
+function renderNarrativeCard(item: ProposalNarrativeCard) {
 	const Icon = ICONS[item.iconKey];
 
 	return (
@@ -240,7 +238,7 @@ function renderProcessOutput(output: string) {
 	);
 }
 
-function renderProcessCard(step: IntroductionProcessStep) {
+function renderProcessCard(step: ProposalProcessStep) {
 	const Icon = ICONS[step.iconKey];
 
 	return (
@@ -296,7 +294,7 @@ function renderToolChip(tool: string) {
 	);
 }
 
-function renderStackCard(group: IntroductionStackGroup) {
+function renderStackCard(group: ProposalStackGroup) {
 	return (
 		<motion.div key={group.title} variants={ITEM_VARIANTS}>
 			<Card className="h-full border border-white/10 bg-content1/70 shadow-none">
@@ -334,7 +332,7 @@ function renderClosingBullet(bullet: string) {
 function TopNavigation({
 	navigation,
 }: {
-	navigation: IntroductionPageData["navigation"];
+	navigation: ProposalPageData["navigation"];
 }) {
 	return (
 		<div className="mx-auto w-full max-w-[90rem] px-5 pt-5 md:px-8 md:pt-8">
@@ -365,7 +363,7 @@ function TopNavigation({
 function HeroSection({
 	hero,
 	process,
-}: Pick<IntroductionPageData, "hero" | "process">) {
+}: Pick<ProposalPageData, "hero" | "process">) {
 	const primaryAction = SECTION_ACTIONS[hero.primaryAction.target];
 	const secondaryAction = SECTION_ACTIONS[hero.secondaryAction.target];
 	const previewSteps = process.slice(0, 3);
@@ -449,9 +447,9 @@ function HeroSection({
 	);
 }
 
-export default observer(function IntroductionPageClient({
+export default observer(function ProposalPageClient({
 	pageData,
-}: IntroductionPageClientProps) {
+}: ProposalPageClientProps) {
 	return (
 		<Page
 			top={<TopNavigation navigation={pageData.navigation} />}

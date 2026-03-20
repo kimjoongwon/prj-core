@@ -54,7 +54,7 @@
 
 | 시점 | API | 캐싱 |
 |------|-----|------|
-| 서버 렌더 | `getIntroductionPageData()` 로컬 정적 데이터 호출 | 정적 페이지 (`force-static`) |
+| 서버 렌더 | `getProposalPageData()` 로컬 정적 데이터 호출 | 정적 페이지 (`force-static`) |
 
 ## 이벤트 핸들러
 
@@ -99,4 +99,4 @@
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
-| 2026-03-12 | introduction 정적 랜딩 페이지 기획서 신규 생성 | codex |
+| 2026-03-12 | proposal-web 정적 랜딩 페이지 기획서 신규 생성 | codex |

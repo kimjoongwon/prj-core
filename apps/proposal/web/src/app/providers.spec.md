@@ -2,7 +2,7 @@
 
 > 생성일: 2026-03-12
 > 타입: provider
-> 위치: apps/introduction/src/app/providers.tsx
+> 위치: apps/proposal/web/src/app/providers.tsx
 
 ## 역할
 
@@ -27,4 +27,4 @@
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
-| 2026-03-12 | introduction 앱 전용 최소 Provider 신규 생성 | codex |
+| 2026-03-12 | proposal-web 앱 전용 최소 Provider 신규 생성 | codex |

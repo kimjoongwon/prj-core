@@ -2,11 +2,11 @@
 
 > 생성일: 2026-03-12
 > 타입: config
-> 위치: apps/introduction/tsconfig.json
+> 위치: apps/proposal/web/tsconfig.json
 
 ## 역할
 
-`introduction` 앱의 TypeScript 입력 범위와 Next.js 타입체크 규칙을 정의합니다.
+`proposal-web` 앱의 TypeScript 입력 범위와 Next.js 타입체크 규칙을 정의합니다.
 정적 소개 페이지와 sidecar spec을 제외하지 않고, E2E sidecar만 제외합니다.
 
 ## 공개 계약
@@ -28,4 +28,4 @@
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
-| 2026-03-12 | introduction 앱의 TypeScript 계약 신규 생성 | codex |
+| 2026-03-12 | proposal-web 앱의 TypeScript 계약 신규 생성 | codex |

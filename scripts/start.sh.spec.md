@@ -14,8 +14,8 @@
 | 항목 | 설명 |
 |------|------|
 | 기본 실행 | `pnpm start`로 대화형 선택 UI 표시 |
-| 숫자 선택 | `1`~`5` 번호로 서비스 선택 |
-| 이름 선택 | `core-api`, `admin-web`, `idp-api`, `idp-web`, `tool-storybook` 문자열 인자 허용 |
+| 숫자 선택 | `1`~`6` 번호로 서비스 선택 |
+| 이름 선택 | `core-api`, `admin-web`, `proposal-web`, `idp-api`, `idp-web`, `tool-storybook` 문자열 인자 허용 |
 | 허용 별칭 | canonical workspace 이름과 대응하는 `start:*` 형태 인자 허용 |
 | 실행 엔진 | 최종 실행은 `turbo start:dev <filters> --concurrency=20` |
 
@@ -30,5 +30,6 @@
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-03-20 | `proposal-web`을 대화형/비대화형 시작 대상에 추가하고 포트/프로세스 정리 규칙을 확장 | codex |
 | 2026-03-08 | 숫자 선택 외에 canonical workspace 이름과 `start:*` 별칭 인자를 받아 root 스크립트 체계와 정렬 | codex |
 | 2026-03-08 | `server`, `admin`, `storybook` 같은 구식 짧은 별칭 인자를 제거 | codex |

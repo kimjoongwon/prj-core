@@ -6,7 +6,7 @@ export type SectionId =
 	| "stack"
 	| "fit";
 
-export type IntroductionIconKey =
+export type ProposalIconKey =
 	| "workflow"
 	| "palette"
 	| "files"
@@ -24,63 +24,63 @@ export type IntroductionIconKey =
 	| "database"
 	| "refresh";
 
-export interface IntroductionNavigationItem {
+export interface ProposalNavigationItem {
 	id: SectionId;
 	label: string;
 }
 
-export interface IntroductionMetric {
+export interface ProposalMetric {
 	label: string;
 	description: string;
 }
 
-export interface IntroductionNarrativeCard {
+export interface ProposalNarrativeCard {
 	title: string;
 	description: string;
-	iconKey: IntroductionIconKey;
+	iconKey: ProposalIconKey;
 }
 
-export interface IntroductionProcessStep {
+export interface ProposalProcessStep {
 	step: string;
 	title: string;
 	description: string;
 	outputs: string[];
-	iconKey: IntroductionIconKey;
+	iconKey: ProposalIconKey;
 }
 
-export interface IntroductionAction {
+export interface ProposalAction {
 	label: string;
 	target: SectionId;
 }
 
-export interface IntroductionStackGroup {
+export interface ProposalStackGroup {
 	title: string;
 	description: string;
 	tools: string[];
 }
 
-export interface IntroductionPageData {
-	navigation: IntroductionNavigationItem[];
+export interface ProposalPageData {
+	navigation: ProposalNavigationItem[];
 	hero: {
 		eyebrow: string;
 		title: string;
 		description: string;
-		primaryAction: IntroductionAction;
-		secondaryAction: IntroductionAction;
-		metrics: IntroductionMetric[];
+		primaryAction: ProposalAction;
+		secondaryAction: ProposalAction;
+		metrics: ProposalMetric[];
 	};
-	problems: IntroductionNarrativeCard[];
-	approach: IntroductionNarrativeCard[];
-	process: IntroductionProcessStep[];
+	problems: ProposalNarrativeCard[];
+	approach: ProposalNarrativeCard[];
+	process: ProposalProcessStep[];
 	costModel: {
 		title: string;
 		description: string;
-		benefits: IntroductionNarrativeCard[];
+		benefits: ProposalNarrativeCard[];
 		removed: string[];
 		focused: string[];
 	};
-	stack: IntroductionStackGroup[];
-	projectFits: IntroductionNarrativeCard[];
+	stack: ProposalStackGroup[];
+	projectFits: ProposalNarrativeCard[];
 	closing: {
 		title: string;
 		description: string;
@@ -88,7 +88,7 @@ export interface IntroductionPageData {
 	};
 }
 
-const INTRODUCTION_PAGE_DATA = {
+const PROPOSAL_PAGE_DATA = {
 	navigation: [
 		{ id: "problem", label: "왜 AI 외주인가" },
 		{ id: "approach", label: "작업 방식" },
@@ -332,8 +332,8 @@ const INTRODUCTION_PAGE_DATA = {
 			"2년 유지보수 보장으로 끝까지 책임집니다.",
 		],
 	},
-} satisfies IntroductionPageData;
+} satisfies ProposalPageData;
 
-export async function getIntroductionPageData(): Promise<IntroductionPageData> {
-	return INTRODUCTION_PAGE_DATA;
+export async function getProposalPageData(): Promise<ProposalPageData> {
+	return PROPOSAL_PAGE_DATA;
 }

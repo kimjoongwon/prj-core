@@ -30,6 +30,7 @@
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-03-20 | `proposal-web#build`에 Next.js 앱 표준 입력/출력(`.next/**`) 규칙을 추가해 Docker/Turbo 빌드 경고 없이 캐시되도록 정리 | codex |
 | 2026-03-18 | Storybook 정적/개발 빌드에 필요한 `STORYBOOK_*` 환경 변수를 `globalEnv`에 추가해 Turbo 실행에서도 전달되도록 수정 | codex |
 | 2026-03-09 | `@cocrepo/prisma#build` 입력을 `schema/**`, `scripts/**`, `prisma.config.ts`, seed 파일 기준으로 정정해 스키마 리팩토링 변경이 캐시에 반영되도록 수정 | codex |
 | 2026-03-08 | `tool-storybook#build` 전용 입력/출력 규칙을 추가해 Storybook을 표준 Turbo 빌드 그래프에 포함 | codex |

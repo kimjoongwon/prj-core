@@ -29,4 +29,4 @@
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
 | 2026-03-14 | Biome 2.3.10 스키마에 맞춰 Tailwind CSS 4 파서 옵션을 루트 설정에 추가하고 `biome check .` 기준을 복원 | codex |
-| 2026-03-14 | introduction 앱 lint 범위를 루트 Biome 설정 기준으로 운영하는 정책을 문서화 | codex |
+| 2026-03-14 | proposal-web 앱 lint 범위를 루트 Biome 설정 기준으로 운영하는 정책을 문서화 | codex |

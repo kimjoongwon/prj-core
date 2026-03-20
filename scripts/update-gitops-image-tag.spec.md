@@ -13,7 +13,7 @@ Jenkins 파이프라인에서 GitOps 저장소의 애플리케이션 이미지 �
 
 | 항목 | 설명 |
 |------|------|
-| 지원 앱 | `idp-api`, `idp-web`, `core-api`, `admin-web`, `spring-api` |
+| 지원 앱 | `idp-api`, `idp-web`, `core-api`, `admin-web`, `proposal-web`, `spring-api` |
 | 지원 환경 | `prod`/`production` |
 | 대상 파일 | `helm/applications/<app>/values-prod.yaml` |
 | 업데이트 키 | `<app>.image.tag` |
@@ -33,5 +33,6 @@ Jenkins 파이프라인에서 GitOps 저장소의 애플리케이션 이미지 �
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-03-20 | `proposal-web` GitOps 이미지 태그 갱신을 지원하도록 대상 앱 목록 확장 | codex |
 | 2026-03-08 | Jenkins가 `prj-devops` 내부 스크립트 경로 부재로 실패하지 않도록 로컬 GitOps 태그 업데이트 스크립트 신규 추가 | codex |
 | 2026-03-08 | push 실패 원인 가시성을 위해 원격 에러 메시지(토큰 마스킹) 출력 추가, non-fast-forward 충돌 시 fetch+rebase 자동 재시도 로직 추가 | codex |

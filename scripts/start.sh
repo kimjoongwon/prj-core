@@ -46,9 +46,10 @@ else
   echo ""
   echo -e "  ${CYAN}1${RESET})  core-api        ${DIM}백엔드 서버${RESET}"
   echo -e "  ${CYAN}2${RESET})  admin-web       ${DIM}어드민 프론트엔드${RESET}"
-  echo -e "  ${CYAN}3${RESET})  idp-api         ${DIM}인증 서버 (백엔드)${RESET}"
-  echo -e "  ${CYAN}4${RESET})  idp-web         ${DIM}인증 서버 (프론트엔드)${RESET}"
-  echo -e "  ${CYAN}5${RESET})  tool-storybook  ${DIM}스토리북${RESET}"
+  echo -e "  ${CYAN}3${RESET})  proposal-web    ${DIM}퍼블릭 제안 랜딩${RESET}"
+  echo -e "  ${CYAN}4${RESET})  idp-api         ${DIM}인증 서버 (백엔드)${RESET}"
+  echo -e "  ${CYAN}5${RESET})  idp-web         ${DIM}인증 서버 (프론트엔드)${RESET}"
+  echo -e "  ${CYAN}6${RESET})  tool-storybook  ${DIM}스토리북${RESET}"
   echo ""
   echo -e "  ${DIM}복수 선택 가능 (예: 1 2)${RESET}"
   echo ""
@@ -72,6 +73,7 @@ get_port() {
   case $1 in
     core-api)        echo "${CORE_API_PORT:-3006}" ;;
     admin-web)       echo "${ADMIN_WEB_PORT:-3000}" ;;
+    proposal-web)    echo "${PROPOSAL_WEB_PORT:-3011}" ;;
     idp-api)         echo "${IDP_API_PORT:-3007}" ;;
     idp-web)         echo "${IDP_WEB_PORT:-3008}" ;;
     tool-storybook)  echo "${STORYBOOK_PORT:-6006}" ;;
@@ -89,13 +91,16 @@ for choice in $choices; do
     2|admin-web|start:admin-web)
       FILTERS="$FILTERS --filter=admin-web"; SERVICES="$SERVICES admin-web"; HAS_FRONTEND="true"
       ;;
-    3|idp-api|start:idp-api)
+    3|proposal-web|start:proposal-web)
+      FILTERS="$FILTERS --filter=proposal-web"; SERVICES="$SERVICES proposal-web"
+      ;;
+    4|idp-api|start:idp-api)
       FILTERS="$FILTERS --filter=idp-api"; SERVICES="$SERVICES idp-api"; HAS_IDP="true"
       ;;
-    4|idp-web|start:idp-web)
+    5|idp-web|start:idp-web)
       FILTERS="$FILTERS --filter=idp-web"; SERVICES="$SERVICES idp-web"; HAS_FRONTEND="true"
       ;;
-    5|tool-storybook|start:tool-storybook)
+    6|tool-storybook|start:tool-storybook)
       FILTERS="$FILTERS --filter=tool-storybook"; SERVICES="$SERVICES tool-storybook"
       ;;
     *) echo -e "${YELLOW}잘못된 번호: ${choice}${RESET}"; exit 1 ;;
@@ -203,6 +208,7 @@ pre_cleanup_service_processes() {
     case $svc in
       core-api) pattern="turbo start:dev --filter=core-api|core-api@0.0.1 start:dev|/apps/core/api/dist/main.js" ;;
       admin-web) pattern="turbo start:dev --filter=admin-web|apps/admin/web" ;;
+      proposal-web) pattern="turbo start:dev --filter=proposal-web|apps/proposal/web" ;;
       idp-api) pattern="turbo start:dev --filter=idp-api|idp-api@0.0.1 start:dev|/apps/idp/api/dist/main.js" ;;
       idp-web) pattern="turbo start:dev --filter=idp-web|apps/idp/web" ;;
       tool-storybook) pattern="turbo start:dev --filter=tool-storybook|storybook" ;;

@@ -1,10 +1,10 @@
 {
-  "name": "introduction",
+  "name": "proposal-web",
   "private": true,
   "version": "0.0.0",
   "scripts": {
-    "dev": "next dev --turbopack --port ${INTRODUCTION_PORT:-3011}",
-    "start:dev": "next dev --turbopack --port ${INTRODUCTION_PORT:-3011}",
+    "dev": "next dev --turbopack --port ${PROPOSAL_WEB_PORT:-3011}",
+    "start:dev": "next dev --turbopack --port ${PROPOSAL_WEB_PORT:-3011}",
     "build": "next build",
     "analyze": "ANALYZE=true pnpm build",
     "start": "next start",

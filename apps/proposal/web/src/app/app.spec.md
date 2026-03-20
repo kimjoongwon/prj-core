@@ -1,13 +1,13 @@
-# introduction app 기획서
+# proposal-web app 기획서
 
 > 생성일: 2026-03-12
 > 수정일: 2026-03-12
 > 타입: app
-> 위치: apps/introduction/src/app
+> 위치: apps/proposal/web/src/app
 
 ## 컨텍스트
 
-`introduction`은 자자의 퍼블릭 소개 앱입니다.
+`proposal-web`은 자자의 퍼블릭 소개 앱입니다.
 목표는 상담 전환이 아니라, AI 중심 개발 방식과 비용 최적화 논리를 명확한 한 페이지 경험으로 전달하는 것입니다.
 
 ## Actor
@@ -37,4 +37,4 @@
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
-| 2026-03-12 | introduction 앱 기획서 신규 생성 | codex |
+| 2026-03-12 | proposal-web 앱 기획서 신규 생성 | codex |

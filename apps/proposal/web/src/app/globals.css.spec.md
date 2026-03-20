@@ -2,7 +2,7 @@
 
 > 생성일: 2026-03-12
 > 타입: style
-> 위치: apps/introduction/src/app/globals.css
+> 위치: apps/proposal/web/src/app/globals.css
 
 ## 역할
 
@@ -29,5 +29,5 @@ Pretendard 타이포, 다크 배경, 블러 오브, 그리드 텍스처, 기본 
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
-| 2026-03-14 | Tailwind 지시문과 전역 배경 스타일의 Biome 포맷을 정리해 introduction 앱 lint 기준과 스타일 자산을 동기화 | codex |
-| 2026-03-12 | introduction 전역 스타일 기획서 신규 생성 | codex |
+| 2026-03-14 | Tailwind 지시문과 전역 배경 스타일의 Biome 포맷을 정리해 proposal-web 앱 lint 기준과 스타일 자산을 동기화 | codex |
+| 2026-03-12 | proposal-web 전역 스타일 기획서 신규 생성 | codex |

@@ -2,7 +2,7 @@
 
 > 생성일: 2026-03-12
 > 타입: layout
-> 위치: apps/introduction/src/app/layout.tsx
+> 위치: apps/proposal/web/src/app/layout.tsx
 
 ## 역할
 
@@ -37,5 +37,5 @@
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
-| 2026-03-12 | introduction 루트 layout 신규 생성 | codex |
+| 2026-03-12 | proposal-web 루트 layout 신규 생성 | codex |
 | 2026-03-12 | Pretendard 폰트 링크를 적용하고 레이아웃 계약을 갱신 | codex |

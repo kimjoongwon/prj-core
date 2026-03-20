@@ -22,7 +22,7 @@ Turbo 기반 공통 빌드/검사 태스크와 앱별 명시적 별칭을 한곳
 
 ## 구현 체크리스트
 
-- [x] `core-api`, `admin-web`, `idp-api`, `idp-web`, `tool-storybook`용 명시적 root alias 제공
+- [x] `core-api`, `admin-web`, `proposal-web`, `idp-api`, `idp-web`, `tool-storybook`용 명시적 root alias 제공
 - [x] 개별 빌드 alias가 Turbo filter 기반으로 동작
 - [x] 개별 시작 alias가 Turbo `start:dev` 기반으로 동작
 - [x] Rancher 컨테이너 파이프라인도 앱별 root alias(`rancher:{workspace}`)로 직접 호출 가능
@@ -33,6 +33,7 @@ Turbo 기반 공통 빌드/검사 태스크와 앱별 명시적 별칭을 한곳
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-03-20 | `proposal-web`용 root build/start/rancher alias를 추가해 배포 대상 앱 목록과 루트 진입 스크립트를 동기화 | codex |
 | 2026-03-09 | 루트 `turbo` 버전을 `2.8.14` exact로 고정해 Docker 전역 설치 버전과 동일한 기준으로 재현성을 맞춤 | codex |
 | 2026-03-08 | `rancher:idp-web` 등 앱별 Rancher 별칭 스크립트를 추가해 `rancher:build -- <workspace>`를 직접 노출 | codex |
 | 2026-03-08 | 루트 `build:*`/`start:*` 스크립트를 workspace 이름 기준으로 정규화하고 기존 짧은 alias를 canonical alias로 연결 | codex |

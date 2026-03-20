@@ -139,8 +139,9 @@ resolve_target() {
   case "$value" in
     1|core-api) echo "core-api" ;;
     2|admin-web) echo "admin-web" ;;
-    3|idp-api) echo "idp-api" ;;
-    4|idp-web) echo "idp-web" ;;
+    3|proposal-web) echo "proposal-web" ;;
+    4|idp-api) echo "idp-api" ;;
+    5|idp-web) echo "idp-web" ;;
     *) return 1 ;;
   esac
 }
@@ -150,6 +151,7 @@ get_dockerfile() {
   case "$target" in
     core-api) echo "devops/Dockerfile.core-api" ;;
     admin-web) echo "devops/Dockerfile.admin-web" ;;
+    proposal-web) echo "devops/Dockerfile.proposal-web" ;;
     idp-api) echo "devops/Dockerfile.idp-api" ;;
     idp-web) echo "devops/Dockerfile.idp-web" ;;
     *) return 1 ;;
@@ -161,6 +163,7 @@ get_image_name() {
   case "$target" in
     core-api) echo "core-api" ;;
     admin-web) echo "admin-web" ;;
+    proposal-web) echo "proposal-web" ;;
     idp-api) echo "idp-api" ;;
     idp-web) echo "idp-web" ;;
     *) return 1 ;;
@@ -172,6 +175,7 @@ get_health_port() {
   case "$target" in
     core-api) echo "3006" ;;
     admin-web) echo "3000" ;;
+    proposal-web) echo "3011" ;;
     idp-api) echo "3007" ;;
     idp-web) echo "3008" ;;
     *) return 1 ;;
@@ -183,6 +187,7 @@ get_health_path() {
   case "$target" in
     core-api) echo "/api-json" ;;
     admin-web) echo "/admin/auth/login" ;;
+    proposal-web) echo "/" ;;
     idp-api) echo "/api-json" ;;
     idp-web) echo "/auth/login" ;;
     *) return 1 ;;
@@ -287,6 +292,11 @@ set_run_env_args() {
     admin-web)
       RUN_ENV_ARGS+=("-e" "NODE_ENV=${NODE_ENV:-production}")
       RUN_ENV_ARGS+=("-e" "PORT=${PORT:-3000}")
+      RUN_ENV_ARGS+=("-e" "HOSTNAME=${HOSTNAME:-0.0.0.0}")
+      ;;
+    proposal-web)
+      RUN_ENV_ARGS+=("-e" "NODE_ENV=${NODE_ENV:-production}")
+      RUN_ENV_ARGS+=("-e" "PORT=${PORT:-3011}")
       RUN_ENV_ARGS+=("-e" "HOSTNAME=${HOSTNAME:-0.0.0.0}")
       ;;
     idp-api)
@@ -447,8 +457,9 @@ if [[ ${#ARGS[@]} -eq 0 ]]; then
   echo ""
   echo -e "  ${CYAN}1${RESET}) core-api  ${DIM}core-api${RESET}"
   echo -e "  ${CYAN}2${RESET}) admin-web ${DIM}admin-web${RESET}"
-  echo -e "  ${CYAN}3${RESET}) idp-api   ${DIM}idp-api${RESET}"
-  echo -e "  ${CYAN}4${RESET}) idp-web   ${DIM}idp-web${RESET}"
+  echo -e "  ${CYAN}3${RESET}) proposal-web ${DIM}proposal-web${RESET}"
+  echo -e "  ${CYAN}4${RESET}) idp-api   ${DIM}idp-api${RESET}"
+  echo -e "  ${CYAN}5${RESET}) idp-web   ${DIM}idp-web${RESET}"
   echo ""
   echo -e "  ${DIM}복수 선택 가능 (예: 1 2)${RESET}"
   echo ""
