@@ -1,32 +1,18 @@
-import {
-	dehydrate,
-	HydrationBoundary,
-	QueryClient,
-} from "@tanstack/react-query";
-import { cookies } from "next/headers";
-import OidcClientDetailPageClient from "./_client";
-import { prefetchOidcClientDetailData } from "./_prefetch";
+"use client";
 
-interface OidcClientDetailPageProps {
-	params: Promise<{ oidcClientId: string }>;
-}
+import dynamic from "next/dynamic";
+import { useParams } from "next/navigation";
 
-/**
- * OIDC 클라이언트 상세 페이지 - 서버 컴포넌트
- * SSR 시점에 데이터를 프리페칭하여 클라이언트에 전달합니다.
- */
-export default async function OidcClientDetailPage({
-	params,
-}: OidcClientDetailPageProps) {
-	const { oidcClientId } = await params;
-	const queryClient = new QueryClient();
-	const cookieStore = await cookies();
+const OidcClientDetailPageClient = dynamic(() => import("./_client"), {
+	ssr: false,
+});
 
-	await prefetchOidcClientDetailData(queryClient, cookieStore, oidcClientId);
+type OidcClientDetailPageParams = {
+	oidcClientId: string;
+};
 
-	return (
-		<HydrationBoundary state={dehydrate(queryClient)}>
-			<OidcClientDetailPageClient oidcClientId={oidcClientId} />
-		</HydrationBoundary>
-	);
+export default function OidcClientDetailPage() {
+	const { oidcClientId } = useParams<OidcClientDetailPageParams>();
+
+	return <OidcClientDetailPageClient oidcClientId={oidcClientId} />;
 }

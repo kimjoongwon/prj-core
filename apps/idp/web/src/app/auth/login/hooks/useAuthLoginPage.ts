@@ -11,14 +11,28 @@ import { useEffect } from "react";
 export const useAuthLoginPage = () => {
 	const searchParams = useSearchParams();
 	const errorFromCallback = searchParams.get("error");
+	const returnToFromQuery = searchParams.get("returnTo");
 
 	const createLoginUrl = () => {
 		if (typeof window === "undefined") {
 			return "/api/v1/auth/login";
 		}
 
-		// IDP 콘솔 기본 페이지로 돌아가도록 returnTo 설정
-		const returnTo = `${window.location.origin}/oidc-clients`;
+		const returnTo = (() => {
+			try {
+				const candidate = new URL(
+					returnToFromQuery || "/dashboard",
+					window.location.origin,
+				);
+				if (candidate.origin !== window.location.origin) {
+					return `${window.location.origin}/dashboard`;
+				}
+
+				return candidate.toString();
+			} catch {
+				return `${window.location.origin}/dashboard`;
+			}
+		})();
 		return `/api/v1/auth/login?returnTo=${encodeURIComponent(returnTo)}`;
 	};
 

@@ -1,31 +1,18 @@
-import {
-	dehydrate,
-	HydrationBoundary,
-	QueryClient,
-} from "@tanstack/react-query";
-import { cookies } from "next/headers";
-import OidcClientEditPageClient from "./_client";
-import { prefetchOidcClientEditData } from "./_prefetch";
+"use client";
 
-interface OidcClientEditPageProps {
-	params: Promise<{ oidcClientId: string }>;
-}
+import dynamic from "next/dynamic";
+import { useParams } from "next/navigation";
 
-/**
- * OIDC 클라이언트 수정 페이지 - 서버 컴포넌트
- */
-export default async function OidcClientEditPage({
-	params,
-}: OidcClientEditPageProps) {
-	const { oidcClientId } = await params;
-	const queryClient = new QueryClient();
-	const cookieStore = await cookies();
+const OidcClientEditPageClient = dynamic(() => import("./_client"), {
+	ssr: false,
+});
 
-	await prefetchOidcClientEditData(queryClient, cookieStore, oidcClientId);
+type OidcClientEditPageParams = {
+	oidcClientId: string;
+};
 
-	return (
-		<HydrationBoundary state={dehydrate(queryClient)}>
-			<OidcClientEditPageClient oidcClientId={oidcClientId} />
-		</HydrationBoundary>
-	);
+export default function OidcClientEditPage() {
+	const { oidcClientId } = useParams<OidcClientEditPageParams>();
+
+	return <OidcClientEditPageClient oidcClientId={oidcClientId} />;
 }

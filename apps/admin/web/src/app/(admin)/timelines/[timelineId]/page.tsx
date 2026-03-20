@@ -1,31 +1,18 @@
-import {
-	dehydrate,
-	HydrationBoundary,
-	QueryClient,
-} from "@tanstack/react-query";
-import { cookies } from "next/headers";
-import TimelineDetailPageClient from "./_client";
-import { prefetchTimelineDetailData } from "./_prefetch";
+"use client";
 
-interface TimelineDetailPageProps {
-	params: Promise<{ timelineId: string }>;
-}
+import dynamic from "next/dynamic";
+import { useParams } from "next/navigation";
 
-/**
- * 타임라인 상세 페이지 - 서버 컴포넌트
- */
-export default async function TimelineDetailPage({
-	params,
-}: TimelineDetailPageProps) {
-	const { timelineId } = await params;
-	const queryClient = new QueryClient();
-	const cookieStore = await cookies();
+const TimelineDetailPageClient = dynamic(() => import("./_client"), {
+	ssr: false,
+});
 
-	await prefetchTimelineDetailData(queryClient, cookieStore, timelineId);
+type TimelineDetailPageParams = {
+	timelineId: string;
+};
 
-	return (
-		<HydrationBoundary state={dehydrate(queryClient)}>
-			<TimelineDetailPageClient timelineId={timelineId} />
-		</HydrationBoundary>
-	);
+export default function TimelineDetailPage() {
+	const { timelineId } = useParams<TimelineDetailPageParams>();
+
+	return <TimelineDetailPageClient timelineId={timelineId} />;
 }

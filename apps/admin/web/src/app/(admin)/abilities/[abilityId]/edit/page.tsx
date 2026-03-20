@@ -1,32 +1,18 @@
-import {
-	dehydrate,
-	HydrationBoundary,
-	QueryClient,
-} from "@tanstack/react-query";
-import { cookies } from "next/headers";
-import AbilityEditPageClient from "./_client";
-import { prefetchAbilityEditData } from "./_prefetch";
+"use client";
 
-interface AbilityEditPageProps {
-	params: Promise<{ abilityId: string }>;
-}
+import dynamic from "next/dynamic";
+import { useParams } from "next/navigation";
 
-/**
- * 권한 수정 페이지 - 서버 컴포넌트
- * SSR 시점에 데이터를 프리페칭하여 클라이언트에 전달합니다.
- */
-export default async function AbilityEditPage({
-	params,
-}: AbilityEditPageProps) {
-	const { abilityId } = await params;
-	const queryClient = new QueryClient();
-	const cookieStore = await cookies();
+const AbilityEditPageClient = dynamic(() => import("./_client"), {
+	ssr: false,
+});
 
-	await prefetchAbilityEditData(queryClient, cookieStore, abilityId);
+type AbilityEditPageParams = {
+	abilityId: string;
+};
 
-	return (
-		<HydrationBoundary state={dehydrate(queryClient)}>
-			<AbilityEditPageClient abilityId={abilityId} />
-		</HydrationBoundary>
-	);
+export default function AbilityEditPage() {
+	const { abilityId } = useParams<AbilityEditPageParams>();
+
+	return <AbilityEditPageClient abilityId={abilityId} />;
 }

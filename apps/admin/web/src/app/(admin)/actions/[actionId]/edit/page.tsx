@@ -1,30 +1,18 @@
-import {
-	dehydrate,
-	HydrationBoundary,
-	QueryClient,
-} from "@tanstack/react-query";
-import { cookies } from "next/headers";
-import ActionEditPageClient from "./_client";
-import { prefetchActionEditData } from "./_prefetch";
+"use client";
 
-interface ActionEditPageProps {
-	params: Promise<{ actionId: string }>;
-}
+import dynamic from "next/dynamic";
+import { useParams } from "next/navigation";
 
-/**
- * Action 수정 페이지 - 서버 컴포넌트
- * SSR 시점에 데이터를 프리페칭하여 클라이언트에 전달합니다.
- */
-export default async function ActionEditPage({ params }: ActionEditPageProps) {
-	const queryClient = new QueryClient();
-	const cookieStore = await cookies();
-	const { actionId } = await params;
+const ActionEditPageClient = dynamic(() => import("./_client"), {
+	ssr: false,
+});
 
-	await prefetchActionEditData(queryClient, cookieStore, actionId);
+type ActionEditPageParams = {
+	actionId: string;
+};
 
-	return (
-		<HydrationBoundary state={dehydrate(queryClient)}>
-			<ActionEditPageClient actionId={actionId} />
-		</HydrationBoundary>
-	);
+export default function ActionEditPage() {
+	const { actionId } = useParams<ActionEditPageParams>();
+
+	return <ActionEditPageClient actionId={actionId} />;
 }

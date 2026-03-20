@@ -1,36 +1,21 @@
-import {
-	dehydrate,
-	HydrationBoundary,
-	QueryClient,
-} from "@tanstack/react-query";
-import { cookies } from "next/headers";
-import SessionEditPageClient from "./_client";
-import { prefetchSessionEditData } from "./_prefetch";
+"use client";
 
-interface SessionEditPageProps {
-	params: Promise<{ timelineId: string; sessionId: string }>;
-}
+import dynamic from "next/dynamic";
+import { useParams } from "next/navigation";
 
-/**
- * 세션 수정 페이지 - 서버 컴포넌트
- */
-export default async function SessionEditPage({
-	params,
-}: SessionEditPageProps) {
-	const { timelineId, sessionId } = await params;
-	const queryClient = new QueryClient();
-	const cookieStore = await cookies();
+const SessionEditPageClient = dynamic(() => import("./_client"), {
+	ssr: false,
+});
 
-	await prefetchSessionEditData(
-		queryClient,
-		cookieStore,
-		timelineId,
-		sessionId,
-	);
+type SessionEditPageParams = {
+	timelineId: string;
+	sessionId: string;
+};
+
+export default function SessionEditPage() {
+	const { timelineId, sessionId } = useParams<SessionEditPageParams>();
 
 	return (
-		<HydrationBoundary state={dehydrate(queryClient)}>
-			<SessionEditPageClient timelineId={timelineId} sessionId={sessionId} />
-		</HydrationBoundary>
+		<SessionEditPageClient timelineId={timelineId} sessionId={sessionId} />
 	);
 }

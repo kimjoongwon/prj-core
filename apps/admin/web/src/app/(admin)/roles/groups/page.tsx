@@ -1,9 +1,11 @@
-import RoleGroupsPageClient from "./_client";
+"use client";
 
-/**
- * 역할 그룹 목록 페이지 - 서버 컴포넌트
- * TODO: Orval codegen 후 prefetch + HydrationBoundary 추가
- */
+import dynamic from "next/dynamic";
+
+const RoleGroupsPageClient = dynamic(() => import("./_client"), {
+	ssr: false,
+});
+
 export default function RoleGroupsPage() {
 	return <RoleGroupsPageClient />;
 }

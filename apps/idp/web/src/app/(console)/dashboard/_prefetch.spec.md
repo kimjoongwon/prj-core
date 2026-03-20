@@ -7,6 +7,7 @@
 ## 역할
 
 이 파일은 prefetch 계층의 보조 동작(연결/조회/조합)을 담당합니다.
+SSR에서 `accessToken` 쿠키가 있는 경우에만 보호 API 프리페치를 수행합니다.
 
 ## 주요 계약
 
@@ -22,6 +23,7 @@
 | @cocrepo/api/server | 기능 구현 의존성 |
 | @tanstack/react-query | 기능 구현 의존성 |
 | next/dist/server/web/spec-extension/adapters/request-cookies | 기능 구현 의존성 |
+| @/lib/server-auth | SSR prefetch 가능 여부 판별 |
 
 ## 구현 체크리스트
 
@@ -34,3 +36,4 @@
 |------|------|--------|
 | 2026-03-03 | 누락된 sidecar spec 신규 생성 | codex |
 | 2026-03-13 | @cocrepo/api root import를 split subpath import로 전환 | codex |
+| 2026-03-20 | 비인증 SSR 요청에서 보호 API를 선호출하지 않도록 access token 가드 추가 | codex |

@@ -1,30 +1,18 @@
-import {
-	dehydrate,
-	HydrationBoundary,
-	QueryClient,
-} from "@tanstack/react-query";
-import { cookies } from "next/headers";
-import RoleDetailPageClient from "./_client";
-import { prefetchRoleDetailData } from "./_prefetch";
+"use client";
 
-interface RoleDetailPageProps {
-	params: Promise<{ roleId: string }>;
-}
+import dynamic from "next/dynamic";
+import { useParams } from "next/navigation";
 
-/**
- * 역할 상세 페이지 - 서버 컴포넌트
- * SSR 시점에 데이터를 프리페칭하여 클라이언트에 전달합니다.
- */
-export default async function RoleDetailPage({ params }: RoleDetailPageProps) {
-	const { roleId } = await params;
-	const queryClient = new QueryClient();
-	const cookieStore = await cookies();
+const RoleDetailPageClient = dynamic(() => import("./_client"), {
+	ssr: false,
+});
 
-	await prefetchRoleDetailData(queryClient, cookieStore, roleId);
+type RoleDetailPageParams = {
+	roleId: string;
+};
 
-	return (
-		<HydrationBoundary state={dehydrate(queryClient)}>
-			<RoleDetailPageClient roleId={roleId} />
-		</HydrationBoundary>
-	);
+export default function RoleDetailPage() {
+	const { roleId } = useParams<RoleDetailPageParams>();
+
+	return <RoleDetailPageClient roleId={roleId} />;
 }

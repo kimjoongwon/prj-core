@@ -1,30 +1,18 @@
-import {
-	dehydrate,
-	HydrationBoundary,
-	QueryClient,
-} from "@tanstack/react-query";
-import { cookies } from "next/headers";
-import GroundEditPageClient from "./_client";
-import { prefetchGroundEditData } from "./_prefetch";
+"use client";
 
-interface GroundEditPageProps {
-	params: Promise<{ spaceId: string }>;
-}
+import dynamic from "next/dynamic";
+import { useParams } from "next/navigation";
 
-/**
- * 공간의 시설 detail 수정 페이지 - 서버 컴포넌트
- * SSR 시점에 시설 detail 데이터를 프리페칭하여 클라이언트에 전달합니다.
- */
-export default async function GroundEditPage({ params }: GroundEditPageProps) {
-	const { spaceId } = await params;
-	const queryClient = new QueryClient();
-	const cookieStore = await cookies();
+const GroundEditPageClient = dynamic(() => import("./_client"), {
+	ssr: false,
+});
 
-	await prefetchGroundEditData(queryClient, cookieStore, spaceId);
+type GroundEditPageParams = {
+	spaceId: string;
+};
 
-	return (
-		<HydrationBoundary state={dehydrate(queryClient)}>
-			<GroundEditPageClient spaceId={spaceId} />
-		</HydrationBoundary>
-	);
+export default function GroundEditPage() {
+	const { spaceId } = useParams<GroundEditPageParams>();
+
+	return <GroundEditPageClient spaceId={spaceId} />;
 }

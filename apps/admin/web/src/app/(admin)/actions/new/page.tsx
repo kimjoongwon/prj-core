@@ -1,8 +1,11 @@
-import ActionNewPageClient from "./_client";
+"use client";
 
-/**
- * Action 등록 페이지 - 서버 컴포넌트
- */
+import dynamic from "next/dynamic";
+
+const ActionNewPageClient = dynamic(() => import("./_client"), {
+	ssr: false,
+});
+
 export default function ActionNewPage() {
 	return <ActionNewPageClient />;
 }

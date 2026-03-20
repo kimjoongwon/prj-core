@@ -1,8 +1,11 @@
-import OidcClientNewPageClient from "./_client";
+"use client";
 
-/**
- * OIDC 클라이언트 등록 페이지 - 서버 컴포넌트
- */
+import dynamic from "next/dynamic";
+
+const OidcClientNewPageClient = dynamic(() => import("./_client"), {
+	ssr: false,
+});
+
 export default function OidcClientNewPage() {
 	return <OidcClientNewPageClient />;
 }

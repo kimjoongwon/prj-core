@@ -1,8 +1,14 @@
-import { ForgotPasswordClient } from "./_client";
+"use client";
 
-/**
- * 비밀번호 찾기 페이지 (서버 컴포넌트)
- */
+import dynamic from "next/dynamic";
+
+const ForgotPasswordClient = dynamic(
+	() => import("./_client").then((module) => module.ForgotPasswordClient),
+	{
+		ssr: false,
+	},
+);
+
 export default function ForgotPasswordPage() {
 	return <ForgotPasswordClient />;
 }

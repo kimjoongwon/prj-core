@@ -1,17 +1,18 @@
-import RoleCategoryDetailPageClient from "./_client";
+"use client";
 
-interface RoleCategoryDetailPageProps {
-	params: Promise<{ categoryId: string }>;
-}
+import dynamic from "next/dynamic";
+import { useParams } from "next/navigation";
 
-/**
- * 역할 카테고리 상세 페이지 - 서버 컴포넌트
- * TODO: Orval codegen 후 prefetch + HydrationBoundary 추가
- */
-export default async function RoleCategoryDetailPage({
-	params,
-}: RoleCategoryDetailPageProps) {
-	const { categoryId } = await params;
+const RoleCategoryDetailPageClient = dynamic(() => import("./_client"), {
+	ssr: false,
+});
+
+type RoleCategoryDetailPageParams = {
+	categoryId: string;
+};
+
+export default function RoleCategoryDetailPage() {
+	const { categoryId } = useParams<RoleCategoryDetailPageParams>();
 
 	return <RoleCategoryDetailPageClient categoryId={categoryId} />;
 }

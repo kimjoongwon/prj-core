@@ -1,26 +1,18 @@
-import {
-	dehydrate,
-	HydrationBoundary,
-	QueryClient,
-} from "@tanstack/react-query";
-import { cookies } from "next/headers";
-import InquiryEditPageClient from "./_client";
-import { prefetchInquiryEditFormData } from "./_prefetch";
+"use client";
 
-interface PageProps {
-	params: Promise<{ inquiryId: string }>;
-}
+import dynamic from "next/dynamic";
+import { useParams } from "next/navigation";
 
-export default async function InquiryEditPage({ params }: PageProps) {
-	const { inquiryId } = await params;
-	const queryClient = new QueryClient();
-	const cookieStore = await cookies();
+const InquiryEditPageClient = dynamic(() => import("./_client"), {
+	ssr: false,
+});
 
-	await prefetchInquiryEditFormData(queryClient, cookieStore, inquiryId);
+type InquiryEditPageParams = {
+	inquiryId: string;
+};
 
-	return (
-		<HydrationBoundary state={dehydrate(queryClient)}>
-			<InquiryEditPageClient inquiryId={inquiryId} />
-		</HydrationBoundary>
-	);
+export default function InquiryEditPage() {
+	const { inquiryId } = useParams<InquiryEditPageParams>();
+
+	return <InquiryEditPageClient inquiryId={inquiryId} />;
 }

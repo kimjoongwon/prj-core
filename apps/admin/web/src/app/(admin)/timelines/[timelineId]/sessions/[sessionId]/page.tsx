@@ -1,36 +1,21 @@
-import {
-	dehydrate,
-	HydrationBoundary,
-	QueryClient,
-} from "@tanstack/react-query";
-import { cookies } from "next/headers";
-import SessionDetailPageClient from "./_client";
-import { prefetchSessionDetailData } from "./_prefetch";
+"use client";
 
-interface SessionDetailPageProps {
-	params: Promise<{ timelineId: string; sessionId: string }>;
-}
+import dynamic from "next/dynamic";
+import { useParams } from "next/navigation";
 
-/**
- * 세션 상세 페이지 - 서버 컴포넌트
- */
-export default async function SessionDetailPage({
-	params,
-}: SessionDetailPageProps) {
-	const { timelineId, sessionId } = await params;
-	const queryClient = new QueryClient();
-	const cookieStore = await cookies();
+const SessionDetailPageClient = dynamic(() => import("./_client"), {
+	ssr: false,
+});
 
-	await prefetchSessionDetailData(
-		queryClient,
-		cookieStore,
-		timelineId,
-		sessionId,
-	);
+type SessionDetailPageParams = {
+	timelineId: string;
+	sessionId: string;
+};
+
+export default function SessionDetailPage() {
+	const { timelineId, sessionId } = useParams<SessionDetailPageParams>();
 
 	return (
-		<HydrationBoundary state={dehydrate(queryClient)}>
-			<SessionDetailPageClient timelineId={timelineId} sessionId={sessionId} />
-		</HydrationBoundary>
+		<SessionDetailPageClient timelineId={timelineId} sessionId={sessionId} />
 	);
 }

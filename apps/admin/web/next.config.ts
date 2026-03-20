@@ -30,6 +30,16 @@ const nextConfig: NextConfig = {
 	// useRouter/usePathname 사용으로 인해 비활성화
 	// TODO: 추후 Store Provider 아키텍처 개선 후 재활성화 검토
 	cacheComponents: false,
+	async redirects() {
+		return [
+			{
+				source: "/",
+				destination: "/admin",
+				permanent: false,
+				basePath: false,
+			},
+		];
+	},
 	// 개발 환경에서만 로컬 API 서버로 프록시합니다.
 	// 배포 환경은 ingress 라우팅으로 같은 경로를 처리합니다.
 	async rewrites() {

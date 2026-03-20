@@ -1,29 +1,18 @@
-import {
-	dehydrate,
-	HydrationBoundary,
-	QueryClient,
-} from "@tanstack/react-query";
-import { cookies } from "next/headers";
-import SessionNewPageClient from "./_client";
-import { prefetchSessionNewData } from "./_prefetch";
+"use client";
 
-interface SessionNewPageProps {
-	params: Promise<{ timelineId: string }>;
-}
+import dynamic from "next/dynamic";
+import { useParams } from "next/navigation";
 
-/**
- * 세션 등록 페이지 - 서버 컴포넌트
- */
-export default async function SessionNewPage({ params }: SessionNewPageProps) {
-	const { timelineId } = await params;
-	const queryClient = new QueryClient();
-	const cookieStore = await cookies();
+const SessionNewPageClient = dynamic(() => import("./_client"), {
+	ssr: false,
+});
 
-	await prefetchSessionNewData(queryClient, cookieStore, timelineId);
+type SessionNewPageParams = {
+	timelineId: string;
+};
 
-	return (
-		<HydrationBoundary state={dehydrate(queryClient)}>
-			<SessionNewPageClient timelineId={timelineId} />
-		</HydrationBoundary>
-	);
+export default function SessionNewPage() {
+	const { timelineId } = useParams<SessionNewPageParams>();
+
+	return <SessionNewPageClient timelineId={timelineId} />;
 }

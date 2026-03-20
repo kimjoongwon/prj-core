@@ -1,32 +1,18 @@
-import {
-	dehydrate,
-	HydrationBoundary,
-	QueryClient,
-} from "@tanstack/react-query";
-import { cookies } from "next/headers";
-import TaskExerciseEditPageClient from "./_client";
-import { prefetchTaskExerciseEditData } from "./_prefetch";
+"use client";
 
-interface TaskExerciseEditPageProps {
-	params: Promise<{ taskId: string }>;
-}
+import dynamic from "next/dynamic";
+import { useParams } from "next/navigation";
 
-/**
- * 태스크의 운동 detail 수정 페이지 - 서버 컴포넌트
- * SSR 시점에 기존 운동 detail 데이터를 프리페칭하여 클라이언트에 전달합니다.
- */
-export default async function TaskExerciseEditPage({
-	params,
-}: TaskExerciseEditPageProps) {
-	const { taskId } = await params;
-	const queryClient = new QueryClient();
-	const cookieStore = await cookies();
+const TaskExerciseEditPageClient = dynamic(() => import("./_client"), {
+	ssr: false,
+});
 
-	await prefetchTaskExerciseEditData(queryClient, cookieStore, taskId);
+type TaskExerciseEditPageParams = {
+	taskId: string;
+};
 
-	return (
-		<HydrationBoundary state={dehydrate(queryClient)}>
-			<TaskExerciseEditPageClient taskId={taskId} />
-		</HydrationBoundary>
-	);
+export default function TaskExerciseEditPage() {
+	const { taskId } = useParams<TaskExerciseEditPageParams>();
+
+	return <TaskExerciseEditPageClient taskId={taskId} />;
 }

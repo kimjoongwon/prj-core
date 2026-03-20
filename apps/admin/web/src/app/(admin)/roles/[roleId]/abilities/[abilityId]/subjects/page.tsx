@@ -1,28 +1,19 @@
-import {
-	dehydrate,
-	HydrationBoundary,
-	QueryClient,
-} from "@tanstack/react-query";
-import AbilitySubjectsPageClient from "./_client";
+"use client";
 
-interface AbilitySubjectsPageProps {
-	params: Promise<{ roleId: string; abilityId: string }>;
-}
+import dynamic from "next/dynamic";
+import { useParams } from "next/navigation";
 
-/**
- * Ability Subject 관리 페이지 - 서버 컴포넌트
- */
-export default async function AbilitySubjectsPage({
-	params,
-}: AbilitySubjectsPageProps) {
-	const { roleId, abilityId } = await params;
-	const queryClient = new QueryClient();
+const AbilitySubjectsPageClient = dynamic(() => import("./_client"), {
+	ssr: false,
+});
 
-	// TODO: prefetch ability data
+type AbilitySubjectsPageParams = {
+	roleId: string;
+	abilityId: string;
+};
 
-	return (
-		<HydrationBoundary state={dehydrate(queryClient)}>
-			<AbilitySubjectsPageClient roleId={roleId} abilityId={abilityId} />
-		</HydrationBoundary>
-	);
+export default function AbilitySubjectsPage() {
+	const { roleId, abilityId } = useParams<AbilitySubjectsPageParams>();
+
+	return <AbilitySubjectsPageClient roleId={roleId} abilityId={abilityId} />;
 }

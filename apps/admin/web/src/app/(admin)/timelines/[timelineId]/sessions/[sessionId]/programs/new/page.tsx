@@ -1,29 +1,19 @@
-import {
-	dehydrate,
-	HydrationBoundary,
-	QueryClient,
-} from "@tanstack/react-query";
-import { cookies } from "next/headers";
-import ProgramNewPageClient from "./_client";
-import { prefetchProgramNewData } from "./_prefetch";
+"use client";
 
-interface ProgramNewPageProps {
-	params: Promise<{ timelineId: string; sessionId: string }>;
-}
+import dynamic from "next/dynamic";
+import { useParams } from "next/navigation";
 
-/**
- * 프로그램 등록 페이지 - 서버 컴포넌트
- */
-export default async function ProgramNewPage({ params }: ProgramNewPageProps) {
-	const { timelineId, sessionId } = await params;
-	const queryClient = new QueryClient();
-	const cookieStore = await cookies();
+const ProgramNewPageClient = dynamic(() => import("./_client"), {
+	ssr: false,
+});
 
-	await prefetchProgramNewData(queryClient, cookieStore, timelineId, sessionId);
+type ProgramNewPageParams = {
+	timelineId: string;
+	sessionId: string;
+};
 
-	return (
-		<HydrationBoundary state={dehydrate(queryClient)}>
-			<ProgramNewPageClient timelineId={timelineId} sessionId={sessionId} />
-		</HydrationBoundary>
-	);
+export default function ProgramNewPage() {
+	const { timelineId, sessionId } = useParams<ProgramNewPageParams>();
+
+	return <ProgramNewPageClient timelineId={timelineId} sessionId={sessionId} />;
 }

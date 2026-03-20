@@ -1,15 +1,21 @@
-import { ResetPasswordClient } from "./_client";
+"use client";
 
-interface ResetPasswordPageProps {
-	params: Promise<{ token: string }>;
-}
+import dynamic from "next/dynamic";
+import { useParams } from "next/navigation";
 
-/**
- * 비밀번호 재설정 페이지 (서버 컴포넌트)
- */
-export default async function ResetPasswordPage({
-	params,
-}: ResetPasswordPageProps) {
-	const { token } = await params;
+const ResetPasswordClient = dynamic(
+	() => import("./_client").then((module) => module.ResetPasswordClient),
+	{
+		ssr: false,
+	},
+);
+
+type ResetPasswordPageParams = {
+	token: string;
+};
+
+export default function ResetPasswordPage() {
+	const { token } = useParams<ResetPasswordPageParams>();
+
 	return <ResetPasswordClient token={token} />;
 }

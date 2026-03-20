@@ -1,28 +1,19 @@
-import {
-	dehydrate,
-	HydrationBoundary,
-	QueryClient,
-} from "@tanstack/react-query";
-import AbilityActionsPageClient from "./_client";
+"use client";
 
-interface AbilityActionsPageProps {
-	params: Promise<{ roleId: string; abilityId: string }>;
-}
+import dynamic from "next/dynamic";
+import { useParams } from "next/navigation";
 
-/**
- * Ability Action 관리 페이지 - 서버 컴포넌트
- */
-export default async function AbilityActionsPage({
-	params,
-}: AbilityActionsPageProps) {
-	const { roleId, abilityId } = await params;
-	const queryClient = new QueryClient();
+const AbilityActionsPageClient = dynamic(() => import("./_client"), {
+	ssr: false,
+});
 
-	// TODO: prefetch ability data
+type AbilityActionsPageParams = {
+	roleId: string;
+	abilityId: string;
+};
 
-	return (
-		<HydrationBoundary state={dehydrate(queryClient)}>
-			<AbilityActionsPageClient roleId={roleId} abilityId={abilityId} />
-		</HydrationBoundary>
-	);
+export default function AbilityActionsPage() {
+	const { roleId, abilityId } = useParams<AbilityActionsPageParams>();
+
+	return <AbilityActionsPageClient roleId={roleId} abilityId={abilityId} />;
 }

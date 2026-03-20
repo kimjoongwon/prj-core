@@ -1,17 +1,18 @@
-import RoleGroupDetailPageClient from "./_client";
+"use client";
 
-interface RoleGroupDetailPageProps {
-	params: Promise<{ groupId: string }>;
-}
+import dynamic from "next/dynamic";
+import { useParams } from "next/navigation";
 
-/**
- * 역할 그룹 상세 페이지 - 서버 컴포넌트
- * TODO: Orval codegen 후 prefetch + HydrationBoundary 추가
- */
-export default async function RoleGroupDetailPage({
-	params,
-}: RoleGroupDetailPageProps) {
-	const { groupId } = await params;
+const RoleGroupDetailPageClient = dynamic(() => import("./_client"), {
+	ssr: false,
+});
+
+type RoleGroupDetailPageParams = {
+	groupId: string;
+};
+
+export default function RoleGroupDetailPage() {
+	const { groupId } = useParams<RoleGroupDetailPageParams>();
 
 	return <RoleGroupDetailPageClient groupId={groupId} />;
 }

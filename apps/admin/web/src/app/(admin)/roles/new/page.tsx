@@ -1,8 +1,11 @@
-import RoleNewPageClient from "./_client";
+"use client";
 
-/**
- * 역할 등록 페이지 - 서버 컴포넌트
- */
+import dynamic from "next/dynamic";
+
+const RoleNewPageClient = dynamic(() => import("./_client"), {
+	ssr: false,
+});
+
 export default function RoleNewPage() {
 	return <RoleNewPageClient />;
 }

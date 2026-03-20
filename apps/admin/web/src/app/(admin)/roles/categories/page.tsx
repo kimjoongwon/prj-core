@@ -1,9 +1,11 @@
-import RoleCategoriesPageClient from "./_client";
+"use client";
 
-/**
- * 역할 카테고리 목록 페이지 - 서버 컴포넌트
- * TODO: Orval codegen 후 prefetch + HydrationBoundary 추가
- */
+import dynamic from "next/dynamic";
+
+const RoleCategoriesPageClient = dynamic(() => import("./_client"), {
+	ssr: false,
+});
+
 export default function RoleCategoriesPage() {
 	return <RoleCategoriesPageClient />;
 }

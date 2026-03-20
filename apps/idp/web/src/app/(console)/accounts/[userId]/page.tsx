@@ -1,32 +1,18 @@
-import {
-	dehydrate,
-	HydrationBoundary,
-	QueryClient,
-} from "@tanstack/react-query";
-import { cookies } from "next/headers";
-import AccountDetailPageClient from "./_client";
-import { prefetchAccountDetailData } from "./_prefetch";
+"use client";
 
-interface AccountDetailPageProps {
-	params: Promise<{ userId: string }>;
-}
+import dynamic from "next/dynamic";
+import { useParams } from "next/navigation";
 
-/**
- * IDP 계정 상세 페이지 - 서버 컴포넌트
- * SSR 시점에 데이터를 프리페칭하여 클라이언트에 전달합니다.
- */
-export default async function AccountDetailPage({
-	params,
-}: AccountDetailPageProps) {
-	const { userId } = await params;
-	const queryClient = new QueryClient();
-	const cookieStore = await cookies();
+const AccountDetailPageClient = dynamic(() => import("./_client"), {
+	ssr: false,
+});
 
-	await prefetchAccountDetailData(queryClient, cookieStore, userId);
+type AccountDetailPageParams = {
+	userId: string;
+};
 
-	return (
-		<HydrationBoundary state={dehydrate(queryClient)}>
-			<AccountDetailPageClient userId={userId} />
-		</HydrationBoundary>
-	);
+export default function AccountDetailPage() {
+	const { userId } = useParams<AccountDetailPageParams>();
+
+	return <AccountDetailPageClient userId={userId} />;
 }

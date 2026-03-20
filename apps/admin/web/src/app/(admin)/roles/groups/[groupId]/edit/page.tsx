@@ -1,17 +1,18 @@
-import RoleGroupEditPageClient from "./_client";
+"use client";
 
-interface RoleGroupEditPageProps {
-	params: Promise<{ groupId: string }>;
-}
+import dynamic from "next/dynamic";
+import { useParams } from "next/navigation";
 
-/**
- * 역할 그룹 수정 페이지 - 서버 컴포넌트
- * TODO: Orval codegen 후 prefetch + HydrationBoundary 추가
- */
-export default async function RoleGroupEditPage({
-	params,
-}: RoleGroupEditPageProps) {
-	const { groupId } = await params;
+const RoleGroupEditPageClient = dynamic(() => import("./_client"), {
+	ssr: false,
+});
+
+type RoleGroupEditPageParams = {
+	groupId: string;
+};
+
+export default function RoleGroupEditPage() {
+	const { groupId } = useParams<RoleGroupEditPageParams>();
 
 	return <RoleGroupEditPageClient groupId={groupId} />;
 }

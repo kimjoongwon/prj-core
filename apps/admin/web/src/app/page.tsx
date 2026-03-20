@@ -1,10 +1,20 @@
-import { redirect } from "next/navigation";
+"use client";
 
-/**
- * 루트 페이지
- *
- * 로그인 페이지로 리다이렉트합니다.
- */
+import { Spinner } from "@heroui/react";
+import { useEffect } from "react";
+import { hasAdminBrowserSessionCookie } from "@/lib/browser-auth";
+
 export default function HomePage() {
-	redirect("/auth/login");
+	useEffect(() => {
+		const nextPath = hasAdminBrowserSessionCookie()
+			? "/dashboard"
+			: "/auth/login";
+		window.location.replace(nextPath);
+	}, []);
+
+	return (
+		<div className="flex min-h-screen items-center justify-center">
+			<Spinner size="lg" />
+		</div>
+	);
 }

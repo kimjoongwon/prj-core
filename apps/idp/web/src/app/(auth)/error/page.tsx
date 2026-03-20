@@ -1,21 +1,34 @@
-import { ErrorClient } from "./_client";
+"use client";
 
-interface ErrorPageProps {
-	searchParams: Promise<{ error?: string; error_description?: string }>;
-}
+import dynamic from "next/dynamic";
+import { useEffect, useState } from "react";
 
-/**
- * OIDC 에러 페이지 (서버 컴포넌트)
- *
- * oidc-provider의 renderError에서 리다이렉트된 에러 정보를 표시합니다.
- */
-export default async function ErrorPage({ searchParams }: ErrorPageProps) {
-	const params = await searchParams;
+const ErrorClient = dynamic(
+	() => import("./_client").then((module) => module.ErrorClient),
+	{
+		ssr: false,
+	},
+);
+
+export default function ErrorPage() {
+	const [errorState, setErrorState] = useState({
+		error: "알 수 없는 오류가 발생했습니다.",
+		errorDescription: "",
+	});
+
+	useEffect(() => {
+		const searchParams = new URLSearchParams(window.location.search);
+
+		setErrorState({
+			error: searchParams.get("error") || "알 수 없는 오류가 발생했습니다.",
+			errorDescription: searchParams.get("error_description") || "",
+		});
+	}, []);
 
 	return (
 		<ErrorClient
-			error={params.error || "Unknown Error"}
-			errorDescription={params.error_description || ""}
+			error={errorState.error}
+			errorDescription={errorState.errorDescription}
 		/>
 	);
 }

@@ -1,8 +1,11 @@
-import RoleCategoryNewPageClient from "./_client";
+"use client";
 
-/**
- * 역할 카테고리 등록 페이지 - 서버 컴포넌트
- */
+import dynamic from "next/dynamic";
+
+const RoleCategoryNewPageClient = dynamic(() => import("./_client"), {
+	ssr: false,
+});
+
 export default function RoleCategoryNewPage() {
 	return <RoleCategoryNewPageClient />;
 }

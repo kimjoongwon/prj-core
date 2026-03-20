@@ -19,19 +19,17 @@
 
 | 모듈 | 용도 |
 |------|------|
-| @cocrepo/api/idp/auth | 기능 구현 의존성 |
-| @cocrepo/hook | 기능 구현 의존성 |
-| @cocrepo/store | console preset selector hooks |
-| @cocrepo/ui | 기능 구현 의존성 |
-| mobx-react-lite | 기능 구현 의존성 |
+| next/headers | 서버에서 인증 쿠키 조회 |
+| next/navigation | 미인증 요청 리다이렉트 |
+| @/lib/server-auth | IDP 콘솔 인증 쿠키 판별 |
+| ./_client | 인증된 요청의 콘솔 UI 조합 |
 | react | 기능 구현 의존성 |
 
 ## 동작 흐름
 
-1. `useLayout`에 앱 Store selector hooks를 주입해 네비게이션/FAB/BottomTab 상태와 핸들러를 조회합니다.
-2. `HeaderBar`, `SidePanel`, `BottomNav`, `ActionFab`, `OverlayMenu`를 구성합니다.
-3. `Layout` 슬롯(`header`, `sidebar`, `mobileBottomNav`, `mobileFab`, `mobileOverlayMenu`)에 주입합니다.
-4. `children`을 Layout 메인 영역에 렌더링합니다.
+1. 서버에서 요청 쿠키를 읽어 인증 쿠키 존재 여부를 확인합니다.
+2. 인증 쿠키가 없으면 `/auth/login`으로 즉시 리다이렉트합니다.
+3. 인증된 요청만 `./_client`를 통해 콘솔 UI를 렌더링합니다.
 
 ## 실패 및 엣지 케이스
 
@@ -54,3 +52,4 @@
 | 2026-03-04 | useIdpLayout 제거 후 @cocrepo/hook의 useLayout 직접 사용으로 전환 | codex |
 | 2026-03-04 | 앱 로컬 AppStoreProvider 제거 후 @cocrepo/store console selector hooks로 전환 | codex |
 | 2026-03-13 | @cocrepo/api root import를 split subpath import로 전환 | codex |
+| 2026-03-20 | 서버 레이아웃에서 인증 쿠키를 먼저 검사하고 UI 조합은 `./_client`로 분리 | codex |

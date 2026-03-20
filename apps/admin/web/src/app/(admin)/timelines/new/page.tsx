@@ -1,8 +1,11 @@
-import TimelineNewPageClient from "./_client";
+"use client";
 
-/**
- * 타임라인 등록 페이지 - 서버 컴포넌트
- */
+import dynamic from "next/dynamic";
+
+const TimelineNewPageClient = dynamic(() => import("./_client"), {
+	ssr: false,
+});
+
 export default function TimelineNewPage() {
 	return <TimelineNewPageClient />;
 }

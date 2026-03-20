@@ -1,9 +1,20 @@
-import { redirect } from "next/navigation";
+"use client";
 
-/**
- * IDP Client 루트 페이지
- * 대시보드로 리다이렉트합니다.
- */
+import { Spinner } from "@heroui/react";
+import { useEffect } from "react";
+import { hasIdpBrowserSessionCookie } from "@/lib/browser-auth";
+
 export default function HomePage() {
-	redirect("/dashboard");
+	useEffect(() => {
+		const nextPath = hasIdpBrowserSessionCookie()
+			? "/dashboard"
+			: "/auth/login";
+		window.location.replace(nextPath);
+	}, []);
+
+	return (
+		<div className="flex min-h-screen items-center justify-center">
+			<Spinner size="lg" />
+		</div>
+	);
 }

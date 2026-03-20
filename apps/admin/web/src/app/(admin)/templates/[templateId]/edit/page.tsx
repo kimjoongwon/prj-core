@@ -1,32 +1,18 @@
-import {
-	dehydrate,
-	HydrationBoundary,
-	QueryClient,
-} from "@tanstack/react-query";
-import { cookies } from "next/headers";
-import TemplateEditPageClient from "./_client";
-import { prefetchTemplateEditData } from "./_prefetch";
+"use client";
 
-interface TemplateEditPageProps {
-	params: Promise<{ templateId: string }>;
-}
+import dynamic from "next/dynamic";
+import { useParams } from "next/navigation";
 
-/**
- * 템플릿 수정 페이지 - 서버 컴포넌트
- * SSR 시점에 템플릿 데이터를 프리페칭하여 클라이언트에 전달합니다.
- */
-export default async function TemplateEditPage({
-	params,
-}: TemplateEditPageProps) {
-	const { templateId } = await params;
-	const queryClient = new QueryClient();
-	const cookieStore = await cookies();
+const TemplateEditPageClient = dynamic(() => import("./_client"), {
+	ssr: false,
+});
 
-	await prefetchTemplateEditData(queryClient, cookieStore, templateId);
+type TemplateEditPageParams = {
+	templateId: string;
+};
 
-	return (
-		<HydrationBoundary state={dehydrate(queryClient)}>
-			<TemplateEditPageClient templateId={templateId} />
-		</HydrationBoundary>
-	);
+export default function TemplateEditPage() {
+	const { templateId } = useParams<TemplateEditPageParams>();
+
+	return <TemplateEditPageClient templateId={templateId} />;
 }

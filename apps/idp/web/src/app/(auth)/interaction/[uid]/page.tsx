@@ -1,18 +1,21 @@
-import { InteractionClient } from "./_client";
+"use client";
 
-interface InteractionPageProps {
-	params: Promise<{ uid: string }>;
-}
+import dynamic from "next/dynamic";
+import { useParams } from "next/navigation";
 
-/**
- * OIDC Interaction 페이지 (서버 컴포넌트)
- *
- * oidc-provider가 리다이렉트한 인터랙션 요청을 처리합니다.
- * uid 파라미터를 추출하여 클라이언트 컴포넌트에 전달합니다.
- */
-export default async function InteractionPage({
-	params,
-}: InteractionPageProps) {
-	const { uid } = await params;
+const InteractionClient = dynamic(
+	() => import("./_client").then((module) => module.InteractionClient),
+	{
+		ssr: false,
+	},
+);
+
+type InteractionPageParams = {
+	uid: string;
+};
+
+export default function InteractionPage() {
+	const { uid } = useParams<InteractionPageParams>();
+
 	return <InteractionClient uid={uid} />;
 }

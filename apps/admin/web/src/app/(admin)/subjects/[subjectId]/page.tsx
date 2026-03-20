@@ -1,32 +1,18 @@
-import {
-	dehydrate,
-	HydrationBoundary,
-	QueryClient,
-} from "@tanstack/react-query";
-import { cookies } from "next/headers";
-import SubjectDetailPageClient from "./_client";
-import { prefetchSubjectDetailData } from "./_prefetch";
+"use client";
 
-interface SubjectDetailPageProps {
-	params: Promise<{ subjectId: string }>;
-}
+import dynamic from "next/dynamic";
+import { useParams } from "next/navigation";
 
-/**
- * Subject 상세 페이지 - 서버 컴포넌트
- * SSR 시점에 데이터를 프리페칭하여 클라이언트에 전달합니다.
- */
-export default async function SubjectDetailPage({
-	params,
-}: SubjectDetailPageProps) {
-	const queryClient = new QueryClient();
-	const cookieStore = await cookies();
-	const { subjectId } = await params;
+const SubjectDetailPageClient = dynamic(() => import("./_client"), {
+	ssr: false,
+});
 
-	await prefetchSubjectDetailData(queryClient, cookieStore, subjectId);
+type SubjectDetailPageParams = {
+	subjectId: string;
+};
 
-	return (
-		<HydrationBoundary state={dehydrate(queryClient)}>
-			<SubjectDetailPageClient subjectId={subjectId} />
-		</HydrationBoundary>
-	);
+export default function SubjectDetailPage() {
+	const { subjectId } = useParams<SubjectDetailPageParams>();
+
+	return <SubjectDetailPageClient subjectId={subjectId} />;
 }
