@@ -126,6 +126,7 @@ export interface OidcClientConfig {
 export interface OidcProviderInstance {
 	callback: () => (req: unknown, res: unknown) => void;
 	on: (event: string, handler: (...args: unknown[]) => void) => void;
+	proxy?: boolean;
 	interactionDetails: (req: unknown, res: unknown) => Promise<Interaction>;
 	interactionResult: (
 		req: unknown,

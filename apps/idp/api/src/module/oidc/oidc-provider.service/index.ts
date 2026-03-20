@@ -33,6 +33,8 @@ export class OidcProviderService {
 			oidcConfig.issuer,
 			configuration as Record<string, unknown>,
 		) as unknown as OidcProviderInstance;
+		// Trust ingress forwarded proto/host so resume URLs keep the external https origin.
+		this.provider.proxy = true;
 
 		this.registerEventHandlers();
 
