@@ -24,9 +24,19 @@ COPY --from=setup /app/out/json/ ./
 # so Docker installs in the pruned tree must allow lockfile re-resolution.
 RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --store-dir /pnpm/store --no-frozen-lockfile --prefer-offline
 COPY --from=setup /app/out/full/ ./
+# Mirror runtime assets into the standalone tree so the minimal server can serve
+# them without relying on extra runner-stage copies.
 RUN --mount=type=cache,id=pnpm,target=/pnpm/store \
     --mount=type=cache,id=turbo,target=/app/.turbo \
-    pnpm exec turbo build --filter=proposal-web...
+    sh -c 'pnpm exec turbo build --filter=proposal-web... && \
+      if [ -d apps/proposal/web/.next/static ]; then \
+        mkdir -p apps/proposal/web/.next/standalone/apps/proposal/web/.next && \
+        cp -R apps/proposal/web/.next/static apps/proposal/web/.next/standalone/apps/proposal/web/.next/static; \
+      fi && \
+      if [ -d apps/proposal/web/public ]; then \
+        mkdir -p apps/proposal/web/.next/standalone/apps/proposal/web && \
+        cp -R apps/proposal/web/public apps/proposal/web/.next/standalone/apps/proposal/web/public; \
+      fi'
 
 FROM node:24-alpine AS runner
 
@@ -36,7 +46,6 @@ RUN addgroup --system --gid 1001 nodejs && \
     adduser --system --uid 1001 nextjs
 
 COPY --from=builder --chown=nextjs:nodejs /app/apps/proposal/web/.next/standalone ./
-COPY --from=builder --chown=nextjs:nodejs /app/apps/proposal/web/.next/static ./apps/proposal/web/.next/static
 
 ENV NODE_ENV=production
 ENV PORT=3011

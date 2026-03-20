@@ -16,7 +16,7 @@
 |------|------|
 | 기본 구성 | `base -> setup -> builder -> runner` |
 | setup 단계 | `COPY . .` 후 `turbo prune --scope=proposal-web --docker` |
-| builder 단계 | `out/json`을 먼저 복사한 뒤 prune된 워크스페이스 기준으로 `pnpm install --no-frozen-lockfile --prefer-offline` 실행, `out/full` 복원 후 로컬 `turbo`(`pnpm exec turbo build --filter=proposal-web...`)로 `proposal-web` 의존 그래프만 빌드 |
+| builder 단계 | `out/json`을 먼저 복사한 뒤 prune된 워크스페이스 기준으로 `pnpm install --no-frozen-lockfile --prefer-offline` 실행, `out/full` 복원 후 로컬 `turbo`(`pnpm exec turbo build --filter=proposal-web...`)로 `proposal-web` 의존 그래프만 빌드하고, `.next/static` 및 optional `public`을 standalone 트리에 동봉 |
 | 러너 단계 | `CMD ["node", "apps/proposal/web/server.js"]` |
 | 런타임 | `PORT=3011`, `HOSTNAME=0.0.0.0` |
 
@@ -26,6 +26,7 @@
 - [x] `out/json`을 먼저 복사해 설치 단계에서 `turbo prune` 산출물의 최신 lockfile을 유지
 - [x] `turbo prune --docker` 산출물의 importer 메타 불일치에 대응하도록 `pnpm install`에서 `--no-frozen-lockfile` 사용
 - [x] `pnpm exec turbo build --filter=proposal-web...`로 `proposal-web`과 필요한 의존 워크스페이스만 빌드
+- [x] Next.js standalone 런타임이 `.next/static`과 optional `public`을 직접 서빙할 수 있도록 builder 단계에서 함께 패키징
 - [x] 앱 내부 `*.e2e.ts(x)` 제외는 Dockerfile 삭제 대신 앱 tsconfig 계약으로 처리
 - [x] 빌드 캐시 경로(`PNPM_STORE_DIR`, `/app/.turbo`, `--mount=type=cache`)를 유지
 
@@ -33,4 +34,5 @@
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-03-20 | Next.js standalone 규칙에 맞춰 `.next/static`과 optional `public`을 builder 단계에서 standalone 트리에 포함하도록 정리 | codex |
 | 2026-03-20 | `proposal-web` 전용 prune/build/runtime 경로, 포트(`3011`), standalone 실행 경로를 반영한 Dockerfile을 신규 추가 | codex |
