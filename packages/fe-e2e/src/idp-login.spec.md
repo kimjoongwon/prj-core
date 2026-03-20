@@ -12,7 +12,7 @@ IDP E2E 시나리오에서 사용하는 로그인 진입 헬퍼를 제공합니�
 
 | 항목 | 설명 |
 |------|------|
-| `loginToConsole(page)` | 로그인 완료 후 `/oidc-clients` 진입 보장 |
+| `loginToConsole(page)` | 로그인 완료 후 기본 landing(`/dashboard`) 진입 보장 |
 | `navigateToLoginForm(page)` | 로그인 폼 렌더링까지만 이동 |
 | `navigateToConsentForm(page)` | 로그인 제출 후 동의 화면 렌더링까지 이동 |
 

@@ -6,7 +6,7 @@ import {
 } from "nestjs-i18n";
 import { existsSync } from "node:fs";
 import { join, resolve } from "node:path";
-import { I18nTranslationService } from "./translation.service";
+import { I18nTranslationService } from "./translation.service/index";
 
 // 실행 CWD가 워크스페이스 루트(/app) 또는 앱 경로(/app/apps/*/api)일 수 있어
 // 존재하는 경로를 우선 선택한다.

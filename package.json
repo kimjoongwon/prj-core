@@ -45,6 +45,7 @@
     "format": "turbo format",
     "test": "turbo test",
     "test:e2e": "pnpm --filter=@cocrepo/e2e test",
+    "test:e2e:idp:local": "bash scripts/e2e-idp-local.sh",
     "test:e2e:ui": "pnpm --filter=@cocrepo/e2e test:ui",
     "test:e2e:headed": "pnpm --filter=@cocrepo/e2e test:headed",
     "test:e2e:debug": "pnpm --filter=@cocrepo/e2e test:debug",

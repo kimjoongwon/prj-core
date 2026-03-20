@@ -9,7 +9,7 @@ import {
 export async function loginToConsole(page: E2EPageLike) {
 	await runOidcLoginFlow(page, {
 		startPath: "/auth/login",
-		finalUrl: /\/oidc-clients/,
+		finalUrl: /\/dashboard(?:[/?#]|$)/,
 		allowDirectRedirect: true,
 	});
 }

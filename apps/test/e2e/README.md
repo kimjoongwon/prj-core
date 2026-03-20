@@ -5,6 +5,9 @@ Admin/IDP E2E 테스트는 Playwright 워크스페이스(`apps/test/e2e`)에서 
 ## 실행
 
 ```bash
+# IDP 로컬 one-shot 준비 + 실행
+pnpm test:e2e:idp:local
+
 # Admin 데스크톱
 pnpm --filter=test-e2e test:admin
 
@@ -17,6 +20,19 @@ pnpm --filter=test-e2e test:idp
 # IDP 모바일
 pnpm --filter=test-e2e test:idp:mobile
 ```
+
+## 로컬 IDP one-shot
+
+`pnpm test:e2e:idp:local`은 다음을 순서대로 수행합니다.
+
+- `apps/idp/api/.env.local` 또는 `.env` 로드
+- 로컬 Postgres/Redis 컨테이너 준비 또는 기존 서비스 재사용
+- `@cocrepo/service`, `idp-api` 빌드
+- Prisma `db:push`, `db:seed`
+- `idp-api` 백그라운드 기동
+- IDP Playwright E2E 실행
+
+필요하면 `E2E_PLAYWRIGHT_PROJECT=idp-mobile pnpm test:e2e:idp:local`처럼 프로젝트를 바꿀 수 있습니다.
 
 ## 로그인 검증 공통 원칙
 
