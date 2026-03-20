@@ -26,6 +26,13 @@ describe("OidcFacade", () => {
 						loginUrl: "http://localhost:6006/__storybook_auth/login",
 						defaultReturnTo: "http://localhost:6006/",
 					},
+					idpWeb: {
+						clientId: "test-idp-web-client",
+						clientSecret: "test-idp-web-secret",
+						redirectUri: "http://localhost:3008/api/v1/auth/idp/callback",
+						loginUrl: "http://localhost:3008/auth/login",
+						defaultReturnTo: "http://localhost:3008/dashboard",
+					},
 				},
 			}),
 		};
@@ -67,6 +74,18 @@ describe("OidcFacade", () => {
 			encodeURIComponent(
 				"http://localhost:6006/api/v1/auth/storybook/callback",
 			),
+		);
+	});
+
+	it("idpWeb RP 설정으로 authorization request를 생성해야 한다", () => {
+		const result = facade.createAuthorizationRequest(
+			"idpWeb",
+			"http://localhost:3008/dashboard",
+		);
+
+		expect(result.authorizationUrl).toContain("client_id=test-idp-web-client");
+		expect(result.authorizationUrl).toContain(
+			encodeURIComponent("http://localhost:3008/api/v1/auth/idp/callback"),
 		);
 	});
 });

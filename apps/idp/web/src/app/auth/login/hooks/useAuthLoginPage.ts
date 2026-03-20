@@ -15,7 +15,7 @@ export const useAuthLoginPage = () => {
 
 	const createLoginUrl = () => {
 		if (typeof window === "undefined") {
-			return "/api/v1/auth/login";
+			return "/api/v1/auth/idp/login";
 		}
 
 		const returnTo = (() => {
@@ -33,7 +33,7 @@ export const useAuthLoginPage = () => {
 				return `${window.location.origin}/dashboard`;
 			}
 		})();
-		return `/api/v1/auth/login?returnTo=${encodeURIComponent(returnTo)}`;
+		return `/api/v1/auth/idp/login?returnTo=${encodeURIComponent(returnTo)}`;
 	};
 
 	useEffect(() => {

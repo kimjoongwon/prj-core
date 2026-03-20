@@ -43,7 +43,7 @@ const oidcStorybookRedirectUri =
 const oidcIdpClientUrl = process.env.IDP_CLIENT_URL || "http://localhost:3008";
 const oidcIdpWebRedirectUri =
 	process.env.OIDC_IDP_WEB_REDIRECT_URI ||
-	resolveOidcSeedUrl(oidcIdpClientUrl, "/api/v1/auth/callback");
+	resolveOidcSeedUrl(oidcIdpClientUrl, "/api/v1/auth/idp/callback");
 const oidcIssuer =
 	process.env.OIDC_ISSUER || oidcIdpClientUrl || "http://localhost:3007";
 const oidcSwaggerRedirectUri =

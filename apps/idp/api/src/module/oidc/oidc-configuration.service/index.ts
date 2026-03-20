@@ -218,7 +218,7 @@ export class OidcConfigurationService {
 			resolveUrl(idpClientUrl || issuer, "/api/oauth2-redirect.html");
 		const idpWebRedirectUri =
 			process.env.OIDC_IDP_WEB_REDIRECT_URI ||
-			resolveUrl(idpClientUrl, "/api/v1/auth/callback");
+			resolveUrl(idpClientUrl, "/api/v1/auth/idp/callback");
 
 		return [
 			{

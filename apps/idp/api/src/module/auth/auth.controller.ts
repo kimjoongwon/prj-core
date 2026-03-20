@@ -64,6 +64,10 @@ const DEFAULT_OIDC_CLIENT_CONFIG: Record<
 		loginUrl: "http://localhost:6006/__storybook_auth/login",
 		defaultReturnTo: "http://localhost:6006/",
 	},
+	idpWeb: {
+		loginUrl: "http://localhost:3008/auth/login",
+		defaultReturnTo: "http://localhost:3008/dashboard",
+	},
 };
 
 @ApiTags("AUTH")
@@ -99,6 +103,18 @@ export class AuthController {
 		@Res() res: Response,
 	) {
 		return this.redirectToAuthorizationUrl("storybook", returnTo, res);
+	}
+
+	@Public()
+	@Get("idp/login")
+	@ApiOperation({
+		operationId: "idpLogin",
+		summary: "IDP Web OIDC 로그인 리다이렉트",
+		description:
+			"IDP 콘솔 전용 RP(clientKey=idpWeb)로 OIDC Authorization 엔드포인트에 리다이렉트합니다.",
+	})
+	async idpLogin(@Query("returnTo") returnTo: string, @Res() res: Response) {
+		return this.redirectToAuthorizationUrl("idpWeb", returnTo, res);
 	}
 
 	@Public()
@@ -148,6 +164,34 @@ export class AuthController {
 	) {
 		return this.handleOidcCallbackForClient(
 			"storybook",
+			code,
+			state,
+			error,
+			errorDescription,
+			req,
+			res,
+		);
+	}
+
+	@Public()
+	@Get("idp/callback")
+	@HttpCode(HttpStatus.OK)
+	@ApiOperation({
+		operationId: "idpOidcCallback",
+		summary: "IDP Web OIDC 콜백",
+		description:
+			"IDP 콘솔 전용 RP(clientKey=idpWeb)에서 인증 완료 후 Authorization Code를 수신하여 토큰을 교환합니다.",
+	})
+	async handleIdpCallback(
+		@Query("code") code: string,
+		@Query("state") state: string,
+		@Query("error") error: string,
+		@Query("error_description") errorDescription: string,
+		@Req() req: Request,
+		@Res() res: Response,
+	) {
+		return this.handleOidcCallbackForClient(
+			"idpWeb",
 			code,
 			state,
 			error,

@@ -6,7 +6,7 @@ import {
 } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
 
-export type OidcRpClientKey = "admin" | "storybook";
+export type OidcRpClientKey = "admin" | "storybook" | "idpWeb";
 
 interface OidcRpClientConfig {
 	clientId: string;
@@ -48,6 +48,13 @@ const DEFAULT_OIDC_CONFIG: OidcServerConfig = {
 			redirectUri: "http://localhost:6006/api/v1/auth/storybook/callback",
 			loginUrl: "http://localhost:6006/__storybook_auth/login",
 			defaultReturnTo: "http://localhost:6006/",
+		},
+		idpWeb: {
+			clientId: "idp-web",
+			clientSecret: "idp-web-secret-change-in-production",
+			redirectUri: "http://localhost:3008/api/v1/auth/idp/callback",
+			loginUrl: "http://localhost:3008/auth/login",
+			defaultReturnTo: "http://localhost:3008/dashboard",
 		},
 	},
 };
@@ -206,6 +213,10 @@ export class OidcFacade {
 				storybook: {
 					...DEFAULT_OIDC_CONFIG.clients.storybook,
 					...rawConfig.clients?.storybook,
+				},
+				idpWeb: {
+					...DEFAULT_OIDC_CONFIG.clients.idpWeb,
+					...rawConfig.clients?.idpWeb,
 				},
 			},
 		};

@@ -26,6 +26,7 @@ pnpm --filter=test-e2e test:idp:mobile
 `pnpm test:e2e:idp:local`은 다음을 순서대로 수행합니다.
 
 - `apps/idp/api/.env.local` 또는 `.env` 로드
+- `DATABASE_URL`, `REDIS_HOST`가 `localhost/127.0.0.1`인지 검증하고 아니면 즉시 실패
 - 로컬 Postgres/Redis 컨테이너 준비 또는 기존 서비스 재사용
 - `@cocrepo/service`, `idp-api` 빌드
 - Prisma `db:push`, `db:seed`

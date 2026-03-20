@@ -10,7 +10,7 @@ export interface JwksKeys {
 	keys: Array<Record<string, unknown>>;
 }
 
-export type OidcRpClientKey = "admin" | "storybook";
+export type OidcRpClientKey = "admin" | "storybook" | "idpWeb";
 
 export interface OidcRpClientConfig {
 	clientId: string;
@@ -47,6 +47,10 @@ export const oidcConfig = registerAs("oidc", (): OidcConfig => {
 		process.env.OIDC_ADMIN_BASE_URL || "http://localhost:3000";
 	const storybookBaseUrl =
 		process.env.OIDC_STORYBOOK_BASE_URL || "http://localhost:6006";
+	const idpWebBaseUrl =
+		process.env.OIDC_IDP_WEB_BASE_URL ||
+		process.env.IDP_CLIENT_URL ||
+		"http://localhost:3008";
 
 	return {
 		// OIDC Provider 설정
@@ -93,6 +97,23 @@ export const oidcConfig = registerAs("oidc", (): OidcConfig => {
 				defaultReturnTo:
 					process.env.OIDC_STORYBOOK_DEFAULT_RETURN_TO ||
 					resolveClientUrl(storybookBaseUrl, "/"),
+			},
+			idpWeb: {
+				clientId:
+					process.env.OIDC_IDP_WEB_CLIENT_ID ||
+					"idp-web",
+				clientSecret:
+					process.env.OIDC_IDP_WEB_CLIENT_SECRET ||
+					"idp-web-secret-change-in-production",
+				redirectUri:
+					process.env.OIDC_IDP_WEB_REDIRECT_URI ||
+					resolveClientUrl(idpWebBaseUrl, "/api/v1/auth/idp/callback"),
+				loginUrl:
+					process.env.OIDC_IDP_WEB_LOGIN_URL ||
+					resolveClientUrl(idpWebBaseUrl, "/auth/login"),
+				defaultReturnTo:
+					process.env.OIDC_IDP_WEB_DEFAULT_RETURN_TO ||
+					resolveClientUrl(idpWebBaseUrl, "/dashboard"),
 			},
 		},
 	};

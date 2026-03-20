@@ -21,6 +21,10 @@ describe("AuthController", () => {
 				loginUrl: "http://localhost:6006/__storybook_auth/login",
 				defaultReturnTo: "http://localhost:6006/",
 			},
+			idpWeb: {
+				loginUrl: "http://localhost:3008/auth/login",
+				defaultReturnTo: "http://localhost:3008/dashboard",
+			},
 		},
 	};
 
@@ -147,6 +151,24 @@ describe("AuthController", () => {
 				"https://idp.example.com/oidc/auth?client_id=storybook",
 			);
 		});
+
+		it("idpWeb RP authorization URL로 리다이렉트해야 한다", async () => {
+			mockAuthApplicationService.getAuthorizationUrl.mockResolvedValue(
+				"https://idp.example.com/oidc/auth?client_id=idp-web",
+			);
+
+			await controller.idpLogin(
+				"http://localhost:3008/dashboard",
+				mockResponse as unknown as never,
+			);
+
+			expect(
+				mockAuthApplicationService.getAuthorizationUrl,
+			).toHaveBeenCalledWith("http://localhost:3008/dashboard", "idpWeb");
+			expect(mockResponse.redirect).toHaveBeenCalledWith(
+				"https://idp.example.com/oidc/auth?client_id=idp-web",
+			);
+		});
 	});
 
 	describe("handleCallback", () => {
@@ -245,6 +267,44 @@ describe("AuthController", () => {
 
 			expect(mockResponse.redirect).toHaveBeenCalledWith(
 				"http://localhost:6006/__storybook_auth/login?error=OIDC+%EC%9D%B8%EC%A6%9D+%EC%BD%9C%EB%B0%B1+%EC%B2%98%EB%A6%AC%EC%97%90+%EC%8B%A4%ED%8C%A8%ED%96%88%EC%8A%B5%EB%8B%88%EB%8B%A4",
+			);
+		});
+
+		it("idpWeb callback 성공 시 기본 대시보드로 리다이렉트해야 한다", async () => {
+			mockAuthApplicationService.handleOidcCallback.mockResolvedValue(
+				undefined,
+			);
+
+			await controller.handleIdpCallback(
+				"auth-code",
+				"state-value",
+				undefined as unknown as string,
+				undefined as unknown as string,
+				mockRequest as unknown as never,
+				mockResponse as unknown as never,
+			);
+
+			expect(mockResponse.redirect).toHaveBeenCalledWith(
+				"http://localhost:3008/dashboard",
+			);
+		});
+
+		it("idpWeb callback 처리 실패 시 idp 로그인으로 리다이렉트해야 한다", async () => {
+			mockAuthApplicationService.handleOidcCallback.mockRejectedValue(
+				new UnauthorizedException("OIDC state 검증에 실패했습니다"),
+			);
+
+			await controller.handleIdpCallback(
+				"auth-code",
+				"invalid-state",
+				undefined as unknown as string,
+				undefined as unknown as string,
+				mockRequest as unknown as never,
+				mockResponse as unknown as never,
+			);
+
+			expect(mockResponse.redirect).toHaveBeenCalledWith(
+				"http://localhost:3008/auth/login?error=OIDC+%EC%9D%B8%EC%A6%9D+%EC%BD%9C%EB%B0%B1+%EC%B2%98%EB%A6%AC%EC%97%90+%EC%8B%A4%ED%8C%A8%ED%96%88%EC%8A%B5%EB%8B%88%EB%8B%A4",
 			);
 		});
 	});

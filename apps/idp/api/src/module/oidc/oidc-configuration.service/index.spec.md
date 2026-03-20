@@ -36,7 +36,7 @@ oidc-provider 인스턴스 초기화에 필요한 전체 설정 객체(`OidcConf
 - DB 접근 실패(RLS 등) 시 정적 폴백 클라이언트 5개 사용:
   - `admin-web`: 어드민 웹 (client_secret_post, authorization_code + refresh_token, localhost:3000 callback)
   - `storybook`: Storybook RP (client_secret_post, authorization_code + refresh_token, localhost:6006 storybook callback)
-  - `idp-web`: IDP 웹 (client_secret_post, authorization_code + refresh_token, localhost:3008 callback)
+  - `idp-web`: IDP 웹 (client_secret_post, authorization_code + refresh_token, localhost:3008 `/api/v1/auth/idp/callback`)
   - `prj-core-mobile`: 모바일 앱 (PKCE 필수, none auth method)
   - `prj-core-swagger`: Swagger UI (authorization_code만)
 

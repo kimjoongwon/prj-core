@@ -115,6 +115,11 @@ container_exists() {
   "$cli" ps -a --format '{{.Names}}' | grep -Fx "$name" >/dev/null 2>&1
 }
 
+is_local_host() {
+  local host="$1"
+  [[ "$host" == "localhost" || "$host" == "127.0.0.1" ]]
+}
+
 load_env() {
   if [[ -f "$ENV_FILE_LOCAL" ]]; then
     ENV_FILE="$ENV_FILE_LOCAL"
@@ -155,12 +160,21 @@ NODE
   IFS=$'\t' read -r DB_HOST DB_PORT DB_NAME DB_USER DB_PASSWORD <<< "$db_meta"
 }
 
-ensure_postgres() {
-  if [[ "$DB_HOST" != "localhost" && "$DB_HOST" != "127.0.0.1" ]]; then
-    warn "외부 Postgres 호스트($DB_HOST)를 사용합니다. 컨테이너 관리는 건너뜁니다."
-    return
+validate_local_targets() {
+  if ! is_local_host "$DB_HOST"; then
+    error "로컬 E2E 스크립트는 원격 DB를 허용하지 않습니다. 현재 DATABASE_URL 호스트: $DB_HOST"
+    error "apps/idp/api/.env.local 또는 .env 를 localhost/127.0.0.1 대상으로 맞춘 뒤 다시 실행하세요."
+    exit 1
   fi
 
+  if ! is_local_host "$REDIS_HOST"; then
+    error "로컬 E2E 스크립트는 원격 Redis를 허용하지 않습니다. 현재 REDIS_HOST: $REDIS_HOST"
+    error "apps/idp/api/.env.local 또는 .env 를 localhost/127.0.0.1 대상으로 맞춘 뒤 다시 실행하세요."
+    exit 1
+  fi
+}
+
+ensure_postgres() {
   if port_in_use "$DB_PORT"; then
     log "Postgres 포트 $DB_PORT 가 이미 열려 있습니다. 기존 서비스를 사용합니다."
     return
@@ -187,11 +201,6 @@ ensure_postgres() {
 }
 
 ensure_redis() {
-  if [[ "$REDIS_HOST" != "localhost" && "$REDIS_HOST" != "127.0.0.1" ]]; then
-    warn "외부 Redis 호스트($REDIS_HOST)를 사용합니다. 컨테이너 관리는 건너뜁니다."
-    return
-  fi
-
   if port_in_use "$REDIS_PORT"; then
     log "Redis 포트 $REDIS_PORT 가 이미 열려 있습니다. 기존 서비스를 사용합니다."
     return
@@ -315,6 +324,7 @@ main() {
 
   load_env
   parse_database_url
+  validate_local_targets
 
   echo ""
   echo -e "${BOLD}IDP 로컬 E2E 실행${RESET}"

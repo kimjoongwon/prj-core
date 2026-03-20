@@ -633,7 +633,7 @@ export class AuthApplicationService {
 	}
 
 	private isOidcClientKey(value: unknown): value is OidcRpClientKey {
-		return value === "admin" || value === "storybook";
+		return value === "admin" || value === "storybook" || value === "idpWeb";
 	}
 
 	/**

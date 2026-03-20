@@ -5,19 +5,39 @@
 @custom-variant dark (&:is(.dark *));
 
 :root {
+	color-scheme: light;
+	--intro-border: rgba(148, 163, 184, 0.28);
+	--intro-surface: rgba(255, 255, 255, 0.82);
+	--intro-grid: rgba(15, 23, 42, 0.06);
+	--intro-selection-bg: rgba(59, 130, 246, 0.18);
+	--intro-selection-text: #0f172a;
+	--intro-background:
+		radial-gradient(
+			circle at top left,
+			rgba(59, 130, 246, 0.16),
+			transparent 34%
+		),
+		radial-gradient(
+			circle at top right,
+			rgba(244, 114, 182, 0.12),
+			transparent 24%
+		),
+		radial-gradient(
+			circle at 50% 120%,
+			rgba(14, 165, 233, 0.12),
+			transparent 36%
+		), linear-gradient(180deg, #f8fbff 0%, #eef4ff 100%);
+	--intro-foreground: rgba(15, 23, 42, 0.96);
+}
+
+html.dark {
 	color-scheme: dark;
 	--intro-border: rgba(255, 255, 255, 0.1);
 	--intro-surface: rgba(10, 10, 12, 0.72);
-}
-
-html {
-	scroll-behavior: smooth;
-}
-
-body {
-	font-family: "Pretendard", sans-serif;
-	min-height: 100vh;
-	background:
+	--intro-grid: rgba(255, 255, 255, 0.04);
+	--intro-selection-bg: rgba(255, 255, 255, 0.18);
+	--intro-selection-text: #ffffff;
+	--intro-background:
 		radial-gradient(
 			circle at top left,
 			rgba(59, 130, 246, 0.26),
@@ -33,8 +53,22 @@ body {
 			rgba(14, 165, 233, 0.18),
 			transparent 34%
 		), #05070b;
-	color: rgba(244, 244, 245, 0.96);
+	--intro-foreground: rgba(244, 244, 245, 0.96);
+}
+
+html {
+	scroll-behavior: smooth;
+}
+
+body {
+	font-family: "Pretendard", sans-serif;
+	min-height: 100vh;
+	background: var(--intro-background);
+	color: var(--intro-foreground);
 	line-height: 1.6;
+	transition:
+		background-color 180ms ease-out,
+		color 180ms ease-out;
 }
 
 body::before {
@@ -43,16 +77,16 @@ body::before {
 	inset: 0;
 	pointer-events: none;
 	background-image:
-		linear-gradient(rgba(255, 255, 255, 0.04) 1px, transparent 1px),
-		linear-gradient(90deg, rgba(255, 255, 255, 0.04) 1px, transparent 1px);
+		linear-gradient(var(--intro-grid) 1px, transparent 1px),
+		linear-gradient(90deg, var(--intro-grid) 1px, transparent 1px);
 	background-size: 88px 88px;
 	opacity: 0.18;
 	mask-image: radial-gradient(circle at center, black 32%, transparent 88%);
 }
 
 body::selection {
-	background: rgba(255, 255, 255, 0.18);
-	color: #ffffff;
+	background: var(--intro-selection-bg);
+	color: var(--intro-selection-text);
 }
 
 .font-display {

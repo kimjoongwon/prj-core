@@ -8,6 +8,7 @@
 
 소개 랜딩의 실제 UI 렌더링과 섹션 앵커 상호작용을 담당합니다.
 HeroUI 컴포넌트, `@cocrepo/ui` 레이아웃, `framer-motion` 애니메이션을 조합해 AI-first 브랜드 톤을 표현합니다.
+라이트 기본 화면과 다크 모드 토글을 모두 지원하며, 사용자 선택을 로컬에 유지합니다.
 
 ## 공개 계약
 
@@ -29,6 +30,7 @@ HeroUI 컴포넌트, `@cocrepo/ui` 레이아웃, `framer-motion` 애니메이션
 ## 상호작용
 
 - 상단 내비게이션 `Button` 클릭 시 섹션 스크롤
+- 상단 내비게이션의 Theme 토글 클릭 시 `localStorage`와 `html.dark`를 동기화
 - Hero CTA 클릭 시 `process`, `stack` 섹션 스크롤
 - 나머지 콘텐츠는 읽기 전용 정적 카드/리스트 렌더링
 
@@ -58,6 +60,7 @@ HeroUI 컴포넌트, `@cocrepo/ui` 레이아웃, `framer-motion` 애니메이션
 - [x] `"use client"` 선언
 - [x] `observer` 적용
 - [x] 섹션 앵커 이동 처리
+- [x] 라이트 기본 + 다크 토글 처리
 - [x] AI 중심 메시지/비용 최적화 메시지 렌더링
 - [x] README 기반 기술 스택 카드 렌더링
 
@@ -65,6 +68,7 @@ HeroUI 컴포넌트, `@cocrepo/ui` 레이아웃, `framer-motion` 애니메이션
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-03-20 | 라이트 기본 UI와 다크 모드 토글, 테마별 대비 클래스를 반영 | codex |
 | 2026-03-14 | proposal-web 랜딩 클라이언트의 Biome 포맷 정렬을 반영해 lint 기준과 코드 가독성을 맞춤 | codex |
 | 2026-03-12 | proposal-web 랜딩 클라이언트 렌더러 신규 생성 | codex |
 | 2026-03-12 | 외주 업계 현실과 AI 시대 병목 구조를 드러내는 카피 톤으로 조정 | codex |
