@@ -14,17 +14,22 @@
 | 항목 | 설명 |
 |------|------|
 | `output` | Docker 및 배포 런타임용 `standalone` 출력 사용 |
+| `basePath` | 외부 노출 경로를 `/proposal`로 고정 |
 | `turbopack.root` | 모노레포 루트(`../../..`) 기준으로 workspace 해석 |
 | `transpilePackages` | `@cocrepo/ui`, `@cocrepo/toolkit`, `@cocrepo/type`를 소스 기준으로 트랜스파일 |
+| `redirects()` | 루트(`/`) 직접 접근 시 `/proposal`로 리다이렉트 |
 
 ## 구현 체크리스트
 
 - [x] `standalone` 출력 유지
+- [x] `/proposal` base path 유지
 - [x] 모노레포 Turbopack 루트 유지
 - [x] proposal-web 앱이 쓰는 공용 패키지 트랜스파일 유지
+- [x] 루트 접근 시 `/proposal` 리다이렉트 유지
 
 ## 변경 이력
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-03-20 | ingress `/proposal` 경로와 일치하도록 `basePath`와 루트 리다이렉트를 추가 | codex |
 | 2026-03-12 | proposal-web 정적 홍보 앱의 빌드 계약 신규 생성 | codex |

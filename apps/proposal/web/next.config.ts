@@ -8,10 +8,21 @@ const withBundleAnalyzer = bundleAnalyzer({
 
 const nextConfig: NextConfig = {
 	output: "standalone",
+	basePath: "/proposal",
 	turbopack: {
 		root: path.join(__dirname, "../../.."),
 	},
 	transpilePackages: ["@cocrepo/ui", "@cocrepo/toolkit", "@cocrepo/type"],
+	async redirects() {
+		return [
+			{
+				source: "/",
+				destination: "/proposal",
+				permanent: false,
+				basePath: false,
+			},
+		];
+	},
 };
 
 export default withBundleAnalyzer(nextConfig);

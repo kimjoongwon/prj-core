@@ -19,7 +19,7 @@ Rancher Desktop 기반 이미지 파이프라인을 수행합니다.
 | 컨테이너 CLI | 실제 `info` 호출이 성공하는 `docker`/`nerdctl`/Rancher Desktop 번들 CLI를 자동 선택하며, `docker`는 필요 시 `~/.rd/docker.sock`로 자동 연결, 수동 지정 시 `CONTAINER_CLI` 우선 |
 | 공통 빌드 옵션 | `${CONTAINER_CLI} build` |
 | 태그 정책 | `${TAG}`(기본 `local-<timestamp>`) + `latest` + `${CACHE_TAG}`(기본 `buildcache`) |
-| 실행 검증 | 컨테이너 실행 후 HTTP probe (`core-api:3006/api-json`, `admin-web:3000/admin/auth/login`, `proposal-web:3011/`, `idp-api:3007/api-json`, `idp-web:3008/auth/login`) |
+| 실행 검증 | 컨테이너 실행 후 HTTP probe (`core-api:3006/api-json`, `admin-web:3000/admin/auth/login`, `proposal-web:3011/proposal`, `idp-api:3007/api-json`, `idp-web:3008/auth/login`) |
 | 푸시 정책 | 기본적으로 비활성(`PUSH=false`), 필요 시 `PUSH=true`일 때만 실행 검증 후 push (`${TAG}`, `latest`, `${CACHE_TAG}`) |
 | 인증 변수 | `REGISTRY_USERNAME/REGISTRY_PASSWORD` 또는 `HARBOR_USERNAME/HARBOR_PASSWORD` |
 | 캐시 정책 | `PULL_CACHE=true`로 `${CACHE_TAG}` 사전 pull 시도, 빌드 시 캐시 태그 갱신 |
@@ -43,7 +43,7 @@ Rancher Desktop 기반 이미지 파이프라인을 수행합니다.
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
-| 2026-03-20 | `proposal-web` 이미지를 빌드/실행 검증 대상에 추가하고 포트 `3011` 루트 probe 계약을 정의 | codex |
+| 2026-03-20 | `proposal-web` 이미지를 빌드/실행 검증 대상에 추가하고 포트 `3011`의 `/proposal` probe 계약을 정의 | codex |
 | 2026-03-09 | `core-api` Docker 런타임 포트 변경에 맞춰 Rancher Desktop 실행 검증 포트를 `80`에서 `3006`으로 조정 | codex |
 | 2026-03-08 | Podman 다중 이미지 빌드 스크립트 신규 추가 (인터랙티브/CLI, ENV/TAG/REGISTRY 기본값 지원) | codex |
 | 2026-03-08 | macOS 기본 bash(3.2) + `set -u` 환경에서 빈 배열 참조 오류가 없도록 배열 순회 구문 보정 | codex |

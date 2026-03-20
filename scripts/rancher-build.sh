@@ -187,7 +187,7 @@ get_health_path() {
   case "$target" in
     core-api) echo "/api-json" ;;
     admin-web) echo "/admin/auth/login" ;;
-    proposal-web) echo "/" ;;
+    proposal-web) echo "/proposal" ;;
     idp-api) echo "/api-json" ;;
     idp-web) echo "/auth/login" ;;
     *) return 1 ;;
