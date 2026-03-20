@@ -211,7 +211,7 @@ function LandingSection({
 			viewport={VIEWPORT}
 			variants={SECTION_VARIANTS}
 		>
-			<Section className="gap-10 md:gap-14">
+			<Section className="gap-12 md:gap-16">
 				<SectionHeading
 					eyebrow={eyebrow}
 					title={title}
@@ -433,7 +433,7 @@ function TopNavigation({
 	return (
 		<div className="mx-auto w-full max-w-[90rem] px-5 pt-5 md:px-8 md:pt-8">
 			<div className="sticky top-4 z-40 rounded-[28px] border border-slate-200/70 bg-white/72 px-5 py-5 shadow-[0_24px_80px_rgba(148,163,184,0.14)] backdrop-blur-xl md:px-8 dark:border-white/10 dark:bg-black/45 dark:shadow-none">
-				<div className="flex flex-col gap-5 md:flex-row md:items-center md:justify-between">
+				<div className="flex flex-col gap-6 md:flex-row md:items-center md:justify-between">
 					<div className="flex items-center gap-3">
 						<div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-gradient-to-br from-primary to-secondary font-display text-lg font-semibold text-white dark:text-black">
 							J
@@ -447,8 +447,8 @@ function TopNavigation({
 							</p>
 						</div>
 					</div>
-					<div className="flex flex-col gap-3 md:items-end">
-						<div className="flex flex-wrap gap-2">
+					<div className="flex flex-col gap-4 md:items-end">
+						<div className="flex flex-wrap gap-3">
 							{navigation.map(renderNavigationButton)}
 						</div>
 						<ThemeToggle
@@ -476,9 +476,9 @@ function HeroSection({
 			initial="hidden"
 			animate="show"
 			variants={SECTION_VARIANTS}
-			className="grid gap-10 md:grid-cols-[minmax(0,1.2fr)_minmax(320px,0.8fr)] md:items-start md:gap-12"
+			className="grid gap-14 md:grid-cols-[minmax(0,1.2fr)_minmax(320px,0.8fr)] md:items-start md:gap-16"
 		>
-			<div className="space-y-10">
+			<div className="space-y-12">
 				<Chip
 					radius="full"
 					variant="flat"
@@ -487,7 +487,7 @@ function HeroSection({
 				>
 					{hero.eyebrow}
 				</Chip>
-				<div className="space-y-6">
+				<div className="space-y-7">
 					<h1 className="font-display max-w-5xl text-5xl font-semibold leading-none text-slate-950 md:text-7xl dark:text-white">
 						{hero.title}
 					</h1>
@@ -495,7 +495,7 @@ function HeroSection({
 						{hero.description}
 					</p>
 				</div>
-				<div className="flex flex-wrap gap-4">
+				<div className="flex flex-wrap gap-5">
 					<Button
 						size="lg"
 						radius="full"
@@ -517,7 +517,7 @@ function HeroSection({
 				</div>
 				<Divider className="bg-slate-200/80 dark:bg-white/10" />
 				<motion.div
-					className="grid gap-5 md:grid-cols-4"
+					className="grid gap-6 md:grid-cols-4"
 					initial="hidden"
 					animate="show"
 					variants={GRID_VARIANTS}
@@ -543,7 +543,7 @@ function HeroSection({
 							</p>
 						</div>
 					</CardHeader>
-					<CardBody className="gap-5 p-6 md:p-7">
+					<CardBody className="gap-6 p-6 md:p-8">
 						{previewSteps.map(renderProcessCard)}
 					</CardBody>
 				</Card>
@@ -606,11 +606,11 @@ export default observer(function ProposalPageClient({
 			}
 			className="gap-0"
 		>
-			<main className="relative mx-auto w-full max-w-[90rem] px-5 pb-16 pt-6 md:px-8 md:pb-24 md:pt-8">
+			<main className="relative mx-auto w-full max-w-[90rem] px-5 pb-20 pt-8 md:px-8 md:pb-28 md:pt-10">
 				<div className="pointer-events-none fixed bottom-0 left-0 h-[500px] w-[500px] -translate-x-1/2 translate-y-1/2 rounded-full bg-primary/16 blur-3xl dark:bg-primary/25" />
 				<div className="pointer-events-none fixed right-0 top-0 h-[420px] w-[420px] translate-x-1/2 -translate-y-1/2 rounded-full bg-secondary/14 blur-3xl opacity-80 dark:bg-secondary/20" />
-				<div className="relative overflow-hidden rounded-[32px] border border-slate-200/70 bg-white/64 px-5 py-8 shadow-[0_40px_140px_rgba(148,163,184,0.16)] backdrop-blur-xl md:px-12 md:py-12 dark:border-white/10 dark:bg-black/42 dark:shadow-[0_40px_140px_rgba(0,0,0,0.4)]">
-					<Container className="mx-auto max-w-7xl gap-24 py-6 md:gap-32 md:py-10">
+				<div className="relative overflow-hidden rounded-[32px] border border-slate-200/70 bg-white/64 px-6 py-10 shadow-[0_40px_140px_rgba(148,163,184,0.16)] backdrop-blur-xl md:px-14 md:py-14 dark:border-white/10 dark:bg-black/42 dark:shadow-[0_40px_140px_rgba(0,0,0,0.4)]">
+					<Container className="mx-auto max-w-7xl gap-28 py-8 md:gap-36 md:py-12">
 						<HeroSection hero={pageData.hero} process={pageData.process} />
 						<LandingSection
 							id="problem"
@@ -619,7 +619,7 @@ export default observer(function ProposalPageClient({
 							description="겉으로는 고급 인력이 제안을 이끌지만, 실제 제작이 저연차 체인과 중간 전달자 구조로 흘러가면 비용은 비싸고 속도는 느려집니다. 여기에 AI 시대에도 남아 있는 어중간한 기획·디자인·개발 계층이 더해지면 일정은 더 길어집니다."
 						>
 							<motion.div
-								className="grid gap-4 md:grid-cols-3"
+								className="grid gap-6 md:grid-cols-3"
 								initial="hidden"
 								whileInView="show"
 								viewport={VIEWPORT}
@@ -635,7 +635,7 @@ export default observer(function ProposalPageClient({
 							description="AI를 장식용 기능으로 보지 않습니다. 기획, 디자인, 개발 초안처럼 이미 빨라진 레이어에는 AI를 적극 투입하고, 기준 자산은 Figma가 아니라 Code로 둡니다. Storybook은 그 Code를 변형과 상태까지 함께 검토하는 공유면입니다. 실제 거래 대상은 AI 개발 플로우 전체입니다."
 						>
 							<motion.div
-								className="grid gap-4 md:grid-cols-3"
+								className="grid gap-6 md:grid-cols-3"
 								initial="hidden"
 								whileInView="show"
 								viewport={VIEWPORT}
@@ -651,7 +651,7 @@ export default observer(function ProposalPageClient({
 							description="각 단계는 다음 단계를 기다리기 위한 문서가 아니라, 바로 구현과 검증으로 이어지기 위한 입력입니다. 그래서 같은 예산에서도 더 많은 범위를 다룰 수 있습니다."
 						>
 							<motion.div
-								className="grid gap-4 xl:grid-cols-5"
+								className="grid gap-6 xl:grid-cols-5"
 								initial="hidden"
 								whileInView="show"
 								viewport={VIEWPORT}
@@ -667,7 +667,7 @@ export default observer(function ProposalPageClient({
 							description={pageData.costModel.description}
 						>
 							<motion.div
-								className="grid gap-4 md:grid-cols-3"
+								className="grid gap-6 md:grid-cols-3"
 								initial="hidden"
 								whileInView="show"
 								viewport={VIEWPORT}
@@ -675,9 +675,9 @@ export default observer(function ProposalPageClient({
 							>
 								{pageData.costModel.benefits.map(renderNarrativeCard)}
 							</motion.div>
-							<div className="grid gap-4 md:grid-cols-2">
+							<div className="grid gap-6 md:grid-cols-2">
 								<Card className="border border-danger/20 bg-danger/5 shadow-none">
-									<CardHeader className="flex-col items-start gap-2">
+									<CardHeader className="flex-col items-start gap-3">
 										<Chip radius="full" variant="flat" color="danger">
 											줄이는 비용
 										</Chip>
@@ -686,13 +686,13 @@ export default observer(function ProposalPageClient({
 										</h3>
 									</CardHeader>
 									<CardBody>
-										<ul className="space-y-3">
+										<ul className="space-y-4">
 											{pageData.costModel.removed.map(renderCostLine)}
 										</ul>
 									</CardBody>
 								</Card>
 								<Card className="border border-success/20 bg-success/5 shadow-none">
-									<CardHeader className="flex-col items-start gap-2">
+									<CardHeader className="flex-col items-start gap-3">
 										<Chip radius="full" variant="flat" color="success">
 											남겨야 하는 비용
 										</Chip>
@@ -701,7 +701,7 @@ export default observer(function ProposalPageClient({
 										</h3>
 									</CardHeader>
 									<CardBody>
-										<ul className="space-y-3">
+										<ul className="space-y-4">
 											{pageData.costModel.focused.map(renderCostLine)}
 										</ul>
 									</CardBody>
@@ -715,7 +715,7 @@ export default observer(function ProposalPageClient({
 							description="소개용 카피만 만드는 팀이 아니라, 실제로 운영 가능한 제품 구조를 전제로 화면과 서버를 함께 설계합니다. 아래 스택은 현재 저장소에서 사용하는 핵심 기술 축입니다."
 						>
 							<motion.div
-								className="grid gap-4 md:grid-cols-2"
+								className="grid gap-6 md:grid-cols-2"
 								initial="hidden"
 								whileInView="show"
 								viewport={VIEWPORT}
@@ -731,7 +731,7 @@ export default observer(function ProposalPageClient({
 							description="복잡한 문서보다 빠른 실행과 운영 가능한 구조가 중요한 팀, 그리고 handoff 비용을 줄이고 싶은 팀에 특히 잘 맞습니다."
 						>
 							<motion.div
-								className="grid gap-4 md:grid-cols-2"
+								className="grid gap-6 md:grid-cols-2"
 								initial="hidden"
 								whileInView="show"
 								viewport={VIEWPORT}
@@ -740,8 +740,8 @@ export default observer(function ProposalPageClient({
 								{pageData.projectFits.map(renderNarrativeCard)}
 							</motion.div>
 							<Card className="border border-slate-200/80 bg-gradient-to-br from-white via-slate-50 to-primary/5 shadow-[0_30px_90px_rgba(148,163,184,0.18)] dark:border-white/10 dark:bg-gradient-to-br dark:from-white/10 dark:via-white/[0.05] dark:to-transparent dark:shadow-[0_30px_90px_rgba(0,0,0,0.35)]">
-								<CardBody className="gap-6 p-6 md:p-8">
-									<div className="space-y-3">
+								<CardBody className="gap-7 p-6 md:p-9">
+									<div className="space-y-4">
 										<Chip radius="full" variant="flat" color="primary">
 											Closing note
 										</Chip>
@@ -752,7 +752,7 @@ export default observer(function ProposalPageClient({
 											{pageData.closing.description}
 										</p>
 									</div>
-									<ul className="grid gap-3 md:grid-cols-3">
+									<ul className="grid gap-4 md:grid-cols-3">
 										{pageData.closing.bullets.map(renderClosingBullet)}
 									</ul>
 								</CardBody>
