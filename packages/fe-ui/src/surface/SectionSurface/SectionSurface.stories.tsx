@@ -55,14 +55,3 @@ export const Titled: Story = {
 		</SectionSurface>
 	),
 };
-
-export const NoPadding: Story = {
-	args: {
-		padding: "none",
-		children: (
-			<div className="border-t border-divider px-6 py-4 text-default-600 text-sm">
-				내부 컴포넌트가 자체 패딩을 담당하는 경우에 사용합니다.
-			</div>
-		),
-	},
-};
