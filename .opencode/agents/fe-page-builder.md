@@ -39,6 +39,7 @@ tools:
    - 허용: hooks, utils, types
 10. 재사용 UI/Widget/Feature는 반드시 `@cocrepo/ui`에서 import
 11. 기존 코드 수정 시 대응 `.spec.md` 업데이트 + `## 변경 이력` 추가 필수
+12. `page.spec.md`의 `## Rendering Decision`에는 반드시 `page role`과 `reusable target`을 기록
 
 ---
 
@@ -59,6 +60,22 @@ tools:
 - `page.tsx`는 해당 skeleton의 `children` 위치에 마운트되는 콘텐츠를 구현합니다.
 - 페이지 상단 shell, 탭, page-level surface, section-level surface는 `layout.spec.md`에 정의된 owner를 따릅니다.
 - `page.tsx`가 route-level layout primitive를 다시 만들면 실패입니다.
+
+### 1.3 페이지 역할 분류
+
+- `page role`은 반드시 `master | detail | form` 중 하나로 결정합니다.
+- `reusable target`은 반드시 아래 중 하나로 결정합니다.
+  - `feature/master/table`
+  - `feature/master/list`
+  - `feature/master/grid`
+  - `feature/detail/view`
+  - `widget/form`
+- 분류 규칙:
+  - 컬렉션 탐색, 검색, 필터, 페이지네이션 중심이면 `master`
+  - `MetaDataGrid`를 사용하면 기본값은 `master` + `feature/master/table`
+  - 읽기 전용 조회, inspector, 상세 본문 중심이면 `detail` + `feature/detail/view`
+  - 생성/수정/입력/검증 중심이면 `form` + `widget/form`
+- `Create`/`Edit` 화면이 `AiForm`을 사용하더라도 재사용 소유는 `widget/form`으로 기록합니다.
 
 ---
 
@@ -113,6 +130,8 @@ apps/<app>/src/app/<route>/
   - page가 직접 소유하지 않는 skeleton 요소 목록
 - `Rendering Decision`에는 최소 아래를 기록합니다.
   - `기본 패턴: page.tsx 단일 CSR`
+  - `page role: master | detail | form`
+  - `reusable target: ...`
   - `SSR/prefetch 예외 승인 여부`
   - 예외 승인 시 승인 근거와 추가 파일 목록
 
@@ -173,6 +192,7 @@ apps/<app>/src/app/<route>/
    - 읽은 spec 파일 목록
    - 소비하는 slot key와 대상 파일 경로
    - layout contract 요약
+   - `page role`과 `reusable target`
    - `page.tsx` 단일 CSR 가능 여부
    - SSR/prefetch 예외 필요 가능성
    - 생성/수정 예정 파일 목록
@@ -189,7 +209,7 @@ apps/<app>/src/app/<route>/
 
 ```bash
 # 0) layout/page spec 계약 존재
-rg -n '^## Consumed Layout Contract$|^## Rendering Decision$|기본 패턴: page\.tsx 단일 CSR|SSR/prefetch 예외 승인 여부' [Content경로]/page.spec.md
+rg -n '^## Consumed Layout Contract$|^## Rendering Decision$|기본 패턴: page\.tsx 단일 CSR|page role: |reusable target: |SSR/prefetch 예외 승인 여부' [Content경로]/page.spec.md
 rg -n '^## Server Skeleton$|^## Page Composition$|^## Surface Ownership$|^## Slot Topology$|^## Slot URL Mapping$|^## Slot Fallbacks$|^## Independent Navigation Policy$|^## Child Content Contract$' [RouteRoot경로]/layout.spec.md
 
 # 1) 승인 없는 예외 파일 금지
@@ -225,6 +245,8 @@ echo "$TARGET_FILES" | xargs rg -n 'from\s+"@cocrepo/ui".*\b(App|Layout|Page|Pag
 1. 수정 파일 목록
 2. `Consumed Layout Contract` 반영 내역과 consumed slot key
 3. Rendering Decision 반영 내역과 SSR/prefetch 예외 승인 여부
+   - `page role`
+   - `reusable target`
 4. 규칙별 위반 해결 내역
 5. 실행한 검증 명령과 결과
 6. 남은 리스크(없으면 없음 명시)
@@ -237,6 +259,7 @@ echo "$TARGET_FILES" | xargs rg -n 'from\s+"@cocrepo/ui".*\b(App|Layout|Page|Pag
 - `page.spec.md`에 `## Consumed Layout Contract` 섹션 유지
 - `page.spec.md`에 `## Rendering Decision` 섹션 유지
 - 기본 패턴은 `page.tsx 단일 CSR`로 기록
+- `Rendering Decision`에 `page role`, `reusable target`를 필수로 기록
 - named slot 콘텐츠도 root page와 같은 규칙으로 `page.spec.md`를 둡니다.
 - SSR/prefetch 예외가 승인된 경우 승인 근거와 추가 파일 목록 기록
 - `## 변경 이력`에 당일 행 추가

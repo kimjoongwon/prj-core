@@ -1,7 +1,12 @@
 export { LoginForm } from "./LoginForm/LoginForm";
 export * from "./ForgotPasswordForm";
+export * from "./FormPage";
+export * from "./FormPageSurface";
+export * from "./FormSection";
+export * from "./FormSectionCard";
 export * from "./OidcClientForm";
 export * from "./OidcConsentPanel";
 export * from "./OidcLoginForm";
 export * from "./ResetPasswordForm";
 export * from "./TemplateForm";
+export * from "./UserFormWidget";

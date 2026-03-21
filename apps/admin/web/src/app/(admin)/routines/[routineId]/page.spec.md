@@ -171,9 +171,7 @@
 
 ## 구현 체크리스트
 
-- [ ] page.tsx (서버 컴포넌트, Prefetch + HydrationBoundary)
-- [ ] _client.tsx (클라이언트 컴포넌트, observer 래핑)
-- [ ] _prefetch.ts (prefetchGetRoutineQuery 호출)
+- [x] page.tsx (클라이언트 컴포넌트, observer 래핑, 단일 CSR)
 - [ ] hooks/useHandlers.ts (삭제 핸들러)
 
 
@@ -181,17 +179,37 @@
 
 | 항목 | 결정 |
 |------|------|
-| PageSurface owner | `apps/admin/web/src/app/(admin)/routines/[routineId]/_client.tsx` |
-|------|------|
+| PageSurface owner | 참조 route layout의 `layout.tsx` skeleton |
 | PageSurface 역할 | 페이지 헤더 아래 본문 전체를 raised surface로 묶습니다. |
 | SectionSurface 대상 | 본문 섹션, 폼, 표, 로딩/빈 상태 블록 |
-| SectionSurface padding | DataGrid/테이블은 필요 시 `padding="none"`, 그 외 기본 패딩 |
-| 예외 | 없음. `Layout`/`Page`/`Section` 슬롯 배치만으로는 surface가 생기지 않으므로 page 또는 `_client.tsx`가 owner를 명시합니다. |
+| SectionSurface padding | 기본 패딩 |
+| 예외 | 없음. surface skeleton은 참조 route layout이 소유하고 `page.tsx`는 내부 콘텐츠만 채웁니다. |
+
+## Consumed Layout Contract
+
+| 항목 | 값 |
+|------|----|
+| 참조 layout spec | `apps/admin/web/src/app/(admin)/routines/layout.spec.md` |
+| consumed slot key | `children` |
+| 콘텐츠 파일 | `apps/admin/web/src/app/(admin)/routines/[routineId]/page.tsx` |
+| page가 소유하지 않는 skeleton | `Page`, `PageSurface`, `Section`, `SectionSurface`, `Surface` |
+
+- `page.tsx`는 상세 조회/읽기 전용 본문만 담당합니다.
+
+## Rendering Decision
+
+- 기본 패턴: `page.tsx` 단일 CSR
+- page role: `detail`
+- reusable target: `feature/detail/view`
+- SSR/prefetch 예외 승인 여부: 없음
+- 추가 예외 파일: 없음 (`_client.tsx`, `_prefetch.ts` 미사용)
 
 ## 변경 이력
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-03-21 | page.tsx 단일 CSR 계약과 현재 surface/rendering decision 기준으로 stale 예외 문구를 정리 | codex |
+| 2026-03-21 | fe-page-builder 계약에 맞춰 consumed layout / rendering decision 섹션을 보강 | codex |
 | 2026-03-15 | Surface ownership과 elevation 결정을 문서화 | codex |
 | 2026-03-15 | Surface ownership/elevation 규칙과 PageSurface/SectionSurface 적용 기준을 문서화 | codex |
 | 2026-03-15 | Surface owner와 elevation 규칙을 문서화 | codex |

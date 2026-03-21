@@ -31,7 +31,7 @@ const LoginContent = observer(() => {
 	);
 });
 
-const Page = () => {
+function AuthLoginPage() {
 	return (
 		<Suspense
 			fallback={
@@ -43,6 +43,6 @@ const Page = () => {
 			<LoginContent />
 		</Suspense>
 	);
-};
+}
 
-export default Page;
+export default observer(AuthLoginPage);

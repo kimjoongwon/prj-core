@@ -42,8 +42,29 @@
 - [ ] 공개 계약(Props/메서드/반환값) 변경 시 동기화함
 - [ ] 의존성 변경 시 spec의 의존성 표를 갱신함
 
+## Consumed Layout Contract
+
+| 항목 | 값 |
+|------|----|
+| 참조 layout spec | `apps/idp/web/src/app/layout.spec.md` |
+| consumed slot key | `children` |
+| 콘텐츠 파일 | `apps/idp/web/src/app/auth/login/page.tsx` |
+| page가 소유하지 않는 skeleton | `Page`, `PageSurface`, `Section`, `SectionSurface`, `Surface` |
+
+- `page.tsx`는 입력, 검증, 생성/수정 폼 흐름만 담당합니다.
+
+## Rendering Decision
+
+- 기본 패턴: `page.tsx` 단일 CSR
+- page role: `form`
+- reusable target: `widget/form`
+- SSR/prefetch 예외 승인 여부: 없음
+- 추가 예외 파일: 없음 (`_client.tsx`, `_prefetch.ts` 미사용)
+
 ## 변경 이력
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-03-21 | `page.tsx` default export를 `observer(...)`로 정리해 client page 규칙을 맞춤 | codex |
+| 2026-03-21 | fe-page-builder 계약에 맞춰 consumed layout / rendering decision 섹션을 보강 | codex |
 | 2026-03-03 | 누락된 sidecar spec 신규 생성 | codex |

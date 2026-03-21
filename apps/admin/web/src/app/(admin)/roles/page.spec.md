@@ -1,126 +1,83 @@
 # 역할 목록 페이지 기획서
 
-> 생성일: 2026-02-18
+> 생성일: 2026-03-21
 > 타입: page
 > 경로: `/roles`
 
-## 디자인 목업
-
-> 페이지의 전체 UI 레이아웃을 ASCII로 표현합니다.
-
-```
-┌────────────────────────────────────────────────────────────────────┐
-│  역할 목록                                    [+ 역할 추가]        │
-│  시스템에 등록된 역할을 관리합니다.                                 │
-├────────────────────────────────────────────────────────────────────┤
-│                                                                    │
-│  ⚠  시스템 역할(FULL_ACCESS, MANAGE, VIEW)은 수정/삭제할 수 없습니다. │
-│                                                                    │
-│  ┌──────────────────────────────────────────────────────────────┐  │
-│  │ 역할 식별자        │ 표시명   │ 설명           │ 상태  │ 생성일 │ 액션 │ │
-│  ├────────────────────┼──────────┼────────────────┼───────┼────────┼──────┤ │
-│  │ FULL_ACCESS        │ 전체 접근 │ 모든 권한...   │ 활성  │ 2026-01│ 상세 │ │
-│  │  [시스템]          │          │                │       │        │      │ │
-│  ├────────────────────┼──────────┼────────────────┼───────┼────────┼──────┤ │
-│  │ MANAGE             │ 관리     │ 관리 권한...    │ 활성  │ 2026-01│ 상세 │ │
-│  │  [시스템]          │          │                │       │        │      │ │
-│  ├────────────────────┼──────────┼────────────────┼───────┼────────┼──────┤ │
-│  │ VIEW               │ 뷰어     │ 읽기 전용...   │ 활성  │ 2026-01│ 상세 │ │
-│  │  [시스템]          │          │                │       │        │      │ │
-│  ├────────────────────┼──────────┼────────────────┼───────┼────────┼──────┤ │
-│  │ CUSTOM_ROLE        │ 커스텀   │ 사용자 정의...  │ 활성  │ 2026-02│ 상세 │ │
-│  └────────────────────┴──────────┴────────────────┴───────┴────────┴──────┘ │
-│                                                                    │
-│  총 4건                                                            │
-└────────────────────────────────────────────────────────────────────┘
-```
-
 ## 사용자 시나리오
 
-1. 관리자가 시스템에 등록된 역할 목록을 조회한다.
-2. 각 역할의 식별자, 표시명, 설명, 상태, 생성일을 테이블 형태로 확인한다.
-3. 시스템 역할(FULL_ACCESS, MANAGE, VIEW)에는 "시스템" 칩이 표시된다.
-4. "역할 추가" 버튼을 클릭하여 등록 페이지로 이동한다.
-5. 각 역할의 "상세" 버튼을 클릭하여 상세 페이지로 이동한다.
+1. 관리자가 시스템 역할과 커스텀 역할 목록을 조회합니다.
+2. 시스템 역할 수정/삭제 불가 안내를 먼저 확인합니다.
+3. 상세 버튼으로 역할 상세 화면에 진입하거나, "역할 추가" 버튼으로 등록 화면으로 이동합니다.
 
-## 레이아웃 구성
+## Consumed Layout Contract
 
-| 영역        | 컴포넌트                         | 설명                                                                |
-| ----------- | -------------------------------- | ------------------------------------------------------------------- |
-| 페이지 래퍼 | `Page`                           | 페이지 콘텐츠 구조 배치                                             |
-| 페이지 헤더 | `PageTitleBar`                   | title="역할 목록", description="시스템에 등록된 역할을 관리합니다." |
-| 헤더 액션   | Button (Link)                    | "역할 추가" 버튼, `/roles/new`로 이동, Plus 아이콘                  |
-| 안내 메시지 | div (warning)                    | 시스템 역할 수정/삭제 불가 안내                                     |
-| 역할 테이블 | `Section + PageTitleBar` > table | 컬럼: 역할 식별자, 표시명, 설명, 상태, 생성일, 액션                 |
-| 테이블 푸터 | div                              | 총 N건 표시                                                         |
+| 항목 | 값 |
+|------|----|
+| 참조 layout spec | `apps/admin/web/src/app/(admin)/roles/layout.spec.md` |
+| consumed slot key | `children` |
+| 콘텐츠 파일 | `apps/admin/web/src/app/(admin)/roles/page.tsx` |
+| page가 소유하지 않는 skeleton | `Page`, `PageSurface`, `Section`, `SectionSurface`, `Surface` |
 
-## Surface / Elevation
+- `page.tsx`는 page-local `PageTitleBar`, 경고 배너, 역할 테이블만 렌더링합니다.
 
-| 항목                   | 결정                                                                                                       |
-| ---------------------- | ---------------------------------------------------------------------------------------------------------- |
-| PageSurface owner      | `apps/admin/web/src/app/(admin)/roles/_client.tsx`                                                         |
-| PageSurface 역할       | 안내 배너와 역할 테이블을 하나의 raised 본문으로 묶음                                                      |
-| SectionSurface 대상    | 역할 목록 커스텀 table 블록                                                                                |
-| SectionSurface padding | `padding="none"`                                                                                           |
-| 예외                   | 없음. 경고 배너는 PageSurface 내부에서 별도 surface 없이 표현하고, 테이블 surface는 `_client.tsx`가 직접 소유 |
+## Rendering Decision
 
-## 테이블 컬럼 정의
+- 기본 패턴: `page.tsx` 단일 CSR
+- SSR/prefetch 예외 승인 여부: 없음
+- 추가 예외 파일: 없음 (`_client.tsx`, `_prefetch.ts` 미사용)
+- `Suspense` fallback은 목록 콘텐츠 로딩 상태만 처리합니다.
 
-| 필드        | 라벨        | 크기          | 셀 렌더링                               |
-| ----------- | ----------- | ------------- | --------------------------------------- |
-| name        | 역할 식별자 | 180px         | font-mono + isSystem일 때 "시스템" Chip |
-| displayName | 표시명      | 150px         | 기본 텍스트                             |
-| description | 설명        | 250px         | text-default-500, 1줄 말줄임            |
-| status      | 상태        | 100px, center | StatusChipCell (removedAt 기반)         |
-| createdAt   | 생성일      | 150px         | DateTimeCell                            |
-| (액션)      | 액션        | 100px, center | "상세" Button (Link)                    |
+## 콘텐츠 구성
 
-## 페이지 상태
-
-| 상태        | 설명               | UI                                        |
-| ----------- | ------------------ | ----------------------------------------- |
-| 로딩        | suspense 응답 대기 | 섹션 내부 "로딩 중..." 텍스트             |
-| 빈 목록     | roles.length === 0 | Shield 아이콘 + "등록된 역할이 없습니다." |
-| 데이터 표시 | 역할 목록 존재     | 테이블 + 총 건수                          |
+| 영역 | 구성 요소 | 설명 |
+|------|-----------|------|
+| 페이지 헤더 | `PageTitleBar` + 역할 추가 버튼 | 역할 목록 안내 |
+| 안내 배너 | warning block | 시스템 역할 제약 안내 |
+| 목록 영역 | custom table | 역할 메타데이터와 상세 이동 |
 
 ## API 호출
 
-| 시점       | API                     | 설명                                                   |
-| ---------- | ----------------------- | ------------------------------------------------------ |
-| 클라이언트 | `useGetRolesSuspense()` | CSR + Suspense 기반 역할 목록 조회 (GET /api/v1/roles) |
+| 시점 | API | 설명 |
+|------|-----|------|
+| 클라이언트 렌더 | `useGetRolesSuspense()` | 역할 목록 조회 |
 
 ## 이벤트 핸들러
 
-| 이벤트                | 동작                            |
-| --------------------- | ------------------------------- |
-| "역할 추가" 버튼 클릭 | `/roles/new`로 Link 이동        |
-| "상세" 버튼 클릭      | `/roles/${role.id}`로 Link 이동 |
-
-## 특이사항
-
-- CSR + Suspense 기본 패턴을 유지하되, 상대 `/api` 호출의 prerender 오류를 피하기 위해 `page.tsx`는 browser-only no-SSR wrapper만 제공하고 실제 목록 렌더링은 `_client.tsx`가 담당합니다.
-- `MetaDataGrid` 대신 커스텀 table 마크업으로 역할 목록을 렌더링
-- 안내 배너를 통해 시스템 역할(FULL_ACCESS, MANAGE, VIEW) 수정/삭제 제약을 먼저 노출
-- `Section` 상단에 보조 `PageTitleBar(level={2})`를 사용해 목록 영역 제목을 분리
+| 이벤트 | 동작 |
+|--------|------|
+| 역할 상세 버튼 클릭 | `/roles/[roleId]` 이동 |
+| 역할 추가 버튼 클릭 | `/roles/new` 이동 |
 
 ## 구현 체크리스트
 
-- [x] page.tsx (`dynamic(() => import("./_client"), { ssr: false })` browser-only wrapper)
-- [x] `_client.tsx` (`Suspense`, `useGetRolesSuspense`, warning/banner 및 table surface owner 담당)
-- [x] `_prefetch.ts` 없음 (SSR 예외 아님)
+- [x] `layout.tsx`가 route skeleton 소유
+- [x] `page.tsx` 단일 CSR 콘텐츠 파일
+- [x] `_client.tsx` 제거
+- [x] `_prefetch.ts` 없음
+
+## Consumed Layout Contract
+
+| 항목 | 값 |
+|------|----|
+| 참조 layout spec | `apps/admin/web/src/app/(admin)/roles/layout.spec.md` |
+| consumed slot key | `children` |
+| 콘텐츠 파일 | `apps/admin/web/src/app/(admin)/roles/page.tsx` |
+| page가 소유하지 않는 skeleton | `Page`, `PageSurface`, `Section`, `SectionSurface`, `Surface` |
+
+- `page.tsx`는 목록 탐색, 검색, 필터 같은 마스터 콘텐츠만 담당합니다.
+
+## Rendering Decision
+
+- 기본 패턴: `page.tsx` 단일 CSR
+- page role: `master`
+- reusable target: `feature/master/list`
+- SSR/prefetch 예외 승인 여부: 없음
+- 추가 예외 파일: 없음 (`_client.tsx`, `_prefetch.ts` 미사용)
 
 ## 변경 이력
 
-| 일자       | 내용                                                                                                       | 작성자               |
-| ---------- | ---------------------------------------------------------------------------------------------------------- | -------------------- |
-| 2026-03-15 | 상대 `/api` 호출의 prerender 오류를 피하기 위해 역할 목록 `page.tsx`를 browser-only no-SSR boundary로 전환 | codex                |
-| 2026-03-15 | Surface owner와 elevation 규칙을 문서화                                                                    | codex                |
-| 2026-03-15 | 역할 목록 본문에 `PageSurface`와 테이블 `SectionSurface(padding="none")` ownership을 추가                  | codex                |
-| 2026-03-15 | 역할 목록을 CSR + Suspense 단일 `page.tsx` 패턴으로 전환하고 `_client.tsx`, `_prefetch.ts`를 제거          | codex                |
-| 2026-03-16 | `dynamic(Promise.resolve(...))` no-SSR 경계를 `_client.tsx` 실제 모듈 import wrapper로 교체해 dev blank 렌더를 방지 | codex |
-| 2026-02-18 | 초기 생성 (역기획)                                                                                         | req-reverse-engineer |
-| 2026-02-19 | 디자인 목업 추가                                                                                           | req-reverse-engineer |
-| 2026-03-03 | Scaffold 제거 및 페이지 헤더 영역/섹션 영역 용어 정리                                                      | codex                |
-| 2026-03-03 | `_client.tsx` 반복 헤더 패턴을 `Page + PageTitleBar + Section` 조합으로 정리                               | codex                |
-| 2026-03-03 | Page/Section `mode` 제거 반영 (단일 구조 기준으로 문서 표현 정리)                                          | codex                |
-| 2026-03-03 | `PageTitleBar` 단일 컴포넌트 통합 및 리네이밍 반영                                                         | codex                |
+| 일자 | 내용 | 작성자 |
+|------|------|--------|
+| 2026-03-21 | fe-page-builder 계약에 맞춰 consumed layout / rendering decision 섹션을 보강 | codex |
+| 2026-03-21 | 역할 목록 spec을 route-layout / page-builder 계약 형식으로 재작성 | codex |

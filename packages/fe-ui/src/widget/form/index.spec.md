@@ -13,7 +13,18 @@
 
 | 항목 | 설명 |
 |------|------|
-| export | 없음 |
+| `FormPage` | form route 콘텐츠용 page wrapper |
+| `FormPageSurface` | form 본문 surface wrapper |
+| `FormSection` | form 섹션 배치 wrapper |
+| `FormSectionCard` | form 섹션 surface wrapper |
+| `LoginForm` | 로그인 폼 위젯 export |
+| `ForgotPasswordForm` | 비밀번호 찾기 폼 위젯 export |
+| `OidcClientForm` | OIDC 클라이언트 폼 위젯 export |
+| `OidcConsentPanel` | OIDC 동의 패널 export |
+| `OidcLoginForm` | OIDC 로그인 폼 위젯 export |
+| `ResetPasswordForm` | 비밀번호 재설정 폼 위젯 export |
+| `TemplateForm` | 템플릿 폼 위젯 export |
+| `UserFormWidget` | 이용자 생성/수정 폼 위젯 export |
 
 ## 의존성
 
@@ -21,11 +32,16 @@
 |------|------|
 | ./LoginForm/LoginForm | 기능 구현 의존성 |
 | ./ForgotPasswordForm | 기능 구현 의존성 |
+| ./FormPage | 기능 구현 의존성 |
+| ./FormPageSurface | 기능 구현 의존성 |
+| ./FormSection | 기능 구현 의존성 |
+| ./FormSectionCard | 기능 구현 의존성 |
 | ./OidcClientForm | 기능 구현 의존성 |
 | ./OidcConsentPanel | 기능 구현 의존성 |
 | ./OidcLoginForm | 기능 구현 의존성 |
 | ./ResetPasswordForm | 기능 구현 의존성 |
 | ./TemplateForm | 기능 구현 의존성 |
+| ./UserFormWidget | 기능 구현 의존성 |
 
 ## 동작 흐름
 
@@ -49,6 +65,8 @@
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-03-21 | form page primitive 치환용 thin wrapper를 추가 | codex |
+| 2026-03-21 | `UserFormWidget` 소유를 `widget/form`으로 이동하고 form 공개 계약에 추가 | codex |
 | 2026-03-06 | 폴더 네이밍을 단수형(feature/input/layout/hook/style/type/util/widget/cell)으로 통일 | codex |
 | 2026-03-06 | src/components 레이어를 제거하고 경로를 src/* 기준으로 상향 | codex |
 | 2026-03-03 | 누락된 sidecar spec 신규 생성 | codex |

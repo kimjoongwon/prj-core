@@ -23,11 +23,11 @@ Create/Update Form Bootstrap 계약을 사용해 초기 폼을 렌더링하며, 
 
 | 항목 | 결정 |
 |------|------|
-| PageSurface owner | `apps/admin/web/src/app/(admin)/inquiries/[inquiryId]/edit/_client.tsx` |
+| PageSurface owner | 참조 route layout의 `layout.tsx` skeleton |
 | PageSurface 역할 | 수정 페이지 본문 전체를 raised 레이어로 묶음 |
 | SectionSurface 대상 | AI 추천 블록, 수정 입력 블록 |
 | SectionSurface padding | 기본 패딩 유지 |
-| 예외 | 없음. AiForm과 입력 폼이 별도 섹션으로 나뉘어도 surface owner는 `_client.tsx`가 직접 소유 |
+| 예외 | 없음. surface skeleton은 참조 route layout이 소유하고 `page.tsx`는 내부 콘텐츠만 채웁니다. |
 
 ## 데이터 흐름
 
@@ -55,18 +55,37 @@ Create/Update Form Bootstrap 계약을 사용해 초기 폼을 렌더링하며, 
 
 ## 구현 체크리스트
 
-- [x] page.tsx (서버 컴포넌트)
-- [x] _prefetch.ts (bootstrap prefetch)
-- [x] _client.tsx (AiForm + 수정 폼 + 저장)
+- [x] page.tsx (클라이언트 컴포넌트, observer 래핑, 단일 CSR)
 
 ## 상위 기획서
 
 - `apps/admin/web/src/app/(admin)/inquiries/[inquiryId]/page.spec.md`
 
+## Consumed Layout Contract
+
+| 항목 | 값 |
+|------|----|
+| 참조 layout spec | `apps/admin/web/src/app/(admin)/inquiries/layout.spec.md` |
+| consumed slot key | `children` |
+| 콘텐츠 파일 | `apps/admin/web/src/app/(admin)/inquiries/[inquiryId]/edit/page.tsx` |
+| page가 소유하지 않는 skeleton | `Page`, `PageSurface`, `Section`, `SectionSurface`, `Surface` |
+
+- `page.tsx`는 입력, 검증, 생성/수정 폼 흐름만 담당합니다.
+
+## Rendering Decision
+
+- 기본 패턴: `page.tsx` 단일 CSR
+- page role: `form`
+- reusable target: `widget/form`
+- SSR/prefetch 예외 승인 여부: 없음
+- 추가 예외 파일: 없음 (`_client.tsx`, `_prefetch.ts` 미사용)
+
 ## 변경 이력
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-03-21 | page.tsx 단일 CSR 계약과 현재 surface/rendering decision 기준으로 stale 예외 문구를 정리 | codex |
+| 2026-03-21 | fe-page-builder 계약에 맞춰 consumed layout / rendering decision 섹션을 보강 | codex |
 | 2026-03-15 | Surface owner와 elevation 규칙을 문서화 | codex |
 | 2026-03-15 | 문의 수정 spec에 `PageSurface`/`SectionSurface` ownership과 elevation 결정을 명시 | codex |
 | 2026-03-01 | 초기 생성 (문의 수정 페이지 + AiForm UPDATE 흐름) | codex |

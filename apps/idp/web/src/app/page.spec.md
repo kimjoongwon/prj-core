@@ -23,9 +23,9 @@
 
 ## 동작 흐름
 
-1. 입력(라우트/props/호출)을 수신합니다.
-2. 인증 쿠키(`accessToken` 또는 `refreshToken`) 존재 여부를 확인합니다.
-3. 인증 쿠키가 있으면 `/dashboard`로, 없으면 `/auth/login`으로 리다이렉트합니다.
+1. 루트 경로 진입 시 세션 검증 API를 호출합니다.
+2. 검증 중에는 전체 화면 로딩 상태만 유지합니다.
+3. 유효 세션이면 `/dashboard`로, 아니면 `/auth/login`으로 이동합니다.
 
 ## 실패 및 엣지 케이스
 
@@ -39,9 +39,30 @@
 - [ ] 공개 계약(Props/메서드/반환값) 변경 시 동기화함
 - [ ] 의존성 변경 시 spec의 의존성 표를 갱신함
 
+## Consumed Layout Contract
+
+| 항목 | 값 |
+|------|----|
+| 참조 layout spec | `apps/idp/web/src/app/layout.spec.md` |
+| consumed slot key | `children` |
+| 콘텐츠 파일 | `apps/idp/web/src/app/page.tsx` |
+| page가 소유하지 않는 skeleton | `Page`, `PageSurface`, `Section`, `SectionSurface`, `Surface` |
+
+- `page.tsx`는 루트 진입 판별과 리다이렉트용 콘텐츠만 담당합니다.
+
+## Rendering Decision
+
+- 기본 패턴: `page.tsx` 단일 CSR
+- page role: `detail`
+- reusable target: `feature/detail/view`
+- SSR/prefetch 예외 승인 여부: 없음
+- 추가 예외 파일: 없음 (`_client.tsx`, `_prefetch.ts` 미사용)
+
 ## 변경 이력
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-03-21 | 루트 진입 page를 `_client.tsx` 없는 단일 CSR 리다이렉트로 정리하고 계약을 detail/view 기준으로 보정 | codex |
+| 2026-03-21 | fe-page-builder 계약에 맞춰 consumed layout / rendering decision 섹션을 보강 | codex |
 | 2026-03-03 | 누락된 sidecar spec 신규 생성 | codex |
 | 2026-03-20 | 루트 진입 시 비인증 사용자를 `/auth/login`으로 바로 보내도록 인증 쿠키 분기 추가 | codex |

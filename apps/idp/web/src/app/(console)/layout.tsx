@@ -1,6 +1,6 @@
 import type { ReactNode } from "react";
 import ConsoleSessionGate from "./_session-gate";
-import ConsoleLayoutClient from "./_client";
+import ConsoleLayoutClient from "./_layout/ConsoleLayoutClient";
 
 interface ConsoleLayoutProps {
 	children: ReactNode;

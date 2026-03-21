@@ -1,143 +1,68 @@
 # 타임라인 목록 페이지 기획서
 
-> 생성일: 2026-02-19
+> 생성일: 2026-03-21
 > 타입: page
 > 경로: `/timelines`
 
-## 디자인 목업
-
-> 페이지의 전체 UI 레이아웃을 ASCII로 표현합니다.
-
-```
-┌─────────────────────────────────────────────────────────────────┐
-│ 페이지 헤더 영역                                                      │
-│  타임라인                              [+ 타임라인 등록]         │
-│  학기/시즌 단위 타임라인을 관리합니다.                          │
-├─────────────────────────────────────────────────────────────────┤
-│ 섹션 영역                                                   │
-│                                                                  │
-│  [🔍 타임라인 이름으로 검색...              ]                   │
-│                                                                  │
-│  타임라인명     설명              세션 수  등록자   등록일      액션│
-│  ──────────────────────────────────────────────────────────────  │
-│  2025 가을시즌  여름 학기 강좌     3       홍길동  2026-01-10   🗑│
-│  10월 1주차     -                  1       김철수  2026-01-15   🗑│
-│  동계 집중반    겨울 집중 프로그램 0       이영희  2026-01-20   🗑│
-│  ──────────────────────────────────────────────────────────────  │
-│                                                                  │
-│               ← 1  2  3 →   총 25건                             │
-│                                                                  │
-│  [빈 데이터 상태]                                               │
-│  ┌──────────────────────────────────────────────────────────┐   │
-│  │  등록된 타임라인이 없습니다.                             │   │
-│  │                    [+ 타임라인 등록]                     │   │
-│  └──────────────────────────────────────────────────────────┘   │
-└─────────────────────────────────────────────────────────────────┘
-```
-
 ## 사용자 시나리오
 
-1. 관리자가 현재 Space에 속한 타임라인 목록을 조회한다
-2. 타임라인 이름으로 검색하여 원하는 타임라인을 찾는다
-3. 타임라인 이름을 클릭하여 상세 페이지(세션 포함)로 이동한다
-4. "타임라인 등록" 버튼을 클릭하여 새 타임라인을 생성한다
-5. 타임라인 삭제 아이콘을 클릭하여 타임라인을 삭제한다
+1. 관리자가 타임라인 이름으로 목록을 검색합니다.
+2. 타임라인명을 눌러 상세 화면으로 이동합니다.
+3. 삭제 버튼으로 삭제 modal을 열고 타임라인 제거를 시도합니다.
 
-## 레이아웃 구성
+## Consumed Layout Contract
 
-| 영역          | 컴포넌트                   | 설명                                                                                                  |
-| ------------- | -------------------------- | ----------------------------------------------------------------------------------------------------- |
-| 페이지 래퍼   | `Page`                     | 페이지 콘텐츠 구조 배치                                                                               |
-| 페이지 헤더   | `PageTitleBar`             | title="타임라인", description="학기/시즌 단위 타임라인을 관리합니다.", actions에 "타임라인 등록" 버튼 |
-| 데이터 그리드 | `Section` > `MetaDataGrid` | 타임라인 목록 표시, 검색/페이지네이션 지원                                                            |
+| 항목 | 값 |
+|------|----|
+| 참조 layout spec | `apps/admin/web/src/app/(admin)/timelines/layout.spec.md` |
+| consumed slot key | `children` |
+| 콘텐츠 파일 | `apps/admin/web/src/app/(admin)/timelines/page.tsx` |
+| page가 소유하지 않는 skeleton | `Page`, `PageSurface`, `Section`, `SectionSurface`, `Surface` |
 
-## Surface / Elevation
+- `page.tsx`는 page-local `PageTitleBar`, `MetaDataGrid`, 삭제 modal만 렌더링합니다.
 
-| 항목                   | 결정                                                                                            |
-| ---------------------- | ----------------------------------------------------------------------------------------------- |
-| PageSurface owner      | `apps/admin/web/src/app/(admin)/timelines/_client.tsx`                                             |
-| PageSurface 역할       | 타임라인 검색/등록 헤더와 목록 전체를 raised 본문으로 묶음                                      |
-| SectionSurface 대상    | 타임라인 `MetaDataGrid`                                                                         |
-| SectionSurface padding | `padding="none"`                                                                                |
-| 예외                   | 없음. `MetaDataGrid` 슬롯의 검색 입력은 surface를 자동 생성하지 않으므로 `page.tsx`가 직접 소유 |
+## Rendering Decision
 
-## 컬럼 정의
+- 기본 패턴: `page.tsx` 단일 CSR
+- page role: `master`
+- reusable target: `feature/master/table`
+- SSR/prefetch 예외 승인 여부: 없음
+- 추가 예외 파일: 없음 (`_client.tsx`, `_prefetch.ts` 미사용)
+- `Suspense` fallback은 목록 로딩 상태만 처리합니다.
 
-| 필드        | 라벨       | 크기 | 정렬   | 셀 컴포넌트                     |
-| ----------- | ---------- | ---- | ------ | ------------------------------- |
-| name        | 타임라인명 | 200  | -      | 링크 스타일 (클릭 시 상세 이동) |
-| description | 설명       | 300  | -      | 기본 (없으면 "-")               |
-| createdAt   | 등록일     | 150  | -      | `DateTimeCell`                  |
-| actions     | 액션       | 80   | center | 삭제 버튼                       |
+## 콘텐츠 구성
 
-## 필터/검색 정의
-
-| 위치 | 타입   | ID     | 설명                                    |
-| ---- | ------ | ------ | --------------------------------------- |
-| 좌측 | search | search | 타임라인 이름으로 검색 (debounce 300ms) |
-
-## 페이지 상태
-
-| 상태        | 설명               | UI                                             |
-| ----------- | ------------------ | ---------------------------------------------- |
-| 로딩        | suspense 재조회 중 | `Suspense` fallback에서 MetaDataGrid 로딩 상태 |
-| 데이터 표시 | 목록 로드 완료     | 페이지네이션 포함 타임라인 목록                |
-| 빈 데이터   | 조회 결과 없음     | "등록된 타임라인이 없습니다."                  |
+| 영역 | 구성 요소 | 설명 |
+|------|-----------|------|
+| 페이지 헤더 | `PageTitleBar` + 타임라인 등록 버튼 | 진입 헤더 |
+| 목록 영역 | `MetaDataGrid` | 타임라인명, 설명, 등록일, 삭제 액션 |
+| modal | 삭제 확인 dialog | 세션 포함 타임라인 삭제 제약 안내 |
 
 ## API 호출
 
-| 시점       | API                                               | 설명                                                     |
-| ---------- | ------------------------------------------------- | -------------------------------------------------------- |
-| 클라이언트 | `useGetTimelinesSuspense({ take, skip, search })` | CSR + Suspense 기반 타임라인 목록 조회 (현재 Space 기준) |
-| 삭제 시    | `useDeleteTimeline({ timelineId })`               | 타임라인 삭제                                            |
+| 시점 | API | 설명 |
+|------|-----|------|
+| 클라이언트 렌더 | `useGetTimelinesSuspense({ take, skip, search })` | 타임라인 목록 조회 |
+| 삭제 확인 | `useDeleteTimeline()` | 타임라인 삭제 |
 
 ## 이벤트 핸들러
 
-| 이벤트                    | 동작                                                                     |
-| ------------------------- | ------------------------------------------------------------------------ |
-| 타임라인명 클릭           | `/timelines/{timelineId}` 상세 페이지로 이동                             |
-| "타임라인 등록" 버튼 클릭 | `/timelines/new` 등록 페이지로 이동                                      |
-| 삭제 버튼 클릭            | 확인 모달 표시 → 확인 시 `deleteTimeline` 호출, 성공 시 목록 캐시 무효화 |
-| 검색 변경                 | URL 쿼리 파라미터 업데이트로 API 재호출                                  |
-
-## 비즈니스 규칙
-
-- **Space 격리**: 현재 Space의 타임라인만 표시 (상위 Space 공유 없음)
-- **삭제 제약**: 세션이 있는 타임라인은 삭제 불가 (`sessionsCount > 0` 경고)
-- **소프트 삭제**: 삭제 시 `removedAt` 기록 (실제 데이터는 보존)
-
-## 특이사항
-
-- CSR + Suspense 기본 패턴을 유지하되, 상대 `/api` 호출의 prerender 오류를 피하기 위해 `page.tsx`가 browser-only no-SSR boundary를 제공합니다.
-- `useMetaDataGridQueryStates`로 검색어와 페이지네이션 상태를 URL 쿼리와 동기화
-- 삭제 확인 모달은 페이지 로컬 observable state(`deleteTarget`)로 관리
-- 삭제 성공 시 `getGetTimelinesQueryKey()` 기준으로 목록 캐시를 무효화
+| 이벤트 | 동작 |
+|--------|------|
+| `onClickTimelineName` | `/timelines/[timelineId]` 이동 |
+| `onClickDeleteIcon` | 삭제 대상 지정 및 modal 오픈 |
+| `onClickDeleteConfirm` | 삭제 요청 및 캐시 무효화 |
 
 ## 구현 체크리스트
 
-- [x] page.tsx (`dynamic(() => import("./_client"), { ssr: false })` no-SSR wrapper)
-- [x] `_client.tsx` (브라우저 전용 목록 렌더링과 본문 surface owner)
-- [x] `_prefetch.ts` 없음 (SSR 예외 아님)
-- [x] 삭제 확인 모달과 캐시 무효화는 `page.tsx`에서 직접 처리
-
-## Browser-only Boundary
-
-- `page.tsx`는 `dynamic(() => import("./_client"), { ssr: false })` wrapper로 유지합니다.
-- `_client.tsx`가 브라우저 전용 데이터 조회와 `PageSurface` ownership을 담당합니다.
+- [x] `layout.tsx`가 route skeleton 소유
+- [x] `page.tsx` 단일 CSR 콘텐츠 파일
+- [x] `_client.tsx` 제거
+- [x] `_prefetch.ts` 없음
 
 ## 변경 이력
 
-| 일자       | 내용                                                                                                           | 작성자               |
-| ---------- | -------------------------------------------------------------------------------------------------------------- | -------------------- |
-| 2026-03-16 | `dynamic(Promise.resolve(...))` no-SSR 경계를 `_client.tsx` 실제 모듈 import wrapper로 교체해 dev blank page를 방지 | codex |
-| 2026-03-15 | 상대 `/api` 호출의 prerender 오류를 피하기 위해 타임라인 목록 `page.tsx`를 browser-only no-SSR boundary로 전환 | codex                |
-| 2026-03-15 | Next.js build 요구에 맞춰 `useMetaDataGridQueryStates` 실행을 page-level `Suspense` boundary 안쪽으로 이동     | codex                |
-| 2026-03-15 | Surface owner와 elevation 규칙을 문서화                                                                        | codex                |
-| 2026-03-15 | 타임라인 목록 본문에 `PageSurface > SectionSurface(padding="none")` ownership을 추가                           | codex                |
-| 2026-03-15 | 타임라인 목록을 CSR + Suspense 단일 `page.tsx` 패턴으로 전환하고 `_client.tsx`, `_prefetch.ts`를 제거          | codex                |
-| 2026-02-19 | 초기 생성                                                                                                      | req-screen-planner   |
-| 2026-02-19 | 디자인 목업 섹션 추가                                                                                          | req-reverse-engineer |
-| 2026-03-03 | Scaffold 제거 및 페이지 헤더 영역/섹션 영역 용어 정리                                                          | codex                |
-| 2026-03-03 | `_client.tsx` 반복 헤더를 `Page + PageTitleBar` 패턴으로 정리                                                  | codex                |
-| 2026-03-03 | Page/Section `mode` 제거 반영 (단일 구조 기준으로 문서 표현 정리)                                              | codex                |
-| 2026-03-03 | `PageTitleBar` 단일 컴포넌트 통합 및 리네이밍 반영                                                             | codex                |
+| 일자 | 내용 | 작성자 |
+|------|------|--------|
+| 2026-03-21 | 타임라인 목록을 `master/table` 재사용 타깃으로 분류하고 page role 계약을 추가 | codex |
+| 2026-03-21 | 타임라인 목록 spec을 route-layout / page-builder 계약 형식으로 재작성 | codex |

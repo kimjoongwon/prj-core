@@ -1,24 +1,61 @@
-# Auth 레이아웃 기획서
+# /auth layout 기획서
 
-> 생성일: 2026-03-03
+> 생성일: 2026-03-21
 > 타입: layout
 > 위치: apps/admin/web/src/app/auth/layout.tsx
 
-## 역할
+## Server Skeleton
 
-인증 도메인 하위 페이지를 위한 공통 구조 레이아웃입니다.
-헤더/사이드 없이 `Page`로 children만 감쌉니다.
+- 상위 shell은 `apps/admin/web/src/app/layout.spec.md`가 소유합니다.
+- 이 route의 `layout.tsx`는 서버 컴포넌트로 동작하며 `App`, `Layout`, `Page`, `Section` skeleton을 소유합니다.
+- route-level 데이터 fetch나 페이지 이벤트 바인딩은 `layout.tsx`가 직접 수행하지 않습니다.
 
-## 동작
+## Page Composition
 
-- `"use client"` + `observer` 패턴을 유지합니다.
-- `<Page className="min-h-screen">{children}</Page>` 형태로 인증 화면 최소 높이를 보장합니다.
+| 레벨 | 소유 파일 | 구성 요소 | 책임 |
+|------|-----------|-----------|------|
+| route layout | `apps/admin/web/src/app/auth/layout.tsx` | `App`, `Layout`, `Page`, `Section` | route skeleton 조립과 child mount |
+| child content | child `page.tsx` / slot page | 콘텐츠 전용 컴포넌트 | layout이 제공한 slot 안에서 실제 화면 콘텐츠 구현 |
+
+- `apps/admin/web/src/app/auth/login/page.spec.md`
+
+## Surface Ownership
+
+| 레벨 | Owner | 구성 | 역할 |
+|------|-------|------|------|
+| route skeleton | `apps/admin/web/src/app/auth/layout.tsx` | `App`, `Layout`, `Page`, `Section` | route 단위 배치와 표면 소유 |
+| child content | child `page.tsx` | route skeleton 내부 콘텐츠 | 데이터 조회, 입력, 목록, 상세 상호작용 |
+
+## Slot Topology
+
+| Slot key | 파일 | 설명 |
+|----------|------|------|
+| `children` | child route `page.tsx` | `auth` 하위 인증 페이지 콘텐츠 mount |
+
+## Slot URL Mapping
+
+| Slot key | URL |
+|----------|-----|
+| `children` | `/auth/login` 등 `auth` 하위 route URL |
+
+## Slot Fallbacks
+
+- named slot이 없어 `default.tsx` fallback은 필요하지 않습니다.
+
+## Independent Navigation Policy
+
+- `children` 단일 slot 구조이며 independent navigation이 필요한 병렬 영역은 없습니다.
+
+## Child Content Contract
+
+- child `page.tsx`와 `@slot/**/page.tsx`는 자신이 채우는 slot 콘텐츠만 구현합니다.
+- child 페이지는 `Page`, `PageSurface`, `Section`, `SectionSurface`, `Surface`를 다시 조립하지 않습니다.
+- child 페이지 계약은 각 `page.spec.md`의 `Consumed Layout Contract`와 `Rendering Decision`을 따릅니다.
 
 ## 변경 이력
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
-| 2026-03-06 | 규칙 위반 정리: useMemo/useCallback/useIsMounted 제거 및 observer/이벤트 네이밍 규칙 반영 | codex |
-| 2026-03-03 | 인증 레이아웃 컴포넌트 네이밍을 `Page`로 통일 | codex |
-| 2026-03-03 | `Page` 단일 구조 전환에 맞춰 인증 레이아웃 최소 높이(`min-h-screen`)를 명시 | codex |
-| 2026-03-03 | Page/Section `mode` 제거 반영 (단일 구조 기준으로 문서 표현 정리) | codex |
+| 2026-03-21 | `auth/layout.tsx`를 client layout에서 서버 `Page` shell로 정리 | codex |
+| 2026-03-21 | intermediate auth route의 `children` mount 설명과 URL 매핑을 실제 구조에 맞게 보정 | codex |
+| 2026-03-21 | fe-route-layout-builder 계약에 맞춰 layout skeleton/slot 계약을 재정의 | codex |

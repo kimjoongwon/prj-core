@@ -1,48 +1,59 @@
-# layout layout 기획서
+# 루트 layout 기획서
 
-> 생성일: 2026-03-03
+> 생성일: 2026-03-21
 > 타입: layout
 > 위치: apps/idp/web/src/app/layout.tsx
 
-## 역할
+## Server Skeleton
 
-이 파일은 layout 계층의 핵심 동작을 담당합니다.
-상위 레이어와 하위 레이어를 연결하며, 런타임에서 실제 사용자 흐름/비즈니스 흐름에 직접 관여합니다.
+- 이 파일이 현재 앱 route 체인에서 최상위 layout contract입니다.
+- 이 route의 `layout.tsx`는 서버 컴포넌트로 동작하며 route 전용 HTML/container skeleton을 소유합니다.
+- route-level 데이터 fetch나 페이지 이벤트 바인딩은 `layout.tsx`가 직접 수행하지 않습니다.
 
-## 공개 계약
+## Page Composition
 
-| 항목 | 설명 |
-|------|------|
-| metadata | 공개 계약 요소 |
-| default export | 공개 계약 요소 |
+| 레벨 | 소유 파일 | 구성 요소 | 책임 |
+|------|-----------|-----------|------|
+| route layout | `apps/idp/web/src/app/layout.tsx` | route 전용 HTML/container | route skeleton 조립과 child mount |
+| child content | child `page.tsx` / slot page | 콘텐츠 전용 컴포넌트 | layout이 제공한 slot 안에서 실제 화면 콘텐츠 구현 |
 
-## 의존성
+- `apps/idp/web/src/app/page.spec.md`
 
-| 모듈 | 용도 |
-|------|------|
-| next | 기능 구현 의존성 |
-| ./providers | 기능 구현 의존성 |
+## Surface Ownership
 
-## 동작 흐름
+| 레벨 | Owner | 구성 | 역할 |
+|------|-------|------|------|
+| route skeleton | `apps/idp/web/src/app/layout.tsx` | route 전용 HTML/container | route 단위 배치와 표면 소유 |
+| child content | child `page.tsx` | route skeleton 내부 콘텐츠 | 데이터 조회, 입력, 목록, 상세 상호작용 |
 
-1. 입력(라우트/props/호출)을 수신합니다.
-2. 필요한 의존 모듈을 호출해 데이터를 조합합니다.
-3. 결과를 렌더링/반환/전파합니다.
+## Slot Topology
 
-## 실패 및 엣지 케이스
+| Slot key | 파일 | 설명 |
+|----------|------|------|
+| `children` | `apps/idp/web/src/app/page.tsx` | 기본 route 콘텐츠 mount |
 
-- 의존 모듈 응답 누락 시 안전한 기본값으로 처리합니다.
-- 비정상 입력은 조기 반환 또는 예외 처리합니다.
-- 비동기 동작 실패 시 사용자 영향 범위를 최소화합니다.
+## Slot URL Mapping
 
-## 구현 체크리스트
+| Slot key | URL |
+|----------|-----|
+| `children` | `/` |
 
-- [ ] 코드와 spec이 동일한 책임 범위를 유지함
-- [ ] 공개 계약(Props/메서드/반환값) 변경 시 동기화함
-- [ ] 의존성 변경 시 spec의 의존성 표를 갱신함
+## Slot Fallbacks
+
+- named slot이 없어 `default.tsx` fallback은 필요하지 않습니다.
+
+## Independent Navigation Policy
+
+- `children` 단일 slot 구조이며 independent navigation이 필요한 병렬 영역은 없습니다.
+
+## Child Content Contract
+
+- child `page.tsx`와 `@slot/**/page.tsx`는 자신이 채우는 slot 콘텐츠만 구현합니다.
+- child 페이지는 `Page`, `PageSurface`, `Section`, `SectionSurface`, `Surface`를 다시 조립하지 않습니다.
+- child 페이지 계약은 각 `page.spec.md`의 `Consumed Layout Contract`와 `Rendering Decision`을 따릅니다.
 
 ## 변경 이력
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
-| 2026-03-03 | 누락된 sidecar spec 신규 생성 | codex |
+| 2026-03-21 | fe-route-layout-builder 계약에 맞춰 layout skeleton/slot 계약을 재정의 | codex |

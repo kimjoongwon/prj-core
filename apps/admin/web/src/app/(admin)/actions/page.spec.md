@@ -1,135 +1,65 @@
 # Action 목록 페이지 기획서
 
-> 생성일: 2026-02-18
+> 생성일: 2026-03-21
 > 타입: page
 > 경로: `/actions`
 
-## 디자인 목업
-
-> 페이지의 전체 UI 레이아웃을 ASCII로 표현합니다.
-
-```
-┌─────────────────────────────────────────────────────────────────────┐
-│  Action 목록                                                         │
-│  시스템에 등록된 Action을 조회합니다.                                   │
-├─────────────────────────────────────────────────────────────────────┤
-│  ┌─────────────────────────────────────────────────────────────┐    │
-│  │  🔍 [이름으로 검색...                     ]      [+ 등록]   │    │
-│  ├──────────────┬────────┬──────────┬──────┬────────┬──────────┤    │
-│  │ 행위 식별자  │ 표시명  │   분류    │ 순서 │ 시스템 │  생성일  │    │
-│  ├──────────────┼────────┼──────────┼──────┼────────┼──────────┤    │
-│  │ user:create  │ 사용자 │ [CRUD]   │  1   │[시스템]│2026-01-10│    │
-│  │              │ 생성   │          │      │        │          │    │
-│  ├──────────────┼────────┼──────────┼──────┼────────┼──────────┤    │
-│  │ user:view    │ 사용자 │[Visibility│  2   │[시스템]│2026-01-10│    │
-│  │              │ 조회   │          │      │        │          │    │
-│  ├──────────────┼────────┼──────────┼──────┼────────┼──────────┤    │
-│  │ order:approve│ 주문   │[Workflow] │  10  │[사용자]│2026-02-01│    │
-│  │              │ 승인   │          │      │        │          │    │
-│  ├──────────────┴────────┴──────────┴──────┴────────┴──────────┤    │
-│  │              < 1  2  3 >          총 24건                    │    │
-│  └─────────────────────────────────────────────────────────────┘    │
-└─────────────────────────────────────────────────────────────────────┘
-```
-
 ## 사용자 시나리오
 
-1. 관리자가 시스템에 등록된 Action 목록을 조회한다.
-2. 검색창에 이름을 입력하여 Action을 검색한다.
-3. group 쿼리 파라미터로 그룹별 필터링된 목록을 조회한다.
-4. "등록" 버튼을 클릭하여 새 Action 등록 페이지로 이동한다.
-5. MetaDataGrid에서 Action 행을 클릭하여 상세 페이지로 이동한다.
+1. 관리자가 Action 이름을 검색하거나 group 상태로 목록을 좁혀봅니다.
+2. 목록에서 Action을 확인하고 등록 버튼으로 새 Action 화면으로 이동합니다.
 
-## 레이아웃 구성
+## Consumed Layout Contract
 
-| 영역          | 컴포넌트                   | 설명                                                                    |
-| ------------- | -------------------------- | ----------------------------------------------------------------------- |
-| 페이지 래퍼   | `Page`                     | 페이지 콘텐츠 구조 배치                                                 |
-| 페이지 헤더   | `PageTitleBar`             | title="Action 목록", description="시스템에 등록된 Action을 조회합니다." |
-| 데이터 그리드 | `Section` > `MetaDataGrid` | nuqs 기반 URL 상태 관리, 검색 + 등록 버튼                               |
+| 항목 | 값 |
+|------|----|
+| 참조 layout spec | `apps/admin/web/src/app/(admin)/actions/layout.spec.md` |
+| consumed slot key | `children` |
+| 콘텐츠 파일 | `apps/admin/web/src/app/(admin)/actions/page.tsx` |
+| page가 소유하지 않는 skeleton | `Page`, `PageSurface`, `Section`, `SectionSurface`, `Surface` |
 
-## Surface / Elevation
+- `page.tsx`는 page-local `PageTitleBar`와 `MetaDataGrid`만 렌더링합니다.
 
-| 항목                   | 결정                                                                                                 |
-| ---------------------- | ---------------------------------------------------------------------------------------------------- |
-| PageSurface owner      | `apps/admin/web/src/app/(admin)/actions/_client.tsx`                                                 |
-| PageSurface 역할       | Action 검색/등록 헤더와 목록 전체를 raised 본문으로 묶음                                             |
-| SectionSurface 대상    | Action `MetaDataGrid`                                                                                |
-| SectionSurface padding | `padding="none"`                                                                                     |
-| 예외                   | 없음. `MetaDataGrid` 슬롯의 검색/버튼 배치는 surface를 자동 생성하지 않으므로 `page.tsx`가 직접 소유 |
+## Rendering Decision
 
-## 컬럼 정의
+- 기본 패턴: `page.tsx` 단일 CSR
+- page role: `master`
+- reusable target: `feature/master/table`
+- SSR/prefetch 예외 승인 여부: 없음
+- 추가 예외 파일: 없음 (`_client.tsx`, `_prefetch.ts` 미사용)
+- `Suspense` fallback은 grid 로딩 상태만 처리합니다.
 
-| 필드        | 라벨        | 크기  | 정렬 | 셀 렌더링                                                                 |
-| ----------- | ----------- | ----- | ---- | ------------------------------------------------------------------------- |
-| name        | 행위 식별자 | 200px | 좌측 | font-mono 텍스트                                                          |
-| displayName | 표시명      | 150px | 좌측 | 기본 텍스트                                                               |
-| group       | 분류        | 120px | 중앙 | Chip (crud=primary, visibility=secondary, workflow=success, bulk=warning) |
-| order       | 순서        | 80px  | 중앙 | 기본 숫자                                                                 |
-| isSystem    | 시스템      | 100px | 중앙 | Chip (시스템=warning, 사용자=default)                                     |
-| createdAt   | 생성일      | 150px | 좌측 | DateTimeCell                                                              |
-| removedAt   | 상태        | 100px | 중앙 | StatusChipCell                                                            |
+## 콘텐츠 구성
 
-## 입력 구성 (MetaDataGrid)
-
-**좌측 입력:**
-
-| ID     | 타입   | 설명                           |
-| ------ | ------ | ------------------------------ |
-| search | search | 이름으로 검색 (debounce 300ms) |
-
-**우측 입력:**
-
-| ID     | 타입   | 설명                               |
-| ------ | ------ | ---------------------------------- |
-| create | button | "등록" 버튼 (primary, Plus 아이콘) |
-
-## 페이지 상태
-
-| 상태        | 설명               | UI                                 |
-| ----------- | ------------------ | ---------------------------------- |
-| 로딩 중     | suspense 응답 대기 | MetaDataGrid 로딩 상태             |
-| 빈 목록     | 조회된 Action 없음 | "조회된 Action이 없습니다." 메시지 |
-| 데이터 있음 | 정상 표시          | MetaDataGrid 테이블                |
+| 영역 | 구성 요소 | 설명 |
+|------|-----------|------|
+| 페이지 헤더 | `PageTitleBar` + 등록 버튼 | Action 목록 안내 |
+| 목록 영역 | `MetaDataGrid` | 검색, group 필터, Action 목록 |
 
 ## API 호출
 
-| 시점            | API                                             | 설명                                         |
-| --------------- | ----------------------------------------------- | -------------------------------------------- |
-| 클라이언트      | `GET /api/v1/actions` (`useGetActionsSuspense`) | group 쿼리 파라미터 기반 CSR + Suspense 조회 |
-| 클라이언트 필터 | 검색어                                          | `name`, `displayName` 기준 클라이언트 필터링 |
+| 시점 | API | 설명 |
+|------|-----|------|
+| 클라이언트 렌더 | `useGetActionsSuspense({ group })` | Action 목록 조회 |
 
 ## 이벤트 핸들러
 
-| 이벤트              | 동작                                     |
-| ------------------- | ---------------------------------------- |
-| onClickCreateButton | `/actions/new` 등록 페이지로 router.push |
-
-## URL 상태 (nuqs)
-
-- `useMetaDataGridQueryStates`로 URL 쿼리 파라미터와 동기화
-- `group` 파라미터를 API 호출에 전달
-- `search` 파라미터는 클라이언트 필터링에 사용
+| 이벤트 | 동작 |
+|--------|------|
+| `onClickCreateButton` | `/actions/new` 이동 |
+| `queryStates.search` 변경 | 이름/표시명 클라이언트 필터링 |
+| `queryStates.group` 변경 | group 기준 재조회 |
 
 ## 구현 체크리스트
 
-- [x] page.tsx (`dynamic(() => import("./_client"), { ssr: false })` no-SSR wrapper)
-- [x] `_client.tsx` (브라우저 전용 `useMetaDataGridQueryStates`, `useGetActionsSuspense`, `PageSurface` owner)
-- [x] `_prefetch.ts` 없음 (SSR 예외 아님)
+- [x] `layout.tsx`가 route skeleton 소유
+- [x] `page.tsx` 단일 CSR 콘텐츠 파일
+- [x] `_client.tsx` 제거
+- [x] `_prefetch.ts` 없음
 
 ## 변경 이력
 
-| 일자       | 내용                                                                                                             | 작성자               |
-| ---------- | ---------------------------------------------------------------------------------------------------------------- | -------------------- |
-| 2026-03-15 | 상대 `/api` 호출의 prerender 오류를 피하기 위해 Action 목록 `page.tsx`를 browser-only no-SSR boundary로 전환     | codex                |
-| 2026-03-15 | Next.js build 요구에 맞춰 `useMetaDataGridQueryStates` 실행을 page-level `Suspense` boundary 안쪽으로 이동       | codex                |
-| 2026-03-15 | Surface owner와 elevation 규칙을 문서화                                                                          | codex                |
-| 2026-03-15 | Action 목록 본문에 `PageSurface > SectionSurface(padding="none")` ownership을 추가해 검색/목록 background를 명시 | codex                |
-| 2026-03-15 | Action 목록을 CSR + Suspense 단일 `page.tsx` 패턴으로 전환하고 검색을 클라이언트 필터로 정리                     | codex                |
-| 2026-03-16 | `dynamic(Promise.resolve(...))` no-SSR 경계를 `_client.tsx` 실제 모듈 import wrapper로 교체해 dev route blank 렌더를 방지 | codex |
-| 2026-02-18 | 초기 생성 (역기획)                                                                                               | req-reverse-engineer |
-| 2026-02-19 | 디자인 목업 섹션 추가                                                                                            | req-reverse-engineer |
-| 2026-03-03 | Scaffold 제거 및 페이지 헤더 영역/섹션 영역 용어 정리                                                            | codex                |
-| 2026-03-03 | `_client.tsx` 반복 헤더를 `Page + PageTitleBar`로 정리                                                           | codex                |
-| 2026-03-03 | Page/Section `mode` 제거 반영 (단일 구조 기준으로 문서 표현 정리)                                                | codex                |
-| 2026-03-03 | `PageTitleBar` 단일 컴포넌트 통합 및 리네이밍 반영                                                               | codex                |
+| 일자 | 내용 | 작성자 |
+|------|------|--------|
+| 2026-03-21 | Action 목록을 `master/table` 재사용 타깃으로 분류하고 page role 계약을 추가 | codex |
+| 2026-03-21 | Action 목록 spec을 route-layout / page-builder 계약 형식으로 재작성 | codex |

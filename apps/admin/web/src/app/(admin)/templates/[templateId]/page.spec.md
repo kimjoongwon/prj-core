@@ -77,9 +77,9 @@
 
 | 항목 | 결정 |
 |------|------|
-| `PageSurface` owner | `apps/admin/web/src/app/(admin)/templates/[templateId]/_client.tsx` 본문과 상태 분기 |
+| `PageSurface` owner | 참조 route layout의 `layout.tsx` skeleton |
 | `SectionSurface` 대상 블록 | 기본 정보, 콘텐츠, 변수 목록, 로딩/데이터 없음 상태 |
-| `padding="none"` 적용 위치 | 적용하지 않음. 각 상세 블록에 기본 패딩을 유지 |
+| SectionSurface padding | 기본 패딩 유지 |
 | flat 예외 여부와 근거 | flat 예외 없음. 상세 정보는 독립된 읽기 블록으로 elevation 위계가 필요 |
 
 ## 기본 정보 표시 필드
@@ -161,14 +161,33 @@
 
 ## 구현 체크리스트
 
-- [x] page.tsx (서버 컴포넌트, Prefetch + HydrationBoundary)
-- [x] _client.tsx (클라이언트 컴포넌트, observer 래핑)
-- [x] _prefetch.ts (prefetchGetTemplateQuery 호출)
+- [x] page.tsx (클라이언트 컴포넌트, observer 래핑, 단일 CSR)
+
+## Consumed Layout Contract
+
+| 항목 | 값 |
+|------|----|
+| 참조 layout spec | `apps/admin/web/src/app/(admin)/templates/layout.spec.md` |
+| consumed slot key | `children` |
+| 콘텐츠 파일 | `apps/admin/web/src/app/(admin)/templates/[templateId]/page.tsx` |
+| page가 소유하지 않는 skeleton | `Page`, `PageSurface`, `Section`, `SectionSurface`, `Surface` |
+
+- `page.tsx`는 상세 조회/읽기 전용 본문만 담당합니다.
+
+## Rendering Decision
+
+- 기본 패턴: `page.tsx` 단일 CSR
+- page role: `detail`
+- reusable target: `feature/detail/view`
+- SSR/prefetch 예외 승인 여부: 없음
+- 추가 예외 파일: 없음 (`_client.tsx`, `_prefetch.ts` 미사용)
 
 ## 변경 이력
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-03-21 | page.tsx 단일 CSR 계약과 현재 surface/rendering decision 기준으로 stale 예외 문구를 정리 | codex |
+| 2026-03-21 | fe-page-builder 계약에 맞춰 consumed layout / rendering decision 섹션을 보강 | codex |
 | 2026-03-15 | 상세 본문과 상태 분기를 `PageSurface` 및 `SectionSurface` ownership 기준으로 정리 | codex |
 | 2026-02-18 | 초기 생성 (역기획) | req-reverse-engineer |
 | 2026-02-19 | 디자인 목업 추가 | req-reverse-engineer |

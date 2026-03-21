@@ -1,75 +1,63 @@
 # 공간 목록 페이지 기획서
 
-> 생성일: 2026-02-19
+> 생성일: 2026-03-21
 > 타입: page
 > 경로: `/spaces`
-> 파일: `apps/admin/web/src/app/(admin)/spaces/page.tsx`
 
-## 목적
+## 사용자 시나리오
 
-Space aggregate root 목록을 조회하고, 각 Space에 연결된 `ground` 1:1 detail로 진입합니다.
+1. 관리자가 공간/시설 목록을 검색하고 기본 정보를 확인합니다.
+2. 시설명을 눌러 `/spaces/[spaceId]/ground` 상세로 이동합니다.
+3. "공간 등록" 버튼으로 등록 화면에 이동합니다.
 
-## 주요 기능
+## Consumed Layout Contract
 
-| ID    | 기능              | 설명                                              |
-| ----- | ----------------- | ------------------------------------------------- |
-| F-001 | 공간 목록 조회    | `GET /api/v1/spaces`를 CSR + Suspense로 조회      |
-| F-002 | 검색              | 시설명/사업자등록번호/주소 기준 클라이언트 필터링 |
-| F-003 | 등록 이동         | "공간 등록" 버튼 클릭 시 `/spaces/new` 이동       |
-| F-004 | child detail 이동 | 행 클릭 시 `/spaces/[spaceId]/ground` 이동        |
+| 항목 | 값 |
+|------|----|
+| 참조 layout spec | `apps/admin/web/src/app/(admin)/spaces/layout.spec.md` |
+| consumed slot key | `children` |
+| 콘텐츠 파일 | `apps/admin/web/src/app/(admin)/spaces/page.tsx` |
+| page가 소유하지 않는 skeleton | `Page`, `PageSurface`, `Section`, `SectionSurface`, `Surface` |
 
-## 화면 구조
+- `page.tsx`는 page-local `PageTitleBar`와 공간 목록 grid만 렌더링합니다.
 
-```text
-Page
-└── PageTitleBar (title="공간 목록", actions=[공간 등록])
-└── Section
-    └── MetaDataGrid
-        ├── 검색 입력
-        └── 컬럼: 시설명, 라벨, 사업자등록번호, 주소, 전화번호, 이메일, 등록일
-```
+## Rendering Decision
 
-## Surface / Elevation
+- 기본 패턴: `page.tsx` 단일 CSR
+- page role: `master`
+- reusable target: `feature/master/table`
+- SSR/prefetch 예외 승인 여부: 없음
+- 추가 예외 파일: 없음 (`_client.tsx`, `_prefetch.ts` 미사용)
 
-| 항목                   | 결정                                                                                          |
-| ---------------------- | --------------------------------------------------------------------------------------------- |
-| PageSurface owner      | `apps/admin/web/src/app/(admin)/spaces/_client.tsx`                                              |
-| PageSurface 역할       | 공간 검색/등록 헤더와 목록 전체를 raised 본문으로 묶음                                        |
-| SectionSurface 대상    | 공간 `MetaDataGrid`                                                                           |
-| SectionSurface padding | `padding="none"`                                                                              |
-| 예외                   | 없음. `MetaDataGrid` 슬롯의 검색 UI는 surface를 자동 생성하지 않으므로 `page.tsx`가 직접 소유 |
+## 콘텐츠 구성
 
-## API 연동
+| 영역 | 구성 요소 | 설명 |
+|------|-----------|------|
+| 페이지 헤더 | `PageTitleBar` + 공간 등록 버튼 | 진입 헤더 |
+| 목록 영역 | `MetaDataGrid` | 시설명, 라벨, 사업자등록번호, 주소, 연락처 표시 |
 
-| 메서드 | 엔드포인트       | Orval 훅                 |
-| ------ | ---------------- | ------------------------ |
-| GET    | `/api/v1/spaces` | `useGetSpacesSuspense()` |
+## API 호출
 
-## E2E 메모
+| 시점 | API | 설명 |
+|------|-----|------|
+| 클라이언트 렌더 | `useGetSpacesSuspense()` | 공간 목록 조회 |
 
-- CRUD E2E cleanup은 `DELETE /api/v1/spaces/:spaceId` 소프트 삭제 응답 `200 OK` 계약을 사용합니다.
+## 이벤트 핸들러
 
-## 구현 메모
+| 이벤트 | 동작 |
+|--------|------|
+| `onClickSpaceGroundName` | `/spaces/[spaceId]/ground` 이동 |
 
-- `page.tsx`는 browser-only no-SSR boundary를 제공하고 내부 페이지 컴포넌트에서 `useMetaDataGridQueryStates`, `MetaDataGrid`를 실행합니다.
-- `_client.tsx`, `_prefetch.ts`는 CSR 기본 패턴으로 전환하며 제거합니다.
+## 구현 체크리스트
 
-## Browser-only Boundary
-
-- `page.tsx`는 `dynamic(() => import("./_client"), { ssr: false })` wrapper로 유지합니다.
-- `_client.tsx`가 브라우저 전용 데이터 조회와 `PageSurface` ownership을 담당합니다.
+- [x] `layout.tsx`가 route skeleton 소유
+- [x] `page.tsx` 단일 CSR 콘텐츠 파일
+- [x] `_client.tsx` 제거
+- [x] `_prefetch.ts` 없음
 
 ## 변경 이력
 
-| 일자       | 내용                                                                                                       | 작성자             |
-| ---------- | ---------------------------------------------------------------------------------------------------------- | ------------------ |
-| 2026-03-16 | `dynamic(Promise.resolve(...))` no-SSR 경계를 `_client.tsx` 실제 모듈 import wrapper로 교체해 dev blank page를 방지 | codex |
-| 2026-03-15 | 상대 `/api` 호출의 prerender 오류를 피하기 위해 공간 목록 `page.tsx`를 browser-only no-SSR boundary로 전환 | codex              |
-| 2026-03-15 | Next.js build 요구에 맞춰 `useMetaDataGridQueryStates` 실행을 page-level `Suspense` boundary 안쪽으로 이동 | codex              |
-| 2026-03-15 | Surface owner와 elevation 규칙을 문서화                                                                    | codex              |
-| 2026-03-15 | 공간 목록 본문에 `PageSurface > SectionSurface(padding="none")` ownership을 추가                           | codex              |
-| 2026-03-15 | 공간 목록을 CSR + Suspense 단일 `page.tsx` 패턴으로 전환하고 `_client.tsx`, `_prefetch.ts`를 제거          | codex              |
-| 2026-03-14 | 공간 CRUD E2E가 사용하는 삭제 cleanup 계약(`DELETE /api/v1/spaces/:spaceId`, 200 OK)을 반영                | codex              |
-| 2026-02-19 | 초기 생성                                                                                                  | req-screen-planner |
-| 2026-03-03 | PageTitleBar/Section 패턴 정리 반영                                                                        | codex              |
-| 2026-03-11 | `/grounds` 페이지를 `/spaces` root 기준으로 전환                                                           | codex              |
+| 일자 | 내용 | 작성자 |
+|------|------|--------|
+| 2026-03-21 | 공간 목록을 `master/table` 재사용 타깃으로 분류하고 page role 계약을 추가 | codex |
+| 2026-03-21 | 공간 목록 spec을 route-layout / page-builder 계약 형식으로 재작성 | codex |

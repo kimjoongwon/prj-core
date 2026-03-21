@@ -1,7 +1,5 @@
-"use client";
-
 import { Page } from "@cocrepo/ui";
-import { observer } from "mobx-react-lite";
+import type { ReactNode } from "react";
 
 /**
  * 인증 페이지 레이아웃
@@ -14,8 +12,6 @@ import { observer } from "mobx-react-lite";
  *
  * 규칙: 하나의 layout.tsx에는 하나의 Layout만 선언
  */
-function AuthLayoutRoute({ children }: { children: React.ReactNode }) {
+export default function AuthLayoutRoute({ children }: { children: ReactNode }) {
 	return <Page className="min-h-screen">{children}</Page>;
 }
-
-export default observer(AuthLayoutRoute);

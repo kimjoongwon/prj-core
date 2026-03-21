@@ -1,46 +1,59 @@
-# layout layout 기획서
+# 역할 route layout 기획서
 
-> 생성일: 2026-03-03
+> 생성일: 2026-03-21
 > 타입: layout
-> 위치: apps/admin/web/src/app/(admin)/roles/layout.tsx
+> 경로: `apps/admin/web/src/app/(admin)/roles/layout.tsx`
 
-## 역할
+## Server Skeleton
 
-이 파일은 layout 계층의 핵심 동작을 담당합니다.
-상위 레이어와 하위 레이어를 연결하며, 런타임에서 실제 사용자 흐름/비즈니스 흐름에 직접 관여합니다.
+- 상위 Admin layout이 공통 shell을 소유합니다.
+- 이 route의 `layout.tsx`는 서버 컴포넌트로 `Page -> PageSurface -> Section -> SectionSurface` skeleton을 조립합니다.
+- 제목, 경고 배너, 목록 콘텐츠는 `page.tsx`가 담당합니다.
 
-## 공개 계약
+## Page Composition
 
-| 항목 | 설명 |
-|------|------|
-| default export | 공개 계약 요소 |
+| 레벨 | 소유 파일 | 구성 요소 | 책임 |
+|------|-----------|-----------|------|
+| app shell | `apps/admin/web/src/app/(admin)/layout.tsx` | `Layout` | 공통 shell |
+| route body | `apps/admin/web/src/app/(admin)/roles/layout.tsx` | `Page` + `PageSurface` + `Section` + `SectionSurface` | 역할 route skeleton |
+| page content | `apps/admin/web/src/app/(admin)/roles/page.tsx` | `PageTitleBar`, warning banner, 역할 table | 역할 목록 콘텐츠 |
 
-## 의존성
+## Surface Ownership
 
-| 모듈 | 용도 |
-|------|------|
-| react | 기능 구현 의존성 |
+| 레벨 | Owner | 컴포넌트 | 역할 |
+|------|-------|----------|------|
+| route body | `layout.tsx` | `PageSurface` | route 본문 표면 |
+| child mount | `layout.tsx` | `SectionSurface` | children mount |
+| content block | `page.tsx` | raw bordered container | 경고 배너/목록 시각 구획 |
 
-## 동작 흐름
+## Slot Topology
 
-1. 입력(라우트/props/호출)을 수신합니다.
-2. 필요한 의존 모듈을 호출해 데이터를 조합합니다.
-3. 결과를 렌더링/반환/전파합니다.
+| Slot key | 파일 | 설명 |
+|----------|------|------|
+| `children` | `apps/admin/web/src/app/(admin)/roles/page.tsx` | 역할 목록 기본 콘텐츠 |
 
-## 실패 및 엣지 케이스
+## Slot URL Mapping
 
-- 의존 모듈 응답 누락 시 안전한 기본값으로 처리합니다.
-- 비정상 입력은 조기 반환 또는 예외 처리합니다.
-- 비동기 동작 실패 시 사용자 영향 범위를 최소화합니다.
+| Slot key | URL |
+|----------|-----|
+| `children` | `/roles` |
 
-## 구현 체크리스트
+## Slot Fallbacks
 
-- [ ] 코드와 spec이 동일한 책임 범위를 유지함
-- [ ] 공개 계약(Props/메서드/반환값) 변경 시 동기화함
-- [ ] 의존성 변경 시 spec의 의존성 표를 갱신함
+- named slot이 없어 fallback 파일은 필요하지 않습니다.
+
+## Independent Navigation Policy
+
+- 경고 배너와 목록은 동일한 lifecycle을 공유하므로 parallel routes를 사용하지 않습니다.
+
+## Child Content Contract
+
+- `page.tsx`는 `children` 콘텐츠만 구현합니다.
+- `page.tsx`는 `Page`, `PageSurface`, `Section`, `SectionSurface`, `Surface`를 import하지 않습니다.
+- page는 `PageTitleBar`, warning banner, CSR 목록 렌더링만 담당합니다.
 
 ## 변경 이력
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
-| 2026-03-03 | 누락된 sidecar spec 신규 생성 | codex |
+| 2026-03-21 | 역할 route의 서버 skeleton 계약으로 재정의 | codex |

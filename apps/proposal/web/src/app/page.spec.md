@@ -39,9 +39,8 @@
 |------|----------|--------|
 | 루트 래퍼 | `layout.tsx` | `layout.spec.md` |
 | Provider | `providers.tsx` | `providers.spec.md` |
-| 서버 엔트리 | `page.tsx` | `page.spec.md` |
-| 클라이언트 렌더 | `_client.tsx` | `_client.spec.md` |
-| 정적 데이터 | `_prefetch.ts` | `_prefetch.spec.md` |
+| 클라이언트 페이지 | `page.tsx` | `page.spec.md` |
+| 정적 데이터 | `proposal-page-data.ts` | `proposal-page-data.spec.md` |
 
 ## 페이지 상태
 
@@ -54,7 +53,7 @@
 
 | 시점 | API | 캐싱 |
 |------|-----|------|
-| 서버 렌더 | `getProposalPageData()` 로컬 정적 데이터 호출 | 정적 페이지 (`force-static`) |
+| 초기 렌더 | `proposalPageData` 로컬 정적 데이터 import | 별도 API 호출 없음 |
 
 ## 이벤트 핸들러
 
@@ -65,9 +64,8 @@
 
 ## 구현 체크리스트
 
-- [x] page.tsx (서버 컴포넌트)
-- [x] _client.tsx (클라이언트 컴포넌트)
-- [x] _prefetch.ts (정적 데이터 조립)
+- [x] page.tsx (클라이언트 컴포넌트, observer 래핑, 단일 CSR)
+- [x] proposal-page-data.ts (직렬화 가능한 정적 소개 데이터)
 - [ ] E2E 테스트 (Playwright)
 
 ## 테스트 케이스
@@ -88,16 +86,38 @@
 | 구분 | 내용 |
 |------|------|
 | **Given** | 사용자가 `/proposal` 에 진입함 |
-| **When** | 서버가 정적 데이터를 주입하고 페이지를 렌더링함 |
+| **When** | 클라이언트 page가 로컬 정적 데이터를 읽어 랜딩을 렌더링함 |
 | **Then** | Hero, 작업 방식, 비용 최적화, 기술 스택 섹션이 모두 표시됨 |
 
 ## 상위 기획서
 
 - `app.spec.md`
 
+## Consumed Layout Contract
+
+| 항목 | 값 |
+|------|----|
+| 참조 layout spec | `apps/proposal/web/src/app/layout.spec.md` |
+| consumed slot key | `children` |
+| 콘텐츠 파일 | `apps/proposal/web/src/app/page.tsx` |
+| page가 소유하지 않는 skeleton | `Page`, `PageSurface`, `Section`, `SectionSurface`, `Surface` |
+
+- `page.tsx`는 목록 탐색, 검색, 필터 같은 마스터 콘텐츠만 담당합니다.
+
+## Rendering Decision
+
+- 기본 패턴: `page.tsx` 단일 CSR
+- page role: `master`
+- reusable target: `feature/master/list`
+- SSR/prefetch 예외 승인 여부: 없음
+- 추가 예외 파일: 없음 (`_client.tsx`, `_prefetch.ts` 미사용)
+
 ## 변경 이력
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-03-21 | `_client.tsx`와 `_prefetch.ts`를 제거하고 `page.tsx` + `proposal-page-data.ts` 구조로 단순화 | codex |
+| 2026-03-21 | page.tsx 단일 CSR 계약과 현재 surface/rendering decision 기준으로 stale 예외 문구를 정리 | codex |
+| 2026-03-21 | fe-page-builder 계약에 맞춰 consumed layout / rendering decision 섹션을 보강 | codex |
 | 2026-03-20 | 공용 ingress 경로와 일치하도록 외부 노출 경로를 `/proposal` 기준으로 조정 | codex |
 | 2026-03-12 | proposal-web 정적 랜딩 페이지 기획서 신규 생성 | codex |

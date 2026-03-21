@@ -21,8 +21,6 @@
 |------|------|
 | @tanstack/react-query | 기능 구현 의존성 |
 | next/headers | 기능 구현 의존성 |
-| ./_client | 기능 구현 의존성 |
-| ./_prefetch | 기능 구현 의존성 |
 
 ## 동작 흐름
 
@@ -42,10 +40,31 @@
 - [ ] 공개 계약(Props/메서드/반환값) 변경 시 동기화함
 - [ ] 의존성 변경 시 spec의 의존성 표를 갱신함
 
+## Consumed Layout Contract
+
+| 항목 | 값 |
+|------|----|
+| 참조 layout spec | `apps/idp/web/src/app/(console)/layout.spec.md` |
+| consumed slot key | `children` |
+| 콘텐츠 파일 | `apps/idp/web/src/app/(console)/security-policy/page.tsx` |
+| page가 소유하지 않는 skeleton | `Page`, `PageSurface`, `Section`, `SectionSurface`, `Surface` |
+
+- `page.tsx`는 목록 탐색, 검색, 필터 같은 마스터 콘텐츠만 담당합니다.
+
+## Rendering Decision
+
+- 기본 패턴: `page.tsx` 단일 CSR
+- page role: `master`
+- reusable target: `feature/master/list`
+- SSR/prefetch 예외 승인 여부: 없음
+- 추가 예외 파일: 없음 (`_client.tsx`, `_prefetch.ts` 미사용)
+
 ## 변경 이력
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-03-21 | page.tsx 단일 CSR 계약과 현재 surface/rendering decision 기준으로 stale 예외 문구를 정리 | codex |
+| 2026-03-21 | fe-page-builder 계약에 맞춰 consumed layout / rendering decision 섹션을 보강 | codex |
 | 2026-03-14 | Biome lint organizeImports/format cleanup reflected | codex |
 | 2026-03-14 | Biome import 정렬 규칙 반영에 맞춰 보안 정책 E2E lint 기준을 동기화 | codex |
 | 2026-03-06 | 공통 로그인 헬퍼 import를 `@cocrepo/e2e`(fe-e2e 패키지)로 전환 | codex |

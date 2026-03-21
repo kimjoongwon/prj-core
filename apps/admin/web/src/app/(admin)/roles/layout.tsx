@@ -1,8 +1,14 @@
 import type { ReactNode } from "react";
+import { Page, PageSurface, Section, SectionSurface } from "@cocrepo/ui";
 
-/**
- * 역할 관리 레이아웃
- */
 export default function RolesLayout({ children }: { children: ReactNode }) {
-	return <>{children}</>;
+	return (
+		<Page>
+			<PageSurface padding="none">
+				<Section>
+					<SectionSurface className="overflow-hidden">{children}</SectionSurface>
+				</Section>
+			</PageSurface>
+		</Page>
+	);
 }

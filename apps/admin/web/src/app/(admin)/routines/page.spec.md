@@ -1,138 +1,68 @@
 # 루틴 목록 페이지 기획서
 
-> 생성일: 2026-02-19
+> 생성일: 2026-03-21
 > 타입: page
 > 경로: `/routines`
 
-## 디자인 목업
-
-> 페이지의 전체 UI 레이아웃을 ASCII로 표현합니다.
-
-```
-┌─────────────────────────────────────────────────────────────────┐
-│ 페이지 헤더 영역                                       [+ 루틴 등록]  │
-│ 루틴                                                              │
-│ 운동 루틴(커리큘럼)을 관리합니다.                                 │
-├─────────────────────────────────────────────────────────────────┤
-│ 섹션 영역                                                    │
-│  [🔍 루틴명, 라벨 검색...  ] [범위: 상위 포함 ▼]                 │
-│ ┌────────────┬──────────┬──────────────┬──────┬───────┬──────┬──┐│
-│ │ 루틴명     │ 라벨     │ Space        │운동수│프로그램│등록일│  ││
-│ ├────────────┼──────────┼──────────────┼──────┼───────┼──────┼──┤│
-│ │풀바디 루틴 │ FULL-A   │ [내 Space]   │  8   │   3   │2026..│🗑 ││
-│ │상체 집중   │ UPPER-B  │ 상위 Space   │  5   │   0   │2026..│   ││
-│ │하체 강화   │ LOWER-C  │ [내 Space]   │  6   │   1   │2026..│🗑 ││
-│ └────────────┴──────────┴──────────────┴──────┴───────┴──────┴──┘│
-│  [< 이전]  1 / 2  [다음 >]                                        │
-└─────────────────────────────────────────────────────────────────┘
-
-※ 삭제 아이콘(🗑)은 현재 Space 소유 루틴에만 표시
-※ 상위 Space 루틴은 읽기 전용
-```
-
 ## 사용자 시나리오
 
-1. 관리자가 현재 Space에서 사용 가능한 루틴 목록을 조회한다
-2. 이름/라벨로 검색하거나, Space 범위 필터(현재 Space / 상위 포함)로 좁혀본다
-3. 루틴 이름을 클릭하여 상세 페이지로 이동한다
-4. "루틴 등록" 버튼을 클릭하여 등록 페이지로 이동한다
-5. 삭제 액션을 실행하면 확인 모달을 거쳐 루틴 삭제를 시도한다
+1. 관리자가 루틴 목록을 검색하거나 Space 범위로 필터링합니다.
+2. 루틴 이름으로 상세 화면에 이동합니다.
+3. 삭제 아이콘으로 삭제 확인 modal을 열고 루틴을 제거합니다.
 
-## 레이아웃 구성
+## Consumed Layout Contract
 
-| 영역          | 컴포넌트                   | 설명                                                                                      |
-| ------------- | -------------------------- | ----------------------------------------------------------------------------------------- |
-| 페이지 래퍼   | `Page`                     | 페이지 콘텐츠 구조 배치                                                                   |
-| 페이지 헤더   | `PageTitleBar`             | title="루틴", description="운동 루틴(커리큘럼)을 관리합니다.", actions에 "루틴 등록" 버튼 |
-| 데이터 그리드 | `Section` > `MetaDataGrid` | 루틴 목록 표시, 검색/필터/페이지네이션 지원                                               |
+| 항목 | 값 |
+|------|----|
+| 참조 layout spec | `apps/admin/web/src/app/(admin)/routines/layout.spec.md` |
+| consumed slot key | `children` |
+| 콘텐츠 파일 | `apps/admin/web/src/app/(admin)/routines/page.tsx` |
+| page가 소유하지 않는 skeleton | `Page`, `PageSurface`, `Section`, `SectionSurface`, `Surface` |
 
-## Surface / Elevation
+- `page.tsx`는 page-local `PageTitleBar`, `MetaDataGrid`, 삭제 modal만 렌더링합니다.
 
-| 항목                   | 결정                                                                       |
-| ---------------------- | -------------------------------------------------------------------------- |
-| PageSurface owner      | `apps/admin/web/src/app/(admin)/routines/_client.tsx`                         |
-| PageSurface 역할       | 루틴 검색/필터와 목록 전체를 raised 본문으로 묶음                          |
-| SectionSurface 대상    | 루틴 `MetaDataGrid`                                                        |
-| SectionSurface padding | `padding="none"`                                                           |
-| 예외                   | 없음. `MetaDataGrid` 슬롯에 필터가 있어도 surface는 `page.tsx`가 직접 소유 |
+## Rendering Decision
 
-## 컬럼 정의
+- 기본 패턴: `page.tsx` 단일 CSR
+- page role: `master`
+- reusable target: `feature/master/table`
+- SSR/prefetch 예외 승인 여부: 없음
+- 추가 예외 파일: 없음 (`_client.tsx`, `_prefetch.ts` 미사용)
+- `Suspense` fallback은 목록 로딩 상태만 처리합니다.
 
-| 필드      | 라벨   | 크기 | 정렬   | 셀 컴포넌트                     |
-| --------- | ------ | ---- | ------ | ------------------------------- |
-| name      | 루틴명 | 200  | -      | 링크 스타일 (클릭 시 상세 이동) |
-| label     | 라벨   | 150  | -      | 기본                            |
-| createdAt | 등록일 | 150  | -      | `DateTimeCell`                  |
-| actions   | 액션   | 80   | center | 삭제 아이콘 버튼                |
+## 콘텐츠 구성
 
-## 필터/검색 정의
-
-| 위치 | 타입   | ID         | 설명                                                             |
-| ---- | ------ | ---------- | ---------------------------------------------------------------- |
-| 좌측 | search | search     | 루틴명, 라벨로 검색 (debounce 300ms)                             |
-| 좌측 | select | spaceScope | Space 범위: "현재 Space만" / "상위 Space 포함" (기본: 상위 포함) |
-
-## 페이지 상태
-
-| 상태        | 설명               | UI                                             |
-| ----------- | ------------------ | ---------------------------------------------- |
-| 로딩        | suspense 재조회 중 | `Suspense` fallback에서 MetaDataGrid 로딩 상태 |
-| 데이터 표시 | 목록 로드 완료     | 페이지네이션 포함 루틴 목록                    |
-| 빈 데이터   | 조회 결과 없음     | "등록된 루틴이 없습니다."                      |
+| 영역 | 구성 요소 | 설명 |
+|------|-----------|------|
+| 페이지 헤더 | `PageTitleBar` + 루틴 등록 버튼 | 진입 헤더 |
+| 목록 영역 | `MetaDataGrid` | 검색, Space 범위 필터, 루틴 목록 |
+| modal | 삭제 확인 dialog | 삭제 제약 안내와 확인 |
 
 ## API 호출
 
-| 시점       | API                                                          | 설명                          |
-| ---------- | ------------------------------------------------------------ | ----------------------------- |
-| 클라이언트 | `useGetRoutinesSuspense({ take, skip, search, spaceScope })` | CSR + Suspense 기반 목록 조회 |
-| 삭제 시    | `useDeleteRoutine({ routineId })`                            | 루틴 삭제                     |
+| 시점 | API | 설명 |
+|------|-----|------|
+| 클라이언트 렌더 | `useGetRoutinesSuspense({ take, skip, search, spaceScope })` | 루틴 목록 조회 |
+| 삭제 확인 | `useDeleteRoutine()` | 루틴 삭제 |
 
 ## 이벤트 핸들러
 
-| 이벤트                | 동작                                                                    |
-| --------------------- | ----------------------------------------------------------------------- |
-| 루틴명 클릭           | `/routines/{routineId}` 상세 페이지로 이동                              |
-| "루틴 등록" 버튼 클릭 | `/routines/new` 등록 페이지로 이동                                      |
-| 삭제 아이콘 클릭      | 확인 모달 표시 → 확인 시 `deleteRoutine` 호출, 성공 시 목록 캐시 무효화 |
-| 검색/필터 변경        | URL 쿼리 파라미터 업데이트로 API 재호출                                 |
-
-## 비즈니스 규칙
-
-- **Space 계층 공유**: `spaceScope=INCLUDE_ANCESTORS` 시 현재 Space + 모든 상위 Space의 루틴 조회
-- **삭제 제약**: 프로그램에서 사용 중인 루틴은 삭제 불가 (`programsCount > 0` 경고 표시)
-
-## 특이사항
-
-- CSR + Suspense 기본 패턴을 사용하며 `_client.tsx`, `_prefetch.ts` 없이 `page.tsx` 단일 파일로 구성
-- `useMetaDataGridQueryStates`로 `search`, `spaceScope`, 페이지네이션 상태를 URL 쿼리와 동기화
-- 삭제 확인 모달은 페이지 로컬 observable state(`deleteTarget`)로 관리
-- 삭제 성공 시 `getGetRoutinesQueryKey()` 기준으로 목록 캐시를 무효화
+| 이벤트 | 동작 |
+|--------|------|
+| `onClickRoutineName` | `/routines/[routineId]` 이동 |
+| `onClickDeleteButton` | 삭제 대상 지정 및 modal 오픈 |
+| `onClickDeleteConfirm` | 삭제 요청 및 캐시 무효화 |
 
 ## 구현 체크리스트
 
-- [x] page.tsx (`dynamic(() => import("./_client"), { ssr: false })` no-SSR wrapper)
-- [x] `_client.tsx` (브라우저 전용 목록 렌더링과 본문 surface owner)
-- [x] `_prefetch.ts` 없음 (SSR 예외 아님)
-- [x] 삭제 확인 모달과 캐시 무효화는 `page.tsx`에서 직접 처리
-
-## Browser-only Boundary
-
-- `page.tsx`는 `dynamic(() => import("./_client"), { ssr: false })` wrapper로 유지합니다.
-- `_client.tsx`가 브라우저 전용 데이터 조회와 `PageSurface` ownership을 담당합니다.
+- [x] `layout.tsx`가 route skeleton 소유
+- [x] `page.tsx` 단일 CSR 콘텐츠 파일
+- [x] `_client.tsx` 제거
+- [x] `_prefetch.ts` 없음
 
 ## 변경 이력
 
-| 일자       | 내용                                                                                                       | 작성자               |
-| ---------- | ---------------------------------------------------------------------------------------------------------- | -------------------- |
-| 2026-03-16 | `dynamic(Promise.resolve(...))` no-SSR 경계를 `_client.tsx` 실제 모듈 import wrapper로 교체해 dev blank page를 방지 | codex |
-| 2026-03-15 | 상대 `/api` 호출의 prerender 오류를 피하기 위해 루틴 목록 `page.tsx`를 browser-only no-SSR boundary로 전환 | codex                |
-| 2026-03-15 | Next.js build 요구에 맞춰 `useMetaDataGridQueryStates` 실행을 page-level `Suspense` boundary 안쪽으로 이동 | codex                |
-| 2026-03-15 | Surface owner와 elevation 규칙을 문서화                                                                    | codex                |
-| 2026-03-15 | 루틴 목록 본문에 `PageSurface > SectionSurface(padding="none")` ownership을 추가                           | codex                |
-| 2026-03-15 | 루틴 목록을 CSR + Suspense 단일 `page.tsx` 패턴으로 전환하고 `_client.tsx`, `_prefetch.ts`를 제거          | codex                |
-| 2026-02-19 | 초기 생성                                                                                                  | 직접 기획            |
-| 2026-02-19 | 디자인 목업 추가                                                                                           | req-reverse-engineer |
-| 2026-03-03 | Scaffold 제거 및 페이지 헤더 영역/섹션 영역 용어 정리                                                      | codex                |
-| 2026-03-03 | `_client.tsx` 반복 헤더를 `Page + PageTitleBar` 패턴으로 정리                                              | codex                |
-| 2026-03-03 | Page/Section `mode` 제거 반영 (단일 구조 기준으로 문서 표현 정리)                                          | codex                |
-| 2026-03-03 | `PageTitleBar` 단일 컴포넌트 통합 및 리네이밍 반영                                                         | codex                |
+| 일자 | 내용 | 작성자 |
+|------|------|--------|
+| 2026-03-21 | 루틴 목록을 `master/table` 재사용 타깃으로 분류하고 page role 계약을 추가 | codex |
+| 2026-03-21 | 루틴 목록 spec을 route-layout / page-builder 계약 형식으로 재작성 | codex |

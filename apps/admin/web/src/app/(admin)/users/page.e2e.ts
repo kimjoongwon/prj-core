@@ -64,12 +64,24 @@ test.describe("이용자 목록 페이지", () => {
 				.isVisible()
 				.catch(() => false);
 			if (hasRows) {
-				await expect(page.getByText("이름")).toBeVisible();
-				await expect(page.getByText("이메일")).toBeVisible();
-				await expect(page.getByText("전화번호")).toBeVisible();
-				await expect(page.getByText("역할")).toBeVisible();
-				await expect(page.getByText("상태")).toBeVisible();
-				await expect(page.getByText("가입일")).toBeVisible();
+				await expect(
+					page.getByRole("columnheader", { name: "이름" }),
+				).toBeVisible();
+				await expect(
+					page.getByRole("columnheader", { name: "이메일" }),
+				).toBeVisible();
+				await expect(
+					page.getByRole("columnheader", { name: "전화번호" }),
+				).toBeVisible();
+				await expect(
+					page.getByRole("columnheader", { name: "역할" }),
+				).toBeVisible();
+				await expect(
+					page.getByRole("columnheader", { name: "상태" }),
+				).toBeVisible();
+				await expect(
+					page.getByRole("columnheader", { name: "가입일" }),
+				).toBeVisible();
 				return;
 			}
 			await expect(page.getByText(/총 \d+건/)).toBeVisible();
@@ -83,6 +95,11 @@ test.describe("이용자 목록 페이지", () => {
 		test("총 N건 텍스트가 표시되어야 한다", async ({ page }) => {
 			// Then: 총 건수 텍스트 확인
 			await expect(page.getByText(/총 \d+건/)).toBeVisible();
+		});
+
+		test("디렉터리 헤더의 총 N명 pill이 표시되어야 한다", async ({ page }) => {
+			// Then: 디렉터리 헤더 요약 pill 확인
+			await expect(page.getByText(/총 \d+명/)).toBeVisible();
 		});
 
 		test("시드 데이터의 사용자가 DataGrid에 표시되어야 한다", async ({

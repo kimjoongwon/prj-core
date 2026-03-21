@@ -81,15 +81,36 @@
 
 ## 구현 체크리스트
 
-- [x] page.tsx (클라이언트 컴포넌트, observer 래핑)
+- [x] page.tsx (클라이언트 컴포넌트, observer 래핑, 단일 CSR)
 - [x] 로그인 후 hydration recoverable error 회귀 테스트
 - [ ] 대시보드 위젯 데이터 연동 (미구현)
 - [ ] 페이지 헤더 영역 적용 (미적용)
+
+## Consumed Layout Contract
+
+| 항목 | 값 |
+|------|----|
+| 참조 layout spec | `apps/admin/web/src/app/(admin)/layout.spec.md` |
+| consumed slot key | `children` |
+| 콘텐츠 파일 | `apps/admin/web/src/app/(admin)/dashboard/page.tsx` |
+| page가 소유하지 않는 skeleton | `Page`, `PageSurface`, `Section`, `SectionSurface`, `Surface` |
+
+- `page.tsx`는 상세 조회/읽기 전용 본문만 담당합니다.
+
+## Rendering Decision
+
+- 기본 패턴: `page.tsx` 단일 CSR
+- page role: `detail`
+- reusable target: `feature/detail/view`
+- SSR/prefetch 예외 승인 여부: 없음
+- 추가 예외 파일: 없음 (`_client.tsx`, `_prefetch.ts` 미사용)
 
 ## 변경 이력
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-03-21 | page.tsx 단일 CSR 계약과 현재 surface/rendering decision 기준으로 stale 예외 문구를 정리 | codex |
+| 2026-03-21 | fe-page-builder 계약에 맞춰 consumed layout / rendering decision 섹션을 보강 | codex |
 | 2026-03-14 | 로그인 후 대시보드 진입 시 hydration recoverable error가 없어야 한다는 E2E 회귀 조건 추가 | codex |
 | 2026-02-18 | 초기 생성 (역기획) | req-reverse-engineer |
 | 2026-02-19 | 디자인 목업 추가 | req-reverse-engineer |

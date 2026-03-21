@@ -6,6 +6,7 @@ import type { InputConfig, MetaDataGridColumnConfig } from "@cocrepo/type";
 import {
 	DateTimeCell,
 	MetaDataGrid,
+	PageTitleBar,
 	PhoneCell,
 	StatsCard,
 	StatusChipCell,
@@ -248,7 +249,13 @@ const UsersPageContent = observer(function UsersPageContent() {
 export default observer(function UsersPage() {
 	return (
 		<Suspense fallback={<UsersPageFallback />}>
-			<UsersPageContent />
+			<div className="space-y-5">
+				<PageTitleBar
+					title="이용자 목록"
+					description="시스템에 등록된 이용자를 조회합니다."
+				/>
+				<UsersPageContent />
+			</div>
 		</Suspense>
 	);
 });

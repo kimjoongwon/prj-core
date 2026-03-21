@@ -110,7 +110,7 @@ Page + PageTitleBar
 
 | 항목 | 결정 |
 |------|------|
-| PageSurface owner | `apps/admin/web/src/app/(admin)/assets/[assetId]/_client.tsx` |
+| PageSurface owner | 참조 route layout의 `layout.tsx` skeleton |
 | PageSurface 역할 | 상세 본문 전체를 raised 레이어로 묶고 상태 분기(loading/notFound/ready)를 동일한 배경 위에서 유지 |
 | SectionSurface 대상 | 기본 정보, 폴더 이동, 스토리지 정보 등 상세 블록 |
 | SectionSurface padding | 기본 패딩 유지. 각 `Section` 본문이 카드형 블록으로 구분되어야 함 |
@@ -194,9 +194,7 @@ apps/admin/web/src/app/(admin)/assets/[assetId]/
 
 ## 구현 체크리스트
 
-- [x] page.tsx (브라우저 전용 렌더 boundary)
-- [x] _client.tsx (클라이언트 컴포넌트)
-- [ ] _prefetch.ts 없음 (Space 헤더 브라우저 의존)
+- [x] page.tsx (클라이언트 컴포넌트, observer 래핑, 단일 CSR)
 - [ ] hooks/useAssetDetailHandlers.ts
 - [ ] AssetPreview Widget
 - [ ] AssetBasicInfo Widget
@@ -272,10 +270,31 @@ apps/admin/web/src/app/(admin)/assets/[assetId]/
 - `apps/admin/web/src/app/(admin)/app.spec.md`
 - `apps/admin/web/src/app/(admin)/assets/page.spec.md`
 
+## Consumed Layout Contract
+
+| 항목 | 값 |
+|------|----|
+| 참조 layout spec | `apps/admin/web/src/app/(admin)/assets/layout.spec.md` |
+| consumed slot key | `children` |
+| 콘텐츠 파일 | `apps/admin/web/src/app/(admin)/assets/[assetId]/page.tsx` |
+| page가 소유하지 않는 skeleton | `Page`, `PageSurface`, `Section`, `SectionSurface`, `Surface` |
+
+- `page.tsx`는 상세 조회/읽기 전용 본문만 담당합니다.
+
+## Rendering Decision
+
+- 기본 패턴: `page.tsx` 단일 CSR
+- page role: `detail`
+- reusable target: `feature/detail/view`
+- SSR/prefetch 예외 승인 여부: 없음
+- 추가 예외 파일: 없음 (`_client.tsx`, `_prefetch.ts` 미사용)
+
 ## 변경 이력
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-03-21 | page.tsx 단일 CSR 계약과 현재 surface/rendering decision 기준으로 stale 예외 문구를 정리 | codex |
+| 2026-03-21 | fe-page-builder 계약에 맞춰 consumed layout / rendering decision 섹션을 보강 | codex |
 | 2026-03-15 | Surface owner와 elevation 규칙을 문서화 | codex |
 | 2026-03-15 | assets 상세 spec에 `PageSurface`/`SectionSurface` ownership과 elevation 결정을 명시 | codex |
 | 2026-03-15 | assets 상세를 no-SSR boundary로 전환해 server prefetch 단계의 URL/Space 헤더 오류를 제거 | codex |

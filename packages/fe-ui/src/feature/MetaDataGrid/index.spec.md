@@ -9,6 +9,7 @@
 메타데이터 기반 선언적 DataGrid 시스템입니다.
 MetaDataGridConfig 설정 객체 하나로 DataGrid의 컬럼, 검색, 필터, 페이지네이션, 선택 모드를 구성합니다.
 nuqs를 통해 페이지네이션과 필터가 URL querystring과 자동 동기화됩니다.
+공개 재사용 진입점은 `packages/fe-ui/src/feature/master/table/index.ts`가 소유하고, 이 폴더는 그 구현을 제공합니다.
 
 ## 디자인 목업
 
@@ -136,6 +137,7 @@ interface MetaDataGridProps<T> {
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-03-21 | `feature/master/table` 공식 재사용 엔트리의 구현 백엔드 역할을 명시 | codex |
 | 2026-03-06 | MetaDataGrid 훅 re-export 경로를 fe-ui 내부 hook에서 @cocrepo/hook으로 이관 | codex |
 | 2026-03-06 | 폴더 네이밍을 단수형(feature/input/layout/hook/style/type/util/widget/cell)으로 통일 | codex |
 | 2026-03-06 | src 레이어 상향에 맞춰 util/hook 상대 import 깊이를 보정 | codex |

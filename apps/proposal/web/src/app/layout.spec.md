@@ -1,43 +1,59 @@
-# layout.tsx 기획서
+# 루트 layout 기획서
 
-> 생성일: 2026-03-12
+> 생성일: 2026-03-21
 > 타입: layout
 > 위치: apps/proposal/web/src/app/layout.tsx
 
-## 역할
+## Server Skeleton
 
-소개 앱의 루트 HTML, 메타데이터, 전역 폰트 및 Provider 연결을 정의합니다.
-정적 랜딩의 브랜드 톤을 라이트 기본으로 두되, 저장된 사용자 선택 또는 OS 선호도에 따라 다크 모드도 안정적으로 초기화합니다.
+- 이 파일이 현재 앱 route 체인에서 최상위 layout contract입니다.
+- 이 route의 `layout.tsx`는 서버 컴포넌트로 동작하며 route 전용 HTML/container skeleton을 소유합니다.
+- route-level 데이터 fetch나 페이지 이벤트 바인딩은 `layout.tsx`가 직접 수행하지 않습니다.
 
-## 공개 계약
+## Page Composition
 
-| 항목 | 설명 |
-|------|------|
-| `metadata.title` | `자자 | AI 중심 외주 개발 스튜디오` |
-| `metadata.description` | AI 중심 외주 개발 방식 설명 |
-| `html.lang` | `ko` |
-| `html` | `suppressHydrationWarning` 적용 |
-| `head > link` | Pretendard CDN 스타일시트 주입 |
-| `beforeInteractive script` | `proposal-web-theme` 키 기준 초기 테마 부트스트랩 |
+| 레벨 | 소유 파일 | 구성 요소 | 책임 |
+|------|-----------|-----------|------|
+| route layout | `apps/proposal/web/src/app/layout.tsx` | route 전용 HTML/container | route skeleton 조립과 child mount |
+| child content | child `page.tsx` / slot page | 콘텐츠 전용 컴포넌트 | layout이 제공한 slot 안에서 실제 화면 콘텐츠 구현 |
 
-## 의존성
+- `apps/proposal/web/src/app/page.spec.md`
 
-| 모듈 | 용도 |
-|------|------|
-| `./providers` | HeroUI 디자인 시스템 제공 |
-| `./globals.css` | 랜딩 전역 스타일 적용 |
+## Surface Ownership
 
-## 구현 체크리스트
+| 레벨 | Owner | 구성 | 역할 |
+|------|-------|------|------|
+| route skeleton | `apps/proposal/web/src/app/layout.tsx` | route 전용 HTML/container | route 단위 배치와 표면 소유 |
+| child content | child `page.tsx` | route skeleton 내부 콘텐츠 | 데이터 조회, 입력, 목록, 상세 상호작용 |
 
-- [x] metadata 정의
-- [x] Pretendard 웹폰트 적용
-- [x] 초기 테마 부트스트랩 적용
-- [x] Providers 연결
+## Slot Topology
+
+| Slot key | 파일 | 설명 |
+|----------|------|------|
+| `children` | `apps/proposal/web/src/app/page.tsx` | 기본 route 콘텐츠 mount |
+
+## Slot URL Mapping
+
+| Slot key | URL |
+|----------|-----|
+| `children` | `/` |
+
+## Slot Fallbacks
+
+- named slot이 없어 `default.tsx` fallback은 필요하지 않습니다.
+
+## Independent Navigation Policy
+
+- `children` 단일 slot 구조이며 independent navigation이 필요한 병렬 영역은 없습니다.
+
+## Child Content Contract
+
+- child `page.tsx`와 `@slot/**/page.tsx`는 자신이 채우는 slot 콘텐츠만 구현합니다.
+- child 페이지는 `Page`, `PageSurface`, `Section`, `SectionSurface`, `Surface`를 다시 조립하지 않습니다.
+- child 페이지 계약은 각 `page.spec.md`의 `Consumed Layout Contract`와 `Rendering Decision`을 따릅니다.
 
 ## 변경 이력
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
-| 2026-03-20 | 라이트 기본 + 다크 지원을 위해 hydration-safe HTML 설정과 초기 테마 스크립트를 추가 | codex |
-| 2026-03-12 | proposal-web 루트 layout 신규 생성 | codex |
-| 2026-03-12 | Pretendard 폰트 링크를 적용하고 레이아웃 계약을 갱신 | codex |
+| 2026-03-21 | fe-route-layout-builder 계약에 맞춰 layout skeleton/slot 계약을 재정의 | codex |
