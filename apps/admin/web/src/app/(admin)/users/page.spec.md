@@ -14,15 +14,17 @@
 │  시스템에 등록된 이용자를 조회합니다.                                │
 ├────────────────────────────────────────────────────────────────────┤
 │                                                                    │
-│  ┌────────────────┐  ┌────────────────┐  ┌─────────────────┐      │
-│  │  전체 이용자    │  │  활성 이용자   │  │  비활성 이용자   │      │
-│  │  Users         │  │  UserCheck     │  │  UserMinus       │      │
-│  │                │  │                │  │                  │      │
-│  │     128        │  │     115        │  │       13         │      │
-│  └────────────────┘  └────────────────┘  └─────────────────┘      │
+│  ┌────────────────────────────────┐ ┌────────────┐ ┌────────────┐  │
+│  │ 전체 이용자                     │ │ 활성 이용자 │ │ 비활성 이용자 │  │
+│  │ 활성 115명 · 비활성 13명        │ │ 운영 중 계정│ │ 비활성 계정   │  │
+│  │                                │ │     115    │ │      13    │  │
+│  │              128               │ └────────────┘ └────────────┘  │
+│  └────────────────────────────────┘                                 │
 │                                                                    │
+│  회원 디렉터리                                      [총 128명]     │
+│  등록된 이용자를 빠르게 검색하고 상태를 확인할 수 있습니다.        │
 │  ┌──────────────────────────────────────────────────────────┐      │
-│  │  🔍 이름, 이메일, 전화번호로 검색...                       │      │
+│  │  🔍 이름, 이메일, 전화번호로 검색...                     │      │
 │  └──────────────────────────────────────────────────────────┘      │
 │                                                                    │
 │  ┌──────────────────────────────────────────────────────────────┐  │
@@ -42,51 +44,60 @@
 ## 사용자 시나리오
 
 1. 관리자가 `/users` 경로에 진입하면 CSR로 이용자 목록을 조회한다.
-2. 상단에 통계 카드(전체/활성/비활성 이용자 수)가 표시된다.
-3. 검색창에서 이름, 이메일, 전화번호로 통합 검색할 수 있다 (300ms 디바운스).
+2. 상단 요약 영역에서 전체/활성/비활성 이용자 수를 위계감 있게 확인한다.
+3. 디렉터리 헤더에서 총 인원 수를 확인하고, 검색창에서 이름/이메일/전화번호를 통합 검색한다 (300ms 디바운스).
 4. 테이블에서 이용자 목록을 확인하고 페이지네이션으로 이동할 수 있다.
 
-## 레이아웃 구성
+## Consumed Layout Contract
 
-| 영역        | 컴포넌트                          | 설명                                                    |
-| ----------- | --------------------------------- | ------------------------------------------------------- |
-| 페이지 구조 | `Page` + `PageTitleBar`           | 페이지 콘텐츠 구조와 제목/설명 배치                     |
-| 페이지 표면 | `PageSurface`                     | 본문 전체를 감싸는 raised 표현 레이어                   |
-| 통계 영역   | `SectionSurface` > `StatsCard` x3 | 전체(Users)/활성(UserCheck)/비활성(UserMinus) 이용자 수 |
-| 목록 영역   | `SectionSurface` > `MetaDataGrid` | 이용자 목록 테이블 (`padding="none"`)                   |
+| 항목 | 값 |
+|------|----|
+| 참조 layout spec | `apps/admin/web/src/app/(admin)/users/layout.spec.md` |
+| consumed slot key | `children` |
+| 콘텐츠 파일 | `apps/admin/web/src/app/(admin)/users/page.tsx` |
+| page가 소유하지 않는 skeleton | `Page`, `PageTitleBar`, `PageSurface`, `Section`, `SectionSurface`, `Surface` |
 
-## Surface / Elevation
+- `users/layout.tsx`가 제공하는 `SectionSurface` 내부에 콘텐츠를 마운트합니다.
+- 이 페이지는 route-level skeleton을 다시 만들지 않고, 통계 블록과 디렉터리/grid 콘텐츠만 렌더링합니다.
 
-| 항목                   | 결정                                                                                             |
-| ---------------------- | ------------------------------------------------------------------------------------------------ |
-| PageSurface owner      | `apps/admin/web/src/app/(admin)/users/_client.tsx`                                               |
-| PageSurface 역할       | 통계 카드와 목록 그리드를 하나의 raised 본문으로 묶음                                            |
-| SectionSurface 대상    | 통계 카드 묶음, 이용자 목록 `MetaDataGrid`                                                       |
-| SectionSurface padding | 통계 영역은 기본 패딩, 목록 영역은 `padding="none"`                                              |
-| 예외                   | 없음. 검색 입력과 그리드 툴바는 `MetaDataGrid` 슬롯이지만 surface는 `users/_client.tsx`가 직접 소유 |
+## Rendering Decision
+
+- 기본 패턴: `page.tsx` 단일 CSR
+- SSR/prefetch 예외 승인 여부: 없음
+- 추가 예외 파일: 없음 (`_client.tsx`, `_prefetch.ts` 미사용)
+- `Suspense` fallback은 `page.tsx` 내부에서 콘텐츠 로딩 상태만 처리합니다.
+
+## 콘텐츠 구성
+
+| 영역 | 구성 요소 | 설명 |
+|------|-----------|------|
+| 통계 블록 | `StatsCard` x3 | 총 이용자 리드 카드 + 활성/비활성 보조 카드 위계 |
+| 디렉터리 헤더 | page-local header + `Chip` | 총 인원 표시와 설명 텍스트 |
+| 검색 영역 | page-local custom `Input` | `search` query param 기반, 300ms 디바운스 |
+| 목록 영역 | `MetaDataGrid` | 이용자 목록, 페이지네이션, 빈 상태 메시지 |
 
 ## 컬럼 정의
 
 | 필드      | 라벨     | 너비 | Cell 컴포넌트    | 비고                      |
 | --------- | -------- | ---- | ---------------- | ------------------------- |
-| name      | 이름     | 150  | 기본 텍스트      | isRequired                |
-| email     | 이메일   | 200  | 기본 텍스트      |                           |
-| phone     | 전화번호 | 150  | `PhoneCell`      | 포맷팅 표시               |
+| name      | 이름     | 150  | page-local cell  | 강조 타이포, isRequired   |
+| email     | 이메일   | 200  | page-local cell  | 보조 텍스트, truncate     |
+| phone     | 전화번호 | 150  | page-local + `PhoneCell` | tabular 숫자 스타일 |
 | role      | 역할     | 120  | `UserRoleCell`   | tenants 기반, 중앙 정렬   |
 | status    | 상태     | 100  | `StatusChipCell` | removedAt 기반, 중앙 정렬 |
-| createdAt | 가입일   | 150  | `DateTimeCell`   |                           |
+| createdAt | 가입일   | 150  | page-local + `DateTimeCell` | 보조 정보 톤 |
 
 ## 검색 설정
 
 | ID     | 타입   | placeholder                        | 옵션            |
 | ------ | ------ | ---------------------------------- | --------------- |
-| search | search | "이름, 이메일, 전화번호로 검색..." | debounceMs: 300 |
+| search | custom | "이름, 이메일, 전화번호로 검색..." | `search` query param, debounceMs: 300 |
 
 ## 페이지 상태
 
 | 상태           | 설명              | UI                                  |
 | -------------- | ----------------- | ----------------------------------- |
-| 로딩           | 초기 조회 중      | `PageSurface` 내부 중앙 로딩 스피너 |
+| 로딩           | 초기 조회 중      | route layout이 제공한 본문 surface 내부 중앙 로딩 스피너 |
 | 데이터 표시    | 이용자 목록 표시  | 통계 카드 + 테이블                  |
 | 빈 목록        | 조회 결과 없음    | "조회된 이용자가 없습니다." 메시지  |
 | 검색 결과 없음 | 검색 후 결과 없음 | 빈 목록 메시지                      |
@@ -95,7 +106,7 @@
 
 | 시점            | API                                 | 설명                        |
 | --------------- | ----------------------------------- | --------------------------- |
-| 클라이언트 렌더 | `useGetUsers({ take, skip, name })` | nuqs URL 상태 기반 CSR 조회 |
+| 클라이언트 렌더 | `useGetUsers({ take, skip, name })` | `take`/`skip` + `search` URL 상태 기반 CSR 조회 |
 
 ## 응답 데이터 구조
 
@@ -109,15 +120,16 @@
 
 | 이벤트           | 동작                                                        |
 | ---------------- | ----------------------------------------------------------- |
-| 검색어 입력      | `queryStates.search` 업데이트 (300ms 디바운스) → API 재호출 |
+| 검색어 입력      | `search` URL 파라미터 업데이트 (300ms 디바운스) → API 재호출 |
 | 페이지 변경      | `queryStates.skip` 업데이트 → API 재호출                    |
 | 페이지 크기 변경 | `queryStates.take` 업데이트 → API 재호출                    |
 
 ## URL 상태 관리
 
-`useMetaDataGridQueryStates` 훅을 사용하여 nuqs 기반으로 URL 쿼리 파라미터를 관리합니다.
+페이지네이션은 `useMetaDataGridQueryStates`, 검색어는 page-local `useQueryState("search")`로 관리합니다.
 
-- Next.js App Router build 요구에 맞춰 `page.tsx`는 browser-only no-SSR wrapper만 제공하고 실제 훅 실행과 목록 렌더링은 `_client.tsx`가 담당합니다.
+- `page.tsx`가 직접 CSR 콘텐츠를 렌더링하며, `Suspense` boundary 안에서 목록 훅과 URL 상태 훅을 실행합니다.
+- 검색 입력은 시각적 존재감을 높이기 위해 custom input으로 렌더링하지만, URL 파라미터 계약은 유지합니다.
 
 | 파라미터 | 타입   | 기본값 | 설명                                |
 | -------- | ------ | ------ | ----------------------------------- |
@@ -127,18 +139,23 @@
 
 ## 구현 체크리스트
 
-- [x] page.tsx (`dynamic(() => import("./_client"), { ssr: false })` browser-only wrapper)
-- [x] `_client.tsx` (`useMetaDataGridQueryStates`, `useGetUsers`, `MetaDataGrid`, `StatsCard` 실행)
+- [x] `layout.tsx`가 route-level `Page/PageSurface/Section/Surface` skeleton 소유
+- [x] `page.tsx` 단일 CSR 콘텐츠 파일
+- [x] `page.tsx`에서 `useMetaDataGridQueryStates`, `useGetUsers`, `MetaDataGrid`, `StatsCard` 실행
+- [x] `_client.tsx` 제거
 - [x] `_prefetch.ts` 없음 (SSR 예외 아님)
+- [x] named slot 없음 (`children`만 사용)
 
 ## 상위 기획서
 
-- `apps/admin/src/app/(admin)/app.spec.md`
+- `apps/admin/web/src/app/(admin)/app.spec.md`
 
 ## 변경 이력
 
 | 일자       | 내용                                                                                                              | 작성자               |
 | ---------- | ----------------------------------------------------------------------------------------------------------------- | -------------------- |
+| 2026-03-21 | `users/layout.tsx`가 route skeleton을 소유하도록 재구성하고 `page.tsx`를 content-only CSR 단일 파일로 통합       | codex                |
+| 2026-03-21 | 이용자 목록을 요약 카드 + 디렉터리 헤더 구조로 재구성하고 page-local custom search input 및 강화된 셀 스타일을 반영 | codex                |
 | 2026-03-15 | 상대 `/api` 호출의 prerender 오류를 피하기 위해 users 목록 `page.tsx`를 browser-only no-SSR boundary로 전환       | codex                |
 | 2026-03-15 | Next.js build 요구에 맞춰 `useMetaDataGridQueryStates` 실행을 page-level `Suspense` boundary 안쪽으로 이동        | codex                |
 | 2026-03-15 | users 목록 spec에 `PageSurface`/`SectionSurface` ownership과 elevation 결정을 명시                                | codex                |

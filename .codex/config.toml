@@ -189,15 +189,19 @@ description = "폼 입력 컴포넌트를 packages/fe-ui/src/input에 생성하�
 config_file = "agents/fe-input-component-builder.toml"
 
 [agents.fe-layout-builder]
-description = "Layout 컴포넌트를 설계하고 생성하는 전문가"
+description = "packages/fe-ui/src/layout의 재사용 Layout 컴포넌트를 설계하고 생성하는 전문가"
 config_file = "agents/fe-layout-builder.toml"
+
+[agents.fe-route-layout-builder]
+description = "Next.js App Router의 app/**/layout.tsx와 named slot topology를 설계하고 생성하는 전문가"
+config_file = "agents/fe-route-layout-builder.toml"
 
 [agents.fe-menu-builder]
 description = "메뉴 시스템 컴포넌트를 생성하는 전문가"
 config_file = "agents/fe-menu-builder.toml"
 
 [agents.fe-page-builder]
-description = "Pure UI 페이지 컴포넌트를 생성하는 전문가 (다국어 렌더링/문구 키 적용 포함)"
+description = "route layout contract를 소비해 page.tsx/@slot/**/page.tsx 콘텐츠를 구현하는 전문가 (다국어 렌더링/문구 키 적용 포함)"
 config_file = "agents/fe-page-builder.toml"
 
 [agents.fe-store-builder]
@@ -277,8 +281,12 @@ description = "입력 컴포넌트(Inputs) sidecar spec을 기획하는 전문�
 config_file = "agents/req-input-planner.toml"
 
 [agents.req-layout-planner]
-description = "페이지/섹션 Layout sidecar spec을 기획하는 전문가"
+description = "packages/fe-ui/src/layout 재사용 Layout sidecar spec을 기획하는 전문가"
 config_file = "agents/req-layout-planner.toml"
+
+[agents.req-route-layout-planner]
+description = "route layout.tsx의 서버 skeleton, named slot topology, layout.spec.md를 기획하는 전문가"
+config_file = "agents/req-route-layout-planner.toml"
 
 [agents.req-logic-planner]
 description = "비즈니스 로직과 테스트 레이어를 기획하는 전문가"
@@ -289,7 +297,7 @@ description = "메뉴 경로/권한 sidecar spec을 기획하는 전문가"
 config_file = "agents/req-menu-planner.toml"
 
 [agents.req-page-planner]
-description = "페이지 통합 관점에서 page.spec.md를 상세 기획하는 전문가 (다국어 키/리소스 정책 포함)"
+description = "route layout contract를 소비하는 page.spec.md/@slot page.spec.md를 상세 기획하는 전문가 (다국어 키/리소스 정책 포함)"
 config_file = "agents/req-page-planner.toml"
 
 [agents.req-reverse-engineer]
@@ -301,7 +309,7 @@ description = "기능(Feature)과 화면(Screen) 레이어를 기획하는 전�
 config_file = "agents/req-screen-planner.toml"
 
 [agents.req-surface-planner]
-description = "페이지/feature/layout의 Surface ownership과 elevation 배치를 기획하는 전문가"
+description = "route layout/page/feature의 Surface ownership과 elevation 배치를 기획하는 전문가"
 config_file = "agents/req-surface-planner.toml"
 
 [agents.req-spec-tracker]

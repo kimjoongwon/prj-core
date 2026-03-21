@@ -18,7 +18,8 @@ tools:
 
 # 메뉴 빌더
 
-Admin/Dashboard 앱의 **메뉴 시스템 컴포넌트**(Sidebar, BottomTab, FAB, Tabs)를 생성합니다.
+Admin/Dashboard 앱의 **메뉴 시스템 컴포넌트**(Sidebar, BottomTab, FAB, Tabs)와 메뉴 contract를 생성합니다.
+실제 `apps/**/layout.tsx` 파일 작성은 `fe-route-layout-builder` 책임이며, 이 에이전트는 route layout이 소비할 메뉴/탭 구성과 재사용 메뉴 UI를 제공합니다.
 
 ---
 
@@ -135,7 +136,7 @@ app/(admin)/
 │   │   └── page.tsx                → /{domain}/{status}
 │   ├── {action}/
 │   │   └── page.tsx                → /{domain}/{action}
-│   └── layout.tsx                  → 공통 레이아웃 + 탭 UI
+│   └── layout.tsx                  → route skeleton + 탭 contract 소비 (`fe-route-layout-builder`)
 ```
 
 ---
@@ -454,121 +455,57 @@ const showFab = visibleActions.length > 0;
 
 ## 8. 3depth 탭 구현 패턴
 
-### layout.tsx에서 탭 UI 렌더링
+### route layout에서 탭 contract 소비
+
+3depth 탭은 route skeleton 안에서 렌더링합니다.
+다만 **실제 `layout.tsx` 파일 작성 책임은 `fe-route-layout-builder`** 에 있고, `fe-menu-builder`는 탭 데이터 구조와 `PageTabs` 같은 메뉴 컴포넌트를 제공합니다.
 
 ```typescript
-"use client";
-
-import { usePathname } from "next/navigation";
-import { Tabs, Tab } from "@heroui/react";
-import Link from "next/link";
-
 interface TabConfig {
   id: string;
   label: string;
   href: string;
 }
 
-interface Props {
-  tabs: TabConfig[];
-  children: React.ReactNode;
-}
-
-export default function TabLayout({ tabs, children }: Props) {
-  const pathname = usePathname();
-
-  // 현재 경로로 활성 탭 판단
-  const activeTab = tabs.find(tab => pathname === tab.href)?.id
-    || tabs[0]?.id;
-
-  return (
-    <div>
-      <Tabs selectedKey={activeTab}>
-        {tabs.map(tab => (
-          <Tab key={tab.id}>
-            <Link href={tab.href}>{tab.label}</Link>
-          </Tab>
-        ))}
-      </Tabs>
-      {children}
-    </div>
-  );
-}
-```
-
-### 사용 예시
-
-```typescript
-// app/(admin)/users/layout.tsx
-const userTabs = [
+const userTabs: TabConfig[] = [
   { id: 'all', label: '전체', href: '/users' },
   { id: 'active', label: '활성', href: '/users/active' },
   { id: 'inactive', label: '비활성', href: '/users/inactive' },
 ];
-
-export default function UsersLayout({ children }) {
-  return (
-    <TabLayout tabs={userTabs}>
-      {children}
-    </TabLayout>
-  );
-}
 ```
 
----
+### route layout 소비 예시
 
-## 8.1 Layout vs Page 책임 분리
+```tsx
+// app/(admin)/users/layout.tsx
+// written by fe-route-layout-builder
+import { Page, PageSurface, Section, SectionSurface, PageTabs } from "@cocrepo/ui";
 
-### 탭 렌더링 위치
-
-**3depth 탭은 layout.tsx에서 렌더링합니다.**
-
-```typescript
-// ✅ 올바른 패턴 - layout.tsx
-export default function UsersLayout({ children }) {
-  const tabs = [
-    { id: 'all', label: '전체', href: '/users' },
-    { id: 'active', label: '활성', href: '/users/active' },
-  ];
-
+export default function UsersLayout({ children }: { children: React.ReactNode }) {
   return (
-    <div>
-      <PageTabs tabs={tabs} />
-      {children}
-    </div>
-  );
-}
-
-// page.tsx (또는 _client.tsx)
-export default function UsersPage() {
-  return (
-    <Page top={<PageTitleBar title="회원 목록" description="..." />}>
-      <Section>
-        {/* 페이지 콘텐츠 */}
-      </Section>
+    <Page top={<PageTabs tabs={userTabs} />}>
+      <PageSurface>
+        <SectionSurface>
+          <Section>{children}</Section>
+        </SectionSurface>
+      </PageSurface>
     </Page>
   );
 }
 ```
 
-### 왜 Layout에서 탭을 렌더링하는가?
+### 책임 분리
 
-1. **공유 UI 요소**: 탭은 하위 경로 간 공유되는 네비게이션
-2. **항상 표시**: `/users`, `/users/active` 등 모든 탭 페이지에서 동일한 탭 UI 유지
-3. **Layout의 역할**: 구조적 네비게이션 요소 제공
+- `fe-menu-builder`: 메뉴 트리, 탭 contract, `PageTabs`/`BottomTab`/`SideNav`/`FAB` 같은 메뉴 UI
+- `fe-route-layout-builder`: 실제 `layout.tsx` 파일에서 skeleton 조립
+- `fe-page-builder`: route skeleton 안의 실제 페이지 콘텐츠 구현
 
-### PageTitleBar와의 차이
+### 운영 규칙
 
-| 요소 | 위치 | 이유 |
-|------|------|------|
-| **PageTabs** | Layout | 하위 경로 간 공유되는 네비게이션 |
-| **PageTitleBar** | Page | 페이지별 고유한 title, description, actions |
-
-### CLAUDE.md 원칙과의 관계
-
-**"PageTitleBar는 Page에서만 사용"** 원칙은 여전히 유효합니다:
-- ❌ Layout에서 PageTitleBar 사용 금지 (타이틀 중복 방지)
-- ✅ Layout에서 PageTabs 사용 가능 (공유 네비게이션)
+1. 3depth 탭은 route `layout.tsx` skeleton 안에서 한 번만 렌더링합니다.
+2. `page.tsx`가 동일 탭을 다시 렌더링하면 안 됩니다.
+3. title/description/actions가 layout skeleton에 포함될지 page 콘텐츠에 남을지는 `req-route-layout-planner`와 `req-page-planner` 계약을 따릅니다.
+4. 활성 탭 판단이 client 상태를 필요로 하면 `PageTabs` 내부 feature/widget이 담당하고, route `layout.tsx` 자체는 서버 파일로 유지합니다.
 
 ---
 
@@ -640,7 +577,7 @@ const SideNav = observer(() => {
 ### 3depth 탭
 
 - [ ] pathParam 기반 경로인가?
-- [ ] layout.tsx에서 탭 UI가 렌더링되는가?
+- [ ] route `layout.tsx` skeleton에서 탭 UI가 렌더링되는가?
 - [ ] usePathname으로 활성 탭이 판단되는가?
 
 ---

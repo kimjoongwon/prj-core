@@ -6,17 +6,19 @@
 
 ## 역할
 
-Surface planner agent가 페이지/레이아웃/기능 사이의 시각적 표면 소유권을 확정하도록 기준을 정의합니다.
-구조 컴포넌트와 표현 컴포넌트를 혼동하지 않도록 `Page owns Surface` 원칙을 문서화합니다.
+Surface planner agent를 route layout 중심 ownership 모델에 맞춰 재정의합니다.
+이 planner는 `layout.spec.md`가 소유할 `PageSurface`, `SectionSurface`, `Surface`와 `page.spec.md`가 소비만 해야 하는 계약을 분리합니다.
 
 ## 운영 규칙
 
-- 페이지 고유 title/description/actions와 `PageSurface`는 `page.tsx` 또는 `_client.tsx`에서 소유합니다.
-- `layout.tsx`는 공유 네비게이션과 구조만 담당하며 페이지 고유 Surface를 소유하지 않습니다.
-- 검색/필터/DataGrid/폼과 같이 시각적으로 묶이는 블록은 `SectionSurface` 또는 명시적 예외 근거가 필요합니다.
+- route-level surface owner는 기본적으로 `layout.tsx`입니다.
+- named slot을 쓰더라도 surface owner는 기본적으로 parent layout 쪽에서 먼저 결정합니다.
+- `page.spec.md`는 surface owner가 아니라 소비 계약 문서입니다.
+- owner 중복과 flat 예외 누락을 실패 조건으로 다룹니다.
 
 ## 변경 이력
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
-| 2026-03-15 | Surface ownership과 elevation 배치를 전담하는 planner role 신규 생성 | codex |
+| 2026-03-21 | route layout 중심 surface ownership 모델로 planner 규칙을 재정의 | codex |
+| 2026-03-21 | named slot과 fallback의 surface ownership 규칙을 추가 | codex |

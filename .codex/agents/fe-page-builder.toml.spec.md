@@ -6,18 +6,21 @@
 
 ## 역할
 
-페이지 빌더 role이 CSR/SSR 판별과 함께 `Surface / Elevation` 결정을 실제 `page.tsx`, `_client.tsx` 코드로 구현하는 규칙을 정의합니다.
+페이지 빌더 role을 route skeleton 소비자 기준으로 재정의합니다.
+`layout.tsx`가 화면 뼈대를 소유하고, `fe-page-builder`는 `page.tsx`와 `@slot/**/page.tsx` 콘텐츠를 단일 CSR 기본값으로 구현합니다.
 
 ## 운영 규칙
 
-- `page.spec.md`의 `Surface / Elevation` 섹션을 입력 계약으로 읽고 구현합니다.
-- `PageSurface` owner는 항상 `page.tsx` 또는 `_client.tsx`이며, `layout.tsx`가 페이지 고유 Surface를 소유하면 실패입니다.
-- `Layout`, `Page`, `Section`, `MetaDataGrid` 슬롯은 구조만 제공하므로 background/elevation을 자동 생성한다고 가정하면 안 됩니다.
-- 검색/필터/DataGrid/폼/카드 등 시각 블록은 spec에 기록된 `SectionSurface`와 `padding` 정책을 그대로 반영합니다.
-- flat 예외는 spec에 근거가 있을 때만 허용합니다.
+- 기본 구현은 여전히 `page.tsx` 단일 CSR입니다.
+- `fe-page-builder`는 작업 시작 전에 반드시 sibling `layout.spec.md`를 읽고 `Consumed Layout Contract`를 확인해야 합니다.
+- named slot 콘텐츠 파일(`@slot/**/page.tsx`)도 같은 계약을 소비하며, `default.tsx`는 이 agent 범위가 아닙니다.
+- route-level `Page`, `PageSurface`, `Section`, `SectionSurface`, `Surface` 조합은 `page.tsx`에서 다시 만들지 않습니다.
+- `_client.tsx`, `_prefetch.ts`, `HydrationBoundary` 기반 SSR/prefetch 패턴은 개발자 승인된 예외에서만 허용합니다.
+- `page.spec.md`에는 반드시 `## Consumed Layout Contract`와 `## Rendering Decision` 섹션이 있어야 합니다.
 
 ## 변경 이력
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
-| 2026-03-15 | `Surface / Elevation` 입력 계약과 Page-owned Surface 구현 규칙을 추가 | codex |
+| 2026-03-21 | route layout ownership 기준에 맞게 page builder를 콘텐츠 전용으로 재정의 | codex |
+| 2026-03-21 | named slot 콘텐츠(`@slot/**/page.tsx`) 지원 규칙을 추가 | codex |

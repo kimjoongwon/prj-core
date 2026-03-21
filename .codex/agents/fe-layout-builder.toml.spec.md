@@ -6,21 +6,17 @@
 
 ## 역할
 
-레이아웃 빌더 agent의 최신 프론트엔드 레이아웃 규칙을 정의합니다.
-`App > Layout > Page > Section` 계층을 유지하면서 `PageSurface`, `SectionSurface`를 표현 레이어로만 쓰는 규칙을 이 파일에서 고정합니다.
+`fe-layout-builder`를 재사용 Layout primitive 전용 agent로 고정합니다.
+대상은 `packages/fe-ui/src/layout/**`이며, Next.js `apps/**/layout.tsx`는 범위에서 제외합니다.
 
 ## 운영 규칙
 
-- Layout은 공유 배치와 네비게이션만 담당하고 페이지 고유 title/description/actions는 `page.tsx` 또는 `_client.tsx`에서 처리합니다.
-- 실제 구현 경로는 `packages/fe-ui/src/layout/Page`, `packages/fe-ui/src/layout/Section`, `packages/fe-ui/src/widget/PageTitleBar`, `packages/fe-ui/src/surface/*` 기준으로 안내해야 합니다.
-- `PageSurface`, `SectionSurface`, `Surface`는 표현 레이어로 제안할 수 있지만 `Page`/`Section`을 대체하는 구조 컴포넌트처럼 설명하면 안 됩니다.
-- Layout 슬롯에 컴포넌트를 올렸다고 background/elevation이 자동 생성된다고 설명하면 안 되며, `page.spec.md`의 `Surface / Elevation` 결정을 우선합니다.
-- `layout.tsx` 예시는 `children`을 직접 전달하고, `Page`는 페이지 컴포넌트에서만 사용하는 방향으로 설명합니다.
+- `App`, `Layout`, `Page`, `Section`은 구조 primitive이며 route 지식과 비즈니스 로직을 가지지 않습니다.
+- `PageSurface`, `SectionSurface`, `Surface`는 별도 surface 계층으로 남기고, 이 문서는 구조 primitive와의 조합 가능성만 다룹니다.
+- `fe-route-layout-builder`가 실제 route skeleton을 조립하므로, `fe-layout-builder` 문서에는 `layout.tsx` 작성 지시를 남기지 않습니다.
 
 ## 변경 이력
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
-| 2026-03-15 | Layout 슬롯 배치만으로 Surface가 생기지 않는다는 ownership 규칙을 추가 | codex |
-| 2026-03-15 | Surface를 폐기 개념이 아닌 표현 레이어로 재정의하고 `Page` 대체 금지 규칙을 명시 | codex |
-| 2026-03-15 | `PageSurface/SectionSurface` 기반 규칙과 예시를 `Page + PageTitleBar + Section` 기준으로 최신화 | codex |
+| 2026-03-21 | `apps/**/layout.tsx` 책임을 분리하고 재사용 Layout primitive 전용 agent로 역할을 축소 | codex |

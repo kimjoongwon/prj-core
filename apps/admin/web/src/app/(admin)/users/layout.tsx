@@ -1,13 +1,41 @@
+import type { ReactNode } from "react";
+import {
+	Page,
+	PageSurface,
+	PageTitleBar,
+	Section,
+	SectionSurface,
+	Surface,
+} from "@cocrepo/ui";
+
 /**
  * 회원 관리 레이아웃
  *
- * 페이지 헤더/섹션 UI는 각 Page 컴포넌트에서 담당합니다.
- * Layout은 구조적 래핑만 수행합니다.
+ * route-level skeleton과 surface ownership은 서버 layout.tsx가 담당합니다.
  */
 export default function UsersLayout({
 	children,
 }: {
-	children: React.ReactNode;
+	children: ReactNode;
 }) {
-	return <>{children}</>;
+	return (
+		<Page
+			top={
+				<Section>
+					<Surface elevation="flat">
+						<PageTitleBar
+							title="이용자 목록"
+							description="시스템에 등록된 이용자를 조회합니다."
+						/>
+					</Surface>
+				</Section>
+			}
+		>
+			<PageSurface padding="none">
+				<Section>
+					<SectionSurface className="overflow-hidden">{children}</SectionSurface>
+				</Section>
+			</PageSurface>
+		</Page>
+	);
 }

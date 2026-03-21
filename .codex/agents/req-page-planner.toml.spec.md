@@ -6,20 +6,19 @@
 
 ## 역할
 
-Page planner agent의 필수 기획 항목을 최신 페이지 구조 패턴에 맞춰 정의합니다.
-페이지 설계 시 `Page`, `Section`, `PageTitleBar` 구조와 `PageSurface`, `SectionSurface` 표현 레이어의 배치 위치를 함께 기록하도록 강제합니다.
+`req-page-planner`를 route skeleton 소비형 `page.spec.md` planner로 재정의합니다.
+root page뿐 아니라 named slot 콘텐츠용 `@slot/**/page.spec.md`도 같은 원칙으로 계획합니다.
 
 ## 운영 규칙
 
-- 페이지 기획은 서버 `page.tsx`, 클라이언트 `_client.tsx`, `_prefetch.ts` 구성과 함께 `Page + PageTitleBar` 구조와 `PageSurface`, `SectionSurface` 사용 여부를 포함해야 합니다.
-- 페이지 헤딩/액션은 `PageTitleBar`를 기준으로 설계하고 인라인 반복 마크업을 허용하지 않습니다.
-- Surface는 구조 대체가 아니라 표현 레이어라는 점을 기획서에 명시합니다.
-- Surface를 생략하는 경우에는 page가 flat 배경을 의도한 이유를 기록해야 합니다.
+- `page.spec.md`에는 `## Consumed Layout Contract`와 `## Rendering Decision`을 반드시 포함합니다.
+- named slot 콘텐츠일 때는 consumed slot key와 대상 파일 경로를 계약에 함께 기록합니다.
+- route-level 구조/표면 배치는 `layout.spec.md`가 먼저 정의합니다.
+- `page.spec.md`는 데이터, 이벤트, 테스트, CSR/SSR 판단을 중심으로 작성합니다.
 
 ## 변경 이력
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
-| 2026-03-15 | `req-surface-planner` 협업을 위해 Surface owner와 flat 예외 근거 기록 규칙을 추가 | codex |
-| 2026-03-15 | Page/Section 구조와 Surface 표현 레이어를 함께 기록하는 기준으로 수정 | codex |
-| 2026-03-15 | page planner의 필수 기획 항목을 `Page`, `Section`, `PageTitleBar` 기준으로 최신화 | codex |
+| 2026-03-21 | route layout contract 소비형 page planner로 역할을 재정의 | codex |
+| 2026-03-21 | named slot 콘텐츠 spec 기획 규칙을 추가 | codex |
