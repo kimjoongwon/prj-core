@@ -706,7 +706,7 @@ packages/fe-ui/src/primitive/[UIName]/index.spec.md   # UI 컴포넌트 기획�
 packages/fe-ui/src/input/[InputName]/index.spec.md   # Input 기획서
 packages/fe-ui/src/primitive/data-display/cell/[CellName]/index.spec.md   # Cell 기획서
 packages/fe-ui/src/widget/[WidgetName]/index.spec.md  # Widget 기획서
-packages/fe-ui/src/layout/[LayoutName]/index.spec.md  # Layout 기획서
+packages/fe-ui/src/primitive/layout/{index,Layout,type}.spec.md  # Layout 기획서
 packages/fe-ui/src/feature/[FeatureName]/index.spec.md  # Feature 기획서
 packages/common-constant/src/routing/admin-menu.spec.md  # 메뉴 기획서
 apps/admin/web/src/app/**/hooks/index.spec.md  # API 연동 기획서

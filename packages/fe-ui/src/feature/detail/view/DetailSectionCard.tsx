@@ -1,8 +1,27 @@
-import type { ComponentProps } from "react";
-import { SectionSurface } from "../../../surface/SectionSurface/SectionSurface";
+import type { ReactNode } from "react";
+import type { ElevationLevel } from "../../../design-system/theme/tokens";
+import {
+	DEFAULT_SURFACE_PADDING,
+	Surface,
+	type SurfacePadding,
+} from "../../../surface/Surface";
 
-export type DetailSectionCardProps = ComponentProps<typeof SectionSurface>;
+export interface DetailSectionCardProps {
+	children?: ReactNode;
+	className?: string;
+	elevation?: ElevationLevel;
+	padding?: SurfacePadding;
+}
 
-export function DetailSectionCard(props: DetailSectionCardProps) {
-	return <SectionSurface {...props} />;
+export function DetailSectionCard({
+	children,
+	className,
+	elevation = "elevated",
+	padding = DEFAULT_SURFACE_PADDING,
+}: DetailSectionCardProps) {
+	return (
+		<Surface className={className} elevation={elevation} padding={padding}>
+			{children}
+		</Surface>
+	);
 }

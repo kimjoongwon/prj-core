@@ -24,7 +24,7 @@
 |------|-------|----------|------|
 | route body | `layout.tsx` | `PageSurface` | route 본문 표면 |
 | child mount | `layout.tsx` | `SectionSurface` | children mount |
-| content block | `page.tsx` | raw bordered container | 현황 카드/목록 구획 |
+| content block | `page.tsx` | `Surface` | 현황 카드/목록 구획 |
 
 ## Slot Topology
 
@@ -57,4 +57,5 @@
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-03-22 | inquiries page 콘텐츠 wrapper 기준을 raw container에서 범용 `Surface`로 정정 | codex |
 | 2026-03-21 | 문의 route의 서버 skeleton 계약 신규 정의 | codex |

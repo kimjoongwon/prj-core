@@ -19,7 +19,7 @@
 | 콘텐츠 파일 | `apps/admin/web/src/app/(admin)/users/page.tsx` |
 | page가 소유하지 않는 skeleton | `Page`, `PageSurface`, `Section`, `SectionSurface`, `Surface` |
 
-- `page.tsx`는 page-local `PageTitleBar`, 통계 카드, 디렉터리 헤더, `MetaDataGrid`만 렌더링합니다.
+- `page.tsx`는 page-local `PageTitleBar`, 통계 카드, 디렉터리 헤더, `Surface` 안의 `MetaDataGrid`만 렌더링합니다.
 
 ## Rendering Decision
 
@@ -37,7 +37,7 @@
 | 페이지 헤더 | `PageTitleBar` | 이용자 목록 안내 |
 | 통계 블록 | `StatsCard` x3 | 전체/활성/비활성 이용자 요약 |
 | 디렉터리 헤더 | page-local header + `Chip` | 총 인원과 설명 텍스트 |
-| 목록 영역 | `MetaDataGrid` | 검색 입력과 이용자 목록 |
+| 목록 영역 | `Surface` + `MetaDataGrid` | 검색 입력과 이용자 목록 |
 
 ## API 호출
 
@@ -64,5 +64,6 @@
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-03-22 | 목록 콘텐츠 wrapper를 범용 `Surface` 기준으로 문서화 | codex |
 | 2026-03-21 | 이용자 목록을 `master/table` 재사용 타깃으로 분류하고 page role 계약을 추가 | codex |
 | 2026-03-21 | 이용자 목록 spec을 generic route layout + content-only page 구조로 재작성 | codex |

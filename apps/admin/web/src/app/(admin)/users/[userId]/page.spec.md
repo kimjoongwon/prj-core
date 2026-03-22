@@ -7,7 +7,7 @@
 ## 사용자 시나리오
 
 1. 관리자가 이용자 목록에서 특정 이용자를 선택해 상세 정보를 확인합니다.
-2. 현재 구현은 TODO 상태이며, 목록 복귀 버튼과 placeholder 본문만 렌더링됩니다.
+2. 현재 구현은 TODO 상태이며, `DetailPage` 헤더와 목록 복귀 액션, placeholder 본문을 렌더링합니다.
 3. 추후 상세 본문은 `feature/detail/view` 재사용 계층을 소비하는 구조로 확장됩니다.
 
 ## Consumed Layout Contract
@@ -19,7 +19,7 @@
 | 콘텐츠 파일 | `apps/admin/web/src/app/(admin)/users/[userId]/page.tsx` |
 | page가 소유하지 않는 skeleton | `Page`, `PageSurface`, `Section`, `SectionSurface`, `Surface` |
 
-- `page.tsx`는 page-local 목록 복귀 버튼과 placeholder 상세 콘텐츠만 렌더링합니다.
+- `page.tsx`는 `feature/detail/view`의 detail shell 안에서 목록 복귀 액션과 placeholder 상세 콘텐츠만 렌더링합니다.
 
 ## Rendering Decision
 
@@ -34,8 +34,8 @@
 
 | 영역 | 구성 요소 | 설명 |
 |------|-----------|------|
-| 상단 액션 | `Button` | `/users` 목록 복귀 |
-| 상세 본문 | placeholder panel | TODO 상태 안내 |
+| 페이지 헤더 | `PageTitleBar` + `Button` | 이용자 ID 설명과 `/users` 목록 복귀 |
+| 상세 본문 | `DetailSectionCard` placeholder | TODO 상태 안내와 이용자 ID 표시 |
 
 ## API 호출
 
@@ -54,6 +54,7 @@
 - [x] `page.tsx` 단일 CSR 콘텐츠 파일
 - [x] route skeleton은 상위 `users/layout.tsx`가 소유
 - [x] `Rendering Decision`에 `detail/view` 재사용 타깃 명시
+- [x] `DetailPage`/`DetailPageSurface`/`DetailSectionCard`로 placeholder 본문을 렌더링
 - [x] `_client.tsx` 없음
 - [x] `_prefetch.ts` 없음
 
@@ -61,4 +62,5 @@
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-03-22 | TODO 상태의 이용자 상세도 `feature/detail/view` shell을 직접 소비하도록 본문/스펙을 정리 | codex |
 | 2026-03-21 | 이용자 상세를 `detail/view` 재사용 타깃으로 재정의하고 route-layout 계약 형식으로 재작성 | codex |

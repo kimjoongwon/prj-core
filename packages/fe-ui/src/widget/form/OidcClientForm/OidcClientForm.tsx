@@ -14,8 +14,8 @@ import {
 } from "@heroui/react";
 import { RefreshCw, Save } from "lucide-react";
 import { observer } from "mobx-react-lite";
-import { RedirectUriListInput } from "../../RedirectUriListInput/RedirectUriListInput";
 import { VStack } from "../../../layout/VStack/VStack";
+import { RedirectUriListInput } from "../../../input/RedirectUriListInput/RedirectUriListInput";
 
 /** 폼 상태 인터페이스 */
 export interface OidcClientFormState {

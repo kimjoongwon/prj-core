@@ -6,7 +6,7 @@ import {
 } from "@cocrepo/api/core/abilities";
 import { useGetActionsSuspense } from "@cocrepo/api/core/actions";
 import { useGetSubjectsSuspense } from "@cocrepo/api/core/subjects";
-import { DateTimeCell, PageTitleBar, VStack } from "@cocrepo/ui";
+import { DateTimeCell, PageTitleBar, Surface, VStack } from "@cocrepo/ui";
 import {
 	Button,
 	Chip,
@@ -167,7 +167,7 @@ const AbilitiesPageContent = observer(function AbilitiesPageContent({
 
 	return (
 		<VStack gap={4}>
-			<div className="rounded-2xl border border-divider/80 bg-content1/70 p-6">
+			<Surface className="rounded-2xl border-divider/80 bg-content1/70">
 				<div className="mb-5 border-b border-divider/80 pb-4">
 					<PageTitleBar level={2} title="필터" />
 				</div>
@@ -221,18 +221,14 @@ const AbilitiesPageContent = observer(function AbilitiesPageContent({
 					</Select>
 				</div>
 				<div className="mt-3 flex justify-end">
-					<Button
-						size="sm"
-						variant="flat"
-						onPress={onClickResetFiltersButton}
-					>
+					<Button size="sm" variant="flat" onPress={onClickResetFiltersButton}>
 						필터 초기화
 					</Button>
 				</div>
-			</div>
+			</Surface>
 
-			<div className="overflow-hidden rounded-2xl border border-divider/80 bg-content1/70">
-				<div className="border-b border-divider/80 px-6 py-5">
+			<Surface className="overflow-hidden rounded-2xl border-divider/80 bg-content1/70">
+				<div className="mb-4 border-b border-divider/80 pb-4">
 					<PageTitleBar level={2} title="권한 목록" />
 				</div>
 				{filteredAbilities.length === 0 ? (
@@ -300,7 +296,7 @@ const AbilitiesPageContent = observer(function AbilitiesPageContent({
 						</div>
 					</div>
 				)}
-			</div>
+			</Surface>
 		</VStack>
 	);
 });
@@ -312,18 +308,24 @@ function AbilitiesPageFallback() {
 				title="권한 목록"
 				description="시스템에 등록된 CASL 권한을 관리합니다."
 			/>
-			<div className="rounded-2xl border border-divider/80 bg-content1/70 p-8">
+			<Surface
+				className="rounded-2xl border-divider/80 bg-content1/70"
+				padding="lg"
+			>
 				<div className="flex items-center justify-center gap-2">
 					<Spinner size="sm" />
 					<span className="text-default-500">로딩 중...</span>
 				</div>
-			</div>
-			<div className="rounded-2xl border border-divider/80 bg-content1/70 p-8">
+			</Surface>
+			<Surface
+				className="rounded-2xl border-divider/80 bg-content1/70"
+				padding="lg"
+			>
 				<div className="flex items-center justify-center gap-2">
 					<Spinner size="sm" />
 					<span className="text-default-500">로딩 중...</span>
 				</div>
-			</div>
+			</Surface>
 		</div>
 	);
 }

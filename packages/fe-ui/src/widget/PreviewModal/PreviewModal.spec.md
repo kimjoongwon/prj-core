@@ -26,7 +26,7 @@
 | react | 기능 구현 의존성 |
 | ../../layout/VStack/VStack | 기능 구현 의존성 |
 | ../../layout/HStack/HStack | 기능 구현 의존성 |
-| ../VariableInputForm | 기능 구현 의존성 |
+| ../form/VariableInputForm | 기능 구현 의존성 |
 | ../VariableReadTable | 기능 구현 의존성 |
 | ../HtmlContentRenderer | 기능 구현 의존성 |
 | ../ByteCounter | 기능 구현 의존성 |

@@ -24,7 +24,7 @@
 |------|-------|----------|------|
 | route body | `layout.tsx` | `PageSurface` | route 본문 표면 |
 | child mount | `layout.tsx` | `SectionSurface` | children mount |
-| content block | `page.tsx` | raw bordered container | 폴더 트리 + 목록 브라우저 시각 구획 |
+| content block | `page.tsx` | `Surface` (`padding="none"`) | 폴더 트리 + 목록 브라우저 시각 구획 |
 
 ## Slot Topology
 
@@ -57,4 +57,5 @@
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-03-22 | 에셋 브라우저 wrapper를 raw container 대신 `Surface`(`padding="none"`) 기준으로 정정 | codex |
 | 2026-03-21 | 에셋 관리 route의 서버 skeleton 계약 신규 정의 | codex |

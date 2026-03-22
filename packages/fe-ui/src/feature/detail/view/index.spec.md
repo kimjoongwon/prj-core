@@ -14,13 +14,14 @@
 | 항목 | 설명 |
 |------|------|
 | `DetailPage` | detail route 콘텐츠용 page wrapper |
-| `DetailPageSurface` | detail 본문 surface wrapper |
+| `DetailPageSurface` | `Surface` 기반 detail 본문 wrapper |
 | `DetailSection` | detail 섹션 배치 wrapper |
-| `DetailSectionCard` | detail 섹션 surface wrapper |
+| `DetailSectionCard` | `Surface` 기반 detail 섹션 wrapper |
 
 ## 변경 이력
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-03-22 | detail surface wrapper의 기반 primitive를 `Surface`로 통일 | codex |
 | 2026-03-21 | detail page primitive 치환용 thin wrapper를 추가 | codex |
 | 2026-03-21 | `feature/detail/view` 표준 재사용 타깃 신규 추가 | codex |

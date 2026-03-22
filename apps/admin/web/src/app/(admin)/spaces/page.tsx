@@ -6,6 +6,7 @@ import {
 	DateTimeCell,
 	MetaDataGrid,
 	PageTitleBar,
+	Surface,
 	useMetaDataGridQueryStates,
 } from "@cocrepo/ui";
 import { Badge, Button } from "@heroui/react";
@@ -117,7 +118,9 @@ function SpacesPageFallback() {
 				title="공간 목록"
 				description="시스템에 등록된 공간과 시설 detail을 관리합니다."
 			/>
-			<div className="h-32 rounded-2xl border border-divider/80 bg-content1/70" />
+			<Surface className="h-32 rounded-2xl border-divider/80 bg-content1/70">
+				{null}
+			</Surface>
 		</div>
 	);
 }
@@ -207,7 +210,7 @@ const SpacesPageInner = observer(function SpacesPageInner() {
 					</Button>
 				}
 			/>
-			<div className="overflow-hidden rounded-2xl border border-divider/80 bg-content1/70">
+			<Surface className="overflow-hidden rounded-2xl border-divider/80 bg-content1/70">
 				<Suspense
 					fallback={
 						<MetaDataGrid
@@ -231,7 +234,7 @@ const SpacesPageInner = observer(function SpacesPageInner() {
 						columns={columns}
 					/>
 				</Suspense>
-			</div>
+			</Surface>
 		</div>
 	);
 });

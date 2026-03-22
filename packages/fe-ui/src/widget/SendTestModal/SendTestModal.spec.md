@@ -26,7 +26,7 @@
 | mobx-react-lite | 기능 구현 의존성 |
 | react | 기능 구현 의존성 |
 | ../VariableReadTable/VariableReadTable | 기능 구현 의존성 |
-| ../VariableInputForm/VariableInputForm | 기능 구현 의존성 |
+| ../form/VariableInputForm/VariableInputForm | 기능 구현 의존성 |
 
 ## 동작 흐름
 

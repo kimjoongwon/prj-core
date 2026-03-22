@@ -447,10 +447,10 @@ export function useAdminLayout() {}
 
 - `packages/fe-ui/src/primitive/Button/Button.tsx`
 - `packages/fe-ui/src/primitive/Text/Text.tsx`
-- `packages/fe-ui/src/layout/VStack/VStack.tsx`
-- `packages/fe-ui/src/layout/HStack/HStack.tsx`
-- `packages/fe-ui/src/layout/Page/Page.tsx`
-- `packages/fe-ui/src/layout/Section/Section.tsx`
+- `src/layout/VStack/VStack.tsx`
+- `src/layout/HStack/HStack.tsx`
+- `src/layout/Page/Page.tsx`
+- `src/layout/Section/Section.tsx`
 - `packages/fe-ui/src/widget/PageTitleBar/PageTitleBar.tsx`
 - `packages/fe-ui/src/primitive/data-display/Avatar/Avatar.tsx`
 
@@ -472,8 +472,15 @@ packages/fe-ui/src/
 │   ├── PageSurface/
 │   └── SectionSurface/
 ├── primitive/layout/
-│   └── Layout/
+│   ├── Layout.tsx
+│   ├── type.ts
+│   └── index.ts
 └── widget/
+    ├── HeaderBar/
+    ├── SidePanel/
+    ├── BottomNav/
+    ├── ActionFab/
+    ├── OverlayMenu/
     └── PageTitleBar/
 ```
 
@@ -487,6 +494,7 @@ packages/fe-ui/src/
 | `VStack`, `HStack`, `Spacer` | 정렬/간격 레이아웃 primitive |
 
 > **Note**: 새로운 primitive는 페이지 래퍼나 헤더 패널을 다시 발명하지 말고 위 컴포넌트와 함께 조합되도록 설계하세요.
+> **Note**: `HeaderBar`, `SidePanel`, `BottomNav`, `ActionFab`, `OverlayMenu`는 primitive가 아니라 widget입니다.
 
 ### 출력 형식
 

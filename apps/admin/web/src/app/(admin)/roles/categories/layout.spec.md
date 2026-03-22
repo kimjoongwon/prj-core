@@ -24,7 +24,7 @@
 |------|-------|----------|------|
 | route body | `layout.tsx` | `PageSurface` | route 본문 표면 |
 | child mount | `layout.tsx` | `SectionSurface` | children mount |
-| content block | `page.tsx` | raw bordered container | 목록 시각 구획 |
+| content block | `page.tsx` | `Surface` | 목록 시각 구획 |
 
 ## Slot Topology
 
@@ -55,4 +55,5 @@
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-03-22 | 역할 카테고리 목록 wrapper 기준을 raw container에서 범용 `Surface`로 정정 | codex |
 | 2026-03-21 | 역할 카테고리 route skeleton 계약 신규 정의 | codex |

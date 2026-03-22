@@ -19,20 +19,29 @@
 
 | 모듈 | 용도 |
 |------|------|
-| @tanstack/react-query | 기능 구현 의존성 |
-| next/headers | 기능 구현 의존성 |
+| `@cocrepo/api/idp/idp-accounts` | 계정 상세 조회, 활성 상태 전환, 실패 횟수 초기화 |
+| `@cocrepo/api/idp/auth` | 잠금 해제, 비밀번호 강제 변경, 세션 무효화 |
+| `@cocrepo/ui` | `DetailPage`, `DetailSection`, `ConfirmModal` 등 상세 본문 조합 |
 
 ## 동작 흐름
 
-1. 입력(라우트/props/호출)을 수신합니다.
-2. 필요한 의존 모듈을 호출해 데이터를 조합합니다.
-3. 결과를 렌더링/반환/전파합니다.
+1. 계정 상세 데이터를 조회하고 잠금/세션/비밀번호 액션 mutation을 준비합니다.
+2. 로딩/없음/정상 상태를 `DetailPage`와 `DetailSectionCard` 조합으로 분기합니다.
+3. 보안 정보와 관리 액션을 읽기 전용 detail 본문으로 렌더링합니다.
 
 ## 실패 및 엣지 케이스
 
 - 의존 모듈 응답 누락 시 안전한 기본값으로 처리합니다.
 - 비정상 입력은 조기 반환 또는 예외 처리합니다.
 - 비동기 동작 실패 시 사용자 영향 범위를 최소화합니다.
+
+## 콘텐츠 구성
+
+| 영역 | 구성 요소 | 설명 |
+|------|-----------|------|
+| 페이지 헤더 | `DetailPage` + `PageTitleBar` | 계정 이름/이메일과 목록 복귀 액션 |
+| 보안 정보 | `DetailSectionCard` + `DetailSection` | 잠금 상태, 로그인 실패 횟수, 마지막 로그인, 가입일 |
+| 관리 액션 | `DetailSectionCard` + `ConfirmModal` | 잠금 해제, 비밀번호 강제 변경, 세션 무효화 |
 
 ## 구현 체크리스트
 
@@ -49,7 +58,7 @@
 | 콘텐츠 파일 | `apps/idp/web/src/app/(console)/accounts/[userId]/page.tsx` |
 | page가 소유하지 않는 skeleton | `Page`, `PageSurface`, `Section`, `SectionSurface`, `Surface` |
 
-- `page.tsx`는 상세 조회/읽기 전용 본문만 담당합니다.
+- `page.tsx`는 `feature/detail/view`의 detail shell 안에서 계정 읽기 전용 본문과 관리 액션만 담당합니다.
 
 ## Rendering Decision
 
@@ -63,6 +72,7 @@
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-03-22 | 계정 상세를 `DetailPage`/`DetailSectionCard` 기반 detail/view shell로 정리하고 spec 의존성을 동기화 | codex |
 | 2026-03-21 | page.tsx 단일 CSR 계약과 현재 surface/rendering decision 기준으로 stale 예외 문구를 정리 | codex |
 | 2026-03-21 | fe-page-builder 계약에 맞춰 consumed layout / rendering decision 섹션을 보강 | codex |
 | 2026-03-14 | Biome lint organizeImports/format cleanup reflected | codex |

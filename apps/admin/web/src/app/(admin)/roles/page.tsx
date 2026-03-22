@@ -5,6 +5,7 @@ import {
 	DateTimeCell,
 	PageTitleBar,
 	StatusChipCell,
+	Surface,
 	VStack,
 } from "@cocrepo/ui";
 import { Button, Chip } from "@heroui/react";
@@ -144,7 +145,9 @@ function RolesPageFallback() {
 				title="역할 목록"
 				description="시스템에 등록된 역할을 관리합니다."
 			/>
-			<div className="h-32 rounded-2xl border border-divider/80 bg-content1/70" />
+			<Surface className="h-32 rounded-2xl border-divider/80 bg-content1/70">
+				{null}
+			</Surface>
 		</div>
 	);
 }
@@ -179,7 +182,7 @@ export default observer(function RolesPage() {
 					</div>
 					<div className="space-y-3">
 						<PageTitleBar level={2} title="역할 목록 데이터" />
-						<div className="overflow-hidden rounded-2xl border border-divider/80 bg-content1/70">
+						<Surface className="overflow-hidden rounded-2xl border-divider/80 bg-content1/70">
 							<Suspense
 								fallback={
 									<div className="flex items-center justify-center p-8">
@@ -189,7 +192,7 @@ export default observer(function RolesPage() {
 							>
 								<RolesTableContent />
 							</Suspense>
-						</div>
+						</Surface>
 					</div>
 				</VStack>
 			</div>

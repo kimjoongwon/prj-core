@@ -14,7 +14,7 @@ import { observer } from "mobx-react-lite";
 import { useEffect, useState } from "react";
 import { VStack } from "../../layout/VStack/VStack";
 import { HStack } from "../../layout/HStack/HStack";
-import { VariableInputForm } from "../VariableInputForm";
+import { VariableInputForm } from "../form/VariableInputForm";
 import type { TemplateVariable } from "../VariableReadTable";
 import { HtmlContentRenderer } from "../HtmlContentRenderer";
 import { ByteCounter } from "../ByteCounter";

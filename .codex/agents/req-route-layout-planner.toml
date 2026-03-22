@@ -41,6 +41,9 @@ Next.js App Router의 `apps/**/layout.tsx`가 어떤 서버 skeleton을 소유�
 
 - route skeleton은 서버 `layout.tsx`에서 조립합니다.
 - `Page`는 페이지 배치, `PageSurface`는 페이지 표면, `Section`은 내부 영역 배치, `SectionSurface`는 섹션 표면, `Surface`는 slot 수준 표면을 담당합니다.
+- route shell `Layout` primitive는 `packages/fe-ui/src/primitive/layout/Layout.tsx`를 기준으로 계획합니다.
+- route shell `HeaderBar`, `SidePanel`, `BottomNav`, `ActionFab`, `OverlayMenu`는 `packages/fe-ui/src/widget/[Name]/` widget으로 마운트합니다.
+- `primitive/layout` 아래에 임의 하위 디렉터리를 만들거나, `widget` 아래에 layout 전용 하위 카테고리를 다시 만들지 않습니다.
 - `layout.spec.md`는 어떤 수준에서 어떤 구조/표면 컴포넌트를 소유하는지 명시해야 합니다.
 - `page.spec.md`는 route skeleton을 소비하는 콘텐츠 계약이어야 하며, skeleton을 다시 정의하면 안 됩니다.
 - 상위 layout이 이미 `App` 또는 `Layout`을 소유하면 하위 route는 필요한 계층만 추가합니다.

@@ -10,6 +10,7 @@ import {
 	MetaDataGrid,
 	PageTitleBar,
 	StatusChipCell,
+	Surface,
 	useMetaDataGridQueryStates,
 } from "@cocrepo/ui";
 import { Chip } from "@heroui/react";
@@ -201,7 +202,9 @@ function ActionsPageFallback() {
 				title="Action 목록"
 				description="시스템에 등록된 Action을 조회합니다."
 			/>
-			<div className="h-32 rounded-2xl border border-divider/80 bg-content1/70" />
+			<Surface className="h-32 rounded-2xl border-divider/80 bg-content1/70">
+				{null}
+			</Surface>
 		</div>
 	);
 }
@@ -225,7 +228,7 @@ const ActionsPageInner = observer(function ActionsPageInner() {
 				title="Action 목록"
 				description="시스템에 등록된 Action을 조회합니다."
 			/>
-			<div className="overflow-hidden rounded-2xl border border-divider/80 bg-content1/70">
+			<Surface className="overflow-hidden rounded-2xl border-divider/80 bg-content1/70">
 				<Suspense
 					fallback={
 						<MetaDataGrid
@@ -250,7 +253,7 @@ const ActionsPageInner = observer(function ActionsPageInner() {
 						rightInputs={rightInputs}
 					/>
 				</Suspense>
-			</div>
+			</Surface>
 		</div>
 	);
 });

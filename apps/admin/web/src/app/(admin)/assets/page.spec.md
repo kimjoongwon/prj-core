@@ -19,7 +19,7 @@
 | 콘텐츠 파일 | `apps/admin/web/src/app/(admin)/assets/page.tsx` |
 | page가 소유하지 않는 skeleton | `Page`, `PageSurface`, `Section`, `SectionSurface`, `Surface` |
 
-- `page.tsx`는 page-local `PageTitleBar`, 폴더 트리, 에셋 그리드, modal만 렌더링합니다.
+- `page.tsx`는 page-local `PageTitleBar`, `Surface`(`padding="none"`) 안의 폴더 트리/에셋 그리드, modal만 렌더링합니다.
 
 ## Rendering Decision
 
@@ -35,7 +35,7 @@
 | 영역 | 구성 요소 | 설명 |
 |------|-----------|------|
 | 페이지 헤더 | `PageTitleBar` + 업로드 버튼 | 에셋 관리 진입점 |
-| 브라우저 본문 | `FolderTree` + `MetaDataGrid` | 폴더 탐색과 목록 브라우징 |
+| 브라우저 본문 | `Surface` (`padding="none"`) + `FolderTree` + `MetaDataGrid` | 폴더 탐색과 목록 브라우징 |
 | 상태 블록 | loading skeleton / `EmptyState` | hydrate 전 또는 Space 미선택 상태 안내 |
 | modal | folder create/rename/delete | 폴더 관리 액션 |
 
@@ -74,5 +74,6 @@
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-03-22 | 브라우저 wrapper를 범용 `Surface`(`padding="none"`) 기준으로 문서화 | codex |
 | 2026-03-21 | 에셋 관리를 `master/table` 재사용 타깃으로 분류하고 page role 계약을 추가 | codex |
 | 2026-03-21 | 에셋 관리 spec을 route-layout / page-builder 계약 형식으로 재작성 | codex |

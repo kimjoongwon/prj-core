@@ -7,7 +7,7 @@ import { Select } from "../../../input/Select/Select";
 import { HStack } from "../../../layout/HStack/HStack";
 import { VStack } from "../../../layout/VStack/VStack";
 import { Text } from "../../../primitive/data-display/Text/Text";
-import { AbilityFormModal } from "../../../widget/ability/AbilityFormModal";
+import { AbilityFormModal } from "../../../widget/form/AbilityFormModal";
 import { AbilityRuleList } from "../../../widget/ability/AbilityRuleList";
 import type { RoleAbilityManagerProps } from "./type";
 import { useRoleAbilityManager } from "./useRoleAbilityManager";

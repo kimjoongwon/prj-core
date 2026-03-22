@@ -28,6 +28,7 @@ import {
 	ProfileAvatarCell,
 	type SentimentTypeCode,
 	type SLAStatus,
+	Surface,
 	useMetaDataGridQueryStates,
 	VStack,
 } from "@cocrepo/ui";
@@ -310,7 +311,7 @@ const InquiriesPageContent = observer(function InquiriesPageContent({
 
 	return (
 		<VStack gap={4}>
-			<div className="rounded-2xl border border-divider/80 bg-content1/70 p-6">
+			<Surface className="rounded-2xl border-divider/80 bg-content1/70">
 				<div className="mb-4 border-b border-divider/80 pb-4">
 					<PageTitleBar level={2} title="문의 현황" />
 				</div>
@@ -319,8 +320,8 @@ const InquiriesPageContent = observer(function InquiriesPageContent({
 					activeStatus={activeStatus}
 					onStatusClick={onClickStatusFilter}
 				/>
-			</div>
-			<div className="rounded-2xl border border-divider/80 bg-content1/70 p-6">
+			</Surface>
+			<Surface className="rounded-2xl border-divider/80 bg-content1/70">
 				<div className="mb-4 border-b border-divider/80 pb-4">
 					<PageTitleBar level={2} title="문의 목록" />
 				</div>
@@ -338,7 +339,7 @@ const InquiriesPageContent = observer(function InquiriesPageContent({
 						emptyMessage: "표시할 문의가 없습니다.",
 					}}
 				/>
-			</div>
+			</Surface>
 		</VStack>
 	);
 });
@@ -350,7 +351,9 @@ function InquiriesPageShellFallback() {
 				title="문의 관리"
 				description="고객 문의를 접수/처리/해결합니다."
 			/>
-			<div className="h-32 rounded-2xl border border-divider/80 bg-content1/70" />
+			<Surface className="h-32 rounded-2xl border-divider/80 bg-content1/70">
+				{null}
+			</Surface>
 		</div>
 	);
 }
@@ -368,7 +371,7 @@ const InquiriesContentFallback = observer(function InquiriesContentFallback({
 }) {
 	return (
 		<VStack gap={4}>
-			<div className="rounded-2xl border border-divider/80 bg-content1/70 p-6">
+			<Surface className="rounded-2xl border-divider/80 bg-content1/70">
 				<div className="mb-4 border-b border-divider/80 pb-4">
 					<PageTitleBar level={2} title="문의 현황" />
 				</div>
@@ -383,8 +386,8 @@ const InquiriesContentFallback = observer(function InquiriesContentFallback({
 					activeStatus={activeStatus}
 					onStatusClick={onClickStatusFilter}
 				/>
-			</div>
-			<div className="rounded-2xl border border-divider/80 bg-content1/70 p-6">
+			</Surface>
+			<Surface className="rounded-2xl border-divider/80 bg-content1/70">
 				<div className="mb-4 border-b border-divider/80 pb-4">
 					<PageTitleBar level={2} title="문의 목록" />
 				</div>
@@ -401,7 +404,7 @@ const InquiriesContentFallback = observer(function InquiriesContentFallback({
 						emptyMessage: "표시할 문의가 없습니다.",
 					}}
 				/>
-			</div>
+			</Surface>
 		</VStack>
 	);
 });

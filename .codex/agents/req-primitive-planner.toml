@@ -102,6 +102,12 @@ packages/fe-ui/src/primitive/[UIName]/index.spec.md
 | Toast | 알림 메시지 |
 | Skeleton | 로딩 플레이스홀더 |
 
+### 레이어 경계 메모
+
+- `packages/fe-ui/src/primitive/layout/Layout.tsx`는 flat Layout primitive다.
+- `HeaderBar`, `SidePanel`, `BottomNav`, `ActionFab`, `OverlayMenu`처럼 완성된 console shell 블록은 props-only여도 widget으로 분류한다.
+- `primitive/layout` 아래에 임의 하위 디렉터리는 다시 만들지 않는다.
+
 ### 분류 결정 트리
 
 ```

@@ -27,6 +27,7 @@ tools: Read, Write, Grep, Bash
 - 검색, 필터, 페이지네이션, 컬렉션 탐색 중심이면 `master`
 - `MetaDataGrid`를 사용하면 기본 목적지는 반드시 `feature/master/table`
 - 기존 구현이 `feature/MetaDataGrid`에 있으면 새로 복제하지 말고 `feature/master/table` 엔트리로 승격
+- master 계층에서 1개 이상 feature/widget을 시각적으로 묶을 때는 기본적으로 `packages/fe-ui/src/surface/Surface/index.ts`를 직접 사용합니다.
 
 ## 출력
 
@@ -38,4 +39,6 @@ tools: Read, Write, Grep, Bash
 
 - `MetaDataGrid` 계열은 1차에서 구현 물리 이동보다 공개 엔트리 정리를 우선합니다.
 - page에서 직접 사용할 공개 계약은 반드시 `@cocrepo/ui`를 통해 노출되게 유지합니다.
+- 특별한 동작이 없는 thin table wrapper는 새로 만들지 않습니다.
+- page는 raw bordered container 대신 범용 `Surface`로 `MetaDataGrid` 블록을 감쌉니다.
 - 코드 수정 시 대응 `.spec.md`와 `## 변경 이력`를 동기화합니다.

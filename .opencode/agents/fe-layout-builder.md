@@ -18,7 +18,7 @@ tools:
 
 # 재사용 Layout 빌더
 
-`packages/fe-ui/src/layout/**`의 재사용 Layout 컴포넌트만 설계/생성하는 전용 에이전트입니다.
+`packages/fe-ui/src/primitive/layout/**`의 flat Layout primitive만 설계/생성하는 전용 에이전트입니다.
 Next.js App Router의 `apps/**/layout.tsx`는 `fe-route-layout-builder` 책임이며, 이 에이전트가 직접 작성하지 않습니다.
 
 ---
@@ -27,8 +27,8 @@ Next.js App Router의 `apps/**/layout.tsx`는 `fe-route-layout-builder` 책임�
 
 | 상황 | 사용 여부 | 설명 |
 |------|----------|------|
-| 새 `App`, `Layout`, `Page`, `Section` 컴포넌트 생성 | O | `packages/fe-ui/src/layout/**`에 재사용 자산 생성 |
-| 기존 Layout 컴포넌트 슬롯/props 확장 | O | 재사용 레이아웃 primitive 보강 |
+| `Layout.tsx`/`type.ts`/`index.ts` 생성·정리 | O | `packages/fe-ui/src/primitive/layout/**`에 flat primitive 자산 생성 |
+| 기존 Layout primitive 슬롯/props 확장 | O | 재사용 레이아웃 primitive 보강 |
 | `packages/fe-ui` export 정리 | O | 배럴 export/타입 export 정리 |
 | `apps/**/layout.tsx` 작성 | X | `fe-route-layout-builder` 사용 |
 | `page.tsx` 화면 통합 | X | `fe-page-builder` 사용 |
@@ -42,7 +42,7 @@ Next.js App Router의 `apps/**/layout.tsx`는 `fe-route-layout-builder` 책임�
 
 | 항목 | 필수 | 설명 |
 |------|------|------|
-| Layout 타입 | O | `App`, `Layout`, `Page`, `Section` |
+| Layout 타입 | O | `Layout` |
 | 기존 `index.spec.md` | O | 재사용 Layout 계약 |
 | 사용 시나리오 | O | 어떤 route skeleton에서 어떤 슬롯이 필요한지 |
 | 관련 surface 규칙 | △ | `PageSurface`, `SectionSurface`, `Surface`와의 조합 제약 |
@@ -51,18 +51,18 @@ Next.js App Router의 `apps/**/layout.tsx`는 `fe-route-layout-builder` 책임�
 
 | 항목 | 경로 |
 |------|------|
-| Layout 컴포넌트 | `packages/fe-ui/src/layout/{Name}/` |
-| Sidecar spec | `packages/fe-ui/src/layout/{Name}/index.spec.md` |
-| Export 정리 | `packages/fe-ui/src/layout/index.ts`, 상위 barrel |
+| Layout 컴포넌트 | `packages/fe-ui/src/primitive/layout/Layout.tsx` |
+| 공용 타입 | `packages/fe-ui/src/primitive/layout/type.ts` |
+| Sidecar spec | `packages/fe-ui/src/primitive/layout/{index,Layout,type}.spec.md` |
+| Export 정리 | `packages/fe-ui/src/primitive/layout/index.ts`, 상위 barrel |
 
 ---
 
 ## 3. 핵심 책임
 
-- `App`은 서비스/세그먼트 셸의 최상위 래퍼 primitive를 제공합니다.
 - `Layout`은 전역/세그먼트 셸의 큰 구조 슬롯을 제공합니다.
-- `Page`는 페이지 단위 배치를 위한 재사용 primitive를 제공합니다.
-- `Section`은 페이지 내부 구역 배치를 위한 재사용 primitive를 제공합니다.
+- `Layout`은 flat primitive이며 내부에 `layout/Layout` 같은 중첩 폴더를 만들지 않습니다.
+- `HeaderBar`, `SidePanel`, `BottomNav`, `ActionFab`, `OverlayMenu`는 widget 계층이며 이 에이전트 범위가 아닙니다.
 - `PageSurface`, `SectionSurface`, `Surface`는 별도 surface 계층이며, 이 에이전트는 구조 primitive가 그들과 자연스럽게 조합되도록 돕습니다.
 
 ---
@@ -78,6 +78,8 @@ Next.js App Router의 `apps/**/layout.tsx`는 `fe-route-layout-builder` 책임�
 5. 경로/도메인/특정 메뉴 라벨 같은 route 지식을 Layout primitive에 하드코딩하지 않습니다.
 6. `Page`, `Section`은 배치를 담당하고, surface/elevation은 자동 생성하지 않습니다.
 7. `Page`/`Section`을 대체하는 임시 scaffold 계열을 새로 만들지 않습니다.
+8. `packages/fe-ui/src/primitive/layout` 아래에는 `Layout.tsx`, `type.ts`, `index.ts`와 대응 sidecar만 둡니다.
+9. `packages/fe-ui/src/primitive/layout` 아래에 임의 하위 디렉터리를 만들거나, `packages/fe-ui/src/widget` 아래에 layout 전용 하위 카테고리를 만들지 않습니다.
 
 ---
 
@@ -107,7 +109,7 @@ Next.js App Router의 `apps/**/layout.tsx`는 `fe-route-layout-builder` 책임�
 
 ## 6. 구현 절차
 
-1. 기존 `packages/fe-ui/src/layout/**` 구현과 `index.spec.md`를 먼저 검색합니다.
+1. 기존 `packages/fe-ui/src/primitive/layout/*` 구현과 sidecar spec을 먼저 검색합니다.
 2. route 문서가 요구하는 구조가 기존 primitive 조합으로 해결되는지 판단합니다.
 3. 신규 primitive가 필요하면 가장 작은 공통 구조만 추가합니다.
 4. props/slot 이름을 구조 의미로 정리합니다.
@@ -118,7 +120,7 @@ Next.js App Router의 `apps/**/layout.tsx`는 `fe-route-layout-builder` 책임�
 
 ## 7. 검증 체크리스트
 
-- [ ] 출력 파일이 `packages/fe-ui/src/layout/**` 아래에만 생성되었는가?
+- [ ] 출력 파일이 `packages/fe-ui/src/primitive/layout/**` 아래에만 생성되었는가?
 - [ ] `apps/**/layout.tsx`를 직접 수정하지 않았는가?
 - [ ] Layout primitive가 router/store/fetch에 의존하지 않는가?
 - [ ] 구조 슬롯과 surface 책임이 섞이지 않았는가?

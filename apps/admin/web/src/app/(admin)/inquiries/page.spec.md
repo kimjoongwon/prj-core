@@ -19,7 +19,7 @@
 | 콘텐츠 파일 | `apps/admin/web/src/app/(admin)/inquiries/page.tsx` |
 | page가 소유하지 않는 skeleton | `Page`, `PageSurface`, `Section`, `SectionSurface`, `Surface` |
 
-- `page.tsx`는 page-local `PageTitleBar`, 현황 카드, 문의 목록 grid만 렌더링합니다.
+- `page.tsx`는 page-local `PageTitleBar`, `Surface` 안의 현황 카드/문의 목록 grid만 렌더링합니다.
 
 ## Rendering Decision
 
@@ -35,8 +35,8 @@
 | 영역 | 구성 요소 | 설명 |
 |------|-----------|------|
 | 페이지 헤더 | `PageTitleBar` + 문의 접수 버튼 | 문의 관리 진입점 |
-| 현황 카드 | `InquiryStatsCards` | 신규/진행중/해결/SLA 위반 요약 |
-| 목록 영역 | `MetaDataGrid` | 문의 상태, 채널, 담당자, SLA 등 표시 |
+| 현황 카드 | `Surface` + `InquiryStatsCards` | 신규/진행중/해결/SLA 위반 요약 |
+| 목록 영역 | `Surface` + `MetaDataGrid` | 문의 상태, 채널, 담당자, SLA 등 표시 |
 
 ## API 호출
 
@@ -64,5 +64,6 @@
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-03-22 | stats/grid wrapper를 범용 `Surface` 기준으로 문서화 | codex |
 | 2026-03-21 | 문의 관리를 `master/table` 재사용 타깃으로 분류하고 page role 계약을 추가 | codex |
 | 2026-03-21 | 문의 관리 spec을 route-layout / page-builder 계약 형식으로 재작성 | codex |

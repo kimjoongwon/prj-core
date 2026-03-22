@@ -19,11 +19,14 @@
 
 ## 구현 메모
 
-- 실제 구현은 `packages/fe-ui/src/feature/MetaDataGrid/`가 담당합니다.
+- 실제 구현은 `packages/fe-ui/src/feature/master/table/MetaDataGrid/`가 담당합니다.
 - 이 파일은 `feature/master/table` 공식 공개 엔트리 역할만 수행합니다.
+- `MetaDataGrid`가 포함된 콘텐츠 블록의 기본 시각 wrapper는 별도 thin wrapper 대신 `packages/fe-ui/src/surface/Surface/index.ts`를 우선 사용합니다.
 
 ## 변경 이력
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-03-22 | `MetaDataGrid` 실제 구현 디렉터리를 `feature/master/table/MetaDataGrid`로 재배치 | codex |
+| 2026-03-22 | `MetaDataGrid` 콘텐츠 wrapper 기본값을 thin wrapper가 아닌 범용 `Surface`로 정리 | codex |
 | 2026-03-21 | `MetaDataGrid` 공식 재사용 엔트리를 `feature/master/table`로 승격 | codex |

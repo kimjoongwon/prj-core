@@ -10,6 +10,7 @@ import {
 	MetaDataGrid,
 	PageTitleBar,
 	StatusChipCell,
+	Surface,
 	useMetaDataGridQueryStates,
 } from "@cocrepo/ui";
 import { observer } from "mobx-react-lite";
@@ -74,7 +75,10 @@ const columns: MetaDataGridColumnConfig<SubjectDto>[] = [
 type SubjectsQueryStates = ReturnType<typeof useMetaDataGridQueryStates>[0];
 type SetSubjectsQueryStates = ReturnType<typeof useMetaDataGridQueryStates>[1];
 
-function filterSubjects(subjects: SubjectDto[], queryStates: SubjectsQueryStates) {
+function filterSubjects(
+	subjects: SubjectDto[],
+	queryStates: SubjectsQueryStates,
+) {
 	const searchKeyword = queryStates.search?.trim().toLowerCase() ?? "";
 	const groupFilter = queryStates.group?.trim().toLowerCase() ?? "";
 
@@ -132,7 +136,9 @@ function SubjectsPageFallback() {
 				title="Subject 목록"
 				description="시스템에 등록된 Subject를 조회합니다."
 			/>
-			<div className="h-32 rounded-2xl border border-divider/80 bg-content1/70" />
+			<Surface className="h-32 rounded-2xl border-divider/80 bg-content1/70">
+				{null}
+			</Surface>
 		</div>
 	);
 }
@@ -149,7 +155,7 @@ const SubjectsPageInner = observer(function SubjectsPageInner() {
 				title="Subject 목록"
 				description="시스템에 등록된 Subject를 조회합니다."
 			/>
-			<div className="overflow-hidden rounded-2xl border border-divider/80 bg-content1/70">
+			<Surface className="overflow-hidden rounded-2xl border-divider/80 bg-content1/70">
 				<Suspense
 					fallback={
 						<MetaDataGrid
@@ -173,7 +179,7 @@ const SubjectsPageInner = observer(function SubjectsPageInner() {
 						setQueryStates={setQueryStates}
 					/>
 				</Suspense>
-			</div>
+			</Surface>
 		</div>
 	);
 });

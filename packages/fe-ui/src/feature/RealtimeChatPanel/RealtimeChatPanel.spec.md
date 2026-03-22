@@ -27,7 +27,7 @@
 | ../../primitive/feedback/TypingIndicator/TypingIndicator | 기능 구현 의존성 |
 | ../../primitive/feedback/WebSocketConnectionStatus/WebSocketConnectionStatus | 기능 구현 의존성 |
 | ../../primitive/feedback/MessageStatus/MessageStatus | 기능 구현 의존성 |
-| ../InquiryReplyForm | 기능 구현 의존성 |
+| ../../widget/form/InquiryReplyForm | 기능 구현 의존성 |
 
 ## 동작 흐름
 

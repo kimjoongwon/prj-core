@@ -496,7 +496,7 @@ export default function UsersLayout({ children }: { children: React.ReactNode })
 
 ### 책임 분리
 
-- `fe-menu-builder`: 메뉴 트리, 탭 contract, `PageTabs`/`BottomTab`/`SideNav`/`FAB` 같은 메뉴 UI
+- `fe-menu-builder`: 메뉴 트리, 탭 contract, `PageTabs`/`BottomTab`/`SideNav`/`QuickActionFAB` 같은 feature와 route shell이 소비할 메뉴 widget 조합 규칙
 - `fe-route-layout-builder`: 실제 `layout.tsx` 파일에서 skeleton 조립
 - `fe-page-builder`: route skeleton 안의 실제 페이지 콘텐츠 구현
 
@@ -515,6 +515,11 @@ export default function UsersLayout({ children }: { children: React.ReactNode })
 
 | Widget | Feature | 연결 |
 |--------|---------|------|
+| HeaderBar | UserMenu / HeaderSpaceSelector | AuthStore / PersistStore |
+| SidePanel | SideNav | NavigationStore |
+| BottomNav | BottomTab | NavigationStore |
+| OverlayMenu | SubMenuList | NavigationStore |
+| ActionFab | QuickActionFAB | NavigationStore + AbilityStore |
 | NavTreePanel | SideNav | NavigationStore |
 | TabBar | BottomTab | NavigationStore |
 | MenuList | SubMenuList | NavigationStore |

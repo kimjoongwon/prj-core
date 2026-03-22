@@ -25,7 +25,7 @@
 | ../../../primitive/data-display/Text/Text | 기능 구현 의존성 |
 | ../../../layout/HStack/HStack | 기능 구현 의존성 |
 | ../../../layout/VStack/VStack | 기능 구현 의존성 |
-| ../../../widget/ability/AbilityFormModal | 기능 구현 의존성 |
+| ../../../widget/form/AbilityFormModal | 기능 구현 의존성 |
 | ../../../widget/ability/AbilityRuleList | 기능 구현 의존성 |
 | ./type | 기능 구현 의존성 |
 | ./useUserAbilityManager | 기능 구현 의존성 |

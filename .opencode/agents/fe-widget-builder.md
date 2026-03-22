@@ -278,6 +278,12 @@ SpaceDropdown                 → SpaceSelector (PersistStore 연결)
 - Feature 없이 Widget만 다른 곳에서 재사용 가능
 - Store 교체 시 Feature만 수정
 
+### Layout shell widget 규칙
+
+- `HeaderBar`, `SidePanel`, `BottomNav`, `ActionFab`, `OverlayMenu`는 완성된 layout shell block이므로 widget으로 분류합니다.
+- 위치는 `packages/fe-ui/src/widget/[Name]/`이고, `widget` 아래에 layout 전용 하위 카테고리를 만들지 않습니다.
+- 공용 props 계약은 `packages/fe-ui/src/primitive/layout/type.ts`를 재사용합니다.
+
 ### UI 컴포넌트 참조 가능 카테고리
 
 `src/primitive/` 내의 다음 카테고리 컴포넌트를 조합:

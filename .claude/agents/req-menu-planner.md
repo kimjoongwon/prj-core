@@ -42,6 +42,7 @@ tools: Read, Write, Grep, Bash
 - 메뉴는 도메인/권한/경로를 함께 설계
 - 경로 파라미터는 축약 없이 엔티티명 사용
 - 목록 페이지 우선으로 1depth/2depth를 먼저 정의
+- route shell의 `HeaderBar`, `SidePanel`, `BottomNav`, `ActionFab`, `OverlayMenu`는 widget 계층이고, `SideNav`, `BottomTab`, `SubMenuList`, `PageTabs` 같은 연결 책임은 feature 계층에서 계획합니다.
 
 ---
 

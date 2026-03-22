@@ -7,7 +7,7 @@ import { TemplateTypeBadge } from "../../TemplateTypeBadge/TemplateTypeBadge";
 import {
 	VariableEditTable,
 	type VariableEditItem,
-} from "../../VariableEditTable/VariableEditTable";
+} from "../VariableEditTable/VariableEditTable";
 
 /** 폼 데이터 인터페이스 */
 export interface TemplateFormData {

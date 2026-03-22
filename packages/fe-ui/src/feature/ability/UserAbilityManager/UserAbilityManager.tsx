@@ -14,7 +14,7 @@ import { observer } from "mobx-react-lite";
 import { HStack } from "../../../layout/HStack/HStack";
 import { VStack } from "../../../layout/VStack/VStack";
 import { Text } from "../../../primitive/data-display/Text/Text";
-import { AbilityFormModal } from "../../../widget/ability/AbilityFormModal";
+import { AbilityFormModal } from "../../../widget/form/AbilityFormModal";
 import { AbilityRuleList } from "../../../widget/ability/AbilityRuleList";
 import type { UserAbilityManagerProps } from "./type";
 import { useUserAbilityManager } from "./useUserAbilityManager";

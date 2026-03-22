@@ -1,1 +1,1 @@
-export * from "../../MetaDataGrid";
+export * from "./MetaDataGrid";

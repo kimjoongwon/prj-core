@@ -15,7 +15,7 @@
 App (서비스별 단일) > Layout > Page > Section
 ```
 
-- `Layout` 계층은 `packages/fe-ui/src/primitive/layout/Layout`에서 제공합니다.
+- `Layout` 계층은 `packages/fe-ui/src/primitive/layout/`에서 제공합니다.
 - 이 배럴은 위계 중 `App`, `Page`, `Section` 레벨을 노출합니다.
 
 ## 동작

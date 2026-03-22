@@ -16,7 +16,7 @@ tools: Read, Write, Grep, Bash
 # 재사용 Layout 기획자
 
 `fe-layout-builder`와 1:1로 대응되는 기획 에이전트입니다.
-`packages/fe-ui/src/layout/**`의 재사용 Layout primitive spec만 기획하며, Next.js `apps/**/layout.tsx`는 `req-route-layout-planner` 책임입니다.
+`packages/fe-ui/src/primitive/layout/**`의 flat Layout primitive spec만 기획하며, Next.js `apps/**/layout.tsx`는 `req-route-layout-planner` 책임입니다.
 
 ---
 
@@ -26,7 +26,7 @@ tools: Read, Write, Grep, Bash
 
 | 항목 | 필수 | 설명 |
 |------|:----:|------|
-| 요구되는 Layout 타입 | ✅ | `App`, `Layout`, `Page`, `Section` |
+| 요구되는 Layout 타입 | ✅ | `Layout` |
 | 기존 `index.spec.md` | ✅ | 재사용 Layout 계약 |
 | 참조 route layout spec | △ | route skeleton이 필요한 구조 |
 | 참조 surface 규칙 | △ | surface와 구조의 경계 |
@@ -35,17 +35,19 @@ tools: Read, Write, Grep, Bash
 
 | 파일 | 동작 |
 |------|------|
-| `packages/fe-ui/src/layout/[LayoutName]/index.spec.md` | 생성/업데이트 |
+| `packages/fe-ui/src/primitive/layout/{index,Layout,type}.spec.md` | 생성/업데이트 |
 
 ---
 
 ## 2. 핵심 원칙
 
 - 설계 대상은 재사용 Layout primitive다.
-- 위계는 `App > Layout > Page > Section`을 기준으로 한다.
+- 위계는 `App > Layout > Page > Section`을 기준으로 하되, 이 planner의 직접 범위는 `Layout` primitive다.
 - primitive는 구조 슬롯만 정의하고 비즈니스 의미를 props 이름에 넣지 않는다.
 - `PageSurface`, `SectionSurface`, `Surface`는 별도 surface 계층이며, route 수준 배치는 `req-route-layout-planner`가 맡는다.
 - `apps/**/layout.tsx` 파일 구조, 메뉴/탭 조합, route별 title/header shell은 여기서 직접 기획하지 않는다.
+- `packages/fe-ui/src/primitive/layout` 아래에 임의 하위 디렉터리를 다시 만들지 않는다.
+- `HeaderBar`, `SidePanel`, `BottomNav`, `ActionFab`, `OverlayMenu`는 widget 계층으로 분류한다.
 
 ---
 

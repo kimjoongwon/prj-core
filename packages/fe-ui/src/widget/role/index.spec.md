@@ -6,8 +6,8 @@
 
 ## 역할
 
-이 파일은 widget 계층의 핵심 동작을 담당합니다.
-상위 레이어와 하위 레이어를 연결하며, 런타임에서 실제 사용자 흐름/비즈니스 흐름에 직접 관여합니다.
+role 도메인 widget namespace를 보존하는 예약 배럴입니다.
+현재 폼 modal 소유는 `widget/form`으로 이동해 이 배럴은 공개 export를 제공하지 않습니다.
 
 ## 공개 계약
 
@@ -17,9 +17,7 @@
 
 ## 의존성
 
-| 모듈 | 용도 |
-|------|------|
-| ./RoleFormModal | 기능 구현 의존성 |
+- 없음
 
 ## 동작 흐름
 
@@ -43,6 +41,7 @@
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-03-22 | `RoleFormModal` 소유를 `widget/form`으로 이동하고 role 배럴을 예약 namespace로 전환 | codex |
 | 2026-03-06 | 폴더 네이밍을 단수형(feature/input/layout/hook/style/type/util/widget/cell)으로 통일 | codex |
 | 2026-03-06 | src/components 레이어를 제거하고 경로를 src/* 기준으로 상향 | codex |
 | 2026-03-03 | 누락된 sidecar spec 신규 생성 | codex |

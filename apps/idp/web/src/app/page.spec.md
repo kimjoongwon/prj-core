@@ -19,7 +19,9 @@
 
 | 모듈 | 용도 |
 |------|------|
-| next/navigation | 기능 구현 의존성 |
+| `@cocrepo/api/idp/auth` | 세션 검증 |
+| `@cocrepo/ui` | `DetailPage`, `DetailSectionCard`, `PageTitleBar` |
+| `next/navigation` | 검증 완료 후 route 이동 |
 
 ## 동작 흐름
 
@@ -48,7 +50,7 @@
 | 콘텐츠 파일 | `apps/idp/web/src/app/page.tsx` |
 | page가 소유하지 않는 skeleton | `Page`, `PageSurface`, `Section`, `SectionSurface`, `Surface` |
 
-- `page.tsx`는 루트 진입 판별과 리다이렉트용 콘텐츠만 담당합니다.
+- `page.tsx`는 `feature/detail/view`의 detail shell 안에서 루트 진입 판별과 리다이렉트용 로딩 콘텐츠만 담당합니다.
 
 ## Rendering Decision
 
@@ -62,6 +64,7 @@
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-03-22 | 루트 리다이렉트 로딩 상태를 `DetailPage`/`DetailSectionCard` 기반 detail/view shell로 정리 | codex |
 | 2026-03-21 | 루트 진입 page를 `_client.tsx` 없는 단일 CSR 리다이렉트로 정리하고 계약을 detail/view 기준으로 보정 | codex |
 | 2026-03-21 | fe-page-builder 계약에 맞춰 consumed layout / rendering decision 섹션을 보강 | codex |
 | 2026-03-03 | 누락된 sidecar spec 신규 생성 | codex |

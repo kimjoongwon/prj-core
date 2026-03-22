@@ -11,6 +11,7 @@ import {
 	DateTimeCell,
 	MetaDataGrid,
 	PageTitleBar,
+	Surface,
 	useMetaDataGridQueryStates,
 } from "@cocrepo/ui";
 import {
@@ -149,7 +150,9 @@ function TimelinesPageFallback() {
 				title="타임라인"
 				description="학기/시즌 단위 타임라인을 관리합니다."
 			/>
-			<div className="h-32 rounded-2xl border border-divider/80 bg-content1/70" />
+			<Surface className="h-32 rounded-2xl border-divider/80 bg-content1/70">
+				{null}
+			</Surface>
 		</div>
 	);
 }
@@ -225,7 +228,7 @@ const TimelinesPageInner = observer(function TimelinesPageInner() {
 					</Button>
 				}
 			/>
-			<div className="overflow-hidden rounded-2xl border border-divider/80 bg-content1/70">
+			<Surface className="overflow-hidden rounded-2xl border-divider/80 bg-content1/70">
 				<Suspense
 					fallback={
 						<MetaDataGrid
@@ -249,7 +252,7 @@ const TimelinesPageInner = observer(function TimelinesPageInner() {
 						columns={columns}
 					/>
 				</Suspense>
-			</div>
+			</Surface>
 			<Modal isOpen={deleteModal.isOpen} onClose={deleteModal.onClose}>
 				<ModalContent>
 					<ModalHeader>타임라인 삭제</ModalHeader>

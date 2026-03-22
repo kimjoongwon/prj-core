@@ -143,11 +143,13 @@ Feature 개발 시 필요한 Widget이 없으면 **먼저 Widget Builder에게 �
 
 | 패턴 | 설명 | 예시 |
 |------|------|------|
-| `[위치]Nav` | 특정 위치의 네비게이션 | SideNav, BottomNav, TopNav |
+| `[위치]Nav` | 특정 위치의 네비게이션 | SideNav, TopNav |
 | `[위치]Tab` | 특정 위치의 탭 | BottomTab, HeaderTab |
 | `[기능]Menu` | 메뉴 기능 | UserMenu, ContextMenu |
 | `[기능]Selector` | 선택 기능 | SpaceSelector, ThemeSelector |
 | `[기능]Form` | 폼 기능 | LoginForm, SearchForm |
+
+> `HeaderBar`, `SidePanel`, `BottomNav`, `ActionFab`, `OverlayMenu`는 feature가 아니라 widget입니다. feature는 해당 widget에 store/API/router를 연결하는 래퍼만 담당합니다.
 
 ### 4.3 파일 구조 생성
 

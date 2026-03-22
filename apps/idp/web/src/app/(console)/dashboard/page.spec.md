@@ -19,20 +19,29 @@
 
 | 모듈 | 용도 |
 |------|------|
-| @tanstack/react-query | 기능 구현 의존성 |
-| next/headers | 기능 구현 의존성 |
+| `@cocrepo/api/idp/idp-dashboard` | 대시보드 통계/로그인 추이 조회 |
+| `@cocrepo/ui` | `DetailPage`, `DetailSection`, `PageTitleBar`, `VStack` 조합 |
+| `lucide-react` | 통계 카드 아이콘 렌더링 |
 
 ## 동작 흐름
 
-1. 입력(라우트/props/호출)을 수신합니다.
-2. 필요한 의존 모듈을 호출해 데이터를 조합합니다.
-3. 결과를 렌더링/반환/전파합니다.
+1. 대시보드 통계와 최근 7일 로그인 추이 데이터를 조회합니다.
+2. 조회 결과를 `DetailPage`와 `DetailSectionCard` 기반 읽기 전용 본문으로 조합합니다.
+3. 통계 타일과 로그인 추이 차트를 렌더링합니다.
 
 ## 실패 및 엣지 케이스
 
 - 의존 모듈 응답 누락 시 안전한 기본값으로 처리합니다.
 - 비정상 입력은 조기 반환 또는 예외 처리합니다.
 - 비동기 동작 실패 시 사용자 영향 범위를 최소화합니다.
+
+## 콘텐츠 구성
+
+| 영역 | 구성 요소 | 설명 |
+|------|-----------|------|
+| 페이지 헤더 | `DetailPage` + `PageTitleBar` | IDP 인증 시스템 현황 요약 |
+| 주요 지표 | `DetailSectionCard` + stat grid | 활성 세션, 성공/실패 로그인, 잠금, 활성 클라이언트 수 |
+| 로그인 추이 | `DetailSectionCard` + bar chart | 최근 7일 성공/실패 로그인 수 |
 
 ## 구현 체크리스트
 
@@ -49,7 +58,7 @@
 | 콘텐츠 파일 | `apps/idp/web/src/app/(console)/dashboard/page.tsx` |
 | page가 소유하지 않는 skeleton | `Page`, `PageSurface`, `Section`, `SectionSurface`, `Surface` |
 
-- `page.tsx`는 상세 조회/읽기 전용 본문만 담당합니다.
+- `page.tsx`는 `feature/detail/view`의 detail shell 안에서 읽기 전용 대시보드 본문만 담당합니다.
 
 ## Rendering Decision
 
@@ -63,6 +72,7 @@
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-03-22 | IDP 대시보드를 `DetailPage`/`DetailSectionCard` 기반 detail/view 본문으로 정리하고 spec 의존성을 동기화 | codex |
 | 2026-03-21 | page.tsx 단일 CSR 계약과 현재 surface/rendering decision 기준으로 stale 예외 문구를 정리 | codex |
 | 2026-03-21 | fe-page-builder 계약에 맞춰 consumed layout / rendering decision 섹션을 보강 | codex |
 | 2026-03-14 | Biome lint organizeImports/format cleanup reflected | codex |

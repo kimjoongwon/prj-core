@@ -102,6 +102,11 @@ packages/fe-ui/src/widget/[WidgetName]/index.spec.md
 | 캘린더 | 도메인 캘린더 | ReservationCalendar |
 | 차트 | 도메인 차트 | RevenueChart |
 
+### Layout shell widget 메모
+
+- `HeaderBar`, `SidePanel`, `BottomNav`, `ActionFab`, `OverlayMenu`처럼 route shell에서 직접 쓰는 완성 블록도 props-only라면 widget으로 기획합니다.
+- 위치는 `packages/fe-ui/src/widget/[Name]/`이며, `widget` 아래에 layout 전용 하위 분류는 사용하지 않습니다.
+
 ### Widget 명명 규칙
 
 ```

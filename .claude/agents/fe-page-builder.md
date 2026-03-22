@@ -25,7 +25,7 @@ tools: Read, Write, Grep, Bash
 
 1. admin 페이지 기본 구현은 `page.tsx` 또는 `@slot/**/page.tsx` 단일 파일 CSR 콘텐츠 패턴 강제
 2. 작업 시작 전에 반드시 sibling `layout.spec.md`와 `page.spec.md`를 읽고, `layout.tsx`가 제공하는 skeleton contract를 확인
-3. `page.tsx`, `@slot/**/page.tsx`, `_client.tsx`에서 route-level `App`, `Layout`, `Page`, `PageSurface`, `Section`, `SectionSurface`, `Surface` 조합을 새로 만들지 않음
+3. `page.tsx`, `@slot/**/page.tsx`, `_client.tsx`에서 route-level `App`, `Layout`, `Page`, `PageSurface`, `Section`, `SectionSurface` 조합을 새로 만들지 않음
 4. 개발자 승인 없이 `_client.tsx`, `_prefetch.ts`, `HydrationBoundary`, `dehydrate`, 서버 `QueryClient` prefetch 패턴 사용 금지
 5. SSR/prefetch가 필요해 보여도 직접 구현하지 않고 먼저 개발자에게 질문해야 하며, 승인 전에는 예외 구현을 진행하지 않음
 6. 모든 `"use client"` 페이지/클라이언트 컴포넌트에서 `useMemo`, `useCallback` 사용 금지
@@ -37,6 +37,10 @@ tools: Read, Write, Grep, Bash
 10. 재사용 UI/Widget/Feature는 반드시 `@cocrepo/ui`에서 import
 11. 기존 코드 수정 시 대응 `.spec.md` 업데이트 + `## 변경 이력` 추가 필수
 12. `page.spec.md`의 `## Rendering Decision`에는 반드시 `page role`과 `reusable target`을 기록
+13. page에서 1개 이상 feature/widget을 시각적으로 묶는 콘텐츠 wrapper는 raw `div`의 `border/bg/padding` 조합으로 만들지 않음
+   - 기본 wrapper는 `@cocrepo/ui`의 `Surface`를 사용
+   - `MetaDataGrid` 계열도 특별한 계약이 없으면 thin wrapper를 새로 만들지 말고 `Surface`를 직접 사용
+   - wrapper가 없음을 이유로 page-local ad-hoc thin wrapper를 새로 만들지 않음
 
 ---
 
@@ -57,6 +61,7 @@ tools: Read, Write, Grep, Bash
 - `page.tsx`는 해당 skeleton의 `children` 위치에 마운트되는 콘텐츠를 구현합니다.
 - 페이지 상단 shell, 탭, page-level surface, section-level surface는 `layout.spec.md`에 정의된 owner를 따릅니다.
 - `page.tsx`가 route-level layout primitive를 다시 만들면 실패입니다.
+- route skeleton 아래에서 feature/widget 묶음을 감싸는 콘텐츠-level visual grouping은 기본적으로 `Surface`를 사용합니다.
 
 ### 1.3 페이지 역할 분류
 
@@ -140,6 +145,7 @@ apps/<app>/src/app/<route>/
 
 - 시각 컴포넌트 import는 `@cocrepo/ui` 사용
 - Page에서 Feature 사용 시 `@cocrepo/ui` 경유 import
+- 페이지에서 feature/widget 묶음 wrapper가 필요하면 기본적으로 `Surface`를 사용
 
 ### 3.2 금지
 
@@ -147,7 +153,8 @@ apps/<app>/src/app/<route>/
 - 라우트 내부 로컬 시각 컴포넌트 의존 (`_components`, `components`)
   - 예외: hooks/util/type 파일
 - page 파일에서 route-level layout primitive 직접 import
-  - 금지 예: `Page`, `PageSurface`, `Section`, `SectionSurface`, `Surface`
+  - 금지 예: `Page`, `PageSurface`, `Section`, `SectionSurface`
+- page 안에서 `rounded-* border bg-* p-*` 형태의 raw container로 feature/widget 묶음 시각 wrapper를 대체
 
 ### 3.3 named slot 콘텐츠 규칙
 

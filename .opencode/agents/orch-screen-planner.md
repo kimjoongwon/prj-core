@@ -32,7 +32,7 @@ tools:
 | L8 | Input | req-input-planner | `packages/fe-ui/src/input/[InputName]/index.spec.md` |
 | L8 | Cell | req-cell-planner | `packages/fe-ui/src/primitive/data-display/cell/[CellName]/index.spec.md` |
 | L9 | Widget | req-widget-planner | `packages/fe-ui/src/widget/[WidgetName]/index.spec.md` |
-| L10 | Layout | req-layout-planner | `packages/fe-ui/src/layout/[LayoutName]/index.spec.md` |
+| L10 | Layout | req-layout-planner | `packages/fe-ui/src/primitive/layout/{index,Layout,type}.spec.md` |
 | L10 | Feature | req-feature-planner | `packages/fe-ui/src/feature/[FeatureName]/index.spec.md` |
 | L10+ | Surface | req-surface-planner | `page.spec.md` Surface/Elevation 섹션 + 관련 layout/feature spec 보강 |
 | L10+ | Menu | req-menu-planner | `packages/common-constant/src/routing/admin-menu.spec.md` |
@@ -71,7 +71,7 @@ packages/fe-ui/src/primitive/[UIName]/index.spec.md
 packages/fe-ui/src/input/[InputName]/index.spec.md
 packages/fe-ui/src/primitive/data-display/cell/[CellName]/index.spec.md
 packages/fe-ui/src/widget/[WidgetName]/index.spec.md
-packages/fe-ui/src/layout/[LayoutName]/index.spec.md
+packages/fe-ui/src/primitive/layout/{index,Layout,type}.spec.md
 packages/fe-ui/src/feature/[FeatureName]/index.spec.md
 
 # 메뉴/API 연동

@@ -12,8 +12,8 @@ import {
 import { AlertCircle, CheckCircle, Send } from "lucide-react";
 import { observer } from "mobx-react-lite";
 import { useState } from "react";
+import { VariableInputForm } from "../form/VariableInputForm/VariableInputForm";
 import type { TemplateVariable } from "../VariableReadTable/VariableReadTable";
-import { VariableInputForm } from "../VariableInputForm/VariableInputForm";
 
 /** 발송 테스트 유형 */
 type SendTestType = "EMAIL" | "SMS" | "PUSH";

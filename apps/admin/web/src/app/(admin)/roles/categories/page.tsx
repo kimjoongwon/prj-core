@@ -1,6 +1,6 @@
 "use client";
 
-import { DateTimeCell, PageTitleBar, VStack } from "@cocrepo/ui";
+import { DateTimeCell, PageTitleBar, Surface } from "@cocrepo/ui";
 import { Button } from "@heroui/react";
 import { useQuery } from "@tanstack/react-query";
 import { FolderTree, Plus } from "lucide-react";
@@ -29,11 +29,7 @@ async function getCategories(): Promise<{ data: CategoryData[] }> {
 	return response.json();
 }
 
-function ParentCategoryCell({
-	parentName,
-}: {
-	parentName?: string | null;
-}) {
+function ParentCategoryCell({ parentName }: { parentName?: string | null }) {
 	if (!parentName) {
 		return <span className="text-default-400">루트 카테고리</span>;
 	}
@@ -65,90 +61,80 @@ function RoleCategoriesPageContent() {
 					</Button>
 				}
 			/>
-			<div className="overflow-hidden rounded-2xl border border-divider/80 bg-content1/70">
-				<VStack gap={4}>
-					<div className="overflow-hidden rounded-2xl border border-divider/60 bg-background/70">
-						{isLoading ? (
-							<div className="flex items-center justify-center p-8">
-								<span className="text-default-500">로딩 중...</span>
-							</div>
-						) : categories.length === 0 ? (
-							<div className="flex flex-col items-center justify-center gap-4 p-16">
-								<div className="flex h-16 w-16 items-center justify-center rounded-full bg-primary/10">
-									<FolderTree className="h-8 w-8 text-primary" />
-								</div>
-								<p className="text-default-500">
-									등록된 역할 카테고리가 없습니다.
-								</p>
-							</div>
-						) : (
-							<div className="overflow-x-auto">
-								<table className="w-full text-sm">
-									<thead>
-										<tr className="border-b border-divider">
-											<th className="w-[200px] px-4 py-3 text-left font-medium text-default-500">
-												카테고리명
-											</th>
-											<th className="w-[180px] px-4 py-3 text-left font-medium text-default-500">
-												상위 카테고리
-											</th>
-											<th className="w-[120px] px-4 py-3 text-center font-medium text-default-500">
-												하위 카테고리 수
-											</th>
-											<th className="w-[150px] px-4 py-3 text-left font-medium text-default-500">
-												생성일
-											</th>
-											<th className="w-[100px] px-4 py-3 text-center font-medium text-default-500">
-												액션
-											</th>
-										</tr>
-									</thead>
-									<tbody>
-										{categories.map((category) => (
-											<tr
-												key={category.id}
-												className="border-b border-divider transition-colors hover:bg-content2/50"
-											>
-												<td className="px-4 py-3">
-													<span className="font-mono text-sm">
-														{category.name}
-													</span>
-												</td>
-												<td className="px-4 py-3">
-													<ParentCategoryCell
-														parentName={category.parent?.name}
-													/>
-												</td>
-												<td className="px-4 py-3 text-center">
-													<span className="text-default-600">
-														{category.children?.length ?? 0}
-													</span>
-												</td>
-												<td className="px-4 py-3">
-													<DateTimeCell value={category.createdAt} />
-												</td>
-												<td className="px-4 py-3 text-center">
-													<Button
-														as={Link}
-														href={`/roles/categories/${category.id}`}
-														size="sm"
-														variant="flat"
-													>
-														상세
-													</Button>
-												</td>
-											</tr>
-										))}
-									</tbody>
-								</table>
-								<div className="px-4 py-3 text-sm text-default-500">
-									총 {totalCount}건
-								</div>
-							</div>
-						)}
+			<Surface className="overflow-hidden rounded-2xl border-divider/80 bg-content1/70">
+				{isLoading ? (
+					<div className="flex items-center justify-center p-8">
+						<span className="text-default-500">로딩 중...</span>
 					</div>
-				</VStack>
-			</div>
+				) : categories.length === 0 ? (
+					<div className="flex flex-col items-center justify-center gap-4 p-16">
+						<div className="flex h-16 w-16 items-center justify-center rounded-full bg-primary/10">
+							<FolderTree className="h-8 w-8 text-primary" />
+						</div>
+						<p className="text-default-500">등록된 역할 카테고리가 없습니다.</p>
+					</div>
+				) : (
+					<div className="overflow-x-auto">
+						<table className="w-full text-sm">
+							<thead>
+								<tr className="border-b border-divider">
+									<th className="w-[200px] px-4 py-3 text-left font-medium text-default-500">
+										카테고리명
+									</th>
+									<th className="w-[180px] px-4 py-3 text-left font-medium text-default-500">
+										상위 카테고리
+									</th>
+									<th className="w-[120px] px-4 py-3 text-center font-medium text-default-500">
+										하위 카테고리 수
+									</th>
+									<th className="w-[150px] px-4 py-3 text-left font-medium text-default-500">
+										생성일
+									</th>
+									<th className="w-[100px] px-4 py-3 text-center font-medium text-default-500">
+										액션
+									</th>
+								</tr>
+							</thead>
+							<tbody>
+								{categories.map((category) => (
+									<tr
+										key={category.id}
+										className="border-b border-divider transition-colors hover:bg-content2/50"
+									>
+										<td className="px-4 py-3">
+											<span className="font-mono text-sm">{category.name}</span>
+										</td>
+										<td className="px-4 py-3">
+											<ParentCategoryCell parentName={category.parent?.name} />
+										</td>
+										<td className="px-4 py-3 text-center">
+											<span className="text-default-600">
+												{category.children?.length ?? 0}
+											</span>
+										</td>
+										<td className="px-4 py-3">
+											<DateTimeCell value={category.createdAt} />
+										</td>
+										<td className="px-4 py-3 text-center">
+											<Button
+												as={Link}
+												href={`/roles/categories/${category.id}`}
+												size="sm"
+												variant="flat"
+											>
+												상세
+											</Button>
+										</td>
+									</tr>
+								))}
+							</tbody>
+						</table>
+						<div className="px-4 py-3 text-sm text-default-500">
+							총 {totalCount}건
+						</div>
+					</div>
+				)}
+			</Surface>
 		</div>
 	);
 }

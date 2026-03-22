@@ -3,7 +3,7 @@ import type {
 	AbilityFormData,
 	Action,
 	Subject,
-} from "../../../widget/ability/AbilityFormModal";
+} from "../../../widget/form/AbilityFormModal";
 
 /**
  * Role 정보

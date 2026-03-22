@@ -18,7 +18,7 @@
 | 콘텐츠 파일 | `apps/admin/web/src/app/(admin)/actions/page.tsx` |
 | page가 소유하지 않는 skeleton | `Page`, `PageSurface`, `Section`, `SectionSurface`, `Surface` |
 
-- `page.tsx`는 page-local `PageTitleBar`와 `MetaDataGrid`만 렌더링합니다.
+- `page.tsx`는 page-local `PageTitleBar`와 `Surface` 안의 `MetaDataGrid`만 렌더링합니다.
 
 ## Rendering Decision
 
@@ -34,7 +34,7 @@
 | 영역 | 구성 요소 | 설명 |
 |------|-----------|------|
 | 페이지 헤더 | `PageTitleBar` + 등록 버튼 | Action 목록 안내 |
-| 목록 영역 | `MetaDataGrid` | 검색, group 필터, Action 목록 |
+| 목록 영역 | `Surface` + `MetaDataGrid` | 검색, group 필터, Action 목록 |
 
 ## API 호출
 
@@ -61,5 +61,6 @@
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-03-22 | 목록 콘텐츠 wrapper를 범용 `Surface` 기준으로 문서화 | codex |
 | 2026-03-21 | Action 목록을 `master/table` 재사용 타깃으로 분류하고 page role 계약을 추가 | codex |
 | 2026-03-21 | Action 목록 spec을 route-layout / page-builder 계약 형식으로 재작성 | codex |

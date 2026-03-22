@@ -23,6 +23,7 @@ import {
 	type FolderTreeItem,
 	MetaDataGrid,
 	PageTitleBar,
+	Surface,
 	useMetaDataGridQueryStates,
 } from "@cocrepo/ui";
 import {
@@ -157,7 +158,9 @@ const getAssetEmptyMessage = (
 		return "등록된 에셋이 없습니다.";
 	}
 
-	const selectedFolder = folders.find((folder) => folder.id === selectedFolderId);
+	const selectedFolder = folders.find(
+		(folder) => folder.id === selectedFolderId,
+	);
 	if (!selectedFolder) {
 		return "선택한 폴더에 등록된 에셋이 없습니다.";
 	}
@@ -248,7 +251,9 @@ function buildAssetColumns({
 					color="danger"
 					isLoading={isRemoving}
 					startContent={<Trash2 className="h-4 w-4" />}
-					onPress={() => onClickDeleteAssetButton((row.original as AssetDto).id)}
+					onPress={() =>
+						onClickDeleteAssetButton((row.original as AssetDto).id)
+					}
 				>
 					삭제
 				</Button>
@@ -350,7 +355,9 @@ function AssetsPageShellFallback() {
 				title="에셋 관리"
 				description="업로드된 에셋을 조회, 검색, 필터링하고 삭제할 수 있습니다."
 			/>
-			<div className="h-32 rounded-2xl border border-divider/80 bg-content1/70" />
+			<Surface className="h-32 rounded-2xl border-divider/80 bg-content1/70">
+				{null}
+			</Surface>
 		</div>
 	);
 }
@@ -734,7 +741,10 @@ const AssetsPageInner = observer(function AssetsPageInner() {
 					actions={pageActions}
 				/>
 
-				<div className="overflow-hidden rounded-2xl border border-divider/80 bg-content1/70">
+				<Surface
+					className="overflow-hidden rounded-2xl border-divider/80 bg-content1/70"
+					padding="none"
+				>
 					{!isPersistStoreHydrated ? (
 						<AssetsGridFallback
 							queryStates={queryStates}
@@ -764,7 +774,7 @@ const AssetsPageInner = observer(function AssetsPageInner() {
 							/>
 						</Suspense>
 					)}
-				</div>
+				</Surface>
 			</div>
 
 			<input

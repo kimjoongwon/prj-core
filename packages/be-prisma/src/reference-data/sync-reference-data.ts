@@ -28,7 +28,6 @@ type DbClient = PrismaClient | Prisma.TransactionClient;
 export interface ReferenceDataSyncResult {
 	roles: Record<string, Role>;
 }
-
 /**
  * reference-data가 의존하는 고정 system space row를 보장합니다.
  *

@@ -11,6 +11,7 @@ import {
 	DateTimeCell,
 	MetaDataGrid,
 	PageTitleBar,
+	Surface,
 	useMetaDataGridQueryStates,
 } from "@cocrepo/ui";
 import { addToast, Button, Switch } from "@heroui/react";
@@ -138,7 +139,9 @@ function TemplatesPageFallback() {
 				title="메시지 템플릿"
 				description="시스템에 등록된 메시지 템플릿을 관리합니다."
 			/>
-			<div className="h-32 rounded-2xl border border-divider/80 bg-content1/70" />
+			<Surface className="h-32 rounded-2xl border-divider/80 bg-content1/70">
+				{null}
+			</Surface>
 		</div>
 	);
 }
@@ -197,7 +200,7 @@ const TemplatesPageInner = observer(function TemplatesPageInner() {
 				description="시스템에 등록된 메시지 템플릿을 관리합니다."
 				actions={createTemplateButton}
 			/>
-			<div className="overflow-hidden rounded-2xl border border-divider/80 bg-content1/70">
+			<Surface className="overflow-hidden rounded-2xl border-divider/80 bg-content1/70">
 				<Suspense
 					fallback={
 						<MetaDataGrid
@@ -221,7 +224,7 @@ const TemplatesPageInner = observer(function TemplatesPageInner() {
 						columns={columns}
 					/>
 				</Suspense>
-			</div>
+			</Surface>
 		</div>
 	);
 });

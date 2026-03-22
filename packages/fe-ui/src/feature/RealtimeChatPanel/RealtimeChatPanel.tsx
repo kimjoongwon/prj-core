@@ -13,7 +13,7 @@ import type { InquiryMessage, InquiryParticipant } from "@cocrepo/type";
 import { TypingIndicator } from "../../primitive/feedback/TypingIndicator/TypingIndicator";
 import { WebSocketConnectionStatus } from "../../primitive/feedback/WebSocketConnectionStatus/WebSocketConnectionStatus";
 import { MessageStatus } from "../../primitive/feedback/MessageStatus/MessageStatus";
-import { InquiryReplyForm } from "../InquiryReplyForm";
+import { InquiryReplyForm } from "../../widget/form/InquiryReplyForm";
 
 export interface RealtimeChatPanelProps {
 	/** 문의 ID */

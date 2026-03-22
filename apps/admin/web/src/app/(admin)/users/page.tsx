@@ -10,6 +10,7 @@ import {
 	PhoneCell,
 	StatsCard,
 	StatusChipCell,
+	Surface,
 	UserRoleCell,
 	useMetaDataGridQueryStates,
 	VStack,
@@ -226,7 +227,7 @@ const UsersPageContent = observer(function UsersPageContent() {
 					/>
 				</div>
 			)}
-			<div className="overflow-hidden rounded-2xl border border-divider/80 bg-content1/70 p-6">
+			<Surface className="overflow-hidden rounded-2xl border-divider/80 bg-content1/70">
 				<UsersDirectoryHeader totalCount={totalCount} />
 				<MetaDataGrid
 					config={{
@@ -241,7 +242,7 @@ const UsersPageContent = observer(function UsersPageContent() {
 						emptyMessage: "조회된 이용자가 없습니다.",
 					}}
 				/>
-			</div>
+			</Surface>
 		</VStack>
 	);
 });

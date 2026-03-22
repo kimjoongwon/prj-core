@@ -11,6 +11,7 @@ import {
 	DateTimeCell,
 	MetaDataGrid,
 	PageTitleBar,
+	Surface,
 	useMetaDataGridQueryStates,
 } from "@cocrepo/ui";
 import {
@@ -161,7 +162,9 @@ function RoutinesPageFallback() {
 				title="루틴"
 				description="운동 루틴(커리큘럼)을 관리합니다."
 			/>
-			<div className="h-32 rounded-2xl border border-divider/80 bg-content1/70" />
+			<Surface className="h-32 rounded-2xl border-divider/80 bg-content1/70">
+				{null}
+			</Surface>
 		</div>
 	);
 }
@@ -238,7 +241,7 @@ const RoutinesPageInner = observer(function RoutinesPageInner() {
 					</Button>
 				}
 			/>
-			<div className="overflow-hidden rounded-2xl border border-divider/80 bg-content1/70">
+			<Surface className="overflow-hidden rounded-2xl border-divider/80 bg-content1/70">
 				<Suspense
 					fallback={
 						<MetaDataGrid
@@ -262,7 +265,7 @@ const RoutinesPageInner = observer(function RoutinesPageInner() {
 						columns={columns}
 					/>
 				</Suspense>
-			</div>
+			</Surface>
 			<Modal isOpen={deleteModal.isOpen} onClose={deleteModal.onClose}>
 				<ModalContent>
 					<ModalHeader>루틴 삭제</ModalHeader>

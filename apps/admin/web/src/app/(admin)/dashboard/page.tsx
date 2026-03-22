@@ -1,6 +1,19 @@
 "use client";
 
+import {
+	DetailPage,
+	DetailPageSurface,
+	DetailSectionCard,
+	PageTitleBar,
+} from "@cocrepo/ui";
 import { observer } from "mobx-react-lite";
+
+const dashboardCards = [
+	{ label: "오늘 예약", value: "-" },
+	{ label: "전체 회원", value: "-" },
+	{ label: "신규 문의", value: "-" },
+	{ label: "이번 달 매출", value: "-" },
+];
 
 /**
  * 대시보드 페이지
@@ -9,34 +22,29 @@ import { observer } from "mobx-react-lite";
  */
 function DashboardPage() {
 	return (
-		<div className="space-y-6">
-			<div>
-				<h1 className="text-2xl font-bold">대시보드</h1>
-				<p className="text-default-500">
-					관리자 대시보드에 오신 것을 환영합니다.
-				</p>
-			</div>
-
-			{/* 추후 대시보드 위젯 추가 예정 */}
-			<div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-				<div className="rounded-xl bg-content1 p-6 shadow-sm">
-					<h3 className="text-sm font-medium text-default-500">오늘 예약</h3>
-					<p className="mt-2 text-3xl font-bold">-</p>
+		<DetailPage
+			top={
+				<PageTitleBar
+					title="대시보드"
+					description="관리자 대시보드에 오신 것을 환영합니다."
+				/>
+			}
+		>
+			<DetailPageSurface>
+				<div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+					{dashboardCards.map((card) => (
+						<DetailSectionCard key={card.label}>
+							<div className="p-6">
+								<h2 className="text-sm font-medium text-default-500">
+									{card.label}
+								</h2>
+								<p className="mt-2 text-3xl font-bold">{card.value}</p>
+							</div>
+						</DetailSectionCard>
+					))}
 				</div>
-				<div className="rounded-xl bg-content1 p-6 shadow-sm">
-					<h3 className="text-sm font-medium text-default-500">전체 회원</h3>
-					<p className="mt-2 text-3xl font-bold">-</p>
-				</div>
-				<div className="rounded-xl bg-content1 p-6 shadow-sm">
-					<h3 className="text-sm font-medium text-default-500">신규 문의</h3>
-					<p className="mt-2 text-3xl font-bold">-</p>
-				</div>
-				<div className="rounded-xl bg-content1 p-6 shadow-sm">
-					<h3 className="text-sm font-medium text-default-500">이번 달 매출</h3>
-					<p className="mt-2 text-3xl font-bold">-</p>
-				</div>
-			</div>
-		</div>
+			</DetailPageSurface>
+		</DetailPage>
 	);
 }
 

@@ -19,11 +19,13 @@
 | 콘텐츠 파일 | `apps/admin/web/src/app/(admin)/roles/page.tsx` |
 | page가 소유하지 않는 skeleton | `Page`, `PageSurface`, `Section`, `SectionSurface`, `Surface` |
 
-- `page.tsx`는 page-local `PageTitleBar`, 경고 배너, 역할 테이블만 렌더링합니다.
+- `page.tsx`는 page-local `PageTitleBar`, 경고 배너, `Surface` 안의 역할 테이블만 렌더링합니다.
 
 ## Rendering Decision
 
 - 기본 패턴: `page.tsx` 단일 CSR
+- page role: `master`
+- reusable target: `feature/master/list`
 - SSR/prefetch 예외 승인 여부: 없음
 - 추가 예외 파일: 없음 (`_client.tsx`, `_prefetch.ts` 미사용)
 - `Suspense` fallback은 목록 콘텐츠 로딩 상태만 처리합니다.
@@ -34,7 +36,7 @@
 |------|-----------|------|
 | 페이지 헤더 | `PageTitleBar` + 역할 추가 버튼 | 역할 목록 안내 |
 | 안내 배너 | warning block | 시스템 역할 제약 안내 |
-| 목록 영역 | custom table | 역할 메타데이터와 상세 이동 |
+| 목록 영역 | `Surface` + custom table | 역할 메타데이터와 상세 이동 |
 
 ## API 호출
 
@@ -56,28 +58,9 @@
 - [x] `_client.tsx` 제거
 - [x] `_prefetch.ts` 없음
 
-## Consumed Layout Contract
-
-| 항목 | 값 |
-|------|----|
-| 참조 layout spec | `apps/admin/web/src/app/(admin)/roles/layout.spec.md` |
-| consumed slot key | `children` |
-| 콘텐츠 파일 | `apps/admin/web/src/app/(admin)/roles/page.tsx` |
-| page가 소유하지 않는 skeleton | `Page`, `PageSurface`, `Section`, `SectionSurface`, `Surface` |
-
-- `page.tsx`는 목록 탐색, 검색, 필터 같은 마스터 콘텐츠만 담당합니다.
-
-## Rendering Decision
-
-- 기본 패턴: `page.tsx` 단일 CSR
-- page role: `master`
-- reusable target: `feature/master/list`
-- SSR/prefetch 예외 승인 여부: 없음
-- 추가 예외 파일: 없음 (`_client.tsx`, `_prefetch.ts` 미사용)
-
 ## 변경 이력
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
-| 2026-03-21 | fe-page-builder 계약에 맞춰 consumed layout / rendering decision 섹션을 보강 | codex |
+| 2026-03-22 | 목록 wrapper를 범용 `Surface` 기준으로 문서화 | codex |
 | 2026-03-21 | 역할 목록 spec을 route-layout / page-builder 계약 형식으로 재작성 | codex |

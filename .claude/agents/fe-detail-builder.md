@@ -26,6 +26,7 @@ tools: Read, Write, Grep, Bash
 
 - 조회 중심, 읽기 전용, inspector, detail slot 본문이면 `feature/detail/view`
 - 입력/생성/수정 흐름이 포함되면 이 에이전트가 아니라 `fe-form-widget-builder` 대상입니다.
+- detail 계층에서 1개 이상 feature/widget을 시각적으로 묶는 wrapper는 `packages/fe-ui/src/surface/Surface/index.ts` 기반으로 만듭니다.
 
 ## 출력
 
@@ -36,4 +37,6 @@ tools: Read, Write, Grep, Bash
 ## 필수 규칙
 
 - detail 구현은 route page 안에 고정하지 말고 재사용 가능한 feature 단위로 먼저 정리합니다.
+- thin visual wrapper만 필요한 경우에는 새 domain wrapper보다 범용 `Surface`를 우선 검토합니다.
+- `DetailPageSurface`, `DetailSectionCard` 같은 기존 detail 공개 계약은 route-level `PageSurface`, `SectionSurface` 재사용이 아니라 `Surface` 기반으로 유지합니다.
 - 코드 수정 시 대응 `.spec.md`와 `## 변경 이력`를 동기화합니다.

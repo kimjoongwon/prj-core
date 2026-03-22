@@ -22,7 +22,7 @@
 - [req-context-planner.toml](./req-context-planner.toml): 시스템 컨텍스트, 사용자(Actor), 사용자 목표(Goal) 레이어를 기획하는 전문가
 - [req-screen-planner.toml](./req-screen-planner.toml): 기능(Feature)과 화면(Screen) 레이어를 기획하는 전문가
 - [req-page-planner.toml](./req-page-planner.toml): route layout contract를 소비하는 `page.spec.md`와 `@slot` 콘텐츠 spec을 상세 기획하는 전문가
-- [req-layout-planner.toml](./req-layout-planner.toml): `packages/fe-ui/src/layout` 재사용 Layout sidecar spec을 기획하는 전문가
+- [req-layout-planner.toml](./req-layout-planner.toml): `packages/fe-ui/src/primitive/layout` flat Layout sidecar spec을 기획하는 전문가
 - [req-route-layout-planner.toml](./req-route-layout-planner.toml): route `layout.tsx`의 서버 skeleton, named slot topology, `layout.spec.md`를 기획하는 전문가
 - [req-surface-planner.toml](./req-surface-planner.toml): route layout/page/feature의 Surface ownership과 elevation 배치를 기획하는 전문가
 - [req-feature-planner.toml](./req-feature-planner.toml): 화면별 Feature 컴포넌트를 기획하는 전문가
@@ -67,7 +67,7 @@
 ## 프론트엔드
 
 - [fe-page-builder.toml](./fe-page-builder.toml): route layout contract를 소비해 `page.tsx`와 `@slot/**/page.tsx` 콘텐츠를 구현하는 전문가
-- [fe-layout-builder.toml](./fe-layout-builder.toml): `packages/fe-ui/src/layout`의 재사용 Layout 컴포넌트를 설계하고 생성하는 전문가
+- [fe-layout-builder.toml](./fe-layout-builder.toml): `packages/fe-ui/src/primitive/layout`의 flat Layout primitive를 설계하고 생성하는 전문가
 - [fe-route-layout-builder.toml](./fe-route-layout-builder.toml): Next.js App Router의 `app/**/layout.tsx`와 named slot topology를 설계하고 생성하는 전문가
 - [fe-feature-builder.toml](./fe-feature-builder.toml): 비즈니스 기능을 담당하는 Feature 컴포넌트를 생성하는 전문가
 - [fe-widget-builder.toml](./fe-widget-builder.toml): 재사용 가능한 작은 UI 조각 Widget 컴포넌트를 생성하는 전문가

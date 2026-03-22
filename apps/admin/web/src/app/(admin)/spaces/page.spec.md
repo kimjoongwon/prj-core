@@ -19,7 +19,7 @@
 | 콘텐츠 파일 | `apps/admin/web/src/app/(admin)/spaces/page.tsx` |
 | page가 소유하지 않는 skeleton | `Page`, `PageSurface`, `Section`, `SectionSurface`, `Surface` |
 
-- `page.tsx`는 page-local `PageTitleBar`와 공간 목록 grid만 렌더링합니다.
+- `page.tsx`는 page-local `PageTitleBar`와 `Surface` 안의 공간 목록 grid만 렌더링합니다.
 
 ## Rendering Decision
 
@@ -34,7 +34,7 @@
 | 영역 | 구성 요소 | 설명 |
 |------|-----------|------|
 | 페이지 헤더 | `PageTitleBar` + 공간 등록 버튼 | 진입 헤더 |
-| 목록 영역 | `MetaDataGrid` | 시설명, 라벨, 사업자등록번호, 주소, 연락처 표시 |
+| 목록 영역 | `Surface` + `MetaDataGrid` | 시설명, 라벨, 사업자등록번호, 주소, 연락처 표시 |
 
 ## API 호출
 
@@ -59,5 +59,6 @@
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-03-22 | 목록 콘텐츠 wrapper를 범용 `Surface` 기준으로 문서화 | codex |
 | 2026-03-21 | 공간 목록을 `master/table` 재사용 타깃으로 분류하고 page role 계약을 추가 | codex |
 | 2026-03-21 | 공간 목록 spec을 route-layout / page-builder 계약 형식으로 재작성 | codex |
