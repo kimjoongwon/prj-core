@@ -16,10 +16,14 @@ import {
 	ExpiryCell,
 	MetaDataGrid,
 	ModelTypeCell,
+	PageTitleBar,
 	RevokeButtonCell,
+	StatsCard,
+	Surface,
 	useMetaDataGridQueryStates,
+	VStack,
 } from "@cocrepo/ui";
-import { Button, Card, CardBody, useDisclosure } from "@heroui/react";
+import { Button, useDisclosure } from "@heroui/react";
 import { useQueryClient } from "@tanstack/react-query";
 import { Activity, Trash2 } from "lucide-react";
 import { observer, useLocalObservable } from "mobx-react-lite";
@@ -227,52 +231,44 @@ function OidcSessionsPageClient() {
 	];
 
 	return (
-		<section>
-			<div className="flex items-start justify-between gap-4">
-				<div>
-					<h1>{"OIDC 세션/토큰"}</h1>
-					<p>{"OIDC 세션 및 토큰을 조회하고 관리합니다."}</p>
-				</div>
-				<div>
-					{
-						<Button
-							color="danger"
-							variant="flat"
-							startContent={<Trash2 className="h-4 w-4" />}
-							onPress={revokeAllModal.onOpen}
-							isDisabled={totalCount === 0}
-						>
-							전체 폐기
-						</Button>
-					}
-				</div>
-			</div>
+		<VStack gap={5}>
+			<PageTitleBar
+				title="OIDC 세션/토큰"
+				description="OIDC 세션 및 토큰을 조회하고 관리합니다."
+				actions={
+					<Button
+						color="danger"
+						variant="flat"
+						startContent={<Trash2 className="h-4 w-4" />}
+						onPress={revokeAllModal.onOpen}
+						isDisabled={totalCount === 0}
+					>
+						전체 폐기
+					</Button>
+				}
+			/>
 			{stats && (
-				<div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
-					<Card className="bg-content1">
-						<CardBody className="flex flex-row items-center gap-3 p-4">
-							<div className="rounded-lg bg-primary p-2">
-								<Activity className="h-5 w-5 text-white" />
-							</div>
-							<div>
-								<p className="text-sm text-default-500">전체</p>
-								<p className="text-2xl font-bold">{stats.totalCount ?? 0}</p>
-							</div>
-						</CardBody>
-					</Card>
+				<div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
+					<StatsCard
+						className="h-full border border-primary/10 bg-primary/5"
+						icon={<Activity className="size-5" />}
+						title="전체"
+						value={stats.totalCount ?? 0}
+						color="primary"
+						description="현재 저장된 세션/토큰 수"
+					/>
 					{Object.entries(byModelType).map(([type, count]) => (
-						<Card key={type} className="bg-content1">
-							<CardBody className="flex flex-row items-center gap-3 p-4">
-								<div>
-									<p className="text-sm text-default-500">{type}</p>
-									<p className="text-2xl font-bold">{count}</p>
-								</div>
-							</CardBody>
-						</Card>
+						<StatsCard
+							key={type}
+							className="h-full border border-default-200 bg-content1/80"
+							title={type}
+							value={count}
+							description="모델 타입별 활성 건수"
+						/>
 					))}
 				</div>
 			)}
-			<section>
+			<Surface className="overflow-hidden rounded-2xl border-divider/80 bg-content1/70">
 				<MetaDataGrid
 					config={{
 						entity: "OidcSession",
@@ -286,7 +282,7 @@ function OidcSessionsPageClient() {
 						emptyMessage: "등록된 OIDC 세션/토큰이 없습니다.",
 					}}
 				/>
-			</section>
+			</Surface>
 			<ConfirmModal
 				isOpen={revokeModal.isOpen}
 				onClose={revokeModal.onClose}
@@ -323,7 +319,7 @@ function OidcSessionsPageClient() {
 				iconType="warning"
 				loading={isRevokingAll}
 			/>
-		</section>
+		</VStack>
 	);
 }
 

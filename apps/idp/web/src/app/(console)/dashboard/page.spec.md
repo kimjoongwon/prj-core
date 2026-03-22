@@ -56,7 +56,7 @@
 | 참조 layout spec | `apps/idp/web/src/app/(console)/layout.spec.md` |
 | consumed slot key | `children` |
 | 콘텐츠 파일 | `apps/idp/web/src/app/(console)/dashboard/page.tsx` |
-| page가 소유하지 않는 skeleton | `Page`, `PageSurface`, `Section`, `SectionSurface`, `Surface` |
+| page가 소유하지 않는 skeleton | `Page`, `PageSurface`, `Section`, `SectionSurface` |
 
 - `page.tsx`는 `feature/detail/view`의 detail shell 안에서 읽기 전용 대시보드 본문만 담당합니다.
 
@@ -72,6 +72,7 @@
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-03-22 | `(console)` layout contract 변경에 맞춰 primitive skeleton 범위를 보정 | codex |
 | 2026-03-22 | IDP 대시보드를 `DetailPage`/`DetailSectionCard` 기반 detail/view 본문으로 정리하고 spec 의존성을 동기화 | codex |
 | 2026-03-21 | page.tsx 단일 CSR 계약과 현재 surface/rendering decision 기준으로 stale 예외 문구를 정리 | codex |
 | 2026-03-21 | fe-page-builder 계약에 맞춰 consumed layout / rendering decision 섹션을 보강 | codex |

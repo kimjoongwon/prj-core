@@ -11,8 +11,11 @@ import {
 	DateTimeCell,
 	GrantTypeCell,
 	MetaDataGrid,
+	PageTitleBar,
 	RowActionsCell,
+	Surface,
 	useMetaDataGridQueryStates,
+	VStack,
 } from "@cocrepo/ui";
 import { Button } from "@heroui/react";
 import { Plus } from "lucide-react";
@@ -115,26 +118,22 @@ function OidcClientsPageClient() {
 	const totalCount = meta?.totalCount ?? 0;
 
 	return (
-		<section>
-			<div className="flex items-start justify-between gap-4">
-				<div>
-					<h1>{"OIDC 클라이언트"}</h1>
-					<p>{"시스템에 등록된 OIDC 클라이언트를 관리합니다."}</p>
-				</div>
-				<div>
-					{
-						<Button
-							as={Link}
-							href="/oidc-clients/new"
-							color="primary"
-							startContent={<Plus className="h-4 w-4" />}
-						>
-							클라이언트 등록
-						</Button>
-					}
-				</div>
-			</div>
-			<section>
+		<VStack gap={5}>
+			<PageTitleBar
+				title="OIDC 클라이언트"
+				description="시스템에 등록된 OIDC 클라이언트를 관리합니다."
+				actions={
+					<Button
+						as={Link}
+						href="/oidc-clients/new"
+						color="primary"
+						startContent={<Plus className="h-4 w-4" />}
+					>
+						클라이언트 등록
+					</Button>
+				}
+			/>
+			<Surface className="overflow-hidden rounded-2xl border-divider/80 bg-content1/70">
 				<MetaDataGrid
 					config={{
 						entity: "OidcClient",
@@ -148,8 +147,8 @@ function OidcClientsPageClient() {
 						emptyMessage: "등록된 OIDC 클라이언트가 없습니다.",
 					}}
 				/>
-			</section>
-		</section>
+			</Surface>
+		</VStack>
 	);
 }
 

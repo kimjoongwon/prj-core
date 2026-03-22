@@ -1,9 +1,17 @@
 "use client";
 
 import { useCreateOidcClient } from "@cocrepo/api/idp/oidc-clients";
-import { OidcClientForm, type OidcClientFormState } from "@cocrepo/ui";
-import { Button } from "@heroui/react";
-import { ArrowLeft } from "lucide-react";
+import {
+	BackButton,
+	FormPage,
+	FormPageSurface,
+	FormSection,
+	FormSectionCard,
+	OidcClientForm,
+	type OidcClientFormState,
+	PageTitleBar,
+	VStack,
+} from "@cocrepo/ui";
 import { observer, useLocalObservable } from "mobx-react-lite";
 import type { Route } from "next";
 import { useRouter } from "next/navigation";
@@ -126,32 +134,39 @@ function OidcClientNewPageClient() {
 	};
 
 	return (
-		<section>
-			<div className="flex items-start justify-between gap-4">
-				<div>
-					<h1>{"OIDC 클라이언트 등록"}</h1>
-					<p>{"새 OIDC 클라이언트를 등록합니다."}</p>
-				</div>
-				<div>
-					{
-						<Button
-							variant="light"
-							startContent={<ArrowLeft className="h-4 w-4" />}
-							onPress={onClickBackButton}
+		<FormPage
+			top={
+				<PageTitleBar
+					title="OIDC 클라이언트 등록"
+					description="새 OIDC 클라이언트를 등록합니다."
+					actions={<BackButton onClick={onClickBackButton} label="목록으로" />}
+				/>
+			}
+		>
+			<FormPageSurface>
+				<VStack gap={4}>
+					<FormSectionCard>
+						<FormSection
+							top={
+								<PageTitleBar
+									level={2}
+									title="클라이언트 설정"
+									description="기본 정보, 인증 방식, Redirect URI를 입력합니다."
+								/>
+							}
 						>
-							목록으로
-						</Button>
-					}
-				</div>
-			</div>
-			<OidcClientForm
-				mode="create"
-				state={state}
-				onSubmit={onClickSubmitButton}
-				onCancel={onClickBackButton}
-				isSubmitting={isPending}
-			/>
-		</section>
+							<OidcClientForm
+								mode="create"
+								state={state}
+								onSubmit={onClickSubmitButton}
+								onCancel={onClickBackButton}
+								isSubmitting={isPending}
+							/>
+						</FormSection>
+					</FormSectionCard>
+				</VStack>
+			</FormPageSurface>
+		</FormPage>
 	);
 }
 

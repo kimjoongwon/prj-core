@@ -44,12 +44,12 @@
 
 | 항목 | 값 |
 |------|----|
-| 참조 layout spec | `apps/idp/web/src/app/(console)/oidc-clients/layout.spec.md` |
+| 참조 layout spec | `apps/idp/web/src/app/(console)/layout.spec.md` |
 | consumed slot key | `children` |
 | 콘텐츠 파일 | `apps/idp/web/src/app/(console)/oidc-clients/page.tsx` |
-| page가 소유하지 않는 skeleton | `Page`, `PageSurface`, `Section`, `SectionSurface`, `Surface` |
+| page가 소유하지 않는 skeleton | `Page`, `PageSurface`, `Section`, `SectionSurface` |
 
-- `page.tsx`는 목록 탐색과 `MetaDataGrid` 기반 콘텐츠만 담당합니다.
+- `page.tsx`는 `PageTitleBar`와 content-level `Surface` 안에서 `MetaDataGrid` 기반 목록 탐색만 담당합니다.
 
 ## Rendering Decision
 
@@ -63,6 +63,7 @@
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-03-22 | parent `(console)` layout 참조와 content-level `Surface` 기준으로 OIDC 목록 계약을 동기화 | codex |
 | 2026-03-21 | page.tsx 단일 CSR 계약과 현재 surface/rendering decision 기준으로 stale 예외 문구를 정리 | codex |
 | 2026-03-21 | fe-page-builder 계약에 맞춰 consumed layout / rendering decision 섹션을 보강 | codex |
 | 2026-03-14 | Biome lint organizeImports/format cleanup reflected | codex |

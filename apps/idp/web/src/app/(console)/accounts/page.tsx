@@ -9,8 +9,11 @@ import {
 	ActiveStatusCell,
 	DateTimeCell,
 	MetaDataGrid,
+	PageTitleBar,
 	RowActionsCell,
+	Surface,
 	useMetaDataGridQueryStates,
+	VStack,
 } from "@cocrepo/ui";
 import { Chip } from "@heroui/react";
 import { observer } from "mobx-react-lite";
@@ -173,14 +176,12 @@ function AccountsPageClient() {
 	const totalCount = meta?.totalCount ?? 0;
 
 	return (
-		<section>
-			<div className="flex items-start justify-between gap-4">
-				<div>
-					<h1>{"계정 관리"}</h1>
-					<p>{"IDP 계정의 보안 상태를 관리합니다."}</p>
-				</div>
-			</div>
-			<section>
+		<VStack gap={5}>
+			<PageTitleBar
+				title="계정 관리"
+				description="IDP 계정의 보안 상태를 관리합니다."
+			/>
+			<Surface className="overflow-hidden rounded-2xl border-divider/80 bg-content1/70">
 				<MetaDataGrid
 					config={{
 						entity: "IdpAccount",
@@ -194,8 +195,8 @@ function AccountsPageClient() {
 						emptyMessage: "등록된 계정이 없습니다.",
 					}}
 				/>
-			</section>
-		</section>
+			</Surface>
+		</VStack>
 	);
 }
 

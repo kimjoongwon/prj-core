@@ -1,16 +1,23 @@
 "use client";
 
-import { useParams } from "next/navigation";
 import {
 	useGetOidcClient,
 	useUpdateOidcClient,
 } from "@cocrepo/api/idp/oidc-clients";
-import { OidcClientForm } from "@cocrepo/ui";
+import {
+	BackButton,
+	FormPage,
+	FormPageSurface,
+	FormSection,
+	FormSectionCard,
+	OidcClientForm,
+	PageTitleBar,
+	VStack,
+} from "@cocrepo/ui";
 import { Button } from "@heroui/react";
-import { ArrowLeft } from "lucide-react";
 import { observer, useLocalObservable } from "mobx-react-lite";
 import type { Route } from "next";
-import { useRouter } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { useEffect } from "react";
 
 type OidcClientEditPageParams = {
@@ -148,6 +155,10 @@ function OidcClientEditPageClient({
 		router.push(`/oidc-clients/${oidcClientId}` as Route);
 	};
 
+	const onClickListButton = () => {
+		router.push("/oidc-clients" as Route);
+	};
+
 	const onClickSubmitButton = () => {
 		if (!validate()) return;
 
@@ -172,72 +183,92 @@ function OidcClientEditPageClient({
 
 	if (isLoading) {
 		return (
-			<section>
-				<div className="flex items-start justify-between gap-4">
-					<div>
-						<h1>{"OIDC 클라이언트 수정"}</h1>
-						<p>{"로딩 중..."}</p>
-					</div>
-				</div>
-				<div className="flex items-center justify-center p-8">
-					<span className="text-default-500">로딩 중...</span>
-				</div>
-			</section>
+			<FormPage
+				top={
+					<PageTitleBar
+						title="OIDC 클라이언트 수정"
+						description="클라이언트 정보를 불러오는 중입니다."
+						actions={
+							<BackButton onClick={onClickListButton} label="목록으로" />
+						}
+					/>
+				}
+			>
+				<FormPageSurface>
+					<FormSectionCard>
+						<div className="flex items-center justify-center p-8">
+							<span className="text-default-500">로딩 중...</span>
+						</div>
+					</FormSectionCard>
+				</FormPageSurface>
+			</FormPage>
 		);
 	}
 
 	if (!client) {
 		return (
-			<section>
-				<div className="flex items-start justify-between gap-4">
-					<div>
-						<h1>{"OIDC 클라이언트 수정"}</h1>
-						<p>{"클라이언트를 찾을 수 없습니다."}</p>
-					</div>
-				</div>
-				<div className="flex flex-col items-center justify-center gap-4 p-8">
-					<p className="text-default-500">클라이언트를 찾을 수 없습니다.</p>
-					<Button
-						variant="flat"
-						onPress={() => router.push("/oidc-clients" as Route)}
-					>
-						목록으로
-					</Button>
-				</div>
-			</section>
+			<FormPage
+				top={
+					<PageTitleBar
+						title="OIDC 클라이언트 수정"
+						description="클라이언트를 찾을 수 없습니다."
+						actions={
+							<BackButton onClick={onClickListButton} label="목록으로" />
+						}
+					/>
+				}
+			>
+				<FormPageSurface>
+					<FormSectionCard>
+						<div className="flex flex-col items-center justify-center gap-4 p-8">
+							<p className="text-default-500">클라이언트를 찾을 수 없습니다.</p>
+							<Button variant="flat" onPress={onClickListButton}>
+								목록으로
+							</Button>
+						</div>
+					</FormSectionCard>
+				</FormPageSurface>
+			</FormPage>
 		);
 	}
 
 	return (
-		<section>
-			<div className="flex items-start justify-between gap-4">
-				<div>
-					<h1>{"OIDC 클라이언트 수정"}</h1>
-					{`${client.clientId} 클라이언트를 수정합니다.` && (
-						<p>{`${client.clientId} 클라이언트를 수정합니다.`}</p>
-					)}
-				</div>
-				<div>
-					{
-						<Button
-							variant="light"
-							startContent={<ArrowLeft className="h-4 w-4" />}
-							onPress={onClickBackButton}
-						>
-							상세로 돌아가기
-						</Button>
+		<FormPage
+			top={
+				<PageTitleBar
+					title="OIDC 클라이언트 수정"
+					description={`${client.clientId} 클라이언트를 수정합니다.`}
+					actions={
+						<BackButton onClick={onClickBackButton} label="상세로 돌아가기" />
 					}
-				</div>
-			</div>
-			<OidcClientForm
-				mode="edit"
-				state={state}
-				onSubmit={onClickSubmitButton}
-				onCancel={onClickBackButton}
-				isSubmitting={isPending}
-				readonlyClientId={client.clientId}
-			/>
-		</section>
+				/>
+			}
+		>
+			<FormPageSurface>
+				<VStack gap={4}>
+					<FormSectionCard>
+						<FormSection
+							top={
+								<PageTitleBar
+									level={2}
+									title="클라이언트 설정"
+									description="기본 정보와 인증 설정을 수정합니다."
+								/>
+							}
+						>
+							<OidcClientForm
+								mode="edit"
+								state={state}
+								onSubmit={onClickSubmitButton}
+								onCancel={onClickBackButton}
+								isSubmitting={isPending}
+								readonlyClientId={client.clientId}
+							/>
+						</FormSection>
+					</FormSectionCard>
+				</VStack>
+			</FormPageSurface>
+		</FormPage>
 	);
 }
 

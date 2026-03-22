@@ -11,9 +11,12 @@ import {
 	AuditResultBadge,
 	DateTimeCell,
 	MetaDataGrid,
+	PageTitleBar,
+	StatsCard,
+	Surface,
 	useMetaDataGridQueryStates,
+	VStack,
 } from "@cocrepo/ui";
-import { Card, CardBody } from "@heroui/react";
 import { CheckCircle, Lock, XCircle } from "lucide-react";
 import { observer } from "mobx-react-lite";
 
@@ -73,33 +76,6 @@ const leftInputs: InputConfig[] = [
 	},
 ];
 
-/** 통계 카드 컴포넌트 */
-function StatCard({
-	icon: Icon,
-	label,
-	value,
-	color,
-}: {
-	icon: React.ElementType;
-	label: string;
-	value: number;
-	color: string;
-}) {
-	return (
-		<Card className="bg-content1">
-			<CardBody className="flex flex-row items-center gap-3 p-4">
-				<div className={`rounded-lg p-2 ${color}`}>
-					<Icon className="h-5 w-5 text-white" />
-				</div>
-				<div>
-					<p className="text-sm text-default-500">{label}</p>
-					<p className="text-2xl font-bold">{value}</p>
-				</div>
-			</CardBody>
-		</Card>
-	);
-}
-
 /**
  * 감사 로그 목록 페이지 - 클라이언트 컴포넌트
  */
@@ -121,36 +97,40 @@ function AuthAuditLogsClient() {
 	const stats = statsResponse?.data;
 
 	return (
-		<section>
-			<div className="flex items-start justify-between gap-4">
-				<div>
-					<h1>{"로그인 감사 로그"}</h1>
-					<p>{"로그인 시도에 대한 감사 로그를 조회합니다."}</p>
-				</div>
-			</div>
+		<VStack gap={5}>
+			<PageTitleBar
+				title="로그인 감사 로그"
+				description="로그인 시도에 대한 감사 로그를 조회합니다."
+			/>
 			{stats && (
-				<div className="grid grid-cols-3 gap-4">
-					<StatCard
-						icon={CheckCircle}
-						label="오늘 성공"
+				<div className="grid grid-cols-1 gap-4 md:grid-cols-3">
+					<StatsCard
+						className="h-full border border-success/10 bg-success/5"
+						icon={<CheckCircle className="size-5" />}
+						title="오늘 성공"
 						value={stats.todaySuccessCount ?? 0}
-						color="bg-success"
+						color="success"
+						description="오늘 발생한 성공 로그인 수"
 					/>
-					<StatCard
-						icon={XCircle}
-						label="오늘 실패"
+					<StatsCard
+						className="h-full border border-danger/10 bg-danger/5"
+						icon={<XCircle className="size-5" />}
+						title="오늘 실패"
 						value={stats.todayFailureCount ?? 0}
-						color="bg-danger"
+						color="danger"
+						description="오늘 발생한 실패 로그인 수"
 					/>
-					<StatCard
-						icon={Lock}
-						label="오늘 잠금"
+					<StatsCard
+						className="h-full border border-warning/10 bg-warning/5"
+						icon={<Lock className="size-5" />}
+						title="오늘 잠금"
 						value={stats.todayLockedCount ?? 0}
-						color="bg-warning"
+						color="warning"
+						description="오늘 잠금 처리된 계정 수"
 					/>
 				</div>
 			)}
-			<section>
+			<Surface className="overflow-hidden rounded-2xl border-divider/80 bg-content1/70">
 				<MetaDataGrid
 					config={{
 						entity: "AuthAuditLog",
@@ -164,8 +144,8 @@ function AuthAuditLogsClient() {
 						emptyMessage: "조회된 감사 로그가 없습니다.",
 					}}
 				/>
-			</section>
-		</section>
+			</Surface>
+		</VStack>
 	);
 }
 
