@@ -1,3 +1,5 @@
+name = "fe-form-widget-builder"
+description = "생성/수정 입력 화면용 재사용 form widget을 생성하고 정리하는 전문가"
 model = "gpt-5-codex"
 model_reasoning_effort = "high"
 developer_instructions = '''

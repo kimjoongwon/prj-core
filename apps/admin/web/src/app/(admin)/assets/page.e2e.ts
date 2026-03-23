@@ -52,7 +52,7 @@ test.describe("에셋 목록 페이지", () => {
 			await expect(
 				page.getByText(
 					"업로드된 에셋을 조회, 검색, 필터링하고 삭제할 수 있습니다.",
-				),
+				).first(),
 			).toBeVisible();
 			await expect(page.getByPlaceholder("파일명 검색...")).toBeVisible();
 			expect(pageErrors).toEqual([]);
@@ -150,19 +150,12 @@ test.describe("에셋 목록 페이지", () => {
 				new RegExp(`/assets/${MOCK_ASSET_ID}$`),
 			);
 			await assetLink.click();
-			await page.waitForTimeout(500);
+			await expect(page).toHaveURL(new RegExp(`/assets/${MOCK_ASSET_ID}/?$`));
 
 			// Then: 상세 페이지 이동 및 파일명 확인
-			if (new RegExp(`/assets/${MOCK_ASSET_ID}$`).test(page.url())) {
-				await expect(
-					page.getByRole("heading", { name: TEST_NAME, exact: true }),
-				).toBeVisible();
-				expect(pageErrors).toEqual([]);
-				return;
-			}
-
-			await expect(page).toHaveURL(/\/assets\/?$/);
-			await expect(assetLink).toBeVisible();
+			await expect(
+				page.getByRole("heading", { name: TEST_NAME, exact: true }),
+			).toBeVisible();
 			expect(pageErrors).toEqual([]);
 		});
 	});

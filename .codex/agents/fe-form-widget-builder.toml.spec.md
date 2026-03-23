@@ -20,3 +20,4 @@ Create/Edit 페이지가 소비하는 입력 폼 위젯을 page 밖 재사용 UI
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
 | 2026-03-21 | form 재사용 계층 전용 builder 신규 추가 | codex |
+| 2026-03-23 | role 메타데이터(name/description)와 config 등록 기준을 반영해 로컬 role 인식 조건을 명시 | codex |

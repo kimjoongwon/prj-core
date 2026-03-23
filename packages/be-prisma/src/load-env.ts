@@ -1,4 +1,9 @@
 import { resolve } from "node:path";
 import { config } from "dotenv";
 
-config({ path: resolve(__dirname, "../.env") });
+for (const envPath of [
+	resolve(__dirname, "../.env.local"),
+	resolve(__dirname, "../.env"),
+]) {
+	config({ path: envPath });
+}

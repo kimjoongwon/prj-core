@@ -6,14 +6,20 @@ import type {
 	OidcClientInfo,
 } from "../oidc/types";
 import {
-	type InteractionResult,
 	InteractionService,
-	type LoginValidationResult,
+	type InteractionResult,
 } from "./interaction.service";
+import {
+	InteractionLoginService,
+	type LoginValidationResult,
+} from "./interaction-login.service";
 
 @Injectable()
 export class InteractionFacade {
-	constructor(private readonly interactionService: InteractionService) {}
+	constructor(
+		private readonly interactionService: InteractionService,
+		private readonly interactionLoginService: InteractionLoginService,
+	) {}
 
 	getInteractionDetails(
 		req: KoaLikeRequest,
@@ -32,7 +38,7 @@ export class InteractionFacade {
 		ipAddress: string,
 		userAgent?: string,
 	): Promise<LoginValidationResult> {
-		return this.interactionService.validateUser(
+		return this.interactionLoginService.validateUser(
 			email,
 			password,
 			ipAddress,

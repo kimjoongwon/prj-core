@@ -26,6 +26,7 @@ Rancher Desktop 기반 이미지 파이프라인을 수행합니다.
 | 정리 정책 | 임시 검증 컨테이너/오래된 로그 정리, 기본값으로 dangling 이미지 정리 수행 (`PRUNE_DANGLING_IMAGES=true`) |
 | 실패 시 정리 | 빌드/검증/푸시 중간 실패여도 EXIT 트랩으로 정리 단계 실행 |
 | 로그 | 빌드/실행검증/푸시 로그를 `${LOG_DIR}`에 타깃별 파일로 저장 (`CONTAINER_BUILD_LOG_DIR` 또는 `RANCHER_BUILD_LOG_DIR`) |
+| SMTP 런타임 주입 | `core-api`, `idp-api` 검증 컨테이너에 `SMTP_HOST/PORT/SECURE/USERNAME/PASSWORD/SENDER`를 함께 전달 |
 
 ## 구현 체크리스트
 
@@ -43,6 +44,7 @@ Rancher Desktop 기반 이미지 파이프라인을 수행합니다.
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-03-23 | `core-api`/`idp-api` 검증 컨테이너에 `SMTP_SECURE`를 함께 주입해 Resend SMTP와 다른 provider 간 TLS 모드 전환이 env 계약으로 일치하도록 정리 | codex |
 | 2026-03-20 | `proposal-web` 이미지를 빌드/실행 검증 대상에 추가하고 포트 `3011`의 `/proposal` probe 계약을 정의 | codex |
 | 2026-03-09 | `core-api` Docker 런타임 포트 변경에 맞춰 Rancher Desktop 실행 검증 포트를 `80`에서 `3006`으로 조정 | codex |
 | 2026-03-08 | Podman 다중 이미지 빌드 스크립트 신규 추가 (인터랙티브/CLI, ENV/TAG/REGISTRY 기본값 지원) | codex |

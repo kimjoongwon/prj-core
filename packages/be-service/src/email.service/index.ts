@@ -1,36 +1,56 @@
-import { Injectable, Logger } from "@nestjs/common";
+import type { SMTPConfig } from "@cocrepo/type";
+import {
+	BadRequestException,
+	Inject,
+	Injectable,
+	Logger,
+} from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
-import * as nodemailer from "nodemailer";
 import type { Transporter } from "nodemailer";
+import * as nodemailer from "nodemailer";
+import type { RenderedTemplateResult } from "../template.service/index";
+import { TemplateService } from "../template.service/index";
 
-interface SmtpConfig {
-	host: string;
-	port: number;
-	username: string;
-	password: string;
-	sender: string;
+const PASSWORD_RESET_TEMPLATE_CODE = "AUTH_PASSWORD_RESET";
+const TEMPORARY_PASSWORD_TEMPLATE_CODE = "AUTH_TEMPORARY_PASSWORD";
+
+/**
+ * 메일 발송 입력 계약
+ */
+export interface EmailSendInput {
+	to: string;
+	subject: string;
+	html: string;
 }
 
 /**
- * SMTP 이메일 발송 서비스
- *
- * 비밀번호 재설정, 임시 비밀번호 발급 등 인증 관련 이메일을 발송합니다.
- * ConfigService에서 smtp 설정을 읽어 Nodemailer 트랜스포터를 생성합니다.
+ * 메일 발송 provider 추상 token
+ */
+export abstract class EmailProvider {
+	abstract send(input: EmailSendInput): Promise<void>;
+}
+
+/**
+ * SMTP 기반 메일 발송 provider
  */
 @Injectable()
-export class EmailService {
-	private readonly logger = new Logger(EmailService.name);
+export class SmtpEmailProvider implements EmailProvider {
+	private readonly logger = new Logger(SmtpEmailProvider.name);
 	private transporter: Transporter | null = null;
-	private readonly smtpConfig: SmtpConfig;
+	private readonly smtpConfig: SMTPConfig;
 
 	constructor(private readonly configService: ConfigService) {
-		this.smtpConfig = this.configService.get<SmtpConfig>("smtp") || {
+		const smtpConfig = this.configService.get<SMTPConfig>("smtp");
+		this.smtpConfig = smtpConfig || {
 			host: process.env.SMTP_HOST || "localhost",
 			port: Number(process.env.SMTP_PORT) || 587,
 			username: process.env.SMTP_USERNAME || "",
 			password: process.env.SMTP_PASSWORD || "",
-			sender:
-				process.env.SMTP_SENDER || "noreply@example.com",
+			secure:
+				process.env.SMTP_SECURE != null
+					? process.env.SMTP_SECURE === "true"
+					: Number(process.env.SMTP_PORT) === 465,
+			sender: process.env.SMTP_SENDER || "noreply@example.com",
 		};
 	}
 
@@ -51,7 +71,7 @@ export class EmailService {
 		this.transporter = nodemailer.createTransport({
 			host: this.smtpConfig.host,
 			port: this.smtpConfig.port,
-			secure: this.smtpConfig.port === 465,
+			secure: this.smtpConfig.secure,
 			auth: {
 				user: this.smtpConfig.username,
 				pass: this.smtpConfig.password,
@@ -61,81 +81,7 @@ export class EmailService {
 		return this.transporter;
 	}
 
-	/**
-	 * 비밀번호 재설정 이메일을 발송합니다.
-	 *
-	 * @param email - 수신자 이메일
-	 * @param resetUrl - 비밀번호 재설정 페이지 URL (토큰 포함)
-	 */
-	async sendPasswordResetEmail(
-		email: string,
-		resetUrl: string,
-	): Promise<void> {
-		const subject = "비밀번호 재설정 안내";
-		const html = `
-			<div style="max-width: 600px; margin: 0 auto; font-family: 'Pretendard', sans-serif; color: #333;">
-				<h2 style="color: #0070f3;">비밀번호 재설정</h2>
-				<p>비밀번호 재설정이 요청되었습니다.</p>
-				<p>아래 버튼을 클릭하여 새 비밀번호를 설정하세요.</p>
-				<div style="margin: 24px 0;">
-					<a href="${resetUrl}"
-						style="display: inline-block; padding: 12px 24px; background-color: #0070f3; color: white; text-decoration: none; border-radius: 8px; font-weight: 600;">
-						비밀번호 재설정하기
-					</a>
-				</div>
-				<p style="color: #666; font-size: 14px;">
-					이 링크는 30분간 유효하며, 1회만 사용할 수 있습니다.
-				</p>
-				<p style="color: #999; font-size: 12px;">
-					본인이 요청하지 않은 경우 이 이메일을 무시하세요. 비밀번호는 변경되지 않습니다.
-				</p>
-			</div>
-		`;
-
-		await this.sendMail(email, subject, html);
-	}
-
-	/**
-	 * 임시 비밀번호 발급 이메일을 발송합니다.
-	 *
-	 * @param email - 수신자 이메일
-	 * @param tempPassword - 임시 비밀번호
-	 */
-	async sendTemporaryPasswordEmail(
-		email: string,
-		tempPassword: string,
-	): Promise<void> {
-		const subject = "임시 비밀번호 발급 안내";
-		const html = `
-			<div style="max-width: 600px; margin: 0 auto; font-family: 'Pretendard', sans-serif; color: #333;">
-				<h2 style="color: #0070f3;">임시 비밀번호 발급</h2>
-				<p>관리자에 의해 비밀번호가 재설정되었습니다.</p>
-				<div style="margin: 24px 0; padding: 16px; background-color: #f5f5f5; border-radius: 8px;">
-					<p style="margin: 0; font-size: 14px; color: #666;">임시 비밀번호</p>
-					<p style="margin: 8px 0 0; font-size: 20px; font-weight: 700; font-family: monospace; letter-spacing: 2px;">
-						${tempPassword}
-					</p>
-				</div>
-				<p style="color: #e53e3e; font-weight: 600;">
-					로그인 후 즉시 비밀번호를 변경해주세요.
-				</p>
-				<p style="color: #999; font-size: 12px;">
-					본인이 요청하지 않은 경우 관리자에게 문의하세요.
-				</p>
-			</div>
-		`;
-
-		await this.sendMail(email, subject, html);
-	}
-
-	/**
-	 * 이메일 발송 공통 메서드
-	 */
-	private async sendMail(
-		to: string,
-		subject: string,
-		html: string,
-	): Promise<void> {
+	async send({ to, subject, html }: EmailSendInput): Promise<void> {
 		const transporter = this.getTransporter();
 
 		if (!transporter) {
@@ -158,5 +104,93 @@ export class EmailService {
 			this.logger.error(`이메일 발송 실패: ${to} (${subject}) - ${error}`);
 			throw error;
 		}
+	}
+}
+
+/**
+ * 이메일 유즈케이스 서비스
+ *
+ * 비밀번호 재설정, 임시 비밀번호 발급 등 인증 관련 이메일을 조합합니다.
+ * 실제 전송은 주입된 EmailProvider 구현체에 위임합니다.
+ */
+@Injectable()
+export class EmailService {
+	constructor(
+		@Inject(EmailProvider)
+		private readonly emailProvider: EmailProvider,
+		private readonly templateService: TemplateService,
+	) {}
+
+	/**
+	 * 비밀번호 재설정 이메일을 발송합니다.
+	 *
+	 * @param email - 수신자 이메일
+	 * @param resetUrl - 비밀번호 재설정 페이지 URL (토큰 포함)
+	 */
+	async sendPasswordResetEmail(email: string, resetUrl: string): Promise<void> {
+		const rendered = await this.templateService.renderByCode(
+			PASSWORD_RESET_TEMPLATE_CODE,
+			{
+				resetUrl,
+				expiresInMinutes: "30",
+			},
+		);
+
+		await this.sendRenderedEmail(email, PASSWORD_RESET_TEMPLATE_CODE, rendered);
+	}
+
+	/**
+	 * 임시 비밀번호 발급 이메일을 발송합니다.
+	 *
+	 * @param email - 수신자 이메일
+	 * @param tempPassword - 임시 비밀번호
+	 */
+	async sendTemporaryPasswordEmail(
+		email: string,
+		tempPassword: string,
+	): Promise<void> {
+		const rendered = await this.templateService.renderByCode(
+			TEMPORARY_PASSWORD_TEMPLATE_CODE,
+			{
+				temporaryPassword: tempPassword,
+			},
+		);
+
+		await this.sendRenderedEmail(
+			email,
+			TEMPORARY_PASSWORD_TEMPLATE_CODE,
+			rendered,
+		);
+	}
+
+	/**
+	 * 이메일 발송 공통 메서드
+	 */
+	async sendEmail(input: EmailSendInput): Promise<void> {
+		await this.emailProvider.send(input);
+	}
+
+	private async sendRenderedEmail(
+		to: string,
+		templateCode: string,
+		rendered: RenderedTemplateResult,
+	): Promise<void> {
+		if (rendered.type !== "EMAIL") {
+			throw new BadRequestException(
+				`이메일 발송 템플릿이 EMAIL 유형이 아닙니다: ${templateCode}`,
+			);
+		}
+
+		if (!rendered.subject) {
+			throw new BadRequestException(
+				`이메일 발송 템플릿에 제목이 없습니다: ${templateCode}`,
+			);
+		}
+
+		await this.sendEmail({
+			to,
+			subject: rendered.subject,
+			html: rendered.content,
+		});
 	}
 }

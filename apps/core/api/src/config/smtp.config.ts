@@ -1,6 +1,6 @@
 import { ValidationUtil } from "@cocrepo/decorator";
 import { registerAs } from "@nestjs/config";
-import { IsString } from "class-validator";
+import { IsBooleanString, IsString } from "class-validator";
 import { SMTPConfig } from "./config.type";
 
 class EnvironmentVariablesValidator {
@@ -16,6 +16,9 @@ class EnvironmentVariablesValidator {
 	@IsString()
 	SMTP_HOST!: string;
 
+	@IsBooleanString()
+	SMTP_SECURE!: string;
+
 	@IsString()
 	SMTP_SENDER!: string;
 }
@@ -28,6 +31,7 @@ export default registerAs<SMTPConfig>("smtp", () => {
 		password: process.env.SMTP_PASSWORD!,
 		port: Number(process.env.SMTP_PORT),
 		host: process.env.SMTP_HOST!,
+		secure: process.env.SMTP_SECURE === "true",
 		sender: process.env.SMTP_SENDER!,
 	};
 });

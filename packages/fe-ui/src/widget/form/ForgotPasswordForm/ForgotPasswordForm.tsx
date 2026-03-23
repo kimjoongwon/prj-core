@@ -129,8 +129,8 @@ export const ForgotPasswordForm = observer(
 				{/* 로그인으로 돌아가기 */}
 				<div className="mt-6 text-center">
 					<Link
-						href="/"
-						className="text-default-400 hover:text-default-300 text-sm"
+						href="/auth/login"
+						className="text-default-400 hover:text-default-500 text-sm"
 					>
 						로그인으로 돌아가기
 					</Link>

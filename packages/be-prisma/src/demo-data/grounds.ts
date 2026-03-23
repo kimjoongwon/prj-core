@@ -1,3 +1,5 @@
+import { systemAdminSeedData } from "../bootstrap/data/system-users";
+
 /**
  * dev/stg에서 쓰는 사용자/지점 데모 데이터입니다.
  *
@@ -27,19 +29,12 @@ export interface GroundSeedData {
 	isSystem?: boolean; // System Space에 연결되는 Ground
 }
 
-// 10명의 다양한 역할 유저 데이터 (FULL_ACCESS 1명, MANAGE 3명, VIEW 6명)
+// 11명의 다양한 역할 유저 데이터 (FULL_ACCESS 2명, MANAGE 3명, VIEW 6명)
 export const userSeedData: UserSeedData[] = [
-	// FULL_ACCESS 1명 - 플랫폼 관리자
-	{
-		email: "admin@plate.com",
-		phone: "01073162347",
-		password: "rkdmf12!@",
-		profile: {
-			name: "Super Admin",
-			nickname: "플레이트",
-		},
+	...systemAdminSeedData.map((user) => ({
+		...user,
 		role: "FULL_ACCESS",
-	},
+	})),
 	// MANAGE 3명 - 각 지점 관리자
 	{
 		email: "manager.gwanghwamun@f45.kr",
@@ -243,6 +238,10 @@ export const userGroundMapping: UserGroundMappingData[] = [
 	// FULL_ACCESS - 플랫폼 운영본부 (System Space)
 	{
 		userEmail: "admin@plate.com",
+		groundNames: ["플랫폼 운영본부"],
+	},
+	{
+		userEmail: "wallydevplan@gmail.com",
 		groundNames: ["플랫폼 운영본부"],
 	},
 	// MANAGE - 담당 지점만 (F45 계열)

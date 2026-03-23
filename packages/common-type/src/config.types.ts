@@ -11,10 +11,7 @@ export type AppConfig = {
 	headerLanguage: string;
 };
 
-export type ObjectStorageProvider =
-	| "aws-s3"
-	| "backblaze-b2"
-	| "cloudflare-r2";
+export type ObjectStorageProvider = "aws-s3" | "backblaze-b2" | "cloudflare-r2";
 
 export type ObjectStorageConfig = {
 	provider: ObjectStorageProvider;
@@ -33,6 +30,7 @@ export type SMTPConfig = {
 	password: string;
 	port: number;
 	host: string;
+	secure: boolean;
 	sender: string;
 };
 

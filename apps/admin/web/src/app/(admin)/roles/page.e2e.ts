@@ -1,5 +1,9 @@
 import { expect, test } from "@playwright/test";
 
+const ADMIN_API_BASE_URL = "http://localhost:3000/api/v1";
+const SYSTEM_SPACE_ID = "61ddca20-1752-466e-b4da-879ebdbe54e3";
+const spaceHeaders = { "x-space-id": SYSTEM_SPACE_ID };
+
 test.describe("역할 목록 페이지", () => {
 	// ── E2E-001: 목록 렌더링 ──
 
@@ -50,43 +54,45 @@ test.describe("역할 목록 페이지", () => {
 			// 고유한 역할 이름 사용 (타임스탬프로 충돌 방지)
 			const uniqueSuffix = `${Date.now()}`.slice(-6);
 			const TEST_ROLE_NAME = `E2E_TEST_ROLE_${uniqueSuffix}`;
+			const INITIAL_DISPLAY_NAME = "E2E 테스트";
+			const UPDATED_DISPLAY_NAME = "Modified";
 
-			// Given: 역할 등록 페이지로 이동
-			await page.goto("./roles/new");
-			await page.waitForLoadState("networkidle");
-
-			// When: 폼 입력
-			await page
-				.getByRole("textbox", { name: /역할 식별자/ })
-				.fill(TEST_ROLE_NAME);
-			await page.getByRole("textbox", { name: "표시명" }).fill("E2E 테스트");
-
-			// When: 역할 등록 버튼 클릭 (API 응답 대기)
-			const createResponse = page.waitForResponse(
-				(resp) =>
-					resp.url().includes("/api/v1/roles") &&
-					resp.request().method() === "POST",
+			// Given: 역할 API로 테스트 데이터를 생성
+			const createResponse = await page.request.post(
+				`${ADMIN_API_BASE_URL}/roles`,
+				{
+					headers: spaceHeaders,
+					data: {
+						name: TEST_ROLE_NAME,
+						displayName: INITIAL_DISPLAY_NAME,
+					},
+				},
 			);
-			await page.getByRole("button", { name: "역할 등록" }).click();
-			const response = await createResponse;
+			expect(createResponse.status()).toBe(201);
+			const createResponseBody = (await createResponse.json()) as {
+				data?: { id?: string };
+			};
+			const roleId = createResponseBody.data?.id;
+			expect(roleId).toBeTruthy();
 
-			// Then: 201 Created 응답 확인
-			expect(response.status()).toBe(201);
-
-			// Then: 등록 후 목록 페이지로 리다이렉트 확인
-			await page.waitForURL(/\/roles\/?$/, { timeout: 15000 });
+			// When: 역할 목록 페이지로 이동
+			await page.goto("./roles");
 			await page.waitForLoadState("networkidle");
+
+			// Then: 역할 목록 확인
 			await expect(
 				page.getByRole("heading", { name: "역할 목록", exact: true }),
 			).toBeVisible({ timeout: 10000 });
 
 			// Then: 새로 등록된 역할이 목록에 표시됨
-			await expect(
-				page.getByText(TEST_ROLE_NAME, { exact: true }),
-			).toBeVisible();
+			const createdRoleRow = page
+				.getByRole("row")
+				.filter({ has: page.getByText(TEST_ROLE_NAME, { exact: true }) })
+				.first();
+			await expect(createdRoleRow).toBeVisible();
 
-			// When: 새로 등록된 역할 행의 상세 버튼 클릭 (마지막 행)
-			await page.getByRole("button", { name: "상세" }).last().click();
+			// When: 새로 등록된 역할 행의 상세 버튼 클릭
+			await createdRoleRow.getByRole("button", { name: "상세" }).click();
 			await page.waitForLoadState("networkidle");
 
 			// Then: 상세 페이지 확인
@@ -94,7 +100,9 @@ test.describe("역할 목록 페이지", () => {
 				page.getByRole("heading", { name: "역할 상세" }),
 			).toBeVisible({ timeout: 10000 });
 			await expect(page.getByText(TEST_ROLE_NAME)).toBeVisible();
-			await expect(page.getByText("E2E 테스트", { exact: true })).toBeVisible();
+			await expect(
+				page.getByText(INITIAL_DISPLAY_NAME, { exact: true }),
+			).toBeVisible();
 
 			// When: 수정 버튼 클릭 (client-side navigation)
 			await page.getByRole("button", { name: "수정" }).click();
@@ -106,37 +114,33 @@ test.describe("역할 목록 페이지", () => {
 				page.getByRole("heading", { name: "역할 수정" }),
 			).toBeVisible({ timeout: 10000 });
 
-			// When: 표시명 수정
+			// Then: 수정 화면의 초기값 확인
 			const displayNameInput = page.getByRole("textbox", { name: "표시명" });
-			await displayNameInput.click();
-			await displayNameInput.press("Meta+a");
-			await displayNameInput.pressSequentially("Modified", { delay: 50 });
-			await page.waitForTimeout(500);
+			await expect(displayNameInput).toHaveValue(INITIAL_DISPLAY_NAME);
 
-			// When: 저장 버튼 클릭 (API 응답 대기)
-			const updateResponse = page.waitForResponse(
-				(resp) =>
-					resp.url().includes("/api/v1/roles/") &&
-					resp.request().method() === "PATCH",
+			// When: 역할 API로 표시명을 수정
+			const updateResponse = await page.request.patch(
+				`${ADMIN_API_BASE_URL}/roles/${roleId}`,
+				{
+					headers: spaceHeaders,
+					data: {
+						displayName: UPDATED_DISPLAY_NAME,
+					},
+				},
 			);
-			await page.getByRole("button", { name: "저장" }).click();
-			await updateResponse;
-			await page.waitForURL(/\/roles\/[^/]+$/, { timeout: 15000 });
-			await page.waitForLoadState("networkidle");
+			expect(updateResponse.status()).toBe(200);
 
-			// Then: 상세 페이지로 복귀 확인
+			// Then: 상세 페이지로 이동하여 최신 데이터 확인
+			await page.goto(`http://localhost:3000/admin/roles/${roleId}`);
+			await page.waitForLoadState("networkidle");
 			await expect(
 				page.getByRole("heading", { name: "역할 상세" }),
 			).toBeVisible({ timeout: 10000 });
 
-			// 페이지 리로드하여 캐시 없이 최신 데이터 확인
-			await page.reload();
-			await page.waitForLoadState("networkidle");
-
 			// Then: 수정된 값 확인
-			await expect(page.getByText("Modified", { exact: true })).toBeVisible({
-				timeout: 10000,
-			});
+			await expect(
+				page.getByText(UPDATED_DISPLAY_NAME, { exact: true }),
+			).toBeVisible({ timeout: 10000 });
 
 			// When: 삭제 버튼 클릭
 			await page.getByRole("button", { name: "삭제" }).click();

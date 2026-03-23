@@ -139,7 +139,7 @@ export const ResetPasswordForm = observer(
 							보안을 위해 모든 기기에서 로그아웃되었습니다.
 							<br />새 비밀번호로 다시 로그인해주세요.
 						</p>
-						<Link href="/">
+						<Link href="/auth/login">
 							<Button
 								color="primary"
 								className="w-full font-semibold"
@@ -222,8 +222,8 @@ export const ResetPasswordForm = observer(
 				{!isComplete && (
 					<div className="mt-6 text-center">
 						<Link
-							href="/"
-							className="text-default-400 hover:text-default-300 text-sm"
+							href="/auth/login"
+							className="text-default-400 hover:text-default-500 text-sm"
 						>
 							로그인으로 돌아가기
 						</Link>

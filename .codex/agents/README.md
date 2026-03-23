@@ -70,6 +70,9 @@
 - [fe-layout-builder.toml](./fe-layout-builder.toml): `packages/fe-ui/src/primitive/layout`의 flat Layout primitive를 설계하고 생성하는 전문가
 - [fe-route-layout-builder.toml](./fe-route-layout-builder.toml): Next.js App Router의 `app/**/layout.tsx`와 named slot topology를 설계하고 생성하는 전문가
 - [fe-feature-builder.toml](./fe-feature-builder.toml): 비즈니스 기능을 담당하는 Feature 컴포넌트를 생성하는 전문가
+- [fe-master-builder.toml](./fe-master-builder.toml): 목록/테이블/그리드 계열 재사용 feature를 생성하고 정리하는 전문가
+- [fe-detail-builder.toml](./fe-detail-builder.toml): 상세 조회/읽기 전용 재사용 feature를 생성하고 정리하는 전문가
+- [fe-form-widget-builder.toml](./fe-form-widget-builder.toml): 생성/수정 입력 화면용 재사용 form widget을 생성하고 정리하는 전문가
 - [fe-widget-builder.toml](./fe-widget-builder.toml): 재사용 가능한 작은 UI 조각 Widget 컴포넌트를 생성하는 전문가
 - [fe-primitive-component-builder.toml](./fe-primitive-component-builder.toml): Pure UI 컴포넌트를 `packages/fe-ui/src/primitive`에 생성하는 전문가
 - [fe-input-component-builder.toml](./fe-input-component-builder.toml): 폼 입력 컴포넌트를 `packages/fe-ui/src/input`에 생성하는 전문가
@@ -100,7 +103,10 @@
 
 - [be-prisma-builder.toml.spec.md](./be-prisma-builder.toml.spec.md)
 - [be-repository-builder.toml.spec.md](./be-repository-builder.toml.spec.md)
+- [fe-detail-builder.toml.spec.md](./fe-detail-builder.toml.spec.md)
+- [fe-form-widget-builder.toml.spec.md](./fe-form-widget-builder.toml.spec.md)
 - [fe-layout-builder.toml.spec.md](./fe-layout-builder.toml.spec.md)
+- [fe-master-builder.toml.spec.md](./fe-master-builder.toml.spec.md)
 - [fe-route-layout-builder.toml.spec.md](./fe-route-layout-builder.toml.spec.md)
 - [fe-menu-builder.toml.spec.md](./fe-menu-builder.toml.spec.md)
 - [fe-page-builder.toml.spec.md](./fe-page-builder.toml.spec.md)

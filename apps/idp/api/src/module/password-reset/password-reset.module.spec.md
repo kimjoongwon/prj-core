@@ -6,7 +6,8 @@
 
 ## 역할
 
-이 파일은 module 계층의 보조 동작(연결/조회/조합)을 담당합니다.
+이 파일은 비밀번호 재설정 유즈케이스에 필요한 facade/service/import wiring을 담당합니다.
+메일 전송은 `EmailModule` import를 통해 공급받습니다.
 
 ## 주요 계약
 
@@ -34,5 +35,6 @@
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-03-23 | `EmailService` 직접 provider 등록을 제거하고 `EmailModule` import로 교체해 비밀번호 재설정 서비스가 메일 provider 구현 세부사항을 모르게 정리 | codex |
 | 2026-03-03 | 누락된 sidecar spec 신규 생성 | codex |
 | 2026-03-13 | PasswordResetModule의 provider/export 참조를 PasswordResetFacade 기준으로 정리 | codex |

@@ -9,6 +9,7 @@ import type {
 } from "../generated/client/client";
 import { SYSTEM_SPACE_ID } from "../reference-data/constants";
 import { syncReferenceData } from "../reference-data/sync-reference-data";
+import { ensureSystemAdminUsers } from "./system-admins";
 
 const systemSpaceGroupNames = [
 	"TEAM_TRAINING",
@@ -95,51 +96,13 @@ export async function ensureSystemBootstrap(
 	const fullAccessRole = getRequiredRole(roles, "FULL_ACCESS");
 	const manageRole = getRequiredRole(roles, "MANAGE");
 
-	// The super admin account is a bootstrap concern: it is required to stand up
-	// a fresh environment, but it is not part of automatic prod reference sync.
-	const superAdminData = userSeedData.find(
-		(user) => user.role === "FULL_ACCESS",
+	const superAdminUsers = await ensureSystemAdminUsers(
+		prisma,
+		fullAccessRole.id,
 	);
-	if (!superAdminData) {
-		throw new Error("FULL_ACCESS 유저 데이터가 demo-data에 없습니다.");
-	}
-
-	const hashedPassword = await hash(superAdminData.password, 10);
-	const superAdminUser = await prisma.user.upsert({
-		where: {
-			phone: superAdminData.phone,
-		},
-		update: {},
-		create: {
-			name: superAdminData.profile.name,
-			phone: superAdminData.phone,
-			email: superAdminData.email,
-			password: hashedPassword,
-			profiles: {
-				create: {
-					name: superAdminData.profile.name,
-					nickname: superAdminData.profile.nickname,
-				},
-			},
-		},
-	});
-
-	const existingTenant = await prisma.tenant.findFirst({
-		where: {
-			spaceId: SYSTEM_SPACE_ID,
-			roleId: fullAccessRole.id,
-		},
-	});
-
-	if (!existingTenant) {
-		await prisma.tenant.create({
-			data: {
-				userId: superAdminUser.id,
-				spaceId: SYSTEM_SPACE_ID,
-				roleId: fullAccessRole.id,
-			},
-		});
-		console.log("System Space Tenant 생성 완료 (FULL_ACCESS 전용)");
+	const [superAdminUser] = superAdminUsers;
+	if (!superAdminUser) {
+		throw new Error("시스템 관리자 계정 seed 데이터가 없습니다.");
 	}
 
 	console.log(`System Space 준비 완료 (id=${SYSTEM_SPACE_ID})`);
@@ -296,6 +259,10 @@ export async function createRegularUsersAndGrounds(
 	// Second pass: attach regular demo users to the spaces that were just
 	// created, using the explicit ground mapping table as the source of truth.
 	for (const userData of userSeedData) {
+		if (userData.role === "FULL_ACCESS") {
+			continue;
+		}
+
 		const userMapping = userGroundMapping.find(
 			(mapping) => mapping.userEmail === userData.email,
 		);

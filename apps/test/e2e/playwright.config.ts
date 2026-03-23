@@ -6,9 +6,66 @@ process.env.PLAYWRIGHT_BROWSERS_PATH =
 	process.env.PLAYWRIGHT_BROWSERS_PATH ?? path.join(__dirname, "browsers");
 
 const skipAdminSetup = process.env.SKIP_ADMIN_SETUP === "1";
+const e2eTarget = process.env.E2E_TARGET ?? "all";
 const chromiumLaunchOptions = {
 	args: ["--disable-crash-reporter"],
 };
+
+const reuseExistingServer = !process.env.CI;
+
+function buildApiStartCommand(
+	envDir: string,
+	filter: "core-api" | "idp-api",
+) {
+	return [
+		"bash -lc",
+		`'set -a; if [ -f ${envDir}/.env.local ]; then source ${envDir}/.env.local; elif [ -f ${envDir}/.env ]; then source ${envDir}/.env; fi; set +a; export SMTP_SECURE=\${SMTP_SECURE:-false}; pnpm --filter=${filter} start:dev'`,
+	].join(" ");
+}
+
+const idpApiServer = {
+	command: buildApiStartCommand("apps/idp/api", "idp-api"),
+	url: "http://localhost:3007/api/password-policy",
+	reuseExistingServer,
+	timeout: 120000,
+	cwd: "../../..",
+};
+
+const coreApiServer = {
+	command: buildApiStartCommand("apps/core/api", "core-api"),
+	url: "http://localhost:3006/api-json",
+	reuseExistingServer,
+	timeout: 120000,
+	cwd: "../../..",
+};
+
+const adminWebServer = {
+	command: "pnpm --filter=admin-web start:dev",
+	url: "http://localhost:3000/admin/auth/login",
+	reuseExistingServer,
+	timeout: 120000,
+	cwd: "../../..",
+};
+
+const idpWebServer = {
+	command: "pnpm --filter=idp-web dev",
+	url: "http://localhost:3008/auth/login",
+	reuseExistingServer,
+	timeout: 120000,
+	cwd: "../../..",
+};
+
+function getWebServers() {
+	if (e2eTarget === "admin") {
+		return [coreApiServer, idpApiServer, adminWebServer, idpWebServer];
+	}
+
+	if (e2eTarget === "idp") {
+		return [idpApiServer, idpWebServer];
+	}
+
+	return [coreApiServer, idpApiServer, adminWebServer, idpWebServer];
+}
 
 /**
  * Playwright E2E 테스트 설정 (멀티앱, Sidecar 방식)
@@ -120,20 +177,5 @@ export default defineConfig({
   // 개발 서버 설정 (SKIP_WEBSERVER=1 로 비활성화)
   webServer: process.env.SKIP_WEBSERVER
     ? undefined
-    : [
-        {
-          command: "pnpm --filter=admin-web start:dev",
-          url: "http://localhost:3000/admin/auth/login",
-          reuseExistingServer: !process.env.CI,
-          timeout: 120000,
-          cwd: "../../..",
-        },
-        {
-          command: "pnpm --filter=idp-web dev",
-          url: "http://localhost:3008/",
-          reuseExistingServer: !process.env.CI,
-          timeout: 120000,
-          cwd: "../../..",
-        },
-      ],
+    : getWebServers(),
 });

@@ -304,10 +304,6 @@ const AbilitiesPageContent = observer(function AbilitiesPageContent({
 function AbilitiesPageFallback() {
 	return (
 		<div className="space-y-5">
-			<PageTitleBar
-				title="권한 목록"
-				description="시스템에 등록된 CASL 권한을 관리합니다."
-			/>
 			<Surface
 				className="rounded-2xl border-divider/80 bg-content1/70"
 				padding="lg"

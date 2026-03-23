@@ -347,10 +347,6 @@ const InquiriesPageContent = observer(function InquiriesPageContent({
 function InquiriesPageShellFallback() {
 	return (
 		<div className="space-y-5">
-			<PageTitleBar
-				title="문의 관리"
-				description="고객 문의를 접수/처리/해결합니다."
-			/>
 			<Surface className="h-32 rounded-2xl border-divider/80 bg-content1/70">
 				{null}
 			</Surface>

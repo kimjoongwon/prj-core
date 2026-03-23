@@ -6,7 +6,8 @@
 
 ## 역할
 
-이 파일은 module 계층의 보조 동작(연결/조회/조합)을 담당합니다.
+이 파일은 인증 관련 provider 조합과 controller/application service 연결을 담당합니다.
+메일 발송은 `EmailModule`을 import해 `EmailService`를 외부 전송 구현과 분리된 상태로 주입받습니다.
 
 ## 주요 계약
 
@@ -34,5 +35,6 @@
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-03-23 | `EmailService` 직접 provider 등록을 제거하고 `EmailModule` import 방식으로 교체해 전송 구현 결합을 모듈 외부로 분리 | codex |
 | 2026-03-03 | 누락된 sidecar spec 신규 생성 | codex |
 | 2026-03-11 | AuthModule provider/export를 ApplicationService + OidcFacade 구조로 전환 | codex |

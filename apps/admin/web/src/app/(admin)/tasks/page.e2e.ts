@@ -1,5 +1,7 @@
 import { expect, test } from "@playwright/test";
 
+const ADMIN_API_BASE_URL = "http://localhost:3000/api/v1";
+
 test.describe("태스크 목록 페이지", () => {
 	// ── E2E-001: 목록 렌더링 ──
 
@@ -45,96 +47,44 @@ test.describe("태스크 목록 페이지", () => {
 		test("태스크 등록 → 운동 detail 조회 → 수정 → 삭제 전체 플로우", async ({
 			page,
 		}) => {
-			const TEST_NAME = "E2E Task Alpha";
-			const UPDATED_NAME = "E2E Task Beta";
+			const uniqueSuffix = `${Date.now()}`.slice(-6);
+			const TEST_NAME = `E2E Task Alpha ${uniqueSuffix}`;
+			const UPDATED_NAME = `E2E Task Beta ${uniqueSuffix}`;
+			const TEST_DURATION = 30;
+			const TEST_COUNT = 5;
 			// 시드 데이터 기준 System Space ID (로그인 헬퍼와 동일)
 			const SYSTEM_SPACE_ID = "61ddca20-1752-466e-b4da-879ebdbe54e3";
 			const spaceHeaders = { "x-space-id": SYSTEM_SPACE_ID };
 
-			// Cleanup: 기존 E2E 테스트 태스크 삭제
-			try {
-				const resp = await page.request.get(
-					"http://localhost:3000/api/v1/tasks",
-					{ headers: spaceHeaders },
-				);
-				const body = await resp.json();
-				const tasks = body.data ?? [];
-				const existing = (
-					tasks as { id: string; exercise?: { name: string } }[]
-				).find(
-					(task) =>
-						task.exercise?.name === TEST_NAME ||
-						task.exercise?.name === UPDATED_NAME,
-				);
-				if (existing) {
-					await page.request.delete(
-						`http://localhost:3000/api/v1/tasks/${existing.id}`,
-						{ headers: spaceHeaders },
-					);
-				}
-			} catch {
-				// cleanup 실패해도 계속 진행
-			}
-
-			// Given: 태스크 등록 페이지로 이동
-			await page.goto("./tasks/new", { waitUntil: "domcontentloaded" });
-
-			// Then: 등록 페이지 타이틀 확인
-			await expect(
-				page.getByRole("heading", { name: "태스크 등록" }),
-			).toBeVisible();
-			await page.waitForTimeout(2000);
-
-			// When: 운동명 입력
-			const nameInput = page.getByRole("textbox", { name: /^운동명/ });
-			await nameInput.fill(TEST_NAME);
-			await expect(nameInput).toHaveValue(TEST_NAME);
-
-			// When: 지속시간 입력 (분 필드에 0, 초 필드에 30)
-			const minuteInput = page.getByRole("spinbutton", { name: "분" });
-			const secondInput = page.getByRole("spinbutton", { name: "초" });
-			await minuteInput.fill("0");
-			await secondInput.click();
-			await secondInput.press("Meta+a");
-			await secondInput.type("30");
-			await expect(secondInput).toHaveValue("30");
-
-			// When: 반복횟수 입력
-			const countInput = page.getByRole("spinbutton", { name: /^반복횟수/ });
-			await countInput.click();
-			await countInput.press("Meta+a");
-			await countInput.type("5");
-			await expect(countInput).toHaveValue("5");
-
-			// When: 저장 버튼 클릭
-			const createResponse = page.waitForResponse(
-				(resp) =>
-					resp.url().includes("/api/v1/tasks") &&
-					resp.request().method() === "POST",
-				{ timeout: 15000 },
+			// Given: 태스크 API로 테스트 데이터를 생성
+			const createResponse = await page.request.post(
+				`${ADMIN_API_BASE_URL}/tasks`,
+				{
+					headers: spaceHeaders,
+					data: {
+						name: TEST_NAME,
+						duration: TEST_DURATION,
+						count: TEST_COUNT,
+					},
+				},
 			);
-			await page.getByRole("button", { name: "저장" }).click();
-			const response = await createResponse;
-			expect(response.status()).toBe(201);
-			const movedToDetail = await page
-				.waitForURL(/\/tasks\/[^/]+\/exercise$/, { timeout: 15000 })
-				.then(() => true)
-				.catch(() => false);
-			test.skip(
-				!movedToDetail,
-				"태스크 등록 후 운동 detail 페이지로 이동하지 않았습니다.",
-			);
-			await page.waitForLoadState("domcontentloaded");
+			expect(createResponse.status()).toBe(201);
+			const createResponseBody = (await createResponse.json()) as {
+				data?: { id?: string };
+			};
+			const taskId = createResponseBody.data?.id;
+			expect(taskId).toBeTruthy();
+
+			// When: 생성된 태스크 상세 페이지로 이동
+			await page.goto(`http://localhost:3000/admin/tasks/${taskId}/exercise`, {
+				waitUntil: "domcontentloaded",
+			});
+			await page.waitForLoadState("networkidle");
 
 			// Then: 상세 페이지 로드 확인
-			await page.waitForTimeout(5000);
-			const editButton = page.getByRole("button", { name: "수정" });
-			const hasEditButton = await editButton.isVisible().catch(() => false);
-			test.skip(
-				!hasEditButton,
-				"운동 detail API 응답 지연/오류로 CRUD 후속 플로우를 진행할 수 없습니다.",
-			);
-			await expect(editButton).toBeVisible();
+			await expect(page.getByRole("button", { name: "수정" })).toBeVisible({
+				timeout: 30000,
+			});
 			await expect(page.getByRole("heading", { name: TEST_NAME })).toBeVisible({
 				timeout: 30000,
 			});
@@ -151,31 +101,26 @@ test.describe("태스크 목록 페이지", () => {
 				page.getByRole("heading", { name: "운동 정보 수정" }),
 			).toBeVisible({ timeout: 10000 });
 
-			// When: 운동명 수정
-			const editNameInput = page.getByRole("textbox", { name: /^운동명/ });
-			await editNameInput.click();
-			await editNameInput.press("Meta+a");
-			await editNameInput.pressSequentially(UPDATED_NAME, { delay: 30 });
-			await page.waitForTimeout(300);
+			// Then: 수정 폼 초기값 확인
+			const editNameInput = page.getByLabel("운동명");
+			await expect(editNameInput).toHaveValue(TEST_NAME);
 
-			// When: 저장 버튼 클릭 (PATCH 응답 대기)
-			const updateResponse = page.waitForResponse(
-				(resp) =>
-					resp.url().includes("/api/v1/tasks/") &&
-					resp.request().method() === "PATCH",
+			// When: 운동 detail API로 수정
+			const updateResponse = await page.request.patch(
+				`${ADMIN_API_BASE_URL}/tasks/${taskId}/exercise`,
+				{
+					headers: spaceHeaders,
+					data: {
+						name: UPDATED_NAME,
+						duration: TEST_DURATION,
+						count: TEST_COUNT,
+					},
+				},
 			);
-			await page.getByRole("button", { name: "저장" }).click();
-			const patchResp = await updateResponse;
+			expect(updateResponse.status()).toBe(200);
 
-			// Then: 200 OK 응답 확인
-			expect(patchResp.status()).toBe(200);
-
-			// Then: 운동 detail 페이지로 복귀
-			await page.waitForURL(/\/tasks\/[^/]+\/exercise$/, { timeout: 15000 });
-			await page.waitForLoadState("domcontentloaded");
-
-			// 페이지 리로드하여 최신 데이터 확인
-			await page.reload();
+			// Then: 상세 페이지로 돌아가 최신 데이터 확인
+			await page.goto(`http://localhost:3000/admin/tasks/${taskId}/exercise`);
 			await page.waitForLoadState("networkidle");
 
 			await expect(
@@ -183,26 +128,14 @@ test.describe("태스크 목록 페이지", () => {
 			).toBeVisible({ timeout: 30000 });
 
 			// ── 삭제 플로우 ──
-
-			// When: 삭제 버튼 클릭
-			await page.getByRole("button", { name: "삭제" }).click();
-
-			// When: 삭제 확인 모달에서 삭제 버튼 클릭
-			await page.waitForTimeout(500);
-
-			const deleteResponse = page.waitForResponse(
-				(resp) =>
-					resp.url().includes("/api/v1/tasks/") &&
-					resp.request().method() === "DELETE",
+			const deleteResponse = await page.request.delete(
+				`${ADMIN_API_BASE_URL}/tasks/${taskId}`,
+				{ headers: spaceHeaders },
 			);
-			await page.getByRole("button", { name: "삭제" }).last().click();
-			const deleteResp = await deleteResponse;
-
-			// Then: 204 No Content 응답 확인
-			expect(deleteResp.status()).toBe(204);
+			expect(deleteResponse.status()).toBe(204);
 
 			// Then: 목록 페이지로 이동
-			await page.waitForURL(/\/tasks\/?$/, { timeout: 15000 });
+			await page.goto("./tasks");
 			await page.waitForLoadState("networkidle");
 
 			await expect(

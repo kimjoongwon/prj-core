@@ -1,3 +1,5 @@
+name = "fe-detail-builder"
+description = "상세 조회/읽기 전용 재사용 feature를 생성하고 정리하는 전문가"
 model = "gpt-5-codex"
 model_reasoning_effort = "high"
 developer_instructions = '''

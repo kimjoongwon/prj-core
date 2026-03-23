@@ -26,7 +26,7 @@ const leftInputs: InputConfig[] = [
 	{
 		type: "search",
 		id: "search",
-		placeholder: "템플릿명 검색...",
+		placeholder: "이름, 코드로 검색...",
 		props: {
 			debounceMs: 300,
 		},

@@ -1,42 +1,82 @@
-# page page 기획서
+# OIDC Interaction 페이지 기획서
 
 > 생성일: 2026-03-03
+> 수정일: 2026-03-23
 > 타입: page
-> 위치: apps/idp/web/src/app/(auth)/interaction/[uid]/page.tsx
+> 경로: `/interaction/[uid]`
 
-## 역할
+## 재사용 우선 점검
 
-이 파일은 page 계층의 핵심 동작을 담당합니다.
-상위 레이어와 하위 레이어를 연결하며, 런타임에서 실제 사용자 흐름/비즈니스 흐름에 직접 관여합니다.
+| 후보 | 판단 | 이유 |
+|------|------|------|
+| `useGetInteraction(uid)` | 재사용 | interaction 타입 분기와 만료 판별의 기준 데이터로 충분하다. |
+| `IdpLogin`, `IdpConsent` | 재사용 | 로그인/동의 책임 분리는 적절하며, 이번 단계에서는 화면 기획만 갱신한다. |
+| 기존 `AuthCard` 기반 full-screen 콘텐츠 구조 | 재사용 불가 | route layout이 shell을 소유해야 하므로 page 내부에서 full-screen 카드 레이아웃을 계속 중첩하면 책임이 충돌한다. |
 
-## 공개 계약
+## 사용자 시나리오
 
-| 항목 | 설명 |
-|------|------|
-| default export | 공개 계약 요소 |
+1. 사용자는 외부 클라이언트에서 보호된 리소스 접근 후 OIDC interaction URL로 이동한다.
+2. 페이지는 `uid` 기준으로 interaction 상태를 조회한다.
+3. `type === "login"`이면 primary panel 안에 로그인 안내와 입력 폼을 노출한다.
+4. 로그인 실패 시 입력한 이메일은 유지하고, 실패 사유에 따라 잔여 시도/잠금 복구 액션을 가장 가까운 위치에서 안내한다.
+5. `type === "consent"`이면 권한 요청 정보를 보여주고 승인/거절을 진행한다.
+6. interaction이 만료되었거나 찾을 수 없으면 현재 요청을 복구할 수 없는 상태임을 설명하고 `/auth/login` 재진입 액션을 제공한다.
 
-## 의존성
+## 레이아웃 구성
 
-| 모듈 | 용도 |
-|------|------|
+| 영역 | 컴포넌트 | 설명 |
+|------|----------|------|
+| route shell | `(auth)/layout.tsx` | 전체 배경, 중앙 배치, support copy, primary panel frame |
+| loading | `Spinner` + loading copy | interaction 데이터 조회 중 |
+| login | `IdpLogin` | 로그인 폼, 에러, recovery action |
+| consent | `IdpConsent` | scope 승인/거절 |
+| error | `AuthCard` 또는 후속 panel wrapper + `AuthCardHeader` | 만료/오류 상태 설명과 복구 액션 |
 
-## 동작 흐름
+## 페이지 상태
 
-1. 입력(라우트/props/호출)을 수신합니다.
-2. 필요한 의존 모듈을 호출해 데이터를 조합합니다.
-3. 결과를 렌더링/반환/전파합니다.
+| 상태 | 설명 | UI |
+|------|------|-----|
+| `isLoading` | interaction 조회 중 | 중앙 spinner + "인증 정보를 확인하는 중..." |
+| `login` | 로그인 필요 | 서비스명, 로그인 목적, 입력 폼, 복구 링크 |
+| `consent` | 권한 동의 필요 | scope 목록, 승인/거절 버튼 |
+| `expired` | 400/404 만료 또는 유효하지 않은 UID | 만료 안내, `/auth/login` 재진입 CTA |
+| `error` | 기타 오류 | 일반 오류 메시지, 이전 페이지 또는 안전한 복귀 CTA |
 
-## 실패 및 엣지 케이스
+## API 호출
 
-- 의존 모듈 응답 누락 시 안전한 기본값으로 처리합니다.
-- 비정상 입력은 조기 반환 또는 예외 처리합니다.
-- 비동기 동작 실패 시 사용자 영향 범위를 최소화합니다.
+| 시점 | API | 설명 |
+|------|-----|------|
+| 페이지 진입 | `useGetInteraction(uid)` | interaction type, client, prompt, dev mode 조회 |
+| 로그인 제출 | `useSubmitLogin` | `IdpLogin`에서 위임 수행 |
+| interaction 중단 | `useAbortInteraction` | `IdpLogin` 또는 `IdpConsent`에서 위임 수행 |
+
+## 이벤트 핸들러
+
+| 이벤트 | 동작 |
+|--------|------|
+| interaction 조회 성공 | `type` 값에 따라 `IdpLogin` 또는 `IdpConsent` 렌더링 |
+| interaction 만료 오류 | `/auth/login`으로 안전하게 복귀 |
+| 일반 오류 상태 CTA | 가능한 경우 `history.back()`, 불가 시 안전한 로그인 진입점으로 복귀 |
+
+## 훅 및 하위 Feature 구성
+
+| 항목 | 위치 | 역할 |
+|------|------|------|
+| `useGetInteraction` | `@cocrepo/api/idp/interaction` | interaction 데이터 조회 |
+| `IdpLogin` | `packages/fe-ui/src/feature/idp/IdpLogin/` | 로그인 제출/중단 feature |
+| `IdpConsent` | `packages/fe-ui/src/feature/idp/IdpConsent/` | 권한 동의 feature |
+
+## 특이사항
+
+- `page.tsx`는 interaction type 분기와 복구 흐름만 소유하고, 실제 form layout 세부는 하위 feature/widget spec을 따른다.
+- 로그인 branch는 이번 재기획의 1차 대상이며, 동일 shell 계약을 비밀번호 찾기/재설정/에러 페이지에도 확장한다.
+- 에러 상태에서도 사용자가 "무엇을 해야 하는지"를 즉시 이해할 수 있도록 기술적인 오류 문구보다 복구 행동을 우선 배치한다.
 
 ## 구현 체크리스트
 
-- [ ] 코드와 spec이 동일한 책임 범위를 유지함
-- [ ] 공개 계약(Props/메서드/반환값) 변경 시 동기화함
-- [ ] 의존성 변경 시 spec의 의존성 표를 갱신함
+- [ ] interaction loading/error/login/consent 상태 문구를 재기획안과 동기화
+- [ ] `IdpLogin`이 route shell 내부 콘텐츠만 렌더링하도록 계약 정리
+- [ ] 만료/오류 복귀 액션을 단일 정책으로 정리
 
 ## Consumed Layout Contract
 
@@ -45,9 +85,9 @@
 | 참조 layout spec | `apps/idp/web/src/app/(auth)/layout.spec.md` |
 | consumed slot key | `children` |
 | 콘텐츠 파일 | `apps/idp/web/src/app/(auth)/interaction/[uid]/page.tsx` |
-| page가 소유하지 않는 skeleton | `Page`, `PageSurface`, `Section`, `SectionSurface`, `Surface` |
+| page가 소유하지 않는 skeleton | `Page`, `PageSurface`, `Section`, `SectionSurface`, `Surface`, full-screen auth shell |
 
-- `page.tsx`는 입력, 검증, 생성/수정 폼 흐름만 담당합니다.
+- `page.tsx`는 route shell이 제공하는 primary panel 내부 콘텐츠만 담당합니다.
 
 ## Rendering Decision
 
@@ -61,6 +101,7 @@
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-03-23 | 로그인 UX 재기획에 맞춰 interaction page의 상태 분기, route shell 소비 계약, 복구 UX 기준을 구체화 | codex |
 | 2026-03-21 | page.tsx 단일 CSR 계약과 현재 surface/rendering decision 기준으로 stale 예외 문구를 정리 | codex |
 | 2026-03-21 | fe-page-builder 계약에 맞춰 consumed layout / rendering decision 섹션을 보강 | codex |
 | 2026-03-14 | 존재하지 않는 계정 로그인 실패 시나리오를 공통 실패 처리 계약(에러 배너 또는 로그인 폼 재표시) 기준으로 정렬 | codex |

@@ -31,6 +31,7 @@ const rightInputs: InputConfig[] = [
 	{
 		type: "select",
 		id: "group",
+		placeholder: "분류",
 		props: {
 			defaultValue: "",
 		},

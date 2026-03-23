@@ -40,6 +40,13 @@ export interface SendTestResult {
 	errorMessage: string | null;
 }
 
+export interface RenderedTemplateResult {
+	type: TemplateType;
+	subject: string | null;
+	content: string;
+	unresolvedVariables: string[];
+}
+
 @Injectable()
 export class TemplateService {
 	private readonly logger = new Logger(TemplateService.name);
@@ -76,6 +83,40 @@ export class TemplateService {
 			throw new NotFoundException("템플릿을 찾을 수 없습니다");
 		}
 		return template;
+	}
+
+	/**
+	 * code로 템플릿을 조회하고 실제 발송 가능한 형태로 렌더링합니다.
+	 */
+	async renderByCode(
+		code: string,
+		variables: Record<string, string>,
+	): Promise<RenderedTemplateResult> {
+		const template = await this.repository.findByCode(code);
+		if (!template) {
+			throw new NotFoundException(`템플릿을 찾을 수 없습니다: ${code}`);
+		}
+		if (!template.isEnabled()) {
+			throw new BadRequestException(
+				`비활성 템플릿은 사용할 수 없습니다: ${code}`,
+			);
+		}
+
+		this.validateRequiredVariables(template, variables);
+		const substituted = this.substituteVariables(template, variables);
+
+		if (substituted.unresolvedVariables.length > 0) {
+			throw new BadRequestException(
+				`템플릿 변수 치환에 실패했습니다: ${substituted.unresolvedVariables.join(", ")}`,
+			);
+		}
+
+		return {
+			type: template.type,
+			subject: substituted.subject,
+			content: substituted.content,
+			unresolvedVariables: substituted.unresolvedVariables,
+		};
 	}
 
 	// ============================================================================
@@ -256,10 +297,7 @@ export class TemplateService {
 		if (template.variables && template.variables.length > 0) {
 			const missingVariables = template.variables
 				.filter(
-					(v) =>
-						v.isRequired &&
-						!dto.variables[v.name] &&
-						!v.defaultValue,
+					(v) => v.isRequired && !dto.variables[v.name] && !v.defaultValue,
 				)
 				.map((v) => v.name);
 
@@ -321,11 +359,7 @@ export class TemplateService {
 		}
 
 		// PUSH: content 200자 제한
-		if (
-			type === TemplateType.PUSH &&
-			content &&
-			content.length > 200
-		) {
+		if (type === TemplateType.PUSH && content && content.length > 200) {
 			throw new BadRequestException(
 				"PUSH 템플릿의 본문은 200자를 초과할 수 없습니다",
 			);
@@ -347,18 +381,14 @@ export class TemplateService {
 			case TemplateType.EMAIL: {
 				const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 				if (!emailRegex.test(recipient)) {
-					throw new BadRequestException(
-						"올바른 이메일 주소를 입력해주세요",
-					);
+					throw new BadRequestException("올바른 이메일 주소를 입력해주세요");
 				}
 				break;
 			}
 			case TemplateType.SMS: {
 				const phoneRegex = /^(\+?\d{1,4}[-\s]?)?\d{8,15}$/;
 				if (!phoneRegex.test(recipient.replace(/[-\s]/g, ""))) {
-					throw new BadRequestException(
-						"올바른 전화번호를 입력해주세요",
-					);
+					throw new BadRequestException("올바른 전화번호를 입력해주세요");
 				}
 				break;
 			}
@@ -366,6 +396,30 @@ export class TemplateService {
 				// 디바이스 토큰은 비어있지 않으면 유효
 				break;
 			}
+		}
+	}
+
+	private validateRequiredVariables(
+		template: Template,
+		variables: Record<string, string>,
+	): void {
+		if (!template.variables || template.variables.length === 0) {
+			return;
+		}
+
+		const missingVariables = template.variables
+			.filter(
+				(variable) =>
+					variable.isRequired &&
+					!variables[variable.name] &&
+					!variable.defaultValue,
+			)
+			.map((variable) => variable.name);
+
+		if (missingVariables.length > 0) {
+			throw new BadRequestException(
+				`필수 변수가 누락되었습니다: ${missingVariables.join(", ")}`,
+			);
 		}
 	}
 
@@ -397,15 +451,9 @@ export class TemplateService {
 				if (variable.defaultValue) {
 					const placeholder = `{{${variable.name}}}`;
 					if (subject) {
-						subject = subject.replaceAll(
-							placeholder,
-							variable.defaultValue,
-						);
+						subject = subject.replaceAll(placeholder, variable.defaultValue);
 					}
-					content = content.replaceAll(
-						placeholder,
-						variable.defaultValue,
-					);
+					content = content.replaceAll(placeholder, variable.defaultValue);
 				}
 			}
 		}

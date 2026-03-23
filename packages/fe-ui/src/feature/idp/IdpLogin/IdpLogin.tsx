@@ -1,6 +1,5 @@
 "use client";
 import {
-	type LoginErrorDto,
 	useAbortInteraction,
 	useSubmitLogin,
 } from "@cocrepo/api/idp/interaction";
@@ -48,11 +47,15 @@ export const IdpLogin = observer(
 				window.location.href = result.redirectTo;
 				return null;
 			} catch (err) {
-				const axiosError = err as AxiosError<LoginErrorDto>;
+				const axiosError = err as AxiosError<LoginErrorResponse>;
 				if (axiosError.response?.data) {
 					return axiosError.response.data;
 				}
-				return { error: "서버와 통신할 수 없습니다." };
+				return {
+					error: "NETWORK_ERROR",
+					displayMessage: "서버와 통신할 수 없습니다.",
+					hint: "잠시 후 다시 시도하거나 문제가 반복되면 관리자에게 문의하세요.",
+				};
 			}
 		};
 

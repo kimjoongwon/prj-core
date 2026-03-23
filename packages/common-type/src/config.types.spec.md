@@ -30,6 +30,7 @@
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-03-23 | `SMTPConfig`에 `secure` 필드를 추가해 SMTP provider별 TLS 모드를 설정 계약으로 표현 | codex |
 | 2026-03-15 | object storage 설정 타입에 선택 필드 `apiToken`을 추가하고 env 키 규약을 access/secret key 기준으로 정리 | codex |
 | 2026-03-15 | AWS 전용 설정 타입을 S3-compatible `ObjectStorageConfig`/`ObjectStorageProvider`로 교체 | codex |
 | 2026-03-03 | 누락된 sidecar spec 신규 생성 | codex |

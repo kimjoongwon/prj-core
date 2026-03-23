@@ -47,6 +47,7 @@ import {
 	type ChangeEvent,
 	type ReactNode,
 	Suspense,
+	useEffect,
 	useRef,
 	useState,
 } from "react";
@@ -416,6 +417,7 @@ const AssetsPageInner = observer(function AssetsPageInner() {
 	const createFolderModal = useDisclosure();
 	const renameFolderModal = useDisclosure();
 	const deleteFolderModal = useDisclosure();
+	const [isClientMounted, setIsClientMounted] = useState(false);
 	const isPersistStoreHydrated = persistStore?.isHydrated ?? false;
 	const hasSelectedSpace = Boolean(persistStore?.spaceId);
 	const selectedFolderId = queryStates.folderId || null;
@@ -732,6 +734,10 @@ const AssetsPageInner = observer(function AssetsPageInner() {
 		</Button>
 	);
 
+	useEffect(() => {
+		setIsClientMounted(true);
+	}, []);
+
 	return (
 		<>
 			<div className="space-y-5">
@@ -745,7 +751,7 @@ const AssetsPageInner = observer(function AssetsPageInner() {
 					className="overflow-hidden rounded-2xl border-divider/80 bg-content1/70"
 					padding="none"
 				>
-					{!isPersistStoreHydrated ? (
+					{!isClientMounted || !isPersistStoreHydrated ? (
 						<AssetsGridFallback
 							queryStates={queryStates}
 							setQueryStates={setQueryStates}

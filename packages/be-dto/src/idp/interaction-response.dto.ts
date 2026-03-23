@@ -75,11 +75,31 @@ export class LoginSuccessDto {
 }
 
 /**
+ * 로그인 실패 후 사용 가능한 복구 액션
+ */
+export class LoginRecoveryActionDto {
+	@StringField({ description: "액션 코드" })
+	type!: string;
+
+	@StringField({ description: "사용자 표시 라벨" })
+	label!: string;
+
+	@StringFieldOptional({ description: "이동 경로" })
+	href?: string;
+}
+
+/**
  * POST /api/interaction/:uid/login 실패 응답
  */
 export class LoginErrorDto {
 	@StringField({ description: "에러 코드" })
 	error!: string;
+
+	@StringFieldOptional({ description: "사용자 표시 메시지" })
+	displayMessage?: string;
+
+	@StringFieldOptional({ description: "추가 안내 문구" })
+	hint?: string;
 
 	@NumberFieldOptional({ description: "남은 시도 횟수" })
 	remainingAttempts?: number;
@@ -92,6 +112,12 @@ export class LoginErrorDto {
 
 	@NumberFieldOptional({ description: "임시 잠금 시간 (분)" })
 	temporaryLockDurationMin?: number;
+
+	@ApiPropertyOptional({
+		description: "사용 가능한 복구 액션",
+		type: [LoginRecoveryActionDto],
+	})
+	recoveryActions?: LoginRecoveryActionDto[];
 }
 
 /**

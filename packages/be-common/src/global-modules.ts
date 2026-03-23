@@ -10,7 +10,6 @@ import { JwtModule } from "@nestjs/jwt";
 import { ThrottlerModule } from "@nestjs/throttler";
 import { ClsPluginTransactional } from "@nestjs-cls/transactional";
 import { TransactionalAdapterPrisma } from "@nestjs-cls/transactional-adapter-prisma";
-import { MailerModule } from "@nestjs-modules/mailer";
 import type { SignOptions } from "jsonwebtoken";
 import { ClsModule } from "nestjs-cls";
 import { LoggerModule } from "nestjs-pino";
@@ -44,26 +43,6 @@ export const createGlobalModules = (
 					{ name: "long", ttl: 900000, limit: 100000 },
 				],
 	),
-	MailerModule.forRootAsync({
-		useFactory: async (config: ConfigService) => {
-			const smtpConfig = await config.get("smtp");
-			return {
-				transport: {
-					host: smtpConfig.host,
-					port: smtpConfig.port,
-					secure: true,
-					auth: {
-						user: smtpConfig.username,
-						pass: smtpConfig.password,
-					},
-				},
-				defaults: {
-					from: smtpConfig.sender,
-				},
-			};
-		},
-		inject: [ConfigService],
-	}),
 	ClsModule.forRoot({
 		global: true,
 		middleware: {

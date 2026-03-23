@@ -1,11 +1,13 @@
 import { expect, type Page, test } from "@playwright/test";
 
 function getAbilitiesHeading(page: Page) {
-	return page.getByRole("heading", {
-		name: "권한 목록",
-		exact: true,
-		level: 1,
-	});
+	return page
+		.getByRole("heading", {
+			name: "권한 목록",
+			exact: true,
+			level: 1,
+		})
+		.first();
 }
 
 async function gotoAbilitiesPage(page: Page) {

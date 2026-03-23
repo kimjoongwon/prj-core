@@ -52,5 +52,6 @@ export class AuthAuditLogService {
 
 export class EmailService {
 	sendEmail() {}
+	sendPasswordResetEmail() {}
 	sendTemporaryPasswordEmail() {}
 }
