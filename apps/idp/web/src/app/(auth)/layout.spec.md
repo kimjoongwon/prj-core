@@ -19,6 +19,7 @@
 - 이 route의 `layout.tsx`는 서버 컴포넌트로 동작하며 인증 전용 shell을 소유합니다.
 - shell의 책임은 다음으로 제한합니다.
   - 전체 viewport 배경과 명도 대비
+  - 상단 light/dark theme toggle 배치
   - 인증 콘텐츠를 배치하는 중앙 grid
   - 데스크톱 보조 카피 영역과 모바일 축약 안내
   - child page가 mount될 primary panel 영역
@@ -36,7 +37,7 @@
 
 | 레벨 | 소유 파일 | 구성 요소 | 책임 |
 |------|-----------|-----------|------|
-| route layout | `apps/idp/web/src/app/(auth)/layout.tsx` | auth shell, support copy, primary panel frame | route skeleton 조립, viewport 배치, 배경/보조 정보 소유 |
+| route layout | `apps/idp/web/src/app/(auth)/layout.tsx` | auth shell, support copy, theme toggle, primary panel frame | route skeleton 조립, viewport 배치, 배경/보조 정보 소유 |
 | child content | child `page.tsx` / slot page | page content only | shell 내부에서 헤더, 안내, 폼, CTA, 상태 전환 구현 |
 
 - layout이 제공하는 primary panel 안에는 로그인, 동의, 비밀번호 찾기/재설정, 에러 화면이 동일한 rhythm으로 mount됩니다.
@@ -85,6 +86,7 @@
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-03-23 | 예약 운영 중심 카피를 계정/인증 중심으로 조정하고 상단 theme toggle 책임을 layout에 추가 | codex |
 | 2026-03-23 | 로그인 UX 재기획에 맞춰 auth shell 책임을 route layout으로 재정의하고 `AuthCard`의 full-screen 책임 축소 방향을 명시 | codex |
 | 2026-03-21 | pathless auth route group의 `children` mount 설명과 URL 매핑을 실제 구조에 맞게 보정 | codex |
 | 2026-03-21 | fe-route-layout-builder 계약에 맞춰 layout skeleton/slot 계약을 재정의 | codex |

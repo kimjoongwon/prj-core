@@ -35,10 +35,17 @@
 | mobileOverlayMenu | 모바일 오버레이 메뉴 |
 | children | 메인 콘텐츠 영역 |
 
+## Desktop Variant
+
+- 기본값 `inline-sidebar`는 기존처럼 sidebar와 content를 같은 행에 배치합니다.
+- `stacked-header`는 header를 전폭 상단에 두고 그 아래에 sidebar/main body를 배치합니다.
+- 두 variant 모두 모바일 FAB, overlay, bottom nav mount 계약은 동일하게 유지합니다.
+
 ## 변경 이력
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-03-23 | `stacked-header` desktop variant를 추가해 shared console shell이 header 상단 고정 구조를 재사용하도록 확장 | codex |
 | 2026-03-22 | `primitive/layout/Layout` 중첩 폴더를 제거하고 `primitive/layout/Layout.tsx`로 평탄화 | codex |
 | 2026-03-06 | 폴더 네이밍을 단수형(feature/input/layout/hook/style/type/util/widget/cell)으로 통일 | codex |
 | 2026-03-06 | src/components 레이어를 제거하고 경로를 src/* 기준으로 상향 | codex |

@@ -350,6 +350,16 @@ describe("NavigationStore", () => {
 			expect(navigationStore.selectedNavItem?.id).toBe("settings");
 			expect(navigationStore.selectedSubNavItem?.id).toBe("security");
 		});
+
+		it("1depth 아이템 ID가 들어오면 루트 아이템 선택으로 fallback 해야 한다", () => {
+			// When
+			navigationStore.selectSubNavItem("dashboard");
+
+			// Then
+			expect(navigationStore.selectedNavItem?.id).toBe("dashboard");
+			expect(navigationStore.selectedSubNavItem).toBeNull();
+			expect(mockNavigate).toHaveBeenCalledWith("/dashboard");
+		});
 	});
 
 	describe("toggleNavItem", () => {

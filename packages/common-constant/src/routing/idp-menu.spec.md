@@ -15,9 +15,11 @@
 | IDP_PATHS | 공개 계약 요소 |
 | IDP_SUBJECTS | 공개 계약 요소 |
 | IDP_NAV_ITEMS | 공개 계약 요소 |
+| IDP_BOTTOM_TAB_IDS | 공개 계약 요소 |
 
 ## 변경 이력
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-03-23 | 모바일/좁은 뷰포트에서 IDP 메뉴가 완전히 사라지지 않도록 `IDP_BOTTOM_TAB_IDS`를 추가 | codex |
 | 2026-03-03 | 누락된 sidecar spec 신규 생성 | codex |

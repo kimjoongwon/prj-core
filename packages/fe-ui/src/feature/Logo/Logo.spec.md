@@ -8,6 +8,7 @@
 
 이 파일은 feature 계층의 핵심 동작을 담당합니다.
 상위 레이어와 하위 레이어를 연결하며, 런타임에서 실제 사용자 흐름/비즈니스 흐름에 직접 관여합니다.
+plain 로고와 console shell 전용 브랜드 variant를 모두 제공합니다.
 
 ## 공개 계약
 
@@ -48,6 +49,7 @@
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-03-23 | console shell용 subtitle/compact/variant 계약을 추가 | codex |
 | 2026-03-11 | 로고 아이콘 기본값과 렌더링 경로를 `AppIconName` + `AppIcon` 조합으로 고정 | codex |
 | 2026-03-06 | 폴더 네이밍을 단수형(feature/input/layout/hook/style/type/util/widget/cell)으로 통일 | codex |
 | 2026-03-06 | Lucide 아이콘 렌더링을 파일 내부 helper로 내장하고 utils 의존을 제거 | codex |

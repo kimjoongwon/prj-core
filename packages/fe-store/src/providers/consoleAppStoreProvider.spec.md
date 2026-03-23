@@ -26,12 +26,13 @@ IDP 콘솔 내비게이션 구성을 공통 provider preset으로 제공하는 �
 
 | 모듈 | 용도 |
 |------|------|
-| @cocrepo/constant | IDP_NAV_ITEMS preset 구성 |
+| @cocrepo/constant | IDP_NAV_ITEMS / IDP_BOTTOM_TAB_IDS preset 구성 |
 | ./createAppStoreProvider | provider factory |
 
 ## 변경 이력
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-03-23 | IDP 콘솔에도 모바일 bottom tab preset을 연결해 좁은 뷰포트에서 메뉴 접근 경로를 복구 | codex |
 | 2026-03-06 | 규칙 위반 정리: useMemo/useCallback/useIsMounted 제거 및 observer/이벤트 네이밍 규칙 반영 | codex |
 | 2026-03-04 | IDP 앱 로컬 AppStoreProvider 제거를 위한 공통 console preset 신규 추가 | codex |

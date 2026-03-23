@@ -89,3 +89,17 @@ export const IDP_NAV_ITEMS: NavItemConfig[] = [
 		subject: IDP_SUBJECTS.MENU_SECURITY_POLICY,
 	},
 ];
+
+/**
+ * IDP 콘솔 BottomTab에 표시할 메뉴 ID 목록
+ *
+ * 마지막 "more"는 특수 처리되어 나머지 1depth 메뉴를 오버레이로 노출합니다.
+ */
+export const IDP_BOTTOM_TAB_IDS = [
+	"dashboard",
+	"accounts",
+	"oidc-clients",
+	"more",
+] as const;
+
+export type IdpBottomTabId = (typeof IDP_BOTTOM_TAB_IDS)[number];

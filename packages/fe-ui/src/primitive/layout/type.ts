@@ -32,7 +32,10 @@ export interface LayoutProps {
 	mobileBottomNav?: ReactNode;
 	mobileFab?: ReactNode;
 	mobileOverlayMenu?: ReactNode;
+	desktopVariant?: "inline-sidebar" | "stacked-header";
 	className?: string;
+	bodyClassName?: string;
+	sidebarClassName?: string;
 	mainClassName?: string;
 	children: ReactNode;
 }
@@ -48,7 +51,16 @@ export interface SidePanelProps {
 	onNavItemClick: (navItemId: string) => void;
 	onSubNavItemClick: (subNavItemId: string) => void;
 	onNavItemToggle: (navItemId: string) => void;
+	header?: ReactNode;
 	logo?: ReactNode;
+	logoDescription?: ReactNode;
+	footer?: ReactNode;
+	className?: string;
+	renderItemIcon?: (
+		item: NavItem,
+		state: { isSelected: boolean },
+	) => ReactNode;
+	getItemDescription?: (item: NavItem) => ReactNode;
 }
 
 /**
@@ -59,6 +71,13 @@ export interface HeaderBarProps {
 	actions?: ReactNode;
 	onLogout?: () => void;
 	logo?: ReactNode;
+	leading?: ReactNode;
+	context?: ReactNode;
+	className?: string;
+	renderUserMenu?: (params: {
+		userInfo: LayoutUserInfo;
+		onLogout?: () => void;
+	}) => ReactNode;
 }
 
 /**

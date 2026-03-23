@@ -20,7 +20,7 @@
 |------|------|
 | @cocrepo/api/core/client | 기능 구현 의존성 |
 | @cocrepo/api/idp/client | 기능 구현 의존성 |
-| @cocrepo/api/idp/auth | `verify-token` 기반 FULL_ACCESS 판별 및 메뉴 bootstrap |
+| @cocrepo/api/idp/auth | `verify-token` 기반 인증 세션 확인 및 메뉴 bootstrap |
 | @cocrepo/store | ConsoleAppStoreProvider 사용 |
 | @cocrepo/ui | 기능 구현 의존성 |
 | @cocrepo/hook/nuqs | 기능 구현 의존성 |
@@ -33,7 +33,7 @@
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
-| 2026-03-23 | IDP 콘솔 메뉴 bootstrap 기준을 `my-spaces` 추론에서 `verify-token.hasFullAccess`로 전환 | codex |
+| 2026-03-23 | IDP 콘솔 메뉴 bootstrap 기준을 `my-spaces` 추론에서 `verify-token` 인증 세션 확인으로 정리 | codex |
 | 2026-03-23 | nuqs bridge 모듈(@cocrepo/hook/nuqs)로 Adapter 의존성을 일원화 | codex |
 | 2026-03-23 | `/interaction`, `/forgot-password`, `/reset-password`, `/error`를 인증 플로우 경로로 간주해 전역 권한 bootstrap의 401 리다이렉트 루프를 차단 | codex |
 | 2026-03-03 | 누락된 sidecar spec 신규 생성 | codex |

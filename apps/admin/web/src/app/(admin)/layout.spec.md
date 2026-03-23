@@ -8,7 +8,9 @@
 
 - 상위 shell은 `apps/admin/web/src/app/layout.spec.md`가 소유합니다.
 - 이 route의 `layout.tsx`는 서버 컴포넌트로 동작하며 `Layout` skeleton을 소유합니다.
+- `Layout`은 `desktopVariant="stacked-header"`를 사용해 전폭 header + 하단 sidebar/main 구조를 shared shell로 조립합니다.
 - 헤더, 사이드바, 모바일 오버레이/FAB/하단 내비게이션 바인딩은 route-local client slot 컴포넌트가 담당합니다.
+- 데스크톱 사이드바는 shared `SidePanel`을 사용하며 2depth 메뉴가 현재 선택 상태를 기준으로 노출되어야 합니다.
 - route-level 데이터 fetch나 페이지 이벤트 바인딩은 `layout.tsx`가 직접 수행하지 않습니다.
 
 ## Page Composition
@@ -70,6 +72,7 @@
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-03-23 | `fe-ui` shared console shell을 사용하도록 전환하고 stacked-header + 2depth sidebar 계약을 명시 | codex |
 | 2026-03-21 | direct client layout을 서버 `Layout` skeleton + client slot 컴포넌트 구조로 전환 | codex |
 | 2026-03-21 | pathless route group의 `children` mount 설명과 URL 매핑을 실제 구조에 맞게 보정 | codex |
 | 2026-03-21 | fe-route-layout-builder 계약에 맞춰 layout skeleton/slot 계약을 재정의 | codex |

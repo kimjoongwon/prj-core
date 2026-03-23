@@ -1,5 +1,6 @@
 "use client";
 
+import { cn } from "@heroui/react";
 import { observer } from "mobx-react-lite";
 import type { LayoutProps } from "./type";
 
@@ -14,21 +15,62 @@ export const Layout = observer(function Layout({
 	mobileBottomNav,
 	mobileFab,
 	mobileOverlayMenu,
+	desktopVariant = "inline-sidebar",
 	className,
+	bodyClassName,
+	sidebarClassName,
 	mainClassName,
 	children,
 }: LayoutProps) {
+	if (desktopVariant === "stacked-header") {
+		return (
+			<div
+				className={cn(
+					"relative flex h-screen flex-col overflow-hidden bg-slate-100 text-slate-950 dark:bg-[#04060b] dark:text-slate-50",
+					className,
+				)}
+			>
+				<div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(0,111,238,0.08),transparent_28%),radial-gradient(circle_at_bottom_right,rgba(23,201,100,0.08),transparent_24%)]" />
+				<div className="relative flex min-h-0 flex-1 flex-col">
+					{header}
+					<div className={cn("flex min-h-0 flex-1", bodyClassName)}>
+						{sidebar && (
+							<div
+								className={cn(
+									"hidden md:block md:w-[304px] md:flex-none",
+									sidebarClassName,
+								)}
+							>
+								{sidebar}
+							</div>
+						)}
+						<main
+							className={cn(
+								"min-w-0 flex-1 overflow-y-auto px-4 pb-20 pt-4 md:px-6 md:pb-6 md:pt-5",
+								mainClassName,
+							)}
+						>
+							{children}
+						</main>
+					</div>
+				</div>
+				{mobileOverlayMenu}
+				{mobileFab}
+				{mobileBottomNav}
+			</div>
+		);
+	}
+
 	return (
-		<div
-			className={`flex h-screen bg-background${className ? ` ${className}` : ""}`}
-		>
-			{sidebar && <div className="hidden md:block">{sidebar}</div>}
+		<div className={cn("flex h-screen bg-background", className)}>
+			{sidebar && <div className={cn("hidden md:block", sidebarClassName)}>{sidebar}</div>}
 			<div className="flex flex-1 flex-col overflow-hidden">
 				{header}
 				<main
-					className={`flex-1 overflow-y-auto bg-content2 p-4 pb-20 md:p-6 md:pb-6${
-						mainClassName ? ` ${mainClassName}` : ""
-					}`}
+					className={cn(
+						"flex-1 overflow-y-auto bg-content2 p-4 pb-20 md:p-6 md:pb-6",
+						mainClassName,
+					)}
 				>
 					{children}
 				</main>

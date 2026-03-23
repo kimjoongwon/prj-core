@@ -1,5 +1,5 @@
 import type { ReactNode } from "react";
-import { ThemeToggleButton } from "@/components/ThemeToggleButton";
+import { ThemeToggleButton } from "@cocrepo/ui";
 
 /**
  * 인증 플로우 레이아웃

@@ -6,8 +6,22 @@ import {
 	useConsoleFABStore,
 	useConsoleNavigationStore,
 } from "@cocrepo/store";
-import { AppLogo, SidePanel } from "@cocrepo/ui";
+import { SidePanel } from "@cocrepo/ui";
 import { observer } from "mobx-react-lite";
+import { IdpConsoleBrand } from "@/components/console/IdpConsoleBrand";
+import {
+	getIdpConsoleIconName,
+	IdpConsoleIcon,
+} from "@/components/console/IdpConsoleIcon";
+
+const NAV_ITEM_COPY: Record<string, string> = {
+	dashboard: "세션, 실패, 잠금 상태를 빠르게 확인합니다.",
+	"oidc-clients": "연동 앱과 인증 흐름 구성을 관리합니다.",
+	accounts: "계정 잠금, 복구, 권한 상태를 점검합니다.",
+	"oidc-sessions": "세션과 토큰 사용 상태를 추적합니다.",
+	"auth-audit-logs": "로그인 흐름과 정책 이벤트를 확인합니다.",
+	"security-policy": "비밀번호와 잠금 정책을 조정합니다.",
+};
 
 export const ConsoleSidebarSlot = observer(function ConsoleSidebarSlot() {
 	const layoutProps = useLayout({
@@ -25,7 +39,24 @@ export const ConsoleSidebarSlot = observer(function ConsoleSidebarSlot() {
 			onNavItemClick={layoutProps.onNavItemClick}
 			onSubNavItemClick={layoutProps.onSubNavItemClick}
 			onNavItemToggle={layoutProps.onNavItemToggle}
-			logo={<AppLogo icon="KeyRound" text="IDP 관리" />}
+			logo={<IdpConsoleBrand />}
+			logoDescription="인증 정책, 계정 접근, OIDC 연동 상태를 한 화면 구조 안에서 관리합니다."
+			getItemDescription={(item) =>
+				NAV_ITEM_COPY[item.id] ?? "콘솔 기능으로 이동합니다."
+			}
+			renderItemIcon={(item) => (
+				<IdpConsoleIcon name={getIdpConsoleIconName(item.id)} size={19} />
+			)}
+			footer={
+				<>
+					<p className="text-[11px] font-medium uppercase tracking-[0.22em] text-slate-400 dark:text-slate-500">
+						Identity Console
+					</p>
+					<p className="mt-1 text-xs text-slate-500 dark:text-slate-400">
+						FULL_ACCESS 기준 전체 관리 메뉴
+					</p>
+				</>
+			}
 		/>
 	);
 });

@@ -8,6 +8,7 @@
 
 상단 헤더를 렌더링하는 layout shell widget입니다.
 사용자 정보와 액션 슬롯은 props로 주입받고, 인증/스토어 연동은 외부 feature에서 담당합니다.
+브랜드 leading, 현재 섹션 context, 사용자 메뉴 override를 받아 app별 콘솔 헤더를 같은 shell 위에서 변주합니다.
 
 ## 구성 요소
 
@@ -25,6 +26,7 @@
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-03-23 | 공용 콘솔 헤더 디자인과 leading/context/renderUserMenu 확장 포인트를 추가 | codex |
 | 2026-03-22 | `primitive/layout`에서 `widget/HeaderBar`로 재배치하고 layout shell widget으로 재분류 | codex |
 | 2026-03-06 | 폴더 네이밍을 단수형(feature/input/layout/hook/style/type/util/widget/cell)으로 통일 | codex |
 | 2026-03-06 | ChevronDown, User, Settings, LogOut 아이콘을 파일 내부에서 직접 import 하도록 정리 | codex |

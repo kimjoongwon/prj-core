@@ -1,22 +1,28 @@
 "use client";
 
 import {
+	getGetIdpAccountQueryKey,
+	getGetIdpAccountsQueryKey,
 	type IdpAccountDto,
 	useGetIdpAccounts,
 } from "@cocrepo/api/idp/idp-accounts";
+import { useUnlockAccount } from "@cocrepo/api/idp/auth";
 import type { InputConfig, MetaDataGridColumnConfig } from "@cocrepo/type";
 import {
 	ActiveStatusCell,
+	ConfirmModal,
 	DateTimeCell,
 	MetaDataGrid,
 	PageTitleBar,
-	RowActionsCell,
 	Surface,
 	useMetaDataGridQueryStates,
 	VStack,
 } from "@cocrepo/ui";
-import { Chip } from "@heroui/react";
+import { Button, Chip, Link, useDisclosure } from "@heroui/react";
+import { useQueryClient } from "@tanstack/react-query";
+import { Eye, LockOpen } from "lucide-react";
 import { observer } from "mobx-react-lite";
+import { useState } from "react";
 
 function AccountsPage() {
 	return <AccountsPageClient />;
@@ -78,10 +84,16 @@ function FailedAttemptsCell({ count }: { count: number }) {
 	);
 }
 
+function isLockedAccount(
+	account: Pick<IdpAccountDto, "isPermanentlyLocked" | "lockedUntil">,
+) {
+	return account.isPermanentlyLocked || !!account.lockedUntil;
+}
+
 /**
  * 컬럼 정의
  */
-const columns: MetaDataGridColumnConfig<IdpAccountDto>[] = [
+const baseColumns: MetaDataGridColumnConfig<IdpAccountDto>[] = [
 	{
 		field: "name",
 		label: "이름",
@@ -132,16 +144,7 @@ const columns: MetaDataGridColumnConfig<IdpAccountDto>[] = [
 	{
 		field: "actions",
 		label: "",
-		size: 100,
-		cell: ({ row }) => (
-			<RowActionsCell
-				id={row.original.id}
-				basePath="/accounts"
-				showView
-				showEdit={false}
-				showDelete={false}
-			/>
-		),
+		size: 180,
 	},
 ];
 
@@ -163,17 +166,97 @@ const leftInputs: InputConfig[] = [
  * IDP 계정 관리 목록 페이지 - 클라이언트 컴포넌트
  */
 function AccountsPageClient() {
+	const queryClient = useQueryClient();
+	const unlockModal = useDisclosure();
+	const [accountToUnlock, setAccountToUnlock] = useState<IdpAccountDto | null>(
+		null,
+	);
 	const [queryStates, setQueryStates] = useMetaDataGridQueryStates(leftInputs);
-
-	const { data: response, isLoading } = useGetIdpAccounts({
+	const queryParams = {
 		take: queryStates.take,
 		skip: queryStates.skip,
 		search: queryStates.search || undefined,
+	};
+
+	const { data: response, isLoading } = useGetIdpAccounts(queryParams);
+	const { mutate: unlockAccount, isPending: isUnlocking } = useUnlockAccount({
+		mutation: {
+			onSuccess: (_data, variables) => {
+				unlockModal.onClose();
+				setAccountToUnlock(null);
+				queryClient.invalidateQueries({
+					queryKey: getGetIdpAccountsQueryKey(),
+				});
+				queryClient.invalidateQueries({
+					queryKey: getGetIdpAccountQueryKey(variables.userId),
+				});
+			},
+		},
 	});
 
 	const accounts = response?.data ?? [];
 	const meta = response?.meta;
 	const totalCount = meta?.totalCount ?? 0;
+
+	const onClickOpenUnlockModal = (account: IdpAccountDto) => {
+		setAccountToUnlock(account);
+		unlockModal.onOpen();
+	};
+
+	const onCloseUnlockModal = () => {
+		setAccountToUnlock(null);
+		unlockModal.onClose();
+	};
+
+	const onClickConfirmUnlock = () => {
+		if (!accountToUnlock) {
+			return;
+		}
+
+		unlockAccount({ userId: accountToUnlock.id });
+	};
+
+	const columns: MetaDataGridColumnConfig<IdpAccountDto>[] = baseColumns.map(
+		(column) => {
+			if (column.field !== "actions") {
+				return column;
+			}
+
+			return {
+				...column,
+				cell: ({ row }) => {
+					const account = row.original;
+					const isLocked = isLockedAccount(account);
+
+					return (
+						<div className="flex items-center justify-center gap-1">
+							{isLocked && (
+								<Button
+									size="sm"
+									variant="flat"
+									color="primary"
+									startContent={<LockOpen className="h-3.5 w-3.5" />}
+									onPress={() => onClickOpenUnlockModal(account)}
+								>
+									잠금 해제
+								</Button>
+							)}
+							<Button
+								as={Link}
+								href={`/accounts/${account.id}`}
+								size="sm"
+								variant="light"
+								isIconOnly
+								aria-label="상세 보기"
+							>
+								<Eye className="h-4 w-4" />
+							</Button>
+						</div>
+					);
+				},
+			};
+		},
+	);
 
 	return (
 		<VStack gap={5}>
@@ -196,6 +279,28 @@ function AccountsPageClient() {
 					}}
 				/>
 			</Surface>
+			<ConfirmModal
+				isOpen={unlockModal.isOpen}
+				onClose={onCloseUnlockModal}
+				onConfirm={onClickConfirmUnlock}
+				title="잠금 해제"
+				message={
+					<>
+						<p>
+							<strong>{accountToUnlock?.name ?? accountToUnlock?.email}</strong>
+							&nbsp;계정의 잠금을 해제하시겠습니까?
+						</p>
+						<p className="mt-2 text-sm text-default-400">
+							연속 로그인 실패로 누적된 잠금 상태와 실패 횟수가 함께
+							초기화됩니다.
+						</p>
+					</>
+				}
+				confirmText="잠금 해제"
+				confirmColor="primary"
+				iconType="warning"
+				loading={isUnlocking}
+			/>
 		</VStack>
 	);
 }

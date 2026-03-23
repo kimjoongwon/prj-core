@@ -271,7 +271,13 @@ export class NavigationStore {
 			}
 		}
 
-		if (!parentNavItem || !subNavItem) return;
+		if (!parentNavItem || !subNavItem) {
+			const navItem = this.findNavItemById(subNavItemId);
+			if (navItem) {
+				this.selectNavItem(navItem.id);
+			}
+			return;
+		}
 
 		this.resetAllActive();
 

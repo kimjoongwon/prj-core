@@ -61,16 +61,22 @@ export const SpaceSelectorDropdown = observer(function SpaceSelectorDropdown({
 		<Dropdown placement="bottom-end">
 			<DropdownTrigger>
 				<Button
-					variant="flat"
-					className="gap-2 px-3"
+					variant="light"
+					className="h-11 gap-2 rounded-2xl border border-slate-200/70 bg-white/72 px-3 shadow-sm backdrop-blur-md hover:bg-white dark:border-white/10 dark:bg-white/5 dark:text-slate-100 dark:hover:bg-white/10"
 					startContent={
-						<Building2 className="w-4 h-4 text-default-500" size={16} />
+						<Building2
+							className="h-4 w-4 text-slate-500 dark:text-slate-300"
+							size={16}
+						/>
 					}
 					endContent={
-						<ChevronDown className="w-4 h-4 text-default-400" size={16} />
+						<ChevronDown
+							className="h-4 w-4 text-slate-400 dark:text-slate-500"
+							size={16}
+						/>
 					}
 				>
-					<span className="max-w-32 truncate text-sm">
+					<span className="max-w-32 truncate text-sm text-slate-700 dark:text-slate-100">
 						{currentSpaceName ?? "Space 선택"}
 					</span>
 				</Button>

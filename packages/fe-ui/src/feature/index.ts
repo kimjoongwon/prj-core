@@ -17,5 +17,6 @@ export * from "./SideNav";
 export * from "./SpaceSelector";
 export * from "./SubMenuList";
 export * from "./SubNav";
+export * from "./ThemeToggleButton";
 export * from "./UserMenu";
 export * from "./user";

@@ -11,6 +11,12 @@ export interface AppLogoProps {
 	icon?: AppIconName;
 	/** 로고 텍스트 */
 	text?: string;
+	/** 로고 서브 타이틀 */
+	subtitle?: string;
+	/** 텍스트 숨김 여부 */
+	compact?: boolean;
+	/** 콘솔 shell 전용 스타일 여부 */
+	variant?: "plain" | "console";
 	/** 추가 클래스명 */
 	className?: string;
 }
@@ -26,7 +32,14 @@ export interface AppLogoProps {
  * ```
  */
 export const AppLogo = observer(
-	({ icon = "LayoutGrid", text = "Admin", className }: AppLogoProps) => {
+	({
+		icon = "LayoutGrid",
+		text = "Admin",
+		subtitle,
+		compact = false,
+		variant = "plain",
+		className,
+	}: AppLogoProps) => {
 		const navigationStore = useNavigationStore();
 
 		const handleClickLogo = () => {
@@ -41,13 +54,36 @@ export const AppLogo = observer(
 			<Button
 				variant="light"
 				className={cn(
-					"flex items-center gap-2 p-0 font-bold text-xl",
+					variant === "console"
+						? "group inline-flex min-w-0 items-center gap-3 rounded-2xl p-0 transition-transform hover:-translate-y-0.5 hover:bg-transparent data-[hover=true]:bg-transparent"
+						: "flex items-center gap-2 p-0 font-bold text-xl",
 					className,
 				)}
 				onPress={handleClickLogo}
 			>
-				{icon && <AppIcon name={icon} className="h-5 w-5" size={20} />}
-				<span>{text}</span>
+				{icon &&
+					(variant === "console" ? (
+						<span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-[18px] bg-slate-950 text-white shadow-[0_18px_40px_-24px_rgba(15,23,42,0.58)] ring-1 ring-white/60 dark:bg-white dark:text-slate-950 dark:ring-white/10">
+							<AppIcon name={icon} className="h-5 w-5" size={20} />
+						</span>
+					) : (
+						<AppIcon name={icon} className="h-5 w-5" size={20} />
+					))}
+				{!compact &&
+					(variant === "console" ? (
+						<span className="min-w-0">
+							{subtitle && (
+								<span className="block truncate text-[11px] font-medium uppercase tracking-[0.22em] text-slate-400 dark:text-slate-500">
+									{subtitle}
+								</span>
+							)}
+							<span className="mt-0.5 block truncate text-sm font-semibold text-slate-950 dark:text-slate-50">
+								{text}
+							</span>
+						</span>
+					) : (
+						<span>{text}</span>
+					))}
 			</Button>
 		);
 	},

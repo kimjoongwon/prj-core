@@ -44,14 +44,14 @@ export const AuthCardHeader = observer(
 					<img
 						src={logoUri}
 						alt={logoAlt ?? title}
-						className="h-12 w-12 rounded-2xl border border-default-200 object-cover shadow-sm"
+						className="h-12 w-12 rounded-2xl border border-slate-200/80 bg-white/70 object-cover shadow-sm dark:border-white/10 dark:bg-white/[0.04]"
 					/>
 				);
 			}
 
 			if (icon) {
 				return (
-					<div className="flex h-12 w-12 items-center justify-center rounded-2xl border border-default-200 bg-default-50 shadow-sm">
+					<div className="flex h-12 w-12 items-center justify-center rounded-2xl border border-slate-200/80 bg-white/70 shadow-sm dark:border-white/10 dark:bg-white/[0.04]">
 						{icon}
 					</div>
 				);
@@ -83,18 +83,17 @@ export const AuthCardHeader = observer(
 		};
 
 		const visual = renderVisual();
+		const titleToneClass = titleClassName ?? "text-slate-950 dark:text-slate-50";
 
 		return (
 			<div className="mb-8 flex items-start gap-4">
 				{visual && <div className="shrink-0">{visual}</div>}
 				<div className="min-w-0">
-					<h1
-						className={`text-2xl font-semibold tracking-tight text-foreground ${titleClassName ?? ""}`}
-					>
+					<h1 className={`text-2xl font-semibold tracking-tight ${titleToneClass}`}>
 						{title}
 					</h1>
 					{subtitle && (
-						<p className="mt-2 text-sm leading-6 text-default-500">
+						<p className="mt-2 text-sm leading-6 text-slate-600 dark:text-slate-300">
 							{subtitle}
 						</p>
 					)}
