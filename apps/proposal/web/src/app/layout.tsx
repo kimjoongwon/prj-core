@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import Script from "next/script";
 import { Providers } from "./providers";
 import "./globals.css";
 
@@ -9,7 +8,7 @@ export const metadata: Metadata = {
 		"자자는 AI 주도로 기획, UI 시스템, 도메인 설계를 연결해 더 적은 handoff와 더 빠른 실행으로 제품을 만드는 개발 스튜디오입니다.",
 };
 
-const THEME_STORAGE_KEY = "proposal-web-theme";
+const THEME_STORAGE_KEY = "heroui-theme";
 
 const themeBootScript = `
 (() => {
@@ -25,10 +24,12 @@ const themeBootScript = `
 					: "light";
 		const root = document.documentElement;
 
-		root.classList.toggle("dark", nextTheme === "dark");
+		root.classList.remove("light", "dark", "system");
+		root.classList.add(nextTheme);
 		root.style.colorScheme = nextTheme;
 	} catch (_error) {
-		document.documentElement.classList.remove("dark");
+		document.documentElement.classList.remove("light", "dark", "system");
+		document.documentElement.classList.add("light");
 		document.documentElement.style.colorScheme = "light";
 	}
 })();
@@ -46,12 +47,8 @@ export default function RootLayout({
 					rel="stylesheet"
 					href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css"
 				/>
+				<script dangerouslySetInnerHTML={{ __html: themeBootScript }} />
 			</head>
-			<Script
-				id="proposal-web-theme"
-				strategy="beforeInteractive"
-				dangerouslySetInnerHTML={{ __html: themeBootScript }}
-			/>
 			<body className="min-h-screen bg-background text-foreground antialiased">
 				<Providers>{children}</Providers>
 			</body>

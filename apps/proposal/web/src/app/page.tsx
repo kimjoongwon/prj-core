@@ -59,7 +59,7 @@ interface LandingSectionProps extends SectionHeadingProps {
 
 type ThemeMode = "light" | "dark";
 
-const THEME_STORAGE_KEY = "proposal-web-theme";
+const THEME_STORAGE_KEY = "heroui-theme";
 const VIEWPORT = { once: true, amount: 0.2 };
 
 const SECTION_VARIANTS = {
@@ -143,6 +143,12 @@ function resolvePreferredTheme(): ThemeMode {
 		return storedTheme;
 	}
 
+	if (storedTheme === "system") {
+		return window.matchMedia("(prefers-color-scheme: dark)").matches
+			? "dark"
+			: "light";
+	}
+
 	return window.matchMedia("(prefers-color-scheme: dark)").matches
 		? "dark"
 		: "light";
@@ -153,7 +159,8 @@ function applyTheme(theme: ThemeMode) {
 		return;
 	}
 
-	document.documentElement.classList.toggle("dark", theme === "dark");
+	document.documentElement.classList.remove("light", "dark", "system");
+	document.documentElement.classList.add(theme);
 	document.documentElement.style.colorScheme = theme;
 }
 
@@ -565,7 +572,11 @@ export default observer(function ProposalPage() {
 		const onChangeSystemThemeMediaQuery = (event: MediaQueryListEvent) => {
 			const storedTheme = window.localStorage.getItem(THEME_STORAGE_KEY);
 
-			if (storedTheme === "light" || storedTheme === "dark") {
+			if (
+				storedTheme === "light" ||
+				storedTheme === "dark" ||
+				storedTheme === "system"
+			) {
 				return;
 			}
 
