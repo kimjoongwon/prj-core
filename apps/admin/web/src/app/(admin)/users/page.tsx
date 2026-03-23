@@ -18,7 +18,7 @@ import {
 import { Chip, Input, Spinner } from "@heroui/react";
 import { Search, UserCheck, UserMinus, Users } from "lucide-react";
 import { observer } from "mobx-react-lite";
-import { parseAsString, useQueryState } from "nuqs";
+import { parseAsString, useQueryState } from "@cocrepo/hook/nuqs";
 import { type ComponentType, Suspense, useEffect, useState } from "react";
 
 const SEARCH_PLACEHOLDER = "이름, 이메일, 전화번호로 검색...";

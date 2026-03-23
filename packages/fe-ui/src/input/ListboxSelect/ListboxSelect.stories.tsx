@@ -4,6 +4,9 @@ import { ListboxSelect } from "./ListboxSelect";
 const meta: Meta<typeof ListboxSelect> = {
 	title: "Inputs/ListboxSelect",
 	component: ListboxSelect,
+	args: {
+		"aria-label": "샘플 리스트박스 선택",
+	},
 	parameters: {
 		layout: "centered",
 	},

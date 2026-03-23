@@ -1,13 +1,13 @@
 import type { Meta, StoryObj } from "@storybook/react";
 import { createColumnHelper } from "@tanstack/react-table";
 import { observer, useLocalObservable } from "mobx-react-lite";
-import { useState, useEffect } from "react";
-import { DataGrid, type Key } from "./DataGrid";
+import { useEffect, useState } from "react";
+import { Pagination } from "../../../input/Pagination/Pagination";
 import type {
 	MultiSortDescriptor,
 	SortEvent,
 } from "../Table/SortableColumnHeader";
-import { Pagination } from "../../../input/Pagination/Pagination";
+import { DataGrid, type DataGridProps, type Key } from "./DataGrid";
 
 interface SampleData {
 	id: Key;
@@ -82,6 +82,9 @@ const columns = [
 const meta = {
 	title: "Ui/data-display/DataGrid",
 	component: DataGrid,
+	args: {
+		"aria-label": "샘플 데이터 그리드",
+	},
 	parameters: {
 		layout: "padded",
 		docs: {
@@ -123,23 +126,19 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-const DataGridWrapper = observer<{
-	selectionMode?: "none" | "single" | "multiple";
-	emptyContent?: string;
-}>(({ selectionMode = "none" }) => {
-	const state = useLocalObservable(() => ({
-		selectedKeys: [] as Key[],
-	}));
+type StoryDataGridProps = Partial<DataGridProps<SampleData>>;
 
-	return (
-		<DataGrid
-			data={sampleData}
-			columns={columns}
-			state={state}
-			selectionMode={selectionMode}
-		/>
-	);
-});
+const DataGridWrapper = observer<StoryDataGridProps>(
+	({ data = sampleData, columns: storyColumns = columns, ...rest }) => {
+		const state = useLocalObservable(() => ({
+			selectedKeys: [] as Key[],
+		}));
+
+		return (
+			<DataGrid data={data} columns={storyColumns} state={state} {...rest} />
+		);
+	},
+);
 
 /**
  * 복합 정렬 로직 헬퍼 함수
@@ -196,188 +195,26 @@ const handleSortChange = (
 };
 
 // 복합 정렬 기능이 포함된 래퍼
-const MultiSortDataGridWrapper = observer(() => {
-	const [sorting, setSorting] = useState<MultiSortDescriptor>([]);
+const MultiSortDataGridWrapper = observer<StoryDataGridProps>(
+	({
+		data = sampleData,
+		columns: storyColumns = columns,
+		sortableColumns = ["id", "name", "age", "city", "email"],
+		selectionMode = "none",
+		...rest
+	}) => {
+		const [sorting, setSorting] = useState<MultiSortDescriptor>([]);
 
-	const state = useLocalObservable(() => ({
-		selectedKeys: [] as Key[],
-	}));
+		const state = useLocalObservable(() => ({
+			selectedKeys: [] as Key[],
+		}));
 
-	const onSortChange = (event: SortEvent) => {
-		setSorting((prev) => handleSortChange(event, prev));
-	};
+		const onSortChange = (event: SortEvent) => {
+			setSorting((prev) => handleSortChange(event, prev));
+		};
 
-	// 서버 복합 정렬 시뮬레이션
-	const sortedData = [...sampleData].sort((a, b) => {
-		for (const sort of sorting) {
-			const col = sort.column as keyof SampleData;
-			const aVal = a[col];
-			const bVal = b[col];
-
-			let comparison = 0;
-			if (typeof aVal === "string" && typeof bVal === "string") {
-				comparison = aVal.localeCompare(bVal);
-			} else if (typeof aVal === "number" && typeof bVal === "number") {
-				comparison = aVal - bVal;
-			}
-
-			if (comparison !== 0) {
-				return sort.direction === "asc" ? comparison : -comparison;
-			}
-		}
-		return 0;
-	});
-
-	const formatSorting = (sorts: MultiSortDescriptor) => {
-		if (sorts.length === 0) return "없음";
-		return sorts
-			.map((s, i) => `${i + 1}. ${s.column} (${s.direction})`)
-			.join(" → ");
-	};
-
-	return (
-		<div className="space-y-4">
-			<div className="p-4 bg-default-100 rounded-lg space-y-2">
-				<div className="text-sm font-medium">복합 정렬 상태:</div>
-				<div className="text-sm text-default-500">{formatSorting(sorting)}</div>
-				<div className="text-xs text-default-400 space-y-1">
-					<div>• 클릭: 단일 정렬 (asc → desc → 해제)</div>
-					<div>• Shift+클릭: 복합 정렬 추가 (최대 3개)</div>
-					<div>• Ctrl+클릭 (Mac: Cmd+클릭): 해당 컬럼 정렬 제거</div>
-				</div>
-			</div>
-			<DataGrid
-				data={sortedData}
-				columns={columns}
-				state={{ ...state, sorting }}
-				onSortChange={onSortChange}
-				sortableColumns={["id", "name", "age", "city", "email"]}
-				selectionMode="none"
-			/>
-		</div>
-	);
-});
-
-// 단일 정렬 기능이 포함된 래퍼 (기존 호환)
-const SortableDataGridWrapper = observer(() => {
-	const [sorting, setSorting] = useState<MultiSortDescriptor>([]);
-
-	const state = useLocalObservable(() => ({
-		selectedKeys: [] as Key[],
-	}));
-
-	const onSortChange = (event: SortEvent) => {
-		setSorting((prev) => handleSortChange(event, prev));
-	};
-
-	// 서버 정렬 시뮬레이션
-	const sortedData = [...sampleData].sort((a, b) => {
-		if (sorting.length === 0) return 0;
-		const { column, direction } = sorting[0];
-		const col = column as keyof SampleData;
-		const aVal = a[col];
-		const bVal = b[col];
-
-		if (typeof aVal === "string" && typeof bVal === "string") {
-			return direction === "asc"
-				? aVal.localeCompare(bVal)
-				: bVal.localeCompare(aVal);
-		}
-		if (typeof aVal === "number" && typeof bVal === "number") {
-			return direction === "asc" ? aVal - bVal : bVal - aVal;
-		}
-		return 0;
-	});
-
-	return (
-		<div className="space-y-4">
-			<div className="text-sm text-default-500">
-				현재 정렬:{" "}
-				{sorting.length > 0
-					? `${sorting[0].column} (${sorting[0].direction})`
-					: "없음"}
-			</div>
-			<DataGrid
-				data={sortedData}
-				columns={columns}
-				state={{ ...state, sorting }}
-				onSortChange={onSortChange}
-				sortableColumns={["id", "name", "age", "email"]}
-				selectionMode="none"
-			/>
-		</div>
-	);
-});
-
-// 로딩 상태 데모
-const LoadingDataGridWrapper = observer(() => {
-	const [isLoading, setIsLoading] = useState(true);
-
-	const state = useLocalObservable(() => ({
-		selectedKeys: [] as Key[],
-	}));
-
-	useEffect(() => {
-		const timer = setTimeout(() => setIsLoading(false), 2000);
-		return () => clearTimeout(timer);
-	}, []);
-
-	return (
-		<div className="space-y-4">
-			<div className="flex gap-2">
-				<button
-					type="button"
-					onClick={() => setIsLoading(true)}
-					className="px-3 py-1 bg-primary text-white rounded text-sm"
-				>
-					로딩 시작
-				</button>
-				<button
-					type="button"
-					onClick={() => setIsLoading(false)}
-					className="px-3 py-1 bg-default-200 rounded text-sm"
-				>
-					로딩 종료
-				</button>
-			</div>
-			<DataGrid
-				data={sampleData}
-				columns={columns}
-				state={state}
-				selectionMode="none"
-				isLoading={isLoading}
-			/>
-		</div>
-	);
-});
-
-// 서버 페이지네이션 데모
-const PaginatedDataGridWrapper = observer(() => {
-	const [sorting, setSorting] = useState<MultiSortDescriptor>([]);
-	const [isLoading, setIsLoading] = useState(false);
-	const [page, setPage] = useState(1);
-	const [pageSize] = useState(10);
-
-	const state = useLocalObservable(() => ({
-		selectedKeys: [] as Key[],
-	}));
-
-	const onSortChange = (event: SortEvent) => {
-		setIsLoading(true);
-		setSorting((prev) => handleSortChange(event, prev));
-		setTimeout(() => setIsLoading(false), 500);
-	};
-
-	const onPageChange = (newPage: number) => {
-		setIsLoading(true);
-		setPage(newPage);
-		setTimeout(() => setIsLoading(false), 500);
-	};
-
-	// 서버 복합 정렬 시뮬레이션
-	let processedData = [...allSampleData];
-	if (sorting.length > 0) {
-		processedData.sort((a, b) => {
+		// 서버 복합 정렬 시뮬레이션
+		const sortedData = [...data].sort((a, b) => {
 			for (const sort of sorting) {
 				const col = sort.column as keyof SampleData;
 				const aVal = a[col];
@@ -396,47 +233,244 @@ const PaginatedDataGridWrapper = observer(() => {
 			}
 			return 0;
 		});
-	}
 
-	// 서버 페이지네이션 시뮬레이션
-	const skip = (page - 1) * pageSize;
-	const paginatedData = processedData.slice(skip, skip + pageSize);
-	const totalCount = allSampleData.length;
+		const formatSorting = (sorts: MultiSortDescriptor) => {
+			if (sorts.length === 0) return "없음";
+			return sorts
+				.map((s, i) => `${i + 1}. ${s.column} (${s.direction})`)
+				.join(" → ");
+		};
 
-	const formatSorting = (sorts: MultiSortDescriptor) => {
-		if (sorts.length === 0) return "";
 		return (
-			" | 정렬: " + sorts.map((s) => `${s.column}(${s.direction})`).join(", ")
-		);
-	};
-
-	return (
-		<div className="space-y-4">
-			<div className="text-sm text-default-500">
-				총 {totalCount}개 항목 | 페이지 {page} /{" "}
-				{Math.ceil(totalCount / pageSize)}
-				{formatSorting(sorting)}
-			</div>
-			<DataGrid
-				data={paginatedData}
-				columns={columns}
-				state={{ ...state, sorting }}
-				onSortChange={onSortChange}
-				sortableColumns={["id", "name", "age", "city", "email"]}
-				selectionMode="multiple"
-				isLoading={isLoading}
-			/>
-			<div className="flex justify-center">
-				<Pagination
-					totalCount={totalCount}
-					page={page}
-					onChange={onPageChange}
-					showControls
+			<div className="space-y-4">
+				<div className="p-4 bg-default-100 rounded-lg space-y-2">
+					<div className="text-sm font-medium">복합 정렬 상태:</div>
+					<div className="text-sm text-default-500">
+						{formatSorting(sorting)}
+					</div>
+					<div className="text-xs text-default-400 space-y-1">
+						<div>• 클릭: 단일 정렬 (asc → desc → 해제)</div>
+						<div>• Shift+클릭: 복합 정렬 추가 (최대 3개)</div>
+						<div>• Ctrl+클릭 (Mac: Cmd+클릭): 해당 컬럼 정렬 제거</div>
+					</div>
+				</div>
+				<DataGrid
+					data={sortedData}
+					columns={storyColumns}
+					state={{ ...state, sorting }}
+					onSortChange={onSortChange}
+					sortableColumns={sortableColumns}
+					selectionMode={selectionMode}
+					{...rest}
 				/>
 			</div>
-		</div>
-	);
-});
+		);
+	},
+);
+
+// 단일 정렬 기능이 포함된 래퍼 (기존 호환)
+const SortableDataGridWrapper = observer<StoryDataGridProps>(
+	({
+		data = sampleData,
+		columns: storyColumns = columns,
+		sortableColumns = ["id", "name", "age", "email"],
+		selectionMode = "none",
+		...rest
+	}) => {
+		const [sorting, setSorting] = useState<MultiSortDescriptor>([]);
+
+		const state = useLocalObservable(() => ({
+			selectedKeys: [] as Key[],
+		}));
+
+		const onSortChange = (event: SortEvent) => {
+			setSorting((prev) => handleSortChange(event, prev));
+		};
+
+		// 서버 정렬 시뮬레이션
+		const sortedData = [...data].sort((a, b) => {
+			if (sorting.length === 0) return 0;
+			const { column, direction } = sorting[0];
+			const col = column as keyof SampleData;
+			const aVal = a[col];
+			const bVal = b[col];
+
+			if (typeof aVal === "string" && typeof bVal === "string") {
+				return direction === "asc"
+					? aVal.localeCompare(bVal)
+					: bVal.localeCompare(aVal);
+			}
+			if (typeof aVal === "number" && typeof bVal === "number") {
+				return direction === "asc" ? aVal - bVal : bVal - aVal;
+			}
+			return 0;
+		});
+
+		return (
+			<div className="space-y-4">
+				<div className="text-sm text-default-500">
+					현재 정렬:{" "}
+					{sorting.length > 0
+						? `${sorting[0].column} (${sorting[0].direction})`
+						: "없음"}
+				</div>
+				<DataGrid
+					data={sortedData}
+					columns={storyColumns}
+					state={{ ...state, sorting }}
+					onSortChange={onSortChange}
+					sortableColumns={sortableColumns}
+					selectionMode={selectionMode}
+					{...rest}
+				/>
+			</div>
+		);
+	},
+);
+
+// 로딩 상태 데모
+const LoadingDataGridWrapper = observer<StoryDataGridProps>(
+	({
+		data = sampleData,
+		columns: storyColumns = columns,
+		isLoading: initialLoading = true,
+		selectionMode = "none",
+		...rest
+	}) => {
+		const [isLoading, setIsLoading] = useState(initialLoading);
+
+		const state = useLocalObservable(() => ({
+			selectedKeys: [] as Key[],
+		}));
+
+		useEffect(() => {
+			const timer = setTimeout(() => setIsLoading(false), 2000);
+			return () => clearTimeout(timer);
+		}, []);
+
+		return (
+			<div className="space-y-4">
+				<div className="flex gap-2">
+					<button
+						type="button"
+						onClick={() => setIsLoading(true)}
+						className="px-3 py-1 bg-primary text-white rounded text-sm"
+					>
+						로딩 시작
+					</button>
+					<button
+						type="button"
+						onClick={() => setIsLoading(false)}
+						className="px-3 py-1 bg-default-200 rounded text-sm"
+					>
+						로딩 종료
+					</button>
+				</div>
+				<DataGrid
+					data={data}
+					columns={storyColumns}
+					state={state}
+					selectionMode={selectionMode}
+					isLoading={isLoading}
+					{...rest}
+				/>
+			</div>
+		);
+	},
+);
+
+// 서버 페이지네이션 데모
+const PaginatedDataGridWrapper = observer<StoryDataGridProps>(
+	({
+		columns: storyColumns = columns,
+		sortableColumns = ["id", "name", "age", "city", "email"],
+		selectionMode = "multiple",
+		...rest
+	}) => {
+		const [sorting, setSorting] = useState<MultiSortDescriptor>([]);
+		const [isLoading, setIsLoading] = useState(false);
+		const [page, setPage] = useState(1);
+		const [pageSize] = useState(10);
+
+		const state = useLocalObservable(() => ({
+			selectedKeys: [] as Key[],
+		}));
+
+		const onSortChange = (event: SortEvent) => {
+			setIsLoading(true);
+			setSorting((prev) => handleSortChange(event, prev));
+			setTimeout(() => setIsLoading(false), 500);
+		};
+
+		const onPageChange = (newPage: number) => {
+			setIsLoading(true);
+			setPage(newPage);
+			setTimeout(() => setIsLoading(false), 500);
+		};
+
+		// 서버 복합 정렬 시뮬레이션
+		const processedData = [...allSampleData];
+		if (sorting.length > 0) {
+			processedData.sort((a, b) => {
+				for (const sort of sorting) {
+					const col = sort.column as keyof SampleData;
+					const aVal = a[col];
+					const bVal = b[col];
+
+					let comparison = 0;
+					if (typeof aVal === "string" && typeof bVal === "string") {
+						comparison = aVal.localeCompare(bVal);
+					} else if (typeof aVal === "number" && typeof bVal === "number") {
+						comparison = aVal - bVal;
+					}
+
+					if (comparison !== 0) {
+						return sort.direction === "asc" ? comparison : -comparison;
+					}
+				}
+				return 0;
+			});
+		}
+
+		// 서버 페이지네이션 시뮬레이션
+		const skip = (page - 1) * pageSize;
+		const paginatedData = processedData.slice(skip, skip + pageSize);
+		const totalCount = allSampleData.length;
+
+		const formatSorting = (sorts: MultiSortDescriptor) => {
+			if (sorts.length === 0) return "";
+			return ` | 정렬: ${sorts.map((s) => `${s.column}(${s.direction})`).join(", ")}`;
+		};
+
+		return (
+			<div className="space-y-4">
+				<div className="text-sm text-default-500">
+					총 {totalCount}개 항목 | 페이지 {page} /{" "}
+					{Math.ceil(totalCount / pageSize)}
+					{formatSorting(sorting)}
+				</div>
+				<DataGrid
+					data={paginatedData}
+					columns={storyColumns}
+					state={{ ...state, sorting }}
+					onSortChange={onSortChange}
+					sortableColumns={sortableColumns}
+					selectionMode={selectionMode}
+					isLoading={isLoading}
+					{...rest}
+				/>
+				<div className="flex justify-center">
+					<Pagination
+						totalCount={totalCount}
+						page={page}
+						onChange={onPageChange}
+						showControls
+					/>
+				</div>
+			</div>
+		);
+	},
+);
 
 export const 기본: Story = {
 	args: {
@@ -497,7 +531,7 @@ export const 단일정렬: Story = {
 		columns: columns,
 		sortableColumns: ["id", "name", "age", "email"],
 	},
-	render: () => <SortableDataGridWrapper />,
+	render: (args) => <SortableDataGridWrapper {...args} />,
 	parameters: {
 		docs: {
 			description: {
@@ -515,7 +549,7 @@ export const 복합정렬: Story = {
 		columns: columns,
 		sortableColumns: ["id", "name", "age", "city", "email"],
 	},
-	render: () => <MultiSortDataGridWrapper />,
+	render: (args) => <MultiSortDataGridWrapper {...args} />,
 	parameters: {
 		docs: {
 			description: {
@@ -533,7 +567,7 @@ export const 로딩상태: Story = {
 		columns: columns,
 		isLoading: true,
 	},
-	render: () => <LoadingDataGridWrapper />,
+	render: (args) => <LoadingDataGridWrapper {...args} />,
 	parameters: {
 		docs: {
 			description: {
@@ -551,7 +585,7 @@ export const 서버페이지네이션: Story = {
 		columns: columns,
 		sortableColumns: ["id", "name", "age", "city", "email"],
 	},
-	render: () => <PaginatedDataGridWrapper />,
+	render: (args) => <PaginatedDataGridWrapper {...args} />,
 	parameters: {
 		docs: {
 			description: {

@@ -14,6 +14,22 @@ import { TemplateService } from "../template.service/index";
 const PASSWORD_RESET_TEMPLATE_CODE = "AUTH_PASSWORD_RESET";
 const TEMPORARY_PASSWORD_TEMPLATE_CODE = "AUTH_TEMPORARY_PASSWORD";
 
+function normalizeOptionalBooleanString(value?: string): string | undefined {
+	const normalizedValue = value?.trim();
+	return normalizedValue ? normalizedValue : undefined;
+}
+
+function resolveSmtpSecure(
+	smtpSecure: string | undefined,
+	smtpPort: number | string | undefined,
+): boolean {
+	if (smtpSecure !== undefined) {
+		return smtpSecure === "true";
+	}
+
+	return Number(smtpPort) === 465;
+}
+
 /**
  * 메일 발송 입력 계약
  */
@@ -40,16 +56,14 @@ export class SmtpEmailProvider implements EmailProvider {
 	private readonly smtpConfig: SMTPConfig;
 
 	constructor(private readonly configService: ConfigService) {
+		const smtpSecure = normalizeOptionalBooleanString(process.env.SMTP_SECURE);
 		const smtpConfig = this.configService.get<SMTPConfig>("smtp");
 		this.smtpConfig = smtpConfig || {
 			host: process.env.SMTP_HOST || "localhost",
 			port: Number(process.env.SMTP_PORT) || 587,
 			username: process.env.SMTP_USERNAME || "",
 			password: process.env.SMTP_PASSWORD || "",
-			secure:
-				process.env.SMTP_SECURE != null
-					? process.env.SMTP_SECURE === "true"
-					: Number(process.env.SMTP_PORT) === 465,
+			secure: resolveSmtpSecure(smtpSecure, process.env.SMTP_PORT),
 			sender: process.env.SMTP_SENDER || "noreply@example.com",
 		};
 	}

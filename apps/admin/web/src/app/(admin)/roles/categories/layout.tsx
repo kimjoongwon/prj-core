@@ -1,5 +1,5 @@
-import type { ReactNode } from "react";
 import { Page, PageSurface, Section, SectionSurface } from "@cocrepo/ui";
+import type { ReactNode } from "react";
 
 export default function RoleCategoriesLayout({
 	children,
@@ -10,7 +10,9 @@ export default function RoleCategoriesLayout({
 		<Page>
 			<PageSurface padding="none">
 				<Section>
-					<SectionSurface className="overflow-hidden">{children}</SectionSurface>
+					<SectionSurface elevation="flat" padding="none">
+						{children}
+					</SectionSurface>
 				</Section>
 			</PageSurface>
 		</Page>

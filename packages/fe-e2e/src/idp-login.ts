@@ -1,29 +1,198 @@
 import {
 	navigateToOidcLoginForm,
-	runOidcLoginFlow,
 	submitOidcCredentials,
 	waitForOidcConsentForm,
 	type E2EPageLike,
 } from "./oidc-login";
 
-export async function loginToConsole(page: E2EPageLike) {
-	await runOidcLoginFlow(page, {
-		startPath: "/auth/login",
-		finalUrl: /\/dashboard(?:[/?#]|$)/,
-		allowDirectRedirect: true,
-	});
+interface ApiResponseLike {
+	status(): number;
+	json(): Promise<unknown>;
+}
+
+interface ApiRequestLike {
+	get(url: string): Promise<ApiResponseLike>;
+	post(
+		url: string,
+		options?: {
+			data?: unknown;
+			headers?: Record<string, string>;
+		},
+	): Promise<ApiResponseLike>;
+}
+
+interface ConsoleLoginPageLike extends E2EPageLike {
+	request: ApiRequestLike;
+	url(): string;
+}
+
+interface InteractionData {
+	type: "login" | "consent";
+	uid: string;
+}
+
+interface RedirectResponse {
+	redirectTo: string;
+}
+
+const DEFAULT_CONSOLE_BASE_URL =
+	process.env.E2E_IDP_BASE_URL ?? "http://localhost:3008";
+const DEFAULT_API_BASE_URL =
+	process.env.E2E_IDP_API_BASE_URL ?? DEFAULT_CONSOLE_BASE_URL;
+const LOGIN_PATH = process.env.E2E_IDP_LOGIN_PATH ?? "/api/v1/auth/idp/login";
+const DASHBOARD_PATH = process.env.E2E_IDP_DASHBOARD_PATH ?? "/dashboard";
+const INTERACTION_PATH =
+	process.env.E2E_IDP_INTERACTION_PATH ?? "/api/interaction";
+const AUTH_LOGIN_PATH = process.env.E2E_IDP_AUTH_LOGIN_PATH ?? "/auth/login";
+
+function trimTrailingSlash(value: string) {
+	return value.endsWith("/") ? value.slice(0, -1) : value;
+}
+
+function ensureLeadingSlash(path: string) {
+	return path.startsWith("/") ? path : `/${path}`;
+}
+
+const consoleBaseUrl = trimTrailingSlash(DEFAULT_CONSOLE_BASE_URL);
+const apiBaseUrl = trimTrailingSlash(DEFAULT_API_BASE_URL);
+const normalizedDashboardPath = ensureLeadingSlash(DASHBOARD_PATH);
+const loginEntryPath = `${ensureLeadingSlash(LOGIN_PATH)}?returnTo=${encodeURIComponent(
+	`${consoleBaseUrl}${normalizedDashboardPath}`,
+)}`;
+const normalizedInteractionPath = ensureLeadingSlash(INTERACTION_PATH);
+const dashboardUrl = `${consoleBaseUrl}${normalizedDashboardPath}`;
+const authLoginPath = ensureLeadingSlash(AUTH_LOGIN_PATH);
+
+function buildApiUrl(path: string) {
+	return `${apiBaseUrl}${ensureLeadingSlash(path)}`;
+}
+const DEFAULT_EMAIL = process.env.E2E_ADMIN_EMAIL ?? "admin@plate.com";
+const DEFAULT_PASSWORD = process.env.E2E_ADMIN_PASSWORD ?? "rkdmf12!@";
+
+function extractInteractionUid(url: string): string | null {
+	try {
+		const parsed = new URL(url);
+		const match = parsed.pathname.match(/^\/interaction\/([^/]+)$/);
+		return match?.[1] ?? null;
+	} catch {
+		return null;
+	}
+}
+
+function isDashboardUrl(url: string): boolean {
+	try {
+		const parsed = new URL(url);
+		const target = new URL(dashboardUrl);
+		return (
+			parsed.origin === target.origin &&
+			parsed.pathname.startsWith(target.pathname)
+		);
+	} catch {
+		return false;
+	}
+}
+
+async function fetchInteraction(
+	page: ConsoleLoginPageLike,
+	uid: string,
+): Promise<InteractionData> {
+	const response = await page.request.get(
+		buildApiUrl(`${normalizedInteractionPath}/${uid}`),
+	);
+
+	if (response.status() !== 200) {
+		throw new Error(`Failed to load interaction ${uid}: ${response.status()}`);
+	}
+
+	return (await response.json()) as InteractionData;
+}
+
+async function postInteractionRedirect(
+	page: ConsoleLoginPageLike,
+	uid: string,
+	path: "login" | "confirm",
+	body?: unknown,
+): Promise<string> {
+	const response = await page.request.post(
+		buildApiUrl(`${normalizedInteractionPath}/${uid}/${path}`),
+		body ? { data: body } : undefined,
+	);
+
+	if (response.status() !== 200) {
+		throw new Error(
+			`Interaction ${path} failed for ${uid}: ${response.status()}`,
+		);
+	}
+
+	const payload = (await response.json()) as RedirectResponse;
+
+	if (!payload.redirectTo) {
+		throw new Error(`Interaction ${path} did not return redirectTo for ${uid}`);
+	}
+
+	return payload.redirectTo;
+}
+
+export async function loginToConsole(page: ConsoleLoginPageLike) {
+	for (let attempt = 1; attempt <= 3; attempt++) {
+		try {
+			await page.goto(loginEntryPath);
+
+			for (let step = 0; step < 5; step++) {
+				const currentUrl = page.url();
+				if (isDashboardUrl(currentUrl)) {
+					return;
+				}
+
+				const uid = extractInteractionUid(currentUrl);
+				if (!uid) {
+					await page.waitForTimeout(500);
+					continue;
+				}
+
+				const interaction = await fetchInteraction(page, uid);
+
+				if (interaction.type === "login") {
+					const redirectTo = await postInteractionRedirect(page, uid, "login", {
+						email: DEFAULT_EMAIL,
+						password: DEFAULT_PASSWORD,
+						remember: false,
+					});
+					await page.goto(redirectTo);
+					continue;
+				}
+
+				const redirectTo = await postInteractionRedirect(page, uid, "confirm");
+				await page.goto(redirectTo);
+			}
+
+			throw new Error("OIDC console login did not reach dashboard in time.");
+		} catch (error) {
+			if (attempt === 3) {
+				throw error;
+			}
+			await page.waitForTimeout(1000);
+		}
+	}
+
+	throw new Error("OIDC console login failed after retries.");
 }
 
 export async function navigateToLoginForm(page: E2EPageLike) {
-	await navigateToOidcLoginForm(page, {
-		startPath: "/auth/login",
+	const entry = await navigateToOidcLoginForm(page, {
+		startPath: authLoginPath,
 	});
+	if (entry !== "login") {
+		throw new Error("Expected OIDC login form but consent screen was shown.");
+	}
 }
 
 export async function navigateToConsentForm(page: E2EPageLike) {
-	await navigateToOidcLoginForm(page, {
-		startPath: "/auth/login",
+	const entry = await navigateToOidcLoginForm(page, {
+		startPath: authLoginPath,
 	});
-	await submitOidcCredentials(page);
+	if (entry === "login") {
+		await submitOidcCredentials(page);
+	}
 	await waitForOidcConsentForm(page);
 }

@@ -1,4 +1,4 @@
-import { readdirSync, readFileSync } from "node:fs";
+import { existsSync, readdirSync, readFileSync } from "node:fs";
 import { dirname, join, relative, sep } from "node:path";
 import { fileURLToPath } from "node:url";
 import {
@@ -19,10 +19,15 @@ const chromaticAddonDisabled = process.env.STORYBOOK_DISABLE_CHROMATIC === "true
 const vitestAddonDisabled = process.env.STORYBOOK_DISABLE_VITEST_ADDON === "true";
 const includePlaceholderStories = process.env.STORYBOOK_INCLUDE_PLACEHOLDER === "true";
 const configDir = fileURLToPath(new URL(".", import.meta.url));
+const localStoryRoot = join(configDir, "../stories");
 const feUiStoryRoot = join(configDir, "../../../../packages/fe-ui/src");
 
 function isStoryFile(name) {
   return /\.stories\.(js|jsx|mjs|ts|tsx)$/.test(name);
+}
+
+function isMdxFile(name) {
+  return /\.mdx$/.test(name);
 }
 
 function isPlaceholderStory(filePath) {
@@ -37,17 +42,28 @@ function toStorybookPath(filePath) {
   return relative(configDir, filePath).split(sep).join("/");
 }
 
-function collectFeUiStories(directory) {
+function collectStoryFiles(directory, { allowMdx = false, filterPlaceholders = false } = {}) {
+  if (!existsSync(directory)) {
+    return [];
+  }
+
   return readdirSync(directory, { withFileTypes: true })
     .flatMap((entry) => {
       const entryPath = join(directory, entry.name);
       if (entry.isDirectory()) {
-        return collectFeUiStories(entryPath);
+        return collectStoryFiles(entryPath, { allowMdx, filterPlaceholders });
       }
-      if (!isStoryFile(entry.name)) {
+      const isSupportedStoryFile =
+        isStoryFile(entry.name) || (allowMdx && isMdxFile(entry.name));
+      if (!isSupportedStoryFile) {
         return [];
       }
-      if (!includePlaceholderStories && isPlaceholderStory(entryPath)) {
+      if (
+        filterPlaceholders &&
+        isStoryFile(entry.name) &&
+        !includePlaceholderStories &&
+        isPlaceholderStory(entryPath)
+      ) {
         return [];
       }
       return [toStorybookPath(entryPath)];
@@ -55,14 +71,15 @@ function collectFeUiStories(directory) {
     .sort((left, right) => left.localeCompare(right));
 }
 
-const feUiStories = collectFeUiStories(feUiStoryRoot);
+const localStories = collectStoryFiles(localStoryRoot, {
+  allowMdx: true,
+});
+const feUiStories = collectStoryFiles(feUiStoryRoot, {
+  filterPlaceholders: true,
+});
 
 const config = {
-  stories: [
-    "../stories/**/*.mdx",
-    "../stories/**/*.stories.@(js|jsx|mjs|ts|tsx)",
-    ...feUiStories,
-  ],
+  stories: [...localStories, ...feUiStories],
   addons: [
     ...(chromaticAddonDisabled ? [] : [getAbsolutePath("@chromatic-com/storybook")]),
     getAbsolutePath("@storybook/addon-docs"),

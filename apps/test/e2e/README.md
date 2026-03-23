@@ -8,18 +8,44 @@ Admin/IDP E2E 테스트는 Playwright 워크스페이스(`apps/test/e2e`)에서 
 # IDP 로컬 one-shot 준비 + 실행
 pnpm test:e2e:idp:local
 
-# Admin 데스크톱
+# Admin 로컬 데스크톱
 pnpm --filter=test-e2e test:admin
 
-# Admin 모바일
+# Admin 운영 데스크톱
+E2E_ADMIN_BASE_URL=https://admin.example.com/admin/ \
+pnpm --filter=test-e2e test:admin:prod
+
+# Admin 로컬 모바일
 pnpm --filter=test-e2e test:admin:mobile
 
-# IDP 데스크톱
+# IDP 로컬 데스크톱
 pnpm --filter=test-e2e test:idp
 
-# IDP 모바일
+# IDP 운영 데스크톱
+E2E_IDP_BASE_URL=https://idp.example.com/ \
+E2E_IDP_API_BASE_URL=https://idp.example.com/ \
+pnpm --filter=test-e2e test:idp:prod
+
+# IDP 로컬 모바일
 pnpm --filter=test-e2e test:idp:mobile
 ```
+
+## 환경 선택
+
+- `E2E_ENV=local`: 기본값. local base URL과 local webServer 전략을 사용합니다.
+- `E2E_ENV=prod`: 운영 base URL만 사용하고 local webServer는 띄우지 않습니다.
+
+운영 실행 시 주요 환경 변수:
+
+- `E2E_ADMIN_BASE_URL`: 예) `https://admin.example.com/admin/`
+- `E2E_IDP_BASE_URL`: 예) `https://idp.example.com/`
+- `E2E_CORE_API_BASE_URL`: 필요 시 Core API readiness URL 오버라이드
+- `E2E_IDP_API_BASE_URL`: 필요 시 IDP API readiness URL 오버라이드
+
+참고:
+
+- Admin Playwright 프로젝트는 환경별 storage state를 `tests/admin/helpers/.auth/{env}/admin.json`에 분리 저장합니다.
+- IDP 로그인 helper는 `E2E_IDP_BASE_URL`, `E2E_IDP_API_BASE_URL` 등을 읽어 local/prod 호스트를 자동 전환합니다.
 
 ## 로컬 IDP one-shot
 
@@ -75,3 +101,8 @@ pnpm --filter=test-e2e test:idp:mobile
 - `E2E_ADMIN_EMAIL`: 로그인 계정 이메일 (기본값 `admin@plate.com`)
 - `E2E_ADMIN_PASSWORD`: 로그인 계정 비밀번호 (기본값 `rkdmf12!@`)
 - `E2E_SYSTEM_SPACE_ID`: Admin 로그인 후 고정할 Space ID
+- `E2E_ENV`: `local|prod` 실행 환경 선택
+- `E2E_ADMIN_BASE_URL`: Admin Web base URL
+- `E2E_IDP_BASE_URL`: IDP Web base URL
+- `E2E_CORE_API_BASE_URL`: Core API base URL
+- `E2E_IDP_API_BASE_URL`: IDP API base URL

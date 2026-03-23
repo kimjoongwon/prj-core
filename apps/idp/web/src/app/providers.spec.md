@@ -22,16 +22,18 @@
 | @cocrepo/api/idp/client | 기능 구현 의존성 |
 | @cocrepo/store | ConsoleAppStoreProvider 사용 |
 | @cocrepo/ui | 기능 구현 의존성 |
+| @cocrepo/hook/nuqs | 기능 구현 의존성 |
 | @tanstack/react-query | 기능 구현 의존성 |
 | mobx-react-lite | 기능 구현 의존성 |
 | next/navigation | 기능 구현 의존성 |
-| nuqs/adapters/next/app | 기능 구현 의존성 |
 | react | 기능 구현 의존성 |
 
 ## 변경 이력
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-03-23 | nuqs bridge 모듈(@cocrepo/hook/nuqs)로 Adapter 의존성을 일원화 | codex |
+| 2026-03-23 | `/interaction`, `/forgot-password`, `/reset-password`, `/error`를 인증 플로우 경로로 간주해 전역 권한 bootstrap의 401 리다이렉트 루프를 차단 | codex |
 | 2026-03-03 | 누락된 sidecar spec 신규 생성 | codex |
 | 2026-03-04 | 앱 로컬 stores 대신 @cocrepo/store의 ConsoleAppStoreProvider 직접 사용으로 전환 | codex |
 | 2026-03-13 | @cocrepo/api root import를 split subpath import로 전환 | codex |

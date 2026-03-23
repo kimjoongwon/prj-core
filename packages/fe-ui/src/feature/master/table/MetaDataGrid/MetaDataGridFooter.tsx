@@ -2,7 +2,7 @@
 
 import type { MetaDataGridConfig } from "@cocrepo/type";
 import { observer } from "mobx-react-lite";
-import { parseAsInteger, useQueryStates } from "nuqs";
+import { parseAsInteger, useQueryStates } from "@cocrepo/hook/nuqs";
 import { Pagination } from "../../../../input/Pagination/Pagination";
 
 interface MetaDataGridFooterProps<T> {

@@ -10,6 +10,9 @@ import { DateRangePicker as DateRangePickerWithMobx } from "./index";
 const meta: Meta<typeof DateRangePicker> = {
 	title: "Inputs/DateRangePicker",
 	component: DateRangePicker,
+	args: {
+		"aria-label": "날짜 범위 선택기",
+	},
 	parameters: {
 		layout: "centered",
 	},
@@ -213,12 +216,14 @@ export const MultipleRanges: Story = {
 					</div>
 
 					<DateRangePickerWithMobx
+						aria-label="출발 일정 날짜 범위 선택기"
 						label="출발 일정"
 						state={state}
 						paths={["trip.outbound.start", "trip.outbound.end"]}
 					/>
 
 					<DateRangePickerWithMobx
+						aria-label="귀국 일정 날짜 범위 선택기"
 						label="귀국 일정"
 						state={state}
 						paths={["trip.return.start", "trip.return.end"]}

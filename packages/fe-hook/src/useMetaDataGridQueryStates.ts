@@ -8,7 +8,7 @@ import {
 	parseAsString,
 	type UseQueryStatesKeysMap,
 	useQueryStates,
-} from "nuqs";
+} from "./nuqs";
 
 /**
  * InputConfig 배열에서 nuqs 파서를 자동 생성하는 훅

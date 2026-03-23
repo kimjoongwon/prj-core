@@ -5,7 +5,9 @@ import Axios, {
 } from "axios";
 
 const DEFAULT_CORE_API_SERVER_BASE_URL =
-	process.env.CORE_API_INTERNAL_URL ?? "http://localhost:3006";
+	(typeof process !== "undefined"
+		? process.env.CORE_API_INTERNAL_URL
+		: undefined) ?? "http://localhost:3006";
 
 function resolveServerBaseUrl(url?: string) {
 	if (typeof window !== "undefined" || !url?.startsWith("/")) {

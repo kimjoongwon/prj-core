@@ -64,6 +64,7 @@
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-03-23 | nuqs 직접 의존을 제거하고 공용 bridge(@cocrepo/hook/nuqs)를 통해 URL state를 공유 | codex |
 | 2026-03-22 | 목록 콘텐츠 wrapper를 범용 `Surface` 기준으로 문서화 | codex |
 | 2026-03-21 | 이용자 목록을 `master/table` 재사용 타깃으로 분류하고 page role 계약을 추가 | codex |
 | 2026-03-21 | 이용자 목록 spec을 generic route layout + content-only page 구조로 재작성 | codex |

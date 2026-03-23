@@ -12,7 +12,8 @@
 
 | 항목 | 설명 |
 |------|------|
-| export | 없음 |
+| `DesignSystemProvider` | Provider 공개 export |
+| `useDesignSystemTheme` | Theme hook 공개 export |
 
 ## 변경 이력
 

@@ -2,10 +2,10 @@
 
 import type { InputConfig } from "@cocrepo/type";
 import { Input } from "@heroui/react";
+import { parseAsString, useQueryState } from "@cocrepo/hook/nuqs";
+import { useDebouncedCallback } from "@cocrepo/hook";
 import { Search } from "lucide-react";
 import { observer } from "mobx-react-lite";
-import { parseAsString, useQueryState } from "nuqs";
-import { useDebouncedCallback } from "@cocrepo/hook";
 
 interface SearchInputProps {
 	config: InputConfig;

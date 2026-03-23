@@ -32,6 +32,7 @@ interface OidcFlowOptions {
 const DEFAULT_EMAIL = process.env.E2E_ADMIN_EMAIL ?? "admin@plate.com";
 const DEFAULT_PASSWORD = process.env.E2E_ADMIN_PASSWORD ?? "rkdmf12!@";
 const DEFAULT_TIMEOUT_MS = 30000;
+type OidcEntryPoint = "login" | "consent";
 
 function getLoginButton(page: E2EPageLike) {
 	return page.getByRole("button", { name: "로그인" });
@@ -51,7 +52,7 @@ export async function navigateToOidcLoginForm(
 		OidcFlowOptions,
 		"startPath" | "retryAttempts" | "retryDelayMs" | "timeoutMs"
 	>,
-) {
+): Promise<OidcEntryPoint> {
 	const {
 		startPath,
 		retryAttempts = 1,
@@ -78,10 +79,31 @@ export async function navigateToOidcLoginForm(
 		throw lastError;
 	}
 
-	await getLoginButton(page).waitFor({
-		state: "visible",
-		timeout: getTimeoutMs(timeoutMs),
-	});
+	const deadline = Date.now() + getTimeoutMs(timeoutMs);
+	while (Date.now() < deadline) {
+		const remaining = Math.max(500, deadline - Date.now());
+		const chunkTimeout = Math.min(remaining, 1000);
+		const [loginResult, consentResult] = await Promise.allSettled([
+			getLoginButton(page).waitFor({
+				state: "visible",
+				timeout: chunkTimeout,
+			}),
+			getAllowButton(page).waitFor({
+				state: "visible",
+				timeout: chunkTimeout,
+			}),
+		]);
+
+		if (loginResult.status === "fulfilled") {
+			return "login";
+		}
+
+		if (consentResult.status === "fulfilled") {
+			return "consent";
+		}
+	}
+
+	throw new Error("OIDC login did not render a login or consent screen in time.");
 }
 
 export async function submitOidcCredentials(
@@ -93,11 +115,23 @@ export async function submitOidcCredentials(
 	const emailInput = page.getByLabel("이메일");
 	const passwordInput = page.getByLabel("비밀번호");
 
-	await emailInput.clear();
-	await emailInput.fill(email);
-	await passwordInput.clear();
-	await passwordInput.fill(password);
-	await getLoginButton(page).click();
+	const maxAttempts = 3;
+	for (let attempt = 1; attempt <= maxAttempts; attempt++) {
+		try {
+			await emailInput.clear();
+			await emailInput.fill(email);
+			await passwordInput.clear();
+			await passwordInput.fill(password);
+			await getLoginButton(page).click();
+			return;
+		} catch (error) {
+			if (attempt === maxAttempts) {
+				throw error;
+			}
+			// 로그인 폼이 다시 로드되었을 수 있으므로 잠시 대기 후 재시도
+			await page.waitForTimeout(250);
+		}
+	}
 }
 
 export async function waitForOidcConsentForm(
@@ -114,35 +148,86 @@ export async function runOidcLoginFlow(
 	page: E2EPageLike,
 	options: OidcFlowOptions,
 ) {
-	await navigateToOidcLoginForm(page, options);
-	await submitOidcCredentials(page, options);
+	const retryAttempts = options.retryAttempts ?? 1;
+	const retryDelayMs = options.retryDelayMs ?? 1000;
+	let lastError: unknown;
 
-	if (!options.finalUrl) {
-		await waitForOidcConsentForm(page, options);
-		return;
-	}
+	for (let attempt = 1; attempt <= retryAttempts; attempt++) {
+		try {
+			const entryPoint = await navigateToOidcLoginForm(page, {
+				startPath: options.startPath,
+				retryAttempts: 1,
+				retryDelayMs,
+				timeoutMs: options.timeoutMs,
+			});
+			if (entryPoint === "login") {
+				await submitOidcCredentials(page, options);
+			} else {
+				await waitForOidcConsentForm(page, options);
+			}
 
-	const allowDirectRedirect = options.allowDirectRedirect ?? true;
-	const allowButton = getAllowButton(page);
-	const timeoutMs = getTimeoutMs(options.timeoutMs);
+			if (!options.finalUrl) {
+				await waitForOidcConsentForm(page, options);
+				return;
+			}
 
-	if (allowDirectRedirect) {
-		let redirectedToTarget = false;
-		await Promise.race([
-			page.waitForURL(options.finalUrl, { timeout: timeoutMs }).then(() => {
-				redirectedToTarget = true;
-			}),
-			allowButton.waitFor({ state: "visible", timeout: timeoutMs }),
-		]);
+			const allowDirectRedirect = options.allowDirectRedirect ?? true;
+			const timeoutMs = getTimeoutMs(options.timeoutMs);
 
-		if (!redirectedToTarget) {
-			await allowButton.click();
-			await page.waitForURL(options.finalUrl, { timeout: timeoutMs });
+			if (allowDirectRedirect) {
+				try {
+					await page.waitForURL(options.finalUrl, {
+						timeout: Math.min(5000, timeoutMs),
+					});
+					return;
+				} catch {
+					// Consent still required, fall through to consent loop.
+				}
+			}
+
+			await resolveOidcConsent(page, options.finalUrl, timeoutMs);
+			return;
+		} catch (error) {
+			lastError = error;
+			if (attempt === retryAttempts) {
+				throw error;
+			}
+			await page.waitForTimeout(retryDelayMs);
 		}
-		return;
 	}
 
-	await allowButton.waitFor({ state: "visible", timeout: timeoutMs });
-	await allowButton.click();
-	await page.waitForURL(options.finalUrl, { timeout: timeoutMs });
+	throw lastError;
+}
+
+async function resolveOidcConsent(
+	page: E2EPageLike,
+	finalUrl: UrlMatcher,
+	timeoutMs: number,
+) {
+	const deadline = Date.now() + timeoutMs;
+	const allowButton = getAllowButton(page);
+
+	while (Date.now() < deadline) {
+		const remaining = Math.max(500, deadline - Date.now());
+
+		try {
+			await page.waitForURL(finalUrl, { timeout: remaining });
+			return;
+		} catch {
+			// Still waiting for the final URL; continue to consent handling.
+		}
+
+		try {
+			await allowButton.waitFor({
+				state: "visible",
+				timeout: Math.min(remaining, 1000),
+			});
+			await allowButton.click();
+		} catch {
+			// Allow 버튼이 아직 렌더링되지 않았으면 잠시 대기 후 재시도
+			await page.waitForTimeout(100);
+		}
+	}
+
+	throw new Error("OIDC consent flow did not reach the target URL in time.");
 }

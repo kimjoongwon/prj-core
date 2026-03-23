@@ -87,11 +87,18 @@ describe("EmailService", () => {
 
 describe("SmtpEmailProvider", () => {
 	const sendMail = jest.fn();
+	const originalEnv = process.env;
 
 	beforeEach(() => {
 		jest.clearAllMocks();
 		sendMail.mockReset();
 		createTransportMock.mockReturnValue({ sendMail });
+		process.env = { ...originalEnv };
+		delete process.env.SMTP_SECURE;
+	});
+
+	afterAll(() => {
+		process.env = originalEnv;
 	});
 
 	it("smtp 설정을 사용해 nodemailer transport를 만들고 발신자를 포함해 전송해야 한다", async () => {
@@ -128,6 +135,37 @@ describe("SmtpEmailProvider", () => {
 			to: "user@example.com",
 			subject: "테스트 제목",
 			html: "<p>테스트</p>",
+		});
+	});
+
+	it("config가 없을 때 SMTP_SECURE가 비어 있으면 포트 기반 fallback 규칙을 사용해야 한다", async () => {
+		process.env.SMTP_HOST = "smtp.resend.com";
+		process.env.SMTP_PORT = "465";
+		process.env.SMTP_SECURE = "   ";
+		process.env.SMTP_USERNAME = "resend";
+		process.env.SMTP_PASSWORD = "secret";
+		process.env.SMTP_SENDER = "support@cocdev.co.kr";
+
+		const mockConfigService = {
+			get: jest.fn().mockReturnValue(undefined),
+		} as unknown as jest.Mocked<ConfigService>;
+
+		const provider = new SmtpEmailProvider(mockConfigService);
+
+		await provider.send({
+			to: "user@example.com",
+			subject: "테스트 제목",
+			html: "<p>테스트</p>",
+		});
+
+		expect(createTransportMock).toHaveBeenCalledWith({
+			host: "smtp.resend.com",
+			port: 465,
+			secure: true,
+			auth: {
+				user: "resend",
+				pass: "secret",
+			},
 		});
 	});
 });

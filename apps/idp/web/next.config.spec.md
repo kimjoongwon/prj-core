@@ -29,4 +29,5 @@ standalone 출력, 모노레포 Turbopack 루트, workspace 패키지 트랜스�
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-03-23 | `nuqs` 절대경로 alias 실험을 제거하고 기본 모노레포 해석 계약만 유지하도록 정리 | codex |
 | 2026-03-09 | Docker 전용 `NEXT_IGNORE_BUILD_ERRORS`/`experimental.cpus` 토글을 제거하고 기본 Next 빌드 계약만 유지하도록 정리 | codex |

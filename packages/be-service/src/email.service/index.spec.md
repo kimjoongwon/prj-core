@@ -39,7 +39,7 @@ SMTP 설정이 없는 개발 환경에서는 실제 발송 대신 로그만 출�
 - 트랜스포터는 지연 생성 (최초 발송 시점에 생성)
 - SMTP host가 없거나 "localhost"이면 개발 모드로 동작 (로그만 출력)
 - transport의 TLS 모드는 `smtp.secure` 설정을 기준으로 결정합니다.
-- legacy 환경에서 `SMTP_SECURE`가 없을 때만 포트 `465`를 fallback 규칙으로 사용합니다.
+- legacy/OpenBao 환경에서 `SMTP_SECURE`가 없거나 공백일 때만 포트 `465`를 fallback 규칙으로 사용합니다.
 - 비밀번호 재설정 링크 유효 시간: 30분, 1회 사용 (메일 내용 기준)
 
 ## SMTP 설정 환경변수
@@ -77,6 +77,7 @@ SMTP 설정이 없는 개발 환경에서는 실제 발송 대신 로그만 출�
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-03-23 | `SMTP_SECURE` 공백값도 legacy 누락과 동일하게 취급해 SMTP 설정 validator와 provider fallback 규칙이 어긋나지 않도록 정리 | codex |
 | 2026-03-23 | `EmailService -> EmailProvider -> SmtpEmailProvider` 구조로 분리해 상위 유즈케이스가 SMTP 구현 세부사항에 직접 결합되지 않도록 정리 | codex |
 | 2026-03-23 | `SMTP_SECURE` 설정을 추가해 Resend SMTP 연동과 향후 SMTP provider 교체 시 env 계약만으로 transport를 전환하도록 정리 | codex |
 | 2026-02-19 | 초기 생성 (역기획) | req-reverse-engineer |

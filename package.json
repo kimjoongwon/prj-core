@@ -82,14 +82,14 @@
   },
   "devDependencies": {
     "@biomejs/biome": "catalog:",
-    "vite": "catalog:",
+    "@types/node": "catalog:",
     "@vitejs/plugin-react-swc": "catalog:",
-    "vitest": "catalog:",
-    "@vitest/ui": "catalog:",
     "@vitest/coverage-v8": "catalog:",
+    "@vitest/ui": "catalog:",
     "turbo": "2.8.14",
     "typescript": "catalog:",
-    "@types/node": "catalog:"
+    "vite": "catalog:",
+    "vitest": "catalog:"
   },
   "pnpm": {
     "overrides": {
@@ -97,5 +97,8 @@
       "pino": "^9.11.0",
       "sonic-boom": "^4.2.0"
     }
+  },
+  "dependencies": {
+    "postgres": "^3.4.7"
   }
 }

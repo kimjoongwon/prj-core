@@ -69,6 +69,9 @@ const columns = [
 const meta: Meta<typeof Table> = {
 	title: "Ui/data-display/Table",
 	component: Table,
+	args: {
+		"aria-label": "샘플 사용자 테이블",
+	},
 	parameters: {
 		layout: "padded",
 		docs: {

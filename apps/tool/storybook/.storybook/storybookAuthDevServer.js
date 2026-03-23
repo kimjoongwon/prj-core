@@ -477,6 +477,16 @@ export function createStorybookAuthPlugin(authConfig) {
 				const { pathname } = requestUrl;
 
 				if (pathname === SESSION_PATH) {
+					if (!authConfig.requireAuth) {
+						sendJson(response, 404, {
+							authenticated: false,
+							status: 404,
+							data: null,
+							message: "Storybook auth is disabled.",
+						});
+						return;
+					}
+
 					const session = await verifySession(request, authConfig);
 					sendJson(response, session.authenticated ? 200 : session.status, session);
 					return;

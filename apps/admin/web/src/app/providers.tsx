@@ -3,6 +3,7 @@ import { type AbilityResponseDto } from "@cocrepo/api/core/abilities";
 
 import { convertApiToAbilityRules, useStore } from "@cocrepo/store";
 import type { AbilityApiResponse, AbilityRule } from "@cocrepo/type";
+import { NuqsNextAdapter } from "@cocrepo/hook/nuqs";
 import { DesignSystemProvider } from "@cocrepo/ui";
 import {
 	isServer,
@@ -11,7 +12,6 @@ import {
 } from "@tanstack/react-query";
 import { observer } from "mobx-react-lite";
 import { useRouter } from "next/navigation";
-import { NuqsAdapter } from "nuqs/adapters/next/app";
 import { type ReactNode, useEffect } from "react";
 import { useAbilities } from "@/hooks";
 import { AppStoreProvider } from "@/stores";
@@ -66,7 +66,7 @@ export const Providers = observer(function Providers({
 
 	return (
 		<QueryClientProvider client={queryClient}>
-			<NuqsAdapter>
+			<NuqsNextAdapter>
 				<AppStoreProvider>
 					<AbilityStoreBootstrapper>
 						<DesignSystemProvider navigate={handleNavigate}>
@@ -74,7 +74,7 @@ export const Providers = observer(function Providers({
 						</DesignSystemProvider>
 					</AbilityStoreBootstrapper>
 				</AppStoreProvider>
-			</NuqsAdapter>
+			</NuqsNextAdapter>
 		</QueryClientProvider>
 	);
 });

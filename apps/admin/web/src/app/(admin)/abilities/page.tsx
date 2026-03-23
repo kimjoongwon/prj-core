@@ -173,6 +173,7 @@ const AbilitiesPageContent = observer(function AbilitiesPageContent({
 				</div>
 				<div className="grid grid-cols-1 gap-4 md:grid-cols-4">
 					<Input
+						aria-label="권한 이름 검색"
 						placeholder="권한 이름 검색"
 						value={searchTerm}
 						onValueChange={onChangeSearchInput}

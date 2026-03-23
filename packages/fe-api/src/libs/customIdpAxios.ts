@@ -5,7 +5,9 @@ import Axios, {
 } from "axios";
 
 const DEFAULT_IDP_API_SERVER_BASE_URL =
-	process.env.IDP_API_INTERNAL_URL ?? "http://localhost:3007";
+	(typeof process !== "undefined"
+		? process.env.IDP_API_INTERNAL_URL
+		: undefined) ?? "http://localhost:3007";
 
 function resolveServerBaseUrl(url?: string) {
 	if (typeof window !== "undefined" || !url?.startsWith("/")) {

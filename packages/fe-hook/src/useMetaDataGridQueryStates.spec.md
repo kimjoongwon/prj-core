@@ -19,7 +19,7 @@
 | 모듈 | 용도 |
 |------|------|
 | @cocrepo/type | 기능 구현 의존성 |
-| nuqs | 기능 구현 의존성 |
+| @cocrepo/hook/nuqs | 기능 구현 의존성 |
 | react | 기능 구현 의존성 |
 
 ## 구현 체크리스트
@@ -31,6 +31,7 @@
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-03-23 | nuqs 직접 의존을 제거하고 공용 bridge 모듈(@cocrepo/hook/nuqs)로 통합 | codex |
 | 2026-03-06 | 규칙 위반 정리: useMemo/useCallback/useIsMounted 제거 및 observer/이벤트 네이밍 규칙 반영 | codex |
 | 2026-03-06 | 공통 훅 패키지(fe-hook/src)로 이관 | codex |
 | 2026-03-06 | 폴더 네이밍을 단수형(feature/input/layout/hook/style/type/util/widget/cell)으로 통일 | codex |

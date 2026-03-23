@@ -5,7 +5,7 @@
 - `next/navigation` 없이도 QueryClient, RootStore, PersistStore, admin/idp bootstrap을 Storybook preview에 주입합니다.
 
 ## 핵심 동작
-- 모든 스토리는 `QueryClientProvider`, `NuqsAdapter`, `RootStoreContext`, `DesignSystemProvider` 안에서 렌더링됩니다.
+- 모든 스토리는 `QueryClientProvider`, `NuqsReactAdapter`, `RootStoreContext`, `DesignSystemProvider` 안에서 렌더링됩니다.
 - `parameters.storybookRuntime = { realm, requiresSpace, currentPath, spaceId }`로 `admin | idp | none` 런타임을 결정합니다.
 - `admin` realm에서는 `/api/v1/auth/verify-token`, `/api/v1/auth/my-spaces`, `/api/v1/abilities/my`를 사용해 토큰 만료 시간, 선택 가능한 Space 목록, Ability 규칙을 Storybook 전용 store에 반영합니다.
 - admin realm은 첫 accessible space 또는 `spaceId` override를 자동 선택하고, preview 상단에서 Space를 바꿀 수 있습니다.
@@ -19,6 +19,7 @@
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-03-23 | nuqs Adapter를 @cocrepo/hook/nuqs 브리지로 교체해 workspace 전역 인스턴스를 공유 | codex |
 | 2026-03-16 | workspace export import와 auth-flag 기반 runtime gating으로 Storybook 타입 안정성을 보강 | codex |
 | 2026-03-16 | story parameter 기반 realm/space bootstrap과 정적 빌드 fallback runtime 동작을 반영 | codex |
 | 2026-03-16 | Storybook 전용 QueryClient/RootStore/provider/bootstrap 계층 및 auth-aware runtime resolver 신규 추가 | codex |

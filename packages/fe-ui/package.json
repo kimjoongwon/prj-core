@@ -100,7 +100,6 @@
     "mobx": "catalog:",
     "mobx-react-lite": "catalog:",
     "msw": "^2.10.4",
-    "nuqs": "catalog:",
     "path-parser": "6.1.0",
     "pluralize": "catalog:",
     "postcss": "catalog:",

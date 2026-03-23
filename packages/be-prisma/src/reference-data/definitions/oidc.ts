@@ -32,15 +32,24 @@ function resolveOidcSeedUrl(baseUrl: string, pathname: string): string {
 // 개별 override가 있으면 그것을 우선하고, 없으면 더 일반적인 base URL에서 redirect URI를 조합합니다.
 const oidcAdminBaseUrl =
 	process.env.OIDC_ADMIN_BASE_URL || "http://localhost:3000";
+const oidcAdminClientSecret =
+	process.env.OIDC_ADMIN_CLIENT_SECRET ||
+	"admin-secret-change-in-production";
 const oidcAdminRedirectUri =
 	process.env.OIDC_ADMIN_REDIRECT_URI ||
 	resolveOidcSeedUrl(oidcAdminBaseUrl, "/api/v1/auth/callback");
 const oidcStorybookBaseUrl =
 	process.env.OIDC_STORYBOOK_BASE_URL || "http://localhost:6006";
+const oidcStorybookClientSecret =
+	process.env.OIDC_STORYBOOK_CLIENT_SECRET ||
+	"storybook-secret-change-in-production";
 const oidcStorybookRedirectUri =
 	process.env.OIDC_STORYBOOK_REDIRECT_URI ||
 	resolveOidcSeedUrl(oidcStorybookBaseUrl, "/api/v1/auth/storybook/callback");
 const oidcIdpClientUrl = process.env.IDP_CLIENT_URL || "http://localhost:3008";
+const oidcIdpWebClientSecret =
+	process.env.OIDC_IDP_WEB_CLIENT_SECRET ||
+	"idp-web-secret-change-in-production";
 const oidcIdpWebRedirectUri =
 	process.env.OIDC_IDP_WEB_REDIRECT_URI ||
 	resolveOidcSeedUrl(oidcIdpClientUrl, "/api/v1/auth/idp/callback");
@@ -57,7 +66,7 @@ const oidcSwaggerRedirectUri =
 export const oidcClientSeedData: OidcClientSeedData[] = [
 	{
 		clientId: "admin-web",
-		clientSecret: "admin-secret-change-in-production",
+		clientSecret: oidcAdminClientSecret,
 		clientName: "Admin Web",
 		redirectUris: [oidcAdminRedirectUri],
 		grantTypes: ["authorization_code", "refresh_token"],
@@ -71,7 +80,7 @@ export const oidcClientSeedData: OidcClientSeedData[] = [
 	},
 	{
 		clientId: "storybook",
-		clientSecret: "storybook-secret-change-in-production",
+		clientSecret: oidcStorybookClientSecret,
 		clientName: "PRJ Core Storybook",
 		redirectUris: [oidcStorybookRedirectUri],
 		grantTypes: ["authorization_code", "refresh_token"],
@@ -102,7 +111,7 @@ export const oidcClientSeedData: OidcClientSeedData[] = [
 	},
 	{
 		clientId: "idp-web",
-		clientSecret: "idp-web-secret-change-in-production",
+		clientSecret: oidcIdpWebClientSecret,
 		clientName: "IDP Web",
 		redirectUris: [oidcIdpWebRedirectUri],
 		grantTypes: ["authorization_code", "refresh_token"],

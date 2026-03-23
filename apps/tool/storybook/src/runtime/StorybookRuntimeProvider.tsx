@@ -1,26 +1,6 @@
 /// <reference types="vite/client" />
 
 import {
-	customInstance,
-	setApiPersistStore,
-	setLoginRedirectUrl,
-} from "../../../../../packages/fe-api/src/core/client";
-import type { AbilityResponseDto } from "../../../../../packages/fe-api/src/core/abilities";
-import {
-	useGetMySpaces,
-	useVerifyToken,
-} from "../../../../../packages/fe-api/src/idp/auth";
-import {
-	setIdpLoginRedirectUrl,
-	setIdpPersistStore,
-} from "../../../../../packages/fe-api/src/idp/client";
-import {
-	ADMIN_FAB_ACTIONS,
-	ADMIN_NAV_ITEMS,
-	BOTTOM_TAB_IDS,
-	IDP_NAV_ITEMS,
-} from "../../../../../packages/common-constant/src";
-import {
 	AbilityStore,
 	AuthStore,
 	BottomTabStore,
@@ -34,11 +14,6 @@ import {
 	TokenStore,
 	usePersistStore,
 } from "@cocrepo/store";
-import type {
-	AbilityApiResponse,
-	AbilityRule,
-	NavigatorLike,
-} from "../../../../../packages/common-type/src";
 import { DesignSystemProvider } from "@cocrepo/ui";
 import {
 	isServer,
@@ -47,9 +22,34 @@ import {
 	useQuery,
 } from "@tanstack/react-query";
 import { observer } from "mobx-react-lite";
-import { NuqsAdapter } from "nuqs/adapters/react";
+import { NuqsReactAdapter } from "@cocrepo/hook/nuqs";
 import type { PropsWithChildren, ReactNode } from "react";
 import { useContext, useEffect, useRef, useState } from "react";
+import {
+	ADMIN_FAB_ACTIONS,
+	ADMIN_NAV_ITEMS,
+	BOTTOM_TAB_IDS,
+	IDP_NAV_ITEMS,
+} from "../../../../../packages/common-constant/src";
+import type {
+	AbilityApiResponse,
+	AbilityRule,
+	NavigatorLike,
+} from "../../../../../packages/common-type/src";
+import type { AbilityResponseDto } from "../../../../../packages/fe-api/src/core/abilities";
+import {
+	customInstance,
+	setApiPersistStore,
+	setLoginRedirectUrl,
+} from "../../../../../packages/fe-api/src/core/client";
+import {
+	useGetMySpaces,
+	useVerifyToken,
+} from "../../../../../packages/fe-api/src/idp/auth";
+import {
+	setIdpLoginRedirectUrl,
+	setIdpPersistStore,
+} from "../../../../../packages/fe-api/src/idp/client";
 
 declare const __STORYBOOK_REQUIRE_AUTH__: boolean;
 
@@ -93,10 +93,12 @@ const STATIC_ADMIN_SPACE: SpaceOption = {
 	groundName: "Storybook Space",
 };
 
-class StorybookAuthStore extends AuthStore {
-	override async logout(logoutApi?: () => Promise<unknown>) {
+function createStorybookAuthStore(rootStore: RootStore): AuthStore {
+	const authStore = new AuthStore(rootStore);
+
+	authStore.logout = async (logoutApi?: () => Promise<unknown>) => {
 		try {
-			this.isLoggingOut = true;
+			authStore.isLoggingOut = true;
 			if (logoutApi) {
 				await logoutApi();
 			}
@@ -104,9 +106,11 @@ class StorybookAuthStore extends AuthStore {
 			if (typeof window !== "undefined") {
 				window.location.href = buildLogoutShellUrl(getTopLevelReturnTo());
 			}
-			this.isLoggingOut = false;
+			authStore.isLoggingOut = false;
 		}
-	}
+	};
+
+	return authStore;
 }
 
 function makeQueryClient() {
@@ -134,7 +138,9 @@ function getQueryClient() {
 	return browserQueryClient;
 }
 
-function resolveRuntimeConfig(context: StorybookContextLike): StorybookRuntimeConfig {
+function resolveRuntimeConfig(
+	context: StorybookContextLike,
+): StorybookRuntimeConfig {
 	const runtime = context.parameters?.storybookRuntime;
 	const realm = runtime?.realm ?? "none";
 
@@ -287,7 +293,9 @@ function createAbilityRules(abilities: AbilityResponseDto[]): AbilityRule[] {
 
 function createStorybookRootStore(runtime: StorybookRuntimeConfig): RootStore {
 	const rootStore = new RootStore();
-	const navigationStore = new NavigationStore(getNavigationItems(runtime.realm));
+	const navigationStore = new NavigationStore(
+		getNavigationItems(runtime.realm),
+	);
 	const persistStore = new PersistStore({
 		storageKey: getStorageKey(runtime.realm),
 	});
@@ -296,7 +304,7 @@ function createStorybookRootStore(runtime: StorybookRuntimeConfig): RootStore {
 	rootStore.name = `STORYBOOK_${runtime.realm.toUpperCase()}`;
 	rootStore.tokenStore = new TokenStore(rootStore);
 	rootStore.cookieStore = new CookieStore();
-	rootStore.authStore = new StorybookAuthStore(rootStore);
+	rootStore.authStore = createStorybookAuthStore(rootStore);
 	rootStore.abilityStore = abilityStore;
 	rootStore.navigationStore = navigationStore;
 	rootStore.persistStore = persistStore;
@@ -347,7 +355,9 @@ function RuntimeScreen({
 					</div>
 					<h2 className="text-3xl font-bold">{title}</h2>
 					<p className="mt-3 text-default-500">{description}</p>
-					{actions ? <div className="mt-6 flex flex-wrap gap-3">{actions}</div> : null}
+					{actions ? (
+						<div className="mt-6 flex flex-wrap gap-3">{actions}</div>
+					) : null}
 				</div>
 			</div>
 		</div>
@@ -400,7 +410,10 @@ const AdminSpaceBar = observer(function AdminSpaceBar() {
 			<span className="text-xs font-semibold uppercase tracking-[0.18em] text-default-500">
 				Admin Realm
 			</span>
-			<label className="text-sm text-default-600" htmlFor="storybook-space-select">
+			<label
+				className="text-sm text-default-600"
+				htmlFor="storybook-space-select"
+			>
 				Space
 			</label>
 			<select
@@ -451,7 +464,7 @@ const StorybookRuntimeBootstrap = observer(function StorybookRuntimeBootstrap({
 	});
 
 	const selectedSpaceId =
-		runtime.realm === "admin" ? persistStore?.spaceId ?? null : null;
+		runtime.realm === "admin" ? (persistStore?.spaceId ?? null) : null;
 
 	const mySpacesQuery = useGetMySpaces({
 		query: {
@@ -516,10 +529,7 @@ const StorybookRuntimeBootstrap = observer(function StorybookRuntimeBootstrap({
 		}
 
 		const tokenData = verifyQuery.data.data;
-		if (
-			!tokenData.accessTokenExpiresAt ||
-			!tokenData.refreshTokenExpiresAt
-		) {
+		if (!tokenData.accessTokenExpiresAt || !tokenData.refreshTokenExpiresAt) {
 			return;
 		}
 
@@ -633,14 +643,18 @@ const StorybookRuntimeBootstrap = observer(function StorybookRuntimeBootstrap({
 
 		return (
 			<RuntimeScreen
-				title={unauthorized ? "Storybook login required" : "Storybook auth check failed"}
+				title={
+					unauthorized
+						? "Storybook login required"
+						: "Storybook auth check failed"
+				}
 				description={
 					unauthorized
 						? "Your local Storybook session expired. Re-authenticate through the Storybook login shell."
 						: getErrorMessage(
 								verifyQuery.error,
 								"Storybook could not reach the local IDP API.",
-						  )
+							)
 				}
 				tone={unauthorized ? "default" : "error"}
 				actions={
@@ -655,7 +669,11 @@ const StorybookRuntimeBootstrap = observer(function StorybookRuntimeBootstrap({
 		);
 	}
 
-	if (runtime.realm === "admin" && isLiveAuthRuntime && mySpacesQuery.isLoading) {
+	if (
+		runtime.realm === "admin" &&
+		isLiveAuthRuntime &&
+		mySpacesQuery.isLoading
+	) {
 		return (
 			<RuntimeScreen
 				title="Bootstrapping admin runtime"
@@ -786,7 +804,7 @@ export function StorybookRuntimeProvider({
 
 	return (
 		<QueryClientProvider client={queryClient}>
-			<NuqsAdapter>
+			<NuqsReactAdapter>
 				<RootStoreContext.Provider value={storeRef.current}>
 					<DesignSystemProvider
 						navigate={(path) => {
@@ -798,7 +816,7 @@ export function StorybookRuntimeProvider({
 						</StorybookRuntimeBootstrap>
 					</DesignSystemProvider>
 				</RootStoreContext.Provider>
-			</NuqsAdapter>
+			</NuqsReactAdapter>
 		</QueryClientProvider>
 	);
 }

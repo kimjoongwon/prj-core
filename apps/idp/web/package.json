@@ -32,7 +32,6 @@
     "mobx": "catalog:",
     "mobx-react-lite": "catalog:",
     "next": "^16.1.0",
-    "nuqs": "catalog:",
     "react": "catalog:",
     "react-dom": "catalog:"
   },

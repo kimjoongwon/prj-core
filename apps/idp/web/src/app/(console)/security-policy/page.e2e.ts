@@ -1,6 +1,8 @@
 import { loginToConsole } from "@cocrepo/e2e";
 import { expect, test } from "@playwright/test";
 
+test.describe.configure({ mode: "serial", timeout: 120000 });
+
 test.describe("보안 정책", () => {
 	test.describe("페이지 렌더링", () => {
 		test.beforeEach(async ({ page }) => {

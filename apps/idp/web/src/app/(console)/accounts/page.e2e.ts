@@ -1,6 +1,25 @@
 import { loginToConsole } from "@cocrepo/e2e";
 import { expect, test } from "@playwright/test";
 
+interface IdpAccountListItem {
+	id: string;
+	email: string;
+}
+
+const getFirstAccount = async (
+	page: import("@playwright/test").Page,
+): Promise<IdpAccountListItem> => {
+	const response = await page.request.get(
+		"http://localhost:3008/api/v1/idp/accounts?take=1&skip=0",
+	);
+	expect(response.status()).toBe(200);
+	const body = (await response.json()) as { data?: IdpAccountListItem[] };
+	const account = body.data?.[0];
+	expect(account?.id).toBeTruthy();
+	expect(account?.email).toBeTruthy();
+	return account as IdpAccountListItem;
+};
+
 test.describe("IDP 계정 목록 페이지", () => {
 	test.describe("목록 페이지", () => {
 		test.beforeEach(async ({ page }) => {
@@ -31,8 +50,9 @@ test.describe("IDP 계정 목록 페이지", () => {
 		});
 
 		test("계정 데이터가 표시되어야 한다", async ({ page }) => {
-			// Then: 시드 데이터의 admin 계정이 표시됨
-			await expect(page.getByText("admin@plate.com")).toBeVisible();
+			// Then: 현재 첫 페이지 API 응답에 포함된 계정 이메일이 목록에 표시됨
+			const account = await getFirstAccount(page);
+			await expect(page.getByText(account.email)).toBeVisible();
 		});
 	});
 

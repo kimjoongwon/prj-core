@@ -11,6 +11,11 @@
       "import": "./index.ts",
       "default": "./index.ts"
     },
+    "./nuqs": {
+      "types": "./src/nuqs.ts",
+      "import": "./src/nuqs.ts",
+      "default": "./src/nuqs.ts"
+    },
     "./package.json": "./package.json"
   },
   "main": "./index.ts",
@@ -40,7 +45,8 @@
     "@cocrepo/store": "workspace:*",
     "@cocrepo/toolkit": "workspace:*",
     "@cocrepo/type": "workspace:*",
-    "@tanstack/react-query": "catalog:"
+    "@tanstack/react-query": "catalog:",
+    "nuqs": "catalog:"
   },
   "devDependencies": {
     "react": "catalog:",

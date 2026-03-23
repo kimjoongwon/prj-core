@@ -4,14 +4,75 @@ import { defineConfig, devices } from "@playwright/test";
 // 항상 절대 경로로 browsers 경로 설정 (상대 경로는 CWD에 따라 달라질 수 있음)
 process.env.PLAYWRIGHT_BROWSERS_PATH =
 	process.env.PLAYWRIGHT_BROWSERS_PATH ?? path.join(__dirname, "browsers");
+process.env.E2E_ENV = process.env.E2E_ENV ?? "local";
 
+const e2eEnvironment = process.env.E2E_ENV;
 const skipAdminSetup = process.env.SKIP_ADMIN_SETUP === "1";
 const e2eTarget = process.env.E2E_TARGET ?? "all";
 const chromiumLaunchOptions = {
 	args: ["--disable-crash-reporter"],
 };
+const shouldUseLocalRuntime = e2eEnvironment === "local";
+const reuseExistingServer = shouldUseLocalRuntime && !process.env.CI;
+const includesAdminTarget = e2eTarget === "admin" || e2eTarget === "all";
+const includesIdpTarget = e2eTarget === "idp" || e2eTarget === "all";
 
-const reuseExistingServer = !process.env.CI;
+function ensureTrailingSlash(url: string) {
+	return url.endsWith("/") ? url : `${url}/`;
+}
+
+function resolveBaseUrl(options: {
+	envKey: string;
+	localDefault: string;
+	required: boolean;
+}) {
+	const configured = process.env[options.envKey];
+
+	if (configured) {
+		return ensureTrailingSlash(configured);
+	}
+
+	if (options.required) {
+		throw new Error(
+			`${options.envKey} is required when E2E_ENV=${e2eEnvironment}.`,
+		);
+	}
+
+	return ensureTrailingSlash(options.localDefault);
+}
+
+const adminBaseUrl = resolveBaseUrl({
+	envKey: "E2E_ADMIN_BASE_URL",
+	localDefault: "http://localhost:3000/admin/",
+	required: e2eEnvironment === "prod" && includesAdminTarget,
+});
+const idpBaseUrl = resolveBaseUrl({
+	envKey: "E2E_IDP_BASE_URL",
+	localDefault: "http://localhost:3008/",
+	required: e2eEnvironment === "prod" && includesIdpTarget,
+});
+const coreApiBaseUrl = resolveBaseUrl({
+	envKey: "E2E_CORE_API_BASE_URL",
+	localDefault: "http://localhost:3006/",
+	required: false,
+});
+const idpApiBaseUrl = resolveBaseUrl({
+	envKey: "E2E_IDP_API_BASE_URL",
+	localDefault: "http://localhost:3007/",
+	required: false,
+});
+
+process.env.E2E_ADMIN_BASE_URL = adminBaseUrl;
+process.env.E2E_IDP_BASE_URL = idpBaseUrl;
+process.env.E2E_CORE_API_BASE_URL = coreApiBaseUrl;
+process.env.E2E_IDP_API_BASE_URL = idpApiBaseUrl;
+
+const adminAuthStorageStatePath = path.join(
+	__dirname,
+	"tests/admin/helpers/.auth",
+	e2eEnvironment,
+	"admin.json",
+);
 
 function buildApiStartCommand(
 	envDir: string,
@@ -25,7 +86,7 @@ function buildApiStartCommand(
 
 const idpApiServer = {
 	command: buildApiStartCommand("apps/idp/api", "idp-api"),
-	url: "http://localhost:3007/api/password-policy",
+	url: new URL("/api/password-policy", idpApiBaseUrl).toString(),
 	reuseExistingServer,
 	timeout: 120000,
 	cwd: "../../..",
@@ -33,7 +94,7 @@ const idpApiServer = {
 
 const coreApiServer = {
 	command: buildApiStartCommand("apps/core/api", "core-api"),
-	url: "http://localhost:3006/api-json",
+	url: new URL("/api-json", coreApiBaseUrl).toString(),
 	reuseExistingServer,
 	timeout: 120000,
 	cwd: "../../..",
@@ -41,7 +102,7 @@ const coreApiServer = {
 
 const adminWebServer = {
 	command: "pnpm --filter=admin-web start:dev",
-	url: "http://localhost:3000/admin/auth/login",
+	url: new URL("/admin/auth/login", adminBaseUrl).toString(),
 	reuseExistingServer,
 	timeout: 120000,
 	cwd: "../../..",
@@ -49,7 +110,7 @@ const adminWebServer = {
 
 const idpWebServer = {
 	command: "pnpm --filter=idp-web dev",
-	url: "http://localhost:3008/auth/login",
+	url: new URL("/auth/login", idpBaseUrl).toString(),
 	reuseExistingServer,
 	timeout: 120000,
 	cwd: "../../..",
@@ -101,10 +162,10 @@ export default defineConfig({
     video: "on-first-retry",
     trace: "on-first-retry",
     actionTimeout: 10000,
-    navigationTimeout: 30000,
+    navigationTimeout: 60000,
   },
 
-  timeout: 60000,
+  timeout: 90000,
 
   // 앱별 프로젝트 설정
   projects: [
@@ -117,7 +178,7 @@ export default defineConfig({
             testMatch: "**/apps/test/e2e/tests/admin/helpers/*.setup.ts",
             use: {
               ...devices["Desktop Chrome"],
-              baseURL: "http://localhost:3000/admin/",
+              baseURL: adminBaseUrl,
               launchOptions: chromiumLaunchOptions,
             },
           },
@@ -131,13 +192,9 @@ export default defineConfig({
       dependencies: skipAdminSetup ? [] : ["admin-setup"],
       use: {
         ...devices["Desktop Chrome"],
-        baseURL: "http://localhost:3000/admin/",
+        baseURL: adminBaseUrl,
         launchOptions: chromiumLaunchOptions,
-        // testDir 변경으로 절대 경로 사용
-        storageState: path.join(
-          __dirname,
-          "tests/admin/helpers/.auth/admin.json",
-        ),
+        storageState: adminAuthStorageStatePath,
       },
     },
     {
@@ -146,12 +203,9 @@ export default defineConfig({
       dependencies: skipAdminSetup ? [] : ["admin-setup"],
       use: {
         ...devices["Pixel 5"],
-        baseURL: "http://localhost:3000/admin/",
+        baseURL: adminBaseUrl,
         launchOptions: chromiumLaunchOptions,
-        storageState: path.join(
-          __dirname,
-          "tests/admin/helpers/.auth/admin.json",
-        ),
+        storageState: adminAuthStorageStatePath,
       },
     },
 
@@ -161,7 +215,7 @@ export default defineConfig({
       testMatch: "**/apps/idp/web/src/**/*.e2e.ts",
       use: {
         ...devices["Desktop Chrome"],
-        baseURL: "http://localhost:3008/",
+        baseURL: idpBaseUrl,
       },
     },
     {
@@ -169,13 +223,13 @@ export default defineConfig({
       testMatch: "**/apps/idp/web/src/**/*.e2e.ts",
       use: {
         ...devices["Pixel 5"],
-        baseURL: "http://localhost:3008/",
+        baseURL: idpBaseUrl,
       },
     },
   ],
 
   // 개발 서버 설정 (SKIP_WEBSERVER=1 로 비활성화)
-  webServer: process.env.SKIP_WEBSERVER
+  webServer: process.env.SKIP_WEBSERVER || !shouldUseLocalRuntime
     ? undefined
     : getWebServers(),
 });

@@ -1,6 +1,6 @@
 import { ValidationUtil } from "@cocrepo/decorator";
 import { registerAs } from "@nestjs/config";
-import { IsBooleanString, IsString } from "class-validator";
+import { IsBooleanString, IsOptional, IsString } from "class-validator";
 import { SMTPConfig } from "./config.type";
 
 class EnvironmentVariablesValidator {
@@ -16,22 +16,47 @@ class EnvironmentVariablesValidator {
 	@IsString()
 	SMTP_HOST!: string;
 
+	@IsOptional()
 	@IsBooleanString()
-	SMTP_SECURE!: string;
+	SMTP_SECURE?: string;
 
 	@IsString()
 	SMTP_SENDER!: string;
 }
 
+function normalizeOptionalBooleanString(value?: string): string | undefined {
+	const normalizedValue = value?.trim();
+	return normalizedValue ? normalizedValue : undefined;
+}
+
+function resolveSmtpSecure(
+	smtpSecure: string | undefined,
+	smtpPort: string | undefined,
+): boolean {
+	if (smtpSecure !== undefined) {
+		return smtpSecure === "true";
+	}
+
+	return Number(smtpPort) === 465;
+}
+
 export default registerAs<SMTPConfig>("smtp", () => {
-	ValidationUtil.validateConfig(process.env, EnvironmentVariablesValidator);
+	const smtpSecure = normalizeOptionalBooleanString(process.env.SMTP_SECURE);
+
+	ValidationUtil.validateConfig(
+		{
+			...process.env,
+			SMTP_SECURE: smtpSecure,
+		},
+		EnvironmentVariablesValidator,
+	);
 
 	return {
 		username: process.env.SMTP_USERNAME!,
 		password: process.env.SMTP_PASSWORD!,
 		port: Number(process.env.SMTP_PORT),
 		host: process.env.SMTP_HOST!,
-		secure: process.env.SMTP_SECURE === "true",
+		secure: resolveSmtpSecure(smtpSecure, process.env.SMTP_PORT),
 		sender: process.env.SMTP_SENDER!,
 	};
 });

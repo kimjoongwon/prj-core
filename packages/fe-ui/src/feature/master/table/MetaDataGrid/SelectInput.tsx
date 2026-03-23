@@ -3,7 +3,7 @@
 import type { InputConfig } from "@cocrepo/type";
 import { Select, SelectItem } from "@heroui/react";
 import { observer } from "mobx-react-lite";
-import { parseAsString, useQueryState } from "nuqs";
+import { parseAsString, useQueryState } from "@cocrepo/hook/nuqs";
 
 interface SelectInputProps {
 	config: InputConfig;

@@ -91,6 +91,7 @@ const DataGridComponent = <T extends object>(props: DataGridProps<T>) => {
 		sortableColumns,
 		isLoading = false,
 		loadingContent,
+		classNames,
 		...rest
 	} = props;
 
@@ -121,6 +122,12 @@ const DataGridComponent = <T extends object>(props: DataGridProps<T>) => {
 			<Table
 				{...rest}
 				tableInstance={table}
+				classNames={{
+					...classNames,
+					wrapper: ["bg-transparent", "p-0", "shadow-none", classNames?.wrapper]
+						.filter(Boolean)
+						.join(" "),
+				}}
 				onSelectionChange={onSelectionChange}
 				selectedKeys={defaultSelection}
 				selectionMode={selectionMode}
