@@ -143,8 +143,7 @@ const AbilityStoreBootstrapper = observer(function AbilityStoreBootstrapper({
 			return;
 		}
 
-		const canAccessIdpConsole =
-			!isError && data?.data?.valid === true && data.data.hasFullAccess === true;
+		const canAccessIdpConsole = !isError && data?.data?.valid === true;
 
 		if (!canAccessIdpConsole) {
 			abilityStore.clearRules();

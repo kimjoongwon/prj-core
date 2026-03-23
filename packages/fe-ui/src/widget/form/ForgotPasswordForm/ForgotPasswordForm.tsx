@@ -50,7 +50,7 @@ export const ForgotPasswordForm = observer(
 				<AuthCardHeader
 					iconPath="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
 					title="비밀번호 찾기"
-					subtitle="가입한 이메일 주소를 입력하세요"
+					subtitle="예약 계정에 등록한 이메일 주소를 입력하세요"
 				/>
 
 				{isSubmitted ? (
@@ -74,7 +74,7 @@ export const ForgotPasswordForm = observer(
 						<h2 className="text-lg font-semibold mb-2">이메일을 확인하세요</h2>
 						<p className="text-default-500 text-sm mb-6">
 							<span className="font-medium text-foreground">{email}</span>
-							으로 비밀번호 재설정 링크를 발송했습니다.
+							으로 예약 계정 비밀번호 재설정 링크를 발송했습니다.
 							<br />
 							이메일이 도착하지 않았다면 스팸 폴더를 확인해주세요.
 						</p>

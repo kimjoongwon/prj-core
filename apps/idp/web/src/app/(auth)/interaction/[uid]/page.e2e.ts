@@ -293,7 +293,7 @@ test.describe("OIDC 동의 화면", () => {
 
 			// Then: 클라이언트 정보와 권한 요청 문구가 표시됨
 			await expect(
-				page.getByText("이 애플리케이션이 다음 권한을 요청합니다"),
+				page.getByText("서비스 연동을 위해 아래 접근 권한을 확인해 주세요"),
 			).toBeVisible();
 			await expect(
 				page.getByRole("heading", { name: "요청된 권한" }),

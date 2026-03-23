@@ -4,7 +4,28 @@
 @source "../../../../../packages/fe-ui/src/**/*.{js,ts,jsx,tsx}";
 @custom-variant dark (&:is(.dark *));
 
+html {
+  color-scheme: light;
+}
+
+html.dark {
+  color-scheme: dark;
+}
+
+html,
+body {
+  min-height: 100%;
+  background-color: hsl(var(--heroui-background));
+  color: hsl(var(--heroui-foreground));
+}
+
+html.dark,
+html.dark body {
+  background-color: #090c12;
+  color: hsl(var(--heroui-foreground));
+}
+
 body {
   font-family: "Pretendard", sans-serif;
-  height: 100vh;
+  min-height: 100vh;
 }

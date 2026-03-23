@@ -9,7 +9,7 @@ test.describe("비밀번호 찾기", () => {
 			// Then: 페이지 요소가 표시됨
 			await expect(page.getByText("비밀번호 찾기")).toBeVisible();
 			await expect(
-				page.getByText("가입한 이메일 주소를 입력하세요"),
+				page.getByText("예약 계정에 등록한 이메일 주소를 입력하세요"),
 			).toBeVisible();
 			await expect(page.getByLabel("이메일")).toBeVisible();
 			await expect(
@@ -57,7 +57,7 @@ test.describe("비밀번호 찾기", () => {
 				timeout: 10000,
 			});
 			await expect(
-				page.getByText("비밀번호 재설정 링크를 발송했습니다"),
+				page.getByText("예약 계정 비밀번호 재설정 링크를 발송했습니다"),
 			).toBeVisible();
 		});
 
