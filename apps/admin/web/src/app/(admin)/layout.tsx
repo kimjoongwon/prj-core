@@ -7,6 +7,8 @@ import { AdminLayoutEffects } from "./_layout/AdminLayoutEffects";
 import { AdminOverlayMenuSlot } from "./_layout/AdminOverlayMenuSlot";
 import { AdminSidebarSlot } from "./_layout/AdminSidebarSlot";
 
+export const dynamic = "force-dynamic";
+
 /**
  * Admin route skeleton
  */
