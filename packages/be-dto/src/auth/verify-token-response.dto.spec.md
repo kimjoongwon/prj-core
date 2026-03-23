@@ -14,6 +14,15 @@
 |------|------|
 | VerifyTokenResponseDto | 공개 계약 요소 |
 
+## 필드 계약
+
+| 필드 | 타입 | 설명 |
+|------|------|------|
+| `valid` | boolean | 현재 액세스 토큰 유효 여부 |
+| `accessTokenExpiresAt` | number | 액세스 토큰 만료 시각(ms) |
+| `refreshTokenExpiresAt` | number | 리프레시 토큰 만료 시각(ms) |
+| `hasFullAccess` | boolean | 현재 사용자가 tenant 역할 기준으로 `FULL_ACCESS`를 보유하는지 여부 |
+
 ## 의존성
 
 | 모듈 | 용도 |
@@ -29,4 +38,5 @@
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-03-23 | IDP 웹 권한 bootstrap을 위해 `hasFullAccess` 필드를 추가 | codex |
 | 2026-03-03 | 누락된 sidecar spec 신규 생성 | codex |

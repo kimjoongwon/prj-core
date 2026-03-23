@@ -1,16 +1,16 @@
 "use client";
 import { setLoginRedirectUrl } from "@cocrepo/api/core/client";
-import { useGetMySpaces } from "@cocrepo/api/idp/auth";
+import { useVerifyToken } from "@cocrepo/api/idp/auth";
 import { setIdpLoginRedirectUrl } from "@cocrepo/api/idp/client";
 
 import { IDP_SUBJECTS } from "@cocrepo/constant";
+import { NuqsNextAdapter } from "@cocrepo/hook/nuqs";
 import {
 	ConsoleAppStoreProvider,
 	convertApiToAbilityRules,
 	useStore,
 } from "@cocrepo/store";
 import type { AbilityApiResponse } from "@cocrepo/type";
-import { NuqsNextAdapter } from "@cocrepo/hook/nuqs";
 import { DesignSystemProvider } from "@cocrepo/ui";
 import {
 	isServer,
@@ -26,7 +26,6 @@ interface ProvidersProps {
 	children: ReactNode;
 }
 
-const SYSTEM_SPACE_ID = "61ddca20-1752-466e-b4da-879ebdbe54e3";
 const AUTH_FLOW_PATH_PREFIXES = [
 	"/auth",
 	"/interaction",
@@ -122,7 +121,7 @@ const AbilityStoreBootstrapper = observer(function AbilityStoreBootstrapper({
 	const shouldSkip = isAuthFlowPath(pathname);
 	const store = useStore();
 	const abilityStore = store.abilityStore;
-	const { data, isLoading, isError } = useGetMySpaces({
+	const { data, isLoading, isError } = useVerifyToken({
 		query: {
 			enabled: !shouldSkip,
 			retry: false,
@@ -144,9 +143,8 @@ const AbilityStoreBootstrapper = observer(function AbilityStoreBootstrapper({
 			return;
 		}
 
-		const spaces = data?.data ?? [];
 		const canAccessIdpConsole =
-			!isError && spaces.some((space) => space.id === SYSTEM_SPACE_ID);
+			!isError && data?.data?.valid === true && data.data.hasFullAccess === true;
 
 		if (!canAccessIdpConsole) {
 			abilityStore.clearRules();

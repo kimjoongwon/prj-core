@@ -21,7 +21,7 @@ OIDC/OAuth2 기반 인증 흐름의 진입점을 담당합니다. 로그인 리�
 | GET | /idp/callback | IDP 콘솔 전용 RP의 OIDC 콜백 처리 | Public |
 | POST | /token/refresh | 리프레시 토큰으로 새 토큰 재발급 | Public (쿠키 기반) |
 | POST | /sign-up | 신규 사용자 계정 생성 | Public |
-| GET | /verify-token | 액세스 토큰 유효성 검증 | JWT 인증 필요, SkipSpaceCheck |
+| GET | /verify-token | 액세스 토큰 유효성 검증 + FULL_ACCESS 보유 여부 반환 | JWT 인증 필요, SkipSpaceCheck |
 | GET | /my-spaces | 현재 사용자가 접근 가능한 Space 목록 조회 | JWT 인증 필요, SkipSpaceCheck |
 | POST | /logout | 로그아웃 및 토큰 무효화 | JWT 인증 필요 |
 | GET | /audit-logs | 인증 감사 로그 목록 조회 | FULL_ACCESS, SkipSpaceCheck |
@@ -54,7 +54,7 @@ OIDC/OAuth2 기반 인증 흐름의 진입점을 담당합니다. 로그인 리�
 | GET /idp/callback | Query: `code`, `state`, `error`, `error_description` | 302 리다이렉트 |
 | POST /token/refresh | 쿠키: `refreshToken`, `sessionId` | `TokenRefreshResponseDto` |
 | POST /sign-up | `SignUpPayloadDto` | - |
-| GET /verify-token | - | `VerifyTokenResponseDto` |
+| GET /verify-token | - | `VerifyTokenResponseDto` (`valid`, `accessTokenExpiresAt`, `refreshTokenExpiresAt`, `hasFullAccess`) |
 | GET /my-spaces | - | `SpaceDto[]` |
 | POST /logout | 쿠키: `accessToken`, `sessionId` | `Boolean` |
 | GET /audit-logs | `QueryAuthAuditLogDto` | `AuthAuditLogDto[]` + `PageMetaDto` |
@@ -96,6 +96,7 @@ OIDC/OAuth2 기반 인증 흐름의 진입점을 담당합니다. 로그인 리�
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-03-23 | `GET /verify-token` 응답 계약에 `hasFullAccess`를 추가하고 IDP 웹 메뉴 bootstrap 근거를 명시 | codex |
 | 2026-03-16 | Storybook RP clientKey 명을 `storybook`으로 단순화해 login/callback redirect 계약 표현을 정리 | codex |
 | 2026-03-16 | Storybook 세션 검증을 위해 `GET /verify-token`에도 `SkipSpaceCheck`를 적용하고 문서 반영 | codex |
 | 2026-03-16 | storybook 전용 login/callback 엔드포인트와 RP별 에러/성공 redirect 규칙을 추가 | codex |

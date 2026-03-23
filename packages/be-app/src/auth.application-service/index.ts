@@ -1,4 +1,4 @@
-import { CONTEXT_KEYS, Token } from "@cocrepo/constant";
+import { CONTEXT_KEYS, SYSTEM_ROLES, Token } from "@cocrepo/constant";
 import {
 	SpaceDto,
 	TokenRefreshResponseDto,
@@ -305,6 +305,7 @@ export class AuthApplicationService {
 	 */
 	verifyToken(): VerifyTokenResponseDto {
 		const token = this.cls.get<string>(CONTEXT_KEYS.TOKEN);
+		const user = this.cls.get<UserDto | undefined>(CONTEXT_KEYS.AUTH_USER);
 		if (!token) {
 			throw new UnauthorizedException("토큰이 존재하지 않습니다");
 		}
@@ -314,8 +315,17 @@ export class AuthApplicationService {
 		const payload = this.decodeAccessToken(token);
 		const accessTokenExpiresAt = ((payload as { exp?: number }).exp || 0) * 1000; // sec → ms
 		const refreshTokenExpiresAt = Date.now() + 30 * 24 * 60 * 60 * 1000; // 30일 (추정)
+		const hasFullAccess =
+			user?.tenants?.some(
+				(tenant) => tenant.role?.name === SYSTEM_ROLES.FULL_ACCESS,
+			) ?? false;
 
-		return { valid: true, accessTokenExpiresAt, refreshTokenExpiresAt };
+		return {
+			valid: true,
+			accessTokenExpiresAt,
+			refreshTokenExpiresAt,
+			hasFullAccess,
+		};
 	}
 
 	/**

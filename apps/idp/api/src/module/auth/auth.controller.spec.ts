@@ -377,16 +377,19 @@ describe("AuthController", () => {
 				valid: true,
 				accessTokenExpiresAt: mockTokenExpiryInfo.accessTokenExpiresAt,
 				refreshTokenExpiresAt: mockTokenExpiryInfo.refreshTokenExpiresAt,
+				hasFullAccess: true,
 			} as never);
 
 			const result = (await controller.verifyToken()) as unknown as {
 				valid: boolean;
 				accessTokenExpiresAt: number;
 				refreshTokenExpiresAt: number;
+				hasFullAccess: boolean;
 			};
 
 			expect(mockAuthApplicationService.verifyToken).toHaveBeenCalled();
 			expect(result.valid).toBe(true);
+			expect(result.hasFullAccess).toBe(true);
 		});
 
 		it("Space 선택 없이 호출할 수 있도록 SkipSpaceCheck 메타데이터가 선언되어야 한다", () => {

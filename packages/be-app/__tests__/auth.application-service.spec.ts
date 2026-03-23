@@ -1,3 +1,4 @@
+import { CONTEXT_KEYS, SYSTEM_ROLES } from "@cocrepo/constant";
 import { OidcFacade } from "@cocrepo/integration";
 import {
 	AuthAuditLogService,
@@ -297,15 +298,35 @@ describe("AuthApplicationService", () => {
 	});
 
 	describe("verifyToken", () => {
-		it("유효한 토큰의 만료 시간을 반환해야 한다", () => {
+		it("유효한 토큰의 만료 시간과 FULL_ACCESS 여부를 반환해야 한다", () => {
 			const exp = Math.floor(Date.now() / 1000) + 3600;
 			const fakeToken = `header.${Buffer.from(JSON.stringify({ sub: "user-1", exp })).toString("base64url")}.signature`;
-			mockClsService.get.mockReturnValue(fakeToken);
+			mockClsService.get.mockImplementation((key) => {
+				if (key === CONTEXT_KEYS.TOKEN) {
+					return fakeToken;
+				}
+
+				if (key === CONTEXT_KEYS.AUTH_USER) {
+					return {
+						id: "user-1",
+						tenants: [
+							{
+								id: "tenant-1",
+								spaceId: "space-1",
+								role: { name: SYSTEM_ROLES.FULL_ACCESS },
+							},
+						],
+					};
+				}
+
+				return undefined;
+			});
 
 			const result = applicationService.verifyToken();
 
 			expect(result.valid).toBe(true);
 			expect(result.accessTokenExpiresAt).toBe(exp * 1000);
+			expect(result.hasFullAccess).toBe(true);
 		});
 	});
 

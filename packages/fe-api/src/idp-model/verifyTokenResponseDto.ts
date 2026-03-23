@@ -19,4 +19,6 @@ export interface VerifyTokenResponseDto {
 	accessTokenExpiresAt: number;
 	/** Refresh Token 만료 시간 (Unix timestamp, ms) */
 	refreshTokenExpiresAt: number;
+	/** 현재 사용자가 tenant 역할 기준으로 FULL_ACCESS 권한을 하나라도 보유하는지 여부 */
+	hasFullAccess: boolean;
 }
